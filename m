@@ -2,102 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 449D71C49BF
-	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2020 00:43:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0275A1C49CC
+	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2020 00:52:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728141AbgEDWnT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 May 2020 18:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44774 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726338AbgEDWnT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 May 2020 18:43:19 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91267C061A10
-        for <linux-usb@vger.kernel.org>; Mon,  4 May 2020 15:43:17 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id y24so58868wma.4
-        for <linux-usb@vger.kernel.org>; Mon, 04 May 2020 15:43:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=eguzFUkYwYoGv/m+tGA5f5qo5AojxZ5F9SIUcjcPN6U=;
-        b=G708xptwUNMdoaDhkWTWdkVl70aBxf1k6we+ylWmrZCMEQ116539Bcq9mHU8SFp/vr
-         z45AxdioUnE9/Rx5uU6u+hwGiqRyDdivefA9Wa6qVXlVy4Z226Q0iA8iaoN2sIfctX+g
-         9zLI0mNdUjV+1TIbXKjvoqMFZPhT2eYOzSVLAc21aZT6okWRRqPCAsjd5Amf8QMEywbL
-         HrWh+3xI0GtHFL5xSR+GOVsTPrdV3gJ4b7jSf/T8mQ3uSA/Z9usj2w/yLzoqw2+bIQbN
-         XbDHKSkyiRfCnvsDiKit8OZLq2hRyybfHEi1UTjuDPrwfXptw67cxzr89GmSP0XU+wVT
-         vQ1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=eguzFUkYwYoGv/m+tGA5f5qo5AojxZ5F9SIUcjcPN6U=;
-        b=cX64xBATVpSQDSXuaOS24qJMC0lgz+juivuuU3ksron/PTixeyuzCNAoCTnswgELk6
-         g7/Ms9ShDgtXIMNHH6fuGGW5DqC1lzWttK6JLLAGgXttqwJ5K3rgzs2xd/HDmXgzzfqn
-         Yj9D9FNPGXMcCDwhQqaAquvq9xsVoyxJrd0FuOvBxtP8mZoIvgjNiBsdQHR1SYmLeNCb
-         xGhmEkcy0BzdOqme9Cl+oVF/6Gje1T9msY1SfWnQLN1XXlzcFJ5zrUXx6dCJFpPhv4a/
-         fiiwxF1viZRZiyPQDryLVKzpTLFkAY/Mg+vs3agGAPonPO4UAtBm5BBzsgIXK+CBO+yc
-         c29w==
-X-Gm-Message-State: AGi0PuahpZsWAKzlhOyyLCgOodwzt7hdIp0GQ4syJyP912luPM8JM3PN
-        BgDKQQPodDg9dBrGuDZ+fVJmpg==
-X-Google-Smtp-Source: APiQypICMTKYBacQ6uREMSUVWz+Vi3PjmMK1sykrqSI26bOeTzB/YVc6M5dzRmrJaGaSLH66XLUX8A==
-X-Received: by 2002:a1c:a9c3:: with SMTP id s186mr16864695wme.89.1588632196295;
-        Mon, 04 May 2020 15:43:16 -0700 (PDT)
-Received: from localhost.localdomain ([176.61.57.127])
-        by smtp.gmail.com with ESMTPSA id a13sm13895888wrv.67.2020.05.04.15.43.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 May 2020 15:43:15 -0700 (PDT)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     Peter.Chen@nxp.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Jun Li <jun.li@nxp.com>, Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        Stephen Boyd <swboyd@chromium.org>
-Subject: [PATCH 2/2] usb: chipidea: Enable user-space triggered role-switching
-Date:   Mon,  4 May 2020 23:43:46 +0100
-Message-Id: <20200504224346.613377-3-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200504224346.613377-1-bryan.odonoghue@linaro.org>
-References: <20200504224346.613377-1-bryan.odonoghue@linaro.org>
+        id S1728092AbgEDWwh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 May 2020 18:52:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43818 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726773AbgEDWwh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 4 May 2020 18:52:37 -0400
+Received: from localhost (mobile-166-175-184-168.mycingular.net [166.175.184.168])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 65AC3206C0;
+        Mon,  4 May 2020 22:52:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588632756;
+        bh=oDW2m6L9Wrq4l6Sa6FvG+TJuH2YvKGkX1auEkVIa68g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=qmCv3L7FRPXdzRbioI3T3Quf3DdF6rhAzTR9i6zP7T4//X93+af4luIhonhjHQsxn
+         O95sd19nj4u3WoDX9BhU/vRHt6Zi37Lp/sCZ6sACPd6FOUe2HAPUO8R8uVm7pVR6n6
+         raEzi3KqsL9DDVFz4SAVWJmSttzT9aOGcEGIbSDc=
+Date:   Mon, 4 May 2020 17:52:34 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+Cc:     Stefan Wahren <wahrenst@gmx.net>, linux-usb@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, tim.gover@raspberrypi.org,
+        linux-pci@vger.kernel.org, f.fainelli@gmail.com,
+        Greg KH <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, RayJui <rjui@broadcom.com>,
+        ScottBranden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com
+Subject: Re: [PATCH v7 2/4] firmware: raspberrypi: Introduce vl805 init
+ routine
+Message-ID: <20200504225234.GA300024@bjorn-Precision-5520>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d105712418b93ebce7c0498d05eea77171892366.camel@suse.de>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The flag provided by the USB role-switch logic allow_userspace_control
-allows user-space to trigger a role-switch. Several other USB controller
-drivers already enable this feature. Let's switch it on for the chipidea
-core now also.
+On Mon, May 04, 2020 at 10:59:29AM +0200, Nicolas Saenz Julienne wrote:
+> On Sat, 2020-05-02 at 11:05 +0200, Stefan Wahren wrote:
+> > > +	pci_read_config_dword(pdev, VL805_PCI_CONFIG_VERSION_OFFSET, &version);
+> > pci_read_config_dword() can fail, we might want to store the return value?
+> 
+> I planned on doing that, but realised that the vast majority of
+> pci_read_config_*() users pass on checking for errors.
+> 
+> Bjorn, any rule of thumb on when to check for errors here?
 
-Cc: Peter Chen <Peter.Chen@nxp.com>
-Cc: Jun Li <jun.li@nxp.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Liam Girdwood <lgirdwood@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: linux-usb@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: Stephen Boyd <swboyd@chromium.org>
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- drivers/usb/chipidea/core.c | 1 +
- 1 file changed, 1 insertion(+)
+Not really.  It *can* fail, for sure.  If it does fail, you normally
+get ~0 data, which means you would skip the firmware load, do another
+config read (which probably also returns ~0) and print firmware
+version ffffffff, and the device probably won't work.
 
-diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
-index ae0bdc036464..5f31fda92292 100644
---- a/drivers/usb/chipidea/core.c
-+++ b/drivers/usb/chipidea/core.c
-@@ -666,6 +666,7 @@ static int ci_usb_role_switch_set(struct usb_role_switch *sw,
- static struct usb_role_switch_desc ci_role_switch = {
- 	.set = ci_usb_role_switch_set,
- 	.get = ci_usb_role_switch_get,
-+	.allow_userspace_control = true,
- };
- 
- static int ci_get_platdata(struct device *dev,
--- 
-2.25.1
+But checking doesn't get you much other than a better error message.
 
+Personally I probably wouldn't bother because it clutters the code so
+much for so little benefit.
+
+Bjorn
