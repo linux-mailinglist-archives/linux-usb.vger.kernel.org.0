@@ -2,93 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA52C1C3CB3
-	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2020 16:16:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C231E1C3CB9
+	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2020 16:18:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728695AbgEDOQR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 May 2020 10:16:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50086 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728446AbgEDOQR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 May 2020 10:16:17 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8103EC061A0E
-        for <linux-usb@vger.kernel.org>; Mon,  4 May 2020 07:16:17 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id a31so3825744pje.1
-        for <linux-usb@vger.kernel.org>; Mon, 04 May 2020 07:16:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vGr4VJtpbWky6mt3MSOnebjTSnX/jE1HLmlXpNGtD2s=;
-        b=jeN9ds2Hmzh8Fxt8ybz3rlm1ae3TUYKRSn3vE1a/6vAt8wFNZFfpsssUE1FgnBbC42
-         sgf2Z8/o4PgwqvTtVUrdMq59PW13BmJycRcZBmCt96IIIxDXZuI4vTGr3AmXhMlhghqr
-         S0vfLRckPhNIML8WqUowPn3yf+4hiEgJEQlDTwOYYmLEV0tGEj/35Zfckf/ZXPjGQ72F
-         aV4lKZK8IN7ukF1R5MLLH3emaXsH7eMSkOG0DSkXyz2pffGjpLOpXiguMAzN1plMbZy8
-         tdc76rkrWcFLz4NOaoUnexjY97UEPBm1lfIRVYDKR7hPiYIP4tfS7vSmPUbYvVMS3c/+
-         wVTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vGr4VJtpbWky6mt3MSOnebjTSnX/jE1HLmlXpNGtD2s=;
-        b=DPQztxxqcIDS794ObZcXfVIh/HQyClpJZ1fFOkYyIEV6D1eHMwGkZLR5EdlJY9pM6F
-         TnPLN5V8J8TkAEjbAvjR+RjMpq48YdGDZ/5tf0HYaUfX8O6dyfn5bahnwzIn8BmlFoA+
-         ctq+OSi2J/wOwt1+FVJl9RG4DBbzXvnrUYNzdB+90KlWLjajH0+lFPLEoG6pMZhwBXem
-         19PRIohcdeteEec7ir9WRSTkS6lqA8oWBzqOJIIms3ozxhHjBmKJkFX52I/U3eigHGRp
-         3+hlY468jCD/c0VANy0+I+87EykayF2M6Gd2vwxpFBr9lOvqY8S5wXI69q2zPeQmPxlw
-         HK8A==
-X-Gm-Message-State: AGi0PubOyDp4/Qs/OL6J57T9qEg/w0pCBbOtWQKcVGIaXcJ2SZqyrIUL
-        vZoXjJwVC9YAleLtRAGJ03vCliVLleoIuzlC73WxYC+/KK5EqA==
-X-Google-Smtp-Source: APiQypIxU+bGV6nmTOG2j2yQ9rcGwDAuKgKP/TX1DJeTvkdka8dmkyTGOIL48eXBbdkFNIB4IjzfL3N/TfHr0/wq/uE=
-X-Received: by 2002:a17:90a:26a2:: with SMTP id m31mr17617244pje.128.1588601776522;
- Mon, 04 May 2020 07:16:16 -0700 (PDT)
+        id S1728217AbgEDOR5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 May 2020 10:17:57 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:40757 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726922AbgEDOR5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 May 2020 10:17:57 -0400
+Received: (qmail 13977 invoked by uid 500); 4 May 2020 10:17:56 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 4 May 2020 10:17:56 -0400
+Date:   Mon, 4 May 2020 10:17:56 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+cc:     mathias.nyman@intel.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] xhci: Prevent runtime suspend on Etron EJ168
+In-Reply-To: <20200504113622.20361-1-kai.heng.feng@canonical.com>
+Message-ID: <Pine.LNX.4.44L0.2005041015570.11213-100000@netrider.rowland.org>
 MIME-Version: 1.0
-References: <CAAeHK+x7AK=D1TA+K6hosWA=0-z0pqGu0W0QEVeZwqGNdFMaMQ@mail.gmail.com>
- <Pine.LNX.4.44L0.2004291005460.28180-100000@netrider.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.2004291005460.28180-100000@netrider.rowland.org>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon, 4 May 2020 16:16:05 +0200
-Message-ID: <CAAeHK+zdN280v54=qbEA5ALuXuCB3u=8BO8YHN+ZMzxWBzsQYg@mail.gmail.com>
-Subject: Re: Testing endpoint halt support for raw-gadget
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Apr 29, 2020 at 4:06 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Wed, 29 Apr 2020, Andrey Konovalov wrote:
->
-> > On Fri, Apr 10, 2020 at 5:53 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> > >
-> > > On Fri, 10 Apr 2020, Andrey Konovalov wrote:
-> > >
-> > > > On Fri, Apr 10, 2020 at 2:29 AM Alan Stern <stern@rowland.harvard.edu> wrote:
-> > >
-> > > > Something else: I've been testing raw-gadget with various UDCs that I
-> > > > have [1] and everything seems to work, except for emulating SuperSpeed
-> > > > devices with net2280. I've just found it out yesterday night, and
-> > > > haven't had a chance to debug that yet, but if you know about some
-> > > > potential issues I could encounter with SuperSpeed/USB3+, please let
-> > > > me know.
-> > >
-> > > Well, USB-3 has streams, unlike USB-2.  You may want to think about
-> > > supporting them.
-> >
-> > Do I understand correctly, that to support streams I basically need to
-> > allow the user to set stream_id on the request being submitted?
->
-> Yes, for bulk endpoints.
+On Mon, 4 May 2020, Kai-Heng Feng wrote:
 
-One more question (sorry for so many :).
+> Etron EJ168 USB 3.0 Host Controller stops working after S3, if it was
+> runtime suspended previously:
+> [  370.080359] pci 0000:02:00.0: can't change power state from D3cold to D0 (config space inaccessible)
+> [  370.080477] xhci_hcd 0000:04:00.0: can't change power state from D3cold to D0 (config space inaccessible)
+> [  370.080532] pcieport 0000:00:1c.0: DPC: containment event, status:0x1f05 source:0x0200
+> [  370.080533] pcieport 0000:00:1c.0: DPC: ERR_FATAL detected
+> [  370.080536] xhci_hcd 0000:04:00.0: can't change power state from D3hot to D0 (config space inaccessible)
+> [  370.080552] xhci_hcd 0000:04:00.0: AER: can't recover (no error_detected callback)
+> [  370.080566] usb usb3: root hub lost power or was reset
+> [  370.080566] usb usb4: root hub lost power or was reset
+> [  370.080572] xhci_hcd 0000:04:00.0: Host halt failed, -19
+> [  370.080574] xhci_hcd 0000:04:00.0: Host not accessible, reset failed.
+> [  370.080575] xhci_hcd 0000:04:00.0: PCI post-resume error -19!
+> [  370.080586] xhci_hcd 0000:04:00.0: HC died; cleaning up
+> 
+> This can be fixed by not runtime suspend the controller at all.
+> 
+> So disable runtime suspend for EJ168 xHCI device.
+> 
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> ---
+> v2:
+>  - Use a new quirk to avoid changing existing behavior.
+> 
+>  drivers/usb/host/xhci-pci.c | 4 +++-
+>  drivers/usb/host/xhci.h     | 1 +
+>  2 files changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+> index 766b74723e64..1658fa4c3e4e 100644
+> --- a/drivers/usb/host/xhci-pci.c
+> +++ b/drivers/usb/host/xhci-pci.c
+> @@ -227,6 +227,7 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+>  		xhci->quirks |= XHCI_RESET_ON_RESUME;
+>  		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
+>  		xhci->quirks |= XHCI_BROKEN_STREAMS;
+> +		xhci->quirks |= XHCI_DISABLE_RUNTIME_SUSPEND;
+>  	}
+>  	if (pdev->vendor == PCI_VENDOR_ID_RENESAS &&
+>  	    pdev->device == 0x0014) {
+> @@ -371,7 +372,8 @@ static int xhci_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
+>  		xhci->shared_hcd->can_do_streams = 1;
+>  
+>  	/* USB-2 and USB-3 roothubs initialized, allow runtime pm suspend */
+> -	pm_runtime_put_noidle(&dev->dev);
+> +	if (!(xhci->quirks & XHCI_DISABLE_RUNTIME_SUSPEND))
+> +		pm_runtime_put_noidle(&dev->dev);
 
-Looking at other fields of usb_request struct I see frame_number.
-AFAIU it's filled in by the UDC driver for ISO transfers. Does it make
-sense to expose it to userspace? I don't see any composite/legacy
-gadgets use that field at all.
+This cannot possibly be correct.  You have changed an unconditional 
+runtime-put to a conditional one, but you have not made the 
+corresponding change to the matching runtime-get.  Every runtime-PM 
+put must be balanced by a get, and vice versa.
+
+Alan Stern
+
