@@ -2,269 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09AF11C36D7
-	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2020 12:24:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 479E91C3848
+	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2020 13:36:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728301AbgEDKYj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 May 2020 06:24:39 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:14349 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726351AbgEDKYj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 May 2020 06:24:39 -0400
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5eafece70001>; Mon, 04 May 2020 03:22:31 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Mon, 04 May 2020 03:24:38 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Mon, 04 May 2020 03:24:38 -0700
-Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 4 May
- 2020 10:24:38 +0000
-Received: from [10.19.66.205] (172.20.13.39) by DRHQMAIL107.nvidia.com
- (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 4 May 2020
- 10:24:33 +0000
-Subject: Re: [PATCH V2 5/8] phy: tegra: xusb: Add soc ops API to enable UTMI
- PAD protection
-To:     Thierry Reding <thierry.reding@gmail.com>
-CC:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
-        <jonathanh@nvidia.com>, <mark.rutland@arm.com>,
-        <robh+dt@kernel.org>, <kishon@ti.com>,
-        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1586939108-10075-1-git-send-email-nkristam@nvidia.com>
- <1586939108-10075-6-git-send-email-nkristam@nvidia.com>
- <20200428101515.GE3592148@ulmo>
-X-Nvconfidentiality: public
-From:   Nagarjuna Kristam <nkristam@nvidia.com>
-Message-ID: <8ce32a32-7d28-6ba2-ca82-18f40b1477b7@nvidia.com>
-Date:   Mon, 4 May 2020 15:56:26 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
-MIME-Version: 1.0
-In-Reply-To: <20200428101515.GE3592148@ulmo>
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- DRHQMAIL107.nvidia.com (10.27.9.16)
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1588587751; bh=NV7MEJ6CFQlKaEaHV4Y/1UEDjWTDLJ7GAiwjhJ/RABQ=;
-        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=h1TUPmvFFG3XtKOyPmynG4X7881mZToJ5zagLFJnQHBo9nDG6B82Teh9SjUYbbX33
-         4qxNN1cm/v+xTGLpPcZ+0N6sYsWSZAPwt5VHSvOP+YL8wF1+Q0VY15B/CP3zxQHkk0
-         2G9IL8nSliNcn7cfZfNsSNna0ZVp6DQ9LNkUXQgnWlxwhj30X/l/yMCn/bJyIcOGTX
-         CKls0NfuGc1aw41N/5HPEKLA6zBpbhcCXjvoFTIKSXRq1SI8gll2XYnqfjSlnD5HoA
-         jq4vh6smANUw829ZoHBpfB3ooqivgKevcrL8kUV4g43efgkvZO3bh4Avhc10ZE2E0Y
-         2xT0YN0//RoZg==
+        id S1728296AbgEDLgb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 May 2020 07:36:31 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:34221 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726445AbgEDLgb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 May 2020 07:36:31 -0400
+Received: from 61-220-137-37.hinet-ip.hinet.net ([61.220.137.37] helo=localhost)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <kai.heng.feng@canonical.com>)
+        id 1jVZOd-000222-Pc; Mon, 04 May 2020 11:36:28 +0000
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     mathias.nyman@intel.com
+Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org (open list:USB XHCI DRIVER),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v2] xhci: Prevent runtime suspend on Etron EJ168
+Date:   Mon,  4 May 2020 19:36:22 +0800
+Message-Id: <20200504113622.20361-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Etron EJ168 USB 3.0 Host Controller stops working after S3, if it was
+runtime suspended previously:
+[  370.080359] pci 0000:02:00.0: can't change power state from D3cold to D0 (config space inaccessible)
+[  370.080477] xhci_hcd 0000:04:00.0: can't change power state from D3cold to D0 (config space inaccessible)
+[  370.080532] pcieport 0000:00:1c.0: DPC: containment event, status:0x1f05 source:0x0200
+[  370.080533] pcieport 0000:00:1c.0: DPC: ERR_FATAL detected
+[  370.080536] xhci_hcd 0000:04:00.0: can't change power state from D3hot to D0 (config space inaccessible)
+[  370.080552] xhci_hcd 0000:04:00.0: AER: can't recover (no error_detected callback)
+[  370.080566] usb usb3: root hub lost power or was reset
+[  370.080566] usb usb4: root hub lost power or was reset
+[  370.080572] xhci_hcd 0000:04:00.0: Host halt failed, -19
+[  370.080574] xhci_hcd 0000:04:00.0: Host not accessible, reset failed.
+[  370.080575] xhci_hcd 0000:04:00.0: PCI post-resume error -19!
+[  370.080586] xhci_hcd 0000:04:00.0: HC died; cleaning up
 
+This can be fixed by not runtime suspend the controller at all.
 
-On 28-04-2020 15:45, Thierry Reding wrote:
-> On Wed, Apr 15, 2020 at 01:55:05PM +0530, Nagarjuna Kristam wrote:
->> When USB charger is enabled, UTMI PAD needs to be protected according
->> to the direction and current level. Add support for the same on Tegra210
->> and Tegra186.
->>
->> Signed-off-by: Nagarjuna Kristam<nkristam@nvidia.com>
->> ---
->> V2:
->>   - Commit message coorected.
->>   - Patch re-based.
->> ---
->>   drivers/phy/tegra/xusb-tegra186.c | 40 +++++++++++++++++++++++++++++++++++++++
->>   drivers/phy/tegra/xusb-tegra210.c | 31 ++++++++++++++++++++++++++++++
->>   drivers/phy/tegra/xusb.h          | 13 +++++++++++++
->>   3 files changed, 84 insertions(+)
-> Oh wait... you're not actually adding custom public APIs for this but
-> are simply wiring this through the SoC-specific code. Okay, that seems
-> fine to me.
-> 
-> Ignore my comments on the prior two patches.
-> 
->> diff --git a/drivers/phy/tegra/xusb-tegra186.c b/drivers/phy/tegra/xusb-tegra186.c
->> index f862254..03bdb5b 100644
->> --- a/drivers/phy/tegra/xusb-tegra186.c
->> +++ b/drivers/phy/tegra/xusb-tegra186.c
->> @@ -68,6 +68,13 @@
->>   #define   PORTX_SPEED_SUPPORT_MASK		(0x3)
->>   #define     PORT_SPEED_SUPPORT_GEN1		(0x0)
->>   
->> +#define USB2_BATTERY_CHRG_OTGPADX_CTL1(x)       (0x84 + (x) * 0x40)
->> +#define  PD_VREG                                (1 << 6)
->> +#define  VREG_LEV(x)                            (((x) & 0x3) << 7)
->> +#define  VREG_DIR(x)                            (((x) & 0x3) << 11)
->> +#define  VREG_DIR_IN                            VREG_DIR(1)
->> +#define  VREG_DIR_OUT                           VREG_DIR(2)
->> +
->>   #define XUSB_PADCTL_USB2_OTG_PADX_CTL0(x)	(0x88 + (x) * 0x40)
->>   #define  HS_CURR_LEVEL(x)			((x) & 0x3f)
->>   #define  TERM_SEL				BIT(25)
->> @@ -289,6 +296,37 @@ static void tegra_phy_xusb_utmi_pad_power_down(struct phy *phy)
->>   	usb2->powered_on = false;
->>   }
->>   
->> +static void tegra186_xusb_padctl_utmi_pad_set_protection_level(
->> +				struct tegra_xusb_port *port, int level,
->> +				enum tegra_vbus_dir dir)
-> It's more idiomatic to wrap after the return type and while at it,
-> perhaps make this name a little shorter, like so:
-> 
->      static void
->      tegra186_xusb_padctl_utmi_pad_set_protection(struct tegra_xusb_port *port,
-> 						 int level,
-> 						 enum tegra_vbus_dir dir)
-> 
-Will update accordingly.
->> +{
->> +	u32 value;
->> +	struct tegra_xusb_padctl *padctl = port->padctl;
->> +	unsigned int index = port->index;
->> +
->> +	value = padctl_readl(padctl, USB2_BATTERY_CHRG_OTGPADX_CTL1(index));
->> +
->> +	if (level < 0) {
->> +		/* disable pad protection */
->> +		value |= PD_VREG;
->> +		value &= ~VREG_LEV(~0);
->> +		value &= ~VREG_DIR(~0);
->> +	} else {
->> +		if (dir == TEGRA_VBUS_SOURCE)
->> +			value |= VREG_DIR_OUT;
->> +		else if (dir == TEGRA_VBUS_SINK)
->> +			value |= VREG_DIR_IN;
->> +
->> +		value &= ~PD_VREG;
->> +		value &= ~VREG_DIR(~0);
->> +		value &= ~VREG_LEV(~0);
->> +		value |= VREG_LEV(level);
->> +	}
->> +
->> +	padctl_writel(padctl, value, USB2_BATTERY_CHRG_OTGPADX_CTL1(index));
->> +}
->> +
->> +
-> There's an extra blank line above that can be dropped.
-> 
-Will remove the same.
->>   static int tegra186_xusb_padctl_vbus_override(struct tegra_xusb_padctl *padctl,
->>   					       bool status)
->>   {
->> @@ -935,6 +973,8 @@ static const struct tegra_xusb_padctl_ops tegra186_xusb_padctl_ops = {
->>   	.vbus_override = tegra186_xusb_padctl_vbus_override,
->>   	.utmi_pad_power_on = tegra_phy_xusb_utmi_pad_power_on,
->>   	.utmi_pad_power_down = tegra_phy_xusb_utmi_pad_power_down,
->> +	.utmi_pad_set_protection_level =
->> +			tegra186_xusb_padctl_utmi_pad_set_protection_level,
->>   };
->>   
->>   #if IS_ENABLED(CONFIG_ARCH_TEGRA_186_SOC)
->> diff --git a/drivers/phy/tegra/xusb-tegra210.c b/drivers/phy/tegra/xusb-tegra210.c
->> index caf0890..7d84f1a 100644
->> --- a/drivers/phy/tegra/xusb-tegra210.c
->> +++ b/drivers/phy/tegra/xusb-tegra210.c
->> @@ -74,6 +74,8 @@
->>   #define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_LEV_MASK 0x3
->>   #define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_LEV_VAL 0x1
->>   #define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_FIX18 (1 << 6)
->> +#define USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_LEV(x) (((x) & 0x3) << 7)
->> +#define USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_DIR(x) (((x) & 0x3) << 11)
->>   
->>   #define XUSB_PADCTL_USB2_OTG_PADX_CTL0(x) (0x088 + (x) * 0x40)
->>   #define XUSB_PADCTL_USB2_OTG_PAD_CTL0_PD_ZI (1 << 29)
->> @@ -1116,6 +1118,33 @@ void tegra210_usb2_pad_power_down(struct phy *phy)
->>   	usb2->powered_on = false;
->>   }
->>   
->> +static void tegra210_xusb_padctl_utmi_pad_set_protection_level(
->> +				struct tegra_xusb_port *port, int level,
->> +				enum tegra_vbus_dir dir)
-> Same comment as above.
-> 
-will update accordingly.
->> +{
->> +	u32 value;
->> +	struct tegra_xusb_padctl *padctl = port->padctl;
->> +	unsigned int index = port->index;
->> +
->> +	value = padctl_readl(padctl,
->> +			     XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPADX_CTL1(index));
->> +
->> +	if (level < 0) {
->> +		/* disable pad protection */
->> +		value |= XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_FIX18;
->> +		value &= USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_LEV(~0);
->> +		value &= ~USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_DIR(~0);
->> +	} else {
->> +		value &= ~XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_FIX18;
->> +		value &= ~USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_DIR(~0);
->> +		value &= USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_LEV(~0);
->> +		value |= USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_LEV(level);
->> +	}
->> +
->> +	padctl_writel(padctl, value,
->> +		      XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPADX_CTL1(index));
->> +}
->> +
->>   static int tegra210_usb2_phy_set_mode(struct phy *phy, enum phy_mode mode,
->>   				      int submode)
->>   {
->> @@ -2291,6 +2320,8 @@ static const struct tegra_xusb_padctl_ops tegra210_xusb_padctl_ops = {
->>   	.utmi_port_reset = tegra210_utmi_port_reset,
->>   	.utmi_pad_power_on = tegra210_usb2_pad_power_on,
->>   	.utmi_pad_power_down = tegra210_usb2_pad_power_down,
->> +	.utmi_pad_set_protection_level =
->> +			tegra210_xusb_padctl_utmi_pad_set_protection_level,
->>   };
->>   
->>   static const char * const tegra210_xusb_padctl_supply_names[] = {
->> diff --git a/drivers/phy/tegra/xusb.h b/drivers/phy/tegra/xusb.h
->> index 6995fc4..79e96b0 100644
->> --- a/drivers/phy/tegra/xusb.h
->> +++ b/drivers/phy/tegra/xusb.h
->> @@ -259,6 +259,17 @@ to_sata_pad(struct tegra_xusb_pad *pad)
->>    */
->>   struct tegra_xusb_port_ops;
->>   
->> +/*
->> + * Tegra OTG port VBUS direction:
->> + * default (based on port capability) or
->> + * as source or sink
->> + */
->> +enum tegra_vbus_dir {
->> +	TEGRA_VBUS_DEFAULT,
->> +	TEGRA_VBUS_SOURCE,
->> +	TEGRA_VBUS_SINK
->> +};
-> Can't we key off of something like the OTG mode? I thought we already
-> carried that elsewhere.
-> 
-Unlike OTG mode, this is VBUS direction, which is different and not same 
-as mode. Hence its a seperate structure.
->> +
->>   struct tegra_xusb_port {
->>   	struct tegra_xusb_padctl *padctl;
->>   	struct tegra_xusb_lane *lane;
->> @@ -398,6 +409,8 @@ struct tegra_xusb_padctl_ops {
->>   	int (*utmi_port_reset)(struct phy *phy);
->>   	void (*utmi_pad_power_on)(struct phy *phy);
->>   	void (*utmi_pad_power_down)(struct phy *phy);
->> +	void (*utmi_pad_set_protection_level)(struct tegra_xusb_port *port,
->> +					int max_ua, enum tegra_vbus_dir dir);
-> You call the variable "max_ua" here but it's "level" in the
-> implementations, which is slightly confusing. Please choose one and
-> stick with it. Also, if it's a value in microamperes, perhaps just make
-> it unsigned int?
-> 
-Its level actually, and needed as int, as it can carry negative value. 
-Will syncronize the naming across all places.
+So disable runtime suspend for EJ168 xHCI device.
 
-> Thierry
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+---
+v2:
+ - Use a new quirk to avoid changing existing behavior.
+
+ drivers/usb/host/xhci-pci.c | 4 +++-
+ drivers/usb/host/xhci.h     | 1 +
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 766b74723e64..1658fa4c3e4e 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -227,6 +227,7 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+ 		xhci->quirks |= XHCI_RESET_ON_RESUME;
+ 		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
+ 		xhci->quirks |= XHCI_BROKEN_STREAMS;
++		xhci->quirks |= XHCI_DISABLE_RUNTIME_SUSPEND;
+ 	}
+ 	if (pdev->vendor == PCI_VENDOR_ID_RENESAS &&
+ 	    pdev->device == 0x0014) {
+@@ -371,7 +372,8 @@ static int xhci_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 		xhci->shared_hcd->can_do_streams = 1;
+ 
+ 	/* USB-2 and USB-3 roothubs initialized, allow runtime pm suspend */
+-	pm_runtime_put_noidle(&dev->dev);
++	if (!(xhci->quirks & XHCI_DISABLE_RUNTIME_SUSPEND))
++		pm_runtime_put_noidle(&dev->dev);
+ 
+ 	if (xhci->quirks & XHCI_DEFAULT_PM_RUNTIME_ALLOW)
+ 		pm_runtime_allow(&dev->dev);
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 86cfefdd6632..d9c209a10d3f 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -1873,6 +1873,7 @@ struct xhci_hcd {
+ #define XHCI_DEFAULT_PM_RUNTIME_ALLOW	BIT_ULL(33)
+ #define XHCI_RESET_PLL_ON_DISCONNECT	BIT_ULL(34)
+ #define XHCI_SNPS_BROKEN_SUSPEND    BIT_ULL(35)
++#define XHCI_DISABLE_RUNTIME_SUSPEND    BIT_ULL(36)
+ 
+ 	unsigned int		num_active_eps;
+ 	unsigned int		limit_active_eps;
+-- 
+2.17.1
+
