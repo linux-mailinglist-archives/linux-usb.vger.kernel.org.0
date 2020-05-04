@@ -2,168 +2,178 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 938041C3AA3
-	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2020 14:58:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20CB51C3B1F
+	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2020 15:21:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727783AbgEDM60 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 May 2020 08:58:26 -0400
-Received: from mga12.intel.com ([192.55.52.136]:4063 "EHLO mga12.intel.com"
+        id S1726913AbgEDNVj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 May 2020 09:21:39 -0400
+Received: from foss.arm.com ([217.140.110.172]:44676 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726796AbgEDM6Y (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 4 May 2020 08:58:24 -0400
-IronPort-SDR: NvPAx64pw7Z/Tdmr+EsR9WtVz9vVwzptwAshoqFXRyO+PyoSV1NPs8g2mr2C2DFwVbk8msYz5J
- iFJ7VVpJ+zjQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2020 05:58:23 -0700
-IronPort-SDR: Y/SoPti7DCDkR8pcvxJXAqsKXfvrTRC+ez5gAeYJsDuiFSAqn9uM70i5fq2WjjRHrrcVs6mm+k
- afO8rZwyqyzg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,352,1583222400"; 
-   d="scan'208";a="259323515"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga003.jf.intel.com with ESMTP; 04 May 2020 05:58:20 -0700
-Subject: Re: [PATCH v12 2/5] usb: renesas-xhci: Add the renesas xhci driver
-To:     Vinod Koul <vkoul@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        =?UTF-8?Q?Andreas_B=c3=b6hler?= <dev@aboehler.at>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200430165920.1345409-1-vkoul@kernel.org>
- <20200430165920.1345409-3-vkoul@kernel.org>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- mQINBFMB0ccBEADd+nZnZrFDsIjQtclVz6OsqFOQ6k0nQdveiDNeBuwyFYykkBpaGekoHZ6f
- lH4ogPZzQ+pzoJEMlRGXc881BIggKMCMH86fYJGfZKWdfpg9O6mqSxyEuvBHKe9eZCBKPvoC
- L2iwygtO8TcXXSCynvXSeZrOwqAlwnxWNRm4J2ikDck5S5R+Qie0ZLJIfaId1hELofWfuhy+
- tOK0plFR0HgVVp8O7zWYT2ewNcgAzQrRbzidA3LNRfkL7jrzyAxDapuejuK8TMrFQT/wW53e
- uegnXcRJaibJD84RUJt+mJrn5BvZ0MYfyDSc1yHVO+aZcpNr+71yZBQVgVEI/AuEQ0+p9wpt
- O9Wt4zO2KT/R5lq2lSz1MYMJrtfFRKkqC6PsDSB4lGSgl91XbibK5poxrIouVO2g9Jabg04T
- MIPpVUlPme3mkYHLZUsboemRQp5/pxV4HTFR0xNBCmsidBICHOYAepCzNmfLhfo1EW2Uf+t4
- L8IowAaoURKdgcR2ydUXjhACVEA/Ldtp3ftF4hTQ46Qhba/p4MUFtDAQ5yeA5vQVuspiwsqB
- BoL/298+V119JzM998d70Z1clqTc8fiGMXyVnFv92QKShDKyXpiisQn2rrJVWeXEIVoldh6+
- J8M3vTwzetnvIKpoQdSFJ2qxOdQ8iYRtz36WYl7hhT3/hwkHuQARAQABtCdNYXRoaWFzIE55
- bWFuIDxtYXRoaWFzLm55bWFuQGdtYWlsLmNvbT6JAjsEEwECACUCGwMGCwkIBwMCBhUIAgkK
- CwQWAgMBAh4BAheABQJTAeo1AhkBAAoJEFiDn/uYk8VJOdIP/jhA+RpIZ7rdUHFIYkHEKzHw
- tkwrJczGA5TyLgQaI8YTCTPSvdNHU9Rj19mkjhUO/9MKvwfoT2RFYqhkrtk0K92STDaBNXTL
- JIi4IHBqjXOyJ/dPADU0xiRVtCHWkBgjEgR7Wihr7McSdVpgupsaXhbZjXXgtR/N7PE0Wltz
- hAL2GAnMuIeJyXhIdIMLb+uyoydPCzKdH6znfu6Ox76XfGWBCqLBbvqPXvk4oH03jcdt+8UG
- 2nfSeti/To9ANRZIlSKGjddCGMa3xzjtTx9ryf1Xr0MnY5PeyNLexpgHp93sc1BKxKKtYaT0
- lR6p0QEKeaZ70623oB7Sa2Ts4IytqUVxkQKRkJVWeQiPJ/dZYTK5uo15GaVwufuF8VTwnMkC
- 4l5X+NUYNAH1U1bpRtlT40aoLEUhWKAyVdowxW4yGCP3nL5E69tZQQgsag+OnxBa6f88j63u
- wxmOJGNXcwCerkCb+wUPwJzChSifFYmuV5l89LKHgSbv0WHSN9OLkuhJO+I9fsCNvro1Y7dT
- U/yq4aSVzjaqPT3yrnQkzVDxrYT54FLWO1ssFKAOlcfeWzqrT9QNcHIzHMQYf5c03Kyq3yMI
- Xi91hkw2uc/GuA2CZ8dUD3BZhUT1dm0igE9NViE1M7F5lHQONEr7MOCg1hcrkngY62V6vh0f
- RcDeV0ISwlZWuQINBFMB0ccBEACXKmWvojkaG+kh/yipMmqZTrCozsLeGitxJzo5hq9ev31N
- 2XpPGx4AGhpccbco63SygpVN2bOd0W62fJJoxGohtf/g0uVtRSuK43OTstoBPqyY/35+VnAV
- oA5cnfvtdx5kQPIL6LRcxmYKgN4/3+A7ejIxbOrjWFmbWCC+SgX6mzHHBrV0OMki8R+NnrNa
- NkUmMmosi7jBSKdoi9VqDqgQTJF/GftvmaZHqgmVJDWNrCv7UiorhesfIWPt1O/AIk9luxlE
- dHwkx5zkWa9CGYvV6LfP9BznendEoO3qYZ9IcUlW727Le80Q1oh69QnHoI8pODDBBTJvEq1h
- bOWcPm/DsNmDD8Rwr/msRmRyIoxjasFi5WkM/K/pzujICKeUcNGNsDsEDJC5TCmRO/TlvCvm
- 0X+vdfEJRZV6Z+QFBflK1asUz9QHFre5csG8MyVZkwTR9yUiKi3KiqQdaEu+LuDD2CGF5t68
- xEl66Y6mwfyiISkkm3ETA4E8rVZP1rZQBBm83c5kJEDvs0A4zrhKIPTcI1smK+TWbyVyrZ/a
- mGYDrZzpF2N8DfuNSqOQkLHIOL3vuOyx3HPzS05lY3p+IIVmnPOEdZhMsNDIGmVorFyRWa4K
- uYjBP/W3E5p9e6TvDSDzqhLoY1RHfAIadM3I8kEx5wqco67VIgbIHHB9DbRcxQARAQABiQIf
- BBgBAgAJBQJTAdHHAhsMAAoJEFiDn/uYk8VJb7AQAK56tgX8V1Wa6RmZDmZ8dmBC7W8nsMRz
- PcKWiDSMIvTJT5bygMy1lf7gbHXm7fqezRtSfXAXr/OJqSA8LB2LWfThLyuuCvrdNsQNrI+3
- D+hjHJjhW/4185y3EdmwwHcelixPg0X9EF+lHCltV/w29Pv3PiGDkoKxJrnOpnU6jrwiBebz
- eAYBfpSEvrCm4CR4hf+T6MdCs64UzZnNt0nxL8mLCCAGmq1iks9M4bZk+LG36QjCKGh8PDXz
- 9OsnJmCggptClgjTa7pO6040OW76pcVrP2rZrkjo/Ld/gvSc7yMO/m9sIYxLIsR2NDxMNpmE
- q/H7WO+2bRG0vMmsndxpEYS4WnuhKutoTA/goBEhtHu1fg5KC+WYXp9wZyTfeNPrL0L8F3N1
- BCEYefp2JSZ/a355X6r2ROGSRgIIeYjAiSMgGAZMPEVsdvKsYw6BH17hDRzltNyIj5S0dIhb
- Gjynb3sXforM/GVbr4mnuxTdLXQYlj2EJ4O4f0tkLlADT7podzKSlSuZsLi2D+ohKxtP3U/r
- 42i8PBnX2oAV0UIkYk7Oel/3hr0+BP666SnTls9RJuoXc7R5XQVsomqXID6GmjwFQR5Wh/RE
- IJtkiDAsk37cfZ9d1kZ2gCQryTV9lmflSOB6AFZkOLuEVSC5qW8M/s6IGDfYXN12YJaZPptJ fiD/
-Message-ID: <81e0eff0-8b40-3c47-e39b-929e1dc07fd5@linux.intel.com>
-Date:   Mon, 4 May 2020 16:01:08 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1726351AbgEDNVi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 4 May 2020 09:21:38 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B3A691FB;
+        Mon,  4 May 2020 06:21:35 -0700 (PDT)
+Received: from [192.168.122.166] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 76A493F71F;
+        Mon,  4 May 2020 06:21:35 -0700 (PDT)
+Subject: Re: [PATCH] usb: usbfs: correct kernel->user page attribute mismatch
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        git@thegavinli.com, jarkko.sakkinen@linux.intel.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20200430211922.929165-1-jeremy.linton@arm.com>
+ <20200501070500.GA887524@kroah.com>
+ <d2d4f50e-a0bf-77c8-399b-86c2137bfa84@arm.com>
+ <20200504071306.GA831956@kroah.com>
+From:   Jeremy Linton <jeremy.linton@arm.com>
+Message-ID: <b3e38dba-ec98-147c-bb7b-c464882b33fd@arm.com>
+Date:   Mon, 4 May 2020 08:21:31 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <20200430165920.1345409-3-vkoul@kernel.org>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20200504071306.GA831956@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 30.4.2020 19.59, Vinod Koul wrote:
-> From: Christian Lamparter <chunkeey@googlemail.com>
-> 
-> This add a new driver for renesas xhci which is basically a firmware
-> loader for uPD720201 and uPD720202 w/o ROM. The xhci-pci driver will
-> invoke this driver for loading/unloading on relevant devices.
-> 
-> This patch adds a firmware loader for the uPD720201K8-711-BAC-A
-> and uPD720202K8-711-BAA-A variant. Both of these chips are listed
-> in Renesas' R19UH0078EJ0500 Rev.5.00 "User's Manual: Hardware" as
-> devices which need the firmware loader on page 2 in order to
-> work as they "do not support the External ROM".
-> 
-> The "Firmware Download Sequence" is describe in chapter
-> "7.1 FW Download Interface" R19UH0078EJ0500 Rev.5.00 page 131.
-> 
-> The firmware "K2013080.mem" is available from a USB3.0 Host to
-> PCIe Adapter (PP2U-E card) "Firmware download" archive. An
-> alternative version can be sourced from Netgear's WNDR4700 GPL
-> archives.
-> 
-> The release notes of the PP2U-E's "Firmware Download" ver 2.0.1.3
-> (2012-06-15) state that the firmware is for the following devices:
->  - uPD720201 ES 2.0 sample whose revision ID is 2.
->  - uPD720201 ES 2.1 sample & CS sample & Mass product, ID is 3.
->  - uPD720202 ES 2.0 sample & CS sample & Mass product, ID is 2.
-> 
-> Signed-off-by: Christian Lamparter <chunkeey@googlemail.com>
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> [vkoul: fixed comments:
-> 	used macros for timeout count and delay
-> 	removed renesas_fw_alive_check
-> 	cleaned renesas_fw_callback
-> 	removed recursion for renesas_fw_download
-> 	add register defines and field names
-> 	move to a separate file
-> 	make fw loader as sync probe so that we execute in probe and
->         prevent race
-> 	export symbols for xhci-pci to use]
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> ---
->  drivers/usb/host/Makefile           |   2 +-
->  drivers/usb/host/xhci-pci-renesas.c | 365 ++++++++++++++++++++++++++++
->  drivers/usb/host/xhci-pci.h         |  16 ++
->  3 files changed, 382 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/usb/host/xhci-pci-renesas.c
->  create mode 100644 drivers/usb/host/xhci-pci.h
-> 
-> diff --git a/drivers/usb/host/Makefile b/drivers/usb/host/Makefile
-> index b191361257cc..f3a5a2f01874 100644
-> --- a/drivers/usb/host/Makefile
-> +++ b/drivers/usb/host/Makefile
-> @@ -70,7 +70,7 @@ obj-$(CONFIG_USB_OHCI_HCD_DAVINCI)	+= ohci-da8xx.o
->  obj-$(CONFIG_USB_UHCI_HCD)	+= uhci-hcd.o
->  obj-$(CONFIG_USB_FHCI_HCD)	+= fhci.o
->  obj-$(CONFIG_USB_XHCI_HCD)	+= xhci-hcd.o
-> -obj-$(CONFIG_USB_XHCI_PCI)	+= xhci-pci.o
-> +obj-$(CONFIG_USB_XHCI_PCI)	+= xhci-pci.o xhci-pci-renesas.o
+Hi,
 
-Hmm, now we end up with two modules, xhci-pci and xhci-pci-renesas, even if
-xhci-pci-renesas just includes helper functions to load firmware for renesas.
+On 5/4/20 2:13 AM, Greg KH wrote:
+> On Fri, May 01, 2020 at 10:47:22AM -0500, Jeremy Linton wrote:
+>> Hi,
+>>
+>> Thanks for taking a look at this.
+>>
+>> On 5/1/20 2:05 AM, Greg KH wrote:
+>>> On Thu, Apr 30, 2020 at 04:19:22PM -0500, Jeremy Linton wrote:
+>>>> On arm64, and possibly other architectures, requesting
+>>>> IO coherent memory may return Normal-NC if the underlying
+>>>> hardware isn't coherent. If these pages are then
+>>>> remapped into userspace as Normal, that defeats the
+>>>> purpose of getting Normal-NC, as well as resulting in
+>>>> mappings with differing cache attributes.
+>>>
+>>> What is "Normal-NC"?
+>>
+>> A non-cacheable attribute on arm64 pages. I think Mark R & Marc Z elaborated
+>> while I was asleep (thanks!).
+>>    .
+>>
+>>
+>>>
+>>>> In particular this happens with libusb, when it attempts
+>>>> to create zero-copy buffers as is used by rtl-sdr, and
+>>>
+>>> What is "rtl-sdr"
+>>
+>> Its the realtek software defined radio (SDR), a really inexpensive TV dongle
+>> that was discovered could be used as a general purpose SDR a decade or so
+>> ago. In particular, this project
+>> https://github.com/osmocom/rtl-sdr/
+>> which is packaged by fedora/etc.
+>>
+>>>
+>>>> maybe other applications. The result is usually
+>>>> application death.
+>>>
+>>> So is this a new problem?  Old problem?  Old problem only showing up on
+>>> future devices?  On current devices?  I need a hint here as to know if
+>>> this is a bugfix or just work to make future devices work properly.
+>>
+>> This has been a problem on arm devices without IO coherent USB apparently
+>> for years. The rtl-sdr project itself has a disable zero-copy mode that
+>> people have been using on rpi/etc specific builds. Fedora OTOH, is building
+>> it with the same flags on x86 & arm64 which means that people report
+>> problems. This happened a few days ago (on a pinebook), and I duplicated it
+>> on an NXP platform just running the `rtl_test` artifact with a nooelec from
+>> my junk box. Guessing that it was a page mismatch I went looking for that,
+>> rather than disabling the zero copy since punishing arm machine that have IO
+>> coherent USB adapters for the sins of these low end devices isn't ideal. I
+>> found this, and this patch allows the rtl_test app to run without issues on
+>> my NXP/solidrun.
+>>
+>> Plus, given that its actually a kernel/libusb problem its likely there are
+>> other applications having similar problems.
+>>
+>>>
+>>>>
+>>>> If dma_mmap_attr() is used instead of remap_pfn_range,
+>>>> the page cache/etc attributes can be matched between the
+>>>> kernel and userspace.
+>>>>
+>>>> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+>>>> ---
+>>>>    drivers/usb/core/devio.c | 5 ++---
+>>>>    1 file changed, 2 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
+>>>> index 6833c918abce..1e7458dd6e5d 100644
+>>>> --- a/drivers/usb/core/devio.c
+>>>> +++ b/drivers/usb/core/devio.c
+>>>> @@ -217,6 +217,7 @@ static int usbdev_mmap(struct file *file, struct vm_area_struct *vma)
+>>>>    {
+>>>>    	struct usb_memory *usbm = NULL;
+>>>>    	struct usb_dev_state *ps = file->private_data;
+>>>> +	struct usb_hcd *hcd = bus_to_hcd(ps->dev->bus);
+>>>>    	size_t size = vma->vm_end - vma->vm_start;
+>>>>    	void *mem;
+>>>>    	unsigned long flags;
+>>>> @@ -250,9 +251,7 @@ static int usbdev_mmap(struct file *file, struct vm_area_struct *vma)
+>>>>    	usbm->vma_use_count = 1;
+>>>>    	INIT_LIST_HEAD(&usbm->memlist);
+>>>> -	if (remap_pfn_range(vma, vma->vm_start,
+>>>> -			virt_to_phys(usbm->mem) >> PAGE_SHIFT,
+>>>> -			size, vma->vm_page_prot) < 0) {
+>>>> +	if (dma_mmap_attrs(hcd->self.sysdev, vma, mem, dma_handle, size, 0)) {
+>>>
+>>> Given that this code has not changed since 2016, how has no one noticed
+>>> this issue before?
+>> They have there are a lot of reports of sdr failures, but the general use
+>> case is rare?
+>>
+>>>
+>>> And have you tested this change out on other systems (i.e. x86) to
+>>> ensure that this still works properly?
+>>
+>> Yes and no, I did some basic libusb tests on an x86 machine, but its a bit
+>> tricky at the moment for me to get the rtl plugged into a x86 test machine.
+>> (its a work in progress).
+>>
+>>
+>>>
+>>> And why isn't this call used more by drivers if this is a real issue?
+>> The particulars of asking for iocoherent memory and then mapping it to
+>> userspace is rarer than just asking for kmalloc()/remap() and then
+>> performing the dma ops?
+>>
+>> Then there are all the softer issues around arm64 testing/availability and
+>> vendors carrying "fixes" for particular issues (like rtl-sdr disabling zero
+>> copy).
+>>
+>>> And will this cause issues with how the userspace mapping is handled as
+>>> now we rely on userspace to do things differently?  Or am I reading the
+>>> dma_mmap_attrs() documentation wrong?
+>> I don't think userspace is doing anything differently here, and AFAIK, on
+>> systems with IO coherent adapters this ends up with the same page mapping as
+>> just doing the remap_pfn_rage() with the same attributes as before. I've
+>> looked at dma_map_attrs() a bit, but i'm also trusting it does what it says
+>> on the tin.
+>>
+>>
+>> Thanks again for looking at this.
+> 
+> Ok, can I get a lot better written changelog text for this patch based
+> on this thread, so that it makes more sense when we merge this patch?
 
-My kbuild knowledge is limited, but one way to solve this would be to 
-rename xhci-pci.c to xhci-pci-core.c and add:
+Yes, sure. I also plan on changing it to dma_mmap_coherent() which is 
+the same as the dma_mmap_attrs() with the attrs as above.
 
-xhci-pci-y := xhci-pci-core.o xhci-pci-renesas.o
 
-unless someone can suggest a better way to solve this
+I will re-post later this afternoon.
 
--Mathias
-
+Thanks,
