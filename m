@@ -2,243 +2,153 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C15FE1C3307
-	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2020 08:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 987FC1C3352
+	for <lists+linux-usb@lfdr.de>; Mon,  4 May 2020 09:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727843AbgEDGdk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 May 2020 02:33:40 -0400
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:5294 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726743AbgEDGdk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 May 2020 02:33:40 -0400
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5eafb6fe0000>; Sun, 03 May 2020 23:32:30 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Sun, 03 May 2020 23:33:39 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Sun, 03 May 2020 23:33:39 -0700
-Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 4 May
- 2020 06:33:39 +0000
-Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Mon, 4 May 2020 06:33:39 +0000
-Received: from nkristam-ubuntu.nvidia.com (Not Verified[10.19.67.128]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5eafb7400001>; Sun, 03 May 2020 23:33:38 -0700
-From:   Nagarjuna Kristam <nkristam@nvidia.com>
-To:     <robh+dt@kernel.org>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <balbi@kernel.org>,
-        <gregkh@linuxfoundation.org>
-CC:     <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>,
-        Nagarjuna Kristam <nkristam@nvidia.com>
-Subject: [PATCH V2 3/3] usb: gadget: tegra-xudc: add port_speed_quirk
-Date:   Mon, 4 May 2020 12:04:41 +0530
-Message-ID: <1588574081-23160-4-git-send-email-nkristam@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1588574081-23160-1-git-send-email-nkristam@nvidia.com>
-References: <1588574081-23160-1-git-send-email-nkristam@nvidia.com>
-X-NVConfidentiality: public
+        id S1727100AbgEDHK2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 May 2020 03:10:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40200 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726625AbgEDHK1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 May 2020 03:10:27 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B245DC061A0E
+        for <linux-usb@vger.kernel.org>; Mon,  4 May 2020 00:10:25 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id y3so523509wrt.1
+        for <linux-usb@vger.kernel.org>; Mon, 04 May 2020 00:10:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=PG6BwDAPcL8wb4HpwlS4YSmvTNTE6ibzVKQn+MZi8Es=;
+        b=LkM38JAq4noGtfOnmF87UfUXUnx6MfQgOywDyS/n35EYboeqiGo2aRfDc8mXTnwM5w
+         CPXlcI8M5+UniPHP9U8mAy6J6HNBwBJBxlJUZ70R0THyb75LvqPSiTOxHAEq+XclvRZ+
+         Cs4PSD7jw3rXiWEvuQicaqtfskfu/SsE8N//AJugm+JvRey12eitbIz3Vbw0QSYHHO33
+         738FUZBMV0R+7+ccdZClm7k0b5FVLgHBo2QbawaJeeDYBCyb1od0JYkd9NxKojoufQiU
+         Qyx56CKXSBdBgNIZdHSrW77VUg5t4F4oI5lrot6S6VGQll+BGG9+x7cvPpn4scU/0aj/
+         Vr7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=PG6BwDAPcL8wb4HpwlS4YSmvTNTE6ibzVKQn+MZi8Es=;
+        b=lJM/1y/yyM8rUkSMSl9TlyZUvog6LK+pamTfOJWBfAe0dg/Ze8VzRk5DWg5e5PdJKf
+         6u3I11m/JHsmF9vtte+eKWwZvvwz0R8BEDcssUAs2TvRKSVm4GMsbSI3SRNxM7olKFlX
+         NIZZvbSAe2S4WijiaQg8pnazrK77A0PkK/SaRS43KU34lmoUdag3JloLDWX8uHzVcW1K
+         k9HIXM2dKgwv+pxGaAqytXUiykKznu9X2l3ExBD/Vgkm1V/nPpL7OnBziMSEEVtLAJx+
+         nJ4QXNC2KUcmMgRtpVSje++LvKclbUb4tZqf8Fon43TgRQ/VQLJHDu8Zz2qG/Q+curGc
+         l8Gw==
+X-Gm-Message-State: AGi0PuZ+5EjJ+m3GHwQieh5Epv7o6yQJL+HIuMmumPSPaMCBpMZZspi/
+        Jzn9B84CmoDMu4zWPtwqtjAjW0Ryk3Q=
+X-Google-Smtp-Source: APiQypJJ8tWv285WswOjJBC9z1LmXOMpX5hXpKi/l41oV/Xikfp3MSONQbmU+rPwn7cBbxCVScdgeQ==
+X-Received: by 2002:adf:f5c4:: with SMTP id k4mr17360658wrp.294.1588576224290;
+        Mon, 04 May 2020 00:10:24 -0700 (PDT)
+Received: from dell ([2.31.163.63])
+        by smtp.gmail.com with ESMTPSA id l15sm11423844wmi.48.2020.05.04.00.10.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 May 2020 00:10:23 -0700 (PDT)
+Date:   Mon, 4 May 2020 08:10:21 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH 01/10] backlight: Add backlight_device_get_by_name()
+Message-ID: <20200504071021.GC298816@dell>
+References: <20200429124830.27475-1-noralf@tronnes.org>
+ <20200429124830.27475-2-noralf@tronnes.org>
+ <20200430083219.GC3118@dell>
+ <0fbc4eb5-cb39-5974-85bb-9f13278ecab4@tronnes.org>
+ <20200430101529.GB298816@dell>
+ <20200430140242.GF10381@phenom.ffwll.local>
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1588573950; bh=4S4+7Q1v8T97/LJp/rVsk/6bGlUDNI4LPsIAgboFSW4=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
-         Content-Type;
-        b=qDoNlBQvezAUQpRut45dNd8S9jGPRljoLdvzs5MyZDQgfl3XhCH2hXnTfNA+93iFa
-         4Dvz7e7HkV08Lb3gkab5q5BafjbPjeaPh/n1OS/c0dNONGwsGICOUWO4Hq+mDDquCO
-         oZaKLQvWYTs0REqOCafWluci8S0rBgu2NZqaTe0WDUtGcXwANlK9Jr9/eIyJMOJw2j
-         +4+/viBqLs+i3LwJU3dahQ3QeQ8MS/I7s70y1hU7pFRBOtFdAz6ERZm4KlgohNZB3d
-         ZtZP6insLjvASX4+GSMQLOSWq/1T8MkLIXx2p74udEg31Wr/souEChjuw22fFyVwQz
-         lx95Ey1Q6ctiA==
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200430140242.GF10381@phenom.ffwll.local>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-OTG port on Tegra194 supports GEN1 speeds when in device mode and GEN2
-speeds when in host mode. dd port_speed_quirk that configures port to
-GEN1/GEN2 speds, corresponding to the mode.
+On Thu, 30 Apr 2020, Daniel Vetter wrote:
 
-Based on work by WayneChang <waynec@nvidia.com>
+> On Thu, Apr 30, 2020 at 11:15:29AM +0100, Lee Jones wrote:
+> > On Thu, 30 Apr 2020, Noralf Trønnes wrote:
+> > 
+> > > 
+> > > 
+> > > Den 30.04.2020 10.32, skrev Lee Jones:
+> > > > On Wed, 29 Apr 2020, Noralf Trønnes wrote:
+> > > > 
+> > > >> Add a way to lookup a backlight device based on its name.
+> > > >> Will be used by a USB display gadget getting the name from configfs.
+> > > >>
+> > > >> Cc: Lee Jones <lee.jones@linaro.org>
+> > > >> Cc: Daniel Thompson <daniel.thompson@linaro.org>
+> > > >> Cc: Jingoo Han <jingoohan1@gmail.com>
+> > > >> Signed-off-by: Noralf Trønnes <noralf@tronnes.org>
+> > > >> ---
+> > > >>  drivers/video/backlight/backlight.c | 21 +++++++++++++++++++++
+> > > >>  include/linux/backlight.h           |  1 +
+> > > >>  2 files changed, 22 insertions(+)
+> > > > 
+> > > > Once reviewed, can this patch be applied on its own?
+> > > > 
+> > > 
+> > > If you can apply it for 5.8, then we're good. DRM has cutoff at -rc5 and
+> > > the driver won't be ready for that. This patch has this dependency
+> > > chain: usb -> drm -> backlight. So if you can apply it for 5.8, things
+> > > gets easier.
+> > > 
+> > > > My guess is that it can't, as the other patches in this set depend on
+> > > > it, right?  If this assumption is true, you need to send me the rest
+> > > > of the set.
+> > > > 
+> > > > FYI: It's normally better to send the whole set to everyone, as it
+> > > > provides visibility on current review (or lack there of) status of the
+> > > > other patches and allows each of the maintainers to discuss possible
+> > > > merge strategies.
+> 
+> Unfortunately this doesn't hold universally, since once you cc too many
+> people smtp servers start throwing your mails away. Generally only happens
+> for bigger refactorings, so pretty much anyone working cross-tree doesn't
+> do this because it doesn't work.
 
-Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
----
-V2:
- - Updated commit message to explain on why this change is needed.
- - Fixed checkpatch errors.
----
- drivers/usb/gadget/udc/tegra-xudc.c | 106 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 106 insertions(+)
+I haven't experienced issues with SMTP servers.  Although I am aware
+of a few mailing lists that are configured to require moderator
+intervention if the recipient list reaches a given length.
 
-diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/udc/tegra-xudc.c
-index 04c6a06..8111b32 100644
---- a/drivers/usb/gadget/udc/tegra-xudc.c
-+++ b/drivers/usb/gadget/udc/tegra-xudc.c
-@@ -158,6 +158,30 @@
- #define  SSPX_CORE_CNT32_POLL_TBURST_MAX_MASK GENMASK(7, 0)
- #define  SSPX_CORE_CNT32_POLL_TBURST_MAX(x) ((x) & \
- 					SSPX_CORE_CNT32_POLL_TBURST_MAX_MASK)
-+#define SSPX_CORE_CNT56 0x6fc
-+#define  SSPX_CORE_CNT56_SCD_BIT0_TRPT_MAX_MASK GENMASK(19, 0)
-+#define  SSPX_CORE_CNT56_SCD_BIT0_TRPT_MAX(x) ((x) & \
-+				SSPX_CORE_CNT56_SCD_BIT0_TRPT_MAX_MASK)
-+#define SSPX_CORE_CNT57 0x700
-+#define  SSPX_CORE_CNT57_SCD_BIT1_TRPT_MAX_MASK GENMASK(19, 0)
-+#define  SSPX_CORE_CNT57_SCD_BIT1_TRPT_MAX(x) ((x) & \
-+				SSPX_CORE_CNT57_SCD_BIT1_TRPT_MAX_MASK)
-+#define SSPX_CORE_CNT65 0x720
-+#define  SSPX_CORE_CNT65_TX_SCD_END_TRPT_MID_MASK GENMASK(19, 0)
-+#define  SSPX_CORE_CNT65_TX_SCD_END_TRPT_MID(x) ((x) & \
-+				SSPX_CORE_CNT65_TX_SCD_END_TRPT_MID_MASK)
-+#define SSPX_CORE_CNT66 0x724
-+#define  SSPX_CORE_CNT66_TX_SCD_BIT0_TRPT_MID_MASK GENMASK(19, 0)
-+#define  SSPX_CORE_CNT66_TX_SCD_BIT0_TRPT_MID(x) ((x) & \
-+				SSPX_CORE_CNT66_TX_SCD_BIT0_TRPT_MID_MASK)
-+#define SSPX_CORE_CNT67 0x728
-+#define  SSPX_CORE_CNT67_TX_SCD_BIT1_TRPT_MID_MASK GENMASK(19, 0)
-+#define  SSPX_CORE_CNT67_TX_SCD_BIT1_TRPT_MID(x) ((x) & \
-+				SSPX_CORE_CNT67_TX_SCD_BIT1_TRPT_MID_MASK)
-+#define SSPX_CORE_CNT72 0x73c
-+#define  SSPX_CORE_CNT72_SCD_LFPS_TIMEOUT_MASK GENMASK(19, 0)
-+#define  SSPX_CORE_CNT72_SCD_LFPS_TIMEOUT(x) ((x) & \
-+				SSPX_CORE_CNT72_SCD_LFPS_TIMEOUT_MASK)
- #define SSPX_CORE_PADCTL4 0x750
- #define  SSPX_CORE_PADCTL4_RXDAT_VLD_TIMEOUT_U3_MASK GENMASK(19, 0)
- #define  SSPX_CORE_PADCTL4_RXDAT_VLD_TIMEOUT_U3(x) ((x) & \
-@@ -530,6 +554,7 @@ struct tegra_xudc_soc {
- 	bool invalid_seq_num;
- 	bool pls_quirk;
- 	bool port_reset_quirk;
-+	bool port_speed_quirk;
- 	bool has_ipfs;
- };
- 
-@@ -599,6 +624,78 @@ static inline void dump_trb(struct tegra_xudc *xudc, const char *type,
- 		trb->control);
- }
- 
-+static void tegra_xudc_limit_port_speed(struct tegra_xudc *xudc)
-+{
-+	u32 val;
-+
-+	/* limit port speed to gen 1 */
-+	val = xudc_readl(xudc, SSPX_CORE_CNT56);
-+	val &= ~(SSPX_CORE_CNT56_SCD_BIT0_TRPT_MAX_MASK);
-+	val |= SSPX_CORE_CNT56_SCD_BIT0_TRPT_MAX(0x260);
-+	xudc_writel(xudc, val, SSPX_CORE_CNT56);
-+
-+	val = xudc_readl(xudc, SSPX_CORE_CNT57);
-+	val &= ~(SSPX_CORE_CNT57_SCD_BIT1_TRPT_MAX_MASK);
-+	val |= SSPX_CORE_CNT57_SCD_BIT1_TRPT_MAX(0x6D6);
-+	xudc_writel(xudc, val, SSPX_CORE_CNT57);
-+
-+	val = xudc_readl(xudc, SSPX_CORE_CNT65);
-+	val &= ~(SSPX_CORE_CNT65_TX_SCD_END_TRPT_MID_MASK);
-+	val |= SSPX_CORE_CNT65_TX_SCD_END_TRPT_MID(0x4B0);
-+	xudc_writel(xudc, val, SSPX_CORE_CNT66);
-+
-+	val = xudc_readl(xudc, SSPX_CORE_CNT66);
-+	val &= ~(SSPX_CORE_CNT66_TX_SCD_BIT0_TRPT_MID_MASK);
-+	val |= SSPX_CORE_CNT66_TX_SCD_BIT0_TRPT_MID(0x4B0);
-+	xudc_writel(xudc, val, SSPX_CORE_CNT66);
-+
-+	val = xudc_readl(xudc, SSPX_CORE_CNT67);
-+	val &= ~(SSPX_CORE_CNT67_TX_SCD_BIT1_TRPT_MID_MASK);
-+	val |= SSPX_CORE_CNT67_TX_SCD_BIT1_TRPT_MID(0x4B0);
-+	xudc_writel(xudc, val, SSPX_CORE_CNT67);
-+
-+	val = xudc_readl(xudc, SSPX_CORE_CNT72);
-+	val &= ~(SSPX_CORE_CNT72_SCD_LFPS_TIMEOUT_MASK);
-+	val |= SSPX_CORE_CNT72_SCD_LFPS_TIMEOUT(0x10);
-+	xudc_writel(xudc, val, SSPX_CORE_CNT72);
-+}
-+
-+static void tegra_xudc_restore_port_speed(struct tegra_xudc *xudc)
-+{
-+	u32 val;
-+
-+	/* restore port speed to gen2 */
-+	val = xudc_readl(xudc, SSPX_CORE_CNT56);
-+	val &= ~(SSPX_CORE_CNT56_SCD_BIT0_TRPT_MAX_MASK);
-+	val |= SSPX_CORE_CNT56_SCD_BIT0_TRPT_MAX(0x438);
-+	xudc_writel(xudc, val, SSPX_CORE_CNT56);
-+
-+	val = xudc_readl(xudc, SSPX_CORE_CNT57);
-+	val &= ~(SSPX_CORE_CNT57_SCD_BIT1_TRPT_MAX_MASK);
-+	val |= SSPX_CORE_CNT57_SCD_BIT1_TRPT_MAX(0x528);
-+	xudc_writel(xudc, val, SSPX_CORE_CNT57);
-+
-+	val = xudc_readl(xudc, SSPX_CORE_CNT65);
-+	val &= ~(SSPX_CORE_CNT65_TX_SCD_END_TRPT_MID_MASK);
-+	val |= SSPX_CORE_CNT65_TX_SCD_END_TRPT_MID(0xE10);
-+	xudc_writel(xudc, val, SSPX_CORE_CNT66);
-+
-+	val = xudc_readl(xudc, SSPX_CORE_CNT66);
-+	val &= ~(SSPX_CORE_CNT66_TX_SCD_BIT0_TRPT_MID_MASK);
-+	val |= SSPX_CORE_CNT66_TX_SCD_BIT0_TRPT_MID(0x348);
-+	xudc_writel(xudc, val, SSPX_CORE_CNT66);
-+
-+	val = xudc_readl(xudc, SSPX_CORE_CNT67);
-+	val &= ~(SSPX_CORE_CNT67_TX_SCD_BIT1_TRPT_MID_MASK);
-+	val |= SSPX_CORE_CNT67_TX_SCD_BIT1_TRPT_MID(0x5a0);
-+	xudc_writel(xudc, val, SSPX_CORE_CNT67);
-+
-+	val = xudc_readl(xudc, SSPX_CORE_CNT72);
-+	val &= ~(SSPX_CORE_CNT72_SCD_LFPS_TIMEOUT_MASK);
-+	val |= SSPX_CORE_CNT72_SCD_LFPS_TIMEOUT(0x1c21);
-+	xudc_writel(xudc, val, SSPX_CORE_CNT72);
-+}
-+
- static void tegra_xudc_device_mode_on(struct tegra_xudc *xudc)
- {
- 	int err;
-@@ -631,6 +728,9 @@ static void tegra_xudc_device_mode_off(struct tegra_xudc *xudc)
- 
- 	reinit_completion(&xudc->disconnect_complete);
- 
-+	if (xudc->soc->port_speed_quirk)
-+		tegra_xudc_restore_port_speed(xudc);
-+
- 	phy_set_mode_ext(xudc->curr_utmi_phy, PHY_MODE_USB_OTG, USB_ROLE_NONE);
- 
- 	pls = (xudc_readl(xudc, PORTSC) & PORTSC_PLS_MASK) >>
-@@ -3274,6 +3374,9 @@ static void tegra_xudc_device_params_init(struct tegra_xudc *xudc)
- 		xudc_writel(xudc, val, BLCG);
- 	}
- 
-+	if (xudc->soc->port_speed_quirk)
-+		tegra_xudc_limit_port_speed(xudc);
-+
- 	/* Set a reasonable U3 exit timer value. */
- 	val = xudc_readl(xudc, SSPX_CORE_PADCTL4);
- 	val &= ~(SSPX_CORE_PADCTL4_RXDAT_VLD_TIMEOUT_U3_MASK);
-@@ -3506,6 +3609,7 @@ static struct tegra_xudc_soc tegra210_xudc_soc_data = {
- 	.invalid_seq_num = true,
- 	.pls_quirk = true,
- 	.port_reset_quirk = true,
-+	.port_speed_quirk = false,
- 	.has_ipfs = true,
- };
- 
-@@ -3519,6 +3623,7 @@ static struct tegra_xudc_soc tegra186_xudc_soc_data = {
- 	.invalid_seq_num = false,
- 	.pls_quirk = false,
- 	.port_reset_quirk = false,
-+	.port_speed_quirk = false,
- 	.has_ipfs = false,
- };
- 
-@@ -3532,6 +3637,7 @@ static struct tegra_xudc_soc tegra194_xudc_soc_data = {
- 	.invalid_seq_num = false,
- 	.pls_quirk = false,
- 	.port_reset_quirk = false,
-+	.port_speed_quirk = true,
- 	.has_ipfs = false,
- };
- 
+> > > dri-devel is the ML for backlight so I assumed you got the full set.
+> > 
+> > dri-devel isn't the ML for Backlight.  It's an interested party.
+> > 
+> > I certainly have no intention of subscribing to it.
+> 
+> dri-devel is on lore so that you can grab missing patches. No need to
+> subscribe. I've only manged to get this sorted recently (last autumn or
+> so), but it's finally done.
+
+This is helpful.  Thanks for doing the work required to make this
+happen.  It's still infinitely more convenient to have the full set
+in my inbox available for review.  As someone who works cross-
+subsystem a lot, I can tell you that it works well in the vast
+majority of cases.
+
+Maybe just add the listed (in 'MAINTAINERS') maintainers and possibly
+the reviewers.  Obviously all of the secondary interested parties that
+get_maintainer.pl recommends should be omitted.
+
+> > > I have had trouble in the past with my email provider dropping parts of
+> > > a series when I had to many recipients.
+> > 
+> > Without visibility into the other patches in the set, things become
+> > more difficult.  Maybe use a different/better email provider.
+
 -- 
-2.7.4
-
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
