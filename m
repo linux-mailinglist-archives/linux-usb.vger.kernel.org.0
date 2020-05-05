@@ -2,120 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81AEC1C4E26
-	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2020 08:15:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE7431C4E57
+	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2020 08:30:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726610AbgEEGPg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 May 2020 02:15:36 -0400
-Received: from mail27.static.mailgun.info ([104.130.122.27]:54556 "EHLO
-        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725320AbgEEGPg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 May 2020 02:15:36 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1588659335; h=Content-Transfer-Encoding: MIME-Version:
- Message-Id: Date: Subject: Cc: To: From: Sender;
- bh=4LMyBGiVjDWuIw38SfK2K8gkzHgQXhrQL+ytQ2dYrts=; b=pg2T8e9wDuYFeCWngLIPmsc9VCBHe+J1//gyaZrCuMq8QofInck48xpD0I32h9mJ7ou18O6I
- HHkkE9zHHLZ4wsKfALDsj+5/B58f7fnWxryGq+ZYp13Xhah0J8TBX2Z0CNVC0MhmhJEqsHcl
- dFXWKLn/y4NtBQmyHwLrJ7jGugE=
-X-Mailgun-Sending-Ip: 104.130.122.27
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5eb1047e.7fe0a1acb030-smtp-out-n04;
- Tue, 05 May 2020 06:15:26 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 37DB4C433BA; Tue,  5 May 2020 06:15:26 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from sallenki-linux.qualcomm.com (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sallenki)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 2020EC433CB;
-        Tue,  5 May 2020 06:15:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 2020EC433CB
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sallenki@codeaurora.org
-From:   Sriharsha Allenki <sallenki@codeaurora.org>
-To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, mgautam@codeaurora.org,
-        jackp@codeaurora.org, Sriharsha Allenki <sallenki@codeaurora.org>,
-        stable@vger.kernel.org
-Subject: [PATCH] usb: xhci: Fix NULL pointer dereference as part of completion
-Date:   Tue,  5 May 2020 11:44:46 +0530
-Message-Id: <20200505061446.21850-1-sallenki@codeaurora.org>
-X-Mailer: git-send-email 2.26.0
+        id S1725833AbgEEGaq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 May 2020 02:30:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60892 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725320AbgEEGap (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 May 2020 02:30:45 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DB3C061A0F
+        for <linux-usb@vger.kernel.org>; Mon,  4 May 2020 23:30:45 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id j3so390465ljg.8
+        for <linux-usb@vger.kernel.org>; Mon, 04 May 2020 23:30:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=9VkRkb1ro1GgJ9r1EmvnofJjjCP5hTfDcQnLR5xMf4s=;
+        b=PRJF5rkB1gz41pH86KmPzfEkDhICs5RLTWoksw5ku/HqdCc/xy28MNwD1y+yUlmo6z
+         uSjWQ+wtI8Yo2cDeLkQEfxGgcIlAvROo6faOHxwgEUR30mf7lNNieRd1cErj2w+I42AH
+         iGv6xXDkj20OZ3n/wp4FF9NKGpUq3ns4UREYXf4jzooqWl0dgr3Jy2e/TIB8Mi6gzQyY
+         OERhy1z2SLQzwtdFug1hSrkffCeuihAQIk/bVZp77Il37e9ybUiRB0PHcMRSKNQpsFYj
+         UHPRTgu0Yn/oMkMPF9ZPyeaOsuLETTWMpuiPw1VLfAxx0aAGOpV+0dVNsYxovW+/pmwB
+         +ixA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=9VkRkb1ro1GgJ9r1EmvnofJjjCP5hTfDcQnLR5xMf4s=;
+        b=LuFcmA7VlX9wz6lJgWUVxh0tCnat3f+QTWz9u9sN8UFt0e8++F90ouB+m++ZmMCu6/
+         0qJLtZv/3CK8DjLtjTho4pWbWToIJ9cWsXcX6P9eToPH9WiOVjhtg/nyfLVjKfOckMxS
+         +f4E/B3l10SZ2yZEkBKE4mMLFGZzWVfF8r8POz/t/rHxPPxMXjzL0j2Uw3nzFz6XtyD7
+         DwMvNcOJvcEEUaQy219osIjfOaRe1gw2PEi525giIGTWgBJTY2uUZBrCj32GfRWJ3rN0
+         HL2uByPLGem+RBYlkoX6aDWX6RJjAPcMSbB3IGzhnpOtNBXYTsMmutaezX0dL+j9h9wP
+         ELOg==
+X-Gm-Message-State: AGi0PuZ51x/Ef6AT2XzN6pgTWkSvJ894dWP2PdirnJagyZMxT0tBu6DE
+        SlOr/38+RZrGfN1V/1mg6uyym/Pe
+X-Google-Smtp-Source: APiQypKcjm3a/GYvCCLaLvivyXzf/CFDKvtaMS1yMNfEJGvjbZlsnc9NikHkG5SdLi5BYRXW3Kk+dQ==
+X-Received: by 2002:a2e:8901:: with SMTP id d1mr827015lji.37.1588660243461;
+        Mon, 04 May 2020 23:30:43 -0700 (PDT)
+Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
+        by smtp.gmail.com with ESMTPSA id o3sm911278lfl.78.2020.05.04.23.30.42
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 04 May 2020 23:30:42 -0700 (PDT)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrey Konovalov <andreyknvl@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>
+Subject: Re: Testing endpoint halt support for raw-gadget
+In-Reply-To: <Pine.LNX.4.44L0.2005041018520.11213-100000@netrider.rowland.org>
+References: <Pine.LNX.4.44L0.2005041018520.11213-100000@netrider.rowland.org>
+Date:   Tue, 05 May 2020 09:30:38 +0300
+Message-ID: <87d07ic2r5.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On platforms with IOMMU enabled, multiple SGs can be
-coalesced into one by the IOMMU driver. In that case
-the SG list processing as part of the completion of
-a urb on a bulk endpoint can result into a NULL pointer
-dereference with the below stack dump.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-<6> Unable to handle kernel NULL pointer dereference at virtual address 0000000c
-<6> pgd = c0004000
-<6> [0000000c] *pgd=00000000
-<6> Internal error: Oops: 5 [#1] PREEMPT SMP ARM
-<2> PC is at xhci_queue_bulk_tx+0x454/0x80c
-<2> LR is at xhci_queue_bulk_tx+0x44c/0x80c
-<2> pc : [<c08907c4>]    lr : [<c08907bc>]    psr: 000000d3
-<2> sp : ca337c80  ip : 00000000  fp : ffffffff
-<2> r10: 00000000  r9 : 50037000  r8 : 00004000
-<2> r7 : 00000000  r6 : 00004000  r5 : 00000000  r4 : 00000000
-<2> r3 : 00000000  r2 : 00000082  r1 : c2c1a200  r0 : 00000000
-<2> Flags: nzcv  IRQs off  FIQs off  Mode SVC_32  ISA ARM  Segment none
-<2> Control: 10c0383d  Table: b412c06a  DAC: 00000051
-<6> Process usb-storage (pid: 5961, stack limit = 0xca336210)
-<snip>
-<2> [<c08907c4>] (xhci_queue_bulk_tx)
-<2> [<c0881b3c>] (xhci_urb_enqueue)
-<2> [<c0831068>] (usb_hcd_submit_urb)
-<2> [<c08350b4>] (usb_sg_wait)
-<2> [<c089f384>] (usb_stor_bulk_transfer_sglist)
-<2> [<c089f2c0>] (usb_stor_bulk_srb)
-<2> [<c089fe38>] (usb_stor_Bulk_transport)
-<2> [<c089f468>] (usb_stor_invoke_transport)
-<2> [<c08a11b4>] (usb_stor_control_thread)
-<2> [<c014a534>] (kthread)
 
-The above NULL pointer dereference is the result of block_len and
-the sent_len set to zero after the first SG of the list when IOMMU
-driver is enabled. Because of this the loop of processing the SGs
-has run more than num_sgs which resulted in a sg_next on the
-last SG of the list which has SG_END set.
+Hi,
 
-Fix this by check for the sg before any attributes of the sg are
-accessed.
+Alan Stern <stern@rowland.harvard.edu> writes:
+> On Mon, 4 May 2020, Andrey Konovalov wrote:
+>
+>> One more question (sorry for so many :).
+>>=20
+>> Looking at other fields of usb_request struct I see frame_number.
+>> AFAIU it's filled in by the UDC driver for ISO transfers. Does it make
+>> sense to expose it to userspace? I don't see any composite/legacy
+>> gadgets use that field at all.
+>
+> Do any of those gadget drivers use isochronous endpoints?
+>
+> In fact, it also looks like none of the drivers in gadget/udc/ touch
+> the frame_number field.  Maybe we should just get rid of it, since it
+> isn't being used.
+>
+> Felipe, any preference?
 
-Fixes: f9c589e142d04 ("xhci: TD-fragment, align the unsplittable case with a bounce buffer")
-Cc: stable@vger.kernel.org
-Signed-off-by: Sriharsha Allenki <sallenki@codeaurora.org>
----
- drivers/usb/host/xhci-ring.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+It was added for functions to use to tell the UDC which frame they want
+to start the request, but it was never used. I don't mind removing it.
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index a78787bb5133..18141b38f7bf 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -3399,8 +3399,8 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
- 			/* New sg entry */
- 			--num_sgs;
- 			sent_len -= block_len;
--			if (num_sgs != 0) {
--				sg = sg_next(sg);
-+			sg = sg_next(sg);
-+			if (num_sgs != 0 && sg) {
- 				block_len = sg_dma_len(sg);
- 				addr = (u64) sg_dma_address(sg);
- 				addr += sent_len;
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, a Linux Foundation Collaborative Project
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl6xCA4ACgkQzL64meEa
+mQYB7g//VcEprmmelTPR78LbGNYvMx5NIEE2iezfjDSVBhs2lflDK9cs62B2B5OR
+VZ12SSimET9107+qqt+KF9WI576KD9g1sKKYpbn9Ofwzjvup7aaV+L3R+jVr0zrJ
++r3xnMK4VMe+jSbhKBTTRxANv6zePGlqL3CMpbI3z3u31QRpEC1XiZA+YGChNcKZ
+lVVjTvh6GRJ7nw1m7g/1qPY5cSPus49Q+Y7KuyOqu7FOmYCOrpETmC/Y4R7CaPDj
+mfAAtHOF/VCRcBKwgwLPv7u0NPjyvlDWNwCLmo7kYWe44a9RHIHRx9RMEdcAxsCM
+KARQZQivuWSFNU3wa+LJ15c1XuNwH/vWwrL9PegfFqwor4LAw2bpO+pQrC/kX3n0
+eXSu0zVfXraoFdzNLRgNnKrbbAdEhLmESeSEie/yZBo0zcS7tILn1VN85C3A+z7F
+KUcouq62GEUa/5O4oHpBw+N+jYRd1SXLGnqxr2v+bSL2dJ+vyuCnvPZyJjXRPR4P
+THGyGl6gn4RHstNiwhxV7gXOMciIZj3SRdkysiQNOOam5le6fdfBAp56sjTbAwyW
+PMUppGQMN5DZww42bcgxs9AQc2m4DoUL7wGx1VhxBz44QK8YqfSwr95H8WmoUyxe
+61PywFtAE6pxrqyodmkzZXoZ8p9krRiEwvch+neR/gT+Ck5np00=
+=oQEC
+-----END PGP SIGNATURE-----
+--=-=-=--
