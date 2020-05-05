@@ -2,129 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 247331C53E0
-	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2020 13:04:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DBF71C5436
+	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2020 13:15:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728781AbgEELEm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 May 2020 07:04:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43150 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725766AbgEELEm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 5 May 2020 07:04:42 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A9470206B8;
-        Tue,  5 May 2020 11:04:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588676680;
-        bh=qQz7Wc0iV6lltQX1X6gMaSxn3yyMWV+Fg5hhEXA0Ytg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BBCgI7d2H1aUoqDx3WyDtsimuN5WaE6Jo4Qzu3lJxq8tnlW/E34w/bnArIwyIWxSE
-         I9qyHEETD7eWdfvaaCTcQY/0hPIH0NTCli/NeoI323hyUWP/rvz+LNcNIFgIy9MTS2
-         WRQUjDV/k+TzdSN1KG7DuO3bNIu0rEFxQyHLGSPc=
-Date:   Tue, 5 May 2020 13:04:38 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andreas =?iso-8859-1?Q?B=F6hler?= <dev@aboehler.at>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v12 2/5] usb: renesas-xhci: Add the renesas xhci driver
-Message-ID: <20200505110438.GC93160@kroah.com>
-References: <20200430165920.1345409-1-vkoul@kernel.org>
- <20200430165920.1345409-3-vkoul@kernel.org>
- <81e0eff0-8b40-3c47-e39b-929e1dc07fd5@linux.intel.com>
- <20200504143438.GT1375924@vkoul-mobl>
+        id S1728948AbgEELP5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 May 2020 07:15:57 -0400
+Received: from s52.coreserver.jp ([202.172.28.53]:51490 "EHLO
+        s52.coreserver.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727090AbgEELP5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 May 2020 07:15:57 -0400
+Received: (qmail 303472 invoked by uid 10000); 5 May 2020 20:15:55 +0900
+To:     undisclosed-recipients:;
+Subject: =?UTF-8?Q?=E3=81=82=E3=81=AA=E3=81=9F=E3=81=B8=E3=81=AE=E3=81=94?=  =?UTF-8?Q?=E6=8C=A8=E6=8B=B6?=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200504143438.GT1375924@vkoul-mobl>
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Tue, 05 May 2020 04:15:55 -0700
+From:   Dominique Bell <keiko@ono.bz>
+Reply-To: dominiquebell757@gmail.com
+Mail-Reply-To: dominiquebell757@gmail.com
+Message-ID: <0f714f4f43ae5e9010916cad9d0633f7@ono.bz>
+X-Sender: keiko@ono.bz
+User-Agent: Roundcube Webmail/0.9.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 04, 2020 at 08:04:38PM +0530, Vinod Koul wrote:
-> Hi Mathias,
-> 
-> On 04-05-20, 16:01, Mathias Nyman wrote:
-> > On 30.4.2020 19.59, Vinod Koul wrote:
-> > > From: Christian Lamparter <chunkeey@googlemail.com>
-> > > 
-> > > This add a new driver for renesas xhci which is basically a firmware
-> > > loader for uPD720201 and uPD720202 w/o ROM. The xhci-pci driver will
-> > > invoke this driver for loading/unloading on relevant devices.
-> > > 
-> > > This patch adds a firmware loader for the uPD720201K8-711-BAC-A
-> > > and uPD720202K8-711-BAA-A variant. Both of these chips are listed
-> > > in Renesas' R19UH0078EJ0500 Rev.5.00 "User's Manual: Hardware" as
-> > > devices which need the firmware loader on page 2 in order to
-> > > work as they "do not support the External ROM".
-> > > 
-> > > The "Firmware Download Sequence" is describe in chapter
-> > > "7.1 FW Download Interface" R19UH0078EJ0500 Rev.5.00 page 131.
-> > > 
-> > > The firmware "K2013080.mem" is available from a USB3.0 Host to
-> > > PCIe Adapter (PP2U-E card) "Firmware download" archive. An
-> > > alternative version can be sourced from Netgear's WNDR4700 GPL
-> > > archives.
-> > > 
-> > > The release notes of the PP2U-E's "Firmware Download" ver 2.0.1.3
-> > > (2012-06-15) state that the firmware is for the following devices:
-> > >  - uPD720201 ES 2.0 sample whose revision ID is 2.
-> > >  - uPD720201 ES 2.1 sample & CS sample & Mass product, ID is 3.
-> > >  - uPD720202 ES 2.0 sample & CS sample & Mass product, ID is 2.
-> > > 
-> > > Signed-off-by: Christian Lamparter <chunkeey@googlemail.com>
-> > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > [vkoul: fixed comments:
-> > > 	used macros for timeout count and delay
-> > > 	removed renesas_fw_alive_check
-> > > 	cleaned renesas_fw_callback
-> > > 	removed recursion for renesas_fw_download
-> > > 	add register defines and field names
-> > > 	move to a separate file
-> > > 	make fw loader as sync probe so that we execute in probe and
-> > >         prevent race
-> > > 	export symbols for xhci-pci to use]
-> > > Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> > > ---
-> > >  drivers/usb/host/Makefile           |   2 +-
-> > >  drivers/usb/host/xhci-pci-renesas.c | 365 ++++++++++++++++++++++++++++
-> > >  drivers/usb/host/xhci-pci.h         |  16 ++
-> > >  3 files changed, 382 insertions(+), 1 deletion(-)
-> > >  create mode 100644 drivers/usb/host/xhci-pci-renesas.c
-> > >  create mode 100644 drivers/usb/host/xhci-pci.h
-> > > 
-> > > diff --git a/drivers/usb/host/Makefile b/drivers/usb/host/Makefile
-> > > index b191361257cc..f3a5a2f01874 100644
-> > > --- a/drivers/usb/host/Makefile
-> > > +++ b/drivers/usb/host/Makefile
-> > > @@ -70,7 +70,7 @@ obj-$(CONFIG_USB_OHCI_HCD_DAVINCI)	+= ohci-da8xx.o
-> > >  obj-$(CONFIG_USB_UHCI_HCD)	+= uhci-hcd.o
-> > >  obj-$(CONFIG_USB_FHCI_HCD)	+= fhci.o
-> > >  obj-$(CONFIG_USB_XHCI_HCD)	+= xhci-hcd.o
-> > > -obj-$(CONFIG_USB_XHCI_PCI)	+= xhci-pci.o
-> > > +obj-$(CONFIG_USB_XHCI_PCI)	+= xhci-pci.o xhci-pci-renesas.o
-> > 
-> > Hmm, now we end up with two modules, xhci-pci and xhci-pci-renesas, even if
-> > xhci-pci-renesas just includes helper functions to load firmware for renesas.
-> 
-> Right, these are two modules. Do you forsee an issue with two ko's
+注::このメッセージをSPAM / JUNKフォルダーで受信した場合は、インターネットサービスプロバイダーによって制限が課せられているためです。
 
-Two kos should be fine, but as you aren't giving people the option to
-not select this, it's a bit harsh to add it.
+メッセージでご迷惑をおかけして申し訳ありません。削除する前に、少し時間をかけてお読みください。
+あなたが私に与えなかったので、このメールはあなたにとって驚きかもしれません
+そうする許可とあなたは私を知らないが、私があなたに言う前に
+私自身についてこのメールを送ったことを許してください
+あなたの許可なしに。
 
-Can this be a separate module/config option?  Why force everyone to need
-this additional code if they do not have this hardware?
+私は自信を持ってこの手紙を書いています。
+あなたがこのプロジェクトを手伝ってくれる神の私、正直で信頼が必要です
+あなたのような立派な人がこの巨大な移転プロジェクトを任せてください。わたし
+次の慈善団体にあなたを紹介するためにあなたの協力を求めています
+世界中の開発。 ..
+ 
+私はあなたに提案があります。あなたのことを示すために私に返信してください
+詳細に興味があります。
 
-thanks,
+私は辛抱強くあなたの返事を待ちます、
+dominiquebell755@gmail.com
 
-greg k-h
+ありがとう
+ドミニク・ベル氏
