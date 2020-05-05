@@ -2,390 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D29E1C53D4
-	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2020 13:00:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 247331C53E0
+	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2020 13:04:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728689AbgEELAk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 May 2020 07:00:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37758 "EHLO mail.kernel.org"
+        id S1728781AbgEELEm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 May 2020 07:04:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43150 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725766AbgEELAj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 5 May 2020 07:00:39 -0400
+        id S1725766AbgEELEm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 5 May 2020 07:04:42 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 19C17206B8;
-        Tue,  5 May 2020 11:00:38 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A9470206B8;
+        Tue,  5 May 2020 11:04:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588676438;
-        bh=K7jK+93jeBiltvxYcIB2QAVepFLJ2URTxv/Kx3l60tY=;
+        s=default; t=1588676680;
+        bh=qQz7Wc0iV6lltQX1X6gMaSxn3yyMWV+Fg5hhEXA0Ytg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MqZhQ+w6PXkTW2dk3qVMo3A/1pBqhvJ1TPkzzZbg2m4O2m509ME3jLVMZzXwEw76b
-         T5sxVqbnrqqsQBnnnc3YqKTg6FGJ7qWUL4Yr57tTD3kMKQDYGpzzjilfOGY7BII7GL
-         QX4lrwpA4KNDKy/msBhd9jlvUM8f4payIM0B44ek=
-Date:   Tue, 5 May 2020 13:00:36 +0200
+        b=BBCgI7d2H1aUoqDx3WyDtsimuN5WaE6Jo4Qzu3lJxq8tnlW/E34w/bnArIwyIWxSE
+         I9qyHEETD7eWdfvaaCTcQY/0hPIH0NTCli/NeoI323hyUWP/rvz+LNcNIFgIy9MTS2
+         WRQUjDV/k+TzdSN1KG7DuO3bNIu0rEFxQyHLGSPc=
+Date:   Tue, 5 May 2020 13:04:38 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Al Cooper <alcooperx@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Christian Lamparter <chunkeey@googlemail.com>,
         Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v6 3/4] usb: ehci: Add new EHCI driver for Broadcom STB
- SoC's
-Message-ID: <20200505110036.GB93160@kroah.com>
-References: <20200430111258.6091-1-alcooperx@gmail.com>
- <20200430111258.6091-4-alcooperx@gmail.com>
+        John Stultz <john.stultz@linaro.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andreas =?iso-8859-1?Q?B=F6hler?= <dev@aboehler.at>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v12 2/5] usb: renesas-xhci: Add the renesas xhci driver
+Message-ID: <20200505110438.GC93160@kroah.com>
+References: <20200430165920.1345409-1-vkoul@kernel.org>
+ <20200430165920.1345409-3-vkoul@kernel.org>
+ <81e0eff0-8b40-3c47-e39b-929e1dc07fd5@linux.intel.com>
+ <20200504143438.GT1375924@vkoul-mobl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200430111258.6091-4-alcooperx@gmail.com>
+In-Reply-To: <20200504143438.GT1375924@vkoul-mobl>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 30, 2020 at 07:12:57AM -0400, Al Cooper wrote:
-> Add a new EHCI driver for Broadcom STB SoC's. A new EHCI driver
-> was created instead of adding support to the existing ehci platform
-> driver because of the code required to workaround bugs in the EHCI
-> controller.
+On Mon, May 04, 2020 at 08:04:38PM +0530, Vinod Koul wrote:
+> Hi Mathias,
 > 
-> Signed-off-by: Al Cooper <alcooperx@gmail.com>
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> ---
->  drivers/usb/host/ehci-brcm.c | 290 +++++++++++++++++++++++++++++++++++
->  1 file changed, 290 insertions(+)
->  create mode 100644 drivers/usb/host/ehci-brcm.c
-
-I need an ack from the EHCI maintainer to agree that this needs a whole
-new driver file...
-
+> On 04-05-20, 16:01, Mathias Nyman wrote:
+> > On 30.4.2020 19.59, Vinod Koul wrote:
+> > > From: Christian Lamparter <chunkeey@googlemail.com>
+> > > 
+> > > This add a new driver for renesas xhci which is basically a firmware
+> > > loader for uPD720201 and uPD720202 w/o ROM. The xhci-pci driver will
+> > > invoke this driver for loading/unloading on relevant devices.
+> > > 
+> > > This patch adds a firmware loader for the uPD720201K8-711-BAC-A
+> > > and uPD720202K8-711-BAA-A variant. Both of these chips are listed
+> > > in Renesas' R19UH0078EJ0500 Rev.5.00 "User's Manual: Hardware" as
+> > > devices which need the firmware loader on page 2 in order to
+> > > work as they "do not support the External ROM".
+> > > 
+> > > The "Firmware Download Sequence" is describe in chapter
+> > > "7.1 FW Download Interface" R19UH0078EJ0500 Rev.5.00 page 131.
+> > > 
+> > > The firmware "K2013080.mem" is available from a USB3.0 Host to
+> > > PCIe Adapter (PP2U-E card) "Firmware download" archive. An
+> > > alternative version can be sourced from Netgear's WNDR4700 GPL
+> > > archives.
+> > > 
+> > > The release notes of the PP2U-E's "Firmware Download" ver 2.0.1.3
+> > > (2012-06-15) state that the firmware is for the following devices:
+> > >  - uPD720201 ES 2.0 sample whose revision ID is 2.
+> > >  - uPD720201 ES 2.1 sample & CS sample & Mass product, ID is 3.
+> > >  - uPD720202 ES 2.0 sample & CS sample & Mass product, ID is 2.
+> > > 
+> > > Signed-off-by: Christian Lamparter <chunkeey@googlemail.com>
+> > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > > [vkoul: fixed comments:
+> > > 	used macros for timeout count and delay
+> > > 	removed renesas_fw_alive_check
+> > > 	cleaned renesas_fw_callback
+> > > 	removed recursion for renesas_fw_download
+> > > 	add register defines and field names
+> > > 	move to a separate file
+> > > 	make fw loader as sync probe so that we execute in probe and
+> > >         prevent race
+> > > 	export symbols for xhci-pci to use]
+> > > Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> > > ---
+> > >  drivers/usb/host/Makefile           |   2 +-
+> > >  drivers/usb/host/xhci-pci-renesas.c | 365 ++++++++++++++++++++++++++++
+> > >  drivers/usb/host/xhci-pci.h         |  16 ++
+> > >  3 files changed, 382 insertions(+), 1 deletion(-)
+> > >  create mode 100644 drivers/usb/host/xhci-pci-renesas.c
+> > >  create mode 100644 drivers/usb/host/xhci-pci.h
+> > > 
+> > > diff --git a/drivers/usb/host/Makefile b/drivers/usb/host/Makefile
+> > > index b191361257cc..f3a5a2f01874 100644
+> > > --- a/drivers/usb/host/Makefile
+> > > +++ b/drivers/usb/host/Makefile
+> > > @@ -70,7 +70,7 @@ obj-$(CONFIG_USB_OHCI_HCD_DAVINCI)	+= ohci-da8xx.o
+> > >  obj-$(CONFIG_USB_UHCI_HCD)	+= uhci-hcd.o
+> > >  obj-$(CONFIG_USB_FHCI_HCD)	+= fhci.o
+> > >  obj-$(CONFIG_USB_XHCI_HCD)	+= xhci-hcd.o
+> > > -obj-$(CONFIG_USB_XHCI_PCI)	+= xhci-pci.o
+> > > +obj-$(CONFIG_USB_XHCI_PCI)	+= xhci-pci.o xhci-pci-renesas.o
+> > 
+> > Hmm, now we end up with two modules, xhci-pci and xhci-pci-renesas, even if
+> > xhci-pci-renesas just includes helper functions to load firmware for renesas.
 > 
-> diff --git a/drivers/usb/host/ehci-brcm.c b/drivers/usb/host/ehci-brcm.c
-> new file mode 100644
-> index 000000000000..381bed5fdab0
-> --- /dev/null
-> +++ b/drivers/usb/host/ehci-brcm.c
-> @@ -0,0 +1,290 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2020, Broadcom */
-> +
-> +#include <linux/clk.h>
-> +#include <linux/dma-mapping.h>
-> +#include <linux/err.h>
-> +#include <linux/kernel.h>
-> +#include <linux/io.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/usb.h>
-> +#include <linux/usb/hcd.h>
-> +#include <linux/iopoll.h>
-> +
-> +#include "ehci.h"
-> +
-> +#define hcd_to_ehci_priv(h) ((struct brcm_priv *)hcd_to_ehci(h)->priv)
-> +
-> +struct brcm_priv {
-> +	struct clk *clk;
-> +};
-> +
-> +static const char brcm_hcd_name[] = "ehci-brcm";
+> Right, these are two modules. Do you forsee an issue with two ko's
 
-You don't use this anywhere?  Are you sure this didn't cause compile
-warnings?
+Two kos should be fine, but as you aren't giving people the option to
+not select this, it's a bit harsh to add it.
 
-> +
-> +static int (*org_hub_control)(struct usb_hcd *hcd,
-> +			u16 typeReq, u16 wValue, u16 wIndex,
-> +			char *buf, u16 wLength);
-
-So you only support one device per system?  That feels bad...
-
-
-> +
-> +/*
-> + * ehci_brcm_wait_for_sof
-> + * Wait for start of next microframe, then wait extra delay microseconds
-> + */
-> +static inline void ehci_brcm_wait_for_sof(struct ehci_hcd *ehci, u32 delay)
-> +{
-> +	u32 frame_idx = ehci_readl(ehci, &ehci->regs->frame_index);
-> +	u32 val;
-> +	int res;
-> +
-> +	/* Wait for next microframe (every 125 usecs) */
-> +	res = readl_relaxed_poll_timeout(&ehci->regs->frame_index, val,
-> +					 val != frame_idx, 1, 130);
-> +	if (res)
-> +		dev_err(ehci_to_hcd(ehci)->self.controller,
-> +			"Error waiting for SOF\n");
-> +	udelay(delay);
-> +}
-> +
-> +/*
-> + * ehci_brcm_hub_control
-> + * Intercept echi-hcd request to complete RESUME and align it to the start
-> + * of the next microframe.
-> + * If RESUME is complete too late in the microframe, host controller
-> + * detects babble on suspended port and resets the port afterwards.
-> + * This s/w workaround allows to avoid this problem.
-> + * See SWLINUX-1909 for more details
-> + */
-> +static int ehci_brcm_hub_control(
-> +	struct usb_hcd	*hcd,
-> +	u16		typeReq,
-> +	u16		wValue,
-> +	u16		wIndex,
-> +	char		*buf,
-> +	u16		wLength)
-> +{
-> +	struct ehci_hcd	*ehci = hcd_to_ehci(hcd);
-> +	int		ports = HCS_N_PORTS(ehci->hcs_params);
-> +	u32 __iomem	*status_reg = &ehci->regs->port_status[
-> +				(wIndex & 0xff) - 1];
-
-Horrid line-wrapping, put this assignment below so it can be read.
-
-And wIndex is little endian?  Or native?
-
-> +	unsigned long flags;
-> +	int retval, irq_disabled = 0;
-> +
-> +	/*
-> +	 * RESUME is cleared when GetPortStatus() is called 20ms after start
-> +	 * of RESUME
-> +	 */
-> +	if ((typeReq == GetPortStatus) &&
-> +	    (wIndex && wIndex <= ports) &&
-> +	    ehci->reset_done[wIndex-1] &&
-> +	    time_after_eq(jiffies, ehci->reset_done[wIndex-1]) &&
-> +	    (ehci_readl(ehci, status_reg) & PORT_RESUME)) {
-> +
-> +		/*
-> +		 * to make sure we are not interrupted until RESUME bit
-> +		 * is cleared, disable interrupts on current CPU
-> +		 */
-> +		ehci_dbg(ehci, "SOF alignment workaround\n");
-> +		irq_disabled = 1;
-> +		local_irq_save(flags);
-> +		ehci_brcm_wait_for_sof(ehci, 5);
-> +	}
-> +	retval = (*org_hub_control)(hcd, typeReq, wValue, wIndex, buf, wLength);
-
-But this might not be set, did you just crash?
-
-If it is always set, then why does it need to be a function pointer at
-all?
-
-> +	if (irq_disabled)
-> +		local_irq_restore(flags);
-> +	return retval;
-> +}
-> +
-> +static int ehci_brcm_reset(struct usb_hcd *hcd)
-> +{
-> +	struct ehci_hcd *ehci = hcd_to_ehci(hcd);
-> +
-> +	ehci->big_endian_mmio = 1;
-> +
-> +	ehci->caps = (struct ehci_caps *) hcd->regs;
-> +	ehci->regs = (struct ehci_regs *) (hcd->regs +
-
-coding style, did you run this through checkpatch.pl?
-
-> +		HC_LENGTH(ehci, ehci_readl(ehci, &ehci->caps->hc_capbase)));
-> +
-> +	/* This fixes the lockup during reboot due to prior interrupts */
-> +	ehci_writel(ehci, CMD_RESET, &ehci->regs->command);
-> +	mdelay(10);
-> +
-> +	/*
-> +	 * SWLINUX-1705: Avoid OUT packet underflows during high memory
-> +	 *   bus usage
-> +	 * port_status[0x0f] = Broadcom-proprietary USB_EHCI_INSNREG00 @ 0x90
-> +	 */
-> +	ehci_writel(ehci, 0x00800040, &ehci->regs->port_status[0x10]);
-> +	ehci_writel(ehci, 0x00000001, &ehci->regs->port_status[0x12]);
-> +
-> +	return ehci_setup(hcd);
-> +}
-> +
-> +static struct hc_driver __read_mostly ehci_brcm_hc_driver;
-> +
-> +static const struct ehci_driver_overrides brcm_overrides __initconst = {
-> +
-
-No blank line.
-
-> +	.reset = ehci_brcm_reset,
-> +	.extra_priv_size = sizeof(struct brcm_priv),
-> +};
-> +
-> +static int ehci_brcm_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct resource *res_mem;
-> +	struct brcm_priv *priv;
-> +	struct usb_hcd *hcd;
-> +	int irq;
-> +	int err;
-> +
-> +	if (usb_disabled())
-> +		return -ENODEV;
-> +
-> +	err = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
-> +	if (err)
-> +		return err;
-> +
-> +	irq = platform_get_irq(pdev, 0);
-> +	if (irq < 0)
-
-"<=" right?
-
-> +		return irq;
-> +
-> +	/* Hook the hub control routine to work around a bug */
-
-What bug?  This feels wrong.
-
-> +	if (!org_hub_control)
-> +		org_hub_control = ehci_brcm_hc_driver.hub_control;
-> +	ehci_brcm_hc_driver.hub_control = ehci_brcm_hub_control;
-> +
-> +	/* initialize hcd */
-> +	hcd = usb_create_hcd(&ehci_brcm_hc_driver, dev, dev_name(dev));
-> +	if (!hcd)
-> +		return -ENOMEM;
-> +
-> +	platform_set_drvdata(pdev, hcd);
-> +	priv = hcd_to_ehci_priv(hcd);
-> +
-> +	priv->clk = devm_clk_get_optional(dev, NULL);
-> +	if (IS_ERR(priv->clk)) {
-> +		err = PTR_ERR(priv->clk);
-> +		goto err_hcd;
-> +	}
-> +
-> +	err = clk_prepare_enable(priv->clk);
-
-But clk was optional, will this break?
-
-> +	if (err)
-> +		goto err_hcd;
-> +
-> +	hcd->regs = devm_platform_get_and_ioremap_resource(pdev, 0, &res_mem);
-> +	if (IS_ERR(hcd->regs)) {
-> +		err = PTR_ERR(hcd->regs);
-> +		goto err_clk;
-> +	}
-> +	hcd->rsrc_start = res_mem->start;
-> +	hcd->rsrc_len = resource_size(res_mem);
-> +	err = usb_add_hcd(hcd, irq, IRQF_SHARED);
-> +	if (err)
-> +		goto err_clk;
-> +
-> +	device_wakeup_enable(hcd->self.controller);
-> +	device_enable_async_suspend(hcd->self.controller);
-> +	platform_set_drvdata(pdev, hcd);
-
-Shouldn't that be set before you register the hcd?
-
-> +
-> +	return 0;
-> +
-> +err_clk:
-> +	clk_disable_unprepare(priv->clk);
-> +err_hcd:
-> +	usb_put_hcd(hcd);
-> +
-> +	return err;
-> +}
-> +
-> +static int ehci_brcm_remove(struct platform_device *dev)
-> +{
-> +	struct usb_hcd *hcd = platform_get_drvdata(dev);
-> +	struct brcm_priv *priv = hcd_to_ehci_priv(hcd);
-> +
-> +	usb_remove_hcd(hcd);
-> +	clk_disable_unprepare(priv->clk);
-> +	usb_put_hcd(hcd);
-> +	return 0;
-> +}
-> +
-> +static int __maybe_unused ehci_brcm_suspend(struct device *dev)
-> +{
-> +	int ret;
-> +	struct usb_hcd *hcd = dev_get_drvdata(dev);
-> +	struct brcm_priv *priv = hcd_to_ehci_priv(hcd);
-> +	bool do_wakeup = device_may_wakeup(dev);
-> +
-> +	ret = ehci_suspend(hcd, do_wakeup);
-> +	if (ret)
-> +		return ret;
-> +	clk_disable_unprepare(priv->clk);
-> +	return 0;
-> +}
-> +
-> +static int __maybe_unused ehci_brcm_resume(struct device *dev)
-> +{
-> +	struct usb_hcd *hcd = dev_get_drvdata(dev);
-> +	struct ehci_hcd *ehci = hcd_to_ehci(hcd);
-> +	struct brcm_priv *priv = hcd_to_ehci_priv(hcd);
-> +	int err;
-> +
-> +	err = clk_prepare_enable(priv->clk);
-> +	if (err)
-> +		return err;
-> +	/*
-> +	 * SWLINUX-1705: Avoid OUT packet underflows during high memory
-> +	 *   bus usage
-> +	 * port_status[0x0f] = Broadcom-proprietary USB_EHCI_INSNREG00
-> +	 * @ 0x90
-> +	 */
-> +	ehci_writel(ehci, 0x00800040, &ehci->regs->port_status[0x10]);
-> +	ehci_writel(ehci, 0x00000001, &ehci->regs->port_status[0x12]);
-> +
-> +	ehci_resume(hcd, false);
-> +
-> +	pm_runtime_disable(dev);
-> +	pm_runtime_set_active(dev);
-> +	pm_runtime_enable(dev);
-> +
-> +	return 0;
-> +}
-> +
-> +static SIMPLE_DEV_PM_OPS(ehci_brcm_pm_ops, ehci_brcm_suspend,
-> +		ehci_brcm_resume);
-> +
-> +static const struct of_device_id brcm_ehci_of_match[] = {
-> +	{ .compatible = "brcm,ehci-brcm-v2", },
-> +	{ .compatible = "brcm,bcm7445-ehci", },
-> +	{}
-> +};
-> +
-> +static struct platform_driver ehci_brcm_driver = {
-> +	.probe		= ehci_brcm_probe,
-> +	.remove		= ehci_brcm_remove,
-> +	.shutdown	= usb_hcd_platform_shutdown,
-> +	.driver		= {
-> +		.name	= "ehci-brcm",
-> +		.pm	= &ehci_brcm_pm_ops,
-> +		.of_match_table = brcm_ehci_of_match,
-> +	}
-> +};
-> +
-> +static int __init ehci_brcm_init(void)
-> +{
-> +	if (usb_disabled())
-> +		return -ENODEV;
-
-You check this here, so why are you also checking it in the probe
-function?
+Can this be a separate module/config option?  Why force everyone to need
+this additional code if they do not have this hardware?
 
 thanks,
 
