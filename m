@@ -2,53 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DBF71C5436
-	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2020 13:15:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D09EB1C547B
+	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2020 13:34:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728948AbgEELP5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 May 2020 07:15:57 -0400
-Received: from s52.coreserver.jp ([202.172.28.53]:51490 "EHLO
-        s52.coreserver.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727090AbgEELP5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 May 2020 07:15:57 -0400
-Received: (qmail 303472 invoked by uid 10000); 5 May 2020 20:15:55 +0900
-To:     undisclosed-recipients:;
-Subject: =?UTF-8?Q?=E3=81=82=E3=81=AA=E3=81=9F=E3=81=B8=E3=81=AE=E3=81=94?=  =?UTF-8?Q?=E6=8C=A8=E6=8B=B6?=
+        id S1728760AbgEELd7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 May 2020 07:33:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49238 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728664AbgEELd7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 5 May 2020 07:33:59 -0400
+Received: from localhost (unknown [122.181.213.114])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2F82C20735;
+        Tue,  5 May 2020 11:33:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588678439;
+        bh=BIDNivoYYArr1mgNzZNlFHarjyA+1JxmkV0Pd9IfbtU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Hei2vThh3fDPJJe5S3ZSQeNuun9d/8uHbm3ksqhgvpfA+IF0olXgQ9b0u8FkhW7xG
+         kGappr474a7EgDcoD7MyXyWqmJDpdwzWS5WEHepav4d5I7wYvo7wTkuZn2Fumc3JWi
+         BufJSxUhnpt1nj3X4/CbkNR8POXcUA+hiCbChQBA=
+Date:   Tue, 5 May 2020 17:03:54 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andreas =?iso-8859-1?Q?B=F6hler?= <dev@aboehler.at>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v12 2/5] usb: renesas-xhci: Add the renesas xhci driver
+Message-ID: <20200505113354.GX1375924@vkoul-mobl>
+References: <20200430165920.1345409-1-vkoul@kernel.org>
+ <20200430165920.1345409-3-vkoul@kernel.org>
+ <81e0eff0-8b40-3c47-e39b-929e1dc07fd5@linux.intel.com>
+ <20200504143438.GT1375924@vkoul-mobl>
+ <20200505110438.GC93160@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Tue, 05 May 2020 04:15:55 -0700
-From:   Dominique Bell <keiko@ono.bz>
-Reply-To: dominiquebell757@gmail.com
-Mail-Reply-To: dominiquebell757@gmail.com
-Message-ID: <0f714f4f43ae5e9010916cad9d0633f7@ono.bz>
-X-Sender: keiko@ono.bz
-User-Agent: Roundcube Webmail/0.9.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200505110438.GC93160@kroah.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-注::このメッセージをSPAM / JUNKフォルダーで受信した場合は、インターネットサービスプロバイダーによって制限が課せられているためです。
+On 05-05-20, 13:04, Greg Kroah-Hartman wrote:
+> On Mon, May 04, 2020 at 08:04:38PM +0530, Vinod Koul wrote:
 
-メッセージでご迷惑をおかけして申し訳ありません。削除する前に、少し時間をかけてお読みください。
-あなたが私に与えなかったので、このメールはあなたにとって驚きかもしれません
-そうする許可とあなたは私を知らないが、私があなたに言う前に
-私自身についてこのメールを送ったことを許してください
-あなたの許可なしに。
+> > > > --- a/drivers/usb/host/Makefile
+> > > > +++ b/drivers/usb/host/Makefile
+> > > > @@ -70,7 +70,7 @@ obj-$(CONFIG_USB_OHCI_HCD_DAVINCI)	+= ohci-da8xx.o
+> > > >  obj-$(CONFIG_USB_UHCI_HCD)	+= uhci-hcd.o
+> > > >  obj-$(CONFIG_USB_FHCI_HCD)	+= fhci.o
+> > > >  obj-$(CONFIG_USB_XHCI_HCD)	+= xhci-hcd.o
+> > > > -obj-$(CONFIG_USB_XHCI_PCI)	+= xhci-pci.o
+> > > > +obj-$(CONFIG_USB_XHCI_PCI)	+= xhci-pci.o xhci-pci-renesas.o
+> > > 
+> > > Hmm, now we end up with two modules, xhci-pci and xhci-pci-renesas, even if
+> > > xhci-pci-renesas just includes helper functions to load firmware for renesas.
+> > 
+> > Right, these are two modules. Do you forsee an issue with two ko's
+> 
+> Two kos should be fine, but as you aren't giving people the option to
+> not select this, it's a bit harsh to add it.
+> 
+> Can this be a separate module/config option?  Why force everyone to need
+> this additional code if they do not have this hardware?
 
-私は自信を持ってこの手紙を書いています。
-あなたがこのプロジェクトを手伝ってくれる神の私、正直で信頼が必要です
-あなたのような立派な人がこの巨大な移転プロジェクトを任せてください。わたし
-次の慈善団体にあなたを紹介するためにあなたの協力を求めています
-世界中の開発。 ..
- 
-私はあなたに提案があります。あなたのことを示すために私に返信してください
-詳細に興味があります。
+Since the code is moved out and is based on PCI ID of the device, this
+wont be invoked at all for folks not having this hardware. But adding a
+config option would work too and avoid renaming file.
 
-私は辛抱強くあなたの返事を待ちます、
-dominiquebell755@gmail.com
+I think this looks as a better option to me atm. We no longer have load
+order issue with current approach so we dont care about that as well.
 
-ありがとう
-ドミニク・ベル氏
+Mathias, let me know if you are okay with approach, I can respin this,
+or if you have better idea do let us know
+
+Thanks
+-- 
+~Vinod
