@@ -2,107 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B7C71C5532
-	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2020 14:13:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC6D11C5546
+	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2020 14:17:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728836AbgEEMNW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 May 2020 08:13:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57864 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728268AbgEEMNW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 May 2020 08:13:22 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC9CC061A0F
-        for <linux-usb@vger.kernel.org>; Tue,  5 May 2020 05:13:21 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id o18so945936pgg.8
-        for <linux-usb@vger.kernel.org>; Tue, 05 May 2020 05:13:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mxIo52dkjiLvxWy+gfMk6TBKmx0wnZO40XvXm/Q0mOM=;
-        b=Khx2i1Dt8XSKgyJGM/0iMsBzhfLnAa40dMnBOv76ue5Wf4CMrxOVZCVx4XFGw8gi13
-         3dfAHedlDDL9qKQkvsbgf5csT4ykw2MvBj7+r00pbg6VxyIgVHDuJDslExEXhKqjzSX6
-         N/er241FshEga2hqosW8TnbUQr7BrCiCmY3iA40yq/XVraV4sLQblPWR8tNSUQm5qHHW
-         QedHgbcNdXG4tqFP5nsFmRny0Jgxm3KnYWkBJ3p/1+JxFFiqv/cyR0W85Jz9SoDgvQOx
-         KssaNmNkRcGkLVblvYSXDSS4rPpNsQCYb4CVNlPdnvxvchJMt6hICtS2hDzzi7AMEvWE
-         jfcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mxIo52dkjiLvxWy+gfMk6TBKmx0wnZO40XvXm/Q0mOM=;
-        b=Yu/iQorFZ1pydw1DhgYYK9Ag7+KQFBGR4hWx041SHFaCcxDQjDZzTm7Ke3nJu/QLSa
-         mVgFH5f6scHTYat/WQJ2lQlX1d8WLv/buDRP2Ah618msYMEVESkJ6yLF4C5INoIGqRxA
-         PLuXfUb4iFpkYut/L/smAeHF6ZD9YrwLXrI1EKRTDvC2/H1Y2g94HeXxnZKMlT3EQr4/
-         ab27MRHNqN7BCxYZJBoNlDexive4YnMWMqf986ZepbMgBjGG4w9uu3jbuTuh9+DdcOkQ
-         SHjeAdDdBz4kVV3zBmSLa/pVbCeAvHq9RGPMic9mviEQSA5w96HVinBj19QBx4VnMY89
-         lGRA==
-X-Gm-Message-State: AGi0PuYQqjdQSDLBXT332Lc8qAur39vjkawqE2AaIvOR4qtYrwGSstlz
-        3seQA66Y+4bBKpWtMurfTtgGEFHKUrJhtwJoAUGleA==
-X-Google-Smtp-Source: APiQypK7FAvYsgfCj+gh8FTtJ9E35Q5BzmuZ49FncOyTm/+1A3u+hFulQ2b5iSD1/4wwvnjFvt1/vaUmzeCCpH31Umc=
-X-Received: by 2002:a62:5289:: with SMTP id g131mr3007163pfb.318.1588680800931;
- Tue, 05 May 2020 05:13:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <Pine.LNX.4.44L0.2005041114130.11213-100000@netrider.rowland.org> <87a72mc2le.fsf@kernel.org>
-In-Reply-To: <87a72mc2le.fsf@kernel.org>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Tue, 5 May 2020 14:13:09 +0200
-Message-ID: <CAAeHK+yk-qDR=8VvhEyxggT-3KuT26smHX_HTeUNRxg+1ObeQA@mail.gmail.com>
-Subject: Re: Testing endpoint halt support for raw-gadget
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S1728569AbgEEMRR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 May 2020 08:17:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43210 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728180AbgEEMRQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 5 May 2020 08:17:16 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 07130206B8;
+        Tue,  5 May 2020 12:17:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588681036;
+        bh=wV8NO8yKKq39WfuQJaqftLyvkr4QFKD5fm91qP3qKzg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PyZ5Oh4je7m/B3dCXVvoC0F3P1olh76bO4gzgRciwyvY8hwYmzYeiSwT0qjNPSqF1
+         R5uZ/amNcLh21u/78qquJ/BejPYyI4XRr5bzdpkPv7Y7BUAoEYzu/pcv90JNadLLL2
+         4gFf0LKBWj/JicWNsWPTW6ADfQhp9jkNBLtHSEis=
+Date:   Tue, 5 May 2020 14:17:14 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Andrey Konovalov <andreyknvl@google.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
         USB list <linux-usb@vger.kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        LKML <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: Re: [PATCH USB 2/2] usb: raw-gadget: fix typo in uapi headers
+Message-ID: <20200505121714.GA118143@kroah.com>
+References: <ca6b79b47313aa7ee9d8c24c5a7f595772764171.1587690539.git.andreyknvl@google.com>
+ <059e7e0ff26cc7d6e85275f764e31d85db867c4b.1587690539.git.andreyknvl@google.com>
+ <87y2q6akhh.fsf@kernel.org>
+ <CAAeHK+y=d_Hu1mwGifYuw6GRSBR=zncGCVOeN6GobP3L1zui=Q@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAeHK+y=d_Hu1mwGifYuw6GRSBR=zncGCVOeN6GobP3L1zui=Q@mail.gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 5, 2020 at 8:34 AM Felipe Balbi <balbi@kernel.org> wrote:
->
->
-> Hi,
->
-> Alan Stern <stern@rowland.harvard.edu> writes:
-> > On Mon, 4 May 2020, Andrey Konovalov wrote:
+On Tue, May 05, 2020 at 02:11:44PM +0200, Andrey Konovalov wrote:
+> On Tue, May 5, 2020 at 9:50 AM Felipe Balbi <balbi@kernel.org> wrote:
 > >
-> >> On Mon, May 4, 2020 at 4:24 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> >> >
-> >> > On Mon, 4 May 2020, Andrey Konovalov wrote:
-> >> >
-> >> > > One more question (sorry for so many :).
-> >> > >
-> >> > > Looking at other fields of usb_request struct I see frame_number.
-> >> > > AFAIU it's filled in by the UDC driver for ISO transfers. Does it make
-> >> > > sense to expose it to userspace? I don't see any composite/legacy
-> >> > > gadgets use that field at all.
-> >> >
-> >> > Do any of those gadget drivers use isochronous endpoints?
-> >>
-> >> Yes, there are audio/uvc function/legacy drivers that use those.
-> >>
-> >> > In fact, it also looks like none of the drivers in gadget/udc/ touch
-> >> > the frame_number field.  Maybe we should just get rid of it, since it
-> >> > isn't being used.
-> >>
-> >> It is used by dwc2/3 gadget drivers (which are not in gadget/udc/).
+> > Andrey Konovalov <andreyknvl@google.com> writes:
 > >
-> > Well, if Felipe thinks we ought to keep the field then you might as
-> > well export it to userspace.  Drivers are free to ignore it.  :-)
->
-> dwc3 has its own private frame_number as part of its own endpoint
-> structure. We simply copy that to the request. That's is currently
-> telling the gadget driver which frame the request completed. It could be
-> used by the function to decide when to queue more requests. It can also
-> be used to predict if we're in sync with the frames or will we diverge
-> and miss frames in the future.
->
-> If nobody has implemented any of that so far, I don't mind removing
-> it. We need strong evidence that this will never be used, though :-)
+> > > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> >
+> > return -ENOCHANGELOG
+> 
+> I've sent v2 with changelog shortly after Greg's response. Would you
+> like me to resend all raw-gadget fixes formed as a series?
+> 
+> BTW, to whom should I send them, to you or to Greg? I've noticed that
+> some of my gadget patches from before got into the mainline twice.
 
-OK, I see, If this field is a potential candidate for removal, I won't
-expose it through raw-gadget just yet, but I'll try to make the
-interface extensible so that it can be easily added when needed.
+They really should all go through Felipe, I was just trying to help out
+a bit in the past.  I'll let him deal with all of these :)
+
+thanks,
+
+greg k-h
