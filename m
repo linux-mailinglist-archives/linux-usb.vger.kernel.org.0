@@ -2,61 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F4171C4F8D
-	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2020 09:49:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 468781C4F99
+	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2020 09:50:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727784AbgEEHtu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 May 2020 03:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44886 "EHLO
+        id S1728436AbgEEHum (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 May 2020 03:50:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726568AbgEEHtt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 May 2020 03:49:49 -0400
+        by vger.kernel.org with ESMTP id S1727784AbgEEHum (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 May 2020 03:50:42 -0400
 Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60992C061A0F
-        for <linux-usb@vger.kernel.org>; Tue,  5 May 2020 00:49:49 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id y4so588136ljn.7
-        for <linux-usb@vger.kernel.org>; Tue, 05 May 2020 00:49:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4448EC061A0F;
+        Tue,  5 May 2020 00:50:41 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id f11so606081ljp.1;
+        Tue, 05 May 2020 00:50:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=RjlK3ep5+Rvp7LR/HqmtrZDJ/LNeU8oYhLoUl3iBlKo=;
-        b=WO/JFjMlctivUrFhjiR46vE878u4Hh9OsU0/Er/WQNmP1NfjI4+EACurONbY06z1cK
-         nnEJuH7xHnhaFLYkLMjEctra8nyLWMFV5TeH8XJQEjNAHMcodyeYwIlNynumJHSA99Ul
-         jB3VNlVvyggskVN4l0aZAeXhZadwEL/TP1f7lIoWKuhGEORl7/Jh6a6LxNklxFe538Cy
-         JCvvMNNvAL7FYcntiF3iSOyqx11WZDEXL539wRPeJW6qvXF96hoNh+jQ1hjPhsXG5ekS
-         PwFiGMxWEPVdHctJVFXJIMMSQBx2dLlUwKKMDphAIP0Fq5vReCjIERg32p98rLwFo7Mj
-         CE1w==
+        bh=mJhZOZvknx96YuEoIZ2lqzNSjlIdDACHMJ5KWHSNI14=;
+        b=Jizk0qQFeKxlo8BmZLCqFT59LkhWbkXaUm0JvMxInhtI9stFaerYXfYpUUKPMTu00J
+         ecApN3Lk7NeLleo2HSyydSUzr5PNBpX5ZaYGCOwcIZ8FNZeUSp6jCnJn2qwxzrEggFKq
+         1Vk6FhUySRdnFAJVz0hmZwzqRN91fkmic/fkWJa7EBS7346q7U2NR8t39kmZk6qZwFRT
+         nB5YHtcurGSRefimxZBJKyQRhlTZjt+cqCYyFYsJP75irnzM+Mcas/7fzG3lVukrzZmT
+         h24/VnE5bsE+UK0XL6HiChm201DbTx71pM/PuhoPiCKm6pAYUZ6YvH3rYpazj8VXwWD6
+         jHzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
          :date:message-id:mime-version;
-        bh=RjlK3ep5+Rvp7LR/HqmtrZDJ/LNeU8oYhLoUl3iBlKo=;
-        b=CdwHjM/dvxwIRiKMH1E1ZFa4gF/VY2tmQT6Jz0bvfK5yV8QKCECKTnPQoQ94W2ASPI
-         +XsoWPUzebB7875D/sQWaUe5zcDATLioPrKM6h8GMjFtDwEOmJMo6JSFDZjkCHZPBfZc
-         bRYKxPB78J3diKNz7LH3jDeIe6MKwooy9Csodpww3bVlQrzL5EZHwlQo9HYshV67dXpr
-         uIxEOvGN7+vedrhU9AKwCGTuwqF+octm+knc/CfUDXCV5A43zn8qkesAMbf0gb8w4imR
-         1AEPD9pNuTcKX7VWKKQhP8UUE37OzT0VLQ/ChsGtQaAu0yIeR35+n3kPCWPwTdHWdEgc
-         7A5w==
-X-Gm-Message-State: AGi0PubyQTuhea8+V+CmiPQbD72k/gO9v0s9ef6pknQO13T6S+HrSQBT
-        qj+MfWtMsDWmxMv96v3koAY=
-X-Google-Smtp-Source: APiQypJVHkTRD6jE+X4HM94IqWNLW18eKhkRkMnN4hXv/J7+Pgr/zOGNsP2pZy6ti57VAKaPibVmJg==
-X-Received: by 2002:a05:651c:326:: with SMTP id b6mr956990ljp.259.1588664987807;
-        Tue, 05 May 2020 00:49:47 -0700 (PDT)
+        bh=mJhZOZvknx96YuEoIZ2lqzNSjlIdDACHMJ5KWHSNI14=;
+        b=cM/Ejt9zSsea2Ng1CuC3C4QasqJ2XmSvycHw5qBqAbA94gblOCP/wCsdabW4y0+DHU
+         eGCa8s3iCdVqhbEeVOhRX+9/QJOq9kWSymjrKz0xuks4xiwN2Tfng7S0ZmQQzo5rGQ7n
+         ZWZ/L/U64wyqYqI7K/9S8nC3lMa0mShkojonLV9JvfCsg0qL9oaw6w9czJj/875B3oWP
+         7Zup/IatpUcymLDHl0pqEZFODYWb/wAyNbt/0pR+mZA+1YLnkSkp6w7kel76KEgocMat
+         vaGi73o1Qc10McZs456iiYEMHFshzKo5GmTkE9vA3Mg01YYpPYBeo9YBKBkmeFLT1k24
+         H/VA==
+X-Gm-Message-State: AGi0Puad4TrqYdX/BAgyR9bNHsQ0fJ6wfbona4bVqk5TUsi/RENt+LyP
+        jxbOkSsaSbzFkPPQejADVMU=
+X-Google-Smtp-Source: APiQypJwsh0uX8J+3lDVtKC/e8pRKH67pL7DjJ9HXCeAvh1fxGH8InEw1kyUTUPeGekvJ5dU+OHkSA==
+X-Received: by 2002:a2e:9996:: with SMTP id w22mr1008682lji.59.1588665039763;
+        Tue, 05 May 2020 00:50:39 -0700 (PDT)
 Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id h28sm1089031lfe.80.2020.05.05.00.49.46
+        by smtp.gmail.com with ESMTPSA id k18sm1510096lfg.81.2020.05.05.00.50.38
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 05 May 2020 00:49:46 -0700 (PDT)
+        Tue, 05 May 2020 00:50:39 -0700 (PDT)
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com, pawell@cadence.com,
-        rogerq@ti.com, gregkh@linuxfoundation.org, jun.li@nxp.com,
-        Peter Chen <peter.chen@nxp.com>
-Subject: Re: [PATCH 1/1] usb: cdns3: ep0: delete the redundant status stage
-In-Reply-To: <20200426130751.32556-1-peter.chen@nxp.com>
-References: <20200426130751.32556-1-peter.chen@nxp.com>
-Date:   Tue, 05 May 2020 10:49:42 +0300
-Message-ID: <87368ebz3d.fsf@kernel.org>
+To:     Andrey Konovalov <andreyknvl@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: Re: [PATCH USB 2/2] usb: raw-gadget: fix typo in uapi headers
+In-Reply-To: <059e7e0ff26cc7d6e85275f764e31d85db867c4b.1587690539.git.andreyknvl@google.com>
+References: <ca6b79b47313aa7ee9d8c24c5a7f595772764171.1587690539.git.andreyknvl@google.com> <059e7e0ff26cc7d6e85275f764e31d85db867c4b.1587690539.git.andreyknvl@google.com>
+Date:   Tue, 05 May 2020 10:50:34 +0300
+Message-ID: <87y2q6akhh.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -69,65 +72,11 @@ X-Mailing-List: linux-usb@vger.kernel.org
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
+Andrey Konovalov <andreyknvl@google.com> writes:
 
-Hi,
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 
-Peter Chen <peter.chen@nxp.com> writes:
-> Each setup stage will prepare status stage at cdns3_ep0_setup_phase,
-
-care to explain this a little better? The controller itself will produce
-the status stage?
-
-Usually, the way this works is that SETUP stage must be *always*
-prepared by the SW while STATUS stage is prepared on-demand, after we
-get an interrupt from the controller.
-
-Also, I see a possible bug in cdns3_ep0_setup_phase():
-
-	if (result < 0)
-		cdns3_ep0_complete_setup(priv_dev, 1, 1);
-	else if (priv_dev->ep0_stage =3D=3D CDNS3_STATUS_STAGE)
-		cdns3_ep0_complete_setup(priv_dev, 0, 1);
-
-What happens here if result is 0 but ep0_state !=3D CNDS3_STATUS_STAGE?
-Seems like you should have a "stall and restart" somewhere here as a
-default fallback.
-
-> it doesn't need to add extra status stage for test mode handling,
-> otherwise, the controller can't enter the test mode. Through the Lecroy
-> bus analyzer log, the controller will always wait status stage
-> even it is prepared by software later than the test mode is set
-> by software. If we comment out the status stage at cdns3_ep0_setup_phase,
-
-It seems that what you're trying to say here is that the controller will
-enter test mode only after STATUS stage completes even though SW has
-already enabled the relevant bits in the register. Is that a correct
-read of your sentence?
-
-Is this backed by documentation or is this something that just happens
-to work? Pawell, can you confirm that this is the correct programming
-model?
-
-The way this usually works is that SW must ensure that Test Mode is only
-entered after STATUS stage has completed. If this controller works
-differently, then we should update the comment (rather than removing it)
-and put a reference to documentation section which describes this very
-fact.
-
-> the controller will not enter test mode even the test mode is set
-> beforehand.
-
-Sorry for being skeptical, but thinking from a HW design perspective,
-this would mean that HW would latch Test Mode bits and only, actually,
-operate on them after completion of STATUS stage. This means that HW
-should have an internal "status_stage_completed" flag which gets ANDed
-with another "must_enter_test_mode" internal flag, then only if both
-conditions are true, will HW read back Test Mode number from the
-register file and enter correct test mode.
-
-Is this working against USBCV? What about LeCroy's compliance suite?
-
-cheers
+return -ENOCHANGELOG
 
 =2D-=20
 balbi
@@ -137,18 +86,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl6xGpYACgkQzL64meEa
-mQaxfA/+PD2tgdMibwwTtZtFiEwR1hffUlPFuKEgFOXWMB2DrJeDtZY7cKl67B1D
-eXnvNDfjNrGa5kBdNn8KgEjpUGUQtCqCKt80O6Z5S3RpUQDDXArVjwrkmVrVZlmA
-0XmILvEMR3cjg1IKonIwcEea7p0DoE6Ab9deXY7ShlCdRu3U12Iy5MPN+U0GM6Bu
-T8Qzf18kgXhxvKOptHUyiVLaGTgEH2889vtGB36DD30P8FgxYToovHLcn5RfvWv/
-kW4OLrzY+d7OgmNINjXCx3x49/GW2SvRy69IKOd1Ma5nk0IH55zvnLtO5odBJMoa
-XvfSoOKqq6lilK6lu4M2asRZVJl8CAG04RovF0KD6R20Ft8ljEL1fEJfjDu4qxkf
-92hA3RvcLCIJRL0aokVlx6f+KWJWVgzk4dPBEc5j22XA5GGQX8STLsH4dFRUxsVt
-WCw/PiYj7tRfjCSqac1QLPgJvaoutjWQue8H3oQ4/YZk6IpBOSKBmaTM1VnO6vRN
-M3OPp9AnJU7Xa1CXX9Q+V0D/ctyUEWOPPJYICw40J9U2fu8IGN+FIOGxAwGGrMha
-9tmzaBRDEnasZUaGAJFqnqe4SRIZKhG/CgJEyOqx8s5u2hMxvQPwdY6wGQ28G5tQ
-MBoAQznZTym8d2j09BdVzs8c4PnsBFAa2QUQgfQGGKKHNxQOdOA=
-=rNiI
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl6xGsoACgkQzL64meEa
+mQYUDBAAxMRssVJC1mciz/vwFtxsZjLPKIe8BSFhAU7jrWxXqtA+7D3QLYd5JLvw
+4xzZnTOSw/AOa/YAdsgGCQOpvNwqCBlQkR0EmaFEyIKNLwg28I+R23pVAT5cGX5r
+lUPymKhGnvPmSjau74MZkdMlPL8hp0c6iGFbq4OykXNilBWnX9FqmsjLle54S7cq
+FRbmQTA6GfLMw+O7DpET5rjI/vV3gosobuiYJE7ntB9luoz3RGnUmva7TTeaK+I8
+MWGcjppGG3pgeVbfSNIm0rQhATgoXwS6qGWtU9HV6+S5yaEZTbbVWwZKvDyxOelI
+SzfTsZK20u0BhzqgP6NBJKcDIk0c2mPF70rWUdwBRbMxhejFcYWiFXs9IITxwtRr
+mVUc8GjujXzMgk3mzG/UNQigNWpGGzvAeUFo5ft5fnYckcsmN3IlotthVFDXE25g
+3JPG/Lv5kDsYBOsarbgUsRN8VlJKHfyygST5B+MxVZnYZh7xY+qrR97mYA9ZdaEz
+gW/WCykw424CoWvNHl4OXXDP44eiBDtUDcedPHGoY43YM63fK439yeeSCAM73b7S
+4f9P+GU1uIYUvZ8VZjnhKB94VdBzO2F1HkdswZOl9uAFNmZvcPPiIMYdhSEwMT+8
+OvcTBCCEjG0UMS1kvu6uNhtCeFy4HdoeRAcLt9+Y8Iy81ngYTBA=
+=7IjE
 -----END PGP SIGNATURE-----
 --=-=-=--
