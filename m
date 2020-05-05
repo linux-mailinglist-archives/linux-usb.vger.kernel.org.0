@@ -2,89 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEB8A1C588B
-	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2020 16:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 969521C5990
+	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2020 16:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729861AbgEEOPd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 May 2020 10:15:33 -0400
-Received: from mout.kundenserver.de ([217.72.192.75]:55717 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729829AbgEEOPc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 May 2020 10:15:32 -0400
-Received: from localhost.localdomain ([149.172.19.189]) by
- mrelayeu.kundenserver.de (mreue109 [212.227.15.145]) with ESMTPA (Nemesis) id
- 1MspyA-1jGeMH3jPU-00t97P; Tue, 05 May 2020 16:15:25 +0200
-From:   Arnd Bergmann <arnd@arndb.de>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Lee Jones <lee.jones@linaro.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: dwc3: select USB_ROLE_SWITCH
-Date:   Tue,  5 May 2020 16:15:09 +0200
-Message-Id: <20200505141523.809858-1-arnd@arndb.de>
-X-Mailer: git-send-email 2.26.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:yrb9vkuiMmrbRMRwcScx3qJ0uzLosaMXqi/bdKr7h+PA1CusLZU
- KRReS9zXfZAxA4/I5Eta+f5I+FgMS/F4Bvtk2qzGnFmtQo0AZ3tHddZDf/vmzyAQGhkAzyv
- if7nUXs7NCdUuiRjIEJLVJ9bRs2h6Ue10IXBlv/1ikSUOeveGKV+j2pGKz8NyiSyjzMplIt
- FW8yDVW2OE+EYofp5mgzw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:2a99Z8iYXuk=:afVkxNbQWlu4TrQVHfCj+X
- xBGZdgbKpa3kUxXSc350jkH8vtLB7zTrevjfQ3J1vSCugnWfRvAU1WuGETxi0rk5i+dVJYuRS
- vCxHFcvR92Ua+gEcw3jrvGj9exUlzYdZp05JG0RnSCUDzu3w1x2z270AnbIbM0rnNvfspo0rV
- iM0XQo5HFkacIgBv1JpumOwCHwZk6fEDVnzE1DO80lvfqPWySSmf/hc49i/iK+9RHKMTTtgW8
- 4hRzzGmf5UiXMFla/bfxbeMISHIb1QJjnd2B6FIFK7fxExI3KV8VjsQvr3lNeWD1RRTbwoCIc
- Hs1e3YJ7a3otrJk8EI7VULoGYufXtEEl7FENBs6y1rgFhyiup2b1Fe8DVJGqv83i/LXeVhD/c
- FPOYWIOgrTBjW0BeAxZH5a6PW1X5YjpYUGScluw3/rnGuWsu5sVqDqq5WUxHFeD5yuRrgwL3t
- NW+3dNC79fwuSw6fuWwzv0QkQzdTg3YW29ZI2UQXurDjcEOmtHsojshhW3v3iTGGYiRbMUnUj
- COLpP/pLUrOORRhIujA81qdy6dJvOKCK8eQcs90yjGKvBwOvW+pJHCrvjDcR4s5iVw1AfId9l
- xhcigPEdwtnnjYOsTC/aRwunIE5iMXsWIQZWW32qZhHSMnBeOKiOdS2V2FSmY+5cJqK/MelC/
- Qz1buQt8fdnuxWSux5KyrLjzKbrW9NK7QbfMB0wMRUgK8Gj+4mTflA6j084cr7QOAURLjG3+d
- 70W7efn/otxKYUMCgaNN2fPhbKat5dGxR6zZLDVF1mEorkbd/yG0bOfiDxZUbqnjYl0lCTJQf
- YSrYStaId772DwTM13AjGHAuTnm7QWirD1b0gKGRM5Tr3kIOjg=
+        id S1729426AbgEEOaY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 May 2020 10:30:24 -0400
+Received: from mx2.suse.de ([195.135.220.15]:55644 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729148AbgEEOaX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 5 May 2020 10:30:23 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 1A9F0AD03;
+        Tue,  5 May 2020 14:30:25 +0000 (UTC)
+From:   Hannes Reinecke <hare@suse.de>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Oliver Neukum <oneukum@suse.de>, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net,
+        Hannes Reinecke <hare@suse.de>
+Subject: [PATCH] sierra-ms: do not call scsi_get_host_dev()
+Date:   Tue,  5 May 2020 16:30:19 +0200
+Message-Id: <20200505143019.57418-1-hare@suse.de>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Calling into the role switch API requires that these functions
-are loaded, if they are in a loadable module and dwc3 itself
-is built-in, this produces a link error:
+scsi_get_host_dev() will create a virtual device such that either
+the target id is ignored from scanning (if 'this_id' is set to
+something which can be reached during scanning) or if the driver
+needs a scsi device for the HBA to send commands to.
+Neither is true for sierra-ms; 'this_id' remains at the default
+value '-1' and the created device is never ever used within
+the driver.
+So kill it.
 
-drivers/usb/dwc3/drd.o: In function `dwc3_usb_role_switch_get':
-drd.c:(.text+0x26): undefined reference to `usb_role_switch_get_drvdata'
-drivers/usb/dwc3/drd.o: In function `dwc3_usb_role_switch_set':
-drd.c:(.text+0x97): undefined reference to `usb_role_switch_get_drvdata'
-drivers/usb/dwc3/drd.o: In function `dwc3_drd_init':
-drd.c:(.text+0x1ca7): undefined reference to `usb_role_switch_register'
-drivers/usb/dwc3/drd.o: In function `dwc3_drd_exit':
-drd.c:(.text+0x1e92): undefined reference to `usb_role_switch_unregister'
-
-Select the USB_ROLE_SWITCH symbol from dwc3 in that configuration.
-
-Fixes: 0339f7fbc82e ("usb: dwc3: fix up for role switch API change")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Hannes Reinecke <hare@suse.de>
 ---
- drivers/usb/dwc3/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/storage/sierra_ms.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
-index 206caa0ea1c6..7a2304565a73 100644
---- a/drivers/usb/dwc3/Kconfig
-+++ b/drivers/usb/dwc3/Kconfig
-@@ -4,6 +4,7 @@ config USB_DWC3
- 	tristate "DesignWare USB3 DRD Core Support"
- 	depends on (USB || USB_GADGET) && HAS_DMA
- 	select USB_XHCI_PLATFORM if USB_XHCI_HCD
-+	select USB_ROLE_SWITCH if USB_DWC3_DUAL_ROLE
- 	help
- 	  Say Y or M here if your system has a Dual Role SuperSpeed
- 	  USB controller based on the DesignWare USB3 IP Core.
+diff --git a/drivers/usb/storage/sierra_ms.c b/drivers/usb/storage/sierra_ms.c
+index e605cbc3d8bf..b9f78ef3edc3 100644
+--- a/drivers/usb/storage/sierra_ms.c
++++ b/drivers/usb/storage/sierra_ms.c
+@@ -129,15 +129,11 @@ int sierra_ms_init(struct us_data *us)
+ 	int result, retries;
+ 	struct swoc_info *swocInfo;
+ 	struct usb_device *udev;
+-	struct Scsi_Host *sh;
+ 
+ 	retries = 3;
+ 	result = 0;
+ 	udev = us->pusb_dev;
+ 
+-	sh = us_to_host(us);
+-	scsi_get_host_dev(sh);
+-
+ 	/* Force Modem mode */
+ 	if (swi_tru_install == TRU_FORCE_MODEM) {
+ 		usb_stor_dbg(us, "SWIMS: Forcing Modem Mode\n");
 -- 
-2.26.0
+2.16.4
 
