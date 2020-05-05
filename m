@@ -2,105 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A1A01C54DF
-	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2020 13:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5EE91C5505
+	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2020 14:05:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728916AbgEEL4X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 May 2020 07:56:23 -0400
-Received: from mx2.suse.de ([195.135.220.15]:57368 "EHLO mx2.suse.de"
+        id S1728664AbgEEMFP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 May 2020 08:05:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57864 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728900AbgEEL4V (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 5 May 2020 07:56:21 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 44235AC37;
-        Tue,  5 May 2020 11:56:21 +0000 (UTC)
-Message-ID: <1588679748.13662.8.camel@suse.com>
-Subject: Re: KASAN: slab-out-of-bounds Read in hfa384x_usbin_callback
-From:   Oliver Neukum <oneukum@suse.com>
-To:     syzbot <syzbot+7d42d68643a35f71ac8a@syzkaller.appspotmail.com>,
-        andreyknvl@google.com, devel@driverdev.osuosl.org,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, nishkadg.linux@gmail.com,
-        syzkaller-bugs@googlegroups.com
-Date:   Tue, 05 May 2020 13:55:48 +0200
-In-Reply-To: <00000000000039420505a14e4951@google.com>
-References: <00000000000039420505a14e4951@google.com>
-Content-Type: multipart/mixed; boundary="=-L0cX0s0IEEouwFjJ7n/w"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
+        id S1727090AbgEEMFO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 5 May 2020 08:05:14 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6260C206A4;
+        Tue,  5 May 2020 12:05:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588680313;
+        bh=bK5N6cPviP+5CuDHCJsCJS64jDtjE4iLNlvSfRpPdJ4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ATTDZkYhTWScPWm7/yMYpCBcnZoLEuEXwCmNTSf3BhAqni2MqDeUVhEn6WlfWsLMR
+         J+9KiJt1WUJ301j+8xFZu1E6cZNOZaYsGr8c85O1QqazB6iB4hBvAoXxMWwowYoJP5
+         gyhLIgD1E1XDMi+WTCv9MMQZHdZCSCsTdB6b8y1E=
+Date:   Tue, 5 May 2020 14:05:09 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andreas =?iso-8859-1?Q?B=F6hler?= <dev@aboehler.at>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v12 2/5] usb: renesas-xhci: Add the renesas xhci driver
+Message-ID: <20200505120509.GA116918@kroah.com>
+References: <20200430165920.1345409-1-vkoul@kernel.org>
+ <20200430165920.1345409-3-vkoul@kernel.org>
+ <81e0eff0-8b40-3c47-e39b-929e1dc07fd5@linux.intel.com>
+ <20200504143438.GT1375924@vkoul-mobl>
+ <20200505110438.GC93160@kroah.com>
+ <20200505113354.GX1375924@vkoul-mobl>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200505113354.GX1375924@vkoul-mobl>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
---=-L0cX0s0IEEouwFjJ7n/w
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-
-Am Freitag, den 20.03.2020, 12:28 -0700 schrieb syzbot:
-> Hello,
+On Tue, May 05, 2020 at 05:03:54PM +0530, Vinod Koul wrote:
+> On 05-05-20, 13:04, Greg Kroah-Hartman wrote:
+> > On Mon, May 04, 2020 at 08:04:38PM +0530, Vinod Koul wrote:
 > 
-> syzbot found the following crash on:
+> > > > > --- a/drivers/usb/host/Makefile
+> > > > > +++ b/drivers/usb/host/Makefile
+> > > > > @@ -70,7 +70,7 @@ obj-$(CONFIG_USB_OHCI_HCD_DAVINCI)	+= ohci-da8xx.o
+> > > > >  obj-$(CONFIG_USB_UHCI_HCD)	+= uhci-hcd.o
+> > > > >  obj-$(CONFIG_USB_FHCI_HCD)	+= fhci.o
+> > > > >  obj-$(CONFIG_USB_XHCI_HCD)	+= xhci-hcd.o
+> > > > > -obj-$(CONFIG_USB_XHCI_PCI)	+= xhci-pci.o
+> > > > > +obj-$(CONFIG_USB_XHCI_PCI)	+= xhci-pci.o xhci-pci-renesas.o
+> > > > 
+> > > > Hmm, now we end up with two modules, xhci-pci and xhci-pci-renesas, even if
+> > > > xhci-pci-renesas just includes helper functions to load firmware for renesas.
+> > > 
+> > > Right, these are two modules. Do you forsee an issue with two ko's
+> > 
+> > Two kos should be fine, but as you aren't giving people the option to
+> > not select this, it's a bit harsh to add it.
+> > 
+> > Can this be a separate module/config option?  Why force everyone to need
+> > this additional code if they do not have this hardware?
 > 
-> HEAD commit:    e17994d1 usb: core: kcov: collect coverage from usb comple..
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=11d74573e00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=5d64370c438bc60
-> dashboard link: https://syzkaller.appspot.com/bug?extid=7d42d68643a35f71ac8a
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15fa561de00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15d74573e00000
-> 
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+7d42d68643a35f71ac8a@syzkaller.appspotmail.com
-> 
-> ==================================================================
-> BUG: KASAN: slab-out-of-bounds in memcpy include/linux/string.h:381 [inline]
-> BUG: KASAN: slab-out-of-bounds in skb_put_data include/linux/skbuff.h:2284 [inline]
-> BUG: KASAN: slab-out-of-bounds in hfa384x_int_rxmonitor drivers/staging/wlan-ng/hfa384x_usb.c:3412 [inline]
-> BUG: KASAN: slab-out-of-bounds in hfa384x_usbin_rx drivers/staging/wlan-ng/hfa384x_usb.c:3312 [inline]
-> BUG: KASAN: slab-out-of-bounds in hfa384x_usbin_callback+0x1993/0x2360 drivers/staging/wlan-ng/hfa384x_usb.c:3026
-> Read of size 19671 at addr ffff8881d226413c by task swapper/0/0
+> Since the code is moved out and is based on PCI ID of the device, this
+> wont be invoked at all for folks not having this hardware. But adding a
+> config option would work too and avoid renaming file.
 
-#syz test: https://github.com/google/kasan.git e17994d1
---=-L0cX0s0IEEouwFjJ7n/w
-Content-Disposition: attachment; filename="0001-hfa384x_usb-fix-buffer-overflow.patch"
-Content-Type: text/x-patch; name="0001-hfa384x_usb-fix-buffer-overflow.patch";
-	charset="UTF-8"
-Content-Transfer-Encoding: base64
+Yes, it would not be "invoked", but it still would always be loaded into
+memory.  Please only load this code if the hardware is present in the
+system.
 
-RnJvbSA2ZGJjYWM4YzRiNjQ1NjAwMTYxZmVhZmM1NTc2NjU3OTA1ZjE1ZDY1IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpEYXRl
-OiBUdWUsIDUgTWF5IDIwMjAgMTM6NDY6MjYgKzAyMDAKU3ViamVjdDogW1BBVENIXSBoZmEzODR4
-X3VzYjogZml4IGJ1ZmZlciBvdmVyZmxvdwoKVGhlIGRyaXZlciB0cnVzdHMgdGhlIGRhdGFfbGVu
-IGNvbWluZyBmcm9tIHRoZSBoYXJkd2FyZQp3aXRob3V0IHZlcmlmaWNhdGlvbi4gVGhhdCBtZWFu
-cyB0aGF0IHRoaXMgb3BlbnMKYSB2ZWN0b3IgYnkgd2hpY2ggYW4gYXR0YWNrZXIgY2FuIHNtYXNo
-IDY0SyBvZiB0aGUgaGVhcC4KClNpZ25lZC1vZmYtYnk6IE9saXZlciBOZXVrdW0gPG9uZXVrdW1A
-c3VzZS5jb20+Ci0tLQogZHJpdmVycy9zdGFnaW5nL3dsYW4tbmcvaGZhMzg0eF91c2IuYyB8IDEy
-ICsrKysrKystLS0tLQogMSBmaWxlIGNoYW5nZWQsIDcgaW5zZXJ0aW9ucygrKSwgNSBkZWxldGlv
-bnMoLSkKCmRpZmYgLS1naXQgYS9kcml2ZXJzL3N0YWdpbmcvd2xhbi1uZy9oZmEzODR4X3VzYi5j
-IGIvZHJpdmVycy9zdGFnaW5nL3dsYW4tbmcvaGZhMzg0eF91c2IuYwppbmRleCBmYTFiZjhiMDY5
-ZmQuLjViNjQ5N2Q4YzllMiAxMDA2NDQKLS0tIGEvZHJpdmVycy9zdGFnaW5nL3dsYW4tbmcvaGZh
-Mzg0eF91c2IuYworKysgYi9kcml2ZXJzL3N0YWdpbmcvd2xhbi1uZy9oZmEzODR4X3VzYi5jCkBA
-IC0zMzUzLDkgKzMzNTMsOSBAQCBzdGF0aWMgdm9pZCBoZmEzODR4X2ludF9yeG1vbml0b3Ioc3Ry
-dWN0IHdsYW5kZXZpY2UgKndsYW5kZXYsCiAJCQkJICBzdHJ1Y3QgaGZhMzg0eF91c2Jfcnhmcm0g
-KnJ4ZnJtKQogewogCXN0cnVjdCBoZmEzODR4X3J4X2ZyYW1lICpyeGRlc2MgPSAmcnhmcm0tPmRl
-c2M7Ci0JdW5zaWduZWQgaW50IGhkcmxlbiA9IDA7Ci0JdW5zaWduZWQgaW50IGRhdGFsZW4gPSAw
-OwotCXVuc2lnbmVkIGludCBza2JsZW4gPSAwOworCXVuc2lnbmVkIGludCBoZHJsZW47CisJdW5z
-aWduZWQgaW50IGRhdGFsZW47CisJdW5zaWduZWQgaW50IHNrYmxlbjsKIAl1OCAqZGF0YXA7CiAJ
-dTE2IGZjOwogCXN0cnVjdCBza19idWZmICpza2I7CkBAIC0zNDEzLDggKzM0MTMsMTAgQEAgc3Rh
-dGljIHZvaWQgaGZhMzg0eF9pbnRfcnhtb25pdG9yKHN0cnVjdCB3bGFuZGV2aWNlICp3bGFuZGV2
-LAogCSAqLwogCXNrYl9wdXRfZGF0YShza2IsICZyeGRlc2MtPmZyYW1lX2NvbnRyb2wsIGhkcmxl
-bik7CiAKLQkvKiBJZiBhbnksIGNvcHkgdGhlIGRhdGEgZnJvbSB0aGUgY2FyZCB0byB0aGUgc2ti
-ICovCi0JaWYgKGRhdGFsZW4gPiAwKSB7CisJLyogSWYgYW55LCBjb3B5IHRoZSBkYXRhIGZyb20g
-dGhlIGNhcmQgdG8gdGhlIHNrYiwKKwkgKiBhcyBsb25nIGFzIGl0IGZpdHMsIGxlc3Qgd2Ugc21h
-c2ggYSBidWZmZXIKKwkgKi8KKwlpZiAoZGF0YWxlbiA+IDAgJiYgZGF0YWxlbiA8PSBza2JsZW4g
-LSBoZHJsZW4pIHsKIAkJZGF0YXAgPSBza2JfcHV0X2RhdGEoc2tiLCByeGZybS0+ZGF0YSwgZGF0
-YWxlbik7CiAKIAkJLyogY2hlY2sgZm9yIHVuZW5jcnlwdGVkIHN0dWZmIGlmIFdFUCBiaXQgc2V0
-LiAqLwotLSAKMi4xNi40Cgo=
+thanks,
 
-
---=-L0cX0s0IEEouwFjJ7n/w--
-
+greg k-h
