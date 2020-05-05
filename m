@@ -2,51 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE7431C4E57
-	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2020 08:30:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3FED1C4E5B
+	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2020 08:34:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725833AbgEEGaq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 May 2020 02:30:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60892 "EHLO
+        id S1725833AbgEEGeM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 May 2020 02:34:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725320AbgEEGap (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 May 2020 02:30:45 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DB3C061A0F
-        for <linux-usb@vger.kernel.org>; Mon,  4 May 2020 23:30:45 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id j3so390465ljg.8
-        for <linux-usb@vger.kernel.org>; Mon, 04 May 2020 23:30:45 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1725320AbgEEGeM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 May 2020 02:34:12 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE86C061A0F
+        for <linux-usb@vger.kernel.org>; Mon,  4 May 2020 23:34:11 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id z22so425377lfd.0
+        for <linux-usb@vger.kernel.org>; Mon, 04 May 2020 23:34:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=9VkRkb1ro1GgJ9r1EmvnofJjjCP5hTfDcQnLR5xMf4s=;
-        b=PRJF5rkB1gz41pH86KmPzfEkDhICs5RLTWoksw5ku/HqdCc/xy28MNwD1y+yUlmo6z
-         uSjWQ+wtI8Yo2cDeLkQEfxGgcIlAvROo6faOHxwgEUR30mf7lNNieRd1cErj2w+I42AH
-         iGv6xXDkj20OZ3n/wp4FF9NKGpUq3ns4UREYXf4jzooqWl0dgr3Jy2e/TIB8Mi6gzQyY
-         OERhy1z2SLQzwtdFug1hSrkffCeuihAQIk/bVZp77Il37e9ybUiRB0PHcMRSKNQpsFYj
-         UHPRTgu0Yn/oMkMPF9ZPyeaOsuLETTWMpuiPw1VLfAxx0aAGOpV+0dVNsYxovW+/pmwB
-         +ixA==
+        bh=Qm89k86sCYhllVKPg65NRhX0ZbalwFesaQl+Boi6CiI=;
+        b=OdsbTxTtDfYSTfo36cUpoEZMUcipZWxI04dgcqNueWRy0+9VwqSyBq+pB4ums9pGSH
+         gqcOiGVuVMrlw3PxhnNFaa0YErvBKdOM6WG5Tg5WKlrebQjqsKGny/ed89n4Fm4EJgPe
+         wrGO33TNqbE8h5H9xmo9kYb6Fx3f4SrEM/52KTekq0dBmeYKbeT0NZ9XUFKq8iv0lLoX
+         lIwsdismgg27POFWoC/nILsHr2nhyOZ09hTZsWEdPn7i9ft3jXz1sfRdaa7odHznNJ3V
+         lOqNJA/Ck3q7F5o9mVr87w0t1pMulTSrnOjKIuQG4ThjpnizZD8DLVrb47PokIeqETm4
+         X3YA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
          :date:message-id:mime-version;
-        bh=9VkRkb1ro1GgJ9r1EmvnofJjjCP5hTfDcQnLR5xMf4s=;
-        b=LuFcmA7VlX9wz6lJgWUVxh0tCnat3f+QTWz9u9sN8UFt0e8++F90ouB+m++ZmMCu6/
-         0qJLtZv/3CK8DjLtjTho4pWbWToIJ9cWsXcX6P9eToPH9WiOVjhtg/nyfLVjKfOckMxS
-         +f4E/B3l10SZ2yZEkBKE4mMLFGZzWVfF8r8POz/t/rHxPPxMXjzL0j2Uw3nzFz6XtyD7
-         DwMvNcOJvcEEUaQy219osIjfOaRe1gw2PEi525giIGTWgBJTY2uUZBrCj32GfRWJ3rN0
-         HL2uByPLGem+RBYlkoX6aDWX6RJjAPcMSbB3IGzhnpOtNBXYTsMmutaezX0dL+j9h9wP
-         ELOg==
-X-Gm-Message-State: AGi0PuZ51x/Ef6AT2XzN6pgTWkSvJ894dWP2PdirnJagyZMxT0tBu6DE
-        SlOr/38+RZrGfN1V/1mg6uyym/Pe
-X-Google-Smtp-Source: APiQypKcjm3a/GYvCCLaLvivyXzf/CFDKvtaMS1yMNfEJGvjbZlsnc9NikHkG5SdLi5BYRXW3Kk+dQ==
-X-Received: by 2002:a2e:8901:: with SMTP id d1mr827015lji.37.1588660243461;
-        Mon, 04 May 2020 23:30:43 -0700 (PDT)
+        bh=Qm89k86sCYhllVKPg65NRhX0ZbalwFesaQl+Boi6CiI=;
+        b=b2gHUhU0Gy3tNaU/tlz1vKMqovsAB/73CWjaT95SSn+oSGNJ1bmdy0qfYzILeogrPo
+         yq1i0+2Cqau6swhJ4OcOv76+7p0HpcCFEgr0dIlO9tSsSJ6INUrm6Rd93TwLkr4iIDnC
+         TYlpjGRJKDs8hB9mlw/FGztEMIWD4ghtao5yujIveLTrhBKXe5Q+dfYnd9sKsxIm24n8
+         HMH3djyBYrTP2RRnlaYmbVAeHYXY53/5E0QSrhSuA5eDlkXvcpnTpGT/9dJryvFC3LTV
+         uTVmYjhdeDrq2yG9xwqZJUq/VeRxzenxQGCCrK4bsxkXx1sPwW7kO7qNDf7i3CFr8uFh
+         cmKg==
+X-Gm-Message-State: AGi0PuZDBSU6DdlXePnSCqU39qSKE+7/Yga/qRYSpUIl/eq4nGayi0J/
+        Ar0IsPKRBWAQCFSGY+QPUwE=
+X-Google-Smtp-Source: APiQypIKDfaEivLouGYRA6ryFrFTaHkwPbJ2OAeqkwTujBYnX6H9yfsqIBk0/sID2QZRua1nKQAQZw==
+X-Received: by 2002:a19:c783:: with SMTP id x125mr596064lff.21.1588660450148;
+        Mon, 04 May 2020 23:34:10 -0700 (PDT)
 Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id o3sm911278lfl.78.2020.05.04.23.30.42
+        by smtp.gmail.com with ESMTPSA id u21sm879336ljo.61.2020.05.04.23.34.09
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 04 May 2020 23:30:42 -0700 (PDT)
+        Mon, 04 May 2020 23:34:09 -0700 (PDT)
 From:   Felipe Balbi <balbi@kernel.org>
 To:     Alan Stern <stern@rowland.harvard.edu>,
         Andrey Konovalov <andreyknvl@google.com>
@@ -54,10 +54,10 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         USB list <linux-usb@vger.kernel.org>,
         Dmitry Vyukov <dvyukov@google.com>
 Subject: Re: Testing endpoint halt support for raw-gadget
-In-Reply-To: <Pine.LNX.4.44L0.2005041018520.11213-100000@netrider.rowland.org>
-References: <Pine.LNX.4.44L0.2005041018520.11213-100000@netrider.rowland.org>
-Date:   Tue, 05 May 2020 09:30:38 +0300
-Message-ID: <87d07ic2r5.fsf@kernel.org>
+In-Reply-To: <Pine.LNX.4.44L0.2005041114130.11213-100000@netrider.rowland.org>
+References: <Pine.LNX.4.44L0.2005041114130.11213-100000@netrider.rowland.org>
+Date:   Tue, 05 May 2020 09:34:05 +0300
+Message-ID: <87a72mc2le.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -76,23 +76,41 @@ Hi,
 Alan Stern <stern@rowland.harvard.edu> writes:
 > On Mon, 4 May 2020, Andrey Konovalov wrote:
 >
->> One more question (sorry for so many :).
+>> On Mon, May 4, 2020 at 4:24 PM Alan Stern <stern@rowland.harvard.edu> wr=
+ote:
+>> >
+>> > On Mon, 4 May 2020, Andrey Konovalov wrote:
+>> >
+>> > > One more question (sorry for so many :).
+>> > >
+>> > > Looking at other fields of usb_request struct I see frame_number.
+>> > > AFAIU it's filled in by the UDC driver for ISO transfers. Does it ma=
+ke
+>> > > sense to expose it to userspace? I don't see any composite/legacy
+>> > > gadgets use that field at all.
+>> >
+>> > Do any of those gadget drivers use isochronous endpoints?
 >>=20
->> Looking at other fields of usb_request struct I see frame_number.
->> AFAIU it's filled in by the UDC driver for ISO transfers. Does it make
->> sense to expose it to userspace? I don't see any composite/legacy
->> gadgets use that field at all.
+>> Yes, there are audio/uvc function/legacy drivers that use those.
+>>=20
+>> > In fact, it also looks like none of the drivers in gadget/udc/ touch
+>> > the frame_number field.  Maybe we should just get rid of it, since it
+>> > isn't being used.
+>>=20
+>> It is used by dwc2/3 gadget drivers (which are not in gadget/udc/).
 >
-> Do any of those gadget drivers use isochronous endpoints?
->
-> In fact, it also looks like none of the drivers in gadget/udc/ touch
-> the frame_number field.  Maybe we should just get rid of it, since it
-> isn't being used.
->
-> Felipe, any preference?
+> Well, if Felipe thinks we ought to keep the field then you might as=20
+> well export it to userspace.  Drivers are free to ignore it.  :-)
 
-It was added for functions to use to tell the UDC which frame they want
-to start the request, but it was never used. I don't mind removing it.
+dwc3 has its own private frame_number as part of its own endpoint
+structure. We simply copy that to the request. That's is currently
+telling the gadget driver which frame the request completed. It could be
+used by the function to decide when to queue more requests. It can also
+be used to predict if we're in sync with the frames or will we diverge
+and miss frames in the future.
+
+If nobody has implemented any of that so far, I don't mind removing
+it. We need strong evidence that this will never be used, though :-)
 
 =2D-=20
 balbi
@@ -102,18 +120,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl6xCA4ACgkQzL64meEa
-mQYB7g//VcEprmmelTPR78LbGNYvMx5NIEE2iezfjDSVBhs2lflDK9cs62B2B5OR
-VZ12SSimET9107+qqt+KF9WI576KD9g1sKKYpbn9Ofwzjvup7aaV+L3R+jVr0zrJ
-+r3xnMK4VMe+jSbhKBTTRxANv6zePGlqL3CMpbI3z3u31QRpEC1XiZA+YGChNcKZ
-lVVjTvh6GRJ7nw1m7g/1qPY5cSPus49Q+Y7KuyOqu7FOmYCOrpETmC/Y4R7CaPDj
-mfAAtHOF/VCRcBKwgwLPv7u0NPjyvlDWNwCLmo7kYWe44a9RHIHRx9RMEdcAxsCM
-KARQZQivuWSFNU3wa+LJ15c1XuNwH/vWwrL9PegfFqwor4LAw2bpO+pQrC/kX3n0
-eXSu0zVfXraoFdzNLRgNnKrbbAdEhLmESeSEie/yZBo0zcS7tILn1VN85C3A+z7F
-KUcouq62GEUa/5O4oHpBw+N+jYRd1SXLGnqxr2v+bSL2dJ+vyuCnvPZyJjXRPR4P
-THGyGl6gn4RHstNiwhxV7gXOMciIZj3SRdkysiQNOOam5le6fdfBAp56sjTbAwyW
-PMUppGQMN5DZww42bcgxs9AQc2m4DoUL7wGx1VhxBz44QK8YqfSwr95H8WmoUyxe
-61PywFtAE6pxrqyodmkzZXoZ8p9krRiEwvch+neR/gT+Ck5np00=
-=oQEC
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl6xCN0ACgkQzL64meEa
+mQYyUw//WDgbFSybsziAH2hdCaV4EZjaFRrTBwBuEWG/sCbrIeNbe5fD+LMgTZP+
+SSKVSJAo0Ed16AiGzfVWkBIZPiz6DrOxQ+zqEDBRvSOOJPcAvAXRqHCV03Unqw13
++w0cqu29p/AyWms0bTRorDTTQwIQhTA5tplw9g32dW/AT71QmmqyCucLk8iVCxJ2
+/7JTf4NKxssBMLvuziNAQLdXWQZqIdq5ulh1JAusm2yDvsQcvItxBOqt4Cjh5A7v
+/3iy7tQd2H3KfonER7D2pGDVBajqcvfa+iWErREXgDs7ac2gR0f5gek0INauUURf
+Sk9UbiLLlmjV6UV92OEFWORZsNWbPgdqaNQ/jWKiqcmpiwOGpc1VhWK51CtF37HW
+CK1f0DlsZykV2GjqjfAGHYciHss0i2MafF3Q0SKWzqaLVdjukh+Wm95wJMPBPfS3
+w6Ws2ORS3cAomgH8TJHyP7GKNj+v4fm/yzkJSCCvQkuiPPyYbiNNl26TD08SHmH+
+e6zbvvZZoKgiVf0gImN8lsYGDGFW49POI2Ni9gRwDVNcJ/i0Y74Yu+ImxvuQitYx
+w4VIjuJPyjs6lAFUGbmVxo2ND1BLoZTgaYJsZAHrf8CKHciIciJmEu57wRiFUI0o
+Uo579hu6sLOO3vgJksoDx6nfFE8yXNBoGSQAGlPLE2RkWG91lvs=
+=nTY2
 -----END PGP SIGNATURE-----
 --=-=-=--
