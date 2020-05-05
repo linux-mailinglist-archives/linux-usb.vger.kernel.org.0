@@ -2,70 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 190B41C5B21
-	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2020 17:28:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D44C71C5C53
+	for <lists+linux-usb@lfdr.de>; Tue,  5 May 2020 17:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729956AbgEEP2m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 May 2020 11:28:42 -0400
-Received: from ms.lwn.net ([45.79.88.28]:50098 "EHLO ms.lwn.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729392AbgEEP2l (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 5 May 2020 11:28:41 -0400
-Received: from lwn.net (localhost [127.0.0.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id E0CF5737;
-        Tue,  5 May 2020 15:28:39 +0000 (UTC)
-Date:   Tue, 5 May 2020 09:28:38 -0600
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linux-cachefs@redhat.com,
-        codalist@coda.cs.cmu.edu, linux-fsdevel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-xfs@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 00/29] Convert files to ReST - part 2
-Message-ID: <20200505092838.4b1ff075@lwn.net>
-In-Reply-To: <20200428130128.22c4b973@lwn.net>
-References: <cover.1588021877.git.mchehab+huawei@kernel.org>
-        <20200428130128.22c4b973@lwn.net>
-Organization: LWN.net
+        id S1730352AbgEEPqa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 May 2020 11:46:30 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:49765 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1729666AbgEEPqa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 May 2020 11:46:30 -0400
+Received: (qmail 26239 invoked by uid 500); 5 May 2020 11:46:28 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 5 May 2020 11:46:28 -0400
+Date:   Tue, 5 May 2020 11:46:28 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     Hannes Reinecke <hare@suse.de>, Greg KH <greg@kroah.com>
+cc:     Oliver Neukum <oneukum@suse.de>,
+        USB list <linux-usb@vger.kernel.org>,
+        USB Storage list <usb-storage@lists.one-eyed-alien.net>
+Subject: Re: [PATCH] sierra-ms: do not call scsi_get_host_dev()
+In-Reply-To: <20200505143019.57418-1-hare@suse.de>
+Message-ID: <Pine.LNX.4.44L0.2005051146040.23429-100000@netrider.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 8bit
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 28 Apr 2020 13:01:28 -0600
-Jonathan Corbet <corbet@lwn.net> wrote:
+On Tue, 5 May 2020, Hannes Reinecke wrote:
 
-> So I'm happy to merge this set, but there is one thing that worries me a
-> bit... 
+> scsi_get_host_dev() will create a virtual device such that either
+> the target id is ignored from scanning (if 'this_id' is set to
+> something which can be reached during scanning) or if the driver
+> needs a scsi device for the HBA to send commands to.
+> Neither is true for sierra-ms; 'this_id' remains at the default
+> value '-1' and the created device is never ever used within
+> the driver.
+> So kill it.
 > 
-> >  fs/cachefiles/Kconfig                         |    4 +-
-> >  fs/coda/Kconfig                               |    2 +-
-> >  fs/configfs/inode.c                           |    2 +-
-> >  fs/configfs/item.c                            |    2 +-
-> >  fs/fscache/Kconfig                            |    8 +-
-> >  fs/fscache/cache.c                            |    8 +-
-> >  fs/fscache/cookie.c                           |    2 +-
-> >  fs/fscache/object.c                           |    4 +-
-> >  fs/fscache/operation.c                        |    2 +-
-> >  fs/locks.c                                    |    2 +-
-> >  include/linux/configfs.h                      |    2 +-
-> >  include/linux/fs_context.h                    |    2 +-
-> >  include/linux/fscache-cache.h                 |    4 +-
-> >  include/linux/fscache.h                       |   42 +-
-> >  include/linux/lsm_hooks.h                     |    2 +-  
+> Signed-off-by: Hannes Reinecke <hare@suse.de>
+> ---
+>  drivers/usb/storage/sierra_ms.c | 4 ----
+>  1 file changed, 4 deletions(-)
 > 
-> I'd feel a bit better if I could get an ack or two from filesystem folks
-> before I venture that far out of my own yard...what say you all?
+> diff --git a/drivers/usb/storage/sierra_ms.c b/drivers/usb/storage/sierra_ms.c
+> index e605cbc3d8bf..b9f78ef3edc3 100644
+> --- a/drivers/usb/storage/sierra_ms.c
+> +++ b/drivers/usb/storage/sierra_ms.c
+> @@ -129,15 +129,11 @@ int sierra_ms_init(struct us_data *us)
+>  	int result, retries;
+>  	struct swoc_info *swocInfo;
+>  	struct usb_device *udev;
+> -	struct Scsi_Host *sh;
+>  
+>  	retries = 3;
+>  	result = 0;
+>  	udev = us->pusb_dev;
+>  
+> -	sh = us_to_host(us);
+> -	scsi_get_host_dev(sh);
+> -
+>  	/* Force Modem mode */
+>  	if (swi_tru_install == TRU_FORCE_MODEM) {
+>  		usb_stor_dbg(us, "SWIMS: Forcing Modem Mode\n");
+> 
 
-It's been another week and nobody has complained, so I'm taking that as
-assent; the series has been applied.
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-Thanks,
-
-jon
