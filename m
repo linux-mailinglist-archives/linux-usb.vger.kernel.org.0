@@ -2,102 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAA0F1C7BD1
-	for <lists+linux-usb@lfdr.de>; Wed,  6 May 2020 23:01:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 373E51C7D51
+	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2020 00:27:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729162AbgEFVB3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 May 2020 17:01:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55154 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728535AbgEFVB3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 May 2020 17:01:29 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D45C061A0F;
-        Wed,  6 May 2020 14:01:28 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id t9so1607150pjw.0;
-        Wed, 06 May 2020 14:01:28 -0700 (PDT)
+        id S1730127AbgEFW1x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 May 2020 18:27:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40466 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729956AbgEFW1x (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 May 2020 18:27:53 -0400
+Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A899C061A10
+        for <linux-usb@vger.kernel.org>; Wed,  6 May 2020 15:27:53 -0700 (PDT)
+Received: by mail-ot1-x343.google.com with SMTP id e20so2783897otk.12
+        for <linux-usb@vger.kernel.org>; Wed, 06 May 2020 15:27:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1PrjJgczo6pwbhVfqtxrYxW7d4ubPdJ5akMV/EdzMO8=;
-        b=S+Y03lcbRfS4M03fe9S1xwCVxAew8y69Mno1QzyJ/cD0m8jpGdJg8JIK2yqt//5s/q
-         TKDuS4ScDuolgCXocIib85qeZn8viFjl3ZwYbLZ74AjJPOIww2Z+qq2ecwqNJaWYqvcU
-         2tfQvU8RJYpdhGsK03ZHN8a5gWrGQ2KT7tuiGdxLy/PtyCLeWYjt5xTYChefFsgTRQrh
-         muaj8qoHgMIXaZSNgBd+7u0w4dVpkTHvL+WHSG8rHfvH+rKqyr+oYqER7vb9+ndZ6qIc
-         j5NleHcXh5HGSEkyRv99dn7fWAMNJmGKm0khoWYkhnzH7IWcqWnaY3/iPeCO8FZpzvyI
-         bh4g==
+         :cc:content-transfer-encoding;
+        bh=Wh9X0viLAqBaCyOgkq5YZkPRFay/niTUsTksW/b9xjc=;
+        b=CAKq1HaIvs35k+7NyjoxmcRuziq+i6ov82ilXW4wZMUrNej7UtuwNVQkHNOAAco+1a
+         /J3br1yYIYX9Km9PQxhLbZpUvZ/GqUlB3+M+8J9JbMZjxzl0G2OjtqJtB5FaBfgaoaZn
+         UryVxJEI2uuCRYFnpd/5B2GsjBEVaXH1rfs3eoq8ysS464Ra+2ZrJhZ/gC5Vnlu6+kQY
+         bQcTHmZfYWxG0eIqV8XgfJzNYhI0tR0jvpAAkUfkxnHlVYWptgMRtH6WKJHpe5Z5xAct
+         43LCYejXAM+DK03Qq7PKwjxh0eNyHgAnaNWFOPysYGKRgP17kqZQhn/jVllhC+UlScTB
+         ZulQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1PrjJgczo6pwbhVfqtxrYxW7d4ubPdJ5akMV/EdzMO8=;
-        b=m3k3dPqmeDthwy7mluqMlagKCoHjHkvAkZ/hjmYOGGk/mzjeMAXVMcZGivxBDRU9ND
-         SPOJMjBtZqcjvQS4i7qvvmnsWLQvazPU0EEKG13CrGj5qCSMnw6CehvuciUyidc8xlus
-         WWrHj6a0ER70+HxQDHBA888eu/kIeyPUUI7hLuxva01SjIl0zh3LQhQr4gQyRUPHJmCd
-         WTs1L2KECtT0WkVnv5K5XyvGKkEOKux2wI7Kp82TNz3GA7lbpC1Ws229H01OMtEPHnmb
-         JmdkcEV9WBvaBL4q7FKLNMrFEYPH0ZMRqJhTYVjC9OiqkS3XbnK/k0TvJ/RBORLgjWFc
-         mCWQ==
-X-Gm-Message-State: AGi0PuZOTL1hs2Lt/uY6yKRcjTvh/7SBpjt5JoVMk2Guz1gRPNGuknFb
-        fFc3zCPYiNLH4u1RhtLeGiriElCJHsnCUnoJ1vM=
-X-Google-Smtp-Source: APiQypKdZjzSlTyFQ/T9CUwUL01Xf79l+ICWYHY1E+4V+NAKRwMIyNo2UDSTCSmbRJOkOJSrbKREYvBDA7BlnuxgR6E=
-X-Received: by 2002:a17:902:6901:: with SMTP id j1mr9830320plk.255.1588798888435;
- Wed, 06 May 2020 14:01:28 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Wh9X0viLAqBaCyOgkq5YZkPRFay/niTUsTksW/b9xjc=;
+        b=c5HRitCP9F171fla+dKcH+0doMF8BOxcQ64hsH8H6zVprcy9RApfsZxzhbNRMy9rQp
+         wEjqwYP9Ly+BwMt4xhh33ZZ304uPZXlrDMcqGmhFr96RJRZIriUlg5pTaQmIwTKnezbe
+         VIO3fAmq78AOTlhF3NzFHupSoMD7Wc3RfDqkDouEYpg4wMI8HiK9PJ05ADOSWebh0w4f
+         tRxNhUIos0zvaJ65meZo92W27ZuCn6FaxhlmSB81uCcS8ntFsFaWKi1MWzXM/2JqtxRS
+         z6Dcy8GvwfSq2hXpEkrxzxcuAKqS3AdYpgPblSfyaZ4nYJLljzBrF87k0CD4+3zfj+f/
+         OKLw==
+X-Gm-Message-State: AGi0PubRFfygLKM9d3cHLxnGJCPZITsHHcmb/RhTgL6YXxZjv1ZbCMJp
+        zRiw8fBVTQANJnXkz7CG9goBqPcFJororsTk70rClA==
+X-Google-Smtp-Source: APiQypI20QdEI7sgKDFAHfmiXS/vC1g/OfTgcmywmGuTIvYN+hRDogr8IPcoVqlopplBf2ONeVdv9YUQFAZMnjd9558=
+X-Received: by 2002:a05:6830:1589:: with SMTP id i9mr8813654otr.102.1588804072594;
+ Wed, 06 May 2020 15:27:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200430111258.6091-1-alcooperx@gmail.com> <20200430111258.6091-4-alcooperx@gmail.com>
- <20200505110036.GB93160@kroah.com> <CAOGqxeXboYz2OQhgJsYmH5_7qEwKeWR5AA4Ljq_iFdSX=H2fkA@mail.gmail.com>
-In-Reply-To: <CAOGqxeXboYz2OQhgJsYmH5_7qEwKeWR5AA4Ljq_iFdSX=H2fkA@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 7 May 2020 00:01:16 +0300
-Message-ID: <CAHp75VeA8JnsJgEgkv0wivinsxvk51JTVyaPhmLhsjzkqZYR8A@mail.gmail.com>
-Subject: Re: [PATCH v6 3/4] usb: ehci: Add new EHCI driver for Broadcom STB SoC's
-To:     Alan Cooper <alcooperx@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        ": Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        DTML <devicetree@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
+References: <20191028215919.83697-1-john.stultz@linaro.org>
+ <20191028215919.83697-4-john.stultz@linaro.org> <87mudjj4rc.fsf@gmail.com>
+ <CALAqxLU+9uEcdRVaLfh+eQrDtZbDGod9pRXhBX=prAhg9MXagw@mail.gmail.com> <CAKgpwJVaKpsgMjKcnYyJsfNj0ibkPt=mdn-NxfOkeX1jfL=9iQ@mail.gmail.com>
+In-Reply-To: <CAKgpwJVaKpsgMjKcnYyJsfNj0ibkPt=mdn-NxfOkeX1jfL=9iQ@mail.gmail.com>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Wed, 6 May 2020 15:27:40 -0700
+Message-ID: <CALAqxLVXauXP0r4Hv2Axa4PNf_F9wp644peYV06bdsPtMKGmLA@mail.gmail.com>
+Subject: Re: [PATCH v4 3/9] usb: dwc3: Increase timeout for CmdAct cleared by
+ device controller
+To:     Jun Li <lijun.kernel@gmail.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Yu Chen <chenyu56@huawei.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        Mark Rutland <mark.rutland@arm.com>,
+        ShuFan Lee <shufan_lee@richtek.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 6, 2020 at 11:23 PM Alan Cooper <alcooperx@gmail.com> wrote:
-> On Tue, May 5, 2020 at 7:00 AM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> > On Thu, Apr 30, 2020 at 07:12:57AM -0400, Al Cooper wrote:
-
-...
-
-> > > +     /* Hook the hub control routine to work around a bug */
-> >
-> > What bug?  This feels wrong.
+On Wed, May 6, 2020 at 2:00 AM Jun Li <lijun.kernel@gmail.com> wrote:
+> John Stultz <john.stultz@linaro.org> =E4=BA=8E2019=E5=B9=B410=E6=9C=8830=
+=E6=97=A5=E5=91=A8=E4=B8=89 =E4=B8=8A=E5=8D=885:18=E5=86=99=E9=81=93=EF=BC=
+=9A
+> > On Tue, Oct 29, 2019 at 2:11 AM Felipe Balbi <balbi@kernel.org> wrote:
+> > > John Stultz <john.stultz@linaro.org> writes:
+> > > > From: Yu Chen <chenyu56@huawei.com>
+> > > >
+> > > > It needs more time for the device controller to clear the CmdAct of
+> > > > DEPCMD on Hisilicon Kirin Soc.
+> > >
+> > > Why does it need more time? Why is it so that no other platform needs
+> > > more time, only this one? And which command, specifically, causes
+> > > problem?
 >
-> The bug is explained in a comment above the ehci_brcm_hub_control()
-> routine as follows:
-> /*
->  * ehci_brcm_hub_control
->  * Intercept echi-hcd request to complete RESUME and align it to the start
->  * of the next microframe.
->  * If RESUME is complete too late in the microframe, host controller
->  * detects babble on suspended port and resets the port afterwards.
->  * This s/w workaround allows to avoid this problem.
->  * See SWLINUX-1909 for more details
->  */
-> I'll remove the internal bug tracking reference from the comment.
+> Sorry for my back to this so late.
+>
+> This change is required on my dwc3 based HW too, I gave a check
+> and the reason is suspend_clk is used in case the PIPE phy is at P3,
+> this slow clock makes my EP command below timeout.
+>
+> dwc3_gadget_ep_cmd: ep0out: cmd 'Set Endpoint Configuration' [401]
+> params 00001000 00000500 00000000 --> status: Timed Out
+>
+> Success case takes about 400us to complete, see below trace(44.286278
+> - 44.285897 =3D 0.000381):
+>
+> configfs_acm.sh-822   [000] d..1    44.285896: dwc3_writel: addr
+> 000000006d59aae1 value 00000401
+> configfs_acm.sh-822   [000] d..1    44.285897: dwc3_readl: addr
+> 000000006d59aae1 value 00000401
+> ... ...
+> configfs_acm.sh-822   [000] d..1    44.286278: dwc3_readl: addr
+> 000000006d59aae1 value 00000001
+> configfs_acm.sh-822   [000] d..1    44.286279: dwc3_gadget_ep_cmd:
+> ep0out: cmd 'Set Endpoint Configuration' [401] params 00001000
+> 00000500 00000000 --> status: Successful
+>
+> Hi John,
+>
+> Do you still have this problem? if yes, What's the value of
+> USBLNKST[21:18] when the timeout happens?
 
-I guess you may leave the internal bug reference. I can tell from my
-experience that's hard to understand what was going on in the driver
-in years perspective. It will help whoever in this company have a
-chance to look after the driver.
+Sorry. As I mentioned, I was working to upstream a patchset that I
+hadn't created, so the context I had was limited. As I couldn't
+reproduce an issue without the change on the device I had, I figured
+it would be best to drop it.
 
--- 
-With Best Regards,
-Andy Shevchenko
+However, as you have some analysis and rational for why such a change
+would be needed, I don't have an objection to it. Do you want to
+resubmit the patch with your explanation and detailed log above in the
+commit message?
+
+thanks
+-john
