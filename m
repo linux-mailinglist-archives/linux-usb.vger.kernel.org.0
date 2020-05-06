@@ -2,134 +2,220 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 373E51C7D51
-	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2020 00:27:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5ECF1C7DE2
+	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2020 01:32:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730127AbgEFW1x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 May 2020 18:27:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40466 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729956AbgEFW1x (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 May 2020 18:27:53 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A899C061A10
-        for <linux-usb@vger.kernel.org>; Wed,  6 May 2020 15:27:53 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id e20so2783897otk.12
-        for <linux-usb@vger.kernel.org>; Wed, 06 May 2020 15:27:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Wh9X0viLAqBaCyOgkq5YZkPRFay/niTUsTksW/b9xjc=;
-        b=CAKq1HaIvs35k+7NyjoxmcRuziq+i6ov82ilXW4wZMUrNej7UtuwNVQkHNOAAco+1a
-         /J3br1yYIYX9Km9PQxhLbZpUvZ/GqUlB3+M+8J9JbMZjxzl0G2OjtqJtB5FaBfgaoaZn
-         UryVxJEI2uuCRYFnpd/5B2GsjBEVaXH1rfs3eoq8ysS464Ra+2ZrJhZ/gC5Vnlu6+kQY
-         bQcTHmZfYWxG0eIqV8XgfJzNYhI0tR0jvpAAkUfkxnHlVYWptgMRtH6WKJHpe5Z5xAct
-         43LCYejXAM+DK03Qq7PKwjxh0eNyHgAnaNWFOPysYGKRgP17kqZQhn/jVllhC+UlScTB
-         ZulQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Wh9X0viLAqBaCyOgkq5YZkPRFay/niTUsTksW/b9xjc=;
-        b=c5HRitCP9F171fla+dKcH+0doMF8BOxcQ64hsH8H6zVprcy9RApfsZxzhbNRMy9rQp
-         wEjqwYP9Ly+BwMt4xhh33ZZ304uPZXlrDMcqGmhFr96RJRZIriUlg5pTaQmIwTKnezbe
-         VIO3fAmq78AOTlhF3NzFHupSoMD7Wc3RfDqkDouEYpg4wMI8HiK9PJ05ADOSWebh0w4f
-         tRxNhUIos0zvaJ65meZo92W27ZuCn6FaxhlmSB81uCcS8ntFsFaWKi1MWzXM/2JqtxRS
-         z6Dcy8GvwfSq2hXpEkrxzxcuAKqS3AdYpgPblSfyaZ4nYJLljzBrF87k0CD4+3zfj+f/
-         OKLw==
-X-Gm-Message-State: AGi0PubRFfygLKM9d3cHLxnGJCPZITsHHcmb/RhTgL6YXxZjv1ZbCMJp
-        zRiw8fBVTQANJnXkz7CG9goBqPcFJororsTk70rClA==
-X-Google-Smtp-Source: APiQypI20QdEI7sgKDFAHfmiXS/vC1g/OfTgcmywmGuTIvYN+hRDogr8IPcoVqlopplBf2ONeVdv9YUQFAZMnjd9558=
-X-Received: by 2002:a05:6830:1589:: with SMTP id i9mr8813654otr.102.1588804072594;
- Wed, 06 May 2020 15:27:52 -0700 (PDT)
+        id S1727945AbgEFXc3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 May 2020 19:32:29 -0400
+Received: from mga11.intel.com ([192.55.52.93]:21643 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727119AbgEFXc3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 6 May 2020 19:32:29 -0400
+IronPort-SDR: R3S+ByBbykYHDRMKfTSAVJCCTa3usoDnbUrq7IVGtsFBHdEnK9PjWDNiWpvbZRnSjPGxjlI+xC
+ 5HhzJj/wN4Vg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2020 16:32:28 -0700
+IronPort-SDR: W0KrL0+7M8KX1c1Ziz6wdrr7m+A/+36QWbSAnrbol/6haNwS2u8aFSErRCZLpAuNG/J01v1Rks
+ OABZBUQz2ZLw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,361,1583222400"; 
+   d="scan'208";a="260344471"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 06 May 2020 16:32:27 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1jWTWc-000EDl-9U; Thu, 07 May 2020 07:32:26 +0800
+Date:   Thu, 07 May 2020 07:32:09 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 084d7e78467534eedaf0d6c72086a6817023d839
+Message-ID: <5eb348f9.ApH3mDF/+4UigloP%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20191028215919.83697-1-john.stultz@linaro.org>
- <20191028215919.83697-4-john.stultz@linaro.org> <87mudjj4rc.fsf@gmail.com>
- <CALAqxLU+9uEcdRVaLfh+eQrDtZbDGod9pRXhBX=prAhg9MXagw@mail.gmail.com> <CAKgpwJVaKpsgMjKcnYyJsfNj0ibkPt=mdn-NxfOkeX1jfL=9iQ@mail.gmail.com>
-In-Reply-To: <CAKgpwJVaKpsgMjKcnYyJsfNj0ibkPt=mdn-NxfOkeX1jfL=9iQ@mail.gmail.com>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Wed, 6 May 2020 15:27:40 -0700
-Message-ID: <CALAqxLVXauXP0r4Hv2Axa4PNf_F9wp644peYV06bdsPtMKGmLA@mail.gmail.com>
-Subject: Re: [PATCH v4 3/9] usb: dwc3: Increase timeout for CmdAct cleared by
- device controller
-To:     Jun Li <lijun.kernel@gmail.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Yu Chen <chenyu56@huawei.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        ShuFan Lee <shufan_lee@richtek.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 6, 2020 at 2:00 AM Jun Li <lijun.kernel@gmail.com> wrote:
-> John Stultz <john.stultz@linaro.org> =E4=BA=8E2019=E5=B9=B410=E6=9C=8830=
-=E6=97=A5=E5=91=A8=E4=B8=89 =E4=B8=8A=E5=8D=885:18=E5=86=99=E9=81=93=EF=BC=
-=9A
-> > On Tue, Oct 29, 2019 at 2:11 AM Felipe Balbi <balbi@kernel.org> wrote:
-> > > John Stultz <john.stultz@linaro.org> writes:
-> > > > From: Yu Chen <chenyu56@huawei.com>
-> > > >
-> > > > It needs more time for the device controller to clear the CmdAct of
-> > > > DEPCMD on Hisilicon Kirin Soc.
-> > >
-> > > Why does it need more time? Why is it so that no other platform needs
-> > > more time, only this one? And which command, specifically, causes
-> > > problem?
->
-> Sorry for my back to this so late.
->
-> This change is required on my dwc3 based HW too, I gave a check
-> and the reason is suspend_clk is used in case the PIPE phy is at P3,
-> this slow clock makes my EP command below timeout.
->
-> dwc3_gadget_ep_cmd: ep0out: cmd 'Set Endpoint Configuration' [401]
-> params 00001000 00000500 00000000 --> status: Timed Out
->
-> Success case takes about 400us to complete, see below trace(44.286278
-> - 44.285897 =3D 0.000381):
->
-> configfs_acm.sh-822   [000] d..1    44.285896: dwc3_writel: addr
-> 000000006d59aae1 value 00000401
-> configfs_acm.sh-822   [000] d..1    44.285897: dwc3_readl: addr
-> 000000006d59aae1 value 00000401
-> ... ...
-> configfs_acm.sh-822   [000] d..1    44.286278: dwc3_readl: addr
-> 000000006d59aae1 value 00000001
-> configfs_acm.sh-822   [000] d..1    44.286279: dwc3_gadget_ep_cmd:
-> ep0out: cmd 'Set Endpoint Configuration' [401] params 00001000
-> 00000500 00000000 --> status: Successful
->
-> Hi John,
->
-> Do you still have this problem? if yes, What's the value of
-> USBLNKST[21:18] when the timeout happens?
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-linus
+branch HEAD: 084d7e78467534eedaf0d6c72086a6817023d839  Merge tag 'usb-serial-5.7-rc5' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
 
-Sorry. As I mentioned, I was working to upstream a patchset that I
-hadn't created, so the context I had was limited. As I couldn't
-reproduce an issue without the change on the device I had, I figured
-it would be best to drop it.
+elapsed time: 481m
 
-However, as you have some analysis and rational for why such a change
-would be needed, I don't have an objection to it. Do you want to
-resubmit the patch with your explanation and detailed log above in the
-commit message?
+configs tested: 161
+configs skipped: 0
 
-thanks
--john
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+arm64                            allyesconfig
+arm                              allyesconfig
+arm64                            allmodconfig
+arm                              allmodconfig
+arm64                             allnoconfig
+arm                               allnoconfig
+sparc                            allyesconfig
+m68k                             allyesconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+csky                             allyesconfig
+riscv                               defconfig
+parisc                           allyesconfig
+alpha                            allyesconfig
+powerpc                           allnoconfig
+m68k                                defconfig
+c6x                               allnoconfig
+s390                             alldefconfig
+ia64                             alldefconfig
+m68k                           sun3_defconfig
+powerpc                             defconfig
+sparc64                          allmodconfig
+nds32                               defconfig
+s390                                defconfig
+i386                              allnoconfig
+i386                             allyesconfig
+i386                             alldefconfig
+i386                                defconfig
+i386                              debian-10.3
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                              allnoconfig
+m68k                          multi_defconfig
+nds32                             allnoconfig
+csky                                defconfig
+alpha                               defconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+h8300                            allmodconfig
+xtensa                              defconfig
+arc                                 defconfig
+arc                              allyesconfig
+microblaze                       allyesconfig
+sh                               allmodconfig
+sh                                allnoconfig
+microblaze                        allnoconfig
+nios2                               defconfig
+nios2                            allyesconfig
+openrisc                            defconfig
+c6x                              allyesconfig
+openrisc                         allyesconfig
+mips                             allyesconfig
+mips                         64r6el_defconfig
+mips                              allnoconfig
+mips                           32r2_defconfig
+mips                             allmodconfig
+parisc                            allnoconfig
+parisc                           allmodconfig
+powerpc                          allyesconfig
+powerpc                          alldefconfig
+powerpc                          rhel-kconfig
+powerpc                          allmodconfig
+m68k                 randconfig-a001-20200506
+mips                 randconfig-a001-20200506
+nds32                randconfig-a001-20200506
+parisc               randconfig-a001-20200506
+alpha                randconfig-a001-20200506
+riscv                randconfig-a001-20200506
+m68k                 randconfig-a001-20200507
+mips                 randconfig-a001-20200507
+nds32                randconfig-a001-20200507
+parisc               randconfig-a001-20200507
+alpha                randconfig-a001-20200507
+riscv                randconfig-a001-20200507
+h8300                randconfig-a001-20200506
+nios2                randconfig-a001-20200506
+microblaze           randconfig-a001-20200506
+c6x                  randconfig-a001-20200506
+sparc64              randconfig-a001-20200506
+h8300                randconfig-a001-20200507
+nios2                randconfig-a001-20200507
+microblaze           randconfig-a001-20200507
+c6x                  randconfig-a001-20200507
+sparc64              randconfig-a001-20200507
+s390                 randconfig-a001-20200506
+xtensa               randconfig-a001-20200506
+sh                   randconfig-a001-20200506
+openrisc             randconfig-a001-20200506
+csky                 randconfig-a001-20200506
+xtensa               randconfig-a001-20200507
+sh                   randconfig-a001-20200507
+openrisc             randconfig-a001-20200507
+csky                 randconfig-a001-20200507
+x86_64               randconfig-a003-20200506
+x86_64               randconfig-a001-20200506
+x86_64               randconfig-a002-20200506
+i386                 randconfig-a001-20200506
+i386                 randconfig-a002-20200506
+i386                 randconfig-a003-20200506
+i386                 randconfig-b003-20200506
+i386                 randconfig-b001-20200506
+x86_64               randconfig-b001-20200506
+x86_64               randconfig-b003-20200506
+i386                 randconfig-b002-20200506
+x86_64               randconfig-d001-20200507
+i386                 randconfig-d003-20200507
+i386                 randconfig-d001-20200507
+x86_64               randconfig-d003-20200507
+x86_64               randconfig-d002-20200507
+i386                 randconfig-d002-20200507
+i386                 randconfig-e003-20200506
+x86_64               randconfig-e003-20200506
+x86_64               randconfig-e001-20200506
+i386                 randconfig-e002-20200506
+i386                 randconfig-e001-20200506
+i386                 randconfig-f003-20200506
+x86_64               randconfig-f001-20200506
+x86_64               randconfig-f003-20200506
+x86_64               randconfig-f002-20200506
+i386                 randconfig-f001-20200506
+i386                 randconfig-f002-20200506
+x86_64               randconfig-g003-20200506
+i386                 randconfig-g003-20200506
+i386                 randconfig-g002-20200506
+x86_64               randconfig-g001-20200506
+i386                 randconfig-g001-20200506
+x86_64               randconfig-g002-20200506
+i386                 randconfig-h002-20200506
+i386                 randconfig-h001-20200506
+i386                 randconfig-h003-20200506
+x86_64               randconfig-h002-20200506
+x86_64               randconfig-h003-20200506
+x86_64               randconfig-h001-20200506
+ia64                 randconfig-a001-20200506
+arm64                randconfig-a001-20200506
+arc                  randconfig-a001-20200506
+powerpc              randconfig-a001-20200506
+arm                  randconfig-a001-20200506
+sparc                randconfig-a001-20200506
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+s390                             allyesconfig
+s390                              allnoconfig
+s390                             allmodconfig
+sparc                               defconfig
+sparc64                             defconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+um                               allmodconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+um                               allyesconfig
+um                                  defconfig
+x86_64                                   rhel
+x86_64                               rhel-7.6
+x86_64                    rhel-7.6-kselftests
+x86_64                         rhel-7.2-clear
+x86_64                                    lkp
+x86_64                              fedora-25
+x86_64                                  kexec
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
