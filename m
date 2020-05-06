@@ -2,121 +2,189 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CF771C778C
-	for <lists+linux-usb@lfdr.de>; Wed,  6 May 2020 19:14:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 306A81C79C9
+	for <lists+linux-usb@lfdr.de>; Wed,  6 May 2020 20:59:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729567AbgEFRNz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 May 2020 13:13:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47790 "EHLO
+        id S1728223AbgEFS7X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 May 2020 14:59:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728093AbgEFRNy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 May 2020 13:13:54 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF99C061A0F;
-        Wed,  6 May 2020 10:13:53 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id r26so3622613wmh.0;
-        Wed, 06 May 2020 10:13:53 -0700 (PDT)
+        with ESMTP id S1726331AbgEFS7X (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 May 2020 14:59:23 -0400
+Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC93FC061A0F;
+        Wed,  6 May 2020 11:59:22 -0700 (PDT)
+Received: by mail-il1-x142.google.com with SMTP id t12so1210797ile.9;
+        Wed, 06 May 2020 11:59:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=GNKW7Nj5sqqTflAX7xBN/lqrOeNoUdudCj9pQHf3RMg=;
-        b=ZDs0lNMpexah6bbEgwbPxd4LeMcR+Qm1BK90fPCv/D0cFZxwt2Grs0fvEDM9Y5Zt/y
-         /8J4uGB59bV3tf70QrxXdzJU/OFwxMaso4PzHBVPPBecQv9ouM1SYY4mROlJA4j8BE3h
-         woJK0P/yuvSu4GaZhZqrnGfrQjmtaMmbxPb63jGfukM2PR+zWh/eAVW7xOTekYW+P7wn
-         OiGRqrHDi5UJXBQRSL1LAiGJ7QQ6dnxkAPXUwVAb8yNHflAQxIEGumUKMj8sRymzXJyu
-         yHDy/Jxn5FydMZAej+qOb6yND7AArqQWv2AVBE0cyJeVxfXdvMocKXlNQN5xnS1vMACg
-         fVYA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2lpYq+th169UEJTBFHfr6994K42fMCM/CE3wPoNMf8w=;
+        b=rRId+sPJ5iOYmr5Y2pDwfZnKD38JSFpf65opPROixp6cmEWzguPot8tGC5dtJ4Xx34
+         HbTQy1oPtncmsCLm5FgLcvpq5OJCscpscNBYzcjwz0ny6yLUK2j3zxsFn+ec8OoIwU76
+         17+TRfQtfNL2pdGXjQZ8wsfXnZUIW8l4y4wNIX3xaVSHsR4x3U4SW0W/MrsqOyOUoBHb
+         gitHxwplv/4ZSmhFWK1sc+gMSIYgb0+qnJXfhJCKeJIg8//H/zEmHeoG7DRBMicU8leN
+         WnpM2dqcR2Sg1nAsvyfdSc3a9ovnGy4jedPaOJHcwhBYZDqrKi9t6wcuoM916vymGV/K
+         dDZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=GNKW7Nj5sqqTflAX7xBN/lqrOeNoUdudCj9pQHf3RMg=;
-        b=TGdBaV7icU6xBlgsysgf6cPWubLBZG/DExQHbHoCnY+agXycQzmwq2la7DxcOsKdyF
-         I1k9ewpyeVy81pB4giG6OADjYekgOq/u+iOP9jAcMLIm8Iy/NuQ6SOZTjlRFBdZ91h/t
-         oF8VALrwy4OUew5o6LCpnUVo8kN/FesH+BNB1taA4jZaMYgBxOqVTKcD8rVH1QPd85Zl
-         jebAX/QNmpukxaQCqjx/71Ujvi+H2/C2ul+jbieA9/VRbR2LdSCjia/r9uVDEsY4LX4y
-         IOfHTm0/S/yoPUxzvVLQK108WognAOoe4waWFByGLK0DXjuhHMGvODB+xXBlH/egDgAf
-         oKNg==
-X-Gm-Message-State: AGi0PuaOnM9Vg6ITuK8ucS69Y2vG7Edg7weKpyfkcuo+uqdKt3qTmW/g
-        8DkXF8VJYPArjA6k24TqJVxfRdevABU=
-X-Google-Smtp-Source: APiQypIi7fdhqbB6pSzfRPoD9/lP54yHlUzEC2PyN83Nmu07s3nwp1ZMpJxcpIjOp08BCiP9Vn83LA==
-X-Received: by 2002:a1c:a344:: with SMTP id m65mr5497369wme.20.1588785232026;
-        Wed, 06 May 2020 10:13:52 -0700 (PDT)
-Received: from localhost (p2E5BE57B.dip0.t-ipconnect.de. [46.91.229.123])
-        by smtp.gmail.com with ESMTPSA id 7sm3844106wra.50.2020.05.06.10.13.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 May 2020 10:13:50 -0700 (PDT)
-Date:   Wed, 6 May 2020 19:13:49 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jon Hunter <jonathanh@nvidia.com>,
-        Nagarjuna Kristam <nkristam@nvidia.com>,
-        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: tegra-xudc: Fix idle suspend/resume
-Message-ID: <20200506171349.GF2723987@ulmo>
-References: <20200417170537.2540914-1-thierry.reding@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2lpYq+th169UEJTBFHfr6994K42fMCM/CE3wPoNMf8w=;
+        b=UVzlQxGHz1Z881fopMOz6ASY0rG3vT31Kv0bIhBUv0/Lic3UHwQR9a56UHi+68ZhQr
+         dxmVJHfHaoE6opFCm8PR8C5wi/nqbP3Q79AY4QBOWsv6IS6a9YWV2YWBcALqzXtdg0gb
+         CGckMdXsvcGuiWDBftwdVTrCHYXBUgqs1ophSPSJsQmVg0u7hu7k1rNC+WqOviijNHBt
+         FmoMzG5aRVAJnSQm1twU1++pnGDYgA18mE3dABxhZ5ISeXFcQ9OThwmPMy60vKHpIgpI
+         rOe8O9xoXDu2X5hdAU4vOtSyF6ghPzsKS81mVgm1cjEC/G0KucDwrtdbkHYYAEpXebYS
+         /u1Q==
+X-Gm-Message-State: AGi0PuZAj4yXwnakrv9lThuY0nSRMJjde49k4Sn4dABRqaMjDlpKqJs/
+        vJOU9N791oG2hY1F+xS9XYrxkfW7cRG7yLsJ6Js=
+X-Google-Smtp-Source: APiQypKhL3iLzzChz2Mlk2v1yEhGVvpmo/vYIu427ZTa6j0CjVwvW5wMIIjpDcBU/aiEoPEN5IPjfHjJHpooxBxwlhM=
+X-Received: by 2002:a92:d286:: with SMTP id p6mr10006224ilp.98.1588791562140;
+ Wed, 06 May 2020 11:59:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Zs/RYxT/hKAHzkfQ"
-Content-Disposition: inline
-In-Reply-To: <20200417170537.2540914-1-thierry.reding@gmail.com>
-User-Agent: Mutt/1.13.1 (2019-12-14)
+References: <20200430111258.6091-1-alcooperx@gmail.com> <20200430111258.6091-5-alcooperx@gmail.com>
+ <20200505105413.GA93160@kroah.com>
+In-Reply-To: <20200505105413.GA93160@kroah.com>
+From:   Alan Cooper <alcooperx@gmail.com>
+Date:   Wed, 6 May 2020 14:59:10 -0400
+Message-ID: <CAOGqxeUJsYmQS8N3yvb8U76J-afFa9qKiu+S0=SK1OYmu+qYeQ@mail.gmail.com>
+Subject: Re: [PATCH v6 4/4] usb: host: Add ability to build new Broadcom STB
+ USB drivers
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     ": Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        DTML <devicetree@vger.kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Tue, May 5, 2020 at 6:54 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Thu, Apr 30, 2020 at 07:12:58AM -0400, Al Cooper wrote:
+> > Add the build system changes needed to get the Broadcom STB XHCI,
+> > EHCI and OHCI functionality working. The OHCI support does not
+> > require anything unique to Broadcom so the standard ohci-platform
+> > driver is being used. The link order for XHCI was changed in the
+> > Makefile because of the way STB XHCI, EHCI and OHCI controllers
+> > share a port which requires that the XHCI driver be initialized
+> > first. Also update MAINTAINERS.
+> >
+> > Signed-off-by: Al Cooper <alcooperx@gmail.com>
+> > ---
+> >  MAINTAINERS               |  8 ++++++++
+> >  drivers/usb/host/Kconfig  | 16 ++++++++++++++++
+> >  drivers/usb/host/Makefile | 16 ++++++++++------
+> >  3 files changed, 34 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 26f281d9f32a..6147ed78d212 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -3481,6 +3481,14 @@ S:     Supported
+> >  F:   Documentation/devicetree/bindings/i2c/brcm,brcmstb-i2c.yaml
+> >  F:   drivers/i2c/busses/i2c-brcmstb.c
+> >
+> > +BROADCOM BRCMSTB USB EHCI DRIVER
+> > +M:   Al Cooper <alcooperx@gmail.com>
+> > +L:   linux-usb@vger.kernel.org
+> > +L:   bcm-kernel-feedback-list@broadcom.com
+> > +S:   Maintained
+> > +F:   Documentation/devicetree/bindings/usb/brcm,bcm7445-ehci.yaml
+> > +F:   drivers/usb/host/ehci-brcm.*
+> > +
+> >  BROADCOM BRCMSTB USB2 and USB3 PHY DRIVER
+> >  M:   Al Cooper <alcooperx@gmail.com>
+> >  L:   linux-kernel@vger.kernel.org
+> > diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
+> > index 55bdfdf11e4c..7d58fd66e412 100644
+> > --- a/drivers/usb/host/Kconfig
+> > +++ b/drivers/usb/host/Kconfig
+> > @@ -97,6 +97,22 @@ config USB_XHCI_TEGRA
+> >
+> >  endif # USB_XHCI_HCD
+> >
+> > +config USB_EHCI_BRCMSTB
+> > +       tristate
+> > +
+> > +config USB_BRCMSTB
+> > +     tristate "Broadcom STB USB support"
+> > +     depends on (ARCH_BRCMSTB && PHY_BRCM_USB) || COMPILE_TEST
+> > +     select USB_OHCI_HCD_PLATFORM if USB_OHCI_HCD
+> > +     select USB_EHCI_BRCMSTB if USB_EHCI_HCD
+> > +     select USB_XHCI_PLATFORM if USB_XHCI_HCD
+> > +     help
+> > +       Say Y to enable support for XHCI, EHCI and OHCI host controllers
+> > +       found in Broadcom STB SoC's.
+> > +
+> > +       Disabling this will keep the controllers and corresponding
+> > +       PHYs powered down.
+>
+> Whhat are the module names?
 
---Zs/RYxT/hKAHzkfQ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I'll add the module names.
 
-On Fri, Apr 17, 2020 at 07:05:37PM +0200, Thierry Reding wrote:
-> From: Thierry Reding <treding@nvidia.com>
->=20
-> When the XUDC device is idle (i.e. powergated), care must be taken not
-> to access any registers because that would lead to a crash.
->=20
-> Move the call to tegra_xudc_device_mode_off() into the same conditional
-> as the tegra_xudc_powergate() call to make sure we only force device
-> mode off if the XUDC is actually powered up.
->=20
-> Fixes: 49db427232fe ("usb: gadget: Add UDC driver for tegra XUSB device m=
-ode controller")
-> Signed-off-by: Thierry Reding <treding@nvidia.com>
-> ---
->  drivers/usb/gadget/udc/tegra-xudc.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> And why 2 config options here?
 
-Hi Felipe, Greg,
+I'd like the option to build an XHCI only system by not enabling
+USB_EHCI_HCD and USB_OHCI_HCD.
 
-can you guys pick this up for v5.7, please?
+>
+> > +
+> >  config USB_EHCI_HCD
+> >       tristate "EHCI HCD (USB 2.0) support"
+> >       depends on HAS_DMA && HAS_IOMEM
+> > diff --git a/drivers/usb/host/Makefile b/drivers/usb/host/Makefile
+> > index b191361257cc..85fa6ace552a 100644
+> > --- a/drivers/usb/host/Makefile
+> > +++ b/drivers/usb/host/Makefile
+> > @@ -37,6 +37,15 @@ endif
+> >
+> >  obj-$(CONFIG_USB_PCI)        += pci-quirks.o
+> >
+> > +# NOTE: BRCMSTB systems require that xhci driver be linked before the
+> > +# ehci/ohci drivers.
+>
+> Why?  Please do this as a separate change before your makefile changes.
 
-Thanks,
-Thierry
+Okay
 
---Zs/RYxT/hKAHzkfQ
-Content-Type: application/pgp-signature; name="signature.asc"
+>
+> And what else will this break?  We have relied on this link order for a
+> very long time, changing it could cause issues...
+>
+> I don't see how your driver needs this, please explain in great detail.
 
------BEGIN PGP SIGNATURE-----
+For this explaination, I'm going to call our EHCI and OHCI controllers EOHCI.
+We have some SoC's that have an XHCI controller and an EOHCI
+controller on the same  port, where the XHCI controller handles the
+3.0 devices and the EOHCI handles the <= 2.0 devices. If the EOHCI
+controller comes up before the XHCI controller, any 3.0 devices
+installed on the port will be seen as a 2.0 device. Once the 3.0
+controller comes up, most 3.0 USB devices will switch to 3.0, but this
+seems to cause problems on some USB devices.
+In the past, this wasn't a problem because we had custom XHCI, EHCI
+and OHCI drivers that I could order any way necessary. Now that the
+standard platform XHCI and OHCI drivers are being used this becomes a
+problem.
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl6y8E0ACgkQ3SOs138+
-s6EAIQ/9Hu7iv4+5FnG2vFRCAbaCleabiFAWeWUg7kxxWd8ya0y/UvD/3YOsNqLA
-M7y32t2KlQYcrVGIpryz4dyEtQtyCcibtd1uMbm2gLQWEbjU6KvxlX6siKyIk3dI
-rxneQDTjUMToGhdIEuLAuJ5En1c9qs5X5STZ2kW6OdzQMoZ/oMPmItTBHwxMJ+FR
-+jyiCA9sDwEwzSWYQsFqOlwEaZ2SoboTfcnSobx2nhvvJh4+MBl6rDG7iMmGt8iA
-fNMl483j+2tpNDbkd+YJHlINeemTyJvuCAV6eGGlpcjPFd6yabVLY9tqyEE+X/6b
-JjHoRA66q7FiyXeB7qg8ia0zJcVjKgP/Xc/YgZ+R81UdTld6f9OAkVvWqXX/MCSX
-Lgq9MFEv+anqrplOyZc3TEx2108yxoxTEuAhoHu7uIZC8dMACgSlZeh/fvxJqlLy
-GSciiTnnhl3McdwsWvDbCxwO4s83GsdndBTSBuPEY9P81yfqt7u2+/LWjHO0/6WH
-s5LIirh8cLlomRymzszh9j64wVvaMHMxBDtUaJFg9jV13pPoWto50es9iKMJ6+Sk
-uFkEMERPPWBV+6h2EpXjy9rzDgAYJ39h2iHUAgAPpsns9j+zhnXXOLlwNq9wJQ44
-DzA3RptRzkZiOCXJDI8bNkAm1kQoFiO5tkmaQyzSdV1ynEl/+p4=
-=qWY6
------END PGP SIGNATURE-----
+Thanks for the review
+Al
 
---Zs/RYxT/hKAHzkfQ--
+>
+> thanks,
+>
+> greg k-h
