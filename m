@@ -2,78 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AA881C76EF
-	for <lists+linux-usb@lfdr.de>; Wed,  6 May 2020 18:47:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CF771C778C
+	for <lists+linux-usb@lfdr.de>; Wed,  6 May 2020 19:14:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729596AbgEFQrn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 May 2020 12:47:43 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:48187 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729414AbgEFQrm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 May 2020 12:47:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1588783661;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=D5gcsjRW/Y6Yf/Wf7cSY/UTAOCmTv3dfJwfJ5p0w6mY=;
-        b=B8fciWGUOdN2+QVTJ124sWohqq+89V+uUVQSCCEWcSCYj2eB59EQBRY4T0ivCbf2Q95+Mm
-        tJ0xOCN1gfqIV1SGLBk7Co3SnPVw1Uno8/WVs9pzDIpL2Y1StxcHGWtu5o5Vrasv3O2ENb
-        oNMzG1qDCh4D8OaBYZCfiX5OWqmulEo=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-286-SSyRdXdjPeWrRvNKHd7Qyg-1; Wed, 06 May 2020 12:47:35 -0400
-X-MC-Unique: SSyRdXdjPeWrRvNKHd7Qyg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7B72F107ACF8;
-        Wed,  6 May 2020 16:47:33 +0000 (UTC)
-Received: from suzdal.zaitcev.lan (ovpn-113-96.phx2.redhat.com [10.3.113.96])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C39B96298F;
-        Wed,  6 May 2020 16:47:32 +0000 (UTC)
-Date:   Wed, 6 May 2020 11:47:32 -0500
-From:   Pete Zaitcev <zaitcev@redhat.com>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        syzbot <syzbot+be5b5f86a162a6c281e6@syzkaller.appspotmail.com>,
-        andreyknvl@google.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, zaitcev@redhat.com
-Subject: Re: KASAN: use-after-free Read in usblp_bulk_read
-Message-ID: <20200506114732.5f81c8c5@suzdal.zaitcev.lan>
-In-Reply-To: <1588756482.13662.20.camel@suse.com>
-References: <Pine.LNX.4.44L0.2004301103500.27217-100000@netrider.rowland.org>
-        <1588756482.13662.20.camel@suse.com>
-Organization: Red Hat, Inc.
+        id S1729567AbgEFRNz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 May 2020 13:13:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47790 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728093AbgEFRNy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 May 2020 13:13:54 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF99C061A0F;
+        Wed,  6 May 2020 10:13:53 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id r26so3622613wmh.0;
+        Wed, 06 May 2020 10:13:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=GNKW7Nj5sqqTflAX7xBN/lqrOeNoUdudCj9pQHf3RMg=;
+        b=ZDs0lNMpexah6bbEgwbPxd4LeMcR+Qm1BK90fPCv/D0cFZxwt2Grs0fvEDM9Y5Zt/y
+         /8J4uGB59bV3tf70QrxXdzJU/OFwxMaso4PzHBVPPBecQv9ouM1SYY4mROlJA4j8BE3h
+         woJK0P/yuvSu4GaZhZqrnGfrQjmtaMmbxPb63jGfukM2PR+zWh/eAVW7xOTekYW+P7wn
+         OiGRqrHDi5UJXBQRSL1LAiGJ7QQ6dnxkAPXUwVAb8yNHflAQxIEGumUKMj8sRymzXJyu
+         yHDy/Jxn5FydMZAej+qOb6yND7AArqQWv2AVBE0cyJeVxfXdvMocKXlNQN5xnS1vMACg
+         fVYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=GNKW7Nj5sqqTflAX7xBN/lqrOeNoUdudCj9pQHf3RMg=;
+        b=TGdBaV7icU6xBlgsysgf6cPWubLBZG/DExQHbHoCnY+agXycQzmwq2la7DxcOsKdyF
+         I1k9ewpyeVy81pB4giG6OADjYekgOq/u+iOP9jAcMLIm8Iy/NuQ6SOZTjlRFBdZ91h/t
+         oF8VALrwy4OUew5o6LCpnUVo8kN/FesH+BNB1taA4jZaMYgBxOqVTKcD8rVH1QPd85Zl
+         jebAX/QNmpukxaQCqjx/71Ujvi+H2/C2ul+jbieA9/VRbR2LdSCjia/r9uVDEsY4LX4y
+         IOfHTm0/S/yoPUxzvVLQK108WognAOoe4waWFByGLK0DXjuhHMGvODB+xXBlH/egDgAf
+         oKNg==
+X-Gm-Message-State: AGi0PuaOnM9Vg6ITuK8ucS69Y2vG7Edg7weKpyfkcuo+uqdKt3qTmW/g
+        8DkXF8VJYPArjA6k24TqJVxfRdevABU=
+X-Google-Smtp-Source: APiQypIi7fdhqbB6pSzfRPoD9/lP54yHlUzEC2PyN83Nmu07s3nwp1ZMpJxcpIjOp08BCiP9Vn83LA==
+X-Received: by 2002:a1c:a344:: with SMTP id m65mr5497369wme.20.1588785232026;
+        Wed, 06 May 2020 10:13:52 -0700 (PDT)
+Received: from localhost (p2E5BE57B.dip0.t-ipconnect.de. [46.91.229.123])
+        by smtp.gmail.com with ESMTPSA id 7sm3844106wra.50.2020.05.06.10.13.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 May 2020 10:13:50 -0700 (PDT)
+Date:   Wed, 6 May 2020 19:13:49 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jon Hunter <jonathanh@nvidia.com>,
+        Nagarjuna Kristam <nkristam@nvidia.com>,
+        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: tegra-xudc: Fix idle suspend/resume
+Message-ID: <20200506171349.GF2723987@ulmo>
+References: <20200417170537.2540914-1-thierry.reding@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Zs/RYxT/hKAHzkfQ"
+Content-Disposition: inline
+In-Reply-To: <20200417170537.2540914-1-thierry.reding@gmail.com>
+User-Agent: Mutt/1.13.1 (2019-12-14)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 06 May 2020 11:14:42 +0200
-Oliver Neukum <oneukum@suse.com> wrote:
 
-> Very well. We are not going to find it without exceptional luck. Yet
-> there may be a real issue, too. We simply do not know. How about the
-> attached patch?
+--Zs/RYxT/hKAHzkfQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->  	usblp_unlink_urbs(usblp);
->  	mutex_unlock(&usblp->mut);
-> +	usb_poison_anchored_urbs(&usblp->urbs);
->  
->  	if (!usblp->used)
->  		usblp_cleanup(usblp);
+On Fri, Apr 17, 2020 at 07:05:37PM +0200, Thierry Reding wrote:
+> From: Thierry Reding <treding@nvidia.com>
+>=20
+> When the XUDC device is idle (i.e. powergated), care must be taken not
+> to access any registers because that would lead to a crash.
+>=20
+> Move the call to tegra_xudc_device_mode_off() into the same conditional
+> as the tegra_xudc_powergate() call to make sure we only force device
+> mode off if the XUDC is actually powered up.
+>=20
+> Fixes: 49db427232fe ("usb: gadget: Add UDC driver for tegra XUSB device m=
+ode controller")
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
+> ---
+>  drivers/usb/gadget/udc/tegra-xudc.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 
-This can't be right. Our URBs are freed by the callback, and this
-technique is not compatible with poisoning, at least with how the
-usb/core.c implements it. The usb_poison_urb() waits for URB
-to complete, and if the callback frees it, it's a problem.
+Hi Felipe, Greg,
 
--- Pete
+can you guys pick this up for v5.7, please?
 
+Thanks,
+Thierry
+
+--Zs/RYxT/hKAHzkfQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl6y8E0ACgkQ3SOs138+
+s6EAIQ/9Hu7iv4+5FnG2vFRCAbaCleabiFAWeWUg7kxxWd8ya0y/UvD/3YOsNqLA
+M7y32t2KlQYcrVGIpryz4dyEtQtyCcibtd1uMbm2gLQWEbjU6KvxlX6siKyIk3dI
+rxneQDTjUMToGhdIEuLAuJ5En1c9qs5X5STZ2kW6OdzQMoZ/oMPmItTBHwxMJ+FR
++jyiCA9sDwEwzSWYQsFqOlwEaZ2SoboTfcnSobx2nhvvJh4+MBl6rDG7iMmGt8iA
+fNMl483j+2tpNDbkd+YJHlINeemTyJvuCAV6eGGlpcjPFd6yabVLY9tqyEE+X/6b
+JjHoRA66q7FiyXeB7qg8ia0zJcVjKgP/Xc/YgZ+R81UdTld6f9OAkVvWqXX/MCSX
+Lgq9MFEv+anqrplOyZc3TEx2108yxoxTEuAhoHu7uIZC8dMACgSlZeh/fvxJqlLy
+GSciiTnnhl3McdwsWvDbCxwO4s83GsdndBTSBuPEY9P81yfqt7u2+/LWjHO0/6WH
+s5LIirh8cLlomRymzszh9j64wVvaMHMxBDtUaJFg9jV13pPoWto50es9iKMJ6+Sk
+uFkEMERPPWBV+6h2EpXjy9rzDgAYJ39h2iHUAgAPpsns9j+zhnXXOLlwNq9wJQ44
+DzA3RptRzkZiOCXJDI8bNkAm1kQoFiO5tkmaQyzSdV1ynEl/+p4=
+=qWY6
+-----END PGP SIGNATURE-----
+
+--Zs/RYxT/hKAHzkfQ--
