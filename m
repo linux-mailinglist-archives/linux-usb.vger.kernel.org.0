@@ -2,103 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EA4C1C6CB3
-	for <lists+linux-usb@lfdr.de>; Wed,  6 May 2020 11:17:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00E6E1C6FA4
+	for <lists+linux-usb@lfdr.de>; Wed,  6 May 2020 13:51:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729022AbgEFJR2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 May 2020 05:17:28 -0400
-Received: from mail-eopbgr80070.outbound.protection.outlook.com ([40.107.8.70]:23631
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728385AbgEFJR1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 6 May 2020 05:17:27 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GYQlidaQa+COmmCJgrz85ZGt5JuQxL3/Z6HGiVgITrPJUtmcGEVtzBeANvobtL/zsJymSWY8Z+xNo0U3if75aeELeQueo0ZWvleLT4rDs29EQiWsrCa6LNs0EcOkkmD8Yu0MK55+GDfzTMKivDrfE8/T6tGmieqTne7Ff3ry2gpOCpoXfFwwvHajcX3rmm6P5I+ia3AKb/zryWkst3Uobg5h3YJadakvgO1l8/5Qyun7AD6CIHwMt0yncozq+T1ZBwNrq7S1htIXrVk7wSVEr4yOuDXH7wtR1rB9ctgmY+17k30QVF4KFVcjzTuoQfToIDPjzM5BGCrBXasZ+6HkVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nHcXX1lmpk9tCHKnn+j3SKZr6aDd4v8e5xwE8Papr54=;
- b=WHDW3k20Y32OtI75xRTRZ81DrsrleWyFlXg/szb3PKJQbUSKcD0Ih4AEYw/yWQhPzn56n9i4u0MAx9XoKbMH9dJLukNkP6LQVIwjb1x3tDQkH+obsCRh258W0bkLJacpTjoXtEfpNdxgCLw1kx4Iq4GGeFWEeGbDB84E+T7wdr2BQOf/d8NLNC7lV2F6jjc96Zdl0inoRQkZO7Uc+TZVrznxeMFMMlpDzvN/7jwt//3/1Ng8EfkgvtC4FsFO4oGILeqzmu/7svWfXyVxC2QUlbdYNH1KUtpOWMaiQ9XQToUx7/JhoOkvmXUSMy0JHTwZiSudPF6lsjumusT6Rm6EKQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nHcXX1lmpk9tCHKnn+j3SKZr6aDd4v8e5xwE8Papr54=;
- b=fpXI2bXqgSm3m00GiWi82Zi7rwan+z557YbfKtsLuvePO8xNSqiKekHAw6Fd/vYQKWhknOxcexHRlQAVOGzJx0+5cu4p0LdQ25brkJlt7qmnq3iwJH0Dz7H/7b/bfjlCvDORRPCPuW++pLhVodaZloxliYl+BfVfHn1usRwclZo=
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
- by AM7PR04MB6856.eurprd04.prod.outlook.com (2603:10a6:20b:108::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2958.27; Wed, 6 May
- 2020 09:17:25 +0000
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::7c34:7ade:17d0:b792]) by AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::7c34:7ade:17d0:b792%9]) with mapi id 15.20.2979.028; Wed, 6 May 2020
- 09:17:24 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Sid Spry <sid@aeam.us>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: Documentation for Raw USB ConfigFS
-Thread-Topic: Documentation for Raw USB ConfigFS
-Thread-Index: AQHWHxIE3BZgWTm6XUiOBTDqqvXTpqia0EkA
-Date:   Wed, 6 May 2020 09:17:24 +0000
-Message-ID: <20200506091750.GE30237@b29397-desktop>
-References: <0507a041-44f4-4257-adaf-3b17de3baf81@www.fastmail.com>
-In-Reply-To: <0507a041-44f4-4257-adaf-3b17de3baf81@www.fastmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: aeam.us; dkim=none (message not signed)
- header.d=none;aeam.us; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: b74b0257-cc67-4988-8b37-08d7f19e4a43
-x-ms-traffictypediagnostic: AM7PR04MB6856:
-x-microsoft-antispam-prvs: <AM7PR04MB685674AB43D2892502BB69FC8BA40@AM7PR04MB6856.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 03950F25EC
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: sjP+lV5X2h60qKSaijUUYRIcsXMDkHk41up8Jq2hauvG9xz8JLCfWAC+MrJzGk6Ak2je+pU/z1Z7UXeYnJ3Q2+46kIeUZxoO0bOmCc2UU7lkfjdDtivWYlFYHEyH0m6hhs33B6xjI8ozRjaH5nlgKuA7KpGvApuuBzwQYTBO2SHXMh41mg3DudPu2K41APNdeFPwdYRyW4CvhRv8aAWwCag8YKRRm7Xtd2FkFEDM/ZRobrtGt+AdOqWE0jm2RJn4Eca5MqGLGQMkX2eNjpftMN4ZpnVTfzyW04DVb76yfgU32e/oA/NNsF2CR6kT6s7dPvP3nkyClwIoo2CCBDcV9u5mgSxXA7O2Xc0wM89NuJT2NoerXcFVIl/0zGS9M+yG8TfRZGRXhS/bm37ugr/o+8/CE5tP1KT3yESgFYKQD8TqQILR9HHlI3+sMgUOY0v3lbohd5gT+rjcgzEgZbjD6L48Eef4L/Az+R5qBe7BSQk1ILiXh4fh7HVTbbCQnzHPz6R3vqRQt5gHs+oZc4Qp5A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(7916004)(39860400002)(136003)(366004)(396003)(346002)(376002)(33430700001)(66446008)(64756008)(66556008)(53546011)(478600001)(4744005)(6916009)(1076003)(4326008)(44832011)(8936002)(33716001)(76116006)(9686003)(6512007)(91956017)(8676002)(66946007)(66476007)(186003)(2906002)(6486002)(26005)(71200400001)(33656002)(86362001)(33440700001)(5660300002)(6506007)(316002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: MA2EMOx9Gtly9DlRzRkFIK51ak7T/M7G7mzbmVcVkg8Usg/qPXritnH6Pr0jPQa9PzsKps8FEzrWChSvw+N6rlvWSHRCSiiDBFWcE5jl8lO6w8Zt9dVUNC9J8le/mlpSbEKgmWi72bUkn6Danv2sBYZPf56bsEOCZXEMLNtEIRCR0DY80LBjY/vDP5c87+EP9ZR/vMFgmiY5jYzlY0S3hB0PI1GBlCe4KWk87ND2Lt3Wvoubptki50xf4yG/6NLMv7tvWANJhF+YkGIDefHN7WsUtyi5p4BtA0hXeEbGjCNjfO8kzLWBCZKRJ8JRLXnqyG386gXtdloNIYyIVaOtV1WZIiPZCoqJGfFM1uRO9O8vqZxBRCKZOwo781mDooj2GftncTbiHO8viONMRgxKJUaVraEBzXJEl9mVxnG5ihS9rJN0t/kH9Cgmsn/Ex9w/o52112XWJIAUWJkNPcThM+OtzJKEXVyVfDLuhp8jrNRFH6tN3TW+cKGG8fFC27seKGTTZn2l7T6R6yHuwrvb1qC/dBAoS6cZ3dz8uotdygLBdswP0zmqt16yKfUwr0kS3bv0btEjWOlJyGi45guFGCyQRlW0zCxg4sQAP8ALs0YKjTVdmNx2B2/nAtTTitnw/ZDImB1lE0quLf4+NHUeNk6nsaBhx3Rh6wJUfWiBPE2dJEBPvDUqWWSAd2MvOhVK6JKjWpQ4FaJ23gn83LO65abBL24bSrTRF4N81v5jPOkveIzouukS+RwzmZY/rVCb8fwVt2DylSYIpH1iiv2H9Xm6MDRugkBm9tTeilVKFOM=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <244F2A9D37437F4696482188D6A7A4C8@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1727072AbgEFLvE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 May 2020 07:51:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53468 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726558AbgEFLvE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 May 2020 07:51:04 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A8F9C061A0F
+        for <linux-usb@vger.kernel.org>; Wed,  6 May 2020 04:51:04 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id y25so886874pfn.5
+        for <linux-usb@vger.kernel.org>; Wed, 06 May 2020 04:51:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NCWVLraG9Z8gnxmAn0SmeF0f40Gs+IBXqSv5TRfXTeo=;
+        b=lcrEA0GGS/ODMtk1F9EbQgx/zhTGO7HwxM1q3YwRF1yV7sz+TG/gC9gvwnsxPQWUl5
+         JzJDdag0D4HdVsx00o/HcFoqylOGBpDNPCWbqQ/5lsZ5Sj9+rB8rWUcyx2SqsNwKdLq8
+         BRigHnSvx7Vx35Rhg2+39JJe9beD0dmVijEfEI5qklWM9IkysJcJsh92eP1QXtfb1/gB
+         MpDZquvW1w0za/4eaHctNyYMhfXiCTbYy7yX0Fye2B7xdAqne9CJx8jqDuQgCCjKk5JG
+         Rwed3oTTBNks+c1PQ37hE8Do/pVC9jiUjJdHmhoGcK51qUlm/m7+vArPv65nyVvo/gqc
+         6lMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NCWVLraG9Z8gnxmAn0SmeF0f40Gs+IBXqSv5TRfXTeo=;
+        b=B5w4Da7TFEYZDozofUXnppzVdSp9PAJpvd8Edi8OA5mVPHUxQGv9TVqsAJEjeXO0Yx
+         uzfpOtkbah6yT7j/wK01G5tt4geiDFudKyULWomlzfdoBp0a8Tvx2K5H8aLqBsyqR0+r
+         hs1TY/OeAXxQrbMAyH+DSUuccNGJy0dCcR2AkRYafCJIrlMUK6Ah59bjUfUFYLAdfX7r
+         TcI7sIo3YI4f80TUJC3bFix+XFzciNyDPpOTwMRs50OMhRQ8wZS5ZV85GSUlV3R193SV
+         UaPh5lzQEcI/z+eIln1LF0Gk6YxWrU/yO4bzxA1wm8bVUMWx+8zW4QJqjkK/6rAXMwQL
+         y5Kw==
+X-Gm-Message-State: AGi0PuZj2GQYe//xjBocWzO1w8xIKuC+FvZWP0f24iyMEkTubijmTe6Z
+        0WqQCARbtLw1AI1QGBR6D7IL5MyASiCPqNlwvP3mIg==
+X-Google-Smtp-Source: APiQypLbnuslSjWfPJCL6GH8TRgkchj+mtZa+8D31hKdGt3QwTAT7sKf3dYFt1pz5KQgKBc84Vw4pl1Pwk8as9editc=
+X-Received: by 2002:a63:a61:: with SMTP id z33mr6595886pgk.440.1588765863165;
+ Wed, 06 May 2020 04:51:03 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b74b0257-cc67-4988-8b37-08d7f19e4a43
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 May 2020 09:17:24.8754
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: K+0QOsi3FHmYqZpG0uj4QnAL+bNLGi9Z3k/ORIKpZTWlbD8aTcu3hVTw0d9w+HYM7OqN/TOQcodpZLVJbeblQQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6856
+References: <00000000000039420505a14e4951@google.com> <1588755226.13662.17.camel@suse.com>
+In-Reply-To: <1588755226.13662.17.camel@suse.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Wed, 6 May 2020 13:50:52 +0200
+Message-ID: <CAAeHK+zOdghTAu647iKBEU+0LqkYYOk0f7gPk_4T6BjNi=2sAQ@mail.gmail.com>
+Subject: Re: KASAN: slab-out-of-bounds Read in hfa384x_usbin_callback
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     syzbot <syzbot+7d42d68643a35f71ac8a@syzkaller.appspotmail.com>,
+        devel@driverdev.osuosl.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>, nishkadg.linux@gmail.com,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: multipart/mixed; boundary="000000000000e870ed05a4f96035"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-04-30 12:08:13, Sid Spry wrote:
-> Hi, I'm having issues finding good documentation for raw USB configfs. It=
- has reached the point I need to look at developing a new driver, but I'd l=
-ike my unique endpoint to coexist with a CDC ECM endpoint or similar.
->=20
-> Is there a high level description of this? I can refer to the code but it=
- will be quite slow.
->=20
+--000000000000e870ed05a4f96035
+Content-Type: text/plain; charset="UTF-8"
 
-You could write a user application using f_fs for your endpoint, the exampl=
-e is at:
-tools/usb/ffs-test.c. And add both your specific function and CDC
-function together into one configuration, in that case, the host could
-see both functions.
+On Wed, May 6, 2020 at 10:54 AM Oliver Neukum <oneukum@suse.com> wrote:
+>
+> Am Freitag, den 20.03.2020, 12:28 -0700 schrieb syzbot:
+> > Hello,
+> >
+> > syzbot found the following crash on:
+> >
+> > HEAD commit:    e17994d1 usb: core: kcov: collect coverage from usb comple..
+> > git tree:       https://github.com/google/kasan.git usb-fuzzer
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=11d74573e00000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=5d64370c438bc60
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=7d42d68643a35f71ac8a
+> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15fa561de00000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15d74573e00000
+> >
+> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> > Reported-by: syzbot+7d42d68643a35f71ac8a@syzkaller.appspotmail.com
+> >
+>
+> Hi,
+>
+> is this bug still active and can a test be run on it? I requested one
+> yesterday. If my analysis is correct this bug has security
+> implications, so it is kind of important.
 
---=20
+I see your request in the queue and it's been registered and
+completed, but for some reason syzbot didn't send an email with a
+response.
 
-Thanks,
-Peter Chen=
+Let me try this once again:
+
+#syz test: https://github.com/google/kasan.git e17994d1
+
+--000000000000e870ed05a4f96035
+Content-Type: application/octet-stream; 
+	name="0001-hfa384x_usb-fix-buffer-overflow.patch"
+Content-Disposition: attachment; 
+	filename="0001-hfa384x_usb-fix-buffer-overflow.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_k9va5uf00>
+X-Attachment-Id: f_k9va5uf00
+
+RnJvbSA2ZGJjYWM4YzRiNjQ1NjAwMTYxZmVhZmM1NTc2NjU3OTA1ZjE1ZDY1IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpEYXRl
+OiBUdWUsIDUgTWF5IDIwMjAgMTM6NDY6MjYgKzAyMDAKU3ViamVjdDogW1BBVENIXSBoZmEzODR4
+X3VzYjogZml4IGJ1ZmZlciBvdmVyZmxvdwoKVGhlIGRyaXZlciB0cnVzdHMgdGhlIGRhdGFfbGVu
+IGNvbWluZyBmcm9tIHRoZSBoYXJkd2FyZQp3aXRob3V0IHZlcmlmaWNhdGlvbi4gVGhhdCBtZWFu
+cyB0aGF0IHRoaXMgb3BlbnMKYSB2ZWN0b3IgYnkgd2hpY2ggYW4gYXR0YWNrZXIgY2FuIHNtYXNo
+IDY0SyBvZiB0aGUgaGVhcC4KClNpZ25lZC1vZmYtYnk6IE9saXZlciBOZXVrdW0gPG9uZXVrdW1A
+c3VzZS5jb20+Ci0tLQogZHJpdmVycy9zdGFnaW5nL3dsYW4tbmcvaGZhMzg0eF91c2IuYyB8IDEy
+ICsrKysrKystLS0tLQogMSBmaWxlIGNoYW5nZWQsIDcgaW5zZXJ0aW9ucygrKSwgNSBkZWxldGlv
+bnMoLSkKCmRpZmYgLS1naXQgYS9kcml2ZXJzL3N0YWdpbmcvd2xhbi1uZy9oZmEzODR4X3VzYi5j
+IGIvZHJpdmVycy9zdGFnaW5nL3dsYW4tbmcvaGZhMzg0eF91c2IuYwppbmRleCBmYTFiZjhiMDY5
+ZmQuLjViNjQ5N2Q4YzllMiAxMDA2NDQKLS0tIGEvZHJpdmVycy9zdGFnaW5nL3dsYW4tbmcvaGZh
+Mzg0eF91c2IuYworKysgYi9kcml2ZXJzL3N0YWdpbmcvd2xhbi1uZy9oZmEzODR4X3VzYi5jCkBA
+IC0zMzUzLDkgKzMzNTMsOSBAQCBzdGF0aWMgdm9pZCBoZmEzODR4X2ludF9yeG1vbml0b3Ioc3Ry
+dWN0IHdsYW5kZXZpY2UgKndsYW5kZXYsCiAJCQkJICBzdHJ1Y3QgaGZhMzg0eF91c2Jfcnhmcm0g
+KnJ4ZnJtKQogewogCXN0cnVjdCBoZmEzODR4X3J4X2ZyYW1lICpyeGRlc2MgPSAmcnhmcm0tPmRl
+c2M7Ci0JdW5zaWduZWQgaW50IGhkcmxlbiA9IDA7Ci0JdW5zaWduZWQgaW50IGRhdGFsZW4gPSAw
+OwotCXVuc2lnbmVkIGludCBza2JsZW4gPSAwOworCXVuc2lnbmVkIGludCBoZHJsZW47CisJdW5z
+aWduZWQgaW50IGRhdGFsZW47CisJdW5zaWduZWQgaW50IHNrYmxlbjsKIAl1OCAqZGF0YXA7CiAJ
+dTE2IGZjOwogCXN0cnVjdCBza19idWZmICpza2I7CkBAIC0zNDEzLDggKzM0MTMsMTAgQEAgc3Rh
+dGljIHZvaWQgaGZhMzg0eF9pbnRfcnhtb25pdG9yKHN0cnVjdCB3bGFuZGV2aWNlICp3bGFuZGV2
+LAogCSAqLwogCXNrYl9wdXRfZGF0YShza2IsICZyeGRlc2MtPmZyYW1lX2NvbnRyb2wsIGhkcmxl
+bik7CiAKLQkvKiBJZiBhbnksIGNvcHkgdGhlIGRhdGEgZnJvbSB0aGUgY2FyZCB0byB0aGUgc2ti
+ICovCi0JaWYgKGRhdGFsZW4gPiAwKSB7CisJLyogSWYgYW55LCBjb3B5IHRoZSBkYXRhIGZyb20g
+dGhlIGNhcmQgdG8gdGhlIHNrYiwKKwkgKiBhcyBsb25nIGFzIGl0IGZpdHMsIGxlc3Qgd2Ugc21h
+c2ggYSBidWZmZXIKKwkgKi8KKwlpZiAoZGF0YWxlbiA+IDAgJiYgZGF0YWxlbiA8PSBza2JsZW4g
+LSBoZHJsZW4pIHsKIAkJZGF0YXAgPSBza2JfcHV0X2RhdGEoc2tiLCByeGZybS0+ZGF0YSwgZGF0
+YWxlbik7CiAKIAkJLyogY2hlY2sgZm9yIHVuZW5jcnlwdGVkIHN0dWZmIGlmIFdFUCBiaXQgc2V0
+LiAqLwotLSAKMi4xNi40Cgo=
+--000000000000e870ed05a4f96035--
