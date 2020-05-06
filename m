@@ -2,40 +2,40 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D19A1C7B06
-	for <lists+linux-usb@lfdr.de>; Wed,  6 May 2020 22:16:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 863221C7B08
+	for <lists+linux-usb@lfdr.de>; Wed,  6 May 2020 22:16:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728336AbgEFUQA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 May 2020 16:16:00 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:42508 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726538AbgEFUQA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 May 2020 16:16:00 -0400
-Received: by mail-ot1-f65.google.com with SMTP id m18so2460680otq.9;
-        Wed, 06 May 2020 13:15:59 -0700 (PDT)
+        id S1728050AbgEFUQZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 May 2020 16:16:25 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:41839 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726538AbgEFUQZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 May 2020 16:16:25 -0400
+Received: by mail-oi1-f196.google.com with SMTP id 19so2952688oiy.8;
+        Wed, 06 May 2020 13:16:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ZgdGZNxNsEX9H1xXxK/wKm6E37fX8E9xp6M+GCu6EE8=;
-        b=JQ6DWHHbUmiA57ZcZsW0dEQUBQuZSRP6hOKAPSAs9KGmNrA72c1Z5oVLof5soeLBFs
-         y9VWnsdtLtFCHZJZ+N7zuXi7UTjXz4WR4X4Oq8Deij+0dM7STBbJsmdERHuIrsiIkgn+
-         T2pByWPtg95/2tF0HYZeoiB0748eX+B+IQkV+L0ddgrRCDcQ2J3sBNDdyeeaV1Tt8bzc
-         ghH6JwiCiFpQatNxiyWj4WEhWt007oTWC0nN/qw9Eycr1Xzin/WHKxHGdSzDupjQ1YI5
-         wrByJe3vYzGJgiLc/sOltJNocGJU9OUvOovc+0gs123i9cT57IAqloyYPUjrROfEiYyQ
-         B5tg==
-X-Gm-Message-State: AGi0PuY3Lv3eMp5i5HQ1consanIHKWI4NawxUYQaAv1j7r6akPeKT9eg
-        NG0DX/64K/Frm9tw3HIreg==
-X-Google-Smtp-Source: APiQypI77eYd6OYhdEQQfqgyyGb3ZaRPH67aBdd9/VgaHTDcIg7JyYE750yEWqukj9W15sNl/YEe6w==
-X-Received: by 2002:a9d:1d6:: with SMTP id e80mr8123517ote.300.1588796159431;
-        Wed, 06 May 2020 13:15:59 -0700 (PDT)
+        bh=SHBfyTMcPIzuRWumH0aiBKSwCoZ1ueSmrKZkMQNhw6Y=;
+        b=TNYSS793lv3Q+nMCtM2ZyTr4ASrsn/uWrtRV8RmStiUwbFntqB8KaxOLI4B8h6xMdX
+         0kF/uOIuoDihOh9Aob6OuaVEymsGIddCrOtbfFWSaD2oi6S1A07l+0tf76hH/Poox/tx
+         Zi7uQLJCdHHeQk2ihvzuGIZEvUkTXTlfYwO4Ft5mZf90RbqvZTZS4hqz88ORUPFxtA8v
+         QurxuZHLTBblNz11fY656yaGnc8xWo+BlAPOQiJDiEOFlcNrxzhuC74qdXen0pNzbbmI
+         8/S4k9WLocSzNGcQbcQMqXIBlmwzGzODuHtZ/49O7OApvWi67fvWfVpFysv8s/8OPdRo
+         1aqQ==
+X-Gm-Message-State: AGi0PuY/w53arhcCo7FBegKDX7bhk3fyxr0HmzcHLwTpFSScVvlsryke
+        /YX4HvVkxdHeQUIauH9Aag==
+X-Google-Smtp-Source: APiQypLX99PrQfl5EX6/W2oSYk8iNXplqPS1Zs80LJE7PJ0tmR+iBCnzfv4x9JAVYNDgm+y/l3bu0A==
+X-Received: by 2002:a05:6808:8ed:: with SMTP id d13mr3880455oic.149.1588796184077;
+        Wed, 06 May 2020 13:16:24 -0700 (PDT)
 Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id y92sm788020ota.33.2020.05.06.13.15.58
+        by smtp.gmail.com with ESMTPSA id d10sm792193otp.19.2020.05.06.13.16.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 May 2020 13:15:58 -0700 (PDT)
-Received: (nullmailer pid 23034 invoked by uid 1000);
-        Wed, 06 May 2020 20:15:58 -0000
-Date:   Wed, 6 May 2020 15:15:58 -0500
+        Wed, 06 May 2020 13:16:23 -0700 (PDT)
+Received: (nullmailer pid 24023 invoked by uid 1000);
+        Wed, 06 May 2020 20:16:22 -0000
+Date:   Wed, 6 May 2020 15:16:22 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Tejas Joglekar <Tejas.Joglekar@synopsys.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -43,7 +43,7 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         John Youn <John.Youn@synopsys.com>
 Subject: Re: [RFC PATCH v2 1/4] dt-bindings: usb: Add documentation for SG
  trb cache size quirk
-Message-ID: <20200506201558.GA15090@bogus>
+Message-ID: <20200506201622.GA23227@bogus>
 References: <cover.1587461220.git.joglekar@synopsys.com>
  <5f5fdfbd323159133fced5b1340f5eb5fd11a17a.1587461220.git.joglekar@synopsys.com>
 MIME-Version: 1.0
@@ -65,6 +65,9 @@ On Tue, Apr 21, 2020 at 03:18:09PM +0530, Tejas Joglekar wrote:
 > Synopsys xHC.
 > 
 > Signed-off-by: Tejas Joglekar <joglekar@synopsys.com>
+
+The author and S-o-b emails don't match.
+
 > ---
 >  Changes in v2:
 >  - Renamed the property
@@ -99,9 +102,6 @@ On Tue, Apr 21, 2020 at 03:18:09PM +0530, Tejas Joglekar wrote:
 > +  - sgl-trb-cache-size-quirk: set if you need to consolidate sg list into a
 > +    temporary buffer when small SG buffer sizes does not make upto MPS
 > +    size or total transfer size across the TRB cache size.
-
-Why do we have 2 different names?
-
 >  
 >  additionally the properties from usb-hcd.yaml (in the current directory) are
 >  supported.
