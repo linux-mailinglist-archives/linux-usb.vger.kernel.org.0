@@ -2,89 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F3661C669B
-	for <lists+linux-usb@lfdr.de>; Wed,  6 May 2020 06:08:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53CE21C67C0
+	for <lists+linux-usb@lfdr.de>; Wed,  6 May 2020 08:00:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725804AbgEFEI3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 May 2020 00:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37964 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725300AbgEFEI3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 May 2020 00:08:29 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7A8C061A0F;
-        Tue,  5 May 2020 21:08:29 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id f18so803502lja.13;
-        Tue, 05 May 2020 21:08:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LPWbtQ2Ipi4zH8vFVUvc1d3VaVsHhfFkCiz+akQxQ1s=;
-        b=SPtmcHHr7tdZpS0WGhctRtDuSDha+MZN0YPNsafUc94yqdQQVOWg+FFAibD7bYwRcT
-         ChxKdbH+LmcX0Rvq7EKy5C8TSpbxks24+h9EKUpw8TU9nWGWtKyWBa2Ynk7Lns9gY88T
-         wD33/dUlXqDWH3jN4KPYMyMSODGSdh4Hk5LQmXrwINK3Ps6NTBIx5x+lNinwPBeSP4Yp
-         jaP2XWlJ67knCfWI9qwm43DDdECSC5o58Pvp8BujjfuoKG9hB973GOM25XPkznf90NaD
-         dgrLEpPBxWOh9Nokt7AjQoHpr8vpylaZrVJ3CE2Lt1W7StqcNYEQCUoP/4I7FDShybGs
-         G2gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LPWbtQ2Ipi4zH8vFVUvc1d3VaVsHhfFkCiz+akQxQ1s=;
-        b=mPPZUdjLciJB0yqN0/aHApVgA/L2SyZmjWVMtaOYwe71/GJkb4lqBtv4peXyXuVEGe
-         WzJ+VjqVuRSkvCQh2At6PHt+6/SO93fKRhE5FfZg84NNdx2FGUHNpqFhxFAXlz1vbtKz
-         2a+fKG2uVio6Arpl6jO4Ge7H6uTqfFIsnDB/gjmxBNQ3X/0z560qFvtc9DIOtPhhe8pG
-         7wlh1Snp6c50UWvJ7lTY5s3cB1mOx+UH5L42SQU1/FcipvpLTHwmds45o/sKsyv6Hgl1
-         l9bMEbTALpCDL/w0ryQRGdFoPt8bM7HlzBvoLgnPzBg1z+cbX9VLDDvL65ORFD+yvLKd
-         9nMA==
-X-Gm-Message-State: AGi0PuY7oVDlohQIPyloCw9gtew6Mtp1HER83T67MyTVINMdWW18elUb
-        aJ6Xs/0hSbBfJWDPwAHhbbhOtKjhVAqQgvztDwhH7BL/
-X-Google-Smtp-Source: APiQypKyYbeaZXkor2B9STYZVK6rBc3QfwXRGW5JhnrzYAQrroZdvsTvW5yGJLC5aQ7SXFwwdMZFdVwjfqymFbU7KQU=
-X-Received: by 2002:a2e:8056:: with SMTP id p22mr3689511ljg.266.1588738107661;
- Tue, 05 May 2020 21:08:27 -0700 (PDT)
+        id S1727082AbgEFGAu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 May 2020 02:00:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51634 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725771AbgEFGAu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 6 May 2020 02:00:50 -0400
+Received: from localhost.localdomain (unknown [122.181.213.114])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C2212206E6;
+        Wed,  6 May 2020 06:00:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588744849;
+        bh=UW8ZX3nCW0V/vYWcElzTqXesPegk9LEv9xZxzAfWIMs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QgaxcexZO3bKQibBypoqBW6r4EeJgCwPb7CAP4UFXzg0eRhOqasRrGzjnHnWNpwU6
+         Za3ueWxG7GFWc41YY/6HQDF91totUrypO7DvGm9UM9gCp1LwHWv6LjeaOixruMTjJl
+         IUTxZ+h3b0THO+kHyVqAauYNyx54TrpaWl/3G/Hw=
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        =?UTF-8?q?Andreas=20B=C3=B6hler?= <dev@aboehler.at>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v13 0/5] usb: xhci: Add support for Renesas USB controllers
+Date:   Wed,  6 May 2020 11:30:20 +0530
+Message-Id: <20200506060025.1535960-1-vkoul@kernel.org>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
-References: <CAEAjamvq+puThrxfo80TOy=xgbQEQNT6xvxy4w6hP2O1By66uw@mail.gmail.com>
- <20200501070538.GB887524@kroah.com>
-In-Reply-To: <20200501070538.GB887524@kroah.com>
-From:   Kyungtae Kim <kt0755@gmail.com>
-Date:   Wed, 6 May 2020 00:08:16 -0400
-Message-ID: <CAEAjamsTt5E0NgauzFXYzN=GK2-y0tvgYx9B26kYAbBkDqfagg@mail.gmail.com>
-Subject: Re: KASAN: slab-out-of-bounds Read in gadget_dev_desc_UDC_store
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     balbi@kernel.org, syzkaller <syzkaller@googlegroups.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Dave Tian <dave.jing.tian@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 01, 2020 at 09:05:38AM +0200, Greg KH wrote:
-> On Thu, Apr 30, 2020 at 11:03:54PM -0400, Kyungtae Kim wrote:
-> > We report a bug (in linux-5.6.8) found by FuzzUSB (a modified version
-> > of syzkaller).
-> >
-> > This happened when the size of "name" buffer is smaller than that of
-> > "page" buffer
-> > (after function kstrdup executed at line 263).
-> > I guess it comes from the "page" buffer containing 0 value in the middle.
-> > So accessing the "name" buffer with "len" variable, which is used to
-> > indicate the size of "page" buffer,
-> > triggered memory access violation.
-> > To fix, it may need to check the size of name buffer, and try to use
-> > right index variable.
->
-> Can you submit a patch for this as you have a reproducer to test the
-> issue?
->
-> thanks,
->
-> greg k-h
+This series add support for Renesas USB controllers uPD720201 and uPD720202.
+These require firmware to be loaded and in case devices have ROM those can
+also be programmed if empty. If ROM is programmed, it runs from ROM as well.
 
-I just submitted a patch after testing with the repro.
+This includes patches from Christian which supported these controllers w/o
+ROM and later my patches for ROM support and debugfs hook for rom erase and
+export of xhci-pci functions.
 
-Regards,
-Kyungtae
+Changes in v13:
+ - Make rensesas as independent module invoke by xhci-pci which can be
+   selected by users of such hardware
+
+Changes in v12:
+  - Restore back module name for xhci-pci, so now renesas is a separate
+    module, export init/exit routines from renesas modules
+  - Update changelog on patch2
+
+Changes in v11:
+  - update xhci->quirks and use that in remove function
+  - remove error return renesas_verify_fw_version()
+  - remove renesas_download_rom() and modify renesas_fw_download_image() for
+  reuse
+Changes in v10:
+  remove renesas_xhci_pci_probe and call renesas_xhci_check_request_fw and
+  also cleanup exit code along with it.
+
+Changes in v9:
+ Make fw load a sync call and have single instance of probe execute,
+   elimating probe/remove races
+ Add quirk for renesas and use that for loading
+
+Changes in v8:
+ Fix compile error reported by Kbuild-bot by making usb_hcd_pci_probe() take
+ const struct hc_driver * as argument
+
+Changes in v7:
+ Make a single module which removes issues with module loading
+ Keep the renesas code in renesas file
+ Add hc_driver as argument for usb_hcd_pci_probe and modify hdc drivers to
+   pass this and not use driver_data
+ Use driver data for fw name
+ Remove code to check if we need to load firmware or not
+ remove multiple fw version support, we can do that with symlink in
+   userspace
+
+Changes in v6:
+ Move the renesas code into a separate driver which invokes xhci-pci functions.
+
+Changes in v5:
+ Added a debugfs rom erase patch, helps in debugging
+ Squashed patch 1 & 2 as requested by Mathias
+
+Changes in v4:
+ Rollback the delay values as we got device failures
+
+Changes in v3:
+  Dropped patch 2 as discussed with Christian
+  Removed aligned 8 bytes check
+  Change order for firmware search from highest version to lowest
+  Added entry for new firmware for device 0x14 as well
+  Add tested by Christian
+
+Changes in v2:
+  used macros for timeout count and delay
+  removed renesas_fw_alive_check
+  cleaned renesas_fw_callback
+  removed recurion for renesas_fw_download
+  added MODULE_FIRMWARE
+  added comment for multip
+
+
+Christian Lamparter (1):
+  usb: renesas-xhci: Add the renesas xhci driver
+
+Vinod Koul (4):
+  usb: hci: add hc_driver as argument for usb_hcd_pci_probe
+  usb: xhci: Add support for Renesas controller with memory
+  usb: renesas-xhci: Add ROM loader for uPD720201
+  usb: xhci: provide a debugfs hook for erasing rom
+
+ drivers/usb/core/hcd-pci.c          |   7 +-
+ drivers/usb/host/Kconfig            |   9 +
+ drivers/usb/host/Makefile           |   1 +
+ drivers/usb/host/ehci-pci.c         |   6 +-
+ drivers/usb/host/ohci-pci.c         |   9 +-
+ drivers/usb/host/uhci-pci.c         |   8 +-
+ drivers/usb/host/xhci-pci-renesas.c | 678 ++++++++++++++++++++++++++++
+ drivers/usb/host/xhci-pci.c         |  47 +-
+ drivers/usb/host/xhci-pci.h         |  28 ++
+ drivers/usb/host/xhci.h             |   1 +
+ include/linux/usb/hcd.h             |   3 +-
+ 11 files changed, 775 insertions(+), 22 deletions(-)
+ create mode 100644 drivers/usb/host/xhci-pci-renesas.c
+ create mode 100644 drivers/usb/host/xhci-pci.h
+
+-- 
+2.25.4
+
