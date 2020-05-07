@@ -2,147 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2982C1C97E5
-	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2020 19:35:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B95DF1C9AD5
+	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2020 21:21:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728039AbgEGRel (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 May 2020 13:34:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49962 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728003AbgEGRek (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 May 2020 13:34:40 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5B44C05BD43;
-        Thu,  7 May 2020 10:34:40 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id 7so4062755pjo.0;
-        Thu, 07 May 2020 10:34:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=EPpfdrDWyIyJoF1ulwtJ3Qw81WLSoebaZdFuuGZoDek=;
-        b=l+q+VPJf0AqTmc1n+v80+kTMlTK2z8npyK82OZfZ/9x/TOF1BzCAl2PQ70xUHvMDpQ
-         8uZIuUt3gx5UjJ7qVIm8vO368Zqk+LKpZqoQB9Lvz4Kjb+tgM9ViIsc48W+C39T6g4ye
-         yfR+UH6TQzzTJTiafMhWOCfdcFHWXtjX8IVw39LgjLqJ2w6vHGwkrFUvyKbcO54wR1i9
-         skBln5pPuZAApexgE7HfQX6k55kd/Lkt6fpeVcvNn7QrMnMY6ywQGRapZUiUuq49NqLj
-         nfNAAEz+/tRjZPThHV+InM9L1e83fQ1c+adoLjoYfZuOtq80duRilt9LRoe8FvWihLDn
-         tpLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=EPpfdrDWyIyJoF1ulwtJ3Qw81WLSoebaZdFuuGZoDek=;
-        b=UmWcC9Ol+wVuIgXFHAB3nAJQ2NESARJo0mDsmXrBEz4acZUdSDofEhjAV+T5aQzOsM
-         MsLmCH/rLHRlhGpxsYj0BRW1KvjPrByslukbAgx8PO5+ZQVhqv25rrOGZZpnMrmxlHPc
-         Kj3WxXAgmxAARCIBowMTvDLbsVn+wSWioQhbm4a1vN/qzjhBC+SFWxXS/HIpqWzlfiD0
-         30F1ohHgFsiNQm6GDJrXS2c1+fSJJvDj9j71tT4AunlMEX0aAzxOggEzpESBeDJ7w0Xm
-         J2kjQZ21zSnQfbHl11QGQq3pNUeXpp5P/yO62lw8j81ANeG4ZGG+9Wed0kIXRgDw3SlK
-         oQpA==
-X-Gm-Message-State: AGi0PuaUAbO99oEalIKUJBhDld29IS8QGgKnPRjyblwpxFh6d9I9eI57
-        dwOy8vFzr0hFnqS1HzEGz6j8h5vlt88=
-X-Google-Smtp-Source: APiQypL3czYk300rpBGKg2G+mjGxZ5lSkGhjC6H19yktBCHPl5NOAmYDW2y9mD2Ze8Q84xRxXPwWFQ==
-X-Received: by 2002:a17:90a:1501:: with SMTP id l1mr1307791pja.82.1588872879825;
-        Thu, 07 May 2020 10:34:39 -0700 (PDT)
-Received: from stbsrv-and-01.and.broadcom.net ([192.19.231.250])
-        by smtp.gmail.com with ESMTPSA id y14sm5368802pff.205.2020.05.07.10.34.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 May 2020 10:34:39 -0700 (PDT)
-From:   Al Cooper <alcooperx@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Al Cooper <alcooperx@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v7 5/5] usb: host: Add ability to build new Broadcom STB USB drivers
-Date:   Thu,  7 May 2020 13:34:08 -0400
-Message-Id: <20200507173408.20754-6-alcooperx@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200507173408.20754-1-alcooperx@gmail.com>
-References: <20200507173408.20754-1-alcooperx@gmail.com>
+        id S1728634AbgEGTU6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 May 2020 15:20:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42516 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727837AbgEGTU6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 7 May 2020 15:20:58 -0400
+Received: from embeddedor (unknown [189.207.59.248])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 970BF208D6;
+        Thu,  7 May 2020 19:20:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588879258;
+        bh=hzZ3BRJHxK/0iJNH5rKEuCwWUFrZiZMlsFx+KFOhD6E=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Tq/MIkKsUFJuC5zOBIHBid/OytqD/3C8lK0sI37YnFdE9Amxy9nluQqghi/muFfKZ
+         BF4iKukLDB9U57ZGGH6UfZuoAFFZ5Hi4i1N6ORzbWoRO4BAO3+eQIZ2qZDT4SvJG7F
+         U+f3cF7Vh/2r/QiCpMT3QrufbXDQO5SvogLjygv0=
+Date:   Thu, 7 May 2020 14:25:24 -0500
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] thunderbolt: Replace zero-length array with flexible-array
+Message-ID: <20200507192524.GA16580@embeddedor>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add the build system changes needed to get the Broadcom STB XHCI,
-EHCI and OHCI functionality working. The OHCI support does not
-require anything unique to Broadcom so the standard ohci-platform
-driver is being used. Also update MAINTAINERS.
+The current codebase makes use of the zero-length array language
+extension to the C90 standard, but the preferred mechanism to declare
+variable-length types such as these ones is a flexible array member[1][2],
+introduced in C99:
 
-Signed-off-by: Al Cooper <alcooperx@gmail.com>
+struct foo {
+        int stuff;
+        struct boo array[];
+};
+
+By making use of the mechanism above, we will get a compiler warning
+in case the flexible array does not occur last in the structure, which
+will help us prevent some kind of undefined behavior bugs from being
+inadvertently introduced[3] to the codebase from now on.
+
+Also, notice that, dynamic memory allocations won't be affected by
+this change:
+
+"Flexible array members have incomplete type, and so the sizeof operator
+may not be applied. As a quirk of the original implementation of
+zero-length arrays, sizeof evaluates to zero."[1]
+
+sizeof(flexible-array-member) triggers a warning because flexible array
+members have incomplete type[1]. There are some instances of code in
+which the sizeof operator is being incorrectly/erroneously applied to
+zero-length arrays and the result is zero. Such instances may be hiding
+some bugs. So, this work (flexible-array member conversions) will also
+help to get completely rid of those sorts of issues.
+
+This issue was found with the help of Coccinelle.
+
+[1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
+[2] https://github.com/KSPP/linux/issues/21
+[3] commit 76497732932f ("cxgb3/l2t: Fix undefined behaviour")
+
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 ---
- MAINTAINERS               |  8 ++++++++
- drivers/usb/host/Kconfig  | 20 ++++++++++++++++++++
- drivers/usb/host/Makefile |  1 +
- 3 files changed, 29 insertions(+)
+ include/linux/thunderbolt.h |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 2926327e4976..fb55300c2a84 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3481,6 +3481,14 @@ S:	Supported
- F:	Documentation/devicetree/bindings/i2c/brcm,brcmstb-i2c.yaml
- F:	drivers/i2c/busses/i2c-brcmstb.c
+diff --git a/include/linux/thunderbolt.h b/include/linux/thunderbolt.h
+index ece782ef5466..ff397c0d5c07 100644
+--- a/include/linux/thunderbolt.h
++++ b/include/linux/thunderbolt.h
+@@ -80,7 +80,7 @@ struct tb {
+ 	int index;
+ 	enum tb_security_level security_level;
+ 	size_t nboot_acl;
+-	unsigned long privdata[0];
++	unsigned long privdata[];
+ };
  
-+BROADCOM BRCMSTB USB EHCI DRIVER
-+M:	Al Cooper <alcooperx@gmail.com>
-+L:	linux-usb@vger.kernel.org
-+L:	bcm-kernel-feedback-list@broadcom.com
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/usb/brcm,bcm7445-ehci.yaml
-+F:	drivers/usb/host/ehci-brcm.*
-+
- BROADCOM BRCMSTB USB2 and USB3 PHY DRIVER
- M:	Al Cooper <alcooperx@gmail.com>
- L:	linux-kernel@vger.kernel.org
-diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
-index 55bdfdf11e4c..973386bbb522 100644
---- a/drivers/usb/host/Kconfig
-+++ b/drivers/usb/host/Kconfig
-@@ -97,6 +97,26 @@ config USB_XHCI_TEGRA
- 
- endif # USB_XHCI_HCD
- 
-+config USB_EHCI_BRCMSTB
-+       tristate
-+
-+config USB_BRCMSTB
-+	tristate "Broadcom STB USB support"
-+	depends on (ARCH_BRCMSTB && PHY_BRCM_USB) || COMPILE_TEST
-+	select USB_OHCI_HCD_PLATFORM if USB_OHCI_HCD
-+	select USB_EHCI_BRCMSTB if USB_EHCI_HCD
-+	select USB_XHCI_PLATFORM if USB_XHCI_HCD
-+	help
-+	  Enables support for XHCI, EHCI and OHCI host controllers
-+	  found in Broadcom STB SoC's.
-+
-+	  To compile these drivers as modules, choose M here: the
-+	  modules will be called ohci-platform.ko, ehci-brcm.ko and
-+	  xhci-plat-hcd.ko
-+
-+	  Disabling this will keep the controllers and corresponding
-+	  PHYs powered down.
-+
- config USB_EHCI_HCD
- 	tristate "EHCI HCD (USB 2.0) support"
- 	depends on HAS_DMA && HAS_IOMEM
-diff --git a/drivers/usb/host/Makefile b/drivers/usb/host/Makefile
-index a7f0b8ff7179..265e26cf9209 100644
---- a/drivers/usb/host/Makefile
-+++ b/drivers/usb/host/Makefile
-@@ -59,6 +59,7 @@ obj-$(CONFIG_USB_EHCI_HCD_STI)	+= ehci-st.o
- obj-$(CONFIG_USB_EHCI_EXYNOS)	+= ehci-exynos.o
- obj-$(CONFIG_USB_EHCI_HCD_AT91) += ehci-atmel.o
- obj-$(CONFIG_USB_EHCI_TEGRA)	+= ehci-tegra.o
-+obj-$(CONFIG_USB_EHCI_BRCMSTB)	+= ehci-brcm.o
- 
- obj-$(CONFIG_USB_OXU210HP_HCD)	+= oxu210hp-hcd.o
- obj-$(CONFIG_USB_ISP116X_HCD)	+= isp116x-hcd.o
--- 
-2.17.1
+ extern struct bus_type tb_bus_type;
 
