@@ -2,75 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 632C91C82BE
-	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2020 08:45:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F7B01C82C4
+	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2020 08:45:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725953AbgEGGpN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 May 2020 02:45:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60740 "EHLO mail.kernel.org"
+        id S1725927AbgEGGps (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 May 2020 02:45:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33580 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725763AbgEGGpN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 7 May 2020 02:45:13 -0400
+        id S1725905AbgEGGps (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 7 May 2020 02:45:48 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 34F802078C;
-        Thu,  7 May 2020 06:45:12 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 951262078C;
+        Thu,  7 May 2020 06:45:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588833912;
-        bh=tqjVJvTgkKsLjnMlFNwr1vnwK2nrbrSCJOG4WY/n4Ow=;
+        s=default; t=1588833948;
+        bh=gm75SLJLcH+JMNI3GZMkQmuSFwAf5JbNY0WtEMPJqUY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bMpVumtdIQ+nfmBaFiOVyFXsnepy0M0Tpj0XL2ogpwhPBjwRBlVjp+sTCr9h9JGI2
-         vaosUT+vI1CLqCIAvabfcP8A5A6HN8myuqC9Pr+4iAcYxxk14Mam9QvRYkcy1SPNSf
-         qMkt+UFpl2ATZC6anMrR0iIvaMy4QkZZHec5UcDQ=
-Date:   Thu, 7 May 2020 08:45:10 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     mathias.nyman@intel.com,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] xhci: Make debug message consistent with bus and port
- number
-Message-ID: <20200507064510.GA787064@kroah.com>
-References: <20200507061755.13280-1-kai.heng.feng@canonical.com>
+        b=wGxD1c5COzsllDgnff5fUZ8KoK3yIZEqdaBc/68jMU7MQ/3AKuqnNp/9aiy6avTnz
+         ncAnmKDGHXjVkeUjq7l6TiVZnQ/pcwenIdSH2vV50XzXppzWQ5SgO4eZPpUtJCNdI+
+         wrZt4neRbzHokNBrxQy+oB0poCslOEPNme2B527A=
+Date:   Thu, 7 May 2020 08:45:45 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Peter Chen <peter.chen@kernel.org>
+Cc:     linux-usb@vger.kernel.org,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-kernel@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>
+Subject: Re: [PATCH 1/1] usb: chipidea: msm: Ensure proper controller reset
+ using role switch API
+Message-ID: <20200507064545.GB787064@kroah.com>
+References: <20200507004918.25975-1-peter.chen@kernel.org>
+ <20200507004918.25975-2-peter.chen@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200507061755.13280-1-kai.heng.feng@canonical.com>
+In-Reply-To: <20200507004918.25975-2-peter.chen@kernel.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 07, 2020 at 02:17:55PM +0800, Kai-Heng Feng wrote:
-> Current xhci debug message doesn't always output bus number, so it's
-> hard to figure out it's from USB2 or USB3 root hub.
+On Thu, May 07, 2020 at 08:49:18AM +0800, Peter Chen wrote:
+> From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 > 
-> In addition to that, some port numbers are offset to 0 and others are
-> offset to 1. Use the latter to match the USB core.
+> Currently we check to make sure there is no error state on the extcon
+> handle for VBUS when writing to the HS_PHY_GENCONFIG_2 register. When using
+> the USB role-switch API we still need to write to this register absent an
+> extcon handle.
 > 
-> So use "bus number - port index + 1" to make debug message consistent.
+> This patch makes the appropriate update to ensure the write happens if
+> role-switching is true.
 > 
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> ---
->  drivers/usb/host/xhci-hub.c | 41 +++++++++++++++++++++----------------
->  1 file changed, 23 insertions(+), 18 deletions(-)
+> Fixes: 05559f10ed79 ("usb: chipidea: add role switch class support")
 > 
-> diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-> index f37316d2c8fa..83088c262cc4 100644
-> --- a/drivers/usb/host/xhci-hub.c
-> +++ b/drivers/usb/host/xhci-hub.c
-> @@ -1241,7 +1241,8 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
->  			temp = readl(ports[wIndex]->addr);
->  			/* Disable port */
->  			if (link_state == USB_SS_PORT_LS_SS_DISABLED) {
-> -				xhci_dbg(xhci, "Disable port %d\n", wIndex);
-> +				xhci_dbg(xhci, "Disable port %d-%d\n",
-> +					 hcd->self.busnum, wIndex + 1);
+> Cc: Peter Chen <Peter.Chen@nxp.com>
 
-Shouldn't xhci_dbg() show the bus number already?  If not, please fix
-that up there instead of having to add it to all messages "by hand".
+No blank line needed, and you can drop your own Cc: in the patch :)
 
-thanks,
+I'll edit it by hand...
 
 greg k-h
