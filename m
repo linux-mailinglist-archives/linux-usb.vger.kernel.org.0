@@ -2,168 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA7661C825F
-	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2020 08:18:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A65CF1C82A1
+	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2020 08:39:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726491AbgEGGS0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 May 2020 02:18:26 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:39561 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725809AbgEGGSZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 May 2020 02:18:25 -0400
-Received: from 61-220-137-37.hinet-ip.hinet.net ([61.220.137.37] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1jWZr6-0008KV-FO; Thu, 07 May 2020 06:18:00 +0000
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     mathias.nyman@intel.com
-Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org (open list:USB XHCI DRIVER),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] xhci: Make debug message consistent with bus and port number
-Date:   Thu,  7 May 2020 14:17:55 +0800
-Message-Id: <20200507061755.13280-1-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.17.1
+        id S1725893AbgEGGj2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 May 2020 02:39:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53876 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725857AbgEGGj1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 7 May 2020 02:39:27 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1D0F72078C;
+        Thu,  7 May 2020 06:39:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588833567;
+        bh=7uxQLOHl5YK/wlVmwTEwQLPM721LHYr1phx0RAen60I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mkhp0gzg7Rcym6cXXfHKaZj0Vbss49q2JLv5DyMO4COiiZwNbBGGtnSshOImXWnOq
+         M98P0XYc8Am88LKwzYZMSmr6ok/nHuZM22Ulshs5/3qxcMbnSc1oLnGRwdq7utoUiP
+         TCRJK5CbQAGtRXUwsQ8plyHeKQwo8xdWwFwfQSnA=
+Date:   Thu, 7 May 2020 08:39:25 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     gavinli@thegavinli.com
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2] usb: devio: fix mmap() on non-coherent DMA
+ architectures
+Message-ID: <20200507063925.GA777100@kroah.com>
+References: <20200507005647.172515-1-gavinli@thegavinli.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200507005647.172515-1-gavinli@thegavinli.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Current xhci debug message doesn't always output bus number, so it's
-hard to figure out it's from USB2 or USB3 root hub.
+On Wed, May 06, 2020 at 05:56:47PM -0700, gavinli@thegavinli.com wrote:
+> From: Gavin Li <gavinli@thegavinli.com>
+> 
+> On architectures that are not (or are optionally) DMA coherent,
+> dma_alloc_coherent() returns an address into the vmalloc space,
+> and calling virt_to_phys() on this address returns an unusable
+> physical address.
+> 
+> This patch replaces the raw remap_pfn_range() call with a call to
+> dmap_mmap_coherent(), which takes care of the differences between
+> coherent and non-coherent code paths.
+> 
+> Tested on an arm64 rk3399 board.
+> ---
+>  drivers/usb/core/devio.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
 
-In addition to that, some port numbers are offset to 0 and others are
-offset to 1. Use the latter to match the USB core.
+I don't think you ran checkpatch.pl on your patch :(
 
-So use "bus number - port index + 1" to make debug message consistent.
+Also, please see 2bef9aed6f0e ("usb: usbfs: correct kernel->user page
+attribute mismatch") in linux-next, does that resolve this problem for
+you?  I think it does the same thing as your patch does...
 
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
----
- drivers/usb/host/xhci-hub.c | 41 +++++++++++++++++++++----------------
- 1 file changed, 23 insertions(+), 18 deletions(-)
+thanks,
 
-diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-index f37316d2c8fa..83088c262cc4 100644
---- a/drivers/usb/host/xhci-hub.c
-+++ b/drivers/usb/host/xhci-hub.c
-@@ -1241,7 +1241,8 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 			temp = readl(ports[wIndex]->addr);
- 			/* Disable port */
- 			if (link_state == USB_SS_PORT_LS_SS_DISABLED) {
--				xhci_dbg(xhci, "Disable port %d\n", wIndex);
-+				xhci_dbg(xhci, "Disable port %d-%d\n",
-+					 hcd->self.busnum, wIndex + 1);
- 				temp = xhci_port_state_to_neutral(temp);
- 				/*
- 				 * Clear all change bits, so that we get a new
-@@ -1257,7 +1258,8 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 
- 			/* Put link in RxDetect (enable port) */
- 			if (link_state == USB_SS_PORT_LS_RX_DETECT) {
--				xhci_dbg(xhci, "Enable port %d\n", wIndex);
-+				xhci_dbg(xhci, "Enable port %d-%d\n",
-+					 hcd->self.busnum, wIndex + 1);
- 				xhci_set_link_state(xhci, ports[wIndex],
- 							link_state);
- 				temp = readl(ports[wIndex]->addr);
-@@ -1289,8 +1291,8 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 					goto error;
- 				}
- 
--				xhci_dbg(xhci, "Enable compliance mode transition for port %d\n",
--						wIndex);
-+				xhci_dbg(xhci, "Enable compliance mode transition for port %d-%d\n",
-+					 hcd->self.busnum, wIndex + 1);
- 				xhci_set_link_state(xhci, ports[wIndex],
- 						link_state);
- 
-@@ -1304,8 +1306,9 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 			}
- 			/* Can't set port link state above '3' (U3) */
- 			if (link_state > USB_SS_PORT_LS_U3) {
--				xhci_warn(xhci, "Cannot set port %d link state %d\n",
--					 wIndex, link_state);
-+				xhci_warn(xhci, "Cannot set port %d-%d link state %d\n",
-+					  hcd->self.busnum, wIndex + 1,
-+					  link_state);
- 				goto error;
- 			}
- 
-@@ -1340,8 +1343,8 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 				spin_unlock_irqrestore(&xhci->lock, flags);
- 				if (!wait_for_completion_timeout(&bus_state->u3exit_done[wIndex],
- 								 msecs_to_jiffies(100)))
--					xhci_dbg(xhci, "missing U0 port change event for port %d\n",
--						 wIndex);
-+					xhci_dbg(xhci, "missing U0 port change event for port %d-%d\n",
-+						 hcd->self.busnum, wIndex + 1);
- 				spin_lock_irqsave(&xhci->lock, flags);
- 				temp = readl(ports[wIndex]->addr);
- 				break;
-@@ -1386,15 +1389,15 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 			writel(temp, ports[wIndex]->addr);
- 
- 			temp = readl(ports[wIndex]->addr);
--			xhci_dbg(xhci, "set port reset, actual port %d status  = 0x%x\n", wIndex, temp);
-+			xhci_dbg(xhci, "set port reset, actual port %d-%d status  = 0x%x\n",
-+				 hcd->self.busnum, wIndex + 1, temp);
- 			break;
- 		case USB_PORT_FEAT_REMOTE_WAKE_MASK:
- 			xhci_set_remote_wake_mask(xhci, ports[wIndex],
- 						  wake_mask);
- 			temp = readl(ports[wIndex]->addr);
--			xhci_dbg(xhci, "set port remote wake mask, "
--					"actual port %d status  = 0x%x\n",
--					wIndex, temp);
-+			xhci_dbg(xhci, "set port remote wake mask, actual port %d-%d status  = 0x%x\n",
-+				 hcd->self.busnum, wIndex + 1, temp);
- 			break;
- 		case USB_PORT_FEAT_BH_PORT_RESET:
- 			temp |= PORT_WR;
-@@ -1634,8 +1637,8 @@ int xhci_bus_suspend(struct usb_hcd *hcd)
- 			spin_unlock_irqrestore(&xhci->lock, flags);
- 			msleep(XHCI_PORT_POLLING_LFPS_TIME);
- 			spin_lock_irqsave(&xhci->lock, flags);
--			xhci_dbg(xhci, "port %d polling in bus suspend, waiting\n",
--				 port_index);
-+			xhci_dbg(xhci, "port %d-%d polling in bus suspend, waiting\n",
-+				 hcd->self.busnum, port_index + 1);
- 			goto retry;
- 		}
- 		/* bail out if port detected a over-current condition */
-@@ -1653,7 +1656,8 @@ int xhci_bus_suspend(struct usb_hcd *hcd)
- 				xhci_dbg(xhci, "Bus suspend bailout, port connect change\n");
- 				return -EBUSY;
- 			}
--			xhci_dbg(xhci, "port %d not suspended\n", port_index);
-+			xhci_dbg(xhci, "port %d-%d not suspended\n",
-+				 hcd->self.busnum, port_index + 1);
- 			t2 &= ~PORT_PLS_MASK;
- 			t2 |= PORT_LINK_STROBE | XDEV_U3;
- 			set_bit(port_index, &bus_state->bus_suspended);
-@@ -1783,7 +1787,8 @@ int xhci_bus_resume(struct usb_hcd *hcd)
- 		if ((xhci->quirks & XHCI_MISSING_CAS) &&
- 		    (hcd->speed >= HCD_USB3) &&
- 		    xhci_port_missing_cas_quirk(ports[port_index])) {
--			xhci_dbg(xhci, "reset stuck port %d\n", port_index);
-+			xhci_dbg(xhci, "reset stuck port %d-%d\n",
-+				 hcd->self.busnum, port_index + 1);
- 			clear_bit(port_index, &bus_state->bus_suspended);
- 			continue;
- 		}
-@@ -1830,8 +1835,8 @@ int xhci_bus_resume(struct usb_hcd *hcd)
- 		sret = xhci_handshake(ports[port_index]->addr, PORT_PLC,
- 				      PORT_PLC, 10 * 1000);
- 		if (sret) {
--			xhci_warn(xhci, "port %d resume PLC timeout\n",
--				  port_index);
-+			xhci_warn(xhci, "port %d-%d resume PLC timeout\n",
-+				  hcd->self.busnum, port_index + 1);
- 			continue;
- 		}
- 		xhci_test_and_clear_bit(xhci, ports[port_index], PORT_PLC);
--- 
-2.17.1
-
+greg k-h
