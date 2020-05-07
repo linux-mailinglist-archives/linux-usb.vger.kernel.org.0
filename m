@@ -2,203 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACCCC1C9E8A
-	for <lists+linux-usb@lfdr.de>; Fri,  8 May 2020 00:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60A481C9E8E
+	for <lists+linux-usb@lfdr.de>; Fri,  8 May 2020 00:41:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726533AbgEGWko (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 May 2020 18:40:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41128 "EHLO
+        id S1726518AbgEGWlZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 May 2020 18:41:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726437AbgEGWko (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 May 2020 18:40:44 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 310DFC05BD43
-        for <linux-usb@vger.kernel.org>; Thu,  7 May 2020 15:40:44 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id d184so3743434pfd.4
-        for <linux-usb@vger.kernel.org>; Thu, 07 May 2020 15:40:44 -0700 (PDT)
+        with ESMTP id S1726515AbgEGWlY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 May 2020 18:41:24 -0400
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 626ABC05BD0B
+        for <linux-usb@vger.kernel.org>; Thu,  7 May 2020 15:41:24 -0700 (PDT)
+Received: by mail-yb1-xb43.google.com with SMTP id c2so3210569ybi.7
+        for <linux-usb@vger.kernel.org>; Thu, 07 May 2020 15:41:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cPTDJmF/tujVfBkCFmIE4YvP6laom+6vA1WUeov6LY0=;
-        b=DYcbxanU7xOF7YD85/inr43/fl2m/NFGp69K/Fs0JxJj5YQcPBMMfEXPTjty4kzn93
-         2xJnSrkADBiKUlrja6Cu/EQMrkstARiLmcYwYTjsq913C0t7xDoN9kX0owwP9+babTbD
-         k9vhtvPWlGcBZBugvw+mAj7yMgqSS1UDC7GYk=
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=15pRIylywvMGvtrJCDOTg+VPNTtiBCmmaIlSjw1OTgk=;
+        b=i6r7L94Xbxk2mrmd/n7Gx0MKdUteaI3n3lpD7e+QFJ/ZVh3+imu2aLLMCMoh/MziUT
+         6o1v/0zpp2xHgDOhyygh7NzM7DXQk2Jt/CZPYGmNEGlpEtqaKI3Hel9oBwsIQkKqnSoZ
+         w0K7bZv7DxPYTPBAZ4JSdOBnnl5nJEwjrI71iuq0SsWCQHDvpR2YBVWsyJ18bamChJWR
+         o5v/09nOfErmbuW4XXsz7bGqYKZ9iLLhLySLWaFTQT15AfH0e1AWErzJYKT0b9Ts5kM2
+         sBUlh7xnexEPVNO+kVICmI8x1t8+UquL/KyRQNHjbPfG/sFaE6hD3PPW2DBls8j6RTb4
+         k4JA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cPTDJmF/tujVfBkCFmIE4YvP6laom+6vA1WUeov6LY0=;
-        b=rLnw5j2sqmvMN6TYTYS/7kPOSb2duMrSfQYH6aJViVvlmy6DUZZTRqe66YMhqzGajl
-         8r9mAjYwf9MoNCoFEzKXnUUbLiNlVJkOfeIr2Kjijc7a6UTGKbRyGJ5mhsEmMs+MJSjL
-         Cwo+NOLVqGK3TgAtL85gKPLqIJOqmX6kMF56GGvGvsbq/zzEvy81Wc4O7qYdokr4rolG
-         ZmHYGBGEIhic8kvsZamwum5WaX7K6gjN/xcE6EbgsZOq1TFzr4xK3Kf3cd4BO4j0pBoP
-         SjVrTzxectOBiktYcUlv/DRNXYigzLGC1G5FdIT3HYJbh/g0P4s8X1BMil2gG3OlFmxN
-         GMNg==
-X-Gm-Message-State: AGi0Pua7hs58OqVKOoJZad9eY5/qV57ET2pX3xvz4YMAaGcqgdTVcqrs
-        eS4THtym1lwrCX49mLOv+tPHzg==
-X-Google-Smtp-Source: APiQypKzWVGuTQrhg0T2RKxcHC1dccZOfB4yuHc7rhnl1Ib0TLRLPytRWJ/yhmppXsA3XgWdl6pDDQ==
-X-Received: by 2002:a62:4ec8:: with SMTP id c191mr16441851pfb.30.1588891243415;
-        Thu, 07 May 2020 15:40:43 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:476b:691:abc3:38db])
-        by smtp.gmail.com with ESMTPSA id p189sm5898931pfp.135.2020.05.07.15.40.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 May 2020 15:40:42 -0700 (PDT)
-Date:   Thu, 7 May 2020 15:40:41 -0700
-From:   Prashant Malani <pmalani@chromium.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Benson Leung <bleung@chromium.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH 2/4] usb: typec: mux: intel_pmc_mux: Support for static
- SBU/HSL orientation
-Message-ID: <20200507224041.GA247416@google.com>
-References: <20200507150900.12102-1-heikki.krogerus@linux.intel.com>
- <20200507150900.12102-3-heikki.krogerus@linux.intel.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=15pRIylywvMGvtrJCDOTg+VPNTtiBCmmaIlSjw1OTgk=;
+        b=sn9k4FSgdtjC0vs7VtK7XB80TPM6gSUjM+G3fTUcxE7B3IY0mSk48cbt+yecJJ6gTi
+         VGOCa4idzlYyR4kJC0Jczm/a6mz7Q6FAylqE9FpGvbVdzfQSMMmIJE6GqATlJr6yRwLC
+         ULcX7OehBCXz46QrOuvewBhXQqdKtfzbnBOcrHBbXPRIqfINJp4I4FELS2CEcfdKhlXn
+         fBLh7RWav7jWbPGgJiE5mT9a3sfMxwHhburapaVLdsFjrTl6DHfWrbHDoDtVBUCWFHbM
+         34C7wiowHpDHHMgIadIEII7jivzrc18R6fUt9IqvZSdXu/cJ7WaWwf4GANr8XzvlcBvb
+         yl5A==
+X-Gm-Message-State: AGi0PuaW/1BLqKl2xnTb/WxEeUGBw2/SRwud26SqQFvmGiNIRUcTBlw8
+        GTIelGJxmQyMhjOIMpL0w+xCxKCkzuBYcB4dXmA=
+X-Google-Smtp-Source: APiQypJnEQ2o+5AAZGJJ+fugGIBokiH9PcxL32HL3KogAEZHqMcgi90EZ26t37Y7FzoZJ4Rbm4m+Re5bNgn3YoiScrM=
+X-Received: by 2002:a25:e54a:: with SMTP id c71mr26618805ybh.139.1588891283167;
+ Thu, 07 May 2020 15:41:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200507150900.12102-3-heikki.krogerus@linux.intel.com>
+Received: by 2002:a25:396:0:0:0:0:0 with HTTP; Thu, 7 May 2020 15:41:22 -0700 (PDT)
+Reply-To: gi625900@gmail.com
+From:   "Mr. Scott Donald" <globalscrtcmpn@gmail.com>
+Date:   Thu, 7 May 2020 15:41:22 -0700
+Message-ID: <CANCHYtv8zORX=kEXDMojzU8EFop+U8cpjZPbRVDJ4XTqAsJ+dA@mail.gmail.com>
+Subject: Very Urgent,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Heikki,
+Dear Friend,
+I'm Mr. Scott Donald a Successful business Man. dealing=C2=A0with
+Exportation, I got your email contact through search=C2=A0to let you know
+my Ugly Situation Am a dying Man here in=C2=A0California Los Angeles
+Hospital Bed in (USA), I Lost my=C2=A0Wife and my only Daughter for Corona
+virus and my Doctor said to me that i don't have enough time to live
+any=C2=A0more, i have a project that am about to handover to you.=C2=A0i ha=
+ve
+already instructed the Barclay Bank of London to=C2=A0transfer my fund sum
+of =C2=A33,7M GBP to you as to enable you=C2=A0give 50% to Charitable Home =
+and
+take 50% and i have=C2=A0already given all i have here in America to
+Charitable=C2=A0home I also ask my Doctor to help me get to you in case=C2=
+=A0you
+did not hear from me again, i want to you see on video very urgent
+here is my Doctor Whatsapp Number for urgent notice +13019692737
 
-Thanks for the patches.
+Hope To Hear From You. i really want to see you on Video call very
+urgent please.
 
-On Thu, May 07, 2020 at 06:08:58PM +0300, Heikki Krogerus wrote:
-> The SBU and HSL orientation may be fixed/static from the mux
-> PoW. Apparently the retimer may take care of the orientation
-> of these lines. Handling the static SBU (AUX) and HSL
-> orientation with device properties.
-> 
-> If the SBU orientation is static, a device property
-> "sbu-orintation" can be used. When the property exists, the
-> driver always sets the SBU orientation according to the
-> property value, and when it's not set, the driver uses the
-> cable plug orientation with SBU.
-> 
-> And with static HSL orientation, "hsl-orientation" device
-> property can be used in the same way.
-> 
-> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> ---
->  drivers/usb/typec/mux/intel_pmc_mux.c | 42 +++++++++++++++++++++++----
->  1 file changed, 36 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
-> index f5c5e0aef66f..1aac218099f3 100644
-> --- a/drivers/usb/typec/mux/intel_pmc_mux.c
-> +++ b/drivers/usb/typec/mux/intel_pmc_mux.c
-> @@ -91,6 +91,9 @@ struct pmc_usb_port {
->  
->  	u8 usb2_port;
->  	u8 usb3_port;
-> +
-> +	enum typec_orientation sbu_orientation;
-> +	enum typec_orientation hsl_orientation;
->  };
->  
->  struct pmc_usb {
-> @@ -99,6 +102,22 @@ struct pmc_usb {
->  	struct pmc_usb_port *port;
->  };
->  
-> +static int sbu_orientation(struct pmc_usb_port *port)
-> +{
-> +	if (port->sbu_orientation)
-> +		return port->sbu_orientation - 1;
-> +
-> +	return port->orientation - 1;
-> +}
-> +
-> +static int hsl_orientation(struct pmc_usb_port *port)
-> +{
-> +	if (port->hsl_orientation)
-> +		return port->hsl_orientation - 1;
-> +
-> +	return port->orientation - 1;
-> +}
-> +
->  static int pmc_usb_command(struct pmc_usb_port *port, u8 *msg, u32 len)
->  {
->  	u8 response[4];
-> @@ -151,8 +170,9 @@ pmc_usb_mux_dp(struct pmc_usb_port *port, struct typec_mux_state *state)
->  
->  	req.mode_data = (port->orientation - 1) << PMC_USB_ALTMODE_ORI_SHIFT;
->  	req.mode_data |= (port->role - 1) << PMC_USB_ALTMODE_UFP_SHIFT;
-> -	req.mode_data |= (port->orientation - 1) << PMC_USB_ALTMODE_ORI_AUX_SHIFT;
-> -	req.mode_data |= (port->orientation - 1) << PMC_USB_ALTMODE_ORI_HSL_SHIFT;
-> +
-> +	req.mode_data |= sbu_orientation(port) << PMC_USB_ALTMODE_ORI_AUX_SHIFT;
+you can reach me through this gmail id: globalinvestmentinvestment61@
 
-I'm curious to know what would happen when sbu-orientation == "normal".
-That means |port->sbu_orientation| == 1.
+Regards
 
-It sounds like what should happen is the AUX_SHIFT orientation
-setting should follow what |port->orientation| is, but here it
-looks like it will always be set to |port->sbu_orientation - 1|, i.e 0,
-even if port->orientation == TYPEC_ORIENTATION_REVERSE, i.e 2, meaning
-it should be set to 1 ?
-
-Apologies if I misunderstood the code...
-
-
-Best regards,
-
-
-> +	req.mode_data |= hsl_orientation(port) << PMC_USB_ALTMODE_ORI_HSL_SHIFT;
->  
->  	req.mode_data |= (state->mode - TYPEC_STATE_MODAL) <<
->  			 PMC_USB_ALTMODE_DP_MODE_SHIFT;
-> @@ -173,8 +193,9 @@ pmc_usb_mux_tbt(struct pmc_usb_port *port, struct typec_mux_state *state)
->  
->  	req.mode_data = (port->orientation - 1) << PMC_USB_ALTMODE_ORI_SHIFT;
->  	req.mode_data |= (port->role - 1) << PMC_USB_ALTMODE_UFP_SHIFT;
-> -	req.mode_data |= (port->orientation - 1) << PMC_USB_ALTMODE_ORI_AUX_SHIFT;
-> -	req.mode_data |= (port->orientation - 1) << PMC_USB_ALTMODE_ORI_HSL_SHIFT;
-> +
-> +	req.mode_data |= sbu_orientation(port) << PMC_USB_ALTMODE_ORI_AUX_SHIFT;
-> +	req.mode_data |= hsl_orientation(port) << PMC_USB_ALTMODE_ORI_HSL_SHIFT;
->  
->  	if (TBT_ADAPTER(data->device_mode) == TBT_ADAPTER_TBT3)
->  		req.mode_data |= PMC_USB_ALTMODE_TBT_TYPE;
-> @@ -211,8 +232,8 @@ static int pmc_usb_connect(struct pmc_usb_port *port)
->  	msg[0] |= port->usb3_port << PMC_USB_MSG_USB3_PORT_SHIFT;
->  
->  	msg[1] = port->usb2_port << PMC_USB_MSG_USB2_PORT_SHIFT;
-> -	msg[1] |= (port->orientation - 1) << PMC_USB_MSG_ORI_HSL_SHIFT;
-> -	msg[1] |= (port->orientation - 1) << PMC_USB_MSG_ORI_AUX_SHIFT;
-> +	msg[1] |= hsl_orientation(port) << PMC_USB_MSG_ORI_HSL_SHIFT;
-> +	msg[1] |= sbu_orientation(port) << PMC_USB_MSG_ORI_AUX_SHIFT;
->  
->  	return pmc_usb_command(port, msg, sizeof(msg));
->  }
-> @@ -296,6 +317,7 @@ static int pmc_usb_register_port(struct pmc_usb *pmc, int index,
->  	struct usb_role_switch_desc desc = { };
->  	struct typec_switch_desc sw_desc = { };
->  	struct typec_mux_desc mux_desc = { };
-> +	const char *str;
->  	int ret;
->  
->  	ret = fwnode_property_read_u8(fwnode, "usb2-port", &port->usb2_port);
-> @@ -306,6 +328,14 @@ static int pmc_usb_register_port(struct pmc_usb *pmc, int index,
->  	if (ret)
->  		return ret;
->  
-> +	ret = fwnode_property_read_string(fwnode, "sbu-orientation", &str);
-> +	if (!ret)
-> +		port->sbu_orientation = typec_find_orientation(str);
-> +
-> +	ret = fwnode_property_read_string(fwnode, "hsl-orientation", &str);
-> +	if (!ret)
-> +		port->hsl_orientation = typec_find_orientation(str);
-> +
->  	port->num = index;
->  	port->pmc = pmc;
->  
-> -- 
-> 2.26.2
-> 
+Mr. Scott Donald
