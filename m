@@ -2,149 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 626431C804C
-	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2020 05:08:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2703D1C80A4
+	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2020 05:48:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727778AbgEGDIR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 May 2020 23:08:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55894 "EHLO
+        id S1726641AbgEGDsY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 May 2020 23:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725879AbgEGDIQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 May 2020 23:08:16 -0400
-Received: from mail-ua1-x941.google.com (mail-ua1-x941.google.com [IPv6:2607:f8b0:4864:20::941])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C17BC061A0F;
-        Wed,  6 May 2020 20:08:16 -0700 (PDT)
-Received: by mail-ua1-x941.google.com with SMTP id b6so1346113uak.6;
-        Wed, 06 May 2020 20:08:16 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1725809AbgEGDsX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 May 2020 23:48:23 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E47C061A0F;
+        Wed,  6 May 2020 20:48:22 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id s9so3221463lfp.1;
+        Wed, 06 May 2020 20:48:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=b5KrgkS9IpHYVnkrIf1m2LB5pieWU4ZRsegpvq8ZuNM=;
-        b=nQH6RfxU7ceNQuXYXgG9OZlSHcATWEnjnhVkzSi1Bop+6sQlFdf2KboXe+5MRiTOPZ
-         wXed/hWDipbbakcaTpb+kOKIbF7MLdB84XNqIhkkaPvWP3L2PD8d6D+Y6W+3gClHxG+H
-         K8qib7WZguDpYxSbhB1djNjEJZks9oM9+/cMA+5mNycHbJfDzz+2S9eJ3vHO6jeQwId0
-         0+m05MEFgioXDWBnkBJ4z8D1JeUYmsRs3wYGcbtrU9O1SkQVJQkFFR6PVHEai0Tx5iK7
-         05Htbwrt6jmfcrguLgsyCehN71Ydh/PPSJsZoDLUibLmLwScZdvQU1ISgYZZKzOzc+4h
-         AfJg==
+         :cc;
+        bh=/au1P+LKp7UGcITXckfJpNTDS25YxZ0TSqVFN3ZEiRA=;
+        b=Huotxyr7xcPRjx/eppGI6o40oTPYZhC35YkjqS0Da0hrwxfHfTCZhoDtvy4zBkmskK
+         GMDnOdfrMe6v7b2f3CBvtF35xxZYgnxACnwHUfsy/3GbYLP6aEuNz8lWMWeQazz6A6d1
+         KuR5nZ8A1FKFSFIE4x9uHLPjUE8m140aKcE4cIaME/hUEJAxNk8IqWMZ2RJOkDl9zEiF
+         04ycUOZEja5swK+kchyPVRD9/bxZE/pDMfx1RgSRXTvqC+lQ3dv/J752Migi2a/u40f9
+         Rra2BU7s5vP6JkKC6YTNZpgHwmJaliY+RQlDY4GdJsaFMbV+CjVbchpf32E5nbscHmLK
+         uOKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=b5KrgkS9IpHYVnkrIf1m2LB5pieWU4ZRsegpvq8ZuNM=;
-        b=re5YeSuedIfPEN5jqxu2c6gGTtNBVJrqTEeXsp3pCNxKanjqE6l99v+ioBEJ9kjs0M
-         hLZ1oLfmNbs0tz8KJtO55PNuWD5e6hZoCBn7pkECFydliFJJgYvGBw5DtYDdC0HwxIU3
-         ndMY3BMfIyC8MSNlTUruowsZ2saGhRLDZzTnC5EJfrT138ZnANYoXaSqSjxZ/cZRrenS
-         n/EcZw9YJpG2elSTJ6kVNb/hvYC+RUopsDr+yPE/z30faMBuuyEnPzAMVJ5mdMMzo+O4
-         ET3gNiTGuoJGiPekpZZllJDuSFq30QYi2hEMF7Jr7KQjInlkupKHqO0Xx/T3WC0ZohAT
-         ezug==
-X-Gm-Message-State: AGi0PuYg2sQClTF1dkkeINThCeZWotKQ0UlVTcn+T3T3f2AMtFK8I4Uz
-        pdJxx99gKeHwwGydY1mNQG8H6VrNpbqyEZanB/nxBknI
-X-Google-Smtp-Source: APiQypLy2gZGyrB2039SyMEF5+hQSLSHuFESjGbmWh7/XJ2Fxp/FeHdyAqmT6q9hnYF5XM72W3uT7UPzgl0MM0NuEqg=
-X-Received: by 2002:ab0:375a:: with SMTP id i26mr9842013uat.120.1588820895622;
- Wed, 06 May 2020 20:08:15 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=/au1P+LKp7UGcITXckfJpNTDS25YxZ0TSqVFN3ZEiRA=;
+        b=T1EXeEzAWLelRNIQsyd/cJb87l55/5QJvCq4hAXWwaZH9Oi5oGC/OuvfGlYL30xnHB
+         7gQu85vOcOW2lrc24D6XOJU5pQiuzAvHUd6yHmQUA2PRpPsr9Uu48HcxiHhtavIhunyS
+         bWiEEa3PlDEQ7uW/xPiA5uGlo6hZqHwzHlxCNoUjGTEXiywi4AC0u6wqvNfs/Q2tisAo
+         XoQsqp5nbwY3zOSko07sIZbxNF98VeEYdRXx/+PHgknv7y20aFrZEYD2s/v2Zd2V1Wvk
+         3wSH9UrOuWlFLg6ORhHMmFjSNT8+BbbaTSliXrVWNhERHXXeghDUTXLo7hx+h1OwX4Ei
+         k7IA==
+X-Gm-Message-State: AGi0PuZvnNGTYHkB08GPESoHXujkQlWfHKnBhbGCgDqSgcdKXYGZLcMC
+        R5/8t+ViSxUXeS8e7K5nXptk6xFC5aI+T9h9TcA=
+X-Google-Smtp-Source: APiQypKGKAViU1DdiQYgx/qoKOwR6hee8Kj1KrI9t7atXw+zCve75aBN2UiRyE1F5LQNGot+nOkW2RgNsyyWjFgqooU=
+X-Received: by 2002:a05:6512:10d0:: with SMTP id k16mr7385994lfg.71.1588823300383;
+ Wed, 06 May 2020 20:48:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20191028215919.83697-1-john.stultz@linaro.org>
- <20191028215919.83697-4-john.stultz@linaro.org> <87mudjj4rc.fsf@gmail.com>
- <CALAqxLU+9uEcdRVaLfh+eQrDtZbDGod9pRXhBX=prAhg9MXagw@mail.gmail.com>
- <CAKgpwJVaKpsgMjKcnYyJsfNj0ibkPt=mdn-NxfOkeX1jfL=9iQ@mail.gmail.com> <CALAqxLVXauXP0r4Hv2Axa4PNf_F9wp644peYV06bdsPtMKGmLA@mail.gmail.com>
-In-Reply-To: <CALAqxLVXauXP0r4Hv2Axa4PNf_F9wp644peYV06bdsPtMKGmLA@mail.gmail.com>
-From:   Jun Li <lijun.kernel@gmail.com>
-Date:   Thu, 7 May 2020 11:08:04 +0800
-Message-ID: <CAKgpwJU7VDx90STE7bhx9VZ5p1jtqCyyLavmhXfpaicyDAYt_g@mail.gmail.com>
-Subject: Re: [PATCH v4 3/9] usb: dwc3: Increase timeout for CmdAct cleared by
- device controller
-To:     John Stultz <john.stultz@linaro.org>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Yu Chen <chenyu56@huawei.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        ShuFan Lee <shufan_lee@richtek.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
+References: <20200401013851.16227-1-peter.chen@nxp.com> <20200409143205.GA15163@portage>
+ <CAL411-rfxO-88aPaiDcjW+ri+RKMFz=C6tkNMztWYA-+uNvopA@mail.gmail.com> <d91e7b91-4197-3f5e-ba0d-854281b94403@ti.com>
+In-Reply-To: <d91e7b91-4197-3f5e-ba0d-854281b94403@ti.com>
+From:   Peter Chen <hzpeterchen@gmail.com>
+Date:   Thu, 7 May 2020 11:48:08 +0800
+Message-ID: <CAL411-oycAoGFwStjcr4Xjxat=p0syketTLf7yN+ntBrFsCY-Q@mail.gmail.com>
+Subject: Re: [PATH v4 1/2] phy: cadence: salvo: add salvo phy driver
+To:     Kishon Vijay Abraham I <kishon@ti.com>
+Cc:     Oliver Graute <oliver.graute@gmail.com>,
+        Peter Chen <peter.chen@nxp.com>, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        jun.li@nxp.com, linux-imx@nxp.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-John Stultz <john.stultz@linaro.org> =E4=BA=8E2020=E5=B9=B45=E6=9C=887=E6=
-=97=A5=E5=91=A8=E5=9B=9B =E4=B8=8A=E5=8D=886:27=E5=86=99=E9=81=93=EF=BC=9A
+On Mon, Apr 27, 2020 at 8:47 PM Kishon Vijay Abraham I <kishon@ti.com> wrote:
 >
-> On Wed, May 6, 2020 at 2:00 AM Jun Li <lijun.kernel@gmail.com> wrote:
-> > John Stultz <john.stultz@linaro.org> =E4=BA=8E2019=E5=B9=B410=E6=9C=883=
-0=E6=97=A5=E5=91=A8=E4=B8=89 =E4=B8=8A=E5=8D=885:18=E5=86=99=E9=81=93=EF=BC=
-=9A
-> > > On Tue, Oct 29, 2019 at 2:11 AM Felipe Balbi <balbi@kernel.org> wrote=
-:
-> > > > John Stultz <john.stultz@linaro.org> writes:
-> > > > > From: Yu Chen <chenyu56@huawei.com>
-> > > > >
-> > > > > It needs more time for the device controller to clear the CmdAct =
-of
-> > > > > DEPCMD on Hisilicon Kirin Soc.
-> > > >
-> > > > Why does it need more time? Why is it so that no other platform nee=
-ds
-> > > > more time, only this one? And which command, specifically, causes
-> > > > problem?
-> >
-> > Sorry for my back to this so late.
-> >
-> > This change is required on my dwc3 based HW too, I gave a check
-> > and the reason is suspend_clk is used in case the PIPE phy is at P3,
-> > this slow clock makes my EP command below timeout.
-> >
-> > dwc3_gadget_ep_cmd: ep0out: cmd 'Set Endpoint Configuration' [401]
-> > params 00001000 00000500 00000000 --> status: Timed Out
-> >
-> > Success case takes about 400us to complete, see below trace(44.286278
-> > - 44.285897 =3D 0.000381):
-> >
-> > configfs_acm.sh-822   [000] d..1    44.285896: dwc3_writel: addr
-> > 000000006d59aae1 value 00000401
-> > configfs_acm.sh-822   [000] d..1    44.285897: dwc3_readl: addr
-> > 000000006d59aae1 value 00000401
-> > ... ...
-> > configfs_acm.sh-822   [000] d..1    44.286278: dwc3_readl: addr
-> > 000000006d59aae1 value 00000001
-> > configfs_acm.sh-822   [000] d..1    44.286279: dwc3_gadget_ep_cmd:
-> > ep0out: cmd 'Set Endpoint Configuration' [401] params 00001000
-> > 00000500 00000000 --> status: Successful
-> >
-> > Hi John,
-> >
-> > Do you still have this problem? if yes, What's the value of
-> > USBLNKST[21:18] when the timeout happens?
+> Hi Peter,
 >
-> Sorry. As I mentioned, I was working to upstream a patchset that I
-> hadn't created, so the context I had was limited. As I couldn't
-> reproduce an issue without the change on the device I had, I figured
-> it would be best to drop it.
+> On 4/26/2020 12:30 PM, Peter Chen wrote:
+> > On Fri, Apr 10, 2020 at 12:30 AM Oliver Graute <oliver.graute@gmail.com> wrote:
+> >>
+> >> On 01/04/20, Peter Chen wrote:
+> >>> Cadence SALVO PHY is a 28nm product, and is only used for USB3 & USB2.
+> >>> According to the Cadence, this PHY is a legacy Module, and Sierra and
+> >>> Torrent are later evolutions from it, and their sequence overlap is
+> >>> minimal, meaning we cannot reuse either (Sierra & Torrent) of the PHY
+> >>> drivers.
+> >>>
+> >>> Signed-off-by: Peter Chen <peter.chen@nxp.com>
+> >>
+> >> Tested-by:  Oliver Graute <oliver.graute@kococonnector.com>
+> >
+> > Hi Kithon,
+> >
+> > Rob has already acked the dt-binding patch, would you please merge
+> > these two patches,
+>
+> Sure, I'll be merging it this week.
+>
 
-That was fine.
->
-> However, as you have some analysis and rational for why such a change
-> would be needed, I don't have an objection to it. Do you want to
-> resubmit the patch with your explanation and detailed log above in the
-> commit message?
+HI Kishon,
 
-Sure, I will resubmit the patch with my explanation added in commit message=
-.
+I still not find it at your next tree:
 
-thanks
-Li Jun
->
-> thanks
-> -john
+https://git.kernel.org/pub/scm/linux/kernel/git/kishon/linux-phy.git/tree/drivers/phy/cadence?h=next
+
+Would you please merge it, I have patches based on it, thanks.
+
+Peter
