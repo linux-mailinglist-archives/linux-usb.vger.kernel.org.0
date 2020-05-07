@@ -2,160 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A80281C96D9
-	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2020 18:49:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2008F1C971C
+	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2020 19:07:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726308AbgEGQtZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 May 2020 12:49:25 -0400
-Received: from mga09.intel.com ([134.134.136.24]:61733 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726222AbgEGQtX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 7 May 2020 12:49:23 -0400
-IronPort-SDR: 1FRq7hgC7FlOPxFC8eMJKdYaHBS66omjz7IaPSImsuxFDOjiRmy3KNFY35d+q16zn3KWSfHSWl
- X8YNNMkfdrfA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2020 09:49:22 -0700
-IronPort-SDR: aOjc+QNUpJMPIeJvnWDc90zGoPenbw59zGoPjYdrKuzN2wYBmzrj+cVkgoaQ19F1BzhBzqZxWC
- U180reNqT6wg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,364,1583222400"; 
-   d="scan'208";a="305169096"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 07 May 2020 09:49:20 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1jWji3-0008GL-Rn; Fri, 08 May 2020 00:49:19 +0800
-Date:   Fri, 08 May 2020 00:48:39 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- 91edf63d5022bd0464788ffb4acc3d5febbaf81d
-Message-ID: <5eb43be7.Ti+305zgsy8k7tJT%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+        id S1726946AbgEGRHF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 May 2020 13:07:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45676 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725949AbgEGRHE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 May 2020 13:07:04 -0400
+Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D2DC05BD43
+        for <linux-usb@vger.kernel.org>; Thu,  7 May 2020 10:07:03 -0700 (PDT)
+Received: by mail-qv1-xf49.google.com with SMTP id d4so6458085qva.16
+        for <linux-usb@vger.kernel.org>; Thu, 07 May 2020 10:07:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=ct3BK4gm/q86QmYuR5ZR/29gFnmZjaUluf46gNZVNR8=;
+        b=ei5Ui1IQ46onwaK7Bz8wzqZph0b2kZo3Jfy1QFsaPnPpn0mCG0eqN07k6ZtOyl8GyG
+         E2MHJcP1StTby58wMTkL0SYVrvqwC3GhlqQg4Vsar+Qtad8Vuh3AeliiD7Ga91u2N6Dg
+         XGruAipCZoeohg+0+jMdHVv7kNtdJyEF7uEnlVtLeqI6bLtWuvFJkHXYJbDRDT+9DKzD
+         RMW6ljhi4ckEjA6HuV1g+LVchwCu/cITcJ9zIMXWVzrkHWEzuco+IGtE5Jot+C55rvL8
+         OtI0mEyzD4PHrCaQK/vvOU3IcS6Ze03TkJmic8EOrDXcZtMP1d4VgceQxTxHZof6Rcdo
+         gT/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=ct3BK4gm/q86QmYuR5ZR/29gFnmZjaUluf46gNZVNR8=;
+        b=huvo2Up0xD9hYymr2RhjBsGv+/vhdambM3ljVXaZlB5dyYrT+3jIpZibbhGv+Ri6LL
+         BGqXoDnFr4IQI1AcWPfR8p5jAFqf0Dl+/MfZbf2PfZOnKQgIoSkAgyK9oP/W8iwBLYOx
+         r2NW+8emJv+KAPdKOdx5Xd3N5vJhq2ycd4CnWeznHZtxZ5y5D5oCLW18ndlHum3DKvWP
+         Hi21PNYLnuZoty+ZajZpfdDGSmLthorkEm7zI1K4li8GC1pjLYfp0ottuIwSZUy6jQud
+         6P9iDt18h2Lmr/ymRMU9/12x4910/LEG0Pd3fXP1Or5FNLZk+atAGAz3NnNL9lvVP2My
+         Haog==
+X-Gm-Message-State: AGi0PuYq8BFpJ6JWV59lj6MTWE0T0bXxrWcfyHd8cKHnq+AUA5St4oZS
+        SueOB+Lrr7nFqil9B6Qt7LlAyTOwA/uxbDT/
+X-Google-Smtp-Source: APiQypKRLt2zSY4Ou9VI6deks5k4MCfwUuX13qpxmUxO9UsmGQqhLChqeurC7hYZJC31zES8PtBlwUhzAipwcRJU
+X-Received: by 2002:a0c:910c:: with SMTP id q12mr14871311qvq.239.1588871222163;
+ Thu, 07 May 2020 10:07:02 -0700 (PDT)
+Date:   Thu,  7 May 2020 19:06:53 +0200
+Message-Id: <cover.1588870822.git.andreyknvl@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.26.2.526.g744177e7f7-goog
+Subject: [PATCH USB v3 0/5] usb: raw-gadget: fixes for 5.7-rcN
+From:   Andrey Konovalov <andreyknvl@google.com>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-linus
-branch HEAD: 91edf63d5022bd0464788ffb4acc3d5febbaf81d  usb: chipidea: msm: Ensure proper controller reset using role switch API
+I've put all raw-gadget fixes in a series, please ignore the previous
+patches.
 
-elapsed time: 599m
+I've dropped the patches that change the ABI for now (those need more
+testing anyway).
 
-configs tested: 101
-configs skipped: 1
+Changes in v3:
+- Dropped ABI breaking changes for .
+- A few more comment fixes for uapi headers.
+- Updated documentation.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Andrey Konovalov (5):
+  usb: raw-gadget: fix return value of ep read ioctls
+  usb: raw-gadget: improve uapi headers comments
+  usb: raw-gadget: fix gadget endpoint selection
+  usb: raw-gadget: support stalling/halting/wedging endpoints
+  usb: raw-gadget: documentation updates
 
-arm                                 defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                               allnoconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm64                            allmodconfig
-arm64                             allnoconfig
-sparc                            allyesconfig
-m68k                             allyesconfig
-nds32                             allnoconfig
-mips                              allnoconfig
-i386                             allyesconfig
-nios2                            allyesconfig
-alpha                               defconfig
-parisc                           allyesconfig
-alpha                            allyesconfig
-m68k                              allnoconfig
-s390                             allmodconfig
-um                                allnoconfig
-riscv                               defconfig
-csky                             allyesconfig
-openrisc                            defconfig
-csky                                defconfig
-i386                              allnoconfig
-i386                                defconfig
-i386                              debian-10.3
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                           sun3_defconfig
-m68k                                defconfig
-nios2                               defconfig
-c6x                              allyesconfig
-c6x                               allnoconfig
-openrisc                         allyesconfig
-nds32                               defconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-h8300                            allmodconfig
-xtensa                              defconfig
-arc                                 defconfig
-arc                              allyesconfig
-microblaze                       allyesconfig
-sh                               allmodconfig
-sh                                allnoconfig
-microblaze                        allnoconfig
-mips                             allyesconfig
-mips                             allmodconfig
-parisc                            allnoconfig
-parisc                              defconfig
-parisc                           allmodconfig
-powerpc                             defconfig
-powerpc                          allyesconfig
-powerpc                          rhel-kconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a005-20200507
-i386                 randconfig-a004-20200507
-i386                 randconfig-a001-20200507
-i386                 randconfig-a002-20200507
-i386                 randconfig-a003-20200507
-i386                 randconfig-a006-20200507
-x86_64               randconfig-a015-20200507
-x86_64               randconfig-a014-20200507
-x86_64               randconfig-a012-20200507
-x86_64               randconfig-a013-20200507
-x86_64               randconfig-a011-20200507
-x86_64               randconfig-a016-20200507
-i386                 randconfig-a012-20200507
-i386                 randconfig-a016-20200507
-i386                 randconfig-a014-20200507
-i386                 randconfig-a011-20200507
-i386                 randconfig-a015-20200507
-i386                 randconfig-a013-20200507
-x86_64               randconfig-a004-20200507
-x86_64               randconfig-a006-20200507
-x86_64               randconfig-a002-20200507
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-s390                             allyesconfig
-s390                              allnoconfig
-s390                                defconfig
-sparc                               defconfig
-sparc64                             defconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                          allmodconfig
-um                               allmodconfig
-um                               allyesconfig
-um                                  defconfig
-x86_64                                   rhel
-x86_64                               rhel-7.6
-x86_64                    rhel-7.6-kselftests
-x86_64                         rhel-7.2-clear
-x86_64                                    lkp
-x86_64                              fedora-25
-x86_64                                  kexec
+ Documentation/usb/raw-gadget.rst       |  37 ++-
+ drivers/usb/gadget/legacy/raw_gadget.c | 314 ++++++++++++++++++++-----
+ include/uapi/linux/usb/raw_gadget.h    | 108 ++++++++-
+ 3 files changed, 377 insertions(+), 82 deletions(-)
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+2.26.2.526.g744177e7f7-goog
+
