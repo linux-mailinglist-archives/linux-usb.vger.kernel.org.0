@@ -2,121 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D03B71C9729
-	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2020 19:07:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CF2C1C97D8
+	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2020 19:34:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728040AbgEGRHU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 May 2020 13:07:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45722 "EHLO
+        id S1726515AbgEGRea (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 May 2020 13:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727972AbgEGRHO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 May 2020 13:07:14 -0400
-Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C360C05BD43
-        for <linux-usb@vger.kernel.org>; Thu,  7 May 2020 10:07:14 -0700 (PDT)
-Received: by mail-qt1-x849.google.com with SMTP id g8so7938075qtq.2
-        for <linux-usb@vger.kernel.org>; Thu, 07 May 2020 10:07:14 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1726308AbgEGRea (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 May 2020 13:34:30 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F00C05BD43;
+        Thu,  7 May 2020 10:34:30 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id d184so3338615pfd.4;
+        Thu, 07 May 2020 10:34:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=7/PrXCrrp5hii78pLoOm9OApKV03tezSTtbf21wn2GQ=;
-        b=vJ2cM97lrsVanMLQWlqZTgaTuRFdaYInxkAXTc1yX40b8vt+T925FTXgJal0sutkm/
-         Qod3Kghc5YBrrYcrNJdKZwVj5qtIf40beNkJT2yW5S1C0QnqVbWws9SKTPfagLcfREO0
-         gD5X+dGPLcTZSDKGFGnChODgWTY5EzyAPi3VA+ZD5mmDoS2rduAzlZDc9L0scC8/LOx+
-         2qCOly+pNoVVgZZEwX0oZ/iaAYI3wIKJXNyiSIRtdzCGKHRVlnZ6U2ahWUcez0t8gRHy
-         38s5DeSTRojmMQcMWprmAHfOoWWA77z3TSlb4p86rDN++UNEQNfB3iEnJHTvlHLGMl7Z
-         t4Xw==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=XEz7HnmXuCDzCluvC2ciL1p4XelzoBx3kOa65ITXPbY=;
+        b=k2Uw6oeaTUmXWP0RgNbyGpnpPuYiNoHYqdYuYxhX+QUT6YnlL2k6pxSDz4BOu1dUha
+         H5suKdKb8C9eHW5tyv9g9HL6OtuptlEv4r2pOwV92yTPBYdstNmcyV1iiGgSAhJBDijK
+         vSefMGhwU0lgDWF7Y8q9YJz+yONuCFi+L9UADzcmY5l8BDQN0keg9Mopb+XnMG1EULO0
+         YHeOcJLX4ShoiVFBXiCiPHLthWicZzQxypRxKE1Qg5Imp2CHGr3KO7MwN66RfZK9P6T2
+         wWUbaZyOy1kpn39ZceUEqVbSibZuVolwIZwYmAJSCCNWCKD/HWHrdi0NIqbvECeeuELT
+         H/XA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=7/PrXCrrp5hii78pLoOm9OApKV03tezSTtbf21wn2GQ=;
-        b=b5/bzDrNNHEKlImVta0yZrwckzlenRZyGCPUM/zZvMr+TpN4RISX4QB0CjR36Y8+Jx
-         FvhmWCF1KcABpEvnSCuh8HzwiP7BOM1Z+SCKSuZeVRvCzVDJxR4vwbtyzEP0/Z0kbffH
-         83fiAJUZibaT8szL3iBCUVHLMKJ1InAH7j8K1gugBki8shP6PK6EQQ5GZfBS3K4bupr/
-         XzdEVn4lsUV9MpuW+qLwYVtTiPJ7Ao+BoJ8vyGyz6jJMqcutC+WkwC8Bd81/ESdHciHb
-         VlVh9tDrnfMtZFTrCGHP3/NFRpduL0j36DLKqMswlyo4L82zMs1zaPUTJHUlxuy7HTxY
-         SHbQ==
-X-Gm-Message-State: AGi0PuYUAqXClSrpv7boJnwqrV6Vy/ZFyWGsRcCZYu7z0AUD1PtWNRs1
-        leqHs4UH0PUUzQqIw4fsMYxl7DzYMJ+sEV6z
-X-Google-Smtp-Source: APiQypIy9HLMvQvr1IoBhkEe19b6+HAz9x1jbIn1bDPc6Z2265SQK2szy4myS1YuI24410DJjPCvk1IQhD93SQVM
-X-Received: by 2002:a0c:ffa3:: with SMTP id d3mr14017803qvv.12.1588871233518;
- Thu, 07 May 2020 10:07:13 -0700 (PDT)
-Date:   Thu,  7 May 2020 19:06:58 +0200
-In-Reply-To: <cover.1588870822.git.andreyknvl@google.com>
-Message-Id: <b07af6ea7091afe7aa528b3015e041999aeebe97.1588870822.git.andreyknvl@google.com>
-Mime-Version: 1.0
-References: <cover.1588870822.git.andreyknvl@google.com>
-X-Mailer: git-send-email 2.26.2.526.g744177e7f7-goog
-Subject: [PATCH USB v3 5/5] usb: raw-gadget: documentation updates
-From:   Andrey Konovalov <andreyknvl@google.com>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=XEz7HnmXuCDzCluvC2ciL1p4XelzoBx3kOa65ITXPbY=;
+        b=cx6uzKBnOcOINCNTDojnUPG92s5dDoeDFdR40MO8DS//G8Y3BY4Em1tjURuiQNXE89
+         kdm2U9IQM6N4jfGHwb4H2tXP1I5+hEIg/bLiSQrglhnfFQq9P+NNHBUEwO/1DDiG27bk
+         KT68Z0lhhs0iPAUJ7+EE8WY0kvll85RBd7LHuX3ZNT/4V8gdxPPQDldD/zsWi8bPK/co
+         ps+PIy7z965u6Z1JrfIK7FJ8Uo3IZBGMddQY6P/06RM0QWZ4Q26Sr+l9kGHVm+nPsmOI
+         0GOC8kdqa2yRcS41HXgDs7IAxSR8bVEeqxZf+87yw7733oVGtrQsq1waELCkLUZV/5ui
+         x0mQ==
+X-Gm-Message-State: AGi0Pub5hHVCa9mVlKcBsyVxQ53jiNyHnkdYqJWM0LhRuudH7CsD7ZnP
+        dGWL1vIoxU1ef8b901rKZUyfV4Nu+os=
+X-Google-Smtp-Source: APiQypKWfdSFshYR1R3HDsp46ph6fFoMsTiaEeFvYHETawZEvcn2RK/7+IAcBUp9J3THS0amPDvOQw==
+X-Received: by 2002:a63:b11:: with SMTP id 17mr12452336pgl.3.1588872869474;
+        Thu, 07 May 2020 10:34:29 -0700 (PDT)
+Received: from stbsrv-and-01.and.broadcom.net ([192.19.231.250])
+        by smtp.gmail.com with ESMTPSA id y14sm5368802pff.205.2020.05.07.10.34.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 May 2020 10:34:29 -0700 (PDT)
+From:   Al Cooper <alcooperx@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Al Cooper <alcooperx@gmail.com>,
         Alan Stern <stern@rowland.harvard.edu>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v7 0/5] Add XHCI, EHCI and OHCI support for Broadcom STB SoS's
+Date:   Thu,  7 May 2020 13:34:03 -0400
+Message-Id: <20200507173408.20754-1-alcooperx@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Mention the issue with fixed UDC addresses.
+v7 - Cleanup ehci-brcm.c as requested by Greg Kroah-Hartman.
+   - Split out Makefile re-order change into a separate commit.
 
-Links external examples and test suite.
+v6 - Remove "contains:" from compatible section of
+     brcm,bcm7445-ehci.yaml as requested by Rob Herring.
 
-Add more implmenetation details and potential improvements.
+v5 - Use devm_platform_get_and_ioremap_resource() in ehci-brcm.c
+     as requested by Andy Shevchenko.
+   - Add pm_runtime_set_active() to ehci_resume() in ehci-brcm.c
+     as requested by Alan Stern.
 
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
----
- Documentation/usb/raw-gadget.rst | 30 ++++++++++++++++++++++++++++--
- 1 file changed, 28 insertions(+), 2 deletions(-)
+v4 - A few more fixes to the brcm,bcm7445-ehci.yaml dt-bindings
+     document requested by Rob Herring.
+   - Fixed ordering issue in MAINTAINERS as requested by
+     Andy Shevchenko.
 
-diff --git a/Documentation/usb/raw-gadget.rst b/Documentation/usb/raw-gadget.rst
-index 3b3d78e850b2..68d879a8009e 100644
---- a/Documentation/usb/raw-gadget.rst
-+++ b/Documentation/usb/raw-gadget.rst
-@@ -49,10 +49,36 @@ The typical usage of Raw Gadget looks like:
-    Raw Gadget and react to those depending on what kind of USB device
-    needs to be emulated.
- 
-+Note, that some UDC drivers have fixed addresses assigned to endpoints, and
-+therefore arbitrary endpoint addresses can't be used in the descriptors.
-+Nevertheles, Raw Gadget provides a UDC-agnostic way to write USB gadgets.
-+Once a USB_RAW_EVENT_CONNECT event is received via USB_RAW_IOCTL_EVENT_FETCH,
-+the USB_RAW_IOCTL_EPS_INFO ioctl can be used to find out information about
-+endpoints that the UDC driver has. Based on that information, the user must
-+chose UDC endpoints that will be used for the gadget being emulated, and
-+properly assign addresses in endpoint descriptors.
-+
-+You can find usage examples (along with a test suite) here:
-+
-+https://github.com/xairy/raw-gadget
-+
-+Internal details
-+~~~~~~~~~~~~~~~~
-+
-+Currently every endpoint read/write ioctl submits a USB request and waits until
-+its completion. This is the desired mode for coverage-guided fuzzing (as we'd
-+like all USB request processing happen during the lifetime of a syscall),
-+and must be kept in the implementation. (This might be slow for real world
-+applications, thus the O_NONBLOCK improvement suggestion below.)
-+
- Potential future improvements
- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 
--- Reporting more events (suspend, resume, etc.) through
--  USB_RAW_IOCTL_EVENT_FETCH.
-+- Report more events (suspend, resume, etc.) through USB_RAW_IOCTL_EVENT_FETCH.
- 
- - Support O_NONBLOCK I/O.
-+
-+- Support USB 3 features (accept SS endpoint companion descriptor when
-+  enabling endpoints; allow providing stream_id for bulk transfers).
-+
-+- Support ISO transfer features (expose frame_number for completed requests).
+v3 - Addressed all of Andy Shevchenko's review comments for
+     ehci-brcm.c.
+   - Fixed the brcm,bcm7445-ehci.yaml dt-bindings document,
+     dt_binding_check now passes.
+   - Added the XHCI functionality to xhci-plat.c instead of creating
+     new brcmstb files, as suggested by Mathias Nyman.
+
+v2 - Addressed Andy Shevchenko's review comments.
+   - Fixed dt_binding_check error pointed out by Rob Herring.
+   - Removed pr_info message in ehci_brcm_init as suggested by
+     Greg Kroah-Hartman.
+
+This adds support for the XHCI, EHCI and OHCI host controllers found
+in Broadcom STB SoC's. These drivers depend on getting access to the
+new Broadcom STB USB PHY driver through a device-tree phandle and
+will fail if the driver is not available.
+
+Al Cooper (5):
+  usb: xhci: Change the XHCI link order in the Makefile
+  dt-bindings: Add Broadcom STB USB support
+  usb: xhci: xhci-plat: Add support for Broadcom STB SoC's
+  usb: ehci: Add new EHCI driver for Broadcom STB SoC's
+  usb: host: Add ability to build new Broadcom STB USB drivers
+
+ .../bindings/usb/brcm,bcm7445-ehci.yaml       |  59 ++++
+ .../devicetree/bindings/usb/usb-xhci.txt      |   1 +
+ MAINTAINERS                                   |   8 +
+ drivers/usb/host/Kconfig                      |  20 ++
+ drivers/usb/host/Makefile                     |  17 +-
+ drivers/usb/host/ehci-brcm.c                  | 292 ++++++++++++++++++
+ drivers/usb/host/xhci-plat.c                  |  10 +
+ 7 files changed, 401 insertions(+), 6 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/brcm,bcm7445-ehci.yaml
+ create mode 100644 drivers/usb/host/ehci-brcm.c
+
 -- 
-2.26.2.526.g744177e7f7-goog
+2.17.1
 
