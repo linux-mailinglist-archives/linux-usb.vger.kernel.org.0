@@ -2,93 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3868E1C9DF4
-	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2020 23:53:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FBEC1C9E09
+	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2020 23:59:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726690AbgEGVw7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 May 2020 17:52:59 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:35817 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726437AbgEGVw7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 May 2020 17:52:59 -0400
-Received: by mail-ot1-f67.google.com with SMTP id k110so5900245otc.2;
-        Thu, 07 May 2020 14:52:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=CU/jhaPmhAqWWMxE+0ciw1zj8C+7RdKkmDqSPqeUli8=;
-        b=ECf0ToFO/iFtn71D4Kvx0tUpUrFRTQFNS8AwPf1AEerJpYWqShI01SNy/ud8UUea88
-         xDkqT/WojV6XxNF6HczHC/1IhoNkYRxkBsWABoP2mED4eouVtBAyeDCI+lrVYo0nbxW/
-         4Evwul7yLpuDrnTXV4fBN6uzGQFhDXqv0ulcglcX8P72RlAbElH9cggm6V4vlGRYpMea
-         ErW5nNRZvh1H9pb6fRdGOZw0Vwm99f9aOh23YhMFNdShOIC3lqYNe+bI6zlEpfhmCR/O
-         PTABrbBdr6OhJyzECgQmnyKcuP3Cjq1g4JyO+rT6kZm1K5U7/N2Y0JN5D9kXPg2PDo+t
-         zVxQ==
-X-Gm-Message-State: AGi0PuYoFJOtqifihA2XGYureuniW90G7TYOvf6T25RkkPVAJMAqlKS1
-        TkNs88uDjz/1tTqYSxiteg==
-X-Google-Smtp-Source: APiQypI1zeZzisqllNqDsttAgfTLEwQGuSYUTjKm2oOFsg8op6zupqbBMYh9erodVZ5cDOxXvTFLIw==
-X-Received: by 2002:a9d:592:: with SMTP id 18mr11812118otd.337.1588888378253;
-        Thu, 07 May 2020 14:52:58 -0700 (PDT)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id w62sm1680584oia.32.2020.05.07.14.52.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 May 2020 14:52:57 -0700 (PDT)
-Received: (nullmailer pid 8285 invoked by uid 1000);
-        Thu, 07 May 2020 21:52:56 -0000
-Date:   Thu, 7 May 2020 16:52:56 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Cc:     f.fainelli@gmail.com, gregkh@linuxfoundation.org, wahrenst@gmx.net,
-        helgaas@kernel.org, linux-kernel@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        tim.gover@raspberrypi.org, linux-pci@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v8 4/4] USB: pci-quirks: Add Raspberry Pi 4 quirk
-Message-ID: <20200507215256.GA8228@bogus>
-References: <20200505161318.26200-1-nsaenzjulienne@suse.de>
- <20200505161318.26200-5-nsaenzjulienne@suse.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200505161318.26200-5-nsaenzjulienne@suse.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1726580AbgEGV7f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 May 2020 17:59:35 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:59485 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726531AbgEGV7e (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 May 2020 17:59:34 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1588888774; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=2JzIuaOGhuGmjvd/Q8TuZu3HdVzNfJc54yOI38k0duI=; b=hITQ/bMPl9/ipX9yj4BTdQSw9RHjjSEA4cnCyv6uqbG6gjjLmI3bIN3I7x2JgUxycW2iZVCA
+ Fdwj7EfsU+mVWOHg4AqTWyKbkiJpIT7yOSyEf5k4zaY13mRa+4da7nsYI4/jYVzKAVY0ENGp
+ P9oIFUCMveE2cjy970u16TnOKd4=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5eb484c5.7f707f34a688-smtp-out-n01;
+ Thu, 07 May 2020 21:59:33 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 19D15C43637; Thu,  7 May 2020 21:59:33 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 10DA3C433D2;
+        Thu,  7 May 2020 21:59:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 10DA3C433D2
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=wcheng@codeaurora.org
+From:   Wesley Cheng <wcheng@codeaurora.org>
+To:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        balbi@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        jackp@codeaurora.org, Wesley Cheng <wcheng@codeaurora.org>
+Subject: [RFC 0/3] Re-introduce TX FIFO resize for larger EP bursting 
+Date:   Thu,  7 May 2020 14:59:25 -0700
+Message-Id: <1588888768-25315-1-git-send-email-wcheng@codeaurora.org>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue,  5 May 2020 18:13:17 +0200, Nicolas Saenz Julienne wrote:
-> On the Raspberry Pi 4, after a PCI reset, VL805's firmware may either be
-> loaded directly from an EEPROM or, if not present, by the SoC's
-> VideoCore. Inform VideoCore that VL805 was just reset.
-> 
-> Also, as this creates a dependency between USB_PCI and VideoCore's
-> firmware interface, and since USB_PCI can't be set as a module neither
-> this can. Reflect that on the firmware interface Kconfg.
-> 
-> Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-> ---
-> 
-> Changes since v5:
->  - Fix Kconfig issue with allmodconfig
-> 
-> Changes since v4:
->  - Do not split up error message
-> 
-> Changes since v3:
->  - Add more complete error message
-> 
-> Changes since v1:
->  - Make RASPBERRYPI_FIRMWARE dependent on this quirk to make sure it
->    gets compiled when needed.
-> 
->  drivers/firmware/Kconfig      |  3 ++-
->  drivers/usb/host/pci-quirks.c | 16 ++++++++++++++++
->  2 files changed, 18 insertions(+), 1 deletion(-)
-> 
+Currently, there is no functionality to allow for resizing the TXFIFOs, and
+relying on the HW default setting for the TXFIFO depth.  In most cases, the
+HW default is probably sufficient, but for USB compositions that contain
+multiple functions that require EP bursting, the default settings
+might not be enough.  Also to note, the current SW will assign an EP to a
+function driver w/o checking to see if the TXFIFO size for that particular
+EP is large enough. (this is a problem if there are multiple HW defined
+values for the TXFIFO size)
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+It is mentioned in the SNPS databook that a minimum of TX FIFO depth = 3
+is required for an EP that supports bursting.  Otherwise, there may be
+frequent occurences of bursts ending.  For high bandwidth functions,
+such as data tethering (protocols that support data aggregation), mass
+storage, and media transfer protocol (over FFS), the bMaxBurst value can be
+large, and a bigger TXFIFO depth may prove to be beneficial in terms of USB
+throughput. (which can be associated to system access latency, etc...)  It
+allows for a more consistent burst of traffic, w/o any interruptions, as
+data is readily available in the FIFO.
+
+With testing done using the mass storage function driver, the results show
+that with a larger TXFIFO depth, the bandwidth increased significantly.
+
+Test Parameters:
+ - Platform: Qualcomm SM8150
+ - bMaxBurst = 6
+ - USB req size = 256kB
+ - Num of USB reqs = 16
+ - USB Speed = Super-Speed
+ - Function Driver: Mass Storage (w/ ramdisk)
+ - Test Application: CrystalDiskMark
+
+Results:
+
+TXFIFO Depth = 3 max packets
+
+Test Case | Data Size | AVG tput (in MB/s)
+-------------------------------------------
+Sequential|1 GB x     | 
+Read      |9 loops    | 193.60
+	  |           | 195.86
+          |           | 184.77
+          |           | 193.60
+-------------------------------------------
+
+TXFIFO Depth = 6 max packets
+
+Test Case | Data Size | AVG tput (in MB/s)
+-------------------------------------------
+Sequential|1 GB x     | 
+Read      |9 loops    | 287.35
+	  |           | 304.94
+          |           | 289.64
+          |           | 293.61
+-------------------------------------------
+
+Wesley Cheng (3):
+  usb: dwc3: Resize TX FIFOs to meet EP bursting requirements
+  arm64: boot: dts: qcom: sm8150: Enable dynamic TX FIFO resize logic
+  dt-bindings: usb: dwc3: Add entry for tx-fifo-resize
+
+ Documentation/devicetree/bindings/usb/dwc3.txt |  2 +-
+ arch/arm64/boot/dts/qcom/sm8150.dtsi           |  1 +
+ drivers/usb/dwc3/core.c                        |  2 +
+ drivers/usb/dwc3/core.h                        |  6 ++
+ drivers/usb/dwc3/ep0.c                         | 40 ++++++++++-
+ drivers/usb/dwc3/gadget.c                      | 95 ++++++++++++++++++++++++++
+ 6 files changed, 144 insertions(+), 2 deletions(-)
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
