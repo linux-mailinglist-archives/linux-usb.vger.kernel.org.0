@@ -2,104 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C59671C8AD7
-	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2020 14:34:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD49F1C8B39
+	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2020 14:45:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726884AbgEGMdr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 May 2020 08:33:47 -0400
-Received: from mga17.intel.com ([192.55.52.151]:56628 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725947AbgEGMdq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 7 May 2020 08:33:46 -0400
-IronPort-SDR: uwnerz3jw2413KLcLg/J9sq6l/V7UNPlIVehgghZVqjYOvnVfTVAonjOCHra4ipTc1YZt6fmPa
- R5Q/FjgD4a5Q==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2020 05:33:46 -0700
-IronPort-SDR: +1OWKyvZqXbaz4Hadljb0cNX8dJujF+OY7bq1KsEwpbMg/imZET7tyloAg7Ocl09zcF23uratp
- wABJANClkiTw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,363,1583222400"; 
-   d="scan'208";a="461831878"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga005.fm.intel.com with ESMTP; 07 May 2020 05:33:43 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jWfik-005DGk-O0; Thu, 07 May 2020 15:33:46 +0300
-Date:   Thu, 7 May 2020 15:33:46 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     heikki.krogerus@linux.intel.com, robh+dt@kernel.org,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        nikolaus.voss@loewensteinmedical.de, garsilva@embeddedor.com,
-        keescook@chromium.org
-Subject: Re: [PATCH 2/2] usb: typec: tps6598x: Add OF probe binding
-Message-ID: <20200507123346.GU185537@smile.fi.intel.com>
-References: <20200507122352.1773661-1-bryan.odonoghue@linaro.org>
- <20200507122352.1773661-3-bryan.odonoghue@linaro.org>
+        id S1725903AbgEGMpZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 May 2020 08:45:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32936 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725857AbgEGMpZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 May 2020 08:45:25 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B073C05BD0A
+        for <linux-usb@vger.kernel.org>; Thu,  7 May 2020 05:45:24 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id k12so6340380wmj.3
+        for <linux-usb@vger.kernel.org>; Thu, 07 May 2020 05:45:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tc54G0swG8CTxHpRzIJicQ+dWaw02lBcaaXJW9A91/A=;
+        b=cgkCoFI6x7ULrpuxlc3Pot4OLbdagWZR3Riu4oqoLyuTnqTUtaw/P1oSLU9GUNZLBh
+         uBzz6Tn/obB4yHCjWHFNB00yoG2NX2PzJx+68S20f2iamTkB9rBhE3CbIO7K8/ng535Z
+         PP/4T6ahdJEid5BH6ota2i6158SrfDoU4hCMjRSEUZY/cXcZ36thF7i5KpFYhRHsAwst
+         hFHdPMNWIhlDUfdOgxISjBLDq3GESj9wmW2pMwoNIwiF+xfOYB3giQ1rvFGg04+KbTYJ
+         7qcqWRLaP6XKGxPpD50zmm8Ljzoy5q3Wn6QG1dxtCg+vr1Rr83WXfYIYUnLpjD/5IZ7G
+         hPfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tc54G0swG8CTxHpRzIJicQ+dWaw02lBcaaXJW9A91/A=;
+        b=r+HIh6oP68ooMhEbmoMg2I+6Aak+0/7IcjdGcr0RryJkjCUBQRMQRp/oRsZC1VGRFz
+         S3yy6NkZC488lVPCXdXiggar/ARM9mQCfPMKx6YUlORl8hPKx9GsJdcApXGQ0N6jSpTy
+         EqW9JDeIfzwoo/3YiM/Rqv/nkjjPeOxqyPzR6RGmjNlFk+J0UI71PAzhjbB4ESdevp2o
+         xCBHFhyAchg+ipPeyT6uR3LA4UZntQ4n6yPahO1ypDSF3t1DbcA1+uOD0R2aN4T7B1+E
+         65HPu3B8Dz0glv8K9I4MLoYGerRNblvpTJAgIO+PnJhiN32vvZALODoNEHNuKo00oU1O
+         4e8g==
+X-Gm-Message-State: AGi0PuYXUSIO3dYghNAiQFNCkJ50Yr6kTLDIdHe6jryVHR1BuUJqgH/R
+        kZY0ML6nEPjTH4nrd+D6WUmMqw==
+X-Google-Smtp-Source: APiQypJUW4IMne2lqh0irngXT2iCewbj1NbU/g07pTPKmQaWFrKPK5bXCb6d0RGyftkr/I2AfTCWsA==
+X-Received: by 2002:a1c:4d17:: with SMTP id o23mr9736752wmh.47.1588855523069;
+        Thu, 07 May 2020 05:45:23 -0700 (PDT)
+Received: from localhost.localdomain ([176.61.57.127])
+        by smtp.gmail.com with ESMTPSA id c17sm8034106wrn.59.2020.05.07.05.45.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 May 2020 05:45:22 -0700 (PDT)
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     heikki.krogerus@linux.intel.com, robh+dt@kernel.org,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        nikolaus.voss@loewensteinmedical.de,
+        andriy.shevchenko@linux.intel.com, garsilva@embeddedor.com,
+        keescook@chromium.org,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Subject: [PATCH 0/1] Add USB role switch to tps6598x
+Date:   Thu,  7 May 2020 13:45:55 +0100
+Message-Id: <20200507124556.1774311-1-bryan.odonoghue@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200507122352.1773661-3-bryan.odonoghue@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 07, 2020 at 01:23:52PM +0100, Bryan O'Donoghue wrote:
-> Adds a MODULE_DEVICE_TABLE() to allow probing of this driver from a DTS
-> setting.
-> 
-> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Nikolaus Voss <nikolaus.voss@loewensteinmedical.de>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: Gustavo A. R. Silva <garsilva@embeddedor.com>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: linux-usb@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> ---
->  drivers/usb/typec/tps6598x.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/tps6598x.c b/drivers/usb/typec/tps6598x.c
-> index 0698addd1185..61c6761072c9 100644
-> --- a/drivers/usb/typec/tps6598x.c
-> +++ b/drivers/usb/typec/tps6598x.c
-> @@ -563,6 +563,14 @@ static int tps6598x_remove(struct i2c_client *client)
->  	return 0;
->  }
->  
-> +#ifdef CONFIG_OF
+This patch - adds USB role switching to the TI TPS6598x. It has been tested
+out with a ChipIdea controller inside a Qualcomm MSM8939.
 
-No need for this (and thus for of_match_ptr() macro below). Saving few dozens of bytes?
+Right now you need to have configured the TPS firmware with the TI
+configuration tool so that the chip knows if it should initiate or accept
+data and power role swaps.
 
-> +static const struct of_device_id tps6598x_of_match[] = {
-> +	{ .compatible = "ti,tps6598x", },
+https://www.ti.com/lit/an/slva843a/slva843a.pdf
 
-> +	{},
+Heikki mentioned that on the ACPI systems the firmware had been
+pre-configured to do data/power role swaps. On the hardware I have this is
+the case also, which is why I did't invest more time in adding DT bindings
+to control data/power roles that I don't need or necessarily support with
+the reference hardware.
 
-No comma for terminator line.
+As-is this code will do role-swappping nicely for me, and I think should be
+safe on existing ACPI systems.
 
-> +};
-> +MODULE_DEVICE_TABLE(of, tps6598x_of_match);
-> +#endif
-> +
->  static const struct i2c_device_id tps6598x_id[] = {
->  	{ "tps6598x" },
->  	{ }
-> @@ -572,6 +580,7 @@ MODULE_DEVICE_TABLE(i2c, tps6598x_id);
->  static struct i2c_driver tps6598x_i2c_driver = {
->  	.driver = {
->  		.name = "tps6598x",
-> +		.of_match_table = of_match_ptr(tps6598x_of_match),
+Bryan O'Donoghue (1):
+  usb: typec: tps6598x: Add USB role switching logic
+
+ drivers/usb/typec/tps6598x.c | 56 +++++++++++++++++++++++++++++++-----
+ 1 file changed, 49 insertions(+), 7 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.25.1
 
