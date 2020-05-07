@@ -2,82 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 231651C9DE4
-	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2020 23:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3868E1C9DF4
+	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2020 23:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727105AbgEGVtU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 May 2020 17:49:20 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:42819 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726437AbgEGVtU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 May 2020 17:49:20 -0400
-Received: by mail-oi1-f193.google.com with SMTP id i13so6609505oie.9;
-        Thu, 07 May 2020 14:49:19 -0700 (PDT)
+        id S1726690AbgEGVw7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 May 2020 17:52:59 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:35817 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726437AbgEGVw7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 May 2020 17:52:59 -0400
+Received: by mail-ot1-f67.google.com with SMTP id k110so5900245otc.2;
+        Thu, 07 May 2020 14:52:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=+K99SXnOq1F0ZjGFhanj1w7QeN74kq3HeaG8Lj+To9M=;
-        b=Vtv11yw9JLcRIiZl3lRUcfIYY/NUebo0pIvVCSnXQu17pKTgpRB4Kv4ypGWHuVhIri
-         OT6gbZnnwmlMLz6xHKsxRB1LqBiF+VtpELzmG0zvuYyz9TkWFQs+r++q8tDZXCDIHAUI
-         El3jd/kTX5KQ6pYj5usTf2dObyIE4M0QsZqgHX8Sj2dcYa2YuUmlbkrO1CdoXMMEN36F
-         rv+qWEYt6w+OIi3OrZa6uUt3pXYevHhO+BSOOpu0RGBQvaeAxD9VRKojbGxSvcqDftbQ
-         z9FY9mPKYp5c+SocRsROkSAI4/+yXWi3iKS2N7xvhPRlHV08CI35Meg4bPxrm5Nj7Ice
-         6CzA==
-X-Gm-Message-State: AGi0PuaL6nLcELYPNMLKlOhI/xQwvsicFEOe+v4TGrGhclFe1tCT+lsW
-        3gVqVoPQ6xES6OCcUWEw4Q==
-X-Google-Smtp-Source: APiQypKdSAfXlYDSJkrzlHUQWVZ3sDz1eGY4XlY4moRp5cxhz0qwaJnHQ2p2QyHEOMcpweAS8N35kw==
-X-Received: by 2002:aca:447:: with SMTP id 68mr7898114oie.94.1588888159223;
-        Thu, 07 May 2020 14:49:19 -0700 (PDT)
+        bh=CU/jhaPmhAqWWMxE+0ciw1zj8C+7RdKkmDqSPqeUli8=;
+        b=ECf0ToFO/iFtn71D4Kvx0tUpUrFRTQFNS8AwPf1AEerJpYWqShI01SNy/ud8UUea88
+         xDkqT/WojV6XxNF6HczHC/1IhoNkYRxkBsWABoP2mED4eouVtBAyeDCI+lrVYo0nbxW/
+         4Evwul7yLpuDrnTXV4fBN6uzGQFhDXqv0ulcglcX8P72RlAbElH9cggm6V4vlGRYpMea
+         ErW5nNRZvh1H9pb6fRdGOZw0Vwm99f9aOh23YhMFNdShOIC3lqYNe+bI6zlEpfhmCR/O
+         PTABrbBdr6OhJyzECgQmnyKcuP3Cjq1g4JyO+rT6kZm1K5U7/N2Y0JN5D9kXPg2PDo+t
+         zVxQ==
+X-Gm-Message-State: AGi0PuYoFJOtqifihA2XGYureuniW90G7TYOvf6T25RkkPVAJMAqlKS1
+        TkNs88uDjz/1tTqYSxiteg==
+X-Google-Smtp-Source: APiQypI1zeZzisqllNqDsttAgfTLEwQGuSYUTjKm2oOFsg8op6zupqbBMYh9erodVZ5cDOxXvTFLIw==
+X-Received: by 2002:a9d:592:: with SMTP id 18mr11812118otd.337.1588888378253;
+        Thu, 07 May 2020 14:52:58 -0700 (PDT)
 Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id b25sm1671203otj.7.2020.05.07.14.49.18
+        by smtp.gmail.com with ESMTPSA id w62sm1680584oia.32.2020.05.07.14.52.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 May 2020 14:49:18 -0700 (PDT)
-Received: (nullmailer pid 1308 invoked by uid 1000);
-        Thu, 07 May 2020 21:49:17 -0000
-Date:   Thu, 7 May 2020 16:49:17 -0500
+        Thu, 07 May 2020 14:52:57 -0700 (PDT)
+Received: (nullmailer pid 8285 invoked by uid 1000);
+        Thu, 07 May 2020 21:52:56 -0000
+Date:   Thu, 7 May 2020 16:52:56 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
 Cc:     f.fainelli@gmail.com, gregkh@linuxfoundation.org, wahrenst@gmx.net,
         helgaas@kernel.org, linux-kernel@vger.kernel.org,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        tim.gover@raspberrypi.org, linux-pci@vger.kernel.org,
+        linux-usb@vger.kernel.org,
         Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        bcm-kernel-feedback-list@broadcom.com, tim.gover@raspberrypi.org,
-        linux-pci@vger.kernel.org, linux-usb@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
         linux-rpi-kernel@lists.infradead.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
         linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v8 3/4] PCI: brcmstb: Wait for Raspberry Pi's firmware
- when  present
-Message-ID: <20200507214917.GA876@bogus>
+Subject: Re: [PATCH v8 4/4] USB: pci-quirks: Add Raspberry Pi 4 quirk
+Message-ID: <20200507215256.GA8228@bogus>
 References: <20200505161318.26200-1-nsaenzjulienne@suse.de>
- <20200505161318.26200-4-nsaenzjulienne@suse.de>
+ <20200505161318.26200-5-nsaenzjulienne@suse.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200505161318.26200-4-nsaenzjulienne@suse.de>
+In-Reply-To: <20200505161318.26200-5-nsaenzjulienne@suse.de>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue,  5 May 2020 18:13:16 +0200, Nicolas Saenz Julienne wrote:
-> xHCI's PCI fixup, run at the end of pcie-brcmstb's probe, depends on
-> RPi4's VideoCore firmware interface to be up and running. It's possible
-> for both initializations to race, so make sure it's available prior to
-> starting.
+On Tue,  5 May 2020 18:13:17 +0200, Nicolas Saenz Julienne wrote:
+> On the Raspberry Pi 4, after a PCI reset, VL805's firmware may either be
+> loaded directly from an EEPROM or, if not present, by the SoC's
+> VideoCore. Inform VideoCore that VL805 was just reset.
+> 
+> Also, as this creates a dependency between USB_PCI and VideoCore's
+> firmware interface, and since USB_PCI can't be set as a module neither
+> this can. Reflect that on the firmware interface Kconfg.
 > 
 > Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-> 
 > ---
 > 
-> Changes since v6:
-> - Add more complete comment
+> Changes since v5:
+>  - Fix Kconfig issue with allmodconfig
 > 
->  drivers/pci/controller/pcie-brcmstb.c | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
+> Changes since v4:
+>  - Do not split up error message
+> 
+> Changes since v3:
+>  - Add more complete error message
+> 
+> Changes since v1:
+>  - Make RASPBERRYPI_FIRMWARE dependent on this quirk to make sure it
+>    gets compiled when needed.
+> 
+>  drivers/firmware/Kconfig      |  3 ++-
+>  drivers/usb/host/pci-quirks.c | 16 ++++++++++++++++
+>  2 files changed, 18 insertions(+), 1 deletion(-)
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>
