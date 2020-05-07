@@ -2,98 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2703D1C80A4
-	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2020 05:48:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAFE81C80C2
+	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2020 06:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726641AbgEGDsY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 May 2020 23:48:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33916 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725809AbgEGDsX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 May 2020 23:48:23 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E47C061A0F;
-        Wed,  6 May 2020 20:48:22 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id s9so3221463lfp.1;
-        Wed, 06 May 2020 20:48:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/au1P+LKp7UGcITXckfJpNTDS25YxZ0TSqVFN3ZEiRA=;
-        b=Huotxyr7xcPRjx/eppGI6o40oTPYZhC35YkjqS0Da0hrwxfHfTCZhoDtvy4zBkmskK
-         GMDnOdfrMe6v7b2f3CBvtF35xxZYgnxACnwHUfsy/3GbYLP6aEuNz8lWMWeQazz6A6d1
-         KuR5nZ8A1FKFSFIE4x9uHLPjUE8m140aKcE4cIaME/hUEJAxNk8IqWMZ2RJOkDl9zEiF
-         04ycUOZEja5swK+kchyPVRD9/bxZE/pDMfx1RgSRXTvqC+lQ3dv/J752Migi2a/u40f9
-         Rra2BU7s5vP6JkKC6YTNZpgHwmJaliY+RQlDY4GdJsaFMbV+CjVbchpf32E5nbscHmLK
-         uOKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/au1P+LKp7UGcITXckfJpNTDS25YxZ0TSqVFN3ZEiRA=;
-        b=T1EXeEzAWLelRNIQsyd/cJb87l55/5QJvCq4hAXWwaZH9Oi5oGC/OuvfGlYL30xnHB
-         7gQu85vOcOW2lrc24D6XOJU5pQiuzAvHUd6yHmQUA2PRpPsr9Uu48HcxiHhtavIhunyS
-         bWiEEa3PlDEQ7uW/xPiA5uGlo6hZqHwzHlxCNoUjGTEXiywi4AC0u6wqvNfs/Q2tisAo
-         XoQsqp5nbwY3zOSko07sIZbxNF98VeEYdRXx/+PHgknv7y20aFrZEYD2s/v2Zd2V1Wvk
-         3wSH9UrOuWlFLg6ORhHMmFjSNT8+BbbaTSliXrVWNhERHXXeghDUTXLo7hx+h1OwX4Ei
-         k7IA==
-X-Gm-Message-State: AGi0PuZvnNGTYHkB08GPESoHXujkQlWfHKnBhbGCgDqSgcdKXYGZLcMC
-        R5/8t+ViSxUXeS8e7K5nXptk6xFC5aI+T9h9TcA=
-X-Google-Smtp-Source: APiQypKGKAViU1DdiQYgx/qoKOwR6hee8Kj1KrI9t7atXw+zCve75aBN2UiRyE1F5LQNGot+nOkW2RgNsyyWjFgqooU=
-X-Received: by 2002:a05:6512:10d0:: with SMTP id k16mr7385994lfg.71.1588823300383;
- Wed, 06 May 2020 20:48:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200401013851.16227-1-peter.chen@nxp.com> <20200409143205.GA15163@portage>
- <CAL411-rfxO-88aPaiDcjW+ri+RKMFz=C6tkNMztWYA-+uNvopA@mail.gmail.com> <d91e7b91-4197-3f5e-ba0d-854281b94403@ti.com>
-In-Reply-To: <d91e7b91-4197-3f5e-ba0d-854281b94403@ti.com>
-From:   Peter Chen <hzpeterchen@gmail.com>
-Date:   Thu, 7 May 2020 11:48:08 +0800
-Message-ID: <CAL411-oycAoGFwStjcr4Xjxat=p0syketTLf7yN+ntBrFsCY-Q@mail.gmail.com>
+        id S1725802AbgEGESK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 May 2020 00:18:10 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:39306 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725601AbgEGESK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 May 2020 00:18:10 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0474I3H7126858;
+        Wed, 6 May 2020 23:18:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1588825083;
+        bh=GcWsPZiMfU+VZv3O8zyDrNBYFrf3vnShAR4Ivpe24S0=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=AOlCn6WHBLltyz367DATmLQfsgEUkK3hvs3jPpxK5nb9WNsuapelOrhUikC2DvfYk
+         7wQGQLNQAqszA2tntGcBmeqtyFkZDLvmlsKaTcYhPn9s29B54TSzXJk1j6U7oDrvAL
+         Y9+u0WAFkzCx/pvuNQPB1QdQZOhqCNM4vJ3+E30g=
+Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0474I3f3107756
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 6 May 2020 23:18:03 -0500
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Wed, 6 May
+ 2020 23:18:02 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Wed, 6 May 2020 23:18:03 -0500
+Received: from [10.250.233.85] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0474Hxvd019783;
+        Wed, 6 May 2020 23:18:00 -0500
 Subject: Re: [PATH v4 1/2] phy: cadence: salvo: add salvo phy driver
-To:     Kishon Vijay Abraham I <kishon@ti.com>
-Cc:     Oliver Graute <oliver.graute@gmail.com>,
-        Peter Chen <peter.chen@nxp.com>, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        jun.li@nxp.com, linux-imx@nxp.com
-Content-Type: text/plain; charset="UTF-8"
+To:     Peter Chen <hzpeterchen@gmail.com>
+CC:     Oliver Graute <oliver.graute@gmail.com>,
+        Peter Chen <peter.chen@nxp.com>, <robh+dt@kernel.org>,
+        <devicetree@vger.kernel.org>, USB list <linux-usb@vger.kernel.org>,
+        <jun.li@nxp.com>, <linux-imx@nxp.com>,
+        Vinod Koul <vkoul@kernel.org>
+References: <20200401013851.16227-1-peter.chen@nxp.com>
+ <20200409143205.GA15163@portage>
+ <CAL411-rfxO-88aPaiDcjW+ri+RKMFz=C6tkNMztWYA-+uNvopA@mail.gmail.com>
+ <d91e7b91-4197-3f5e-ba0d-854281b94403@ti.com>
+ <CAL411-oycAoGFwStjcr4Xjxat=p0syketTLf7yN+ntBrFsCY-Q@mail.gmail.com>
+From:   Kishon Vijay Abraham I <kishon@ti.com>
+Message-ID: <c448d7cd-402f-c75a-1fe3-378e4b33d606@ti.com>
+Date:   Thu, 7 May 2020 09:47:59 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <CAL411-oycAoGFwStjcr4Xjxat=p0syketTLf7yN+ntBrFsCY-Q@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Apr 27, 2020 at 8:47 PM Kishon Vijay Abraham I <kishon@ti.com> wrote:
->
-> Hi Peter,
->
-> On 4/26/2020 12:30 PM, Peter Chen wrote:
-> > On Fri, Apr 10, 2020 at 12:30 AM Oliver Graute <oliver.graute@gmail.com> wrote:
-> >>
-> >> On 01/04/20, Peter Chen wrote:
-> >>> Cadence SALVO PHY is a 28nm product, and is only used for USB3 & USB2.
-> >>> According to the Cadence, this PHY is a legacy Module, and Sierra and
-> >>> Torrent are later evolutions from it, and their sequence overlap is
-> >>> minimal, meaning we cannot reuse either (Sierra & Torrent) of the PHY
-> >>> drivers.
-> >>>
-> >>> Signed-off-by: Peter Chen <peter.chen@nxp.com>
-> >>
-> >> Tested-by:  Oliver Graute <oliver.graute@kococonnector.com>
-> >
-> > Hi Kithon,
-> >
-> > Rob has already acked the dt-binding patch, would you please merge
-> > these two patches,
->
-> Sure, I'll be merging it this week.
->
++Vinod
 
-HI Kishon,
+On 5/7/2020 9:18 AM, Peter Chen wrote:
+> On Mon, Apr 27, 2020 at 8:47 PM Kishon Vijay Abraham I <kishon@ti.com> wrote:
+>>
+>> Hi Peter,
+>>
+>> On 4/26/2020 12:30 PM, Peter Chen wrote:
+>>> On Fri, Apr 10, 2020 at 12:30 AM Oliver Graute <oliver.graute@gmail.com> wrote:
+>>>>
+>>>> On 01/04/20, Peter Chen wrote:
+>>>>> Cadence SALVO PHY is a 28nm product, and is only used for USB3 & USB2.
+>>>>> According to the Cadence, this PHY is a legacy Module, and Sierra and
+>>>>> Torrent are later evolutions from it, and their sequence overlap is
+>>>>> minimal, meaning we cannot reuse either (Sierra & Torrent) of the PHY
+>>>>> drivers.
+>>>>>
+>>>>> Signed-off-by: Peter Chen <peter.chen@nxp.com>
+>>>>
+>>>> Tested-by:  Oliver Graute <oliver.graute@kococonnector.com>
+>>>
+>>> Hi Kithon,
+>>>
+>>> Rob has already acked the dt-binding patch, would you please merge
+>>> these two patches,
+>>
+>> Sure, I'll be merging it this week.
+>>
+> 
+> HI Kishon,
+> 
+> I still not find it at your next tree:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/kishon/linux-phy.git/tree/drivers/phy/cadence?h=next
+> 
+> Would you please merge it, I have patches based on it, thanks.
 
-I still not find it at your next tree:
+merged this now, thanks!
 
-https://git.kernel.org/pub/scm/linux/kernel/git/kishon/linux-phy.git/tree/drivers/phy/cadence?h=next
-
-Would you please merge it, I have patches based on it, thanks.
-
-Peter
+-Kishon
