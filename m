@@ -2,66 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8D571C8CB7
-	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2020 15:41:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33D531C8CF1
+	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2020 15:49:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726942AbgEGNlb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 May 2020 09:41:31 -0400
-Received: from mga02.intel.com ([134.134.136.20]:57847 "EHLO mga02.intel.com"
+        id S1726308AbgEGNtZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 May 2020 09:49:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53822 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726542AbgEGNlb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 7 May 2020 09:41:31 -0400
-IronPort-SDR: KTBlUNEmoFuQYJPwzWYrnvxt5vvBk3+SKDAaniDm7aaysQaleKPL4nSJ1prlPYe2Jk57FPXSsM
- +G2fBm67PGNA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2020 06:41:30 -0700
-IronPort-SDR: G7ce+OsY5MlHspOLUOm76PNjgGDXmJ4FDym/wEFtCeIGUxBxYbcB2EB0DDIi60NghlARqDS2Hn
- 6Eau5r4ymXqg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,363,1583222400"; 
-   d="scan'208";a="263938934"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by orsmga006.jf.intel.com with ESMTP; 07 May 2020 06:41:27 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jWgmI-005Dmr-GN; Thu, 07 May 2020 16:41:30 +0300
-Date:   Thu, 7 May 2020 16:41:30 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     heikki.krogerus@linux.intel.com, robh+dt@kernel.org,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        nikolaus.voss@loewensteinmedical.de, garsilva@embeddedor.com,
-        keescook@chromium.org
-Subject: Re: [PATCH 0/1] Add USB role switch to tps6598x
-Message-ID: <20200507134130.GX185537@smile.fi.intel.com>
-References: <20200507124556.1774311-1-bryan.odonoghue@linaro.org>
+        id S1725914AbgEGNtZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 7 May 2020 09:49:25 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 94D1620725;
+        Thu,  7 May 2020 13:49:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588859365;
+        bh=EITDGaPX8swpQvDL2tLqcooypgIydo6yIyuNVXenMY0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=voY85dPv1npGb/rOFUsk3nujLQxcoz+oAAT9l/b2bNCX/R3vRJGEoKYolIWRMV0t5
+         vqvv9qMl48klN58J34bkW2DbseXVBvIYcnCvZHfB5qeQL2uzFRWoDQa+sxeFk1Z15K
+         gwO390f0fxqEjIMNM88LLrV6TjByKSmgNwn/2vMk=
+Date:   Thu, 7 May 2020 15:49:21 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-usb@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Julian =?iso-8859-1?Q?Gro=DF?= <julian.g@posteo.de>
+Subject: Re: [PATCH] USB: uas: Add US_FL_NO_REPORT_OPCODES for LaCie 2Big
+ Quadra USB3 external disk
+Message-ID: <20200507134921.GA1798390@kroah.com>
+References: <20200507131708.250871-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20200507124556.1774311-1-bryan.odonoghue@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200507131708.250871-1-hdegoede@redhat.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 07, 2020 at 01:45:55PM +0100, Bryan O'Donoghue wrote:
-> This patch - adds USB role switching to the TI TPS6598x. It has been tested
-> out with a ChipIdea controller inside a Qualcomm MSM8939.
+On Thu, May 07, 2020 at 03:17:08PM +0200, Hans de Goede wrote:
+> The LaCie 2Big Quadra USB3 external disk does not like the REPORT_OPCODES
+> request, causing probing it to take several minutes (and several resets).
 > 
-> Right now you need to have configured the TPS firmware with the TI
-> configuration tool so that the chip knows if it should initiate or accept
-> data and power role swaps.
+> Add US_FL_NO_REPORT_OPCODES flag for this model to fix the probing delay.
 > 
-> https://www.ti.com/lit/an/slva843a/slva843a.pdf
+> Reported-by: Julian Groﬂ <julian.g@posteo.de>
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> ---
+>  drivers/usb/storage/unusual_uas.h | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
+> index 1b23741036ee..37157ed9a881 100644
+> --- a/drivers/usb/storage/unusual_uas.h
+> +++ b/drivers/usb/storage/unusual_uas.h
+> @@ -28,6 +28,13 @@
+>   * and don't forget to CC: the USB development list <linux-usb@vger.kernel.org>
+>   */
+>  
+> +/* Reported-by: Julian Groﬂ <julian.g@posteo.de> */
+> +UNUSUAL_DEV(0x059f, 0x105f, 0x0000, 0x9999,
+> +		"LaCie",
+> +		"2Big Quadra USB3",
+> +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+> +		US_FL_NO_REPORT_OPCODES),
+> +
+>  /*
+>   * Apricorn USB3 dongle sometimes returns "USBSUSBSUSBS" in response to SCSI
+>   * commands in UAS mode.  Observed with the 1.28 firmware; are there others?
+> -- 
+> 2.26.0
+> 
 
-Can you include that in the patch under DocLink tag with some background info?
+Already in my tree and in linux-next and will go to Linus this week,
+sorry.
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+greg k-h
