@@ -2,67 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A65CF1C82A1
-	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2020 08:39:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1BCF1C82AB
+	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2020 08:41:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725893AbgEGGj2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 May 2020 02:39:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53876 "EHLO mail.kernel.org"
+        id S1726451AbgEGGlr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 May 2020 02:41:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55574 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725857AbgEGGj1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 7 May 2020 02:39:27 -0400
+        id S1725813AbgEGGlr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 7 May 2020 02:41:47 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1D0F72078C;
-        Thu,  7 May 2020 06:39:26 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9141F20753;
+        Thu,  7 May 2020 06:41:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588833567;
-        bh=7uxQLOHl5YK/wlVmwTEwQLPM721LHYr1phx0RAen60I=;
+        s=default; t=1588833707;
+        bh=ZfGZjSQzlxql6JrfYK2CjpWc5gUaW3O8isNZHL1cHgQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mkhp0gzg7Rcym6cXXfHKaZj0Vbss49q2JLv5DyMO4COiiZwNbBGGtnSshOImXWnOq
-         M98P0XYc8Am88LKwzYZMSmr6ok/nHuZM22Ulshs5/3qxcMbnSc1oLnGRwdq7utoUiP
-         TCRJK5CbQAGtRXUwsQ8plyHeKQwo8xdWwFwfQSnA=
-Date:   Thu, 7 May 2020 08:39:25 +0200
+        b=M09WcW1KjQjAJdPTQm0zozAA6/w6JqJ+af+Z9XAf7SHLgvMuh64pWlYzK/VnpMS6I
+         mP1uw8407EQPHb2GkFDezqjut6jLHEnsLov8p1RWeNzwruCy100T1i2lCe8MECNhi1
+         b2/yksuqVxBEj5B6xSJeLVCPdSnxRKp54DYlAR24=
+Date:   Thu, 7 May 2020 08:41:45 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     gavinli@thegavinli.com
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] usb: devio: fix mmap() on non-coherent DMA
- architectures
-Message-ID: <20200507063925.GA777100@kroah.com>
-References: <20200507005647.172515-1-gavinli@thegavinli.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Alan Cooper <alcooperx@gmail.com>,
+        ": Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        DTML <devicetree@vger.kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v6 3/4] usb: ehci: Add new EHCI driver for Broadcom STB
+ SoC's
+Message-ID: <20200507064145.GB777100@kroah.com>
+References: <20200430111258.6091-1-alcooperx@gmail.com>
+ <20200430111258.6091-4-alcooperx@gmail.com>
+ <20200505110036.GB93160@kroah.com>
+ <CAOGqxeXboYz2OQhgJsYmH5_7qEwKeWR5AA4Ljq_iFdSX=H2fkA@mail.gmail.com>
+ <CAHp75VeA8JnsJgEgkv0wivinsxvk51JTVyaPhmLhsjzkqZYR8A@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200507005647.172515-1-gavinli@thegavinli.com>
+In-Reply-To: <CAHp75VeA8JnsJgEgkv0wivinsxvk51JTVyaPhmLhsjzkqZYR8A@mail.gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 06, 2020 at 05:56:47PM -0700, gavinli@thegavinli.com wrote:
-> From: Gavin Li <gavinli@thegavinli.com>
+On Thu, May 07, 2020 at 12:01:16AM +0300, Andy Shevchenko wrote:
+> On Wed, May 6, 2020 at 11:23 PM Alan Cooper <alcooperx@gmail.com> wrote:
+> > On Tue, May 5, 2020 at 7:00 AM Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > > On Thu, Apr 30, 2020 at 07:12:57AM -0400, Al Cooper wrote:
 > 
-> On architectures that are not (or are optionally) DMA coherent,
-> dma_alloc_coherent() returns an address into the vmalloc space,
-> and calling virt_to_phys() on this address returns an unusable
-> physical address.
+> ...
 > 
-> This patch replaces the raw remap_pfn_range() call with a call to
-> dmap_mmap_coherent(), which takes care of the differences between
-> coherent and non-coherent code paths.
+> > > > +     /* Hook the hub control routine to work around a bug */
+> > >
+> > > What bug?  This feels wrong.
+> >
+> > The bug is explained in a comment above the ehci_brcm_hub_control()
+> > routine as follows:
+> > /*
+> >  * ehci_brcm_hub_control
+> >  * Intercept echi-hcd request to complete RESUME and align it to the start
+> >  * of the next microframe.
+> >  * If RESUME is complete too late in the microframe, host controller
+> >  * detects babble on suspended port and resets the port afterwards.
+> >  * This s/w workaround allows to avoid this problem.
+> >  * See SWLINUX-1909 for more details
+> >  */
+> > I'll remove the internal bug tracking reference from the comment.
 > 
-> Tested on an arm64 rk3399 board.
-> ---
->  drivers/usb/core/devio.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
+> I guess you may leave the internal bug reference. I can tell from my
+> experience that's hard to understand what was going on in the driver
+> in years perspective. It will help whoever in this company have a
+> chance to look after the driver.
 
-I don't think you ran checkpatch.pl on your patch :(
-
-Also, please see 2bef9aed6f0e ("usb: usbfs: correct kernel->user page
-attribute mismatch") in linux-next, does that resolve this problem for
-you?  I think it does the same thing as your patch does...
-
-thanks,
+"internal bug references" mean nothing to the 99% of the people that can
+see this.  Document the heck out of what this is instead please.
 
 greg k-h
