@@ -2,105 +2,185 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAFE81C80C2
-	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2020 06:18:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2D91C8130
+	for <lists+linux-usb@lfdr.de>; Thu,  7 May 2020 06:54:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725802AbgEGESK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 May 2020 00:18:10 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:39306 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725601AbgEGESK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 May 2020 00:18:10 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0474I3H7126858;
-        Wed, 6 May 2020 23:18:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1588825083;
-        bh=GcWsPZiMfU+VZv3O8zyDrNBYFrf3vnShAR4Ivpe24S0=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=AOlCn6WHBLltyz367DATmLQfsgEUkK3hvs3jPpxK5nb9WNsuapelOrhUikC2DvfYk
-         7wQGQLNQAqszA2tntGcBmeqtyFkZDLvmlsKaTcYhPn9s29B54TSzXJk1j6U7oDrvAL
-         Y9+u0WAFkzCx/pvuNQPB1QdQZOhqCNM4vJ3+E30g=
-Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0474I3f3107756
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 6 May 2020 23:18:03 -0500
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Wed, 6 May
- 2020 23:18:02 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Wed, 6 May 2020 23:18:03 -0500
-Received: from [10.250.233.85] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0474Hxvd019783;
-        Wed, 6 May 2020 23:18:00 -0500
-Subject: Re: [PATH v4 1/2] phy: cadence: salvo: add salvo phy driver
-To:     Peter Chen <hzpeterchen@gmail.com>
-CC:     Oliver Graute <oliver.graute@gmail.com>,
-        Peter Chen <peter.chen@nxp.com>, <robh+dt@kernel.org>,
-        <devicetree@vger.kernel.org>, USB list <linux-usb@vger.kernel.org>,
-        <jun.li@nxp.com>, <linux-imx@nxp.com>,
-        Vinod Koul <vkoul@kernel.org>
-References: <20200401013851.16227-1-peter.chen@nxp.com>
- <20200409143205.GA15163@portage>
- <CAL411-rfxO-88aPaiDcjW+ri+RKMFz=C6tkNMztWYA-+uNvopA@mail.gmail.com>
- <d91e7b91-4197-3f5e-ba0d-854281b94403@ti.com>
- <CAL411-oycAoGFwStjcr4Xjxat=p0syketTLf7yN+ntBrFsCY-Q@mail.gmail.com>
-From:   Kishon Vijay Abraham I <kishon@ti.com>
-Message-ID: <c448d7cd-402f-c75a-1fe3-378e4b33d606@ti.com>
-Date:   Thu, 7 May 2020 09:47:59 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <CAL411-oycAoGFwStjcr4Xjxat=p0syketTLf7yN+ntBrFsCY-Q@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+        id S1725809AbgEGEyZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 7 May 2020 00:54:25 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:60915 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725783AbgEGEyZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 May 2020 00:54:25 -0400
+Received: from mail-pf1-f200.google.com ([209.85.210.200])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <kai.heng.feng@canonical.com>)
+        id 1jWYWP-0000T8-HO
+        for linux-usb@vger.kernel.org; Thu, 07 May 2020 04:52:33 +0000
+Received: by mail-pf1-f200.google.com with SMTP id 67so4425530pfe.0
+        for <linux-usb@vger.kernel.org>; Wed, 06 May 2020 21:52:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=w4FDbx+sqaj7/I18BPPgkxjRI2IWGp9DxRd9OXfc4I8=;
+        b=BwLNY5dR6KjgLgsQ2JSXBJwSrHTcCZyVjpO2DDXU33xnUzoB96KCD+DQhO2FpA9ALC
+         Eo0Ilii9CPcxGj2VGRMNsO1WkLE29QCpJkrvokaxR127I4uKtCIOw6R0xTr9fr2gTBXi
+         JQwrH9fnr4naoc+kFYgq1AlvaSATSSyYXfYw6AstQ87DKqcwGmsY1NwhZBIis/4xrAjz
+         cDqH5h3/4O/a627v47nNHE2ec0Ph189OCke7W+UvRkdJH7bws9a/3cqRC/gybBLX6jxI
+         wighKsKv9S9GWx6QYaXdXLkwUUOYGnPex30avQyffmBH+zZrYRd84EvsuS+J2VqPwp0m
+         lrwA==
+X-Gm-Message-State: AGi0PuZK64PRQIhmLm6EXDyFdX/RTDVpOrxQDQ8kl9UGS+zmtu09kEIy
+        6e0hx+FbCigUhfpWS6+JYIL9qcihYHxq3zNHrWoESCbefKUEdVy0mdJpMY+j6uj3dDoXvgEd3g0
+        G15FN3yDaHG78kHtlHPNmDMQoPl6I5MKAHptVLg==
+X-Received: by 2002:a17:902:7289:: with SMTP id d9mr11737733pll.147.1588827151903;
+        Wed, 06 May 2020 21:52:31 -0700 (PDT)
+X-Google-Smtp-Source: APiQypKd1OFSTF85NtleoC+pgFpSup5vc27PkUDpOeKCJJnN6mB3hBbdRvincDHIf2zmxpakc3zpnw==
+X-Received: by 2002:a17:902:7289:: with SMTP id d9mr11737714pll.147.1588827151405;
+        Wed, 06 May 2020 21:52:31 -0700 (PDT)
+Received: from [192.168.1.208] (220-133-187-190.HINET-IP.hinet.net. [220.133.187.190])
+        by smtp.gmail.com with ESMTPSA id w13sm3396670pfn.192.2020.05.06.21.52.29
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 06 May 2020 21:52:30 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.80.23.2.2\))
+Subject: Re: [PATCH v2] xhci: Set port link to RxDetect if port is not enabled
+ after resume
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+In-Reply-To: <a4311a60-ad12-e9a8-d391-f34832f65ef5@linux.intel.com>
+Date:   Thu, 7 May 2020 12:52:28 +0800
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "open list:USB NETWORKING DRIVERS" <linux-usb@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 8BIT
+Message-Id: <79060777-FF5B-4394-9A05-8573B6EF6578@canonical.com>
+References: <20200311040456.25851-1-kai.heng.feng@canonical.com>
+ <B4E44BDC-5AFE-4F8A-8498-0EEE9CDAC0E1@canonical.com>
+ <635B3350-F064-4B45-B194-40F793423049@canonical.com>
+ <35fbb517-31b1-7bba-8e07-795ab18af1ff@linux.intel.com>
+ <47BCEDDA-2E91-4CE3-AA45-B2EEB1DA111D@canonical.com>
+ <a4311a60-ad12-e9a8-d391-f34832f65ef5@linux.intel.com>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+X-Mailer: Apple Mail (2.3608.80.23.2.2)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-+Vinod
 
-On 5/7/2020 9:18 AM, Peter Chen wrote:
-> On Mon, Apr 27, 2020 at 8:47 PM Kishon Vijay Abraham I <kishon@ti.com> wrote:
->>
->> Hi Peter,
->>
->> On 4/26/2020 12:30 PM, Peter Chen wrote:
->>> On Fri, Apr 10, 2020 at 12:30 AM Oliver Graute <oliver.graute@gmail.com> wrote:
->>>>
->>>> On 01/04/20, Peter Chen wrote:
->>>>> Cadence SALVO PHY is a 28nm product, and is only used for USB3 & USB2.
->>>>> According to the Cadence, this PHY is a legacy Module, and Sierra and
->>>>> Torrent are later evolutions from it, and their sequence overlap is
->>>>> minimal, meaning we cannot reuse either (Sierra & Torrent) of the PHY
->>>>> drivers.
->>>>>
->>>>> Signed-off-by: Peter Chen <peter.chen@nxp.com>
->>>>
->>>> Tested-by:  Oliver Graute <oliver.graute@kococonnector.com>
->>>
->>> Hi Kithon,
->>>
->>> Rob has already acked the dt-binding patch, would you please merge
->>> these two patches,
->>
->> Sure, I'll be merging it this week.
->>
-> 
-> HI Kishon,
-> 
-> I still not find it at your next tree:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/kishon/linux-phy.git/tree/drivers/phy/cadence?h=next
-> 
-> Would you please merge it, I have patches based on it, thanks.
 
-merged this now, thanks!
+> On Apr 28, 2020, at 00:49, Mathias Nyman <mathias.nyman@linux.intel.com> wrote:
+> 
+> On 27.4.2020 12.05, Kai-Heng Feng wrote:
+>> 
+>> 
+>>> On Apr 23, 2020, at 19:25, Mathias Nyman <mathias.nyman@linux.intel.com> wrote:
+>>> 
+>>> Was this roothub port forcefully suspended xhci_bus_suspend()?
+>>> i.e. was a bit set in bus_state->bus_suspended for this port?
+>> 
+>> No, it's a USB3 device so it was set to U3 via USB_PORT_FEAT_LINK_STATE.
+> 
+> Logs show port was first forced by xhci_bus_suspend() to U3  ("port 0 not
+> suspended" message)
+> and only later set to U3 by USB_PORT_FEAT_LINK_STATE.
+> Seems line wrong order or race.
 
--Kishon
+The "port 0 not suspended" is actually for 3-1, if we print bus num and port + 1:
+[  213.732977] xhci_hcd 0000:3f:00.0: port 3-1 not suspended
+
+For port 4-1 it's always suspended before suspend the bus.
+I'll send a patch to adjust the debug message for better clarity.
+
+> 
+> while suspended we get a port event about a connect status change,
+> showing port link state is in disabled.
+> Cherry picked messages:
+> 
+> [ 1330.021450] xhci_hcd 0000:3f:00.0: port 0 not suspended
+> [ 1330.036822] xhci_hcd 0000:3f:00.0: Set port 4-1 link state, portsc: 0x1203, write 0x11261
+> [ 1331.020736] xhci_hcd 0000:3f:00.0: Port change event, 4-1, id 1, portsc: 0x20280
+> [ 1331.020738] xhci_hcd 0000:3f:00.0: resume root hub
+> [ 1331.020741] xhci_hcd 0000:3f:00.0: handle_port_status: starting port polling.
+> 
+> If we force the port link state to U3 in xhci_bus_suspend() maybe it would make
+> sense to try and recover it in xhci_bus_resume(). But only for that forced
+> port.
+> 
+> None of the previous suspend/resume cycles in the logs went smooth either.
+> Each time device 4-1 was forced to U3 bus xhci_bus_suspend(), and at resume the
+> link was stuck in polling until timeout, after which it went to compliance mode,
+> and had to be warm reset to recover.
+
+If my observation above is true, port 4-1 is indeed suspended by usb_port_suspend() rather than xhci_bus_suspend().
+
+> 
+> We could add the code to recover USB3 ports from disabled state in case we
+> forced them to U3, but the rootcause of theus suspend/resume issues should
+> be found as well
+
+Seems like the issue doesn't happen if the host system use S2Idle instead of S3.
+However, I can't see any difference in xHCI driver with different suspend methods.
+Maybe the root cause is that, ASMedia controller and SMSC hub are just quirky?
+
+> 
+> Limiting your code to USB3 devices that xhi_bus_suspend forced to U3 would look
+> something like this:
+> 
+> diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
+> index 9eca1fe81061..0f16dd936ab8 100644
+> --- a/drivers/usb/host/xhci-hub.c
+> +++ b/drivers/usb/host/xhci-hub.c
+> @@ -1789,6 +1789,15 @@ int xhci_bus_resume(struct usb_hcd *hcd)
+> 			case XDEV_RESUME:
+> 				/* resume already initiated */
+> 				break;
+> +			case XDEV_DISABLED:
+> +				if (hcd->speed >= HCD_USB3) {
+> +					portsc = xhci_port_state_to_neutral(
+> +						portsc);
+> +					portsc &= ~PORT_PLS_MASK;
+> +					portsc |= PORT_LINK_STROBE |
+> +						XDEV_RXDETECT;
+> +				}
+> +				/* fall through for both USB3 abd USB2 */
+> 			default:
+> 				/* not in a resumeable state, ignore it */
+> 				clear_bit(port_index,
+
+This doesn't work because port 4-1 isn't suspended by xhci_bus_suspend().
+
+Maybe we can restrict the case to ports that are suspended by USB_PORT_FEAT_LINK_STATE.
+Is the following patch looks good to you?
+
+diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
+index f37316d2c8fa..dc2e14ea308d 100644
+--- a/drivers/usb/host/xhci-hub.c
++++ b/drivers/usb/host/xhci-hub.c
+@@ -1787,6 +1787,16 @@ int xhci_bus_resume(struct usb_hcd *hcd)
+                        clear_bit(port_index, &bus_state->bus_suspended);
+                        continue;
+                }
++
++               if (bus_state->suspended_ports & (1 << port_index)) {
++                       if ((portsc & PORT_PLS_MASK) == XDEV_DISABLED &&
++                           hcd->speed >= HCD_USB3) {
++                               portsc = xhci_port_state_to_neutral(portsc);
++                               portsc &= ~PORT_PLS_MASK;
++                               portsc |= PORT_LINK_STROBE | XDEV_RXDETECT;
++                       }
++               }
++
+                /* resume if we suspended the link, and it is still suspended */
+                if (test_bit(port_index, &bus_state->bus_suspended))
+                        switch (portsc & PORT_PLS_MASK) {
+
+
+Kai-Heng
+
+> 
+> -Mathias
+
