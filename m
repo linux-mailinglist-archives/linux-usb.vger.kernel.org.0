@@ -2,102 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52C091CB4E0
-	for <lists+linux-usb@lfdr.de>; Fri,  8 May 2020 18:21:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0F5E1CB4FE
+	for <lists+linux-usb@lfdr.de>; Fri,  8 May 2020 18:30:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727092AbgEHQVp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 May 2020 12:21:45 -0400
-Received: from node.akkea.ca ([192.155.83.177]:46260 "EHLO node.akkea.ca"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726767AbgEHQVp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 8 May 2020 12:21:45 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by node.akkea.ca (Postfix) with ESMTP id F29744E2006;
-        Fri,  8 May 2020 16:21:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akkea.ca; s=mail;
-        t=1588954905; bh=qqdGiit1A1ccKcGEq/kEAeFk1oJVjJOp1JpLW3iPgxc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References;
-        b=EcEz/cx8BIEt8g5kbz5qjUYua8PdPr1kRcZFGDkxhKwVBXGipdekwAYgv7zJrA+fg
-         8ti4UQEExgK9xnWe4SjlPmYcOCWxMkFjwE5EjWGvRofc9pz8TUGyKKvASPtlX6RMkJ
-         StuJjEvevvAnfx7rUdYlUMEvhho1Wmp6glqtv7pE=
-X-Virus-Scanned: Debian amavisd-new at mail.akkea.ca
-Received: from node.akkea.ca ([127.0.0.1])
-        by localhost (mail.akkea.ca [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id otSJD3v_rQyi; Fri,  8 May 2020 16:21:44 +0000 (UTC)
-Received: from www.akkea.ca (node.akkea.ca [192.155.83.177])
-        by node.akkea.ca (Postfix) with ESMTPSA id 795CD4E2003;
-        Fri,  8 May 2020 16:21:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akkea.ca; s=mail;
-        t=1588954904; bh=qqdGiit1A1ccKcGEq/kEAeFk1oJVjJOp1JpLW3iPgxc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References;
-        b=Ave0rTF2XK1n8ErShLXUs856x+F7uVJIMGvA8OkgznGBlhzLyllEHxJpVjhXmobEA
-         qI/OWB9ZTO1xL4o3GnxpxoB9xyJV5Co2e4OrBwNqmyIBsCvN1Na9TEyqvbIJjPVJ+Y
-         0AFFgjip53RVimkzt/+RtnWJqlFGsCqA0QYH3a4A=
+        id S1727831AbgEHQ3q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 May 2020 12:29:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38526 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726756AbgEHQ3q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 May 2020 12:29:46 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECBE5C05BD43
+        for <linux-usb@vger.kernel.org>; Fri,  8 May 2020 09:29:45 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id l18so2584441wrn.6
+        for <linux-usb@vger.kernel.org>; Fri, 08 May 2020 09:29:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+iuOH/WKVgDwlOpqLtEZz1Xk/okLvZZF5WbQRpij0D4=;
+        b=AQt+ZF9/H2qk/OzomabTHPI7WvMlnn1Z6hG6gqNJIe5EizYLqFoDrDWpINidOLAgaq
+         qkxTNC5J00AzTlAZQvnF/dbaHsDAfE/fqpCtkW3hlE9kjdjAD2q5eUUncCpBNBKPnrdk
+         2wk+lL8bnj8EForOpu5KW38XHvLpS//BMB7EkbmGLPrMNq3FjPdICxV0v9XVmU+jc4kp
+         1fEPrrVGBkose3eZ3JXKQscdx2Fq7231IQxf8FdX6I8EeAomwFNy7dhjmQ01wP6ryr5h
+         eH5eNWJrEHOenSXHxlSlCIxzCFu3/8/Fr8Nu6qAxo7p87nmqcfk0mWMEd+JSCV8IHaUm
+         FvRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+iuOH/WKVgDwlOpqLtEZz1Xk/okLvZZF5WbQRpij0D4=;
+        b=ZuJQ3BoqU7RTVrE9onYxzmxDrAY2EclvVAGsFDgR1HNwlDHjS/hvFpLiJl4F3acYYB
+         iVsfhbENX3SPiSO8aU96nOTJOOAJAuQDptDZjEQLTRsx+MG/OM1dcprL7QwcPlZRcb2g
+         VTyVJipSr88yvstID9TRydv72M1oOZUV65Keg44FkXLjYyxlQ/iLCI1GVZ/CB5R53Yod
+         rRFtGPZvG+X71Ghf+33eZeNE3dBLkoKQv87tgF5VIImauO8hDY6NC7Rnxivhd10BhcZG
+         eKD82QN+9op1TlHSvqcRVNBZtSOlEC01nGxrUPeM8pPUIr2k4Wm+1YcOJ0oH0QaH565O
+         fGbA==
+X-Gm-Message-State: AGi0PuYD5iIIcfEKTrv5A8RUu0Xl3ig8uQ0PHUHhtkuDkXwHvRzLBZcL
+        c7vqPyplxnQZGzkMuYjoIgg/RQ==
+X-Google-Smtp-Source: APiQypIvwEN8ANKN3qCA5nhSd3XIXtCZSkyca1PpubPK0GASNJT8ODNwqlF/DEWhTVLbHg8aa6qFlA==
+X-Received: by 2002:a5d:61c5:: with SMTP id q5mr3933822wrv.398.1588955384626;
+        Fri, 08 May 2020 09:29:44 -0700 (PDT)
+Received: from localhost.localdomain ([176.61.57.127])
+        by smtp.gmail.com with ESMTPSA id w15sm3602749wrl.73.2020.05.08.09.29.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 May 2020 09:29:43 -0700 (PDT)
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, bryan.odonoghue@linaro.org
+Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wen Yang <wenyang@linux.alibaba.com>,
+        chenqiwu <chenqiwu@xiaomi.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: roles: Switch on role-switch uevent reporting
+Date:   Fri,  8 May 2020 17:29:37 +0100
+Message-Id: <20200508162937.2566818-1-bryan.odonoghue@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Fri, 08 May 2020 09:21:44 -0700
-From:   Angus Ainslie <angus@akkea.ca>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        robh+dt@kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, nikolaus.voss@loewensteinmedical.de,
-        andriy.shevchenko@linux.intel.com, garsilva@embeddedor.com,
-        keescook@chromium.org, linux-usb-owner@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] Add TI tps6598x DT binding and probe
-In-Reply-To: <f6bd2b0b-1eda-8ea4-abf2-e17131b944d4@linaro.org>
-References: <20200507214733.1982696-1-bryan.odonoghue@linaro.org>
- <20200508140132.GA1264047@kuha.fi.intel.com>
- <e1f5fac00b4d574edf187f2ccd19ebe2@akkea.ca>
- <f6bd2b0b-1eda-8ea4-abf2-e17131b944d4@linaro.org>
-Message-ID: <943b6c3fabcfc5da8e2ee170a5d6144b@akkea.ca>
-X-Sender: angus@akkea.ca
-User-Agent: Roundcube Webmail/1.3.6
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2020-05-08 07:47, Bryan O'Donoghue wrote:
-> On 08/05/2020 15:22, Angus Ainslie wrote:
->> Hi,
->> 
->> On 2020-05-08 07:01, Heikki Krogerus wrote:
->> 
->>> Angus, is it OK if we use these patches instead the ones from you?
->>> 
->> 
->> Yeah these ones will work great for what we need.
->> 
->> Sorry Bryan I didn't realize there was a patch already in progress.
->> 
->> @Bryan, I'm going to send up some extcon patches for the tps6598x soon 
->> but maybe I should check and make sure you don't already have anything 
->> planned there.
->> 
->> It still needs to be retested after cleaning up but it's the top 9 
->> patches here:
->> 
->> https://source.puri.sm/angus.ainslie/linux-next/-/commits/next/extcon
-> 
-> Makes me glad I didn't try to touch the PDO stuff :)
-> 
-> That series looks fine to me.
-> 
-> The only other modification I have is here.
-> 
-> https://lore.kernel.org/linux-usb/20200507215938.1983363-2-bryan.odonoghue@linaro.org/T/#u
-> 
-> which is about data-role switching.
+Right now we don't report to user-space a role switch when doing a
+usb_role_switch_set_role() despite having registered the uevent callbacks.
 
-We have something similar but that one should work for us. I'll try and 
-test that early next week.
+This patch switches on the notifications allowing user-space to see
+role-switch change notifications and subsequently determine the current
+controller data-role.
 
-Thanks
-Angus
+example:
+PFX=/devices/platform/soc/78d9000.usb/ci_hdrc.0
 
-> 
-> ---
-> bod
+root@somebox# udevadm monitor -p
+
+KERNEL[49.894994] change $PFX/usb_role/ci_hdrc.0-role-switch (usb_role)
+ACTION=change
+DEVPATH=$PFX/usb_role/ci_hdrc.0-role-switch
+SUBSYSTEM=usb_role
+DEVTYPE=usb_role_switch
+USB_ROLE_SWITCH=ci_hdrc.0-role-switch
+SEQNUM=2432
+
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Wen Yang <wenyang@linux.alibaba.com>
+Cc: chenqiwu <chenqiwu@xiaomi.com>
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+---
+ drivers/usb/roles/class.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/roles/class.c b/drivers/usb/roles/class.c
+index 5b17709821df..27d92af29635 100644
+--- a/drivers/usb/roles/class.c
++++ b/drivers/usb/roles/class.c
+@@ -49,8 +49,10 @@ int usb_role_switch_set_role(struct usb_role_switch *sw, enum usb_role role)
+ 	mutex_lock(&sw->lock);
+ 
+ 	ret = sw->set(sw, role);
+-	if (!ret)
++	if (!ret) {
+ 		sw->role = role;
++		kobject_uevent(&sw->dev.kobj, KOBJ_CHANGE);
++	}
+ 
+ 	mutex_unlock(&sw->lock);
+ 
+-- 
+2.25.1
+
