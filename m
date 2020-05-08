@@ -2,102 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 803521CB130
-	for <lists+linux-usb@lfdr.de>; Fri,  8 May 2020 15:56:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F088F1CB143
+	for <lists+linux-usb@lfdr.de>; Fri,  8 May 2020 16:01:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728699AbgEHN4J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 May 2020 09:56:09 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:41247 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727851AbgEHN4J (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 May 2020 09:56:09 -0400
-Received: (qmail 21040 invoked by uid 500); 8 May 2020 09:56:08 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 8 May 2020 09:56:08 -0400
-Date:   Fri, 8 May 2020 09:56:08 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     Tang Bin <tangbin@cmss.chinamobile.com>
-cc:     gregkh@linuxfoundation.org, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Zhang Shengju <zhangshengju@cmss.chinamobile.com>
-Subject: Re: [PATCH] USB: host: ehci: Use the defined variable to simplify
- code
-In-Reply-To: <20200508114520.13332-1-tangbin@cmss.chinamobile.com>
-Message-ID: <Pine.LNX.4.44L0.2005080952130.19653-100000@netrider.rowland.org>
+        id S1727856AbgEHOBk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 May 2020 10:01:40 -0400
+Received: from mga09.intel.com ([134.134.136.24]:21312 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727845AbgEHOBk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 8 May 2020 10:01:40 -0400
+IronPort-SDR: uzSvTKMEUVJMbzS4wGjf5EcyMp5i5ejLkOD9Z6qI6qtfYtelYxjtqwP+73Uci8PwRsGaevyrui
+ 1H5kf/ppO/Tg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2020 07:01:39 -0700
+IronPort-SDR: tyLSI9pNoX+sLzweinsTc8kCksLLnDn7G53YEFJasLjS/iKAb/GKJhocYPyIJt0XH8Fc8BDKqF
+ y9O2NhzHgJnQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,367,1583222400"; 
+   d="scan'208";a="370495411"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 08 May 2020 07:01:35 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 08 May 2020 17:01:32 +0300
+Date:   Fri, 8 May 2020 17:01:32 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Angus Ainslie <angus@akkea.ca>
+Cc:     robh+dt@kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, nikolaus.voss@loewensteinmedical.de,
+        andriy.shevchenko@linux.intel.com, garsilva@embeddedor.com,
+        keescook@chromium.org
+Subject: Re: [PATCH v2 0/2] Add TI tps6598x DT binding and probe
+Message-ID: <20200508140132.GA1264047@kuha.fi.intel.com>
+References: <20200507214733.1982696-1-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200507214733.1982696-1-bryan.odonoghue@linaro.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 8 May 2020, Tang Bin wrote:
+Hi,
 
-> Use the defined variable "dev" to make the code cleaner. And
-> delete an extra blank line.
-
-Again, the Subject: line should say "ehci-mxc".
-
-> Signed-off-by: Zhang Shengju <zhangshengju@cmss.chinamobile.com>
-> Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
-> ---
->  drivers/usb/host/ehci-mxc.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
+On Thu, May 07, 2020 at 10:47:31PM +0100, Bryan O'Donoghue wrote:
+> V2:
+> - Put myself down as sole schema maintainer as suggested - Andy
+> - Fixed whitespace typo - Andy
+> - Removed ifdef and of_match_ptr() - Andy
 > 
-> diff --git a/drivers/usb/host/ehci-mxc.c b/drivers/usb/host/ehci-mxc.c
-> index c9f91e6c7..a1eb5ee77 100644
-> --- a/drivers/usb/host/ehci-mxc.c
-> +++ b/drivers/usb/host/ehci-mxc.c
-> @@ -56,7 +56,7 @@ static int ehci_mxc_drv_probe(struct platform_device *pdev)
->  		return -ENOMEM;
->  
->  	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -	hcd->regs = devm_ioremap_resource(&pdev->dev, res);
-> +	hcd->regs = devm_ioremap_resource(dev, res);
-
-As long as you're making these changes, why not also move the 
-definition of dev up before the definition of pdata?  Then you could 
-change the definition of pdata to:
-
-	struct mxc_usbh_platform_data *pdata = dev_get_platdata(dev);
-
-Alan Stern
-
->  	if (IS_ERR(hcd->regs)) {
->  		ret = PTR_ERR(hcd->regs);
->  		goto err_alloc;
-> @@ -69,14 +69,14 @@ static int ehci_mxc_drv_probe(struct platform_device *pdev)
->  	priv = (struct ehci_mxc_priv *) ehci->priv;
->  
->  	/* enable clocks */
-> -	priv->usbclk = devm_clk_get(&pdev->dev, "ipg");
-> +	priv->usbclk = devm_clk_get(dev, "ipg");
->  	if (IS_ERR(priv->usbclk)) {
->  		ret = PTR_ERR(priv->usbclk);
->  		goto err_alloc;
->  	}
->  	clk_prepare_enable(priv->usbclk);
->  
-> -	priv->ahbclk = devm_clk_get(&pdev->dev, "ahb");
-> +	priv->ahbclk = devm_clk_get(dev, "ahb");
->  	if (IS_ERR(priv->ahbclk)) {
->  		ret = PTR_ERR(priv->ahbclk);
->  		goto err_clk_ahb;
-> @@ -84,13 +84,12 @@ static int ehci_mxc_drv_probe(struct platform_device *pdev)
->  	clk_prepare_enable(priv->ahbclk);
->  
->  	/* "dr" device has its own clock on i.MX51 */
-> -	priv->phyclk = devm_clk_get(&pdev->dev, "phy");
-> +	priv->phyclk = devm_clk_get(dev, "phy");
->  	if (IS_ERR(priv->phyclk))
->  		priv->phyclk = NULL;
->  	if (priv->phyclk)
->  		clk_prepare_enable(priv->phyclk);
->  
-> -
->  	/* call platform specific init function */
->  	if (pdata->init) {
->  		ret = pdata->init(pdev);
+> V1:
+> This simple series adds DT binding yaml and a DT lookup table for the
+> tps6598x.
 > 
+> Its possible to use i2c id_table to match the 'compatible = "ti,tps6598x"
+> and probe that way, however I think it is worthwhile adding a specific OF
+> way of doing it and having an accompanying yaml as an example.
+> 
+> Bryan O'Donoghue (2):
+>   dt-bindings: usb: Add TI tps6598x device tree binding documentation
+>   usb: typec: tps6598x: Add OF probe binding
+> 
+>  .../devicetree/bindings/usb/ti,tps6598x.yaml  | 64 +++++++++++++++++++
+>  drivers/usb/typec/tps6598x.c                  |  7 ++
+>  2 files changed, 71 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
 
+There was already a series from Angus [1] for this. The bindings
+looked a bit different, but I think we should use these, because in
+the DT bindings from Angus there appeared to be definitions for OF
+graph that was not used. Or maybe I got it wrong?
+
+Angus, is it OK if we use these patches instead the ones from you?
+
+[1] https://lore.kernel.org/linux-usb/20200506191718.2144752-1-angus@akkea.ca/
+
+thanks,
+
+-- 
+heikki
