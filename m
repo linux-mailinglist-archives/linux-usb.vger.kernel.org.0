@@ -2,62 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51FA81CB78D
-	for <lists+linux-usb@lfdr.de>; Fri,  8 May 2020 20:47:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76BB11CB8F1
+	for <lists+linux-usb@lfdr.de>; Fri,  8 May 2020 22:27:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726906AbgEHSqw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 May 2020 14:46:52 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:58537 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726767AbgEHSqw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 May 2020 14:46:52 -0400
-Received: (qmail 11698 invoked by uid 500); 8 May 2020 14:46:50 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 8 May 2020 14:46:50 -0400
-Date:   Fri, 8 May 2020 14:46:50 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     Al Cooper <alcooperx@gmail.com>
-cc:     linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        <bcm-kernel-feedback-list@broadcom.com>,
-        <devicetree@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        <linux-usb@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v7 4/5] usb: ehci: Add new EHCI driver for Broadcom STB
- SoC's
-In-Reply-To: <20200507173408.20754-5-alcooperx@gmail.com>
-Message-ID: <Pine.LNX.4.44L0.2005081444450.11470-100000@netrider.rowland.org>
+        id S1727839AbgEHU1p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 May 2020 16:27:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47510 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727835AbgEHU1o (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 May 2020 16:27:44 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2D3C061A0C
+        for <linux-usb@vger.kernel.org>; Fri,  8 May 2020 13:27:42 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id t2so2437344lfc.3
+        for <linux-usb@vger.kernel.org>; Fri, 08 May 2020 13:27:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=H7hdF+TXU+z5warwWctoW0ejNkNB5ByIm48BqwSmIjk=;
+        b=c1OctmAOUzcC966xGv96Qy3CyvDsCLzmCpNDffti/u3sU9BbV7CH3jhpTMMnRsQSwy
+         qE/7vlHukdClIs8gJ+/yOBckSTdPtUCHbNat27L/asSCI8yCf7TNIQSupXSEIYeLorKw
+         /Oo84qo2i0jTtaDj0v2XbivFiJB6+KoTwVXotTxMXlfD/QZ/lcRieNieqTYO8Sz0SMLN
+         JAnJJ2IcgwapNOrq+zSYmyyTuLqH2N6S4kuizaDqnXodQnpHnfzkH2zal8UrGUKy+Bjy
+         5ghZtvqFRuR3nHSQdIXG/6t3ETIBTnzqmmvDbo44EGOtKhaLdt3s6v01G3WS+WduZRHZ
+         lqtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=H7hdF+TXU+z5warwWctoW0ejNkNB5ByIm48BqwSmIjk=;
+        b=Ry2w3u5bKdx4+j2N0Xh84zDHyldhed0f2/uli+Wxy+RM8u+nUZrPJuD5CO+csO8VAs
+         nc7QiGQk0UKtVbBx11WrkRXq/nc9efYX/fHoWHdodlG8b4lmejSrnsbIII9/jP3V+9vc
+         G4uSlgv4paTPwYL3fFblAXoOiuIjO0wpTzzCrhNvGeKxqgjza9G57sBrVztwnHdXGhxC
+         bwLDuuAxU6o2HFqmHCRqWnkpfqttDaejw6R3H0lDPKTCqb3F8iFfLn7fhg83gZygaswC
+         g5ziVjT7Rtly2FO/LCLGiH4cWE+uKMxbjIM3aO6rM3tEvTzNIYsR9VK3PVZV+XaBO+HG
+         veBw==
+X-Gm-Message-State: AOAM530rMaYl14jq+Lpf+/jxc30imkq31UCuCgLVC5RHvKu3Dm7k+Wld
+        oseejCqTbhLi5GTKIiR9MBpV9+e0KFs=
+X-Google-Smtp-Source: ABdhPJwhM6HSpwQmv/7uHamxME3MWQs8CZ24wPPZCd6IAhDGdZQI+53saRBbO43ShtN8OjAP4cmK9Q==
+X-Received: by 2002:ac2:4304:: with SMTP id l4mr3074961lfh.87.1588969660574;
+        Fri, 08 May 2020 13:27:40 -0700 (PDT)
+Received: from wasted.cogentembedded.com ([2a00:1fa0:222:bcfb:3767:1ed2:9bbb:4cab])
+        by smtp.gmail.com with ESMTPSA id g22sm1950160ljl.17.2020.05.08.13.27.39
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 08 May 2020 13:27:39 -0700 (PDT)
+Subject: Re: [PATCH] USB: host: ehci: Add error handlinginehci_mxc_drv_probe()
+To:     Tang Bin <tangbin@cmss.chinamobile.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Zhang Shengju <zhangshengju@cmss.chinamobile.com>
+References: <20200508114453.15436-1-tangbin@cmss.chinamobile.com>
+ <20200508114858.GA4085349@kroah.com>
+ <fb147bdf-faaa-8919-407e-89b4fe1337a6@cmss.chinamobile.com>
+ <20200508143110.GA447591@kroah.com>
+ <107353c0-09f2-858d-2a87-498e2d8584c6@cmss.chinamobile.com>
+From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Organization: Cogent Embedded
+Message-ID: <66a6bbca-4218-fb71-7284-37f73d5a3c58@cogentembedded.com>
+Date:   Fri, 8 May 2020 23:27:38 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.1
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+In-Reply-To: <107353c0-09f2-858d-2a87-498e2d8584c6@cmss.chinamobile.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-MW
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 7 May 2020, Al Cooper wrote:
+On 05/08/2020 06:03 PM, Tang Bin wrote:
 
-> Add a new EHCI driver for Broadcom STB SoC's. A new EHCI driver
-> was created instead of adding support to the existing ehci platform
-> driver because of the code required to workaround bugs in the EHCI
-> controller. The primary workround is for a bug where the Core
-> violates the SOF interval between the first two SOFs transmitted after
-> resume. This only happens if the resume occurs near the end of a
-> microframe. The fix is to intercept the echi-hcd request to complete
-> RESUME and align it to the start of the next microframe.
+>>>> On Fri, May 08, 2020 at 07:44:53PM +0800, Tang Bin wrote:
+>>>>> The function ehci_mxc_drv_probe() does not perform sufficient error
+>>>>> checking after executing platform_get_irq(), thus fix it.
+>>>>>
+>>>>> Fixes: 7e8d5cd93fa ("USB: Add EHCI support for MX27 and MX31 based boards")
+>>>>> Signed-off-by: Zhang Shengju <zhangshengju@cmss.chinamobile.com>
+>>>>> Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
+>>>>> ---
+>>>>>    drivers/usb/host/ehci-mxc.c | 2 ++
+>>>>>    1 file changed, 2 insertions(+)
+>>>>>
+>>>>> diff --git a/drivers/usb/host/ehci-mxc.c b/drivers/usb/host/ehci-mxc.c
+>>>>> index a1eb5ee77..a0b42ba59 100644
+>>>>> --- a/drivers/usb/host/ehci-mxc.c
+>>>>> +++ b/drivers/usb/host/ehci-mxc.c
+>>>>> @@ -50,6 +50,8 @@ static int ehci_mxc_drv_probe(struct platform_device *pdev)
+>>>>>        }
+>>>>>        irq = platform_get_irq(pdev, 0);
+>>>>> +    if (irq < 0)
+>>>>> +        return irq;
+>>>> <= ?
+>>> In the file 'drivers/base/platform.c'， the function platform_get_irq() is
+>>> explained and used as follows:
+>>>
+>>>       * Gets an IRQ for a platform device and prints an error message if
+>>> finding the
+>>>       * IRQ fails. Device drivers should check the return value for errors so
+>>> as to
+>>>       * not pass a negative integer value to the request_irq() APIs.
+>>>       *
+>>>       * Example:
+>>>       *        int irq = platform_get_irq(pdev, 0);
+>>>       *        if (irq < 0)
+>>>       *            return irq;
+>>>       *
+>>>       * Return: IRQ number on success, negative error number on failure.
+>>>
+>>> And in my hardware experiment, even if I set the irq failed deliberately in
+>>> the DTS, the returned value is negative instead of zero.
+>> Please read the thread at
+>>     https://lore.kernel.org/r/20200501224042.141366-1-helgaas%40kernel.org
+>> for more details about this.
+>>
+> Great, It looks beautiful, finally someone took a knife to the file 'platform.c'.
+
+   I thought I did that already couple years ago, when returned 0 from platform_get_irq() could mean both IRQ # and error... :-)
+
 > 
-> Signed-off-by: Al Cooper <alcooperx@gmail.com>
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> I have been studied this place for a long time, and don't know what platform can return 0, which made me curious.
+> 
+> So the example should be:
+> 
+>      *        int irq = platform_get_irq(pdev, 0);
+>      *        if (irq <= 0)
+>      *            return irq;
 
-Adding a new EHCI platform-specific driver is okay with me.  However, 
-this patch does not include most of the changes you discussed with 
-Greg.  I assume you will submit a revised version with those changes in 
-place; when you do I will Ack it.
+   And you then return 0 (success) as if your probe() succeeded. Congratulations! :-P
 
-Alan Stern
+> 
+> Thanks,
+> 
+> Tang Bin
 
+MBR, Sergei
