@@ -2,78 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D41C1CB1CD
-	for <lists+linux-usb@lfdr.de>; Fri,  8 May 2020 16:28:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B107E1CB1D8
+	for <lists+linux-usb@lfdr.de>; Fri,  8 May 2020 16:31:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727887AbgEHO2N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 May 2020 10:28:13 -0400
-Received: from cmccmta1.chinamobile.com ([221.176.66.79]:4391 "EHLO
-        cmccmta1.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727896AbgEHO2N (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 May 2020 10:28:13 -0400
-Received: from spf.mail.chinamobile.com (unknown[172.16.121.7]) by rmmx-syy-dmz-app02-12002 (RichMail) with SMTP id 2ee25eb56c5a887-5ad8b; Fri, 08 May 2020 22:27:39 +0800 (CST)
-X-RM-TRANSID: 2ee25eb56c5a887-5ad8b
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG: 00000000
-Received: from [192.168.43.52] (unknown[223.104.148.118])
-        by rmsmtp-syy-appsvr04-12004 (RichMail) with SMTP id 2ee45eb56c5a857-5b418;
-        Fri, 08 May 2020 22:27:39 +0800 (CST)
-X-RM-TRANSID: 2ee45eb56c5a857-5b418
-Subject: Re: [PATCH] USB: host: ehci: Use the defined variable to simplifycode
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        id S1727867AbgEHObO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 May 2020 10:31:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57206 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726767AbgEHObN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 8 May 2020 10:31:13 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B3C622083B;
+        Fri,  8 May 2020 14:31:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1588948273;
+        bh=rxJGu5drzSYlySe9vqiHE3VHx5o1VcEOkPGlZR8Lo3A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wZktF9m7g8nYEa9ZRPbOPppcX55CdaEXNGt4tq/QwNaZjeCd3Cx9CY1afEGvZbEy/
+         5VqH9lwxCpoFVdnXPDOTHakZAl448yXKr/oFjO6K3GMG5lHxpfgA2cIE4ZHTqXrs7A
+         J9uT/dzg4LEAEYZUZ3rPBSdjCD2CNsjk8P3MYEbg=
+Date:   Fri, 8 May 2020 16:31:10 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Tang Bin <tangbin@cmss.chinamobile.com>
+Cc:     stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Zhang Shengju <zhangshengju@cmss.chinamobile.com>
-References: <Pine.LNX.4.44L0.2005080952130.19653-100000@netrider.rowland.org>
-From:   Tang Bin <tangbin@cmss.chinamobile.com>
-Message-ID: <e335e5c7-bf7e-22d8-4dbf-15b0477d8d5d@cmss.chinamobile.com>
-Date:   Fri, 8 May 2020 22:28:25 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+Subject: Re: [PATCH] USB: host: ehci: Add error handling
+ inehci_mxc_drv_probe()
+Message-ID: <20200508143110.GA447591@kroah.com>
+References: <20200508114453.15436-1-tangbin@cmss.chinamobile.com>
+ <20200508114858.GA4085349@kroah.com>
+ <fb147bdf-faaa-8919-407e-89b4fe1337a6@cmss.chinamobile.com>
 MIME-Version: 1.0
-In-Reply-To: <Pine.LNX.4.44L0.2005080952130.19653-100000@netrider.rowland.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <fb147bdf-faaa-8919-407e-89b4fe1337a6@cmss.chinamobile.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Fri, May 08, 2020 at 09:55:53PM +0800, Tang Bin wrote:
+> Hi, Greg:
+> 
+> On 2020/5/8 19:48, Greg KH wrote:
+> > On Fri, May 08, 2020 at 07:44:53PM +0800, Tang Bin wrote:
+> > > The function ehci_mxc_drv_probe() does not perform sufficient error
+> > > checking after executing platform_get_irq(), thus fix it.
+> > > 
+> > > Fixes: 7e8d5cd93fa ("USB: Add EHCI support for MX27 and MX31 based boards")
+> > > Signed-off-by: Zhang Shengju <zhangshengju@cmss.chinamobile.com>
+> > > Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
+> > > ---
+> > >   drivers/usb/host/ehci-mxc.c | 2 ++
+> > >   1 file changed, 2 insertions(+)
+> > > 
+> > > diff --git a/drivers/usb/host/ehci-mxc.c b/drivers/usb/host/ehci-mxc.c
+> > > index a1eb5ee77..a0b42ba59 100644
+> > > --- a/drivers/usb/host/ehci-mxc.c
+> > > +++ b/drivers/usb/host/ehci-mxc.c
+> > > @@ -50,6 +50,8 @@ static int ehci_mxc_drv_probe(struct platform_device *pdev)
+> > >   	}
+> > >   	irq = platform_get_irq(pdev, 0);
+> > > +	if (irq < 0)
+> > > +		return irq;
+> > <= ?
+> 
+> In the file 'drivers/base/platform.c'， the function platform_get_irq() is
+> explained and used as follows:
+> 
+>      * Gets an IRQ for a platform device and prints an error message if
+> finding the
+>      * IRQ fails. Device drivers should check the return value for errors so
+> as to
+>      * not pass a negative integer value to the request_irq() APIs.
+>      *
+>      * Example:
+>      *        int irq = platform_get_irq(pdev, 0);
+>      *        if (irq < 0)
+>      *            return irq;
+>      *
+>      * Return: IRQ number on success, negative error number on failure.
+> 
+> And in my hardware experiment, even if I set the irq failed deliberately in
+> the DTS, the returned value is negative instead of zero.
 
-On 2020/5/8 21:56, Alan Stern wrote:
-> On Fri, 8 May 2020, Tang Bin wrote:
->
->> Use the defined variable "dev" to make the code cleaner. And
->> delete an extra blank line.
-> Again, the Subject: line should say "ehci-mxc".
-Got it.
->
->> Signed-off-by: Zhang Shengju <zhangshengju@cmss.chinamobile.com>
->> Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
->> ---
->>   drivers/usb/host/ehci-mxc.c | 9 ++++-----
->>   1 file changed, 4 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/usb/host/ehci-mxc.c b/drivers/usb/host/ehci-mxc.c
->> index c9f91e6c7..a1eb5ee77 100644
->> --- a/drivers/usb/host/ehci-mxc.c
->> +++ b/drivers/usb/host/ehci-mxc.c
->> @@ -56,7 +56,7 @@ static int ehci_mxc_drv_probe(struct platform_device *pdev)
->>   		return -ENOMEM;
->>   
->>   	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->> -	hcd->regs = devm_ioremap_resource(&pdev->dev, res);
->> +	hcd->regs = devm_ioremap_resource(dev, res);
-> As long as you're making these changes, why not also move the
-> definition of dev up before the definition of pdata?  Then you could
-> change the definition of pdata to:
->
-> 	struct mxc_usbh_platform_data *pdata = dev_get_platdata(dev);
->
-Got it.
+Please read the thread at
+	https://lore.kernel.org/r/20200501224042.141366-1-helgaas%40kernel.org
+for more details about this.
 
-Thanks
+thanks,
 
-
-
+greg k-h
