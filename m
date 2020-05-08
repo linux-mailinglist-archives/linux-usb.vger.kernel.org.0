@@ -2,29 +2,37 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEB1E1CB6FC
-	for <lists+linux-usb@lfdr.de>; Fri,  8 May 2020 20:19:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51FA81CB78D
+	for <lists+linux-usb@lfdr.de>; Fri,  8 May 2020 20:47:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726950AbgEHSTn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 May 2020 14:19:43 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:34043 "HELO
+        id S1726906AbgEHSqw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 May 2020 14:46:52 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:58537 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726807AbgEHSTn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 May 2020 14:19:43 -0400
-Received: (qmail 9518 invoked by uid 500); 8 May 2020 14:19:42 -0400
+        with SMTP id S1726767AbgEHSqw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 May 2020 14:46:52 -0400
+Received: (qmail 11698 invoked by uid 500); 8 May 2020 14:46:50 -0400
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 8 May 2020 14:19:42 -0400
-Date:   Fri, 8 May 2020 14:19:42 -0400 (EDT)
+  by localhost with SMTP; 8 May 2020 14:46:50 -0400
+Date:   Fri, 8 May 2020 14:46:50 -0400 (EDT)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@netrider.rowland.org
-To:     Tang Bin <tangbin@cmss.chinamobile.com>
-cc:     gregkh@linuxfoundation.org, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Zhang Shengju <zhangshengju@cmss.chinamobile.com>
-Subject: Re: [PATCH v2] USB: host: ehci-mxc: Use the defined variable to
- simplify code
-In-Reply-To: <20200508144024.7836-1-tangbin@cmss.chinamobile.com>
-Message-ID: <Pine.LNX.4.44L0.2005081419270.7856-100000@netrider.rowland.org>
+To:     Al Cooper <alcooperx@gmail.com>
+cc:     linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        <bcm-kernel-feedback-list@broadcom.com>,
+        <devicetree@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v7 4/5] usb: ehci: Add new EHCI driver for Broadcom STB
+ SoC's
+In-Reply-To: <20200507173408.20754-5-alcooperx@gmail.com>
+Message-ID: <Pine.LNX.4.44L0.2005081444450.11470-100000@netrider.rowland.org>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
@@ -32,82 +40,24 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 8 May 2020, Tang Bin wrote:
+On Thu, 7 May 2020, Al Cooper wrote:
 
-> Use the defined variable "dev" to make the code cleaner. And
-> delete an extra blank line.
+> Add a new EHCI driver for Broadcom STB SoC's. A new EHCI driver
+> was created instead of adding support to the existing ehci platform
+> driver because of the code required to workaround bugs in the EHCI
+> controller. The primary workround is for a bug where the Core
+> violates the SOF interval between the first two SOFs transmitted after
+> resume. This only happens if the resume occurs near the end of a
+> microframe. The fix is to intercept the echi-hcd request to complete
+> RESUME and align it to the start of the next microframe.
 > 
-> Signed-off-by: Zhang Shengju <zhangshengju@cmss.chinamobile.com>
-> Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
-> ---
-> Changes from v1:
->  - fix the subject and the code.
-> ---
+> Signed-off-by: Al Cooper <alcooperx@gmail.com>
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Adding a new EHCI platform-specific driver is okay with me.  However, 
+this patch does not include most of the changes you discussed with 
+Greg.  I assume you will submit a revised version with those changes in 
+place; when you do I will Ack it.
 
->  drivers/usb/host/ehci-mxc.c | 13 ++++++-------
->  1 file changed, 6 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/usb/host/ehci-mxc.c b/drivers/usb/host/ehci-mxc.c
-> index c9f91e6c7..09e01397f 100644
-> --- a/drivers/usb/host/ehci-mxc.c
-> +++ b/drivers/usb/host/ehci-mxc.c
-> @@ -36,12 +36,12 @@ static const struct ehci_driver_overrides ehci_mxc_overrides __initconst = {
->  
->  static int ehci_mxc_drv_probe(struct platform_device *pdev)
->  {
-> -	struct mxc_usbh_platform_data *pdata = dev_get_platdata(&pdev->dev);
-> +	struct device *dev = &pdev->dev;
-> +	struct mxc_usbh_platform_data *pdata = dev_get_platdata(dev);
->  	struct usb_hcd *hcd;
->  	struct resource *res;
->  	int irq, ret;
->  	struct ehci_mxc_priv *priv;
-> -	struct device *dev = &pdev->dev;
->  	struct ehci_hcd *ehci;
->  
->  	if (!pdata) {
-> @@ -56,7 +56,7 @@ static int ehci_mxc_drv_probe(struct platform_device *pdev)
->  		return -ENOMEM;
->  
->  	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -	hcd->regs = devm_ioremap_resource(&pdev->dev, res);
-> +	hcd->regs = devm_ioremap_resource(dev, res);
->  	if (IS_ERR(hcd->regs)) {
->  		ret = PTR_ERR(hcd->regs);
->  		goto err_alloc;
-> @@ -69,14 +69,14 @@ static int ehci_mxc_drv_probe(struct platform_device *pdev)
->  	priv = (struct ehci_mxc_priv *) ehci->priv;
->  
->  	/* enable clocks */
-> -	priv->usbclk = devm_clk_get(&pdev->dev, "ipg");
-> +	priv->usbclk = devm_clk_get(dev, "ipg");
->  	if (IS_ERR(priv->usbclk)) {
->  		ret = PTR_ERR(priv->usbclk);
->  		goto err_alloc;
->  	}
->  	clk_prepare_enable(priv->usbclk);
->  
-> -	priv->ahbclk = devm_clk_get(&pdev->dev, "ahb");
-> +	priv->ahbclk = devm_clk_get(dev, "ahb");
->  	if (IS_ERR(priv->ahbclk)) {
->  		ret = PTR_ERR(priv->ahbclk);
->  		goto err_clk_ahb;
-> @@ -84,13 +84,12 @@ static int ehci_mxc_drv_probe(struct platform_device *pdev)
->  	clk_prepare_enable(priv->ahbclk);
->  
->  	/* "dr" device has its own clock on i.MX51 */
-> -	priv->phyclk = devm_clk_get(&pdev->dev, "phy");
-> +	priv->phyclk = devm_clk_get(dev, "phy");
->  	if (IS_ERR(priv->phyclk))
->  		priv->phyclk = NULL;
->  	if (priv->phyclk)
->  		clk_prepare_enable(priv->phyclk);
->  
-> -
->  	/* call platform specific init function */
->  	if (pdata->init) {
->  		ret = pdata->init(pdev);
-> 
+Alan Stern
 
