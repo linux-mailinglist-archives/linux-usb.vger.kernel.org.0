@@ -2,218 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B8B71CC048
-	for <lists+linux-usb@lfdr.de>; Sat,  9 May 2020 12:20:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9412B1CC11F
+	for <lists+linux-usb@lfdr.de>; Sat,  9 May 2020 14:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727827AbgEIKUU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 9 May 2020 06:20:20 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:4320 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726877AbgEIKUT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 9 May 2020 06:20:19 -0400
-Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 2719BB310B83E5E88FAF;
-        Sat,  9 May 2020 18:20:16 +0800 (CST)
-Received: from localhost.localdomain (10.67.165.24) by
- DGGEMS404-HUB.china.huawei.com (10.3.19.204) with Microsoft SMTP Server id
- 14.3.487.0; Sat, 9 May 2020 18:20:08 +0800
-From:   Yicong Yang <yangyicong@hisilicon.com>
-To:     <helgaas@kernel.org>, <linux-pci@vger.kernel.org>
-CC:     <kvalo@codeaurora.org>, <andreas.noever@gmail.com>,
-        <rjw@rjwysocki.net>, <mika.westerberg@linux.intel.com>,
-        <linux-wireless@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linuxarm@huawei.com>, <yangyicong@hisilicon.com>
-Subject: [PATCH v3] PCI: Use pcie_find_root_port() to get root port of both PCI/PCIe device
-Date:   Sat, 9 May 2020 18:19:28 +0800
-Message-ID: <1589019568-5216-1-git-send-email-yangyicong@hisilicon.com>
-X-Mailer: git-send-email 2.8.1
+        id S1728188AbgEIMEi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 9 May 2020 08:04:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51694 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726600AbgEIMEi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 9 May 2020 08:04:38 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F315EC061A0C;
+        Sat,  9 May 2020 05:04:37 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id ms17so5473816pjb.0;
+        Sat, 09 May 2020 05:04:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wUpvglT7RVI0VhxUEBL660l9QrPqkvdcztJEgEYZgVE=;
+        b=NQoyld5OELIut/6UkNs1QRfi9i+epuoVHUKNHesyhNiHwyCgMz2dsk95CM2YAjdiPb
+         OZhokEcTwLonbVkoSEHArg5P11YL0pYA7FrqZ5Ea6n7pS8ZFYaRk/a4CrGJN24wjf+sT
+         6RVOq4a9iM5M9plD78kt081Z9pD3ZlqQqqb9ibpDiCEzXfhTKChPdU+g8X02t/Jtgxdj
+         iqqIDP79VMLiTWKUI1mPtfu7uKlTsNaJRGGZTyYs61iZLUmBUC0HkymmOUxIBJtsGoE1
+         tAjtALvt8Uwo82olkqA+E8DUC9qhhlv0TRtkv1bkkP/dYmiN0vTUUvvnAmdZ57tDvUjU
+         Fhhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wUpvglT7RVI0VhxUEBL660l9QrPqkvdcztJEgEYZgVE=;
+        b=GAwP5H6ciMIPEGzVn+qj0QpuWr3N7m/coVjcLHfjpNl5El6cy8C5ho2+a9SefevO+J
+         zQUq7sDld5bTuZ6MeANrai0eFwtPbQrU5e3A7izhuZ37kK0b8vQQ2I3CknUuXwV0HSYf
+         S/0cNmNfGHpvzRPEpERGxAAw0lzWOQL+6PmZlsyjM73tkSvaqewWWsUuF1m10jfrKQZ6
+         Ve17gY3/XBFYIzxEauUfLEJOMzWkiOTz1Ol7ptXzBNPtSDRS9uMtiPSUpvUMWLnEO2fp
+         ponzYiRF0ikAtW8Oc1B9aqKc1N+Qv+XXz6+SAGNVDFmSLF8sgi2JJaeLYU1JYvOpPYxk
+         zYrA==
+X-Gm-Message-State: AGi0Pua1QMtVckhkRxodc7X58Kkiu5F/cg7974Ahp/tcxpScfPSsPCT2
+        xqI1C1p/x8ICWwklHYGMzl3PQvF/p8vyupQKJeQ=
+X-Google-Smtp-Source: APiQypI0HEt+PVZf/6IcEtjlof5jsVdsR0hAD/QMKEx2hKai3zkGEHMgEwx0que30ynyNsOLHyxo3+JbdKXsfI5mkvA=
+X-Received: by 2002:a17:90b:94a:: with SMTP id dw10mr11395860pjb.228.1589025877306;
+ Sat, 09 May 2020 05:04:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.165.24]
-X-CFilter-Loop: Reflected
+References: <20200508211929.39020-5-alcooperx@gmail.com> <Pine.LNX.4.44L0.2005082035460.2445-100000@netrider.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.2005082035460.2445-100000@netrider.rowland.org>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sat, 9 May 2020 15:04:26 +0300
+Message-ID: <CAHp75VfV8SwKG5aX-POce5aHCoqCHdnfpxzq6C6buJ_TaSacsg@mail.gmail.com>
+Subject: Re: [PATCH v8 4/5] usb: ehci: Add new EHCI driver for Broadcom STB SoC's
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Al Cooper <alcooperx@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Previously we use pcie_find_root_port() to get root port from a pcie
-device, use pci_find_pcie_root_port() to get root port from a pci
-device, which increase the complexity.
+On Sat, May 9, 2020 at 3:47 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+> On Fri, 8 May 2020, Al Cooper wrote:
 
-Unify the two functions and use pcie_find_root_port() to get root
-port from both pci device and pcie device. Then there is no need to
-distinguish the type of the device.
+...
 
-The callers of the function list below, they'll get no functional
-change:
-- iwl_trans_pcie_dump_regs()
-- pcie_root_rcb_set()
-- aer_inject()
-- acpi_pci_bridge_d3()
-- pci_configure_relaxed_ordering()
+> > +     irq = platform_get_irq(pdev, 0);
+> > +     if (irq <= 0)
+> > +             return irq;
+>
+> I don't want to get involved in the question of whether or not 0 is a
+> valid IRQ number.  The consensus has gone back and forth over the
+> years, and it just doesn't seem important.
+>
+> However, as Sergei points out, if 0 is going to be regarded as an
+> invalid value then we shouldn't return 0 from the probe function here.
 
-Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-Acked-by: Kalle Valo <kvalo@codeaurora.org> // for wireless
-Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com> // for thunderbolt
----
-Change since v2:
-- archive the callers in the commit message
-- rename pci_pcie_find_root_port() as pcie_find_root_port()
-- use pci_upstream_bridge() to traverse the chain
-Link: https://lore.kernel.org/linux-pci/1588768976-4852-1-git-send-email-yangyicong@hisilicon.com/
+The most of the drivers rely on the fact that on platforms where it's
+the case (yes, we have you-know-which architecture has some legacy
+stuff there) request_irq() will fail anyway.
 
-Change since v1:
-- Add Mika's Ack for thunderbolt part
-- Add description for pci_pcie_find_root_port()
+> I'll leave the decision on how to handle this matter up to Greg.  :-)
 
- drivers/pci/pci-acpi.c       |  2 +-
- drivers/pci/pci.c            | 24 ------------------------
- drivers/pci/probe.c          |  2 +-
- drivers/pci/quirks.c         |  2 +-
- drivers/thunderbolt/switch.c |  4 ++--
- include/linux/pci.h          | 23 ++++++++++++++---------
- 6 files changed, 19 insertions(+), 38 deletions(-)
+Me too.
 
-diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
-index 0c02d50..d401370 100644
---- a/drivers/pci/pci-acpi.c
-+++ b/drivers/pci/pci-acpi.c
-@@ -948,7 +948,7 @@ static bool acpi_pci_bridge_d3(struct pci_dev *dev)
- 	 * Look for a special _DSD property for the root port and if it
- 	 * is set we know the hierarchy behind it supports D3 just fine.
- 	 */
--	root = pci_find_pcie_root_port(dev);
-+	root = pcie_find_root_port(dev);
- 	if (!root)
- 		return false;
-
-diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-index d828ca8..fc5e7b6 100644
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -695,30 +695,6 @@ struct resource *pci_find_resource(struct pci_dev *dev, struct resource *res)
- EXPORT_SYMBOL(pci_find_resource);
-
- /**
-- * pci_find_pcie_root_port - return PCIe Root Port
-- * @dev: PCI device to query
-- *
-- * Traverse up the parent chain and return the PCIe Root Port PCI Device
-- * for a given PCI Device.
-- */
--struct pci_dev *pci_find_pcie_root_port(struct pci_dev *dev)
--{
--	struct pci_dev *bridge, *highest_pcie_bridge = dev;
--
--	bridge = pci_upstream_bridge(dev);
--	while (bridge && pci_is_pcie(bridge)) {
--		highest_pcie_bridge = bridge;
--		bridge = pci_upstream_bridge(bridge);
--	}
--
--	if (pci_pcie_type(highest_pcie_bridge) != PCI_EXP_TYPE_ROOT_PORT)
--		return NULL;
--
--	return highest_pcie_bridge;
--}
--EXPORT_SYMBOL(pci_find_pcie_root_port);
--
--/**
-  * pci_wait_for_pending - wait for @mask bit(s) to clear in status word @pos
-  * @dev: the PCI device to operate on
-  * @pos: config space offset of status word
-diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-index 512cb43..554cdca 100644
---- a/drivers/pci/probe.c
-+++ b/drivers/pci/probe.c
-@@ -2015,7 +2015,7 @@ static void pci_configure_relaxed_ordering(struct pci_dev *dev)
- 	 * For now, we only deal with Relaxed Ordering issues with Root
- 	 * Ports. Peer-to-Peer DMA is another can of worms.
- 	 */
--	root = pci_find_pcie_root_port(dev);
-+	root = pcie_find_root_port(dev);
- 	if (!root)
- 		return;
-
-diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index 29f473e..7aeeda5 100644
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@ -4253,7 +4253,7 @@ DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_AMD, 0x1a02, PCI_CLASS_NOT_DEFINED,
-  */
- static void quirk_disable_root_port_attributes(struct pci_dev *pdev)
- {
--	struct pci_dev *root_port = pci_find_pcie_root_port(pdev);
-+	struct pci_dev *root_port = pcie_find_root_port(pdev);
-
- 	if (!root_port) {
- 		pci_warn(pdev, "PCIe Completion erratum may cause device errors\n");
-diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-index a2ce990..d92c755 100644
---- a/drivers/thunderbolt/switch.c
-+++ b/drivers/thunderbolt/switch.c
-@@ -263,7 +263,7 @@ static void nvm_authenticate_start_dma_port(struct tb_switch *sw)
- 	 * itself. To be on the safe side keep the root port in D0 during
- 	 * the whole upgrade process.
- 	 */
--	root_port = pci_find_pcie_root_port(sw->tb->nhi->pdev);
-+	root_port = pcie_find_root_port(sw->tb->nhi->pdev);
- 	if (root_port)
- 		pm_runtime_get_noresume(&root_port->dev);
- }
-@@ -272,7 +272,7 @@ static void nvm_authenticate_complete_dma_port(struct tb_switch *sw)
- {
- 	struct pci_dev *root_port;
-
--	root_port = pci_find_pcie_root_port(sw->tb->nhi->pdev);
-+	root_port = pcie_find_root_port(sw->tb->nhi->pdev);
- 	if (root_port)
- 		pm_runtime_put(&root_port->dev);
- }
-diff --git a/include/linux/pci.h b/include/linux/pci.h
-index 3840a54..98fb495 100644
---- a/include/linux/pci.h
-+++ b/include/linux/pci.h
-@@ -1011,7 +1011,6 @@ void pci_bus_add_device(struct pci_dev *dev);
- void pci_read_bridge_bases(struct pci_bus *child);
- struct resource *pci_find_parent_resource(const struct pci_dev *dev,
- 					  struct resource *res);
--struct pci_dev *pci_find_pcie_root_port(struct pci_dev *dev);
- u8 pci_swizzle_interrupt_pin(const struct pci_dev *dev, u8 pin);
- int pci_get_interrupt_pin(struct pci_dev *dev, struct pci_dev **bridge);
- u8 pci_common_swizzle(struct pci_dev *dev, u8 *pinp);
-@@ -2124,17 +2123,23 @@ static inline int pci_pcie_type(const struct pci_dev *dev)
- 	return (pcie_caps_reg(dev) & PCI_EXP_FLAGS_TYPE) >> 4;
- }
-
-+/**
-+ * pcie_find_root_port - Get the PCIe root port device
-+ * @dev: PCI device
-+ *
-+ * Traverse up the parent chain and return the PCIe Root Port PCI Device
-+ * for a given PCI/PCIe Device.
-+ */
- static inline struct pci_dev *pcie_find_root_port(struct pci_dev *dev)
- {
--	while (1) {
--		if (!pci_is_pcie(dev))
--			break;
--		if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT)
--			return dev;
--		if (!dev->bus->self)
--			break;
--		dev = dev->bus->self;
-+	struct pci_dev *root_port = pci_upstream_bridge(dev);
-+
-+	while (root_port) {
-+		if (pci_pcie_type(root_port) == PCI_EXP_TYPE_ROOT_PORT)
-+			return root_port;
-+		root_port = pci_upstream_bridge(root_port);
- 	}
-+
- 	return NULL;
- }
-
---
-2.8.1
-
+-- 
+With Best Regards,
+Andy Shevchenko
