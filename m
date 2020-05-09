@@ -2,91 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22B471CBAF5
-	for <lists+linux-usb@lfdr.de>; Sat,  9 May 2020 00:53:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C848F1CBBF9
+	for <lists+linux-usb@lfdr.de>; Sat,  9 May 2020 02:48:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728317AbgEHWxP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 May 2020 18:53:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42548 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727878AbgEHWxP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 May 2020 18:53:15 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C308EC061A0C;
-        Fri,  8 May 2020 15:53:14 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id z72so2802935wmc.2;
-        Fri, 08 May 2020 15:53:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=MMrlGS3Usu2vxGof1+PJ+l2BUflCsuWc3mZfos5tvb8=;
-        b=o/TzgS8fx2y71BYwe1ZVMxzbshUJ0qg7RVghfPrQX920582rMFq7Kq1X2CAfogr+kk
-         5BlCTYWr/XkIndEtU60t/GK5Zkz8kh+5q9Y2oghH3/xu9XlNsxNxuDtspnRH51XZVWy4
-         J+zSmOSqXtN6X9+HVe+ejw8ymeocngnKhNpsAO225fpehfxgrCgF0rz8yXxgGFsRlNIg
-         1ETCLVmhKepLIhYIhDnaIqVzr9eAZhijyeOzORYeqHh+PvEswpkRSMRikSDK92Ky1K8i
-         opps1/VrkBmXPGT6VHNg2o6PwZuoHH3rT6npdw4sLKdqRNBlkxkuTWFXQWyoddDCzdS9
-         z1TQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=MMrlGS3Usu2vxGof1+PJ+l2BUflCsuWc3mZfos5tvb8=;
-        b=p4cK9DksdzX40MDdrqbfwL0Jzl10zRiyqWGFAYPJkoY7awIt4KmN6TiPegfPpfqM9+
-         nzZM/HP/CkxYkh/ASqlh+3sLleLhO98NCjrobAJReO7KGuYvz3/7x69dXNT2zL21UKm9
-         Mn97yBYga7FzlgSnnaLWFkGv11RJrl6ZssS7fNcdy3CBa6KCJkw4m/hzzYhJOCYuz9uB
-         dzYFdTbL3cgNESrGHvA82l6ITwgpCYYtbyQMD0fe3K6qD9fs/qqOuXErQhYjAx8Pyy4l
-         J0xHKXbH4X2Sk/IYOCyvg+Sd53GzulUYgK7J5c/MenBttwTB5Dir7CS3jU05kYXhaIRY
-         3H+w==
-X-Gm-Message-State: AGi0Pubfd72xrRMDfusFXhdMyQ4knbnCbQ3+xqTCvt46s429n/byttt/
-        AHjEs9ET30yGq6oUpdFevuE=
-X-Google-Smtp-Source: APiQypKudYAyXmUpgl2IgAZ0fi2GDMBEyzSbjTybQpyZpDiyC+Ad6xlbbmCtcKKA7LoyCl/fAkOYGQ==
-X-Received: by 2002:a1c:770f:: with SMTP id t15mr18057283wmi.178.1588978393519;
-        Fri, 08 May 2020 15:53:13 -0700 (PDT)
-Received: from [10.230.188.43] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id l12sm1346562wrh.20.2020.05.08.15.53.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 May 2020 15:53:12 -0700 (PDT)
-Subject: Re: [PATCH v8 5/5] usb: host: Add ability to build new Broadcom STB
- USB drivers
-To:     Al Cooper <alcooperx@gmail.com>, linux-kernel@vger.kernel.org
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        id S1728469AbgEIArx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 May 2020 20:47:53 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:60783 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1728421AbgEIArx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 May 2020 20:47:53 -0400
+Received: (qmail 3733 invoked by uid 500); 8 May 2020 20:47:52 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 8 May 2020 20:47:52 -0400
+Date:   Fri, 8 May 2020 20:47:52 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     Al Cooper <alcooperx@gmail.com>
+cc:     linux-kernel@vger.kernel.org,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
+        <bcm-kernel-feedback-list@broadcom.com>,
+        <devicetree@vger.kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>,
+        <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
         Rob Herring <robh+dt@kernel.org>,
         Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-References: <20200508211929.39020-1-alcooperx@gmail.com>
- <20200508211929.39020-6-alcooperx@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <5bd76807-ac02-5627-a3ad-f02aff3cb579@gmail.com>
-Date:   Fri, 8 May 2020 15:53:09 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Firefox/68.0 Thunderbird/68.8.0
+Subject: Re: [PATCH v8 4/5] usb: ehci: Add new EHCI driver for Broadcom STB
+ SoC's
+In-Reply-To: <20200508211929.39020-5-alcooperx@gmail.com>
+Message-ID: <Pine.LNX.4.44L0.2005082035460.2445-100000@netrider.rowland.org>
 MIME-Version: 1.0
-In-Reply-To: <20200508211929.39020-6-alcooperx@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Fri, 8 May 2020, Al Cooper wrote:
 
+A few minor typos in the patch description:
 
-On 5/8/2020 2:19 PM, Al Cooper wrote:
-> Add the build system changes needed to get the Broadcom STB XHCI,
-> EHCI and OHCI functionality working. The OHCI support does not
-> require anything unique to Broadcom so the standard ohci-platform
-> driver is being used. Also update MAINTAINERS.
+> Add a new EHCI driver for Broadcom STB SoC's. A new EHCI driver
+> was created instead of adding support to the existing ehci platform
+> driver because of the code required to workaround bugs in the EHCI
+-----------------------------------------^
+
+"workaround" is a noun; the verb form is "work around".
+
+> controller. The primary workround is for a bug where the Core
+-----------------------------^
+
+Missing "a".
+
+> violates the SOF interval between the first two SOFs transmitted after
+> resume. This only happens if the resume occurs near the end of a
+> microframe. The fix is to intercept the echi-hcd request to complete
+-------------------------------------------^
+
+ehci, not echi.
+
+> RESUME and align it to the start of the next microframe.
 > 
 > Signed-off-by: Al Cooper <alcooperx@gmail.com>
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> ---
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Basically this new driver is fine.  However...
+
+> +static inline void ehci_brcm_wait_for_sof(struct ehci_hcd *ehci, u32 delay)
+> +{
+> +	u32 frame_idx = ehci_readl(ehci, &ehci->regs->frame_index);
+> +	u32 val;
+> +	int res;
+> +
+> +	/* Wait for next microframe (every 125 usecs) */
+> +	res = readl_relaxed_poll_timeout(&ehci->regs->frame_index, val,
+> +					 val != frame_idx, 1, 130);
+> +	if (res)
+> +		dev_err(ehci_to_hcd(ehci)->self.controller,
+> +			"Error waiting for SOF\n");
+
+If this patch is going to be redone anyway, you might as well change
+dev_err() to ehci_err() -- that's what it's for.  I should have noticed
+this earlier, sorry.
+
+> +static int ehci_brcm_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct resource *res_mem;
+> +	struct brcm_priv *priv;
+> +	struct usb_hcd *hcd;
+> +	int irq;
+> +	int err;
+> +
+> +	err = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
+> +	if (err)
+> +		return err;
+> +
+> +	irq = platform_get_irq(pdev, 0);
+> +	if (irq <= 0)
+> +		return irq;
+
+I don't want to get involved in the question of whether or not 0 is a 
+valid IRQ number.  The consensus has gone back and forth over the 
+years, and it just doesn't seem important.
+
+However, as Sergei points out, if 0 is going to be regarded as an 
+invalid value then we shouldn't return 0 from the probe function here.
+
+I'll leave the decision on how to handle this matter up to Greg.  :-)
+
+Alan Stern
+
+
