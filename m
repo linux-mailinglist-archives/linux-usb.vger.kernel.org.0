@@ -2,189 +2,280 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D76A1CBEFB
-	for <lists+linux-usb@lfdr.de>; Sat,  9 May 2020 10:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AFC31CBF49
+	for <lists+linux-usb@lfdr.de>; Sat,  9 May 2020 10:43:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727907AbgEII23 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 9 May 2020 04:28:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46530 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726214AbgEII22 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 9 May 2020 04:28:28 -0400
-Received: from mail-ua1-x944.google.com (mail-ua1-x944.google.com [IPv6:2607:f8b0:4864:20::944])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F839C061A0C;
-        Sat,  9 May 2020 01:28:28 -0700 (PDT)
-Received: by mail-ua1-x944.google.com with SMTP id r2so1566536uam.7;
-        Sat, 09 May 2020 01:28:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=eINgDGJMaJIZgwxo+adBIzcEyirrmAf1qVa6/NMgfNs=;
-        b=vKP8Lubbl0z88XrQwfs6SZq5llN00B3ztUYbaEbETAAj2GYGKkPDZu/CiBT1OFFpoK
-         t+IYjQmZVREsAeNInCvkZM9V+bOrslUhFXsj6HpuJXDhCt11ivFoAvxFsdYTzAjo4sx3
-         /lOZWa+1E4QivWA1KS09YzPYVnmg8oZxWhBu5WSo47+yoP5NBc0PdedqQIFlPdNRgwb4
-         Ll0PSG8w2ULtX7TbomrtOOrR5D+72PUQY458IR8FbMyZCiM85xp3Oxqj4zWeTKKZpbEC
-         aAOBElP7YkDxfGv9KYlkO7oZKqGETaby/DItJdpm/SHWfjbjLR9SlPZkSoXZVFbAno6h
-         LrRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=eINgDGJMaJIZgwxo+adBIzcEyirrmAf1qVa6/NMgfNs=;
-        b=nSvrmYlz4BuI+hLn6BrPnJ42/dU0nHmgKpHhXGh+Rll7GIlm6QKhiRy8D7a4WqLOdq
-         D2u18R4YPqfUZIRhhm0kvKHt7LmxOwOfOH5ycF/5N5MPG91xJRDMee1UsJDrH6j1R839
-         Z3GsUeRklk2IsUBiV2tmbwaiA7UrE5+olBKIsceZXp77ledMYreCftwU+ntYlK8ichPH
-         FMT0Cx10kY1DihW8w3vi8lit7mUDMEQc13cttn9M5GM0Vpmo5PJITPWc/N6r9saJNdPf
-         rIRYSDE88onBJ7c197rr7fhlsGJr6DGhf0QpEVoTWhkXqdyxE2onjb8XXj7CVZkKNnsc
-         OnWA==
-X-Gm-Message-State: AGi0PuYfS3G5QOwGSS9tETy2ZASjKedtlRGcrtw9zCHtzg4QFRPLjnml
-        lF4Jx5o0jmEVr1F3g5BQpGQyRU/JiscCuA4fdNs=
-X-Google-Smtp-Source: APiQypJUsNaJk8HtjBPKfp+oM0xWkicWbch5h0T78OsafAj5jw0ru7bBBx3YVBBUoe2KsnkTLSgQaB+Frq2cCKxlFQk=
-X-Received: by 2002:a9f:2508:: with SMTP id 8mr5406078uaz.115.1589012907353;
- Sat, 09 May 2020 01:28:27 -0700 (PDT)
+        id S1726797AbgEIInN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 9 May 2020 04:43:13 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:35300 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726067AbgEIInN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 9 May 2020 04:43:13 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1589013792; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=7q6ciT5kWTeLY/TWplHoNnQfdOa1lllVc1nno43F/RI=; b=EhBjk+RZXsi6TVPqg+HuMbXb433pmATfrRvgrdMMmDry5qR7NskF88/pf4bJKny7Be4ziwYe
+ JI1yjNJ5L54w0kGMrO5+kIarFYT65ZLsGdqq+s/2s956JmFzDCgvu8+adxSmhM1vrSkVbOSh
+ Pkt182XzH9XjYJ98ADUPgz/KA+4=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5eb66d15.7f3d25ce3ca8-smtp-out-n03;
+ Sat, 09 May 2020 08:43:01 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 9D137C433BA; Sat,  9 May 2020 08:43:01 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.110.20.51] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 0DA83C433D2;
+        Sat,  9 May 2020 08:42:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 0DA83C433D2
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=wcheng@codeaurora.org
+Subject: Re: [RFC 1/3] usb: dwc3: Resize TX FIFOs to meet EP bursting
+ requirements
+To:     Felipe Balbi <balbi@kernel.org>, agross@kernel.org,
+        bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        gregkh@linuxfoundation.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        jackp@codeaurora.org
+References: <1588888768-25315-1-git-send-email-wcheng@codeaurora.org>
+ <1588888768-25315-2-git-send-email-wcheng@codeaurora.org>
+ <878si2mw7i.fsf@kernel.org>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <f966ac74-94d9-7aca-dc10-71052a8f82a9@codeaurora.org>
+Date:   Sat, 9 May 2020 01:42:58 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-References: <20191028215919.83697-1-john.stultz@linaro.org>
- <20191028215919.83697-4-john.stultz@linaro.org> <87mudjj4rc.fsf@gmail.com>
- <CALAqxLU+9uEcdRVaLfh+eQrDtZbDGod9pRXhBX=prAhg9MXagw@mail.gmail.com>
- <CAKgpwJVaKpsgMjKcnYyJsfNj0ibkPt=mdn-NxfOkeX1jfL=9iQ@mail.gmail.com>
- <CALAqxLVXauXP0r4Hv2Axa4PNf_F9wp644peYV06bdsPtMKGmLA@mail.gmail.com>
- <CAKgpwJU7VDx90STE7bhx9VZ5p1jtqCyyLavmhXfpaicyDAYt_g@mail.gmail.com>
- <CAKgpwJVU9m6G8PRdray2fGCp_peOU9C-ZAVKTk7pmSdq6z4NiA@mail.gmail.com> <87eerumwok.fsf@kernel.org>
-In-Reply-To: <87eerumwok.fsf@kernel.org>
-From:   Jun Li <lijun.kernel@gmail.com>
-Date:   Sat, 9 May 2020 16:28:16 +0800
-Message-ID: <CAKgpwJU=w8Qn2PpNMyh7D1Ci6jJCmMianG1xjsi-p7-0uVKfTA@mail.gmail.com>
-Subject: Re: [PATCH v4 3/9] usb: dwc3: Increase timeout for CmdAct cleared by
- device controller
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     John Stultz <john.stultz@linaro.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Yu Chen <chenyu56@huawei.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        ShuFan Lee <shufan_lee@richtek.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <878si2mw7i.fsf@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Felipe Balbi <balbi@kernel.org> =E4=BA=8E2020=E5=B9=B45=E6=9C=888=E6=97=A5=
-=E5=91=A8=E4=BA=94 =E4=B8=8B=E5=8D=888:35=E5=86=99=E9=81=93=EF=BC=9A
->
->
+
+
+On 5/8/2020 5:45 AM, Felipe Balbi wrote:
+> 
 > Hi,
->
-> Jun Li <lijun.kernel@gmail.com> writes:
-> > Jun Li <lijun.kernel@gmail.com> =E4=BA=8E2020=E5=B9=B45=E6=9C=887=E6=97=
-=A5=E5=91=A8=E5=9B=9B =E4=B8=8A=E5=8D=8811:08=E5=86=99=E9=81=93=EF=BC=9A
-> >>
-> >> John Stultz <john.stultz@linaro.org> =E4=BA=8E2020=E5=B9=B45=E6=9C=887=
-=E6=97=A5=E5=91=A8=E5=9B=9B =E4=B8=8A=E5=8D=886:27=E5=86=99=E9=81=93=EF=BC=
-=9A
-> >> >
-> >> > On Wed, May 6, 2020 at 2:00 AM Jun Li <lijun.kernel@gmail.com> wrote=
-:
-> >> > > John Stultz <john.stultz@linaro.org> =E4=BA=8E2019=E5=B9=B410=E6=
-=9C=8830=E6=97=A5=E5=91=A8=E4=B8=89 =E4=B8=8A=E5=8D=885:18=E5=86=99=E9=81=
-=93=EF=BC=9A
-> >> > > > On Tue, Oct 29, 2019 at 2:11 AM Felipe Balbi <balbi@kernel.org> =
-wrote:
-> >> > > > > John Stultz <john.stultz@linaro.org> writes:
-> >> > > > > > From: Yu Chen <chenyu56@huawei.com>
-> >> > > > > >
-> >> > > > > > It needs more time for the device controller to clear the Cm=
-dAct of
-> >> > > > > > DEPCMD on Hisilicon Kirin Soc.
-> >> > > > >
-> >> > > > > Why does it need more time? Why is it so that no other platfor=
-m needs
-> >> > > > > more time, only this one? And which command, specifically, cau=
-ses
-> >> > > > > problem?
-> >> > >
-> >> > > Sorry for my back to this so late.
-> >> > >
-> >> > > This change is required on my dwc3 based HW too, I gave a check
-> >> > > and the reason is suspend_clk is used in case the PIPE phy is at P=
-3,
-> >> > > this slow clock makes my EP command below timeout.
-> >> > >
-> >> > > dwc3_gadget_ep_cmd: ep0out: cmd 'Set Endpoint Configuration' [401]
-> >> > > params 00001000 00000500 00000000 --> status: Timed Out
-> >> > >
-> >> > > Success case takes about 400us to complete, see below trace(44.286=
-278
-> >> > > - 44.285897 =3D 0.000381):
-> >> > >
-> >> > > configfs_acm.sh-822   [000] d..1    44.285896: dwc3_writel: addr
-> >> > > 000000006d59aae1 value 00000401
-> >> > > configfs_acm.sh-822   [000] d..1    44.285897: dwc3_readl: addr
-> >> > > 000000006d59aae1 value 00000401
-> >> > > ... ...
-> >> > > configfs_acm.sh-822   [000] d..1    44.286278: dwc3_readl: addr
-> >> > > 000000006d59aae1 value 00000001
-> >> > > configfs_acm.sh-822   [000] d..1    44.286279: dwc3_gadget_ep_cmd:
-> >> > > ep0out: cmd 'Set Endpoint Configuration' [401] params 00001000
-> >> > > 00000500 00000000 --> status: Successful
-> >> > >
-> >> > > Hi John,
-> >> > >
-> >> > > Do you still have this problem? if yes, What's the value of
-> >> > > USBLNKST[21:18] when the timeout happens?
-> >> >
-> >> > Sorry. As I mentioned, I was working to upstream a patchset that I
-> >> > hadn't created, so the context I had was limited. As I couldn't
-> >> > reproduce an issue without the change on the device I had, I figured
-> >> > it would be best to drop it.
-> >>
-> >> That was fine.
-> >> >
-> >> > However, as you have some analysis and rational for why such a chang=
-e
-> >> > would be needed, I don't have an objection to it. Do you want to
-> >> > resubmit the patch with your explanation and detailed log above in t=
-he
-> >> > commit message?
-> >>
-> >> Sure, I will resubmit the patch with my explanation added in commit me=
-ssage.
-> >
-> > Hi John
-> >
-> > A second think of this, I feel use readl_poll_timeout_atomic() to wait =
-by time
-> > is more proper here, so I create a new patch to address this also other
-> > registers polling, see below patch with you CCed:
-> >
-> > https://patchwork.kernel.org/patch/11536081/
->
-> Fixing a bug has nothing to do with using
-> readl_poll_timeout_atomic(). Please don't mix things as it just makes
-> review time consuming.
->
-> Let's find out what the bug is all about, only then should we consider
-> moving over to readl_poll_timeout_atomic().
+> 
+> Wesley Cheng <wcheng@codeaurora.org> writes:
+>> Some devices have USB compositions which may require multiple endpoints
+>> that support EP bursting.  HW defined TX FIFO sizes may not always be
+>> sufficient for these compositions.  By utilizing flexible TX FIFO
+>> allocation, this allows for endpoints to request the required FIFO depth to
+>> achieve higher bandwidth.  With some higher bMaxBurst configurations, using
+>> a larger TX FIFO size results in better TX throughput.
+> 
+> This needs to be carefully thought out as it can introduce situations
+> where gadget drivers that worked previously stop working.
+> 
 
-Agreed, sorry about that, I will hold on my readl_poll_timeout_atomic() cha=
-nges
-until we have a conclusion on this issue fix.
+Hi Felipe,
 
-thanks
-Li Jun
->
-> --
-> balbi
+Thanks for the feedback.  I agree, the TX FIFO resizing logic should be
+reviewed carefully to, in order not to cause any regressions.  Would you
+be willing to shed some light on some of the failures you've seen
+previously where the gadget drivers stopped working?  (would help
+possibly come up with better approaches, etc...)
+
+>> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+>> index 4c171a8..e815c13 100644
+>> --- a/drivers/usb/dwc3/core.h
+>> +++ b/drivers/usb/dwc3/core.h
+>> @@ -675,6 +675,7 @@ struct dwc3_event_buffer {
+>>   *		isochronous START TRANSFER command failure workaround
+>>   * @start_cmd_status: the status of testing START TRANSFER command with
+>>   *		combo_num = 'b00
+>> + * @fifo_depth: allocated TXFIFO depth
+>>   */
+>>  struct dwc3_ep {
+>>  	struct usb_ep		endpoint;
+>> @@ -718,6 +719,7 @@ struct dwc3_ep {
+>>  	u8			resource_index;
+>>  	u32			frame_number;
+>>  	u32			interval;
+>> +	int			fifo_depth;
+>>  
+>>  	char			name[20];
+>>  
+>> @@ -1004,6 +1006,7 @@ struct dwc3_scratchpad_array {
+>>   * 	1	- utmi_l1_suspend_n
+>>   * @is_fpga: true when we are using the FPGA board
+>>   * @pending_events: true when we have pending IRQs to be handled
+>> + * @needs_fifo_resize: not all users might want fifo resizing, flag it
+>>   * @pullups_connected: true when Run/Stop bit is set
+>>   * @setup_packet_pending: true when there's a Setup Packet in FIFO. Workaround
+>>   * @three_stage_setup: set if we perform a three phase setup
+>> @@ -1044,6 +1047,7 @@ struct dwc3_scratchpad_array {
+>>   * @dis_metastability_quirk: set to disable metastability quirk.
+>>   * @imod_interval: set the interrupt moderation interval in 250ns
+>>   *                 increments or 0 to disable.
+>> + * @last_fifo_depth: total TXFIFO depth of all enabled USB IN/INT endpoints
+>>   */
+>>  struct dwc3 {
+>>  	struct work_struct	drd_work;
+>> @@ -1204,6 +1208,7 @@ struct dwc3 {
+>>  	unsigned		is_utmi_l1_suspend:1;
+>>  	unsigned		is_fpga:1;
+>>  	unsigned		pending_events:1;
+>> +	unsigned		needs_fifo_resize:1;
+> 
+> Instead of passing a flag, this could be detected in runtime during ->udc_start()
+> 
+
+The flag was going to serve the purpose of allowing platforms to define
+if they want to enable the TX FIFO resizing logic or not.  Maybe in
+their particular HW platform, the HW default FIFO settings are sufficient.
+
+>> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
+>> index 6dee4da..7ee2302 100644
+>> --- a/drivers/usb/dwc3/ep0.c
+>> +++ b/drivers/usb/dwc3/ep0.c
+>> @@ -611,6 +612,43 @@ static int dwc3_ep0_set_config(struct dwc3 *dwc, struct usb_ctrlrequest *ctrl)
+>>  		return -EINVAL;
+>>  
+>>  	case USB_STATE_ADDRESS:
+> 
+> are you sure it's safe to fiddle with TX FIFO allocation at SetAddress()
+> time?
+> 
+
+It should be acceptable, as the function drivers shouldn't be calling
+usb_ep_enable() until we receive a SET_CONFIG from the host to enable
+the configuration.  __dwc3_gadget_ep_enable() -->
+dwc3_gadget_set_ep_config() is where we'd assign the EP to a particular
+TX FIFO.
+
+>> +		/*
+>> +		 * If tx-fifo-resize flag is not set for the controller, then
+>> +		 * do not clear existing allocated TXFIFO since we do not
+>> +		 * allocate it again in dwc3_gadget_resize_tx_fifos
+>> +		 */
+>> +		if (dwc->needs_fifo_resize) {
+>> +			/* Read ep0IN related TXFIFO size */
+>> +			dep = dwc->eps[1];
+>> +			size = dwc3_readl(dwc->regs, DWC3_GTXFIFOSIZ(0));
+>> +			if (dwc3_is_usb31(dwc))
+>> +				dep->fifo_depth = DWC31_GTXFIFOSIZ_TXFDEP(size);
+>> +			else
+>> +				dep->fifo_depth = DWC3_GTXFIFOSIZ_TXFDEP(size);
+>> +
+>> +			dwc->last_fifo_depth = dep->fifo_depth;
+>> +			/* Clear existing TXFIFO for all IN eps except ep0 */
+>> +			for (num = 3; num < min_t(int, dwc->num_eps,
+>> +				DWC3_ENDPOINTS_NUM); num += 2) {
+>> +				dep = dwc->eps[num];
+>> +				/* Don't change TXFRAMNUM on usb31 version */
+>> +				size = dwc3_is_usb31(dwc) ?
+>> +					dwc3_readl(dwc->regs,
+>> +						   DWC3_GTXFIFOSIZ(num >> 1)) &
+>> +						   DWC31_GTXFIFOSIZ_TXFRAMNUM :
+>> +						   0;
+>> +
+>> +				dwc3_writel(dwc->regs,
+>> +					    DWC3_GTXFIFOSIZ(num >> 1),
+>> +					    size);
+>> +				dep->fifo_depth = 0;
+>> +
+>> +				dev_dbg(dwc->dev, "%s(): %s fifo_depth:%x\n",
+>> +					__func__, dep->name,
+>> +					dep->fifo_depth);
+> 
+> no dev_dbg() calls in this driver, please.
+> 
+
+Got it.
+
+>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>> index 00746c2..6baca05 100644
+>> --- a/drivers/usb/dwc3/gadget.c
+>> +++ b/drivers/usb/dwc3/gadget.c
+>> @@ -540,6 +540,97 @@ static int dwc3_gadget_start_config(struct dwc3_ep *dep)
+>>  	return 0;
+>>  }
+>>  
+>> +/*
+>> + * dwc3_gadget_resize_tx_fifos - reallocate fifo spaces for current use-case
+>> + * @dwc: pointer to our context structure
+>> + *
+>> + * This function will a best effort FIFO allocation in order
+>> + * to improve FIFO usage and throughput, while still allowing
+>> + * us to enable as many endpoints as possible.
+>> + *
+>> + * Keep in mind that this operation will be highly dependent
+>> + * on the configured size for RAM1 - which contains TxFifo -,
+>> + * the amount of endpoints enabled on coreConsultant tool, and
+>> + * the width of the Master Bus.
+>> + *
+>> + * In the ideal world, we would always be able to satisfy the
+>> + * following equation:
+>> + *
+>> + * ((512 + 2 * MDWIDTH-Bytes) + (Number of IN Endpoints - 1) * \
+>> + * (3 * (1024 + MDWIDTH-Bytes) + MDWIDTH-Bytes)) / MDWIDTH-Bytes
+>> + *
+>> + * Unfortunately, due to many variables that's not always the case.
+>> + */
+>> +static int dwc3_gadget_resize_tx_fifos(struct dwc3 *dwc, struct dwc3_ep *dep)
+>> +{
+>> +	int fifo_size, mdwidth, max_packet = 1024;
+>> +	int tmp, mult = 1, fifo_0_start, ram1_depth;
+>> +
+>> +	if (!dwc->needs_fifo_resize)
+>> +		return 0;
+>> +
+>> +	/* resize IN endpoints excepts ep0 */
+> 
+> typo: excepts
+> 
+
+Got it.
+
+>> +	if (!usb_endpoint_dir_in(dep->endpoint.desc) || dep->number <= 1)
+>> +		return 0;
+>> +
+>> +	/* Don't resize already resized IN endpoint */
+>> +	if (dep->fifo_depth) {
+>> +		dev_dbg(dwc->dev, "%s fifo_depth:%d is already set\n",
+>> +					dep->endpoint.name, dep->fifo_depth);
+> 
+> no dev_dbg()
+> 
+
+Understood.
+
+>> @@ -620,6 +711,10 @@ static int __dwc3_gadget_ep_enable(struct dwc3_ep *dep, unsigned int action)
+>>  	int			ret;
+>>  
+>>  	if (!(dep->flags & DWC3_EP_ENABLED)) {
+>> +		ret = dwc3_gadget_resize_tx_fifos(dwc, dep);
+> 
+> technically, you're no resizing a single FIFO. In any case, what happens
+> when you run out of space midway through the resizing? You already
+> accepted the gadget driver, you're already bound to it, then you resize
+> the FIFOs and things start to fall apart. How do we handle that?
+> 
+
+Yes, that is a valid concern.  At the moment, if we returned -ENOMEM due
+to the resizing logic failing, then the function driver would receive an
+error during usb_ep_enable().  This would then most likely result in the
+data path not being enabled for each subsequent function driver.  Would
+the situation be better if we avoid binding to the UDC entirely if our
+TXFIFO was out of memory?
+
+Thanks again for the input!
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
