@@ -2,63 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61E231CBEA0
-	for <lists+linux-usb@lfdr.de>; Sat,  9 May 2020 10:00:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD2C21CBEAE
+	for <lists+linux-usb@lfdr.de>; Sat,  9 May 2020 10:02:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726013AbgEIIAM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 9 May 2020 04:00:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42178 "EHLO
+        id S1726067AbgEIICV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 9 May 2020 04:02:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725850AbgEIIAL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 9 May 2020 04:00:11 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B9FAC061A0C;
-        Sat,  9 May 2020 01:00:11 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id r17so198900lff.9;
-        Sat, 09 May 2020 01:00:11 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1725880AbgEIICU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 9 May 2020 04:02:20 -0400
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D828C061A0C;
+        Sat,  9 May 2020 01:02:20 -0700 (PDT)
+Received: by mail-lf1-x141.google.com with SMTP id a4so3257309lfh.12;
+        Sat, 09 May 2020 01:02:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=1O47PkHhPqgCaPnb1U8RuAAVju8TXrJE2/w3v9RDbug=;
-        b=uREhs3pYWcR0fUxz9iyr7QagA9NylxN3dLzNLCrOkywdxmuF8NGbY/bZ5Hb74A8uQ8
-         kM78bD3VFlp9o1qq3xAKEitVWtT3lSDrk1FfSTNpHMk5Om6n0EfZ83Po3zMj8nDVFSDg
-         fta+m2dQ5muFyBgC7vEzG4j76DNJSPdREfwIFg+GV9CYzg5h8nTtO4mWp5OCfdIKAw+v
-         679hdIi8nlEsSGCR3D5pYPjr/UnCCWfxGmLVqlXtNgnRpcyTjzlTDBSVLV7EfG3SzoK+
-         u+XV0pFLp6EHpaTiXf7KhyCcv/YJW7aEslPWGa0niXrtXueu0qOPBidxy8d3/DGqvur2
-         nV3w==
+        bh=BuTmdFQyPT/UZt2ymSX/JY4LvFwkZzPp3F14X454bn8=;
+        b=Z/tAs/QevuNrQ0BwYjAZBlqOh1h4Tpajd4iqRsOnOXhX5eUw4oHZxcYnskD9rQ+V+H
+         0J6XgKQA0L6T9HwSn2yizRwLeikcQcY5t7G9kIeagxty6t700t5bKuIog7umtodpU5PK
+         ZSNpN7BkKE8qJp0LOkMGelIBQ5EFJUQrRDK8Fb33En3eA6DY/CNhvz06mjHIhGOtvflA
+         Hq77Ek1/yQfoi/m5Fr/ZWQeO4tVVb5PEOTbnZEeh1yXbASdDE9nFPFauF5VhwwjGWTkg
+         tkhxqsduFwyTpoGgwGREfLxMQsA/928ISmnVkCt+ILv2scrU9kom+ImfzGZfiuSn2BrS
+         AJYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
          :date:message-id:mime-version;
-        bh=1O47PkHhPqgCaPnb1U8RuAAVju8TXrJE2/w3v9RDbug=;
-        b=cY9vvybdHA5LAZ0G+f85MIDUGJnsf5Qx+iKTNTAaI0dzp339+vZ3yKqM7Y60CQBehS
-         22KGOnWSA4OWECsWY+9oqLIYKqYHWZ7xsTPu/A8rC86kJ1kfsWc9/zFpPIdmm/gGVqC0
-         QynM0r18Gg6cx5p0moVZJzZpdZU+W2BxZ8K+c1VdqrEt2AYPeZ61hmcd4bkDBERM+Gwp
-         8yYJVmkdF3qi5uJDoD2ht4i1q3z2J+hmhNt/khHTGGGThI8HbXkZfaYe1WhcgTwMxC/z
-         Wy6xX9n+8tsJhhh0apv+E5tVjZUx9hITYNqQPeTANSpe1d/YN7egEzRqa3iWZ9qhXslB
-         zo3g==
-X-Gm-Message-State: AOAM530jLs6bgrAP3NCpVoWRVaOtCipdqHZ0dCZKEjvJ1R4j6EFtG5TF
-        jLS4YkeRJSP2NYJfgTr5bws=
-X-Google-Smtp-Source: ABdhPJzXIr+L+cqMht2BVYAGEPXftyPaqzeiq57Iq7hB4B+ztVcm83B0Xz/SLjIvsjYJJAlQeD/bJQ==
-X-Received: by 2002:ac2:50c7:: with SMTP id h7mr4331340lfm.171.1589011209653;
-        Sat, 09 May 2020 01:00:09 -0700 (PDT)
+        bh=BuTmdFQyPT/UZt2ymSX/JY4LvFwkZzPp3F14X454bn8=;
+        b=FroSoJFvlx/6h1QHyKSst9FYzu+H1TmKli9cXfUV6KOc9/temTO/SxWeoM/gX3FpO+
+         Z4ps2L3CTjgt1etKb2aLRouTKWfnXnKxfgY2bVcHkOlBieaDtmmsszO2QM2vVKbxXI4g
+         I6TzEJrh7EBzZAyb5OqMCeP+iLqYvB/MmF+l82gczMmG7rNf/YBnk2OU1Y4Sa/hl8cDy
+         D/OojpuC6CqxA/JPKi/wm01f/ehmAQCybhuPCVxTIG8mEuap/JFUmL0tCnmzmIzFVPE8
+         jrW+oyjcNZX/GeoMqjlnKLaEYdeFZQwHMyI5qgg1tnR+Vh1kxTwUzLkk1z4OfWg9JJfy
+         NqKg==
+X-Gm-Message-State: AOAM530dZvOK+q6OexQCxny7x8u1XDgjInEYfXG+jJKvY6BGbaIAgZ/s
+        aLr6UfYHwogSvu6dM37yFtY=
+X-Google-Smtp-Source: ABdhPJyGL1rF/FXwTFL072+D1awC/4HqNexICNeOuN2DuyGoLCL3fJot18CM74NGpLkR1xapK2MLGA==
+X-Received: by 2002:ac2:5199:: with SMTP id u25mr4373879lfi.80.1589011338783;
+        Sat, 09 May 2020 01:02:18 -0700 (PDT)
 Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id j29sm3691207lfp.90.2020.05.09.01.00.08
+        by smtp.gmail.com with ESMTPSA id q19sm3059482ljj.84.2020.05.09.01.02.17
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 09 May 2020 01:00:09 -0700 (PDT)
+        Sat, 09 May 2020 01:02:18 -0700 (PDT)
 From:   Felipe Balbi <balbi@kernel.org>
 To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
         Alan Stern <stern@rowland.harvard.edu>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Konovalov <andreyknvl@google.com>
-Subject: Re: [PATCH USB v3 3/5] usb: raw-gadget: fix gadget endpoint selection
-In-Reply-To: <459d02069dedefcc30095748f49ef4a426e15b74.1588870822.git.andreyknvl@google.com>
-References: <cover.1588870822.git.andreyknvl@google.com> <459d02069dedefcc30095748f49ef4a426e15b74.1588870822.git.andreyknvl@google.com>
-Date:   Sat, 09 May 2020 11:00:04 +0300
-Message-ID: <873689mtbv.fsf@kernel.org>
+        Dmitry Vyukov <dvyukov@google.com>
+Subject: Re: [PATCH v2] usb: raw-gadget: fix gadget endpoint selection
+In-Reply-To: <CAAeHK+yxoYigM7uWC3cpKmCjgMLXQ1pT=MkJ7XQYCVRgZ-DdTQ@mail.gmail.com>
+References: <2f05fe9aa7e4bcb1bad3f6d11e48a411c901af68.1588197975.git.andreyknvl@google.com> <875zdabzs3.fsf@kernel.org> <CAAeHK+yxoYigM7uWC3cpKmCjgMLXQ1pT=MkJ7XQYCVRgZ-DdTQ@mail.gmail.com>
+Date:   Sat, 09 May 2020 11:02:13 +0300
+Message-ID: <87zhahlenu.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -71,45 +71,25 @@ X-Mailing-List: linux-usb@vger.kernel.org
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
+
+Hi,
+
 Andrey Konovalov <andreyknvl@google.com> writes:
+>> here you're changing userspace ABI. Aren't we going to possibly break
+>> some existing applications?
+>
+> Hi Felipe,
+>
+>  I've been working on tests for Raw Gadget for the last few weeks [1],
+> which revealed a few problems with the interface. This isn't yet
+> included into any released kernel, so my hope that changing the ABI is
+> OK during the rc stage.
 
-> Currently automatic gadget endpoint selection based on required features
-> doesn't work. Raw Gadget tries iterating over the list of available
-> endpoints and finding one that has the right direction and transfer type.
-> Unfortunately selecting arbitrary gadget endpoints (even if they satisfy
-> feature requirements) doesn't work, as (depending on the UDC driver) they
-> might have fixed addresses, and one also needs to provide matching
-> endpoint addresses in the descriptors sent to the host.
->
-> The composite framework deals with this by assigning endpoint addresses
-> in usb_ep_autoconfig() before enumeration starts. This approach won't work
-> with Raw Gadget as the endpoints are supposed to be enabled after a
-> set_configuration/set_interface request from the host, so it's too late to
-> patch the endpoint descriptors that had already been sent to the host.
->
-> For Raw Gadget we take another approach. Similarly to GadgetFS, we allow
-> the user to make the decision as to which gadget endpoints to use.
->
-> This patch adds another Raw Gadget ioctl USB_RAW_IOCTL_EPS_INFO that
-> exposes information about all non-control endpoints that a currently
-> connected UDC has. This information includes endpoints addresses, as well
-> as their capabilities and limits to allow the user to choose the most
-> fitting gadget endpoint.
->
-> The USB_RAW_IOCTL_EP_ENABLE ioctl is updated to use the proper endpoint
-> validation routine usb_gadget_ep_match_desc().
->
-> These changes affect the portability of the gadgets that use Raw Gadget
-> when running on different UDCs. Nevertheless, as long as the user relies
-> on the information provided by USB_RAW_IOCTL_EPS_INFO to dynamically
-> choose endpoint addresses, UDC-agnostic gadgets can still be written with
-> Raw Gadget.
->
-> Fixes: f2c2e717642c ("usb: gadget: add raw-gadget interface")
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> ---
+Fair enough. If that's okay with Greg, it's okay with me, but then how
+do we include it into the -rc seen as it's not really a fix?
 
-you're adding a new IOCTL, how is this a fix?
+Greg, are you okay with me including such large patches during the -rc?
+They essentially add new IOCTLs to the raw-gadget interface.
 
 =2D-=20
 balbi
@@ -119,18 +99,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl62YwQACgkQzL64meEa
-mQbYsRAA0XJbcBgnby2EBTMYktlDmcMrOfmOE7NSASjGlft/AAZO/0yJVSEy9rE8
-iPMyiw6wQ81VuMfpWzeFC9G+HTkTsqpQQ2ULWZWpJtDBFhzUL/5VWF/ZLeHg3VXT
-fMuI2Cgmbj0Gy/V2pWH5MFGJtyxWKJQ0Q9QHFqSfimfcPT4dLbBbQ+HHvO+tJ8zV
-3KN39YxJ5We1agxM2E2nzrCvTY8eiOl4/8a8s4N9l//8WlHc2BwWmuGq6QRPdvRE
-aBElv9l4WplqDe+TXG+5Wx/vD+ezshKiAFhjlq3JdwgU4F8BsqO0BJFaLZXtUJnz
-VTNqbkPmPOqEw5+QHhQQJ8N0ThJPHI4+gIXYZnQUyWHwW3G+CSYey5sFnjm0DA5M
-rbmTIsSCk1VpTQjZvV9PWuF3vMO8aKLZy7UWC3DVvc82Uj1WfjI6ewn6e1M1v0wC
-SquNQ1iKw5s6erCWmbYjOn+h9lEAnZgoDJpHHZzXcTpQidRAu1fRpYOdqxLEDV2y
-AVQOYLV07Zvo4nDnACMUhvXxGLyeJs3gNZxIBMQQu0d+XWlRnAZAZABdUI43q/hs
-1FLYj8j/PoYOqEnE2RfcMLE7jmtWnlt5v2llz4+1DF1gvY/CPL5ncRtmWNAPC9SX
-dBZqt/Efo19jrHKsHXPPFqSdsm2Zc24EudCjgjyw6JujDnXVDCA=
-=sI+L
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl62Y4YACgkQzL64meEa
+mQYjJA/9Gb9ZWN8TE3Q3M6hAC05iGc3Td3l8aC6OQGmDPB5as3fHiCM9wqHOfHMr
+fL3OhtCRl+C/deIgW28+4y3uQy1wYOnIvgqeEJDUPjhO+1d0I2z+F1jAJwx/9H7w
+4tGD4goEl7uvRdiCwkkxNgWP74LW0+3/a8riL+UKCbgltBWQaXUIFw1ucSziJt/t
+W/Sio0YbQpyRp8MBaAdRmE3slA/EUdM8B74j5d5sT60/9+dH3gqH6/9IaTjhVaJf
+6q7XPbe8ribIS94rf6it04Q47hg1JTvQbvo+MPHuZuVyPj3xRkyevMzELPTp3/yv
+gUwEGp16s5XpELelEtHiixSafGZykzmU9xAM203t9mhzmvqiDenDrgNaT24XASLe
+tG/IjNTxNr65R/9FoUnrSTQquahZLVTE3IzS4wkznUjDK9v0P/+IuQLQVsf/3Xvg
+YFXG1XCU+b6h68CG0T5Wvjbxlcte0Cycq7THcovVRyBsyPpGy7VnyJoRMB42A13G
+dKKugfm5M8czyT6mOcqFQV+UzsFmwWpOjHmZLTP6+6w56FSz2Fx2S/uCduP6jSCd
+yUQ+lE8kguXtonMfhWWRrR9m1jq5lsrvrFxVtDUVxB0G/VHmfL+GiNXzoGQo1IbM
+RcsH7Y+y3hBXzbOE9S6J4WjvLghGrnZEdgbSvuVhh0gtIxVQXVk=
+=O4Si
 -----END PGP SIGNATURE-----
 --=-=-=--
