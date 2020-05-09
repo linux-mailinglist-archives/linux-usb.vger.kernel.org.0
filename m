@@ -2,53 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 504731CC1CC
-	for <lists+linux-usb@lfdr.de>; Sat,  9 May 2020 15:29:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C8411CC1D4
+	for <lists+linux-usb@lfdr.de>; Sat,  9 May 2020 15:42:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727833AbgEIN3C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 9 May 2020 09:29:02 -0400
-Received: from s52.coreserver.jp ([202.172.28.53]:42587 "EHLO
-        s52.coreserver.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727789AbgEIN3B (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 9 May 2020 09:29:01 -0400
-Received: (qmail 520476 invoked by uid 10000); 9 May 2020 22:29:00 +0900
-To:     undisclosed-recipients:;
-Subject: =?UTF-8?Q?=E3=81=82=E3=81=AA=E3=81=9F=E3=81=B8=E3=81=AE=E3=81=94?=  =?UTF-8?Q?=E6=8C=A8=E6=8B=B6?=
+        id S1727092AbgEINl4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 9 May 2020 09:41:56 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:44171 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726013AbgEINl4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 9 May 2020 09:41:56 -0400
+Received: (qmail 4958 invoked by uid 500); 9 May 2020 09:41:55 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 9 May 2020 09:41:55 -0400
+Date:   Sat, 9 May 2020 09:41:55 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     Thomas Gleixner <tglx@linutronix.de>
+cc:     Greg KH <gregkh@linuxfoundation.org>,
+        syzbot <syzbot+353be47c9ce21b68b7ed@syzkaller.appspotmail.com>,
+        <bp@alien8.de>, <dave.hansen@linux.intel.com>,
+        <dmitry.torokhov@gmail.com>, <ebiederm@xmission.com>,
+        <hpa@zytor.com>, <jeremy.linton@arm.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <luto@kernel.org>, <mingo@redhat.com>, <peterz@infradead.org>,
+        <syzkaller-bugs@googlegroups.com>, <x86@kernel.org>
+Subject: Re: WARNING in memtype_reserve
+In-Reply-To: <87wo5l4ecm.fsf@nanos.tec.linutronix.de>
+Message-ID: <Pine.LNX.4.44L0.2005090939210.4307-100000@netrider.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Sat, 09 May 2020 06:29:00 -0700
-From:   Dominique Bell <keiko@ono.bz>
-Reply-To: dominiquebell757@gmail.com
-Mail-Reply-To: dominiquebell757@gmail.com
-Message-ID: <30291408c15ccfeaf3a095bda6aba812@ono.bz>
-X-Sender: keiko@ono.bz
-User-Agent: Roundcube Webmail/0.9.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-注::このメッセージをSPAM / JUNKフォルダーで受信した場合は、インターネットサービスプロバイダーによって制限が課せられているためです。
+On Sat, 9 May 2020, Thomas Gleixner wrote:
 
-メッセージでご迷惑をおかけして申し訳ありません。削除する前に、少し時間をかけてお読みください。
-あなたが私に与えなかったので、このメールはあなたにとって驚きかもしれません
-そうする許可とあなたは私を知らないが、私があなたに言う前に
-私自身についてこのメールを送ったことを許してください
-あなたの許可なしに。
+> Greg KH <gregkh@linuxfoundation.org> writes:
+> > On Sat, May 09, 2020 at 12:20:14AM -0700, syzbot wrote:
+> >> memtype_reserve failed: [mem 0xffffffffff000-0x00008fff], req write-back
+> >> WARNING: CPU: 1 PID: 7025 at arch/x86/mm/pat/memtype.c:589 memtype_reserve+0x69f/0x820 arch/x86/mm/pat/memtype.c:589
+> >
+> > So should memtype_reserve() not do a WARN if given invalid parameters as
+> > it can be triggered by userspace requests?
+> >
+> > A normal "invalid request" debug line is probably all that is needed,
+> > right?
+> 
+> I disagree. The callsite espcially if user space triggerable should not
+> attempt to ask for a reservation where start > end:
+> 
+>   >> memtype_reserve failed: [mem 0xffffffffff000-0x00008fff], req write-back
+> 
+> The real question is which part of the call chain is responsible for
+> this. That needs to be fixed.
 
-私は自信を持ってこの手紙を書いています。
-あなたがこのプロジェクトを手伝ってくれる神の私、正直で信頼が必要です
-あなたのような立派な人がこの巨大な移転プロジェクトを任せてください。わたし
-次の慈善団体にあなたを紹介するためにあなたの協力を求めています
-世界中の開発。 ..
- 
-私はあなたに提案があります。あなたのことを示すために私に返信してください
-詳細に興味があります。
+What about all the other ways in which a reservation request could be
+invalid?  The MM core already checks for these; what point is there in
+duplicating these checks in many places higher up the call chain?
 
-私は辛抱強くあなたの返事を待ちます、
-dominiquebell755@gmail.com
+Alan Stern
 
-ありがとう
-ドミニク・ベル氏
