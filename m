@@ -2,29 +2,29 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDFA21CC216
-	for <lists+linux-usb@lfdr.de>; Sat,  9 May 2020 16:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A834C1CC225
+	for <lists+linux-usb@lfdr.de>; Sat,  9 May 2020 16:17:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728008AbgEIOQr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 9 May 2020 10:16:47 -0400
-Received: from asav22.altibox.net ([109.247.116.9]:34156 "EHLO
+        id S1728058AbgEIOQv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 9 May 2020 10:16:51 -0400
+Received: from asav22.altibox.net ([109.247.116.9]:34162 "EHLO
         asav22.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727930AbgEIOQr (ORCPT
+        with ESMTP id S1727940AbgEIOQr (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Sat, 9 May 2020 10:16:47 -0400
 Received: from localhost.localdomain (unknown [81.166.168.211])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: noralf.tronnes@ebnett.no)
-        by asav22.altibox.net (Postfix) with ESMTPSA id 87ADA20190;
+        by asav22.altibox.net (Postfix) with ESMTPSA id DF53B20192;
         Sat,  9 May 2020 16:16:43 +0200 (CEST)
 From:   =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>
 To:     dri-devel@lists.freedesktop.org, linux-usb@vger.kernel.org,
         lee.jones@linaro.org
 Cc:     sam@ravnborg.org, daniel.thompson@linaro.org, jingoohan1@gmail.com,
         =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>
-Subject: [PATCH v2 06/10] drm/client: Add a way to set modeset, properties and rotation
-Date:   Sat,  9 May 2020 16:16:15 +0200
-Message-Id: <20200509141619.32970-7-noralf@tronnes.org>
+Subject: [PATCH v2 07/10] drm/format-helper: Add drm_fb_swab()
+Date:   Sat,  9 May 2020 16:16:16 +0200
+Message-Id: <20200509141619.32970-8-noralf@tronnes.org>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20200509141619.32970-1-noralf@tronnes.org>
 References: <20200509141619.32970-1-noralf@tronnes.org>
@@ -34,279 +34,141 @@ Content-Transfer-Encoding: 8bit
 X-CMAE-Score: 0
 X-CMAE-Analysis: v=2.3 cv=R7It5+ZX c=1 sm=1 tr=0
         a=OYZzhG0JTxDrWp/F2OJbnw==:117 a=OYZzhG0JTxDrWp/F2OJbnw==:17
-        a=IkcTkHD0fZMA:10 a=M51BFTxLslgA:10 a=SJz97ENfAAAA:8
-        a=M-TpJSvIHFVSw-O4hR8A:9 a=Se0h0s-PsaGxwzjN:21 a=KLOMj-mo1MvUhMRw:21
-        a=QEXdDO2ut3YA:10 a=vFet0B0WnEQeilDPIY6i:22
+        a=IkcTkHD0fZMA:10 a=M51BFTxLslgA:10 a=7gkXJVJtAAAA:8 a=SJz97ENfAAAA:8
+        a=-9A2zdw3ca-yCi4n-HUA:9 a=QEXdDO2ut3YA:10 a=E9Po1WZjFZOl8hwRPBS3:22
+        a=vFet0B0WnEQeilDPIY6i:22
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This adds functions for clients that need more control over the
-configuration than what's setup by drm_client_modeset_probe().
-Connector, fb and display mode can be set using drm_client_modeset_set().
-Plane rotation can be set using drm_client_modeset_set_rotation() and
-other properties using drm_client_modeset_set_property(). Property
-setting is only implemented for atomic drivers.
+This replaces drm_fb_swab16() with drm_fb_swab() supporting 16 and 32-bit.
+Also make pixel line caching optional.
 
 v2:
-- drm_client_modeset_set(): Remove undocumented functionality to clear
-  modesets. A disable function takes care of that need now.
-- drm_client_modeset_set_property(): Return -EOPNOTSUPP if driver is not
-  atomic (Sam)
+- Bail out on cpp != 2 && 4 (Sam)
 
+Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
 Signed-off-by: Noralf Trønnes <noralf@tronnes.org>
 ---
- drivers/gpu/drm/drm_client_modeset.c | 137 +++++++++++++++++++++++++++
- include/drm/drm_client.h             |  38 +++++++-
- 2 files changed, 174 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/drm_format_helper.c | 61 +++++++++++++++++++----------
+ drivers/gpu/drm/drm_mipi_dbi.c      |  2 +-
+ include/drm/drm_format_helper.h     |  4 +-
+ 3 files changed, 44 insertions(+), 23 deletions(-)
 
-diff --git a/drivers/gpu/drm/drm_client_modeset.c b/drivers/gpu/drm/drm_client_modeset.c
-index b96183fadd4c..b22cc63d8da4 100644
---- a/drivers/gpu/drm/drm_client_modeset.c
-+++ b/drivers/gpu/drm/drm_client_modeset.c
-@@ -83,6 +83,10 @@ static void drm_client_modeset_release(struct drm_client_dev *client)
- 		}
- 		modeset->num_connectors = 0;
- 	}
-+
-+	kfree(client->properties);
-+	client->properties = NULL;
-+	client->num_properties = 0;
- }
- 
- void drm_client_modeset_free(struct drm_client_dev *client)
-@@ -879,6 +883,130 @@ int drm_client_modeset_probe(struct drm_client_dev *client, unsigned int width,
- }
- EXPORT_SYMBOL(drm_client_modeset_probe);
- 
-+/**
-+ * drm_client_modeset_set() - Set modeset configuration
-+ * @client: DRM client
-+ * @connector: Connector
-+ * @mode: Display mode
-+ * @fb: Framebuffer
-+ *
-+ * This function releases any current modeset info, including properties, and
-+ * sets the new modeset in the client's modeset array.
-+ *
-+ * Returns:
-+ * Zero on success or negative error code on failure.
-+ */
-+int drm_client_modeset_set(struct drm_client_dev *client, struct drm_connector *connector,
-+			   struct drm_display_mode *mode, struct drm_framebuffer *fb)
-+{
-+	struct drm_mode_set *modeset;
-+	int ret = -ENOENT;
-+
-+	mutex_lock(&client->modeset_mutex);
-+
-+	drm_client_modeset_release(client);
-+
-+	drm_client_for_each_modeset(modeset, client) {
-+		if (!connector_has_possible_crtc(connector, modeset->crtc))
-+			continue;
-+
-+		modeset->mode = drm_mode_duplicate(client->dev, mode);
-+		if (!modeset->mode) {
-+			ret = -ENOMEM;
-+			break;
-+		}
-+
-+		drm_mode_set_crtcinfo(modeset->mode, CRTC_INTERLACE_HALVE_V);
-+
-+		drm_connector_get(connector);
-+		modeset->connectors[modeset->num_connectors++] = connector;
-+
-+		modeset->fb = fb;
-+		ret = 0;
-+		break;
-+	}
-+
-+	mutex_unlock(&client->modeset_mutex);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL(drm_client_modeset_set);
-+
-+/**
-+ * drm_client_modeset_set_property() - Set a property on the current configuration
-+ * @client: DRM client
-+ * @obj: DRM Mode Object
-+ * @prop: DRM Property
-+ * @value: Property value
-+ *
-+ * Note: Currently only implemented for atomic drivers.
-+ *
-+ * Returns:
-+ * Zero on success or negative error code on failure.
-+ */
-+int drm_client_modeset_set_property(struct drm_client_dev *client, struct drm_mode_object *obj,
-+				    struct drm_property *prop, u64 value)
-+{
-+	struct drm_client_property *properties;
-+	int ret = 0;
-+
-+	if (!prop)
-+		return -EINVAL;
-+
-+	if (!drm_drv_uses_atomic_modeset(client->dev))
-+		return -EOPNOTSUPP;
-+
-+	mutex_lock(&client->modeset_mutex);
-+
-+	properties = krealloc(client->properties,
-+			      (client->num_properties + 1) * sizeof(*properties), GFP_KERNEL);
-+	if (!properties) {
-+		ret = -ENOMEM;
-+		goto unlock;
-+	}
-+
-+	properties[client->num_properties].obj = obj;
-+	properties[client->num_properties].prop = prop;
-+	properties[client->num_properties].value = value;
-+	client->properties = properties;
-+	client->num_properties++;
-+unlock:
-+	mutex_unlock(&client->modeset_mutex);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL(drm_client_modeset_set_property);
-+
-+/**
-+ * drm_client_modeset_set_rotation() - Set rotation on the current configuration
-+ * @client: DRM client
-+ * @value: Rotation value
-+ *
-+ * Returns:
-+ * Zero on success or negative error code on failure.
-+ */
-+int drm_client_modeset_set_rotation(struct drm_client_dev *client, u64 value)
-+{
-+	struct drm_plane *plane = NULL;
-+	struct drm_mode_set *modeset;
-+
-+	mutex_lock(&client->modeset_mutex);
-+	drm_client_for_each_modeset(modeset, client) {
-+		if (modeset->mode) {
-+			plane = modeset->crtc->primary;
-+			break;
-+		}
-+	}
-+	mutex_unlock(&client->modeset_mutex);
-+
-+	if (!plane)
-+		return -ENOENT;
-+
-+	return drm_client_modeset_set_property(client, &plane->base,
-+					       plane->rotation_property, value);
-+}
-+EXPORT_SYMBOL(drm_client_modeset_set_rotation);
-+
- /**
-  * drm_client_rotation() - Check the initial rotation value
-  * @modeset: DRM modeset
-@@ -973,6 +1101,7 @@ static int drm_client_modeset_commit_atomic(struct drm_client_dev *client, bool
- 	struct drm_atomic_state *state;
- 	struct drm_modeset_acquire_ctx ctx;
- 	struct drm_mode_set *mode_set;
-+	unsigned int i;
- 	int ret;
- 
- 	drm_modeset_acquire_init(&ctx, 0);
-@@ -1033,6 +1162,14 @@ static int drm_client_modeset_commit_atomic(struct drm_client_dev *client, bool
- 		}
- 	}
- 
-+	for (i = 0; i < client->num_properties; i++) {
-+		struct drm_client_property *prop = &client->properties[i];
-+
-+		ret = drm_atomic_set_property(state, NULL, prop->obj, prop->prop, prop->value);
-+		if (ret)
-+			goto out_state;
-+	}
-+
- 	if (check)
- 		ret = drm_atomic_check_only(state);
- 	else
-diff --git a/include/drm/drm_client.h b/include/drm/drm_client.h
-index 498089b647da..bdcdc30519e6 100644
---- a/include/drm/drm_client.h
-+++ b/include/drm/drm_client.h
-@@ -16,6 +16,7 @@ struct drm_file;
- struct drm_framebuffer;
- struct drm_gem_object;
- struct drm_minor;
-+struct drm_property;
- struct module;
+diff --git a/drivers/gpu/drm/drm_format_helper.c b/drivers/gpu/drm/drm_format_helper.c
+index 0897cb9aeaff..07c9999f1527 100644
+--- a/drivers/gpu/drm/drm_format_helper.c
++++ b/drivers/gpu/drm/drm_format_helper.c
+@@ -79,39 +79,60 @@ void drm_fb_memcpy_dstclip(void __iomem *dst, void *vaddr,
+ EXPORT_SYMBOL(drm_fb_memcpy_dstclip);
  
  /**
-@@ -64,6 +65,26 @@ struct drm_client_funcs {
- 	int (*hotplug)(struct drm_client_dev *client);
- };
- 
-+/**
-+ * struct drm_client_property - DRM client property
-+ */
-+struct drm_client_property {
-+	/**
-+	 * @obj: DRM Mode Object to which the property belongs.
-+	 */
-+	struct drm_mode_object *obj;
-+
-+	/**
-+	 * @prop: DRM Property.
-+	 */
-+	struct drm_property *prop;
-+
-+	/**
-+	 * @value: Property value.
-+	 */
-+	u64 value;
-+};
-+
- /**
-  * struct drm_client_dev - DRM client instance
+- * drm_fb_swab16 - Swap bytes into clip buffer
+- * @dst: RGB565 destination buffer
+- * @vaddr: RGB565 source buffer
++ * drm_fb_swab - Swap bytes into clip buffer
++ * @dst: Destination buffer
++ * @src: Source buffer
+  * @fb: DRM framebuffer
+  * @clip: Clip rectangle area to copy
++ * @cached: Source buffer is mapped cached (eg. not write-combined)
++ *
++ * If @cached is false a temporary buffer is used to cache one pixel line at a
++ * time to speed up slow uncached reads.
++ *
++ * This function does not apply clipping on dst, i.e. the destination
++ * is a small buffer containing the clip rect only.
   */
-@@ -97,7 +118,7 @@ struct drm_client_dev {
- 	struct drm_file *file;
+-void drm_fb_swab16(u16 *dst, void *vaddr, struct drm_framebuffer *fb,
+-		   struct drm_rect *clip)
++void drm_fb_swab(void *dst, void *src, struct drm_framebuffer *fb,
++		 struct drm_rect *clip, bool cached)
+ {
+-	size_t len = (clip->x2 - clip->x1) * sizeof(u16);
++	u8 cpp = fb->format->cpp[0];
++	size_t len = drm_rect_width(clip) * cpp;
++	u16 *src16, *dst16 = dst;
++	u32 *src32, *dst32 = dst;
+ 	unsigned int x, y;
+-	u16 *src, *buf;
++	void *buf = NULL;
  
- 	/**
--	 * @modeset_mutex: Protects @modesets.
-+	 * @modeset_mutex: Protects @modesets and @properties.
- 	 */
- 	struct mutex modeset_mutex;
+-	/*
+-	 * The cma memory is write-combined so reads are uncached.
+-	 * Speed up by fetching one line at a time.
+-	 */
+-	buf = kmalloc(len, GFP_KERNEL);
+-	if (!buf)
++	if (WARN_ON_ONCE(cpp != 2 && cpp != 4))
+ 		return;
  
-@@ -105,6 +126,16 @@ struct drm_client_dev {
- 	 * @modesets: CRTC configurations
- 	 */
- 	struct drm_mode_set *modesets;
++	if (!cached)
++		buf = kmalloc(len, GFP_KERNEL);
 +
-+	/**
-+	 * @properties: DRM properties attached to the configuration.
-+	 */
-+	struct drm_client_property *properties;
++	src += clip_offset(clip, fb->pitches[0], cpp);
 +
-+	/**
-+	 * @num_properties: Number of attached properties.
-+	 */
-+	unsigned int num_properties;
- };
+ 	for (y = clip->y1; y < clip->y2; y++) {
+-		src = vaddr + (y * fb->pitches[0]);
+-		src += clip->x1;
+-		memcpy(buf, src, len);
+-		src = buf;
+-		for (x = clip->x1; x < clip->x2; x++)
+-			*dst++ = swab16(*src++);
++		if (buf) {
++			memcpy(buf, src, len);
++			src16 = buf;
++			src32 = buf;
++		} else {
++			src16 = src;
++			src32 = src;
++		}
++
++		for (x = clip->x1; x < clip->x2; x++) {
++			if (cpp == 4)
++				*dst32++ = swab32(*src32++);
++			else
++				*dst16++ = swab16(*src16++);
++		}
++
++		src += fb->pitches[0];
+ 	}
  
- int drm_client_init(struct drm_device *dev, struct drm_client_dev *client,
-@@ -163,6 +194,11 @@ void drm_client_buffer_vunmap(struct drm_client_buffer *buffer);
- int drm_client_modeset_create(struct drm_client_dev *client);
- void drm_client_modeset_free(struct drm_client_dev *client);
- int drm_client_modeset_probe(struct drm_client_dev *client, unsigned int width, unsigned int height);
-+int drm_client_modeset_set(struct drm_client_dev *client, struct drm_connector *connector,
-+			   struct drm_display_mode *mode, struct drm_framebuffer *fb);
-+int drm_client_modeset_set_property(struct drm_client_dev *client, struct drm_mode_object *obj,
-+				    struct drm_property *prop, u64 value);
-+int drm_client_modeset_set_rotation(struct drm_client_dev *client, u64 value);
- bool drm_client_rotation(struct drm_mode_set *modeset, unsigned int *rotation);
- int drm_client_modeset_check(struct drm_client_dev *client);
- int drm_client_modeset_commit_locked(struct drm_client_dev *client);
+ 	kfree(buf);
+ }
+-EXPORT_SYMBOL(drm_fb_swab16);
++EXPORT_SYMBOL(drm_fb_swab);
+ 
+ static void drm_fb_xrgb8888_to_rgb565_line(u16 *dbuf, u32 *sbuf,
+ 					   unsigned int pixels,
+diff --git a/drivers/gpu/drm/drm_mipi_dbi.c b/drivers/gpu/drm/drm_mipi_dbi.c
+index 69e2b4122ce4..1447e26c0145 100644
+--- a/drivers/gpu/drm/drm_mipi_dbi.c
++++ b/drivers/gpu/drm/drm_mipi_dbi.c
+@@ -217,7 +217,7 @@ int mipi_dbi_buf_copy(void *dst, struct drm_framebuffer *fb,
+ 	switch (fb->format->format) {
+ 	case DRM_FORMAT_RGB565:
+ 		if (swap)
+-			drm_fb_swab16(dst, src, fb, clip);
++			drm_fb_swab(dst, src, fb, clip, !import_attach);
+ 		else
+ 			drm_fb_memcpy(dst, src, fb, clip);
+ 		break;
+diff --git a/include/drm/drm_format_helper.h b/include/drm/drm_format_helper.h
+index ac220aa1a245..5f9e37032468 100644
+--- a/include/drm/drm_format_helper.h
++++ b/include/drm/drm_format_helper.h
+@@ -14,8 +14,8 @@ void drm_fb_memcpy(void *dst, void *vaddr, struct drm_framebuffer *fb,
+ void drm_fb_memcpy_dstclip(void __iomem *dst, void *vaddr,
+ 			   struct drm_framebuffer *fb,
+ 			   struct drm_rect *clip);
+-void drm_fb_swab16(u16 *dst, void *vaddr, struct drm_framebuffer *fb,
+-		   struct drm_rect *clip);
++void drm_fb_swab(void *dst, void *src, struct drm_framebuffer *fb,
++		 struct drm_rect *clip, bool cached);
+ void drm_fb_xrgb8888_to_rgb565(void *dst, void *vaddr,
+ 			       struct drm_framebuffer *fb,
+ 			       struct drm_rect *clip, bool swab);
 -- 
 2.23.0
 
