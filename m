@@ -2,118 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C848F1CBBF9
-	for <lists+linux-usb@lfdr.de>; Sat,  9 May 2020 02:48:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1348B1CBC0C
+	for <lists+linux-usb@lfdr.de>; Sat,  9 May 2020 03:13:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728469AbgEIArx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 May 2020 20:47:53 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:60783 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728421AbgEIArx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 May 2020 20:47:53 -0400
-Received: (qmail 3733 invoked by uid 500); 8 May 2020 20:47:52 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 8 May 2020 20:47:52 -0400
-Date:   Fri, 8 May 2020 20:47:52 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     Al Cooper <alcooperx@gmail.com>
-cc:     linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        <bcm-kernel-feedback-list@broadcom.com>,
-        <devicetree@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        <linux-usb@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v8 4/5] usb: ehci: Add new EHCI driver for Broadcom STB
- SoC's
-In-Reply-To: <20200508211929.39020-5-alcooperx@gmail.com>
-Message-ID: <Pine.LNX.4.44L0.2005082035460.2445-100000@netrider.rowland.org>
+        id S1728367AbgEIBMv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 May 2020 21:12:51 -0400
+Received: from cmccmta1.chinamobile.com ([221.176.66.79]:3528 "EHLO
+        cmccmta1.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727828AbgEIBMv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 May 2020 21:12:51 -0400
+Received: from spf.mail.chinamobile.com (unknown[172.16.121.11]) by rmmx-syy-dmz-app01-12001 (RichMail) with SMTP id 2ee15eb60383602-60882; Sat, 09 May 2020 09:12:35 +0800 (CST)
+X-RM-TRANSID: 2ee15eb60383602-60882
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG: 00000000
+Received: from [172.20.145.40] (unknown[112.25.154.146])
+        by rmsmtp-syy-appsvr06-12006 (RichMail) with SMTP id 2ee65eb6038203c-643e9;
+        Sat, 09 May 2020 09:12:35 +0800 (CST)
+X-RM-TRANSID: 2ee65eb6038203c-643e9
+Subject: Re: [PATCH] USB: host: ehci: Add error handlinginehci_mxc_drv_probe()
+To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, stern@rowland.harvard.edu,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200508114453.15436-1-tangbin@cmss.chinamobile.com>
+ <20200508114858.GA4085349@kroah.com>
+ <fb147bdf-faaa-8919-407e-89b4fe1337a6@cmss.chinamobile.com>
+ <20200508143110.GA447591@kroah.com>
+ <107353c0-09f2-858d-2a87-498e2d8584c6@cmss.chinamobile.com>
+ <66a6bbca-4218-fb71-7284-37f73d5a3c58@cogentembedded.com>
+From:   Tang Bin <tangbin@cmss.chinamobile.com>
+Message-ID: <012c911d-e877-d7b8-60ab-2e70e67e62cb@cmss.chinamobile.com>
+Date:   Sat, 9 May 2020 09:13:22 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+In-Reply-To: <66a6bbca-4218-fb71-7284-37f73d5a3c58@cogentembedded.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 8 May 2020, Al Cooper wrote:
+Hi Sergei:
 
-A few minor typos in the patch description:
+On 2020/5/9 4:27, Sergei Shtylyov wrote:
+> On 05/08/2020 06:03 PM, Tang Bin wrote:
+>
+>>>>> On Fri, May 08, 2020 at 07:44:53PM +0800, Tang Bin wrote:
+>>>>>> The function ehci_mxc_drv_probe() does not perform sufficient error
+>>>>>> checking after executing platform_get_irq(), thus fix it.
+>>>>>>
+>>>>>> Fixes: 7e8d5cd93fa ("USB: Add EHCI support for MX27 and MX31 based boards")
+>>>>>> Signed-off-by: Zhang Shengju <zhangshengju@cmss.chinamobile.com>
+>>>>>> Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
+>>>>>> ---
+>>>>>>     drivers/usb/host/ehci-mxc.c | 2 ++
+>>>>>>     1 file changed, 2 insertions(+)
+>>>>>>
+>>>>>> diff --git a/drivers/usb/host/ehci-mxc.c b/drivers/usb/host/ehci-mxc.c
+>>>>>> index a1eb5ee77..a0b42ba59 100644
+>>>>>> --- a/drivers/usb/host/ehci-mxc.c
+>>>>>> +++ b/drivers/usb/host/ehci-mxc.c
+>>>>>> @@ -50,6 +50,8 @@ static int ehci_mxc_drv_probe(struct platform_device *pdev)
+>>>>>>         }
+>>>>>>         irq = platform_get_irq(pdev, 0);
+>>>>>> +    if (irq < 0)
+>>>>>> +        return irq;
+>>>>> <= ?
+>>>> In the file 'drivers/base/platform.c'， the function platform_get_irq() is
+>>>> explained and used as follows:
+>>>>
+>>>>        * Gets an IRQ for a platform device and prints an error message if
+>>>> finding the
+>>>>        * IRQ fails. Device drivers should check the return value for errors so
+>>>> as to
+>>>>        * not pass a negative integer value to the request_irq() APIs.
+>>>>        *
+>>>>        * Example:
+>>>>        *        int irq = platform_get_irq(pdev, 0);
+>>>>        *        if (irq < 0)
+>>>>        *            return irq;
+>>>>        *
+>>>>        * Return: IRQ number on success, negative error number on failure.
+>>>>
+>>>> And in my hardware experiment, even if I set the irq failed deliberately in
+>>>> the DTS, the returned value is negative instead of zero.
+>>> Please read the thread at
+>>>      https://lore.kernel.org/r/20200501224042.141366-1-helgaas%40kernel.org
+>>> for more details about this.
+>>>
+>> Great, It looks beautiful, finally someone took a knife to the file 'platform.c'.
+>     I thought I did that already couple years ago, when returned 0 from platform_get_irq() could mean both IRQ # and error... :-)
+Can you tell me what platform can returned 0? I want to do this test in 
+the hardware.
+>> I have been studied this place for a long time, and don't know what platform can return 0, which made me curious.
+>>
+>> So the example should be:
+>>
+>>       *        int irq = platform_get_irq(pdev, 0);
+>>       *        if (irq <= 0)
+>>       *            return irq;
+>     And you then return 0 (success) as if your probe() succeeded. Congratulations! :-P
 
-> Add a new EHCI driver for Broadcom STB SoC's. A new EHCI driver
-> was created instead of adding support to the existing ehci platform
-> driver because of the code required to workaround bugs in the EHCI
------------------------------------------^
+Thanks,
 
-"workaround" is a noun; the verb form is "work around".
+Tang Bin
 
-> controller. The primary workround is for a bug where the Core
------------------------------^
-
-Missing "a".
-
-> violates the SOF interval between the first two SOFs transmitted after
-> resume. This only happens if the resume occurs near the end of a
-> microframe. The fix is to intercept the echi-hcd request to complete
--------------------------------------------^
-
-ehci, not echi.
-
-> RESUME and align it to the start of the next microframe.
-> 
-> Signed-off-by: Al Cooper <alcooperx@gmail.com>
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> ---
-
-Basically this new driver is fine.  However...
-
-> +static inline void ehci_brcm_wait_for_sof(struct ehci_hcd *ehci, u32 delay)
-> +{
-> +	u32 frame_idx = ehci_readl(ehci, &ehci->regs->frame_index);
-> +	u32 val;
-> +	int res;
-> +
-> +	/* Wait for next microframe (every 125 usecs) */
-> +	res = readl_relaxed_poll_timeout(&ehci->regs->frame_index, val,
-> +					 val != frame_idx, 1, 130);
-> +	if (res)
-> +		dev_err(ehci_to_hcd(ehci)->self.controller,
-> +			"Error waiting for SOF\n");
-
-If this patch is going to be redone anyway, you might as well change
-dev_err() to ehci_err() -- that's what it's for.  I should have noticed
-this earlier, sorry.
-
-> +static int ehci_brcm_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct resource *res_mem;
-> +	struct brcm_priv *priv;
-> +	struct usb_hcd *hcd;
-> +	int irq;
-> +	int err;
-> +
-> +	err = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
-> +	if (err)
-> +		return err;
-> +
-> +	irq = platform_get_irq(pdev, 0);
-> +	if (irq <= 0)
-> +		return irq;
-
-I don't want to get involved in the question of whether or not 0 is a 
-valid IRQ number.  The consensus has gone back and forth over the 
-years, and it just doesn't seem important.
-
-However, as Sergei points out, if 0 is going to be regarded as an 
-invalid value then we shouldn't return 0 from the probe function here.
-
-I'll leave the decision on how to handle this matter up to Greg.  :-)
-
-Alan Stern
 
 
