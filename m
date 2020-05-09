@@ -2,53 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E65A1CBC9E
-	for <lists+linux-usb@lfdr.de>; Sat,  9 May 2020 04:54:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54E551CBCF2
+	for <lists+linux-usb@lfdr.de>; Sat,  9 May 2020 05:24:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728385AbgEICyj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 May 2020 22:54:39 -0400
-Received: from s52.coreserver.jp ([202.172.28.53]:40955 "EHLO
-        s52.coreserver.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728353AbgEICyj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 May 2020 22:54:39 -0400
-Received: (qmail 643105 invoked by uid 10000); 9 May 2020 11:54:37 +0900
-To:     undisclosed-recipients:;
-Subject: =?UTF-8?Q?=E3=81=82=E3=81=AA=E3=81=9F=E3=81=B8=E3=81=AE=E3=81=94?=  =?UTF-8?Q?=E6=8C=A8=E6=8B=B6?=
+        id S1728567AbgEIDYM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 May 2020 23:24:12 -0400
+Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:37030 "EHLO
+        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728355AbgEIDYL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 May 2020 23:24:11 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01f04397;MF=wenyang@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0Txzw3bb_1588994648;
+Received: from IT-C02W23QPG8WN.local(mailfrom:wenyang@linux.alibaba.com fp:SMTPD_---0Txzw3bb_1588994648)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Sat, 09 May 2020 11:24:08 +0800
+Subject: Re: [PATCH] usb: roles: Switch on role-switch uevent reporting
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org
+Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        chenqiwu <chenqiwu@xiaomi.com>, linux-kernel@vger.kernel.org
+References: <20200508162937.2566818-1-bryan.odonoghue@linaro.org>
+From:   Wen Yang <wenyang@linux.alibaba.com>
+Message-ID: <fbd660ca-fe2a-8ca7-5076-f898acd1ca74@linux.alibaba.com>
+Date:   Sat, 9 May 2020 11:24:08 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:68.0)
+ Gecko/20100101 Thunderbird/68.1.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
+In-Reply-To: <20200508162937.2566818-1-bryan.odonoghue@linaro.org>
+Content-Type: text/plain; charset=gbk; format=flowed
 Content-Transfer-Encoding: 8bit
-Date:   Fri, 08 May 2020 19:54:37 -0700
-From:   Dominique Bell <keiko@ono.bz>
-Reply-To: dominiquebell757@gmail.com
-Mail-Reply-To: dominiquebell757@gmail.com
-Message-ID: <ecb5aaffdab5957ec2eff8e08ff3f32d@ono.bz>
-X-Sender: keiko@ono.bz
-User-Agent: Roundcube Webmail/0.9.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-注::このメッセージをSPAM / JUNKフォルダーで受信した場合は、インターネットサービスプロバイダーによって制限が課せられているためです。
 
-メッセージでご迷惑をおかけして申し訳ありません。削除する前に、少し時間をかけてお読みください。
-あなたが私に与えなかったので、このメールはあなたにとって驚きかもしれません
-そうする許可とあなたは私を知らないが、私があなたに言う前に
-私自身についてこのメールを送ったことを許してください
-あなたの許可なしに。
 
-私は自信を持ってこの手紙を書いています。
-あなたがこのプロジェクトを手伝ってくれる神の私、正直で信頼が必要です
-あなたのような立派な人がこの巨大な移転プロジェクトを任せてください。わたし
-次の慈善団体にあなたを紹介するためにあなたの協力を求めています
-世界中の開発。 ..
- 
-私はあなたに提案があります。あなたのことを示すために私に返信してください
-詳細に興味があります。
+�� 2020/5/9 ����12:29, Bryan O'Donoghue д��:
+> Right now we don't report to user-space a role switch when doing a
+> usb_role_switch_set_role() despite having registered the uevent callbacks.
+> 
+> This patch switches on the notifications allowing user-space to see
+> role-switch change notifications and subsequently determine the current
+> controller data-role.
+> 
+> example:
+> PFX=/devices/platform/soc/78d9000.usb/ci_hdrc.0
+> 
+> root@somebox# udevadm monitor -p
+> 
+> KERNEL[49.894994] change $PFX/usb_role/ci_hdrc.0-role-switch (usb_role)
+> ACTION=change
+> DEVPATH=$PFX/usb_role/ci_hdrc.0-role-switch
+> SUBSYSTEM=usb_role
+> DEVTYPE=usb_role_switch
+> USB_ROLE_SWITCH=ci_hdrc.0-role-switch
+> SEQNUM=2432
+> 
+> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Wen Yang <wenyang@linux.alibaba.com>
+> Cc: chenqiwu <chenqiwu@xiaomi.com>
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> ---
+>   drivers/usb/roles/class.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/roles/class.c b/drivers/usb/roles/class.c
+> index 5b17709821df..27d92af29635 100644
+> --- a/drivers/usb/roles/class.c
+> +++ b/drivers/usb/roles/class.c
+> @@ -49,8 +49,10 @@ int usb_role_switch_set_role(struct usb_role_switch *sw, enum usb_role role)
+>   	mutex_lock(&sw->lock);
+>   
+>   	ret = sw->set(sw, role);
+> -	if (!ret)
+> +	if (!ret) {
+>   		sw->role = role;
+> +		kobject_uevent(&sw->dev.kobj, KOBJ_CHANGE);
+> +	}
+>   
+>   	mutex_unlock(&sw->lock);
+>   
+> 
 
-私は辛抱強くあなたの返事を待ちます、
-dominiquebell755@gmail.com
+Hi, we may also need to deal with the return value of kobject_uevent(). 
+Should we move it under the line mutex_unlock(&sw->lock)?
 
-ありがとう
-ドミニク・ベル氏
+Regards,
+Wen
+
