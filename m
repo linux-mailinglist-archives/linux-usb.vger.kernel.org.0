@@ -2,172 +2,189 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C33161CBEC4
-	for <lists+linux-usb@lfdr.de>; Sat,  9 May 2020 10:11:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D76A1CBEFB
+	for <lists+linux-usb@lfdr.de>; Sat,  9 May 2020 10:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727116AbgEIILU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 9 May 2020 04:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43886 "EHLO
+        id S1727907AbgEII23 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 9 May 2020 04:28:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725850AbgEIILU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 9 May 2020 04:11:20 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9EDC061A0C
-        for <linux-usb@vger.kernel.org>; Sat,  9 May 2020 01:11:18 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id j3so4095211ljg.8
-        for <linux-usb@vger.kernel.org>; Sat, 09 May 2020 01:11:18 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1726214AbgEII22 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 9 May 2020 04:28:28 -0400
+Received: from mail-ua1-x944.google.com (mail-ua1-x944.google.com [IPv6:2607:f8b0:4864:20::944])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F839C061A0C;
+        Sat,  9 May 2020 01:28:28 -0700 (PDT)
+Received: by mail-ua1-x944.google.com with SMTP id r2so1566536uam.7;
+        Sat, 09 May 2020 01:28:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:mime-version;
-        bh=RtEpq7FVI5yCvMYIKkV4/mzKlHTDQ5EMy5SBGjVVdyY=;
-        b=lPXfpXv8Q75VBrk16Db9igY+PiLbw2KqmRcRO6FZ4VHrL7BwEKwiBJA4WdBZcReT0j
-         Kv8KlHs6uueRjGr/BOWdYJNAWdHhRJ539oIX498LC6PKQEhboqL37KDo54jxjbqAgEWJ
-         TfWIO3y47zrpx1HqvScUmyjTGjgl6GculAvXcaV6iYqMxOyrToxbnBXgQmMitVavmWoW
-         ErHVdL+gVahdmDf5IvJlUrOyNZPNLD5mOT5sguvCLsxejG18/wLrwqLadhAFqCbyzQmT
-         /KaXfAPjVsE0hKZB4dZdWAOLChueX02HKgd2Y5FdT1QeMWMKDsBnjfhPyh+oSan1M6ZE
-         bpGg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=eINgDGJMaJIZgwxo+adBIzcEyirrmAf1qVa6/NMgfNs=;
+        b=vKP8Lubbl0z88XrQwfs6SZq5llN00B3ztUYbaEbETAAj2GYGKkPDZu/CiBT1OFFpoK
+         t+IYjQmZVREsAeNInCvkZM9V+bOrslUhFXsj6HpuJXDhCt11ivFoAvxFsdYTzAjo4sx3
+         /lOZWa+1E4QivWA1KS09YzPYVnmg8oZxWhBu5WSo47+yoP5NBc0PdedqQIFlPdNRgwb4
+         Ll0PSG8w2ULtX7TbomrtOOrR5D+72PUQY458IR8FbMyZCiM85xp3Oxqj4zWeTKKZpbEC
+         aAOBElP7YkDxfGv9KYlkO7oZKqGETaby/DItJdpm/SHWfjbjLR9SlPZkSoXZVFbAno6h
+         LrRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version;
-        bh=RtEpq7FVI5yCvMYIKkV4/mzKlHTDQ5EMy5SBGjVVdyY=;
-        b=jEnSVbnCvOs3ZXemE5lvU+A3vK2zcos5MDKJolAjDIoNht7AE7wGK95iuLHikcpxor
-         5vnj2rW2mzU4Wz8CqnCYarB0TuguIVm0NmQhkd9Yzz8p/pEI+BvOAnlJfH0HR/3pLlX7
-         ykHWC9Kh+3ExriuxeZBnrkPYOaacbJAHo/z18WpCp0ShTmVKNfUX5NVP/T4WNEy1SRp0
-         k+pryBubFmWzJUfYdJ0frTiInR4yu5O29FfwhFfYPZauc6sM0hxBZpstCTOSjhF559XE
-         mHPjOQmDryXEZDJDepEZSRTQl6n4juyzIzWyCxRhYnh7OGV6v+w7QBLxuO0x0rdQe8eq
-         cBtQ==
-X-Gm-Message-State: AOAM5332eVt4TXN5+RMzi4I0CZhVWW4EhYxY8vqwsAdfujaYxHJ5D2iJ
-        y6DkgEAj+Jo99ZhCdh0o2+1zDrxJ0pw=
-X-Google-Smtp-Source: ABdhPJzSS21IxS9k5tAZyMhhpWlvf/mw+jQEKGP5QvuY1CGBLuGyUM77CJcLx87C1Bb+qfXx3u7ThA==
-X-Received: by 2002:a05:651c:449:: with SMTP id g9mr4194038ljg.278.1589011876892;
-        Sat, 09 May 2020 01:11:16 -0700 (PDT)
-Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id c4sm3196371lfi.13.2020.05.09.01.11.16
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 09 May 2020 01:11:16 -0700 (PDT)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB fixes for v5.7-rc
-Date:   Sat, 09 May 2020 11:11:12 +0300
-Message-ID: <87v9l5le8v.fsf@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=eINgDGJMaJIZgwxo+adBIzcEyirrmAf1qVa6/NMgfNs=;
+        b=nSvrmYlz4BuI+hLn6BrPnJ42/dU0nHmgKpHhXGh+Rll7GIlm6QKhiRy8D7a4WqLOdq
+         D2u18R4YPqfUZIRhhm0kvKHt7LmxOwOfOH5ycF/5N5MPG91xJRDMee1UsJDrH6j1R839
+         Z3GsUeRklk2IsUBiV2tmbwaiA7UrE5+olBKIsceZXp77ledMYreCftwU+ntYlK8ichPH
+         FMT0Cx10kY1DihW8w3vi8lit7mUDMEQc13cttn9M5GM0Vpmo5PJITPWc/N6r9saJNdPf
+         rIRYSDE88onBJ7c197rr7fhlsGJr6DGhf0QpEVoTWhkXqdyxE2onjb8XXj7CVZkKNnsc
+         OnWA==
+X-Gm-Message-State: AGi0PuYfS3G5QOwGSS9tETy2ZASjKedtlRGcrtw9zCHtzg4QFRPLjnml
+        lF4Jx5o0jmEVr1F3g5BQpGQyRU/JiscCuA4fdNs=
+X-Google-Smtp-Source: APiQypJUsNaJk8HtjBPKfp+oM0xWkicWbch5h0T78OsafAj5jw0ru7bBBx3YVBBUoe2KsnkTLSgQaB+Frq2cCKxlFQk=
+X-Received: by 2002:a9f:2508:: with SMTP id 8mr5406078uaz.115.1589012907353;
+ Sat, 09 May 2020 01:28:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+References: <20191028215919.83697-1-john.stultz@linaro.org>
+ <20191028215919.83697-4-john.stultz@linaro.org> <87mudjj4rc.fsf@gmail.com>
+ <CALAqxLU+9uEcdRVaLfh+eQrDtZbDGod9pRXhBX=prAhg9MXagw@mail.gmail.com>
+ <CAKgpwJVaKpsgMjKcnYyJsfNj0ibkPt=mdn-NxfOkeX1jfL=9iQ@mail.gmail.com>
+ <CALAqxLVXauXP0r4Hv2Axa4PNf_F9wp644peYV06bdsPtMKGmLA@mail.gmail.com>
+ <CAKgpwJU7VDx90STE7bhx9VZ5p1jtqCyyLavmhXfpaicyDAYt_g@mail.gmail.com>
+ <CAKgpwJVU9m6G8PRdray2fGCp_peOU9C-ZAVKTk7pmSdq6z4NiA@mail.gmail.com> <87eerumwok.fsf@kernel.org>
+In-Reply-To: <87eerumwok.fsf@kernel.org>
+From:   Jun Li <lijun.kernel@gmail.com>
+Date:   Sat, 9 May 2020 16:28:16 +0800
+Message-ID: <CAKgpwJU=w8Qn2PpNMyh7D1Ci6jJCmMianG1xjsi-p7-0uVKfTA@mail.gmail.com>
+Subject: Re: [PATCH v4 3/9] usb: dwc3: Increase timeout for CmdAct cleared by
+ device controller
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Yu Chen <chenyu56@huawei.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        ShuFan Lee <shufan_lee@richtek.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+Felipe Balbi <balbi@kernel.org> =E4=BA=8E2020=E5=B9=B45=E6=9C=888=E6=97=A5=
+=E5=91=A8=E4=BA=94 =E4=B8=8B=E5=8D=888:35=E5=86=99=E9=81=93=EF=BC=9A
+>
+>
+> Hi,
+>
+> Jun Li <lijun.kernel@gmail.com> writes:
+> > Jun Li <lijun.kernel@gmail.com> =E4=BA=8E2020=E5=B9=B45=E6=9C=887=E6=97=
+=A5=E5=91=A8=E5=9B=9B =E4=B8=8A=E5=8D=8811:08=E5=86=99=E9=81=93=EF=BC=9A
+> >>
+> >> John Stultz <john.stultz@linaro.org> =E4=BA=8E2020=E5=B9=B45=E6=9C=887=
+=E6=97=A5=E5=91=A8=E5=9B=9B =E4=B8=8A=E5=8D=886:27=E5=86=99=E9=81=93=EF=BC=
+=9A
+> >> >
+> >> > On Wed, May 6, 2020 at 2:00 AM Jun Li <lijun.kernel@gmail.com> wrote=
+:
+> >> > > John Stultz <john.stultz@linaro.org> =E4=BA=8E2019=E5=B9=B410=E6=
+=9C=8830=E6=97=A5=E5=91=A8=E4=B8=89 =E4=B8=8A=E5=8D=885:18=E5=86=99=E9=81=
+=93=EF=BC=9A
+> >> > > > On Tue, Oct 29, 2019 at 2:11 AM Felipe Balbi <balbi@kernel.org> =
+wrote:
+> >> > > > > John Stultz <john.stultz@linaro.org> writes:
+> >> > > > > > From: Yu Chen <chenyu56@huawei.com>
+> >> > > > > >
+> >> > > > > > It needs more time for the device controller to clear the Cm=
+dAct of
+> >> > > > > > DEPCMD on Hisilicon Kirin Soc.
+> >> > > > >
+> >> > > > > Why does it need more time? Why is it so that no other platfor=
+m needs
+> >> > > > > more time, only this one? And which command, specifically, cau=
+ses
+> >> > > > > problem?
+> >> > >
+> >> > > Sorry for my back to this so late.
+> >> > >
+> >> > > This change is required on my dwc3 based HW too, I gave a check
+> >> > > and the reason is suspend_clk is used in case the PIPE phy is at P=
+3,
+> >> > > this slow clock makes my EP command below timeout.
+> >> > >
+> >> > > dwc3_gadget_ep_cmd: ep0out: cmd 'Set Endpoint Configuration' [401]
+> >> > > params 00001000 00000500 00000000 --> status: Timed Out
+> >> > >
+> >> > > Success case takes about 400us to complete, see below trace(44.286=
+278
+> >> > > - 44.285897 =3D 0.000381):
+> >> > >
+> >> > > configfs_acm.sh-822   [000] d..1    44.285896: dwc3_writel: addr
+> >> > > 000000006d59aae1 value 00000401
+> >> > > configfs_acm.sh-822   [000] d..1    44.285897: dwc3_readl: addr
+> >> > > 000000006d59aae1 value 00000401
+> >> > > ... ...
+> >> > > configfs_acm.sh-822   [000] d..1    44.286278: dwc3_readl: addr
+> >> > > 000000006d59aae1 value 00000001
+> >> > > configfs_acm.sh-822   [000] d..1    44.286279: dwc3_gadget_ep_cmd:
+> >> > > ep0out: cmd 'Set Endpoint Configuration' [401] params 00001000
+> >> > > 00000500 00000000 --> status: Successful
+> >> > >
+> >> > > Hi John,
+> >> > >
+> >> > > Do you still have this problem? if yes, What's the value of
+> >> > > USBLNKST[21:18] when the timeout happens?
+> >> >
+> >> > Sorry. As I mentioned, I was working to upstream a patchset that I
+> >> > hadn't created, so the context I had was limited. As I couldn't
+> >> > reproduce an issue without the change on the device I had, I figured
+> >> > it would be best to drop it.
+> >>
+> >> That was fine.
+> >> >
+> >> > However, as you have some analysis and rational for why such a chang=
+e
+> >> > would be needed, I don't have an objection to it. Do you want to
+> >> > resubmit the patch with your explanation and detailed log above in t=
+he
+> >> > commit message?
+> >>
+> >> Sure, I will resubmit the patch with my explanation added in commit me=
+ssage.
+> >
+> > Hi John
+> >
+> > A second think of this, I feel use readl_poll_timeout_atomic() to wait =
+by time
+> > is more proper here, so I create a new patch to address this also other
+> > registers polling, see below patch with you CCed:
+> >
+> > https://patchwork.kernel.org/patch/11536081/
+>
+> Fixing a bug has nothing to do with using
+> readl_poll_timeout_atomic(). Please don't mix things as it just makes
+> review time consuming.
+>
+> Let's find out what the bug is all about, only then should we consider
+> moving over to readl_poll_timeout_atomic().
 
+Agreed, sorry about that, I will hold on my readl_poll_timeout_atomic() cha=
+nges
+until we have a conclusion on this issue fix.
 
-Hi Greg,
-
-here's another pull request for the current -rc cycle. We may have
-another pull request to add a few more fixes to the raw-gadget, but it
-depends on your reply to my query on that thread ;-)
-
-cheers
-
-The following changes since commit d5eeab8d7e269e8cfc53b915bccd7bd30485bcbf:
-
-  Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/j=
-ejb/scsi (2020-05-08 10:36:56 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git fixes-for-v5.=
-7-rc5
-
-for you to fetch changes up to 6e507644209b4a043363e165855a3a3050c4d40e:
-
-  usb: raw-gadget: fix return value of ep read ioctls (2020-05-09 11:05:09 =
-+0300)
-
-=2D---------------------------------------------------------------
-USB: fixes for v5.7-rc5
-
-Fixing raw-gadget's IOCTL return value. Enabling EXTCON for Intel
-Merrifield. Couple leaks have been plugged in net2272 and
-twl6030-usb. Returning an error code when things fail in cdc and ncm
-legacy gadgets. An old bug on dwc3 regarding HWO bit handling has been
-fixed.
-
-Apart from these, some minor fixes.
-
-Signed-off-by: Felipe Balbi <balbi@kernel.org>
-
-=2D---------------------------------------------------------------
-Andrey Konovalov (1):
-      usb: raw-gadget: fix return value of ep read ioctls
-
-Andy Shevchenko (1):
-      usb: dwc3: pci: Enable extcon driver for Intel Merrifield
-
-Arnd Bergmann (1):
-      usb: dwc3: select USB_ROLE_SWITCH
-
-Christophe JAILLET (3):
-      usb: gadget: audio: Fix a missing error return value in audio_bind()
-      usb: phy: twl6030-usb: Fix a resource leak in an error handling path =
-in 'twl6030_usb_probe()'
-      usb: gadget: net2272: Fix a memory leak in an error handling path in =
-'net2272_plat_probe()'
-
-John Stultz (1):
-      dwc3: Remove check for HWO flag in dwc3_gadget_ep_reclaim_trb_sg()
-
-Masahiro Yamada (1):
-      usb: gadget: legacy: fix redundant initialization warnings
-
-Peter Chen (1):
-      usb: cdns3: gadget: prev_req->trb is NULL for ep0
-
-Thierry Reding (1):
-      usb: gadget: tegra-xudc: Fix idle suspend/resume
-
-Wei Yongjun (2):
-      usb: gadget: legacy: fix error return code in cdc_bind()
-      usb: gadget: legacy: fix error return code in gncm_bind()
-
- drivers/usb/cdns3/gadget.c             |  2 +-
- drivers/usb/dwc3/Kconfig               |  1 +
- drivers/usb/dwc3/dwc3-pci.c            |  1 +
- drivers/usb/dwc3/gadget.c              |  3 ---
- drivers/usb/gadget/legacy/audio.c      |  4 +++-
- drivers/usb/gadget/legacy/cdc2.c       |  4 +++-
- drivers/usb/gadget/legacy/inode.c      |  3 +--
- drivers/usb/gadget/legacy/ncm.c        |  4 +++-
- drivers/usb/gadget/legacy/raw_gadget.c |  8 ++++++--
- drivers/usb/gadget/udc/net2272.c       |  2 ++
- drivers/usb/gadget/udc/tegra-xudc.c    |  8 ++++----
- drivers/usb/phy/phy-twl6030-usb.c      | 12 +++++++++---
- 12 files changed, 34 insertions(+), 18 deletions(-)
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl62ZaAACgkQzL64meEa
-mQYZ2g/+O1awOnJcuK9glJ8CD/QNDCBipLwGZHEfBkfqX8qJ11q5SSS2nSGl1RHU
-1OR6IblP6eYGwlXPFJGWnSdAbO1P1QWH7jdBWNus21Gn4AavkApl5FCYMy1ZQbgJ
-rnDZn1vJ9fXQAZH2BmIwt7zE89gULnOqUM1aAqfKxQoOi9JciV6K6wkDEI6ihQKp
-CQaCwqgRz80jaeDfN7Wk5Mj7zHurF+aGHoOGvWkaKtpxzDr1/9GTXKAPA/dJC2KM
-pBHkmf9E/XddsJMXzqMNrdKMMBO9IvqOd+lt/VYTRZZ3YTx9GsTMlZ9Mq3qKHyyg
-wy0P/026dRY2Tr+4cKC9ssC88gBdHnKr/5tc759JeEMdtecw/Eq9dIEDbH3x2KiW
-IBG1Hg/zIg4dw9gZqC4afWPJGamRqO9Fha2gjLn0lIAIbzS/pxlqRpo82tuFZa2z
-xX9TZPX5XMmTS0+N2mItZIo2m6ULjUoAMi7OSsn13+3jFvvowDnvTrll5f4mCjQQ
-ta0oGFOZibc2Ggd000s7y1FUobHF7td3QcYu3CmgFiy8r7r1Y9LSWt0qwn1bsa+d
-phy28JAnMt+wsgAZvJ4hsc+WwkjMmhchtL2J0/0zMarU3eSw20WVhnF6Kyl/cadn
-XKc0TjWtwRsBUymkA14stSRxWCwP+u4yN2fUgR+n7qTtkM9/8DY=
-=hdz4
------END PGP SIGNATURE-----
---=-=-=--
+thanks
+Li Jun
+>
+> --
+> balbi
