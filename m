@@ -2,29 +2,29 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A801CC211
-	for <lists+linux-usb@lfdr.de>; Sat,  9 May 2020 16:16:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACE481CC213
+	for <lists+linux-usb@lfdr.de>; Sat,  9 May 2020 16:16:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727989AbgEIOQq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 9 May 2020 10:16:46 -0400
-Received: from asav22.altibox.net ([109.247.116.9]:34102 "EHLO
+        id S1727982AbgEIOQp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 9 May 2020 10:16:45 -0400
+Received: from asav22.altibox.net ([109.247.116.9]:34116 "EHLO
         asav22.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727840AbgEIOQp (ORCPT
+        with ESMTP id S1727845AbgEIOQp (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Sat, 9 May 2020 10:16:45 -0400
 Received: from localhost.localdomain (unknown [81.166.168.211])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: noralf.tronnes@ebnett.no)
-        by asav22.altibox.net (Postfix) with ESMTPSA id 90EB22016D;
+        by asav22.altibox.net (Postfix) with ESMTPSA id DCFB52018B;
         Sat,  9 May 2020 16:16:42 +0200 (CEST)
 From:   =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>
 To:     dri-devel@lists.freedesktop.org, linux-usb@vger.kernel.org,
         lee.jones@linaro.org
 Cc:     sam@ravnborg.org, daniel.thompson@linaro.org, jingoohan1@gmail.com,
         =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>
-Subject: [PATCH v2 03/10] drm/client: Add drm_client_framebuffer_flush()
-Date:   Sat,  9 May 2020 16:16:12 +0200
-Message-Id: <20200509141619.32970-4-noralf@tronnes.org>
+Subject: [PATCH v2 04/10] drm/client: Add drm_client_modeset_check()
+Date:   Sat,  9 May 2020 16:16:13 +0200
+Message-Id: <20200509141619.32970-5-noralf@tronnes.org>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20200509141619.32970-1-noralf@tronnes.org>
 References: <20200509141619.32970-1-noralf@tronnes.org>
@@ -35,82 +35,111 @@ X-CMAE-Score: 0
 X-CMAE-Analysis: v=2.3 cv=R7It5+ZX c=1 sm=1 tr=0
         a=OYZzhG0JTxDrWp/F2OJbnw==:117 a=OYZzhG0JTxDrWp/F2OJbnw==:17
         a=IkcTkHD0fZMA:10 a=M51BFTxLslgA:10 a=7gkXJVJtAAAA:8 a=SJz97ENfAAAA:8
-        a=0jVh_8K4HvQRDTyCFMcA:9 a=QEXdDO2ut3YA:10 a=E9Po1WZjFZOl8hwRPBS3:22
+        a=NCESiyWrsFzEEJbiIYUA:9 a=QEXdDO2ut3YA:10 a=E9Po1WZjFZOl8hwRPBS3:22
         a=vFet0B0WnEQeilDPIY6i:22
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Some drivers need explicit flushing of buffer changes, add a function
-that does that.
+Add a way for client to check the configuration before comitting.
 
 v2:
-- Put all clip rect stuff inside if statement (Sam)
+- Fix docs (Sam)
 
 Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
 Signed-off-by: Noralf Trønnes <noralf@tronnes.org>
 ---
- drivers/gpu/drm/drm_client.c | 33 +++++++++++++++++++++++++++++++++
- include/drm/drm_client.h     |  1 +
- 2 files changed, 34 insertions(+)
+ drivers/gpu/drm/drm_client_modeset.c | 35 ++++++++++++++++++++++++----
+ include/drm/drm_client.h             |  1 +
+ 2 files changed, 32 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/drm_client.c b/drivers/gpu/drm/drm_client.c
-index 12787915db01..827ee6422dd2 100644
---- a/drivers/gpu/drm/drm_client.c
-+++ b/drivers/gpu/drm/drm_client.c
-@@ -483,6 +483,39 @@ void drm_client_framebuffer_delete(struct drm_client_buffer *buffer)
+diff --git a/drivers/gpu/drm/drm_client_modeset.c b/drivers/gpu/drm/drm_client_modeset.c
+index 7443114bd713..9d1ab69dd8d0 100644
+--- a/drivers/gpu/drm/drm_client_modeset.c
++++ b/drivers/gpu/drm/drm_client_modeset.c
+@@ -966,7 +966,7 @@ bool drm_client_rotation(struct drm_mode_set *modeset, unsigned int *rotation)
  }
- EXPORT_SYMBOL(drm_client_framebuffer_delete);
+ EXPORT_SYMBOL(drm_client_rotation);
+ 
+-static int drm_client_modeset_commit_atomic(struct drm_client_dev *client, bool active)
++static int drm_client_modeset_commit_atomic(struct drm_client_dev *client, bool active, bool check)
+ {
+ 	struct drm_device *dev = client->dev;
+ 	struct drm_plane *plane;
+@@ -1033,7 +1033,10 @@ static int drm_client_modeset_commit_atomic(struct drm_client_dev *client, bool
+ 		}
+ 	}
+ 
+-	ret = drm_atomic_commit(state);
++	if (check)
++		ret = drm_atomic_check_only(state);
++	else
++		ret = drm_atomic_commit(state);
+ 
+ out_state:
+ 	if (ret == -EDEADLK)
+@@ -1094,6 +1097,30 @@ static int drm_client_modeset_commit_legacy(struct drm_client_dev *client)
+ 	return ret;
+ }
  
 +/**
-+ * drm_client_framebuffer_flush - Manually flush client framebuffer
-+ * @buffer: DRM client buffer (can be NULL)
-+ * @rect: Damage rectangle (if NULL flushes all)
++ * drm_client_modeset_check() - Check modeset configuration
++ * @client: DRM client
 + *
-+ * This calls &drm_framebuffer_funcs->dirty (if present) to flush buffer changes
-+ * for drivers that need it.
++ * Check modeset configuration.
 + *
 + * Returns:
 + * Zero on success or negative error code on failure.
 + */
-+int drm_client_framebuffer_flush(struct drm_client_buffer *buffer, struct drm_rect *rect)
++int drm_client_modeset_check(struct drm_client_dev *client)
 +{
-+	if (!buffer || !buffer->fb || !buffer->fb->funcs->dirty)
++	int ret;
++
++	if (!drm_drv_uses_atomic_modeset(client->dev))
 +		return 0;
 +
-+	if (rect) {
-+		struct drm_clip_rect clip = {
-+			.x1 = rect->x1,
-+			.y1 = rect->y1,
-+			.x2 = rect->x2,
-+			.y2 = rect->y2,
-+		};
++	mutex_lock(&client->modeset_mutex);
++	ret = drm_client_modeset_commit_atomic(client, true, true);
++	mutex_unlock(&client->modeset_mutex);
 +
-+		return buffer->fb->funcs->dirty(buffer->fb, buffer->client->file,
-+						0, 0, &clip, 1);
-+	}
-+
-+	return buffer->fb->funcs->dirty(buffer->fb, buffer->client->file,
-+					0, 0, NULL, 0);
++	return ret;
 +}
-+EXPORT_SYMBOL(drm_client_framebuffer_flush);
++EXPORT_SYMBOL(drm_client_modeset_check);
 +
- #ifdef CONFIG_DEBUG_FS
- static int drm_client_debugfs_internal_clients(struct seq_file *m, void *data)
- {
+ /**
+  * drm_client_modeset_commit_locked() - Force commit CRTC configuration
+  * @client: DRM client
+@@ -1112,7 +1139,7 @@ int drm_client_modeset_commit_locked(struct drm_client_dev *client)
+ 
+ 	mutex_lock(&client->modeset_mutex);
+ 	if (drm_drv_uses_atomic_modeset(dev))
+-		ret = drm_client_modeset_commit_atomic(client, true);
++		ret = drm_client_modeset_commit_atomic(client, true, false);
+ 	else
+ 		ret = drm_client_modeset_commit_legacy(client);
+ 	mutex_unlock(&client->modeset_mutex);
+@@ -1188,7 +1215,7 @@ int drm_client_modeset_dpms(struct drm_client_dev *client, int mode)
+ 
+ 	mutex_lock(&client->modeset_mutex);
+ 	if (drm_drv_uses_atomic_modeset(dev))
+-		ret = drm_client_modeset_commit_atomic(client, mode == DRM_MODE_DPMS_ON);
++		ret = drm_client_modeset_commit_atomic(client, mode == DRM_MODE_DPMS_ON, false);
+ 	else
+ 		drm_client_modeset_dpms_legacy(client, mode);
+ 	mutex_unlock(&client->modeset_mutex);
 diff --git a/include/drm/drm_client.h b/include/drm/drm_client.h
-index 96ebc7523aa0..9737dd7b147f 100644
+index 9737dd7b147f..76704f48fc46 100644
 --- a/include/drm/drm_client.h
 +++ b/include/drm/drm_client.h
-@@ -156,6 +156,7 @@ struct drm_client_buffer {
- struct drm_client_buffer *
- drm_client_framebuffer_create(struct drm_client_dev *client, u32 width, u32 height, u32 format);
- void drm_client_framebuffer_delete(struct drm_client_buffer *buffer);
-+int drm_client_framebuffer_flush(struct drm_client_buffer *buffer, struct drm_rect *rect);
- void *drm_client_buffer_vmap(struct drm_client_buffer *buffer);
- void drm_client_buffer_vunmap(struct drm_client_buffer *buffer);
- 
+@@ -164,6 +164,7 @@ int drm_client_modeset_create(struct drm_client_dev *client);
+ void drm_client_modeset_free(struct drm_client_dev *client);
+ int drm_client_modeset_probe(struct drm_client_dev *client, unsigned int width, unsigned int height);
+ bool drm_client_rotation(struct drm_mode_set *modeset, unsigned int *rotation);
++int drm_client_modeset_check(struct drm_client_dev *client);
+ int drm_client_modeset_commit_locked(struct drm_client_dev *client);
+ int drm_client_modeset_commit(struct drm_client_dev *client);
+ int drm_client_modeset_dpms(struct drm_client_dev *client, int mode);
 -- 
 2.23.0
 
