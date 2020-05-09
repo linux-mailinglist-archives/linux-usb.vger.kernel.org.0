@@ -2,112 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1348B1CBC0C
-	for <lists+linux-usb@lfdr.de>; Sat,  9 May 2020 03:13:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E65A1CBC9E
+	for <lists+linux-usb@lfdr.de>; Sat,  9 May 2020 04:54:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728367AbgEIBMv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 May 2020 21:12:51 -0400
-Received: from cmccmta1.chinamobile.com ([221.176.66.79]:3528 "EHLO
-        cmccmta1.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727828AbgEIBMv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 May 2020 21:12:51 -0400
-Received: from spf.mail.chinamobile.com (unknown[172.16.121.11]) by rmmx-syy-dmz-app01-12001 (RichMail) with SMTP id 2ee15eb60383602-60882; Sat, 09 May 2020 09:12:35 +0800 (CST)
-X-RM-TRANSID: 2ee15eb60383602-60882
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG: 00000000
-Received: from [172.20.145.40] (unknown[112.25.154.146])
-        by rmsmtp-syy-appsvr06-12006 (RichMail) with SMTP id 2ee65eb6038203c-643e9;
-        Sat, 09 May 2020 09:12:35 +0800 (CST)
-X-RM-TRANSID: 2ee65eb6038203c-643e9
-Subject: Re: [PATCH] USB: host: ehci: Add error handlinginehci_mxc_drv_probe()
-To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, stern@rowland.harvard.edu,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200508114453.15436-1-tangbin@cmss.chinamobile.com>
- <20200508114858.GA4085349@kroah.com>
- <fb147bdf-faaa-8919-407e-89b4fe1337a6@cmss.chinamobile.com>
- <20200508143110.GA447591@kroah.com>
- <107353c0-09f2-858d-2a87-498e2d8584c6@cmss.chinamobile.com>
- <66a6bbca-4218-fb71-7284-37f73d5a3c58@cogentembedded.com>
-From:   Tang Bin <tangbin@cmss.chinamobile.com>
-Message-ID: <012c911d-e877-d7b8-60ab-2e70e67e62cb@cmss.chinamobile.com>
-Date:   Sat, 9 May 2020 09:13:22 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1728385AbgEICyj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 May 2020 22:54:39 -0400
+Received: from s52.coreserver.jp ([202.172.28.53]:40955 "EHLO
+        s52.coreserver.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728353AbgEICyj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 May 2020 22:54:39 -0400
+Received: (qmail 643105 invoked by uid 10000); 9 May 2020 11:54:37 +0900
+To:     undisclosed-recipients:;
+Subject: =?UTF-8?Q?=E3=81=82=E3=81=AA=E3=81=9F=E3=81=B8=E3=81=AE=E3=81=94?=  =?UTF-8?Q?=E6=8C=A8=E6=8B=B6?=
 MIME-Version: 1.0
-In-Reply-To: <66a6bbca-4218-fb71-7284-37f73d5a3c58@cogentembedded.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Date:   Fri, 08 May 2020 19:54:37 -0700
+From:   Dominique Bell <keiko@ono.bz>
+Reply-To: dominiquebell757@gmail.com
+Mail-Reply-To: dominiquebell757@gmail.com
+Message-ID: <ecb5aaffdab5957ec2eff8e08ff3f32d@ono.bz>
+X-Sender: keiko@ono.bz
+User-Agent: Roundcube Webmail/0.9.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Sergei:
+注::このメッセージをSPAM / JUNKフォルダーで受信した場合は、インターネットサービスプロバイダーによって制限が課せられているためです。
 
-On 2020/5/9 4:27, Sergei Shtylyov wrote:
-> On 05/08/2020 06:03 PM, Tang Bin wrote:
->
->>>>> On Fri, May 08, 2020 at 07:44:53PM +0800, Tang Bin wrote:
->>>>>> The function ehci_mxc_drv_probe() does not perform sufficient error
->>>>>> checking after executing platform_get_irq(), thus fix it.
->>>>>>
->>>>>> Fixes: 7e8d5cd93fa ("USB: Add EHCI support for MX27 and MX31 based boards")
->>>>>> Signed-off-by: Zhang Shengju <zhangshengju@cmss.chinamobile.com>
->>>>>> Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
->>>>>> ---
->>>>>>     drivers/usb/host/ehci-mxc.c | 2 ++
->>>>>>     1 file changed, 2 insertions(+)
->>>>>>
->>>>>> diff --git a/drivers/usb/host/ehci-mxc.c b/drivers/usb/host/ehci-mxc.c
->>>>>> index a1eb5ee77..a0b42ba59 100644
->>>>>> --- a/drivers/usb/host/ehci-mxc.c
->>>>>> +++ b/drivers/usb/host/ehci-mxc.c
->>>>>> @@ -50,6 +50,8 @@ static int ehci_mxc_drv_probe(struct platform_device *pdev)
->>>>>>         }
->>>>>>         irq = platform_get_irq(pdev, 0);
->>>>>> +    if (irq < 0)
->>>>>> +        return irq;
->>>>> <= ?
->>>> In the file 'drivers/base/platform.c'， the function platform_get_irq() is
->>>> explained and used as follows:
->>>>
->>>>        * Gets an IRQ for a platform device and prints an error message if
->>>> finding the
->>>>        * IRQ fails. Device drivers should check the return value for errors so
->>>> as to
->>>>        * not pass a negative integer value to the request_irq() APIs.
->>>>        *
->>>>        * Example:
->>>>        *        int irq = platform_get_irq(pdev, 0);
->>>>        *        if (irq < 0)
->>>>        *            return irq;
->>>>        *
->>>>        * Return: IRQ number on success, negative error number on failure.
->>>>
->>>> And in my hardware experiment, even if I set the irq failed deliberately in
->>>> the DTS, the returned value is negative instead of zero.
->>> Please read the thread at
->>>      https://lore.kernel.org/r/20200501224042.141366-1-helgaas%40kernel.org
->>> for more details about this.
->>>
->> Great, It looks beautiful, finally someone took a knife to the file 'platform.c'.
->     I thought I did that already couple years ago, when returned 0 from platform_get_irq() could mean both IRQ # and error... :-)
-Can you tell me what platform can returned 0? I want to do this test in 
-the hardware.
->> I have been studied this place for a long time, and don't know what platform can return 0, which made me curious.
->>
->> So the example should be:
->>
->>       *        int irq = platform_get_irq(pdev, 0);
->>       *        if (irq <= 0)
->>       *            return irq;
->     And you then return 0 (success) as if your probe() succeeded. Congratulations! :-P
+メッセージでご迷惑をおかけして申し訳ありません。削除する前に、少し時間をかけてお読みください。
+あなたが私に与えなかったので、このメールはあなたにとって驚きかもしれません
+そうする許可とあなたは私を知らないが、私があなたに言う前に
+私自身についてこのメールを送ったことを許してください
+あなたの許可なしに。
 
-Thanks,
+私は自信を持ってこの手紙を書いています。
+あなたがこのプロジェクトを手伝ってくれる神の私、正直で信頼が必要です
+あなたのような立派な人がこの巨大な移転プロジェクトを任せてください。わたし
+次の慈善団体にあなたを紹介するためにあなたの協力を求めています
+世界中の開発。 ..
+ 
+私はあなたに提案があります。あなたのことを示すために私に返信してください
+詳細に興味があります。
 
-Tang Bin
+私は辛抱強くあなたの返事を待ちます、
+dominiquebell755@gmail.com
 
-
-
+ありがとう
+ドミニク・ベル氏
