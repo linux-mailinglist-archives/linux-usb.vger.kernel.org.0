@@ -2,91 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8907D1CC7B0
-	for <lists+linux-usb@lfdr.de>; Sun, 10 May 2020 09:41:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE31D1CC97A
+	for <lists+linux-usb@lfdr.de>; Sun, 10 May 2020 10:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727870AbgEJHl3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 10 May 2020 03:41:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35982 "EHLO
+        id S1728929AbgEJIfk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 10 May 2020 04:35:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725810AbgEJHl2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 10 May 2020 03:41:28 -0400
-Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F655C061A0C;
-        Sun, 10 May 2020 00:41:27 -0700 (PDT)
-Received: from miraculix.mork.no (miraculix.mork.no [IPv6:2001:4641:0:2:7627:374e:db74:e353])
-        (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 04A7fH88024809
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Sun, 10 May 2020 09:41:17 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1589096478; bh=0ektno/eixWqJUCCiVzDc/aHhKtbibJjf6a3mIpikDc=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=olgW/Ws8kwtuB8HJdniFdFLhEJC7qutQa4C36OHLCmbDH3Img5r70ZHnXUO+z1LV1
-         49+FwDwaK47stz/ZyUhlq8cvlPoAxYkI75f+iLdOnrdomu0eH1Z6OekEd8J5Pdpc0W
-         kVpLq7wQ19uIiYBYArnnxOOc+4fhZ5hih+0ocK9k=
-Received: from bjorn by miraculix.mork.no with local (Exim 4.92)
-        (envelope-from <bjorn@mork.no>)
-        id 1jXgaK-0008K3-RX; Sun, 10 May 2020 09:41:16 +0200
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Colin King <colin.king@canonical.com>
-Cc:     "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        with ESMTP id S1728815AbgEJIfj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 10 May 2020 04:35:39 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43777C061A0C;
+        Sun, 10 May 2020 01:35:39 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id v63so3231452pfb.10;
+        Sun, 10 May 2020 01:35:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=7agiBsUJ0WJpTqY/Qk8WKBAW1zaA6qAMgzq/5zf2raI=;
+        b=eeDOtH1x9jnloaFnJ3Z+SjvbWmCsGddQmRP6Iy+I7niyfkzGtXriuvDkz2NxfIQ21M
+         a/I2o+Y7VeQNyZ3zT9CtF/Yq0CgR3TqtZjngMrsypwGmYQRhKcIfGgWM86VvfyOtxZqZ
+         a4bx9Nl8SSveRxybgTAhA8I9FPrqAk0qVPYFW32kpn4B6zCDGnWy3vvF3HVT2e2Laf49
+         X2nC0Ar7E63t5n8QBWCqIT6JNk0vnAHnqrhzI5obQU6NMXieNSdxKcqcJJozgW2zODc8
+         gSSPDpRZjK+S4Ffos5vuz1FjQBq/dzTr3CI12ODVlT/oOHiaReIGkenWxScGlT3qVjTr
+         XzmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=7agiBsUJ0WJpTqY/Qk8WKBAW1zaA6qAMgzq/5zf2raI=;
+        b=DCbdpFgSQ/BZAz9cDefJhR2quWqNxuKLiryM9GwC1tYvb+70ajQpeuMHUcvFeX42wx
+         J191+/OOnSfSGJLW81GXd68/9dotm+UYBRhDNFyeOxZrwaGvgGPAMKOWYi0FokHLHrkL
+         PT6X94JzsOiZ4nbnBV3nC/8e1Dl/AFx6C+jB6cYpN2SKMaQUJYjqIm+M2716tXziu1rN
+         lyquDvk8ZwsC2UrwZ57oVRf69UOG483EQZEtrMW4GV4qiJxtN/iqX4L3zJtUfAg9P/XG
+         M0tH25iNaAEFw1+0fK3yqNyfxEt7hbvaijEc2mM33CYJxpAbIdbD84JT3jZGDL0Ficn7
+         lvGA==
+X-Gm-Message-State: AGi0PuYJBpN8ROA44+q0ulcdxDMzSMaf8TkOkxdHxpiDGR8Rq9bpWoTy
+        dTRhyaO3Qziqxav3o7dVPkHmLblPRJI=
+X-Google-Smtp-Source: APiQypKRBfBFVeXFXk/wb20AlTooYehwAX9iEMTObrGdj4gjFJvK4P7wp7R0eR5PZ6i/gLEbxAas7g==
+X-Received: by 2002:a63:5642:: with SMTP id g2mr9755057pgm.211.1589099738277;
+        Sun, 10 May 2020 01:35:38 -0700 (PDT)
+Received: from ASMDT.1 ([114.125.245.237])
+        by smtp.gmail.com with ESMTPSA id s76sm5236338pgc.85.2020.05.10.01.35.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 10 May 2020 01:35:37 -0700 (PDT)
+Subject: Re: USB Attached SCSI breakage due no udev involvement
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-scsi@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net, stern@rowland.harvard.edu,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: usb: qmi_wwan: remove redundant assignment to variable status
-Organization: m
-References: <20200509215756.506840-1-colin.king@canonical.com>
-        <20200509215756.506840-2-colin.king@canonical.com>
-Date:   Sun, 10 May 2020 09:41:16 +0200
-In-Reply-To: <20200509215756.506840-2-colin.king@canonical.com> (Colin King's
-        message of "Sat, 9 May 2020 22:57:56 +0100")
-Message-ID: <87a72gck4j.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+References: <CAOyCV0zW_20Jq6Rrb9=fhZQAHeqMMs_oHBJdTVt8Nqje0Zoeig@mail.gmail.com>
+ <20200510054717.GA3365021@kroah.com>
+ <1f9c0b30-f440-de43-366f-28ccba6a22e2@gmail.com>
+ <20200510065416.GA3434442@kroah.com>
+ <e409bbfe-c446-2ba3-423d-c6e198abef33@gmail.com>
+ <20200510073258.GA3474912@kroah.com>
+From:   Dio Putra <dioput12@gmail.com>
+Message-ID: <6dcbc78c-8c2f-e620-822b-7e777144d4ae@gmail.com>
+Date:   Sun, 10 May 2020 15:35:34 +0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
+In-Reply-To: <20200510073258.GA3474912@kroah.com>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.102.2 at canardo
-X-Virus-Status: Clean
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Colin King <colin.king@canonical.com> writes:
+On 5/10/20 2:32 PM, Greg KH wrote:
+> On Sun, May 10, 2020 at 02:10:04PM +0700, Dio Putra wrote:
+>> On 5/10/20 1:54 PM, Greg KH wrote:
+>>> On Sun, May 10, 2020 at 01:48:24PM +0700, Dio Putra wrote:
+>>>> On 5/10/20 12:47 PM, Greg KH wrote:
+>>>>> On Sun, May 10, 2020 at 09:55:57AM +0700, Dio Putra wrote:
+>>>>>> Hi, it's first time for me to report user-space breakage in here, so
+>>>>>> i'm begging your pardon.
+>>>>>>
+>>>>>> I want to report that Linux 5.4 breaking my USB mount workflow due
+>>>>>> udevadm monitor report here (I'm using vanilla kernel 5.4.39 on
+>>>>>> Slackware64 Current and vanilla kernel 4.4.221 on Slackware64 14.2):
+>>>>>
+>>>>> <snip>
+>>>>>
+>>>>> Sorry, but what actually changed that you can see in the logs?
+>>>> Sorry, what do you mean? The dmesg log or the kernel changelogs?
+>>>
+>>> Either, your message made them pretty impossible to compare with all of
+>>> the line-wrapping :(
+>>>
+>> I'm so sorry for first message mess, because that message has been sent by
+>> Gmail Website. Can I send my logs as attachment? I try to convenient everyone
+>> here. ( FYI, I just switched to Thunderbird with these settings:
+>> https://www.kernel.org/doc/html/v4.12/process/email-clients.html#thunderbird-gui ) 
+> 
+> Sure, attachments work, but better yet, if you can show the difference
+> in a few lines that is much nicer than having to dig through large
+> numbers of log files.
+> 
+Okay, I'll attach long messages and trim it as far as I can.
 
-> From: Colin Ian King <colin.king@canonical.com>
->
-> The variable status is being initializeed with a value that is never read
-> and it is being updated later with a new value. The initialization
-> is redundant and can be removed.
->
-> Addresses-Coverity: ("Unused value")
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
-> ---
->  drivers/net/usb/qmi_wwan.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-> index 4bb8552a00d3..b0eab6e5279d 100644
-> --- a/drivers/net/usb/qmi_wwan.c
-> +++ b/drivers/net/usb/qmi_wwan.c
-> @@ -719,7 +719,7 @@ static int qmi_wwan_change_dtr(struct usbnet *dev, bo=
-ol on)
->=20=20
->  static int qmi_wwan_bind(struct usbnet *dev, struct usb_interface *intf)
->  {
-> -	int status =3D -1;
-> +	int status;
->  	u8 *buf =3D intf->cur_altsetting->extra;
->  	int len =3D intf->cur_altsetting->extralen;
->  	struct usb_interface_descriptor *desc =3D &intf->cur_altsetting->desc;
+>>>>> What functionality broke?  What used to work that no longer does work?
+>>>>>
+>>>> Yes, it supposed that just work and kernel could talk with udev, not just handled by the kernel.
+>>>
+>>> I don't understand, what functionality changed?  What exactly used to
+>>> work that no longer does?
+>> linux-5.4 has been never called the udev dependencies whereas
+>> linux-4.4 will call any udev dependencies if necessary, that's the problem.
+> 
+> I do not understand what exactly you mean by "call udev dependencies".
+> 
+> udev is used to create symlinks and set user/group permissions on device
+> nodes in /dev/ which is created by devtmpfs.  What exactly is not
+> happening in your /dev/ with the move to a newer kernel?
+> 
+Would I send my dmesg log with "udev.log-priority=debug" as attachment then?
 
+>>> Did you change anything else other than the kernel on your system?  Did
+>>> you change to a newer version of udev/systemd or anything else?
+>>>
+>> I'm using eudev-master from their official mirror github:
+>> https://github.com/gentoo/eudev
+> 
+> Have you contacted the eudev developers to see if something different
+> needs to be set in your kernel when moving 4 years in kernel development
+> forward?  Are you sure you have all the correct config options enabled?
+> 
+It's my bad not to contact the eudev developers first. However I'm not quite
+sure to contact the eudev developers would solve the problem, but CMIIW.
 
-Yes, looks like this initialization was made redundant when the CDC
-descriptor parsing was moved to usbcore. Thanks.
+> Why such a huge leap forward all at once, how about going from 4.4.y to
+> 4.9.y and then 4.14.y and then 5.4.y?  That might help narrow things
+> down a bit easier.
+> 
+Unfortunately I need to think twice due almost ran out of electricity
+here every time I power on my laptop for long time. So maybe I can't.
 
-Adding Fixes for documentation only, not as a stable hint.  This is
-cleanup only and not suitable for stable IMHO.
+But if these steps are necessary, I'll think solution later.
+> thanks,
+> 
+> greg k-h
+> 
 
-Acked-by: Bj=C3=B8rn Mork <bjorn@mork.no>
-Fixes: 8492ed45aa5d ("qmi-wwan: use common parser")
