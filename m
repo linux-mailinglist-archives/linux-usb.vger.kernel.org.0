@@ -2,107 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 253311CC7A4
-	for <lists+linux-usb@lfdr.de>; Sun, 10 May 2020 09:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8907D1CC7B0
+	for <lists+linux-usb@lfdr.de>; Sun, 10 May 2020 09:41:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726906AbgEJHdC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 10 May 2020 03:33:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33682 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725810AbgEJHdC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 10 May 2020 03:33:02 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D7DA420801;
-        Sun, 10 May 2020 07:33:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589095981;
-        bh=OhPzK8XvsgbaPEDXqL+qrrB3wHcSJuyDPUOAY9QGoSs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AwPkx+XOlkgPmm1u/VxrKPB2XtBOo7KThsn7W3xTHMSasLGE2cUAQ6R7m2bOvcs+g
-         NpEwM5UT2g7roXeQDMgvv7Zh2rczQqJ3uHX8Yo+Lv+Iy6xoMliTQFRBFlnpBE8t/jM
-         HafNTlreBYEmfjI69z0B7znDajewadxfgt2oDtHw=
-Date:   Sun, 10 May 2020 09:32:58 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Dio Putra <dioput12@gmail.com>
-Cc:     oneukum@suse.com, linux-usb@vger.kernel.org,
-        linux-scsi@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        stern@rowland.harvard.edu, linux-kernel@vger.kernel.org
-Subject: Re: USB Attached SCSI breakage due no udev involvement
-Message-ID: <20200510073258.GA3474912@kroah.com>
-References: <CAOyCV0zW_20Jq6Rrb9=fhZQAHeqMMs_oHBJdTVt8Nqje0Zoeig@mail.gmail.com>
- <20200510054717.GA3365021@kroah.com>
- <1f9c0b30-f440-de43-366f-28ccba6a22e2@gmail.com>
- <20200510065416.GA3434442@kroah.com>
- <e409bbfe-c446-2ba3-423d-c6e198abef33@gmail.com>
+        id S1727870AbgEJHl3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 10 May 2020 03:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35982 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725810AbgEJHl2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 10 May 2020 03:41:28 -0400
+Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F655C061A0C;
+        Sun, 10 May 2020 00:41:27 -0700 (PDT)
+Received: from miraculix.mork.no (miraculix.mork.no [IPv6:2001:4641:0:2:7627:374e:db74:e353])
+        (authenticated bits=0)
+        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 04A7fH88024809
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Sun, 10 May 2020 09:41:17 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1589096478; bh=0ektno/eixWqJUCCiVzDc/aHhKtbibJjf6a3mIpikDc=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=olgW/Ws8kwtuB8HJdniFdFLhEJC7qutQa4C36OHLCmbDH3Img5r70ZHnXUO+z1LV1
+         49+FwDwaK47stz/ZyUhlq8cvlPoAxYkI75f+iLdOnrdomu0eH1Z6OekEd8J5Pdpc0W
+         kVpLq7wQ19uIiYBYArnnxOOc+4fhZ5hih+0ocK9k=
+Received: from bjorn by miraculix.mork.no with local (Exim 4.92)
+        (envelope-from <bjorn@mork.no>)
+        id 1jXgaK-0008K3-RX; Sun, 10 May 2020 09:41:16 +0200
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     Colin King <colin.king@canonical.com>
+Cc:     "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: usb: qmi_wwan: remove redundant assignment to variable status
+Organization: m
+References: <20200509215756.506840-1-colin.king@canonical.com>
+        <20200509215756.506840-2-colin.king@canonical.com>
+Date:   Sun, 10 May 2020 09:41:16 +0200
+In-Reply-To: <20200509215756.506840-2-colin.king@canonical.com> (Colin King's
+        message of "Sat, 9 May 2020 22:57:56 +0100")
+Message-ID: <87a72gck4j.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e409bbfe-c446-2ba3-423d-c6e198abef33@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.102.2 at canardo
+X-Virus-Status: Clean
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, May 10, 2020 at 02:10:04PM +0700, Dio Putra wrote:
-> On 5/10/20 1:54 PM, Greg KH wrote:
-> > On Sun, May 10, 2020 at 01:48:24PM +0700, Dio Putra wrote:
-> >> On 5/10/20 12:47 PM, Greg KH wrote:
-> >>> On Sun, May 10, 2020 at 09:55:57AM +0700, Dio Putra wrote:
-> >>>> Hi, it's first time for me to report user-space breakage in here, so
-> >>>> i'm begging your pardon.
-> >>>>
-> >>>> I want to report that Linux 5.4 breaking my USB mount workflow due
-> >>>> udevadm monitor report here (I'm using vanilla kernel 5.4.39 on
-> >>>> Slackware64 Current and vanilla kernel 4.4.221 on Slackware64 14.2):
-> >>>
-> >>> <snip>
-> >>>
-> >>> Sorry, but what actually changed that you can see in the logs?
-> >> Sorry, what do you mean? The dmesg log or the kernel changelogs?
-> > 
-> > Either, your message made them pretty impossible to compare with all of
-> > the line-wrapping :(
-> > 
-> I'm so sorry for first message mess, because that message has been sent by
-> Gmail Website. Can I send my logs as attachment? I try to convenient everyone
-> here. ( FYI, I just switched to Thunderbird with these settings:
-> https://www.kernel.org/doc/html/v4.12/process/email-clients.html#thunderbird-gui ) 
+Colin King <colin.king@canonical.com> writes:
 
-Sure, attachments work, but better yet, if you can show the difference
-in a few lines that is much nicer than having to dig through large
-numbers of log files.
+> From: Colin Ian King <colin.king@canonical.com>
+>
+> The variable status is being initializeed with a value that is never read
+> and it is being updated later with a new value. The initialization
+> is redundant and can be removed.
+>
+> Addresses-Coverity: ("Unused value")
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> ---
+>  drivers/net/usb/qmi_wwan.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+> index 4bb8552a00d3..b0eab6e5279d 100644
+> --- a/drivers/net/usb/qmi_wwan.c
+> +++ b/drivers/net/usb/qmi_wwan.c
+> @@ -719,7 +719,7 @@ static int qmi_wwan_change_dtr(struct usbnet *dev, bo=
+ol on)
+>=20=20
+>  static int qmi_wwan_bind(struct usbnet *dev, struct usb_interface *intf)
+>  {
+> -	int status =3D -1;
+> +	int status;
+>  	u8 *buf =3D intf->cur_altsetting->extra;
+>  	int len =3D intf->cur_altsetting->extralen;
+>  	struct usb_interface_descriptor *desc =3D &intf->cur_altsetting->desc;
 
-> >>> What functionality broke?  What used to work that no longer does work?
-> >>>
-> >> Yes, it supposed that just work and kernel could talk with udev, not just handled by the kernel.
-> > 
-> > I don't understand, what functionality changed?  What exactly used to
-> > work that no longer does?
-> linux-5.4 has been never called the udev dependencies whereas
-> linux-4.4 will call any udev dependencies if necessary, that's the problem.
 
-I do not understand what exactly you mean by "call udev dependencies".
+Yes, looks like this initialization was made redundant when the CDC
+descriptor parsing was moved to usbcore. Thanks.
 
-udev is used to create symlinks and set user/group permissions on device
-nodes in /dev/ which is created by devtmpfs.  What exactly is not
-happening in your /dev/ with the move to a newer kernel?
+Adding Fixes for documentation only, not as a stable hint.  This is
+cleanup only and not suitable for stable IMHO.
 
-> > Did you change anything else other than the kernel on your system?  Did
-> > you change to a newer version of udev/systemd or anything else?
-> > 
-> I'm using eudev-master from their official mirror github:
-> https://github.com/gentoo/eudev
-
-Have you contacted the eudev developers to see if something different
-needs to be set in your kernel when moving 4 years in kernel development
-forward?  Are you sure you have all the correct config options enabled?
-
-Why such a huge leap forward all at once, how about going from 4.4.y to
-4.9.y and then 4.14.y and then 5.4.y?  That might help narrow things
-down a bit easier.
-
-thanks,
-
-greg k-h
+Acked-by: Bj=C3=B8rn Mork <bjorn@mork.no>
+Fixes: 8492ed45aa5d ("qmi-wwan: use common parser")
