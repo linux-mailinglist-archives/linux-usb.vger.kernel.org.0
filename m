@@ -2,134 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A753E1CDD0C
-	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2020 16:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF6451CDD0F
+	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2020 16:25:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728089AbgEKOZU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 May 2020 10:25:20 -0400
-Received: from foss.arm.com ([217.140.110.172]:33334 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725993AbgEKOZU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 11 May 2020 10:25:20 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E051F1045;
-        Mon, 11 May 2020 07:25:18 -0700 (PDT)
-Received: from e121166-lin.cambridge.arm.com (e121166-lin.cambridge.arm.com [10.1.196.255])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3F4643F68F;
-        Mon, 11 May 2020 07:25:17 -0700 (PDT)
-Date:   Mon, 11 May 2020 15:25:14 +0100
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Mathias Nyman <mathias.nyman@intel.com>
-Cc:     f.fainelli@gmail.com, gregkh@linuxfoundation.org, wahrenst@gmx.net,
-        helgaas@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com, tim.gover@raspberrypi.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH v8 4/4] USB: pci-quirks: Add Raspberry Pi 4 quirk
-Message-ID: <20200511142514.GB27249@e121166-lin.cambridge.arm.com>
-References: <20200505161318.26200-1-nsaenzjulienne@suse.de>
- <20200505161318.26200-5-nsaenzjulienne@suse.de>
+        id S1729927AbgEKOZi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 May 2020 10:25:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38912 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725993AbgEKOZh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 May 2020 10:25:37 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C916C061A0C
+        for <linux-usb@vger.kernel.org>; Mon, 11 May 2020 07:25:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=An8LtgnEqiNOPgIdTVkv8RFxQwgfnBQgv2USdPep6KQ=; b=apWibMHddm3jKXAGXyU7Pa0ot3
+        /Zw+Z4tPRnT1SICxl0OqC/ix4nM1NA5QKKVW+V6jOWd8MBrGY5irVbycoLlUWb+h4+jFyglSxzFtI
+        9hJ5y8czfODhiv9ltYiHAsiz3LgbND50LL0KZyFa6lL5FZ6xKdiREOCIdY0bnvinmriRDArHr6POc
+        FqhiiCCqMV/+V1z3dZxVpo7AVZrbUfMe2avfEWZ6LGcgmprpKvpGdm8dl7etXA2evT3QlYwa8SpHr
+        N6n7YX/6UAxUd8LAS1PqhbEV/MJH18pt8Vz7o4usybKOQAI2mRoR/JZXuLmPK9S3WE6AAm4cPp3Xu
+        cE4TvL4A==;
+Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jY9N7-00009F-FM; Mon, 11 May 2020 14:25:33 +0000
+Subject: Re: [PATCH RFC] drivers: most: add USB adapter driver
+To:     Christian Gromm <christian.gromm@microchip.com>,
+        gregkh@linuxfoundation.org
+Cc:     driverdev-devel@linuxdriverproject.org, linux-usb@vger.kernel.org
+References: <1589190675-21145-1-git-send-email-christian.gromm@microchip.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <85800dd5-952b-8a34-8907-57485d280f6f@infradead.org>
+Date:   Mon, 11 May 2020 07:25:31 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200505161318.26200-5-nsaenzjulienne@suse.de>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <1589190675-21145-1-git-send-email-christian.gromm@microchip.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 05, 2020 at 06:13:17PM +0200, Nicolas Saenz Julienne wrote:
-> On the Raspberry Pi 4, after a PCI reset, VL805's firmware may either be
-> loaded directly from an EEPROM or, if not present, by the SoC's
-> VideoCore. Inform VideoCore that VL805 was just reset.
-> 
-> Also, as this creates a dependency between USB_PCI and VideoCore's
-> firmware interface, and since USB_PCI can't be set as a module neither
-> this can. Reflect that on the firmware interface Kconfg.
-> 
-> Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-> ---
-> 
-> Changes since v5:
->  - Fix Kconfig issue with allmodconfig
-> 
-> Changes since v4:
->  - Do not split up error message
-> 
-> Changes since v3:
->  - Add more complete error message
-> 
-> Changes since v1:
->  - Make RASPBERRYPI_FIRMWARE dependent on this quirk to make sure it
->    gets compiled when needed.
-> 
->  drivers/firmware/Kconfig      |  3 ++-
->  drivers/usb/host/pci-quirks.c | 16 ++++++++++++++++
->  2 files changed, 18 insertions(+), 1 deletion(-)
+On 5/11/20 2:51 AM, Christian Gromm wrote:
+> diff --git a/drivers/most/usb/Kconfig b/drivers/most/usb/Kconfig
+> new file mode 100644
+> index 0000000..a86f1f6
+> --- /dev/null
+> +++ b/drivers/most/usb/Kconfig
+> @@ -0,0 +1,14 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# MOST USB configuration
+> +#
+> +
+> +config MOST_USB
+> +	tristate "USB"
+> +	depends on USB && NET
+> +	help
+> +	  Say Y here if you want to connect via USB to network tranceiver.
 
-Hi Mathias,
+	                                                       transceiver.
 
-I would need your ACK to merge this series, thanks.
 
-Lorenzo
+> +	  This device driver depends on the networking AIM.
+> +
+> +	  To compile this driver as a module, choose M here: the
+> +	  module will be called most_usb.
 
-> diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
-> index 8007d4aa76dc..b42140cff8ac 100644
-> --- a/drivers/firmware/Kconfig
-> +++ b/drivers/firmware/Kconfig
-> @@ -178,8 +178,9 @@ config ISCSI_IBFT
->  	  Otherwise, say N.
->  
->  config RASPBERRYPI_FIRMWARE
-> -	tristate "Raspberry Pi Firmware Driver"
-> +	bool "Raspberry Pi Firmware Driver"
->  	depends on BCM2835_MBOX
-> +	default USB_PCI
->  	help
->  	  This option enables support for communicating with the firmware on the
->  	  Raspberry Pi.
-> diff --git a/drivers/usb/host/pci-quirks.c b/drivers/usb/host/pci-quirks.c
-> index 92150ecdb036..0b949acfa258 100644
-> --- a/drivers/usb/host/pci-quirks.c
-> +++ b/drivers/usb/host/pci-quirks.c
-> @@ -16,6 +16,9 @@
->  #include <linux/export.h>
->  #include <linux/acpi.h>
->  #include <linux/dmi.h>
-> +
-> +#include <soc/bcm2835/raspberrypi-firmware.h>
-> +
->  #include "pci-quirks.h"
->  #include "xhci-ext-caps.h"
->  
-> @@ -1243,11 +1246,24 @@ static void quirk_usb_handoff_xhci(struct pci_dev *pdev)
->  
->  static void quirk_usb_early_handoff(struct pci_dev *pdev)
->  {
-> +	int ret;
-> +
->  	/* Skip Netlogic mips SoC's internal PCI USB controller.
->  	 * This device does not need/support EHCI/OHCI handoff
->  	 */
->  	if (pdev->vendor == 0x184e)	/* vendor Netlogic */
->  		return;
-> +
-> +	if (pdev->vendor == PCI_VENDOR_ID_VIA && pdev->device == 0x3483) {
-> +		ret = rpi_firmware_init_vl805(pdev);
-> +		if (ret) {
-> +			/* Firmware might be outdated, or something failed */
-> +			dev_warn(&pdev->dev,
-> +				 "Failed to load VL805's firmware: %d. Will continue to attempt to work, but bad things might happen. You should fix this...\n",
-> +				 ret);
-> +		}
-> +	}
-> +
->  	if (pdev->class != PCI_CLASS_SERIAL_USB_UHCI &&
->  			pdev->class != PCI_CLASS_SERIAL_USB_OHCI &&
->  			pdev->class != PCI_CLASS_SERIAL_USB_EHCI &&
-> -- 
-> 2.26.2
-> 
+
+-- 
+~Randy
+
