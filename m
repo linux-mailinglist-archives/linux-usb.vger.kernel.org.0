@@ -2,140 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0E251CEF17
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2020 10:28:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 889D61CE213
+	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2020 19:57:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726193AbgELI2n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 May 2020 04:28:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57062 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725987AbgELI2n (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 12 May 2020 04:28:43 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 43E95206A3;
-        Tue, 12 May 2020 08:28:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589272122;
-        bh=7RuoiwtdXbjU5E/bE+GPnT11/3NNMit5u9rAnsnFk9s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hURymR3FiR13WuWVys7r7yn6p1lKKJKhuOl2Z3MYBq2KJyKKgnIqXOOR1ht1dDXpb
-         X+vtTZCkoB9hEjTuc2KyG9tne4q3HkiN92Z39eb5wwr6B7nTfKokX8Pp3bGQB5YKTk
-         aWAtRI4tHJv9NAb7uVVD/HNJIzF8LNSzbQt+OEqE=
-Date:   Mon, 11 May 2020 18:33:46 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Christian.Gromm@microchip.com
-Cc:     driverdev-devel@linuxdriverproject.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH RFC] drivers: most: add USB adapter driver
-Message-ID: <20200511163346.GA2236392@kroah.com>
-References: <1589190675-21145-1-git-send-email-christian.gromm@microchip.com>
- <20200511114713.GA1671075@kroah.com>
- <266714a09283d7b5cc9f0720415db7e86bf18387.camel@microchip.com>
+        id S1730115AbgEKR5W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 May 2020 13:57:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43678 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727051AbgEKR5W (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 May 2020 13:57:22 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3104C05BD09
+        for <linux-usb@vger.kernel.org>; Mon, 11 May 2020 10:57:21 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id x10so4248714plr.4
+        for <linux-usb@vger.kernel.org>; Mon, 11 May 2020 10:57:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/4VPW/3YLXwoqcjHvmu+U93vY1XvtT8ILR97l+aBRHM=;
+        b=XYsodElimbqFJLNFnU/6UJl3lwNcwYu/y1MR1mjVNPFY94eInf7JUE6nLmVgUkHowr
+         4zSTdezoG0smW1qmL27QUdfb65KUD5AuCFfMJHnfOwzRVwH5uwUY2BPnP2uILCu+GQY0
+         PICJ13i5ZMC1iPneXD+vBuFAGy2Rk3JBqX/2k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/4VPW/3YLXwoqcjHvmu+U93vY1XvtT8ILR97l+aBRHM=;
+        b=J9AmoCgaQeECv6aWMf6tl0Z8Iw4pdEIHVRzCRfyHRUgKVygC2AhXraJlIu+gYYulb7
+         48nRCSos+/ld6/SeVXjrYVNSqqTrwDiPyZGL7V7dPNw1fXjJcHGiAzKk7qgWNMAkiIuV
+         RjZgvl3rr8XqpFldrpQOk4d5BkOSjmBBNV4RysGReU4h/s+gaBdfcHTkDdN/QzC94GlS
+         G+2IMYZPOwDaRJJllJiFxLDPr53LScmVxCDHYcPbOCAkxxC8RcQcrdZHqnnr1QMBpa3H
+         808Zl18aIHHJPkdzECVu8GzeSwy/FYMQLUXbBE2brYmNkWqA3pUu2XDnTL6AXzV8Yx1/
+         nWcg==
+X-Gm-Message-State: AGi0PuYgT0YeBzzmLkh+Mh+z8A5kyPniv2ZvHfH8Ld9ZewGKX4CHBM8+
+        cjvcFyJDCrNYcD+sK/j9uMgBXA==
+X-Google-Smtp-Source: APiQypKPWCdtCZVF1JVQ+N/i5CTxy1YZ2uxgAQ2wkunQWyauVm+9tyh+T7jrBtoR7DjFIZl3sskrPw==
+X-Received: by 2002:a17:90a:1b67:: with SMTP id q94mr23611499pjq.84.1589219841106;
+        Mon, 11 May 2020 10:57:21 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:476b:691:abc3:38db])
+        by smtp.gmail.com with ESMTPSA id z190sm9750203pfz.84.2020.05.11.10.57.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 May 2020 10:57:20 -0700 (PDT)
+Date:   Mon, 11 May 2020 10:57:19 -0700
+From:   Prashant Malani <pmalani@chromium.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Benson Leung <bleung@chromium.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH 2/4] usb: typec: mux: intel_pmc_mux: Support for static
+ SBU/HSL orientation
+Message-ID: <20200511175719.GA136540@google.com>
+References: <20200507150900.12102-1-heikki.krogerus@linux.intel.com>
+ <20200507150900.12102-3-heikki.krogerus@linux.intel.com>
+ <20200507224041.GA247416@google.com>
+ <20200508111840.GG645261@kuha.fi.intel.com>
+ <20200511133202.GA2085641@kuha.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <266714a09283d7b5cc9f0720415db7e86bf18387.camel@microchip.com>
+In-Reply-To: <20200511133202.GA2085641@kuha.fi.intel.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 11, 2020 at 02:46:58PM +0000, Christian.Gromm@microchip.com wrote:
-> On Mon, 2020-05-11 at 13:47 +0200, Greg KH wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you
-> > know the content is safe
+Hi Heikki,
+
+Thanks a lot for looking into this. Kindly see my response inline:
+
+On Mon, May 11, 2020 at 04:32:02PM +0300, Heikki Krogerus wrote:
+> On Fri, May 08, 2020 at 02:18:44PM +0300, Heikki Krogerus wrote:
+> > Hi Prashant,
 > > 
-> > On Mon, May 11, 2020 at 11:51:15AM +0200, Christian Gromm wrote:
-> > > This patch adds the MOST USB adapter driver to the stable branch.
-> > > This is
-> > > a follow-up to commit <b276527>.
+> > On Thu, May 07, 2020 at 03:40:41PM -0700, Prashant Malani wrote:
+> > > > +static int sbu_orientation(struct pmc_usb_port *port)
+> > > > +{
+> > > > +	if (port->sbu_orientation)
+> > > > +		return port->sbu_orientation - 1;
+> > > > +
+> > > > +	return port->orientation - 1;
+> > > > +}
+> > > > +
+> > > > +static int hsl_orientation(struct pmc_usb_port *port)
+> > > > +{
+> > > > +	if (port->hsl_orientation)
+> > > > +		return port->hsl_orientation - 1;
+> > > > +
+> > > > +	return port->orientation - 1;
+> > > > +}
+> > > > +
+> > > >  static int pmc_usb_command(struct pmc_usb_port *port, u8 *msg, u32 len)
+> > > >  {
+> > > >  	u8 response[4];
+> > > > @@ -151,8 +170,9 @@ pmc_usb_mux_dp(struct pmc_usb_port *port, struct typec_mux_state *state)
+> > > >  
+> > > >  	req.mode_data = (port->orientation - 1) << PMC_USB_ALTMODE_ORI_SHIFT;
+> > > >  	req.mode_data |= (port->role - 1) << PMC_USB_ALTMODE_UFP_SHIFT;
+> > > > -	req.mode_data |= (port->orientation - 1) << PMC_USB_ALTMODE_ORI_AUX_SHIFT;
+> > > > -	req.mode_data |= (port->orientation - 1) << PMC_USB_ALTMODE_ORI_HSL_SHIFT;
+> > > > +
+> > > > +	req.mode_data |= sbu_orientation(port) << PMC_USB_ALTMODE_ORI_AUX_SHIFT;
+> > > 
+> > > I'm curious to know what would happen when sbu-orientation == "normal".
+> > > That means |port->sbu_orientation| == 1.
+> > > 
+> > > It sounds like what should happen is the AUX_SHIFT orientation
+> > > setting should follow what |port->orientation| is, but here it
+> > > looks like it will always be set to |port->sbu_orientation - 1|, i.e 0,
+> > > even if port->orientation == TYPEC_ORIENTATION_REVERSE, i.e 2, meaning
+> > > it should be set to 1 ?
 > > 
-> > I do not understand the "a follow-up..." sentance.  Always use the
-> > format of:
-> >         b27652753918 ("staging: most: move core files out of the
-> > staging area")
-> > when writing kernel commits in changelogs.
-> > 
-> > Also, that commit doesn't really mean anything here, this is a
-> > stand-alone driver for the most subsystem.  This changelog needs
-> > work.
+> > I'll double check this, and get back to you..
 > 
-> Purpose was sharing the information that this is patch is
-> only one part of moving the complete driver stack. That a
-> first step has alread been done and others are to follow.
-> But you're probably right and nobody realy needs to know.
+> This is not exactly an answer to your question, but it seems that
+> those bits are only valid if "Alternate-Direct" message is used.
+> Currently the driver does not support that message.
+Could you kindly provide some detail on when "Alternate-Direct" would be
+preferred to the current method?
+Also, is there anything on the PMC side which is preventing the use of
+"Alternate-Direct" messages? It seems like the state transition diagram
+there would be simpler, although I'm likely missing significant details
+here.
+
 > 
-> I'll skip this.
+> I think the correct thing to do now is to remove the two lines from
+> the driver where those bits (ORI-HSL and ORI-Aux) are set.
+I see. How would orientation then be handled in a retimer configuration
+where AUX/SBU is flipped by the retimer itself?
+
+Best regards,
+
+-Prashant
 > 
-> > 
-> > > Signed-off-by: Christian Gromm <christian.gromm@microchip.com>
-> > > ---
-> > >  drivers/most/Kconfig          |    6 +
-> > >  drivers/most/Makefile         |    2 +
-> > >  drivers/most/usb/Kconfig      |   14 +
-> > >  drivers/most/usb/Makefile     |    4 +
-> > >  drivers/most/usb/usb.c        | 1262
-> > > +++++++++++++++++++++++++++++++++++++++++
-> > 
-> > Why not just call this file most-usb.c so you don't have to do the
-> > 2-step Makefile work.  Also, why a whole subdir for a single .c file?
+> Let me know if that's OK, and I'll update the series.
 > 
-> To keep the staging layout.
-
-No need to do that, this is a new layout :)
-
-> > > +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> > 
-> > You shouldn't need any pr_*() calls because this is a driver and you
-> > always have access to the struct device * it controls.  So drop this
-> > and
-> > fix up the remaining pr_*() calls to be dev_*() instead.
+> thanks,
 > 
-> There are helper functions that actually don't have access to the
-> struct device and it felt like an overhead to pass the device
-> pointer just for logging purposes.
-
-pr_* calls show almost nothing when it comes to the actual device/driver
-being affected.  That's why the dev_*() functions are there, please use
-them.
-
-> > > +/**
-> > > + * struct most_dci_obj - Direct Communication Interface
-> > > + * @kobj:position in sysfs
-> > > + * @usb_device: pointer to the usb device
-> > > + * @reg_addr: register address for arbitrary DCI access
-> > > + */
-> > > +struct most_dci_obj {
-> > > +     struct device dev;
-> > 
-> > Wait, why is a USB driver creating something with a separate struct
-> > device embedded in it?  Shouldn't the most core handle stuff like
-> > this?
-> 
-> The driver adds an ABI interface that belongs to USB only. This keeps
-> the core generic.
-
-So this same type of thing is also needed in the other bus controllers
-(serial, i2c, etc.)?
-
-Creating a new device implies it lives on a bus, and almost always the
-bus code for creating/managing that code lives in a single place, not in
-the individual drivers.  Why doesn't the most core handle this?  What
-does the most core do?  :)
-
-
-> > > +static DEVICE_ATTR(arb_address, 0644, value_show, value_store);
-> > > +static DEVICE_ATTR(arb_value, 0644, value_show, value_store);
-> > 
-> > Loads of sysfs files with no documentation for them?
-> > 
-> 
-> see driver/staging/most/Documentation
-
-Add it as part of this patch series, as you are moving these sysfs files
-into the "real" part of the kernel and belong out of drivers/staging/
-
-thanks,
-
-greg k-h
+> -- 
+> heikki
