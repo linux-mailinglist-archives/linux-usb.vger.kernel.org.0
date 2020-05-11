@@ -2,92 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 660F61CD1F7
-	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2020 08:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B213D1CD434
+	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2020 10:49:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725993AbgEKGkW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 May 2020 02:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51100 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725790AbgEKGkW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 May 2020 02:40:22 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 626BBC061A0C
-        for <linux-usb@vger.kernel.org>; Sun, 10 May 2020 23:40:20 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id l18so9360156wrn.6
-        for <linux-usb@vger.kernel.org>; Sun, 10 May 2020 23:40:20 -0700 (PDT)
+        id S1728704AbgEKItV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 May 2020 04:49:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42862 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728562AbgEKItU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 May 2020 04:49:20 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC482C061A0C;
+        Mon, 11 May 2020 01:49:20 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id a7so7468034pju.2;
+        Mon, 11 May 2020 01:49:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=b+54X+TX5kZJ9qRshyticlnYndABBvz6OtR/q492GBo=;
-        b=M8EYmyHmTRjm+HdQp+lpCdON/vaMWQpsLthw3YYDANF7NHrHoYvnkT+xgs7I2yegeT
-         CndpjBqZ9xaZCJY9kbyDMbvAZHpBdREoRk5PY6Va4ohQa2f4BzAFgSwmC1jJl54zK8Sg
-         LK5xF/1zdvab2IqMpowmR3TyvXedv5cKu2yzjZTa9bhOqTYOfHJ/IHJtxTqhURlUjD24
-         MKAwgay/5VFJkHkRvtGIjzqshHIZo5Fz567i+B6uir3abJMVwXLIB5Cr0RSrMSxhnew3
-         AjkhNADh/Ss5sTc2oCUCtXtfq5h3fUx/VLxtT/rJtg6OPcyHI6h9jRtw/r1dUlBbumb2
-         eGvA==
+        d=gmail.com; s=20161025;
+        h=from:subject:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=sq8Mq/OxjyWpcL62/IYV8B3/GJi76SpQCwAh+NrsgKo=;
+        b=Fmn+xkIuoCtLzZ9L5niujL1ia1KizwnLoxdeKcLivh3+US4248sEtcamEd57cYtLP1
+         gUsQc6guW04sLRO/ehfKtLLkHye1haA0ghJdXE5o1vhgr5C4ikudX9MoELY5Z61vs1QI
+         cc/vFFZNY3iYllbOPBnlwGPdraCbxp6ABjfx7s5lZNJ/ivFcOaZJh91S8BR7hwBgE8cN
+         QhK/RbAgiIfOK/lN3gnEThCF5fRaG+bmp65xg4R2UBDF/vQjh7J+TDAYC57+FX+QNKW5
+         iSxl29E6ubfN3d2Xv/9jM25XUpF9pHNGk5Psj1PGcOlL6YclDOEAvG/Rui93O6dPiScW
+         4hTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=b+54X+TX5kZJ9qRshyticlnYndABBvz6OtR/q492GBo=;
-        b=gF4/ZNIUE3Lni+FQWeagyhWbbHOuSZEqtmkHKD/GsWZEyg9vBoxNHZTiCW54v8T2w5
-         WwP3/8yefyxM+yXKK4NWVKMolUu7TDcyt3LIWLwPnI55MAvZPUQOPfUObHr7uXfT6gHj
-         SXJkWxIWeXp8pWR7NFPWa+GyZj2AymLlKDK99zY7sIpQn1TkYfjcolSqFeISZ/qRsfY2
-         39uAPF8hfIs2STFCEz8BbOXgvslKbKWvuOBRzKyhQj2ZnQJmTr69eH2W19aJx1EcsgqG
-         CU5KdpUtPl4alVUGSoaIz2bVW98lw+C4yQf2KhCYw3ILZvp+j/4x570GCW9MVj4SvWII
-         El6w==
-X-Gm-Message-State: AGi0PuY+kJdfkgLlUZr4F+j0HIiy1RB0ZfezvPJ8FAvTfbFoE88Mlsky
-        Fjzf1CMQn/GZr7NHmpFVAtQjyYwX4oU=
-X-Google-Smtp-Source: APiQypLNFMVwgMOtwQds6QCltWYpc6Vs3EChos/FuLb+gpdk79SDqJOL0Xi3mG5TizXzQAknF4MLTA==
-X-Received: by 2002:adf:f00e:: with SMTP id j14mr10520253wro.252.1589179219073;
-        Sun, 10 May 2020 23:40:19 -0700 (PDT)
-Received: from dell ([2.31.163.63])
-        by smtp.gmail.com with ESMTPSA id w9sm17109112wrc.27.2020.05.10.23.40.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 May 2020 23:40:18 -0700 (PDT)
-Date:   Mon, 11 May 2020 07:40:16 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>
-Cc:     dri-devel@lists.freedesktop.org, linux-usb@vger.kernel.org,
-        sam@ravnborg.org, daniel.thompson@linaro.org, jingoohan1@gmail.com
-Subject: Re: [PATCH v2 01/10] backlight: Add backlight_device_get_by_name()
-Message-ID: <20200511064016.GJ823950@dell>
-References: <20200509141619.32970-1-noralf@tronnes.org>
- <20200509141619.32970-2-noralf@tronnes.org>
+        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=sq8Mq/OxjyWpcL62/IYV8B3/GJi76SpQCwAh+NrsgKo=;
+        b=TzFmryzfQbqMZ8DsSc6G4i3ifG5XZ1qziJb4wg+sn8XY5UkUcVP5HNmkLNoS/iPjPo
+         f5xhnpjLln69O0sSsxQBumwe5Gxx8tc0/LgzCLaAj6j+Z/qYMAWhgb04A4rQvLd2xTAw
+         YCzYNxRWi3vFvBnFgPtR1zdrGsjq4i3Bz2X5meOLQZBqvNtlYuRSY3K+poWznJPMgxzP
+         QSUFyTjmD5rczriXj9J56b0UpAVxs0nIK6qXxjaIcXEnmU3MeWfxsssJtcUbI8Sx9xaJ
+         X7WpQTEbcXwzCUzKjnGG9KM6e30RNvb9iJWyAawvdJjidHLi5ovpjurBlbVgCI/caJsy
+         /Czg==
+X-Gm-Message-State: AGi0Pua2sIncEzASVaom8U29G4a/G/I7KBYR1HGQbi2MioIDPABoNXEu
+        s549PiA91bei0jI4044s/HHFYaAGCa4=
+X-Google-Smtp-Source: APiQypJJODO+DqnvGW6pvwrpID7bxuUbBP7xXA9dC/Py7n0F2eUbS3woXmIuBbA3IzkJTAyrjd5Rzg==
+X-Received: by 2002:a17:90a:f418:: with SMTP id ch24mr20848992pjb.68.1589186959766;
+        Mon, 11 May 2020 01:49:19 -0700 (PDT)
+Received: from [192.168.1.5] ([110.77.154.194])
+        by smtp.googlemail.com with ESMTPSA id y8sm8890315pfg.216.2020.05.11.01.49.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 May 2020 01:49:19 -0700 (PDT)
+From:   Lars Melin <larsm17@gmail.com>
+Subject: Re: [PATCH v2] usb: typec: mux: intel: Fix DP_HPD_LVL bit field
+To:     Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org
+Cc:     bleung@chromium.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "open list:USB TYPEC CLASS" <linux-usb@vger.kernel.org>
+References: <20200510213934.146631-1-pmalani@chromium.org>
+Message-ID: <6921cb24-091b-1de3-5348-a1dd8a6803f5@gmail.com>
+Date:   Mon, 11 May 2020 15:49:17 +0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200509141619.32970-2-noralf@tronnes.org>
+In-Reply-To: <20200510213934.146631-1-pmalani@chromium.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, 09 May 2020, Noralf Trønnes wrote:
-
-> Add a way to lookup a backlight device based on its name.
-> Will be used by a USB display gadget getting the name from configfs.
+On 5/11/2020 04:39, Prashant Malani wrote:
+> According to the PMC Type C Subsystem (TCSS) Mux programming guide rev
+> 0.6, the PMC HPD request LVL bit field is bit 4.
+> Fix the definition here to match the programming guide.
 > 
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Cc: Daniel Thompson <daniel.thompson@linaro.org>
-> Cc: Jingoo Han <jingoohan1@gmail.com>
-> Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
-> Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
-> Acked-by: Lee Jones <lee.jones@linaro.org>
-> Signed-off-by: Noralf Trønnes <noralf@tronnes.org>
+> Since this bit field is changing, explicitly define a field for the
+> HPD_HIGH mode data bit.
+> 
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> Fixes: 6701adfa9693 ("usb: typec: driver for Intel PMC mux control")
+> Reviewed-by: Benson Leung <bleung@chromium.org>
 > ---
->  drivers/video/backlight/backlight.c | 21 +++++++++++++++++++++
->  include/linux/backlight.h           |  1 +
->  2 files changed, 22 insertions(+)
+> 
+> Changes in v2:
+> - Fixed bit error in commit message.
+> 
+>   drivers/usb/typec/mux/intel_pmc_mux.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
+> index 67c5139cfa0d..15074aec94eb 100644
+> --- a/drivers/usb/typec/mux/intel_pmc_mux.c
+> +++ b/drivers/usb/typec/mux/intel_pmc_mux.c
+> @@ -63,6 +63,7 @@ enum {
+>   #define PMC_USB_ALTMODE_DP_MODE_SHIFT	8
+>   
+>   /* TBT specific Mode Data bits */
+> +#define PMC_USB_ALTMODE_HPD_HIGH	BIT(14)
+>   #define PMC_USB_ALTMODE_TBT_TYPE	BIT(17)
+>   #define PMC_USB_ALTMODE_CABLE_TYPE	BIT(18)
+>   #define PMC_USB_ALTMODE_ACTIVE_LINK	BIT(20)
+> @@ -75,7 +76,7 @@ enum {
+>   
+>   /* Display HPD Request bits */
+>   #define PMC_USB_DP_HPD_IRQ		BIT(5)
+> -#define PMC_USB_DP_HPD_LVL		BIT(6)
+> +#define PMC_USB_DP_HPD_LVL		BIT(4)
+>   
+Please keep the bits sorted
 
-Applied, thanks.
+>   struct pmc_usb;
+>   
+> @@ -158,8 +159,7 @@ pmc_usb_mux_dp(struct pmc_usb_port *port, struct typec_mux_state *state)
+>   			 PMC_USB_ALTMODE_DP_MODE_SHIFT;
+>   
+>   	if (data->status & DP_STATUS_HPD_STATE)
+> -		req.mode_data |= PMC_USB_DP_HPD_LVL <<
+> -				 PMC_USB_ALTMODE_DP_MODE_SHIFT;
+> +		req.mode_data |= PMC_USB_ALTMODE_HPD_HIGH;
+>   
+>   	return pmc_usb_command(port, (void *)&req, sizeof(req));
+>   }
+> 
 
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Thanks
+Lars
