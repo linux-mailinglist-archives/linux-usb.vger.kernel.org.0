@@ -2,53 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37D0A1CD763
-	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2020 13:13:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6C8E1CD898
+	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2020 13:35:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727877AbgEKLNp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 May 2020 07:13:45 -0400
-Received: from s52.coreserver.jp ([202.172.28.53]:42991 "EHLO
-        s52.coreserver.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725993AbgEKLNp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 May 2020 07:13:45 -0400
-Received: (qmail 103231 invoked by uid 10000); 11 May 2020 20:13:42 +0900
-To:     undisclosed-recipients:;
-Subject: =?UTF-8?Q?=E3=81=82=E3=81=AA=E3=81=9F=E3=81=B8=E3=81=AE=E3=81=94?=  =?UTF-8?Q?=E6=8C=A8=E6=8B=B6?=
+        id S1729745AbgEKLfN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 May 2020 07:35:13 -0400
+Received: from mga02.intel.com ([134.134.136.20]:42750 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729610AbgEKLfL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 11 May 2020 07:35:11 -0400
+IronPort-SDR: vZROyOj1WAPPXxCtEYkeit6DKDpqyW8NCR7T3IlyQz3IqkvuyoyHV8bRlDtSFJZLuolcS85POh
+ Y8Cvu8HDExEA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2020 04:35:10 -0700
+IronPort-SDR: pL1SsiTAJyIBF/Qu6mEw90bEMYOwWcUPILyyajrHPk3Au1WGiusSXB3OnViGL9gXuFf07HReZH
+ RkiBBWIfVYxQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,379,1583222400"; 
+   d="scan'208";a="371194061"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 11 May 2020 04:35:07 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 11 May 2020 14:35:06 +0300
+Date:   Mon, 11 May 2020 14:35:06 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     jakub@bilan.me, Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: your mail
+Message-ID: <20200511113506.GB2062175@kuha.fi.intel.com>
+References: <526351589195104@mail.yandex.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Date:   Mon, 11 May 2020 04:13:42 -0700
-From:   Dominique Bell <keiko@ono.bz>
-Reply-To: dominiquebell757@gmail.com
-Mail-Reply-To: dominiquebell757@gmail.com
-Message-ID: <8b3629b0b817a2d96b16df31f3586cfa@ono.bz>
-X-Sender: keiko@ono.bz
-User-Agent: Roundcube Webmail/0.9.0
+In-Reply-To: <526351589195104@mail.yandex.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-注::このメッセージをSPAM / JUNKフォルダーで受信した場合は、インターネットサービスプロバイダーによって制限が課せられているためです。
++Andy
 
-メッセージでご迷惑をおかけして申し訳ありません。削除する前に、少し時間をかけてお読みください。
-あなたが私に与えなかったので、このメールはあなたにとって驚きかもしれません
-そうする許可とあなたは私を知らないが、私があなたに言う前に
-私自身についてこのメールを送ったことを許してください
-あなたの許可なしに。
+Adding also the linux-usb mailing list.
 
-私は自信を持ってこの手紙を書いています。
-あなたがこのプロジェクトを手伝ってくれる神の私、正直で信頼が必要です
-あなたのような立派な人がこの巨大な移転プロジェクトを任せてください。わたし
-次の慈善団体にあなたを紹介するためにあなたの協力を求めています
-世界中の開発。 ..
- 
-私はあなたに提案があります。あなたのことを示すために私に返信してください
-詳細に興味があります。
+On Mon, May 11, 2020 at 01:06:18PM +0200, jakub@bilan.me wrote:
+> Hello, I'm running Intel NUC10i3 with Ubuntu 20.04 on board. I have a problem
+> with cpu interrups causing issues with deeper CPU sleep and increased power
+> usage. Also load is always 1 even if machine has nothing to do.
+> �
+> I made a reasearch and found that device named TPS6598x interrupts my CPU. This
+> device is related with USB and according to datasheet it's "USB Interface IC USB
+> Type-CG and USB PD controller power switch and high-speed multiplexer ". I have
+> nothing connected to NUC except power plug and ethernet cable.
+> �
+> Screenshots: https://imgur.com/a/uw9NDCi
+> �
+> How to solve this issue? Could you help me?
 
-私は辛抱強くあなたの返事を待ちます、
-dominiquebell755@gmail.com
+My guess is that the IRQ resource is not correct for the PD
+controller causing you to see irq flood.
 
-ありがとう
-ドミニク・ベル氏
+The problem is that the ACPI device entry (the node) on this platform
+has 4 I2CSerialBus resources and 4 IRQ resources. The idea is that the
+single ACPI device entry can represent up to 4 USB PD controllers. The
+problem is that there is no way to know which IRQ resource belongs to
+which I2CSerialBus resource :-(.
+
+Andy, this is one of those multi-instantiate I2C slave devices with
+HID INT3515.
+
+The only solution I can think of is that we start maintaining DMI
+quirk table in drivers/platform/x86/i2c-multi-instantiate.c where we
+supply the correct i2c to irq resource mapping for every platform
+that has this device(s).
+
+> Kernel version:
+> �
+> Linux NUC 5.6.11-050611-generic #202005061022 SMP Wed May 6 10:27:04 UTC 2020
+> x86_64 x86_64 x86_64 GNU/Linux
+> �
+> Bios version:
+> FNCML357 Version: 0039 Date: 3/12/2020
+> --�
+> Best regards
+> Jakub Bilan
+
+thanks,
+
+-- 
+heikki
