@@ -2,86 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AE6C1CD6A3
-	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2020 12:34:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 273F21CD6CD
+	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2020 12:46:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729131AbgEKKeU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 May 2020 06:34:20 -0400
-Received: from mga04.intel.com ([192.55.52.120]:46397 "EHLO mga04.intel.com"
+        id S1729522AbgEKKqI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 May 2020 06:46:08 -0400
+Received: from mga05.intel.com ([192.55.52.43]:35929 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728209AbgEKKeT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 11 May 2020 06:34:19 -0400
-IronPort-SDR: FjlBUJCkDBelvWDxTgEPz78g1ZzG/lDjA4f1rKt8DbkbdwjmFRUzQaPLCFJdn7LSOfKxERoS0T
- FhsK9735Lv3w==
+        id S1728209AbgEKKqH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 11 May 2020 06:46:07 -0400
+IronPort-SDR: MU9XcCbWKgTZPKtzlcVfIX2egQgty+6tTm6+j9MGFjpjBIiwRoJZnkInx389npW3E/3tFhvzvi
+ PkrQmDK6Ewpg==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2020 03:34:19 -0700
-IronPort-SDR: x+ad6tvXSpdDpbPcKvlKZqJi1Jnm32xut9gHaFLSbnWdP79XULQDlZ/6WaED+adLvadvcgNhBt
- 613cFVUvLNyA==
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2020 03:46:07 -0700
+IronPort-SDR: 6+wlxQGsVBrFkYcdLlZFMmpWwHUXCZDfh8jl9RM72uix1XLHClRhOnf+DraSIizGZYnxI9okUZ
+ ODsCpMZBjBMA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,379,1583222400"; 
-   d="scan'208";a="371182023"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga001.fm.intel.com with SMTP; 11 May 2020 03:34:16 -0700
-Received: by lahna (sSMTP sendmail emulation); Mon, 11 May 2020 13:34:15 +0300
-Date:   Mon, 11 May 2020 13:34:15 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] thunderbolt: Replace zero-length array with
- flexible-array
-Message-ID: <20200511103415.GG487496@lahna.fi.intel.com>
-References: <20200507192524.GA16580@embeddedor>
+   d="scan'208";a="371183811"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 11 May 2020 03:46:04 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 11 May 2020 13:46:03 +0300
+Date:   Mon, 11 May 2020 13:46:03 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, nikolaus.voss@loewensteinmedical.de,
+        andriy.shevchenko@linux.intel.com, garsilva@embeddedor.com,
+        keescook@chromium.org
+Subject: Re: [PATCH v2] usb: typec: tps6598x: Add USB role switching logic
+Message-ID: <20200511104603.GA2062175@kuha.fi.intel.com>
+References: <20200507215938.1983363-1-bryan.odonoghue@linaro.org>
+ <20200507215938.1983363-2-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200507192524.GA16580@embeddedor>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20200507215938.1983363-2-bryan.odonoghue@linaro.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 07, 2020 at 02:25:24PM -0500, Gustavo A. R. Silva wrote:
-> The current codebase makes use of the zero-length array language
-> extension to the C90 standard, but the preferred mechanism to declare
-> variable-length types such as these ones is a flexible array member[1][2],
-> introduced in C99:
-> 
-> struct foo {
->         int stuff;
->         struct boo array[];
-> };
-> 
-> By making use of the mechanism above, we will get a compiler warning
-> in case the flexible array does not occur last in the structure, which
-> will help us prevent some kind of undefined behavior bugs from being
-> inadvertently introduced[3] to the codebase from now on.
-> 
-> Also, notice that, dynamic memory allocations won't be affected by
-> this change:
-> 
-> "Flexible array members have incomplete type, and so the sizeof operator
-> may not be applied. As a quirk of the original implementation of
-> zero-length arrays, sizeof evaluates to zero."[1]
-> 
-> sizeof(flexible-array-member) triggers a warning because flexible array
-> members have incomplete type[1]. There are some instances of code in
-> which the sizeof operator is being incorrectly/erroneously applied to
-> zero-length arrays and the result is zero. Such instances may be hiding
-> some bugs. So, this work (flexible-array member conversions) will also
-> help to get completely rid of those sorts of issues.
-> 
-> This issue was found with the help of Coccinelle.
-> 
-> [1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
-> [2] https://github.com/KSPP/linux/issues/21
-> [3] commit 76497732932f ("cxgb3/l2t: Fix undefined behaviour")
-> 
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Hi,
 
-Applied, thanks!
+On Thu, May 07, 2020 at 10:59:38PM +0100, Bryan O'Donoghue wrote:
+> @@ -452,6 +471,7 @@ static int tps6598x_probe(struct i2c_client *client)
+>  {
+>  	struct typec_capability typec_cap = { };
+>  	struct tps6598x *tps;
+> +	struct fwnode_handle *fwnode;
+>  	u32 status;
+>  	u32 conf;
+>  	u32 vid;
+> @@ -495,11 +515,21 @@ static int tps6598x_probe(struct i2c_client *client)
+>  	if (ret < 0)
+>  		return ret;
+>  
+> +	fwnode = device_get_named_child_node(&client->dev, "connector");
+> +	if (!IS_ERR_OR_NULL(fwnode)) {
+> +		tps->role_sw = fwnode_usb_role_switch_get(fwnode);
+> +		if (IS_ERR(tps->role_sw)) {
+> +			ret = PTR_ERR(tps->role_sw);
+> +			goto err_fwnode_put;
+> +		}
+> +	}
+
+        fwnode = device_get_named_child_node(&client->dev, "connector");
+        if (IS_ERR(fwnode))
+                return PTR_ERR(fwnode);
+
+        tps->role_sw = fwnode_usb_role_switch_get(fwnode);
+        if (IS_ERR(tps->role_sw)) {
+        	ret = PTR_ERR(tps->role_sw);
+        	goto err_fwnode_put;
+        }
+
+>  	typec_cap.revision = USB_TYPEC_REV_1_2;
+>  	typec_cap.pd_revision = 0x200;
+>  	typec_cap.prefer_role = TYPEC_NO_PREFERRED_ROLE;
+>  	typec_cap.driver_data = tps;
+>  	typec_cap.ops = &tps6598x_ops;
+> +	typec_cap.fwnode = fwnode;
+>  
+>  	switch (TPS_SYSCONF_PORTINFO(conf)) {
+>  	case TPS_PORTINFO_SINK_ACCESSORY:
+> @@ -525,12 +555,16 @@ static int tps6598x_probe(struct i2c_client *client)
+>  		typec_cap.data = TYPEC_PORT_DFP;
+>  		break;
+>  	default:
+> -		return -ENODEV;
+> +		ret = -ENODEV;
+> +		goto err_role_put;
+>  	}
+>  
+>  	tps->port = typec_register_port(&client->dev, &typec_cap);
+> -	if (IS_ERR(tps->port))
+> -		return PTR_ERR(tps->port);
+> +	if (IS_ERR(tps->port)) {
+> +		ret = PTR_ERR(tps->port);
+> +		goto err_role_put;
+> +	}
+> +	fwnode_handle_put(fwnode);
+>  
+>  	if (status & TPS_STATUS_PLUG_PRESENT) {
+>  		ret = tps6598x_connect(tps, status);
+> @@ -545,12 +579,19 @@ static int tps6598x_probe(struct i2c_client *client)
+>  	if (ret) {
+>  		tps6598x_disconnect(tps, 0);
+>  		typec_unregister_port(tps->port);
+> -		return ret;
+> +		goto err_role_put;
+>  	}
+>  
+>  	i2c_set_clientdata(client, tps);
+>  
+>  	return 0;
+> +
+> +err_role_put:
+> +	usb_role_switch_put(tps->role_sw);
+> +err_fwnode_put:
+> +	fwnode_handle_put(fwnode);
+> +
+> +	return ret;
+>  }
+
+thanks,
+
+-- 
+heikki
