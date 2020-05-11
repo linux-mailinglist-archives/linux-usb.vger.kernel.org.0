@@ -2,162 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9BB81CCE3C
-	for <lists+linux-usb@lfdr.de>; Sun, 10 May 2020 23:44:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BB011CD055
+	for <lists+linux-usb@lfdr.de>; Mon, 11 May 2020 05:18:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729078AbgEJVoY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 10 May 2020 17:44:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53230 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728972AbgEJVoY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 10 May 2020 17:44:24 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA11C061A0C
-        for <linux-usb@vger.kernel.org>; Sun, 10 May 2020 14:44:23 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id k19so3072376pll.9
-        for <linux-usb@vger.kernel.org>; Sun, 10 May 2020 14:44:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:thread-topic:thread-index:date:message-id
-         :references:in-reply-to:accept-language:content-language
-         :content-transfer-encoding:mime-version;
-        bh=TbO75A5Gn8gWHO4gwUNWqoHwkBpk2egJ3kslUHiUBjc=;
-        b=Ys8fwHHyoBUtdt4s9CCwekJehrIh/ska7PwkTviYx+3AT7ZT/5ORkSkrZHO/qg9h/P
-         c+QTP2XZT/DJniIHP33j9F7b4QpZ4vEysQUJswattEOXJFQGGG/sxegHP4K1rmHemjkY
-         QSu7UGL8AdYqIeiI/uRNq0QPETdeLmX7H+nY1ZNRwZQgyV6J9b2vLl8H+BXL3oJ7qPSL
-         99oC241UfxIGRlpClQehSF7znp1aCyV4eQM/pEkO8Y1DoeQdXvVATE+QXZLQZ2lxfZBR
-         4hEg3L/xzyOLLjMXhmXfDv1/JBAFsurjMrAOpm2TIK+LMdo1ryC+QKL1kzK6GMVfy3uq
-         UtzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:thread-topic:thread-index
-         :date:message-id:references:in-reply-to:accept-language
-         :content-language:content-transfer-encoding:mime-version;
-        bh=TbO75A5Gn8gWHO4gwUNWqoHwkBpk2egJ3kslUHiUBjc=;
-        b=qHX4U0Mh8scbpVj+RycB92Eq90KG32zpVIDUykwwsyJiRV+F5z7WuPQgl6AuoDGiKp
-         8ujKccdWy05W4Tda/a/uIp05WAPXxOKUJIpXS6O0qIjDHB3oIguJl6qikl+hyemwg3cT
-         VLtYdn6wAbCGhNS9L/7/JSJYznoK7HXaOv0ftW+mD1QPCgeDp2Mt/24L9WCJJRKXPBjM
-         UNWwHZmvFJniQnrmwmoFRml85nMlqQolThuvBMkfbPCYOOQl9GYAa1Ac1nEdAPp8AkHa
-         2/XRFIg8ZQmwu+hSvNeRW7ugwlWOc4mjuwQrTee63LLfyWWeCUb2dmOWx59XR+jf3bO0
-         gRqA==
-X-Gm-Message-State: AGi0PubJTEXGzZfIGgkkPSTzG5iTgtMYkR3tVAeNctCddkG4wzS/Oxwh
-        8TKIwlzFZi8jnZiIxJa4uNw=
-X-Google-Smtp-Source: APiQypLpiBUrsTPNHWIeSrqoqJ1lPzhBjZ1nog8zsbMNjYWmqB4S+b7C+ekQ8gXMrQwgkeXU7xQodg==
-X-Received: by 2002:a17:90a:9302:: with SMTP id p2mr18359448pjo.230.1589147063246;
-        Sun, 10 May 2020 14:44:23 -0700 (PDT)
-Received: from SL2P216MB0105.KORP216.PROD.OUTLOOK.COM ([2603:1046:100:22::5])
-        by smtp.gmail.com with ESMTPSA id j186sm7566456pfb.220.2020.05.10.14.44.20
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 10 May 2020 14:44:22 -0700 (PDT)
-From:   Jingoo Han <jingoohan1@gmail.com>
-To:     =?iso-8859-1?Q?Noralf_Tr=F8nnes?= <noralf@tronnes.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>
-CC:     "sam@ravnborg.org" <sam@ravnborg.org>,
-        "daniel.thompson@linaro.org" <daniel.thompson@linaro.org>,
-        Han Jingoo <jingoohan1@gmail.com>
-Subject: Re: [PATCH v2 01/10] backlight: Add backlight_device_get_by_name()
-Thread-Topic: [PATCH v2 01/10] backlight: Add backlight_device_get_by_name()
-Thread-Index: AWZuNzkxnA4fzGnWCrmX5dZ1Wlp95mZuNzkx3D5IIXY=
-X-MS-Exchange-MessageSentRepresentingType: 1
-Date:   Sun, 10 May 2020 21:44:17 +0000
-Message-ID: <SL2P216MB0105AD2B905A372B585A2828AAA00@SL2P216MB0105.KORP216.PROD.OUTLOOK.COM>
-References: <20200509141619.32970-1-noralf@tronnes.org>
- <20200509141619.32970-2-noralf@tronnes.org>
-In-Reply-To: <20200509141619.32970-2-noralf@tronnes.org>
-Accept-Language: ko-KR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-Exchange-Organization-SCL: -1
-X-MS-TNEF-Correlator: 
-X-MS-Exchange-Organization-RecordReviewCfmType: 0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        id S1728299AbgEKDRx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 10 May 2020 23:17:53 -0400
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:4435 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727094AbgEKDRx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 10 May 2020 23:17:53 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5eb8c3d30001>; Sun, 10 May 2020 20:17:39 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Sun, 10 May 2020 20:17:52 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Sun, 10 May 2020 20:17:52 -0700
+Received: from [10.19.66.205] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 11 May
+ 2020 03:17:49 +0000
+Subject: Re: [PATCH V2 6/8] phy: tegra: xusb: Add support for charger detect
+To:     Thierry Reding <thierry.reding@gmail.com>
+CC:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <jonathanh@nvidia.com>, <mark.rutland@arm.com>,
+        <robh+dt@kernel.org>, <kishon@ti.com>,
+        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1586939108-10075-1-git-send-email-nkristam@nvidia.com>
+ <1586939108-10075-7-git-send-email-nkristam@nvidia.com>
+ <20200428105510.GH3592148@ulmo>
+ <ea0f5906-4681-8b84-a55a-e959ce40aece@nvidia.com>
+ <20200504155029.GB614153@ulmo>
+X-Nvconfidentiality: public
+From:   Nagarjuna Kristam <nkristam@nvidia.com>
+Message-ID: <229333de-8dd6-2d09-c8ad-99afdcec703f@nvidia.com>
+Date:   Mon, 11 May 2020 08:49:37 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
+In-Reply-To: <20200504155029.GB614153@ulmo>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1589167059; bh=dhOCrrvTkzHB+DWGZHHMWxRBnVmIB3xIwhi9oro8Ae4=;
+        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=EjLINloir2HvrF0Xcs//fNNihRZi7fY12ShF48GOmR2ek7FpdH28Fd56VuOqH90Ea
+         eMgsFlP41Y3N4fqJBLDkoL/tOZiTQtp2RAYh1WXI5DZD5GnI6TH6P0HUH8j9QcTEui
+         uZgYjpVwQDhYs2dC/KOyG9pIgErQaf4Wj3moctX+6r+GWdo8yeIghs+CR56oKe4mgI
+         LvwhEC6Ox9J0FS58SL4NFlyEQ988BzhxYj3012lFzQkHdWN3UpKvrQjxA3EPrd1pNR
+         PpwckUh4jC8DUv7pSArMHGjGtTMOUv7H9uFVzsML82zs3J7hd+dQQ0yoS9SMRUEcIv
+         GUmi4oW+StK/Q==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 5/9/20, 10:16 AM, Noralf Tr=F8nnes wrote:
->=20
-> Add a way to lookup a backlight device based on its name.
-> Will be used by a USB display gadget getting the name from configfs.
->
-> Cc: Lee Jones <lee.jones@linaro.org>
 
-Please delete this line, because Lee already sent his Acked-by.
 
-> Cc: Daniel Thompson <daniel.thompson@linaro.org>
-> Cc: Jingoo Han <jingoohan1@gmail.com>
+On 04-05-2020 21:20, Thierry Reding wrote:
+> 
+> On Mon, May 04, 2020 at 02:32:51PM +0530, Nagarjuna Kristam wrote:
+>>> On 28-04-2020 16:25, Thierry Reding wrote:
+>>>> On Wed, Apr 15, 2020 at 01:55:06PM +0530, Nagarjuna Kristam wrote:
+> [...]
+>>>> diff --git a/drivers/phy/tegra/xusb-tegra-cd.c b/drivers/phy/tegra/xusb-tegra-cd.c
+>>>> +static void tegra_xusb_padctl_utmi_pad_dcd(struct tegra_xusb_padctl *padctl,
+>>>> +					      u32 index)
+>>>> +{
+>>>> +	u32 value;
+>>>> +	int dcd_timeout_ms = 0;
+>>>> +	bool ret = false;
+>>>> +
+>>>> +	/* Turn on IDP_SRC */
+>>>> +	value = padctl_readl(padctl, USB2_BATTERY_CHRG_OTGPADX_CTL0(index));
+>>>> +	value |= OP_I_SRC_EN;
+>>>> +	padctl_writel(padctl, value, USB2_BATTERY_CHRG_OTGPADX_CTL0(index));
+>>>> +
+>>>> +	/* Turn on D- pull-down resistor */
+>>>> +	value = padctl_readl(padctl, USB2_BATTERY_CHRG_OTGPADX_CTL1(index));
+>>>> +	value |= USBON_RPD_OVRD_VAL;
+>>>> +	padctl_writel(padctl, value, USB2_BATTERY_CHRG_OTGPADX_CTL1(index));
+>>>> +
+>>>> +	/* Wait for TDCD_DBNC */
+>>>> +	usleep_range(10000, 120000);
+>>>   From the comment this looks like we're waiting for some hardware
+>>> condition. Can we somehow obtain this rather than implementing a fixed
+>>> sleep? Especially since the range here is so large.
+>>>
+>> As per data sheet we need to wait for 10 micro seconds as settle time.
+> Okay, so TDCD_DBNC is a value that comes from a timing diagram in a
+> datasheet? Seems fine to leave it as-is then. Perhaps add parentheses
+> and mention which exact datasheet that's from, and perhaps which figure
+> so that people can more easily reference it. Provided there is a
+> publicly available datasheet, of course.
+> 
+Will update reference to table in the data sheet where these values are 
+recommended. ITs part of BC 1.2 spec from USB.
 
-Acked-by: Jingoo Han <jingoohan1@gmail.com>
+> Actually, one other thing: If the data sheet says to wait 10 us, why do
+> you use an upper range of 120 us? Shouldn't a range of 10-20 us be good
+> enough?
+> Yes, will reduce it to 20ms.
 
-Best regards,
-Jingoo Han
-
-> Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
-> Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
-> Acked-by: Lee Jones <lee.jones@linaro.org>
-> Signed-off-by: Noralf Tr=F8nnes <noralf@tronnes.org>
-> ---
- > drivers/video/backlight/backlight.c | 21 +++++++++++++++++++++
- > include/linux/backlight.h           |  1 +
- > 2 files changed, 22 insertions(+)
->
-> diff --git a/drivers/video/backlight/backlight.c b/drivers/video/backligh=
-t/backlight.c
-> index cac3e35d7630..92d80aa0c0ef 100644
-> --- a/drivers/video/backlight/backlight.c
-> +++ b/drivers/video/backlight/backlight.c
-> @@ -432,6 +432,27 @@ struct backlight_device *backlight_device_get_by_typ=
-e(enum backlight_type type)
->  }
->  EXPORT_SYMBOL(backlight_device_get_by_type);
-> =20
-> +/**
-> + * backlight_device_get_by_name - Get backlight device by name
-> + * @name: Device name
-> + *
-> + * This function looks up a backlight device by its name. It obtains a r=
-eference
-> + * on the backlight device and it is the caller's responsibility to drop=
- the
-> + * reference by calling backlight_put().
-> + *
-> + * Returns:
-> + * A pointer to the backlight device if found, otherwise NULL.
-> + */
-> +struct backlight_device *backlight_device_get_by_name(const char *name)
-> +{
-> +	struct device *dev;
-> +
-> +	dev =3D class_find_device_by_name(backlight_class, name);
-> +
-> +	return dev ? to_backlight_device(dev) : NULL;
-> +}
-> +EXPORT_SYMBOL(backlight_device_get_by_name);
-> +
->  /**
->   * backlight_device_unregister - unregisters a backlight device object.
->   * @bd: the backlight device object to be unregistered and freed.
-> diff --git a/include/linux/backlight.h b/include/linux/backlight.h
-> index c7d6b2e8c3b5..56e4580d4f55 100644
-> --- a/include/linux/backlight.h
-> +++ b/include/linux/backlight.h
-> @@ -190,6 +190,7 @@ extern void backlight_force_update(struct backlight_d=
-evice *bd,
->  extern int backlight_register_notifier(struct notifier_block *nb);
->  extern int backlight_unregister_notifier(struct notifier_block *nb);
->  extern struct backlight_device *backlight_device_get_by_type(enum backli=
-ght_type type);
-> +struct backlight_device *backlight_device_get_by_name(const char *name);
->  extern int backlight_device_set_brightness(struct backlight_device *bd, =
-unsigned long brightness);
-> =20
->  #define to_backlight_device(obj) container_of(obj, struct backlight_devi=
-ce, dev)
-> --=20
-> 2.23.0
-
+-Nagarjuna
