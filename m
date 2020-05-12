@@ -2,95 +2,172 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EF341CF8BE
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2020 17:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 844D81CF9FB
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2020 17:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726300AbgELPPN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 May 2020 11:15:13 -0400
-Received: from out4-smtp.messagingengine.com ([66.111.4.28]:34713 "EHLO
-        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725888AbgELPPN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 May 2020 11:15:13 -0400
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id E9C8C5C01B3;
-        Tue, 12 May 2020 11:15:11 -0400 (EDT)
-Received: from imap21 ([10.202.2.71])
-  by compute7.internal (MEProxy); Tue, 12 May 2020 11:15:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aeam.us; h=
-        mime-version:message-id:in-reply-to:references:date:from:to:cc
-        :subject:content-type; s=fm1; bh=5TiQ7+4hvxQaGpYZLmh7oS8xybSfby1
-        ak3vksEvngpo=; b=YoD3rmc5cP41nKMXdJeshvGglUrXi7iKLijbK3I4vXoUyiv
-        3/6Fd8DasSiPyjikYf/PgjztgX2pP/m53oE57U8kLjTR5GAm5semV02sgBhQsEfC
-        ujUmAbu6cXbAuLKmP+bkt2TeDEDOh43dB4aoDQqIUG97mlxRx4uVqlplUQzo4IuR
-        UrHMotPVWeUeJAMf71Zk2AKO1TDPPdTo3upDGFjT0iN/THFfSddGpEKo0pPLjv62
-        g56N/o4sEDn9xX6lHDP1h5P3U1QEtFduwa5TGUl0y8f/7IgtfzwHdCJZhc7Irq6h
-        KII6C6O1Jlexls4njQP0ACgWeHvr95mNtUaEnIA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=5TiQ7+
-        4hvxQaGpYZLmh7oS8xybSfby1ak3vksEvngpo=; b=cqPw2/hQP0ubqVn+fm7X3y
-        jvgJ1dNeeVWqoGzctXxvjeJEZN9xnO3L/y03d+ZV7Xiaaswx9syTdSqUZv4e/2rB
-        ydxYh3dSytBlCxBFyxODUfcoyXFd2QubR/NHI9mUsmkDstzNWy3gvV3UfNDMxkoh
-        A5+VyPzwU8UranGv+FzZkN9wA0MCrEIrxCRmffkNNCsykhIumhE8iUjQcC5+g8Np
-        Mnj14yzQb0KXya5l3IN55yoVuBdEX1eZafcxcK8k52QQGHGQL19KZS+bb/JzS9dE
-        Jk/L63kofiZuzShalk5nCiK6VBWMGwCV4H6ctCQAknP86o81GOgCI4VScBSSOzoQ
-        ==
-X-ME-Sender: <xms:f726XpGLKQ0h_OgH7cgDFrvuM2mYBCMCnzVq6v_kxXbrcKcV-mVYNw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrledvgdekfecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfufhiugcu
-    ufhprhihfdcuoehsihgusegrvggrmhdruhhsqeenucggtffrrghtthgvrhhnpeevgefhve
-    evteetfeetkeejjeehudffffffhfeuffelhfeuffdufeduleejfeeugfenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsihgusegrvggrmhdruh
-    hs
-X-ME-Proxy: <xmx:f726XuXOtp1iX6ogtUembfGRn5-y4UsuVkfsQhyD20UjLCzKZ1aVIw>
-    <xmx:f726XrItNK2WeZ0ZDABD9ysT2VOOLjUAKt6YciYyFBSkUddKXt43Sw>
-    <xmx:f726XvHMQGFlenI8UGLnPp_9LhTyeAqJUxW8Pa1lzyeg2WA-_UHbrg>
-    <xmx:f726Xnh3T0e_S4GbQwYe97WUdOTgFoghc8usGTibBkIbh63I1ak6EQ>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 8E8E966007F; Tue, 12 May 2020 11:15:11 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.3.0-dev0-413-g750b809-fmstable-20200507v1
-Mime-Version: 1.0
-Message-Id: <8ee3914e-7876-46aa-bade-7cf14df7efdc@www.fastmail.com>
-In-Reply-To: <20200506091750.GE30237@b29397-desktop>
-References: <0507a041-44f4-4257-adaf-3b17de3baf81@www.fastmail.com>
- <20200506091750.GE30237@b29397-desktop>
-Date:   Tue, 12 May 2020 10:14:26 -0500
-From:   "Sid Spry" <sid@aeam.us>
-To:     "Peter Chen" <peter.chen@nxp.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: Documentation for Raw USB ConfigFS
-Content-Type: text/plain
+        id S1730649AbgELP6q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 May 2020 11:58:46 -0400
+Received: from mga04.intel.com ([192.55.52.120]:47116 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726388AbgELP6p (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 12 May 2020 11:58:45 -0400
+IronPort-SDR: ajw48U3nOt6iz0ROGFx+w+hiPZRVA4o0fHIkwKYFA3rzchJN1WbQVeOe8QscZHeHJVNgyx1Dua
+ T7uCnthcpsrg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2020 08:58:45 -0700
+IronPort-SDR: UYBXHjhtbvnI19MzQKzfVY2TpiffSzdlnJksilCoo1Bgc7uR1td57hrTcM67PW0yQHyT/fkCWv
+ Z+Q3T3HU/Cgw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,384,1583222400"; 
+   d="scan'208";a="297350261"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 12 May 2020 08:58:43 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1jYXIV-000GDP-9S; Tue, 12 May 2020 23:58:23 +0800
+Date:   Tue, 12 May 2020 23:57:29 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     linux-omap@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [balbi-usb:testing/fixes] BUILD SUCCESS
+ 07aa17095faf7d57587349ad3817b0d7985ebde3
+Message-ID: <5ebac769.25Vwz2enfO8db0VN%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Peter, thanks for pointing me towards the ffs-test. Unfortunately after some exploration in that area I still don't see how I would add a preexisting function to the configuration to be handled by the kernel.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git  testing/fixes
+branch HEAD: 07aa17095faf7d57587349ad3817b0d7985ebde3  usb: raw-gadget: documentation updates
 
-I do see something in an AIO test in the host code where libusb is used to bind a kernel driver to an endpoint. Is that something that will be necessary? Device side, I'm still unsure how I tell the function to handle ECM/ethernet on a collection of endpoints.
+elapsed time: 483m
 
-I understand how USB works fairly well, especially on microcontrollers, but am a little lost still in understanding the Linux machinery for USB.
+configs tested: 113
+configs skipped: 5
 
-Cheers,
-    Sid
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-On Wed, May 6, 2020, at 4:17 AM, Peter Chen wrote:
-> On 20-04-30 12:08:13, Sid Spry wrote:
-> > Hi, I'm having issues finding good documentation for raw USB configfs. It has reached the point I need to look at developing a new driver, but I'd like my unique endpoint to coexist with a CDC ECM endpoint or similar.
-> > 
-> > Is there a high level description of this? I can refer to the code but it will be quite slow.
-> > 
-> 
-> You could write a user application using f_fs for your endpoint, the example is at:
-> tools/usb/ffs-test.c. And add both your specific function and CDC
-> function together into one configuration, in that case, the host could
-> see both functions.
-> 
-> -- 
-> 
-> Thanks,
-> Peter Chen
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                               allnoconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+sh                          kfr2r09_defconfig
+arm                            xcep_defconfig
+arm                         s5pv210_defconfig
+arm                        oxnas_v6_defconfig
+arm64                            alldefconfig
+arm                        vexpress_defconfig
+m68k                        m5272c3_defconfig
+sh                                  defconfig
+sh                             sh03_defconfig
+riscv                            allyesconfig
+arm                         lpc32xx_defconfig
+sh                            titan_defconfig
+arc                           tb10x_defconfig
+powerpc                         wii_defconfig
+s390                                defconfig
+arm                      integrator_defconfig
+sh                   rts7751r2dplus_defconfig
+i386                              allnoconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                              debian-10.3
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                              allnoconfig
+m68k                           sun3_defconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+nios2                            allyesconfig
+openrisc                            defconfig
+c6x                              allyesconfig
+c6x                               allnoconfig
+openrisc                         allyesconfig
+nds32                               defconfig
+nds32                             allnoconfig
+csky                             allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+h8300                            allmodconfig
+xtensa                              defconfig
+arc                                 defconfig
+arc                              allyesconfig
+sh                               allmodconfig
+sh                                allnoconfig
+microblaze                        allnoconfig
+mips                             allyesconfig
+mips                              allnoconfig
+mips                             allmodconfig
+parisc                            allnoconfig
+parisc                              defconfig
+parisc                           allyesconfig
+parisc                           allmodconfig
+powerpc                             defconfig
+powerpc                          allyesconfig
+powerpc                          rhel-kconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a006-20200512
+i386                 randconfig-a005-20200512
+i386                 randconfig-a003-20200512
+i386                 randconfig-a001-20200512
+i386                 randconfig-a004-20200512
+i386                 randconfig-a002-20200512
+x86_64               randconfig-a016-20200512
+x86_64               randconfig-a012-20200512
+x86_64               randconfig-a015-20200512
+x86_64               randconfig-a013-20200512
+x86_64               randconfig-a014-20200512
+x86_64               randconfig-a011-20200512
+i386                 randconfig-a012-20200512
+i386                 randconfig-a016-20200512
+i386                 randconfig-a014-20200512
+i386                 randconfig-a011-20200512
+i386                 randconfig-a013-20200512
+i386                 randconfig-a015-20200512
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+s390                             allyesconfig
+s390                              allnoconfig
+s390                             allmodconfig
+x86_64                              defconfig
+sparc                               defconfig
+sparc64                             defconfig
+sparc64                           allnoconfig
+sparc                            allyesconfig
+sparc64                          allyesconfig
+sparc64                          allmodconfig
+um                               allmodconfig
+um                                allnoconfig
+um                               allyesconfig
+um                                  defconfig
+x86_64                                   rhel
+x86_64                               rhel-7.6
+x86_64                    rhel-7.6-kselftests
+x86_64                         rhel-7.2-clear
+x86_64                                    lkp
+x86_64                              fedora-25
+x86_64                                  kexec
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
