@@ -2,53 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A89E31CF22B
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2020 12:14:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28F101CF5E8
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2020 15:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729229AbgELKOm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 May 2020 06:14:42 -0400
-Received: from s52.coreserver.jp ([202.172.28.53]:41750 "EHLO
-        s52.coreserver.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726187AbgELKOm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 May 2020 06:14:42 -0400
-Received: (qmail 824735 invoked by uid 10000); 12 May 2020 19:14:41 +0900
-To:     undisclosed-recipients:;
-Subject: =?UTF-8?Q?=E3=81=82=E3=81=AA=E3=81=9F=E3=81=B8=E3=81=AE=E3=81=94?=  =?UTF-8?Q?=E6=8C=A8=E6=8B=B6?=
+        id S1727783AbgELNf3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 May 2020 09:35:29 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:37985 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1725923AbgELNf3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 May 2020 09:35:29 -0400
+Received: (qmail 21977 invoked by uid 500); 12 May 2020 09:35:28 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 12 May 2020 09:35:28 -0400
+Date:   Tue, 12 May 2020 09:35:28 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     Peter Chen <peter.chen@nxp.com>
+cc:     mathias.nyman@intel.com, <linux-usb@vger.kernel.org>,
+        <gregkh@linuxfoundation.org>, <linux-imx@nxp.com>,
+        Li Jun <jun.li@nxp.com>, Baolin Wang <baolin.wang@linaro.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        <stable@vger.kernel.org>
+Subject: Re: [PATCH 1/1] usb: host: xhci-plat: keep runtime active when remove
+ host
+In-Reply-To: <20200512023547.31164-1-peter.chen@nxp.com>
+Message-ID: <Pine.LNX.4.44L0.2005120931060.21033-100000@netrider.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Tue, 12 May 2020 03:14:40 -0700
-From:   Dominique Bell <keiko@ono.bz>
-Reply-To: dominiquebell757@gmail.com
-Mail-Reply-To: dominiquebell757@gmail.com
-Message-ID: <6599ff19333190a5c0453bae825c98dc@ono.bz>
-X-Sender: keiko@ono.bz
-User-Agent: Roundcube Webmail/0.9.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-注::このメッセージをSPAM / JUNKフォルダーで受信した場合は、インターネットサービスプロバイダーによって制限が課せられているためです。
+On Tue, 12 May 2020, Peter Chen wrote:
 
-メッセージでご迷惑をおかけして申し訳ありません。削除する前に、少し時間をかけてお読みください。
-あなたが私に与えなかったので、このメールはあなたにとって驚きかもしれません
-そうする許可とあなたは私を知らないが、私があなたに言う前に
-私自身についてこのメールを送ったことを許してください
-あなたの許可なしに。
+> From: Li Jun <jun.li@nxp.com>
+> 
+> While remove host(e.g. for USB role switch from host to device), if
+> runtime pm is enabled by user, below oops are occurs at dwc3
+> and cdns3 platform. Keep the xhci-plat device being active during
+> remove host fixes them.
 
-私は自信を持ってこの手紙を書いています。
-あなたがこのプロジェクトを手伝ってくれる神の私、正直で信頼が必要です
-あなたのような立派な人がこの巨大な移転プロジェクトを任せてください。わたし
-次の慈善団体にあなたを紹介するためにあなたの協力を求めています
-世界中の開発。 ..
- 
-私はあなたに提案があります。あなたのことを示すために私に返信してください
-詳細に興味があります。
+...
 
-私は辛抱強くあなたの返事を待ちます、
-dominiquebell755@gmail.com
+> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+> index 1d4f6f85f0fe..f38d53528c96 100644
+> --- a/drivers/usb/host/xhci-plat.c
+> +++ b/drivers/usb/host/xhci-plat.c
+> @@ -362,6 +362,7 @@ static int xhci_plat_remove(struct platform_device *dev)
+>  	struct clk *reg_clk = xhci->reg_clk;
+>  	struct usb_hcd *shared_hcd = xhci->shared_hcd;
+>  
+> +	pm_runtime_get_sync(&dev->dev);
+>  	xhci->xhc_state |= XHCI_STATE_REMOVING;
+>  
+>  	usb_remove_hcd(shared_hcd);
 
-ありがとう
-ドミニク・ベル氏
+You mustn't add a pm_runtime_get call without a corresponding 
+pm_runtime_put call.
+
+With just this one call, if the role switched from host to device and 
+then back to host, then the host would never be able to go into runtime 
+suspend.
+
+In this case the correspondence between the get's and the put's will 
+probably be obscure; some comments would help.
+
+Alan Stern
+
