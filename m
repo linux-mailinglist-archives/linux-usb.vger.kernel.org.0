@@ -2,126 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2124C1CF6FD
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2020 16:24:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB0211CF82C
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2020 17:01:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730230AbgELOYW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 May 2020 10:24:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37400 "EHLO
+        id S1727882AbgELPAk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 May 2020 11:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725929AbgELOYV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 May 2020 10:24:21 -0400
-Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4363AC061A0C;
-        Tue, 12 May 2020 07:24:21 -0700 (PDT)
-Received: by mail-il1-x144.google.com with SMTP id j2so1632928ilr.5;
-        Tue, 12 May 2020 07:24:21 -0700 (PDT)
+        with ESMTP id S1726300AbgELPAj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 May 2020 11:00:39 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C101FC061A0C;
+        Tue, 12 May 2020 08:00:39 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id u10so5490796pls.8;
+        Tue, 12 May 2020 08:00:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rHPCRyECAcM8k/cCdpKgX/ZG7bOYLJtrdapfMB8yHTY=;
-        b=pL400oUOmAbd00DWGg45pkmL9RaYHaSg0EMnVTCe13VpTIwWykhkyVyy+4r+WyoLVz
-         7FsIjn4CGjupx/7voxxuK4RFDbUEAxeFVMgyArXMO9PCj8M/a1980V33qwl8Ig6Sml99
-         ABgVQ7DUfri85Qk9eWeVWYWVEgDpHKjK6KzsceQqWZUK63ExHiy5Xu3KIdt0kI8rz55N
-         xnTzuNSd80B4X5LY7GXe4cpaHlCHfDe7iduvh0Qxff7utifkz+yfh4SnEfdKZispRiW2
-         3vSi6u8ZzySDWb3nq85Msah09Q8zntlB0W6pdgPvoFLvJTZvi8QUT2OyJR+QPRSRztw/
-         eELw==
+        h=from:to:cc:subject:date:message-id;
+        bh=zY6l7Pzo8dnedvQSXEa9BV0T0TX5SB1UpYlmpbsnlxo=;
+        b=aY69rB+XNQ8wwcsY3HAr+e0Ju0AYGDRXK+SLIrRK8A5Rv7FhKikttrwEJcoinFah+N
+         rvnUwzOTQ4b+4b6c+dWj1ux7ov2pTAER7MQQvNQAemGhgp3+up9tg8Q0ZgZWUheEizMA
+         WzEWlGY9yeGrO9e5G8uiQ5mZVceUhOk2iIxjWcVXs5Nj9b4TEnAYNT9SMZIsNfFmgbG5
+         RO3Zp/30tTdNgII4qgOl/vxmHojp+s6VyMZxopunLZ2yWstKzryLUe9BLP/m5ca29OT2
+         RmASSTOY06SBS8jG6Rczr8cvR4x8Mo902ymSkHDpCSXBDTQZQoGR6331UgTowMahkru3
+         Y4vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rHPCRyECAcM8k/cCdpKgX/ZG7bOYLJtrdapfMB8yHTY=;
-        b=Qdx/abfKtvMQPhrzLCaKvPFzrS+Sis3Uj56rLGQLWwhHb7Zjw9zt0+SjUmOwoa4mTO
-         9jByLdz2t6T7eu1IftXIXCo99Dd6YSlIrIX9jaWisv+r0e9deJG0Pi/xOX9TcieKKQ9C
-         A+F85JX0hpMToBoCSxvHb2ednjhfRA4cOfflWY367WM3XyLSs2T4zTZbwb3reiOSZQjG
-         rP4aPO9mD2lGt9uC7pT9088ldrp0W+Mky7fg9u7lWmm6nHoinpBX9xUJuMq9PMlWVJe/
-         uiRvOD3oNRVjhsCewZab/Y6G+bVDCL7lMpB4BEEDw10TAK7kKi7ABoxNTbUYN3rY+54O
-         0Ahg==
-X-Gm-Message-State: AGi0PuYwH6zKMK4oVej52KBCvCpd6l4BwiN+SPNR9R2P1+oi6rlK6WDJ
-        LCPjlSAaQfE+/0OU6TNE5IjRhVMYAXpJVKkPMDE=
-X-Google-Smtp-Source: APiQypIFGaWFT/sin8nzW7GPMz/bf3+8hyeBW5SceLin9d02vPh/G5jzdUF5gSilruEh5HwTVCfzhHp34i+OXseVuQg=
-X-Received: by 2002:a92:2904:: with SMTP id l4mr13035243ilg.159.1589293460473;
- Tue, 12 May 2020 07:24:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200511193643.30926-5-alcooperx@gmail.com> <Pine.LNX.4.44L0.2005111542310.11417-100000@netrider.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.2005111542310.11417-100000@netrider.rowland.org>
-From:   Alan Cooper <alcooperx@gmail.com>
-Date:   Tue, 12 May 2020 10:24:09 -0400
-Message-ID: <CAOGqxeXSZY6-NNCvrYmurVb1q9e5_fJVdpU3EwO4vFV+hpxwvg@mail.gmail.com>
-Subject: Re: [PATCH v9 4/5] usb: ehci: Add new EHCI driver for Broadcom STB SoC's
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     ": Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=zY6l7Pzo8dnedvQSXEa9BV0T0TX5SB1UpYlmpbsnlxo=;
+        b=Wf94hKGgY21fiZJrkTs0sQ76xO2HSw0hPkBow9cstEjQNu3TLzFOV0MufmvAPga2bp
+         t41CpH36F3+nGGN4oaRAeHi7u+6NcLMPySE4AFFjipKybZYFxKiqQIzN8MEfZTsGLyRZ
+         /0RwKXG5TgodXeT3+Zpqmmn2JPz2H2RSuzyKa2+3g4tQk68tjnlz4wzqinpSPja984jX
+         /vdnWOYrLbC/x4/0t7QCDmutluGgUAlOdW3Oxo4/ycUqhZR0vM1yr9qt48kBp8xg91qe
+         QZhfGUJSmLsmXEsUHKCek6+uEs2vPTFvYUvSkmGbxNCkaQRD79nB75Uww94HzNR6w8mq
+         rqQQ==
+X-Gm-Message-State: AGi0PubRJNRPSpdv+y2tLzFOQ5AxUWRAZ1tVGPXtQgP6l2rIjuwCwc2B
+        2eKrryz+RBN8ogt7trbCtyFEkWQK4mM=
+X-Google-Smtp-Source: APiQypKmZjVS6pLHVWaDrSJr/frJYuIFiE/4qsGhLrwa25HuB2pW3W/srEun1TtAHe/cEWB3VZjSUQ==
+X-Received: by 2002:a17:902:c3c3:: with SMTP id j3mr20040157plj.284.1589295638750;
+        Tue, 12 May 2020 08:00:38 -0700 (PDT)
+Received: from stbsrv-and-01.and.broadcom.net ([192.19.231.250])
+        by smtp.gmail.com with ESMTPSA id c2sm8359779pgj.93.2020.05.12.08.00.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 May 2020 08:00:38 -0700 (PDT)
+From:   Al Cooper <alcooperx@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Al Cooper <alcooperx@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        DTML <devicetree@vger.kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Krzysztof Kozlowski <krzk@kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>,
         Rob Herring <robh+dt@kernel.org>,
         Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: [PATCH v10 0/5] Add XHCI, EHCI and OHCI support for Broadcom STB SoS's
+Date:   Tue, 12 May 2020 11:00:14 -0400
+Message-Id: <20200512150019.25903-1-alcooperx@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 11, 2020 at 3:51 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Mon, 11 May 2020, Al Cooper wrote:
->
-> > Add a new EHCI driver for Broadcom STB SoC's. A new EHCI driver
-> > was created instead of adding support to the existing ehci platform
-> > driver because of the code required to work around bugs in the EHCI
-> > controller. The primary workaround is for a bug where the Core
-> > violates the SOF interval between the first two SOFs transmitted after
-> > resume. This only happens if the resume occurs near the end of a
-> > microframe. The fix is to intercept the ehci-hcd request to complete
-> > RESUME and align it to the start of the next microframe.
-> >
-> > Signed-off-by: Al Cooper <alcooperx@gmail.com>
-> > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> > Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-> > ---
->
-> I hate to point this out...
->
-> > +static int ehci_brcm_probe(struct platform_device *pdev)
-> > +{
-> > +     struct device *dev = &pdev->dev;
-> > +     struct resource *res_mem;
-> > +     struct brcm_priv *priv;
-> > +     struct usb_hcd *hcd;
-> > +     int irq;
-> > +     int err;
-> > +
-> > +     err = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
-> > +     if (err)
-> > +             return err;
-> > +
-> > +     irq = platform_get_irq(pdev, 0);
-> > +     if (irq <= 0)
-> > +             return irq ? irq : EINVAL;
->
-> That should be -EINVAL.
->
-> To tell the truth, I'm not sure it's worthwhile checking for irq == 0.
-> That's up to Greg to decide.
+v10 - Fix incorrect error return in ehci-brcmstb.c pointed out by
+      Alan Stern.
 
-Darn, I've been looking at this code for too long :(
-Since Greg originally requested <=, I'll fix this and send v10.
+v9 - Fix minor typos in patch description for ehci driver.
+   - In ehci-brcm.c, use ehci_err() instead of dev_err().
+   - In ehci-brcm.c, handle zero returned from platform_get_irq()
+     by returning -EINVAL for 0 or actual return value for < 0.
 
-Thanks
-Al
+v8 - The previous v7 had the wrong version of ehci-brcm.c. This time
+     really, really add the changes Greg requested.
 
->
-> Anyway, as far as I'm concerned you can either change EINVAL to -EINVAL
-> or change the whole thing back to "if (irq < 0) return irq;".  Either
-> way, you may add:
->
-> Acked-by: Alan Stern <stern@rowland.harvard.edu>
->
-> Alan Stern
->
+v7 - Cleanup ehci-brcm.c as requested by Greg Kroah-Hartman.
+   - Split out Makefile re-order change into a separate commit.
+
+v6 - Remove "contains:" from compatible section of
+     brcm,bcm7445-ehci.yaml as requested by Rob Herring.
+
+v5 - Use devm_platform_get_and_ioremap_resource() in ehci-brcm.c
+     as requested by Andy Shevchenko.
+   - Add pm_runtime_set_active() to ehci_resume() in ehci-brcm.c
+     as requested by Alan Stern.
+
+v4 - A few more fixes to the brcm,bcm7445-ehci.yaml dt-bindings
+     document requested by Rob Herring.
+   - Fixed ordering issue in MAINTAINERS as requested by
+     Andy Shevchenko.
+
+v3 - Addressed all of Andy Shevchenko's review comments for
+     ehci-brcm.c.
+   - Fixed the brcm,bcm7445-ehci.yaml dt-bindings document,
+     dt_binding_check now passes.
+   - Added the XHCI functionality to xhci-plat.c instead of creating
+     new brcmstb files, as suggested by Mathias Nyman.
+
+v2 - Addressed Andy Shevchenko's review comments.
+   - Fixed dt_binding_check error pointed out by Rob Herring.
+   - Removed pr_info message in ehci_brcm_init as suggested by
+     Greg Kroah-Hartman.
+
+This adds support for the XHCI, EHCI and OHCI host controllers found
+in Broadcom STB SoC's. These drivers depend on getting access to the
+new Broadcom STB USB PHY driver through a device-tree phandle and
+will fail if the driver is not available.
+
+Al Cooper (5):
+  usb: xhci: Change the XHCI link order in the Makefile
+  dt-bindings: Add Broadcom STB USB support
+  usb: xhci: xhci-plat: Add support for Broadcom STB SoC's
+  usb: ehci: Add new EHCI driver for Broadcom STB SoC's
+  usb: host: Add ability to build new Broadcom STB USB drivers
+
+ .../bindings/usb/brcm,bcm7445-ehci.yaml       |  59 ++++
+ .../devicetree/bindings/usb/usb-xhci.txt      |   1 +
+ MAINTAINERS                                   |   8 +
+ drivers/usb/host/Kconfig                      |  20 ++
+ drivers/usb/host/Makefile                     |  17 +-
+ drivers/usb/host/ehci-brcm.c                  | 280 ++++++++++++++++++
+ drivers/usb/host/xhci-plat.c                  |  10 +
+ 7 files changed, 389 insertions(+), 6 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/brcm,bcm7445-ehci.yaml
+ create mode 100644 drivers/usb/host/ehci-brcm.c
+
+-- 
+2.17.1
+
