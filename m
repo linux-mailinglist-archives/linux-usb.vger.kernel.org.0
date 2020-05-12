@@ -2,138 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 396201CF6F7
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2020 16:23:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2124C1CF6FD
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2020 16:24:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730190AbgELOXO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 May 2020 10:23:14 -0400
-Received: from mga02.intel.com ([134.134.136.20]:24333 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728085AbgELOXO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 12 May 2020 10:23:14 -0400
-IronPort-SDR: ZiBXA76rb1/qZhNuKw1vgwQ2DC1XW3Kk46lXmqcYNjWIsc9o1haLQW2ZQ6LJ1X5Z1cPX6+KvQx
- T88Ij9y0cT7g==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2020 07:23:11 -0700
-IronPort-SDR: GlzZtu1sGARwiLFsda7n5jP+UidS5IcfVek8rox5EIDoV01vzHRDGFl9rq8vjh2j1rPhVTZ4+J
- 9F++snUjWrew==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,384,1583222400"; 
-   d="scan'208";a="371578153"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 12 May 2020 07:22:52 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 12 May 2020 17:22:51 +0300
-Date:   Tue, 12 May 2020 17:22:51 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Benson Leung <bleung@chromium.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH 2/4] usb: typec: mux: intel_pmc_mux: Support for static
- SBU/HSL orientation
-Message-ID: <20200512142251.GD2085641@kuha.fi.intel.com>
-References: <20200507150900.12102-1-heikki.krogerus@linux.intel.com>
- <20200507150900.12102-3-heikki.krogerus@linux.intel.com>
- <20200507224041.GA247416@google.com>
- <20200508111840.GG645261@kuha.fi.intel.com>
- <20200511133202.GA2085641@kuha.fi.intel.com>
- <20200511175719.GA136540@google.com>
+        id S1730230AbgELOYW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 May 2020 10:24:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37400 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725929AbgELOYV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 May 2020 10:24:21 -0400
+Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4363AC061A0C;
+        Tue, 12 May 2020 07:24:21 -0700 (PDT)
+Received: by mail-il1-x144.google.com with SMTP id j2so1632928ilr.5;
+        Tue, 12 May 2020 07:24:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rHPCRyECAcM8k/cCdpKgX/ZG7bOYLJtrdapfMB8yHTY=;
+        b=pL400oUOmAbd00DWGg45pkmL9RaYHaSg0EMnVTCe13VpTIwWykhkyVyy+4r+WyoLVz
+         7FsIjn4CGjupx/7voxxuK4RFDbUEAxeFVMgyArXMO9PCj8M/a1980V33qwl8Ig6Sml99
+         ABgVQ7DUfri85Qk9eWeVWYWVEgDpHKjK6KzsceQqWZUK63ExHiy5Xu3KIdt0kI8rz55N
+         xnTzuNSd80B4X5LY7GXe4cpaHlCHfDe7iduvh0Qxff7utifkz+yfh4SnEfdKZispRiW2
+         3vSi6u8ZzySDWb3nq85Msah09Q8zntlB0W6pdgPvoFLvJTZvi8QUT2OyJR+QPRSRztw/
+         eELw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rHPCRyECAcM8k/cCdpKgX/ZG7bOYLJtrdapfMB8yHTY=;
+        b=Qdx/abfKtvMQPhrzLCaKvPFzrS+Sis3Uj56rLGQLWwhHb7Zjw9zt0+SjUmOwoa4mTO
+         9jByLdz2t6T7eu1IftXIXCo99Dd6YSlIrIX9jaWisv+r0e9deJG0Pi/xOX9TcieKKQ9C
+         A+F85JX0hpMToBoCSxvHb2ednjhfRA4cOfflWY367WM3XyLSs2T4zTZbwb3reiOSZQjG
+         rP4aPO9mD2lGt9uC7pT9088ldrp0W+Mky7fg9u7lWmm6nHoinpBX9xUJuMq9PMlWVJe/
+         uiRvOD3oNRVjhsCewZab/Y6G+bVDCL7lMpB4BEEDw10TAK7kKi7ABoxNTbUYN3rY+54O
+         0Ahg==
+X-Gm-Message-State: AGi0PuYwH6zKMK4oVej52KBCvCpd6l4BwiN+SPNR9R2P1+oi6rlK6WDJ
+        LCPjlSAaQfE+/0OU6TNE5IjRhVMYAXpJVKkPMDE=
+X-Google-Smtp-Source: APiQypIFGaWFT/sin8nzW7GPMz/bf3+8hyeBW5SceLin9d02vPh/G5jzdUF5gSilruEh5HwTVCfzhHp34i+OXseVuQg=
+X-Received: by 2002:a92:2904:: with SMTP id l4mr13035243ilg.159.1589293460473;
+ Tue, 12 May 2020 07:24:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200511175719.GA136540@google.com>
+References: <20200511193643.30926-5-alcooperx@gmail.com> <Pine.LNX.4.44L0.2005111542310.11417-100000@netrider.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.2005111542310.11417-100000@netrider.rowland.org>
+From:   Alan Cooper <alcooperx@gmail.com>
+Date:   Tue, 12 May 2020 10:24:09 -0400
+Message-ID: <CAOGqxeXSZY6-NNCvrYmurVb1q9e5_fJVdpU3EwO4vFV+hpxwvg@mail.gmail.com>
+Subject: Re: [PATCH v9 4/5] usb: ehci: Add new EHCI driver for Broadcom STB SoC's
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     ": Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        DTML <devicetree@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Prashant,
+On Mon, May 11, 2020 at 3:51 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Mon, 11 May 2020, Al Cooper wrote:
+>
+> > Add a new EHCI driver for Broadcom STB SoC's. A new EHCI driver
+> > was created instead of adding support to the existing ehci platform
+> > driver because of the code required to work around bugs in the EHCI
+> > controller. The primary workaround is for a bug where the Core
+> > violates the SOF interval between the first two SOFs transmitted after
+> > resume. This only happens if the resume occurs near the end of a
+> > microframe. The fix is to intercept the ehci-hcd request to complete
+> > RESUME and align it to the start of the next microframe.
+> >
+> > Signed-off-by: Al Cooper <alcooperx@gmail.com>
+> > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+> > ---
+>
+> I hate to point this out...
+>
+> > +static int ehci_brcm_probe(struct platform_device *pdev)
+> > +{
+> > +     struct device *dev = &pdev->dev;
+> > +     struct resource *res_mem;
+> > +     struct brcm_priv *priv;
+> > +     struct usb_hcd *hcd;
+> > +     int irq;
+> > +     int err;
+> > +
+> > +     err = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
+> > +     if (err)
+> > +             return err;
+> > +
+> > +     irq = platform_get_irq(pdev, 0);
+> > +     if (irq <= 0)
+> > +             return irq ? irq : EINVAL;
+>
+> That should be -EINVAL.
+>
+> To tell the truth, I'm not sure it's worthwhile checking for irq == 0.
+> That's up to Greg to decide.
 
-On Mon, May 11, 2020 at 10:57:19AM -0700, Prashant Malani wrote:
-> Hi Heikki,
-> 
-> Thanks a lot for looking into this. Kindly see my response inline:
-> 
-> On Mon, May 11, 2020 at 04:32:02PM +0300, Heikki Krogerus wrote:
-> > On Fri, May 08, 2020 at 02:18:44PM +0300, Heikki Krogerus wrote:
-> > > Hi Prashant,
-> > > 
-> > > On Thu, May 07, 2020 at 03:40:41PM -0700, Prashant Malani wrote:
-> > > > > +static int sbu_orientation(struct pmc_usb_port *port)
-> > > > > +{
-> > > > > +	if (port->sbu_orientation)
-> > > > > +		return port->sbu_orientation - 1;
-> > > > > +
-> > > > > +	return port->orientation - 1;
-> > > > > +}
-> > > > > +
-> > > > > +static int hsl_orientation(struct pmc_usb_port *port)
-> > > > > +{
-> > > > > +	if (port->hsl_orientation)
-> > > > > +		return port->hsl_orientation - 1;
-> > > > > +
-> > > > > +	return port->orientation - 1;
-> > > > > +}
-> > > > > +
-> > > > >  static int pmc_usb_command(struct pmc_usb_port *port, u8 *msg, u32 len)
-> > > > >  {
-> > > > >  	u8 response[4];
-> > > > > @@ -151,8 +170,9 @@ pmc_usb_mux_dp(struct pmc_usb_port *port, struct typec_mux_state *state)
-> > > > >  
-> > > > >  	req.mode_data = (port->orientation - 1) << PMC_USB_ALTMODE_ORI_SHIFT;
-> > > > >  	req.mode_data |= (port->role - 1) << PMC_USB_ALTMODE_UFP_SHIFT;
-> > > > > -	req.mode_data |= (port->orientation - 1) << PMC_USB_ALTMODE_ORI_AUX_SHIFT;
-> > > > > -	req.mode_data |= (port->orientation - 1) << PMC_USB_ALTMODE_ORI_HSL_SHIFT;
-> > > > > +
-> > > > > +	req.mode_data |= sbu_orientation(port) << PMC_USB_ALTMODE_ORI_AUX_SHIFT;
-> > > > 
-> > > > I'm curious to know what would happen when sbu-orientation == "normal".
-> > > > That means |port->sbu_orientation| == 1.
-> > > > 
-> > > > It sounds like what should happen is the AUX_SHIFT orientation
-> > > > setting should follow what |port->orientation| is, but here it
-> > > > looks like it will always be set to |port->sbu_orientation - 1|, i.e 0,
-> > > > even if port->orientation == TYPEC_ORIENTATION_REVERSE, i.e 2, meaning
-> > > > it should be set to 1 ?
-> > > 
-> > > I'll double check this, and get back to you..
-> > 
-> > This is not exactly an answer to your question, but it seems that
-> > those bits are only valid if "Alternate-Direct" message is used.
-> > Currently the driver does not support that message.
-> Could you kindly provide some detail on when "Alternate-Direct" would be
-> preferred to the current method?
+Darn, I've been looking at this code for too long :(
+Since Greg originally requested <=, I'll fix this and send v10.
 
-Alternate Mode Direct request is supposed to be used if an alternate
-mode is entered directly from disconnected state.
+Thanks
+Al
 
-> Also, is there anything on the PMC side which is preventing the use of
-> "Alternate-Direct" messages? It seems like the state transition diagram
-> there would be simpler, although I'm likely missing significant details
-> here.
-
-So we actually should use the "direct" request if we are in
-disconnected state to enter alt modes if I understood correctly. But
-otherwise we should use the normal Alternate Mode request and not the
-Alternate Mode "direct" request. And I'm afraid I don't know why.
-
-> > I think the correct thing to do now is to remove the two lines from
-> > the driver where those bits (ORI-HSL and ORI-Aux) are set.
-> I see. How would orientation then be handled in a retimer configuration
-> where AUX/SBU is flipped by the retimer itself?
-
-Note that if we send a separate "connection" request first, then we
-already tell the HSL and SBU orientation as part of the payload of
-that request. That is why there is no need to tell about the HSL and
-SBU orientation with the normal Alternate Mode Request.
-
-So we have already handled the HSL and SBU orientation by the time
-this function is called.
-
-
-thanks,
-
--- 
-heikki
+>
+> Anyway, as far as I'm concerned you can either change EINVAL to -EINVAL
+> or change the whole thing back to "if (irq < 0) return irq;".  Either
+> way, you may add:
+>
+> Acked-by: Alan Stern <stern@rowland.harvard.edu>
+>
+> Alan Stern
+>
