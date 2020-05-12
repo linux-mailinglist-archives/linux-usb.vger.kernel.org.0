@@ -2,248 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39F4E1CE901
-	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2020 01:19:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7220D1CEA0C
+	for <lists+linux-usb@lfdr.de>; Tue, 12 May 2020 03:15:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726079AbgEKXTC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 May 2020 19:19:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37514 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725895AbgEKXTB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 May 2020 19:19:01 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7B0C061A0E
-        for <linux-usb@vger.kernel.org>; Mon, 11 May 2020 16:19:01 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id m24so10172033wml.2
-        for <linux-usb@vger.kernel.org>; Mon, 11 May 2020 16:19:01 -0700 (PDT)
+        id S1728110AbgELBPX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 May 2020 21:15:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55564 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728115AbgELBPX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 May 2020 21:15:23 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3090DC061A0E
+        for <linux-usb@vger.kernel.org>; Mon, 11 May 2020 18:15:23 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id q24so8596820pjd.1
+        for <linux-usb@vger.kernel.org>; Mon, 11 May 2020 18:15:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=htWLsPXxnD3s+Ak+OsHOd4Z+bbLisHPSJDmkJfsO+9A=;
-        b=MWoKMev1EAGY5CSGNDm4/jSw+i1b4/V0SZ6GGxEyoe8ve85KRM0TX9lOlHb+sfqbnp
-         qlYVx8mQEN/1vuw0Qm8mtLgkS1FUhNShNpSm2VC1jxVmZlJIcTDJq+75U/nwrCPSXo1s
-         yTh01AyujaFFL1ToNgCZO/gqAHTg0HsT9unfLZwzfkHBNCLOWIj23C12g0/+QAoNgPK2
-         HHVM2ZcpfNPMcPZB+0lW5HwaeHFve8EQ22+RE3xIenBoObHSTB1of8073J+inwt2ZYI1
-         XveanW4AWhtUjRN+ph9jAk/IUfI4/TjUN3+dvdHitIXKvI5sSR7Gs2dBuuq2Thhds1Jp
-         akpg==
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=t0TLC5mt6zw20J38nO6UV1Kz+5E95WBtIXeRkoxQ4a0=;
+        b=dao2jUsKEg0MNPr55uxxilqsr6U9IBF9cB0argAoiu+nzQbynnQySyQri1WXpjEqJG
+         rQtQRPE6kf9dn6K8zEzinKtihNCU1nkYNvzWld5uPTEk0mRNxcVlEd7QHVoT3hDK97qL
+         pi/e9VDFvCcvxsyBBxEa0d1VjKvLysP4thOc93Rg/sC9E6+N+xIBpO6zbeElBB7SqnZ/
+         YTlSxPBt57ylnu2S8n8Gq6ZhAaEFbqPB/fadW3E5kfIFHu6upTL0RyENKnjdB9YK2uCU
+         /zMtQNQK80ucr9aQD1DPhHKkX/5sXAJJ2Lamv7kwnHNMvUiNsy2zxg6pVJAT5oN5G1LV
+         4z7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=htWLsPXxnD3s+Ak+OsHOd4Z+bbLisHPSJDmkJfsO+9A=;
-        b=pdaDAULReacuokzPwa15CZopp4V6LHY0GOIdFM5BCVgFns4Y45ShrKOdIQuyjFcNfp
-         Vs6lT+MUzbhEG5VccE8i7qM9/2It3Vvy0+VAfzdcH/z6YAhuvmB2QSe/wPZntdzotYbn
-         6is85jHNeE3oCk+PefhmELDfQYG6OSKboYlWdH64PHlxYOWmsAuXF7PcEBeV/CMl829j
-         IexkwwxIDX3/d47UqnSq9G2GY0bGhnpnoC+twgBJjcLdmx9oHxsWvf0YDgOaXw7vYI9D
-         ZB5CpcVIcV4KmQce9CKh7NIMN6w4sbZ9Y01RhaIY+jm5OhRLWlWVvl2Cv9+o6sqsBW2t
-         nMtQ==
-X-Gm-Message-State: AGi0Pubp9LsozduHzEApP3eAm/YPf4f5dXPps5hLllGHwxOWqQPXqbxh
-        bsQhXICtXeh7fP96UPAOn4Hxz5k+JJY=
-X-Google-Smtp-Source: APiQypJkEvfnL3ff6hmymJTiKdHywu/T6Kx/KgGG3Oaligwi4hbo1zKKuHyNqU+zFf8l+Rn63x43yw==
-X-Received: by 2002:a1c:3581:: with SMTP id c123mr23251363wma.150.1589239139895;
-        Mon, 11 May 2020 16:18:59 -0700 (PDT)
-Received: from localhost.localdomain ([176.61.57.127])
-        by smtp.gmail.com with ESMTPSA id t2sm29844707wmt.15.2020.05.11.16.18.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2020 16:18:59 -0700 (PDT)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, bryan.odonoghue@linaro.org
-Cc:     Nikolaus Voss <nikolaus.voss@loewensteinmedical.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Gustavo A . R . Silva" <garsilva@embeddedor.com>,
-        Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 1/1] usb: typec: tps6598x: Add USB role switching logic
-Date:   Tue, 12 May 2020 00:19:30 +0100
-Message-Id: <20200511231930.2825183-2-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200511231930.2825183-1-bryan.odonoghue@linaro.org>
-References: <20200511231930.2825183-1-bryan.odonoghue@linaro.org>
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=t0TLC5mt6zw20J38nO6UV1Kz+5E95WBtIXeRkoxQ4a0=;
+        b=RMuxyJ31LjXjVCRxxECa2bOf2BNgy9oSqTCt5qESui1OqIMreW3GyjsJKKsFKipzZi
+         1akApNZeXrfkiDPDZ/Lx92Yc9qu/IDZpsaYL0IdEjNRX3tlOOlrURbZFo0iMazEwVS9V
+         irE5bDQ5nF696RPShBTtVmS7kUFgtXSuzSPEzsIC+xEoSwekzieSibf85U0Mh8yL7s6E
+         ukw6fGcCByzrORKlpGUBLhkR/p10LOcxmx54QB2wVg+RizZTEemvPC/NH9b2yp1kLXS+
+         5x0ieh6e8RifDRs+LUTgH3V++BZ1kAeiupUWE0GGYS1bB9ag6edJDf1NDHgzd+s98Opb
+         bzNA==
+X-Gm-Message-State: AGi0PuZ73FrPfFuEBbEZHebBQ1qe/FOC61efeP9lNUpPuADbkG0D9QRV
+        ebZBTXHGotNgShbmjesJmbd7KGJ/lUhYhcYT70c=
+X-Google-Smtp-Source: APiQypL7drP1TXFtbqS0WcI7b2l//8li31Sqm1idopYxv/pczsPHVy5oY3Tu50ZHDTGRWIkTbhvf7HaHzAaILZR4PMk=
+X-Received: by 2002:a17:90b:3443:: with SMTP id lj3mr25124196pjb.38.1589246121078;
+ Mon, 11 May 2020 18:15:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Reply-To: mrsanna.h.bruun119@gmail.com
+Received: by 2002:a17:90a:2901:0:0:0:0 with HTTP; Mon, 11 May 2020 18:15:20
+ -0700 (PDT)
+From:   "Mrs. Anna H. Bruun" <mrsanna.h.bruun119@gmail.com>
+Date:   Mon, 11 May 2020 18:15:20 -0700
+X-Google-Sender-Auth: DP3vQANA4x9hZJUxoEOwwGs8HNQ
+Message-ID: <CAAebY0nohthGzgVxSYUxAi+Xyp7H3amaMG=ZS+G-HS=Abxp5pg@mail.gmail.com>
+Subject: My Greetings
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch adds USB role switch support to the tps6598x.
+My Dear
 
-The setup to initiate or accept a data-role switch is both assumed and
-currently required to be baked-into the firmware as described in TI's
-document here.
+My Name is Mrs. Anna H. Bruun, from Norway. I know that this message
+will be a surprise to you. Firstly, I am married to Mr. Patrick Bruun,
+A gold merchant who owns a small gold Mine in Burkina Faso; He died of
+Cardiovascular Disease in mid-March 2011. During his life time he
+deposited the sum of =E2=82=AC 8.5 Million Euro) Eight million, Five hundre=
+d
+thousand Euros in a bank in Ouagadougou the capital city of Burkina
+Faso. The deposited money was from the sale of the shares, death
+benefits payment and entitlements of my deceased husband by his
+company.
 
-Link: https://www.ti.com/lit/an/slva843a/slva843a.pdf
+I am sending this message to you praying that it will reach you in
+good health, since I am not in good health condition in which I sleep
+every night without knowing if I may be alive to see the next day. I
+am suffering from long time cancer and presently i am partially
+suffering from a stroke illness which has become almost impossible for
+me to move around. I am married to my late husband for over 4 years
+before he died and is unfortunately that we don't have a child, my
+doctor confided in me that i have less chance to live. Having known my
+health condition, I decided to contact you to claim the fund since I
+don't have any relation I grew up from the orphanage home,
 
-With this change its possible to use the USB role-switch API to detect and
-notify role-switches to downstream consumers.
+I have decided to donate what I have to you for the support of helping
+Motherless babies/Less privileged/Widows' because I am dying and
+diagnosed of cancer for about 2 years ago. I have been touched by God
+Almighty to donate from what I have inherited from my late husband to
+you for good work of God Almighty. I have asked Almighty God to
+forgive me and believe he has, because He is a Merciful God I will be
+going in for an operation surgery soon
 
-Tested with a ChipIdea controller on a Qualcomm MSM8939.
+This is the reason i need your services to stand as my next of kin or
+an executor to claim the funds for charity purposes. If this money
+remains unclaimed after my death, the bank executives or the
+government will take the money as unclaimed fund and maybe use it for
+selfish and worthless ventures, I need a very honest person who can
+claim this money and use it for Charity works, for orphanages, widows
+and also build schools for less privilege that will be named after my
+late husband and my name; I need your urgent answer to know if you
+will be able to execute this project, and I will give you more
+Information on how the fund will be transferred to your bank account.
 
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Nikolaus Voss <nikolaus.voss@loewensteinmedical.de>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Gustavo A. R. Silva <garsilva@embeddedor.com>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: linux-usb@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- drivers/usb/typec/tps6598x.c | 57 +++++++++++++++++++++++++++++++-----
- 1 file changed, 50 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/usb/typec/tps6598x.c b/drivers/usb/typec/tps6598x.c
-index defa651282b0..b7c9fe5caabe 100644
---- a/drivers/usb/typec/tps6598x.c
-+++ b/drivers/usb/typec/tps6598x.c
-@@ -12,6 +12,7 @@
- #include <linux/regmap.h>
- #include <linux/interrupt.h>
- #include <linux/usb/typec.h>
-+#include <linux/usb/role.h>
- 
- /* Register offsets */
- #define TPS_REG_VID			0x00
-@@ -94,6 +95,7 @@ struct tps6598x {
- 	struct typec_port *port;
- 	struct typec_partner *partner;
- 	struct usb_pd_identity partner_identity;
-+	struct usb_role_switch *role_sw;
- };
- 
- /*
-@@ -190,6 +192,23 @@ static int tps6598x_read_partner_identity(struct tps6598x *tps)
- 	return 0;
- }
- 
-+static void tps6598x_set_data_role(struct tps6598x *tps,
-+				   enum typec_data_role role, bool connected)
-+{
-+	enum usb_role role_val;
-+
-+	if (role == TYPEC_HOST)
-+		role_val = USB_ROLE_HOST;
-+	else
-+		role_val = USB_ROLE_DEVICE;
-+
-+	if (!connected)
-+		role_val = USB_ROLE_NONE;
-+
-+	usb_role_switch_set_role(tps->role_sw, role_val);
-+	typec_set_data_role(tps->port, role);
-+}
-+
- static int tps6598x_connect(struct tps6598x *tps, u32 status)
- {
- 	struct typec_partner_desc desc;
-@@ -220,7 +239,7 @@ static int tps6598x_connect(struct tps6598x *tps, u32 status)
- 	typec_set_pwr_opmode(tps->port, mode);
- 	typec_set_pwr_role(tps->port, TPS_STATUS_PORTROLE(status));
- 	typec_set_vconn_role(tps->port, TPS_STATUS_VCONN(status));
--	typec_set_data_role(tps->port, TPS_STATUS_DATAROLE(status));
-+	tps6598x_set_data_role(tps, TPS_STATUS_DATAROLE(status), true);
- 
- 	tps->partner = typec_register_partner(tps->port, &desc);
- 	if (IS_ERR(tps->partner))
-@@ -240,7 +259,7 @@ static void tps6598x_disconnect(struct tps6598x *tps, u32 status)
- 	typec_set_pwr_opmode(tps->port, TYPEC_PWR_MODE_USB);
- 	typec_set_pwr_role(tps->port, TPS_STATUS_PORTROLE(status));
- 	typec_set_vconn_role(tps->port, TPS_STATUS_VCONN(status));
--	typec_set_data_role(tps->port, TPS_STATUS_DATAROLE(status));
-+	tps6598x_set_data_role(tps, TPS_STATUS_DATAROLE(status), false);
- }
- 
- static int tps6598x_exec_cmd(struct tps6598x *tps, const char *cmd,
-@@ -328,7 +347,7 @@ static int tps6598x_dr_set(struct typec_port *port, enum typec_data_role role)
- 		goto out_unlock;
- 	}
- 
--	typec_set_data_role(tps->port, role);
-+	tps6598x_set_data_role(tps, role, true);
- 
- out_unlock:
- 	mutex_unlock(&tps->lock);
-@@ -452,6 +471,7 @@ static int tps6598x_probe(struct i2c_client *client)
- {
- 	struct typec_capability typec_cap = { };
- 	struct tps6598x *tps;
-+	struct fwnode_handle *fwnode;
- 	u32 status;
- 	u32 conf;
- 	u32 vid;
-@@ -495,11 +515,22 @@ static int tps6598x_probe(struct i2c_client *client)
- 	if (ret < 0)
- 		return ret;
- 
-+	fwnode = device_get_named_child_node(&client->dev, "connector");
-+	if (IS_ERR(fwnode))
-+		return PTR_ERR(fwnode);
-+
-+	tps->role_sw = fwnode_usb_role_switch_get(fwnode);
-+	if (IS_ERR(tps->role_sw)) {
-+		ret = PTR_ERR(tps->role_sw);
-+		goto err_fwnode_put;
-+	}
-+
- 	typec_cap.revision = USB_TYPEC_REV_1_2;
- 	typec_cap.pd_revision = 0x200;
- 	typec_cap.prefer_role = TYPEC_NO_PREFERRED_ROLE;
- 	typec_cap.driver_data = tps;
- 	typec_cap.ops = &tps6598x_ops;
-+	typec_cap.fwnode = fwnode;
- 
- 	switch (TPS_SYSCONF_PORTINFO(conf)) {
- 	case TPS_PORTINFO_SINK_ACCESSORY:
-@@ -525,12 +556,16 @@ static int tps6598x_probe(struct i2c_client *client)
- 		typec_cap.data = TYPEC_PORT_DFP;
- 		break;
- 	default:
--		return -ENODEV;
-+		ret = -ENODEV;
-+		goto err_role_put;
- 	}
- 
- 	tps->port = typec_register_port(&client->dev, &typec_cap);
--	if (IS_ERR(tps->port))
--		return PTR_ERR(tps->port);
-+	if (IS_ERR(tps->port)) {
-+		ret = PTR_ERR(tps->port);
-+		goto err_role_put;
-+	}
-+	fwnode_handle_put(fwnode);
- 
- 	if (status & TPS_STATUS_PLUG_PRESENT) {
- 		ret = tps6598x_connect(tps, status);
-@@ -545,12 +580,19 @@ static int tps6598x_probe(struct i2c_client *client)
- 	if (ret) {
- 		tps6598x_disconnect(tps, 0);
- 		typec_unregister_port(tps->port);
--		return ret;
-+		goto err_role_put;
- 	}
- 
- 	i2c_set_clientdata(client, tps);
- 
- 	return 0;
-+
-+err_role_put:
-+	usb_role_switch_put(tps->role_sw);
-+err_fwnode_put:
-+	fwnode_handle_put(fwnode);
-+
-+	return ret;
- }
- 
- static int tps6598x_remove(struct i2c_client *client)
-@@ -559,6 +601,7 @@ static int tps6598x_remove(struct i2c_client *client)
- 
- 	tps6598x_disconnect(tps, 0);
- 	typec_unregister_port(tps->port);
-+	usb_role_switch_put(tps->role_sw);
- 
- 	return 0;
- }
--- 
-2.25.1
-
+Thanks
+Mrs. Anna H.
