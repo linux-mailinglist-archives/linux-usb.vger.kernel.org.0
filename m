@@ -2,115 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 459101D0620
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 06:48:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E2531D0978
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 09:04:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726035AbgEMEsO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 May 2020 00:48:14 -0400
-Received: from out3-smtp.messagingengine.com ([66.111.4.27]:41833 "EHLO
-        out3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725898AbgEMEsN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 May 2020 00:48:13 -0400
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id A1B1E5C0003;
-        Wed, 13 May 2020 00:48:12 -0400 (EDT)
-Received: from imap21 ([10.202.2.71])
-  by compute7.internal (MEProxy); Wed, 13 May 2020 00:48:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aeam.us; h=
-        mime-version:message-id:in-reply-to:references:date:from:to:cc
-        :subject:content-type; s=fm1; bh=wKI9kWdFgvxntpoR5sxGFOZA1ewtbq8
-        rdpKuBheo3Zg=; b=mRs3wd36bXaphwqNecak80myt8redPXv0mfjLkpOBqUGD9z
-        GVbG39T83kF+SBhNAKZkUClaK/omNr92+P8/Lm7K8Wxu4jAPglb5xAymUClBDcJi
-        14zcxgJzK0yD9GIMoagYWqJTnI0zpopfXc0BMrUdDi8kXDqnRKCN7HR8kF3TmjHz
-        ruQMCXswUleZlczP6x52viZJ00DqPqdYxxFa452JqV+onbGAXISzgOYTvKUhMQVw
-        t6O0bc2A+gqeQOV1Ghpf3Ds2Fl0sojr9myqzg6dzu7h4SFQUiKpIAtp2AI4YX4L8
-        CMTmIDFUhpz9F0zCEwbGw7QA2hbk58Q94rOdfZw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=wKI9kW
-        dFgvxntpoR5sxGFOZA1ewtbq8rdpKuBheo3Zg=; b=LvzBq+Dcf+otOmwj5vOFX0
-        m+ZN8A9xI9HP/79NlaVen2qIcIwTkch180XOi12Q6tiOS5kr7OjppCD96zpztSli
-        IOopgwSGwwkSjPnJ1KpWiFr0GFsMRvQMAA0hKWv5zdiezLzPOEZG6CGOSj9mWqXs
-        OzNpLjHP8lKLzP9+m+KjamlvI6VslbMEihaO0mw3NZuvR8a2AJETxmc4KEuMileF
-        XmxtQmZ465jACIPQbwDP3cpk6smHODTEwEaYqsLuacZrdY6AMJgQhSQ/ZWxv7Qtu
-        eZicVRzdqn3Yh+8odSdsLuBX73SHoqzhV3YCzkzd/+JF3jnbvFoGI2PAS1Q01ldg
-        ==
-X-ME-Sender: <xms:DHy7XpsRQ4hV-NcDAjMZoP9OXAvSYyUnOrQrDLOWNuul16kX0PxIbQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrleefgdekiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfufhiugcu
-    ufhprhihfdcuoehsihgusegrvggrmhdruhhsqeenucggtffrrghtthgvrhhnpeevgefhve
-    evteetfeetkeejjeehudffffffhfeuffelhfeuffdufeduleejfeeugfenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsihgusegrvggrmhdruh
-    hs
-X-ME-Proxy: <xmx:DHy7XifdOTO6R8uighHlAQaERNiphV4JEkoFD7rWU6l2nYHprrwc4w>
-    <xmx:DHy7XsyLqHV4nC_aPwLNkFl_ujiVZUdhnEHf8vkeUu4gQmiWEOLmcw>
-    <xmx:DHy7XgM6UJNYB9RciWNhDOjqBMrjtCLIOKQ4budmZkHTd_U49Eh-IQ>
-    <xmx:DHy7XuLtNyrv4eQrfR5kx6eURHvatd2QX0fatp3WhZ9_J7qA6SP0lw>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 53D4566007E; Wed, 13 May 2020 00:48:12 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.3.0-dev0-413-g750b809-fmstable-20200507v1
-Mime-Version: 1.0
-Message-Id: <ba5a11fe-90a6-48c2-8da1-66076e52c6b4@www.fastmail.com>
-In-Reply-To: <e89456b5-20db-48c1-814b-075e84ca8b8b@www.fastmail.com>
-References: <8943a225c6d8354f2f5fe0ea7270dc0fa1293180.camel@gmail.com>
- <20200512195231.GA26080@rowland.harvard.edu>
- <6d19d49dcfe7467556b0462b16e76677c1999875.camel@gmail.com>
- <e89456b5-20db-48c1-814b-075e84ca8b8b@www.fastmail.com>
-Date:   Tue, 12 May 2020 23:47:27 -0500
-From:   "Sid Spry" <sid@aeam.us>
-To:     "Claus Stovgaard" <claus.stovgaard@gmail.com>,
-        "Alan Stern" <stern@rowland.harvard.edu>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: Options for forcing dwc3 gadget to only accept superspeed
-Content-Type: text/plain
+        id S1730322AbgEMHEm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 May 2020 03:04:42 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:43953 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729642AbgEMHEm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 May 2020 03:04:42 -0400
+Received: by mail-oi1-f195.google.com with SMTP id i22so3966938oik.10;
+        Wed, 13 May 2020 00:04:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sMqsXTZkQsUYXsgUW5SNfqYNzeikt2R+rOYAkqTmE5k=;
+        b=Qlo78ui8y08TBdBC1f87m+1ryXxVvJIB0Om7wNF+f5clbFdgRJkuZ+KV3ytof3yMzv
+         pM02R0CKD0jZQOggg78PwzYCICqcG2pqnWlJxECulifzUnEt9l855gTMvHK8AU9y91ts
+         /uQ9XkcsXgSYXTS2E0/JG62+VXh+H3y2256SXpcam2KItKvB51Ef8zoWWhXlmsWq6bgv
+         RLKfQsNJ1wZv/aYbLb16oD9ElcNCyaUn1NW+mNoOSonhUUqa8QBQvjhGKC2E9s9WZHR2
+         63gmIBtMFhzTCBuzEMmdiQyxcXTTohcGoM/8EZXUExFNtORXZDpi9p2ZZcQNWEyOb7LV
+         pMKA==
+X-Gm-Message-State: AGi0Puack8XJaENLTjvv1ed5B7u91qa0FqxGx8C9af530hSjD2PmLX0s
+        uidHH4s9Gs0xSRIp3B+eG53NviECbNhbEtanQUiqrw==
+X-Google-Smtp-Source: APiQypI2i3OcOk0fZSl5EaM/AtAYKVxaJffZ2UtQJdWMHY7G9eIbkNlIzli6zPVMpFnI38y49fid2zK+GkOq09gyGKs=
+X-Received: by 2002:aca:cd93:: with SMTP id d141mr3674965oig.148.1589353479660;
+ Wed, 13 May 2020 00:04:39 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200512204543.22090-1-robh@kernel.org> <20200512204543.22090-5-robh@kernel.org>
+In-Reply-To: <20200512204543.22090-5-robh@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 13 May 2020 09:04:28 +0200
+Message-ID: <CAMuHMdWoh94eFvVKHt5si3LOX4Nwx0-JssxVOy=fXPMXxgndXg@mail.gmail.com>
+Subject: Re: [PATCH 5/5] dt-bindings: Fix incorrect 'reg' property sizes
+To:     Rob Herring <robh@kernel.org>
+Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello again, I'm terribly sorry for the double post. Claus, you might try detecting the speed of the connection and re-enumerating if necessary. It would avoid noncompliance with the spec and is probably the easiest option.
+Hi Rob,
 
-Unsure of how this would be done with a C manifestation of functionfs code but echoing "" to the UDC pseudofile under /sys/kernel/config/usb_gadget/${your_gadget} will allow you to set everything up again and reenumerate.
+On Tue, May 12, 2020 at 10:46 PM Rob Herring <robh@kernel.org> wrote:
+> The examples template is a 'simple-bus' with a size of 1 cell for
+> #address-cells and #size-cells. The schema was only checking the entries
+> had between 2 and 4 cells which really only errors on I2C or SPI type
+> devices with a single cell.
+>
+> The easiest fix in most cases is to change the 'reg' property to for 1 cell
+> address and size. In some cases with child devices having 2 cells, that
+> doesn't make sense so a bus node is needed.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-On Tue, May 12, 2020, at 11:43 PM, Sid Spry wrote:
-> Have you tried only providing a SS configuration? If that fails for some reason I suspect the next course of action would be to see why, and patch the driver so it does not.
-> 
-> Out of curiosity, which SoC are you using?
-> 
-> On Tue, May 12, 2020, at 3:08 PM, Claus Stovgaard wrote:
-> > On tir, 2020-05-12 at 15:52 -0400, Alan Stern wrote:
-> > > On Tue, May 12, 2020 at 09:25:38PM +0200, Claus Stovgaard wrote:
-> > > > 
-> > > > In a certain scenario I would like to force the dwc3 to only
-> > > > connect
-> > > > via superspeed and not fall back to USB2.
-> > > > 
-> > > > What options exist for forcing the dwc3 to keep retry?
-> > > 
-> > > The USB-3 spec forbids devices from operating only at SuperSpeed. 
-> > > Devices must be able to connect at high speed, although possibly
-> > > with 
-> > > reduced functionality.
-> > > 
-> > > Alan Stern
-> > > 
-> > 
-> > I understand the requirement from the USB 3 specification. Though in
-> > the scenario for this specific device, it is not about comply with the
-> > USB 3 specification, but my question is rather what options I have for
-> > not comply with the specification here, and then force retry of USB 3,
-> > using the dwc3 as device.
-> > 
-> > The device is in a fixed mounting with a fixed host. Sometimes when the
-> > host and device is powered up, it ends in high-speed instead of super-
-> > speed. I would like the option for "I will not be compliant with USB,
-> > but rather retry super-speed".
-> > 
-> > Regards
-> > Claus
-> > 
-> > 
+Thanks for your patch!
+
+>  .../devicetree/bindings/arm/renesas,prr.yaml  |  2 +-
+>  .../bindings/display/renesas,cmm.yaml         |  2 +-
+>  .../interrupt-controller/renesas,irqc.yaml    |  2 +-
+>  .../bindings/media/renesas,csi2.yaml          |  2 +-
+>  .../bindings/media/renesas,vin.yaml           |  6 +-
+>  .../bindings/net/renesas,ether.yaml           |  2 +-
+>  .../bindings/pwm/renesas,pwm-rcar.yaml        |  2 +-
+>  .../bindings/spi/renesas,sh-msiof.yaml        |  2 +-
+>  .../bindings/thermal/rcar-thermal.yaml        |  6 +-
+>  .../bindings/usb/renesas,usb3-peri.yaml       |  2 +-
+>  .../bindings/usb/renesas,usbhs.yaml           |  2 +-
+
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
