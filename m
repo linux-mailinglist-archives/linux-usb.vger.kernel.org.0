@@ -2,89 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6EC31D193D
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 17:23:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DA381D195A
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 17:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729257AbgEMPXH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 May 2020 11:23:07 -0400
-Received: from wout2-smtp.messagingengine.com ([64.147.123.25]:38339 "EHLO
-        wout2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729153AbgEMPXH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 May 2020 11:23:07 -0400
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 9AB5E738;
-        Wed, 13 May 2020 11:23:06 -0400 (EDT)
-Received: from imap21 ([10.202.2.71])
-  by compute7.internal (MEProxy); Wed, 13 May 2020 11:23:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aeam.us; h=
-        mime-version:message-id:in-reply-to:references:date:from:to
-        :subject:content-type; s=fm1; bh=EKgBPAFq/YzpK6kpbwJl7Z5MErlNp9u
-        Wq1xHQJulkPg=; b=KDkRFRPXiJEqmsHqpJwifxD3z4gqY0w2nCjBlAPCdYCyNIu
-        6wWlEL5neYgAqX8RV0lzxAXPBdJtC98E3hY5MsvbzgmXNVr6n8O0HtL7c6SWpa6g
-        KR15BuIVAAbAVsPmjLRaNb+O5YKos2sRYg1rJyudOx/5WWmYNaEXWkd25KVJo9iP
-        dxVqQ/rzvl7hRcp6nU9LoLyW4o/8HDA6e2xkgLv7DthXkV2/p/7fj0pgXVDRAFdl
-        I/y1RUWMJgMaiINNPT1Md/y5i1o1uD1509LvmT6WVUlNte0vBKEdfz2CIR6FFbev
-        Wvokbjp2YYgQCrEcbq5iWT4CD/Acco/xD6nCadw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=EKgBPA
-        Fq/YzpK6kpbwJl7Z5MErlNp9uWq1xHQJulkPg=; b=kTIVhiruzDF5OSeLjEGl50
-        wkLwBydsrYONmAy15XTTQWZRtXPma8kzzc4dly514rVPJ/SdztWaECEmN9KgPXII
-        0If01ZdPq7a3YAQ/N5JeAPg/oyZyfjKP/DsreeMZFAKili2pBNZFGNMAkcfTyWIc
-        MUcoGBq8rnMFXFvd9fPsufbbg3OQSKlnnWT/Gp33RGMjTZTZYH7G5uT1lfP7b5Gn
-        1F9U9ykEzBOipterFWz7xP3BVhaMyW/u5BVYiftHMUDrUUP3wVOBV0GwPRIMHnV3
-        DYGcYTRq6uScO+mOMT1gaAd16A6UgaVPiDNs151NUbNMjJLUHDzBbRkwQxJlw8nw
-        ==
-X-ME-Sender: <xms:2BC8XpqwGD6mcIvPSLVZIa7JP5MCAHJCotHpJ5pOrPzOUKjnXQbUqA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrleeggdekjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfufhiugcu
-    ufhprhihfdcuoehsihgusegrvggrmhdruhhsqeenucggtffrrghtthgvrhhnpeevgefhve
-    evteetfeetkeejjeehudffffffhfeuffelhfeuffdufeduleejfeeugfenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsihgusegrvggrmhdruh
-    hs
-X-ME-Proxy: <xmx:2BC8XrqpG0E26YnVW1xRsNE_crK7cloHsWds_WnKpdqUKP3UgHhDXQ>
-    <xmx:2BC8XmO4HE7xq5bU2S2eTqBW3dSHk9KzY2LNSJCLWp3ER5jAMMCclg>
-    <xmx:2BC8Xk7gCioPcL6mUQdxEmUYFMiJdwpf_ompI40CuxuKnxyamP6Ujg>
-    <xmx:2hC8Xthe1TNOzfl1Gp9wr4t2p3zWB-mNwHYIiEv8X0az7T6ILGiEvQ>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 3C39E66008C; Wed, 13 May 2020 11:23:04 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.3.0-dev0-413-g750b809-fmstable-20200507v1
-Mime-Version: 1.0
-Message-Id: <bb16e374-3d9f-427c-8470-3542dc697fdb@www.fastmail.com>
-In-Reply-To: <CAPY=qRRFV4SpNO5pb9vF=U95dbA_gN2ngP+vm34884NMk5q8gQ@mail.gmail.com>
-References: <CAPY=qRRFV4SpNO5pb9vF=U95dbA_gN2ngP+vm34884NMk5q8gQ@mail.gmail.com>
-Date:   Wed, 13 May 2020 10:22:18 -0500
-From:   "Sid Spry" <sid@aeam.us>
-To:     "Subhashini Rao Beerisetty" <subhashbeerisetty@gmail.com>,
-        kernelnewbies <kernelnewbies@kernelnewbies.org>,
-        alsa-devel@alsa-project.org, linux-usb@vger.kernel.org
-Subject: Re: sound over USB
-Content-Type: text/plain
+        id S2389240AbgEMP0O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 May 2020 11:26:14 -0400
+Received: from mga12.intel.com ([192.55.52.136]:5095 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732300AbgEMP0O (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 13 May 2020 11:26:14 -0400
+IronPort-SDR: 10LHBv/gr9H30UxboA5GwFTYwIqF34ZvabE/C6gG9gfW9qgmxwbqU1P0l2gY63YOpHOmqpyB4/
+ dutQpTq9ip4Q==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2020 08:26:13 -0700
+IronPort-SDR: lpwA1behfMK+YoTYrewJdqYqqwJnbTOvkihSrV8etO4S7L7OrLHQ5L8WJd8nkhoMvqurgnnLd8
+ ugv8/0/nSPbQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,388,1583222400"; 
+   d="scan'208";a="253223172"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga008.fm.intel.com with ESMTP; 13 May 2020 08:26:11 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andy.shevchenko@gmail.com>)
+        id 1jYtGv-006Rs4-KZ; Wed, 13 May 2020 18:26:13 +0300
+Date:   Wed, 13 May 2020 18:26:13 +0300
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Al Cooper <alcooperx@gmail.com>, linux-kernel@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Subject: Re: [PATCH v10 1/5] usb: xhci: Change the XHCI link order in the
+ Makefile
+Message-ID: <20200513152613.GR185537@smile.fi.intel.com>
+References: <20200512150019.25903-1-alcooperx@gmail.com>
+ <20200512150019.25903-2-alcooperx@gmail.com>
+ <20200513122613.GA1023594@kroah.com>
+ <7acc2a4c-caab-11e7-7b3f-4176f19c58cf@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7acc2a4c-caab-11e7-7b3f-4176f19c58cf@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 12, 2020, at 11:43 AM, Subhashini Rao Beerisetty wrote> 
->
-> How do I use it for playing and recording an audio?
+On Wed, May 13, 2020 at 08:08:07AM -0700, Florian Fainelli wrote:
+> On 5/13/2020 5:26 AM, Greg Kroah-Hartman wrote:
+> > On Tue, May 12, 2020 at 11:00:15AM -0400, Al Cooper wrote:
+> >> Some BRCMSTB USB chips have an XHCI, EHCI and OHCI controller
+> >> on the same port where XHCI handles 3.0 devices, EHCI handles 2.0
+> >> devices and OHCI handles <2.0 devices. Currently the Makefile
+> >> has XHCI linking at the bottom which will result in the XHIC driver
+> >> initalizing after the EHCI and OHCI drivers and any installed 3.0
+> >> device will be seen as a 2.0 device. Moving the XHCI linking
+> >> above the EHCI and OHCI linking fixes the issue.
+> > 
+> > What happens if all of these are modules and they are loaded in a
+> > different order?  This makefile change will not help with that, you need
+> > to have logic in the code in order to properly coordinate this type of
+> > mess, sorry.
 > 
-> Basically first I want to gain knowledge on set of test cases I can
-> run on ALSA and then learn ALSA kernel modules stuff including
-> snd_usb_audio mdule.
+> I believe we should be using module soft dependencies to instruct the
+> module loaders to load the modules in the correct order, so something
+> like this would do (not tested) for xhci-plat-hcd.c:
 > 
-> So please guide me by providing related documentation/Steps.
+> MODULE_SOFTDEP("post: ehci-hcd ohci-hcd");
 > 
+> and I am not sure whether we need to add the opposite for ehci-hcd and
+> ohci-hcd:
+> 
+> MODULE_SOFTDEP("pre: xhci-plat-hcd");
 
-Hi, searching for an ALSA tutorial will get you far. However on a modern Linux distribution you will likely want to target pulseaudio. There are other libraries like RtAudio or PortAudio that may be easier to use and are cross platform.
+JFYI: not all user space support this (alas, but that's current state of
+affairs), OTOH I don't really care about those which do not support it
+(Busybox).
 
-ALSA seems to give the most reliable results when enumerating audio devices. This can be done when pulseaudio is installed. The pulseaudio results are harder to interpret.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-In my experience, and not necessarily targeted at you, I have experienced massive difficulties getting RtAudio and PortAudio working in a reproducible way. ALSA is the most reliable but an unusual configuration, and pulseaudio is a hot complicated mess.
 
-
-For what it's worth, the sound API on Linux is so pointlessly complex that I have, in the past, created a custom USB driver to avoid going through the sound API. It was easier to use libusb and get raw samples.
