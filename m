@@ -2,150 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00FCE1D1965
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 17:29:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29BF31D19D2
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 17:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388493AbgEMP2z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 May 2020 11:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45792 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732415AbgEMP2z (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 May 2020 11:28:55 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D46C061A0E
-        for <linux-usb@vger.kernel.org>; Wed, 13 May 2020 08:28:54 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id s69so2966204pjb.4
-        for <linux-usb@vger.kernel.org>; Wed, 13 May 2020 08:28:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=4VqrDPtNrY8lU3jv4tbGJ+nxlqODxkNJ8mQ1kIusA3s=;
-        b=fluZZrz+O2fICElXwhjMSYxAQrhkMhGKHiOoJDtdBYYrM6szMhqD4hxk+9S/ZftImQ
-         r96KGLWZN8Gh+PeHts9jOj7MRSh4dPpzON8r9dlgXeb28GLUu6EZ/u8W3+SD8tXHoML4
-         cMy4/pufmvHKH/sxSEn2bRjX5KjLt2fJTqf5w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=4VqrDPtNrY8lU3jv4tbGJ+nxlqODxkNJ8mQ1kIusA3s=;
-        b=AFfbJyPZuVCEtfgyAQpCOWfABKvGOqHS3iv2mK/V5TEGQAbTjK5Z/jySJRAOmfebbF
-         VrIJbVDIxIPt/hEMggNwuUftmL6LWGU2GkzkptecZezHoKU4G0+FMPpN6hYh3HqYvFFa
-         s42zqqecQjc+HTwk9+3N9cFhG6Y4haaDotCgDs5hWKeYQvGujP3uts5ITkq/g7a2ajOR
-         RMvMg23CDh+QkhQmpAXBfG0/4OPpxQG3p8gw3hISH8ybjIwg9haNv7ci+uwZ9VvLNcxO
-         aVKdQ25N9Id0VWqBx5waKFZclZca71Iz+MF3kj9rUAYwd0uIO+KnDhdDNkrvsAtgAFkF
-         FVOg==
-X-Gm-Message-State: AGi0PubRmseanSh70ItEo8+ZOGrpTaxGp6L6aLbeIJnq+LLA1+kfcZtt
-        UF6wKlG/PvIumtNCbtnOchCW0w==
-X-Google-Smtp-Source: APiQypLwE5b0n6ox/XG+aPuvmiery03Ijo0hokbmjaaas92s1E2eRupRYJZVsWYaZPW4kxRd8JXDyA==
-X-Received: by 2002:a17:90a:6782:: with SMTP id o2mr36669866pjj.122.1589383734237;
-        Wed, 13 May 2020 08:28:54 -0700 (PDT)
-Received: from [10.230.188.43] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id q3sm2710500pfg.22.2020.05.13.08.28.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 May 2020 08:28:53 -0700 (PDT)
-Subject: Re: [PATCH v10 1/5] usb: xhci: Change the XHCI link order in the
- Makefile
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Al Cooper <alcooperx@gmail.com>, linux-kernel@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-References: <20200512150019.25903-1-alcooperx@gmail.com>
- <20200512150019.25903-2-alcooperx@gmail.com>
- <20200513122613.GA1023594@kroah.com>
- <7acc2a4c-caab-11e7-7b3f-4176f19c58cf@gmail.com>
- <20200513152613.GR185537@smile.fi.intel.com>
-From:   Florian Fainelli <florian.fainelli@broadcom.com>
-Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
- mQENBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
- M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
- JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
- PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
- KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
- AAG0MEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPokB
- xAQQAQgArgUCXnQoOxcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFrZXktdXNh
- Z2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2RpbmdAcGdw
- LmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29tLmNvbQUb
- AwAAAAMWAgEFHgEAAAAEFQgJCgAKCRCBMbXEKbxmoHaNB/4p5GXw2Xlk4r2J0MsUAZE4Gnfc
- C4DtilufOGVR1K0/WhROYemyCAP+xuBj8bnQDBtZwB5ED37q4/p8DSmCnkEBjM5Cz12EZQzs
- utQgCV1UIgzryoiDZSF2XLslzF9LOSaOiNzpBvwEYNTZ+koEW+AOHEAgS6SbV2Hob8Zc32xF
- oQdKGwbSwcV8hS2YLL37VxKr2h8ZTtuTmhDNqxuKPzZuoAL61/4i8+BTyVZC4gUL/EUu7pG2
- rbwhg/s8TyQWWeBz18Xiw5K148TXT0LeErmTsJSPQFMqZ6AR/nuJDQzhIUiLeq/hvBs1BIQf
- REqNMShEnnMJfHjd8RFnGpdPk+hKuQENBFPAG8EBCACsa+9aKnvtPjGAnO1mn1hHKUBxVML2
- C3HQaDp5iT8Q8A0ab1OS4akj75P8iXYfZOMVA0Lt65taiFtiPT7pOZ/yc/5WbKhsPE9dwysr
- vHjHL2gP4q5vZV/RJduwzx8v9KrMZsVZlKbvcvUvgZmjG9gjPSLssTFhJfa7lhUtowFof0fA
- q3Zy+vsy5OtEe1xs5kiahdPb2DZSegXW7DFg15GFlj+VG9WSRjSUOKk+4PCDdKl8cy0LJs+r
- W4CzBB2ARsfNGwRfAJHU4Xeki4a3gje1ISEf+TVxqqLQGWqNsZQ6SS7jjELaB/VlTbrsUEGR
- 1XfIn/sqeskSeQwJiFLeQgj3ABEBAAGJAkEEGAECASsFAlPAG8IFGwwAAADAXSAEGQEIAAYF
- AlPAG8EACgkQk2AGqJgvD1UNFQgAlpN5/qGxQARKeUYOkL7KYvZFl3MAnH2VeNTiGFoVzKHO
- e7LIwmp3eZ6GYvGyoNG8cOKrIPvXDYGdzzfwxVnDSnAE92dv+H05yanSUv/2HBIZa/LhrPmV
- hXKgD27XhQjOHRg0a7qOvSKx38skBsderAnBZazfLw9OukSnrxXqW/5pe3mBHTeUkQC8hHUD
- Cngkn95nnLXaBAhKnRfzFqX1iGENYRH3Zgtis7ZvodzZLfWUC6nN8LDyWZmw/U9HPUaYX8qY
- MP0n039vwh6GFZCqsFCMyOfYrZeS83vkecAwcoVh8dlHdke0rnZk/VytXtMe1u2uc9dUOr68
- 7hA+Z0L5IQAKCRCBMbXEKbxmoLoHCACXeRGHuijOmOkbyOk7x6fkIG1OXcb46kokr2ptDLN0
- Ky4nQrWp7XBk9ls/9j5W2apKCcTEHONK2312uMUEryWI9BlqWnawyVL1LtyxLLpwwsXVq5m5
- sBkSqma2ldqBu2BHXZg6jntF5vzcXkqG3DCJZ2hOldFPH+czRwe2OOsiY42E/w7NUyaN6b8H
- rw1j77+q3QXldOw/bON361EusWHdbhcRwu3WWFiY2ZslH+Xr69VtYAoMC1xtDxIvZ96ps9ZX
- pUPJUqHJr8QSrTG1/zioQH7j/4iMJ07MMPeQNkmj4kGQOdTcsFfDhYLDdCE5dj5WeE6fYRxE
- Q3up0ArDSP1L
-Message-ID: <2fda61f9-388f-d62b-feaf-9782cbbe37fd@broadcom.com>
-Date:   Wed, 13 May 2020 08:28:51 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Firefox/68.0 Thunderbird/68.8.0
+        id S2389262AbgEMPr2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 May 2020 11:47:28 -0400
+Received: from foss.arm.com ([217.140.110.172]:49580 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729604AbgEMPr2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 13 May 2020 11:47:28 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A8EE931B;
+        Wed, 13 May 2020 08:47:26 -0700 (PDT)
+Received: from e121166-lin.cambridge.arm.com (e121166-lin.cambridge.arm.com [10.1.196.255])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0513B3F305;
+        Wed, 13 May 2020 08:47:24 -0700 (PDT)
+Date:   Wed, 13 May 2020 16:47:19 +0100
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+Cc:     f.fainelli@gmail.com, gregkh@linuxfoundation.org, wahrenst@gmx.net,
+        helgaas@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com, tim.gover@raspberrypi.org,
+        linux-pci@vger.kernel.org, Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v8 0/4] USB: pci-quirks: Add Raspberry Pi 4 quirk
+Message-ID: <20200513154719.GA3486@e121166-lin.cambridge.arm.com>
+References: <20200505161318.26200-1-nsaenzjulienne@suse.de>
 MIME-Version: 1.0
-In-Reply-To: <20200513152613.GR185537@smile.fi.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200505161318.26200-1-nsaenzjulienne@suse.de>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 5/13/2020 8:26 AM, Andy Shevchenko wrote:
-> On Wed, May 13, 2020 at 08:08:07AM -0700, Florian Fainelli wrote:
->> On 5/13/2020 5:26 AM, Greg Kroah-Hartman wrote:
->>> On Tue, May 12, 2020 at 11:00:15AM -0400, Al Cooper wrote:
->>>> Some BRCMSTB USB chips have an XHCI, EHCI and OHCI controller
->>>> on the same port where XHCI handles 3.0 devices, EHCI handles 2.0
->>>> devices and OHCI handles <2.0 devices. Currently the Makefile
->>>> has XHCI linking at the bottom which will result in the XHIC driver
->>>> initalizing after the EHCI and OHCI drivers and any installed 3.0
->>>> device will be seen as a 2.0 device. Moving the XHCI linking
->>>> above the EHCI and OHCI linking fixes the issue.
->>>
->>> What happens if all of these are modules and they are loaded in a
->>> different order?  This makefile change will not help with that, you need
->>> to have logic in the code in order to properly coordinate this type of
->>> mess, sorry.
->>
->> I believe we should be using module soft dependencies to instruct the
->> module loaders to load the modules in the correct order, so something
->> like this would do (not tested) for xhci-plat-hcd.c:
->>
->> MODULE_SOFTDEP("post: ehci-hcd ohci-hcd");
->>
->> and I am not sure whether we need to add the opposite for ehci-hcd and
->> ohci-hcd:
->>
->> MODULE_SOFTDEP("pre: xhci-plat-hcd");
+On Tue, May 05, 2020 at 06:13:13PM +0200, Nicolas Saenz Julienne wrote:
+> On the Raspberry Pi 4, after a PCI reset, VL805's firmware may either be
+> loaded directly from an EEPROM or, if not present, by the SoC's
+> co-processor, VideoCore. This series adds support for the later.
 > 
-> JFYI: not all user space support this (alas, but that's current state of
-> affairs), OTOH I don't really care about those which do not support it
-> (Busybox).
+> Note that there are a set of constraints we have to consider:
+>  - We need to make sure the VideoCore firmware interface is up and
+>    running before running the VL805 firmware load call.
+> 
+>  - There is no way to discern RPi4's VL805 chip from other platforms',
+>    so we need the firmware load to happen *before* running
+>    quirk_usb_handoff_xhci(). Failure to do so results in an unwarranted
+>    5 second wait while the fixup code polls xHC's non-existing state.
+> 
+> By Florian's suggestion I've been spending some time exploring the device
+> link[1] API in order to see if that could save us from explicitly creating
+> probe dependencies between pcie-brcmstb and firmware/raspberrypi (patch #3).
+> Technically these dependencies could be inferred from DT. It turns out Saravana
+> Kannan has been looking at this already. A new boot mechanism, activated with
+> fw_devlink=on takes care of the device probe ordering on devices with
+> consumer/supplier relationships. For now this relationship is created based on
+> the usage of generic DT properties, but has no support for vendor-specifc DT
+> properties, which we'd be forced to use in order to create a relationship
+> between our two devices since our setup is highly non generic. There will
+> probably be at some point support for such properties, and we will then be able
+> to revisit some of this code.
+> 
+> All this is based on the work by Tim Gover in RPi's downstream
+> kernel[2].
+> 
+> [1] https://www.kernel.org/doc/html/v4.13/driver-api/device_link.html
+> [2] https://github.com/raspberrypi/linux/commit/9935b4c7e360b4494b4cb6e3ce797238a1ab78bd
+> 
+> ---
+> 
+> Changes since v7:
+>  - Address Stefan's comments
+> 
+> Changes since v6:
+>  - Make rpi_firmware_init_vl805() more robust
+>  - Rewrite comments and patch descriptions to be more accessible to non RPi
+>    fluent people
+>  - Removed Florian's Reviewed-by in patch #2 as function changed
+>    substantially
+>  - Tested with/witout u-boot
+> 
+> Changes since v5:
+>  - Fix issues reported by Kbuild test robot
+> 
+> Changes since v4:
+>  - Addressed Sergei's comments
+>  - Fix potential warning in patch #2
+> 
+> Changes since v3:
+>  - Addressed Greg's comments
+> 
+> There was no v2, my bad.
+> 
+> Changes since v1:
+>  - Addressed Floarians comments
+> 
+> Nicolas Saenz Julienne (4):
+>   soc: bcm2835: Add notify xHCI reset property
+>   firmware: raspberrypi: Introduce vl805 init routine
+>   PCI: brcmstb: Wait for Raspberry Pi's firmware when present
+>   USB: pci-quirks: Add Raspberry Pi 4 quirk
+> 
+>  drivers/firmware/Kconfig                   |  3 +-
+>  drivers/firmware/raspberrypi.c             | 61 ++++++++++++++++++++++
+>  drivers/pci/controller/pcie-brcmstb.c      | 17 ++++++
+>  drivers/usb/host/pci-quirks.c              | 16 ++++++
+>  include/soc/bcm2835/raspberrypi-firmware.h |  9 +++-
+>  5 files changed, 104 insertions(+), 2 deletions(-)
 
-I know that Gentoo's initramfs tool does not support it, however given
-there are no symbols being cross referenced, I am not sure how to best
-support this other than using these hints, and possibly making use of
-device links too?
--- 
-Florian
+Applied to pci/brcmstb, thanks !
+
+Lorenzo
