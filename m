@@ -2,91 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9A1F1D1CD3
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 20:02:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E6761D1D28
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 20:14:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390034AbgEMSBw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 May 2020 14:01:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41312 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2390029AbgEMSBv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 May 2020 14:01:51 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F47C061A0E
-        for <linux-usb@vger.kernel.org>; Wed, 13 May 2020 11:01:50 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id n7so579843ybh.13
-        for <linux-usb@vger.kernel.org>; Wed, 13 May 2020 11:01:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=5/MRceWyn7IA9pmXU1Ty874NROsCdfVXPSq0u2J/dn0=;
-        b=cyEJYbuoTCZwv/JsnJBEdVmnQ08+rJVCHUfnXpjw128J6smQ4hrmkq2g50efB/eedA
-         XV5xHOXTYGeGEuee1G7pe2Zpw8/80UZC50cT2fcIuXIaiCx+GaAFketbc4CGpNGGP87V
-         mQcTySPjLpKyPF9jyRn9Q5QgBn3IXJZITq3QDXPao4y5YJjgT6jbCvHHdrO2y8IlLX/U
-         lRmnImSFuOZRaRV1omRTFJeKCK5o+Wk6KdmJ8kUGU6ROsMKa0GoQlN1oenuJ30Ne0B1z
-         uUpnTabyDpe1JCNnMheGtM8SA/UHb95RHyKxn59/KD3i0o/zmRrg11F7PSx395ghxN9b
-         lQCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=5/MRceWyn7IA9pmXU1Ty874NROsCdfVXPSq0u2J/dn0=;
-        b=QWw+YzF/wjDMp94ZbAywHLNVggqpIWDo8LA+eBmeJWVJZeG8gEFPNwdOfNywnBQ64g
-         vuAkv4vEskG1jApAiPwasynDZrIg2Mvj7N/yRFFKboTasplH0/2kucVHtyPix7LZGBZ8
-         hXVUxFgilg4qrLfNdWq7k69kZpHBF7iDgJFux55qbQe70ufesOyiMA5apNBD1QDtcCsw
-         hDtm5awDdWUAEbSMwkIWv5X6kglHruZ8Y0BYaCvNpQEP63mi1ZlC66btL9+HaWk4U8Np
-         aBk7yDH1O6tHXUzXHIR9Xxvd7S8G87QtA28x+4vQnJf1jP/eM0NAf6C8onaNu2dnjX3f
-         FOQw==
-X-Gm-Message-State: AOAM532j9u3vBPqr5iPLtyd//f2w0cCWFRyNwaI9NQwA0oavg/oUJid0
-        qXl9z0qwxPFApHitwJTDqyniZJZojyXEcrGZ
-X-Google-Smtp-Source: ABdhPJzByBrBAtuTVt//2PEhmGvansFFvV+KulV8oXted/AGzBiO6VtlMfXhTAQAalvYmvNwUeaRobr214loYVWO
-X-Received: by 2002:a25:d084:: with SMTP id h126mr361526ybg.424.1589392909379;
- Wed, 13 May 2020 11:01:49 -0700 (PDT)
-Date:   Wed, 13 May 2020 20:01:42 +0200
-Message-Id: <76557d920a125f6e42b3dc46d3ae84bffbe9a2f9.1589392709.git.andreyknvl@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.26.2.645.ge9eca65c58-goog
-Subject: [PATCH USB] usb: raw-gadget: fix null-ptr-deref when reenabling endpoints
-From:   Andrey Konovalov <andreyknvl@google.com>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        id S2390076AbgEMSOc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 May 2020 14:14:32 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:46931 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1733070AbgEMSOc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 May 2020 14:14:32 -0400
+Received: (qmail 6873 invoked by uid 500); 13 May 2020 14:14:31 -0400
+Date:   Wed, 13 May 2020 14:14:31 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Andrey Konovalov <andreyknvl@google.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        USB list <linux-usb@vger.kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>
+Subject: Re: Testing endpoint halt support for raw-gadget
+Message-ID: <20200513181431.GB2862@rowland.harvard.edu>
+References: <CAAeHK+z=z=e2pYQy3vtJO4rm+=Rb=av+4RidLCyp7Ae3shggqA@mail.gmail.com>
+ <Pine.LNX.4.44L0.2004280920510.4958-100000@netrider.rowland.org>
+ <CAAeHK+yHBZ4oxW7AbS8VwqMrULKiETBYjW6ARZ+9FiWk=hvs=g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAeHK+yHBZ4oxW7AbS8VwqMrULKiETBYjW6ARZ+9FiWk=hvs=g@mail.gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Currently we preassign gadget endpoints to raw-gadget endpoints during
-initialization. Fix resetting this assignment in raw_ioctl_ep_disable(),
-otherwise we will get null-ptr-derefs when an endpoint is reenabled.
+On Wed, May 13, 2020 at 07:07:20PM +0200, Andrey Konovalov wrote:
+> Hi Alan,
+> 
+> I've been looking at this a little more. Do I understand correctly
+> that even though Dummy UDC names endpoints as "ep1in", etc. it
+> actually allows to assign endpoints addresses different from what is
+> specified in the endpoint names (it uses find_endpoint() to find the
+> right endpoint based on ep->desc)? E.g. you can technically assign
+> endpoint with address 2 (| USB_DIR_IN) to "ep1in".
 
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
----
+Yes, that's right.  In fact, you can do this with any UDC.  (But with 
+other UDCs it won't work, whereas with dummy-hcd it will.)
 
-Felipe, this is technically a fix for "usb: raw-gadget: fix gadget
-endpoint selection", which AFAICS is already in your testing/fixes tree.
-Please let me know if you would like me resend that patch with this fix
-folded in.
+> If this is correct, this kind of limits Dummy UDC usage with Raw
+> Gadget the way it is currently implemented, as Raw Gadget assumes that
+> the endpoint address must be fixed when the endpoint is named as
+> ep1in.
 
----
- drivers/usb/gadget/legacy/raw_gadget.c | 1 -
- 1 file changed, 1 deletion(-)
+Okay.  That makes sense, since it is true for most UDCs.
 
-diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
-index d73ba77014c8..e01e366d89cd 100644
---- a/drivers/usb/gadget/legacy/raw_gadget.c
-+++ b/drivers/usb/gadget/legacy/raw_gadget.c
-@@ -867,7 +867,6 @@ static int raw_ioctl_ep_disable(struct raw_dev *dev, unsigned long value)
- 	spin_lock_irqsave(&dev->lock, flags);
- 	usb_ep_free_request(dev->eps[i].ep, dev->eps[i].req);
- 	kfree(dev->eps[i].ep->desc);
--	dev->eps[i].ep = NULL;
- 	dev->eps[i].state = STATE_EP_DISABLED;
- 	dev->eps[i].disabling = false;
- 
--- 
-2.26.2.645.ge9eca65c58-goog
+> Would it be acceptable to add another mode to Dummy UDC that names the
+> endpoints as "ep-a"? Perhaps enabled with a module parameter. I'm not
+> sure if this kind of naming would be technically correct, as "ep-a"
+> name assumes that we can assign arbitrary transfer type to the
+> endpoint as well, which isn't possible with Dummy UDC, as it doesn't
+> support ISO transfers.
+> 
+> Or do you think there can be another way to expose the fact that Dummy
+> UDC allows arbitrary addresses? I could hardcode this into Raw Gadget,
+> but it doesn't feel like the right approach.
 
+Why do you want to do this?  Does anything go wrong if you just continue 
+to assume the endpoint numbers are fixed?
+
+I suppose, if you thought this was really necessary, we could change 
+find_endpoint() so that it looks for a match against the endpoint's name 
+instead of against the address stored in the descriptor.  Or we could 
+change the last thirteen "generic" endpoints in ep_info[] to be 
+configurable: "ep-a", ..., "ep-m", or "ep-aout", ..., "ep-min".  (The 
+fact that the endpoints don't support isochronous is exposed through the 
+usb_ep_caps structures.)
+
+Alan Stern
