@@ -2,115 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 186D91D0A00
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 09:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBBA31D0A39
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 09:49:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729490AbgEMHgM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 May 2020 03:36:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56664 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726138AbgEMHgM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 May 2020 03:36:12 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E47C061A0C
-        for <linux-usb@vger.kernel.org>; Wed, 13 May 2020 00:36:11 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id d21so8904493ljg.9
-        for <linux-usb@vger.kernel.org>; Wed, 13 May 2020 00:36:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=BkmZqV3BWJFbYwL4KXbLGxX8yD/o7JICC2OmyXkPnFA=;
-        b=smAR01W+6ZK4xamH/5hCfc7hPHM4+2UrHjuASoEbOjX72qTv0XCO6f7Y2gv3mbYRHa
-         D8FS1iEgEog1zANIfFMMlT5eOHOZ2RaKJhY51vUqLlZUv7YX5pmCFY/AgC7nQeyRV6ah
-         juVK03QH/HPEFAbJrdc+uQTSzKHDrMD7K+k8fbxs0ccrhQVcJCqRRCEcwdpOofud3e03
-         7vv0bKKsLdjvdTI7qUcrPC5f95WVnSkLIW0tiKtAmbLIi2oxbVQJBNAKUm25abWmZspG
-         uqFO5Tv4Z6FhLlnH4NmmhteopQptYSBPML4e70ziJsmSlVBJCEs6gLxYvHmEYBFIF4ex
-         Rj5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=BkmZqV3BWJFbYwL4KXbLGxX8yD/o7JICC2OmyXkPnFA=;
-        b=buANOaCpAuFWE6Q8amRT24WZ0SqJnxdElJfRSqIsluE52wBXT1fHkKUe1bWFuZschl
-         KA6Qtxsj/bWfK8Z1lObwHbCNf7Om008aLhJnnzCfuIRVwPMrolfyx+Sp5xtd3ZebtYpF
-         XoniXHZ4CoKrCMmT9CWPxVATSFo43tybPRzNWr/5Z//2KGi09Ihu+2ZP1Qj1y1vUZsML
-         FwbJgdwVvilits+9K+xD4s7S0qg2ZNuNLeBhHxvQE61/huLpEyNZ6MQsk1EtTTU+VzDr
-         nKuJjKbZV1PO1WC7qnckrO7EUVKnfSgUuplK9XrKraSbYVlqNuiyNxIIgGiYxnmxxnXW
-         lV0w==
-X-Gm-Message-State: AOAM532Pv6vqLL8evCJ3znwY5kwThzsPJi6X9C2/ALzBwLWMUjAkcx/i
-        BsuOn0h4Iguw7YyvLpQcXJLEU5In
-X-Google-Smtp-Source: ABdhPJzrxAxeU/uD0enZ9TYYs51CpTZONVqA6IkgmYxsCS+RpzcS6Mib77jhJNOh7TvY7JN/HMIw9w==
-X-Received: by 2002:a2e:3009:: with SMTP id w9mr16736112ljw.71.1589355369982;
-        Wed, 13 May 2020 00:36:09 -0700 (PDT)
-Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id j2sm6722126lfb.78.2020.05.13.00.36.08
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 13 May 2020 00:36:09 -0700 (PDT)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Sid Spry <sid@aeam.us>, Peter Chen <peter.chen@nxp.com>
-Cc:     "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: Documentation for Raw USB ConfigFS
-In-Reply-To: <8ee3914e-7876-46aa-bade-7cf14df7efdc@www.fastmail.com>
-References: <0507a041-44f4-4257-adaf-3b17de3baf81@www.fastmail.com> <20200506091750.GE30237@b29397-desktop> <8ee3914e-7876-46aa-bade-7cf14df7efdc@www.fastmail.com>
-Date:   Wed, 13 May 2020 10:36:05 +0300
-Message-ID: <87h7wkp9qy.fsf@kernel.org>
+        id S1729562AbgEMHtH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 May 2020 03:49:07 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:49114 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726138AbgEMHtH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 May 2020 03:49:07 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04D7n4Le097562;
+        Wed, 13 May 2020 02:49:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1589356144;
+        bh=wtW22k3rGw5O3JPO++YwPMQIM+B/57xeHXQmnyUUzLU=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=GxtA4sBWJkP7z72g3cMS/CWNj2rGfz81ocUu96x7f8aPdI2kjvyEsk9W1pGTtP8c6
+         6pl8fol2DAfch3SJZaxNxODQzvvHyNtt957q1GfZ2tFMJ6tmQFfgTLAzMwHjN/QChO
+         jHhyQ4UFWygDXEKKxZ8GrT5raQWR+m+wnDmSBVKw=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 04D7n4am077526
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 13 May 2020 02:49:04 -0500
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Wed, 13
+ May 2020 02:49:04 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Wed, 13 May 2020 02:49:04 -0500
+Received: from [10.250.234.195] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04D7n0k3005183;
+        Wed, 13 May 2020 02:49:01 -0500
+Subject: Re: [PATCH 3/5] dt-bindings: ufs: ti: Fix address properties handling
+To:     Rob Herring <robh@kernel.org>, <devicetree@vger.kernel.org>
+CC:     <linux-clk@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>
+References: <20200512204543.22090-1-robh@kernel.org>
+ <20200512204543.22090-3-robh@kernel.org>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+Message-ID: <503c62d9-d85d-ea14-8659-8a18ba47932e@ti.com>
+Date:   Wed, 13 May 2020 13:19:00 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+In-Reply-To: <20200512204543.22090-3-robh@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
 
 
-Hi,
+On 13/05/20 2:15 am, Rob Herring wrote:
+> The ti,j721e-ufs schema and example have a couple of problems related to
+> address properties. First, the default #size-cells and #address-cells
+> are 1 for examples, so they need to be overriden with a bus node.
+> Second, address translation for the child ufs node is broken because
+> 'ranges', '#address-cells', and '#size-cells' are missing from the
+> schema.
+> 
+> Cc: Vignesh Raghavendra <vigneshr@ti.com>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
 
-"Sid Spry" <sid@aeam.us> writes:
+Acked-by: Vignesh Raghavendra <vigneshr@ti.com>
 
-> Hi Peter, thanks for pointing me towards the ffs-test. Unfortunately after
-> some exploration in that area I still don't see how I would add a preexis=
-ting
-> function to the configuration to be handled by the kernel.
->
-> I do see something in an AIO test in the host code where libusb is used to
-> bind a kernel driver to an endpoint. Is that something that will be neces=
-sary?
-> Device side, I'm still unsure how I tell the function to handle ECM/ether=
-net
-> on a collection of endpoints.
->
-> I understand how USB works fairly well, especially on microcontrollers, b=
-ut am
-> a little lost still in understanding the Linux machinery for USB.
+Regards
+Vignesh
 
-please, stop with your top-posting and break your lines at 80-columns. I
-have re-wrapped your lines so you see how they should look.
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl67o2UACgkQzL64meEa
-mQbYfQ//e2IgCFKD57CiPCUorz383ZG9r7q9ftZS1/8K4ytyBl9AbR2zMEESXpFT
-BPW4eMiYplWzGRruqhBOz4IoOSO6c2wD3RLLOGX2rXotwJkShc0pBMLIN8Pb8MKx
-JWDmY49PkTXPe5tZjVwe79u2eQlW5ILbggkJq+Z+GoVX0GXzeMBMFuXDncAPT1Jk
-TOaJy+UhMNWguWLV24JahZkVZ+gm8INDLEi38qjs2moE/ALkRRB+rBCLHe6yx0kJ
-QaAacZoyEhUfvtZmGK5A7upqQh/Z7ZBiVMBH6MGc3FZ9pu+uad9kWk1voswZEtxZ
-Wz0LlLvKzg3JZKbCZQDqmEkbGCXDVvy0dBzc20fuYvhuP9X31T6Mb1jFl8rsVBxb
-kcDoU5IsQAhZMbDczmNajE7PkId4E+18XXWbyfmuyT4gQvnEsciC+/Kgk7ysi4Se
-OPAB/ZEuOzUXvpvAT7cbzsB73iWQyl03kKuFIdnCJC5oikJXlL2EXTfwSE+kyrql
-iRTPBsVHEJZNFBsRbFfHr0EyMFti0vQ6vizFVFLeoLwwsCoCPqYuWOwfBlIcsF7a
-eGnfJmccX9WLBQeGemR4s/MW7hqMBvNXDZtIVbt3aIVbXrnLWbnMPr3nS9Xwjw8X
-I2QRGY9wkx6j3cHMM46TzcKAQEGhl4r8KkDxAzWT1RO6NfpnwYA=
-=tlGh
------END PGP SIGNATURE-----
---=-=-=--
+> Please ack, dependency for patch 5.
+> 
+>  .../devicetree/bindings/ufs/ti,j721e-ufs.yaml | 57 ++++++++++++-------
+>  1 file changed, 36 insertions(+), 21 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/ufs/ti,j721e-ufs.yaml b/Documentation/devicetree/bindings/ufs/ti,j721e-ufs.yaml
+> index c8a2a92074df..b503b1a918a5 100644
+> --- a/Documentation/devicetree/bindings/ufs/ti,j721e-ufs.yaml
+> +++ b/Documentation/devicetree/bindings/ufs/ti,j721e-ufs.yaml
+> @@ -25,6 +25,14 @@ properties:
+>    power-domains:
+>      maxItems: 1
+>  
+> +  "#address-cells":
+> +    const: 2
+> +
+> +  "#size-cells":
+> +    const: 2
+> +
+> +  ranges: true
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -44,25 +52,32 @@ examples:
+>      #include <dt-bindings/interrupt-controller/irq.h>
+>      #include <dt-bindings/interrupt-controller/arm-gic.h>
+>  
+> -    ufs_wrapper: ufs-wrapper@4e80000 {
+> -       compatible = "ti,j721e-ufs";
+> -       reg = <0x0 0x4e80000 0x0 0x100>;
+> -       power-domains = <&k3_pds 277>;
+> -       clocks = <&k3_clks 277 1>;
+> -       assigned-clocks = <&k3_clks 277 1>;
+> -       assigned-clock-parents = <&k3_clks 277 4>;
+> -       #address-cells = <2>;
+> -       #size-cells = <2>;
+> -
+> -       ufs@4e84000 {
+> -          compatible = "cdns,ufshc-m31-16nm", "jedec,ufs-2.0";
+> -          reg = <0x0 0x4e84000 0x0 0x10000>;
+> -          interrupts = <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>;
+> -          freq-table-hz = <19200000 19200000>;
+> -          power-domains = <&k3_pds 277>;
+> -          clocks = <&k3_clks 277 1>;
+> -          assigned-clocks = <&k3_clks 277 1>;
+> -          assigned-clock-parents = <&k3_clks 277 4>;
+> -          clock-names = "core_clk";
+> -       };
+> +    bus {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        ufs-wrapper@4e80000 {
+> +            compatible = "ti,j721e-ufs";
+> +            reg = <0x0 0x4e80000 0x0 0x100>;
+> +            power-domains = <&k3_pds 277>;
+> +            clocks = <&k3_clks 277 1>;
+> +            assigned-clocks = <&k3_clks 277 1>;
+> +            assigned-clock-parents = <&k3_clks 277 4>;
+> +
+> +            ranges = <0x0 0x0 0x0 0x4e80000 0x0 0x14000>;
+> +            #address-cells = <2>;
+> +            #size-cells = <2>;
+> +
+> +            ufs@4000 {
+> +                compatible = "cdns,ufshc-m31-16nm", "jedec,ufs-2.0";
+> +                reg = <0x0 0x4000 0x0 0x10000>;
+> +                interrupts = <GIC_SPI 17 IRQ_TYPE_LEVEL_HIGH>;
+> +                freq-table-hz = <19200000 19200000>;
+> +                power-domains = <&k3_pds 277>;
+> +                clocks = <&k3_clks 277 1>;
+> +                assigned-clocks = <&k3_clks 277 1>;
+> +                assigned-clock-parents = <&k3_clks 277 4>;
+> +                clock-names = "core_clk";
+> +            };
+> +        };
+>      };
+> 
