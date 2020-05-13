@@ -2,58 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72A751D1B4A
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 18:41:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8261D1BA0
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 18:55:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732557AbgEMQlC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 May 2020 12:41:02 -0400
-Received: from mga09.intel.com ([134.134.136.24]:25318 "EHLO mga09.intel.com"
+        id S2389707AbgEMQzn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 May 2020 12:55:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57032 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728354AbgEMQlC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 13 May 2020 12:41:02 -0400
-IronPort-SDR: ZZkSCbb5JEQsXsBu9YZEuPIWKoAPK5EJYRVnWgPw2S4mo/SSH0Mh4srFcbbpXPcExfl50r3YjQ
- YX9UZGm0C3fg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2020 09:41:01 -0700
-IronPort-SDR: 3MeCc5OBY+l5lwh4byl6fFGi/o2sVfl2EKGn+uSOlIc/TVm3hLx/l/xPjjlcDnjEQAUvMVOYcP
- DzFfTyivQB1w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,388,1583222400"; 
-   d="scan'208";a="371958607"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga001.fm.intel.com with SMTP; 13 May 2020 09:40:59 -0700
-Received: by lahna (sSMTP sendmail emulation); Wed, 13 May 2020 19:40:58 +0300
-Date:   Wed, 13 May 2020 19:40:58 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     David Manouchehri <david.manouchehri@riseup.net>
-Cc:     YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
-        andreas.noever@gmail.com, michael.jamet@intel.com
-Subject: Re: [PATCH] thunderbolt: Update Kconfig to allow building on other
- architectures.
-Message-ID: <20200513164058.GK2571@lahna.fi.intel.com>
-References: <CAJEJqRzVe1oWZAWMq=JLkAtDpH4pxvLVoh4uO=qqF+a6sL77uA@mail.gmail.com>
+        id S1727120AbgEMQzn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 13 May 2020 12:55:43 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C22DB20671;
+        Wed, 13 May 2020 16:55:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589388943;
+        bh=gsslFp9rqxz7ytfQkPA8wdKTwKbLEePk9J96wly+SWk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u23wU6O/t5VjgR1swjr7WLWTBzPMow6KnFETB1dL7r+xziGuStYskJssLLALqnwfu
+         jwtPb9MNzzUs8jgS+/sOuVleshkeqqCHHVxPtsS5l3jriIiTHEFc/Un9gq4I/uJgZp
+         1TThkwzIt6ngumq8AbPDynG85032Y0LAMcA9cd0Y=
+Date:   Wed, 13 May 2020 18:55:40 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Hillf Danton <hdanton@sina.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     syzbot <syzbot+353be47c9ce21b68b7ed@syzkaller.appspotmail.com>,
+        bp@alien8.de, dave.hansen@linux.intel.com,
+        dmitry.torokhov@gmail.com, ebiederm@xmission.com, hpa@zytor.com,
+        jeremy.linton@arm.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
+        peterz@infradead.org, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com, x86@kernel.org
+Subject: Re: WARNING in memtype_reserve
+Message-ID: <20200513165540.GA1366700@kroah.com>
+References: <000000000000f0d8d205a531f1a3@google.com>
+ <20200509074507.GC1831917@kroah.com>
+ <87wo5l4ecm.fsf@nanos.tec.linutronix.de>
+ <20200513124445.GA1082735@kroah.com>
+ <87zhab249p.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJEJqRzVe1oWZAWMq=JLkAtDpH4pxvLVoh4uO=qqF+a6sL77uA@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <87zhab249p.fsf@nanos.tec.linutronix.de>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 11, 2020 at 05:42:51PM -0400, David Manouchehri wrote:
-> Thunderbolt 3 and USB4 shouldn't be x86 only.
+On Wed, May 13, 2020 at 06:22:58PM +0200, Thomas Gleixner wrote:
+> Greg KH <gregkh@linuxfoundation.org> writes:
+> > On Sat, May 09, 2020 at 12:00:57PM +0200, Thomas Gleixner wrote:
+> >> Greg KH <gregkh@linuxfoundation.org> writes:
+> >> > On Sat, May 09, 2020 at 12:20:14AM -0700, syzbot wrote:
+> >> >> memtype_reserve failed: [mem 0xffffffffff000-0x00008fff], req write-back
+> >> >> WARNING: CPU: 1 PID: 7025 at arch/x86/mm/pat/memtype.c:589 memtype_reserve+0x69f/0x820 arch/x86/mm/pat/memtype.c:589
+> >> >
+> >> > So should memtype_reserve() not do a WARN if given invalid parameters as
+> >> > it can be triggered by userspace requests?
+> >> >
+> >> > A normal "invalid request" debug line is probably all that is needed,
+> >> > right?
+> >> 
+> >> I disagree. The callsite espcially if user space triggerable should not
+> >> attempt to ask for a reservation where start > end:
+> >> 
+> >>   >> memtype_reserve failed: [mem 0xffffffffff000-0x00008fff], req write-back
+> >> 
+> >> The real question is which part of the call chain is responsible for
+> >> this. That needs to be fixed.
+> >
+> > This is caused by 2bef9aed6f0e ("usb: usbfs: correct kernel->user page
+> > attribute mismatch") which changed a call to remap_pfn_range() to
+> > dma_mmap_coherent().  Looks like the error checking in remap_pfn_range()
+> > handled the invalid options better than dma_mma_coherent() when odd
+> > values are passed in.
+> >
+> > We can add the check to dma_mmap_coherent(), again, but really, this
+> > type of check should probably only be needed in one place to ensure we
+> > always get it correct, right?
+> 
+> That might be correct for this particular call chain, but this check
+> really is the last defense before stuff goes down the drain. None of the
+> last line functions should ever be reached with crappy arguments.
 
-Fully agree.
+Looking at the other callers of dma_mmap_coherent(), it looks like this
+needs to be done in that function, as other drivers are passing in "raw"
+data as well.  So Hillf's patch is probably the best one.
 
-> Tested on a SolidRun HoneyComb (ARM Cortex-A72) with a
-> Gigabyte Titan Ridge Thunderbolt 3 PCIe card (JHL7540).
+Hillf, can you resend it in a format we can apply it in and have syzbot
+test?
 
-Nice :)
+thanks,
 
-> Signed-off-by: David Manouchehri <david.manouchehri@riseup.net>
-
-Applied, thanks!
+greg k-h
