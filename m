@@ -2,100 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 096311D1857
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 17:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85F3E1D18B5
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 17:08:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389208AbgEMPAe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 May 2020 11:00:34 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:49131 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2389155AbgEMPAN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 May 2020 11:00:13 -0400
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04DEwJv0008668;
-        Wed, 13 May 2020 16:59:58 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=STMicroelectronics;
- bh=QTCaThy3GVFCYOhCkPvOzFwaT3nv8roy2DLEbs0qBbo=;
- b=c+3ilERflSrBijQAJJe6KdPE0lLVj+4f4Lcx5gSA2cUC/2uEPNyJFLy00GETTt6p7y5f
- fHKSf6vukoNpXa6w+E2JH8mssiWxFPrxm6618QjqKBXlBCMgd3dvH1raB09XvRMzQBJa
- vagqwuh5vSiblFFvojO19IL/qMnTVrHMrFX5AoGZD1lIGkkKZDHyonrP1nbDbcrrzWzG
- nYD5XZMCuTeSOseoVNpt8Xg+Hk8No/PAIJByhcmB21+E9LgFT/3AOM/s9oC7JjfPILHW
- 3QNFfk9Jk3Si/44+ky826t7QZWG4n5MyGuohjaZWC1kdQ2wfrowb825vOWlNE9VSHT42 IA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 3100vqdeb4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 13 May 2020 16:59:58 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 1BE9310002A;
-        Wed, 13 May 2020 16:59:58 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node3.st.com [10.75.127.9])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 084EC2D3006;
-        Wed, 13 May 2020 16:59:58 +0200 (CEST)
-Received: from localhost (10.75.127.50) by SFHDAG3NODE3.st.com (10.75.127.9)
- with Microsoft SMTP Server (TLS) id 15.0.1347.2; Wed, 13 May 2020 16:59:57
- +0200
-From:   Benjamin Gaignard <benjamin.gaignard@st.com>
-To:     <linus.walleij@linaro.org>, <robh+dt@kernel.org>,
-        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@st.com>,
-        <gregkh@linuxfoundation.org>
-CC:     <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        Benjamin Gaignard <benjamin.gaignard@st.com>
-Subject: [PATCH 15/15] dt-bindings: usb: dwc2: Fix issues for stm32mp15x SoC
-Date:   Wed, 13 May 2020 16:59:35 +0200
-Message-ID: <20200513145935.22493-16-benjamin.gaignard@st.com>
-X-Mailer: git-send-email 2.15.0
-In-Reply-To: <20200513145935.22493-1-benjamin.gaignard@st.com>
-References: <20200513145935.22493-1-benjamin.gaignard@st.com>
+        id S1729027AbgEMPIO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 May 2020 11:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42574 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727778AbgEMPIN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 May 2020 11:08:13 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B522C061A0C;
+        Wed, 13 May 2020 08:08:13 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id h17so12427376wrc.8;
+        Wed, 13 May 2020 08:08:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=VWRAGlUE58pZzy9cngU2gBHWI6hRPV4qJAq7Js3hLQM=;
+        b=fxyVei8o92xYp2W45MEq20WpAtKItN0ZVI7QCX5zuer5dPU9RXHubrZZy5Sqpbg0RA
+         SWodfxZ6paK8plPL7t0ef8pbtVKpGxKuJKI3oZEPbYmWWQkgxszW7o/lwSxBDqbu4chh
+         5HciRUbHnUs8+x8jkF02JjdKMU7cE+A4OLw9b5cEp3SnhFGZ3RcyzmVKlNRhEHIEB3Hq
+         aRzanvuLRkllUfK1HVQrm+lhdOFvi+VXzAKdanzgfbmuIWlE2qjV3D/cwXMHk90B9N69
+         QmL+s5rlN6oNJzPqR8bDCB8fY4FsYP0j3RS9hLA57cP/SGmF7aGJ7VjwAc32wtt22tt1
+         yrmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=VWRAGlUE58pZzy9cngU2gBHWI6hRPV4qJAq7Js3hLQM=;
+        b=TLy18P05UJbQ1/JoGYJPil4YolWG+2MDhXXU+OiFEsYtbDHkMuSxbD5/rOfNW6Fyas
+         GMuRkesmw+vvP/eSVlNtmf1MndQ3gKvST/JQmoiC5M0cEm7ueyeW2GAlcX+YarGbs+wh
+         qmOqm0+R6pHJJ+lGPgladUa/KizaUvsjPnOp1GVlLgENyvzixHyb056U1lWY0lCqXQGL
+         EqzkfiPQ/tiSLMUCRMpoRzmtqSCU+nd42BfgudAJXukzYFHnlVRzM3MR6vAkYKs/Pkdr
+         +iKM93Vd1R4skHnJyqD0CIFhabyVvd5zmpOJCVBa+BKG8kvBciAMFe6vyrnmXW1QwSpS
+         8mhw==
+X-Gm-Message-State: AGi0PuYf0XzdfVyyQFjacGNWZx7FZFt16UlEQd3NtP2PPcF0H2p97hbO
+        ACExQyR8OmHywDea0cUNUQs=
+X-Google-Smtp-Source: APiQypLXg8ASZd+iA6265bHQHLtl29lOt/lFKSif4O+rOT+hi1gYBRKHdy6OxMxG+9OmQlKS1XYZtw==
+X-Received: by 2002:adf:b301:: with SMTP id j1mr30897749wrd.221.1589382491668;
+        Wed, 13 May 2020 08:08:11 -0700 (PDT)
+Received: from [10.230.188.43] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id r9sm19085526wmg.47.2020.05.13.08.08.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 May 2020 08:08:10 -0700 (PDT)
+Subject: Re: [PATCH v10 1/5] usb: xhci: Change the XHCI link order in the
+ Makefile
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Al Cooper <alcooperx@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+References: <20200512150019.25903-1-alcooperx@gmail.com>
+ <20200512150019.25903-2-alcooperx@gmail.com>
+ <20200513122613.GA1023594@kroah.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <7acc2a4c-caab-11e7-7b3f-4176f19c58cf@gmail.com>
+Date:   Wed, 13 May 2020 08:08:07 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Firefox/68.0 Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.50]
-X-ClientProxiedBy: SFHDAG6NODE3.st.com (10.75.127.18) To SFHDAG3NODE3.st.com
- (10.75.127.9)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
- definitions=2020-05-13_06:2020-05-13,2020-05-13 signatures=0
+In-Reply-To: <20200513122613.GA1023594@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Correct the compatible list for stm32mp15x SoC.
-Fix the name of the stm32mp15x dedicated supply to be aligned with
-what the driver use.
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
----
- Documentation/devicetree/bindings/usb/dwc2.yaml | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml b/Documentation/devicetree/bindings/usb/dwc2.yaml
-index 0d6d850a7f17..1357b861310d 100644
---- a/Documentation/devicetree/bindings/usb/dwc2.yaml
-+++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
-@@ -44,7 +44,9 @@ properties:
-       - const: st,stm32f4x9-hsotg
-       - const: st,stm32f7-hsotg
-       - const: st,stm32mp15-fsotg
--      - const: st,stm32mp15-hsotg
-+      - items:
-+          - const: st,stm32mp15-hsotg
-+          - const: snps,dwc2
-       - const: samsung,s3c6400-hsotg
- 
-   reg:
-@@ -90,7 +92,7 @@ properties:
-   vusb_a-supply:
-     description: phandle to voltage regulator of analog section.
- 
--  vusb33d-supply:
-+  usb33d-supply:
-     description: reference to the VBUS and ID sensing comparators supply, in
-       order to perform OTG operation, used on STM32MP15 SoCs.
- 
+On 5/13/2020 5:26 AM, Greg Kroah-Hartman wrote:
+> On Tue, May 12, 2020 at 11:00:15AM -0400, Al Cooper wrote:
+>> Some BRCMSTB USB chips have an XHCI, EHCI and OHCI controller
+>> on the same port where XHCI handles 3.0 devices, EHCI handles 2.0
+>> devices and OHCI handles <2.0 devices. Currently the Makefile
+>> has XHCI linking at the bottom which will result in the XHIC driver
+>> initalizing after the EHCI and OHCI drivers and any installed 3.0
+>> device will be seen as a 2.0 device. Moving the XHCI linking
+>> above the EHCI and OHCI linking fixes the issue.
+> 
+> What happens if all of these are modules and they are loaded in a
+> different order?  This makefile change will not help with that, you need
+> to have logic in the code in order to properly coordinate this type of
+> mess, sorry.
+
+I believe we should be using module soft dependencies to instruct the
+module loaders to load the modules in the correct order, so something
+like this would do (not tested) for xhci-plat-hcd.c:
+
+MODULE_SOFTDEP("post: ehci-hcd ohci-hcd");
+
+and I am not sure whether we need to add the opposite for ehci-hcd and
+ohci-hcd:
+
+MODULE_SOFTDEP("pre: xhci-plat-hcd");
+
+Al, do you want to test that?
 -- 
-2.15.0
-
+Florian
