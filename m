@@ -2,153 +2,155 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A6E51D1F60
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 21:38:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD8BA1D1F87
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 21:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390256AbgEMTiS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 May 2020 15:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56600 "EHLO
+        id S2390639AbgEMTmi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 May 2020 15:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1732626AbgEMTiQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 May 2020 15:38:16 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 491DBC061A0C
-        for <linux-usb@vger.kernel.org>; Wed, 13 May 2020 12:38:16 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id b8so185082pgi.11
-        for <linux-usb@vger.kernel.org>; Wed, 13 May 2020 12:38:16 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S2387616AbgEMTmh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 May 2020 15:42:37 -0400
+Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D13DC061A0C;
+        Wed, 13 May 2020 12:42:37 -0700 (PDT)
+Received: by mail-il1-x142.google.com with SMTP id w6so944948ilg.1;
+        Wed, 13 May 2020 12:42:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=tuLZiJXlCiEq6nNwtj7VZt2ne1pqxpdlNfWSgWi/TyI=;
-        b=agtfBvZS67e3Yg6B9qa6YcSq3IM8u+GmXVjf18m2kesh+HGBlilqxITuvqjQkDT6Fs
-         NWEvXkePOEY5A4rE/v/ikydxwWJv1MR8dGLiF7MmWXCQEiTNEnBn5Ok0OFtieTk9vMHh
-         L2WMKGmxDEp6dzMUYso/Pm8broee/Lez+SNh6NZWOUjupZsCkU0reHb+kXJBMItjTTGB
-         NG8D4s7xwbXVZ9OZq4Y9Ofrun0ZN2tubYgNev2WrLirUilyiCKDz/896w3AHRHOb+ZDT
-         Yx3U7LP3DMIcukxBKur18JwyCfiMUlx4KV/PsJq/PO6vZ3c5rp6hGNs5XFljRroQNo7u
-         vSBA==
+        bh=uINUBH0b67t7eYaVdOESIaSo4GsnVh3MgDPLeaDlYvQ=;
+        b=kf3uoBcYAc8ZC02QIDPCZgxdfnLlHom1piA05+woOCC7646WUcvJ+cpVUT/csrQsC/
+         K/Q/ItYqAVNA+MvlSbTTSylkjRMbx5p2+XF/xfpHae7fMmWKefe6OzozeTVXKtXARI8R
+         4jHdVNe1kTp+adyHo8sPZ5i5SYQZGdfp6OlGTwxGZmHbJOCMCz+3pfsBawlydtRcD1oA
+         Jssx4Bxz9oR1XBNMmzjPvnH4ymFhXKDluPKwv9pY179jlyO0xqcRB3Uam2qOVlF90jE7
+         v7zbAt2fz9Ud/2LaJgZ3pyWdymGut2f6EK1CcME0HM539KjbhJWqgYT6bBfuRfCv2Pak
+         12vA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=tuLZiJXlCiEq6nNwtj7VZt2ne1pqxpdlNfWSgWi/TyI=;
-        b=uAuyJIpigd/tK2S454wwDohPaCaTpfxGzvHlzqG34K1OQT+uSeNjQsMrBYMdz3c2GP
-         ksW19H2LlvWtS4RT4sMtmju5rglazMqLqn48Vt2+1QqSILyW/SrtdbDp2W9WAgB9jpJF
-         g9YKbOcElzzLM3bQxGvJtgoupsAamL0EjquUumaVeU4gSw+DBqTsPlRYzplI3SYivcrl
-         ugtg92nviW8X0YVSwSgdWgBwG/AzgFkgQrNWZdG+vHo7sF/ypj2IJNe3x5IB3hSZKhjA
-         sHo84wESuoi52q7v9dI9bWlOhJstMfD9DUYrpph11W+SL3ywiICDhe3j3wIRugpgYt5E
-         1Q9g==
-X-Gm-Message-State: AOAM530agq6ntpGzdhYErnHSEQQ/HW0NkUkMHYQlyDOiJC8LepntoDAY
-        IuVTiEFoogd8PfGNKFpZGcxaFFM4Z4AXN0UeWYxY4g==
-X-Google-Smtp-Source: ABdhPJxFkgfEoy9HhQB3pqrYqlNSEDR/OovFXa/RvDmmot+3GcylJOBJvIF94MZVvi/9o+yLCvSJoxvmP2/Q88NkDto=
-X-Received: by 2002:a62:32c1:: with SMTP id y184mr770427pfy.306.1589398695447;
- Wed, 13 May 2020 12:38:15 -0700 (PDT)
+        bh=uINUBH0b67t7eYaVdOESIaSo4GsnVh3MgDPLeaDlYvQ=;
+        b=FPAdI3qSGkxJT8MdLWlf7JR7Y8PWtLmaCNnQEMACiT6GwyQ/alkTlle4kMBZTF5Q5T
+         /QJXSdMU9IB1/7lDhGQCLDdu+m4L/XApOJmxqjzIfAfZEOlPdtPlAWhGvaTK4KdbIT9d
+         rmamaQ66Qs5pIiVYyq+UlCCjb/Z1T9vStQqOq3RkPq5Ww4qsNqxMhgcId/7EG2mQBMnB
+         lQTZaPmCV4YClRmDrRl3BWvswpMAvO1+m6ElS3qtGFc5BssmrvvgwcVkPaSEXuOBnGtb
+         nyNn6RFr3tg5ww+qvhvSOokP+65FF4/WqcXQXS1AxD4wtc0faRc1zvZ5maswPdRuTRs/
+         Z+Dg==
+X-Gm-Message-State: AOAM530qBWYzaHJmGYm3mWgX/vrTkrSzD0hayblrXwUeuT0GZZ/1+m5o
+        qqVTvuDF/DRN/3KOq8kE6mSDWUqcGDuhDet/uW+/Jstn
+X-Google-Smtp-Source: ABdhPJxTm1xgroYc2W51c5QCs9n6y0TBHp/24L3n0o5XMr5msuOmG19W+7cwoNcXSsf3jT3rkp/YlZAYEsp+LWW0+VU=
+X-Received: by 2002:a92:6c0b:: with SMTP id h11mr1024982ilc.158.1589398956864;
+ Wed, 13 May 2020 12:42:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAAeHK+z=z=e2pYQy3vtJO4rm+=Rb=av+4RidLCyp7Ae3shggqA@mail.gmail.com>
- <Pine.LNX.4.44L0.2004280920510.4958-100000@netrider.rowland.org>
- <CAAeHK+yHBZ4oxW7AbS8VwqMrULKiETBYjW6ARZ+9FiWk=hvs=g@mail.gmail.com>
- <20200513181431.GB2862@rowland.harvard.edu> <CAAeHK+wgP+P341B2F-aOFJGyompr6AqG6SiL-Qb60i=X-K6SvQ@mail.gmail.com>
- <20200513190912.GC2862@rowland.harvard.edu>
-In-Reply-To: <20200513190912.GC2862@rowland.harvard.edu>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Wed, 13 May 2020 21:38:04 +0200
-Message-ID: <CAAeHK+wAMZPduGeb863z36vC33G4-Wf8zrx-nwDLqr_aiEjjKA@mail.gmail.com>
-Subject: Re: Testing endpoint halt support for raw-gadget
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Felipe Balbi <balbi@kernel.org>,
+References: <20200512150019.25903-1-alcooperx@gmail.com> <20200512150019.25903-2-alcooperx@gmail.com>
+ <20200513122613.GA1023594@kroah.com> <7acc2a4c-caab-11e7-7b3f-4176f19c58cf@gmail.com>
+ <20200513162723.GF1362525@kroah.com> <38ff034d-a84c-2309-a8d5-f344930d9a31@gmail.com>
+ <20200513170505.GB1369204@kroah.com> <20200513173920.GA2862@rowland.harvard.edu>
+ <c0642cf4-1436-aec4-96fd-355a897f6418@gmail.com>
+In-Reply-To: <c0642cf4-1436-aec4-96fd-355a897f6418@gmail.com>
+From:   Alan Cooper <alcooperx@gmail.com>
+Date:   Wed, 13 May 2020 15:42:25 -0400
+Message-ID: <CAOGqxeU=LjAmAYR9wGeKZo_eLj+ehkrANTM+04E7xWNAp82EJA@mail.gmail.com>
+Subject: Re: [PATCH v10 1/5] usb: xhci: Change the XHCI link order in the Makefile
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        ": Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        DTML <devicetree@vger.kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
         USB list <linux-usb@vger.kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 13, 2020 at 9:09 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+On Wed, May 13, 2020 at 1:46 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
 >
-> On Wed, May 13, 2020 at 08:31:35PM +0200, Andrey Konovalov wrote:
-> > On Wed, May 13, 2020 at 8:14 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> > >
-> > > On Wed, May 13, 2020 at 07:07:20PM +0200, Andrey Konovalov wrote:
-> > > > Hi Alan,
-> > > >
-> > > > I've been looking at this a little more. Do I understand correctly
-> > > > that even though Dummy UDC names endpoints as "ep1in", etc. it
-> > > > actually allows to assign endpoints addresses different from what is
-> > > > specified in the endpoint names (it uses find_endpoint() to find the
-> > > > right endpoint based on ep->desc)? E.g. you can technically assign
-> > > > endpoint with address 2 (| USB_DIR_IN) to "ep1in".
-> > >
-> > > Yes, that's right.  In fact, you can do this with any UDC.  (But with
-> > > other UDCs it won't work, whereas with dummy-hcd it will.)
-> > >
-> > > > If this is correct, this kind of limits Dummy UDC usage with Raw
-> > > > Gadget the way it is currently implemented, as Raw Gadget assumes that
-> > > > the endpoint address must be fixed when the endpoint is named as
-> > > > ep1in.
-> > >
-> > > Okay.  That makes sense, since it is true for most UDCs.
-> > >
-> > > > Would it be acceptable to add another mode to Dummy UDC that names the
-> > > > endpoints as "ep-a"? Perhaps enabled with a module parameter. I'm not
-> > > > sure if this kind of naming would be technically correct, as "ep-a"
-> > > > name assumes that we can assign arbitrary transfer type to the
-> > > > endpoint as well, which isn't possible with Dummy UDC, as it doesn't
-> > > > support ISO transfers.
-> > > >
-> > > > Or do you think there can be another way to expose the fact that Dummy
-> > > > UDC allows arbitrary addresses? I could hardcode this into Raw Gadget,
-> > > > but it doesn't feel like the right approach.
-> > >
-> > > Why do you want to do this?  Does anything go wrong if you just continue
-> > > to assume the endpoint numbers are fixed?
+>
+>
+> On 5/13/2020 10:39 AM, Alan Stern wrote:
+> > On Wed, May 13, 2020 at 07:05:05PM +0200, Greg Kroah-Hartman wrote:
+> >> On Wed, May 13, 2020 at 09:31:11AM -0700, Florian Fainelli wrote:
+> >>>
+> >>>
+> >>> On 5/13/2020 9:27 AM, Greg Kroah-Hartman wrote:
+> >>>> On Wed, May 13, 2020 at 08:08:07AM -0700, Florian Fainelli wrote:
+> >>>>>
+> >>>>>
+> >>>>> On 5/13/2020 5:26 AM, Greg Kroah-Hartman wrote:
+> >>>>>> On Tue, May 12, 2020 at 11:00:15AM -0400, Al Cooper wrote:
+> >>>>>>> Some BRCMSTB USB chips have an XHCI, EHCI and OHCI controller
+> >>>>>>> on the same port where XHCI handles 3.0 devices, EHCI handles 2.0
+> >>>>>>> devices and OHCI handles <2.0 devices. Currently the Makefile
+> >>>>>>> has XHCI linking at the bottom which will result in the XHIC driver
+> >>>>>>> initalizing after the EHCI and OHCI drivers and any installed 3.0
+> >>>>>>> device will be seen as a 2.0 device. Moving the XHCI linking
+> >>>>>>> above the EHCI and OHCI linking fixes the issue.
+> >>>>>>
+> >>>>>> What happens if all of these are modules and they are loaded in a
+> >>>>>> different order?  This makefile change will not help with that, you need
+> >>>>>> to have logic in the code in order to properly coordinate this type of
+> >>>>>> mess, sorry.
+> >>>>>
+> >>>>> I believe we should be using module soft dependencies to instruct the
+> >>>>> module loaders to load the modules in the correct order, so something
+> >>>>> like this would do (not tested) for xhci-plat-hcd.c:
+> >>>>>
+> >>>>> MODULE_SOFTDEP("post: ehci-hcd ohci-hcd");
+> >>>>>
+> >>>>> and I am not sure whether we need to add the opposite for ehci-hcd and
+> >>>>> ohci-hcd:
+> >>>>>
+> >>>>> MODULE_SOFTDEP("pre: xhci-plat-hcd");
+> >>>>
+> >>>> That's a nice start, but what happens if that isn't honored?  This
+> >>>> really needs to work properly for any order as you never can guarantee
+> >>>> module/driver loading order in a system of modules.
+> >>>
+> >>> I also suggested that device links may help, though I am not sure. What
+> >>> do you suggest to be done?
+> >>
+> >> No idea.  device links will help if you defer the probe properly until
+> >> you see the proper drivers binding correctly.
 > >
-> > Yes. Some USB drivers require endpoints with certain logical functions
-> > to have certain addresses (e.g. for ath9k: [1]). This limits the
-> > ability to use Raw Gadget + Dummy UDC for fuzzing, as sometimes we
-> > can't emulate such devices unless Dummy UDC endpoint with a particular
-> > address has required capabilities to implement those logical functions
-> > (e.g. for ath9k: we can't emulate USB_REG_IN_PIPE endpoint, as Dummy
-> > UDC only has an OUT endpoint with address 3).
+> > I suspect that in general there is no way to do this properly.
 > >
-> > It's acceptable to be unable to emulate such devices with real UDCs
-> > with fixed address endpoints, but it would be highly desirable to be
-> > able to do that with Dummy UDC, as it technically supports
-> > configurable endpoint addresses.
->
-> Okay, that's reasonable.
->
-> > [1] https://elixir.bootlin.com/linux/v5.6.12/source/drivers/net/wireless/ath/ath9k/hif_usb.h#L68
+> > We can't modify ehci-hcd and ohci-hcd to make them wait.  In fact, for
+> > all they know, xhci-hcd will _never_ be loaded.
 > >
-> > > I suppose, if you thought this was really necessary, we could change
-> > > find_endpoint() so that it looks for a match against the endpoint's name
-> > > instead of against the address stored in the descriptor.
+> > One thing that might be possible (although not all platforms may support
+> > it) is if xhci-hcd could somehow disconnect all devices attached to a
+> > peer port when it starts up.  But that would be disruptive to any
+> > devices that aren't USB-3.
 > >
-> > That would make the behaviour of Dummy UDC match what is expected from
-> > it based on the endpoint names, but won't help with the problem
-> > described above.
+> > We faced a very similar ordering problem between ehci-hcd and
+> > [ou]hci-hcd many years ago, and we never found a good solution.
+> > We did arrange the link order so that ehci-hcd precedes the others, and
+> > we added a warning message to ehci-hcd which gets printed if the module
+> > initialization routine runs after [ou]hci-hcd is loaded.  Also, there
+> > are MODULE_SOFTDEP lines in ohci-pci.c and uhci-pci.c.
 >
-> Would you want to do this anyway?  It doesn't seem necessary to me.
+> Given that these modules are used on specific SoC platforms, where we
+> usually provide a reference implementation of user space and kernel
+> space and documentation, it seems to me that the MODULE_SOFTDEP(),
+> despite being a hint and best effort from user space module loaders is
+> probably acceptable.
+> --
+> Florian
 
-No, no need for this :)
+What I found in the past is that things work. For example if the ehci
+driver starts first, the USB device will come up as a 2.0 device and
+when the XHCI driver comes up the device will switch to 3.0. I've see
+the same thing happen if OHCI starts before EHCI. It's just that there
+are some poorly behaved USB devices that have trouble with this.
 
->
-> > > Or we could
-> > > change the last thirteen "generic" endpoints in ep_info[] to be
-> > > configurable: "ep-a", ..., "ep-m", or "ep-aout", ..., "ep-min".  (The
-> > > fact that the endpoints don't support isochronous is exposed through the
-> > > usb_ep_caps structures.)
-> >
-> > I think this should work. If we put this under a module parameter,
-> > then we can make all endpoints have configurable names.
->
-> No need for a module parameter; just make it a permanent change to the
-> driver.
-
-I was thinking that it could break some existing users, but I don't
-know for sure.
-
-> Would you like to submit a patch?
-
-Sure, will do. Thanks!
+Al
