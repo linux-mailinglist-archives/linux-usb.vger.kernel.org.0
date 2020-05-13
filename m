@@ -2,27 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B17B51D0E47
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 11:59:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49EA71D0E97
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 12:01:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388323AbgEMJ7D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 May 2020 05:59:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56126 "EHLO mail.kernel.org"
+        id S2387610AbgEMJvJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 May 2020 05:51:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51594 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732656AbgEMJx5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 13 May 2020 05:53:57 -0400
+        id S2387603AbgEMJvI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 13 May 2020 05:51:08 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1BDC4205ED;
-        Wed, 13 May 2020 09:53:55 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0AE8E20575;
+        Wed, 13 May 2020 09:51:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589363636;
+        s=default; t=1589363467;
         bh=KaBdmx0FEom7Oa5L1jSWEFIFXl5TMxoTKMFAD99rzvk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S4uXfb8rtRGVf1ZmkOTDpLe6IeIhlUre3bAoI7AShBmhhsZmnjmp3Sij7vslGzvTT
-         GQS8P7mgu3WrHz83el+415NSzhe6JMZXcv4wjrcMfreaUySZF2f5LQ6CE6yBwO5LoK
-         cG/EyUGTf4X2Laei6gJ34ssYIWjWQnsu9O3VFQO8=
+        b=OAx7GN0SY1Uo24yWRpjLR6JJUU1F6+NDx44Jc4k6K9MqAjAZjkpWqy0TRj8V93GRL
+         VeQm9m59sz1g/5+Ldj/J7gXGMof8nq38pWkh5QIY9eQbmXTvHB6WDClPr+YLcfiee/
+         rIs6jzzNgEZD4uQ0mASKT+Bswo112pwBSPFQBGJo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -30,12 +30,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
         Bryan ODonoghue <bryan.odonoghue@linaro.org>,
         Peter Chen <peter.chen@nxp.com>
-Subject: [PATCH 5.6 063/118] usb: chipidea: msm: Ensure proper controller reset using role switch API
-Date:   Wed, 13 May 2020 11:44:42 +0200
-Message-Id: <20200513094423.468102573@linuxfoundation.org>
+Subject: [PATCH 5.4 47/90] usb: chipidea: msm: Ensure proper controller reset using role switch API
+Date:   Wed, 13 May 2020 11:44:43 +0200
+Message-Id: <20200513094413.789775786@linuxfoundation.org>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200513094417.618129545@linuxfoundation.org>
-References: <20200513094417.618129545@linuxfoundation.org>
+In-Reply-To: <20200513094408.810028856@linuxfoundation.org>
+References: <20200513094408.810028856@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
