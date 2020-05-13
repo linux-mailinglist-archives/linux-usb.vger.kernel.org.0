@@ -2,142 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4805A1D206B
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 22:53:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7003E1D20DA
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 23:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728408AbgEMUxF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 May 2020 16:53:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40102 "EHLO
+        id S1728336AbgEMVWJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 May 2020 17:22:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728366AbgEMUxE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 May 2020 16:53:04 -0400
-Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7658BC061A0C
-        for <linux-usb@vger.kernel.org>; Wed, 13 May 2020 13:53:03 -0700 (PDT)
-Received: by mail-qv1-xf4a.google.com with SMTP id z1so999718qvd.23
-        for <linux-usb@vger.kernel.org>; Wed, 13 May 2020 13:53:03 -0700 (PDT)
+        with ESMTP id S1728341AbgEMVWI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 May 2020 17:22:08 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2F1C061A0F
+        for <linux-usb@vger.kernel.org>; Wed, 13 May 2020 14:22:08 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id f4so580825iov.11
+        for <linux-usb@vger.kernel.org>; Wed, 13 May 2020 14:22:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=71HdHnmN8TyFcDA++Ka6XFKmm8bF3JudbFVjypVFt6Q=;
-        b=KjW4pG1mGXHWCxz4oL4MDmdh7FTqnCOT3X7xYJPzqEI1ekwsbGX2qc1O03PUEjcXtg
-         /Zq7qS4u8LjeFDh6Q7oicY8qUr+BYaV3tU0YQoQ8PbAEcr1atGLUbr8ObVGo2Tb//9nn
-         CJJrzDE7LLoIWmoWydzDkuaQ75mg4hBYMPETHuX0zyJMvG7iVZ1HLM7znyqb3QwWlDv2
-         T2dETCp7V2y+9PQZQssQvllUVfZ4skwVMOx0NYjHt5iD0PFR0mO00KhgrxZopADcAvBe
-         UYHVBxefwADmYwlTVYt7KKGi4gmswHY0e73Ie38F5ytWgeOM+zX/WBel0O6ok38XmYj2
-         dG0w==
+        d=sifive.com; s=google;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :user-agent:mime-version;
+        bh=tGOgO3DH7KY7eGZj+l93dH69/CZG3Xhtwrztz8Xi5EY=;
+        b=hOZtlEBO2LKyP8bHzFDDLBLE+AyP3GW51R2Bgu0+e70rfUZ9rIiczo3pB8s/u3VM70
+         K0T9RD7NVB7brgPgne9G7Y9DKSqMwc34kmUSNaN1+tKmQKMyi7b2a/DSMwe/zY5/KEhq
+         fQSq0XIBJbkr+PAekXcISSvdYkIgp1CyKT8+VJYoZrJ8KYzz0lTZCE6/MFJ87T2KQroR
+         EtSZS930x4uhhtysV1nP2Ob/eQgc7gMe8HsNnHtxeeVeS/yekgc2kD61tz8HifWs7qcn
+         aDv4sBzqEuxANANls7LL4SbixAH4tEKQkZN+1IFCsDhaPLM0Ftld10Il4H8V74Y2oTRm
+         cjMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=71HdHnmN8TyFcDA++Ka6XFKmm8bF3JudbFVjypVFt6Q=;
-        b=UbH2VRXRf+84hwwJdvLxVt/eoBgGE2VGJYSGX9kOnKpMhwoYFcjSj8AfSAyQNlnRGs
-         Zn/jwUzf4W/h8Q5rdwKs2D90aPA6KpbQt5LB09vH9fvxAu8VIB6svLGYCQrB/5JDq03G
-         DFgNA5ThmuzRISF5dpfmJwiFxxxVZ+TzlzrObFE5DbEdqJCQCFAgTmxKIlY9+59JRiy2
-         iKFuo363E5SLxnDWqP1g6f8JS1YRdhlUf4iHt8Gbduay33LdS8wI+c9clDaaYHmvHFLZ
-         NyVdWy6LwfJ0nwhX53uiBTOimHvufyZFHvT+wufr31nHPvQw1+Zh2zXAhjgYOfC1spmy
-         8Mow==
-X-Gm-Message-State: AOAM532kH6UB7/0FdhjqDNXdn6+fjKLG2me2/P+0OJEC3eFJsuIM86/L
-        tY9gAT8OD8t6wkA3dKrG+1T7s84eqBC4YbJv
-X-Google-Smtp-Source: ABdhPJzoDDG++JXRtbGjq1lH9KoGeACWGJXeEOGFxCZtoPl/Q6gZL/DDE97zTZTzO7SOZf0WX9coyDOfDbiHw8LX
-X-Received: by 2002:ad4:4a8b:: with SMTP id h11mr1582071qvx.232.1589403182626;
- Wed, 13 May 2020 13:53:02 -0700 (PDT)
-Date:   Wed, 13 May 2020 22:52:56 +0200
-Message-Id: <e2638d6e4d38f97b46bee58b2c79a93b29b5718c.1589403150.git.andreyknvl@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.26.2.645.ge9eca65c58-goog
-Subject: [PATCH] USB: dummy-hcd: use configurable endpoint naming scheme
-From:   Andrey Konovalov <andreyknvl@google.com>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:user-agent:mime-version;
+        bh=tGOgO3DH7KY7eGZj+l93dH69/CZG3Xhtwrztz8Xi5EY=;
+        b=HYc5uPc1s99JB42hp3B783jcnJCU8nGGAbpM6ZQ39NhLkQDVAPKVI2ulLhpa8DR3Bx
+         dBk9kTfVuvjO3ZN6dPEnF4hnHIjBMUxOQCJrun/fjFm/AtD+XhRetIxn6lmAuW+Yw9b/
+         Gh8G/k0W3LMCYqRNjn2Vdm/fCTzMiHDg/nqI9K30GEl5JYeTdAQCNqNBPGjGxvslWmkC
+         AG69XTyu4dAADmA5jZVTFnV7k8NDhiaSyjxVsc+j+WTfKpoVDdmKdMpNEparZ8TZ0Cd1
+         BiJUrz1xbk58UAxogR14tISXojycXQd2JHCN8/OTHNlvYUq7W1HrD5eokMw3ar/IPJPv
+         /iyg==
+X-Gm-Message-State: AGi0PuZqqSbpRklhFpJQuK9B3kMIa8z+senKjia/JDiWkki/mvdvKFsq
+        DPl22AmgxmFBG6DkVQyKnZxl3w==
+X-Google-Smtp-Source: ABdhPJxZH8ktcsDq2DKyrfz9mzAZuFt485i9jtYbwe1JvROnYtyNj3dkM5M5qWN962L5ecYak/nF8Q==
+X-Received: by 2002:a05:6638:277:: with SMTP id x23mr1463557jaq.122.1589404927597;
+        Wed, 13 May 2020 14:22:07 -0700 (PDT)
+Received: from localhost ([2601:8c4:0:32f::7b7])
+        by smtp.gmail.com with ESMTPSA id j90sm272733ilg.70.2020.05.13.14.22.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 May 2020 14:22:06 -0700 (PDT)
+Date:   Wed, 13 May 2020 14:22:01 -0700 (PDT)
+From:   Paul Walmsley <paul.walmsley@sifive.com>
+X-X-Sender: paulw@viisi.sifive.com
+To:     Rob Herring <robh@kernel.org>
+cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Mark Brown <broonie@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 1/5] spi: dt-bindings: sifive: Add missing 2nd register
+ region
+In-Reply-To: <20200512204543.22090-1-robh@kernel.org>
+Message-ID: <alpine.DEB.2.21.9999.2005131421010.18879@viisi.sifive.com>
+References: <20200512204543.22090-1-robh@kernel.org>
+User-Agent: Alpine 2.21.9999 (DEB 301 2018-08-15)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Andrey Konovalov <andreyknvl@gmail.com>
+On Tue, 12 May 2020, Rob Herring wrote:
 
-USB gadget subsystem uses the following naming convention for UDC
-endpoints:
+> The 'reg' description and example have a 2nd register region for memory
+> mapped flash, but the schema says there is only 1 region. Fix this.
+> 
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: linux-spi@vger.kernel.org
+> Cc: linux-riscv@lists.infradead.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> Please ack, dependency for patch 5.
 
-- "ep-a" names for fully configurable endpoints (address, direction and
-  transfer type can be changed);
+Acked-by: Paul Walmsley <paul.walmsley@sifive.com> 
 
-- "ep1in", "ep12out-bulk" names for fixed function endpoints (fixed
-  address, direction and/or transfer type).
 
-Dummy UDC endpoints are capable of full configuration, but named using
-the second scheme.
-
-This patch changes the names of generic Dummy UDC endpoints to "ep-aout",
-"ep-bin", etc., to advertise that they have configurable addresses and
-transfer types (except that Dummy UDC doesn't support ISO transfers), but
-fixed direction.
-
-This is required for Raw Gadget (and perhaps for some other drivers),
-that reasons about whether an endpoint has configurable address based
-on its name.
-
-Suggested-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
----
- drivers/usb/gadget/udc/dummy_hcd.c | 26 +++++++++++++-------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/usb/gadget/udc/dummy_hcd.c b/drivers/usb/gadget/udc/dummy_hcd.c
-index 6e3e3ebf715f..7402ef0d66d2 100644
---- a/drivers/usb/gadget/udc/dummy_hcd.c
-+++ b/drivers/usb/gadget/udc/dummy_hcd.c
-@@ -187,31 +187,31 @@ static const struct {
- 		USB_EP_CAPS(USB_EP_CAPS_TYPE_BULK, USB_EP_CAPS_DIR_IN)),
- 
- 	/* and now some generic EPs so we have enough in multi config */
--	EP_INFO("ep3out",
-+	EP_INFO("ep-aout",
- 		USB_EP_CAPS(TYPE_BULK_OR_INT, USB_EP_CAPS_DIR_OUT)),
--	EP_INFO("ep4in",
-+	EP_INFO("ep-bin",
- 		USB_EP_CAPS(TYPE_BULK_OR_INT, USB_EP_CAPS_DIR_IN)),
--	EP_INFO("ep5out",
-+	EP_INFO("ep-cout",
- 		USB_EP_CAPS(TYPE_BULK_OR_INT, USB_EP_CAPS_DIR_OUT)),
--	EP_INFO("ep6out",
-+	EP_INFO("ep-dout",
- 		USB_EP_CAPS(TYPE_BULK_OR_INT, USB_EP_CAPS_DIR_OUT)),
--	EP_INFO("ep7in",
-+	EP_INFO("ep-ein",
- 		USB_EP_CAPS(TYPE_BULK_OR_INT, USB_EP_CAPS_DIR_IN)),
--	EP_INFO("ep8out",
-+	EP_INFO("ep-fout",
- 		USB_EP_CAPS(TYPE_BULK_OR_INT, USB_EP_CAPS_DIR_OUT)),
--	EP_INFO("ep9in",
-+	EP_INFO("ep-gin",
- 		USB_EP_CAPS(TYPE_BULK_OR_INT, USB_EP_CAPS_DIR_IN)),
--	EP_INFO("ep10out",
-+	EP_INFO("ep-hout",
- 		USB_EP_CAPS(TYPE_BULK_OR_INT, USB_EP_CAPS_DIR_OUT)),
--	EP_INFO("ep11out",
-+	EP_INFO("ep-iout",
- 		USB_EP_CAPS(TYPE_BULK_OR_INT, USB_EP_CAPS_DIR_OUT)),
--	EP_INFO("ep12in",
-+	EP_INFO("ep-jin",
- 		USB_EP_CAPS(TYPE_BULK_OR_INT, USB_EP_CAPS_DIR_IN)),
--	EP_INFO("ep13out",
-+	EP_INFO("ep-kout",
- 		USB_EP_CAPS(TYPE_BULK_OR_INT, USB_EP_CAPS_DIR_OUT)),
--	EP_INFO("ep14in",
-+	EP_INFO("ep-lin",
- 		USB_EP_CAPS(TYPE_BULK_OR_INT, USB_EP_CAPS_DIR_IN)),
--	EP_INFO("ep15out",
-+	EP_INFO("ep-mout",
- 		USB_EP_CAPS(TYPE_BULK_OR_INT, USB_EP_CAPS_DIR_OUT)),
- 
- #undef EP_INFO
--- 
-2.26.2.645.ge9eca65c58-goog
-
+- Paul
