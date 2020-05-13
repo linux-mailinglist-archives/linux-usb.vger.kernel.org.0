@@ -2,235 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DCC61D16FF
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 16:05:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C82E1D17D8
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 16:45:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388850AbgEMOFR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 May 2020 10:05:17 -0400
-Received: from mga05.intel.com ([192.55.52.43]:11955 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388325AbgEMOFR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 13 May 2020 10:05:17 -0400
-IronPort-SDR: m2f3H+AKghJAV6vzjVJhpjV8xKIsS4SCsdL5QIRi3FgTgvsg9C8fU/F9ig1NUJoE4UK7Ag9M42
- 7E+bRS5fzp4w==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2020 07:04:58 -0700
-IronPort-SDR: lQOMhYCNEN5EtjiPCFHMQ65qf8SY1cqAwpRPe86DEW3lanjbEDd2BWx+e9xgd4ukWyJoTX+IC5
- ljY7P+gWQtkQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,388,1583222400"; 
-   d="scan'208";a="371916009"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 13 May 2020 07:04:55 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 13 May 2020 17:04:54 +0300
-Date:   Wed, 13 May 2020 17:04:54 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        Nikolaus Voss <nikolaus.voss@loewensteinmedical.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Gustavo A . R . Silva" <garsilva@embeddedor.com>,
-        Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/1] usb: typec: tps6598x: Add USB role switching logic
-Message-ID: <20200513140454.GE2085641@kuha.fi.intel.com>
-References: <20200511231930.2825183-1-bryan.odonoghue@linaro.org>
- <20200511231930.2825183-2-bryan.odonoghue@linaro.org>
+        id S2388965AbgEMOpu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 May 2020 10:45:50 -0400
+Received: from mail-am6eur05on2071.outbound.protection.outlook.com ([40.107.22.71]:29282
+        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2388806AbgEMOpu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 13 May 2020 10:45:50 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=a6rTLYWbuiTeT6AgMfrisR4qN/83HaQz/vZ9mM6RwOOgK6pR8HFNkje1KzmJ6HxeKV9eO5t+FOdF0PROxnbIUGbtJuY2SM7rFKm+GoeEhLkUlsJBNlnjzFIBUTH5QBSFK79e5mN6h1bAW98lShu4YWsM+j90ABfCePE3kp5hy/izZHnHyyszKEMFYXLW+giqbZYVPftI+QwiKsKAFBS+30SgAE1DWWCyl0/G6KthphaRzWfcwTGsvT9LDgvCb8UkGmZ6XLvY90IAksP3c7dT4DkC4rlzQsKEhz9Tl70aOgAlw/A54E9xld78/Q4NsuJk/pQU2r1PJoE49tSy8+USJg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=K91445mLyzN1IDlGdsKg5jcrr6tgFRU8cIU8ihjiCLI=;
+ b=DvOV4levdEXgZsdfTp3pYEpUVLMpdA6MbL1W9bxiEBWmEMhkgUn6fjHGW/C9HIBfqABe9sxXn2Nk/zeFRnZNQFbaSqxZulMNh07R9xxExBgZaU8EBrjdkvpeA8okBL8B2Q2rZZq10VRD0VewttQzNRmZVRAk6sxjizzwiTSTD3mG/S8TqQ52E4g4JYQXqpFVNurTvQoHPey4StlAS6xcXSKcFis7u5w9LJ77vzkRGW+4LGdfQqpjRh0iFCI7EiAHXJdOQhh4YCfa9tqaeFwHKy4qLVwUHgKtm7vUMDbTBwsRcCWckGmXPg04KL3jLHtqxR/ketQEq+ItY7yyKN2HTQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=K91445mLyzN1IDlGdsKg5jcrr6tgFRU8cIU8ihjiCLI=;
+ b=rvJGuj/8NMrimDOrshnLNbVOkUGAZU4bf0c54wMA9JjUx0CKGgI0MPnJiv1J1cZc70KaJpbobXqSQn+o6UpWIX8lnywqw9mVokSBRBmvVl2JSORWA8foy/R6merJfTd1YzU7SpSaXDizcFmDXH5o6iphOPNZXatQ5GIvsWo2r6g=
+Received: from VE1PR04MB6528.eurprd04.prod.outlook.com (2603:10a6:803:127::18)
+ by VE1PR04MB6493.eurprd04.prod.outlook.com (2603:10a6:803:11f::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2979.26; Wed, 13 May
+ 2020 14:45:43 +0000
+Received: from VE1PR04MB6528.eurprd04.prod.outlook.com
+ ([fe80::5086:ae9e:6397:6b03]) by VE1PR04MB6528.eurprd04.prod.outlook.com
+ ([fe80::5086:ae9e:6397:6b03%7]) with mapi id 15.20.2979.033; Wed, 13 May 2020
+ 14:45:43 +0000
+From:   Jun Li <jun.li@nxp.com>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Peter Chen <peter.chen@nxp.com>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        "mathias.nyman@intel.com" <mathias.nyman@intel.com>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Baolin Wang <baolin.wang@linaro.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Subject: =?utf-8?B?5Zue5aSNOiBbUEFUQ0ggMS8xXSB1c2I6IGhvc3Q6IHhoY2ktcGxhdDoga2Vl?=
+ =?utf-8?Q?p_runtime_active_when_remove_host?=
+Thread-Topic: [PATCH 1/1] usb: host: xhci-plat: keep runtime active when
+ remove host
+Thread-Index: AQHWKAYJU7WBAPFTDECZ4QCbYfct56ij0LUAgAAD5wCAATYzgIABCGj5
+Date:   Wed, 13 May 2020 14:45:42 +0000
+Message-ID: <VE1PR04MB6528D2A1C08ED9F091BCF3FD89BF0@VE1PR04MB6528.eurprd04.prod.outlook.com>
+References: <20200512023547.31164-1-peter.chen@nxp.com>
+ <a5ba9001-0371-e675-e013-b8dd4f1c38e2@codeaurora.org>
+ <AM7PR04MB7157A3036C121654E7C70FB38BBE0@AM7PR04MB7157.eurprd04.prod.outlook.com>,<62e24805-5c80-f6b4-b8ba-cb6d649a878b@linux.intel.com>
+In-Reply-To: <62e24805-5c80-f6b4-b8ba-cb6d649a878b@linux.intel.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: linux.intel.com; dkim=none (message not signed)
+ header.d=none;linux.intel.com; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [49.84.202.194]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 00683f47-b873-4eac-d4cc-08d7f74c5056
+x-ms-traffictypediagnostic: VE1PR04MB6493:|VE1PR04MB6493:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VE1PR04MB649375BF4E5483C464860B6E89BF0@VE1PR04MB6493.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-forefront-prvs: 0402872DA1
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: nFly1OjloWHr8Sx0JsHEsg3sZ4y5ndPSyptSs3fN3WAJKGTBqiBdX7NQwqBNHLg1B+lfjjyvRSLNrEwA2Evl3V0TqbYrIRUU7Gn/rJHZUmlSYK6/PCIN4sjxH3AFgIUV/Y38xDd6oXJ1R2J+i3GSxYYoOhVMJjrhPpXriFbgT8VFln+7J79sGUZKIAWArydGAu+JX5ln68jLIrwZvCVIV2HoC6bufRe1W3R14Mxx0Oe4OYBkPvehhamZRcON7dS6hhhCKKVYR5AsoOtbBuKvk2WlpvzsBVD19Ojg8tjYMHHypSsN3wT+uSHnve3Hs96tFECVqlYOSdvZFkAU3jj47dZZ1aYq5hjQXR9OGcIyw0yC61VVafcs2Dpxm6ix5Lxl54ZyFE96ImX/q1sjlgwhykn2N6Qa4WIXH4yaWlgfy4xGvqdniqFYGdNeQAsfJbMhKEsy2fXfrY+VymH9890HKt0aYAPiSYQVn2fS+aqbOEdsb25LjXFSywEnzqshsbGG4v9/UaztWwGsmffWvzu7nw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6528.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(366004)(376002)(346002)(39860400002)(396003)(136003)(33430700001)(64756008)(33656002)(5660300002)(9686003)(478600001)(55016002)(110136005)(54906003)(224303003)(316002)(2906002)(6506007)(7696005)(52536014)(8936002)(91956017)(66476007)(66446008)(66946007)(76116006)(66556008)(33440700001)(71200400001)(26005)(4326008)(44832011)(86362001)(186003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: dckPpGdF+Yh++CXx3OnuKTjyC6sKc7xnUFGsIB51d/gbUT01QponRlbX6z2dJkaWadgqbeQSFI7/2f9rS6j/ErUSyS4XSXtxLlPdWvmr/HBZ/pLscyd+J8o7t9MbHEwHy+v2LmT3MM2XidivRJUOR8YI/bE3WLg+JkGuGWwP5G0Tv15sM1XEdm2XG5ehblUTR2nc+rQ7GL11ir72NH5XtT9H5OI3weX7fdNFlHFs8tVfxEt0O2aZYGdyLOkUwgl+jOtSBfqGjHYHKjfcN9yt19R8zUPKwUqHZtSRf3joRmj80pqBcKhi9XdnnK7PzWoXlzVtTnnmrMt8tPh3L2LJlQ0VJrHpRfhQrMRA01Re3n6JLDlWBoUd31x8bvwZzQJ84cdPZNiLV7V4qLQYUiPbELT2j2UZAfoSsYDAcSZBWMJWXioFFhlUJy8HrH1WG+a2rjYvwGtEBjH6Ys+pnR7K7t2lanmYJdzPyQj3fcOgfJk=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200511231930.2825183-2-bryan.odonoghue@linaro.org>
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 00683f47-b873-4eac-d4cc-08d7f74c5056
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 May 2020 14:45:42.9809
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: dr1uU5yRy9tKA7POnXP0inlAkzHRlAKzUVPNF9QUTA1J2Y6QSI6y52gI3E3CWI3a
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6493
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 12, 2020 at 12:19:30AM +0100, Bryan O'Donoghue wrote:
-> This patch adds USB role switch support to the tps6598x.
-> 
-> The setup to initiate or accept a data-role switch is both assumed and
-> currently required to be baked-into the firmware as described in TI's
-> document here.
-> 
-> Link: https://www.ti.com/lit/an/slva843a/slva843a.pdf
-> 
-> With this change its possible to use the USB role-switch API to detect and
-> notify role-switches to downstream consumers.
-> 
-> Tested with a ChipIdea controller on a Qualcomm MSM8939.
-> 
-> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Nikolaus Voss <nikolaus.voss@loewensteinmedical.de>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: Gustavo A. R. Silva <garsilva@embeddedor.com>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: linux-usb@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
-> ---
->  drivers/usb/typec/tps6598x.c | 57 +++++++++++++++++++++++++++++++-----
->  1 file changed, 50 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tps6598x.c b/drivers/usb/typec/tps6598x.c
-> index defa651282b0..b7c9fe5caabe 100644
-> --- a/drivers/usb/typec/tps6598x.c
-> +++ b/drivers/usb/typec/tps6598x.c
-> @@ -12,6 +12,7 @@
->  #include <linux/regmap.h>
->  #include <linux/interrupt.h>
->  #include <linux/usb/typec.h>
-> +#include <linux/usb/role.h>
->  
->  /* Register offsets */
->  #define TPS_REG_VID			0x00
-> @@ -94,6 +95,7 @@ struct tps6598x {
->  	struct typec_port *port;
->  	struct typec_partner *partner;
->  	struct usb_pd_identity partner_identity;
-> +	struct usb_role_switch *role_sw;
->  };
->  
->  /*
-> @@ -190,6 +192,23 @@ static int tps6598x_read_partner_identity(struct tps6598x *tps)
->  	return 0;
->  }
->  
-> +static void tps6598x_set_data_role(struct tps6598x *tps,
-> +				   enum typec_data_role role, bool connected)
-> +{
-> +	enum usb_role role_val;
-> +
-> +	if (role == TYPEC_HOST)
-> +		role_val = USB_ROLE_HOST;
-> +	else
-> +		role_val = USB_ROLE_DEVICE;
-> +
-> +	if (!connected)
-> +		role_val = USB_ROLE_NONE;
-> +
-> +	usb_role_switch_set_role(tps->role_sw, role_val);
-> +	typec_set_data_role(tps->port, role);
-> +}
-> +
->  static int tps6598x_connect(struct tps6598x *tps, u32 status)
->  {
->  	struct typec_partner_desc desc;
-> @@ -220,7 +239,7 @@ static int tps6598x_connect(struct tps6598x *tps, u32 status)
->  	typec_set_pwr_opmode(tps->port, mode);
->  	typec_set_pwr_role(tps->port, TPS_STATUS_PORTROLE(status));
->  	typec_set_vconn_role(tps->port, TPS_STATUS_VCONN(status));
-> -	typec_set_data_role(tps->port, TPS_STATUS_DATAROLE(status));
-> +	tps6598x_set_data_role(tps, TPS_STATUS_DATAROLE(status), true);
->  
->  	tps->partner = typec_register_partner(tps->port, &desc);
->  	if (IS_ERR(tps->partner))
-> @@ -240,7 +259,7 @@ static void tps6598x_disconnect(struct tps6598x *tps, u32 status)
->  	typec_set_pwr_opmode(tps->port, TYPEC_PWR_MODE_USB);
->  	typec_set_pwr_role(tps->port, TPS_STATUS_PORTROLE(status));
->  	typec_set_vconn_role(tps->port, TPS_STATUS_VCONN(status));
-> -	typec_set_data_role(tps->port, TPS_STATUS_DATAROLE(status));
-> +	tps6598x_set_data_role(tps, TPS_STATUS_DATAROLE(status), false);
->  }
->  
->  static int tps6598x_exec_cmd(struct tps6598x *tps, const char *cmd,
-> @@ -328,7 +347,7 @@ static int tps6598x_dr_set(struct typec_port *port, enum typec_data_role role)
->  		goto out_unlock;
->  	}
->  
-> -	typec_set_data_role(tps->port, role);
-> +	tps6598x_set_data_role(tps, role, true);
->  
->  out_unlock:
->  	mutex_unlock(&tps->lock);
-> @@ -452,6 +471,7 @@ static int tps6598x_probe(struct i2c_client *client)
->  {
->  	struct typec_capability typec_cap = { };
->  	struct tps6598x *tps;
-> +	struct fwnode_handle *fwnode;
->  	u32 status;
->  	u32 conf;
->  	u32 vid;
-> @@ -495,11 +515,22 @@ static int tps6598x_probe(struct i2c_client *client)
->  	if (ret < 0)
->  		return ret;
->  
-> +	fwnode = device_get_named_child_node(&client->dev, "connector");
-> +	if (IS_ERR(fwnode))
-> +		return PTR_ERR(fwnode);
-> +
-> +	tps->role_sw = fwnode_usb_role_switch_get(fwnode);
-> +	if (IS_ERR(tps->role_sw)) {
-> +		ret = PTR_ERR(tps->role_sw);
-> +		goto err_fwnode_put;
-> +	}
-> +
->  	typec_cap.revision = USB_TYPEC_REV_1_2;
->  	typec_cap.pd_revision = 0x200;
->  	typec_cap.prefer_role = TYPEC_NO_PREFERRED_ROLE;
->  	typec_cap.driver_data = tps;
->  	typec_cap.ops = &tps6598x_ops;
-> +	typec_cap.fwnode = fwnode;
->  
->  	switch (TPS_SYSCONF_PORTINFO(conf)) {
->  	case TPS_PORTINFO_SINK_ACCESSORY:
-> @@ -525,12 +556,16 @@ static int tps6598x_probe(struct i2c_client *client)
->  		typec_cap.data = TYPEC_PORT_DFP;
->  		break;
->  	default:
-> -		return -ENODEV;
-> +		ret = -ENODEV;
-> +		goto err_role_put;
->  	}
->  
->  	tps->port = typec_register_port(&client->dev, &typec_cap);
-> -	if (IS_ERR(tps->port))
-> -		return PTR_ERR(tps->port);
-> +	if (IS_ERR(tps->port)) {
-> +		ret = PTR_ERR(tps->port);
-> +		goto err_role_put;
-> +	}
-> +	fwnode_handle_put(fwnode);
->  
->  	if (status & TPS_STATUS_PLUG_PRESENT) {
->  		ret = tps6598x_connect(tps, status);
-> @@ -545,12 +580,19 @@ static int tps6598x_probe(struct i2c_client *client)
->  	if (ret) {
->  		tps6598x_disconnect(tps, 0);
->  		typec_unregister_port(tps->port);
-> -		return ret;
-> +		goto err_role_put;
->  	}
->  
->  	i2c_set_clientdata(client, tps);
->  
->  	return 0;
-> +
-> +err_role_put:
-> +	usb_role_switch_put(tps->role_sw);
-> +err_fwnode_put:
-> +	fwnode_handle_put(fwnode);
-> +
-> +	return ret;
->  }
->  
->  static int tps6598x_remove(struct i2c_client *client)
-> @@ -559,6 +601,7 @@ static int tps6598x_remove(struct i2c_client *client)
->  
->  	tps6598x_disconnect(tps, 0);
->  	typec_unregister_port(tps->port);
-> +	usb_role_switch_put(tps->role_sw);
->  
->  	return 0;
->  }
-> -- 
-> 2.25.1
-
-thanks,
-
--- 
-heikki
+4oCLCi4uLgo+IFRoaXMgc2VlbXMgb2RkLAoKPiBJIGRvbid0IHVuZGVyc3RhbmQgd2h5IHBtX3J1
+bnRpbWVfc2V0X3N1c3BlbmRlZCgpIHdvdWxkIGNhbGwgcG1fcnVudGltZV9wdXRfc3luYygpPwoK
+PiBJIHRob3VnaHQgcG1fcnVudGltZV9zZXRfc3VzcGVuZGVkKCkgaXMgdXNlZCB0byBsZXQgcG0g
+Y29yZSBrbm93IHRoZSBoYXJkd2FyZSBpcyBzdXNwZW5kZWQsCgo+IGFuZCBpbmZvcm0gdGhlIHBh
+cmVudCBvZiB0aGlzLCBwb3NzaWJseSBhbGxvd2luZyBwYXJlbnQgdG8gcnVudGltZSBzdXNwZW5k
+LiAKCj4gTm90IHN1cmUgaWYgaXQncyBuZWVkZWQgaW4gdGhlIHJlbW92ZSBmdW5jdGlvbi4gCgo+
+IEl0IG1ha2VzIHNlbnNlIHRvIGFsbG93IHRoZSBwYXJlbnQgdG8gc3VzcGVuZCwgYnV0IHhoY2kg
+aXNuJ3QgcmVhbGx5IHN1c3BlbmRlZC4KCj4gWWVzIGlzIHN0b3BwZWQsIGJ1dCB3ZSBjYW4ndCBy
+ZXN1bWUgb3VyIHdheSBiYWNrIHRvIGEgYWN0aXZlIHN0YXRlLgoKPiAKCj4gQ291bGQgaXQgYmUg
+dGhhdCB0aGUgcnVudGltZSBzdXNwZW5kIGNhbGwgeW91IGFyZSBzZWVpbmcgaXMgYmVjYXVzZSB3
+ZSBhcmUgcmVtb3ZpbmcgYWxsIGNoaWxkIGRldmljZXMsCgo+IGRpc2Nvbm5lY3RpbmcgYW5kIGZy
+ZWVpbmcgZXZlcnl0aGluZywgaW5jbHVkaW5nIHJvb3RodWJzIGFuZCBoY2Qncy4gCgo+IE1heWJl
+IHJ1bnRpbWUgcG0gc2hvdWxkIGJlIGRpc2FibGVkIGEgYml0IGVhcmxpZXIuCgo+IAoKPiBDdXJy
+ZW50bHkgcHJvYmUgYW5kIHJlbW92ZSBsb29rcyBsaWtlOgoKPiAKCj4geGhjaV9wbGF0X3Byb2Jl
+KCkKCj4gcG1fcnVudGltZV9zZXRfYWN0aXZlKCkKCj4gIHBtX3J1bnRpbWVfZW5hYmxlKCkKCj4g
+wqAgcG1fcnVudGltZV9nZXRfbm9yZXN1bWUoKQoKID4gLi4uCgo+IHBtX3J1bnRpbWVfcHV0X25v
+aWRsZSgpCgo+IMKgIHBtX3J1bnRpbWVfZm9yYmlkKCkKCj4gCgo+IHhoY2lfcGxhdF9yZW1vdmUo
+KQoKPiDCoCA8cmVtb3ZlIGFuZCBwdXQgYm90aCBoY2Qncz4KCj4gwqAgcG1fcnVudGltZV9zZXRf
+c3VzcGVuZGVkKCkKCj4gwqAgcG1fcnVudGltZV9kaXNhYmxlKCkKCsKgIAoKPiBXb3VsZCBpdCBt
+YWtlIHNlbnNlIHRvIGNoYW5nZSB4aGNpX3BsYXRfcmVtb3ZlKCkgdG8KCgoKPiB4aGNpX3BsYXRf
+cmVtb3ZlKCkKCj4gwqAgcG1fcnVudGltZV9kaXNhYmxlKCkKCj4gwqAgPHJlbW92ZSBhbmQgcHV0
+IGJvdGggaGNkJ3M+Cgo+IMKgIHBtX3J1bnRpbWVfc2V0X3N1c3BlbmRlZCgpCgoKCj4gb3IgcG9z
+c2libHkgd3JhcHBpbmcgdGhlIHJlbW92ZSBpbiBhIHJ1bnRpbWUgZ2V0L3B1dDoKCj4geGhjaV9w
+bGF0X3JlbW92ZSgpCgo+ICBwbV9ydW50aW1lX2dldF9ub3Jlc3VtZSgpCgo+IMKgIHBtX3J1bnRp
+bWVfZGlzYWJsZSgpCgrCoD4gIDxyZW1vdmUgYW5kIHB1dCBib3RoIGhjZCdzPgoKwqA+ICBwbV9y
+dW50aW1lX3NldF9zdXNwZW5kZWQoKQoKwqA+ICBwbV9ydW50aW1lX3B1dF9ub2lkbGUoKQoKSSB0
+aGluayBpdCdzIGJldHRlciB0byBrZWVwIHJ1bnRpbWUgYWN0aXZlIGR1cmluZyBkcml2ZXIgcmVt
+b3ZhbCwKaG93IGFib3V0IHRoaXM6CgpwbV9ydW50aW1lX2dldF9zeW5jKCkKPHJlbW92ZSBhbmQg
+cHV0IGJvdGggaGNkJ3M+CnBtX3J1bnRpbWVfZGlzYWJsZSgpCnBtX3J1bnRpbWVfcHV0X25vaWRs
+ZSgpCnBtX3J1bnRpbWVfc2V0X3N1c3BlbmRlZCgpCgp0aGFua3MKTGkgSnVuCgo+IC1NYXRoaWFz
+IAoKCgo=
