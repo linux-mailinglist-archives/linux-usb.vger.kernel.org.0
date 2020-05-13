@@ -2,78 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3AAA1D17E0
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 16:48:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 131AB1D1862
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 17:01:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388837AbgEMOs1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 May 2020 10:48:27 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:52303 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S2388167AbgEMOs1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 May 2020 10:48:27 -0400
-Received: (qmail 19438 invoked by uid 500); 13 May 2020 10:48:26 -0400
-Date:   Wed, 13 May 2020 10:48:26 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-        gregkh@linuxfoundation.org, dl-linux-imx <linux-imx@nxp.com>,
-        Jun Li <jun.li@nxp.com>, Baolin Wang <baolin.wang@linaro.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 1/1] usb: host: xhci-plat: keep runtime active when
- remove host
-Message-ID: <20200513144826.GA14570@rowland.harvard.edu>
-References: <20200512023547.31164-1-peter.chen@nxp.com>
- <Pine.LNX.4.44L0.2005120931060.21033-100000@netrider.rowland.org>
- <AM7PR04MB7157DA1F920529E2D59AA4B28BBF0@AM7PR04MB7157.eurprd04.prod.outlook.com>
+        id S2389307AbgEMPBL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 May 2020 11:01:11 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:36890 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728692AbgEMPAD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 May 2020 11:00:03 -0400
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04DEv03a016527;
+        Wed, 13 May 2020 16:59:43 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=ZgpAUyUBhezUtCmK/K3PuawVI1AJV9N0ktEyTGWGChE=;
+ b=FCEurBkqNDjhkxHwJgxnJZlZ+ky03QXvODmzl5OqMiNV8vu1MwZcc5EAHSqgftOwlnpt
+ cYS9N5oKrLTT/b3plyMtMKqsnRWr0SmP+E5pLQZqf665qsSJ57C8z7V1qv47mJK6In/3
+ nIDZoRk1HxCmWKddNbn0TIgz9ofQQKVHldNMaLMMH8dM+VbfJiNXA4oCt6+GJKBfKja1
+ ngMpB2LFEyPDjhVdWVMen2ZmdircFUhnXbXBY6dOrFEzGupCwnQyYFsr8vZt0udxjl+/
+ rWrb52J1lhP2iUpmQV+Bqp928hFlqcTi7AyJthG/pXzCapxpF5X0w1ZF922L7GpZfFXh xQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 3100vydgkn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 May 2020 16:59:43 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 92BD010002A;
+        Wed, 13 May 2020 16:59:41 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag3node3.st.com [10.75.127.9])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7D0852D3004;
+        Wed, 13 May 2020 16:59:41 +0200 (CEST)
+Received: from localhost (10.75.127.51) by SFHDAG3NODE3.st.com (10.75.127.9)
+ with Microsoft SMTP Server (TLS) id 15.0.1347.2; Wed, 13 May 2020 16:59:40
+ +0200
+From:   Benjamin Gaignard <benjamin.gaignard@st.com>
+To:     <linus.walleij@linaro.org>, <robh+dt@kernel.org>,
+        <mcoquelin.stm32@gmail.com>, <alexandre.torgue@st.com>,
+        <gregkh@linuxfoundation.org>
+CC:     <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Benjamin Gaignard <benjamin.gaignard@st.com>
+Subject: [PATCH 00/15] Fix STM32 DT issues on v5.7-rc4
+Date:   Wed, 13 May 2020 16:59:20 +0200
+Message-ID: <20200513145935.22493-1-benjamin.gaignard@st.com>
+X-Mailer: git-send-email 2.15.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <AM7PR04MB7157DA1F920529E2D59AA4B28BBF0@AM7PR04MB7157.eurprd04.prod.outlook.com>
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.51]
+X-ClientProxiedBy: SFHDAG8NODE1.st.com (10.75.127.22) To SFHDAG3NODE3.st.com
+ (10.75.127.9)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
+ definitions=2020-05-13_06:2020-05-13,2020-05-13 signatures=0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 13, 2020 at 11:08:13AM +0000, Peter Chen wrote:
->  
->  
-> > > diff --git a/drivers/usb/host/xhci-plat.c
-> > > b/drivers/usb/host/xhci-plat.c index 1d4f6f85f0fe..f38d53528c96 100644
-> > > --- a/drivers/usb/host/xhci-plat.c
-> > > +++ b/drivers/usb/host/xhci-plat.c
-> > > @@ -362,6 +362,7 @@ static int xhci_plat_remove(struct platform_device *dev)
-> > >  	struct clk *reg_clk = xhci->reg_clk;
-> > >  	struct usb_hcd *shared_hcd = xhci->shared_hcd;
-> > >
-> > > +	pm_runtime_get_sync(&dev->dev);
-> > >  	xhci->xhc_state |= XHCI_STATE_REMOVING;
-> > >
-> > >  	usb_remove_hcd(shared_hcd);
-> > 
-> > You mustn't add a pm_runtime_get call without a corresponding pm_runtime_put
-> > call.
-> > 
-> > With just this one call, if the role switched from host to device and then back to host,
-> > then the host would never be able to go into runtime suspend.
-> > 
-> 
-> I may not consider carefully for other cases, for my case, the xhci-plat device
-> will be removed, and re-created. But if we remove the driver using modprobe,
-> it may have issues.
-> 
-> > In this case the correspondence between the get's and the put's will probably be
-> > obscure; some comments would help.
-> > 
-> 
-> I explained at the reply for Mathias's, but I am not 100% it is the root cause.
+This series fixes issues hight lighted by dtbs_check on STM32 devicetrees.
+The patches has been developped on top of v5.7-rc4 tag.
 
-Okay, but there's something you may not know: pm_runtime_set_suspended() 
-should be called _after_ pm_runtime_disable().  If you try to set the 
-state to "suspended" while the device is enabled for runtime PM, the 
-call may very well fail.
+Benjamin Gaignard (15):
+  ARM: dts: stm32: remove useless interrupt-names property on stm32f429
+  ARM: dts: stm32: update pwm pinctrl node names for stm32f4
+  ARM: dts: stm32: update led nodes names for stm32f249-disco
+  ARM: dts: stm32: update led nodes names for stm32f469-disco
+  ARM: dts: stm32: remove useless interrupt-names property on stm32f746
+  ARM: dts: stm32: update led nodes names for stm32f429-eval
+  ARM: dts: stm32: update led nodes names for stm32f769-disco
+  ARM: dts: stm32: update led nodes names for stm32f746-eval
+  ARM: dts: stm32: remove useless interrupt-names property on stm32f743
+  ARM: dts: stm32: Update nodes names for stm32h743 pinctrl
+  ARM: dts: stm32: Update nodes names for stm32mp15 pinctrl
+  ARM: dts: stm32: Add missing #address and #size cells on spi node for
+    stm32mp151
+  ARM: dts: stm32: update led nodes names for stm32f746-eval
+  dt-bindings: pinctrl: stm32: Add missing interrupts property
+  dt-bindings: usb: dwc2: Fix issues for stm32mp15x SoC
 
-In this case, if all you want to do is block callbacks to the xHCI 
-suspend routine, pm_runtime_disable() is probably all you need.
+ .../devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml          |  3 +++
+ Documentation/devicetree/bindings/usb/dwc2.yaml                |  6 ++++--
+ arch/arm/boot/dts/stm32429i-eval.dts                           |  8 ++++----
+ arch/arm/boot/dts/stm32746g-eval.dts                           |  8 ++++----
+ arch/arm/boot/dts/stm32f4-pinctrl.dtsi                         |  4 ++--
+ arch/arm/boot/dts/stm32f429-disco.dts                          |  4 ++--
+ arch/arm/boot/dts/stm32f429.dtsi                               |  1 -
+ arch/arm/boot/dts/stm32f469-disco.dts                          |  8 ++++----
+ arch/arm/boot/dts/stm32f746.dtsi                               |  1 -
+ arch/arm/boot/dts/stm32f769-disco.dts                          |  4 ++--
+ arch/arm/boot/dts/stm32h743-pinctrl.dtsi                       | 10 +++++-----
+ arch/arm/boot/dts/stm32h743.dtsi                               |  1 -
+ arch/arm/boot/dts/stm32mp15-pinctrl.dtsi                       |  6 +++---
+ arch/arm/boot/dts/stm32mp151.dtsi                              |  2 ++
+ arch/arm/boot/dts/stm32mp15xx-dkx.dtsi                         |  2 +-
+ 15 files changed, 36 insertions(+), 32 deletions(-)
 
-Alan Stern
+-- 
+2.15.0
+
