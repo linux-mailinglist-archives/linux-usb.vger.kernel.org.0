@@ -2,155 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C52561D1C88
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 19:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9A1F1D1CD3
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 20:02:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389850AbgEMRqZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 May 2020 13:46:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38930 "EHLO
+        id S2390034AbgEMSBw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 May 2020 14:01:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1732670AbgEMRqZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 May 2020 13:46:25 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C1BC061A0C;
-        Wed, 13 May 2020 10:46:25 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id u35so70805pgk.6;
-        Wed, 13 May 2020 10:46:25 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S2390029AbgEMSBv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 May 2020 14:01:51 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F47C061A0E
+        for <linux-usb@vger.kernel.org>; Wed, 13 May 2020 11:01:50 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id n7so579843ybh.13
+        for <linux-usb@vger.kernel.org>; Wed, 13 May 2020 11:01:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=3AyO9Ui8zFCawW0Lwfl84VvMEinAsSXxuQe8ws/cLpY=;
-        b=kivnDObFzJc7ctBIJXaOiWWZXUlFXAUOrjfO9Z1UWpkr6wFzle7r+TadzK6PwrdZCE
-         2dR9zZ6LUZlFeJfp+mFw66lM4bwWxM4IkZCvri+Tw595lnwdZeMxoL6gO+x0OCZtYNZS
-         uGOY/rO4y6C7QSwq/KBHQE1coNFtesZE2SguL9VDMlXNECk3oiRpQKz0Q1nMuGh0qkRF
-         10O60lgkp2ubtj/IZstkN6qlrmKweIwuIjiP3ofXwg/mvxdkxjzl04Zu043fFphUWwwI
-         4G4XqjA6Lws1jiKE49zdTFS0MK1NYySJ+Yrh8xTNluXFd6RuogzHnCWrqHtJIj14xsjT
-         kTiA==
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=5/MRceWyn7IA9pmXU1Ty874NROsCdfVXPSq0u2J/dn0=;
+        b=cyEJYbuoTCZwv/JsnJBEdVmnQ08+rJVCHUfnXpjw128J6smQ4hrmkq2g50efB/eedA
+         XV5xHOXTYGeGEuee1G7pe2Zpw8/80UZC50cT2fcIuXIaiCx+GaAFketbc4CGpNGGP87V
+         mQcTySPjLpKyPF9jyRn9Q5QgBn3IXJZITq3QDXPao4y5YJjgT6jbCvHHdrO2y8IlLX/U
+         lRmnImSFuOZRaRV1omRTFJeKCK5o+Wk6KdmJ8kUGU6ROsMKa0GoQlN1oenuJ30Ne0B1z
+         uUpnTabyDpe1JCNnMheGtM8SA/UHb95RHyKxn59/KD3i0o/zmRrg11F7PSx395ghxN9b
+         lQCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=3AyO9Ui8zFCawW0Lwfl84VvMEinAsSXxuQe8ws/cLpY=;
-        b=cdNlS369h2F3MjuQshJ7ohzQWiwCnjx3nWG+NmfvbbSZO5BzVF9H9AoCBgYvaOQ5qJ
-         NStu8prXZV78vxeNaKOqiPHLFNluaf51D0TTHSTxWkFj9R+xt7Et8W/SIIvb4mDZNd4K
-         /H5+GthDkNjiaBsBXJFiNE6ebS2N5bETqgxs96czgyh0BeHPotFc4RW+yvWOErUN/zHo
-         FUV2l4wE2cbVsOebjKI9djrV2zBHjW3fzUAZlT+36a3qrvUDj47926lnoA7YVPtPo5Ds
-         /Zg0YgFTc2OfEy68CwumOy1Nqb9OOfnhg28oCAw9VttekC7U128w0ohHkQFz89pN4T3G
-         Z1KA==
-X-Gm-Message-State: AOAM532Wm2PwmIwS7eGtRSo9T+AW/ERhDuR2gtmeVpixaHfHrmDFv7Hz
-        frexM5VtgMlBR2fCIFC52Es=
-X-Google-Smtp-Source: ABdhPJx1YL6wmL7k5tPrjJcHfiWPKgtVs/a0wT9J4nd19xkcUgoZmrwysYeOZSmB5DTuqeV8CggzJQ==
-X-Received: by 2002:a63:e148:: with SMTP id h8mr405667pgk.313.1589391984595;
-        Wed, 13 May 2020 10:46:24 -0700 (PDT)
-Received: from [10.230.188.43] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id d12sm172454pfq.36.2020.05.13.10.46.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 May 2020 10:46:23 -0700 (PDT)
-Subject: Re: [PATCH v10 1/5] usb: xhci: Change the XHCI link order in the
- Makefile
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Al Cooper <alcooperx@gmail.com>, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-References: <20200512150019.25903-1-alcooperx@gmail.com>
- <20200512150019.25903-2-alcooperx@gmail.com>
- <20200513122613.GA1023594@kroah.com>
- <7acc2a4c-caab-11e7-7b3f-4176f19c58cf@gmail.com>
- <20200513162723.GF1362525@kroah.com>
- <38ff034d-a84c-2309-a8d5-f344930d9a31@gmail.com>
- <20200513170505.GB1369204@kroah.com>
- <20200513173920.GA2862@rowland.harvard.edu>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <c0642cf4-1436-aec4-96fd-355a897f6418@gmail.com>
-Date:   Wed, 13 May 2020 10:46:22 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Firefox/68.0 Thunderbird/68.8.0
-MIME-Version: 1.0
-In-Reply-To: <20200513173920.GA2862@rowland.harvard.edu>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=5/MRceWyn7IA9pmXU1Ty874NROsCdfVXPSq0u2J/dn0=;
+        b=QWw+YzF/wjDMp94ZbAywHLNVggqpIWDo8LA+eBmeJWVJZeG8gEFPNwdOfNywnBQ64g
+         vuAkv4vEskG1jApAiPwasynDZrIg2Mvj7N/yRFFKboTasplH0/2kucVHtyPix7LZGBZ8
+         hXVUxFgilg4qrLfNdWq7k69kZpHBF7iDgJFux55qbQe70ufesOyiMA5apNBD1QDtcCsw
+         hDtm5awDdWUAEbSMwkIWv5X6kglHruZ8Y0BYaCvNpQEP63mi1ZlC66btL9+HaWk4U8Np
+         aBk7yDH1O6tHXUzXHIR9Xxvd7S8G87QtA28x+4vQnJf1jP/eM0NAf6C8onaNu2dnjX3f
+         FOQw==
+X-Gm-Message-State: AOAM532j9u3vBPqr5iPLtyd//f2w0cCWFRyNwaI9NQwA0oavg/oUJid0
+        qXl9z0qwxPFApHitwJTDqyniZJZojyXEcrGZ
+X-Google-Smtp-Source: ABdhPJzByBrBAtuTVt//2PEhmGvansFFvV+KulV8oXted/AGzBiO6VtlMfXhTAQAalvYmvNwUeaRobr214loYVWO
+X-Received: by 2002:a25:d084:: with SMTP id h126mr361526ybg.424.1589392909379;
+ Wed, 13 May 2020 11:01:49 -0700 (PDT)
+Date:   Wed, 13 May 2020 20:01:42 +0200
+Message-Id: <76557d920a125f6e42b3dc46d3ae84bffbe9a2f9.1589392709.git.andreyknvl@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.26.2.645.ge9eca65c58-goog
+Subject: [PATCH USB] usb: raw-gadget: fix null-ptr-deref when reenabling endpoints
+From:   Andrey Konovalov <andreyknvl@google.com>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Currently we preassign gadget endpoints to raw-gadget endpoints during
+initialization. Fix resetting this assignment in raw_ioctl_ep_disable(),
+otherwise we will get null-ptr-derefs when an endpoint is reenabled.
 
+Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+---
 
-On 5/13/2020 10:39 AM, Alan Stern wrote:
-> On Wed, May 13, 2020 at 07:05:05PM +0200, Greg Kroah-Hartman wrote:
->> On Wed, May 13, 2020 at 09:31:11AM -0700, Florian Fainelli wrote:
->>>
->>>
->>> On 5/13/2020 9:27 AM, Greg Kroah-Hartman wrote:
->>>> On Wed, May 13, 2020 at 08:08:07AM -0700, Florian Fainelli wrote:
->>>>>
->>>>>
->>>>> On 5/13/2020 5:26 AM, Greg Kroah-Hartman wrote:
->>>>>> On Tue, May 12, 2020 at 11:00:15AM -0400, Al Cooper wrote:
->>>>>>> Some BRCMSTB USB chips have an XHCI, EHCI and OHCI controller
->>>>>>> on the same port where XHCI handles 3.0 devices, EHCI handles 2.0
->>>>>>> devices and OHCI handles <2.0 devices. Currently the Makefile
->>>>>>> has XHCI linking at the bottom which will result in the XHIC driver
->>>>>>> initalizing after the EHCI and OHCI drivers and any installed 3.0
->>>>>>> device will be seen as a 2.0 device. Moving the XHCI linking
->>>>>>> above the EHCI and OHCI linking fixes the issue.
->>>>>>
->>>>>> What happens if all of these are modules and they are loaded in a
->>>>>> different order?  This makefile change will not help with that, you need
->>>>>> to have logic in the code in order to properly coordinate this type of
->>>>>> mess, sorry.
->>>>>
->>>>> I believe we should be using module soft dependencies to instruct the
->>>>> module loaders to load the modules in the correct order, so something
->>>>> like this would do (not tested) for xhci-plat-hcd.c:
->>>>>
->>>>> MODULE_SOFTDEP("post: ehci-hcd ohci-hcd");
->>>>>
->>>>> and I am not sure whether we need to add the opposite for ehci-hcd and
->>>>> ohci-hcd:
->>>>>
->>>>> MODULE_SOFTDEP("pre: xhci-plat-hcd");
->>>>
->>>> That's a nice start, but what happens if that isn't honored?  This
->>>> really needs to work properly for any order as you never can guarantee
->>>> module/driver loading order in a system of modules.
->>>
->>> I also suggested that device links may help, though I am not sure. What
->>> do you suggest to be done?
->>
->> No idea.  device links will help if you defer the probe properly until
->> you see the proper drivers binding correctly.
-> 
-> I suspect that in general there is no way to do this properly.
-> 
-> We can't modify ehci-hcd and ohci-hcd to make them wait.  In fact, for 
-> all they know, xhci-hcd will _never_ be loaded.
-> 
-> One thing that might be possible (although not all platforms may support 
-> it) is if xhci-hcd could somehow disconnect all devices attached to a 
-> peer port when it starts up.  But that would be disruptive to any 
-> devices that aren't USB-3.
-> 
-> We faced a very similar ordering problem between ehci-hcd and 
-> [ou]hci-hcd many years ago, and we never found a good solution.  
-> We did arrange the link order so that ehci-hcd precedes the others, and 
-> we added a warning message to ehci-hcd which gets printed if the module 
-> initialization routine runs after [ou]hci-hcd is loaded.  Also, there 
-> are MODULE_SOFTDEP lines in ohci-pci.c and uhci-pci.c.
+Felipe, this is technically a fix for "usb: raw-gadget: fix gadget
+endpoint selection", which AFAICS is already in your testing/fixes tree.
+Please let me know if you would like me resend that patch with this fix
+folded in.
 
-Given that these modules are used on specific SoC platforms, where we
-usually provide a reference implementation of user space and kernel
-space and documentation, it seems to me that the MODULE_SOFTDEP(),
-despite being a hint and best effort from user space module loaders is
-probably acceptable.
+---
+ drivers/usb/gadget/legacy/raw_gadget.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
+index d73ba77014c8..e01e366d89cd 100644
+--- a/drivers/usb/gadget/legacy/raw_gadget.c
++++ b/drivers/usb/gadget/legacy/raw_gadget.c
+@@ -867,7 +867,6 @@ static int raw_ioctl_ep_disable(struct raw_dev *dev, unsigned long value)
+ 	spin_lock_irqsave(&dev->lock, flags);
+ 	usb_ep_free_request(dev->eps[i].ep, dev->eps[i].req);
+ 	kfree(dev->eps[i].ep->desc);
+-	dev->eps[i].ep = NULL;
+ 	dev->eps[i].state = STATE_EP_DISABLED;
+ 	dev->eps[i].disabling = false;
+ 
 -- 
-Florian
+2.26.2.645.ge9eca65c58-goog
+
