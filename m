@@ -2,108 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FD9B1D141F
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 15:09:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DBE91D13E7
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 15:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387466AbgEMNJX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 May 2020 09:09:23 -0400
-Received: from smtp2.axis.com ([195.60.68.18]:31701 "EHLO smtp2.axis.com"
+        id S1733086AbgEMNC1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 May 2020 09:02:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57694 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728481AbgEMNJW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 13 May 2020 09:09:22 -0400
-X-Greylist: delayed 429 seconds by postgrey-1.27 at vger.kernel.org; Wed, 13 May 2020 09:09:21 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; l=1662; q=dns/txt; s=axis-central1;
-  t=1589375361; x=1620911361;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-transfer-encoding;
-  bh=HmiGANTaWeCxvVIMvxry7eZiiySoeq97ejFPwewSvOQ=;
-  b=dgZsl1WypI92QHyBpUe3F76HZxL0ZULnOQEDktrSXykw4iR5nuPNWmHp
-   hlNS4uzVEVAY0+Tvf7J2/HbKsHO9CGdH+uMf5LVxqmmHesaiPHZagWdNA
-   l7+58NcuHOD8lXOXz85uJo3p6T4GVnM2NbTPTljR4pKFHbSsdfB22u2fM
-   adYyd3M18lzy288Cf4VWLe9a3YXIqwTq6GJd0gnhnL6JYUyvU4/kYDL79
-   w81hWyku6l468Fio26SWRR2FlQZIt+tGqvYO9lKliw3BL0iNX8OT654og
-   vA7Ad6DD8PXNoKAmjXH8AZik8rhgmuKyvBIsD4ul1i2AZqbaHs3NQKLxw
-   w==;
-IronPort-SDR: H28L571fwiwBqZmIUHb+UKInMxA0uXG+HaVBs+hqX/lnsjq8kqQfRwMsZeS1yHspWEBbF7B2sF
- 7LjZLd5yi4chd4OUi9ceabe6oTqb+DnRfW7Dt2ZX3w/p5Fh8pLfiEURcoCn9VOtJSfUW6rnPs0
- tqtdFduthvkMMD24ZurRw5rrv1zClv3k1Gv74pG9yQzL5d30cMsSnwn76x+o81ZGnj0eaYCfXf
- RO3pR8NzT6g1hzUpFumT87ibfULw5jE+NWThdQjSogXUy1MuQ4P+NEGxQRsKuvuBxbCuuUdCTO
- R8I=
-X-IronPort-AV: E=Sophos;i="5.73,387,1583190000"; 
-   d="scan'208";a="8445975"
-Date:   Wed, 13 May 2020 15:02:06 +0200
-From:   Ricard Wanderlof <ricardw@axis.com>
-X-X-Sender: ricardw@lnxricardw1.se.axis.com
-To:     Greg KH <greg@kroah.com>
-CC:     Subhashini Rao Beerisetty <subhashbeerisetty@gmail.com>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        kernelnewbies <kernelnewbies@kernelnewbies.org>
-Subject: Re: sound over USB
-In-Reply-To: <20200512165359.GA702234@kroah.com>
-Message-ID: <alpine.DEB.2.20.2005131459520.17840@lnxricardw1.se.axis.com>
-References: <CAPY=qRRFV4SpNO5pb9vF=U95dbA_gN2ngP+vm34884NMk5q8gQ@mail.gmail.com> <20200512165359.GA702234@kroah.com>
-User-Agent: Alpine 2.20 (DEB 67 2015-01-07)
+        id S1726038AbgEMNC1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 13 May 2020 09:02:27 -0400
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D85B22494F;
+        Wed, 13 May 2020 13:02:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589374947;
+        bh=3gsu1+H8KaTAc/1/XTAg+o3iWJpqglDQYi2kGj9mDyY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=GHEUHp58flz5dGi5qOoN3liccsYth1fQGfMCrkeZ0Ukng6zXWrNkLhmVsWRUDfDfL
+         XjmY8es72bnP0BEoJ1esx+zSnjB8BQb7oNiKNXZm06o9In68xcVy5l0WbydN+Zx6i2
+         J+VhzAIgf9YJotVvPlAHwSw7XasOcwiGNjxF1/ts=
+Received: by mail-oi1-f171.google.com with SMTP id 19so21320661oiy.8;
+        Wed, 13 May 2020 06:02:26 -0700 (PDT)
+X-Gm-Message-State: AGi0Pua0/EJNJRqeYmQTpKOCyUaHKHhn8qKAFboGef/r1toUSrn/smwu
+        7LAAO9UureKF2XkJZlGMO7IS0U+yWbJR+pg5wA==
+X-Google-Smtp-Source: APiQypJLdEVF0QKdCuz/qxBqkFZpgAWEBjtcdpCh6nTVaiCngqOwmIFbeeHiC/FcXGhzItL+NUf/oULbqA+pCcA59cE=
+X-Received: by 2002:a05:6808:24f:: with SMTP id m15mr28316669oie.152.1589374946192;
+ Wed, 13 May 2020 06:02:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [10.0.5.60]
-X-ClientProxiedBy: XBOX01.axis.com (10.0.5.15) To XBOX03.axis.com (10.0.5.17)
+References: <20200512204543.22090-1-robh@kernel.org> <158937185132.39109.17103954100758193517.b4-ty@kernel.org>
+In-Reply-To: <158937185132.39109.17103954100758193517.b4-ty@kernel.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 13 May 2020 08:02:14 -0500
+X-Gmail-Original-Message-ID: <CAL_Jsq+KfngSTEnP3eh6Zr9H4GUuSbyZCGXs=skbwQK0j4ZJnA@mail.gmail.com>
+Message-ID: <CAL_Jsq+KfngSTEnP3eh6Zr9H4GUuSbyZCGXs=skbwQK0j4ZJnA@mail.gmail.com>
+Subject: Re: [PATCH 1/5] spi: dt-bindings: sifive: Add missing 2nd register region
+To:     Mark Brown <broonie@kernel.org>
+Cc:     devicetree@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Wed, May 13, 2020 at 7:10 AM Mark Brown <broonie@kernel.org> wrote:
+>
+> On Tue, 12 May 2020 15:45:39 -0500, Rob Herring wrote:
+> > The 'reg' description and example have a 2nd register region for memory
+> > mapped flash, but the schema says there is only 1 region. Fix this.
+>
+> Applied to
+>
+>    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-5.8
+>
+> Thanks!
+>
+> [1/1] spi: dt-bindings: sifive: Add missing 2nd register region
+>       commit: b265b5a0ba15b6e00abce9bf162926e84b4323b4
 
-On Tue, 12 May 2020, Greg KH wrote:
+You missed my ask for an ack. This is a dependency for patch 5.
 
-> On Tue, May 12, 2020 at 10:13:10PM +0530, Subhashini Rao Beerisetty wrote:
-> > ...
-> >  [116677.281756] usbcore: registered new interface driver snd-usb-audio
-> >
-> >  The following nodes are present in the /dev/snd
-> >
-> > $ ls -l /dev/snd/
-> >
-> > total 0
-> >
-> > drwxr-xr-x 2 root root       60 May 12 11:32 by-id
-> >
-> > drwxr-xr-x 2 root root       60 May 12 11:32 by-path
-> >
-> > crw-rw---- 1 root audio 116,  2 May 12 11:32 controlC1
-> >
-> > crw-rw---- 1 root audio 116,  4 May 12 11:32 pcmC1D0c
-> >
-> > crw-rw---- 1 root audio 116,  3 May 12 11:32 pcmC1D0p
-> >
-> > crw-rw---- 1 root audio 116,  1 May 12 11:32 seq
-> >
-> > crw-rw---- 1 root audio 116, 33 May 12 11:32 timer
-> >
-> >
-> >
-> > What are all these devices present in /dev/snd
-> >
-> > How do I use it for playing and recording an audio?
-> >
-> > Basically first I want to gain knowledge on set of test cases I can
-> > run on ALSA and then learn ALSA kernel modules stuff including
-> > snd_usb_audio mdule.
-> >
-> > So please guide me by providing related documentation/Steps.
-> 
-> ALSA should "just work" with this device, no need to do anything to the
-> kernel driver.  Does it not work properly for you as-is?
-
-To clarify (if it's not too obvious): Normally these devices are never 
-accessed directly by programs, instead, there is a userspace library 
-called alsa-lib which provides a userspace API and then handles the 
-communication with the kernel devices.
-
-/Ricard
--- 
-Ricard Wolf Wanderlof                           ricardw(at)axis.com
-Axis Communications AB, Lund, Sweden            www.axis.com
-Phone +46 46 272 2016                           Fax +46 46 13 61 30
+Rob
