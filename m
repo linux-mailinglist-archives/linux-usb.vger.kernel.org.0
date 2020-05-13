@@ -2,155 +2,228 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD8BA1D1F87
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 21:42:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A84D1D2030
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 22:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390639AbgEMTmi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 May 2020 15:42:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57296 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2387616AbgEMTmh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 May 2020 15:42:37 -0400
-Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D13DC061A0C;
-        Wed, 13 May 2020 12:42:37 -0700 (PDT)
-Received: by mail-il1-x142.google.com with SMTP id w6so944948ilg.1;
-        Wed, 13 May 2020 12:42:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uINUBH0b67t7eYaVdOESIaSo4GsnVh3MgDPLeaDlYvQ=;
-        b=kf3uoBcYAc8ZC02QIDPCZgxdfnLlHom1piA05+woOCC7646WUcvJ+cpVUT/csrQsC/
-         K/Q/ItYqAVNA+MvlSbTTSylkjRMbx5p2+XF/xfpHae7fMmWKefe6OzozeTVXKtXARI8R
-         4jHdVNe1kTp+adyHo8sPZ5i5SYQZGdfp6OlGTwxGZmHbJOCMCz+3pfsBawlydtRcD1oA
-         Jssx4Bxz9oR1XBNMmzjPvnH4ymFhXKDluPKwv9pY179jlyO0xqcRB3Uam2qOVlF90jE7
-         v7zbAt2fz9Ud/2LaJgZ3pyWdymGut2f6EK1CcME0HM539KjbhJWqgYT6bBfuRfCv2Pak
-         12vA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uINUBH0b67t7eYaVdOESIaSo4GsnVh3MgDPLeaDlYvQ=;
-        b=FPAdI3qSGkxJT8MdLWlf7JR7Y8PWtLmaCNnQEMACiT6GwyQ/alkTlle4kMBZTF5Q5T
-         /QJXSdMU9IB1/7lDhGQCLDdu+m4L/XApOJmxqjzIfAfZEOlPdtPlAWhGvaTK4KdbIT9d
-         rmamaQ66Qs5pIiVYyq+UlCCjb/Z1T9vStQqOq3RkPq5Ww4qsNqxMhgcId/7EG2mQBMnB
-         lQTZaPmCV4YClRmDrRl3BWvswpMAvO1+m6ElS3qtGFc5BssmrvvgwcVkPaSEXuOBnGtb
-         nyNn6RFr3tg5ww+qvhvSOokP+65FF4/WqcXQXS1AxD4wtc0faRc1zvZ5maswPdRuTRs/
-         Z+Dg==
-X-Gm-Message-State: AOAM530qBWYzaHJmGYm3mWgX/vrTkrSzD0hayblrXwUeuT0GZZ/1+m5o
-        qqVTvuDF/DRN/3KOq8kE6mSDWUqcGDuhDet/uW+/Jstn
-X-Google-Smtp-Source: ABdhPJxTm1xgroYc2W51c5QCs9n6y0TBHp/24L3n0o5XMr5msuOmG19W+7cwoNcXSsf3jT3rkp/YlZAYEsp+LWW0+VU=
-X-Received: by 2002:a92:6c0b:: with SMTP id h11mr1024982ilc.158.1589398956864;
- Wed, 13 May 2020 12:42:36 -0700 (PDT)
+        id S1726885AbgEMU3P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 May 2020 16:29:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45148 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725977AbgEMU3P (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 13 May 2020 16:29:15 -0400
+Received: from localhost (mobile-166-175-190-200.mycingular.net [166.175.190.200])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 729C220575;
+        Wed, 13 May 2020 20:29:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589401754;
+        bh=E77L7wM+6LvumoFVm59xuqtanywSO/210sLZygV9BkM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=i0Fr017z5WgdC8ST7rhISOZ1biC29d1lh2opjDhS4f87x/LRSSP/rCdlZUFE22kqS
+         MBmsXUZEh2thWjqkAE9NUq+w8GbAhzl00Kbc0nGhC0qY+uHz6sSp5EfbbFa5AEImu2
+         B8Bh7ROGJHI/ZuzG2AnVQpuYhjuyzjiufDV5w/Wo=
+Date:   Wed, 13 May 2020 15:29:12 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Yicong Yang <yangyicong@hisilicon.com>
+Cc:     linux-pci@vger.kernel.org, kvalo@codeaurora.org,
+        andreas.noever@gmail.com, rjw@rjwysocki.net,
+        mika.westerberg@linux.intel.com, linux-wireless@vger.kernel.org,
+        linux-usb@vger.kernel.org, linuxarm@huawei.com
+Subject: Re: [PATCH v3] PCI: Use pcie_find_root_port() to get root port of
+ both PCI/PCIe device
+Message-ID: <20200513202912.GA344050@bjorn-Precision-5520>
 MIME-Version: 1.0
-References: <20200512150019.25903-1-alcooperx@gmail.com> <20200512150019.25903-2-alcooperx@gmail.com>
- <20200513122613.GA1023594@kroah.com> <7acc2a4c-caab-11e7-7b3f-4176f19c58cf@gmail.com>
- <20200513162723.GF1362525@kroah.com> <38ff034d-a84c-2309-a8d5-f344930d9a31@gmail.com>
- <20200513170505.GB1369204@kroah.com> <20200513173920.GA2862@rowland.harvard.edu>
- <c0642cf4-1436-aec4-96fd-355a897f6418@gmail.com>
-In-Reply-To: <c0642cf4-1436-aec4-96fd-355a897f6418@gmail.com>
-From:   Alan Cooper <alcooperx@gmail.com>
-Date:   Wed, 13 May 2020 15:42:25 -0400
-Message-ID: <CAOGqxeU=LjAmAYR9wGeKZo_eLj+ehkrANTM+04E7xWNAp82EJA@mail.gmail.com>
-Subject: Re: [PATCH v10 1/5] usb: xhci: Change the XHCI link order in the Makefile
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        ": Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        DTML <devicetree@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1589019568-5216-1-git-send-email-yangyicong@hisilicon.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 13, 2020 at 1:46 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
->
->
->
-> On 5/13/2020 10:39 AM, Alan Stern wrote:
-> > On Wed, May 13, 2020 at 07:05:05PM +0200, Greg Kroah-Hartman wrote:
-> >> On Wed, May 13, 2020 at 09:31:11AM -0700, Florian Fainelli wrote:
-> >>>
-> >>>
-> >>> On 5/13/2020 9:27 AM, Greg Kroah-Hartman wrote:
-> >>>> On Wed, May 13, 2020 at 08:08:07AM -0700, Florian Fainelli wrote:
-> >>>>>
-> >>>>>
-> >>>>> On 5/13/2020 5:26 AM, Greg Kroah-Hartman wrote:
-> >>>>>> On Tue, May 12, 2020 at 11:00:15AM -0400, Al Cooper wrote:
-> >>>>>>> Some BRCMSTB USB chips have an XHCI, EHCI and OHCI controller
-> >>>>>>> on the same port where XHCI handles 3.0 devices, EHCI handles 2.0
-> >>>>>>> devices and OHCI handles <2.0 devices. Currently the Makefile
-> >>>>>>> has XHCI linking at the bottom which will result in the XHIC driver
-> >>>>>>> initalizing after the EHCI and OHCI drivers and any installed 3.0
-> >>>>>>> device will be seen as a 2.0 device. Moving the XHCI linking
-> >>>>>>> above the EHCI and OHCI linking fixes the issue.
-> >>>>>>
-> >>>>>> What happens if all of these are modules and they are loaded in a
-> >>>>>> different order?  This makefile change will not help with that, you need
-> >>>>>> to have logic in the code in order to properly coordinate this type of
-> >>>>>> mess, sorry.
-> >>>>>
-> >>>>> I believe we should be using module soft dependencies to instruct the
-> >>>>> module loaders to load the modules in the correct order, so something
-> >>>>> like this would do (not tested) for xhci-plat-hcd.c:
-> >>>>>
-> >>>>> MODULE_SOFTDEP("post: ehci-hcd ohci-hcd");
-> >>>>>
-> >>>>> and I am not sure whether we need to add the opposite for ehci-hcd and
-> >>>>> ohci-hcd:
-> >>>>>
-> >>>>> MODULE_SOFTDEP("pre: xhci-plat-hcd");
-> >>>>
-> >>>> That's a nice start, but what happens if that isn't honored?  This
-> >>>> really needs to work properly for any order as you never can guarantee
-> >>>> module/driver loading order in a system of modules.
-> >>>
-> >>> I also suggested that device links may help, though I am not sure. What
-> >>> do you suggest to be done?
-> >>
-> >> No idea.  device links will help if you defer the probe properly until
-> >> you see the proper drivers binding correctly.
-> >
-> > I suspect that in general there is no way to do this properly.
-> >
-> > We can't modify ehci-hcd and ohci-hcd to make them wait.  In fact, for
-> > all they know, xhci-hcd will _never_ be loaded.
-> >
-> > One thing that might be possible (although not all platforms may support
-> > it) is if xhci-hcd could somehow disconnect all devices attached to a
-> > peer port when it starts up.  But that would be disruptive to any
-> > devices that aren't USB-3.
-> >
-> > We faced a very similar ordering problem between ehci-hcd and
-> > [ou]hci-hcd many years ago, and we never found a good solution.
-> > We did arrange the link order so that ehci-hcd precedes the others, and
-> > we added a warning message to ehci-hcd which gets printed if the module
-> > initialization routine runs after [ou]hci-hcd is loaded.  Also, there
-> > are MODULE_SOFTDEP lines in ohci-pci.c and uhci-pci.c.
->
-> Given that these modules are used on specific SoC platforms, where we
-> usually provide a reference implementation of user space and kernel
-> space and documentation, it seems to me that the MODULE_SOFTDEP(),
-> despite being a hint and best effort from user space module loaders is
-> probably acceptable.
+On Sat, May 09, 2020 at 06:19:28PM +0800, Yicong Yang wrote:
+> Previously we use pcie_find_root_port() to get root port from a pcie
+> device, use pci_find_pcie_root_port() to get root port from a pci
+> device, which increase the complexity.
+> 
+> Unify the two functions and use pcie_find_root_port() to get root
+> port from both pci device and pcie device. Then there is no need to
+> distinguish the type of the device.
+> 
+> The callers of the function list below, they'll get no functional
+> change:
+> - iwl_trans_pcie_dump_regs()
+> - pcie_root_rcb_set()
+> - aer_inject()
+> - acpi_pci_bridge_d3()
+> - pci_configure_relaxed_ordering()
+> 
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> Acked-by: Kalle Valo <kvalo@codeaurora.org> // for wireless
+> Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com> // for thunderbolt
+
+Applied to pci/misc for v5.8, thanks!
+
+> ---
+> Change since v2:
+> - archive the callers in the commit message
+> - rename pci_pcie_find_root_port() as pcie_find_root_port()
+> - use pci_upstream_bridge() to traverse the chain
+> Link: https://lore.kernel.org/linux-pci/1588768976-4852-1-git-send-email-yangyicong@hisilicon.com/
+> 
+> Change since v1:
+> - Add Mika's Ack for thunderbolt part
+> - Add description for pci_pcie_find_root_port()
+> 
+>  drivers/pci/pci-acpi.c       |  2 +-
+>  drivers/pci/pci.c            | 24 ------------------------
+>  drivers/pci/probe.c          |  2 +-
+>  drivers/pci/quirks.c         |  2 +-
+>  drivers/thunderbolt/switch.c |  4 ++--
+>  include/linux/pci.h          | 23 ++++++++++++++---------
+>  6 files changed, 19 insertions(+), 38 deletions(-)
+> 
+> diff --git a/drivers/pci/pci-acpi.c b/drivers/pci/pci-acpi.c
+> index 0c02d50..d401370 100644
+> --- a/drivers/pci/pci-acpi.c
+> +++ b/drivers/pci/pci-acpi.c
+> @@ -948,7 +948,7 @@ static bool acpi_pci_bridge_d3(struct pci_dev *dev)
+>  	 * Look for a special _DSD property for the root port and if it
+>  	 * is set we know the hierarchy behind it supports D3 just fine.
+>  	 */
+> -	root = pci_find_pcie_root_port(dev);
+> +	root = pcie_find_root_port(dev);
+>  	if (!root)
+>  		return false;
+> 
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index d828ca8..fc5e7b6 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -695,30 +695,6 @@ struct resource *pci_find_resource(struct pci_dev *dev, struct resource *res)
+>  EXPORT_SYMBOL(pci_find_resource);
+> 
+>  /**
+> - * pci_find_pcie_root_port - return PCIe Root Port
+> - * @dev: PCI device to query
+> - *
+> - * Traverse up the parent chain and return the PCIe Root Port PCI Device
+> - * for a given PCI Device.
+> - */
+> -struct pci_dev *pci_find_pcie_root_port(struct pci_dev *dev)
+> -{
+> -	struct pci_dev *bridge, *highest_pcie_bridge = dev;
+> -
+> -	bridge = pci_upstream_bridge(dev);
+> -	while (bridge && pci_is_pcie(bridge)) {
+> -		highest_pcie_bridge = bridge;
+> -		bridge = pci_upstream_bridge(bridge);
+> -	}
+> -
+> -	if (pci_pcie_type(highest_pcie_bridge) != PCI_EXP_TYPE_ROOT_PORT)
+> -		return NULL;
+> -
+> -	return highest_pcie_bridge;
+> -}
+> -EXPORT_SYMBOL(pci_find_pcie_root_port);
+> -
+> -/**
+>   * pci_wait_for_pending - wait for @mask bit(s) to clear in status word @pos
+>   * @dev: the PCI device to operate on
+>   * @pos: config space offset of status word
+> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+> index 512cb43..554cdca 100644
+> --- a/drivers/pci/probe.c
+> +++ b/drivers/pci/probe.c
+> @@ -2015,7 +2015,7 @@ static void pci_configure_relaxed_ordering(struct pci_dev *dev)
+>  	 * For now, we only deal with Relaxed Ordering issues with Root
+>  	 * Ports. Peer-to-Peer DMA is another can of worms.
+>  	 */
+> -	root = pci_find_pcie_root_port(dev);
+> +	root = pcie_find_root_port(dev);
+>  	if (!root)
+>  		return;
+> 
+> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+> index 29f473e..7aeeda5 100644
+> --- a/drivers/pci/quirks.c
+> +++ b/drivers/pci/quirks.c
+> @@ -4253,7 +4253,7 @@ DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_AMD, 0x1a02, PCI_CLASS_NOT_DEFINED,
+>   */
+>  static void quirk_disable_root_port_attributes(struct pci_dev *pdev)
+>  {
+> -	struct pci_dev *root_port = pci_find_pcie_root_port(pdev);
+> +	struct pci_dev *root_port = pcie_find_root_port(pdev);
+> 
+>  	if (!root_port) {
+>  		pci_warn(pdev, "PCIe Completion erratum may cause device errors\n");
+> diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+> index a2ce990..d92c755 100644
+> --- a/drivers/thunderbolt/switch.c
+> +++ b/drivers/thunderbolt/switch.c
+> @@ -263,7 +263,7 @@ static void nvm_authenticate_start_dma_port(struct tb_switch *sw)
+>  	 * itself. To be on the safe side keep the root port in D0 during
+>  	 * the whole upgrade process.
+>  	 */
+> -	root_port = pci_find_pcie_root_port(sw->tb->nhi->pdev);
+> +	root_port = pcie_find_root_port(sw->tb->nhi->pdev);
+>  	if (root_port)
+>  		pm_runtime_get_noresume(&root_port->dev);
+>  }
+> @@ -272,7 +272,7 @@ static void nvm_authenticate_complete_dma_port(struct tb_switch *sw)
+>  {
+>  	struct pci_dev *root_port;
+> 
+> -	root_port = pci_find_pcie_root_port(sw->tb->nhi->pdev);
+> +	root_port = pcie_find_root_port(sw->tb->nhi->pdev);
+>  	if (root_port)
+>  		pm_runtime_put(&root_port->dev);
+>  }
+> diff --git a/include/linux/pci.h b/include/linux/pci.h
+> index 3840a54..98fb495 100644
+> --- a/include/linux/pci.h
+> +++ b/include/linux/pci.h
+> @@ -1011,7 +1011,6 @@ void pci_bus_add_device(struct pci_dev *dev);
+>  void pci_read_bridge_bases(struct pci_bus *child);
+>  struct resource *pci_find_parent_resource(const struct pci_dev *dev,
+>  					  struct resource *res);
+> -struct pci_dev *pci_find_pcie_root_port(struct pci_dev *dev);
+>  u8 pci_swizzle_interrupt_pin(const struct pci_dev *dev, u8 pin);
+>  int pci_get_interrupt_pin(struct pci_dev *dev, struct pci_dev **bridge);
+>  u8 pci_common_swizzle(struct pci_dev *dev, u8 *pinp);
+> @@ -2124,17 +2123,23 @@ static inline int pci_pcie_type(const struct pci_dev *dev)
+>  	return (pcie_caps_reg(dev) & PCI_EXP_FLAGS_TYPE) >> 4;
+>  }
+> 
+> +/**
+> + * pcie_find_root_port - Get the PCIe root port device
+> + * @dev: PCI device
+> + *
+> + * Traverse up the parent chain and return the PCIe Root Port PCI Device
+> + * for a given PCI/PCIe Device.
+> + */
+>  static inline struct pci_dev *pcie_find_root_port(struct pci_dev *dev)
+>  {
+> -	while (1) {
+> -		if (!pci_is_pcie(dev))
+> -			break;
+> -		if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT)
+> -			return dev;
+> -		if (!dev->bus->self)
+> -			break;
+> -		dev = dev->bus->self;
+> +	struct pci_dev *root_port = pci_upstream_bridge(dev);
+> +
+> +	while (root_port) {
+> +		if (pci_pcie_type(root_port) == PCI_EXP_TYPE_ROOT_PORT)
+> +			return root_port;
+> +		root_port = pci_upstream_bridge(root_port);
+>  	}
+> +
+>  	return NULL;
+>  }
+> 
 > --
-> Florian
-
-What I found in the past is that things work. For example if the ehci
-driver starts first, the USB device will come up as a 2.0 device and
-when the XHCI driver comes up the device will switch to 3.0. I've see
-the same thing happen if OHCI starts before EHCI. It's just that there
-are some poorly behaved USB devices that have trouble with this.
-
-Al
+> 2.8.1
+> 
