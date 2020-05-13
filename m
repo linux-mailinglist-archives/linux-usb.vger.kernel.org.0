@@ -2,45 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ECA31D211F
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 23:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 510A21D212E
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 23:36:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729343AbgEMVgV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 May 2020 17:36:21 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:43542 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729339AbgEMVgV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 May 2020 17:36:21 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04DLaKHp034530
-        for <linux-usb@vger.kernel.org>; Wed, 13 May 2020 16:36:20 -0500
+        id S1729418AbgEMVgi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 May 2020 17:36:38 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:51050 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729413AbgEMVgg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 May 2020 17:36:36 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04DLaZao037591
+        for <linux-usb@vger.kernel.org>; Wed, 13 May 2020 16:36:35 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1589405780;
-        bh=abTLqWYnMAoQ0zECWkLggxONDZAE/sJG2xSgir4kP3M=;
+        s=ti-com-17Q1; t=1589405795;
+        bh=4Uwo9+q8rBh4O5RXcZCu6XFwX681ZgA1nUiH/x8aBs4=;
         h=From:To:CC:Subject:Date;
-        b=aWblXI8JRXSwduC931xxDBeW3xwIPBNaLUKTFGCoT5UtLt7RN+r+pQqoeKL4uti8S
-         zdW8wa74y6YJWFqo/oK6Fsii2IfuVDmzt6qJcC1VwEMn7kCTfMdFWGhLRR6+7FeNxd
-         LAfG8bapjnZ7K7RO2YiB4DOKxb7QAbBw7SwD2gp0=
-Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04DLaK0b115611
-        for <linux-usb@vger.kernel.org>; Wed, 13 May 2020 16:36:20 -0500
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+        b=g5EKNk2QeaKLBMKnIBSnru3tP9KjdWEOodFuHWAWtqSOgHfHTQ0EsRdtc2ENfoWS3
+         yYnpBfIwCVx+E47sijm+Z3SEY6YhyY0jXlf3G3EwU9ZIP/Gmo/FFHc1o+T+8BepYL0
+         nNUxptTZn4Lnw2s9WqcirTlp50vP6FLJp3HWtZ18=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 04DLaZOi067887
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL)
+        for <linux-usb@vger.kernel.org>; Wed, 13 May 2020 16:36:35 -0500
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Wed, 13
- May 2020 16:36:19 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ May 2020 16:36:35 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Wed, 13 May 2020 16:36:20 -0500
+ Frontend Transport; Wed, 13 May 2020 16:36:35 -0500
 Received: from uda0271908.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04DLaKo7031592;
-        Wed, 13 May 2020 16:36:20 -0500
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04DLaZlG112342;
+        Wed, 13 May 2020 16:36:35 -0500
 From:   Bin Liu <b-liu@ti.com>
 To:     <linux-usb@vger.kernel.org>
 CC:     Bin Liu <b-liu@ti.com>
-Subject: [PATCH] usb: musb: return -ESHUTDOWN in urb when three-strikes error happened
-Date:   Wed, 13 May 2020 16:36:20 -0500
-Message-ID: <20200513213620.21541-1-b-liu@ti.com>
+Subject: [PATCH] usb: musb: start session in resume for host port
+Date:   Wed, 13 May 2020 16:36:35 -0500
+Message-ID: <20200513213635.21599-1-b-liu@ti.com>
 X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
@@ -50,39 +51,40 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When a USB device attached to a hub got disconnected, MUSB controller
-generates RXCSR_RX_ERROR interrupt for the 3-strikes-out error.
+Commit 17539f2f4f0b ("usb: musb: fix enumeration after resume") replaced
+musb_start() in musb_resume() to not override softconnect bit, but it
+doesn't restart the session for host port which was done in musb_start().
+The session could be disabled in musb_suspend(), which leads the host
+port doesn't stay in host mode.
 
-Currently the MUSB host driver returns -EPROTO in current URB, then the
-USB device driver could immediately resubmit the URB which causes MUSB
-generate RXCSR_RX_ERROR interrupt again. This circle causes interrupt
-storm then the hub never got a chance to report the USB device detach.
+So let's start the session specifically for host port in musb_resume().
 
-To fix the interrupt storm, change the URB return code to -ESHUTDOWN for
-MUSB_RXCSR_H_ERROR interrupt, so that the USB device driver will not
-immediately resubmit the URB.
+Fixes: 17539f2f4f0b ("usb: musb: fix enumeration after resume")
 
+Cc: stable@vger.kernel.org
 Signed-off-by: Bin Liu <b-liu@ti.com>
 ---
- drivers/usb/musb/musb_host.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/musb/musb_core.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/usb/musb/musb_host.c b/drivers/usb/musb/musb_host.c
-index 8736f4251a22..e41d910dcad1 100644
---- a/drivers/usb/musb/musb_host.c
-+++ b/drivers/usb/musb/musb_host.c
-@@ -1774,9 +1774,9 @@ void musb_host_rx(struct musb *musb, u8 epnum)
- 		status = -EPIPE;
+diff --git a/drivers/usb/musb/musb_core.c b/drivers/usb/musb/musb_core.c
+index d590110539ab..48178aeccf5b 100644
+--- a/drivers/usb/musb/musb_core.c
++++ b/drivers/usb/musb/musb_core.c
+@@ -2877,6 +2877,13 @@ static int musb_resume(struct device *dev)
+ 	musb_enable_interrupts(musb);
+ 	musb_platform_enable(musb);
  
- 	} else if (rx_csr & MUSB_RXCSR_H_ERROR) {
--		musb_dbg(musb, "end %d RX proto error", epnum);
-+		dev_err(musb->controller, "ep%d RX three-strikes error", epnum);
- 
--		status = -EPROTO;
-+		status = -ESHUTDOWN;
- 		musb_writeb(epio, MUSB_RXINTERVAL, 0);
- 
- 		rx_csr &= ~MUSB_RXCSR_H_ERROR;
++	/* session might be disabled in suspend */
++	if (musb->port_mode == MUSB_HOST &&
++	    !(musb->ops->quirks & MUSB_PRESERVE_SESSION)) {
++		devctl |= MUSB_DEVCTL_SESSION;
++		musb_writeb(musb->mregs, MUSB_DEVCTL, devctl);
++	}
++
+ 	spin_lock_irqsave(&musb->lock, flags);
+ 	error = musb_run_resume_work(musb);
+ 	if (error)
 -- 
 2.17.1
 
