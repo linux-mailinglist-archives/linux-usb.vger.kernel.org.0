@@ -2,157 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BAA81D1405
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 15:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0A531D14C3
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 15:26:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733218AbgEMNHY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 May 2020 09:07:24 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:48950 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733182AbgEMNHW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 May 2020 09:07:22 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04DD7Kf1043033;
-        Wed, 13 May 2020 08:07:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1589375240;
-        bh=5K+SEGQeU5EpeWcccdRNrdDbsnRedKCXOuo8mbwS6a8=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=kAkiwK4gmsI3IObS1d0pMN20fNxEMri/JnVKQUZSxRrdRJ4Ti26pmFqU36POHxXfo
-         E8KFX8wHpOT8VkNt17Pken/mDV67dsN8bgkfsI1kux/BxfHZ7zxBqda8mrOzX+Bu4x
-         y9UHvlME7SVHJTPIKTb2Faly+ukq9GeaTUglQA+E=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04DD7KLm068039;
-        Wed, 13 May 2020 08:07:20 -0500
-Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Wed, 13
- May 2020 08:07:20 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Wed, 13 May 2020 08:07:20 -0500
-Received: from lta0400828a.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04DD7B2T074071;
-        Wed, 13 May 2020 08:07:18 -0500
-From:   Roger Quadros <rogerq@ti.com>
-To:     <balbi@kernel.org>
-CC:     <robh+dt@kernel.org>, <vigneshr@ti.com>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Roger Quadros <rogerq@ti.com>
-Subject: [PATCH 3/3] usb: dwc3: keystone: Turn on USB3 PHY before controller
-Date:   Wed, 13 May 2020 16:07:09 +0300
-Message-ID: <20200513130709.10239-4-rogerq@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200513130709.10239-1-rogerq@ti.com>
-References: <20200513130709.10239-1-rogerq@ti.com>
+        id S2387808AbgEMN0c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 May 2020 09:26:32 -0400
+Received: from cmccmta3.chinamobile.com ([221.176.66.81]:10926 "EHLO
+        cmccmta3.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733066AbgEMN0b (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 May 2020 09:26:31 -0400
+Received: from spf.mail.chinamobile.com (unknown[172.16.121.17]) by rmmx-syy-dmz-app09-12009 (RichMail) with SMTP id 2ee95ebbf56d3c6-d0732; Wed, 13 May 2020 21:26:07 +0800 (CST)
+X-RM-TRANSID: 2ee95ebbf56d3c6-d0732
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG: 00000000
+Received: from localhost.localdomain (unknown[112.1.172.85])
+        by rmsmtp-syy-appsvr09-12009 (RichMail) with SMTP id 2ee95ebbf56c23b-4af97;
+        Wed, 13 May 2020 21:26:07 +0800 (CST)
+X-RM-TRANSID: 2ee95ebbf56c23b-4af97
+From:   Tang Bin <tangbin@cmss.chinamobile.com>
+To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tang Bin <tangbin@cmss.chinamobile.com>,
+        Zhang Shengju <zhangshengju@cmss.chinamobile.com>
+Subject: [PATCH v2] USB: host: ehci-mxc: Add error handling in ehci_mxc_drv_probe()
+Date:   Wed, 13 May 2020 21:26:47 +0800
+Message-Id: <20200513132647.5456-1-tangbin@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.20.1.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The Local Power Sleep Controller (LPSC) dependency on AM65
-requires SERDES0 to be powered on before USB.
+The function ehci_mxc_drv_probe() does not perform sufficient error
+checking after executing platform_get_irq(), thus fix it.
 
-We need to power up SERDES0 power domain and hold it on
-throughout the reset, init, power on sequence.
-
-Signed-off-by: Roger Quadros <rogerq@ti.com>
+Fixes: 7e8d5cd93fa ("USB: Add EHCI support for MX27 and MX31 based boards")
+Signed-off-by: Zhang Shengju <zhangshengju@cmss.chinamobile.com>
+Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
 ---
- drivers/usb/dwc3/dwc3-keystone.c | 47 +++++++++++++++++++++++++++++++-
- 1 file changed, 46 insertions(+), 1 deletion(-)
+Changes from v1
+ - fix the subject.
+---
+ drivers/usb/host/ehci-mxc.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/usb/dwc3/dwc3-keystone.c b/drivers/usb/dwc3/dwc3-keystone.c
-index 1e14a6f4884b..46d46f3507fc 100644
---- a/drivers/usb/dwc3/dwc3-keystone.c
-+++ b/drivers/usb/dwc3/dwc3-keystone.c
-@@ -14,6 +14,7 @@
- #include <linux/dma-mapping.h>
- #include <linux/io.h>
- #include <linux/of_platform.h>
-+#include <linux/phy/phy.h>
- #include <linux/pm_runtime.h>
+diff --git a/drivers/usb/host/ehci-mxc.c b/drivers/usb/host/ehci-mxc.c
+index c9f91e6c7..7f65c8604 100644
+--- a/drivers/usb/host/ehci-mxc.c
++++ b/drivers/usb/host/ehci-mxc.c
+@@ -50,6 +50,8 @@ static int ehci_mxc_drv_probe(struct platform_device *pdev)
+ 	}
  
- /* USBSS register offsets */
-@@ -34,6 +35,7 @@
- struct dwc3_keystone {
- 	struct device			*dev;
- 	void __iomem			*usbss;
-+	struct phy			*usb3_phy;
- };
+ 	irq = platform_get_irq(pdev, 0);
++	if (irq < 0)
++		return irq;
  
- static inline u32 kdwc3_readl(void __iomem *base, u32 offset)
-@@ -95,8 +97,44 @@ static int kdwc3_probe(struct platform_device *pdev)
- 	if (IS_ERR(kdwc->usbss))
- 		return PTR_ERR(kdwc->usbss);
- 
--	pm_runtime_enable(kdwc->dev);
-+	/* PSC dependency on AM65 needs SERDES0 to be powered before USB0 */
-+	kdwc->usb3_phy = devm_phy_get(dev, "usb3-phy");
-+	if (IS_ERR(kdwc->usb3_phy)) {
-+		error = PTR_ERR(kdwc->usb3_phy);
-+		if (error == -ENOSYS || error == -ENODEV) {
-+			kdwc->usb3_phy = NULL;
-+		} else {
-+			if (error != -EPROBE_DEFER) {
-+				dev_err(dev, "couldn't get usb3 phy: %d\n",
-+					error);
-+			}
-+
-+			return error;
-+		}
-+	}
-+
-+	phy_pm_runtime_get_sync(kdwc->usb3_phy);
-+
-+	error = phy_reset(kdwc->usb3_phy);
-+	if (error < 0) {
-+		dev_err(dev, "usb3 phy reset failed: %d\n", error);
-+		return error;
-+	}
-+
-+	error = phy_init(kdwc->usb3_phy);
-+	if (error < 0) {
-+		dev_err(dev, "usb3 phy init failed: %d\n", error);
-+		return error;
-+	}
- 
-+	error = phy_power_on(kdwc->usb3_phy);
-+	if (error < 0) {
-+		dev_err(dev, "usb3 phy power on failed: %d\n", error);
-+		phy_exit(kdwc->usb3_phy);
-+		return error;
-+	}
-+
-+	pm_runtime_enable(kdwc->dev);
- 	error = pm_runtime_get_sync(kdwc->dev);
- 	if (error < 0) {
- 		dev_err(kdwc->dev, "pm_runtime_get_sync failed, error %d\n",
-@@ -138,6 +176,9 @@ static int kdwc3_probe(struct platform_device *pdev)
- err_irq:
- 	pm_runtime_put_sync(kdwc->dev);
- 	pm_runtime_disable(kdwc->dev);
-+	phy_power_off(kdwc->usb3_phy);
-+	phy_exit(kdwc->usb3_phy);
-+	phy_pm_runtime_put_sync(kdwc->usb3_phy);
- 
- 	return error;
- }
-@@ -163,6 +204,10 @@ static int kdwc3_remove(struct platform_device *pdev)
- 	pm_runtime_put_sync(kdwc->dev);
- 	pm_runtime_disable(kdwc->dev);
- 
-+	phy_power_off(kdwc->usb3_phy);
-+	phy_exit(kdwc->usb3_phy);
-+	phy_pm_runtime_put_sync(kdwc->usb3_phy);
-+
- 	platform_set_drvdata(pdev, NULL);
- 
- 	return 0;
+ 	hcd = usb_create_hcd(&ehci_mxc_hc_driver, dev, dev_name(dev));
+ 	if (!hcd)
 -- 
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+2.20.1.windows.1
+
+
 
