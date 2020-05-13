@@ -2,59 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AECD1D13D5
-	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 15:01:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FD9B1D141F
+	for <lists+linux-usb@lfdr.de>; Wed, 13 May 2020 15:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732667AbgEMNBU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 May 2020 09:01:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56878 "EHLO mail.kernel.org"
+        id S2387466AbgEMNJX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 May 2020 09:09:23 -0400
+Received: from smtp2.axis.com ([195.60.68.18]:31701 "EHLO smtp2.axis.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731915AbgEMNBU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 13 May 2020 09:01:20 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A0B34205ED;
-        Wed, 13 May 2020 13:01:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589374880;
-        bh=m8GZsqelm6lKhj1/vT9jlMCK7f8Uw381Kw8/Ni5D3SA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cnc+GvTzNPW18mO7QUiUOBrXXrokRnBxI2VA+MOZYmC6mgLH/Jk9FbFAyvfu2czrq
-         S+IFMqHEoqDbxs+ZPhruWFvRRHKfO7JTQkG/5IPjDEgmSMu2R7OxFxbzgx3+Kr5pRG
-         PoIAZJj1qKtp2lnGhDiqltUfAv6G6rNokODR8ePo=
-Date:   Wed, 13 May 2020 15:01:17 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Tang Bin <tangbin@cmss.chinamobile.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Zhang Shengju <zhangshengju@cmss.chinamobile.com>
-Subject: Re: [PATCH] USB: host: ehci: Add error handling in
- ehci_mxc_drv_probe()
-Message-ID: <20200513130117.GA1085323@kroah.com>
-References: <Pine.LNX.4.44L0.2005080950180.19653-100000@netrider.rowland.org>
- <9f88b0fd-28e9-2fa8-2deb-73652eb53fd4@cmss.chinamobile.com>
+        id S1728481AbgEMNJW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 13 May 2020 09:09:22 -0400
+X-Greylist: delayed 429 seconds by postgrey-1.27 at vger.kernel.org; Wed, 13 May 2020 09:09:21 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; l=1662; q=dns/txt; s=axis-central1;
+  t=1589375361; x=1620911361;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-transfer-encoding;
+  bh=HmiGANTaWeCxvVIMvxry7eZiiySoeq97ejFPwewSvOQ=;
+  b=dgZsl1WypI92QHyBpUe3F76HZxL0ZULnOQEDktrSXykw4iR5nuPNWmHp
+   hlNS4uzVEVAY0+Tvf7J2/HbKsHO9CGdH+uMf5LVxqmmHesaiPHZagWdNA
+   l7+58NcuHOD8lXOXz85uJo3p6T4GVnM2NbTPTljR4pKFHbSsdfB22u2fM
+   adYyd3M18lzy288Cf4VWLe9a3YXIqwTq6GJd0gnhnL6JYUyvU4/kYDL79
+   w81hWyku6l468Fio26SWRR2FlQZIt+tGqvYO9lKliw3BL0iNX8OT654og
+   vA7Ad6DD8PXNoKAmjXH8AZik8rhgmuKyvBIsD4ul1i2AZqbaHs3NQKLxw
+   w==;
+IronPort-SDR: H28L571fwiwBqZmIUHb+UKInMxA0uXG+HaVBs+hqX/lnsjq8kqQfRwMsZeS1yHspWEBbF7B2sF
+ 7LjZLd5yi4chd4OUi9ceabe6oTqb+DnRfW7Dt2ZX3w/p5Fh8pLfiEURcoCn9VOtJSfUW6rnPs0
+ tqtdFduthvkMMD24ZurRw5rrv1zClv3k1Gv74pG9yQzL5d30cMsSnwn76x+o81ZGnj0eaYCfXf
+ RO3pR8NzT6g1hzUpFumT87ibfULw5jE+NWThdQjSogXUy1MuQ4P+NEGxQRsKuvuBxbCuuUdCTO
+ R8I=
+X-IronPort-AV: E=Sophos;i="5.73,387,1583190000"; 
+   d="scan'208";a="8445975"
+Date:   Wed, 13 May 2020 15:02:06 +0200
+From:   Ricard Wanderlof <ricardw@axis.com>
+X-X-Sender: ricardw@lnxricardw1.se.axis.com
+To:     Greg KH <greg@kroah.com>
+CC:     Subhashini Rao Beerisetty <subhashbeerisetty@gmail.com>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        kernelnewbies <kernelnewbies@kernelnewbies.org>
+Subject: Re: sound over USB
+In-Reply-To: <20200512165359.GA702234@kroah.com>
+Message-ID: <alpine.DEB.2.20.2005131459520.17840@lnxricardw1.se.axis.com>
+References: <CAPY=qRRFV4SpNO5pb9vF=U95dbA_gN2ngP+vm34884NMk5q8gQ@mail.gmail.com> <20200512165359.GA702234@kroah.com>
+User-Agent: Alpine 2.20 (DEB 67 2015-01-07)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9f88b0fd-28e9-2fa8-2deb-73652eb53fd4@cmss.chinamobile.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [10.0.5.60]
+X-ClientProxiedBy: XBOX01.axis.com (10.0.5.15) To XBOX03.axis.com (10.0.5.17)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 13, 2020 at 08:55:59PM +0800, Tang Bin wrote:
-> Hi gregkh:
+
+On Tue, 12 May 2020, Greg KH wrote:
+
+> On Tue, May 12, 2020 at 10:13:10PM +0530, Subhashini Rao Beerisetty wrote:
+> > ...
+> >  [116677.281756] usbcore: registered new interface driver snd-usb-audio
+> >
+> >  The following nodes are present in the /dev/snd
+> >
+> > $ ls -l /dev/snd/
+> >
+> > total 0
+> >
+> > drwxr-xr-x 2 root root       60 May 12 11:32 by-id
+> >
+> > drwxr-xr-x 2 root root       60 May 12 11:32 by-path
+> >
+> > crw-rw---- 1 root audio 116,  2 May 12 11:32 controlC1
+> >
+> > crw-rw---- 1 root audio 116,  4 May 12 11:32 pcmC1D0c
+> >
+> > crw-rw---- 1 root audio 116,  3 May 12 11:32 pcmC1D0p
+> >
+> > crw-rw---- 1 root audio 116,  1 May 12 11:32 seq
+> >
+> > crw-rw---- 1 root audio 116, 33 May 12 11:32 timer
+> >
+> >
+> >
+> > What are all these devices present in /dev/snd
+> >
+> > How do I use it for playing and recording an audio?
+> >
+> > Basically first I want to gain knowledge on set of test cases I can
+> > run on ALSA and then learn ALSA kernel modules stuff including
+> > snd_usb_audio mdule.
+> >
+> > So please guide me by providing related documentation/Steps.
 > 
-> On 2020/5/8 21:51, Alan Stern wrote:
-> > On Fri, 8 May 2020, Tang Bin wrote:
-> > 
-> > > The function ehci_mxc_drv_probe() does not perform sufficient error
-> > > checking after executing platform_get_irq(), thus fix it.
-> > Aside from the "irq <= 0" issue, the Subject: line should say
-> > "ehci-mxc", not "ehci".
-> > 
-> I know this patch need v2, whether just fix the subject?
+> ALSA should "just work" with this device, no need to do anything to the
+> kernel driver.  Does it not work properly for you as-is?
 
-0 is an invalid irq.
+To clarify (if it's not too obvious): Normally these devices are never 
+accessed directly by programs, instead, there is a userspace library 
+called alsa-lib which provides a userspace API and then handles the 
+communication with the kernel devices.
 
+/Ricard
+-- 
+Ricard Wolf Wanderlof                           ricardw(at)axis.com
+Axis Communications AB, Lund, Sweden            www.axis.com
+Phone +46 46 272 2016                           Fax +46 46 13 61 30
