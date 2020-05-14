@@ -2,95 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 729E61D366C
-	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 18:26:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53C681D3686
+	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 18:33:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726123AbgENQ0F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 May 2020 12:26:05 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:45369 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726117AbgENQ0F (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 12:26:05 -0400
-Received: (qmail 10249 invoked by uid 500); 14 May 2020 12:26:04 -0400
-Date:   Thu, 14 May 2020 12:26:04 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Bin Liu <b-liu@ti.com>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: musb: return -ESHUTDOWN in urb when three-strikes
- error happened
-Message-ID: <20200514162604.GA9571@rowland.harvard.edu>
-References: <20200513213620.21541-1-b-liu@ti.com>
- <20200514013205.GA10515@rowland.harvard.edu>
- <20200514142803.GA11463@iaqt7>
- <20200514144053.GC12181@rowland.harvard.edu>
- <20200514150259.GB11463@iaqt7>
- <20200514153731.GC11463@iaqt7>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200514153731.GC11463@iaqt7>
+        id S1726035AbgENQdZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 May 2020 12:33:25 -0400
+Received: from wout4-smtp.messagingengine.com ([64.147.123.20]:46911 "EHLO
+        wout4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726017AbgENQdY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 12:33:24 -0400
+Received: from compute7.internal (compute7.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id F189987C;
+        Thu, 14 May 2020 12:33:23 -0400 (EDT)
+Received: from imap21 ([10.202.2.71])
+  by compute7.internal (MEProxy); Thu, 14 May 2020 12:33:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aeam.us; h=
+        mime-version:message-id:in-reply-to:references:date:from:to:cc
+        :subject:content-type; s=fm1; bh=/jY+8VgS/OwUaVsjHX9NQ4fK3cjC71y
+        /3dnCrQOv4RY=; b=WaFWoGSv8EF66cW8Oc0C1U9fTCS15FMUA0qHc6J6RhJ5lKb
+        Lqc/qUP+xUDcJDfb0dRgYg3Ou3//FuxfKEw9ckI+aMOqCgtKcmPtcoFyprKpcpEw
+        cDpg3dXImMb/esQ1cTvP7CPOSwsVErPq63Um5IyWA77hsUlvofUXZeaRAPHk2ZrC
+        w0PnkzKn34LelBWJc1+a+UcA1O+vYaAJ9uLU7/fuzpNmKptdIPqN9dzVhLEP1Ru8
+        M8hXANEgLmYhWSTtU6xNBAWMagPU5xCGKBo8F5IisqCOXiRrhFqm3hlxHsWcn4z8
+        Pls7mYxnlqpIpsJUcVJmeX/kpmuJDbfLG17XI7A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=/jY+8V
+        gS/OwUaVsjHX9NQ4fK3cjC71y/3dnCrQOv4RY=; b=WYq+J2vy07NIZCI7EBg6cA
+        wNtHjzQTiCyHMAoCL4gijd/6abX6OrzU8vuCsEKJVBiIlAso2GHYcwm2g/yosP78
+        C5aLRsQazMrq2bEWSpx87d/5h+hyhCONbLAsVImfXJ1u/yC6B6lETinYPOTwco6/
+        iW86YWvJxE+vVfoZTYKA0oKO6teyD5SNMk1P4Hu09DuQ0eZOgBG2YTWQ94HhmAz5
+        Tp7x/jLtkfKjo+XrzyNAv/rdhadx20rsmkSjgqEuOYVVTMI1Wz14ng4rVlTOsOwC
+        vRfaJkbh1KHTk/UP52t7A8Z547fZMUIM7yxdinglZMTlpd+S4MQ2oWbq9f9Oeipw
+        ==
+X-ME-Sender: <xms:03K9Xqz-u1o5mALCo4Un0pCXyn7EsU7eeyAd97-ImNOs_JyOVczfvg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrleeigdelgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfufhiugcu
+    ufhprhihfdcuoehsihgusegrvggrmhdruhhsqeenucggtffrrghtthgvrhhnpeevgefhve
+    evteetfeetkeejjeehudffffffhfeuffelhfeuffdufeduleejfeeugfenucevlhhushht
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsihgusegrvggrmhdruh
+    hs
+X-ME-Proxy: <xmx:03K9XmQTYL-fpgVyEPPnHYe9F-xcMCe8oNZzCDriu57dIi9OszzNjA>
+    <xmx:03K9XsVx5FwYW2z7Km05N43SVnGsgrkc8adGaaXUF-qSQDTKT_2Viw>
+    <xmx:03K9Xgjb-sdDleBxfEu-qeJAYPbjJoJUZ8tplqtcVs9xzMZK3EwvHA>
+    <xmx:03K9Xr_OpbBH6B_1hphQwUA7Y75TWy8msDFmBZDtUv3m1kIp1fTAFA>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id E715566007E; Thu, 14 May 2020 12:33:22 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.3.0-dev0-413-g750b809-fmstable-20200507v1
+Mime-Version: 1.0
+Message-Id: <6cab4113-b4ad-43d9-85fc-f68682cf0259@www.fastmail.com>
+In-Reply-To: <20200513100614.GA3698@b29397-desktop>
+References: <0507a041-44f4-4257-adaf-3b17de3baf81@www.fastmail.com>
+ <20200506091750.GE30237@b29397-desktop>
+ <8ee3914e-7876-46aa-bade-7cf14df7efdc@www.fastmail.com>
+ <87h7wkp9qy.fsf@kernel.org> <20200513100614.GA3698@b29397-desktop>
+Date:   Thu, 14 May 2020 11:32:35 -0500
+From:   "Sid Spry" <sid@aeam.us>
+To:     "Peter Chen" <peter.chen@nxp.com>,
+        "Felipe Balbi" <balbi@kernel.org>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: Documentation for Raw USB ConfigFS
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 14, 2020 at 10:37:31AM -0500, Bin Liu wrote:
-> On Thu, May 14, 2020 at 10:02:59AM -0500, Bin Liu wrote:
-> > On Thu, May 14, 2020 at 10:40:53AM -0400, Alan Stern wrote:
-> > > On Thu, May 14, 2020 at 09:28:03AM -0500, Bin Liu wrote:
-> > > > On Wed, May 13, 2020 at 09:32:05PM -0400, Alan Stern wrote:
-> > > > > On Wed, May 13, 2020 at 04:36:20PM -0500, Bin Liu wrote:
-> > > > > > When a USB device attached to a hub got disconnected, MUSB controller
-> > > > > > generates RXCSR_RX_ERROR interrupt for the 3-strikes-out error.
-> > > > > > 
-> > > > > > Currently the MUSB host driver returns -EPROTO in current URB, then the
-> > > > > > USB device driver could immediately resubmit the URB which causes MUSB
-> > > > > > generate RXCSR_RX_ERROR interrupt again. This circle causes interrupt
-> > > > > > storm then the hub never got a chance to report the USB device detach.
-> > > > > > 
-> > > > > > To fix the interrupt storm, change the URB return code to -ESHUTDOWN for
-> > > > > > MUSB_RXCSR_H_ERROR interrupt, so that the USB device driver will not
-> > > > > > immediately resubmit the URB.
-> > > > > > 
-> > > > > > Signed-off-by: Bin Liu <b-liu@ti.com>
-> > > > > 
-> > > > > Strictly speaking, this is not the right thing to do.  It goes against 
-> > > > > the API described in error-codes.rst.  A better approach would be to fix 
-> > > > 
-> > > > error-codes.rst says:
-> > > > 
-> > > > -ESHUTDOWN              The device or host controller has been
-> > > > 			disabled due to some problem that could not
-> > > > 			be worked around, such as a physical
-> > > > 			disconnect.
-> > > > 
-> > > > So -ESHUTDOWN is applicable in this case - the device is disconnected
-> > > > behind a hub.
-> > > 
-> > > Yes, but you don't _know_ that the device was disconnected.  All you 
-> > > know is that there was a 3-strikes error.  Other problems can cause such 
-> > > errors (noise, for example).
+On Wed, May 13, 2020, at 5:05 AM, Peter Chen wrote:
+> On 20-05-13 10:36:05, Felipe Balbi wrote:
 > > 
-> > Yes, I know this. But we don't have a solution then. I cannot add
-> > resubmit delay in those ~500 device drivers.
+> > Hi,
+> > 
+> > "Sid Spry" <sid@aeam.us> writes:
+> > 
+> > > Hi Peter, thanks for pointing me towards the ffs-test. Unfortunately after
+> > > some exploration in that area I still don't see how I would add a preexisting
+> > > function to the configuration to be handled by the kernel.
+> > >
+> > > I do see something in an AIO test in the host code where libusb is used to
+> > > bind a kernel driver to an endpoint. Is that something that will be necessary?
+> > > Device side, I'm still unsure how I tell the function to handle ECM/ethernet
+> > > on a collection of endpoints.
+> > >
+> > > I understand how USB works fairly well, especially on microcontrollers, but am
+> > > a little lost still in understanding the Linux machinery for USB.
+> > 
 > 
-> By the way I don't think noise could last long enough to cause 3-strikes
-> error. A shortest USB packet is about 3-bytes long, a noise should be
-> just a glitch, it won't last at least 3-bytes long to supress the bus
-> and 3 times on the exact timing when the host expecting a response
-> packet. I cannot think of any other reason which can cause the 3-strikes
-> error other than the device is off the bus.
+> Would you please let ECM gadget work first at your board, then let f_fs work
+> using test application (you need to compile both host and device
+> application for it). After that, you may have more precise concept for
+> Linux USB gadget framework.
+> 
 
-Heh.  I heard from somebody (many years ago) about a setup where one of 
-his USB devices stopped working whenever he turned on the fluorescent 
-lights.
+I don't see anything that harmonizes preexsting function usage with specifying custom endpoints.
 
-Yes, I agree that noise is pretty uncommon, and the vast majority of 
-3-strikes errors are caused by disconnection or device firmware bugs.  
-That's why I didn't NAK this patch.
+I've gotten the ECM gadget, and then the ECM gadget via ffs working. I've read through the ffs test but I don't see any way to assign functionality to the endpoints. The example seems to transport raw data via a bulk endpoint. I know enough to instead assign an isochronous endpoint to the UDC and transfer via that, but I don't want it to be the *only* functionality the device offers.
 
-Still, it's worth pointing out that this change abuses the API (perhaps 
-mentioning it in a comment).  And it still would be preferable to fix 
-the drivers in question, impractical though that may be.  (I have a hard 
-time believing there are really 500 of them getting this wrong...)
+Are you saying I can assign the ECM gadget via ffs and then add another driver after the fact? This isn't really spelled out in the documentation (from what I can see). I was operating under the assumption that assigning the UDC claims it and it's not a shared resource. I've already run into issues where certain configurations use up the available endpoints or cause other issues.
 
-Alan Stern
+For reference here is what I am currently doing:
+
+---
+
+modprobe g_ffs
+cd /sys/kernel/config/usb_gadget
+
+if [[ -d "g1" ]]; then
+	echo "" > UAC
+	rm -rf g1;
+fi
+
+mkdir g1
+cd g1
+
+echo "0x1d6b" > idVendor
+echo "0x0104" > idProduct
+
+mkdir strings/0x409
+echo "0000000000" > strings/0x409/serialnumber
+echo "Foo Bar Inc." > strings/0x409/manufacturer
+echo "Trololololo" > strings/0x409/product
+
+mkdir functions/ecm.usb0
+mkdir functions/uac2.dev0
+mkdir functions/midi.dev0
+
+mkdir configs/c.1
+ln -s functions/ecm.usb0 configs/c.1
+ln -s functions/uac2.dev0 configs/c.1
+ln -s functions/midi.dev0 configs/c.1
+
+echo "musb-hdrc.2.auto" > UDC
