@@ -2,198 +2,286 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C73A91D3253
-	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 16:12:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97E821D327C
+	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 16:17:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726860AbgENOL7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 May 2020 10:11:59 -0400
-Received: from mga11.intel.com ([192.55.52.93]:32433 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726140AbgENOL7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 14 May 2020 10:11:59 -0400
-IronPort-SDR: I+BQK+T2Ximn6NB8vzXJGBDshlXEr0XKMBttE4kl0imBfzY2Ss2dfEJ0GU0Pgx3kkIscXJU6Bc
- bqlbJIsomzyw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2020 07:11:44 -0700
-IronPort-SDR: fZyp5vUT6UTSh3iJO3CNXFXOD3m0LnDKD8f9V3TvjC0gJjuorX/7ldrH3BvB6jRXcP+fymjJoo
- BlRSRLanDT3g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,391,1583222400"; 
-   d="scan'208";a="298722237"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga008.jf.intel.com with ESMTP; 14 May 2020 07:11:40 -0700
-Subject: Re: [PATCH REPOST v13 0/4] usb: xhci: Add support for Renesas USB
- controllers
-To:     Vinod Koul <vkoul@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        =?UTF-8?Q?Andreas_B=c3=b6hler?= <dev@aboehler.at>,
-        linux-usb@vger.kernel.org
-References: <20200514122039.300417-1-vkoul@kernel.org>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- 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 fiD/
-Message-ID: <4ff01657-c844-d52a-0b42-81a50327a5f8@linux.intel.com>
-Date:   Thu, 14 May 2020 17:14:31 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1726551AbgENORq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 May 2020 10:17:46 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:36225 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726050AbgENORp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 10:17:45 -0400
+Received: by mail-lf1-f66.google.com with SMTP id c21so2785442lfb.3
+        for <linux-usb@vger.kernel.org>; Thu, 14 May 2020 07:17:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=A/CdV3mdj9ujS/eNNKaIrhcwu/qy7mubr144dd196CY=;
+        b=G9HAxaN1ynaXeChcBGri8tGOTYOSGhf39lfRtNQzuUJ5MKHk4Z4kKUzL4SAJZWon5N
+         8Qyj9OKBim4cltZfQG5Atz2XrtLFLtACgHN4AxYQgQih6xe/UpSUowYvz7xn3W2NtNPm
+         PMuUgAk1UwKF2TFgmTWbVoJCms8wosSAj0GaEJdSshUeW6d91JS/DAjlY6QfIwo00oZc
+         wq+VO1MIOXOSwizzVpfptkzjFG+Wta3BRS1bF1JQd7C6bUDNGSr30DWjY75rb34bXWWE
+         uQd3j/OWZx+ctcCqq9BjtFmQO6AzrzcorDFpEkKPVcJlyVHEg6a7FWQQw1YAb86rvCX/
+         lANg==
+X-Gm-Message-State: AOAM532sksGE5eXJJLWeO749QseGp74Njg7vC0ltqt0U51ndY8l3NVwX
+        5ze0MlF0vM1B2E9OlHGQXog=
+X-Google-Smtp-Source: ABdhPJz0MZGGU6ySmIKayvh0g9clf7JAKuKmX/TwFkIkcDincIlpNCi3LKW6/0kVr84ZJhVaytL71Q==
+X-Received: by 2002:ac2:4286:: with SMTP id m6mr3495986lfh.84.1589465861239;
+        Thu, 14 May 2020 07:17:41 -0700 (PDT)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id z21sm1580978ljh.42.2020.05.14.07.17.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 May 2020 07:17:40 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.92.3)
+        (envelope-from <johan@kernel.org>)
+        id 1jZEgB-0006f3-H1; Thu, 14 May 2020 16:17:43 +0200
+Date:   Thu, 14 May 2020 16:17:43 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Michael Hanselmann <public@hansmi.ch>
+Cc:     linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+        Michael Dreher <michael@5dot1.de>,
+        Jonathan Olds <jontio@i4free.co.nz>
+Subject: Re: [PATCH v2 3/6] USB: serial: ch341: Limit prescaler on quirky
+ chips
+Message-ID: <20200514141743.GE25962@localhost>
+References: <cover.1585697281.git.public@hansmi.ch>
+ <ee0499594a75018c0e31da4af9feb8a322ff448d.1585697281.git.public@hansmi.ch>
 MIME-Version: 1.0
-In-Reply-To: <20200514122039.300417-1-vkoul@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ee0499594a75018c0e31da4af9feb8a322ff448d.1585697281.git.public@hansmi.ch>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 14.5.2020 15.20, Vinod Koul wrote:
-> This series add support for Renesas USB controllers uPD720201 and uPD720202.
-> These require firmware to be loaded and in case devices have ROM those can
-> also be programmed if empty. If ROM is programmed, it runs from ROM as well.
+On Tue, Mar 31, 2020 at 11:37:19PM +0000, Michael Hanselmann wrote:
+> A subset of all CH341 devices stop responding to bulk transfers, usually
+> after the third byte, when the highest prescaler bit (0b100) is set.
+> There is one exception, namely a prescaler of exactly 0b111 (fact=1,
+> ps=3). Limit these to the lower prescaler values at the cost of timing
+> precision.
 > 
-> This includes patches from Christian which supported these controllers w/o
-> ROM and later my patches for ROM support and debugfs hook for rom erase and
-> export of xhci-pci functions.
+> Rates above 46875 baud use the same timings as the normal algorithm.
+> Below that the worst difference between desired and actual baud rate is
+> 2.17 percentage points. The worst difference is 1.06 p.p. when only
+> looking at divisors differing from the normal algorithm.
 > 
-> Changes in v13-repost:
->  - drop debugfs patch 5 and repost
+> Signed-off-by: Michael Hanselmann <public@hansmi.ch>
+> ---
+>  drivers/usb/serial/ch341.c | 70 ++++++++++++++++++++++++++++----------
+>  1 file changed, 52 insertions(+), 18 deletions(-)
 > 
-> Changes in v13:
->  - Make rensesas as independent module invoke by xhci-pci which can be
->    selected by users of such hardware
-> 
-> Changes in v12:
->   - Restore back module name for xhci-pci, so now renesas is a separate
->     module, export init/exit routines from renesas modules
->   - Update changelog on patch2
-> 
-> Changes in v11:
->   - update xhci->quirks and use that in remove function
->   - remove error return renesas_verify_fw_version()
->   - remove renesas_download_rom() and modify renesas_fw_download_image() for
->   reuse
-> Changes in v10:
->   remove renesas_xhci_pci_probe and call renesas_xhci_check_request_fw and
->   also cleanup exit code along with it.
-> 
-> Changes in v9:
->  Make fw load a sync call and have single instance of probe execute,
->    elimating probe/remove races
->  Add quirk for renesas and use that for loading
-> 
-> Changes in v8:
->  Fix compile error reported by Kbuild-bot by making usb_hcd_pci_probe() take
->  const struct hc_driver * as argument
-> 
-> Changes in v7:
->  Make a single module which removes issues with module loading
->  Keep the renesas code in renesas file
->  Add hc_driver as argument for usb_hcd_pci_probe and modify hdc drivers to
->    pass this and not use driver_data
->  Use driver data for fw name
->  Remove code to check if we need to load firmware or not
->  remove multiple fw version support, we can do that with symlink in
->    userspace
-> 
-> Changes in v6:
->  Move the renesas code into a separate driver which invokes xhci-pci functions.
-> 
-> Changes in v5:
->  Added a debugfs rom erase patch, helps in debugging
->  Squashed patch 1 & 2 as requested by Mathias
-> 
-> Changes in v4:
->  Rollback the delay values as we got device failures
-> 
-> Changes in v3:
->   Dropped patch 2 as discussed with Christian
->   Removed aligned 8 bytes check
->   Change order for firmware search from highest version to lowest
->   Added entry for new firmware for device 0x14 as well
->   Add tested by Christian
-> 
-> Changes in v2:
->   used macros for timeout count and delay
->   removed renesas_fw_alive_check
->   cleaned renesas_fw_callback
->   removed recurion for renesas_fw_download
->   added MODULE_FIRMWARE
->   added comment for multip
-> 
-> Christian Lamparter (1):
->   usb: renesas-xhci: Add the renesas xhci driver
-> 
-> Vinod Koul (3):
->   usb: hci: add hc_driver as argument for usb_hcd_pci_probe
->   usb: xhci: Add support for Renesas controller with memory
->   usb: renesas-xhci: Add ROM loader for uPD720201
-> 
->  drivers/usb/core/hcd-pci.c          |   7 +-
->  drivers/usb/host/Kconfig            |   9 +
->  drivers/usb/host/Makefile           |   1 +
->  drivers/usb/host/ehci-pci.c         |   6 +-
->  drivers/usb/host/ohci-pci.c         |   9 +-
->  drivers/usb/host/uhci-pci.c         |   8 +-
->  drivers/usb/host/xhci-pci-renesas.c | 645 ++++++++++++++++++++++++++++
->  drivers/usb/host/xhci-pci.c         |  47 +-
->  drivers/usb/host/xhci-pci.h         |  28 ++
->  drivers/usb/host/xhci.h             |   1 +
->  include/linux/usb/hcd.h             |   3 +-
->  11 files changed, 742 insertions(+), 22 deletions(-)
->  create mode 100644 drivers/usb/host/xhci-pci-renesas.c
->  create mode 100644 drivers/usb/host/xhci-pci.h
-> 
+> diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
+> index 9c839f67c3d4..67a5d4c3df42 100644
+> --- a/drivers/usb/serial/ch341.c
+> +++ b/drivers/usb/serial/ch341.c
+> @@ -24,6 +24,8 @@
+>  #define DEFAULT_BAUD_RATE 9600
+>  #define DEFAULT_TIMEOUT   1000
+>  
+> +#define CH341_QUIRK_LIMITED_PRESCALER 0x01
+> +
+>  /* flags for IO-Bits */
+>  #define CH341_BIT_RTS (1 << 6)
+>  #define CH341_BIT_DTR (1 << 5)
+> @@ -195,35 +197,67 @@ static int ch341_calc_divisor(speed_t speed, unsigned int ps,
+>   *		2 <= div <= 256 if fact = 0, or
+>   *		9 <= div <= 256 if fact = 1
+>   */
+> -static int ch341_get_divisor(speed_t speed)
+> +static int ch341_get_divisor(struct ch341_private *priv)
+>  {
+> +	speed_t speed;
+>  	unsigned int fact, div, clk_div;
+>  	int ps;
+>  
+> +	speed = priv->baud_rate;
+> +
+>  	/*
+>  	 * Clamp to supported range, this makes the (ps < 0) and (div < 2)
+>  	 * sanity checks below redundant.
+>  	 */
+>  	speed = clamp(speed, 46U, 3000000U);
+>  
+> -	/*
+> -	 * Start with highest possible base clock and find a divisor for the
+> -	 * requested baud rate.
+> -	 */
+> -	for (ps = 3; ps >= 0; --ps) {
+> -		if (ch341_calc_divisor(speed, ps, 1U, &div, &clk_div) == 0) {
+> -			fact = 1;
+> -			break;
+> -		}
+> -
+> +	if (priv->quirks & CH341_QUIRK_LIMITED_PRESCALER) {
+>  		/*
+> -		 * Prefer half base clock (fact = 0) before trying lower
+> -		 * prescaler values. This makes the receiver more tolerant to
+> -		 * errors.
+> +		 * A subset of all CH34x devices stop responding to bulk
+> +		 * transfers when configured with certain prescaler values.
+> +		 *
+> +		 * fact=0, ps=0..3: Works
+> +		 * fact=1, ps=0..2: Unreliable
+> +		 * fact=1, ps=3: Works
+> +		 *
+> +		 * Limit these devices to working prescaler values at the cost
+> +		 * of precision for speeds up to 46875 baud above which
+> +		 * fact = 1 with ps = 3 is used.
+>  		 */
+> -		if (ch341_calc_divisor(speed, ps, 0U, &div, &clk_div) == 0) {
+> +		if (ch341_calc_divisor(speed, 3U, 1U, &div, &clk_div) == 0) {
+> +			ps = 3U;
+> +			fact = 1U;
+> +		} else {
+>  			fact = 0;
+> -			break;
+> +
+> +			for (ps = 3; ps >= 0; --ps) {
+> +				if (ch341_calc_divisor(speed, ps, fact,
+> +						       &div, &clk_div) == 0)
+> +					break;
+> +			}
+> +		}
+> +	} else {
+> +		/*
+> +		 * Start with highest possible base clock and find a divisor
+> +		 * for the requested baud rate.
+> +		 */
+> +		for (ps = 3; ps >= 0; --ps) {
+> +			if (ch341_calc_divisor(speed, ps, 1U,
+> +					       &div, &clk_div) == 0) {
+> +				fact = 1;
+> +				break;
+> +			}
+> +
+> +			/*
+> +			 * Prefer half base clock (fact = 0) before trying
+> +			 * lower prescaler values. This makes the receiver more
+> +			 * tolerant to errors.
+> +			 */
+> +			if (ch341_calc_divisor(speed, ps, 0U,
+> +					       &div, &clk_div) == 0) {
+> +				fact = 0;
+> +				break;
+> +			}
+>  		}
+>  	}
+>  
+> @@ -250,7 +284,7 @@ static int ch341_set_baudrate_lcr(struct usb_device *dev,
+>  	if (!priv->baud_rate)
+>  		return -EINVAL;
+>  
+> -	val = ch341_get_divisor(priv->baud_rate);
+> +	val = ch341_get_divisor(priv);
+>  	if (val < 0)
+>  		return -EINVAL;
+>  
+> @@ -353,7 +387,7 @@ static int ch341_detect_quirks(struct usb_device *dev)
+>  	if (r == -EPIPE) {
+>  		dev_dbg(&dev->dev, "%s - reading break condition register"
+>  			" failed (%d)\n", __func__, r);
+> -		r = 0;
+> +		r = CH341_QUIRK_LIMITED_PRESCALER;
+>  		goto out;
+>  	}
 
-For all 4 patches:
-Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+This can be implemented in a more compact way which makes the algorithm
+easier to follow and doesn't depend on your patch 1/6 either. With a
+smaller fix we can get this backported to stable as well.
+
+I've verified that the below works here on top of your (slightly
+modified) 2/6. Would you mind giving it a try on your end as well?
+
+Johan
+
+
+From ea23730616b6406101d4efeb12e1ae2312dd20c9 Mon Sep 17 00:00:00 2001
+From: Johan Hovold <johan@kernel.org>
+Date: Thu, 14 May 2020 11:36:45 +0200
+Subject: [PATCH] USB: serial: ch341: fix lockup of devices with limited
+ prescaler
+
+Michael Hanselmann reports that
+
+	[a] subset of all CH341 devices stop responding to bulk
+	transfers, usually after the third byte, when the highest
+	prescaler bit (0b100) is set. There is one exception, namely a
+	prescaler of exactly 0b111 (fact=1, ps=3).
+
+Fix this by forcing a lower base clock (fact = 0) whenever needed.
+
+This specifically makes the standard rates 110, 134 and 200 bps work
+again with these devices.
+
+Fixes: 35714565089e ("USB: serial: ch341: reimplement line-speed handling")
+Cc: stable <stable@vger.kernel.org>	# 5.5
+Reported-by: Michael Hanselmann <public@hansmi.ch>
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ drivers/usb/serial/ch341.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
+index f2b93f4554a7..89675ee29645 100644
+--- a/drivers/usb/serial/ch341.c
++++ b/drivers/usb/serial/ch341.c
+@@ -73,6 +73,8 @@
+ #define CH341_LCR_CS6          0x01
+ #define CH341_LCR_CS5          0x00
+ 
++#define CH341_QUIRK_LIMITED_PRESCALER	BIT(0)
++
+ static const struct usb_device_id id_table[] = {
+ 	{ USB_DEVICE(0x4348, 0x5523) },
+ 	{ USB_DEVICE(0x1a86, 0x7523) },
+@@ -160,9 +162,11 @@ static const speed_t ch341_min_rates[] = {
+  *		2 <= div <= 256 if fact = 0, or
+  *		9 <= div <= 256 if fact = 1
+  */
+-static int ch341_get_divisor(speed_t speed)
++static int ch341_get_divisor(struct ch341_private *priv)
+ {
+ 	unsigned int fact, div, clk_div;
++	speed_t speed = priv->baud_rate;
++	bool force_fact0 = false;
+ 	int ps;
+ 
+ 	/*
+@@ -188,8 +192,12 @@ static int ch341_get_divisor(speed_t speed)
+ 	clk_div = CH341_CLK_DIV(ps, fact);
+ 	div = CH341_CLKRATE / (clk_div * speed);
+ 
++	/* Some devices require a lower base clock if ps < 3. */
++	if (ps < 3 && (priv->quirks & CH341_QUIRK_LIMITED_PRESCALER))
++		force_fact0 = true;
++
+ 	/* Halve base clock (fact = 0) if required. */
+-	if (div < 9 || div > 255) {
++	if (div < 9 || div > 255 || force_fact0) {
+ 		div /= 2;
+ 		clk_div *= 2;
+ 		fact = 0;
+@@ -228,7 +236,7 @@ static int ch341_set_baudrate_lcr(struct usb_device *dev,
+ 	if (!priv->baud_rate)
+ 		return -EINVAL;
+ 
+-	val = ch341_get_divisor(priv->baud_rate);
++	val = ch341_get_divisor(priv);
+ 	if (val < 0)
+ 		return -EINVAL;
+ 
+@@ -333,6 +341,7 @@ static int ch341_detect_quirks(struct usb_serial_port *port)
+ 			    CH341_REG_BREAK, 0, buffer, size, DEFAULT_TIMEOUT);
+ 	if (r == -EPIPE) {
+ 		dev_dbg(&port->dev, "break control not supported\n");
++		quirks = CH341_QUIRK_LIMITED_PRESCALER;
+ 		r = 0;
+ 		goto out;
+ 	}
+-- 
+2.26.2
+
 
