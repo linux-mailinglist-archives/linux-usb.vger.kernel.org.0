@@ -2,175 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1415C1D28F3
-	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 09:40:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CE031D290A
+	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 09:47:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726084AbgENHk1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 May 2020 03:40:27 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:45846 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725911AbgENHk0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 03:40:26 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04E7eLFN125466;
-        Thu, 14 May 2020 02:40:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1589442021;
-        bh=KG3memjsCcwE/u1z7H7YBFsNgxZt+svqBex7nCFVKpE=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=CTHytnE2rppXj7kocZdax12mZ/nnkBlHwpK+0Fqn4TYklkDFHYad9/Un2+J18cE6d
-         BQGf7D9/IE6lPc/omfJ/e8XkG3hQNA83W/GxNiwziMRxn4dH4SLsdYq658taMaofSc
-         gm4Cw3bqVaFvq6bOqZfRjEBX91A8F73gETubfTts=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04E7eLso027858;
-        Thu, 14 May 2020 02:40:21 -0500
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 14
- May 2020 02:40:21 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Thu, 14 May 2020 02:40:21 -0500
-Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04E7eIsV043167;
-        Thu, 14 May 2020 02:40:19 -0500
-Subject: Re: [PATCH 3/3] usb: dwc3: keystone: Turn on USB3 PHY before
- controller
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-CC:     <balbi@kernel.org>, <robh+dt@kernel.org>, <vigneshr@ti.com>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20200513130709.10239-1-rogerq@ti.com>
- <20200513130709.10239-4-rogerq@ti.com> <1589420265.5899.0.camel@mhfsdcap03>
-From:   Roger Quadros <rogerq@ti.com>
-Message-ID: <baaaf89c-4baf-4218-e22e-53cd1a64ec02@ti.com>
-Date:   Thu, 14 May 2020 10:40:18 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1726031AbgENHrC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 May 2020 03:47:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47734 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725974AbgENHrC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 14 May 2020 03:47:02 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 35E34206BE;
+        Thu, 14 May 2020 07:47:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589442421;
+        bh=wN80gGI8V+ylaxhZ0uVEzr/XB82cdY/3/3iPL444rCA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wyV8dKIjLO7rETVBqMxhDcXNwBCiYADAEr93vBBL4ZJl/y577W1fIntacfew8QfRa
+         vt5DU2KMibyPDnZ18TCUQvd8fHYQRg6g/OvM9AAqpcaLisyd/3np0z7HHNyqbuhARI
+         2sNCauNuuF90gzLVvznhjQAUFqDJAkmpKjMrP3jk=
+Date:   Thu, 14 May 2020 09:46:59 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Christoph Hellwig <hch@lst.de>, jeremy.linton@arm.com
+Cc:     Hillf Danton <hdanton@sina.com>,
+        syzbot <syzbot+353be47c9ce21b68b7ed@syzkaller.appspotmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>, jeremy.linton@arm.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, x86@kernel.org
+Subject: Re: Validating dma_mmap_coherent() parameters before calling (was
+ Re: WARNING in memtype_reserve)
+Message-ID: <20200514074659.GA1569055@kroah.com>
+References: <000000000000f0d8d205a531f1a3@google.com>
+ <20200509074507.GC1831917@kroah.com>
+ <87wo5l4ecm.fsf@nanos.tec.linutronix.de>
+ <20200513124445.GA1082735@kroah.com>
+ <87zhab249p.fsf@nanos.tec.linutronix.de>
+ <20200514035458.14760-1-hdanton@sina.com>
+ <20200514061417.GA8367@lst.de>
+ <20200514062750.GA1488715@kroah.com>
+ <20200514063158.GA8780@lst.de>
 MIME-Version: 1.0
-In-Reply-To: <1589420265.5899.0.camel@mhfsdcap03>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200514063158.GA8780@lst.de>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 14/05/2020 04:37, Chunfeng Yun wrote:
-> On Wed, 2020-05-13 at 16:07 +0300, Roger Quadros wrote:
->> The Local Power Sleep Controller (LPSC) dependency on AM65
->> requires SERDES0 to be powered on before USB.
->>
->> We need to power up SERDES0 power domain and hold it on
->> throughout the reset, init, power on sequence.
->>
->> Signed-off-by: Roger Quadros <rogerq@ti.com>
->> ---
->>   drivers/usb/dwc3/dwc3-keystone.c | 47 +++++++++++++++++++++++++++++++-
->>   1 file changed, 46 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/usb/dwc3/dwc3-keystone.c b/drivers/usb/dwc3/dwc3-keystone.c
->> index 1e14a6f4884b..46d46f3507fc 100644
->> --- a/drivers/usb/dwc3/dwc3-keystone.c
->> +++ b/drivers/usb/dwc3/dwc3-keystone.c
->> @@ -14,6 +14,7 @@
->>   #include <linux/dma-mapping.h>
->>   #include <linux/io.h>
->>   #include <linux/of_platform.h>
->> +#include <linux/phy/phy.h>
->>   #include <linux/pm_runtime.h>
->>   
->>   /* USBSS register offsets */
->> @@ -34,6 +35,7 @@
->>   struct dwc3_keystone {
->>   	struct device			*dev;
->>   	void __iomem			*usbss;
->> +	struct phy			*usb3_phy;
->>   };
->>   
->>   static inline u32 kdwc3_readl(void __iomem *base, u32 offset)
->> @@ -95,8 +97,44 @@ static int kdwc3_probe(struct platform_device *pdev)
->>   	if (IS_ERR(kdwc->usbss))
->>   		return PTR_ERR(kdwc->usbss);
->>   
->> -	pm_runtime_enable(kdwc->dev);
->> +	/* PSC dependency on AM65 needs SERDES0 to be powered before USB0 */
->> +	kdwc->usb3_phy = devm_phy_get(dev, "usb3-phy");
-> Use devm_phy_optional_get() instead?
-
-Indeed, it seems better suited.
-
-cheers,
--roger
-
+On Thu, May 14, 2020 at 08:31:58AM +0200, Christoph Hellwig wrote:
+> On Thu, May 14, 2020 at 08:27:50AM +0200, Greg KH wrote:
+> > On Thu, May 14, 2020 at 08:14:17AM +0200, Christoph Hellwig wrote:
+> > > Guys, can you please start formal thread on this?  I have no
+> > > idea where this came from and what the rationale is.  Btw, if the
+> > > pfn is crap in dma_direct_mmap then the dma_addr_t passed in is
+> > > crap, as it is derived from that.  What is the caller, and how is
+> > > this triggered?
+> > 
+> > 
+> > Ok, to summarize, commit 2bef9aed6f0e ("usb: usbfs: correct kernel->user
+> > page attribute mismatch") changed a call from remap_pfn_range() to
+> > dma_mmap_coherent() for usb data buffers being sent from userspace.
 > 
->> +	if (IS_ERR(kdwc->usb3_phy)) {
->> +		error = PTR_ERR(kdwc->usb3_phy);
->> +		if (error == -ENOSYS || error == -ENODEV) {
->> +			kdwc->usb3_phy = NULL;
->> +		} else {
->> +			if (error != -EPROBE_DEFER) {
->> +				dev_err(dev, "couldn't get usb3 phy: %d\n",
->> +					error);
->> +			}
->> +
->> +			return error;
->> +		}
->> +	}
->> +
->> +	phy_pm_runtime_get_sync(kdwc->usb3_phy);
->> +
->> +	error = phy_reset(kdwc->usb3_phy);
->> +	if (error < 0) {
->> +		dev_err(dev, "usb3 phy reset failed: %d\n", error);
->> +		return error;
->> +	}
->> +
->> +	error = phy_init(kdwc->usb3_phy);
->> +	if (error < 0) {
->> +		dev_err(dev, "usb3 phy init failed: %d\n", error);
->> +		return error;
->> +	}
->>   
->> +	error = phy_power_on(kdwc->usb3_phy);
->> +	if (error < 0) {
->> +		dev_err(dev, "usb3 phy power on failed: %d\n", error);
->> +		phy_exit(kdwc->usb3_phy);
->> +		return error;
->> +	}
->> +
->> +	pm_runtime_enable(kdwc->dev);
->>   	error = pm_runtime_get_sync(kdwc->dev);
->>   	if (error < 0) {
->>   		dev_err(kdwc->dev, "pm_runtime_get_sync failed, error %d\n",
->> @@ -138,6 +176,9 @@ static int kdwc3_probe(struct platform_device *pdev)
->>   err_irq:
->>   	pm_runtime_put_sync(kdwc->dev);
->>   	pm_runtime_disable(kdwc->dev);
->> +	phy_power_off(kdwc->usb3_phy);
->> +	phy_exit(kdwc->usb3_phy);
->> +	phy_pm_runtime_put_sync(kdwc->usb3_phy);
->>   
->>   	return error;
->>   }
->> @@ -163,6 +204,10 @@ static int kdwc3_remove(struct platform_device *pdev)
->>   	pm_runtime_put_sync(kdwc->dev);
->>   	pm_runtime_disable(kdwc->dev);
->>   
->> +	phy_power_off(kdwc->usb3_phy);
->> +	phy_exit(kdwc->usb3_phy);
->> +	phy_pm_runtime_put_sync(kdwc->usb3_phy);
->> +
->>   	platform_set_drvdata(pdev, NULL);
->>   
->>   	return 0;
+> I only need to look at the commit for 3 seconds to tell you that it is
+> completely buggy.  While using dma_mmap_coherent is fundamentally the
+> right thing and absolutely required for dma_alloc_* allocations, USB
+> also uses it's own local gen pool allocator or plain kmalloc for not
+> DMA capable controller.  This need to use remap_pfn_range.  I'm pretty
+> sure you hit one of those cases.
 > 
+> The logic should be something like:
+> 
+> 	if (hcd->localmem_pool || !hcd_uses_dma(hcd))
+> 		remap_pfn_range()
+> 	else
+> 		dma_mmap_coherent()
 
--- 
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+Ok, that's simple enough, patch is below.
+
+Jeremy, any objection to this change?
+
+thanks,
+
+greg k-h
+
+
+diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
+index b9db9812d6c5..d93d94d7ff50 100644
+--- a/drivers/usb/core/devio.c
++++ b/drivers/usb/core/devio.c
+@@ -251,9 +251,19 @@ static int usbdev_mmap(struct file *file, struct vm_area_struct *vma)
+ 	usbm->vma_use_count = 1;
+ 	INIT_LIST_HEAD(&usbm->memlist);
+ 
+-	if (dma_mmap_coherent(hcd->self.sysdev, vma, mem, dma_handle, size)) {
+-		dec_usb_memory_use_count(usbm, &usbm->vma_use_count);
+-		return -EAGAIN;
++	if (hcd->localmem_pool || !hcd_uses_dma(hcd)) {
++		if (remap_pfn_range(vma, vma->vm_start,
++				    virt_to_phys(usbm->mem) >> PAGE_SHIFT,
++				    size, vma->vm_page_prot) < 0) {
++			dec_usb_memory_use_count(usbm, &usbm->vma_use_count);
++			return -EAGAIN;
++		}
++	} else {
++		if (dma_mmap_coherent(hcd->self.sysdev, vma, mem, dma_handle,
++				      size)) {
++			dec_usb_memory_use_count(usbm, &usbm->vma_use_count);
++			return -EAGAIN;
++		}
+ 	}
+ 
+ 	vma->vm_flags |= VM_IO;
