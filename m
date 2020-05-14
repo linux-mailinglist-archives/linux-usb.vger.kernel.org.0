@@ -2,76 +2,175 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F7701D28D4
-	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 09:35:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1415C1D28F3
+	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 09:40:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726010AbgENHe4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 May 2020 03:34:56 -0400
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:25851 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725972AbgENHe4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 03:34:56 -0400
-X-UUID: 72bfeb9eaa344ce58a72c6db30dc0aad-20200514
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=/nREqLi1Ldl8sd0riITmmpWJKuTNyeKnEZWI4u7Mg0Y=;
-        b=bg9Pgjd9KHnY+znNILPTWZKAHNkxlugL4jlyX1guMYRskgMMgE8jl+Z+r8xM7pRv1NEVrIcjRn4BqJf2uQJ1Au8l+So/+zDkV+X5uR+UqUo8X1Kc3UcAJ/01yUKgXKWHE887B4wOsDD4XISz7fjLG+OXJ+Kekile5fcawNQIdZk=;
-X-UUID: 72bfeb9eaa344ce58a72c6db30dc0aad-20200514
-Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <min.guo@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 549127802; Thu, 14 May 2020 15:34:45 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N1.mediatek.inc
- (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 14 May
- 2020 15:34:44 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 14 May 2020 15:34:44 +0800
-Message-ID: <1589441605.28160.27.camel@mhfsdcap03>
-Subject: Re: [PATCH] usb: musb: mediatek: add reset FADDR to zero in reset
- interrupt handle
-From:   Min Guo <min.guo@mediatek.com>
-To:     Macpaul Lin <macpaul.lin@mediatek.com>
-CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Hans de Goede <hdegoede@redhat.com>, Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        Macpaul Lin <macpaul.lin@gmail.com>
-Date:   Thu, 14 May 2020 15:33:25 +0800
-In-Reply-To: <1589428872-29282-1-git-send-email-macpaul.lin@mediatek.com>
-References: <1589428872-29282-1-git-send-email-macpaul.lin@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S1726084AbgENHk1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 May 2020 03:40:27 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:45846 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725911AbgENHk0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 03:40:26 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04E7eLFN125466;
+        Thu, 14 May 2020 02:40:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1589442021;
+        bh=KG3memjsCcwE/u1z7H7YBFsNgxZt+svqBex7nCFVKpE=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=CTHytnE2rppXj7kocZdax12mZ/nnkBlHwpK+0Fqn4TYklkDFHYad9/Un2+J18cE6d
+         BQGf7D9/IE6lPc/omfJ/e8XkG3hQNA83W/GxNiwziMRxn4dH4SLsdYq658taMaofSc
+         gm4Cw3bqVaFvq6bOqZfRjEBX91A8F73gETubfTts=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04E7eLso027858;
+        Thu, 14 May 2020 02:40:21 -0500
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 14
+ May 2020 02:40:21 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Thu, 14 May 2020 02:40:21 -0500
+Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04E7eIsV043167;
+        Thu, 14 May 2020 02:40:19 -0500
+Subject: Re: [PATCH 3/3] usb: dwc3: keystone: Turn on USB3 PHY before
+ controller
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+CC:     <balbi@kernel.org>, <robh+dt@kernel.org>, <vigneshr@ti.com>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20200513130709.10239-1-rogerq@ti.com>
+ <20200513130709.10239-4-rogerq@ti.com> <1589420265.5899.0.camel@mhfsdcap03>
+From:   Roger Quadros <rogerq@ti.com>
+Message-ID: <baaaf89c-4baf-4218-e22e-53cd1a64ec02@ti.com>
+Date:   Thu, 14 May 2020 10:40:18 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 3929ED25672ED9116AC7BC7CCB30D4C22ADBA5D38237F4E1188FC580E959644C2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <1589420265.5899.0.camel@mhfsdcap03>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gVGh1LCAyMDIwLTA1LTE0IGF0IDEyOjAxICswODAwLCBNYWNwYXVsIExpbiB3cm90ZToNCj4g
-V2hlbiByZWNlaXZpbmcgcmVzZXQgaW50ZXJydXB0LCBGQUREUiBuZWVkIHRvIGJlIHJlc2V0IHRv
-IHplcm8gaW4NCj4gcGVyaXBoZWFybCBtb2RlLiBPdGhlcndpc2UgZXAwIGNhbm5vdCBkbyBlbnVt
-ZXJhdGlvbiB3aGVuIHJlLXBsdWdpbmcgVVNCDQo+IGNhYmxlLg0KPiANCj4gU2lnbmVkLW9mZi1i
-eTogTWFjcGF1bCBMaW4gPG1hY3BhdWwubGluQG1lZGlhdGVrLmNvbT4NCj4gLS0tDQo+ICBkcml2
-ZXJzL3VzYi9tdXNiL21lZGlhdGVrLmMgfCAgICA2ICsrKysrKw0KPiAgMSBmaWxlIGNoYW5nZWQs
-IDYgaW5zZXJ0aW9ucygrKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL211c2IvbWVk
-aWF0ZWsuYyBiL2RyaXZlcnMvdXNiL211c2IvbWVkaWF0ZWsuYw0KPiBpbmRleCA2MTk2YjBlLi5l
-ZWJlYWRkIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3VzYi9tdXNiL21lZGlhdGVrLmMNCj4gKysr
-IGIvZHJpdmVycy91c2IvbXVzYi9tZWRpYXRlay5jDQo+IEBAIC0yMDgsNiArMjA4LDEyIEBAIHN0
-YXRpYyBpcnFyZXR1cm5fdCBnZW5lcmljX2ludGVycnVwdChpbnQgaXJxLCB2b2lkICpfX2hjaSkN
-Cj4gIAltdXNiLT5pbnRfcnggPSBtdXNiX2NsZWFydyhtdXNiLT5tcmVncywgTVVTQl9JTlRSUlgp
-Ow0KPiAgCW11c2ItPmludF90eCA9IG11c2JfY2xlYXJ3KG11c2ItPm1yZWdzLCBNVVNCX0lOVFJU
-WCk7DQo+ICANCj4gKwlpZiAoKG11c2ItPmludF91c2IgJiBNVVNCX0lOVFJfUkVTRVQpICYmICFp
-c19ob3N0X2FjdGl2ZShtdXNiKSkgew0KPiArCQkvKiBlcDAgRkFERFIgbXVzdCBiZSAwIHdoZW4g
-KHJlKWVudGVyaW5nIHBlcmlwaGVyYWwgbW9kZSAqLw0KPiArCQltdXNiX2VwX3NlbGVjdChtdXNi
-LT5tcmVncywgMCk7DQo+ICsJCW11c2Jfd3JpdGViKG11c2ItPm1yZWdzLCBNVVNCX0ZBRERSLCAw
-KTsNCj4gKwl9DQo+ICsNCj4gIAlpZiAobXVzYi0+aW50X3VzYiB8fCBtdXNiLT5pbnRfdHggfHwg
-bXVzYi0+aW50X3J4KQ0KPiAgCQlyZXR2YWwgPSBtdXNiX2ludGVycnVwdChtdXNiKTsNCj4gIA0K
-DQpBY2tlZC1ieTpNaW4gR3VvIDxtaW4uZ3VvQG1lZGlhdGVrLmNvbT4NCg0K
 
+
+On 14/05/2020 04:37, Chunfeng Yun wrote:
+> On Wed, 2020-05-13 at 16:07 +0300, Roger Quadros wrote:
+>> The Local Power Sleep Controller (LPSC) dependency on AM65
+>> requires SERDES0 to be powered on before USB.
+>>
+>> We need to power up SERDES0 power domain and hold it on
+>> throughout the reset, init, power on sequence.
+>>
+>> Signed-off-by: Roger Quadros <rogerq@ti.com>
+>> ---
+>>   drivers/usb/dwc3/dwc3-keystone.c | 47 +++++++++++++++++++++++++++++++-
+>>   1 file changed, 46 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/dwc3/dwc3-keystone.c b/drivers/usb/dwc3/dwc3-keystone.c
+>> index 1e14a6f4884b..46d46f3507fc 100644
+>> --- a/drivers/usb/dwc3/dwc3-keystone.c
+>> +++ b/drivers/usb/dwc3/dwc3-keystone.c
+>> @@ -14,6 +14,7 @@
+>>   #include <linux/dma-mapping.h>
+>>   #include <linux/io.h>
+>>   #include <linux/of_platform.h>
+>> +#include <linux/phy/phy.h>
+>>   #include <linux/pm_runtime.h>
+>>   
+>>   /* USBSS register offsets */
+>> @@ -34,6 +35,7 @@
+>>   struct dwc3_keystone {
+>>   	struct device			*dev;
+>>   	void __iomem			*usbss;
+>> +	struct phy			*usb3_phy;
+>>   };
+>>   
+>>   static inline u32 kdwc3_readl(void __iomem *base, u32 offset)
+>> @@ -95,8 +97,44 @@ static int kdwc3_probe(struct platform_device *pdev)
+>>   	if (IS_ERR(kdwc->usbss))
+>>   		return PTR_ERR(kdwc->usbss);
+>>   
+>> -	pm_runtime_enable(kdwc->dev);
+>> +	/* PSC dependency on AM65 needs SERDES0 to be powered before USB0 */
+>> +	kdwc->usb3_phy = devm_phy_get(dev, "usb3-phy");
+> Use devm_phy_optional_get() instead?
+
+Indeed, it seems better suited.
+
+cheers,
+-roger
+
+> 
+>> +	if (IS_ERR(kdwc->usb3_phy)) {
+>> +		error = PTR_ERR(kdwc->usb3_phy);
+>> +		if (error == -ENOSYS || error == -ENODEV) {
+>> +			kdwc->usb3_phy = NULL;
+>> +		} else {
+>> +			if (error != -EPROBE_DEFER) {
+>> +				dev_err(dev, "couldn't get usb3 phy: %d\n",
+>> +					error);
+>> +			}
+>> +
+>> +			return error;
+>> +		}
+>> +	}
+>> +
+>> +	phy_pm_runtime_get_sync(kdwc->usb3_phy);
+>> +
+>> +	error = phy_reset(kdwc->usb3_phy);
+>> +	if (error < 0) {
+>> +		dev_err(dev, "usb3 phy reset failed: %d\n", error);
+>> +		return error;
+>> +	}
+>> +
+>> +	error = phy_init(kdwc->usb3_phy);
+>> +	if (error < 0) {
+>> +		dev_err(dev, "usb3 phy init failed: %d\n", error);
+>> +		return error;
+>> +	}
+>>   
+>> +	error = phy_power_on(kdwc->usb3_phy);
+>> +	if (error < 0) {
+>> +		dev_err(dev, "usb3 phy power on failed: %d\n", error);
+>> +		phy_exit(kdwc->usb3_phy);
+>> +		return error;
+>> +	}
+>> +
+>> +	pm_runtime_enable(kdwc->dev);
+>>   	error = pm_runtime_get_sync(kdwc->dev);
+>>   	if (error < 0) {
+>>   		dev_err(kdwc->dev, "pm_runtime_get_sync failed, error %d\n",
+>> @@ -138,6 +176,9 @@ static int kdwc3_probe(struct platform_device *pdev)
+>>   err_irq:
+>>   	pm_runtime_put_sync(kdwc->dev);
+>>   	pm_runtime_disable(kdwc->dev);
+>> +	phy_power_off(kdwc->usb3_phy);
+>> +	phy_exit(kdwc->usb3_phy);
+>> +	phy_pm_runtime_put_sync(kdwc->usb3_phy);
+>>   
+>>   	return error;
+>>   }
+>> @@ -163,6 +204,10 @@ static int kdwc3_remove(struct platform_device *pdev)
+>>   	pm_runtime_put_sync(kdwc->dev);
+>>   	pm_runtime_disable(kdwc->dev);
+>>   
+>> +	phy_power_off(kdwc->usb3_phy);
+>> +	phy_exit(kdwc->usb3_phy);
+>> +	phy_pm_runtime_put_sync(kdwc->usb3_phy);
+>> +
+>>   	platform_set_drvdata(pdev, NULL);
+>>   
+>>   	return 0;
+> 
+
+-- 
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
