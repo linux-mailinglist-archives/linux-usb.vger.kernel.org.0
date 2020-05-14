@@ -2,107 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8301A1D2BB5
-	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 11:44:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EF641D2BCF
+	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 11:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726100AbgENJol (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 May 2020 05:44:41 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:18803 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725878AbgENJol (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 05:44:41 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5ebd127f0001>; Thu, 14 May 2020 02:42:23 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Thu, 14 May 2020 02:44:41 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Thu, 14 May 2020 02:44:41 -0700
-Received: from [10.25.73.206] (172.20.13.39) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 14 May
- 2020 09:44:37 +0000
-Subject: Re: [PATCH V3 0/8] Tegra XUSB charger detect support
-To:     Felipe Balbi <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
-        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <mark.rutland@arm.com>, <robh+dt@kernel.org>, <kishon@ti.com>
-CC:     <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1589437363-16727-1-git-send-email-nkristam@nvidia.com>
- <87wo5e4zzi.fsf@kernel.org>
-X-Nvconfidentiality: public
-From:   Nagarjuna Kristam <nkristam@nvidia.com>
-Message-ID: <de31ad94-6884-cf83-36c4-0a865bc01753@nvidia.com>
-Date:   Thu, 14 May 2020 15:16:48 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1726105AbgENJxB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 May 2020 05:53:01 -0400
+Received: from esa1.microchip.iphmx.com ([68.232.147.91]:58699 "EHLO
+        esa1.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725946AbgENJxB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 05:53:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1589449980; x=1620985980;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=4BYb23KO7xGiRWlCsZBOQqfF7mP3kChQE5nAO2UmTUA=;
+  b=FYh6c6buO1DyWP/085XjdJluJwaqIrtTQeL00Wcx3UvDRnQKmbuCs40J
+   qnwXYsA635K4tFpcru4Nb9FQpw43NMu964JLvhjRQrdL5v+82GKj6Z9j2
+   /fRG8YmdLUxuK8s7cMfxdVKPNz45aEQ+CCP1rxGIKmAQJ9VNRlzsVLwCH
+   EDs3Wb0DMMUpw5D4TbNzmAujVvCstKAm22kE6evclFVO7MtGdxLuyAhl0
+   aVbvmJozoGxISh6jdEKUnPgRZXvaw6GO+49LRu/YJoJNxxZ2UnQvrEmQW
+   kXl2d6yaSN0EEe9EXbH1YARCV34Oj+UwEwn8l4Yp6drUBDHJw0UegaByO
+   Q==;
+IronPort-SDR: G2/ae2QsK6sMGEbhnQ0HNyZmFvfzjaiv5YgWOB4BpdB9tYPAdFhoFXTClG3H8YIlxVcZRecWDT
+ 2BATNHH7EkwTErzf0p9fn9aj0HCcpJo6hJXsurn75kyh10a5GAopUF/Za/HbctKfoQa761YPw8
+ bcE85p9dp5CLkqfhtjOKasIzrpJVzLCsmwm3AhkvQaFnKP8Cnk/hmxpUY4r3omzIQ5PvV87cOd
+ bv3Hid1J+2aUjge+X783VXjgzLVw5ApYzP53w5/0trZu2w/B5NbLMphEUjuQT8KzKuYXcgUhyv
+ WwM=
+X-IronPort-AV: E=Sophos;i="5.73,390,1583218800"; 
+   d="scan'208";a="79589202"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 May 2020 02:53:00 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Thu, 14 May 2020 02:53:03 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.1713.5 via Frontend Transport; Thu, 14 May 2020 02:52:58 -0700
+From:   Christian Gromm <christian.gromm@microchip.com>
+To:     <gregkh@linuxfoundation.org>
+CC:     <driverdev-devel@linuxdriverproject.org>,
+        <linux-usb@vger.kernel.org>,
+        Christian Gromm <christian.gromm@microchip.com>
+Subject: [PATCH v2 0/8] staging: most: move USB adapter driver to stable branch
+Date:   Thu, 14 May 2020 11:52:48 +0200
+Message-ID: <1589449976-11378-1-git-send-email-christian.gromm@microchip.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-In-Reply-To: <87wo5e4zzi.fsf@kernel.org>
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1589449343; bh=IjElWauWpJw92WntPBv2Q9z6+yo5qw4xWM56DjfOXrA=;
-        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=UFysw5t4oIzHzmyonRYLlW3RfxdrYITKUAEJOaiNz8TXpelUnGolk8wRFclt2gUsp
-         milukPQu8fyoz+ySK0BJ6vimiRDpWU2QZidyPER2HDyJP8mkaXRjiUdz84u5lB7Crz
-         SDZqkjVEoPM29GeGfEMaA/pVrwn9MPIvqnXeg58cHreZhExEC/JT+ss/Uj9hXwzoPj
-         WXmHMAq2reAs0aJoIf6Gl7y1E9P+yvuT9A/az7+svUa+Cy/90YH+SLVLNlTPythwx3
-         SfN2TehRuXTXPrMrgduBc3RJnRUWIr2CLMp9eMrFQ8IY4/MSlYdwTOo24z0EcvCLR+
-         31RExRP4EVujQ==
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+This series moves the USB adapter driver to the stable branch and fixes
+the comments/findings on the submitted code.
 
+v2:
+	- create a patch set to address the comments on submitted code
 
-On 14-05-2020 15:09, Felipe Balbi wrote:
-> Nagarjuna Kristam<nkristam@nvidia.com>  writes:
-> 
->> This patch series adds charger detect support on XUSB hardware used in
->> Tegra210 and Tegra186 SoCs.
->>
->> This patchset is composed with :
->>   - dt bindings of XUSB Pad Controller
->>   - Tegra XUSB device mode driver to add vbus_draw support
->>   - Tegra PHY driver for charger detect support
->>
->> Tests done:
->>   - Connect USB cable from ubuntu host to micro-B port of DUT to detect
->>     SDP_TYPE charger
->>   - Connect USB cable from external powered USB hub(which inturn connects
->>     to ubuntu host) to micro-B port of DUT to detect CDP_TYPE charger.
->>   - Connect USB cable from USB charger to micro-B port of DUT to detect
->>     DCP_TYPE charger.
->> DUT: Jetson-tx1, Jetson tx2.
->>
->> V3:
->>   - Added ACKed-by details for PHY driver and DT changes.
->>   - Functions and its arguments are aligned.
->>   - Tabs are used for alignment of MACRO's
->>   - For vbus_draw USDC callback, usb_phy set_power error is propogated.
->>   - Fixed various comments given by thierry.
->> V2:
->>   - Added ACKed-by details for DT patches.
->>   - All patches rebased.
->>
->> Nagarjuna Kristam (8):
->>    dt-bindings: phy: tegra-xusb: Add charger-detect property
->>    usb: gadget: tegra-xudc: Add vbus_draw support
->>    phy: tegra: xusb: Add support for UTMI pad power control
->>    phy: tegra: xusb: Add USB2 pad power control support for Tegra210
->>    phy: tegra: xusb: Add soc ops API to enable UTMI PAD protection
->>    phy: tegra: xusb: Add support for charger detect
->>    phy: tegra: xusb: Enable charger detect for Tegra186
->>    phy: tegra: xusb: Enable charger detect for Tegra210
-> Is there a hard-dependency between gadget and phy patches?
-> 
-> -- balbiNo dependency. They can be merged independently.
+Christian Gromm (8):
+  drivers: most: add usb adapter driver
+  drivers: most: usb: use dev_*() functions to print messages
+  drivers: most: usb: remove reference to USB error codes
+  drivers: most: usb: check number of reported endpoints
+  drivers: most: usb: use dev_dbg function
+  drivers: most: fix typo in Kconfig
+  drivers: most: usb: use macro ATTRIBUTE_GROUPS
+  Documentation: ABI: correct sysfs attribute description of MOST driver
 
-- Nagarjuna
+ Documentation/ABI/testing/sysfs-bus-most |  104 +--
+ drivers/most/Kconfig                     |   12 +
+ drivers/most/Makefile                    |    2 +
+ drivers/most/most_usb.c                  | 1252 ++++++++++++++++++++++++++++++
+ 4 files changed, 1319 insertions(+), 51 deletions(-)
+ create mode 100644 drivers/most/most_usb.c
+
+-- 
+2.7.4
+
