@@ -2,52 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9416E1D34DE
-	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 17:19:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D47221D34DF
+	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 17:19:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727798AbgENPTA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 May 2020 11:19:00 -0400
-Received: from esa3.microchip.iphmx.com ([68.232.153.233]:3694 "EHLO
-        esa3.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727124AbgENPTA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 11:19:00 -0400
+        id S1727802AbgENPTB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 May 2020 11:19:01 -0400
+Received: from esa5.microchip.iphmx.com ([216.71.150.166]:8015 "EHLO
+        esa5.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727124AbgENPTB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 11:19:01 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1589469539; x=1621005539;
+  t=1589469541; x=1621005541;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=Rn1pc1QTMgKmish9JgDfo6jrHeq3EAb4tQb+UmggaHs=;
-  b=Z9X6HDKubv5HjUr4pSWKCrVbrVAhmfhKWnuS3ftc8GdfGxG/VCnf+FBb
-   /wqtPNf62Kixm+B5YJtGk0FhGpJoBxvblcHtySh1E+Qr3NHdYpul7Mgjb
-   LVYmJfZu2AbLkvvDmhB4xwzGeTGJ4bbI8fEWDfV4lvhDgwhmw6ahljy4H
-   pjPyIHFaIxPZkpg9Gvt01eMjJL/bvMER6HdKjXntwLuv1CZpiaxASYYwe
-   reqBHaRr9tr7e5eaG36Jh6Ny24UqJAMrf0yKbDM7PIZB5OS00flHvCnLw
-   q6iXrUUZOPG6BqZ36yfAzangR1ygHFJ/jf0iS/CWjk2q9yuwzxSJVjcDH
-   Q==;
-IronPort-SDR: AF2hbRuxcvisuVT0xf6kLCxQMTs4C5LGJttxc1RUaYUYz0H1dKA2tliybFI3sbnUrNdN+kVUPG
- EubRSAAQGUUKx70Ty6EZGvMqm5NIJQl/WVgF0wYnSqopo3dx1SYYk45mnb8fmagVYssu8HwhSU
- QsJI98vJazbkwF5s49ZpFxOO/rIOvgmLQyyBddQz+9DrW7Q3zODtzbrlxxe9+XkojdEozDxh+F
- jbfMbZA829uWbL4awKIngx7CkEztt6I+gdfO+j8njDiPgXKPuC13QZHRDFvrRmObFyRoe79OwN
- eJM=
+  bh=lUbXm9Hi2Ra7UqsdrP7ZRyeuZc3zmXm9sYSDoqr6Ukc=;
+  b=voC5IqYDOpLrnqqq0m9+AZZRYhBGI8+lyokVKdH6zZi23xX60DCyai9a
+   SDj6khASMB27J/KEtzxUAdgfm71V8fId9qtGQbIA7KzDz6T0C8MHUYyHs
+   LeqV7ZbvzgEHwaj/v+uJnODFB2uYs8aCSOtzMd8N365OR52bEAVm4keS+
+   hbHtXntglOjpMUwPI+bb950Ygq5/xWgkpMc1Yf6+iH0oX2vi7mvY9llzW
+   8QxA14k+Z0JV14o5j66QUXqb0KnV4eCfsfgqvVxRPBp5YlKo3p+eDJ27+
+   UMdXl44WP1NraZAtYHZz7AZC8Vvi5EE9/u4Cj7TT1Kd4WHMj+tzfZ41EY
+   g==;
+IronPort-SDR: Hw4LbRd5KLKkWog3YwbbBYlD377fNUU+nzVAwrJ72mssypSUvZXSO0h2z1INf9pEqLZgRygLQm
+ UeranlswXdRu2HB6XPDMlF/lpjKfh96uxVa3NdP7GTRPYJP82HvDTavOr6mDG2CYw4GY0rc1iL
+ xMoO3ExTwDan0ZZ4J/eD1yOZP/vjO48NdWFbvoEovBzPgu4KfjK9nHgHEcIXERRgZ0Lz+0JfJW
+ ff4AZzAxK030pxJa2LpAuwJkXgPESYNPEkqq6OGJePpBxpKaQETTP3YGfBTFPb+LaOFAiB7B+4
+ HnM=
 X-IronPort-AV: E=Sophos;i="5.73,391,1583218800"; 
-   d="scan'208";a="76658375"
+   d="scan'208";a="75909810"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 May 2020 08:18:59 -0700
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 May 2020 08:19:01 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Thu, 14 May 2020 08:18:59 -0700
+ 15.1.1713.5; Thu, 14 May 2020 08:19:03 -0700
 Received: from localhost.localdomain (10.10.115.15) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.1713.5 via Frontend Transport; Thu, 14 May 2020 08:19:01 -0700
+ 15.1.1713.5 via Frontend Transport; Thu, 14 May 2020 08:19:02 -0700
 From:   Christian Gromm <christian.gromm@microchip.com>
 To:     <gregkh@linuxfoundation.org>
 CC:     <driverdev-devel@linuxdriverproject.org>,
         <linux-usb@vger.kernel.org>,
         Christian Gromm <christian.gromm@microchip.com>
-Subject: [PATCH v2 3/7] staging: most: usb: check number of reported endpoints
-Date:   Thu, 14 May 2020 17:18:48 +0200
-Message-ID: <1589469532-21488-4-git-send-email-christian.gromm@microchip.com>
+Subject: [PATCH v2 4/7] staging: most: usb: use dev_dbg function
+Date:   Thu, 14 May 2020 17:18:49 +0200
+Message-ID: <1589469532-21488-5-git-send-email-christian.gromm@microchip.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1589469532-21488-1-git-send-email-christian.gromm@microchip.com>
 References: <1589469532-21488-1-git-send-email-christian.gromm@microchip.com>
@@ -58,54 +58,50 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch checks the number of endpoints reported by the USB
-interface descriptor and throws an error if the number exceeds
-MAX_NUM_ENDPOINTS.
+This patch replaces the functions dev_notice with dev_dbg to silence
+the driver during normal operation.
 
 Signed-off-by: Christian Gromm <christian.gromm@microchip.com>
 Reported-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
 v2:
 
- drivers/staging/most/usb/usb.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ drivers/staging/most/usb/usb.c | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/staging/most/usb/usb.c b/drivers/staging/most/usb/usb.c
-index dbb6003..d5c73cb 100644
+index d5c73cb..c3a7e71 100644
 --- a/drivers/staging/most/usb/usb.c
 +++ b/drivers/staging/most/usb/usb.c
-@@ -950,13 +950,17 @@ hdm_probe(struct usb_interface *interface, const struct usb_device_id *id)
- 	unsigned int num_endpoints;
- 	struct most_channel_capability *tmp_cap;
- 	struct usb_endpoint_descriptor *ep_desc;
--	int ret = 0;
-+	int ret;
+@@ -1035,17 +1035,17 @@ hdm_probe(struct usb_interface *interface, const struct usb_device_id *id)
+ 		init_usb_anchor(&mdev->busy_urbs[i]);
+ 		spin_lock_init(&mdev->channel_lock[i]);
+ 	}
+-	dev_notice(dev, "claimed gadget: Vendor=%4.4x ProdID=%4.4x Bus=%02x Device=%02x\n",
+-		   le16_to_cpu(usb_dev->descriptor.idVendor),
+-		   le16_to_cpu(usb_dev->descriptor.idProduct),
+-		   usb_dev->bus->busnum,
+-		   usb_dev->devnum);
+-
+-	dev_notice(dev, "device path: /sys/bus/usb/devices/%d-%s:%d.%d\n",
+-		   usb_dev->bus->busnum,
+-		   usb_dev->devpath,
+-		   usb_dev->config->desc.bConfigurationValue,
+-		   usb_iface_desc->desc.bInterfaceNumber);
++	dev_dbg(dev, "claimed gadget: Vendor=%4.4x ProdID=%4.4x Bus=%02x Device=%02x\n",
++		le16_to_cpu(usb_dev->descriptor.idVendor),
++		le16_to_cpu(usb_dev->descriptor.idProduct),
++		usb_dev->bus->busnum,
++		usb_dev->devnum);
++
++	dev_dbg(dev, "device path: /sys/bus/usb/devices/%d-%s:%d.%d\n",
++		usb_dev->bus->busnum,
++		usb_dev->devpath,
++		usb_dev->config->desc.bConfigurationValue,
++		usb_iface_desc->desc.bInterfaceNumber);
  
- 	if (!mdev)
--		goto err_out_of_memory;
-+		return -ENOMEM;
- 
- 	usb_set_intfdata(interface, mdev);
- 	num_endpoints = usb_iface_desc->desc.bNumEndpoints;
-+	if (num_endpoints > MAX_NUM_ENDPOINTS) {
-+		kfree(mdev);
-+		return -EINVAL;
-+	}
- 	mutex_init(&mdev->io_mutex);
- 	INIT_WORK(&mdev->poll_work_obj, wq_netinfo);
- 	timer_setup(&mdev->link_stat_timer, link_stat_timer_handler, 0);
-@@ -1085,11 +1089,6 @@ hdm_probe(struct usb_interface *interface, const struct usb_device_id *id)
- 	kfree(mdev->conf);
- err_free_mdev:
- 	put_device(&mdev->dev);
--err_out_of_memory:
--	if (ret == 0 || ret == -ENOMEM) {
--		ret = -ENOMEM;
--		dev_err(dev, "out of memory\n");
--	}
- 	return ret;
- }
- 
+ 	ret = most_register_interface(&mdev->iface);
+ 	if (ret)
 -- 
 2.7.4
 
