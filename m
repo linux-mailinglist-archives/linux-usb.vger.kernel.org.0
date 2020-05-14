@@ -2,107 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE60A1D24D6
-	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 03:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4962B1D2534
+	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 04:51:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726038AbgENBjN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 May 2020 21:39:13 -0400
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:14344 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725925AbgENBjN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 May 2020 21:39:13 -0400
-X-UUID: 4b3c483eabb647ccac6f02e4391850e8-20200514
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=c6lbM5ORaD1df0n3V09w+vUyABWL3OC0bP3q4G96Tcg=;
-        b=JFQDRTdeKMXmptoNuzltVULKMmUll5JnMpZe+S/kxnVb3BXqfeqP1ULq3AwK4EnwxqfzDmXQxK0c+nkNkt3zagqihn2OJNX4bii+4inY22I5mQiBsFyUAKCdcVlVLezmo+Tym+beCV4iNcHRGN9BS7j1Cv5UcwLflgjVM0szfMI=;
-X-UUID: 4b3c483eabb647ccac6f02e4391850e8-20200514
-Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 127096153; Thu, 14 May 2020 09:39:07 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS32N2.mediatek.inc
- (172.27.4.72) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 14 May
- 2020 09:39:04 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 14 May 2020 09:39:03 +0800
-Message-ID: <1589420265.5899.0.camel@mhfsdcap03>
-Subject: Re: [PATCH 3/3] usb: dwc3: keystone: Turn on USB3 PHY before
- controller
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Roger Quadros <rogerq@ti.com>
-CC:     <balbi@kernel.org>, <robh+dt@kernel.org>, <vigneshr@ti.com>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Date:   Thu, 14 May 2020 09:37:45 +0800
-In-Reply-To: <20200513130709.10239-4-rogerq@ti.com>
-References: <20200513130709.10239-1-rogerq@ti.com>
-         <20200513130709.10239-4-rogerq@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S1725952AbgENCvs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 May 2020 22:51:48 -0400
+Received: from mail-db8eur05on2081.outbound.protection.outlook.com ([40.107.20.81]:34977
+        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725925AbgENCvr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 13 May 2020 22:51:47 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Y5bEp3b5H7CNjUcU3G+uCbpnGTMvFJZJfbv+G6y2LlVPJiGHrMbs/xFfHw4AVF3dDVwXlyY5zVyK4i3NlBH0Y9yKjwkhZq65xOzL/shU+eET+j4lfuBgfYSu8wfP1DGvuDMjdt8BNN4AgPL1eYayPhIZqJDXAT78Ooxg3PlAuCRdrPrm74hIGFb6CsY15JR9OAuaD14JRJkrFee8y+uw/DWWy4D3I4+L/n9zGIdBYguy9xXdngL4/yyWsb1cxgd985bcD3oIPQ9vjVju6ER60fZsFA+2c1bSVtV3SmuoHMQsMu+nWWBDkm5BFYFQjpmLT4tJn9fjM7WFEvoFF/nLtQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+rX/hwCCUaCVU4an3j6ByPIhEd18ho0mXs280UemoOg=;
+ b=fHTOpfMiL1MEhZP7R8RknXptVzltUIY9dmTLQC+m39AJWWt1ypJOfL3eJ0wK3xcnLvFkLhZjWvFxUi8gUuFRuGCVeFlE9WCzGjf+6tVJ3Ap+P4MTugMRoClCazmVA242wGf3V6EU9w3nrnYJ2ARa/v0kcr7ykwZQr4cWXGI82Mh2gwdCe9nOKiTw0lO6jUuM4fE+g6SjEOKtVllTTt8ber/LbdbA3zFBzcvZhS5/wjyNjfWNWJBq4bC1xsi+7E/JzDeVmpm4gyNvUhZQ26AjKfoY9EMnHpr4q9hbP6kHb0JXkQuDh89/qDLmhV1xcdRIkK1x9OtAx/jJ7UabSPx5Mg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+rX/hwCCUaCVU4an3j6ByPIhEd18ho0mXs280UemoOg=;
+ b=doQPCXjKg903VrBevvHHI9SrQ97W5GxLOS/+HbqrGDUYz0SN2GxgaNxm6BB/U0LnvFXYa/rc7elfK3yDYFW7vIDW6m0jwMN6kkKm9vNFbRAnlCvIxez6IUonWmqSEldAonMdH3lzSXv5jHJ5o78cebbIfruXXw+0DvczcnxTUDY=
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
+ by AM7PR04MB6920.eurprd04.prod.outlook.com (2603:10a6:20b:101::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3000.20; Thu, 14 May
+ 2020 02:51:44 +0000
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::7c34:7ade:17d0:b792]) by AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::7c34:7ade:17d0:b792%9]) with mapi id 15.20.2979.033; Thu, 14 May 2020
+ 02:51:44 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Tang Bin <tangbin@cmss.chinamobile.com>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Zhang Shengju <zhangshengju@cmss.chinamobile.com>
+Subject: Re: [PATCH v2] USB: host: ehci-mxc: Add error handling in
+ ehci_mxc_drv_probe()
+Thread-Topic: [PATCH v2] USB: host: ehci-mxc: Add error handling in
+ ehci_mxc_drv_probe()
+Thread-Index: AQHWKSoqHwlWXc5HRUSHh26WGa8dzqim4vkA
+Date:   Thu, 14 May 2020 02:51:44 +0000
+Message-ID: <20200514025206.GB20346@b29397-desktop>
+References: <20200513132647.5456-1-tangbin@cmss.chinamobile.com>
+In-Reply-To: <20200513132647.5456-1-tangbin@cmss.chinamobile.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: cmss.chinamobile.com; dkim=none (message not signed)
+ header.d=none;cmss.chinamobile.com; dmarc=none action=none
+ header.from=nxp.com;
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: f1f68066-0a3c-4517-6068-08d7f7b1bcc6
+x-ms-traffictypediagnostic: AM7PR04MB6920:
+x-microsoft-antispam-prvs: <AM7PR04MB6920A0987C9C10BC44F2ED9D8BBC0@AM7PR04MB6920.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5516;
+x-forefront-prvs: 040359335D
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: FzJeiu6yW3NVuIbkNOqKdACN60zni9mwGIKo6Ik5ET4LRgV4RGfABspmi7gdCei9ZoE38iC7a+sP0waJ4Wn9QUznZOr6OBhpEGeQCcMUrNu8lW8H/Kd2s03mghCNtGwDgUFf9/ORyuYTM1oy23N+wARvmiK3iC1bxu/GeH31XbqOwRCkj3IfqszCME34A+x1NAvEob1hihzBfoW117RUN+or9PXRIdHOqkqFnS14O5OUjz8ZltI9TiPD7pApUOqj36G50MB+/n1sfk3AMxAbOVV8jawNxxXiVQtRRZ62Am0+Jeqk3xrjNhBIi+DIMr6MY7fGSsLryrRQIUylBw8RU4VZ3cd1qhuCyRK2vqKpzAUNGJIJYWNtFOxJPQei0VC7cWegBjknkaKSJwPkjOteaQQVs0FVexEg9Yn30NNh9Io8NXkso4pLyHuFBFlpujjp
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(7916004)(4636009)(376002)(39860400002)(366004)(346002)(136003)(396003)(8676002)(8936002)(6512007)(54906003)(6486002)(316002)(26005)(5660300002)(186003)(53546011)(44832011)(86362001)(33656002)(2906002)(6916009)(66476007)(1076003)(33716001)(71200400001)(4326008)(6506007)(9686003)(478600001)(66946007)(91956017)(4744005)(76116006)(66446008)(66556008)(64756008);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: vAeG2auTBSc027YVla/hsBV7hjSky8kFV/yczPmI2DKH1HSogHvajy7MOwx8tuu5d63zW9MB2Of8WeLCOYju+i3jZ7aB57dIsadpY/G+4ovgr9/MnmL2thmwmO3ZS3rRomTsaPqSBkS3UgjIGnhCwZokTlw7hOD4ViXIer0yiBMAu98EUdn6jo8Deke1ELLoJrO3TP6vDTjmN8KYmyLlo7Xhg+9LCRiB3efBWu0KnfyaSqsn2MT9YtTM2bxeixieAyToRepuXLMyP8ryb98bh3NRdYAGKy/xmhY4q8xDlqWBbYvSTgKyX9nyFZUapmcQ24FIRloZWN50hdko56o8n48WcyKIw1F830AHJkqiE1R/z9SlnnBTXOMtbEDlNNKxM8jahiPfKFGnfNTGgCkoLFCZhXG7cE6NmGxaJWHPSksPCRyI/3x0vmb5Dcb7I6Ed5hPJv1zutVA9+IdlGRf4++oI8EJC1wLiDs3EiT556Rw=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <C724AFC661FD35499D3D8AF10E7D0AE1@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 3195E2F93C14396777CFF1A5A593F242391F9645814601659A98E9F49774BB9F2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f1f68066-0a3c-4517-6068-08d7f7b1bcc6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 May 2020 02:51:44.3259
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: rEe+J5zWar11OqVaUjwkluDzzY8MhYmATWOqwvoL9FOV1TpLKm/wBVXuFMG5OFGhAY3gLyl7ZzYcbaEgyOxKbA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6920
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gV2VkLCAyMDIwLTA1LTEzIGF0IDE2OjA3ICswMzAwLCBSb2dlciBRdWFkcm9zIHdyb3RlOg0K
-PiBUaGUgTG9jYWwgUG93ZXIgU2xlZXAgQ29udHJvbGxlciAoTFBTQykgZGVwZW5kZW5jeSBvbiBB
-TTY1DQo+IHJlcXVpcmVzIFNFUkRFUzAgdG8gYmUgcG93ZXJlZCBvbiBiZWZvcmUgVVNCLg0KPiAN
-Cj4gV2UgbmVlZCB0byBwb3dlciB1cCBTRVJERVMwIHBvd2VyIGRvbWFpbiBhbmQgaG9sZCBpdCBv
-bg0KPiB0aHJvdWdob3V0IHRoZSByZXNldCwgaW5pdCwgcG93ZXIgb24gc2VxdWVuY2UuDQo+IA0K
-PiBTaWduZWQtb2ZmLWJ5OiBSb2dlciBRdWFkcm9zIDxyb2dlcnFAdGkuY29tPg0KPiAtLS0NCj4g
-IGRyaXZlcnMvdXNiL2R3YzMvZHdjMy1rZXlzdG9uZS5jIHwgNDcgKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKy0NCj4gIDEgZmlsZSBjaGFuZ2VkLCA0NiBpbnNlcnRpb25zKCspLCAxIGRl
-bGV0aW9uKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvZHdjMy9kd2MzLWtleXN0
-b25lLmMgYi9kcml2ZXJzL3VzYi9kd2MzL2R3YzMta2V5c3RvbmUuYw0KPiBpbmRleCAxZTE0YTZm
-NDg4NGIuLjQ2ZDQ2ZjM1MDdmYyAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy91c2IvZHdjMy9kd2Mz
-LWtleXN0b25lLmMNCj4gKysrIGIvZHJpdmVycy91c2IvZHdjMy9kd2MzLWtleXN0b25lLmMNCj4g
-QEAgLTE0LDYgKzE0LDcgQEANCj4gICNpbmNsdWRlIDxsaW51eC9kbWEtbWFwcGluZy5oPg0KPiAg
-I2luY2x1ZGUgPGxpbnV4L2lvLmg+DQo+ICAjaW5jbHVkZSA8bGludXgvb2ZfcGxhdGZvcm0uaD4N
-Cj4gKyNpbmNsdWRlIDxsaW51eC9waHkvcGh5Lmg+DQo+ICAjaW5jbHVkZSA8bGludXgvcG1fcnVu
-dGltZS5oPg0KPiAgDQo+ICAvKiBVU0JTUyByZWdpc3RlciBvZmZzZXRzICovDQo+IEBAIC0zNCw2
-ICszNSw3IEBADQo+ICBzdHJ1Y3QgZHdjM19rZXlzdG9uZSB7DQo+ICAJc3RydWN0IGRldmljZQkJ
-CSpkZXY7DQo+ICAJdm9pZCBfX2lvbWVtCQkJKnVzYnNzOw0KPiArCXN0cnVjdCBwaHkJCQkqdXNi
-M19waHk7DQo+ICB9Ow0KPiAgDQo+ICBzdGF0aWMgaW5saW5lIHUzMiBrZHdjM19yZWFkbCh2b2lk
-IF9faW9tZW0gKmJhc2UsIHUzMiBvZmZzZXQpDQo+IEBAIC05NSw4ICs5Nyw0NCBAQCBzdGF0aWMg
-aW50IGtkd2MzX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQo+ICAJaWYgKElT
-X0VSUihrZHdjLT51c2JzcykpDQo+ICAJCXJldHVybiBQVFJfRVJSKGtkd2MtPnVzYnNzKTsNCj4g
-IA0KPiAtCXBtX3J1bnRpbWVfZW5hYmxlKGtkd2MtPmRldik7DQo+ICsJLyogUFNDIGRlcGVuZGVu
-Y3kgb24gQU02NSBuZWVkcyBTRVJERVMwIHRvIGJlIHBvd2VyZWQgYmVmb3JlIFVTQjAgKi8NCj4g
-KwlrZHdjLT51c2IzX3BoeSA9IGRldm1fcGh5X2dldChkZXYsICJ1c2IzLXBoeSIpOw0KVXNlIGRl
-dm1fcGh5X29wdGlvbmFsX2dldCgpIGluc3RlYWQ/DQoNCj4gKwlpZiAoSVNfRVJSKGtkd2MtPnVz
-YjNfcGh5KSkgew0KPiArCQllcnJvciA9IFBUUl9FUlIoa2R3Yy0+dXNiM19waHkpOw0KPiArCQlp
-ZiAoZXJyb3IgPT0gLUVOT1NZUyB8fCBlcnJvciA9PSAtRU5PREVWKSB7DQo+ICsJCQlrZHdjLT51
-c2IzX3BoeSA9IE5VTEw7DQo+ICsJCX0gZWxzZSB7DQo+ICsJCQlpZiAoZXJyb3IgIT0gLUVQUk9C
-RV9ERUZFUikgew0KPiArCQkJCWRldl9lcnIoZGV2LCAiY291bGRuJ3QgZ2V0IHVzYjMgcGh5OiAl
-ZFxuIiwNCj4gKwkJCQkJZXJyb3IpOw0KPiArCQkJfQ0KPiArDQo+ICsJCQlyZXR1cm4gZXJyb3I7
-DQo+ICsJCX0NCj4gKwl9DQo+ICsNCj4gKwlwaHlfcG1fcnVudGltZV9nZXRfc3luYyhrZHdjLT51
-c2IzX3BoeSk7DQo+ICsNCj4gKwllcnJvciA9IHBoeV9yZXNldChrZHdjLT51c2IzX3BoeSk7DQo+
-ICsJaWYgKGVycm9yIDwgMCkgew0KPiArCQlkZXZfZXJyKGRldiwgInVzYjMgcGh5IHJlc2V0IGZh
-aWxlZDogJWRcbiIsIGVycm9yKTsNCj4gKwkJcmV0dXJuIGVycm9yOw0KPiArCX0NCj4gKw0KPiAr
-CWVycm9yID0gcGh5X2luaXQoa2R3Yy0+dXNiM19waHkpOw0KPiArCWlmIChlcnJvciA8IDApIHsN
-Cj4gKwkJZGV2X2VycihkZXYsICJ1c2IzIHBoeSBpbml0IGZhaWxlZDogJWRcbiIsIGVycm9yKTsN
-Cj4gKwkJcmV0dXJuIGVycm9yOw0KPiArCX0NCj4gIA0KPiArCWVycm9yID0gcGh5X3Bvd2VyX29u
-KGtkd2MtPnVzYjNfcGh5KTsNCj4gKwlpZiAoZXJyb3IgPCAwKSB7DQo+ICsJCWRldl9lcnIoZGV2
-LCAidXNiMyBwaHkgcG93ZXIgb24gZmFpbGVkOiAlZFxuIiwgZXJyb3IpOw0KPiArCQlwaHlfZXhp
-dChrZHdjLT51c2IzX3BoeSk7DQo+ICsJCXJldHVybiBlcnJvcjsNCj4gKwl9DQo+ICsNCj4gKwlw
-bV9ydW50aW1lX2VuYWJsZShrZHdjLT5kZXYpOw0KPiAgCWVycm9yID0gcG1fcnVudGltZV9nZXRf
-c3luYyhrZHdjLT5kZXYpOw0KPiAgCWlmIChlcnJvciA8IDApIHsNCj4gIAkJZGV2X2VycihrZHdj
-LT5kZXYsICJwbV9ydW50aW1lX2dldF9zeW5jIGZhaWxlZCwgZXJyb3IgJWRcbiIsDQo+IEBAIC0x
-MzgsNiArMTc2LDkgQEAgc3RhdGljIGludCBrZHdjM19wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2
-aWNlICpwZGV2KQ0KPiAgZXJyX2lycToNCj4gIAlwbV9ydW50aW1lX3B1dF9zeW5jKGtkd2MtPmRl
-dik7DQo+ICAJcG1fcnVudGltZV9kaXNhYmxlKGtkd2MtPmRldik7DQo+ICsJcGh5X3Bvd2VyX29m
-ZihrZHdjLT51c2IzX3BoeSk7DQo+ICsJcGh5X2V4aXQoa2R3Yy0+dXNiM19waHkpOw0KPiArCXBo
-eV9wbV9ydW50aW1lX3B1dF9zeW5jKGtkd2MtPnVzYjNfcGh5KTsNCj4gIA0KPiAgCXJldHVybiBl
-cnJvcjsNCj4gIH0NCj4gQEAgLTE2Myw2ICsyMDQsMTAgQEAgc3RhdGljIGludCBrZHdjM19yZW1v
-dmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikNCj4gIAlwbV9ydW50aW1lX3B1dF9zeW5j
-KGtkd2MtPmRldik7DQo+ICAJcG1fcnVudGltZV9kaXNhYmxlKGtkd2MtPmRldik7DQo+ICANCj4g
-KwlwaHlfcG93ZXJfb2ZmKGtkd2MtPnVzYjNfcGh5KTsNCj4gKwlwaHlfZXhpdChrZHdjLT51c2Iz
-X3BoeSk7DQo+ICsJcGh5X3BtX3J1bnRpbWVfcHV0X3N5bmMoa2R3Yy0+dXNiM19waHkpOw0KPiAr
-DQo+ICAJcGxhdGZvcm1fc2V0X2RydmRhdGEocGRldiwgTlVMTCk7DQo+ICANCj4gIAlyZXR1cm4g
-MDsNCg0K
+On 20-05-13 21:26:47, Tang Bin wrote:
+> The function ehci_mxc_drv_probe() does not perform sufficient error
+> checking after executing platform_get_irq(), thus fix it.
+>=20
+> Fixes: 7e8d5cd93fa ("USB: Add EHCI support for MX27 and MX31 based boards=
+")
+> Signed-off-by: Zhang Shengju <zhangshengju@cmss.chinamobile.com>
+> Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
+> ---
+> Changes from v1
+>  - fix the subject.
+> ---
+>  drivers/usb/host/ehci-mxc.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>=20
+> diff --git a/drivers/usb/host/ehci-mxc.c b/drivers/usb/host/ehci-mxc.c
+> index c9f91e6c7..7f65c8604 100644
+> --- a/drivers/usb/host/ehci-mxc.c
+> +++ b/drivers/usb/host/ehci-mxc.c
+> @@ -50,6 +50,8 @@ static int ehci_mxc_drv_probe(struct platform_device *p=
+dev)
+>  	}
+> =20
+>  	irq =3D platform_get_irq(pdev, 0);
+> +	if (irq < 0)
+> +		return irq;
+> =20
+>  	hcd =3D usb_create_hcd(&ehci_mxc_hc_driver, dev, dev_name(dev));
+>  	if (!hcd)
+> --=20
 
+Reviewed-by: Peter Chen <peter.chen@nxp.com>
+
+--=20
+
+Thanks,
+Peter Chen=
