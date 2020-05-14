@@ -2,60 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0FF81D2B84
-	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 11:34:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BADBA1D2B95
+	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 11:38:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726072AbgENJed (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 May 2020 05:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45858 "EHLO
+        id S1726076AbgENJik (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 May 2020 05:38:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725878AbgENJed (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 05:34:33 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC638C061A0C
-        for <linux-usb@vger.kernel.org>; Thu, 14 May 2020 02:34:32 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id r17so2027420lff.9
-        for <linux-usb@vger.kernel.org>; Thu, 14 May 2020 02:34:32 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1726050AbgENJik (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 05:38:40 -0400
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0953C061A0C;
+        Thu, 14 May 2020 02:38:39 -0700 (PDT)
+Received: by mail-lf1-x141.google.com with SMTP id z22so2084831lfd.0;
+        Thu, 14 May 2020 02:38:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=4ochJLhArIn3MufWzxhw4gsCUtDsPdwSWwkbWfA3CIU=;
-        b=s2WDd8r6qnbQt9YZ5oqaw5AbDvwOmNAjRDw00igCgWYQgkmdC4G5p+bMtOuVcix+oV
-         f0+FBSpqJx/K+2+vJl2xPvz3AzCmwC/59I3+Ssg/tLodKgvFPpnqNexnMwUnhp0PCNfG
-         DWZaCj5mDKNUDvhBkc/jrynBF9clz0EYOHl5WbVIduEz8nsaeCUqDAmZ1Iz2e1V4Phqv
-         ecnIULCMfNt0xkua643WEVrrrAejOJu441zeDpHFyW9NFWvWZDg2vqN4oXQpb7LKiHPE
-         BR5JRme9AogzFzCVxsVxFK7Fj2k6bj3PQjnK/Xke9lLZ9I8FbWx/ud9Wff/koB1g2g2q
-         544g==
+        bh=p1doL36G2c7yhzTcmyQM52QYqsuvRFETy5dpSj2TRJ0=;
+        b=toI+rQpJnNbUCzcB+dgkiFl8ZbxTzcp06t53gOCpWvhpI+lmGb+KFHlEvaufI6/A/l
+         zHVf/rngtHD8UvZsZ0BpsW4KmsUyaQClpKSdgm9HLuFPVsSlbEpQZixShCGUwur8dJf0
+         uGYG+IepnjneVJ3UySonJ2FYkAHJbkcJAuTXQEoMMbYnGQEOqAYUc65rm5nHUeqg+dcT
+         G2g6RuM5CZVJ0+1eU7vrMbBuqoJon/IaAOUbmdJScRcfMuoqiIkMaKHFvDmtwMm/uGRt
+         H7dLzRm1URyCs9fW8FiWvwljgZeUL4xHGL8J5aLVvwJVMOVjD64wh2V/TmHW4xEcrSj0
+         +PHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
          :date:message-id:mime-version;
-        bh=4ochJLhArIn3MufWzxhw4gsCUtDsPdwSWwkbWfA3CIU=;
-        b=s7s14P9j/IQTJ93Z2dsbPa2AR8UDORCGOWN4Dv/TSp9ellS/DiHBWwKUAUo1msQYLf
-         YrwyFBSgdbuYMjeYwPNpmMurqpxKIPi4vHpOx96DfvZJXVRjtzHw8w6KxLN8uO6nl6rK
-         Ays4MFBaSpQ5DTS5BhugPiIaICTjscokPik1uYI6AV/XrrM4Nip6u9V7LumFgzZZeoRJ
-         3w/zbjUNAsRAldVNot2JBSZajxcZOD8BIw3Bqp2mD9JUzVZb8GIrBtpaEZUY0OsG57Hk
-         RaOYZYhWF6M3dF12T3pkfRioXMwjrPFbURQedyyNxcV8QHTcd8d4RAhbWe9a17eHVSB8
-         TWvg==
-X-Gm-Message-State: AOAM531zYgA6RwbUomQiq8nCuZmMZ+hGtMHW2sm//nPWF2BZZszPbL7U
-        5ssoz+5eEBdr9SQHRs+AqUKgIGedmwM=
-X-Google-Smtp-Source: ABdhPJwDCJ9l0rXSF8XraETapMV4NPFnadWmGpMQKDjonPwWwFn/6GN2IDsR+qWCsVAcne6OTWYEzw==
-X-Received: by 2002:a05:6512:310d:: with SMTP id n13mr2751293lfb.205.1589448870840;
-        Thu, 14 May 2020 02:34:30 -0700 (PDT)
+        bh=p1doL36G2c7yhzTcmyQM52QYqsuvRFETy5dpSj2TRJ0=;
+        b=CbzE2O3hHfHVUDUY8Faqzf1N7EqewfEeVBE0rYyHhtXEYUyxvfeSQfUwM/N3YNwCqp
+         tVVCPEkZ6dvvZjtGUX26qgCOmRc5lhoA2/RsjF729EeBtGLysJfQ/hDnH6GS+EHyYhLg
+         CXbG1sL6Ta4uTbAshf9PKQq2Q0tX3m9GydnUcbIaSqtQLz+r9PPB/4os2hcTbZtZdy97
+         2mgPbJ5FN9tXSkgv7dyFhp/M3cs9irM8XBjExKZEsgu06Jy3E5ziZnM6q9u0zi2Rgedy
+         hY8Wgo30OZbEwDQybjxjbBFreZqwt7a6FZqzlC8vlLxgrgNxX39IISkC06CpwfWJJSRX
+         WsqQ==
+X-Gm-Message-State: AOAM530qhf0kdvR+KjRzscCoAA5XopA+XUCZ2q5TMCOGJJrJAbZ1osqz
+        EL+oDNuWXDAwzsHojB5CHNS3GouJEwqm/g==
+X-Google-Smtp-Source: ABdhPJweyHUB48SIZU9eU3c0UH9UXABozzSP4zy46Gq1mNAcOXb8OYrBNiR8O6eFfLYj5n/NGtVV0A==
+X-Received: by 2002:a19:f70f:: with SMTP id z15mr2686757lfe.53.1589449118242;
+        Thu, 14 May 2020 02:38:38 -0700 (PDT)
 Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id f4sm1165502ljm.11.2020.05.14.02.34.29
+        by smtp.gmail.com with ESMTPSA id f25sm1071515lja.5.2020.05.14.02.38.36
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 14 May 2020 02:34:30 -0700 (PDT)
+        Thu, 14 May 2020 02:38:37 -0700 (PDT)
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Claus Stovgaard <claus.stovgaard@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: Options for forcing dwc3 gadget to only accept superspeed
-In-Reply-To: <e44a96cff9bee0b9f47c82d05461570d47d96177.camel@gmail.com>
-References: <8943a225c6d8354f2f5fe0ea7270dc0fa1293180.camel@gmail.com> <20200512195231.GA26080@rowland.harvard.edu> <6d19d49dcfe7467556b0462b16e76677c1999875.camel@gmail.com> <87k11gp9t4.fsf@kernel.org> <e44a96cff9bee0b9f47c82d05461570d47d96177.camel@gmail.com>
-Date:   Thu, 14 May 2020 12:34:25 +0300
-Message-ID: <8736826ese.fsf@kernel.org>
+To:     Macpaul Lin <macpaul.lin@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        =?utf-8?Q?Micha=C5=82_Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
+        Sergey Organov <sorganov@gmail.com>,
+        Macpaul Lin <macpaul.lin@mediatek.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Cc:     Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
+        Macpaul Lin <macpaul.lin@gmail.com>,
+        Stan Lu <stan.lu@mediatek.com>
+Subject: Re: [PATCH] usb: gadget: u_serial: fix coverity warning: negative index at array
+In-Reply-To: <1589443500-3990-1-git-send-email-macpaul.lin@mediatek.com>
+References: <1589443500-3990-1-git-send-email-macpaul.lin@mediatek.com>
+Date:   Thu, 14 May 2020 12:38:33 +0300
+Message-ID: <87zhaa5012.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -68,65 +77,27 @@ X-Mailing-List: linux-usb@vger.kernel.org
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
+Macpaul Lin <macpaul.lin@mediatek.com> writes:
 
-Hi,
-
-Claus Stovgaard <claus.stovgaard@gmail.com> writes:
-> On ons, 2020-05-13 at 10:34 +0300, Felipe Balbi wrote:
->>=20
->> If it's "ending in super-speed" this means it tried RX.Detect and it
->> failed, thus falling back to high-speed. It's likely that the signal
->> quality in your setup has degraded or is, at least, sub-par.
->>=20
->> Forcing a SS-only setup would just give you a device that doesn't
->> even
->> enumerate in some cases.
->>=20
->> Could you capture dwc3 tracepoints of the problem?
->>=20
->> Also, which kernel version are you running? Which platform?
->>=20
+> This issue has been reported by coverity scanner.
+> Replace "int portnum" by "unsigned int", this void negative index at
+> array.
 >
-> Thanks for you reply Balbi.
->
-> Will start with from the back. The kernel is 4.19 in the xilinx version
-> - https://github.com/Xilinx/linux-xlnx
+> Signed-off-by: Stan Lu <stan.lu@mediatek.com>
+> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
 
-4.19 is *really* old. Care to try v5.6 or, better yet, v5.7-rc5?
+please rebase on testing/fixes
 
-> It is running on a ZynqMP from Xilinx, where we are using the build in
-> Cirrus SERDES as phy. In front of the phy is a tusb1042i redriver/mux
-> and a Cypress CCG4 as type-c controller for handling the redriver/mux.
->
-> Regarding signal integrity - it is on my radar. I know from experience
-> that noise on the GND in the cable can highly influence signal
-> integrity on the super speed pair in some situations, even though it is
-> shielded.
-
-Yeah, common problem with high-speed signals.
-
-> I am currently working on a setup with a Beagle USB analyzer, together
-> with dwc3 tracepoints, and automatically disconnect and connect the
-> USB. Would like to have both the USB analyzer version of what happening
-> on the bus, together with the dwc3 handling.
-
-That makes sense to me. One thing you can try is disabling PHY suspend
-(see our existing quirk flags) and also disabling scrambling for
-testing. Do NOT, however, ship your product with scrambling disabled ;-)
-
-> It just takes some time to create this test setup (need to do some
-> python code for controlling the Beagle and the device), so it will take
-> some time before I can have any data.=20
->
-> So my email is also kind of an brainstorm for what kind of options
-> there exist in the dwc3 to control how it falls back to high-speed.
-
-falling back to high-speed is not something we can control. It's part of
-the standard, and as such, implemented entirely in the HW. What we can
-do is figure out *why* Rx.Detect fails and causes the link to downgrade.
-
-A look at the tracepoints, even without the sniffer, may give us hints
-of what's possibly happening.
+error: patch failed: drivers/usb/gadget/function/u_serial.c:587
+error: drivers/usb/gadget/function/u_serial.c: patch does not apply
+hint: Use 'git am --show-current-patch=3Ddiff' to see the failed patch
+Applying: usb: gadget: u_serial: fix coverity warning: negative index at ar=
+ray
+Patch failed at 0001 usb: gadget: u_serial: fix coverity warning: negative =
+index at array
+When you have resolved this problem, run "git am --continue".
+If you prefer to skip this patch, run "git am --skip" instead.
+To restore the original branch and stop patching, run "git am --abort".
 
 =2D-=20
 balbi
@@ -136,18 +107,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl69EKEACgkQzL64meEa
-mQYXcBAArxbECsmZrcJymxcX3UFn2saVSqaNq3OsBCueqsFIk0X4AASaLTzjceqh
-kGR3926qziBGOPcbGVMOkonxSInkJAcwcCNHnWZ5+iQFWdN3p17BAl9uPE0vHuE9
-3U+4yBAZHYcHg2xhO5JPiWAHV4ly++KtqxfiDuv1NAcujxTtmfJAF6JfrUYQ9tgS
-4QQdS+zY1h8ohMIDnrbbzDe5qF0Jt33CXslTGled/0c/uItPOh6yC5HrQVIXK9OT
-QtLdxVqzUNHdGOxym52MqTPE6jJnlaC3uoSP/MohK3nPSguwyhwW+MppYAbbE/zU
-/Mzecb2qBvv2kHwmbsSV0L2SKqlsHtFCc2QA/ZQbmcbr9WyW6R51QWtR6lC0ttOy
-E7pDrKnZGMxaeczW+KEehnVapySCMWZ4f4ZuEU9wElb0ZJtbJR0M9p6RDJtELHua
-C3j3ZuxfrJ8YXMsBkHjIDg6/AxKpR7u4AFTVMiB7ZRL6skqCm4DypJbT3QQBnNAL
-rhdOg39CCoXpngrIVFLwQzteCVyP/sMfZP7w2w7FqM5/zVVV8ZhguKBG/RSa9Z1e
-IgwqjsWStZA2dxaUyXqf8DRDA0Ht0rH8OVVO6JPVBO7buWfzmoXxQMBSuCFXEKDK
-SBUd7oFK/MnxsIk0ej/LLGlElSoRloieFEqjbBpZTG7BUi/pxoU=
-=YZ6h
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl69EZkACgkQzL64meEa
+mQa6Qw//Z0NbbILQ3n/09Coti9vMt51E2QalESJ3ogcfVbWjTSptfs2I6x92JE0Y
+fIpmObM90gVjqzGmDGgBj3iwZZTVkddXWDasoW2w18o05g2R65TDGBwO1C1XDlaN
+DdGn0GLUNcifF5t/rUEy2Csqv35IwKluHmDdsLTjVlTWFdPKkT1VaW0/caI1CpFf
+rk4CloEcMxwGBLdx98CPyY24MzzyyhtxNjahZ+hCCXO5S0GF2dnpaaZ1x/TtZ5VN
+UbdQzSgrDMEuMtrrUfIlakrTTR6aELxqm0yAqupDsbBAkPdLfpXooqfwKB4fEmhJ
+Ns1+CUiAK+BmpXEKmyWybSSUwe+FSBkuUK9+QskFGB/R0mjjyXQVdbYpgL1OIjY1
+eBDWzSQZmNGMJ0iLZXc1az0+XVxeI2KKzN+n1IYCwgQTQNYUCYtEEDpFaFEosogt
+hmVmo2/iadctVQ/+PU8hfcmylLg6hUBMrApObdsY3JB8tq7SOJIyW2Hx2+Imktwg
+vnTnKrFcXLSTmJ/0HbHkP6XZ1UDt1Go06rPzCBzahTPdXVKcqT/D+L7fm7sHmcCX
+C/2pHGtodGiUt9R9m+eeYilDbUTTj95vmGzyu/mPtRG5tAOqsSVDVyLffuBFDZe8
+Y05awSTgxKqblxXWlK+UZNsvV4nxOTxCaovWn5XoGtA8GYk64Mo=
+=XPNg
 -----END PGP SIGNATURE-----
 --=-=-=--
