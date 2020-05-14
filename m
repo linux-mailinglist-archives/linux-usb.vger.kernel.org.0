@@ -2,230 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B926B1D3919
-	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 20:29:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 029AB1D39E4
+	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 20:53:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726494AbgENS27 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 May 2020 14:28:59 -0400
-Received: from mga01.intel.com ([192.55.52.88]:11941 "EHLO mga01.intel.com"
+        id S1728409AbgENSwk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 May 2020 14:52:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51012 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726165AbgENS26 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 14 May 2020 14:28:58 -0400
-IronPort-SDR: /J1Xmj5NVUxXGXzA2KRY3WRLaIp/gqcRhjSoeyaWZsR/ueS9BJ4FVcmXRXrhJFSai02O5ZrThs
- BBfxe0ePiQyA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2020 11:28:55 -0700
-IronPort-SDR: 1wa5ogtVeF+x5THzdC/npn0apWDDRGVUDuU1ZXlNeRX1pw2P4fCEXVOfG1GmGttyd1dsL2+2a5
- Zr/E98b+u+iw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,392,1583222400"; 
-   d="scan'208";a="298130256"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 14 May 2020 11:28:53 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1jZIbF-0001ES-5p; Fri, 15 May 2020 02:28:53 +0800
-Date:   Fri, 15 May 2020 02:28:31 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     linux-omap@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [balbi-usb:testing/fixes] BUILD SUCCESS
- 172b14b48ca10b280482b164506892ea09edb946
-Message-ID: <5ebd8dcf.v9WxMqmsSgF7dZbg%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1728398AbgENSwi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 14 May 2020 14:52:38 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 29C4E20727;
+        Thu, 14 May 2020 18:52:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589482357;
+        bh=nx23dqVpWnjfhGPHJ3dCs8uLrVRnY0WPQ+tFW7+VuqM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=MNrhG7YtabLcEzkB+ziSxGBuaiNDXEPeHN9wvOZzcj3T21wpVQhqp0c3oCaadPmgk
+         RaxT71cykMQu0sXYDisTyOeMFB1+J5uXSeM3QI0gZ5IM76L+DtJ8SdKLKV9YCo2Mfh
+         iLJxz1Kb4vQcVLonMMqxWAn6j5bujIOhm/7N8tp0=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        syzbot+db339689b2101f6f6071@syzkaller.appspotmail.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.6 38/62] USB: core: Fix misleading driver bug report
+Date:   Thu, 14 May 2020 14:51:23 -0400
+Message-Id: <20200514185147.19716-38-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200514185147.19716-1-sashal@kernel.org>
+References: <20200514185147.19716-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git  testing/fixes
-branch HEAD: 172b14b48ca10b280482b164506892ea09edb946  usb: cdns3: gadget: make a bunch of functions static
+From: Alan Stern <stern@rowland.harvard.edu>
 
-elapsed time: 483m
+[ Upstream commit ac854131d9844f79e2fdcef67a7707227538d78a ]
 
-configs tested: 171
-configs skipped: 11
+The syzbot fuzzer found a race between URB submission to endpoint 0
+and device reset.  Namely, during the reset we call usb_ep0_reinit()
+because the characteristics of ep0 may have changed (if the reset
+follows a firmware update, for example).  While usb_ep0_reinit() is
+running there is a brief period during which the pointers stored in
+udev->ep_in[0] and udev->ep_out[0] are set to NULL, and if an URB is
+submitted to ep0 during that period, usb_urb_ep_type_check() will
+report it as a driver bug.  In the absence of those pointers, the
+routine thinks that the endpoint doesn't exist.  The log message looks
+like this:
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+------------[ cut here ]------------
+usb 2-1: BOGUS urb xfer, pipe 2 != type 2
+WARNING: CPU: 0 PID: 9241 at drivers/usb/core/urb.c:478
+usb_submit_urb+0x1188/0x1460 drivers/usb/core/urb.c:478
 
-arm                                 defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                               allnoconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm64                            allmodconfig
-arm64                             allnoconfig
-sparc                            allyesconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                 nsimosci_hs_smp_defconfig
-mips                          malta_defconfig
-i386                                defconfig
-arm                          exynos_defconfig
-powerpc                      pmac32_defconfig
-powerpc                     mpc5200_defconfig
-arm                            qcom_defconfig
-sh                               alldefconfig
-arm                       aspeed_g5_defconfig
-arm                        vexpress_defconfig
-mips                         rt305x_defconfig
-arm                           corgi_defconfig
-powerpc                       holly_defconfig
-arm                        oxnas_v6_defconfig
-powerpc                           allnoconfig
-m68k                       m5208evb_defconfig
-m68k                            q40_defconfig
-sh                          sdk7780_defconfig
-riscv                            alldefconfig
-sh                             espt_defconfig
-m68k                         amcore_defconfig
-sh                          polaris_defconfig
-arc                     haps_hs_smp_defconfig
-mips                           jazz_defconfig
-powerpc                          g5_defconfig
-arm                  colibri_pxa300_defconfig
-arm                       cns3420vb_defconfig
-mips                     loongson1c_defconfig
-arm                             rpc_defconfig
-mips                      loongson3_defconfig
-ia64                        generic_defconfig
-arm                        magician_defconfig
-arm                          imote2_defconfig
-s390                       zfcpdump_defconfig
-powerpc                       maple_defconfig
-sh                           se7722_defconfig
-sh                          r7785rp_defconfig
-h8300                            alldefconfig
-powerpc                      tqm8xx_defconfig
-mips                           ip28_defconfig
-arm                        clps711x_defconfig
-m68k                           sun3_defconfig
-mips                   sb1250_swarm_defconfig
-arm                           efm32_defconfig
-nios2                         3c120_defconfig
-um                             i386_defconfig
-arm                         lubbock_defconfig
-arm                       multi_v4t_defconfig
-arc                          axs103_defconfig
-arc                          axs101_defconfig
-sh                            titan_defconfig
-s390                                defconfig
-arc                      axs103_smp_defconfig
-arm                         cm_x2xx_defconfig
-arm                         palmz72_defconfig
-sh                 kfr2r09-romimage_defconfig
-c6x                        evmc6678_defconfig
-sh                            shmin_defconfig
-arm                        neponset_defconfig
-sh                         microdev_defconfig
-x86_64                              defconfig
-arm                         s3c2410_defconfig
-arm                        multi_v7_defconfig
-arm                        shmobile_defconfig
-sh                        sh7763rdp_defconfig
-arm                             ezx_defconfig
-powerpc                mpc7448_hpc2_defconfig
-mips                         cobalt_defconfig
-ia64                            zx1_defconfig
-sh                         ecovec24_defconfig
-ia64                              allnoconfig
-mips                         db1xxx_defconfig
-m68k                          atari_defconfig
-sh                               j2_defconfig
-arm                          lpd270_defconfig
-sh                          rsk7264_defconfig
-m68k                        m5407c3_defconfig
-sh                ecovec24-romimage_defconfig
-riscv                    nommu_virt_defconfig
-i386                              allnoconfig
-i386                             allyesconfig
-i386                              debian-10.3
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                              allnoconfig
-m68k                                defconfig
-nios2                            allyesconfig
-openrisc                            defconfig
-c6x                              allyesconfig
-c6x                               allnoconfig
-openrisc                         allyesconfig
-nds32                               defconfig
-nds32                             allnoconfig
-csky                             allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-h8300                            allmodconfig
-xtensa                              defconfig
-arc                                 defconfig
-arc                              allyesconfig
-sh                               allmodconfig
-sh                                allnoconfig
-microblaze                        allnoconfig
-mips                             allyesconfig
-mips                              allnoconfig
-mips                             allmodconfig
-parisc                            allnoconfig
-parisc                              defconfig
-parisc                           allyesconfig
-parisc                           allmodconfig
-powerpc                             defconfig
-powerpc                          allyesconfig
-powerpc                          rhel-kconfig
-powerpc                          allmodconfig
-i386                 randconfig-a006-20200514
-i386                 randconfig-a005-20200514
-i386                 randconfig-a003-20200514
-i386                 randconfig-a001-20200514
-i386                 randconfig-a004-20200514
-i386                 randconfig-a002-20200514
-x86_64               randconfig-a012-20200514
-x86_64               randconfig-a016-20200514
-x86_64               randconfig-a015-20200514
-x86_64               randconfig-a013-20200514
-x86_64               randconfig-a014-20200514
-x86_64               randconfig-a011-20200514
-i386                 randconfig-a012-20200514
-i386                 randconfig-a016-20200514
-i386                 randconfig-a014-20200514
-i386                 randconfig-a011-20200514
-i386                 randconfig-a013-20200514
-i386                 randconfig-a015-20200514
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-s390                             allyesconfig
-s390                              allnoconfig
-s390                             allmodconfig
-sparc                               defconfig
-sparc64                             defconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                          allmodconfig
-um                               allmodconfig
-um                                allnoconfig
-um                               allyesconfig
-um                                  defconfig
-x86_64                                   rhel
-x86_64                               rhel-7.6
-x86_64                    rhel-7.6-kselftests
-x86_64                         rhel-7.2-clear
-x86_64                                    lkp
-x86_64                              fedora-25
-x86_64                                  kexec
+Now, although submitting an URB while the device is being reset is a
+questionable thing to do, it shouldn't count as a driver bug as severe
+as submitting an URB for an endpoint that doesn't exist.  Indeed,
+endpoint 0 always exists, even while the device is in its unconfigured
+state.
 
+To prevent these misleading driver bug reports, this patch updates
+usb_disable_endpoint() to avoid clearing the ep_in[] and ep_out[]
+pointers when the endpoint being disabled is ep0.  There's no danger
+of leaving a stale pointer in place, because the usb_host_endpoint
+structure being pointed to is stored permanently in udev->ep0; it
+doesn't get deallocated until the entire usb_device structure does.
+
+Reported-and-tested-by: syzbot+db339689b2101f6f6071@syzkaller.appspotmail.com
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+
+Link: https://lore.kernel.org/r/Pine.LNX.4.44L0.2005011558590.903-100000@netrider.rowland.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/usb/core/message.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
+index 02eaac7e1e34e..a1ac2f0723b0b 100644
+--- a/drivers/usb/core/message.c
++++ b/drivers/usb/core/message.c
+@@ -1143,11 +1143,11 @@ void usb_disable_endpoint(struct usb_device *dev, unsigned int epaddr,
+ 
+ 	if (usb_endpoint_out(epaddr)) {
+ 		ep = dev->ep_out[epnum];
+-		if (reset_hardware)
++		if (reset_hardware && epnum != 0)
+ 			dev->ep_out[epnum] = NULL;
+ 	} else {
+ 		ep = dev->ep_in[epnum];
+-		if (reset_hardware)
++		if (reset_hardware && epnum != 0)
+ 			dev->ep_in[epnum] = NULL;
+ 	}
+ 	if (ep) {
+-- 
+2.20.1
+
