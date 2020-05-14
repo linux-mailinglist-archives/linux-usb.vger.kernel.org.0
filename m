@@ -2,57 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13A571D3ED6
-	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 22:16:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 380061D3EDF
+	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 22:18:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727822AbgENUQ4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 May 2020 16:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33456 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726035AbgENUQ4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 16:16:56 -0400
-Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54263C061A0C;
-        Thu, 14 May 2020 13:16:56 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id C3627128D72F5;
-        Thu, 14 May 2020 13:16:55 -0700 (PDT)
-Date:   Thu, 14 May 2020 13:16:55 -0700 (PDT)
-Message-Id: <20200514.131655.249413798024922962.davem@davemloft.net>
-To:     thierry.reding@gmail.com
-Cc:     hayeswang@realtek.com, kuba@kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH net/next] r8152: Use MAC address from device tree if
- available
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20200514123848.933199-1-thierry.reding@gmail.com>
-References: <20200514123848.933199-1-thierry.reding@gmail.com>
-X-Mailer: Mew version 6.8 on Emacs 26.3
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Thu, 14 May 2020 13:16:56 -0700 (PDT)
+        id S1727856AbgENUSO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 May 2020 16:18:14 -0400
+Received: from mail-io1-f72.google.com ([209.85.166.72]:40746 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726200AbgENUSM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 16:18:12 -0400
+Received: by mail-io1-f72.google.com with SMTP id r17so198210iom.7
+        for <linux-usb@vger.kernel.org>; Thu, 14 May 2020 13:18:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=DeXjDYHmOwesipnsIKPMEZ1+4ozFBXqUZp0fQq+0Nyw=;
+        b=s3GbRVBZ/un6llfhvnRcEvCXBFcXTwM6PpL8bVmB8qFEO6fuX8rsAqu4hcqa9f7Mk3
+         7vpecEazgKpEVK8PIZmyqjy0zuX5G4eT9Uiq5rMJC/Z9OGFC1v3R27rpwUjjbIZuBGXX
+         D1P1k7yPEXhdBP22W7EtwIF3aKizEDXaorHjVXCrld+S5sBj657DZTXBxaEdB7Eko+2+
+         Q/+/2GMzRJ6iAQkM/tsfR6CS/B1M9/MkCi4xzKqPQQi4FKvIm39CpBGrEeocbyRg0uWi
+         6AGqlAXGOIDavXGWvQzWRSPhzSyO5bSKtYVX4FHRlSdPf7pj00FKkKjftTB6X8HqEIrn
+         /wUA==
+X-Gm-Message-State: AOAM533ON66JiEmt4WLkDYTVpSzev4Z5AKVzs6ES0ab1yJgK5w2A33gk
+        oPgZZ8xTnxhzPVhbI9mZa+vs1XpVJ1uSvQp2y+TAihRPqmKE
+X-Google-Smtp-Source: ABdhPJx18/IHJI1GPEwb9TPDpxaTVnV4BHV7LzVRW6V0NgBXx6yTbmdMW2gzQY115FVFY9VQKnYEmhFRym2Z5EhIejWsKtPOk3gl
+MIME-Version: 1.0
+X-Received: by 2002:a6b:38c6:: with SMTP id f189mr5690237ioa.81.1589487491460;
+ Thu, 14 May 2020 13:18:11 -0700 (PDT)
+Date:   Thu, 14 May 2020 13:18:11 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004dbaa505a5a165f7@google.com>
+Subject: WARNING in carl9170_usb_submit_cmd_urb/usb_submit_urb
+From:   syzbot <syzbot+9468df99cb63a4a4c4e1@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        ingrassia@epigenesys.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Thierry Reding <thierry.reding@gmail.com>
-Date: Thu, 14 May 2020 14:38:48 +0200
+Hello,
 
-> From: Thierry Reding <treding@nvidia.com>
-> 
-> If a MAC address was passed via the device tree node for the r8152
-> device, use it and fall back to reading from EEPROM otherwise. This is
-> useful for devices where the r8152 EEPROM was not programmed with a
-> valid MAC address, or if users want to explicitly set a MAC address in
-> the bootloader and pass that to the kernel.
-> 
-> Signed-off-by: Thierry Reding <treding@nvidia.com>
+syzbot found the following crash on:
 
-Yep, that looks good, applied.
+HEAD commit:    059e7e0f usb: raw-gadget: fix typo in uapi headers
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=179bc3c2100000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b484a6e53b2b06ad
+dashboard link: https://syzkaller.appspot.com/bug?extid=9468df99cb63a4a4c4e1
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=177d01c6100000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13052f48100000
 
-Thank you.
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+9468df99cb63a4a4c4e1@syzkaller.appspotmail.com
+
+usb 1-1: reset full-speed USB device number 2 using dummy_hcd
+------------[ cut here ]------------
+usb 1-1: BOGUS urb xfer, pipe 1 != type 3
+WARNING: CPU: 1 PID: 17 at drivers/usb/core/urb.c:478 usb_submit_urb+0x1188/0x1460 drivers/usb/core/urb.c:478
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 1 PID: 17 Comm: kworker/1:0 Not tainted 5.7.0-rc1-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xef/0x16e lib/dump_stack.c:118
+ panic+0x2aa/0x6e1 kernel/panic.c:221
+ __warn.cold+0x2f/0x30 kernel/panic.c:582
+ report_bug+0x27b/0x2f0 lib/bug.c:195
+ fixup_bug arch/x86/kernel/traps.c:175 [inline]
+ fixup_bug arch/x86/kernel/traps.c:170 [inline]
+ do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:267
+ do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
+ invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
+RIP: 0010:usb_submit_urb+0x1188/0x1460 drivers/usb/core/urb.c:478
+Code: 4d 85 ed 74 46 e8 38 c2 d2 fd 4c 89 f7 e8 70 ac 16 ff 41 89 d8 44 89 e1 4c 89 ea 48 89 c6 48 c7 c7 00 52 3d 86 e8 40 96 a6 fd <0f> 0b e9 20 f4 ff ff e8 0c c2 d2 fd 0f 1f 44 00 00 e8 02 c2 d2 fd
+RSP: 0018:ffff8881da25ef40 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff812a2d8d RDI: ffffed103b44bdda
+RBP: ffff8881d9846050 R08: ffff8881da243180 R09: ffffed103b666292
+R10: ffff8881db33148f R11: ffffed103b666291 R12: 0000000000000001
+R13: ffff8881d8c365e8 R14: ffff8881cd6940a0 R15: ffff8881cfb0a100
+ carl9170_usb_submit_cmd_urb+0xa5/0x120 drivers/net/wireless/ath/carl9170/usb.c:229
+ __carl9170_exec_cmd+0x313/0x5c0 drivers/net/wireless/ath/carl9170/usb.c:643
+ carl9170_reboot+0xaf/0xf0 drivers/net/wireless/ath/carl9170/cmd.c:141
+ carl9170_usb_disconnect+0xee/0x130 drivers/net/wireless/ath/carl9170/usb.c:1117
+ usb_unbind_interface+0x1bd/0x8a0 drivers/usb/core/driver.c:436
+ __device_release_driver drivers/base/dd.c:1114 [inline]
+ device_release_driver_internal+0x432/0x500 drivers/base/dd.c:1145
+ usb_driver_release_interface+0x102/0x180 drivers/usb/core/driver.c:609
+ usb_forced_unbind_intf+0x50/0xb0 drivers/usb/core/driver.c:1057
+ usb_reset_device+0x39d/0x960 drivers/usb/core/hub.c:5933
+ carl9170_usb_probe+0x48/0xd40 drivers/net/wireless/ath/carl9170/usb.c:1044
+ usb_probe_interface+0x310/0x800 drivers/usb/core/driver.c:374
+ really_probe+0x290/0xac0 drivers/base/dd.c:527
+ driver_probe_device+0x223/0x350 drivers/base/dd.c:701
+ __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:808
+ bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:431
+ __device_attach+0x21a/0x390 drivers/base/dd.c:874
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
+ device_add+0x1367/0x1c20 drivers/base/core.c:2533
+ usb_set_configuration+0xed4/0x1850 drivers/usb/core/message.c:2025
+ usb_generic_driver_probe+0x9d/0xe0 drivers/usb/core/generic.c:241
+ usb_probe_device+0xd9/0x230 drivers/usb/core/driver.c:272
+ really_probe+0x290/0xac0 drivers/base/dd.c:527
+ driver_probe_device+0x223/0x350 drivers/base/dd.c:701
+ __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:808
+ bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:431
+ __device_attach+0x21a/0x390 drivers/base/dd.c:874
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
+ device_add+0x1367/0x1c20 drivers/base/core.c:2533
+ usb_new_device.cold+0x552/0xf6e drivers/usb/core/hub.c:2548
+ hub_port_connect drivers/usb/core/hub.c:5195 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5335 [inline]
+ port_event drivers/usb/core/hub.c:5481 [inline]
+ hub_event+0x226d/0x43c0 drivers/usb/core/hub.c:5563
+ process_one_work+0x965/0x1630 kernel/workqueue.c:2268
+ worker_thread+0x96/0xe20 kernel/workqueue.c:2414
+ kthread+0x326/0x430 kernel/kthread.c:268
+ ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
