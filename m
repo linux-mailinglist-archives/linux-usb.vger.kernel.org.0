@@ -2,121 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46F431D2E5A
-	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 13:30:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D795A1D2E7A
+	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 13:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726322AbgENLag (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 May 2020 07:30:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35664 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726010AbgENLag (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 07:30:36 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F17C061A0C;
-        Thu, 14 May 2020 04:30:35 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id o14so3114219ljp.4;
-        Thu, 14 May 2020 04:30:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=ah//zqGVr2uq0yxwfS0temU7octJ3zdlPot3c86bBKg=;
-        b=ZWiahqDG1NmV5BZmHPba70NLT3jWoiGhVL8LiWzNM5EhW7iB8gMGIHJWV5rCTG8rSo
-         HQJAj/lGM8deoncy8mlMupsfxwUzmZfcH7LSJB4TBSc5VzKIqmp9ASkktLIpfvCVNc3A
-         BoMwqKygagvsl3T0XOfD4ktdNoyypTKBqlGaj+q0h9E0RS2FYPE/MZptMW8/G1zMOSQW
-         HVAoWBCuHRgv0LAKY8q86/wb7mFb7ezeOtSWtnkM57R2R6U0QTqBIQpwkwljLayq4+jk
-         pfTZPKz/kEOk9lEBP50dMvgmYYWd9kRdtTbQY2kjDY48W1NzTDBvZQGOhiLt3kCT8Jp6
-         i9Vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=ah//zqGVr2uq0yxwfS0temU7octJ3zdlPot3c86bBKg=;
-        b=koOyuQU/wwm2FhIT6rroXW1il2D/fegpTtMkuxpKgHU+yClv9vji5dI+CgMs/OX86d
-         Fc3y2zVxP7icLfiPAiowYKxaRQm5WXYA6Jw1tRN89WZzbj40k2UJFeCw+Qk/8XwO2MU9
-         PH+2KIQPJIUNbiOYmh3B6yHL8dqUJL1nxuU69F7J5x8U9Q4krHORUJe+nu6RCcC3jVO/
-         MZPHcqZFQr+AOuwJyHbBnjQw+5MtvrHH3L3+sSyfaqp3PVuIC3mjJ8mfPedsakuPRVIc
-         z85p1xxvZu6/LwFBouuJCjkF5/zyMS30l2if9t4YuS2gQiqbM3PkppfNEETemn3KpVmf
-         Efog==
-X-Gm-Message-State: AOAM5315o8hDrmT/oEty2sXiBLL1JpbFe5lFr8fhXUYp6YNL+rBJ7rZq
-        Y9s4lC16jd9ESp/cU8wPAK4=
-X-Google-Smtp-Source: ABdhPJzBPTrOoPSmDrxxlZaojs5Gyl65qbnn/VHe5j3S87HnxSM5SrSaFP8FYBZdlRTpPyemwx7bpg==
-X-Received: by 2002:a2e:a313:: with SMTP id l19mr2474879lje.133.1589455834002;
-        Thu, 14 May 2020 04:30:34 -0700 (PDT)
-Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id l26sm1340749ljc.49.2020.05.14.04.30.32
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 14 May 2020 04:30:33 -0700 (PDT)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Sandeep Maheswaram <sanm@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Chandana Kishori Chiluveru <cchiluve@codeaurora.org>,
-        Sandeep Maheswaram <sanm@codeaurora.org>
-Subject: Re: [PATCH v7 2/4] usb: dwc3: qcom: Add interconnect support in dwc3 driver
-In-Reply-To: <878shu4uwk.fsf@kernel.org>
-References: <1585718145-29537-1-git-send-email-sanm@codeaurora.org> <1585718145-29537-3-git-send-email-sanm@codeaurora.org> <878shu4uwk.fsf@kernel.org>
-Date:   Thu, 14 May 2020 14:30:28 +0300
-Message-ID: <875zcy4uuj.fsf@kernel.org>
+        id S1726296AbgENLh1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 May 2020 07:37:27 -0400
+Received: from foss.arm.com ([217.140.110.172]:34772 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726190AbgENLh1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 14 May 2020 07:37:27 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7633530E;
+        Thu, 14 May 2020 04:37:26 -0700 (PDT)
+Received: from [192.168.122.166] (unknown [10.119.48.101])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1AD693F305;
+        Thu, 14 May 2020 04:37:26 -0700 (PDT)
+Subject: Re: [PATCH] USB: usbfs: fix mmap dma mismatch
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Christoph Hellwig <hch@lst.de>, Hillf Danton <hdanton@sina.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        syzbot+353be47c9ce21b68b7ed@syzkaller.appspotmail.com,
+        stable <stable@vger.kernel.org>
+References: <20200514112711.1858252-1-gregkh@linuxfoundation.org>
+From:   Jeremy Linton <jeremy.linton@arm.com>
+Message-ID: <9cc0a324-c3d8-44f4-4e65-b6938ab8cb06@arm.com>
+Date:   Thu, 14 May 2020 06:37:25 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+In-Reply-To: <20200514112711.1858252-1-gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-Felipe Balbi <balbi@kernel.org> writes:
+So looking at hcd_buffer_alloc() again, there are 4 cases, 
+localmem_pool, hcd_uses_dma, dma_pool_alloc and dma_alloc_coherent 
+directly. The dma_pool_alloc appears to just be using 
+dma_alloc_coherent, so its really three cases.
 
-> Hi,
->
-> Sandeep Maheswaram <sanm@codeaurora.org> writes:
->> +static int dwc3_qcom_interconnect_init(struct dwc3_qcom *qcom)
->> +{
->> +	struct device *dev =3D qcom->dev;
->> +	int ret;
->> +
->> +	if (!device_is_bound(&qcom->dwc3->dev))
->> +		return -EPROBE_DEFER;
->
-> this breaks allmodconfig. I'm dropping this series from my queue for
-> this merge window.
+Those three cases appear to be handled below:
 
-Sorry, I meant this patch ;-)
+So:
 
-=2D-=20
-balbi
+Reviewed-by: Jeremy Linton <jeremy.linton@arm.com>
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+I'm testing it now...
 
------BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl69K9QACgkQzL64meEa
-mQZ7vhAArWjaK6Aj1DN1EzYA0n/cMOhFyrbXdSjFMQVnz2FVLtseCEoKC6OdSMLx
-jGEzTYRjI+78Ypm8agyAVxlEvWvpG9z7NNNTA8yDIevNKQ47q5M/XWRsI2ueElV1
-LG6mt2SdK5RH1Id4BQAIZ36/IG/CIlQiml4EJYUtT0RjNhCmP7kI73bN4bp8EH3u
-8TGjNwFfguoI0RjJLXbOSIkTvYUbMFv/X3Ap5qk7sne3BBBMZkNGepGG5t8HGWHa
-uFgM1IXpgVQ3Wnua5nlSjk/PYjm+Vkm/z4Tj646+cUZHyhlZNpwSlMDtrPT9euAS
-7cWU4zVE2ve74Jpu2CJbVuHEpVmNSoh4zlnqDHpth8AEfiSndn4AlzkHd7ZLY1lA
-ZEXGRu8aylz4/fIQMlxA1J2NiV+81zi8awOD4D4/ERBJrf5Fx5s41ChUXXynbmrx
-OSube67GvjjMZdCG1gjZatIIex8pj0DMM91bDAEPvZIbr/Z1G5FwrNnoIaJpE3Xi
-DT9N6CGkz+PvOpME7y/CLpOlfqYe1Js/+RkzRJ80Qwy/G1V5n7McOKSU4o7AOmZk
-m40we7nmSzN+Q1KmAh0EzjtfLhrUWGMcuwRcI+p5jc40G/4dm6ySKVv9b5z+l+No
-1yahDWmAwNgIDBJtRvET0vbw5F7oaCqzy+p+lKq7s/8UnxLVJNQ=
-=mQ/l
------END PGP SIGNATURE-----
---=-=-=--
+Thanks,
+
+
+
+On 5/14/20 6:27 AM, Greg Kroah-Hartman wrote:
+> In commit 2bef9aed6f0e ("usb: usbfs: correct kernel->user page attribute
+> mismatch") we switched from always calling remap_pfn_range() to call
+> dma_mmap_coherent() to handle issues with systems with non-coherent USB host
+> controller drivers.  Unfortunatly, as syzbot quickly told us, not all the world
+> is host controllers with DMA support, so we need to check what host controller
+> we are attempting to talk to before doing this type of allocation.
+> 
+> Thanks to Christoph for the quick idea of how to fix this.
+> 
+> Cc: Christoph Hellwig <hch@lst.de>
+> Cc: Hillf Danton <hdanton@sina.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Jeremy Linton <jeremy.linton@arm.com>
+> Reported-by: syzbot+353be47c9ce21b68b7ed@syzkaller.appspotmail.com
+> Fixes: 2bef9aed6f0e ("usb: usbfs: correct kernel->user page attribute mismatch")
+> Cc: stable <stable@vger.kernel.org>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>   drivers/usb/core/devio.c | 16 +++++++++++++---
+>   1 file changed, 13 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
+> index b9db9812d6c5..d93d94d7ff50 100644
+> --- a/drivers/usb/core/devio.c
+> +++ b/drivers/usb/core/devio.c
+> @@ -251,9 +251,19 @@ static int usbdev_mmap(struct file *file, struct vm_area_struct *vma)
+>   	usbm->vma_use_count = 1;
+>   	INIT_LIST_HEAD(&usbm->memlist);
+>   
+> -	if (dma_mmap_coherent(hcd->self.sysdev, vma, mem, dma_handle, size)) {
+> -		dec_usb_memory_use_count(usbm, &usbm->vma_use_count);
+> -		return -EAGAIN;
+> +	if (hcd->localmem_pool || !hcd_uses_dma(hcd)) {
+> +		if (remap_pfn_range(vma, vma->vm_start,
+> +				    virt_to_phys(usbm->mem) >> PAGE_SHIFT,
+> +				    size, vma->vm_page_prot) < 0) {
+> +			dec_usb_memory_use_count(usbm, &usbm->vma_use_count);
+> +			return -EAGAIN;
+> +		}
+> +	} else {
+> +		if (dma_mmap_coherent(hcd->self.sysdev, vma, mem, dma_handle,
+> +				      size)) {
+> +			dec_usb_memory_use_count(usbm, &usbm->vma_use_count);
+> +			return -EAGAIN;
+> +		}
+>   	}
+>   
+>   	vma->vm_flags |= VM_IO;
+> 
+
