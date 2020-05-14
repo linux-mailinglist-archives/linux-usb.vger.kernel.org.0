@@ -2,72 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF2351D259D
-	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 06:01:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A7581D2751
+	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 08:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725788AbgENEBa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 May 2020 00:01:30 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:55251 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725290AbgENEB3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 00:01:29 -0400
-X-UUID: 2d07cbdbd61b41e19992e24d852812ac-20200514
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=Vq25CpGWDu4hIaBmnMbm4KOdW3U78xl9MWNuHHP8T8w=;
-        b=W0Bs7A4Jn2c2RwT1+rEF3uzTWZ5LFHb0PuxVMa6PhglatDohufz/Hhi9W7q/kG0AiwVvZc8lIyN1FXVXTWJO/3pHf8/Cqp/cEwiId1OT9Pzz9d5VW+fQTQLgtX4PL50gB/Myhh+p/f+E1l1nsC7D91JatSF72695Izozx0KJm3Q=;
-X-UUID: 2d07cbdbd61b41e19992e24d852812ac-20200514
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1918152551; Thu, 14 May 2020 12:01:25 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 14 May 2020 12:01:20 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 14 May 2020 12:01:19 +0800
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-To:     Min Guo <min.guo@mediatek.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Hans de Goede <hdegoede@redhat.com>, Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-CC:     Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>,
-        Macpaul Lin <macpaul.lin@gmail.com>
-Subject: [PATCH] usb: musb: mediatek: add reset FADDR to zero in reset interrupt handle
-Date:   Thu, 14 May 2020 12:01:12 +0800
-Message-ID: <1589428872-29282-1-git-send-email-macpaul.lin@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
+        id S1725979AbgENGOV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 May 2020 02:14:21 -0400
+Received: from verein.lst.de ([213.95.11.211]:50138 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725794AbgENGOV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 14 May 2020 02:14:21 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 65CF468BEB; Thu, 14 May 2020 08:14:17 +0200 (CEST)
+Date:   Thu, 14 May 2020 08:14:17 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     syzbot <syzbot+353be47c9ce21b68b7ed@syzkaller.appspotmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>, jeremy.linton@arm.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, Christoph Hellwig <hch@lst.de>,
+        x86@kernel.org
+Subject: Re: WARNING in memtype_reserve
+Message-ID: <20200514061417.GA8367@lst.de>
+References: <000000000000f0d8d205a531f1a3@google.com> <20200509074507.GC1831917@kroah.com> <87wo5l4ecm.fsf@nanos.tec.linutronix.de> <20200513124445.GA1082735@kroah.com> <87zhab249p.fsf@nanos.tec.linutronix.de> <20200514035458.14760-1-hdanton@sina.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: 7786936E7E97A400A420A3B5D83AA16F375A89018EEAA40ED48FEFC21FA816762000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200514035458.14760-1-hdanton@sina.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-V2hlbiByZWNlaXZpbmcgcmVzZXQgaW50ZXJydXB0LCBGQUREUiBuZWVkIHRvIGJlIHJlc2V0IHRv
-IHplcm8gaW4NCnBlcmlwaGVhcmwgbW9kZS4gT3RoZXJ3aXNlIGVwMCBjYW5ub3QgZG8gZW51bWVy
-YXRpb24gd2hlbiByZS1wbHVnaW5nIFVTQg0KY2FibGUuDQoNClNpZ25lZC1vZmYtYnk6IE1hY3Bh
-dWwgTGluIDxtYWNwYXVsLmxpbkBtZWRpYXRlay5jb20+DQotLS0NCiBkcml2ZXJzL3VzYi9tdXNi
-L21lZGlhdGVrLmMgfCAgICA2ICsrKysrKw0KIDEgZmlsZSBjaGFuZ2VkLCA2IGluc2VydGlvbnMo
-KykNCg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL211c2IvbWVkaWF0ZWsuYyBiL2RyaXZlcnMv
-dXNiL211c2IvbWVkaWF0ZWsuYw0KaW5kZXggNjE5NmIwZS4uZWViZWFkZCAxMDA2NDQNCi0tLSBh
-L2RyaXZlcnMvdXNiL211c2IvbWVkaWF0ZWsuYw0KKysrIGIvZHJpdmVycy91c2IvbXVzYi9tZWRp
-YXRlay5jDQpAQCAtMjA4LDYgKzIwOCwxMiBAQCBzdGF0aWMgaXJxcmV0dXJuX3QgZ2VuZXJpY19p
-bnRlcnJ1cHQoaW50IGlycSwgdm9pZCAqX19oY2kpDQogCW11c2ItPmludF9yeCA9IG11c2JfY2xl
-YXJ3KG11c2ItPm1yZWdzLCBNVVNCX0lOVFJSWCk7DQogCW11c2ItPmludF90eCA9IG11c2JfY2xl
-YXJ3KG11c2ItPm1yZWdzLCBNVVNCX0lOVFJUWCk7DQogDQorCWlmICgobXVzYi0+aW50X3VzYiAm
-IE1VU0JfSU5UUl9SRVNFVCkgJiYgIWlzX2hvc3RfYWN0aXZlKG11c2IpKSB7DQorCQkvKiBlcDAg
-RkFERFIgbXVzdCBiZSAwIHdoZW4gKHJlKWVudGVyaW5nIHBlcmlwaGVyYWwgbW9kZSAqLw0KKwkJ
-bXVzYl9lcF9zZWxlY3QobXVzYi0+bXJlZ3MsIDApOw0KKwkJbXVzYl93cml0ZWIobXVzYi0+bXJl
-Z3MsIE1VU0JfRkFERFIsIDApOw0KKwl9DQorDQogCWlmIChtdXNiLT5pbnRfdXNiIHx8IG11c2It
-PmludF90eCB8fCBtdXNiLT5pbnRfcngpDQogCQlyZXR2YWwgPSBtdXNiX2ludGVycnVwdChtdXNi
-KTsNCiANCi0tIA0KMS43LjkuNQ0K
-
+Guys, can you please start formal thread on this?  I have no
+idea where this came from and what the rationale is.  Btw, if the
+pfn is crap in dma_direct_mmap then the dma_addr_t passed in is
+crap, as it is derived from that.  What is the caller, and how is
+this triggered?
