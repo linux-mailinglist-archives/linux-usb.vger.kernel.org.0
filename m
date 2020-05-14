@@ -2,70 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E06C1D2E37
-	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 13:27:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E34C1D2E3F
+	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 13:27:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726232AbgENL0Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 May 2020 07:26:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51038 "EHLO mail.kernel.org"
+        id S1726241AbgENL13 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 May 2020 07:27:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51250 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726056AbgENL0Y (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 14 May 2020 07:26:24 -0400
-Received: from localhost (unknown [122.182.193.86])
+        id S1726051AbgENL1Z (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 14 May 2020 07:27:25 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AFD31206DA;
-        Thu, 14 May 2020 11:26:23 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F16FC206A5;
+        Thu, 14 May 2020 11:27:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589455584;
-        bh=Zr9uDclEiIV6JbC3eC6+cs7xG/1U4iZ+ynfezdaEHow=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d/oDzLyJwmDobZIfdVeIEJgufx+lrbTWLtT7pMQqySHU5/ULP4Jsv/8wF0k1kI82V
-         vlgOQTeaB3BbBu3N4XOo7OBQ9dexz5GQdIKp0VsboXT8pOTDb9lOyWRYbjwBniy29C
-         mbSzD87B6Zbx5W+HeRQazW6/QMRU/vH8KMXiVeWU=
-Date:   Thu, 14 May 2020 16:56:18 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andreas =?iso-8859-1?Q?B=F6hler?= <dev@aboehler.at>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v13 5/5] usb: xhci: provide a debugfs hook for erasing rom
-Message-ID: <20200514112618.GP14092@vkoul-mobl>
-References: <20200506060025.1535960-1-vkoul@kernel.org>
- <20200506060025.1535960-6-vkoul@kernel.org>
- <caa2c5f4-a858-d699-27af-7b0c22b4dc40@linux.intel.com>
- <20200513124554.GA1083139@kroah.com>
- <20200514092458.GA1591384@kroah.com>
+        s=default; t=1589455644;
+        bh=lb1wILpxMnk2dDKyaT9/I0hBKKuiQ8NqaXhAMd1Q6S8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jlxWWmcoplhtpNO8NT/phR6Z+E6qgXXqonoospaP5cvfpEK5qHLTzJ0ge5FzXeGsM
+         LIPRtO2WwqLM0xwU4zTjDKGWK/7JSHGzvgTxSMePIr5XdUw1c7AkxVxUSP1h3CUEuZ
+         vA9wGo5cvKaK8kBTNEznr/v3ilTRmRXcXbtiBK64=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Hillf Danton <hdanton@sina.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jeremy Linton <jeremy.linton@arm.com>,
+        syzbot+353be47c9ce21b68b7ed@syzkaller.appspotmail.com,
+        stable <stable@vger.kernel.org>
+Subject: [PATCH] USB: usbfs: fix mmap dma mismatch
+Date:   Thu, 14 May 2020 13:27:11 +0200
+Message-Id: <20200514112711.1858252-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200514092458.GA1591384@kroah.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 14-05-20, 11:24, Greg Kroah-Hartman wrote:
-> On Wed, May 13, 2020 at 02:45:54PM +0200, Greg Kroah-Hartman wrote:
+In commit 2bef9aed6f0e ("usb: usbfs: correct kernel->user page attribute
+mismatch") we switched from always calling remap_pfn_range() to call
+dma_mmap_coherent() to handle issues with systems with non-coherent USB host
+controller drivers.  Unfortunatly, as syzbot quickly told us, not all the world
+is host controllers with DMA support, so we need to check what host controller
+we are attempting to talk to before doing this type of allocation.
 
-> > Ah, I misssed that, a follow-on patch can do this, right?
-> 
-> Actually, a whole new series with this changed is good, I didn't take
-> these for now, for some reason I thought I had.
+Thanks to Christoph for the quick idea of how to fix this.
 
-Do you mind taking these except this patch (last). I will spin this
-later
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Hillf Danton <hdanton@sina.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Jeremy Linton <jeremy.linton@arm.com>
+Reported-by: syzbot+353be47c9ce21b68b7ed@syzkaller.appspotmail.com
+Fixes: 2bef9aed6f0e ("usb: usbfs: correct kernel->user page attribute mismatch")
+Cc: stable <stable@vger.kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/usb/core/devio.c | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-Debugfs was for my own testing to be able to erase so that I can test
-load :) No hurry for users to have that yet...
-
-Thanks
+diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
+index b9db9812d6c5..d93d94d7ff50 100644
+--- a/drivers/usb/core/devio.c
++++ b/drivers/usb/core/devio.c
+@@ -251,9 +251,19 @@ static int usbdev_mmap(struct file *file, struct vm_area_struct *vma)
+ 	usbm->vma_use_count = 1;
+ 	INIT_LIST_HEAD(&usbm->memlist);
+ 
+-	if (dma_mmap_coherent(hcd->self.sysdev, vma, mem, dma_handle, size)) {
+-		dec_usb_memory_use_count(usbm, &usbm->vma_use_count);
+-		return -EAGAIN;
++	if (hcd->localmem_pool || !hcd_uses_dma(hcd)) {
++		if (remap_pfn_range(vma, vma->vm_start,
++				    virt_to_phys(usbm->mem) >> PAGE_SHIFT,
++				    size, vma->vm_page_prot) < 0) {
++			dec_usb_memory_use_count(usbm, &usbm->vma_use_count);
++			return -EAGAIN;
++		}
++	} else {
++		if (dma_mmap_coherent(hcd->self.sysdev, vma, mem, dma_handle,
++				      size)) {
++			dec_usb_memory_use_count(usbm, &usbm->vma_use_count);
++			return -EAGAIN;
++		}
+ 	}
+ 
+ 	vma->vm_flags |= VM_IO;
 -- 
-~Vinod
+2.26.2
+
