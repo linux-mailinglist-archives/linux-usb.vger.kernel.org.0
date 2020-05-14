@@ -2,160 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08C601D307D
-	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 15:00:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CF641D318D
+	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 15:43:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726087AbgENNAI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 May 2020 09:00:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49650 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726056AbgENNAG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 09:00:06 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75754C061A0C;
-        Thu, 14 May 2020 06:00:05 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id h188so1803092lfd.7;
-        Thu, 14 May 2020 06:00:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=ROR9+95dsTUL1CeIysEpgW1DhBAJL0UZ2A95+lwDUiw=;
-        b=KO6z1RYlRErR/eWlNzvzQ1S4WAxi9GPRDFuqfPtP3FkEatHRkZJJYMDLbVWyrzKM05
-         kdvUfgzIXmLo9llmPsA0bTlpcoZPlGa1gQ1i1M3P2LWLtEY5ERlIUn+AVfptSlpLbwVI
-         8TT6ZW7OHWOzgTPcBdcMCweELyx/ku0oW8s0fbHOiKfYMSDGHJaGcVwKSpYVVg6mEI9p
-         IseVRHYjX7nj0CCb+CDXaxSmi8RCuNUFUnnvPBkx/33a3PNl4IzvkfzHCPM/8KeTdf1q
-         AxOnnkTEJH1IWW99opQOR1zBslGDQ3EMeU4aMmxxT3o2eaiXj6SPSxUT6BfOnoWNMlm9
-         HZuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=ROR9+95dsTUL1CeIysEpgW1DhBAJL0UZ2A95+lwDUiw=;
-        b=gPchzb3oXJBkBat5/pPBSDkRRX7c5vjsr824NBgUPxrpT+FlV9ZdJT/Lmt/1dCErdy
-         /17gWdDfWG3Pv58GTOkO0F6S1NnHlLz3ZmuZFtcDsJfyN+1epPPtBhJxeOctOB9cCq29
-         UBSibJqP18O9lbO/Lbn3PSoOHvhf5iCO8x050N0jyQw7ppwg6YB7dHA/97Zc2IoIINJe
-         i8HKgkN11KUPaMyzpDmnl+zQzhvbJXhRQCzedjESts8pFsQqF1wJ3buppZLPOtZ/FMOq
-         9v30X0dJVke/OAdt+vwTefCgIgA77y2uGMHFk2fHmb6ZCozR2UscxKrkSV0qZs6Y+f5a
-         f95w==
-X-Gm-Message-State: AOAM53265zX+WC6kpoBbFiHx+9r6n1nfQmlqZ/CM3HC85KHwiogDLCv7
-        jtw7tfqQPODBiX5h7tUTr0z4wPEiHXdhsg==
-X-Google-Smtp-Source: ABdhPJxNerIfBcvLmQHYutWMRmJg9p7efJMIVDi65EtZZ3Y4oVoOZUA65oO9+bwhonnVNLfMWyzKiQ==
-X-Received: by 2002:ac2:5999:: with SMTP id w25mr3194661lfn.196.1589461203516;
-        Thu, 14 May 2020 06:00:03 -0700 (PDT)
-Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id g3sm1894755ljk.27.2020.05.14.06.00.02
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 14 May 2020 06:00:02 -0700 (PDT)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Neil Armstrong <narmstrong@baylibre.com>, kishon@ti.com,
-        khilman@baylibre.com, martin.blumenstingl@googlemail.com
-Cc:     linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/13] usb: dwc3: meson: add OTG support for GXL/GXM
-In-Reply-To: <8404c7a0-fca7-9e28-b65a-312ed09ecdd3@baylibre.com>
-References: <20200324102030.31000-1-narmstrong@baylibre.com> <87369rfo7l.fsf@kernel.org> <87r1vm4xyq.fsf@kernel.org> <8404c7a0-fca7-9e28-b65a-312ed09ecdd3@baylibre.com>
-Date:   Thu, 14 May 2020 15:59:52 +0300
-Message-ID: <87wo5e3c53.fsf@kernel.org>
+        id S1727819AbgENNmt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 May 2020 09:42:49 -0400
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:61750 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726197AbgENNmt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 09:42:49 -0400
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04EDgMxu028132;
+        Thu, 14 May 2020 15:42:33 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=STMicroelectronics;
+ bh=tD1qvdb0EwmAv9XocfBUyYNcHtOhYgnwwbYe5684NcY=;
+ b=lpZCseNN1q8B2O++L5FqZEfrupQp8UmuSICipi2VpYbbXdKqjviuS4uNBmOQ1Qk1/JYn
+ FC0+aT7IZOR+0AaKhzk+Ozpgl88d1a5y1MBWH1j0sjx/T8Vy7mAFxLIZkKAuH5DBT24e
+ w8vnJeOoFwf7/cYeADMBCKg6OvlIrAm70cghUtpnyO8Px5h4+ovsh1x/0sNyYzBPay55
+ GNVpTBzYrzgrxIYjV346YgPOw8M8x1YuBl3tdk9ASS/dhGkQVptEBfcXiG2r4Y/3xJqM
+ b1YktOvA+/Pa6WYvOrUBAuOptDbM+z10mLDDQLjERCoYWeW9MwohkWsITtdfWVTKKrAK eQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 3100vnbg0g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 May 2020 15:42:33 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0CF2C100034;
+        Thu, 14 May 2020 15:42:33 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id EA8332BE24D;
+        Thu, 14 May 2020 15:42:32 +0200 (CEST)
+Received: from lmecxl0912.tpe.st.com (10.75.127.47) by SFHDAG3NODE2.st.com
+ (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Thu, 14 May
+ 2020 15:42:27 +0200
+Subject: Re: [PATCH 00/15] Fix STM32 DT issues on v5.7-rc4
+To:     Benjamin Gaignard <benjamin.gaignard@st.com>,
+        <linus.walleij@linaro.org>, <robh+dt@kernel.org>,
+        <mcoquelin.stm32@gmail.com>, <gregkh@linuxfoundation.org>
+CC:     <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+References: <20200513145935.22493-1-benjamin.gaignard@st.com>
+From:   Alexandre Torgue <alexandre.torgue@st.com>
+Message-ID: <caef6641-b7c2-881a-a331-3d05f6f4bba6@st.com>
+Date:   Thu, 14 May 2020 15:42:18 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+In-Reply-To: <20200513145935.22493-1-benjamin.gaignard@st.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
+ definitions=2020-05-14_04:2020-05-14,2020-05-14 signatures=0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+Hi Benjamin
 
-Neil Armstrong <narmstrong@baylibre.com> writes:
+On 5/13/20 4:59 PM, Benjamin Gaignard wrote:
+> This series fixes issues hight lighted by dtbs_check on STM32 devicetrees.
+> The patches has been developped on top of v5.7-rc4 tag.
+> 
+> Benjamin Gaignard (15):
+>    ARM: dts: stm32: remove useless interrupt-names property on stm32f429
+>    ARM: dts: stm32: update pwm pinctrl node names for stm32f4
+>    ARM: dts: stm32: update led nodes names for stm32f249-disco
+>    ARM: dts: stm32: update led nodes names for stm32f469-disco
+>    ARM: dts: stm32: remove useless interrupt-names property on stm32f746
+>    ARM: dts: stm32: update led nodes names for stm32f429-eval
+>    ARM: dts: stm32: update led nodes names for stm32f769-disco
+>    ARM: dts: stm32: update led nodes names for stm32f746-eval
+>    ARM: dts: stm32: remove useless interrupt-names property on stm32f743
+>    ARM: dts: stm32: Update nodes names for stm32h743 pinctrl
+>    ARM: dts: stm32: Update nodes names for stm32mp15 pinctrl
+>    ARM: dts: stm32: Add missing #address and #size cells on spi node for
+>      stm32mp151
+>    ARM: dts: stm32: update led nodes names for stm32f746-eval
+>    dt-bindings: pinctrl: stm32: Add missing interrupts property
+>    dt-bindings: usb: dwc2: Fix issues for stm32mp15x SoC
 
-> Hi,
->
-> On 14/05/2020 12:23, Felipe Balbi wrote:
->> Felipe Balbi <balbi@kernel.org> writes:
->>=20
->>> Neil Armstrong <narmstrong@baylibre.com> writes:
->>>
->>>> The USB support was initialy done with a set of PHYs and dwc3-of-simple
->>>> because the architecture of the USB complex was not understood correct=
-ly
->>>> at the time (and proper documentation was missing...).
->>>>
->>>> But with the G12A family, the USB complex was correctly understood and
->>>> implemented correctly.
->>>> But seems the G12A architecture was derived for the GXL USB architectu=
-re,
->>>> with minor differences and looks we can share most of the USB DWC3 glue
->>>> driver.
->>>>
->>>> This patchset refactors and adds callbacks to handle the architecture
->>>> difference while keeping the main code shared.
->>>>
->>>> The main difference is that on GXL/GXM the USB2 PHY control registers
->>>> are mixed with the PHY registers (we already handle correctly), and
->>>> the GLUE registers are allmost (99%) the same as G12A.
->>>>
->>>> But, the GXL/GXM HW is buggy, here are the quirks :
->>>> - for the DWC2 controller to reset correctly, the GLUE mux must be swi=
-tched
->>>>   to peripheral when the DWC2 controlle probes. For now it's handled b=
-y simply
->>>>   switching to device when probing the subnodes, but it may be not eno=
-ugh
->>>> - when manually switching from Host to Device when the USB port is not
->>>>   populated (should not happen with proper Micro-USB/USB-C OTG switch)=
-, it
->>>>   makes the DWC3 to crash. The only way to avoid that is to use the Ho=
-st
->>>>   Disconnect bit to disconnect the DWC3 controller from the port, but =
-we can't
->>>>   recover the Host functionnality unless resetting the DWC3 controller.
->>>>   This bit is set when only manual switch is done, and a warning is pr=
-inted
->>>>   on manual switching.
->>>>
->>>> The patches 1-8 should be applied first, then either waiting the next =
-release
->>>> or if the usb maintainer can provide us a stable tag, we can use it to=
- merge
->>>> the DT and bindings.
->>>
->>> it's unclear to me if this series is ready to be merged. Can someone
->>> confirm? If it is, can you resend with all reviewed by tags in place?
->>=20
->> Are we getting a v2 for this?
->>=20
->
-> Yes, even a v3 with reviews on all patches:
-> http://lkml.kernel.org/r/20200416121910.12723-1-narmstrong@baylibre.com
+For dts(i) part, it looks good to me. I let Rob to review before taking 
+the whole series.
 
-In that case, can you check that I have applied everything correctly in
-testing/next?
+thanks
+alex
 
-cheers
 
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl69QMoACgkQzL64meEa
-mQZ7CBAAjOVQDtFwDKrzgDZRhyR2kgFRKf9TzlbXviaZij9EeWPBy1HaR0b+/2eX
-SgIO6RsGUiDD0dBt92WLGnvIxt2JecaAdUNbjUzQBeIkuvEyAuJq0M3qkaMLUU+h
-6t6yJZBfO+MyOoFzUS7o+jKQn96KrQLHxcUB69ubZChlNHJUG5nBXpJ2D8xeehnW
-Jz3VvJRqBTtN6X8Cgox6e+X7xq42E+VJz9/vwEqQuMA8R85Ay+fxKbX20GdEj0+P
-8mhZVbe/Anwpksh5RDLAYeP6tOwz5XeAxotB6Iav81HY//gw2HwVuLdhG4t7sm8h
-lfzOa/MkbeoLwT2NacYaZ6eQbBWNpe0+JhX74FL08/P+S5JiHw/DoejbYJL4u8v5
-vfA9kWfkrgEQem/MxNAD8dI+HtFMAnNemLsXMATSrNepVNJiEFACyR9fPA76tf1A
-OPd9sztw4TMDhVi7rPFjnkRYacG7eNkY814OI39975lRc2VI24GjkzBELJMILhqo
-u6EFJcd5vUJcsE47LNyn+hnEFZdkzjxnDXRIJhFfHIyuHaBWYF7chXbkj/TohCQi
-NnLdxEIHnHTXLsD+zN79KNx+UB+4JmRoMVyGlipjaGcgiPWTark9gXyxqOzJNYGG
-Ag7n5Rbxrlh80c2pOZnK4dHKjpUSLf8pcbXgK4rvLr5uWZEvT9A=
-=1kRq
------END PGP SIGNATURE-----
---=-=-=--
+> 
+>   .../devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml          |  3 +++
+>   Documentation/devicetree/bindings/usb/dwc2.yaml                |  6 ++++--
+>   arch/arm/boot/dts/stm32429i-eval.dts                           |  8 ++++----
+>   arch/arm/boot/dts/stm32746g-eval.dts                           |  8 ++++----
+>   arch/arm/boot/dts/stm32f4-pinctrl.dtsi                         |  4 ++--
+>   arch/arm/boot/dts/stm32f429-disco.dts                          |  4 ++--
+>   arch/arm/boot/dts/stm32f429.dtsi                               |  1 -
+>   arch/arm/boot/dts/stm32f469-disco.dts                          |  8 ++++----
+>   arch/arm/boot/dts/stm32f746.dtsi                               |  1 -
+>   arch/arm/boot/dts/stm32f769-disco.dts                          |  4 ++--
+>   arch/arm/boot/dts/stm32h743-pinctrl.dtsi                       | 10 +++++-----
+>   arch/arm/boot/dts/stm32h743.dtsi                               |  1 -
+>   arch/arm/boot/dts/stm32mp15-pinctrl.dtsi                       |  6 +++---
+>   arch/arm/boot/dts/stm32mp151.dtsi                              |  2 ++
+>   arch/arm/boot/dts/stm32mp15xx-dkx.dtsi                         |  2 +-
+>   15 files changed, 36 insertions(+), 32 deletions(-)
+> 
