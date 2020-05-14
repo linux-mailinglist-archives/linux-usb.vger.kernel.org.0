@@ -2,39 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A0CB1D3BE3
-	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 21:06:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEE6B1D3AFE
+	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 21:05:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728880AbgENSx4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 May 2020 14:53:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53500 "EHLO mail.kernel.org"
+        id S1729216AbgENSyt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 May 2020 14:54:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54948 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728871AbgENSxy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 14 May 2020 14:53:54 -0400
+        id S1729053AbgENSys (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 14 May 2020 14:54:48 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D291D207CD;
-        Thu, 14 May 2020 18:53:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5C50F207D0;
+        Thu, 14 May 2020 18:54:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589482433;
-        bh=nx23dqVpWnjfhGPHJ3dCs8uLrVRnY0WPQ+tFW7+VuqM=;
+        s=default; t=1589482487;
+        bh=8hFZEeYTUPNMEk1q5PkptXqW8zlYX8h70fC2YZwUHxE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MhvjMLX01WBA+Ctmyv4rXx/JmNStazor32i59NLkvvvhWQFYOQvQ/3/xnDPgQ5cPY
-         YKxKtfFGT2q1yMgVLG/EVVyQvNrglz0kxM7wYcK2SvmDn7DF/Ioxp5k+O6+eIilGHB
-         ytJrhinvTVp/yYpTS5tQ6GZZM9r/PC+RD34MeLmU=
+        b=dpZKVvNLXtZsN/owOXv8R/m8w2sCS/obZfkcGPwnJ052amI7gNTwIHUaU7z6hcKnk
+         QAUcEyfaVu6bOJBSIbEt9KKlNa6sP6H8qgoTtzKwQgMBgraD5QTpBRGzwI03KE2gDZ
+         NHMNZ57dQbL1eoxT3/lmZqsuHWm1/H8zqiEvD/Ic=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Alan Stern <stern@rowland.harvard.edu>,
         syzbot+db339689b2101f6f6071@syzkaller.appspotmail.com,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 34/49] USB: core: Fix misleading driver bug report
-Date:   Thu, 14 May 2020 14:52:55 -0400
-Message-Id: <20200514185311.20294-34-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 26/31] USB: core: Fix misleading driver bug report
+Date:   Thu, 14 May 2020 14:54:08 -0400
+Message-Id: <20200514185413.20755-26-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200514185311.20294-1-sashal@kernel.org>
-References: <20200514185311.20294-1-sashal@kernel.org>
+In-Reply-To: <20200514185413.20755-1-sashal@kernel.org>
+References: <20200514185413.20755-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -88,7 +88,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
-index 02eaac7e1e34e..a1ac2f0723b0b 100644
+index fcf84bfc08e34..f705ea52eb973 100644
 --- a/drivers/usb/core/message.c
 +++ b/drivers/usb/core/message.c
 @@ -1143,11 +1143,11 @@ void usb_disable_endpoint(struct usb_device *dev, unsigned int epaddr,
