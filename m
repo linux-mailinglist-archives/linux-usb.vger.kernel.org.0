@@ -2,52 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33A811D24B5
-	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 03:32:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E15F91D24C4
+	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 03:34:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727033AbgENBcH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 May 2020 21:32:07 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:41405 "HELO
+        id S1726161AbgENBe0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 May 2020 21:34:26 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:39027 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1725925AbgENBcG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 May 2020 21:32:06 -0400
-Received: (qmail 11072 invoked by uid 500); 13 May 2020 21:32:05 -0400
-Date:   Wed, 13 May 2020 21:32:05 -0400
+        with SMTP id S1725952AbgENBe0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 May 2020 21:34:26 -0400
+Received: (qmail 11256 invoked by uid 500); 13 May 2020 21:34:25 -0400
+Date:   Wed, 13 May 2020 21:34:25 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Bin Liu <b-liu@ti.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: musb: return -ESHUTDOWN in urb when three-strikes
- error happened
-Message-ID: <20200514013205.GA10515@rowland.harvard.edu>
-References: <20200513213620.21541-1-b-liu@ti.com>
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     Jun Li <jun.li@nxp.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Baolin Wang <baolin.wang@linaro.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: =?utf-8?B?5Zue5aSNOiBbUEFUQ0ggMS8x?= =?utf-8?Q?=5D?= usb: host:
+ xhci-plat: keep runtime active when remove host
+Message-ID: <20200514013425.GB10515@rowland.harvard.edu>
+References: <20200512023547.31164-1-peter.chen@nxp.com>
+ <a5ba9001-0371-e675-e013-b8dd4f1c38e2@codeaurora.org>
+ <AM7PR04MB7157A3036C121654E7C70FB38BBE0@AM7PR04MB7157.eurprd04.prod.outlook.com>
+ <62e24805-5c80-f6b4-b8ba-cb6d649a878b@linux.intel.com>
+ <VE1PR04MB6528D2A1C08ED9F091BCF3FD89BF0@VE1PR04MB6528.eurprd04.prod.outlook.com>
+ <20200514013221.GA20346@b29397-desktop>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200513213620.21541-1-b-liu@ti.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200514013221.GA20346@b29397-desktop>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 13, 2020 at 04:36:20PM -0500, Bin Liu wrote:
-> When a USB device attached to a hub got disconnected, MUSB controller
-> generates RXCSR_RX_ERROR interrupt for the 3-strikes-out error.
+On Thu, May 14, 2020 at 01:31:59AM +0000, Peter Chen wrote:
+> On 20-05-13 14:45:42, Jun Li wrote:
+> > ​
+> > ...
+> > > Would it make sense to change xhci_plat_remove() to
+> > 
+> > 
+> > 
+> > > xhci_plat_remove()
+> > 
+> > >   pm_runtime_disable()
+> > 
+> > >   <remove and put both hcd's>
+> > 
+> > >   pm_runtime_set_suspended()
+> > 
+> > 
+> > 
+> > > or possibly wrapping the remove in a runtime get/put:
+> > 
+> > > xhci_plat_remove()
+> > 
+> > >  pm_runtime_get_noresume()
+> > 
+> > >   pm_runtime_disable()
+> > 
+> >  >  <remove and put both hcd's>
+> > 
+> >  >  pm_runtime_set_suspended()
+> > 
+> >  >  pm_runtime_put_noidle()
+> > 
+> > I think it's better to keep runtime active during driver removal,
+> > how about this:
+> > 
+> > pm_runtime_get_sync()
+> > <remove and put both hcd's>
+> > pm_runtime_disable()
+> > pm_runtime_put_noidle()
+> > pm_runtime_set_suspended()
+> > 
 > 
-> Currently the MUSB host driver returns -EPROTO in current URB, then the
-> USB device driver could immediately resubmit the URB which causes MUSB
-> generate RXCSR_RX_ERROR interrupt again. This circle causes interrupt
-> storm then the hub never got a chance to report the USB device detach.
-> 
-> To fix the interrupt storm, change the URB return code to -ESHUTDOWN for
-> MUSB_RXCSR_H_ERROR interrupt, so that the USB device driver will not
-> immediately resubmit the URB.
-> 
-> Signed-off-by: Bin Liu <b-liu@ti.com>
+> I think it is more reasonable since for some DRD controllers if
+> DRD core is suspended, access the xHCI register (eg, we remove
+> xhci-plat-hcd module at the time) may hang the system. Alan &
+> Mathias, what's your opinion?
 
-Strictly speaking, this is not the right thing to do.  It goes against 
-the API described in error-codes.rst.  A better approach would be to fix 
-the drivers that immediately resubmit an URB after getting a -EPROTO 
-error.  After all, that is the wrong thing to do no matter what sort of 
-host controller the device is attached to.
+Jun's suggestion looks good to me.
 
 Alan Stern
