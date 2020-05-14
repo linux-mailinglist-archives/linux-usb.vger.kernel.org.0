@@ -2,62 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 316E21D2D02
-	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 12:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2D081D2D19
+	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 12:40:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726073AbgENKiQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 May 2020 06:38:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55772 "EHLO
+        id S1726176AbgENKkp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 May 2020 06:40:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726056AbgENKiO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 06:38:14 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E93C061A0C
-        for <linux-usb@vger.kernel.org>; Thu, 14 May 2020 03:38:14 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id l19so2913597lje.10
-        for <linux-usb@vger.kernel.org>; Thu, 14 May 2020 03:38:14 -0700 (PDT)
+        with ESMTP id S1726010AbgENKkp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 06:40:45 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEBF1C061A0C;
+        Thu, 14 May 2020 03:40:44 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id u15so2971295ljd.3;
+        Thu, 14 May 2020 03:40:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=b3PJLigGGW/woucgM+z4vCA9eeUtsl6llobsXbQ3L78=;
-        b=DTzVsO3kffZ4Hg9qjwPU9QWwohzQu5r5tVgFbw2oQe1gEu24x3xIsd1fzoLBsmqHse
-         EcUBkCna/ULYwW1yMac+DqbdllKPJeGJJyZA+0Su4+QXkYlz66yj3fBN5UWz7dOBcM9T
-         7HFcNU+Q5i5MPXvUFDtWMn37FhHQaAEpHkR5qnulEO+dVBQ5TnGaDCYvqiaMhlf3bbOR
-         9dinQt8fnG4w68YihZobq5Tlv41Ky/E8PIdVnYXs40jidIc1US/7TlT0K3TzwG/Z0XHN
-         fCIWWV/XX8WWhfaFZabB2dqlVhrFEjdxFuhY94R31Yj//zH/REJVHp6SQCSOVHSOBu3A
-         TEEw==
+        bh=ADFIiIM1Fe26/cRjvae/xxSYwcERBybNKGMvOKxuFr4=;
+        b=bcftHwObq2STzO4ObxkD57BKbGME8uRmzC1DIuh1WNyRkLm+RpMqlj3oJPYjCecTdW
+         qeixtywBTxIDWfCvWYfh6os9aQTjruOLHMxBvxna9zosjgHtlR1/HY7bSv6sut/GXHX/
+         pvBhPQC5M7xC+15QOoDF3w/ZH6a+Q5ovj01Yfxu4WBSwXYK/8LH0K0nuDiZBTb1GM2Op
+         kut8C6pqAxf65Gbn1I1gPekBSdzo6C9L843PuLCd0XUjd5VwwJ4mXYVJRxyMNgSNo2xE
+         ft3y4XmwxVLHPMgkYWzu8iztz4kyeJKaUSLTK9qY4Wctvx+DlxXKnwfKcOQXZdBCBvpa
+         3OlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
          :date:message-id:mime-version;
-        bh=b3PJLigGGW/woucgM+z4vCA9eeUtsl6llobsXbQ3L78=;
-        b=VoFMmpdfhrZkqPItT4E8XtIN0C84XtuJBam6n6YVClOGw/oOaFz/ylb1jKyiHwKRSf
-         ku09xvOC+hM0k+SCOaNwcJjl9RQ7dQrIuw+ud5ZaK4EZhxKXGkEwuUDOFl21zItI9D6m
-         kRdcefeK1s3/VCPOFqX1VGqpfYz6pAzl+xd63OCKphUqXgKyso8kJOXJsqvoN/PI3msM
-         6W44jcTRPbZNRVeSIfzf+RAB1wjXNEwXuR0MB74XUep+PxW6aHMokclsJYlVJpW/7f6y
-         KCXhdJIzuDV3TtF3ODn2/elBX1RP5noCZC83QzmYRxSTNcrMj0CvgdxN0H7IFWGhVjzf
-         pbUw==
-X-Gm-Message-State: AOAM533YwRs6G7wKxCrRpJ3lnc8ujFQVN7jWe3kAYZxfQ6srG6y4RAtt
-        xHP360l/l2bdqDIzokhMdzjhmFMb4n5iEg==
-X-Google-Smtp-Source: ABdhPJwvJh0eLYsacEeIJcO9Y1OHZVdriBMUpEjWc9HpbFkdU1WDdXbqFnoOI8G3gFpo04XJXpaI/w==
-X-Received: by 2002:a05:651c:449:: with SMTP id g9mr2415696ljg.278.1589452692773;
-        Thu, 14 May 2020 03:38:12 -0700 (PDT)
+        bh=ADFIiIM1Fe26/cRjvae/xxSYwcERBybNKGMvOKxuFr4=;
+        b=b5dEz1obOCW315NuUCYtA6851gEfcQ8HLoRH+VrhMUW/wk0llCMMROD5GusiKViyVR
+         R8M15biqvnh7kj3tCg0QvVU2QGVObfoJmWfxWQi8xiGGgSCk09+dRjr2vzxO3Yrpa3d5
+         W8M5dm7jUMOuu/34gJpX4QlL5OChEbG4gCQ9kWL9nzzw1BmqW8CLFtGSriL2fbCSJAkC
+         Hqi1XvQDeK/A6k9S+wWQUead+kMdg0jx5iASy7UksYMK7SePFAAs5aHmcAmQnZpRoEG5
+         MOgCF+NIaMHpRmJFfGcJg+gWBzYEM9uZUE8SZn0iamIGF1vRSPGN3YyOtRFQsbJuiX/w
+         AR9Q==
+X-Gm-Message-State: AOAM531uffqI4NmcQff2Uzv95UmZXF+AVQFS6zkgVj+XL8Go21PvhFlW
+        cQ1xhs3ajHV9WoacLNnVv8dnZpuHvXPMgg==
+X-Google-Smtp-Source: ABdhPJxSqTSWM74zlVsYXQn6jKwYtKuDk62yq+Z8ixknh/c2vPrcCXyau8zXak4ww5Ml8u8ZzxOlMA==
+X-Received: by 2002:a2e:a417:: with SMTP id p23mr2491094ljn.19.1589452842932;
+        Thu, 14 May 2020 03:40:42 -0700 (PDT)
 Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id w24sm1498110lfk.47.2020.05.14.03.38.11
+        by smtp.gmail.com with ESMTPSA id f24sm1534475lfc.43.2020.05.14.03.40.41
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 14 May 2020 03:38:11 -0700 (PDT)
+        Thu, 14 May 2020 03:40:42 -0700 (PDT)
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>
-Cc:     John Youn <John.Youn@synopsys.com>
-Subject: Re: [PATCH 4/5] usb: dwc3: gadget: Handle transfer completion
-In-Reply-To: <ad3a0e37-c611-c6e9-959b-7351fb82ed0a@synopsys.com>
-References: <cover.1588025916.git.thinhn@synopsys.com> <70555c2202529c6e0bdd23124003d0d4bc637cdc.1588025916.git.thinhn@synopsys.com> <87blna20n3.fsf@kernel.org> <ad3a0e37-c611-c6e9-959b-7351fb82ed0a@synopsys.com>
-Date:   Thu, 14 May 2020 13:38:07 +0300
-Message-ID: <87o8qq4x9s.fsf@kernel.org>
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>,
+        Roger Quadros <rogerq@ti.com>
+Cc:     gregkh@linuxfoundation.org, sergei.shtylyov@cogentembedded.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] usb: dwc3: support continuous runtime PM with dual role
+In-Reply-To: <d1c38262-198c-c128-f2b7-3253bde37e5c@puri.sm>
+References: <20200319100207.19957-1-martin.kepplinger@puri.sm> <cb2db077-0f37-2221-84f6-a7adfd6ed1f1@ti.com> <d1c38262-198c-c128-f2b7-3253bde37e5c@puri.sm>
+Date:   Thu, 14 May 2020 13:40:37 +0300
+Message-ID: <87lflu4x5m.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -70,29 +69,34 @@ X-Mailing-List: linux-usb@vger.kernel.org
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
+Martin Kepplinger <martin.kepplinger@puri.sm> writes:
 
-Hi,
-
-Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
->>> @@ -1223,6 +1231,10 @@ static void dwc3_prepare_trbs(struct dwc3_ep *de=
-p)
->>>=20=20=20
->>>   		if (!dwc3_calc_trbs_left(dep))
->>>   			return;
->>> +
->>> +		/* Don't prepare ahead. This is not an option for DWC_usb32. */
->>> +		if (req->request.is_last)
->>> +			return;
->> this requires some better description. Why isn't it an option for dwc_us=
-b32?
+> On 24.04.20 09:48, Roger Quadros wrote:
+>>=20
+>>=20
+>> On 19/03/2020 12:02, Martin Kepplinger wrote:
+>>> The DRD module calls dwc3_set_mode() on role switches, i.e. when a
+>>> device is
+>>> being plugged in. In order to support continuous runtime power
+>>> management when
+>>> plugging in / unplugging a cable, we need to call
+>>> pm_runtime_get_sync() in
+>>> this path.
+>>>
+>>> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+>>=20
+>> Reviewed-by: Roger Quadros <rogerq@ti.com>
+>>=20
+>>=20
 >
-> Internally, DWC_usb32 does some advance caching and burst that we should=
-=20
-> not prepare more TRB until the transfer is completed.
-> This doesn't apply for isoc, missed a check here. Need to apply on the=20
-> next version.
+> thank you very much Roger. Anything else that is holding this back?
 
-Do you mind re-wording this statement as a comment in the code?
+Merge window is holding it back :-) It has been in my tree for weeks:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git/commit/?h=3Dt=
+esting/next&id=3Dc2cd3452d5f8b66d49a73138fba5baadd5b489bd
+
+Gotta wait for the next merge window for new features to be merged.
 
 =2D-=20
 balbi
@@ -102,18 +106,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl69H48ACgkQzL64meEa
-mQYUfg/+MJyJW9Fj/uNMtClTfWHYykq9NXntEyMOuSwdBlsfhppA7lfBhS4yYEvd
-iYGMIPaEhG+DRu0pnjbiy4GAPtACUe/tnMkGbezXj910DwbhVDS3Ac0pQqjji9xl
-QL0uZyqxgV5pN8TjsD3MoIjFBblZH68E35rEVNJ7MmRtik+ywf2FXgW3tyKNb77O
-dFheeUWYrGLGj4P4ay0Z0tsuuxBq/wKEPfnj20xvlELyAKMg+Xia8WJKcRiYNIwL
-mHi1otSXs7BsiiO7W+N4KXVpsleQ5E8NHQXI/KaUjGXNIvjD6mHk2DONq6g0Asd/
-FcZVYZ//Zumt+bE1M1R6PAA6Xdo2UiRAqogE/VLTjSgcjZjI7rtrKGav8ltqE1mG
-4IUKLXIxvGoxh14cjPm7VwIeViSnbKeLhMC/2PeKMqvdCRO0gCSLFD7W5xVojuaz
-Jj6s/I4NNhJCG25ocPkQXjeAEp4ZwKM3Go2ODn7tasLvn48PRBVHs2N/WSQzt+TH
-qJ/mPfTdlBp+RxQA3CGpHQ/bX8vZM/3W4kRA5qdOt7MPlP4lwmsPMGc7ku1ssTsh
-v07aDCWMNxravbsnUYzDxxAkFCrHzLrfruLbCqx9K1dRvTcbF86RDfubz4Kgnow8
-UGaWxons6wncD6jHIARol1fD1MSJGYpON07ZeliM6QsnN/MXmpw=
-=7Yjr
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl69ICUACgkQzL64meEa
+mQZ7VQ/+Mq0/5vRDJKOzvBdxMlyHYA9lUQr02QNKN8h1S0qAap4a0JZ01VhuIf3Y
+XBALfQgHg0ljjY3THqZ6MjDNEjGPDm8ENsdXInXt6jrwlDucrJxBHTKG8ZBq/brC
+WMS5hA/uL1LWywn0ybeNCtuvl8tn3vIV7iNKATt0YtijfZxBt/IP+fd+4rlkEyPk
+tN41d1HZo4uh7RNBiUgFX3L36j1yrdadSdnLv383yRmUQoxpdsmsVs3Jp1PHYalb
+bIPjNTlgJfyQ8vikb+1/OQSOe4ARIIXkViDeQG4MODjzU/cwiy4spipcwXk7HMQG
+VeeBXFXyZyljxddSWGLMHOSmBKl0s5o20ClnjmPGBpDnAsgt96tPqwC6Tb+jb0R4
+hpJDVn0MFRpcAk/4plccqKVE9behUXNWHLzyMGuwKkQ8Js/0oNOIw6KW0oUynMnw
+3rFvADz3+fct78F7M/zr82adrCtSF7l0gw4WvfpCqImu+59PApGg6ivv+F+ALwkZ
+7UDGevdubjw23+8tfZH7muURNJJDMleyl2E0ZDOwHtb/XB5FKVs8DxXSv9zUFEZq
+kUx1qbMjze8hONtM3Mzuy4vnpU68K1/r2OdAOtbPmAGbSRZNw9Gf/TPjHi0TVubg
+wbs8QRbxrd69glmDuH7pnb5uWphtUItieKQ5P9+Xsq0w99kNprM=
+=CQVk
 -----END PGP SIGNATURE-----
 --=-=-=--
