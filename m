@@ -2,83 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F9861D318A
-	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 15:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 477E51D31A8
+	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 15:46:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727851AbgENNmt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 May 2020 09:42:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56308 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726281AbgENNmt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 09:42:49 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26370C061A0C
-        for <linux-usb@vger.kernel.org>; Thu, 14 May 2020 06:42:49 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id r25so24551304oij.4
-        for <linux-usb@vger.kernel.org>; Thu, 14 May 2020 06:42:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gjUlD/lRnqEmJx87EdZHbW6yAizeTdTaFklB0owA6lQ=;
-        b=SLTbnJtffgqgcngdxn06ZHmxHp0dxStSZM0h4LgdbyH5vStAba3RGu4HLooR27spJk
-         q02Rn7JOA1QCzwn5O7jMbUwHi1TzPFtLoe/anvQjozBJ2xn9Ox0E5/zCXyc5QUjpnC5z
-         tt8n+LRwyZqtdrX9/gQ2dmiMn06V4GIJ6cc0ZDGjYoNarzXoA9v8Ca6W+WlvmSAW2Obu
-         y1M3c90XOf7C+AjfNb+TJZgXFPAWcVthjwINfaeXdDyLOjiMipXvVbJdYaBiGHE//eAg
-         KtiR7h4Rs2iaRqpWpsYrJDzRdewyWE4eQE0u+2sQfEtjb4I4Gi+1VbKO9ogzfMs9EPXQ
-         gYQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gjUlD/lRnqEmJx87EdZHbW6yAizeTdTaFklB0owA6lQ=;
-        b=JSRorxUJh+6R3T88dOuXFXKP3giVtcf3Kff39Oh48dzaTYMfjnfQSKwoDv4U37Z+jd
-         32SoXtiYSgyOdpTBD2WXRtWey1Af0q23XPYTb6h2nq+lSXfV7/LRgaoadZxHx+Fr5TIG
-         ZwIkz81kmMHE232OR1K87lODLcsPrPgGlcfdYyZ8bKegUuSrDVVy8BqHxmXHXJe3Olnu
-         fB7XWUTIQVguZrYXSaxa0WHFEqYEyQH4qz25RFijRS4EeFfxz4o6AaHAZuM56ZR//tb3
-         KtMMKeVs2+lOTSKANPUU4Yiz/+6Qcj4oE50t/5Pkavbvv8RT84K6DeZb/N+d1AxkSr23
-         EXzw==
-X-Gm-Message-State: AGi0PuZ64aJQxgSUSiqB9p+WRfuDM7PMIku+vVSyksViLPhHyYu8D239
-        gol1UzN7Tx4gOtF5byaRrd7IG6D1jQo9Y5aCmGIswBhS
-X-Google-Smtp-Source: APiQypL1zD4vVMSFeXn2iXspdTdkoGitfCmSknBPAOcwWQ8kuxnzLGLFJm44lBmtFBKQp/+RCjKvDetd7ur11GamiOA=
-X-Received: by 2002:aca:cc0d:: with SMTP id c13mr22529645oig.125.1589463768470;
- Thu, 14 May 2020 06:42:48 -0700 (PDT)
+        id S1726124AbgENNqi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 May 2020 09:46:38 -0400
+Received: from esa5.microchip.iphmx.com ([216.71.150.166]:62113 "EHLO
+        esa5.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726067AbgENNqi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 09:46:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1589463999; x=1620999999;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=66jlXt28CE6ScMvqdgsfrIxpJQ4UbAilL8dvmhWUcpQ=;
+  b=cIRqsGrqoZXa1T1OadmGAvuuzENlizl76QfFlcN/eReQpeROTTLfGbYX
+   Vvdp0mJX5ejOP7Sj/eUvfBHws0n+Xa/qghrcjO6g+m1/F3Bpk8cEwVg8V
+   NINtvJxUCMTbIBYSZwXLAJqENabSbKhptzWNY7mQu/t+c8UY3du976/9C
+   wJAgc6nkg6/4KH0A4hx/fI/e1blfQtggaSlGRc7SDpWuHCwinRTPguEUF
+   vq5zG+g9aMmNFZhvMcbYLHcChiarAe4Uy3U1v10VKdCUXJp185D3x9ak8
+   KqUTUqJ88CuCqr/Wuok7JnagAHNlUvTsGDRGrfF520B35SvVNHnAki9IZ
+   Q==;
+IronPort-SDR: vvxCgUCCTC3ENzVJrDlcZMAgT3gAnY/Wqe6+UfEIvBcrvXyLGeU68Out0GmQEZkyTvH9yS8oJy
+ ndCOzN5wQaoV5DZgZyBqvOfd2eb4SxkmGoE4kSP4ZksyxteEtZPVFHXBnff7UhyWn484r8HOQN
+ 9+78jguvsgMdnKezLtNsaaNCjy+A2g/0ZIZFLoLm+ezQBqHZZCIdX54tkGEH8ibkIOib9N/rNv
+ 0UIuuMCbV+0+0DNgC5fPkmXVS4CXHqwrR1VlsTi7zvDFJfXIF7No0gbi60Cgf8p5ehyqoOfP3/
+ wqA=
+X-IronPort-AV: E=Sophos;i="5.73,391,1583218800"; 
+   d="scan'208";a="75894420"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 May 2020 06:46:35 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Thu, 14 May 2020 06:46:36 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.1713.5 via Frontend Transport; Thu, 14 May 2020 06:46:35 -0700
+From:   Christian Gromm <christian.gromm@microchip.com>
+To:     <gregkh@linuxfoundation.org>
+CC:     <driverdev-devel@linuxdriverproject.org>,
+        <linux-usb@vger.kernel.org>,
+        Christian Gromm <christian.gromm@microchip.com>
+Subject: [PATCH 0/7] staging: most: usb: fix issues found in code audit
+Date:   Thu, 14 May 2020 15:46:22 +0200
+Message-ID: <1589463989-30029-1-git-send-email-christian.gromm@microchip.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <CAPY=qRRFV4SpNO5pb9vF=U95dbA_gN2ngP+vm34884NMk5q8gQ@mail.gmail.com>
- <bb16e374-3d9f-427c-8470-3542dc697fdb@www.fastmail.com>
-In-Reply-To: <bb16e374-3d9f-427c-8470-3542dc697fdb@www.fastmail.com>
-From:   Subhashini Rao Beerisetty <subhashbeerisetty@gmail.com>
-Date:   Thu, 14 May 2020 19:12:35 +0530
-Message-ID: <CAPY=qRRDCqdOOhV2TkyuBV7N-ab7e5110ZQ4u6cfT5dQk=TVnQ@mail.gmail.com>
-Subject: Re: sound over USB
-To:     Sid Spry <sid@aeam.us>
-Cc:     kernelnewbies <kernelnewbies@kernelnewbies.org>,
-        alsa-devel@alsa-project.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 13, 2020 at 8:53 PM Sid Spry <sid@aeam.us> wrote:
->
-> On Tue, May 12, 2020, at 11:43 AM, Subhashini Rao Beerisetty wrote>
-> >
-> > How do I use it for playing and recording an audio?
-> >
-> > Basically first I want to gain knowledge on set of test cases I can
-> > run on ALSA and then learn ALSA kernel modules stuff including
-> > snd_usb_audio mdule.
-> >
-> > So please guide me by providing related documentation/Steps.
-> >
->
-> Hi, searching for an ALSA tutorial will get you far. However on a modern Linux distribution you will likely want to target pulseaudio. There are other libraries like RtAudio or PortAudio that may be easier to use and are cross platform.
->
-> ALSA seems to give the most reliable results when enumerating audio devices. This can be done when pulseaudio is installed. The pulseaudio results are harder to interpret.
->
-> In my experience, and not necessarily targeted at you, I have experienced massive difficulties getting RtAudio and PortAudio working in a reproducible way. ALSA is the most reliable but an unusual configuration, and pulseaudio is a hot complicated mess.
->
->
-> For what it's worth, the sound API on Linux is so pointlessly complex that I have, in the past, created a custom USB driver to avoid going through the sound API. It was easier to use libusb and get raw samples.
-Great. Does the custom USB driver is available in public repository?
+This series fixes the comments/findings on the previously submitted code
+of the USB adapter driver. The fixes should be applied in staging before
+moving the driver out as one patch.
+
+Christian Gromm (7):
+  staging: most: usb: use dev_*() functions to print messages
+  staging: most: usb: remove reference to USB error codes
+  staging: most: usb: check number of reported endpoints
+  staging: most: usb: use dev_dbg function
+  staging: most: fix typo in Kconfig
+  staging: most: usb: use macro ATTRIBUTE_GROUPS
+  Documentation: ABI: correct sysfs attribute description of MOST driver
+
+ Documentation/ABI/testing/sysfs-bus-most | 104 ++++++++++++++++---------------
+ drivers/staging/most/usb/Kconfig         |   2 +-
+ drivers/staging/most/usb/usb.c           |  46 ++++++--------
+ 3 files changed, 72 insertions(+), 80 deletions(-)
+
+-- 
+2.7.4
+
