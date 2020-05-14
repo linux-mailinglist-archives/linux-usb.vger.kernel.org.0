@@ -2,96 +2,180 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E3581D3EDB
-	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 22:18:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEE5B1D3F4C
+	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 22:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727847AbgENUSN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 May 2020 16:18:13 -0400
-Received: from mail-io1-f71.google.com ([209.85.166.71]:40745 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726135AbgENUSM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 16:18:12 -0400
-Received: by mail-io1-f71.google.com with SMTP id r17so198207iom.7
-        for <linux-usb@vger.kernel.org>; Thu, 14 May 2020 13:18:11 -0700 (PDT)
+        id S1728319AbgENUvo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 May 2020 16:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38872 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727835AbgENUvn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 16:51:43 -0400
+Received: from mail-qv1-xf44.google.com (mail-qv1-xf44.google.com [IPv6:2607:f8b0:4864:20::f44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABC6C061A0E
+        for <linux-usb@vger.kernel.org>; Thu, 14 May 2020 13:51:43 -0700 (PDT)
+Received: by mail-qv1-xf44.google.com with SMTP id v15so7071qvr.8
+        for <linux-usb@vger.kernel.org>; Thu, 14 May 2020 13:51:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CEO5MKxsOiGcoZ39AsHbecY6ymOt3yQ4dCldSFUPnR4=;
+        b=nSO+tCI9Zh7sRx+j/A6zP12qApAJl7YPoucFFniaPNg63f6d/RJbqGvHBbbdz3qR4q
+         wxQNpJ4ZIOCIIsp5ABxFrQkrZWd4iUPjVGPhYw01jxSLQ8Ncs4KZRqZPhr4wZIQxc+9r
+         kRHo62eCYWEsQ51YWnuWSvkk/F9oX8bUbIsU4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=IPg2EsJITZG2pHDONJjjBuxNwGIW/PzUBwTlpT6HwaI=;
-        b=dhL/DhOERX2p+NWfkhiQwHTtFEHxDAT9+nsr6tKZm2oft7M2bU4gOPxmgGeAPca7Er
-         W7K5cQ+BC7Iy6qIf+9raLhHVAyxZfQ3uX2o3f7w2N+o0YIRAHMEWyli05IGZg4/Q2L8/
-         p7fUgW+cZTJMvlryn7Ulk1++j2DPCxHRhmsG7qLhNhIyYKzM2EgULfMN7BpFFupZGgwo
-         +yl7CVpg4jFGHFOenCdShasN+5MXmjFRIN46ycx2BRdd+X1jGwnKwzkt03/dZsM988RW
-         bC2L5DH5Iha1Vk5Ip5p6nYEu9zsXfG9nzDfPOH/JYljMKQOFEya8u9HeKP7rKjTgx4je
-         2/sA==
-X-Gm-Message-State: AOAM533OCGqw5135tzwpm99gikanw14TtcUQ+rRr/Sb2bA2a9S7ANXGg
-        KjTVvRhT2iYMxoTIkiefJlo6G7jQf9Xye1CZHFVZU4z5F4fo
-X-Google-Smtp-Source: ABdhPJxGuvQnbzRJzfnK1FrWkVtW7RepuEfB4roh2OBItqjGz5Gf9NiC+nAr4jfLh94bvRFGGTUGVduyzpa5zafKq1Fxl8+THd+a
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CEO5MKxsOiGcoZ39AsHbecY6ymOt3yQ4dCldSFUPnR4=;
+        b=hdjQYzxdeTgHczGGQXDnWuZdFEa8P1ki6kuJUEe8H2kZxEYAoqXdLLDL8m2AaYcIZE
+         zu4tVPp+wJEECjt1BZu5NAVBSrXsoiIil9D+r21aQzzSPpZsFUT4rGHolC4CH8Gx40FU
+         iI4BJPPmE14bz68xChtHsdFT0nxAVWZKn6IYQsrn37vS6/CaT0ThJmzO7pyFwAUoxvwn
+         ovaRmkPraGZY0AdJGQw76mYiyUYbb0937nTO7zyDEurT3srDS83fPSc5jhKpnkqRm4rI
+         99y+dWTf6Y+H2vf18nORv/suEB04a+guXfeeBexRHA9Z1D+jTDnFffoIEdBx/RkTxUpd
+         byXw==
+X-Gm-Message-State: AOAM530/SUBveQWJTsF9EZzH4ZGR3D459QA4GLvQPm7iCqNuBvhBCbOF
+        oGZf3iNh/5Oc+9bDNADZcF34dvL+h17QMcWOKHg6WA==
+X-Google-Smtp-Source: ABdhPJwZIDQ0iffdn72gpulU1LnB9Bmp5RlA17+pbGPp6hkz8/U1ki4Yh9hvEH+g3T7fP+yL9FS3YYKm8La8/jz7ldA=
+X-Received: by 2002:a0c:e304:: with SMTP id s4mr303192qvl.133.1589489502504;
+ Thu, 14 May 2020 13:51:42 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a5d:8b8e:: with SMTP id p14mr5755453iol.110.1589487491247;
- Thu, 14 May 2020 13:18:11 -0700 (PDT)
-Date:   Thu, 14 May 2020 13:18:11 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004a72f505a5a16525@google.com>
-Subject: WARNING in media_create_pad_link
-From:   syzbot <syzbot+dd320d114deb3f5bb79b@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, laurent.pinchart@ideasonboard.com,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org, mchehab@kernel.org,
-        sakari.ailus@linux.intel.com, syzkaller-bugs@googlegroups.com
+References: <20200507150900.12102-1-heikki.krogerus@linux.intel.com>
+ <20200507150900.12102-3-heikki.krogerus@linux.intel.com> <20200507224041.GA247416@google.com>
+ <20200508111840.GG645261@kuha.fi.intel.com> <20200511133202.GA2085641@kuha.fi.intel.com>
+ <20200511175719.GA136540@google.com> <20200512142251.GD2085641@kuha.fi.intel.com>
+ <20200512191910.GD136540@google.com>
+In-Reply-To: <20200512191910.GD136540@google.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Thu, 14 May 2020 13:51:32 -0700
+Message-ID: <CACeCKad4BebiBJS_wO=FdWVWypgOD822Dir7HeRBf0uXUuJusA@mail.gmail.com>
+Subject: Re: [PATCH 2/4] usb: typec: mux: intel_pmc_mux: Support for static
+ SBU/HSL orientation
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Benson Leung <bleung@chromium.org>,
+        "open list:USB NETWORKING DRIVERS" <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-acpi@vger.kernel.org,
+        Tim Wawrzynczak <twawrzynczak@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Hi Heikki,
 
-syzbot found the following crash on:
+On Tue, May 12, 2020 at 12:19 PM Prashant Malani <pmalani@chromium.org> wrote:
+>
+> Hi Heikki,
+>
+> On Tue, May 12, 2020 at 05:22:51PM +0300, Heikki Krogerus wrote:
+> > Hi Prashant,
+> >
+> > On Mon, May 11, 2020 at 10:57:19AM -0700, Prashant Malani wrote:
+> > > Hi Heikki,
+> > >
+> > > Thanks a lot for looking into this. Kindly see my response inline:
+> > >
+> > > On Mon, May 11, 2020 at 04:32:02PM +0300, Heikki Krogerus wrote:
+> > > > On Fri, May 08, 2020 at 02:18:44PM +0300, Heikki Krogerus wrote:
+> > > > > Hi Prashant,
+> > > > >
+> > > > > On Thu, May 07, 2020 at 03:40:41PM -0700, Prashant Malani wrote:
+> > > > > > > +static int sbu_orientation(struct pmc_usb_port *port)
+> > > > > > > +{
+> > > > > > > +   if (port->sbu_orientation)
+> > > > > > > +           return port->sbu_orientation - 1;
+> > > > > > > +
+> > > > > > > +   return port->orientation - 1;
+> > > > > > > +}
+> > > > > > > +
+> > > > > > > +static int hsl_orientation(struct pmc_usb_port *port)
+> > > > > > > +{
+> > > > > > > +   if (port->hsl_orientation)
+> > > > > > > +           return port->hsl_orientation - 1;
+> > > > > > > +
+> > > > > > > +   return port->orientation - 1;
+> > > > > > > +}
+> > > > > > > +
+> > > > > > >  static int pmc_usb_command(struct pmc_usb_port *port, u8 *msg, u32 len)
+> > > > > > >  {
+> > > > > > >     u8 response[4];
+> > > > > > > @@ -151,8 +170,9 @@ pmc_usb_mux_dp(struct pmc_usb_port *port, struct typec_mux_state *state)
+> > > > > > >
+> > > > > > >     req.mode_data = (port->orientation - 1) << PMC_USB_ALTMODE_ORI_SHIFT;
+> > > > > > >     req.mode_data |= (port->role - 1) << PMC_USB_ALTMODE_UFP_SHIFT;
+> > > > > > > -   req.mode_data |= (port->orientation - 1) << PMC_USB_ALTMODE_ORI_AUX_SHIFT;
+> > > > > > > -   req.mode_data |= (port->orientation - 1) << PMC_USB_ALTMODE_ORI_HSL_SHIFT;
+> > > > > > > +
+> > > > > > > +   req.mode_data |= sbu_orientation(port) << PMC_USB_ALTMODE_ORI_AUX_SHIFT;
+> > > > > >
+> > > > > > I'm curious to know what would happen when sbu-orientation == "normal".
+> > > > > > That means |port->sbu_orientation| == 1.
+> > > > > >
+> > > > > > It sounds like what should happen is the AUX_SHIFT orientation
+> > > > > > setting should follow what |port->orientation| is, but here it
+> > > > > > looks like it will always be set to |port->sbu_orientation - 1|, i.e 0,
+> > > > > > even if port->orientation == TYPEC_ORIENTATION_REVERSE, i.e 2, meaning
+> > > > > > it should be set to 1 ?
+> > > > >
+> > > > > I'll double check this, and get back to you..
+> > > >
+> > > > This is not exactly an answer to your question, but it seems that
+> > > > those bits are only valid if "Alternate-Direct" message is used.
+> > > > Currently the driver does not support that message.
+> > > Could you kindly provide some detail on when "Alternate-Direct" would be
+> > > preferred to the current method?
+> >
+> > Alternate Mode Direct request is supposed to be used if an alternate
+> > mode is entered directly from disconnected state.
+>
+> Ack.
+> >
+> > > Also, is there anything on the PMC side which is preventing the use of
+> > > "Alternate-Direct" messages? It seems like the state transition diagram
+> > > there would be simpler, although I'm likely missing significant details
+> > > here.
+> >
+> > So we actually should use the "direct" request if we are in
+> > disconnected state to enter alt modes if I understood correctly. But
+> > otherwise we should use the normal Alternate Mode request and not the
+> > Alternate Mode "direct" request. And I'm afraid I don't know why.
+>
+> SG.
+> >
+> > > > I think the correct thing to do now is to remove the two lines from
+> > > > the driver where those bits (ORI-HSL and ORI-Aux) are set.
+> > > I see. How would orientation then be handled in a retimer configuration
+> > > where AUX/SBU is flipped by the retimer itself?
+> >
+> > Note that if we send a separate "connection" request first, then we
+> > already tell the HSL and SBU orientation as part of the payload of
+> > that request. That is why there is no need to tell about the HSL and
+> > SBU orientation with the normal Alternate Mode Request.
+> >
+> > So we have already handled the HSL and SBU orientation by the time
+> > this function is called.
+>
+> Thanks for the explanation. I assume the HSL and SBU bit setting lines
+> will be removed from pmc_usb_mux_tbt() too?
+>
+I just realized, the issue I initially pointed out would apply to the
+connect message too, i.e I'm not sure if "normal" orientation setting
+handles the case where port orientation is reversed correctly.
+Overall, I am not sure that re-using the typec_orientations[] string
+list is the best option for this use-case.
+we're looking for "normal" (i.e follows port->orientation) and "fixed"
+(i.e is always the same orientation, regardless of what
+port->orientation is), so it is perhaps better to just define a new
+array just for this driver.
 
-HEAD commit:    059e7e0f usb: raw-gadget: fix typo in uapi headers
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=10e77dfa100000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b484a6e53b2b06ad
-dashboard link: https://syzkaller.appspot.com/bug?extid=dd320d114deb3f5bb79b
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16cd44ac100000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17b12b92100000
-
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+dd320d114deb3f5bb79b@syzkaller.appspotmail.com
-
-uvcvideo 1-1:0.0: Entity type for entity Processing 1 was not initialized!
-uvcvideo 1-1:0.0: Entity type for entity Input 255 was not initialized!
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 163 at drivers/media/mc/mc-entity.c:669 media_create_pad_link+0x500/0x650 drivers/media/mc/mc-entity.c:669
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 0 PID: 163 Comm: kworker/0:3 Not tainted 5.7.0-rc1-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0xef/0x16e lib/dump_stack.c:118
- panic+0x2aa/0x6e1 kernel/panic.c:221
- __warn.cold+0x2f/0x30 kernel/panic.c:582
- report_bug+0x27b/0x2f0 lib/bug.c:195
- fixup_bug arch/x86/kernel/traps.c:175 [inline]
- fixup_bug arch/x86/kernel/traps.c:170 [inline]
- do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:267
- do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
- invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
-RIP: 0010:media_create_pad_link+0x500/0x650 drivers/media/mc/mc-entity.c:669
-Code: bc ea ff ff ff eb da e8 ee e0 37 fd 0f 0b 41 bc ea ff ff ff eb cb e8 df e0 37 fd 0f 0b 41 bc ea ff ff ff eb bc e8 d0 e0 37 fd <0f> 0b 41 bc ea ff ff ff eb ad e8 c1 e0 37 fd 0f 0b 41 bc ea ff ff
-RSP: 0018:ffff8881ce48ef70 EFLAGS: 00010293
-RAX: ff
-
-
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+> Best regards,
+> >
+> >
+> > thanks,
+> >
+> > --
+> > heikki
