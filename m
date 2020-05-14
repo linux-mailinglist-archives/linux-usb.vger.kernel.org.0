@@ -2,89 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8748E1D279D
-	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 08:24:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 809AD1D27C2
+	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 08:28:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726317AbgENGXV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 May 2020 02:23:21 -0400
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:17957 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726146AbgENGXU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 02:23:20 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5ebce38d0000>; Wed, 13 May 2020 23:22:05 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Wed, 13 May 2020 23:23:20 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Wed, 13 May 2020 23:23:20 -0700
-Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 14 May
- 2020 06:23:19 +0000
-Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Thu, 14 May 2020 06:23:19 +0000
-Received: from nkristam-ubuntu.nvidia.com (Not Verified[10.19.67.128]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5ebce3d40000>; Wed, 13 May 2020 23:23:18 -0700
-From:   Nagarjuna Kristam <nkristam@nvidia.com>
-To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
-        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <mark.rutland@arm.com>, <robh+dt@kernel.org>, <kishon@ti.com>
-CC:     <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Nagarjuna Kristam <nkristam@nvidia.com>
-Subject: [PATCH V3 8/8] phy: tegra: xusb: Enable charger detect for Tegra210
-Date:   Thu, 14 May 2020 11:52:43 +0530
-Message-ID: <1589437363-16727-9-git-send-email-nkristam@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1589437363-16727-1-git-send-email-nkristam@nvidia.com>
-References: <1589437363-16727-1-git-send-email-nkristam@nvidia.com>
-X-NVConfidentiality: public
+        id S1725911AbgENG1x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 May 2020 02:27:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51222 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725818AbgENG1x (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 14 May 2020 02:27:53 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2AEED206B6;
+        Thu, 14 May 2020 06:27:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589437672;
+        bh=ZZL/VqoacdeBCG/xZqKQotkNP7fuRxsK35yGhyyUx20=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VGwF8ASJoWP8ykgSGEL/7yAp6tuDZFLCWd4GHadPK/Jy0EBZUBanEEfCeTEKkWSl/
+         gTpl4Q/qikRRcaE8ItuVW2nz+/MdymI14MUHKX8IVb5daWtH8bphPFAUaSuXKS/9ww
+         ky/9xD1YMqx6jyqbMhrZX2Kyl0nxHS2VmJkHP6fo=
+Date:   Thu, 14 May 2020 08:27:50 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Hillf Danton <hdanton@sina.com>,
+        syzbot <syzbot+353be47c9ce21b68b7ed@syzkaller.appspotmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>, jeremy.linton@arm.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, x86@kernel.org
+Subject: Validating dma_mmap_coherent() parameters before calling (was Re:
+ WARNING in memtype_reserve)
+Message-ID: <20200514062750.GA1488715@kroah.com>
+References: <000000000000f0d8d205a531f1a3@google.com>
+ <20200509074507.GC1831917@kroah.com>
+ <87wo5l4ecm.fsf@nanos.tec.linutronix.de>
+ <20200513124445.GA1082735@kroah.com>
+ <87zhab249p.fsf@nanos.tec.linutronix.de>
+ <20200514035458.14760-1-hdanton@sina.com>
+ <20200514061417.GA8367@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1589437325; bh=JdPaxz2ZR9EpiOJ34rlWuJacCo/o+9AwhoQ7gUgbCD0=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
-         Content-Type;
-        b=lA/ox8SxdSZPpf4kFOKT66rKuEUPjPRp5Z529kTxlsOWY9EiprkxtJ8J95THi+8XO
-         4NTKnJGf5O6gQD9zgXUBZBBu5u1Dht7YzNYd/quhzyCHIdQKPEXxIODekYNPBO/p5l
-         H3AdBDPTT1ynLaQE+/eeNu/U4oHEWqe2kw8YGzJxSIk82G/DNR1zsx21zfcmNmVI1D
-         hRotYw+4orN/8bKXfXFWBglgh0CWXILjsL/db9GrxIBSok01IQJluM/Tr/9GseFeOr
-         InPR18rmSUueH02D0x+72F4fc7+0oA4CJ9TxZ9aOqHYw4X64JRY3sQO3hl2H8mNS32
-         qp3gCkwGuI8Zg==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200514061417.GA8367@lst.de>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Tegra210 SoC supports charger detect, set corresponding soc flag.
+On Thu, May 14, 2020 at 08:14:17AM +0200, Christoph Hellwig wrote:
+> Guys, can you please start formal thread on this?  I have no
+> idea where this came from and what the rationale is.  Btw, if the
+> pfn is crap in dma_direct_mmap then the dma_addr_t passed in is
+> crap, as it is derived from that.  What is the caller, and how is
+> this triggered?
 
-Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
-Acked-by: Thierry Reding <treding@nvidia.com>
----
-V3:
- - Used supports_charger_detect name instead of charger_detect.
- - Added Acked-by updates to commit message.
----
-V2:
- - Patch re-based.
----
- drivers/phy/tegra/xusb-tegra210.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/phy/tegra/xusb-tegra210.c b/drivers/phy/tegra/xusb-tegra210.c
-index 80c4349..db2a1ab 100644
---- a/drivers/phy/tegra/xusb-tegra210.c
-+++ b/drivers/phy/tegra/xusb-tegra210.c
-@@ -2353,6 +2353,7 @@ const struct tegra_xusb_padctl_soc tegra210_xusb_padctl_soc = {
- 	.supply_names = tegra210_xusb_padctl_supply_names,
- 	.num_supplies = ARRAY_SIZE(tegra210_xusb_padctl_supply_names),
- 	.need_fake_usb3_port = true,
-+	.supports_charger_detect = true,
- };
- EXPORT_SYMBOL_GPL(tegra210_xusb_padctl_soc);
- 
--- 
-2.7.4
+Ok, to summarize, commit 2bef9aed6f0e ("usb: usbfs: correct kernel->user
+page attribute mismatch") changed a call from remap_pfn_range() to
+dma_mmap_coherent() for usb data buffers being sent from userspace.
 
+Details on why this was changed is in the commit changelog, but this has
+triggered a WARN_ON() in memtype_reserve when I think some odd data
+buffers were sent to it by syzbot fuzzing.
+
+The warning caught the wrong data, but triggered syzbot.
+
+So, the question is, should all callers of dma_mmap_coherent() validate
+the parms better before it is called, or should the call chain here
+properly sanitize things on their own.
+
+Note, usbfs is not the only direct-from-userspace caller of
+dma_mmap_coherent(), it's also used in other userspace apis (frame
+buffer drivers, fastrpc, some SoC drivers) but it looks like nothing has
+fuzzed those apis before to trigger this.
+
+Does that help explain things better?
+
+thanks,
+
+greg k-h
