@@ -2,70 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 649CA1D2D39
-	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 12:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5447A1D2D66
+	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 12:51:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726179AbgENKtY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 May 2020 06:49:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57496 "EHLO
+        id S1727770AbgENKu7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 May 2020 06:50:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726160AbgENKtX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 06:49:23 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A19C061A0C;
-        Thu, 14 May 2020 03:49:21 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id a9so2205663lfb.8;
-        Thu, 14 May 2020 03:49:21 -0700 (PDT)
+        with ESMTP id S1727124AbgENKu6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 06:50:58 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE09C061A0C
+        for <linux-usb@vger.kernel.org>; Thu, 14 May 2020 03:50:58 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id j3so2957392ljg.8
+        for <linux-usb@vger.kernel.org>; Thu, 14 May 2020 03:50:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=ihBtKopP3k1Y1JCaSjxHNdvYIfEueCdWieJSz6SvBN4=;
-        b=cdbYIJYI4NcPSHfXQP07wl2UNIDAxSzXgr70FR6ySmwbSMRzx8KwYUedNTajATJy/V
-         WKHUAcz8fGKYFbQKBnpHjKNb5/BtjeFwc7j+qHSH+r6CZ6GMYgkrBDx1kpCWi97NidTH
-         rLPuqm07AeGkf/mjPYIMXanP0sJaGaY55Q81xIGQR/wNjOFkEdtTmIDay2rhpGrrjMmN
-         qviYV4EAXvXUo1D24t+bER/5c0QLaxujdOwoxc9iwoSUSYb9Z592o6ZrpEA1Fna6UdNq
-         BynEx9iqLFaPGBtBzpj5xjiWel2Ikw31NmXP/eyJrdimO2kr0qUWqZZNfNQmo+0neqix
-         rrFQ==
+        bh=uT7CFCkPm0It/Am4kHMycYpaytcaQFGyqdXOjqq3fp8=;
+        b=qIDCHeORUQZ703hsn50GaWJItQAm4K2H/JGP8OYRNOJfNceXXdMhgI75fl24oDPgHr
+         2WPZlQLoMp3Yj4+pIpbhEq4UOBDJv/YjiNJ8fr0YJdvdNHk0elSS2bBVA6wbMBPHPwBl
+         TSoKu4t3QlW+X9xuB5VcRt5NsuoUWGPYsqaGO8VpIlj59/Raes3HHPfvRA1nsESSSqSL
+         fnWG5PhijFp+oucd2iRkgmjb8p8yKOpGyahngs1iEsFg2wcwzKpLpXm+Y08In53sKgia
+         xiZfIsW72vPR1dMw4zhJvDK5e7QEalNfoq7HuNkvG0P9iGUeHZTOYojMiySQYJMDk4sx
+         2/PA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
          :date:message-id:mime-version;
-        bh=ihBtKopP3k1Y1JCaSjxHNdvYIfEueCdWieJSz6SvBN4=;
-        b=n2kWgQbgVDxbKo2s+6TawAIoVPHUg+SxZlnzuZ0zEYcHnyIeABr27R1Ko5wfpqR5vs
-         61jymtHBOuIo5g2NiVezufWLIU7LQKDD1kDvDqI1ip+1vaF9bpwRSSHEouFcb3NLbbqQ
-         9yWAKH3oFxo+SytwYsvK9lycwtnsx4ynP5Kli/negXx3aAR1k1kJvx7Po/PK2p/3610M
-         yctMvXAZmo2SpE4qmtOn5vL42qpSN4ghC5JE/WMLpFHhxmGs9rjcU5icJ9YtbMm4O07x
-         yC4B3f33SyNOdekxewc2IUrZvf3GqyZ20LB4nfA4UEKcKCX7xcQamZiGYOBK/oa8D9J+
-         Q0AA==
-X-Gm-Message-State: AOAM53208ZE6+byIRp6ZIyD0L8Cm+P/GAo8k+E9/4oszC6MGPe+EOazl
-        GKplIoOmnj13lcj9WRN8tyg=
-X-Google-Smtp-Source: ABdhPJzemH7406zwPBPhxjJ/sOFlUJLUa/CJWeWsI8Bjd4BU54bVJGKrYv8rSvofcAhwn7pE2K814w==
-X-Received: by 2002:ac2:4945:: with SMTP id o5mr2888415lfi.21.1589453360383;
-        Thu, 14 May 2020 03:49:20 -0700 (PDT)
+        bh=uT7CFCkPm0It/Am4kHMycYpaytcaQFGyqdXOjqq3fp8=;
+        b=owiwHoVdVIkfK6kmGHM+GtJU7ZshRCBIimOysuqRLz4m1rAtozxP9gndOMUaVwseSE
+         0QRDBtSWSQ7vQdXxCSmd7+WWgHgzi6sNIa1GTUnOUp+arc2/pZZelUm5I+1fN0LGakiX
+         +/4SEhlpHb6Iem2feP6z8JntUU7XHaN3IoiUFBvdHM15FyarFLk6n98vURmS770P/NlZ
+         CbicKXyci72gmEaOGRYLHvJYvHpnu4aYDG+1MOmSePHGcOzWlkDJ0Zm+Ytsz4baMPix8
+         1cX3Xh0vfz3wetTRQM0//XW/NMLyFCsQ7vsDT4YKD5W/CWtCqoKh0EV8SPnykDfeOgId
+         UnzQ==
+X-Gm-Message-State: AOAM533HK1fDsjfxQGhOzgkWshXumFXp+Dx6XLohu38r47bbDNpkYFcG
+        hhhv8iir6wxvYx3ExPtTzS0KxYC+Tt0xWA==
+X-Google-Smtp-Source: ABdhPJz/wUcQLKOe3aQtNiUakPBGsqgipwUMY65o2aYT/aSnH47zWhoxY4sjojMprOqp8yqKin8tUQ==
+X-Received: by 2002:a05:651c:154:: with SMTP id c20mr2235891ljd.99.1589453456786;
+        Thu, 14 May 2020 03:50:56 -0700 (PDT)
 Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id v4sm1276524ljj.104.2020.05.14.03.49.18
+        by smtp.gmail.com with ESMTPSA id r19sm1321882ljp.68.2020.05.14.03.50.54
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 14 May 2020 03:49:19 -0700 (PDT)
+        Thu, 14 May 2020 03:50:55 -0700 (PDT)
 From:   Felipe Balbi <balbi@kernel.org>
-To:     "Sandeep Maheswaram \(Temp\)" <sanm@codeaurora.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
-Subject: Re: [PATCH v7 0/4] ADD interconnect support for Qualcomm DWC3 driver
-In-Reply-To: <a119cf75-8bda-f380-8249-173fa426279c@codeaurora.org>
-References: <1585718145-29537-1-git-send-email-sanm@codeaurora.org> <20200429183542.GS4525@google.com> <a119cf75-8bda-f380-8249-173fa426279c@codeaurora.org>
-Date:   Thu, 14 May 2020 13:49:15 +0300
-Message-ID: <87eerm4wr8.fsf@kernel.org>
+To:     Li Jun <jun.li@nxp.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        peter.chen@nxp.com, linux-imx@nxp.com
+Subject: Re: [PATCH] usb: dwc3: allow dual role switch by defautl for new IP w/o OTG
+In-Reply-To: <1589272379-30536-1-git-send-email-jun.li@nxp.com>
+References: <1589272379-30536-1-git-send-email-jun.li@nxp.com>
+Date:   Thu, 14 May 2020 13:50:51 +0300
+Message-ID: <87blmq4wok.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -78,13 +68,17 @@ X-Mailing-List: linux-usb@vger.kernel.org
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
-"Sandeep Maheswaram (Temp)" <sanm@codeaurora.org> writes:
 
-> Hi Felipe,
->
-> Any update about landing this series.
+Hi,
 
-in my tree now
+Li Jun <jun.li@nxp.com> writes:
+> For new IP version DWC3_REVISION_330A or above, current code only allows
+> dual role if role-switch is used, those IP w/o OTG only removes OTG
+> block but dual role should be capable so don't limit dual role, user
+> may use debugfs or any other way to switch role.
+
+then you need to compile your kernel with support for Dual Role. This
+patch is the wrong way to go.
 
 =2D-=20
 balbi
@@ -94,18 +88,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl69IisACgkQzL64meEa
-mQbu6A//fIS1BToxj09T/BzusfhWqlmhP82ZlNUi/d/TwchOeTjRexbJ1nYm+i+F
-+DelctoeEuZhzYlQr91ZgliYidtTH26NRBAna9Lld6pDlJg31YS8NxB1s9KNNaz5
-9s2HKUt//5ZRzvxhhZZgIvv84iE7cXviVzSzbZ/cU5PjKXJ1E8zsvrbQ9biWP7P6
-AMNP+MbwSBDH2EYz3JyjqmlsBO3oEnJ7IyZDJnMcfXiCIscf7AKYaQY6WOrEj5WH
-ioJFm/GmfJ6Nh77DAtYNjHitz45tFzWGxRbjhUKqIbCnnVMOmwJ8zJNqYH8LDk8X
-ZfEdCU3FcDO98D0izBf0PdAfypa1MFul4bLBaPNKahDjKJKQq6fKvHNMF71ORflI
-HoCy9nm0czUSAIC6i1BZjmEK9yNkMmyKpXGC3YBDw1aQbzrV4uIjZqGRfnzpAzvY
-ng03LpR1BDemQiw869vPmVkX2Y86PaFFnigKaMS2wBN6QBtt6XGePGqf5i3PYmYa
-yEMWBJgRptHAkimChB8EJd02DLeXczae3i85qPFA56Tl9OvMpldIhjD7y47kFKW3
-AseQQAFult5iMM0xIZIXgRXG1JDKajMMqHTz6j7sh/OxnHcrOaSA5mi+XPHp4F94
-z+e8VD3UHm7iHKzOIttpyeTf6l9bP4wczMPup4YhwcaB0xOMY6U=
-=/l/R
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl69IosACgkQzL64meEa
+mQYxtRAAoT2hO7Kd/X2xTFFFJ18KeCsLaaE09FHxUEVJB0tmKMEaO9Rk/kB444eE
+i3+pFlnSQUAXGbtX7rR/yXmdfYfg37FbQT4F+pipL3WBZlhzJjO0hHUcNsaCJSEh
++Calk17uFpbIQUiGsdNrtJ73v4bHIryoU0XIDuX8Lg+Qjpfa7fS98b9JTssw4yqz
+ijGUWRTWzKTqK68HuGhIAlGTfZo8+I2EwXMGd7CSajDmM5NruhN1vfQnArTU0Cto
+sF58C6s9dwGFrRt7rywaGlhBEKj/yWTQsQdVW5OReHf4LBT1k50P+H+k3EnNHqxI
+tRdD8QzR3C/1n8mYGV0nLeLG8CT97irCrTyso3PRp+7mzVpEd5auYMuLu8Fi9Xvf
+eij9s3l5K9j8mBGB180xK2nlDsO4p7Zc9A3xARuvIqxe9JkEA6NEfUBtWVRbSVge
+1Y74w1Qa5J9WQhSc/rDQmoKa+XSlJTW0RYbIekCOs+3ukhbfKXGXNPJi6UfWWTwj
+VAMvjntokFCjhhlUCyIYqH9p+snwsZ8jf1DYlyz6jdQnoK5TsOqG/zc9mrdSyLpC
+4obcfH+FSjax9BjrsQWSw/hr0ei80QoT3KhwCqSUK/DBKqBPPexwprBBwyn/uxvB
+v6x4Tk2tg5+/ggyQrxMu5+5wda/0Xg04n+7+PdQ11UKqVBOTF2o=
+=3iME
 -----END PGP SIGNATURE-----
 --=-=-=--
