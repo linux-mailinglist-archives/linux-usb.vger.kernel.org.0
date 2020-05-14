@@ -2,121 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2A991D2E05
-	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 13:17:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 249531D2E26
+	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 13:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726050AbgENLRo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 May 2020 07:17:44 -0400
-Received: from foss.arm.com ([217.140.110.172]:34472 "EHLO foss.arm.com"
+        id S1726141AbgENLWE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 May 2020 07:22:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49704 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726010AbgENLRn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 14 May 2020 07:17:43 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E827F30E;
-        Thu, 14 May 2020 04:17:42 -0700 (PDT)
-Received: from [192.168.122.166] (unknown [10.119.48.101])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9B6E53F305;
-        Thu, 14 May 2020 04:17:42 -0700 (PDT)
-Subject: Re: Validating dma_mmap_coherent() parameters before calling (was Re:
- WARNING in memtype_reserve)
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     Hillf Danton <hdanton@sina.com>,
+        id S1725925AbgENLWD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 14 May 2020 07:22:03 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A94B9206A5;
+        Thu, 14 May 2020 11:22:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589455323;
+        bh=HyGY0khgwqFwhv7+vcxB8uAUHWDSBrDB80SWjydlCDY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pwrT4lA/S8fB+vjmejav4EtBtU1SYVn1SszBodfdw31PDe+AYNtHo7Inl29XNet0m
+         Eu4rZDyBuJOCPHFdtjCkWZBSn8tgb6zHn6/pAPbCBGSXnK0CVgOd1gY9EBFKlGmZOk
+         bPydrAFcQxgmtfrS0oIlNF22eU3RvIeeK+jnvHTw=
+Date:   Thu, 14 May 2020 13:22:00 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jeremy Linton <jeremy.linton@arm.com>
+Cc:     Christoph Hellwig <hch@lst.de>, Hillf Danton <hdanton@sina.com>,
         syzbot <syzbot+353be47c9ce21b68b7ed@syzkaller.appspotmail.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
         syzkaller-bugs@googlegroups.com, x86@kernel.org
-References: <000000000000f0d8d205a531f1a3@google.com>
- <20200509074507.GC1831917@kroah.com> <87wo5l4ecm.fsf@nanos.tec.linutronix.de>
- <20200513124445.GA1082735@kroah.com> <87zhab249p.fsf@nanos.tec.linutronix.de>
- <20200514035458.14760-1-hdanton@sina.com> <20200514061417.GA8367@lst.de>
- <20200514062750.GA1488715@kroah.com> <20200514063158.GA8780@lst.de>
+Subject: Re: Validating dma_mmap_coherent() parameters before calling (was
+ Re: WARNING in memtype_reserve)
+Message-ID: <20200514112200.GA1847837@kroah.com>
+References: <20200509074507.GC1831917@kroah.com>
+ <87wo5l4ecm.fsf@nanos.tec.linutronix.de>
+ <20200513124445.GA1082735@kroah.com>
+ <87zhab249p.fsf@nanos.tec.linutronix.de>
+ <20200514035458.14760-1-hdanton@sina.com>
+ <20200514061417.GA8367@lst.de>
+ <20200514062750.GA1488715@kroah.com>
+ <20200514063158.GA8780@lst.de>
  <20200514074659.GA1569055@kroah.com>
-From:   Jeremy Linton <jeremy.linton@arm.com>
-Message-ID: <d4657561-63b2-21a3-9db3-99f3f91aea3e@arm.com>
-Date:   Thu, 14 May 2020 06:17:41 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+ <d4657561-63b2-21a3-9db3-99f3f91aea3e@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <20200514074659.GA1569055@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d4657561-63b2-21a3-9db3-99f3f91aea3e@arm.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 5/14/20 2:46 AM, Greg KH wrote:
-> On Thu, May 14, 2020 at 08:31:58AM +0200, Christoph Hellwig wrote:
->> On Thu, May 14, 2020 at 08:27:50AM +0200, Greg KH wrote:
->>> On Thu, May 14, 2020 at 08:14:17AM +0200, Christoph Hellwig wrote:
->>>> Guys, can you please start formal thread on this?  I have no
->>>> idea where this came from and what the rationale is.  Btw, if the
->>>> pfn is crap in dma_direct_mmap then the dma_addr_t passed in is
->>>> crap, as it is derived from that.  What is the caller, and how is
->>>> this triggered?
->>>
->>>
->>> Ok, to summarize, commit 2bef9aed6f0e ("usb: usbfs: correct kernel->user
->>> page attribute mismatch") changed a call from remap_pfn_range() to
->>> dma_mmap_coherent() for usb data buffers being sent from userspace.
->>
->> I only need to look at the commit for 3 seconds to tell you that it is
->> completely buggy.  While using dma_mmap_coherent is fundamentally the
->> right thing and absolutely required for dma_alloc_* allocations, USB
->> also uses it's own local gen pool allocator or plain kmalloc for not
->> DMA capable controller.  This need to use remap_pfn_range.  I'm pretty
->> sure you hit one of those cases.
->>
->> The logic should be something like:
->>
->> 	if (hcd->localmem_pool || !hcd_uses_dma(hcd))
->> 		remap_pfn_range()
->> 	else
->> 		dma_mmap_coherent()
+On Thu, May 14, 2020 at 06:17:41AM -0500, Jeremy Linton wrote:
+> On 5/14/20 2:46 AM, Greg KH wrote:
+> > On Thu, May 14, 2020 at 08:31:58AM +0200, Christoph Hellwig wrote:
+> > > On Thu, May 14, 2020 at 08:27:50AM +0200, Greg KH wrote:
+> > > > On Thu, May 14, 2020 at 08:14:17AM +0200, Christoph Hellwig wrote:
+> > > > > Guys, can you please start formal thread on this?  I have no
+> > > > > idea where this came from and what the rationale is.  Btw, if the
+> > > > > pfn is crap in dma_direct_mmap then the dma_addr_t passed in is
+> > > > > crap, as it is derived from that.  What is the caller, and how is
+> > > > > this triggered?
+> > > > 
+> > > > 
+> > > > Ok, to summarize, commit 2bef9aed6f0e ("usb: usbfs: correct kernel->user
+> > > > page attribute mismatch") changed a call from remap_pfn_range() to
+> > > > dma_mmap_coherent() for usb data buffers being sent from userspace.
+> > > 
+> > > I only need to look at the commit for 3 seconds to tell you that it is
+> > > completely buggy.  While using dma_mmap_coherent is fundamentally the
+> > > right thing and absolutely required for dma_alloc_* allocations, USB
+> > > also uses it's own local gen pool allocator or plain kmalloc for not
+> > > DMA capable controller.  This need to use remap_pfn_range.  I'm pretty
+> > > sure you hit one of those cases.
+> > > 
+> > > The logic should be something like:
+> > > 
+> > > 	if (hcd->localmem_pool || !hcd_uses_dma(hcd))
+> > > 		remap_pfn_range()
+> > > 	else
+> > > 		dma_mmap_coherent()
+> > 
+> > Ok, that's simple enough, patch is below.
+> > 
+> > Jeremy, any objection to this change?
 > 
-> Ok, that's simple enough, patch is below.
-> 
-> Jeremy, any objection to this change?
+> No, thats fine but since I just translated usb_alloc_coherent() to
+> dma_map_coherent in my not fully away head. Putting this as
+> "usb_map_cohernet()" sort of makes more sense.
 
-No, thats fine but since I just translated usb_alloc_coherent() to 
-dma_map_coherent in my not fully away head. Putting this as 
-"usb_map_cohernet()" sort of makes more sense.
+Thanks, I'll turn this into a "real" patch now...
 
-
-> 
-> thanks,
-> 
-> greg k-h
-> 
-> 
-> diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-> index b9db9812d6c5..d93d94d7ff50 100644
-> --- a/drivers/usb/core/devio.c
-> +++ b/drivers/usb/core/devio.c
-> @@ -251,9 +251,19 @@ static int usbdev_mmap(struct file *file, struct vm_area_struct *vma)
->   	usbm->vma_use_count = 1;
->   	INIT_LIST_HEAD(&usbm->memlist);
->   
-> -	if (dma_mmap_coherent(hcd->self.sysdev, vma, mem, dma_handle, size)) {
-> -		dec_usb_memory_use_count(usbm, &usbm->vma_use_count);
-> -		return -EAGAIN;
-> +	if (hcd->localmem_pool || !hcd_uses_dma(hcd)) {
-> +		if (remap_pfn_range(vma, vma->vm_start,
-> +				    virt_to_phys(usbm->mem) >> PAGE_SHIFT,
-> +				    size, vma->vm_page_prot) < 0) {
-> +			dec_usb_memory_use_count(usbm, &usbm->vma_use_count);
-> +			return -EAGAIN;
-> +		}
-> +	} else {
-> +		if (dma_mmap_coherent(hcd->self.sysdev, vma, mem, dma_handle,
-> +				      size)) {
-> +			dec_usb_memory_use_count(usbm, &usbm->vma_use_count);
-> +			return -EAGAIN;
-> +		}
->   	}
->   
->   	vma->vm_flags |= VM_IO;
-> 
-
+greg k-h
