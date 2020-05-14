@@ -2,85 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 487831D32A6
-	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 16:22:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 379911D32BB
+	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 16:24:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727095AbgENOWj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 May 2020 10:22:39 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:42273 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726073AbgENOWi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 10:22:38 -0400
-Received: (qmail 14203 invoked by uid 500); 14 May 2020 10:22:37 -0400
-Date:   Thu, 14 May 2020 10:22:37 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Macpaul Lin <macpaul.lin@mediatek.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Sergey Organov <sorganov@gmail.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        Macpaul Lin <macpaul.lin@gmail.com>,
-        Stan Lu <stan.lu@mediatek.com>
-Subject: Re: [PATCH] usb: gadget: u_serial: fix coverity warning: negative
- index at array
-Message-ID: <20200514142237.GB12181@rowland.harvard.edu>
-References: <1589443500-3990-1-git-send-email-macpaul.lin@mediatek.com>
+        id S1727876AbgENOYe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 May 2020 10:24:34 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:36025 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726582AbgENOYe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 10:24:34 -0400
+Received: by mail-lf1-f68.google.com with SMTP id c21so2805949lfb.3
+        for <linux-usb@vger.kernel.org>; Thu, 14 May 2020 07:24:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3AimrDPPvv2ior6Jtyml+gHziZA8Ox8SpctG0L6ikBU=;
+        b=eWfIYspBN13hyyyNsw1PhZHJswfIcVrDkmx3L5TIzU3jzb053lDsi2X9PK7KIiLwqv
+         U3x+ohw5s6JUEVktLLc8i6hJC4mly4tgZoB1rcYfZA6HDNvNbGtq2yxJep17YI/1Y6Om
+         uM55U+04VvCIzBcbGOXW9SfBlsN30OnxPVLhVwZAm9hsAIkT5NPHvnuBlsBD/eb2fcTK
+         XsWmrNLhKBBkgV+GNONFFYHycnESDZw2A93yF0SIXPqJdVlbu3T8HYfZ4T/vVjRSJR44
+         DM3FFgw7oxMcZatdzxmRlRiFlTgysYwkYYobGyKwK84vLubGARDcZi6k9Ed9zV2irmps
+         hJaQ==
+X-Gm-Message-State: AOAM533rzfuywfgODyJFVLoHaRXw271Sr4fd+QXLhfvVLsUSZ7owcdn1
+        BXw0zo4+5eKMr1BsRoWExlM=
+X-Google-Smtp-Source: ABdhPJycuShY2+REgiLBqfVOGMY67zsO1kOKGw9DMcgvnsJfLcJT42KQPYRBVOP8nQ705iY8EkMOSA==
+X-Received: by 2002:a05:6512:691:: with SMTP id t17mr3681390lfe.85.1589466272567;
+        Thu, 14 May 2020 07:24:32 -0700 (PDT)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id o18sm1557169ljc.73.2020.05.14.07.24.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 May 2020 07:24:31 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.92.3)
+        (envelope-from <johan@kernel.org>)
+        id 1jZEmo-0006jA-Ty; Thu, 14 May 2020 16:24:34 +0200
+Date:   Thu, 14 May 2020 16:24:34 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Michael Hanselmann <public@hansmi.ch>
+Cc:     linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+        Michael Dreher <michael@5dot1.de>,
+        Jonathan Olds <jontio@i4free.co.nz>
+Subject: Re: [PATCH v2 4/6] USB: serial: ch341: Name prescaler, divisor
+ registers
+Message-ID: <20200514142434.GF25962@localhost>
+References: <cover.1585697281.git.public@hansmi.ch>
+ <65cfdf4a0600e86e89b3a3fb839e733ecebee688.1585697281.git.public@hansmi.ch>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1589443500-3990-1-git-send-email-macpaul.lin@mediatek.com>
+In-Reply-To: <65cfdf4a0600e86e89b3a3fb839e733ecebee688.1585697281.git.public@hansmi.ch>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 14, 2020 at 04:05:00PM +0800, Macpaul Lin wrote:
-> This issue has been reported by coverity scanner.
-> Replace "int portnum" by "unsigned int", this void negative index at
-> array.
+On Tue, Mar 31, 2020 at 11:37:20PM +0000, Michael Hanselmann wrote:
+> Add constants for the prescaler and divisor registers.
 
-Can you please explain this more fully?  Why does coverity think the 
-code might use a negative array index?  Is there some possibility that 
-the portnum value might actually be negative?
+...and document and name register 0x25, and put the LCR define to more
+use. I still thinks this should go in its own patch as your not
+replacing all magic register constants (or at least be mentioned in the
+commit message).
 
-It's noticeable that your patch doesn't actually change any values, only 
-the type.  This means that if the code was buggy before, it's still 
-buggy.  Alternatively, if the code wasn't buggy before then coverity got 
-a false positive, so no change should be needed.
+> The 0x25 register is only used by CH341 chips before version 0x30 and is
+> involved in configuring the line control parameters. It's not known to
+> the author whether there any such chips in the wild, and the driver
+> never supported them (other registers are also treated differently). The
+> alternative would've been to not set the register, but that may have
+> unintended effects.
 
-Alan Stern
+How did you come to those conclusions? I see this register being written
+the value zero in some older version of the vendor driver, but not in
+more recent ones.
 
-> Signed-off-by: Stan Lu <stan.lu@mediatek.com>
-> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+Are you sure it's at all related to LCR?
+
+> Signed-off-by: Michael Hanselmann <public@hansmi.ch>
 > ---
->  drivers/usb/gadget/function/u_serial.c |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/usb/serial/ch341.c | 16 ++++++++++++++--
+>  1 file changed, 14 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
-> index 8167d37..53951f2 100644
-> --- a/drivers/usb/gadget/function/u_serial.c
-> +++ b/drivers/usb/gadget/function/u_serial.c
-> @@ -587,7 +587,7 @@ static int gs_start_io(struct gs_port *port)
->   */
->  static int gs_open(struct tty_struct *tty, struct file *file)
->  {
-> -	int		port_num = tty->index;
-> +	unsigned int	port_num = tty->index;
->  	struct gs_port	*port;
->  	int		status = 0;
+> diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
+> index 67a5d4c3df42..9407e12d9fbc 100644
+> --- a/drivers/usb/serial/ch341.c
+> +++ b/drivers/usb/serial/ch341.c
+> @@ -61,7 +61,11 @@
+>  #define CH341_REQ_MODEM_CTRL   0xA4
 >  
-> @@ -1211,7 +1211,7 @@ int gserial_alloc_line_no_console(unsigned char *line_num)
->  	struct gs_port			*port;
->  	struct device			*tty_dev;
->  	int				ret;
-> -	int				port_num;
-> +	unsigned int			port_num;
+>  #define CH341_REG_BREAK        0x05
+> +#define CH341_REG_PRESCALER    0x12
+> +#define CH341_REG_DIVISOR      0x13
+>  #define CH341_REG_LCR          0x18
+> +#define CH341_REG_LCR2         0x25
+> +
+>  #define CH341_NBREAK_BITS      0x01
 >  
->  	coding.dwDTERate = cpu_to_le32(9600);
->  	coding.bCharFormat = 8;
-> -- 
-> 1.7.9.5
+>  #define CH341_LCR_ENABLE_RX    0x80
+> @@ -294,11 +298,19 @@ static int ch341_set_baudrate_lcr(struct usb_device *dev,
+>  	 */
+>  	val |= BIT(7);
+>  
+> -	r = ch341_control_out(dev, CH341_REQ_WRITE_REG, 0x1312, val);
+> +	r = ch341_control_out(dev, CH341_REQ_WRITE_REG,
+> +			      CH341_REG_DIVISOR << 8 | CH341_REG_PRESCALER,
+> +			      val);
+>  	if (r)
+>  		return r;
+>  
+> -	r = ch341_control_out(dev, CH341_REQ_WRITE_REG, 0x2518, lcr);
+> +	/*
+> +	 * Chip versions before version 0x30 (read using
+> +	 * CH341_REQ_READ_VERSION) used separate registers for line control.
+> +	 * 0x30 and above use CH341_REG_LCR only.
+> +	 */
+> +	r = ch341_control_out(dev, CH341_REQ_WRITE_REG,
+> +			      CH341_REG_LCR2 << 8 | CH341_REG_LCR, lcr);
+
+Keeping "0x25" here to indicate that it's purpose is still not known
+should be ok too.
+
+>  	if (r)
+>  		return r;
+
+Johan
