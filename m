@@ -2,120 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 085D51D287E
-	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 09:06:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F7701D28D4
+	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 09:35:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726005AbgENHGn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 May 2020 03:06:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50876 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725866AbgENHGn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 03:06:43 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202D4C061A0C
-        for <linux-usb@vger.kernel.org>; Thu, 14 May 2020 00:06:43 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id v12so2389177wrp.12
-        for <linux-usb@vger.kernel.org>; Thu, 14 May 2020 00:06:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=L05mAm31ZcxAvElKHc83C4Aoq1Kuwp/snWFI4H5GBOo=;
-        b=BsRXFiH5yG6nmOjUcFKNvCpyGlQOL12dA7yKt6lnaH+KnfFz8Mo98iFPBtghVFAYiz
-         fR0ckku5wtnAbxE6U+vEp6ww8uXJV7AQYqBlGC5m6F0iJj8bZ9ulaKTyZIMoxNA8ioup
-         HNeSdOzDgDCAIP0t/GevGNetkzENYbmay4MVe6zS+wkh4wibqfXvbfhptMW/gNYLqTBU
-         l3+qg10tekW3ywwBQbmOAklka79+bbCkxgpj/W3UmN/Kp/CO1GGolBeS6L/POqyvH6BR
-         ZHXFmg7zwegR4Hj+wmNOV2vez4SvxikUtGNyx/vYbS9CaT9bvsYxi5R38wgNhwsl66SL
-         s/tA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=L05mAm31ZcxAvElKHc83C4Aoq1Kuwp/snWFI4H5GBOo=;
-        b=haRegi+CS+f+f8/K7zXYfjsSfpsMusrX++h5T5RBQA6wEeblROaPohO+AzeL9DlkuX
-         AAMOkCA+tQhkoJoSawr3ZsozD8qgaabsSV6LNg2jvhX0Aimyd3gQw8HGekNErCiLGuEQ
-         zRG/6saJ+fmDySPExrKuU63k+nj1BkwZ4a9wGlUiFJPG62Ztk33r1Q+z9NzvAzX6sYAv
-         w+f4+ypdvZ7vHfOZAiF9Tf8ndreBLw6/9uBCzRP6kPoDxdkD2yYcN4vtOYw+rGFgqC1C
-         TMmgt9ER0phU5eGoTrrYbEcyHDbjrOsLgB7A2+1UhCmEO3j/SFsTbwxFnaS2mW5kvSuc
-         26eA==
-X-Gm-Message-State: AOAM532ppA0XaR4kmK4dHJI7gBYF7gkesQ+HOWPnreo9s/cn7H9k7Qn+
-        8/0KLopDSQ1M4iEylIT46hEWNknU
-X-Google-Smtp-Source: ABdhPJzfuoollfUJBQodkdem8+zaZgFNp9Sjvwo/mwnxLWctN7kgefn2tMZLqCKPaR0J23sc1NR56Q==
-X-Received: by 2002:a5d:5388:: with SMTP id d8mr3616853wrv.242.1589440001554;
-        Thu, 14 May 2020 00:06:41 -0700 (PDT)
-Received: from [192.168.1.41] (2-108-107-206-static.dk.customer.tdc.net. [2.108.107.206])
-        by smtp.gmail.com with ESMTPSA id n9sm16957206wmj.5.2020.05.14.00.06.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 May 2020 00:06:40 -0700 (PDT)
-Message-ID: <d34fd178852f136db29560b3cfbaddf67d1a85a1.camel@gmail.com>
-Subject: Re: Options for forcing dwc3 gadget to only accept superspeed
-From:   Claus Stovgaard <claus.stovgaard@gmail.com>
-To:     Sid Spry <sid@aeam.us>, Alan Stern <stern@rowland.harvard.edu>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Date:   Thu, 14 May 2020 09:06:39 +0200
-In-Reply-To: <ba5a11fe-90a6-48c2-8da1-66076e52c6b4@www.fastmail.com>
-References: <8943a225c6d8354f2f5fe0ea7270dc0fa1293180.camel@gmail.com>
-         <20200512195231.GA26080@rowland.harvard.edu>
-         <6d19d49dcfe7467556b0462b16e76677c1999875.camel@gmail.com>
-         <e89456b5-20db-48c1-814b-075e84ca8b8b@www.fastmail.com>
-         <ba5a11fe-90a6-48c2-8da1-66076e52c6b4@www.fastmail.com>
+        id S1726010AbgENHe4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 May 2020 03:34:56 -0400
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:25851 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725972AbgENHe4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 03:34:56 -0400
+X-UUID: 72bfeb9eaa344ce58a72c6db30dc0aad-20200514
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=/nREqLi1Ldl8sd0riITmmpWJKuTNyeKnEZWI4u7Mg0Y=;
+        b=bg9Pgjd9KHnY+znNILPTWZKAHNkxlugL4jlyX1guMYRskgMMgE8jl+Z+r8xM7pRv1NEVrIcjRn4BqJf2uQJ1Au8l+So/+zDkV+X5uR+UqUo8X1Kc3UcAJ/01yUKgXKWHE887B4wOsDD4XISz7fjLG+OXJ+Kekile5fcawNQIdZk=;
+X-UUID: 72bfeb9eaa344ce58a72c6db30dc0aad-20200514
+Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <min.guo@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 549127802; Thu, 14 May 2020 15:34:45 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N1.mediatek.inc
+ (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 14 May
+ 2020 15:34:44 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 14 May 2020 15:34:44 +0800
+Message-ID: <1589441605.28160.27.camel@mhfsdcap03>
+Subject: Re: [PATCH] usb: musb: mediatek: add reset FADDR to zero in reset
+ interrupt handle
+From:   Min Guo <min.guo@mediatek.com>
+To:     Macpaul Lin <macpaul.lin@mediatek.com>
+CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Hans de Goede <hdegoede@redhat.com>, Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
+        Macpaul Lin <macpaul.lin@gmail.com>
+Date:   Thu, 14 May 2020 15:33:25 +0800
+In-Reply-To: <1589428872-29282-1-git-send-email-macpaul.lin@mediatek.com>
+References: <1589428872-29282-1-git-send-email-macpaul.lin@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+X-TM-SNTS-SMTP: 3929ED25672ED9116AC7BC7CCB30D4C22ADBA5D38237F4E1188FC580E959644C2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On tir, 2020-05-12 at 23:47 -0500, Sid Spry wrote:
-> Hello again, I'm terribly sorry for the double post. Claus, you might
-> try detecting the speed of the connection and re-enumerating if
-> necessary. It would avoid noncompliance with the spec and is probably
-> the easiest option.
-> 
-> Unsure of how this would be done with a C manifestation of functionfs
-> code but echoing "" to the UDC pseudofile under
-> /sys/kernel/config/usb_gadget/${your_gadget} will allow you to set
-> everything up again and reenumerate.
-> 
-> On Tue, May 12, 2020, at 11:43 PM, Sid Spry wrote:
-> > Have you tried only providing a SS configuration? If that fails for
-> > some reason I suspect the next course of action would be to see
-> > why, and patch the driver so it does not.
-> > 
-> > Out of curiosity, which SoC are you using?
-> > 
-
-Hi Sid.
-
-Thanks for both your replies. Will answer the last question first. It
-is the Xilinx Zynq UltraScale+ MPSoC, also just known as ZynqMP.
-
-I remember vaguely testing only SS configuration for an older kernel,
-where it got a fault because somewhere the configurations was indexed
-by [0], e.g. just indexing the full-speed descriptor directly. This
-might changed by now.
-
-Regarding just enumerating. I have thought about it, and it might be
-what I end up implementing no matter what. The not so nice part is if
-the host side is Windows, my impression from doing it like this, would
-be that you get the "device appeared" / "device not safely removed"
-style of messages. Can't remember the exact wording.
-
-Just as a background in why I am looking into doing it like this. For
-10 years ago I worked on some USB 3 devices. Here the USB2 part was a
-hard-block, and the USB3 part was a soft-core in FPGA logic. I
-encountered a number of, should we call it implementation differences,
-in the USB 3 hosts. E.g. issues like when the device and host did not
-agree on link training (Ux exit) etc.
-As the link control of switching between the hard-block and the soft-
-core was done in firmware, it was pretty easy for me to make an option
-for being non-compliment and making the link retry Super-Speed, and by
-that hide the "differences" for the end-user, and just have working
-system.
-
-
-Thanks
-/Claus
+T24gVGh1LCAyMDIwLTA1LTE0IGF0IDEyOjAxICswODAwLCBNYWNwYXVsIExpbiB3cm90ZToNCj4g
+V2hlbiByZWNlaXZpbmcgcmVzZXQgaW50ZXJydXB0LCBGQUREUiBuZWVkIHRvIGJlIHJlc2V0IHRv
+IHplcm8gaW4NCj4gcGVyaXBoZWFybCBtb2RlLiBPdGhlcndpc2UgZXAwIGNhbm5vdCBkbyBlbnVt
+ZXJhdGlvbiB3aGVuIHJlLXBsdWdpbmcgVVNCDQo+IGNhYmxlLg0KPiANCj4gU2lnbmVkLW9mZi1i
+eTogTWFjcGF1bCBMaW4gPG1hY3BhdWwubGluQG1lZGlhdGVrLmNvbT4NCj4gLS0tDQo+ICBkcml2
+ZXJzL3VzYi9tdXNiL21lZGlhdGVrLmMgfCAgICA2ICsrKysrKw0KPiAgMSBmaWxlIGNoYW5nZWQs
+IDYgaW5zZXJ0aW9ucygrKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL211c2IvbWVk
+aWF0ZWsuYyBiL2RyaXZlcnMvdXNiL211c2IvbWVkaWF0ZWsuYw0KPiBpbmRleCA2MTk2YjBlLi5l
+ZWJlYWRkIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3VzYi9tdXNiL21lZGlhdGVrLmMNCj4gKysr
+IGIvZHJpdmVycy91c2IvbXVzYi9tZWRpYXRlay5jDQo+IEBAIC0yMDgsNiArMjA4LDEyIEBAIHN0
+YXRpYyBpcnFyZXR1cm5fdCBnZW5lcmljX2ludGVycnVwdChpbnQgaXJxLCB2b2lkICpfX2hjaSkN
+Cj4gIAltdXNiLT5pbnRfcnggPSBtdXNiX2NsZWFydyhtdXNiLT5tcmVncywgTVVTQl9JTlRSUlgp
+Ow0KPiAgCW11c2ItPmludF90eCA9IG11c2JfY2xlYXJ3KG11c2ItPm1yZWdzLCBNVVNCX0lOVFJU
+WCk7DQo+ICANCj4gKwlpZiAoKG11c2ItPmludF91c2IgJiBNVVNCX0lOVFJfUkVTRVQpICYmICFp
+c19ob3N0X2FjdGl2ZShtdXNiKSkgew0KPiArCQkvKiBlcDAgRkFERFIgbXVzdCBiZSAwIHdoZW4g
+KHJlKWVudGVyaW5nIHBlcmlwaGVyYWwgbW9kZSAqLw0KPiArCQltdXNiX2VwX3NlbGVjdChtdXNi
+LT5tcmVncywgMCk7DQo+ICsJCW11c2Jfd3JpdGViKG11c2ItPm1yZWdzLCBNVVNCX0ZBRERSLCAw
+KTsNCj4gKwl9DQo+ICsNCj4gIAlpZiAobXVzYi0+aW50X3VzYiB8fCBtdXNiLT5pbnRfdHggfHwg
+bXVzYi0+aW50X3J4KQ0KPiAgCQlyZXR2YWwgPSBtdXNiX2ludGVycnVwdChtdXNiKTsNCj4gIA0K
+DQpBY2tlZC1ieTpNaW4gR3VvIDxtaW4uZ3VvQG1lZGlhdGVrLmNvbT4NCg0K
 
