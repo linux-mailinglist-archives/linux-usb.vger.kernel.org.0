@@ -2,61 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD6B31D2C81
-	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 12:23:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 933341D2C8E
+	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 12:23:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726140AbgENKW1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 May 2020 06:22:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53250 "EHLO
+        id S1726094AbgENKXS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 May 2020 06:23:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725955AbgENKWA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 06:22:00 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF488C061A0C;
-        Thu, 14 May 2020 03:21:59 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id r17so2145099lff.9;
-        Thu, 14 May 2020 03:21:59 -0700 (PDT)
+        with ESMTP id S1725974AbgENKXS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 06:23:18 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E47FC061A0C;
+        Thu, 14 May 2020 03:23:17 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id d22so2131667lfm.11;
+        Thu, 14 May 2020 03:23:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=BCPye0pUcJCrk1mGrs7j2KRmFPfxGUAT389d2jmnUgA=;
-        b=YHESanEIwOFx7yqx5nXb7MOmP1hbxGBQl8oiuq/VNYK1KZX1rXsZpHig2eMC5eb2Fx
-         9dKmYw5CM1cjQCVC2AiUG5qPL5Ua1ZWRM9yePwUNevdq2fKcBkYoaH0PDq1FQSR4hNwX
-         ZxRrmYeoZ3bbndjHKMX2HEFQX9K3O704YYKZC6dv+2siHCY0ulkVVh5/SmdUXQfBPsVS
-         DCaTQ7kaLOqDIeL16WawA/z1xFV+CwLUhX3OoT5akSwzDgP1NIv8/vrTLenIbb3VohEf
-         tinYb5hl5eeSEiLAJ7yRY5XB1SGSA3E5th8YBUL+q/sO6L2DchdEtwmkNSjRHd96wuPO
-         XZuw==
+        bh=on2D6elu53pZj4wNtYf7fZ0iGgEMC4vnCrij0e0GY3Y=;
+        b=YWwJnh346DomNcO4odW5tj0MMLVzr9cRxcJo6n+Dt9fuMb4qneEfKEKUJHDnEy4yuN
+         9cqWkmlSN93BhIYrTXcpa3kA/EtXoX8ZUxllaYJG2VuYBBbRA9Sab18ErkYrm5p02GXG
+         KuTLvxrKQOAgsQJ7k3ip3Zz2n2cK/aCqUjj+FRR97mP/BhNETq1YUnciIbbHPU2Fclq6
+         P0OJUdtkQMtwoWuV6zDzf6VUTxJlUEXBEwVROI/mQj5BQxuhH/dBkw/PrXszJn+a9ize
+         l0mbAGcNZXhgwGywmoULZ8LhWBH+iz0dxAP2/gXPR4N43j6OYq0flMpdSl4iyCvLetSb
+         wf7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
          :date:message-id:mime-version;
-        bh=BCPye0pUcJCrk1mGrs7j2KRmFPfxGUAT389d2jmnUgA=;
-        b=OZCOp+Kmn2KqjXCrSe5UPoeyZXS8wn/TTWLj+wgU/GEj0GLI82oL4UPzTB/qpdkn5W
-         t7tjJx9n6LpZnx/ikXznYV43H4HUDEB949gmWh/fHyMJ8kh6Zm7FQb0knAbW+PjlcJ+g
-         aqNf8incK9zUzl75uie3ClfWR5CpyRyk42jp3jrma+Ao7TsqtmTYlyoZ1xGk9ASzl1I+
-         XotYDegh4osq/c1/H9KO82oatMWKP2rUBVtKi1YZncY78XQfZc9/Bawl1aUu2AVwqszz
-         WHNotJu6qFwQtsO6GenSkUxbdPJg07SajHBclcFCKdbvTTTX9SfAraUruT4JWTjd5upi
-         Dt6Q==
-X-Gm-Message-State: AOAM530avmkD31bL9EWG0CLedwM5o1ItbSUeaIyi0Y1OT1Ee/JozsZKb
-        3kmEv/P+vTaYaFiv0dQi6K/F4S1OFoa6nw==
-X-Google-Smtp-Source: ABdhPJwSFr86hBYlDBf0+PbPXxKc+kC7s2B9GDldm15Xqs3P7Se2TIbnDsS5P/MfAEp4LzIbExD5QA==
-X-Received: by 2002:a19:5f04:: with SMTP id t4mr2886505lfb.208.1589451717935;
-        Thu, 14 May 2020 03:21:57 -0700 (PDT)
+        bh=on2D6elu53pZj4wNtYf7fZ0iGgEMC4vnCrij0e0GY3Y=;
+        b=IBpeCbM+Y8eoDYVlEtWfRBFunBTDS42PRdlal6AUBa1o8FyQ5k8J68o0pnJfSlvrR7
+         pYFmLq4HeT8l29RVCkP4XZEv+CjtEAfQxs6LNK4zyFCOV8bsDWDcUuMQU/cd2v/2suf2
+         NXjhMBDfMj7EsRN11FaP363uvtUjp2ohPI+BpCQa4MOXq+d5301DAYLdwOKmGx4fJfSh
+         1A5ZxMcwsja7KgT2AGtaY/CUw09JiuHThCGtDVq9VWchhQRLNljjW8844eCpmKrl10A4
+         iffuKA5KtuIcL+1QXMihaoawc6Agxw56lXGesbTqETJs/ZLkxsy+89MkNKjTQuc8iYA1
+         298Q==
+X-Gm-Message-State: AOAM533pN5Xz/3wSHSY3FpK04TiQRNiSR3ai069XXbEgygBlCvYbQ9wn
+        vL+uEPPV/A9Bi2qAEPD5W7DXf5ugdOia5Q==
+X-Google-Smtp-Source: ABdhPJz0OX6tX5Djvgz/x/V2SQPdQDpdcaDSPFTtdAjVwURPzcOQ1sZlYNWA8qY/i2cUpwYwILXpBg==
+X-Received: by 2002:a19:e041:: with SMTP id g1mr2742299lfj.70.1589451795238;
+        Thu, 14 May 2020 03:23:15 -0700 (PDT)
 Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id h11sm1554137lfp.22.2020.05.14.03.21.56
+        by smtp.gmail.com with ESMTPSA id k9sm1231222lja.52.2020.05.14.03.23.13
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 14 May 2020 03:21:56 -0700 (PDT)
+        Thu, 14 May 2020 03:23:14 -0700 (PDT)
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Roger Quadros <rogerq@ti.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     robh+dt@kernel.org, vigneshr@ti.com, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] usb: dwc3: keystone: Turn on USB3 PHY before controller
-In-Reply-To: <baaaf89c-4baf-4218-e22e-53cd1a64ec02@ti.com>
-References: <20200513130709.10239-1-rogerq@ti.com> <20200513130709.10239-4-rogerq@ti.com> <1589420265.5899.0.camel@mhfsdcap03> <baaaf89c-4baf-4218-e22e-53cd1a64ec02@ti.com>
-Date:   Thu, 14 May 2020 13:21:52 +0300
-Message-ID: <87tv0i4y0v.fsf@kernel.org>
+To:     Neil Armstrong <narmstrong@baylibre.com>, kishon@ti.com,
+        khilman@baylibre.com, martin.blumenstingl@googlemail.com
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/13] usb: dwc3: meson: add OTG support for GXL/GXM
+In-Reply-To: <87369rfo7l.fsf@kernel.org>
+References: <20200324102030.31000-1-narmstrong@baylibre.com> <87369rfo7l.fsf@kernel.org>
+Date:   Thu, 14 May 2020 13:23:09 +0300
+Message-ID: <87r1vm4xyq.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -69,54 +70,54 @@ X-Mailing-List: linux-usb@vger.kernel.org
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
-Roger Quadros <rogerq@ti.com> writes:
+Felipe Balbi <balbi@kernel.org> writes:
 
-> On 14/05/2020 04:37, Chunfeng Yun wrote:
->> On Wed, 2020-05-13 at 16:07 +0300, Roger Quadros wrote:
->>> The Local Power Sleep Controller (LPSC) dependency on AM65
->>> requires SERDES0 to be powered on before USB.
->>>
->>> We need to power up SERDES0 power domain and hold it on
->>> throughout the reset, init, power on sequence.
->>>
->>> Signed-off-by: Roger Quadros <rogerq@ti.com>
->>> ---
->>>   drivers/usb/dwc3/dwc3-keystone.c | 47 +++++++++++++++++++++++++++++++-
->>>   1 file changed, 46 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/usb/dwc3/dwc3-keystone.c b/drivers/usb/dwc3/dwc3-k=
-eystone.c
->>> index 1e14a6f4884b..46d46f3507fc 100644
->>> --- a/drivers/usb/dwc3/dwc3-keystone.c
->>> +++ b/drivers/usb/dwc3/dwc3-keystone.c
->>> @@ -14,6 +14,7 @@
->>>   #include <linux/dma-mapping.h>
->>>   #include <linux/io.h>
->>>   #include <linux/of_platform.h>
->>> +#include <linux/phy/phy.h>
->>>   #include <linux/pm_runtime.h>
->>>=20=20=20
->>>   /* USBSS register offsets */
->>> @@ -34,6 +35,7 @@
->>>   struct dwc3_keystone {
->>>   	struct device			*dev;
->>>   	void __iomem			*usbss;
->>> +	struct phy			*usb3_phy;
->>>   };
->>>=20=20=20
->>>   static inline u32 kdwc3_readl(void __iomem *base, u32 offset)
->>> @@ -95,8 +97,44 @@ static int kdwc3_probe(struct platform_device *pdev)
->>>   	if (IS_ERR(kdwc->usbss))
->>>   		return PTR_ERR(kdwc->usbss);
->>>=20=20=20
->>> -	pm_runtime_enable(kdwc->dev);
->>> +	/* PSC dependency on AM65 needs SERDES0 to be powered before USB0 */
->>> +	kdwc->usb3_phy =3D devm_phy_get(dev, "usb3-phy");
->> Use devm_phy_optional_get() instead?
+> Neil Armstrong <narmstrong@baylibre.com> writes:
 >
-> Indeed, it seems better suited.
+>> The USB support was initialy done with a set of PHYs and dwc3-of-simple
+>> because the architecture of the USB complex was not understood correctly
+>> at the time (and proper documentation was missing...).
+>>
+>> But with the G12A family, the USB complex was correctly understood and
+>> implemented correctly.
+>> But seems the G12A architecture was derived for the GXL USB architecture,
+>> with minor differences and looks we can share most of the USB DWC3 glue
+>> driver.
+>>
+>> This patchset refactors and adds callbacks to handle the architecture
+>> difference while keeping the main code shared.
+>>
+>> The main difference is that on GXL/GXM the USB2 PHY control registers
+>> are mixed with the PHY registers (we already handle correctly), and
+>> the GLUE registers are allmost (99%) the same as G12A.
+>>
+>> But, the GXL/GXM HW is buggy, here are the quirks :
+>> - for the DWC2 controller to reset correctly, the GLUE mux must be switc=
+hed
+>>   to peripheral when the DWC2 controlle probes. For now it's handled by =
+simply
+>>   switching to device when probing the subnodes, but it may be not enough
+>> - when manually switching from Host to Device when the USB port is not
+>>   populated (should not happen with proper Micro-USB/USB-C OTG switch), =
+it
+>>   makes the DWC3 to crash. The only way to avoid that is to use the Host
+>>   Disconnect bit to disconnect the DWC3 controller from the port, but we=
+ can't
+>>   recover the Host functionnality unless resetting the DWC3 controller.
+>>   This bit is set when only manual switch is done, and a warning is prin=
+ted
+>>   on manual switching.
+>>
+>> The patches 1-8 should be applied first, then either waiting the next re=
+lease
+>> or if the usb maintainer can provide us a stable tag, we can use it to m=
+erge
+>> the DT and bindings.
+>
+> it's unclear to me if this series is ready to be merged. Can someone
+> confirm? If it is, can you resend with all reviewed by tags in place?
 
-patches 1 and 2 are in testing/next
+Are we getting a v2 for this?
 
 =2D-=20
 balbi
@@ -126,18 +127,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl69G8AACgkQzL64meEa
-mQa11Q/+LJkpCuNcO49WcpIjbeMQZDjgBgMtNIDOq7wYX2aIP/ZFb3GhrdLLwe/H
-3ZpoOTl5/KcJuF5BjMBt/7t+VdwP0Naw2Z8542e/OKzr/xVANOXmWN9ERujcVZy+
-l50KeoG3eycU5UAoyJN2lAAQV05TNotjTrSl15eClSUbo+FPUYbAyqdu3SZyNrGh
-O8mswueuV3BqznAbMh5dje+Rixdqr0gPYLj2RHnZYSHtWfNFyy5CT2fVikA45RZj
-5dL43DHtbR+Z4MyivdvFtHClS4EvySngRTGhLvtYORLWfP7M8LiBIa1WZ4S0d6iV
-A7lTlwlw3bE4/5uiGYqtM+SS5gDPu3wlyMhofhqKJlJAvV+DvTkaNLb7DI7lmDqU
-CXK8dGcLBtv8D7XyXBHY1FdZ86sXvz4NYrNcoJlldakk+CY7iLrV0c2SYG65Dm0x
-vLBCy2nWFq+tQ0tUYTU8rMGURDkASreb95XvyTh4+Ow6xY3/9MWFoAR16MSBx5r9
-Lz6xXWWVKrQeNTPl6INJuuN9XBXVOwYRNfYhrpbAnB3/bR7WADCY+UNmUGK1RmRK
-AU5zkyqPaamXy5+B6z6gL7KdOx0h5FEMm0J4advv32EFlBRTEi3KQm/lHGsxEnBt
-r7DSou4RpmjBMnx/bDRVPY5l5g31mjEbYRX4wR+EuXbO3jgHv6s=
-=QLsY
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl69HA4ACgkQzL64meEa
+mQY4DhAAtHTcNLDu5ri1XuAeABlYEcezvODzuPM7Xg0my7l1TAURKXzAe0LV/LSB
+9FU5hFcfAPUD7JSDmyGey9foVoFKo0ZxOvXLTXCW7AFHq5UyphcWAa5dW7kjtrI7
+uqJ9VYc6gdQ6a/lEJXTdEuq8lLBt88hJkU8OPjzedp82in9fGXZg0mmwDePj3yVE
+6KAnwJG+9qKZ/t06kNY2POoQpyFGnjOruj+9K4kG1R/RXGrU1YV1Cq6+GZp/DNoj
+Z81nw30hMBIFmKrxMl9bx+/hXAQUPV0C01txbCkdCGVTtp/L7GB3RXWgEljIyPPw
+KiE2yF12BFeuOB2egjAIWVztPxlzh0W19f/2bAQPEhlHrfcu83SJDAdEfMx/pe+w
+aFVJhdTZz+GeJ7K1Oame/ddtzbuPTyUbZFo4c0qASictw1dXGir88hOBeRrzpjJ0
+d7cmNieizTfV8EoF0/FKN1NuwIie/k/dZiejZ28lukE8pZ2RUXxuBrrncmHk+Hrp
+iHTOjXsXTYJgVU4OxXFk9Q+B0YYgvpiAtrAS3Hpn3UQMX+KYd1RMELFSYtBLUGCG
+TZ9WJPGijn2G7rmvDy0sJtxhLsRoE9tx7tvr6HG5btz2fMdZmTnK6cW1nyIoP8kP
+ijmeyb1OUfQTkFoBIZUIPi5pTkuuqScPtsu7LAF+nP7HjD/+VYk=
+=8p6e
 -----END PGP SIGNATURE-----
 --=-=-=--
