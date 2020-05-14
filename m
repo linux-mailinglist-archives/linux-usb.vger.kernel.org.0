@@ -2,402 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88CDC1D2BD8
-	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 11:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD6B31D2C81
+	for <lists+linux-usb@lfdr.de>; Thu, 14 May 2020 12:23:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726124AbgENJxM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 May 2020 05:53:12 -0400
-Received: from esa2.microchip.iphmx.com ([68.232.149.84]:37259 "EHLO
-        esa2.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726119AbgENJxM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 05:53:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1589449990; x=1620985990;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=7sr8R+a8FhyrV5tLGE/O2dQuzK7UJ6QXJnSbaWaRDsg=;
-  b=O3aFuV41qQWq61Eif5czvJET0kfe4dtu6x4Q6ycctCYXdbhvaZq4x+m2
-   W8IMQz3PAzEo0TBBtklstNIK2fGwk9aR9PchEZaQXqIZ2CTQfpm0CBaCZ
-   +vFn8emNy7FNKTOjnG7MzZscNgefqaKBiiQDVEA525O7tGUffV2bjgCJL
-   mXKxXMZiHLLph/bYHL8J21CWKFitPTSFE84L3JsidIGFA9L4EGof9+KgG
-   +A7Zg/cGFYcMrauym3nvzU3L1Iqn2yRFJwnSzKSY3b6Bz0dsQXRhsQmk+
-   C8ctyD2/oS6QQ9B3wzBFbi8CfbNKiALb1EcLyH0oCKjE7BUP5Int6lCSn
-   g==;
-IronPort-SDR: OXuutMCp8Emz1+Nws1o5GmhUbzS4NwyRH6BfmY7EhmSIyBtoyXnNYn9tnzYQKDtTacBOHtA8tr
- Smxjbo/uAzZtDZ29Pt9zUOiG+9OREJBvRa87z2/EEFnUaRs9831HE+DF0iBTZxWMPG23Z8vowO
- JzsiosqQJp65QJEHPpjdiP50cDDrK4i/ko5NTgCiUf01wAypWX0FwbPnrbpG6n1rU79PxVoy/5
- 10MpQvf0rSzDorUlCp3avM8k4Uf53JvV4VrhBN3NowSSYZE0elNrbelGJ7iEuTyCPskL9d575a
- OW0=
-X-IronPort-AV: E=Sophos;i="5.73,390,1583218800"; 
-   d="scan'208";a="75245175"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 May 2020 02:53:10 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Thu, 14 May 2020 02:53:09 -0700
-Received: from localhost.localdomain (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.1713.5 via Frontend Transport; Thu, 14 May 2020 02:53:08 -0700
-From:   Christian Gromm <christian.gromm@microchip.com>
-To:     <gregkh@linuxfoundation.org>
-CC:     <driverdev-devel@linuxdriverproject.org>,
-        <linux-usb@vger.kernel.org>,
-        Christian Gromm <christian.gromm@microchip.com>
-Subject: [PATCH v2 8/8] Documentation: ABI: correct sysfs attribute description of MOST driver
-Date:   Thu, 14 May 2020 11:52:56 +0200
-Message-ID: <1589449976-11378-9-git-send-email-christian.gromm@microchip.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1589449976-11378-1-git-send-email-christian.gromm@microchip.com>
-References: <1589449976-11378-1-git-send-email-christian.gromm@microchip.com>
+        id S1726140AbgENKW1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 May 2020 06:22:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53250 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725955AbgENKWA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 06:22:00 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF488C061A0C;
+        Thu, 14 May 2020 03:21:59 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id r17so2145099lff.9;
+        Thu, 14 May 2020 03:21:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=BCPye0pUcJCrk1mGrs7j2KRmFPfxGUAT389d2jmnUgA=;
+        b=YHESanEIwOFx7yqx5nXb7MOmP1hbxGBQl8oiuq/VNYK1KZX1rXsZpHig2eMC5eb2Fx
+         9dKmYw5CM1cjQCVC2AiUG5qPL5Ua1ZWRM9yePwUNevdq2fKcBkYoaH0PDq1FQSR4hNwX
+         ZxRrmYeoZ3bbndjHKMX2HEFQX9K3O704YYKZC6dv+2siHCY0ulkVVh5/SmdUXQfBPsVS
+         DCaTQ7kaLOqDIeL16WawA/z1xFV+CwLUhX3OoT5akSwzDgP1NIv8/vrTLenIbb3VohEf
+         tinYb5hl5eeSEiLAJ7yRY5XB1SGSA3E5th8YBUL+q/sO6L2DchdEtwmkNSjRHd96wuPO
+         XZuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=BCPye0pUcJCrk1mGrs7j2KRmFPfxGUAT389d2jmnUgA=;
+        b=OZCOp+Kmn2KqjXCrSe5UPoeyZXS8wn/TTWLj+wgU/GEj0GLI82oL4UPzTB/qpdkn5W
+         t7tjJx9n6LpZnx/ikXznYV43H4HUDEB949gmWh/fHyMJ8kh6Zm7FQb0knAbW+PjlcJ+g
+         aqNf8incK9zUzl75uie3ClfWR5CpyRyk42jp3jrma+Ao7TsqtmTYlyoZ1xGk9ASzl1I+
+         XotYDegh4osq/c1/H9KO82oatMWKP2rUBVtKi1YZncY78XQfZc9/Bawl1aUu2AVwqszz
+         WHNotJu6qFwQtsO6GenSkUxbdPJg07SajHBclcFCKdbvTTTX9SfAraUruT4JWTjd5upi
+         Dt6Q==
+X-Gm-Message-State: AOAM530avmkD31bL9EWG0CLedwM5o1ItbSUeaIyi0Y1OT1Ee/JozsZKb
+        3kmEv/P+vTaYaFiv0dQi6K/F4S1OFoa6nw==
+X-Google-Smtp-Source: ABdhPJwSFr86hBYlDBf0+PbPXxKc+kC7s2B9GDldm15Xqs3P7Se2TIbnDsS5P/MfAEp4LzIbExD5QA==
+X-Received: by 2002:a19:5f04:: with SMTP id t4mr2886505lfb.208.1589451717935;
+        Thu, 14 May 2020 03:21:57 -0700 (PDT)
+Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
+        by smtp.gmail.com with ESMTPSA id h11sm1554137lfp.22.2020.05.14.03.21.56
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 14 May 2020 03:21:56 -0700 (PDT)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Roger Quadros <rogerq@ti.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     robh+dt@kernel.org, vigneshr@ti.com, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] usb: dwc3: keystone: Turn on USB3 PHY before controller
+In-Reply-To: <baaaf89c-4baf-4218-e22e-53cd1a64ec02@ti.com>
+References: <20200513130709.10239-1-rogerq@ti.com> <20200513130709.10239-4-rogerq@ti.com> <1589420265.5899.0.camel@mhfsdcap03> <baaaf89c-4baf-4218-e22e-53cd1a64ec02@ti.com>
+Date:   Thu, 14 May 2020 13:21:52 +0300
+Message-ID: <87tv0i4y0v.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch fixes the ABI description file sysfs-bus-most.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Christian Gromm <christian.gromm@microchip.com>
----
-v2:
+Roger Quadros <rogerq@ti.com> writes:
 
- Documentation/ABI/testing/sysfs-bus-most | 104 ++++++++++++++++---------------
- 1 file changed, 53 insertions(+), 51 deletions(-)
+> On 14/05/2020 04:37, Chunfeng Yun wrote:
+>> On Wed, 2020-05-13 at 16:07 +0300, Roger Quadros wrote:
+>>> The Local Power Sleep Controller (LPSC) dependency on AM65
+>>> requires SERDES0 to be powered on before USB.
+>>>
+>>> We need to power up SERDES0 power domain and hold it on
+>>> throughout the reset, init, power on sequence.
+>>>
+>>> Signed-off-by: Roger Quadros <rogerq@ti.com>
+>>> ---
+>>>   drivers/usb/dwc3/dwc3-keystone.c | 47 +++++++++++++++++++++++++++++++-
+>>>   1 file changed, 46 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/usb/dwc3/dwc3-keystone.c b/drivers/usb/dwc3/dwc3-k=
+eystone.c
+>>> index 1e14a6f4884b..46d46f3507fc 100644
+>>> --- a/drivers/usb/dwc3/dwc3-keystone.c
+>>> +++ b/drivers/usb/dwc3/dwc3-keystone.c
+>>> @@ -14,6 +14,7 @@
+>>>   #include <linux/dma-mapping.h>
+>>>   #include <linux/io.h>
+>>>   #include <linux/of_platform.h>
+>>> +#include <linux/phy/phy.h>
+>>>   #include <linux/pm_runtime.h>
+>>>=20=20=20
+>>>   /* USBSS register offsets */
+>>> @@ -34,6 +35,7 @@
+>>>   struct dwc3_keystone {
+>>>   	struct device			*dev;
+>>>   	void __iomem			*usbss;
+>>> +	struct phy			*usb3_phy;
+>>>   };
+>>>=20=20=20
+>>>   static inline u32 kdwc3_readl(void __iomem *base, u32 offset)
+>>> @@ -95,8 +97,44 @@ static int kdwc3_probe(struct platform_device *pdev)
+>>>   	if (IS_ERR(kdwc->usbss))
+>>>   		return PTR_ERR(kdwc->usbss);
+>>>=20=20=20
+>>> -	pm_runtime_enable(kdwc->dev);
+>>> +	/* PSC dependency on AM65 needs SERDES0 to be powered before USB0 */
+>>> +	kdwc->usb3_phy =3D devm_phy_get(dev, "usb3-phy");
+>> Use devm_phy_optional_get() instead?
+>
+> Indeed, it seems better suited.
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-most b/Documentation/ABI/testing/sysfs-bus-most
-index 6b1d06e..ec0a603 100644
---- a/Documentation/ABI/testing/sysfs-bus-most
-+++ b/Documentation/ABI/testing/sysfs-bus-most
-@@ -1,14 +1,14 @@
--What:		/sys/bus/most/devices/.../description
-+What:		/sys/bus/most/devices/<dev>/description
- Date:		March 2017
- KernelVersion:	4.15
- Contact:	Christian Gromm <christian.gromm@microchip.com>
- Description:
--		Provides information about the interface type and the physical
--		location of the device. Hardware attached via USB, for instance,
-+		Provides information about the physical location of the
-+		device. Hardware attached via USB, for instance,
- 		might return <1-1.1:1.0>
- Users:
- 
--What:		/sys/bus/most/devices/.../interface
-+What:		/sys/bus/most/devices/<dev>/interface
- Date:		March 2017
- KernelVersion:	4.15
- Contact:	Christian Gromm <christian.gromm@microchip.com>
-@@ -16,7 +16,7 @@ Description:
- 		Indicates the type of peripheral interface the device uses.
- Users:
- 
--What:		/sys/bus/most/devices/.../dci
-+What:		/sys/bus/most/devices/<dev>/dci
- Date:		June 2016
- KernelVersion:	4.15
- Contact:	Christian Gromm <christian.gromm@microchip.com>
-@@ -26,7 +26,7 @@ Description:
- 		write the controller's DCI registers.
- Users:
- 
--What:		/sys/bus/most/devices/.../dci/arb_address
-+What:		/sys/bus/most/devices/<dev>/dci/arb_address
- Date:		June 2016
- KernelVersion:	4.15
- Contact:	Christian Gromm <christian.gromm@microchip.com>
-@@ -35,7 +35,7 @@ Description:
- 		application wants to read from or write to.
- Users:
- 
--What:		/sys/bus/most/devices/.../dci/arb_value
-+What:		/sys/bus/most/devices/<dev>/dci/arb_value
- Date:		June 2016
- KernelVersion:	4.15
- Contact:	Christian Gromm <christian.gromm@microchip.com>
-@@ -44,7 +44,7 @@ Description:
- 		is stored in arb_address.
- Users:
- 
--What:		/sys/bus/most/devices/.../dci/mep_eui48_hi
-+What:		/sys/bus/most/devices/<dev>/dci/mep_eui48_hi
- Date:		June 2016
- KernelVersion:	4.15
- Contact:	Christian Gromm <christian.gromm@microchip.com>
-@@ -52,7 +52,7 @@ Description:
- 		This is used to check and configure the MAC address.
- Users:
- 
--What:		/sys/bus/most/devices/.../dci/mep_eui48_lo
-+What:		/sys/bus/most/devices/<dev>/dci/mep_eui48_lo
- Date:		June 2016
- KernelVersion:	4.15
- Contact:	Christian Gromm <christian.gromm@microchip.com>
-@@ -60,7 +60,7 @@ Description:
- 		This is used to check and configure the MAC address.
- Users:
- 
--What:		/sys/bus/most/devices/.../dci/mep_eui48_mi
-+What:		/sys/bus/most/devices/<dev>/dci/mep_eui48_mi
- Date:		June 2016
- KernelVersion:	4.15
- Contact:	Christian Gromm <christian.gromm@microchip.com>
-@@ -68,7 +68,7 @@ Description:
- 		This is used to check and configure the MAC address.
- Users:
- 
--What:		/sys/bus/most/devices/.../dci/mep_filter
-+What:		/sys/bus/most/devices/<dev>/dci/mep_filter
- Date:		June 2016
- KernelVersion:	4.15
- Contact:	Christian Gromm <christian.gromm@microchip.com>
-@@ -76,7 +76,7 @@ Description:
- 		This is used to check and configure the MEP filter address.
- Users:
- 
--What:		/sys/bus/most/devices/.../dci/mep_hash0
-+What:		/sys/bus/most/devices/<dev>/dci/mep_hash0
- Date:		June 2016
- KernelVersion:	4.15
- Contact:	Christian Gromm <christian.gromm@microchip.com>
-@@ -84,7 +84,7 @@ Description:
- 		This is used to check and configure the MEP hash table.
- Users:
- 
--What:		/sys/bus/most/devices/.../dci/mep_hash1
-+What:		/sys/bus/most/devices/<dev>/dci/mep_hash1
- Date:		June 2016
- KernelVersion:	4.15
- Contact:	Christian Gromm <christian.gromm@microchip.com>
-@@ -92,7 +92,7 @@ Description:
- 		This is used to check and configure the MEP hash table.
- Users:
- 
--What:		/sys/bus/most/devices/.../dci/mep_hash2
-+What:		/sys/bus/most/devices/<dev>/dci/mep_hash2
- Date:		June 2016
- KernelVersion:	4.15
- Contact:	Christian Gromm <christian.gromm@microchip.com>
-@@ -100,7 +100,7 @@ Description:
- 		This is used to check and configure the MEP hash table.
- Users:
- 
--What:		/sys/bus/most/devices/.../dci/mep_hash3
-+What:		/sys/bus/most/devices/<dev>/dci/mep_hash3
- Date:		June 2016
- KernelVersion:	4.15
- Contact:	Christian Gromm <christian.gromm@microchip.com>
-@@ -108,7 +108,7 @@ Description:
- 		This is used to check and configure the MEP hash table.
- Users:
- 
--What:		/sys/bus/most/devices/.../dci/ni_state
-+What:		/sys/bus/most/devices/<dev>/dci/ni_state
- Date:		June 2016
- KernelVersion:	4.15
- Contact:	Christian Gromm <christian.gromm@microchip.com>
-@@ -116,7 +116,7 @@ Description:
- 		Indicates the current network interface state.
- Users:
- 
--What:		/sys/bus/most/devices/.../dci/node_address
-+What:		/sys/bus/most/devices/<dev>/dci/node_address
- Date:		June 2016
- KernelVersion:	4.15
- Contact:	Christian Gromm <christian.gromm@microchip.com>
-@@ -124,7 +124,7 @@ Description:
- 		Indicates the current node address.
- Users:
- 
--What:		/sys/bus/most/devices/.../dci/node_position
-+What:		/sys/bus/most/devices/<dev>/dci/node_position
- Date:		June 2016
- KernelVersion:	4.15
- Contact:	Christian Gromm <christian.gromm@microchip.com>
-@@ -132,7 +132,7 @@ Description:
- 		Indicates the current node position.
- Users:
- 
--What:		/sys/bus/most/devices/.../dci/packet_bandwidth
-+What:		/sys/bus/most/devices/<dev>/dci/packet_bandwidth
- Date:		June 2016
- KernelVersion:	4.15
- Contact:	Christian Gromm <christian.gromm@microchip.com>
-@@ -140,7 +140,7 @@ Description:
- 		Indicates the configured packet bandwidth.
- Users:
- 
--What:		/sys/bus/most/devices/.../dci/sync_ep
-+What:		/sys/bus/most/devices/<dev>/dci/sync_ep
- Date:		June 2016
- KernelVersion:	4.15
- Contact:	Christian Gromm <christian.gromm@microchip.com>
-@@ -149,7 +149,7 @@ Description:
- 		endpoint.
- Users:
- 
--What:		/sys/bus/most/devices/.../<channel>/
-+What:		/sys/bus/most/devices/<dev>/<channel>/
- Date:		March 2017
- KernelVersion:	4.15
- Contact:	Christian Gromm <christian.gromm@microchip.com>
-@@ -160,91 +160,92 @@ Description:
- 		configure it.
- Users:
- 
--What:		/sys/bus/most/devices/.../<channel>/available_datatypes
-+What:		/sys/bus/most/devices/<dev>/<channel>/available_datatypes
- Date:		March 2017
- KernelVersion:	4.15
- Contact:	Christian Gromm <christian.gromm@microchip.com>
- Description:
--		Indicates the data types the current channel can transport.
-+		Indicates the data types the channel can transport.
- Users:
- 
--What:		/sys/bus/most/devices/.../<channel>/available_directions
-+What:		/sys/bus/most/devices/<dev>/<channel>/available_directions
- Date:		March 2017
- KernelVersion:	4.15
- Contact:	Christian Gromm <christian.gromm@microchip.com>
- Description:
--		Indicates the directions the current channel is capable of.
-+		Indicates the directions the channel is capable of.
- Users:
- 
--What:		/sys/bus/most/devices/.../<channel>/number_of_packet_buffers
-+What:		/sys/bus/most/devices/<dev>/<channel>/number_of_packet_buffers
- Date:		March 2017
- KernelVersion:	4.15
- Contact:	Christian Gromm <christian.gromm@microchip.com>
- Description:
--		Indicates the number of packet buffers the current channel can
-+		Indicates the number of packet buffers the channel can
- 		handle.
- Users:
- 
--What:		/sys/bus/most/devices/.../<channel>/number_of_stream_buffers
-+What:		/sys/bus/most/devices/<dev>/<channel>/number_of_stream_buffers
- Date:		March 2017
- KernelVersion:	4.15
- Contact:	Christian Gromm <christian.gromm@microchip.com>
- Description:
--		Indicates the number of streaming buffers the current channel can
-+		Indicates the number of streaming buffers the channel can
- 		handle.
- Users:
- 
--What:		/sys/bus/most/devices/.../<channel>/size_of_packet_buffer
-+What:		/sys/bus/most/devices/<dev>/<channel>/size_of_packet_buffer
- Date:		March 2017
- KernelVersion:	4.15
- Contact:	Christian Gromm <christian.gromm@microchip.com>
- Description:
--		Indicates the size of a packet buffer the current channel can
-+		Indicates the size of a packet buffer the channel can
- 		handle.
- Users:
- 
--What:		/sys/bus/most/devices/.../<channel>/size_of_stream_buffer
-+What:		/sys/bus/most/devices/<dev>/<channel>/size_of_stream_buffer
- Date:		March 2017
- KernelVersion:	4.15
- Contact:	Christian Gromm <christian.gromm@microchip.com>
- Description:
--		Indicates the size of a streaming buffer the current channel can
-+		Indicates the size of a streaming buffer the channel can
- 		handle.
- Users:
- 
--What:		/sys/bus/most/devices/.../<channel>/set_number_of_buffers
-+What:		/sys/bus/most/devices/<dev>/<channel>/set_number_of_buffers
- Date:		March 2017
- KernelVersion:	4.15
- Contact:	Christian Gromm <christian.gromm@microchip.com>
- Description:
--		This is to configure the number of buffers of the current channel.
-+		This is to read back the configured number of buffers of
-+		the channel.
- Users:
- 
--What:		/sys/bus/most/devices/.../<channel>/set_buffer_size
-+What:		/sys/bus/most/devices/<dev>/<channel>/set_buffer_size
- Date:		March 2017
- KernelVersion:	4.15
- Contact:	Christian Gromm <christian.gromm@microchip.com>
- Description:
--		This is to configure the size of a buffer of the current channel.
-+		This is to read back the configured buffer size of the channel.
- Users:
- 
--What:		/sys/bus/most/devices/.../<channel>/set_direction
-+What:		/sys/bus/most/devices/<dev>/<channel>/set_direction
- Date:		March 2017
- KernelVersion:	4.15
- Contact:	Christian Gromm <christian.gromm@microchip.com>
- Description:
--		This is to configure the direction of the current channel.
-+		This is to read back the configured direction of the channel.
- 		The following strings will be accepted:
--			'dir_tx',
--			'dir_rx'
-+			'tx',
-+			'rx'
- Users:
- 
--What:		/sys/bus/most/devices/.../<channel>/set_datatype
-+What:		/sys/bus/most/devices/<dev>/<channel>/set_datatype
- Date:		March 2017
- KernelVersion:	4.15
- Contact:	Christian Gromm <christian.gromm@microchip.com>
- Description:
--		This is to configure the data type of the current channel.
-+		This is to read back the configured data type of the channel.
- 		The following strings will be accepted:
- 			'control',
- 			'async',
-@@ -252,30 +253,31 @@ Description:
- 			'isoc_avp'
- Users:
- 
--What:		/sys/bus/most/devices/.../<channel>/set_subbuffer_size
-+What:		/sys/bus/most/devices/<dev>/<channel>/set_subbuffer_size
- Date:		March 2017
- KernelVersion:	4.15
- Contact:	Christian Gromm <christian.gromm@microchip.com>
- Description:
--		This is to configure the subbuffer size of the current channel.
-+		This is to read back the configured subbuffer size of
-+		the channel.
- Users:
- 
--What:		/sys/bus/most/devices/.../<channel>/set_packets_per_xact
-+What:		/sys/bus/most/devices/<dev>/<channel>/set_packets_per_xact
- Date:		March 2017
- KernelVersion:	4.15
- Contact:	Christian Gromm <christian.gromm@microchip.com>
- Description:
--		This is to configure the number of packets per transaction of
--		the current channel. This is only needed network interface
--		controller is attached via USB.
-+		This is to read back the configured number of packets per
-+		transaction of the channel. This is only applicable when
-+		connected via USB.
- Users:
- 
--What:		/sys/bus/most/devices/.../<channel>/channel_starving
-+What:		/sys/bus/most/devices/<dev>/<channel>/channel_starving
- Date:		March 2017
- KernelVersion:	4.15
- Contact:	Christian Gromm <christian.gromm@microchip.com>
- Description:
--		Indicates whether current channel ran out of buffers.
-+		Indicates whether channel ran out of buffers.
- Users:
- 
- What:		/sys/bus/most/drivers/most_core/components
--- 
-2.7.4
+patches 1 and 2 are in testing/next
 
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl69G8AACgkQzL64meEa
+mQa11Q/+LJkpCuNcO49WcpIjbeMQZDjgBgMtNIDOq7wYX2aIP/ZFb3GhrdLLwe/H
+3ZpoOTl5/KcJuF5BjMBt/7t+VdwP0Naw2Z8542e/OKzr/xVANOXmWN9ERujcVZy+
+l50KeoG3eycU5UAoyJN2lAAQV05TNotjTrSl15eClSUbo+FPUYbAyqdu3SZyNrGh
+O8mswueuV3BqznAbMh5dje+Rixdqr0gPYLj2RHnZYSHtWfNFyy5CT2fVikA45RZj
+5dL43DHtbR+Z4MyivdvFtHClS4EvySngRTGhLvtYORLWfP7M8LiBIa1WZ4S0d6iV
+A7lTlwlw3bE4/5uiGYqtM+SS5gDPu3wlyMhofhqKJlJAvV+DvTkaNLb7DI7lmDqU
+CXK8dGcLBtv8D7XyXBHY1FdZ86sXvz4NYrNcoJlldakk+CY7iLrV0c2SYG65Dm0x
+vLBCy2nWFq+tQ0tUYTU8rMGURDkASreb95XvyTh4+Ow6xY3/9MWFoAR16MSBx5r9
+Lz6xXWWVKrQeNTPl6INJuuN9XBXVOwYRNfYhrpbAnB3/bR7WADCY+UNmUGK1RmRK
+AU5zkyqPaamXy5+B6z6gL7KdOx0h5FEMm0J4advv32EFlBRTEi3KQm/lHGsxEnBt
+r7DSou4RpmjBMnx/bDRVPY5l5g31mjEbYRX4wR+EuXbO3jgHv6s=
+=QLsY
+-----END PGP SIGNATURE-----
+--=-=-=--
