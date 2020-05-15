@@ -2,165 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACCB81D4B33
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2020 12:41:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 199311D4C40
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2020 13:16:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728295AbgEOKlb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 May 2020 06:41:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55224 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728013AbgEOKla (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 May 2020 06:41:30 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37772C061A0C;
-        Fri, 15 May 2020 03:41:30 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id a4so1383536lfh.12;
-        Fri, 15 May 2020 03:41:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=IuV69pJbmeb25IQL0aSFJ0UEC0q8gcPDy0lgWN6OqZE=;
-        b=soNtbApqsD+cgPilkRoeQA4ln881xLdHuq6YTIxSaUN+teZMhygQno0fhmf2Ycxih2
-         he2CT4nyTLFpQF3HevAvm+IGS8ooZdqWbv4LmKplMWK4pmwKVRtDUD+7N4CTisZkmJox
-         VBEDsQ3Otj+uQBzMqtXkpfodnZ6p7VqNiFnh2rnsfvFHF/rtQitpJIUKOATLu+Dm5K02
-         BbzFPJXMwdyAS1KIbYCYUZl+wsHUCAbYiMhMb56FN0feEmPSYYE7Ll+KwXxvJQTwiLg5
-         iONb4CIqT9LwmmcC8wNIji33FdHJ1OSu+LuBMih5ytIAhMx0B+3qBCma9ismvU5sU7fR
-         casg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=IuV69pJbmeb25IQL0aSFJ0UEC0q8gcPDy0lgWN6OqZE=;
-        b=PDeD/JhCygDSlJLu0DAsrPuINGry2kX6BOsuTaDkysWwRtAqMG6nLyXsiQh11ciwX4
-         30IKT0r2tcEotkWipCjzJkiQz2B0FtbGSIm2q93GNUZePJzgiR+uJCYG3KapgEoYU+9+
-         pgOw1AOXE0S0SRvZ3rfwsu9uBRQAxNdxouDhwVGZmFVEHddMrmJhYaSdjM1PZOdHuQ6b
-         lFEWi8fN2hRbWjmqwHl/VNMSZfXNYIOa8KEyC+IWQKKDt31KoB9b+4tQ+9jPsvCzPLCv
-         vJepGP8xIvtLl3xG7QAVEHlDZpQaSsmHIH8Xun1c/AcTJ+85hwT8KedXBRynap2t4FkD
-         G+vg==
-X-Gm-Message-State: AOAM5324W/+EVX1VEshGt9Mwbm/z7SNOL6yiusjp17dUw023L6SellHY
-        Sd6GyFo3RT9cTTON0yhh8d8=
-X-Google-Smtp-Source: ABdhPJyyuyuD9RduQc6EDqDlE3JsblyuUG+arIWzoNUFnUhg54klEKgbLEeXrMbzd7IAh9TZXrgSWw==
-X-Received: by 2002:a19:b8d:: with SMTP id 135mr1935506lfl.145.1589539288473;
-        Fri, 15 May 2020 03:41:28 -0700 (PDT)
-Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id r19sm992094ljp.68.2020.05.15.03.41.26
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 15 May 2020 03:41:27 -0700 (PDT)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Jun Li <jun.li@nxp.com>, Jun Li <lijun.kernel@gmail.com>
-Cc:     John Stultz <john.stultz@linaro.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Yu Chen <chenyu56@huawei.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        ShuFan Lee <shufan_lee@richtek.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        "open list\:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Peter Chen <peter.chen@nxp.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: RE: [PATCH v4 3/9] usb: dwc3: Increase timeout for CmdAct cleared by device controller
-In-Reply-To: <VE1PR04MB65283F16826D2254128073C589BD0@VE1PR04MB6528.eurprd04.prod.outlook.com>
-References: <20191028215919.83697-1-john.stultz@linaro.org> <20191028215919.83697-4-john.stultz@linaro.org> <87mudjj4rc.fsf@gmail.com> <CALAqxLU+9uEcdRVaLfh+eQrDtZbDGod9pRXhBX=prAhg9MXagw@mail.gmail.com> <CAKgpwJVaKpsgMjKcnYyJsfNj0ibkPt=mdn-NxfOkeX1jfL=9iQ@mail.gmail.com> <87h7wqmwrv.fsf@kernel.org> <CAKgpwJXfWv5=MDqBCADhe2iXf6eiP0GQ13Bwo9fkuU5kGO7dsw@mail.gmail.com> <87imgx35pg.fsf@kernel.org> <VE1PR04MB65283F16826D2254128073C589BD0@VE1PR04MB6528.eurprd04.prod.outlook.com>
-Date:   Fri, 15 May 2020 13:41:23 +0300
-Message-ID: <87d07532gc.fsf@kernel.org>
+        id S1726224AbgEOLQZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 May 2020 07:16:25 -0400
+Received: from esa4.microchip.iphmx.com ([68.232.154.123]:19611 "EHLO
+        esa4.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726144AbgEOLQY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 May 2020 07:16:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1589541384; x=1621077384;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=ABwPSOt6Vn+yadZj5yycUyO4VKdjl4WcH7rpms4LysM=;
+  b=k/XbgOhaE7i7EQJ3J2NRE9t0qSachKUYd/Mlw7ZpOUisn7wrg8WYcX3P
+   v/3xkObXaDtqo37pWG8GWt/qlkicNgz0rS/I2o8dNFpCfIW2csQVyQHiO
+   KgeIE0jlao1Sd6gMJXiqNaOi6Cmd673TrkoNoACK04mfaBRmIpjBJ8sVG
+   Ml67EGbmGLORKXtnTBOBewmqUsSxM5g9pSbkA6BN6TyzdYbeepKY7Wie0
+   aPmSvdRSzSi+Mxf5Kn0XF5128E1sq5DtDGx+GKqKkgVT5qgKn3Pcjyro/
+   wFR3QgruvBZPbUr92TFFGLFK080xD3BXYuTLz8H+FVnV94mxt68xrBTfg
+   w==;
+IronPort-SDR: d1Ro/FnxzZNikeDUdQz/SltJMJxGFcl/zWK39dHh0MfNPIZD37uVX1zLfG3rF4HuUkePUfyT25
+ w898hqe9GAvk4PHvCnXJ1shgJuVxQBN6scp70tlGwiucor15kWAtBQvclnIVtX2GfdQ7m8NgcB
+ s0GalkDVsbOYWDopm6KBKlsK01D927pMnPQM4FPpB9NtIaXstLqjXSQbEP4LxjNbgo2g1gRrFq
+ H2yF02dUkYL6EuYvXbRaHcBkQIoxsD8OjPy0xsWEdLcd7+gFjuDms5NMGgR/yljeuvvHzjKQoq
+ stc=
+X-IronPort-AV: E=Sophos;i="5.73,395,1583218800"; 
+   d="scan'208";a="73566865"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 May 2020 04:16:23 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Fri, 15 May 2020 04:16:26 -0700
+Received: from cristi-P53.lan (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.1713.5 via Frontend
+ Transport; Fri, 15 May 2020 04:16:20 -0700
+From:   <cristian.birsan@microchip.com>
+To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <ludovic.desroches@microchip.com>, <robh+dt@kernel.org>,
+        <mark.rutland@arm.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Cristian Birsan <cristian.birsan@microchip.com>
+Subject: [PATCH v2 0/7] usb: gadget: udc: atmel: add usb device support for SAM9x60 SoC
+Date:   Fri, 15 May 2020 14:16:24 +0300
+Message-ID: <20200515111631.31210-1-cristian.birsan@microchip.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+From: Cristian Birsan <cristian.birsan@microchip.com>
 
+This patch set adds usb device support for SAM9x60 SoC.
+The DPRAM memory for the USB High Speed Device Port (UDPHS) hardware
+block was increased and the allocation method is changed. This patch
+series simplifies the endpoint allocation scheme to acomodate this SoC
+and the old ones.
 
-Hi,
+Changes in v2:
+- drop the patch that adds reference to pmc for sam9x60
+- use dt-bindings: usb prefix
+- enable usb device in device tree
 
-Jun Li <jun.li@nxp.com> writes:
->> Jun Li <lijun.kernel@gmail.com> writes:
->> >> @@ -397,12 +407,18 @@ int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep=
-, unsigned
->> cmd,
->> >>                         dwc3_gadget_ep_get_transfer_index(dep);
->> >>         }
->> >>
->> >> -       if (saved_config) {
->> >> +       if (saved_hs_config) {
->> >>                 reg =3D dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
->> >> -               reg |=3D saved_config;
->> >> +               reg |=3D saved_hs_config;
->> >>                 dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
->> >>         }
->> >>
->> >> +       if (saved_ss_config) {
->> >> +               reg =3D dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(0));
->> >> +               reg |=3D saved_ss_config;
->> >> +               dwc3_writel(dwc->regs, DWC3_GUSB3PIPECTL(0), reg);
->> >> +       }
->> >> +
->> >>         return ret;
->> >>  }
->> >
->> > Unfortunately this way can't work, once the SS PHY enters P3, disable
->> > suspend_en can't force SS PHY exit P3, unless do this at the very
->> > beginning to prevent SS PHY entering P3(e.g. add "snps,dis_u3_susphy_q=
-uirk" for
->> test).
->>=20
->> It sounds like you have a quirky PHY.=20
->
-> From what I got from the IC design, the behavior of DWC3_GUSB3PIPECTL_SUS=
-PHY
-> bit should be as what I said, not a quirky.
->
-> Hi Thinh, could you comment this?
->
->> If that's the case, then you probably need
->> to use the flag you mentioned above. Please verify with that.
->
-> With quirk of "snps,dis_u3_susphy_quirk", I had verified it can
-> resolve the problem, but this will make USB3 Super Speed PHY
-> never enter P3, this is a huge impact on USB power consumption.
->
-> The timeout increase has no impact on those platforms which have
-> no this problem, but can give chance for platform with very low
-> supspend clk(like my case 32k) to work.
+Claudiu Beznea (1):
+  usb: gadget: udc: atmel: use of_find_matching_node_and_match
 
-I was under the impression that issuing a command would wake the PHY
-up. I don't have access to DWC3 documentation to verify, but that's as I
-remember. Is that not the case?
+Cristian Birsan (6):
+  dt-bindings: usb: atmel: Update DT bindings documentation for sam9x60
+  usb: gadget: udc: atmel: simplify endpoint allocation
+  usb: gadget: udc: atmel: use 1 bank endpoints for control transfers
+  usb: gadget: udc: atmel: rename errata into caps
+  usb: gadget: udc: atmel: update endpoint allocation for sam9x60
+  ARM: dts: at91: sam9x60ek: enable usb device
 
-=2D-=20
-balbi
+ .../devicetree/bindings/usb/atmel-usb.txt     |  1 +
+ arch/arm/boot/dts/at91-sam9x60ek.dts          | 13 +++
+ arch/arm/boot/dts/sam9x60.dtsi                | 74 ++++++++++++++++
+ drivers/usb/gadget/udc/atmel_usba_udc.c       | 87 ++++++++++++-------
+ drivers/usb/gadget/udc/atmel_usba_udc.h       |  6 +-
+ 5 files changed, 145 insertions(+), 36 deletions(-)
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+2.17.1
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl6+cdMACgkQzL64meEa
-mQYMMQ//ReGJl+YwiKBw2I8knemHDYhudQuGQSG6s78dfTKTJkH84XJ197AGxIPm
-s4vOk6VAuXpsWmota81ZU57GGC+NZqPLVQMXsrEE08HgFrHjjIriIv6AwoQ8rHfi
-pVQHdma8yaZRFRLYtzpGUf0lEHbgIgcy50gnGpjcQKc/FvChJNCbBNVvp8IVJPIA
-L/Zi5Vsl+lyLYSHYYYIDXU3EhPEbel8GmDYwNqn+N8jgxdDqF+vxwx+t1uXy584S
-EdVTnJZihL6TcTwck7//mrGfvIZ04sLtrGgbaUcmw/QotlfmrkWcmUN1P4as2A51
-A/+z0NcV6FQBIKj8lnDlYUjSL36qYw32mCvb1TTp6JnZ/khMclrYd/5o8C+beRna
-OUS0dhOy2/ygBfuiUiw2x15pe0GQ24EN0ZiLmTWrjd49whqkqheM7PWKNLxtnnmP
-2/10rAdQpD5STJSHiQi6YZSQaMsRPDlQasyVcrlAgOqNBfA3pRXz6rqRYD4NTLL0
-1IGl4EtzZlEfQpIqpZlaLtirz6iPkqMrRXROaTiZC55tHoItwaJ+wqZ47n8QQWyG
-NehsGGD3dk9LyGjiIpXnZ3HIalOTLXKwagEpfD39sgQsTBuzSfexUYER3diNe93k
-X4exS7gdYwhTfbYPiFbY9HcyQqRDckgC5p0k/qEdpeqw+WsQ3MQ=
-=ljzj
------END PGP SIGNATURE-----
---=-=-=--
