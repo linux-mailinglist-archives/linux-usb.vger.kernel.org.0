@@ -2,122 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A331B1D59D8
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2020 21:19:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BB6A1D5AB5
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2020 22:31:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726372AbgEOTSX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 May 2020 15:18:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51942 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726223AbgEOTSX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 May 2020 15:18:23 -0400
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AD6C05BD09
-        for <linux-usb@vger.kernel.org>; Fri, 15 May 2020 12:18:21 -0700 (PDT)
-Received: by mail-yb1-xb42.google.com with SMTP id x15so1669157ybr.10
-        for <linux-usb@vger.kernel.org>; Fri, 15 May 2020 12:18:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=BmOnRbcR3AFYYV75I99OpKgERiPbjcBnWxKWXN2nC7c=;
-        b=Skg2EB4P+xqChQ+yZLz8eFl0BQuMKb7cIFnQjRedA/4JLPEpYmDFtzydvfju3zSGqC
-         8CSzIuFWaAWvgVPLgmj54r/G/c1gt2fh12Gf1jjJZcbP2F6L5qyN/Xg64b2xR4XOXAPb
-         TLpyVPrNhVkz0U4XXoRGVjTwiN4Y0vyPVjHjVtzP/zdICdsZ2mtwdP1jD8UT8uZWHf+/
-         VugJOOochwEluZzhQjxUndls10g8vSOA5UXR+wVW513NQGG6hL15aK9fi+ejsEFneEnr
-         TEOiISZEb78pFSsJQ+jQ7LzGn3Rd4QubfVaLfiafjKWeeEAOiCvVbFNz8EQwaR20gwvM
-         LPlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=BmOnRbcR3AFYYV75I99OpKgERiPbjcBnWxKWXN2nC7c=;
-        b=DV2cQ9xQo/n13j/sJtvqbGH7XaADBDQf26trMNbCw3BPKzcPuShUIo6H/4Y5LEAYhL
-         4I/W9EyBqBtdcdrxcav3lSU4w6tO6DYc9/xaCDjaJ30XB16CdbpoG+a6itVKZmaqcO46
-         gpnxw/ZxgCoWTRnUYGyAJZgGLCWaqJQTlKu2fruX7BU5n2hZvkfmxfGskrMBycPc/HEm
-         Nuy1G79wudi0R61VpsJp/bHZw7HWwTZoetjr4ooMcv9bOTcwEaQJabwlNoN+il3DkjkD
-         HesO7KmTPu5izcj2hRy+Xtv3sdAv5SQLJLtKsHw3pRGCt0ZET4BFqWAk4xzC8STd+Ari
-         5l9g==
-X-Gm-Message-State: AOAM533rqV3IbnX1f2rtmfrUNIpxI9wHYd7sUi3vYCulLozMj9NYHlkg
-        4y7bGGUD3aZmZZp+G/HYVPdCOuaB/8HTz4u9ECc=
-X-Google-Smtp-Source: ABdhPJxXZSblZzudNZnOpBn2DcY0+MJn7LmyDNhiZc5/6BhoN5muDciXwUJxiZIglQjPmVAZnyHM8IugtCyH9zczRbE=
-X-Received: by 2002:a25:7903:: with SMTP id u3mr8452020ybc.251.1589570300838;
- Fri, 15 May 2020 12:18:20 -0700 (PDT)
+        id S1726231AbgEOUb5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 May 2020 16:31:57 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:25784 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726179AbgEOUb5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 May 2020 16:31:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1589574716;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HDLwpmUVQX+kl1vnZkZEJyyTX65SwDMx+M1Xd73pLfM=;
+        b=JH8y2CsBAqVisiVKCmKcirQe9p7mccG0yvzb/NoYYhOuaGwLDoMTt1J2RfJ0L6UG0acKN/
+        o4nEDIaGih56ILrnEu8Ddq+uVDYbeTSnL4erjKYAcS8pDFUC2YXTD45YKnys2Xs4qHzNx/
+        1Ugl1sl1iwGxwSVo83uiFFUjE1/D9kc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-225-ZhmxP6SSPZK_knqjQUAxzQ-1; Fri, 15 May 2020 16:31:54 -0400
+X-MC-Unique: ZhmxP6SSPZK_knqjQUAxzQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E7403BFCA;
+        Fri, 15 May 2020 20:31:52 +0000 (UTC)
+Received: from suzdal.zaitcev.lan (ovpn-113-95.phx2.redhat.com [10.3.113.95])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B592D99D8;
+        Fri, 15 May 2020 20:31:49 +0000 (UTC)
+Date:   Fri, 15 May 2020 15:31:49 -0500
+From:   Pete Zaitcev <zaitcev@redhat.com>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>, zaitcev@redhat.com
+Subject: Re: [PATCH] usblp: poison URBs upon disconnect
+Message-ID: <20200515153149.19f5b4ee@suzdal.zaitcev.lan>
+In-Reply-To: <20200507085806.5793-1-oneukum@suse.com>
+References: <20200507085806.5793-1-oneukum@suse.com>
+Organization: Red Hat, Inc.
 MIME-Version: 1.0
-Reply-To: daniellal3eloch@gmail.com
-Received: by 2002:a05:6900:2f2:0:0:0:0 with HTTP; Fri, 15 May 2020 12:18:19
- -0700 (PDT)
-From:   "Mrs.Daniella Leloch" <daniella2leloch@gmail.com>
-Date:   Fri, 15 May 2020 12:18:19 -0700
-X-Google-Sender-Auth: M-vM2MLXBEVe13O_152Ckm-XeJo
-Message-ID: <CAC74ftVTcnuBafZvzL45UawihBaTPZXWpLjS8Nw=CyZxmWCaHw@mail.gmail.com>
-Subject: WU urgent
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-WELCOME TO WESTERN UNION MONEY TRANSFER
-THIS MAIL IS ONLY FOR THE OWNER OF THIS E-MAIL ADDRESS:
+On Thu,  7 May 2020 10:58:06 +0200
+Oliver Neukum <oneukum@suse.com> wrote:
 
-Below is the information of your first payments $5000 Dollars sent to you t=
-oday.
-But unfortunately, the managing Director of this department called us this
-morning and reported that you have not paid the required fee $156 which you=
- are
-supposed to pay earlier for the purchasing and updating of your transfer fi=
-les
-but we have already sent out the payment out but not yet been putting on yo=
-ur
-name as the receiver. You will be receiving $5000 daily until your total am=
-ount
-of funds $520,000 is fully paid to you.
+> syzkaller reported an URB that should have been killed to be active.
+> We do not understand it, but this should fix the issue if it is real.
 
-Since you are finding it difficult to get the $156 we have decided that you=
- are
-to go ahead and pay whatever you have out of the total fee $156 required. B=
-ut
-mind you, no amount below $95 will be accepted so we expect you to pay what=
-ever
-amount from $95 and above. You are to pay what ever you have and we will
-activate your mtcn number and direct the transfer to your name as the recei=
-ver.
+> @@ -1375,9 +1376,11 @@ static void usblp_disconnect(struct usb_interface *intf)
+>  
+>  	usblp_unlink_urbs(usblp);
+>  	mutex_unlock(&usblp->mut);
+> +	usb_poison_anchored_urbs(&usblp->urbs);
+>  
+>  	if (!usblp->used)
+>  		usblp_cleanup(usblp);
+>  	mutex_unlock(&usblp_mutex);
+>  }
 
-Send it to this information below:
-Name:__________Chintuwa ThankGod chisom
-Address:________Burkina Faso
-Text Question____Transfer?
-Answer_____________Yes
-Please any amount you send let us know but remember, any amount below $95 w=
-ill
-not be accepted. Send us the payment information=E2=80=99s immediately afte=
-r you send
-it.
-HERE IS THE MONEY DETAILS MADE TO YOU!!!
-MTCN: 6839222328
-Sender=E2=80=99s First Name: Kark
-Sender=E2=80=99s Last Name: Heinrich
-Test Question: Color
-Answer: Blue
-Amount: $5000.00
+Sorry, it took me this long to think about it. I am against the duplication
+of effort between usblp_unlink_urbs, which is exactly usb_kill_anchored_urbs,
+and usb_poison_anchored_urbs. If you think that poisoning may help against
+what the bot identified, we may try this instead:
 
-Don=E2=80=99t expose this numbers to anybody else. If you need to check the=
- transfer
-online to see that the money is posted online for you:
-https://wumt.westernunion.com/asp/orderStatus.asp?country=3DBJ
-Note that the money detail given to you does not bear your name as the rece=
-iver
-yet. As soon as we receive the fee from you, we will immediately activate y=
-our
-mtcn# and put your name as the receiver. Please take note; you need to go a=
-long
-with your passport ID or Drivers license when you need to pick up the trans=
-fer
-okay. We look forward hearing from you.
+diff --git a/drivers/usb/class/usblp.c b/drivers/usb/class/usblp.c
+index 0d8e3f3804a3..eae5eaf5d4f1 100644
+--- a/drivers/usb/class/usblp.c
++++ b/drivers/usb/class/usblp.c
+@@ -1373,7 +1373,7 @@ static void usblp_disconnect(struct usb_interface *intf)
+        wake_up(&usblp->rwait);
+        usb_set_intfdata(intf, NULL);
+ 
+-       usblp_unlink_urbs(usblp);
++       usb_poison_anchored_urbs(&usblp->urbs);
+        mutex_unlock(&usblp->mut);
+ 
+        if (!usblp->used)
 
-REGARDS,
-Mrs Daniella Leloch
-WESTERN UNION BENIN -TRANSFER AGEN
+I'm still concerned that we didn't identify the scenario tht led to bot's
+findings.
+
+The usblp->present was supposed to play a role of the poison pill, at the
+driver level. The difference with poisoning the anchor is that ->present
+is protected by the most outlying mutex, and therefore cannot be meaninfully
+checked in URB callbacks. But the anchor's poison flag is protected by a
+spinlock, so callbacks check it. But what does it matter for us? This driver
+does not re-submit URBs from callbacks.
+
+So, I'm suspicious of attempts to hit at the problem in the dark and hope
+for a miracle.
+
+-- Pete
+
