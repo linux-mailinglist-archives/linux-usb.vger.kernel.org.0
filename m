@@ -2,157 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C50821D5809
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2020 19:34:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F9201D5932
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2020 20:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726290AbgEORei (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 May 2020 13:34:38 -0400
-Received: from mga12.intel.com ([192.55.52.136]:57151 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726023AbgEORei (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 15 May 2020 13:34:38 -0400
-IronPort-SDR: 3AdPXZ+dWNKCfvx+/zstaz7P/jIshDGF2u39N02mZCgj3iGFxRU3yBO6Wmn+4EzYY79186U5ej
- CVtt3wCi5HSQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2020 10:34:37 -0700
-IronPort-SDR: kx1l76/oRi/roqDhC/itZAKQ/8FRYO+OEDCYpsLMEeZeSBSjL0F65R5ab66HmBlozTmU/dETfl
- t29Bc7bFAttw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,396,1583222400"; 
-   d="scan'208";a="464972916"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 15 May 2020 10:34:36 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1jZeEF-000IS7-Ou; Sat, 16 May 2020 01:34:35 +0800
-Date:   Sat, 16 May 2020 01:34:07 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     linux-omap@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [balbi-usb:testing/next] BUILD SUCCESS
- a65a1ec70639afa5ff7990cf33213dd41f3c7176
-Message-ID: <5ebed28f.OHmCHuBwgjoIqGFf%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1726642AbgEOSjw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 May 2020 14:39:52 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:57497 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726206AbgEOSjw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 May 2020 14:39:52 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1589567992; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=mBPBCYFoKWdI3mEJ/ipBvucpCeB6dmeaUNTapAwv4TA=; b=F9gBoT3vYJDT2kKipcCbfGrYgP7+VzsVyM+4Hw/4T1RX3exs/ZNBCOJCu6R/DEZMxEU/detv
+ 5PtFXNO+Tfm/t9aPLMLfzifXOQ4JOE8hj9/oK14TyFeSQJr6G9uD2ka4zn1/VH4zfLWJ8CnH
+ IRgtfsSX3xYQ4NOta6xDvSI7SmI=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5ebee1f7.7f85bbbcc960-smtp-out-n04;
+ Fri, 15 May 2020 18:39:51 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 12CB1C43636; Fri, 15 May 2020 18:39:50 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.110.50.174] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 98FECC433D2;
+        Fri, 15 May 2020 18:39:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 98FECC433D2
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=wcheng@codeaurora.org
+Subject: Re: [RFC 3/3] dt-bindings: usb: dwc3: Add entry for tx-fifo-resize
+To:     Rob Herring <robh@kernel.org>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, balbi@kernel.org,
+        gregkh@linuxfoundation.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, jackp@codeaurora.org
+References: <1588888768-25315-1-git-send-email-wcheng@codeaurora.org>
+ <1588888768-25315-4-git-send-email-wcheng@codeaurora.org>
+ <20200515031042.GA25107@bogus>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <10d2109d-cfb7-73d0-a186-4fa5f17feffe@codeaurora.org>
+Date:   Fri, 15 May 2020 11:39:46 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <20200515031042.GA25107@bogus>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git  testing/next
-branch HEAD: a65a1ec70639afa5ff7990cf33213dd41f3c7176  USB: dummy-hcd: use configurable endpoint naming scheme
 
-elapsed time: 482m
 
-configs tested: 98
-configs skipped: 1
+On 5/14/2020 8:10 PM, Rob Herring wrote:
+> On Thu, May 07, 2020 at 02:59:28PM -0700, Wesley Cheng wrote:
+>> Re-introduce the comment for the tx-fifo-resize setting for the DWC3
+>> controller.
+> 
+> Why?
+> 
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Hi Rob,
 
-arm                                 defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                               allnoconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm64                            allmodconfig
-arm64                             allnoconfig
-sparc                            allyesconfig
-mips                             allyesconfig
-m68k                             allyesconfig
-i386                              allnoconfig
-i386                             allyesconfig
-i386                                defconfig
-i386                              debian-10.3
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                              allnoconfig
-m68k                           sun3_defconfig
-m68k                                defconfig
-nios2                               defconfig
-nios2                            allyesconfig
-openrisc                            defconfig
-c6x                              allyesconfig
-c6x                               allnoconfig
-openrisc                         allyesconfig
-nds32                               defconfig
-nds32                             allnoconfig
-csky                             allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-h8300                            allmodconfig
-xtensa                              defconfig
-arc                                 defconfig
-arc                              allyesconfig
-sh                               allmodconfig
-sh                                allnoconfig
-microblaze                        allnoconfig
-mips                              allnoconfig
-mips                             allmodconfig
-parisc                            allnoconfig
-parisc                              defconfig
-parisc                           allyesconfig
-parisc                           allmodconfig
-powerpc                             defconfig
-powerpc                          allyesconfig
-powerpc                          rhel-kconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a005-20200515
-x86_64               randconfig-a003-20200515
-x86_64               randconfig-a006-20200515
-x86_64               randconfig-a004-20200515
-x86_64               randconfig-a001-20200515
-x86_64               randconfig-a002-20200515
-i386                 randconfig-a006-20200515
-i386                 randconfig-a005-20200515
-i386                 randconfig-a003-20200515
-i386                 randconfig-a001-20200515
-i386                 randconfig-a004-20200515
-i386                 randconfig-a002-20200515
-i386                 randconfig-a012-20200515
-i386                 randconfig-a016-20200515
-i386                 randconfig-a014-20200515
-i386                 randconfig-a013-20200515
-i386                 randconfig-a011-20200515
-i386                 randconfig-a015-20200515
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-s390                             allyesconfig
-s390                              allnoconfig
-s390                             allmodconfig
-s390                                defconfig
-x86_64                              defconfig
-sparc                               defconfig
-sparc64                             defconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                          allmodconfig
-um                               allmodconfig
-um                                allnoconfig
-um                               allyesconfig
-um                                  defconfig
-x86_64                                   rhel
-x86_64                               rhel-7.6
-x86_64                    rhel-7.6-kselftests
-x86_64                         rhel-7.2-clear
-x86_64                                    lkp
-x86_64                              fedora-25
-x86_64                                  kexec
+Initially, the reasoning behind bringing back the DTSI parameter, was to
+address situations where vendors don't require the resizing logic.  I
+was assuming that each vendor has their own HW configuration for the TX
+FIFO size, and some may already have sufficient space to account for
+their endpoint requirements.  However, if Felipe doesn't believe we need
+to have a DTSI parameter for this, then we don't need to re-add this
+back in.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+>>
+>> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+>> ---
+>>  Documentation/devicetree/bindings/usb/dwc3.txt | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt b/Documentation/devicetree/bindings/usb/dwc3.txt
+>> index 9946ff9..489f5da 100644
+>> --- a/Documentation/devicetree/bindings/usb/dwc3.txt
+>> +++ b/Documentation/devicetree/bindings/usb/dwc3.txt
+>> @@ -105,7 +105,7 @@ Optional properties:
+>>  			1-16 (DWC_usb31 programming guide section 1.2.3) to
+>>  			enable periodic ESS TX threshold.
+>>  
+>> - - <DEPRECATED> tx-fifo-resize: determines if the FIFO *has* to be reallocated.
+>> + - tx-fifo-resize: determines if the FIFO *has* to be reallocated.
+>>   - snps,incr-burst-type-adjustment: Value for INCR burst type of GSBUSCFG0
+>>  			register, undefined length INCR burst type enable and INCRx type.
+>>  			When just one value, which means INCRX burst mode enabled. When
+>> -- 
+>> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+>> a Linux Foundation Collaborative Project
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
