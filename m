@@ -2,167 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5E031D45E5
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2020 08:29:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 182FB1D4622
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2020 08:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726614AbgEOG3n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 May 2020 02:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44156 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726205AbgEOG3l (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 May 2020 02:29:41 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88AF0C061A0C;
-        Thu, 14 May 2020 23:29:40 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id a21so950152ljj.11;
-        Thu, 14 May 2020 23:29:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=Amf4MMj2VGQ1xYWqB5Hox97fpmf7o1e1Pv6Ynpzq9ZA=;
-        b=jsC4kphUL2op1Q0Gul+GW8ZzHn+Fz0rAKVrK4mQufYYlRh7PR/cZXKwUGc+r5CpaSm
-         nIMbq79+co4bXWG1LYPLwQiW+br8gexZXlEjaAoCTt822Fk+xsHEuBl1W9LzMtM7CNqv
-         T0WXBCd1d87zMNTO4mimrV6MV1t5p5r4iy44ILOtUijNxieHe5oZ0DVXYZckx+pph1gQ
-         JdYT8TK5ICJqyBnFUi9mOBYqsL5pL/Ma5VG/1wXFsF53hxNr7rQvu5JEQvSVvOcv9SDU
-         9vMUAOBMN7b4VEpiDXUr92gtp3XjHEzMBlVDSXKcA+DJbPCOtX79VYLtl2hYgFYww1Ts
-         8GoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=Amf4MMj2VGQ1xYWqB5Hox97fpmf7o1e1Pv6Ynpzq9ZA=;
-        b=DPT2P5NEaacq7swaEsPep8WVSfUSViO5i9aQG+o3Be4rfu9TCwU+DmGw7vk3F2O4PZ
-         G1Svn1pFhN8lGdSlgl16AwMtneJwzyiLryufMMa5I3E+YlJOtMnWXkI18begS7cNWmX2
-         np+/ooMY0bwsjme5Yf73yHT+4IH4tt9kDVzZ6lyttR7xoRa0oMzeiqskckoVlRkbtmWe
-         D0/m4KevG2PUgcPu5YzHeHBhGuWH18tLOTRqeR9MFOReXu7mMPcQA0S/yFrPG2wMUy8C
-         Z1XLvdo6j6uJRJ2HZk2d8DwmKeqhDI9U/I6ThMQ9XksoYtKX+WV3Wxu3wcemN0B/0qDv
-         m2Yg==
-X-Gm-Message-State: AOAM533nxpA3wyVklbNCuR6iM9vvLETBHLgnNft9QZ8vchPXQvHHM7/E
-        eKafBpiTTsbbm/rl/guYRow=
-X-Google-Smtp-Source: ABdhPJyCsKXkodP4IvvysE0kpE+Bv7kllWtuMRULgUzrmOXWuUHVqaHLeOZ11THfL9Ig83wrRiHTyQ==
-X-Received: by 2002:a2e:9605:: with SMTP id v5mr1263833ljh.102.1589524178897;
-        Thu, 14 May 2020 23:29:38 -0700 (PDT)
-Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id u4sm834419lfu.81.2020.05.14.23.29.37
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 14 May 2020 23:29:38 -0700 (PDT)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Georgi Djakov <georgi.djakov@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Cc:     Sandeep Maheswaram <sanm@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Chandana Kishori Chiluveru <cchiluve@codeaurora.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Subject: Re: [PATCH v7 2/4] usb: dwc3: qcom: Add interconnect support in dwc3 driver
-In-Reply-To: <090e48d7-7988-eea1-bf39-f6820578d354@linaro.org>
-References: <1585718145-29537-1-git-send-email-sanm@codeaurora.org> <1585718145-29537-3-git-send-email-sanm@codeaurora.org> <878shu4uwk.fsf@kernel.org> <875zcy4uuj.fsf@kernel.org> <20200514171352.GP4525@google.com> <abbc3f8c-c8c9-c189-735e-f8058dab3e40@linaro.org> <87tv0h3fpv.fsf@kernel.org> <090e48d7-7988-eea1-bf39-f6820578d354@linaro.org>
-Date:   Fri, 15 May 2020 09:29:33 +0300
-Message-ID: <87r1vl3e42.fsf@kernel.org>
+        id S1726465AbgEOGuh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 May 2020 02:50:37 -0400
+Received: from mga04.intel.com ([192.55.52.120]:30828 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726205AbgEOGuh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 15 May 2020 02:50:37 -0400
+IronPort-SDR: cl+KXt2VhA3oHDRgjbxOMS8CYGLgvCv1ohKtRk57qGKUwdxJXGtbcD2JL+1OXJK+2CfFZeNesW
+ kAso3i8SeMXg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2020 23:50:32 -0700
+IronPort-SDR: PRl64UCM5ptkwKKmskj4xQpjPeiy6WW2NKmsxz/noxNIW+QNiH1NFJpGlLJtSKvUBUqRcnJns9
+ Ih45BWIAyhLg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,394,1583222400"; 
+   d="scan'208";a="298958476"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by orsmga008.jf.intel.com with ESMTP; 14 May 2020 23:50:30 -0700
+Subject: Re: [PATCH] xhci: Fix log mistake of xhci_start
+To:     jiahao <jiahao243@gmail.com>, mathias.nyman@intel.com,
+        gregkh@linuxfoundation.org, jiahao@xiaomi.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1589521506-19492-1-git-send-email-jiahao@xiaomi.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
+ 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 fiD/
+Message-ID: <dd0ff565-2222-8bf0-c379-5e5d97975e98@linux.intel.com>
+Date:   Fri, 15 May 2020 09:53:22 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+In-Reply-To: <1589521506-19492-1-git-send-email-jiahao@xiaomi.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On 15.5.2020 8.45, jiahao wrote:
+> It is obvious that XCHI_MAX_HALT_USEC is usec,
+>  not milliseconds; Replace 'milliseconds' with
+> 'usec' of the debug message.
+> 
+> Signed-off-by: jiahao <jiahao@xiaomi.com>
+> ---
+>  drivers/usb/host/xhci.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index bee5dec..d011472 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -147,7 +147,7 @@ int xhci_start(struct xhci_hcd *xhci)
+>  			STS_HALT, 0, XHCI_MAX_HALT_USEC);
+>  	if (ret == -ETIMEDOUT)
+>  		xhci_err(xhci, "Host took too long to start, "
+> -				"waited %u microseconds.\n",
+> +				"waited %u usec.\n",
 
+It already says "microseconds", no need to change it
 
-Hi,
+-Mathias
 
-Georgi Djakov <georgi.djakov@linaro.org> writes:
->>>>>> Sandeep Maheswaram <sanm@codeaurora.org> writes:
->>>>>>> +static int dwc3_qcom_interconnect_init(struct dwc3_qcom *qcom)
->>>>>>> +{
->>>>>>> +	struct device *dev =3D qcom->dev;
->>>>>>> +	int ret;
->>>>>>> +
->>>>>>> +	if (!device_is_bound(&qcom->dwc3->dev))
->>>>>>> +		return -EPROBE_DEFER;
->>>>>>
->>>>>> this breaks allmodconfig. I'm dropping this series from my queue for
->>>>>> this merge window.
->>>>>
->>>>> Sorry, I meant this patch ;-)
->>>>
->>>> I guess that's due to INTERCONNECT being a module. There is currently a
->>>
->>> I believe it's because of this:
->>> ERROR: modpost: "device_is_bound" [drivers/usb/dwc3/dwc3-qcom.ko] undef=
-ined!
->>>
->>>> discussion about this  with Viresh and Georgi in response to another
->>>> automated build failure. Viresh suggests changing CONFIG_INTERCONNECT
->>>> from tristate to bool, which seems sensible to me given that interconn=
-ect
->>>> is a core subsystem.
->>>
->>> The problem you are talking about would arise when INTERCONNECT=3Dm and
->>> USB_DWC3_QCOM=3Dy and it definitely exists here and could be triggered =
-with
->>> randconfig build. So i suggest to squash also the diff below.
->>>
->>> Thanks,
->>> Georgi
->>>
->>> ---8<---
->>> diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
->>> index 206caa0ea1c6..6661788b1a76 100644
->>> --- a/drivers/usb/dwc3/Kconfig
->>> +++ b/drivers/usb/dwc3/Kconfig
->>> @@ -129,6 +129,7 @@ config USB_DWC3_QCOM
->>>  	tristate "Qualcomm Platform"
->>>  	depends on ARCH_QCOM || COMPILE_TEST
->>>  	depends on EXTCON || !EXTCON
->>> +	depends on INTERCONNECT || !INTERCONNECT
->>=20
->> I would prefer to see a patch adding EXPORT_SYMBOL_GPL() to device_is_bo=
-und()
->
-> Agree, but just to clarify, that these are two separate issues that need =
-to
-> be fixed. The device_is_bound() is the first one and USB_DWC3_QCOM=3Dy co=
-mbined
-> with INTERCONNECT=3Dm is the second one.
-
-If INTERCONNECT=3Dm, QCOM3 shouldn't be y. I think the following is
-enough:
-
-	depends on INTERCONNECT=3Dy || INTERCONNECT=3DUSB_DWC3_QCOM
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl6+Ns0ACgkQzL64meEa
-mQbAXRAAx1nSiv+90Ab9qTZwL9hwRv7Z81MYwG4smKR+OwjyzOR7s9P7KX7OiRvx
-nnoleEKaK596cmTgrFxejEKrs5ASfMh8d8r9nZyv+PALk+uIf5t/IdQ+GrzC9Odg
-TaFHL1FsV63YsCL94rkhYNDlFZr9HcF0FslmbW8Edk5BrdMn7CJiihpGEj2woowc
-o4R4iWfletBlWIDffYq/KnHZbNfai1NOPlS1Tqu+qLtH50UMUGYD42OehueZK8id
-J9+BGUBJVx4fCHAN5KyWuOm0BKzd4c9uQJRP7Yr6jlK5Q3fG7xqlyvXC0a38eHhm
-VuMCR2WATX2EhMD6zR+O+d7+od0pyaM+6pzLzVsJrj5v/235Ncwt3t8PUAESoNI/
-6jvQ3TqVRfArjUU9lWIoez3t82CHbLpNW7XNgCo7aXE0YWqudek0HX1jShT86Oyg
-tcdYc3EfBXQyRm893r7zD055MT75xwhfE7I+snc16b1xdPHIDvFZJo9/5Q6BmJq+
-FSIBHqKOLP+s4lqAVKdmdxki1OKc8wY1K3LB8mT5ksAkaPmhqCBPJ8k8tf9ldxNC
-eL+7W7Ja/cXZ5Uu/Gvv7wxP83sER6jXuGbbtxHU9GUAfVWN/0oHFa2OsXo9pxCPY
-6fFr6/b0nBD+SWgIFt2ZaFgBisebVRrAVdck8I0mqcyJwbF2yMo=
-=2Mnr
------END PGP SIGNATURE-----
---=-=-=--
