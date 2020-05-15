@@ -2,38 +2,38 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A2881D5BF5
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2020 23:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44C7D1D5BF6
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2020 23:52:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726945AbgEOVwL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 May 2020 17:52:11 -0400
-Received: from mga03.intel.com ([134.134.136.65]:32753 "EHLO mga03.intel.com"
+        id S1726946AbgEOVwN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 May 2020 17:52:13 -0400
+Received: from mga01.intel.com ([192.55.52.88]:7886 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726261AbgEOVwL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        id S1726553AbgEOVwL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
         Fri, 15 May 2020 17:52:11 -0400
-IronPort-SDR: X5uj2uItrenG7IIt3ykV13fUnb7vX4jQYHLfz7bwjzX0HrtI/xZAeRDre5BpDQa3vsvNKO91S4
- 0x0P/rMRx9xQ==
+IronPort-SDR: K9ZzzwcuUvMN+O7Z+Lp04Nv1Fh5pnglQ/I/ORed0srgGi5LN8Ua5vFhtiybSfIiFAJY8Zb5G3j
+ CHVvEK2wfDtA==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2020 14:52:11 -0700
-IronPort-SDR: UoTvUansR+QDyAk8sXEtMNWwDTbYfQVW473JdDLUUONLGUdbK3dva1NOK/qidemLJ4FGzNLjzh
- f9U2bkD9LbuA==
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2020 14:52:11 -0700
+IronPort-SDR: f4XboHA/2K0FsbTrx6m4xFOJIg4VQx3FSGRjP+u4+y0sUabw5M0naDhUdcg5aZnV0oDLCRYWkQ
+ kCmyjSEZTLOw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,396,1583222400"; 
-   d="scan'208";a="281350126"
+   d="scan'208";a="342103833"
 Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 15 May 2020 14:52:09 -0700
+  by orsmga001.jf.intel.com with ESMTP; 15 May 2020 14:52:09 -0700
 Received: from kbuild by lkp-server01 with local (Exim 4.89)
         (envelope-from <lkp@intel.com>)
-        id 1jZiFV-0005M7-1B; Sat, 16 May 2020 05:52:09 +0800
-Date:   Sat, 16 May 2020 05:51:31 +0800
+        id 1jZiFV-0005MI-29; Sat, 16 May 2020 05:52:09 +0800
+Date:   Sat, 16 May 2020 05:51:32 +0800
 From:   kbuild test robot <lkp@intel.com>
 To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 2478be82de44bee4346eb1f48d4cfa28cd99d2d0
-Message-ID: <5ebf0ee3.af4+9wnVeZhwV7D7%lkp@intel.com>
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 15753588bcd4bbffae1cca33c8ced5722477fe1f
+Message-ID: <5ebf0ee4.dVUeQoFjs3ZMp1df%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -43,13 +43,13 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
-branch HEAD: 2478be82de44bee4346eb1f48d4cfa28cd99d2d0  usb: renesas-xhci: Add ROM loader for uPD720201
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-linus
+branch HEAD: 15753588bcd4bbffae1cca33c8ced5722477fe1f  USB: gadget: fix illegal array access in binding with UDC
 
-elapsed time: 482m
+elapsed time: 484m
 
-configs tested: 107
-configs skipped: 1
+configs tested: 106
+configs skipped: 2
 
 The following configs have been built successfully.
 More configs may be tested in the coming days.
@@ -62,15 +62,14 @@ arm64                            allyesconfig
 arm64                               defconfig
 arm64                            allmodconfig
 arm64                             allnoconfig
+sparc                            allyesconfig
 mips                             allyesconfig
 m68k                             allyesconfig
-sparc                            allyesconfig
-h8300                       h8s-sim_defconfig
-arm                           sama5_defconfig
-m68k                          amiga_defconfig
-mips                      pistachio_defconfig
-arm                            mps2_defconfig
-sh                           cayman_defconfig
+sh                          sdk7780_defconfig
+arm                        mini2440_defconfig
+powerpc                         wii_defconfig
+m68k                            mac_defconfig
+sh                           se7780_defconfig
 arc                                 defconfig
 arm                        shmobile_defconfig
 m68k                       m5208evb_defconfig
