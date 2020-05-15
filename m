@@ -2,191 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF66D1D4C55
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2020 13:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C1741D4D62
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2020 14:06:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726532AbgEOLQt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 May 2020 07:16:49 -0400
-Received: from esa4.microchip.iphmx.com ([68.232.154.123]:19651 "EHLO
-        esa4.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726465AbgEOLQs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 May 2020 07:16:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1589541406; x=1621077406;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=bZ2JnU0EXObNl5L5pPijjp9Xg73ORZBTgLZoGKU0TPk=;
-  b=vIs0Yc4y3Tmd4D7Xh8iOXvq8/Evh3/WLQmcIsJOBCrO9cRCp8APw4UuC
-   gmGGCBTmU98C1AVl3kpfjvk0TCI4mEvqsX2hzDvIJpgFLOTA8wiu/jKla
-   uhDr4/V0jcLFSC15IYCu7KoDAES7sS3Qgd8bVN+uX9nEzkNk8JqpxTjLI
-   qWFY6TmKn4+MhMCTyhFmUTd9/JrmsvvKoy3hM6NUQU4SHMShZJIwxcl6A
-   JxQDuudlsjkUDI8gjxp5QJFx9+P13dFu+Lw5KSgs0vfHLzlGbxqPqO6hS
-   esXKSyAAnyAGmvT87dBhAssR42jQHk+64n+ig4phqRUH565vXTpoVCiuV
-   Q==;
-IronPort-SDR: XltXjzs+GU6yt//0omU6PmdLk2jQP5ZYtU64eC6H8VCmkAjLS49NYR8MzOiI46Jnogrfof4qVt
- ehDiHryI2RxBu5y7pXRfpiQPWJBnFDpYRG92vcKXEM5JWrOcnvnC6Z4oDH+2GVYHUXcrSsiJs7
- 6ECz0+hv5J7AG9MVaAUeKLhbYxDbJp7uAhFfwWiWt97uVdFLfVxnTVQmSrNqj/F76fDcOfVVI4
- mPlaJXJY/asv87Ot5dBe+1VwcJPoQn1+vYOmGxAyMTh98NkWYB14wTJ+AmSy78BM1BNP8Y6fBm
- ERY=
-X-IronPort-AV: E=Sophos;i="5.73,395,1583218800"; 
-   d="scan'208";a="73566907"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 May 2020 04:16:46 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Fri, 15 May 2020 04:16:45 -0700
-Received: from cristi-P53.lan (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.1713.5 via Frontend
- Transport; Fri, 15 May 2020 04:16:42 -0700
-From:   <cristian.birsan@microchip.com>
-To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
-        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <ludovic.desroches@microchip.com>, <robh+dt@kernel.org>,
-        <mark.rutland@arm.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Cristian Birsan <cristian.birsan@microchip.com>
-Subject: [PATCH v2 7/7] ARM: dts: at91: sam9x60ek: enable usb device
-Date:   Fri, 15 May 2020 14:16:31 +0300
-Message-ID: <20200515111631.31210-8-cristian.birsan@microchip.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200515111631.31210-1-cristian.birsan@microchip.com>
-References: <20200515111631.31210-1-cristian.birsan@microchip.com>
+        id S1726163AbgEOMF5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 May 2020 08:05:57 -0400
+Received: from mga11.intel.com ([192.55.52.93]:4688 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726112AbgEOMF4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 15 May 2020 08:05:56 -0400
+IronPort-SDR: pbNWTpnTexALeOgUTQEJWtgskadJOYSEAPv7RTbh6zLW7pZmxF6YzFs4fyvcWzzFhHOskXad9k
+ y1i8qEAfy3dg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2020 05:05:56 -0700
+IronPort-SDR: ETu/rW6/uFdF7TdKoh27Q9VwNarsKv/Nw6Rqg/wuXAUPeJO4JbkpXTzyU+NuZoqdLKCQMtm7hB
+ 56shWPE1OBtQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,395,1583222400"; 
+   d="scan'208";a="372670460"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 15 May 2020 05:05:53 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 15 May 2020 15:05:52 +0300
+Date:   Fri, 15 May 2020 15:05:52 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Benson Leung <bleung@chromium.org>,
+        "open list:USB NETWORKING DRIVERS" <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-acpi@vger.kernel.org,
+        Tim Wawrzynczak <twawrzynczak@chromium.org>
+Subject: Re: [PATCH 2/4] usb: typec: mux: intel_pmc_mux: Support for static
+ SBU/HSL orientation
+Message-ID: <20200515120552.GC1511@kuha.fi.intel.com>
+References: <20200507150900.12102-1-heikki.krogerus@linux.intel.com>
+ <20200507150900.12102-3-heikki.krogerus@linux.intel.com>
+ <20200507224041.GA247416@google.com>
+ <20200508111840.GG645261@kuha.fi.intel.com>
+ <20200511133202.GA2085641@kuha.fi.intel.com>
+ <20200511175719.GA136540@google.com>
+ <20200512142251.GD2085641@kuha.fi.intel.com>
+ <20200512191910.GD136540@google.com>
+ <CACeCKad4BebiBJS_wO=FdWVWypgOD822Dir7HeRBf0uXUuJusA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACeCKad4BebiBJS_wO=FdWVWypgOD822Dir7HeRBf0uXUuJusA@mail.gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Cristian Birsan <cristian.birsan@microchip.com>
+Hi Prashant,
 
-Enable usb device for sam9x60ek board.
+> I just realized, the issue I initially pointed out would apply to the
+> connect message too, i.e I'm not sure if "normal" orientation setting
+> handles the case where port orientation is reversed correctly.
+> Overall, I am not sure that re-using the typec_orientations[] string
+> list is the best option for this use-case.
+> we're looking for "normal" (i.e follows port->orientation) and "fixed"
+> (i.e is always the same orientation, regardless of what
+> port->orientation is), so it is perhaps better to just define a new
+> array just for this driver.
 
-Signed-off-by: Cristian Birsan <cristian.birsan@microchip.com>
----
- arch/arm/boot/dts/at91-sam9x60ek.dts | 13 +++++
- arch/arm/boot/dts/sam9x60.dtsi       | 74 ++++++++++++++++++++++++++++
- 2 files changed, 87 insertions(+)
+Sorry, I got sidetracked with that Alternate-Direct Request stuff.
+Let's start over..
 
-diff --git a/arch/arm/boot/dts/at91-sam9x60ek.dts b/arch/arm/boot/dts/at91-sam9x60ek.dts
-index b484745bf2d4..325d0fc8674f 100644
---- a/arch/arm/boot/dts/at91-sam9x60ek.dts
-+++ b/arch/arm/boot/dts/at91-sam9x60ek.dts
-@@ -547,6 +547,12 @@
- 			atmel,pins = <AT91_PIOD 18 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
- 		};
- 	};
-+
-+	usb0 {
-+		pinctrl_usba_vbus: usba_vbus {
-+			atmel,pins = <AT91_PIOB 16 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
-+		};
-+	};
- }; /* pinctrl */
- 
- &pmc {
-@@ -634,6 +640,13 @@
- 	};
- };
- 
-+&usb0 {
-+	atmel,vbus-gpio = <&pioB 16 GPIO_ACTIVE_HIGH>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_usba_vbus>;
-+	status = "okay";
-+};
-+
- &usb1 {
- 	num-ports = <3>;
- 	atmel,vbus-gpio = <0
-diff --git a/arch/arm/boot/dts/sam9x60.dtsi b/arch/arm/boot/dts/sam9x60.dtsi
-index 6763423d64b8..5cd2b9054762 100644
---- a/arch/arm/boot/dts/sam9x60.dtsi
-+++ b/arch/arm/boot/dts/sam9x60.dtsi
-@@ -69,6 +69,80 @@
- 		#size-cells = <1>;
- 		ranges;
- 
-+		usb0: gadget@500000 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			compatible = "microchip,sam9x60-udc";
-+			reg = <0x00500000 0x100000
-+				0xf803c000 0x400>;
-+			interrupts = <23 IRQ_TYPE_LEVEL_HIGH 2>;
-+			clocks = <&pmc PMC_TYPE_PERIPHERAL 23>, <&pmc PMC_TYPE_CORE PMC_UTMI>;
-+			clock-names = "pclk", "hclk";
-+			assigned-clocks = <&pmc PMC_TYPE_CORE PMC_UTMI>;
-+			assigned-clock-rates = <480000000>;
-+			status = "disabled";
-+
-+			ep@0 {
-+				reg = <0>;
-+				atmel,fifo-size = <64>;
-+				atmel,nb-banks = <1>;
-+			};
-+
-+			ep@1 {
-+				reg = <1>;
-+				atmel,fifo-size = <1024>;
-+				atmel,nb-banks = <2>;
-+				atmel,can-dma;
-+			};
-+
-+			ep@2 {
-+				reg = <2>;
-+				atmel,fifo-size = <1024>;
-+				atmel,nb-banks = <2>;
-+				atmel,can-dma;
-+			};
-+
-+			ep@3 {
-+				reg = <3>;
-+				atmel,fifo-size = <1024>;
-+				atmel,nb-banks = <3>;
-+				atmel,can-dma;
-+				atmel,can-isoc;
-+			};
-+
-+			ep@4 {
-+				reg = <4>;
-+				atmel,fifo-size = <1024>;
-+				atmel,nb-banks = <3>;
-+				atmel,can-dma;
-+				atmel,can-isoc;
-+			};
-+
-+			ep@5 {
-+				reg = <5>;
-+				atmel,fifo-size = <1024>;
-+				atmel,nb-banks = <3>;
-+				atmel,can-dma;
-+				atmel,can-isoc;
-+			};
-+
-+			ep@6 {
-+				reg = <6>;
-+				atmel,fifo-size = <1024>;
-+				atmel,nb-banks = <3>;
-+				atmel,can-dma;
-+				atmel,can-isoc;
-+			};
-+
-+			ep@7 {
-+				reg = <7>;
-+				atmel,fifo-size = <1024>;
-+				atmel,nb-banks = <3>;
-+				atmel,can-dma;
-+				atmel,can-isoc;
-+			};
-+		};
-+
- 		usb1: ohci@600000 {
- 			compatible = "atmel,at91rm9200-ohci", "usb-ohci";
- 			reg = <0x00600000 0x100000>;
+The property itself is the indicator that the orientation is fixed for
+those lines, not its value. If the property exists, we know the
+orientation is fixed, and if it doesn't exist, we know we need to use
+the cable plug orientation. So if we only want to use the property as
+a flag, then it does not need to have any value at all. It would be a
+boolean property.
+
+But we would then always leave the ORI-HSL field with value 0 when the
+orientation is fixed, and that would rule out the possibility of
+supporting a platform where we have to use a fixed value of 1 there
+(fixed-reversed). If we ever needed to support configuration like
+that, then we would need to add a new property.
+
+That scenario may not be relevant on this platform, and it may seem
+like an unlikely, or even impossible case now, but experience (and the
+north mux-agent documentation) tells me we should prepare also for
+that. That is why I use the typec_orientation strings as the values
+for these properties. Then the fixed-reversed orientation is also
+covered with the same properties if we ever need to support it.
+
+Maybe this code would be better, or more clear in the driver:
+
+/*
+ * Returns the value for the HSL-ORI field.
+ */
+static int hsl_orientation(struct pmc_usb_port *port)
+{
+        enum typec_orientation orientation;
+
+        /*
+         * Is the orientation fixed:
+         *   Yes, use the fixed orientation.
+         *   No, use cable plug orientation.
+         */
+        if (port->hsl_orientation)
+                orientation = hsl_orientation;
+        else
+                orientation = port->orientation;
+
+        switch (orientation) {
+        case TYPEC_ORIENTATION_NORMAL:
+                return 0;
+        case TYPEC_ORIENTATION_REVERSE:
+                return 1;
+        }
+
+        return -EINVAL;
+}
+
+thanks,
+
 -- 
-2.17.1
-
+heikki
