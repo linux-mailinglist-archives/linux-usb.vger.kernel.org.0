@@ -2,42 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A465F1D4A78
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2020 12:07:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACCB81D4B33
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2020 12:41:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728288AbgEOKHa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 May 2020 06:07:30 -0400
-Received: from mail-eopbgr20046.outbound.protection.outlook.com ([40.107.2.46]:7431
-        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728007AbgEOKHa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 15 May 2020 06:07:30 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JUWHWLEfqjjSycTr2Xhi0T5KCbweidoSuoy3SNCNjtNZyPZMHu/KxMfojsy0jAntMmntTYd0gmgD5TOqGEB1lWw2bLstzSB5PW2/K4N8GuayzKj4BpGJlYUh4dH9lXArY2A1rBQy8I1ywqSWeBZCe/kWZP7ay84MW2yA4aEMqnV3q4vrrchu0mmG79FVM6WhTkrhcDplJm/X/C8cUUaP9JwlLem2jE/JmimFXf9DZbCaHY2H4945K2WTFoKqpGYwOzQ8tHtrPlTdmmulftWlRydR0l1lJ/NATpyEUxiJXYfhqNoa6yoqQLTKfmOlxaxzmaTtRaC5VB/4YV/Pmug/mQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MJe0W2FCQR8knlx57fqZ3mSlEV4FPBeBwmZiyiDJeuk=;
- b=DnomshmGCvXlFW+1d6bDB9a5AstnRhiBN0vWsET4FiP307PZmVLj2PyLtx3ahus9n0y3xN+xI8Ck1slGUht1UheQJWWOX98hpACOMDc21I/WI6B70TUu2xCrW3AeMoUoOMJsN6TsTYVY+mLsdx+5XDJtlELsOhthE+o+mqRSC07fv24vJNefDxwia3N9jT+D3w/2neLD2VYomI8MWn6vQvBgG7vBOhhkGT8dKV4iY4Pf2mwRFRQ/KFtfvB4HXETqBWZyvpSaufkE8hHWjn2PM4B0qe0CQMm9ekvJpyo1BkToazGR/MowP9debqDiHYrRqXPaHyRb6aw46Wp23VJVsg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MJe0W2FCQR8knlx57fqZ3mSlEV4FPBeBwmZiyiDJeuk=;
- b=J62yZP3P16SO5r3urXuXmamiuiLg3zt/ijcHoAChuhvArk2e5TcmjjjL/y8W/8WjUrii+k+fOrSM3VfqzJDx8giMVanTmTq6UnPzYd3FVkWcqeZY+7Jt/LaZg6wg+LfRRwbUVP/rbxapm3GaXSWOlurufiDMX6wvJZ5hjWgfaGc=
-Received: from VE1PR04MB6528.eurprd04.prod.outlook.com (2603:10a6:803:127::18)
- by VE1PR04MB6541.eurprd04.prod.outlook.com (2603:10a6:803:121::26) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3000.26; Fri, 15 May
- 2020 10:07:26 +0000
-Received: from VE1PR04MB6528.eurprd04.prod.outlook.com
- ([fe80::5086:ae9e:6397:6b03]) by VE1PR04MB6528.eurprd04.prod.outlook.com
- ([fe80::5086:ae9e:6397:6b03%7]) with mapi id 15.20.3000.022; Fri, 15 May 2020
- 10:07:25 +0000
-From:   Jun Li <jun.li@nxp.com>
-To:     Felipe Balbi <balbi@kernel.org>, Jun Li <lijun.kernel@gmail.com>
-CC:     John Stultz <john.stultz@linaro.org>,
+        id S1728295AbgEOKlb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 May 2020 06:41:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55224 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728013AbgEOKla (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 May 2020 06:41:30 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37772C061A0C;
+        Fri, 15 May 2020 03:41:30 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id a4so1383536lfh.12;
+        Fri, 15 May 2020 03:41:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=IuV69pJbmeb25IQL0aSFJ0UEC0q8gcPDy0lgWN6OqZE=;
+        b=soNtbApqsD+cgPilkRoeQA4ln881xLdHuq6YTIxSaUN+teZMhygQno0fhmf2Ycxih2
+         he2CT4nyTLFpQF3HevAvm+IGS8ooZdqWbv4LmKplMWK4pmwKVRtDUD+7N4CTisZkmJox
+         VBEDsQ3Otj+uQBzMqtXkpfodnZ6p7VqNiFnh2rnsfvFHF/rtQitpJIUKOATLu+Dm5K02
+         BbzFPJXMwdyAS1KIbYCYUZl+wsHUCAbYiMhMb56FN0feEmPSYYE7Ll+KwXxvJQTwiLg5
+         iONb4CIqT9LwmmcC8wNIji33FdHJ1OSu+LuBMih5ytIAhMx0B+3qBCma9ismvU5sU7fR
+         casg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=IuV69pJbmeb25IQL0aSFJ0UEC0q8gcPDy0lgWN6OqZE=;
+        b=PDeD/JhCygDSlJLu0DAsrPuINGry2kX6BOsuTaDkysWwRtAqMG6nLyXsiQh11ciwX4
+         30IKT0r2tcEotkWipCjzJkiQz2B0FtbGSIm2q93GNUZePJzgiR+uJCYG3KapgEoYU+9+
+         pgOw1AOXE0S0SRvZ3rfwsu9uBRQAxNdxouDhwVGZmFVEHddMrmJhYaSdjM1PZOdHuQ6b
+         lFEWi8fN2hRbWjmqwHl/VNMSZfXNYIOa8KEyC+IWQKKDt31KoB9b+4tQ+9jPsvCzPLCv
+         vJepGP8xIvtLl3xG7QAVEHlDZpQaSsmHIH8Xun1c/AcTJ+85hwT8KedXBRynap2t4FkD
+         G+vg==
+X-Gm-Message-State: AOAM5324W/+EVX1VEshGt9Mwbm/z7SNOL6yiusjp17dUw023L6SellHY
+        Sd6GyFo3RT9cTTON0yhh8d8=
+X-Google-Smtp-Source: ABdhPJyyuyuD9RduQc6EDqDlE3JsblyuUG+arIWzoNUFnUhg54klEKgbLEeXrMbzd7IAh9TZXrgSWw==
+X-Received: by 2002:a19:b8d:: with SMTP id 135mr1935506lfl.145.1589539288473;
+        Fri, 15 May 2020 03:41:28 -0700 (PDT)
+Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
+        by smtp.gmail.com with ESMTPSA id r19sm992094ljp.68.2020.05.15.03.41.26
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 15 May 2020 03:41:27 -0700 (PDT)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Jun Li <jun.li@nxp.com>, Jun Li <lijun.kernel@gmail.com>
+Cc:     John Stultz <john.stultz@linaro.org>,
         lkml <linux-kernel@vger.kernel.org>,
         Yu Chen <chenyu56@huawei.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -52,110 +64,103 @@ CC:     John Stultz <john.stultz@linaro.org>,
         Valentin Schneider <valentin.schneider@arm.com>,
         Jack Pham <jackp@codeaurora.org>,
         Linux USB List <linux-usb@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        "open list\:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>, Peter Chen <peter.chen@nxp.com>,
         Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: RE: [PATCH v4 3/9] usb: dwc3: Increase timeout for CmdAct cleared by
- device controller
-Thread-Topic: [PATCH v4 3/9] usb: dwc3: Increase timeout for CmdAct cleared by
- device controller
-Thread-Index: AQHWJdlQZJAsekudzECWhic28QWur6io62yAgAAEAEA=
-Date:   Fri, 15 May 2020 10:07:25 +0000
-Message-ID: <VE1PR04MB65283F16826D2254128073C589BD0@VE1PR04MB6528.eurprd04.prod.outlook.com>
-References: <20191028215919.83697-1-john.stultz@linaro.org>
- <20191028215919.83697-4-john.stultz@linaro.org> <87mudjj4rc.fsf@gmail.com>
- <CALAqxLU+9uEcdRVaLfh+eQrDtZbDGod9pRXhBX=prAhg9MXagw@mail.gmail.com>
- <CAKgpwJVaKpsgMjKcnYyJsfNj0ibkPt=mdn-NxfOkeX1jfL=9iQ@mail.gmail.com>
- <87h7wqmwrv.fsf@kernel.org>
- <CAKgpwJXfWv5=MDqBCADhe2iXf6eiP0GQ13Bwo9fkuU5kGO7dsw@mail.gmail.com>
- <87imgx35pg.fsf@kernel.org>
-In-Reply-To: <87imgx35pg.fsf@kernel.org>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.68]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 272783eb-b259-4e34-b8d2-08d7f8b7c4b9
-x-ms-traffictypediagnostic: VE1PR04MB6541:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VE1PR04MB6541D4CD3A0A4B3D70CD708A89BD0@VE1PR04MB6541.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 04041A2886
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: EP36lxspnFdOlgke6Bkt+biq0CoHj3fgRoMtiZ7i0Xcj+uJwN4GabtoaVdGVWYKLgvJq1fwxBuUKyEIPO79osw2d4s+o8/UGBolkj3nh0H1VlWStBjGSZTS9wXfj1cgyB4twVO4RQTAJGvZB6YErtMreuZ919QKQ/gYbZ1iCNmI/heR1B1jwHT51MMfawz0MUr0fidRzxMvDUMHCGRBrPhujZBXScKefINVeAitSC8yKedO2QLZ6r6hjIwOQSCbOVhgVbw9GORH4aamjZbrazTGZOPYbZDdAMe7j5ZvU5Mk8s7FZCQFQz/PNiXpYjk+Br51LAo3p/MQSi4z12iLkZrMHEJHCaCbnyvXorxRp2QHRCpph+LrVcCBqNRH6jEf3rgUwxmLfota3axtkeBjEVBgAmiGbpi+wZtAiv4pnvhA75v4Kdcs8E/CKf7Xgh8UK
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6528.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(136003)(346002)(39860400002)(366004)(396003)(376002)(54906003)(44832011)(26005)(71200400001)(316002)(9686003)(55016002)(110136005)(186003)(478600001)(8936002)(8676002)(86362001)(33656002)(66556008)(7416002)(2906002)(6506007)(66476007)(64756008)(66446008)(53546011)(5660300002)(66946007)(76116006)(52536014)(4326008)(7696005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: 3qBwXqAv8tX5riHZlq3/yWyQ17yuYLI/pEbSM90KnvEDMwsu3pzCvDx5oTeKjmckkAuyedrK69cKfz81RW9oCkBb0HuRXDX2xuKb04fk3OYwLtor7h7QyRnBCGpcVpUW1c82ftWy2WzLj+q9f06kVYDx/fYALvW1zUlCSkcPextS9rxcQu6Ugb7nQaHCIAWLwjO+eE+79F9ny24L9GlB3PmXn/XfgReYGkOAUlTG2tUsIx9crhMjFMxbAiowt4hk9GIEqrjCi3zIQbe4XlQZZoTnjy8/c9IsGO7jjHgGraJwROC6qKh1eZ5+dID0codwMc4Hgl+Iu0mhf2CnFMqYosF6/c3BrCLd8Vip7ttv6nUaBVKYIxaHPhlrRocex8FgKDaO4gzdKK4hm5bORi6f8iIt4iU2/gommSL9P/c3U2iLwo0+rorqbGUbKFfDMPMoEYSj8uORepERH2ISUgXeYaWxB9aTxtTYBhvB+nR9Zt4=
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+Subject: RE: [PATCH v4 3/9] usb: dwc3: Increase timeout for CmdAct cleared by device controller
+In-Reply-To: <VE1PR04MB65283F16826D2254128073C589BD0@VE1PR04MB6528.eurprd04.prod.outlook.com>
+References: <20191028215919.83697-1-john.stultz@linaro.org> <20191028215919.83697-4-john.stultz@linaro.org> <87mudjj4rc.fsf@gmail.com> <CALAqxLU+9uEcdRVaLfh+eQrDtZbDGod9pRXhBX=prAhg9MXagw@mail.gmail.com> <CAKgpwJVaKpsgMjKcnYyJsfNj0ibkPt=mdn-NxfOkeX1jfL=9iQ@mail.gmail.com> <87h7wqmwrv.fsf@kernel.org> <CAKgpwJXfWv5=MDqBCADhe2iXf6eiP0GQ13Bwo9fkuU5kGO7dsw@mail.gmail.com> <87imgx35pg.fsf@kernel.org> <VE1PR04MB65283F16826D2254128073C589BD0@VE1PR04MB6528.eurprd04.prod.outlook.com>
+Date:   Fri, 15 May 2020 13:41:23 +0300
+Message-ID: <87d07532gc.fsf@kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 272783eb-b259-4e34-b8d2-08d7f8b7c4b9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 May 2020 10:07:25.8294
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 6jCSEFaYkY5tUmzk9ZYq4Yy+Zn9OiHx9ZfI29iRoYi/A7/66jS1C0WLvUSldGEX9
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6541
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogRmVsaXBlIEJhbGJpIDxi
-YWxiaWZAZ21haWwuY29tPiBPbiBCZWhhbGYgT2YgRmVsaXBlIEJhbGJpDQo+IFNlbnQ6IDIwMjDE
-6jXUwjE1yNUgMTc6MzENCj4gVG86IEp1biBMaSA8bGlqdW4ua2VybmVsQGdtYWlsLmNvbT4NCj4g
-Q2M6IEpvaG4gU3R1bHR6IDxqb2huLnN0dWx0ekBsaW5hcm8ub3JnPjsgbGttbCA8bGludXgta2Vy
-bmVsQHZnZXIua2VybmVsLm9yZz47IFl1DQo+IENoZW4gPGNoZW55dTU2QGh1YXdlaS5jb20+OyBH
-cmVnIEtyb2FoLUhhcnRtYW4gPGdyZWdraEBsaW51eGZvdW5kYXRpb24ub3JnPjsgUm9iDQo+IEhl
-cnJpbmcgPHJvYmgrZHRAa2VybmVsLm9yZz47IE1hcmsgUnV0bGFuZCA8bWFyay5ydXRsYW5kQGFy
-bS5jb20+OyBTaHVGYW4gTGVlDQo+IDxzaHVmYW5fbGVlQHJpY2h0ZWsuY29tPjsgSGVpa2tpIEty
-b2dlcnVzIDxoZWlra2kua3JvZ2VydXNAbGludXguaW50ZWwuY29tPjsNCj4gU3V6dWtpIEsgUG91
-bG9zZSA8c3V6dWtpLnBvdWxvc2VAYXJtLmNvbT47IENodW5mZW5nIFl1bg0KPiA8Y2h1bmZlbmcu
-eXVuQG1lZGlhdGVrLmNvbT47IEhhbnMgZGUgR29lZGUgPGhkZWdvZWRlQHJlZGhhdC5jb20+OyBB
-bmR5IFNoZXZjaGVua28NCj4gPGFuZHkuc2hldmNoZW5rb0BnbWFpbC5jb20+OyBWYWxlbnRpbiBT
-Y2huZWlkZXIgPHZhbGVudGluLnNjaG5laWRlckBhcm0uY29tPjsNCj4gSmFjayBQaGFtIDxqYWNr
-cEBjb2RlYXVyb3JhLm9yZz47IExpbnV4IFVTQiBMaXN0IDxsaW51eC11c2JAdmdlci5rZXJuZWwu
-b3JnPjsgb3Blbg0KPiBsaXN0Ok9QRU4gRklSTVdBUkUgQU5EIEZMQVRURU5FRCBERVZJQ0UgVFJF
-RSBCSU5ESU5HUyA8ZGV2aWNldHJlZUB2Z2VyLmtlcm5lbC5vcmc+Ow0KPiBQZXRlciBDaGVuIDxw
-ZXRlci5jaGVuQG54cC5jb20+OyBKdW4gTGkgPGp1bi5saUBueHAuY29tPjsgVGhpbmggTmd1eWVu
-DQo+IDxUaGluaC5OZ3V5ZW5Ac3lub3BzeXMuY29tPg0KPiBTdWJqZWN0OiBSZTogW1BBVENIIHY0
-IDMvOV0gdXNiOiBkd2MzOiBJbmNyZWFzZSB0aW1lb3V0IGZvciBDbWRBY3QgY2xlYXJlZCBieSBk
-ZXZpY2UNCj4gY29udHJvbGxlcg0KPiANCj4gDQo+IEhpLA0KPiANCj4gSnVuIExpIDxsaWp1bi5r
-ZXJuZWxAZ21haWwuY29tPiB3cml0ZXM6DQo+ID4+IEBAIC0zOTcsMTIgKzQwNywxOCBAQCBpbnQg
-ZHdjM19zZW5kX2dhZGdldF9lcF9jbWQoc3RydWN0IGR3YzNfZXAgKmRlcCwgdW5zaWduZWQNCj4g
-Y21kLA0KPiA+PiAgICAgICAgICAgICAgICAgICAgICAgICBkd2MzX2dhZGdldF9lcF9nZXRfdHJh
-bnNmZXJfaW5kZXgoZGVwKTsNCj4gPj4gICAgICAgICB9DQo+ID4+DQo+ID4+IC0gICAgICAgaWYg
-KHNhdmVkX2NvbmZpZykgew0KPiA+PiArICAgICAgIGlmIChzYXZlZF9oc19jb25maWcpIHsNCj4g
-Pj4gICAgICAgICAgICAgICAgIHJlZyA9IGR3YzNfcmVhZGwoZHdjLT5yZWdzLCBEV0MzX0dVU0Iy
-UEhZQ0ZHKDApKTsNCj4gPj4gLSAgICAgICAgICAgICAgIHJlZyB8PSBzYXZlZF9jb25maWc7DQo+
-ID4+ICsgICAgICAgICAgICAgICByZWcgfD0gc2F2ZWRfaHNfY29uZmlnOw0KPiA+PiAgICAgICAg
-ICAgICAgICAgZHdjM193cml0ZWwoZHdjLT5yZWdzLCBEV0MzX0dVU0IyUEhZQ0ZHKDApLCByZWcp
-Ow0KPiA+PiAgICAgICAgIH0NCj4gPj4NCj4gPj4gKyAgICAgICBpZiAoc2F2ZWRfc3NfY29uZmln
-KSB7DQo+ID4+ICsgICAgICAgICAgICAgICByZWcgPSBkd2MzX3JlYWRsKGR3Yy0+cmVncywgRFdD
-M19HVVNCM1BJUEVDVEwoMCkpOw0KPiA+PiArICAgICAgICAgICAgICAgcmVnIHw9IHNhdmVkX3Nz
-X2NvbmZpZzsNCj4gPj4gKyAgICAgICAgICAgICAgIGR3YzNfd3JpdGVsKGR3Yy0+cmVncywgRFdD
-M19HVVNCM1BJUEVDVEwoMCksIHJlZyk7DQo+ID4+ICsgICAgICAgfQ0KPiA+PiArDQo+ID4+ICAg
-ICAgICAgcmV0dXJuIHJldDsNCj4gPj4gIH0NCj4gPg0KPiA+IFVuZm9ydHVuYXRlbHkgdGhpcyB3
-YXkgY2FuJ3Qgd29yaywgb25jZSB0aGUgU1MgUEhZIGVudGVycyBQMywgZGlzYWJsZQ0KPiA+IHN1
-c3BlbmRfZW4gY2FuJ3QgZm9yY2UgU1MgUEhZIGV4aXQgUDMsIHVubGVzcyBkbyB0aGlzIGF0IHRo
-ZSB2ZXJ5DQo+ID4gYmVnaW5uaW5nIHRvIHByZXZlbnQgU1MgUEhZIGVudGVyaW5nIFAzKGUuZy4g
-YWRkICJzbnBzLGRpc191M19zdXNwaHlfcXVpcmsiIGZvcg0KPiB0ZXN0KS4NCj4gDQo+IEl0IHNv
-dW5kcyBsaWtlIHlvdSBoYXZlIGEgcXVpcmt5IFBIWS4gDQoNCkZyb20gd2hhdCBJIGdvdCBmcm9t
-IHRoZSBJQyBkZXNpZ24sIHRoZSBiZWhhdmlvciBvZiBEV0MzX0dVU0IzUElQRUNUTF9TVVNQSFkN
-CmJpdCBzaG91bGQgYmUgYXMgd2hhdCBJIHNhaWQsIG5vdCBhIHF1aXJreS4NCg0KSGkgVGhpbmgs
-IGNvdWxkIHlvdSBjb21tZW50IHRoaXM/DQoNCj4gSWYgdGhhdCdzIHRoZSBjYXNlLCB0aGVuIHlv
-dSBwcm9iYWJseSBuZWVkDQo+IHRvIHVzZSB0aGUgZmxhZyB5b3UgbWVudGlvbmVkIGFib3ZlLiBQ
-bGVhc2UgdmVyaWZ5IHdpdGggdGhhdC4NCg0KV2l0aCBxdWlyayBvZiAic25wcyxkaXNfdTNfc3Vz
-cGh5X3F1aXJrIiwgSSBoYWQgdmVyaWZpZWQgaXQgY2FuDQpyZXNvbHZlIHRoZSBwcm9ibGVtLCBi
-dXQgdGhpcyB3aWxsIG1ha2UgVVNCMyBTdXBlciBTcGVlZCBQSFkNCm5ldmVyIGVudGVyIFAzLCB0
-aGlzIGlzIGEgaHVnZSBpbXBhY3Qgb24gVVNCIHBvd2VyIGNvbnN1bXB0aW9uLg0KDQpUaGUgdGlt
-ZW91dCBpbmNyZWFzZSBoYXMgbm8gaW1wYWN0IG9uIHRob3NlIHBsYXRmb3JtcyB3aGljaCBoYXZl
-DQpubyB0aGlzIHByb2JsZW0sIGJ1dCBjYW4gZ2l2ZSBjaGFuY2UgZm9yIHBsYXRmb3JtIHdpdGgg
-dmVyeSBsb3cNCnN1cHNwZW5kIGNsayhsaWtlIG15IGNhc2UgMzJrKSB0byB3b3JrLg0KDQpUaGFu
-a3MNCkxpIEp1bg0KPiANCj4gLS0NCj4gYmFsYmkNCg==
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+
+
+Hi,
+
+Jun Li <jun.li@nxp.com> writes:
+>> Jun Li <lijun.kernel@gmail.com> writes:
+>> >> @@ -397,12 +407,18 @@ int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep=
+, unsigned
+>> cmd,
+>> >>                         dwc3_gadget_ep_get_transfer_index(dep);
+>> >>         }
+>> >>
+>> >> -       if (saved_config) {
+>> >> +       if (saved_hs_config) {
+>> >>                 reg =3D dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
+>> >> -               reg |=3D saved_config;
+>> >> +               reg |=3D saved_hs_config;
+>> >>                 dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
+>> >>         }
+>> >>
+>> >> +       if (saved_ss_config) {
+>> >> +               reg =3D dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(0));
+>> >> +               reg |=3D saved_ss_config;
+>> >> +               dwc3_writel(dwc->regs, DWC3_GUSB3PIPECTL(0), reg);
+>> >> +       }
+>> >> +
+>> >>         return ret;
+>> >>  }
+>> >
+>> > Unfortunately this way can't work, once the SS PHY enters P3, disable
+>> > suspend_en can't force SS PHY exit P3, unless do this at the very
+>> > beginning to prevent SS PHY entering P3(e.g. add "snps,dis_u3_susphy_q=
+uirk" for
+>> test).
+>>=20
+>> It sounds like you have a quirky PHY.=20
+>
+> From what I got from the IC design, the behavior of DWC3_GUSB3PIPECTL_SUS=
+PHY
+> bit should be as what I said, not a quirky.
+>
+> Hi Thinh, could you comment this?
+>
+>> If that's the case, then you probably need
+>> to use the flag you mentioned above. Please verify with that.
+>
+> With quirk of "snps,dis_u3_susphy_quirk", I had verified it can
+> resolve the problem, but this will make USB3 Super Speed PHY
+> never enter P3, this is a huge impact on USB power consumption.
+>
+> The timeout increase has no impact on those platforms which have
+> no this problem, but can give chance for platform with very low
+> supspend clk(like my case 32k) to work.
+
+I was under the impression that issuing a command would wake the PHY
+up. I don't have access to DWC3 documentation to verify, but that's as I
+remember. Is that not the case?
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl6+cdMACgkQzL64meEa
+mQYMMQ//ReGJl+YwiKBw2I8knemHDYhudQuGQSG6s78dfTKTJkH84XJ197AGxIPm
+s4vOk6VAuXpsWmota81ZU57GGC+NZqPLVQMXsrEE08HgFrHjjIriIv6AwoQ8rHfi
+pVQHdma8yaZRFRLYtzpGUf0lEHbgIgcy50gnGpjcQKc/FvChJNCbBNVvp8IVJPIA
+L/Zi5Vsl+lyLYSHYYYIDXU3EhPEbel8GmDYwNqn+N8jgxdDqF+vxwx+t1uXy584S
+EdVTnJZihL6TcTwck7//mrGfvIZ04sLtrGgbaUcmw/QotlfmrkWcmUN1P4as2A51
+A/+z0NcV6FQBIKj8lnDlYUjSL36qYw32mCvb1TTp6JnZ/khMclrYd/5o8C+beRna
+OUS0dhOy2/ygBfuiUiw2x15pe0GQ24EN0ZiLmTWrjd49whqkqheM7PWKNLxtnnmP
+2/10rAdQpD5STJSHiQi6YZSQaMsRPDlQasyVcrlAgOqNBfA3pRXz6rqRYD4NTLL0
+1IGl4EtzZlEfQpIqpZlaLtirz6iPkqMrRXROaTiZC55tHoItwaJ+wqZ47n8QQWyG
+NehsGGD3dk9LyGjiIpXnZ3HIalOTLXKwagEpfD39sgQsTBuzSfexUYER3diNe93k
+X4exS7gdYwhTfbYPiFbY9HcyQqRDckgC5p0k/qEdpeqw+WsQ3MQ=
+=ljzj
+-----END PGP SIGNATURE-----
+--=-=-=--
