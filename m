@@ -2,87 +2,199 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24E9D1D41F5
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2020 02:08:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCB881D421D
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2020 02:32:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727890AbgEOAIl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 May 2020 20:08:41 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:42622 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726125AbgEOAIl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 May 2020 20:08:41 -0400
-Received: from mailhost.synopsys.com (sv1-mailhost2.synopsys.com [10.205.2.132])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id B4F2F40081;
-        Fri, 15 May 2020 00:08:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1589501320; bh=XTiA55nDqmWMitpAH5aqFDWjxwxwza0YFXej4Tu3Qa0=;
-        h=Date:From:Subject:To:Cc:From;
-        b=IgdJTWRBRl164zGuAjRWqxNXRyhyhy/0RKDVvov8epe5i3snjGTdU/AYE3r0Ncl0l
-         aDTxC7ykg0wrs5oSAvhDne0mH/wYkw6DhIhwx8aaqLPd1GtyQvbBIU1cLjrDTNETbn
-         3RNVsIfk6ufxwkxHd8YgrcGz2UXZmzDUe3NuB6FeeQlDS/nnNOMWaafeUYVYlMaVVK
-         BfnVpOAdnrPrjx81ZBANns0zSwisIfKCj5zFcV3BfXKVrmPAxFlWFs5rA0LfDYArcz
-         YUly8pgHbOpA5KEiCkP9jM+BGQDFUOITHkIyik2W3GdPqi6u+6/uOslaT7JmgcHujh
-         YuNfVNcPrGa9g==
-Received: from te-lab16 (nanobot.internal.synopsys.com [10.10.186.99])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 3B94DA006D;
-        Fri, 15 May 2020 00:08:38 +0000 (UTC)
-Received: by te-lab16 (sSMTP sendmail emulation); Thu, 14 May 2020 17:08:38 -0700
-Date:   Thu, 14 May 2020 17:08:38 -0700
-Message-Id: <a13a2738dab5a37182396570db68440ed8ff2c6e.1589500544.git.thinhn@synopsys.com>
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH] usb: dwc3: Remove old comment
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+        id S1728492AbgEOAcL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 May 2020 20:32:11 -0400
+Received: from mga18.intel.com ([134.134.136.126]:19292 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728427AbgEOAcK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 14 May 2020 20:32:10 -0400
+IronPort-SDR: AJca3RWS+vR6Nie82d1nG1PNb/nLnDmNKvx7RG66QptIc1Ao3wBbI8zfo3/1NmLK5JXEy7iVrl
+ qhirUPcFuGGQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2020 17:32:09 -0700
+IronPort-SDR: GyWORXeExasTfNa8vVdKvZJQoRi6VwdWu6zxIKOj25NmV2yIkVnkNFc67yIVnDOPo/VfGRrcVp
+ QWJJ95HW5Z+A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,392,1583222400"; 
+   d="scan'208";a="307265862"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 14 May 2020 17:32:08 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1jZOGl-0002Si-Kk; Fri, 15 May 2020 08:32:07 +0800
+Date:   Fri, 15 May 2020 08:31:38 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     linux-omap@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [balbi-usb:testing/next] BUILD SUCCESS
+ 55f322974cbe2878bcfaec3804257c68ac90ee6f
+Message-ID: <5ebde2ea.jzeLCDJ9Llmhu6JU%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-With the new IP version checking scheme, we're not using the bit 31 of
-dwc->revision as a flag anymore. Remove the stale comment.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git  testing/next
+branch HEAD: 55f322974cbe2878bcfaec3804257c68ac90ee6f  USB: dummy-hcd: use configurable endpoint naming scheme
 
-Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
+elapsed time: 742m
+
+configs tested: 140
+configs skipped: 8
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                               allnoconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+sparc                            allyesconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                 nsimosci_hs_smp_defconfig
+mips                          malta_defconfig
+arm                          exynos_defconfig
+powerpc                      pmac32_defconfig
+mips                         rt305x_defconfig
+arm                           corgi_defconfig
+m68k                       m5208evb_defconfig
+powerpc                       holly_defconfig
+arm                        oxnas_v6_defconfig
+powerpc                           allnoconfig
+sh                          polaris_defconfig
+arc                     haps_hs_smp_defconfig
+mips                           jazz_defconfig
+ia64                              allnoconfig
+powerpc                          g5_defconfig
+m68k                            q40_defconfig
+ia64                        generic_defconfig
+arm                        magician_defconfig
+arm                          imote2_defconfig
+s390                       zfcpdump_defconfig
+powerpc                       maple_defconfig
+sh                           se7722_defconfig
+sh                          r7785rp_defconfig
+h8300                            alldefconfig
+arm                           efm32_defconfig
+nios2                         3c120_defconfig
+um                             i386_defconfig
+arm                         lubbock_defconfig
+arm                       multi_v4t_defconfig
+arc                          axs103_defconfig
+s390                                defconfig
+arc                      axs103_smp_defconfig
+arm                         cm_x2xx_defconfig
+arm                         palmz72_defconfig
+ia64                             allmodconfig
+sh                 kfr2r09-romimage_defconfig
+c6x                        evmc6678_defconfig
+sh                            shmin_defconfig
+arm                        neponset_defconfig
+arm                         socfpga_defconfig
+mips                        bcm63xx_defconfig
+arm                          iop32x_defconfig
+arm                         vf610m4_defconfig
+mips                        nlm_xlr_defconfig
+mips                        nlm_xlp_defconfig
+arm                      jornada720_defconfig
+i386                              allnoconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                              debian-10.3
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                              allnoconfig
+m68k                           sun3_defconfig
+m68k                                defconfig
+nios2                            allyesconfig
+openrisc                            defconfig
+c6x                              allyesconfig
+c6x                               allnoconfig
+openrisc                         allyesconfig
+nds32                               defconfig
+nds32                             allnoconfig
+csky                             allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+h8300                            allmodconfig
+xtensa                              defconfig
+arc                                 defconfig
+arc                              allyesconfig
+sh                               allmodconfig
+sh                                allnoconfig
+microblaze                        allnoconfig
+mips                             allyesconfig
+mips                              allnoconfig
+mips                             allmodconfig
+parisc                            allnoconfig
+parisc                              defconfig
+parisc                           allyesconfig
+parisc                           allmodconfig
+powerpc                             defconfig
+powerpc                          allyesconfig
+powerpc                          rhel-kconfig
+powerpc                          allmodconfig
+i386                 randconfig-a006-20200514
+i386                 randconfig-a005-20200514
+i386                 randconfig-a003-20200514
+i386                 randconfig-a001-20200514
+i386                 randconfig-a004-20200514
+i386                 randconfig-a002-20200514
+x86_64               randconfig-a012-20200514
+x86_64               randconfig-a016-20200514
+x86_64               randconfig-a015-20200514
+x86_64               randconfig-a013-20200514
+x86_64               randconfig-a014-20200514
+x86_64               randconfig-a011-20200514
+i386                 randconfig-a012-20200514
+i386                 randconfig-a016-20200514
+i386                 randconfig-a014-20200514
+i386                 randconfig-a011-20200514
+i386                 randconfig-a013-20200514
+i386                 randconfig-a015-20200514
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+s390                             allyesconfig
+s390                              allnoconfig
+s390                             allmodconfig
+x86_64                              defconfig
+sparc                               defconfig
+sparc64                             defconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                          allmodconfig
+um                               allmodconfig
+um                                allnoconfig
+um                               allyesconfig
+um                                  defconfig
+x86_64                                   rhel
+x86_64                               rhel-7.6
+x86_64                    rhel-7.6-kselftests
+x86_64                         rhel-7.2-clear
+x86_64                                    lkp
+x86_64                              fedora-25
+x86_64                                  kexec
+
 ---
-
-Hi Felipe,
-
-Not sure what happened to the DWC_usb32 patch* when it was merged to your
-testing/next branch, but the old comment was removed in that patch. You can
-apply this or squash it to the patch "usb: dwc3: Add support for DWC_usb32 IP"
-on your testing/next branch.
-
-*Original patch:
-https://patchwork.kernel.org/patch/11484297/
-
-Thanks,
-Thinh
-
-
- drivers/usb/dwc3/core.h | 4 ----
- 1 file changed, 4 deletions(-)
-
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index d800f8119195..013f42a2b5dc 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -1153,10 +1153,6 @@ struct dwc3 {
- #define DWC3_REVISION_310A	0x5533310a
- #define DWC3_REVISION_330A	0x5533330a
- 
--/*
-- * NOTICE: we're using bit 31 as a "is usb 3.1" flag. This is really
-- * just so dwc31 revisions are always larger than dwc3.
-- */
- #define DWC31_REVISION_ANY	0x0
- #define DWC31_REVISION_110A	0x3131302a
- #define DWC31_REVISION_120A	0x3132302a
--- 
-2.11.0
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
