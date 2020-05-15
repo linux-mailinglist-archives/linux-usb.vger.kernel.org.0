@@ -2,63 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A23741D4F5C
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2020 15:38:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D2561D52DC
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2020 17:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726174AbgEONie (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 May 2020 09:38:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42186 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726141AbgEONie (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 15 May 2020 09:38:34 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id ACE5B20657;
-        Fri, 15 May 2020 13:38:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589549914;
-        bh=i1uDO3Rt2yIb3qX2EBAr3qqQdRbZpYWk7XpHGC9p+FI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FSHWF92FTdpPg2e/Qt/BqtVBQVakkKNBN4Y92XEHs3Pt3fp5Jk6JzTOzOsyqyKMoR
-         BTCZRRI7XR8xqDIUP1hyhlm1smLrnKOQxprXpLo914bFwqBRQz2jqhQ++PV5mei99U
-         goJaTEt0A8+AdddfCMobu9A7eqSyQMjSLvIsWD+c=
-Date:   Fri, 15 May 2020 15:38:28 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [GIT PULL] USB fixes for v5.7-rc6
-Message-ID: <20200515133828.GA2046686@kroah.com>
-References: <87o8qp35wx.fsf@kernel.org>
+        id S1726656AbgEOPCc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 May 2020 11:02:32 -0400
+Received: from relay10.mail.gandi.net ([217.70.178.230]:57671 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726144AbgEOPCc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 May 2020 11:02:32 -0400
+Received: from localhost (lfbn-lyo-1-1912-bdcst.w90-65.abo.wanadoo.fr [90.65.91.255])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 18597240009;
+        Fri, 15 May 2020 15:02:28 +0000 (UTC)
+Date:   Fri, 15 May 2020 17:02:28 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     cristian.birsan@microchip.com
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        nicolas.ferre@microchip.com, ludovic.desroches@microchip.com,
+        robh+dt@kernel.org, mark.rutland@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/7] usb: gadget: udc: atmel: add usb device support
+ for SAM9x60 SoC
+Message-ID: <20200515150228.GW34497@piout.net>
+References: <20200515111631.31210-1-cristian.birsan@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87o8qp35wx.fsf@kernel.org>
+In-Reply-To: <20200515111631.31210-1-cristian.birsan@microchip.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 15, 2020 at 12:26:38PM +0300, Felipe Balbi wrote:
-> 
-> Hi Greg,
-> 
-> here's what I hope to be the last set of fixes for the current
-> cycle. The important part are all the fixes on the raw-gadget which have
-> been discussed in the mailing list.
-> 
-> Let me know if you want anything to be changed.
-> 
-> cheers
-> 
-> The following changes since commit 5c4edcdbcd97fb3fb657898d0463afb84e4fbbb3:
-> 
->   usb: typec: mux: intel: Fix DP_HPD_LVL bit field (2020-05-13 14:33:51 +0200)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git fixes-for-v5.7-rc6
+Hi,
 
-Pulled and pushed out, thanks.
+On 15/05/2020 14:16:24+0300, cristian.birsan@microchip.com wrote:
+> From: Cristian Birsan <cristian.birsan@microchip.com>
+> 
+> This patch set adds usb device support for SAM9x60 SoC.
+> The DPRAM memory for the USB High Speed Device Port (UDPHS) hardware
+> block was increased and the allocation method is changed. This patch
+> series simplifies the endpoint allocation scheme to acomodate this SoC
+> and the old ones.
+> 
+> Changes in v2:
+> - drop the patch that adds reference to pmc for sam9x60
+> - use dt-bindings: usb prefix
+> - enable usb device in device tree
+> 
+> Claudiu Beznea (1):
+>   usb: gadget: udc: atmel: use of_find_matching_node_and_match
+> 
+> Cristian Birsan (6):
+>   dt-bindings: usb: atmel: Update DT bindings documentation for sam9x60
+>   usb: gadget: udc: atmel: simplify endpoint allocation
+>   usb: gadget: udc: atmel: use 1 bank endpoints for control transfers
+>   usb: gadget: udc: atmel: rename errata into caps
+>   usb: gadget: udc: atmel: update endpoint allocation for sam9x60
+>   ARM: dts: at91: sam9x60ek: enable usb device
 
-greg k-h
+This should probably be rebased on top of
+https://lore.kernel.org/linux-arm-kernel/20200507155651.1094142-1-gregory.clement@bootlin.com/
+so we avoid having to define the endpoints in the device tree in the
+first place.
+
+-- 
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
