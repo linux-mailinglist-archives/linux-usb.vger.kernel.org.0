@@ -2,109 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F9201D5932
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2020 20:39:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07F1D1D5942
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2020 20:43:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726642AbgEOSjw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 May 2020 14:39:52 -0400
-Received: from mail27.static.mailgun.info ([104.130.122.27]:57497 "EHLO
-        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726206AbgEOSjw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 May 2020 14:39:52 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1589567992; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=mBPBCYFoKWdI3mEJ/ipBvucpCeB6dmeaUNTapAwv4TA=; b=F9gBoT3vYJDT2kKipcCbfGrYgP7+VzsVyM+4Hw/4T1RX3exs/ZNBCOJCu6R/DEZMxEU/detv
- 5PtFXNO+Tfm/t9aPLMLfzifXOQ4JOE8hj9/oK14TyFeSQJr6G9uD2ka4zn1/VH4zfLWJ8CnH
- IRgtfsSX3xYQ4NOta6xDvSI7SmI=
-X-Mailgun-Sending-Ip: 104.130.122.27
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5ebee1f7.7f85bbbcc960-smtp-out-n04;
- Fri, 15 May 2020 18:39:51 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 12CB1C43636; Fri, 15 May 2020 18:39:50 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [10.110.50.174] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 98FECC433D2;
-        Fri, 15 May 2020 18:39:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 98FECC433D2
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [RFC 3/3] dt-bindings: usb: dwc3: Add entry for tx-fifo-resize
-To:     Rob Herring <robh@kernel.org>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, balbi@kernel.org,
-        gregkh@linuxfoundation.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, jackp@codeaurora.org
-References: <1588888768-25315-1-git-send-email-wcheng@codeaurora.org>
- <1588888768-25315-4-git-send-email-wcheng@codeaurora.org>
- <20200515031042.GA25107@bogus>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <10d2109d-cfb7-73d0-a186-4fa5f17feffe@codeaurora.org>
-Date:   Fri, 15 May 2020 11:39:46 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1726584AbgEOSnC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 May 2020 14:43:02 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:48407 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726304AbgEOSnC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 May 2020 14:43:02 -0400
+Received: (qmail 14280 invoked by uid 500); 15 May 2020 14:43:01 -0400
+Date:   Fri, 15 May 2020 14:43:01 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Colin Ian King <colin.king@canonical.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Zhang Shengju <zhangshengju@cmss.chinamobile.com>,
+        Tang Bin <tangbin@cmss.chinamobile.com>,
+        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] USB: EHCI: ehci-mv: fix less than zero comparison
+ of an unsigned int
+Message-ID: <20200515184301.GA13795@rowland.harvard.edu>
+References: <20200515165453.104028-1-colin.king@canonical.com>
+ <20200515172121.GA5498@rowland.harvard.edu>
+ <342e8fc0-c961-d9f0-f2d1-bd455ce06d86@canonical.com>
 MIME-Version: 1.0
-In-Reply-To: <20200515031042.GA25107@bogus>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <342e8fc0-c961-d9f0-f2d1-bd455ce06d86@canonical.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 5/14/2020 8:10 PM, Rob Herring wrote:
-> On Thu, May 07, 2020 at 02:59:28PM -0700, Wesley Cheng wrote:
->> Re-introduce the comment for the tx-fifo-resize setting for the DWC3
->> controller.
+On Fri, May 15, 2020 at 06:26:04PM +0100, Colin Ian King wrote:
+> On 15/05/2020 18:21, Alan Stern wrote:
+> > On Fri, May 15, 2020 at 05:54:53PM +0100, Colin King wrote:
+> >> From: Colin Ian King <colin.king@canonical.com>
+> >>
+> >> The comparison of hcd->irq to less than zero for an error check will
+> >> never be true because hcd->irq is an unsigned int.  Fix this by
+> >> assigning the int retval to the return of platform_get_irq and checking
+> >> this for the -ve error condition and assigning hcd->irq to retval.
+> >>
+> >> Addresses-Coverity: ("Unsigned compared against 0")
+> >> Fixes: c856b4b0fdb5 ("USB: EHCI: ehci-mv: fix error handling in mv_ehci_probe()")
+> >> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> >> ---
+> > 
+> > Thanks to Coverity for spotting this.  Any reason why it didn't spot 
+> > exactly the same mistake in the ohci-da8xx.c driver?
 > 
-> Why?
+> No idea, it is curious that it can spot one error but miss another.
+> Sometimes I see these issues on the next scan, so it maybe the database
+> diff'ing is awry.
 > 
+> > 
+> > Also, why wasn't the patch CC'ed for the stable series?
+> 
+> My bad on that. Human error
 
-Hi Rob,
+Actually the question itself was my mistake.  I didn't notice that your 
+patch was a fix to something that was just merged and hadn't been CC'ed 
+to stable.
 
-Initially, the reasoning behind bringing back the DTSI parameter, was to
-address situations where vendors don't require the resizing logic.  I
-was assuming that each vendor has their own HW configuration for the TX
-FIFO size, and some may already have sufficient space to account for
-their endpoint requirements.  However, if Felipe doesn't believe we need
-to have a DTSI parameter for this, then we don't need to re-add this
-back in.
-
->>
->> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
->> ---
->>  Documentation/devicetree/bindings/usb/dwc3.txt | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt b/Documentation/devicetree/bindings/usb/dwc3.txt
->> index 9946ff9..489f5da 100644
->> --- a/Documentation/devicetree/bindings/usb/dwc3.txt
->> +++ b/Documentation/devicetree/bindings/usb/dwc3.txt
->> @@ -105,7 +105,7 @@ Optional properties:
->>  			1-16 (DWC_usb31 programming guide section 1.2.3) to
->>  			enable periodic ESS TX threshold.
->>  
->> - - <DEPRECATED> tx-fifo-resize: determines if the FIFO *has* to be reallocated.
->> + - tx-fifo-resize: determines if the FIFO *has* to be reallocated.
->>   - snps,incr-burst-type-adjustment: Value for INCR burst type of GSBUSCFG0
->>  			register, undefined length INCR burst type enable and INCRx type.
->>  			When just one value, which means INCRX burst mode enabled. When
->> -- 
->> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
->> a Linux Foundation Collaborative Project
-
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Alan Stern
