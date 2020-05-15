@@ -2,77 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DA511D49A0
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2020 11:31:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 760E91D49BA
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2020 11:35:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728004AbgEOJbP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 May 2020 05:31:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44228 "EHLO
+        id S1728138AbgEOJfk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 May 2020 05:35:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727116AbgEOJbP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 May 2020 05:31:15 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63C7C061A0C;
-        Fri, 15 May 2020 02:31:14 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id 202so1244384lfe.5;
-        Fri, 15 May 2020 02:31:14 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1728015AbgEOJfk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 May 2020 05:35:40 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4508DC061A0C
+        for <linux-usb@vger.kernel.org>; Fri, 15 May 2020 02:35:39 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id d21so1495876ljg.9
+        for <linux-usb@vger.kernel.org>; Fri, 15 May 2020 02:35:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=w0eGqlOZ52vQy1Dkr85GlfLJmiL8U3wT1Ya8mJ/znt0=;
-        b=D2wNjY3MJAOzxofquD/Y0UCnjJ5fMCOl9Ng9w38us71OAo0uPFKLsdSgtg/vqQyZWX
-         q8znqNuphrJgEwk/T+VbOfZy9vC04v9Yt3WwGrrfr13XMtgjjKV4I+MJBtM3ur/x2u+M
-         R3geRf3OblRWETJeHASkjtGCPj0DXFviuprj3BXSwbejB7UQBx1zWaE3I6Kwz+EVnRA9
-         byqPT434+EJ5aPIE0Im4tJhd71jdCQFgLM+hTdRaeqEXbze84lcxWsDnSiZYyceqXK5f
-         vw/Qw5oj9hWsRhKJEfnd7aQKDTzVhbfrQomLW6WTcttCBiX/UlnUsAwMjUf/iHVhb5Af
-         Zy8w==
+        bh=iXhF7D1hPO4XXnmzrJ0OP8MEf9xy7u4HVEnxVVE4nTY=;
+        b=thAt7z5Wbgv/47GN24I/S2K+5hA8T9d6TuhxfCVc4aOisUWOwevWm+7EDBp76xtGnu
+         eX27PpLVwNyZepgHvMAXLH2IcRdovi6W7A9rayowkKKJowdIDS5lBHKIwBGhhiWSvvFD
+         hr3mOzaCabYmGmW8znZbacjSJg5WwRtR4TasubjwvFCH3oR9VuvOAFboTbLo6YaU3Qtj
+         GdyCmrY6RVfODGSAHTxeBaYrAR55xsPx+4Dr09K4hXv8FeovQ2wo4clcTQbVkUD5AuWL
+         Tmcwxk6yNEyy5TXykKkYUO4O2+DStoUTxppsNCbIwmwQICgzn5QJJGIPUQnIpiCOqqQD
+         +wnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
          :date:message-id:mime-version;
-        bh=w0eGqlOZ52vQy1Dkr85GlfLJmiL8U3wT1Ya8mJ/znt0=;
-        b=auuyWMl5fVl9228uDtBS1wytQlLrd+WtSZBO5151SD4ojQPJ2Q8KtzHvDYyxbabPp4
-         FfgJIQf67OXVoyBoFmBc56STyslZBZLtc7brNoHDBV9PVecYNryEd2qQBPAbkSCa37ZV
-         nLCLQr7SrkanoCq/Q6Eqyx93Wt2bvEs9njsxxrmshGwlsswJcnME17pvPe2pt33GtOwo
-         MruAQd4aGjCzjmIuFDl/Isvw2BgayGx+uRYY6ZdhA0KRcIR+eEoAvy2JKm/d1FeO2SiH
-         1Hbueg4KByLngHTx9o1WXTm9MIW3JGwY6al9ZqcWaDQTqD8TGd8mjBHXIAgQIAj1IdH4
-         QVBQ==
-X-Gm-Message-State: AOAM532o5FBP5cz+jrorQ5qTnDsnSH+70T0cKjqxoY98s0RHRU4S9BeS
-        njLVTnvYqRMIWrGi1aaco7w=
-X-Google-Smtp-Source: ABdhPJwJtuMGAWzQaBQVqZ/aXcBAp+d6w1PONLrgV8Exlm0JbQrhntEPE8IE5SLgExGfimn8BUsb6A==
-X-Received: by 2002:ac2:44cd:: with SMTP id d13mr1811163lfm.2.1589535073199;
-        Fri, 15 May 2020 02:31:13 -0700 (PDT)
+        bh=iXhF7D1hPO4XXnmzrJ0OP8MEf9xy7u4HVEnxVVE4nTY=;
+        b=rOtt3T+1yEWXfotWyG4oY3zuTCprkr2dwsRRJcNKQNDIdbl70fIOTWNNRnI38FM2H6
+         NGSgmWDJQ1g7Qvb9jBpmaQ88hhA0jsB2MtioBVpj7ovyQJBbqiYIfaWlzXLo2zppwfY0
+         eVud3/PUKbqqXT0ZNw9ex1YMnfLWN938oqvq2MdQIBDxFnoFEiEqqs4kUEhOcm7O2OKi
+         eCTagEjc72EV5NSRa1oYlUsO76T1UfTP+MoK0RzRg1VaFkkJMsAYWjQhV2Pus3uyDOKU
+         hA2GR7k7rdeCFfha2fg0xFsLKGpmC6QmP08PsT+qqrB9vYCzrGpv6nvUo0CasL5cP3sy
+         nMig==
+X-Gm-Message-State: AOAM5303vubjjX9xNMHMV1knxzW+nEzBe2Tcyt9LfbbQj1qwZZBCxz72
+        1x0KqvRGyH13pXyzQzSvc7s=
+X-Google-Smtp-Source: ABdhPJx6tyX90qivR6R8T1HcbunEbbTWyyChSDOCN3Ws33RVSaKb5KPEvEx1pSIACQaZRuQxIjQcng==
+X-Received: by 2002:a2e:6a08:: with SMTP id f8mr1810954ljc.8.1589535337609;
+        Fri, 15 May 2020 02:35:37 -0700 (PDT)
 Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id a1sm839104ljn.101.2020.05.15.02.31.11
+        by smtp.gmail.com with ESMTPSA id r20sm856488ljj.44.2020.05.15.02.35.36
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 15 May 2020 02:31:12 -0700 (PDT)
+        Fri, 15 May 2020 02:35:36 -0700 (PDT)
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Jun Li <lijun.kernel@gmail.com>
-Cc:     John Stultz <john.stultz@linaro.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Yu Chen <chenyu56@huawei.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        ShuFan Lee <shufan_lee@richtek.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        "open list\:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, peter.chen@nxp.com,
-        Li Jun <jun.li@nxp.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: Re: [PATCH v4 3/9] usb: dwc3: Increase timeout for CmdAct cleared by device controller
-In-Reply-To: <CAKgpwJXfWv5=MDqBCADhe2iXf6eiP0GQ13Bwo9fkuU5kGO7dsw@mail.gmail.com>
-References: <20191028215919.83697-1-john.stultz@linaro.org> <20191028215919.83697-4-john.stultz@linaro.org> <87mudjj4rc.fsf@gmail.com> <CALAqxLU+9uEcdRVaLfh+eQrDtZbDGod9pRXhBX=prAhg9MXagw@mail.gmail.com> <CAKgpwJVaKpsgMjKcnYyJsfNj0ibkPt=mdn-NxfOkeX1jfL=9iQ@mail.gmail.com> <87h7wqmwrv.fsf@kernel.org> <CAKgpwJXfWv5=MDqBCADhe2iXf6eiP0GQ13Bwo9fkuU5kGO7dsw@mail.gmail.com>
-Date:   Fri, 15 May 2020 12:31:07 +0300
-Message-ID: <87imgx35pg.fsf@kernel.org>
+To:     Peter Chen <hzpeterchen@gmail.com>
+Cc:     Peter Chen <peter.chen@nxp.com>,
+        USB list <linux-usb@vger.kernel.org>, linux-imx@nxp.com,
+        pawell@cadence.com, rogerq@ti.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>, jun.li@nxp.com
+Subject: Re: [PATCH 1/1] usb: cdns3: ep0: delete the redundant status stage
+In-Reply-To: <CAL411-q4euWFrJ5Sp+tocBEsXXYkviQXt_pz_SyHHC=ELNf_sQ@mail.gmail.com>
+References: <20200426130751.32556-1-peter.chen@nxp.com> <87368ebz3d.fsf@kernel.org> <CAL411-q4euWFrJ5Sp+tocBEsXXYkviQXt_pz_SyHHC=ELNf_sQ@mail.gmail.com>
+Date:   Fri, 15 May 2020 12:35:32 +0300
+Message-ID: <87ftc135i3.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -88,38 +73,88 @@ Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-Jun Li <lijun.kernel@gmail.com> writes:
->> @@ -397,12 +407,18 @@ int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep, u=
-nsigned cmd,
->>                         dwc3_gadget_ep_get_transfer_index(dep);
->>         }
->>
->> -       if (saved_config) {
->> +       if (saved_hs_config) {
->>                 reg =3D dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
->> -               reg |=3D saved_config;
->> +               reg |=3D saved_hs_config;
->>                 dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
->>         }
->>
->> +       if (saved_ss_config) {
->> +               reg =3D dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(0));
->> +               reg |=3D saved_ss_config;
->> +               dwc3_writel(dwc->regs, DWC3_GUSB3PIPECTL(0), reg);
->> +       }
->> +
->>         return ret;
->>  }
+Peter Chen <hzpeterchen@gmail.com> writes:
+> It seems the yesterday's reply from nxp email account is blocked by ML.
+> Send it again.
 >
-> Unfortunately this way can't work, once the SS PHY enters P3, disable
-> suspend_en can't force SS PHY exit P3, unless do this at the very beginni=
-ng
-> to prevent SS PHY entering P3(e.g. add "snps,dis_u3_susphy_quirk" for tes=
-t).
+>>
+>> Peter Chen <peter.chen@nxp.com> writes:
+>> > Each setup stage will prepare status stage at cdns3_ep0_setup_phase,
+>>
+>> care to explain this a little better? The controller itself will produce
+>> the status stage?
+>>
+>
+> Unlike the other controllers, the CDNS3 does not need to prepare TD
+> for status stage,
+> it only needs to write register bits EP_CMD.REQ_CMPL to tell the
+> controller the request
+> service is completed, and the controller itself will send ACK answer
+> for the Status Stage after that.
+> The code sequence like below:
+>
+> cdns3_ep0_setup_phase -> cdns3_ep0_complete_setup ->
+>             writel((send_erdy ? EP_CMD_ERDY : 0) | EP_CMD_REQ_CMPL,
+>                    &priv_dev->regs->ep_cmd);
 
-It sounds like you have a quirky PHY. If that's the case, then you
-probably need to use the flag you mentioned above. Please verify with
-that.
+got it.
+
+>> Usually, the way this works is that SETUP stage must be *always*
+>> prepared by the SW while STATUS stage is prepared on-demand, after we
+>> get an interrupt from the controller.
+>>
+>> Also, I see a possible bug in cdns3_ep0_setup_phase():
+>>
+>>         if (result < 0)
+>>                 cdns3_ep0_complete_setup(priv_dev, 1, 1);
+>>         else if (priv_dev->ep0_stage =3D=3D CDNS3_STATUS_STAGE)
+>>                 cdns3_ep0_complete_setup(priv_dev, 0, 1);
+>>
+>> What happens here if result is 0 but ep0_state !=3D CNDS3_STATUS_STAGE?
+>> Seems like you should have a "stall and restart" somewhere here as a
+>> default fallback.
+>>
+>
+> At cdns3_ep0_setup_phase, the status will be CDNS3_DATA_STAGE
+> or CDNS3_STATUS_STAGE according to if there is a data stage.
+> If there is a data stage, it will inform of controller ACKing the status
+> stage after data stage has finished, it is at: ep0.c,
+> cdns3_transfer_completed->cdns3_ep0_complete_setup
+>
+> But I don't know why it needs to send ERDY for ep0 transfer without
+> data stage, but do need for ep0 transfer with data stage. Maybe Pawel
+> could explain it. At spec, it only says below for ERDY:
+
+Would be good, indeed. Pawel?
+
+>> Is this backed by documentation or is this something that just happens
+>> to work? Pawell, can you confirm that this is the correct programming
+>> model?
+>>
+>
+> No documentation, maybe Pawel could confirm with designer.
+
+yeah, Pawel?
+
+>> Is this working against USBCV? What about LeCroy's compliance suite?
+>>
+>
+> For NXP USB certification flow:
+>
+> The test mode is only used for USB2 electrical test (eg, Eye diagram),
+> The HSETT tool is used for device mode which will send command
+> from Windows PC to let device enter test mode.
+>
+> USBCV is used to test protocol level, like USB CH9, Mass Storage protocol
+> etc.
+
+Entering test modes is part of chapter9 tests, IIRC.
+
+> For Lecroy's compliance suite, we usually use it for Link test for
+> USB3.
+
+You need to run the HS compliance suite ;-) USB3 devices must still
+comply with HS/FS/LS.
 
 =2D-=20
 balbi
@@ -129,18 +164,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl6+YVsACgkQzL64meEa
-mQbdgRAA2/XUFT7mg4gDxdDx3PjeMl7KW1uDTUiFf7LeQT4Vwkqq2epxcPwqjaQU
-Bnt4CLX2TGgdmL/IntNlpU9i6M3a+IeDZM0D+S7/NK1Ty2iMuQ0kGA6wZOfUdbY+
-RpA6Yrl1DkqQ6pMsLUYkDyGauPx7qFOJ8mx4XDEjX7v6fI/AcKkDMCx/Yuj89zhd
-Yf56yxVKq/tiDOe7U7IC/IpEx9Zt7TGEVUqSotC+23A08/YBiKy229Qv5v9KkoXt
-VP0xHBZGPBnEQ79rCZHxj8M8E2nDmYSLqvAOwDp27EeQNq1j/6XMlzk2bR1jvnpq
-s78lCPBLGoJc/8WVgBJtLZ0BTLKPctS17xatz/3gtgd8sX03ddyp4cG+xMVKC16f
-1kbOg820KTvr1UDgaMq3Bo9lFTFCkOg25WYHx4c1/w/VeclRpfK+2QVqXE0eZ/ME
-8d9oM9tCKILQc1SlSy9tHwKRj5+KCd993CzSyMuMwMO1RqM+nadmQJMcexiquxiS
-T5rHakbLtnpimLfO7SEi/OvuypKkWhLt52JTwgech584qyKWVh3tR/QbZCPMo7Dj
-IAyB80gcRaVN5kZjfdTOeSxUpjuJuJujUwmgFhw/00nqBJ3EPogo6F8n2WDCORpH
-kybGfZw3RrMTtrfd0gQU4rZf6Cel6kE+L7Jjy7skyJ466XjfTpU=
-=hLf8
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl6+YmQACgkQzL64meEa
+mQZovA//aksI3VNEN6VRgifFN7NWHo9dF4JQmEbeYg88jZ+DajMBgVZIjkpb8jl+
+2LKepgkCrSkNbuQf+0pu83eC3LQljLZ/4Ad6mFwZ8+VcjiqFSbD0Dva5vBf0BwTj
+5AsJijd+gF0mXGbkc7F10pfzN/6mBfIOk0mCSRPfpRs9fvX05qbJ2llbRVOeBrQu
+AAO5i1MF0Jk6pwQdTrQG+UwtnYIb8SxYEPcgakavvtS1JCgrxeHMyAKTuFo0xs3g
+0boalqgXe1ynHzgbtKwjEuRFQE/BGMdW8yhUkxEkD2Zu0NrXZ0T8Qa3K35zb2oFb
+IzjDTvaH5hM5a8oa26idsdcG8uaCkwuAAJ01+ilkcdSvhHxPAgt5NOd+YgzGe9gn
+k3bQk7quGtEasbI+zKY0/+BjF0OP4xLVEzO6gY7+EWmnZQL5SpL8nqokSxJmUfGf
+dmy9XIzuEc2atP4c4lptScIdit8nu+XeWpMELID5Dl0mOIxPZ6VwwLYjn+Bo0TyS
+cM1FBBRGG2A8hmByvgBc/+c8J1+PRUXGJlJSFC+m/3BKlye/Gu3n7hc5ddj9gckr
+W101sYfDORah49BmS6dYvR72n8/omFRjxuMv2GgQafQINfyBRPR5SW82F+QUG7C1
+WBD/pWU4R79z4ubYJql8grxUQgyRtYUlzdgJF0a2JIYQcjcMZPU=
+=/JR2
 -----END PGP SIGNATURE-----
 --=-=-=--
