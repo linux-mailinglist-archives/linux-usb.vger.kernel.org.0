@@ -2,56 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D88761D497C
-	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2020 11:26:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E72A1D498A
+	for <lists+linux-usb@lfdr.de>; Fri, 15 May 2020 11:29:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728095AbgEOJ0q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 May 2020 05:26:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43528 "EHLO
+        id S1727902AbgEOJ3U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 May 2020 05:29:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727116AbgEOJ0p (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 May 2020 05:26:45 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0A1C061A0C
-        for <linux-usb@vger.kernel.org>; Fri, 15 May 2020 02:26:45 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id h26so1233487lfg.6
-        for <linux-usb@vger.kernel.org>; Fri, 15 May 2020 02:26:45 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1727803AbgEOJ3T (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 May 2020 05:29:19 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479D2C061A0C
+        for <linux-usb@vger.kernel.org>; Fri, 15 May 2020 02:29:17 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id l19so1470049lje.10
+        for <linux-usb@vger.kernel.org>; Fri, 15 May 2020 02:29:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:mime-version;
-        bh=mDwgqBBgdj8wFe2i1CPo2sYCrtWpvg+/hfFXWdLu3x0=;
-        b=A4rnhKWdFl4zDP2ppmSzmtYt8qcRo+yvT04Mz5sI5FZ9FXXKm7ItMxkWdUkDfEi8KW
-         +FGG/VzlbRHpyNvqw6N2wCWyLvq+Pe7WpD+Ej528lWcKsdehQkrHBcE/cq4LYxqggEPD
-         bdxU1Nhz6YZ4N4G4wRrtFzsZuWCET2W2yF+goCF5o0iNDNFW3kbxHEIq4h04bdoa18N7
-         baTSjWzzd8kCYb3/+9Jl5bFra9HnUv6xXtaEgTCVKsVgxyXetvIo3ZsRBgCeoJNq9t+X
-         GGFOZdv5qOZ4xbeMHg6FzJZ9czYSI6XM4HPtCEY668dYClqE/hmc15A8tprTlxISdfqY
-         +waQ==
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=+L6a1F3oEbjuavYg8O+zs9qUWPJF7otzX4QXDgm+kG4=;
+        b=aEwZAK9nvqoz5mkFWpeMzThPWAtm752aecwQUSY8YrxQEFyFYslVz2AlEq98D3iYlu
+         2GgkoGgPbtclrjGxy0Am5zD/s/PEBiQbQzih46OdgzgnytpITkGkLbjrwlMK2qfq01eq
+         NAiN90EJpHQnK/qJBK9CbgSLyJhzFitMmtf8sKwdiTtzrJBg8BH/EqT03PbH1bPIHrPW
+         TAXo/DIMuevXK1BHeGg0McGF+bk4bJfMQ4YHPsVznAc2YQk+qWfZa3QOH1ZQH7NbYCCN
+         IlaHyINvgTUqcsWBJwZNbtBWv6wwMfnY5Emvn/JighoELxJ+ua7mlCcH1hiNwkuh/gvn
+         AGUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version;
-        bh=mDwgqBBgdj8wFe2i1CPo2sYCrtWpvg+/hfFXWdLu3x0=;
-        b=KUkwcLfBhQZzD1TMsyK0a7Vc4/dniaveerqz+NASESezgAYLhgmL8a+wA7lj1vW9Ns
-         VSH68OeMkC3MM1VFVlSmg24x8sKa4GhtOFcG48GYi8734cKa3GeT8wuwrh6wVc6Gteyv
-         IoVN/LMk2YvXBOQx/rJqDAhaMQH227DMdvrYBZtQbcSYIhYWxorKjDpdGCmHHQaKw8kd
-         3dcvvoIrBTZYQY1e+kt7j41gLsjaCnXn6G0HzK1jYfvPOeOzxODdvyy+4HTuhUx84ZVr
-         TFf0hZCM7O0xOAGszOJcKMefVjb34Y2x++42Af6K5BW2cBCl6OrQACBhwwQZDuTS3KPY
-         JjTQ==
-X-Gm-Message-State: AOAM530bZRBIMY4KAf0aGlQh6Cy1/rZ0Dio4XDZZeY95vl9ckZtFJ29Y
-        xwtYgJJu9RuuG5r6TqF2SMBmT9fqnkI=
-X-Google-Smtp-Source: ABdhPJwS8r2wa3PaDqR332PoTjwvPlbRRRfJpvdFeMwTG15x6/i7TFydgyYJ0mvetNRCkNwLZ5wwwg==
-X-Received: by 2002:ac2:4c29:: with SMTP id u9mr1785512lfq.209.1589534803598;
-        Fri, 15 May 2020 02:26:43 -0700 (PDT)
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=+L6a1F3oEbjuavYg8O+zs9qUWPJF7otzX4QXDgm+kG4=;
+        b=B2OjX+5jwty0kT4yO/M4MM8dseTn007Hm7MZDLwAQOLrKGEfQ1lrq+nLb41yZ91EYr
+         y0ED7qTXdTjDOrnrMKS62ZzVvfzubWRa/Tw5dyQUVupYb86wS067Lp6xr5x6W7mOruXn
+         Vo86lfFIK+UOzv1tYHdi1kxO1NINGmQ9mhOgE6vmnC3U30HR5RgfuY+O8BxyABNSLdmu
+         o1q/cXULMjafIfOZdg93XW2eMcrygY+PZzgVj+IQyDVwoCrob1wgQ3kGQV1TyMzN2INz
+         /3BAaZKA6mVJTqZ+6dhHYNtFN7agfMFfttPlE2xETTCG+MVB7yuxPrkGwU1TW1kbzOtw
+         be1w==
+X-Gm-Message-State: AOAM533nVEyoxw58gkFgF2XD2p/Ui0lbk8PyKT80ASr5kgHztd7UQk3y
+        sRFoGd5f/+sFcXE/72B28tA=
+X-Google-Smtp-Source: ABdhPJyD8/AkQgMhMfH2/LA1m9X+WP9tUzzzUjBkshVno/w4xGsP0WjJyZfbgMXtjd94gUQ+WiXNLw==
+X-Received: by 2002:a2e:b043:: with SMTP id d3mr1693277ljl.42.1589534955697;
+        Fri, 15 May 2020 02:29:15 -0700 (PDT)
 Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id q13sm975550lfh.73.2020.05.15.02.26.42
+        by smtp.gmail.com with ESMTPSA id d23sm1000204ljg.90.2020.05.15.02.29.14
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 15 May 2020 02:26:42 -0700 (PDT)
+        Fri, 15 May 2020 02:29:14 -0700 (PDT)
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB fixes for v5.7-rc6
-Date:   Fri, 15 May 2020 12:26:38 +0300
-Message-ID: <87o8qp35wx.fsf@kernel.org>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     John Youn <John.Youn@synopsys.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: Re: [PATCH] usb: dwc3: Remove old comment
+In-Reply-To: <a13a2738dab5a37182396570db68440ed8ff2c6e.1589500544.git.thinhn@synopsys.com>
+References: <a13a2738dab5a37182396570db68440ed8ff2c6e.1589500544.git.thinhn@synopsys.com>
+Date:   Fri, 15 May 2020 12:29:10 +0300
+Message-ID: <87lflt35sp.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -65,69 +71,29 @@ Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
 
-Hi Greg,
+Hi,
 
-here's what I hope to be the last set of fixes for the current
-cycle. The important part are all the fixes on the raw-gadget which have
-been discussed in the mailing list.
+Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
+> With the new IP version checking scheme, we're not using the bit 31 of
+> dwc->revision as a flag anymore. Remove the stale comment.
+>
+> Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
+> ---
+>
+> Hi Felipe,
+>
+> Not sure what happened to the DWC_usb32 patch* when it was merged to your
+> testing/next branch, but the old comment was removed in that patch. You c=
+an
+> apply this or squash it to the patch "usb: dwc3: Add support for DWC_usb3=
+2 IP"
+> on your testing/next branch.
+>
+> *Original patch:
+> https://patchwork.kernel.org/patch/11484297/
 
-Let me know if you want anything to be changed.
-
-cheers
-
-The following changes since commit 5c4edcdbcd97fb3fb657898d0463afb84e4fbbb3:
-
-  usb: typec: mux: intel: Fix DP_HPD_LVL bit field (2020-05-13 14:33:51 +02=
-00)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git fixes-for-v5.=
-7-rc6
-
-for you to fetch changes up to 172b14b48ca10b280482b164506892ea09edb946:
-
-  usb: cdns3: gadget: make a bunch of functions static (2020-05-14 12:46:10=
- +0300)
-
-=2D---------------------------------------------------------------
-USB: fixes for v5.7-rc6
-
-The main part here are the important fixes for the raw-gadget before it
-becomes an ABI. We're adding support for stall/halt/wedge which is
-actually pretty important in many situations. There's also a NULL
-pointer deref fix.
-
-Apart from raw-gadget, I've included some recent sparse fixes to a few
-drivers.
-
-Signed-off-by: Felipe Balbi <balbi@kernel.org>
-
-=2D---------------------------------------------------------------
-Andrey Konovalov (5):
-      usb: raw-gadget: improve uapi headers comments
-      usb: raw-gadget: fix gadget endpoint selection
-      usb: raw-gadget: support stalling/halting/wedging endpoints
-      usb: raw-gadget: documentation updates
-      usb: raw-gadget: fix null-ptr-deref when reenabling endpoints
-
-Jason Yan (1):
-      usb: cdns3: gadget: make a bunch of functions static
-
-Rikard Falkeborn (1):
-      usb: mtu3: constify struct debugfs_reg32
-
-Samuel Zou (1):
-      usb: gadget: udc: atmel: Make some symbols static
-
- Documentation/usb/raw-gadget.rst        |  37 +++-
- drivers/usb/cdns3/gadget.c              |  20 +--
- drivers/usb/gadget/legacy/raw_gadget.c  | 307 +++++++++++++++++++++++++---=
-----
- drivers/usb/gadget/udc/atmel_usba_udc.c |   4 +-
- drivers/usb/mtu3/mtu3_debugfs.c         |   4 +-
- include/uapi/linux/usb/raw_gadget.h     | 108 +++++++++--
- 6 files changed, 385 insertions(+), 95 deletions(-)
+Thanks for the fix up. I had to apply that patch manually and ended up
+missing this hunk. I've corrected your original patch now.
 
 =2D-=20
 balbi
@@ -137,18 +103,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl6+YE4ACgkQzL64meEa
-mQZUVg/+P0yAuhcZuY1Pc0jXOr8vjgDrxzwXftfck5R2xhw/m+bhUQtQiI+wxD6q
-SHm1lbQSqjPXju5x1eIjxtmv/aLhDeiUGfIhDTPrelyniURC23uHjIpZK48luYyc
-WW7MpxRhD/BxKQzeeVj3sXzuE4DSk/RhwMhVswZ0r580Z7YY4pm/Pf4TsGtArLb/
-YdjF905lkJt5rrgDhKGdRl+9nta/S8ziz1m4IChAZWEm5d1NP+G4Fke7KTWPYhfP
-ZPQs9H1uD+fGJvlbdm8ctDAB3WBiPK6AWHcN2BpE9qWxf2hPAN+bJFK2VDzkDfUd
-+XKDwV2gRfAtekfjY3D0O+w0J9Sytx7dAmo75xVt6CnYFdUHoHzyiH5DKq5YPitp
-Kz02RLhzreGk9GHt2lyWiIm5NSHodYsd2SHeEPa31ZdNcfB9ByBSw+YN107iI2rN
-hLXG+G+T2DZXyaDvBI+pm2bxq8ocHjN2L29x+AC3DNgck/DIt33JEivlIuxevHTn
-37u1mBwNT36yVg7nRt4zfVLyN3u8ISkNPUFnR4N+sCytJ7r+3OyRfdJubx8f73ke
-oGKMOqFAydMV1uPpKr2Fv0u433v67YwgpV5Lybf2uiNrb6oizCCpqQctveWpFBYD
-9GMXHSLZUltp0ml5xwnMnvOCvtP3NKTEBQ6uf+0Jus50YEa65s0=
-=4k8G
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl6+YOYACgkQzL64meEa
+mQb1ag//Xm3TtByKTmWGhf/zTVTJ4q4HrrtOI9et0iLlXRHXCFbx80pG0pQGOmD3
+1n8sEDM96gbOISnjd9g2wrw2UdQmvHTMhFeEIy6tMr/z7nNdJTQehgkM+XjVC9aD
+Wt2Y7CTT6sjcyB4udPP7/t63iHGcuidWGGpFK7iJhVniaNJafsi90u1RWZbv/hcH
+t9pjKlAOcflTF2bfnDDL2L8LdaoYp9IAgy1xOYf7qhohjDRMrdoGDwEBirzagH86
+tXTVTiUbbI17EiRvq4N1i854TqcoEqTe2VCb4q0uNWxqqdn/ecAMNn6CZxcFCzZT
+rn033+OxJsIrDmODysk8EWQB4bQT0VRBdMRIlk79ySY8oc2UGDSmuJhhnjQO+0kB
+p9PJHQKyuzrkaR+ArQBswNdbKolRbctsWL4b6ETleHUGe0E37aYz1n+mvsuszqRv
+y9CHMpazIAv/6HKI9+qVm2FUe+rja3RiO9vYOE7og9KWk8YoYX25ABaSnBH/pBbv
+xPWpqYR52gUdOklYtxLrKD0ilFAi1FbFuiqsnM+4TSFCXag/RviPluVfwOQ3HSix
+KYVVnmY03UlQpVr0npg2pb9ZoB1SvtSYBvYu9/AyhKnevehB+nfBA1cVtYaXCbvQ
+F2zEvHqyDav0xivf0JTA7mYX57vgF4VNzMJSypvEzb+xSvXZ0xU=
+=3pdZ
 -----END PGP SIGNATURE-----
 --=-=-=--
