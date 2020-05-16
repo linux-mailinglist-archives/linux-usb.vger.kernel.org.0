@@ -2,76 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B96DF1D6086
-	for <lists+linux-usb@lfdr.de>; Sat, 16 May 2020 13:28:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7323C1D608B
+	for <lists+linux-usb@lfdr.de>; Sat, 16 May 2020 13:34:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726202AbgEPL2w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 16 May 2020 07:28:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40526 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726191AbgEPL2w (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 16 May 2020 07:28:52 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4187820728;
-        Sat, 16 May 2020 11:28:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589628531;
-        bh=ywqfjkGnB77jZhHpT5lf1JCv2i3wB+loawHMXK7A7KY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gZs9urE7MqYdO6AFC0gmScW5O4RdZkKQhUlntZD3GvoTo/wi1fabkbgODuBSv1wq3
-         /6GlzEFI81n80Nv7no4IfYjOdUIfHPPv2vKrxYSTMrIMkBjSLUIX8i9W5GpKxEZYAt
-         OkdxcmBDRjEqb9DSxDsn1zv4SuQfGd+Va+kyiuT8=
-Date:   Sat, 16 May 2020 13:28:46 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     kbuild test robot <lkp@intel.com>, Vinod Koul <vkoul@kernel.org>
-Cc:     Christian Lamparter <chunkeey@googlemail.com>,
-        kbuild-all@lists.01.org, linux-usb@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: Re: [usb:usb-next 56/58] include/linux/unaligned/access_ok.h:8:28:
- error: redefinition of 'get_unaligned_le16'
-Message-ID: <20200516112846.GB133224@kroah.com>
-References: <202005161756.KxL7u2ha%lkp@intel.com>
+        id S1726210AbgEPLef (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 16 May 2020 07:34:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35858 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726202AbgEPLee (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 16 May 2020 07:34:34 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 742CCC061A0C
+        for <linux-usb@vger.kernel.org>; Sat, 16 May 2020 04:34:34 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id f18so4923508lja.13
+        for <linux-usb@vger.kernel.org>; Sat, 16 May 2020 04:34:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2QKIb7tCZNXGAt7a6kfjs6Ld8K7RbQinyCn1SMdfrHE=;
+        b=SuTQQw844xyIimQAaSZ8ojXrsHTJw2l7slkLTwcINuhNVhGzIJVUR2syjWGEYCg3x5
+         +a2Dp0VVG8OtmqNuQBw0m0Yke2Y4j0ObrRJNWCvWZEt+IdketfFLfQyvHHYm0mYLtdyC
+         ev0MVB7AOhmg1P/ZZe/MWSF6oKxmMwyrBCCOSze9dSc6imhzLPWKws9sQ9goM++IwXxv
+         UUklsQQ6TnzVlhnfvD4GA1JqN/a/AC8kk+uCFyD/+kn1nCMkoreXly+cTPoAGoyG4hiH
+         2lsya2OuqJBa9HLvZKh2sGqv10BthZEq8aCrfVsSqvpuiiXsQhnO5Y2cwt39kRVL5t0m
+         WkKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2QKIb7tCZNXGAt7a6kfjs6Ld8K7RbQinyCn1SMdfrHE=;
+        b=jU2kZh+j60/xsRkNZ3LnlVnjt7320MUa4kqVMvqxOpvdrPOGB9Ia6RLfTxn8e4REhu
+         Dg+ARGS/JOKMNfjBKQ9Wi6YW8bb1sFSGHMjMSlnW/oz53WQYSwgWSCq/if+ZdORa0J1J
+         V5QxkpE6g9C5Kamv7ShyN/sATN6ohZYQ5O8lrf0z0WRVpVH2rNPb+wQHNtK2UECwoCN6
+         r7oLS9pDSi/Cjtbl8lHCie3UwHDjhc7kP0EOqacHbg52l/iEhtHq4822RSjLNghJyaTv
+         KGETAtw5Y+4jCt8YAXo8Y2E/MFCXWThcjbWrysqezw3bnbvHf5cs0qDdHYvH2IsMU7GY
+         wknQ==
+X-Gm-Message-State: AOAM533fbedj9+/9xJ9yC++Z0x2B2Wd1IWDRnwWOwYY+0hGu/boEq2+Z
+        fZt4Lps6TeHNxF2swwfRdQvQeyObWd/ARptSAjw=
+X-Google-Smtp-Source: ABdhPJx+idCZ2QHSyXs+C81cXNl5p4AKttGDhs7L1EHt5gmXMHW8Z56Ur71l719DZOvoFh5y/+mCfcVROQHEHyD5SYo=
+X-Received: by 2002:a2e:5753:: with SMTP id r19mr4724707ljd.195.1589628870941;
+ Sat, 16 May 2020 04:34:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202005161756.KxL7u2ha%lkp@intel.com>
+References: <CAOMZO5C1jm4Nr4uTvn14sRqe3mb1Li-iTJ4EhZSBju-x1pzyXg@mail.gmail.com>
+ <VE1PR04MB6528C12091A5B0BD2DA0E51A89BA0@VE1PR04MB6528.eurprd04.prod.outlook.com>
+In-Reply-To: <VE1PR04MB6528C12091A5B0BD2DA0E51A89BA0@VE1PR04MB6528.eurprd04.prod.outlook.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Sat, 16 May 2020 08:35:46 -0300
+Message-ID: <CAOMZO5DzV6Kcxtd=UUL6iYW82rArviB7SA_y2eOzkKa3YjWe8g@mail.gmail.com>
+Subject: Re: usbmisc_imx: charger detection errors
+To:     Jun Li <jun.li@nxp.com>
+Cc:     Peter Chen <peter.chen@nxp.com>,
+        USB list <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, May 16, 2020 at 05:01:16PM +0800, kbuild test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
-> head:   2478be82de44bee4346eb1f48d4cfa28cd99d2d0
-> commit: 8bd5741e3145e40c1e4f422fa5f1b9d7fe0644b3 [56/58] usb: renesas-xhci: Add the renesas xhci driver
-> config: ia64-allmodconfig (attached as .config)
-> compiler: ia64-linux-gcc (GCC) 9.3.0
-> reproduce:
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         git checkout 8bd5741e3145e40c1e4f422fa5f1b9d7fe0644b3
->         # save the attached .config to linux build tree
->         COMPILER_INSTALL_PATH=$HOME/0day GCC_VERSION=9.3.0 make.cross ARCH=ia64 
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kbuild test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>, old ones prefixed by <<):
-> 
-> In file included from drivers/usb/host/xhci-pci-renesas.c:9:
-> >> include/linux/unaligned/access_ok.h:8:28: error: redefinition of 'get_unaligned_le16'
-> 8 | static __always_inline u16 get_unaligned_le16(const void *p)
-> |                            ^~~~~~~~~~~~~~~~~~
-> In file included from arch/ia64/include/asm/unaligned.h:5,
+Hi Li Jun,
 
+On Sat, May 16, 2020 at 3:33 AM Jun Li <jun.li@nxp.com> wrote:
 
-Vinod, you need to include another .h file for this file to properly
-define this function.
+> This indicates the voltage of VBUS pad is below VBUS valid threshold(defaut
+> is 4.75v), how is vbus connected on your imx7s-warp board? is the vbus connected
+> from USB connector to vbus pad of imx7s SoC?
 
-Can you make up a patch for that?
+I have sent you the schematics off-list.
 
-thanks,
-
-greg k-h
+Thanks
