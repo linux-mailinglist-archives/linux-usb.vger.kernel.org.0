@@ -2,99 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3CA91D619D
-	for <lists+linux-usb@lfdr.de>; Sat, 16 May 2020 16:48:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 002661D629E
+	for <lists+linux-usb@lfdr.de>; Sat, 16 May 2020 18:25:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726707AbgEPOsa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 16 May 2020 10:48:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37658 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726416AbgEPOsa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 16 May 2020 10:48:30 -0400
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20022C061A0C
-        for <linux-usb@vger.kernel.org>; Sat, 16 May 2020 07:48:29 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id be9so469701edb.2
-        for <linux-usb@vger.kernel.org>; Sat, 16 May 2020 07:48:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QaFBaflpXjNvVIml+hiilPMh8MrtNz4rVVeOwS5CwGE=;
-        b=OTayr52UBK3yGGAs7YiVska0+bMF5K3Kt85B5q3sKNT03v5K6+1DH2QxtqtQsHhn1i
-         VuSLiKlouCZBOnqsxz7/MYPMcu1J2HugXPaMo0Yvqcaaeen66129ramYVUzdhMjga0iO
-         Llm6Z6iMDjQm+1Arx5pBo5h6Kkgrt/HHLiBmZLOFW3CkOWBGrYm+JZrKptasbnJc90rW
-         BtZlReqUKti22sDOfFvsuGrqcEf8uaC1bUK3tlE0KbXk9wuwW1+6fVfrSpnwG0sXL7ZX
-         4cIgdJZRHU/bhfVXHJiQyCw/KNwt09BGRwL5TYrAJw91qvP/VuJqy9+gAGopbD9MCISP
-         Hmow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QaFBaflpXjNvVIml+hiilPMh8MrtNz4rVVeOwS5CwGE=;
-        b=ZZaoHNGXP+ZodQqGCoaHPx/rApon0y9XIDH7wQV0T+6XrCQnyTUmb1fuzrMNlgBlsf
-         7sDg6lwz6DbGeh0C/csWMzaQqo41H7Wu3k5Ez7YiPXgCKp93ucCjmkCP11JyiaKiQ1Jq
-         dTCo04/O/R7pB5ApUxKrx4tDwAsl79RFnKZr/q7S/moD3VyPFdhLqSFTynN+N28h9/3A
-         d64IBEWuwPjLnHUlVl3Y2NoMoBG5oMOxFba70a7SZqB6/ad+hXWhPNQ/uj3O/N0/7As8
-         OMi4dsFsTeRoxqg+y0m0SQdZRScF+m9rFP62ftEcFEGk/7a7oaxni8MoGjZFkbGMLuE3
-         0oKg==
-X-Gm-Message-State: AOAM531CewOpiWPh4e7KSOH6n9wVS013kJ3l9V2cJdk3aeh6jpDX8fsg
-        934WFbQeDEFSw4nBxZrD5jVGEkH4O7dHGVgcTO7wSA==
-X-Google-Smtp-Source: ABdhPJx4eiM0My9jE4zA6rqs2UHViabbTex6vHE0YMU7TxCo9Cn/CuhXi2qwzHv14WOiM2AGgm3qjeXvwKeBoqwzuw4=
-X-Received: by 2002:a50:b202:: with SMTP id o2mr6841947edd.251.1589640507492;
- Sat, 16 May 2020 07:48:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <202005161756.KxL7u2ha%lkp@intel.com> <20200516112846.GB133224@kroah.com>
-In-Reply-To: <20200516112846.GB133224@kroah.com>
-From:   Vinod Koul <vinod.koul@linaro.org>
-Date:   Sat, 16 May 2020 20:18:16 +0530
-Message-ID: <CAEaK=Bwo0-8JEw-C1pBO4=JfyoybEwd3tuM74_i4-nFL3m57Kg@mail.gmail.com>
-Subject: Re: [usb:usb-next 56/58] include/linux/unaligned/access_ok.h:8:28:
- error: redefinition of 'get_unaligned_le16'
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kbuild test robot <lkp@intel.com>, Vinod Koul <vkoul@kernel.org>,
+        id S1726270AbgEPQZd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 16 May 2020 12:25:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59254 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726206AbgEPQZd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 16 May 2020 12:25:33 -0400
+Received: from vkoul-mobl.Dlink (unknown [49.207.59.236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B07FD206D8;
+        Sat, 16 May 2020 16:25:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589646332;
+        bh=ZpBrhlrmpHDM4bnj6HA0bzd92Cf5AYkp3l1+/w9OLyM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=syIDhw3pWp4adqZ+txEOmMB8Ae5eQ8QQcQIu7SNRLtIalGVJ2a/jHecpwKVokwVi1
+         T/3DPmPJVXbI0GHsdUSFU8IOzXZOdMQiWdpv2hZIGtdIbJznhXHHzEGtc5Y485N5T1
+         tgWlF2k3vG1h+1VU3Ui2gwyoNsMjpjnJn6w11Ysw=
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Vinod Koul <vkoul@kernel.org>,
         Christian Lamparter <chunkeey@googlemail.com>,
-        kbuild-all@lists.01.org, linux-usb@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kbuild test robot <lkp@intel.com>
+Subject: [PATCH] usb: renesas-xhci: include correct header for  get_unaligned_le16()
+Date:   Sat, 16 May 2020 21:55:16 +0530
+Message-Id: <20200516162516.385149-1-vkoul@kernel.org>
+X-Mailer: git-send-email 2.25.4
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, 16 May 2020 at 16:58, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Sat, May 16, 2020 at 05:01:16PM +0800, kbuild test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
-> > head:   2478be82de44bee4346eb1f48d4cfa28cd99d2d0
-> > commit: 8bd5741e3145e40c1e4f422fa5f1b9d7fe0644b3 [56/58] usb: renesas-xhci: Add the renesas xhci driver
-> > config: ia64-allmodconfig (attached as .config)
-> > compiler: ia64-linux-gcc (GCC) 9.3.0
-> > reproduce:
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         git checkout 8bd5741e3145e40c1e4f422fa5f1b9d7fe0644b3
-> >         # save the attached .config to linux build tree
-> >         COMPILER_INSTALL_PATH=$HOME/0day GCC_VERSION=9.3.0 make.cross ARCH=ia64
-> >
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kbuild test robot <lkp@intel.com>
-> >
-> > All errors (new ones prefixed by >>, old ones prefixed by <<):
-> >
-> > In file included from drivers/usb/host/xhci-pci-renesas.c:9:
-> > >> include/linux/unaligned/access_ok.h:8:28: error: redefinition of 'get_unaligned_le16'
-> > 8 | static __always_inline u16 get_unaligned_le16(const void *p)
-> > |                            ^~~~~~~~~~~~~~~~~~
-> > In file included from arch/ia64/include/asm/unaligned.h:5,
->
->
-> Vinod, you need to include another .h file for this file to properly
-> define this function.
->
-> Can you make up a patch for that?
+get_unaligned_le16() is defined in linux/unaligned/access_ok.h header
+but it uses symbols which may not be available, leading to build
+failures on ia64. Using asm/unaligned.h seem to be the right thing
+and used in other drivers.
 
-Sure thing, I will get the compiler for ia64 and send the patch soon.
+This fixes below error reported by kbuild test robot
 
-~Vinod
+In file included from drivers/usb/host/xhci-pci-renesas.c:9:
+>> include/linux/unaligned/access_ok.h:8:28: error: redefinition of 'get_unaligned_le16'
+8 | static __always_inline u16 get_unaligned_le16(const void *p)
+|                            ^~~~~~~~~~~~~~~~~~
+In file included from arch/ia64/include/asm/unaligned.h:5,
+from arch/ia64/include/asm/io.h:23,
+from arch/ia64/include/asm/smp.h:21,
+from include/linux/smp.h:67,
+from include/linux/percpu.h:7,
+from include/linux/arch_topology.h:9,
+from include/linux/topology.h:30,
+from include/linux/gfp.h:9,
+from include/linux/xarray.h:14,
+from include/linux/radix-tree.h:18,
+from include/linux/idr.h:15,
+from include/linux/kernfs.h:13,
+from include/linux/sysfs.h:16,
+from include/linux/kobject.h:20,
+from include/linux/of.h:17,
+from include/linux/irqdomain.h:35,
+from include/linux/acpi.h:13,
+from drivers/usb/host/xhci-pci-renesas.c:4:
+include/linux/unaligned/le_struct.h:7:19: note: previous definition of 'get_unaligned_le16' was here
+7 | static inline u16 get_unaligned_le16(const void *p)
+|                   ^~~~~~~~~~~~~~~~~~
+In file included from drivers/usb/host/xhci-pci-renesas.c:9:
+include/linux/unaligned/access_ok.h:13:28: error: redefinition of 'get_unaligned_le32'
+13 | static __always_inline u32 get_unaligned_le32(const void *p)
+|                            ^~~~~~~~~~~~~~~~~~
+In file included from arch/ia64/include/asm/unaligned.h:5,
+from arch/ia64/include/asm/io.h:23,
+from arch/ia64/include/asm/smp.h:21,
+from include/linux/smp.h:67,
+from include/linux/percpu.h:7,
+from include/linux/arch_topology.h:9,
+from include/linux/topology.h:30,
+from include/linux/gfp.h:9,
+from include/linux/xarray.h:14,
+from include/linux/radix-tree.h:18,
+from include/linux/idr.h:15,
+from include/linux/kernfs.h:13,
+from include/linux/sysfs.h:16,
+from include/linux/kobject.h:20,
+from include/linux/of.h:17,
+from include/linux/irqdomain.h:35,
+from include/linux/acpi.h:13,
+from drivers/usb/host/xhci-pci-renesas.c:4:
+include/linux/unaligned/le_struct.h:12:19: note: previous definition of 'get_unaligned_le32' was here
+
+Fixes: 8bd5741e3145 ("usb: renesas-xhci: Add the renesas xhci driver")
+Reported-by: kbuild test robot <lkp@intel.com>
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+---
+ drivers/usb/host/xhci-pci-renesas.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/host/xhci-pci-renesas.c b/drivers/usb/host/xhci-pci-renesas.c
+index fa32ec352dc8..f7a4d2dea439 100644
+--- a/drivers/usb/host/xhci-pci-renesas.c
++++ b/drivers/usb/host/xhci-pci-renesas.c
+@@ -7,7 +7,7 @@
+ #include <linux/module.h>
+ #include <linux/pci.h>
+ #include <linux/slab.h>
+-#include <linux/unaligned/access_ok.h>
++#include <asm/unaligned.h>
+ 
+ #include "xhci.h"
+ #include "xhci-trace.h"
+-- 
+2.25.4
+
