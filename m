@@ -2,72 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7323C1D608B
-	for <lists+linux-usb@lfdr.de>; Sat, 16 May 2020 13:34:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D768D1D60A4
+	for <lists+linux-usb@lfdr.de>; Sat, 16 May 2020 13:57:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726210AbgEPLef (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 16 May 2020 07:34:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35858 "EHLO
+        id S1726259AbgEPL5h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 16 May 2020 07:57:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726202AbgEPLee (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 16 May 2020 07:34:34 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 742CCC061A0C
-        for <linux-usb@vger.kernel.org>; Sat, 16 May 2020 04:34:34 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id f18so4923508lja.13
-        for <linux-usb@vger.kernel.org>; Sat, 16 May 2020 04:34:34 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1726244AbgEPL5h (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 16 May 2020 07:57:37 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B63C061A0C;
+        Sat, 16 May 2020 04:57:36 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id d21so4960090ljg.9;
+        Sat, 16 May 2020 04:57:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2QKIb7tCZNXGAt7a6kfjs6Ld8K7RbQinyCn1SMdfrHE=;
-        b=SuTQQw844xyIimQAaSZ8ojXrsHTJw2l7slkLTwcINuhNVhGzIJVUR2syjWGEYCg3x5
-         +a2Dp0VVG8OtmqNuQBw0m0Yke2Y4j0ObrRJNWCvWZEt+IdketfFLfQyvHHYm0mYLtdyC
-         ev0MVB7AOhmg1P/ZZe/MWSF6oKxmMwyrBCCOSze9dSc6imhzLPWKws9sQ9goM++IwXxv
-         UUklsQQ6TnzVlhnfvD4GA1JqN/a/AC8kk+uCFyD/+kn1nCMkoreXly+cTPoAGoyG4hiH
-         2lsya2OuqJBa9HLvZKh2sGqv10BthZEq8aCrfVsSqvpuiiXsQhnO5Y2cwt39kRVL5t0m
-         WkKw==
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=K7EtYXdMTNzKSL9u6ZM46DAAdiHLhw9RiBgsQRiVhWw=;
+        b=nxh7l2ZnP3udZZsY6Klbl4JQkfQaj+Bo/Lo9618AKC99lkzYAXxKgfPLcxeZRMJjo9
+         4Ahg7qm45oZuMRpep2JSDTVELGj4kemJTd33VPvt6mYuIjuOogxtjrcVR4F98xY7GhyI
+         XxwObcERQ13KcOJ4TFPHzq3Z8E6og0ItZnFTwNCtVP3le/g0hKqzlCxCNpSo9vfS9iJn
+         YT995fefFMYq+hhe9p/asDTEvSxucrkFTiD8IxT4ZRnis+S8u+T7WBTPM/pcZWhFd/BW
+         s8PADkMnkTPV4FMMYzuy8iFVagl6yBoo8ugzKqSa/S5yVAcjkxxtUvaGBUab1uamQBe9
+         GwRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2QKIb7tCZNXGAt7a6kfjs6Ld8K7RbQinyCn1SMdfrHE=;
-        b=jU2kZh+j60/xsRkNZ3LnlVnjt7320MUa4kqVMvqxOpvdrPOGB9Ia6RLfTxn8e4REhu
-         Dg+ARGS/JOKMNfjBKQ9Wi6YW8bb1sFSGHMjMSlnW/oz53WQYSwgWSCq/if+ZdORa0J1J
-         V5QxkpE6g9C5Kamv7ShyN/sATN6ohZYQ5O8lrf0z0WRVpVH2rNPb+wQHNtK2UECwoCN6
-         r7oLS9pDSi/Cjtbl8lHCie3UwHDjhc7kP0EOqacHbg52l/iEhtHq4822RSjLNghJyaTv
-         KGETAtw5Y+4jCt8YAXo8Y2E/MFCXWThcjbWrysqezw3bnbvHf5cs0qDdHYvH2IsMU7GY
-         wknQ==
-X-Gm-Message-State: AOAM533fbedj9+/9xJ9yC++Z0x2B2Wd1IWDRnwWOwYY+0hGu/boEq2+Z
-        fZt4Lps6TeHNxF2swwfRdQvQeyObWd/ARptSAjw=
-X-Google-Smtp-Source: ABdhPJx+idCZ2QHSyXs+C81cXNl5p4AKttGDhs7L1EHt5gmXMHW8Z56Ur71l719DZOvoFh5y/+mCfcVROQHEHyD5SYo=
-X-Received: by 2002:a2e:5753:: with SMTP id r19mr4724707ljd.195.1589628870941;
- Sat, 16 May 2020 04:34:30 -0700 (PDT)
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=K7EtYXdMTNzKSL9u6ZM46DAAdiHLhw9RiBgsQRiVhWw=;
+        b=BS6cJ0ef7TJ1HkwhtTB/HWaRv54DKiw869323XT5rTOcp/v6+4fp8tg6YYBlq3uugm
+         oh28UNqpVUc4Oe2EX41hICyxawg6INOPje7u+bs+BzRNJ0HiCfduqh54ReBQHa0+k1F5
+         whd6EZJqj+wV5Epy3AvZv/dpRDwsHYeW/RkzxHG2Pp2gV3WgHayEH/yMsyBLqPUEdvTO
+         BU2Lbheff7Enld5cqxNLwGFtEXRlQ8F/gpaCY8ajFB6iMBPpqlLGoCG1yb6B7818eZdB
+         A5tQYPQUPKsmIXo5TWfVCYgq676y7+ZZOKZUxO+7Uw3+q1l/BOAr19Hl6ntJRSusXP+v
+         3I8g==
+X-Gm-Message-State: AOAM532yp03j+7XZBB4V0bNYrjCPTwK8XMe7iKYl2957+Fa7LXgKmLRt
+        y5pHquFUhCBX1nIlm6nPvwBMPWofMek=
+X-Google-Smtp-Source: ABdhPJz2P0qexY309WH6bQebCkuZJifgIsfaZd99/tUMgXb7ToO/nnip5VIXMpFwO/L5TGG1QMSlag==
+X-Received: by 2002:a2e:8689:: with SMTP id l9mr5198526lji.193.1589630255011;
+        Sat, 16 May 2020 04:57:35 -0700 (PDT)
+Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
+        by smtp.gmail.com with ESMTPSA id x204sm3078968lff.21.2020.05.16.04.57.32
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 16 May 2020 04:57:34 -0700 (PDT)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Jun Li <jun.li@nxp.com>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Jun Li <lijun.kernel@gmail.com>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Yu Chen <chenyu56@huawei.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        ShuFan Lee <shufan_lee@richtek.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        "open list\:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Peter Chen <peter.chen@nxp.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: RE: [PATCH v4 3/9] usb: dwc3: Increase timeout for CmdAct cleared by device controller
+In-Reply-To: <VE1PR04MB6528AB046FD441A5DDD83CD289BA0@VE1PR04MB6528.eurprd04.prod.outlook.com>
+References: <20191028215919.83697-1-john.stultz@linaro.org> <20191028215919.83697-4-john.stultz@linaro.org> <87mudjj4rc.fsf@gmail.com> <CALAqxLU+9uEcdRVaLfh+eQrDtZbDGod9pRXhBX=prAhg9MXagw@mail.gmail.com> <CAKgpwJVaKpsgMjKcnYyJsfNj0ibkPt=mdn-NxfOkeX1jfL=9iQ@mail.gmail.com> <87h7wqmwrv.fsf@kernel.org> <CAKgpwJXfWv5=MDqBCADhe2iXf6eiP0GQ13Bwo9fkuU5kGO7dsw@mail.gmail.com> <87imgx35pg.fsf@kernel.org> <VE1PR04MB65283F16826D2254128073C589BD0@VE1PR04MB6528.eurprd04.prod.outlook.com> <3d757998-56f2-6fff-a724-f713867ae785@synopsys.com> <87ftc0xsig.fsf@kernel.org> <VE1PR04MB6528AB046FD441A5DDD83CD289BA0@VE1PR04MB6528.eurprd04.prod.outlook.com>
+Date:   Sat, 16 May 2020 14:57:29 +0300
+Message-ID: <87d074xfbq.fsf@kernel.org>
 MIME-Version: 1.0
-References: <CAOMZO5C1jm4Nr4uTvn14sRqe3mb1Li-iTJ4EhZSBju-x1pzyXg@mail.gmail.com>
- <VE1PR04MB6528C12091A5B0BD2DA0E51A89BA0@VE1PR04MB6528.eurprd04.prod.outlook.com>
-In-Reply-To: <VE1PR04MB6528C12091A5B0BD2DA0E51A89BA0@VE1PR04MB6528.eurprd04.prod.outlook.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Sat, 16 May 2020 08:35:46 -0300
-Message-ID: <CAOMZO5DzV6Kcxtd=UUL6iYW82rArviB7SA_y2eOzkKa3YjWe8g@mail.gmail.com>
-Subject: Re: usbmisc_imx: charger detection errors
-To:     Jun Li <jun.li@nxp.com>
-Cc:     Peter Chen <peter.chen@nxp.com>,
-        USB list <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Li Jun,
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, May 16, 2020 at 3:33 AM Jun Li <jun.li@nxp.com> wrote:
 
-> This indicates the voltage of VBUS pad is below VBUS valid threshold(defaut
-> is 4.75v), how is vbus connected on your imx7s-warp board? is the vbus connected
-> from USB connector to vbus pad of imx7s SoC?
+Hi,
 
-I have sent you the schematics off-list.
+Jun Li <jun.li@nxp.com> writes:
+>> >> Hi Thinh, could you comment this?
+>> >
+>> > You only need to wake up the usb2 phy when issuing the command while
+>> > running in highspeed or below. If you're running in SS or higher,
+>> > internally the controller does it for you for usb3 phy. In Jun's case,
+>> > it seems like it takes longer for his phy to wake up.
+>> >
+>> > IMO, in this case, I think it's fine to increase the command timeout.
+>>=20
+>> Is there an upper limit to this? Is 32k clock the slowest that can be fe=
+d to the
+>> PHY as a suspend clock?
+>
+> Yes, 32K clock is the slowest, Per DWC3 document on Power Down Scale
+> (bits 31:19 of GCTL):
+>
+> "Power Down Scale (PwrDnScale)
+> The USB3 suspend_clk input replaces pipe3_rx_pclk as a clock source
+> to a small part of the USB3 controller that operates when the SS PHY
+> is in its lowest power (P3) state, and therefore does not provide a clock.
+> The Power Down Scale field specifies how many suspend_clk periods
+> fit into a 16 kHz clock period. When performing the division, round up
+> the remainder.
+> For example, when using an 8-bit/16-bit/32-bit PHY and 25-MHz Suspend clo=
+ck,
+> Power Down Scale =3D 25000 kHz/16 kHz =3D 13'd1563 (rounder up)
+> Note:
+> - Minimum Suspend clock frequency is 32 kHz
+> - Maximum Suspend clock frequency is 125 MHz"
 
-Thanks
+Cool, now do we have an upper bound for how many clock cycles it takes
+to wake up the PHY? Then we can just set the time to that upper bound.
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl6/1SkACgkQzL64meEa
+mQZL+w/6AxOqdqZMxD6dJoy944O3y9M5glYLwe/tfeeCGMbA/mULQDUi9CSFu7iu
+JTj+bJm3AMgWwzyJByWjEeOhw9M60ntIG2fztMEU/RuIsPCfSbXCxHHgccQx5JgW
+atB9hxrMgI3BT41qqL98Ze+fJ540iii/0LA5/Dt1lw6NNjGKKxMC8dxipokcBUOc
+oWqj4FS6J1JWrjjwLBna04l2UtrxM4NlFhSLxr5QCUx2ISVCDGB2nkW+lqjsPqoT
+Ge4rKpUGqnJVbFHTR359GUnjbcPPzwp55LaQHfxxgvhQ+GlRpLBb6mFfeqj6a0JZ
+EXvBxWDj9seVyvpL2xeLtOdhCzy5NCU5djHVEm4yckQ0I2yXccT9/SSQUJyD9I9o
+2WomGpZZ1OxwKqL2XAcZyhvpstMXq+TvmJ8kjvaHIcEHROA1aFiIrxlyQQORssHH
+8x4wZzwD7BuOCcZJy/W5cYyMi8dakbF4OhAKOOyg0AbU3weApPE2n2f5ZoYZVAFe
+WJSlNC45benjGZdHrAMFvcNMuptBdIMF67oLXxoqa0gajL3zGvLateErsFqsJn1Z
+jsZWNrVB5he+chQqraP37y5ZB2Nn95Et0/MPf1kgDO+JkVqkbyAX/HmuVILZ3Tgl
+IBsFYDBphzkiWi0xTXGewtUUhSwerJL1PDPROdt4/wJkJqIXPEg=
+=fLB9
+-----END PGP SIGNATURE-----
+--=-=-=--
