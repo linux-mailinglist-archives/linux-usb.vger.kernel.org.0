@@ -2,156 +2,180 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 687F61D66EF
-	for <lists+linux-usb@lfdr.de>; Sun, 17 May 2020 11:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 086851D68A9
+	for <lists+linux-usb@lfdr.de>; Sun, 17 May 2020 17:32:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727063AbgEQJkp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 17 May 2020 05:40:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40356 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727043AbgEQJkp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 17 May 2020 05:40:45 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CFE792065F;
-        Sun, 17 May 2020 09:40:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589708443;
-        bh=39EXHpNSdWNjjMtj/vp27M8IQbirDJAzBquVu1o5sDk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=VbmCACrRhYus1jCQDkTsAEbe13GfRJShQe5Ks4Pv4yhhmxjdximk+6ksw9JCo8fNP
-         BSF+wHtSsyesGai7WKK+U73e2+oBQ/YKOqtd14caEVrBGBsan1pk0LpQmrDBC/klyQ
-         oAAMbQLcCp05rI5jRTjG8UYFWAuBbWyZsIHsEbwA=
-Date:   Sun, 17 May 2020 11:40:41 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB driver fixes for 5.7-rc6
-Message-ID: <20200517094041.GA3392057@kroah.com>
+        id S1728103AbgEQPc0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 17 May 2020 11:32:26 -0400
+Received: from mail-io1-f69.google.com ([209.85.166.69]:41043 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728028AbgEQPcW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 17 May 2020 11:32:22 -0400
+Received: by mail-io1-f69.google.com with SMTP id d3so6487809iob.8
+        for <linux-usb@vger.kernel.org>; Sun, 17 May 2020 08:32:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=2doS7klhJosBZYIMMmPUj2nhv1GcHyUE0aRUwaSGsPk=;
+        b=KJD+rxeG9ODuVoYYkHqkJCv2ITae2wU5XM5BUUMfpklvSDk5XYIcvdc5Dj7HPy16aU
+         6Yk2uplMTWX9oX+wcqq4tItXop4rQQ9fAdkwjPc/uGNF0aadLUFk+dNeg1v8S0beM5gy
+         XybnX5RrN/1+PdKu251MNNxGcGgZ/wrNK05xiYzH/ydJFotnWf7ZDAzcAN4q/ahu4lq6
+         xmvZYXpcAYIx+mEew/ukO94F+McQJhm5P2ddg35HraJzJ5Q/mwFt5yNv6Wpe1T2aQXj9
+         FFoD6+jpJyzMTHHQhb4TLmIiT2j3LvqkArsU1tzPv5uWQnDnnVAkSB0++5I9DSjxZhm3
+         NlCA==
+X-Gm-Message-State: AOAM532Tc2clXSHSm1UbRUDwGNwYgT87lDyZCHLwHbnbkSuF0L7i5Jvd
+        qyMiU4dGzsL5hrKqN0CePvbhoiNv1a3K1+QL9JrTdOXqtKjk
+X-Google-Smtp-Source: ABdhPJyRqOw2N4zucehobh1VqdeBMSepkfOx12OOiImeDnQo31lVKxndyFcwzlDCgNZi8UjOR+zQHW3dshDHyOtfT1ajt+bLn+2o
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Received: by 2002:a92:58d6:: with SMTP id z83mr12182831ilf.129.1589729539621;
+ Sun, 17 May 2020 08:32:19 -0700 (PDT)
+Date:   Sun, 17 May 2020 08:32:19 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007f8ce405a5d9c010@google.com>
+Subject: KASAN: slab-out-of-bounds Read in ath9k_hif_usb_rx_cb
+From:   syzbot <syzbot+c15a0a825788b6ba2bc4@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, ath9k-devel@qca.qualcomm.com,
+        davem@davemloft.net, kvalo@codeaurora.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit 2ef96a5bb12be62ef75b5828c0aab838ebb29cb8:
+Hello,
 
-  Linux 5.7-rc5 (2020-05-10 15:16:58 -0700)
+syzbot found the following crash on:
 
-are available in the Git repository at:
+HEAD commit:    806d8acc USB: dummy-hcd: use configurable endpoint naming ..
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=1147bce6100000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d800e9bad158025f
+dashboard link: https://syzkaller.appspot.com/bug?extid=c15a0a825788b6ba2bc4
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.7-rc6
+Unfortunately, I don't have any reproducer for this crash yet.
 
-for you to fetch changes up to 15753588bcd4bbffae1cca33c8ced5722477fe1f:
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+c15a0a825788b6ba2bc4@syzkaller.appspotmail.com
 
-  USB: gadget: fix illegal array access in binding with UDC (2020-05-15 15:42:17 +0200)
+==================================================================
+BUG: KASAN: slab-out-of-bounds in ath9k_hif_usb_rx_stream drivers/net/wireless/ath/ath9k/hif_usb.c:580 [inline]
+BUG: KASAN: slab-out-of-bounds in ath9k_hif_usb_rx_cb+0xad3/0xf90 drivers/net/wireless/ath/ath9k/hif_usb.c:666
+Read of size 4 at addr ffff8881cca0c0dc by task kworker/1:3/3075
 
-----------------------------------------------------------------
-USB fixes for 5.7-rc6
+CPU: 1 PID: 3075 Comm: kworker/1:3 Not tainted 5.7.0-rc5-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events request_firmware_work_func
+Call Trace:
+ <IRQ>
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xef/0x16e lib/dump_stack.c:118
+ print_address_description.constprop.0.cold+0xd3/0x314 mm/kasan/report.c:382
+ __kasan_report.cold+0x37/0x92 mm/kasan/report.c:511
+ kasan_report+0x33/0x50 mm/kasan/common.c:625
+ ath9k_hif_usb_rx_stream drivers/net/wireless/ath/ath9k/hif_usb.c:580 [inline]
+ ath9k_hif_usb_rx_cb+0xad3/0xf90 drivers/net/wireless/ath/ath9k/hif_usb.c:666
+ __usb_hcd_giveback_urb+0x1f2/0x470 drivers/usb/core/hcd.c:1648
+ usb_hcd_giveback_urb+0x368/0x420 drivers/usb/core/hcd.c:1713
+ dummy_timer+0x125e/0x32b4 drivers/usb/gadget/udc/dummy_hcd.c:1966
+ call_timer_fn+0x1ac/0x700 kernel/time/timer.c:1405
+ expire_timers kernel/time/timer.c:1450 [inline]
+ __run_timers kernel/time/timer.c:1774 [inline]
+ __run_timers kernel/time/timer.c:1741 [inline]
+ run_timer_softirq+0x5f9/0x1500 kernel/time/timer.c:1787
+ __do_softirq+0x21e/0x9aa kernel/softirq.c:292
+ invoke_softirq kernel/softirq.c:373 [inline]
+ irq_exit+0x178/0x1a0 kernel/softirq.c:413
+ exiting_irq arch/x86/include/asm/apic.h:546 [inline]
+ smp_apic_timer_interrupt+0x141/0x540 arch/x86/kernel/apic/apic.c:1140
+ apic_timer_interrupt+0xf/0x20 arch/x86/entry/entry_64.S:829
+ </IRQ>
+RIP: 0010:arch_local_irq_restore arch/x86/include/asm/irqflags.h:85 [inline]
+RIP: 0010:console_trylock_spinning kernel/printk/printk.c:1779 [inline]
+RIP: 0010:vprintk_emit+0x3d0/0x3e0 kernel/printk/printk.c:2020
+Code: 00 83 fb ff 75 d6 e9 d8 fc ff ff e8 7a 2f 16 00 e8 55 8b 1b 00 41 56 9d e9 aa fd ff ff e8 68 2f 16 00 e8 43 8b 1b 00 41 56 9d <e9> 2a ff ff ff 90 66 2e 0f 1f 84 00 00 00 00 00 55 48 89 f5 53 48
+RSP: 0018:ffff8881d5f8fab8 EFLAGS: 00000293 ORIG_RAX: ffffffffffffff13
+RAX: 0000000000000007 RBX: 0000000000000200 RCX: 1ffffffff1270ab2
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff8881d5aeeb7c
+RBP: ffff8881d5f8fb00 R08: 0000000000000001 R09: fffffbfff126c8c8
+R10: ffffffff8936463f R11: fffffbfff126c8c7 R12: 000000000000002a
+R13: ffff8881d5e48000 R14: 0000000000000293 R15: 0000000000000000
+ vprintk_func+0x75/0x113 kernel/printk/printk_safe.c:385
+ printk+0xba/0xed kernel/printk/printk.c:2081
+ ath9k_htc_hw_init.cold+0x17/0x2a drivers/net/wireless/ath/ath9k/htc_hst.c:502
+ ath9k_hif_usb_firmware_cb+0x274/0x510 drivers/net/wireless/ath/ath9k/hif_usb.c:1187
+ request_firmware_work_func+0x126/0x242 drivers/base/firmware_loader/main.c:1005
+ process_one_work+0x965/0x1630 kernel/workqueue.c:2268
+ worker_thread+0x96/0xe20 kernel/workqueue.c:2414
+ kthread+0x326/0x430 kernel/kthread.c:268
+ ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:351
 
-Here are a number of USB fixes for 5.7-rc6
+Allocated by task 147:
+ save_stack+0x1b/0x40 mm/kasan/common.c:49
+ set_track mm/kasan/common.c:57 [inline]
+ __kasan_kmalloc mm/kasan/common.c:495 [inline]
+ __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:468
+ slab_post_alloc_hook mm/slab.h:586 [inline]
+ slab_alloc_node mm/slub.c:2797 [inline]
+ slab_alloc mm/slub.c:2805 [inline]
+ kmem_cache_alloc+0xd8/0x300 mm/slub.c:2810
+ getname_flags fs/namei.c:138 [inline]
+ getname_flags+0xd2/0x5b0 fs/namei.c:128
+ user_path_at_empty+0x2a/0x50 fs/namei.c:2632
+ user_path_at include/linux/namei.h:59 [inline]
+ vfs_statx+0x119/0x1e0 fs/stat.c:197
+ vfs_lstat include/linux/fs.h:3284 [inline]
+ __do_sys_newlstat+0x96/0x120 fs/stat.c:364
+ do_syscall_64+0xb6/0x5a0 arch/x86/entry/common.c:295
+ entry_SYSCALL_64_after_hwframe+0x49/0xb3
 
-The "largest" in here is a bunch of raw-gadget fixes and api changes as
-the driver just showed up in -rc1 and work has been done to fix up some
-uapi issues found with the original submission, before it shows up in a
--final release.
+Freed by task 147:
+ save_stack+0x1b/0x40 mm/kasan/common.c:49
+ set_track mm/kasan/common.c:57 [inline]
+ kasan_set_free_info mm/kasan/common.c:317 [inline]
+ __kasan_slab_free+0x117/0x160 mm/kasan/common.c:456
+ slab_free_hook mm/slub.c:1455 [inline]
+ slab_free_freelist_hook mm/slub.c:1488 [inline]
+ slab_free mm/slub.c:3045 [inline]
+ kmem_cache_free+0x9b/0x360 mm/slub.c:3061
+ putname+0xe1/0x120 fs/namei.c:259
+ filename_lookup+0x282/0x3e0 fs/namei.c:2362
+ user_path_at include/linux/namei.h:59 [inline]
+ vfs_statx+0x119/0x1e0 fs/stat.c:197
+ vfs_lstat include/linux/fs.h:3284 [inline]
+ __do_sys_newlstat+0x96/0x120 fs/stat.c:364
+ do_syscall_64+0xb6/0x5a0 arch/x86/entry/common.c:295
+ entry_SYSCALL_64_after_hwframe+0x49/0xb3
 
-Other than that, a bunch of other small USB gadget fixes, xhci fixes,
-some quirks, andother tiny fixes for reported issues.
+The buggy address belongs to the object at ffff8881cca0b300
+ which belongs to the cache names_cache of size 4096
+The buggy address is located 3548 bytes inside of
+ 4096-byte region [ffff8881cca0b300, ffff8881cca0c300)
+The buggy address belongs to the page:
+page:ffffea0007328200 refcount:1 mapcount:0 mapping:0000000063d385a8 index:0x0 head:ffffea0007328200 order:3 compound_mapcount:0 compound_pincount:0
+flags: 0x200000000010200(slab|head)
+raw: 0200000000010200 dead000000000100 dead000000000122 ffff8881da11e000
+raw: 0000000000000000 0000000000070007 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
 
-All of these have been in linux-next with no reported issues.
+Memory state around the buggy address:
+ ffff8881cca0bf80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff8881cca0c000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff8881cca0c080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                                    ^
+ ffff8881cca0c100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff8881cca0c180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
 
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-----------------------------------------------------------------
-Andrey Konovalov (6):
-      usb: raw-gadget: fix return value of ep read ioctls
-      usb: raw-gadget: improve uapi headers comments
-      usb: raw-gadget: fix gadget endpoint selection
-      usb: raw-gadget: support stalling/halting/wedging endpoints
-      usb: raw-gadget: documentation updates
-      usb: raw-gadget: fix null-ptr-deref when reenabling endpoints
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Andy Shevchenko (1):
-      usb: dwc3: pci: Enable extcon driver for Intel Merrifield
-
-Arnd Bergmann (1):
-      usb: dwc3: select USB_ROLE_SWITCH
-
-Christophe JAILLET (3):
-      usb: gadget: audio: Fix a missing error return value in audio_bind()
-      usb: phy: twl6030-usb: Fix a resource leak in an error handling path in 'twl6030_usb_probe()'
-      usb: gadget: net2272: Fix a memory leak in an error handling path in 'net2272_plat_probe()'
-
-Eugeniu Rosca (1):
-      usb: core: hub: limit HUB_QUIRK_DISABLE_AUTOSUSPEND to USB5534B
-
-Greg Kroah-Hartman (3):
-      Merge tag 'fixes-for-v5.7-rc5' of git://git.kernel.org/.../balbi/usb into usb-linus
-      USB: usbfs: fix mmap dma mismatch
-      Merge tag 'fixes-for-v5.7-rc6' of git://git.kernel.org/.../balbi/usb into usb-linus
-
-Jason Yan (1):
-      usb: cdns3: gadget: make a bunch of functions static
-
-John Stultz (1):
-      dwc3: Remove check for HWO flag in dwc3_gadget_ep_reclaim_trb_sg()
-
-Kyungtae Kim (1):
-      USB: gadget: fix illegal array access in binding with UDC
-
-Li Jun (1):
-      usb: host: xhci-plat: keep runtime active when removing host
-
-Masahiro Yamada (1):
-      usb: gadget: legacy: fix redundant initialization warnings
-
-Peter Chen (1):
-      usb: cdns3: gadget: prev_req->trb is NULL for ep0
-
-Prashant Malani (1):
-      usb: typec: mux: intel: Fix DP_HPD_LVL bit field
-
-Rikard Falkeborn (1):
-      usb: mtu3: constify struct debugfs_reg32
-
-Samuel Zou (1):
-      usb: gadget: udc: atmel: Make some symbols static
-
-Sriharsha Allenki (1):
-      usb: xhci: Fix NULL pointer dereference when enqueuing trbs from urb sg list
-
-Thierry Reding (1):
-      usb: gadget: tegra-xudc: Fix idle suspend/resume
-
-Wei Yongjun (2):
-      usb: gadget: legacy: fix error return code in cdc_bind()
-      usb: gadget: legacy: fix error return code in gncm_bind()
-
- Documentation/usb/raw-gadget.rst        |  37 +++-
- drivers/usb/cdns3/gadget.c              |  22 +--
- drivers/usb/core/devio.c                |  16 +-
- drivers/usb/core/hub.c                  |   6 +-
- drivers/usb/dwc3/Kconfig                |   1 +
- drivers/usb/dwc3/dwc3-pci.c             |   1 +
- drivers/usb/dwc3/gadget.c               |   3 -
- drivers/usb/gadget/configfs.c           |   3 +
- drivers/usb/gadget/legacy/audio.c       |   4 +-
- drivers/usb/gadget/legacy/cdc2.c        |   4 +-
- drivers/usb/gadget/legacy/inode.c       |   3 +-
- drivers/usb/gadget/legacy/ncm.c         |   4 +-
- drivers/usb/gadget/legacy/raw_gadget.c  | 315 +++++++++++++++++++++++++-------
- drivers/usb/gadget/udc/atmel_usba_udc.c |   4 +-
- drivers/usb/gadget/udc/net2272.c        |   2 +
- drivers/usb/gadget/udc/tegra-xudc.c     |   8 +-
- drivers/usb/host/xhci-plat.c            |   4 +-
- drivers/usb/host/xhci-ring.c            |   4 +-
- drivers/usb/mtu3/mtu3_debugfs.c         |   4 +-
- drivers/usb/phy/phy-twl6030-usb.c       |  12 +-
- drivers/usb/typec/mux/intel_pmc_mux.c   |   6 +-
- include/uapi/linux/usb/raw_gadget.h     | 108 +++++++++--
- 22 files changed, 448 insertions(+), 123 deletions(-)
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
