@@ -2,212 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E8051D85A8
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2020 20:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A4B41D8760
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2020 20:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731994AbgERSUB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 May 2020 14:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33382 "EHLO
+        id S1728705AbgERSgh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 May 2020 14:36:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731148AbgERRxa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 May 2020 13:53:30 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12092C061A0C
-        for <linux-usb@vger.kernel.org>; Mon, 18 May 2020 10:53:30 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id w15so1507403lfe.11
-        for <linux-usb@vger.kernel.org>; Mon, 18 May 2020 10:53:29 -0700 (PDT)
+        with ESMTP id S1728475AbgERSgg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 May 2020 14:36:36 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97543C05BD0A
+        for <linux-usb@vger.kernel.org>; Mon, 18 May 2020 11:36:36 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id z26so5228998pfk.12
+        for <linux-usb@vger.kernel.org>; Mon, 18 May 2020 11:36:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=auxOAvLWtf1pZZSyVWFPai0DZNGDmQxFTyydphVNHvc=;
-        b=Vl9mmuiC7+19REd6VDHNPar684dLArGlRGMkQn5oqgGISgDn9rA9Lik+VFA810mJKY
-         Z/lqU/1LmGYWo/ob8AYxr4Q2/sNWezCyNM2TzOQag9de1dtWzYYjvtcqYLaj5UZ/eRSs
-         j8hcnYEluwCIYYQEZhNVvSaQXUVwZaW1vekivhtGXj6agpH6us2lt2eVka42V2tC3FBb
-         anttD+3GT6y2WprpvsdRhnf8iEsWgi9AJN5Lcv6UsJMZ0dJcUwz0KICOSnVe+AkXm4jK
-         rk7WxHuCvOQsbVbuTW9D42lNo27aBJenp/CL1EDodgfeQDkV7DKsAI6jISrExqk+E3OT
-         iqGg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=gvKKfXKVwXyHM5zyQzU2yfD82YJ/ssxteenCSL12PQo=;
+        b=SP6KFNP8GBJH4Y0iu8AifmlsrJrIDmqF86ly0zVJjsY9edGxCLOGJgRntsHb0RHjQG
+         gATe1S/lNrSEnPx6+nA/9Db0kPWSNByB+aLbETP0I7rvxRd5Pg5ppv5wkwn5hjz58cu/
+         /58rWXz8O5y2llnAhz2PnD1PepCOMtPQz0wlcWd4cCLGYB8YoMdMS4KqF902+qJ/GrWu
+         rYOlTmXrrdAjjv2aIxMNhSrdaKjlbrB4OS5ce1/H/hEo88g4KjJQ31AE7yroPGtfE9G0
+         GSPSNWOTyxVLaXh8veu7K3K0s5sMenbgG1ZDSnf8416Sc5oeIX+1pRsFFZpq8ADiflTg
+         Yiqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=auxOAvLWtf1pZZSyVWFPai0DZNGDmQxFTyydphVNHvc=;
-        b=ja90kAoF9YGoyq5Fd1tGCrydBPZHRuN8DErbPQWrlArNfT2PrSST4wKdgJcx342VPD
-         dTwVqaN3urkOlKIQev4DKEIORLqOSMzOat+hD8UMZ9LuiDcs5JW8kBZYHPyNrWVMFWkO
-         6NNKmgfe2TlJ/CcZGEp7n4/XDrB7B5zub1XJtKL1+6+YVykJM7I5+p84cLsdAO+I5Q6j
-         nsWVtXvfacT63tQ+QBcOQ07mpgXXDN6/mUw3x3CEXZXjEtDtCb1Loi3qqEvPpSJGAbRr
-         LfU7pM5Alc/oQDOFAX6Exe7tZb47vhu7vtnnLy0cCRrFyPcw5nwAinsseI515+M/w7DM
-         W2Jw==
-X-Gm-Message-State: AOAM530YxE2LhdU38H0o7s443XnJ0XpNP73Cq9v/QNiL/JiX5SOGGLgy
-        dZRTFt4qc/6vK1akDt8aiPddNNdrRZZciJ+dznVTqQ==
-X-Google-Smtp-Source: ABdhPJzv50aTNUNlvFS55s6qXm4/Sd4s/08q5esk2oruVv0ektYpkAo/7FrkfziK8Eed36WkBnmqcTgcwCr6rqNC7Eg=
-X-Received: by 2002:a19:48c9:: with SMTP id v192mr8337329lfa.20.1589824408382;
- Mon, 18 May 2020 10:53:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200506060025.1535960-1-vkoul@kernel.org> <20200506060025.1535960-4-vkoul@kernel.org>
-In-Reply-To: <20200506060025.1535960-4-vkoul@kernel.org>
-From:   Anders Roxell <anders.roxell@linaro.org>
-Date:   Mon, 18 May 2020 19:53:17 +0200
-Message-ID: <CADYN=9JLeWHODRWDEcTE_6iZ3TX-E4yyx3OwqzK-H-ytLAmQUg@mail.gmail.com>
-Subject: Re: [PATCH v13 3/5] usb: xhci: Add support for Renesas controller
- with memory
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gvKKfXKVwXyHM5zyQzU2yfD82YJ/ssxteenCSL12PQo=;
+        b=ZxQC0XeahB3puRXmKNj+FkrAfBBmsuDuv88k3b50bxIv3BfvuatLSxk0AwPxlFMmQL
+         RcsfMZOHgeaU8WMVVxB68b/jFvuh8k2hR3BllNehYd8nFD5EJaffmA/Fyk0jtwbelcQw
+         2np2B/TAaL1oWjqLLC1H1px9DHcsohGkhYYOmsePpwtkD59QGjBql5i6NgTYumR9lRI/
+         9dxoFgaH37oMwER5MR1nC6BKBC1LDWAAhvSOyXOUQ1Xzvt8CkxMiWv8dlYUYgrJSltit
+         pAZOSU4Im4vNzAwz81W7w3bYi/qSL77367DbY7zrJR8/7bH7/HXjAzwa1j27mpBIMoP9
+         N1EQ==
+X-Gm-Message-State: AOAM531yyGDFMmPPX4yZsrSeLba7vYGBAijBnmItFELFtMqnU7VTSJdV
+        xBzk48xfsfZF2pvpXqDWqqhRGw==
+X-Google-Smtp-Source: ABdhPJwzQPbROOk4HuXutlusmWdCXG1o7ldok+fY8PJ23k2eDMM1tiiAiGoPeKkibIa2gifPhE5rpA==
+X-Received: by 2002:a65:5186:: with SMTP id h6mr17090119pgq.453.1589826995952;
+        Mon, 18 May 2020 11:36:35 -0700 (PDT)
+Received: from builder.lan (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id z1sm209932pjn.43.2020.05.18.11.36.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 May 2020 11:36:35 -0700 (PDT)
+Date:   Mon, 18 May 2020 11:35:12 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Sandeep Maheswaram <sanm@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        =?UTF-8?Q?Andreas_B=C3=B6hler?= <dev@aboehler.at>,
-        linux-usb@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Chandana Kishori Chiluveru <cchiluve@codeaurora.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Subject: Re: [PATCH v7 2/4] usb: dwc3: qcom: Add interconnect support in dwc3
+ driver
+Message-ID: <20200518183512.GE2165@builder.lan>
+References: <1585718145-29537-1-git-send-email-sanm@codeaurora.org>
+ <1585718145-29537-3-git-send-email-sanm@codeaurora.org>
+ <878shu4uwk.fsf@kernel.org>
+ <875zcy4uuj.fsf@kernel.org>
+ <20200514171352.GP4525@google.com>
+ <abbc3f8c-c8c9-c189-735e-f8058dab3e40@linaro.org>
+ <87tv0h3fpv.fsf@kernel.org>
+ <090e48d7-7988-eea1-bf39-f6820578d354@linaro.org>
+ <87r1vl3e42.fsf@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87r1vl3e42.fsf@kernel.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 6 May 2020 at 08:01, Vinod Koul <vkoul@kernel.org> wrote:
->
-> Some rensas controller like uPD720201 and uPD720202 need firmware to be
-> loaded. Add these devices in pci table and invoke renesas firmware loader
-> functions to check and load the firmware into device memory when
-> required.
->
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+On Thu 14 May 23:29 PDT 2020, Felipe Balbi wrote:
 
-Hi, I got a build error when I built an arm64 allmodconfig kernel.
+> 
+> Hi,
+> 
+> Georgi Djakov <georgi.djakov@linaro.org> writes:
+> >>>>>> Sandeep Maheswaram <sanm@codeaurora.org> writes:
+> >>>>>>> +static int dwc3_qcom_interconnect_init(struct dwc3_qcom *qcom)
+> >>>>>>> +{
+> >>>>>>> +	struct device *dev = qcom->dev;
+> >>>>>>> +	int ret;
+> >>>>>>> +
+> >>>>>>> +	if (!device_is_bound(&qcom->dwc3->dev))
+> >>>>>>> +		return -EPROBE_DEFER;
+> >>>>>>
+> >>>>>> this breaks allmodconfig. I'm dropping this series from my queue for
+> >>>>>> this merge window.
+> >>>>>
+> >>>>> Sorry, I meant this patch ;-)
+> >>>>
+> >>>> I guess that's due to INTERCONNECT being a module. There is currently a
+> >>>
+> >>> I believe it's because of this:
+> >>> ERROR: modpost: "device_is_bound" [drivers/usb/dwc3/dwc3-qcom.ko] undefined!
+> >>>
+> >>>> discussion about this  with Viresh and Georgi in response to another
+> >>>> automated build failure. Viresh suggests changing CONFIG_INTERCONNECT
+> >>>> from tristate to bool, which seems sensible to me given that interconnect
+> >>>> is a core subsystem.
+> >>>
+> >>> The problem you are talking about would arise when INTERCONNECT=m and
+> >>> USB_DWC3_QCOM=y and it definitely exists here and could be triggered with
+> >>> randconfig build. So i suggest to squash also the diff below.
+> >>>
+> >>> Thanks,
+> >>> Georgi
+> >>>
+> >>> ---8<---
+> >>> diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
+> >>> index 206caa0ea1c6..6661788b1a76 100644
+> >>> --- a/drivers/usb/dwc3/Kconfig
+> >>> +++ b/drivers/usb/dwc3/Kconfig
+> >>> @@ -129,6 +129,7 @@ config USB_DWC3_QCOM
+> >>>  	tristate "Qualcomm Platform"
+> >>>  	depends on ARCH_QCOM || COMPILE_TEST
+> >>>  	depends on EXTCON || !EXTCON
+> >>> +	depends on INTERCONNECT || !INTERCONNECT
+> >> 
+> >> I would prefer to see a patch adding EXPORT_SYMBOL_GPL() to device_is_bound()
+> >
+> > Agree, but just to clarify, that these are two separate issues that need to
+> > be fixed. The device_is_bound() is the first one and USB_DWC3_QCOM=y combined
+> > with INTERCONNECT=m is the second one.
+> 
+> If INTERCONNECT=m, QCOM3 shouldn't be y. I think the following is
+> enough:
+> 
+> 	depends on INTERCONNECT=y || INTERCONNECT=USB_DWC3_QCOM
+> 
 
-building obj-arm64-next-20200518
+This misses the case where INTERCONNECT=n and USB_DWC3_QCOM=[ym] which
+I don't see a reason for breaking.
 
-aarch64-linux-gnu-ld: drivers/usb/host/xhci-pci.o: in function
-`xhci_pci_remove':
-/srv/src/kernel/next/obj-arm64-next-20200518/../drivers/usb/host/xhci-pci.c:411:
-undefined reference to `renesas_xhci_pci_exit'
-aarch64-linux-gnu-ld:
-/srv/src/kernel/next/obj-arm64-next-20200518/../drivers/usb/host/xhci-pci.c:411:(.text+0xd8):
-relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol
-`renesas_xhci_pci_exit'
-aarch64-linux-gnu-ld: drivers/usb/host/xhci-pci.o: in function `xhci_pci_probe':
-/srv/src/kernel/next/obj-arm64-next-20200518/../drivers/usb/host/xhci-pci.c:345:
-undefined reference to `renesas_xhci_check_request_fw'
-aarch64-linux-gnu-ld:
-/srv/src/kernel/next/obj-arm64-next-20200518/../drivers/usb/host/xhci-pci.c:345:(.text+0x2298):
-relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol
-`renesas_xhci_check_request_fw'
-make[1]: *** [/srv/src/kernel/next/Makefile:1126: vmlinux] Error 1
-make[1]: Target 'Image' not remade because of errors.
-make: *** [Makefile:185: __sub-make] Error 2
-make: Target 'Image' not remade because of errors.
+But if only INTERCONNECT where a bool, then we don't need to specify a
+depends on, because it will either be there, or the stubs will.
+We've come to this conclusion in a lot of different frameworks and I
+don't see why we should do this differently with INTERCONNECT.
 
-When I reverted this patch from todays next tag next-20200518 I
-managed to build.
-
-
-Cheers,
-Anders
-
-> ---
->  drivers/usb/host/xhci-pci.c | 35 ++++++++++++++++++++++++++++++++++-
->  drivers/usb/host/xhci.h     |  1 +
->  2 files changed, 35 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> index b6c2f5c530e3..ef513c2fb843 100644
-> --- a/drivers/usb/host/xhci-pci.c
-> +++ b/drivers/usb/host/xhci-pci.c
-> @@ -15,6 +15,7 @@
->
->  #include "xhci.h"
->  #include "xhci-trace.h"
-> +#include "xhci-pci.h"
->
->  #define SSIC_PORT_NUM          2
->  #define SSIC_PORT_CFG2         0x880c
-> @@ -87,7 +88,16 @@ static int xhci_pci_reinit(struct xhci_hcd *xhci, struct pci_dev *pdev)
->
->  static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
->  {
-> -       struct pci_dev          *pdev = to_pci_dev(dev);
-> +       struct pci_dev                  *pdev = to_pci_dev(dev);
-> +       struct xhci_driver_data         *driver_data;
-> +       const struct pci_device_id      *id;
-> +
-> +       id = pci_match_id(pdev->driver->id_table, pdev);
-> +
-> +       if (id && id->driver_data) {
-> +               driver_data = (struct xhci_driver_data *)id->driver_data;
-> +               xhci->quirks |= driver_data->quirks;
-> +       }
->
->         /* Look for vendor-specific quirks */
->         if (pdev->vendor == PCI_VENDOR_ID_FRESCO_LOGIC &&
-> @@ -328,6 +338,14 @@ static int xhci_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
->         int retval;
->         struct xhci_hcd *xhci;
->         struct usb_hcd *hcd;
-> +       struct xhci_driver_data *driver_data;
-> +
-> +       driver_data = (struct xhci_driver_data *)id->driver_data;
-> +       if (driver_data && driver_data->quirks & XHCI_RENESAS_FW_QUIRK) {
-> +               retval = renesas_xhci_check_request_fw(dev, id);
-> +               if (retval)
-> +                       return retval;
-> +       }
->
->         /* Prevent runtime suspending between USB-2 and USB-3 initialization */
->         pm_runtime_get_noresume(&dev->dev);
-> @@ -389,6 +407,9 @@ static void xhci_pci_remove(struct pci_dev *dev)
->         struct xhci_hcd *xhci;
->
->         xhci = hcd_to_xhci(pci_get_drvdata(dev));
-> +       if (xhci->quirks & XHCI_RENESAS_FW_QUIRK)
-> +               renesas_xhci_pci_exit(dev);
-> +
->         xhci->xhc_state |= XHCI_STATE_REMOVING;
->
->         if (xhci->quirks & XHCI_DEFAULT_PM_RUNTIME_ALLOW)
-> @@ -540,14 +561,26 @@ static void xhci_pci_shutdown(struct usb_hcd *hcd)
->
->  /*-------------------------------------------------------------------------*/
->
-> +static const struct xhci_driver_data reneses_data = {
-> +       .quirks  = XHCI_RENESAS_FW_QUIRK,
-> +       .firmware = "renesas_usb_fw.mem",
-> +};
-> +
->  /* PCI driver selection metadata; PCI hotplugging uses this */
->  static const struct pci_device_id pci_ids[] = {
-> +       { PCI_DEVICE(0x1912, 0x0014),
-> +               .driver_data =  (unsigned long)&reneses_data,
-> +       },
-> +       { PCI_DEVICE(0x1912, 0x0015),
-> +               .driver_data =  (unsigned long)&reneses_data,
-> +       },
->         /* handle any USB 3.0 xHCI controller */
->         { PCI_DEVICE_CLASS(PCI_CLASS_SERIAL_USB_XHCI, ~0),
->         },
->         { /* end: all zeroes */ }
->  };
->  MODULE_DEVICE_TABLE(pci, pci_ids);
-> +MODULE_FIRMWARE("renesas_usb_fw.mem");
->
->  /* pci driver glue; this is a "new style" PCI driver module */
->  static struct pci_driver xhci_pci_driver = {
-> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-> index 3289bb516201..4047363c7423 100644
-> --- a/drivers/usb/host/xhci.h
-> +++ b/drivers/usb/host/xhci.h
-> @@ -1873,6 +1873,7 @@ struct xhci_hcd {
->  #define XHCI_DEFAULT_PM_RUNTIME_ALLOW  BIT_ULL(33)
->  #define XHCI_RESET_PLL_ON_DISCONNECT   BIT_ULL(34)
->  #define XHCI_SNPS_BROKEN_SUSPEND    BIT_ULL(35)
-> +#define XHCI_RENESAS_FW_QUIRK  BIT_ULL(36)
->
->         unsigned int            num_active_eps;
->         unsigned int            limit_active_eps;
-> --
-> 2.25.4
->
+Regards,
+Bjorn
