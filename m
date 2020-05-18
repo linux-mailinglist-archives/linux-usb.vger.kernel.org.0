@@ -2,81 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F6861D7AD8
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2020 16:16:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD7271D7AE4
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2020 16:17:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727007AbgEROQh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 May 2020 10:16:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55616 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726998AbgEROQh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 May 2020 10:16:37 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02BA7C05BD09
-        for <linux-usb@vger.kernel.org>; Mon, 18 May 2020 07:16:36 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id c75so3847166pga.3
-        for <linux-usb@vger.kernel.org>; Mon, 18 May 2020 07:16:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VvdwlrTxZSPLNiHSo5izLe2b9V9iAwxZ6AVughxgK60=;
-        b=ps2MNAPgt0wJEpSoRGPmK2+4ULpB4BaAo59cnpT7mYucm95vV+gxN5DooIqEcTNchQ
-         ze8j0HVaJlTP5iKz7Udv7v1ZseorbSU3Yjf8J1TncdIRulZda1rNqjBIbFvuzd0B5XKC
-         +NkmnPUNxVKQTuKkwj0YS9LDDXkK1MhCGK7DclzUYsEvQUBMOzuQ8fkJmCsxteqUW72R
-         HngYxY/xbueyPxLiaTl260tRajNXNgLu90K2Z01SShdQZx5HVGuaGO+MEx/oGk06q5jT
-         nzf1TdkcPyvjpA0iqS1add5KgxgcklcuYWEHCDch9ud9p2nixqIeu6nuy0osH2SBTyFl
-         Ztfg==
+        id S1727954AbgERORh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 May 2020 10:17:37 -0400
+Received: from mail-il1-f193.google.com ([209.85.166.193]:42242 "EHLO
+        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726998AbgERORh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 May 2020 10:17:37 -0400
+Received: by mail-il1-f193.google.com with SMTP id 18so1027868iln.9;
+        Mon, 18 May 2020 07:17:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VvdwlrTxZSPLNiHSo5izLe2b9V9iAwxZ6AVughxgK60=;
-        b=dn3Hu3ksqj5kVZMR2yonxQ9YTgxesVjlTBSn1dSZ2ZaNhLTtxndXsAZdDVoG6qhaeb
-         qpu5RBRwLF4R8qP4m2tl44cT/umii7fVnvGel08kNd+zYn3WTqXeH5uSlJJYuJE5Si+U
-         VzT2w0odFQMq09PhINOcYWPiOqHhP3lnxfa09I/mW+80KqiUbZQ2fmPDhO9/Aa+xwONp
-         JPDDQ7QOS/ixduvOqp/j0wqC8Q6cRrZX0Lqn7mfoJi1ewkzB1QjfkAZ7qB54baXyCJ4C
-         rrKxCCUapZYRaX09Cepn00oowUHKmTW5xh9hwlV/xjl9glFCci7wlqTfrHZdHBuGETVN
-         mqwQ==
-X-Gm-Message-State: AOAM532plM1IzpiRUA+HxE82l/qJmJDkNvTvKKoMhY4KTP6nqJ7XJ+TI
-        1t3bMn5Ocp8egK3YYrCk8wjlxEHu9ocx7veet4VM/A==
-X-Google-Smtp-Source: ABdhPJx3wRh01nd1bZ/9vwQRe0znfW0aKGrrl0hY0MSDSxHkHDrF5FbNPirncmGpWohW35cZQJhy5r+VW/7ncV+Hj3Q=
-X-Received: by 2002:a63:2bd3:: with SMTP id r202mr15015983pgr.130.1589811396267;
- Mon, 18 May 2020 07:16:36 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=s4TcDNDS3QM/2KVd7294s1MpV8sGjG6xtKJIu72IkFw=;
+        b=jrm6oCb+JSL+NzHvRdGWxqGcWr6PtW3U6ZyMn0JziQhq2QWjSp+i4m3JL+jRa6JILt
+         t0+jMvTlGtb3JxoWxvZnaado4Yt08gwtBVYdCCLWLMWyWbuCoKO56DBpu+qXcQHu8909
+         adYX3xNXCGNOSdW4gGdYzMOblUjzpIajiHgwt9Ff64GMghdH/l6S7KGu9pfo3NIy/V+q
+         oLJERjGW2YwWBUsH+GW4KB7AsWsnbt4ybz/RtSqBQIr1Nd5Y7y1cS3UqCZsaDP9ehgRr
+         gMIhV9Zo3oAtqYqpOZ1gikEk8u8wAAPcF+DrBVlb8WCJPinSglDRhBY6srpx2Pv/P0fK
+         mvyQ==
+X-Gm-Message-State: AOAM533b87vGmpWFCBK0gj5q0HwceSAKjOIf+RXsDlmyWEH7F3OgujMl
+        SVWPrUMPA3wSIFurjuUDYg==
+X-Google-Smtp-Source: ABdhPJzHP8Ro8/4oUA9Fgt5ZOHrfRK+rsvNiPBByP3WgO3+qiK7XcLyuhVX7Th3TGlo7ugCodmENbg==
+X-Received: by 2002:a92:c68c:: with SMTP id o12mr14945066ilg.96.1589811456172;
+        Mon, 18 May 2020 07:17:36 -0700 (PDT)
+Received: from rob-hp-laptop ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id k5sm4353242ilg.55.2020.05.18.07.17.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 May 2020 07:17:35 -0700 (PDT)
+Received: (nullmailer pid 2493 invoked by uid 1000);
+        Mon, 18 May 2020 14:17:34 -0000
+Date:   Mon, 18 May 2020 08:17:34 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Sandeep Maheswaram <sanm@codeaurora.org>
+Cc:     Felipe Balbi <balbi@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, linux-usb@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-kernel@vger.kernel.org, Matthias Kaehlcke <mka@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        devicetree@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Manu Gautam <mgautam@codeaurora.org>
+Subject: Re: [PATCH v6 1/2] dt-bindings: usb: qcom,dwc3: Convert USB DWC3
+ bindings
+Message-ID: <20200518141734.GA2367@bogus>
+References: <1589534960-6973-1-git-send-email-sanm@codeaurora.org>
+ <1589534960-6973-2-git-send-email-sanm@codeaurora.org>
 MIME-Version: 1.0
-References: <20200518033319.GC24805@intel.com>
-In-Reply-To: <20200518033319.GC24805@intel.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon, 18 May 2020 16:16:25 +0200
-Message-ID: <CAAeHK+wLp6h9Ew5ZHgk7u3qQ7gN32ZPqdWUcYcFNYfzFw5EvVQ@mail.gmail.com>
-Subject: Re: [balbi-usb:testing/fixes 2/8] WARNING: simple_strtoul is
- obsolete, use kstrtoul instead
-To:     kbuild test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, USB list <linux-usb@vger.kernel.org>,
-        linux-omap@vger.kernel.org, Felipe Balbi <balbi@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1589534960-6973-2-git-send-email-sanm@codeaurora.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 18, 2020 at 5:34 AM kbuild test robot <lkp@intel.com> wrote:
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git testing/fixes
-> head:   172b14b48ca10b280482b164506892ea09edb946
-> commit: 97df5e5758f7d1dd0ca97e3210696818fc45bdb3 [2/8] usb: raw-gadget: fix gadget endpoint selection
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kbuild test robot <lkp@intel.com>
->
-> scripts/checkpatch.pl 0001-usb-raw-gadget-fix-gadget-endpoint-selection.patch
-> # many are suggestions rather than must-fix
->
-> WARNING: simple_strtoul is obsolete, use kstrtoul instead
-> #123: drivers/usb/gadget/legacy/raw_gadget.c:261:
-> +               return simple_strtoul(&name[2], NULL, 10);
+On Fri, 15 May 2020 14:59:19 +0530, Sandeep Maheswaram wrote:
+> Convert USB DWC3 bindings to DT schema format using json-schema.
+> 
+> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+> ---
+>  .../devicetree/bindings/usb/qcom,dwc3.txt          | 104 -------------
+>  .../devicetree/bindings/usb/qcom,dwc3.yaml         | 162 +++++++++++++++++++++
+>  2 files changed, 162 insertions(+), 104 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/usb/qcom,dwc3.txt
+>  create mode 100644 Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> 
 
-The use of simple_strtoul() is intended here and falls under [1]. I'm
-not sure if we need to explain this to kbuild test robot somehow.
 
-[1] https://elixir.bootlin.com/linux/v5.7-rc5/source/include/linux/kernel.h#L459
+My bot found errors running 'make dt_binding_check' on your patch:
+
+Documentation/devicetree/bindings/usb/qcom,dwc3.example.dts:28.13-20: Warning (ranges_format): /example-0/usb@a6f8800:ranges: empty "ranges" property but its #address-cells (2) differs from /example-0 (1)
+Documentation/devicetree/bindings/usb/qcom,dwc3.example.dts:28.13-20: Warning (ranges_format): /example-0/usb@a6f8800:ranges: empty "ranges" property but its #size-cells (2) differs from /example-0 (1)
+
+See https://patchwork.ozlabs.org/patch/1290971
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure dt-schema is up to date:
+
+pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
+
+Please check and re-submit.
+
