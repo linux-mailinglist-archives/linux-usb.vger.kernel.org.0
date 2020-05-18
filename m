@@ -2,254 +2,342 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F20031D7314
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2020 10:38:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A67211D757F
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2020 12:46:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726447AbgERIiy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 May 2020 04:38:54 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:60664 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726040AbgERIix (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 May 2020 04:38:53 -0400
-Received: from mailhost.synopsys.com (badc-mailhost2.synopsys.com [10.192.0.18])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 225DB400B0;
-        Mon, 18 May 2020 08:38:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1589791133; bh=DBPMJiagukV4Yvi9P0HO4xsXMCA5DdtBsKzXIJHcfys=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=Wp/vv7h8RHti6KTYlKu7Yql7d52UXLOHbhvw30k8UhLi7LqszrdAyGYiUJ0CpFpmd
-         +KMmr70pYo2dYQeiJanuNRHnEy14Mv06pu9RbjwsRVpZJzT1lZn+5Hh7+uV6KtqHdK
-         l6Ls8tlKvp/vJHzvgMafNhe54QptjMYDnK+DiJSYTC3Ia+cG66+KY/0iTjG/dKq0iQ
-         yOFQmHv0G7Gh5zdC2CL01sXMqixITTpn0+e0gYOQ0ZSYJYVkiV+m/rap4w4CuAx3cO
-         NFIP9H2cGvgE+WmRZl4Cg01smpLDETb4XIQz6gw+0fSf42F5GVItPyHZ4Rtw+NWf/x
-         Q02w/GPFJfkSw==
-Received: from US01WEHTC3.internal.synopsys.com (us01wehtc3.internal.synopsys.com [10.15.84.232])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id EA24DA006A;
-        Mon, 18 May 2020 08:38:52 +0000 (UTC)
-Received: from us01hybrid1.internal.synopsys.com (10.200.27.51) by
- US01WEHTC3.internal.synopsys.com (10.15.84.232) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Mon, 18 May 2020 01:38:52 -0700
-Received: from NAM04-BN3-obe.outbound.protection.outlook.com (10.202.3.67) by
- mrs.synopsys.com (10.200.27.51) with Microsoft SMTP Server (TLS) id
- 14.3.487.0; Mon, 18 May 2020 01:38:52 -0700
+        id S1726936AbgERKqj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 May 2020 06:46:39 -0400
+Received: from mx0a-0014ca01.pphosted.com ([208.84.65.235]:53452 "EHLO
+        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726249AbgERKqi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 May 2020 06:46:38 -0400
+X-Greylist: delayed 1945 seconds by postgrey-1.27 at vger.kernel.org; Mon, 18 May 2020 06:46:38 EDT
+Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
+        by mx0a-0014ca01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04IA7Itu015284;
+        Mon, 18 May 2020 03:14:08 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=proofpoint;
+ bh=JGCI0K7ErXhX+0uqiitYKaGwWB54QXRCljibeszCWk8=;
+ b=FVhTqInHlS8x+OZcNn2duh1dLCxJChHTri2/6snoltXTx8QERdfKpxfukCEUyhAbBS0v
+ 3LX5T/Uj2caOx5Qz1jquD3VUuC6jOERJoN9kUn1lcslCwLV3G1ozmMYDEWHJqvSlZFYj
+ U5754NIITOllHy8MFCaE/1QyMCWe3+SlkuPf3h2Ue5WruH8/6GYlianztsDhUEzCW1bC
+ SboUnS+C9IC/2659n6u8DXtvxQUa0qa+e5y2O531MzttNbWgKWIR7vrjnlC/tmlxYrf6
+ eA5gDI+gla8Iqf6WKp08KvDkPMPrJuSwVSLNu9OF8sqUy9gmXlKhatlitbRSAfJxirXf 7A== 
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2177.outbound.protection.outlook.com [104.47.56.177])
+        by mx0a-0014ca01.pphosted.com with ESMTP id 312cqy67wd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 18 May 2020 03:14:08 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JDYKELYygLp0iYG2+8AqABovM0af63Sb40rOO5gqLdC83JzTfhgIqclnQ/IsWsrDWKvmjIjaFPIv9tf9t6gwiRPVEYyqZuDDXHalaHpFXMN013/ug/HKU9pWyyOJICva6NkOJ1M2Acz8mYY9KnW1MsOqeCLUct5Bm1Hp2GfYUcT+vQ/zQYUrUqywJcqKNGkVQMPUQ/B14dwpfZ2XmzjfUDmBOkwtv5qDMq0sU9iLXHRCXuJk1MYF9MoYYesR5bdbpXN+IZbsbsh8jsBj7leQqyp32woWLOjydb7z+L778EOIJAedPLcmfvpcYumYmpSs6T9GjdCtQc24u7fYgeIdPA==
+ b=ngYlfqKklXdFfM7HttqJ+3Kv+h/HrWizHZaLRPIIUaQD63ogBrehvC3SL/2yjFBLXuo85ii1RjnhKXaY1WW1TjEw4oxmkO7cUkWeNIbdCPrilw6/P06eok0XY4Jv8N5SDjqGTkeO2AyW1zc+b8/IdOp9lbTumMb6KDG65GGIOwrVAR4Iw0sQNvwq/dY766qxNrEEsqtDD9QMGIpkuwhV8N8b0Ek5ZJhRBT11iUIv/jK70IKzxFuWF5bIREh//PtKd4MT/nyYYrNIGVuAOT1FA+1m626iT1dXYKc7bfYvltdc4pn7RERsGVXvgLn+/uvRsEPG9Tp6YinYJXBnFIIJiQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DBPMJiagukV4Yvi9P0HO4xsXMCA5DdtBsKzXIJHcfys=;
- b=f+zLPVHVsMaO4ZJIM/MdQGyT8nBppC98Q4/EgUrH9LuwkS0+y1I4ESvVHvpoGmBx9WIKCgLfV6K+qRYHKxLkdSlB4WhhFz5j6COhAHuDgWLFaw2pOJaiXPZn9n3es2Fiim7WzYz5ZUb66LjBVv2DOt/WLhUsT4XzOX/2ZiGT8ZlM7bSDY/bArzn2YZBkjgzM8yRAHxck43Q/uv+nrE5aMisO1FGVB7uxO2PTgi6C1pKpVxppgoDJTsNl7CM45joyDyz7MEnhNgNZMBMWkfwRpBu0ttZ2iFLXygvj6cYPyYdKelKyiJ6yBW2KQdpbAqE/1DrfvoGLYgZatB1coSVhBA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
+ bh=JGCI0K7ErXhX+0uqiitYKaGwWB54QXRCljibeszCWk8=;
+ b=lAbfz3qnMWXRt24mm/bk578aKDnwlBIyznHEdtcVlcdjWw5b7ByU3kftE8LTnGJ2gf44Z82+tDv+SbxXYoBM542QPyo/hgs6h+wURxijU7a0j+WeTXbdHBnoHNCGuxqgzhN5y1CNj40MhPz2mBxXmihRHI7oSWD9GevxekSTPFh4zxBUGuWydCI2j9vCDqeRD26uv5Z8GQpDPfVZE+823K7CJizZEeSm9e9ScYebjhJpnja5w8GDdE8dCQqr7IkxJE/qFx5GV/BBIQJhLyzvvgcbw6nkgZj6I0WlFeSg2HcxGmxvbDFS8pyF5RTg25c0T58YUDxXBgVi67P9RvX+3g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 199.43.4.23) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=cadence.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=cadence.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DBPMJiagukV4Yvi9P0HO4xsXMCA5DdtBsKzXIJHcfys=;
- b=lLhlwX/z4QVOmyZqeMkG0hiTu3TANTZ1hsyrzkY81BxaxzlyYJdsONesy9InlQEUu2rmQi1Ft178+RgR4jA3f7y5o7pHUtjeORbbPneNH16CwfRvnUSeSbJ8kDls4HzO7CtGC4ryt5FgcfApu7qxfTsjawkJFL+VI0511FOQtS8=
-Received: from CH2PR12MB4311.namprd12.prod.outlook.com (2603:10b6:610:a8::21)
- by CH2PR12MB3992.namprd12.prod.outlook.com (2603:10b6:610:29::29) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3000.27; Mon, 18 May
- 2020 08:38:50 +0000
-Received: from CH2PR12MB4311.namprd12.prod.outlook.com
- ([fe80::cd38:4727:1239:f467]) by CH2PR12MB4311.namprd12.prod.outlook.com
- ([fe80::cd38:4727:1239:f467%4]) with mapi id 15.20.3000.034; Mon, 18 May 2020
- 08:38:50 +0000
-From:   Tejas Joglekar <Tejas.Joglekar@synopsys.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-CC:     John Youn <John.Youn@synopsys.com>
-Subject: Re: [RFC PATCH v2 4/4] usb: xhci: Use temporary buffer to consolidate
- SG
-Thread-Topic: [RFC PATCH v2 4/4] usb: xhci: Use temporary buffer to
- consolidate SG
-Thread-Index: AQHWF8I9mzJAua+iDUCYnE0KWVGzAqitr/yA
-Date:   Mon, 18 May 2020 08:38:50 +0000
-Message-ID: <d467de66-d166-c0e6-bb92-454086a1504e@synopsys.com>
-References: <cover.1587461220.git.joglekar@synopsys.com>
- <969b5c9f31807635785ecc74b2ae2559ddc3bbeb.1587461220.git.joglekar@synopsys.com>
-In-Reply-To: <969b5c9f31807635785ecc74b2ae2559ddc3bbeb.1587461220.git.joglekar@synopsys.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: linuxfoundation.org; dkim=none (message not signed)
- header.d=none;linuxfoundation.org; dmarc=none action=none
- header.from=synopsys.com;
-x-originating-ip: [49.207.49.82]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1749e6af-b2ff-414b-3b79-08d7fb06e3cf
-x-ms-traffictypediagnostic: CH2PR12MB3992:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <CH2PR12MB3992039E43DF441C2283A4E2A4B80@CH2PR12MB3992.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 04073E895A
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: F+zx6f5M2J0h7tIupZN5i/Tu4BahyVeYPKUHw924tjLirUvqoA7mCQhLdy+zzGVL1zYOREyWI363ArKeLG4G7F7/xiIzqa/zeXbjS37MdPnp7wj3w9S9We3MAGS1cHqAGettMkm24UZ7ydthUR8hu8eOGl2+OGkUe/S2YbjjfF5U8ajGhxAnXqvdaSbQ3ELEI0y34MMRReJKYt1HKujrOw+B/9pO9eosqh+75huDH4gf3LTr0nmOf7M3VL+7jeMdU6bep77VEgqTMNbhi18nubHg5NJzsaF8g4y0DjqW9xhkaJm98fy8ZEUTZ9b97w7BcNt364oU1vLZtVxMT3nWAds/GyOmtXZAvnZ0or6HVQkbVuWcoaDblWg+6etBEtsqU56Y9HjRsATTLF08kamjoPC+QJPq3R8Z7u/dys81GDiyu/Msp4AwUKTC5hIAZltC
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR12MB4311.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(376002)(136003)(39850400004)(396003)(346002)(366004)(66556008)(107886003)(66446008)(66476007)(66946007)(6486002)(86362001)(4326008)(316002)(31696002)(5660300002)(478600001)(91956017)(76116006)(8676002)(6512007)(64756008)(110136005)(8936002)(2906002)(36756003)(26005)(186003)(71200400001)(31686004)(2616005)(55236004)(6506007)(53546011);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: i/djhyg5xlZwp23BUd4H4H0yGa16RvqU794TKO7FBV1Vrw58mHGPUeCZYXYxKHsmMUQVDhacj0UVCNxaR/+O3XuS94lnZit7zsu2wpRpoeF9lrs6jDV9Nnzys1mDdM4LpLyLM3HHApdBKyDpskOy5DpfQRVvHerKQP6FWGgM+WfUF4qyOxoRsuv5vPOEUz6MaxSNCkpbWBWvqd3y8aeQyIJNRCe6UwAFlyfrCT6eMrXUi42ilFltxhu8Iva0tHYsOLT/az4crfQyU+HsCv6BOWJCHDGtwdYniaWY+lAlobu00rwWS8DqFAYnkqCi0kUzbJTXDPJrLoLGpCwucXmv3gPI1lCDYuIt/YFcEsjTdX4ihsd3b5PdUM+lF2rAfxR1E3QUnUd7pSBtiQo3szSeDKWPPgPsOpBV5XRbi7Fx3yCur7RWQtQ8FLGWlS5ZvO5Ax8paqauZw1KkTtd60kUDdS+RR6Rdtn3x75LxK6FDuGo=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <FC57A78A73976443B7CEAFFA2516A494@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ bh=JGCI0K7ErXhX+0uqiitYKaGwWB54QXRCljibeszCWk8=;
+ b=Zkoc5fC1Xnj9Xq+/Z1oAVGSg67YM3r5dFVd782f5A1vAKt2MrxkQDFNazGLl/KkVjrWJm1AQAQqAPBAu3ZEko/VrRqjsmJPQ6FVqNaMUw3Hghft8Qzmvpi8cHwiCW995wUtbgvHWrL7e7+vyRIWz3F1d08MkDCejMz/Pvg+P12M=
+Received: from DM5PR21CA0024.namprd21.prod.outlook.com (2603:10b6:3:ac::34) by
+ DM6PR07MB5066.namprd07.prod.outlook.com (2603:10b6:5:1f::28) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3000.27; Mon, 18 May 2020 10:14:04 +0000
+Received: from DM6NAM12FT007.eop-nam12.prod.protection.outlook.com
+ (2603:10b6:3:ac:cafe::db) by DM5PR21CA0024.outlook.office365.com
+ (2603:10b6:3:ac::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3045.4 via Frontend
+ Transport; Mon, 18 May 2020 10:14:04 +0000
+Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
+ 199.43.4.23 as permitted sender) receiver=protection.outlook.com;
+ client-ip=199.43.4.23; helo=rmmaillnx1.cadence.com;
+Received: from rmmaillnx1.cadence.com (199.43.4.23) by
+ DM6NAM12FT007.mail.protection.outlook.com (10.13.178.236) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3021.11 via Frontend Transport; Mon, 18 May 2020 10:14:04 +0000
+Received: from maileu3.global.cadence.com (maileu3.cadence.com [10.160.88.99])
+        by rmmaillnx1.cadence.com (8.14.4/8.14.4) with ESMTP id 04IADtgs020992
+        (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=OK);
+        Mon, 18 May 2020 06:14:02 -0400
+X-CrossPremisesHeadersFilteredBySendConnector: maileu3.global.cadence.com
+Received: from maileu3.global.cadence.com (10.160.88.99) by
+ maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1367.3; Mon, 18 May 2020 12:12:46 +0200
+Received: from vleu-orange.cadence.com (10.160.88.83) by
+ maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1367.3 via Frontend Transport; Mon, 18 May 2020 12:12:46 +0200
+Received: from vleu-orange.cadence.com (localhost.localdomain [127.0.0.1])
+        by vleu-orange.cadence.com (8.14.4/8.14.4) with ESMTP id 04IACk2X030559;
+        Mon, 18 May 2020 12:12:46 +0200
+Received: (from pawell@localhost)
+        by vleu-orange.cadence.com (8.14.4/8.14.4/Submit) id 04IACbwd030453;
+        Mon, 18 May 2020 12:12:37 +0200
+From:   Pawel Laszczak <pawell@cadence.com>
+To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <rogerq@ti.com>, <jbergsagel@ti.com>, <nsekhar@ti.com>,
+        <nm@ti.com>, <kurahul@cadence.com>, <jpawar@cadence.com>,
+        <Thinh.Nguyen@synopsys.com>, Pawel Laszczak <pawell@cadence.com>
+Subject: [PATCH v2] usb: gadget: Fix issue with config_ep_by_speed function.
+Date:   Mon, 18 May 2020 12:08:45 +0200
+Message-ID: <20200518100844.28293-1-pawell@cadence.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1749e6af-b2ff-414b-3b79-08d7fb06e3cf
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 May 2020 08:38:50.5304
+Content-Type: text/plain
+X-OrganizationHeadersPreserved: maileu3.global.cadence.com
+X-EOPAttributedMessage: 0
+X-Forefront-Antispam-Report: CIP:199.43.4.23;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:rmmaillnx1.cadence.com;PTR:InfoDomainNonexistent;CAT:NONE;SFTY:;SFS:(4636009)(346002)(39860400002)(136003)(396003)(376002)(36092001)(46966005)(47076004)(82740400003)(82310400002)(81166007)(356005)(36906005)(107886003)(54906003)(8676002)(316002)(70206006)(42186006)(70586007)(1076003)(110136005)(6666004)(8936002)(478600001)(186003)(2616005)(26005)(2906002)(426003)(4326008)(336012)(5660300002)(36756003)(86362001);DIR:OUT;SFP:1101;
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 57263b70-2691-420a-de6b-08d7fb143155
+X-MS-TrafficTypeDiagnostic: DM6PR07MB5066:
+X-Microsoft-Antispam-PRVS: <DM6PR07MB50664050C260195289D5EB52DDB80@DM6PR07MB5066.namprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-Forefront-PRVS: 04073E895A
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: UCJbcRlJgPON4+Gk9vWJKaHURryoeFDenAfvHw+mOWcUHR0hjED9Vag0CqzqztTA79uJGrxUwmYAOESrtQAsdrm6PZUxQMnUNLv6VBnUCU2PSlLQ3y1ZbmxUyrHyD2j7pCy3dm5dJgZXXXL1bG3PDb7kn6LKaNGzkvtxIHYTgTsk0bfQiKBTt+omn9KX3+ZXt/jATiuqIV6LKQUU0fFISBsxcv0Lbl4abgU2r6dq2Hv9+WKmDAN3H4RHrrIGxJlCCbIc5AQJg/QkZaGKCfFPdZmXhF72WhrHyVU/NR5TJa4iKsBepMKXF00SKHc52+unzp/HYraPtJj/5mXysSPv8Ngc7jy1cIFYmTlsoXvP2tB4vH0SOnkJMyG5xkBr961MX8slnNmi0P7BJ5QNNG33hGl81KPw/BWyfRMjsDKaXKY2EtOzmwgq2fN8oeAnEp4tHNBcrwrESPHzHW0FaGKpPmsiCv52hvFULALs5XuteScIQzetO99SiTd0i/dp9f07tiV9FwWxxQ/MjErf/uHp4kJ4Q/LZdn+osnErojSoAiY=
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2020 10:14:04.1113
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: L7e+h7yf91ujQMfeyhm32k0iEshkVLY9BdoYOueCJVs2wOo2Ntdznv8aT5S8vUlacLpF3bzkh03WzKdwEG3ZKQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB3992
-X-OriginatorOrg: synopsys.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 57263b70-2691-420a-de6b-08d7fb143155
+X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[199.43.4.23];Helo=[rmmaillnx1.cadence.com]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR07MB5066
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
+ definitions=2020-05-18_03:2020-05-15,2020-05-18 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0
+ lowpriorityscore=0 spamscore=0 cotscore=-2147483648 impostorscore=0
+ mlxlogscore=993 phishscore=0 clxscore=1011 mlxscore=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 bulkscore=0 adultscore=0 classifier=spam
+ adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2005180092
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgTWF0aGlhcywNCiBDYW4geW91IHBsZWFzZSByZXZpZXcgYW5kIGNvbW1lbnQ/DQpPbiA0LzIx
-LzIwMjAgMzoxOSBQTSwgVGVqYXMgSm9nbGVrYXIgd3JvdGU6DQo+IFRoZSBTeW5vcHN5cyB4SEMg
-aGFzIGFuIGludGVybmFsIFRSQiBjYWNoZSBvZiBzaXplIFRSQl9DQUNIRV9TSVpFIGZvcg0KPiBl
-YWNoIGVuZHBvaW50LiBUaGUgZGVmYXVsdCB2YWx1ZSBmb3IgVFJCX0NBQ0hFX1NJWkUgaXMgMTYg
-Zm9yIFNTIGFuZCA4DQo+IGZvciBIUy4gVGhlIGNvbnRyb2xsZXIgbG9hZHMgYW5kIHVwZGF0ZXMg
-dGhlIFRSQiBjYWNoZSBmcm9tIHRoZSB0cmFuc2Zlcg0KPiByaW5nIGluIHN5c3RlbSBtZW1vcnkg
-d2hlbmV2ZXIgdGhlIGRyaXZlciBpc3N1ZXMgYSBzdGFydCB0cmFuc2ZlciBvcg0KPiB1cGRhdGUg
-dHJhbnNmZXIgY29tbWFuZC4NCj4gDQo+IEZvciBjaGFpbmVkIFRSQnMsIHRoZSBTeW5vcHN5cyB4
-SEMgcmVxdWlyZXMgdGhhdCB0aGUgdG90YWwgYW1vdW50IG9mDQo+IGJ5dGVzIGZvciBhbGwgVFJC
-cyBsb2FkZWQgaW4gdGhlIFRSQiBjYWNoZSBiZSBncmVhdGVyIHRoYW4gb3IgZXF1YWwgdG8gMQ0K
-PiBNUFMuIE9yIHRoZSBjaGFpbiBlbmRzIHdpdGhpbiB0aGUgVFJCIGNhY2hlICh3aXRoIGEgbGFz
-dCBUUkIpLg0KPiANCj4gSWYgdGhpcyByZXF1aXJlbWVudCBpcyBub3QgbWV0LCB0aGUgY29udHJv
-bGxlciB3aWxsIG5vdCBiZSBhYmxlIHRvIHNlbmQNCj4gb3IgcmVjZWl2ZSBhIHBhY2tldCBhbmQg
-aXQgd2lsbCBoYW5nIGNhdXNpbmcgYSBkcml2ZXIgdGltZW91dCBhbmQgZXJyb3IuDQo+IA0KPiBU
-aGlzIGNhbiBiZSBhIHByb2JsZW0gaWYgYSBjbGFzcyBkcml2ZXIgcXVldWVzIFNHIHJlcXVlc3Rz
-IHdpdGggbWFueQ0KPiBzbWFsbC1idWZmZXIgZW50cmllcy4gVGhlIFhIQ0kgZHJpdmVyIHdpbGwg
-Y3JlYXRlIGEgY2hhaW5lZCBUUkIgZm9yIGVhY2gNCj4gZW50cnkgd2hpY2ggbWF5IHRyaWdnZXIg
-dGhpcyBpc3N1ZS4NCj4gDQo+IFRoaXMgcGF0Y2ggYWRkcyBsb2dpYyB0byB0aGUgWEhDSSBkcml2
-ZXIgdG8gZGV0ZWN0IGFuZCBwcmV2ZW50IHRoaXMgZnJvbQ0KPiBoYXBwZW5pbmcuDQo+IA0KPiBG
-b3IgZXZlcnkgKFRSQl9DQUNIRV9TSVpFIC0gMiksIHdlIGNoZWNrIHRoZSB0b3RhbCBidWZmZXIg
-c2l6ZSBvZg0KPiB0aGUgU0cgbGlzdCBhbmQgaWYgdGhlIGxhc3Qgd2luZG93IG9mIChUUkJfQ0FD
-SEVfU0laRSAtIDIpIFNHIGxpc3QgbGVuZ3RoDQo+IGFuZCB3ZSBkb24ndCBtYWtlIHVwIGF0IGxl
-YXN0IDEgTVBTLCB3ZSBjcmVhdGUgYSB0ZW1wb3JhcnkgYnVmZmVyIHRvDQo+IGNvbnNvbGlkYXRl
-IGZ1bGwgU0cgbGlzdCBpbnRvIHRoZSBidWZmZXIuDQo+IA0KPiBXZSBjaGVjayBhdCAoVFJCX0NB
-Q0hFX1NJWkUgLSAyKSB3aW5kb3cgYmVjYXVzZSBpdCBpcyBwb3NzaWJsZSB0aGF0IHRoZXJlDQo+
-IHdvdWxkIGJlIGEgbGluayBhbmQvb3IgZXZlbnQgZGF0YSBUUkIgdGhhdCB0YWtlIHVwIHRvIDIg
-b2YgdGhlIGNhY2hlDQo+IGVudHJpZXMuDQo+IA0KPiBXZSBkaXNjb3ZlcmVkIHRoaXMgaXNzdWUg
-d2l0aCBkZXZpY2VzIG9uIG90aGVyIHBsYXRmb3JtcyBidXQgaGF2ZSBub3QNCj4geWV0IGNvbWUg
-YWNyb3NzIGFueSBkZXZpY2UgdGhhdCB0cmlnZ2VycyB0aGlzIG9uIExpbnV4LiBCdXQgaXQgY291
-bGQgYmUNCj4gYSByZWFsIHByb2JsZW0gbm93IG9yIGluIHRoZSBmdXR1cmUuIEFsbCBpdCB0YWtl
-cyBpcyBOIG51bWJlciBvZiBzbWFsbA0KPiBjaGFpbmVkIFRSQnMuIEFuZCBvdGhlciBpbnN0YW5j
-ZXMgb2YgdGhlIFN5bm9wc3lzIElQIG1heSBoYXZlIHNtYWxsZXINCj4gdmFsdWVzIGZvciB0aGUg
-VFJCX0NBQ0hFX1NJWkUgd2hpY2ggd291bGQgZXhhY2VyYmF0ZSB0aGUgcHJvYmxlbS4NCj4gDQo+
-IFNpZ25lZC1vZmYtYnk6IFRlamFzIEpvZ2xla2FyIDxqb2dsZWthckBzeW5vcHN5cy5jb20+DQo+
-IC0tLQ0KPiAgQ2hhbmdlcyBpbiB2MjoNCj4gIC0gUmVtb3ZlZCByZWR1bmRhbnQgZGVidWcgbWVz
-c2FnZXMNCj4gIC0gTW9kaWZpZWQgbG9naWMgdG8gcmVtb3ZlIHVubmVjZXNzYXJ5IGNoYW5nZXMg
-aW4gaGNkLmMNCj4gIC0gUmVuYW1lIHRoZSBxdWlyaw0KPiANCj4gIGRyaXZlcnMvdXNiL2hvc3Qv
-eGhjaS1yaW5nLmMgfCAgIDIgKy0NCj4gIGRyaXZlcnMvdXNiL2hvc3QveGhjaS5jICAgICAgfCAx
-MjUgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKw0KPiAgZHJpdmVy
-cy91c2IvaG9zdC94aGNpLmggICAgICB8ICAgNCArKw0KPiAgMyBmaWxlcyBjaGFuZ2VkLCAxMzAg
-aW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMv
-dXNiL2hvc3QveGhjaS1yaW5nLmMgYi9kcml2ZXJzL3VzYi9ob3N0L3hoY2ktcmluZy5jDQo+IGlu
-ZGV4IGE3ODc4N2JiNTEzMy4uMmZhZDk0NzQ5MTJhIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3Vz
-Yi9ob3N0L3hoY2ktcmluZy5jDQo+ICsrKyBiL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1yaW5nLmMN
-Cj4gQEAgLTMyOTEsNyArMzI5MSw3IEBAIGludCB4aGNpX3F1ZXVlX2J1bGtfdHgoc3RydWN0IHho
-Y2lfaGNkICp4aGNpLCBnZnBfdCBtZW1fZmxhZ3MsDQo+ICANCj4gIAlmdWxsX2xlbiA9IHVyYi0+
-dHJhbnNmZXJfYnVmZmVyX2xlbmd0aDsNCj4gIAkvKiBJZiB3ZSBoYXZlIHNjYXR0ZXIvZ2F0aGVy
-IGxpc3QsIHdlIHVzZSBpdC4gKi8NCj4gLQlpZiAodXJiLT5udW1fc2dzKSB7DQo+ICsJaWYgKHVy
-Yi0+bnVtX3NncyAmJiAhKHVyYi0+dHJhbnNmZXJfZmxhZ3MgJiBVUkJfRE1BX01BUF9TSU5HTEUp
-KSB7DQo+ICAJCW51bV9zZ3MgPSB1cmItPm51bV9tYXBwZWRfc2dzOw0KPiAgCQlzZyA9IHVyYi0+
-c2c7DQo+ICAJCWFkZHIgPSAodTY0KSBzZ19kbWFfYWRkcmVzcyhzZyk7DQo+IGRpZmYgLS1naXQg
-YS9kcml2ZXJzL3VzYi9ob3N0L3hoY2kuYyBiL2RyaXZlcnMvdXNiL2hvc3QveGhjaS5jDQo+IGlu
-ZGV4IGZlMzgyNzUzNjNlMC4uMTVmMDZiYzZiMWFkIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3Vz
-Yi9ob3N0L3hoY2kuYw0KPiArKysgYi9kcml2ZXJzL3VzYi9ob3N0L3hoY2kuYw0KPiBAQCAtMTI1
-Niw2ICsxMjU2LDEwNiBAQCBFWFBPUlRfU1lNQk9MX0dQTCh4aGNpX3Jlc3VtZSk7DQo+ICANCj4g
-IC8qLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLSovDQo+ICANCj4gK3N0YXRpYyBpbnQgeGhjaV9tYXBfdGVtcF9i
-dWZmZXIoc3RydWN0IHVzYl9oY2QgKmhjZCwgc3RydWN0IHVyYiAqdXJiKQ0KPiArew0KPiArCXZv
-aWQgKnRlbXA7DQo+ICsJaW50IHJldCA9IDA7DQo+ICsJdW5zaWduZWQgaW50IGxlbjsNCj4gKwl1
-bnNpZ25lZCBpbnQgYnVmX2xlbjsNCj4gKwllbnVtIGRtYV9kYXRhX2RpcmVjdGlvbiBkaXI7DQo+
-ICsJc3RydWN0IHhoY2lfaGNkICp4aGNpOw0KPiArDQo+ICsJeGhjaSA9IGhjZF90b194aGNpKGhj
-ZCk7DQo+ICsJZGlyID0gdXNiX3VyYl9kaXJfaW4odXJiKSA/IERNQV9GUk9NX0RFVklDRSA6IERN
-QV9UT19ERVZJQ0U7DQo+ICsJYnVmX2xlbiA9IHVyYi0+dHJhbnNmZXJfYnVmZmVyX2xlbmd0aDsN
-Cj4gKw0KPiArCXRlbXAgPSBremFsbG9jX25vZGUoYnVmX2xlbiwgR0ZQX0FUT01JQywNCj4gKwkJ
-CSAgICBkZXZfdG9fbm9kZShoY2QtPnNlbGYuc3lzZGV2KSk7DQo+ICsNCj4gKwlpZiAodXNiX3Vy
-Yl9kaXJfb3V0KHVyYikpDQo+ICsJCWxlbiA9IHNnX3Bjb3B5X3RvX2J1ZmZlcih1cmItPnNnLCB1
-cmItPm51bV9zZ3MsDQo+ICsJCQkJCSB0ZW1wLCBidWZfbGVuLCAwKTsNCj4gKw0KPiArCXVyYi0+
-dHJhbnNmZXJfYnVmZmVyID0gdGVtcDsNCj4gKwl1cmItPnRyYW5zZmVyX2RtYSA9IGRtYV9tYXBf
-c2luZ2xlKGhjZC0+c2VsZi5zeXNkZXYsDQo+ICsJCQkJCSAgIHVyYi0+dHJhbnNmZXJfYnVmZmVy
-LA0KPiArCQkJCQkgICB1cmItPnRyYW5zZmVyX2J1ZmZlcl9sZW5ndGgsDQo+ICsJCQkJCSAgIGRp
-cik7DQo+ICsNCj4gKwlpZiAoZG1hX21hcHBpbmdfZXJyb3IoaGNkLT5zZWxmLnN5c2RldiwNCj4g
-KwkJCSAgICAgIHVyYi0+dHJhbnNmZXJfZG1hKSkgew0KPiArCQlyZXQgPSAtRUFHQUlOOw0KPiAr
-CQlrZnJlZSh0ZW1wKTsNCj4gKwl9IGVsc2Ugew0KPiArCQl1cmItPnRyYW5zZmVyX2ZsYWdzIHw9
-IFVSQl9ETUFfTUFQX1NJTkdMRTsNCj4gKwl9DQo+ICsNCj4gKwlyZXR1cm4gcmV0Ow0KPiArfQ0K
-PiArDQo+ICtzdGF0aWMgYm9vbCB4aGNpX3VyYl90ZW1wX2J1ZmZlcl9yZXF1aXJlZChzdHJ1Y3Qg
-dXNiX2hjZCAqaGNkLA0KPiArCQkJCQkgIHN0cnVjdCB1cmIgKnVyYikNCj4gK3sNCj4gKwlib29s
-IHJldCA9IGZhbHNlOw0KPiArCXVuc2lnbmVkIGludCBpOw0KPiArCXVuc2lnbmVkIGludCBsZW4g
-PSAwOw0KPiArCXVuc2lnbmVkIGludCBidWZfbGVuOw0KPiArCXVuc2lnbmVkIGludCB0cmJfc2l6
-ZTsNCj4gKwl1bnNpZ25lZCBpbnQgbWF4X3BrdDsNCj4gKwlzdHJ1Y3Qgc2NhdHRlcmxpc3QgKnNn
-Ow0KPiArCXN0cnVjdCBzY2F0dGVybGlzdCAqdGFpbF9zZzsNCj4gKw0KPiArCXNnID0gdXJiLT5z
-ZzsNCj4gKwl0YWlsX3NnID0gdXJiLT5zZzsNCj4gKwlidWZfbGVuID0gdXJiLT50cmFuc2Zlcl9i
-dWZmZXJfbGVuZ3RoOw0KPiArCW1heF9wa3QgPSB1c2JfZW5kcG9pbnRfbWF4cCgmdXJiLT5lcC0+
-ZGVzYyk7DQo+ICsNCj4gKwlpZiAoIXVyYi0+bnVtX3NncykNCj4gKwkJcmV0dXJuIHJldDsNCj4g
-Kw0KPiArCWlmICh1cmItPmRldi0+c3BlZWQgPj0gVVNCX1NQRUVEX1NVUEVSKQ0KPiArCQl0cmJf
-c2l6ZSA9IFRSQl9DQUNIRV9TSVpFX1NTOw0KPiArCWVsc2UNCj4gKwkJdHJiX3NpemUgPSBUUkJf
-Q0FDSEVfU0laRV9IUzsNCj4gKw0KPiArCWlmICh1cmItPnRyYW5zZmVyX2J1ZmZlcl9sZW5ndGgg
-IT0gMCAmJg0KPiArCSAgICAhKHVyYi0+dHJhbnNmZXJfZmxhZ3MgJiBVUkJfTk9fVFJBTlNGRVJf
-RE1BX01BUCkpIHsNCj4gKwkJZm9yX2VhY2hfc2codXJiLT5zZywgc2csIHVyYi0+bnVtX3Nncywg
-aSkgew0KPiArCQkJbGVuID0gbGVuICsgc2ctPmxlbmd0aDsNCj4gKwkJCWlmIChpID4gdHJiX3Np
-emUgLSAyKSB7DQo+ICsJCQkJbGVuID0gbGVuIC0gdGFpbF9zZy0+bGVuZ3RoOw0KPiArCQkJCWlm
-IChsZW4gPCBtYXhfcGt0KSB7DQo+ICsJCQkJCXJldCA9IHRydWU7DQo+ICsJCQkJCWJyZWFrOw0K
-PiArCQkJCX0NCj4gKw0KPiArCQkJCXRhaWxfc2cgPSBzZ19uZXh0KHRhaWxfc2cpOw0KPiArCQkJ
-fQ0KPiArCQl9DQo+ICsJfQ0KPiArCXJldHVybiByZXQ7DQo+ICt9DQo+ICsNCj4gK3N0YXRpYyB2
-b2lkIHhoY2lfdW5tYXBfdGVtcF9idWYoc3RydWN0IHVyYiAqdXJiKQ0KPiArew0KPiArCXN0cnVj
-dCBzY2F0dGVybGlzdCAqc2c7DQo+ICsJdW5zaWduZWQgaW50IGxlbjsNCj4gKwl1bnNpZ25lZCBp
-bnQgYnVmX2xlbjsNCj4gKw0KPiArCXNnID0gdXJiLT5zZzsNCj4gKwlidWZfbGVuID0gdXJiLT50
-cmFuc2Zlcl9idWZmZXJfbGVuZ3RoOw0KPiArDQo+ICsJaWYgKHVzYl91cmJfZGlyX2luKHVyYikp
-IHsNCj4gKwkJbGVuID0gc2dfcGNvcHlfZnJvbV9idWZmZXIodXJiLT5zZywgdXJiLT5udW1fc2dz
-LA0KPiArCQkJCQkgICB1cmItPnRyYW5zZmVyX2J1ZmZlciwNCj4gKwkJCQkJICAgYnVmX2xlbiwN
-Cj4gKwkJCQkJICAgMCk7DQo+ICsJfQ0KPiArDQo+ICsJa2ZyZWUodXJiLT50cmFuc2Zlcl9idWZm
-ZXIpOw0KPiArCXVyYi0+dHJhbnNmZXJfYnVmZmVyID0gTlVMTDsNCj4gK30NCj4gKw0KPiAgLyoN
-Cj4gICAqIEJ5cGFzcyB0aGUgRE1BIG1hcHBpbmcgaWYgVVJCIGlzIHN1aXRhYmxlIGZvciBJbW1l
-ZGlhdGUgVHJhbnNmZXIgKElEVCksDQo+ICAgKiB3ZSdsbCBjb3B5IHRoZSBhY3R1YWwgZGF0YSBp
-bnRvIHRoZSBUUkIgYWRkcmVzcyByZWdpc3Rlci4gVGhpcyBpcyBsaW1pdGVkIHRvDQo+IEBAIC0x
-MjY1LDEyICsxMzY1LDM2IEBAIEVYUE9SVF9TWU1CT0xfR1BMKHhoY2lfcmVzdW1lKTsNCj4gIHN0
-YXRpYyBpbnQgeGhjaV9tYXBfdXJiX2Zvcl9kbWEoc3RydWN0IHVzYl9oY2QgKmhjZCwgc3RydWN0
-IHVyYiAqdXJiLA0KPiAgCQkJCWdmcF90IG1lbV9mbGFncykNCj4gIHsNCj4gKwlzdHJ1Y3QgeGhj
-aV9oY2QgKnhoY2k7DQo+ICsNCj4gKwl4aGNpID0gaGNkX3RvX3hoY2koaGNkKTsNCj4gKw0KPiAg
-CWlmICh4aGNpX3VyYl9zdWl0YWJsZV9mb3JfaWR0KHVyYikpDQo+ICAJCXJldHVybiAwOw0KPiAg
-DQo+ICsJaWYgKHhoY2ktPnF1aXJrcyAmIFhIQ0lfU0dfVFJCX0NBQ0hFX1NJWkVfUVVJUkspIHsN
-Cj4gKwkJaWYgKHhoY2lfdXJiX3RlbXBfYnVmZmVyX3JlcXVpcmVkKGhjZCwgdXJiKSkNCj4gKwkJ
-CXJldHVybiB4aGNpX21hcF90ZW1wX2J1ZmZlcihoY2QsIHVyYik7DQo+ICsJfQ0KPiAgCXJldHVy
-biB1c2JfaGNkX21hcF91cmJfZm9yX2RtYShoY2QsIHVyYiwgbWVtX2ZsYWdzKTsNCj4gIH0NCj4g
-IA0KPiArc3RhdGljIHZvaWQgeGhjaV91bm1hcF91cmJfZm9yX2RtYShzdHJ1Y3QgdXNiX2hjZCAq
-aGNkLCBzdHJ1Y3QgdXJiICp1cmIpDQo+ICt7DQo+ICsJc3RydWN0IHhoY2lfaGNkICp4aGNpOw0K
-PiArCWJvb2wgdW5tYXBfdGVtcF9idWYgPSBmYWxzZTsNCj4gKw0KPiArCXhoY2kgPSBoY2RfdG9f
-eGhjaShoY2QpOw0KPiArDQo+ICsJaWYgKHVyYi0+bnVtX3NncyAmJiAodXJiLT50cmFuc2Zlcl9m
-bGFncyAmIFVSQl9ETUFfTUFQX1NJTkdMRSkpDQo+ICsJCXVubWFwX3RlbXBfYnVmID0gdHJ1ZTsN
-Cj4gKw0KPiArCXVzYl9oY2RfdW5tYXBfdXJiX2Zvcl9kbWEoaGNkLCB1cmIpOw0KPiArDQo+ICsJ
-aWYgKCh4aGNpLT5xdWlya3MgJiBYSENJX1NHX1RSQl9DQUNIRV9TSVpFX1FVSVJLKSAmJiB1bm1h
-cF90ZW1wX2J1ZikNCj4gKwkJeGhjaV91bm1hcF90ZW1wX2J1Zih1cmIpOw0KPiArfQ0KPiArDQo+
-ICAvKioNCj4gICAqIHhoY2lfZ2V0X2VuZHBvaW50X2luZGV4IC0gVXNlZCBmb3IgcGFzc2luZyBl
-bmRwb2ludCBiaXRtYXNrcyBiZXR3ZWVuIHRoZSBjb3JlIGFuZA0KPiAgICogSENEcy4gIEZpbmQg
-dGhlIGluZGV4IGZvciBhbiBlbmRwb2ludCBnaXZlbiBpdHMgZGVzY3JpcHRvci4gIFVzZSB0aGUg
-cmV0dXJuDQo+IEBAIC01MzE1LDYgKzU0MzksNyBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IGhjX2Ry
-aXZlciB4aGNpX2hjX2RyaXZlciA9IHsNCj4gIAkgKiBtYW5hZ2luZyBpL28gcmVxdWVzdHMgYW5k
-IGFzc29jaWF0ZWQgZGV2aWNlIHJlc291cmNlcw0KPiAgCSAqLw0KPiAgCS5tYXBfdXJiX2Zvcl9k
-bWEgPSAgICAgIHhoY2lfbWFwX3VyYl9mb3JfZG1hLA0KPiArCS51bm1hcF91cmJfZm9yX2RtYSA9
-ICAgIHhoY2lfdW5tYXBfdXJiX2Zvcl9kbWEsDQo+ICAJLnVyYl9lbnF1ZXVlID0JCXhoY2lfdXJi
-X2VucXVldWUsDQo+ICAJLnVyYl9kZXF1ZXVlID0JCXhoY2lfdXJiX2RlcXVldWUsDQo+ICAJLmFs
-bG9jX2RldiA9CQl4aGNpX2FsbG9jX2RldiwNCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2hv
-c3QveGhjaS5oIGIvZHJpdmVycy91c2IvaG9zdC94aGNpLmgNCj4gaW5kZXggNGRiODI1NDU5YjQw
-Li4xNDYwMDIxNDE4OGYgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvdXNiL2hvc3QveGhjaS5oDQo+
-ICsrKyBiL2RyaXZlcnMvdXNiL2hvc3QveGhjaS5oDQo+IEBAIC0xMzMwLDYgKzEzMzAsMTAgQEAg
-ZW51bSB4aGNpX3NldHVwX2RldiB7DQo+ICAjZGVmaW5lIFRSQl9TSUEJCQkoMTw8MzEpDQo+ICAj
-ZGVmaW5lIFRSQl9GUkFNRV9JRChwKQkJKCgocCkgJiAweDdmZikgPDwgMjApDQo+ICANCj4gKy8q
-IFRSQiBjYWNoZSBzaXplIGZvciB4SEMgd2l0aCBUUkIgY2FjaGUgKi8NCj4gKyNkZWZpbmUgVFJC
-X0NBQ0hFX1NJWkVfSFMJOA0KPiArI2RlZmluZSBUUkJfQ0FDSEVfU0laRV9TUwkxNg0KPiArDQo+
-ICBzdHJ1Y3QgeGhjaV9nZW5lcmljX3RyYiB7DQo+ICAJX19sZTMyIGZpZWxkWzRdOw0KPiAgfTsN
-Cj4gDQoNClRoYW5rcyAmIFJlZ2FyZHMsDQogVGVqYXMgSm9nbGVrYXINCg==
+This patch adds new config_ep_by_speed_and_alt function which
+extends the config_ep_by_speed about alt parameter.
+This additional parameter allows to find proper usb_ss_ep_comp_descriptor.
+
+Problem has appeared during testing f_tcm (BOT/UAS) driver function.
+
+f_tcm function for SS use array of headers for both  BOT/UAS alternate
+setting:
+
+static struct usb_descriptor_header *uasp_ss_function_desc[] = {
+        (struct usb_descriptor_header *) &bot_intf_desc,
+        (struct usb_descriptor_header *) &uasp_ss_bi_desc,
+        (struct usb_descriptor_header *) &bot_bi_ep_comp_desc,
+        (struct usb_descriptor_header *) &uasp_ss_bo_desc,
+        (struct usb_descriptor_header *) &bot_bo_ep_comp_desc,
+
+        (struct usb_descriptor_header *) &uasp_intf_desc,
+        (struct usb_descriptor_header *) &uasp_ss_bi_desc,
+        (struct usb_descriptor_header *) &uasp_bi_ep_comp_desc,
+        (struct usb_descriptor_header *) &uasp_bi_pipe_desc,
+        (struct usb_descriptor_header *) &uasp_ss_bo_desc,
+        (struct usb_descriptor_header *) &uasp_bo_ep_comp_desc,
+        (struct usb_descriptor_header *) &uasp_bo_pipe_desc,
+        (struct usb_descriptor_header *) &uasp_ss_status_desc,
+        (struct usb_descriptor_header *) &uasp_status_in_ep_comp_desc,
+        (struct usb_descriptor_header *) &uasp_status_pipe_desc,
+        (struct usb_descriptor_header *) &uasp_ss_cmd_desc,
+        (struct usb_descriptor_header *) &uasp_cmd_comp_desc,
+        (struct usb_descriptor_header *) &uasp_cmd_pipe_desc,
+        NULL,
+};
+
+The first 5 descriptors are associated with BOT alternate setting,
+and others are associated with UAS.
+
+During handling UAS alternate setting f_tcm driver invokes
+config_ep_by_speed and this function sets incorrect companion endpoint
+descriptor in usb_ep object.
+
+Instead setting ep->comp_desc to uasp_bi_ep_comp_desc function in this
+case set ep->comp_desc to uasp_ss_bi_desc.
+
+This is due to the fact that it searches endpoint based on endpoint
+address:
+
+        for_each_ep_desc(speed_desc, d_spd) {
+                chosen_desc = (struct usb_endpoint_descriptor *)*d_spd;
+                if (chosen_desc->bEndpoitAddress == _ep->address)
+                        goto ep_found;
+        }
+
+And in result it uses the descriptor from BOT alternate setting
+instead UAS.
+
+Finally, it causes that controller driver during enabling endpoints
+detect that just enabled endpoint for bot.
+
+Signed-off-by: Jayshri Pawar <jpawar@cadence.com>
+Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+---
+Changelog:
+v2
+- redefine config_ep_by_speed() instead removing it.
+- remove changes from f_tcm.c file.
+
+ drivers/usb/gadget/composite.c | 78 ++++++++++++++++++++++++++--------
+ include/linux/usb/composite.h  |  3 ++
+ 2 files changed, 64 insertions(+), 17 deletions(-)
+
+diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+index 3b4f67000315..858a71fbcd13 100644
+--- a/drivers/usb/gadget/composite.c
++++ b/drivers/usb/gadget/composite.c
+@@ -96,40 +96,43 @@ function_descriptors(struct usb_function *f,
+ }
+ 
+ /**
+- * next_ep_desc() - advance to the next EP descriptor
++ * next_desc() - advance to the next desc_type descriptor
+  * @t: currect pointer within descriptor array
++ * @desc_type: descriptor type
+  *
+- * Return: next EP descriptor or NULL
++ * Return: next desc_type descriptor or NULL
+  *
+- * Iterate over @t until either EP descriptor found or
++ * Iterate over @t until either desc_type descriptor found or
+  * NULL (that indicates end of list) encountered
+  */
+ static struct usb_descriptor_header**
+-next_ep_desc(struct usb_descriptor_header **t)
++next_desc(struct usb_descriptor_header **t, u8 desc_type)
+ {
+ 	for (; *t; t++) {
+-		if ((*t)->bDescriptorType == USB_DT_ENDPOINT)
++		if ((*t)->bDescriptorType == desc_type)
+ 			return t;
+ 	}
+ 	return NULL;
+ }
+ 
+ /*
+- * for_each_ep_desc()- iterate over endpoint descriptors in the
+- *		descriptors list
+- * @start:	pointer within descriptor array.
+- * @ep_desc:	endpoint descriptor to use as the loop cursor
++ * for_each_desc() - iterate over desc_type descriptors in the
++ * descriptors list
++ * @start: pointer within descriptor array.
++ * @iter_desc: desc_type descriptor to use as the loop cursor
++ * @desc_type: wanted descriptr type
+  */
+-#define for_each_ep_desc(start, ep_desc) \
+-	for (ep_desc = next_ep_desc(start); \
+-	      ep_desc; ep_desc = next_ep_desc(ep_desc+1))
++#define for_each_desc(start, iter_desc, desc_type) \
++	for (iter_desc = next_desc(start, desc_type); \
++	     iter_desc; iter_desc = next_desc(iter_desc + 1, desc_type))
+ 
+ /**
+- * config_ep_by_speed() - configures the given endpoint
++ * config_ep_by_speed_and_alt() - configures the given endpoint
+  * according to gadget speed.
+  * @g: pointer to the gadget
+  * @f: usb function
+  * @_ep: the endpoint to configure
++ * @alt: alternate setting number
+  *
+  * Return: error code, 0 on success
+  *
+@@ -142,11 +145,13 @@ next_ep_desc(struct usb_descriptor_header **t)
+  * Note: the supplied function should hold all the descriptors
+  * for supported speeds
+  */
+-int config_ep_by_speed(struct usb_gadget *g,
+-			struct usb_function *f,
+-			struct usb_ep *_ep)
++int config_ep_by_speed_and_alt(struct usb_gadget *g,
++				struct usb_function *f,
++				struct usb_ep *_ep,
++				u8 alt)
+ {
+ 	struct usb_endpoint_descriptor *chosen_desc = NULL;
++	struct usb_interface_descriptor *int_desc = NULL;
+ 	struct usb_descriptor_header **speed_desc = NULL;
+ 
+ 	struct usb_ss_ep_comp_descriptor *comp_desc = NULL;
+@@ -182,8 +187,21 @@ int config_ep_by_speed(struct usb_gadget *g,
+ 	default:
+ 		speed_desc = f->fs_descriptors;
+ 	}
++
++	/* find correct alternate setting descriptor */
++	for_each_desc(speed_desc, d_spd, USB_DT_INTERFACE) {
++		int_desc = (struct usb_interface_descriptor *)*d_spd;
++
++		if (int_desc->bAlternateSetting == alt) {
++			speed_desc = d_spd;
++			goto intf_found;
++		}
++	}
++	return -EIO;
++
++intf_found:
+ 	/* find descriptors */
+-	for_each_ep_desc(speed_desc, d_spd) {
++	for_each_desc(speed_desc, d_spd, USB_DT_ENDPOINT) {
+ 		chosen_desc = (struct usb_endpoint_descriptor *)*d_spd;
+ 		if (chosen_desc->bEndpointAddress == _ep->address)
+ 			goto ep_found;
+@@ -237,6 +255,32 @@ int config_ep_by_speed(struct usb_gadget *g,
+ 	}
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(config_ep_by_speed_and_alt);
++
++/**
++ * config_ep_by_speed() - configures the given endpoint
++ * according to gadget speed.
++ * @g: pointer to the gadget
++ * @f: usb function
++ * @_ep: the endpoint to configure
++ *
++ * Return: error code, 0 on success
++ *
++ * This function chooses the right descriptors for a given
++ * endpoint according to gadget speed and saves it in the
++ * endpoint desc field. If the endpoint already has a descriptor
++ * assigned to it - overwrites it with currently corresponding
++ * descriptor. The endpoint maxpacket field is updated according
++ * to the chosen descriptor.
++ * Note: the supplied function should hold all the descriptors
++ * for supported speeds
++ */
++int config_ep_by_speed(struct usb_gadget *g,
++			struct usb_function *f,
++			struct usb_ep *_ep)
++{
++	return config_ep_by_speed_and_alt(g, f, _ep, 0);
++}
+ EXPORT_SYMBOL_GPL(config_ep_by_speed);
+ 
+ /**
+diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
+index 8675e145ea8b..2040696d75b6 100644
+--- a/include/linux/usb/composite.h
++++ b/include/linux/usb/composite.h
+@@ -249,6 +249,9 @@ int usb_function_activate(struct usb_function *);
+ 
+ int usb_interface_id(struct usb_configuration *, struct usb_function *);
+ 
++int config_ep_by_speed_and_alt(struct usb_gadget *g, struct usb_function *f,
++				struct usb_ep *_ep, u8 alt);
++
+ int config_ep_by_speed(struct usb_gadget *g, struct usb_function *f,
+ 			struct usb_ep *_ep);
+ 
+-- 
+2.17.1
+
