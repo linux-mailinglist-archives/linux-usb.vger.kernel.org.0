@@ -2,31 +2,25 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CED461D7CE4
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2020 17:33:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D6AA1D7D24
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2020 17:44:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728256AbgERPdP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 May 2020 11:33:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34800 "EHLO mail.kernel.org"
+        id S1728326AbgERPoA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 May 2020 11:44:00 -0400
+Received: from foss.arm.com ([217.140.110.172]:42968 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726958AbgERPdP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 18 May 2020 11:33:15 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 269B0207ED;
-        Mon, 18 May 2020 15:33:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589815994;
-        bh=TyenBBcRlC7bHcDCgrQGTESSKFo/bxcfFo2JmDj2gPg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2bkezwy1Dc3M7HZgrw3dCxOGmxDcnV20LYmEDJpxoZlAjzDsoEut3EaU8jMFKnHH7
-         9eO7bFr7vaIXSYWoj9XUc5T/0mtcMFZg0oDggYw7qupQHvTtJEOmou1pm00LR+XO+b
-         gDN3m0O1mh9OPm14IdCrla7JnVoJlBC7DzuhojYA=
-Date:   Mon, 18 May 2020 17:33:12 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Qais Yousef <qais.yousef@arm.com>,
+        id S1726958AbgERPoA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 18 May 2020 11:44:00 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 61E0C101E;
+        Mon, 18 May 2020 08:43:59 -0700 (PDT)
+Received: from e107158-lin.cambridge.arm.com (e107158-lin.cambridge.arm.com [10.1.195.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2CDB43F52E;
+        Mon, 18 May 2020 08:43:58 -0700 (PDT)
+Date:   Mon, 18 May 2020 16:43:55 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
         "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Tony Prisk <linux@prisktech.co.nz>,
         Mathias Nyman <mathias.nyman@intel.com>,
@@ -34,38 +28,44 @@ Cc:     Qais Yousef <qais.yousef@arm.com>,
         linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 1/3] usb/ohci-platform: Fix a warning when hibernating
-Message-ID: <20200518153312.GA1963214@kroah.com>
+Message-ID: <20200518154355.qzur4fy6wowjarwp@e107158-lin.cambridge.arm.com>
 References: <20200424134800.4629-1-qais.yousef@arm.com>
  <Pine.LNX.4.44L0.2004281459240.1555-100000@netrider.rowland.org>
  <20200518145748.puvxkcmyrxc7eqt7@e107158-lin.cambridge.arm.com>
  <20200518151940.GC15479@rowland.harvard.edu>
+ <20200518153312.GA1963214@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200518151940.GC15479@rowland.harvard.edu>
+In-Reply-To: <20200518153312.GA1963214@kroah.com>
+User-Agent: NeoMutt/20171215
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 18, 2020 at 11:19:40AM -0400, Alan Stern wrote:
-> On Mon, May 18, 2020 at 03:57:49PM +0100, Qais Yousef wrote:
-> > > For both this patch and the 3/3 patch (ehci-platform):
+On 05/18/20 17:33, Greg Kroah-Hartman wrote:
+> On Mon, May 18, 2020 at 11:19:40AM -0400, Alan Stern wrote:
+> > On Mon, May 18, 2020 at 03:57:49PM +0100, Qais Yousef wrote:
+> > > > For both this patch and the 3/3 patch (ehci-platform):
+> > > > 
+> > > > Acked-by: Alan Stern <stern@rowland.harvard.edu>
 > > > 
-> > > Acked-by: Alan Stern <stern@rowland.harvard.edu>
+> > > Thanks Alan. Did this make it through to any tree? I don't see it on next, nor
+> > > on Linus. But it could be queued somewhere else.
+> > > 
+> > > I have sent v2 to patch 2 (xhci) as a reply, so hopefully it wasn't missed.
+> > > I can resend the whole series if necessary.
 > > 
-> > Thanks Alan. Did this make it through to any tree? I don't see it on next, nor
-> > on Linus. But it could be queued somewhere else.
-> > 
-> > I have sent v2 to patch 2 (xhci) as a reply, so hopefully it wasn't missed.
-> > I can resend the whole series if necessary.
+> > Greg, what happened to this series?  Did it just fall through the 
+> > cracks?
 > 
-> Greg, what happened to this series?  Did it just fall through the 
-> cracks?
+> No idea, it's not in my to-review queue, so maybe it got merged
+> somewhere?  If not, can someone resend it please?
 
-No idea, it's not in my to-review queue, so maybe it got merged
-somewhere?  If not, can someone resend it please?
+Sure, I'll get it out ASAP.
 
-thanks,
+Thanks
 
-greg k-h
+--
+Qais Yousef
