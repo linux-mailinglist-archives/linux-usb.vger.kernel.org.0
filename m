@@ -2,139 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8432B1D7CA6
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2020 17:20:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CED461D7CE4
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2020 17:33:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728315AbgERPU1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 May 2020 11:20:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57988 "EHLO mail.kernel.org"
+        id S1728256AbgERPdP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 May 2020 11:33:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34800 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727063AbgERPU0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 18 May 2020 11:20:26 -0400
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726958AbgERPdP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 18 May 2020 11:33:15 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1BE2F20709;
-        Mon, 18 May 2020 15:20:25 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 269B0207ED;
+        Mon, 18 May 2020 15:33:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589815225;
-        bh=tSws2kjDhXaAFNWN68OWyjCdK+4AcxFyLFLzGGQxyNU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=kZz+KHtEmx4LXcyztl4rmU2EAXazJQFb7E8mHywQvhoHn1/5wVi5TmH9zFMDLS4W/
-         MiKmt+x10Jms6pej2MZzFDOjkYSYEcoSMNblOS5IKOq3bv9ecuPNIZRnnJBSu7GCXv
-         mI5P/vnVxOyhBlbFI4Ezj8NA2S5v8JeiuE3LjRFQ=
-Received: by mail-ot1-f42.google.com with SMTP id x22so4751556otq.4;
-        Mon, 18 May 2020 08:20:25 -0700 (PDT)
-X-Gm-Message-State: AOAM532AXu2+ODHrVl/USjh57gFEjBKY3Xj6/SQBQi8niO4Abx/WAKpk
-        JP4+SsdoEdntaT89YyW0M+vGxKJxzww1f7hjMQ==
-X-Google-Smtp-Source: ABdhPJzAqhRdGybXpwpC/ZOQ7F9CQ8eOmJxxxyRMv1ENHmR6X3dhaIAFrOd3PP9Ko0YHK3CdCi+5NlS47TBiLzZklxs=
-X-Received: by 2002:a9d:5c8a:: with SMTP id a10mr8596315oti.129.1589815224353;
- Mon, 18 May 2020 08:20:24 -0700 (PDT)
+        s=default; t=1589815994;
+        bh=TyenBBcRlC7bHcDCgrQGTESSKFo/bxcfFo2JmDj2gPg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2bkezwy1Dc3M7HZgrw3dCxOGmxDcnV20LYmEDJpxoZlAjzDsoEut3EaU8jMFKnHH7
+         9eO7bFr7vaIXSYWoj9XUc5T/0mtcMFZg0oDggYw7qupQHvTtJEOmou1pm00LR+XO+b
+         gDN3m0O1mh9OPm14IdCrla7JnVoJlBC7DzuhojYA=
+Date:   Mon, 18 May 2020 17:33:12 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Qais Yousef <qais.yousef@arm.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Tony Prisk <linux@prisktech.co.nz>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Oliver Neukum <oneukum@suse.de>,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] usb/ohci-platform: Fix a warning when hibernating
+Message-ID: <20200518153312.GA1963214@kroah.com>
+References: <20200424134800.4629-1-qais.yousef@arm.com>
+ <Pine.LNX.4.44L0.2004281459240.1555-100000@netrider.rowland.org>
+ <20200518145748.puvxkcmyrxc7eqt7@e107158-lin.cambridge.arm.com>
+ <20200518151940.GC15479@rowland.harvard.edu>
 MIME-Version: 1.0
-References: <20200317093922.20785-1-lkundrak@v3.sk> <20200317093922.20785-29-lkundrak@v3.sk>
- <20200327195520.GA2235@bogus> <20200517193451.GG1695525@furthur.local>
-In-Reply-To: <20200517193451.GG1695525@furthur.local>
-From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 18 May 2020 09:20:13 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+oQSk=xGBiQ73SyGggo=gBOmH6xvTv1QBAUfbnt42E0A@mail.gmail.com>
-Message-ID: <CAL_Jsq+oQSk=xGBiQ73SyGggo=gBOmH6xvTv1QBAUfbnt42E0A@mail.gmail.com>
-Subject: Re: [PATCH 28/28] dt-bindings: usb: Convert ehci-mv to json-schema
-To:     Lubomir Rintel <lkundrak@v3.sk>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200518151940.GC15479@rowland.harvard.edu>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, May 17, 2020 at 1:34 PM Lubomir Rintel <lkundrak@v3.sk> wrote:
->
-> On Fri, Mar 27, 2020 at 01:55:20PM -0600, Rob Herring wrote:
-> > On Tue, Mar 17, 2020 at 10:39:22AM +0100, Lubomir Rintel wrote:
-> > > A straightforward conversion of the ehci-mv binding to DT schema format
-> > > using json-schema.
-> > >
-> > > Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
-> > > ---
-> > >  .../devicetree/bindings/usb/ehci-mv.txt       | 23 -------
-> > >  .../bindings/usb/marvell,pxau2o-ehci.yaml     | 60 +++++++++++++++++++
-> > >  2 files changed, 60 insertions(+), 23 deletions(-)
-> > >  delete mode 100644 Documentation/devicetree/bindings/usb/ehci-mv.txt
-> > >  create mode 100644 Documentation/devicetree/bindings/usb/marvell,pxau2o-ehci.yaml
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/usb/ehci-mv.txt b/Documentation/devicetree/bindings/usb/ehci-mv.txt
-> > > deleted file mode 100644
-> > > index 335589895763e..0000000000000
-> > > --- a/Documentation/devicetree/bindings/usb/ehci-mv.txt
-> > > +++ /dev/null
-> > > @@ -1,23 +0,0 @@
-> > > -* Marvell PXA/MMP EHCI controller.
-> > > -
-> > > -Required properties:
-> > > -
-> > > -- compatible: must be "marvell,pxau2o-ehci"
-> > > -- reg: physical base addresses of the controller and length of memory mapped region
-> > > -- interrupts: one EHCI controller interrupt should be described here
-> > > -- clocks: phandle list of usb clocks
-> > > -- clock-names: should be "USBCLK"
-> > > -- phys: phandle for the PHY device
-> > > -- phy-names: should be "usb"
-> > > -
-> > > -Example:
-> > > -
-> > > -   ehci0: usb-ehci@d4208000 {
-> > > -           compatible = "marvell,pxau2o-ehci";
-> > > -           reg = <0xd4208000 0x200>;
-> > > -           interrupts = <44>;
-> > > -           clocks = <&soc_clocks MMP2_CLK_USB>;
-> > > -           clock-names = "USBCLK";
-> > > -           phys = <&usb_otg_phy>;
-> > > -           phy-names = "usb";
-> > > -   };
-> > > diff --git a/Documentation/devicetree/bindings/usb/marvell,pxau2o-ehci.yaml b/Documentation/devicetree/bindings/usb/marvell,pxau2o-ehci.yaml
-> > > new file mode 100644
-> > > index 0000000000000..189025ef1e92e
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/usb/marvell,pxau2o-ehci.yaml
-> > > @@ -0,0 +1,60 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-or-later OR BSD-2-Clause)
-> >
-> > Same license comment.
->
-> I wrote that binding document and chose that license.
+On Mon, May 18, 2020 at 11:19:40AM -0400, Alan Stern wrote:
+> On Mon, May 18, 2020 at 03:57:49PM +0100, Qais Yousef wrote:
+> > > For both this patch and the 3/3 patch (ehci-platform):
+> > > 
+> > > Acked-by: Alan Stern <stern@rowland.harvard.edu>
+> > 
+> > Thanks Alan. Did this make it through to any tree? I don't see it on next, nor
+> > on Linus. But it could be queued somewhere else.
+> > 
+> > I have sent v2 to patch 2 (xhci) as a reply, so hopefully it wasn't missed.
+> > I can resend the whole series if necessary.
+> 
+> Greg, what happened to this series?  Did it just fall through the 
+> cracks?
 
-Okay, but please make it GPL-2.0-only instead of or-later. If everyone
-was attentive to licensing picking their own variations would be fine,
-but they aren't and just copy-n-paste. So there's 2 choices
-GPL-2.0-only (for converted bindings) or (GPL-2.0-only OR
-BSD-2-Clause) for new or re-licensed bindings.
+No idea, it's not in my to-review queue, so maybe it got merged
+somewhere?  If not, can someone resend it please?
 
-Rob
+thanks,
+
+greg k-h
