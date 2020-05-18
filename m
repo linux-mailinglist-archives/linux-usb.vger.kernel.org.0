@@ -2,102 +2,212 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD1DD1D8425
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2020 20:11:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E8051D85A8
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2020 20:20:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732723AbgERSJY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 May 2020 14:09:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54900 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733195AbgERSGk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 18 May 2020 14:06:40 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 17850207D3;
-        Mon, 18 May 2020 18:06:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589825199;
-        bh=jEGs5cCX+TotOoxBhZ01jg/PVeC8CitSbGIkzwa184g=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BNtWEXTIPo4iiRQsaWAtNGLWcMeho4DRvxnwhKc7/UwToTYCwo3zArAUsBIBFPNik
-         1mR91hWEQwCskoU+ZYSauI9JPxcJyCzamiq+ET1O7hq610I2C6g6F46TX4t2QCjTFN
-         UUy2VYJku+awP6nBfOGxwourHtp1qI3+RLTgwQVc=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, YongQin Liu <yongqin.liu@linaro.org>,
-        Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>,
-        Yang Fei <fei.yang@intel.com>,
-        Thinh Nguyen <thinhn@synopsys.com>,
-        Tejas Joglekar <tejas.joglekar@synopsys.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Jack Pham <jackp@codeaurora.org>, Josh Gao <jmgao@google.com>,
-        Todd Kjos <tkjos@google.com>, Felipe Balbi <balbi@kernel.org>,
-        linux-usb@vger.kernel.org, John Stultz <john.stultz@linaro.org>
-Subject: [PATCH 5.6 162/194] dwc3: Remove check for HWO flag in dwc3_gadget_ep_reclaim_trb_sg()
-Date:   Mon, 18 May 2020 19:37:32 +0200
-Message-Id: <20200518173544.709413214@linuxfoundation.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200518173531.455604187@linuxfoundation.org>
-References: <20200518173531.455604187@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S1731994AbgERSUB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 May 2020 14:20:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33382 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731148AbgERRxa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 May 2020 13:53:30 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12092C061A0C
+        for <linux-usb@vger.kernel.org>; Mon, 18 May 2020 10:53:30 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id w15so1507403lfe.11
+        for <linux-usb@vger.kernel.org>; Mon, 18 May 2020 10:53:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=auxOAvLWtf1pZZSyVWFPai0DZNGDmQxFTyydphVNHvc=;
+        b=Vl9mmuiC7+19REd6VDHNPar684dLArGlRGMkQn5oqgGISgDn9rA9Lik+VFA810mJKY
+         Z/lqU/1LmGYWo/ob8AYxr4Q2/sNWezCyNM2TzOQag9de1dtWzYYjvtcqYLaj5UZ/eRSs
+         j8hcnYEluwCIYYQEZhNVvSaQXUVwZaW1vekivhtGXj6agpH6us2lt2eVka42V2tC3FBb
+         anttD+3GT6y2WprpvsdRhnf8iEsWgi9AJN5Lcv6UsJMZ0dJcUwz0KICOSnVe+AkXm4jK
+         rk7WxHuCvOQsbVbuTW9D42lNo27aBJenp/CL1EDodgfeQDkV7DKsAI6jISrExqk+E3OT
+         iqGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=auxOAvLWtf1pZZSyVWFPai0DZNGDmQxFTyydphVNHvc=;
+        b=ja90kAoF9YGoyq5Fd1tGCrydBPZHRuN8DErbPQWrlArNfT2PrSST4wKdgJcx342VPD
+         dTwVqaN3urkOlKIQev4DKEIORLqOSMzOat+hD8UMZ9LuiDcs5JW8kBZYHPyNrWVMFWkO
+         6NNKmgfe2TlJ/CcZGEp7n4/XDrB7B5zub1XJtKL1+6+YVykJM7I5+p84cLsdAO+I5Q6j
+         nsWVtXvfacT63tQ+QBcOQ07mpgXXDN6/mUw3x3CEXZXjEtDtCb1Loi3qqEvPpSJGAbRr
+         LfU7pM5Alc/oQDOFAX6Exe7tZb47vhu7vtnnLy0cCRrFyPcw5nwAinsseI515+M/w7DM
+         W2Jw==
+X-Gm-Message-State: AOAM530YxE2LhdU38H0o7s443XnJ0XpNP73Cq9v/QNiL/JiX5SOGGLgy
+        dZRTFt4qc/6vK1akDt8aiPddNNdrRZZciJ+dznVTqQ==
+X-Google-Smtp-Source: ABdhPJzv50aTNUNlvFS55s6qXm4/Sd4s/08q5esk2oruVv0ektYpkAo/7FrkfziK8Eed36WkBnmqcTgcwCr6rqNC7Eg=
+X-Received: by 2002:a19:48c9:: with SMTP id v192mr8337329lfa.20.1589824408382;
+ Mon, 18 May 2020 10:53:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20200506060025.1535960-1-vkoul@kernel.org> <20200506060025.1535960-4-vkoul@kernel.org>
+In-Reply-To: <20200506060025.1535960-4-vkoul@kernel.org>
+From:   Anders Roxell <anders.roxell@linaro.org>
+Date:   Mon, 18 May 2020 19:53:17 +0200
+Message-ID: <CADYN=9JLeWHODRWDEcTE_6iZ3TX-E4yyx3OwqzK-H-ytLAmQUg@mail.gmail.com>
+Subject: Re: [PATCH v13 3/5] usb: xhci: Add support for Renesas controller
+ with memory
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        =?UTF-8?Q?Andreas_B=C3=B6hler?= <dev@aboehler.at>,
+        linux-usb@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: John Stultz <john.stultz@linaro.org>
+On Wed, 6 May 2020 at 08:01, Vinod Koul <vkoul@kernel.org> wrote:
+>
+> Some rensas controller like uPD720201 and uPD720202 need firmware to be
+> loaded. Add these devices in pci table and invoke renesas firmware loader
+> functions to check and load the firmware into device memory when
+> required.
+>
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
 
-commit 00e21763f2c8cab21b7befa52996d1b18bde5c42 upstream.
+Hi, I got a build error when I built an arm64 allmodconfig kernel.
 
-The check for the HWO flag in dwc3_gadget_ep_reclaim_trb_sg()
-causes us to break out of the loop before we call
-dwc3_gadget_ep_reclaim_completed_trb(), which is what likely
-should be clearing the HWO flag.
+building obj-arm64-next-20200518
 
-This can cause odd behavior where we never reclaim all the trbs
-in the sg list, so we never call giveback on a usb req, and that
-will causes transfer stalls.
+aarch64-linux-gnu-ld: drivers/usb/host/xhci-pci.o: in function
+`xhci_pci_remove':
+/srv/src/kernel/next/obj-arm64-next-20200518/../drivers/usb/host/xhci-pci.c:411:
+undefined reference to `renesas_xhci_pci_exit'
+aarch64-linux-gnu-ld:
+/srv/src/kernel/next/obj-arm64-next-20200518/../drivers/usb/host/xhci-pci.c:411:(.text+0xd8):
+relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol
+`renesas_xhci_pci_exit'
+aarch64-linux-gnu-ld: drivers/usb/host/xhci-pci.o: in function `xhci_pci_probe':
+/srv/src/kernel/next/obj-arm64-next-20200518/../drivers/usb/host/xhci-pci.c:345:
+undefined reference to `renesas_xhci_check_request_fw'
+aarch64-linux-gnu-ld:
+/srv/src/kernel/next/obj-arm64-next-20200518/../drivers/usb/host/xhci-pci.c:345:(.text+0x2298):
+relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol
+`renesas_xhci_check_request_fw'
+make[1]: *** [/srv/src/kernel/next/Makefile:1126: vmlinux] Error 1
+make[1]: Target 'Image' not remade because of errors.
+make: *** [Makefile:185: __sub-make] Error 2
+make: Target 'Image' not remade because of errors.
 
-This effectively resovles the adb stalls seen on HiKey960
-after userland changes started only using AIO in adbd.
-
-Cc: YongQin Liu <yongqin.liu@linaro.org>
-Cc: Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
-Cc: Yang Fei <fei.yang@intel.com>
-Cc: Thinh Nguyen <thinhn@synopsys.com>
-Cc: Tejas Joglekar <tejas.joglekar@synopsys.com>
-Cc: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Cc: Jack Pham <jackp@codeaurora.org>
-Cc: Josh Gao <jmgao@google.com>
-Cc: Todd Kjos <tkjos@google.com>
-Cc: Felipe Balbi <balbi@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Cc: stable@vger.kernel.org #4.20+
-Signed-off-by: John Stultz <john.stultz@linaro.org>
-Signed-off-by: Felipe Balbi <balbi@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
----
- drivers/usb/dwc3/gadget.c |    3 ---
- 1 file changed, 3 deletions(-)
-
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2483,9 +2483,6 @@ static int dwc3_gadget_ep_reclaim_trb_sg
- 	for_each_sg(sg, s, pending, i) {
- 		trb = &dep->trb_pool[dep->trb_dequeue];
- 
--		if (trb->ctrl & DWC3_TRB_CTRL_HWO)
--			break;
--
- 		req->sg = sg_next(s);
- 		req->num_pending_sgs--;
- 
+When I reverted this patch from todays next tag next-20200518 I
+managed to build.
 
 
+Cheers,
+Anders
+
+> ---
+>  drivers/usb/host/xhci-pci.c | 35 ++++++++++++++++++++++++++++++++++-
+>  drivers/usb/host/xhci.h     |  1 +
+>  2 files changed, 35 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+> index b6c2f5c530e3..ef513c2fb843 100644
+> --- a/drivers/usb/host/xhci-pci.c
+> +++ b/drivers/usb/host/xhci-pci.c
+> @@ -15,6 +15,7 @@
+>
+>  #include "xhci.h"
+>  #include "xhci-trace.h"
+> +#include "xhci-pci.h"
+>
+>  #define SSIC_PORT_NUM          2
+>  #define SSIC_PORT_CFG2         0x880c
+> @@ -87,7 +88,16 @@ static int xhci_pci_reinit(struct xhci_hcd *xhci, struct pci_dev *pdev)
+>
+>  static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+>  {
+> -       struct pci_dev          *pdev = to_pci_dev(dev);
+> +       struct pci_dev                  *pdev = to_pci_dev(dev);
+> +       struct xhci_driver_data         *driver_data;
+> +       const struct pci_device_id      *id;
+> +
+> +       id = pci_match_id(pdev->driver->id_table, pdev);
+> +
+> +       if (id && id->driver_data) {
+> +               driver_data = (struct xhci_driver_data *)id->driver_data;
+> +               xhci->quirks |= driver_data->quirks;
+> +       }
+>
+>         /* Look for vendor-specific quirks */
+>         if (pdev->vendor == PCI_VENDOR_ID_FRESCO_LOGIC &&
+> @@ -328,6 +338,14 @@ static int xhci_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
+>         int retval;
+>         struct xhci_hcd *xhci;
+>         struct usb_hcd *hcd;
+> +       struct xhci_driver_data *driver_data;
+> +
+> +       driver_data = (struct xhci_driver_data *)id->driver_data;
+> +       if (driver_data && driver_data->quirks & XHCI_RENESAS_FW_QUIRK) {
+> +               retval = renesas_xhci_check_request_fw(dev, id);
+> +               if (retval)
+> +                       return retval;
+> +       }
+>
+>         /* Prevent runtime suspending between USB-2 and USB-3 initialization */
+>         pm_runtime_get_noresume(&dev->dev);
+> @@ -389,6 +407,9 @@ static void xhci_pci_remove(struct pci_dev *dev)
+>         struct xhci_hcd *xhci;
+>
+>         xhci = hcd_to_xhci(pci_get_drvdata(dev));
+> +       if (xhci->quirks & XHCI_RENESAS_FW_QUIRK)
+> +               renesas_xhci_pci_exit(dev);
+> +
+>         xhci->xhc_state |= XHCI_STATE_REMOVING;
+>
+>         if (xhci->quirks & XHCI_DEFAULT_PM_RUNTIME_ALLOW)
+> @@ -540,14 +561,26 @@ static void xhci_pci_shutdown(struct usb_hcd *hcd)
+>
+>  /*-------------------------------------------------------------------------*/
+>
+> +static const struct xhci_driver_data reneses_data = {
+> +       .quirks  = XHCI_RENESAS_FW_QUIRK,
+> +       .firmware = "renesas_usb_fw.mem",
+> +};
+> +
+>  /* PCI driver selection metadata; PCI hotplugging uses this */
+>  static const struct pci_device_id pci_ids[] = {
+> +       { PCI_DEVICE(0x1912, 0x0014),
+> +               .driver_data =  (unsigned long)&reneses_data,
+> +       },
+> +       { PCI_DEVICE(0x1912, 0x0015),
+> +               .driver_data =  (unsigned long)&reneses_data,
+> +       },
+>         /* handle any USB 3.0 xHCI controller */
+>         { PCI_DEVICE_CLASS(PCI_CLASS_SERIAL_USB_XHCI, ~0),
+>         },
+>         { /* end: all zeroes */ }
+>  };
+>  MODULE_DEVICE_TABLE(pci, pci_ids);
+> +MODULE_FIRMWARE("renesas_usb_fw.mem");
+>
+>  /* pci driver glue; this is a "new style" PCI driver module */
+>  static struct pci_driver xhci_pci_driver = {
+> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+> index 3289bb516201..4047363c7423 100644
+> --- a/drivers/usb/host/xhci.h
+> +++ b/drivers/usb/host/xhci.h
+> @@ -1873,6 +1873,7 @@ struct xhci_hcd {
+>  #define XHCI_DEFAULT_PM_RUNTIME_ALLOW  BIT_ULL(33)
+>  #define XHCI_RESET_PLL_ON_DISCONNECT   BIT_ULL(34)
+>  #define XHCI_SNPS_BROKEN_SUSPEND    BIT_ULL(35)
+> +#define XHCI_RENESAS_FW_QUIRK  BIT_ULL(36)
+>
+>         unsigned int            num_active_eps;
+>         unsigned int            limit_active_eps;
+> --
+> 2.25.4
+>
