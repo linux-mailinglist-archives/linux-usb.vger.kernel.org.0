@@ -2,90 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 137121D79FB
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2020 15:35:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F6861D7AD8
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2020 16:16:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727995AbgERNff (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 May 2020 09:35:35 -0400
-Received: from mga18.intel.com ([134.134.136.126]:64625 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726775AbgERNff (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 18 May 2020 09:35:35 -0400
-IronPort-SDR: BgxX+mo4GwtS0LRt7jon4Dkdii9FcyFcUJVDNGr/Ix5r8beM0gFKJSsQW6ZqDTwZcK8Lqwja6e
- ng1WJBy3ILKA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2020 06:35:34 -0700
-IronPort-SDR: b+0BUGM31BW8JI4QsMPM5wO6d+1unXO1fRR8+5S0gjFWPJdYpJNl7gRJ1KWd2kE7x5B29JXV+2
- vfc6OBwF7p+Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,407,1583222400"; 
-   d="scan'208";a="373390387"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 18 May 2020 06:35:31 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 18 May 2020 16:35:30 +0300
-Date:   Mon, 18 May 2020 16:35:30 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     jakub@bilan.me
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        USB <linux-usb@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>
-Subject: Re: your mail
-Message-ID: <20200518133530.GB1298122@kuha.fi.intel.com>
-References: <526351589195104@mail.yandex.com>
- <20200511113506.GB2062175@kuha.fi.intel.com>
- <CAHp75VcwUcbtZFQExEoJg9sFFVa_ueUT71SiMCVWetgaQg6kDQ@mail.gmail.com>
- <5ee2b9ef-25e3-c049-3f82-d3d51d392824@redhat.com>
- <CAHp75VdUeBt++mJCvWkHm82XQ+ze1U6OpQ9fv8Hb2d1Nfsz3pw@mail.gmail.com>
+        id S1727007AbgEROQh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 May 2020 10:16:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55616 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726998AbgEROQh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 May 2020 10:16:37 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02BA7C05BD09
+        for <linux-usb@vger.kernel.org>; Mon, 18 May 2020 07:16:36 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id c75so3847166pga.3
+        for <linux-usb@vger.kernel.org>; Mon, 18 May 2020 07:16:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VvdwlrTxZSPLNiHSo5izLe2b9V9iAwxZ6AVughxgK60=;
+        b=ps2MNAPgt0wJEpSoRGPmK2+4ULpB4BaAo59cnpT7mYucm95vV+gxN5DooIqEcTNchQ
+         ze8j0HVaJlTP5iKz7Udv7v1ZseorbSU3Yjf8J1TncdIRulZda1rNqjBIbFvuzd0B5XKC
+         +NkmnPUNxVKQTuKkwj0YS9LDDXkK1MhCGK7DclzUYsEvQUBMOzuQ8fkJmCsxteqUW72R
+         HngYxY/xbueyPxLiaTl260tRajNXNgLu90K2Z01SShdQZx5HVGuaGO+MEx/oGk06q5jT
+         nzf1TdkcPyvjpA0iqS1add5KgxgcklcuYWEHCDch9ud9p2nixqIeu6nuy0osH2SBTyFl
+         Ztfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VvdwlrTxZSPLNiHSo5izLe2b9V9iAwxZ6AVughxgK60=;
+        b=dn3Hu3ksqj5kVZMR2yonxQ9YTgxesVjlTBSn1dSZ2ZaNhLTtxndXsAZdDVoG6qhaeb
+         qpu5RBRwLF4R8qP4m2tl44cT/umii7fVnvGel08kNd+zYn3WTqXeH5uSlJJYuJE5Si+U
+         VzT2w0odFQMq09PhINOcYWPiOqHhP3lnxfa09I/mW+80KqiUbZQ2fmPDhO9/Aa+xwONp
+         JPDDQ7QOS/ixduvOqp/j0wqC8Q6cRrZX0Lqn7mfoJi1ewkzB1QjfkAZ7qB54baXyCJ4C
+         rrKxCCUapZYRaX09Cepn00oowUHKmTW5xh9hwlV/xjl9glFCci7wlqTfrHZdHBuGETVN
+         mqwQ==
+X-Gm-Message-State: AOAM532plM1IzpiRUA+HxE82l/qJmJDkNvTvKKoMhY4KTP6nqJ7XJ+TI
+        1t3bMn5Ocp8egK3YYrCk8wjlxEHu9ocx7veet4VM/A==
+X-Google-Smtp-Source: ABdhPJx3wRh01nd1bZ/9vwQRe0znfW0aKGrrl0hY0MSDSxHkHDrF5FbNPirncmGpWohW35cZQJhy5r+VW/7ncV+Hj3Q=
+X-Received: by 2002:a63:2bd3:: with SMTP id r202mr15015983pgr.130.1589811396267;
+ Mon, 18 May 2020 07:16:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75VdUeBt++mJCvWkHm82XQ+ze1U6OpQ9fv8Hb2d1Nfsz3pw@mail.gmail.com>
+References: <20200518033319.GC24805@intel.com>
+In-Reply-To: <20200518033319.GC24805@intel.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Mon, 18 May 2020 16:16:25 +0200
+Message-ID: <CAAeHK+wLp6h9Ew5ZHgk7u3qQ7gN32ZPqdWUcYcFNYfzFw5EvVQ@mail.gmail.com>
+Subject: Re: [balbi-usb:testing/fixes 2/8] WARNING: simple_strtoul is
+ obsolete, use kstrtoul instead
+To:     kbuild test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, USB list <linux-usb@vger.kernel.org>,
+        linux-omap@vger.kernel.org, Felipe Balbi <balbi@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Jakub,
+On Mon, May 18, 2020 at 5:34 AM kbuild test robot <lkp@intel.com> wrote:
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git testing/fixes
+> head:   172b14b48ca10b280482b164506892ea09edb946
+> commit: 97df5e5758f7d1dd0ca97e3210696818fc45bdb3 [2/8] usb: raw-gadget: fix gadget endpoint selection
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kbuild test robot <lkp@intel.com>
+>
+> scripts/checkpatch.pl 0001-usb-raw-gadget-fix-gadget-endpoint-selection.patch
+> # many are suggestions rather than must-fix
+>
+> WARNING: simple_strtoul is obsolete, use kstrtoul instead
+> #123: drivers/usb/gadget/legacy/raw_gadget.c:261:
+> +               return simple_strtoul(&name[2], NULL, 10);
 
-On Mon, May 11, 2020 at 04:40:05PM +0300, Andy Shevchenko wrote:
-> On Mon, May 11, 2020 at 3:29 PM Hans de Goede <hdegoede@redhat.com> wrote:
-> > On 5/11/20 1:44 PM, Andy Shevchenko wrote:
-> 
-> ...
-> 
-> > > I would rather disable them and issue a firmware bug.
-> > > Vendors, including us, should do something sane about this.
-> >
-> > I have to partially disagree here. I agree that for future hardware
-> > versions the firmware team of those devices should offer a saner
-> > interface. But for the current hardware gen I guess we are stuck
-> > with this and having a DMI table for popular models (well any model
-> > a Linux user is willing to submit a quirk for) is better then simply
-> > not having things working under Linux.
-> >
-> > I do wonder what Windows does here though. Perhaps the INT3513 device
-> > has some ACPI methods to query for more info, like how many Type-C
-> > controllers there actually are?
-> 
-> I think they do silly things there in usual obscure MS way, i.e.
-> hardcoding everything in the driver per platform.
-> That's why I'm really disappointed how things are going on.
+The use of simple_strtoul() is intended here and falls under [1]. I'm
+not sure if we need to explain this to kbuild test robot somehow.
 
-I've been trying to figure out which exact NUC10i3 your NUC is? I
-can't find a NUC10i3 that uses Comet Lake -S?
-
-If your NUC isn't actually "-S" variant, then the ACPI device entry
-with HID INT3515 should return 0 from its _STA method.
-
-But can you please share the full name of your board (like NUC10i3FNH
-or something like that - should read on the bottom of the device).
-Also, dmesg output would be useful.
-
-thanks,
-
--- 
-heikki
+[1] https://elixir.bootlin.com/linux/v5.7-rc5/source/include/linux/kernel.h#L459
