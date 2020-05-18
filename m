@@ -2,92 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD7271D7AE4
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2020 16:17:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B68401D7C01
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2020 16:57:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727954AbgERORh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 May 2020 10:17:37 -0400
-Received: from mail-il1-f193.google.com ([209.85.166.193]:42242 "EHLO
-        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726998AbgERORh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 May 2020 10:17:37 -0400
-Received: by mail-il1-f193.google.com with SMTP id 18so1027868iln.9;
-        Mon, 18 May 2020 07:17:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=s4TcDNDS3QM/2KVd7294s1MpV8sGjG6xtKJIu72IkFw=;
-        b=jrm6oCb+JSL+NzHvRdGWxqGcWr6PtW3U6ZyMn0JziQhq2QWjSp+i4m3JL+jRa6JILt
-         t0+jMvTlGtb3JxoWxvZnaado4Yt08gwtBVYdCCLWLMWyWbuCoKO56DBpu+qXcQHu8909
-         adYX3xNXCGNOSdW4gGdYzMOblUjzpIajiHgwt9Ff64GMghdH/l6S7KGu9pfo3NIy/V+q
-         oLJERjGW2YwWBUsH+GW4KB7AsWsnbt4ybz/RtSqBQIr1Nd5Y7y1cS3UqCZsaDP9ehgRr
-         gMIhV9Zo3oAtqYqpOZ1gikEk8u8wAAPcF+DrBVlb8WCJPinSglDRhBY6srpx2Pv/P0fK
-         mvyQ==
-X-Gm-Message-State: AOAM533b87vGmpWFCBK0gj5q0HwceSAKjOIf+RXsDlmyWEH7F3OgujMl
-        SVWPrUMPA3wSIFurjuUDYg==
-X-Google-Smtp-Source: ABdhPJzHP8Ro8/4oUA9Fgt5ZOHrfRK+rsvNiPBByP3WgO3+qiK7XcLyuhVX7Th3TGlo7ugCodmENbg==
-X-Received: by 2002:a92:c68c:: with SMTP id o12mr14945066ilg.96.1589811456172;
-        Mon, 18 May 2020 07:17:36 -0700 (PDT)
-Received: from rob-hp-laptop ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id k5sm4353242ilg.55.2020.05.18.07.17.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 May 2020 07:17:35 -0700 (PDT)
-Received: (nullmailer pid 2493 invoked by uid 1000);
-        Mon, 18 May 2020 14:17:34 -0000
-Date:   Mon, 18 May 2020 08:17:34 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Sandeep Maheswaram <sanm@codeaurora.org>
-Cc:     Felipe Balbi <balbi@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, linux-usb@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-kernel@vger.kernel.org, Matthias Kaehlcke <mka@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        devicetree@vger.kernel.org,
+        id S1728113AbgERO5x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 May 2020 10:57:53 -0400
+Received: from foss.arm.com ([217.140.110.172]:42182 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727035AbgERO5x (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 18 May 2020 10:57:53 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B9D2C101E;
+        Mon, 18 May 2020 07:57:52 -0700 (PDT)
+Received: from e107158-lin.cambridge.arm.com (e107158-lin.cambridge.arm.com [10.1.195.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 84B383F52E;
+        Mon, 18 May 2020 07:57:51 -0700 (PDT)
+Date:   Mon, 18 May 2020 15:57:49 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Tony Prisk <linux@prisktech.co.nz>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Manu Gautam <mgautam@codeaurora.org>
-Subject: Re: [PATCH v6 1/2] dt-bindings: usb: qcom,dwc3: Convert USB DWC3
- bindings
-Message-ID: <20200518141734.GA2367@bogus>
-References: <1589534960-6973-1-git-send-email-sanm@codeaurora.org>
- <1589534960-6973-2-git-send-email-sanm@codeaurora.org>
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Oliver Neukum <oneukum@suse.de>,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] usb/ohci-platform: Fix a warning when hibernating
+Message-ID: <20200518145748.puvxkcmyrxc7eqt7@e107158-lin.cambridge.arm.com>
+References: <20200424134800.4629-1-qais.yousef@arm.com>
+ <Pine.LNX.4.44L0.2004281459240.1555-100000@netrider.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1589534960-6973-2-git-send-email-sanm@codeaurora.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <Pine.LNX.4.44L0.2004281459240.1555-100000@netrider.rowland.org>
+User-Agent: NeoMutt/20171215
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 15 May 2020 14:59:19 +0530, Sandeep Maheswaram wrote:
-> Convert USB DWC3 bindings to DT schema format using json-schema.
+On 04/28/20 15:00, Alan Stern wrote:
+> On Fri, 24 Apr 2020, Qais Yousef wrote:
 > 
-> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
-> ---
->  .../devicetree/bindings/usb/qcom,dwc3.txt          | 104 -------------
->  .../devicetree/bindings/usb/qcom,dwc3.yaml         | 162 +++++++++++++++++++++
->  2 files changed, 162 insertions(+), 104 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/usb/qcom,dwc3.txt
->  create mode 100644 Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> > The following warning was observed when attempting to suspend to disk
+> > using a USB flash as a swap device.
+> > 
+> > [  111.779649] ------------[ cut here ]------------
+> > [  111.788382] URB (____ptrval____) submitted while active
+> > [  111.796646] WARNING: CPU: 3 PID: 365 at drivers/usb/core/urb.c:363 usb_submit_urb+0x3d8/0x590
+> > [  111.805417] Modules linked in:
+> > [  111.808584] CPU: 3 PID: 365 Comm: kworker/3:2 Not tainted 5.6.0-rc6-00002-gdfd1731f9a3e-dirty #545
+> > [  111.817796] Hardware name: ARM Juno development board (r2) (DT)
+> > [  111.823896] Workqueue: usb_hub_wq hub_event
+> > [  111.828217] pstate: 60000005 (nZCv daif -PAN -UAO)
+> > [  111.833156] pc : usb_submit_urb+0x3d8/0x590
+> > [  111.837471] lr : usb_submit_urb+0x3d8/0x590
+> > [  111.841783] sp : ffff800018de38b0
+> > [  111.845205] x29: ffff800018de38b0 x28: 0000000000000003
+> > [  111.850682] x27: ffff000970530b20 x26: ffff8000133fd000
+> > [  111.856159] x25: ffff8000133fd000 x24: ffff800018de3b38
+> > [  111.861635] x23: 0000000000000004 x22: 0000000000000c00
+> > [  111.867112] x21: 0000000000000000 x20: 00000000fffffff0
+> > [  111.872589] x19: ffff0009704e7a00 x18: ffffffffffffffff
+> > [  111.878065] x17: 00000000a7c8f4bc x16: 000000002af33de8
+> > [  111.883542] x15: ffff8000133fda88 x14: 0720072007200720
+> > [  111.889019] x13: 0720072007200720 x12: 0720072007200720
+> > [  111.894496] x11: 0000000000000000 x10: 00000000a5286134
+> > [  111.899973] x9 : 0000000000000002 x8 : ffff000970c837a0
+> > [  111.905449] x7 : 0000000000000000 x6 : ffff800018de3570
+> > [  111.910926] x5 : 0000000000000001 x4 : 0000000000000003
+> > [  111.916401] x3 : 0000000000000000 x2 : ffff800013427118
+> > [  111.921879] x1 : 9d4e965b4b7d7c00 x0 : 0000000000000000
+> > [  111.927356] Call trace:
+> > [  111.929892]  usb_submit_urb+0x3d8/0x590
+> > [  111.933852]  hub_activate+0x108/0x7f0
+> > [  111.937633]  hub_resume+0xac/0x148
+> > [  111.941149]  usb_resume_interface.isra.10+0x60/0x138
+> > [  111.946265]  usb_resume_both+0xe4/0x140
+> > [  111.950225]  usb_runtime_resume+0x24/0x30
+> > [  111.954365]  __rpm_callback+0xdc/0x138
+> > [  111.958236]  rpm_callback+0x34/0x98
+> > [  111.961841]  rpm_resume+0x4a8/0x720
+> > [  111.965445]  rpm_resume+0x50c/0x720
+> > [  111.969049]  __pm_runtime_resume+0x4c/0xb8
+> > [  111.973276]  usb_autopm_get_interface+0x28/0x60
+> > [  111.977948]  hub_event+0x80/0x16d8
+> > [  111.981466]  process_one_work+0x2a4/0x748
+> > [  111.985604]  worker_thread+0x48/0x498
+> > [  111.989387]  kthread+0x13c/0x140
+> > [  111.992725]  ret_from_fork+0x10/0x18
+> > [  111.996415] irq event stamp: 354
+> > [  111.999756] hardirqs last  enabled at (353): [<ffff80001019ea1c>] console_unlock+0x504/0x5b8
+> > [  112.008441] hardirqs last disabled at (354): [<ffff8000100a95d0>] do_debug_exception+0x1a8/0x258
+> > [  112.017479] softirqs last  enabled at (350): [<ffff8000100818a4>] __do_softirq+0x4bc/0x568
+> > [  112.025984] softirqs last disabled at (343): [<ffff8000101145a4>] irq_exit+0x144/0x150
+> > [  112.034129] ---[ end trace dc96030b9cf6c8a3 ]---
+> > 
+> > The problem was tracked down to a missing call to
+> > pm_runtime_set_active() on resume in ohci-platform.
+> > 
+> > Link: https://lore.kernel.org/lkml/20200323143857.db5zphxhq4hz3hmd@e107158-lin.cambridge.arm.com/
+> > Signed-off-by: Qais Yousef <qais.yousef@arm.com>
+> > CC: Tony Prisk <linux@prisktech.co.nz>
+> > CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > CC: Mathias Nyman <mathias.nyman@intel.com>
+> > CC: Oliver Neukum <oneukum@suse.de>
+> > CC: linux-arm-kernel@lists.infradead.org
+> > CC: linux-usb@vger.kernel.org
+> > CC: linux-kernel@vger.kernel.org
+> > ---
+> >  drivers/usb/host/ohci-platform.c | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> > 
+> > diff --git a/drivers/usb/host/ohci-platform.c b/drivers/usb/host/ohci-platform.c
+> > index 7addfc2cbadc..4a8456f12a73 100644
+> > --- a/drivers/usb/host/ohci-platform.c
+> > +++ b/drivers/usb/host/ohci-platform.c
+> > @@ -299,6 +299,11 @@ static int ohci_platform_resume(struct device *dev)
+> >  	}
+> >  
+> >  	ohci_resume(hcd, false);
+> > +
+> > +	pm_runtime_disable(dev);
+> > +	pm_runtime_set_active(dev);
+> > +	pm_runtime_enable(dev);
+> > +
+> >  	return 0;
+> >  }
+> >  #endif /* CONFIG_PM_SLEEP */
 > 
+> For both this patch and the 3/3 patch (ehci-platform):
+> 
+> Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
+Thanks Alan. Did this make it through to any tree? I don't see it on next, nor
+on Linus. But it could be queued somewhere else.
 
-My bot found errors running 'make dt_binding_check' on your patch:
+I have sent v2 to patch 2 (xhci) as a reply, so hopefully it wasn't missed.
+I can resend the whole series if necessary.
 
-Documentation/devicetree/bindings/usb/qcom,dwc3.example.dts:28.13-20: Warning (ranges_format): /example-0/usb@a6f8800:ranges: empty "ranges" property but its #address-cells (2) differs from /example-0 (1)
-Documentation/devicetree/bindings/usb/qcom,dwc3.example.dts:28.13-20: Warning (ranges_format): /example-0/usb@a6f8800:ranges: empty "ranges" property but its #size-cells (2) differs from /example-0 (1)
+Thanks
 
-See https://patchwork.ozlabs.org/patch/1290971
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure dt-schema is up to date:
-
-pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
-
-Please check and re-submit.
-
+--
+Qais Yousef
