@@ -2,38 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A20C1D85B7
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2020 20:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77BF61D85A6
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2020 20:20:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730993AbgERRwd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 May 2020 13:52:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55836 "EHLO mail.kernel.org"
+        id S1732449AbgERST4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 May 2020 14:19:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57610 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730986AbgERRwc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 18 May 2020 13:52:32 -0400
+        id S1731158AbgERRxd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 18 May 2020 13:53:33 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3F2A120715;
-        Mon, 18 May 2020 17:52:31 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 95A11207C4;
+        Mon, 18 May 2020 17:53:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589824351;
-        bh=ZKnpzjS+1IXbi1HA1HZSgCrEQdDz9VPjJYTYfFSTaf8=;
+        s=default; t=1589824413;
+        bh=ZsJn7yzuxpLIcnmErC2GkQPXYoeEaR6UqPbjZR5fag4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t9DbYVxsZm6qT2c0jXho0Nhtnmo0BYTacG9QtRSpqcISQIjJXAoL1RrK1QN1Y97c8
-         CbEj9F4Iv4+40F0tUGyKCjDomxdsvLtqWd94RAepgg+YrLA1owIRUVF34tZD+UWFQC
-         WkAp2uFLA0yNUJYlPFiuXK//Jkpfj61czcqYfZy4=
+        b=d7gvwFDN15uaK6L6tqI6KrQ9lJ8It6/JLke38W7VdwHJmRCn4FF1qZdAc3Q1qPjfm
+         tpHZCQZqrQWszAFMMB431WVETyvt6xtKR3WRiN7MEC4+g5BvRv7QAZhVr9jpqTBeS6
+         koBeK4hzm3Hk0vj6fQoDCw95gv+pU6mmfcIu1fJo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Hardik Gajjar <hgajjar@de.adit-jv.com>,
-        linux-renesas-soc@vger.kernel.org, linux-usb@vger.kernel.org,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>
-Subject: [PATCH 4.19 56/80] usb: core: hub: limit HUB_QUIRK_DISABLE_AUTOSUSPEND to USB5534B
-Date:   Mon, 18 May 2020 19:37:14 +0200
-Message-Id: <20200518173501.711638330@linuxfoundation.org>
+        stable@vger.kernel.org, YongQin Liu <yongqin.liu@linaro.org>,
+        Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>,
+        Yang Fei <fei.yang@intel.com>,
+        Thinh Nguyen <thinhn@synopsys.com>,
+        Tejas Joglekar <tejas.joglekar@synopsys.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Jack Pham <jackp@codeaurora.org>, Josh Gao <jmgao@google.com>,
+        Todd Kjos <tkjos@google.com>, Felipe Balbi <balbi@kernel.org>,
+        linux-usb@vger.kernel.org, John Stultz <john.stultz@linaro.org>
+Subject: [PATCH 4.19 67/80] dwc3: Remove check for HWO flag in dwc3_gadget_ep_reclaim_trb_sg()
+Date:   Mon, 18 May 2020 19:37:25 +0200
+Message-Id: <20200518173503.872586878@linuxfoundation.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200518173450.097837707@linuxfoundation.org>
 References: <20200518173450.097837707@linuxfoundation.org>
@@ -46,72 +50,54 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Eugeniu Rosca <erosca@de.adit-jv.com>
+From: John Stultz <john.stultz@linaro.org>
 
-commit 76e1ef1d81a4129d7e2fb8c48c83b166d1c8e040 upstream.
+commit 00e21763f2c8cab21b7befa52996d1b18bde5c42 upstream.
 
-On Tue, May 12, 2020 at 09:36:07PM +0800, Kai-Heng Feng wrote [1]:
-> This patch prevents my Raven Ridge xHCI from getting runtime suspend.
+The check for the HWO flag in dwc3_gadget_ep_reclaim_trb_sg()
+causes us to break out of the loop before we call
+dwc3_gadget_ep_reclaim_completed_trb(), which is what likely
+should be clearing the HWO flag.
 
-The problem described in v5.6 commit 1208f9e1d758c9 ("USB: hub: Fix the
-broken detection of USB3 device in SMSC hub") applies solely to the
-USB5534B hub [2] present on the Kingfisher Infotainment Carrier Board,
-manufactured by Shimafuji Electric Inc [3].
+This can cause odd behavior where we never reclaim all the trbs
+in the sg list, so we never call giveback on a usb req, and that
+will causes transfer stalls.
 
-Despite that, the aforementioned commit applied the quirk to _all_ hubs
-carrying vendor ID 0x424 (i.e. SMSC), of which there are more [4] than
-initially expected. Consequently, the quirk is now enabled on platforms
-carrying SMSC/Microchip hub models which potentially don't exhibit the
-original issue.
+This effectively resovles the adb stalls seen on HiKey960
+after userland changes started only using AIO in adbd.
 
-To avoid reports like [1], further limit the quirk's scope to
-USB5534B [2], by employing both Vendor and Product ID checks.
-
-Tested on H3ULCB + Kingfisher rev. M05.
-
-[1] https://lore.kernel.org/linux-renesas-soc/73933975-6F0E-40F5-9584-D2B8F615C0F3@canonical.com/
-[2] https://www.microchip.com/wwwproducts/en/USB5534B
-[3] http://www.shimafuji.co.jp/wp/wp-content/uploads/2018/08/SBEV-RCAR-KF-M06Board_HWSpecificationEN_Rev130.pdf
-[4] https://devicehunt.com/search/type/usb/vendor/0424/device/any
-
-Fixes: 1208f9e1d758c9 ("USB: hub: Fix the broken detection of USB3 device in SMSC hub")
-Cc: stable@vger.kernel.org # v4.14+
-Cc: Alan Stern <stern@rowland.harvard.edu>
-Cc: Hardik Gajjar <hgajjar@de.adit-jv.com>
-Cc: linux-renesas-soc@vger.kernel.org
+Cc: YongQin Liu <yongqin.liu@linaro.org>
+Cc: Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>
+Cc: Yang Fei <fei.yang@intel.com>
+Cc: Thinh Nguyen <thinhn@synopsys.com>
+Cc: Tejas Joglekar <tejas.joglekar@synopsys.com>
+Cc: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Cc: Jack Pham <jackp@codeaurora.org>
+Cc: Josh Gao <jmgao@google.com>
+Cc: Todd Kjos <tkjos@google.com>
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: linux-usb@vger.kernel.org
-Reported-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Signed-off-by: Eugeniu Rosca <erosca@de.adit-jv.com>
-Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Link: https://lore.kernel.org/r/20200514220246.13290-1-erosca@de.adit-jv.com
+Cc: stable@vger.kernel.org #4.20+
+Signed-off-by: John Stultz <john.stultz@linaro.org>
+Signed-off-by: Felipe Balbi <balbi@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 ---
- drivers/usb/core/hub.c |    6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/usb/dwc3/gadget.c |    3 ---
+ 1 file changed, 3 deletions(-)
 
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -37,6 +37,7 @@
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2279,9 +2279,6 @@ static int dwc3_gadget_ep_reclaim_trb_sg
+ 	for_each_sg(sg, s, pending, i) {
+ 		trb = &dep->trb_pool[dep->trb_dequeue];
  
- #define USB_VENDOR_GENESYS_LOGIC		0x05e3
- #define USB_VENDOR_SMSC				0x0424
-+#define USB_PRODUCT_USB5534B			0x5534
- #define HUB_QUIRK_CHECK_PORT_AUTOSUSPEND	0x01
- #define HUB_QUIRK_DISABLE_AUTOSUSPEND		0x02
+-		if (trb->ctrl & DWC3_TRB_CTRL_HWO)
+-			break;
+-
+ 		req->sg = sg_next(s);
+ 		req->num_pending_sgs--;
  
-@@ -5434,8 +5435,11 @@ out_hdev_lock:
- }
- 
- static const struct usb_device_id hub_id_table[] = {
--    { .match_flags = USB_DEVICE_ID_MATCH_VENDOR | USB_DEVICE_ID_MATCH_INT_CLASS,
-+    { .match_flags = USB_DEVICE_ID_MATCH_VENDOR
-+                   | USB_DEVICE_ID_MATCH_PRODUCT
-+                   | USB_DEVICE_ID_MATCH_INT_CLASS,
-       .idVendor = USB_VENDOR_SMSC,
-+      .idProduct = USB_PRODUCT_USB5534B,
-       .bInterfaceClass = USB_CLASS_HUB,
-       .driver_info = HUB_QUIRK_DISABLE_AUTOSUSPEND},
-     { .match_flags = USB_DEVICE_ID_MATCH_VENDOR
 
 
