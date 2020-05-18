@@ -2,182 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 109121D8A8B
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2020 00:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B89D61D8ABE
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2020 00:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728229AbgERWP2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 May 2020 18:15:28 -0400
-Received: from out3-smtp.messagingengine.com ([66.111.4.27]:60549 "EHLO
-        out3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726386AbgERWP2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 May 2020 18:15:28 -0400
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id C39105C00E3;
-        Mon, 18 May 2020 18:15:26 -0400 (EDT)
-Received: from imap21 ([10.202.2.71])
-  by compute7.internal (MEProxy); Mon, 18 May 2020 18:15:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aeam.us; h=
-        mime-version:message-id:in-reply-to:references:date:from:to:cc
-        :subject:content-type; s=fm1; bh=MX0bPRvVsWlP9MJcD9J6i4IwbZqsVHy
-        WUUNimFIY4qc=; b=LlW3g+/flIX03VWLhECQzFSpiaeNUr7LTqye1U6TbLetPAX
-        EDy/+cwIQ8x6vg/E0Gh2+uDiLk8wdlFSDBIVjBEoRNRiZuR42fsrPXZqpLJZz6NV
-        6Kch83NRh8/WXNYfu/RFsvCr4ju3+gYaxDQ2RWr6hKwUYqFU7w7QKQOWOyAAW9YC
-        aUGvvoJ0Aaf2vQI8mDidynK61rKaDyoAopgwgFl2XH6E4kaDsk0m3AsxcVgDNE1h
-        Gcz4alaNlzed2rScCWXyXzBaVanNsEdYhIoRz/MEK9yXOtHjUlnZWmDuoOmq5d8n
-        7ufHK22OHb0CyY2hLmwt+5cT4WVM97kbNUrlbog==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=MX0bPR
-        vVsWlP9MJcD9J6i4IwbZqsVHyWUUNimFIY4qc=; b=113G1tRc76rJcU78R7aKOG
-        Nt3p8y+z0CyJL4o6VDxlDH6hl41B0kQn6ggMAMlie2HCLCBgcw+mMCDmKSY56DxT
-        OndjrYgu4NoiXDEX0n7EORQ74wUdROZ2amF6RdSCjllu3ZEBZb2C+qr8T6iWRrri
-        GW/kjoFa8KH9tVc0B8r5sEUGuCv15RYdkw7Av6XAQL2i5UIyYwtwhMg89PNvBPGj
-        7NNH0DEjvmaQxlD3EI3vrBxsj9bSNUvntecTAFVvDAbR18u/16Ksorcer9YQhtYN
-        dJB2Bv7qc4UglkivEJ2YRszvH9dob4jlucvhXTmklrkSGyDKKKXjmGJ5iDXGPEfA
-        ==
-X-ME-Sender: <xms:_gjDXlVQjQrzkv4FR39NPCD7hBt_SuxcfV_8GUG8Hcb2kHCrlLXnsg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedruddtiedgtdejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdfuihgu
-    ucfuphhrhidfuceoshhiugesrggvrghmrdhusheqnecuggftrfgrthhtvghrnhepveelie
-    dtgeehgfejfffffeffheffteduvefgvefguefgheehudevfefhhffgheeinecuffhomhgr
-    ihhnpehtohhgvghthhgvrhdrtggunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomhepshhiugesrggvrghmrdhush
-X-ME-Proxy: <xmx:_gjDXlmuqYCWWAdEhaXCFF7wmEmmPKLTKGo5O9PVqv-gftZucvcHgQ>
-    <xmx:_gjDXhaKTxo8mlWd__ixkAkI4KgmqB2Pknv0C3eZkUNpsVl4x06lPw>
-    <xmx:_gjDXoX7GE_KA32qs38EhoGbLzKoKFPa9ptPtnRxWLIWiflbLtgBCg>
-    <xmx:_gjDXlTzyeI0_4pz9C7TjPN2TBaAyKCX3DV7pPoxfOk38HItH4FwDw>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 293CC660089; Mon, 18 May 2020 18:15:26 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.3.0-dev0-464-g810d66a-fmstable-20200518v1
-Mime-Version: 1.0
-Message-Id: <83ac8b7b-e0e7-4615-8ebf-4c98e596577b@www.fastmail.com>
-In-Reply-To: <20200518054914.GC27612@b29397-desktop>
-References: <0507a041-44f4-4257-adaf-3b17de3baf81@www.fastmail.com>
- <20200506091750.GE30237@b29397-desktop>
- <8ee3914e-7876-46aa-bade-7cf14df7efdc@www.fastmail.com>
- <87h7wkp9qy.fsf@kernel.org> <20200513100614.GA3698@b29397-desktop>
- <6cab4113-b4ad-43d9-85fc-f68682cf0259@www.fastmail.com>
- <AM7PR04MB71571747B1FD3B2FFBB8DC9F8BBD0@AM7PR04MB7157.eurprd04.prod.outlook.com>
- <9fee6fcc-6156-489f-838b-114903f8e751@www.fastmail.com>
- <20200518054914.GC27612@b29397-desktop>
-Date:   Mon, 18 May 2020 17:14:33 -0500
-From:   "Sid Spry" <sid@aeam.us>
-To:     "Peter Chen" <peter.chen@nxp.com>
-Cc:     "Felipe Balbi" <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: Documentation for Raw USB ConfigFS
-Content-Type: text/plain
+        id S1726959AbgERW0u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 May 2020 18:26:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47922 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726386AbgERW0u (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 May 2020 18:26:50 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFECDC061A0C
+        for <linux-usb@vger.kernel.org>; Mon, 18 May 2020 15:26:49 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id u15so11608446ljd.3
+        for <linux-usb@vger.kernel.org>; Mon, 18 May 2020 15:26:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=U4BCVLRt8CC3bx65/x59hJGRt9Oaodvxu19LE1zktj8=;
+        b=Wez2aN3Tpca4GrJdr39ccumwxICXjf/tskT23VCXUv3KcNxgdtxHDJ5w0c8xlnMWkr
+         0UO5DanUgk87i8Q11110+zOQJrXWtxbrOv3pYsDh0hcHz7lLADAymYlMlgWz5xzoEbxE
+         jKvh8+CbrzCIFJFcnL8P/my5JPwBcNd0npuMDN+r8kSoitTpOnplJQOcwLE2CTAG4n+0
+         9m4lP4biaYTFR/9wLCTywb4qNIXh+DXkH76SqqUNBHW/uwslpDI1RGQZiYFf66KrXGpL
+         m7gS/xk+p8eApaBCJnnEM+/71PSzklXhYLhWmrEPMKDbKR8KHCARN+Ue/JHfkk7Ts/xN
+         FFIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=U4BCVLRt8CC3bx65/x59hJGRt9Oaodvxu19LE1zktj8=;
+        b=IaE4WYipS+g5CGp/4iMhzR0WfGIXFjl6HHIIT48fOOUz5u3I4W99HKCdMOBL7viLf+
+         CKcMrXS//fgPjz38a5/HtF5dSGr6nA16AU68fx4JRDCWKduXzg3+lVq5B0K+4AJ3rnxb
+         vm5GtI9XScGeaacrgZ0Gmkg6VJxqpHKvcj57nPTTo1rAyWU6PhaoPceV7aw7xXnVWf3m
+         afT/Ke+2aQ6qVI0JVtKx0L/NVsigBROmq0vuiBPrhSJrw9vF+zmVUZQ4M+oMDEZcc4hp
+         D2H96V247p9AWvrT8pQBEE4ByL1XvxlOS/Y86Mt7ZiBIqed0hchPN8KUAuof9AXAAj8X
+         UVRg==
+X-Gm-Message-State: AOAM531pzA6FG0PdJtSkyiIAi12OCX7eiePTpPjGc9Y1ISQbl/ERA9M7
+        +CejvxE6IFK83LNUf7wh3nrNLakViuFEVG+bI2w=
+X-Google-Smtp-Source: ABdhPJxgWqwhZANzZc4ojHa5mQqmn/PpsSPPNFe1aYIBDnzTa50GFQQSkxfIg2etJ2eOswhF01tMr+HCRaT6dXttx+I=
+X-Received: by 2002:a2e:b0ec:: with SMTP id h12mr6239026ljl.269.1589840806943;
+ Mon, 18 May 2020 15:26:46 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAOMZO5C1jm4Nr4uTvn14sRqe3mb1Li-iTJ4EhZSBju-x1pzyXg@mail.gmail.com>
+ <VE1PR04MB6528C12091A5B0BD2DA0E51A89BA0@VE1PR04MB6528.eurprd04.prod.outlook.com>
+ <CAOMZO5DzV6Kcxtd=UUL6iYW82rArviB7SA_y2eOzkKa3YjWe8g@mail.gmail.com> <VE1PR04MB652825D4B99C4EE47F75216789B80@VE1PR04MB6528.eurprd04.prod.outlook.com>
+In-Reply-To: <VE1PR04MB652825D4B99C4EE47F75216789B80@VE1PR04MB6528.eurprd04.prod.outlook.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Mon, 18 May 2020 19:28:07 -0300
+Message-ID: <CAOMZO5Bp8A5rrWJqBSWokE1EQQnE6G5AQCNWaMkm_LvTpWhsSA@mail.gmail.com>
+Subject: Re: usbmisc_imx: charger detection errors
+To:     Jun Li <jun.li@nxp.com>
+Cc:     Peter Chen <peter.chen@nxp.com>,
+        USB list <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 18, 2020, at 12:48 AM, Peter Chen wrote:
-> On 20-05-16 00:57:55, Sid Spry wrote:
-> > On Thu, May 14, 2020, at 8:05 PM, Peter Chen wrote:
-> > > 
-> > > > >
-> > > > > Would you please let ECM gadget work first at your board, then let
-> > > > > f_fs work using test application (you need to compile both host and
-> > > > > device application for it). After that, you may have more precise
-> > > > > concept for Linux USB gadget framework.
-> > > > >
-> > > > 
-> > > > I don't see anything that harmonizes preexsting function usage with specifying
-> > > > custom endpoints.
-> > > > 
-> > > > I've gotten the ECM gadget, and then the ECM gadget via ffs working. I've read
-> > > > through the ffs test but I don't see any way to assign functionality to the endpoints.
-> > > > The example seems to transport raw data via a bulk endpoint. I know enough to
-> > > > instead assign an isochronous endpoint to the UDC and transfer via that, but I don't
-> > > > want it to be the *only* functionality the device offers.
-> > > > 
-> > > > Are you saying I can assign the ECM gadget via ffs and then add another driver
-> > > > after the fact? 
-> > > 
-> > > ffs (f_fs.c) is used for customized function, other functions, like ECM (f_ecm.c)
-> > > and Mass Storage (f_mass_storage.c) are used for certain function. You could
-> > > use configfs (like you have done below) to put customized function and certain functions
-> > > into one configuration, and let the host see them at the same time. Do your
-> > > real requirement is one customized function and one ECM function in one USB gadget?
-> > > If it is, below is the example to combine f_fs, mass_storage, and NCM together.
-> > > 
-> > > cd /sys/kernel/config/usb_gadget
-> > > cd g1
-> > > echo "0x1d6b" > idVendor
-> > > echo "0x0105" > idProduct
-> > > mkdir /dev/usb-ffs
-> > > mkdir functions/ffs.usb
-> > > mount -t functionfs usb /dev/usb-ffs
-> > > ln -s functions/ffs.usb configs/c.1
-> > > /home/root/usb_test/ffs_test/ffs-test & /* your own test application */
-> > > while [ ! -e /dev/usb-ffs/ep1 ]
-> > > do
-> > >  echo "."
-> > >  sleep 1;
-> > > done
-> > > mkdir functions/ncm.0 
-> > > ln -s functions/ncm.0 configs/c.1 
-> > > mkdir functions/mass_storage.0
-> > > ln -s functions/mass_storage.0 configs/c.1
-> > > echo $FILE > functions/mass_storage.0/lun.0/file 
-> > > 
-> > > Peter 
-> > > 
-> > 
-> > Hi Peter, thanks for the advice. I realized I was confusing FunctionFS and ConfigFS a little while after I sent my message and saw the FFS configuration in the ConfigFS documentation.
-> > 
-> > And yes, I need ECM/NCM (one is newer and faster, will go look it up again) and my custom function. I may also include a serial port.
-> > 
-> > I have been having issues creating any file called "ffs.${id}" in the gadget directory. It fails with device or resource busy. I assume this means I have misconfigured it, but I am copying your example; or missing the driver, but I have ensured it is there.[1] I have also tried ensuring the ffs function is added first. Any pointers?
-> > 
-> 
-> 1. Please build in all configfs functions, and choose through the
-> script.
-> 
-> CONFIG_USB_CONFIGFS=y
-> CONFIG_USB_CONFIGFS_SERIAL=y
-> CONFIG_USB_CONFIGFS_ACM=y
-> CONFIG_USB_CONFIGFS_OBEX=y
-> CONFIG_USB_CONFIGFS_NCM=y
-> CONFIG_USB_CONFIGFS_ECM=y
-> CONFIG_USB_CONFIGFS_ECM_SUBSET=y
-> CONFIG_USB_CONFIGFS_RNDIS=y
-> CONFIG_USB_CONFIGFS_EEM=y
-> CONFIG_USB_CONFIGFS_MASS_STORAGE=y
-> CONFIG_USB_CONFIGFS_F_LB_SS=y
-> CONFIG_USB_CONFIGFS_F_FS=y
-> CONFIG_USB_CONFIGFS_F_UAC1=y
-> CONFIG_USB_CONFIGFS_F_UAC1_LEGACY=y
-> CONFIG_USB_CONFIGFS_F_UAC2=y
-> CONFIG_USB_CONFIGFS_F_MIDI=y
-> CONFIG_USB_CONFIGFS_F_HID=y
-> CONFIG_USB_CONFIGFS_F_UVC=y
-> 
-> 2. Try exactly the same script I gave you, do not try change
-> any charaters (except the position for your application)
-> 
-> > > cd /sys/kernel/config/usb_gadget
-> > > cd g1
-> > > echo "0x1d6b" > idVendor
-> > > echo "0x0105" > idProduct
-> > > mkdir /dev/usb-ffs
-> > > mkdir functions/ffs.usb
-> > > mount -t functionfs usb /dev/usb-ffs
-> > > ln -s functions/ffs.usb configs/c.1
-> > > /home/root/usb_test/ffs_test/ffs-test & /* your own test application */
-> > > while [ ! -e /dev/usb-ffs/ep1 ]
-> > > do
-> > >  echo "."
-> > >  sleep 1;
-> > > done
-> 
-> > 
-> > [1]: I actually did not have CONFIG_USB_CONFIGFS_F_FS nor F_NCM/ECM set however the necessary code seemed to have been pulled in some other way and the modules were available. They were loaded, and as explained my shell-based configfs code worked. They are set now and the problem persists.
-> 
+Hi Li Jun,
 
-Hi, sorry I was not clear. The kernel config is fine, and CONFIG_USB_CONFIGFS_F_FS is set. I run your exact script (minus the ffs-test line) and it fails to create the functions/ffs.usb directory as I described before. I can create other functions just fine.
+On Mon, May 18, 2020 at 9:09 AM Jun Li <jun.li@nxp.com> wrote:
+
+> Please dump the below registers after connect the otg port
+> to the power source for issue case:
+>
+> Non-core:
+> 0x30b10400 ~ 0x30b10440
+
+Today I was going to dump these registers, but I cannot see the
+original error anymore.
+
+If I ever see it again, I will dump these registers and will let you know.
+
+Thanks
