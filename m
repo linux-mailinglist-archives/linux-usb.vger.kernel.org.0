@@ -2,27 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77BF61D85A6
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2020 20:20:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E7B31D84F2
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2020 20:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732449AbgERST4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 May 2020 14:19:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57610 "EHLO mail.kernel.org"
+        id S1732685AbgERSPK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 May 2020 14:15:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40760 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731158AbgERRxd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 18 May 2020 13:53:33 -0400
+        id S1732134AbgERR7w (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 18 May 2020 13:59:52 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 95A11207C4;
-        Mon, 18 May 2020 17:53:32 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0A14F20835;
+        Mon, 18 May 2020 17:59:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589824413;
-        bh=ZsJn7yzuxpLIcnmErC2GkQPXYoeEaR6UqPbjZR5fag4=;
+        s=default; t=1589824791;
+        bh=C3QjyvfMA2/0h9o42z5Tga0tOWFXXJ4MGKYsh8FyOF4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d7gvwFDN15uaK6L6tqI6KrQ9lJ8It6/JLke38W7VdwHJmRCn4FF1qZdAc3Q1qPjfm
-         tpHZCQZqrQWszAFMMB431WVETyvt6xtKR3WRiN7MEC4+g5BvRv7QAZhVr9jpqTBeS6
-         koBeK4hzm3Hk0vj6fQoDCw95gv+pU6mmfcIu1fJo=
+        b=vJBYpAlSEDTxBoymVt4v55fR8flZL0WSkkZNn6U1mQRMqylVWI8g3J12IOQy9zwdp
+         cLYIS9+3NKP4iKbTKMGr3In8ke4ogM94/3X3f+yFuzLPQAcj8R6NMMnS4PeA4Wr6DZ
+         6Hsl9MUNy56I/a4sFJs2jsNuO2goiXqELKfQyzX4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -35,12 +35,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jack Pham <jackp@codeaurora.org>, Josh Gao <jmgao@google.com>,
         Todd Kjos <tkjos@google.com>, Felipe Balbi <balbi@kernel.org>,
         linux-usb@vger.kernel.org, John Stultz <john.stultz@linaro.org>
-Subject: [PATCH 4.19 67/80] dwc3: Remove check for HWO flag in dwc3_gadget_ep_reclaim_trb_sg()
-Date:   Mon, 18 May 2020 19:37:25 +0200
-Message-Id: <20200518173503.872586878@linuxfoundation.org>
+Subject: [PATCH 5.4 125/147] dwc3: Remove check for HWO flag in dwc3_gadget_ep_reclaim_trb_sg()
+Date:   Mon, 18 May 2020 19:37:28 +0200
+Message-Id: <20200518173528.444595278@linuxfoundation.org>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200518173450.097837707@linuxfoundation.org>
-References: <20200518173450.097837707@linuxfoundation.org>
+In-Reply-To: <20200518173513.009514388@linuxfoundation.org>
+References: <20200518173513.009514388@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -89,7 +89,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/usb/dwc3/gadget.c
 +++ b/drivers/usb/dwc3/gadget.c
-@@ -2279,9 +2279,6 @@ static int dwc3_gadget_ep_reclaim_trb_sg
+@@ -2480,9 +2480,6 @@ static int dwc3_gadget_ep_reclaim_trb_sg
  	for_each_sg(sg, s, pending, i) {
  		trb = &dep->trb_pool[dep->trb_dequeue];
  
