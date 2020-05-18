@@ -2,156 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A4B41D8760
-	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2020 20:36:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10C011D8899
+	for <lists+linux-usb@lfdr.de>; Mon, 18 May 2020 21:59:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728705AbgERSgh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 May 2020 14:36:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40162 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728475AbgERSgg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 May 2020 14:36:36 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97543C05BD0A
-        for <linux-usb@vger.kernel.org>; Mon, 18 May 2020 11:36:36 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id z26so5228998pfk.12
-        for <linux-usb@vger.kernel.org>; Mon, 18 May 2020 11:36:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gvKKfXKVwXyHM5zyQzU2yfD82YJ/ssxteenCSL12PQo=;
-        b=SP6KFNP8GBJH4Y0iu8AifmlsrJrIDmqF86ly0zVJjsY9edGxCLOGJgRntsHb0RHjQG
-         gATe1S/lNrSEnPx6+nA/9Db0kPWSNByB+aLbETP0I7rvxRd5Pg5ppv5wkwn5hjz58cu/
-         /58rWXz8O5y2llnAhz2PnD1PepCOMtPQz0wlcWd4cCLGYB8YoMdMS4KqF902+qJ/GrWu
-         rYOlTmXrrdAjjv2aIxMNhSrdaKjlbrB4OS5ce1/H/hEo88g4KjJQ31AE7yroPGtfE9G0
-         GSPSNWOTyxVLaXh8veu7K3K0s5sMenbgG1ZDSnf8416Sc5oeIX+1pRsFFZpq8ADiflTg
-         Yiqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gvKKfXKVwXyHM5zyQzU2yfD82YJ/ssxteenCSL12PQo=;
-        b=ZxQC0XeahB3puRXmKNj+FkrAfBBmsuDuv88k3b50bxIv3BfvuatLSxk0AwPxlFMmQL
-         RcsfMZOHgeaU8WMVVxB68b/jFvuh8k2hR3BllNehYd8nFD5EJaffmA/Fyk0jtwbelcQw
-         2np2B/TAaL1oWjqLLC1H1px9DHcsohGkhYYOmsePpwtkD59QGjBql5i6NgTYumR9lRI/
-         9dxoFgaH37oMwER5MR1nC6BKBC1LDWAAhvSOyXOUQ1Xzvt8CkxMiWv8dlYUYgrJSltit
-         pAZOSU4Im4vNzAwz81W7w3bYi/qSL77367DbY7zrJR8/7bH7/HXjAzwa1j27mpBIMoP9
-         N1EQ==
-X-Gm-Message-State: AOAM531yyGDFMmPPX4yZsrSeLba7vYGBAijBnmItFELFtMqnU7VTSJdV
-        xBzk48xfsfZF2pvpXqDWqqhRGw==
-X-Google-Smtp-Source: ABdhPJwzQPbROOk4HuXutlusmWdCXG1o7ldok+fY8PJ23k2eDMM1tiiAiGoPeKkibIa2gifPhE5rpA==
-X-Received: by 2002:a65:5186:: with SMTP id h6mr17090119pgq.453.1589826995952;
-        Mon, 18 May 2020 11:36:35 -0700 (PDT)
-Received: from builder.lan (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id z1sm209932pjn.43.2020.05.18.11.36.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 May 2020 11:36:35 -0700 (PDT)
-Date:   Mon, 18 May 2020 11:35:12 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Sandeep Maheswaram <sanm@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
+        id S1728631AbgERT51 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 May 2020 15:57:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41980 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726478AbgERT50 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 18 May 2020 15:57:26 -0400
+Received: from localhost (unknown [122.178.242.232])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E35B320657;
+        Mon, 18 May 2020 19:57:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589831845;
+        bh=DRz4DAY0Mnx2npyUdBsc9qwGVxIZLo1A/yWb9iqMvwc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Qc0a6OQvdCAEnO3CUTnrYxiYhaPyQTi55+IhPmvKayJnYlwQi4oxEdbuCAAoaqMDa
+         dFImllZ7cfaCePbe7ebGoK91XABYlDlmrHmwm9ncKc6LY2DAeuS62km5DMrPTVNXnA
+         BpsvtV7X7O3awzJsEdsD90yUG11JfNCxNl9brLZE=
+Date:   Tue, 19 May 2020 01:27:19 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Anders Roxell <anders.roxell@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Chandana Kishori Chiluveru <cchiluve@codeaurora.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Subject: Re: [PATCH v7 2/4] usb: dwc3: qcom: Add interconnect support in dwc3
- driver
-Message-ID: <20200518183512.GE2165@builder.lan>
-References: <1585718145-29537-1-git-send-email-sanm@codeaurora.org>
- <1585718145-29537-3-git-send-email-sanm@codeaurora.org>
- <878shu4uwk.fsf@kernel.org>
- <875zcy4uuj.fsf@kernel.org>
- <20200514171352.GP4525@google.com>
- <abbc3f8c-c8c9-c189-735e-f8058dab3e40@linaro.org>
- <87tv0h3fpv.fsf@kernel.org>
- <090e48d7-7988-eea1-bf39-f6820578d354@linaro.org>
- <87r1vl3e42.fsf@kernel.org>
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andreas =?iso-8859-1?Q?B=F6hler?= <dev@aboehler.at>,
+        linux-usb@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v13 3/5] usb: xhci: Add support for Renesas controller
+ with memory
+Message-ID: <20200518195719.GG374218@vkoul-mobl.Dlink>
+References: <20200506060025.1535960-1-vkoul@kernel.org>
+ <20200506060025.1535960-4-vkoul@kernel.org>
+ <CADYN=9JLeWHODRWDEcTE_6iZ3TX-E4yyx3OwqzK-H-ytLAmQUg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87r1vl3e42.fsf@kernel.org>
+In-Reply-To: <CADYN=9JLeWHODRWDEcTE_6iZ3TX-E4yyx3OwqzK-H-ytLAmQUg@mail.gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu 14 May 23:29 PDT 2020, Felipe Balbi wrote:
+Hi Anders,
 
-> 
-> Hi,
-> 
-> Georgi Djakov <georgi.djakov@linaro.org> writes:
-> >>>>>> Sandeep Maheswaram <sanm@codeaurora.org> writes:
-> >>>>>>> +static int dwc3_qcom_interconnect_init(struct dwc3_qcom *qcom)
-> >>>>>>> +{
-> >>>>>>> +	struct device *dev = qcom->dev;
-> >>>>>>> +	int ret;
-> >>>>>>> +
-> >>>>>>> +	if (!device_is_bound(&qcom->dwc3->dev))
-> >>>>>>> +		return -EPROBE_DEFER;
-> >>>>>>
-> >>>>>> this breaks allmodconfig. I'm dropping this series from my queue for
-> >>>>>> this merge window.
-> >>>>>
-> >>>>> Sorry, I meant this patch ;-)
-> >>>>
-> >>>> I guess that's due to INTERCONNECT being a module. There is currently a
-> >>>
-> >>> I believe it's because of this:
-> >>> ERROR: modpost: "device_is_bound" [drivers/usb/dwc3/dwc3-qcom.ko] undefined!
-> >>>
-> >>>> discussion about this  with Viresh and Georgi in response to another
-> >>>> automated build failure. Viresh suggests changing CONFIG_INTERCONNECT
-> >>>> from tristate to bool, which seems sensible to me given that interconnect
-> >>>> is a core subsystem.
-> >>>
-> >>> The problem you are talking about would arise when INTERCONNECT=m and
-> >>> USB_DWC3_QCOM=y and it definitely exists here and could be triggered with
-> >>> randconfig build. So i suggest to squash also the diff below.
-> >>>
-> >>> Thanks,
-> >>> Georgi
-> >>>
-> >>> ---8<---
-> >>> diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
-> >>> index 206caa0ea1c6..6661788b1a76 100644
-> >>> --- a/drivers/usb/dwc3/Kconfig
-> >>> +++ b/drivers/usb/dwc3/Kconfig
-> >>> @@ -129,6 +129,7 @@ config USB_DWC3_QCOM
-> >>>  	tristate "Qualcomm Platform"
-> >>>  	depends on ARCH_QCOM || COMPILE_TEST
-> >>>  	depends on EXTCON || !EXTCON
-> >>> +	depends on INTERCONNECT || !INTERCONNECT
-> >> 
-> >> I would prefer to see a patch adding EXPORT_SYMBOL_GPL() to device_is_bound()
+On 18-05-20, 19:53, Anders Roxell wrote:
+> On Wed, 6 May 2020 at 08:01, Vinod Koul <vkoul@kernel.org> wrote:
 > >
-> > Agree, but just to clarify, that these are two separate issues that need to
-> > be fixed. The device_is_bound() is the first one and USB_DWC3_QCOM=y combined
-> > with INTERCONNECT=m is the second one.
+> > Some rensas controller like uPD720201 and uPD720202 need firmware to be
+> > loaded. Add these devices in pci table and invoke renesas firmware loader
+> > functions to check and load the firmware into device memory when
+> > required.
+> >
+> > Signed-off-by: Vinod Koul <vkoul@kernel.org>
 > 
-> If INTERCONNECT=m, QCOM3 shouldn't be y. I think the following is
-> enough:
-> 
-> 	depends on INTERCONNECT=y || INTERCONNECT=USB_DWC3_QCOM
-> 
+> Hi, I got a build error when I built an arm64 allmodconfig kernel.
 
-This misses the case where INTERCONNECT=n and USB_DWC3_QCOM=[ym] which
-I don't see a reason for breaking.
+Thanks for this. This is happening as we have default y for USB_XHCI_PCI
+and then we make USB_XHCI_PCI_RENESAS=m. That should be not allowed as
+we export as symbol so both can be inbuilt or modules but USB_XHCI_PCI=y
+and USB_XHCI_PCI_RENESAS=m cant. While it is valid that USB_XHCI_PCI=y|m
+and USB_XHCI_PCI_RENESAS=n
 
-But if only INTERCONNECT where a bool, then we don't need to specify a
-depends on, because it will either be there, or the stubs will.
-We've come to this conclusion in a lot of different frameworks and I
-don't see why we should do this differently with INTERCONNECT.
+So this seems to get fixed by below for me. I have tested with
+ - both y and m (easy)
+ - make USB_XHCI_PCI_RENESAS=n, USB_XHCI_PCI=y|m works
+ - try making USB_XHCI_PCI=y and USB_XHCI_PCI_RENESAS=m, then
+   USB_XHCI_PCI=m by kbuild :)
+ - try making USB_XHCI_PCI=m and USB_XHCI_PCI_RENESAS=y, kbuild gives
+   error prompt that it will be m due to depends
 
-Regards,
-Bjorn
+Thanks to all the fixes done by Arnd which pointed me to this. Pls
+verify and I will send the fix with you as reported :)
+
+---- >8 ----
+
+diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
+index b5c542d6a1c5..92783d175b3f 100644
+--- a/drivers/usb/host/Kconfig
++++ b/drivers/usb/host/Kconfig
+@@ -40,11 +40,11 @@ config USB_XHCI_DBGCAP
+ config USB_XHCI_PCI
+        tristate
+        depends on USB_PCI
++       depends on USB_XHCI_PCI_RENESAS || !USB_XHCI_PCI_RENESAS
+        default y
+ 
+ config USB_XHCI_PCI_RENESAS
+        tristate "Support for additional Renesas xHCI controller with firwmare"
+-       depends on USB_XHCI_PCI
+        ---help---
+          Say 'Y' to enable the support for the Renesas xHCI controller with
+          firwmare. Make sure you have the firwmare for the device and
+
+-- 
+~Vinod
