@@ -2,123 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D40AF1D8B41
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2020 00:49:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98E311D8BEF
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2020 01:59:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728046AbgERWtV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 May 2020 18:49:21 -0400
-Received: from mail-il1-f198.google.com ([209.85.166.198]:48572 "EHLO
-        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727831AbgERWtU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 May 2020 18:49:20 -0400
-Received: by mail-il1-f198.google.com with SMTP id i2so11329807ile.15
-        for <linux-usb@vger.kernel.org>; Mon, 18 May 2020 15:49:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=s7pJG3kCbjesl2+yw3Ny5oEdOD0W3IyGzcv0S7xrJhM=;
-        b=KUyx63OTfuogS11zudd9189j23lIqjlzjUm8IfaeKrKRxdUkCteZWJnKSWmDlasE66
-         g77sOEAFlD90MUtj+tdYndWRtOk1LMN+wLeB6nK4lKiBvT1OUjwEKIG0/TJgmiIb81NO
-         5OBhtVpm+fZNX/jjNlS1bhm68wX95UQfOO3IwhqDKoRmZ+ghNk6gV+Nq6w0+16/+cbDw
-         adLRP24dR4611w6X5bkgava383Vfkvheddn4uVhFTJUvdiYLsj6y1jyqZ2VxfGX1xO9b
-         xBIXuZlwMm+3OqRXgMXofWaP8fxrwxj3WOP6CQpFrtiNxJG2LfPohJACdqE9cQ1n9ISO
-         DImA==
-X-Gm-Message-State: AOAM5322lyQ6X6/zZQABfEtRWI0dLoYi3EaSDhJYsX+/gsxEMSwZi3NM
-        KHLEV+ZUJA8UpdnGM0g2ohziBAsi06GupMyBCbF28Jh9GFPI
-X-Google-Smtp-Source: ABdhPJxTNOY/otNKuIWN6DE4p24smH8pkB9L9kKuOxWfH7PMuAvIAfFp5Bh/xKJebEJobEGdI8hkjREJxNwHDhJanxGYxr6quyZO
+        id S1726907AbgERX6f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 May 2020 19:58:35 -0400
+Received: from mail-eopbgr40056.outbound.protection.outlook.com ([40.107.4.56]:14150
+        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726302AbgERX6f (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 18 May 2020 19:58:35 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HOyGZDhhWW2nbf0QMbMipJMbLIahECMYG4hdRjCMU2cQ0CJ8FEAwGDhe5c04M//hZkzsLrty23ozVjmzEE/yJtAGxaCNrFO7v8IW1hKdFSLMwnPywhA4+8fi6qSXMUYshCFfHDSyMgiAGBHN8b0fXGDywA++OwulWuRAnCxoycSmqTnYp82bqLTqcvVwyTkXVL3X8pFW1vPKR1pbWcWE4087PVev9M/q3BZb6G8WJ0H+KksQVRYe0vUidH24mHt5clB+vNCa/Rm46Ei8Fi7n5ber06rTQasMw1YUrb9O/VQa67dHG6Hfwo+uNedaPKSefD0IrJ8t25/faQ4UXDqcfw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GjW7MvUpcboauwxH+PDQKBqn1sy7t1y9CujFkcJAkoQ=;
+ b=LMeiJW5wUkzlHI4HjkXcNyillpcCDvUXtzlmsknFfy3P+dP0Az7aSgBziuFmAXN9kyhvWb79wOTtK5yVumXVVPjQgmNTSggLEZ0r8I6JXoM+CWStb1D2G3YHV4H2/oHPzVqFPz2Y8AjUEG7N8NCJ9xDPPZi+JIbYJF/DrcBG2Hfn18yXZoyxtKUCudx+c0xcs0AvZj2aCTZAslr7Myc0FUaXn5B5cMG1zPzvSA0e1L4avQQpfxFjtjBpjMUhOe43LFybikEMwjpBKP12I4OvYv+A5p6ESBYxKFjUDfWt5KGUMI7wabBPMTsEAkgX2z3zjkvMOQdVFBQvSEcJC1+45w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GjW7MvUpcboauwxH+PDQKBqn1sy7t1y9CujFkcJAkoQ=;
+ b=AZlDG7gOnXEsmZX8zcIGT8O0GdmEhfFNggCFb+jzQEvidpLnc4qhoaA0HnPDivj1ycXgxspCO8n6r19SmmOBI11NiHIAdy4IYMmDThOrRRDuNLzKIcEVLkatCBxVBFkTJgNxbqRh9yq7gSWD92AVj0VDIjL3POMcdAD8OqsEvdY=
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
+ by AM7PR04MB7079.eurprd04.prod.outlook.com (2603:10a6:20b:11d::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3000.25; Mon, 18 May
+ 2020 23:58:32 +0000
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::7c34:7ade:17d0:b792]) by AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::7c34:7ade:17d0:b792%9]) with mapi id 15.20.3000.034; Mon, 18 May 2020
+ 23:58:31 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Sid Spry <sid@aeam.us>
+CC:     Felipe Balbi <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: Documentation for Raw USB ConfigFS
+Thread-Topic: Documentation for Raw USB ConfigFS
+Thread-Index: AQHWHxIE3BZgWTm6XUiOBTDqqvXTpqia0EkAgAnRnwCAARJFgIAAKfQAgAH+RoCAAIp4IIAB6N+AgAMiPQCAARNLgIAAHDvw
+Date:   Mon, 18 May 2020 23:58:31 +0000
+Message-ID: <AM7PR04MB71575A56A92CCFDE8B460FC88BB80@AM7PR04MB7157.eurprd04.prod.outlook.com>
+References: <0507a041-44f4-4257-adaf-3b17de3baf81@www.fastmail.com>
+ <20200506091750.GE30237@b29397-desktop>
+ <8ee3914e-7876-46aa-bade-7cf14df7efdc@www.fastmail.com>
+ <87h7wkp9qy.fsf@kernel.org> <20200513100614.GA3698@b29397-desktop>
+ <6cab4113-b4ad-43d9-85fc-f68682cf0259@www.fastmail.com>
+ <AM7PR04MB71571747B1FD3B2FFBB8DC9F8BBD0@AM7PR04MB7157.eurprd04.prod.outlook.com>
+ <9fee6fcc-6156-489f-838b-114903f8e751@www.fastmail.com>
+ <20200518054914.GC27612@b29397-desktop>
+ <83ac8b7b-e0e7-4615-8ebf-4c98e596577b@www.fastmail.com>
+In-Reply-To: <83ac8b7b-e0e7-4615-8ebf-4c98e596577b@www.fastmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: aeam.us; dkim=none (message not signed)
+ header.d=none;aeam.us; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 76b013a6-4f5b-4353-3f44-08d7fb875e70
+x-ms-traffictypediagnostic: AM7PR04MB7079:
+x-microsoft-antispam-prvs: <AM7PR04MB7079087619B6225AC3B6D5F88BB80@AM7PR04MB7079.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-forefront-prvs: 04073E895A
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 6hvM3mYFp8+8hlN0xDEeEh6onKYz0rvWVo9XgpPicfAQigQe7rGC4FIRLkqicrePbF2w4ug/1tyKL68e9k+6Obnu/93yQc3A/qHExaGd6eAmnQgkjorUVTGqIMRXDjnU4oB6zB542CnkBbRnwOLGSyLrXF3nxxnxlutf2fPSyh7fkmMsG26WsC3rLjEgzpd59lj5hA/E2+irfBBK1adUgFaGEMQspz89vdRE+ep+O3T03dz9eu3VbOkmXJIelfqhBDUoYlUJVeHsSqbuZsTwOexLl/28Q9VC/GQWvEZq2GQ0b5VV+edyWpQsjz31TBPrUFYk4muq1qbpIEnXSRknv4EyxGa4//Tc6lXA+IWZUlrQzk3UKLMJKqAkTzkWQEZi8Hhazj09lz0vmtILw6GjuiEzMixgQkduvQOmtlf2oRBYG73WRuc3UVnJljGZ1zgv
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(39860400002)(366004)(396003)(346002)(376002)(136003)(478600001)(186003)(6506007)(9686003)(8936002)(64756008)(66446008)(52536014)(66556008)(6916009)(26005)(66476007)(33656002)(44832011)(86362001)(66946007)(55016002)(5660300002)(8676002)(54906003)(7696005)(2906002)(71200400001)(76116006)(316002)(4326008);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: reb3fDSO3uyjav/r+Ttcm7Q/LT0DPniZlYHFIl7sBAEBoBl9Yvx5N4vN8VYE+O35taTIU6rRai3mkMPZ/5/A658UEORCltZ/BI/vsqckqjEyRTAE3RC3HK8cA1bAsLble4bwqnYgskX/x6GNGcrNWiiG7Wu5kUp1EMO3SH47+hoRxRBzcMBc/kD+i/oingBouXIbg/dKMfYR7P1YEHX57sZp8D9NnMMNJKfWQOLCjN+nibsjVogebbQxnEI+377shYkEoP/wo5ESsTe0LYrMj6pK207C9/vJzvXXxm4f0u2RJPB5w/egrSs0VBTTCMC8Bt8wKA2vLSyzvjWzd2Hgsl8gB27RANHn0QcexsO4Dg+rH0irpNkPYbnSfJ9ameSrE3EYvPStFU5Cub+pASHO1eoksD+gyOjnsIb0MR2DrZ0CQIQ5hydK+ysL4415UZNVx8UUyVG7wzASG/JuUwp11rTl2kVQei7TmILmxsLYqoo=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-Received: by 2002:a92:8b0a:: with SMTP id i10mr18159399ild.245.1589842158029;
- Mon, 18 May 2020 15:49:18 -0700 (PDT)
-Date:   Mon, 18 May 2020 15:49:18 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001413f305a5f3f9ba@google.com>
-Subject: KASAN: use-after-free Read in em28xx_release_resources
-From:   syzbot <syzbot+83803be25e647b7e40b0@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, laurent.pinchart@ideasonboard.com,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org, mchehab@kernel.org,
-        sakari.ailus@linux.intel.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 76b013a6-4f5b-4353-3f44-08d7fb875e70
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 May 2020 23:58:31.8481
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: RMI/AYqLXj7vSEdbYuXCN939tMkPsX4b5gwh5AWnUOa3Jw0B/zmDS1UaVAFKpPbhL7clyP13q2L6415ru/HlGw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB7079
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+=20
+> > 2. Try exactly the same script I gave you, do not try change any
+> > charaters (except the position for your application)
+> >
+> > > > cd /sys/kernel/config/usb_gadget
+> > > > cd g1
+> > > > echo "0x1d6b" > idVendor
+> > > > echo "0x0105" > idProduct
+> > > > mkdir /dev/usb-ffs
+> > > > mkdir functions/ffs.usb
+> > > > mount -t functionfs usb /dev/usb-ffs ln -s functions/ffs.usb
+> > > > configs/c.1 /home/root/usb_test/ffs_test/ffs-test & /* your own
+> > > > test application */ while [ ! -e /dev/usb-ffs/ep1 ] do  echo "."
+> > > >  sleep 1;
+> > > > done
+> >
+> > >
+> > > [1]: I actually did not have CONFIG_USB_CONFIGFS_F_FS nor F_NCM/ECM
+> set however the necessary code seemed to have been pulled in some other w=
+ay
+> and the modules were available. They were loaded, and as explained my she=
+ll-
+> based configfs code worked. They are set now and the problem persists.
+> >
+>=20
+> Hi, sorry I was not clear. The kernel config is fine, and
+> CONFIG_USB_CONFIGFS_F_FS is set. I run your exact script (minus the ffs-t=
+est
+> line) and it fails to create the functions/ffs.usb directory as I describ=
+ed before. I can
+> create other functions just fine.
 
-syzbot found the following crash on:
+You may enable debug at configfs.c, f_fs.c and your udc driver to see what =
+happened.
 
-HEAD commit:    806d8acc USB: dummy-hcd: use configurable endpoint naming ..
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=161ad202100000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d800e9bad158025f
-dashboard link: https://syzkaller.appspot.com/bug?extid=83803be25e647b7e40b0
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-
-Unfortunately, I don't have any reproducer for this crash yet.
-
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+83803be25e647b7e40b0@syzkaller.appspotmail.com
-
-em28xx 2-1:0.63: Closing input extension
-==================================================================
-BUG: KASAN: use-after-free in media_device_unregister drivers/media/mc/mc-device.c:822 [inline]
-BUG: KASAN: use-after-free in media_device_unregister+0x564/0x5d0 drivers/media/mc/mc-device.c:800
-Read of size 8 at addr ffff8881ccf74210 by task kworker/1:7/3751
-
-CPU: 1 PID: 3751 Comm: kworker/1:7 Not tainted 5.7.0-rc5-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0xef/0x16e lib/dump_stack.c:118
- print_address_description.constprop.0.cold+0xd3/0x314 mm/kasan/report.c:382
- __kasan_report.cold+0x37/0x92 mm/kasan/report.c:511
- kasan_report+0x33/0x50 mm/kasan/common.c:625
- media_device_unregister drivers/media/mc/mc-device.c:822 [inline]
- media_device_unregister+0x564/0x5d0 drivers/media/mc/mc-device.c:800
- em28xx_unregister_media_device drivers/media/usb/em28xx/em28xx-cards.c:3392 [inline]
- em28xx_release_resources+0xaf/0x254 drivers/media/usb/em28xx/em28xx-cards.c:3413
- em28xx_usb_disconnect.cold+0x18b/0x284 drivers/media/usb/em28xx/em28xx-cards.c:4072
- usb_unbind_interface+0x1bd/0x8a0 drivers/usb/core/driver.c:436
- __device_release_driver drivers/base/dd.c:1110 [inline]
- device_release_driver_internal+0x432/0x500 drivers/base/dd.c:1141
- bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
- device_del+0x481/0xd30 drivers/base/core.c:2715
- usb_disable_device+0x23d/0x790 drivers/usb/core/message.c:1245
- usb_disconnect+0x293/0x900 drivers/usb/core/hub.c:2216
- hub_port_connect drivers/usb/core/hub.c:5058 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5347 [inline]
- port_event drivers/usb/core/hub.c:5493 [inline]
- hub_event+0x1abf/0x43c0 drivers/usb/core/hub.c:5575
- process_one_work+0x965/0x1630 kernel/workqueue.c:2268
- process_scheduled_works kernel/workqueue.c:2330 [inline]
- worker_thread+0x7ab/0xe20 kernel/workqueue.c:2416
- kthread+0x326/0x430 kernel/kthread.c:268
- ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:351
-
-The buggy address belongs to the page:
-page:ffffea000733dd00 refcount:0 mapcount:-128 mapping:00000000f4330ebd index:0x0
-flags: 0x200000000000000()
-raw: 0200000000000000 ffffea00071b0808 ffff88821fffabd0 0000000000000000
-raw: 0000000000000000 0000000000000002 00000000ffffff7f 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
- ffff8881ccf74100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff8881ccf74180: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
->ffff8881ccf74200: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-                         ^
- ffff8881ccf74280: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff8881ccf74300: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-==================================================================
-
-
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Peter=20
