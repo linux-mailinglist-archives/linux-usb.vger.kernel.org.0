@@ -2,350 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9CF11D9723
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2020 15:08:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B1891D9797
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2020 15:24:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728647AbgESNHr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 May 2020 09:07:47 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:34100 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728052AbgESNHr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 May 2020 09:07:47 -0400
-Received: by mail-lj1-f195.google.com with SMTP id b6so13655858ljj.1;
-        Tue, 19 May 2020 06:07:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fFW0yU7PTSC3s/LgZ1vagPs95+BYYWWy0AK3MQOTufQ=;
-        b=hY7YPWMmDiB205O5UaTMXSjF0V/uccgJiXGfnHSMQCHPrxsejZ3eDTeZR3hoOYISc6
-         pLl5rQPywwNTmcep1Pus5dGo5Ow/r9z0mpJFQxm54k05Cu0+Ppqc6hrYc7xPQ/lmGOMB
-         u3nwrkwaC8gNxZOTLcYOZs2eXv/fmo83FVesL2GRw0QWt02+MBND008i0+n2vuDmHSuP
-         LinlcTE4nGgDVmcpCO3mjnAJZntsmBJ+mejvC91Qa4JJIM0xt3xp1Dkd54k4x7vT7HiY
-         itjXmmfUPA+SoLGe7cEjs13//RGpvPNp4wCohUdtn/A9khdSgHA3LHm7KoAOm95vxZ9X
-         iUdw==
-X-Gm-Message-State: AOAM531dSfXMK982ofTVkx/R9Mh4LqhWMY31w7CS5Xzd035RKdG8nShH
-        PjEYiAyLUKWUOxDY0AQV484=
-X-Google-Smtp-Source: ABdhPJwRXdsFuiTrwUVT+G6emDGlpWAIC/qKyiYj+Qi6fJz9Bh+wKQInEQqY83u5QgmUMJ+NVtrygA==
-X-Received: by 2002:a2e:920f:: with SMTP id k15mr12641342ljg.131.1589893662352;
-        Tue, 19 May 2020 06:07:42 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id 4sm7362533ljc.65.2020.05.19.06.07.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 May 2020 06:07:41 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1jb1y8-0002cL-Q3; Tue, 19 May 2020 15:07:40 +0200
-Date:   Tue, 19 May 2020 15:07:40 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     mani@kernel.org
-Cc:     johan@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patong.mxl@gmail.com, Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] usb: serial: xr_serial: Add gpiochip support
-Message-ID: <20200519130740.GE27787@localhost>
-References: <20200430184924.31690-1-mani@kernel.org>
- <20200430184924.31690-3-mani@kernel.org>
+        id S1728052AbgESNYW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 May 2020 09:24:22 -0400
+Received: from mail-dm6nam12on2068.outbound.protection.outlook.com ([40.107.243.68]:7032
+        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727057AbgESNYV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 19 May 2020 09:24:21 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IVClmwifnQM0LUUrbYc6u+LdyVCaakTUtNhouBpDvdJ99a6oTbSfVv+bHK1EgowqIYhDCQTH7OEb4EIjuJOwJhnRKR3QMp37CVXhnapT5y0P2r7MSiYZmbc/RnvLpzg46eTRDLGq3f9LXKSmfHPQjuh09ibo6o0NA9DxknZXeYyzYJO6EsUYngDrx+PwgqmYl9o1Ea2Ssmj7fb/kVLaDQC9dK9uPS3wjQenacMV2ysY8MXZ1DMc+IKfLmRZzzOexC78nBkjChIr7Z6OPU15jPY+G3hSTXd8nCAsJ6wrGtn0E7e7RjX7UMjpgZGoo00MHbIr5v//C/cIUI1ipk/Kt4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=A4s/TJoHE4LumxJelG7IF1sXPNwDAjJwd8IXXkSEZ0Q=;
+ b=CpDWw4eUZ5SwVbgGF3+IQarXojJWjlwdqP03Joow65T+n2rbVXuWuXD71hMtMXchfxJDhJBJl80ysRWYGByKQzoAJUkj+8YiMDTmFltdzvt4nNms+OWzGpjw4s2e4dfVmmoP+sKGHp4zGpbaFrDWG8sMKxXrR2HXXNp9z8fD0PpX6N700B3nm388vBjFRm4/IZqybtnyc4+H4Ffzl3rlleIX3Pz4Le3b5itCpGQK/PJ24ubWUTbmuJT7PUApUPUssQ1+Ozhmh1M5k2a8v6xA2tv40Zb039RIJkTMEKgyDDhX4BeEgCJQDeU7gbo+q0ci/X+bOtIu+omzzcyCLX1erw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=infinera.com; dmarc=pass action=none header.from=infinera.com;
+ dkim=pass header.d=infinera.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infinera.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=A4s/TJoHE4LumxJelG7IF1sXPNwDAjJwd8IXXkSEZ0Q=;
+ b=I6x115OoYhY6pziLr5PHmuhT87exTlYtAAgxHHgj1iAaLRsr9B+Pm86jL8wha6jIFbVXSR/+dXgy9zkhPbioxzOjU1I9K9hkukVhJjqx6+nQrDvq/7H6a9gCJPAOOCHvImNLyhQyi04mgvsD8smfa+Zp/yRkFRVCLjtdXZGGGwA=
+Received: from BN8PR10MB3540.namprd10.prod.outlook.com (2603:10b6:408:ae::24)
+ by BN8PR10MB3138.namprd10.prod.outlook.com (2603:10b6:408:c4::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3000.20; Tue, 19 May
+ 2020 13:24:19 +0000
+Received: from BN8PR10MB3540.namprd10.prod.outlook.com
+ ([fe80::c158:d59f:e3bc:1941]) by BN8PR10MB3540.namprd10.prod.outlook.com
+ ([fe80::c158:d59f:e3bc:1941%2]) with mapi id 15.20.3000.034; Tue, 19 May 2020
+ 13:24:19 +0000
+From:   Joakim Tjernlund <Joakim.Tjernlund@infinera.com>
+To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: ttyACM strange chars appearing at connect
+Thread-Topic: ttyACM strange chars appearing at connect
+Thread-Index: AQHWLdcbNaT93COqRkquqTua8R38BaivXXMAgAAIdwA=
+Date:   Tue, 19 May 2020 13:24:19 +0000
+Message-ID: <51f1e0138b5ac6dab88f1630f1298d650ad90f13.camel@infinera.com>
+References: <52b8c126634058e3a455dc0ab8b0c542916db543.camel@infinera.com>
+         <20200519125400.GA410029@kroah.com>
+In-Reply-To: <20200519125400.GA410029@kroah.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.36.2 
+authentication-results: linuxfoundation.org; dkim=none (message not signed)
+ header.d=none;linuxfoundation.org; dmarc=none action=none
+ header.from=infinera.com;
+x-originating-ip: [88.131.87.201]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 5803633f-861b-41fc-5307-08d7fbf7efe9
+x-ms-traffictypediagnostic: BN8PR10MB3138:
+x-microsoft-antispam-prvs: <BN8PR10MB313870A60BAB0B4D21116DF8F4B90@BN8PR10MB3138.namprd10.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-forefront-prvs: 040866B734
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: FkrqPDnlk9ccU8BcVOuPdsx10creE+Jlvm/JhJ5x0nfb8pYuiVs0bhXX73d1NlZN8u5Yy+N49Km/UDez4zAJ53QD4Wpd15aNj6ey9v5QXsIg9NsN8bGw5DJXP7gt0Jf3aF7GjT+N2sZ3PX11uK7uhnBD5BL6zpgzXZTS74H5PNj46Coy21PCUADbLKT1ZovqEs6YgXnM6jjPatnSghNZYPDHrQGbQkZFYwDYFrFlD/smryaqNK1Z4/XOsW9DL9AZ5Vyv1wmyspnSZ+h8j8SUC6W1ULYGMzoXeSo6WEFDLg8VI5zE3cCuVz5lml8RxD5AiyiNnBnODjLmg0L5K9MsIUHOiq3OBnhgNlCikDUW0LRfpvXvxGseyPvcRlzY9LgbjK2uB13kFpKGZBVIS3IcISOYtfHBdCo0kqGlv/iXsHRtmk0WiBnfnjZ6ULChl0el
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR10MB3540.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(376002)(396003)(366004)(136003)(39860400002)(346002)(66556008)(64756008)(66446008)(66476007)(76116006)(6916009)(478600001)(91956017)(5660300002)(4744005)(2616005)(86362001)(26005)(6486002)(8676002)(6506007)(71200400001)(66946007)(8936002)(4326008)(36756003)(186003)(6512007)(2906002)(316002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: VQxeBZADF6cwqUqFHzp0FNbDuwwIw7AooYBEOVJCy5udYPFT61ZJvnbL02tjeNnVVLyS/Us1poeL6RqKXyV8a6PD30x2UMuRf51DK4gsS0IAzhSevCb9pJNNQ8tu1jFey391kur9dgDL0JM7rpq7BEyt2u2P3jy8xNEpxRcQaIMDW7BKgbrzdLfK0aucnFEcUGmge/VQhGI0Eg0t986/cGfwiByi9aUtXTnvtOVG4USXrRI5LYuWlsG4lczC21ds3Y+p3vy6oo35niDl4MC+3EK+CRmAlElvcnX2J2qcOU0HTYrjlxLiecfyHtYj8OCxKen9eXPAWeIeuU91IiZ6hASN2EWOXe8JiP5iOj7vrAHWzaqxDllIfNlzBqdxy2zwJiUlNI4KRWwOy+oFbMD7OG6wBxLud7UUt0aBjHrtaX1heJnBbwfi4fIXPvlN7U4+tGxmiJu3xd8rZkO80e1g8GfIicbQ1DUJYKvFwzQ1apw=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <C71A84D95C83A24B8FE584A0B5BB8C87@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200430184924.31690-3-mani@kernel.org>
+X-OriginatorOrg: infinera.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5803633f-861b-41fc-5307-08d7fbf7efe9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 May 2020 13:24:19.4965
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 285643de-5f5b-4b03-a153-0ae2dc8aaf77
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: JDyaiQiHuaJ62sUQrWNkR2T/lZ09B5WogoavP3/Lr+TGgFgXPimcpaOChSbQJD7EA1pTWqMHqUjCFslpHUdgEg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR10MB3138
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 01, 2020 at 12:19:24AM +0530, mani@kernel.org wrote:
-> From: Manivannan Sadhasivam <mani@kernel.org>
-> 
-> Add gpiochip support for Maxlinear/Exar USB to serial converter
-> for controlling the available gpios.
-
-You should mention that you've based this implementation on the other
-usb-serial gpio-chip implementations (e.g. cp210x).
-
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: linux-gpio@vger.kernel.org
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Manivannan Sadhasivam <mani@kernel.org>
-> ---
->  drivers/usb/serial/xr_serial.c | 199 ++++++++++++++++++++++++++++++++-
->  1 file changed, 198 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/serial/xr_serial.c b/drivers/usb/serial/xr_serial.c
-> index fdb9ddf8bd95..255a30540b52 100644
-> --- a/drivers/usb/serial/xr_serial.c
-> +++ b/drivers/usb/serial/xr_serial.c
-> @@ -7,6 +7,7 @@
->   * Copyright (c) 2020 Manivannan Sadhasivam <mani@kernel.org>
->   */
->  
-> +#include <linux/gpio/driver.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/slab.h>
-> @@ -32,6 +33,11 @@ struct xr_uart_regs {
->  };
->  
->  struct xr_port_private {
-> +#ifdef CONFIG_GPIOLIB
-> +	struct gpio_chip gc;
-> +	bool gpio_registered;
-> +	u8 gpio_altfunc;
-> +#endif
->  	const struct xr_uart_regs *regs;
->  };
->  
-> @@ -562,6 +568,196 @@ static void xr_break_ctl(struct tty_struct *tty, int break_state)
->  		   state);
->  }
->  
-> +#ifdef CONFIG_GPIOLIB
-> +
-> +static int xr_gpio_request(struct gpio_chip *gc, unsigned int offset)
-> +{
-> +	struct usb_serial_port *port = gpiochip_get_data(gc);
-> +	struct xr_port_private *port_priv = usb_get_serial_port_data(port);
-> +
-> +	/* Check if the requested GPIO is occupied */
-> +	if (port_priv->gpio_altfunc & BIT(offset))
-> +		return -ENODEV;
-> +
-> +	return 0;
-> +}
-> +
-> +static int xr_gpio_get(struct gpio_chip *gc, unsigned int gpio)
-> +{
-> +	struct usb_serial_port *port = gpiochip_get_data(gc);
-> +	struct xr_port_private *port_priv = usb_get_serial_port_data(port);
-> +	int ret;
-> +	u8 gpio_status;
-> +
-> +	ret = xr_get_reg(port, XR21V141X_UART_REG_BLOCK,
-> +			 port_priv->regs->gpio_status, &gpio_status);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return !!(gpio_status & BIT(gpio));
-> +}
-> +
-> +static void xr_gpio_set(struct gpio_chip *gc, unsigned int gpio, int val)
-> +{
-> +	struct usb_serial_port *port = gpiochip_get_data(gc);
-> +	struct xr_port_private *port_priv = usb_get_serial_port_data(port);
-> +
-> +	if (val)
-> +		xr_set_reg(port, XR21V141X_UART_REG_BLOCK,
-> +			   port_priv->regs->gpio_set, BIT(gpio));
-> +	else
-> +		xr_set_reg(port, XR21V141X_UART_REG_BLOCK,
-> +			   port_priv->regs->gpio_clr, BIT(gpio));
-
-I see no coordination with the serial driver which may toggle the DTR
-and RTS pins.
-
-> +}
-> +
-> +static int xr_gpio_direction_get(struct gpio_chip *gc, unsigned int gpio)
-> +{
-> +	struct usb_serial_port *port = gpiochip_get_data(gc);
-> +	struct xr_port_private *port_priv = usb_get_serial_port_data(port);
-> +	int ret;
-> +	u8 gpio_dir;
-> +
-> +	ret = xr_get_reg(port, XR21V141X_UART_REG_BLOCK,
-> +			 port_priv->regs->gpio_dir, &gpio_dir);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Logic 0 = input and Logic 1 = output */
-> +	return !(gpio_dir & BIT(gpio));
-> +}
-> +
-> +static int xr_gpio_direction_input(struct gpio_chip *gc, unsigned int gpio)
-> +{
-> +	struct usb_serial_port *port = gpiochip_get_data(gc);
-> +	struct xr_port_private *port_priv = usb_get_serial_port_data(port);
-> +	int ret;
-> +	u8 gpio_dir;
-> +
-> +	ret = xr_get_reg(port, XR21V141X_UART_REG_BLOCK,
-> +			 port_priv->regs->gpio_dir, &gpio_dir);
-> +	if (ret)
-> +		return ret;
-> +
-> +	gpio_dir &= ~BIT(gpio);
-> +
-> +	return xr_set_reg(port, XR21V141X_UART_REG_BLOCK,
-> +			  port_priv->regs->gpio_dir, gpio_dir);
-> +}
-> +
-> +static int xr_gpio_direction_output(struct gpio_chip *gc, unsigned int gpio,
-> +				    int val)
-> +{
-> +	struct usb_serial_port *port = gpiochip_get_data(gc);
-> +	struct xr_port_private *port_priv = usb_get_serial_port_data(port);
-> +	int ret;
-> +	u8 gpio_dir;
-> +
-> +	ret = xr_get_reg(port, XR21V141X_UART_REG_BLOCK,
-> +			 port_priv->regs->gpio_dir, &gpio_dir);
-> +	if (ret)
-> +		return ret;
-> +
-> +	gpio_dir |= BIT(gpio);
-> +
-> +	ret = xr_set_reg(port, XR21V141X_UART_REG_BLOCK,
-> +			 port_priv->regs->gpio_dir, gpio_dir);
-> +	if (ret)
-> +		return ret;
-> +
-> +	xr_gpio_set(gc, gpio, val);
-
-If it's possible to set the value before changing direction then that
-may be preferable.
-
-> +
-> +	return 0;
-> +}
-> +
-> +static int xr21v141x_gpio_init(struct usb_serial_port *port)
-> +{
-> +	struct xr_port_private *port_priv = usb_get_serial_port_data(port);
-> +	int ret;
-> +	u8 gpio_mode;
-> +
-> +	port_priv->gc.ngpio = 6;
-> +
-> +	ret = xr_get_reg(port, XR21V141X_UART_REG_BLOCK,
-> +			 port_priv->regs->gpio_mode, &gpio_mode);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Mark all pins which are not in GPIO mode */
-> +	if (gpio_mode & UART_MODE_RTS_CTS)
-> +		port_priv->gpio_altfunc |= (BIT(4) | BIT(5));
-> +	else if (gpio_mode & UART_MODE_DTR_DSR)
-> +		port_priv->gpio_altfunc |= (BIT(2) | BIT(3));
-> +	else if (gpio_mode & UART_MODE_RS485)
-> +		port_priv->gpio_altfunc |= BIT(5);
-> +	else if (gpio_mode & UART_MODE_RS485_ADDR)
-> +		port_priv->gpio_altfunc |= BIT(5);
-> +	else
-> +		port_priv->gpio_altfunc = 0; /* All GPIOs are available */
-
-So this clearly isn't sufficient as the serial driver updates the
-gpio-mode settings at runtime, which means you may have the two drivers
-interfering with each other.
-
-You probably need to reserve at least CTS/RTS (gpio 4 and 5) for use
-by the serial driver. But suddenly driving the DSR, RI and CD inputs
-probably isn't a good idea either.
-
-How would you even what know what these pins are used for generally?
-
-Perhaps refusing all gpio requests while the port is open and making
-sure that the serial driver never touches a requested pin could work
-(including indirectly through hardware flow control, etc).
-
-> +
-> +	return ret;
-> +}
-> +
-> +static int xr_gpio_init(struct usb_serial_port *port)
-> +{
-> +	struct xr_port_private *port_priv = usb_get_serial_port_data(port);
-> +	struct usb_serial *serial = port->serial;
-> +	int ret = 0;
-> +	u16 pid;
-> +
-> +	/* Don't register gpiochip for interface 0 */
-> +	if (port->minor == 0)
-> +		return ret;
-
-Heh. Nice hack. Unfortunately entirely broken as it only works if this
-happens to be the first usb-serial device that is probed (port->minor is
-the usb-serial port minor number, not the interface number).
-
-> +
-> +	pid = le16_to_cpu(serial->dev->descriptor.idProduct);
-> +
-> +	ret = xr21v141x_gpio_init(port);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	port_priv->gc.label = devm_kasprintf(&port->dev, GFP_KERNEL, "XR%04x",
-> +					     pid);
-
-No point in adding PID here.
-
-> +	port_priv->gc.request = xr_gpio_request;
-> +	port_priv->gc.get_direction = xr_gpio_direction_get;
-> +	port_priv->gc.direction_input = xr_gpio_direction_input;
-> +	port_priv->gc.direction_output = xr_gpio_direction_output;
-> +	port_priv->gc.get = xr_gpio_get;
-> +	port_priv->gc.set = xr_gpio_set;
-> +	port_priv->gc.owner = THIS_MODULE;
-> +	port_priv->gc.parent = &port->dev;
-> +	port_priv->gc.base = -1;
-> +	port_priv->gc.can_sleep = true;
-> +
-> +	ret = gpiochip_add_data(&port_priv->gc, port);
-> +	if (!ret)
-> +		port_priv->gpio_registered = true;
-> +
-> +	return ret;
-> +}
-> +
-> +static void xr_gpio_remove(struct usb_serial_port *port)
-> +{
-> +	struct xr_port_private *port_priv = usb_get_serial_port_data(port);
-> +
-> +	if (port_priv->gpio_registered) {
-> +		gpiochip_remove(&port_priv->gc);
-> +		port_priv->gpio_registered = false;
-> +	}
-> +}
-> +
-> +#else
-> +
-> +static int xr_gpio_init(struct usb_serial_port *port)
-> +{
-> +	return 0;
-> +}
-> +
-> +static void xr_gpio_remove(struct usb_serial_port *port)
-> +{
-> +	/* Nothing to do */
-
-Comment not needed.
-
-> +}
-> +
-> +#endif
-> +
->  static int xr_port_probe(struct usb_serial_port *port)
->  {
->  	struct xr_port_private *port_priv;
-> @@ -575,13 +771,14 @@ static int xr_port_probe(struct usb_serial_port *port)
->  
->  	usb_set_serial_port_data(port, port_priv);
->  
-> -	return 0;
-> +	return xr_gpio_init(port);
-
-This is broken; you'll leak the port data on errors.
-
->  }
->  
->  static int xr_port_remove(struct usb_serial_port *port)
->  {
->  	struct xr_port_private *port_priv = usb_get_serial_port_data(port);
->  
-> +	xr_gpio_remove(port);
->  	kfree(port_priv);
->  
->  	return 0;
-
-Johan
+T24gVHVlLCAyMDIwLTA1LTE5IGF0IDE0OjU0ICswMjAwLCBHcmVnIEtIIHdyb3RlOg0KPiBDQVVU
+SU9OOiBUaGlzIGVtYWlsIG9yaWdpbmF0ZWQgZnJvbSBvdXRzaWRlIG9mIHRoZSBvcmdhbml6YXRp
+b24uIERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3UgcmVj
+b2duaXplIHRoZSBzZW5kZXIgYW5kIGtub3cgdGhlIGNvbnRlbnQgaXMgc2FmZS4NCj4gDQo+IA0K
+PiBPbiBUdWUsIE1heSAxOSwgMjAyMCBhdCAxMjoxNDo1NVBNICswMDAwLCBKb2FraW0gVGplcm5s
+dW5kIHdyb3RlOg0KPiA+IFdoZW5ldmVyIHdlIGNvbm5lY3QgYSBMaW51eCBsYXB0b3AoNC4xOS4x
+MTgpIHRvIG91ciB0dHlBQ00gc2VyaWFsIGdhZGdldCB3ZSBjYW4gc2VlIHNvbSBzdHJhbmdlDQo+
+ID4gY2hhcnMgYXBwZWFyaW5nIGluIG91ciBnYWRnZXQ6DQo+ID4gMDPvv71gM++/vTAz77+9eO+/
+vXgoaW4gaGV4OiAzMDMzIGVmYmYgYmQ2MCAzM2VmIGJmYmQgMzAzMyBlZmJmIGJkNzggZWZiZiBi
+ZDc4KQ0KPiA+IFRoZXkgYXBwZWFyIHdpdGNoIGMuYSAxIHNlYyBpbiBiZXR3ZWVuLg0KPiA+IEkg
+YXNzdW1lIGl0IGlzIHRoZSBsYXB0b3BzIEFDTSBkcml2ZXIgZW1pdHRpbmcgdGhvc2UsIGJ1dCB3
+aHk/IENhbiB0aGVzZSBjaGFycyBiZSB0dXJuZWQgb2ZmPw0KPiANCj4gSXQncyBhIHByb2dyYW0g
+b24geW91ciBsYXB0b3AgcHJvYmluZyB0aGUgZGV2aWNlLiAgVXN1YWxseSBtb2RlbW1hbmFnZXIN
+Cj4gb3Igc29tZXRoaW5nIGxpa2UgdGhhdC4NCg0KQWhoLCBtYWtlcyBzZW5zZS4gTm93IEkgbmVl
+ZCB0byBzZWUgaG93IHRvIHR1cm4gaXQgb2ZmKE5ldHdvck1hbmFnZXIgcHVsbHMgaXQgaW4pIC4u
+Lg0KDQogSm9ja2UNCg==
