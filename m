@@ -2,103 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B1891D9797
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2020 15:24:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3DF81D980C
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2020 15:42:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728052AbgESNYW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 May 2020 09:24:22 -0400
-Received: from mail-dm6nam12on2068.outbound.protection.outlook.com ([40.107.243.68]:7032
-        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727057AbgESNYV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 19 May 2020 09:24:21 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IVClmwifnQM0LUUrbYc6u+LdyVCaakTUtNhouBpDvdJ99a6oTbSfVv+bHK1EgowqIYhDCQTH7OEb4EIjuJOwJhnRKR3QMp37CVXhnapT5y0P2r7MSiYZmbc/RnvLpzg46eTRDLGq3f9LXKSmfHPQjuh09ibo6o0NA9DxknZXeYyzYJO6EsUYngDrx+PwgqmYl9o1Ea2Ssmj7fb/kVLaDQC9dK9uPS3wjQenacMV2ysY8MXZ1DMc+IKfLmRZzzOexC78nBkjChIr7Z6OPU15jPY+G3hSTXd8nCAsJ6wrGtn0E7e7RjX7UMjpgZGoo00MHbIr5v//C/cIUI1ipk/Kt4g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=A4s/TJoHE4LumxJelG7IF1sXPNwDAjJwd8IXXkSEZ0Q=;
- b=CpDWw4eUZ5SwVbgGF3+IQarXojJWjlwdqP03Joow65T+n2rbVXuWuXD71hMtMXchfxJDhJBJl80ysRWYGByKQzoAJUkj+8YiMDTmFltdzvt4nNms+OWzGpjw4s2e4dfVmmoP+sKGHp4zGpbaFrDWG8sMKxXrR2HXXNp9z8fD0PpX6N700B3nm388vBjFRm4/IZqybtnyc4+H4Ffzl3rlleIX3Pz4Le3b5itCpGQK/PJ24ubWUTbmuJT7PUApUPUssQ1+Ozhmh1M5k2a8v6xA2tv40Zb039RIJkTMEKgyDDhX4BeEgCJQDeU7gbo+q0ci/X+bOtIu+omzzcyCLX1erw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=infinera.com; dmarc=pass action=none header.from=infinera.com;
- dkim=pass header.d=infinera.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infinera.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=A4s/TJoHE4LumxJelG7IF1sXPNwDAjJwd8IXXkSEZ0Q=;
- b=I6x115OoYhY6pziLr5PHmuhT87exTlYtAAgxHHgj1iAaLRsr9B+Pm86jL8wha6jIFbVXSR/+dXgy9zkhPbioxzOjU1I9K9hkukVhJjqx6+nQrDvq/7H6a9gCJPAOOCHvImNLyhQyi04mgvsD8smfa+Zp/yRkFRVCLjtdXZGGGwA=
-Received: from BN8PR10MB3540.namprd10.prod.outlook.com (2603:10b6:408:ae::24)
- by BN8PR10MB3138.namprd10.prod.outlook.com (2603:10b6:408:c4::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3000.20; Tue, 19 May
- 2020 13:24:19 +0000
-Received: from BN8PR10MB3540.namprd10.prod.outlook.com
- ([fe80::c158:d59f:e3bc:1941]) by BN8PR10MB3540.namprd10.prod.outlook.com
- ([fe80::c158:d59f:e3bc:1941%2]) with mapi id 15.20.3000.034; Tue, 19 May 2020
- 13:24:19 +0000
-From:   Joakim Tjernlund <Joakim.Tjernlund@infinera.com>
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: ttyACM strange chars appearing at connect
-Thread-Topic: ttyACM strange chars appearing at connect
-Thread-Index: AQHWLdcbNaT93COqRkquqTua8R38BaivXXMAgAAIdwA=
-Date:   Tue, 19 May 2020 13:24:19 +0000
-Message-ID: <51f1e0138b5ac6dab88f1630f1298d650ad90f13.camel@infinera.com>
-References: <52b8c126634058e3a455dc0ab8b0c542916db543.camel@infinera.com>
-         <20200519125400.GA410029@kroah.com>
-In-Reply-To: <20200519125400.GA410029@kroah.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.36.2 
-authentication-results: linuxfoundation.org; dkim=none (message not signed)
- header.d=none;linuxfoundation.org; dmarc=none action=none
- header.from=infinera.com;
-x-originating-ip: [88.131.87.201]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5803633f-861b-41fc-5307-08d7fbf7efe9
-x-ms-traffictypediagnostic: BN8PR10MB3138:
-x-microsoft-antispam-prvs: <BN8PR10MB313870A60BAB0B4D21116DF8F4B90@BN8PR10MB3138.namprd10.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-forefront-prvs: 040866B734
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: FkrqPDnlk9ccU8BcVOuPdsx10creE+Jlvm/JhJ5x0nfb8pYuiVs0bhXX73d1NlZN8u5Yy+N49Km/UDez4zAJ53QD4Wpd15aNj6ey9v5QXsIg9NsN8bGw5DJXP7gt0Jf3aF7GjT+N2sZ3PX11uK7uhnBD5BL6zpgzXZTS74H5PNj46Coy21PCUADbLKT1ZovqEs6YgXnM6jjPatnSghNZYPDHrQGbQkZFYwDYFrFlD/smryaqNK1Z4/XOsW9DL9AZ5Vyv1wmyspnSZ+h8j8SUC6W1ULYGMzoXeSo6WEFDLg8VI5zE3cCuVz5lml8RxD5AiyiNnBnODjLmg0L5K9MsIUHOiq3OBnhgNlCikDUW0LRfpvXvxGseyPvcRlzY9LgbjK2uB13kFpKGZBVIS3IcISOYtfHBdCo0kqGlv/iXsHRtmk0WiBnfnjZ6ULChl0el
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR10MB3540.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(376002)(396003)(366004)(136003)(39860400002)(346002)(66556008)(64756008)(66446008)(66476007)(76116006)(6916009)(478600001)(91956017)(5660300002)(4744005)(2616005)(86362001)(26005)(6486002)(8676002)(6506007)(71200400001)(66946007)(8936002)(4326008)(36756003)(186003)(6512007)(2906002)(316002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: VQxeBZADF6cwqUqFHzp0FNbDuwwIw7AooYBEOVJCy5udYPFT61ZJvnbL02tjeNnVVLyS/Us1poeL6RqKXyV8a6PD30x2UMuRf51DK4gsS0IAzhSevCb9pJNNQ8tu1jFey391kur9dgDL0JM7rpq7BEyt2u2P3jy8xNEpxRcQaIMDW7BKgbrzdLfK0aucnFEcUGmge/VQhGI0Eg0t986/cGfwiByi9aUtXTnvtOVG4USXrRI5LYuWlsG4lczC21ds3Y+p3vy6oo35niDl4MC+3EK+CRmAlElvcnX2J2qcOU0HTYrjlxLiecfyHtYj8OCxKen9eXPAWeIeuU91IiZ6hASN2EWOXe8JiP5iOj7vrAHWzaqxDllIfNlzBqdxy2zwJiUlNI4KRWwOy+oFbMD7OG6wBxLud7UUt0aBjHrtaX1heJnBbwfi4fIXPvlN7U4+tGxmiJu3xd8rZkO80e1g8GfIicbQ1DUJYKvFwzQ1apw=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <C71A84D95C83A24B8FE584A0B5BB8C87@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1727910AbgESNmv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 May 2020 09:42:51 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:53688 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726880AbgESNmv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 May 2020 09:42:51 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04JDfecE084204;
+        Tue, 19 May 2020 13:42:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2020-01-29;
+ bh=vlMDjmc1CBjXB6CRCEZCjJA7tdeu6QXrADwnz3NFtQ0=;
+ b=TTf+mnrNV/UIMbqWELZ0/oEoXVtVK/7HMPUgEn8sHGXtItNw6xsVZPjsQ5BvQJ9IAOZG
+ AqfqZeDXu6aqxzzqgL9je/+9pyPocdYsAxe6sF7YP7Xjf/XDB0cD+RG/3o/02XyoLP03
+ jrGgLHTNdYZyxB5TjF26/KyXBGWTClV1/h1biReBjnQi9Zou52Wn5apA+2664m4zZ/U2
+ e4i1N4hETb2JLAqv0V3gi/YGDpy43m2CQTk/rX7VoAgXVrlBdloW8pM/kpdy+js06fX+
+ zX2SOkwKb+7SLGTCjox9TVYbYjpXQVJxbp0tXpzahLvJcl0y1fPQi75YTv1n7G5/rldW FQ== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 3127kr5fg0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 19 May 2020 13:42:47 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04JDcN4B021965;
+        Tue, 19 May 2020 13:42:46 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 312t3y1pma-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 19 May 2020 13:42:46 +0000
+Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 04JDgj0Q022882;
+        Tue, 19 May 2020 13:42:45 GMT
+Received: from kadam (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 19 May 2020 06:42:45 -0700
+Date:   Tue, 19 May 2020 16:42:39 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Christian Gromm <christian.gromm@microchip.com>
+Cc:     gregkh@linuxfoundation.org, driverdev-devel@linuxdriverproject.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 2/8] drivers: most: usb: use dev_*() functions to
+ print messages
+Message-ID: <20200519134239.GP2078@kadam>
+References: <1589449976-11378-1-git-send-email-christian.gromm@microchip.com>
+ <1589449976-11378-3-git-send-email-christian.gromm@microchip.com>
 MIME-Version: 1.0
-X-OriginatorOrg: infinera.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5803633f-861b-41fc-5307-08d7fbf7efe9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 May 2020 13:24:19.4965
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 285643de-5f5b-4b03-a153-0ae2dc8aaf77
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: JDyaiQiHuaJ62sUQrWNkR2T/lZ09B5WogoavP3/Lr+TGgFgXPimcpaOChSbQJD7EA1pTWqMHqUjCFslpHUdgEg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR10MB3138
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1589449976-11378-3-git-send-email-christian.gromm@microchip.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9625 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 adultscore=0
+ phishscore=0 bulkscore=0 suspectscore=0 mlxscore=0 spamscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2005190122
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9625 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0 spamscore=0
+ bulkscore=0 clxscore=1011 priorityscore=1501 mlxscore=0 impostorscore=0
+ suspectscore=0 mlxlogscore=999 malwarescore=0 cotscore=-2147483648
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2005190122
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gVHVlLCAyMDIwLTA1LTE5IGF0IDE0OjU0ICswMjAwLCBHcmVnIEtIIHdyb3RlOg0KPiBDQVVU
-SU9OOiBUaGlzIGVtYWlsIG9yaWdpbmF0ZWQgZnJvbSBvdXRzaWRlIG9mIHRoZSBvcmdhbml6YXRp
-b24uIERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3UgcmVj
-b2duaXplIHRoZSBzZW5kZXIgYW5kIGtub3cgdGhlIGNvbnRlbnQgaXMgc2FmZS4NCj4gDQo+IA0K
-PiBPbiBUdWUsIE1heSAxOSwgMjAyMCBhdCAxMjoxNDo1NVBNICswMDAwLCBKb2FraW0gVGplcm5s
-dW5kIHdyb3RlOg0KPiA+IFdoZW5ldmVyIHdlIGNvbm5lY3QgYSBMaW51eCBsYXB0b3AoNC4xOS4x
-MTgpIHRvIG91ciB0dHlBQ00gc2VyaWFsIGdhZGdldCB3ZSBjYW4gc2VlIHNvbSBzdHJhbmdlDQo+
-ID4gY2hhcnMgYXBwZWFyaW5nIGluIG91ciBnYWRnZXQ6DQo+ID4gMDPvv71gM++/vTAz77+9eO+/
-vXgoaW4gaGV4OiAzMDMzIGVmYmYgYmQ2MCAzM2VmIGJmYmQgMzAzMyBlZmJmIGJkNzggZWZiZiBi
-ZDc4KQ0KPiA+IFRoZXkgYXBwZWFyIHdpdGNoIGMuYSAxIHNlYyBpbiBiZXR3ZWVuLg0KPiA+IEkg
-YXNzdW1lIGl0IGlzIHRoZSBsYXB0b3BzIEFDTSBkcml2ZXIgZW1pdHRpbmcgdGhvc2UsIGJ1dCB3
-aHk/IENhbiB0aGVzZSBjaGFycyBiZSB0dXJuZWQgb2ZmPw0KPiANCj4gSXQncyBhIHByb2dyYW0g
-b24geW91ciBsYXB0b3AgcHJvYmluZyB0aGUgZGV2aWNlLiAgVXN1YWxseSBtb2RlbW1hbmFnZXIN
-Cj4gb3Igc29tZXRoaW5nIGxpa2UgdGhhdC4NCg0KQWhoLCBtYWtlcyBzZW5zZS4gTm93IEkgbmVl
-ZCB0byBzZWUgaG93IHRvIHR1cm4gaXQgb2ZmKE5ldHdvck1hbmFnZXIgcHVsbHMgaXQgaW4pIC4u
-Lg0KDQogSm9ja2UNCg==
+On Thu, May 14, 2020 at 11:52:50AM +0200, Christian Gromm wrote:
+> @@ -186,13 +185,14 @@ static inline int start_sync_ep(struct usb_device *usb_dev, u16 ep)
+>   * get_stream_frame_size - calculate frame size of current configuration
+>   * @cfg: channel configuration
+>   */
+> -static unsigned int get_stream_frame_size(struct most_channel_config *cfg)
+> +static unsigned int get_stream_frame_size(struct most_channel_config *cfg,
+> +					  struct device *dev)
+
+I feel like normally "dev" would be the first pointer instead of the
+second.  It goes from permanent --> temporary.  Central --> outer.
+
+That rule of thumb basically works for this file.
+
+regards,
+dan carpenter
+
