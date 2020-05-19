@@ -2,142 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F84D1D9140
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2020 09:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38E361D9152
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2020 09:49:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728380AbgESHog (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 May 2020 03:44:36 -0400
-Received: from mout.kundenserver.de ([217.72.192.73]:59159 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725996AbgESHof (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 May 2020 03:44:35 -0400
-Received: from mail-qv1-f49.google.com ([209.85.219.49]) by
- mrelayeu.kundenserver.de (mreue109 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1MxUfn-1iqQ1I28BV-00xpvI; Tue, 19 May 2020 09:44:33 +0200
-Received: by mail-qv1-f49.google.com with SMTP id ee19so6026496qvb.11;
-        Tue, 19 May 2020 00:44:33 -0700 (PDT)
-X-Gm-Message-State: AOAM5305roy0Im1kbKAcS3unXyHZyJjp2IEZtTDOA+JJId05teJPiZMH
-        8FCzBJLnkMeimGWzbpT+fnMiwvFqPzXygRa+QE8=
-X-Google-Smtp-Source: ABdhPJyz5mXdtib6QAE28t5pFaGbx82ytbNPSngTpPa/9FO90GbqJW3zKmrtW+AkEiHWKR5n9g/tllAzh+eT59Lestw=
-X-Received: by 2002:a05:6214:905:: with SMTP id dj5mr19849870qvb.222.1589874272193;
- Tue, 19 May 2020 00:44:32 -0700 (PDT)
+        id S1727057AbgESHtr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 May 2020 03:49:47 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:45414 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726892AbgESHtq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 May 2020 03:49:46 -0400
+Received: by mail-lj1-f193.google.com with SMTP id z18so4440500lji.12
+        for <linux-usb@vger.kernel.org>; Tue, 19 May 2020 00:49:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6R6/K8wl7iJOxiI74lG/O3jw7mCZ9+B8+KFcoDYP070=;
+        b=ZpFpm7k8Qu2IIwDAkWPZqvj/+iJKjzFxoqNIRFyRpe1fae14VTNK4bPI90LEhrRdjB
+         JOjiw5N2Aehxi/dJU8Yhig+BcHkDeo3bLgSIuVyshF5I24qWEJRd3WAGgxtl1vN8uGUX
+         Y2KZzvgZ6fSKF3HKSJ1copIwm7CXAkIMjnndsw9jh53xIHRaVHGlRAucZpUyM1151jS1
+         zv52lxxPD00qbn/Ug3PxrJuTVThbzJZWS6zgMJCRYAiZsVrjwkpSksDT33YarVGcnNil
+         YuIIQZw03M1GGFMjmiP0y5wpupymdTI9iZSIhfC4YkUWahM5yDt0pIFaOnD2fip/DmSB
+         ivyg==
+X-Gm-Message-State: AOAM532ku7M01CzP61U/H501+lYf8JmD5oCOdRkFZ42ZkOguMXy7fhMQ
+        BpoPYYOZnCJhLcoSg5imcKrWh8MM
+X-Google-Smtp-Source: ABdhPJyxpTKiHjUYnMYySb2zykoylbpMmn1xEF84tH6t2vczFmP06SCHObG6LUxyIYb/VhDZiPUNXw==
+X-Received: by 2002:a2e:8018:: with SMTP id j24mr2610091ljg.99.1589874583207;
+        Tue, 19 May 2020 00:49:43 -0700 (PDT)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id h6sm7038695ljg.38.2020.05.19.00.49.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 May 2020 00:49:42 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1jax0P-0006LE-30; Tue, 19 May 2020 09:49:41 +0200
+Date:   Tue, 19 May 2020 09:49:41 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Bin Liu <b-liu@ti.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: usb_wwan: do not resubmit rx urb on fatal errors in
+ rx callback
+Message-ID: <20200519074941.GA27787@localhost>
+References: <20200513213646.21649-1-b-liu@ti.com>
 MIME-Version: 1.0
-References: <20200506060025.1535960-1-vkoul@kernel.org> <20200506060025.1535960-4-vkoul@kernel.org>
- <CADYN=9JLeWHODRWDEcTE_6iZ3TX-E4yyx3OwqzK-H-ytLAmQUg@mail.gmail.com>
- <20200518195719.GG374218@vkoul-mobl.Dlink> <CADYN=9+VuTwVk32hQXAAeDyErMn7D4Y+Gzdehy_=c8fBeU23jA@mail.gmail.com>
- <20200519045336.GH374218@vkoul-mobl.Dlink>
-In-Reply-To: <20200519045336.GH374218@vkoul-mobl.Dlink>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 19 May 2020 09:44:15 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2CCwfXz8_p6zscuq21tCRZ_aHRZUa_9ov1b4sSqvL_aw@mail.gmail.com>
-Message-ID: <CAK8P3a2CCwfXz8_p6zscuq21tCRZ_aHRZUa_9ov1b4sSqvL_aw@mail.gmail.com>
-Subject: Re: [PATCH v13 3/5] usb: xhci: Add support for Renesas controller
- with memory
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Anders Roxell <anders.roxell@linaro.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        =?UTF-8?Q?Andreas_B=C3=B6hler?= <dev@aboehler.at>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:zg0WXCVgxaVauGkuk7NHqfGuaMZjVr8VtN21yfQvU6wlcgxAYoU
- IrDb3X/O+40U3VdeTv3sh7aqhR/5eWFkq2zhVJ4NSQubgHOU76OW+J5SV/CNu/YozRYh5/y
- 3XFgY019wLB8saSTq91MFpaaFcdUvm6658zHcNkJ9MxNszyv9yQj8EKm2xmUlc5ZOO1Ul33
- f+/FGSLwOZPT1ikA50j3g==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:gGlDoxcaACU=:hlVk4p4DmAe196w/U7j8KH
- yks9CwDyLD9LbQpwylQYN3/whOLiuI5lvXI1DphTcuSFrxYcRVxcdOpnFUCxT/6sgxVazQiI+
- YraDuYxXyc8Dsd0dsp3SBNsOkGM/tjpuvRsNjbRCQZHyfo5snf+P5Jp/6lcJsu5+jQy9/9v9x
- DX4c5UV/YIN1SgoymEid8FT9SZ62ibc9jfeaBh9LguqXhgeUVToxxGH6dXMwnAm7OwtwcS7Wf
- GitnTL9yNlluAlDCUktIUbIyEQfYO2sggqj6YOhtDUpK0/I1F06BO6piSn7IJXm+NCxrSegmE
- oOmebHMlLpJ0anf8vflLehi8zriBTrcpzchxUjItULzZeeRcIVZb/BV/m3VQmpX8CmQ2TfNxN
- Z8GS30iCbwk5c3VjMKZlPSH1nSaHug7Vk+X88ce3UL1A7jKNZJJFWDQJwc6atvxf6W5SUN0Ee
- EiBTriOYGWPhJN1lLCt6qJRR3DXxoANu2r/WUVwjIp887GcKyBHAVLkk2V75CDfofFC/OTUgS
- cUGgRTkpGXdiX6yeN83nu1lRsNGQLyQRihDFjglaes3Fw159feulBWO77+xDTQqmEKlZTvNw+
- 5lJ/FA4bhQT/hJ1gS5/sy+W1KCnOTJU/kweEDGvmdsmrWxkT901R7D1+rxLs9KB5yBD3MGY3h
- QTMWjg4+6q/nxD0cbP0N9RL5ZQ80CZ3YXITeuoWDr+IVpQnIw/fVimagkfw93xEpsUL/V3MKV
- 5yTt2k/qZwAfVNwVR37u1fiP2Dv49hI7DfHuOLUZUrt/L/3nAsYV7rHnysHTmX8I0/8tVm9zq
- ahxGreNWNEmY13jCSA5V5KSy001DCw4xx23EAQKnF1C6PuZSwU=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200513213646.21649-1-b-liu@ti.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 19, 2020 at 6:53 AM Vinod Koul <vkoul@kernel.org> wrote:
-> On 19-05-20, 00:37, Anders Roxell wrote:
-> > On Mon, 18 May 2020 at 21:57, Vinod Koul <vkoul@kernel.org> wrote:
-> > > On 18-05-20, 19:53, Anders Roxell wrote:
-> > > > On Wed, 6 May 2020 at 08:01, Vinod Koul <vkoul@kernel.org> wrote:
-> > > > >
-> > > > > Some rensas controller like uPD720201 and uPD720202 need firmware to be
-> > > > > loaded. Add these devices in pci table and invoke renesas firmware loader
-> > > > > functions to check and load the firmware into device memory when
-> > > > > required.
-> > > > >
-> > > > > Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> > > >
-> > > > Hi, I got a build error when I built an arm64 allmodconfig kernel.
-> > >
-> > > Thanks for this. This is happening as we have default y for USB_XHCI_PCI
-> > > and then we make USB_XHCI_PCI_RENESAS=m. That should be not allowed as
-> > > we export as symbol so both can be inbuilt or modules but USB_XHCI_PCI=y
-> > > and USB_XHCI_PCI_RENESAS=m cant. While it is valid that USB_XHCI_PCI=y|m
-> > > and USB_XHCI_PCI_RENESAS=n
-> > >
-> > > So this seems to get fixed by below for me. I have tested with
-> > >  - both y and m (easy)
-> > >  - make USB_XHCI_PCI_RENESAS=n, USB_XHCI_PCI=y|m works
-> > >  - try making USB_XHCI_PCI=y and USB_XHCI_PCI_RENESAS=m, then
-> > >    USB_XHCI_PCI=m by kbuild :)
-> > >  - try making USB_XHCI_PCI=m and USB_XHCI_PCI_RENESAS=y, kbuild gives
-> > >    error prompt that it will be m due to depends
-> > >
-> > > Thanks to all the fixes done by Arnd which pointed me to this. Pls
-> > > verify
-> >
-> > I was able to build an arm64 allmodconfig kernel with this change.
->
-> I will send the formal patch and add your name in reported and
-> tested. Thanks for the quick verification
+On Wed, May 13, 2020 at 04:36:46PM -0500, Bin Liu wrote:
+> usb_wwan_indat_callback() shouldn't resubmit rx urb if the previous urb
+> status is a fatal error. Or the usb controller would keep processing the
+> new urbs then run into interrupt storm, and has no chance to recover.
+> 
+> Fixes: 6c1ee66a0b2b ("USB-Serial: Fix error handling of usb_wwan")
+> 
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Bin Liu <b-liu@ti.com>
+> ---
+>  drivers/usb/serial/usb_wwan.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/usb/serial/usb_wwan.c b/drivers/usb/serial/usb_wwan.c
+> index 13be21aad2f4..4b9845807bee 100644
+> --- a/drivers/usb/serial/usb_wwan.c
+> +++ b/drivers/usb/serial/usb_wwan.c
+> @@ -270,6 +270,10 @@ static void usb_wwan_indat_callback(struct urb *urb)
+>  	if (status) {
+>  		dev_dbg(dev, "%s: nonzero status: %d on endpoint %02x.\n",
+>  			__func__, status, endpoint);
+> +
+> +		/* don't resubmit on fatal errors */
+> +		if (status == -ESHUTDOWN || status == -ENOENT)
+> +			return;
+>  	} else {
+>  		if (urb->actual_length) {
+>  			tty_insert_flip_string(&port->port, data,
 
-I just checked the patch and I think this will work correctly in all cases,
-but it still seems a bit backwards:
+Now applied, thanks.
 
-> > > diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
-> > > index b5c542d6a1c5..92783d175b3f 100644
-> > > --- a/drivers/usb/host/Kconfig
-> > > +++ b/drivers/usb/host/Kconfig
-> > > @@ -40,11 +40,11 @@ config USB_XHCI_DBGCAP
-> > >  config USB_XHCI_PCI
-> > >         tristate
-> > >         depends on USB_PCI
-> > > +       depends on USB_XHCI_PCI_RENESAS || !USB_XHCI_PCI_RENESAS
-> > >         default y
-> > >
-> > >  config USB_XHCI_PCI_RENESAS
-> > >         tristate "Support for additional Renesas xHCI controller with firwmare"
-> > > -       depends on USB_XHCI_PCI
-> > >         ---help---
-> > >           Say 'Y' to enable the support for the Renesas xHCI controller with
-> > >           firwmare. Make sure you have the firwmare for the device and
-> > >
-
-I think it would have been better to follow the normal driver abstraction here
-and make the renesas xhci a specialized version of the xhci driver with
-its own platform_driver instance that calls into the generic xhci_pci module,
-rather than having the generic code treat it as a quirk.
-
-That would be more like how we handle all the ehci and ohci variants, though
-I'm not sure how exactly it would work with two drivers having pci_device_id
-tables with non-exclusive members. Presumably the generic driver would
-still have to know that it needs to fail its probe() function on devices that
-need the firmware.
-
-        Arnd
+Johan
