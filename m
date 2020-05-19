@@ -2,123 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C04951DA267
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2020 22:19:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 738451DA45F
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2020 00:19:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726623AbgESUTQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 May 2020 16:19:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55310 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726203AbgESUTQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 May 2020 16:19:16 -0400
-Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CE20C08C5C0;
-        Tue, 19 May 2020 13:19:16 -0700 (PDT)
-Received: by mail-oi1-x242.google.com with SMTP id l6so904670oic.9;
-        Tue, 19 May 2020 13:19:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=k9wGkUcX8mpQpH0xT7svm0mysTXkndwHirc7LDkmIVs=;
-        b=eaOTiOYGy7RGzDrE84ODOO4mkvp8w+Ti3n5zOCs2MzLSxzwRD0Mnt4wQ97IkJRivtX
-         zWbO7w8mEpIm0zoGTWMU7LLb515tER+6WW9JJIiGtPO079HzCh8fEgS12Igy/N/5eD8O
-         q1jMT5GGO6KS/gr3PifQQywcPiulG5aykfKC3KMge+rjXJtkbQsKkxCOyYieA3KiSprb
-         BkyqbX1rTF1rysO8HS6x14Ok1R5aRfFJr/sHFfYKVvEW7mn/j3D1Bb9tWwMpiWBEcqWp
-         XNdostXg+QFFN+cykYdZfnvmKR0DXLvMFUb7S51d36qvYUHbPufYd18ejnn0a2RIm2di
-         41rQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=k9wGkUcX8mpQpH0xT7svm0mysTXkndwHirc7LDkmIVs=;
-        b=sPZCpz/HJ49Tic1lgiAe163lL9roLMOYFjOBhv6ihuMjJzrHD/ee1vCxTQt0l7imPv
-         29l2Fg8v6e6d7FousatyAI+m3rjg7BbnEQD4xnScTcNpirNTRno2kVizCJT6R00Fc0zP
-         //CiR9f5MaRVtuqtZHo4ZMZ4KdejR37MuSVmblmd2HbNgpj01cNfK115JpJiomANaH/O
-         N5ffMraF855MnVg4FYIZb+vqM5Gonzxt5NdW8FgwUxH5JRMHkE8CZR6aBuF+dAhrghnb
-         GlmsSktitwTKdNb5Huqo6gyiuDYQC3ct29HaKj39Lrk5cwteJy3goz7CaO/hBZfe6Hnm
-         fS2w==
-X-Gm-Message-State: AOAM531QlPMAN6pCkZ6OffOBvBZpH2GG2h2GuBe/hUEOa+gGYqeeHP0e
-        UyfD35EvjlnJWzuo7sdzRzJuHOZm6OXP3EueXHc=
-X-Google-Smtp-Source: ABdhPJwpptg0g/2Fuqr75TcXz0TmtAi6ivq8xFaPLg5vusReOtbpkYwZQMxwK3sgeD/rniBZQ0FaeWVLtK50KUScI5w=
-X-Received: by 2002:a05:6808:a1b:: with SMTP id n27mr825430oij.171.1589919555708;
- Tue, 19 May 2020 13:19:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200506060025.1535960-1-vkoul@kernel.org> <20200506060025.1535960-3-vkoul@kernel.org>
- <20200519114528.GC1298122@kuha.fi.intel.com>
-In-Reply-To: <20200519114528.GC1298122@kuha.fi.intel.com>
-From:   Christian Lamparter <chunkeey@gmail.com>
-Date:   Tue, 19 May 2020 22:19:03 +0200
-Message-ID: <CAAd0S9AEOsOLrnry4xNRVOi5fXwm3KXYzQsUMCm9tVxHr2sr1w@mail.gmail.com>
-Subject: Re: [PATCH v13 2/5] usb: renesas-xhci: Add the renesas xhci driver
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
+        id S1726489AbgESWTF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 May 2020 18:19:05 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:52924 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725998AbgESWTE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 May 2020 18:19:04 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04JMIqOf057744;
+        Tue, 19 May 2020 17:18:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1589926732;
+        bh=c1gNUTsHB3gfgkX/gTaB62tQSNuCVzXqjEsmpqFZNow=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=EVzxb79ac+E5BSzuU90j/JF6T/OBf/3ArGRe7NoRfuaOqdbtZHPjFEE8wun3fZ20t
+         ZmU5QtpMoV31HWGLoXF6GGexouZIT56jAJMqz0O6fdspUPRQq9y/PEzzJgoKJqhCQi
+         o+6JZyuZa5dCqiLH9kGS5LvrQu+l3EiyN5BRTg14=
+Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 04JMIqFx072467
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 19 May 2020 17:18:52 -0500
+Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Tue, 19
+ May 2020 17:18:51 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Tue, 19 May 2020 17:18:51 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04JMIpPZ086866;
+        Tue, 19 May 2020 17:18:51 -0500
+Date:   Tue, 19 May 2020 17:18:51 -0500
+From:   Bin Liu <b-liu@ti.com>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+CC:     Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        =?UTF-8?Q?Andreas_B=C3=B6hler?= <dev@aboehler.at>,
-        USB list <linux-usb@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        <linux-usb@vger.kernel.org>, <russell@personaltelco.net>,
+        <fercerpav@gmail.com>
+Subject: Re: [PATCH v1] usb: musb: dsps: set MUSB_DA8XX quirk for AM335x
+Message-ID: <20200519221851.GA15845@iaqt7>
+Mail-Followup-To: Bin Liu <b-liu@ti.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, russell@personaltelco.net,
+        fercerpav@gmail.com
+References: <20200327053849.5348-1-o.rempel@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20200327053849.5348-1-o.rempel@pengutronix.de>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Hi,
 
-On Tue, May 19, 2020 at 1:45 PM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
-> On Wed, May 06, 2020 at 11:30:22AM +0530, Vinod Koul wrote:
-> > From: Christian Lamparter <chunkeey@googlemail.com>
-> >
-> > This add a new driver for renesas xhci which is basically a firmware
-> > loader for uPD720201 and uPD720202 w/o ROM. The xhci-pci driver will
-> > invoke this driver for loading/unloading on relevant devices.
-> >
-> > This patch adds a firmware loader for the uPD720201K8-711-BAC-A
-> > and uPD720202K8-711-BAA-A variant. Both of these chips are listed
-> > in Renesas' R19UH0078EJ0500 Rev.5.00 "User's Manual: Hardware" as
-> > devices which need the firmware loader on page 2 in order to
-> > work as they "do not support the External ROM".
-> >
-> > The "Firmware Download Sequence" is describe in chapter
-> > "7.1 FW Download Interface" R19UH0078EJ0500 Rev.5.00 page 131.
-> >
-> > The firmware "K2013080.mem" is available from a USB3.0 Host to
-> > PCIe Adapter (PP2U-E card) "Firmware download" archive. An
-> > alternative version can be sourced from Netgear's WNDR4700 GPL
-> > archives.
-> >
-> > The release notes of the PP2U-E's "Firmware Download" ver 2.0.1.3
-> > (2012-06-15) state that the firmware is for the following devices:
-> >  - uPD720201 ES 2.0 sample whose revision ID is 2.
-> >  - uPD720201 ES 2.1 sample & CS sample & Mass product, ID is 3.
-> >  - uPD720202 ES 2.0 sample & CS sample & Mass product, ID is 2.
->
-> You wouldn't happen to have access to the documentation of the
-> "original" uPD720200 USB 3.0 controller?
->
-> It would be cool if we could support that too with this driver.
+On Fri, Mar 27, 2020 at 06:38:49AM +0100, Oleksij Rempel wrote:
+> Beagle Bone Black has different memory corruptions if kernel is
+> configured with USB_TI_CPPI41_DMA=y. This issue is reproducible with
+> ath9k-htc driver (ar9271 based wifi usb controller):
+> 
+> root@AccessBox:~ iw dev wlan0 set monitor  fcsfail otherbss
+> root@AccessBox:~ ip l s dev wlan0 up
+> kmemleak: Cannot insert 0xda577e40 into the object search tree (overlaps existing)
+> CPU: 0 PID: 176 Comm: ip Not tainted 5.5.0 #7
+> Hardware name: Generic AM33XX (Flattened Device Tree)
+> [<c0112c14>] (unwind_backtrace) from [<c010dc98>] (show_stack+0x18/0x1c)
+> [<c010dc98>] (show_stack) from [<c08c7c2c>] (dump_stack+0x84/0x98)
+> [<c08c7c2c>] (dump_stack) from [<c02c75a8>] (create_object+0x2f8/0x324)
+> [<c02c75a8>] (create_object) from [<c02b8928>] (kmem_cache_alloc+0x1a8/0x39c)
+> [<c02b8928>] (kmem_cache_alloc) from [<c072fb68>] (__alloc_skb+0x60/0x174)
+> [<c072fb68>] (__alloc_skb) from [<bf0c5c58>] (ath9k_wmi_cmd+0x50/0x184 [ath9k_htc])
+> [<bf0c5c58>] (ath9k_wmi_cmd [ath9k_htc]) from [<bf0cb410>] (ath9k_regwrite_multi+0x54/0x84 [ath9k_htc])
+> [<bf0cb410>] (ath9k_regwrite_multi [ath9k_htc]) from [<bf0cb7fc>] (ath9k_regwrite+0xf0/0xfc [ath9k_htc])
+> [<bf0cb7fc>] (ath9k_regwrite [ath9k_htc]) from [<bf1aca78>] (ar5008_hw_process_ini+0x280/0x6c0 [ath9k_hw])
+> [<bf1aca78>] (ar5008_hw_process_ini [ath9k_hw]) from [<bf1a66ac>] (ath9k_hw_reset+0x270/0x1458 [ath9k_hw])
+> [<bf1a66ac>] (ath9k_hw_reset [ath9k_hw]) from [<bf0c9588>] (ath9k_htc_start+0xb0/0x22c [ath9k_htc])
+> [<bf0c9588>] (ath9k_htc_start [ath9k_htc]) from [<bf0eb3c0>] (drv_start+0x4c/0x1e8 [mac80211])
+> [<bf0eb3c0>] (drv_start [mac80211]) from [<bf104a84>] (ieee80211_do_open+0x480/0x954 [mac80211])
+> [<bf104a84>] (ieee80211_do_open [mac80211]) from [<c075127c>] (__dev_open+0xdc/0x160)
+> [<c075127c>] (__dev_open) from [<c07516a8>] (__dev_change_flags+0x1a4/0x204)
+> [<c07516a8>] (__dev_change_flags) from [<c0751728>] (dev_change_flags+0x20/0x50)
+> [<c0751728>] (dev_change_flags) from [<c076971c>] (do_setlink+0x2ac/0x978)
+> 
+> After applying this patch, the system is running in monitor mode without
+> noticeable issues.
+> 
+> Suggested-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  drivers/usb/musb/musb_dsps.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/musb/musb_dsps.c b/drivers/usb/musb/musb_dsps.c
+> index 88923175f71e..c01f9e9e69f5 100644
+> --- a/drivers/usb/musb/musb_dsps.c
+> +++ b/drivers/usb/musb/musb_dsps.c
+> @@ -690,7 +690,7 @@ static void dsps_dma_controller_resume(struct dsps_glue *glue) {}
+>  #endif /* CONFIG_USB_TI_CPPI41_DMA */
+>  
+>  static struct musb_platform_ops dsps_ops = {
+> -	.quirks		= MUSB_DMA_CPPI41 | MUSB_INDEXED_EP,
+> +	.quirks		= MUSB_DMA_CPPI41 | MUSB_INDEXED_EP | MUSB_DA8XX,
 
-???. I have one of those "original" uPD720200(A) working "just fine"
-in my Laptop currently.
-It's an really old HP dv6-6003eg from around 2011 that came with two
-USB 3.0 Ports, which
-are driven by a "NEC Corporation uPD720200 USB 3.0 Host Controller"
-1033:0194 (Rev 04).
+The MUSB_DA8XX flag cannot be simply applied to MUSB_DSPS, at least the
+teardown and autoreq register offsets are different as show in
+cppi41_dma_controller_create().
 
-As for supporting the uPD720200 (flasher) with this serises.... There
-are some bad news:
+Do you understand what exactly caused the issue? The kernel trace above
+doesn't provide enuough information.
 
-"In addition, the programming interface for the uPD720200 and uPD720200A
-is different from the uPD720202, needs different programming tools, and relies
-on proprietary chip features that cannot be disclosed outside of Renesas."
-<https://mail.coreboot.org/pipermail/flashrom/2013-February/010498.html> :-(
-
-Regards,
-Christian
+-Bin.
