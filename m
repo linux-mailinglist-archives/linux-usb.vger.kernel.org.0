@@ -2,102 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA1751D96B0
-	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2020 14:51:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F22331D96BC
+	for <lists+linux-usb@lfdr.de>; Tue, 19 May 2020 14:54:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728847AbgESMva (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 May 2020 08:51:30 -0400
-Received: from mga17.intel.com ([192.55.52.151]:47865 "EHLO mga17.intel.com"
+        id S1726880AbgESMyD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 May 2020 08:54:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47670 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726991AbgESMv3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 19 May 2020 08:51:29 -0400
-IronPort-SDR: j3Px7osGxG7WSDJsfBM2hDsMm1AysejSzYsg7Iumi9EN5jjlKD2YZZGwHjP/aDAgGRcxLOKIey
- S08AxcH3j8Sg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2020 05:51:29 -0700
-IronPort-SDR: 0COlADP61rFlXgsldtC2+8lHkEFUk+vocSTxCrwrtsRUq8MnmP6g3iJsQ4U5byQqnPsvNn6dMc
- 3rsc5aNdgrxg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,410,1583222400"; 
-   d="scan'208";a="373716987"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 19 May 2020 05:51:25 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 19 May 2020 15:51:25 +0300
-Date:   Tue, 19 May 2020 15:51:24 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Christian Lamparter <chunkeey@googlemail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andreas =?iso-8859-1?Q?B=F6hler?= <dev@aboehler.at>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v13 2/5] usb: renesas-xhci: Add the renesas xhci driver
-Message-ID: <20200519125124.GD1298122@kuha.fi.intel.com>
-References: <20200506060025.1535960-1-vkoul@kernel.org>
- <20200506060025.1535960-3-vkoul@kernel.org>
- <20200519114528.GC1298122@kuha.fi.intel.com>
- <20200519120130.GN374218@vkoul-mobl.Dlink>
+        id S1726169AbgESMyD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 19 May 2020 08:54:03 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7356E2081A;
+        Tue, 19 May 2020 12:54:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589892842;
+        bh=v0xajYSa5l3lB+zy1YykxNt0Lf99pTWzRwzHhEAnwq8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oEmyiLtT4w5ukqDhd79M1G6HbLqfi+CD7H3Vx6b5ObjSdLq03Cw1DN2r2RSQEMoDM
+         cdM8avLMcihCCG4kvwCjJP5XPYxbqR+jeGV2r72QkHqcyeOdKJ1glQ6cQIAKfXLTPG
+         +guhOAHZ5VkyQNCOqZTjDO7d/uPZvBu1k7KBDimo=
+Date:   Tue, 19 May 2020 14:54:00 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Joakim Tjernlund <Joakim.Tjernlund@infinera.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: ttyACM strange chars appearing at connect
+Message-ID: <20200519125400.GA410029@kroah.com>
+References: <52b8c126634058e3a455dc0ab8b0c542916db543.camel@infinera.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200519120130.GN374218@vkoul-mobl.Dlink>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <52b8c126634058e3a455dc0ab8b0c542916db543.camel@infinera.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 19, 2020 at 05:31:30PM +0530, Vinod Koul wrote:
-> Hi Heikki
-> 
-> On 19-05-20, 14:45, Heikki Krogerus wrote:
-> > Hi guys,
-> > 
-> > On Wed, May 06, 2020 at 11:30:22AM +0530, Vinod Koul wrote:
-> > > From: Christian Lamparter <chunkeey@googlemail.com>
-> > > 
-> > > This add a new driver for renesas xhci which is basically a firmware
-> > > loader for uPD720201 and uPD720202 w/o ROM. The xhci-pci driver will
-> > > invoke this driver for loading/unloading on relevant devices.
-> > > 
-> > > This patch adds a firmware loader for the uPD720201K8-711-BAC-A
-> > > and uPD720202K8-711-BAA-A variant. Both of these chips are listed
-> > > in Renesas' R19UH0078EJ0500 Rev.5.00 "User's Manual: Hardware" as
-> > > devices which need the firmware loader on page 2 in order to
-> > > work as they "do not support the External ROM".
-> > > 
-> > > The "Firmware Download Sequence" is describe in chapter
-> > > "7.1 FW Download Interface" R19UH0078EJ0500 Rev.5.00 page 131.
-> > > 
-> > > The firmware "K2013080.mem" is available from a USB3.0 Host to
-> > > PCIe Adapter (PP2U-E card) "Firmware download" archive. An
-> > > alternative version can be sourced from Netgear's WNDR4700 GPL
-> > > archives.
-> > > 
-> > > The release notes of the PP2U-E's "Firmware Download" ver 2.0.1.3
-> > > (2012-06-15) state that the firmware is for the following devices:
-> > >  - uPD720201 ES 2.0 sample whose revision ID is 2.
-> > >  - uPD720201 ES 2.1 sample & CS sample & Mass product, ID is 3.
-> > >  - uPD720202 ES 2.0 sample & CS sample & Mass product, ID is 2.
-> > 
-> > You wouldn't happen to have access to the documentation of the
-> > "original" uPD720200 USB 3.0 controller?
-> > 
-> > It would be cool if we could support that too with this driver.
-> 
-> Not me. does it also require firmware? If so you can try with this
-> driver and see if it works for you?
+On Tue, May 19, 2020 at 12:14:55PM +0000, Joakim Tjernlund wrote:
+> Whenever we connect a Linux laptop(4.19.118) to our ttyACM serial gadget we can see som strange
+> chars appearing in our gadget:
+> 03�`3�03�x�x(in hex: 3033 efbf bd60 33ef bfbd 3033 efbf bd78 efbf bd78)
+> They appear witch c.a 1 sec in between.
+> I assume it is the laptops ACM driver emitting those, but why? Can these chars be turned off?
 
-It does require firmware, and yes I can test this driver at some
-point.
+It's a program on your laptop probing the device.  Usually modemmanager
+or something like that.
 
-thanks,
-
--- 
-heikki
+greg k-h
