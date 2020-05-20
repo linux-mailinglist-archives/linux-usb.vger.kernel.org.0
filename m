@@ -2,181 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 063CC1DBC6E
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2020 20:14:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB60C1DBCA2
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2020 20:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726596AbgETSOO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 May 2020 14:14:14 -0400
-Received: from mail-dm6nam11on2137.outbound.protection.outlook.com ([40.107.223.137]:38017
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726560AbgETSOO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 20 May 2020 14:14:14 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N/OySGyVSujhFe7KGpgR4SlemI0vMebtsRcDZvWvJLGFk25sNZ8As5sRaxrSnKcBML5U/Yib7fMycOVAXLXDR96MwspEiSnLOTGfn/2RkFUH2f5q/qXe7Ccs4+7KgZOg+I7UaeV32PKGdZwBdPe9AwRaVWP3hQmOeigTWonw++LSZBGihxLBI+YBi2pqvIam9Ko9CYwk0k3JAXH545+JtA17oH9hjyda0ZOhbD4k1m5mSqNC2ywt20+xfTBCo1eI3WXWn6IT+cAh77OKbUdgrwAJ+m1ncRjtuZ3OGLbGaoe7MeoCp6si9jYB7c0C14Bf0Pk951SoWNxb3A91FANT3g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0+Qgw7b8lCP2akUGIwxf2OOH9ZOC5WyfMFT7Ta46pxU=;
- b=ED7rljTn4AryJ8NUsYiRwUBzorqixbxxQNnr07fbWOmQnOAPc+ed9QxWbl9+/Efehcc1Me1wfyNs5FcZ6QYQcfGSHfm5uNZZ8i9MzBczeKifmksnX+ZlqBeoT4Y36WV+zEXSm/YU7id+5TbD1UitkaROhaqIniG2yYWcfoL8H11cI29/i/sQwgYR8JX19WEsG3ObK2Z3VVCThkvpXaEp9TYMF1zcDv57v9463v7yBi4uZRAXkvezVafRnvZyguksEZkQ8SlSnwcWQ8jS3L9S9Q7YqBPb+EKotOR7r34FHawufDlDTnDYl5Ap040zgWGBcYlVeO4vjgWtHbN/S0eGcA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=northeastern.edu; dmarc=pass action=none
- header.from=northeastern.edu; dkim=pass header.d=northeastern.edu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=northeastern.edu;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0+Qgw7b8lCP2akUGIwxf2OOH9ZOC5WyfMFT7Ta46pxU=;
- b=PMh0d6jHFQYWNockW9Oy/XeZQKyuEseu2EcpTlAH090Wp+EvH4OvN5cXUWAJva2hQxNgp3uC3Xk7ZazcbKQLDWdAZkgRJ5NLsysHkaCZpVhBi3J7Q+b3gkYypfFaK0aCy35XPK60iLzM442XdKt5Jhng+uWWTjtTg+184j0/G+8=
-Received: from BL0PR06MB4548.namprd06.prod.outlook.com (2603:10b6:208:56::26)
- by BL0PR06MB4722.namprd06.prod.outlook.com (2603:10b6:208:58::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3021.24; Wed, 20 May
- 2020 18:14:10 +0000
-Received: from BL0PR06MB4548.namprd06.prod.outlook.com
- ([fe80::fd87:3891:70a2:bc5d]) by BL0PR06MB4548.namprd06.prod.outlook.com
- ([fe80::fd87:3891:70a2:bc5d%3]) with mapi id 15.20.3000.034; Wed, 20 May 2020
- 18:14:10 +0000
-From:   Changming Liu <liu.changm@northeastern.edu>
-To:     Greg KH <greg@kroah.com>
-CC:     "thomas@winischhofer.net" <thomas@winischhofer.net>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "Lu, Long" <l.lu@northeastern.edu>,
-        "yaohway@gmail.com" <yaohway@gmail.com>
-Subject: RE: [PATCH] USB: sisusbvga: Fix left shifting a possible negative
- value
-Thread-Topic: [PATCH] USB: sisusbvga: Fix left shifting a possible negative
- value
-Thread-Index: AdYuxNmskfT55oS6Rb26qZi3a0k1HQAAXJ6AAALdtDA=
-Date:   Wed, 20 May 2020 18:14:09 +0000
-Message-ID: <BL0PR06MB45484699A1AA2D89918E9FDFE5B60@BL0PR06MB4548.namprd06.prod.outlook.com>
-References: <BL0PR06MB4548B811CFD66D0AB61ACD89E5B60@BL0PR06MB4548.namprd06.prod.outlook.com>
- <20200520164707.GB66231@kroah.com>
-In-Reply-To: <20200520164707.GB66231@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: kroah.com; dkim=none (message not signed)
- header.d=none;kroah.com; dmarc=none action=none header.from=northeastern.edu;
-x-originating-ip: [128.227.216.118]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 613e618d-b54c-4930-0a9c-08d7fce997e2
-x-ms-traffictypediagnostic: BL0PR06MB4722:
-x-ld-processed: a8eec281-aaa3-4dae-ac9b-9a398b9215e7,ExtFwd
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BL0PR06MB47221A626EA377F3BDA87B20E5B60@BL0PR06MB4722.namprd06.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-forefront-prvs: 04097B7F7F
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: yo0I5c2Yje0Tb2yBtQRw1BApjj46Az3dRsw2T/4itKc936TCkoA4o+tNkxVR7PFHveFjCaQbrnkicQuL5E7EZL5cD9pcZyz8L0hspO3anTe+owWCIseps8xuYTOZae8ftYuDcph39HpMxY1WmNhnkQRmhchKAwTizgEco9XSalr/2jkwTIYpJM7cQxIDI4IHamQaAQmwOeaLR4Gsbn7Ds+gya2Gk02pGTKG42dR1gWf0Liw8q/FHgV9esQDWo8X8mcBbyA7nuy9oolZ617VqNZhjGJNXgSxnQ3Hl3k2O7qDLrkuCQtAyC1H5OcciuCX76WSLNzi2+0t+UvUVp+lzyA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR06MB4548.namprd06.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(136003)(366004)(376002)(39860400002)(396003)(346002)(54906003)(9686003)(2906002)(6916009)(786003)(55016002)(316002)(4326008)(478600001)(75432002)(8936002)(8676002)(7696005)(64756008)(5660300002)(6506007)(53546011)(76116006)(66946007)(86362001)(66556008)(66476007)(71200400001)(186003)(33656002)(52536014)(66446008)(26005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: 0FmD9khkWtWr0jrMsz/WVL0aiZWWobYiV/GYWRljw6txC+BUVctTC6bKKfoH99O1xPQbw6nXJwVNku3sAdmZQwBFaWJahbVtH/iKrHK/qnXvFAfWTuShfLWzF54/vGAV64yTG6ETu5pHZWmQ4fYJraqdchS5uxnSTWIbXFYyvE4CJ/KdZdQjQ5YspKEqWUn0/utxU+4BwELrGRMg7W1zLY7QWCEemTf6ZmG064jZ5KOaCiDP2u5tvrikr1AjkDsR9SYs5e5TREur7oENFWnC6Ul24mOJJHHWk4WzGKaycyRacDjBptVlu3+mMTNQW4X/M5RVgOZvxnnkiwx2AKJOFjq8IgCuN7nM47PQYImuDjj9ricUlnLSMxOAiSkpns86asj8x5veKelcTjz6AttVDGEKkeebpwyb4ybjv04/WHC43gyMXGlXziGrZJAoUqGuHgpjocjFUA6sAkzMSwVxS0RYroktiNOwJNQ4RNsePkJ7tydT/rSRuWSsZ2iGV/Cq
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1727087AbgETSUv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 May 2020 14:20:51 -0400
+Received: from mga09.intel.com ([134.134.136.24]:47285 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727017AbgETSUu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 20 May 2020 14:20:50 -0400
+IronPort-SDR: lruQtvMDlVsBlpSO7R/mlVDQRZ4GXVyJN9a/iudPi4wz4VmMSoM0opA1HKECsk7qFN4mfAfRFS
+ wcs4cAUqlWsw==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2020 11:20:49 -0700
+IronPort-SDR: YEuzpoVu+3qFg0hA0Kg3k++O4seF86ufqOjT4c9llP3a7SFJ5/E247heG8Ec22ef9OtVlOCP5X
+ LeZRINc7wGCA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,414,1583222400"; 
+   d="scan'208";a="264776165"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 20 May 2020 11:20:47 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1jbTKg-0007Eu-RJ; Thu, 21 May 2020 02:20:46 +0800
+Date:   Thu, 21 May 2020 02:20:38 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
+        heikki.krogerus@linux.intel.com
+Cc:     kbuild-all@lists.01.org,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Subject: Re: [PATCH] usb: typec: Ensure USB_ROLE_SWITCH is a dependency for
+ tps6598x
+Message-ID: <202005210211.0PCV77KB%lkp@intel.com>
+References: <20200520100526.2729-1-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
-X-OriginatorOrg: northeastern.edu
-X-MS-Exchange-CrossTenant-Network-Message-Id: 613e618d-b54c-4930-0a9c-08d7fce997e2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 May 2020 18:14:09.9958
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a8eec281-aaa3-4dae-ac9b-9a398b9215e7
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: aDp8csXmvT7wdYuSvbQsOMvgZOhJz1k1PPOQlvnCIZ3Drli8x93ps3jW2XMwWyCut/xGKJKMR3IOqQZ+6o0HrQaIwLLpe9Hf46ImjrGB6BU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR06MB4722
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200520100526.2729-1-bryan.odonoghue@linaro.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Bryan,
 
+I love your patch! Yet something to improve:
 
-> -----Original Message-----
-> From: Greg KH <greg@kroah.com>
-> Sent: Wednesday, May 20, 2020 12:47 PM
-> To: Changming Liu <liu.changm@northeastern.edu>
-> Cc: thomas@winischhofer.net; linux-usb@vger.kernel.org; Lu, Long
-> <l.lu@northeastern.edu>; yaohway@gmail.com
-> Subject: Re: [PATCH] USB: sisusbvga: Fix left shifting a possible negativ=
-e value
->=20
-> On Wed, May 20, 2020 at 04:37:50PM +0000, Changming Liu wrote:
-> >
-> >
-> > > -----Original Message-----
-> > > From: Greg KH <greg@kroah.com>
-> > > Sent: Wednesday, May 20, 2020 1:02 AM
-> > > To: Changming Liu <liu.changm@northeastern.edu>
-> > > Cc: thomas@winischhofer.net; linux-usb@vger.kernel.org; Lu, Long
-> > > <l.lu@northeastern.edu>; yaohway@gmail.com
-> > > Subject: Re: [Bug Report] drivers/usb/misc/sisusbvga: undefined
-> > > result when left shift a possible negative value in
-> > > sisusb_write_mem_bulk
-> > >
-> > > On Wed, May 20, 2020 at 03:51:04AM +0000, Changming Liu wrote:
-> > > > Hi Greg and Thomas,
-> > > > Greetings, I'm a first-year PhD student who is interested in the
-> > > > usage of
-> > > UBSan for linux. And after some experiments, I've found that in
-> > > drivers/usb/misc/sisusbvga/sisusb.c
-> > > > function sisusb_write_mem_bulk, there is an undefined behavior
-> > > > caused by
-> > > left shifting a possible negative number.
-> > > >
-> > > > More specifically, in the switch statement for case 3, after
-> > > > executing
-> > > copy_from_user, the the lower 3 bytes of char buf[4] are filled with
-> > > data from user space.
-> > > > And these 3 bytes are left shifted accordingly to form a 32bit
-> > > > unsigned
-> > > integer, swap32.
-> > > >
-> > > > The potential problem is, since the buf is declared as signed char
-> > > > buffer so
-> > > each byte might be a negative number while being left shifted.
-> > > According to the C standard, when the left-hand operand of the left
-> > > shift operator is a negative value, the result is undefined. So I
-> > > guess change the buf declaration to unsigned will help? Given that it=
-'s only
-> used here.
-> > >
-> > > Sounds like a good idea, patches are welcome to fix this.
-> >
-> > Hi greg,
-> > Thank you for this recognition! This means a lot to me.
-> > Here's the patch as we agreed.
->=20
-> Please resend this in a normal format where we can properly review it.
-Sure, I'm so sorry for this inconvenience, I've sent you a separate patch ,=
- hope this works.
->=20
-> But:
->=20
-> >
-> > Best,
-> > Changming
-> >
-> >
-> > >From 14ae7c67ea3fb96ed6bea0bc9919f3c597308813 Mon Sep 17 00:00:00
-> > >2001
-> > From: Changming Liu <liu.changm@northeastern.edu>
-> > Date: Wed, 20 May 2020 12:19:37 -0400
-> > Subject: [PATCH] USB: sisusbvga: Fix left shifting a possible negative
-> > value
-> >
-> > the char buffer buf, accepts user data which might be negative value an=
-d the
-> content is left shifted to form an unsigned integer.
-> > Since left shifting a negative value is undefined behavior, thus
-> > change the char to u8 to fix this
->=20
-> Properly line-wrap your changelog when you resend this.
-[Changming Liu]=20
-Got it, I believe in my patch, I properly line-wrapped the line, I hope the=
- patch you received is well-formatted.=20
-Otherwise, I'll have to send through my gmail account.
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on balbi-usb/testing/next peter.chen-usb/ci-for-usb-next v5.7-rc6 next-20200519]
+[if your patch is applied to the wrong git tree, please drop us a note to help
+improve the system. BTW, we also suggest to use '--base' option to specify the
+base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
 
-Sorry again for this inconvenience.
+url:    https://github.com/0day-ci/linux/commits/Bryan-O-Donoghue/usb-typec-Ensure-USB_ROLE_SWITCH-is-a-dependency-for-tps6598x/20200521-011740
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+config: i386-tinyconfig
+compiler: gcc-7 (Ubuntu 7.5.0-6ubuntu2) 7.5.0
+reproduce:
+        make ARCH=i386  tinyconfig
+        make ARCH=i386 
 
-Best,
-Changming
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kbuild test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> drivers/of/Kconfig:69:error: recursive dependency detected!
+drivers/of/Kconfig:69: symbol OF_IRQ depends on IRQ_DOMAIN
+kernel/irq/Kconfig:68: symbol IRQ_DOMAIN is selected by REGMAP
+drivers/base/regmap/Kconfig:7: symbol REGMAP default is visible depending on REGMAP_I2C
+drivers/base/regmap/Kconfig:19: symbol REGMAP_I2C is selected by TYPEC_TPS6598X
+drivers/usb/typec/Kconfig:64: symbol TYPEC_TPS6598X depends on USB_ROLE_SWITCH
+drivers/usb/roles/Kconfig:3: symbol USB_ROLE_SWITCH is selected by USB_MUSB_MEDIATEK
+drivers/usb/musb/Kconfig:119: symbol USB_MUSB_MEDIATEK depends on GENERIC_PHY
+drivers/phy/Kconfig:8: symbol GENERIC_PHY is selected by PHY_BCM_NS_USB3
+drivers/phy/broadcom/Kconfig:41: symbol PHY_BCM_NS_USB3 depends on MDIO_BUS
+drivers/net/phy/Kconfig:13: symbol MDIO_BUS depends on MDIO_DEVICE
+drivers/net/phy/Kconfig:6: symbol MDIO_DEVICE is selected by PHYLIB
+drivers/net/phy/Kconfig:243: symbol PHYLIB is selected by ARC_EMAC_CORE
+drivers/net/ethernet/arc/Kconfig:19: symbol ARC_EMAC_CORE is selected by ARC_EMAC
+drivers/net/ethernet/arc/Kconfig:25: symbol ARC_EMAC depends on OF_IRQ
+For a resolution refer to Documentation/kbuild/kconfig-language.rst
+subsection "Kconfig recursive dependency limitations"
+
+vim +69 drivers/of/Kconfig
+
+5ab5fc7e35705c Grant Likely         2010-07-05  14  
+19fd74879a32fb Grant Likely         2014-11-04  15  config OF_UNITTEST
+19fd74879a32fb Grant Likely         2014-11-04  16  	bool "Device Tree runtime unit tests"
+6019a3d07d7258 Rob Herring          2017-07-25  17  	depends on !SPARC
+6019a3d07d7258 Rob Herring          2017-07-25  18  	select IRQ_DOMAIN
+649e0a77e28a77 Rob Herring          2015-05-28  19  	select OF_EARLY_FLATTREE
+2eb46da2a760e5 Grant Likely         2014-10-02  20  	select OF_RESOLVE
+53a42093d96ef5 Grant Likely         2011-12-12  21  	help
+53a42093d96ef5 Grant Likely         2011-12-12  22  	  This option builds in test cases for the device tree infrastructure
+5d9270869b6cd3 Geert Uytterhoeven   2013-12-24  23  	  that are executed once at boot time, and the results dumped to the
+53a42093d96ef5 Grant Likely         2011-12-12  24  	  console.
+53a42093d96ef5 Grant Likely         2011-12-12  25  
+53a42093d96ef5 Grant Likely         2011-12-12  26  	  If unsure, say N here, but this option is safe to enable.
+53a42093d96ef5 Grant Likely         2011-12-12  27  
+1b7c501b51a8c8 Rob Herring          2015-10-06  28  config OF_ALL_DTBS
+1b7c501b51a8c8 Rob Herring          2015-10-06  29  	bool "Build all Device Tree Blobs"
+1b7c501b51a8c8 Rob Herring          2015-10-06  30  	depends on COMPILE_TEST
+1b7c501b51a8c8 Rob Herring          2015-10-06  31  	select DTC
+1b7c501b51a8c8 Rob Herring          2015-10-06  32  	help
+1b7c501b51a8c8 Rob Herring          2015-10-06  33  	  This option builds all possible Device Tree Blobs (DTBs) for the
+1b7c501b51a8c8 Rob Herring          2015-10-06  34  	  current architecture.
+1b7c501b51a8c8 Rob Herring          2015-10-06  35  
+1b7c501b51a8c8 Rob Herring          2015-10-06  36  	  If unsure, say N here, but this option is safe to enable.
+1b7c501b51a8c8 Rob Herring          2015-10-06  37  
+e169cfbef46d62 Grant Likely         2009-11-23  38  config OF_FLATTREE
+e169cfbef46d62 Grant Likely         2009-11-23  39  	bool
+5ab5fc7e35705c Grant Likely         2010-07-05  40  	select DTC
+e6a6928c3ea1d0 Rob Herring          2014-04-02  41  	select LIBFDT
+08d53aa58cb162 Ard Biesheuvel       2014-11-14  42  	select CRC32
+e169cfbef46d62 Grant Likely         2009-11-23  43  
+e6ce1324e4f08b Stephen Neuendorffer 2010-11-18  44  config OF_EARLY_FLATTREE
+e6ce1324e4f08b Stephen Neuendorffer 2010-11-18  45  	bool
+ff4c25f26a71b7 Christoph Hellwig    2019-02-03  46  	select DMA_DECLARE_COHERENT if HAS_DMA
+e6ce1324e4f08b Stephen Neuendorffer 2010-11-18  47  	select OF_FLATTREE
+e6ce1324e4f08b Stephen Neuendorffer 2010-11-18  48  
+3cfc535c5df812 Andres Salomon       2010-10-10  49  config OF_PROMTREE
+3cfc535c5df812 Andres Salomon       2010-10-10  50  	bool
+3cfc535c5df812 Andres Salomon       2010-10-10  51  
+b56b5528f5b3c3 Rob Herring          2017-10-04  52  config OF_KOBJ
+b56b5528f5b3c3 Rob Herring          2017-10-04  53  	def_bool SYSFS
+b56b5528f5b3c3 Rob Herring          2017-10-04  54  
+0f22dd395fc473 Grant Likely         2012-02-15  55  # Hardly any platforms need this.  It is safe to select, but only do so if you
+0f22dd395fc473 Grant Likely         2012-02-15  56  # need it.
+fcdeb7fedf89f4 Grant Likely         2010-01-29  57  config OF_DYNAMIC
+121c92cad33db2 Geert Uytterhoeven   2015-01-23  58  	bool "Support for dynamic device trees" if OF_UNITTEST
+b56b5528f5b3c3 Rob Herring          2017-10-04  59  	select OF_KOBJ
+121c92cad33db2 Geert Uytterhoeven   2015-01-23  60  	help
+121c92cad33db2 Geert Uytterhoeven   2015-01-23  61  	  On some platforms, the device tree can be manipulated at runtime.
+121c92cad33db2 Geert Uytterhoeven   2015-01-23  62  	  While this option is selected automatically on such platforms, you
+121c92cad33db2 Geert Uytterhoeven   2015-01-23  63  	  can enable it manually to improve device tree unit test coverage.
+fcdeb7fedf89f4 Grant Likely         2010-01-29  64  
+6b884a8d50a6ee Grant Likely         2010-06-08  65  config OF_ADDRESS
+6b884a8d50a6ee Grant Likely         2010-06-08  66  	def_bool y
+6019a3d07d7258 Rob Herring          2017-07-25  67  	depends on !SPARC && (HAS_IOMEM || UML)
+6b884a8d50a6ee Grant Likely         2010-06-08  68  
+e3873444990dd6 Grant Likely         2010-06-18 @69  config OF_IRQ
+e3873444990dd6 Grant Likely         2010-06-18  70  	def_bool y
+63c60e3a6dc3ec Geert Uytterhoeven   2015-04-05  71  	depends on !SPARC && IRQ_DOMAIN
+e3873444990dd6 Grant Likely         2010-06-18  72  
+
+:::::: The code at line 69 was first introduced by commit
+:::::: e3873444990dd6f8a095d1f72b5ad45192f8c506 of/irq: Move irq_of_parse_and_map() to common code
+
+:::::: TO: Grant Likely <grant.likely@secretlab.ca>
+:::::: CC: Grant Likely <grant.likely@secretlab.ca>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
