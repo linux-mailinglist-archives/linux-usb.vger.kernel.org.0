@@ -2,127 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 738451DA45F
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2020 00:19:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 834A11DA746
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2020 03:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726489AbgESWTF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 May 2020 18:19:05 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:52924 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725998AbgESWTE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 May 2020 18:19:04 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04JMIqOf057744;
-        Tue, 19 May 2020 17:18:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1589926732;
-        bh=c1gNUTsHB3gfgkX/gTaB62tQSNuCVzXqjEsmpqFZNow=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=EVzxb79ac+E5BSzuU90j/JF6T/OBf/3ArGRe7NoRfuaOqdbtZHPjFEE8wun3fZ20t
-         ZmU5QtpMoV31HWGLoXF6GGexouZIT56jAJMqz0O6fdspUPRQq9y/PEzzJgoKJqhCQi
-         o+6JZyuZa5dCqiLH9kGS5LvrQu+l3EiyN5BRTg14=
-Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 04JMIqFx072467
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 19 May 2020 17:18:52 -0500
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Tue, 19
- May 2020 17:18:51 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Tue, 19 May 2020 17:18:51 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04JMIpPZ086866;
-        Tue, 19 May 2020 17:18:51 -0500
-Date:   Tue, 19 May 2020 17:18:51 -0500
-From:   Bin Liu <b-liu@ti.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-CC:     Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <russell@personaltelco.net>,
-        <fercerpav@gmail.com>
-Subject: Re: [PATCH v1] usb: musb: dsps: set MUSB_DA8XX quirk for AM335x
-Message-ID: <20200519221851.GA15845@iaqt7>
-Mail-Followup-To: Bin Liu <b-liu@ti.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, russell@personaltelco.net,
-        fercerpav@gmail.com
-References: <20200327053849.5348-1-o.rempel@pengutronix.de>
+        id S1728352AbgETBj4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 May 2020 21:39:56 -0400
+Received: from mga11.intel.com ([192.55.52.93]:60090 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726348AbgETBjz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 19 May 2020 21:39:55 -0400
+IronPort-SDR: 7mQ75CKuwAvYHr3nN14B3hP9R7tbB6y9cMrGr1Ro3dUqyjOGwsenYc97NgCkMwLzG+FcF9aYrF
+ jlpIEQez1Tfg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2020 18:39:54 -0700
+IronPort-SDR: DvuxFnX4kt4oPjffkcdanQeAbigMuJ/6YQpxlhXRnJWBZjZVtczhsy75n6/3xvrTBJDZsleSJW
+ eYfHQEFgm6vA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,412,1583222400"; 
+   d="scan'208";a="268091549"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 19 May 2020 18:39:53 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1jbDi4-0002WV-FY; Wed, 20 May 2020 09:39:52 +0800
+Date:   Wed, 20 May 2020 09:39:42 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ d49292025f79693d3348f8e2029a8b4703be0f0a
+Message-ID: <5ec48a5e.mCQjZ5NI4Xk7vJoV%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20200327053849.5348-1-o.rempel@pengutronix.de>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
+branch HEAD: d49292025f79693d3348f8e2029a8b4703be0f0a  USB: host: ehci-mxc: Add error handling in ehci_mxc_drv_probe()
 
-On Fri, Mar 27, 2020 at 06:38:49AM +0100, Oleksij Rempel wrote:
-> Beagle Bone Black has different memory corruptions if kernel is
-> configured with USB_TI_CPPI41_DMA=y. This issue is reproducible with
-> ath9k-htc driver (ar9271 based wifi usb controller):
-> 
-> root@AccessBox:~ iw dev wlan0 set monitor  fcsfail otherbss
-> root@AccessBox:~ ip l s dev wlan0 up
-> kmemleak: Cannot insert 0xda577e40 into the object search tree (overlaps existing)
-> CPU: 0 PID: 176 Comm: ip Not tainted 5.5.0 #7
-> Hardware name: Generic AM33XX (Flattened Device Tree)
-> [<c0112c14>] (unwind_backtrace) from [<c010dc98>] (show_stack+0x18/0x1c)
-> [<c010dc98>] (show_stack) from [<c08c7c2c>] (dump_stack+0x84/0x98)
-> [<c08c7c2c>] (dump_stack) from [<c02c75a8>] (create_object+0x2f8/0x324)
-> [<c02c75a8>] (create_object) from [<c02b8928>] (kmem_cache_alloc+0x1a8/0x39c)
-> [<c02b8928>] (kmem_cache_alloc) from [<c072fb68>] (__alloc_skb+0x60/0x174)
-> [<c072fb68>] (__alloc_skb) from [<bf0c5c58>] (ath9k_wmi_cmd+0x50/0x184 [ath9k_htc])
-> [<bf0c5c58>] (ath9k_wmi_cmd [ath9k_htc]) from [<bf0cb410>] (ath9k_regwrite_multi+0x54/0x84 [ath9k_htc])
-> [<bf0cb410>] (ath9k_regwrite_multi [ath9k_htc]) from [<bf0cb7fc>] (ath9k_regwrite+0xf0/0xfc [ath9k_htc])
-> [<bf0cb7fc>] (ath9k_regwrite [ath9k_htc]) from [<bf1aca78>] (ar5008_hw_process_ini+0x280/0x6c0 [ath9k_hw])
-> [<bf1aca78>] (ar5008_hw_process_ini [ath9k_hw]) from [<bf1a66ac>] (ath9k_hw_reset+0x270/0x1458 [ath9k_hw])
-> [<bf1a66ac>] (ath9k_hw_reset [ath9k_hw]) from [<bf0c9588>] (ath9k_htc_start+0xb0/0x22c [ath9k_htc])
-> [<bf0c9588>] (ath9k_htc_start [ath9k_htc]) from [<bf0eb3c0>] (drv_start+0x4c/0x1e8 [mac80211])
-> [<bf0eb3c0>] (drv_start [mac80211]) from [<bf104a84>] (ieee80211_do_open+0x480/0x954 [mac80211])
-> [<bf104a84>] (ieee80211_do_open [mac80211]) from [<c075127c>] (__dev_open+0xdc/0x160)
-> [<c075127c>] (__dev_open) from [<c07516a8>] (__dev_change_flags+0x1a4/0x204)
-> [<c07516a8>] (__dev_change_flags) from [<c0751728>] (dev_change_flags+0x20/0x50)
-> [<c0751728>] (dev_change_flags) from [<c076971c>] (do_setlink+0x2ac/0x978)
-> 
-> After applying this patch, the system is running in monitor mode without
-> noticeable issues.
-> 
-> Suggested-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
->  drivers/usb/musb/musb_dsps.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/musb/musb_dsps.c b/drivers/usb/musb/musb_dsps.c
-> index 88923175f71e..c01f9e9e69f5 100644
-> --- a/drivers/usb/musb/musb_dsps.c
-> +++ b/drivers/usb/musb/musb_dsps.c
-> @@ -690,7 +690,7 @@ static void dsps_dma_controller_resume(struct dsps_glue *glue) {}
->  #endif /* CONFIG_USB_TI_CPPI41_DMA */
->  
->  static struct musb_platform_ops dsps_ops = {
-> -	.quirks		= MUSB_DMA_CPPI41 | MUSB_INDEXED_EP,
-> +	.quirks		= MUSB_DMA_CPPI41 | MUSB_INDEXED_EP | MUSB_DA8XX,
+elapsed time: 482m
 
-The MUSB_DA8XX flag cannot be simply applied to MUSB_DSPS, at least the
-teardown and autoreq register offsets are different as show in
-cppi41_dma_controller_create().
+configs tested: 98
+configs skipped: 1
 
-Do you understand what exactly caused the issue? The kernel trace above
-doesn't provide enuough information.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
--Bin.
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                               allnoconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+sparc                            allyesconfig
+mips                             allyesconfig
+m68k                             allyesconfig
+i386                              allnoconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                              debian-10.3
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                              allnoconfig
+m68k                           sun3_defconfig
+m68k                                defconfig
+nios2                               defconfig
+nios2                            allyesconfig
+openrisc                            defconfig
+c6x                              allyesconfig
+c6x                               allnoconfig
+openrisc                         allyesconfig
+nds32                               defconfig
+nds32                             allnoconfig
+csky                             allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+h8300                            allmodconfig
+xtensa                              defconfig
+arc                                 defconfig
+arc                              allyesconfig
+sh                               allmodconfig
+sh                                allnoconfig
+microblaze                        allnoconfig
+mips                              allnoconfig
+mips                             allmodconfig
+parisc                            allnoconfig
+parisc                              defconfig
+parisc                           allyesconfig
+parisc                           allmodconfig
+powerpc                             defconfig
+powerpc                          allyesconfig
+powerpc                          rhel-kconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a006-20200519
+i386                 randconfig-a005-20200519
+i386                 randconfig-a001-20200519
+i386                 randconfig-a003-20200519
+i386                 randconfig-a004-20200519
+i386                 randconfig-a002-20200519
+x86_64               randconfig-a003-20200519
+x86_64               randconfig-a005-20200519
+x86_64               randconfig-a004-20200519
+x86_64               randconfig-a006-20200519
+x86_64               randconfig-a002-20200519
+x86_64               randconfig-a001-20200519
+i386                 randconfig-a012-20200519
+i386                 randconfig-a014-20200519
+i386                 randconfig-a016-20200519
+i386                 randconfig-a011-20200519
+i386                 randconfig-a015-20200519
+i386                 randconfig-a013-20200519
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+s390                             allyesconfig
+s390                              allnoconfig
+s390                             allmodconfig
+s390                                defconfig
+x86_64                              defconfig
+sparc                               defconfig
+sparc64                             defconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                          allmodconfig
+um                               allmodconfig
+um                                allnoconfig
+um                                  defconfig
+um                               allyesconfig
+x86_64                                   rhel
+x86_64                               rhel-7.6
+x86_64                    rhel-7.6-kselftests
+x86_64                         rhel-7.2-clear
+x86_64                                    lkp
+x86_64                              fedora-25
+x86_64                                  kexec
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
