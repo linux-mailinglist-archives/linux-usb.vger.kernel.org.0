@@ -2,118 +2,186 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27CE81DA8BE
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2020 05:51:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69AB31DA977
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2020 06:49:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728309AbgETDvL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 May 2020 23:51:11 -0400
-Received: from mail-bn7nam10on2132.outbound.protection.outlook.com ([40.107.92.132]:4193
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726938AbgETDvK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 19 May 2020 23:51:10 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mDE5PcYM/AL3dvB1+dgJZAsTpYWq9W+awY+lFzIyrbClEJ2ZgjQYP9X1rdLB/qKwsEWFrUkteks0zu9h14YuT6f4qlcppr4FpN4YTES44QfXuEd/LSWpzXtZREU7+uh7JO5NqyivTxVrzAkKFuwlIVeiSgn0ifFbFz1ZimXR4ySrv2IGbQWWavgt0k8MhwutUTYVmfs3cU1hX3VYf9Xjx2c+GTL8vm5q67F2zORmBYejaB7KTXU4d696tG2h8JtIbaTNVUZnKhmzaX/JDtd3da5e9+3J5RcAL2W5MVl5wBsrgXjwO+CvkCgjB9NqeIqC2UIYpijQi8zOlDdx5xd1Tg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=THeRaPUnkcTYcQnwv93LeGlpvHwA1TUQpgyMrAS/1tU=;
- b=JgVNyAu7lyhUPn9HVt8OD48Cxl79xfBCsZend9suDYb3GPXDt7Ks70ek2cqZWM/vGh/03xRrLuKoaEClr240ZGRCl0Rm4CkZv4APVdmQiqifuLB/rZMAZo9lui4gf2cmMCXFM66x9GKlVWG69tzns5xJIvxi707sKeGno/kdrGLrSNENXYaHwBWOuzAzp7FtS4iHRzNlqTJ12FN8a5zjTVUrklzKDJStK0kAbZElSxsjcdXuAwlBcJVBADCYk+WSLuHZqpWvUOHrkWuHwvoSZB+F8fn0BqGZbh+YF/KlvzLtI59doEBZix277MI47zSWaWesv2T59QR4lRo1iIge0A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=northeastern.edu; dmarc=pass action=none
- header.from=northeastern.edu; dkim=pass header.d=northeastern.edu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=northeastern.edu;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=THeRaPUnkcTYcQnwv93LeGlpvHwA1TUQpgyMrAS/1tU=;
- b=qF6B7Yg242ejvan+mHK8dA4Fi0T6N7cm3MpeloxyCopDwgocW93op4ULaH06/oygzP6yAKRWodM0AqEGO1JfWN78DlBBmxhZEMufkDMT1dZyTPjv9JlY4BRj6GP4qa6to70n8IbIY7S7Hrzvv57qsXnSUNcpcD5ikQ+F6+vwrWk=
-Received: from BL0PR06MB4548.namprd06.prod.outlook.com (2603:10b6:208:56::26)
- by BL0PR06MB4753.namprd06.prod.outlook.com (2603:10b6:208:5c::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3000.31; Wed, 20 May
- 2020 03:51:04 +0000
-Received: from BL0PR06MB4548.namprd06.prod.outlook.com
- ([fe80::fd87:3891:70a2:bc5d]) by BL0PR06MB4548.namprd06.prod.outlook.com
- ([fe80::fd87:3891:70a2:bc5d%3]) with mapi id 15.20.3000.034; Wed, 20 May 2020
- 03:51:04 +0000
-From:   Changming Liu <liu.changm@northeastern.edu>
-To:     "thomas@winischhofer.net" <thomas@winischhofer.net>,
-        Greg KH <greg@kroah.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "Lu, Long" <l.lu@northeastern.edu>,
-        "yaohway@gmail.com" <yaohway@gmail.com>
-Subject: [Bug Report] drivers/usb/misc/sisusbvga: undefined result when left
- shift a possible negative value in sisusb_write_mem_bulk
-Thread-Topic: [Bug Report] drivers/usb/misc/sisusbvga: undefined result when
- left shift a possible negative value in sisusb_write_mem_bulk
-Thread-Index: AdYuWRRubczH7bESTyqwoCyPI8W43Q==
-Date:   Wed, 20 May 2020 03:51:04 +0000
-Message-ID: <BL0PR06MB4548D5526F5BFAD528039FECE5B60@BL0PR06MB4548.namprd06.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: winischhofer.net; dkim=none (message not signed)
- header.d=none;winischhofer.net; dmarc=none action=none
- header.from=northeastern.edu;
-x-originating-ip: [128.227.216.118]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5d2ee2c2-ff01-4fa0-ebe8-08d7fc710536
-x-ms-traffictypediagnostic: BL0PR06MB4753:
-x-ld-processed: a8eec281-aaa3-4dae-ac9b-9a398b9215e7,ExtFwd
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BL0PR06MB4753A856358559B2BA8F5BADE5B60@BL0PR06MB4753.namprd06.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 04097B7F7F
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: YA87RucfjHY1AHo7cAKJA8PuZgtZ/4vFsIMdvsXNep3VHG6JfGTetL3nZr0S666CSj0IecZRN1fLfRT28tbFPGu3dQMV47FgQDKl3nPIo2kLKQ5p/qyEkMiAZYqB0Daerxl0jlo+fpQj8qWmj/6ITQSK96jLAV44FueiBNkPsyrk4UXcG6SIrn68PhI3uNfGIy7Oq85bLryd3UQ5wHuTXwucZzOzRy4DJ2//ynTC8GHG8rfTziMhHrDg1S7Ti6w8uA8xAAzRmyTCM+DrRAh5hoZBBrIQK938rotZ3WYKGSQ9xuJI2lK8vc9BRhA/5jHqW3ENyIK2EZ/o8SrEfYsQjjUuyXe5A/yYL/ytLnNH28DCqPmVgxkxVIzsvLBPlfFGvGhGzNzTmPdNsqnCY/L6yn8ZndDE+NPauVff9v/kRgqhSxbz+aJjIXhXgNtejBCV
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR06MB4548.namprd06.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(136003)(346002)(376002)(396003)(366004)(39850400004)(86362001)(2906002)(54906003)(110136005)(7696005)(6506007)(75432002)(71200400001)(76116006)(64756008)(186003)(66476007)(66556008)(66446008)(786003)(66946007)(52536014)(26005)(316002)(4326008)(33656002)(5660300002)(8676002)(9686003)(8936002)(478600001)(55016002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: FgGsW9D204bXB/8KuIG26vDJ3hDcJJ8JFrbddVz3kr/l0p7ux4DOA72k2EIJBl6mOHk8Qh4ZsVSNI2lIV9bvA2hCpaH0TrViXIp1W2truRuIXpe+jWKuKAOSq7DlW3e4JHZnVx725td5DFYqJcDFAXi1XkdMCSNWKhHit07Pu4qEZBvMz3YYipi0nHTCqpMPxWMBH571C3pRWmfJe4U8RtDCird+mEqaeFveaihRIPE7GPOaYMyM1klrpvybiLpecO5dIAc56UfLZKUT8MGSxD5t9bAMy+fQHuC2+1WlV9lpcOT2m0aiBhPZpphWvuTM8qhuhkVH2/zgHt3dGkZ3NblMOXQrdDwGJJ93R07kG99ARwwc4v1Ok8X4LK7wBstmmXMk0/sKYuME7W2ntRIRxyB09dH1ZyI0Ax3zXwGO8yuQmgLSN04HJ94BYLtmTH7LgRRvdc6IbHKzDzm9o9ScquzhyyI7hMHmgRoXVq/lBj8=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1726829AbgETEtv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 May 2020 00:49:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50320 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726766AbgETEtq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 May 2020 00:49:46 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F12C061A0E
+        for <linux-usb@vger.kernel.org>; Tue, 19 May 2020 21:49:45 -0700 (PDT)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1jbGfg-00066a-Fr; Wed, 20 May 2020 06:49:36 +0200
+Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ore@pengutronix.de>)
+        id 1jbGfe-00020E-9b; Wed, 20 May 2020 06:49:34 +0200
+Date:   Wed, 20 May 2020 06:49:34 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Bin Liu <b-liu@ti.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, russell@personaltelco.net,
+        fercerpav@gmail.com
+Subject: Re: [PATCH v1] usb: musb: dsps: set MUSB_DA8XX quirk for AM335x
+Message-ID: <20200520044934.hyngdg774ibqai46@pengutronix.de>
+References: <20200327053849.5348-1-o.rempel@pengutronix.de>
+ <20200519221851.GA15845@iaqt7>
 MIME-Version: 1.0
-X-OriginatorOrg: northeastern.edu
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5d2ee2c2-ff01-4fa0-ebe8-08d7fc710536
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 May 2020 03:51:04.3534
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a8eec281-aaa3-4dae-ac9b-9a398b9215e7
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: BBRlIO23GILe1yl+mVOkzj9gC33k0rlfpDHgCcrUCUUjhPSLu3Taa96pRkYbgiefb3n6xjn/CvxgZKvpSblRaEux0ZG0p9fMitMSXUMv3qA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR06MB4753
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="2lnvkb6fzyg3lzwg"
+Content-Disposition: inline
+In-Reply-To: <20200519221851.GA15845@iaqt7>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 06:31:46 up 186 days, 19:50, 180 users,  load average: 0.20, 0.13,
+ 0.06
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg and Thomas,
-Greetings, I'm a first-year PhD student who is interested in the usage of U=
-BSan for linux. And after some experiments, I've found that in drivers/usb/=
-misc/sisusbvga/sisusb.c=20
-function sisusb_write_mem_bulk, there is an undefined behavior caused by le=
-ft shifting a possible negative number.
 
-More specifically, in the switch statement for case 3, after executing copy=
-_from_user, the the lower 3 bytes of char buf[4] are filled with data from =
-user space.
-And these 3 bytes are left shifted accordingly to form a 32bit unsigned int=
-eger, swap32.
+--2lnvkb6fzyg3lzwg
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The potential problem is, since the buf is declared as signed char buffer s=
-o each byte might be a negative number while being left shifted. According =
-to the C standard, when the left-hand operand of the left shift operator is=
- a negative value, the result is undefined. So I guess change the buf decla=
-ration to unsigned will help? Given that it's only used here.
+On Tue, May 19, 2020 at 05:18:51PM -0500, Bin Liu wrote:
+> Hi,
+>=20
+> On Fri, Mar 27, 2020 at 06:38:49AM +0100, Oleksij Rempel wrote:
+> > Beagle Bone Black has different memory corruptions if kernel is
+> > configured with USB_TI_CPPI41_DMA=3Dy. This issue is reproducible with
+> > ath9k-htc driver (ar9271 based wifi usb controller):
+> >=20
+> > root@AccessBox:~ iw dev wlan0 set monitor  fcsfail otherbss
+> > root@AccessBox:~ ip l s dev wlan0 up
+> > kmemleak: Cannot insert 0xda577e40 into the object search tree (overlap=
+s existing)
+> > CPU: 0 PID: 176 Comm: ip Not tainted 5.5.0 #7
+> > Hardware name: Generic AM33XX (Flattened Device Tree)
+> > [<c0112c14>] (unwind_backtrace) from [<c010dc98>] (show_stack+0x18/0x1c)
+> > [<c010dc98>] (show_stack) from [<c08c7c2c>] (dump_stack+0x84/0x98)
+> > [<c08c7c2c>] (dump_stack) from [<c02c75a8>] (create_object+0x2f8/0x324)
+> > [<c02c75a8>] (create_object) from [<c02b8928>] (kmem_cache_alloc+0x1a8/=
+0x39c)
+> > [<c02b8928>] (kmem_cache_alloc) from [<c072fb68>] (__alloc_skb+0x60/0x1=
+74)
+> > [<c072fb68>] (__alloc_skb) from [<bf0c5c58>] (ath9k_wmi_cmd+0x50/0x184 =
+[ath9k_htc])
+> > [<bf0c5c58>] (ath9k_wmi_cmd [ath9k_htc]) from [<bf0cb410>] (ath9k_regwr=
+ite_multi+0x54/0x84 [ath9k_htc])
+> > [<bf0cb410>] (ath9k_regwrite_multi [ath9k_htc]) from [<bf0cb7fc>] (ath9=
+k_regwrite+0xf0/0xfc [ath9k_htc])
+> > [<bf0cb7fc>] (ath9k_regwrite [ath9k_htc]) from [<bf1aca78>] (ar5008_hw_=
+process_ini+0x280/0x6c0 [ath9k_hw])
+> > [<bf1aca78>] (ar5008_hw_process_ini [ath9k_hw]) from [<bf1a66ac>] (ath9=
+k_hw_reset+0x270/0x1458 [ath9k_hw])
+> > [<bf1a66ac>] (ath9k_hw_reset [ath9k_hw]) from [<bf0c9588>] (ath9k_htc_s=
+tart+0xb0/0x22c [ath9k_htc])
+> > [<bf0c9588>] (ath9k_htc_start [ath9k_htc]) from [<bf0eb3c0>] (drv_start=
++0x4c/0x1e8 [mac80211])
+> > [<bf0eb3c0>] (drv_start [mac80211]) from [<bf104a84>] (ieee80211_do_ope=
+n+0x480/0x954 [mac80211])
+> > [<bf104a84>] (ieee80211_do_open [mac80211]) from [<c075127c>] (__dev_op=
+en+0xdc/0x160)
+> > [<c075127c>] (__dev_open) from [<c07516a8>] (__dev_change_flags+0x1a4/0=
+x204)
+> > [<c07516a8>] (__dev_change_flags) from [<c0751728>] (dev_change_flags+0=
+x20/0x50)
+> > [<c0751728>] (dev_change_flags) from [<c076971c>] (do_setlink+0x2ac/0x9=
+78)
+> >=20
+> > After applying this patch, the system is running in monitor mode without
+> > noticeable issues.
+> >=20
+> > Suggested-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> > ---
+> >  drivers/usb/musb/musb_dsps.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/usb/musb/musb_dsps.c b/drivers/usb/musb/musb_dsps.c
+> > index 88923175f71e..c01f9e9e69f5 100644
+> > --- a/drivers/usb/musb/musb_dsps.c
+> > +++ b/drivers/usb/musb/musb_dsps.c
+> > @@ -690,7 +690,7 @@ static void dsps_dma_controller_resume(struct dsps_=
+glue *glue) {}
+> >  #endif /* CONFIG_USB_TI_CPPI41_DMA */
+> > =20
+> >  static struct musb_platform_ops dsps_ops =3D {
+> > -	.quirks		=3D MUSB_DMA_CPPI41 | MUSB_INDEXED_EP,
+> > +	.quirks		=3D MUSB_DMA_CPPI41 | MUSB_INDEXED_EP | MUSB_DA8XX,
+>=20
+> The MUSB_DA8XX flag cannot be simply applied to MUSB_DSPS, at least the
+> teardown and autoreq register offsets are different as show in
+> cppi41_dma_controller_create().
 
-Due to the lack of knowledge of the interaction between this module and oth=
-ers, I'm not able to assess the severity of this problem. I wonder if it's =
-worth a fix? If not, I would appreciate it if I can know why, this will hel=
-p me understand linux and UB a lot!
+ok
 
-Looking forward to your valuable response!
+> Do you understand what exactly caused the issue?
 
-PS: I'm that guy who sent you a bug report and the patch was accepted 3 wee=
-ks ago, please allow me to express my appreciation again!
+No.
 
-Changming Liu
+Disabling DMA support "solve" this issue as well.
+
+Beside, with DMA support, there remains one more crash with different sympt=
+oms.
+I can workaround it by disabling CPU Freq governor, or setting it to perfor=
+mance.
+
+> The kernel trace above doesn't provide enuough information.
+
+Do you have any suggestions how to instrument the kernel to get needed
+information? Or, should I try to capture USB traffic before the crash?=20
+
+If it helps, ath9k_htc is a usb wifi adapter. It generates a lot of
+USB traffic on multiple endpoints. Bulk with data packets and Interrupt
+with register accesses, LED blinking... etc.
+
+Regards,
+Oleksij
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+--2lnvkb6fzyg3lzwg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEERBNZvwSgvmcMY/T74omh9DUaUbMFAl7EttkACgkQ4omh9DUa
+UbPN6A/+NEoLiqEpSJSwhbJJZtm3Id6TZVhx45kidQFEpsUBKr2DrpvKL1QhSXDf
+6qgL976h7vHDKvEFi2CO8OrGeetNp9339/x9jxn8o7d2B3mWMUIN8peklF3rvZEk
+a4oZoHPRWXcGrg9U7vpotOvVO4OTriBma8/EUHLkup6N10sXgi6l1KFqNHn4DsVA
+cIMp+gGwKBw3CaRXG1UJt+XbrPIPWGbVrW8v72neibXYGDXfGAgMeuV3TEXfHi1l
+XWGycKvMCi0heMfmwaGUdS+vKCf+4Ozhc4vSg1w3OwH2Bkr9+6QWHOOVWLt04Hc3
+5OkoYdYanGrDHmcaFpe+n+a5A8KFMeWrDM7X+Z4W5/Cn5XNr2KsZLOWDazhzQVTn
+39foAps4y4cYY69e/N6Qzu9pNIf9awTC9b585hBOnMbazECOkitMPTMMS2G+eMOa
+jyZjEqPuvpn/5uYTpSep+sXwfKxvECL3MreOvYgamH9MinT70nndT0j3+k7FgLIi
+mHUbyJe9fM0QG9QbkgrabpYHFWyXFMPYEmIhYTjprTwtmtj9L3P4Bj1ZSCvDZQ/7
+gousGwmAgXjSTPzfeZgXs8kIgfcv1a3TlAYbclcKnx8jsYOmiYdn39ll+FKCsSp+
+4USHimXsK9HKZOO6gAwMvljmKZF+uUYh1smdOpbF2dF5wQlLaqI=
+=YE6Q
+-----END PGP SIGNATURE-----
+
+--2lnvkb6fzyg3lzwg--
