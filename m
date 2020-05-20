@@ -2,145 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C206D1DB1A7
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2020 13:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C79591DB1D0
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2020 13:33:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726846AbgETL1I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 May 2020 07:27:08 -0400
-Received: from shelob.surriel.com ([96.67.55.147]:52946 "EHLO
-        shelob.surriel.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726435AbgETL1I (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 May 2020 07:27:08 -0400
-Received: from imladris.surriel.com ([96.67.55.152])
-        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <riel@shelob.surriel.com>)
-        id 1jbMsE-0003xQ-7J; Wed, 20 May 2020 07:26:58 -0400
-Message-ID: <273cc1c074cc4a4058f31afe487fb233f5cf0351.camel@surriel.com>
-Subject: XHCI vs PCM2903B/PCM2904 part 2
-From:   Rik van Riel <riel@surriel.com>
-To:     linux-usb <linux-usb@vger.kernel.org>
-Cc:     alsa-devel@alsa-project.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
+        id S1726486AbgETLdh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 May 2020 07:33:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56952 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726436AbgETLdh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 May 2020 07:33:37 -0400
+Received: from mail-vs1-xe61.google.com (mail-vs1-xe61.google.com [IPv6:2607:f8b0:4864:20::e61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05D5C061A0E
+        for <linux-usb@vger.kernel.org>; Wed, 20 May 2020 04:33:36 -0700 (PDT)
+Received: by mail-vs1-xe61.google.com with SMTP id y13so1596062vsk.8
+        for <linux-usb@vger.kernel.org>; Wed, 20 May 2020 04:33:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=footclan-ninja.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=w/ac2SaHHPe23aQybxirdwZDUTCApkczJdZwYl+fN8E=;
+        b=C07mdIPZd8txhfFv6idlqagpEMKGITPX6yQo9EBE6MLBAPN/AjzG3TKiltGTpmC32/
+         Yr79nmOW8lYtfbm3M1ZRHU11lRfXDlCM65Z86vSEZcVibOPl+nCTtKBgh9F/1+2Xl78P
+         EZWCoXWqWqsCbzq25V/GQndnXt+hvNeqnvQHSY+2Ts6zDyjmBNNtSl0s9IlAt8WnBTFN
+         PYisqSi6kG1vBmPrI6K6ybh6ePr517FjmyS0aTlIr+wo774U3opWBls3Bum4AzzwXpJn
+         u3oCA1p2eJzUo0FP1Z/rqUy5bZelt0zEP1Tpgo1YjGiz1bpHjG+38Npdsa2aJv8oTzM/
+         CEBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=w/ac2SaHHPe23aQybxirdwZDUTCApkczJdZwYl+fN8E=;
+        b=RT6knZFWUDLW+xavMJiOY7rqtsZKAI2q+rDuCKhRwy7xH+Mj0CUVUR1HRsbYWOvl13
+         TR5LxOVn8rDNkgFhOmqmzSqPtMnK5UGnJU6R6fY1IPaHdCkn4XBzgc8b1yu3oolh2Jae
+         zxE6/abgNm6Mkd8p9DZ1Wu4mYqEEuMWNEHrkz9UmBiTVyc7yveicXsB6qQkvSoI8/pDx
+         VLClwIaCApuXl1MkwFCEfIrwa1cArpW1TUoOx2bGLEr5I87WQZqFlb3TKc5rxtB3yTX3
+         g5ZxL4fjhuRqgG5dm3hHKbv38OypDm4z6nT4cI6zKY8B5D6GzMLKfb8Nz+cwqOYsSMdn
+         i4+g==
+X-Gm-Message-State: AOAM530gDK2Crzfjzuj+9mU5HfLuLjuc6YB/2P+BoisSjCpvPwhfiwlJ
+        rjewT8g+ZcIvJ/EJw4WFKYGiZWiJT4hpVo/y9AqUBBcJ+63Fug==
+X-Google-Smtp-Source: ABdhPJwAb+JstEdpvktOlEmxSiHdZ284xxf3MlUVpKackA/Bois9z0hs1Tsfiq0uP62wU/JT5NJM7XzpVpJ3
+X-Received: by 2002:a05:6102:1043:: with SMTP id h3mr3047743vsq.229.1589974416017;
+        Wed, 20 May 2020 04:33:36 -0700 (PDT)
+Received: from localhost.localdomain (pa49-180-69-106.pa.nsw.optusnet.com.au. [49.180.69.106])
+        by smtp-relay.gmail.com with ESMTPS id h13sm217126vka.13.2020.05.20.04.33.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 May 2020 04:33:36 -0700 (PDT)
+X-Relaying-Domain: footclan.ninja
+From:   Matt Jolly <Kangie@footclan.ninja>
+To:     Johan Hovold <johan@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Date:   Wed, 20 May 2020 07:26:57 -0400
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-KZ0PlQuw8u0ClyxHg+lW"
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Matt Jolly <Kangie@footclan.ninja>
+Subject: [PATCH] USB: serial: qcserial: Add DW5816e QDL support
+Date:   Wed, 20 May 2020 21:32:58 +1000
+Message-Id: <20200520113258.5496-1-Kangie@footclan.ninja>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Add support for Dell Wireless 5816e Download Mode (AKA boot & hold mode /
+QDL download mode) to drivers/usb/serial/qcserial.c
 
---=-KZ0PlQuw8u0ClyxHg+lW
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+This is required to update device firmware.
 
-After a few more weeks of digging, I have come to the tentative
-conclusion that either the XHCI driver, or the USB sound driver,
-or both, fail to handle USB errors correctly.
+Signed-off-by: Matt Jolly <Kangie@footclan.ninja>
+---
+ drivers/usb/serial/qcserial.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-I have some questions at the bottom, after a (brief-ish) explanation
-of exactly what seems to go wrong.
-
-TL;DR: arecord from a misbehaving device can hang forever
-after a USB error, due to poll on /dev/snd/timer never returning.
-
-The details: under some mysterious circumstances, the PCM290x
-family sound chips can send more data than expected during an
-isochronous transfer, leading to a babble error. Those
-circumstances seem to in part depend on the USB host controller
-and/or the electrical environment, since the chips work just
-fine for most people.
-
-Receiving data past the end of the isochronous transfer window
-scheduled for a device results in the XHCI controller throwing
-a babble error, which moves the endpoint into halted state.
-
-This is followed by the host controller software sending a
-reset endpoint command, and moving the endpoint into stopped
-state, as specified on pages 164-165 of the XHCI specification.
-
-However, the USB sound driver seems to have no idea that this
-error happened. The function retire_capture_urb looks at the
-status of each isochronous frame, but seems to be under the
-assumption that the sound device just keeps on running.
-
-The function snd_complete_urb seems to only detect that the
-device is not running if usb_submit_urb returns a failure.
-
-        err =3D usb_submit_urb(urb, GFP_ATOMIC);
-        if (err =3D=3D 0)
-                return;
-
-        usb_audio_err(ep->chip, "cannot submit urb (err =3D %d)\n", err);
-
-        if (ep->data_subs && ep->data_subs->pcm_substream) {
-                substream =3D ep->data_subs->pcm_substream;
-                snd_pcm_stop_xrun(substream);
-        }
-
-However, the XHCI driver will happily submit an URB to a
-stopped device. Looking at the call trace usb_submit_urb ->
-xhci_urb_enqueue -> xhci_queue_isoc_tx_prepare -> prepare_ring,
-you can see this code:
-
-        /* Make sure the endpoint has been added to xHC schedule */
-        switch (ep_state) {
-...
-        case EP_STATE_HALTED:
-                xhci_dbg(xhci, "WARN halted endpoint, queueing URB anyway.\=
-n");
-        case EP_STATE_STOPPED:
-        case EP_STATE_RUNNING:
-                break;
-
-This leads me to a few questions:
-- should retire_capture_urb call snd_pcm_stop_xrun,
-  or another function like it, if it sees certain
-  errors in the iso frame in the URB?
-- should snd_complete_urb do something with these
-  errors, too, in case they happen on the sync frames
-  and not the data frames?
-- does the XHCI code need to ring the doorbell when
-  submitting an URB to a stopped device, or is it
-  always up to the higher-level driver to fully reset
-  the device before it can do anything useful?
-- if a device in stopped state does not do anything
-  useful, should usb_submit_urb return an error?
-- how should the USB sound driver recover from these
-  occasional and/or one-off errors? stop the sound
-  stream, or try to reinitialize the device and start
-  recording again?
-
-I am willing to write patches and can test with my
-setup, but both the sound code and the USB code are
-new to me so I would like to know what direction I
-should go in :)
-
---=20
-All Rights Reversed.
-
---=-KZ0PlQuw8u0ClyxHg+lW
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCAAdFiEEKR73pCCtJ5Xj3yADznnekoTE3oMFAl7FFAEACgkQznnekoTE
-3oM+AAf+JhbuACD7UFirucp8tydQbMb1EuABebzvTo+DuA0miaAAYbfZu8o1g3P1
-gg7edPquFrT88411j4qWGfHSBvG9n3WhF8qLm1aIdLB83K9Vi0R1oxDgizg8I4IR
-R/EO16XdMWsOKAsv4yiKtuDGUZ8Y+TuGivRts6bTKjwqxABOVeX82zCPmHOPe6dI
-z2EXhqmduk4W2Hfswz5ouBMHyNpPeMEMPWxlIwhU+d6a/5ZkhDcoWvaxC8sr5LRC
-W4LhSZINZsMt+tzjy1dv7EkTQz/gGBKU+ZnTrA5XZxLAT83Y2YmdQd+76UUmSyzl
-c9N17a9S0hnZ6luq73BDEh7vsj/ZZA==
-=8U/0
------END PGP SIGNATURE-----
-
---=-KZ0PlQuw8u0ClyxHg+lW--
+diff --git a/drivers/usb/serial/qcserial.c b/drivers/usb/serial/qcserial.c
+index ce0401d3137f..d80ccf58a638 100644
+--- a/drivers/usb/serial/qcserial.c
++++ b/drivers/usb/serial/qcserial.c
+@@ -173,6 +173,7 @@ static const struct usb_device_id id_table[] = {
+ 	{DEVICE_SWI(0x413c, 0x81b3)},	/* Dell Wireless 5809e Gobi(TM) 4G LTE Mobile Broadband Card (rev3) */
+ 	{DEVICE_SWI(0x413c, 0x81b5)},	/* Dell Wireless 5811e QDL */
+ 	{DEVICE_SWI(0x413c, 0x81b6)},	/* Dell Wireless 5811e QDL */
++	{DEVICE_SWI(0x413c, 0x81cb)),	/* Dell Wireless 5816e QDL */
+ 	{DEVICE_SWI(0x413c, 0x81cc)},	/* Dell Wireless 5816e */
+ 	{DEVICE_SWI(0x413c, 0x81cf)},   /* Dell Wireless 5819 */
+ 	{DEVICE_SWI(0x413c, 0x81d0)},   /* Dell Wireless 5819 */
+-- 
+2.26.2
 
