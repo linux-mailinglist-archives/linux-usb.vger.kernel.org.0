@@ -2,208 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5174E1DB579
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2020 15:47:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 889531DB5B6
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2020 15:54:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726729AbgETNri (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 May 2020 09:47:38 -0400
-Received: from mga03.intel.com ([134.134.136.65]:14401 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726436AbgETNrh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 20 May 2020 09:47:37 -0400
-IronPort-SDR: 91FYcLaZWk5SZlRE7DgeiJHC3PuV5qj9lYAePcjlkZE0zZdIfTCUVH+QtAs9v9s1zsYDrljOoK
- TjB8Z9oCxWMw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2020 06:47:36 -0700
-IronPort-SDR: YVqKstJZAo/sdpxfBobGZ7tUK7GvIPb/f6rblNQ4LPlm9okxiPxYULhbLXjEVTksEqYmC26gIT
- baFrOHQQvwhw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,414,1583222400"; 
-   d="scan'208";a="466390121"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by fmsmga005.fm.intel.com with ESMTP; 20 May 2020 06:47:32 -0700
-Subject: Re: XHCI vs PCM2903B/PCM2904 part 2
-To:     Rik van Riel <riel@surriel.com>,
-        linux-usb <linux-usb@vger.kernel.org>
-Cc:     alsa-devel@alsa-project.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-References: <273cc1c074cc4a4058f31afe487fb233f5cf0351.camel@surriel.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- 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 fiD/
-Message-ID: <296d1b03-fbc3-6107-950e-00d38633ea1f@linux.intel.com>
-Date:   Wed, 20 May 2020 16:50:26 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <273cc1c074cc4a4058f31afe487fb233f5cf0351.camel@surriel.com>
-Content-Type: text/plain; charset=utf-8
+        id S1726898AbgETNyL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 May 2020 09:54:11 -0400
+Received: from esa6.microchip.iphmx.com ([216.71.154.253]:62145 "EHLO
+        esa6.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726718AbgETNyL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 May 2020 09:54:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1589982849; x=1621518849;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=kRUk5JnWB5WGxoEuGKTv9vuZhdS/XdPv82GVyl70rMQ=;
+  b=AnSI8xIfSuxUPhVXf9qDHfgUg6dnhAa5qFPGVEEUviOGpFjDpAu3s4Z/
+   mb0Q3myqW3eFQ4GGZ8jDF9dpsPBfSHrCGVI+5lMydLRKRh7wZJLIqTZfO
+   1fHrgWmHlxHwuNCxhAdR4I2iOZ2xaHVv5QPmUZb1xtluQpN1obL4taL08
+   /gDntQiKZvJctwt4kmopRR4i2AlR5UH6Jkd4wXBJiQYaYmdWIQ1F9gGeC
+   IgU3+hc80BqXuQWi7jJ5ZBqrmztiAiv7lCqB+tCRRVMzT/1LMiBmCIdpt
+   6cl6LO51zL6b5q3Nmj9PNenElrLJl8X0izs+1HHA4r9TlKZZeiH8sh/zM
+   w==;
+IronPort-SDR: Qd6mPjKyWpwYVybhym1Qu/HGB1jiFYR3IP40WjoZoi2VJLQgJxMZzBdzdE0gQVMrYbILWvbTuG
+ HGOY8CZuHyLTfVg29CB6k4PXfpHI5WKriqMzfOBAIZPz1wOkI/kDykrR95NmaVaEVJmaJnaPqk
+ bPBJi1Ln5Jm/jKb6VCUsUDftQSbAZED3mOya+hLXmUyWwK7d4JWdlFNw2oKERsd8MPWDiuoGh7
+ bwE7PDxbi8IeLS98k4OfHJxYEDNQFIgYTjrdCeRTgA6EwJuCIOnbZSUz3RrEHeJVxbi+YMDXTL
+ RkM=
+X-IronPort-AV: E=Sophos;i="5.73,414,1583218800"; 
+   d="scan'208";a="12985629"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 May 2020 06:54:09 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Wed, 20 May 2020 06:54:09 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5 via Frontend
+ Transport; Wed, 20 May 2020 06:54:08 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hVPqkpZ3KPGCiUB58AFj0CRo8yzXA0EvSFWwObNdXnl46AtrRIOd11PN/w6+8kY/bsIjQPotZ1B0lgMvvoU1fvDBGEnIJMM0EWVICDLiKdzTmjiovra6FZZd4Jx6mlrsMjtXBo2P+YzqQ22z9AkTBUthRiyOaeed1moN9flXuEADGUZLZA88NQs6+RXVV+rU6FyplwidQv2CJ/c4euSUZCqQyOWV+HXw9DQTiQTUvCfPbOjkhnBAdE6EDdz4gXY4owJhrvA5ISDHRJS7UP26BvwgpQGRsy8qQE6DKlmIKf7+G9ZECiu3cZJhK7ltAjzmR2LVA//MNbffMxGIQnlXCQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kRUk5JnWB5WGxoEuGKTv9vuZhdS/XdPv82GVyl70rMQ=;
+ b=WUq+tXaFOhn43Aa1pgdKTKXPI1PGA2LIqkvYkxn5d8VB+G0rj4Mg02wQCIg12mIxve4++s6oYRCEBI4qLOVd0ExmbJOOGjcB2MuhqZByK1WpXPb4eSO6DVZ6p+u5e0z+lyrJdYKl/LYrGDQllIs2MuK21JSniop1BufiAo7jJQzlmAgSkgD6rZky3+T7X/JFO1WDyHf0kncMbzgW3XmxaA6ZmxjgtBCNrBBKxM1XpFyypwQst+0O8U94glPVBkge7KLYGEHhgWzkCwUJaCBec9B4TZ2CMatnXC3/v4jFPrckMfwlx9ZJlsgcLxx3P2ZfNpqWaR/X1EJv7KFnDxrALQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kRUk5JnWB5WGxoEuGKTv9vuZhdS/XdPv82GVyl70rMQ=;
+ b=FqUrh/MXBc1M3fD0HLYyqY5EvbI0yOIJlLJq6yxrjS3Ommag2oPcmWSJWNz21vv8UW10hINVKWNM26RLtYLdOvJ53SPEGioiphcd2if9ZTCqX/OemZg42UXABvMbe+C2TnsKNFw78Viruvo01gYcybmffqgAVPFyK3RKsEFHRvU=
+Received: from DM6PR11MB3420.namprd11.prod.outlook.com (2603:10b6:5:69::31) by
+ DM6PR11MB2697.namprd11.prod.outlook.com (2603:10b6:5:c3::19) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3021.24; Wed, 20 May 2020 13:54:07 +0000
+Received: from DM6PR11MB3420.namprd11.prod.outlook.com
+ ([fe80::e8fd:29e5:1fa6:c01d]) by DM6PR11MB3420.namprd11.prod.outlook.com
+ ([fe80::e8fd:29e5:1fa6:c01d%5]) with mapi id 15.20.3000.034; Wed, 20 May 2020
+ 13:54:07 +0000
+From:   <Christian.Gromm@microchip.com>
+To:     <dan.carpenter@oracle.com>
+CC:     <driverdev-devel@linuxdriverproject.org>,
+        <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v2 1/8] drivers: most: add usb adapter driver
+Thread-Topic: [PATCH v2 1/8] drivers: most: add usb adapter driver
+Thread-Index: AQHWKdV8kIdQpzA+vEmZxc66TslXC6iw/mgAgAAKLgA=
+Date:   Wed, 20 May 2020 13:54:07 +0000
+Message-ID: <9f448ee4453003f4d92ff854146efa8e8d6b3a67.camel@microchip.com>
+References: <1589449976-11378-1-git-send-email-christian.gromm@microchip.com>
+         <1589449976-11378-2-git-send-email-christian.gromm@microchip.com>
+         <20200520131740.GR2078@kadam>
+In-Reply-To: <20200520131740.GR2078@kadam>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.30.5-1.1 
+authentication-results: oracle.com; dkim=none (message not signed)
+ header.d=none;oracle.com; dmarc=none action=none header.from=microchip.com;
+x-originating-ip: [46.142.77.56]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 31093a12-36bc-49ea-c3cd-08d7fcc543dc
+x-ms-traffictypediagnostic: DM6PR11MB2697:
+x-microsoft-antispam-prvs: <DM6PR11MB269745296408B11FEC9FA810F8B60@DM6PR11MB2697.namprd11.prod.outlook.com>
+x-bypassexternaltag: True
+x-ms-oob-tlc-oobclassifiers: OLM:1360;
+x-forefront-prvs: 04097B7F7F
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 2fbGAsV9UuozD7yEjLKn6XRw6qomstlouQJnm/v0ZsQsZ+ntSN0R3QeMLX/dGw79JMxUJx/A0MiHlt2IX91ixr9EMSN62YqPIYs2sp+UM95WO3CyKGnEudTzsRtgrB2B47Z71ubdTscp6we3mWrPllxKZG80dVruFG+ZC3nkcBLauxueS3U542XD+4epsfBXUyCdkUbPuxiJpeHonOX/hvcLTBc2esVK0dWkRUeq5mu32T8VG8u6gGEejXwBIYIcZiaRCNQIHuikUbeHFLhbvBuNR1Wp/nYgIKU9FYF9nVO3cwGOpMu0LBj2IfkmBNKk
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3420.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(366004)(39860400002)(346002)(396003)(136003)(376002)(6506007)(478600001)(2906002)(6916009)(66446008)(4326008)(8676002)(66556008)(6512007)(64756008)(66476007)(66946007)(71200400001)(86362001)(91956017)(76116006)(6486002)(26005)(2616005)(316002)(5660300002)(186003)(54906003)(8936002)(36756003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: 5Cd5czXvSPy3NDRoHvQ1d3/Aad6mTemMwxApdRg5l5xlAwCjsDU8JUW6QYz7BPYBdBUWlHKkaBGnz0m8ajnaJgkbslVBFIZnA5FDshPkX7aFUjUGLbqN/C7Cgxq0yeQ12LfCqb2s05M6wLbGqWOHOGa1lqXERFFNvEYcwUMvIOHYJnO1p9SxarE1T5xbFsUuE/ejcj1G4NIy6IYVALnssRzsrUO+R+/QqYlsQKuGJ6U2St+OBrAyF+wwXnN2e37tD5XZ0ddIAkSqIeGHc9wLK0oxTgKgWm3R7Co2iHd+CvOL1/VyHlXUKdtPaquHIRxP9OpMkrv1NNIuQBRYGMoozNHTP2jD/ptPO1XzmXsWjLUKZakNcfNiTxQ2M8B3p8F/Qohj06D4s5aR9GtWuSm1T3W/IkstPGgSxlSx36II1QWoOkQY7+C/rEQICAQVHSM1NBqh+TK5EHpNmQBpzd6VXF4zucfZQTpc3YYuhygzRY0=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <0E846A039FF6644BB6562A6F27DF2E01@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 31093a12-36bc-49ea-c3cd-08d7fcc543dc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 May 2020 13:54:07.2323
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: WvyXyhfpqyefxBqfxbv7GxQTH+qbKJrH7CDHqWfoQfRGtm3nPf54IUiv9waCqGenD5Pie8CkYehgdIfqXM55+8xnzj9YBA+5s9g/0DVDptQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB2697
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20.5.2020 14.26, Rik van Riel wrote:
-> After a few more weeks of digging, I have come to the tentative
-> conclusion that either the XHCI driver, or the USB sound driver,
-> or both, fail to handle USB errors correctly.
-> 
-> I have some questions at the bottom, after a (brief-ish) explanation
-> of exactly what seems to go wrong.
-> 
-> TL;DR: arecord from a misbehaving device can hang forever
-> after a USB error, due to poll on /dev/snd/timer never returning.
-> 
-> The details: under some mysterious circumstances, the PCM290x
-> family sound chips can send more data than expected during an
-> isochronous transfer, leading to a babble error. Those
-> circumstances seem to in part depend on the USB host controller
-> and/or the electrical environment, since the chips work just
-> fine for most people.
-> 
-> Receiving data past the end of the isochronous transfer window
-> scheduled for a device results in the XHCI controller throwing
-> a babble error, which moves the endpoint into halted state.
-> 
-> This is followed by the host controller software sending a
-> reset endpoint command, and moving the endpoint into stopped
-> state, as specified on pages 164-165 of the XHCI specification.
-
-Note that isoch endpoints should generate buffer overrun instead of
-babble detect error on TD babble conditions. 
-See xHCI spec 6.4.5 additional note 115.
-
-Or maybe a frame babble could halt an isoc endpoint, see xhci 4.10.2.4.1
-but then you should see a port error and port going to disabled state.
-
-Any logs of this?
-
-mount -t debugfs none /sys/kernel/debug
-echo 'module xhci_hcd =p' >/sys/kernel/debug/dynamic_debug/control
-echo 'module usbcore =p' >/sys/kernel/debug/dynamic_debug/control
-echo 81920 > /sys/kernel/debug/tracing/buffer_size_kb
-echo 1 > /sys/kernel/debug/tracing/events/xhci-hcd/enable
-< trigger the issue >
-Send output of dmesg
-Send content of /sys/kernel/debug/tracing/trace
-
-> 
-> However, the USB sound driver seems to have no idea that this
-> error happened. The function retire_capture_urb looks at the
-> status of each isochronous frame, but seems to be under the
-> assumption that the sound device just keeps on running.
-> 
-> The function snd_complete_urb seems to only detect that the
-> device is not running if usb_submit_urb returns a failure.
-> 
->         err = usb_submit_urb(urb, GFP_ATOMIC);
->         if (err == 0)
->                 return;
-> 
->         usb_audio_err(ep->chip, "cannot submit urb (err = %d)\n", err);
-> 
->         if (ep->data_subs && ep->data_subs->pcm_substream) {
->                 substream = ep->data_subs->pcm_substream;
->                 snd_pcm_stop_xrun(substream);
->         }
-> 
-> However, the XHCI driver will happily submit an URB to a
-> stopped device. Looking at the call trace usb_submit_urb ->
-> xhci_urb_enqueue -> xhci_queue_isoc_tx_prepare -> prepare_ring,
-> you can see this code:
-> 
->         /* Make sure the endpoint has been added to xHC schedule */
->         switch (ep_state) {
-> ...
->         case EP_STATE_HALTED:
->                 xhci_dbg(xhci, "WARN halted endpoint, queueing URB anyway.\n");
->         case EP_STATE_STOPPED:
->         case EP_STATE_RUNNING:
->                 break;
-> 
-> This leads me to a few questions:
-> - should retire_capture_urb call snd_pcm_stop_xrun,
->   or another function like it, if it sees certain
->   errors in the iso frame in the URB?
-> - should snd_complete_urb do something with these
->   errors, too, in case they happen on the sync frames
->   and not the data frames?
-> - does the XHCI code need to ring the doorbell when
->   submitting an URB to a stopped device, or is it
->   always up to the higher-level driver to fully reset
->   the device before it can do anything useful?
-
-xhci driver should ring the doorbell.
-
-xhci_queue_isoc_tx()
-  giveback_first_trb()
-    xhci_ring_ep_doorbell()
-
-when we are talking about babble or transaction errors the device might be
-completely unaware of the situation. Device side of the endpoint is not necessarily halted.
-xHC host will only halt its internal endpoint state, and it needs a reset
-endopoint command from the xhci driver to clear the internal halt state. 
-
--Mathias
-
-> - if a device in stopped state does not do anything
->   useful, should usb_submit_urb return an error?
-> - how should the USB sound driver recover from these
->   occasional and/or one-off errors? stop the sound
->   stream, or try to reinitialize the device and start
->   recording again?
-> 
-> I am willing to write patches and can test with my
-> setup, but both the sound code and the USB code are
-> new to me so I would like to know what direction I
-> should go in :)
-> 
-
+T24gV2VkLCAyMDIwLTA1LTIwIGF0IDE2OjE3ICswMzAwLCBEYW4gQ2FycGVudGVyIHdyb3RlOg0K
+PiBFWFRFUk5BTCBFTUFJTDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMg
+dW5sZXNzIHlvdQ0KPiBrbm93IHRoZSBjb250ZW50IGlzIHNhZmUNCj4gDQo+IE9uIFRodSwgTWF5
+IDE0LCAyMDIwIGF0IDExOjUyOjQ5QU0gKzAyMDAsIENocmlzdGlhbiBHcm9tbSB3cm90ZToNCj4g
+PiBUaGlzIHBhdGNoIGFkZHMgdGhlIHVzYiBkcml2ZXIgc291cmNlIGZpbGUgbW9zdF91c2IuYyBh
+bmQNCj4gPiBtb2RpZmllcyB0aGUgTWFrZWZpbGUgYW5kIEtjb25maWcgYWNjb3JkaW5nbHkuDQo+
+ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogQ2hyaXN0aWFuIEdyb21tIDxjaHJpc3RpYW4uZ3JvbW1A
+bWljcm9jaGlwLmNvbT4NCj4gPiAtLS0NCj4gPiB2MjoNCj4gPiBSZXBvcnRlZC1ieTogR3JlZyBL
+cm9haC1IYXJ0bWFuIDxncmVna2hAbGludXhmb3VuZGF0aW9uLm9yZz4NCj4gPiAgICAgICAtIGRv
+bid0IHJlbW92ZSB1c2IgZHJpdmVyIGZyb20gc3RhZ2luZyBhcmVhDQo+ID4gICAgICAgLSBkb24n
+dCB0b3VjaCBzdGFnaW5nL21vc3QvS2NvbmZpZw0KPiA+ICAgICAgIC0gcmVtb3ZlIHN1YmRpcmVj
+dG9yeSBmb3IgVVNCIGRyaXZlciBhbmQgcHV0IHNvdXJjZSBmaWxlIGludG8NCj4gPiAgICAgICAg
+IGRyaXZlcnMvbW9zdA0KPiA+IA0KPiA+ICBkcml2ZXJzL21vc3QvS2NvbmZpZyAgICB8ICAgMTIg
+Kw0KPiA+ICBkcml2ZXJzL21vc3QvTWFrZWZpbGUgICB8ICAgIDIgKw0KPiA+ICBkcml2ZXJzL21v
+c3QvbW9zdF91c2IuYyB8IDEyNjINCj4gPiArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKysrKw0KPiA+ICAzIGZpbGVzIGNoYW5nZWQsIDEyNzYgaW5zZXJ0aW9ucygr
+KQ0KPiA+ICBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy9tb3N0L21vc3RfdXNiLmMNCj4gPiAN
+Cj4gPiANCg0KVGhlcmUgaXMgYWxyZWFkeSBhIHYzIG91dCB0aGVyZSB0aGF0IGhhcyBzb21lIG9m
+IHlvdXIgY29uY2VybnMNCmFscmVhZHkgYWRkcmVzc2VkLiBJJ2xsIHRha2UgeW91ciBjb21tZW50
+cyBhbmQgZml4IHRoZW0gaW4gdGhlDQpuZXh0IHZlcnNpb24gb2YgdGhlIHBhdGNoLg0KDQp0aGFu
+a3MsDQpDaHJpcw0KDQoNCg0KDQo=
