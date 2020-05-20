@@ -2,131 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7C1C1DB168
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2020 13:21:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C206D1DB1A7
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2020 13:27:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726443AbgETLVd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 May 2020 07:21:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55014 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726435AbgETLVc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 May 2020 07:21:32 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81432C061A0E
-        for <linux-usb@vger.kernel.org>; Wed, 20 May 2020 04:21:32 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id k13so2762847wrx.3
-        for <linux-usb@vger.kernel.org>; Wed, 20 May 2020 04:21:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Tpu8LW/1cVh2s0meM0mTep2LiLazAjkGMbpSe6tODh4=;
-        b=bGb1ubY5VZvNgev4EhB4V/OLTjRyyFHawyjGOZ9GapnEfR0TJiUWXn5zAV4OzxqXGD
-         wp7u25j0EP/Vlo67+5NGVO3elvnAXtr67sqVelfzNW7G9z1U65zgOrZvr5hQKva2VNmY
-         a+yTi+0gnuCjz1wh4KkLhMXODu0UbAwr/o6byK9PtvyRD9XkDMnOFmB34TcYMbyG2HG4
-         aXtwxSN0LtgiNMA9461ehXB8gHxUD1O4wZ2OACfC36v+q2sa5BtUZIybvuBCTxxPZpuc
-         0HWePT4eCX8uOnwBH7GWED3ScAKowyHEQN+1Rb6auIc+AzAo6addU7gUxb1ejM9JemCc
-         E1TQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Tpu8LW/1cVh2s0meM0mTep2LiLazAjkGMbpSe6tODh4=;
-        b=AzBm8+ZKtvRdRy4xBdIwCnrFYLRmI9GBMBGuRxqnPCsG3F4ECs07AVXLQLSBMyCW7p
-         R7ICHFEBBXd78Gh9LHM6w3dqBv0FlJ8Iz9VWLl2ih64LERa0vsJsTyKULYEmz2OBPrP4
-         hkQAdR+nXAPtCT+LXhAsf/QSc8jPpMTbEmUdzJ403/7QGYBE7PyuSdiloa+bC+p9F04i
-         C5bVJkMSyhe0s/M80msqEnozeqPOwBt9doaSafMkqPls2L3tqC6w3A/eCOdrDljVE17u
-         lsCE79DcvYSiVP/be0OTWG5TdNT9dBEvF5KPe9nMXZp6w2EVNimVGIl+aNT9tgztbNIP
-         dXBg==
-X-Gm-Message-State: AOAM532Za+ECdnTZP28c90i07w6O3W/6qHWJ9vcxDzLAbVQmAkM10OkI
-        KlqBAb67Igzv3fugkJCEq1bp6Q==
-X-Google-Smtp-Source: ABdhPJzRMGchJzudajaSz+65N5cnUljB9+IHyuxA6NAqHl/OntVTTc+3IqWmAVdARbMqmrdZoyYdZQ==
-X-Received: by 2002:a5d:4907:: with SMTP id x7mr3620148wrq.49.1589973691263;
-        Wed, 20 May 2020 04:21:31 -0700 (PDT)
-Received: from [192.168.0.38] ([176.61.57.127])
-        by smtp.gmail.com with ESMTPSA id v131sm2953565wmb.27.2020.05.20.04.21.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 May 2020 04:21:30 -0700 (PDT)
-Subject: Re: [PATCH] usb: typec: Ensure USB_ROLE_SWITCH is a dependency for
- tps6598x
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org
-References: <20200520100526.2729-1-bryan.odonoghue@linaro.org>
- <20200520103542.GF1298122@kuha.fi.intel.com>
- <c1b5a729-6b2a-9c91-6ed0-94ffbc529fcd@linaro.org>
- <4f5aaa11-194f-24ad-bd8a-ce510b2bce94@linaro.org>
-Message-ID: <49a6693e-ed9e-2de6-1dea-ba24b8a3ff4d@linaro.org>
-Date:   Wed, 20 May 2020 12:22:09 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1726846AbgETL1I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 May 2020 07:27:08 -0400
+Received: from shelob.surriel.com ([96.67.55.147]:52946 "EHLO
+        shelob.surriel.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726435AbgETL1I (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 May 2020 07:27:08 -0400
+Received: from imladris.surriel.com ([96.67.55.152])
+        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <riel@shelob.surriel.com>)
+        id 1jbMsE-0003xQ-7J; Wed, 20 May 2020 07:26:58 -0400
+Message-ID: <273cc1c074cc4a4058f31afe487fb233f5cf0351.camel@surriel.com>
+Subject: XHCI vs PCM2903B/PCM2904 part 2
+From:   Rik van Riel <riel@surriel.com>
+To:     linux-usb <linux-usb@vger.kernel.org>
+Cc:     alsa-devel@alsa-project.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Date:   Wed, 20 May 2020 07:26:57 -0400
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-KZ0PlQuw8u0ClyxHg+lW"
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
 MIME-Version: 1.0
-In-Reply-To: <4f5aaa11-194f-24ad-bd8a-ce510b2bce94@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20/05/2020 12:13, Bryan O'Donoghue wrote:
-> On 20/05/2020 12:08, Bryan O'Donoghue wrote:
->> On 20/05/2020 11:35, Heikki Krogerus wrote:
->>> On Wed, May 20, 2020 at 11:05:26AM +0100, Bryan O'Donoghue wrote:
->>>> When I switched on USB role switching for the tps6598x I completely 
->>>> forgot
->>>> to add the Kconfig dependency.
->>>>
->>>> This patch ensures the dependency is there to prevent compilation error
->>>> when role-switching is off.
->>>
->>> There are stubs for the those functions, so there should not be any
->>> compilation errors.
->>>
->>
->> That's what I initially thought too, then I saw this.
->>
->> git show da4b5d18dd949abdda7c8ea76c9483b5edd49616
->>
->> but looking at role.h
->>
->> #if IS_ENABLED(CONFIG_USB_ROLE_SWITCH)
->>
->> int usb_role_switch_set_role(struct usb_role_switch *sw, enum usb_role 
->> role);
->>
->> #else
->>
->> static inline int usb_role_switch_set_role(struct usb_role_switch *sw,
->>                  enum usb_role role)
->> {
->>          return 0;
->> }
->>
->> #endif
->>
->> That should work.
->>
->> Hmm, let me see if I can figure this out...
-> 
-> Well if I do this
-> 
-> diff --git a/drivers/usb/chipidea/Kconfig b/drivers/usb/chipidea/Kconfig
-> index d53db520e209..636a5428b47e 100644
-> --- a/drivers/usb/chipidea/Kconfig
-> +++ b/drivers/usb/chipidea/Kconfig
-> @@ -6,7 +6,6 @@ config USB_CHIPIDEA
->          select EXTCON
->          select RESET_CONTROLLER
->          select USB_ULPI_BUS
-> -       select USB_ROLE_SWITCH
-> 
-> my build does this
 
-ah ha - look at what role switch is defaulting to
+--=-KZ0PlQuw8u0ClyxHg+lW
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-CONFIG_USB_ROLE_SWITCH=m
+After a few more weeks of digging, I have come to the tentative
+conclusion that either the XHCI driver, or the USB sound driver,
+or both, fail to handle USB errors correctly.
 
-So anything linked into the kernel image will not resolve those symbols
+I have some questions at the bottom, after a (brief-ish) explanation
+of exactly what seems to go wrong.
+
+TL;DR: arecord from a misbehaving device can hang forever
+after a USB error, due to poll on /dev/snd/timer never returning.
+
+The details: under some mysterious circumstances, the PCM290x
+family sound chips can send more data than expected during an
+isochronous transfer, leading to a babble error. Those
+circumstances seem to in part depend on the USB host controller
+and/or the electrical environment, since the chips work just
+fine for most people.
+
+Receiving data past the end of the isochronous transfer window
+scheduled for a device results in the XHCI controller throwing
+a babble error, which moves the endpoint into halted state.
+
+This is followed by the host controller software sending a
+reset endpoint command, and moving the endpoint into stopped
+state, as specified on pages 164-165 of the XHCI specification.
+
+However, the USB sound driver seems to have no idea that this
+error happened. The function retire_capture_urb looks at the
+status of each isochronous frame, but seems to be under the
+assumption that the sound device just keeps on running.
+
+The function snd_complete_urb seems to only detect that the
+device is not running if usb_submit_urb returns a failure.
+
+        err =3D usb_submit_urb(urb, GFP_ATOMIC);
+        if (err =3D=3D 0)
+                return;
+
+        usb_audio_err(ep->chip, "cannot submit urb (err =3D %d)\n", err);
+
+        if (ep->data_subs && ep->data_subs->pcm_substream) {
+                substream =3D ep->data_subs->pcm_substream;
+                snd_pcm_stop_xrun(substream);
+        }
+
+However, the XHCI driver will happily submit an URB to a
+stopped device. Looking at the call trace usb_submit_urb ->
+xhci_urb_enqueue -> xhci_queue_isoc_tx_prepare -> prepare_ring,
+you can see this code:
+
+        /* Make sure the endpoint has been added to xHC schedule */
+        switch (ep_state) {
+...
+        case EP_STATE_HALTED:
+                xhci_dbg(xhci, "WARN halted endpoint, queueing URB anyway.\=
+n");
+        case EP_STATE_STOPPED:
+        case EP_STATE_RUNNING:
+                break;
+
+This leads me to a few questions:
+- should retire_capture_urb call snd_pcm_stop_xrun,
+  or another function like it, if it sees certain
+  errors in the iso frame in the URB?
+- should snd_complete_urb do something with these
+  errors, too, in case they happen on the sync frames
+  and not the data frames?
+- does the XHCI code need to ring the doorbell when
+  submitting an URB to a stopped device, or is it
+  always up to the higher-level driver to fully reset
+  the device before it can do anything useful?
+- if a device in stopped state does not do anything
+  useful, should usb_submit_urb return an error?
+- how should the USB sound driver recover from these
+  occasional and/or one-off errors? stop the sound
+  stream, or try to reinitialize the device and start
+  recording again?
+
+I am willing to write patches and can test with my
+setup, but both the sound code and the USB code are
+new to me so I would like to know what direction I
+should go in :)
+
+--=20
+All Rights Reversed.
+
+--=-KZ0PlQuw8u0ClyxHg+lW
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCAAdFiEEKR73pCCtJ5Xj3yADznnekoTE3oMFAl7FFAEACgkQznnekoTE
+3oM+AAf+JhbuACD7UFirucp8tydQbMb1EuABebzvTo+DuA0miaAAYbfZu8o1g3P1
+gg7edPquFrT88411j4qWGfHSBvG9n3WhF8qLm1aIdLB83K9Vi0R1oxDgizg8I4IR
+R/EO16XdMWsOKAsv4yiKtuDGUZ8Y+TuGivRts6bTKjwqxABOVeX82zCPmHOPe6dI
+z2EXhqmduk4W2Hfswz5ouBMHyNpPeMEMPWxlIwhU+d6a/5ZkhDcoWvaxC8sr5LRC
+W4LhSZINZsMt+tzjy1dv7EkTQz/gGBKU+ZnTrA5XZxLAT83Y2YmdQd+76UUmSyzl
+c9N17a9S0hnZ6luq73BDEh7vsj/ZZA==
+=8U/0
+-----END PGP SIGNATURE-----
+
+--=-KZ0PlQuw8u0ClyxHg+lW--
+
