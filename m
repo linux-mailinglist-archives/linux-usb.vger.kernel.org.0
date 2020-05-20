@@ -2,127 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 423471DB49B
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2020 15:08:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC4CD1DB4A1
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2020 15:11:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726860AbgETNIr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 May 2020 09:08:47 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:39922 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726525AbgETNIp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 May 2020 09:08:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1589980124;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=P/gKendr0zNppLUJqUiRq2VN8GArGi4m/3tA9Ju98qE=;
-        b=KYhN0CMriMEhhiPcS3h2gEHvLFl+69HD4cLHD1BkVgAWIrcFMerKZ9pJNxaAdxQBX6ZGSx
-        II8BCTrsJ62SGmkvAuwelq641nhqQiPntRBMxnW7Z271yivERdyINb1sPQO1j1vlltv6YY
-        9mE0I70CG6O8Tsj3ZPxeXNqmB+2s7Tg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-327-dGyQj__5NfKZX75GXBS-Pw-1; Wed, 20 May 2020 09:08:39 -0400
-X-MC-Unique: dGyQj__5NfKZX75GXBS-Pw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 133F7A0BE6;
-        Wed, 20 May 2020 13:08:38 +0000 (UTC)
-Received: from localhost.localdomain (unknown [10.3.128.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 41BAE82ED0;
-        Wed, 20 May 2020 13:08:36 +0000 (UTC)
-Message-ID: <6e83f76cc2e559ec82c1c8fe8a22b7d91338a851.camel@redhat.com>
-Subject: Re: ttyACM strange chars appearing at connect
-From:   Dan Williams <dcbw@redhat.com>
-To:     Joakim Tjernlund <Joakim.Tjernlund@infinera.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Date:   Wed, 20 May 2020 08:08:35 -0500
-In-Reply-To: <f317d5942549910c4a92f7d398ada9fc02a26af4.camel@infinera.com>
-References: <52b8c126634058e3a455dc0ab8b0c542916db543.camel@infinera.com>
-         <20200519125400.GA410029@kroah.com>
-         <f317d5942549910c4a92f7d398ada9fc02a26af4.camel@infinera.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.5 (3.32.5-1.fc30) 
+        id S1726747AbgETNLC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 May 2020 09:11:02 -0400
+Received: from mga06.intel.com ([134.134.136.31]:39982 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726439AbgETNLC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 20 May 2020 09:11:02 -0400
+IronPort-SDR: HnVV2vE6JIt643J2C0lZHe1k9kWJV18FA61+HKgvR86QfVs3snuvN75b59/2/S67vul0jxOuDW
+ /NBq8ZBUpxXQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2020 06:10:55 -0700
+IronPort-SDR: 70By9Ty12l9Aee0c4RqnbdxQE8IwPX6txzA60JQQagCYfYp1/8iuGcxLDaH4M4WnK9+HbdjDrI
+ N6n8HpmIRd0w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,414,1583222400"; 
+   d="scan'208";a="374072587"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 20 May 2020 06:10:53 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 20 May 2020 16:10:52 +0300
+Date:   Wed, 20 May 2020 16:10:52 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org
+Subject: Re: [PATCH] usb: typec: Ensure USB_ROLE_SWITCH is a dependency for
+ tps6598x
+Message-ID: <20200520131052.GH1298122@kuha.fi.intel.com>
+References: <20200520100526.2729-1-bryan.odonoghue@linaro.org>
+ <20200520103542.GF1298122@kuha.fi.intel.com>
+ <c1b5a729-6b2a-9c91-6ed0-94ffbc529fcd@linaro.org>
+ <4f5aaa11-194f-24ad-bd8a-ce510b2bce94@linaro.org>
+ <49a6693e-ed9e-2de6-1dea-ba24b8a3ff4d@linaro.org>
+ <8000f5b7-7652-4a31-6ec2-ac680c830823@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8000f5b7-7652-4a31-6ec2-ac680c830823@linaro.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 2020-05-20 at 12:43 +0000, Joakim Tjernlund wrote:
-> On Tue, 2020-05-19 at 14:54 +0200, Greg KH wrote:
-> > CAUTION: This email originated from outside of the organization. Do
-> > not click links or open attachments unless you recognize the sender
-> > and know the content is safe.
-> > 
-> > 
-> > On Tue, May 19, 2020 at 12:14:55PM +0000, Joakim Tjernlund wrote:
-> > > Whenever we connect a Linux laptop(4.19.118) to our ttyACM serial
-> > > gadget we can see som strange
-> > > chars appearing in our gadget:
-> > > 03�`3�03�x�x(in hex: 3033 efbf bd60 33ef bfbd 3033 efbf bd78 efbf
-> > > bd78)
-> > > They appear witch c.a 1 sec in between.
-> > > I assume it is the laptops ACM driver emitting those, but why?
-> > > Can these chars be turned off?
-> > 
-> > It's a program on your laptop probing the device.  Usually
-> > modemmanager
-> > or something like that.
-> > 
-> > greg k-h
+On Wed, May 20, 2020 at 12:52:36PM +0100, Bryan O'Donoghue wrote:
+> So it should be "select USB_ROLE_SWITCH" not "depends on USB_ROLE_SWITCH"
+
+No. The consumers of the switches should depend on it, not silently
+select it.
+
+> grep -r "USB_ROLE_SWITCH" * | grep depend
+> drivers/usb/typec/Kconfig:	depends on USB_ROLE_SWITCH
 > 
-> Right you were, it was modemmanager :)
+> grep -r "USB_ROLE_SWITCH" * | grep select
+> drivers/extcon/Kconfig:	select USB_ROLE_SWITCH
+> drivers/usb/dwc3/Kconfig:	select USB_ROLE_SWITCH
+> drivers/usb/cdns3/Kconfig:	select USB_ROLE_SWITCH
+> drivers/usb/gadget/udc/Kconfig:	select USB_ROLE_SWITCH
+> drivers/usb/mtu3/Kconfig:	select USB_ROLE_SWITCH
+> drivers/usb/musb/Kconfig:	select USB_ROLE_SWITCH
+> drivers/usb/musb/Kconfig:	select USB_ROLE_SWITCH
+> drivers/usb/typec/tcpm/Kconfig:	select USB_ROLE_SWITCH
+> drivers/usb/typec/Kconfig:	select USB_ROLE_SWITCH
+> drivers/usb/typec/mux/Kconfig:	select USB_ROLE_SWITCH
+> drivers/usb/common/Kconfig:	select USB_ROLE_SWITCH
 
-If the device has a unique ID that isn't a modem, it can be added to
-ModemManager's blacklist.
+Note that all those except tcpm supply the switch.
 
-Also note that recent versions of ModemManager flipped the logic and
-will only probe *known* modems, require explicit requests to probe
-possible modems, and of course won't probe anything on the blacklist.
+thanks,
 
-Dan
-
-> Fixing that I can occasion se in my DE:
-> [Wed May 20 14:03:16 2020] cdc_ether 1-6.2:1.0 usb0: unregister
-> 'cdc_ether' usb-0000:00:14.0-6.2, CDC Ethernet Device
-> [Wed May 20 14:03:25 2020] usb usb1-port6: disabled by hub (EMI?),
-> re-enabling...
-> [Wed May 20 14:03:25 2020] usb 1-6: USB disconnect, device number 85
-> [Wed May 20 14:03:25 2020] cdc_acm 1-6.3:1.1: acm_ctrl_irq -
-> usb_submit_urb failed: -19
-> [Wed May 20 14:03:25 2020] usb 1-6-port2: attempt power cycle
-> [Wed May 20 14:03:26 2020] usb 1-6.3: USB disconnect, device number
-> 86
-> [Wed May 20 14:03:26 2020] cdc_acm 1-6.3:1.1: failed to set dtr/rts
-> [Wed May 20 14:03:26 2020] usb 1-6: new high-speed USB device number
-> 94 using xhci_hcd
-> [Wed May 20 14:03:27 2020] hub 1-6:1.0: USB hub found
-> [Wed May 20 14:03:27 2020] hub 1-6:1.0: 3 ports detected
-> [Wed May 20 14:03:27 2020] usb 1-6.2: new high-speed USB device
-> number 95 using xhci_hcd
-> [Wed May 20 14:03:27 2020] cdc_ether 1-6.2:1.0 usb0: register
-> 'cdc_ether' at usb-0000:00:14.0-6.2, CDC Ethernet Device,
-> 7e:1d:06:c0:3f:3c
-> [Wed May 20 14:03:27 2020] usb 1-6.3: new high-speed USB device
-> number 96 using xhci_hcd
-> [Wed May 20 14:03:27 2020] cdc_acm 1-6.3:1.1: ttyACM0: USB ACM device
-> 
-> This "disabled by hub (EMI?), re-enabling" may be from:
->   EM interference sometimes causes bad shielded USB devices to 
->   be shutdown by the hub, this hack enables them again.
-> 
-> But a another side effect from this is that I get a lot of garbage
-> chars in the other end, like:
->  h�^@^@� ^@^@� ^@
-> or
->  X���)H��4Ğ^���
-> I wonder if this can be caused by the USB/ACM driver ?
-> 
->  Jocke
-
+-- 
+heikki
