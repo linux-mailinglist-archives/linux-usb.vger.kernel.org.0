@@ -2,68 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49F7E1DBCC7
-	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2020 20:25:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83E161DBD36
+	for <lists+linux-usb@lfdr.de>; Wed, 20 May 2020 20:46:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726833AbgETSZi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 May 2020 14:25:38 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:55687 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726826AbgETSZi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 May 2020 14:25:38 -0400
-Received: (qmail 17522 invoked by uid 1000); 20 May 2020 14:25:36 -0400
-Date:   Wed, 20 May 2020 14:25:36 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Bin Liu <b-liu@ti.com>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: musb: return -ESHUTDOWN in urb when three-strikes
- error happened
-Message-ID: <20200520182536.GB15590@rowland.harvard.edu>
-References: <20200514150259.GB11463@iaqt7>
- <20200514153731.GC11463@iaqt7>
- <20200514162604.GA9571@rowland.harvard.edu>
- <20200514170023.GD11463@iaqt7>
- <20200514185549.GA22428@rowland.harvard.edu>
- <20200519171255.GE11463@iaqt7>
- <20200519200158.GA1339@rowland.harvard.edu>
- <20200520143112.GB15845@iaqt7>
- <20200520164055.GB11084@rowland.harvard.edu>
- <20200520180550.GD15845@iaqt7>
+        id S1726737AbgETSqG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 May 2020 14:46:06 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:48628 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726548AbgETSqF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 May 2020 14:46:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1590000364;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JdxlV9+3kfjDDkLUzoqBN4uSPGSE70o1REhWjMzumHk=;
+        b=LCw4vOF9pFXftK6WV4mvhKTkQwa+/KYMltLbA1S8AkWz49E6+2g3f/JIUO4RTsG+W62lFq
+        /8J19n4s+j907a2jBiw4+lm+8qsA+1UxfiFt7xH0QvBA2dSCdTh1k+o142Ap45tgD0RZ6W
+        Lx5UtMSuJQBhm+wMDnPRyFwcPVoteQk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-4-xp6Y2zEbPDq9VHNA6uRsxg-1; Wed, 20 May 2020 14:46:01 -0400
+X-MC-Unique: xp6Y2zEbPDq9VHNA6uRsxg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 12C11100CCC2;
+        Wed, 20 May 2020 18:46:00 +0000 (UTC)
+Received: from starship (unknown [10.35.207.28])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E495D579A3;
+        Wed, 20 May 2020 18:45:57 +0000 (UTC)
+Message-ID: <cfabdf8a0f21c9c77744f1fd3efd0c9d87c9763f.camel@redhat.com>
+Subject: Re: [PATCH 1/1] thunderbolt: add trivial .shutdown
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     kvm@vger.kernel.org
+Cc:     Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Jiri Kosina <trivial@kernel.org>
+Date:   Wed, 20 May 2020 21:45:56 +0300
+In-Reply-To: <20200520181240.118559-2-mlevitsk@redhat.com>
+References: <20200520181240.118559-1-mlevitsk@redhat.com>
+         <20200520181240.118559-2-mlevitsk@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200520180550.GD15845@iaqt7>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 20, 2020 at 01:05:50PM -0500, Bin Liu wrote:
-> On Wed, May 20, 2020 at 12:40:55PM -0400, Alan Stern wrote:
-> > > > Then do you think we should change the API?
-> > > > 
-> > > > Right now it's a little too complicated.  There's no real reason for 
-> > > > EPROTO, EILSEQ, and ETIME to be different codes.  And now you seem to be 
-> > > > suggesting that we should fold them all into ESHUTDOWN.
-> > > 
-> > > I haven't studied all the USB error code enough to suggest this. I am
-> > > only changing to ESHUTDOWN in musb driver because I know this 3-strikes
-> > > error should only be caused by USB device disabled, which is the
-> > > definition of ESHUTDOWN in error-code.rst.
-> > 
-> > You should spend a little time studying the error-codes document.  
-> > EPROTO, EILSEQ, and ETIME describe different kinds of errors that all 
-> > fall into the 3-strikes category.
+On Wed, 2020-05-20 at 21:12 +0300, Maxim Levitsky wrote:
+> On my machine, a kexec with this driver loaded in the old kernel
+> causes a very long delay on boot in the kexec'ed kernel,
+> most likely due to unclean shutdown prior to that.
 > 
-> But not all device drivers, except the 3 I found, treat EPROTO as fatal,
-> and I cannot fix it in all the device drivers. The only thing I can do
-> at this moment is changing the MUSB HCD driver to return ESHUTDOWN which
-> still follows the document, kind of.
+> Unloading thunderbolt driver prior to kexec allows kexec to work as fast
+> as regular kernel boot, as well as adding this .shutdown pointer.
+> 
+> Shutting a device prior to the shutdown completely is always
+> a good idea IMHO to help with kexec,
+> and this one-liner patch implements it.
+> 
+> Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
+> ---
+>  drivers/thunderbolt/nhi.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
+> index 1be491ecbb45..4046642e6aec 100644
+> --- a/drivers/thunderbolt/nhi.c
+> +++ b/drivers/thunderbolt/nhi.c
+> @@ -1285,6 +1285,7 @@ static struct pci_driver nhi_driver = {
+>  	.id_table = nhi_ids,
+>  	.probe = nhi_probe,
+>  	.remove = nhi_remove,
+> +	.shutdown = nhi_remove,
+>  	.driver.pm = &nhi_pm_ops,
+>  };
+>  
+Oops, I see that I posted this little fix on a wrong mailing list.
+I didn't update the script correctly.
+Sorry for the noise!
 
-Think long-term.  Yes, for now you're focused on changing the MUSB HCD.  
-But what should happen in the future?
+Best regards,
+	Maxim Levitsky
 
-At some point we all need to stop reacting and start making some 
-deliberate plans.  This issue is bigger than one patch or one driver.
 
-Alan Stern
