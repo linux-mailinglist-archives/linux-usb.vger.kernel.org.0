@@ -2,71 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85EE11DC7CA
-	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2020 09:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45EF91DC7D3
+	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2020 09:39:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728359AbgEUHge (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 May 2020 03:36:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51606 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728053AbgEUHgd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 21 May 2020 03:36:33 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0301C2065F;
-        Thu, 21 May 2020 07:36:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590046590;
-        bh=Ko0yxRa2b18dohhk/hY+WAc1XIHiNYoqz9iprCTMgGk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XlaXyCf56ctMQwNZGnCngXjbZ8vAdEMxF1iWQ0l8BwnfEJzEqFGSaorcWZRZrFqW/
-         ifGiyX8YHXIMl2BhMUKv8kQ6bSUwh7y4u0K+NoWhB/U5ilTKFQ17QxgLMS4Fm9zRo0
-         yuSr76eGi33lCt1Uh9htRZaI1UeyGDmPx+ECxZBM=
-Date:   Thu, 21 May 2020 09:36:27 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Changming Liu <liu.changm@northeastern.edu>
-Cc:     "thomas@winischhofer.net" <thomas@winischhofer.net>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] USB: sisusbvga: Fix left shifting a possible negative
- value
-Message-ID: <20200521073627.GB2579717@kroah.com>
-References: <BL0PR06MB45483EF82A54B8751524A2E7E5B60@BL0PR06MB4548.namprd06.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BL0PR06MB45483EF82A54B8751524A2E7E5B60@BL0PR06MB4548.namprd06.prod.outlook.com>
+        id S1728425AbgEUHjr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 May 2020 03:39:47 -0400
+Received: from mail.zju.edu.cn ([61.164.42.155]:43928 "EHLO zju.edu.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728300AbgEUHjr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 21 May 2020 03:39:47 -0400
+Received: from localhost.localdomain (unknown [222.205.77.158])
+        by mail-app3 (Coremail) with SMTP id cC_KCgDnX7cuMMZe2PjmAA--.15363S4;
+        Thu, 21 May 2020 15:39:30 +0800 (CST)
+From:   Dinghao Liu <dinghao.liu@zju.edu.cn>
+To:     dinghao.liu@zju.edu.cn, kjlu@umn.edu
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Roger Quadros <rogerq@ti.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: cdns3: Fix runtime PM imbalance on error
+Date:   Thu, 21 May 2020 15:39:19 +0800
+Message-Id: <20200521073925.19633-1-dinghao.liu@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cC_KCgDnX7cuMMZe2PjmAA--.15363S4
+X-Coremail-Antispam: 1UD129KBjvdXoWrKrW7ZFW3Gr18JF1xWF4UArb_yoWDGFc_Ww
+        4ruw47GF1YgF9rXw4UCw13ZryIgFnFqF1kWF40qF1agryUur1kCry8ZrZ5Crsruw4UtryD
+        tF92grWfurZ7ujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbI8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
+        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
+        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4UJVW0owA2z4x0Y4vEx4A2
+        jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52
+        x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWU
+        AwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
+        8JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GF4l42xK82IYc2Ij64vIr41l
+        42xK82IY6x8ErcxFaVAv8VW8uw4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+        8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
+        ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+        0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Zr0_Wr1UMIIF0xvEx4A2jsIE14v2
+        6r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvj
+        fUeAwIDUUUU
+X-CM-SenderInfo: qrrzjiaqtzq6lmxovvfxof0/1tbiAgEHBlZdtOPItAAJsr
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 20, 2020 at 06:06:50PM +0000, Changming Liu wrote:
-> The char buffer buf, accepts user data which might be negative value and
-> the content is left shifted to form an unsigned integer.
-> 
-> Since left shifting a negative value is undefined behavior, thus change
-> the char to u8 to fix this
-> 
-> Signed-off-by: Changming Liu <liu.changm@northeastern.edu>
-> ---
->  drivers/usb/misc/sisusbvga/sisusb.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/misc/sisusbvga/sisusb.c b/drivers/usb/misc/sisusbvga/sisusb.c
-> index fc8a5da4a07c..0734e6dd9386 100644
-> --- a/drivers/usb/misc/sisusbvga/sisusb.c
-> +++ b/drivers/usb/misc/sisusbvga/sisusb.c
-> @@ -761,7 +761,7 @@ static int sisusb_write_mem_bulk(struct sisusb_usb_data *sisusb, u32 addr,
->         u8   swap8, fromkern = kernbuffer ? 1 : 0;
->         u16  swap16;
->         u32  swap32, flag = (length >> 28) & 1;
-> -       char buf[4];
-> +       u8 buf[4];
+pm_runtime_get_sync() increments the runtime PM usage counter even
+when it returns an error code. Thus a pairing decrement is needed on
+the error handling path to keep the counter balanced.
 
-Do we also need to change the kernbuffer variable from char* to be u8*
-as the same time to solve the same potential issue?
+Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+---
+ drivers/usb/cdns3/cdns3-ti.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-thanks,
+diff --git a/drivers/usb/cdns3/cdns3-ti.c b/drivers/usb/cdns3/cdns3-ti.c
+index 5685ba11480b..e701ab56b0a7 100644
+--- a/drivers/usb/cdns3/cdns3-ti.c
++++ b/drivers/usb/cdns3/cdns3-ti.c
+@@ -138,7 +138,7 @@ static int cdns_ti_probe(struct platform_device *pdev)
+ 	error = pm_runtime_get_sync(dev);
+ 	if (error < 0) {
+ 		dev_err(dev, "pm_runtime_get_sync failed: %d\n", error);
+-		goto err_get;
++		goto err;
+ 	}
+ 
+ 	/* assert RESET */
+@@ -185,7 +185,6 @@ static int cdns_ti_probe(struct platform_device *pdev)
+ 
+ err:
+ 	pm_runtime_put_sync(data->dev);
+-err_get:
+ 	pm_runtime_disable(data->dev);
+ 
+ 	return error;
+-- 
+2.17.1
 
-greg k-h
