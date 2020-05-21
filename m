@@ -2,55 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA6311DD873
-	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2020 22:34:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7106F1DD87D
+	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2020 22:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729322AbgEUUe2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 May 2020 16:34:28 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:57396 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729506AbgEUUe1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 May 2020 16:34:27 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04LKYNk9061073;
-        Thu, 21 May 2020 15:34:23 -0500
+        id S1729972AbgEUUhb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 May 2020 16:37:31 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:48008 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726814AbgEUUhb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 May 2020 16:37:31 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04LKbSm1048692;
+        Thu, 21 May 2020 15:37:28 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1590093263;
-        bh=mbogiIJ51R5QdW+/MJYLWt5NYi1vk9juLL/j738tJCo=;
+        s=ti-com-17Q1; t=1590093448;
+        bh=9xP5vfoBO+4BJ4jvW3objaO6eouH59qs+QM52qR8o3M=;
         h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=JTOfIrn9vJEzT/LRspFQIMrCSlPqJJnn4ru/b7uHRnVtzsSxSaxmLmhL9ttwV25Bi
-         yMuW0kejsUuQhuzawDezhpBFGLEyiFwPShWFfJ0TPyVJ5/TMdrhiI5Ih60VymwLByk
-         MEqU9suBWd/tk7nLCDvuC2PXV0i4vTIYv+c0orZw=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 04LKYNoE057209
+        b=b/hWi2PDFf0VSW2yJawZ9W2H2iAfh74UixmbprqMb+4CTu8dY2EItfrV99ePrzmQ0
+         jjNwTxIHNdFt4t/UElwxtNZUE29emuVrZoyBtbhEG38MoxAvRHKeq+9o5AikPB+I/b
+         W7BtoKvEPU6yNq2Ly0UldLf0/P1lnMT0t4p7f410=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 04LKbSLW089527
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 21 May 2020 15:34:23 -0500
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+        Thu, 21 May 2020 15:37:28 -0500
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 21
- May 2020 15:34:22 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ May 2020 15:37:28 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Thu, 21 May 2020 15:34:22 -0500
+ Frontend Transport; Thu, 21 May 2020 15:37:28 -0500
 Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04LKYM42068417;
-        Thu, 21 May 2020 15:34:22 -0500
-Date:   Thu, 21 May 2020 15:34:22 -0500
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04LKbSOO098116;
+        Thu, 21 May 2020 15:37:28 -0500
+Date:   Thu, 21 May 2020 15:37:28 -0500
 From:   Bin Liu <b-liu@ti.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-CC:     <od@zcrc.me>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: musb: jz4740: Prevent lockup when CONFIG_SMP is set
-Message-ID: <20200521203422.GA25575@iaqt7>
+To:     Dinghao Liu <dinghao.liu@zju.edu.cn>
+CC:     <kjlu@umn.edu>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: musb: Fix runtime PM imbalance on error
+Message-ID: <20200521203728.GB25575@iaqt7>
 Mail-Followup-To: Bin Liu <b-liu@ti.com>,
-        Paul Cercueil <paul@crapouillou.net>, od@zcrc.me,
+        Dinghao Liu <dinghao.liu@zju.edu.cn>, kjlu@umn.edu,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200520150111.76658-1-paul@crapouillou.net>
+References: <20200521073547.18828-1-dinghao.liu@zju.edu.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20200520150111.76658-1-paul@crapouillou.net>
+In-Reply-To: <20200521073547.18828-1-dinghao.liu@zju.edu.cn>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
@@ -58,14 +59,35 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 20, 2020 at 05:01:11PM +0200, Paul Cercueil wrote:
-> The function dma_controller_irq() locks up the exact same spinlock we
-> locked before calling it, which obviously resulted in a deadlock when
-> CONFIG_SMP was enabled. This flew under the radar as none of the boards
-> supported by this driver needs SMP.
-> 
-> Fixes: 57aadb46bd63 ("usb: musb: jz4740: Add support for DMA")
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Hi,
 
-Queued for v5.8. Thanks.
+On Thu, May 21, 2020 at 03:35:47PM +0800, Dinghao Liu wrote:
+> When copy_from_user() returns an error code, a pairing
+> runtime PM usage counter decrement is needed to keep
+> the counter balanced.
+> 
+> Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+> ---
+>  drivers/usb/musb/musb_debugfs.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/musb/musb_debugfs.c b/drivers/usb/musb/musb_debugfs.c
+> index 7b6281ab62ed..837c38a5e4ef 100644
+> --- a/drivers/usb/musb/musb_debugfs.c
+> +++ b/drivers/usb/musb/musb_debugfs.c
+> @@ -178,8 +178,11 @@ static ssize_t musb_test_mode_write(struct file *file,
+>  
+>  	memset(buf, 0x00, sizeof(buf));
+>  
+> -	if (copy_from_user(buf, ubuf, min_t(size_t, sizeof(buf) - 1, count)))
+> +	if (copy_from_user(buf, ubuf, min_t(size_t, sizeof(buf) - 1, count))) {
+> +		pm_runtime_mark_last_busy(musb->controller);
+> +		pm_runtime_put_autosuspend(musb->controller);
+>  		return -EFAULT;
+> +	}
+
+Thanks for catching the bug. Can you please instead move these lines to
+the beginning of this function so that pm_runtime_get_sync() is not
+called if copy_from_user() failed?
+
 -Bin.
