@@ -2,155 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 160B71DC6FD
-	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2020 08:23:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC4C71DC7A7
+	for <lists+linux-usb@lfdr.de>; Thu, 21 May 2020 09:29:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728144AbgEUGXA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 May 2020 02:23:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35734 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726506AbgEUGW7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 May 2020 02:22:59 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE7DC061A0E;
-        Wed, 20 May 2020 23:22:58 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id z18so6815699lji.12;
-        Wed, 20 May 2020 23:22:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=1cDoFhrO3JlVD3tvhSXZOVSF58OQKaORYpnpmjOhqAs=;
-        b=PDnu1Q7JRIO6G+SaTh5J1ef0cPUleRFWGKq+NULLVLnVdB2HfpfRQbRkB4AcBfA9W8
-         jR0P0vfxJIFfYRIim8R0aFhSZtlSwn4wOpwc9xwRYXWa/MRje1MXg3wU0gyxasnnwT47
-         ldrlQnckvUoAuPZyDM1s39GWahGyt99Uoq9h7R4LD4hzrHFkZzEiVaAXqd/OhmkIIfZU
-         mEyd1xTzJrYj/tA+JK5UPcKm1+bh7NucrSuu7A3qwj69Xdv2eVWdVFzRyetw985RNcHr
-         Uc387dqPmgyAvLtsGGseVef/jOTJcAnaxahq/tYfZTX/FlfKJUOoLsLRKiuCGpjLb0v5
-         /zkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=1cDoFhrO3JlVD3tvhSXZOVSF58OQKaORYpnpmjOhqAs=;
-        b=eCj1Pj7LUaaDGvYIZ49TmV7HmMWeKrO2HdMCtk9CoxwP71WSRNIbXhMzmcZu+RrRDn
-         At68ssnNDItNd8NZMDOInEt2vphjKs9lVXYrkRaXAK5b0RiMatgac5PHGmlQLp2jLo6Q
-         PInem0h0JMfF9HXMx5O3mcqAupGkzhib/iu7WgbCoDMTuodzRw5OpG9LbSlp/IyM2dKy
-         TVzm9Rjf6amZk7gc2xaGOD8Z6AUWJZNDjVUXmA7Q3wIsSAGZHzELECgWSHlyMh4mXSSa
-         XW8ZAHIPHg44HfruF0jmXvl+7ylV35hPAVc4O/L97T2tVil4Xxmz2Nj3vWURKybmK4aS
-         PmZQ==
-X-Gm-Message-State: AOAM532rQ2smeCqsPbr/IsYIw6LF1nFV1kZTiJhbkdsn9M4RAjyixD27
-        rFK9Hl/MyfQm0G8Y+qtLF60=
-X-Google-Smtp-Source: ABdhPJyMuPbOwO0ZBJt4B4trT6XYOxwNynenEnFe+gwIXnCnca6GrxDBZcsmtwNt+kFBVKcudUiaFw==
-X-Received: by 2002:a2e:9850:: with SMTP id e16mr4096070ljj.163.1590042176833;
-        Wed, 20 May 2020 23:22:56 -0700 (PDT)
-Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id e21sm376688ljj.86.2020.05.20.23.22.55
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 20 May 2020 23:22:56 -0700 (PDT)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Jun Li <jun.li@nxp.com>,
-        Jun Li <lijun.kernel@gmail.com>
-Cc:     John Stultz <john.stultz@linaro.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Yu Chen <chenyu56@huawei.com>,
+        id S1728475AbgEUH21 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 May 2020 03:28:27 -0400
+Received: from spam.zju.edu.cn ([61.164.42.155]:42542 "EHLO zju.edu.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728265AbgEUH21 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 21 May 2020 03:28:27 -0400
+Received: from localhost.localdomain (unknown [222.205.77.158])
+        by mail-app3 (Coremail) with SMTP id cC_KCgCXLkGKLcZesuTmAA--.10435S4;
+        Thu, 21 May 2020 15:28:15 +0800 (CST)
+From:   Dinghao Liu <dinghao.liu@zju.edu.cn>
+To:     dinghao.liu@zju.edu.cn, kjlu@umn.edu
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        ShuFan Lee <shufan_lee@richtek.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        "open list\:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Peter Chen <peter.chen@nxp.com>
-Subject: Re: [PATCH v4 3/9] usb: dwc3: Increase timeout for CmdAct cleared by device controller
-In-Reply-To: <87v9kpx0zh.fsf@kernel.org>
-References: <20191028215919.83697-1-john.stultz@linaro.org>
- <20191028215919.83697-4-john.stultz@linaro.org> <87mudjj4rc.fsf@gmail.com>
- <CALAqxLU+9uEcdRVaLfh+eQrDtZbDGod9pRXhBX=prAhg9MXagw@mail.gmail.com>
- <CAKgpwJVaKpsgMjKcnYyJsfNj0ibkPt=mdn-NxfOkeX1jfL=9iQ@mail.gmail.com>
- <87h7wqmwrv.fsf@kernel.org>
- <CAKgpwJXfWv5=MDqBCADhe2iXf6eiP0GQ13Bwo9fkuU5kGO7dsw@mail.gmail.com>
- <87imgx35pg.fsf@kernel.org>
- <VE1PR04MB65283F16826D2254128073C589BD0@VE1PR04MB6528.eurprd04.prod.outlook.com>
- <3d757998-56f2-6fff-a724-f713867ae785@synopsys.com>
- <87ftc0xsig.fsf@kernel.org>
- <VE1PR04MB6528AB046FD441A5DDD83CD289BA0@VE1PR04MB6528.eurprd04.prod.outlook.com>
- <87d074xfbq.fsf@kernel.org>
- <VE1PR04MB6528A50EA40BF40E4B09793789B90@VE1PR04MB6528.eurprd04.prod.outlook.com>
- <db7447c2-a39d-361f-8b35-a1d5c2705c89@synopsys.com>
- <e3b0ff51-70ab-7d16-2c7e-cacac7d97043@synopsys.com>
- <VE1PR04MB65286728B9546B5FAA818A0A89B90@VE1PR04MB6528.eurprd04.prod.outlook.com>
- <bbfbd3f7-4908-5529-1a4e-29469e794b27@synopsys.com>
- <1c16bdb6-8d8d-1e1b-f08b-b3963f905eb0@synopsys.com>
- <87v9kpx0zh.fsf@kernel.org>
-Date:   Thu, 21 May 2020 09:22:51 +0300
-Message-ID: <87r1vdx0w4.fsf@kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] xhci: Fix runtime PM imbalance on error
+Date:   Thu, 21 May 2020 15:28:09 +0800
+Message-Id: <20200521072809.17390-1-dinghao.liu@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cC_KCgCXLkGKLcZesuTmAA--.10435S4
+X-Coremail-Antispam: 1UD129KBjvdXoWruF4kArW7Jw1rCrWfGrW8Crg_yoWfZFg_Cr
+        y5ur1xWrnYgFZIv3yUC3y3ZrWqq3yUX3WkZF10yFnagry2y3Z5ZFyxurn8AF15ur4xJrZ0
+        kwnaqryxCFW8CjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbIkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
+        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
+        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4UJVW0owA2z4x0Y4vEx4A2
+        jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52
+        x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWU
+        GwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
+        8JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GF4l42xK82IYc2Ij64vIr41l
+        42xK82IY6x8ErcxFaVAv8VW8uw4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+        8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWU
+        twCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+        0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAF
+        wI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf
+        9x0JUffHUUUUUU=
+X-CM-SenderInfo: qrrzjiaqtzq6lmxovvfxof0/1tbiAgEHBlZdtOPItAAFsn
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+When dma_set_mask_and_coherent() returns an error code,
+a pairing runtime PM usage counter decrement is needed
+to keep the counter balanced.
 
+Also, call pm_runtime_disable() when dma_set_mask_and_coherent()
+returns an error code.
 
-Hi Jun,
+Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+---
+ drivers/usb/host/xhci-histb.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Felipe Balbi <balbi@kernel.org> writes:
->> In any case, increasing the timeout should be fine with me. It maybe=20
->> difficult to determine the max timeout base on the slowest clock rate=20
->> and number of cycles. Different controller and controller versions=20
->> behave differently and may have different number of clock cycles to=20
->> complete a command.
->>
->> The RTL engineer recommended timeout to be at least 1ms (which maybe=20
->> more than the polling rate of this patch). I'm fine with either the rate=
-=20
->> provided by this tested patch or higher.
->
-> A whole ms waiting for a command to complete? Wow, that's a lot of time
-> blocking the CPU. It looks like, perhaps, we should move to command
-> completion interrupts. The difficulty here is that we issue commands
-> from within the interrupt handler and, as such, can't
-> wait_for_completion().
->
-> Meanwhile, we will take the timeout increase I guess, otherwise NXP
-> won't have a working setup.
+diff --git a/drivers/usb/host/xhci-histb.c b/drivers/usb/host/xhci-histb.c
+index 5546e7e013a8..1d22a664477f 100644
+--- a/drivers/usb/host/xhci-histb.c
++++ b/drivers/usb/host/xhci-histb.c
+@@ -240,7 +240,7 @@ static int xhci_histb_probe(struct platform_device *pdev)
+ 	/* Initialize dma_mask and coherent_dma_mask to 32-bits */
+ 	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
+ 	if (ret)
+-		return ret;
++		goto disable_pm
+ 
+ 	hcd = usb_create_hcd(driver, dev, dev_name(dev));
+ 	if (!hcd) {
+-- 
+2.17.1
 
-patch 1 in this series doesn't apply to testing/next. Care to rebase and
-resend?
-
-Thank you
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl7GHjsACgkQzL64meEa
-mQZinhAAudYIuvazPxapE687anJuiz/UEVAaqcfJK8dDh/BGT20JtTbI5J+1zwE7
-OVwDBVXEdUNLOsd0Tc84OVeLNKhzbKGXdyter8tVautvcaSGQZm0nqO/ctFfs1N4
-4kZf1LQd7HrA9Xju0Fzy3BIZcOJx39AD5cXFAkcHylfblO8On6OOm8q3zdMN3rPH
-5Rgf3bPQSvt07Ex4uS8zPPEXC5H2EHyPDLMzMXmbDlKRzJcLtZcIMbeKGUuzBdNo
-jobVMFblYbHf6f9gBjQtFfY1V64mnBT0ULDNmhWIKuXvRN7hfmCKmAZiDdDmzEqG
-tVZ9qEwIWIgTF5mWuWvrZ2mqtzBRwSCScjxZwK6GmnktrDxGgi3TPom6e8TNZ0Ee
-mV+UedcuqcFvpQeL58Ru478tl7Hmtw7Io7xMR0nNssXNLyIKKwSOKtbCHmHMC3NM
-kHlK8dLAEnAPJ5AYOqIHvXACEI3vKestgQeWvci2slwWuBcNZFuweS4ASC/fkRzD
-+QDE0t0L4AFY9bq1ML4QulL+3/0ogJkORLy1wnHb/QD++DfYDHhayFZ2Q6K9BF9X
-axL5Gqw3tIjW5muwErsMTsLruNaA91/L6hPugtypeBqFigozZGtRJYTyuCGFlazM
-zKtIsU7/wFUCfxhCQ9IcgXlfHk/240h22Gg5X2X+1/nX64WQzTI=
-=y08r
------END PGP SIGNATURE-----
---=-=-=--
