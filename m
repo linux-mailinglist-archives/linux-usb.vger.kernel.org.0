@@ -2,113 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D4631DE17C
-	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2020 10:04:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 686FA1DE1A3
+	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2020 10:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728512AbgEVIEv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 22 May 2020 04:04:51 -0400
-Received: from mx2.suse.de ([195.135.220.15]:50750 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728152AbgEVIEu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 22 May 2020 04:04:50 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id D0123BCAA;
-        Fri, 22 May 2020 08:04:50 +0000 (UTC)
-Message-ID: <1590134662.19681.12.camel@suse.com>
-Subject: Re: [PATCH] USB: cdc-wdm: Call wake_up_all() when clearing
- WDM_IN_USE bit.
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Greg KH <greg@kroah.com>
-Cc:     Colin Ian King <colin.king@canonical.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-usb@vger.kernel.org
-In-Reply-To: <a72cbcc6-df68-2043-1580-a8b4e4053079@i-love.sakura.ne.jp>
-References: <20200520233129.3704-1-penguin-kernel@I-love.SAKURA.ne.jp>
-         <20200521073323.GA2579717@kroah.com>
-         <177cc23a-60a7-f5cd-09d6-57608727ea27@i-love.sakura.ne.jp>
-         <1590090636.6470.12.camel@suse.com>
-         <a72cbcc6-df68-2043-1580-a8b4e4053079@i-love.sakura.ne.jp>
-Content-Type: text/plain; charset="UTF-8"
-Date:   Fri, 22 May 2020 10:04:22 +0200
-Mime-Version: 1.0
-X-Mailer: Evolution 3.26.6 
-Content-Transfer-Encoding: 7bit
+        id S1728987AbgEVIRv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 22 May 2020 04:17:51 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:41214 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728152AbgEVIRv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 22 May 2020 04:17:51 -0400
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx39+hisdeUsM3AA--.8S2;
+        Fri, 22 May 2020 16:17:37 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: [PATCH] usb: bdc: Fix return value of bdc_probe()
+Date:   Fri, 22 May 2020 16:17:36 +0800
+Message-Id: <1590135456-11176-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9Dx39+hisdeUsM3AA--.8S2
+X-Coremail-Antispam: 1UD129KBjvdXoWruw18Zw1xXFykAryUuryrXrb_yoWfuFbEyw
+        4xurs7Wr18Jrn0yFyDZ3W5CrW293Wqgrn5WF47Ka9Iy34jga4xWr1UAFZ7AF4UZr4qkF9r
+        GasrGr1a9w1fCjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbcxFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_GFyl
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAI
+        cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUUW89tUUUUU==
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Freitag, den 22.05.2020, 07:48 +0900 schrieb Tetsuo Handa:
+When call function devm_platform_ioremap_resource(), we should use IS_ERR()
+to check the return value and return PTR_ERR() if failed.
 
+Fixes: 893a66d34298 ("usb: bdc: use devm_platform_ioremap_resource() to simplify code")
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ drivers/usb/gadget/udc/bdc/bdc_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Hi,
-
-I looked at your patch again and I am impressed and I need to
-apologize. I looked at only the intended use, but overlooked
-the unintended use.
-
-I think we need to work on the description of the patch though.
-
-> On 2020/05/22 4:50, Oliver Neukum wrote:
-> > interesting. Do you have a test case for these patches working?
-> 
-> No.
-
-Yes, going through the logs it looks that you need to trigger
-an error case for this race to strike.
-
-> > > 	wait_event(desc->wait,
-> > > 			/*
-> > > 			 * needs both flags. We cannot do with one
-> > > 			 * because resetting it would cause a race
-> > > 			 * with write() yet we need to signal
-> > > 			 * a disconnect
-> > > 			 */
-> > > 			!test_bit(WDM_IN_USE, &desc->flags) ||
-> > > 			test_bit(WDM_DISCONNECTING, &desc->flags));
-> > > 
-> > > but wdm_write() is not calling wake_up(&desc->wait) after
-> > > clear_bit(WDM_IN_USE, &desc->flags) when usb_submit_urb() failed.
-> > 
-> > Yes, because desc->wlock is held. There can be nobody sleeping here.
-> 
-> Then, this patch is not needed. (But adding some comment is welcomed.)
-
-OK and here I screwed up. wlock is held in wdm_write(), but not in
-wdm_flush()
-
-So may I suggest the following log:
-
---
-
-WDM_IN_USE is used in wdm_write() to protect against concurrent writes
-and in wdm_flush() to wait for all messages to flush, so that errors
-are not lost. The former use is guarded by a mutex, the later, as
-it does no IO, is not.
-In the error case of wdm_write(), however, there is a race, which
-can make wdm_flush() wait for IO that was supposed to be started
-but was never started due to an error condition.
-Hence if an error is detected in wdm_write() after WDM_IN_USE was
-toggeled, all potential waiters must be woken. As multiple tasks
-can be in wdm_flush, wake_up_all() must be used in all cases
-WDM_IN_USE is reset.
-
---
-
-May I ask you to redo the patch with comments added stating
-that the wake up is done for the sake of wdm_flush(), change
-the description and add the link to syzkaller?
-
-> > > > And is this a bugfix?  For what?  Does it need to go to stable kernels?
-
-Yes, it is. The bug is ancient. It goes back to afba937e540c9,
-which introduced the driver.
-
-
-Again, thank you for this impressive piece of debugging.
-
-	Regards
-		Oliver
-
+diff --git a/drivers/usb/gadget/udc/bdc/bdc_core.c b/drivers/usb/gadget/udc/bdc/bdc_core.c
+index 02a3a77..c48fdd3 100644
+--- a/drivers/usb/gadget/udc/bdc/bdc_core.c
++++ b/drivers/usb/gadget/udc/bdc/bdc_core.c
+@@ -510,7 +510,7 @@ static int bdc_probe(struct platform_device *pdev)
+ 	bdc->regs = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(bdc->regs)) {
+ 		dev_err(dev, "ioremap error\n");
+-		return -ENOMEM;
++		return PTR_ERR(bdc->regs);
+ 	}
+ 	irq = platform_get_irq(pdev, 0);
+ 	if (irq < 0)
+-- 
+2.1.0
 
