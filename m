@@ -2,86 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8875A1DF1F8
-	for <lists+linux-usb@lfdr.de>; Sat, 23 May 2020 00:40:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C7261DF2D7
+	for <lists+linux-usb@lfdr.de>; Sat, 23 May 2020 01:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731222AbgEVWku (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 22 May 2020 18:40:50 -0400
-Received: from mail-il1-f193.google.com ([209.85.166.193]:39705 "EHLO
-        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731029AbgEVWku (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 May 2020 18:40:50 -0400
-Received: by mail-il1-f193.google.com with SMTP id c20so12367530ilk.6;
-        Fri, 22 May 2020 15:40:49 -0700 (PDT)
+        id S1731327AbgEVXSH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 22 May 2020 19:18:07 -0400
+Received: from mail-io1-f69.google.com ([209.85.166.69]:44131 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731243AbgEVXSF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 May 2020 19:18:05 -0400
+Received: by mail-io1-f69.google.com with SMTP id a2so3603699iok.11
+        for <linux-usb@vger.kernel.org>; Fri, 22 May 2020 16:18:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=L9O1ztl73QCyaz4czM7KN6rZzxlSQiG/LQQETJdvECE=;
-        b=qywbsa09nrFJ9IcOsm5wHV/D/3rQbDkB7zXtN8FlDG41tyOseF6tA3d0GvxHm3bhcq
-         Grj6YYlFS+EikpydQKXYOgH2uFL7a9xUKLh2TLLxtgRNtt49xJhVk1LZcncAuRU8OU5/
-         N/1TkKW43TYc8M/it9lE4uge+hzUuxNkHgLkPM8+k9gO/MJIZleo9fcJhpk8zJQT7LWt
-         gOTIAUCRUGKEgx5d4dms+O0xwGL/+nCAKj/H/ZAwQnKNDjWhidYnJ4SoRGY68qymUk7f
-         2/GYQq3Kn+C9L6MbctHqNUW1QOf3FjpCNuqfqodujijT0EAYxtSl0EDcB9p6RW30fnpw
-         oKMw==
-X-Gm-Message-State: AOAM530ERGKPFNF6lXmk0nLpkkX7e3HsYMMRK/2LA++S7HkY2PJl2yXA
-        bvPCXPn5lBUqx1IhoSLnQadyutxpJqw=
-X-Google-Smtp-Source: ABdhPJwFf0FNqC6ZgYM/FHrk3wPlyCTZJJB3LVatxCaJKD4IqZ24qDgivXe1I/k+FmhXZCfV1ejcNA==
-X-Received: by 2002:a05:6e02:ec2:: with SMTP id i2mr15593326ilk.262.1590187248869;
-        Fri, 22 May 2020 15:40:48 -0700 (PDT)
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com. [209.85.166.43])
-        by smtp.gmail.com with ESMTPSA id l21sm2016938ili.8.2020.05.22.15.40.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 May 2020 15:40:48 -0700 (PDT)
-Received: by mail-io1-f43.google.com with SMTP id d7so13194450ioq.5;
-        Fri, 22 May 2020 15:40:48 -0700 (PDT)
-X-Received: by 2002:a02:5e81:: with SMTP id h123mr9862796jab.99.1590187248159;
- Fri, 22 May 2020 15:40:48 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=hY+OQTAuY6M9q+ZlmlR3e05EdcbrRXkCCbneZ37ciSs=;
+        b=CcNTQyLpM/1jwuf8twiDLD5fmiHZCSXrXxILa7D7CBj515LxYlHh8NSDDgg0YiCaLH
+         U7i5LB+I42xl5/mDdeIu4Puz+riuUpPbcvAUmvE/LmFmuStscApVxLFzezhKxxbwAcDM
+         lhXSC0eUM436mQfC5e+iud7FqOfNk+fvj5aWFT8IVD5WfGHI0m7oYAsuAL4r5aRl7x3w
+         cLl/pvQ2SDGfRenLttg7JgXztmW1T+jQ+RdHbb5NqilmYh65ja0gAZp19YOemY8tu+rD
+         fv9SzHCzQB3a8oR/q1+nPESo2ImQVmNbdNK3KGdEcXrFFEAi4hPGbp4A1O3v2ES8/el7
+         2qhQ==
+X-Gm-Message-State: AOAM530s2h+vBhA4QTJyuvOYbp6zjPTqa9NpvVAGUk/jP8Z61ECZvjLX
+        oxDZx+90Cvi7ZbGlOAsSFVS0PJo2R0MCfJ88xIrLQjG/KaqU
+X-Google-Smtp-Source: ABdhPJwgYqS05aE4+oBbSGGIRzX2fn9OewAC8LgxkJqcCKZPII9tPeLQBXsUSEDvz5Roj7zFdf6zjg2Dj5BNDCyhUjhu5gkgsAJs
 MIME-Version: 1.0
-References: <20200410015832.8012-1-tangbin@cmss.chinamobile.com>
- <be8cd229-884a-40e6-3363-7c4680a51b30@web.de> <0b718268-d330-dfc1-aca3-3dd3203363d7@cmss.chinamobile.com>
- <20200414083036.GC14722@kadam> <f712918c-2f61-0ba5-2ba8-b5ca3cce9a35@cmss.chinamobile.com>
-In-Reply-To: <f712918c-2f61-0ba5-2ba8-b5ca3cce9a35@cmss.chinamobile.com>
-From:   Li Yang <leoyang.li@nxp.com>
-Date:   Fri, 22 May 2020 17:40:24 -0500
-X-Gmail-Original-Message-ID: <CADRPPNRJe6aE3MXjK0z6uYtey3smU8cbFcGBqqv0ELJ9SxApvQ@mail.gmail.com>
-Message-ID: <CADRPPNRJe6aE3MXjK0z6uYtey3smU8cbFcGBqqv0ELJ9SxApvQ@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: fsl: Fix a wrong judgment in fsl_udc_probe()
-To:     Tang Bin <tangbin@cmss.chinamobile.com>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>,
-        Markus Elfring <Markus.Elfring@web.de>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+X-Received: by 2002:a05:6e02:68d:: with SMTP id o13mr15946835ils.230.1590189483733;
+ Fri, 22 May 2020 16:18:03 -0700 (PDT)
+Date:   Fri, 22 May 2020 16:18:03 -0700
+In-Reply-To: <000000000000fc0c1c05a0ffc2b8@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004db88405a644d75e@google.com>
+Subject: Re: KASAN: slab-out-of-bounds Read in dlfb_usb_probe
+From:   syzbot <syzbot+ed94135f896a14d75284@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, balbi@kernel.org,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, rafael@kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 14, 2020 at 4:13 AM Tang Bin <tangbin@cmss.chinamobile.com> wrote:
->
-> Hi
->
-> On 2020/4/14 16:30, Dan Carpenter wrote:
-> > On Fri, Apr 10, 2020 at 04:05:06PM +0800, Tang Bin wrote:
-> >>>
-> >>>> Thus it must be fixed.
-> >>> Wording alternative:
-> >>>     Thus adjust the error detection and corresponding exception handling.
-> >> Got it.
-> > Wow...
-> >
-> > No, don't listen to Markus when it comes to writing commit messages.
-> > You couldn't find worse advice anywhere.  :P
->
-> I'm actively waiting for a reply from the maintainer. Thank you very much.
+syzbot has bisected this bug to:
 
-Sorry for the late response.
+commit f2c2e717642c66f7fe7e5dd69b2e8ff5849f4d10
+Author: Andrey Konovalov <andreyknvl@google.com>
+Date:   Mon Feb 24 16:13:03 2020 +0000
 
-Acked-by: Li Yang <leoyang.li@nxp.com>
+    usb: gadget: add raw-gadget interface
 
-Regards,
-Leo
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10510cba100000
+start commit:   051143e1 Merge tag 'apparmor-pr-2020-05-21' of git://git.k..
+git tree:       upstream
+final crash:    https://syzkaller.appspot.com/x/report.txt?x=12510cba100000
+console output: https://syzkaller.appspot.com/x/log.txt?x=14510cba100000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b3368ce0cc5f5ace
+dashboard link: https://syzkaller.appspot.com/bug?extid=ed94135f896a14d75284
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=103d795e100000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=143d795e100000
+
+Reported-by: syzbot+ed94135f896a14d75284@syzkaller.appspotmail.com
+Fixes: f2c2e717642c ("usb: gadget: add raw-gadget interface")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
