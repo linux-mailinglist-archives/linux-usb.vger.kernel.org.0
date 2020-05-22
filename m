@@ -2,49 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 417741DE1C2
-	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2020 10:26:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 346DB1DE2A1
+	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2020 11:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728802AbgEVI0e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 22 May 2020 04:26:34 -0400
-Received: from www262.sakura.ne.jp ([202.181.97.72]:59534 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728152AbgEVI0d (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 May 2020 04:26:33 -0400
-Received: from fsav104.sakura.ne.jp (fsav104.sakura.ne.jp [27.133.134.231])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 04M8QHO6058310;
-        Fri, 22 May 2020 17:26:17 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav104.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav104.sakura.ne.jp);
- Fri, 22 May 2020 17:26:17 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav104.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 04M8QH9Q058306
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO);
-        Fri, 22 May 2020 17:26:17 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Subject: Re: [PATCH] USB: cdc-wdm: Call wake_up_all() when clearing WDM_IN_USE
- bit.
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Greg KH <greg@kroah.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-usb@vger.kernel.org
-References: <20200520233129.3704-1-penguin-kernel@I-love.SAKURA.ne.jp>
- <20200521073323.GA2579717@kroah.com>
- <177cc23a-60a7-f5cd-09d6-57608727ea27@i-love.sakura.ne.jp>
- <1590090636.6470.12.camel@suse.com>
- <a72cbcc6-df68-2043-1580-a8b4e4053079@i-love.sakura.ne.jp>
- <1590134662.19681.12.camel@suse.com>
-From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Message-ID: <03894591-a1ac-496a-a35f-55953e5bcc06@i-love.sakura.ne.jp>
-Date:   Fri, 22 May 2020 17:26:12 +0900
+        id S1729353AbgEVJKq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 22 May 2020 05:10:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60724 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728368AbgEVJKq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 May 2020 05:10:46 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B3AC061A0E
+        for <linux-usb@vger.kernel.org>; Fri, 22 May 2020 02:10:45 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id z18so11711528lji.12
+        for <linux-usb@vger.kernel.org>; Fri, 22 May 2020 02:10:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=9ofTQmEmfXkUcuVidw/3/uTdX1nNZlN27Kc/a5adlBE=;
+        b=xos9xnl9YZMdIx1d5mCEq3WAxSwvc5UCDqkmUO2+7x7I2+vGVPF21hwGBtxoXZCbzN
+         BfTzYnkM3jf1GNsGMpQwEhZJU19G76BgsR6WIkEl8q8ipZmtiT3LJZ5dylbF6sPZvy/g
+         iPD32Jwa+lXfjf9Z+JcRgthh+JjV/VaPn5w8qYW4qmZxbnjKhEaS6EVD1kwklB7PIOrU
+         VVV3ngvcL9YBwXPHqqtmnNfpJC+FTzpzuGe4RsqkkeXWDTqNFR6M3t10HoO2emoGSdv8
+         tR623mcE5V6xS7Em0K0KHrKx8XzwmkbnL6Aek+bllgxrfNKJZ7HYyZyZ/80/A7wWMmJx
+         UXww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=9ofTQmEmfXkUcuVidw/3/uTdX1nNZlN27Kc/a5adlBE=;
+        b=rVgDz8c4j8A+NjbiB1T65TZ7RQeJQoj/GnJv7xW5FnSKgA8SrKF31EKtWjvwHdnxjV
+         4XzY8wu/7gbRZHULu5TFBR6LnvaSrkBIxBbq8/+4Swioe8njzCDgp0+4kECk6DdC2Zyd
+         qLcS7curBTzIMwzxHnqmy0yUM2dkPLTxvLvUo+Xe6mmrLlBv/t8BimbejfQUOKWgn8BD
+         3Ph6s/GupkZ0+96RNACtqtqzCJMHhz4Lyq0sDV6anuoFqXgRzi5mmPz1sCAU3pJMwoWv
+         Wu8fNirDwEi2oFrIeRaNv9AIjBohsse6tdOpzybl1HiRko5fvCVh94t3bPvYDSeVDOQ+
+         2ARw==
+X-Gm-Message-State: AOAM530vZQGL66sjI7suE0fWahfHe3ev+tGJbe0nnsimqrFNlf87NA1/
+        WUuS2VCZCphXEivoFYjmNRsHqw==
+X-Google-Smtp-Source: ABdhPJwx2PlbH43Qr+B81OY6kvWskKdV/Ban2ix6W7cw/0cV2HmXGusEjLn7mThOr7LFWA4sajYdwA==
+X-Received: by 2002:a2e:851a:: with SMTP id j26mr6763722lji.287.1590138644148;
+        Fri, 22 May 2020 02:10:44 -0700 (PDT)
+Received: from ?IPv6:2a00:1fa0:469e:f842:7427:5f3b:8fe0:cf58? ([2a00:1fa0:469e:f842:7427:5f3b:8fe0:cf58])
+        by smtp.gmail.com with ESMTPSA id u3sm2297273lfq.59.2020.05.22.02.10.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 May 2020 02:10:43 -0700 (PDT)
+Subject: Re: [PATCH] usb: bdc: Fix return value of bdc_probe()
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>
+References: <1590135456-11176-1-git-send-email-yangtiezhu@loongson.cn>
+From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Message-ID: <94e58d73-0691-ddbc-3c75-1c7ee87d1216@cogentembedded.com>
+Date:   Fri, 22 May 2020 12:10:29 +0300
 User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <1590134662.19681.12.camel@suse.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <1590135456-11176-1-git-send-email-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
@@ -52,12 +69,21 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2020/05/22 17:04, Oliver Neukum wrote:
-> May I ask you to redo the patch with comments added stating
-> that the wake up is done for the sake of wdm_flush(), change
-> the description and add the link to syzkaller?
+Hello!
 
-You can take over this patch. syzbot tried this patch on 2020/02/11 01:23 at
-https://syzkaller.appspot.com/bug?id=e7b761593b23eb50855b9ea31e3be5472b711186 ,
-but this patch did not solve the problem syzbot has found. Thus, I don't add
-a link to syzkaller...
+On 22.05.2020 11:17, Tiezhu Yang wrote:
+
+> When call function devm_platform_ioremap_resource(), we should use IS_ERR()
+> to check the return value
+
+    Already done.
+
+> and return PTR_ERR() if failed.
+
+   Yes, else the deferred probing doesn't work.
+
+> Fixes: 893a66d34298 ("usb: bdc: use devm_platform_ioremap_resource() to simplify code")
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+[...]
+
+MBR, Sergei
