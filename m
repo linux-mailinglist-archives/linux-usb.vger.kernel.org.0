@@ -2,107 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B68F31DE38F
-	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2020 11:54:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB2C71DE477
+	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2020 12:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728669AbgEVJyw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 22 May 2020 05:54:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39262 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728249AbgEVJyv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 May 2020 05:54:51 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1FFDC061A0E;
-        Fri, 22 May 2020 02:54:50 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id v16so11913291ljc.8;
-        Fri, 22 May 2020 02:54:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=XzN7vQSAeKD/eMd3BXZFqaFdo1S/tdrEDVtMr2FGnLU=;
-        b=Og7+X8GsBOfeJA3VJxO9QrF+eNA1WImqglo1OAStxYRp8TU5PGXrQmNtGmN0qlyp34
-         RaxDZmB5YkfLP3SlmIT6TNWFSnle76nSJBo4/fwN8LgyJXBjkfPFCieho97KHlfsf1iM
-         mdbPjltolPJBj6iROxZsLe7NtGT37gpt6jsIgbGVYgonW2hN1Wy3V9EuZaU2iQ61t0lo
-         OAvVy7v3ekVESgM1gcZZ/fglsARr2nC4a5Qni0+5BI467TUO23O0cxWPCNgOWO0VBEH+
-         uOzLY+dAnO5mKK8l2wQ32FuDjQrLZXbLh9J311jODurfsqOzjMrSQ3yWJxZzRW38uoP2
-         5+gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=XzN7vQSAeKD/eMd3BXZFqaFdo1S/tdrEDVtMr2FGnLU=;
-        b=O0C/8HTIl5JXNT4S5KnIgKZafH3qzuFh4Yw8+2VJ5h9TUmnF/czN8zQfIWtKBfNpF2
-         H3Dk3AU8PXgGj7daazYcbyIFkmnCiRL2LySj15FyK9qYbvuvO9E463GKS6WTYy+Wrb8l
-         G2yiuoCYzDEgt/JWEJPorbVzOrnxotgMVtQ+m6CuoXqxApW1E4wQ+wTfEW8ChHkiNbyb
-         wdOcUOT5ujAg3mn+8Yj3Zm3vtfqkqerDrCAVWNhpIKPDg4wNxIgpgOb17W9yp8XdWWb5
-         +Oms7UTD2eYIEwucn22qlfDY0sO1unqPGf4IgBNSrnijQvUd1vqlWwt86iJsgVgg9SQ/
-         NhwQ==
-X-Gm-Message-State: AOAM530OO+KeFxgd0dXHumim5mLGsEBbIRe1GFRB9x4jvCjgOmsdTWbZ
-        6N0zbo8Mwyt4g7LPP6zvuOs=
-X-Google-Smtp-Source: ABdhPJxls6sqBFx9as0rTD7ea7wRBsOpMahmM8dx899ivTV953sT8LrHdqpRnsVfBCHXJSWevqBg9Q==
-X-Received: by 2002:a2e:980d:: with SMTP id a13mr7372013ljj.277.1590141288728;
-        Fri, 22 May 2020 02:54:48 -0700 (PDT)
-Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id o23sm2655294lfg.0.2020.05.22.02.54.46
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 22 May 2020 02:54:47 -0700 (PDT)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Wesley Cheng <wcheng@codeaurora.org>, agross@kernel.org,
-        bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        gregkh@linuxfoundation.org
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        jackp@codeaurora.org, Wesley Cheng <wcheng@codeaurora.org>
-Subject: Re: [PATCH v2 0/3] Re-introduce TX FIFO resize for larger EP bursting
-In-Reply-To: <1590050169-30747-1-git-send-email-wcheng@codeaurora.org>
-References: <1590050169-30747-1-git-send-email-wcheng@codeaurora.org>
-Date:   Fri, 22 May 2020 12:54:25 +0300
-Message-ID: <87o8qgwazy.fsf@kernel.org>
+        id S1728791AbgEVKcs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 22 May 2020 06:32:48 -0400
+Received: from mail-eopbgr50047.outbound.protection.outlook.com ([40.107.5.47]:48672
+        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728362AbgEVKcs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 22 May 2020 06:32:48 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ChOFq4aTyI37WgV17lwUo/Ua3FHjmZs/ROCbr6Ci9yfvNr0TfRguQHy4ppJ3oqzqdEfYxgjaTrrIlrxZLw72ZY6hYhzkIoZPVsoD9VS8e6DCh6YyEvZ1rycH7rJWm6Tnn0an7hqIMnMgQ510+pmzrO528nRpy4t0mNDAa2PGWc6rwkW6KTcrH8CSc+UtTVLUTA17CAc2LcezxRoXBqdvhmnzpbNc4pjyY9CJZ3yg3rKli1BcOIEavwkZsH6ZqQo7bqyTvGagju4byddUsvwJkrRz28o8kuk86p7gXmo6YOaiHu4YwJUqByGb4pds1RzDHKtSAGlLhjOFZTp3lTnNMw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2nsVlBuA3vv5gVLnIpYua7IUj5jHCAy/uZ7dduOGk9s=;
+ b=MjXqGSkJ1xaj+6+Mf4OM9I6JTkFSrnF6rwwNa+oQgkD9nEITiAd7g0M/5dDcBlXNlpZey5CPdncife+PWIBYmOdQ7dFnNI9cxVmLz3VaU+soWBDGmIR3YWbMfdp+QuKYrBsUpGzW5qEtZz0jcxmU9VlWxhqjmQN++1i8+HScpyuSX4YuDeI/496ioC4HSJiz115VUCZebaP918yCMcwbWgQRQLPyNol6aAG1kL8PjDAEFpiOG6OVY+JAAiJcYfHt5HtFqc0xdKhImnKGYJ7+JNVDT81z3vhjCi6b2kHa9axd9cDjEOibuOkn7y5uZDwcn0blMx1j6n+dyQPWFk0o6w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2nsVlBuA3vv5gVLnIpYua7IUj5jHCAy/uZ7dduOGk9s=;
+ b=QM1P4TduLyLWkynjqkl5QNBL2YIlqvsypTry5Qoeg+0+gthzPpaJACaq/bxEAWQi8vhhzjkFsv+PHRwfQ95ycPjLj2t9FQG9Gm5tALs5q813cGAmPY8vZQ56lbxFy+HXUZxAqDIbAdQMBnkC2nEHDSf8eSQQXXI2MohgpaHqM6E=
+Authentication-Results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
+ by AM7PR04MB7111.eurprd04.prod.outlook.com (2603:10a6:20b:118::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3021.24; Fri, 22 May
+ 2020 10:32:44 +0000
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1101:adaa:ee89:af2a]) by AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1101:adaa:ee89:af2a%3]) with mapi id 15.20.3021.026; Fri, 22 May 2020
+ 10:32:44 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     balbi@kernel.org, mathias.nyman@intel.com
+Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com, pawell@cadence.com,
+        rogerq@ti.com, gregkh@linuxfoundation.org, jun.li@nxp.com,
+        Peter Chen <peter.chen@nxp.com>
+Subject: [PATCH 0/8] usb: cdns3: add runtime PM support
+Date:   Fri, 22 May 2020 18:32:48 +0800
+Message-Id: <20200522103256.16322-1-peter.chen@nxp.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR0601CA0019.apcprd06.prod.outlook.com (2603:1096:3::29)
+ To AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from b29397-desktop.ap.freescale.net (119.31.174.66) by SG2PR0601CA0019.apcprd06.prod.outlook.com (2603:1096:3::29) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3021.23 via Frontend Transport; Fri, 22 May 2020 10:32:41 +0000
+X-Mailer: git-send-email 2.17.1
+X-Originating-IP: [119.31.174.66]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 8835426b-14c7-4efc-6eef-08d7fe3b7684
+X-MS-TrafficTypeDiagnostic: AM7PR04MB7111:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <AM7PR04MB711191067FAD7B5A7762B3F38BB40@AM7PR04MB7111.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3826;
+X-Forefront-PRVS: 04111BAC64
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: pzIeDMCgtxekVqj3G0SDjHotlX3HIenIYagTFNJcti8h8tl8bJCgC64q6i4WU4YaFgnHAlf/kBRQBQFjbCNmSUGo+dXoZNfDyx7/R/DFr0XMF+i1JKckWPQ/QM0/Wl7Nz1TAGJOjOgchXX1/dCR+XogyYGkDFXMea/LrZiaikyZceKYAqrMcJpg0m7rWl4w3JFctQi62zOIryHKEsF9m6A8/6cwzYyBtt4RbQ060ZolswUoUUYh3IX0PjFrcDt3zNzqR9B9Gn90JPwcjDFNK/qDKi0mx6xPo16faZ0pZ4AK1UIrVYljkZqzepVhv9OUSU7f41w7pdjSfwJzzYvsspg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(366004)(346002)(136003)(376002)(396003)(39860400002)(8676002)(6506007)(1076003)(52116002)(26005)(6512007)(5660300002)(16526019)(86362001)(8936002)(66476007)(66556008)(36756003)(66946007)(186003)(6486002)(2616005)(44832011)(2906002)(478600001)(956004)(316002)(4326008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: +LmsK4JT3dg1NDjlgRstGQ1YdxReV8CpcdCuUGaEYM4YhEpdOAVAfu6LRUmzicn+MwHDTHzpK22N9LTZNoceupYPkvvwwjJ9lGxRfAi11r3+QLdC17YHaDfKA04WpK4o1ZcL0fse8U/V0lx1S7BlNc9woIUxDiX7DMe6xoi+jpj3vtRIalHqqpoMgxvm04x91OS+gCnvHkfeZyelj/OvCWJN/+ifBFmaTgRWKkn523kK3xdoX98xviwDBfPhB5wP2vw78wSr0Ol1zub+4DbdLvKXRr9xKg/udft5RVWmI9ySwb1huidXcMen09xKiupCntwPoc4CGPEhS9PS2Ax2E2kG+xRCkitU3v8+bdXKyzA/8bfJeXGDUy0WaH/Z3yx6myGhRPZHjzTlzG9vmubZDWvC7uRb9wZZbe5dYNWuELGyQ+fH7PSitQO0f4vJSZvW9rNfB2gflUK02HPuExze1Jn+pyMpNpMpJPMfXF8QMg0=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8835426b-14c7-4efc-6eef-08d7fe3b7684
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2020 10:32:44.3370
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FfM4dW+UDUYJwRjXSs4+DWmtTeNHry/CrPhjqU2XwYvuaJL+FgSlvM0DRHUwSEduHv0d95/FbY5goxPQYMo/cw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB7111
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+Hi Felipe & Mathias,
 
-Wesley Cheng <wcheng@codeaurora.org> writes:
+In this series, it adds cdns3 runtime PM support and verified by
+NXP i.MX8QM and i.MX8QXP platforms.
 
-> Changes in V2:
->  - Modified TXFIFO resizing logic to ensure that each EP is reserved a
->    FIFO.
->  - Removed dev_dbg() prints and fixed typos from patches
->  - Added some more description on the dt-bindings commit message
->
-> Reviewed-by: Felipe Balbi <balbi@kernel.org>
+Patch 1-2: add main runtime PM support for cdns3 core and imx glue layer
+Patch 3-8: add two quirks for xhci-plat.c.
+- .suspend_quirk for platform special sequence between xhci_bus_suspend
+and xhci_suspend.
+- skip_phy_initialization for skip PHY management from HCD core.
 
-I don't remember giving you a Reviewed-by, did I?
+Peter Chen (8):
+  usb: cdns3: add runtime PM support
+  usb: cdns3: imx: add glue layer runtime pm implementation
+  usb: host: xhci-plat: add platform data support
+  usb: host: xhci-plat: add .suspend_quirk for struct xhci_plat_priv
+  usb: host: xhci-plat: delete the unnecessary code
+  usb: host: xhci-plat: add priv flag for skip_phy_initialization
+  usb: cdns3: host: add .suspend_quirk for xhci-plat.c
+  usb: cdns3: host: add xhci_plat_priv's flag skip_phy_initialization
 
-=2D-=20
-balbi
+ drivers/usb/cdns3/cdns3-imx.c   | 179 +++++++++++++++++++++++++++++++-
+ drivers/usb/cdns3/core.c        | 119 ++++++++++++++++++---
+ drivers/usb/cdns3/core.h        |  14 +++
+ drivers/usb/cdns3/drd.c         |   7 ++
+ drivers/usb/cdns3/gadget.c      |   4 +
+ drivers/usb/cdns3/host-export.h |   6 ++
+ drivers/usb/cdns3/host.c        |  48 +++++++++
+ drivers/usb/host/xhci-plat.c    |  36 ++++++-
+ drivers/usb/host/xhci-plat.h    |   2 +
+ 9 files changed, 391 insertions(+), 24 deletions(-)
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+2.17.1
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl7HoVEACgkQzL64meEa
-mQZY/hAAobcsEW4IFsU2bxTrcCRnV6RQNz20bIfxZRKcyKquzoBrV66YyGxsyE+t
-egAiLviJmCxwGdOzOSdHETrrG6HequyOGzwoux/HrGre/OCJqmrh6WnJPunPIqg3
-hzYN9Jos3yFDZUUi8KPoYeS88Ke//VKXXKEwKdAyKFrB1BO2+elWtfMexyDluxlk
-oZggbGmDVlenHL2/IUrxs6EvkL1ry1ogAa5U97hwwAJApJhjqKDTswoJJvvnm+e5
-01pkLPgvD+GWOHKV+zMQ5CnjVc+cVtpTqcQJ3FY+7cbkHgzOcnb2ANgn0gygK68w
-ljUf0kopym3Y3uAuEnRzIUdrLZMjwiDepXQb2Q1hoC6sS0ptO3Qso1SFRwGsCiNR
-9ocFjCios7dA8obaELDLXMwS3B0dfMW7HR2SFgeVQ9btB00ZYNMyAqE0yMcnhdHv
-Er+5fCcHy9ObwYoXbhI30eA64rn1+KBpyJo1UMh1XLoo3Z3ON/nuI/ozaBs7xexb
-4OPsf5E4CnkPSSqBpHG1ukGU7uHyEla/lwKCIBteb0iuX2LO+kn5G3tkcd0vBrua
-ceZmOk7UDMcYFN8jGNpitKqtrCuhiMn1UpGqdEySJYh40hI92lkAv3/brvouU8Pz
-C5R4GNwFrHqYHozr+39cQAX7BKDKoJ7hvzAjIllw4t2Lzum6OEc=
-=pWoV
------END PGP SIGNATURE-----
---=-=-=--
