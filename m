@@ -2,27 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3BAA1DEA5F
-	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2020 16:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51BA81DE9F9
+	for <lists+linux-usb@lfdr.de>; Fri, 22 May 2020 16:52:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731077AbgEVOyM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 22 May 2020 10:54:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53498 "EHLO mail.kernel.org"
+        id S1731136AbgEVOv4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 22 May 2020 10:51:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53974 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731052AbgEVOvg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 22 May 2020 10:51:36 -0400
+        id S1731126AbgEVOvy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 22 May 2020 10:51:54 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 84B4E2145D;
-        Fri, 22 May 2020 14:51:35 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CD61A2224A;
+        Fri, 22 May 2020 14:51:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590159096;
-        bh=w5I/bCvhdOOgccWeAkoMqO+L/IVr9RQ8dbnPQfmCt/w=;
+        s=default; t=1590159113;
+        bh=CuBTDqU7i9gT/BrbieKiGX7Ca/D8uLOthjeVO9EfLPY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=so0YO0aJhJhoLI20OwfjQBmwmLtj3jDKvINuC/VUcleLjvGCTeK0HlzXznnwzAkCu
-         XN/lu6WailZCZE/8YW+M9EHKZqRPnwSOc2bPD/Ey8kCOhlEQ7s7IIkb9N2sfP0qs1B
-         188UiEgOezkU06nqhk8V5AZt8p3iUr0fQqqIZcK0=
+        b=YJwye2YwXU9/Heh+yc68Wj4Hcrxw/j30mgQGP7ZeCZ9PX/OB19AyIQRjotzU0Ck9g
+         jn+zq8T9q4KgJo2/BscXbgd6omnfvn9uNi59cPIzNvP9h66e5enY2YAhGMFQYssyoL
+         h4Sw632aNoA9WK7NsUA1KRtplVtgLKEyyJd9n1nU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Masahiro Yamada <masahiroy@kernel.org>,
@@ -30,12 +30,12 @@ Cc:     Masahiro Yamada <masahiroy@kernel.org>,
         kbuild test robot <lkp@intel.com>,
         Felipe Balbi <balbi@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 14/19] usb: gadget: legacy: fix redundant initialization warnings
-Date:   Fri, 22 May 2020 10:51:15 -0400
-Message-Id: <20200522145120.434921-14-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 10/13] usb: gadget: legacy: fix redundant initialization warnings
+Date:   Fri, 22 May 2020 10:51:39 -0400
+Message-Id: <20200522145142.435086-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200522145120.434921-1-sashal@kernel.org>
-References: <20200522145120.434921-1-sashal@kernel.org>
+In-Reply-To: <20200522145142.435086-1-sashal@kernel.org>
+References: <20200522145142.435086-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -80,10 +80,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/drivers/usb/gadget/legacy/inode.c b/drivers/usb/gadget/legacy/inode.c
-index 37ca0e669bd8..25d417ad9000 100644
+index 5c28bee327e1..e431a8bc3a9d 100644
 --- a/drivers/usb/gadget/legacy/inode.c
 +++ b/drivers/usb/gadget/legacy/inode.c
-@@ -1360,7 +1360,6 @@ gadgetfs_setup (struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
+@@ -1364,7 +1364,6 @@ gadgetfs_setup (struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
  
  	req->buf = dev->rbuf;
  	req->context = NULL;
@@ -91,7 +91,7 @@ index 37ca0e669bd8..25d417ad9000 100644
  	switch (ctrl->bRequest) {
  
  	case USB_REQ_GET_DESCRIPTOR:
-@@ -1783,7 +1782,7 @@ static ssize_t
+@@ -1788,7 +1787,7 @@ static ssize_t
  dev_config (struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
  {
  	struct dev_data		*dev = fd->private_data;
