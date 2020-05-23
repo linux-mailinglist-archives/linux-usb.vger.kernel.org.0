@@ -2,49 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 527911DFBB8
-	for <lists+linux-usb@lfdr.de>; Sun, 24 May 2020 01:23:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 849661DFBBA
+	for <lists+linux-usb@lfdr.de>; Sun, 24 May 2020 01:23:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388140AbgEWXXT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 23 May 2020 19:23:19 -0400
+        id S2388147AbgEWXXW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 23 May 2020 19:23:22 -0400
 Received: from mail-eopbgr00066.outbound.protection.outlook.com ([40.107.0.66]:23517
         "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2388047AbgEWXXS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 23 May 2020 19:23:18 -0400
+        id S2388010AbgEWXXV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 23 May 2020 19:23:21 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YKip/8N7wXFWhezUzgz6bBybL0bSfoDzbSEpYDcQ1FGz/rXz3SvaTv9ux6yX5NFs7B+pqFOT/Mvdxg4MGNrtzfV0hU7OXxhAWD1+bgmXE9XexbHRnmegacVIA9Zc3/lwdbOYUg9qGab4AFcObLLBkenZHpAQWfJkNCIvkeixjI63RITECFtwdEhPd1R34M7iGohZIOoH+6SOAnKEXX4+l7mRdnbogk5fFvqvbn1va9ovMk7BAN/Qut4XUt6MfGVKlBaxJ024saMEog1SXUu+CLefb509HbSXQ4CxhcfV4w+hD2PYpupRZ/HNYVU5wXetoY5Ndrn6ykW5tSzeerzJBA==
+ b=YqK4RycBphjoUhiqiBXEm4Cp3HyHhrLAjkp93WA+lWl68zFXtTrxn/MPLXxeODp55AB/CYJC5+vQOhHxvcvfVEZ6KUCZexAPNGRlNnNZRRs2TchAQ5eE28EicbsW4/cbB8fDAOiqclqZ8XwWLxHQKWgXfViL3u6fm7vP+2frzFAth87rr4QCDqwB94JUCCiK18xj4fGICNIst22JmZ4EgmvuRLJgmHDZMKFXzGxyAaP0PrAGxv5LCgVUsdFBvcOmQI/5HqujD8QhoYYYxSITDNhyOMoo4zBOl1hINKKRa5Yvm6WLF62RB+HjHhte2MhiMrctXcbq2reZcQjC8lxrlQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7zYPHqZggGbZCeqQx7aK4CzhnlnQJPLSxIkcwYP5TVA=;
- b=Rx4OdEeP7gVZGsU0szOIliKA7DlN93VSbP+gjUj8pf7ctya3SnlMazg7e6DBSRuMRCWNxbebllt5tupWAya0A+Q7j1XiB57QOkcBc530ZSyqldByl0Yhei293TFhy7lsWZZzLfJOGoEo7LntgMCRgfVrTFVYsf/U2CbHnaq2sYdGSyesx/VxyP0Du5bcF6yLpfXRLkH/ld1Kf5U1X10piPpF0UYOJcHr1QdIqymqopl4BCPpgVFs7/WCI83C+yUVO0VL3Axy8wIIhzC9dz6zWpSz8eEwqCdo5/6kZhoNH2fb0xWIi/pUxiQ389kUVzgVCJo67HTWsDQvTsTtu4487Q==
+ bh=X1YZzZ589G2IRz/LzrnhKmir3H0rRq/adHtpX3ezRlE=;
+ b=TwIe2GJ1VwQCuAA/0VhoS6/jPBCPMS18WmqDdA8HsYXgEh3wd5Vqja2r9Khl60LJI0M3zN5xF7MYUVknget3wzDV0xuxkj3S/RCgXTpkfQg357bP4L9LuOhi8J8WvapgZzWWpCov21oBU9/hPpAoKsULA4HvX0b/nwB8oNIWntTLDLzau+1khor1tw1JNnvn78clb1IALEFQnQdExsothwncL3M5dp9ntZ2I3jfOD9YW8AgTaNa1EQKB4GenhFGT62NFK6POnyzbiAS1rCwUalWXSKmsEA6CNCujflurbGttnRyW5YJ6mOc+y4+tpsmo/q8WYdZ8sToWSJSkuiyqBQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7zYPHqZggGbZCeqQx7aK4CzhnlnQJPLSxIkcwYP5TVA=;
- b=mo22g+PzOCbCE4of3ekB6ogzTmDlIrUuz/3UdtOPWutBrSSU3qKKdcxf/+Xi6ECm8mWHCE6a9DFEE7ECPezZlqKJPi6whqPuo7hx/vXstfrQSfCG5wSBMc25V1BIbuBWS/M3+8WO70LrwbSO4nCGFW7kO3keiDKXo5sXQSy7Qz0=
+ bh=X1YZzZ589G2IRz/LzrnhKmir3H0rRq/adHtpX3ezRlE=;
+ b=JOLv3sDVyBzeJSWoGBh6uCbULuum/1pM5n9rkI62heEUZBncwlFCY0r6mGjr4rOH7UzbEPtfkBfvTDyMwdE66g49bS2SDAN9JkXzWuBWxk6yVdBW0e7uZcG78IKQS70PFNQKyrvXSZPKyp10kL5Mh+Zb6fXs9sy8nGNm4xOr9es=
 Authentication-Results: kernel.org; dkim=none (message not signed)
  header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
 Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
  by AM7PR04MB6918.eurprd04.prod.outlook.com (2603:10a6:20b:10c::20) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3021.27; Sat, 23 May
- 2020 23:23:07 +0000
+ 2020 23:23:10 +0000
 Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
  ([fe80::1101:adaa:ee89:af2a]) by AM7PR04MB7157.eurprd04.prod.outlook.com
  ([fe80::1101:adaa:ee89:af2a%3]) with mapi id 15.20.3021.026; Sat, 23 May 2020
- 23:23:07 +0000
+ 23:23:10 +0000
 From:   Peter Chen <peter.chen@nxp.com>
 To:     balbi@kernel.org, mathias.nyman@intel.com
 Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com, pawell@cadence.com,
         rogerq@ti.com, gregkh@linuxfoundation.org, jun.li@nxp.com,
         Peter Chen <peter.chen@nxp.com>
-Subject: [PATCH v2 5/9] usb: host: xhci-plat: add .suspend_quirk for struct xhci_plat_priv
-Date:   Sun, 24 May 2020 07:23:00 +0800
-Message-Id: <20200523232304.23976-6-peter.chen@nxp.com>
+Subject: [PATCH v2 6/9] usb: host: xhci-plat: delete the unnecessary code
+Date:   Sun, 24 May 2020 07:23:01 +0800
+Message-Id: <20200523232304.23976-7-peter.chen@nxp.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200523232304.23976-1-peter.chen@nxp.com>
 References: <20200523232304.23976-1-peter.chen@nxp.com>
@@ -53,102 +53,57 @@ X-ClientProxiedBy: SG2PR04CA0153.apcprd04.prod.outlook.com (2603:1096:4::15)
  To AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from b29397-desktop.ap.freescale.net (119.31.174.66) by SG2PR04CA0153.apcprd04.prod.outlook.com (2603:1096:4::15) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3021.23 via Frontend Transport; Sat, 23 May 2020 23:23:04 +0000
+Received: from b29397-desktop.ap.freescale.net (119.31.174.66) by SG2PR04CA0153.apcprd04.prod.outlook.com (2603:1096:4::15) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3021.23 via Frontend Transport; Sat, 23 May 2020 23:23:07 +0000
 X-Mailer: git-send-email 2.17.1
 X-Originating-IP: [119.31.174.66]
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 4a5d906d-5396-418f-2e2f-08d7ff703fee
+X-MS-Office365-Filtering-Correlation-Id: 226645f0-7da3-413a-f3ef-08d7ff7041b5
 X-MS-TrafficTypeDiagnostic: AM7PR04MB6918:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM7PR04MB69189A710C81631870D4BFA88BB50@AM7PR04MB6918.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3513;
+X-Microsoft-Antispam-PRVS: <AM7PR04MB69187285F462EF27AC2F9A958BB50@AM7PR04MB6918.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2512;
 X-Forefront-PRVS: 0412A98A59
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SLHUelwsAnP31UQe2v3Sqv1uY6CZNbuRgCM6XfPGb0CdHszKwMEMfE2QFWEbBpU0E8adGtECDUz7/T7FASlCsK2AYYBuUidKk68d1mGG8avkEQ57K0D1xk0qOWkdkhkQwtt9r76obTOnhOjdfyZIfFS3D8Zbw4iLwvboW6hoN93PCABJGkpTIH2WV6ahGhMX7QPW8vxYIEruvk4bKeEQCyRfgTkZrSgj4sC8R5y6iMr1Ga3rug9qGdY1myfZb67kgmg9acwuaHa05DH6b9H9xbkewaTQu8JRvEPOeFicAhJ/iLBgNUzOh1DTY5zeKdoOU0CLc7CsWhuzLjcbQMw1NjgQCOCfTJXbQkWCjkqQk8WKmz/a7Ie5s3wmrmkuvoPI
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(366004)(396003)(136003)(376002)(346002)(39860400002)(8936002)(2616005)(2906002)(44832011)(186003)(6506007)(8676002)(6486002)(316002)(478600001)(66556008)(36756003)(16526019)(6512007)(52116002)(956004)(15650500001)(66476007)(86362001)(26005)(5660300002)(1076003)(4326008)(66946007)(6666004)(142923001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: iJAYe5ipYT1Fb+UyvRkTWxIh8buxfGhBcq1VA/KpmybaD+B2YLQRoZpmoUBdy0ePtCIiKeqexKmSAvJMQSOrqynd4sW0j0iERikSR0WZ/NTGWwruwnBNKnYq4rcWmbMR/qLKPiOM0SGul/gp9h59dLNofxdi9ek+xppVOh6F6LxW2dWfr2kKbnXcS0lvoz7uc/mrr1gyi4wtp7hr6J4BjOexfxj51ph4kDgffjXuGYix0Wzi9+D2K2rViXl7vIlVd83OZrJo9++GLAFQL+CJp23qYPSwo90+SILeci1GAxCujT+w4K7X+h8exqWsl2hhcTw3QX5Hh05azjbZCaAfaP669MovtPohCmUs+CO6Z72majDUZ0qeGApWXMVx5XdJ3XlFi5UGpQUV3zzY/0mqHdocrXfdCP2PbD2m7QmgEyUjexq5tF6DAN8UQL1oMKMqsOfkcE2FVxrXTrSDbEMSYO3KuyM37mzcqu5zp00Nf4k=
+X-Microsoft-Antispam-Message-Info: QICih1DZ3NFaajkSogbBfTPNTu5WreuatHk1KfqqpCrj8X90jFmznBneg6DOZHiCP8i3YqFCUT2ST+/91QV9jtVVEa5fTTBtrCdsHnPkG+yfeCX55ngxBYzQTBPaEzGrA77iCE+4qCg9PtyPM5F6RYU74UuFTZg9pSnHAROgAt9ByHaMujz6qSXhGthwZk5WQv9ztxzYjwt6D1oS0Xs+GgMKNxMSN4iWFJ5mnrRRWC6T+qDKYvPK7ByHMCZCB1iNWYa3DQ+uvhguBaV+fFOxO2yR52/VXRWGBywWv/xQtaBGQ7C+uFBPB6f91Ndj3QKfSwARevbD9yK2TSEzMfkXtQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(366004)(396003)(136003)(376002)(346002)(39860400002)(8936002)(2616005)(2906002)(44832011)(186003)(6506007)(8676002)(6486002)(316002)(478600001)(66556008)(36756003)(16526019)(6512007)(52116002)(956004)(66476007)(86362001)(26005)(5660300002)(1076003)(4326008)(4744005)(66946007)(6666004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: Sk+H3c/mNw/L/GIvEr0t1cUZZu0MAnKI8U0teNxTj/4a1B97Ms4YKmlga4BRg0Ro5Ui6lV2voTCjA3+TNJG0bFA7kKyRpeTs5NfYTdC4t/ZdDT3lXopwXLVYVHcTtjdOoFqE49d1jnNxFyhebwpTjwRJ6IpHx1Wyp7Vxdm1gPFNAYydfgLfRBfKTE6iMpY0HlARwLyqAdPQf46c7oQkELP5mLZcvunMC+Hr+iOUCHUep4MwI3H3xG/Yx7nHIL+ObPgUI1Uah20TDHHQo5A4Mp6AqOUiUEiJljMy39NisSWnc7dDKgqqceglLKp95XuVLMDaWTjJyCYpvD+/8lawSiXiXSWcGBn+f8o0G+iseAVoHeeIzUUaINFdXUCImWmSHNViUqv/hYwnCKmRx7hzFMovpaoVmjA/DzzvDgilSZwG96PPeIApI9fw58icrQ2kl7XwrKGRGQBwywskNn5KWy9vFkwOZcEERJOad01mhD68=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4a5d906d-5396-418f-2e2f-08d7ff703fee
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2020 23:23:07.1791
+X-MS-Exchange-CrossTenant-Network-Message-Id: 226645f0-7da3-413a-f3ef-08d7ff7041b5
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2020 23:23:10.3005
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jeP3AFZreVCZ+4Ga9N64mfpiFaYyB8g7oEUhNnsD9CTz4o/IHeUJFw2xLt3XDh09KUF1sSN2MN/p/B2BSou02Q==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0vyf1GERnXXl0rqDx69Kx333IwMdsr6nQ0l+RqoB9vSH04dfm1OkzreEN9A8SOBkptDT0X/pzQL7jdo0vHVSRQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6918
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Some platforms (eg cdns3) may have special sequences between
-xhci_bus_suspend and xhci_suspend, add .suspend_quick for it.
+The if {} condition is duplicated with outer if {} condition.
 
 Signed-off-by: Peter Chen <peter.chen@nxp.com>
 ---
- drivers/usb/host/xhci-plat.c | 19 +++++++++++++++++++
- drivers/usb/host/xhci-plat.h |  1 +
- 2 files changed, 20 insertions(+)
+ drivers/usb/host/xhci-plat.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index 38bea2b6a17d..51e20464fe0a 100644
+index 51e20464fe0a..03d6bbe51919 100644
 --- a/drivers/usb/host/xhci-plat.c
 +++ b/drivers/usb/host/xhci-plat.c
-@@ -54,6 +54,16 @@ static int xhci_priv_init_quirk(struct usb_hcd *hcd)
- 	return priv->init_quirk(hcd);
- }
+@@ -283,8 +283,7 @@ static int xhci_plat_probe(struct platform_device *pdev)
+ 		struct xhci_plat_priv *priv = hcd_to_xhci_priv(hcd);
  
-+static int xhci_priv_suspend_quirk(struct usb_hcd *hcd)
-+{
-+	struct xhci_plat_priv *priv = hcd_to_xhci_priv(hcd);
-+
-+	if (!priv->suspend_quirk)
-+		return 0;
-+
-+	return priv->suspend_quirk(hcd);
-+}
-+
- static int xhci_priv_resume_quirk(struct usb_hcd *hcd)
- {
- 	struct xhci_plat_priv *priv = hcd_to_xhci_priv(hcd);
-@@ -401,7 +411,11 @@ static int __maybe_unused xhci_plat_suspend(struct device *dev)
- {
- 	struct usb_hcd	*hcd = dev_get_drvdata(dev);
- 	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
-+	int ret;
+ 		/* Just copy data for now */
+-		if (priv_match)
+-			*priv = *priv_match;
++		*priv = *priv_match;
+ 	}
  
-+	ret = xhci_priv_suspend_quirk(hcd);
-+	if (ret)
-+		return ret;
- 	/*
- 	 * xhci_suspend() needs `do_wakeup` to know whether host is allowed
- 	 * to do wakeup during suspend. Since xhci_plat_suspend is currently
-@@ -438,6 +452,11 @@ static int __maybe_unused xhci_plat_runtime_suspend(struct device *dev)
- {
- 	struct usb_hcd  *hcd = dev_get_drvdata(dev);
- 	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
-+	int ret;
-+
-+	ret = xhci_priv_suspend_quirk(hcd);
-+	if (ret)
-+		return ret;
- 
- 	return xhci_suspend(xhci, true);
- }
-diff --git a/drivers/usb/host/xhci-plat.h b/drivers/usb/host/xhci-plat.h
-index b49f6447bd3a..1fb149d1fbce 100644
---- a/drivers/usb/host/xhci-plat.h
-+++ b/drivers/usb/host/xhci-plat.h
-@@ -15,6 +15,7 @@ struct xhci_plat_priv {
- 	unsigned long long quirks;
- 	void (*plat_start)(struct usb_hcd *);
- 	int (*init_quirk)(struct usb_hcd *);
-+	int (*suspend_quirk)(struct usb_hcd *);
- 	int (*resume_quirk)(struct usb_hcd *);
- };
- 
+ 	device_wakeup_enable(hcd->self.controller);
 -- 
 2.17.1
 
