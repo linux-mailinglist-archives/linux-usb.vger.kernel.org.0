@@ -2,49 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 369781DFBB5
-	for <lists+linux-usb@lfdr.de>; Sun, 24 May 2020 01:23:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AE1D1DFBB6
+	for <lists+linux-usb@lfdr.de>; Sun, 24 May 2020 01:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388123AbgEWXXH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 23 May 2020 19:23:07 -0400
+        id S2388131AbgEWXXL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 23 May 2020 19:23:11 -0400
 Received: from mail-eopbgr00066.outbound.protection.outlook.com ([40.107.0.66]:23517
         "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2388010AbgEWXXH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 23 May 2020 19:23:07 -0400
+        id S2388047AbgEWXXL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 23 May 2020 19:23:11 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dLGUJ5a7JSGEvf/BFJ5epbZcnMoEwnjDLjGCJFJ759VbxMPbDvMn/6QZq/LZef9qfMgjQE6SkisObL11SULjud/y7DuwaWjOYbgrLp1V/BxaSDtCzCHCotz+Z/VCnuS2rIS9nbuP71egSy0j+GThH/tpB0QIcUNT9rBOXGAF18DXgjmy6zmCmORXq4id2BiYhN9mmwNENR4+3vztC5SmvCVt3vf7ZdxfRI3DFPm3tQJpgvX2hyiK4AgP8+PTUuSYLomjX+AEvq3gnvo7PH4au1vLwY9cj6uXUJejcgNprMNPNA93TFzYnVvteL4O8toWpdScbuuJxf/C6Mx+OBfgew==
+ b=FYzOm/KoNQ7iUGl6lPyhZ1Fer++K7P3+IUhtwMGIYEs93cyXShLgQXCqDyN0bveK1ueorS+zj4cKxuR1mbcCYj15loERboQxSyCxFE82UgC/GF3F83kXIzmp0Uu9C57jJFJIWqMiKgmJefaeT91hoREzhhH7NYr9c3juOF6xm6hXIyNWcjgQzurlvJYfWgVIC41QEningBKobpxwqreyTwzDNi8Q8rA6S6yPzanXiQacnP7o/cte/Y6VwqQajh/Ew4hqHEU/nd85x2r6Y7gg+XboH8K7RbojE2K4juaIvSVMUQ9K7rNuNbLGvo7/mDVJM7TEJpjhSLkLlWETP2TO/Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FWf+sEZnIKU+XEeDXp2XhnWdxSDkWIzISJWNdejQ5m0=;
- b=LwzbyFSotYNT2M1Lz3n906H/6EkXVy7L0VPillqRLzal8DyupKmkR8Tl2oe4i/Jk98w/Ez4SKnFtWiMMZSouhQdz7NJsmq97g/XtrHw3Z7pfxHkd6M/0zNJOMc39KOlcrwJA0/UmEH7Vms0QaWxtyckMNATk7C3lRkpMWOsf3TnJo99eGwHMNvm4BTSbxNstFmV67J0RqzZzBZDc0g/YCzDER3wr0yqoHt3SbsyUYRBINDtxCGVW6damoGIN1o0Evia9EX1fyuWSBdt1aukn7mIv6jJLoeHzmMh5CAZu8dTI/GnSTup1fEE+7K9Wuczr+GMwWa/8spRXKI3z8nlNlQ==
+ bh=uT+DKnQMSqid1P7HUGXEc7h60iy9sSbHaOr2UlWRZOo=;
+ b=EKpiQIHieHe1vaMS73vCbOxjTnOn84PBzLZfgW/PLiiHjOOjD48xFssksH09yvMlodgJIb2nDjugnH/HOWMimHbAJmsPssTUAd5CLPwjb6uQUkWwd0SsxuOBtCVYh6iUESiOcdKmYEpwhlVaxa4x9VSft7r2eWKsroS/ibYCLdGkHbaoeV9xHdrtk9lBqANh31g0iAdPbsKCdpxgO4OgrJNCMVwbN9KPl1bvYXLxoRtA9sNmDOBlXHDPmuq1zXgNMjGzIm396PeBJvTB6ZuqdJL1PaGLRerlmVeqDLl1lB2PmRrBLwYWwJ80yq78Y6UWN3Idry3jUCltiF5nD0guhw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FWf+sEZnIKU+XEeDXp2XhnWdxSDkWIzISJWNdejQ5m0=;
- b=NoVA5SR6s/tHiyVGOztwn/Q4wlXjULlaBUwoe8ofdX5HSk9oYufdetn/8SQYoCYIdPca3G+vNGsID/gPHerDqZWRRWW3pOCiJOgXwPDabA1Kd+8dgAKhnIY8Hq179VLBQcaFhJPlt0TbrhT9HM4ZczHtNfeAcolOB5nNTzKvtFE=
+ bh=uT+DKnQMSqid1P7HUGXEc7h60iy9sSbHaOr2UlWRZOo=;
+ b=Pp3pT63IoMSdxpGDy0vLwokmqFTr7EjuxBGUZn7o7rmjRxpjtGkkapRcMOAZ/ipDz26L63tUjhr2fV65E/ROg0GvvJ2tETr/ol6VA8iAeQkowwcXqqInmyuWqdMPSVZHVnCnjs2FCXLWoKpflv0nEvEZtQ+ZCPQV3E0GwOs+6YA=
 Authentication-Results: kernel.org; dkim=none (message not signed)
  header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
 Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
  by AM7PR04MB6918.eurprd04.prod.outlook.com (2603:10a6:20b:10c::20) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3021.27; Sat, 23 May
- 2020 23:22:58 +0000
+ 2020 23:23:01 +0000
 Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
  ([fe80::1101:adaa:ee89:af2a]) by AM7PR04MB7157.eurprd04.prod.outlook.com
  ([fe80::1101:adaa:ee89:af2a%3]) with mapi id 15.20.3021.026; Sat, 23 May 2020
- 23:22:58 +0000
+ 23:23:01 +0000
 From:   Peter Chen <peter.chen@nxp.com>
 To:     balbi@kernel.org, mathias.nyman@intel.com
 Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com, pawell@cadence.com,
         rogerq@ti.com, gregkh@linuxfoundation.org, jun.li@nxp.com,
         Peter Chen <peter.chen@nxp.com>
-Subject: [PATCH v2 2/9] usb: cdns3: add runtime PM support
-Date:   Sun, 24 May 2020 07:22:57 +0800
-Message-Id: <20200523232304.23976-3-peter.chen@nxp.com>
+Subject: [PATCH v2 3/9] usb: cdns3: imx: add glue layer runtime pm implementation
+Date:   Sun, 24 May 2020 07:22:58 +0800
+Message-Id: <20200523232304.23976-4-peter.chen@nxp.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200523232304.23976-1-peter.chen@nxp.com>
 References: <20200523232304.23976-1-peter.chen@nxp.com>
@@ -53,342 +53,280 @@ X-ClientProxiedBy: SG2PR04CA0153.apcprd04.prod.outlook.com (2603:1096:4::15)
  To AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from b29397-desktop.ap.freescale.net (119.31.174.66) by SG2PR04CA0153.apcprd04.prod.outlook.com (2603:1096:4::15) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3021.23 via Frontend Transport; Sat, 23 May 2020 23:22:55 +0000
+Received: from b29397-desktop.ap.freescale.net (119.31.174.66) by SG2PR04CA0153.apcprd04.prod.outlook.com (2603:1096:4::15) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3021.23 via Frontend Transport; Sat, 23 May 2020 23:22:58 +0000
 X-Mailer: git-send-email 2.17.1
 X-Originating-IP: [119.31.174.66]
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 711a7cd9-47dd-4caf-f4d2-08d7ff703a6a
+X-MS-Office365-Filtering-Correlation-Id: dce2a399-7ba2-4295-a195-08d7ff703c46
 X-MS-TrafficTypeDiagnostic: AM7PR04MB6918:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM7PR04MB691859FED652CFC740BC6DFD8BB50@AM7PR04MB6918.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-Microsoft-Antispam-PRVS: <AM7PR04MB6918C7CEE7A18BAC29C02CDE8BB50@AM7PR04MB6918.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
 X-Forefront-PRVS: 0412A98A59
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ShV/b0k0mSAduAQdYAFAuYtGgkqr6iT/dZzXMJTfXA1CvNywYkyIB1uQmEV8nnComYfxRxQqQ81DZ7BGskVTd/9iYoV9yK/KvCRlJpr39VA9GeWXFT4MHx/t4oPHHvkHfhP4X5h+yAdZP/kM9glJD8PzL6lYv0RyAE6lNMpaLSuem+Un0fhziGILADyuQdwp9eUNLrOzfenr94Wh4FY9jcdxKIIGIe98VbfKGqVSy91r/m/E8E1K70n6gs+VwBCkdWccmCL+gievxKifK89k1OUr77tJzjV7EjJBEpQ3HvuoZoJKkFbhGAWrPpBD8na3NQ8vMcBkcxXMeAt0rZoFSQ==
+X-Microsoft-Antispam-Message-Info: dLmt16/BU7OvIv46uOIUpTx5x7jNNyKNH78UYzGXkRuS3CDEJIjILVObXTgJugAYJ02vaA/WjTWmQeuKAPfVYlAX9WcrX9wXdhYkyzZsVZhx9dLCjil4w2/hd/9xFiSSxW7OVLoKqGi5oMR01vzSpx1kKLnHlWFp/6BHLQjubmdbDRnSl5AnxiNusunn2+IeGV15sWmZGW3uhkgY5DJHnQnFk/mdUHcfDCxKM7i/2aZCTawKh07eLesmmQjflbjJ0m7CJ8svM+AiFMRIrA77LK4F40LkhMpQ2gEdI+pnn4lFa+d35NgGpPe6cZh4RJSjq7GKQm9DRpMwDQh2P4JoiQ==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(366004)(396003)(136003)(376002)(346002)(39860400002)(8936002)(2616005)(2906002)(44832011)(186003)(6506007)(8676002)(6486002)(316002)(478600001)(66556008)(36756003)(16526019)(6512007)(52116002)(956004)(66476007)(86362001)(26005)(5660300002)(1076003)(4326008)(66946007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: xiniNINaCVNg/wUIudeAWiX6RGGLMEctJOdxg/ngevpka4Fl92l+8hFAKVnv78KW5vRWMtoqRZZd1ZsMRLfkO8bZWXgx36F8YjQE5Ej7LoAmgO7HwwaGNKJkvczmjHG/MwPWwctMOyUVUAb4T6gv+AVgFcOcsRMPoo9teT/GRjWB14m/lPYxXDNG0xjfvE+Cz2fvr184fSPdbezxppVWKkl6uWvgPxDzB5RHrivXOp9I94VcgK/dbcKGHBGLd/rkSLO4ydDImfsoHFzqD1pYt8iQQ0Cq1cDCSYffE/TyScev9IMXKdmLgtXV3+97GOmklYROa36ldvONZddkKUSrTkepR9Qw6B+yd1xayIEWbzj3QUaClqFkdHdoz6YJgmgy6ONYgawimmU1zJx9nXngEgg2jvgodQSQL0R7qrWVviMolvqN4hbDc6+tf8UWevYRTBIdKxRE2M0ck5sLJrm4ALECx3NSq+aJcWoVd8fUx3w=
+X-MS-Exchange-AntiSpam-MessageData: IpapHXONqGFmhLUxMYyTxGl2rwJ1qVoYwvVh7ouLk1mCNSVhNZQvoo2CoxpFCf3WiEJX66fZ9B1FaHI9EEd2xpfB07jzmc9RqUIj9FGiDNVbXU2iiujb0vCbYmc4ZfK0985/FTikd5Zw2sjEhYsKFpOwWo5kElDY6rCwT52TXhFE8Crjkn+PHQbmYD7hSsH/dd64EIXQJf1/or3NBZJvYyFPdTV1X6qxsDBXDzurm5ZiW0PzY/o7+RL3EDBU7BGOtVObM4CmyWPWq523ni6y0aRA3my/N8W0gMWPRmRLo3iegFNPDR8llc2HCwU/FUFjKj0zGxfu8TdVsJwXkheGdiRnC5ppHZ92AHCNHhjr/11uR0xDLOifQJi7H/0KM4C+MSqAEzXYZAIM5QGDGOeHfQI68tYWsSknvfhRXdUcYGiIiU78z8031bcU5MEiDh/y8pOBuuNjEBs8+oFTlTFDr/nqpITfyUq1k+/60kksSPI=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 711a7cd9-47dd-4caf-f4d2-08d7ff703a6a
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2020 23:22:58.0570
+X-MS-Exchange-CrossTenant-Network-Message-Id: dce2a399-7ba2-4295-a195-08d7ff703c46
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2020 23:23:01.0539
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lVXCOiEqmg8vwH2YgbO2b/c4frsD8XV+lTR4fMBZsyJroDn8ILBZPfU1wTAYLUJoam7Kxv2MJomznOceYoflkw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: qvK41MOsKKaFack9IkpGIArKUaIhBknXFGIceXnoILA6HJa9iVVvyXDtFEGEYq1zgVHCQrOE2RUhRpaQA5aF3w==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6918
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Introduce runtime PM and wakeup interrupt handler for cdns3,
-the runtime PM is default off since other cdns3 has not implemented
-glue layer support for runtime PM.
-
-When the controller is in low power mode, the lpm flag will be set.
-The interrupt triggered later than lpm flag is set considers as
-wakeup interrupt and handled at cdns_drd_irq. Once the wakeup
-occurs, it first disables interrupt to avoid later interrupt
-occurrence since the controller is in low power mode at that
-time, and access registers may be invalid at that time. At wakeup
-handler, it will call pm_runtime_get to wakeup controller, and
-at runtime resume handler, it will enable interrupt again.
-
-The API platform_suspend is introduced for glue layer to implement
-platform specific PM sequence.
+Add imx glue layer runtime pm implementation, and the runtime
+pm is default off.
 
 Signed-off-by: Peter Chen <peter.chen@nxp.com>
 ---
- drivers/usb/cdns3/core.c   | 119 +++++++++++++++++++++++++++++++------
- drivers/usb/cdns3/core.h   |  14 +++++
- drivers/usb/cdns3/drd.c    |   7 +++
- drivers/usb/cdns3/gadget.c |   4 ++
- drivers/usb/cdns3/host.c   |   7 +++
- 5 files changed, 134 insertions(+), 17 deletions(-)
+ drivers/usb/cdns3/cdns3-imx.c | 179 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 177 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
-index bfd09aa98c12..5221c1306e64 100644
---- a/drivers/usb/cdns3/core.c
-+++ b/drivers/usb/cdns3/core.c
-@@ -432,6 +432,7 @@ static int cdns3_probe(struct platform_device *pdev)
- 		return -ENOMEM;
+diff --git a/drivers/usb/cdns3/cdns3-imx.c b/drivers/usb/cdns3/cdns3-imx.c
+index aba988e71958..9d247de8e7eb 100644
+--- a/drivers/usb/cdns3/cdns3-imx.c
++++ b/drivers/usb/cdns3/cdns3-imx.c
+@@ -15,6 +15,8 @@
+ #include <linux/io.h>
+ #include <linux/of_platform.h>
+ #include <linux/iopoll.h>
++#include <linux/pm_runtime.h>
++#include "core.h"
  
- 	cdns->dev = dev;
-+	cdns->pdata = dev_get_platdata(dev);
+ #define USB3_CORE_CTRL1    0x00
+ #define USB3_CORE_CTRL2    0x04
+@@ -66,11 +68,30 @@
+ #define CLK_VALID_COMPARE_BITS	(0xf << 28)
+ #define PHY_REFCLK_REQ		(1 << 0)
  
- 	platform_set_drvdata(pdev, cdns);
++/* OTG registers definition */
++#define OTGSTS		0x4
++/* OTGSTS */
++#define OTG_NRDY	(1 << 11)
++
++/* xHCI registers definition  */
++#define XECP_PM_PMCSR		0x8018
++#define XECP_AUX_CTRL_REG1	0x8120
++
++/* Register bits definition */
++/* XECP_AUX_CTRL_REG1 */
++#define CFG_RXDET_P3_EN		(1 << 15)
++
++/* XECP_PM_PMCSR */
++#define PS_MASK			(3 << 0)
++#define PS_D0			0
++#define PS_D1			(1 << 0)
++
+ struct cdns_imx {
+ 	struct device *dev;
+ 	void __iomem *noncore;
+ 	struct clk_bulk_data *clks;
+ 	int num_clks;
++	struct platform_device *cdns3_pdev;
+ };
  
-@@ -525,9 +526,11 @@ static int cdns3_probe(struct platform_device *pdev)
+ static inline u32 cdns_imx_readl(struct cdns_imx *data, u32 offset)
+@@ -126,6 +147,20 @@ static int cdns_imx_noncore_init(struct cdns_imx *data)
+ 	return ret;
+ }
+ 
++static int cdns_imx_platform_suspend(struct device *dev,
++	bool suspend, bool wakeup);
++static struct cdns3_platform_data cdns_imx_pdata = {
++	.platform_suspend = cdns_imx_platform_suspend,
++};
++
++static struct of_dev_auxdata cdns_imx_auxdata[] = {
++	{
++	.compatible = "cdns,usb3",
++	.platform_data = &cdns_imx_pdata,
++	},
++	{},
++};
++
+ static int cdns_imx_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+@@ -162,14 +197,18 @@ static int cdns_imx_probe(struct platform_device *pdev)
  	if (ret)
- 		goto err4;
+ 		goto err;
  
-+	spin_lock_init(&cdns->lock);
- 	device_set_wakeup_capable(dev, true);
- 	pm_runtime_set_active(dev);
- 	pm_runtime_enable(dev);
+-	ret = of_platform_populate(node, NULL, NULL, dev);
++	ret = of_platform_populate(node, NULL, cdns_imx_auxdata, dev);
+ 	if (ret) {
+ 		dev_err(dev, "failed to create children: %d\n", ret);
+ 		goto err;
+ 	}
+ 
+-	return ret;
++	device_set_wakeup_capable(dev, true);
++	pm_runtime_set_active(dev);
++	pm_runtime_enable(dev);
 +	pm_runtime_forbid(dev);
  
- 	/*
- 	 * The controller needs less time between bus and controller suspend,
-@@ -574,52 +577,134 @@ static int cdns3_remove(struct platform_device *pdev)
++	return ret;
+ err:
+ 	clk_bulk_disable_unprepare(data->num_clks, data->clks);
+ 	return ret;
+@@ -194,6 +233,141 @@ static int cdns_imx_remove(struct platform_device *pdev)
  	return 0;
  }
  
--#ifdef CONFIG_PM_SLEEP
 +#ifdef CONFIG_PM
- 
--static int cdns3_suspend(struct device *dev)
-+static int cdns3_set_platform_suspend(struct device *dev,
++static void cdns3_set_wakeup(struct cdns_imx *data, bool enable)
++{
++	u32 value;
++
++	value = cdns_imx_readl(data, USB3_INT_REG);
++	if (enable)
++		value |= OTG_WAKEUP_EN | DEVU3_WAEKUP_EN;
++	else
++		value &= ~(OTG_WAKEUP_EN | DEVU3_WAEKUP_EN);
++
++	cdns_imx_writel(data, USB3_INT_REG, value);
++}
++
++static int cdns_imx_platform_suspend(struct device *dev,
 +		bool suspend, bool wakeup)
 +{
 +	struct cdns3 *cdns = dev_get_drvdata(dev);
++	struct device *parent = dev->parent;
++	struct cdns_imx *data = dev_get_drvdata(parent);
++	void __iomem *otg_regs = cdns->otg_regs;
++	void __iomem *xhci_regs = cdns->xhci_regs;
++	u32 value;
 +	int ret = 0;
-+	unsigned long flags;
 +
-+	spin_lock_irqsave(&cdns->lock, flags);
-+	if (cdns->pdata && cdns->pdata->platform_suspend)
-+		ret = cdns->pdata->platform_suspend(dev, suspend, wakeup);
++	if (cdns->role != USB_ROLE_HOST)
++		return 0;
 +
-+	spin_unlock_irqrestore(&cdns->lock, flags);
++	if (suspend) {
++		/* SW request low power when all usb ports allow to it ??? */
++		value = readl(xhci_regs + XECP_PM_PMCSR);
++		value &= ~PS_MASK;
++		value |= PS_D1;
++		writel(value, xhci_regs + XECP_PM_PMCSR);
 +
-+	return ret;
-+}
++		/* mdctrl_clk_sel */
++		value = cdns_imx_readl(data, USB3_CORE_CTRL1);
++		value |= MDCTRL_CLK_SEL;
++		cdns_imx_writel(data, USB3_CORE_CTRL1, value);
 +
-+static int cdns3_controller_suspend(struct device *dev, pm_message_t msg)
- {
- 	struct cdns3 *cdns = dev_get_drvdata(dev);
-+	bool wakeup;
- 	unsigned long flags;
- 
--	if (cdns->role == USB_ROLE_HOST)
-+	if (cdns->in_lpm)
- 		return 0;
- 
--	if (pm_runtime_status_suspended(dev))
--		pm_runtime_resume(dev);
-+	if (PMSG_IS_AUTO(msg))
-+		wakeup = true;
-+	else
-+		wakeup = false;
- 
--	if (cdns->roles[cdns->role]->suspend) {
--		spin_lock_irqsave(&cdns->gadget_dev->lock, flags);
--		cdns->roles[cdns->role]->suspend(cdns, false);
--		spin_unlock_irqrestore(&cdns->gadget_dev->lock, flags);
--	}
-+	cdns3_set_platform_suspend(cdns->dev, true, wakeup);
-+	cdns3_set_phy_power(cdns, false);
-+	spin_lock_irqsave(&cdns->lock, flags);
-+	cdns->in_lpm = true;
-+	spin_unlock_irqrestore(&cdns->lock, flags);
- 
- 	return 0;
- }
- 
--static int cdns3_resume(struct device *dev)
-+static int cdns3_controller_resume(struct device *dev, pm_message_t msg)
- {
- 	struct cdns3 *cdns = dev_get_drvdata(dev);
-+	int ret;
- 	unsigned long flags;
- 
--	if (cdns->role == USB_ROLE_HOST)
-+	if (!cdns->in_lpm)
- 		return 0;
- 
--	if (cdns->roles[cdns->role]->resume) {
--		spin_lock_irqsave(&cdns->gadget_dev->lock, flags);
-+	ret = cdns3_set_phy_power(cdns, true);
-+	if (ret)
-+		return ret;
++		/* wait for mdctrl_clk_status */
++		value = cdns_imx_readl(data, USB3_CORE_STATUS);
++		ret = readl_poll_timeout_atomic(data->noncore + USB3_CORE_STATUS, value,
++			(value & MDCTRL_CLK_STATUS) == MDCTRL_CLK_STATUS,
++			10, 100000);
++		if (ret)
++			dev_warn(parent, "wait mdctrl_clk_status timeout\n");
 +
-+	cdns3_set_platform_suspend(cdns->dev, false, false);
++		/* wait lpm_clk_req to be 0 */
++		value = cdns_imx_readl(data, USB3_INT_REG);
++		ret = readl_poll_timeout_atomic(data->noncore + USB3_INT_REG, value,
++			(value & LPM_CLK_REQ) != LPM_CLK_REQ,
++			10, 100000);
++		if (ret)
++			dev_warn(parent, "wait lpm_clk_req timeout\n");
 +
-+	spin_lock_irqsave(&cdns->lock, flags);
-+	if (cdns->roles[cdns->role]->resume && !PMSG_IS_AUTO(msg))
- 		cdns->roles[cdns->role]->resume(cdns, false);
--		spin_unlock_irqrestore(&cdns->gadget_dev->lock, flags);
++		/* wait phy_refclk_req to be 0 */
++		value = cdns_imx_readl(data, USB3_SSPHY_STATUS);
++		ret = readl_poll_timeout_atomic(data->noncore + USB3_SSPHY_STATUS, value,
++			(value & PHY_REFCLK_REQ) != PHY_REFCLK_REQ,
++			10, 100000);
++		if (ret)
++			dev_warn(parent, "wait phy_refclk_req timeout\n");
 +
-+	cdns->in_lpm = false;
-+	spin_unlock_irqrestore(&cdns->lock, flags);
-+	if (cdns->wakeup_int) {
-+		cdns->wakeup_int = false;
-+		if (cdns->role == USB_ROLE_HOST) {
-+			/* Trigger xhci-plat.c runtime runtime */
-+			pm_runtime_get(&cdns->host_dev->dev);
-+			pm_runtime_mark_last_busy(&cdns->host_dev->dev);
-+			pm_runtime_put_autosuspend(&cdns->host_dev->dev);
-+			/* balence the pm_runtime_get at cdns3_drd_irq */
-+			pm_runtime_mark_last_busy(cdns->dev);
-+			pm_runtime_put_autosuspend(cdns->dev);
-+		}
++		cdns3_set_wakeup(data, wakeup);
++	} else {
++		/* wait CLK_125_REQ to be 1 */
++		value = cdns_imx_readl(data, USB3_INT_REG);
++		ret = readl_poll_timeout_atomic(data->noncore + USB3_INT_REG, value,
++			(value & CLK_125_REQ) != CLK_125_REQ,
++			10, 100000);
++		if (ret)
++			dev_warn(parent, "wait CLK_125_REQ timeout\n");
 +
-+		enable_irq(cdns->otg_irq);
++		cdns3_set_wakeup(data, false);
++
++		/* SW request D0 */
++		value = readl(xhci_regs + XECP_PM_PMCSR);
++		value &= ~PS_MASK;
++		value |= PS_D0;
++		writel(value, xhci_regs + XECP_PM_PMCSR);
++
++		/* clr CFG_RXDET_P3_EN */
++		value = readl(xhci_regs + XECP_AUX_CTRL_REG1);
++		value &= ~CFG_RXDET_P3_EN;
++		writel(value, xhci_regs + XECP_AUX_CTRL_REG1);
++
++		/* clear mdctrl_clk_sel */
++		value = cdns_imx_readl(data, USB3_CORE_CTRL1);
++		value &= ~MDCTRL_CLK_SEL;
++		cdns_imx_writel(data, USB3_CORE_CTRL1, value);
++
++		/* wait for mdctrl_clk_status is cleared */
++		value = cdns_imx_readl(data, USB3_CORE_STATUS);
++		ret = readl_poll_timeout_atomic(data->noncore + USB3_CORE_STATUS, value,
++			(value & MDCTRL_CLK_STATUS) != MDCTRL_CLK_STATUS,
++			10, 100000);
++		if (ret)
++			dev_warn(parent, "wait mdctrl_clk_status cleared timeout\n");
++
++		/* Wait until OTG_NRDY is 0 */
++		value = readl(otg_regs + OTGSTS);
++		ret = readl_poll_timeout_atomic(otg_regs + OTGSTS, value,
++			(value & OTG_NRDY) != OTG_NRDY,
++			10, 100000);
++		if (ret)
++			dev_warn(parent, "wait OTG ready timeout\n");
 +	}
 +
 +	return ret;
++
 +}
 +
-+static int cdns3_runtime_suspend(struct device *dev)
++static int cdns_imx_resume(struct device *dev)
 +{
-+	return cdns3_controller_suspend(dev, PMSG_AUTO_SUSPEND);
++	struct cdns_imx *data = dev_get_drvdata(dev);
++
++	return clk_bulk_prepare_enable(data->num_clks, data->clks);
 +}
 +
-+static int cdns3_runtime_resume(struct device *dev)
++static int cdns_imx_suspend(struct device *dev)
 +{
-+	return cdns3_controller_resume(dev, PMSG_AUTO_RESUME);
-+}
-+#ifdef CONFIG_PM_SLEEP
++	struct cdns_imx *data = dev_get_drvdata(dev);
 +
-+static int cdns3_suspend(struct device *dev)
-+{
-+	struct cdns3 *cdns = dev_get_drvdata(dev);
-+	unsigned long flags;
++	clk_bulk_disable_unprepare(data->num_clks, data->clks);
 +
-+	if (pm_runtime_status_suspended(dev))
-+		pm_runtime_resume(dev);
-+
-+	if (cdns->roles[cdns->role]->suspend) {
-+		spin_lock_irqsave(&cdns->lock, flags);
-+		cdns->roles[cdns->role]->suspend(cdns, false);
-+		spin_unlock_irqrestore(&cdns->lock, flags);
- 	}
- 
-+	return cdns3_controller_suspend(dev, PMSG_SUSPEND);
++	return 0;
 +}
 +
-+static int cdns3_resume(struct device *dev)
-+{
-+	int ret;
-+
-+	ret = cdns3_controller_resume(dev, PMSG_RESUME);
-+	if (ret)
-+		return ret;
-+
- 	pm_runtime_disable(dev);
- 	pm_runtime_set_active(dev);
- 	pm_runtime_enable(dev);
- 
--	return 0;
-+	return ret;
- }
--#endif
-+#endif /* CONFIG_PM_SLEEP */
 +#endif /* CONFIG_PM */
- 
- static const struct dev_pm_ops cdns3_pm_ops = {
- 	SET_SYSTEM_SLEEP_PM_OPS(cdns3_suspend, cdns3_resume)
-+	SET_RUNTIME_PM_OPS(cdns3_runtime_suspend, cdns3_runtime_resume, NULL)
- };
- 
- #ifdef CONFIG_OF
-diff --git a/drivers/usb/cdns3/core.h b/drivers/usb/cdns3/core.h
-index 1ad1f1fe61e9..9eb8aeea2d20 100644
---- a/drivers/usb/cdns3/core.h
-+++ b/drivers/usb/cdns3/core.h
-@@ -38,6 +38,12 @@ struct cdns3_role_driver {
- };
- 
- #define CDNS3_XHCI_RESOURCES_NUM	2
 +
-+struct cdns3_platform_data {
-+	int (*platform_suspend)(struct device *dev,
-+			bool suspend, bool wakeup);
++static const struct dev_pm_ops cdns_imx_pm_ops = {
++	SET_RUNTIME_PM_OPS(cdns_imx_suspend, cdns_imx_resume, NULL)
 +};
 +
- /**
-  * struct cdns3 - Representation of Cadence USB3 DRD controller.
-  * @dev: pointer to Cadence device struct
-@@ -62,6 +68,10 @@ struct cdns3_role_driver {
-  *           This field based on firmware setting, kernel configuration
-  *           and hardware configuration.
-  * @role_sw: pointer to role switch object.
-+ * @in_lpm: indicate the controller is in low power mode
-+ * @wakeup_int: wakeup interrupt occurs
-+ * @pdata: platform data from glue layer
-+ * @lock: spinlock structure
-  */
- struct cdns3 {
- 	struct device			*dev;
-@@ -89,6 +99,10 @@ struct cdns3 {
- 	struct mutex			mutex;
- 	enum usb_dr_mode		dr_mode;
- 	struct usb_role_switch		*role_sw;
-+	bool				in_lpm;
-+	bool				wakeup_int;
-+	struct cdns3_platform_data	*pdata;
-+	spinlock_t			lock;
+ static const struct of_device_id cdns_imx_of_match[] = {
+ 	{ .compatible = "fsl,imx8qm-usb3", },
+ 	{},
+@@ -206,6 +380,7 @@ static struct platform_driver cdns_imx_driver = {
+ 	.driver		= {
+ 		.name	= "cdns3-imx",
+ 		.of_match_table	= cdns_imx_of_match,
++		.pm	= &cdns_imx_pm_ops,
+ 	},
  };
- 
- int cdns3_hw_role_switch(struct cdns3 *cdns);
-diff --git a/drivers/usb/cdns3/drd.c b/drivers/usb/cdns3/drd.c
-index 58089841ed52..292ea248c0ec 100644
---- a/drivers/usb/cdns3/drd.c
-+++ b/drivers/usb/cdns3/drd.c
-@@ -278,6 +278,13 @@ static irqreturn_t cdns3_drd_irq(int irq, void *data)
- 	struct cdns3 *cdns = data;
- 	u32 reg;
- 
-+	if (cdns->in_lpm) {
-+		disable_irq_nosync(irq);
-+		cdns->wakeup_int = true;
-+		pm_runtime_get(cdns->dev);
-+		return IRQ_HANDLED;
-+	}
-+
- 	if (cdns->dr_mode != USB_DR_MODE_OTG)
- 		return ret;
- 
-diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
-index 559e5c01c2b0..ccb257d9daa6 100644
---- a/drivers/usb/cdns3/gadget.c
-+++ b/drivers/usb/cdns3/gadget.c
-@@ -1766,9 +1766,13 @@ static void cdns3_check_usb_interrupt_proceed(struct cdns3_device *priv_dev,
- static irqreturn_t cdns3_device_irq_handler(int irq, void *data)
- {
- 	struct cdns3_device *priv_dev = data;
-+	struct cdns3 *cdns = dev_get_drvdata(priv_dev->dev);
- 	irqreturn_t ret = IRQ_NONE;
- 	u32 reg;
- 
-+	if (cdns->in_lpm)
-+		return ret;
-+
- 	/* check USB device interrupt */
- 	reg = readl(&priv_dev->regs->usb_ists);
- 	if (reg) {
-diff --git a/drivers/usb/cdns3/host.c b/drivers/usb/cdns3/host.c
-index ad788bf3fe4f..b579ef15f4e0 100644
---- a/drivers/usb/cdns3/host.c
-+++ b/drivers/usb/cdns3/host.c
-@@ -13,11 +13,13 @@
- #include "core.h"
- #include "drd.h"
- #include "host-export.h"
-+#include <linux/usb/hcd.h>
- 
- static int __cdns3_host_init(struct cdns3 *cdns)
- {
- 	struct platform_device *xhci;
- 	int ret;
-+	struct usb_hcd *hcd;
- 
- 	cdns3_drd_switch_host(cdns, 1);
- 
-@@ -43,6 +45,11 @@ static int __cdns3_host_init(struct cdns3 *cdns)
- 		goto err1;
- 	}
- 
-+	/* Glue needs to access xHCI region register for Power management */
-+	hcd = platform_get_drvdata(xhci);
-+	if (hcd)
-+		cdns->xhci_regs = hcd->regs;
-+
- 	return 0;
- err1:
- 	platform_device_put(xhci);
+ module_platform_driver(cdns_imx_driver);
 -- 
 2.17.1
 
