@@ -2,192 +2,239 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8FED1DFAB2
-	for <lists+linux-usb@lfdr.de>; Sat, 23 May 2020 21:28:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66CCC1DFADF
+	for <lists+linux-usb@lfdr.de>; Sat, 23 May 2020 22:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387869AbgEWT2L convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Sat, 23 May 2020 15:28:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42906 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727996AbgEWT2L (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 23 May 2020 15:28:11 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 207871] New: nullpointer dereference in
- uvc_video_stop_streaming
-Date:   Sat, 23 May 2020 19:28:10 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: ranma+kernel@tdiedrich.de
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version
- cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
- priority component assigned_to reporter cf_regression
-Message-ID: <bug-207871-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S2387843AbgEWUGc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 23 May 2020 16:06:32 -0400
+Received: from blockout.pre-sense.de ([213.238.39.74]:53997 "EHLO
+        mail.pre-sense.de" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728319AbgEWUGc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 23 May 2020 16:06:32 -0400
+Received: from smtp.pre-sense.de (tetris_b.pre-sense.de [10.9.0.76])
+        by mail.pre-sense.de (Postfix) with ESMTP id 3F5D25E0F0;
+        Sat, 23 May 2020 22:06:29 +0200 (CEST)
+Received: from atlan.none (unknown [212.12.60.67])
+        by smtp.pre-sense.de (Postfix) with ESMTPS id 4F89915D8;
+        Sat, 23 May 2020 22:05:24 +0200 (CEST)
+Subject: Re: Ext. HDDs not working under Linux via USB 3.0 but under Windows
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org
+References: <512118bc-e639-2387-e608-56b7e30fc3b2@pre-sense.de>
+ <20200523154817.GA7091@rowland.harvard.edu>
+From:   =?UTF-8?Q?Till_D=c3=b6rges?= <doerges@pre-sense.de>
+Autocrypt: addr=doerges@pre-sense.de; prefer-encrypt=mutual; keydata=
+ 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
+Organization: PRESENSE Technologies GmbH
+Message-ID: <34933b01-e4b0-10da-c935-9e6a9a6ae427@pre-sense.de>
+Date:   Sat, 23 May 2020 22:05:48 +0200
+User-Agent: Thunderbird
 MIME-Version: 1.0
+In-Reply-To: <20200523154817.GA7091@rowland.harvard.edu>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=207871
+Hi Alan,
 
-            Bug ID: 207871
-           Summary: nullpointer dereference in uvc_video_stop_streaming
-           Product: Drivers
-           Version: 2.5
-    Kernel Version: 5.4.26
-          Hardware: x86-64
-                OS: Linux
-              Tree: Mainline
-            Status: NEW
-          Severity: normal
-          Priority: P1
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: ranma+kernel@tdiedrich.de
-        Regression: No
+thanks for the really quick response!
 
-nullpointer dereference in V4L2CaptureThread when in-use USB3 uvcvideo device
-drops of the bus:
+Am 23.05.20 um 17:48 schrieb Alan Stern:
 
-[5473614.803782] usb 4-4.4: New USB device strings: Mfr=6, Product=7,
-SerialNumber=3
-[5473614.803784] usb 4-4.4: Product: HDMI to U3 capture
-[5473614.803785] usb 4-4.4: Manufacturer: Video Grabber
-[5473614.803787] usb 4-4.4: SerialNumber: 20000130041415
-[5473614.804178] uvcvideo: Found UVC 1.00 device HDMI to U3 capture (1e4e:701f)
-[5473614.818515] uvcvideo: UVC non compliance - GET_DEF(PROBE) not supported.
-Enabling workaround.
-[5473614.818716] uvcvideo 4-4.4:1.0: Entity type for entity Extension 4 was not
-initialized!
-[5473614.818718] uvcvideo 4-4.4:1.0: Entity type for entity Processing 3 was
-not initialized!
-[5473614.818720] uvcvideo 4-4.4:1.0: Entity type for entity Camera 1 was not
-initialized!
-[5473614.869980] systemd-udevd[16462]: Process '/usr/sbin/alsactl -E
-HOME=/run/alsa restore 3' failed with exit code 99.
+>> I'm trying to get external HDDs from Sony to work under Linux with USB 3.0.
+[...]
+>>  - PSZ-HA2T: idVendor=054c, idProduct=087d
+>>  - PSZ-HA1T: idVendor=054c, idProduct=087d
+>>  - PSZ-HA50: idVendor=054c, idProduct=087d
+>>  - PSZ-HC1T: idVendor=054c, idProduct=0c4f
+[...]
+>> I've also tried several of the quirk settings
+>> (https://github.com/torvalds/linux/blob/ead751507de86d90fa250431e9990a8b881f713c/drivers/usb/storage/usb.c#L527).
+> 
+> Unfortunately, the uas driver ignores those settings.
+[...]
+> Try adding an entry to the unusual_uas.h file for the device, specifying 
+> the USB_FL_NO_REPORT_OPCODES flag.
 
-[5473633.057731] usb 4-4.4: reset SuperSpeed Gen 1 USB device number 58 using
-xhci_hcd
-[5473635.636401] usb 4-4.4: USB disconnect, device number 58
-[5473635.642127] BUG: kernel NULL pointer dereference, address:
-0000000000000000
-[5473635.642132] #PF: supervisor read access in kernel mode
-[5473635.642133] #PF: error_code(0x0000) - not-present page
-[5473635.642135] PGD 0 P4D 0 
-[5473635.642139] Oops: 0000 [#1] SMP
-[5473635.642142] CPU: 0 PID: 16509 Comm: V4L2CaptureThre Not tainted 5.4.26 #2
-[5473635.642144] Hardware name: Gigabyte Technology Co., Ltd.
-AB350M-D3H/AB350M-D3H-CF, BIOS F31 05/06/2019
-[5473635.642151] RIP: 0010:usb_ifnum_to_if+0x21/0x37
-[5473635.642153] Code: ff ff 5b 5d 41 5c 41 5d c3 48 8b 87 98 03 00 00 48 85 c0
-74 2a 0f b6 78 04 31 d2 39 d7 7e 1d 48 8b 8c d0 98 00 00 00 48 ff c2 <4c> 8b 01
-45 0f b6 40 02 41 39 f0 75 e4 48 89 c8 eb 03 31 c0 c3 c3
-[5473635.642155] RSP: 0018:ffffa140c109fb98 EFLAGS: 00010202
-[5473635.642157] RAX: ffff89f4e64d2c00 RBX: ffff89f60d4b1000 RCX:
-0000000000000000
-[5473635.642159] RDX: 0000000000000001 RSI: 0000000000000001 RDI:
-0000000000000004
-[5473635.642160] RBP: ffff89f5b095fa88 R08: 00000000ffffffed R09:
-0000000000000001
-[5473635.642162] R10: 000000000000000b R11: 0045e025810cb2e0 R12:
-0000000000000000
-[5473635.642163] R13: ffff89f5b095fa88 R14: ffff89f5b095fad8 R15:
-ffff89f3d2f60000
-[5473635.642165] FS:  00007f9a5c6ce700(0000) GS:ffff89f61ee00000(0000)
-knlGS:0000000000000000
-[5473635.642167] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[5473635.642168] CR2: 0000000000000000 CR3: 00000003c193f000 CR4:
-00000000003406f0
-[5473635.642170] Call Trace:
-[5473635.642175]  usb_hcd_alloc_bandwidth+0x1e8/0x2d9
-[5473635.642179]  usb_set_interface+0x1b4/0x290
-[5473635.642187]  uvc_video_stop_streaming+0x2f/0x75 [uvcvideo]
-[5473635.642192]  uvc_stop_streaming+0x17/0x43 [uvcvideo]
-[5473635.642196]  __vb2_queue_cancel+0x6c/0x2fd [videobuf2_common]
-[5473635.642201]  vb2_core_streamoff+0x2b/0x73 [videobuf2_common]
-[5473635.642205]  uvc_queue_streamoff+0x25/0x39 [uvcvideo]
-[5473635.642209]  uvc_ioctl_streamoff+0x38/0x47 [uvcvideo]
-[5473635.642213]  __video_do_ioctl+0x279/0x3c1
-[5473635.642219]  ? _raw_spin_unlock_irqrestore+0xd/0xe
-[5473635.642222]  ? try_to_wake_up+0x290/0x363
-[5473635.642225]  video_usercopy+0x28b/0x46d
-[5473635.642227]  ? v4l_g_ctrl+0x11f/0x11f
-[5473635.642230]  ? vtime_delta.isra.10+0x9/0x1e
-[5473635.642233]  v4l2_ioctl+0x42/0x48
-[5473635.642236]  vfs_ioctl+0x19/0x26
-[5473635.642238]  do_vfs_ioctl+0x526/0x54e
-[5473635.642241]  ? finish_task_switch+0x1d4/0x218
-[5473635.642245]  ? timekeeping_get_ns+0x19/0x2c
-[5473635.642248]  ? paravirt_sched_clock+0x5/0x8
-[5473635.642250]  ksys_ioctl+0x39/0x58
-[5473635.642252]  __x64_sys_ioctl+0x11/0x14
-[5473635.642255]  do_syscall_64+0x83/0x91
-[5473635.642258]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
-[5473635.642261] RIP: 0033:0x7f9a614a5427
-[5473635.642264] Code: 00 00 90 48 8b 05 69 aa 0c 00 64 c7 00 26 00 00 00 48 c7
-c0 ff ff ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 b8 10 00 00 00 0f 05 <48> 3d 01
-f0 ff ff 73 01 c3 48 8b 0d 39 aa 0c 00 f7 d8 64 89 01 48
-[5473635.642265] RSP: 002b:00007f9a5c6cd258 EFLAGS: 00000246 ORIG_RAX:
-0000000000000010
-[5473635.642268] RAX: ffffffffffffffda RBX: 00002059db1a35f0 RCX:
-00007f9a614a5427
-[5473635.642269] RDX: 00007f9a5c6cd2ac RSI: 0000000040045613 RDI:
-0000000000000017
-[5473635.642270] RBP: 00007f9a5c6cd2f0 R08: 0000000000000000 R09:
-00007f9a5c6cd3d8
-[5473635.642272] R10: 00007ffeaab6e090 R11: 0000000000000246 R12:
-00002059db230158
-[5473635.642273] R13: 00002059db230000 R14: 00002059db230000 R15:
-00007f9a5c6cd2ac
-[5473635.642275] Modules linked in: cfg80211 snd_usb_audio bnep bluetooth
-uvcvideo videobuf2_vmalloc videobuf2_memops snd_usbmidi_lib videobuf2_v4l2
-snd_rawmidi videobuf2_common [last unloaded: snd_usb_audio]
-[5473635.642282] CR2: 0000000000000000
-[5473635.642284] ---[ end trace cbc4d60c1db09b1c ]---
-[5473635.642287] RIP: 0010:usb_ifnum_to_if+0x21/0x37
-[5473635.642289] Code: ff ff 5b 5d 41 5c 41 5d c3 48 8b 87 98 03 00 00 48 85 c0
-74 2a 0f b6 78 04 31 d2 39 d7 7e 1d 48 8b 8c d0 98 00 00 00 48 ff c2 <4c> 8b 01
-45 0f b6 40 02 41 39 f0 75 e4 48 89 c8 eb 03 31 c0 c3 c3
-[5473635.642291] RSP: 0018:ffffa140c109fb98 EFLAGS: 00010202
-[5473635.642292] RAX: ffff89f4e64d2c00 RBX: ffff89f60d4b1000 RCX:
-0000000000000000
-[5473635.642293] RDX: 0000000000000001 RSI: 0000000000000001 RDI:
-0000000000000004
-[5473635.642295] RBP: ffff89f5b095fa88 R08: 00000000ffffffed R09:
-0000000000000001
-[5473635.642296] R10: 000000000000000b R11: 0045e025810cb2e0 R12:
-0000000000000000
-[5473635.642297] R13: ffff89f5b095fa88 R14: ffff89f5b095fad8 R15:
-ffff89f3d2f60000
-[5473635.642299] FS:  00007f9a5c6ce700(0000) GS:ffff89f61ee00000(0000)
-knlGS:0000000000000000
-[5473635.642300] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[5473635.642302] CR2: 0000000000000000 CR3: 00000003c193f000 CR4:
-00000000003406f0
-[5473635.700061] show_signal_msg: 3729 callbacks suppressed
-[5473635.700065] chrome[16497]: segfault at 0 ip 000056399a1110f4 sp
-00007ffeaaa675c0 error 4 in chrome[563997639000+7349000]
-[5473635.700080] Code: 48 89 de 31 d2 4c 89 f1 e8 b9 20 fa ff eb 07 48 8b 1d b0
-fd 10 05 48 89 df 5b 41 5e 5d e9 64 2e 00 00 cc cc cc cc 55 48 89 e5 <48> 8b 0f
-4c 8b 47 08 4c 89 c0 48 29 c8 74 41 48 c1 f8 03 48 bf ab
+I'm not sure I understand correctly. Do I have to compile the uas Kernel module
+myself if I want to test a flag?
 
+Because with setting the f flag (via options usb-storage quirks=054c:087d:f) the
+PSZ-HA*1*T starts behaving nicely.
+
+--- snip ---
+$ cat /sys/module/usb_storage/parameters/quirks
+054c:087d:f,054c:0c4f:f
+--- snip ---
+
+
+The PSZ-HA*2*T, however, still doesn't work with that.
+
+dmesg shows:
+--- snip ---
+[613960.192066] scsi host5: uas
+[613960.192179] usbcore: registered new interface driver uas
+[613960.195028] usb 6-2: cmd cmplt err -71
+[613980.764509] scsi 5:0:0:0: tag#12 uas_eh_abort_handler 0 uas-tag 1 inflight: CMD IN
+[613980.764513] scsi 5:0:0:0: tag#12 CDB: Inquiry 12 00 00 00 24 00
+[613980.780506] scsi host5: uas_eh_device_reset_handler start
+[613980.910565] usb 6-2: reset SuperSpeed Gen 1 USB device number 3 using xhci_hcd
+[613980.940879] scsi host5: uas_eh_device_reset_handler success
+[613984.957905] scsi 5:0:0:0: Direct-Access     Sony     PSZ-H            320: PQ: 0
+ANSI: 6
+[613990.960817] sd 5:0:0:0: Attached scsi generic sg3 type 0
+[613990.961028] sd 5:0:0:0: [sdb] Spinning up disk...
+[613991.984560] .ready
+[613999.987984] sd 5:0:0:0: [sdb] 281474976710656 512-byte logical blocks: (144
+PB/128 PiB)
+[613999.987988] sd 5:0:0:0: [sdb] 4096-byte physical blocks
+[614001.988698] sd 5:0:0:0: [sdb] Write Protect is off
+[614001.988702] sd 5:0:0:0: [sdb] Mode Sense: 67 00 10 08
+[614005.989956] sd 5:0:0:0: [sdb] Write cache: enabled, read cache: enabled, supports
+DPO and FUA
+[614007.990627] sd 5:0:0:0: [sdb] Optimal transfer size 524287 logical blocks > sd
+driver limit (65535 logical blocks)
+[614008.004886] sd 5:0:0:0: [sdb] Spinning up disk...
+[614009.040540] .ready
+[614056.540501] sd 5:0:0:0: [sdb] tag#13 uas_eh_abort_handler 0 uas-tag 1 inflight:
+CMD IN
+[614056.540507] sd 5:0:0:0: [sdb] tag#13 CDB: Read(16) 88 00 00 00 00 00 00 00 00 00
+00 00 00 08 00 00
+[614056.556501] scsi host5: uas_eh_device_reset_handler start
+[614056.686376] usb 6-2: reset SuperSpeed Gen 1 USB device number 3 using xhci_hcd
+[614056.716509] scsi host5: uas_eh_device_reset_handler success
+[614066.768485] sd 5:0:0:0: [sdb] tag#13 uas_eh_abort_handler 0 uas-tag 1 inflight: CMD
+[614066.768490] sd 5:0:0:0: [sdb] tag#13 CDB: Test Unit Ready 00 00 00 00 00 00
+[614066.768493] scsi host5: uas_eh_device_reset_handler start
+[614072.144648] xhci_hcd 0000:06:00.0: Timeout while waiting for setup device command
+[614072.353271] usb 6-2: Device not responding to setup address.
+[614072.354062] debugfs: Directory '01' with parent 'devices' already present!
+[614072.560471] usb 6-2: device not accepting address 3, error -71
+[614078.032657] xhci_hcd 0000:06:00.0: Timeout while waiting for setup device command
+[614078.240963] usb 6-2: Device not responding to setup address.
+[614078.241423] debugfs: Directory '01' with parent 'devices' already present!
+[614078.448469] usb 6-2: device not accepting address 3, error -71
+[614083.920631] xhci_hcd 0000:06:00.0: Timeout while waiting for setup device command
+[614084.128937] usb 6-2: Device not responding to setup address.
+[614084.129413] debugfs: Directory '01' with parent 'devices' already present!
+[614084.336459] usb 6-2: device not accepting address 3, error -71
+[614089.808656] xhci_hcd 0000:06:00.0: Timeout while waiting for setup device command
+[614090.017000] usb 6-2: Device not responding to setup address.
+[614090.017527] debugfs: Directory '01' with parent 'devices' already present!
+[614090.224459] usb 6-2: device not accepting address 3, error -71
+[614090.280517] scsi host5: uas_eh_device_reset_handler FAILED err -19
+[614090.280522] sd 5:0:0:0: Device offlined - not ready after error recovery
+[614090.280529] sd 5:0:0:0: [sdb] tag#13 FAILED Result: hostbyte=DID_OK
+driverbyte=DRIVER_TIMEOUT
+[614090.280531] sd 5:0:0:0: [sdb] tag#13 CDB: Read(16) 88 00 00 00 00 00 00 00 00 00
+00 00 00 08 00 00
+[614090.280533] print_req_error: 1 callbacks suppressed
+[614090.280534] blk_update_request: I/O error, dev sdb, sector 0 op 0x0:(READ) flags
+0x0 phys_seg 1 prio class 0
+[614090.280537] buffer_io_error: 1 callbacks suppressed
+[614090.280538] Buffer I/O error on dev sdb, logical block 0, async page read
+[614090.280567] usb 6-2: USB disconnect, device number 3
+[614090.280571] sd 5:0:0:0: rejecting I/O to offline device
+[614090.280574] blk_update_request: I/O error, dev sdb, sector 0 op 0x0:(READ) flags
+0x0 phys_seg 1 prio class 0
+[614090.280576] Buffer I/O error on dev sdb, logical block 0, async page read
+[614090.280597] blk_update_request: I/O error, dev sdb, sector 0 op 0x0:(READ) flags
+0x0 phys_seg 1 prio class 0
+[614090.280598] Buffer I/O error on dev sdb, logical block 0, async page read
+[614090.280601] ldm_validate_partition_table(): Disk read failed.
+[614090.280607] blk_update_request: I/O error, dev sdb, sector 0 op 0x0:(READ) flags
+0x0 phys_seg 1 prio class 0
+[614090.280608] Buffer I/O error on dev sdb, logical block 0, async page read
+[614090.280615] blk_update_request: I/O error, dev sdb, sector 0 op 0x0:(READ) flags
+0x0 phys_seg 1 prio class 0
+[614090.280616] Buffer I/O error on dev sdb, logical block 0, async page read
+[614090.280624] blk_update_request: I/O error, dev sdb, sector 0 op 0x0:(READ) flags
+0x0 phys_seg 1 prio class 0
+[614090.280625] Buffer I/O error on dev sdb, logical block 0, async page read
+[614090.280632] blk_update_request: I/O error, dev sdb, sector 0 op 0x0:(READ) flags
+0x0 phys_seg 1 prio class 0
+[614090.280633] Buffer I/O error on dev sdb, logical block 0, async page read
+[614090.280640] blk_update_request: I/O error, dev sdb, sector 0 op 0x0:(READ) flags
+0x0 phys_seg 1 prio class 0
+[614090.280642] Buffer I/O error on dev sdb, logical block 0, async page read
+[614090.280655] blk_update_request: I/O error, dev sdb, sector 24 op 0x0:(READ) flags
+0x0 phys_seg 1 prio class 0
+[614090.280657] Buffer I/O error on dev sdb, logical block 3, async page read
+[614090.280664] blk_update_request: I/O error, dev sdb, sector 0 op 0x0:(READ) flags
+0x0 phys_seg 1 prio class 0
+[614090.280665] Buffer I/O error on dev sdb, logical block 0, async page read
+[614090.280674]  sdb: unable to read partition table
+[614090.604487] sd 5:0:0:0: [sdb] Read Capacity(16) failed: Result:
+hostbyte=DID_ERROR driverbyte=DRIVER_OK
+[614090.604491] sd 5:0:0:0: [sdb] Sense not available.
+[614090.844483] sd 5:0:0:0: [sdb] Read Capacity(10) failed: Result:
+hostbyte=DID_ERROR driverbyte=DRIVER_OK
+[614090.844487] sd 5:0:0:0: [sdb] Sense not available.
+[614090.940485] sd 5:0:0:0: [sdb] 0 512-byte logical blocks: (0 B/0 B)
+[614090.940488] sd 5:0:0:0: [sdb] 4096-byte physical blocks
+[614091.020504] sd 5:0:0:0: [sdb] Write Protect is on
+[614091.020507] sd 5:0:0:0: [sdb] Mode Sense: 27 40 bb f7
+[614091.228484] sd 5:0:0:0: [sdb] Attached SCSI disk
+[614091.285557] debugfs: Directory '01' with parent 'devices' already present!
+[614096.720608] xhci_hcd 0000:06:00.0: Timeout while waiting for setup device command
+[614096.928929] usb 6-2: Device not responding to setup address.
+[614096.929337] debugfs: Directory '01' with parent 'devices' already present!
+[614097.136449] usb 6-2: device not accepting address 4, error -71
+--- snap ---
+
+
+Do you have any idea what to try there?
+
+
+Thanks and regards -- Till
 -- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+Dipl.-Inform. Till Dörges                  doerges@pre-sense.de
+PRESENSE Technologies GmbH             Nagelsweg 41, D-20097 HH
+Geschäftsführer/Managing Directors       AG Hamburg, HRB 107844
+Till Dörges, Jürgen Sander               USt-IdNr.: DE263765024
