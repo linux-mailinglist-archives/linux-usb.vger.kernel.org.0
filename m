@@ -2,127 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D9041DFD90
-	for <lists+linux-usb@lfdr.de>; Sun, 24 May 2020 09:46:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D86B1DFE6D
+	for <lists+linux-usb@lfdr.de>; Sun, 24 May 2020 13:05:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727809AbgEXHqK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 24 May 2020 03:46:10 -0400
-Received: from blockout.pre-sense.de ([213.238.39.74]:40821 "EHLO
-        mail.pre-sense.de" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726331AbgEXHqJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 24 May 2020 03:46:09 -0400
-Received: from smtp.pre-sense.de (tetris_b.pre-sense.de [10.9.0.76])
-        by mail.pre-sense.de (Postfix) with ESMTP id 683CC5E461;
-        Sun, 24 May 2020 09:46:07 +0200 (CEST)
-Received: from atlan.none (x4d00c1f0.dyn.telefonica.de [77.0.193.240])
-        by smtp.pre-sense.de (Postfix) with ESMTPS id D58CB15D9;
-        Sun, 24 May 2020 09:45:05 +0200 (CEST)
-Subject: Re: Ext. HDDs not working under Linux via USB 3.0 but under Windows
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org
-References: <512118bc-e639-2387-e608-56b7e30fc3b2@pre-sense.de>
- <20200523154817.GA7091@rowland.harvard.edu>
- <34933b01-e4b0-10da-c935-9e6a9a6ae427@pre-sense.de>
- <20200523203349.GA12853@rowland.harvard.edu>
-From:   =?UTF-8?Q?Till_D=c3=b6rges?= <doerges@pre-sense.de>
-Autocrypt: addr=doerges@pre-sense.de; prefer-encrypt=mutual; keydata=
- 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
-Organization: PRESENSE Technologies GmbH
-Message-ID: <816c9c46-6845-e09f-9c67-ecd2427eb9c4@pre-sense.de>
-Date:   Sun, 24 May 2020 09:46:06 +0200
-User-Agent: Thunderbird
+        id S1726734AbgEXLFY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Sun, 24 May 2020 07:05:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43536 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725873AbgEXLFY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 24 May 2020 07:05:24 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 207871] nullpointer dereference in uvc_video_stop_streaming
+Date:   Sun, 24 May 2020 11:05:23 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: ranma+kernel@tdiedrich.de
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-207871-208809-DIaQkmTNN5@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-207871-208809@https.bugzilla.kernel.org/>
+References: <bug-207871-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-In-Reply-To: <20200523203349.GA12853@rowland.harvard.edu>
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am 23.05.20 um 22:33 schrieb Alan Stern:
+https://bugzilla.kernel.org/show_bug.cgi?id=207871
 
->>>> I'm trying to get external HDDs from Sony to work under Linux with USB 3.0.
->> [...]
->>>>  - PSZ-HA2T: idVendor=054c, idProduct=087d
->>>>  - PSZ-HA1T: idVendor=054c, idProduct=087d
->>>>  - PSZ-HA50: idVendor=054c, idProduct=087d
->>>>  - PSZ-HC1T: idVendor=054c, idProduct=0c4f
+--- Comment #2 from Tobias Diedrich (ranma+kernel@tdiedrich.de) ---
+Interestingly, usb_set_interface() already calls usb_ifnum_to_if() once, which
+did not fail. Then after calling usb_disable_interface() it calls
+usb_hcd_alloc_bandwidth(), which does another call to usb_ifnum_to_if(), which
+faulted with the null deref.
+
+The fault is at:
+    mov   rax, [rdx + 0x398]
+    test  rax, rax
+    jz early_exit_since_config_is_null
+    [...]
+    mov   rcx, [rax + rdx*8 + 0x98]
+    inc   rdx
+->  mov   r8, [rcx]
+    movzx r8d, byte ptr [r8 + 2]
+    [...]
+
+So I think the fault is at
 [...]
->> Because with setting the f flag (via options usb-storage quirks=054c:087d:f) the
->> PSZ-HA*1*T starts behaving nicely.
+  for (i = 0; i < config->desc.bNumInterfaces; i++)
+->  if (config->interface[i]->altsetting[0].desc.bInterfaceNumber == ifnum)
+                ^^^^^^^^^^^^nullptr
+      return config->interface[i];
 [...]
->> The PSZ-HA*2*T, however, still doesn't work with that.
-[...]
-> That device seems to be behaving so badly, it's hard to tell what the 
-> underlying problem is.
-> 
-> I'd start by blacklisting the device for UAS, so forcing it to use 
-> usb-storage, which is a somewhat simpler protocol.  Next, you should 
-> collect a usbmon trace showing what happens when you plug in the 
-> PSZ-HA2T.  That will tell us what's going on, even if it doesn't suggest 
-> a way to work around the problems.
-> 
-> (The instructions for usbmon are in the kernel source file 
-> Documentation/usb/usbmon.rst.)
 
-Thanks. Will give that a shot.
+usb_set_interface() only checks for dev->state == USB_STATE_SUSPENDED, maybe it
+also needs to check for dev->state == USB_STATE_NOTATTACHED?
 
+The disconnect message indicates this would have been the state the device was
+in, from usb_disconnect():
+  [...]
+  usb_set_device_state(udev, USB_STATE_NOTATTACHED);
+  dev_info(&udev->dev, "USB disconnect, device number %d\n", udev->devnum);
+  [...]
 
-Is there any way to differentiate between devices other than vendor and product ID?
-
-Because the PSZ-HA1T (which seems to be working thanks to your help) and the PSZ-HA2T
-(which still refuses to work) have the *same* vendor and product ID.
-
-
-Regards -- Till
 -- 
-Dipl.-Inform. Till Dörges                  doerges@pre-sense.de
-                                  Tel. +49 - 40 - 244 2407 -  0
-                                  Fax  +49 - 40 - 244 2407 - 24
-PRESENSE Technologies GmbH             Nagelsweg 41, D-20097 HH
-Geschäftsführer/Managing Directors       AG Hamburg, HRB 107844
-Till Dörges, Jürgen Sander               USt-IdNr.: DE263765024
+You are receiving this mail because:
+You are watching the assignee of the bug.
