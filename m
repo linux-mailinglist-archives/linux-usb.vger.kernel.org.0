@@ -2,85 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D86B1DFE6D
-	for <lists+linux-usb@lfdr.de>; Sun, 24 May 2020 13:05:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1BC11DFED4
+	for <lists+linux-usb@lfdr.de>; Sun, 24 May 2020 14:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726734AbgEXLFY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Sun, 24 May 2020 07:05:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43536 "EHLO mail.kernel.org"
+        id S1729294AbgEXMFy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 24 May 2020 08:05:54 -0400
+Received: from mga18.intel.com ([134.134.136.126]:40188 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725873AbgEXLFY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 24 May 2020 07:05:24 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 207871] nullpointer dereference in uvc_video_stop_streaming
-Date:   Sun, 24 May 2020 11:05:23 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: ranma+kernel@tdiedrich.de
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-207871-208809-DIaQkmTNN5@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-207871-208809@https.bugzilla.kernel.org/>
-References: <bug-207871-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1726734AbgEXMFy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 24 May 2020 08:05:54 -0400
+IronPort-SDR: HQyfe5KrAmJ2IkCvqLc4ruM1Ix3Eah1mMh3xQ0PUAC/3dWV1ssBu9lFgPEsdE6QdsJzMxxBH3W
+ 8vBo0joG+5pA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2020 05:05:54 -0700
+IronPort-SDR: 2z5bM9azoCWcabfy3z8rgsbbWx4gTIFHOqsbpfPbV+szc5Kl6YjO6oUqUsCEDQTLZO04RZP32O
+ W0OQyCyiiN/Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,429,1583222400"; 
+   d="scan'208";a="309784351"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 24 May 2020 05:05:52 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1jcpO4-000AsD-6v; Sun, 24 May 2020 20:05:52 +0800
+Date:   Sun, 24 May 2020 20:04:40 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 14f3a5ccacdb4268764474d834ee353219dbd1a2
+Message-ID: <5eca62d8.zsO1gkS9bcdg80GK%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=207871
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
+branch HEAD: 14f3a5ccacdb4268764474d834ee353219dbd1a2  Merge tag 'phy-for-5.8' of git://git.kernel.org/pub/scm/linux/kernel/git/phy/linux-phy into usb-next
 
---- Comment #2 from Tobias Diedrich (ranma+kernel@tdiedrich.de) ---
-Interestingly, usb_set_interface() already calls usb_ifnum_to_if() once, which
-did not fail. Then after calling usb_disable_interface() it calls
-usb_hcd_alloc_bandwidth(), which does another call to usb_ifnum_to_if(), which
-faulted with the null deref.
+elapsed time: 3055m
 
-The fault is at:
-    mov   rax, [rdx + 0x398]
-    test  rax, rax
-    jz early_exit_since_config_is_null
-    [...]
-    mov   rcx, [rax + rdx*8 + 0x98]
-    inc   rdx
-->  mov   r8, [rcx]
-    movzx r8d, byte ptr [r8 + 2]
-    [...]
+configs tested: 98
+configs skipped: 1
 
-So I think the fault is at
-[...]
-  for (i = 0; i < config->desc.bNumInterfaces; i++)
-->  if (config->interface[i]->altsetting[0].desc.bInterfaceNumber == ifnum)
-                ^^^^^^^^^^^^nullptr
-      return config->interface[i];
-[...]
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-usb_set_interface() only checks for dev->state == USB_STATE_SUSPENDED, maybe it
-also needs to check for dev->state == USB_STATE_NOTATTACHED?
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                               allnoconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+sparc                            allyesconfig
+mips                             allyesconfig
+m68k                             allyesconfig
+i386                              allnoconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                              debian-10.3
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                              allnoconfig
+m68k                           sun3_defconfig
+m68k                                defconfig
+nios2                               defconfig
+nios2                            allyesconfig
+openrisc                            defconfig
+c6x                              allyesconfig
+c6x                               allnoconfig
+openrisc                         allyesconfig
+nds32                               defconfig
+nds32                             allnoconfig
+csky                             allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+h8300                            allmodconfig
+xtensa                              defconfig
+arc                                 defconfig
+arc                              allyesconfig
+sh                               allmodconfig
+sh                                allnoconfig
+microblaze                        allnoconfig
+mips                              allnoconfig
+mips                             allmodconfig
+parisc                            allnoconfig
+parisc                              defconfig
+parisc                           allyesconfig
+parisc                           allmodconfig
+powerpc                             defconfig
+powerpc                          allyesconfig
+powerpc                          rhel-kconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a001-20200521
+i386                 randconfig-a004-20200521
+i386                 randconfig-a006-20200521
+i386                 randconfig-a003-20200521
+i386                 randconfig-a002-20200521
+i386                 randconfig-a005-20200521
+i386                 randconfig-a001-20200523
+i386                 randconfig-a004-20200523
+i386                 randconfig-a003-20200523
+i386                 randconfig-a006-20200523
+i386                 randconfig-a002-20200523
+i386                 randconfig-a005-20200523
+i386                 randconfig-a013-20200524
+i386                 randconfig-a015-20200524
+i386                 randconfig-a012-20200524
+i386                 randconfig-a011-20200524
+i386                 randconfig-a016-20200524
+i386                 randconfig-a014-20200524
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+s390                             allyesconfig
+s390                              allnoconfig
+s390                             allmodconfig
+s390                                defconfig
+x86_64                              defconfig
+sparc                               defconfig
+sparc64                             defconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                          allmodconfig
+um                                allnoconfig
+um                                  defconfig
+um                               allmodconfig
+um                               allyesconfig
+x86_64                                   rhel
+x86_64                               rhel-7.6
+x86_64                    rhel-7.6-kselftests
+x86_64                         rhel-7.2-clear
+x86_64                                    lkp
+x86_64                              fedora-25
+x86_64                                  kexec
 
-The disconnect message indicates this would have been the state the device was
-in, from usb_disconnect():
-  [...]
-  usb_set_device_state(udev, USB_STATE_NOTATTACHED);
-  dev_info(&udev->dev, "USB disconnect, device number %d\n", udev->devnum);
-  [...]
-
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
