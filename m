@@ -2,78 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3F171E036F
-	for <lists+linux-usb@lfdr.de>; Sun, 24 May 2020 23:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 205981E037E
+	for <lists+linux-usb@lfdr.de>; Sun, 24 May 2020 23:53:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388546AbgEXVkS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 24 May 2020 17:40:18 -0400
-Received: from relmlor2.renesas.com ([210.160.252.172]:17462 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2388539AbgEXVkQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 24 May 2020 17:40:16 -0400
-X-IronPort-AV: E=Sophos;i="5.73,431,1583161200"; 
-   d="scan'208";a="47678241"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 25 May 2020 06:40:15 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 7B45940E4593;
-        Mon, 25 May 2020 06:40:12 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>
-Cc:     dmaengine@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH 8/8] ARM: dts: r8a7742: Add xhci support
-Date:   Sun, 24 May 2020 22:37:57 +0100
-Message-Id: <1590356277-19993-9-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1590356277-19993-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <1590356277-19993-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        id S2388489AbgEXVxG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 24 May 2020 17:53:06 -0400
+Received: from mail-il1-f197.google.com ([209.85.166.197]:44860 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387850AbgEXVxF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 24 May 2020 17:53:05 -0400
+Received: by mail-il1-f197.google.com with SMTP id b8so13777688ilr.11
+        for <linux-usb@vger.kernel.org>; Sun, 24 May 2020 14:53:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=W2XSpdpI4imP3oFttp3ea6rQjy1+gsYM/fLbimKy0J8=;
+        b=kFydqyPyeZbnZ9japzbwTnxxSQI0ZY2trnKE5B/Brke8NEtv0gtqVSZAZb3dOF3rh0
+         QS1aTZRPLjHpJkhuyLpSWw6VqcQi9RXjlsMBjPGjFa7c6VNgQ6g6MiTeRUMibAajgbKR
+         lmv0/D56mozxb7sY4S448YEi8o0p9cbRihF+lxxSU7PeJQGG1t7lPknqiAZXUV/FUFhE
+         rpt0myaBZ9LYozG6wF6WDv2vO7XWNfowTOoV8e7+CZDbA8RuNb1Ll6yFj9BtLhIri+08
+         3b09IsluVU08quLGJq0QQ3qmYwC81OoM0AN/3AsH5HELmaSZjquuiRp/9JhUGbd5UYtg
+         CRRA==
+X-Gm-Message-State: AOAM531zzaFX2gLo8SUuXzGNBVBfxgfNBoDVjPnmlFD3z3QKjwpVp9Mn
+        nKtqljuEBSHyVw9yZuYNWBadfKaohJAAnugHSkuv45sMSmqE
+X-Google-Smtp-Source: ABdhPJxqwdoquD6CD1t/4vURcXUY094C2cwyZVIZOKx/NGCIbF4xF4jKrwBVk0W6TIG38UReDIw9O+Vu9CfgTfvRCzjbz4MkjNyl
+MIME-Version: 1.0
+X-Received: by 2002:a92:885c:: with SMTP id h89mr22924691ild.16.1590357183712;
+ Sun, 24 May 2020 14:53:03 -0700 (PDT)
+Date:   Sun, 24 May 2020 14:53:03 -0700
+In-Reply-To: <000000000000cd404e058c9de28b@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000000537605a66be3a8@google.com>
+Subject: Re: WARNING in dlfb_submit_urb/usb_submit_urb
+From:   syzbot <syzbot+53ce4a4246d0fe0fee34@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, balbi@kernel.org, corbet@lwn.net,
+        gregkh@linuxfoundation.org, gustavo@embeddedor.com,
+        ingrassia@epigenesys.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add xhci support to R8A7742 SoC DT.
+syzbot has bisected this bug to:
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
----
- arch/arm/boot/dts/r8a7742.dtsi | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+commit c61769bd4777a922952aed0d042a2572e5bd9b74
+Author: Andrey Konovalov <andreyknvl@google.com>
+Date:   Thu May 7 17:06:57 2020 +0000
 
-diff --git a/arch/arm/boot/dts/r8a7742.dtsi b/arch/arm/boot/dts/r8a7742.dtsi
-index cbf3d85..3a9c67b 100644
---- a/arch/arm/boot/dts/r8a7742.dtsi
-+++ b/arch/arm/boot/dts/r8a7742.dtsi
-@@ -821,6 +821,19 @@
- 			status = "disabled";
- 		};
- 
-+		xhci: usb@ee000000 {
-+			compatible = "renesas,xhci-r8a7742",
-+				     "renesas,rcar-gen2-xhci";
-+			reg = <0 0xee000000 0 0xc00>;
-+			interrupts = <GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 328>;
-+			power-domains = <&sysc R8A7742_PD_ALWAYS_ON>;
-+			resets = <&cpg 328>;
-+			phys = <&usb2 1>;
-+			phy-names = "usb";
-+			status = "disabled";
-+		};
-+
- 		pci0: pci@ee090000 {
- 			compatible = "renesas,pci-r8a7742",
- 				     "renesas,pci-rcar-gen2";
--- 
-2.7.4
+    usb: raw-gadget: support stalling/halting/wedging endpoints
 
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14add53c100000
+start commit:   051143e1 Merge tag 'apparmor-pr-2020-05-21' of git://git.k..
+git tree:       upstream
+final crash:    https://syzkaller.appspot.com/x/report.txt?x=16add53c100000
+console output: https://syzkaller.appspot.com/x/log.txt?x=12add53c100000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b3368ce0cc5f5ace
+dashboard link: https://syzkaller.appspot.com/bug?extid=53ce4a4246d0fe0fee34
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15be3ad6100000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1559676e100000
+
+Reported-by: syzbot+53ce4a4246d0fe0fee34@syzkaller.appspotmail.com
+Fixes: c61769bd4777 ("usb: raw-gadget: support stalling/halting/wedging endpoints")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
