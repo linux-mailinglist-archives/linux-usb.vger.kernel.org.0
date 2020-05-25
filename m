@@ -2,83 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BACA11E0BDB
-	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2020 12:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 860B41E0C95
+	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2020 13:12:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389782AbgEYKdi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 May 2020 06:33:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37436 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389778AbgEYKdh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 May 2020 06:33:37 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6731C061A0E
-        for <linux-usb@vger.kernel.org>; Mon, 25 May 2020 03:33:36 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id d3so7364093pln.1
-        for <linux-usb@vger.kernel.org>; Mon, 25 May 2020 03:33:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=footclan-ninja.20150623.gappssmtp.com; s=20150623;
-        h=from:subject:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=bcIsWmmEkRWoaOrX+BaWGDzqoQqiuKveo/AD/DMmyLs=;
-        b=0CisCT68V7ucr2HapFKzya24WVrp+iCTX2mnNGSV7JVfHbSNPfE5UgX9XFcvhC3YeK
-         lzwT19u8/X2J7Gl6lbQIw4N65c+l+3gD8aSY4/RsPeIHlYAYJvZPHPdbWIZXcg49iTbQ
-         vzKwFSPxNE/Q120KjNrTQM3hd5nP+W+BybSFXzZ2+fQsVeQoqcdHlI3H+dowRiFZKoIO
-         2XCCOkB0IzkW4usH0DBj1vaiyYC66MWzYshUmvTm2eZtrJrIWFp151EeWd/HTg//tZy0
-         II4FZXgKMQyMxa18Snt+SqCb/qf9TRJJlL6MIFurKt6cp7S7vWzi7it+ZgxYg+wfcBWv
-         fekA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=bcIsWmmEkRWoaOrX+BaWGDzqoQqiuKveo/AD/DMmyLs=;
-        b=SOAHoiruPj/EEesP+KT5CyP6djF7HQuCWZ8zS07XjB1Fe75jTOiBlHlnQZMnGGRsUQ
-         z+dTDRXD4dbajeKGBmLVm1aKZBSZMXf814GkdE7QNfu32grf0WZ4WHeJw3Gk2jqS1zcP
-         LysGHISRYUQ60g3e/tTBZFGCOZvZgsqQknnFj/2iq4mwA+rFgwiEVLaXtJnc41Up70Zd
-         3Y5Jl1oA8rpGnlkNGQeb56lc3rkp8Al2UDxJj8/9O7xeURgTICkbuCjfLgsfZHPMxvxh
-         ipFBsjK4Mo1a9x1uBrSl0xSLSQACJVz6VwOPIv2MzEpn8acAHhhFudAES+mKpqimVkmO
-         tL+A==
-X-Gm-Message-State: AOAM533AtJ0W2sIkbKFi45u41XoYUBK96tTAXZl4vIdj7hWgVIZonp+b
-        SDyr3LxWXWvFchF5qikl19gLOQ==
-X-Google-Smtp-Source: ABdhPJzuzGH3bJR0NQc8zAEdKDEVVW4wg4JbVUGvXIq+RctefMv5/XpHLGjgmdCT3aJ+yevCUearCg==
-X-Received: by 2002:a17:90a:c78f:: with SMTP id gn15mr19715320pjb.103.1590402816108;
-        Mon, 25 May 2020 03:33:36 -0700 (PDT)
-Received: from [192.168.8.100] (pa49-195-155-227.pa.nsw.optusnet.com.au. [49.195.155.227])
-        by smtp.gmail.com with ESMTPSA id x2sm12521503pfc.106.2020.05.25.03.33.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 May 2020 03:33:35 -0700 (PDT)
-From:   Matt Jolly <kangie@footclan.ninja>
-X-Google-Original-From: Matt Jolly <Kangie@footclan.ninja>
-Subject: Re: [PATCH v2] USB: serial: qcserial: Add DW5816e QDL support
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200521004358.8949-1-Kangie@footclan.ninja>
- <20200525093951.GC5276@localhost>
-Message-ID: <d0535328-6773-4565-82b9-1975cf875a8d@footclan.ninja>
-Date:   Mon, 25 May 2020 20:33:31 +1000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S2390094AbgEYLMG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 May 2020 07:12:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59830 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2390003AbgEYLMG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 25 May 2020 07:12:06 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4FF0F20723;
+        Mon, 25 May 2020 11:12:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590405125;
+        bh=vRFVXyIsmXnGGPyWv/9BQ79AvtKwa530dOjUkPXl8WM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=m/XxOHBDQOiPx2mx/lu6b+Em6kLEldYgVbgV039cMwBhdP5FcTvg7e6IAvV+Ty3vW
+         ohH4JaIWQUajJj1vhstYuNy6Vyd0ua32NwzrXliQC7L4r0IdB4J+W4n0aEr/glI33v
+         +wrSsS79xmKZ3Y9nK/Tsk10aFdLjKmQO/6DQiQIE=
+Date:   Mon, 25 May 2020 13:12:03 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        patong.mxl@gmail.com,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
+Subject: Re: [PATCH 2/2] usb: serial: xr_serial: Add gpiochip support
+Message-ID: <20200525111203.GB279021@kroah.com>
+References: <20200428195651.6793-1-mani@kernel.org>
+ <20200428195651.6793-3-mani@kernel.org>
+ <CACRpkdZ3b-VLvxN06H_4cDOtUEQTVbe=Zw+NA=YjssMzK2d2sQ@mail.gmail.com>
+ <20200429124918.GC6443@Mani-XPS-13-9360>
+ <20200519085703.GB27787@localhost>
+ <CACRpkdapMuMs_mEUHheGtaKYg97=nL1bH3zq4Tc3cnX9Jbw-Ew@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200525093951.GC5276@localhost>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACRpkdapMuMs_mEUHheGtaKYg97=nL1bH3zq4Tc3cnX9Jbw-Ew@mail.gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> On 25/5/20 7:39 pm, Johan Hovold wrote:
->> Hmm. I'd a call a build breakage a bit more than just a "typo" as it
->> indicates this patch was never tested at all before being submitted.
-I applied, built, and tested it against the sources for the kernel I run 
-on my machine, but made several silly mistakes: both manually applying 
-the patch to my copy of the repo (which is not my running kernel), and 
-not build testing that change before submission. Not good indeed.
+On Mon, May 25, 2020 at 10:59:59AM +0200, Linus Walleij wrote:
+> On Tue, May 19, 2020 at 10:57 AM Johan Hovold <johan@kernel.org> wrote:
+> > > On Wed, Apr 29, 2020 at 02:12:24PM +0200, Linus Walleij wrote:
+> 
+> > > > to something that is device-unique, like "xr-gpios-<serial number>"
+> > > > which makes it easy to locate the GPIOs on a specific serial converter
+> > > > for lab use. However the USB serial maintainers know better what
+> > > > to use here. Whatever makes a USB-to-serial unique from a TTY
+> > > > point of view is probably fine with me too.
+> > > >
+> > > > My idea is that people might want to know which USB cable
+> > > > this is sitting on, so I have this USB cable and from this label
+> > > > I can always figure out which GPIO device it is.
+> >
+> > I think we've had this discussion before. First, not every device has a
+> > unique serial number. Second, we already have a universal way of
+> > distinguishing devices namely by using the bus topology. That's
+> > available through sysfs and shouldn't have to be be re-encoded by every
+> > driver in the gpiochip name.
+> 
+> I remember I even referred to this myself, but I've been waning a bit
+> on it recently, because it turns out that userspace/users aren't very
+> good at parsing sysfs for topology.
 
-I could definitely have been more descriptive in the change notes.
+Which is why they could use libudev :)
 
-Consider me appropriately chastised!
+thanks,
 
+greg k-h
