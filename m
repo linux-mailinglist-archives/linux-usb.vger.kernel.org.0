@@ -2,125 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CEBF1E0728
-	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2020 08:41:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 551FD1E0783
+	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2020 09:12:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388581AbgEYGlb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 May 2020 02:41:31 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:59712 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726393AbgEYGlb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 May 2020 02:41:31 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04P6fRS2052015;
-        Mon, 25 May 2020 01:41:27 -0500
+        id S2388944AbgEYHLC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 May 2020 03:11:02 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:34052 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726393AbgEYHLC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 May 2020 03:11:02 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04P7AqLa068647;
+        Mon, 25 May 2020 02:10:52 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1590388887;
-        bh=o/T4a+iVa5id3QHDSWuDIMh/rTsJCeFA4f07QeO6HeU=;
-        h=Subject:From:To:CC:References:Date:In-Reply-To;
-        b=DncnV4l3WaMIUD5GWq0POssxEbkZFJ6cQCK3bcT5JfoLNCg0stJnAL1Mr/WdzghAL
-         4LoTk8bxoFwyUZM14tGcdX8ZmDVwCEUfP/GBhuhFIenwnY88R0xoNgxJ/pxVo4B0mL
-         /O7q4hR1fix1975Xna6QmwTw5Qlb9lb53Gps9JrM=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04P6fRWD057808;
-        Mon, 25 May 2020 01:41:27 -0500
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+        s=ti-com-17Q1; t=1590390652;
+        bh=9cMDnQMDkejVvyUB8NrUL8tf/QLfFZ5QEEA4jkLIzuI=;
+        h=From:To:CC:Subject:Date;
+        b=PoymS4qGh5fkDNuO3UJTCJK6cWOTFLeFjUEE/gd7aTYyi2sFd7YcU5Crdc1KxcgPg
+         ZyU6NinVZliDNFbuMLEa7BvzUC/3jmDY2S/kmEfwmsOZASnpc+NkzVOG+z9YuVEkSy
+         XcKxkCwdsqf3ucpEsMQQYwp4xkDgYcKifmc37R2E=
+Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 04P7AqoK089500
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 25 May 2020 02:10:52 -0500
+Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Mon, 25
- May 2020 01:41:27 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ May 2020 02:10:52 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Mon, 25 May 2020 01:41:26 -0500
-Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04P6fOX6098354;
-        Mon, 25 May 2020 01:41:25 -0500
-Subject: Re: [PATCH 3/3] usb: dwc3: keystone: Turn on USB3 PHY before
- controller
+ Frontend Transport; Mon, 25 May 2020 02:10:52 -0500
+Received: from lta0400828a.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04P7AohU077897;
+        Mon, 25 May 2020 02:10:50 -0500
 From:   Roger Quadros <rogerq@ti.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>
-CC:     <robh+dt@kernel.org>, <vigneshr@ti.com>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20200513130709.10239-1-rogerq@ti.com>
- <20200513130709.10239-4-rogerq@ti.com> <1589420265.5899.0.camel@mhfsdcap03>
- <baaaf89c-4baf-4218-e22e-53cd1a64ec02@ti.com> <87tv0i4y0v.fsf@kernel.org>
- <debe1c1d-8e84-8047-d387-42d4f6e03f91@ti.com>
-Message-ID: <ec6c01d7-643f-3dd4-dcad-b492924fdf66@ti.com>
-Date:   Mon, 25 May 2020 09:41:24 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+To:     <balbi@kernel.org>
+CC:     <linux-usb@vger.kernel.org>, <vigneshr@ti.com>,
+        <chunfeng.yun@mediatek.com>, <linux-kernel@vger.kernel.org>,
+        Roger Quadros <rogerq@ti.com>
+Subject: [PATCH v2 0/2] usb: dwc3: keystone: Turn on USB3 PHY before controller
+Date:   Mon, 25 May 2020 10:10:46 +0300
+Message-ID: <20200525071048.7738-1-rogerq@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <debe1c1d-8e84-8047-d387-42d4f6e03f91@ti.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Felipe,
 
+This series prepares for Super-Speed support for AM654 SoC.
 
-On 25/05/2020 09:39, Roger Quadros wrote:
-> Felipe,
-> 
-> On 14/05/2020 13:21, Felipe Balbi wrote:
->> Roger Quadros <rogerq@ti.com> writes:
->>
->>> On 14/05/2020 04:37, Chunfeng Yun wrote:
->>>> On Wed, 2020-05-13 at 16:07 +0300, Roger Quadros wrote:
->>>>> The Local Power Sleep Controller (LPSC) dependency on AM65
->>>>> requires SERDES0 to be powered on before USB.
->>>>>
->>>>> We need to power up SERDES0 power domain and hold it on
->>>>> throughout the reset, init, power on sequence.
->>>>>
->>>>> Signed-off-by: Roger Quadros <rogerq@ti.com>
->>>>> ---
->>>>>    drivers/usb/dwc3/dwc3-keystone.c | 47 +++++++++++++++++++++++++++++++-
->>>>>    1 file changed, 46 insertions(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/drivers/usb/dwc3/dwc3-keystone.c b/drivers/usb/dwc3/dwc3-keystone.c
->>>>> index 1e14a6f4884b..46d46f3507fc 100644
->>>>> --- a/drivers/usb/dwc3/dwc3-keystone.c
->>>>> +++ b/drivers/usb/dwc3/dwc3-keystone.c
->>>>> @@ -14,6 +14,7 @@
->>>>>    #include <linux/dma-mapping.h>
->>>>>    #include <linux/io.h>
->>>>>    #include <linux/of_platform.h>
->>>>> +#include <linux/phy/phy.h>
->>>>>    #include <linux/pm_runtime.h>
->>>>>    /* USBSS register offsets */
->>>>> @@ -34,6 +35,7 @@
->>>>>    struct dwc3_keystone {
->>>>>        struct device            *dev;
->>>>>        void __iomem            *usbss;
->>>>> +    struct phy            *usb3_phy;
->>>>>    };
->>>>>    static inline u32 kdwc3_readl(void __iomem *base, u32 offset)
->>>>> @@ -95,8 +97,44 @@ static int kdwc3_probe(struct platform_device *pdev)
->>>>>        if (IS_ERR(kdwc->usbss))
->>>>>            return PTR_ERR(kdwc->usbss);
->>>>> -    pm_runtime_enable(kdwc->dev);
->>>>> +    /* PSC dependency on AM65 needs SERDES0 to be powered before USB0 */
->>>>> +    kdwc->usb3_phy = devm_phy_get(dev, "usb3-phy");
->>>> Use devm_phy_optional_get() instead?
->>>
->>> Indeed, it seems better suited.
->>
->> patches 1 and 2 are in testing/next
->>
-> 
-> Could you please drop them as I need to make changes to make the PHY optional.
-> I will send v2 of entire series.
-
-Actually only patch 2 and 3 need to be revised. Patch 1 is fine.
+Patch 1 is already in your testing/next as commit d47b0062a8ad6c5060c84439745c3ce7d21d6bb9.
+Please revert that and apply the revised version in which we make
+the USB3.0 PHY optional. Thanks.
 
 cheers,
 -roger
+
+Changelog:
+v2:
+- make USB3 PHY optional
+
+Roger Quadros (2):
+  dt-bindings: usb: ti,keystone-dwc3.yaml: Add USB3.0 PHY property
+  usb: dwc3: keystone: Turn on USB3 PHY before controller
+
+ .../bindings/usb/ti,keystone-dwc3.yaml        | 10 +++++
+ drivers/usb/dwc3/dwc3-keystone.c              | 41 ++++++++++++++++++-
+ 2 files changed, 50 insertions(+), 1 deletion(-)
+
 -- 
 Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
 Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+
