@@ -2,90 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C1231E0ACD
-	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2020 11:40:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 681751E0B39
+	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2020 12:01:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389571AbgEYJkD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 May 2020 05:40:03 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:44957 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389504AbgEYJkD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 May 2020 05:40:03 -0400
-Received: by mail-lj1-f193.google.com with SMTP id k5so20015131lji.11;
-        Mon, 25 May 2020 02:40:01 -0700 (PDT)
+        id S2389722AbgEYKBf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 May 2020 06:01:35 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:40500 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389407AbgEYKBe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 May 2020 06:01:34 -0400
+Received: by mail-ot1-f66.google.com with SMTP id d26so13430475otc.7;
+        Mon, 25 May 2020 03:01:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XQymZljwfgmEfjEng3R4J0xMW9sd1d0z49n9HaUeJs4=;
-        b=HXyABr8jCv2j6ZBru0FUNhK8jzw2m1h6CIy3ROaZuHumVV0QfegMFeE077iJsB4C8l
-         9oglIJqfPcGjQGrlQNnNh20mS3iFfeWhaCX8npiqG4pz+eqD9r4QBeEs2+IsxXTYwfcQ
-         Bh6lS+bfLDcY4QthT9lMxp+/Fk/pjmokuB1R5c3IKkvR8R3nTPS2WBdamqYu0NtVbIVn
-         Rt85kqUMeO2s3PokkTwWZQU3jY801cDHuy73F/7smBpxD+kEZR1tGM7tud4lGyOjivJC
-         Frnu42BQt6Zt/kSQ3npmkNjsEaxXkOw+7PCVGoQxY436AaTOXb/VQRqJAjzKHpbwAg5x
-         fjTA==
-X-Gm-Message-State: AOAM533pqiknQ397ijO2CYiRfBnNawLX/HsC7gs8cdpq2CYU/eCxoz13
-        mG/DjPR6ZDTEUtIlQHLpjdo=
-X-Google-Smtp-Source: ABdhPJxff8oM9HW2z7UfjW5Q8iGKTQ2Src2MKJdLK16sUt6wIlalvZBtCWFwVV+6T7P/u5Kk4QIm9w==
-X-Received: by 2002:a2e:860f:: with SMTP id a15mr12799496lji.197.1590399600074;
-        Mon, 25 May 2020 02:40:00 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id u4sm2263204lfl.18.2020.05.25.02.39.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 May 2020 02:39:59 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1jd9aJ-0006ar-G5; Mon, 25 May 2020 11:39:51 +0200
-Date:   Mon, 25 May 2020 11:39:51 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Matt Jolly <Kangie@footclan.ninja>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] USB: serial: qcserial: Add DW5816e QDL support
-Message-ID: <20200525093951.GC5276@localhost>
-References: <20200521004358.8949-1-Kangie@footclan.ninja>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VV/6l8WsyzC8FiWpUNY+r2Jtj3u8eeprICu82Hj0+XY=;
+        b=Ux4MSvsoa89TNIazEGpdFWwqCr9DEj+ZXhe2tXDSZ3qL1bR097MPSp8rISat8cffQe
+         +h1Tl7L05mez6fgQKShP4PMqmNQ6x2uR1Hh5Ttgi58PC1TS8zJj+z93yoIlPSVUz9l0f
+         +uHOFIuqglVCXfeuzemys3kKvtgc7/U78Q9QY92AjcNNehpCn6iAnuEyn7EgTK/Jpq0e
+         +cEIstKd8jCuWz0+PhKLMn/VeBM1Cwbhfny/hCimqufs4A2gxNAwB6W/dFWE5gJP+aQf
+         VwAkn9OSAaJBn3khhNkGBDZpZD4pW9QpMPMtE4Xl6snjqVcknvScZ/qg/ArIwb53NSJL
+         DNaQ==
+X-Gm-Message-State: AOAM530JxaI6ucoFgzCxWWDxCSnvXb01lkIp5XwFNlqfblFh1PDajmAD
+        EiKwaaBabCbVMyYZJWKqr4P7dGEuTPu/9CmC6VQ=
+X-Google-Smtp-Source: ABdhPJzes4OiyEEjnQUeTxYRLsuBzQ4vKfThl/Frl99MU9u9wmZ+pYZTwDk9xLH0jtn6Of53oQ19DFOqxZtclXHDOj8=
+X-Received: by 2002:a05:6830:18d9:: with SMTP id v25mr19187412ote.107.1590400893283;
+ Mon, 25 May 2020 03:01:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200521004358.8949-1-Kangie@footclan.ninja>
+References: <1590356277-19993-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1590356277-19993-2-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <1590356277-19993-2-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 25 May 2020 12:01:21 +0200
+Message-ID: <CAMuHMdXhmxhYSsnzSMQYvUa8SYd-evFi=sfxqMgYuXtxvxdWVg@mail.gmail.com>
+Subject: Re: [PATCH 1/8] dt-bindings: phy: rcar-gen2: Add r8a7742 support
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        dmaengine <dmaengine@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 21, 2020 at 10:43:58AM +1000, Matt Jolly wrote:
-> Add support for Dell Wireless 5816e Download Mode (AKA boot & hold mode /
-> QDL download mode) to drivers/usb/serial/qcserial.c
-> 
-> This is required to update device firmware.
-> 
-> Signed-off-by: Matt Jolly <Kangie@footclan.ninja>
-> ---
-> v2 changes: typo.
+On Sun, May 24, 2020 at 11:38 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> Add USB PHY support for r8a7742 SoC. Renesas RZ/G1H (R8A7742)
+> USB PHY is identical to the R-Car Gen2 family.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
 
-Hmm. I'd a call a build breakage a bit more than just a "typo" as it
-indicates this patch was never tested at all before being submitted. 
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Not good.
+Gr{oetje,eeting}s,
 
-> ---
-> drivers/usb/serial/qcserial.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/serial/qcserial.c b/drivers/usb/serial/qcserial.c
-> index ce0401d3137f..d147feae83e6 100644
-> --- a/drivers/usb/serial/qcserial.c
-> +++ b/drivers/usb/serial/qcserial.c
-> @@ -173,6 +173,7 @@ static const struct usb_device_id id_table[] = {
->  	{DEVICE_SWI(0x413c, 0x81b3)},	/* Dell Wireless 5809e Gobi(TM) 4G LTE Mobile Broadband Card (rev3) */
->  	{DEVICE_SWI(0x413c, 0x81b5)},	/* Dell Wireless 5811e QDL */
->  	{DEVICE_SWI(0x413c, 0x81b6)},	/* Dell Wireless 5811e QDL */
-> +	{DEVICE_SWI(0x413c, 0x81cb)},	/* Dell Wireless 5816e QDL */
->  	{DEVICE_SWI(0x413c, 0x81cc)},	/* Dell Wireless 5816e */
->  	{DEVICE_SWI(0x413c, 0x81cf)},   /* Dell Wireless 5819 */
->  	{DEVICE_SWI(0x413c, 0x81d0)},   /* Dell Wireless 5819 */
+                        Geert
 
-Now applied, though.
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Johan
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
