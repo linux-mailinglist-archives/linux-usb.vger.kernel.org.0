@@ -2,152 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 374E21E0787
-	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2020 09:12:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06EAF1E08BA
+	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2020 10:24:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388993AbgEYHLL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 May 2020 03:11:11 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:36076 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388979AbgEYHLK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 May 2020 03:11:10 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04P7Auql042631;
-        Mon, 25 May 2020 02:10:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1590390656;
-        bh=FoaDS57l9HZ38RVGEQeLkyX++9L0ZXthsJfhk8G2VPE=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=MBcWhj2ijDYRhXyGiEGnCMKftWtheqxkPTkkZ5AaeyJFlFEDraZAh12u3DhPmGwyX
-         scNd19w8S1T+W59D4x7wmeW7DP0XYd9Pl5zmyDUDLCpS3+Qln7vbTnG+zTKE96o8rt
-         drdxB3dsg5T7awls5HCn2+zi2PT1z08Liw0hOAGs=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 04P7Au53091528
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 25 May 2020 02:10:56 -0500
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Mon, 25
- May 2020 02:10:55 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Mon, 25 May 2020 02:10:55 -0500
-Received: from lta0400828a.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04P7AohW077897;
-        Mon, 25 May 2020 02:10:54 -0500
-From:   Roger Quadros <rogerq@ti.com>
-To:     <balbi@kernel.org>
-CC:     <linux-usb@vger.kernel.org>, <vigneshr@ti.com>,
-        <chunfeng.yun@mediatek.com>, <linux-kernel@vger.kernel.org>,
+        id S1731306AbgEYIYG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 May 2020 04:24:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45366 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725849AbgEYIYG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 May 2020 04:24:06 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1AE6C061A0E;
+        Mon, 25 May 2020 01:24:05 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id z6so19764497ljm.13;
+        Mon, 25 May 2020 01:24:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=ANsmsts+DHXNEc88o7BQxwGmebDh+l2B4Pvz9WLqzyk=;
+        b=dC7wDseltyDwTHP3wA1YHJ/onugrBnJLQt+wdz1AkGAxhdRt7AQqbFVbEtXa1c4vme
+         cPXUb3LOtmSGHqIik58e/iBF222d8d1d3hkGp6oSi3P/jexKHicIkGHfYhgiGunoDJBl
+         hOUo5Oau8cnauLrWdywpaa1D088+V2fO8UUyd/Z+VjHmrHqeLlug/ShdCNSH6HM6fWtk
+         nLZAV0osglxqjUxxFOPEEN4NYm6Ar4hqIugIlhmpotzkyXZNki1OexDwVmidWYsBjD88
+         8LqLfc0zUCK84unUeDKe9OGYUIJtI1DHO/UHed4Bzr7X7m4GnHaSenVJMAnpfVtXWnji
+         0lTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=ANsmsts+DHXNEc88o7BQxwGmebDh+l2B4Pvz9WLqzyk=;
+        b=GJ5jLXEONGW7tae6BavaJyxUdcU52wYsY+qEWd2hnRm7HSz6KMJxwlfx3z3POpgQcj
+         2e68mXZXdReD9rp6oJMXruhyRRvKD/NUVAXbFlTBlj5lSjAWxumP+uws6j3finZbTqAK
+         9whOx/OL8B5vwZWyQXWMkyOKirI5rtzHDL47lVimQWXVBICXTx/v7cOnk1MNif815vyx
+         DxVf6LX5If2vZQvkigqGI1vOKXDouRi7KOmT5HWSm4t9VFZI1gdIv6+Ic+sb3JNv9yi5
+         AiLqh7RZUXk9OeKuC+nWKL2t5KB+o//fxWnTKi/xpAx5+qBEseYQkZi7pzkSJxLzDRGF
+         B2Dw==
+X-Gm-Message-State: AOAM5307Mnc/145hkVcQBpqHQTBGe6pzrR4DKENrobQjJvTaXcxWyk29
+        mlOqpZin2uESw4lvs69dscc=
+X-Google-Smtp-Source: ABdhPJxNZgTanxq9CvLsQ/fUF7XgeONYIPCPiDZoewQSfO90yvUaQW600QFBf+2TaJtz/KgUa6K1qw==
+X-Received: by 2002:a2e:87d7:: with SMTP id v23mr11619050ljj.334.1590395044209;
+        Mon, 25 May 2020 01:24:04 -0700 (PDT)
+Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
+        by smtp.gmail.com with ESMTPSA id w4sm2758698lji.2.2020.05.25.01.24.02
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 25 May 2020 01:24:03 -0700 (PDT)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Roger Quadros <rogerq@ti.com>
+Cc:     linux-usb@vger.kernel.org, vigneshr@ti.com,
+        chunfeng.yun@mediatek.com, linux-kernel@vger.kernel.org,
         Roger Quadros <rogerq@ti.com>
-Subject: [PATCH v2 2/2] usb: dwc3: keystone: Turn on USB3 PHY before controller
-Date:   Mon, 25 May 2020 10:10:48 +0300
-Message-ID: <20200525071048.7738-3-rogerq@ti.com>
-X-Mailer: git-send-email 2.17.1
+Subject: Re: [PATCH v2 0/2] usb: dwc3: keystone: Turn on USB3 PHY before controller
 In-Reply-To: <20200525071048.7738-1-rogerq@ti.com>
 References: <20200525071048.7738-1-rogerq@ti.com>
+Date:   Mon, 25 May 2020 11:23:58 +0300
+Message-ID: <87k110whgh.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The Local Power Sleep Controller (LPSC) dependency on AM65
-requires SERDES0 to be powered on before USB.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-We need to power up SERDES0 power domain and hold it on
-throughout the reset, init, power on sequence.
 
-Signed-off-by: Roger Quadros <rogerq@ti.com>
----
- drivers/usb/dwc3/dwc3-keystone.c | 41 +++++++++++++++++++++++++++++++-
- 1 file changed, 40 insertions(+), 1 deletion(-)
+Hi,
 
-diff --git a/drivers/usb/dwc3/dwc3-keystone.c b/drivers/usb/dwc3/dwc3-keystone.c
-index 1e14a6f4884b..6505f7bd69e2 100644
---- a/drivers/usb/dwc3/dwc3-keystone.c
-+++ b/drivers/usb/dwc3/dwc3-keystone.c
-@@ -14,6 +14,7 @@
- #include <linux/dma-mapping.h>
- #include <linux/io.h>
- #include <linux/of_platform.h>
-+#include <linux/phy/phy.h>
- #include <linux/pm_runtime.h>
- 
- /* USBSS register offsets */
-@@ -34,6 +35,7 @@
- struct dwc3_keystone {
- 	struct device			*dev;
- 	void __iomem			*usbss;
-+	struct phy			*usb3_phy;
- };
- 
- static inline u32 kdwc3_readl(void __iomem *base, u32 offset)
-@@ -95,8 +97,38 @@ static int kdwc3_probe(struct platform_device *pdev)
- 	if (IS_ERR(kdwc->usbss))
- 		return PTR_ERR(kdwc->usbss);
- 
--	pm_runtime_enable(kdwc->dev);
-+	/* PSC dependency on AM65 needs SERDES0 to be powered before USB0 */
-+	kdwc->usb3_phy = devm_phy_optional_get(dev, "usb3-phy");
-+	if (IS_ERR(kdwc->usb3_phy)) {
-+		error = PTR_ERR(kdwc->usb3_phy);
-+		if (error != -EPROBE_DEFER)
-+			dev_err(dev, "couldn't get usb3 phy: %d\n", error);
-+
-+		return error;
-+	}
-+
-+	phy_pm_runtime_get_sync(kdwc->usb3_phy);
- 
-+	error = phy_reset(kdwc->usb3_phy);
-+	if (error < 0) {
-+		dev_err(dev, "usb3 phy reset failed: %d\n", error);
-+		return error;
-+	}
-+
-+	error = phy_init(kdwc->usb3_phy);
-+	if (error < 0) {
-+		dev_err(dev, "usb3 phy init failed: %d\n", error);
-+		return error;
-+	}
-+
-+	error = phy_power_on(kdwc->usb3_phy);
-+	if (error < 0) {
-+		dev_err(dev, "usb3 phy power on failed: %d\n", error);
-+		phy_exit(kdwc->usb3_phy);
-+		return error;
-+	}
-+
-+	pm_runtime_enable(kdwc->dev);
- 	error = pm_runtime_get_sync(kdwc->dev);
- 	if (error < 0) {
- 		dev_err(kdwc->dev, "pm_runtime_get_sync failed, error %d\n",
-@@ -138,6 +170,9 @@ static int kdwc3_probe(struct platform_device *pdev)
- err_irq:
- 	pm_runtime_put_sync(kdwc->dev);
- 	pm_runtime_disable(kdwc->dev);
-+	phy_power_off(kdwc->usb3_phy);
-+	phy_exit(kdwc->usb3_phy);
-+	phy_pm_runtime_put_sync(kdwc->usb3_phy);
- 
- 	return error;
- }
-@@ -163,6 +198,10 @@ static int kdwc3_remove(struct platform_device *pdev)
- 	pm_runtime_put_sync(kdwc->dev);
- 	pm_runtime_disable(kdwc->dev);
- 
-+	phy_power_off(kdwc->usb3_phy);
-+	phy_exit(kdwc->usb3_phy);
-+	phy_pm_runtime_put_sync(kdwc->usb3_phy);
-+
- 	platform_set_drvdata(pdev, NULL);
- 
- 	return 0;
--- 
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+Roger Quadros <rogerq@ti.com> writes:
+> This series prepares for Super-Speed support for AM654 SoC.
+>
+> Patch 1 is already in your testing/next as commit d47b0062a8ad6c5060c8443=
+9745c3ce7d21d6bb9.
+> Please revert that and apply the revised version in which we make
+> the USB3.0 PHY optional. Thanks.
+>
+> cheers,
+> -roger
+>
+> Changelog:
+> v2:
+> - make USB3 PHY optional
+>
+> Roger Quadros (2):
+>   dt-bindings: usb: ti,keystone-dwc3.yaml: Add USB3.0 PHY property
+>   usb: dwc3: keystone: Turn on USB3 PHY before controller
 
+should reach testing/next shortly.
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl7LgJ4ACgkQzL64meEa
+mQb5WQ//Vrvlk2vNCM3DTytPOMcudLJlF7qSgD5yafe51IBxP+esW9iJ8ttw7AK/
++EDL5oqKUkORUhymPd4SGQhV23f2a31WdEoDKgc8S5OsTPyrZM8OJb8SmSiQGL/9
+OaInwQmBD69/g0HxNo4LcdWkeoFNUvOdptJST/rbml59WiUwAx3By8t+liqYQ7QY
+VQoO7hY2F379UU7mE7Aa37IygSDON2SEaSqrDPzhYOJehQ3IECTJA3Y3K+irTJ1Y
+FyiK6S0qHtTkuf03Hn7Xdrkp3EPPnkqT760rHucMwrLjiu6L3R0pHKhalFtTQWwz
+BdDCMJpMwBe5iztuZgLPvWGrDE/M0WW6Zcout3BxtBgyOIT+PWPxW9+BmLxYGljo
+/zAJahDjSVPc8Ui4jHLCR7WxrCOgZutps/OaX3lxNobbQQpK7OAkXeXbV1RCXqyp
+dI6uu78nSd8cbY5nRk6oSe3w/oplTeSXpnrDwTMf2dR+kJ73pXBv8anVPodj3oRn
+SeDVKOtXnRqS7N3eKYAp4k8EqIfCr3Ls4Hj8bhto77BhQmDLcoVSmgJKybK9c42Z
+pyeW2hHs7usGd+3uRNq06xUr1QR2VX+6yfC5AiVxgkkOlgUrQPK8gxhRdp20vckP
+7HQvIQitgkOxD72mHqt75ZPElgFzkuca0Q+Dopw6EvuJPj0q8m8=
+=GcB7
+-----END PGP SIGNATURE-----
+--=-=-=--
