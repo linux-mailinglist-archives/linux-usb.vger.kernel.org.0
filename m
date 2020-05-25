@@ -2,46 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85F8E1E04E4
-	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2020 04:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D0571E04DF
+	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2020 04:50:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388743AbgEYCuz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 24 May 2020 22:50:55 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:58304 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388398AbgEYCuv (ORCPT
+        id S2388739AbgEYCuw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 24 May 2020 22:50:52 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:56044 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388422AbgEYCuv (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Sun, 24 May 2020 22:50:51 -0400
 Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04P2ooMh118916;
-        Sun, 24 May 2020 21:50:50 -0500
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04P2opIm126651;
+        Sun, 24 May 2020 21:50:51 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1590375050;
-        bh=4Uwo9+q8rBh4O5RXcZCu6XFwX681ZgA1nUiH/x8aBs4=;
+        s=ti-com-17Q1; t=1590375051;
+        bh=mKy3IfhVE5mi/N3qwL7RzIIz9Xx+SitREVQ9Sxmukpw=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=QXA/uboHrS+U+pdrayRmb64X7MKpU4bafDz41geTOVZrn3GWYf4zE7f4H7f1CXbFy
-         kCEce/an+Y8nSxc/73QEorTY8tIp8y/NtxSm+b5kzJxVAQ9G6mZDtAXpoB7fANII2r
-         sSekxVnphozA2KLc18k6NUVtaJpKpNZrN1C1Ewik=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 04P2ooBj113212
+        b=ZR/hgjPVf9GJfvf9/YSrrKnZu0DoFx+8Je3NHSzB2sue16B9y7SA2X9kQUCvMrHg5
+         Lub/t0p48CiIeUW6cf6sKfLGaW58LL9B2/I1tMMpxqN5v7iQFUpo3+L/HKIM7dGWdD
+         RJxA6TK9XeNFYgGSYT0TJM7HljaQhssCxWEzy5Wo=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 04P2ooqp113246
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sun, 24 May 2020 21:50:50 -0500
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+        Sun, 24 May 2020 21:50:51 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Sun, 24
- May 2020 21:50:49 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ May 2020 21:50:50 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Sun, 24 May 2020 21:50:49 -0500
+ Frontend Transport; Sun, 24 May 2020 21:50:50 -0500
 Received: from uda0271908.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04P2onNk023969;
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04P2onNl023969;
         Sun, 24 May 2020 21:50:49 -0500
 From:   Bin Liu <b-liu@ti.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 CC:     <linux-usb@vger.kernel.org>, Bin Liu <b-liu@ti.com>
-Subject: [PATCH 2/6] usb: musb: start session in resume for host port
-Date:   Sun, 24 May 2020 21:50:45 -0500
-Message-ID: <20200525025049.3400-3-b-liu@ti.com>
+Subject: [PATCH 3/6] usb: musb: use true for 'use_dma'
+Date:   Sun, 24 May 2020 21:50:46 -0500
+Message-ID: <20200525025049.3400-4-b-liu@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200525025049.3400-1-b-liu@ti.com>
 References: <20200525025049.3400-1-b-liu@ti.com>
@@ -53,40 +53,32 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Commit 17539f2f4f0b ("usb: musb: fix enumeration after resume") replaced
-musb_start() in musb_resume() to not override softconnect bit, but it
-doesn't restart the session for host port which was done in musb_start().
-The session could be disabled in musb_suspend(), which leads the host
-port doesn't stay in host mode.
+From: Jason Yan <yanaijie@huawei.com>
 
-So let's start the session specifically for host port in musb_resume().
+Fix the following coccicheck warning:
 
-Fixes: 17539f2f4f0b ("usb: musb: fix enumeration after resume")
+drivers/usb/musb/musb_core.c:1798:12-19: WARNING: Assignment of 0/1 to
+bool variable
 
-Cc: stable@vger.kernel.org
+Signed-off-by: Jason Yan <yanaijie@huawei.com>
 Signed-off-by: Bin Liu <b-liu@ti.com>
 ---
- drivers/usb/musb/musb_core.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/usb/musb/musb_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/usb/musb/musb_core.c b/drivers/usb/musb/musb_core.c
-index d590110539ab..48178aeccf5b 100644
+index 48178aeccf5b..384a8039a7fd 100644
 --- a/drivers/usb/musb/musb_core.c
 +++ b/drivers/usb/musb/musb_core.c
-@@ -2877,6 +2877,13 @@ static int musb_resume(struct device *dev)
- 	musb_enable_interrupts(musb);
- 	musb_platform_enable(musb);
+@@ -1795,7 +1795,7 @@ irqreturn_t musb_interrupt(struct musb *musb)
+ EXPORT_SYMBOL_GPL(musb_interrupt);
  
-+	/* session might be disabled in suspend */
-+	if (musb->port_mode == MUSB_HOST &&
-+	    !(musb->ops->quirks & MUSB_PRESERVE_SESSION)) {
-+		devctl |= MUSB_DEVCTL_SESSION;
-+		musb_writeb(musb->mregs, MUSB_DEVCTL, devctl);
-+	}
-+
- 	spin_lock_irqsave(&musb->lock, flags);
- 	error = musb_run_resume_work(musb);
- 	if (error)
+ #ifndef CONFIG_MUSB_PIO_ONLY
+-static bool use_dma = 1;
++static bool use_dma = true;
+ 
+ /* "modprobe ... use_dma=0" etc */
+ module_param(use_dma, bool, 0644);
 -- 
 2.17.1
 
