@@ -2,78 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 860B41E0C95
-	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2020 13:12:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A3A1E0D68
+	for <lists+linux-usb@lfdr.de>; Mon, 25 May 2020 13:36:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390094AbgEYLMG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 May 2020 07:12:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59830 "EHLO mail.kernel.org"
+        id S2390208AbgEYLgM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 May 2020 07:36:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58248 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390003AbgEYLMG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 25 May 2020 07:12:06 -0400
+        id S2388733AbgEYLgM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 25 May 2020 07:36:12 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4FF0F20723;
-        Mon, 25 May 2020 11:12:05 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4B05320723;
+        Mon, 25 May 2020 11:36:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590405125;
-        bh=vRFVXyIsmXnGGPyWv/9BQ79AvtKwa530dOjUkPXl8WM=;
+        s=default; t=1590406571;
+        bh=Hsvgo7cXkWqV9YjaMgYxtNBSn2GMPiEARBTxGDoSXwM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m/XxOHBDQOiPx2mx/lu6b+Em6kLEldYgVbgV039cMwBhdP5FcTvg7e6IAvV+Ty3vW
-         ohH4JaIWQUajJj1vhstYuNy6Vyd0ua32NwzrXliQC7L4r0IdB4J+W4n0aEr/glI33v
-         +wrSsS79xmKZ3Y9nK/Tsk10aFdLjKmQO/6DQiQIE=
-Date:   Mon, 25 May 2020 13:12:03 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        patong.mxl@gmail.com,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-Subject: Re: [PATCH 2/2] usb: serial: xr_serial: Add gpiochip support
-Message-ID: <20200525111203.GB279021@kroah.com>
-References: <20200428195651.6793-1-mani@kernel.org>
- <20200428195651.6793-3-mani@kernel.org>
- <CACRpkdZ3b-VLvxN06H_4cDOtUEQTVbe=Zw+NA=YjssMzK2d2sQ@mail.gmail.com>
- <20200429124918.GC6443@Mani-XPS-13-9360>
- <20200519085703.GB27787@localhost>
- <CACRpkdapMuMs_mEUHheGtaKYg97=nL1bH3zq4Tc3cnX9Jbw-Ew@mail.gmail.com>
+        b=WJszw50TSIw6QqK0eDHRKuYOV/rrRCknm2nJsQBZ2uWnR5qNHEq5imBqCYQCDmQM4
+         5PaTcN6io7f1VdgllwGOVRJXgcEULQvf7P2s975yt8GmN62YsBNwZJ5nFuMwGR24iX
+         CUjv4gudoP4EiImqfRnRYWSQuXpj64r7pYFSPSWs=
+Date:   Mon, 25 May 2020 13:33:44 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [GIT PULL] USB for v5.8 merge window
+Message-ID: <20200525113344.GA360751@kroah.com>
+References: <87h7w4wcug.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACRpkdapMuMs_mEUHheGtaKYg97=nL1bH3zq4Tc3cnX9Jbw-Ew@mail.gmail.com>
+In-Reply-To: <87h7w4wcug.fsf@kernel.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 25, 2020 at 10:59:59AM +0200, Linus Walleij wrote:
-> On Tue, May 19, 2020 at 10:57 AM Johan Hovold <johan@kernel.org> wrote:
-> > > On Wed, Apr 29, 2020 at 02:12:24PM +0200, Linus Walleij wrote:
+On Mon, May 25, 2020 at 01:03:35PM +0300, Felipe Balbi wrote:
 > 
-> > > > to something that is device-unique, like "xr-gpios-<serial number>"
-> > > > which makes it easy to locate the GPIOs on a specific serial converter
-> > > > for lab use. However the USB serial maintainers know better what
-> > > > to use here. Whatever makes a USB-to-serial unique from a TTY
-> > > > point of view is probably fine with me too.
-> > > >
-> > > > My idea is that people might want to know which USB cable
-> > > > this is sitting on, so I have this USB cable and from this label
-> > > > I can always figure out which GPIO device it is.
-> >
-> > I think we've had this discussion before. First, not every device has a
-> > unique serial number. Second, we already have a universal way of
-> > distinguishing devices namely by using the bus topology. That's
-> > available through sysfs and shouldn't have to be be re-encoded by every
-> > driver in the gpiochip name.
+> Hi Greg,
 > 
-> I remember I even referred to this myself, but I've been waning a bit
-> on it recently, because it turns out that userspace/users aren't very
-> good at parsing sysfs for topology.
+> here's my pull request for v5.8 merge window. Note that we have a
+> conflict in CDNS3 driver. The conflict is all about indentation, I don't
+> really have an opinion if you want to choose my version or yours,
+> whichever you choose works for me :-)
+> 
+> Most patches have been soaking for several weeks now without any
+> reports.
+> 
+> Let me know if you want anything to be changed.
+> 
+> Cheers
+> 
+> The following changes since commit 0e698dfa282211e414076f9dc7e83c1c288314fd:
+> 
+>   Linux 5.7-rc4 (2020-05-03 14:56:04 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git tags/usb-for-v5.8
 
-Which is why they could use libudev :)
+There was a simple conflict in drivers/usb/cdns3/gadget.c that I've
+fixed up and pushed out.  If you could verify I got it right, that would
+be great.
 
 thanks,
 
