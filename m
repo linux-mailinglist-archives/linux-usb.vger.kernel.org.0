@@ -2,126 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90B201E27A8
-	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2020 18:49:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 499DC1E286E
+	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2020 19:19:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731494AbgEZQsR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 May 2020 12:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40078 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731462AbgEZQsQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 May 2020 12:48:16 -0400
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E55DC03E97B
-        for <linux-usb@vger.kernel.org>; Tue, 26 May 2020 09:48:15 -0700 (PDT)
-Received: by mail-io1-xd41.google.com with SMTP id p20so9335177iop.11
-        for <linux-usb@vger.kernel.org>; Tue, 26 May 2020 09:48:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=CDy85Gj7MYd1kNtILJcUzn7KVIhIM0XshsVeAc/i0tA=;
-        b=dCxwuhqpPbwbXsS8D4GR15Oi/vkWvJ2t6JE5jqhDuEYRBCxiAwo9cWnqARqt/pZ9N3
-         vSDlZ8wDeZydMMsvQgllY5SFL21AkwmUO/yVMpJRwkWuLZ+okFm2plV7st5ZUHxgg7+n
-         nw9y2DMW7Y1odFWc8D0ovkNrkmBQTlf+wVi0icllMuisiL6LQjhD1eU0HTahi0uvVson
-         7H1igoRa7sC3VzH0k6kw37/8QsEYXM6RYbG1TkZAtikaoCp3wlyHVEwAfTjAFYYV3q4L
-         NgflHMgnD8hmupC7gXChsbUVMFzyhgq3aBSV9WdpBp5mfIm6+JpoU8GgF7qXRXSqT3gV
-         qZIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=CDy85Gj7MYd1kNtILJcUzn7KVIhIM0XshsVeAc/i0tA=;
-        b=PR0iUgImmYd//IKLlEoGZ02ZBfH5e96O0x396IkpLfHEfJ47jQbrZ3QcNYqFlfCGRp
-         4otQPoCw1wF66J5elemm/sZTP3fJ1/Ur03/Ziky/6B6THU4OXl1QF/Y0BvjQCmrnVlw+
-         47Q4sXhljDxz82vCtd/5yaeXCiy3O3X4UjriQDuMpr8ebDvto+KaLVDLeOgqxLoDpL1r
-         FMhgRTD9CldJEFIc4gWGaR1qj+odtQOBU/dTGZiaLrSQ/RejUlVa6f3sWHDRChxF7HCg
-         +cVdCyr/tcEyxlYyVjBy/rv8o+j3mNulVbQrRNtQhd3YW3jSyC3LGquqOeNjqhq3APwp
-         qrSg==
-X-Gm-Message-State: AOAM5307jO7l1O17vV518nkkg5jrP55iud+pjbPBjkfmeCg5ggqNGfDk
-        Hlzwku1vJT4DDzBTB8MrAIVlWQ==
-X-Google-Smtp-Source: ABdhPJwt8EDbE+Md3qNwECgPyEhh34GzLnn6Kwx5Q+Egs2R3PU4UAkkaFOOCDwhKuojJpS4rMr4mTQ==
-X-Received: by 2002:a02:2708:: with SMTP id g8mr1921759jaa.52.1590511694529;
-        Tue, 26 May 2020 09:48:14 -0700 (PDT)
-Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.googlemail.com with ESMTPSA id d29sm250489ild.42.2020.05.26.09.48.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 May 2020 09:48:13 -0700 (PDT)
-Subject: Re: [greybus-dev] [PATCH 8/8] net/iucv: Use the new device_to_pm()
- helper to access struct dev_pm_ops
-To:     =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>, linux-pci@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, linux-s390@vger.kernel.org,
-        linux-scsi@vger.kernel.org, Kevin Hilman <khilman@kernel.org>,
-        Julian Wiedmann <jwi@linux.ibm.com>,
-        linux-acpi@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Len Brown <lenb@kernel.org>, linux-pm@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Ursula Braun <ubraun@linux.ibm.com>,
-        Johan Hovold <johan@kernel.org>, greybus-dev@lists.linaro.org,
-        John Stultz <john.stultz@linaro.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Felipe Balbi <balbi@kernel.org>, Alex Elder <elder@kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Karsten Graul <kgraul@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>
-References: <20200525182608.1823735-1-kw@linux.com>
- <20200525182608.1823735-9-kw@linux.com> <20200526063521.GC2578492@kroah.com>
- <20200526150744.GC75990@rocinante>
-From:   Alex Elder <elder@linaro.org>
-Message-ID: <acb9415a-d0d0-3ebc-b5ae-c26a7dc2114a@linaro.org>
-Date:   Tue, 26 May 2020 11:48:12 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <20200526150744.GC75990@rocinante>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        id S2388654AbgEZRTm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 May 2020 13:19:42 -0400
+Received: from mail-mw2nam10on2085.outbound.protection.outlook.com ([40.107.94.85]:21185
+        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2388061AbgEZRTl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 26 May 2020 13:19:41 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JZkyfOCHlujNTlzCaiEAk5hTV4tBMW+LEjzQ9o2FXpABb2dFmBovS77Xwqorha8C6YphQadlA6ZoV/SY5DlTIOfAmo4b/k9MtIY7YdmjUuaAzqBjciArFCPMIkASrCTW4P9+XosQcSD9YR1RtLPteAROz0vyZ/QwtPISx0c3+pctPoB1FqbszE4jUqmDQYoTSCbyq0kI/CcN72y4kpAl7fVDhcBv5GukjZfYTc0bCLQCl4Aa5d5Ayck995Ljb4YjDJVvvhENKKJYGKSznKCk9E1+d1g4XdLsiVO4XLba+k70UoJaZKOfg3wcBdFwQjZSYTb6GLqMQ4u0DHCbnygrpw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BoEiZcgygynnzDCXPqPO6ODcBNAXdEc0JKy0AaqUq8Q=;
+ b=miKASnnhNdBBouvg/nM9DZtZ9KN0jZ7qwOKkmHrk6zlqzKBFUohBcxshh8uppbo3sg8rdIYAjyEHdM3jwJfOTLNi4jb1wieUwPSdsZAQdLR1msV20Y0gF7ITaxcjPuJRpfAoX8otwkiAJvLva76LL5ylV+jzm3FQGsaW764/x8YAxBgTLe2YoNCrIO7654EnW9b5s81QAMqxS5Nk6D8ihik3euTKhwDmuBT2DD4Mns+OzSPaYIDiogrqrveq5mE/uY14tX4ErdjHRv8KUOU9jkyGVBtCZiVzwf4VsnPFJTrxg0QTzFHh6XUI0gfctOSi5sgcFApSNQPDi8GJNVvswg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=infinera.com; dmarc=pass action=none header.from=infinera.com;
+ dkim=pass header.d=infinera.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infinera.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BoEiZcgygynnzDCXPqPO6ODcBNAXdEc0JKy0AaqUq8Q=;
+ b=IEQz5JianCUkb0SSqq3ffqVJqPKKSACBx+HfPxCL0GiRtJJrR+MFEhTu/EiZZOX8So4lQQJ0gJL+7diU1LGRuOqgTAvnqJW2BfHV5pEN1NRJv2oG/pGRkEsJkaHbkEBuOe+b8omE/YGJpmo0UeVD2Y5nj9QlmBQGQSFvN+jZd5E=
+Received: from BN8PR10MB3540.namprd10.prod.outlook.com (2603:10b6:408:ae::24)
+ by BN8PR10MB3571.namprd10.prod.outlook.com (2603:10b6:408:ad::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3021.27; Tue, 26 May
+ 2020 17:19:38 +0000
+Received: from BN8PR10MB3540.namprd10.prod.outlook.com
+ ([fe80::c158:d59f:e3bc:1941]) by BN8PR10MB3540.namprd10.prod.outlook.com
+ ([fe80::c158:d59f:e3bc:1941%2]) with mapi id 15.20.3021.029; Tue, 26 May 2020
+ 17:19:38 +0000
+From:   Joakim Tjernlund <Joakim.Tjernlund@infinera.com>
+To:     "oneukum@suse.com" <oneukum@suse.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: ttyACM: disabled by hub (EMI?), re-enabling... Causes garbage
+ chars & disconnect
+Thread-Topic: ttyACM: disabled by hub (EMI?), re-enabling... Causes garbage
+ chars & disconnect
+Thread-Index: AQHWMqM6W5iP9Jkv9UCEGIiDuBaJw6i45d+AgAADdICAABpkAIABC5qAgAADbYCAABTvAIAAbWUAgAAJUgA=
+Date:   Tue, 26 May 2020 17:19:38 +0000
+Message-ID: <4c2bd25aa7f6672cb132487f7af6a787ffc1fab6.camel@infinera.com>
+References: <6a4fe396ab5ae6cda548e904c57bc823103999d7.camel@infinera.com>
+         <1590418977.2838.16.camel@suse.com>
+         <b39259fc7f397b27f4af145eeafb33ec36638660.camel@infinera.com>
+         <a3f4a9bbde9efd2827b2a02c46f86c8ba7853bc6.camel@infinera.com>
+         <1590482853.2838.26.camel@suse.com>
+         <8cf71160e703a18b28d27a844406d42f6cadf39b.camel@infinera.com>
+         <1590488084.2838.34.camel@suse.com>
+         <42c92312c74e90e5507de4103bd15bbbe175f98d.camel@infinera.com>
+In-Reply-To: <42c92312c74e90e5507de4103bd15bbbe175f98d.camel@infinera.com>
+Accept-Language: en-GB, en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.36.2 
+authentication-results: suse.com; dkim=none (message not signed)
+ header.d=none;suse.com; dmarc=none action=none header.from=infinera.com;
+x-originating-ip: [88.131.87.201]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 993ccb98-5d3f-4469-7198-08d80198f857
+x-ms-traffictypediagnostic: BN8PR10MB3571:
+x-microsoft-antispam-prvs: <BN8PR10MB35713631049798A90E554A0CF4B00@BN8PR10MB3571.namprd10.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6108;
+x-forefront-prvs: 041517DFAB
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 8LtCouV6gRmfzG/kAq4GEYJ3DSZsGMFxEOGvalCpuuaD0nXzENTM/u+VOf/bYjW4xKYUN9TRsJcXUOGGAuZnnwKu9GI+AOrU8OPDHIa+gr2Mol6o6pZT8j7OBGxtRXmuzT3qn2H6KcthiBzxbowTn9qQd6KqIbFaB5quVfmpo9OnViMV8G0W/ZuIlKJeJN/pKSq9dvzQPxZPodNTm7E4IjhAmjiezcZm2qAgg/tV+RVpLpY6/q8OmuYsNK3SEgVvR5S0Un/m5F8gcEmrqPqEMiVPB6rB1Ztb7FR32v2xE60cRPIe+7ZrPko5Nu1hRCdEH76rnH+tHY+e5NRsywfJXQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR10MB3540.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(396003)(366004)(136003)(39860400002)(346002)(376002)(91956017)(76116006)(66556008)(66946007)(2906002)(64756008)(36756003)(71200400001)(110136005)(26005)(6512007)(2616005)(8936002)(5660300002)(6506007)(66446008)(6486002)(186003)(66476007)(478600001)(86362001)(8676002)(316002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: Z2ldQrNPXtylhs3IPg5E/p1Mq3nh7yMKC4hpqMvOSNFSzH/Y0n3fyWfw+jCx3wt7pWyoFv77j0eXHlzttcqX3ncjD7dTrEjzrLiLe53B4svp376LhukGFTbBNvGjfPcFNDG95fRZiz4WvdyCU3HxazCviBgwuZwI8S3AJeOvmibxzWJofb0qqvN8AyTx/gXjTo7KucVDFvXAC2cvLorNjjJqx1QFLenbHf7K4ljv3rR69UbkKKBPexKvNAHOBQmkY2iIJdD45p/1m9XXW+4YDd5Umz424Yx8u7ge1eD4RdsQacvz05OFbFgBDaC6GTwbrDXEsCAYMWVg6UbKdG5w9EXmVBovEoJoobP588mTgb2P/h7ubfwVJ7iJYC3XG3u+QOes63Y++E3DkFhnjN2biBNWx6Ckii0qG9LXOUUWScmV1lbiW5U7RUvQdaWBWbMU7tqqWCvuL8mhaWksLbheZVFXTSHNzuDmWtHqfAqUmvs=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <76A34C2C8BB2C24E91E61E5327D58861@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: infinera.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 993ccb98-5d3f-4469-7198-08d80198f857
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 May 2020 17:19:38.4772
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 285643de-5f5b-4b03-a153-0ae2dc8aaf77
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: SyJglhw9zf2Uac+P4tniWnTJ7YhYQHXCfvWQyW05W/fp6Y6wh0hAmkZmGSdfIa1rdfM9o0zvddnSyErJ9wcBVA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR10MB3571
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 5/26/20 10:07 AM, Krzysztof Wilczyński wrote:
-> Hello Greg,
-> 
-> [...]
->> It's "interesting" how using your new helper doesn't actually make the
->> code smaller.  Perhaps it isn't a good helper function?
-
-Helper functions often improve code readability, which is
-beneficial even if it doesn't reduce code size or efficiency.
-
-But I won't argue for or against this particular change.
-It's OK with me either way.
-
-					-Alex
-
-> The idea for the helper was inspired by the comment Dan made to Bjorn
-> about Bjorn's change, as per:
-> 
->    https://lore.kernel.org/driverdev-devel/20191016135002.GA24678@kadam/
-> 
-> It looked like a good idea to try to reduce the following:
-> 
->    dev->driver && dev->driver->pm && dev->driver->pm->prepare
-> 
-> Into something more succinct.  Albeit, given the feedback from yourself
-> and Rafael, I gather that this helper is not really a good addition.
-> 
-> Thank you everyone and sorry for the commotion!
-> 
-> Krzysztof
-> _______________________________________________
-> greybus-dev mailing list
-> greybus-dev@lists.linaro.org
-> https://lists.linaro.org/mailman/listinfo/greybus-dev
-> 
-
+T24gVHVlLCAyMDIwLTA1LTI2IGF0IDE4OjQ2ICswMjAwLCBKb2FraW0gVGplcm5sdW5kIHdyb3Rl
+Og0KPiBPbiBUdWUsIDIwMjAtMDUtMjYgYXQgMTI6MTQgKzAyMDAsIE9saXZlciBOZXVrdW0gd3Jv
+dGU6DQo+ID4gQ0FVVElPTjogVGhpcyBlbWFpbCBvcmlnaW5hdGVkIGZyb20gb3V0c2lkZSBvZiB0
+aGUgb3JnYW5pemF0aW9uLiBEbyBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1
+bmxlc3MgeW91IHJlY29nbml6ZSB0aGUgc2VuZGVyIGFuZCBrbm93IHRoZSBjb250ZW50IGlzIHNh
+ZmUuDQo+ID4gDQo+ID4gDQo+ID4gQW0gRGllbnN0YWcsIGRlbiAyNi4wNS4yMDIwLCAwODo1OSAr
+MDAwMCBzY2hyaWViIEpvYWtpbSBUamVybmx1bmQ6DQo+ID4gPiBPbiBUdWUsIDIwMjAtMDUtMjYg
+YXQgMTA6NDcgKzAyMDAsIE9saXZlciBOZXVrdW0gd3JvdGU6DQo+ID4gPiA+IEFtIE1vbnRhZywg
+ZGVuIDI1LjA1LjIwMjAsIDE2OjQ5ICswMDAwIHNjaHJpZWIgSm9ha2ltIFRqZXJubHVuZDoNCj4g
+PiA+ID4gDQo+ID4gPiA+ID4gVG8gYmUgY2xlYXIsIEkgY2FuIHB1bGwgdGhlIGNhYmxlIGFuZCBw
+dXQgaXQgYmFjayBhbmQgdGhlcmUgYXJlIG5vIGdhcmJhZ2UgY2hhcnMuDQo+ID4gPiA+ID4gVGhl
+cmUgaXMgYWxzbyB0aGlzIGVycm9yOg0KPiA+ID4gPiA+IFtXZWQgTWF5IDIwIDE0OjAzOjI1IDIw
+MjBdIGNkY19hY20gMS02LjM6MS4xOiBhY21fY3RybF9pcnEgLSB1c2Jfc3VibWl0X3VyYiBmYWls
+ZWQ6IC0xOQ0KPiA+ID4gPiA+IFtXZWQgTWF5IDIwIDE0OjAzOjI1IDIwMjBdIHVzYiAxLTYtcG9y
+dDI6IGF0dGVtcHQgcG93ZXIgY3ljbGUNCj4gPiA+ID4gPiBbV2VkIE1heSAyMCAxNDowMzoyNiAy
+MDIwXSB1c2IgMS02LjM6IFVTQiBkaXNjb25uZWN0LCBkZXZpY2UgbnVtYmVyIDg2DQo+ID4gPiA+
+ID4gW1dlZCBNYXkgMjAgMTQ6MDM6MjYgMjAyMF0gY2RjX2FjbSAxLTYuMzoxLjE6IGZhaWxlZCB0
+byBzZXQgZHRyL3J0cw0KPiA+ID4gPiA+IA0KPiA+ID4gPiA+IFNob3VsZCBub3QgdGhpcyBhdXRv
+IHJlZW5hYmxlIGVtdWxhdGUgcmVhdHRhY2hpbmcgdGhlIFVTQiBjYWJsZT8NCj4gPiA+ID4gDQo+
+ID4gPiA+IEhpLA0KPiA+ID4gPiANCj4gPiA+ID4geWVzIGl0IHNob3VsZC4gWW91IGZpbmQgdGhl
+IGdhcmFnZSBjaGFyYWN0ZXJzIGFmdGVyIHRoZSBFTUkgZXZlbnQuIEhvdw0KPiA+ID4gPiBzdXJl
+IGFyZSB5b3UgdGhhdCB0aGV5IGFycml2ZSBhZnRlciB0aGUgZXZlbnQgYW5kIG5vdCBkdXJpbmcg
+dGhlIGV2ZW50Pw0KPiA+ID4gPiANCj4gPiA+IA0KPiA+ID4gRG9uJ3Qga25vd24gaG93IHRvIGRl
+dGVybWluZSB0aGF0Pw0KPiA+ID4gSSBjYW4gc2F5IHRoYXQNCj4gPiA+ICAgIGFjbV9jdHJsX2ly
+cSAtIHVzYl9zdWJtaXRfdXJiIGZhaWxlZDogLTE5DQo+ID4gDQo+ID4gLTE5IGlzIC1FTk9ERVYN
+Cj4gPiANCj4gPiBUaGUgZHJpdmVyIHRoaW5rcyB0cmllcyB0byByZXN1Ym1pdCB0aGUgVVJCIGFz
+a2luZyBmb3IgY29udHJvbA0KPiA+IG1lc3NhZ2VzLg0KPiA+IEJhc2ljYWxseSB5b3UgYXJlIHNl
+ZWluZyBlcnJvciBoYW5kbGluZyBzdGFydGluZyBhbmQgZmFpbGluZyBkdWUNCj4gPiB0byBhIHN1
+YnNlcXVlbnQgZGlzY29ubmVjdC4NCj4gPiANCj4gPiA+IGFuZA0KPiA+ID4gICAgY2RjX2FjbSAx
+LTYuMzoxLjE6IGZhaWxlZCB0byBzZXQgZHRyL3J0cw0KPiA+ID4gYXJlIHVuaXF1ZSB0byB0aGlz
+IEVNSSBldmVudCB0aG91Z2guIEl0IGRvZXMgbm90IGZlZWwgbGlrZSB0aGlzDQo+ID4gPiByZWVu
+YWJsaW5nIGZvbGxvdyB0aGUgc2FtZSBwcm9jZWR1cmUgYXMgYSBjYWJsZSBwdWxsPw0KPiA+ID4g
+QXMgSSBjYW4gb25seSBzZWUgdGhlIGFib3ZlIHR3byBlcnJvcnMgSSB0aGluayB3ZSBzaG91bGQg
+Z2V0IHJpZCBvZg0KPiA+ID4gdGhlc2UgZmlyc3QuDQo+ID4gDQo+ID4gVGhlIHRpbWluZyBpcyBk
+aWZmZXJlbnQgYW5kIGlmIHRoZXJlIGlzIEVNSSB0cmFuc2ZlciBjYW4gZW5kDQo+ID4gaW4gZXJy
+b3JzIGFuZCBjYXVzZSBlcnJvciBoYW5kbGluZyB0byBraWNrIGluLiBZb3UgYXJlIHNlZWluZw0K
+PiA+IHN5bXB0b21zLiBZb3UgY2FuIHRyeSBlbmFibGluZyBkeW5hbWljIGRlYnVnZ2luZyB0byBn
+ZXQNCj4gPiBhIGJldHRlciBsb2cuDQo+ID4gDQo+ID4gICAgICAgICBSZWdhcmRzDQo+ID4gICAg
+ICAgICAgICAgICAgIE9saXZlcg0KPiA+IA0KPiANCj4gVHJpZWQgc29tIGR5bmFtaWMgZGVidWcg
+Zm9yIG1vZHVsZSBjZGNfYWNtIGdvdCBzb21ldGhpbmcgSSBjYW5ub3QgcGFyc2U6DQo+IFtUdWUg
+TWF5IDI2IDE4OjI0OjMwIDIwMjBdIGNkY19hY20gMS02LjM6MS4xOiB0dHlBQ00wOiBVU0IgQUNN
+IGRldmljZQ0KPiBbVHVlIE1heSAyNiAxODoyNDozMCAyMDIwXSBjZGNfYWNtIDEtNi4zOjEuMTog
+YWNtX2N0cmxfbXNnIC0gcnEgMHgyMCwgdmFsIDB4MCwgbGVuIDB4NywgcmVzdWx0IDcNCj4gW1R1
+ZSBNYXkgMjYgMTg6MjQ6NDMgMjAyMF0gdXNiIDEtNi4yOiBuZXcgaGlnaC1zcGVlZCBVU0IgZGV2
+aWNlIG51bWJlciAzNiB1c2luZyB4aGNpX2hjZA0KPiBbVHVlIE1heSAyNiAxODoyNDo0MyAyMDIw
+XSBjZGNfZXRoZXIgMS02LjI6MS4wIHVzYjA6IHJlZ2lzdGVyICdjZGNfZXRoZXInIGF0IHVzYi0w
+MDAwOjAwOjE0LjAtNi4yLCBDREMgRXRoZXJuZXQgRGV2aWNlLCA5MjpkMTpjOTpiNDo5MTpkNQ0K
+PiBbVHVlIE1heSAyNiAxODoyNDo0MyAyMDIwXSBJUHY2OiBBRERSQ09ORihORVRERVZfVVApOiB1
+c2IwOiBsaW5rIGlzIG5vdCByZWFkeQ0KPiBbVHVlIE1heSAyNiAxODoyNTo0MCAyMDIwXSBjZGNf
+YWNtIDEtNi4zOjEuMTogYWNtX2N0cmxfbXNnIC0gcnEgMHgyMiwgdmFsIDB4MywgbGVuIDB4MCwg
+cmVzdWx0IDANCj4gW1R1ZSBNYXkgMjYgMTg6MjU6NDAgMjAyMF0gY2RjX2FjbSAxLTYuMzoxLjE6
+IGFjbV90dHlfc2V0X3Rlcm1pb3MgLSBzZXQgbGluZTogMTE1MjAwIDAgMCA4DQo+IFtUdWUgTWF5
+IDI2IDE4OjI1OjQwIDIwMjBdIGNkY19hY20gMS02LjM6MS4xOiBhY21fY3RybF9tc2cgLSBycSAw
+eDIwLCB2YWwgMHgwLCBsZW4gMHg3LCByZXN1bHQgNw0KPiBbVHVlIE1heSAyNiAxODoyNTo0MiAy
+MDIwXSBjZGNfYWNtIDEtNi4zOjEuMTogYWNtX2N0cmxfaXJxIC0gdXJiIHNodXR0aW5nIGRvd24g
+d2l0aCBzdGF0dXM6IC0yDQo+IFtUdWUgTWF5IDI2IDE4OjI1OjQyIDIwMjBdIGNkY19hY20gMS02
+LjM6MS4yOiBhY21fcmVhZF9idWxrX2NhbGxiYWNrIC0gdXJiIHNodXR0aW5nIGRvd24gd2l0aCBz
+dGF0dXM6IC0yDQo+IC4uLi4NCj4gDQo+IEkgZG8gbm90ZSBvbmUgdGhpbmcgaW46DQo+IA0KPiBG
+aXJzdCBjb25uZWN0IGFmdGVyIHBvd2VyIG9uIGZvciB0aGUgZ2FkZ2V0IEkgc2VlIHNvbWUgZ2Fy
+YmFnZSBjaGFycyB3aGVuIGNvbm5lY3Rpbmcgd2l0aCBjdS4NCj4gSG93ZXZlciwgaWYgSSBqdXN0
+IGRvIGEgImNhdCAvZGV2L3R0eUFDTTAiLCBDdHJsLUMgYW5kIHRoZW4gY3UgSSB0aGVyZSBhcmUg
+bm8gZ2FyYmFnZSBjaGFycy4NCj4gDQo+IEl0IGZlZWxzIGxpa2UgdGhlIGdhZGdldCBpcyBzcGV3
+aW5nIHNvbWUgZ2FyYmFnZSBhdCBwb3dlciBvbiBhbmQgdGhpcyBnZXRzIHNhdmVkIGluIGhvc3Rz
+IGNkY19hY20sIG9uY2UNCj4gSSBvcGVuIC9kZXYvdHR5QUNNMCBmb3Igd3JpdGUsIHRoZXNlIGdl
+dHMgZWNob2VkIGJhY2sgdG8gdGhlIGdhZGdldC4NCj4gSWYgc28sIGNkY19hY20gZmFpbHMgdG8g
+Y2xlYXIgaXRzIGJ1ZmZlcnMgYmVmb3JlIHRoZSBmaXJzdCBvcGVuLCBkb2VzIHRoaXMgbWFrZSBz
+ZW5zZSB0byB5b3U/DQo+IA0KDQpHb3Qgc29tZSBldmlkZW5jZSBub3csIEkgY2hhbmdlIHRoZSBk
+ZWZhdWx0IGJhdWQgcmF0ZSBmb3JtIDk2MDAgdG8gMTE1MjAwIGluIGNkY19hY20gYW5kIG5vdw0K
+SSBjYW4gc2VlKGluc3RlYWQgb2YgZ2FyYmFnZSBjaGFycyk6DQpjdSB1c2JhY20wDQpDb25uZWN0
+ZWQuDQpeQA0KDQoNCg0KVS1Cb290IFNQTA0KDQoNClRoaXMgInUtYm9vdCBTUEwiIGlzIHRoZSBm
+aXJzdCB0aGluZyB1LWJvb3Qgd3JpdGVzIGFuZCBzb21laG93IHRoaXMgaXMgcmVtZW1iZXJlZCwg
+SSBhc3N1bWUsIGJ5IGNkY19hY20gDQphbmQgZ2V0cyBlY2hvZWQgYmFjayB3aGVuIEkgb3BlbiB0
+dHlBQ00wDQoNCiBKb2NrZQ0K
