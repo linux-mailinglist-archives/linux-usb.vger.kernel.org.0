@@ -2,128 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCE3A1E1EF7
-	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2020 11:45:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DB591E1F77
+	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2020 12:14:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731815AbgEZJpW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 May 2020 05:45:22 -0400
-Received: from jabberwock.ucw.cz ([46.255.230.98]:55976 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728686AbgEZJpW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 May 2020 05:45:22 -0400
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 791CE1C02C0; Tue, 26 May 2020 11:45:19 +0200 (CEST)
-Date:   Tue, 26 May 2020 11:45:18 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>, Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Julian Wiedmann <jwi@linux.ibm.com>,
-        Karsten Graul <kgraul@linux.ibm.com>,
-        Ursula Braun <ubraun@linux.ibm.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        John Stultz <john.stultz@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        greybus-dev@lists.linaro.org, netdev <netdev@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-s390@vger.kernel.org,
-        "open list:TARGET SUBSYSTEM" <linux-scsi@vger.kernel.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH 2/8] ACPI: PM: Use the new device_to_pm() helper to
- access struct dev_pm_ops
-Message-ID: <20200526094518.GA4600@amd>
-References: <20200525182608.1823735-1-kw@linux.com>
- <20200525182608.1823735-3-kw@linux.com>
- <CAJZ5v0jQUmdDYmJsP43Ja3urpVLUxe-yD_Hm_Jd2LtCoPiXsrQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="bg08WKrSYDhXBjb5"
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0jQUmdDYmJsP43Ja3urpVLUxe-yD_Hm_Jd2LtCoPiXsrQ@mail.gmail.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+        id S1731745AbgEZKOs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 May 2020 06:14:48 -0400
+Received: from mx2.suse.de ([195.135.220.15]:38948 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726944AbgEZKOs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 26 May 2020 06:14:48 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id E3979B1E7;
+        Tue, 26 May 2020 10:14:49 +0000 (UTC)
+Message-ID: <1590488084.2838.34.camel@suse.com>
+Subject: Re: ttyACM: disabled by hub (EMI?), re-enabling... Causes garbage
+ chars & disconnect
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Joakim Tjernlund <Joakim.Tjernlund@infinera.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Date:   Tue, 26 May 2020 12:14:44 +0200
+In-Reply-To: <8cf71160e703a18b28d27a844406d42f6cadf39b.camel@infinera.com>
+References: <6a4fe396ab5ae6cda548e904c57bc823103999d7.camel@infinera.com>
+         <1590418977.2838.16.camel@suse.com>
+         <b39259fc7f397b27f4af145eeafb33ec36638660.camel@infinera.com>
+         <a3f4a9bbde9efd2827b2a02c46f86c8ba7853bc6.camel@infinera.com>
+         <1590482853.2838.26.camel@suse.com>
+         <8cf71160e703a18b28d27a844406d42f6cadf39b.camel@infinera.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Am Dienstag, den 26.05.2020, 08:59 +0000 schrieb Joakim Tjernlund:
+> On Tue, 2020-05-26 at 10:47 +0200, Oliver Neukum wrote:
+> > 
+> > Am Montag, den 25.05.2020, 16:49 +0000 schrieb Joakim Tjernlund:
+> > 
+> > > To be clear, I can pull the cable and put it back and there are no garbage chars.
+> > > There is also this error:
+> > > [Wed May 20 14:03:25 2020] cdc_acm 1-6.3:1.1: acm_ctrl_irq - usb_submit_urb failed: -19
+> > > [Wed May 20 14:03:25 2020] usb 1-6-port2: attempt power cycle
+> > > [Wed May 20 14:03:26 2020] usb 1-6.3: USB disconnect, device number 86
+> > > [Wed May 20 14:03:26 2020] cdc_acm 1-6.3:1.1: failed to set dtr/rts
+> > > 
+> > > Should not this auto reenable emulate reattaching the USB cable?
+> > 
+> > Hi,
+> > 
+> > yes it should. You find the garage characters after the EMI event. How
+> > sure are you that they arrive after the event and not during the event?
+> > 
+> 
+> Don't known how to determine that? 
+> I can say that 
+>    acm_ctrl_irq - usb_submit_urb failed: -19
 
---bg08WKrSYDhXBjb5
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+-19 is -ENODEV
 
-On Tue 2020-05-26 10:37:36, Rafael J. Wysocki wrote:
-> On Mon, May 25, 2020 at 8:26 PM Krzysztof Wilczy=C5=84ski <kw@linux.com> =
-wrote:
-> >
-> > Use the new device_to_pm() helper to access Power Management callbacs
-> > (struct dev_pm_ops) for a particular device (struct device_driver).
-> >
-> > No functional change intended.
-> >
-> > Signed-off-by: Krzysztof Wilczy=C5=84ski <kw@linux.com>
-> > ---
-> >  drivers/acpi/device_pm.c | 5 +++--
-> >  1 file changed, 3 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/acpi/device_pm.c b/drivers/acpi/device_pm.c
-> > index 5832bc10aca8..b98a32c48fbe 100644
-> > --- a/drivers/acpi/device_pm.c
-> > +++ b/drivers/acpi/device_pm.c
-> > @@ -1022,9 +1022,10 @@ static bool acpi_dev_needs_resume(struct device =
-*dev, struct acpi_device *adev)
-> >  int acpi_subsys_prepare(struct device *dev)
-> >  {
-> >         struct acpi_device *adev =3D ACPI_COMPANION(dev);
-> > +       const struct dev_pm_ops *pm =3D driver_to_pm(dev->driver);
->=20
-> I don't really see a reason for this change.
->=20
-> What's wrong with the check below?
+The driver thinks tries to resubmit the URB asking for control
+messages.
+Basically you are seeing error handling starting and failing due
+to a subsequent disconnect.
+ 
+> and
+>    cdc_acm 1-6.3:1.1: failed to set dtr/rts
+> are unique to this EMI event though. It does not feel like this
+> reenabling follow the same procedure as a cable pull?
+> As I can only see the above two errors I think we should get rid of
+> these first.
 
-Duplicated code. Yes, compiler can sort it out, but... new version
-looks better to me.
+The timing is different and if there is EMI transfer can end
+in errors and cause error handling to kick in. You are seeing
+symptoms. You can try enabling dynamic debugging to get
+a better log.
 
-Best regards,
-								pavel
+	Regards
+		Oliver
 
-> >
-> > -       if (dev->driver && dev->driver->pm && dev->driver->pm->prepare)=
- {
-> > -               int ret =3D dev->driver->pm->prepare(dev);
-> > +       if (pm && pm->prepare) {
-> > +               int ret =3D pm->prepare(dev);
-
-
-
---=20
-(english) http://www.livejournal.com/~pavelmachek
-(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
-g.html
-
---bg08WKrSYDhXBjb5
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iEYEARECAAYFAl7M5S0ACgkQMOfwapXb+vJLqgCcCbDmh7NooqBM+qslb58avjsp
-78cAn1mUUlj/BAfzgJELHWPID2a0mmvg
-=+Cmh
------END PGP SIGNATURE-----
-
---bg08WKrSYDhXBjb5--
