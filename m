@@ -2,339 +2,581 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 477C61E2DA2
-	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2020 21:24:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D4D1E2F6D
+	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2020 21:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392167AbgEZTWs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 May 2020 15:22:48 -0400
-Received: from rnd-relay.smtp.broadcom.com ([192.19.229.170]:52068 "EHLO
-        rnd-relay.smtp.broadcom.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2392172AbgEZTUj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 May 2020 15:20:39 -0400
-Received: from mail-irv-17.broadcom.com (mail-irv-17.lvn.broadcom.net [10.75.242.48])
-        by rnd-relay.smtp.broadcom.com (Postfix) with ESMTP id 7AFEF30D639;
-        Tue, 26 May 2020 12:13:38 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 rnd-relay.smtp.broadcom.com 7AFEF30D639
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-        s=dkimrelay; t=1590520418;
-        bh=EsBLxUZiy649ZiBRdK80O6rwq0lkq6mGhRDs7jPGYdc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xj7guZeLqBw6/h3Fbq+q9orHO803qEFe9RRL+yXTSnCE331faLqti7RKP4TcZn23t
-         IS+AnjdUfRvgLcVFNvvLtVgepPJOa3aPXPTQNU4e3Vd5SCjwqFxp9qMxJA+Gp8XsbE
-         5xLZ5x9VasIk/VKIuZXs9rDkyas6AUqOpX/Gre8M=
-Received: from stbsrv-and-01.and.broadcom.net (stbsrv-and-01.and.broadcom.net [10.28.16.211])
-        by mail-irv-17.broadcom.com (Postfix) with ESMTP id 08C1314008C;
-        Tue, 26 May 2020 12:13:35 -0700 (PDT)
-From:   Jim Quinlan <james.quinlan@broadcom.com>
-To:     linux-pci@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Oliver Neukum <oneukum@suse.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>, Corey Minyard <minyard@acm.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE), linux-kernel@vger.kernel.org (open list),
-        linux-usb@vger.kernel.org (open list:USB SUBSYSTEM),
-        iommu@lists.linux-foundation.org (open list:DMA MAPPING HELPERS)
-Subject: [PATCH v2 09/14] device core: Add ability to handle multiple dma offsets
-Date:   Tue, 26 May 2020 15:12:48 -0400
-Message-Id: <20200526191303.1492-10-james.quinlan@broadcom.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200526191303.1492-1-james.quinlan@broadcom.com>
-References: <20200526191303.1492-1-james.quinlan@broadcom.com>
+        id S2389600AbgEZTwT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 May 2020 15:52:19 -0400
+Received: from wout3-smtp.messagingengine.com ([64.147.123.19]:44931 "EHLO
+        wout3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729163AbgEZTwS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 May 2020 15:52:18 -0400
+Received: from compute7.internal (compute7.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 135B5AB3
+        for <linux-usb@vger.kernel.org>; Tue, 26 May 2020 15:52:16 -0400 (EDT)
+Received: from imap21 ([10.202.2.71])
+  by compute7.internal (MEProxy); Tue, 26 May 2020 15:52:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aeam.us; h=
+        mime-version:message-id:in-reply-to:references:date:from:to
+        :subject:content-type; s=fm1; bh=N3eepKdgvOy3cYJI5RtWkKVKUnMfh7f
+        4TdwQyAyEy8c=; b=SnMoF/Nt/6Vh1ofM5pRYcAmAHVZ5a8cz+25Od5OwFjGZNHw
+        1z17+7qnUgF04i8TWWp1M7kCLc1kFAgQ9qgiW/AGBnd9Kk8QrynByGU1IJ6ReZ1V
+        LCwOkFmL1jlDE0iJJJpjrx76qWaxTJtbTDYYIeggW7L8HtMycIqSNWllWyfCRtme
+        hwBmw4ZWfdlJ9Osavk8owQK7nVuaG2TSW90utqUyCls8r3r9MNxVZIrH+go6UtAP
+        Fd9L3NRwDLx3+150DWJTmiH/0H0MObyLkndW3mSBP0vk7I7v36jg7Cc74L1AChqc
+        5U2Hfvlq6+T9Mctb/y3/pnUout5QxkG/zKh2bKQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=N3eepK
+        dgvOy3cYJI5RtWkKVKUnMfh7f4TdwQyAyEy8c=; b=bR2gvi+UasOES6t/+bPkWC
+        +9fFcBPpxJO8ES/BEtoh7V8iDW1NFdOG2zJsPv7yEJQ5gsMPu97+muwEV/BD91qM
+        MJ7hN6XoqnqGZsQK0ZLP1DK231bRQGRcx4PhibNX5FOWtptXCkUa5CP+ipTKYwuw
+        fl7n/CwDnnsxNWK3TZHCRDd4DOEHTH65kcWVgfzPRxbIVQZEhsxs9T2FKhUZ3CA4
+        BTVs9D7mAFZgQbBthX5HkIZrw42edP2zByNlDJKGtMZItPQFKAbtArymMM/7Q0R9
+        +NyA/XNWsTPCVI3H+S0NfLVOQTqlPM7x31+nVkMBATyJ/C2/ufngpBaCGU6YbNfA
+        ==
+X-ME-Sender: <xms:b3PNXrtxTNiF7WAdsHLqv57Kp-7iigO7q9jrl1CshQoyl81QmdPLqA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedruddvvddgudefjecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecunecujfgurhepofgfggfkjghffffhvffutgesth
+    dtredtreertdenucfhrhhomhepfdfuihguucfuphhrhidfuceoshhiugesrggvrghmrdhu
+    sheqnecuggftrfgrthhtvghrnhepjeffieejgfffleejgefgudekkeehheejffegffeihe
+    etveetgedvgffgieekieeinecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhu
+    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsihgusegrvggrmh
+    druhhs
+X-ME-Proxy: <xmx:b3PNXseKFBH_gOi_mby_mTXvSoWrtAnpSPoYZ9kqzKM2koH-M8PU_Q>
+    <xmx:b3PNXuw4QjNsHmbZMRZdjJIa_hmu1jAZX2BE1XFfuMe4k8V7R2GGpA>
+    <xmx:b3PNXqOwybjUlnlRqT6xRwpSjEmfrm1RXtVNInhAJKZsrsAjQIEoGw>
+    <xmx:b3PNXpfiIUqY6xSIJJIpSFCZIYAqEXe3wb6u3_g_2rFClWwHUj3pLQ>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 40D32660082; Tue, 26 May 2020 15:52:15 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.3.0-dev0-488-g9249dd4-fm-20200522.001-g9249dd48
+Mime-Version: 1.0
+Message-Id: <f5180146-3bec-4dff-8fbd-9dab9e659239@www.fastmail.com>
+In-Reply-To: <eaa2bcfb-21c2-4a9f-bdad-44ebd293b0e3@www.fastmail.com>
+References: <eaa2bcfb-21c2-4a9f-bdad-44ebd293b0e3@www.fastmail.com>
+Date:   Tue, 26 May 2020 14:51:13 -0500
+From:   "Sid Spry" <sid@aeam.us>
+To:     linux-usb@vger.kernel.org
+Subject: Re: Unable to open(2) ep0 in ConfigFG FunctionFS Gadget
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The new field in struct device 'dma_pfn_offset_map' is used to facilitate
-the use of multiple pfn offsets between cpu addrs and dma addrs.  It is
-similar to 'dma_pfn_offset' except that the offset chosen depends on the
-cpu or dma address involved.
+On Wed, May 20, 2020, at 11:22 AM, Sid Spry wrote:
+> Crossreffing 
+> https://github.com/torvalds/linux/blob/2f4c53349961c8ca480193e47da4d44fdb8335a8/tools/usb/ffs-test.c it looks like all I have to do is open "ep0" in the proper directory, but I do just that and it fails on first and subsequent runs.
+> 
+> gadget.cc:
+> 
+> ```
+> #include <stdio.h>
+> #include <stdlib.h>
+> #include <unistd.h>
+> #include <fcntl.h>
+> #include <string.h>
+> #include <errno.h>
+> 
+> #include <linux/usb/ch9.h>
+> #include <usbg/usbg.h>
+> 
+> #define VENDOR  0x1d6b
+> #define PRODUCT 0x0104
+> 
+> int usbg_setup(
+>         usbg_state **s,
+>         usbg_gadget **g,
+>         usbg_config **c,
+>         usbg_function **f_ffs0,
+>         usbg_function **f_ncm0
+> );      
+> 
+> int main(int argc, char *argv[]) {
+>         usbg_state *s;
+>         usbg_gadget *g;
+>         usbg_config *c;
+>         usbg_function *f_ffs0, *f_ncm0;
+> 
+>         if (int rc = usbg_setup(&s, &g, &c, &f_ffs0, &f_ncm0);
+>                 rc != 0) {
+>                 puts("gadget exists or libcomposite needs to be loaded.");
+>         } else {
+>                 puts("gadget created.");
+>         }
+> 
+>         int ffs_fd = open("/sys/kernel/config/usb_gadget/g1/functions/ffs.dev0",
+>                 O_RDONLY);
+>         if (int rc = fchdir(ffs_fd); rc != 0) {
+>                 fprintf(stderr, "unable to chdir to ffs directory: %s\n",
+>                         strerror(errno));
+>         }
+> 
+>         int ffs_fd_ep0 = open("ep0",
+>                 O_RDWR);
+>         if (ffs_fd_ep0 < 0) {
+>                 fprintf(stderr, "unable to create ep0: %d : %s\n",
+>                         errno, strerror(errno));
+>         }
+> 
+>         close(ffs_fd);
+> }
+> 
+> int usbg_setup(
+>         usbg_state **s,
+>         usbg_gadget **g,
+>         usbg_config **c,
+>         usbg_function **f_ffs0,
+>         usbg_function **f_ncm0
+> ) {
+>         struct usbg_gadget_attrs g_attrs = {
+>                 .bcdUSB = 0x0200,
+>                 .bDeviceClass = USB_CLASS_PER_INTERFACE,
+>                 .bDeviceSubClass = 0x00,
+>                 .bDeviceProtocol = 0x00,
+>                 .bMaxPacketSize0 = 64,
+>                 .idVendor = VENDOR,
+>                 .idProduct = PRODUCT,
+>                 .bcdDevice = 0x0000
+>         };
+> 
+>         struct usbg_gadget_strs g_strs = {
+>                 .manufacturer = "Foo Inc.",
+>                 .product = "Bar Gadget",
+>                 .serial = "0000000000"
+>         };
+> 
+>         struct usbg_config_strs c_strs = {
+>                 .configuration = "Default"
+>         };
+> 
+>         if (usbg_error rc = 
+>                         (usbg_error)usbg_init("/sys/kernel/config", s);
+>                 rc != USBG_SUCCESS) {
+>                 goto error_exit;
+>         }
+> 
+>         if (usbg_error rc =
+>                         (usbg_error)usbg_create_gadget(*s, "g1", 
+> &g_attrs, &g_strs, g);
+>                 rc != USBG_SUCCESS) {
+>                 goto error_exit;
+>         }
+> 
+>         if (usbg_error rc =
+>                         (usbg_error)usbg_create_function(*g,
+>                                 USBG_F_NCM, "dev0", NULL, f_ncm0);
+>                 rc != USBG_SUCCESS) {
+>                 goto error_exit;
+>         }
+> 
+>         if (usbg_error rc =
+>                         (usbg_error)usbg_create_function(*g,
+>                                 USBG_F_FFS, "dev0", NULL, f_ffs0);
+>                 rc != USBG_SUCCESS) {
+>                 //fprintf(stderr, "Error: %s : %s\n", usbg_error_name(rc),
+>                 //      usbg_strerror(rc));
+>                 goto error_exit;
+>         }
+>         
+>         return 0;
+> 
+> error_exit:
+>         return -2;
+> }
+> ```
+> 
+> strace:
+> 
+> ```
+> execve("./gadget", ["./gadget"], 0xbece77a0 /* 19 vars */) = 0
+> brk(NULL)                               = 0x1017000
+> uname({sysname="Linux", nodename="nanopiduo", ...}) = 0
+> mmap2(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 
+> 0) = 0xb6f5e000
+> access("/etc/ld.so.preload", R_OK)      = -1 ENOENT (No such file or 
+> directory)
+> openat(AT_FDCWD, "/etc/ld.so.cache", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3
+> fstat64(3, {st_mode=S_IFREG|0644, st_size=35157, ...}) = 0
+> mmap2(NULL, 35157, PROT_READ, MAP_PRIVATE, 3, 0) = 0xb6f55000
+> close(3)                                = 0
+> openat(AT_FDCWD, "/usr/local/lib/libusbgx.so.2", 
+> O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3
+> read(3, 
+> "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0(\0\1\0\0\0\314I\0\0004\0\0\0"..., 
+> 512) = 512
+> _llseek(3, 362460, [362460], SEEK_SET)  = 0
+> read(3, 
+> "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+> 1400) = 1400
+> _llseek(3, 50996, [50996], SEEK_SET)    = 0
+> read(3, "A0\0\0\0aeabi\0\1&\0\0\0\0057-A\0\6\n\7A\10\1\t\2\n\4\22"..., 
+> 49) = 49
+> _llseek(3, 362460, [362460], SEEK_SET)  = 0
+> read(3, 
+> "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+> 1400) = 1400
+> _llseek(3, 50996, [50996], SEEK_SET)    = 0
+> read(3, "A0\0\0\0aeabi\0\1&\0\0\0\0057-A\0\6\n\7A\10\1\t\2\n\4\22"..., 
+> 49) = 49
+> _llseek(3, 362460, [362460], SEEK_SET)  = 0
+> read(3, 
+> "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+> 1400) = 1400
+> _llseek(3, 50996, [50996], SEEK_SET)    = 0
+> read(3, "A0\0\0\0aeabi\0\1&\0\0\0\0057-A\0\6\n\7A\10\1\t\2\n\4\22"..., 
+> 49) = 49
+> _llseek(3, 362460, [362460], SEEK_SET)  = 0
+> read(3, 
+> "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+> 1400) = 1400
+> _llseek(3, 50996, [50996], SEEK_SET)    = 0
+> read(3, "A0\0\0\0aeabi\0\1&\0\0\0\0057-A\0\6\n\7A\10\1\t\2\n\4\22"..., 
+> 49) = 49
+> _llseek(3, 362460, [362460], SEEK_SET)  = 0
+> read(3, 
+> "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+> 1400) = 1400
+> _llseek(3, 50996, [50996], SEEK_SET)    = 0
+> read(3, "A0\0\0\0aeabi\0\1&\0\0\0\0057-A\0\6\n\7A\10\1\t\2\n\4\22"..., 
+> 49) = 49
+> fstat64(3, {st_mode=S_IFREG|0755, st_size=363860, ...}) = 0
+> mmap2(NULL, 116508, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 
+> 0) = 0xb6f1b000
+> mprotect(0xb6f27000, 61440, PROT_NONE)  = 0
+> mmap2(0xb6f36000, 8192, PROT_READ|PROT_WRITE, 
+> MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0xb000) = 0xb6f36000
+> close(3)                                = 0
+> openat(AT_FDCWD, "/usr/lib/arm-linux-gnueabihf/libconfig.so.9", 
+> O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3
+> read(3, 
+> "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0(\0\1\0\0\0\360\"\0\0004\0\0\0"..., 
+> 512) = 512
+> _llseek(3, 29420, [29420], SEEK_SET)    = 0
+> read(3, 
+> "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+> 960) = 960
+> _llseek(3, 29096, [29096], SEEK_SET)    = 0
+> read(3, "A0\0\0\0aeabi\0\1&\0\0\0\0057-A\0\6\n\7A\10\1\t\2\n\4\22"..., 
+> 49) = 49
+> _llseek(3, 29420, [29420], SEEK_SET)    = 0
+> read(3, 
+> "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+> 960) = 960
+> _llseek(3, 29096, [29096], SEEK_SET)    = 0
+> read(3, "A0\0\0\0aeabi\0\1&\0\0\0\0057-A\0\6\n\7A\10\1\t\2\n\4\22"..., 
+> 49) = 49
+> _llseek(3, 29420, [29420], SEEK_SET)    = 0
+> read(3, 
+> "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+> 960) = 960
+> _llseek(3, 29096, [29096], SEEK_SET)    = 0
+> read(3, "A0\0\0\0aeabi\0\1&\0\0\0\0057-A\0\6\n\7A\10\1\t\2\n\4\22"..., 
+> 49) = 49
+> _llseek(3, 29420, [29420], SEEK_SET)    = 0
+> read(3, 
+> "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+> 960) = 960
+> _llseek(3, 29096, [29096], SEEK_SET)    = 0
+> read(3, "A0\0\0\0aeabi\0\1&\0\0\0\0057-A\0\6\n\7A\10\1\t\2\n\4\22"..., 
+> 49) = 49
+> _llseek(3, 29420, [29420], SEEK_SET)    = 0
+> read(3, 
+> "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+> 960) = 960
+> _llseek(3, 29096, [29096], SEEK_SET)    = 0
+> read(3, "A0\0\0\0aeabi\0\1&\0\0\0\0057-A\0\6\n\7A\10\1\t\2\n\4\22"..., 
+> 49) = 49
+> fstat64(3, {st_mode=S_IFREG|0644, st_size=30380, ...}) = 0
+> mmap2(NULL, 94636, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 
+> 0) = 0xb6f03000
+> mprotect(0xb6f0a000, 61440, PROT_NONE)  = 0
+> mmap2(0xb6f19000, 8192, PROT_READ|PROT_WRITE, 
+> MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x6000) = 0xb6f19000
+> close(3)                                = 0
+> openat(AT_FDCWD, "/usr/lib/arm-linux-gnueabihf/libstdc++.so.6", 
+> O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3
+> read(3, 
+> "\177ELF\1\1\1\3\0\0\0\0\0\0\0\0\3\0(\0\1\0\0\0\270\346\6\0004\0\0\0"..., 512) = 512
+> _llseek(3, 1018532, [1018532], SEEK_SET) = 0
+> read(3, 
+> "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+> 1240) = 1240
+> _llseek(3, 1017936, [1017936], SEEK_SET) = 0
+> read(3, "A2\0\0\0aeabi\0\1(\0\0\0\0057-A\0\6\n\7A\10\1\t\2\n\4\22"..., 
+> 51) = 51
+> _llseek(3, 1018532, [1018532], SEEK_SET) = 0
+> read(3, 
+> "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+> 1240) = 1240
+> _llseek(3, 1017936, [1017936], SEEK_SET) = 0
+> read(3, "A2\0\0\0aeabi\0\1(\0\0\0\0057-A\0\6\n\7A\10\1\t\2\n\4\22"..., 
+> 51) = 51
+> _llseek(3, 1018532, [1018532], SEEK_SET) = 0
+> read(3, 
+> "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+> 1240) = 1240
+> _llseek(3, 1017936, [1017936], SEEK_SET) = 0
+> read(3, "A2\0\0\0aeabi\0\1(\0\0\0\0057-A\0\6\n\7A\10\1\t\2\n\4\22"..., 
+> 51) = 51
+> _llseek(3, 1018532, [1018532], SEEK_SET) = 0
+> read(3, 
+> "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+> 1240) = 1240
+> _llseek(3, 1017936, [1017936], SEEK_SET) = 0
+> read(3, "A2\0\0\0aeabi\0\1(\0\0\0\0057-A\0\6\n\7A\10\1\t\2\n\4\22"..., 
+> 51) = 51
+> _llseek(3, 1018532, [1018532], SEEK_SET) = 0
+> read(3, 
+> "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+> 1240) = 1240
+> _llseek(3, 1017936, [1017936], SEEK_SET) = 0
+> read(3, "A2\0\0\0aeabi\0\1(\0\0\0\0057-A\0\6\n\7A\10\1\t\2\n\4\22"..., 
+> 51) = 51
+> _llseek(3, 1018532, [1018532], SEEK_SET) = 0
+> read(3, 
+> "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+> 1240) = 1240
+> _llseek(3, 1017936, [1017936], SEEK_SET) = 0
+> read(3, "A2\0\0\0aeabi\0\1(\0\0\0\0057-A\0\6\n\7A\10\1\t\2\n\4\22"..., 
+> 51) = 51
+> _llseek(3, 1018532, [1018532], SEEK_SET) = 0
+> read(3, 
+> "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+> 1240) = 1240
+> _llseek(3, 1017936, [1017936], SEEK_SET) = 0
+> read(3, "A2\0\0\0aeabi\0\1(\0\0\0\0057-A\0\6\n\7A\10\1\t\2\n\4\22"..., 
+> 51) = 51
+> fstat64(3, {st_mode=S_IFREG|0644, st_size=1019772, ...}) = 0
+> mmap2(NULL, 1091308, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 
+> 0) = 0xb6df8000
+> mprotect(0xb6eeb000, 61440, PROT_NONE)  = 0
+> mmap2(0xb6efa000, 28672, PROT_READ|PROT_WRITE, 
+> MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0xf2000) = 0xb6efa000
+> mmap2(0xb6f01000, 5868, PROT_READ|PROT_WRITE, 
+> MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0xb6f01000
+> close(3)                                = 0
+> openat(AT_FDCWD, "/lib/arm-linux-gnueabihf/libm.so.6", 
+> O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3
+> read(3, 
+> "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0(\0\1\0\0\0\250r\0\0004\0\0\0"..., 
+> 512) = 512
+> _llseek(3, 434644, [434644], SEEK_SET)  = 0
+> read(3, 
+> "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+> 1080) = 1080
+> _llseek(3, 434288, [434288], SEEK_SET)  = 0
+> read(3, "A4\0\0\0aeabi\0\1*\0\0\0\0057-A\0\6\n\7A\10\1\t\2\n\4\22"..., 
+> 53) = 53
+> _llseek(3, 434644, [434644], SEEK_SET)  = 0
+> read(3, 
+> "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+> 1080) = 1080
+> _llseek(3, 434288, [434288], SEEK_SET)  = 0
+> read(3, "A4\0\0\0aeabi\0\1*\0\0\0\0057-A\0\6\n\7A\10\1\t\2\n\4\22"..., 
+> 53) = 53
+> _llseek(3, 434644, [434644], SEEK_SET)  = 0
+> read(3, 
+> "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+> 1080) = 1080
+> _llseek(3, 434288, [434288], SEEK_SET)  = 0
+> read(3, "A4\0\0\0aeabi\0\1*\0\0\0\0057-A\0\6\n\7A\10\1\t\2\n\4\22"..., 
+> 53) = 53
+> fstat64(3, {st_mode=S_IFREG|0644, st_size=435724, ...}) = 0
+> mmap2(NULL, 499832, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 
+> 0) = 0xb6d7d000
+> mprotect(0xb6de7000, 61440, PROT_NONE)  = 0
+> mmap2(0xb6df6000, 8192, PROT_READ|PROT_WRITE, 
+> MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x69000) = 0xb6df6000
+> close(3)                                = 0
+> openat(AT_FDCWD, "/lib/arm-linux-gnueabihf/libgcc_s.so.1", 
+> O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3
+> read(3, 
+> "\177ELF\1\1\1\0\0\0\0\0\0\0\0\0\3\0(\0\1\0\0\0\360\321\0\0004\0\0\0"..., 512) = 512
+> _llseek(3, 98916, [98916], SEEK_SET)    = 0
+> read(3, 
+> "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+> 1080) = 1080
+> _llseek(3, 98556, [98556], SEEK_SET)    = 0
+> read(3, "A0\0\0\0aeabi\0\1&\0\0\0\0057-A\0\6\n\7A\10\1\t\2\n\4\22"..., 
+> 49) = 49
+> _llseek(3, 98916, [98916], SEEK_SET)    = 0
+> read(3, 
+> "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+> 1080) = 1080
+> _llseek(3, 98556, [98556], SEEK_SET)    = 0
+> read(3, "A0\0\0\0aeabi\0\1&\0\0\0\0057-A\0\6\n\7A\10\1\t\2\n\4\22"..., 
+> 49) = 49
+> _llseek(3, 98916, [98916], SEEK_SET)    = 0
+> read(3, 
+> "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+> 1080) = 1080
+> _llseek(3, 98556, [98556], SEEK_SET)    = 0
+> read(3, "A0\0\0\0aeabi\0\1&\0\0\0\0057-A\0\6\n\7A\10\1\t\2\n\4\22"..., 
+> 49) = 49
+> _llseek(3, 98916, [98916], SEEK_SET)    = 0
+> read(3, 
+> "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+> 1080) = 1080
+> _llseek(3, 98556, [98556], SEEK_SET)    = 0
+> read(3, "A0\0\0\0aeabi\0\1&\0\0\0\0057-A\0\6\n\7A\10\1\t\2\n\4\22"..., 
+> 49) = 49
+> _llseek(3, 98916, [98916], SEEK_SET)    = 0
+> read(3, 
+> "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+> 1080) = 1080
+> _llseek(3, 98556, [98556], SEEK_SET)    = 0
+> read(3, "A0\0\0\0aeabi\0\1&\0\0\0\0057-A\0\6\n\7A\10\1\t\2\n\4\22"..., 
+> 49) = 49
+> _llseek(3, 98916, [98916], SEEK_SET)    = 0
+> read(3, 
+> "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+> 1080) = 1080
+> _llseek(3, 98556, [98556], SEEK_SET)    = 0
+> read(3, "A0\0\0\0aeabi\0\1&\0\0\0\0057-A\0\6\n\7A\10\1\t\2\n\4\22"..., 
+> 49) = 49
+> fstat64(3, {st_mode=S_IFREG|0644, st_size=99996, ...}) = 0
+> mmap2(NULL, 164148, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 
+> 0) = 0xb6d54000
+> mprotect(0xb6d6c000, 61440, PROT_NONE)  = 0
+> mmap2(0xb6d7b000, 8192, PROT_READ|PROT_WRITE, 
+> MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x17000) = 0xb6d7b000
+> close(3)                                = 0
+> openat(AT_FDCWD, "/lib/arm-linux-gnueabihf/libc.so.6", 
+> O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3
+> read(3, 
+> "\177ELF\1\1\1\3\0\0\0\0\0\0\0\0\3\0(\0\1\0\0\09v\1\0004\0\0\0"..., 
+> 512) = 512
+> _llseek(3, 949188, [949188], SEEK_SET)  = 0
+> read(3, 
+> "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+> 2840) = 2840
+> _llseek(3, 945756, [945756], SEEK_SET)  = 0
+> read(3, "A4\0\0\0aeabi\0\1*\0\0\0\0057-A\0\6\n\7A\10\1\t\2\n\3\f"..., 
+> 53) = 53
+> _llseek(3, 949188, [949188], SEEK_SET)  = 0
+> read(3, 
+> "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+> 2840) = 2840
+> _llseek(3, 945756, [945756], SEEK_SET)  = 0
+> read(3, "A4\0\0\0aeabi\0\1*\0\0\0\0057-A\0\6\n\7A\10\1\t\2\n\3\f"..., 
+> 53) = 53
+> _llseek(3, 949188, [949188], SEEK_SET)  = 0
+> read(3, 
+> "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+> 2840) = 2840
+> _llseek(3, 945756, [945756], SEEK_SET)  = 0
+> read(3, "A4\0\0\0aeabi\0\1*\0\0\0\0057-A\0\6\n\7A\10\1\t\2\n\3\f"..., 
+> 53) = 53
+> _llseek(3, 949188, [949188], SEEK_SET)  = 0
+> read(3, 
+> "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+> 2840) = 2840
+> _llseek(3, 945756, [945756], SEEK_SET)  = 0
+> read(3, "A4\0\0\0aeabi\0\1*\0\0\0\0057-A\0\6\n\7A\10\1\t\2\n\3\f"..., 
+> 53) = 53
+> _llseek(3, 949188, [949188], SEEK_SET)  = 0
+> read(3, 
+> "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+> 2840) = 2840
+> _llseek(3, 945756, [945756], SEEK_SET)  = 0
+> read(3, "A4\0\0\0aeabi\0\1*\0\0\0\0057-A\0\6\n\7A\10\1\t\2\n\3\f"..., 
+> 53) = 53
+> _llseek(3, 949188, [949188], SEEK_SET)  = 0
+> read(3, 
+> "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"..., 
+> 2840) = 2840
+> _llseek(3, 945756, [945756], SEEK_SET)  = 0
+> read(3, "A4\0\0\0aeabi\0\1*\0\0\0\0057-A\0\6\n\7A\10\1\t\2\n\3\f"..., 
+> 53) = 53
+> fstat64(3, {st_mode=S_IFREG|0755, st_size=952028, ...}) = 0
+> mmap2(NULL, 1020732, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 
+> 0) = 0xb6c5a000
+> mprotect(0xb6d3e000, 65536, PROT_NONE)  = 0
+> mmap2(0xb6d4e000, 12288, PROT_READ|PROT_WRITE, 
+> MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0xe4000) = 0xb6d4e000
+> mmap2(0xb6d51000, 9020, PROT_READ|PROT_WRITE, 
+> MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0xb6d51000
+> close(3)                                = 0
+> mmap2(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 
+> 0) = 0xb6f53000
+> set_tls(0xb6f534d0)                     = 0
+> mprotect(0xb6d4e000, 8192, PROT_READ)   = 0
+> mprotect(0xb6d7b000, 4096, PROT_READ)   = 0
+> mprotect(0xb6df6000, 4096, PROT_READ)   = 0
+> mprotect(0xb6efa000, 20480, PROT_READ)  = 0
+> mprotect(0xb6f19000, 4096, PROT_READ)   = 0
+> mprotect(0xb6f36000, 4096, PROT_READ)   = 0
+> mprotect(0x491000, 4096, PROT_READ)     = 0
+> mprotect(0xb6f60000, 4096, PROT_READ)   = 0
+> munmap(0xb6f55000, 35157)               = 0
+> brk(NULL)                               = 0x1017000
+> brk(0x1038000)                          = 0x1038000
+> openat(AT_FDCWD, "/sys/kernel/config/usb_gadget", 
+> O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_CLOEXEC|O_DIRECTORY) = 3
+> fstat64(3, {st_mode=S_IFDIR|0755, st_size=0, ...}) = 0
+> close(3)                                = 0
+> openat(AT_FDCWD, "/sys/class/udc", 
+> O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_CLOEXEC|O_DIRECTORY) = 3
+> fstat64(3, {st_mode=S_IFDIR|0755, st_size=0, ...}) = 0
+> getdents64(3, /* 3 entries */, 32768)   = 88
+> getdents64(3, /* 0 entries */, 32768)   = 0
+> close(3)                                = 0
+> openat(AT_FDCWD, "/sys/kernel/config/usb_gadget", 
+> O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_CLOEXEC|O_DIRECTORY) = 3
+> fstat64(3, {st_mode=S_IFDIR|0755, st_size=0, ...}) = 0
+> getdents64(3, /* 3 entries */, 32768)   = 72
+> getdents64(3, /* 0 entries */, 32768)   = 0
+> close(3)                                = 0
+> openat(AT_FDCWD, "/sys/kernel/config/usb_gadget/g1/UDC", O_RDONLY) = 3
+> fstat64(3, {st_mode=S_IFREG|0644, st_size=4096, ...}) = 0
+> read(3, "\n", 4096)                     = 1
+> read(3, "", 4096)                       = 0
+> close(3)                                = 0
+> openat(AT_FDCWD, "/sys/kernel/config/usb_gadget/g1/functions", 
+> O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_CLOEXEC|O_DIRECTORY) = 3
+> fstat64(3, {st_mode=S_IFDIR|0755, st_size=0, ...}) = 0
+> getdents64(3, /* 4 entries */, 32768)   = 112
+> getdents64(3, /* 0 entries */, 32768)   = 0
+> close(3)                                = 0
+> openat(AT_FDCWD, "/sys/kernel/config/usb_gadget/g1/configs", 
+> O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_CLOEXEC|O_DIRECTORY) = 3
+> fstat64(3, {st_mode=S_IFDIR|0755, st_size=0, ...}) = 0
+> getdents64(3, /* 2 entries */, 32768)   = 48
+> getdents64(3, /* 0 entries */, 32768)   = 0
+> close(3)                                = 0
+> openat(AT_FDCWD, "/sys/kernel/config/usb_gadget/g1/os_desc", 
+> O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_CLOEXEC|O_DIRECTORY) = 3
+> fstat64(3, {st_mode=S_IFDIR|0755, st_size=0, ...}) = 0
+> getdents64(3, /* 5 entries */, 32768)   = 144
+> getdents64(3, /* 0 entries */, 32768)   = 0
+> close(3)                                = 0
+> write(2, "usbg_create_gadget()  duplicate "..., 46usbg_create_gadget()  
+> duplicate gadget name
+>  
+> ) = 46
+> fstat64(1, {st_mode=S_IFCHR|0600, st_rdev=makedev(0x4, 0x40), ...}) = 0
+> ioctl(1, TCGETS, {B115200 opost isig icanon echo ...}) = 0
+> write(1, "gadget exists.\n", 15gadget exists.
+> )        = 15
+> openat(AT_FDCWD, "/sys/kernel/config/usb_gadget/g1/functions/ffs.dev0", 
+> O_RDONLY) = 3
+> fchdir(3)                               = 0
+> openat(AT_FDCWD, "ep0", O_RDWR)         = -1 ENOENT (No such file or 
+> directory)
+> write(2, "unable to create ep0: 2 : No suc"..., 52unable to create ep0: 
+> 2 : No such file or directory
+> ) = 52
+> close(3)                                = 0
+> exit_group(0)                           = ?
+> +++ exited with 0 +++
+> 
+> ```
+>
 
-Signed-off-by: Jim Quinlan <james.quinlan@broadcom.com>
----
- drivers/of/address.c        | 65 +++++++++++++++++++++++++++++++++++--
- drivers/usb/core/message.c  |  3 ++
- drivers/usb/core/usb.c      |  3 ++
- include/linux/device.h      | 10 +++++-
- include/linux/dma-direct.h  | 10 ++++--
- include/linux/dma-mapping.h | 46 ++++++++++++++++++++++++++
- kernel/dma/Kconfig          | 13 ++++++++
- 7 files changed, 144 insertions(+), 6 deletions(-)
+I created the configs as well. Still can't open ep0. Really -- is there a device or UDC someone can verify has worked in the past? Seems easiest way for me to proceed.
 
-diff --git a/drivers/of/address.c b/drivers/of/address.c
-index 96d8cfb14a60..a01afffcde7d 100644
---- a/drivers/of/address.c
-+++ b/drivers/of/address.c
-@@ -918,6 +918,47 @@ void __iomem *of_io_request_and_map(struct device_node *np, int index,
- }
- EXPORT_SYMBOL(of_io_request_and_map);
- 
-+#ifdef CONFIG_DMA_PFN_OFFSET_MAP
-+static int attach_dma_pfn_offset_map(struct device *dev,
-+				     struct device_node *node, int num_ranges)
-+{
-+	struct of_range_parser parser;
-+	struct of_range range;
-+	size_t r_size = (num_ranges + 1)
-+		* sizeof(struct dma_pfn_offset_region);
-+	struct dma_pfn_offset_region *r;
-+
-+	r = devm_kzalloc(dev, r_size, GFP_KERNEL);
-+	if (!r)
-+		return -ENOMEM;
-+	dev->dma_pfn_offset_map = r;
-+	of_dma_range_parser_init(&parser, node);
-+
-+	/*
-+	 * Record all info for DMA ranges array.  We could
-+	 * just use the of_range struct, but if we did that it
-+	 * would require more calculations for phys_to_dma and
-+	 * dma_to_phys conversions.
-+	 */
-+	for_each_of_range(&parser, &range) {
-+		r->cpu_beg = range.cpu_addr;
-+		r->cpu_end = r->cpu_beg + range.size;
-+		r->dma_beg = range.bus_addr;
-+		r->dma_end = r->dma_beg + range.size;
-+		r->pfn_offset = PFN_DOWN(range.cpu_addr)
-+			- PFN_DOWN(range.bus_addr);
-+		r++;
-+	}
-+	return 0;
-+}
-+#else
-+static int attach_dma_pfn_offset_map(struct device *dev,
-+				     struct device_node *node, int num_ranges)
-+{
-+	return 0;
-+}
-+#endif
-+
- /**
-  * of_dma_get_range - Get DMA range info
-  * @dev:	device pointer; only needed for a corner case.
-@@ -947,6 +988,8 @@ int of_dma_get_range(struct device *dev, struct device_node *np, u64 *dma_addr,
- 	struct of_range_parser parser;
- 	struct of_range range;
- 	u64 dma_start = U64_MAX, dma_end = 0, dma_offset = 0;
-+	bool dma_multi_pfn_offset = false;
-+	int num_ranges = 0;
- 
- 	while (node) {
- 		ranges = of_get_property(node, "dma-ranges", &len);
-@@ -977,10 +1020,19 @@ int of_dma_get_range(struct device *dev, struct device_node *np, u64 *dma_addr,
- 		pr_debug("dma_addr(%llx) cpu_addr(%llx) size(%llx)\n",
- 			 range.bus_addr, range.cpu_addr, range.size);
- 
-+		num_ranges++;
- 		if (dma_offset && range.cpu_addr - range.bus_addr != dma_offset) {
--			pr_warn("Can't handle multiple dma-ranges with different offsets on node(%pOF)\n", node);
--			/* Don't error out as we'd break some existing DTs */
--			continue;
-+			if (!IS_ENABLED(CONFIG_DMA_PFN_OFFSET_MAP)) {
-+				pr_warn("Can't handle multiple dma-ranges with different offsets on node(%pOF)\n", node);
-+				pr_warn("Perhaps set DMA_PFN_OFFSET_MAP=y?\n");
-+				/*
-+				 * Don't error out as we'd break some existing
-+				 * DTs that are using configs w/o
-+				 * CONFIG_DMA_PFN_OFFSET_MAP set.
-+				 */
-+				continue;
-+			}
-+			dma_multi_pfn_offset = true;
- 		}
- 		dma_offset = range.cpu_addr - range.bus_addr;
- 
-@@ -991,6 +1043,13 @@ int of_dma_get_range(struct device *dev, struct device_node *np, u64 *dma_addr,
- 			dma_end = range.bus_addr + range.size;
- 	}
- 
-+	if (dma_multi_pfn_offset) {
-+		dma_offset = 0;
-+		ret = attach_dma_pfn_offset_map(dev, node, num_ranges);
-+		if (ret)
-+			return ret;
-+	}
-+
- 	if (dma_start >= dma_end) {
- 		ret = -EINVAL;
- 		pr_debug("Invalid DMA ranges configuration on node(%pOF)\n",
-diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
-index 6197938dcc2d..aaa3e58f5eb4 100644
---- a/drivers/usb/core/message.c
-+++ b/drivers/usb/core/message.c
-@@ -1960,6 +1960,9 @@ int usb_set_configuration(struct usb_device *dev, int configuration)
- 		 */
- 		intf->dev.dma_mask = dev->dev.dma_mask;
- 		intf->dev.dma_pfn_offset = dev->dev.dma_pfn_offset;
-+#ifdef CONFIG_DMA_PFN_OFFSET_MAP
-+		intf->dev.dma_pfn_offset_map = dev->dev.dma_pfn_offset_map;
-+#endif
- 		INIT_WORK(&intf->reset_ws, __usb_queue_reset_device);
- 		intf->minor = -1;
- 		device_initialize(&intf->dev);
-diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
-index f16c26dc079d..d2ed4d90e56e 100644
---- a/drivers/usb/core/usb.c
-+++ b/drivers/usb/core/usb.c
-@@ -612,6 +612,9 @@ struct usb_device *usb_alloc_dev(struct usb_device *parent,
- 	 */
- 	dev->dev.dma_mask = bus->sysdev->dma_mask;
- 	dev->dev.dma_pfn_offset = bus->sysdev->dma_pfn_offset;
-+#ifdef CONFIG_DMA_PFN_OFFSET_MAP
-+	dev->dev.dma_pfn_offset_map = bus->sysdev->dma_pfn_offset_map;
-+#endif
- 	set_dev_node(&dev->dev, dev_to_node(bus->sysdev));
- 	dev->state = USB_STATE_ATTACHED;
- 	dev->lpm_disable_count = 1;
-diff --git a/include/linux/device.h b/include/linux/device.h
-index ac8e37cd716a..67a240ad4fc5 100644
---- a/include/linux/device.h
-+++ b/include/linux/device.h
-@@ -493,6 +493,8 @@ struct dev_links_info {
-  * @bus_dma_limit: Limit of an upstream bridge or bus which imposes a smaller
-  *		DMA limit than the device itself supports.
-  * @dma_pfn_offset: offset of DMA memory range relatively of RAM
-+ * @dma_pfn_offset_map:	Like dma_pfn_offset but used when there are multiple
-+ *		pfn offsets for multiple dma-ranges.
-  * @dma_parms:	A low level driver may set these to teach IOMMU code about
-  * 		segment limitations.
-  * @dma_pools:	Dma pools (if dma'ble device).
-@@ -578,7 +580,13 @@ struct device {
- 					     allocations such descriptors. */
- 	u64		bus_dma_limit;	/* upstream dma constraint */
- 	unsigned long	dma_pfn_offset;
--
-+#ifdef CONFIG_DMA_PFN_OFFSET_MAP
-+	const struct dma_pfn_offset_region *dma_pfn_offset_map;
-+					/* Like dma_pfn_offset, but for
-+					 * the unlikely case of multiple
-+					 * offsets. If non-null, dma_pfn_offset
-+					 * will be set to 0. */
-+#endif
- 	struct device_dma_parameters *dma_parms;
- 
- 	struct list_head	dma_pools;	/* dma pools (if dma'ble) */
-diff --git a/include/linux/dma-direct.h b/include/linux/dma-direct.h
-index 24b8684aa21d..03110a57eabc 100644
---- a/include/linux/dma-direct.h
-+++ b/include/linux/dma-direct.h
-@@ -14,15 +14,21 @@ extern unsigned int zone_dma_bits;
- static inline dma_addr_t __phys_to_dma(struct device *dev, phys_addr_t paddr)
- {
- 	dma_addr_t dev_addr = (dma_addr_t)paddr;
-+	/* The compiler should remove the 2nd term if !DMA_PFN_OFFSET_MAP */
-+	unsigned long dma_pfn_offset = dev->dma_pfn_offset
-+		+ dma_pfn_offset_from_phys_addr(dev, paddr);
- 
--	return dev_addr - ((dma_addr_t)dev->dma_pfn_offset << PAGE_SHIFT);
-+	return dev_addr - ((dma_addr_t)dma_pfn_offset << PAGE_SHIFT);
- }
- 
- static inline phys_addr_t __dma_to_phys(struct device *dev, dma_addr_t dev_addr)
- {
- 	phys_addr_t paddr = (phys_addr_t)dev_addr;
-+	/* The compiler should remove the 2nd term if !DMA_PFN_OFFSET_MAP */
-+	unsigned long dma_pfn_offset = dev->dma_pfn_offset
-+		+ dma_pfn_offset_from_dma_addr(dev, paddr);
- 
--	return paddr + ((phys_addr_t)dev->dma_pfn_offset << PAGE_SHIFT);
-+	return paddr + ((phys_addr_t)dma_pfn_offset << PAGE_SHIFT);
- }
- #endif /* !CONFIG_ARCH_HAS_PHYS_TO_DMA */
- 
-diff --git a/include/linux/dma-mapping.h b/include/linux/dma-mapping.h
-index 330ad58fbf4d..91940bba2229 100644
---- a/include/linux/dma-mapping.h
-+++ b/include/linux/dma-mapping.h
-@@ -256,6 +256,52 @@ static inline void dma_direct_sync_sg_for_cpu(struct device *dev,
- size_t dma_direct_max_mapping_size(struct device *dev);
- 
- #ifdef CONFIG_HAS_DMA
-+#ifdef CONFIG_DMA_PFN_OFFSET_MAP
-+struct dma_pfn_offset_region {
-+	phys_addr_t	cpu_beg;
-+	phys_addr_t	cpu_end;
-+	dma_addr_t	dma_beg;
-+	dma_addr_t	dma_end;
-+	unsigned long	pfn_offset;
-+};
-+
-+static inline unsigned long dma_pfn_offset_from_dma_addr(struct device *dev,
-+							 dma_addr_t dma_addr)
-+{
-+	const struct dma_pfn_offset_region *m = dev->dma_pfn_offset_map;
-+
-+	if (m)
-+		for (; m->cpu_end; m++)
-+			if (dma_addr >= m->dma_beg && dma_addr < m->dma_end)
-+				return m->pfn_offset;
-+	return 0;
-+}
-+
-+static inline unsigned long dma_pfn_offset_from_phys_addr(struct device *dev,
-+							  phys_addr_t paddr)
-+{
-+	const struct dma_pfn_offset_region *m = dev->dma_pfn_offset_map;
-+
-+	if (m)
-+		for (; m->cpu_end; m++)
-+			if (paddr >= m->cpu_beg && paddr < m->cpu_end)
-+				return m->pfn_offset;
-+	return 0;
-+}
-+#else  /* CONFIG_DMA_PFN_OFFSET_MAP */
-+static inline unsigned long dma_pfn_offset_from_dma_addr(struct device *dev,
-+							 dma_addr_t dma_addr)
-+{
-+	return 0;
-+}
-+
-+static inline unsigned long dma_pfn_offset_from_phys_addr(struct device *dev,
-+							  phys_addr_t paddr)
-+{
-+	return 0;
-+}
-+#endif /* CONFIG_DMA_PFN_OFFSET_MAP */
-+
- #include <asm/dma-mapping.h>
- 
- static inline const struct dma_map_ops *get_dma_ops(struct device *dev)
-diff --git a/kernel/dma/Kconfig b/kernel/dma/Kconfig
-index 4c103a24e380..ceb7e5e8f501 100644
---- a/kernel/dma/Kconfig
-+++ b/kernel/dma/Kconfig
-@@ -195,3 +195,16 @@ config DMA_API_DEBUG_SG
- 	  is technically out-of-spec.
- 
- 	  If unsure, say N.
-+
-+config DMA_PFN_OFFSET_MAP
-+	bool "Uses a DMA range map to calculate PFN offset"
-+	depends on PCIE_BRCMSTB
-+	default n
-+	help
-+	  Some devices have a dma-range that gets converted to
-+	  a dev->dma_pfn_offset value.  This option is for the
-+	  atypical case of there being multiple dma-ranges requiring
-+	  multiple pfn offsets, which are selected from when
-+	  converting to phys to dma and vice versa.
-+
-+	  If unsure, say N.
--- 
-2.17.1
-
+I can get more info if it'll help, but I assume some device is already working.
