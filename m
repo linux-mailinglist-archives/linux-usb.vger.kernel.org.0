@@ -2,72 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C8E1E19EE
-	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2020 05:25:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 619BF1E1B59
+	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2020 08:33:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388606AbgEZDZg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 May 2020 23:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56884 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388523AbgEZDZg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 May 2020 23:25:36 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3616C061A0E
-        for <linux-usb@vger.kernel.org>; Mon, 25 May 2020 20:25:35 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id c71so1759437wmd.5
-        for <linux-usb@vger.kernel.org>; Mon, 25 May 2020 20:25:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=buIxI8Dghu/RugFyN26MhBXjzFwVplnZUSLd72o/Yd8=;
-        b=GbhnlCMREslfF4RXdo83zJpZ1LOexNG8FfmvexAyMK0G2IuRb5KxIHRvTmmJO9XWAb
-         ucpfd6gdW7kH2LZWmUQlf/8zZnfjyNQpV29USaxCKESyMOBHGCxxbGEmwWLHBWZ1bpZM
-         inNIM2RkQOGOR03fVnIen4XdV4DgZiJ/8VMOgjP6mrOSmJnxm89WIaOiHqH/X6gmzvUi
-         eqnGWYkLP3Put+3ewCVYO5C0Fen46LmbymXJDfLeUQhV8U6qlh+QMHp/lUuLyjNh8CGA
-         +VBOSBkJwYn0UL+72pC3H8S37LdqHXKW3jJgcNyYGw8fznNB8sb9hUFB89BNiRdHaMmN
-         rWug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=buIxI8Dghu/RugFyN26MhBXjzFwVplnZUSLd72o/Yd8=;
-        b=TuRYkUQr/dUft0FxDgy8InO/hJ6iP7hIou1m2qMNE9e+4Lp+PH+6bHJGNY7MfDTKFL
-         vTPVuusFgHHdXbp6DlVcptE2Ssu7ygPZrE7L1/xSG6TZSVaox5d5sXODO4N53nnW63jk
-         j6815Y1xDsMebaLuKmxFjaleNXAyN/X5ZYKYZyjk9ff8KO8h4WXwbodeeJxTApiKHuF6
-         zm5XPm5MW3LgvEHP+jVIiu99pokR6+H6ItRvLJhJ4JT5MAf5GJtstjbKQmkiZcmrSx89
-         Q5b7n3M/cK3jNSbIifRqRjMYV4VyOGxU1NUzQ5QPoeLeHiTuGzu3tunTk3s2birmEGy1
-         1FNg==
-X-Gm-Message-State: AOAM532DkOxYn5y38vqaXMtsM+M8OzPWmtJvraIXb4zXCcqA4DEAMbwg
-        Ghax3n/3OV94uHemMQV/ro2GQrdl7sK5SOePeY1hArX8
-X-Google-Smtp-Source: ABdhPJw+mlKM0AH2WjdjT4+iXhJKTM7NdG2EMlH/DZQUAfkqtmC8ONZaGbkIKfEps/XSaj2NLgbxeSeHvE3L9x5noMo=
-X-Received: by 2002:a1c:2bc2:: with SMTP id r185mr29588791wmr.49.1590463534470;
- Mon, 25 May 2020 20:25:34 -0700 (PDT)
+        id S1730156AbgEZGdk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 May 2020 02:33:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35540 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726842AbgEZGdi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 26 May 2020 02:33:38 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 493922073B;
+        Tue, 26 May 2020 06:33:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590474816;
+        bh=ekoHJmuDYgfF1SuG9z404kGqxsTf0Kd2lPtuC2TdX78=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=upgmfSg6+hyi2RnYD15UKVCUWWpzVmk35guz+ryNT4da9EZJ7evbDVNO0PKMLrqsQ
+         +fGZzarS6/XMZfmdW21nbzBX5BfMvv+D0W3fk0eD7I2f2aKeRnpBAyI0v+M2ILIryk
+         7qnBc+AjLpsROB+BxZwolVoeKKpBh4GZdOQAKZLI=
+Date:   Tue, 26 May 2020 08:33:34 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>, Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Johan Hovold <johan@kernel.org>,
+        Alex Elder <elder@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Julian Wiedmann <jwi@linux.ibm.com>,
+        Karsten Graul <kgraul@linux.ibm.com>,
+        Ursula Braun <ubraun@linux.ibm.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        John Stultz <john.stultz@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        greybus-dev@lists.linaro.org, netdev@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/8] driver core: Add helper for accessing Power
+ Management callbacs
+Message-ID: <20200526063334.GB2578492@kroah.com>
+References: <20200525182608.1823735-1-kw@linux.com>
+ <20200525182608.1823735-2-kw@linux.com>
 MIME-Version: 1.0
-From:   Frank Mori Hess <fmh6jj@gmail.com>
-Date:   Mon, 25 May 2020 23:25:23 -0400
-Message-ID: <CAJz5Opc0zDQxnNp2foPEeL0=hOZ0C9-xy3T4nEO2pRy-rQmpWQ@mail.gmail.com>
-Subject: usb: dwc2: screaming interrupt after kexec reboot
-To:     Minas Harutyunyan <minas.harutyunyan@synopsys.com>,
-        linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200525182608.1823735-2-kw@linux.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Mon, May 25, 2020 at 06:26:01PM +0000, Krzysztof Wilczyński wrote:
+> Add driver_to_pm() helper allowing for accessing the Power Management
+> callbacs for a particular device.  Access to the callbacs (struct
+> dev_pm_ops) is normally done through using the pm pointer that is
+> embedded within the device_driver struct.
+> 
+> Helper allows for the code required to reference the pm pointer and
+> access Power Management callbas to be simplified.  Changing the
+> following:
+> 
+>   struct device_driver *drv = dev->driver;
+>   if (dev->driver && dev->driver->pm && dev->driver->pm->prepare) {
+>       int ret = dev->driver->pm->prepare(dev);
+> 
+> To:
+> 
+>   const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
+>   if (pm && pm->prepare) {
+>       int ret = pm->prepare(dev);
+> 
+> Or, changing the following:
+> 
+>      const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+> 
+> To:
+>      const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
+> 
+> Signed-off-by: Krzysztof Wilczyński <kw@linux.com>
+> ---
+>  include/linux/device/driver.h | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+> 
+> diff --git a/include/linux/device/driver.h b/include/linux/device/driver.h
+> index ee7ba5b5417e..ccd0b315fd93 100644
+> --- a/include/linux/device/driver.h
+> +++ b/include/linux/device/driver.h
+> @@ -236,6 +236,21 @@ driver_find_device_by_acpi_dev(struct device_driver *drv, const void *adev)
+>  }
+>  #endif
+>  
+> +/**
+> + * driver_to_pm - Return Power Management callbacs (struct dev_pm_ops) for
+> + *                a particular device.
+> + * @drv: Pointer to a device (struct device_driver) for which you want to access
+> + *       the Power Management callbacks.
+> + *
+> + * Returns a pointer to the struct dev_pm_ops embedded within the device (struct
+> + * device_driver), or returns NULL if Power Management is not present and the
+> + * pointer is not valid.
+> + */
+> +static inline const struct dev_pm_ops *driver_to_pm(struct device_driver *drv)
+> +{
+> +	return drv && drv->pm ? drv->pm : NULL;
 
-I get a screaming dwc2 interrupt after rebooting into a new kernel
-with kexec.  I fixed it by modifying the dwc2_driver_shutdown function
-in dwc2/platform.c so it does
+I hate ? : lines with a passion, as they break normal pattern mattching
+in my brain.  Please just spell this all out:
+	if (drv && drv->pm)
+		return drv->pm;
+	return NULL;
 
-dwc2_writel(hsotg, 0, GINTMSK);
-dwc2_writel(hsotg, 0, HAINTMSK);
-dwc2_writel(hsotg, 0, DAINTMSK);
+Much easier to read, and the compiler will do the exact same thing.
 
-rather than calling disable_irq().  Another reason to make this change
-is disable_irq() affects other devices if the irq is shared.  I'd
-really rather not submit a formal patch, hopefully the maintainer will
-adopt this suggestion.
+Only place ? : are ok to use in my opinion, are as function arguments.
 
--- 
-Frank
+thanks,
+
+greg k-h
