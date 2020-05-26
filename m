@@ -2,109 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01C801E1FD0
-	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2020 12:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 060F21E2076
+	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2020 13:05:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731926AbgEZKgI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 26 May 2020 06:36:08 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:44980 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727890AbgEZKgH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 May 2020 06:36:07 -0400
-Received: by mail-ot1-f68.google.com with SMTP id f18so15836136otq.11;
-        Tue, 26 May 2020 03:36:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=OP8/hxzSora7+RyKmdWGrhPbxw1jS07GePgn3bcs4Ls=;
-        b=c3uGYnrCb4WAGHZya8YQv3RDUmJ/iiligWaOKn8wjfpV6U65Cn+8P6/8We9RY7VPtq
-         WVO8PaEN3ZnluyQhcXt0N8r5TRkyvnCduaHHOdNx9nCECB95hckaw0sDD5uyk8Nn2QKu
-         4gvjRqM2nDflIKrbTKV/pirTNdtUlTyUoiyzenvnBJ1wIy8O4zwHHA8UOX7+4gSJzhAm
-         hcGSnaL4shRqSiAdcGS+tX0IMhd1J7bAattoBquo+F8QEF4b0cibfEMexFGyHrhAU1ho
-         MyMPIi+HTS5QCj8XKC+wRD34gPgMWUuSHGLmaRBDq20pXlFYwQyq8tgBaEUIV4BzrVX0
-         D1Iw==
-X-Gm-Message-State: AOAM533HtqFz8V6nIu1fgbPJqBp/IXkPI8Zs9ruj9GgQHQbhvJuyeNXF
-        s+xvlroxpkP7LQrddggsqwfl9h26kfXyLjRyJ5Q=
-X-Google-Smtp-Source: ABdhPJy1GHMjiBmqkoqcnOQswjrf3GtFhFuljSG5cgXHe0ZrV2FGIT0iVHs8J6BfXHu/3+89V/CmkBUjqTdpcpTHsMI=
-X-Received: by 2002:a9d:6c0f:: with SMTP id f15mr346512otq.118.1590489366099;
- Tue, 26 May 2020 03:36:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200525182608.1823735-1-kw@linux.com> <20200525182608.1823735-3-kw@linux.com>
- <CAJZ5v0jQUmdDYmJsP43Ja3urpVLUxe-yD_Hm_Jd2LtCoPiXsrQ@mail.gmail.com> <20200526094518.GA4600@amd>
-In-Reply-To: <20200526094518.GA4600@amd>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 26 May 2020 12:35:55 +0200
-Message-ID: <CAJZ5v0ibtOMFDtCcyfmGeE15uR-+hQLw8tr6bfbp4aR4V7C3vA@mail.gmail.com>
-Subject: Re: [PATCH 2/8] ACPI: PM: Use the new device_to_pm() helper to access
- struct dev_pm_ops
-To:     Pavel Machek <pavel@denx.de>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>, Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
+        id S2388999AbgEZLEr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 May 2020 07:04:47 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:60128 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2389003AbgEZLEq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 May 2020 07:04:46 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1590491085; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=SKBdhs63Zp2CNDzdiohqN/c3xb5urkHJTxlo1SdluWA=; b=VmvcfV+w2UFlOhZKMY6i3W/t7qnb61gBsnKC3HBAfBZjP19eOkq/FrPV1lTEDSP/84dH/c4f
+ cryxSprXaL6oegMeLb3r7/gzE+F5IlFFdTrCI5f4u+kwhyeVtX875McOtDHKhOI3SBMDzZTC
+ jPVouq+4XVqY4dIYr/eF4pduhxE=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
+ 5eccf7b03131442d9595171b (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 26 May 2020 11:04:16
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 7D019C43395; Tue, 26 May 2020 11:04:15 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.206.24.160] (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: sanm)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 9663FC433C6;
+        Tue, 26 May 2020 11:04:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 9663FC433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sanm@codeaurora.org
+Subject: Re: [PATCH v7 2/4] usb: dwc3: qcom: Add interconnect support in dwc3
+ driver
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Andy Gross <agross@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Julian Wiedmann <jwi@linux.ibm.com>,
-        Karsten Graul <kgraul@linux.ibm.com>,
-        Ursula Braun <ubraun@linux.ibm.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        John Stultz <john.stultz@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        greybus-dev@lists.linaro.org, netdev <netdev@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-s390@vger.kernel.org,
-        "open list:TARGET SUBSYSTEM" <linux-scsi@vger.kernel.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Chandana Kishori Chiluveru <cchiluve@codeaurora.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+References: <1585718145-29537-1-git-send-email-sanm@codeaurora.org>
+ <1585718145-29537-3-git-send-email-sanm@codeaurora.org>
+ <878shu4uwk.fsf@kernel.org> <875zcy4uuj.fsf@kernel.org>
+ <20200514171352.GP4525@google.com>
+ <abbc3f8c-c8c9-c189-735e-f8058dab3e40@linaro.org> <87tv0h3fpv.fsf@kernel.org>
+ <090e48d7-7988-eea1-bf39-f6820578d354@linaro.org> <87r1vl3e42.fsf@kernel.org>
+ <20200518183512.GE2165@builder.lan>
+From:   "Sandeep Maheswaram (Temp)" <sanm@codeaurora.org>
+Message-ID: <b20775ba-7870-b0ca-7c65-d72a08fdacb2@codeaurora.org>
+Date:   Tue, 26 May 2020 16:34:06 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
+MIME-Version: 1.0
+In-Reply-To: <20200518183512.GE2165@builder.lan>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 26, 2020 at 11:45 AM Pavel Machek <pavel@denx.de> wrote:
->
-> On Tue 2020-05-26 10:37:36, Rafael J. Wysocki wrote:
-> > On Mon, May 25, 2020 at 8:26 PM Krzysztof Wilczyński <kw@linux.com> wrote:
-> > >
-> > > Use the new device_to_pm() helper to access Power Management callbacs
-> > > (struct dev_pm_ops) for a particular device (struct device_driver).
-> > >
-> > > No functional change intended.
-> > >
-> > > Signed-off-by: Krzysztof Wilczyński <kw@linux.com>
-> > > ---
-> > >  drivers/acpi/device_pm.c | 5 +++--
-> > >  1 file changed, 3 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/acpi/device_pm.c b/drivers/acpi/device_pm.c
-> > > index 5832bc10aca8..b98a32c48fbe 100644
-> > > --- a/drivers/acpi/device_pm.c
-> > > +++ b/drivers/acpi/device_pm.c
-> > > @@ -1022,9 +1022,10 @@ static bool acpi_dev_needs_resume(struct device *dev, struct acpi_device *adev)
-> > >  int acpi_subsys_prepare(struct device *dev)
-> > >  {
-> > >         struct acpi_device *adev = ACPI_COMPANION(dev);
-> > > +       const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
-> >
-> > I don't really see a reason for this change.
-> >
-> > What's wrong with the check below?
->
-> Duplicated code. Yes, compiler can sort it out, but... new version
-> looks better to me.
+Hi Felipe,
 
-So the new code would not be duplicated?
+Please let me know how to go forward with this patch
 
-Look at the other patches in the series then. :-)
+Regards
+
+Sandeep
+
+On 5/19/2020 12:05 AM, Bjorn Andersson wrote:
+> On Thu 14 May 23:29 PDT 2020, Felipe Balbi wrote:
+>
+>> Hi,
+>>
+>> Georgi Djakov <georgi.djakov@linaro.org> writes:
+>>>>>>>> Sandeep Maheswaram <sanm@codeaurora.org> writes:
+>>>>>>>>> +static int dwc3_qcom_interconnect_init(struct dwc3_qcom *qcom)
+>>>>>>>>> +{
+>>>>>>>>> +	struct device *dev = qcom->dev;
+>>>>>>>>> +	int ret;
+>>>>>>>>> +
+>>>>>>>>> +	if (!device_is_bound(&qcom->dwc3->dev))
+>>>>>>>>> +		return -EPROBE_DEFER;
+>>>>>>>> this breaks allmodconfig. I'm dropping this series from my queue for
+>>>>>>>> this merge window.
+>>>>>>> Sorry, I meant this patch ;-)
+>>>>>> I guess that's due to INTERCONNECT being a module. There is currently a
+>>>>> I believe it's because of this:
+>>>>> ERROR: modpost: "device_is_bound" [drivers/usb/dwc3/dwc3-qcom.ko] undefined!
+>>>>>
+>>>>>> discussion about this  with Viresh and Georgi in response to another
+>>>>>> automated build failure. Viresh suggests changing CONFIG_INTERCONNECT
+>>>>>> from tristate to bool, which seems sensible to me given that interconnect
+>>>>>> is a core subsystem.
+>>>>> The problem you are talking about would arise when INTERCONNECT=m and
+>>>>> USB_DWC3_QCOM=y and it definitely exists here and could be triggered with
+>>>>> randconfig build. So i suggest to squash also the diff below.
+>>>>>
+>>>>> Thanks,
+>>>>> Georgi
+>>>>>
+>>>>> ---8<---
+>>>>> diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
+>>>>> index 206caa0ea1c6..6661788b1a76 100644
+>>>>> --- a/drivers/usb/dwc3/Kconfig
+>>>>> +++ b/drivers/usb/dwc3/Kconfig
+>>>>> @@ -129,6 +129,7 @@ config USB_DWC3_QCOM
+>>>>>   	tristate "Qualcomm Platform"
+>>>>>   	depends on ARCH_QCOM || COMPILE_TEST
+>>>>>   	depends on EXTCON || !EXTCON
+>>>>> +	depends on INTERCONNECT || !INTERCONNECT
+>>>> I would prefer to see a patch adding EXPORT_SYMBOL_GPL() to device_is_bound()
+>>> Agree, but just to clarify, that these are two separate issues that need to
+>>> be fixed. The device_is_bound() is the first one and USB_DWC3_QCOM=y combined
+>>> with INTERCONNECT=m is the second one.
+>> If INTERCONNECT=m, QCOM3 shouldn't be y. I think the following is
+>> enough:
+>>
+>> 	depends on INTERCONNECT=y || INTERCONNECT=USB_DWC3_QCOM
+>>
+> This misses the case where INTERCONNECT=n and USB_DWC3_QCOM=[ym] which
+> I don't see a reason for breaking.
+>
+> But if only INTERCONNECT where a bool, then we don't need to specify a
+> depends on, because it will either be there, or the stubs will.
+> We've come to this conclusion in a lot of different frameworks and I
+> don't see why we should do this differently with INTERCONNECT.
+>
+> Regards,
+> Bjorn
+
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, hosted by The Linux Foundation
+
