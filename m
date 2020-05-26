@@ -2,66 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED9031E1CF0
-	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2020 10:08:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F072A1E1D4E
+	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2020 10:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728837AbgEZIIv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 May 2020 04:08:51 -0400
-Received: from mx2.suse.de ([195.135.220.15]:48942 "EHLO mx2.suse.de"
+        id S1729605AbgEZI21 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 May 2020 04:28:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49962 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727772AbgEZIIv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 26 May 2020 04:08:51 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 4EFD3ACA1;
-        Tue, 26 May 2020 08:08:53 +0000 (UTC)
-Message-ID: <1590480528.2838.24.camel@suse.com>
-Subject: Re: Kernel Oops in cdc_acm
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Jean Rene Dawin <jdawin@math.uni-bielefeld.de>,
-        linux-usb@vger.kernel.org
-Date:   Tue, 26 May 2020 10:08:48 +0200
-In-Reply-To: <20200525191624.GA28647@math.uni-bielefeld.de>
-References: <20200525120026.GA11378@math.uni-bielefeld.de>
-         <1590409690.2838.7.camel@suse.com>
-         <20200525191624.GA28647@math.uni-bielefeld.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1727879AbgEZI20 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 26 May 2020 04:28:26 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 09D342071A;
+        Tue, 26 May 2020 08:28:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590481706;
+        bh=oCMzAwCOpzidHmx+D3i0UgW9PyUvkrPjRh0awAS7XBU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kjIQ4/Ul3QLo9KFxaJOGiLie1F+wG+2i0KyHoq6TKANmGG6MDmEKFJD7zy+PQnCJB
+         0CUQ6R6n2EAKGcZ0qyAwe+JAv6VOv19BpG15l9YWAL8DYsWr02SdO1v/GDPXQMhAh9
+         fKitkq5UOP/YvYJyc7UdaH0jTuhBQRRlaOJa6Pf8=
+Date:   Tue, 26 May 2020 10:28:04 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [GIT PULL] usb: chipidea: changes for v5.8-rc1
+Message-ID: <20200526082804.GA2717070@kroah.com>
+References: <20200526024024.GC27933@b29397-desktop>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200526024024.GC27933@b29397-desktop>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Montag, den 25.05.2020, 21:16 +0200 schrieb Jean Rene Dawin:
+On Tue, May 26, 2020 at 02:39:59AM +0000, Peter Chen wrote:
+> Hi Greg,
+> 
+> Below are the changes for this merge window, and all patches are at
+> my tree several weeks, no issues are reported.
+> 
+> 
+> 
+> The following changes since commit 62d65bdd9d05158aa2547f8ef72375535f3bc6e3:
+> 
+>   USB: cdc-acm: restore capability check order (2020-03-27 16:24:16 +0100)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/usb.git/ tags/usb-ci-v5.8-rc1
 
+Pulled and pushed out,t hanks.
 
-Hi,
-
-good, so the primary bug is fixed. I will send it upstream.
-May I include your "Reported-by:" to give you the deserved fame?
-
-> The first time the battery is removed and inserted again, everything is
-> quite fine. Except that the USB cable has to be plugged out and in for the
-> connection to be re-established. But that was needed in previous
-> kernels, too.
-
-Yes, I know. It sucks. But I cannot tell that it is the same device
-in the kernel. Nor can I reestablish the connection, as it is done with
-AT commands. It also means I cannot support reset_resume(). It sucks.
-Any ideas?
-
-I can only encourage you to contact the people developing the tool set
-you are using.
-
-> # turn on phone
-> [  572.928634] ------------[ cut here ]------------
-> [  572.928643] WARNING: CPU: 0 PID: 0 at kernel/workqueue.c:1473 __queue_work+0x38a/0x430
-
-This is extremely interesting and unexpected. It is in USB core. I am
-looking into this.
-
-	Regards
-		Oliver
-
+greg k-h
