@@ -2,85 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DB591E1F77
-	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2020 12:14:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C50B1E1F8D
+	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2020 12:21:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731745AbgEZKOs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 May 2020 06:14:48 -0400
-Received: from mx2.suse.de ([195.135.220.15]:38948 "EHLO mx2.suse.de"
+        id S1731824AbgEZKVK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 May 2020 06:21:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47986 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726944AbgEZKOs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 26 May 2020 06:14:48 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id E3979B1E7;
-        Tue, 26 May 2020 10:14:49 +0000 (UTC)
-Message-ID: <1590488084.2838.34.camel@suse.com>
-Subject: Re: ttyACM: disabled by hub (EMI?), re-enabling... Causes garbage
- chars & disconnect
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Joakim Tjernlund <Joakim.Tjernlund@infinera.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Date:   Tue, 26 May 2020 12:14:44 +0200
-In-Reply-To: <8cf71160e703a18b28d27a844406d42f6cadf39b.camel@infinera.com>
-References: <6a4fe396ab5ae6cda548e904c57bc823103999d7.camel@infinera.com>
-         <1590418977.2838.16.camel@suse.com>
-         <b39259fc7f397b27f4af145eeafb33ec36638660.camel@infinera.com>
-         <a3f4a9bbde9efd2827b2a02c46f86c8ba7853bc6.camel@infinera.com>
-         <1590482853.2838.26.camel@suse.com>
-         <8cf71160e703a18b28d27a844406d42f6cadf39b.camel@infinera.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1726944AbgEZKUs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 26 May 2020 06:20:48 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 07094207CB;
+        Tue, 26 May 2020 10:20:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590488448;
+        bh=+sS0x47VC8tc/gMC26iNWscSpkNh5zLw45Bbs8WET18=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cO8HxD7NBhSqgNJvr5CcgjXdPVhvI1i5O3ygQwcDRi69UlzBZsyKwkUCcNyc/GNbG
+         6/+OPA9BnHRtOq+Rb6byTcxdFptDCw/uuHVxY8xw2B2x/cU7dwmSLDzXiX9dxJ1RNy
+         m4BT5NhFXQzABaTbxKs4Ju+9q/LmTATOft7wNTEM=
+Date:   Tue, 26 May 2020 12:20:38 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>, linux-usb@vger.kernel.org
+Subject: Re: [GIT PULL] Thunderbolt/USB4 changes for v5.8 merge window
+Message-ID: <20200526102038.GA2760432@kroah.com>
+References: <20200526091323.GH247495@lahna.fi.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200526091323.GH247495@lahna.fi.intel.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Dienstag, den 26.05.2020, 08:59 +0000 schrieb Joakim Tjernlund:
-> On Tue, 2020-05-26 at 10:47 +0200, Oliver Neukum wrote:
-> > 
-> > Am Montag, den 25.05.2020, 16:49 +0000 schrieb Joakim Tjernlund:
-> > 
-> > > To be clear, I can pull the cable and put it back and there are no garbage chars.
-> > > There is also this error:
-> > > [Wed May 20 14:03:25 2020] cdc_acm 1-6.3:1.1: acm_ctrl_irq - usb_submit_urb failed: -19
-> > > [Wed May 20 14:03:25 2020] usb 1-6-port2: attempt power cycle
-> > > [Wed May 20 14:03:26 2020] usb 1-6.3: USB disconnect, device number 86
-> > > [Wed May 20 14:03:26 2020] cdc_acm 1-6.3:1.1: failed to set dtr/rts
-> > > 
-> > > Should not this auto reenable emulate reattaching the USB cable?
-> > 
-> > Hi,
-> > 
-> > yes it should. You find the garage characters after the EMI event. How
-> > sure are you that they arrive after the event and not during the event?
-> > 
+On Tue, May 26, 2020 at 12:13:23PM +0300, Mika Westerberg wrote:
+> Hi Greg,
 > 
-> Don't known how to determine that? 
-> I can say that 
->    acm_ctrl_irq - usb_submit_urb failed: -19
+> The following changes since commit 8f3d9f354286745c751374f5f1fcafee6b3f3136:
+> 
+>   Linux 5.7-rc1 (2020-04-12 12:35:55 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v5.8
 
--19 is -ENODEV
+Pulled and pushed out, thanks,
 
-The driver thinks tries to resubmit the URB asking for control
-messages.
-Basically you are seeing error handling starting and failing due
-to a subsequent disconnect.
- 
-> and
->    cdc_acm 1-6.3:1.1: failed to set dtr/rts
-> are unique to this EMI event though. It does not feel like this
-> reenabling follow the same procedure as a cable pull?
-> As I can only see the above two errors I think we should get rid of
-> these first.
-
-The timing is different and if there is EMI transfer can end
-in errors and cause error handling to kick in. You are seeing
-symptoms. You can try enabling dynamic debugging to get
-a better log.
-
-	Regards
-		Oliver
-
+greg k-h
