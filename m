@@ -2,92 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B31DE1E1E1B
-	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2020 11:13:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCE3A1E1EF7
+	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2020 11:45:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731795AbgEZJN1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 May 2020 05:13:27 -0400
-Received: from mga14.intel.com ([192.55.52.115]:33932 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731635AbgEZJN1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 26 May 2020 05:13:27 -0400
-IronPort-SDR: /QlhAE+sSEnOtCqi7Sn1EKeOgbpSL1Jy46yHTAbmKEf6JXzPQ2i1sS/2D0kLkilUoIZVAMKE9+
- Ww5g9EfsWA4w==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2020 02:13:27 -0700
-IronPort-SDR: 8f5xbmvWlPF5ZzD0delccDTFMqXOEE48lTosgpKWD5S3voTperTyehxgc5oN9r2cdlWw3e8Kdo
- +cNHGRpy4nDQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,436,1583222400"; 
-   d="scan'208";a="375642487"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga001.fm.intel.com with SMTP; 26 May 2020 02:13:24 -0700
-Received: by lahna (sSMTP sendmail emulation); Tue, 26 May 2020 12:13:23 +0300
-Date:   Tue, 26 May 2020 12:13:23 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>, linux-usb@vger.kernel.org
-Subject: [GIT PULL] Thunderbolt/USB4 changes for v5.8 merge window
-Message-ID: <20200526091323.GH247495@lahna.fi.intel.com>
+        id S1731815AbgEZJpW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 May 2020 05:45:22 -0400
+Received: from jabberwock.ucw.cz ([46.255.230.98]:55976 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728686AbgEZJpW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 May 2020 05:45:22 -0400
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 791CE1C02C0; Tue, 26 May 2020 11:45:19 +0200 (CEST)
+Date:   Tue, 26 May 2020 11:45:18 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>, Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Julian Wiedmann <jwi@linux.ibm.com>,
+        Karsten Graul <kgraul@linux.ibm.com>,
+        Ursula Braun <ubraun@linux.ibm.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        John Stultz <john.stultz@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        greybus-dev@lists.linaro.org, netdev <netdev@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-s390@vger.kernel.org,
+        "open list:TARGET SUBSYSTEM" <linux-scsi@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH 2/8] ACPI: PM: Use the new device_to_pm() helper to
+ access struct dev_pm_ops
+Message-ID: <20200526094518.GA4600@amd>
+References: <20200525182608.1823735-1-kw@linux.com>
+ <20200525182608.1823735-3-kw@linux.com>
+ <CAJZ5v0jQUmdDYmJsP43Ja3urpVLUxe-yD_Hm_Jd2LtCoPiXsrQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="bg08WKrSYDhXBjb5"
 Content-Disposition: inline
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <CAJZ5v0jQUmdDYmJsP43Ja3urpVLUxe-yD_Hm_Jd2LtCoPiXsrQ@mail.gmail.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
 
-The following changes since commit 8f3d9f354286745c751374f5f1fcafee6b3f3136:
+--bg08WKrSYDhXBjb5
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-  Linux 5.7-rc1 (2020-04-12 12:35:55 -0700)
+On Tue 2020-05-26 10:37:36, Rafael J. Wysocki wrote:
+> On Mon, May 25, 2020 at 8:26 PM Krzysztof Wilczy=C5=84ski <kw@linux.com> =
+wrote:
+> >
+> > Use the new device_to_pm() helper to access Power Management callbacs
+> > (struct dev_pm_ops) for a particular device (struct device_driver).
+> >
+> > No functional change intended.
+> >
+> > Signed-off-by: Krzysztof Wilczy=C5=84ski <kw@linux.com>
+> > ---
+> >  drivers/acpi/device_pm.c | 5 +++--
+> >  1 file changed, 3 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/acpi/device_pm.c b/drivers/acpi/device_pm.c
+> > index 5832bc10aca8..b98a32c48fbe 100644
+> > --- a/drivers/acpi/device_pm.c
+> > +++ b/drivers/acpi/device_pm.c
+> > @@ -1022,9 +1022,10 @@ static bool acpi_dev_needs_resume(struct device =
+*dev, struct acpi_device *adev)
+> >  int acpi_subsys_prepare(struct device *dev)
+> >  {
+> >         struct acpi_device *adev =3D ACPI_COMPANION(dev);
+> > +       const struct dev_pm_ops *pm =3D driver_to_pm(dev->driver);
+>=20
+> I don't really see a reason for this change.
+>=20
+> What's wrong with the check below?
 
-are available in the Git repository at:
+Duplicated code. Yes, compiler can sort it out, but... new version
+looks better to me.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v5.8
+Best regards,
+								pavel
 
-for you to fetch changes up to 4caf2511ec498277333d229f8a7ad1fa9331df65:
+> >
+> > -       if (dev->driver && dev->driver->pm && dev->driver->pm->prepare)=
+ {
+> > -               int ret =3D dev->driver->pm->prepare(dev);
+> > +       if (pm && pm->prepare) {
+> > +               int ret =3D pm->prepare(dev);
 
-  thunderbolt: Add trivial .shutdown (2020-05-25 11:48:03 +0300)
 
-----------------------------------------------------------------
-thunderbolt: Changes for v5.8 merge window
 
-This adds support for Intel Tiger Lake Thunderbolt controller using
-firmware based connection manager. In addition the driver can now be
-built on non-x86 architectures as well. Then there are a couple of
-commits that make the driver work across kexec, replace a zero length
-array with flexible one, and revert one change that is not needed
-anymore because of NVMem subsystem improvements.
+--=20
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
+g.html
 
-----------------------------------------------------------------
-David Manouchehri (1):
-      thunderbolt: Update Kconfig to allow building on other architectures.
+--bg08WKrSYDhXBjb5
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
 
-Gustavo A. R. Silva (1):
-      thunderbolt: Replace zero-length array with flexible-array
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
 
-Maxim Levitsky (1):
-      thunderbolt: Add trivial .shutdown
+iEYEARECAAYFAl7M5S0ACgkQMOfwapXb+vJLqgCcCbDmh7NooqBM+qslb58avjsp
+78cAn1mUUlj/BAfzgJELHWPID2a0mmvg
+=+Cmh
+-----END PGP SIGNATURE-----
 
-Mika Westerberg (1):
-      thunderbolt: Add support for Intel Tiger Lake
-
-Nicholas Johnson (1):
-      Revert "thunderbolt: Prevent crash if non-active NVMem file is read"
-
- drivers/thunderbolt/Kconfig  |  1 -
- drivers/thunderbolt/icm.c    | 22 ++++++++++++++++++++++
- drivers/thunderbolt/nhi.c    |  5 +++++
- drivers/thunderbolt/nhi.h    |  2 ++
- drivers/thunderbolt/switch.c |  7 -------
- include/linux/thunderbolt.h  |  2 +-
- 6 files changed, 30 insertions(+), 9 deletions(-)
+--bg08WKrSYDhXBjb5--
