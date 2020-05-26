@@ -2,129 +2,176 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 413D31E211B
-	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2020 13:43:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBD081E2159
+	for <lists+linux-usb@lfdr.de>; Tue, 26 May 2020 13:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388905AbgEZLnV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 May 2020 07:43:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48932 "EHLO
+        id S1728626AbgEZLx0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 May 2020 07:53:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388510AbgEZLnU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 May 2020 07:43:20 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60090C03E97E;
-        Tue, 26 May 2020 04:43:20 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id e4so1596125ljn.4;
-        Tue, 26 May 2020 04:43:20 -0700 (PDT)
+        with ESMTP id S1729566AbgEZLxZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 May 2020 07:53:25 -0400
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF59C03E97B
+        for <linux-usb@vger.kernel.org>; Tue, 26 May 2020 04:53:25 -0700 (PDT)
+Received: by mail-io1-xd44.google.com with SMTP id j8so21536184iog.13
+        for <linux-usb@vger.kernel.org>; Tue, 26 May 2020 04:53:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=sCpXcTRl3vsWBtClDzeRm+UY+tVeAJjr3BKAo83yXgg=;
-        b=i7JdQYGOxWV80uCxES3u/NXyzKpjHyQZiq4wLGq0wuPOqfrt9TOW4ee6kULNc2yn2F
-         5IZTOmy++lMyYCnZqqMaMotraN7ejj62aidN2STBdBR7wG6rdzwtizyDH6PgnlpTeMf6
-         0Alu0OGTVENkkP/5dkRsJrjxC8QdWG3iQ5XNtHWyPXZQWzTLjv91Io/gQTs9e2GKk87V
-         G60EjY/zxAjAacCKLmuVEOF63Hzk/AuUfXlerRFqoJ//0j12AXwGS6ttCM2vS16VP/MV
-         LHhsmuozrrNTvvkdwFcS/YxUkHJJtBEI2LhzEcGD64qENU8IUNlF0S+kd9zzqQzUkdYJ
-         flpA==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=hlMxfZxeMD+DKWmT3pt17RdFPN380iI2WVeOeZ79wkw=;
+        b=t4kZrH+2brZaCI4MrOkR6KZfqPavGym3179KUX4j/ZvYjMZeGwNOrjXyEzeIGYdSAV
+         5PSjV6gaZI3+EepcmOnwgmqSZhsuJiMkZi7Pd8CQCruTBzcT6c5Ley9CH2SsLVshyIt3
+         QNsiKJjobAtOpmroQCiLNENOzYP0eYjZlDsUmDlIgRz7hEU6moYbMyw7UQaxsEmCHNA/
+         qZOM3IaV+rOtSdd1HCCRWWUcEIllNbeZrBRMH2IICgG1iA6wF2ughWfOqEzUP8+mT3/1
+         ycBv0p1napzjkUUxgXfJ/eXiWh48UrP1d6+OA7KfHNjYL+8zAtH4huoUG0QivvNCEAYz
+         ekyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=sCpXcTRl3vsWBtClDzeRm+UY+tVeAJjr3BKAo83yXgg=;
-        b=Kb0oV1qsz0bXfrmzU+gSeywi/locpNDa5SshA6f8CzwnSv4fUoIYRCQ2l3Y34bRA65
-         7fzjzMMg/wmOictaSCQjRsg80cKa2FNEmfZrDKCRXUR6y/dzdIL8Ss6siDTppqYEqNVM
-         3X5UgJe5TsmjesfWo2r+mDpaexFcNI14Xpq8NkKTXyZf1bYRehaquxex5EgcWtLXBl3s
-         iXZ9JAd2AmQ46MKOLX/HmPvTrZqmekoAuKJtciy+4PKoPbhB63nUCVZHqnjxJ4cDIrhY
-         4Zcyf2fCpROh5k8BosFSvfcDXjrSPu0vIfSK7Lr6aVoB2K/xo9JSCyq5oF6mDzYwRslj
-         OYyA==
-X-Gm-Message-State: AOAM532Ev6bWQf+pP5rmvxlFAuu9QadfP8x16zc100s2NAf34/L7V0xP
-        FGNuffqWQHkXGSeJ2xJ+FL21Lz4F5iI=
-X-Google-Smtp-Source: ABdhPJwB6hEoJNRdH7dBEep1lhwCwmRGm9m89aDzlD2NRcwbnA7TRDxS2lA424olfMemXwlDP3eGnw==
-X-Received: by 2002:a05:651c:303:: with SMTP id a3mr440332ljp.414.1590493398773;
-        Tue, 26 May 2020 04:43:18 -0700 (PDT)
-Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id x28sm5544167ljd.53.2020.05.26.04.43.17
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 26 May 2020 04:43:18 -0700 (PDT)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Georgi Djakov <georgi.djakov@linaro.org>,
-        "Sandeep Maheswaram \(Temp\)" <sanm@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Matthias Kaehlcke <mka@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Chandana Kishori Chiluveru <cchiluve@codeaurora.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Subject: Re: [PATCH v7 2/4] usb: dwc3: qcom: Add interconnect support in dwc3 driver
-In-Reply-To: <0723aee9-9ea4-dab5-e083-3cf3858a8f96@linaro.org>
-References: <1585718145-29537-1-git-send-email-sanm@codeaurora.org> <1585718145-29537-3-git-send-email-sanm@codeaurora.org> <878shu4uwk.fsf@kernel.org> <875zcy4uuj.fsf@kernel.org> <20200514171352.GP4525@google.com> <abbc3f8c-c8c9-c189-735e-f8058dab3e40@linaro.org> <87tv0h3fpv.fsf@kernel.org> <090e48d7-7988-eea1-bf39-f6820578d354@linaro.org> <87r1vl3e42.fsf@kernel.org> <20200518183512.GE2165@builder.lan> <b20775ba-7870-b0ca-7c65-d72a08fdacb2@codeaurora.org> <0723aee9-9ea4-dab5-e083-3cf3858a8f96@linaro.org>
-Date:   Tue, 26 May 2020 14:43:12 +0300
-Message-ID: <871rn63orz.fsf@kernel.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=hlMxfZxeMD+DKWmT3pt17RdFPN380iI2WVeOeZ79wkw=;
+        b=osJqpd84jyZGUft9GJfhN4Cztan/rSOphFvsIOhoHrM5Q/xXN6JxbDe7KJnoBWFVO8
+         ZEFNTF4OtB3sh6k+8/+JqCyCZ8dHWm3DEsX8qBg+86JP5zcw6nQMrygkJgutBBsLkCon
+         HkyNLw23x+eFMgeAYZIvKWfBBawjDfFokOP2hqImHCekyMIXXgX++TdkRUXLyN2OMIu+
+         pLBNT5hKNEcoD1WkMdpoucoXGRgSpxX6MZna6wWKY3ML550gUNA30Fx+zMElRalga44I
+         gT20sJ19jbeAPBBtfypKrwumSYZBgvQB+YRdg0j+HO0n8zu380QG2N9VnZzJEmg+abjK
+         quuw==
+X-Gm-Message-State: AOAM533AQw2MdTLanh8AFzSX84N4n0s95DjCWBzarEkSwgT2D/KksNJV
+        VQd6BsjeY5QRAYZ+WTTBIKQrvg==
+X-Google-Smtp-Source: ABdhPJysJNQt3T6dM953D88S5wdzxi/U/oshKuW/qDlHy6hbQRmFmerb1YPlez4lats+13/+SUWV/g==
+X-Received: by 2002:a5e:a70b:: with SMTP id b11mr8299591iod.63.1590494004490;
+        Tue, 26 May 2020 04:53:24 -0700 (PDT)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id c7sm11123220ilf.36.2020.05.26.04.53.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 May 2020 04:53:23 -0700 (PDT)
+Subject: Re: [greybus-dev] [PATCH 1/8] driver core: Add helper for accessing
+ Power Management callbacs
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>, linux-pci@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, linux-s390@vger.kernel.org,
+        linux-scsi@vger.kernel.org, Kevin Hilman <khilman@kernel.org>,
+        Julian Wiedmann <jwi@linux.ibm.com>,
+        linux-acpi@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Len Brown <lenb@kernel.org>, linux-pm@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Ursula Braun <ubraun@linux.ibm.com>,
+        Johan Hovold <johan@kernel.org>, greybus-dev@lists.linaro.org,
+        John Stultz <john.stultz@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Felipe Balbi <balbi@kernel.org>, Alex Elder <elder@kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Karsten Graul <kgraul@linux.ibm.com>,
+        "David S. Miller" <davem@davemloft.net>
+References: <20200525182608.1823735-1-kw@linux.com>
+ <20200525182608.1823735-2-kw@linux.com> <20200526063334.GB2578492@kroah.com>
+From:   Alex Elder <elder@linaro.org>
+Message-ID: <41c42552-0f4f-df6a-d587-5c62333aa6a8@linaro.org>
+Date:   Tue, 26 May 2020 06:53:22 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+In-Reply-To: <20200526063334.GB2578492@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On 5/26/20 1:33 AM, Greg Kroah-Hartman wrote:
+> On Mon, May 25, 2020 at 06:26:01PM +0000, Krzysztof Wilczyński wrote:
+>> Add driver_to_pm() helper allowing for accessing the Power Management
+>> callbacs for a particular device.  Access to the callbacs (struct
+>> dev_pm_ops) is normally done through using the pm pointer that is
+>> embedded within the device_driver struct.
+>>
+>> Helper allows for the code required to reference the pm pointer and
+>> access Power Management callbas to be simplified.  Changing the
+>> following:
+>>
+>>    struct device_driver *drv = dev->driver;
+>>    if (dev->driver && dev->driver->pm && dev->driver->pm->prepare) {
+>>        int ret = dev->driver->pm->prepare(dev);
+>>
+>> To:
+>>
+>>    const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
+>>    if (pm && pm->prepare) {
+>>        int ret = pm->prepare(dev);
+>>
+>> Or, changing the following:
+>>
+>>       const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+>>
+>> To:
+>>       const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
+>>
+>> Signed-off-by: Krzysztof Wilczyński <kw@linux.com>
+>> ---
+>>   include/linux/device/driver.h | 15 +++++++++++++++
+>>   1 file changed, 15 insertions(+)
+>>
+>> diff --git a/include/linux/device/driver.h b/include/linux/device/driver.h
+>> index ee7ba5b5417e..ccd0b315fd93 100644
+>> --- a/include/linux/device/driver.h
+>> +++ b/include/linux/device/driver.h
+>> @@ -236,6 +236,21 @@ driver_find_device_by_acpi_dev(struct device_driver *drv, const void *adev)
+>>   }
+>>   #endif
+>>   
+>> +/**
+>> + * driver_to_pm - Return Power Management callbacs (struct dev_pm_ops) for
+>> + *                a particular device.
+>> + * @drv: Pointer to a device (struct device_driver) for which you want to access
+>> + *       the Power Management callbacks.
+>> + *
+>> + * Returns a pointer to the struct dev_pm_ops embedded within the device (struct
+>> + * device_driver), or returns NULL if Power Management is not present and the
+>> + * pointer is not valid.
+>> + */
+>> +static inline const struct dev_pm_ops *driver_to_pm(struct device_driver *drv)
+>> +{
+>> +	return drv && drv->pm ? drv->pm : NULL;
 
+This could just be:
 
-Hi,
+	if (drv)
+		return drv->pm;
 
-Georgi Djakov <georgi.djakov@linaro.org> writes:
-> On 26.05.20 14:04, Sandeep Maheswaram (Temp) wrote:
->> Hi Felipe,
->>=20
->> Please let me know how to go forward with this patch
+	return NULL;
 
-(don't top-post!)
+Or if you want to evoke passion in Greg:
 
-> Please just add a patch to fix the allmodconfig error. Felipe has
-> suggested to introduce a separate patch which exports the
-> device_is_bound() function. This export should precede the addition
-> of interconnect support.
->
-> Also regarding the "depends on INTERCONNECT || !INTERCONNECT" change,
-> no "depends on" would be needed, as we just made the interconnect
-> framework bool.
+	return drv ? drv->pm : NULL;
 
-y'all have lost the current merge window, I guess. I'm not sure Greg
-will take last minute changes to drivers base and I have already sent
-him my pull request for v5.8. On the plus side, this gives you the
-chance to run hundreds of randbuilds with your patches.
+					-Alex
 
-=2D-=20
-balbi
+> I hate ? : lines with a passion, as they break normal pattern mattching
+> in my brain.  Please just spell this all out:
+> 	if (drv && drv->pm)
+> 		return drv->pm;
+> 	return NULL;
+> 
+> Much easier to read, and the compiler will do the exact same thing.
+> 
+> Only place ? : are ok to use in my opinion, are as function arguments.
+> 
+> thanks,
+> 
+> greg k-h
+> _______________________________________________
+> greybus-dev mailing list
+> greybus-dev@lists.linaro.org
+> https://lists.linaro.org/mailman/listinfo/greybus-dev
+> 
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl7NANEACgkQzL64meEa
-mQZVaxAAsCP/6euxWFKWIpRzRkpKGetdAmxpRbOwuu89BRmDwQExLzTdCPRmnR+k
-VSN02V1/5oMVKXrBVCVLtRj2Cd1ug+zu8guQodJ0z9P1u8se+I+MKGRHhjDMjnIE
-U2h47FVxsXrUUJ0M7SJaaIGwSR2eqK3c44d75tiUrYyB/aGdJO8JJJywmP/6nyYN
-ZhSdQV4XICMOJAXDnxcVQ7j24jHA10X6F7hvnBZBdgYMXxdVnXaSWaMxxR+JiziO
-eGXr15rItk8sEGk+Nz0EfB4NThfjo5YmFuCxfk6/rWi+8FgQJLmV+2k12ngbMf6C
-Cly8Z/J+WoJaaxkccMW1wG2h8xoEadLBjceSWDbRa8cBcoICzdoQfMMCDaROfGSB
-7u+0YvsCyw+xIan9qLpOriAVCsKcX5yU6Bx/0ufNzv/7HorpzS3tM6nXbBCC23GB
-XQsy5Da59ajQUhzXPRD7YqHXfY3xYSB1Y0F2G3rxt+aPZD2HJJb2eLjpqxOxkWZo
-7jWEy2PA21dSb7UvXUXGakYAyEF2Q33HcL/V+7eMeWqNkoO7aE2wv1tswcjO18XB
-WLesjA8lScj/MyHB2r/xu5cD8WV2MaByiY/MLTHsgfVX0xydbBQyiiay/fLlHR/1
-1XIKU3j/s/byeXTLE+EwirvTUumKH5apjOgTEoB2S0qXCX6fgAg=
-=dJ4W
------END PGP SIGNATURE-----
---=-=-=--
