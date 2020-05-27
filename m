@@ -2,62 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD2981E3B04
-	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2020 09:54:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E99301E3BC3
+	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2020 10:17:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387696AbgE0Hxi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 May 2020 03:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39370 "EHLO
+        id S2387891AbgE0IRg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 May 2020 04:17:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387650AbgE0Hxi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 May 2020 03:53:38 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB70CC061A0F
-        for <linux-usb@vger.kernel.org>; Wed, 27 May 2020 00:53:37 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id y17so14610408wrn.11
-        for <linux-usb@vger.kernel.org>; Wed, 27 May 2020 00:53:37 -0700 (PDT)
+        with ESMTP id S2387776AbgE0IRf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 May 2020 04:17:35 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F862C03E97A
+        for <linux-usb@vger.kernel.org>; Wed, 27 May 2020 01:17:35 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id u26so1693235wmn.1
+        for <linux-usb@vger.kernel.org>; Wed, 27 May 2020 01:17:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=subject:to:cc:references:from:autocrypt:organization:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=0uXOIK76KSs40fnk/nPthqtyEhJ+m0Y/dYNUNGL8EzA=;
-        b=uP8qKtET22Dmlqb49Ul3D8lgyOk3haU2hVybPhJrVAT+QAKmCAEAJiW4D4nVp2oZTD
-         6WLECOGS8MI6Kwn2DGqMxOiNzWi2czeFM+i9AGQwj16db/QBtfsa9dpJzFACABMbcQ+b
-         zyYGLY2fFy5wwzqiyYUIASb+e50kPYF5QuG4yhw650XBCB/pij/D6NjL1C+bHe7SU1b6
-         S86iNSeSI8DgwNc6n5sCwvUrW4LCBbRJCq8khWPXTqhs8MXoew9yGdcwEl7jSyxA9pGf
-         wLzeMCJSyefqqDZbaxMJ9it+bKJt6pf9Z9ZJCjXQpQ++UOQPEuLgqhUaLve9dcfTRERm
-         XGvA==
+        bh=zQPsUVCqNfzFIU8v+ZDf1R9blbjp1zF0pTEs4sFWhWU=;
+        b=YgVqEsnHHZp93t+SQ2Ae73TGpl85Q6L1tDROvs8Tobv4eKCAT6IccsQt9lTRvQbuxT
+         O6gRYjdUeWehx0AhZ3hloWHfGclDcE6lRxvAxSjFiM/u5tuFFkqPHi6VvC4idg/peWJJ
+         PXmxtXbc2FPfb2G9YJnwd9blYMCKwXce1c3qDOE8qUunH9ZMXoFKSgzzxJEIWwhdX8HI
+         LJK2hTqGT1GbT0D+R5KLVgVnjZwCzVPGSOToiINSZojZ5Y8yqparHQ4hIa0LpHq4Be5M
+         Htj/D/oSFAmmNjpiQS6cjzqkIgLwn/QLo938SrxL9OxivAv4pqjJF7IbiEVfjtRQE9x+
+         d0aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :organization:message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=0uXOIK76KSs40fnk/nPthqtyEhJ+m0Y/dYNUNGL8EzA=;
-        b=Qhuz+SZX99Urspe32sxibf0FV15zEajGKPkyNBom1pqTTCYv0ozqb/Wj4cY6BAHWhE
-         oMESul4PH5LsdXwsP3gEAjqrqmkKSjPTeDPr19IWbzbf+9xNAIC9cWwbwW4jeMaGWju8
-         EkIhVVuXyeguc+yANEL0+KEI9Ls/PfvC2ET9hrEg1u7N4N93zp/g5hYuU7z5AVwM6RDR
-         vYKJZuh6+J9GHDQ8+VmOTAJJAMJ8dTVW03kiU+rLnylBNvo37QW6D+nmM/2h0YkHSsO9
-         Cdjwdk9line6sx4Ovl1ZCRd4d6Hzi9pszXtP/GowWTbhsjItEiZjhxbLDWl0u6J8qb6v
-         nwqQ==
-X-Gm-Message-State: AOAM533xOp2AZ8mras5oudeBdW11l0gnCtvtdjbAUcxhVt/Q2TMjjCTR
-        8E/wpIhKDw8IxfG1mZO8ZAzu3pysgg1WaQ==
-X-Google-Smtp-Source: ABdhPJxn28gk0kw3P6BCtiNPU+2IYx7W2LVb8NiQ4cjXVBUay1OBUQ0UwOCoSCQYZXQYFDKE+dooOg==
-X-Received: by 2002:a5d:4701:: with SMTP id y1mr78311wrq.310.1590566016324;
-        Wed, 27 May 2020 00:53:36 -0700 (PDT)
+        bh=zQPsUVCqNfzFIU8v+ZDf1R9blbjp1zF0pTEs4sFWhWU=;
+        b=mLMIR1MVIABSTik6aozf3Dt3H150chhmGcXWkXwqVxjJCfHaTocoFux3K2buCY+fCH
+         tx0J59cTPm1r/9+IY+rZn9s9YYFGizyyFPyVpsZcWZ/Pq1LqAVbQIeW/YK+ylfgL0QXV
+         GqAgZlhlArYcbDiGhfoKnJRoexZI8+C1/dEMSikjjkMBwsuPBD/VawzyG/qsmXR1IjVJ
+         eY8rxjuRKJSKQkIGuMGtp8DI7/4DsTw39OdqwKkYaXLDUT/ymrrHt13up1hzD8TQQJFZ
+         IHpQQiTgiLCoB+Ycdll8eLggGUXSvufeajhr4hoT/R750IQqcpwJZKOq73RbUEviA0Wf
+         YCwQ==
+X-Gm-Message-State: AOAM531IYIejWNWICNuCx0rz7QiYrr/H+LPfuZWd1gROwKlJ+a2ykWdt
+        WHJW4RDxdrotCGPkwr6RAYDB7A==
+X-Google-Smtp-Source: ABdhPJx8wptAoFsnZYW04E1TTKd7bYnndpnmEkPYZcaM4kED49FKX+cqXxfItLqmi7vSzsFcR5xCkA==
+X-Received: by 2002:a1c:64c1:: with SMTP id y184mr3055622wmb.175.1590567453814;
+        Wed, 27 May 2020 01:17:33 -0700 (PDT)
 Received: from ?IPv6:2a01:e35:2ec0:82b0:acf8:18a8:b3a5:a17b? ([2a01:e35:2ec0:82b0:acf8:18a8:b3a5:a17b])
-        by smtp.gmail.com with ESMTPSA id w15sm1959515wmi.35.2020.05.27.00.53.34
+        by smtp.gmail.com with ESMTPSA id t14sm2165032wrb.94.2020.05.27.01.17.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 May 2020 00:53:35 -0700 (PDT)
-Subject: Re: [PATCH for-5.8 1/2] usb: dwc3: meson-g12a: fix error path when
- fetching the reset line fails
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        balbi@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-amlogic@lists.infradead.org
-Cc:     hanjie.lin@amlogic.com, yue.wang@amlogic.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+        Wed, 27 May 2020 01:17:33 -0700 (PDT)
+Subject: Re: [PATCH for-5.8 2/2] usb: dwc3: meson-g12a: fix USB2 PHY
+ initialization on G12A and A1 SoCs
+To:     balbi@kernel.org, gregkh@linuxfoundation.org
+Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-usb@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        hanjie.lin@amlogic.com, yue.wang@amlogic.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        "kernelci.org bot" <bot@kernelci.org>
 References: <20200526202943.715220-1-martin.blumenstingl@googlemail.com>
- <20200526202943.715220-2-martin.blumenstingl@googlemail.com>
+ <20200526202943.715220-3-martin.blumenstingl@googlemail.com>
 From:   Neil Armstrong <narmstrong@baylibre.com>
 Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
  xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
@@ -109,12 +110,12 @@ Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
  zR8QplXA5kogS4kLe/7/JmlDMO8Zgm9vKLHSUeesLOrjdZ59EcjldNNBszRZQgEhwaarfz46
  BSwxi7g3Mu7u5kUByanqHyA=
 Organization: Baylibre
-Message-ID: <f4428633-4a7b-226d-d7df-0a43efb9d6ec@baylibre.com>
-Date:   Wed, 27 May 2020 09:53:34 +0200
+Message-ID: <40a874eb-1a2b-533e-ee3e-bd90510abaf9@baylibre.com>
+Date:   Wed, 27 May 2020 10:17:31 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <20200526202943.715220-2-martin.blumenstingl@googlemail.com>
+In-Reply-To: <20200526202943.715220-3-martin.blumenstingl@googlemail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -123,32 +124,51 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Martin,
+
 On 26/05/2020 22:29, Martin Blumenstingl wrote:
-> Disable and unprepare the clocks when devm_reset_control_get_shared()
-> fails. This fixes the error path as this must disable the clocks which
-> were previously enabled.
+> dwc3_meson_g12a_usb2_init_phy() crashes with NULL pointer on an SM1
+> board (which uses the same USB setup as G12A) dereference as reported
+> by the Kernel CI bot. This is because of the following call flow:
+>   dwc3_meson_g12a_probe
+>     priv->drvdata->setup_regmaps
+>       dwc3_meson_g12a_setup_regmaps
+>         priv->usb2_ports is still 0 so priv->u2p_regmap[i] will be NULL
+>     dwc3_meson_g12a_get_phys
+>       initializes priv->usb2_ports
+>     priv->drvdata->usb_init
+>       dwc3_meson_g12a_usb_init
+>         dwc3_meson_g12a_usb_init_glue
+>           dwc3_meson_g12a_usb2_init
+>             priv->drvdata->usb2_init_phy
+>               dwc3_meson_g12a_usb2_init_phy
+>                 dereferences priv->u2p_regmap[i]
 > 
-> Fixes: 1e355f21d3fb96 ("usb: dwc3: Add Amlogic A1 DWC3 glue")
-> Cc: Yue Wang <yue.wang@amlogic.com>
-> Cc: Hanjie Lin <hanjie.lin@amlogic.com>
+> Call priv->drvdata->setup_regmaps only after dwc3_meson_g12a_get_phys so
+> priv->usb2_ports is initialized and the regmaps will be set up
+> correctly. This fixes the NULL dereference later on.
+> 
+> Fixes: 013af227f58a97 ("usb: dwc3: meson-g12a: handle the phy and glue registers separately")
+> Reported-by: "kernelci.org bot" <bot@kernelci.org>
 > Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 > ---
->  drivers/usb/dwc3/dwc3-meson-g12a.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/usb/dwc3/dwc3-meson-g12a.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 > 
 > diff --git a/drivers/usb/dwc3/dwc3-meson-g12a.c b/drivers/usb/dwc3/dwc3-meson-g12a.c
-> index bd744e82cad4..ce5388338389 100644
+> index ce5388338389..1f7f4d88ed9d 100644
 > --- a/drivers/usb/dwc3/dwc3-meson-g12a.c
 > +++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
-> @@ -738,7 +738,7 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
->  	if (IS_ERR(priv->reset)) {
->  		ret = PTR_ERR(priv->reset);
->  		dev_err(dev, "failed to get device reset, err=%d\n", ret);
-> -		return ret;
-> +		goto err_disable_clks;
->  	}
->  
->  	ret = reset_control_reset(priv->reset);
-> 
 
-Acked-by: Neil Armstrong <narmstrong@baylibre.com>
+[...]
+
+Fixes regression reported at [1] on SEI510 board based on Amlogic G12A.
+
+Felipe, Greg, can this be queued on uxb-next for 5.8 ?
+
+Acked-by: Neil Armstrong <narmstron@baylibre.com>
+
+Thanks,
+Neil
+
+[1] http://lore.kernel.org/r/ffe2c64c-62ed-9b59-3754-7ede0f0203be@collabora.com
