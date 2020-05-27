@@ -2,287 +2,305 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C97501E3F54
-	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2020 12:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E240B1E3FA2
+	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2020 13:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728313AbgE0KoR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 May 2020 06:44:17 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:34694 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727027AbgE0KoQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 May 2020 06:44:16 -0400
-Received: from mailhost.synopsys.com (mdc-mailhost2.synopsys.com [10.225.0.210])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 2235EC0519;
-        Wed, 27 May 2020 10:44:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1590576255; bh=855GjQn1FEeqOyUJZosAn+Z7OiUOrt0Wo2sq8fiAPc0=;
-        h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=NfnwRhd3BdNcw3Bz/8oim6Meqj2EnM6UToAW8RN75KyDgxZsWp/I7r/lov4a8MAo+
-         nvslKH2oc58aym7fHAFT46LpqG5glD4rZGN2ehZ1bVH5tA2QPHvzm9iKqN5UncIhJm
-         CMZqz6ZgqC/GwL+JmkHSzGLxxN6tsQ3SO2Co2bwWNph04g6+DJ1ldlZsmf/mZWWPzP
-         GatQDkn5Z6edp4aqIrVoEuJ8OgEE95bHpoOwKVs4Vix/Jb+qSwhBqZCO33hfAbTINh
-         R4tDaDaULSNRW5l/ef9QbOguf2Keenpg8FDUOdRaftCff40vUvowaFo2XvHw6fU4hh
-         +O40+zIBLff7A==
-Received: from tejas-VirtualBox (joglekar-e7480.internal.synopsys.com [10.146.20.198])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id EEE86A005C;
-        Wed, 27 May 2020 10:44:11 +0000 (UTC)
-Received: by tejas-VirtualBox (sSMTP sendmail emulation); Wed, 27 May 2020 16:12:09 +0530
-Date:   Wed, 27 May 2020 16:12:09 +0530
-Message-Id: <cf698b1b2c3195db3c789d79965d6cfdf4919bdd.1590415123.git.joglekar@synopsys.com>
-In-Reply-To: <cover.1590415123.git.joglekar@synopsys.com>
-References: <cover.1590415123.git.joglekar@synopsys.com>
-X-SNPS-Relay: synopsys.com
-From:   Tejas Joglekar <Tejas.Joglekar@synopsys.com>
-Subject: [PATCH v3 4/4] usb: xhci: Use temporary buffer to consolidate SG
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
-        linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
-Cc:     John Youn <John.Youn@synopsys.com>
+        id S2387956AbgE0LQt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 May 2020 07:16:49 -0400
+Received: from mx2.suse.de ([195.135.220.15]:43160 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387397AbgE0LQs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 27 May 2020 07:16:48 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id D90FDAE2C;
+        Wed, 27 May 2020 11:16:47 +0000 (UTC)
+Message-ID: <1590578201.2838.69.camel@suse.com>
+Subject: Re: [PATCH v2 1/3] media: rc: add support for Infrared Toy and IR
+ Droid devices
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>
+Date:   Wed, 27 May 2020 13:16:41 +0200
+In-Reply-To: <20200527094107.11936-2-sean@mess.org>
+References: <20200527094107.11936-1-sean@mess.org>
+         <20200527094107.11936-2-sean@mess.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The Synopsys xHC has an internal TRB cache of size TRB_CACHE_SIZE for
-each endpoint. The default value for TRB_CACHE_SIZE is 16 for SS and 8
-for HS. The controller loads and updates the TRB cache from the transfer
-ring in system memory whenever the driver issues a start transfer or
-update transfer command.
+Am Mittwoch, den 27.05.2020, 10:41 +0100 schrieb Sean Young:
 
-For chained TRBs, the Synopsys xHC requires that the total amount of
-bytes for all TRBs loaded in the TRB cache be greater than or equal to 1
-MPS. Or the chain ends within the TRB cache (with a last TRB).
+Hi,
 
-If this requirement is not met, the controller will not be able to send
-or receive a packet and it will hang causing a driver timeout and error.
+thank you for the driver. Much cleaner than routing this through
+CDC_ACM.
 
-This can be a problem if a class driver queues SG requests with many
-small-buffer entries. The XHCI driver will create a chained TRB for each
-entry which may trigger this issue.
+I am afraid there are a few issues though. Nothing major.
+I've added remarks directly to the code. Would you care to
+fix them up?
 
-This patch adds logic to the XHCI driver to detect and prevent this from
-happening.
+	Regards
+		Oliver
 
-For every (TRB_CACHE_SIZE - 2), we check the total buffer size of
-the SG list and if the last window of (TRB_CACHE_SIZE - 2) SG list length
-and we don't make up at least 1 MPS, we create a temporary buffer to
-consolidate full SG list into the buffer.
+> +static const u8 COMMAND_VERSION[] = { 'v' };
+> +// End transmit and repeat reset command so we exit sump mode
+> +static const u8 COMMAND_RESET[] = { 0xff, 0xff, 0, 0, 0, 0, 0 };
+> +static const u8 COMMAND_SMODE_ENTER[] = { 's' };
+> +static const u8 COMMAND_TXSTART[] = { 0x26, 0x24, 0x25, 0x03 };
 
-We check at (TRB_CACHE_SIZE - 2) window because it is possible that there
-would be a link and/or event data TRB that take up to 2 of the cache
-entries.
+Using these directly as buffers is based on the assuption that the
+kernel code is accessable by DMA. On some architectures that is
+false. You need to use a bounce buffer.
 
-We discovered this issue with devices on other platforms but have not
-yet come across any device that triggers this on Linux. But it could be
-a real problem now or in the future. All it takes is N number of small
-chained TRBs. And other instances of the Synopsys IP may have smaller
-values for the TRB_CACHE_SIZE which would exacerbate the problem.
+> +
+> +#define REPLY_XMITCOUNT 't'
+> +#define REPLY_XMITSUCCESS 'C'
+> +#define REPLY_VERSION 'V'
+> +#define REPLY_SAMPLEMODEPROTO 'S'
+> +
+> +#define TIMEOUT 500
+> +
+> +#define LEN_XMITRES 3
+> +#define LEN_VERSION 4
+> +#define LEN_SAMPLEMODEPROTO 3
+> +
+> +#define MIN_FW_VERSION 20
+> +#define UNIT_NS 21333
+> +#define MAX_TIMEOUT_NS (UNIT_NS * U16_MAX)
+> +
+> +#define MAX_PACKET 64
+> +
+> +enum state {
+> +	STATE_IRDATA,
+> +	STATE_RESET,
+> +	STATE_COMMAND,
+> +	STATE_TX,
+> +};
+> +
+> +struct irtoy {
+> +	struct device *dev;
+> +	struct usb_device *usbdev;
+> +
+> +	struct rc_dev *rc;
+> +	struct urb *urb_in, *urb_out;
+> +
+> +	u8 in[MAX_PACKET];
+> +	u8 out[MAX_PACKET];
 
-Signed-off-by: Tejas Joglekar <joglekar@synopsys.com>
----
- drivers/usb/host/xhci-ring.c |   2 +-
- drivers/usb/host/xhci.c      | 135 +++++++++++++++++++++++++++++++++++++++++++
- drivers/usb/host/xhci.h      |   4 ++
- 3 files changed, 140 insertions(+), 1 deletion(-)
+This violates the DMA coherency rules. The buffers must be
+allocated separately with kmalloc().
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 0fda0c0f4d31..104c9f683375 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -3325,7 +3325,7 @@ int xhci_queue_bulk_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
- 
- 	full_len = urb->transfer_buffer_length;
- 	/* If we have scatter/gather list, we use it. */
--	if (urb->num_sgs) {
-+	if (urb->num_sgs && !(urb->transfer_flags & URB_DMA_MAP_SINGLE)) {
- 		num_sgs = urb->num_mapped_sgs;
- 		sg = urb->sg;
- 		addr = (u64) sg_dma_address(sg);
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index bee5deccc83d..646a6a542ec7 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1256,6 +1256,116 @@ EXPORT_SYMBOL_GPL(xhci_resume);
- 
- /*-------------------------------------------------------------------------*/
- 
-+static int xhci_map_temp_buffer(struct usb_hcd *hcd, struct urb *urb)
-+{
-+	void *temp;
-+	int ret = 0;
-+	unsigned int len;
-+	unsigned int buf_len;
-+	enum dma_data_direction dir;
-+	struct xhci_hcd *xhci;
-+
-+	xhci = hcd_to_xhci(hcd);
-+	dir = usb_urb_dir_in(urb) ? DMA_FROM_DEVICE : DMA_TO_DEVICE;
-+	buf_len = urb->transfer_buffer_length;
-+
-+	temp = kzalloc_node(buf_len, GFP_ATOMIC,
-+			    dev_to_node(hcd->self.sysdev));
-+
-+	if (usb_urb_dir_out(urb))
-+		len = sg_pcopy_to_buffer(urb->sg, urb->num_sgs,
-+					 temp, buf_len, 0);
-+
-+	urb->transfer_buffer = temp;
-+	urb->transfer_dma = dma_map_single(hcd->self.sysdev,
-+					   urb->transfer_buffer,
-+					   urb->transfer_buffer_length,
-+					   dir);
-+
-+	if (dma_mapping_error(hcd->self.sysdev,
-+			      urb->transfer_dma)) {
-+		ret = -EAGAIN;
-+		kfree(temp);
-+	} else {
-+		urb->transfer_flags |= URB_DMA_MAP_SINGLE;
-+	}
-+
-+	return ret;
-+}
-+
-+static bool xhci_urb_temp_buffer_required(struct usb_hcd *hcd,
-+					  struct urb *urb)
-+{
-+	bool ret = false;
-+	unsigned int i;
-+	unsigned int len = 0;
-+	unsigned int buf_len;
-+	unsigned int trb_size;
-+	unsigned int max_pkt;
-+	struct scatterlist *sg;
-+	struct scatterlist *tail_sg;
-+
-+	sg = urb->sg;
-+	tail_sg = urb->sg;
-+	buf_len = urb->transfer_buffer_length;
-+	max_pkt = usb_endpoint_maxp(&urb->ep->desc);
-+
-+	if (!urb->num_sgs)
-+		return ret;
-+
-+	if (urb->dev->speed >= USB_SPEED_SUPER)
-+		trb_size = TRB_CACHE_SIZE_SS;
-+	else
-+		trb_size = TRB_CACHE_SIZE_HS;
-+
-+	if (urb->transfer_buffer_length != 0 &&
-+	    !(urb->transfer_flags & URB_NO_TRANSFER_DMA_MAP)) {
-+		for_each_sg(urb->sg, sg, urb->num_sgs, i) {
-+			len = len + sg->length;
-+			if (i > trb_size - 2) {
-+				len = len - tail_sg->length;
-+				if (len < max_pkt) {
-+					ret = true;
-+					break;
-+				}
-+
-+				tail_sg = sg_next(tail_sg);
-+			}
-+		}
-+	}
-+	return ret;
-+}
-+
-+static void xhci_unmap_temp_buf(struct usb_hcd *hcd, struct urb *urb)
-+{
-+	struct scatterlist *sg;
-+	unsigned int len;
-+	unsigned int buf_len;
-+	enum dma_data_direction dir;
-+
-+	dir = usb_urb_dir_in(urb) ? DMA_FROM_DEVICE : DMA_TO_DEVICE;
-+
-+	sg = urb->sg;
-+	buf_len = urb->transfer_buffer_length;
-+
-+	if (IS_ENABLED(CONFIG_HAS_DMA) &&
-+	    (urb->transfer_flags & URB_DMA_MAP_SINGLE))
-+		dma_unmap_single(hcd->self.sysdev,
-+				 urb->transfer_dma,
-+				 urb->transfer_buffer_length,
-+				 dir);
-+
-+	if (usb_urb_dir_in(urb))
-+		len = sg_pcopy_from_buffer(urb->sg, urb->num_sgs,
-+					   urb->transfer_buffer,
-+					   buf_len,
-+					   0);
-+
-+	urb->transfer_flags &= ~URB_DMA_MAP_SINGLE;
-+	kfree(urb->transfer_buffer);
-+	urb->transfer_buffer = NULL;
-+}
-+
- /*
-  * Bypass the DMA mapping if URB is suitable for Immediate Transfer (IDT),
-  * we'll copy the actual data into the TRB address register. This is limited to
-@@ -1265,12 +1375,36 @@ EXPORT_SYMBOL_GPL(xhci_resume);
- static int xhci_map_urb_for_dma(struct usb_hcd *hcd, struct urb *urb,
- 				gfp_t mem_flags)
- {
-+	struct xhci_hcd *xhci;
-+
-+	xhci = hcd_to_xhci(hcd);
-+
- 	if (xhci_urb_suitable_for_idt(urb))
- 		return 0;
- 
-+	if (xhci->quirks & XHCI_SG_TRB_CACHE_SIZE_QUIRK) {
-+		if (xhci_urb_temp_buffer_required(hcd, urb))
-+			return xhci_map_temp_buffer(hcd, urb);
-+	}
- 	return usb_hcd_map_urb_for_dma(hcd, urb, mem_flags);
- }
- 
-+static void xhci_unmap_urb_for_dma(struct usb_hcd *hcd, struct urb *urb)
-+{
-+	struct xhci_hcd *xhci;
-+	bool unmap_temp_buf = false;
-+
-+	xhci = hcd_to_xhci(hcd);
-+
-+	if (urb->num_sgs && (urb->transfer_flags & URB_DMA_MAP_SINGLE))
-+		unmap_temp_buf = true;
-+
-+	if ((xhci->quirks & XHCI_SG_TRB_CACHE_SIZE_QUIRK) && unmap_temp_buf)
-+		xhci_unmap_temp_buf(hcd, urb);
-+	else
-+		usb_hcd_unmap_urb_for_dma(hcd, urb);
-+}
-+
- /**
-  * xhci_get_endpoint_index - Used for passing endpoint bitmasks between the core and
-  * HCDs.  Find the index for an endpoint given its descriptor.  Use the return
-@@ -5315,6 +5449,7 @@ static const struct hc_driver xhci_hc_driver = {
- 	 * managing i/o requests and associated device resources
- 	 */
- 	.map_urb_for_dma =      xhci_map_urb_for_dma,
-+	.unmap_urb_for_dma =    xhci_unmap_urb_for_dma,
- 	.urb_enqueue =		xhci_urb_enqueue,
- 	.urb_dequeue =		xhci_urb_dequeue,
- 	.alloc_dev =		xhci_alloc_dev,
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 69e3587e805c..2d3ae699e40c 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1330,6 +1330,10 @@ enum xhci_setup_dev {
- #define TRB_SIA			(1<<31)
- #define TRB_FRAME_ID(p)		(((p) & 0x7ff) << 20)
- 
-+/* TRB cache size for xHC with TRB cache */
-+#define TRB_CACHE_SIZE_HS	8
-+#define TRB_CACHE_SIZE_SS	16
-+
- struct xhci_generic_trb {
- 	__le32 field[4];
- };
--- 
-2.11.0
+> +	case STATE_IRDATA: {
+> +		struct ir_raw_event rawir = { .pulse = irtoy->pulse };
+> +		__be16 *in = (__be16 *)irtoy->in;
+> +		int i;
+> +
+> +		for (i = 0; i < len / sizeof(__be16); i++) {
+> +			u32 v = be16_to_cpup(in + i);
 
+Is this 16 or 32 bit?
+
+> +
+> +			if (v == 0xffff) {
+> +				rawir.pulse = false;
+> +			} else {
+> +				rawir.duration = v * UNIT_NS;
+> +				ir_raw_event_store_with_timeout(irtoy->rc,
+> +								&rawir);
+> +			}
+> +
+> +			rawir.pulse = !rawir.pulse;
+> +		}
+> +
+> +		irtoy->pulse = rawir.pulse;
+> +
+> +		ir_raw_event_handle(irtoy->rc);
+> +		break;
+> +	}
+> +	case STATE_TX:
+> +		if (irtoy->tx_len == 0) {
+> +			if (len == LEN_XMITRES &&
+> +			    irtoy->in[0] == REPLY_XMITCOUNT) {
+
+Endianness?
+
+> +				__be16 *emitted = (__be16 *)(irtoy->in + 1);
+> +
+> +				irtoy->emitted = be16_to_cpup(emitted);
+
+Reason you are using cpup versions?
+
+> +			} else if (len == 1 &&
+> +				   irtoy->in[0] == REPLY_XMITSUCCESS) {
+> +				complete(&irtoy->rx_done);
+> +				irtoy->state = STATE_IRDATA;
+
+Race condition. Whoever you wake up with that complete could read
+the old state.
+
+> +			}
+> +		} else {
+> +			// send next part of tx buffer
+> +			uint max_send = irtoy->in[0];
+> +			uint buf_len = min(max_send, irtoy->tx_len);
+> +			int err;
+> +
+> +			dev_dbg(irtoy->dev, "ready to receive: 0x%02x\n",
+> +				max_send);
+> +
+> +			memcpy(irtoy->out, irtoy->tx_buf, buf_len);
+> +			irtoy->urb_out->transfer_buffer_length = buf_len;
+> +			err = usb_submit_urb(irtoy->urb_out, GFP_ATOMIC);
+> +			if (err != 0) {
+> +				dev_err(irtoy->dev, "fail to submit tx buf urb: %d\n",
+> +					err);
+> +				complete(&irtoy->rx_done);
+> +				irtoy->state = STATE_IRDATA;
+
+Same race condition as above.
+
+> +			}
+> +
+> +			irtoy->tx_buf += buf_len;
+> +			irtoy->tx_len -= buf_len;
+> +			break;
+> +		}
+> +		break;
+> +	case STATE_RESET:
+> +		dev_err(irtoy->dev, "unexpected response to reset: %*phN\n",
+> +			len, irtoy->in);
+> +	}
+> +}
+> +
+> +static void irtoy_out_callback(struct urb *urb)
+> +{
+> +	struct irtoy *irtoy = urb->context;
+> +
+> +	switch (urb->status) {
+> +	case 0:
+> +		if (irtoy->state == STATE_RESET)
+> +			complete(&irtoy->rx_done);
+> +		break;
+> +
+> +	case -ECONNRESET:
+> +	case -ENOENT:
+> +	case -ESHUTDOWN:
+> +	case -EPROTO:
+> +		usb_unlink_urb(urb);
+
+Redundant.
+
+> +		return;
+> +
+> +	default:
+> +		dev_warn(irtoy->dev, "out urb status: %d\n", urb->status);
+> +	}
+> +}
+> +
+> +static void irtoy_in_callback(struct urb *urb)
+> +{
+> +	struct irtoy *irtoy = urb->context;
+> +	int ret;
+> +
+> +	switch (urb->status) {
+> +	case 0:
+> +		irtoy_response(irtoy, urb->actual_length);
+> +		break;
+> +
+> +	case -ECONNRESET:
+> +	case -ENOENT:
+> +	case -ESHUTDOWN:
+> +	case -EPROTO:
+> +		usb_unlink_urb(urb);
+
+Redundant.
+
+> +		return;
+> +
+> +	default:
+> +		dev_warn(irtoy->dev, "in urb status: %d\n", urb->status);
+> +	}
+> +
+> +	ret = usb_submit_urb(urb, GFP_ATOMIC);
+> +	if (ret && ret != -ENODEV)
+> +		dev_warn(irtoy->dev, "failed to resubmit urb: %d\n", ret);
+> +}
+> +
+> +static int irtoy_command(struct irtoy *irtoy, const u8 *cmd, int cmd_len)
+> +{
+> +	int err;
+> +
+> +	init_completion(&irtoy->rx_done);
+> +
+> +	memcpy(irtoy->out, cmd, cmd_len);
+> +	irtoy->urb_out->transfer_buffer_length = cmd_len;
+> +
+> +	err = usb_submit_urb(irtoy->urb_out, GFP_KERNEL);
+> +	if (err != 0)
+> +		return err;
+> +
+> +	if (!wait_for_completion_timeout(&irtoy->rx_done,
+> +					 msecs_to_jiffies(TIMEOUT)))
+> +		return -ETIMEDOUT;
+
+Wrong error handling. The URB is still active. You cannot free the
+buffer. The caller has no idea when that is safe to do so. You must
+kill the URB in the timeout case.
+
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * When sending IR, it is imperative that we send the IR data as quickly
+> + * as possible to the device, so it does not run out of IR data and
+> + * introduce gaps. So, we feed the data from the urb callback handler
+> + */
+> +static int irtoy_tx(struct rc_dev *rc, uint *txbuf, uint count)
+> +{
+> +	struct irtoy *irtoy = rc->priv;
+> +	unsigned int i, size;
+> +	__be16 *buf;
+> +	int err;
+> +
+> +	size = sizeof(u16) * (count + 1);
+> +	buf = kmalloc(size, GFP_KERNEL);
+
+This is incompatible with the comment. If you are potentially in
+interrupt, you must use GFP_ATOMIC. Please clarify.
+
+> 
+> +static int irtoy_suspend(struct usb_interface *intf, pm_message_t message)
+> +{
+> +	struct irtoy *irtoy = usb_get_intfdata(intf);
+> +
+> +	usb_kill_urb(irtoy->urb_in);
+> +	usb_kill_urb(irtoy->urb_out);
+
+That is brutal. It could fail commands. Do you really want to
+do that?
+
+> +
+> +	return 0;
+> +}
+> +
+> +static int irtoy_resume(struct usb_interface *intf)
+> +{
+> +	struct irtoy *irtoy = usb_get_intfdata(intf);
+> +	int err;
+> +
+> +	err = usb_submit_urb(irtoy->urb_in, GFP_KERNEL);
+
+That should technically be GFP_NOIO
+
+> +	if (err)
+> +		dev_warn(&intf->dev, "failed to submit urb: %d\n", err);
+> +
+> +	return err;
+> +}
