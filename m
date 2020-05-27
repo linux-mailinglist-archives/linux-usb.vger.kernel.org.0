@@ -2,231 +2,352 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 196751E34CE
-	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2020 03:37:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA6C1E363E
+	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2020 05:10:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725969AbgE0BhU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 May 2020 21:37:20 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:38160 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725801AbgE0BhT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 May 2020 21:37:19 -0400
-Received: by mail-io1-f65.google.com with SMTP id d7so24263322ioq.5;
-        Tue, 26 May 2020 18:37:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xckD9+dHAmUGj7g+utINyA+rLaiLP9KqU3YumDLq3PE=;
-        b=bdL4szCwQPS1O+4il3fB8+B60vX1HVZq0I6lFqMIeDu/69Gel3aZluxU8fQ8xqFftP
-         KHGmW99MywSiSlvqiAuEqFOL340aDNpR1qigOzq+pFioOmHP4RzIaI+rOoPgYELlcA6t
-         Dxj2jasEFstBk8H/+Tb1nHEWbksf4k5Mxwis44DNGD+G0mk93085QurFbqL/9a0CWIcI
-         Pl/Snw2WBrEmN50tQPHRXoGccu8AykfPXAo69ziFcFG/kELu8HbUT0N4oQwDSepzHQJz
-         5wGjtkXMaKnwBGwM8XDEU6UBtLY/Sur22iwlf7sK3XzEw1AdQNGQJi6SCUesk0pH1HII
-         RvBQ==
-X-Gm-Message-State: AOAM530Taip0fgDmRXPV39kfagEmRHfWDo+LHRzhjl2W96gPAma5KJnY
-        71feu23kjv6fS3JusUxCLzqiAXs=
-X-Google-Smtp-Source: ABdhPJyaK2mdTrxf61+oakEx9DGgvUIte6C7kK0Co/6Hn2/jE+Jnnd6DVBPrp3084vEYB9IfypTIrw==
-X-Received: by 2002:a5e:d506:: with SMTP id e6mr19684901iom.184.1590543437064;
-        Tue, 26 May 2020 18:37:17 -0700 (PDT)
-Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id p7sm620988iob.7.2020.05.26.18.37.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 May 2020 18:37:16 -0700 (PDT)
-Received: (nullmailer pid 852830 invoked by uid 1000);
-        Wed, 27 May 2020 01:37:15 -0000
-Date:   Tue, 26 May 2020 19:37:15 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Roger Quadros <rogerq@ti.com>
-Cc:     balbi@kernel.org, vigneshr@ti.com, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] dt-bindings: usb: convert keystone-usb.txt to YAML
-Message-ID: <20200527013715.GA847644@bogus>
-References: <20200513130709.10239-1-rogerq@ti.com>
- <20200513130709.10239-2-rogerq@ti.com>
+        id S1728333AbgE0DKN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 May 2020 23:10:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53424 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725893AbgE0DKM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 26 May 2020 23:10:12 -0400
+Received: from Mani-XPS-13-9360 (unknown [157.46.56.55])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2F3AC20704;
+        Wed, 27 May 2020 03:10:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590549011;
+        bh=+EEyVr661pULoQZPwBYBmG2knPzLWMHEXk/eiLq8QQ4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vRAeien0o/rxmT9HJJJwIJ6cDc+YUGEYQlYNuMOjeuopN+mlMlQjq102VLeYszuS0
+         f/1Qu7JqTW98b1OrZ5ygdT/QyQ3DPO2NpT5OYyiM5ZFgEzBhC/HytvKaEwrVZyiSBL
+         Pf0DbVW3wJyHp4ulMzEXpnluzXP4kX77puGh0hzs=
+Date:   Wed, 27 May 2020 08:39:59 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patong.mxl@gmail.com,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] usb: serial: xr_serial: Add gpiochip support
+Message-ID: <20200527030959.GA6129@Mani-XPS-13-9360>
+References: <20200430184924.31690-1-mani@kernel.org>
+ <20200430184924.31690-3-mani@kernel.org>
+ <20200519130740.GE27787@localhost>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200513130709.10239-2-rogerq@ti.com>
+In-Reply-To: <20200519130740.GE27787@localhost>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 13, 2020 at 04:07:07PM +0300, Roger Quadros wrote:
-> Convert keystone-usb documentation to YAML format.
+Hi,
+
+On Tue, May 19, 2020 at 03:07:40PM +0200, Johan Hovold wrote:
+> On Fri, May 01, 2020 at 12:19:24AM +0530, mani@kernel.org wrote:
+> > From: Manivannan Sadhasivam <mani@kernel.org>
+> > 
+> > Add gpiochip support for Maxlinear/Exar USB to serial converter
+> > for controlling the available gpios.
 > 
-> Signed-off-by: Roger Quadros <rogerq@ti.com>
-> ---
->  .../devicetree/bindings/usb/keystone-usb.txt  | 56 ----------------
->  .../bindings/usb/ti,keystone-dwc3.yaml        | 67 +++++++++++++++++++
->  2 files changed, 67 insertions(+), 56 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/usb/keystone-usb.txt
->  create mode 100644 Documentation/devicetree/bindings/usb/ti,keystone-dwc3.yaml
+> You should mention that you've based this implementation on the other
+> usb-serial gpio-chip implementations (e.g. cp210x).
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/keystone-usb.txt b/Documentation/devicetree/bindings/usb/keystone-usb.txt
-> deleted file mode 100644
-> index 77df82e36138..000000000000
-> --- a/Documentation/devicetree/bindings/usb/keystone-usb.txt
-> +++ /dev/null
-> @@ -1,56 +0,0 @@
-> -TI Keystone Soc USB Controller
-> -
-> -DWC3 GLUE
-> -
-> -Required properties:
-> - - compatible: should be
-> -		"ti,keystone-dwc3" for Keystone 2 SoCs
-> -		"ti,am654-dwc3" for AM654 SoC
-> - - #address-cells, #size-cells : should be '1' if the device has sub-nodes
-> -   with 'reg' property.
-> - - reg : Address and length of the register set for the USB subsystem on
-> -   the SOC.
-> - - interrupts : The irq number of this device that is used to interrupt the
-> -   MPU.
-> - - ranges: allows valid 1:1 translation between child's address space and
-> -   parent's address space.
-> -
-> -SoC-specific Required Properties:
-> -The following are mandatory properties for Keystone 2 66AK2HK, 66AK2L and 66AK2E
-> -SoCs only:
-> -
-> -- clocks:		Clock ID for USB functional clock.
-> -- clock-names:		Must be "usb".
-> -
-> -
-> -The following are mandatory properties for 66AK2G and AM654:
-> -
-> -- power-domains:	Should contain a phandle to a PM domain provider node
-> -			and an args specifier containing the USB device id
-> -			value. This property is as per the binding,
-> -			Documentation/devicetree/bindings/soc/ti/sci-pm-domain.txt
-> -
-> -Sub-nodes:
-> -The dwc3 core should be added as subnode to Keystone DWC3 glue.
-> -- dwc3 :
-> -   The binding details of dwc3 can be found in:
-> -   Documentation/devicetree/bindings/usb/dwc3.txt
-> -
-> -Example:
-> -	usb: usb@2680000 {
-> -		compatible = "ti,keystone-dwc3";
-> -		#address-cells = <1>;
-> -		#size-cells = <1>;
-> -		reg = <0x2680000 0x10000>;
-> -		clocks = <&clkusb>;
-> -		clock-names = "usb";
-> -		interrupts = <GIC_SPI 393 IRQ_TYPE_EDGE_RISING>;
-> -		ranges;
-> -
-> -		dwc3@2690000 {
-> -			compatible = "synopsys,dwc3";
-> -			reg = <0x2690000 0x70000>;
-> -			interrupts = <GIC_SPI 393 IRQ_TYPE_EDGE_RISING>;
-> -			usb-phy = <&usb_phy>, <&usb_phy>;
-> -		};
-> -	};
-> diff --git a/Documentation/devicetree/bindings/usb/ti,keystone-dwc3.yaml b/Documentation/devicetree/bindings/usb/ti,keystone-dwc3.yaml
-> new file mode 100644
-> index 000000000000..14d2fe329b93
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/ti,keystone-dwc3.yaml
-> @@ -0,0 +1,67 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/ti,keystone-dwc3.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: TI Keystone Soc USB Controller
-> +
-> +maintainers:
-> +  - Roger Quadros <rogerq@ti.com>
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - const: "ti,keystone-dwc3"
-> +      - const: "ti,am654-dwc3"
-
-Use enum rather than oneOf+const.
-
-> +
-> +  reg:
-> +    maxItems: 1
-> +    description: Address and length of the register set for the USB subsystem on
-> +      the SOC.
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +    description: The irq number of this device that is used to interrupt the MPU.
-
-No need for genericish descriptions when a single item.
-
-> +
-> +
-> +  clocks:
-> +    description: Clock ID for USB functional clock.
-
-How many?
-
-> +
-> +  power-domains:
-> +    description: Should contain a phandle to a PM domain provider node
-> +      and an args specifier containing the USB device id
-> +      value. This property is as per the binding,
-> +      Documentation/devicetree/bindings/soc/ti/sci-pm-domain.txt
-
-How many?
-
-> +
-> +  dwc3:
-
-This doesn't work because there's a unit address. You need a pattern.
-
-> +    description: This is the node representing the DWC3 controller instance
-> +      Documentation/devicetree/bindings/usb/dwc3.txt
-
-type: object
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-
-additionalProperties: false
-
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    usb: usb@2680000 {
-> +      compatible = "ti,keystone-dwc3";
-> +      #address-cells = <1>;
-> +      #size-cells = <1>;
-
-These have to be documented.
-
-> +      reg = <0x2680000 0x10000>;
-> +      clocks = <&clkusb>;
-> +      clock-names = "usb";
-> +      interrupts = <GIC_SPI 393 IRQ_TYPE_EDGE_RISING>;
-> +      ranges;
-
-This too.
-
-> +
-> +      dwc3@2690000 {
-> +        compatible = "synopsys,dwc3";
-> +        reg = <0x2690000 0x70000>;
-> +        interrupts = <GIC_SPI 393 IRQ_TYPE_EDGE_RISING>;
-> +        usb-phy = <&usb_phy>, <&usb_phy>;
-> +      };
-> +    };
-> -- 
-> Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-> Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+> > Cc: Linus Walleij <linus.walleij@linaro.org>
+> > Cc: linux-gpio@vger.kernel.org
+> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> > Signed-off-by: Manivannan Sadhasivam <mani@kernel.org>
+> > ---
+> >  drivers/usb/serial/xr_serial.c | 199 ++++++++++++++++++++++++++++++++-
+> >  1 file changed, 198 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/usb/serial/xr_serial.c b/drivers/usb/serial/xr_serial.c
+> > index fdb9ddf8bd95..255a30540b52 100644
+> > --- a/drivers/usb/serial/xr_serial.c
+> > +++ b/drivers/usb/serial/xr_serial.c
+> > @@ -7,6 +7,7 @@
+> >   * Copyright (c) 2020 Manivannan Sadhasivam <mani@kernel.org>
+> >   */
+> >  
+> > +#include <linux/gpio/driver.h>
+> >  #include <linux/kernel.h>
+> >  #include <linux/module.h>
+> >  #include <linux/slab.h>
+> > @@ -32,6 +33,11 @@ struct xr_uart_regs {
+> >  };
+> >  
+> >  struct xr_port_private {
+> > +#ifdef CONFIG_GPIOLIB
+> > +	struct gpio_chip gc;
+> > +	bool gpio_registered;
+> > +	u8 gpio_altfunc;
+> > +#endif
+> >  	const struct xr_uart_regs *regs;
+> >  };
+> >  
+> > @@ -562,6 +568,196 @@ static void xr_break_ctl(struct tty_struct *tty, int break_state)
+> >  		   state);
+> >  }
+> >  
+> > +#ifdef CONFIG_GPIOLIB
+> > +
+> > +static int xr_gpio_request(struct gpio_chip *gc, unsigned int offset)
+> > +{
+> > +	struct usb_serial_port *port = gpiochip_get_data(gc);
+> > +	struct xr_port_private *port_priv = usb_get_serial_port_data(port);
+> > +
+> > +	/* Check if the requested GPIO is occupied */
+> > +	if (port_priv->gpio_altfunc & BIT(offset))
+> > +		return -ENODEV;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int xr_gpio_get(struct gpio_chip *gc, unsigned int gpio)
+> > +{
+> > +	struct usb_serial_port *port = gpiochip_get_data(gc);
+> > +	struct xr_port_private *port_priv = usb_get_serial_port_data(port);
+> > +	int ret;
+> > +	u8 gpio_status;
+> > +
+> > +	ret = xr_get_reg(port, XR21V141X_UART_REG_BLOCK,
+> > +			 port_priv->regs->gpio_status, &gpio_status);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	return !!(gpio_status & BIT(gpio));
+> > +}
+> > +
+> > +static void xr_gpio_set(struct gpio_chip *gc, unsigned int gpio, int val)
+> > +{
+> > +	struct usb_serial_port *port = gpiochip_get_data(gc);
+> > +	struct xr_port_private *port_priv = usb_get_serial_port_data(port);
+> > +
+> > +	if (val)
+> > +		xr_set_reg(port, XR21V141X_UART_REG_BLOCK,
+> > +			   port_priv->regs->gpio_set, BIT(gpio));
+> > +	else
+> > +		xr_set_reg(port, XR21V141X_UART_REG_BLOCK,
+> > +			   port_priv->regs->gpio_clr, BIT(gpio));
 > 
+> I see no coordination with the serial driver which may toggle the DTR
+> and RTS pins.
+> 
+> > +}
+> > +
+> > +static int xr_gpio_direction_get(struct gpio_chip *gc, unsigned int gpio)
+> > +{
+> > +	struct usb_serial_port *port = gpiochip_get_data(gc);
+> > +	struct xr_port_private *port_priv = usb_get_serial_port_data(port);
+> > +	int ret;
+> > +	u8 gpio_dir;
+> > +
+> > +	ret = xr_get_reg(port, XR21V141X_UART_REG_BLOCK,
+> > +			 port_priv->regs->gpio_dir, &gpio_dir);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	/* Logic 0 = input and Logic 1 = output */
+> > +	return !(gpio_dir & BIT(gpio));
+> > +}
+> > +
+> > +static int xr_gpio_direction_input(struct gpio_chip *gc, unsigned int gpio)
+> > +{
+> > +	struct usb_serial_port *port = gpiochip_get_data(gc);
+> > +	struct xr_port_private *port_priv = usb_get_serial_port_data(port);
+> > +	int ret;
+> > +	u8 gpio_dir;
+> > +
+> > +	ret = xr_get_reg(port, XR21V141X_UART_REG_BLOCK,
+> > +			 port_priv->regs->gpio_dir, &gpio_dir);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	gpio_dir &= ~BIT(gpio);
+> > +
+> > +	return xr_set_reg(port, XR21V141X_UART_REG_BLOCK,
+> > +			  port_priv->regs->gpio_dir, gpio_dir);
+> > +}
+> > +
+> > +static int xr_gpio_direction_output(struct gpio_chip *gc, unsigned int gpio,
+> > +				    int val)
+> > +{
+> > +	struct usb_serial_port *port = gpiochip_get_data(gc);
+> > +	struct xr_port_private *port_priv = usb_get_serial_port_data(port);
+> > +	int ret;
+> > +	u8 gpio_dir;
+> > +
+> > +	ret = xr_get_reg(port, XR21V141X_UART_REG_BLOCK,
+> > +			 port_priv->regs->gpio_dir, &gpio_dir);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	gpio_dir |= BIT(gpio);
+> > +
+> > +	ret = xr_set_reg(port, XR21V141X_UART_REG_BLOCK,
+> > +			 port_priv->regs->gpio_dir, gpio_dir);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	xr_gpio_set(gc, gpio, val);
+> 
+> If it's possible to set the value before changing direction then that
+> may be preferable.
+> 
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int xr21v141x_gpio_init(struct usb_serial_port *port)
+> > +{
+> > +	struct xr_port_private *port_priv = usb_get_serial_port_data(port);
+> > +	int ret;
+> > +	u8 gpio_mode;
+> > +
+> > +	port_priv->gc.ngpio = 6;
+> > +
+> > +	ret = xr_get_reg(port, XR21V141X_UART_REG_BLOCK,
+> > +			 port_priv->regs->gpio_mode, &gpio_mode);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	/* Mark all pins which are not in GPIO mode */
+> > +	if (gpio_mode & UART_MODE_RTS_CTS)
+> > +		port_priv->gpio_altfunc |= (BIT(4) | BIT(5));
+> > +	else if (gpio_mode & UART_MODE_DTR_DSR)
+> > +		port_priv->gpio_altfunc |= (BIT(2) | BIT(3));
+> > +	else if (gpio_mode & UART_MODE_RS485)
+> > +		port_priv->gpio_altfunc |= BIT(5);
+> > +	else if (gpio_mode & UART_MODE_RS485_ADDR)
+> > +		port_priv->gpio_altfunc |= BIT(5);
+> > +	else
+> > +		port_priv->gpio_altfunc = 0; /* All GPIOs are available */
+> 
+> So this clearly isn't sufficient as the serial driver updates the
+> gpio-mode settings at runtime, which means you may have the two drivers
+> interfering with each other.
+> 
+
+Agree. I was not sure earlier on how to handle this.
+
+> You probably need to reserve at least CTS/RTS (gpio 4 and 5) for use
+> by the serial driver. But suddenly driving the DSR, RI and CD inputs
+> probably isn't a good idea either.
+> 
+> How would you even what know what these pins are used for generally?
+> 
+> Perhaps refusing all gpio requests while the port is open and making
+> sure that the serial driver never touches a requested pin could work
+> (including indirectly through hardware flow control, etc).
+> 
+
+Is there an API or recommended way to check if the port is open? I just see a
+helper for tty...
+
+Thanks,
+Mani
+
+> > +
+> > +	return ret;
+> > +}
+> > +
+> > +static int xr_gpio_init(struct usb_serial_port *port)
+> > +{
+> > +	struct xr_port_private *port_priv = usb_get_serial_port_data(port);
+> > +	struct usb_serial *serial = port->serial;
+> > +	int ret = 0;
+> > +	u16 pid;
+> > +
+> > +	/* Don't register gpiochip for interface 0 */
+> > +	if (port->minor == 0)
+> > +		return ret;
+> 
+> Heh. Nice hack. Unfortunately entirely broken as it only works if this
+> happens to be the first usb-serial device that is probed (port->minor is
+> the usb-serial port minor number, not the interface number).
+> 
+> > +
+> > +	pid = le16_to_cpu(serial->dev->descriptor.idProduct);
+> > +
+> > +	ret = xr21v141x_gpio_init(port);
+> > +	if (ret < 0)
+> > +		return ret;
+> > +
+> > +	port_priv->gc.label = devm_kasprintf(&port->dev, GFP_KERNEL, "XR%04x",
+> > +					     pid);
+> 
+> No point in adding PID here.
+> 
+> > +	port_priv->gc.request = xr_gpio_request;
+> > +	port_priv->gc.get_direction = xr_gpio_direction_get;
+> > +	port_priv->gc.direction_input = xr_gpio_direction_input;
+> > +	port_priv->gc.direction_output = xr_gpio_direction_output;
+> > +	port_priv->gc.get = xr_gpio_get;
+> > +	port_priv->gc.set = xr_gpio_set;
+> > +	port_priv->gc.owner = THIS_MODULE;
+> > +	port_priv->gc.parent = &port->dev;
+> > +	port_priv->gc.base = -1;
+> > +	port_priv->gc.can_sleep = true;
+> > +
+> > +	ret = gpiochip_add_data(&port_priv->gc, port);
+> > +	if (!ret)
+> > +		port_priv->gpio_registered = true;
+> > +
+> > +	return ret;
+> > +}
+> > +
+> > +static void xr_gpio_remove(struct usb_serial_port *port)
+> > +{
+> > +	struct xr_port_private *port_priv = usb_get_serial_port_data(port);
+> > +
+> > +	if (port_priv->gpio_registered) {
+> > +		gpiochip_remove(&port_priv->gc);
+> > +		port_priv->gpio_registered = false;
+> > +	}
+> > +}
+> > +
+> > +#else
+> > +
+> > +static int xr_gpio_init(struct usb_serial_port *port)
+> > +{
+> > +	return 0;
+> > +}
+> > +
+> > +static void xr_gpio_remove(struct usb_serial_port *port)
+> > +{
+> > +	/* Nothing to do */
+> 
+> Comment not needed.
+> 
+> > +}
+> > +
+> > +#endif
+> > +
+> >  static int xr_port_probe(struct usb_serial_port *port)
+> >  {
+> >  	struct xr_port_private *port_priv;
+> > @@ -575,13 +771,14 @@ static int xr_port_probe(struct usb_serial_port *port)
+> >  
+> >  	usb_set_serial_port_data(port, port_priv);
+> >  
+> > -	return 0;
+> > +	return xr_gpio_init(port);
+> 
+> This is broken; you'll leak the port data on errors.
+> 
+> >  }
+> >  
+> >  static int xr_port_remove(struct usb_serial_port *port)
+> >  {
+> >  	struct xr_port_private *port_priv = usb_get_serial_port_data(port);
+> >  
+> > +	xr_gpio_remove(port);
+> >  	kfree(port_priv);
+> >  
+> >  	return 0;
+> 
+> Johan
