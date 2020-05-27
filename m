@@ -2,54 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DACB1E44B1
-	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2020 15:55:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06C6E1E45C5
+	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2020 16:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389018AbgE0Nze (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 May 2020 09:55:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39094 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388991AbgE0Nzd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 May 2020 09:55:33 -0400
-Received: from msa14.plala.or.jp (msa14.plala.or.jp [IPv6:2400:7800:0:502e::14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3D12BC08C5C2;
-        Wed, 27 May 2020 06:55:32 -0700 (PDT)
-Received: from mwebp13 ([172.23.13.133]) by msa14.plala.or.jp with ESMTP
-          id <20200527135531.WGVA3566.msa14.plala.or.jp@mwebp13>;
-          Wed, 27 May 2020 22:55:31 +0900
-Date:   Wed, 27 May 2020 22:55:31 +0900
-From:   "Mrs.Judith Rice" <hamurafujimi@tmail.plala.or.jp>
-Reply-To: jonesevansje@gmail.com
-Message-ID: <20200527225531.YQK7M.1012.root@mwebp13>
-Subject: Spende
+        id S2389179AbgE0OZw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 May 2020 10:25:52 -0400
+Received: from mout.kundenserver.de ([212.227.126.133]:46657 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389165AbgE0OZv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 May 2020 10:25:51 -0400
+Received: from mail-qv1-f46.google.com ([209.85.219.46]) by
+ mrelayeu.kundenserver.de (mreue011 [212.227.15.129]) with ESMTPSA (Nemesis)
+ id 1MI59b-1jpjMv1eZb-00F9rM; Wed, 27 May 2020 16:25:50 +0200
+Received: by mail-qv1-f46.google.com with SMTP id f89so11225959qva.3;
+        Wed, 27 May 2020 07:25:50 -0700 (PDT)
+X-Gm-Message-State: AOAM530J/ckRqqA+V6QbZ5aZ9lO5J2vW4CTdKt1ErPkbJivtgRc2Dljd
+        fJf4llLUCeE4D9RTvWWwzk7NfK4WVOoTsZQZo00=
+X-Google-Smtp-Source: ABdhPJwTzla3NmSa1mJK6JbiU0wve0aQ7njgHCnP8j6rCZASppCyhQtlSLcn6p/n68/fn2r6wcYO8Ty/YjpZHB8wRVo=
+X-Received: by 2002:ad4:58cb:: with SMTP id dh11mr23498548qvb.211.1590589549159;
+ Wed, 27 May 2020 07:25:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-2022-jp
-Content-Transfer-Encoding: 7bit
-X-Priority: 3 (Normal)
-Sensitivity: Normal
-X-VirusScan: Outbound; mvir-ac14; Wed, 27 May 2020 22:55:31 +0900
-To:     unlisted-recipients:; (no To-header on input)
+References: <20200527134320.869042-1-arnd@arndb.de>
+In-Reply-To: <20200527134320.869042-1-arnd@arndb.de>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 27 May 2020 16:25:32 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1TrR3qkKgY78D0VybG3H1B6AauzTiZ0=jP57QM5MkjTw@mail.gmail.com>
+Message-ID: <CAK8P3a1TrR3qkKgY78D0VybG3H1B6AauzTiZ0=jP57QM5MkjTw@mail.gmail.com>
+Subject: Re: [PATCH] usb: ehci: add struct entry for broadcom insnreg
+To:     Al Cooper <alcooperx@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        bcm-kernel-feedback-list <bcm-kernel-feedback-list@broadcom.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:uts/YM7wttCkfCQrBQhdtEzZfRPw12bbrftZwZGM5czYIh046gG
+ RjXCIuXDApEjSnuudi0XLYIaZ4DPVGYCmPQw52r2moG15Ncag6iPgazy/VBMkywr/bMlsSA
+ +skUApKQlUhpn6WlzZXT4d0Lpk1GiBl4SU4DO6E+EGa+EMxa5TkVdgiubRnl0gXusfVmt4y
+ RgA5XkBYeR4qLYPCVTNYQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:O40RoDwja6E=:uts8v7j/FtLB5w2RaALHMq
+ OOCcocy4njfhO7PmN8l6Ovfm1kGQ3xejRvMRZExVC5BnfZN/svALzWO/MjymjWsfVqUsubBBY
+ R8mzn4QHSQTTuqd1YHk24D3VsGJMMQOfO6fFrAGVyB0GQyipKp3ipeQGbOSQQque+IUZ70hNT
+ oHtVKczXiKkH4UZ0am9AMNEu2/HMDGkLGCLpsZrvw8FGJqgPgyC4/56/v0NyyH6ok7ZZ8Zci+
+ B98diH1R3RSNWTJbFYaX/hvZFkkwUSuD5lx2xkeNc7ZCO5yzCfLruWFlNkHxya7D46wZsblZa
+ dCQ7m7HoLebhee7sREwKOpFrB7+e4cvcLubLUM42Qz4XyygbFCR0JYKJhpnHII+yYyTgEYOOp
+ /tjzt5Nf9kmGEiq7IgDsB7dIgQH7Jksb4W8Kwez32+FkK3cSBFuq4RlU7yqnDOAwg7P41RKPY
+ gjNq4u9c6Oh8HG1ifEYnwWWpM/0LrD3teMU7R93LDv7erMbFIVZHCF5/k0C51b9Sve15HMkdi
+ mq3Sk0YAHzQh6o2yDeW4o97QM0B4EGfGpSrAbX+QbpVVR5wi7VbZfXrs5G/QfJ0mQ16rHzxqH
+ qsE3YHD9ZKhN49sW98b90umQ4YtCBVuRiLpsph6M5w2nBVZb7X5ZZi3D7N6qum18gfgMvVYK5
+ v8niRf6lutiP+3FxmOBWdpoeH5aNYarsN2KOkCa3LmTsEZZpXIyqRm0+yMTCyL9ofrZ48kmyz
+ wS1n6+AX7DTc+NcuLCLuAbui0fHREr9Fu2oYd0Q+lZBjs4z4VTLn6icyiSRQ1gAXdoAvbZQU4
+ G4WMtGd1kZgxa/lO46vrS2eSeuvyhvwzJFGPlMipmsv4IgoI+w=
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Attn:
+On Wed, May 27, 2020 at 3:43 PM Arnd Bergmann <arnd@arndb.de> wrote:
 
-Es tut uns leid, dass wir Sie aufgrund eines Mismanagent of Beneficaries-Fonds von unseren ernannten Zonal Managern versp&#228;tet kontaktiert haben. Bitte beachten Sie, dass Sie qualifiziert sind, die Zahlung von 900.000,00 USD an der ATM-Karte mit neunhunderttausend Dollar zu erhalten.
+>
+> Fixes: 9df231511bd6 ("usb: ehci: Add new EHCI driver for Broadcom STB SoC's")
+> Fixes: 88aa39691cea ("usb: ehci: avoid gcc-10 zero-length-bounds warning")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Als Entsch&#228;digung von WORLD BANK / IWF (Internationaler W&#228;hrungsfonds) f&#252;r die automatisch &#252;ber einen E-Mail-Wahlautomaten gezogenen, die in der Vergangenheit noch nicht abgeschlossene Transaktionen hatten.
 
-F&#252;r weitere Informationen kontaktieren Sie bitte Rev.EVANS JONES ( jonesevansje@gmail.com )
+Please disregard this submission, I just noticed that the 88aa39691cea
+commit I referenced is one in my local tree, not in linux-next. I'll make
+sure they are both good and then resubmit them as a series or a combined
+patch.
 
-Bitte senden Sie ihm Ihre pers&#246;nlichen Daten wie:
-
-Vollst&#228;ndiger Name:
-Wohnanschrift:
-Telefonnummer:
-Herkunftsland:
-
-Gr&#252;&#223;e,
-Mrs. Judith Rice
-
-Spende
+        Arnd
