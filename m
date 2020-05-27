@@ -2,52 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 576BC1E3ECE
-	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2020 12:18:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E9D61E3F49
+	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2020 12:42:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728336AbgE0KRD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 May 2020 06:17:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57084 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726542AbgE0KRD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 27 May 2020 06:17:03 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        id S1729913AbgE0Kmi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 May 2020 06:42:38 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:34630 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729354AbgE0Kmh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 May 2020 06:42:37 -0400
+Received: from mailhost.synopsys.com (mdc-mailhost2.synopsys.com [10.225.0.210])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id D71E1C0519;
+        Wed, 27 May 2020 10:42:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1590576157; bh=lpACwEEgKDR7yHl5cTeAFMn8IWhWr6mS3IR2RzmeAgk=;
+        h=Date:From:Subject:To:Cc:From;
+        b=OOvC/Pw4xL0cc8ffTcmlrPBKtn7Om8cqlNAHuifZkka4vvjKQdQwOknaL9O2j2ulK
+         rQRp3L6/YQdY7BJHimu8un0yV4Jtv0jUxRj3l4PRml5FQ6i4gKvpl1wlLawE7TV9jR
+         Pdvy3kPe3xh4oVxqe6gx6H4bvTZ6lZHTzswRTKnjy1XSEqeztx7Y0dGfo3pkkNyCuW
+         f+h8xB+ZGHsmbhJZBQCkR1znJfOV7on4ZQTA1+jZDB5fPwLVjc6/QiSXiuNq03RPp+
+         UsaHze/xjtxXqpcx8PjUoGM3bikRJVlr2kt9O0WdVy2CaExOJbrnN76aLd9NFOJVKE
+         2r8ODMfkECMBw==
+Received: from tejas-VirtualBox (joglekar-e7480.internal.synopsys.com [10.146.20.198])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7EA042088E;
-        Wed, 27 May 2020 10:17:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590574623;
-        bh=tpWfArgC5M8fG6+LXN28JJdWpgfFpPdct50z7c3a42I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pVx46B/5kqpTeKW1Q4WcSXNQ4rKXySxHOGacOZlxq2c3o+j8aWgG1lbUbsA7eNAI6
-         THgxvqnLTZiEAcIgYTyU5wZSRrR9kloTTksg+5QfiW/DIZ+T+Ea98X5be25zdzliSy
-         jnz8a9SSQjCVGqTfJRutS2rd4YHqkigRJakXNTx0=
-Date:   Wed, 27 May 2020 12:17:00 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Sean Young <sean@mess.org>
-Cc:     linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        Oliver Neukum <oneukum@suse.com>
-Subject: Re: [PATCH v2 1/3] media: rc: add support for Infrared Toy and IR
- Droid devices
-Message-ID: <20200527101700.GD281913@kroah.com>
-References: <20200527094107.11936-1-sean@mess.org>
- <20200527094107.11936-2-sean@mess.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200527094107.11936-2-sean@mess.org>
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 7B168A005C;
+        Wed, 27 May 2020 10:42:32 +0000 (UTC)
+Received: by tejas-VirtualBox (sSMTP sendmail emulation); Wed, 27 May 2020 16:10:30 +0530
+Date:   Wed, 27 May 2020 16:10:30 +0530
+Message-Id: <cover.1590415123.git.joglekar@synopsys.com>
+X-SNPS-Relay: synopsys.com
+From:   Tejas Joglekar <Tejas.Joglekar@synopsys.com>
+Subject: [PATCH v3 0/4] Add logic to consolidate TRBs for Synopsys xHC
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>
+Cc:     John Youn <John.Youn@synopsys.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 27, 2020 at 10:41:05AM +0100, Sean Young wrote:
-> http://dangerousprototypes.com/docs/USB_Infrared_Toy
-> https://www.irdroid.com/irdroid-usb-ir-transceiver/
-> 
-> Signed-off-by: Sean Young <sean@mess.org>
+The Synopsys xHC has an internal TRB cache of size TRB_CACHE_SIZE for
+each endpoint. The default value for TRB_CACHE_SIZE is 16 for SS and 8
+for HS. The controller loads and updates the TRB cache from the
+transfer ring in system memory whenever the driver issues a start
+transfer or update transfer command.
 
-Looks sane, nice job.
+For chained TRBs, the Synopsys xHC requires that the total amount of
+bytes for all TRBs loaded in the TRB cache be greater than or equal to
+1 MPS. Or the chain ends within the TRB cache (with a last TRB).
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+If this requirement is not met, the controller will not be able to
+send or receive a packet and it will hang causing a driver timeout and
+error.
+
+This patch set adds logic to the XHCI driver to detect and prevent this
+from happening along with the quirk to enable this logic for Synopsys
+HAPS platform.
+
+Based on Mathias's feedback on previous implementation where consolidation
+was done in TRB cache, with this patch series the implementation is done
+during mapping of the URB by consolidating the SG list into a temporary
+buffer if the SG list buffer sizes within TRB_CACHE_SIZE is less than MPS.
+
+Changes since v2:
+ - Modified the xhci_unmap_temp_buffer function to unmap dma and clear
+   the dma flag
+ - Removed RFC tag
+
+Changes since v1:
+ - Comments from Greg are addressed on [PATCH 4/4] and [PATCH 1/4]
+ - Renamed the property and quirk as in other patches based on [PATCH 1/4]
+
+Tejas Joglekar (4):
+  dt-bindings: usb: Add documentation for SG trb cache size quirk
+  usb: xhci: Set quirk for XHCI_SG_TRB_CACHE_SIZE_QUIRK
+  usb: dwc3: Add device property sgl-trb-cache-size-quirk
+  usb: xhci: Use temporary buffer to consolidate SG
+
+ Documentation/devicetree/bindings/usb/dwc3.txt     |   4 +
+ Documentation/devicetree/bindings/usb/usb-xhci.txt |   3 +
+ drivers/usb/dwc3/core.c                            |   2 +
+ drivers/usb/dwc3/core.h                            |   2 +
+ drivers/usb/dwc3/dwc3-haps.c                       |   1 +
+ drivers/usb/dwc3/host.c                            |   6 +-
+ drivers/usb/host/xhci-pci.c                        |   3 +
+ drivers/usb/host/xhci-plat.c                       |   4 +
+ drivers/usb/host/xhci-ring.c                       |   2 +-
+ drivers/usb/host/xhci.c                            | 135 +++++++++++++++++++++
+ drivers/usb/host/xhci.h                            |   5 +
+ 11 files changed, 165 insertions(+), 2 deletions(-)
+
+-- 
+2.11.0
+
