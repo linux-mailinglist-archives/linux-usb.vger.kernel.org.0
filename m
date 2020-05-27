@@ -2,310 +2,231 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F15F81E33DA
-	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2020 01:44:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 196751E34CE
+	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2020 03:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726625AbgEZXob (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 May 2020 19:44:31 -0400
-Received: from mga12.intel.com ([192.55.52.136]:25293 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725857AbgEZXoa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 26 May 2020 19:44:30 -0400
-IronPort-SDR: zqCauGUTgQTbyfXBieJSzxMHvB5DgYJkH5bzepRG5kd/Ru6dtffYNs9e+iBMfcvC7m/B0xmgFY
- URa69k9fMDpg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2020 16:44:30 -0700
-IronPort-SDR: TE4jGjOSMNn8yha01lbdYX7u5g+M2yqGhkpQJMEY49R02mQ/Tf1NIGgiRW+T4RGE5J9c7MY71k
- tCXa8C4CqcTg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,439,1583222400"; 
-   d="scan'208";a="345344456"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 26 May 2020 16:44:28 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1jdjFD-000CMk-Qj; Wed, 27 May 2020 07:44:27 +0800
-Date:   Wed, 27 May 2020 07:43:34 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     linux-omap@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [balbi-usb:testing/next] BUILD REGRESSION
- 1c11e74e9079289d8aaccc34b74cbf6463c0b791
-Message-ID: <5ecda9a6.BAzBYazdXVCiiSLt%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1725969AbgE0BhU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 May 2020 21:37:20 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:38160 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725801AbgE0BhT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 May 2020 21:37:19 -0400
+Received: by mail-io1-f65.google.com with SMTP id d7so24263322ioq.5;
+        Tue, 26 May 2020 18:37:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xckD9+dHAmUGj7g+utINyA+rLaiLP9KqU3YumDLq3PE=;
+        b=bdL4szCwQPS1O+4il3fB8+B60vX1HVZq0I6lFqMIeDu/69Gel3aZluxU8fQ8xqFftP
+         KHGmW99MywSiSlvqiAuEqFOL340aDNpR1qigOzq+pFioOmHP4RzIaI+rOoPgYELlcA6t
+         Dxj2jasEFstBk8H/+Tb1nHEWbksf4k5Mxwis44DNGD+G0mk93085QurFbqL/9a0CWIcI
+         Pl/Snw2WBrEmN50tQPHRXoGccu8AykfPXAo69ziFcFG/kELu8HbUT0N4oQwDSepzHQJz
+         5wGjtkXMaKnwBGwM8XDEU6UBtLY/Sur22iwlf7sK3XzEw1AdQNGQJi6SCUesk0pH1HII
+         RvBQ==
+X-Gm-Message-State: AOAM530Taip0fgDmRXPV39kfagEmRHfWDo+LHRzhjl2W96gPAma5KJnY
+        71feu23kjv6fS3JusUxCLzqiAXs=
+X-Google-Smtp-Source: ABdhPJyaK2mdTrxf61+oakEx9DGgvUIte6C7kK0Co/6Hn2/jE+Jnnd6DVBPrp3084vEYB9IfypTIrw==
+X-Received: by 2002:a5e:d506:: with SMTP id e6mr19684901iom.184.1590543437064;
+        Tue, 26 May 2020 18:37:17 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id p7sm620988iob.7.2020.05.26.18.37.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 May 2020 18:37:16 -0700 (PDT)
+Received: (nullmailer pid 852830 invoked by uid 1000);
+        Wed, 27 May 2020 01:37:15 -0000
+Date:   Tue, 26 May 2020 19:37:15 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Roger Quadros <rogerq@ti.com>
+Cc:     balbi@kernel.org, vigneshr@ti.com, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] dt-bindings: usb: convert keystone-usb.txt to YAML
+Message-ID: <20200527013715.GA847644@bogus>
+References: <20200513130709.10239-1-rogerq@ti.com>
+ <20200513130709.10239-2-rogerq@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20200513130709.10239-2-rogerq@ti.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git  testing/next
-branch HEAD: 1c11e74e9079289d8aaccc34b74cbf6463c0b791  usb: dwc3: keystone: Turn on USB3 PHY before controller
+On Wed, May 13, 2020 at 04:07:07PM +0300, Roger Quadros wrote:
+> Convert keystone-usb documentation to YAML format.
+> 
+> Signed-off-by: Roger Quadros <rogerq@ti.com>
+> ---
+>  .../devicetree/bindings/usb/keystone-usb.txt  | 56 ----------------
+>  .../bindings/usb/ti,keystone-dwc3.yaml        | 67 +++++++++++++++++++
+>  2 files changed, 67 insertions(+), 56 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/usb/keystone-usb.txt
+>  create mode 100644 Documentation/devicetree/bindings/usb/ti,keystone-dwc3.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/keystone-usb.txt b/Documentation/devicetree/bindings/usb/keystone-usb.txt
+> deleted file mode 100644
+> index 77df82e36138..000000000000
+> --- a/Documentation/devicetree/bindings/usb/keystone-usb.txt
+> +++ /dev/null
+> @@ -1,56 +0,0 @@
+> -TI Keystone Soc USB Controller
+> -
+> -DWC3 GLUE
+> -
+> -Required properties:
+> - - compatible: should be
+> -		"ti,keystone-dwc3" for Keystone 2 SoCs
+> -		"ti,am654-dwc3" for AM654 SoC
+> - - #address-cells, #size-cells : should be '1' if the device has sub-nodes
+> -   with 'reg' property.
+> - - reg : Address and length of the register set for the USB subsystem on
+> -   the SOC.
+> - - interrupts : The irq number of this device that is used to interrupt the
+> -   MPU.
+> - - ranges: allows valid 1:1 translation between child's address space and
+> -   parent's address space.
+> -
+> -SoC-specific Required Properties:
+> -The following are mandatory properties for Keystone 2 66AK2HK, 66AK2L and 66AK2E
+> -SoCs only:
+> -
+> -- clocks:		Clock ID for USB functional clock.
+> -- clock-names:		Must be "usb".
+> -
+> -
+> -The following are mandatory properties for 66AK2G and AM654:
+> -
+> -- power-domains:	Should contain a phandle to a PM domain provider node
+> -			and an args specifier containing the USB device id
+> -			value. This property is as per the binding,
+> -			Documentation/devicetree/bindings/soc/ti/sci-pm-domain.txt
+> -
+> -Sub-nodes:
+> -The dwc3 core should be added as subnode to Keystone DWC3 glue.
+> -- dwc3 :
+> -   The binding details of dwc3 can be found in:
+> -   Documentation/devicetree/bindings/usb/dwc3.txt
+> -
+> -Example:
+> -	usb: usb@2680000 {
+> -		compatible = "ti,keystone-dwc3";
+> -		#address-cells = <1>;
+> -		#size-cells = <1>;
+> -		reg = <0x2680000 0x10000>;
+> -		clocks = <&clkusb>;
+> -		clock-names = "usb";
+> -		interrupts = <GIC_SPI 393 IRQ_TYPE_EDGE_RISING>;
+> -		ranges;
+> -
+> -		dwc3@2690000 {
+> -			compatible = "synopsys,dwc3";
+> -			reg = <0x2690000 0x70000>;
+> -			interrupts = <GIC_SPI 393 IRQ_TYPE_EDGE_RISING>;
+> -			usb-phy = <&usb_phy>, <&usb_phy>;
+> -		};
+> -	};
+> diff --git a/Documentation/devicetree/bindings/usb/ti,keystone-dwc3.yaml b/Documentation/devicetree/bindings/usb/ti,keystone-dwc3.yaml
+> new file mode 100644
+> index 000000000000..14d2fe329b93
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/ti,keystone-dwc3.yaml
+> @@ -0,0 +1,67 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/ti,keystone-dwc3.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: TI Keystone Soc USB Controller
+> +
+> +maintainers:
+> +  - Roger Quadros <rogerq@ti.com>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - const: "ti,keystone-dwc3"
+> +      - const: "ti,am654-dwc3"
 
-Error/Warning in current branch:
+Use enum rather than oneOf+const.
 
-Error: arch/arm64/boot/dts/qcom/sc7180.dtsi:1450.33-34 syntax error
-drivers/usb/dwc3/core.h:1428:17: warning: comparison of unsigned expression >= 0 is always true [-Wtype-limits]
-drivers/usb/dwc3/gadget.c:1939:7: note: in expansion of macro 'DWC3_VER_IS_WITHIN'
+> +
+> +  reg:
+> +    maxItems: 1
+> +    description: Address and length of the register set for the USB subsystem on
+> +      the SOC.
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +    description: The irq number of this device that is used to interrupt the MPU.
 
-Error/Warning ids grouped by kconfigs:
+No need for genericish descriptions when a single item.
 
-recent_errors
-|-- alpha-allyesconfig
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- arm-allmodconfig
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- arm-allyesconfig
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- arm-defconfig
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- arm64-allmodconfig
-|   |-- Error:arch-arm64-boot-dts-qcom-sc7180.dtsi.-syntax-error
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- arm64-allyesconfig
-|   |-- Error:arch-arm64-boot-dts-qcom-sc7180.dtsi.-syntax-error
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- arm64-defconfig
-|   |-- Error:arch-arm64-boot-dts-qcom-sc7180.dtsi.-syntax-error
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- arm64-randconfig-c021-20200526
-|   |-- Error:arch-arm64-boot-dts-qcom-sc7180.dtsi.-syntax-error
-|   `-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|-- c6x-allyesconfig
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- h8300-allmodconfig
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- h8300-allyesconfig
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- i386-allyesconfig
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- i386-randconfig-a003-20200526
-|   `-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|-- i386-randconfig-a006-20200526
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- i386-randconfig-c001-20200526
-|   `-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|-- i386-randconfig-m021-20200526
-|   `-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|-- i386-randconfig-s001-20200526
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- ia64-allmodconfig
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- ia64-allyesconfig
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- ia64-randconfig-r005-20200526
-|   `-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|-- m68k-allmodconfig
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- m68k-allyesconfig
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- mips-allmodconfig
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- mips-allyesconfig
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- mips-randconfig-c024-20200526
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- mips-randconfig-r006-20200526
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- nios2-allyesconfig
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- openrisc-allyesconfig
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- parisc-allmodconfig
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- parisc-allyesconfig
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- powerpc-allmodconfig
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- powerpc-allyesconfig
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- powerpc-randconfig-r023-20200526
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- riscv-allmodconfig
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- riscv-allyesconfig
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- s390-allmodconfig
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- s390-allyesconfig
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- sh-allmodconfig
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- sparc-allyesconfig
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- sparc64-allmodconfig
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- sparc64-allyesconfig
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- sparc64-randconfig-r026-20200526
-|   `-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|-- x86_64-randconfig-c002-20200526
-|   `-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|-- x86_64-randconfig-c023-20200526
-|   `-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|-- x86_64-rhel
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-|-- x86_64-rhel-7.2-clear
-|   |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-|   `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
-`-- xtensa-allyesconfig
-    |-- drivers-usb-dwc3-core.h:warning:comparison-of-unsigned-expression-is-always-true
-    `-- drivers-usb-dwc3-gadget.c:note:in-expansion-of-macro-DWC3_VER_IS_WITHIN
+> +
+> +
+> +  clocks:
+> +    description: Clock ID for USB functional clock.
 
+How many?
 
-i386-tinyconfig vmlinux size:
+> +
+> +  power-domains:
+> +    description: Should contain a phandle to a PM domain provider node
+> +      and an args specifier containing the USB device id
+> +      value. This property is as per the binding,
+> +      Documentation/devicetree/bindings/soc/ti/sci-pm-domain.txt
 
-+-------+-----------------------------------+---------------------------------------------------------------------------+
-| DELTA |              SYMBOL               |                                  COMMIT                                   |
-+-------+-----------------------------------+---------------------------------------------------------------------------+
-|   +98 | TOTAL                             | 2e75973832ab USB: gadget: Use the correct style for SPDX License Identifi |
-|   +96 | TEXT                              | 2e75973832ab USB: gadget: Use the correct style for SPDX License Identifi |
-| +1355 | balance_dirty_pages()             | 2e75973832ab USB: gadget: Use the correct style for SPDX License Identifi |
-|  +615 | __setup_rt_frame()                | 2e75973832ab USB: gadget: Use the correct style for SPDX License Identifi |
-|  +113 | klist_release()                   | 2e75973832ab USB: gadget: Use the correct style for SPDX License Identifi |
-|   +93 | change_clocksource()              | 2e75973832ab USB: gadget: Use the correct style for SPDX License Identifi |
-|   +86 | release_bdi()                     | 2e75973832ab USB: gadget: Use the correct style for SPDX License Identifi |
-|   +84 | kobject_release()                 | 2e75973832ab USB: gadget: Use the correct style for SPDX License Identifi |
-|   -68 | bdi_put()                         | 2e75973832ab USB: gadget: Use the correct style for SPDX License Identifi |
-|   -77 | kobject_put()                     | 2e75973832ab USB: gadget: Use the correct style for SPDX License Identifi |
-|   -79 | timekeeping_notify()              | 2e75973832ab USB: gadget: Use the correct style for SPDX License Identifi |
-|   -99 | klist_dec_and_del()               | 2e75973832ab USB: gadget: Use the correct style for SPDX License Identifi |
-|  -555 | do_signal()                       | 2e75973832ab USB: gadget: Use the correct style for SPDX License Identifi |
-| -1383 | balance_dirty_pages_ratelimited() | 2e75973832ab USB: gadget: Use the correct style for SPDX License Identifi |
-+-------+-----------------------------------+---------------------------------------------------------------------------+
+How many?
 
-elapsed time: 2371m
+> +
+> +  dwc3:
 
-configs tested: 85
-configs skipped: 1
+This doesn't work because there's a unit address. You need a pattern.
 
-arm                                 defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                               allnoconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm64                            allmodconfig
-arm64                             allnoconfig
-i386                             allyesconfig
-i386                                defconfig
-i386                              debian-10.3
-i386                              allnoconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                              allnoconfig
-m68k                           sun3_defconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nds32                               defconfig
-nds32                             allnoconfig
-csky                             allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-nios2                               defconfig
-nios2                            allyesconfig
-openrisc                            defconfig
-c6x                              allyesconfig
-c6x                               allnoconfig
-openrisc                         allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-h8300                            allmodconfig
-xtensa                              defconfig
-arc                                 defconfig
-arc                              allyesconfig
-sh                               allmodconfig
-sh                                allnoconfig
-microblaze                        allnoconfig
-mips                             allyesconfig
-mips                              allnoconfig
-mips                             allmodconfig
-parisc                            allnoconfig
-parisc                              defconfig
-parisc                           allyesconfig
-parisc                           allmodconfig
-powerpc                             defconfig
-powerpc                          allyesconfig
-powerpc                          rhel-kconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a001-20200526
-i386                 randconfig-a004-20200526
-i386                 randconfig-a003-20200526
-i386                 randconfig-a006-20200526
-i386                 randconfig-a002-20200526
-i386                 randconfig-a005-20200526
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-s390                             allyesconfig
-s390                              allnoconfig
-s390                             allmodconfig
-s390                                defconfig
-sparc                            allyesconfig
-sparc                               defconfig
-sparc64                             defconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                          allmodconfig
-um                               allmodconfig
-um                                allnoconfig
-um                               allyesconfig
-um                                  defconfig
-x86_64                                   rhel
-x86_64                               rhel-7.6
-x86_64                    rhel-7.6-kselftests
-x86_64                         rhel-7.2-clear
-x86_64                                    lkp
-x86_64                              fedora-25
-x86_64                                  kexec
+> +    description: This is the node representing the DWC3 controller instance
+> +      Documentation/devicetree/bindings/usb/dwc3.txt
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+type: object
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+
+additionalProperties: false
+
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    usb: usb@2680000 {
+> +      compatible = "ti,keystone-dwc3";
+> +      #address-cells = <1>;
+> +      #size-cells = <1>;
+
+These have to be documented.
+
+> +      reg = <0x2680000 0x10000>;
+> +      clocks = <&clkusb>;
+> +      clock-names = "usb";
+> +      interrupts = <GIC_SPI 393 IRQ_TYPE_EDGE_RISING>;
+> +      ranges;
+
+This too.
+
+> +
+> +      dwc3@2690000 {
+> +        compatible = "synopsys,dwc3";
+> +        reg = <0x2690000 0x70000>;
+> +        interrupts = <GIC_SPI 393 IRQ_TYPE_EDGE_RISING>;
+> +        usb-phy = <&usb_phy>, <&usb_phy>;
+> +      };
+> +    };
+> -- 
+> Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+> Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+> 
