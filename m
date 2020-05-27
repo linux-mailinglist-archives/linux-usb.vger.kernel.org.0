@@ -2,128 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EA491E3BEE
-	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2020 10:30:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D59E91E3C13
+	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2020 10:34:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729472AbgE0I2v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 May 2020 04:28:51 -0400
-Received: from smtp2.math.uni-bielefeld.de ([129.70.45.13]:53600 "EHLO
-        smtp2.math.uni-bielefeld.de" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729349AbgE0I2u (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 May 2020 04:28:50 -0400
-Received: from math.uni-bielefeld.de (kvm01.math.uni-bielefeld.de [129.70.45.15])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by smtp2.math.uni-bielefeld.de (Postfix) with ESMTPSA id 2DF9F6029A;
-        Wed, 27 May 2020 10:28:49 +0200 (CEST)
-Date:   Wed, 27 May 2020 10:28:47 +0200
-From:   Jean Rene Dawin <jdawin@math.uni-bielefeld.de>
-To:     Oliver Neukum <oneukum@suse.com>
+        id S2388072AbgE0Iee (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 May 2020 04:34:34 -0400
+Received: from mga12.intel.com ([192.55.52.136]:49632 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388037AbgE0Ied (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 27 May 2020 04:34:33 -0400
+IronPort-SDR: P//8CBT0xTNwXLltKx4Lwoe5iSNsHxT1cHEY6cpYFM/Yx0FmJ3yliKm5XC7ZzeXdXBDqjoyjQE
+ EaJF+V+WLudA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2020 01:34:27 -0700
+IronPort-SDR: F7GwngjKvonZ5fWFLnmGlWKNhwQuNJgZofgBDUaePtOSiaBl4c+xoVB5u4da3dtfe0SXIwhmNQ
+ tylL8Wf5TNvQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,440,1583222400"; 
+   d="scan'208";a="468662717"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 27 May 2020 01:34:26 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1jdrW5-000D8r-MB; Wed, 27 May 2020 16:34:25 +0800
+Date:   Wed, 27 May 2020 16:34:08 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org
-Subject: Re: Kernel Oops in cdc_acm
-Message-ID: <20200527082847.GA8044@math.uni-bielefeld.de>
-References: <20200525120026.GA11378@math.uni-bielefeld.de>
- <1590409690.2838.7.camel@suse.com>
- <20200525191624.GA28647@math.uni-bielefeld.de>
- <1590491586.2838.38.camel@suse.com>
+Subject: [usb:usb-testing] BUILD SUCCESS
+ d19c64b3d0978e741a9b18273ff8a9b52f1a8ca0
+Message-ID: <5ece2600.X0/boP2tH5p39KpF%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1590491586.2838.38.camel@suse.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Oliver Neukum wrote on Tue 26/05/20 13:13:
-> 
-> Hi,
-> 
-> may I ask whether you did the test with removing the battery twice with
-> an older kernel? Could you please go back to
-> f6cc6093a729ede1ff5658b493237c42b82ba107
-> and repeat the test of a second battery removal with that state?
-> I just cannot find anything pointing to a change that could cause
-> this issue within that time.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
+branch HEAD: d19c64b3d0978e741a9b18273ff8a9b52f1a8ca0  Merge tag 'thunderbolt-for-v5.8' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-next
 
+elapsed time: 1331m
 
-Hi,
+configs tested: 97
+configs skipped: 1
 
-I tested again with 5.7-rc6 and the following applied to drivers/usb/class/cdc-acm.c :
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
---- a/drivers/usb/class/cdc-acm.c
-+++ b/drivers/usb/class/cdc-acm.c
-@@ -579,8 +579,8 @@ static void acm_softint(struct work_struct *work)
-                                usb_kill_urb(acm->read_urbs[i]);
-                        usb_clear_halt(acm->dev, acm->in);
-                        acm_submit_read_urbs(acm, GFP_KERNEL);
--                       clear_bit(EVENT_RX_STALL, &acm->flags);
-                }
-+               clear_bit(EVENT_RX_STALL, &acm->flags);
-        }
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                               allnoconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+i386                              allnoconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                              debian-10.3
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                              allnoconfig
+m68k                           sun3_defconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+nios2                            allyesconfig
+openrisc                            defconfig
+c6x                              allyesconfig
+c6x                               allnoconfig
+openrisc                         allyesconfig
+nds32                               defconfig
+nds32                             allnoconfig
+csky                             allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+h8300                            allmodconfig
+xtensa                              defconfig
+arc                                 defconfig
+arc                              allyesconfig
+sh                               allmodconfig
+sh                                allnoconfig
+microblaze                        allnoconfig
+mips                             allyesconfig
+mips                              allnoconfig
+mips                             allmodconfig
+parisc                            allnoconfig
+parisc                              defconfig
+parisc                           allyesconfig
+parisc                           allmodconfig
+powerpc                          allyesconfig
+powerpc                          rhel-kconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+powerpc                             defconfig
+i386                 randconfig-a001-20200527
+i386                 randconfig-a004-20200527
+i386                 randconfig-a003-20200527
+i386                 randconfig-a006-20200527
+i386                 randconfig-a002-20200527
+i386                 randconfig-a005-20200527
+i386                 randconfig-a013-20200527
+i386                 randconfig-a015-20200527
+i386                 randconfig-a012-20200527
+i386                 randconfig-a011-20200527
+i386                 randconfig-a016-20200527
+i386                 randconfig-a014-20200527
+x86_64               randconfig-a006-20200527
+x86_64               randconfig-a002-20200527
+x86_64               randconfig-a005-20200527
+x86_64               randconfig-a003-20200527
+x86_64               randconfig-a004-20200527
+x86_64               randconfig-a001-20200527
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+s390                             allyesconfig
+s390                              allnoconfig
+s390                             allmodconfig
+s390                                defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+sparc64                             defconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                          allmodconfig
+um                                allnoconfig
+um                                  defconfig
+um                               allmodconfig
+um                               allyesconfig
+x86_64                                   rhel
+x86_64                               rhel-7.6
+x86_64                    rhel-7.6-kselftests
+x86_64                         rhel-7.2-clear
+x86_64                                    lkp
+x86_64                              fedora-25
+x86_64                                  kexec
 
-        if (test_and_clear_bit(ACM_ERROR_DELAY, &acm->flags)) {
-
-This in addtion to your earlier patch :
-
-> > > diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-> > > index 7678ae4afd53..be4543569822 100644
-> > > --- a/drivers/usb/class/cdc-acm.c
-> > > +++ b/drivers/usb/class/cdc-acm.c
-> > > @@ -585,7 +585,7 @@ static void acm_softint(struct work_struct *work)
-> > >   }
-> > >
-> > >   if (test_and_clear_bit(ACM_ERROR_DELAY, &acm->flags)) {
-> > > -         for (i = 0; i < ACM_NR; i++)
-> > > +         for (i = 0; i < acm->rx_buflimit; i++)
-> > >                   if (test_and_clear_bit(i, &acm->urbs_in_error_delay))
-> > >                                   acm_submit_read_urb(acm, i, GFP_NOIO);
-
-
-And with these patches the behaviour seems to me like with
-f6cc6093a729ede1ff5658b493237c42b82ba10. I'm not sure if this is correct
-but to me it looked odd that before 0afccd7601514c4b83d8cc58c740089cc447051d the function
-
-   clear_bit(EVENT_RX_STALL, &acm->flags);
-
-
-was always called when the block of
-
-   if (test_bit(EVENT_RX_STALL, &acm->flags)) {
-
-was entered.
-
-But since 0afccd7601514c4b83d8cc58c740089cc447051d
-only when condition
-
-   if (!acm->susp_count) {
-
-was also fulfilled:
-
-diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-index 84d6f7df09a4..4ef68e6671aa 100644
---- a/drivers/usb/class/cdc-acm.c
-+++ b/drivers/usb/class/cdc-acm.c
-@@ -557,14 +557,14 @@ static void acm_softint(struct work_struct *work)
-        struct acm *acm = container_of(work, struct acm, work);
-
-        if (test_bit(EVENT_RX_STALL, &acm->flags)) {
--               if (!(usb_autopm_get_interface(acm->data))) {
-+               smp_mb(); /* against acm_suspend() */
-+               if (!acm->susp_count) {
-                        for (i = 0; i < acm->rx_buflimit; i++)
-                                usb_kill_urb(acm->read_urbs[i]);
-                        usb_clear_halt(acm->dev, acm->in);
-                        acm_submit_read_urbs(acm, GFP_KERNEL);
--                       usb_autopm_put_interface(acm->data);
-+                       clear_bit(EVENT_RX_STALL, &acm->flags);
-                }
--               clear_bit(EVENT_RX_STALL, &acm->flags);
-        }
-
-        if (test_and_clear_bit(EVENT_TTY_WAKEUP, &acm->flags))
-
-Regards,
-Jean Rene
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
