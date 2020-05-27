@@ -2,98 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 012231E3CB4
-	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2020 10:54:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 648ED1E3D2C
+	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2020 11:06:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388317AbgE0IxS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 May 2020 04:53:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54488 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388112AbgE0IxS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 27 May 2020 04:53:18 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3AA9F20723;
-        Wed, 27 May 2020 08:53:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590569597;
-        bh=21T7sPdQCrYT7yx27IXVTIKRDL60nkltAXenV63O92M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jap5XRLqUYxuDAD+TFlFFCsHfOP1n3cKaPyUG1wx2aWwZQaFUekRMDW5RX+f7/9nm
-         whX6Bap6JcEsdXGAX8+ZaqqRHA3ogx/2NUaGIZYYi9y0L9B8LuYr7f7tH48GfX3we0
-         QoWeiz77MD8CnHHgOj5Uo7bFhFlrdURuXiqNDiGA=
-Date:   Wed, 27 May 2020 10:53:15 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     balbi@kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-usb@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        hanjie.lin@amlogic.com, yue.wang@amlogic.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "kernelci.org bot" <bot@kernelci.org>
-Subject: Re: [PATCH for-5.8 2/2] usb: dwc3: meson-g12a: fix USB2 PHY
- initialization on G12A and A1 SoCs
-Message-ID: <20200527085315.GA168054@kroah.com>
-References: <20200526202943.715220-1-martin.blumenstingl@googlemail.com>
- <20200526202943.715220-3-martin.blumenstingl@googlemail.com>
- <40a874eb-1a2b-533e-ee3e-bd90510abaf9@baylibre.com>
+        id S2388502AbgE0JGe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 May 2020 05:06:34 -0400
+Received: from esa4.microchip.iphmx.com ([68.232.154.123]:2344 "EHLO
+        esa4.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388268AbgE0JGc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 May 2020 05:06:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1590570391; x=1622106391;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=OJ3jogAcBXoCOIeBSavV874OsXHq0x03huAnCHVD8go=;
+  b=DVg/EbnvfqJo5xS83q7Qmd8GVZxPIRg+eHwlOdfMHXPY2J8jWt0YyE50
+   Ke0yfqQTMH7HXEF7CdUpW3Rc1bGm8TWjbu3HvFdCsJ3xg9W4MkDZLJHy7
+   ztZJel5cNP30QVhqk+ANpCgA4bFp8rMHfn4U41l+LuvDK6FxrQXN3VZ+l
+   jaV7XyAnd8LWvj5qJoK6zDt08FcYQdrjNvxcRi/jRpwYNV+9fagxYaa7a
+   50mXVnDjJATpjhW28j8yYxDc/1SmgmFXB8cYyMMSqYu2rOOOd/UOIBU/Q
+   S1D+ndpGAto++v65YQl71cMKXNDs2kMGC0iFdZ9pNfkAiykJClOzDUFYL
+   w==;
+IronPort-SDR: Ze6Vd32uZyek0pdsjKXiWgnbh0U9iVpKfgMlYkmBA9xs5VTsKKGTVDnTEwgE6SP4nUvgMiZYPG
+ YOXdbRhnpZ9pYm5eHxXzGFkjaVmutf4Y5KmMo0ZRjGdKhuKH196OfDrf5wqxryDYn44mWYUN7R
+ evEGIQurZwPXRSXIuzmuW8mPmzVr11EFh6PusUAlPdDaosL9PeFjuKlsDwspvibWdvfsxkHkNa
+ mYn29+n0d18x0oeynQjZL+bxSm31uw3hM/TsLmF2TXhkOTNBO4qt30dd622aZLN8teuYkxvbbb
+ DJ0=
+X-IronPort-AV: E=Sophos;i="5.73,440,1583218800"; 
+   d="scan'208";a="74590201"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 27 May 2020 02:06:31 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Wed, 27 May 2020 02:06:24 -0700
+Received: from localhost.localdomain (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.1713.5 via Frontend Transport; Wed, 27 May 2020 02:06:30 -0700
+From:   Christian Gromm <christian.gromm@microchip.com>
+To:     <gregkh@linuxfoundation.org>
+CC:     <driverdev-devel@linuxdriverproject.org>,
+        <linux-usb@vger.kernel.org>,
+        Christian Gromm <christian.gromm@microchip.com>
+Subject: [PATCH 00/10] staging: most: usb: fix code review findings
+Date:   Wed, 27 May 2020 11:06:17 +0200
+Message-ID: <1590570387-27069-1-git-send-email-christian.gromm@microchip.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <40a874eb-1a2b-533e-ee3e-bd90510abaf9@baylibre.com>
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 27, 2020 at 10:17:31AM +0200, Neil Armstrong wrote:
-> Hi Martin,
-> 
-> On 26/05/2020 22:29, Martin Blumenstingl wrote:
-> > dwc3_meson_g12a_usb2_init_phy() crashes with NULL pointer on an SM1
-> > board (which uses the same USB setup as G12A) dereference as reported
-> > by the Kernel CI bot. This is because of the following call flow:
-> >   dwc3_meson_g12a_probe
-> >     priv->drvdata->setup_regmaps
-> >       dwc3_meson_g12a_setup_regmaps
-> >         priv->usb2_ports is still 0 so priv->u2p_regmap[i] will be NULL
-> >     dwc3_meson_g12a_get_phys
-> >       initializes priv->usb2_ports
-> >     priv->drvdata->usb_init
-> >       dwc3_meson_g12a_usb_init
-> >         dwc3_meson_g12a_usb_init_glue
-> >           dwc3_meson_g12a_usb2_init
-> >             priv->drvdata->usb2_init_phy
-> >               dwc3_meson_g12a_usb2_init_phy
-> >                 dereferences priv->u2p_regmap[i]
-> > 
-> > Call priv->drvdata->setup_regmaps only after dwc3_meson_g12a_get_phys so
-> > priv->usb2_ports is initialized and the regmaps will be set up
-> > correctly. This fixes the NULL dereference later on.
-> > 
-> > Fixes: 013af227f58a97 ("usb: dwc3: meson-g12a: handle the phy and glue registers separately")
-> > Reported-by: "kernelci.org bot" <bot@kernelci.org>
-> > Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> > ---
-> >  drivers/usb/dwc3/dwc3-meson-g12a.c | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/usb/dwc3/dwc3-meson-g12a.c b/drivers/usb/dwc3/dwc3-meson-g12a.c
-> > index ce5388338389..1f7f4d88ed9d 100644
-> > --- a/drivers/usb/dwc3/dwc3-meson-g12a.c
-> > +++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
-> 
-> [...]
-> 
-> Fixes regression reported at [1] on SEI510 board based on Amlogic G12A.
-> 
-> Felipe, Greg, can this be queued on uxb-next for 5.8 ?
-> 
-> Acked-by: Neil Armstrong <narmstron@baylibre.com>
+This series fixes the comments received from the mailing list.
 
-I can take this and patch 1/2 here if Felipe acks them.
+Christian Gromm (10):
+  staging: most: usb: change order of function parameters
+  staging: most: usb: don't use expressions that might fail in a
+    declaration
+  staging: most: usb: change return value of function drci_rd_reg
+  staging: most: usb: return 0 instead of variable
+  staging: most: usb: move allocation of URB out of critical section
+  staging: most: usb: don't use error path to exit function on success
+  staging: most: usb: replace code to calculate array index
+  staging: most: usb: use correct error codes
+  staging: most: usb: add missing put_device calls
+  staging: most: usb: use function sysfs_streq
 
-thanks,
+ drivers/staging/most/usb/usb.c | 83 ++++++++++++++++++++++++------------------
+ 1 file changed, 47 insertions(+), 36 deletions(-)
 
-greg k-h
+-- 
+2.7.4
+
