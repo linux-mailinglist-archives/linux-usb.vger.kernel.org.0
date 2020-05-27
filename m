@@ -2,72 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10A2E1E3CB2
-	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2020 10:54:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 012231E3CB4
+	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2020 10:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388314AbgE0IxO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 May 2020 04:53:14 -0400
-Received: from mx2.suse.de ([195.135.220.15]:57314 "EHLO mx2.suse.de"
+        id S2388317AbgE0IxS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 May 2020 04:53:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54488 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388112AbgE0IxO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 27 May 2020 04:53:14 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id F3B52AD65;
-        Wed, 27 May 2020 08:53:15 +0000 (UTC)
-Message-ID: <1590569589.2838.50.camel@suse.com>
-Subject: Re: Kernel Oops in cdc_acm
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Jean Rene Dawin <jdawin@math.uni-bielefeld.de>
-Cc:     linux-usb@vger.kernel.org
-Date:   Wed, 27 May 2020 10:53:09 +0200
-In-Reply-To: <20200526195750.GA10336@math.uni-bielefeld.de>
-References: <20200525120026.GA11378@math.uni-bielefeld.de>
-         <1590409690.2838.7.camel@suse.com>
-         <20200525191624.GA28647@math.uni-bielefeld.de>
-         <1590491586.2838.38.camel@suse.com>
-         <20200526195750.GA10336@math.uni-bielefeld.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S2388112AbgE0IxS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 27 May 2020 04:53:18 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3AA9F20723;
+        Wed, 27 May 2020 08:53:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590569597;
+        bh=21T7sPdQCrYT7yx27IXVTIKRDL60nkltAXenV63O92M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jap5XRLqUYxuDAD+TFlFFCsHfOP1n3cKaPyUG1wx2aWwZQaFUekRMDW5RX+f7/9nm
+         whX6Bap6JcEsdXGAX8+ZaqqRHA3ogx/2NUaGIZYYi9y0L9B8LuYr7f7tH48GfX3we0
+         QoWeiz77MD8CnHHgOj5Uo7bFhFlrdURuXiqNDiGA=
+Date:   Wed, 27 May 2020 10:53:15 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Neil Armstrong <narmstrong@baylibre.com>
+Cc:     balbi@kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-usb@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        hanjie.lin@amlogic.com, yue.wang@amlogic.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        "kernelci.org bot" <bot@kernelci.org>
+Subject: Re: [PATCH for-5.8 2/2] usb: dwc3: meson-g12a: fix USB2 PHY
+ initialization on G12A and A1 SoCs
+Message-ID: <20200527085315.GA168054@kroah.com>
+References: <20200526202943.715220-1-martin.blumenstingl@googlemail.com>
+ <20200526202943.715220-3-martin.blumenstingl@googlemail.com>
+ <40a874eb-1a2b-533e-ee3e-bd90510abaf9@baylibre.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <40a874eb-1a2b-533e-ee3e-bd90510abaf9@baylibre.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Dienstag, den 26.05.2020, 21:57 +0200 schrieb Jean Rene Dawin:
-> Oliver Neukum wrote on Tue 26/05/20 13:13:
-> > Hi,
+On Wed, May 27, 2020 at 10:17:31AM +0200, Neil Armstrong wrote:
+> Hi Martin,
+> 
+> On 26/05/2020 22:29, Martin Blumenstingl wrote:
+> > dwc3_meson_g12a_usb2_init_phy() crashes with NULL pointer on an SM1
+> > board (which uses the same USB setup as G12A) dereference as reported
+> > by the Kernel CI bot. This is because of the following call flow:
+> >   dwc3_meson_g12a_probe
+> >     priv->drvdata->setup_regmaps
+> >       dwc3_meson_g12a_setup_regmaps
+> >         priv->usb2_ports is still 0 so priv->u2p_regmap[i] will be NULL
+> >     dwc3_meson_g12a_get_phys
+> >       initializes priv->usb2_ports
+> >     priv->drvdata->usb_init
+> >       dwc3_meson_g12a_usb_init
+> >         dwc3_meson_g12a_usb_init_glue
+> >           dwc3_meson_g12a_usb2_init
+> >             priv->drvdata->usb2_init_phy
+> >               dwc3_meson_g12a_usb2_init_phy
+> >                 dereferences priv->u2p_regmap[i]
 > > 
-> > may I ask whether you did the test with removing the battery twice with
-> > an older kernel? Could you please go back to
-> > f6cc6093a729ede1ff5658b493237c42b82ba107
-> > and repeat the test of a second battery removal with that state?
-> > I just cannot find anything pointing to a change that could cause
-> > this issue within that time.
+> > Call priv->drvdata->setup_regmaps only after dwc3_meson_g12a_get_phys so
+> > priv->usb2_ports is initialized and the regmaps will be set up
+> > correctly. This fixes the NULL dereference later on.
+> > 
+> > Fixes: 013af227f58a97 ("usb: dwc3: meson-g12a: handle the phy and glue registers separately")
+> > Reported-by: "kernelci.org bot" <bot@kernelci.org>
+> > Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> > ---
+> >  drivers/usb/dwc3/dwc3-meson-g12a.c | 8 ++++----
+> >  1 file changed, 4 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/usb/dwc3/dwc3-meson-g12a.c b/drivers/usb/dwc3/dwc3-meson-g12a.c
+> > index ce5388338389..1f7f4d88ed9d 100644
+> > --- a/drivers/usb/dwc3/dwc3-meson-g12a.c
+> > +++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
 > 
-> Hi,
+> [...]
 > 
-> testing with f6cc6093a729ede1ff5658b493237c42b82ba107 looks like this:
+> Fixes regression reported at [1] on SEI510 board based on Amlogic G12A.
+> 
+> Felipe, Greg, can this be queued on uxb-next for 5.8 ?
+> 
+> Acked-by: Neil Armstrong <narmstron@baylibre.com>
 
-OK, we have two possibilities here. Either
-a4e7279cd1d19f48f0af2a10ed020febaa9ac092 or
-0afccd7601514c4b83d8cc58c740089cc447051d
+I can take this and patch 1/2 here if Felipe acks them.
 
-have had a really wierd effect, or they introduced a bug
-that hid a later bug. Can I ask you to run a complicated test
-to decide between these possibilities?
+thanks,
 
-Could you test a4e7279cd1d19f48f0af2a10ed020febaa9ac092
-together with the patch I sent you applied on top?
-
-> Interesting is, that at the second time, the usb disconnect message
-> conmes first, and then a message from cdc_acm acm_port_activate.
-
-Basically you are deliberately creating a race condition between error
-handling and disconnect. That is a feature of the HC design.
-
-	Regards
-		Oliver
-
+greg k-h
