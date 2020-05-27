@@ -2,94 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2FCB1E3F4B
-	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2020 12:43:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC0791E3F46
+	for <lists+linux-usb@lfdr.de>; Wed, 27 May 2020 12:41:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729956AbgE0KnC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 May 2020 06:43:02 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:34648 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729354AbgE0KnB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 May 2020 06:43:01 -0400
-Received: from mailhost.synopsys.com (mdc-mailhost2.synopsys.com [10.225.0.210])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 4B5D6C0519;
-        Wed, 27 May 2020 10:43:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1590576181; bh=c8cXuZnPUVhDrm8TnZwka2SdniDodmtUoYnu1RdfkT8=;
-        h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=BYrPVPO02B5iGjtVTiNucEtRVgT09AbX2i5B5CAiriLpq3U+XuXsI87GxIjK2XUui
-         LZ+zpeyFG1abmoTpldPEeCwAqDQEjlFrlmTDhxJ5YcUTlN+wSsww6j/gEB+adHleG3
-         CmSavSgSi1kWVcbjvQmrY760lJYS7soiyKPFnOLOjRTdClelVWWiyZ6n9aqx6gaPRZ
-         2WYu9L0TTBDtMoM0eIqLb8YunOAxCTDbNOuqsrYnncVrRpTAyd/Gk15Gbsw3V1mqWP
-         FE81z+SFEgi4l9onS7Jnj6LE4imRV9ism0+RV5VSKwnrN236+ET1gLJFLryqm3gMoy
-         Twu1DPkXoG9JQ==
-Received: from tejas-VirtualBox (joglekar-e7480.internal.synopsys.com [10.146.20.198])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id D6C91A005C;
-        Wed, 27 May 2020 10:42:57 +0000 (UTC)
-Received: by tejas-VirtualBox (sSMTP sendmail emulation); Wed, 27 May 2020 16:10:55 +0530
-Date:   Wed, 27 May 2020 16:10:55 +0530
-Message-Id: <d91b768b3827fce611ba052aa1bcca19ac09fd75.1590415123.git.joglekar@synopsys.com>
-In-Reply-To: <cover.1590415123.git.joglekar@synopsys.com>
-References: <cover.1590415123.git.joglekar@synopsys.com>
-X-SNPS-Relay: synopsys.com
-From:   Tejas Joglekar <Tejas.Joglekar@synopsys.com>
-Subject: [PATCH v3 1/4] dt-bindings: usb: Add documentation for SG trb cache size quirk
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     John Youn <John.Youn@synopsys.com>
+        id S1729937AbgE0KlQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 May 2020 06:41:16 -0400
+Received: from mx2.suse.de ([195.135.220.15]:51834 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729828AbgE0KlO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 27 May 2020 06:41:14 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 80568AEEF;
+        Wed, 27 May 2020 10:41:16 +0000 (UTC)
+Message-ID: <1590576068.2838.56.camel@suse.com>
+Subject: Re: ttyACM: disabled by hub (EMI?), re-enabling... Causes garbage
+ chars & disconnect
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Joakim Tjernlund <Joakim.Tjernlund@infinera.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Date:   Wed, 27 May 2020 12:41:08 +0200
+In-Reply-To: <f4a809ba4ca132266e476ca1805e4ff9e5663f9f.camel@infinera.com>
+References: <6a4fe396ab5ae6cda548e904c57bc823103999d7.camel@infinera.com>
+         <1590418977.2838.16.camel@suse.com>
+         <b39259fc7f397b27f4af145eeafb33ec36638660.camel@infinera.com>
+         <a3f4a9bbde9efd2827b2a02c46f86c8ba7853bc6.camel@infinera.com>
+         <1590482853.2838.26.camel@suse.com>
+         <8cf71160e703a18b28d27a844406d42f6cadf39b.camel@infinera.com>
+         <1590488084.2838.34.camel@suse.com>
+         <42c92312c74e90e5507de4103bd15bbbe175f98d.camel@infinera.com>
+         <4c2bd25aa7f6672cb132487f7af6a787ffc1fab6.camel@infinera.com>
+         <1590568683.2838.42.camel@suse.com>
+         <f4a809ba4ca132266e476ca1805e4ff9e5663f9f.camel@infinera.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This commit adds the documentation for sgl-trb-cache-size-quirk, and
-snps,sgl-trb-cache-size-quirk property. These when set enables the
-quirk for XHCI driver for consolidation of sg list into a temporary
-buffer when small buffer sizes are scattered over the sg list not
-making up to MPS or total transfer size within TRB cache size with
-Synopsys xHC.
+Am Mittwoch, den 27.05.2020, 09:40 +0000 schrieb Joakim Tjernlund:
+> On Wed, 2020-05-27 at 10:38 +0200, Oliver Neukum wrote:
+> > CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you recognize the sender and know the content is safe.
+> > 
+> > 
+> > Am Dienstag, den 26.05.2020, 17:19 +0000 schrieb Joakim Tjernlund:
+> > > 
+> > > This "u-boot SPL" is the first thing u-boot writes and somehow this is remembered, I assume, by cdc_acm
+> > > and gets echoed back when I open ttyACM0
+> > 
+> > Hi,
+> > 
+> > that makes sense, but it is not something that we could really
+> > change in CDC-ACM, I am afraid.
+> 
+> Why not? CDC-ACM should echo back anything it has received before open of ttyACM
 
-Signed-off-by: Tejas Joglekar <joglekar@synopsys.com>
----
- Documentation/devicetree/bindings/usb/dwc3.txt     | 4 ++++
- Documentation/devicetree/bindings/usb/usb-xhci.txt | 3 +++
- 2 files changed, 7 insertions(+)
+Well, there is an inherent race condition with loading the module I am
+afraid. By default cdc-acm should actually echo. You can set the
+DISABLE_ECHO echo quirk for your device if you want to get rid of it.
 
-diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt b/Documentation/devicetree/bindings/usb/dwc3.txt
-index d03edf9d3935..0fcbaa51f66e 100644
---- a/Documentation/devicetree/bindings/usb/dwc3.txt
-+++ b/Documentation/devicetree/bindings/usb/dwc3.txt
-@@ -102,6 +102,10 @@ Optional properties:
- 			this and tx-thr-num-pkt-prd to a valid, non-zero value
- 			1-16 (DWC_usb31 programming guide section 1.2.3) to
- 			enable periodic ESS TX threshold.
-+ - snps,sgl-trb-cache-size-quirk: enable sg list consolidation - host mode
-+			only. Set to use SG buffers of at least MPS size
-+			by consolidating smaller SG buffers list into a
-+			single buffer.
- 
-  - <DEPRECATED> tx-fifo-resize: determines if the FIFO *has* to be reallocated.
-  - snps,incr-burst-type-adjustment: Value for INCR burst type of GSBUSCFG0
-diff --git a/Documentation/devicetree/bindings/usb/usb-xhci.txt b/Documentation/devicetree/bindings/usb/usb-xhci.txt
-index dc025f126d71..c53eb19ae67e 100644
---- a/Documentation/devicetree/bindings/usb/usb-xhci.txt
-+++ b/Documentation/devicetree/bindings/usb/usb-xhci.txt
-@@ -44,6 +44,9 @@ Optional properties:
-   - quirk-broken-port-ped: set if the controller has broken port disable mechanism
-   - imod-interval-ns: default interrupt moderation interval is 5000ns
-   - phys : see usb-hcd.yaml in the current directory
-+  - sgl-trb-cache-size-quirk: set if you need to consolidate sg list into a
-+    temporary buffer when small SG buffer sizes does not make upto MPS
-+    size or total transfer size across the TRB cache size.
- 
- additionally the properties from usb-hcd.yaml (in the current directory) are
- supported.
--- 
-2.11.0
+Is CDC-ACM violating some standard with respect to echoing? Changing
+defaults really hurts users, no matter what you do.
+
+	Regards
+		Oliver
 
