@@ -2,36 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF6A51E6979
-	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2020 20:36:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D891E6970
+	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2020 20:36:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405895AbgE1Sf5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 May 2020 14:35:57 -0400
-Received: from rere.qmqm.pl ([91.227.64.183]:47602 "EHLO rere.qmqm.pl"
+        id S2405904AbgE1Sf6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 May 2020 14:35:58 -0400
+Received: from rere.qmqm.pl ([91.227.64.183]:42498 "EHLO rere.qmqm.pl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405871AbgE1Sf4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        id S2405891AbgE1Sf4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
         Thu, 28 May 2020 14:35:56 -0400
 Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 49XxGd6lrsz8L;
-        Thu, 28 May 2020 20:35:53 +0200 (CEST)
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 49XxGf65JDzBn;
+        Thu, 28 May 2020 20:35:54 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1590690954; bh=QmkFZ9eFWaDioQbY5TlOYF/cOWllJop5t2LIsaqe1rM=;
+        t=1590690954; bh=QjngVfF3jGFX7hjsYC0+ki+GV1G3GFLfuWLY+mPbiy8=;
         h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=DSYwmJKqLQR1j43Pw1ma9FilGqrQlukUQnwtIS1e0acU6URtVDx7cnu0TB7h34fC0
-         VFfv9E5BcBBkMUVaxUkOXMM7z5O82aEOYO1N0oQDQh2g6TdvRTZczZdLI7ZwBOlW6D
-         PbduX7w/RvIf4xGNcKqsfd82lS91QpvUK894dCrFTiTHgccTAjlf7INvudkR/qcy46
-         xRYrREQrmvARzTMeta1K5WovgTndiuHiznQY20heVNga5kvR8xJypVcf9xsyzxpGQu
-         D/rkv++3qBVApjnSudeXLpv0NxeWE1ZNCJsSudNcVRU6md9JeBAXth8Fs/RfUkZz7h
-         yrGzVXgwPdBIA==
+        b=mjOQBr4a0z6i6cI5tKBgwyT5sDSr+t668gVJneiKtoM8WU27fbdcalb43S5QkFoJ5
+         idpS8+XgQIXeIK0cX+uBp3z6rbvLhe2Q7xmL+nGTh9CEAqIFHasXlJ2ai4yQQBwFtN
+         A2GuVMXuhg6g7lCM081DGpeCJjH2TFsWkkOJKQ6Oh1EHb95Wz4Dq9Z1QrqETuIOsv/
+         XuwG9FZ9vNw0TDieZibrq989ipD0ypwzy9orWcSQEJwK52S18WVKTFhlf8FPP8CS4T
+         MAjH6iuiD8WurIhd/K8NBHsnm82furj3JTSieDPiRGzBlua33OwlyM3ULgUTjIm84+
+         TlQAc1yXCB/SA==
 X-Virus-Status: Clean
 X-Virus-Scanned: clamav-milter 0.102.2 at mail
-Date:   Thu, 28 May 2020 20:35:53 +0200
-Message-Id: <9a5ad692ad2d615d28901c6393716b79005c1c25.1590690650.git.mirq-linux@rere.qmqm.pl>
+Date:   Thu, 28 May 2020 20:35:54 +0200
+Message-Id: <e4d649e657f67ca422252331b560c29bc3f63515.1590690650.git.mirq-linux@rere.qmqm.pl>
 In-Reply-To: <cover.1590690650.git.mirq-linux@rere.qmqm.pl>
 References: <cover.1590690650.git.mirq-linux@rere.qmqm.pl>
 From:   =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
-Subject: [PATCH 1/3] usb: gadget: udc: atmel: remove outdated comment in
- usba_ep_disable()
+Subject: [PATCH 3/3] usb: gadget: udc: atmel: implement .pullup callback
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -49,34 +48,60 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Fixed commit removed the offending behaviour from the driver, but missed
-the comment and associated test. Remove them now.
+Implement udc->pullup callback, so that udc_connect/disconnect work.
+This is needed for composite gadget, as it assumes udc_disconnect()
+actually works and calls gadget's ->disconnect callback.
 
-Fixes: 38e58986e6fc ("usb: gadget: udc: atmel: don't disable enpdoints we don't own")
 Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
 ---
- drivers/usb/gadget/udc/atmel_usba_udc.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ drivers/usb/gadget/udc/atmel_usba_udc.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
 diff --git a/drivers/usb/gadget/udc/atmel_usba_udc.c b/drivers/usb/gadget/udc/atmel_usba_udc.c
-index d69f61ff0181..9153e220848d 100644
+index 9342a3d24963..c5128c229c52 100644
 --- a/drivers/usb/gadget/udc/atmel_usba_udc.c
 +++ b/drivers/usb/gadget/udc/atmel_usba_udc.c
-@@ -676,13 +676,7 @@ static int usba_ep_disable(struct usb_ep *_ep)
+@@ -1028,6 +1028,7 @@ usba_udc_set_selfpowered(struct usb_gadget *gadget, int is_selfpowered)
+ 	return 0;
+ }
  
- 	if (!ep->ep.desc) {
- 		spin_unlock_irqrestore(&udc->lock, flags);
--		/* REVISIT because this driver disables endpoints in
--		 * reset_all_endpoints() before calling disconnect(),
--		 * most gadget drivers would trigger this non-error ...
--		 */
--		if (udc->gadget.speed != USB_SPEED_UNKNOWN)
--			DBG(DBG_ERR, "ep_disable: %s not enabled\n",
--					ep->ep.name);
-+		DBG(DBG_ERR, "ep_disable: %s not enabled\n", ep->ep.name);
- 		return -EINVAL;
- 	}
- 	ep->ep.desc = NULL;
++static int atmel_usba_pullup(struct usb_gadget *gadget, int is_on);
+ static int atmel_usba_start(struct usb_gadget *gadget,
+ 		struct usb_gadget_driver *driver);
+ static int atmel_usba_stop(struct usb_gadget *gadget);
+@@ -1101,6 +1102,7 @@ static const struct usb_gadget_ops usba_udc_ops = {
+ 	.get_frame		= usba_udc_get_frame,
+ 	.wakeup			= usba_udc_wakeup,
+ 	.set_selfpowered	= usba_udc_set_selfpowered,
++	.pullup			= atmel_usba_pullup,
+ 	.udc_start		= atmel_usba_start,
+ 	.udc_stop		= atmel_usba_stop,
+ 	.match_ep		= atmel_usba_match_ep,
+@@ -1957,6 +1959,24 @@ static irqreturn_t usba_vbus_irq_thread(int irq, void *devid)
+ 	return IRQ_HANDLED;
+ }
+ 
++static int atmel_usba_pullup(struct usb_gadget *gadget, int is_on)
++{
++	struct usba_udc *udc = container_of(gadget, struct usba_udc, gadget);
++	unsigned long flags;
++	u32 ctrl;
++
++	spin_lock_irqsave(&udc->lock, flags);
++	ctrl = usba_readl(udc, CTRL);
++	if (is_on)
++		ctrl &= ~USBA_DETACH;
++	else
++		ctrl |= USBA_DETACH;
++	usba_writel(udc, CTRL, ctrl);
++	spin_unlock_irqrestore(&udc->lock, flags);
++
++	return 0;
++}
++
+ static int atmel_usba_start(struct usb_gadget *gadget,
+ 		struct usb_gadget_driver *driver)
+ {
 -- 
 2.20.1
 
