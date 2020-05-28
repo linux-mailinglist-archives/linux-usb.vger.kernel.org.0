@@ -2,72 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E6571E552F
-	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2020 06:49:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CECA1E5778
+	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2020 08:20:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725786AbgE1Et4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 May 2020 00:49:56 -0400
-Received: from mail.codeweavers.com ([50.203.203.244]:55672 "EHLO
-        mail.codeweavers.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725648AbgE1Et4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 May 2020 00:49:56 -0400
-X-Greylist: delayed 984 seconds by postgrey-1.27 at vger.kernel.org; Thu, 28 May 2020 00:49:56 EDT
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=codeweavers.com; s=6377696661; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:Date:Message-ID:Subject:From:To:Sender:Reply-To:Cc:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=vemHJ1ofMEjf4BkGKBqYn/ibfSlLxPKA4jDOogwFvAk=; b=XVxd9wZ6dEbJINO0ouPyv158+R
-        0+b3yyAwB5jyaiQaKSGm6Lmto0QDmstj27EYdc45s/LKqn6/1If/Iw/OAwapDUy5Fb9MuHFy+eAfd
-        6TJG18yVgpWWL3k8nON6PAf8om1TTu40zkN7j99A/CBdDSW8XOad38uZo68gJRlDYyIQ=;
-Received: from [64.191.7.9] (helo=[192.168.1.115])
-        by mail.codeweavers.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <zfigura@codeweavers.com>)
-        id 1jeAEU-0007cg-Ie; Wed, 27 May 2020 23:33:31 -0500
-To:     usb-storage@lists.one-eyed-alien.net, linux-usb@vger.kernel.org
-From:   Zebediah Figura <zfigura@codeweavers.com>
-Subject: Bug 207877: ASMedia drive (174c:55aa) hangs in ioctl
- CDROM_DRIVE_STATUS when mounting a DVD
-Message-ID: <7d0b20b9-4735-bbed-bb50-72764aefd6d8@codeweavers.com>
-Date:   Wed, 27 May 2020 23:23:13 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.1
+        id S1727902AbgE1GUB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 May 2020 02:20:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50720 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727105AbgE1GUA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 May 2020 02:20:00 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370E0C05BD1E
+        for <linux-usb@vger.kernel.org>; Wed, 27 May 2020 23:19:59 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id nr22so14400965ejb.6
+        for <linux-usb@vger.kernel.org>; Wed, 27 May 2020 23:19:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=JKlHOwEgq5eJ0w9NxH5XWvwuDgHzplW8LYsyksqwZ2c=;
+        b=rWHw8o9GJ0oWApntPkgSALsExnW9GF16U8uXjh/tVXu89ZjGy8/AKmFxe1C+a0VfeZ
+         tBciXVDj2wKMs3FqOidwSENkg9egyjFJgxe9/Z8mrYyiWsSo9eikJoI/SRH6yO47+BKF
+         TgRxsH2xQ3NplYzsY2SVZYRUAoSXbXa0mgUubHXvYQiXe7Fa9RoOFieWNddEiO5pTLNn
+         fttqQhXOz4qm3yhM1gdhQ9Hzw6BnCSCrazCtlmYS7q/zCHGE/oksQboKxlVPnLikhchE
+         aG0/J2OHzAUWRoCC3PmDJS448saCeYaikkL/iCpG9FWA0XY8xLvUOcx/epCQ77Wr7GJz
+         7+nA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=JKlHOwEgq5eJ0w9NxH5XWvwuDgHzplW8LYsyksqwZ2c=;
+        b=O2VpHYG4xSVzb02N0tDnXY4ouUCpQbSf5ovvhUg2v27r4uuNk/JkErBb1tKtyOSzXc
+         YVv/eActT3n9enP9+tG9BQvCFo1riIKRx994HKIJbugHqgzjwPIGKoNJ++KTGjeoUjq+
+         x4cf3rM5hk/h5k5mxN2jgx+NJn1Z7K3hzQpQN35ESXxA6imO++o3M0Rzw+rIWKFnyeqV
+         hZ2GCOL3V0y+8VA5HwhTJ3G8trTxljsWiVkRKxQds8jbr8SPpTDlD+Ott2Yy69tL4BtC
+         h1ORaskwU8m+gR52LVfyWY5/POTLsDKW9IvUZa8L7D+sDC8Mh2Ekzl1Uwl131vQfpB1o
+         egFA==
+X-Gm-Message-State: AOAM5324syEMlglLCmALHV7xdZIcSn7C7+geuzIZKZW4OnqkK8CDkaT0
+        /0jn1MF3ZpHcNWM9bkdP4HJyCOdNgMSAqWgsslOClYd6maI=
+X-Google-Smtp-Source: ABdhPJwZ0pMkw3CFxLjowbCbmTWFxGwISxUQ+m/vNd+F3W2cWJyKajdSkWgrumlHRArVyjqdvmAiZuPXqd44XYeaqgU=
+X-Received: by 2002:a17:906:938a:: with SMTP id l10mr1558131ejx.186.1590646797626;
+ Wed, 27 May 2020 23:19:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -26.0
-X-Spam-Report: Spam detection software, running on the system "mail.codeweavers.com",
- has NOT identified this incoming email as spam.  The original
- message has been attached to this so you can view it or label
- similar future email.  If you have any questions, see
- the administrator of that system for details.
- Content preview:  Hello all, I was asked to report this bug here. There's more
-    details in the bug report, but it's been proposed that there's a deadlock
-    between device_reset() in scsiglue.c and usb_stor_control_thread(). 
- Content analysis details:   (-26.0 points, 5.0 required)
-  pts rule name              description
- ---- ---------------------- --------------------------------------------------
-  -20 USER_IN_WHITELIST      From: address is in the user's white-list
- -6.0 ALL_TRUSTED            Passed through trusted hosts only via SMTP
- -0.5 BAYES_00               BODY: Bayes spam probability is 0 to 1%
-                             [score: 0.0000]
-  0.5 AWL                    AWL: Adjusted score from AWL reputation of From: address
+From:   Belisko Marek <marek.belisko@gmail.com>
+Date:   Thu, 28 May 2020 08:19:46 +0200
+Message-ID: <CAAfyv37cFWsvoprz2jZ=jkdiTqxjPSYr_c6w5YYiaKWUe_-V1A@mail.gmail.com>
+Subject: usb raw gadget impossible to sent buffer bigger than 3MB
+To:     Linux USB Mailing List <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello all,
+Hi,
 
-I was asked to report this bug here. There's more details in the bug 
-report, but it's been proposed that there's a deadlock between 
-device_reset() in scsiglue.c and usb_stor_control_thread().
+we're using USB RAW gadget for communicating with PC application. We
+have created loopback test which send file (any size) from PC to
+device and then same data are sent back to PC to verify roundtrip time
+(using bulk data transfer). Everything works fine up to 3MB file size.
+If we sent bigger file like e.g. 5M we can receive file on device but
+when we want to write to output endpoint we got:
 
-I haven't examined the code in detail, but is this plausible? 
-Alternatively, is there something else clearer that the backtrace shows?
+WARNING: CPU: 0 PID: 12299 at /kernel-source//mm/page_alloc.c:3725
+__alloc_pages_nodemask+0x1b0/0xde4
+[<c010fa08>] (unwind_backtrace) from [<c010c45c>] (show_stack+0x20/0x24)
+[<c010c45c>] (show_stack) from [<c04cc0d4>] (dump_stack+0x20/0x28)
+[<c04cc0d4>] (dump_stack) from [<c01324ac>] (__warn+0xec/0x108)
+[<c01324ac>] (__warn) from [<c0132598>] (warn_slowpath_null+0x30/0x38)
+[<c0132598>] (warn_slowpath_null) from [<c021ccb8>]
+(__alloc_pages_nodemask+0x1b0/0xde4)
+[<c021ccb8>] (__alloc_pages_nodemask) from [<c023b888>]
+(kmalloc_order+0x2c/0x48)
+[<c023b888>] (kmalloc_order) from [<c023b8d0>] (kmalloc_order_trace+0x2c/0xd4)
+[<c023b8d0>] (kmalloc_order_trace) from [<c0261c24>] (__kmalloc+0x40/0x264)
+[<c0261c24>] (__kmalloc) from [<bf039bc4>] (ffs_epfile_io+0x13c/0x570
+[usb_f_fs])
+[<bf039bc4>] (ffs_epfile_io [usb_f_fs]) from [<bf03a0c0>]
+(ffs_epfile_write_iter+0xc8/0x120 [usb_f_fs])
+[<bf03a0c0>] (ffs_epfile_write_iter [usb_f_fs]) from [<c02734bc>]
+(new_sync_write+0xc8/0xec)
+[<c02734bc>] (new_sync_write) from [<c027351c>] (__vfs_write+0x3c/0x48)
+[<c027351c>] (__vfs_write) from [<c02749a0>] (vfs_write+0xcc/0x158)
+[<c02749a0>] (vfs_write) from [<c02756ac>] (SyS_write+0x50/0x88)
+[<c02756ac>] (SyS_write) from [<c0107a20>] (ret_fast_syscall+0x0/0x54)
+---[ end trace fe5f79fe415b9881 ]---
 
-ἔρρωσθε,
-Zebediah
+and write ends up with: write /run/ffs/ep1: cannot allocate memory
+
+When checked free command there should be plenty of available memory.
+Is there some limitation when writing to endpoint? We tried to split
+buffer to e.g. 3M and sent it and this works but looks like there is
+penalty when sending bigger files (100MB file received in 5secs whicle
+sending back it took 2minutes). Thanks for ideas and hints.
+
+BR,
+
+marek
+
+-- 
+as simple and primitive as possible
+-------------------------------------------------
+Marek Belisko - OPEN-NANDRA
+Freelance Developer
+
+Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
+Tel: +421 915 052 184
+skype: marekwhite
+twitter: #opennandra
+web: http://open-nandra.com
