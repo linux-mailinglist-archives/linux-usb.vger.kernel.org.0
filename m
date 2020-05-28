@@ -2,80 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABEDE1E6123
-	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2020 14:41:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E43E1E62CD
+	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2020 15:51:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389786AbgE1Mls (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 May 2020 08:41:48 -0400
-Received: from esa6.microchip.iphmx.com ([216.71.154.253]:17288 "EHLO
-        esa6.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389746AbgE1Mls (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 May 2020 08:41:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1590669707; x=1622205707;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=XNVYxOXijcfDaVkxWFEMx1vIj2xuYX4rEfvliHK4rFA=;
-  b=sBh+ddEG/JF/UuFC7WDI3KbhuP6GAsv8jhr7Wf6J25z4v6hsJTBowsxZ
-   gsCuCYHoveWjGVZTQ3a2Cq9gNkHg6YH/J03XfDe8xzVBU6pus7LGQ/tn/
-   p/UQ0/JWBZ0lnMdUK2GoaRdighJK/SE6y4kH0AJjK9z/gHlN5hEGL5tb9
-   p/oZjjtzDWtmQa0g3ZTKoaXXj1DSZOEabEaAR6jhv7jIRlHTKMHCqP4g+
-   18K501EK/C3AZnj4NhvaOubVDqmD7b1EMeyww9qM5g8LWnRVFqdCnoYDF
-   d0dIrdKeBo5fvaUjUMWTxoZL5bwmCLpJUdmUa2Aen55XOsLHPA4T5QYfu
-   w==;
-IronPort-SDR: uI2h0FcwQkTRcsuI6dEqE7CHSXOcqgY3LoESAKQp1ZVtdS0XzrwoNGWZoWZVeomSQI5wKMSkeV
- B9+Y+AZ6p2nJWnKPFqo7aB5DA4/JT6tvABlCj9G7oWhsS8pWszl7XCgM54vkd8yK3T2Et44fMs
- OKkmtyPjyc22GmyFeL00HGcHbmRWuc5IF9/UuI0OPwdxX2FCvNbl46mOE+kGRS2SO/6DrvQvnq
- tjn7TfQHqYrCofgfFqk1mtGFNKTS8vEqNYKJbSvj6OjaRU32D6rQ3DMJFYaoBiGC6w3H3LwJZ8
- zlI=
-X-IronPort-AV: E=Sophos;i="5.73,444,1583218800"; 
-   d="scan'208";a="13787893"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 May 2020 05:41:46 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Thu, 28 May 2020 05:41:46 -0700
-Received: from localhost.localdomain (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.1713.5 via Frontend Transport; Thu, 28 May 2020 05:41:45 -0700
-From:   Christian Gromm <christian.gromm@microchip.com>
-To:     <gregkh@linuxfoundation.org>
-CC:     <driverdev-devel@linuxdriverproject.org>,
-        <linux-usb@vger.kernel.org>,
-        Christian Gromm <christian.gromm@microchip.com>
-Subject: [PATCH] staging: most: usb: init return value in default path of switch/case expression
-Date:   Thu, 28 May 2020 14:41:43 +0200
-Message-ID: <1590669703-20004-1-git-send-email-christian.gromm@microchip.com>
-X-Mailer: git-send-email 2.7.4
+        id S2390693AbgE1Nvf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 May 2020 09:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36098 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390687AbgE1Nvd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 May 2020 09:51:33 -0400
+Received: from mail-vk1-xa43.google.com (mail-vk1-xa43.google.com [IPv6:2607:f8b0:4864:20::a43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A25C05BD1E
+        for <linux-usb@vger.kernel.org>; Thu, 28 May 2020 06:51:33 -0700 (PDT)
+Received: by mail-vk1-xa43.google.com with SMTP id w188so6760962vkf.0
+        for <linux-usb@vger.kernel.org>; Thu, 28 May 2020 06:51:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Owau2ya3gC/56f2SKOWlhU4477LIjpRkozc6MVc36Qc=;
+        b=GYmzIcOlqp0inV6/3Xbibkn3HMcVd4Kh3aWqiEsZZ+94U0XoqmKQnXEFW911vZoxe3
+         tqwoC6vF9M01gE2dXUFrB+Ljfs9ALNwtqNC9lI8jyrz87h2pALKsg8cK2UUsJEFMMJ0r
+         M3FtrtYW8asIwRfRjJAX4rJxdX5w5qBpjn8NA7VeL7Tp/dvhsVFNkGMcLkvXRq+e49nF
+         LNFuGTCOJxOrHz3Ow2ouJpNFYbVUHcOSDg4F7DPUUSS/+Mz65uYZTDTXTbRBiPsWJcL6
+         K3ch5G5007j8ORpqaJGFm3zvzMVfY69UTTqQoNyWodKbgqaCJ18Vly1x03KxSkVv8f2W
+         oKnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Owau2ya3gC/56f2SKOWlhU4477LIjpRkozc6MVc36Qc=;
+        b=WPyqXl6JmaakN7SouBphD313AF6UokA4bvOEuOuA5gT9lcwqgq+sw9r1Y6fUWLh0si
+         PwX9QrFjgbHAxyy/5JMMnvZGwfhcMmTzst49lLczspv0a6jvjWidwmev9soMsa5wcNJ1
+         pjmyVALbezNkbswOPFyA27IKl+D8JJxfaj7r1IN1QU9zWlqw0JhEJDSDbzVGWgOYw186
+         9AlAkY0LqLahj1m+BJLietSd0Z/X+QUXINW+d2/Ih1Zb1wKQ3RAHrEXs1gi3nmvGcW5s
+         rzJ+cJVoxljy545ApUIwMY4O2MmY7AvpH/9ddiUaEij3jJfU2tnGPBud0DY8Ho75+2Zc
+         j6HQ==
+X-Gm-Message-State: AOAM532o/TUOKXZ0cSH+UqQsp2tW8l6nIITevTvViOlXubQ+nsAlCxlG
+        lVlwIra4RFSSfmi3sOfe6qjFG9iZmpecDdOoEmk=
+X-Google-Smtp-Source: ABdhPJz9rpEV9NefPJ4mvmUlFFoe/xH96S5Z/teq9tsa7Ud4tKk4G1rL0ay4Q3TiP/U4WG82nA4Rv2OPTseHsC+Qrrs=
+X-Received: by 2002:a1f:9094:: with SMTP id s142mr2205245vkd.6.1590673892337;
+ Thu, 28 May 2020 06:51:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20200509141619.32970-1-noralf@tronnes.org> <20200509141619.32970-4-noralf@tronnes.org>
+In-Reply-To: <20200509141619.32970-4-noralf@tronnes.org>
+From:   Emil Velikov <emil.l.velikov@gmail.com>
+Date:   Thu, 28 May 2020 14:48:24 +0100
+Message-ID: <CACvgo51Cq1ipV_K-NLk9QZ7d1Pweebz2ST6anqrT1q09r0+QEw@mail.gmail.com>
+Subject: Re: [PATCH v2 03/10] drm/client: Add drm_client_framebuffer_flush()
+To:     =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>
+Cc:     ML dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-usb@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch avoids returning an uninitialized value in the default
-path of the switch expression.
+Hi all,
 
-Signed-off-by: Christian Gromm <christian.gromm@microchip.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
----
- drivers/staging/most/usb/usb.c | 1 +
- 1 file changed, 1 insertion(+)
+I realise this has landed, so a small FYI comment.
 
-diff --git a/drivers/staging/most/usb/usb.c b/drivers/staging/most/usb/usb.c
-index df5876c..2640c5b 100644
---- a/drivers/staging/most/usb/usb.c
-+++ b/drivers/staging/most/usb/usb.c
-@@ -215,6 +215,7 @@ static unsigned int get_stream_frame_size(struct device *dev,
- 		break;
- 	default:
- 		dev_warn(dev, "Query frame size of non-streaming channel\n");
-+		frame_size = 0;
- 		break;
- 	}
- 	return frame_size;
--- 
-2.7.4
+On Sat, 9 May 2020 at 15:16, Noralf Tr=C3=B8nnes <noralf@tronnes.org> wrote=
+:
 
+> +int drm_client_framebuffer_flush(struct drm_client_buffer *buffer, struc=
+t drm_rect *rect)
+> +{
+> +       if (!buffer || !buffer->fb || !buffer->fb->funcs->dirty)
+
+Hmm cannot think of a good reason why anyone would call this with
+!buffer || !buffer->fb?
+Might be a good idea to WARN in those cases - otherwise the user is
+given false sense to security.
+
+Looking at the upcoming user (drm/gud) it already has both - so it's
+perfectly safe.
+
+-Emil
