@@ -2,93 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC421E6A38
-	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2020 21:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27D721E6ADD
+	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2020 21:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406139AbgE1TRM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 May 2020 15:17:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58720 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406108AbgE1TRL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 May 2020 15:17:11 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FD9C08C5C6
-        for <linux-usb@vger.kernel.org>; Thu, 28 May 2020 12:17:10 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id t18so372472wru.6
-        for <linux-usb@vger.kernel.org>; Thu, 28 May 2020 12:17:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Rd0oLSAo8ofjMzvEHAYMtqN3tyStjDfVgpv2dW9dekM=;
-        b=UQwa4H5GTUnWEWJdd2ViMfbQ+Srm/j1lfxcKxkwBaXI6U3U3jZIWNAs2G51boeBX1D
-         Wz/FpeHHxaxkiMPCWdwcopKuznNOGzVbq+KTZU3ss+vqtHOZflXOCcfEbNR94L84kqTJ
-         RfwLCR9kV9E0NiLjMfVMPjYvI3GoD+0ecLEC9DaRGr1Yj4cmM+kMKIiG1mtuLiqri0y4
-         PDZbh+UUi/nFaqDVuKgto80yKtL0MWXO4dCi/b5MHM32GMSXPwWd5U/kY6H3rc23v/rv
-         t2LDcqXOJTXuMJtRKcLrIgf+XKPJIlh5swu4X5EYM+2Rv1I9TfNVOZrsqoBGdmDvDzes
-         p9Bw==
+        id S2406502AbgE1T0e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 May 2020 15:26:34 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:33899 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406258AbgE1T0d (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 May 2020 15:26:33 -0400
+Received: by mail-io1-f66.google.com with SMTP id f3so31427669ioj.1;
+        Thu, 28 May 2020 12:26:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Rd0oLSAo8ofjMzvEHAYMtqN3tyStjDfVgpv2dW9dekM=;
-        b=eFxifVJ1uWPxGfYJYGSQrcvDd7lDplt5x0wuKoDKhi/YLoWqJSHHeNVkw05CLOJ6Sw
-         LHoJqt6mQSW3GlE9Uj6aQA62wuRdlI2JFMocdFxgJEvZHIbgq+x+RRb5YJv8q/OsXyQE
-         mRxaKZnjcwX/FDTnQgnQ2BNzNe5g0QoY5m+YdvPpdkmlWzp7+iVxT+AUsCA6Z92ASGUn
-         byBnbfjfVlArERDdxYvh/wAHSO+9HfMVUjfflqWAYito3o4aogPKKU7CkILn1bPqQwjU
-         w0tl1l7JpKyNw0ICcMtfj9EMfGVEqQkm57mUsBQfXVob+aqrrDKW4iSv8PI2wQUaVQvs
-         pzng==
-X-Gm-Message-State: AOAM531NIqiE8FiySfZA+jyC1MnQbehiK+hmyYWNaCRC643nGlelAdOd
-        avd3nKEx7wWbnkVIs6816Rvpf69XxHZKbuAi7E6Zjqxv
-X-Google-Smtp-Source: ABdhPJw5Ei7ns1Dks4f24XdHs2Nx2tYKIf1nBuAtr2JUxmwKyRTlHB1sqoD3JEPfZhHdL5GAYs6qPmE3p3cKvrobPDo=
-X-Received: by 2002:adf:e2c9:: with SMTP id d9mr4886725wrj.227.1590693429602;
- Thu, 28 May 2020 12:17:09 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hPV9O47er4xNAMd5wglL6Z5Z1lhGUqlcSginv9j4tJY=;
+        b=iKJZE1nlq6F6nJp+puvkmCfCYym1L+VVG+kmnaU1d4f62PhOg8U+V+8IbbvzXo8HDN
+         78drb/ptOtpGReVqyjC4Z2LLcqgyLwbiPJ+2R6lcaQ9G3alZs+k/UimOzC3zbf61yOWB
+         YQiR38Wc7/TSsda+qdCx94WiXfkyMyksqo0FpAeRNRnyOYuC+d1rpZBMptBT8yf68QcN
+         MD8lMcpMoBU5r9XuXZG1kLVH1+ERVFtvDYawCdAgdOZT7HTKdolbJguCkIBb7TUBD4pG
+         dMI89JOIF5C47sJAFCASJtQZPOjeQbUd/YF8h8O+9uIw/+lXd/1oebuWgL12DfE6ImeG
+         r5+Q==
+X-Gm-Message-State: AOAM531ahsT7rl0vdxByAVsabNGLIc8oNt1isUMqiIJkbR+z1MGq4qeF
+        mnwJkUabddHTXv2P1QRSWg==
+X-Google-Smtp-Source: ABdhPJzCyFeUg7Z9IIEN+Krc+e5kutkL4mnELlbgP88jXAg66vChno/VzYMMvtVbSJ8HNuZC5aYN2w==
+X-Received: by 2002:a02:9f90:: with SMTP id a16mr3987752jam.65.1590693992020;
+        Thu, 28 May 2020 12:26:32 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id g19sm2933855iom.21.2020.05.28.12.26.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 May 2020 12:26:31 -0700 (PDT)
+Received: (nullmailer pid 539224 invoked by uid 1000);
+        Thu, 28 May 2020 19:26:29 -0000
+Date:   Thu, 28 May 2020 13:26:29 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     cristian.birsan@microchip.com
+Cc:     linux-kernel@vger.kernel.org, ludovic.desroches@microchip.com,
+        alexandre.belloni@bootlin.com,
+        linux-arm-kernel@lists.infradead.org, balbi@kernel.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        mark.rutland@arm.com, linux-usb@vger.kernel.org,
+        gregkh@linuxfoundation.org, nicolas.ferre@microchip.com
+Subject: Re: [PATCH v2 2/7] dt-bindings: usb: atmel: Update DT bindings
+ documentation for sam9x60
+Message-ID: <20200528192629.GA539191@bogus>
+References: <20200515111631.31210-1-cristian.birsan@microchip.com>
+ <20200515111631.31210-3-cristian.birsan@microchip.com>
 MIME-Version: 1.0
-References: <CAJz5Opc0zDQxnNp2foPEeL0=hOZ0C9-xy3T4nEO2pRy-rQmpWQ@mail.gmail.com>
- <dca3b78a-3740-aeb2-5767-76e7f9fd1fb5@synopsys.com>
-In-Reply-To: <dca3b78a-3740-aeb2-5767-76e7f9fd1fb5@synopsys.com>
-From:   Frank Mori Hess <fmh6jj@gmail.com>
-Date:   Thu, 28 May 2020 15:16:58 -0400
-Message-ID: <CAJz5OpfJ0549X4kj8UTsck5ieJxDro1Ga1OhqUPypi+p1490JA@mail.gmail.com>
-Subject: Re: usb: dwc2: screaming interrupt after kexec reboot
-To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200515111631.31210-3-cristian.birsan@microchip.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Minas,
+On Fri, 15 May 2020 14:16:26 +0300, cristian.birsan@microchip.com wrote:
+> From: Cristian Birsan <cristian.birsan@microchip.com>
+> 
+> Add sam9x60 binding.
+> 
+> Signed-off-by: Cristian Birsan <cristian.birsan@microchip.com>
+> ---
+>  Documentation/devicetree/bindings/usb/atmel-usb.txt | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-On Wed, May 27, 2020 at 2:07 AM Minas Harutyunyan
-<Minas.Harutyunyan@synopsys.com> wrote:
-> Could you please test this patch instead of your suggestion. Does it
-> solve issue in your case?
-
-Yes, I tested using your patch and it does work.
-
->
-> diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
-> index e571c8ae65ec..ada5b66b948e 100644
-> --- a/drivers/usb/dwc2/platform.c
-> +++ b/drivers/usb/dwc2/platform.c
-> @@ -342,7 +342,7 @@ static void dwc2_driver_shutdown(struct
-> platform_device *dev)
->   {
->          struct dwc2_hsotg *hsotg = platform_get_drvdata(dev);
->
-> -       disable_irq(hsotg->irq);
-> +       dwc2_disable_global_interrupts(hsotg);
->   }
->
->   /**
->
->
-> Thanks,
-> Minas
-
-
-
--- 
-Frank
+Acked-by: Rob Herring <robh@kernel.org>
