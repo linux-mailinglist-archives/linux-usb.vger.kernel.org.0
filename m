@@ -2,69 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 512C01E64D8
-	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2020 16:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77EFC1E654D
+	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2020 17:02:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391399AbgE1Oz3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 May 2020 10:55:29 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:37170 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391314AbgE1Oz2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 May 2020 10:55:28 -0400
-Received: by mail-io1-f68.google.com with SMTP id r2so19953710ioo.4;
-        Thu, 28 May 2020 07:55:26 -0700 (PDT)
+        id S2403904AbgE1PCG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 May 2020 11:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47210 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2403800AbgE1PCE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 May 2020 11:02:04 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72045C08C5C6
+        for <linux-usb@vger.kernel.org>; Thu, 28 May 2020 08:02:04 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id b6so33818178ljj.1
+        for <linux-usb@vger.kernel.org>; Thu, 28 May 2020 08:02:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=l+IxZGmEs11FRdJLf4USrQtg76w7X0hvvq6nK8Ct6HY=;
+        b=uIVQdAdkxOpeGICFKxRFJRxZAUycfh/shd1PHZTEmzXIJ/786uRwYesz0c8CHzPZbW
+         e1psom96YN2fy9E+0/5h4we3iCXm0N1hq9MtgBYQshBnLZ+QDP47sxNYtgSZRDMvW6Yj
+         RoOK0g3LJP/YWpnwZNF6+P154XSibKEkJ5i4Jko9YKpOnMlvbyx5dHETrHxZ6YE5bZxd
+         KbxPU6RoK0e3WIcDllpCyTtg/XiNTAVw4v4W3CrlLMt9i32GdWtSY3t4dsRex9dseeGx
+         RB7JskL9srqVgGkSxcvspn2pO6vN0IRlnP4KsbNM1KiYmUTzfhGTxZi03KENWgpwqVwC
+         HkLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=V9q1pziYt0m1nKSry3Jo6IofP6yHLLawIxH8HrvbkSs=;
-        b=eYAGGGqR6Mh7wTfu4GebqMW/1iwZsS3J0fxs+PbJH1RgeSjgolEXffTrn4OVYZQP+G
-         kSDVHLHFcXxsRcu46rKNn276I6UPdbpdwLM991yeSqDx8OOkXYGWEr7B2zVl6J6ru3v5
-         IhFZkZ3JiLM12QQ337xWGG3MT5UeQGHCEEUWdwMPqUU13RvjCOtMGTC21Rtz8X4DSHF/
-         7sIbO0Vkbw1gycTsuHADF+hHNSsQXnZHVWrsB6obGYFs9upFeJeANNwyoSNV3iMQn57N
-         cj9VHN0j5KaHovSXW4U/XHRhmOArADO9MZY48e945ii5kqxUzKngGBHqcVA9mbFf+Bl3
-         +Ebw==
-X-Gm-Message-State: AOAM531CmrQVJMlwTwUi6XyzAIWow4TIUAMLEwybH1w01zRM7H2dsElJ
-        xDCImTqnRE7dBsr71oPZ2w==
-X-Google-Smtp-Source: ABdhPJxgsg0zCerw2qnN08IcsRx2AWNyPK9QS8PlC0mEQceT82QnF20dOb575GIlcF9ISPrl8ADfXQ==
-X-Received: by 2002:a5d:860b:: with SMTP id f11mr2576671iol.104.1590677725988;
-        Thu, 28 May 2020 07:55:25 -0700 (PDT)
-Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id w26sm3482778ill.19.2020.05.28.07.55.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 May 2020 07:55:24 -0700 (PDT)
-Received: (nullmailer pid 52001 invoked by uid 1000);
-        Thu, 28 May 2020 14:55:23 -0000
-Date:   Thu, 28 May 2020 08:55:23 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Wesley Cheng <wcheng@codeaurora.org>
-Cc:     devicetree@vger.kernel.org, agross@kernel.org,
-        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        balbi@kernel.org, gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        bjorn.andersson@linaro.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC v3 3/3] dt-bindings: usb: dwc3: Add entry for tx-fifo-resize
-Message-ID: <20200528145523.GA51866@bogus>
-References: <1590630363-3934-1-git-send-email-wcheng@codeaurora.org>
- <1590630363-3934-4-git-send-email-wcheng@codeaurora.org>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=l+IxZGmEs11FRdJLf4USrQtg76w7X0hvvq6nK8Ct6HY=;
+        b=VI7qMKxRh18HXWq+j+YwOkVZev8/0OKGZjf+thuujhLFbb7HD2DBUmmm8utkBYlNYS
+         AX8cccyfzbH3qjN0118UmBDmy/V3gRFrLS2oX3YoZAYFqAUsbR/5AEvJuYgQ3zHoCjt9
+         dGfmcgxQVwS64Hq5C8Qh7h6uiYUY57ZBDwF2XADWi2GFSGTyxvsq34kDQUEpQrUVHOoe
+         zGlv9QGqPsYT2yn0BCqm4ZiUfhw2pGwrM9QF53iJkKsPnWfmpSKLKP5z1w9hdoBKown+
+         X3Kdj8nPyfGWRmjk/SrU2i7v9edR38zSXT9DICIiw0b/iJdC2StcX/N2ndcKO0kOhtV4
+         oBOA==
+X-Gm-Message-State: AOAM531eF477MpD6LgoKyEXFOF1dmwOE6kVSd+v1v6Vga7kCe5tMPxQu
+        NQNGNhPBKK2QUtKoS4mdyYZryUgoNq1rVlMjELM=
+X-Google-Smtp-Source: ABdhPJzEDxNrRm/pFHjgBti/BZCn+xpexfebEyxI0Z+J/DThvwO4z9mbp7isynPF0WFsTOkpo50oiBS7cWVJgu5RSAw=
+X-Received: by 2002:a2e:a586:: with SMTP id m6mr1605634ljp.318.1590678122842;
+ Thu, 28 May 2020 08:02:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1590630363-3934-4-git-send-email-wcheng@codeaurora.org>
+Received: by 2002:a05:6512:3088:0:0:0:0 with HTTP; Thu, 28 May 2020 08:02:02
+ -0700 (PDT)
+Reply-To: bode.law.ssociates.llp@gmail.com
+From:   Barr Felix Bode <officemailbox72@gmail.com>
+Date:   Thu, 28 May 2020 15:02:02 +0000
+Message-ID: <CAGPT7G=wkix3roPeYdYu87cK4tQj9CMoVv4BsQ5S6+1Xd50QNw@mail.gmail.com>
+Subject: Re: Urgent Responds
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 27 May 2020 18:46:03 -0700, Wesley Cheng wrote:
-> Re-introduce the comment for the tx-fifo-resize setting for the DWC3
-> controller.  This allows for vendors to control if they require the TX FIFO
-> resizing logic on their HW, as the default FIFO size configurations may
-> already be sufficient.
-> 
-> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
-> ---
->  Documentation/devicetree/bindings/usb/dwc3.txt | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+Attention:
 
-Acked-by: Rob Herring <robh@kernel.org>
+I understand that you share the same surname with my deceased client
+and I decided to seek your consent regarding his fund currently in a
+British bank.For details get back to me as soon as you get this email.
+
+Yours professionally
+Principal of Felix Bode,
+Law Associates-LLP
