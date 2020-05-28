@@ -2,71 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EBCB1E53FA
-	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2020 04:34:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E6571E552F
+	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2020 06:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726860AbgE1Cee (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 May 2020 22:34:34 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:46712 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725896AbgE1Ced (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 May 2020 22:34:33 -0400
-Received: by mail-io1-f67.google.com with SMTP id j8so28319109iog.13;
-        Wed, 27 May 2020 19:34:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=n/FH6mJ3fikdqE4Zcc+b5bEIYmcTN5k726IIFViGyw8=;
-        b=FnNfNJ/XDdrHN6zNsoA/ynN072qhJu1oq/gguPHKnIQw7ObKzhz+HaKuKB21X0EVKP
-         jju+0+LMNaYQEIF0sy2qMGCcjFYZSV9f3GIM9axfkzfVGSr+RGFXjhT4OyNDcDbt1bde
-         Ih2JMYPL1qnko1NMyDrhJYgNUVZw/K9AP+y2rUZ3fuCVDqru39BTwre+YwTNWvAesPUI
-         8izRt4exD2Qf5/lNsKKsTMgq4vl+JX+LKNTQkGK3Mbvkp7/6NYqla3hPDN7d0z7z/ruI
-         0FijIGpKTCfMcVeZsmxUmsdkSZIvaDpWBDdyLzUgXEgZvOJGim6b6NmVHGBR/rMshg5h
-         nrSA==
-X-Gm-Message-State: AOAM533dmIDZ3ZqQ9r/1ORvgTcPiqUa1pucw1EWjSq7HgG8QhL324Ko6
-        FQYEUnMdqk/iERMnuRGx2CD2ej4=
-X-Google-Smtp-Source: ABdhPJzlRpRHQMmZDZLj/tYbF7cnyKdNiYI4MRq2hMn5XR8oW8DZfDevLNinGnIjZkv6csK9kUeBLA==
-X-Received: by 2002:a05:6602:2ac9:: with SMTP id m9mr710941iov.68.1590633271819;
-        Wed, 27 May 2020 19:34:31 -0700 (PDT)
-Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id l21sm2658506ili.8.2020.05.27.19.34.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 May 2020 19:34:31 -0700 (PDT)
-Received: (nullmailer pid 3250747 invoked by uid 1000);
-        Thu, 28 May 2020 02:34:30 -0000
-Date:   Wed, 27 May 2020 20:34:30 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Benjamin Gaignard <benjamin.gaignard@st.com>
-Cc:     alexandre.torgue@st.com, linux-arm-kernel@lists.infradead.org,
-        linux-gpio@vger.kernel.org, robh+dt@kernel.org,
-        gregkh@linuxfoundation.org, mcoquelin.stm32@gmail.com,
-        linux-stm32@st-md-mailman.stormreply.com,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        linus.walleij@linaro.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 15/15] dt-bindings: usb: dwc2: Fix issues for stm32mp15x
- SoC
-Message-ID: <20200528023430.GA3250641@bogus>
-References: <20200513145935.22493-1-benjamin.gaignard@st.com>
- <20200513145935.22493-16-benjamin.gaignard@st.com>
+        id S1725786AbgE1Et4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 May 2020 00:49:56 -0400
+Received: from mail.codeweavers.com ([50.203.203.244]:55672 "EHLO
+        mail.codeweavers.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725648AbgE1Et4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 May 2020 00:49:56 -0400
+X-Greylist: delayed 984 seconds by postgrey-1.27 at vger.kernel.org; Thu, 28 May 2020 00:49:56 EDT
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=codeweavers.com; s=6377696661; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:Date:Message-ID:Subject:From:To:Sender:Reply-To:Cc:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=vemHJ1ofMEjf4BkGKBqYn/ibfSlLxPKA4jDOogwFvAk=; b=XVxd9wZ6dEbJINO0ouPyv158+R
+        0+b3yyAwB5jyaiQaKSGm6Lmto0QDmstj27EYdc45s/LKqn6/1If/Iw/OAwapDUy5Fb9MuHFy+eAfd
+        6TJG18yVgpWWL3k8nON6PAf8om1TTu40zkN7j99A/CBdDSW8XOad38uZo68gJRlDYyIQ=;
+Received: from [64.191.7.9] (helo=[192.168.1.115])
+        by mail.codeweavers.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <zfigura@codeweavers.com>)
+        id 1jeAEU-0007cg-Ie; Wed, 27 May 2020 23:33:31 -0500
+To:     usb-storage@lists.one-eyed-alien.net, linux-usb@vger.kernel.org
+From:   Zebediah Figura <zfigura@codeweavers.com>
+Subject: Bug 207877: ASMedia drive (174c:55aa) hangs in ioctl
+ CDROM_DRIVE_STATUS when mounting a DVD
+Message-ID: <7d0b20b9-4735-bbed-bb50-72764aefd6d8@codeweavers.com>
+Date:   Wed, 27 May 2020 23:23:13 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200513145935.22493-16-benjamin.gaignard@st.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Score: -26.0
+X-Spam-Report: Spam detection software, running on the system "mail.codeweavers.com",
+ has NOT identified this incoming email as spam.  The original
+ message has been attached to this so you can view it or label
+ similar future email.  If you have any questions, see
+ the administrator of that system for details.
+ Content preview:  Hello all, I was asked to report this bug here. There's more
+    details in the bug report, but it's been proposed that there's a deadlock
+    between device_reset() in scsiglue.c and usb_stor_control_thread(). 
+ Content analysis details:   (-26.0 points, 5.0 required)
+  pts rule name              description
+ ---- ---------------------- --------------------------------------------------
+  -20 USER_IN_WHITELIST      From: address is in the user's white-list
+ -6.0 ALL_TRUSTED            Passed through trusted hosts only via SMTP
+ -0.5 BAYES_00               BODY: Bayes spam probability is 0 to 1%
+                             [score: 0.0000]
+  0.5 AWL                    AWL: Adjusted score from AWL reputation of From: address
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 13 May 2020 16:59:35 +0200, Benjamin Gaignard wrote:
-> Correct the compatible list for stm32mp15x SoC.
-> Fix the name of the stm32mp15x dedicated supply to be aligned with
-> what the driver use.
-> 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
-> ---
->  Documentation/devicetree/bindings/usb/dwc2.yaml | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
+Hello all,
 
-Acked-by: Rob Herring <robh@kernel.org>
+I was asked to report this bug here. There's more details in the bug 
+report, but it's been proposed that there's a deadlock between 
+device_reset() in scsiglue.c and usb_stor_control_thread().
+
+I haven't examined the code in detail, but is this plausible? 
+Alternatively, is there something else clearer that the backtrace shows?
+
+ἔρρωσθε,
+Zebediah
