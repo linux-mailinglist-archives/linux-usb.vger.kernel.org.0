@@ -2,85 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E43E1E62CD
-	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2020 15:51:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BB301E63AF
+	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2020 16:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390693AbgE1Nvf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 May 2020 09:51:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36098 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390687AbgE1Nvd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 May 2020 09:51:33 -0400
-Received: from mail-vk1-xa43.google.com (mail-vk1-xa43.google.com [IPv6:2607:f8b0:4864:20::a43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A25C05BD1E
-        for <linux-usb@vger.kernel.org>; Thu, 28 May 2020 06:51:33 -0700 (PDT)
-Received: by mail-vk1-xa43.google.com with SMTP id w188so6760962vkf.0
-        for <linux-usb@vger.kernel.org>; Thu, 28 May 2020 06:51:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Owau2ya3gC/56f2SKOWlhU4477LIjpRkozc6MVc36Qc=;
-        b=GYmzIcOlqp0inV6/3Xbibkn3HMcVd4Kh3aWqiEsZZ+94U0XoqmKQnXEFW911vZoxe3
-         tqwoC6vF9M01gE2dXUFrB+Ljfs9ALNwtqNC9lI8jyrz87h2pALKsg8cK2UUsJEFMMJ0r
-         M3FtrtYW8asIwRfRjJAX4rJxdX5w5qBpjn8NA7VeL7Tp/dvhsVFNkGMcLkvXRq+e49nF
-         LNFuGTCOJxOrHz3Ow2ouJpNFYbVUHcOSDg4F7DPUUSS/+Mz65uYZTDTXTbRBiPsWJcL6
-         K3ch5G5007j8ORpqaJGFm3zvzMVfY69UTTqQoNyWodKbgqaCJ18Vly1x03KxSkVv8f2W
-         oKnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Owau2ya3gC/56f2SKOWlhU4477LIjpRkozc6MVc36Qc=;
-        b=WPyqXl6JmaakN7SouBphD313AF6UokA4bvOEuOuA5gT9lcwqgq+sw9r1Y6fUWLh0si
-         PwX9QrFjgbHAxyy/5JMMnvZGwfhcMmTzst49lLczspv0a6jvjWidwmev9soMsa5wcNJ1
-         pjmyVALbezNkbswOPFyA27IKl+D8JJxfaj7r1IN1QU9zWlqw0JhEJDSDbzVGWgOYw186
-         9AlAkY0LqLahj1m+BJLietSd0Z/X+QUXINW+d2/Ih1Zb1wKQ3RAHrEXs1gi3nmvGcW5s
-         rzJ+cJVoxljy545ApUIwMY4O2MmY7AvpH/9ddiUaEij3jJfU2tnGPBud0DY8Ho75+2Zc
-         j6HQ==
-X-Gm-Message-State: AOAM532o/TUOKXZ0cSH+UqQsp2tW8l6nIITevTvViOlXubQ+nsAlCxlG
-        lVlwIra4RFSSfmi3sOfe6qjFG9iZmpecDdOoEmk=
-X-Google-Smtp-Source: ABdhPJz9rpEV9NefPJ4mvmUlFFoe/xH96S5Z/teq9tsa7Ud4tKk4G1rL0ay4Q3TiP/U4WG82nA4Rv2OPTseHsC+Qrrs=
-X-Received: by 2002:a1f:9094:: with SMTP id s142mr2205245vkd.6.1590673892337;
- Thu, 28 May 2020 06:51:32 -0700 (PDT)
+        id S2391087AbgE1OV5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 May 2020 10:21:57 -0400
+Received: from foss.arm.com ([217.140.110.172]:53386 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2390958AbgE1OVy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 28 May 2020 10:21:54 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 81A5FD6E;
+        Thu, 28 May 2020 07:21:53 -0700 (PDT)
+Received: from e121166-lin.cambridge.arm.com (e121166-lin.cambridge.arm.com [10.1.196.255])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 682B73F52E;
+        Thu, 28 May 2020 07:21:51 -0700 (PDT)
+Date:   Thu, 28 May 2020 15:21:39 +0100
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>, dmaengine@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Subject: Re: [PATCH 0/8] R8A7742 add support for HSUSB and USB2.0/3.0
+Message-ID: <20200528142139.GA28290@e121166-lin.cambridge.arm.com>
+References: <1590356277-19993-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-References: <20200509141619.32970-1-noralf@tronnes.org> <20200509141619.32970-4-noralf@tronnes.org>
-In-Reply-To: <20200509141619.32970-4-noralf@tronnes.org>
-From:   Emil Velikov <emil.l.velikov@gmail.com>
-Date:   Thu, 28 May 2020 14:48:24 +0100
-Message-ID: <CACvgo51Cq1ipV_K-NLk9QZ7d1Pweebz2ST6anqrT1q09r0+QEw@mail.gmail.com>
-Subject: Re: [PATCH v2 03/10] drm/client: Add drm_client_framebuffer_flush()
-To:     =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>
-Cc:     ML dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-usb@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1590356277-19993-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi all,
+On Sun, May 24, 2020 at 10:37:49PM +0100, Lad Prabhakar wrote:
+> Hi All,
+> 
+> This patch series adds support for HSUSB, USB2.0 and USB3.0 to
+> R8A7742 SoC DT.
+> 
+> This patch series applies on-top of [1].
+> 
+> [1] https://patchwork.kernel.org/project/linux-renesas-soc/list/?series=288491
 
-I realise this has landed, so a small FYI comment.
+I think Geert will pull this series, so I'd drop it from the PCI
+patchwork unless there is a reason I should not, please let me know.
 
-On Sat, 9 May 2020 at 15:16, Noralf Tr=C3=B8nnes <noralf@tronnes.org> wrote=
-:
+Thanks,
+Lorenzo
 
-> +int drm_client_framebuffer_flush(struct drm_client_buffer *buffer, struc=
-t drm_rect *rect)
-> +{
-> +       if (!buffer || !buffer->fb || !buffer->fb->funcs->dirty)
-
-Hmm cannot think of a good reason why anyone would call this with
-!buffer || !buffer->fb?
-Might be a good idea to WARN in those cases - otherwise the user is
-given false sense to security.
-
-Looking at the upcoming user (drm/gud) it already has both - so it's
-perfectly safe.
-
--Emil
+> Cheers,
+> Prabhakar
+> 
+> Lad Prabhakar (8):
+>   dt-bindings: phy: rcar-gen2: Add r8a7742 support
+>   dt-bindings: PCI: pci-rcar-gen2: Add device tree support for r8a7742
+>   dt-bindings: usb: renesas,usbhs: Add support for r8a7742
+>   dt-bindings: dmaengine: renesas,usb-dmac: Add binding for r8a7742
+>   dt-bindings: usb: usb-xhci: Document r8a7742 support
+>   ARM: dts: r8a7742: Add USB 2.0 host support
+>   ARM: dts: r8a7742: Add USB-DMAC and HSUSB device nodes
+>   ARM: dts: r8a7742: Add xhci support
+> 
+>  .../devicetree/bindings/dma/renesas,usb-dmac.yaml  |   1 +
+>  .../devicetree/bindings/pci/pci-rcar-gen2.txt      |   3 +-
+>  .../devicetree/bindings/phy/rcar-gen2-phy.txt      |   3 +-
+>  .../devicetree/bindings/usb/renesas,usbhs.yaml     |   1 +
+>  Documentation/devicetree/bindings/usb/usb-xhci.txt |   1 +
+>  arch/arm/boot/dts/r8a7742.dtsi                     | 173 +++++++++++++++++++++
+>  6 files changed, 180 insertions(+), 2 deletions(-)
+> 
+> -- 
+> 2.7.4
+> 
