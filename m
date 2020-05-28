@@ -2,132 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D09BA1E5B7B
-	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2020 11:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E67691E5BC8
+	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2020 11:24:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728175AbgE1JKg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 May 2020 05:10:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48870 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728080AbgE1JKg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 May 2020 05:10:36 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4176C05BD1E
-        for <linux-usb@vger.kernel.org>; Thu, 28 May 2020 02:10:35 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id n24so31270835ejd.0
-        for <linux-usb@vger.kernel.org>; Thu, 28 May 2020 02:10:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wQ0MYe0z6hAN4jQvNg17FLUQPBXUxV7Zgii5Q2qDRDc=;
-        b=nw+AGFDXxa4bKD3+irl6quJ4LpRJmK++HeSly2R63G/9ASUbSjow3bNmlyECrnNQWV
-         roIHjWZtr1PC0CfplJudD9gtVDFZ4rSGCnunSL1GY56nnoiOEgsUU+5jIretGiLos5P8
-         g9boGYv/dcuRyIAj/RhkXNVldk0pTTOQIJgn/6JPD2nbWYXGL6NpreuVqET7iLY16+Dz
-         IhduiV5cSIjeIm/9amQbu/YqSEjRpwnKBWfvaSr2R6zO1D4m+x3mygz38vDz88jT116N
-         dlVOJ7lyB8bJdOeARMsAayAbtn1Jo3c5SQpWaBNwDNGTrJDBhnXdhiETJM/pVCsG2wr4
-         y59Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wQ0MYe0z6hAN4jQvNg17FLUQPBXUxV7Zgii5Q2qDRDc=;
-        b=DqAQVKKpaGbmSvu7wHsU9rIPdB4jl16lrIkQaUZCb4H5NeCLoxhVVocjQF0SpyK5HW
-         2KiEqkiieBL6jPgxdY7IN/E4CS0qNBWAcmTbp+S5mRRhu64B44oRFDmbc1cVWB+uvZva
-         LxFalzKUMl44Pk5/E5jH+eHyS+0YtyrNfHA4YmmV9arYhU2F+X+R52G0yTYADbFAQDFh
-         bUtFUvhZnuehjgqpg2tlfiiOtrx5FtAxYrtIlgVvwU3wDn7FZ12U3qDC8/b3I+XvQhh2
-         Atg5fxLCTLosDYtowIugHLIHTcdqN+9rj7UfVlv/ZZEjpas2VgAYPulEkxuod3jZMv9l
-         iwpA==
-X-Gm-Message-State: AOAM531TXvxjQfFRl3619nzCHL5SZGtGvQKaZwSjNXZ4Mo7BWBd3frr6
-        favgl/t9tfGlD6anI14bYj0heedReDGfAU7uzc4=
-X-Google-Smtp-Source: ABdhPJxX3OtFutPeTCiBQ1qxX5LoPYyWO/ggj5PC4gwPUwL5lOGoDCSQDdn+I6xfqaNgXQesUUZEdu06ZwjrmdykEbQ=
-X-Received: by 2002:a17:906:4993:: with SMTP id p19mr2167550eju.67.1590657034492;
- Thu, 28 May 2020 02:10:34 -0700 (PDT)
+        id S1728359AbgE1JYX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 May 2020 05:24:23 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:42438 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728161AbgE1JYV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 May 2020 05:24:21 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1590657861; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=iMb1wbf6uPwfZB8sG11hmQ4ZThGw/6wXcct0WODPnkE=; b=bYK6/6F50m6qbbAxcyUKOFjPTYnd+AvXhPKYpP8yEg+sIaKKJgFTumhzkrqZiVdjWpIG0y4x
+ IPYMdeq70yKG5+Hgn2g86J8YItoI11eNEDZld71j4n5rcFVaW1zarHzas7y7ll08AsuAeSP6
+ bRaJXIEjV2dEEI30paD7eMF6S9U=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
+ 5ecf8344c6d4683243ce189e (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 28 May 2020 09:24:20
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 9D2DFC43391; Thu, 28 May 2020 09:24:20 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.206.24.160] (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: sanm)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 0BCF3C433C9;
+        Thu, 28 May 2020 09:24:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 0BCF3C433C9
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sanm@codeaurora.org
+Subject: Re: [PATCH v7 2/4] usb: dwc3: qcom: Add interconnect support in dwc3
+ driver
+To:     Felipe Balbi <balbi@kernel.org>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Chandana Kishori Chiluveru <cchiluve@codeaurora.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+References: <1585718145-29537-1-git-send-email-sanm@codeaurora.org>
+ <1585718145-29537-3-git-send-email-sanm@codeaurora.org>
+ <878shu4uwk.fsf@kernel.org> <875zcy4uuj.fsf@kernel.org>
+ <20200514171352.GP4525@google.com>
+ <abbc3f8c-c8c9-c189-735e-f8058dab3e40@linaro.org> <87tv0h3fpv.fsf@kernel.org>
+ <090e48d7-7988-eea1-bf39-f6820578d354@linaro.org> <87r1vl3e42.fsf@kernel.org>
+ <20200518183512.GE2165@builder.lan>
+ <b20775ba-7870-b0ca-7c65-d72a08fdacb2@codeaurora.org>
+ <0723aee9-9ea4-dab5-e083-3cf3858a8f96@linaro.org> <871rn63orz.fsf@kernel.org>
+From:   "Sandeep Maheswaram (Temp)" <sanm@codeaurora.org>
+Message-ID: <158003c3-6d8a-52c2-cfd6-3904ac7376c5@codeaurora.org>
+Date:   Thu, 28 May 2020 14:54:12 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-References: <CAAfyv37cFWsvoprz2jZ=jkdiTqxjPSYr_c6w5YYiaKWUe_-V1A@mail.gmail.com>
- <87v9kg1l9d.fsf@kernel.org>
-In-Reply-To: <87v9kg1l9d.fsf@kernel.org>
-From:   Belisko Marek <marek.belisko@gmail.com>
-Date:   Thu, 28 May 2020 11:10:23 +0200
-Message-ID: <CAAfyv349wRnYdxrq4ejLTcgOfyjBoDiv1SSv6LEinatE3rxffg@mail.gmail.com>
-Subject: Re: usb raw gadget impossible to sent buffer bigger than 3MB
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Linux USB Mailing List <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <871rn63orz.fsf@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-On Thu, May 28, 2020 at 11:06 AM Felipe Balbi <balbi@kernel.org> wrote:
->
->
+
+On 5/26/2020 5:13 PM, Felipe Balbi wrote:
 > Hi,
 >
-> Belisko Marek <marek.belisko@gmail.com> writes:
-> > we're using USB RAW gadget for communicating with PC application. We
-> > have created loopback test which send file (any size) from PC to
-> > device and then same data are sent back to PC to verify roundtrip time
-> > (using bulk data transfer). Everything works fine up to 3MB file size.
-> > If we sent bigger file like e.g. 5M we can receive file on device but
-> > when we want to write to output endpoint we got:
-> >
-> > WARNING: CPU: 0 PID: 12299 at /kernel-source//mm/page_alloc.c:3725
-> > __alloc_pages_nodemask+0x1b0/0xde4
-> > [<c010fa08>] (unwind_backtrace) from [<c010c45c>] (show_stack+0x20/0x24)
-> > [<c010c45c>] (show_stack) from [<c04cc0d4>] (dump_stack+0x20/0x28)
-> > [<c04cc0d4>] (dump_stack) from [<c01324ac>] (__warn+0xec/0x108)
-> > [<c01324ac>] (__warn) from [<c0132598>] (warn_slowpath_null+0x30/0x38)
-> > [<c0132598>] (warn_slowpath_null) from [<c021ccb8>]
-> > (__alloc_pages_nodemask+0x1b0/0xde4)
-> > [<c021ccb8>] (__alloc_pages_nodemask) from [<c023b888>]
-> > (kmalloc_order+0x2c/0x48)
-> > [<c023b888>] (kmalloc_order) from [<c023b8d0>] (kmalloc_order_trace+0x2c/0xd4)
-> > [<c023b8d0>] (kmalloc_order_trace) from [<c0261c24>] (__kmalloc+0x40/0x264)
-> > [<c0261c24>] (__kmalloc) from [<bf039bc4>] (ffs_epfile_io+0x13c/0x570
-> > [usb_f_fs])
-> > [<bf039bc4>] (ffs_epfile_io [usb_f_fs]) from [<bf03a0c0>]
-> > (ffs_epfile_write_iter+0xc8/0x120 [usb_f_fs])
-> > [<bf03a0c0>] (ffs_epfile_write_iter [usb_f_fs]) from [<c02734bc>]
-> > (new_sync_write+0xc8/0xec)
-> > [<c02734bc>] (new_sync_write) from [<c027351c>] (__vfs_write+0x3c/0x48)
-> > [<c027351c>] (__vfs_write) from [<c02749a0>] (vfs_write+0xcc/0x158)
-> > [<c02749a0>] (vfs_write) from [<c02756ac>] (SyS_write+0x50/0x88)
-> > [<c02756ac>] (SyS_write) from [<c0107a20>] (ret_fast_syscall+0x0/0x54)
-> > ---[ end trace fe5f79fe415b9881 ]---
-> >
-> > and write ends up with: write /run/ffs/ep1: cannot allocate memory
-> >
-> > When checked free command there should be plenty of available memory.
-> > Is there some limitation when writing to endpoint? We tried to split
-> > buffer to e.g. 3M and sent it and this works but looks like there is
-> > penalty when sending bigger files (100MB file received in 5secs whicle
-> > sending back it took 2minutes). Thanks for ideas and hints.
+> Georgi Djakov <georgi.djakov@linaro.org> writes:
+>> On 26.05.20 14:04, Sandeep Maheswaram (Temp) wrote:
+>>> Hi Felipe,
+>>>
+>>> Please let me know how to go forward with this patch
+> (don't top-post!)
 >
-> that's trying to allocate a 5MiB buffer in kernel space. It just goes
-> over max allocation size, I'm assuming. Which kernel version are you
-> using? Which gadget controller are you using?
-We' using mainline 4.12 kernel and gadget is raw gadget using ffs +
-composite drivers.
->
-> --
-> balbi
+>> Please just add a patch to fix the allmodconfig error. Felipe has
+>> suggested to introduce a separate patch which exports the
+>> device_is_bound() function. This export should precede the addition
+>> of interconnect support.
+>>
+>> Also regarding the "depends on INTERCONNECT || !INTERCONNECT" change,
+>> no "depends on" would be needed, as we just made the interconnect
+>> framework bool.
+> y'all have lost the current merge window, I guess. I'm not sure Greg
+> will take last minute changes to drivers base and I have already sent
+> him my pull request for v5.8. On the plus side, this gives you the
+> chance to run hundreds of randbuilds with your patches.
+Hi  Georgi,
 
-Thanks and BR,
-
-marek
-
-
+I am assuming that the patch which exports the device_is_bound() function will solve the allmodconfig error.
+Or do i need to change anything in dwc3 driver?
 
 -- 
-as simple and primitive as possible
--------------------------------------------------
-Marek Belisko - OPEN-NANDRA
-Freelance Developer
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, hosted by The Linux Foundation
 
-Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
-Tel: +421 915 052 184
-skype: marekwhite
-twitter: #opennandra
-web: http://open-nandra.com
