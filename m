@@ -2,136 +2,230 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6B531E5E11
-	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2020 13:17:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA8A81E5E1A
+	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2020 13:20:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388165AbgE1LRn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 May 2020 07:17:43 -0400
-Received: from mail-eopbgr10072.outbound.protection.outlook.com ([40.107.1.72]:40263
-        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
+        id S2388279AbgE1LUd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 May 2020 07:20:33 -0400
+Received: from mail-eopbgr30068.outbound.protection.outlook.com ([40.107.3.68]:38381
+        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2388105AbgE1LRn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 28 May 2020 07:17:43 -0400
+        id S2388038AbgE1LUb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 28 May 2020 07:20:31 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cFnzXtpt2O/khl5qCKtQCFCNUUo7KkgmSUca38ANaRy3GanAlnZ94ExeZEpeu/LCyhWJeyxkfywGxx1YbcoSHIYvvC/ABTTj3r5Mz62+La4KxKawx0p5VKN0Iafa0McRy44Fffg4fClQCt9yxVzm4OlZx6yFQOC2GNQG2nRG+RrAvwM0F0kr0WL1L59H6Cc7+9ID+gY7IdrwkLtnW3JPOIx8UX9B+DU5bqaDd7EiQMqCl5OPtAijY+afseqoXup2kT4qfTybWyQlydtsI11QWNTgojMPhHp4Lt3zFVVR8RphjOomxD6Q4I8SnNpfNL4TWyIhW5TcePnCok42OknK3g==
+ b=l9D46ALSyMQ7QpkRBBgoITcCr2XtbL6EqgJSZ0IO5b8X9lHCBAaOV7TqreT4RCFeSRsyR76qupgsxxUvK5TPaRS2u1RgEbaKgnxdQJK5XrBG5c1HXX2d80dSSjZRSTfGg4Z4zkrhLcvyS60ivL1bIjjS9EmbXr+F3D/QqDqIiCjsgcRQP93bepb78UaH4qFzlgSpcgUUQUTksWw4fdEMpeH/ZPmZivDFFdnSqCs5gaa3t+WWVXsxfMWxPOTyNshdSgw+VzfOiwTnPUUzPVtIhNawbIphd6UOOf5b1IZK6ZVV1tSFUKlJu3QuIWP/LCf7OalOYnpFes+R0EnJqGn2Xg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ys7cBL27K7ASYpMsqy+GIH54am7dWZWCsuvY3zPs4QU=;
- b=n/YK/DFLgFK+xCdg7ptjhIXBWalblagXueIYl9Wkga+gEaqN/L01cQ2SkHcbptI/siYoc7UAFh9UOXTyd1k6F41lL+QX4wb1kQunaoR7qIuB06cOjQsFUy5AUhw69C2JEgWM2kNn39KrljfvqndWQHb/Ycde1LMwHVs7FWJ+lrQVPTSL/JPrY4tFN+YVPKIhIJwc5cWo75H89DYEeJHTGTLZfSCyFDSbQKvNCvjbCsHksIh2LDewlTeFwxGMwilC//0974LshHlc3kuOVXcACOcVWLwzZvlYNmcmKryrbsr1LkQAOpZoRVTe52zKsrfyauMJDkuTlG3ZDKfYYS1H6Q==
+ bh=TfZYXV5ntPrwIvB91G2ZTNsNM2tBLs2x21ESuz/udbo=;
+ b=nCQaLxj55sLd5ovgrAxum7ScIhyy85RcRLv6FzrYVuKTttBRKYyH9Y5Iq5tmgN2mNNvPAe8ryeIjsy5r2D/7uiI67kPRQYyG+zjQyt6ue5sx8l67iCPFCtHbxd2ToYmDzKryVoESDAVs3GL0xI/iDE79s/OaEzTlKJjicOZ0MWHEAEt2Y2C2vQoYfwJHWSmXkXPdpVGj7rGNS+kZfxXbXyFN2F6IfXnZQFLmExqfu9IfqK9KeAHyJCfGrC6PUwEIZ+Ymh1koPE3YMyUjqrv854j5+f5kvTjBFfGMM3OwgMTwxpN41K5ZdLn10dtu1V8AAwrAu2jvXiGWQKeQT9qljA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ys7cBL27K7ASYpMsqy+GIH54am7dWZWCsuvY3zPs4QU=;
- b=Ytrr/TVhI8T2bpWm3Js8+zDcccka9yKF+502Obaf4/NBnIt1r8ZpT9svNIP61BVX0CvUHK3iKRKcLlDhmsg9shchNRXdriWa1pXLMDRcB/nGoZhuWNwAAAix6+tdCxQSQowYeT7hvELYwGJjyIGg39Tixl+Mj+ZyrCLOZDTMmyk=
+ bh=TfZYXV5ntPrwIvB91G2ZTNsNM2tBLs2x21ESuz/udbo=;
+ b=fngdbhO2mk4SWC1b31IQT2lwgkgE6LUJff6+z5EDDgOkdsQQ10QlWXWKEFnIrisH59jF3vKBmEjWZy9AwhdkgVcEvJlQ2deEplMtucSK8sD5e1x70NzxS4jgClT3b+U4W/3WtmLhGEaYxAZEKNJqVxfWP+P3nnN1HnjSumd25BI=
 Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
- by AM7PR04MB6936.eurprd04.prod.outlook.com (2603:10a6:20b:106::11) with
+ by AM7PR04MB6871.eurprd04.prod.outlook.com (2603:10a6:20b:109::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3021.24; Thu, 28 May
- 2020 11:17:39 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3045.17; Thu, 28 May
+ 2020 11:20:26 +0000
 Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
  ([fe80::1101:adaa:ee89:af2a]) by AM7PR04MB7157.eurprd04.prod.outlook.com
  ([fe80::1101:adaa:ee89:af2a%3]) with mapi id 15.20.3045.018; Thu, 28 May 2020
- 11:17:39 +0000
+ 11:20:26 +0000
 From:   Peter Chen <peter.chen@nxp.com>
-To:     Belisko Marek <marek.belisko@gmail.com>
-CC:     Linux USB Mailing List <linux-usb@vger.kernel.org>
-Subject: Re: usb raw gadget impossible to sent buffer bigger than 3MB
-Thread-Topic: usb raw gadget impossible to sent buffer bigger than 3MB
-Thread-Index: AQHWNLgGna5z4KFXNEKgnhn+fIzL8Ki9Wd6A
-Date:   Thu, 28 May 2020 11:17:39 +0000
-Message-ID: <20200528111803.GA2604@b29397-desktop>
-References: <CAAfyv37cFWsvoprz2jZ=jkdiTqxjPSYr_c6w5YYiaKWUe_-V1A@mail.gmail.com>
-In-Reply-To: <CAAfyv37cFWsvoprz2jZ=jkdiTqxjPSYr_c6w5YYiaKWUe_-V1A@mail.gmail.com>
+To:     Mike Looijmans <mike.looijmans@topic.nl>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb/phy-generic: Add support for OTG VBUS supply control
+Thread-Topic: [PATCH] usb/phy-generic: Add support for OTG VBUS supply control
+Thread-Index: AQHWM23eFY1+Pfs1gUaTviqfbn5UWqi9XTqA
+Date:   Thu, 28 May 2020 11:20:26 +0000
+Message-ID: <20200528112051.GB2604@b29397-desktop>
+References: <20200526145051.31520-1-mike.looijmans@topic.nl>
+In-Reply-To: <20200526145051.31520-1-mike.looijmans@topic.nl>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-authentication-results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=nxp.com;
+authentication-results: topic.nl; dkim=none (message not signed)
+ header.d=none;topic.nl; dmarc=none action=none header.from=nxp.com;
 x-originating-ip: [119.31.174.66]
 x-ms-publictraffictype: Email
 x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 20f7a609-518e-453a-536f-08d802f8bb72
-x-ms-traffictypediagnostic: AM7PR04MB6936:
-x-microsoft-antispam-prvs: <AM7PR04MB6936977EAE136E4B9A5508958B8E0@AM7PR04MB6936.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-office365-filtering-correlation-id: 9745a6a5-5672-45f9-ef15-08d802f91f4a
+x-ms-traffictypediagnostic: AM7PR04MB6871:
+x-microsoft-antispam-prvs: <AM7PR04MB68714A8674D7F3DB6D9920068B8E0@AM7PR04MB6871.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5797;
 x-forefront-prvs: 0417A3FFD2
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 5TUEkeJcy5zCh4FL3GmNe2RKx4+gvruTMOUp+7S4YfbW1leJPzn/w/dZo7gkA+dzUsvGrQBIocRLNrISNquO+WIS6vK1BGZbio/6Xnqcd1SPFTlCTYocnlBLA2wJ5JNAAUyykZhH6PVqMNYjxGxcPTqiB4HRDGPJ21nU0vpXr7/wxF4dZk0Dna5oeaRVzqGrr4KEMrFbFXqKPgE8ae9rgSsFtZ0wHV93WxqlJy9FFW+Tw4ZinOxMeo888YqGprHI7ExWXw+IRAHgYenOuFjYga8b0EH2DoM8hLebT4kXEx1ULn/62uVxJlzMQz0cGg3iL/VUBN0rLneEY4MMlE+koZHMOTEbCxWJt87HF3kzNPfBlN4nEJSWGYK1N2N9Qo/g
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(7916004)(396003)(346002)(136003)(39860400002)(366004)(376002)(8936002)(316002)(8676002)(66946007)(66476007)(66556008)(64756008)(66446008)(186003)(6506007)(53546011)(4326008)(76116006)(91956017)(9686003)(6512007)(26005)(44832011)(71200400001)(86362001)(478600001)(2906002)(5660300002)(6486002)(6916009)(1076003)(83380400001)(33716001)(33656002)(135533001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: iAHEXUdVmRz6XnXo81UHarjWZfDR3/c29jMGaUvSg+mqQeYoReRxq8Rpk7Mky+3Cd1XFqWrB1T+bdGd196/LfpkYu5ojN8lRJN6ukKwxoaPo2RXTaDD+Fk2NqWq5096LYajb1yBCHXjCRV/RZTVMLyxGYAY2iwjQFAQmskVgCJRU4348PjQZGjItJnGQMJlN15GeODp6cx4dCOiz620MhBew89y065zOfzwLekI2H8bkdgQ6bPy9UZEYqhzYEINXiEgczso1WAEKNcWL28+f3PKqUPNzeMP4Caks4EEUu+rVsvuFEHQ4GsGQEu316/xP1Ry4EvzBguWi4NpGgrWTm4t1Y0Jr69IQN+/DgWgh0fRWUqDDu9+gWwHjkw7/hBWUR9IJwnfYov0r7N7An5CD0YBVu4DpeeL3yjRKcY0KK+GMUL+KsBbR7vyRuS263kVrqzaRUSu91Y5K63YVDjb4TTY3qSWDrN5DBe1Z4/F0vQc=
+x-microsoft-antispam-message-info: 0R3vUz48/EjMQdENLWv9v+AU+Mcc0MqRGShqEFW9BxFCSrtT4ZqEiz2AHnO5wj/Z+NyCA+D1IocM+IeHtM7VhWjetb+e9hPs8ABKh6uIUdYQEFaEH0kRLYQrh0nXCMHHzvLTHkf0BzhaIpJPIK9xYTOqxDaqLQHfPGjT7mc4ve9e7aymUrcWq+0hAJl6oDw/CFA08UKhWELL8bXYuU8OHkQWhQ7kiGNG/LZBaVarJw7DJF2a9w0XTfFxRflJnnirYRJKBj0cnvBgkI0BpdnC9byAXkMP7kvh1cnM3QHtRcakJeTLTb8AlCeab4D6fHrjY4L4JWMyWzTbpXRRThNhrQYh80rLy4Isojzg/eCzVAlLJgpMfgDBlaDj5FpyVcEE
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(7916004)(4636009)(136003)(39860400002)(376002)(346002)(396003)(366004)(54906003)(4326008)(6486002)(316002)(5660300002)(83380400001)(33716001)(6916009)(66476007)(8676002)(478600001)(33656002)(2906002)(86362001)(8936002)(6506007)(26005)(66446008)(64756008)(91956017)(53546011)(71200400001)(76116006)(44832011)(9686003)(1076003)(186003)(66946007)(6512007)(66556008)(41533002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: Up9mKF7pbfrR76u8jDLT+DD9daH6PVlgybdG+8kp9MNhRpidI6xWFowiFfBtmTo4a28kPp2Y/FROAa9rA3z7W5aJXHFRTNVvFESxBfHbejGLE4FvareO2ML/3tw3YR1bHR6MmLHnR17IZa68Ctj+gOMlkYz5Ba9RFfhN5jBi07EEZU9CWgith+3jPVXpf8eQHamhdWgb4Lggn+A4a9yzJuEujOJmP1g6Fn5AEccDkA+JoqpFB/UsxOvDBBihDHFds9c6gPnmZghDzxLHhdlG2wlCDq645vwJ/fPFoNbKfWnsUzDAZjk99YLkMF8hsCBpVk+F6nuDOHHT4gXEE/IREaF7FfT6dN2LMzjmQrF/Jk19kX4MACo8++Vq3j7P5k6hixfLKm+Lp5flHAWmHZj9vfVcEABpArJtfrSWClMkQhyX/C6whQTfBgf6BJDUz2faFJf4MM6dBQJFT9XjBmYAsmdoxE18i211tABOh5+VKIs=
 x-ms-exchange-transport-forked: True
 Content-Type: text/plain; charset="us-ascii"
-Content-ID: <DDFA148DC48A3742B4B7DF2315A9B48E@eurprd04.prod.outlook.com>
+Content-ID: <31785CD05404F846A4943BB0C30CC070@eurprd04.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 20f7a609-518e-453a-536f-08d802f8bb72
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 May 2020 11:17:39.1498
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9745a6a5-5672-45f9-ef15-08d802f91f4a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 May 2020 11:20:26.6727
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 8NicaMOaKOZIy+7mv/aYndWoyn2yXdwqx8sWoPzKkmZJ0/TuK4SGvuvPxkOtMDIy2ulukTm6gz7Bqybl0Dniqg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6936
+X-MS-Exchange-CrossTenant-userprincipalname: 8YHiIr6Evy/RDOGWxtLl+PhOsCpK1n4Ij/rs06XDkWUDzN2eTe4SRf4TDRLH9QgaS9qiG3jDHe2lnMyaiHHY2w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6871
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-05-28 08:19:46, Belisko Marek wrote:
-> Hi,
->=20
-> we're using USB RAW gadget for communicating with PC application. We
-> have created loopback test which send file (any size) from PC to
-> device and then same data are sent back to PC to verify roundtrip time
-> (using bulk data transfer). Everything works fine up to 3MB file size.
-> If we sent bigger file like e.g. 5M we can receive file on device but
-> when we want to write to output endpoint we got:
->=20
-> WARNING: CPU: 0 PID: 12299 at /kernel-source//mm/page_alloc.c:3725
-> __alloc_pages_nodemask+0x1b0/0xde4
-> [<c010fa08>] (unwind_backtrace) from [<c010c45c>] (show_stack+0x20/0x24)
-> [<c010c45c>] (show_stack) from [<c04cc0d4>] (dump_stack+0x20/0x28)
-> [<c04cc0d4>] (dump_stack) from [<c01324ac>] (__warn+0xec/0x108)
-> [<c01324ac>] (__warn) from [<c0132598>] (warn_slowpath_null+0x30/0x38)
-> [<c0132598>] (warn_slowpath_null) from [<c021ccb8>]
-> (__alloc_pages_nodemask+0x1b0/0xde4)
-> [<c021ccb8>] (__alloc_pages_nodemask) from [<c023b888>]
-> (kmalloc_order+0x2c/0x48)
-> [<c023b888>] (kmalloc_order) from [<c023b8d0>] (kmalloc_order_trace+0x2c/=
-0xd4)
-> [<c023b8d0>] (kmalloc_order_trace) from [<c0261c24>] (__kmalloc+0x40/0x26=
-4)
-> [<c0261c24>] (__kmalloc) from [<bf039bc4>] (ffs_epfile_io+0x13c/0x570
-> [usb_f_fs])
-> [<bf039bc4>] (ffs_epfile_io [usb_f_fs]) from [<bf03a0c0>]
-> (ffs_epfile_write_iter+0xc8/0x120 [usb_f_fs])
-> [<bf03a0c0>] (ffs_epfile_write_iter [usb_f_fs]) from [<c02734bc>]
-> (new_sync_write+0xc8/0xec)
-> [<c02734bc>] (new_sync_write) from [<c027351c>] (__vfs_write+0x3c/0x48)
-> [<c027351c>] (__vfs_write) from [<c02749a0>] (vfs_write+0xcc/0x158)
-> [<c02749a0>] (vfs_write) from [<c02756ac>] (SyS_write+0x50/0x88)
-> [<c02756ac>] (SyS_write) from [<c0107a20>] (ret_fast_syscall+0x0/0x54)
-> ---[ end trace fe5f79fe415b9881 ]---
->=20
-> and write ends up with: write /run/ffs/ep1: cannot allocate memory
->=20
-> When checked free command there should be plenty of available memory.
-> Is there some limitation when writing to endpoint? We tried to split
-> buffer to e.g. 3M and sent it and this works but looks like there is
-> penalty when sending bigger files (100MB file received in 5secs whicle
-> sending back it took 2minutes). Thanks for ideas and hints.
+On 20-05-26 16:50:51, Mike Looijmans wrote:
+> This enables support for VBUS on boards where the power is supplied
+> by a regulator. The regulator is enabled when the USB port enters
+> HOST mode.
 >=20
 
-Although you see there are plenty of available memory, but the block number
-for the size(eg 64KB) you request may be zero. Since you use old
-kernel, the f_fs doesn't support scatter list. To fix it, you may use
-small buffer at use space, eg: 16KB per transfer.
+Why you don't do this at your host controller driver?
+
+Peter
+> Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
+> ---
+>  .../devicetree/bindings/usb/usb-nop-xceiv.txt |  3 ++
+>  drivers/usb/phy/phy-generic.c                 | 44 ++++++++++++++++++-
+>  drivers/usb/phy/phy-generic.h                 |  2 +
+>  3 files changed, 48 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/usb/usb-nop-xceiv.txt b/Do=
+cumentation/devicetree/bindings/usb/usb-nop-xceiv.txt
+> index 4dc6a8ee3071..775a19fdb613 100644
+> --- a/Documentation/devicetree/bindings/usb/usb-nop-xceiv.txt
+> +++ b/Documentation/devicetree/bindings/usb/usb-nop-xceiv.txt
+> @@ -16,6 +16,9 @@ Optional properties:
+> =20
+>  - vcc-supply: phandle to the regulator that provides power to the PHY.
+> =20
+> +- vbus-supply: phandle to the regulator that provides the VBUS power for=
+ when
+> +  the device is in HOST mode.
+> +
+>  - reset-gpios: Should specify the GPIO for reset.
+> =20
+>  - vbus-detect-gpio: should specify the GPIO detecting a VBus insertion
+> diff --git a/drivers/usb/phy/phy-generic.c b/drivers/usb/phy/phy-generic.=
+c
+> index 661a229c105d..ebfb90764511 100644
+> --- a/drivers/usb/phy/phy-generic.c
+> +++ b/drivers/usb/phy/phy-generic.c
+> @@ -203,13 +203,43 @@ static int nop_set_host(struct usb_otg *otg, struct=
+ usb_bus *host)
+>  	return 0;
+>  }
+> =20
+> +static int nop_set_vbus(struct usb_otg *otg, bool enabled)
+> +{
+> +	struct usb_phy_generic *nop;
+> +	int ret;
+> +
+> +	if (!otg)
+> +		return -ENODEV;
+> +
+> +	nop =3D container_of(otg->usb_phy, struct usb_phy_generic, phy);
+> +
+> +	if (!nop->vbus_reg)
+> +		return 0;
+> +
+> +	if (enabled) {
+> +		if (nop->vbus_reg_enabled)
+> +			return 0;
+> +		ret =3D regulator_enable(nop->vbus_reg);
+> +		if (ret < 0)
+> +			return ret;
+> +		nop->vbus_reg_enabled =3D true;
+> +	} else {
+> +		if (!nop->vbus_reg_enabled)
+> +			return 0;
+> +		ret =3D regulator_disable(nop->vbus_reg);
+> +		if (ret < 0)
+> +			return ret;
+> +		nop->vbus_reg_enabled =3D false;
+> +	}
+> +}
+> +
+>  int usb_phy_gen_create_phy(struct device *dev, struct usb_phy_generic *n=
+op)
+>  {
+>  	enum usb_phy_type type =3D USB_PHY_TYPE_USB2;
+>  	int err =3D 0;
+> =20
+>  	u32 clk_rate =3D 0;
+> -	bool needs_vcc =3D false, needs_clk =3D false;
+> +	bool needs_vcc =3D false, needs_clk =3D false, needs_vbus =3D false;
+> =20
+>  	if (dev->of_node) {
+>  		struct device_node *node =3D dev->of_node;
+> @@ -219,6 +249,7 @@ int usb_phy_gen_create_phy(struct device *dev, struct=
+ usb_phy_generic *nop)
+> =20
+>  		needs_vcc =3D of_property_read_bool(node, "vcc-supply");
+>  		needs_clk =3D of_property_read_bool(node, "clocks");
+> +		needs_vbus =3D of_property_read_bool(node, "vbus-supply");
+>  	}
+>  	nop->gpiod_reset =3D devm_gpiod_get_optional(dev, "reset",
+>  						   GPIOD_ASIS);
+> @@ -268,6 +299,16 @@ int usb_phy_gen_create_phy(struct device *dev, struc=
+t usb_phy_generic *nop)
+>  			return -EPROBE_DEFER;
+>  	}
+> =20
+> +	nop->vbus_reg =3D devm_regulator_get(dev, "vbus");
+> +	if (IS_ERR(nop->vbus_reg)) {
+> +		dev_dbg(dev, "Error getting vbus regulator: %ld\n",
+> +					PTR_ERR(nop->vbus_reg));
+> +		if (needs_vbus)
+> +			return -EPROBE_DEFER;
+> +
+> +		nop->vbus_reg =3D NULL;
+> +	}
+> +
+>  	nop->dev		=3D dev;
+>  	nop->phy.dev		=3D nop->dev;
+>  	nop->phy.label		=3D "nop-xceiv";
+> @@ -278,6 +319,7 @@ int usb_phy_gen_create_phy(struct device *dev, struct=
+ usb_phy_generic *nop)
+>  	nop->phy.otg->usb_phy		=3D &nop->phy;
+>  	nop->phy.otg->set_host		=3D nop_set_host;
+>  	nop->phy.otg->set_peripheral	=3D nop_set_peripheral;
+> +	nop->phy.otg->set_vbus		=3D nop_set_vbus;
+> =20
+>  	return 0;
+>  }
+> diff --git a/drivers/usb/phy/phy-generic.h b/drivers/usb/phy/phy-generic.=
+h
+> index 7ee80211a688..a3663639ea1e 100644
+> --- a/drivers/usb/phy/phy-generic.h
+> +++ b/drivers/usb/phy/phy-generic.h
+> @@ -14,7 +14,9 @@ struct usb_phy_generic {
+>  	struct gpio_desc *gpiod_reset;
+>  	struct gpio_desc *gpiod_vbus;
+>  	struct regulator *vbus_draw;
+> +	struct regulator *vbus_reg;
+>  	bool vbus_draw_enabled;
+> +	bool vbus_reg_enabled;
+>  	unsigned long mA;
+>  	unsigned int vbus;
+>  };
+> --=20
+> 2.17.1
+>=20
 
 --=20
 
