@@ -2,108 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 480E51E662B
-	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2020 17:33:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A4D81E6703
+	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2020 18:03:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404460AbgE1PdU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 May 2020 11:33:20 -0400
-Received: from mail-oo1-f66.google.com ([209.85.161.66]:33014 "EHLO
-        mail-oo1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404218AbgE1PdS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 May 2020 11:33:18 -0400
-Received: by mail-oo1-f66.google.com with SMTP id q6so5822386oot.0;
-        Thu, 28 May 2020 08:33:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BwvPrfZ8wSg4ph9zMdOEHVQNrGJxP0cUS3oI9/YOGpQ=;
-        b=QpwqjFTsadK3mu7urI3IfM1rL6tr9ztPKMnoyrW7GQqMX5igix/k9dhHLHJKlX+QoI
-         XBBoQSXFkwTM3UbSizQhWIndyeBKKk/1TjOK5wgzYCqYOVL9Mh3Hf5vqvbsiZcAKVH2U
-         i5m4Z3iR7AAXWrMp+pTab7419V0Yf8Moo3G3dM5JSTJDjNasCsFH2Q3N8y3VTXDLUbiQ
-         VYms1wPIp8aymnP4bneBUlrU0U+vp+MmMoXqlUbAC/pP6SHCNNIsiyHkdOUiHAMNpetR
-         FGIubYztWG5GSahTJrFvbyq56zPluCH5YtmAS7fEUpHNBoZaJtYtifg6rs4WO4OcCgeO
-         sX1Q==
-X-Gm-Message-State: AOAM533NAu2ppUzQserN6stdvj2DRLSH+vNElmo1XKqd42FoWSzqxH4S
-        7I4AxZXGoUxOohLtIwrdZYqsYFguYz4bSXbIuko=
-X-Google-Smtp-Source: ABdhPJzYnIPD026r8y0hPgfUlAn0bDcx+vTjLCisCeIZ4o+tCY/6uQdRsn4J2v/VaqLjNOwZ97xJOv6mtqydzoFJdxQ=
-X-Received: by 2002:a4a:e0d1:: with SMTP id e17mr2914462oot.1.1590679997128;
- Thu, 28 May 2020 08:33:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <1590356277-19993-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20200528142139.GA28290@e121166-lin.cambridge.arm.com>
-In-Reply-To: <20200528142139.GA28290@e121166-lin.cambridge.arm.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 28 May 2020 17:33:06 +0200
-Message-ID: <CAMuHMdVNi2dwrbsX9Zbxo3GGaGZ6EwtsVhFFORNTYkcGfynkQQ@mail.gmail.com>
-Subject: Re: [PATCH 0/8] R8A7742 add support for HSUSB and USB2.0/3.0
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        dmaengine <dmaengine@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
+        id S2404817AbgE1QDN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 May 2020 12:03:13 -0400
+Received: from www262.sakura.ne.jp ([202.181.97.72]:53608 "EHLO
+        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404723AbgE1QDM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 May 2020 12:03:12 -0400
+Received: from fsav304.sakura.ne.jp (fsav304.sakura.ne.jp [153.120.85.135])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 04SG39iD001921;
+        Fri, 29 May 2020 01:03:10 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav304.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav304.sakura.ne.jp);
+ Fri, 29 May 2020 01:03:09 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav304.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 04SG39ei001892
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO);
+        Fri, 29 May 2020 01:03:09 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Subject: Re: [PATCH] USB: cdc-wdm: Call wake_up_all() when clearing WDM_IN_USE
+ bit.
+To:     Andrey Konovalov <andreyknvl@google.com>
+Cc:     Oliver Neukum <oneukum@suse.com>, Greg KH <greg@kroah.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Arnd Bergmann <arnd@arndb.de>,
         USB list <linux-usb@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        syzbot <syzbot+854768b99f19e89d7f81@syzkaller.appspotmail.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+References: <20200520233129.3704-1-penguin-kernel@I-love.SAKURA.ne.jp>
+ <20200521073323.GA2579717@kroah.com>
+ <177cc23a-60a7-f5cd-09d6-57608727ea27@i-love.sakura.ne.jp>
+ <1590090636.6470.12.camel@suse.com>
+ <a72cbcc6-df68-2043-1580-a8b4e4053079@i-love.sakura.ne.jp>
+ <1590134662.19681.12.camel@suse.com>
+ <03894591-a1ac-496a-a35f-55953e5bcc06@i-love.sakura.ne.jp>
+ <1590408381.2838.4.camel@suse.com>
+ <4a686d9a-d09f-44f3-553c-bcf0bd8a8ea1@i-love.sakura.ne.jp>
+ <082ae642-0703-6c26-39f6-d725e395ef9a@i-love.sakura.ne.jp>
+ <CAAeHK+ww0YLUKGjQF5KfzoUUsdfLJdv5guUXRq4q46VfPiQubQ@mail.gmail.com>
+From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Message-ID: <27b7545e-8f41-10b8-7c02-e35a08eb1611@i-love.sakura.ne.jp>
+Date:   Fri, 29 May 2020 01:03:09 +0900
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.1
+MIME-Version: 1.0
+In-Reply-To: <CAAeHK+ww0YLUKGjQF5KfzoUUsdfLJdv5guUXRq4q46VfPiQubQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Lorenzo,
+On 2020/05/29 0:18, Andrey Konovalov wrote:
+>> I might have found what is wrong.
+>>
+>> My understanding is that a process using /dev/raw-gadget is responsible for
+>> reacting to every USB request. I don't know whether /dev/raw-gadget already
+>> provides callback for aborting the in-flight USB requests (in order to resume
+>> wdm_flush()) when /dev/raw-gadget is closed (due to explicit close() syscall or
+>> implicit exit_files() from do_exit() upon SIGKILL). I assume /dev/raw-gadget
+>> already provides such callback in the following paragraphs.
+> 
+> raw-gadget should kill all unfishished USB requests when the file is closed.
 
-On Thu, May 28, 2020 at 4:21 PM Lorenzo Pieralisi
-<lorenzo.pieralisi@arm.com> wrote:
-> On Sun, May 24, 2020 at 10:37:49PM +0100, Lad Prabhakar wrote:
-> > This patch series adds support for HSUSB, USB2.0 and USB3.0 to
-> > R8A7742 SoC DT.
-> >
-> > This patch series applies on-top of [1].
-> >
-> > [1] https://patchwork.kernel.org/project/linux-renesas-soc/list/?series=288491
->
-> I think Geert will pull this series, so I'd drop it from the PCI
-> patchwork unless there is a reason I should not, please let me know.
+I see. But
 
-I'll take the DTS patches only.
+> 
+>>
+>> Since the reproducer is opening both /dev/raw-gadget (which is char-10-62) and
+>> /dev/cdc-wdm0 (which is char-180-0), it seems that the kernel is falling into
+>> deadlock condition due to the need to close both files when the reproducer is
+>> killed. My guess is that since that process is stuck at wdm_flush() (due to
+>> explicit close() syscall or implicit exit_files() from do_exit() upon SIGKILL),
+>> that process cannot react to USB requests which are needed for resuming wdm_flush().
+>> Unexpectedly blocking a process which is responsible for reacting to USB requests
+>> will look as if it is a broken hardware.
+> 
+> Hm, so wdm_flush() is unable to finish unless an expected USB request
+> is received from the device? This is a bug in the wdm driver then.
 
-You may want to take 2/8, or leave it to Rob.
+this specific bug report is caused by being unable to close /dev/cdc-wdm0
+due to /dev/raw-gadget API usage bug in the userspace process. In other words,
+this bug report should be closed with "#syz invalid" like a bug report at
+https://syzkaller.appspot.com/bug?id=287aa8708bc940d0ca1645223c53dd4c2d203be6
+which unexpectedly did ioctl(FIFREEZE) without corresponding ioctl(FITHAW).
 
-> > Lad Prabhakar (8):
-> >   dt-bindings: phy: rcar-gen2: Add r8a7742 support
-> >   dt-bindings: PCI: pci-rcar-gen2: Add device tree support for r8a7742
-> >   dt-bindings: usb: renesas,usbhs: Add support for r8a7742
-> >   dt-bindings: dmaengine: renesas,usb-dmac: Add binding for r8a7742
-> >   dt-bindings: usb: usb-xhci: Document r8a7742 support
-> >   ARM: dts: r8a7742: Add USB 2.0 host support
-> >   ARM: dts: r8a7742: Add USB-DMAC and HSUSB device nodes
-> >   ARM: dts: r8a7742: Add xhci support
-> >
-> >  .../devicetree/bindings/dma/renesas,usb-dmac.yaml  |   1 +
-> >  .../devicetree/bindings/pci/pci-rcar-gen2.txt      |   3 +-
-> >  .../devicetree/bindings/phy/rcar-gen2-phy.txt      |   3 +-
-> >  .../devicetree/bindings/usb/renesas,usbhs.yaml     |   1 +
-> >  Documentation/devicetree/bindings/usb/usb-xhci.txt |   1 +
-> >  arch/arm/boot/dts/r8a7742.dtsi                     | 173 +++++++++++++++++++++
-> >  6 files changed, 180 insertions(+), 2 deletions(-)
+> Should we use wait_event_interruptible() instead of wait_event() in
+> wdm_flush()?
 
-Gr{oetje,eeting}s,
+That only shadows this kind of bug reports, by not using TASK_UNINTERRUPTIBLE.
 
-                        Geert
+The problem that the userspace process which is responsible for closing
+/dev/raw-gadget gets stuck at wdm_flush() unless interrupted by a signal
+when closing /dev/cdc-wdm0 is remaining. I think that a process should not
+open /dev/raw-gadget and /dev/cdc-wdm0 at the same time.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
