@@ -2,39 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB851E5ED0
-	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2020 13:56:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2449C1E5FC9
+	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2020 14:05:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388710AbgE1L4X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 May 2020 07:56:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48374 "EHLO mail.kernel.org"
+        id S2389616AbgE1ME6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 May 2020 08:04:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49518 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388630AbgE1L4V (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 28 May 2020 07:56:21 -0400
+        id S2388922AbgE1L5G (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 28 May 2020 07:57:06 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AAFE420C56;
-        Thu, 28 May 2020 11:56:19 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9673621655;
+        Thu, 28 May 2020 11:57:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590666980;
-        bh=SXeOyrI9WO1tlCA+D5zsxsVgIxlxT1ShXur1AVJHTik=;
+        s=default; t=1590667026;
+        bh=KTTdY+P4YiOd/BUQzDIZn4WNKGXVwzofufSSUG2f+tg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZoHH4YR5uikGe5gyTO5tdCcGEo+9UVEI0/o/gxs4tWSTH8Ly9b9NP17Ecd6U32JuF
-         iXc6dld4C6CxzmIEwSfULGgKs2F3DNupRqB/9m7P2WQrps642S3aC6ytXJb0qo50mG
-         9hS0iTm51TQzSBgDcmzaG8jdjoW39Y0HwY7ksoN8=
+        b=BOUSaKd4EJE/zSuYE8uSFaPKmTo/z73GMnOMT4/SQhanyIr6M4dgYGXscY+IXatbt
+         ohhTtyX8RkhNXUvFmLjqcbuAqyZCQrO52C2IfWkWCktt7NuRisKcufbo09AAH/6Pyi
+         p/K6A1poXkOjOAf5t2+6AyE5wBqZt50E2uOypWzw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Marc Payne <marc.payne@mdpsys.co.uk>,
         "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 17/47] r8152: support additional Microsoft Surface Ethernet Adapter variant
-Date:   Thu, 28 May 2020 07:55:30 -0400
-Message-Id: <20200528115600.1405808-17-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 10/26] r8152: support additional Microsoft Surface Ethernet Adapter variant
+Date:   Thu, 28 May 2020 07:56:38 -0400
+Message-Id: <20200528115654.1406165-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200528115600.1405808-1-sashal@kernel.org>
-References: <20200528115600.1405808-1-sashal@kernel.org>
+In-Reply-To: <20200528115654.1406165-1-sashal@kernel.org>
+References: <20200528115654.1406165-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -64,10 +64,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 10 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/net/usb/cdc_ether.c b/drivers/net/usb/cdc_ether.c
-index 0cdb2ce47645..a657943c9f01 100644
+index fe630438f67b..9bb37ac99a10 100644
 --- a/drivers/net/usb/cdc_ether.c
 +++ b/drivers/net/usb/cdc_ether.c
-@@ -815,14 +815,21 @@ static const struct usb_device_id	products[] = {
+@@ -808,14 +808,21 @@ static const struct usb_device_id	products[] = {
  	.driver_info = 0,
  },
  
@@ -92,10 +92,10 @@ index 0cdb2ce47645..a657943c9f01 100644
  	USB_DEVICE_AND_INTERFACE_INFO(TPLINK_VENDOR_ID, 0x0601, USB_CLASS_COMM,
  			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
 diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 95b19ce96513..7c8c45984a5c 100644
+index 44ea5dcc43fd..cd1a07175e11 100644
 --- a/drivers/net/usb/r8152.c
 +++ b/drivers/net/usb/r8152.c
-@@ -6901,6 +6901,7 @@ static const struct usb_device_id rtl8152_table[] = {
+@@ -5837,6 +5837,7 @@ static const struct usb_device_id rtl8152_table[] = {
  	{REALTEK_USB_DEVICE(VENDOR_ID_REALTEK, 0x8153)},
  	{REALTEK_USB_DEVICE(VENDOR_ID_MICROSOFT, 0x07ab)},
  	{REALTEK_USB_DEVICE(VENDOR_ID_MICROSOFT, 0x07c6)},
