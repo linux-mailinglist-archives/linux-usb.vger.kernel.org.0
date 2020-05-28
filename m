@@ -2,232 +2,287 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA8A81E5E1A
-	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2020 13:20:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0587F1E5E3D
+	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2020 13:29:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388279AbgE1LUd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 May 2020 07:20:33 -0400
-Received: from mail-eopbgr30068.outbound.protection.outlook.com ([40.107.3.68]:38381
-        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2388038AbgE1LUb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 28 May 2020 07:20:31 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=l9D46ALSyMQ7QpkRBBgoITcCr2XtbL6EqgJSZ0IO5b8X9lHCBAaOV7TqreT4RCFeSRsyR76qupgsxxUvK5TPaRS2u1RgEbaKgnxdQJK5XrBG5c1HXX2d80dSSjZRSTfGg4Z4zkrhLcvyS60ivL1bIjjS9EmbXr+F3D/QqDqIiCjsgcRQP93bepb78UaH4qFzlgSpcgUUQUTksWw4fdEMpeH/ZPmZivDFFdnSqCs5gaa3t+WWVXsxfMWxPOTyNshdSgw+VzfOiwTnPUUzPVtIhNawbIphd6UOOf5b1IZK6ZVV1tSFUKlJu3QuIWP/LCf7OalOYnpFes+R0EnJqGn2Xg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TfZYXV5ntPrwIvB91G2ZTNsNM2tBLs2x21ESuz/udbo=;
- b=nCQaLxj55sLd5ovgrAxum7ScIhyy85RcRLv6FzrYVuKTttBRKYyH9Y5Iq5tmgN2mNNvPAe8ryeIjsy5r2D/7uiI67kPRQYyG+zjQyt6ue5sx8l67iCPFCtHbxd2ToYmDzKryVoESDAVs3GL0xI/iDE79s/OaEzTlKJjicOZ0MWHEAEt2Y2C2vQoYfwJHWSmXkXPdpVGj7rGNS+kZfxXbXyFN2F6IfXnZQFLmExqfu9IfqK9KeAHyJCfGrC6PUwEIZ+Ymh1koPE3YMyUjqrv854j5+f5kvTjBFfGMM3OwgMTwxpN41K5ZdLn10dtu1V8AAwrAu2jvXiGWQKeQT9qljA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TfZYXV5ntPrwIvB91G2ZTNsNM2tBLs2x21ESuz/udbo=;
- b=fngdbhO2mk4SWC1b31IQT2lwgkgE6LUJff6+z5EDDgOkdsQQ10QlWXWKEFnIrisH59jF3vKBmEjWZy9AwhdkgVcEvJlQ2deEplMtucSK8sD5e1x70NzxS4jgClT3b+U4W/3WtmLhGEaYxAZEKNJqVxfWP+P3nnN1HnjSumd25BI=
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
- by AM7PR04MB6871.eurprd04.prod.outlook.com (2603:10a6:20b:109::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3045.17; Thu, 28 May
- 2020 11:20:26 +0000
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1101:adaa:ee89:af2a]) by AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1101:adaa:ee89:af2a%3]) with mapi id 15.20.3045.018; Thu, 28 May 2020
- 11:20:26 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Mike Looijmans <mike.looijmans@topic.nl>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb/phy-generic: Add support for OTG VBUS supply control
-Thread-Topic: [PATCH] usb/phy-generic: Add support for OTG VBUS supply control
-Thread-Index: AQHWM23eFY1+Pfs1gUaTviqfbn5UWqi9XTqA
-Date:   Thu, 28 May 2020 11:20:26 +0000
-Message-ID: <20200528112051.GB2604@b29397-desktop>
-References: <20200526145051.31520-1-mike.looijmans@topic.nl>
-In-Reply-To: <20200526145051.31520-1-mike.looijmans@topic.nl>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: topic.nl; dkim=none (message not signed)
- header.d=none;topic.nl; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 9745a6a5-5672-45f9-ef15-08d802f91f4a
-x-ms-traffictypediagnostic: AM7PR04MB6871:
-x-microsoft-antispam-prvs: <AM7PR04MB68714A8674D7F3DB6D9920068B8E0@AM7PR04MB6871.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5797;
-x-forefront-prvs: 0417A3FFD2
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 0R3vUz48/EjMQdENLWv9v+AU+Mcc0MqRGShqEFW9BxFCSrtT4ZqEiz2AHnO5wj/Z+NyCA+D1IocM+IeHtM7VhWjetb+e9hPs8ABKh6uIUdYQEFaEH0kRLYQrh0nXCMHHzvLTHkf0BzhaIpJPIK9xYTOqxDaqLQHfPGjT7mc4ve9e7aymUrcWq+0hAJl6oDw/CFA08UKhWELL8bXYuU8OHkQWhQ7kiGNG/LZBaVarJw7DJF2a9w0XTfFxRflJnnirYRJKBj0cnvBgkI0BpdnC9byAXkMP7kvh1cnM3QHtRcakJeTLTb8AlCeab4D6fHrjY4L4JWMyWzTbpXRRThNhrQYh80rLy4Isojzg/eCzVAlLJgpMfgDBlaDj5FpyVcEE
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(7916004)(4636009)(136003)(39860400002)(376002)(346002)(396003)(366004)(54906003)(4326008)(6486002)(316002)(5660300002)(83380400001)(33716001)(6916009)(66476007)(8676002)(478600001)(33656002)(2906002)(86362001)(8936002)(6506007)(26005)(66446008)(64756008)(91956017)(53546011)(71200400001)(76116006)(44832011)(9686003)(1076003)(186003)(66946007)(6512007)(66556008)(41533002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: Up9mKF7pbfrR76u8jDLT+DD9daH6PVlgybdG+8kp9MNhRpidI6xWFowiFfBtmTo4a28kPp2Y/FROAa9rA3z7W5aJXHFRTNVvFESxBfHbejGLE4FvareO2ML/3tw3YR1bHR6MmLHnR17IZa68Ctj+gOMlkYz5Ba9RFfhN5jBi07EEZU9CWgith+3jPVXpf8eQHamhdWgb4Lggn+A4a9yzJuEujOJmP1g6Fn5AEccDkA+JoqpFB/UsxOvDBBihDHFds9c6gPnmZghDzxLHhdlG2wlCDq645vwJ/fPFoNbKfWnsUzDAZjk99YLkMF8hsCBpVk+F6nuDOHHT4gXEE/IREaF7FfT6dN2LMzjmQrF/Jk19kX4MACo8++Vq3j7P5k6hixfLKm+Lp5flHAWmHZj9vfVcEABpArJtfrSWClMkQhyX/C6whQTfBgf6BJDUz2faFJf4MM6dBQJFT9XjBmYAsmdoxE18i211tABOh5+VKIs=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <31785CD05404F846A4943BB0C30CC070@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S2388389AbgE1L3n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 May 2020 07:29:43 -0400
+Received: from cmccmta1.chinamobile.com ([221.176.66.79]:4394 "EHLO
+        cmccmta1.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388190AbgE1L3n (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 May 2020 07:29:43 -0400
+Received: from spf.mail.chinamobile.com (unknown[172.16.121.7]) by rmmx-syy-dmz-app02-12002 (RichMail) with SMTP id 2ee25ecfa089b11-1547a; Thu, 28 May 2020 19:29:13 +0800 (CST)
+X-RM-TRANSID: 2ee25ecfa089b11-1547a
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG: 00000000
+Received: from localhost.localdomain (unknown[112.25.154.146])
+        by rmsmtp-syy-appsvr04-12004 (RichMail) with SMTP id 2ee45ecfa086616-732fc;
+        Thu, 28 May 2020 19:29:13 +0800 (CST)
+X-RM-TRANSID: 2ee45ecfa086616-732fc
+From:   Tang Bin <tangbin@cmss.chinamobile.com>
+To:     gregkh@linuxfoundation.org, thierry.reding@gmail.com,
+        balbi@kernel.org, jonathanh@nvidia.com
+Cc:     linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Tang Bin <tangbin@cmss.chinamobile.com>
+Subject: [PATCH] usb: phy: tegra: Remove unnecessary spaces and tables
+Date:   Thu, 28 May 2020 19:28:59 +0800
+Message-Id: <20200528112859.6160-1-tangbin@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.20.1.windows.1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9745a6a5-5672-45f9-ef15-08d802f91f4a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 May 2020 11:20:26.6727
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 8YHiIr6Evy/RDOGWxtLl+PhOsCpK1n4Ij/rs06XDkWUDzN2eTe4SRf4TDRLH9QgaS9qiG3jDHe2lnMyaiHHY2w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6871
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-05-26 16:50:51, Mike Looijmans wrote:
-> This enables support for VBUS on boards where the power is supplied
-> by a regulator. The regulator is enabled when the USB port enters
-> HOST mode.
->=20
+The macros in phy-tegra-usb.c have inconsistent sapces between
+the macro name and the value. Thus sets all the macros to have
+a signal space between the name and value.
 
-Why you don't do this at your host controller driver?
+Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
+---
+ drivers/usb/phy/phy-tegra-usb.c | 214 ++++++++++++++++----------------
+ 1 file changed, 107 insertions(+), 107 deletions(-)
 
-Peter
-> Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
-> ---
->  .../devicetree/bindings/usb/usb-nop-xceiv.txt |  3 ++
->  drivers/usb/phy/phy-generic.c                 | 44 ++++++++++++++++++-
->  drivers/usb/phy/phy-generic.h                 |  2 +
->  3 files changed, 48 insertions(+), 1 deletion(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/usb/usb-nop-xceiv.txt b/Do=
-cumentation/devicetree/bindings/usb/usb-nop-xceiv.txt
-> index 4dc6a8ee3071..775a19fdb613 100644
-> --- a/Documentation/devicetree/bindings/usb/usb-nop-xceiv.txt
-> +++ b/Documentation/devicetree/bindings/usb/usb-nop-xceiv.txt
-> @@ -16,6 +16,9 @@ Optional properties:
-> =20
->  - vcc-supply: phandle to the regulator that provides power to the PHY.
-> =20
-> +- vbus-supply: phandle to the regulator that provides the VBUS power for=
- when
-> +  the device is in HOST mode.
-> +
->  - reset-gpios: Should specify the GPIO for reset.
-> =20
->  - vbus-detect-gpio: should specify the GPIO detecting a VBus insertion
-> diff --git a/drivers/usb/phy/phy-generic.c b/drivers/usb/phy/phy-generic.=
-c
-> index 661a229c105d..ebfb90764511 100644
-> --- a/drivers/usb/phy/phy-generic.c
-> +++ b/drivers/usb/phy/phy-generic.c
-> @@ -203,13 +203,43 @@ static int nop_set_host(struct usb_otg *otg, struct=
- usb_bus *host)
->  	return 0;
->  }
-> =20
-> +static int nop_set_vbus(struct usb_otg *otg, bool enabled)
-> +{
-> +	struct usb_phy_generic *nop;
-> +	int ret;
-> +
-> +	if (!otg)
-> +		return -ENODEV;
-> +
-> +	nop =3D container_of(otg->usb_phy, struct usb_phy_generic, phy);
-> +
-> +	if (!nop->vbus_reg)
-> +		return 0;
-> +
-> +	if (enabled) {
-> +		if (nop->vbus_reg_enabled)
-> +			return 0;
-> +		ret =3D regulator_enable(nop->vbus_reg);
-> +		if (ret < 0)
-> +			return ret;
-> +		nop->vbus_reg_enabled =3D true;
-> +	} else {
-> +		if (!nop->vbus_reg_enabled)
-> +			return 0;
-> +		ret =3D regulator_disable(nop->vbus_reg);
-> +		if (ret < 0)
-> +			return ret;
-> +		nop->vbus_reg_enabled =3D false;
-> +	}
-> +}
-> +
->  int usb_phy_gen_create_phy(struct device *dev, struct usb_phy_generic *n=
-op)
->  {
->  	enum usb_phy_type type =3D USB_PHY_TYPE_USB2;
->  	int err =3D 0;
-> =20
->  	u32 clk_rate =3D 0;
-> -	bool needs_vcc =3D false, needs_clk =3D false;
-> +	bool needs_vcc =3D false, needs_clk =3D false, needs_vbus =3D false;
-> =20
->  	if (dev->of_node) {
->  		struct device_node *node =3D dev->of_node;
-> @@ -219,6 +249,7 @@ int usb_phy_gen_create_phy(struct device *dev, struct=
- usb_phy_generic *nop)
-> =20
->  		needs_vcc =3D of_property_read_bool(node, "vcc-supply");
->  		needs_clk =3D of_property_read_bool(node, "clocks");
-> +		needs_vbus =3D of_property_read_bool(node, "vbus-supply");
->  	}
->  	nop->gpiod_reset =3D devm_gpiod_get_optional(dev, "reset",
->  						   GPIOD_ASIS);
-> @@ -268,6 +299,16 @@ int usb_phy_gen_create_phy(struct device *dev, struc=
-t usb_phy_generic *nop)
->  			return -EPROBE_DEFER;
->  	}
-> =20
-> +	nop->vbus_reg =3D devm_regulator_get(dev, "vbus");
-> +	if (IS_ERR(nop->vbus_reg)) {
-> +		dev_dbg(dev, "Error getting vbus regulator: %ld\n",
-> +					PTR_ERR(nop->vbus_reg));
-> +		if (needs_vbus)
-> +			return -EPROBE_DEFER;
-> +
-> +		nop->vbus_reg =3D NULL;
-> +	}
-> +
->  	nop->dev		=3D dev;
->  	nop->phy.dev		=3D nop->dev;
->  	nop->phy.label		=3D "nop-xceiv";
-> @@ -278,6 +319,7 @@ int usb_phy_gen_create_phy(struct device *dev, struct=
- usb_phy_generic *nop)
->  	nop->phy.otg->usb_phy		=3D &nop->phy;
->  	nop->phy.otg->set_host		=3D nop_set_host;
->  	nop->phy.otg->set_peripheral	=3D nop_set_peripheral;
-> +	nop->phy.otg->set_vbus		=3D nop_set_vbus;
-> =20
->  	return 0;
->  }
-> diff --git a/drivers/usb/phy/phy-generic.h b/drivers/usb/phy/phy-generic.=
-h
-> index 7ee80211a688..a3663639ea1e 100644
-> --- a/drivers/usb/phy/phy-generic.h
-> +++ b/drivers/usb/phy/phy-generic.h
-> @@ -14,7 +14,9 @@ struct usb_phy_generic {
->  	struct gpio_desc *gpiod_reset;
->  	struct gpio_desc *gpiod_vbus;
->  	struct regulator *vbus_draw;
-> +	struct regulator *vbus_reg;
->  	bool vbus_draw_enabled;
-> +	bool vbus_reg_enabled;
->  	unsigned long mA;
->  	unsigned int vbus;
->  };
-> --=20
-> 2.17.1
->=20
+diff --git a/drivers/usb/phy/phy-tegra-usb.c b/drivers/usb/phy/phy-tegra-usb.c
+index 6153cc35a..c294dc617 100644
+--- a/drivers/usb/phy/phy-tegra-usb.c
++++ b/drivers/usb/phy/phy-tegra-usb.c
+@@ -30,124 +30,124 @@
+ #include <linux/usb/tegra_usb_phy.h>
+ #include <linux/usb/ulpi.h>
+ 
+-#define ULPI_VIEWPORT				0x170
++#define ULPI_VIEWPORT	0x170
+ 
+ /* PORTSC PTS/PHCD bits, Tegra20 only */
+-#define TEGRA_USB_PORTSC1			0x184
+-#define TEGRA_USB_PORTSC1_PTS(x)		(((x) & 0x3) << 30)
+-#define TEGRA_USB_PORTSC1_PHCD			BIT(23)
++#define TEGRA_USB_PORTSC1	0x184
++#define TEGRA_USB_PORTSC1_PTS(x)	(((x) & 0x3) << 30)
++#define TEGRA_USB_PORTSC1_PHCD	BIT(23)
+ 
+ /* HOSTPC1 PTS/PHCD bits, Tegra30 and above */
+-#define TEGRA_USB_HOSTPC1_DEVLC			0x1b4
+-#define TEGRA_USB_HOSTPC1_DEVLC_PTS(x)		(((x) & 0x7) << 29)
+-#define TEGRA_USB_HOSTPC1_DEVLC_PHCD		BIT(22)
++#define TEGRA_USB_HOSTPC1_DEVLC	0x1b4
++#define TEGRA_USB_HOSTPC1_DEVLC_PTS(x)	(((x) & 0x7) << 29)
++#define TEGRA_USB_HOSTPC1_DEVLC_PHCD	BIT(22)
+ 
+ /* Bits of PORTSC1, which will get cleared by writing 1 into them */
+ #define TEGRA_PORTSC1_RWC_BITS	(PORT_CSC | PORT_PEC | PORT_OCC)
+ 
+-#define USB_SUSP_CTRL				0x400
+-#define   USB_WAKE_ON_CNNT_EN_DEV		BIT(3)
+-#define   USB_WAKE_ON_DISCON_EN_DEV		BIT(4)
+-#define   USB_SUSP_CLR				BIT(5)
+-#define   USB_PHY_CLK_VALID			BIT(7)
+-#define   UTMIP_RESET				BIT(11)
+-#define   UHSIC_RESET				BIT(11)
+-#define   UTMIP_PHY_ENABLE			BIT(12)
+-#define   ULPI_PHY_ENABLE			BIT(13)
+-#define   USB_SUSP_SET				BIT(14)
+-#define   USB_WAKEUP_DEBOUNCE_COUNT(x)		(((x) & 0x7) << 16)
+-
+-#define USB1_LEGACY_CTRL			0x410
+-#define   USB1_NO_LEGACY_MODE			BIT(0)
+-#define   USB1_VBUS_SENSE_CTL_MASK		(3 << 1)
+-#define   USB1_VBUS_SENSE_CTL_VBUS_WAKEUP	(0 << 1)
+-#define   USB1_VBUS_SENSE_CTL_AB_SESS_VLD_OR_VBUS_WAKEUP \
++#define USB_SUSP_CTRL	0x400
++#define USB_WAKE_ON_CNNT_EN_DEV	BIT(3)
++#define USB_WAKE_ON_DISCON_EN_DEV	BIT(4)
++#define USB_SUSP_CLR	BIT(5)
++#define USB_PHY_CLK_VALID	BIT(7)
++#define UTMIP_RESET	BIT(11)
++#define UHSIC_RESET	BIT(11)
++#define UTMIP_PHY_ENABLE	BIT(12)
++#define ULPI_PHY_ENABLE	BIT(13)
++#define USB_SUSP_SET	BIT(14)
++#define USB_WAKEUP_DEBOUNCE_COUNT(x)	(((x) & 0x7) << 16)
++
++#define USB1_LEGACY_CTRL	0x410
++#define USB1_NO_LEGACY_MODE	BIT(0)
++#define USB1_VBUS_SENSE_CTL_MASK	(3 << 1)
++#define USB1_VBUS_SENSE_CTL_VBUS_WAKEUP	(0 << 1)
++#define USB1_VBUS_SENSE_CTL_AB_SESS_VLD_OR_VBUS_WAKEUP \
+ 						(1 << 1)
+-#define   USB1_VBUS_SENSE_CTL_AB_SESS_VLD	(2 << 1)
+-#define   USB1_VBUS_SENSE_CTL_A_SESS_VLD	(3 << 1)
+-
+-#define ULPI_TIMING_CTRL_0			0x424
+-#define   ULPI_OUTPUT_PINMUX_BYP		BIT(10)
+-#define   ULPI_CLKOUT_PINMUX_BYP		BIT(11)
+-
+-#define ULPI_TIMING_CTRL_1			0x428
+-#define   ULPI_DATA_TRIMMER_LOAD		BIT(0)
+-#define   ULPI_DATA_TRIMMER_SEL(x)		(((x) & 0x7) << 1)
+-#define   ULPI_STPDIRNXT_TRIMMER_LOAD		BIT(16)
+-#define   ULPI_STPDIRNXT_TRIMMER_SEL(x)		(((x) & 0x7) << 17)
+-#define   ULPI_DIR_TRIMMER_LOAD			BIT(24)
+-#define   ULPI_DIR_TRIMMER_SEL(x)		(((x) & 0x7) << 25)
+-
+-#define UTMIP_PLL_CFG1				0x804
+-#define   UTMIP_XTAL_FREQ_COUNT(x)		(((x) & 0xfff) << 0)
+-#define   UTMIP_PLLU_ENABLE_DLY_COUNT(x)	(((x) & 0x1f) << 27)
+-
+-#define UTMIP_XCVR_CFG0				0x808
+-#define   UTMIP_XCVR_SETUP(x)			(((x) & 0xf) << 0)
+-#define   UTMIP_XCVR_SETUP_MSB(x)		((((x) & 0x70) >> 4) << 22)
+-#define   UTMIP_XCVR_LSRSLEW(x)			(((x) & 0x3) << 8)
+-#define   UTMIP_XCVR_LSFSLEW(x)			(((x) & 0x3) << 10)
+-#define   UTMIP_FORCE_PD_POWERDOWN		BIT(14)
+-#define   UTMIP_FORCE_PD2_POWERDOWN		BIT(16)
+-#define   UTMIP_FORCE_PDZI_POWERDOWN		BIT(18)
+-#define   UTMIP_XCVR_LSBIAS_SEL			BIT(21)
+-#define   UTMIP_XCVR_HSSLEW(x)			(((x) & 0x3) << 4)
+-#define   UTMIP_XCVR_HSSLEW_MSB(x)		((((x) & 0x1fc) >> 2) << 25)
+-
+-#define UTMIP_BIAS_CFG0				0x80c
+-#define   UTMIP_OTGPD				BIT(11)
+-#define   UTMIP_BIASPD				BIT(10)
+-#define   UTMIP_HSSQUELCH_LEVEL(x)		(((x) & 0x3) << 0)
+-#define   UTMIP_HSDISCON_LEVEL(x)		(((x) & 0x3) << 2)
+-#define   UTMIP_HSDISCON_LEVEL_MSB(x)		((((x) & 0x4) >> 2) << 24)
+-
+-#define UTMIP_HSRX_CFG0				0x810
+-#define   UTMIP_ELASTIC_LIMIT(x)		(((x) & 0x1f) << 10)
+-#define   UTMIP_IDLE_WAIT(x)			(((x) & 0x1f) << 15)
+-
+-#define UTMIP_HSRX_CFG1				0x814
+-#define   UTMIP_HS_SYNC_START_DLY(x)		(((x) & 0x1f) << 1)
+-
+-#define UTMIP_TX_CFG0				0x820
+-#define   UTMIP_FS_PREABMLE_J			BIT(19)
+-#define   UTMIP_HS_DISCON_DISABLE		BIT(8)
+-
+-#define UTMIP_MISC_CFG0				0x824
+-#define   UTMIP_DPDM_OBSERVE			BIT(26)
+-#define   UTMIP_DPDM_OBSERVE_SEL(x)		(((x) & 0xf) << 27)
+-#define   UTMIP_DPDM_OBSERVE_SEL_FS_J		UTMIP_DPDM_OBSERVE_SEL(0xf)
+-#define   UTMIP_DPDM_OBSERVE_SEL_FS_K		UTMIP_DPDM_OBSERVE_SEL(0xe)
+-#define   UTMIP_DPDM_OBSERVE_SEL_FS_SE1		UTMIP_DPDM_OBSERVE_SEL(0xd)
+-#define   UTMIP_DPDM_OBSERVE_SEL_FS_SE0		UTMIP_DPDM_OBSERVE_SEL(0xc)
+-#define   UTMIP_SUSPEND_EXIT_ON_EDGE		BIT(22)
+-
+-#define UTMIP_MISC_CFG1				0x828
+-#define   UTMIP_PLL_ACTIVE_DLY_COUNT(x)		(((x) & 0x1f) << 18)
+-#define   UTMIP_PLLU_STABLE_COUNT(x)		(((x) & 0xfff) << 6)
+-
+-#define UTMIP_DEBOUNCE_CFG0			0x82c
+-#define   UTMIP_BIAS_DEBOUNCE_A(x)		(((x) & 0xffff) << 0)
+-
+-#define UTMIP_BAT_CHRG_CFG0			0x830
+-#define   UTMIP_PD_CHRG				BIT(0)
+-
+-#define UTMIP_SPARE_CFG0			0x834
+-#define   FUSE_SETUP_SEL			BIT(3)
+-
+-#define UTMIP_XCVR_CFG1				0x838
+-#define   UTMIP_FORCE_PDDISC_POWERDOWN		BIT(0)
+-#define   UTMIP_FORCE_PDCHRP_POWERDOWN		BIT(2)
+-#define   UTMIP_FORCE_PDDR_POWERDOWN		BIT(4)
+-#define   UTMIP_XCVR_TERM_RANGE_ADJ(x)		(((x) & 0xf) << 18)
+-
+-#define UTMIP_BIAS_CFG1				0x83c
+-#define   UTMIP_BIAS_PDTRK_COUNT(x)		(((x) & 0x1f) << 3)
++#define USB1_VBUS_SENSE_CTL_AB_SESS_VLD	(2 << 1)
++#define USB1_VBUS_SENSE_CTL_A_SESS_VLD	(3 << 1)
++
++#define ULPI_TIMING_CTRL_0	0x424
++#define ULPI_OUTPUT_PINMUX_BYP	BIT(10)
++#define ULPI_CLKOUT_PINMUX_BYP	BIT(11)
++
++#define ULPI_TIMING_CTRL_1	0x428
++#define ULPI_DATA_TRIMMER_LOAD	BIT(0)
++#define ULPI_DATA_TRIMMER_SEL(x)	(((x) & 0x7) << 1)
++#define ULPI_STPDIRNXT_TRIMMER_LOAD	BIT(16)
++#define ULPI_STPDIRNXT_TRIMMER_SEL(x)	(((x) & 0x7) << 17)
++#define ULPI_DIR_TRIMMER_LOAD	BIT(24)
++#define ULPI_DIR_TRIMMER_SEL(x)	(((x) & 0x7) << 25)
++
++#define UTMIP_PLL_CFG1	0x804
++#define UTMIP_XTAL_FREQ_COUNT(x)	(((x) & 0xfff) << 0)
++#define UTMIP_PLLU_ENABLE_DLY_COUNT(x)	(((x) & 0x1f) << 27)
++
++#define UTMIP_XCVR_CFG0	0x808
++#define UTMIP_XCVR_SETUP(x)	(((x) & 0xf) << 0)
++#define UTMIP_XCVR_SETUP_MSB(x)	((((x) & 0x70) >> 4) << 22)
++#define UTMIP_XCVR_LSRSLEW(x)	(((x) & 0x3) << 8)
++#define UTMIP_XCVR_LSFSLEW(x)	(((x) & 0x3) << 10)
++#define UTMIP_FORCE_PD_POWERDOWN	BIT(14)
++#define UTMIP_FORCE_PD2_POWERDOWN	BIT(16)
++#define UTMIP_FORCE_PDZI_POWERDOWN	BIT(18)
++#define UTMIP_XCVR_LSBIAS_SEL	BIT(21)
++#define UTMIP_XCVR_HSSLEW(x)	(((x) & 0x3) << 4)
++#define UTMIP_XCVR_HSSLEW_MSB(x)	((((x) & 0x1fc) >> 2) << 25)
++
++#define UTMIP_BIAS_CFG0	0x80c
++#define UTMIP_OTGPD	BIT(11)
++#define UTMIP_BIASPD	BIT(10)
++#define UTMIP_HSSQUELCH_LEVEL(x)	(((x) & 0x3) << 0)
++#define UTMIP_HSDISCON_LEVEL(x)	(((x) & 0x3) << 2)
++#define UTMIP_HSDISCON_LEVEL_MSB(x)	((((x) & 0x4) >> 2) << 24)
++
++#define UTMIP_HSRX_CFG0	0x810
++#define UTMIP_ELASTIC_LIMIT(x)	(((x) & 0x1f) << 10)
++#define UTMIP_IDLE_WAIT(x)	(((x) & 0x1f) << 15)
++
++#define UTMIP_HSRX_CFG1	0x814
++#define UTMIP_HS_SYNC_START_DLY(x)	(((x) & 0x1f) << 1)
++
++#define UTMIP_TX_CFG0	0x820
++#define UTMIP_FS_PREABMLE_J	BIT(19)
++#define UTMIP_HS_DISCON_DISABLE	BIT(8)
++
++#define UTMIP_MISC_CFG0	0x824
++#define UTMIP_DPDM_OBSERVE	BIT(26)
++#define UTMIP_DPDM_OBSERVE_SEL(x)	(((x) & 0xf) << 27)
++#define UTMIP_DPDM_OBSERVE_SEL_FS_J	UTMIP_DPDM_OBSERVE_SEL(0xf)
++#define UTMIP_DPDM_OBSERVE_SEL_FS_K	UTMIP_DPDM_OBSERVE_SEL(0xe)
++#define UTMIP_DPDM_OBSERVE_SEL_FS_SE1	UTMIP_DPDM_OBSERVE_SEL(0xd)
++#define UTMIP_DPDM_OBSERVE_SEL_FS_SE0	UTMIP_DPDM_OBSERVE_SEL(0xc)
++#define UTMIP_SUSPEND_EXIT_ON_EDGE	BIT(22)
++
++#define UTMIP_MISC_CFG1	0x828
++#define UTMIP_PLL_ACTIVE_DLY_COUNT(x)	(((x) & 0x1f) << 18)
++#define UTMIP_PLLU_STABLE_COUNT(x)	(((x) & 0xfff) << 6)
++
++#define UTMIP_DEBOUNCE_CFG0	0x82c
++#define UTMIP_BIAS_DEBOUNCE_A(x)	(((x) & 0xffff) << 0)
++
++#define UTMIP_BAT_CHRG_CFG0	0x830
++#define UTMIP_PD_CHRG	BIT(0)
++
++#define UTMIP_SPARE_CFG0	0x834
++#define FUSE_SETUP_SEL	BIT(3)
++
++#define UTMIP_XCVR_CFG1	0x838
++#define UTMIP_FORCE_PDDISC_POWERDOWN	BIT(0)
++#define UTMIP_FORCE_PDCHRP_POWERDOWN	BIT(2)
++#define UTMIP_FORCE_PDDR_POWERDOWN	BIT(4)
++#define UTMIP_XCVR_TERM_RANGE_ADJ(x)	(((x) & 0xf) << 18)
++
++#define UTMIP_BIAS_CFG1	0x83c
++#define UTMIP_BIAS_PDTRK_COUNT(x)	(((x) & 0x1f) << 3)
+ 
+ /* For Tegra30 and above only, the address is different in Tegra20 */
+-#define USB_USBMODE				0x1f8
+-#define   USB_USBMODE_MASK			(3 << 0)
+-#define   USB_USBMODE_HOST			(3 << 0)
+-#define   USB_USBMODE_DEVICE			(2 << 0)
++#define USB_USBMODE	0x1f8
++#define USB_USBMODE_MASK	(3 << 0)
++#define USB_USBMODE_HOST	(3 << 0)
++#define USB_USBMODE_DEVICE	(2 << 0)
+ 
+ static DEFINE_SPINLOCK(utmip_pad_lock);
+ static unsigned int utmip_pad_count;
+-- 
+2.20.1.windows.1
 
---=20
 
-Thanks,
-Peter Chen=
+
