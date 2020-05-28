@@ -2,88 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6448C1E6F33
-	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2020 00:35:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E859E1E708A
+	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2020 01:43:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437245AbgE1WfZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 May 2020 18:35:25 -0400
-Received: from mail-out.m-online.net ([212.18.0.9]:56293 "EHLO
-        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2436978AbgE1WfY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 May 2020 18:35:24 -0400
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 49Y2Zw4Gjgz1qs03;
-        Fri, 29 May 2020 00:35:20 +0200 (CEST)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 49Y2Zw3k1yz1qtwr;
-        Fri, 29 May 2020 00:35:20 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id Wd6N57Oy21RK; Fri, 29 May 2020 00:35:19 +0200 (CEST)
-X-Auth-Info: fINXjxd3LKESYOeZ38Yymx2nQ25X+hzgijRZ6uSFg60=
-Received: from [IPv6:::1] (unknown [195.140.253.167])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Fri, 29 May 2020 00:35:19 +0200 (CEST)
-Subject: Re: [PATCH] [RFC] usb: dwc2: Run the core connect in dwc2_hcd_init()
-To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Cc:     Amelie Delaunay <amelie.delaunay@st.com>,
+        id S2437538AbgE1XnU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 May 2020 19:43:20 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:46898 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2437503AbgE1XnS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 May 2020 19:43:18 -0400
+Received: by mail-io1-f68.google.com with SMTP id j8so379189iog.13;
+        Thu, 28 May 2020 16:43:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=X4P5cAAR887DNWxh4WskIGj1izCGidkfB+Pfk93nqy0=;
+        b=LLf1vQCnaHazVEFjqJce2Qq3pb+qXXKoUuwSnZecs6MzgCzlth/4TplghjGVaJ0cNi
+         M1gWWaxp5wvbh7CAOkKramwJMrvHXR9agKDT/WEPq21mW8sCDJz5xr6VWppzIcs9JWW2
+         NOLYhsMeo9C76VX/G9UdfZX4+DG8LYrU3Y2+ZOo/871uDzGLHe4mYHYYwR9kimf9ZENC
+         Cl4NhlYNSwOL4Ayl6E9ArreZWTIlC2sDUcGm0Xx/76V3Ivz9CDcwJwzrdtMWtHpQmiJD
+         /rkSYBdSuJpXV3Lw41LTw8Whhk6QCFY1txlEIxqgjffYktsECMUPTfwmrGDEcGnZ2K/6
+         duCw==
+X-Gm-Message-State: AOAM530YTDyeXuyYa4EJMxExWICfuDIMmnJMgCeBV29BNK+gveiuTqO/
+        Zdh4rziOneEnXF3pkBomMg==
+X-Google-Smtp-Source: ABdhPJyt0fkpS/3WLGVpB36ef/4na3oV+ZxN0Jj7Ovu7tYSb4cvCrjCF5L+csGkz2rNHbGxigRO8Ig==
+X-Received: by 2002:a02:cc36:: with SMTP id o22mr4942045jap.58.1590709397782;
+        Thu, 28 May 2020 16:43:17 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id o12sm3093192iob.6.2020.05.28.16.43.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 May 2020 16:43:17 -0700 (PDT)
+Received: (nullmailer pid 900471 invoked by uid 1000);
+        Thu, 28 May 2020 23:43:15 -0000
+Date:   Thu, 28 May 2020 17:43:15 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-usb@vger.kernel.org,
+        linux-pci@vger.kernel.org, Prabhakar <prabhakar.csengg@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-References: <20200413143107.181669-1-marex@denx.de>
- <31b679d3-d3e4-0220-ec4b-58eada4d21d4@synopsys.com>
- <b20fb33d-7fdd-5785-8f72-74900eb4d328@denx.de>
- <9906c2da-8a20-eae7-d69e-6947085edf84@synopsys.com>
- <b64f41ac-2d70-55a3-ab6a-77383cd463eb@denx.de>
- <d1b36da4-b506-2f86-f5ad-95bf3aac4485@synopsys.com>
- <c35e95cf-7f72-4a49-a0e1-efc0701d613d@denx.de>
- <867a776d-1e2c-2207-4387-072d2a8423fb@synopsys.com>
- <a6d681c5-d5fa-51d8-a320-6f6e9844c93a@denx.de>
- <4b4478aa-85bd-c05c-b5d0-e11dc35eb623@synopsys.com>
- <6ea2270d-19a4-7e8b-42fb-37a4a9d81e1f@denx.de>
- <8fb53f3a-a02b-3c53-0d9d-22b707bda786@synopsys.com>
- <671f36e3-367e-bcdf-0da7-f7ad82cf6284@denx.de>
- <ebb175be-edc1-892f-4537-a7402fd4460e@synopsys.com>
- <bb4835f6-a6c7-61cf-d4f0-eddbb5d6dea9@denx.de>
- <8de7047f-4d49-349b-983a-31c4ab66562f@synopsys.com>
- <c59c58e6-648c-bcb3-cbd4-9e78f9021bb7@denx.de>
- <d67d69a6-651f-f214-5119-bbbd68b4c2d5@denx.de>
- <4bfffaf9-fffd-57bc-6d45-ba43c46cd136@synopsys.com>
- <b9023085-0abb-b994-bb1c-e0b03e99e7ed@synopsys.com>
-From:   Marek Vasut <marex@denx.de>
-Message-ID: <abf109c3-c641-fdf0-f59a-2ba8b5a5f09c@denx.de>
-Date:   Fri, 29 May 2020 00:35:19 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Magnus Damm <magnus.damm@gmail.com>,
+        dmaengine@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: Re: [PATCH 1/8] dt-bindings: phy: rcar-gen2: Add r8a7742 support
+Message-ID: <20200528234315.GA900312@bogus>
+References: <1590356277-19993-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1590356277-19993-2-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-In-Reply-To: <b9023085-0abb-b994-bb1c-e0b03e99e7ed@synopsys.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1590356277-19993-2-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 5/27/20 8:17 AM, Minas Harutyunyan wrote:
-> Hi Marek,
-
-Hi,
-
-> On 5/15/2020 11:41 AM, Minas Harutyunyan wrote:
->> Hi Marek,
+On Sun, 24 May 2020 22:37:50 +0100, Lad Prabhakar wrote:
+> Add USB PHY support for r8a7742 SoC. Renesas RZ/G1H (R8A7742)
+> USB PHY is identical to the R-Car Gen2 family.
 > 
-> Any update on on this patch testing?
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
+> ---
+>  Documentation/devicetree/bindings/phy/rcar-gen2-phy.txt | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> Thanks,
-> Minas
-> 
->>>
->> Could you please test with this patch.
 
-Yes, that works, thanks.
-
-This should likely get a Stable: tag when submitting.
+Applied, thanks!
