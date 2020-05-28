@@ -2,73 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C94061E6953
-	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2020 20:30:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A35681E6973
+	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2020 20:36:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405827AbgE1Sad (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 May 2020 14:30:33 -0400
-Received: from rere.qmqm.pl ([91.227.64.183]:39577 "EHLO rere.qmqm.pl"
+        id S2405899AbgE1Sf6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 May 2020 14:35:58 -0400
+Received: from rere.qmqm.pl ([91.227.64.183]:10705 "EHLO rere.qmqm.pl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405803AbgE1Sab (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 28 May 2020 14:30:31 -0400
+        id S2405863AbgE1Sfz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 28 May 2020 14:35:55 -0400
 Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 49Xx8N2wkvz63;
-        Thu, 28 May 2020 20:30:28 +0200 (CEST)
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 49XxGT4LZGz63;
+        Thu, 28 May 2020 20:35:45 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1590690629; bh=wyk1Xu6FHxs00Uj8yLfVamGMvT7czOOsTndQSx9fs8A=;
+        t=1590690953; bh=JDXQmGIW53NRlTH7B094Eeot8dV9wNZ5qBuxOCKPMUY=;
         h=Date:From:Subject:To:Cc:From;
-        b=eBxrUA/+NVA3frxBWe/uNipfhphrdxrnbO+QVsyc2NKfb4EGBpJcs2UohSLpDFIhr
-         d7Z8q4sg6xd5TxvxBazcy9UgEJYV8WRwcWauVfYz15zNWiIP0Y9TC50CFl9dMCpigz
-         GJUcK4BIDQDLmvVwBNuEK+cScQZdRAwfd9tGuK+bRQj/DW2YQskjqt8zyjucNN8oYB
-         GPz248JYO9lF02C+Khq/FeigGaLORj4W0jHzUOMKM11nZsZrzImKM9B4eEAh2vH3r1
-         +FUHviTw1zhlKhtytHgcwKSwDdM+w9TF/sE2xz9uMVLbDVHbNd67kHRq8Ke/VON9HF
-         J5vBtQAHmYQYA==
+        b=m+xP5gErbXWNOqVWw+QSCUTA256Y3YYdiXr/xLyb3IUQ11U6aFUXkBL/65iQQ2/GC
+         qWo9/51NWY9Ul5gqdLLIi7kg7Gz1qH6a1lQqygHcAwj2ykNr1x9X0mIxQxTm1NPMlN
+         IyalaCwTS+GUaak0fSlxzFMqfKTMYpXjI+1xpaQ8V+nDpqQ8N8Tgfv0GBy2WNuVJas
+         SY9EVlk3PKZFiPpTIhBFOiOvnXo1RSiOZMLRnv7yaGbm2JcHIAd/1Kg9vecGqDaH8T
+         93BgjBYaRaR2e62MJhWQ0qbv2hz5C/f/25/U3lBnh0s3Wz2im1wYduvxwR2Ec9zB9N
+         BgtVKsrysOogg==
 X-Virus-Status: Clean
 X-Virus-Scanned: clamav-milter 0.102.2 at mail
-Date:   Thu, 28 May 2020 20:30:28 +0200
-Message-Id: <237e4bc8c63680f9ce0388d35b4c34a856ed8595.1590690518.git.mirq-linux@rere.qmqm.pl>
+Date:   Thu, 28 May 2020 20:35:45 +0200
+Message-Id: <cover.1590690650.git.mirq-linux@rere.qmqm.pl>
 From:   =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
-Subject: [PATCH] usb: gadget: f_acm: don't disable disabled EP
+Subject: [PATCH 0/3] usb: gadget: udc: atmel: assorted fixes
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-To:     Felipe Balbi <balbi@kernel.org>,
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Cristian Birsan <cristian.birsan@microchip.com>,
+        Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Robert Baldyga <r.baldyga@samsung.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Songjun Wu <songjun.wu@atmel.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Make debugging real problems easier by not trying to disable an EP that
-was not yet enabled.
+Two trivial fixes and .pullup implementation for Atmel UDC driver to
+make composite gadget happy when handling reconfiguration.
 
-Fixes: 4aab757ca44a ("usb: gadget: f_acm: eliminate abuse of ep->driver data")
-Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
----
- drivers/usb/gadget/function/f_acm.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+Michał Mirosław (3):
+  usb: gadget: udc: atmel: remove outdated comment in usba_ep_disable()
+  usb: gadget: udc: atmel: fix uninitialized read in debug printk
+  usb: gadget: udc: atmel: implement .pullup callback
 
-diff --git a/drivers/usb/gadget/function/f_acm.c b/drivers/usb/gadget/function/f_acm.c
-index 200596ea9557..46647bfac2ef 100644
---- a/drivers/usb/gadget/function/f_acm.c
-+++ b/drivers/usb/gadget/function/f_acm.c
-@@ -425,9 +425,11 @@ static int acm_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
- 	/* we know alt == 0, so this is an activation or a reset */
- 
- 	if (intf == acm->ctrl_id) {
--		dev_vdbg(&cdev->gadget->dev,
--				"reset acm control interface %d\n", intf);
--		usb_ep_disable(acm->notify);
-+		if (acm->notify->enabled) {
-+			dev_vdbg(&cdev->gadget->dev,
-+					"reset acm control interface %d\n", intf);
-+			usb_ep_disable(acm->notify);
-+		}
- 
- 		if (!acm->notify->desc)
- 			if (config_ep_by_speed(cdev->gadget, f, acm->notify))
+ drivers/usb/gadget/udc/atmel_usba_udc.c | 30 ++++++++++++++++++-------
+ 1 file changed, 22 insertions(+), 8 deletions(-)
+
 -- 
 2.20.1
 
