@@ -2,53 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8D91E680F
-	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2020 19:05:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C94061E6953
+	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2020 20:30:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405293AbgE1RFL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 May 2020 13:05:11 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:60531 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S2405191AbgE1RFK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 May 2020 13:05:10 -0400
-Received: (qmail 17452 invoked by uid 1000); 28 May 2020 13:05:09 -0400
-Date:   Thu, 28 May 2020 13:05:09 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Zebediah Figura <zfigura@codeweavers.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        usb-storage@lists.one-eyed-alien.net, linux-usb@vger.kernel.org
-Subject: Re: Bug 207877: ASMedia drive (174c:55aa) hangs in ioctl
- CDROM_DRIVE_STATUS when mounting a DVD
-Message-ID: <20200528170509.GC14188@rowland.harvard.edu>
-References: <7d0b20b9-4735-bbed-bb50-72764aefd6d8@codeweavers.com>
- <20200528075440.GA2881385@kroah.com>
- <465eaae3-fa60-f37e-1d62-c52236720798@codeweavers.com>
- <20200528160420.GA14188@rowland.harvard.edu>
- <232b68f8-9a5c-89fd-2e12-bf63f49dbe38@codeweavers.com>
+        id S2405827AbgE1Sad (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 May 2020 14:30:33 -0400
+Received: from rere.qmqm.pl ([91.227.64.183]:39577 "EHLO rere.qmqm.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2405803AbgE1Sab (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 28 May 2020 14:30:31 -0400
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 49Xx8N2wkvz63;
+        Thu, 28 May 2020 20:30:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1590690629; bh=wyk1Xu6FHxs00Uj8yLfVamGMvT7czOOsTndQSx9fs8A=;
+        h=Date:From:Subject:To:Cc:From;
+        b=eBxrUA/+NVA3frxBWe/uNipfhphrdxrnbO+QVsyc2NKfb4EGBpJcs2UohSLpDFIhr
+         d7Z8q4sg6xd5TxvxBazcy9UgEJYV8WRwcWauVfYz15zNWiIP0Y9TC50CFl9dMCpigz
+         GJUcK4BIDQDLmvVwBNuEK+cScQZdRAwfd9tGuK+bRQj/DW2YQskjqt8zyjucNN8oYB
+         GPz248JYO9lF02C+Khq/FeigGaLORj4W0jHzUOMKM11nZsZrzImKM9B4eEAh2vH3r1
+         +FUHviTw1zhlKhtytHgcwKSwDdM+w9TF/sE2xz9uMVLbDVHbNd67kHRq8Ke/VON9HF
+         J5vBtQAHmYQYA==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.102.2 at mail
+Date:   Thu, 28 May 2020 20:30:28 +0200
+Message-Id: <237e4bc8c63680f9ce0388d35b4c34a856ed8595.1590690518.git.mirq-linux@rere.qmqm.pl>
+From:   =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
+Subject: [PATCH] usb: gadget: f_acm: don't disable disabled EP
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <232b68f8-9a5c-89fd-2e12-bf63f49dbe38@codeweavers.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Robert Baldyga <r.baldyga@samsung.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> Thanks, I've attached a usbmon trace to the bug. It seems the kernel submits
-> a bulk input transfer that never receives a response. I hope my drive isn't
-> broken...
+Make debugging real problems easier by not trying to disable an EP that
+was not yet enabled.
 
-Did you wait for thirty seconds after that final bulk input transfer 
-started?  It should have been aborted at that point, just like the two 
-previous transfer attempts.  There might be a bad sector on the disc you 
-were trying to read; all three attempts seem to have failed at the same 
-place.
+Fixes: 4aab757ca44a ("usb: gadget: f_acm: eliminate abuse of ep->driver data")
+Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
+---
+ drivers/usb/gadget/function/f_acm.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-I get the impression that the SCSI error handler may have tried to reset 
-the device without first aborting the current transfer.  But it's not 
-easy to tell if that's what really happened.  You might be able to get 
-more information by enabling CONFIG_USB_STORAGE_DEBUG and rebuilding the 
-usb-storage driver, or by turning on SCSI debugging.
+diff --git a/drivers/usb/gadget/function/f_acm.c b/drivers/usb/gadget/function/f_acm.c
+index 200596ea9557..46647bfac2ef 100644
+--- a/drivers/usb/gadget/function/f_acm.c
++++ b/drivers/usb/gadget/function/f_acm.c
+@@ -425,9 +425,11 @@ static int acm_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
+ 	/* we know alt == 0, so this is an activation or a reset */
+ 
+ 	if (intf == acm->ctrl_id) {
+-		dev_vdbg(&cdev->gadget->dev,
+-				"reset acm control interface %d\n", intf);
+-		usb_ep_disable(acm->notify);
++		if (acm->notify->enabled) {
++			dev_vdbg(&cdev->gadget->dev,
++					"reset acm control interface %d\n", intf);
++			usb_ep_disable(acm->notify);
++		}
+ 
+ 		if (!acm->notify->desc)
+ 			if (config_ep_by_speed(cdev->gadget, f, acm->notify))
+-- 
+2.20.1
 
-Alan Stern
