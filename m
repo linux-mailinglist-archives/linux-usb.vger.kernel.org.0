@@ -2,105 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A4D81E6703
-	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2020 18:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6357D1E670C
+	for <lists+linux-usb@lfdr.de>; Thu, 28 May 2020 18:04:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404817AbgE1QDN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 May 2020 12:03:13 -0400
-Received: from www262.sakura.ne.jp ([202.181.97.72]:53608 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404723AbgE1QDM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 May 2020 12:03:12 -0400
-Received: from fsav304.sakura.ne.jp (fsav304.sakura.ne.jp [153.120.85.135])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 04SG39iD001921;
-        Fri, 29 May 2020 01:03:10 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav304.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav304.sakura.ne.jp);
- Fri, 29 May 2020 01:03:09 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav304.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 04SG39ei001892
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO);
-        Fri, 29 May 2020 01:03:09 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Subject: Re: [PATCH] USB: cdc-wdm: Call wake_up_all() when clearing WDM_IN_USE
- bit.
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     Oliver Neukum <oneukum@suse.com>, Greg KH <greg@kroah.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzbot <syzbot+854768b99f19e89d7f81@syzkaller.appspotmail.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-References: <20200520233129.3704-1-penguin-kernel@I-love.SAKURA.ne.jp>
- <20200521073323.GA2579717@kroah.com>
- <177cc23a-60a7-f5cd-09d6-57608727ea27@i-love.sakura.ne.jp>
- <1590090636.6470.12.camel@suse.com>
- <a72cbcc6-df68-2043-1580-a8b4e4053079@i-love.sakura.ne.jp>
- <1590134662.19681.12.camel@suse.com>
- <03894591-a1ac-496a-a35f-55953e5bcc06@i-love.sakura.ne.jp>
- <1590408381.2838.4.camel@suse.com>
- <4a686d9a-d09f-44f3-553c-bcf0bd8a8ea1@i-love.sakura.ne.jp>
- <082ae642-0703-6c26-39f6-d725e395ef9a@i-love.sakura.ne.jp>
- <CAAeHK+ww0YLUKGjQF5KfzoUUsdfLJdv5guUXRq4q46VfPiQubQ@mail.gmail.com>
-From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Message-ID: <27b7545e-8f41-10b8-7c02-e35a08eb1611@i-love.sakura.ne.jp>
-Date:   Fri, 29 May 2020 01:03:09 +0900
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.1
+        id S2404859AbgE1QEY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 May 2020 12:04:24 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:39575 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S2404688AbgE1QEV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 May 2020 12:04:21 -0400
+Received: (qmail 14781 invoked by uid 1000); 28 May 2020 12:04:20 -0400
+Date:   Thu, 28 May 2020 12:04:20 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Zebediah Figura <zfigura@codeweavers.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        usb-storage@lists.one-eyed-alien.net, linux-usb@vger.kernel.org
+Subject: Re: Bug 207877: ASMedia drive (174c:55aa) hangs in ioctl
+ CDROM_DRIVE_STATUS when mounting a DVD
+Message-ID: <20200528160420.GA14188@rowland.harvard.edu>
+References: <7d0b20b9-4735-bbed-bb50-72764aefd6d8@codeweavers.com>
+ <20200528075440.GA2881385@kroah.com>
+ <465eaae3-fa60-f37e-1d62-c52236720798@codeweavers.com>
 MIME-Version: 1.0
-In-Reply-To: <CAAeHK+ww0YLUKGjQF5KfzoUUsdfLJdv5guUXRq4q46VfPiQubQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <465eaae3-fa60-f37e-1d62-c52236720798@codeweavers.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2020/05/29 0:18, Andrey Konovalov wrote:
->> I might have found what is wrong.
->>
->> My understanding is that a process using /dev/raw-gadget is responsible for
->> reacting to every USB request. I don't know whether /dev/raw-gadget already
->> provides callback for aborting the in-flight USB requests (in order to resume
->> wdm_flush()) when /dev/raw-gadget is closed (due to explicit close() syscall or
->> implicit exit_files() from do_exit() upon SIGKILL). I assume /dev/raw-gadget
->> already provides such callback in the following paragraphs.
+On Thu, May 28, 2020 at 10:02:07AM -0500, Zebediah Figura wrote:
+> On 5/28/20 2:54 AM, Greg KH wrote:
+> > On Wed, May 27, 2020 at 11:23:13PM -0500, Zebediah Figura wrote:
+> > > Hello all,
+> > > 
+> > > I was asked to report this bug here. There's more details in the bug report,
+> > > but it's been proposed that there's a deadlock between device_reset() in
+> > > scsiglue.c and usb_stor_control_thread().
+> > 
+> > What bug report where?  Can you provide a link and the details here in
+> > the email?
 > 
-> raw-gadget should kill all unfishished USB requests when the file is closed.
-
-I see. But
-
+> Oops, meant to link it and forgot. Sorry about that.
 > 
->>
->> Since the reproducer is opening both /dev/raw-gadget (which is char-10-62) and
->> /dev/cdc-wdm0 (which is char-180-0), it seems that the kernel is falling into
->> deadlock condition due to the need to close both files when the reproducer is
->> killed. My guess is that since that process is stuck at wdm_flush() (due to
->> explicit close() syscall or implicit exit_files() from do_exit() upon SIGKILL),
->> that process cannot react to USB requests which are needed for resuming wdm_flush().
->> Unexpectedly blocking a process which is responsible for reacting to USB requests
->> will look as if it is a broken hardware.
-> 
-> Hm, so wdm_flush() is unable to finish unless an expected USB request
-> is received from the device? This is a bug in the wdm driver then.
+> https://bugzilla.kernel.org/show_bug.cgi?id=207877
 
-this specific bug report is caused by being unable to close /dev/cdc-wdm0
-due to /dev/raw-gadget API usage bug in the userspace process. In other words,
-this bug report should be closed with "#syz invalid" like a bug report at
-https://syzkaller.appspot.com/bug?id=287aa8708bc940d0ca1645223c53dd4c2d203be6
-which unexpectedly did ioctl(FIFREEZE) without corresponding ioctl(FITHAW).
+This doesn't look like a deadlock to me, at least, not a deadlock 
+involving the device reset code.
 
-> Should we use wait_event_interruptible() instead of wait_event() in
-> wdm_flush()?
+Your next step should be to collect a usbmon trace showing what happens 
+when the problem occurs.  See the instructions in 
+Documentation/usb/usbmon.rst.
 
-That only shadows this kind of bug reports, by not using TASK_UNINTERRUPTIBLE.
-
-The problem that the userspace process which is responsible for closing
-/dev/raw-gadget gets stuck at wdm_flush() unless interrupted by a signal
-when closing /dev/cdc-wdm0 is remaining. I think that a process should not
-open /dev/raw-gadget and /dev/cdc-wdm0 at the same time.
-
+Alan Stern
