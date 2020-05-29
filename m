@@ -2,93 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17CCA1E8900
-	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2020 22:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FFED1E88F3
+	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2020 22:33:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728216AbgE2Uhl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 May 2020 16:37:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41588 "EHLO
+        id S1728237AbgE2Udc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 May 2020 16:33:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727024AbgE2Uhk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 May 2020 16:37:40 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3ACC08C5C8;
-        Fri, 29 May 2020 13:29:35 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id j10so5331839wrw.8;
-        Fri, 29 May 2020 13:29:35 -0700 (PDT)
+        with ESMTP id S1728129AbgE2Ud1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 May 2020 16:33:27 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD88C08C5CB;
+        Fri, 29 May 2020 13:33:27 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id p30so451530pgl.11;
+        Fri, 29 May 2020 13:33:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fB9V5yxTdl0Y/SF+tmGL/MfOvt9Ppi9fS3wB0UgNJoE=;
-        b=rCQNkS8yjDJzrS7pJTvKxijntbCHM+wtCfEaW70MRgTQZcE93bQjqXxUAMMZQTQ4dF
-         NJIVfw2kJXfifp2KRfeit0A/IkNuxYClReH9mDJJ9J2pWp9XRMHleFN7xDnQHC3PEaQa
-         L82TA1QkWnjGpApa5UgMKwcB6wP4An8jw87+R5ySqS0FGhD7zqcajk7AM8mRA+YBh19t
-         RchB++kI38hn9G1L9hqq1ogTRCN4HmmLpvQRyqhWwbDpQnv5YAY89Zh7vSYTLkWiSSr0
-         REhO/TgnrMN4QCbbiYHHovvCsTXXmQm6W3In5vCJlOweP09O8Oxmvl4eJADUhyLdg8xI
-         uwHg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=SFmuSEf0AGpMxKm8V34s/d7k2oUKvRzQXSbrrQduN4k=;
+        b=LM1dPShEli098FLDwnYhkV+0T2hp8Uwz984pm/7QF4xIByrHV/6bRnEvoAL59nx1Ek
+         lWt+92RZtwue8pHMoXS1yN+So60GTR+wtRgKzqimp6JhUQh5KqHa3Ua6JmfMF3CBeBr5
+         diK6yJrOHUfwiH73ui1MfXPWaPbTfpxf/fax8XLb0eUt7cGij5ikAlfVmZ7sq1Hvci0Y
+         aR6v3w1jLkXzvQpnO2aN++0QYGOqFRmvQhxXxewrF/mvOA5SoA6P/lkAtCjlS8ofUFEj
+         UlEFtEezp3VpUT4O7+AWbEzELarcEbG2x2xzqWgAvuuHj4llEenZvcM23PkOV+1tIQze
+         ucQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fB9V5yxTdl0Y/SF+tmGL/MfOvt9Ppi9fS3wB0UgNJoE=;
-        b=t2dxBHE4upIYKtEgBL5HuncOmFeaUM9eL5HIrkaU1h2d10tlhTqVxkJRrbMIYnR0Bx
-         drhxOZU3TqbZqMS82Ndf9aNOhQEsQbqbuz2d1n64qQWXF62dLuu/aBWA8bXgLJ/GLTqK
-         WGF+Cpho5WBH8WSVIyxOdmUpwzS5F4UPG2LCz4Z9tf3SSvPQinrMuKV7S1e1+UnWOC8G
-         poJfPYP3OyrbxVY4A3raK2vIZ92GUss1qHsjwW0jN6BnuOIpck/MovDT5CZ/H4rFs+pe
-         1D/JDZZSLtRZMPkqEFbzhoGGa9PtyaW5OIwVMIZJ6vDgU+NsaTeyLSHVxAGdpu369Hi3
-         Ia+Q==
-X-Gm-Message-State: AOAM5300cf0ba28lsTCgokr2q4YjEd1GJBX5AehSb2P12EG5sMf1cLuP
-        4G5f9ylIxgg34nXj2iS5j4kOL2eL+72XtiCpDcY=
-X-Google-Smtp-Source: ABdhPJwgvaCDlsEU6b6VHl1zt74QkOXIGbiWzt0svEVrnCthWkVj8mjupMJyZKpmiXt1gRk90beRtWHllU7oXod90Hk=
-X-Received: by 2002:adf:ef47:: with SMTP id c7mr11084863wrp.57.1590784174030;
- Fri, 29 May 2020 13:29:34 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=SFmuSEf0AGpMxKm8V34s/d7k2oUKvRzQXSbrrQduN4k=;
+        b=SRBKOYXItjhI9kYt5S4U126y1Ng9q849l7qPQ1EbdIpubfOjrmoHObbhfFForReJOb
+         Zgx1CQX2gTSw6uPqq0TRb3ZTYdKNjMrpZoI46yasNddWvOfVuvmsYJII8XRBNChfYO+Q
+         kAenGZJ/BHtIhghxX2qkzZFvsR6yj04GxGP6h8RHW5+r9faFI/Ys6NgJTK9IIy0yv77l
+         SkMWW8nwLOWbjXWujS7s1hhf6kjEDyQ6zxe6f1uEQx9eyEEBRE8FilRENEPjGmBC7MLW
+         GVoXNlmKBhm0wn6TO6Wkq0D6kBuqjq1B0qVOS7KW2m3FaDqscRb/mME6NsHD2YsH+hTN
+         p4Ow==
+X-Gm-Message-State: AOAM532l8UGnsJInUYgwEyByw9WekEiCMrGYzgEwB25MlG8OZCjVd/S4
+        cif9YDcTnBSJ+YioDLCH5ZI9oNSf
+X-Google-Smtp-Source: ABdhPJzhaSX/OYtOM2+g4EKqdUmnyU/S1XaNnapVtdvqpdgjvRfde7Y1l6mMzph3FlWapk0JPV+aRQ==
+X-Received: by 2002:aa7:8c44:: with SMTP id e4mr10221335pfd.108.1590784406650;
+        Fri, 29 May 2020 13:33:26 -0700 (PDT)
+Received: from dtor-ws ([2620:15c:202:201:3c2a:73a9:c2cf:7f45])
+        by smtp.gmail.com with ESMTPSA id y4sm7834796pfn.101.2020.05.29.13.33.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 May 2020 13:33:26 -0700 (PDT)
+Date:   Fri, 29 May 2020 13:33:24 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        groeck@chromium.org, Nicolas Boichat <drinkcat@chromium.org>,
+        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] HID: usbhid: do not sleep when opening device
+Message-ID: <20200529203324.GL89269@dtor-ws>
+References: <20200529195951.GA3767@dtor-ws>
+ <20200529201424.GA180211@roeck-us.net>
 MIME-Version: 1.0
-References: <1d3bae1b3048f5d6e19f7ef569dd77e9e160a026.1590753016.git.hminas@synopsys.com>
- <CAD=FV=W1x_HJNCYMUb11QNA8yGs0heEiZzHZdeMPzFaRHaTOsA@mail.gmail.com>
- <0f6b1580-41d8-b7e7-206b-64cda87abfd5@synopsys.com> <CAD=FV=UCMqyX92o9m7H40E3sHzAFieHSu3TUY953VqNb-vuPPg@mail.gmail.com>
- <CAJz5OpfDnHfGf=dLbc0hTtaz-CERsQyaBNeqDiRz7u4jMywNow@mail.gmail.com>
- <CAD=FV=URUeE55xyL3iB5GmS7BRoDG2ey3UE4qSwwc7XZHR0c-Q@mail.gmail.com>
- <CAJz5OpdMDumfdYC+aj0N20p4qVEkEkHhNY3uKest6RSpPtrDWQ@mail.gmail.com>
- <CAD=FV=XsLA3w2QPcNF3-mgZbZoGsz4kg_QvHcoZV=XTVDYhnSg@mail.gmail.com>
- <20200529190031.GA2271@rowland.harvard.edu> <CAD=FV=UUULUgw_fnpbv2b-m8=CrOJimOba+ewRJj_hMB7niK1A@mail.gmail.com>
- <52f936c5-7f3f-5da0-33b8-3e6d4a4008d1@synopsys.com> <CAJz5OpcP860ANLLZELB7GNSsGAY2SvataZVAMyQj_HG0udkOmg@mail.gmail.com>
- <CAD=FV=VuX6pAtU+3-uXAJ8sXecbuiRNDj6RP36Xkyp-_G85-VA@mail.gmail.com> <f68ce0c2-7014-64ff-73e3-94d93897e3b2@synopsys.com>
-In-Reply-To: <f68ce0c2-7014-64ff-73e3-94d93897e3b2@synopsys.com>
-From:   Frank Mori Hess <fmh6jj@gmail.com>
-Date:   Fri, 29 May 2020 16:29:22 -0400
-Message-ID: <CAJz5OpfBfFhDODB+kL+uAGVgtg6vMTS9NPuu78zV8kEpozR_dA@mail.gmail.com>
-Subject: Re: [PATCH] usb: dwc2: Fix shutdown callback in platform
-To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Cc:     Doug Anderson <dianders@chromium.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        John Youn <John.Youn@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "# 4.0+" <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200529201424.GA180211@roeck-us.net>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Minas,
+On Fri, May 29, 2020 at 01:14:24PM -0700, Guenter Roeck wrote:
+> On Fri, May 29, 2020 at 12:59:51PM -0700, Dmitry Torokhov wrote:
+> > usbhid tries to give the device 50 milliseconds to drain its queues
+> > when opening the device, but does it naively by simply sleeping in open
+> > handler, which slows down device probing (and thus may affect overall
+> > boot time).
+> > 
+> > However we do not need to sleep as we can instead mark a point of time
+> > in the future when we should start processing the events.
+> > 
+> > Reported-by: Nicolas Boichat <drinkcat@chromium.org>
+> > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> > ---
+> >  drivers/hid/usbhid/hid-core.c | 27 +++++++++++++++------------
+> >  drivers/hid/usbhid/usbhid.h   |  1 +
+> >  2 files changed, 16 insertions(+), 12 deletions(-)
+> > 
+> > diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
+> > index c7bc9db5b192..e69992e945b2 100644
+> > --- a/drivers/hid/usbhid/hid-core.c
+> > +++ b/drivers/hid/usbhid/hid-core.c
+> > @@ -95,6 +95,19 @@ static int hid_start_in(struct hid_device *hid)
+> >  				set_bit(HID_NO_BANDWIDTH, &usbhid->iofl);
+> >  		} else {
+> >  			clear_bit(HID_NO_BANDWIDTH, &usbhid->iofl);
+> > +
+> > +			if (test_and_clear_bit(HID_RESUME_RUNNING,
+> > +					       &usbhid->iofl)) {
+> > +				/*
+> > +				 * In case events are generated while nobody was
+> > +				 * listening, some are released when the device
+> > +				 * is re-opened. Wait 50 msec for the queue to
+> > +				 * empty before allowing events to go through
+> > +				 * hid.
+> > +				 */
+> > +				usbhid->input_start_time = jiffies +
+> > +							   msecs_to_jiffies(50);
+> > +			}
+> >  		}
+> >  	}
+> >  	spin_unlock_irqrestore(&usbhid->lock, flags);
+> > @@ -280,7 +293,8 @@ static void hid_irq_in(struct urb *urb)
+> >  		if (!test_bit(HID_OPENED, &usbhid->iofl))
+> >  			break;
+> >  		usbhid_mark_busy(usbhid);
+> > -		if (!test_bit(HID_RESUME_RUNNING, &usbhid->iofl)) {
+> > +		if (!test_bit(HID_RESUME_RUNNING, &usbhid->iofl) &&
+> > +		    time_after(jiffies, usbhid->input_start_time)) {
+> >  			hid_input_report(urb->context, HID_INPUT_REPORT,
+> >  					 urb->transfer_buffer,
+> >  					 urb->actual_length, 1);
+> > @@ -714,17 +728,6 @@ static int usbhid_open(struct hid_device *hid)
+> >  	}
+> >  
+> >  	usb_autopm_put_interface(usbhid->intf);
+> > -
+> > -	/*
+> > -	 * In case events are generated while nobody was listening,
+> > -	 * some are released when the device is re-opened.
+> > -	 * Wait 50 msec for the queue to empty before allowing events
+> > -	 * to go through hid.
+> > -	 */
+> > -	if (res == 0)
+> > -		msleep(50);
+> > -
+> Can you just set usbhid->input_start_time here ?
+> 	if (res == 0)
+> 		usbhid->input_start_time = jiffies + msecs_to_jiffies(50);
+> 	clear_bit(HID_RESUME_RUNNING, &usbhid->iofl);
+> 
+> Then you might not need the added code in hid_start_in().
 
-On Fri, May 29, 2020 at 3:50 PM Minas Harutyunyan
-<Minas.Harutyunyan@synopsys.com> wrote:
->
-> Can you test it on your setup and confirm (to keep "Tested-by: Frank.."
-> tag).
->
+That was my first version, but if hid_start_in() fails we start a timer
+and try to retry the IO (and the "res" in 0 in this case). And we want
+to mark the time only after we successfully submitted the interrupt URB,
+that is why the code is in hid_start_in().
 
-I just tested the
-
-dwc2_disable_global_interrupts(hsotg);
-synchronize_irq(hsotg->irq);
-
-version of dwc2 shutdown, and booting a new kernel with kexec worked
-fine for me.
+Thanks.
 
 -- 
-Frank
+Dmitry
