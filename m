@@ -2,35 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 415ED1E7A5F
-	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2020 12:18:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92E391E7A63
+	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2020 12:19:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726518AbgE2KSi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 May 2020 06:18:38 -0400
-Received: from mga17.intel.com ([192.55.52.151]:49118 "EHLO mga17.intel.com"
+        id S1726638AbgE2KTd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 May 2020 06:19:33 -0400
+Received: from mga18.intel.com ([134.134.136.126]:17495 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725601AbgE2KSg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 29 May 2020 06:18:36 -0400
-IronPort-SDR: ETa6gR+agrp6g6RZS+BFCSsgcoPZZgZiN0QJsq64qBSs4WunF8FgP3odj9fN3AyqurqQ0/T2fe
- +/kTVtIfUyTg==
+        id S1725601AbgE2KTc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 29 May 2020 06:19:32 -0400
+IronPort-SDR: G0ilslkRleULuCCkpUrbu0OY+s8gV1Mf4RDvK+SqWwla4f+08lE9uE0XdDo1FILjzRbRLubVK2
+ q9NPu8TmHYgw==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2020 03:18:36 -0700
-IronPort-SDR: dpS9Bo0qzdohMnLae5/uOFKidZLrAG0mK9TXVtY22ec3VWjQbZBPbHVwNWeMXCyWWsCTu8ijC1
- Y+sRj4t5XMmw==
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2020 03:19:32 -0700
+IronPort-SDR: MDsWzSndoUmBznLSdTHdF1K/DjFIbKpuk8ko7vlL3gzb84aV2+73SbKwp73jBcFk2LovPUGcas
+ OzHjIAfw8c5A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,448,1583222400"; 
-   d="scan'208";a="414930000"
+   d="scan'208";a="414930425"
 Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga004.jf.intel.com with ESMTP; 29 May 2020 03:18:33 -0700
-Subject: Re: [PATCH v2 4/9] usb: host: xhci-plat: add platform data support
+  by orsmga004.jf.intel.com with ESMTP; 29 May 2020 03:19:29 -0700
+Subject: Re: [PATCH v2 5/9] usb: host: xhci-plat: add .suspend_quirk for
+ struct xhci_plat_priv
 To:     Peter Chen <peter.chen@nxp.com>, balbi@kernel.org,
         mathias.nyman@intel.com
 Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com, pawell@cadence.com,
         rogerq@ti.com, gregkh@linuxfoundation.org, jun.li@nxp.com
 References: <20200523232304.23976-1-peter.chen@nxp.com>
- <20200523232304.23976-5-peter.chen@nxp.com>
+ <20200523232304.23976-6-peter.chen@nxp.com>
 From:   Mathias Nyman <mathias.nyman@linux.intel.com>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
@@ -75,12 +76,12 @@ Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
  Gjynb3sXforM/GVbr4mnuxTdLXQYlj2EJ4O4f0tkLlADT7podzKSlSuZsLi2D+ohKxtP3U/r
  42i8PBnX2oAV0UIkYk7Oel/3hr0+BP666SnTls9RJuoXc7R5XQVsomqXID6GmjwFQR5Wh/RE
  IJtkiDAsk37cfZ9d1kZ2gCQryTV9lmflSOB6AFZkOLuEVSC5qW8M/s6IGDfYXN12YJaZPptJ fiD/
-Message-ID: <8d65e965-3562-8783-a8ea-57100e871359@linux.intel.com>
-Date:   Fri, 29 May 2020 13:21:30 +0300
+Message-ID: <5186b29a-34ea-5317-1c35-4a4c3390809e@linux.intel.com>
+Date:   Fri, 29 May 2020 13:22:27 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20200523232304.23976-5-peter.chen@nxp.com>
+In-Reply-To: <20200523232304.23976-6-peter.chen@nxp.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -89,33 +90,72 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 24.5.2020 2.22, Peter Chen wrote:
-> Some xhci hosts (eg dwc3 and cdns3) do not use OF to create
-> platform device, they create xhci-plat platform device runtime.
-> And these platforms may also have quirks, and the quirks could
-> be supplied by their parent device through platform data.
+On 24.5.2020 2.23, Peter Chen wrote:
+> Some platforms (eg cdns3) may have special sequences between
+> xhci_bus_suspend and xhci_suspend, add .suspend_quick for it.
 > 
 > Signed-off-by: Peter Chen <peter.chen@nxp.com>
 > ---
->  drivers/usb/host/xhci-plat.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+>  drivers/usb/host/xhci-plat.c | 19 +++++++++++++++++++
+>  drivers/usb/host/xhci-plat.h |  1 +
+>  2 files changed, 20 insertions(+)
 > 
 > diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-> index f6b4089bfc4a..38bea2b6a17d 100644
+> index 38bea2b6a17d..51e20464fe0a 100644
 > --- a/drivers/usb/host/xhci-plat.c
 > +++ b/drivers/usb/host/xhci-plat.c
-> @@ -264,7 +264,11 @@ static int xhci_plat_probe(struct platform_device *pdev)
->  	if (ret)
->  		goto disable_reg_clk;
+> @@ -54,6 +54,16 @@ static int xhci_priv_init_quirk(struct usb_hcd *hcd)
+>  	return priv->init_quirk(hcd);
+>  }
 >  
-> -	priv_match = of_device_get_match_data(&pdev->dev);
-> +	if (pdev->dev.of_node)
-> +		priv_match = of_device_get_match_data(&pdev->dev);
-> +	else
-> +		priv_match = dev_get_platdata(&pdev->dev);
+> +static int xhci_priv_suspend_quirk(struct usb_hcd *hcd)
+> +{
+> +	struct xhci_plat_priv *priv = hcd_to_xhci_priv(hcd);
 > +
->  	if (priv_match) {
->  		struct xhci_plat_priv *priv = hcd_to_xhci_priv(hcd);
+> +	if (!priv->suspend_quirk)
+> +		return 0;
+> +
+> +	return priv->suspend_quirk(hcd);
+> +}
+> +
+>  static int xhci_priv_resume_quirk(struct usb_hcd *hcd)
+>  {
+>  	struct xhci_plat_priv *priv = hcd_to_xhci_priv(hcd);
+> @@ -401,7 +411,11 @@ static int __maybe_unused xhci_plat_suspend(struct device *dev)
+>  {
+>  	struct usb_hcd	*hcd = dev_get_drvdata(dev);
+>  	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
+> +	int ret;
+>  
+> +	ret = xhci_priv_suspend_quirk(hcd);
+> +	if (ret)
+> +		return ret;
+>  	/*
+>  	 * xhci_suspend() needs `do_wakeup` to know whether host is allowed
+>  	 * to do wakeup during suspend. Since xhci_plat_suspend is currently
+> @@ -438,6 +452,11 @@ static int __maybe_unused xhci_plat_runtime_suspend(struct device *dev)
+>  {
+>  	struct usb_hcd  *hcd = dev_get_drvdata(dev);
+>  	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
+> +	int ret;
+> +
+> +	ret = xhci_priv_suspend_quirk(hcd);
+> +	if (ret)
+> +		return ret;
+>  
+>  	return xhci_suspend(xhci, true);
+>  }
+> diff --git a/drivers/usb/host/xhci-plat.h b/drivers/usb/host/xhci-plat.h
+> index b49f6447bd3a..1fb149d1fbce 100644
+> --- a/drivers/usb/host/xhci-plat.h
+> +++ b/drivers/usb/host/xhci-plat.h
+> @@ -15,6 +15,7 @@ struct xhci_plat_priv {
+>  	unsigned long long quirks;
+>  	void (*plat_start)(struct usb_hcd *);
+>  	int (*init_quirk)(struct usb_hcd *);
+> +	int (*suspend_quirk)(struct usb_hcd *);
+>  	int (*resume_quirk)(struct usb_hcd *);
+>  };
 >  
 > 
 
