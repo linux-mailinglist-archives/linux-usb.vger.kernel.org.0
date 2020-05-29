@@ -2,96 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C8361E7991
-	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2020 11:40:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68C071E7A27
+	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2020 12:12:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725914AbgE2Jkg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 May 2020 05:40:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52080 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725795AbgE2Jkf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 May 2020 05:40:35 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 360EAC08C5C6
-        for <linux-usb@vger.kernel.org>; Fri, 29 May 2020 02:40:34 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id k5so1772606lji.11
-        for <linux-usb@vger.kernel.org>; Fri, 29 May 2020 02:40:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=XYgoBNG3u7MmHcrZN5HXjjH/JoLdor7MyEPJB2j2iqQ=;
-        b=mN7wxYWFtiEXsqCYZ8PexRy0UFfkx3w+iBz22p14IHkPjMc1w5sk/YEI3w3kIdovHB
-         orzh6wrKdQq+AYmc6AaLXOiJQvpReyZ0ATGqyhUcNswXlhQKeCbFEVNn/GpTGBT7Huck
-         vruzAVPV2z8aoQ6uBCXrINGrNNMImOTPvNFLy9CUiaZM9Y77cpSrAeuiE9Hy3O5wTM+v
-         2pDssfxnnJu2e0TXOf8WwFDxlKiA0drKjK2ta0h0j1GtnibMmy39evqD2h0FDla1ob4P
-         a3YfWpgiWIdlZk5A/8e6PKenVpUXQQBtQfQrlRYaIiWkCoLTvoeUiceDr1xGGOSnAjQf
-         tYwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=XYgoBNG3u7MmHcrZN5HXjjH/JoLdor7MyEPJB2j2iqQ=;
-        b=CxAikmsmVK9lr+zXHVRePJ5f8Gcp2GFcBQliXwDxGaCOTQio3s3PyN8ATJ1rvSfMAv
-         OxLFnJIDOUsQUF5JqF1dU+hOoESyUAwL3WQs29e7MePlDvqZ/A84GiicPZdSkoDX/YGE
-         OuPJMvZYFbN6dqCtdIxJ+RU6iFzU5O8g3Dt/52O1elOT5XFYjvVRvIwJ8xKWQiEDlorg
-         Dtdp5z5O38t9kXsQ9Gn0AIYbw0VUpjW4UJToVJia7p13z+Rg4ypmN1l2A5nWDdOzPiET
-         edkxA5UCe113VfRvi6WsMdpj6Rho3QUgObqxkya/maI9q17Ppa9IuMubmP/cKgQWp42G
-         uUCQ==
-X-Gm-Message-State: AOAM532SAdYQnf+bAXKkHurtWNZuT9DMyf2/rLtdge6fzUTSZ8d/cJVU
-        mgtcOHTqaqQypoaWfQisqTIK1e/aN0gAobdqYTg=
-X-Google-Smtp-Source: ABdhPJxr8IKkzffKja8ROiIisXSHnlBbrLbbU7U5WhZka4EZbkv1H77JeCz/WwXzwMRHZGQVTpKDQN2xAEyztaBRKB8=
-X-Received: by 2002:a2e:b889:: with SMTP id r9mr3886845ljp.92.1590745232510;
- Fri, 29 May 2020 02:40:32 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a2e:d0a:0:0:0:0:0 with HTTP; Fri, 29 May 2020 02:40:31 -0700 (PDT)
-From:   Donna Louise <dlouisemclnnes@gmail.com>
-Date:   Fri, 29 May 2020 02:40:31 -0700
-X-Google-Sender-Auth: GEGD8l4MpCKANi9JM4ekX7kZboI
-Message-ID: <CAKEaK75F1bF13p6FNt5ADKNerk_GsLj+5HOaJ0a5RzXs25KucQ@mail.gmail.com>
-Subject: HELLO,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S1726792AbgE2KMT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 May 2020 06:12:19 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:45860 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726629AbgE2KMS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 May 2020 06:12:18 -0400
+Received: from mailhost.synopsys.com (mdc-mailhost1.synopsys.com [10.225.0.209])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 7A4CC40914;
+        Fri, 29 May 2020 10:12:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1590747138; bh=J1cOrJZusMLst7lsrpeM8Ti16IstZnIDLZV0EfLRdk4=;
+        h=Date:From:Subject:To:Cc:From;
+        b=DVoREkJihGPojAPCB1lSC6dXWgfZ4Q3Im8mCFLTRJvq6Ew1//poeGpOgtjEdZx0Ri
+         M/ZP9tQn12Z5ZaNxWCzaLBBKE6WMTfAhgyy1+7HLlTraguzMuICBuFtN2J+huYrTEC
+         dPujya3Che5W6L/PSgTZPz3DIYiTHhTIM8UQXS93d8FQfO0hExP36IkE1HH+KmUCdu
+         oeJGOPCtC15GEcpZ3zd0PabHvZk593aN/rjUmyRNy2zOY9fT68d9y70c77SIH5GkJ7
+         raLbQWS7hlyoARlZThm5Lhhv0ARmQ+HTxY+5KYrpmIfMuN9GpcSHcY4d1CABIp9OXK
+         7l+2IdcpgT5aw==
+Received: from hminas-z420 (hminas-z420.internal.synopsys.com [10.116.126.211])
+        (using TLSv1 with cipher AES128-SHA (128/128 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id EC43CA005B;
+        Fri, 29 May 2020 10:12:12 +0000 (UTC)
+Received: by hminas-z420 (sSMTP sendmail emulation); Fri, 29 May 2020 14:12:11 +0400
+Date:   Fri, 29 May 2020 14:12:11 +0400
+Message-Id: <137e787bf7c7935bda3358c8f07230d3f4998fad.1590745119.git.hminas@synopsys.com>
+X-SNPS-Relay: synopsys.com
+From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Subject: [PATCH] usb: dwc2: Postponed gadget registration to the udc class driver
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        Paul Zimmerman <paulz@synopsys.com>, linux-usb@vger.kernel.org,
+        Felipe Balbi <balbi@ti.com>,
+        Dinh Nguyen <dinguyen@opensource.altera.com>
+Cc:     John Youn <John.Youn@synopsys.com>, stable@vger.kernel.org,
+        Marek Vasut <marex@denx.de>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Cordial Greetings Dear Friend,
+During dwc2 driver probe, after gadget registration to the udc class
+driver, if exist any builtin function driver it immediately bound to
+dwc2 and after init host side (dwc2_hcd_init()) stucked in host mode.
+Patch postpone gadget registration after host side initialization done.
 
-How are you today? With hope you are found in good condition of
-health, together with your beloved family? My Dear, this is the second
-time I am sending the same message to you, because I need your urgent
-assistance. My names are Mrs. Donna Louise, a widow and I=E2=80=99m diagnos=
-ed
-with brain tumor disease and this illness has gotten to a very bad
-stage, without any family members and no child. I hope that you will
-not expose or betray this trust and confidence that I am about to
-entrust to you for the mutual benefit of the orphans and the less
-privileged ones. I have some funds I inherited from my late husband,
-the sum of ($ 8.450.000.00 Eight Million Four Hundred and Fifty
-Thousand Dollars) deposited with the Bank. Haven=E2=80=99t   known my prese=
-nt
-health condition, I decided to entrust this fund under your custody
-believing that you will utilize it the way i am going to instruct
-herein, for orphanages and gives justice and help to the poor, needy,
-elderly ones, disables and to promote the words of God and the effort
-that the house of God will be maintained.
+Cc: stable@vger.kernel.org
+Fixes: 117777b2c3bb9 ("usb: dwc2: Move gadget probe function into
+platform code")
+Tested-by: Marek Vasut <marex@denx.de>
 
-Please all I need and required from you is your sincerity and ability
-to carry out the transaction and fulfill my final wish in implementing
-the charitable project as it requires absolute trust and devotion
-without any failure and I will be glad to see that the bank has
-finally release and transfer the fund into your bank account in your
-country even before I die here in the hospital, because my present
-health condition is very critical at the moment everything need to be
-process rapidly as soon as possible.
-Meanwhile it will be my pleasure to compensate you as my Investment
-Manager/Partner with 30% percent of the total money for your effort in
-handling the transaction while 70% of the money will be invested into
-the charity project there in your country. Meanwhile I am waiting for
-your prompt response, if only you are interested for further details
-of the transaction.
+Signed-off-by: Minas Harutyunyan <hminas@synopsys.com>
+---
+ drivers/usb/dwc2/gadget.c   | 6 ------
+ drivers/usb/dwc2/platform.c | 9 +++++++++
+ 2 files changed, 9 insertions(+), 6 deletions(-)
 
-Sincerely yours beloved Sister in Christ Mrs. Donna Louise.
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index 12b98b466287..7faf5f8c056d 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -4920,12 +4920,6 @@ int dwc2_gadget_init(struct dwc2_hsotg *hsotg)
+ 					  epnum, 0);
+ 	}
+ 
+-	ret = usb_add_gadget_udc(dev, &hsotg->gadget);
+-	if (ret) {
+-		dwc2_hsotg_ep_free_request(&hsotg->eps_out[0]->ep,
+-					   hsotg->ctrl_req);
+-		return ret;
+-	}
+ 	dwc2_hsotg_dump(hsotg);
+ 
+ 	return 0;
+diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
+index e571c8ae65ec..6b4043117e97 100644
+--- a/drivers/usb/dwc2/platform.c
++++ b/drivers/usb/dwc2/platform.c
+@@ -575,6 +575,15 @@ static int dwc2_driver_probe(struct platform_device *dev)
+ 	if (hsotg->dr_mode == USB_DR_MODE_PERIPHERAL)
+ 		dwc2_lowlevel_hw_disable(hsotg);
+ 
++	/* Postponed adding a new gadget to the udc class driver list */
++	if (hsotg->gadget_enabled) {
++		retval = usb_add_gadget_udc(hsotg->dev, &hsotg->gadget);
++		if (retval) {
++			dwc2_hsotg_remove(hsotg);
++			goto error_init;
++		}
++	}
++
+ 	return 0;
+ 
+ error_init:
+-- 
+2.11.0
+
