@@ -2,87 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F28171E88DC
-	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2020 22:27:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17CCA1E8900
+	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2020 22:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728074AbgE2U1e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 May 2020 16:27:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40036 "EHLO
+        id S1728216AbgE2Uhl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 May 2020 16:37:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726926AbgE2U1e (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 May 2020 16:27:34 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0137C03E969;
-        Fri, 29 May 2020 13:27:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=zPMXHGinvpmbOO2uHJoJ8DYwUQB9G7uW/4dEVS7cJ0I=; b=XqOxZivMEezkHFFqWL9Ubo1yCp
-        jYuOb6sadXa65JFn7RehjWvI6opK1yjZQNHP+FDKbzLYVhzNUNA0D7wftRwkHW+pgbPcxnB0sEqaL
-        sJhErbLN7ury7gOpdmM/R/bMc1mCd5cQQnOMfSMcdISKzShPzjyGTcZUh+Ep89jaovMmp1tWEn9ct
-        kRirdyfCQoBe/cDzS1Xc/MQRw4h5hxdPUopYIEJ0glXskivBMitIDKEJj39t9CkkbIZdGp+f9dJXh
-        +2HTf7n8uxWwyxrZuZN981ukwk2fuHPhi1ap6J+VubHIq6FfJrVSsQf4pMRUdII6H59MXDlDUQOJd
-        a14fe67A==;
-Received: from willy by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jelaz-0008Ci-I1; Fri, 29 May 2020 20:27:13 +0000
-Date:   Fri, 29 May 2020 13:27:13 -0700
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Kaitao Cheng <pilgrimtao@gmail.com>
-Cc:     axboe@kernel.dk, hch@lst.de, sth@linux.ibm.com,
-        viro@zeniv.linux.org.uk, clm@fb.com, jaegeuk@kernel.org,
-        hch@infradead.org, mark@fasheh.com, dhowells@redhat.com,
-        balbi@kernel.org, damien.lemoal@wdc.com, bvanassche@acm.org,
-        ming.lei@redhat.com, martin.petersen@oracle.com, satyat@google.com,
-        chaitanya.kulkarni@wdc.com, houtao1@huawei.com,
-        asml.silence@gmail.com, ajay.joshi@wdc.com,
-        linux-kernel@vger.kernel.org, songmuchun@bytedance.com,
-        hoeppner@linux.ibm.com, heiko.carstens@de.ibm.com,
-        gor@linux.ibm.com, borntraeger@de.ibm.com,
-        linux-s390@vger.kernel.org, sagi@grimberg.me,
-        linux-nvme@lists.infradead.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, chao@kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, darrick.wong@oracle.com,
-        linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
-        ocfs2-devel@oss.oracle.com, deepa.kernel@gmail.com
-Subject: Re: [PATCH v2] blkdev: Replace blksize_bits() with ilog2()
-Message-ID: <20200529202713.GC19604@bombadil.infradead.org>
-References: <20200529141100.37519-1-pilgrimtao@gmail.com>
+        with ESMTP id S1727024AbgE2Uhk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 May 2020 16:37:40 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3ACC08C5C8;
+        Fri, 29 May 2020 13:29:35 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id j10so5331839wrw.8;
+        Fri, 29 May 2020 13:29:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fB9V5yxTdl0Y/SF+tmGL/MfOvt9Ppi9fS3wB0UgNJoE=;
+        b=rCQNkS8yjDJzrS7pJTvKxijntbCHM+wtCfEaW70MRgTQZcE93bQjqXxUAMMZQTQ4dF
+         NJIVfw2kJXfifp2KRfeit0A/IkNuxYClReH9mDJJ9J2pWp9XRMHleFN7xDnQHC3PEaQa
+         L82TA1QkWnjGpApa5UgMKwcB6wP4An8jw87+R5ySqS0FGhD7zqcajk7AM8mRA+YBh19t
+         RchB++kI38hn9G1L9hqq1ogTRCN4HmmLpvQRyqhWwbDpQnv5YAY89Zh7vSYTLkWiSSr0
+         REhO/TgnrMN4QCbbiYHHovvCsTXXmQm6W3In5vCJlOweP09O8Oxmvl4eJADUhyLdg8xI
+         uwHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fB9V5yxTdl0Y/SF+tmGL/MfOvt9Ppi9fS3wB0UgNJoE=;
+        b=t2dxBHE4upIYKtEgBL5HuncOmFeaUM9eL5HIrkaU1h2d10tlhTqVxkJRrbMIYnR0Bx
+         drhxOZU3TqbZqMS82Ndf9aNOhQEsQbqbuz2d1n64qQWXF62dLuu/aBWA8bXgLJ/GLTqK
+         WGF+Cpho5WBH8WSVIyxOdmUpwzS5F4UPG2LCz4Z9tf3SSvPQinrMuKV7S1e1+UnWOC8G
+         poJfPYP3OyrbxVY4A3raK2vIZ92GUss1qHsjwW0jN6BnuOIpck/MovDT5CZ/H4rFs+pe
+         1D/JDZZSLtRZMPkqEFbzhoGGa9PtyaW5OIwVMIZJ6vDgU+NsaTeyLSHVxAGdpu369Hi3
+         Ia+Q==
+X-Gm-Message-State: AOAM5300cf0ba28lsTCgokr2q4YjEd1GJBX5AehSb2P12EG5sMf1cLuP
+        4G5f9ylIxgg34nXj2iS5j4kOL2eL+72XtiCpDcY=
+X-Google-Smtp-Source: ABdhPJwgvaCDlsEU6b6VHl1zt74QkOXIGbiWzt0svEVrnCthWkVj8mjupMJyZKpmiXt1gRk90beRtWHllU7oXod90Hk=
+X-Received: by 2002:adf:ef47:: with SMTP id c7mr11084863wrp.57.1590784174030;
+ Fri, 29 May 2020 13:29:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200529141100.37519-1-pilgrimtao@gmail.com>
+References: <1d3bae1b3048f5d6e19f7ef569dd77e9e160a026.1590753016.git.hminas@synopsys.com>
+ <CAD=FV=W1x_HJNCYMUb11QNA8yGs0heEiZzHZdeMPzFaRHaTOsA@mail.gmail.com>
+ <0f6b1580-41d8-b7e7-206b-64cda87abfd5@synopsys.com> <CAD=FV=UCMqyX92o9m7H40E3sHzAFieHSu3TUY953VqNb-vuPPg@mail.gmail.com>
+ <CAJz5OpfDnHfGf=dLbc0hTtaz-CERsQyaBNeqDiRz7u4jMywNow@mail.gmail.com>
+ <CAD=FV=URUeE55xyL3iB5GmS7BRoDG2ey3UE4qSwwc7XZHR0c-Q@mail.gmail.com>
+ <CAJz5OpdMDumfdYC+aj0N20p4qVEkEkHhNY3uKest6RSpPtrDWQ@mail.gmail.com>
+ <CAD=FV=XsLA3w2QPcNF3-mgZbZoGsz4kg_QvHcoZV=XTVDYhnSg@mail.gmail.com>
+ <20200529190031.GA2271@rowland.harvard.edu> <CAD=FV=UUULUgw_fnpbv2b-m8=CrOJimOba+ewRJj_hMB7niK1A@mail.gmail.com>
+ <52f936c5-7f3f-5da0-33b8-3e6d4a4008d1@synopsys.com> <CAJz5OpcP860ANLLZELB7GNSsGAY2SvataZVAMyQj_HG0udkOmg@mail.gmail.com>
+ <CAD=FV=VuX6pAtU+3-uXAJ8sXecbuiRNDj6RP36Xkyp-_G85-VA@mail.gmail.com> <f68ce0c2-7014-64ff-73e3-94d93897e3b2@synopsys.com>
+In-Reply-To: <f68ce0c2-7014-64ff-73e3-94d93897e3b2@synopsys.com>
+From:   Frank Mori Hess <fmh6jj@gmail.com>
+Date:   Fri, 29 May 2020 16:29:22 -0400
+Message-ID: <CAJz5OpfBfFhDODB+kL+uAGVgtg6vMTS9NPuu78zV8kEpozR_dA@mail.gmail.com>
+Subject: Re: [PATCH] usb: dwc2: Fix shutdown callback in platform
+To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Cc:     Doug Anderson <dianders@chromium.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        John Youn <John.Youn@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "# 4.0+" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 29, 2020 at 10:11:00PM +0800, Kaitao Cheng wrote:
-> There is a function named ilog2() exist which can replace blksize.
-> The generated code will be shorter and more efficient on some
-> architecture, such as arm64. And ilog2() can be optimized according
-> to different architecture.
+Hi Minas,
 
-We'd get the same benefit from a smaller patch with just:
+On Fri, May 29, 2020 at 3:50 PM Minas Harutyunyan
+<Minas.Harutyunyan@synopsys.com> wrote:
+>
+> Can you test it on your setup and confirm (to keep "Tested-by: Frank.."
+> tag).
+>
 
---- a/include/linux/blkdev.h
-+++ b/include/linux/blkdev.h
-@@ -1502,15 +1502,9 @@ static inline int blk_rq_aligned(struct request_queue *q, unsigned long addr,
- 	return !(addr & alignment) && !(len & alignment);
- }
- 
--/* assumes size > 256 */
- static inline unsigned int blksize_bits(unsigned int size)
- {
--	unsigned int bits = 8;
--	do {
--		bits++;
--		size >>= 1;
--	} while (size > 256);
--	return bits;
-+	return ilog2(size);
- }
- 
- static inline unsigned int block_size(struct block_device *bdev)
+I just tested the
+
+dwc2_disable_global_interrupts(hsotg);
+synchronize_irq(hsotg->irq);
+
+version of dwc2 shutdown, and booting a new kernel with kexec worked
+fine for me.
+
+-- 
+Frank
