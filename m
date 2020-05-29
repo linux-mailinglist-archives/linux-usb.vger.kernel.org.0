@@ -2,149 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 160441E76AA
-	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2020 09:31:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D69311E76F8
+	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2020 09:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725855AbgE2Hba (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 May 2020 03:31:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60142 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725839AbgE2Hb3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 May 2020 03:31:29 -0400
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE53C08C5C6
-        for <linux-usb@vger.kernel.org>; Fri, 29 May 2020 00:31:29 -0700 (PDT)
-Received: by mail-ed1-x543.google.com with SMTP id e10so991119edq.0
-        for <linux-usb@vger.kernel.org>; Fri, 29 May 2020 00:31:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=S8w6KpJa6E9P3Ab5+H5KQT60Yf2q4h8XKjA9OR105Sg=;
-        b=uznq6OJA/q3HCkyJi+aENaj+slkF142Y4qd6bKwahLVoljTUH/eXUO9j2Makytl9ZI
-         9VYwuIcKYfgkg2vdXJoht3e3ArD59/jNs++3kbWYCDTibRAt2ZKd5fQizJgMAuRAvHi+
-         EE/O+lmXcPjGwy1pErLYrgxeyd+Um7ajvOCpwP3OhUjhx5R0HCXodIaITiwZQ03JGhi0
-         Kvgh0/pl5JLowMchHEnkxAmHb6mf+xuQ+AVORMCt909UgVvsTTdlmbeAsigjZjQO7XjG
-         M79HLWb0cwL3Y55qHLGlKRITzrg08ON/S8HKJD9U7eld9A2XKIdHFeROC+BeSfVbfNnX
-         32Xw==
+        id S1726910AbgE2Hii (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 May 2020 03:38:38 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:40185 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726911AbgE2Hid (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 May 2020 03:38:33 -0400
+Received: by mail-lf1-f67.google.com with SMTP id h188so706733lfd.7
+        for <linux-usb@vger.kernel.org>; Fri, 29 May 2020 00:38:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=S8w6KpJa6E9P3Ab5+H5KQT60Yf2q4h8XKjA9OR105Sg=;
-        b=PNqmadfV0Iqslmzu+acfZYLuy9hxC87kB5dFIQksCYnMlTE+7gvLStLYLTXzTPvJ9V
-         F88EX3kwy0E72u/phtJDY7v3/auY4EkaH0l80Is+LlqWwZGt+qka2SzKTjCC2STvuvyq
-         NODMNskeveEjYRTV6Zj2CYCKg054DkyBjYPhZBTE0sUCq4NZAEXI+pg9k8WMqt+19TiV
-         +cUmklkgJUFymC3zROlxrNRKegeka8dVQimC1OjgGwhvjU4Aq+n9900KLS8qLZKrmRAk
-         BFHG7jD/7+vPHPlKQXTiA8Xt8py4rw4W+voiNeDN/6HQHImolfzM3ba6Li7hkPm+vjjD
-         T/dg==
-X-Gm-Message-State: AOAM530cUdA/zrzqwYIYuuoovWnN+6Q/6vWstKYQe4aifaBUo7abOfUt
-        7KP1BAtRrkRObTRJQcKaeK5O7rTwPdGjISd8CtE=
-X-Google-Smtp-Source: ABdhPJxtAvQIQjF25xAdnM3/gFW0Qm1H3FGWBgG4WzlHsJ+IuK2NhqamppDOtutr3gWhM7y8NZRHQy1hBKsQHe1C0+s=
-X-Received: by 2002:a05:6402:690:: with SMTP id f16mr7178181edy.9.1590737488070;
- Fri, 29 May 2020 00:31:28 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=87nVU9CMosGJKROKHIZCpYZ7nI3dqzgw9mnVEWrPJbo=;
+        b=lwE/K6K9AqPwzn+eewb3pqd3iRUR32OPLIlORdeDzCSrIEX7KMbcVDXXJk+nu1bOAE
+         B1124ezxBSkf8x0g9hu1+ogLbzuzF9zwMP8PtoLMO8atn/V7Vd+sDTnCl8yD7s2oCJ/J
+         fD+rzDVRhz+/q00VFYwvkJ9AB78EHIc6MMD2dD9YVr6fn7n39QEU4hRfXMVbDztbD7+z
+         L6RexGZg1XqDVIlMiTFKDOKOrK8RzRRqbreVSdA3RHvq/UAQiOG+aMIwnHcgkybJOTjy
+         PS3LhFB1dOUiEhFEIkVJ1n8BBlYnGa6fZOETjmFteW4TgTxg0bL8zEopVE4+SqIQ6o9T
+         7e9g==
+X-Gm-Message-State: AOAM530uUxD/MGDo7q3zFM60EGOc+ahAcVFwRZYUp4r217p7CS3zoSfs
+        YWbQRVbZa8td9N2GugD77+AUVoEn
+X-Google-Smtp-Source: ABdhPJz0bieqLJDVZN4GwyCK21kP7mJZgq8TDy2upj8Na4NYWn/uQetJ98gw/4+5KN/SSoKvdQzgdA==
+X-Received: by 2002:ac2:5cd1:: with SMTP id f17mr3503115lfq.4.1590737910716;
+        Fri, 29 May 2020 00:38:30 -0700 (PDT)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id u20sm1849482ljk.103.2020.05.29.00.38.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 May 2020 00:38:30 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1jeZaz-0003ZB-Tw; Fri, 29 May 2020 09:38:25 +0200
+Date:   Fri, 29 May 2020 09:38:25 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB-serial fixes for 5.8-rc1-2
+Message-ID: <20200529073825.GA13677@localhost>
 MIME-Version: 1.0
-References: <CAAfyv37cFWsvoprz2jZ=jkdiTqxjPSYr_c6w5YYiaKWUe_-V1A@mail.gmail.com>
- <87v9kg1l9d.fsf@kernel.org> <CAAfyv349wRnYdxrq4ejLTcgOfyjBoDiv1SSv6LEinatE3rxffg@mail.gmail.com>
- <87sgfj1cid.fsf@kernel.org>
-In-Reply-To: <87sgfj1cid.fsf@kernel.org>
-From:   Belisko Marek <marek.belisko@gmail.com>
-Date:   Fri, 29 May 2020 09:31:17 +0200
-Message-ID: <CAAfyv34X-+s=MSSqP9G9_kz6eOSNKGPgNjKSRdFUet=PNQczKw@mail.gmail.com>
-Subject: Re: usb raw gadget impossible to sent buffer bigger than 3MB
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Linux USB Mailing List <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Hi Greg,
 
-On Fri, May 29, 2020 at 8:27 AM Felipe Balbi <balbi@kernel.org> wrote:
->
-> Belisko Marek <marek.belisko@gmail.com> writes:
->
-> > Hi,
-> > On Thu, May 28, 2020 at 11:06 AM Felipe Balbi <balbi@kernel.org> wrote:
-> >>
-> >>
-> >> Hi,
-> >>
-> >> Belisko Marek <marek.belisko@gmail.com> writes:
-> >> > we're using USB RAW gadget for communicating with PC application. We
-> >> > have created loopback test which send file (any size) from PC to
-> >> > device and then same data are sent back to PC to verify roundtrip time
-> >> > (using bulk data transfer). Everything works fine up to 3MB file size.
-> >> > If we sent bigger file like e.g. 5M we can receive file on device but
-> >> > when we want to write to output endpoint we got:
-> >> >
-> >> > WARNING: CPU: 0 PID: 12299 at /kernel-source//mm/page_alloc.c:3725
-> >> > __alloc_pages_nodemask+0x1b0/0xde4
-> >> > [<c010fa08>] (unwind_backtrace) from [<c010c45c>] (show_stack+0x20/0x24)
-> >> > [<c010c45c>] (show_stack) from [<c04cc0d4>] (dump_stack+0x20/0x28)
-> >> > [<c04cc0d4>] (dump_stack) from [<c01324ac>] (__warn+0xec/0x108)
-> >> > [<c01324ac>] (__warn) from [<c0132598>] (warn_slowpath_null+0x30/0x38)
-> >> > [<c0132598>] (warn_slowpath_null) from [<c021ccb8>]
-> >> > (__alloc_pages_nodemask+0x1b0/0xde4)
-> >> > [<c021ccb8>] (__alloc_pages_nodemask) from [<c023b888>]
-> >> > (kmalloc_order+0x2c/0x48)
-> >> > [<c023b888>] (kmalloc_order) from [<c023b8d0>] (kmalloc_order_trace+0x2c/0xd4)
-> >> > [<c023b8d0>] (kmalloc_order_trace) from [<c0261c24>] (__kmalloc+0x40/0x264)
-> >> > [<c0261c24>] (__kmalloc) from [<bf039bc4>] (ffs_epfile_io+0x13c/0x570
-> >> > [usb_f_fs])
-> >> > [<bf039bc4>] (ffs_epfile_io [usb_f_fs]) from [<bf03a0c0>]
-> >> > (ffs_epfile_write_iter+0xc8/0x120 [usb_f_fs])
-> >> > [<bf03a0c0>] (ffs_epfile_write_iter [usb_f_fs]) from [<c02734bc>]
-> >> > (new_sync_write+0xc8/0xec)
-> >> > [<c02734bc>] (new_sync_write) from [<c027351c>] (__vfs_write+0x3c/0x48)
-> >> > [<c027351c>] (__vfs_write) from [<c02749a0>] (vfs_write+0xcc/0x158)
-> >> > [<c02749a0>] (vfs_write) from [<c02756ac>] (SyS_write+0x50/0x88)
-> >> > [<c02756ac>] (SyS_write) from [<c0107a20>] (ret_fast_syscall+0x0/0x54)
-> >> > ---[ end trace fe5f79fe415b9881 ]---
-> >> >
-> >> > and write ends up with: write /run/ffs/ep1: cannot allocate memory
-> >> >
-> >> > When checked free command there should be plenty of available memory.
-> >> > Is there some limitation when writing to endpoint? We tried to split
-> >> > buffer to e.g. 3M and sent it and this works but looks like there is
-> >> > penalty when sending bigger files (100MB file received in 5secs whicle
-> >> > sending back it took 2minutes). Thanks for ideas and hints.
-> >>
-> >> that's trying to allocate a 5MiB buffer in kernel space. It just goes
-> >> over max allocation size, I'm assuming. Which kernel version are you
-> >> using? Which gadget controller are you using?
-> > We' using mainline 4.12 kernel and gadget is raw gadget using ffs +
->
-> that's old. Really, really old. You should ask for support from whoever
-> gave you that kernel. An alternative, upgrade to v5.6 latest stable or
-> latest v5.7-rc.
-We're in the process of kernel bump (we really have no vendor kernel
-we use mainline with few patches on top)
->
-> > composite drivers.
->
-> Right, and which UDC controller?
-Not sure if it is right but those options are enabled:
-EHCI support for OMAP3 and later chips
-OHCI support for OMAP3 and later chips
->
-> --
-> balbi
+Here's a second pull request for 5.8-rc1 as I wanted to avoid a back merge.
 
-Thanks and BR,
+Johan
 
-marek
 
--- 
-as simple and primitive as possible
--------------------------------------------------
-Marek Belisko - OPEN-NANDRA
-Freelance Developer
 
-Ruska Nova Ves 219 | Presov, 08005 Slovak Republic
-Tel: +421 915 052 184
-skype: marekwhite
-twitter: #opennandra
-web: http://open-nandra.com
+The following changes since commit b9bbe6ed63b2b9f2c9ee5cbd0f2c946a2723f4ce:
+
+  Linux 5.7-rc6 (2020-05-17 16:48:37 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.8-rc1-2
+
+for you to fetch changes up to 399ad9477c523f721f8e51d4f824bdf7267f120c:
+
+  USB: serial: option: add Telit LE910C1-EUX compositions (2020-05-27 09:28:02 +0200)
+
+----------------------------------------------------------------
+USB-serial fixes for 5.8-rc1
+
+Here are some new modem device ids.
+
+All have been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Daniele Palmas (1):
+      USB: serial: option: add Telit LE910C1-EUX compositions
+
+Matt Jolly (1):
+      USB: serial: qcserial: add DW5816e QDL support
+
+ drivers/usb/serial/option.c   | 4 ++++
+ drivers/usb/serial/qcserial.c | 1 +
+ 2 files changed, 5 insertions(+)
