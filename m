@@ -2,109 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 172281E8914
-	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2020 22:44:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FF701E8917
+	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2020 22:44:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728124AbgE2Uou (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 May 2020 16:44:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42702 "EHLO
+        id S1728256AbgE2Uox (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 May 2020 16:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726975AbgE2Uou (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 May 2020 16:44:50 -0400
-Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C8FC03E969
-        for <linux-usb@vger.kernel.org>; Fri, 29 May 2020 13:44:49 -0700 (PDT)
-Received: by mail-vk1-xa36.google.com with SMTP id u15so647512vkk.6
-        for <linux-usb@vger.kernel.org>; Fri, 29 May 2020 13:44:49 -0700 (PDT)
+        with ESMTP id S1726975AbgE2Uow (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 May 2020 16:44:52 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1EE0C03E969;
+        Fri, 29 May 2020 13:44:52 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id n15so425276pfd.0;
+        Fri, 29 May 2020 13:44:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fWa0+HLWvK3e0bODNo242BKakZe5J2NYfLM0QmZHS/o=;
-        b=JGq+X7E9A7cL1/8RH+/sq1bVonoUPDl8kY3V+J/7gAZ9m2xfLXdNwcIL8tvxu2ZNn6
-         0lnLDozaNC1JILknIriB21prWnZDQ1obQtwP7JlQqcZFbKpy7bmZiD2Cqkv/VFcqEGF+
-         LIbHI305vgd8VRGSu7Q4ViqlWTCz6cMh0EJh4=
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=RdrvG/y032Pb+0M+lAlgyETU611TcK85B72yJbBhqnQ=;
+        b=JcNu1BWvx5pmMHXVdvRPKRe+BPaLoXsIEeQnXPqivdgfQG+fVqdbommxb5PkoZoHk7
+         jLaRya8DMtAYwzRTVCK6+ej78Ot7wra+BDsV9MLyg7vs8HFkYki907mUgL2tLv47flhc
+         tojQEscFYMYklLRKxsjRjF3RiLWpmXg587EpNAql9S8q7PEio2edd8TYCW0i+eEnjuby
+         wJZlXY9WtW4uRHuuQ6QLKDWtTZHwNCQdUg/gp0K18TQ7OLfrpHHZblHUkRb0xQjMhpRI
+         2r3xTMC+Qt4mNn3sTsVHuiQYlL5FF1/5EXx9qfNqLMs6wZIO6iMRszqveyb2fYbqw7D2
+         VxLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fWa0+HLWvK3e0bODNo242BKakZe5J2NYfLM0QmZHS/o=;
-        b=uUMlkfA2DJN9ygHXCSb99mgCaxmCp8dRdUGrLDik0RR2JFlQ7yu60tbXMfw8sqNWp/
-         8056wSiCl9PgFYqTDk8WyD943VGOBpwadsUEs5yMJDfhsyUGzRauJxRnP67lda33aehE
-         syq76h1zr/nnwnd/QrGRnx1fVSk1e9uWlq+jRr2F5H1O9EI1su6uyH46WCNy5dCykVct
-         bPNi27XIbxpLAmwSyMbbNbcT9njjApH8VQe4U9f+Smbg00c+lzYvRaqDy1d+ht1K2wUy
-         SyVak73G767h9BGIKHGl2aFKxi6y1fp+FT2HJn/9Ap3gkN5oEBdYmpTYNf6lWnfn+0Tv
-         ygxg==
-X-Gm-Message-State: AOAM532M1qrW7ezAGvqOD1EUzrBeYtRnYZIbKrRd4QTsBgGCjFrJGbD3
-        u6FZot7jkNWr/Y5AcquranCrl7OYQhBiCC2ANNWL8g==
-X-Google-Smtp-Source: ABdhPJyOA3FmluwZauqPVOsDxYj6lmgBYLTLx3xZOv9HVDhCNHqkEyAMowp7L/iXFOElKfZZ4sAPL6pnEq1Rldp3Yw4=
-X-Received: by 2002:a1f:430a:: with SMTP id q10mr6277098vka.4.1590785088483;
- Fri, 29 May 2020 13:44:48 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=RdrvG/y032Pb+0M+lAlgyETU611TcK85B72yJbBhqnQ=;
+        b=oCEhXCaKS+3RGIsvdYr17al7BalN6J/BGfQ1y5mUgfY3+oAIwI3+GO4pzXFWMxDZCU
+         4WcF4f4Wef7SfqN2n6L/DPOf9llfqNKDxSi1bOmV34vN2n/YI+aVcaMWujNcL7k6lKqW
+         /oc31JauQv07lTX4M9mwMjUYMXyJAEMkDAO52VpDO0IPP9NJJRpeinEsJaM3/qEANC99
+         e251Mzntc2OlOYMbQXD2OX5cw0zjpjoO/n6RMwR3AkFXocP0hdRLMLfmQYjPV06WML4H
+         6p2sR+5k49++m77KesgZLhVE4a1IEOipdLAueatPKVimyqbObJlEkKs3J9wUeqHHl2wy
+         A2cA==
+X-Gm-Message-State: AOAM531WPm7GnmkSsTlDSSrMlTDH+hWioe322N34Dyas8oV9PEt0c746
+        ZbcB53ERXEMv5Av7YX8XdAICKfFX
+X-Google-Smtp-Source: ABdhPJw5QliwZDPpAl33gh7TKJAYHZQPkZR0ldTF9IGWJan9XUaxRCKFYYj9MlstKNR/hLLZbsVRGw==
+X-Received: by 2002:aa7:96d7:: with SMTP id h23mr9853780pfq.259.1590785092417;
+        Fri, 29 May 2020 13:44:52 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id k24sm7977955pfk.134.2020.05.29.13.44.51
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 29 May 2020 13:44:51 -0700 (PDT)
+Date:   Fri, 29 May 2020 13:44:50 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        groeck@chromium.org, Nicolas Boichat <drinkcat@chromium.org>,
+        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] HID: usbhid: do not sleep when opening device
+Message-ID: <20200529204450.GA184901@roeck-us.net>
+References: <20200529195951.GA3767@dtor-ws>
+ <20200529201424.GA180211@roeck-us.net>
+ <20200529203324.GL89269@dtor-ws>
 MIME-Version: 1.0
-References: <CAHNYxRzH3F7r4A3hOJYWw8fwoSLBESyyN7XQ4HYfw1Y3qoNbJg@mail.gmail.com>
- <20200529081243.GA827304@kroah.com>
-In-Reply-To: <20200529081243.GA827304@kroah.com>
-From:   Julius Werner <jwerner@chromium.org>
-Date:   Fri, 29 May 2020 13:44:37 -0700
-Message-ID: <CAODwPW9=h5wXsFDwWiZcpCBkhxiJ=QJyo5hGHVUcgBL3Q9AxSQ@mail.gmail.com>
-Subject: Re: Splitting 1 USB port between 2 devices
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Alexandru M Stan <amstan@chromium.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Felipe Balbi <balbi@kernel.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Julius Werner <jwerner@chromium.org>,
-        Evan Green <evgreen@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200529203324.GL89269@dtor-ws>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> > My question here is: is this legal as far as Linux is concerned? Can 2
-> > devices be enumerated under one physical port (even though we're
-> > talking about separate usb2.0 and 3.0 bus topologies).
->
-> Is it "legal" as far as the USB spec is concerned?  I would try to
-> answer that first before worrying about if Linux can handle it or not :)
+On Fri, May 29, 2020 at 01:33:24PM -0700, Dmitry Torokhov wrote:
+> On Fri, May 29, 2020 at 01:14:24PM -0700, Guenter Roeck wrote:
+> > On Fri, May 29, 2020 at 12:59:51PM -0700, Dmitry Torokhov wrote:
+> > > usbhid tries to give the device 50 milliseconds to drain its queues
+> > > when opening the device, but does it naively by simply sleeping in open
+> > > handler, which slows down device probing (and thus may affect overall
+> > > boot time).
+> > > 
+> > > However we do not need to sleep as we can instead mark a point of time
+> > > in the future when we should start processing the events.
+> > > 
+> > > Reported-by: Nicolas Boichat <drinkcat@chromium.org>
+> > > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> > > ---
+> > >  drivers/hid/usbhid/hid-core.c | 27 +++++++++++++++------------
+> > >  drivers/hid/usbhid/usbhid.h   |  1 +
+> > >  2 files changed, 16 insertions(+), 12 deletions(-)
+> > > 
+> > > diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
+> > > index c7bc9db5b192..e69992e945b2 100644
+> > > --- a/drivers/hid/usbhid/hid-core.c
+> > > +++ b/drivers/hid/usbhid/hid-core.c
+> > > @@ -95,6 +95,19 @@ static int hid_start_in(struct hid_device *hid)
+> > >  				set_bit(HID_NO_BANDWIDTH, &usbhid->iofl);
+> > >  		} else {
+> > >  			clear_bit(HID_NO_BANDWIDTH, &usbhid->iofl);
+> > > +
+> > > +			if (test_and_clear_bit(HID_RESUME_RUNNING,
+> > > +					       &usbhid->iofl)) {
+> > > +				/*
+> > > +				 * In case events are generated while nobody was
+> > > +				 * listening, some are released when the device
+> > > +				 * is re-opened. Wait 50 msec for the queue to
+> > > +				 * empty before allowing events to go through
+> > > +				 * hid.
+> > > +				 */
+> > > +				usbhid->input_start_time = jiffies +
+> > > +							   msecs_to_jiffies(50);
+> > > +			}
+> > >  		}
+> > >  	}
+> > >  	spin_unlock_irqrestore(&usbhid->lock, flags);
+> > > @@ -280,7 +293,8 @@ static void hid_irq_in(struct urb *urb)
+> > >  		if (!test_bit(HID_OPENED, &usbhid->iofl))
+> > >  			break;
+> > >  		usbhid_mark_busy(usbhid);
+> > > -		if (!test_bit(HID_RESUME_RUNNING, &usbhid->iofl)) {
+> > > +		if (!test_bit(HID_RESUME_RUNNING, &usbhid->iofl) &&
+> > > +		    time_after(jiffies, usbhid->input_start_time)) {
+> > >  			hid_input_report(urb->context, HID_INPUT_REPORT,
+> > >  					 urb->transfer_buffer,
+> > >  					 urb->actual_length, 1);
+> > > @@ -714,17 +728,6 @@ static int usbhid_open(struct hid_device *hid)
+> > >  	}
+> > >  
+> > >  	usb_autopm_put_interface(usbhid->intf);
+> > > -
+> > > -	/*
+> > > -	 * In case events are generated while nobody was listening,
+> > > -	 * some are released when the device is re-opened.
+> > > -	 * Wait 50 msec for the queue to empty before allowing events
+> > > -	 * to go through hid.
+> > > -	 */
+> > > -	if (res == 0)
+> > > -		msleep(50);
+> > > -
+> > Can you just set usbhid->input_start_time here ?
+> > 	if (res == 0)
+> > 		usbhid->input_start_time = jiffies + msecs_to_jiffies(50);
+> > 	clear_bit(HID_RESUME_RUNNING, &usbhid->iofl);
+> > 
+> > Then you might not need the added code in hid_start_in().
+> 
+> That was my first version, but if hid_start_in() fails we start a timer
+> and try to retry the IO (and the "res" in 0 in this case). And we want
+> to mark the time only after we successfully submitted the interrupt URB,
+> that is why the code is in hid_start_in().
+> 
 
-I don't think the question gets specifically addressed. It does at
-least say this: 'A USB hub is the logical combination of two hubs: a
-USB 2.0 hub and an Enhanced SuperSpeed hub. Each hub operates
-independently on a separate data bus. Typically, the only signal
-shared logic between them is to control VBUS.'
+Ah yes, that makes sense.
 
-> > Is there any weird port reset interaction that might be annoying here?
-> > I wouldn't want a reset on the usb 2.0 device to affect the 3.0
-> > device.
->
-> Which is why I don't think the hub would like this type of
-> configuration, as who controls the power connections?  What happens if
-> one device is suspended and the other isn't?
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-USB 3.2 spec also says: 'If either the USB 2.0 hub or Enhanced
-SuperSpeed hub controllers requires a downstream port to be powered,
-power is turned on for the port.'
-
-Note that since we're talking internal devices only here, the hub
-usually doesn't actually supply VBUS to the device anyway. Port power
-controls should only matter for whether the port is logically turned
-on or not. Suspend signalling uses the data pins so the expectation is
-that it should be possible separately for the USB 3.0 and USB 2.0 side
-(after all, when you suspend a 3.0 hub, you also suspend both halves
-separately -- right?).
-
-Of course since hub manufacturers probably don't expect this use case,
-every hub you'd want to do this with would always have to be carefully
-tested first. I think the main question here is whether Linux
-architecturally assumes that every port on a 3.0 hub *needs* to have a
-corresponding 2.0 port and they can't both be used for separate
-devices, or whether it's going to add assumptions like that at some
-point in the future. Like Alex said, running this seems to work fine
-on Linux 5.4 right now. The question is just whether we can expect it
-to stay that way and can consider this an allowed use case in Linux
-(as long as the hardware supports it) -- i.e. if other changes get
-added later that break this in software, could we submit fixes for
-this use case or would we be told that device configurations like this
-just aren't allowed in the first place?
+Thanks,
+Guenter
