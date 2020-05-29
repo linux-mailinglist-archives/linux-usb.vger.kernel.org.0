@@ -2,106 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68C071E7A27
+	by mail.lfdr.de (Postfix) with ESMTP id 72A211E7A28
 	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2020 12:12:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726792AbgE2KMT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 May 2020 06:12:19 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:45860 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726629AbgE2KMS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 May 2020 06:12:18 -0400
-Received: from mailhost.synopsys.com (mdc-mailhost1.synopsys.com [10.225.0.209])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        id S1726579AbgE2KMS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 May 2020 06:12:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42356 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725775AbgE2KMR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 29 May 2020 06:12:17 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 7A4CC40914;
-        Fri, 29 May 2020 10:12:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1590747138; bh=J1cOrJZusMLst7lsrpeM8Ti16IstZnIDLZV0EfLRdk4=;
-        h=Date:From:Subject:To:Cc:From;
-        b=DVoREkJihGPojAPCB1lSC6dXWgfZ4Q3Im8mCFLTRJvq6Ew1//poeGpOgtjEdZx0Ri
-         M/ZP9tQn12Z5ZaNxWCzaLBBKE6WMTfAhgyy1+7HLlTraguzMuICBuFtN2J+huYrTEC
-         dPujya3Che5W6L/PSgTZPz3DIYiTHhTIM8UQXS93d8FQfO0hExP36IkE1HH+KmUCdu
-         oeJGOPCtC15GEcpZ3zd0PabHvZk593aN/rjUmyRNy2zOY9fT68d9y70c77SIH5GkJ7
-         raLbQWS7hlyoARlZThm5Lhhv0ARmQ+HTxY+5KYrpmIfMuN9GpcSHcY4d1CABIp9OXK
-         7l+2IdcpgT5aw==
-Received: from hminas-z420 (hminas-z420.internal.synopsys.com [10.116.126.211])
-        (using TLSv1 with cipher AES128-SHA (128/128 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id EC43CA005B;
-        Fri, 29 May 2020 10:12:12 +0000 (UTC)
-Received: by hminas-z420 (sSMTP sendmail emulation); Fri, 29 May 2020 14:12:11 +0400
-Date:   Fri, 29 May 2020 14:12:11 +0400
-Message-Id: <137e787bf7c7935bda3358c8f07230d3f4998fad.1590745119.git.hminas@synopsys.com>
-X-SNPS-Relay: synopsys.com
-From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Subject: [PATCH] usb: dwc2: Postponed gadget registration to the udc class driver
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        Paul Zimmerman <paulz@synopsys.com>, linux-usb@vger.kernel.org,
-        Felipe Balbi <balbi@ti.com>,
-        Dinh Nguyen <dinguyen@opensource.altera.com>
-Cc:     John Youn <John.Youn@synopsys.com>, stable@vger.kernel.org,
-        Marek Vasut <marex@denx.de>
+        by mail.kernel.org (Postfix) with ESMTPSA id 99C412074D;
+        Fri, 29 May 2020 10:12:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590747137;
+        bh=Yl+5FEwzOOeZ8hYUoXsCXAbU3LDBkX87gD4CrrxKtSs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=yNzc+6/JphBjd5egkaD9BnpKWOOfFI4ax9kFqcSb30A43a5fGOeZLBcjqQ5K12KpQ
+         BBhsv8gKvsvILykkAjdjQv8OBLRXBiUK1QcJD+1VHoovufrAK8bAlisdKfQycTSCqg
+         VLyxNIVURxjUGEHIJg9LzB1m/DgVdPm8VbkzD7iA=
+Date:   Fri, 29 May 2020 12:12:14 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Wesley Cheng <wcheng@codeaurora.org>
+Cc:     robh+dt@kernel.org, bjorn.andersson@linaro.org, balbi@kernel.org,
+        agross@kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [RFC v3 0/3] Re-introduce TX FIFO resize for larger EP bursting
+Message-ID: <20200529101214.GA1321073@kroah.com>
+References: <1590630363-3934-1-git-send-email-wcheng@codeaurora.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1590630363-3934-1-git-send-email-wcheng@codeaurora.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-During dwc2 driver probe, after gadget registration to the udc class
-driver, if exist any builtin function driver it immediately bound to
-dwc2 and after init host side (dwc2_hcd_init()) stucked in host mode.
-Patch postpone gadget registration after host side initialization done.
+On Wed, May 27, 2020 at 06:46:00PM -0700, Wesley Cheng wrote:
+> Changes in V3:
+>  - Removed "Reviewed-by" tags
+>  - Renamed series back to RFC
+>  - Modified logic to ensure that fifo_size is reset if we pass the minimum
+>    threshold.  Tested with binding multiple FDs requesting 6 FIFOs.
+> 
+> Changes in V2:
+>  - Modified TXFIFO resizing logic to ensure that each EP is reserved a
+>    FIFO.
+>  - Removed dev_dbg() prints and fixed typos from patches
+>  - Added some more description on the dt-bindings commit message
+> 
+> Currently, there is no functionality to allow for resizing the TXFIFOs, and
+> relying on the HW default setting for the TXFIFO depth.  In most cases, the
+> HW default is probably sufficient, but for USB compositions that contain
+> multiple functions that require EP bursting, the default settings
+> might not be enough.  Also to note, the current SW will assign an EP to a
+> function driver w/o checking to see if the TXFIFO size for that particular
+> EP is large enough. (this is a problem if there are multiple HW defined
+> values for the TXFIFO size)
+> 
+> It is mentioned in the SNPS databook that a minimum of TX FIFO depth = 3
+> is required for an EP that supports bursting.  Otherwise, there may be
+> frequent occurences of bursts ending.  For high bandwidth functions,
+> such as data tethering (protocols that support data aggregation), mass
+> storage, and media transfer protocol (over FFS), the bMaxBurst value can be
+> large, and a bigger TXFIFO depth may prove to be beneficial in terms of USB
+> throughput. (which can be associated to system access latency, etc...)  It
+> allows for a more consistent burst of traffic, w/o any interruptions, as
+> data is readily available in the FIFO.
+> 
+> With testing done using the mass storage function driver, the results show
+> that with a larger TXFIFO depth, the bandwidth increased significantly.
 
-Cc: stable@vger.kernel.org
-Fixes: 117777b2c3bb9 ("usb: dwc2: Move gadget probe function into
-platform code")
-Tested-by: Marek Vasut <marex@denx.de>
-
-Signed-off-by: Minas Harutyunyan <hminas@synopsys.com>
----
- drivers/usb/dwc2/gadget.c   | 6 ------
- drivers/usb/dwc2/platform.c | 9 +++++++++
- 2 files changed, 9 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 12b98b466287..7faf5f8c056d 100644
---- a/drivers/usb/dwc2/gadget.c
-+++ b/drivers/usb/dwc2/gadget.c
-@@ -4920,12 +4920,6 @@ int dwc2_gadget_init(struct dwc2_hsotg *hsotg)
- 					  epnum, 0);
- 	}
- 
--	ret = usb_add_gadget_udc(dev, &hsotg->gadget);
--	if (ret) {
--		dwc2_hsotg_ep_free_request(&hsotg->eps_out[0]->ep,
--					   hsotg->ctrl_req);
--		return ret;
--	}
- 	dwc2_hsotg_dump(hsotg);
- 
- 	return 0;
-diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
-index e571c8ae65ec..6b4043117e97 100644
---- a/drivers/usb/dwc2/platform.c
-+++ b/drivers/usb/dwc2/platform.c
-@@ -575,6 +575,15 @@ static int dwc2_driver_probe(struct platform_device *dev)
- 	if (hsotg->dr_mode == USB_DR_MODE_PERIPHERAL)
- 		dwc2_lowlevel_hw_disable(hsotg);
- 
-+	/* Postponed adding a new gadget to the udc class driver list */
-+	if (hsotg->gadget_enabled) {
-+		retval = usb_add_gadget_udc(hsotg->dev, &hsotg->gadget);
-+		if (retval) {
-+			dwc2_hsotg_remove(hsotg);
-+			goto error_init;
-+		}
-+	}
-+
- 	return 0;
- 
- error_init:
--- 
-2.11.0
+Why is this still a "RFC" series?  That implies you don't want this
+applied...
 
