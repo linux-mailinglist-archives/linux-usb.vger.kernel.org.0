@@ -2,96 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2E911E7E75
-	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2020 15:17:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4791D1E7F52
+	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2020 15:55:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726549AbgE2NR5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 May 2020 09:17:57 -0400
-Received: from mga04.intel.com ([192.55.52.120]:29662 "EHLO mga04.intel.com"
+        id S1726792AbgE2Nzb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 May 2020 09:55:31 -0400
+Received: from rere.qmqm.pl ([91.227.64.183]:23263 "EHLO rere.qmqm.pl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726509AbgE2NR4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 29 May 2020 09:17:56 -0400
-IronPort-SDR: Bc7qlJ4XDx2tbeeXge6So0FEhekXUiBOxgN+1KOFzTy8GG2XJPQLXmCunGXI/Q/xYIHO6KY2YB
- 5+fIPDjkBjeA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2020 06:17:56 -0700
-IronPort-SDR: Ss4KJm6Yk7JprosAb+c18Y48ejuar8GUGYLOAhs3luDkFebJ6ied5ZbbgP2Hv1hSh6en1MYSSU
- r/1qlU1LmbHw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,448,1583222400"; 
-   d="scan'208";a="376703429"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 29 May 2020 06:17:54 -0700
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Prashant Malani <pmalani@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        "Mani, Rajmohan" <rajmohan.mani@intel.com>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH] usb: typec: mux: intel_pmc_mux: Fix DP alternate mode entry
-Date:   Fri, 29 May 2020 16:17:53 +0300
-Message-Id: <20200529131753.15587-1-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.26.2
+        id S1725901AbgE2Nzb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 29 May 2020 09:55:31 -0400
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 49YR0d0ByYz9s;
+        Fri, 29 May 2020 15:55:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1590760529; bh=Ahv7mUDTuyxTSHWyPZ7XPAxCgroBDI5D/yY3iwLuGsM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YXwJXHDI5Wnwz3Rjh57U0N5rjfWYb+GvadNg8fVhdT5nVC1m/v4p4kjuGsso/ybos
+         PKvv8/O+atjd/H8JMqF36T08BhnfUFaEhhwYplLAO0H4MFbNze4bl6Y0z91fsMPM2Y
+         UGFoiWq1iL3SmRU9viGjsgEkwoEJtVnCg4i0rsgU7T9nIdrxGTJ+AaM4jqIDjFQJun
+         ikpXm46j7+kGR1XoUwx9YXmv0iG5HpUA/tGAgv4AAPYZ8wKcXzFH82eEVeOPIQ/MSm
+         TrXE2GasbGM3U+Pyj1k+hOXdNR+onNYJ/v+PGN1JMftskIQNXW431ntQ6CuC33J5MB
+         0UFaBf4WvjXBA==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.102.2 at mail
+Date:   Fri, 29 May 2020 15:55:24 +0200
+From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Robert Baldyga <r.baldyga@samsung.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: gadget: f_acm: don't disable disabled EP
+Message-ID: <20200529135524.GA14614@qmqm.qmqm.pl>
+References: <237e4bc8c63680f9ce0388d35b4c34a856ed8595.1590690518.git.mirq-linux@rere.qmqm.pl>
+ <20200529081104.GD32755@b29397-desktop>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-2
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200529081104.GD32755@b29397-desktop>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The PMC needs to be notified separately about HPD (hotplug
-detected) signal being high after mode entry. There is a bit
-"HPD High" in the Alternate Mode Request that the driver
-already sets, but that bit is only valid when the
-DisplayPort Alternate Mode is directly entered from
-disconnected state.
+On Fri, May 29, 2020 at 08:10:40AM +0000, Peter Chen wrote:
+> On 20-05-28 20:30:28, Micha³ Miros³aw wrote:
+> > Make debugging real problems easier by not trying to disable an EP that
+> > was not yet enabled.
+> > 
+> > Fixes: 4aab757ca44a ("usb: gadget: f_acm: eliminate abuse of ep->driver data")
+> > Signed-off-by: Micha³ Miros³aw <mirq-linux@rere.qmqm.pl>
+> > ---
+> >  drivers/usb/gadget/function/f_acm.c | 8 +++++---
+> >  1 file changed, 5 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/usb/gadget/function/f_acm.c b/drivers/usb/gadget/function/f_acm.c
+> > index 200596ea9557..46647bfac2ef 100644
+> > --- a/drivers/usb/gadget/function/f_acm.c
+> > +++ b/drivers/usb/gadget/function/f_acm.c
+> > @@ -425,9 +425,11 @@ static int acm_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
+> >  	/* we know alt == 0, so this is an activation or a reset */
+> >  
+> >  	if (intf == acm->ctrl_id) {
+> > -		dev_vdbg(&cdev->gadget->dev,
+> > -				"reset acm control interface %d\n", intf);
+> > -		usb_ep_disable(acm->notify);
+> > +		if (acm->notify->enabled) {
+> > +			dev_vdbg(&cdev->gadget->dev,
+> > +					"reset acm control interface %d\n", intf);
+> > +			usb_ep_disable(acm->notify);
+> > +		}
+> 
+> But it does not fix any issues, the usb_ep_disable checks 'enabled' flag.
 
-Fixes: 5c4edcdbcd97 ("usb: typec: mux: intel: Fix DP_HPD_LVL bit field")
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
- drivers/usb/typec/mux/intel_pmc_mux.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+It generates spurious trace events if you enable them.
 
-diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
-index 962bc69a6a59e..70ddc9d6d49e4 100644
---- a/drivers/usb/typec/mux/intel_pmc_mux.c
-+++ b/drivers/usb/typec/mux/intel_pmc_mux.c
-@@ -148,7 +148,8 @@ pmc_usb_mux_dp_hpd(struct pmc_usb_port *port, struct typec_mux_state *state)
- 	msg[0] = PMC_USB_DP_HPD;
- 	msg[0] |= port->usb3_port << PMC_USB_MSG_USB3_PORT_SHIFT;
- 
--	msg[1] = PMC_USB_DP_HPD_IRQ;
-+	if (data->status & DP_STATUS_IRQ_HPD)
-+		msg[1] = PMC_USB_DP_HPD_IRQ;
- 
- 	if (data->status & DP_STATUS_HPD_STATE)
- 		msg[1] |= PMC_USB_DP_HPD_LVL;
-@@ -161,6 +162,7 @@ pmc_usb_mux_dp(struct pmc_usb_port *port, struct typec_mux_state *state)
- {
- 	struct typec_displayport_data *data = state->data;
- 	struct altmode_req req = { };
-+	int ret;
- 
- 	if (data->status & DP_STATUS_IRQ_HPD)
- 		return pmc_usb_mux_dp_hpd(port, state);
-@@ -181,7 +183,14 @@ pmc_usb_mux_dp(struct pmc_usb_port *port, struct typec_mux_state *state)
- 	if (data->status & DP_STATUS_HPD_STATE)
- 		req.mode_data |= PMC_USB_ALTMODE_HPD_HIGH;
- 
--	return pmc_usb_command(port, (void *)&req, sizeof(req));
-+	ret = pmc_usb_command(port, (void *)&req, sizeof(req));
-+	if (ret)
-+		return ret;
-+
-+	if (data->status & DP_STATUS_HPD_STATE)
-+		return pmc_usb_mux_dp_hpd(port, state);
-+
-+	return 0;
- }
- 
- static int
--- 
-2.26.2
-
+Best Regards,
+Micha³ Miros³aw
