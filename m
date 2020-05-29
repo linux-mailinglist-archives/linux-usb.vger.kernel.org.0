@@ -2,156 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FF701E8917
-	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2020 22:44:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D9D11E8985
+	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2020 23:08:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728256AbgE2Uox (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 May 2020 16:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42712 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726975AbgE2Uow (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 May 2020 16:44:52 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1EE0C03E969;
-        Fri, 29 May 2020 13:44:52 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id n15so425276pfd.0;
-        Fri, 29 May 2020 13:44:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=RdrvG/y032Pb+0M+lAlgyETU611TcK85B72yJbBhqnQ=;
-        b=JcNu1BWvx5pmMHXVdvRPKRe+BPaLoXsIEeQnXPqivdgfQG+fVqdbommxb5PkoZoHk7
-         jLaRya8DMtAYwzRTVCK6+ej78Ot7wra+BDsV9MLyg7vs8HFkYki907mUgL2tLv47flhc
-         tojQEscFYMYklLRKxsjRjF3RiLWpmXg587EpNAql9S8q7PEio2edd8TYCW0i+eEnjuby
-         wJZlXY9WtW4uRHuuQ6QLKDWtTZHwNCQdUg/gp0K18TQ7OLfrpHHZblHUkRb0xQjMhpRI
-         2r3xTMC+Qt4mNn3sTsVHuiQYlL5FF1/5EXx9qfNqLMs6wZIO6iMRszqveyb2fYbqw7D2
-         VxLg==
+        id S1728352AbgE2VIV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 May 2020 17:08:21 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:36033 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727781AbgE2VIV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 May 2020 17:08:21 -0400
+Received: by mail-io1-f67.google.com with SMTP id y18so867893iow.3;
+        Fri, 29 May 2020 14:08:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=RdrvG/y032Pb+0M+lAlgyETU611TcK85B72yJbBhqnQ=;
-        b=oCEhXCaKS+3RGIsvdYr17al7BalN6J/BGfQ1y5mUgfY3+oAIwI3+GO4pzXFWMxDZCU
-         4WcF4f4Wef7SfqN2n6L/DPOf9llfqNKDxSi1bOmV34vN2n/YI+aVcaMWujNcL7k6lKqW
-         /oc31JauQv07lTX4M9mwMjUYMXyJAEMkDAO52VpDO0IPP9NJJRpeinEsJaM3/qEANC99
-         e251Mzntc2OlOYMbQXD2OX5cw0zjpjoO/n6RMwR3AkFXocP0hdRLMLfmQYjPV06WML4H
-         6p2sR+5k49++m77KesgZLhVE4a1IEOipdLAueatPKVimyqbObJlEkKs3J9wUeqHHl2wy
-         A2cA==
-X-Gm-Message-State: AOAM531WPm7GnmkSsTlDSSrMlTDH+hWioe322N34Dyas8oV9PEt0c746
-        ZbcB53ERXEMv5Av7YX8XdAICKfFX
-X-Google-Smtp-Source: ABdhPJw5QliwZDPpAl33gh7TKJAYHZQPkZR0ldTF9IGWJan9XUaxRCKFYYj9MlstKNR/hLLZbsVRGw==
-X-Received: by 2002:aa7:96d7:: with SMTP id h23mr9853780pfq.259.1590785092417;
-        Fri, 29 May 2020 13:44:52 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k24sm7977955pfk.134.2020.05.29.13.44.51
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 29 May 2020 13:44:51 -0700 (PDT)
-Date:   Fri, 29 May 2020 13:44:50 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        groeck@chromium.org, Nicolas Boichat <drinkcat@chromium.org>,
-        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/SHku4mzH1ikNG4JF1qtGBkI22UvLg0U5HySgguahA4=;
+        b=DuamKrQHQYus6DRaba9+UpRmftHoYu8GZjzHGosxVZ+kiKD9ZFispI1jy8GohnH7pt
+         M/LVMbdLrOtsxERIlPX9IigJYxwx0D1ITKoPu1j4K6E7063gJS3sX1peOJNqiok+P/Cp
+         BTk1tuzVTFdOxPZCx/HpL81HTcRWdr3iWG+p9g98ShsLgQmffeQ1n9RtLYxHoi1mv3la
+         OgsuFM/HZZ5ZGVlDkhFR50+Skb//PYejB4bbtIDtBsjh91Z8AZJmwVPG2vh/0LtPwiK9
+         V2VuPNtNms/UVqWjV9p4OLMpTHKdbsoicCgkOUWzLePZK3Yb7ojv2PDHhhzlfgoMgfVG
+         4S0w==
+X-Gm-Message-State: AOAM530txQb6yr5jO1In6OzUxuHyAYVZDfb9yikZr8oIMrsSlpy2uqrD
+        x5caX7lGiiqqcEzZYYDuDQ==
+X-Google-Smtp-Source: ABdhPJwT67UfxkWOvpEe8YR2Gic0ttFB9T+wozbaaqN3B+BECF6UaLH8BdYSY5aFSNhLXghMjGl7Iw==
+X-Received: by 2002:a05:6638:11c6:: with SMTP id g6mr8914496jas.134.1590786499871;
+        Fri, 29 May 2020 14:08:19 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id l21sm5577407ili.8.2020.05.29.14.08.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 May 2020 14:08:18 -0700 (PDT)
+Received: (nullmailer pid 2958331 invoked by uid 1000);
+        Fri, 29 May 2020 21:08:16 -0000
+Date:   Fri, 29 May 2020 15:08:16 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Mike Looijmans <mike.looijmans@topic.nl>
+Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
+        balbi@kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] HID: usbhid: do not sleep when opening device
-Message-ID: <20200529204450.GA184901@roeck-us.net>
-References: <20200529195951.GA3767@dtor-ws>
- <20200529201424.GA180211@roeck-us.net>
- <20200529203324.GL89269@dtor-ws>
+Subject: Re: [PATCH v2] usb/phy-generic: Add support for OTG VBUS supply
+ control
+Message-ID: <20200529210816.GA2952126@bogus>
+References: <20200529060045.25556-1-mike.looijmans@topic.nl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200529203324.GL89269@dtor-ws>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200529060045.25556-1-mike.looijmans@topic.nl>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 29, 2020 at 01:33:24PM -0700, Dmitry Torokhov wrote:
-> On Fri, May 29, 2020 at 01:14:24PM -0700, Guenter Roeck wrote:
-> > On Fri, May 29, 2020 at 12:59:51PM -0700, Dmitry Torokhov wrote:
-> > > usbhid tries to give the device 50 milliseconds to drain its queues
-> > > when opening the device, but does it naively by simply sleeping in open
-> > > handler, which slows down device probing (and thus may affect overall
-> > > boot time).
-> > > 
-> > > However we do not need to sleep as we can instead mark a point of time
-> > > in the future when we should start processing the events.
-> > > 
-> > > Reported-by: Nicolas Boichat <drinkcat@chromium.org>
-> > > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> > > ---
-> > >  drivers/hid/usbhid/hid-core.c | 27 +++++++++++++++------------
-> > >  drivers/hid/usbhid/usbhid.h   |  1 +
-> > >  2 files changed, 16 insertions(+), 12 deletions(-)
-> > > 
-> > > diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
-> > > index c7bc9db5b192..e69992e945b2 100644
-> > > --- a/drivers/hid/usbhid/hid-core.c
-> > > +++ b/drivers/hid/usbhid/hid-core.c
-> > > @@ -95,6 +95,19 @@ static int hid_start_in(struct hid_device *hid)
-> > >  				set_bit(HID_NO_BANDWIDTH, &usbhid->iofl);
-> > >  		} else {
-> > >  			clear_bit(HID_NO_BANDWIDTH, &usbhid->iofl);
-> > > +
-> > > +			if (test_and_clear_bit(HID_RESUME_RUNNING,
-> > > +					       &usbhid->iofl)) {
-> > > +				/*
-> > > +				 * In case events are generated while nobody was
-> > > +				 * listening, some are released when the device
-> > > +				 * is re-opened. Wait 50 msec for the queue to
-> > > +				 * empty before allowing events to go through
-> > > +				 * hid.
-> > > +				 */
-> > > +				usbhid->input_start_time = jiffies +
-> > > +							   msecs_to_jiffies(50);
-> > > +			}
-> > >  		}
-> > >  	}
-> > >  	spin_unlock_irqrestore(&usbhid->lock, flags);
-> > > @@ -280,7 +293,8 @@ static void hid_irq_in(struct urb *urb)
-> > >  		if (!test_bit(HID_OPENED, &usbhid->iofl))
-> > >  			break;
-> > >  		usbhid_mark_busy(usbhid);
-> > > -		if (!test_bit(HID_RESUME_RUNNING, &usbhid->iofl)) {
-> > > +		if (!test_bit(HID_RESUME_RUNNING, &usbhid->iofl) &&
-> > > +		    time_after(jiffies, usbhid->input_start_time)) {
-> > >  			hid_input_report(urb->context, HID_INPUT_REPORT,
-> > >  					 urb->transfer_buffer,
-> > >  					 urb->actual_length, 1);
-> > > @@ -714,17 +728,6 @@ static int usbhid_open(struct hid_device *hid)
-> > >  	}
-> > >  
-> > >  	usb_autopm_put_interface(usbhid->intf);
-> > > -
-> > > -	/*
-> > > -	 * In case events are generated while nobody was listening,
-> > > -	 * some are released when the device is re-opened.
-> > > -	 * Wait 50 msec for the queue to empty before allowing events
-> > > -	 * to go through hid.
-> > > -	 */
-> > > -	if (res == 0)
-> > > -		msleep(50);
-> > > -
-> > Can you just set usbhid->input_start_time here ?
-> > 	if (res == 0)
-> > 		usbhid->input_start_time = jiffies + msecs_to_jiffies(50);
-> > 	clear_bit(HID_RESUME_RUNNING, &usbhid->iofl);
-> > 
-> > Then you might not need the added code in hid_start_in().
+On Fri, May 29, 2020 at 08:00:45AM +0200, Mike Looijmans wrote:
+> This enables support for VBUS on boards where the power is supplied
+> by a regulator. The regulator is enabled when the USB port enters
+> HOST mode.
 > 
-> That was my first version, but if hid_start_in() fails we start a timer
-> and try to retry the IO (and the "res" in 0 in this case). And we want
-> to mark the time only after we successfully submitted the interrupt URB,
-> that is why the code is in hid_start_in().
+> Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
+> ---
+> v2: Added missing "return 0;" in set_vbus method
 > 
+>  .../devicetree/bindings/usb/usb-nop-xceiv.txt |  3 ++
+>  drivers/usb/phy/phy-generic.c                 | 46 ++++++++++++++++++-
+>  drivers/usb/phy/phy-generic.h                 |  2 +
+>  3 files changed, 50 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/usb-nop-xceiv.txt b/Documentation/devicetree/bindings/usb/usb-nop-xceiv.txt
+> index 4dc6a8ee3071..775a19fdb613 100644
+> --- a/Documentation/devicetree/bindings/usb/usb-nop-xceiv.txt
+> +++ b/Documentation/devicetree/bindings/usb/usb-nop-xceiv.txt
+> @@ -16,6 +16,9 @@ Optional properties:
+>  
+>  - vcc-supply: phandle to the regulator that provides power to the PHY.
+>  
+> +- vbus-supply: phandle to the regulator that provides the VBUS power for when
+> +  the device is in HOST mode.
+> +
 
-Ah yes, that makes sense.
+I'm going to say no to expanding this binding...
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+First, there sure are a lot of controls on a NOP tranceiver.
 
-Thanks,
-Guenter
+Second, unless Vbus is supplying the PHY, then this belongs in a 
+connector node for which this is already supported.
+
+>  - reset-gpios: Should specify the GPIO for reset.
+>  
+>  - vbus-detect-gpio: should specify the GPIO detecting a VBus insertion
