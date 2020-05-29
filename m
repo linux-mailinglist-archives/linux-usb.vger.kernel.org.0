@@ -2,228 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1DA41E83AD
-	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2020 18:29:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FBD11E83D4
+	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2020 18:37:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727842AbgE2Q3L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 May 2020 12:29:11 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:18253 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727822AbgE2Q3I (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 29 May 2020 12:29:08 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1590769748; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Cc: To: From: Date: Sender;
- bh=++5XVB1edF20k7ZuQoruhRB+Yzom05jHCSFa/0b0SXY=; b=u00u/tiBsnx4f+asXuEYVCXiOMjL+V93me4FVWOpyTibjN97hPQ1l+/c+AyDeoRXSeVleYcR
- XJXoJ5thsFgtFTnw61kZrKMUtxjXVaelrj9Zg0nGYAqFwAXHuzW4y+6wcfsQcwNLkHvKKt81
- JCN9DQBOMde+tIntEnmuP2lTBwY=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
- 5ed1384f3131442d952d6356 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 29 May 2020 16:29:03
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 113ECC433C6; Fri, 29 May 2020 16:29:02 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher DHE-RSA-AES128-SHA (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: jackp)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id B31CDC433C9;
-        Fri, 29 May 2020 16:29:00 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org B31CDC433C9
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=jackp@codeaurora.org
-Date:   Fri, 29 May 2020 09:28:56 -0700
-From:   Jack Pham <jackp@codeaurora.org>
-To:     Wesley Cheng <wcheng@codeaurora.org>
-Cc:     robh+dt@kernel.org, bjorn.andersson@linaro.org, balbi@kernel.org,
-        gregkh@linuxfoundation.org, agross@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [RFC v3 1/3] usb: dwc3: Resize TX FIFOs to meet EP bursting
- requirements
-Message-ID: <20200529162856.GA10327@jackp-linux.qualcomm.com>
-References: <1590630363-3934-1-git-send-email-wcheng@codeaurora.org>
- <1590630363-3934-2-git-send-email-wcheng@codeaurora.org>
+        id S1726903AbgE2Qhx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 May 2020 12:37:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60684 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725914AbgE2Qhw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 May 2020 12:37:52 -0400
+Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D25BC08C5C6
+        for <linux-usb@vger.kernel.org>; Fri, 29 May 2020 09:37:52 -0700 (PDT)
+Received: by mail-il1-x144.google.com with SMTP id h3so3070302ilh.13
+        for <linux-usb@vger.kernel.org>; Fri, 29 May 2020 09:37:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VVOicISwjob/jpSj7GhBdeR1eYfzffk4NhdXDDRt620=;
+        b=mniyFHBszz8POGVdK0H4zlRw0AW/+Qzt9awBB1qmYHoh/wVhj7ZcME7OmouegwCSlE
+         mUBQcpmP1H19Dk20aDc45vWv+yLNvxrvzJvYK2gWhm204qK53tKDqzQU2q6sIg4dbJ/V
+         7zdTPr6Xjttnt1/nzTMZzlT6KaDwFbevZixtc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VVOicISwjob/jpSj7GhBdeR1eYfzffk4NhdXDDRt620=;
+        b=mvGIzrjHq/3Kdr4SJZ/FqJXWWYlZOREJKIMRrRwLGPnKZ0blSdH8oG+TwVPY61OeZ1
+         xEVBUx77Mb8jdl+KfQIb6iQgyFuba4+gSE8/Uo+HbPOyD/A9Z2UWMF9Is42Hp+VqFqAa
+         OfQQ1opvrAMJGEujbHu/tOn3JFIdBvaEgBPsYA6m5TDvu3ejEvirmcF8n6LcfGhHeFB4
+         eaY7JrscxXhPJM2K6YF5Wu2nVv0frBWRM9w/G35xy7irIzJ44MbpULz0aSaq1lce4lcQ
+         MMy+kT7nh1/XlXX16HslXWuZESid0JYNQi608AaGFgHkI/SOKqW4EG1H3AfiyiOGCWaW
+         RwlQ==
+X-Gm-Message-State: AOAM531Y2trl8EvV7xEMntGV4PHilSPOz9qYXHc/u/xyIO67ZEBMR1Jj
+        Sx5lejQ1x3PDQC5yox+j/2YRNisp458=
+X-Google-Smtp-Source: ABdhPJxsW9OPfW/iSRpEFmvUZhgAnpI248M4gWS4ANjzxaBH1MsHl4OLvZXdn8ElhBKZiLfM9nK0ow==
+X-Received: by 2002:a05:6e02:dd3:: with SMTP id l19mr7507375ilj.154.1590770271355;
+        Fri, 29 May 2020 09:37:51 -0700 (PDT)
+Received: from mail-il1-f179.google.com (mail-il1-f179.google.com. [209.85.166.179])
+        by smtp.gmail.com with ESMTPSA id w29sm3284608ila.26.2020.05.29.09.37.50
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 May 2020 09:37:50 -0700 (PDT)
+Received: by mail-il1-f179.google.com with SMTP id r2so3117602ila.4
+        for <linux-usb@vger.kernel.org>; Fri, 29 May 2020 09:37:50 -0700 (PDT)
+X-Received: by 2002:a05:6e02:11b2:: with SMTP id 18mr8533637ilj.229.1590770269906;
+ Fri, 29 May 2020 09:37:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1590630363-3934-2-git-send-email-wcheng@codeaurora.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+References: <1d3bae1b3048f5d6e19f7ef569dd77e9e160a026.1590753016.git.hminas@synopsys.com>
+ <CAD=FV=W1x_HJNCYMUb11QNA8yGs0heEiZzHZdeMPzFaRHaTOsA@mail.gmail.com> <0f6b1580-41d8-b7e7-206b-64cda87abfd5@synopsys.com>
+In-Reply-To: <0f6b1580-41d8-b7e7-206b-64cda87abfd5@synopsys.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 29 May 2020 09:37:38 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=UCMqyX92o9m7H40E3sHzAFieHSu3TUY953VqNb-vuPPg@mail.gmail.com>
+Message-ID: <CAD=FV=UCMqyX92o9m7H40E3sHzAFieHSu3TUY953VqNb-vuPPg@mail.gmail.com>
+Subject: Re: [PATCH] usb: dwc2: Fix shutdown callback in platform
+To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Cc:     John Youn <John.Youn@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Felipe Balbi <balbi@ti.com>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko.stuebner@collabora.com>,
+        "# 4.0+" <stable@vger.kernel.org>,
+        Frank Mori Hess <fmh6jj@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Wesley,
+Hi,
 
-On Wed, May 27, 2020 at 06:46:01PM -0700, Wesley Cheng wrote:
-> Some devices have USB compositions which may require multiple endpoints
-> that support EP bursting.  HW defined TX FIFO sizes may not always be
-> sufficient for these compositions.  By utilizing flexible TX FIFO
-> allocation, this allows for endpoints to request the required FIFO depth to
-> achieve higher bandwidth.  With some higher bMaxBurst configurations, using
-> a larger TX FIFO size results in better TX throughput.
-> 
-> Ensure that one TX FIFO is reserved for every IN endpoint.  This allows for
-> the FIFO logic to prevent running out of FIFO space.
-> 
-> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
-> ---
 
-<snip>
+On Fri, May 29, 2020 at 9:30 AM Minas Harutyunyan
+<Minas.Harutyunyan@synopsys.com> wrote:
+>
+> Hi Doug,
+>
+> On 5/29/2020 6:49 PM, Doug Anderson wrote:
+> > Hi,
+> >
+> > On Fri, May 29, 2020 at 4:51 AM Minas Harutyunyan
+> > <Minas.Harutyunyan@synopsys.com> wrote:
+> >>
+> >> To avoid lot of interrupts from dwc2 core, which can be asserted in
+> >> specific conditions need to disable interrupts on HW level instead of
+> >> disable IRQs on Kernel level, because of IRQ can be shared between
+> >> drivers.
+> >>
+> >> Cc: stable@vger.kernel.org
+> >> Fixes: a40a00318c7fc ("usb: dwc2: add shutdown callback to platform variant")
+> >> Tested-by: Frank Mori Hess <fmh6jj@gmail.com>
+> >> Signed-off-by: Minas Harutyunyan <hminas@synopsys.com>
+> >> ---
+> >>   drivers/usb/dwc2/platform.c | 2 +-
+> >>   1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
+> >> index e571c8ae65ec..ada5b66b948e 100644
+> >> --- a/drivers/usb/dwc2/platform.c
+> >> +++ b/drivers/usb/dwc2/platform.c
+> >> @@ -342,7 +342,7 @@ static void dwc2_driver_shutdown(struct platform_device *dev)
+> >>   {
+> >>          struct dwc2_hsotg *hsotg = platform_get_drvdata(dev);
+> >>
+> >> -       disable_irq(hsotg->irq);
+> >> +       dwc2_disable_global_interrupts(hsotg);
+> >>   }
+> >
+> > I could be wrong, but I think it would be better to instead end up
+> > with both calls, like:
+> >
+> > dwc2_disable_global_interrupts(hsotg);
+> > disable_irq(hsotg->irq);
+> >
+> > To some extent it's slightly overkill, but the disable_irq() function
+> > has the nice "and wait for completion" bit.  Your new call doesn't do
+> > this.
+> >
+> If dwc2 currently handling some interrupt then below patch can allow to
+> wait until interrupt will be handled:
+>
+> spin_lock(&hsotg->lock);
+> dwc2_disable_global_interrupts(hsotg);
+> spin_unlock(&hsotg->lock);
 
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 00746c2..9b09528 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -540,6 +540,117 @@ static int dwc3_gadget_start_config(struct dwc3_ep *dep)
->  	return 0;
->  }
->  
-> +/*
-> + * dwc3_gadget_resize_tx_fifos - reallocate fifo spaces for current use-case
-> + * @dwc: pointer to our context structure
-> + *
-> + * This function will a best effort FIFO allocation in order
-> + * to improve FIFO usage and throughput, while still allowing
-> + * us to enable as many endpoints as possible.
-> + *
-> + * Keep in mind that this operation will be highly dependent
-> + * on the configured size for RAM1 - which contains TxFifo -,
-> + * the amount of endpoints enabled on coreConsultant tool, and
-> + * the width of the Master Bus.
-> + *
-> + * In general, FIFO depths are represented with the following equation:
-> + *
-> + * fifo_size = mult * ((max_packet + mdwidth)/mdwidth + 1) + 1
-> + *
-> + * Conversions can be done to the equation to derive the number of packets that
-> + * will fit to a particular FIFO size value.
-> + */
-> +static int dwc3_gadget_resize_tx_fifos(struct dwc3 *dwc, struct dwc3_ep *dep)
+Would that really work?  If you've got a two core system and the
+interrupt is just firing on a different core but hasn't acquired the
+spinlock then your code might get the spinlock, disable the
+interrupts, and then release the spinlock.  The interrupt handler will
+still be running on the other CPU and now will get the spinlock.
 
-The 'dep' param should be sufficient; we can just get 'dwc' from
-dep->dwc. That will make it more clear this function operates on each
-endpoint that needs resizing.
 
-> +{
-> +	int ram1_depth, mdwidth, fifo_0_start, tmp, num_in_ep;
-> +	int min_depth, remaining, fifo_size, mult = 1, fifo, max_packet = 1024;
-> +
-> +	if (!dwc->needs_fifo_resize)
-> +		return 0;
-> +
-> +	/* resize IN endpoints except ep0 */
-> +	if (!usb_endpoint_dir_in(dep->endpoint.desc) || dep->number <= 1)
-> +		return 0;
-> +
-> +	/* Don't resize already resized IN endpoint */
-> +	if (dep->fifo_depth)
-> +		return 0;
-> +
-> +	ram1_depth = DWC3_RAM1_DEPTH(dwc->hwparams.hwparams7);
-> +	mdwidth = DWC3_MDWIDTH(dwc->hwparams.hwparams0);
-> +	/* MDWIDTH is represented in bits, we need it in bytes */
-> +	mdwidth >>= 3;
-> +
-> +	if (((dep->endpoint.maxburst > 1) &&
-> +			usb_endpoint_xfer_bulk(dep->endpoint.desc))
-> +			|| usb_endpoint_xfer_isoc(dep->endpoint.desc))
-> +		mult = 3;
-> +
-> +	if ((dep->endpoint.maxburst > 6) &&
-> +			usb_endpoint_xfer_bulk(dep->endpoint.desc)
-> +			&& dwc3_is_usb31(dwc))
-> +		mult = 6;
-> +
-> +	/* FIFO size for a single buffer */
-> +	fifo = (max_packet + mdwidth)/mdwidth;
-> +	fifo++;
-> +
-> +	/* Calculate the number of remaining EPs w/o any FIFO */
-> +	num_in_ep = dwc->num_eps/2;
-> +	num_in_ep -= dwc->num_ep_resized;
-> +	/* Ignore EP0 IN */
-> +	num_in_ep--;
-> +
-> +	/* Reserve at least one FIFO for the number of IN EPs */
-> +	min_depth = num_in_ep * (fifo+1);
-> +	remaining = ram1_depth - min_depth - dwc->last_fifo_depth;
-> +
-> +	/* We've already reserved 1 FIFO per EP, so check what we can fit in
-> +	 * addition to it.  If there is not enough remaining space, allocate
-> +	 * all the remaining space to the EP.
-> +	 */
-> +	fifo_size = (mult-1) * fifo;
-> +	if (remaining < fifo_size) {
-> +		if (remaining > 0)
-> +			fifo_size = remaining;
-> +		else
-> +			fifo_size = 0;
-> +	}
-> +
-> +	fifo_size += fifo;
-> +	fifo_size++;
-> +	dep->fifo_depth = fifo_size;
-> +
-> +	/* Check if TXFIFOs start at non-zero addr */
-> +	tmp = dwc3_readl(dwc->regs, DWC3_GTXFIFOSIZ(0));
-> +	fifo_0_start = DWC3_GTXFIFOSIZ_TXFSTADDR(tmp);
-> +
-> +	fifo_size |= (fifo_0_start + (dwc->last_fifo_depth << 16));
-> +	if (dwc3_is_usb31(dwc))
-> +		dwc->last_fifo_depth += DWC31_GTXFIFOSIZ_TXFDEP(fifo_size);
-> +	else
-> +		dwc->last_fifo_depth += DWC3_GTXFIFOSIZ_TXFDEP(fifo_size);
-> +
-> +	/* Check fifo size allocation doesn't exceed available RAM size. */
-> +	if (dwc->last_fifo_depth >= ram1_depth) {
-> +		dev_err(dwc->dev, "Fifosize(%d) > RAM size(%d) %s depth:%d\n",
-> +				(dwc->last_fifo_depth * mdwidth), ram1_depth,
-> +				dep->endpoint.name, fifo_size);
+> but on other hand dwc2 have 3 subsequent interrupt handlers - core,
+> gadget, host and not clear which of handler completed.
+>
+> > That being said, though, you still won't wait for the completion of
+> > the IRQ handler for the "other drivers" you reference, right.  Maybe a
+> > better fix would be to add a shutdown callback for those other drivers
+> > and just keep relying on disable_irq()?
+> >
+> I have look to other drivers where used disable_irq() - no any driver
+> care about SHARED irq's. In that case your suggestion to use both
+> disabling is looks Ok.
 
-Use dev_WARN() here and eliminate the WARN_ON(1) below?
+I'm not sure I understand.  Are you saying that you'll just add
+shutdown callbacks to all the drivers using this IRQ and call
+disable_irq() there?  That seems like the best solution to me.
 
-> +		if (dwc3_is_usb31(dwc))
-> +			fifo_size = DWC31_GTXFIFOSIZ_TXFDEP(fifo_size);
-> +		else
-> +			fifo_size = DWC3_GTXFIFOSIZ_TXFDEP(fifo_size);
-> +		dwc->last_fifo_depth -= fifo_size;
-> +		dep->fifo_depth = 0;
-> +		WARN_ON(1);
-> +		return -ENOMEM;
-> +	}
-> +
-> +	dwc3_writel(dwc->regs, DWC3_GTXFIFOSIZ(dep->number >> 1), fifo_size);
-> +	dwc->num_ep_resized++;
-> +	return 0;
-> +}
-> +
->  static int dwc3_gadget_set_ep_config(struct dwc3_ep *dep, unsigned int action)
->  {
->  	const struct usb_ss_ep_comp_descriptor *comp_desc;
-> @@ -620,6 +731,10 @@ static int __dwc3_gadget_ep_enable(struct dwc3_ep *dep, unsigned int action)
->  	int			ret;
->  
->  	if (!(dep->flags & DWC3_EP_ENABLED)) {
-> +		ret = dwc3_gadget_resize_tx_fifos(dwc, dep);
-> +		if (ret)
-> +			return ret;
-> +
->  		ret = dwc3_gadget_start_config(dep);
->  		if (ret)
->  			return ret;
-
-Jack
--- 
-The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project
+-Doug
