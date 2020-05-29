@@ -2,28 +2,28 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F5B81E85FB
-	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2020 19:57:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADD521E85F8
+	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2020 19:57:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728184AbgE2R5H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 May 2020 13:57:07 -0400
-Received: from asav22.altibox.net ([109.247.116.9]:39028 "EHLO
+        id S1728181AbgE2R5G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 May 2020 13:57:06 -0400
+Received: from asav22.altibox.net ([109.247.116.9]:39046 "EHLO
         asav22.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727802AbgE2R5G (ORCPT
+        with ESMTP id S1728030AbgE2R5G (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Fri, 29 May 2020 13:57:06 -0400
 Received: from localhost.localdomain (unknown [81.166.168.211])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: noralf.tronnes@ebnett.no)
-        by asav22.altibox.net (Postfix) with ESMTPSA id 2029F200B9;
+        by asav22.altibox.net (Postfix) with ESMTPSA id 6198A200C5;
         Fri, 29 May 2020 19:57:03 +0200 (CEST)
 From:   =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>
 To:     dri-devel@lists.freedesktop.org, balbi@kernel.org
 Cc:     linux-usb@vger.kernel.org, sam@ravnborg.org,
         =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>
-Subject: [PATCH v3 1/6] drm/client: Add drm_client_init_from_id()
-Date:   Fri, 29 May 2020 19:56:38 +0200
-Message-Id: <20200529175643.46094-2-noralf@tronnes.org>
+Subject: [PATCH v3 2/6] drm/client: Add drm_client_modeset_disable()
+Date:   Fri, 29 May 2020 19:56:39 +0200
+Message-Id: <20200529175643.46094-3-noralf@tronnes.org>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20200529175643.46094-1-noralf@tronnes.org>
 References: <20200529175643.46094-1-noralf@tronnes.org>
@@ -34,121 +34,60 @@ X-CMAE-Score: 0
 X-CMAE-Analysis: v=2.3 cv=LvK8NEVc c=1 sm=1 tr=0
         a=OYZzhG0JTxDrWp/F2OJbnw==:117 a=OYZzhG0JTxDrWp/F2OJbnw==:17
         a=IkcTkHD0fZMA:10 a=M51BFTxLslgA:10 a=SJz97ENfAAAA:8
-        a=K4G_t0gYd1P4o9CfPpEA:9 a=QEXdDO2ut3YA:10 a=vFet0B0WnEQeilDPIY6i:22
+        a=0d597LMeBdbU6fJEcaIA:9 a=QEXdDO2ut3YA:10 a=vFet0B0WnEQeilDPIY6i:22
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-drm_client_init_from_id() provides a way for clients to add a client based
-on the minor. drm_client_register() is changed to return whether it was
-registered or not depending on the unplugged status of the DRM device.
-Its only caller drm_fbdev_generic_setup() runs inside probe() so it
-doesn't have to check.
-
-v2:
-- Move drm_client_modeset_set() to a separate patch with added functions.
-- Previous version had drm_client_init_from_id() call
-  drm_client_register(). This put the client in a position where it could
-  receive hotplugs during init in addition to akward error paths. Instead
-  let drm_client_register() return status so clients can know if the DRM
-  device is gone or not.
-
-v3:
-- Forgot to remove locking with the change in the previous version.
-  No need for locking when drm_client_register() is not called.
+Add a way for clients to disable all outputs.
 
 Signed-off-by: Noralf Trønnes <noralf@tronnes.org>
 ---
- drivers/gpu/drm/drm_client.c | 44 +++++++++++++++++++++++++++++++++++-
- include/drm/drm_client.h     |  4 +++-
- 2 files changed, 46 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/drm_client_modeset.c | 20 ++++++++++++++++++++
+ include/drm/drm_client.h             |  1 +
+ 2 files changed, 21 insertions(+)
 
-diff --git a/drivers/gpu/drm/drm_client.c b/drivers/gpu/drm/drm_client.c
-index 8f3d08dc996d..b7a310fef7e2 100644
---- a/drivers/gpu/drm/drm_client.c
-+++ b/drivers/gpu/drm/drm_client.c
-@@ -112,6 +112,36 @@ int drm_client_init(struct drm_device *dev, struct drm_client_dev *client,
+diff --git a/drivers/gpu/drm/drm_client_modeset.c b/drivers/gpu/drm/drm_client_modeset.c
+index 27e2fb41f14d..977bcd063520 100644
+--- a/drivers/gpu/drm/drm_client_modeset.c
++++ b/drivers/gpu/drm/drm_client_modeset.c
+@@ -1225,3 +1225,23 @@ int drm_client_modeset_dpms(struct drm_client_dev *client, int mode)
+ 	return ret;
  }
- EXPORT_SYMBOL(drm_client_init);
- 
+ EXPORT_SYMBOL(drm_client_modeset_dpms);
++
 +/**
-+ * drm_client_init_from_id - Initialise a DRM client
-+ * @minor_id: DRM minor id
++ * drm_client_modeset_disable() - Disable all outputs
 + * @client: DRM client
-+ * @name: Client name
-+ * @funcs: DRM client functions (optional)
 + *
-+ * This function looks up the drm_device using the minor id and initializes the
-+ * client using drm_client_init().
++ * This function disables all outputs by first clearing the modeset array and
++ * then committing the empty modesets.
 + *
 + * Returns:
 + * Zero on success or negative error code on failure.
 + */
-+int drm_client_init_from_id(unsigned int minor_id, struct drm_client_dev *client,
-+			    const char *name, const struct drm_client_funcs *funcs)
++int drm_client_modeset_disable(struct drm_client_dev *client)
 +{
-+	struct drm_minor *minor;
-+	int ret;
++	mutex_lock(&client->modeset_mutex);
++	drm_client_modeset_release(client);
++	mutex_unlock(&client->modeset_mutex);
 +
-+	minor = drm_minor_acquire(minor_id);
-+	if (IS_ERR(minor))
-+		return PTR_ERR(minor);
-+
-+	ret = drm_client_init(minor->dev, client, name, funcs);
-+	drm_minor_release(minor);
-+
-+	return ret;
++	return drm_client_modeset_commit(client);
 +}
-+EXPORT_SYMBOL(drm_client_init_from_id);
-+
- /**
-  * drm_client_register - Register client
-  * @client: DRM client
-@@ -121,14 +151,26 @@ EXPORT_SYMBOL(drm_client_init);
-  * drm_client_register() it is no longer permissible to call drm_client_release()
-  * directly (outside the unregister callback), instead cleanup will happen
-  * automatically on driver unload.
-+ *
-+ * Returns:
-+ * True if the client has been registered, false if the DRM device has already
-+ * been unregistered.
-  */
--void drm_client_register(struct drm_client_dev *client)
-+bool drm_client_register(struct drm_client_dev *client)
- {
- 	struct drm_device *dev = client->dev;
-+	int idx;
-+
-+	if (!drm_dev_enter(client->dev, &idx))
-+		return false;
- 
- 	mutex_lock(&dev->clientlist_mutex);
- 	list_add(&client->list, &dev->clientlist);
- 	mutex_unlock(&dev->clientlist_mutex);
-+
-+	drm_dev_exit(idx);
-+
-+	return true;
- }
- EXPORT_SYMBOL(drm_client_register);
- 
++EXPORT_SYMBOL(drm_client_modeset_disable);
 diff --git a/include/drm/drm_client.h b/include/drm/drm_client.h
-index 9f5a36a8ef24..76704f48fc46 100644
+index 76704f48fc46..498089b647da 100644
 --- a/include/drm/drm_client.h
 +++ b/include/drm/drm_client.h
-@@ -109,8 +109,10 @@ struct drm_client_dev {
+@@ -168,6 +168,7 @@ int drm_client_modeset_check(struct drm_client_dev *client);
+ int drm_client_modeset_commit_locked(struct drm_client_dev *client);
+ int drm_client_modeset_commit(struct drm_client_dev *client);
+ int drm_client_modeset_dpms(struct drm_client_dev *client, int mode);
++int drm_client_modeset_disable(struct drm_client_dev *client);
  
- int drm_client_init(struct drm_device *dev, struct drm_client_dev *client,
- 		    const char *name, const struct drm_client_funcs *funcs);
-+int drm_client_init_from_id(unsigned int minor_id, struct drm_client_dev *client,
-+			    const char *name, const struct drm_client_funcs *funcs);
- void drm_client_release(struct drm_client_dev *client);
--void drm_client_register(struct drm_client_dev *client);
-+bool drm_client_register(struct drm_client_dev *client);
- 
- void drm_client_dev_unregister(struct drm_device *dev);
- void drm_client_dev_hotplug(struct drm_device *dev);
+ /**
+  * drm_client_for_each_modeset() - Iterate over client modesets
 -- 
 2.23.0
 
