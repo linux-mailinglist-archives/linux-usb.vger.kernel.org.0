@@ -2,79 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AA361E7C69
-	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2020 13:56:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82E191E7D90
+	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2020 14:48:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726701AbgE2L4M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 May 2020 07:56:12 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:48648 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726064AbgE2L4L (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 May 2020 07:56:11 -0400
-Received: from mailhost.synopsys.com (mdc-mailhost1.synopsys.com [10.225.0.209])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id CF36840926;
-        Fri, 29 May 2020 11:56:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1590753371; bh=L3nqExQdt9Th8F85LswZf1/Mv1pXFYVFvvkgMUD9fAg=;
-        h=Date:From:Subject:To:Cc:From;
-        b=GGa09UmroPcaHihHX47BqGh70zcc+ZUxr6hVublp67rA30nGe+PrAyYVkKPfYzIJ8
-         AREg3SxII9z2nIez0Wcs1+2OeYjdKJTNLldBSmN1SQybovuvgbYHMCy//tm1AYkFUU
-         0/y2Ew6XUe62vMqFTyRWZgOMbtki5pcIr3fe5PAUaMe2c4j9yFct7XB12m2Dgsprpp
-         7WOOaIfqWHtZUntAZrcohzuSW7l0MuaJ26mxip+RsBDTiW0/zwU/fVMII1hdIUJN9v
-         JDgYnZE+bPONM+zFcjvxyeXCm+dIdU4LyiLGGehcm8m3ml45JRn9SN2sfNYWEU6ioa
-         CYRO8d2sTshQA==
-Received: from hminas-z420 (hminas-z420.internal.synopsys.com [10.116.126.211])
-        (using TLSv1 with cipher AES128-SHA (128/128 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 892F4A005B;
-        Fri, 29 May 2020 11:56:06 +0000 (UTC)
-Received: by hminas-z420 (sSMTP sendmail emulation); Fri, 29 May 2020 15:56:05 +0400
-Date:   Fri, 29 May 2020 15:56:05 +0400
-Message-Id: <1d3bae1b3048f5d6e19f7ef569dd77e9e160a026.1590753016.git.hminas@synopsys.com>
-X-SNPS-Relay: synopsys.com
-From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Subject: [PATCH] usb: dwc2: Fix shutdown callback in platform
-To:     John Youn <John.Youn@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        linux-usb@vger.kernel.org, Felipe Balbi <balbi@ti.com>,
-        "Heiko Stuebner" <heiko.stuebner@collabora.com>,
-        Douglas Anderson <dianders@chromium.org>
-Cc:     stable@vger.kernel.org, Frank Mori Hess <fmh6jj@gmail.com>
+        id S1726898AbgE2Msz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 May 2020 08:48:55 -0400
+Received: from jabberwock.ucw.cz ([46.255.230.98]:42116 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726467AbgE2Msz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 May 2020 08:48:55 -0400
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 6BCBB1C0389; Fri, 29 May 2020 14:48:53 +0200 (CEST)
+Date:   Fri, 29 May 2020 14:48:43 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Vladimir Stankovic <vladimir.stankovic@displaylink.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, mausb-host-devel@displaylink.com
+Subject: Re: [External] Re: [PATCH v5 0/8] Add MA USB Host driver
+Message-ID: <20200529124843.GA1339@bug>
+References: <20200327152614.26833-1-vladimir.stankovic@displaylink.com>
+ <20200425091954.1610-1-vladimir.stankovic@displaylink.com>
+ <20200428110459.GB1145239@kroah.com>
+ <b14a2f71-3931-8d32-43a1-cbf52add48bb@displaylink.com>
+ <20200430200238.GB3843398@kroah.com>
+ <f0a4432e-d14a-0108-7d6e-edb648b6393f@displaylink.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f0a4432e-d14a-0108-7d6e-edb648b6393f@displaylink.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-To avoid lot of interrupts from dwc2 core, which can be asserted in
-specific conditions need to disable interrupts on HW level instead of
-disable IRQs on Kernel level, because of IRQ can be shared between
-drivers.
+Hi!
 
-Cc: stable@vger.kernel.org
-Fixes: a40a00318c7fc ("usb: dwc2: add shutdown callback to platform variant")
-Tested-by: Frank Mori Hess <fmh6jj@gmail.com>
-Signed-off-by: Minas Harutyunyan <hminas@synopsys.com>
----
- drivers/usb/dwc2/platform.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> >>>> MA USB protocol used by MA USB Host driver has been implemented in
+> >>>> accordance with MA USB Specification Release 1.0b.
+> >>>
+> >>> Is that a USB-released spec?
+> >> Correct, document is being maintained by USB IF and is publicly available.
+> >> However, I just noticed a typo, correct version is 1.0a. Will correct.
+> >>
+> >> In short, MA USB Specification defines an MA USB protocol that performs USB
+> >> communication via any communication medium. As such, it defines how to pack
+> >> USB data within MA USB payload, and how to communicate with remote MA USB device.
 
-diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
-index e571c8ae65ec..ada5b66b948e 100644
---- a/drivers/usb/dwc2/platform.c
-+++ b/drivers/usb/dwc2/platform.c
-@@ -342,7 +342,7 @@ static void dwc2_driver_shutdown(struct platform_device *dev)
- {
- 	struct dwc2_hsotg *hsotg = platform_get_drvdata(dev);
- 
--	disable_irq(hsotg->irq);
-+	dwc2_disable_global_interrupts(hsotg);
- }
- 
- /**
+Ok
+
+> >> Userspace code is not publicly available. However, in short, it's purpose is
+> >> twofold, to provide interface to application layer, and to prepare MA USB packets
+> >> that will be used by remote device.
+> > 
+> > So you want us to take a one-off char-driver kernel code for a closed
+> > source userspace application for a public spec?  That feels really
+> > really odd, if not actually against a few licenses.  I hate to ask it,
+> > but are your lawyers ok with this?
+
+More importantly... does that work?
+
+Userland is okay for communication setup, but if userspace is involved with every packet
+being sent... It will deadlock.
+
+One example: attach mass storage device over MUSB, put swap there; what happens if your
+userland helper is now swapped out?
+
+									Pavel
 -- 
-2.11.0
-
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blog.html
