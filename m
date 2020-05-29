@@ -2,181 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB24B1E8638
-	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2020 20:06:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C29CA1E8685
+	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2020 20:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726898AbgE2SGf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 May 2020 14:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46246 "EHLO
+        id S1726966AbgE2SVg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 May 2020 14:21:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725808AbgE2SGe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 May 2020 14:06:34 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AAE8C03E969;
-        Fri, 29 May 2020 11:06:34 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id u13so4518107wml.1;
-        Fri, 29 May 2020 11:06:34 -0700 (PDT)
+        with ESMTP id S1726549AbgE2SVg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 May 2020 14:21:36 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3753C03E969;
+        Fri, 29 May 2020 11:21:35 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id q11so4904573wrp.3;
+        Fri, 29 May 2020 11:21:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=upQJf5klT3BJhtYCik8Xt8ZFwpOd8Ec+MHPem0ZBw8c=;
-        b=DspHGxQfaOC5kX6RIxvC1n0CE1qXRgsL4blUue2WedwR0X4NsElEG3XCCag9mBzcQl
-         SoDHlqHZQhspzDo2d39Tk8dusf7LAbUo2KjrJmovrmVwFR0zVdMp+mPfJ4uN6KNOoqCq
-         RlF4tIZ2BjAg8cVTd871wAQoep+io91MgCroMR7R03/Bbh1m0bmhDcsNtSCXPlkMEroT
-         9rsOHe/mfn+oieHO8JQ52AzRCk02VeLf96AkXC6H87KqMhteuJw/6cFM89V5xstClfv4
-         e67/ytujHYHO8XkBTNYkMKN36PBwQTDSsZENgnT6pft3mm5PbQyjIIwn0KQqJxc95uap
-         qVWQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zLXiRl9cDcJQQ+j3BIvVxaRM9eyFQUW8oMYbC//hTWw=;
+        b=PIRjTM/zhFET505J1F3i/uxUINJAWq4DGpG+4MDw7UUdtGHRdWRjEcwI+wUmHNLTxS
+         TeJ57bVYgy7g7YWqz0QEqGLeOhy48OT+abnt80YRuB9NEh9hwLW4Oip4xnbft2jigjWg
+         H6Wbz5Z51JFFnwgpf37EHIOLMY9PIe8oRQXLZWnun4JajK/2AHp/9QXMNlaPci+lBMD/
+         xiQhKppYZS7t2k3+h1fgYhidRH8U2BcIDqRt4SnS6hmNv7HuuRgO4zGuf7ZayV+SsZNc
+         d7VuIlwWe729P0Gz2OrcrxiyQYicBlctjgKpveJrIQ/OaxrAsbn3QE00QCTANTbHxCsE
+         ixkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=upQJf5klT3BJhtYCik8Xt8ZFwpOd8Ec+MHPem0ZBw8c=;
-        b=BUEv85iIC5DbB5tW7ST5ULv77qZOLwkUE7JxTeSQ5MK9fQ/urpmpTJUlY2HT5doQur
-         zeXhtLqdte3YDybs13cj87ZNOsuuZk+tfyKCyAcEXN4gpGa/zj1nvUYDd6o+y+FWO2Bj
-         M++bUBrbr1EkhAw0kzPgDsbYOP6FB9+alz+2PCWeZDAwpd25RaGjbp5s93L8NF8Ns3+n
-         ThUVVmzMOFdVx6MQIB+WYzuv/lNSHiijqtPHMOr8n3s9extNnmFTz8hcsuNZMBKpg8hH
-         XD/Ap8jsNqMV2S21L2Bh35DAB6jMVpj8bLa9Shf1OVCxce2q8pbUJhoX8fLIso0IVLVi
-         pf9g==
-X-Gm-Message-State: AOAM5333HASH9Yz85YzAZeTqvAMbSkzyzvmIziqv3LOveJQQw/DsouV8
-        pTS4xZ/flTSmlOO8m3r18Sg=
-X-Google-Smtp-Source: ABdhPJxECAbSxRGc7r2e70SdPbZdEqtqwn8on6WG0NbbGyW+QD1yZ66KVZEWblueeLh61ipr8/Nl1Q==
-X-Received: by 2002:a1c:a905:: with SMTP id s5mr9433945wme.120.1590775593019;
-        Fri, 29 May 2020 11:06:33 -0700 (PDT)
-Received: from localhost (pd9e51079.dip0.t-ipconnect.de. [217.229.16.121])
-        by smtp.gmail.com with ESMTPSA id t185sm299618wmt.28.2020.05.29.11.06.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 May 2020 11:06:32 -0700 (PDT)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: Merge gpio-usb-b-connector with usb-connector
-Date:   Fri, 29 May 2020 20:06:31 +0200
-Message-Id: <20200529180631.3200680-1-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.24.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zLXiRl9cDcJQQ+j3BIvVxaRM9eyFQUW8oMYbC//hTWw=;
+        b=N/6+GYh7E2Fzc1Lf+PbQauhIxws6nXgV+IUPQHoG7ZOjOrj4gCXFJS//b6lh1b0NnY
+         +WNB84oT9vGPkq5njkZ2tQuMBVuVW+M4jxtk5QU0c7e3XD1CLKMM7rqyNHSKYjkKtly8
+         wEG8jgMS+Z9Sf8arEjp9LlPcQTw16d8B4bQay1SWRNB7dAK92TqxTJDVkgQPiUljOvva
+         0ARLTUukiD+IaGOD1gKzXBtlb8UzTmc6iD/6fsTCDERc8nJm8cEdhCzSJbNFZ8wEY/yG
+         xMlGfmbmNEqGkSCPFBlRMltRRPZSCG9TrzNpG6T2VyOyXRnFx1DfynLi1ngah1gVbk4O
+         2ZRw==
+X-Gm-Message-State: AOAM533OwSQRi7Q9ox6fEZLslLG2D4FtWpKDktEYQ9f1FzcCnn14lGIo
+        gMOsAzkVEXPn3kmoSPxRnTfG4mkHb2GDa8iKx5zFhoDp
+X-Google-Smtp-Source: ABdhPJzZfyp8e713uokhnlncAGKpGbSODS17oXrNKjcyEh7Rq/5hnnoiflVwEml34+J+6mfTf9ifb+Y1QFXG23w6V7k=
+X-Received: by 2002:adf:9f0b:: with SMTP id l11mr5759898wrf.66.1590776494740;
+ Fri, 29 May 2020 11:21:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <1d3bae1b3048f5d6e19f7ef569dd77e9e160a026.1590753016.git.hminas@synopsys.com>
+ <CAD=FV=W1x_HJNCYMUb11QNA8yGs0heEiZzHZdeMPzFaRHaTOsA@mail.gmail.com>
+ <0f6b1580-41d8-b7e7-206b-64cda87abfd5@synopsys.com> <CAD=FV=UCMqyX92o9m7H40E3sHzAFieHSu3TUY953VqNb-vuPPg@mail.gmail.com>
+ <CAJz5OpfDnHfGf=dLbc0hTtaz-CERsQyaBNeqDiRz7u4jMywNow@mail.gmail.com> <CAD=FV=URUeE55xyL3iB5GmS7BRoDG2ey3UE4qSwwc7XZHR0c-Q@mail.gmail.com>
+In-Reply-To: <CAD=FV=URUeE55xyL3iB5GmS7BRoDG2ey3UE4qSwwc7XZHR0c-Q@mail.gmail.com>
+From:   Frank Mori Hess <fmh6jj@gmail.com>
+Date:   Fri, 29 May 2020 14:21:23 -0400
+Message-ID: <CAJz5OpdMDumfdYC+aj0N20p4qVEkEkHhNY3uKest6RSpPtrDWQ@mail.gmail.com>
+Subject: Re: [PATCH] usb: dwc2: Fix shutdown callback in platform
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        John Youn <John.Youn@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "# 4.0+" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Thierry Reding <treding@nvidia.com>
+On Fri, May 29, 2020 at 1:53 PM Doug Anderson <dianders@chromium.org> wrote:
+> >
+> > I don't get it.  A hypothetical machine could have literally anything
+> > sharing the IRQ line, right?
+>
+> It's not a real physical line, though?  I don't think it's common to
+> have a shared interrupt between different IP blocks in a given SoC.
+> Even if it existed, all the drivers should disable their interrupts?
 
-The binding for usb-connector is a superset of gpio-usb-b-connector. One
-major difference is that gpio-usb-b-connector requires at least one of
-the vbus-gpios and id-gpios properties to be specified. Merge the two
-bindings by adding the compatible string combination for the GPIO USB-B
-variant and an extra conditional for the required properties list to the
-usb-connector.yaml file.
+I don't know, it's a hypothetical machine so it can be whatever you
+want.  The driver requests shared irqs, if it doesn't actually support
+irq sharing, it shouldn't request them.
 
-Signed-off-by: Thierry Reding <treding@nvidia.com>
----
- .../bindings/connector/usb-connector.yaml     | 39 +++++++++++++++++--
- .../devicetree/bindings/usb/usb-conn-gpio.txt | 30 --------------
- 2 files changed, 35 insertions(+), 34 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/usb/usb-conn-gpio.txt
+> > Anyways, my screaming interrupt occurs after a a new kernel has been
+> > booted with kexec.  In this case, it doesn't matter if the old kernel
+> > called disable_irq or not.  As soon as the new kernel re-enables the
+> > interrupt line, the kernel immediately disables it again with a
+> > backtrace due to the unhandled screaming interrupt.  That's why the
+> > dwc2 hardware needs to have its interrupts turned off when the old
+> > kernel is shutdown.
+>
+> Isn't that a bug with your new kernel?  I've seen plenty of bugs where
+> drivers enable their interrupt before their interrupt handler is set
+> to handle it.  You never know what state the bootloader (or previous
+> kernel) might have left things in and if an interrupt was pending it
+> shouldn't kill you.
 
-diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-index 03b92b6f35fa..9bd52e63c935 100644
---- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
-+++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-@@ -15,10 +15,15 @@ description:
- 
- properties:
-   compatible:
--    enum:
--      - usb-a-connector
--      - usb-b-connector
--      - usb-c-connector
-+    oneOf:
-+      - enum:
-+          - usb-a-connector
-+          - usb-b-connector
-+          - usb-c-connector
-+
-+      - items:
-+          - const: gpio-usb-b-connector
-+          - const: usb-b-connector
- 
-   label:
-     description: Symbolic name for the connector.
-@@ -140,6 +145,19 @@ properties:
- required:
-   - compatible
- 
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: gpio-usb-b-connector
-+    then:
-+      anyOf:
-+        - required:
-+            - vbus-gpios
-+        - required:
-+            - id-gpios
-+
- examples:
-   # Micro-USB connector with HS lines routed via controller (MUIC).
-   - |
-@@ -202,3 +220,16 @@ examples:
-         op-sink-microwatt = <10000000>;
-       };
-     };
-+
-+  # USB connector with GPIO control lines
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    usb {
-+      connector {
-+        compatible = "gpio-usb-b-connector", "usb-b-connector";
-+        type = "micro";
-+        id-gpios = <&pio 12 GPIO_ACTIVE_HIGH>;
-+        vbus-supply = <&usb_p0_vbus>;
-+      };
-+    };
-diff --git a/Documentation/devicetree/bindings/usb/usb-conn-gpio.txt b/Documentation/devicetree/bindings/usb/usb-conn-gpio.txt
-deleted file mode 100644
-index ec80641208a5..000000000000
---- a/Documentation/devicetree/bindings/usb/usb-conn-gpio.txt
-+++ /dev/null
-@@ -1,30 +0,0 @@
--USB GPIO Based Connection Detection
--
--This is typically used to switch dual role mode from the USB ID pin connected
--to an input GPIO, and also used to enable/disable device mode from the USB
--Vbus pin connected to an input GPIO.
--
--Required properties:
--- compatible : should include "gpio-usb-b-connector" and "usb-b-connector".
--- id-gpios, vbus-gpios : input gpios, either one of them must be present,
--	and both can be present as well.
--	see connector/usb-connector.yaml
--
--Optional properties:
--- vbus-supply : can be present if needed when supports dual role mode.
--	see connector/usb-connector.yaml
--
--- Sub-nodes:
--	- port : can be present.
--		see graph.txt
--
--Example:
--
--&mtu3 {
--	connector {
--		compatible = "gpio-usb-b-connector", "usb-b-connector";
--		type = "micro";
--		id-gpios = <&pio 12 GPIO_ACTIVE_HIGH>;
--		vbus-supply = <&usb_p0_vbus>;
--	};
--};
+It wouldn't hurt to add disabling of the dwc2 irq early in dwc2
+initialization, but why leave the irq screaming after shutdown?  If
+there is another device using the same irq, it will generate unhandled
+interrupt backtraces and get its irq disabled when the new kernel
+requests its irq, if the device's driver is loaded before the dwc2
+driver (assuming the new kernel even has a dwc2 driver).  The dwc2
+driver in its current state will generate unhandled interrupt
+backtraces by itself until it registers the right handler.
+
 -- 
-2.24.1
-
+Frank
