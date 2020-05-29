@@ -2,154 +2,251 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FBD11E83D4
-	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2020 18:37:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B31951E8501
+	for <lists+linux-usb@lfdr.de>; Fri, 29 May 2020 19:36:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726903AbgE2Qhx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 May 2020 12:37:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60684 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725914AbgE2Qhw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 May 2020 12:37:52 -0400
-Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D25BC08C5C6
-        for <linux-usb@vger.kernel.org>; Fri, 29 May 2020 09:37:52 -0700 (PDT)
-Received: by mail-il1-x144.google.com with SMTP id h3so3070302ilh.13
-        for <linux-usb@vger.kernel.org>; Fri, 29 May 2020 09:37:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VVOicISwjob/jpSj7GhBdeR1eYfzffk4NhdXDDRt620=;
-        b=mniyFHBszz8POGVdK0H4zlRw0AW/+Qzt9awBB1qmYHoh/wVhj7ZcME7OmouegwCSlE
-         mUBQcpmP1H19Dk20aDc45vWv+yLNvxrvzJvYK2gWhm204qK53tKDqzQU2q6sIg4dbJ/V
-         7zdTPr6Xjttnt1/nzTMZzlT6KaDwFbevZixtc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VVOicISwjob/jpSj7GhBdeR1eYfzffk4NhdXDDRt620=;
-        b=mvGIzrjHq/3Kdr4SJZ/FqJXWWYlZOREJKIMRrRwLGPnKZ0blSdH8oG+TwVPY61OeZ1
-         xEVBUx77Mb8jdl+KfQIb6iQgyFuba4+gSE8/Uo+HbPOyD/A9Z2UWMF9Is42Hp+VqFqAa
-         OfQQ1opvrAMJGEujbHu/tOn3JFIdBvaEgBPsYA6m5TDvu3ejEvirmcF8n6LcfGhHeFB4
-         eaY7JrscxXhPJM2K6YF5Wu2nVv0frBWRM9w/G35xy7irIzJ44MbpULz0aSaq1lce4lcQ
-         MMy+kT7nh1/XlXX16HslXWuZESid0JYNQi608AaGFgHkI/SOKqW4EG1H3AfiyiOGCWaW
-         RwlQ==
-X-Gm-Message-State: AOAM531Y2trl8EvV7xEMntGV4PHilSPOz9qYXHc/u/xyIO67ZEBMR1Jj
-        Sx5lejQ1x3PDQC5yox+j/2YRNisp458=
-X-Google-Smtp-Source: ABdhPJxsW9OPfW/iSRpEFmvUZhgAnpI248M4gWS4ANjzxaBH1MsHl4OLvZXdn8ElhBKZiLfM9nK0ow==
-X-Received: by 2002:a05:6e02:dd3:: with SMTP id l19mr7507375ilj.154.1590770271355;
-        Fri, 29 May 2020 09:37:51 -0700 (PDT)
-Received: from mail-il1-f179.google.com (mail-il1-f179.google.com. [209.85.166.179])
-        by smtp.gmail.com with ESMTPSA id w29sm3284608ila.26.2020.05.29.09.37.50
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 May 2020 09:37:50 -0700 (PDT)
-Received: by mail-il1-f179.google.com with SMTP id r2so3117602ila.4
-        for <linux-usb@vger.kernel.org>; Fri, 29 May 2020 09:37:50 -0700 (PDT)
-X-Received: by 2002:a05:6e02:11b2:: with SMTP id 18mr8533637ilj.229.1590770269906;
- Fri, 29 May 2020 09:37:49 -0700 (PDT)
+        id S1727992AbgE2RfT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 May 2020 13:35:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56382 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727062AbgE2RfN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 29 May 2020 13:35:13 -0400
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2808A2158C;
+        Fri, 29 May 2020 17:35:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590773712;
+        bh=N+Un+BXPNCdwo4xJnKmNvAMc7B65G5dDUl6XlFJhboc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=FC3K04+o4kotI0QdMdPXhWg/NrGqfBDvkybMPFFYhcROjhXFdhvHa2g/UMuaRQqe4
+         0PXK7cz+RH1eDoNP8QxNY3rNcgGsseJCELbyZgsSzVIjNfuk4dHvCtCGqflCylK4jK
+         2TJzKOFI4NdHk0vFqSZFwojvCm1olXIh9bODbUlM=
+Received: by mail-oi1-f176.google.com with SMTP id r67so3313147oih.0;
+        Fri, 29 May 2020 10:35:12 -0700 (PDT)
+X-Gm-Message-State: AOAM532dp6rzP1uKWpfJEU6XO0c81OyZZOmeY2rQ1eJnDwovfyHadNWA
+        YNnMUwwk9zdR2nFgd5vsYMU8afdq35lyhYxLuA==
+X-Google-Smtp-Source: ABdhPJy67vCAsYB4Fd3qNuQ9AC0QhkVo349CUBfpkVbINCPQGDe2HpNRSlbYDZ1gs0sw/NCjOOh6RfVzTBK35dFAoUo=
+X-Received: by 2002:a05:6808:7cb:: with SMTP id f11mr6993653oij.152.1590773711249;
+ Fri, 29 May 2020 10:35:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <1d3bae1b3048f5d6e19f7ef569dd77e9e160a026.1590753016.git.hminas@synopsys.com>
- <CAD=FV=W1x_HJNCYMUb11QNA8yGs0heEiZzHZdeMPzFaRHaTOsA@mail.gmail.com> <0f6b1580-41d8-b7e7-206b-64cda87abfd5@synopsys.com>
-In-Reply-To: <0f6b1580-41d8-b7e7-206b-64cda87abfd5@synopsys.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 29 May 2020 09:37:38 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=UCMqyX92o9m7H40E3sHzAFieHSu3TUY953VqNb-vuPPg@mail.gmail.com>
-Message-ID: <CAD=FV=UCMqyX92o9m7H40E3sHzAFieHSu3TUY953VqNb-vuPPg@mail.gmail.com>
-Subject: Re: [PATCH] usb: dwc2: Fix shutdown callback in platform
-To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Cc:     John Youn <John.Youn@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
+References: <20200526191303.1492-1-james.quinlan@broadcom.com>
+ <20200526191303.1492-10-james.quinlan@broadcom.com> <59a0b4e1454a8ef4d3e4ebaf55dcbf3dcd2d73a2.camel@suse.de>
+ <CA+-6iNyOKvY-xNfXqDRa5_nJVJuqGKA-oe-ejNuJHUBt6ORu0A@mail.gmail.com>
+In-Reply-To: <CA+-6iNyOKvY-xNfXqDRa5_nJVJuqGKA-oe-ejNuJHUBt6ORu0A@mail.gmail.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Fri, 29 May 2020 11:34:59 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJsxxC6msUXBCa9naitMLfOcVZauk44gPJNGGe3iXRzsA@mail.gmail.com>
+Message-ID: <CAL_JsqJsxxC6msUXBCa9naitMLfOcVZauk44gPJNGGe3iXRzsA@mail.gmail.com>
+Subject: Re: [PATCH v2 09/14] device core: Add ability to handle multiple dma offsets
+To:     Jim Quinlan <james.quinlan@broadcom.com>
+Cc:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        "open list:PCI NATIVE HOST BRIDGE AND ENDPOINT DRIVERS" 
+        <linux-pci@vger.kernel.org>, Christoph Hellwig <hch@lst.de>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Frank Rowand <frowand.list@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Felipe Balbi <balbi@ti.com>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko.stuebner@collabora.com>,
-        "# 4.0+" <stable@vger.kernel.org>,
-        Frank Mori Hess <fmh6jj@gmail.com>
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Oliver Neukum <oneukum@suse.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>, Corey Minyard <minyard@acm.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        "open list:DMA MAPPING HELPERS" <iommu@lists.linux-foundation.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-
-On Fri, May 29, 2020 at 9:30 AM Minas Harutyunyan
-<Minas.Harutyunyan@synopsys.com> wrote:
+On Wed, May 27, 2020 at 9:43 AM Jim Quinlan <james.quinlan@broadcom.com> wrote:
 >
-> Hi Doug,
+> Hi Nicolas,
 >
-> On 5/29/2020 6:49 PM, Doug Anderson wrote:
-> > Hi,
+> On Wed, May 27, 2020 at 11:00 AM Nicolas Saenz Julienne
+> <nsaenzjulienne@suse.de> wrote:
 > >
-> > On Fri, May 29, 2020 at 4:51 AM Minas Harutyunyan
-> > <Minas.Harutyunyan@synopsys.com> wrote:
-> >>
-> >> To avoid lot of interrupts from dwc2 core, which can be asserted in
-> >> specific conditions need to disable interrupts on HW level instead of
-> >> disable IRQs on Kernel level, because of IRQ can be shared between
-> >> drivers.
-> >>
-> >> Cc: stable@vger.kernel.org
-> >> Fixes: a40a00318c7fc ("usb: dwc2: add shutdown callback to platform variant")
-> >> Tested-by: Frank Mori Hess <fmh6jj@gmail.com>
-> >> Signed-off-by: Minas Harutyunyan <hminas@synopsys.com>
-> >> ---
-> >>   drivers/usb/dwc2/platform.c | 2 +-
-> >>   1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
-> >> index e571c8ae65ec..ada5b66b948e 100644
-> >> --- a/drivers/usb/dwc2/platform.c
-> >> +++ b/drivers/usb/dwc2/platform.c
-> >> @@ -342,7 +342,7 @@ static void dwc2_driver_shutdown(struct platform_device *dev)
-> >>   {
-> >>          struct dwc2_hsotg *hsotg = platform_get_drvdata(dev);
-> >>
-> >> -       disable_irq(hsotg->irq);
-> >> +       dwc2_disable_global_interrupts(hsotg);
-> >>   }
+> > Hi Jim,
+> > one thing comes to mind, there is a small test suite in drivers/of/unittest.c
+> > (specifically of_unittest_pci_dma_ranges()) you could extend it to include your
+> > use cases.
+> Sure, will check out.
 > >
-> > I could be wrong, but I think it would be better to instead end up
-> > with both calls, like:
+> > On Tue, 2020-05-26 at 15:12 -0400, Jim Quinlan wrote:
+> > > The new field in struct device 'dma_pfn_offset_map' is used to facilitate
+> > > the use of multiple pfn offsets between cpu addrs and dma addrs.  It is
+> > > similar to 'dma_pfn_offset' except that the offset chosen depends on the
+> > > cpu or dma address involved.
+> > >
+> > > Signed-off-by: Jim Quinlan <james.quinlan@broadcom.com>
+> > > ---
+> > >  drivers/of/address.c        | 65 +++++++++++++++++++++++++++++++++++--
+> > >  drivers/usb/core/message.c  |  3 ++
+> > >  drivers/usb/core/usb.c      |  3 ++
+> > >  include/linux/device.h      | 10 +++++-
+> > >  include/linux/dma-direct.h  | 10 ++++--
+> > >  include/linux/dma-mapping.h | 46 ++++++++++++++++++++++++++
+> > >  kernel/dma/Kconfig          | 13 ++++++++
+> > >  7 files changed, 144 insertions(+), 6 deletions(-)
+> > >
 > >
-> > dwc2_disable_global_interrupts(hsotg);
-> > disable_irq(hsotg->irq);
+> > [...]
 > >
-> > To some extent it's slightly overkill, but the disable_irq() function
-> > has the nice "and wait for completion" bit.  Your new call doesn't do
-> > this.
+> > > @@ -977,10 +1020,19 @@ int of_dma_get_range(struct device *dev, struct
+> > > device_node *np, u64 *dma_addr,
+> > >               pr_debug("dma_addr(%llx) cpu_addr(%llx) size(%llx)\n",
+> > >                        range.bus_addr, range.cpu_addr, range.size);
+> > >
+> > > +             num_ranges++;
+> > >               if (dma_offset && range.cpu_addr - range.bus_addr != dma_offset)
+> > > {
+> > > -                     pr_warn("Can't handle multiple dma-ranges with different
+> > > offsets on node(%pOF)\n", node);
+> > > -                     /* Don't error out as we'd break some existing DTs */
+> > > -                     continue;
+> > > +                     if (!IS_ENABLED(CONFIG_DMA_PFN_OFFSET_MAP)) {
+> > > +                             pr_warn("Can't handle multiple dma-ranges with
+> > > different offsets on node(%pOF)\n", node);
+> > > +                             pr_warn("Perhaps set DMA_PFN_OFFSET_MAP=y?\n");
+> > > +                             /*
+> > > +                              * Don't error out as we'd break some existing
+> > > +                              * DTs that are using configs w/o
+> > > +                              * CONFIG_DMA_PFN_OFFSET_MAP set.
+> > > +                              */
+> > > +                             continue;
 > >
-> If dwc2 currently handling some interrupt then below patch can allow to
-> wait until interrupt will be handled:
->
-> spin_lock(&hsotg->lock);
-> dwc2_disable_global_interrupts(hsotg);
-> spin_unlock(&hsotg->lock);
+> > dev->bus_dma_limit is set in of_dma_configure(), this function's caller, based
+> > on dma_start's value (set after this continue). So you'd be effectively setting
+> > the dev->bus_dma_limit to whatever we get from the first dma-range.
+> I'm not seeing that at all.  On the  evaluation of each dma-range,
+> dma_start and dma_end are re-evaluated to be the lowest and highest
+> bus values of the  dma-ranges seen so far.  After all dma-ranges are
+> examined,  dev->bus_dma_limit being set to the highest.  In fact, the
+> current code -- ie before my commits -- already does this for multiple
+> dma-ranges as long as the cpu-bus offset is the same in the
+> dma-ranges.
+> >
+> > This can be troublesome depending on how the dma-ranges are setup, for example
+> > if the first dma-range doesn't include the CMA area, in arm64 generally set as
+> > high as possible in ZONE_DMA32, that would render it useless for
+> > dma/{direct/swiotlb}. Again depending on the bus_dma_limit value, if smaller
+> > than ZONE_DMA you'd be unable to allocate any DMA memory.
+> >
+> > IMO, a solution to this calls for a revamp of dma-direct's dma_capable(): match
+> > the target DMA memory area with each dma-range we have to see if it fits.
+> >
+> > > +                     }
+> > > +                     dma_multi_pfn_offset = true;
+> > >               }
+> > >               dma_offset = range.cpu_addr - range.bus_addr;
+> > >
+> > > @@ -991,6 +1043,13 @@ int of_dma_get_range(struct device *dev, struct
+> > > device_node *np, u64 *dma_addr,
+> > >                       dma_end = range.bus_addr + range.size;
+> > >       }
+> > >
+> > > +     if (dma_multi_pfn_offset) {
+> > > +             dma_offset = 0;
+> > > +             ret = attach_dma_pfn_offset_map(dev, node, num_ranges);
+> > > +             if (ret)
+> > > +                     return ret;
+> > > +     }
+> > > +
+> > >       if (dma_start >= dma_end) {
+> > >               ret = -EINVAL;
+> > >               pr_debug("Invalid DMA ranges configuration on node(%pOF)\n",
+> > > diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
+> > > index 6197938dcc2d..aaa3e58f5eb4 100644
+> > > --- a/drivers/usb/core/message.c
+> > > +++ b/drivers/usb/core/message.c
+> > > @@ -1960,6 +1960,9 @@ int usb_set_configuration(struct usb_device *dev, int
+> > > configuration)
+> > >                */
+> > >               intf->dev.dma_mask = dev->dev.dma_mask;
+> > >               intf->dev.dma_pfn_offset = dev->dev.dma_pfn_offset;
+> > > +#ifdef CONFIG_DMA_PFN_OFFSET_MAP
+> > > +             intf->dev.dma_pfn_offset_map = dev->dev.dma_pfn_offset_map;
+> > > +#endif
+> >
+> > Thanks for looking at this, that said, I see more instances of drivers changing
+> > dma_pfn_offset outside of the core code. Why not doing this there too?
+> >
+> > Also, are we 100% sure that dev->dev.dma_pfn_offset isn't going to be freed
+> > before we're done using intf->dev? Maybe it's safer to copy the ranges?
+> >
+> > >               INIT_WORK(&intf->reset_ws, __usb_queue_reset_device);
+> > >               intf->minor = -1;
+> > >               device_initialize(&intf->dev);
+> > > diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
+> > > index f16c26dc079d..d2ed4d90e56e 100644
+> > > --- a/drivers/usb/core/usb.c
+> > > +++ b/drivers/usb/core/usb.c
+> > > @@ -612,6 +612,9 @@ struct usb_device *usb_alloc_dev(struct usb_device
+> > > *parent,
+> > >        */
+> > >       dev->dev.dma_mask = bus->sysdev->dma_mask;
+> > >       dev->dev.dma_pfn_offset = bus->sysdev->dma_pfn_offset;
+> > > +#ifdef CONFIG_DMA_PFN_OFFSET_MAP
+> > > +     dev->dev.dma_pfn_offset_map = bus->sysdev->dma_pfn_offset_map;
+> > > +#endif
+> > >       set_dev_node(&dev->dev, dev_to_node(bus->sysdev));
+> > >       dev->state = USB_STATE_ATTACHED;
+> > >       dev->lpm_disable_count = 1;
+> > > diff --git a/include/linux/device.h b/include/linux/device.h
+> > > index ac8e37cd716a..67a240ad4fc5 100644
+> > > --- a/include/linux/device.h
+> > > +++ b/include/linux/device.h
+> > > @@ -493,6 +493,8 @@ struct dev_links_info {
+> > >   * @bus_dma_limit: Limit of an upstream bridge or bus which imposes a smaller
+> > >   *           DMA limit than the device itself supports.
+> > >   * @dma_pfn_offset: offset of DMA memory range relatively of RAM
+> > > + * @dma_pfn_offset_map:      Like dma_pfn_offset but used when there are
+> > > multiple
+> > > + *           pfn offsets for multiple dma-ranges.
+> > >   * @dma_parms:       A low level driver may set these to teach IOMMU code
+> > > about
+> > >   *           segment limitations.
+> > >   * @dma_pools:       Dma pools (if dma'ble device).
+> > > @@ -578,7 +580,13 @@ struct device {
+> > >                                            allocations such descriptors. */
+> > >       u64             bus_dma_limit;  /* upstream dma constraint */
+> > >       unsigned long   dma_pfn_offset;
+> > > -
+> > > +#ifdef CONFIG_DMA_PFN_OFFSET_MAP
+> > > +     const struct dma_pfn_offset_region *dma_pfn_offset_map;
+> > > +                                     /* Like dma_pfn_offset, but for
+> > > +                                      * the unlikely case of multiple
+> > > +                                      * offsets. If non-null, dma_pfn_offset
+> > > +                                      * will be set to 0. */
+> > > +#endif
+> >
+> > I'm still sad this doesn't fully replace dma_pfn_offset & bus_dma_limit. I feel
+> > the extra logic involved in incorporating this as default isn't going to be
+> > noticeable as far as performance is concerned to single dma-range users, and
+> > it'd make for a nicer DMA code. Also you'd force everyone to test their changes
+> > on the multi dma-ranges code path, as opposed to having this disabled 99.9% of
+> > the time (hence broken every so often).
+> Good point.
 
-Would that really work?  If you've got a two core system and the
-interrupt is just firing on a different core but hasn't acquired the
-spinlock then your code might get the spinlock, disable the
-interrupts, and then release the spinlock.  The interrupt handler will
-still be running on the other CPU and now will get the spinlock.
++1
 
+> > Note that I sympathize with the amount of work involved on improving that, so
+> > better wait to hear what more knowledgeable people have to say about this :)
+> Yes, I agree.  I want to avoid coding and testing one solution only to
+> have a different reviewer NAK it.
 
-> but on other hand dwc2 have 3 subsequent interrupt handlers - core,
-> gadget, host and not clear which of handler completed.
->
-> > That being said, though, you still won't wait for the completion of
-> > the IRQ handler for the "other drivers" you reference, right.  Maybe a
-> > better fix would be to add a shutdown callback for those other drivers
-> > and just keep relying on disable_irq()?
-> >
-> I have look to other drivers where used disable_irq() - no any driver
-> care about SHARED irq's. In that case your suggestion to use both
-> disabling is looks Ok.
+It's a pretty safe bet that everyone will prefer one code path over 2.
 
-I'm not sure I understand.  Are you saying that you'll just add
-shutdown callbacks to all the drivers using this IRQ and call
-disable_irq() there?  That seems like the best solution to me.
-
--Doug
+Rob
