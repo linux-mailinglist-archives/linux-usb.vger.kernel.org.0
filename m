@@ -2,88 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EB801E8F1A
-	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2020 09:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 439F51E9003
+	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2020 11:25:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728826AbgE3HmA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 30 May 2020 03:42:00 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:52350 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728807AbgE3Hl7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 30 May 2020 03:41:59 -0400
-Received: from mailhost.synopsys.com (sv1-mailhost2.synopsys.com [10.205.2.132])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 3B5C74094A;
-        Sat, 30 May 2020 07:41:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1590824519; bh=i0WVMhfUe7X8jMr5woG6oawz62l16H5EjhMrkDwjGg8=;
-        h=Date:From:Subject:To:Cc:From;
-        b=VPbMjlWXvgSjBNwqy7YQhePBOiQSgSydqCzFtqv0n/Q5e8JeP8aE0F5+es/3+Q/ui
-         7vgm+dJJMuLbIYqpSJQEnEdjpueKybjEOoUWMborNh2yY/8/FJUEL6kkykF9IO63iq
-         gIgejJtRNGEAn3TzVo77Pg4IaNOg/cAVyE3dsNxniXjAWYZVUoIu3/VZCUd6Ll6hla
-         MWP/IyabcGicImy3JjovjxVmdCpRuHju1WAktzisSph5SkRH888qfS96ehcVKCOaFQ
-         KyhzamOKyQFjk0tzxQjdeX2DSRkCjfz+/HuR/3+belxA1Hi9KFiKWAH/CORiDBuEQc
-         w89GN7e+veVHA==
-Received: from hminas-z420 (hminas-z420.internal.synopsys.com [10.116.126.211])
-        (using TLSv1 with cipher AES128-SHA (128/128 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 09A37A006F;
-        Sat, 30 May 2020 07:41:53 +0000 (UTC)
-Received: by hminas-z420 (sSMTP sendmail emulation); Sat, 30 May 2020 11:41:50 +0400
-Date:   Sat, 30 May 2020 11:41:50 +0400
-Message-Id: <01a67b314fa39b794847fc0c1758969931ca6177.1590822499.git.hminas@synopsys.com>
-X-SNPS-Relay: synopsys.com
-From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Subject: [PATCH v2] usb: dwc2: Fix shutdown callback in platform
-To:     John Youn <John.Youn@synopsys.com>,
+        id S1728513AbgE3JYu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 30 May 2020 05:24:50 -0400
+Received: from mout.web.de ([212.227.15.4]:38461 "EHLO mout.web.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728071AbgE3JYt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 30 May 2020 05:24:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
+        s=dbaedf251592; t=1590830665;
+        bh=D/PFUzv6CfvJZCUeNBxauZnNL547fXvqgd8mvATU+n4=;
+        h=X-UI-Sender-Class:To:Cc:Subject:From:Date;
+        b=ft0vF7pAydNWEQ0cr7OgfD8MSFywSXZqhT3qxTAnYx/4M4p3VwW2H41QRHOnHG+of
+         d8SVjuw20aXAEUQM3gWAOilmGwQLTQkj4hzqlgKXCrAR7aL4ks2Lr6Ae8O36rDvKdl
+         LKepEQqW1H/ufE4j1RoaSpEH4H9vtYgxsbCXX8qs=
+X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
+Received: from [192.168.1.2] ([93.133.149.250]) by smtp.web.de (mrweb004
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 0MdYXk-1jMLyu3quK-00POEZ; Sat, 30
+ May 2020 11:24:25 +0200
+To:     Jia-Ju Bai <baijiaju1990@gmail.com>, linux-usb@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Colin Ian King <colin.king@canonical.com>,
         Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        linux-usb@vger.kernel.org,
-        "Heiko Stuebner" <heiko.stuebner@collabora.com>,
-        Douglas Anderson <dianders@chromium.org>
-Cc:     stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Frank Mori Hess <fmh6jj@gmail.com>
+        Pawel Laszczak <pawell@cadence.com>,
+        Peter Chen <peter.chen@nxp.com>, Roger Quadros <rogerq@ti.com>,
+        YueHaibing <yuehaibing@huawei.com>
+Subject: Re: [PATCH] usb: cdns3: fix possible buffer overflow caused by bad
+ DMA value
+From:   Markus Elfring <Markus.Elfring@web.de>
+Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
+ 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 FEE=
+Message-ID: <b489646a-a4f7-adf0-b996-ab92039c8487@web.de>
+Date:   Sat, 30 May 2020 11:24:23 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:KwFD5huqvoEbAm6XI3CNAt5Swh4839eXZ9RLBK+8vXvQhGLEptD
+ QBd5Tj+twa5AMOtdITWI3m1WDq9LBiZGbXBM6nZWI6W5YpFrWES8iStDf+dH6IskgnRzEYQ
+ dU0pLZPvTZzGYBt1L3rd6wP5WvUGnSq/Eyp/g192XfGMTPx7OFjIzbM384JhQ2/zbS4Sg+n
+ sMMAEsjfOiT87+KvfNTnw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:o8CKB5kNA6U=:Ny4iKf/f5tf6iIhVxjCeAz
+ HXkNFZPrM/7CFo5DMLoUC3S0hkdQHV/424RE0STuZCF/u8Nx5EtCgeMDbq5Iep5PlIx+mkdLc
+ LQx0Hj6YGQ3ne3pE9T6BUKV2qb5/QM19KKZ99dP/KDka6TrTOBak+Z2Uv36Du2oWJfsWnsz7z
+ D3OvXkfryTqcDVVvLAKiDQTmbQlFHAm9kDYqmmnqk66vfrHYjZ+S3TjecggKbL+Grq7froURN
+ A1SlxeOCnk2W+/NdCHxoZOQtM5W/Hl8KZrJNGGrj5pW90PJq3zZX5JVvktOduXk5sM/WIVQqw
+ SUyN+MwoQFVozNlDYDCVhtVGGf745pI72s6w0XEbZ5ySJsOGWX/HjZF0cFHpTSfk0xIORopDS
+ K/3Om/zsyWT9VBrG6au76If+zDEfHe0F+AbL8NSptIXbDJz1ckXtuEYHPR5/7nOlkLebWdIGl
+ ayNfFtBPF3IHyKgMgPTl3vBlDQ+ayE6odKUbMlz7eC+0hvEE3RXMQ5Fuzma0tuFR0IDUeONwB
+ /OhfodGpU3i24DRMyEJT4olCgAyoKxLTDcjwtA0YWFdc5QU41Krl9oO2mRsIK4bDuciwx2tIo
+ MuNacSspZQJcSYkqZypo/HGOuIw1xc22Oh0R2jrMUxOHb4g2Pnenz7f/mMnEyWxM7/7ZkK399
+ mnJMe452JL1LWghQMZPc3yCuxTRtODlNQSiDwOEsdxgGThAW9b6CAJRC58a1B3TWhdJBUM9++
+ Ysh36aqStCwque7QkW86LV+p9+nmNGaNt5fuzDYYsrAbqo/+v1pTs4LFd2LHh3k0PXPUH1gvP
+ 2sMw12vqOMdpdsrjKTxj4Km1Z+N8yfMccxcgRRoZplUkAe2cc89Q6Nt0Lhj4LGMp8IPo1i+Rp
+ w/u/up3nuccnFrOSIzp/aolASfnQujA5+N5v/txXRyGQKXjW3vpDReuxAEzWOr5FSafuQhmrR
+ D3h8VlAWjJpDnEGYTCSST9qN/iMixRa7nyh6191+eMmq4++CXsU36UT+SLFcdvV4SwRokgG8O
+ JH+WEwRtXy2ot2NWjfouZ/K5QEIaZHRCFRuBrgj1g2AVfhoFqong6fbPldz0eolUmujkxB+5l
+ 5I2jzeJA8bjSl2in1lgnxYwB+vi2NmY8Mh0pLd/Ac6oUJil4WNVK/Nnz4hyuC5N5GoTRfKRsb
+ OgYD8opB0LprHxNCnO/72deWv5iXt/VaeVBgtBDD6kii1Gpf6WjlOA2yqIOYxNJIZv6XW/FX6
+ dDPtgjlc63KkGvMdX
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-To avoid lot of interrupts from dwc2 core, which can be asserted in
-specific conditions need to disable interrupts on HW level instead of
-disable IRQs on Kernel level, because of IRQ can be shared between
-drivers.
+> To fix these possible bugs, index is checked before being used.
 
-Cc: stable@vger.kernel.org
-Fixes: a40a00318c7fc ("usb: dwc2: add shutdown callback to platform variant")
-Tested-by: Frank Mori Hess <fmh6jj@gmail.com>
-Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
-Reviewed-by: Doug Anderson <dianders@chromium.org>
-Reviewed-by: Frank Mori Hess <fmh6jj@gmail.com>
-Signed-off-by: Minas Harutyunyan <hminas@synopsys.com>
----
+How do you think about a wording variant like the following?
 
-Changes in V2:
-- added synchronize_irq()
+  Thus check the index before using it further.
 
- drivers/usb/dwc2/platform.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
-index e571c8ae65ec..a6360f5f6cd4 100644
---- a/drivers/usb/dwc2/platform.c
-+++ b/drivers/usb/dwc2/platform.c
-@@ -342,7 +342,8 @@ static void dwc2_driver_shutdown(struct platform_device *dev)
- {
- 	struct dwc2_hsotg *hsotg = platform_get_drvdata(dev);
- 
--	disable_irq(hsotg->irq);
-+	dwc2_disable_global_interrupts(hsotg);
-+	synchronize_irq(hsotg->irq);
- }
- 
- /**
--- 
-2.11.0
+Would you like to add the tag =E2=80=9CFixes=E2=80=9D to the commit messag=
+e?
 
+Regards,
+Markus
