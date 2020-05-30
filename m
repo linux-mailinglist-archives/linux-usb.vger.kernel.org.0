@@ -2,126 +2,213 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 439F51E9003
-	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2020 11:25:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D2501E908E
+	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2020 12:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728513AbgE3JYu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 30 May 2020 05:24:50 -0400
-Received: from mout.web.de ([212.227.15.4]:38461 "EHLO mout.web.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728071AbgE3JYt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 30 May 2020 05:24:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1590830665;
-        bh=D/PFUzv6CfvJZCUeNBxauZnNL547fXvqgd8mvATU+n4=;
-        h=X-UI-Sender-Class:To:Cc:Subject:From:Date;
-        b=ft0vF7pAydNWEQ0cr7OgfD8MSFywSXZqhT3qxTAnYx/4M4p3VwW2H41QRHOnHG+of
-         d8SVjuw20aXAEUQM3gWAOilmGwQLTQkj4hzqlgKXCrAR7aL4ks2Lr6Ae8O36rDvKdl
-         LKepEQqW1H/ufE4j1RoaSpEH4H9vtYgxsbCXX8qs=
-X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.1.2] ([93.133.149.250]) by smtp.web.de (mrweb004
- [213.165.67.108]) with ESMTPSA (Nemesis) id 0MdYXk-1jMLyu3quK-00POEZ; Sat, 30
- May 2020 11:24:25 +0200
-To:     Jia-Ju Bai <baijiaju1990@gmail.com>, linux-usb@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Colin Ian King <colin.king@canonical.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Peter Chen <peter.chen@nxp.com>, Roger Quadros <rogerq@ti.com>,
-        YueHaibing <yuehaibing@huawei.com>
-Subject: Re: [PATCH] usb: cdns3: fix possible buffer overflow caused by bad
- DMA value
-From:   Markus Elfring <Markus.Elfring@web.de>
-Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
- 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 FEE=
-Message-ID: <b489646a-a4f7-adf0-b996-ab92039c8487@web.de>
-Date:   Sat, 30 May 2020 11:24:23 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.1
+        id S1728370AbgE3KaH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 30 May 2020 06:30:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58006 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725813AbgE3KaG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 30 May 2020 06:30:06 -0400
+Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F573C08C5C9;
+        Sat, 30 May 2020 03:30:06 -0700 (PDT)
+Received: by mail-vs1-xe41.google.com with SMTP id r10so2932359vsa.12;
+        Sat, 30 May 2020 03:30:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=hMMyvoJ6Hzq7k9EdwYSzipKdBEAp/8uFwI62KF47aTo=;
+        b=eZnEd7jRFwVo6W9WehaNpAVhal5eoJNUL7m2gR3O02eJx/Fzt1Gi1CDflleRbuC9bp
+         1CxtgGcejx2Wyq4PqJkKnwhI21ntOY6x/jpALKbXuTz/aFs2P+1q2wUfCPwujEZoQG1I
+         dCYemBeEqb33RBygKp3JV/Uckr+uL6CS53uLVb0j8K42N9AoVvSvY/5VQsJj4ceMJVcR
+         QIro+3sXBs23JTyZWwqlqJIvd2x49BfC4Fecf+v9g6Y/+NCuAzcFlyaK2uVsPeLsBaq1
+         n0RczJtrVyLZyeYMHILqgyWvSEQS7dMZx69XuU3iSsDitSOzUUWsWt7FrI3sI88GzTxG
+         8VPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=hMMyvoJ6Hzq7k9EdwYSzipKdBEAp/8uFwI62KF47aTo=;
+        b=der+4oplS1SdP25FUIut3Dpj6TThlKDGpzq5t7De0hmN5jPrCEQ1O6iSgqZunoD62S
+         QcbLIXfT2KJClMXNnqnru9iWWG7HysLuW4pE8XIi/dTPzgiL+p3uFKqUv2WH8ee71xNN
+         aK89BSY+XINLMz5/O8uAHWHhXcx1SSXNCd9o5jwguif/eIMUUT0SHYTxH8hE92c5WfHm
+         IV/UiBaAd1V8vYw41MBf8DT9bZcFoheo6XgbJh48z7cTn8/Lvha8ahEgabd6WJ4/qwvt
+         IvKZ1PUmM4mDGXtUrzAuFG7no5/DNJ1CdR2x+lUPaZ7qbp5Hxa3x6F4PG7p0xDVN18jP
+         WpJw==
+X-Gm-Message-State: AOAM530PfG3zr6m5B6+v6npMXUYdme0wOGgSoyO6D7fEMqU9ENHHjg4L
+        2uxM+b5eFSBtuEEq/2S7YtXZkpz6zCckAA2v0FR5AKDJUJg=
+X-Google-Smtp-Source: ABdhPJxCQHWP1LqR1lDJ72kduPSRCOX8pxNwGhDxafimTUvAR8uGv1bjw3PqpER8mPJSQaz7oAmbvuzqPxHIjCyWmQ8=
+X-Received: by 2002:a67:71c2:: with SMTP id m185mr9086492vsc.186.1590834604383;
+ Sat, 30 May 2020 03:30:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
+References: <20200530040157.31038-1-john.stultz@linaro.org>
+In-Reply-To: <20200530040157.31038-1-john.stultz@linaro.org>
+From:   Jun Li <lijun.kernel@gmail.com>
+Date:   Sat, 30 May 2020 18:29:53 +0800
+Message-ID: <CAKgpwJXU9uuT6C0NMGhZRYQMxZ9b_cCZ8=8=Yb8DwQn7aZcV7g@mail.gmail.com>
+Subject: Re: [RFC][PATCH] usb: typec: tcpci_rt1711h: Try to avoid screaming
+ irq causing boot hangs
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     lkml <linux-kernel@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        YongQin Liu <yongqin.liu@linaro.org>,
+        Linux USB List <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:KwFD5huqvoEbAm6XI3CNAt5Swh4839eXZ9RLBK+8vXvQhGLEptD
- QBd5Tj+twa5AMOtdITWI3m1WDq9LBiZGbXBM6nZWI6W5YpFrWES8iStDf+dH6IskgnRzEYQ
- dU0pLZPvTZzGYBt1L3rd6wP5WvUGnSq/Eyp/g192XfGMTPx7OFjIzbM384JhQ2/zbS4Sg+n
- sMMAEsjfOiT87+KvfNTnw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:o8CKB5kNA6U=:Ny4iKf/f5tf6iIhVxjCeAz
- HXkNFZPrM/7CFo5DMLoUC3S0hkdQHV/424RE0STuZCF/u8Nx5EtCgeMDbq5Iep5PlIx+mkdLc
- LQx0Hj6YGQ3ne3pE9T6BUKV2qb5/QM19KKZ99dP/KDka6TrTOBak+Z2Uv36Du2oWJfsWnsz7z
- D3OvXkfryTqcDVVvLAKiDQTmbQlFHAm9kDYqmmnqk66vfrHYjZ+S3TjecggKbL+Grq7froURN
- A1SlxeOCnk2W+/NdCHxoZOQtM5W/Hl8KZrJNGGrj5pW90PJq3zZX5JVvktOduXk5sM/WIVQqw
- SUyN+MwoQFVozNlDYDCVhtVGGf745pI72s6w0XEbZ5ySJsOGWX/HjZF0cFHpTSfk0xIORopDS
- K/3Om/zsyWT9VBrG6au76If+zDEfHe0F+AbL8NSptIXbDJz1ckXtuEYHPR5/7nOlkLebWdIGl
- ayNfFtBPF3IHyKgMgPTl3vBlDQ+ayE6odKUbMlz7eC+0hvEE3RXMQ5Fuzma0tuFR0IDUeONwB
- /OhfodGpU3i24DRMyEJT4olCgAyoKxLTDcjwtA0YWFdc5QU41Krl9oO2mRsIK4bDuciwx2tIo
- MuNacSspZQJcSYkqZypo/HGOuIw1xc22Oh0R2jrMUxOHb4g2Pnenz7f/mMnEyWxM7/7ZkK399
- mnJMe452JL1LWghQMZPc3yCuxTRtODlNQSiDwOEsdxgGThAW9b6CAJRC58a1B3TWhdJBUM9++
- Ysh36aqStCwque7QkW86LV+p9+nmNGaNt5fuzDYYsrAbqo/+v1pTs4LFd2LHh3k0PXPUH1gvP
- 2sMw12vqOMdpdsrjKTxj4Km1Z+N8yfMccxcgRRoZplUkAe2cc89Q6Nt0Lhj4LGMp8IPo1i+Rp
- w/u/up3nuccnFrOSIzp/aolASfnQujA5+N5v/txXRyGQKXjW3vpDReuxAEzWOr5FSafuQhmrR
- D3h8VlAWjJpDnEGYTCSST9qN/iMixRa7nyh6191+eMmq4++CXsU36UT+SLFcdvV4SwRokgG8O
- JH+WEwRtXy2ot2NWjfouZ/K5QEIaZHRCFRuBrgj1g2AVfhoFqong6fbPldz0eolUmujkxB+5l
- 5I2jzeJA8bjSl2in1lgnxYwB+vi2NmY8Mh0pLd/Ac6oUJil4WNVK/Nnz4hyuC5N5GoTRfKRsb
- OgYD8opB0LprHxNCnO/72deWv5iXt/VaeVBgtBDD6kii1Gpf6WjlOA2yqIOYxNJIZv6XW/FX6
- dDPtgjlc63KkGvMdX
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> To fix these possible bugs, index is checked before being used.
+Hi John,
 
-How do you think about a wording variant like the following?
+John Stultz <john.stultz@linaro.org> =E4=BA=8E2020=E5=B9=B45=E6=9C=8830=E6=
+=97=A5=E5=91=A8=E5=85=AD =E4=B8=8B=E5=8D=8812:02=E5=86=99=E9=81=93=EF=BC=9A
+>
+> I've recently (since 5.7-rc1) started noticing very rare hangs
+> pretty early in bootup on my HiKey960 board.
+>
+> They have been particularly difficult to debug, as the system
+> seems to not respond at all to sysrq- commands. However, the
+> system is alive as I'll occaionally see firmware loading timeout
+> errors after awhile. Adding changes like initcall_debug and
+> lockdep weren't informative, as it tended to cause the problem
+> to hide.
+>
+> I finally tried to dig in a bit more on this today, and noticed
+> that the last dmesg output before the hang was usually:
+>   "random: crng init done"
+>
+> So I dumped the stack at that point, and saw it was being called
+> from the pl061 gpio irq, and the hang always occurred when the
+> crng init finished on cpu 0. Instrumenting that more I could see
+> that when the issue triggered, we were getting a stream of irqs.
+>
+> Chasing further, I found the screaming irq was for the rt1711h,
+> and narrowed down that we were hitting the !chip->tcpci check
+> which immediately returns IRQ_HANDLED, but does not stop the
+> irq from triggering immediately afterwards.
+>
+> This patch slightly reworks the logic, so if we hit the irq
+> before the chip->tcpci has been assigned, we still read and
+> write the alert register, but just skip calling tcpci_irq().
+>
+> With this change, I haven't managed to trip over the problem
+> (though it hasn't been super long - but I did confirm I hit
+> the error case and it didn't hang the system).
+>
+> I still have some concern that I don't know why this cropped
+> up since 5.7-rc, as there haven't been any changes to the
+> driver since 5.4 (or before). It may just be the initialization
+> timing has changed due to something else, and its just exposed
+> this issue? I'm not sure, and that's not super re-assuring.
+>
+> Anyway, I'd love to hear your thoughts if this looks like a sane
+> fix or not.
 
-  Thus check the index before using it further.
+I think a better solution may be move the irq request after port register,
+we should fire the irq after everything is setup.
+does below change works for you?
 
+diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+index 0173890..b56a088 100644
+--- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
++++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+@@ -179,26 +179,6 @@ static irqreturn_t rt1711h_irq(int irq, void *dev_id)
+        return tcpci_irq(chip->tcpci);
+ }
 
-Would you like to add the tag =E2=80=9CFixes=E2=80=9D to the commit messag=
-e?
+-static int rt1711h_init_alert(struct rt1711h_chip *chip,
+-                             struct i2c_client *client)
+-{
+-       int ret;
+-
+-       /* Disable chip interrupts before requesting irq */
+-       ret =3D rt1711h_write16(chip, TCPC_ALERT_MASK, 0);
+-       if (ret < 0)
+-               return ret;
+-
+-       ret =3D devm_request_threaded_irq(chip->dev, client->irq, NULL,
+-                                       rt1711h_irq,
+-                                       IRQF_ONESHOT | IRQF_TRIGGER_LOW,
+-                                       dev_name(chip->dev), chip);
+-       if (ret < 0)
+-               return ret;
+-       enable_irq_wake(client->irq);
+-       return 0;
+-}
+-
+ static int rt1711h_sw_reset(struct rt1711h_chip *chip)
+ {
+        int ret;
+@@ -260,7 +240,8 @@ static int rt1711h_probe(struct i2c_client *client,
+        if (ret < 0)
+                return ret;
 
-Regards,
-Markus
+-       ret =3D rt1711h_init_alert(chip, client);
++       /* Disable chip interrupts before requesting irq */
++       ret =3D rt1711h_write16(chip, TCPC_ALERT_MASK, 0);
+        if (ret < 0)
+                return ret;
+
+@@ -271,6 +252,14 @@ static int rt1711h_probe(struct i2c_client *client,
+        if (IS_ERR_OR_NULL(chip->tcpci))
+                return PTR_ERR(chip->tcpci);
+
++       ret =3D devm_request_threaded_irq(chip->dev, client->irq, NULL,
++                                       rt1711h_irq,
++                                       IRQF_ONESHOT | IRQF_TRIGGER_LOW,
++                                       dev_name(chip->dev), chip);
++       if (ret < 0)
++               return ret;
++       enable_irq_wake(client->irq);
++
+        return 0;
+ }
+
+Li Jun
+>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: YongQin Liu <yongqin.liu@linaro.org>
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: John Stultz <john.stultz@linaro.org>
+> ---
+>  drivers/usb/typec/tcpm/tcpci_rt1711h.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/t=
+cpm/tcpci_rt1711h.c
+> index 017389021b96..530fd2c111ad 100644
+> --- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> +++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> @@ -159,9 +159,6 @@ static irqreturn_t rt1711h_irq(int irq, void *dev_id)
+>         u8 status;
+>         struct rt1711h_chip *chip =3D dev_id;
+>
+> -       if (!chip->tcpci)
+> -               return IRQ_HANDLED;
+> -
+>         ret =3D rt1711h_read16(chip, TCPC_ALERT, &alert);
+>         if (ret < 0)
+>                 goto out;
+> @@ -176,6 +173,9 @@ static irqreturn_t rt1711h_irq(int irq, void *dev_id)
+>         }
+>
+>  out:
+> +       if (!chip->tcpci)
+> +               return IRQ_HANDLED;
+> +
+>         return tcpci_irq(chip->tcpci);
+>  }
+>
+> --
+> 2.17.1
+>
