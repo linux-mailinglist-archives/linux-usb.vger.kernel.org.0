@@ -2,251 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BB681E8CB0
-	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2020 03:03:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 438191E8CB2
+	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2020 03:03:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728449AbgE3BDQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 May 2020 21:03:16 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:46523 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728293AbgE3BDP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 May 2020 21:03:15 -0400
-Received: (qmail 14534 invoked by uid 1000); 29 May 2020 21:03:14 -0400
-Date:   Fri, 29 May 2020 21:03:14 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Zebediah Figura <zfigura@codeweavers.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        usb-storage@lists.one-eyed-alien.net, linux-usb@vger.kernel.org,
-        SCSI development list <linux-scsi@vger.kernel.org>
-Subject: Re: Bug 207877: ASMedia drive (174c:55aa) hangs in ioctl
- CDROM_DRIVE_STATUS when mounting a DVD
-Message-ID: <20200530010314.GA12419@rowland.harvard.edu>
-References: <7d0b20b9-4735-bbed-bb50-72764aefd6d8@codeweavers.com>
- <20200528075440.GA2881385@kroah.com>
- <465eaae3-fa60-f37e-1d62-c52236720798@codeweavers.com>
- <20200528160420.GA14188@rowland.harvard.edu>
- <232b68f8-9a5c-89fd-2e12-bf63f49dbe38@codeweavers.com>
- <20200528170509.GC14188@rowland.harvard.edu>
- <cb5371de-984f-bdf3-4cfe-a7343998515d@codeweavers.com>
+        id S1728551AbgE3BDW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 May 2020 21:03:22 -0400
+Received: from mail-am6eur05on2064.outbound.protection.outlook.com ([40.107.22.64]:28225
+        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728293AbgE3BDV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 29 May 2020 21:03:21 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Pvmmz4k4fxbKUF9oJf5HGYefrEmUE85vjTybTYkFpA3lp4KwpIxXVnwAgm1zhwNrf3/3DA17MTAF6Ws6/x8NWH5mbyk5DbNVmUXgfjJpBqVDphHkmUEBs8P74o40pTkdWPbcJInJ+8CCXUIy/4+rmxRgGj5ZWfKkszOoMYMgH9vBlz9j2z+++mh9OZHYM8MlPXXLw6U3sQiPtf0GH0q2szbzDx1WaPQsM4NCgFtav1g0NbIumG8HWpIFABvTtntQ+MSxpdEnFnMFgcmiJN8GHNlpaXiqP8yg8V6o42IHqILzMThrOJdu3K/7q14N0jmZkOIGkFMbySy4AfzbcCQn2Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UOePKroUVJb3gBd2FEocK4Rdeo6CVJKWCi8byr5s1RE=;
+ b=LLiwCJxi2ha4B+gN1tV65TA7wL5+oKLlN4cwN6bhTmX0r9PlGvezDs3eut4m1t/TNeMTFQvhA/d5WnM4Adh4rbCbtHcb2Op1Rz3dH64SJSnoeIfhOA/y8LN3q6Xa3jSvMD+/xxt+ptnvAtWSqJ5YkpkfCxBrPOZ2g4vftXTJTPASXQHoXFzwT9d4B0h5l3TrrbJ+g25wlxqDF0U976TwlrYqR96LKh0r/E2k6GR6JBt3ynw69PTkhAYYDVkk6YD9C5wv2cWeEMqDnkQVJppVybvVoXgG2CZFNMyhbZ4GcWJjupb/72EyRkfLhsJ4jneLXeQzkbOig4UZImHnAgoEIQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UOePKroUVJb3gBd2FEocK4Rdeo6CVJKWCi8byr5s1RE=;
+ b=KI3xuIfMxGlLbG6qMFgTPJwTFK1uS7fNUnOch+evOIVtpYeVmKAef4CEuuAAkPaCHWQUN2apjWR1QkXz5qh1L5rhvyI2+89RTDTGUODwQFt9ATJf6g9ZTcB0U3Dr+WqmMS0JfO15jxGCoRkRWjuupdgQh+4JwuXZiSKOyfTil20=
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
+ by AM7PR04MB7031.eurprd04.prod.outlook.com (2603:10a6:20b:116::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3045.19; Sat, 30 May
+ 2020 01:03:17 +0000
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1101:adaa:ee89:af2a]) by AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1101:adaa:ee89:af2a%3]) with mapi id 15.20.3045.022; Sat, 30 May 2020
+ 01:03:17 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
+CC:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] usb: gadget: f_acm: don't disable disabled EP
+Thread-Topic: [PATCH] usb: gadget: f_acm: don't disable disabled EP
+Thread-Index: AQHWNXESSGSOBa+W40WQH/z+ZHSm4ai+toSAgABgMwCAALdzEA==
+Date:   Sat, 30 May 2020 01:03:17 +0000
+Message-ID: <AM7PR04MB715735B54F24293ABF7B37908B8C0@AM7PR04MB7157.eurprd04.prod.outlook.com>
+References: <237e4bc8c63680f9ce0388d35b4c34a856ed8595.1590690518.git.mirq-linux@rere.qmqm.pl>
+ <20200529081104.GD32755@b29397-desktop> <20200529135524.GA14614@qmqm.qmqm.pl>
+In-Reply-To: <20200529135524.GA14614@qmqm.qmqm.pl>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: rere.qmqm.pl; dkim=none (message not signed)
+ header.d=none;rere.qmqm.pl; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [222.65.251.6]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 2aa8973b-fb38-4ec6-8582-08d804353d31
+x-ms-traffictypediagnostic: AM7PR04MB7031:
+x-microsoft-antispam-prvs: <AM7PR04MB7031341929B3F240042DD3D08B8C0@AM7PR04MB7031.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
+x-forefront-prvs: 041963B986
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: cR+n99v4m7/YKTwYgFyf7XxLVSBhz7a3zrmX92dg/lVBJwnwUpeg4Lmbs6QL+bWpubhF54YrzYNKF5LhW3dvPORnmGZZrcnXU/YQPRq4gnU8V6iGGPOdGoS0VlBtPf8iqP6oBlcstMZdfXMyl6w2aMzJEbHgvhymnAdi+1OkkINoyLjs2M3EOGMXeImOud23antcT+s22vP2V//RBllMDh33dPo8KaqUxiQTccXM7BwviZdJ9J1U7P4k1lPvLe2sUx+IFOh+NaQy9edDLv4V75v0JMJWe+hXMeFpNymEdxB4xFlvUxZxeoUdvGAOOG7XmpKCgOcczKVQoSpuMG1cig==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(396003)(376002)(346002)(136003)(366004)(39860400002)(66946007)(55016002)(478600001)(76116006)(8676002)(2906002)(8936002)(66476007)(54906003)(66446008)(66556008)(64756008)(44832011)(316002)(5660300002)(71200400001)(86362001)(4326008)(83380400001)(9686003)(52536014)(7696005)(6506007)(186003)(4744005)(33656002)(6916009)(26005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: 060+WhrxI+R3CkAEEBi74WpmDOwGolvogoIu7OPpaWPkBpDQEKdg0fETUvazs6SkUw0SPXcUS+mIzCylIRzt+S+6aXczOP7XCHpjfySBfLHToW84p89Cu7zRCUr1d9Uc9NSsu27AwDTqvwvSy9JmZtKEm5V4bLRgdt4ILlZK9ACcKBJ9Tk44SEQswdHvXR2e0h/4QZrOImrfQIhAczGCYns6lEi6FSjRsa4YVAk1lqisJlzA9BESDFyM1INtwU9JkaqD3wx+1JClCwU20KVtBmm+V/elmmqhNC0KYZLkJ/GTmhaqgoFtogyRyXgwsCXblJ+bTIVlcTC+QPD6GPt7TdVFP+Qhc/OZJ9Gtzej+31n3GX5+GBLt/GEGi/3u30CB2+MlqY3Qv8abCqiPcivlfMfQkoTHBEiV2jxRf951LZQUg6YBArZPlHTEtyN9dp8LkYgwX3ihlLIw1ORl/Zk2tVv0Sno725piRipoVqIvr3w=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="iso-8859-2"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cb5371de-984f-bdf3-4cfe-a7343998515d@codeweavers.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2aa8973b-fb38-4ec6-8582-08d804353d31
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 May 2020 01:03:17.9030
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: cAHf9NsT0oPSaegQQt4cw0VGRY6BrKC/6p3GqiVpcacq35YD8iIvcl1KCfo+blxndU4dVYxF5SGItHLMban6vw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB7031
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 28, 2020 at 02:27:52PM -0500, Zebediah Figura wrote:
-> On 5/28/20 12:05 PM, Alan Stern wrote:
-> > I get the impression that the SCSI error handler may have tried to reset
-> > the device without first aborting the current transfer.  But it's not
-> > easy to tell if that's what really happened.  You might be able to get
-> > more information by enabling CONFIG_USB_STORAGE_DEBUG and rebuilding the
-> > usb-storage driver, or by turning on SCSI debugging.
-> 
-> I've attached a kernel log with CONFIG_USB_STORAGE_DEBUG to the bug report.
-> I'm not able to properly interpret the results, but I do see "device_reset
-> called" as the last USB/SCSI-related message without any nearby mention of
-> cancellation...?
-> 
-> The backtrace looks different, though.
+=20
+> > > @@ -425,9 +425,11 @@ static int acm_set_alt(struct usb_function *f, u=
+nsigned
+> intf, unsigned alt)
+> > >  	/* we know alt =3D=3D 0, so this is an activation or a reset */
+> > >
+> > >  	if (intf =3D=3D acm->ctrl_id) {
+> > > -		dev_vdbg(&cdev->gadget->dev,
+> > > -				"reset acm control interface %d\n", intf);
+> > > -		usb_ep_disable(acm->notify);
+> > > +		if (acm->notify->enabled) {
+> > > +			dev_vdbg(&cdev->gadget->dev,
+> > > +					"reset acm control interface %d\n", intf);
+> > > +			usb_ep_disable(acm->notify);
+> > > +		}
+> >
+> > But it does not fix any issues, the usb_ep_disable checks 'enabled' fla=
+g.
+>=20
+> It generates spurious trace events if you enable them.
+>=20
 
-I don't think that matters.
+You mean the trace events from core.c? If it is, we could try to improve it
+and indicate it is already enabled or disabled.
 
-> With respect to SCSI debugging, the best instructions I was able to find
-> directed me to try:
-> 
-> hazel@watership:~$ cat /proc/scsi/sg/debug
-> max_active_device=2  def_reserved_size=32768
-> 
-> while the hang was taking place. If there's more useful debugging I can do,
-> I'll need pointers. I did enable CONFIG_SCSI_LOGGING in the above build.
-
-Maybe someone from the linux-scsi mailing list will help.
-
-Here is the problem we are facing, as shown in the following debugging 
-log.  The log includes a sequence of six commands sent to a DVD drive.  
-The first READ succeeds:
-
-May 28 14:03:05 watership kernel: *** thread awakened
-May 28 14:03:05 watership kernel: Command READ_10 (10 bytes)
-May 28 14:03:05 watership kernel: bytes: 28 00 00 00 00 fa 00 00 06 00
-May 28 14:03:05 watership kernel: Bulk Command S 0x43425355 T 0x222 L 12288 F 128 Trg 0 LUN 0 CL 10
-May 28 14:03:05 watership kernel: xfer 31 bytes
-May 28 14:03:05 watership kernel: Status code 0; transferred 31/31
-May 28 14:03:05 watership kernel: -- transfer complete
-May 28 14:03:05 watership kernel: Bulk command transfer result=0
-May 28 14:03:05 watership kernel: xfer 12288 bytes, 1 entries
-May 28 14:03:05 watership kernel: Status code 0; transferred 12288/12288
-May 28 14:03:05 watership kernel: -- transfer complete
-May 28 14:03:05 watership kernel: Bulk data transfer result 0x0
-May 28 14:03:05 watership kernel: Attempting to get CSW...
-May 28 14:03:05 watership kernel: xfer 13 bytes
-May 28 14:03:05 watership kernel: Status code 0; transferred 13/13
-May 28 14:03:05 watership kernel: -- transfer complete
-May 28 14:03:05 watership kernel: Bulk status result = 0
-May 28 14:03:05 watership kernel: Bulk Status S 0x53425355 T 0x222 R 0 Stat 0x0
-May 28 14:03:05 watership kernel: scsi cmd done, result=0x0
-May 28 14:03:05 watership kernel: *** thread sleeping
-
-The second READ hangs for 30 seconds (reason unknown) and then gets 
-aborted.  Following the abort, usb-storage automatically performs a 
-reset:
-
-May 28 14:03:05 watership kernel: *** thread awakened
-May 28 14:03:05 watership kernel: Command READ_10 (10 bytes)
-May 28 14:03:05 watership kernel: bytes: 28 00 00 3e 38 00 00 00 3c 00
-May 28 14:03:05 watership kernel: Bulk Command S 0x43425355 T 0x223 L 122880 F 128 Trg 0 LUN 0 CL 10
-May 28 14:03:05 watership kernel: xfer 31 bytes
-May 28 14:03:05 watership kernel: Status code 0; transferred 31/31
-May 28 14:03:05 watership kernel: -- transfer complete
-May 28 14:03:05 watership kernel: Bulk command transfer result=0
-May 28 14:03:05 watership kernel: xfer 122880 bytes, 15 entries
-May 28 14:03:37 watership kernel: command_abort called
-May 28 14:03:37 watership kernel: -- cancelling sg request
-May 28 14:03:37 watership kernel: Status code -104; transferred 2048/122880
-May 28 14:03:37 watership kernel: -- transfer cancelled
-May 28 14:03:37 watership kernel: Bulk data transfer result 0x4
-May 28 14:03:37 watership kernel: -- command was aborted
-May 28 14:03:37 watership kernel: usb 1-5: reset high-speed USB device number 3 using xhci_hcd
-May 28 14:03:37 watership kernel: usb_reset_device returns 0
-May 28 14:03:37 watership kernel: scsi command aborted
-May 28 14:03:37 watership kernel: *** thread sleeping
-May 28 14:03:37 watership kernel: sr 1:0:0:0: [sr0] tag#0 FAILED Result: hostbyte=DID_TIME_OUT driverbyte=DRIVER_OK cmd_age=31s
-May 28 14:03:37 watership kernel: sr 1:0:0:0: [sr0] tag#0 CDB: Read(10) 28 00 00 3e 38 00 00 00 3c 00
-May 28 14:03:37 watership kernel: blk_update_request: I/O error, dev sr0, sector 16310272 op 0x0:(READ) flags 0x80700 phys_seg 15 prio class 0
-
-Next is a GET EVENT/STATUS NOTIFICATION...
-
-May 28 14:03:37 watership kernel: *** thread awakened
-May 28 14:03:37 watership kernel: Command GET EVENT/STATUS NOTIFICATION (10 bytes)
-May 28 14:03:37 watership kernel: bytes: 4a 01 00 00 10 00 00 00 08 00
-May 28 14:03:37 watership kernel: Bulk Command S 0x43425355 T 0x224 L 8 F 128 Trg 0 LUN 0 CL 10
-May 28 14:03:37 watership kernel: xfer 31 bytes
-May 28 14:03:37 watership kernel: Status code 0; transferred 31/31
-May 28 14:03:37 watership kernel: -- transfer complete
-May 28 14:03:37 watership kernel: Bulk command transfer result=0
-May 28 14:03:37 watership kernel: xfer 8 bytes, 1 entries
-May 28 14:03:37 watership kernel: Status code 0; transferred 8/8
-May 28 14:03:37 watership kernel: -- transfer complete
-May 28 14:03:37 watership kernel: Bulk data transfer result 0x0
-May 28 14:03:37 watership kernel: Attempting to get CSW...
-May 28 14:03:37 watership kernel: xfer 13 bytes
-May 28 14:03:37 watership kernel: Status code 0; transferred 13/13
-May 28 14:03:37 watership kernel: -- transfer complete
-May 28 14:03:37 watership kernel: Bulk status result = 0
-May 28 14:03:37 watership kernel: Bulk Status S 0x53425355 T 0x224 R 0 Stat 0x0
-May 28 14:03:37 watership kernel: scsi cmd done, result=0x0
-May 28 14:03:37 watership kernel: *** thread sleeping
-
-... followed by a retry attempt of the previous READ, which hangs and is 
-aborted again:
-
-May 28 14:03:37 watership kernel: *** thread awakened
-May 28 14:03:37 watership kernel: Command READ_10 (10 bytes)
-May 28 14:03:37 watership kernel: bytes: 28 00 00 3e 38 00 00 00 02 00
-May 28 14:03:37 watership kernel: Bulk Command S 0x43425355 T 0x225 L 4096 F 128 Trg 0 LUN 0 CL 10
-May 28 14:03:37 watership kernel: xfer 31 bytes
-May 28 14:03:37 watership kernel: Status code 0; transferred 31/31
-May 28 14:03:37 watership kernel: -- transfer complete
-May 28 14:03:37 watership kernel: Bulk command transfer result=0
-May 28 14:03:37 watership kernel: xfer 4096 bytes, 1 entries
-May 28 14:04:08 watership kernel: command_abort called
-May 28 14:04:08 watership kernel: -- cancelling sg request
-May 28 14:04:08 watership kernel: Status code -104; transferred 2048/4096
-May 28 14:04:08 watership kernel: -- transfer cancelled
-May 28 14:04:08 watership kernel: Bulk data transfer result 0x4
-May 28 14:04:08 watership kernel: -- command was aborted
-May 28 14:04:08 watership kernel: usb 1-5: reset high-speed USB device number 3 using xhci_hcd
-May 28 14:04:08 watership kernel: usb_reset_device returns 0
-May 28 14:04:08 watership kernel: scsi command aborted
-May 28 14:04:08 watership kernel: *** thread sleeping
-
-Then there's another successful GET EVENT/STATUS NOTIFICATION:
-
-May 28 14:04:08 watership kernel: *** thread awakened
-May 28 14:04:08 watership kernel: Command GET EVENT/STATUS NOTIFICATION (10 bytes)
-May 28 14:04:08 watership kernel: bytes: 4a 01 00 00 10 00 00 00 08 00
-May 28 14:04:08 watership kernel: Bulk Command S 0x43425355 T 0x226 L 8 F 128 Trg 0 LUN 0 CL 10
-May 28 14:04:08 watership kernel: xfer 31 bytes
-May 28 14:04:08 watership kernel: Status code 0; transferred 31/31
-May 28 14:04:08 watership kernel: -- transfer complete
-May 28 14:04:08 watership kernel: Bulk command transfer result=0
-May 28 14:04:08 watership kernel: xfer 8 bytes, 1 entries
-May 28 14:04:08 watership kernel: Status code 0; transferred 8/8
-May 28 14:04:08 watership kernel: -- transfer complete
-May 28 14:04:08 watership kernel: Bulk data transfer result 0x0
-May 28 14:04:08 watership kernel: Attempting to get CSW...
-May 28 14:04:08 watership kernel: xfer 13 bytes
-May 28 14:04:08 watership kernel: Status code 0; transferred 13/13
-May 28 14:04:08 watership kernel: -- transfer complete
-May 28 14:04:08 watership kernel: Bulk status result = 0
-May 28 14:04:08 watership kernel: Bulk Status S 0x53425355 T 0x226 R 0 Stat 0x0
-May 28 14:04:08 watership kernel: scsi cmd done, result=0x0
-May 28 14:04:08 watership kernel: *** thread sleeping
-
-And a third attempt at the READ, which hangs as before:
-
-May 28 14:04:08 watership kernel: *** thread awakened
-May 28 14:04:08 watership kernel: Command READ_10 (10 bytes)
-May 28 14:04:08 watership kernel: bytes: 28 00 00 3e 38 00 00 00 02 00
-May 28 14:04:08 watership kernel: Bulk Command S 0x43425355 T 0x227 L 4096 F 128 Trg 0 LUN 0 CL 10
-May 28 14:04:08 watership kernel: xfer 31 bytes
-May 28 14:04:08 watership kernel: Status code 0; transferred 31/31
-May 28 14:04:08 watership kernel: -- transfer complete
-May 28 14:04:08 watership kernel: Bulk command transfer result=0
-May 28 14:04:08 watership kernel: xfer 4096 bytes, 1 entries
-
-But this time, instead of aborting the command, the SCSI core calls the 
-device_reset routine.  This causes usb-storage to lock up; the reset 
-can't proceed while the READ command is still executing:
-
-May 28 14:04:38 watership kernel: device_reset called
-May 28 14:06:48 watership kernel: INFO: task scsi_eh_1:240 blocked for more than 122 seconds.
-May 28 14:06:48 watership kernel:       Not tainted 5.7.0-rc7local #4
-May 28 14:06:48 watership kernel: "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-May 28 14:06:48 watership kernel: scsi_eh_1       D    0   240      2 0x80004000
-May 28 14:06:48 watership kernel: Call Trace:
-May 28 14:06:48 watership kernel:  __schedule+0x2a5/0x8c0
-May 28 14:06:48 watership kernel:  schedule+0x46/0xf0
-May 28 14:06:48 watership kernel:  schedule_preempt_disabled+0x14/0x20
-May 28 14:06:48 watership kernel:  __mutex_lock.constprop.0+0x180/0x510
-May 28 14:06:48 watership kernel:  device_reset+0x33/0x60 [usb_storage]
-May 28 14:06:48 watership kernel:  scsi_eh_ready_devs+0x5f4/0xa40 [scsi_mod]
-May 28 14:06:48 watership kernel:  ? _raw_spin_unlock_irqrestore+0x20/0x40
-May 28 14:06:48 watership kernel:  ? __pm_runtime_resume+0x49/0x60
-May 28 14:06:48 watership kernel:  scsi_error_handler+0x448/0x510 [scsi_mod]
-May 28 14:06:48 watership kernel:  ? scsi_eh_get_sense+0x1f0/0x1f0 [scsi_mod]
-May 28 14:06:48 watership kernel:  kthread+0x13e/0x160
-May 28 14:06:48 watership kernel:  ? __kthread_bind_mask+0x60/0x60
-May 28 14:06:48 watership kernel:  ret_from_fork+0x22/0x40
-May 28 14:06:48 watership kernel: INFO: task usb-storage:242 blocked for more than 122 seconds.
-May 28 14:06:48 watership kernel:       Not tainted 5.7.0-rc7local #4
-May 28 14:06:48 watership kernel: "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-May 28 14:06:48 watership kernel: usb-storage     D    0   242      2 0x80004000
-May 28 14:06:48 watership kernel: Call Trace:
-May 28 14:06:48 watership kernel:  __schedule+0x2a5/0x8c0
-May 28 14:06:48 watership kernel:  schedule+0x46/0xf0
-May 28 14:06:48 watership kernel:  schedule_timeout+0x12d/0x170
-May 28 14:06:48 watership kernel:  wait_for_completion+0x9e/0x100
-May 28 14:06:48 watership kernel:  usb_sg_wait+0xc9/0x190
-May 28 14:06:48 watership kernel:  usb_stor_bulk_transfer_sglist.part.0.constprop.0+0x7f/0x100 [usb_storage]
-May 28 14:06:48 watership kernel:  ? fill_inquiry_response+0x10/0x10 [usb_storage]
-May 28 14:06:48 watership kernel:  usb_stor_Bulk_transport+0x1f9/0x5b0 [usb_storage]
-May 28 14:06:48 watership kernel:  ? fill_inquiry_response+0x10/0x10 [usb_storage]
-May 28 14:06:48 watership kernel:  usb_stor_invoke_transport+0x59/0x6c0 [usb_storage]
-May 28 14:06:48 watership kernel:  ? fill_inquiry_response+0x10/0x10 [usb_storage]
-May 28 14:06:48 watership kernel:  usb_stor_control_thread+0x17d/0x390 [usb_storage]
-May 28 14:06:48 watership kernel:  kthread+0x13e/0x160
-May 28 14:06:48 watership kernel:  ? __kthread_bind_mask+0x60/0x60
-May 28 14:06:48 watership kernel:  ret_from_fork+0x22/0x40
-
-So here's the question: Why doesn't the SCSI error handler abort the 
-ongoing command (like it did the first two times) before resetting the 
-device?
-
-Note: The kernel version is 5.7-rc7.
-
-Alan Stern
+Peter
