@@ -2,248 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 231E01E8E37
-	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2020 08:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EB801E8F1A
+	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2020 09:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728642AbgE3Gmv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 30 May 2020 02:42:51 -0400
-Received: from mail27.static.mailgun.info ([104.130.122.27]:56726 "EHLO
-        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726843AbgE3Gmu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 30 May 2020 02:42:50 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1590820969; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=CVwez3TJzuI5Hz8YJYBg002P52Rbx2o2mf/O9S0LF6g=; b=FV+HK/5aEub54ghkzq5Py0euYDouWa4R8aJXMNZc0f6GrklLSp8HIMrjoPSuE8MzhPr333qZ
- gOI4Etu4aUrhsEqKgaeXfpwvFxkuQgNJfjTctSLfqG41RW0/zbYUqB1MHSPbGZcNArLRr01E
- 6UnwVxapjX0zQ6jkeoxP3AxiujE=
-X-Mailgun-Sending-Ip: 104.130.122.27
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
- 5ed2005c50867324814d91de (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Sat, 30 May 2020 06:42:36
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 48103C433CA; Sat, 30 May 2020 06:42:36 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [10.110.93.207] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1728826AbgE3HmA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 30 May 2020 03:42:00 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:52350 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728807AbgE3Hl7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 30 May 2020 03:41:59 -0400
+Received: from mailhost.synopsys.com (sv1-mailhost2.synopsys.com [10.205.2.132])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 36F48C433C6;
-        Sat, 30 May 2020 06:42:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 36F48C433C6
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [RFC v3 1/3] usb: dwc3: Resize TX FIFOs to meet EP bursting
- requirements
-To:     Jack Pham <jackp@codeaurora.org>
-Cc:     robh+dt@kernel.org, bjorn.andersson@linaro.org, balbi@kernel.org,
-        gregkh@linuxfoundation.org, agross@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org
-References: <1590630363-3934-1-git-send-email-wcheng@codeaurora.org>
- <1590630363-3934-2-git-send-email-wcheng@codeaurora.org>
- <20200529162856.GA10327@jackp-linux.qualcomm.com>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <4f4652c2-6fc0-c96d-35dc-ee1235aa4206@codeaurora.org>
-Date:   Fri, 29 May 2020 23:42:33 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <20200529162856.GA10327@jackp-linux.qualcomm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 3B5C74094A;
+        Sat, 30 May 2020 07:41:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1590824519; bh=i0WVMhfUe7X8jMr5woG6oawz62l16H5EjhMrkDwjGg8=;
+        h=Date:From:Subject:To:Cc:From;
+        b=VPbMjlWXvgSjBNwqy7YQhePBOiQSgSydqCzFtqv0n/Q5e8JeP8aE0F5+es/3+Q/ui
+         7vgm+dJJMuLbIYqpSJQEnEdjpueKybjEOoUWMborNh2yY/8/FJUEL6kkykF9IO63iq
+         gIgejJtRNGEAn3TzVo77Pg4IaNOg/cAVyE3dsNxniXjAWYZVUoIu3/VZCUd6Ll6hla
+         MWP/IyabcGicImy3JjovjxVmdCpRuHju1WAktzisSph5SkRH888qfS96ehcVKCOaFQ
+         KyhzamOKyQFjk0tzxQjdeX2DSRkCjfz+/HuR/3+belxA1Hi9KFiKWAH/CORiDBuEQc
+         w89GN7e+veVHA==
+Received: from hminas-z420 (hminas-z420.internal.synopsys.com [10.116.126.211])
+        (using TLSv1 with cipher AES128-SHA (128/128 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 09A37A006F;
+        Sat, 30 May 2020 07:41:53 +0000 (UTC)
+Received: by hminas-z420 (sSMTP sendmail emulation); Sat, 30 May 2020 11:41:50 +0400
+Date:   Sat, 30 May 2020 11:41:50 +0400
+Message-Id: <01a67b314fa39b794847fc0c1758969931ca6177.1590822499.git.hminas@synopsys.com>
+X-SNPS-Relay: synopsys.com
+From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Subject: [PATCH v2] usb: dwc2: Fix shutdown callback in platform
+To:     John Youn <John.Youn@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        linux-usb@vger.kernel.org,
+        "Heiko Stuebner" <heiko.stuebner@collabora.com>,
+        Douglas Anderson <dianders@chromium.org>
+Cc:     stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Frank Mori Hess <fmh6jj@gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+To avoid lot of interrupts from dwc2 core, which can be asserted in
+specific conditions need to disable interrupts on HW level instead of
+disable IRQs on Kernel level, because of IRQ can be shared between
+drivers.
 
+Cc: stable@vger.kernel.org
+Fixes: a40a00318c7fc ("usb: dwc2: add shutdown callback to platform variant")
+Tested-by: Frank Mori Hess <fmh6jj@gmail.com>
+Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+Reviewed-by: Doug Anderson <dianders@chromium.org>
+Reviewed-by: Frank Mori Hess <fmh6jj@gmail.com>
+Signed-off-by: Minas Harutyunyan <hminas@synopsys.com>
+---
 
-On 5/29/2020 9:28 AM, Jack Pham wrote:
-> Hi Wesley,
-> 
-> On Wed, May 27, 2020 at 06:46:01PM -0700, Wesley Cheng wrote:
->> Some devices have USB compositions which may require multiple endpoints
->> that support EP bursting.  HW defined TX FIFO sizes may not always be
->> sufficient for these compositions.  By utilizing flexible TX FIFO
->> allocation, this allows for endpoints to request the required FIFO depth to
->> achieve higher bandwidth.  With some higher bMaxBurst configurations, using
->> a larger TX FIFO size results in better TX throughput.
->>
->> Ensure that one TX FIFO is reserved for every IN endpoint.  This allows for
->> the FIFO logic to prevent running out of FIFO space.
->>
->> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
->> ---
-> 
-> <snip>
-> 
->> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->> index 00746c2..9b09528 100644
->> --- a/drivers/usb/dwc3/gadget.c
->> +++ b/drivers/usb/dwc3/gadget.c
->> @@ -540,6 +540,117 @@ static int dwc3_gadget_start_config(struct dwc3_ep *dep)
->>  	return 0;
->>  }
->>  
->> +/*
->> + * dwc3_gadget_resize_tx_fifos - reallocate fifo spaces for current use-case
->> + * @dwc: pointer to our context structure
->> + *
->> + * This function will a best effort FIFO allocation in order
->> + * to improve FIFO usage and throughput, while still allowing
->> + * us to enable as many endpoints as possible.
->> + *
->> + * Keep in mind that this operation will be highly dependent
->> + * on the configured size for RAM1 - which contains TxFifo -,
->> + * the amount of endpoints enabled on coreConsultant tool, and
->> + * the width of the Master Bus.
->> + *
->> + * In general, FIFO depths are represented with the following equation:
->> + *
->> + * fifo_size = mult * ((max_packet + mdwidth)/mdwidth + 1) + 1
->> + *
->> + * Conversions can be done to the equation to derive the number of packets that
->> + * will fit to a particular FIFO size value.
->> + */
->> +static int dwc3_gadget_resize_tx_fifos(struct dwc3 *dwc, struct dwc3_ep *dep)
-> 
-> The 'dep' param should be sufficient; we can just get 'dwc' from
-> dep->dwc. That will make it more clear this function operates on each
-> endpoint that needs resizing.
-> 
+Changes in V2:
+- added synchronize_irq()
 
-Hi Jack,
+ drivers/usb/dwc2/platform.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Thanks for the inputs.  Sure, I agree with that.  Will make the changes
-to pass in only the dep.
-
->> +{
->> +	int ram1_depth, mdwidth, fifo_0_start, tmp, num_in_ep;
->> +	int min_depth, remaining, fifo_size, mult = 1, fifo, max_packet = 1024;
->> +
->> +	if (!dwc->needs_fifo_resize)
->> +		return 0;
->> +
->> +	/* resize IN endpoints except ep0 */
->> +	if (!usb_endpoint_dir_in(dep->endpoint.desc) || dep->number <= 1)
->> +		return 0;
->> +
->> +	/* Don't resize already resized IN endpoint */
->> +	if (dep->fifo_depth)
->> +		return 0;
->> +
->> +	ram1_depth = DWC3_RAM1_DEPTH(dwc->hwparams.hwparams7);
->> +	mdwidth = DWC3_MDWIDTH(dwc->hwparams.hwparams0);
->> +	/* MDWIDTH is represented in bits, we need it in bytes */
->> +	mdwidth >>= 3;
->> +
->> +	if (((dep->endpoint.maxburst > 1) &&
->> +			usb_endpoint_xfer_bulk(dep->endpoint.desc))
->> +			|| usb_endpoint_xfer_isoc(dep->endpoint.desc))
->> +		mult = 3;
->> +
->> +	if ((dep->endpoint.maxburst > 6) &&
->> +			usb_endpoint_xfer_bulk(dep->endpoint.desc)
->> +			&& dwc3_is_usb31(dwc))
->> +		mult = 6;
->> +
->> +	/* FIFO size for a single buffer */
->> +	fifo = (max_packet + mdwidth)/mdwidth;
->> +	fifo++;
->> +
->> +	/* Calculate the number of remaining EPs w/o any FIFO */
->> +	num_in_ep = dwc->num_eps/2;
->> +	num_in_ep -= dwc->num_ep_resized;
->> +	/* Ignore EP0 IN */
->> +	num_in_ep--;
->> +
->> +	/* Reserve at least one FIFO for the number of IN EPs */
->> +	min_depth = num_in_ep * (fifo+1);
->> +	remaining = ram1_depth - min_depth - dwc->last_fifo_depth;
->> +
->> +	/* We've already reserved 1 FIFO per EP, so check what we can fit in
->> +	 * addition to it.  If there is not enough remaining space, allocate
->> +	 * all the remaining space to the EP.
->> +	 */
->> +	fifo_size = (mult-1) * fifo;
->> +	if (remaining < fifo_size) {
->> +		if (remaining > 0)
->> +			fifo_size = remaining;
->> +		else
->> +			fifo_size = 0;
->> +	}
->> +
->> +	fifo_size += fifo;
->> +	fifo_size++;
->> +	dep->fifo_depth = fifo_size;
->> +
->> +	/* Check if TXFIFOs start at non-zero addr */
->> +	tmp = dwc3_readl(dwc->regs, DWC3_GTXFIFOSIZ(0));
->> +	fifo_0_start = DWC3_GTXFIFOSIZ_TXFSTADDR(tmp);
->> +
->> +	fifo_size |= (fifo_0_start + (dwc->last_fifo_depth << 16));
->> +	if (dwc3_is_usb31(dwc))
->> +		dwc->last_fifo_depth += DWC31_GTXFIFOSIZ_TXFDEP(fifo_size);
->> +	else
->> +		dwc->last_fifo_depth += DWC3_GTXFIFOSIZ_TXFDEP(fifo_size);
->> +
->> +	/* Check fifo size allocation doesn't exceed available RAM size. */
->> +	if (dwc->last_fifo_depth >= ram1_depth) {
->> +		dev_err(dwc->dev, "Fifosize(%d) > RAM size(%d) %s depth:%d\n",
->> +				(dwc->last_fifo_depth * mdwidth), ram1_depth,
->> +				dep->endpoint.name, fifo_size);
-> 
-> Use dev_WARN() here and eliminate the WARN_ON(1) below?
-> 
-
-I think we can just remove the WARN_ON() entirely, and keep the
-dev_err().  Printing the callstack might not be really useful in
-general, since this would only be called during the EP enable step.
-
-
->> +		if (dwc3_is_usb31(dwc))
->> +			fifo_size = DWC31_GTXFIFOSIZ_TXFDEP(fifo_size);
->> +		else
->> +			fifo_size = DWC3_GTXFIFOSIZ_TXFDEP(fifo_size);
->> +		dwc->last_fifo_depth -= fifo_size;
->> +		dep->fifo_depth = 0;
->> +		WARN_ON(1);
->> +		return -ENOMEM;
->> +	}
->> +
->> +	dwc3_writel(dwc->regs, DWC3_GTXFIFOSIZ(dep->number >> 1), fifo_size);
->> +	dwc->num_ep_resized++;
->> +	return 0;
->> +}
->> +
->>  static int dwc3_gadget_set_ep_config(struct dwc3_ep *dep, unsigned int action)
->>  {
->>  	const struct usb_ss_ep_comp_descriptor *comp_desc;
->> @@ -620,6 +731,10 @@ static int __dwc3_gadget_ep_enable(struct dwc3_ep *dep, unsigned int action)
->>  	int			ret;
->>  
->>  	if (!(dep->flags & DWC3_EP_ENABLED)) {
->> +		ret = dwc3_gadget_resize_tx_fifos(dwc, dep);
->> +		if (ret)
->> +			return ret;
->> +
->>  		ret = dwc3_gadget_start_config(dep);
->>  		if (ret)
->>  			return ret;
-> 
-> Jack
-> 
-
+diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
+index e571c8ae65ec..a6360f5f6cd4 100644
+--- a/drivers/usb/dwc2/platform.c
++++ b/drivers/usb/dwc2/platform.c
+@@ -342,7 +342,8 @@ static void dwc2_driver_shutdown(struct platform_device *dev)
+ {
+ 	struct dwc2_hsotg *hsotg = platform_get_drvdata(dev);
+ 
+-	disable_irq(hsotg->irq);
++	dwc2_disable_global_interrupts(hsotg);
++	synchronize_irq(hsotg->irq);
+ }
+ 
+ /**
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.11.0
+
