@@ -2,139 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DB131E8CF1
-	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2020 03:49:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73C601E8D82
+	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2020 05:24:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728638AbgE3BtH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 May 2020 21:49:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33748 "EHLO
+        id S1728675AbgE3DYT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 May 2020 23:24:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728642AbgE3BtG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 May 2020 21:49:06 -0400
-Received: from mail-ua1-x944.google.com (mail-ua1-x944.google.com [IPv6:2607:f8b0:4864:20::944])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F4EC08C5CA
-        for <linux-usb@vger.kernel.org>; Fri, 29 May 2020 18:49:06 -0700 (PDT)
-Received: by mail-ua1-x944.google.com with SMTP id g7so1466932uap.7
-        for <linux-usb@vger.kernel.org>; Fri, 29 May 2020 18:49:06 -0700 (PDT)
+        with ESMTP id S1728297AbgE3DYS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 May 2020 23:24:18 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C3FC03E969;
+        Fri, 29 May 2020 20:24:18 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id bh7so1959075plb.11;
+        Fri, 29 May 2020 20:24:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=O2zEfHJzja0FYAayQuGq1uzqD7Al76JYJxnGc3Icuto=;
-        b=rNZPjw7PgAkEeqcGHYdoeCzQwiS/wz4pXsP5KXdoK+7S7Xog4VYFYjB9sGD4lfeS6y
-         hC0jr3BPuI8FFq66MI4cDknFq1GPrlMeQqMJDTDqg04NVIp9BmqbrQVGuofLxgf3yym2
-         sQEWLs3kscB2OPed6SU7nminZdHebua9KInby0HW/HWpN9c8gKHZ52r/z6x9jmGQ8Fz6
-         R7dCxr+PXqIfA5HNE6K0eePPU96e4vbWdA8C7w0JaP1TErr6j4YnaZjxF5RE9TmUcrjM
-         NZd37MkL3p6kES+ZjSCYfW2xprQLRnmEfw+ts29kiavqr2XShJdOBhPoPZgKeyeWq5C/
-         pH5A==
+        h=from:to:cc:subject:date:message-id;
+        bh=FdbL62wDBkj51/wZjPHO0PEcvT8Qa+4KymVTq92Y+JA=;
+        b=aPWKRMwhAzA/H+38X17QTU2KRFcaK5q5nRdTvsURPl33xIsGN+hw2VXVRTJ2xRfGOY
+         fqcJKIBCP2GJQFYBnA3xWVKR5wM5kOCotIOPBuax9gigjN6JdqzuY5nA92D83FwT3jFe
+         SQFuBOHKMQbY8b+h9SLfjT55Izyu9GmiHUXLhlo4qgd5NldtoSokES819rkBlRa7chnU
+         fiOMni3p8W4580kw+C4ZHnmdLEFs2I6R8S982fZ3nfgA6QGThiQoeRAGWKXQAI3UEqgq
+         AZeTwCWT+yXlmARWaBiybrQvxJbSbRjn+Svs8ePNITQX/U92/2ZKEF/vd3ZxnFk1aRjZ
+         nGBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=O2zEfHJzja0FYAayQuGq1uzqD7Al76JYJxnGc3Icuto=;
-        b=Dt+RdNQMW3C056ZMoKQVDMbMC8LI3XQ+n0u3YaSTX15lvV2S31f0aaUi+Se2L57rDk
-         qJ8sbMZLKSxtosrfs+pJq70LMIGrF6jdu9hFZr74Fr000V16TNq/G9me6570fOVhoJBj
-         qqhJ/f6+0ieKyn2heqhsxVp4AS0jQt4M+iN/ujyRoHJ4O9NWBf8lTpDMDmwznFKZ5yPw
-         uE9LQ43W3lUjN3vK6637BQUcpHwZk9A6P6Ur2bWAhyN/4Fv6GGhbyISD6QekFWAVz1ZT
-         niw775BgnMM/74SLK7h9g5AbaScg5NjyIHQDj0x5fmxQO/aGSy2n9ItEhcubCCQoyl+z
-         yBTQ==
-X-Gm-Message-State: AOAM530Xu9yNfQpylmcxyEnTORFtYaYe2C4TdY4301ktzFluZi5/Up/+
-        jEOVVCunbB6SHsz8As2tOgk=
-X-Google-Smtp-Source: ABdhPJwjZJM86D4AiJgJa0vkvRlLMEJYaxbHefnU48Vsu7lhggfV4XxJamcHb6W6JecxcDcszyQe1w==
-X-Received: by 2002:ab0:6e8e:: with SMTP id b14mr9765179uav.0.1590803345675;
-        Fri, 29 May 2020 18:49:05 -0700 (PDT)
-Received: from DESKTOP-2I1VNC3.localdomain (host-128-227-216-118.xlate.ufl.edu. [128.227.216.118])
-        by smtp.gmail.com with ESMTPSA id z75sm1507759vkd.5.2020.05.29.18.49.05
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=FdbL62wDBkj51/wZjPHO0PEcvT8Qa+4KymVTq92Y+JA=;
+        b=fkRRzFx0HzQCgruW0tCClxONQzSOYOtxIQKfcLlF/5klMD+HgDsDDUACRNVGaj4yGc
+         bL3ZuMl+Va8AftQab4Yz2UhEDu1xEkO7el7Y0AxEMnHNEbGlNaA2BPCpqJcO9eOov1jE
+         w9cTrHttXJF7ZyBjwGDISfb8nK/T8H2mZ+SOMrMICp4mx70AHJusCrEhPihZMeZ2LUMW
+         hny2bQ5xsSb196ZUYaAIWUK/eHaPu1mSjhc9OzFAUG0dIH4YdcblaS20NCW+a7oyFX7t
+         tvbzY2nRqQpcOLgDhw4cPd72YFGlBZYLAV9YCu7SdZogM9nX7JdlEiV44Pwz7NWHqkBq
+         Zh3w==
+X-Gm-Message-State: AOAM533EPhi9/D7mXVTbt0Mhoaqcz7u1X3fLkOZtWXQZ4qZ+NCaLbjvT
+        oALEnykspbhsA6ceSZ4DHpA=
+X-Google-Smtp-Source: ABdhPJxFrT0FsXFHKwllDoEok7Dgi4SL1M1SsslivDkKDszxBXXjKxhrC+1f5K2kAKg2Dw1/IXdPHA==
+X-Received: by 2002:a17:90a:ee91:: with SMTP id i17mr11269329pjz.45.1590809058312;
+        Fri, 29 May 2020 20:24:18 -0700 (PDT)
+Received: from oslab.tsinghua.edu.cn ([166.111.139.172])
+        by smtp.gmail.com with ESMTPSA id b63sm8426304pfg.86.2020.05.29.20.24.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 May 2020 18:49:05 -0700 (PDT)
-From:   Changming <charley.ashbringer@gmail.com>
-X-Google-Original-From: Changming <liu.changm@northeastern.edu>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, thomas@winischhofer.net,
-        Changming Liu <liu.changm@northeastern.edu>
-Subject: [PATCH 6/6] USB: sisusbvga: change the local char array to u8 array
-Date:   Fri, 29 May 2020 21:48:20 -0400
-Message-Id: <20200530014820.9967-7-liu.changm@northeastern.edu>
+        Fri, 29 May 2020 20:24:17 -0700 (PDT)
+From:   Jia-Ju Bai <baijiaju1990@gmail.com>
+To:     gregkh@linuxfoundation.org, balbi@kernel.org, peter.chen@nxp.com,
+        pawell@cadence.com, rogerq@ti.com, colin.king@canonical.com,
+        yuehaibing@huawei.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jia-Ju Bai <baijiaju1990@gmail.com>
+Subject: [PATCH] usb: cdns3: fix possible buffer overflow caused by bad DMA value
+Date:   Sat, 30 May 2020 11:24:00 +0800
+Message-Id: <20200530032400.12743-1-baijiaju1990@gmail.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200530014820.9967-1-liu.changm@northeastern.edu>
-References: <20200530014820.9967-1-liu.changm@northeastern.edu>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Changming Liu <liu.changm@northeastern.edu>
+In cdns3_ep0_setup_phase():
+  struct usb_ctrlrequest *ctrl = priv_dev->setup_buf;
 
-These arrays/data elements are used as unsigned.
-So change them from char to u8.
+Because priv_dev->setup_buf (allocated in cdns3_gadget_start) is stored 
+in DMA memory, and thus ctrl is a DMA value.
 
-Signed-off-by: Changming Liu <liu.changm@northeastern.edu>
+cdns3_ep0_setup_phase()
+  cdns3_ep0_standard_request(priv_dev, ctrl)
+    cdns3_req_ep0_get_status(priv_dev, ctrl)
+      index = cdns3_ep_addr_to_index(ctrl->wIndex);
+      priv_ep = priv_dev->eps[index];
+
+cdns3_ep0_setup_phase()
+  cdns3_ep0_standard_request(priv_dev, ctrl)
+    cdns3_req_ep0_handle_feature(priv_dev, ctrl_req, 0)
+      cdns3_ep0_feature_handle_endpoint(priv_dev, ctrl, set)
+        index = cdns3_ep_addr_to_index(ctrl->wIndex);
+        priv_ep = priv_dev->eps[index];
+
+In these cases, ctrl->wIndex can be be modified at anytime by malicious
+hardware, and thus a buffer overflow can occur when the code
+"priv_dev->eps[index]" is executed.
+
+To fix these possible bugs, index is checked before being used.
+
+Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
 ---
- drivers/usb/misc/sisusbvga/sisusb.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ drivers/usb/cdns3/ep0.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/usb/misc/sisusbvga/sisusb.c b/drivers/usb/misc/sisusbvga/sisusb.c
-index 1f21db40fdb5..70a10ad9ae0a 100755
---- a/drivers/usb/misc/sisusbvga/sisusb.c
-+++ b/drivers/usb/misc/sisusbvga/sisusb.c
-@@ -1752,22 +1752,22 @@ static void sisusb_set_default_mode(struct sisusb_usb_data *sisusb,
- {
- 	int i, j, modex, bpp, du;
- 	u8 sr31, cr63, tmp8;
--	static const char attrdata[] = {
-+	static const u8 attrdata[] = {
- 		0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
- 		0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
- 		0x01, 0x00, 0x00, 0x00
- 	};
--	static const char crtcrdata[] = {
-+	static const u8 crtcrdata[] = {
- 		0x5f, 0x4f, 0x50, 0x82, 0x54, 0x80, 0x0b, 0x3e,
- 		0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
- 		0xea, 0x8c, 0xdf, 0x28, 0x40, 0xe7, 0x04, 0xa3,
- 		0xff
- 	};
--	static const char grcdata[] = {
-+	static const u8 grcdata[] = {
- 		0x00, 0x00, 0x00, 0x00, 0x00, 0x40, 0x05, 0x0f,
- 		0xff
- 	};
--	static const char crtcdata[] = {
-+	static const u8 crtcdata[] = {
- 		0x5f, 0x4f, 0x4f, 0x83, 0x55, 0x81, 0x0b, 0x3e,
- 		0xe9, 0x8b, 0xdf, 0xe8, 0x0c, 0x00, 0x00, 0x05,
- 		0x00
-@@ -1880,19 +1880,19 @@ static int sisusb_init_gfxcore(struct sisusb_usb_data *sisusb)
- 	int ret = 0, i, j, bw, chab, iret, retry = 3;
- 	u8 tmp8, ramtype;
- 	u32 tmp32;
--	static const char mclktable[] = {
-+	static const u8 mclktable[] = {
- 		0x3b, 0x22, 0x01, 143,
- 		0x3b, 0x22, 0x01, 143,
- 		0x3b, 0x22, 0x01, 143,
- 		0x3b, 0x22, 0x01, 143
- 	};
--	static const char eclktable[] = {
-+	static const u8 eclktable[] = {
- 		0x3b, 0x22, 0x01, 143,
- 		0x3b, 0x22, 0x01, 143,
- 		0x3b, 0x22, 0x01, 143,
- 		0x3b, 0x22, 0x01, 143
- 	};
--	static const char ramtypetable1[] = {
-+	static const u8 ramtypetable1[] = {
- 		0x00, 0x04, 0x60, 0x60,
- 		0x0f, 0x0f, 0x1f, 0x1f,
- 		0xba, 0xba, 0xba, 0xba,
-@@ -1901,7 +1901,7 @@ static int sisusb_init_gfxcore(struct sisusb_usb_data *sisusb)
- 		0x00, 0x00, 0x02, 0x02,
- 		0x30, 0x30, 0x40, 0x40
- 	};
--	static const char ramtypetable2[] = {
-+	static const u8 ramtypetable2[] = {
- 		0x77, 0x77, 0x44, 0x44,
- 		0x77, 0x77, 0x44, 0x44,
- 		0x00, 0x00, 0x00, 0x00,
+diff --git a/drivers/usb/cdns3/ep0.c b/drivers/usb/cdns3/ep0.c
+index e71240b386b4..0a80c7ade613 100644
+--- a/drivers/usb/cdns3/ep0.c
++++ b/drivers/usb/cdns3/ep0.c
+@@ -265,6 +265,8 @@ static int cdns3_req_ep0_get_status(struct cdns3_device *priv_dev,
+ 		return cdns3_ep0_delegate_req(priv_dev, ctrl);
+ 	case USB_RECIP_ENDPOINT:
+ 		index = cdns3_ep_addr_to_index(ctrl->wIndex);
++		if (index >= CDNS3_ENDPOINTS_MAX_COUNT)
++			return -EINVAL;
+ 		priv_ep = priv_dev->eps[index];
+ 
+ 		/* check if endpoint is stalled or stall is pending */
+@@ -388,6 +390,9 @@ static int cdns3_ep0_feature_handle_endpoint(struct cdns3_device *priv_dev,
+ 		return 0;
+ 
+ 	index = cdns3_ep_addr_to_index(ctrl->wIndex);
++	if (index >= CDNS3_ENDPOINTS_MAX_COUNT)
++		return -EINVAL;
++
+ 	priv_ep = priv_dev->eps[index];
+ 
+ 	cdns3_select_ep(priv_dev, ctrl->wIndex);
 -- 
 2.17.1
 
