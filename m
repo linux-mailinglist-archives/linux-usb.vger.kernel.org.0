@@ -2,111 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11EF51E8E1F
-	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2020 08:08:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 368121E8E2D
+	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2020 08:31:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725889AbgE3GIT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 30 May 2020 02:08:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39854 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725814AbgE3GIT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 30 May 2020 02:08:19 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1728724AbgE3Gbu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 30 May 2020 02:31:50 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:62117 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725950AbgE3Gbu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 30 May 2020 02:31:50 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1590820309; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=GbL0e/7j+u57H6VWh+bFLrd10kAQvlzotWW8nszjMzo=; b=b5fIgTRcflfLyjvzHb+pnzBUvZ+jkH93NVtyjpNGWUkNlvURjEu7Xej5ghCFKim3u/CvlioE
+ ULLh7rroJ2eBeJN3RtUNvY3aNoL2gf9jcIDnMfwGxzgeVlnBMLtcQlrFcpWizANJcoG8bdaw
+ eWriR54SVbL2b+pDpRloh4yZ5L4=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
+ 5ed1fdad44a25e0052306304 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Sat, 30 May 2020 06:31:09
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 23025C433CB; Sat, 30 May 2020 06:31:08 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.110.93.207] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E35B62073B;
-        Sat, 30 May 2020 06:08:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590818898;
-        bh=zw2sKkI/x1ytJNu3BmP2doFskXpKjmfgnrXN+h7dvVs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=apeaRdupOky30f+DhqBjLB2FU+hoSEKum1Yked/J8L6Ij6OcKBSkUDsqa0fyy7jOl
-         9fkMR+weUv6DVc6Lbw5O7+YyDDlVWx9adtFeJlcAZay+WoLmw70qarMed2tuqzseXJ
-         2SVmKabKmlUl68I08U7wfhBuV2xYkkQCVf6fvSCk=
-Date:   Sat, 30 May 2020 08:08:14 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     Andrey Konovalov <andreyknvl@google.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Oliver Neukum <oneukum@suse.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzbot <syzbot+854768b99f19e89d7f81@syzkaller.appspotmail.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Subject: Re: [PATCH] USB: cdc-wdm: Call wake_up_all() when clearing
- WDM_IN_USE bit.
-Message-ID: <20200530060814.GD3462734@kroah.com>
-References: <4a686d9a-d09f-44f3-553c-bcf0bd8a8ea1@i-love.sakura.ne.jp>
- <082ae642-0703-6c26-39f6-d725e395ef9a@i-love.sakura.ne.jp>
- <CAAeHK+ww0YLUKGjQF5KfzoUUsdfLJdv5guUXRq4q46VfPiQubQ@mail.gmail.com>
- <27b7545e-8f41-10b8-7c02-e35a08eb1611@i-love.sakura.ne.jp>
- <CAAeHK+ww0u0G94z_Y7VXLCVTQVZ9thO0q69n+Fj3jKT6MtpPng@mail.gmail.com>
- <20200528194057.GA21709@rowland.harvard.edu>
- <CAAeHK+ySAnU03cvg1=+yHh0YK1UFO4mrv-N9FcDDMt_0AfGZSQ@mail.gmail.com>
- <20200528205807.GB21709@rowland.harvard.edu>
- <CAAeHK+xx-uodQWBDA2pJ_Et26uBPb6J7fTwu4h6D1uUTv8t3HA@mail.gmail.com>
- <79ba410f-e0ef-2465-b94f-6b9a4a82adf5@i-love.sakura.ne.jp>
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id EB2B9C433C9;
+        Sat, 30 May 2020 06:31:06 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org EB2B9C433C9
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=wcheng@codeaurora.org
+Subject: Re: [RFC v3 0/3] Re-introduce TX FIFO resize for larger EP bursting
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     robh+dt@kernel.org, bjorn.andersson@linaro.org, balbi@kernel.org,
+        agross@kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <1590630363-3934-1-git-send-email-wcheng@codeaurora.org>
+ <20200529101214.GA1321073@kroah.com>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <48776606-518a-77b7-fe44-0bb84df5ce58@codeaurora.org>
+Date:   Fri, 29 May 2020 23:31:06 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <79ba410f-e0ef-2465-b94f-6b9a4a82adf5@i-love.sakura.ne.jp>
+In-Reply-To: <20200529101214.GA1321073@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, May 30, 2020 at 09:42:46AM +0900, Tetsuo Handa wrote:
-> On 2020/05/30 5:41, Andrey Konovalov wrote:
-> > On Thu, May 28, 2020 at 10:58 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> >>
-> >> On Thu, May 28, 2020 at 09:51:35PM +0200, Andrey Konovalov wrote:
-> >>> On Thu, May 28, 2020 at 9:40 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> >>>>
-> >>>> On Thu, May 28, 2020 at 09:03:43PM +0200, Andrey Konovalov wrote:
-> >>>>
-> >>>>> Ah, so the problem is that when a process exits, it tries to close wdm
-> >>>>> fd first, which ends up calling wdm_flush(), which can't finish
-> >>>>> because the USB requests are not terminated before raw-gadget fd is
-> >>>>> closed, which is supposed to happen after wdm fd is closed. Is this
-> >>>>> correct? I wonder what will happen if a real device stays connected
-> >>>>> and ignores wdm requests.
-> >>>>>
-> >>>>> I don't understand though, how using wait_event_interruptible() will
-> >>>>> shadow anything here.
-> >>>>>
-> >>>>> Alan, Greg, is this acceptable behavior for a USB driver?
-> >>>>
-> >>>> I don't understand what the problem is.  Can you explain in more general
-> >>>> terms -- nothing specific to wdm or anything like that -- what you are
-> >>>> concerned about?  Is this something that could happen to any gadget
-> >>>> driver?  Or any USB class device driver?  Or does it only affect
-> >>>> usespace components of raw-gadget drivers?
-> >>>
-> >>> So, AFAIU, we have a driver whose flush() callback blocks on
-> >>> wait_event(), which can only terminate when either 1) the driver
-> >>> receives a particular USB response from the device or 2) the device
-> >>> disconnects.
-> >>
-> >> This sounds like a bug in the driver.  What would it do if someone had a
-> >> genuine (not emulated) but buggy USB device which didn't send the
-> >> desired response?  The only way to unblock the driver would be to unplug
-> >> the device!  That isn't acceptable behavior.
-> > 
-> > OK, that's what I thought.
+
+
+On 5/29/2020 3:12 AM, Greg KH wrote:
+> On Wed, May 27, 2020 at 06:46:00PM -0700, Wesley Cheng wrote:
+>> Changes in V3:
+>>  - Removed "Reviewed-by" tags
+>>  - Renamed series back to RFC
+>>  - Modified logic to ensure that fifo_size is reset if we pass the minimum
+>>    threshold.  Tested with binding multiple FDs requesting 6 FIFOs.
+>>
+>> Changes in V2:
+>>  - Modified TXFIFO resizing logic to ensure that each EP is reserved a
+>>    FIFO.
+>>  - Removed dev_dbg() prints and fixed typos from patches
+>>  - Added some more description on the dt-bindings commit message
+>>
+>> Currently, there is no functionality to allow for resizing the TXFIFOs, and
+>> relying on the HW default setting for the TXFIFO depth.  In most cases, the
+>> HW default is probably sufficient, but for USB compositions that contain
+>> multiple functions that require EP bursting, the default settings
+>> might not be enough.  Also to note, the current SW will assign an EP to a
+>> function driver w/o checking to see if the TXFIFO size for that particular
+>> EP is large enough. (this is a problem if there are multiple HW defined
+>> values for the TXFIFO size)
+>>
+>> It is mentioned in the SNPS databook that a minimum of TX FIFO depth = 3
+>> is required for an EP that supports bursting.  Otherwise, there may be
+>> frequent occurences of bursts ending.  For high bandwidth functions,
+>> such as data tethering (protocols that support data aggregation), mass
+>> storage, and media transfer protocol (over FFS), the bMaxBurst value can be
+>> large, and a bigger TXFIFO depth may prove to be beneficial in terms of USB
+>> throughput. (which can be associated to system access latency, etc...)  It
+>> allows for a more consistent burst of traffic, w/o any interruptions, as
+>> data is readily available in the FIFO.
+>>
+>> With testing done using the mass storage function driver, the results show
+>> that with a larger TXFIFO depth, the bandwidth increased significantly.
 > 
-> I believe that this is not a bug in the driver but a problem of hardware
-> failure. Unless this is high-availability code which is designed for safely
-> failing over to other node, we don't need to care about hardware failure.
+> Why is this still a "RFC" series?  That implies you don't want this
+> applied...
+> 
 
-As Alan said, that's just not true.  It's the job of an operating system
-kernel to handle all of the crazy ways hardware is broken, and make it
-work properly for people.  We deal with hardware failure all the time.
+Hi Greg,
 
-So don't do uninterruptable waits or loop for forever waiting for some
-hardware value to change that might not change.  That's a sure way to
-lock up the system and make users mad at you.
+As Felipe mentioned, we need to make sure that this TX FIFO resize logic
+is carefully thought out, since the behavior could be different based
+off the HW configuration as shown in the past.  Eventually, I hope that
+this does get applied, but I think the changes needs more detailed
+reviews, as there may be potential shortfalls I did not consider due to
+my limited knowledge of what happened w/ the previous logic.  That's
+pretty much the reason for tagging it as a RFC, since we still need to
+hash out if this is the right approach.
 
-thanks,
+Thanks!
 
-greg k-h
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
