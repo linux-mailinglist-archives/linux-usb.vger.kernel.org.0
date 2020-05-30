@@ -2,57 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3E8C1E926F
-	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2020 17:59:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C8C01E92B5
+	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2020 18:53:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729139AbgE3P72 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 30 May 2020 11:59:28 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:55311 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1729038AbgE3P72 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 30 May 2020 11:59:28 -0400
-Received: (qmail 30265 invoked by uid 1000); 30 May 2020 11:59:27 -0400
-Date:   Sat, 30 May 2020 11:59:27 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Jia-Ju Bai <baijiaju@tsinghua.edu.cn>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org,
-        Jia-Ju Bai <baijiaju1990@gmail.com>
-Subject: Re: [PATCH] usb: storage: alauda: fix possible buffer overflow
- casued by bad DMA value in alauda_read_map()
-Message-ID: <20200530155927.GC29298@rowland.harvard.edu>
-References: <20200530144230.3550-1-baijiaju@tsinghua.edu.cn>
+        id S1729090AbgE3Qx1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 30 May 2020 12:53:27 -0400
+Received: from out28-53.mail.aliyun.com ([115.124.28.53]:59914 "EHLO
+        out28-53.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728797AbgE3Qx0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 30 May 2020 12:53:26 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.3907478|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_news_journal|0.00733395-0.00458315-0.988083;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03300;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=12;RT=12;SR=0;TI=SMTPD_---.HfvVT0t_1590857595;
+Received: from localhost.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.HfvVT0t_1590857595)
+          by smtp.aliyun-inc.com(10.147.40.26);
+          Sun, 31 May 2020 00:53:22 +0800
+From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
+        <zhouyanjie@wanyeetech.com>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        balbi@kernel.org, gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, yanfei.li@ingenic.com,
+        sernia.zhou@foxmail.com, zhenwenjin@gmail.com
+Subject: [PATCH 0/2] Add USB PHY support for Ingenic X1000 and X1830.
+Date:   Sun, 31 May 2020 00:52:51 +0800
+Message-Id: <20200530165253.17445-1-zhouyanjie@wanyeetech.com>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200530144230.3550-1-baijiaju@tsinghua.edu.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, May 30, 2020 at 10:42:30PM +0800, Jia-Ju Bai wrote:
-> From: Jia-Ju Bai <baijiaju1990@gmail.com>
-> 
-> The value us->iobuf is stored in DMA memory, and it is assigned to data,
-> so data[6] and data[7] can be modified at anytime by malicious hardware.
-> In this case, data[6] ^ data[7] can be a quite large number, which may 
-> cause buffer overflow when the code "parity[data[6] ^ data[7]]" is
-> executed.
-> 
-> To fix this possible bug, data[6] ^ data[7] is assigned to a local
-> variable, and then this variable is checked before being used.
+1.Add the USB PHY bindings for the X1000 SoC and
+  the X1830 SoC from Ingenic.
+2.Add support for probing the phy-jz4770 driver on the
+  X1000 SoC and the X1830 SoC from Ingenic.
 
-There are much worse problems than this in the alauda driver.  For 
-example, alauda_get_redu_data() does I/O from a data buffer on the 
-stack; this is not allowed.  That's just the example I noticed; there 
-may very well be others.
+周琰杰 (Zhou Yanjie) (2):
+  dt-bindings: USB: Add Ingenic X1000 and X1830 bindings.
+  USB: PHY: JZ4770: Add support for Ingenic X1000 and X1830.
 
-If you want to fix something, fix that.
+ .../bindings/usb/ingenic,jz4770-phy.yaml           |   5 +-
+ drivers/usb/phy/Kconfig                            |   4 +-
+ drivers/usb/phy/phy-jz4770.c                       | 250 ++++++++++++++-------
+ 3 files changed, 173 insertions(+), 86 deletions(-)
 
-If you're still worried about malicious hardware, the way to fix the 
-problem is not to change this one location.  Instead, you should modify 
-the driver so that us->iobuf is not stored in DMA memory.
+-- 
+2.11.0
 
-Alan Stern
