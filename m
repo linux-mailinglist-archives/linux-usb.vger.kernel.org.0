@@ -2,111 +2,194 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 745DF1E9832
-	for <lists+linux-usb@lfdr.de>; Sun, 31 May 2020 16:43:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B92FF1E9867
+	for <lists+linux-usb@lfdr.de>; Sun, 31 May 2020 17:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728193AbgEaOnI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 31 May 2020 10:43:08 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:54646 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725889AbgEaOnH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 31 May 2020 10:43:07 -0400
-Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 00F3E40164;
-        Sun, 31 May 2020 14:43:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1590936187; bh=cFrdruy77uNdpg61TGwbsmAVmXU2tcp8CGi7/X2nbL0=;
-        h=Date:From:Subject:To:Cc:From;
-        b=RT8kpGUEagbxF2SBdZkc0Jgw3Cyh+nrU0cX7B4SIm+3VyHI2ECo2BV66Y5Lhw5E3U
-         f66E+fUHkapXbXyI4kNd7R60YQt+yYaaQti4Uk8mcQGWnuGy8ZOok6SMLUb4jHdIL/
-         6/2hVBD46YVOyyQyx92VmBwOpkdYt437j7Hz4gVmybQerWDTVSlmoUJUsPO9ZdFr5T
-         V4aZ9BBPsrOlFmK5GyHjwKetocC07HScgn7AizA0c8YVjKomTY/ljaX4VyMuLnGZHb
-         UmxCFK3HuEJ+lzKqOst65QXtVphDjyifRanWE5zjcetZTjXQT3w9429v3CkHWcn8wp
-         CqU7Se53sv5Ig==
-Received: from hminas-z420 (hminas-z420.internal.synopsys.com [10.116.126.211])
-        (using TLSv1 with cipher AES128-SHA (128/128 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 1F1A1A009C;
-        Sun, 31 May 2020 14:43:01 +0000 (UTC)
-Received: by hminas-z420 (sSMTP sendmail emulation); Sun, 31 May 2020 18:42:58 +0400
-Date:   Sun, 31 May 2020 18:42:58 +0400
-Message-Id: <631755afa9aa2504684322ec285c7fa4fabca9de.1590935792.git.hminas@synopsys.com>
-X-SNPS-Relay: synopsys.com
-From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Subject: [PATCH v2] usb: dwc2: Postponed gadget registration to the udc class driver
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        linux-usb@vger.kernel.org,
-        Dinh Nguyen <dinguyen@opensource.altera.com>
-Cc:     John Youn <John.Youn@synopsys.com>, stable@vger.kernel.org,
-        Marek Vasut <marex@denx.de>
+        id S1728220AbgEaPMW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 31 May 2020 11:12:22 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:60380 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727781AbgEaPMW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 31 May 2020 11:12:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1590937939; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kymWIUWItlhHLWKPhKukKuKsgfUgf420g1O8R+PnZoQ=;
+        b=foHofBbV4GnKB5b+ecDB5jldLR80OSvOFXdbFImRxCrZHr5NhXu4OK8o/d08EHG+AiJ7YR
+        AULi5EEQUl6sUt6vP0gGR1RlSI6WmWeFzu9H/PLd509/4RbZZba7Syl0PoEz14iKtZP80c
+        G22y3JdVvCNq1HYZTduKSa8SRZrh0pg=
+Date:   Sun, 31 May 2020 17:12:09 +0200
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH] usb: common: usb-conn-gpio: Register optional charger
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>, od@zcrc.me,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <9KB7BQ.BH9P6TT11PEH2@crapouillou.net>
+In-Reply-To: <20200413122543.73846-1-paul@crapouillou.net>
+References: <20200413122543.73846-1-paul@crapouillou.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-During dwc2 driver probe, after gadget registration to the udc class
-driver, if exist any builtin function driver it immediately bound to
-dwc2 and after init host side (dwc2_hcd_init()) stucked in host mode.
-Patch postpone gadget registration after host side initialization done.
+Hi,
 
-Cc: stable@vger.kernel.org
-Fixes: 117777b2c3bb9 ("usb: dwc2: Move gadget probe function into
-platform code")
-Tested-by: Marek Vasut <marex@denx.de>
+Any feedback on this patch?
 
-Signed-off-by: Minas Harutyunyan <hminas@synopsys.com>
----
+Cheers,
+-Paul
 
-Changes in V2:
-- add module configuration check
 
- drivers/usb/dwc2/gadget.c   |  6 ------
- drivers/usb/dwc2/platform.c | 11 +++++++++++
- 2 files changed, 11 insertions(+), 6 deletions(-)
+Le lun. 13 avril 2020 =E0 14:25, Paul Cercueil <paul@crapouillou.net> a=20
+=E9crit :
+> Register a power supply charger, if the Kconfig option
+> USB_CONN_GPIO_CHARGER is set, whose online state depends on whether
+> the USB role is set to device or not.
+>=20
+> This is useful when the USB role is the only way to know if the device
+> is charging from USB. The API is the standard power supply charger=20
+> API,
+> you get a /sys/class/power_supply/xxx/online node which tells you the
+> state of the charger.
+>=20
+> The sole purpose of this is to give userspace applications a way to
+> know whether or not the charger is plugged.
+>=20
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+>=20
+> Notes:
+>     v2: - improve commit message... explain why we want a charger
+>         - compile charger code only if CONFIG_USB_CONN_GPIO_CHARGER
+>     	  is set
+>=20
+>  drivers/usb/common/Kconfig         | 11 +++++++
+>  drivers/usb/common/usb-conn-gpio.c | 47=20
+> ++++++++++++++++++++++++++++++
+>  2 files changed, 58 insertions(+)
+>=20
+> diff --git a/drivers/usb/common/Kconfig b/drivers/usb/common/Kconfig
+> index d611477aae41..5405ae96c68f 100644
+> --- a/drivers/usb/common/Kconfig
+> +++ b/drivers/usb/common/Kconfig
+> @@ -49,3 +49,14 @@ config USB_CONN_GPIO
+>=20
+>  	  To compile the driver as a module, choose M here: the module will
+>  	  be called usb-conn-gpio.ko
+> +
+> +if USB_CONN_GPIO
+> +
+> +config USB_CONN_GPIO_CHARGER
+> +	bool "USB charger support"
+> +	select POWER_SUPPLY
+> +	help
+> +	  Register a charger with the power supply subsystem. This will=20
+> allow
+> +	  userspace to know whether or not the device is charging from USB.
+> +
+> +endif
+> diff --git a/drivers/usb/common/usb-conn-gpio.c=20
+> b/drivers/usb/common/usb-conn-gpio.c
+> index ed204cbb63ea..129d48db280b 100644
+> --- a/drivers/usb/common/usb-conn-gpio.c
+> +++ b/drivers/usb/common/usb-conn-gpio.c
+> @@ -17,6 +17,7 @@
+>  #include <linux/of.h>
+>  #include <linux/pinctrl/consumer.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/power_supply.h>
+>  #include <linux/regulator/consumer.h>
+>  #include <linux/usb/role.h>
+>=20
+> @@ -38,6 +39,9 @@ struct usb_conn_info {
+>  	struct gpio_desc *vbus_gpiod;
+>  	int id_irq;
+>  	int vbus_irq;
+> +
+> +	struct power_supply_desc desc;
+> +	struct power_supply *charger;
+>  };
+>=20
+>  /**
+> @@ -98,6 +102,8 @@ static void usb_conn_detect_cable(struct=20
+> work_struct *work)
+>  		ret =3D regulator_enable(info->vbus);
+>  		if (ret)
+>  			dev_err(info->dev, "enable vbus regulator failed\n");
+> +	} else if (IS_ENABLED(CONFIG_USB_CONN_GPIO_CHARGER)) {
+> +		power_supply_changed(info->charger);
+>  	}
+>=20
+>  	info->last_role =3D role;
+> @@ -121,10 +127,35 @@ static irqreturn_t usb_conn_isr(int irq, void=20
+> *dev_id)
+>  	return IRQ_HANDLED;
+>  }
+>=20
+> +static enum power_supply_property usb_charger_properties[] =3D {
+> +	POWER_SUPPLY_PROP_ONLINE,
+> +};
+> +
+> +static int usb_charger_get_property(struct power_supply *psy,
+> +				    enum power_supply_property psp,
+> +				    union power_supply_propval *val)
+> +{
+> +	struct usb_conn_info *info =3D power_supply_get_drvdata(psy);
+> +
+> +	switch (psp) {
+> +	case POWER_SUPPLY_PROP_ONLINE:
+> +		val->intval =3D info->last_role =3D=3D USB_ROLE_DEVICE;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static int usb_conn_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev =3D &pdev->dev;
+> +	struct power_supply_desc *desc;
+>  	struct usb_conn_info *info;
+> +	struct power_supply_config cfg =3D {
+> +		.of_node =3D dev->of_node,
+> +	};
+>  	int ret =3D 0;
+>=20
+>  	info =3D devm_kzalloc(dev, sizeof(*info), GFP_KERNEL);
+> @@ -203,6 +234,22 @@ static int usb_conn_probe(struct platform_device=20
+> *pdev)
+>  		}
+>  	}
+>=20
+> +	if (IS_ENABLED(CONFIG_USB_CONN_GPIO_CHARGER)) {
+> +		desc =3D &info->desc;
+> +		desc->name =3D "usb-charger";
+> +		desc->properties =3D usb_charger_properties;
+> +		desc->num_properties =3D ARRAY_SIZE(usb_charger_properties);
+> +		desc->get_property =3D usb_charger_get_property;
+> +		desc->type =3D POWER_SUPPLY_TYPE_USB;
+> +		cfg.drv_data =3D info;
+> +
+> +		info->charger =3D devm_power_supply_register(dev, desc, &cfg);
+> +		if (IS_ERR(info->charger)) {
+> +			dev_err(dev, "Unable to register charger\n");
+> +			return PTR_ERR(info->charger);
+> +		}
+> +	}
+> +
+>  	platform_set_drvdata(pdev, info);
+>=20
+>  	/* Perform initial detection */
+> --
+> 2.25.1
+>=20
 
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 12b98b466287..7faf5f8c056d 100644
---- a/drivers/usb/dwc2/gadget.c
-+++ b/drivers/usb/dwc2/gadget.c
-@@ -4920,12 +4920,6 @@ int dwc2_gadget_init(struct dwc2_hsotg *hsotg)
- 					  epnum, 0);
- 	}
- 
--	ret = usb_add_gadget_udc(dev, &hsotg->gadget);
--	if (ret) {
--		dwc2_hsotg_ep_free_request(&hsotg->eps_out[0]->ep,
--					   hsotg->ctrl_req);
--		return ret;
--	}
- 	dwc2_hsotg_dump(hsotg);
- 
- 	return 0;
-diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
-index e571c8ae65ec..c347d93eae64 100644
---- a/drivers/usb/dwc2/platform.c
-+++ b/drivers/usb/dwc2/platform.c
-@@ -575,6 +575,17 @@ static int dwc2_driver_probe(struct platform_device *dev)
- 	if (hsotg->dr_mode == USB_DR_MODE_PERIPHERAL)
- 		dwc2_lowlevel_hw_disable(hsotg);
- 
-+#if IS_ENABLED(CONFIG_USB_DWC2_PERIPHERAL) || \
-+	IS_ENABLED(CONFIG_USB_DWC2_DUAL_ROLE)
-+	/* Postponed adding a new gadget to the udc class driver list */
-+	if (hsotg->gadget_enabled) {
-+		retval = usb_add_gadget_udc(hsotg->dev, &hsotg->gadget);
-+		if (retval) {
-+			dwc2_hsotg_remove(hsotg);
-+			goto error_init;
-+		}
-+	}
-+#endif /* CONFIG_USB_DWC2_PERIPHERAL || CONFIG_USB_DWC2_DUAL_ROLE */
- 	return 0;
- 
- error_init:
--- 
-2.11.0
 
