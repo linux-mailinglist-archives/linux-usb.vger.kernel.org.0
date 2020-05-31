@@ -2,87 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B1B61E94EA
-	for <lists+linux-usb@lfdr.de>; Sun, 31 May 2020 03:50:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F15F21E95E4
+	for <lists+linux-usb@lfdr.de>; Sun, 31 May 2020 08:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729520AbgEaBuT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 30 May 2020 21:50:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59682 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729026AbgEaBuT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 30 May 2020 21:50:19 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7DEC03E969;
-        Sat, 30 May 2020 18:50:17 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id d3so2831182pln.1;
-        Sat, 30 May 2020 18:50:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=qY4wFUZZgX45Dp3bBb91Af1u6lqNrHI4U7Zm/ob1lZU=;
-        b=vbFhq2ZBaz3WNkbWS14mUaNoQtvtvYAf0+gMprmfSiEsBno3MYWI2OgsGqaV36ji7B
-         Z/WXMh+Ik8WrOL42S6Ib3ybTk9Us3qO0M3D2zirFlpUUlGR7m2QvcH3Z6lrYtAx7inxQ
-         bl8EeK418BzyOApisSll47cf8ZH2Fv2UyJE10pvLKn/wAlbnehv+tJfm0Uah+K3MHpEQ
-         ZFwiGoMjF4Bl1BFjrgT1qh9mqAZYxQqgK/q/zTknmTvfJXbkoNfV7ZYCcla4bbRhMZCp
-         gmnFrgiqeEKVDIcxETP7lKcr/NediBQi2ZAG/3K+IAQ5KO4e88MPxVkTVuEh/blWC6DH
-         sABg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=qY4wFUZZgX45Dp3bBb91Af1u6lqNrHI4U7Zm/ob1lZU=;
-        b=b8DU1cpiYox2U89UWLN4A7So9BHkLNiXkXDmCu3jzkg114wHIK/wTUB0gFTzzVSRtQ
-         Qz4+1chLNh0LwV97kKqZE3gl+SIamFME+7fn3EAPDd8tMR7tQcylmkoPWRV+ZpAS/3x2
-         tzZZ7C4Jiv+5tC+aBM0lQR1SzkW+0cPpAxqY2sLVb9Hc8zsEanFirT0EtvZoLPoS6ZDM
-         Kxd1GjxlTEIiBgh5B6trx2e69Bzjb7B8OUbAhfdB2ZV5J7YexqMJLzwrYEm2sq9iGRQq
-         15ntborHJFe/JhEirQEjj/KQp9c59ro4zFXchBOC+cfvNeWTJ6n0OLzq7hBRSyVAOi6a
-         WpdA==
-X-Gm-Message-State: AOAM53194zM+lDfNbafVCzglJLgGxCJONPxo5E3N7N/zaj9dsVNVnL4O
-        4UC8xhJowgNg8bfpVLLjE70=
-X-Google-Smtp-Source: ABdhPJxEW2YrFqa9mfxbTY6AjWTEr+rVpCwSCxOKxc6PJBeYAp2buVfC7ZIEAxUAwiEwk3S+FROQ2g==
-X-Received: by 2002:a17:902:7786:: with SMTP id o6mr15154545pll.279.1590889817306;
-        Sat, 30 May 2020 18:50:17 -0700 (PDT)
-Received: from localhost.localdomain ([2409:4070:519:d594:7c5c:d9ff:75c1:5478])
-        by smtp.gmail.com with ESMTPSA id f3sm3326141pjw.57.2020.05.30.18.50.13
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 30 May 2020 18:50:16 -0700 (PDT)
-From:   Lokesh Chebrolu <lokeshch007@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     hadess@hadess.net, stern@rowland.harvard.edu,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lokeshch007 <lokeshch007@gmail.com>
-Subject: [PATCH] drivers: usb: core: driver: fixed 80 line character length issue
-Date:   Sun, 31 May 2020 07:20:06 +0530
-Message-Id: <1590889806-13539-1-git-send-email-lokeshch007@gmail.com>
-X-Mailer: git-send-email 2.7.4
+        id S1726020AbgEaGjn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 31 May 2020 02:39:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48976 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725895AbgEaGjn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 31 May 2020 02:39:43 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6A03120723;
+        Sun, 31 May 2020 06:39:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590907183;
+        bh=MTrSdcN1VmjDTA7hmEcp/kAIKW/bBAXMYB6FTgjyJUA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Mg2qJMGy7zOphfocfdXRkp61JKx3hq+eyVVt/xJ5mz8wQVu5DCCyhhJh2a5/vosMC
+         S7TVYZmw1hl6m4IrMG8AEV7kkf5CQLyawhLyOt2NL2qIV1p9NofG8eig9WY97/U3NV
+         3xDJjMpZ8q+z/Dl3QSZzhkIHtGUmjicx+r7CamF8=
+Date:   Sun, 31 May 2020 08:39:36 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Kyungtae Kim <kt0755@gmail.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        syzkaller <syzkaller@googlegroups.com>,
+        Dave Tian <dave.jing.tian@gmail.com>
+Subject: Re: memory leak in hidg_set_alt
+Message-ID: <20200531063936.GB1082896@kroah.com>
+References: <20200530171759.GA37895@pizza01>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200530171759.GA37895@pizza01>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: lokeshch007 <lokeshch007@gmail.com>
+On Sat, May 30, 2020 at 05:18:06PM +0000, Kyungtae Kim wrote:
+> We report a bug (in linux-5.6.11) found by FuzzUSB (a modified version
+> of syzkaller)
+> 
+> kernel config: https://kt0755.github.io/etc/config_v5.6.11
+> 
+> An usb_request instance allocated for report in hidg_set_alt() leaked.
+> 
+> ==================================================================
+> BUG: memory leak
+> unreferenced object 0xffff88803af68400 (size 128):
+>   comm "softirq", pid 0, jiffies 4294942450 (age 189.010s)
+>   hex dump (first 32 bytes):
+>     00 84 f6 3a 80 88 ff ff 00 84 f6 3a 80 88 ff ff  ...:.......:....
+>     a8 83 3c 5e 80 88 ff ff 01 00 00 00 00 00 00 00  ..<^............
+>   backtrace:
+>     [<00000000c77ea9d0>] kmemleak_alloc_recursive include/linux/kmemleak.h:43 [inline]
+>     [<00000000c77ea9d0>] slab_post_alloc_hook mm/slab.h:586 [inline]
+>     [<00000000c77ea9d0>] slab_alloc_node mm/slub.c:2786 [inline]
+>     [<00000000c77ea9d0>] slab_alloc mm/slub.c:2794 [inline]
+>     [<00000000c77ea9d0>] kmem_cache_alloc_trace+0x15e/0x2d0 mm/slub.c:2811
+>     [<0000000021977c74>] kmalloc include/linux/slab.h:555 [inline]
+>     [<0000000021977c74>] kzalloc include/linux/slab.h:669 [inline]
+>     [<0000000021977c74>] dummy_alloc_request+0xb4/0x1a0 drivers/usb/gadget/udc/dummy_hcd.c:662
+>     [<0000000065bac76c>] usb_ep_alloc_request+0x69/0x2e0 drivers/usb/gadget/udc/core.c:178
+>     [<00000000916a7f5e>] alloc_ep_req+0x27/0x1d0 drivers/usb/gadget/u_f.c:18
+>     [<00000000a697106a>] hidg_alloc_ep_req drivers/usb/gadget/function/f_hid.c:458 [inline]
+>     [<00000000a697106a>] hidg_set_alt+0x1ff/0xbe0 drivers/usb/gadget/function/f_hid.c:662
+>     [<000000006a6a3007>] set_config drivers/usb/gadget/composite.c:838 [inline]
+>     [<000000006a6a3007>] composite_setup+0x4231/0x6f10 drivers/usb/gadget/composite.c:1717
+>     [<000000000c47b49d>] configfs_composite_setup+0x11a/0x170 drivers/usb/gadget/configfs.c:1466
+>     [<00000000850a3c44>] dummy_timer+0xda5/0x33f0 drivers/usb/gadget/udc/dummy_hcd.c:1898
+>     [<00000000aaf23b82>] call_timer_fn+0x20e/0x770 kernel/time/timer.c:1404
+>     [<00000000e04e8038>] expire_timers kernel/time/timer.c:1449 [inline]
+>     [<00000000e04e8038>] __run_timers kernel/time/timer.c:1773 [inline]
+>     [<00000000e04e8038>] run_timer_softirq+0x63f/0x13c0 kernel/time/timer.c:1786
+>     [<00000000deb0ec70>] __do_softirq+0x262/0xb46 kernel/softirq.c:292
+>     [<00000000c245a5cd>] invoke_softirq kernel/softirq.c:373 [inline]
+>     [<00000000c245a5cd>] irq_exit+0x161/0x1b0 kernel/softirq.c:413
+>     [<00000000bacb5a5b>] exiting_irq arch/x86/include/asm/apic.h:546 [inline]
+>     [<00000000bacb5a5b>] smp_apic_timer_interrupt+0x137/0x500 arch/x86/kernel/apic/apic.c:1146
+>     [<000000001988f5a4>] apic_timer_interrupt+0xf/0x20 arch/x86/entry/entry_64.S:829
+> ==================================================================
 
-Fixed a coding style issue
+Great, can you send a patch fixing this please so you can get the proper
+credit for finding and fixing the issue?
 
-Signed-off-by: Lokesh Chebrolu <lokeshch007@gmail.com>
----
- drivers/usb/core/driver.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+thanks,
 
-diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-index f81606c..83c3287 100644
---- a/drivers/usb/core/driver.c
-+++ b/drivers/usb/core/driver.c
-@@ -1796,7 +1796,9 @@ int usb_autopm_get_interface_async(struct usb_interface *intf)
- EXPORT_SYMBOL_GPL(usb_autopm_get_interface_async);
- 
- /**
-- * usb_autopm_get_interface_no_resume - increment a USB interface's PM-usage counter
-+ * usb_autopm_get_interface_no_resume -
-+ * increment a USB interface's PM-usage counter
-+ *
-  * @intf: the usb_interface whose counter should be incremented
-  *
-  * This routine increments @intf's usage counter but does not carry out an
--- 
-2.7.4
-
+greg k-h
