@@ -2,80 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91F3F1E92C7
-	for <lists+linux-usb@lfdr.de>; Sat, 30 May 2020 19:16:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B1B61E94EA
+	for <lists+linux-usb@lfdr.de>; Sun, 31 May 2020 03:50:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729138AbgE3RP4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 30 May 2020 13:15:56 -0400
-Received: from rere.qmqm.pl ([91.227.64.183]:9738 "EHLO rere.qmqm.pl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728927AbgE3RP4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 30 May 2020 13:15:56 -0400
-Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 49Z7PQ0Llbz6R;
-        Sat, 30 May 2020 19:15:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1590858954; bh=Z3I4iqZssynvHyIKkwc6iDvd5nliuSp4CpNF2Pe2wjw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IOSBYLRusv3Q/rjMxE1zs2NN4DEyNHJGK/TmI/Pn73IjzqCb6n9BeQbySI153D5Of
-         /EDPJmGkaNznqiFa+bv6jj4gH2kAMt4Z0U3DiHypy2RlaajEwXoxVbvv95lUYdGeqC
-         uDhDzQpqBm2HA+arpNXgw+11Jxyqhx8z9sLbHpTIqFMao6kPRt3E2jdQrpbrLUrbBP
-         6YmTxTtDiyKfzPmoeFi4czir6i/1Eh6dal0C0tOow1zhQ2PJ0Fnavd/hNcV36QIrOm
-         mK2vqSes+ekR/yE3VBQLDGPOUkZzmR+DhGscx4q0GAE3rCvQ/kM81JuwRQJC3pisd8
-         aw7UAjoOUmqhg==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.102.2 at mail
-Date:   Sat, 30 May 2020 19:15:52 +0200
-From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: gadget: f_acm: don't disable disabled EP
-Message-ID: <20200530171552.GC16333@qmqm.qmqm.pl>
-References: <237e4bc8c63680f9ce0388d35b4c34a856ed8595.1590690518.git.mirq-linux@rere.qmqm.pl>
- <20200529081104.GD32755@b29397-desktop>
- <20200529135524.GA14614@qmqm.qmqm.pl>
- <AM7PR04MB715735B54F24293ABF7B37908B8C0@AM7PR04MB7157.eurprd04.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <AM7PR04MB715735B54F24293ABF7B37908B8C0@AM7PR04MB7157.eurprd04.prod.outlook.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1729520AbgEaBuT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 30 May 2020 21:50:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59682 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729026AbgEaBuT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 30 May 2020 21:50:19 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7DEC03E969;
+        Sat, 30 May 2020 18:50:17 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id d3so2831182pln.1;
+        Sat, 30 May 2020 18:50:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=qY4wFUZZgX45Dp3bBb91Af1u6lqNrHI4U7Zm/ob1lZU=;
+        b=vbFhq2ZBaz3WNkbWS14mUaNoQtvtvYAf0+gMprmfSiEsBno3MYWI2OgsGqaV36ji7B
+         Z/WXMh+Ik8WrOL42S6Ib3ybTk9Us3qO0M3D2zirFlpUUlGR7m2QvcH3Z6lrYtAx7inxQ
+         bl8EeK418BzyOApisSll47cf8ZH2Fv2UyJE10pvLKn/wAlbnehv+tJfm0Uah+K3MHpEQ
+         ZFwiGoMjF4Bl1BFjrgT1qh9mqAZYxQqgK/q/zTknmTvfJXbkoNfV7ZYCcla4bbRhMZCp
+         gmnFrgiqeEKVDIcxETP7lKcr/NediBQi2ZAG/3K+IAQ5KO4e88MPxVkTVuEh/blWC6DH
+         sABg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=qY4wFUZZgX45Dp3bBb91Af1u6lqNrHI4U7Zm/ob1lZU=;
+        b=b8DU1cpiYox2U89UWLN4A7So9BHkLNiXkXDmCu3jzkg114wHIK/wTUB0gFTzzVSRtQ
+         Qz4+1chLNh0LwV97kKqZE3gl+SIamFME+7fn3EAPDd8tMR7tQcylmkoPWRV+ZpAS/3x2
+         tzZZ7C4Jiv+5tC+aBM0lQR1SzkW+0cPpAxqY2sLVb9Hc8zsEanFirT0EtvZoLPoS6ZDM
+         Kxd1GjxlTEIiBgh5B6trx2e69Bzjb7B8OUbAhfdB2ZV5J7YexqMJLzwrYEm2sq9iGRQq
+         15ntborHJFe/JhEirQEjj/KQp9c59ro4zFXchBOC+cfvNeWTJ6n0OLzq7hBRSyVAOi6a
+         WpdA==
+X-Gm-Message-State: AOAM53194zM+lDfNbafVCzglJLgGxCJONPxo5E3N7N/zaj9dsVNVnL4O
+        4UC8xhJowgNg8bfpVLLjE70=
+X-Google-Smtp-Source: ABdhPJxEW2YrFqa9mfxbTY6AjWTEr+rVpCwSCxOKxc6PJBeYAp2buVfC7ZIEAxUAwiEwk3S+FROQ2g==
+X-Received: by 2002:a17:902:7786:: with SMTP id o6mr15154545pll.279.1590889817306;
+        Sat, 30 May 2020 18:50:17 -0700 (PDT)
+Received: from localhost.localdomain ([2409:4070:519:d594:7c5c:d9ff:75c1:5478])
+        by smtp.gmail.com with ESMTPSA id f3sm3326141pjw.57.2020.05.30.18.50.13
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 30 May 2020 18:50:16 -0700 (PDT)
+From:   Lokesh Chebrolu <lokeshch007@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     hadess@hadess.net, stern@rowland.harvard.edu,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lokeshch007 <lokeshch007@gmail.com>
+Subject: [PATCH] drivers: usb: core: driver: fixed 80 line character length issue
+Date:   Sun, 31 May 2020 07:20:06 +0530
+Message-Id: <1590889806-13539-1-git-send-email-lokeshch007@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, May 30, 2020 at 01:03:17AM +0000, Peter Chen wrote:
->  
-> > > > @@ -425,9 +425,11 @@ static int acm_set_alt(struct usb_function *f, unsigned
-> > intf, unsigned alt)
-> > > >  	/* we know alt == 0, so this is an activation or a reset */
-> > > >
-> > > >  	if (intf == acm->ctrl_id) {
-> > > > -		dev_vdbg(&cdev->gadget->dev,
-> > > > -				"reset acm control interface %d\n", intf);
-> > > > -		usb_ep_disable(acm->notify);
-> > > > +		if (acm->notify->enabled) {
-> > > > +			dev_vdbg(&cdev->gadget->dev,
-> > > > +					"reset acm control interface %d\n", intf);
-> > > > +			usb_ep_disable(acm->notify);
-> > > > +		}
-> > >
-> > > But it does not fix any issues, the usb_ep_disable checks 'enabled' flag.
-> > 
-> > It generates spurious trace events if you enable them.
-> You mean the trace events from core.c? If it is, we could try to improve it
-> and indicate it is already enabled or disabled.
+From: lokeshch007 <lokeshch007@gmail.com>
 
-It is indicated in return code, but the problem is that this generates
-noise and wastes debugging time. The problem I was seeing manifested
-itself as disabling disabled EPs and desync of EP state between core
-and UDC driver. The patch avoids the noise and makes the code obvious.
-(This check was there at some point in time, BTW.)
+Fixed a coding style issue
 
-Best Regards,
-Micha³ Miros³aw
+Signed-off-by: Lokesh Chebrolu <lokeshch007@gmail.com>
+---
+ drivers/usb/core/driver.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+index f81606c..83c3287 100644
+--- a/drivers/usb/core/driver.c
++++ b/drivers/usb/core/driver.c
+@@ -1796,7 +1796,9 @@ int usb_autopm_get_interface_async(struct usb_interface *intf)
+ EXPORT_SYMBOL_GPL(usb_autopm_get_interface_async);
+ 
+ /**
+- * usb_autopm_get_interface_no_resume - increment a USB interface's PM-usage counter
++ * usb_autopm_get_interface_no_resume -
++ * increment a USB interface's PM-usage counter
++ *
+  * @intf: the usb_interface whose counter should be incremented
+  *
+  * This routine increments @intf's usage counter but does not carry out an
+-- 
+2.7.4
+
