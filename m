@@ -2,131 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 581BB1EB055
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Jun 2020 22:40:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83AC71EB0D3
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Jun 2020 23:18:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728376AbgFAUjn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Jun 2020 16:39:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33800 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727096AbgFAUjn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Jun 2020 16:39:43 -0400
-Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C39FC061A0E
-        for <linux-usb@vger.kernel.org>; Mon,  1 Jun 2020 13:39:43 -0700 (PDT)
-Received: by mail-ot1-x342.google.com with SMTP id 69so9154540otv.2
-        for <linux-usb@vger.kernel.org>; Mon, 01 Jun 2020 13:39:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=RPgsvmsceQElv0ozLEaWZZlkfQr9AeVv/O9Th10daWE=;
-        b=DWcC0fQiZp6+ZInLSwjYUS0CFltBHeRF68tsMCxpE7l8uOSzDXpY+MKIkKky/Ds9iB
-         igQ4g16lBhKmBAZWc3+1r3DtsyegD+6933LoY9y0wnwH2YgVK1tKerG9q9TdU2u0VA0k
-         z5oh6A7txCJ1YE34ZSNx+PyL0rNsqNBnm4nbW285GUY/gHUXCq1bPNc+eMKgIgsO3Lpc
-         eikymAtPmfq/O/1H7uWesqJeQleLIXdNkSa5IWDveiAn4tOTqJ0cGL0vWEDU2dJ3RYrA
-         m46y3vQYwOPSLd9LXVsqGv5QA736J72baUvZ1A8vHdQLAIB06ND0N1APRULKgncAac5R
-         DRfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=RPgsvmsceQElv0ozLEaWZZlkfQr9AeVv/O9Th10daWE=;
-        b=Lmd+8UoUiOb1rOck2unf9ctsmASzCv5+pk96k37AcmqJ2kUtXLL/zoKSyl2Q7w0JXs
-         GgoTF0D2C+Ju/eKq4YXwPXxrcJQrfEyxN9LCR2vJrGyuE8WYUI+NrFY+IRgKUV2hLMUc
-         c+nvL6wAGlO6l4UKw74v0HA50BUoBlp2osDNP5IJnbSoL0LvXCMLC8BYUd/gMc8ttd+l
-         jul/0jCAFNjOZjSQQl9/CfjthhLvXCBz+ynGcfR0Je6Iy5LTUgJ92736cB6XdPk/mRsH
-         zOH3JvdyP/a4Av7F1lKrlN1AD08o42hjoiCfur9+qosXayHvzgz7KPbG5DKE+UwllvjT
-         t4HQ==
-X-Gm-Message-State: AOAM533zeCSHoKFPhO6LXh6m+x6H2eO85/P/bQN34r5NwRBaxX/T80x1
-        0Wlzzv92nO4KYkLeilLRRP4GAf3s0RqzNi655nOJ8w==
-X-Google-Smtp-Source: ABdhPJyCPfMySEQtxJpkDiWwL2wlJS292G6oePG9DQUdgHs/FDEzPxFGSieFMMrsfRcZNonrrROnPncpVF/C9cwQrds=
-X-Received: by 2002:a9d:62cb:: with SMTP id z11mr19097563otk.102.1591043981750;
- Mon, 01 Jun 2020 13:39:41 -0700 (PDT)
+        id S1728628AbgFAVSC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Jun 2020 17:18:02 -0400
+Received: from mail2.protonmail.ch ([185.70.40.22]:17974 "EHLO
+        mail2.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728097AbgFAVSC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Jun 2020 17:18:02 -0400
+Date:   Mon, 01 Jun 2020 21:17:56 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail; t=1591046279;
+        bh=WoS6JqxAjdtRobLvB6/Un1RuL9o0O4HYNT0YHPJLKV8=;
+        h=Date:To:From:Cc:Reply-To:Subject:From;
+        b=aG6Qo+Ki6i7+Z8Pi/lSWz/FZq1i1jCvU/ViZcnLz+4IwT96ACj/SRlXPMr6z+ilzt
+         F/U+7kirK/+btwoa1khJtw5ajxxmOd2hPDe7ZX+frmditaSe7c6MLk+40wyI2qafkZ
+         liHzF9EGflayrqNNNjDVJx5dPedKE074SRw/x3E8=
+To:     linux-usb@vger.kernel.org
+From:   Rob Gill <rrobgill@protonmail.com>
+Cc:     Rob Gill <rrobgill@protonmail.com>
+Reply-To: Rob Gill <rrobgill@protonmail.com>
+Subject: Re: [PATCH] USB: core: additional Device Classes to debug/usb/devices
+Message-ID: <20200601211749.6878-1-rrobgill@protonmail.com>
 MIME-Version: 1.0
-References: <20200530040157.31038-1-john.stultz@linaro.org> <CAKgpwJXU9uuT6C0NMGhZRYQMxZ9b_cCZ8=8=Yb8DwQn7aZcV7g@mail.gmail.com>
-In-Reply-To: <CAKgpwJXU9uuT6C0NMGhZRYQMxZ9b_cCZ8=8=Yb8DwQn7aZcV7g@mail.gmail.com>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Mon, 1 Jun 2020 13:39:31 -0700
-Message-ID: <CALAqxLXmOjHvP2yB0nie8o7nCyT0xhVU+0+6DGiVaoDHwRr=ig@mail.gmail.com>
-Subject: Re: [RFC][PATCH] usb: typec: tcpci_rt1711h: Try to avoid screaming
- irq causing boot hangs
-To:     Jun Li <lijun.kernel@gmail.com>
-Cc:     lkml <linux-kernel@vger.kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        YongQin Liu <yongqin.liu@linaro.org>,
-        Linux USB List <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=7.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on mail.protonmail.ch
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, May 30, 2020 at 3:30 AM Jun Li <lijun.kernel@gmail.com> wrote:
->
-> Hi John,
->
-> John Stultz <john.stultz@linaro.org> =E4=BA=8E2020=E5=B9=B45=E6=9C=8830=
-=E6=97=A5=E5=91=A8=E5=85=AD =E4=B8=8B=E5=8D=8812:02=E5=86=99=E9=81=93=EF=BC=
-=9A
-> >
-> > I've recently (since 5.7-rc1) started noticing very rare hangs
-> > pretty early in bootup on my HiKey960 board.
-> >
-> > They have been particularly difficult to debug, as the system
-> > seems to not respond at all to sysrq- commands. However, the
-> > system is alive as I'll occaionally see firmware loading timeout
-> > errors after awhile. Adding changes like initcall_debug and
-> > lockdep weren't informative, as it tended to cause the problem
-> > to hide.
-> >
-> > I finally tried to dig in a bit more on this today, and noticed
-> > that the last dmesg output before the hang was usually:
-> >   "random: crng init done"
-> >
-> > So I dumped the stack at that point, and saw it was being called
-> > from the pl061 gpio irq, and the hang always occurred when the
-> > crng init finished on cpu 0. Instrumenting that more I could see
-> > that when the issue triggered, we were getting a stream of irqs.
-> >
-> > Chasing further, I found the screaming irq was for the rt1711h,
-> > and narrowed down that we were hitting the !chip->tcpci check
-> > which immediately returns IRQ_HANDLED, but does not stop the
-> > irq from triggering immediately afterwards.
-> >
-> > This patch slightly reworks the logic, so if we hit the irq
-> > before the chip->tcpci has been assigned, we still read and
-> > write the alert register, but just skip calling tcpci_irq().
-> >
-> > With this change, I haven't managed to trip over the problem
-> > (though it hasn't been super long - but I did confirm I hit
-> > the error case and it didn't hang the system).
-> >
-> > I still have some concern that I don't know why this cropped
-> > up since 5.7-rc, as there haven't been any changes to the
-> > driver since 5.4 (or before). It may just be the initialization
-> > timing has changed due to something else, and its just exposed
-> > this issue? I'm not sure, and that's not super re-assuring.
-> >
-> > Anyway, I'd love to hear your thoughts if this looks like a sane
-> > fix or not.
->
-> I think a better solution may be move the irq request after port register=
-,
-> we should fire the irq after everything is setup.
-> does below change works for you?
+Several newer USB Device classes are not presently reported individually at
+/sys/kernel/debug/usb/devices, (reported as "unk."). This patch adds the
+following classes: 0fh (Personal Healthcare devices), 10h (USB Type-C combi=
+ned
+Audio/Video devices) 11h (USB billboard), 12h (USB Type-C Bridge). As defin=
+ed
+at [https://www.usb.org/defined-class-codes]
 
-Unfortunately the patch didn't seem to apply, but I recreated it by
-hand. I agree this looks like it should address the issue and I've not
-managed to trigger the problem in my (admittedly somewhat brief)
-attempts at testing.
+Corresponding classes defined in include/linux/usb/ch9.h.
 
-Thanks for sending it out. Do you want to submit the patch and I'll
-provide a Tested-by tag, or would it help for me to submit your
-suggested change?
+Signed-off-by: Rob Gill <rrobgill@protonmail.com>
+---
+ drivers/usb/core/devices.c   | 4 ++++
+ include/uapi/linux/usb/ch9.h | 4 ++++
+ 2 files changed, 8 insertions(+)
 
-thanks
--john
+diff --git a/drivers/usb/core/devices.c b/drivers/usb/core/devices.c
+index 44f28a114..2ef50a1d4 100644
+--- a/drivers/usb/core/devices.c
++++ b/drivers/usb/core/devices.c
+@@ -133,6 +133,10 @@ static const struct class_info clas_info[] =3D {
+ =09{USB_CLASS_CSCID,=09=09"scard"},
+ =09{USB_CLASS_CONTENT_SEC,=09=09"c-sec"},
+ =09{USB_CLASS_VIDEO,=09=09"video"},
++=09{USB_CLASS_PERSONAL_HEALTHCARE,=09"perhc"},
++=09{USB_CLASS_AUDIO_VIDEO,=09=09"av"},
++=09{USB_CLASS_BILLBOARD,=09=09"blbrd"},
++=09{USB_CLASS_USB_TYPE_C_BRIDGE,=09"bridg"},
+ =09{USB_CLASS_WIRELESS_CONTROLLER,=09"wlcon"},
+ =09{USB_CLASS_MISC,=09=09"misc"},
+ =09{USB_CLASS_APP_SPEC,=09=09"app."},
+diff --git a/include/uapi/linux/usb/ch9.h b/include/uapi/linux/usb/ch9.h
+index 2b623f36a..456ab0c2b 100644
+--- a/include/uapi/linux/usb/ch9.h
++++ b/include/uapi/linux/usb/ch9.h
+@@ -326,6 +326,10 @@ struct usb_device_descriptor {
+ #define USB_CLASS_CONTENT_SEC=09=090x0d=09/* content security */
+ #define USB_CLASS_VIDEO=09=09=090x0e
+ #define USB_CLASS_WIRELESS_CONTROLLER=090xe0
++#define USB_CLASS_PERSONAL_HEALTHCARE=090x0f
++#define USB_CLASS_AUDIO_VIDEO=09=090x10
++#define USB_CLASS_BILLBOARD=09=090x11
++#define USB_CLASS_USB_TYPE_C_BRIDGE=090x12
+ #define USB_CLASS_MISC=09=09=090xef
+ #define USB_CLASS_APP_SPEC=09=090xfe
+ #define USB_CLASS_VENDOR_SPEC=09=090xff
+--=20
+2.17.1
+
+
