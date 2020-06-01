@@ -2,138 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF5CE1E9F01
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Jun 2020 09:22:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF3AE1E9F06
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Jun 2020 09:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727945AbgFAHWO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Jun 2020 03:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49494 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725935AbgFAHWN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Jun 2020 03:22:13 -0400
-Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A38A0C061A0E;
-        Mon,  1 Jun 2020 00:22:13 -0700 (PDT)
-Received: by mail-vs1-xe42.google.com with SMTP id o2so2163836vsr.0;
-        Mon, 01 Jun 2020 00:22:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LIgRN0QDBu4gnSn3TisqfMx5xMC/fpgZPP0eL7TYZo4=;
-        b=Qy+GRsFwP59gROSPpwcSk+d4BmBdCEdjxVcnG89ETwVbaChC3CZGqNCjYA5q3zZEXV
-         ftJjSX22++JyxqShjPrcs60ExBRV9rkg0po2DVvCYUGUQ+/Lln9ssEhgcKVqibq5h1QD
-         3GcB+VR5pmjymE7fc4kCi6UuBXGedcxGeKYY0JahfpNnaRtzua+jlXVyuPKz5eq95nyx
-         FH5rsmTOlXiADyitE7Yo9XplyqzAHQ1AspJB0cypzPPGDXANPkzbpULgcPelQMQlpYkn
-         q2rtZDeeH2pm1YHT1QiK+n+u+A7jM83OUkEtSD+uInIdVHUsPiVFys6kxdjnMNKzkX37
-         ++ig==
+        id S1726860AbgFAHYH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Jun 2020 03:24:07 -0400
+Received: from mail-io1-f69.google.com ([209.85.166.69]:45159 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725283AbgFAHYF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Jun 2020 03:24:05 -0400
+Received: by mail-io1-f69.google.com with SMTP id r11so4002198ioa.12
+        for <linux-usb@vger.kernel.org>; Mon, 01 Jun 2020 00:24:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LIgRN0QDBu4gnSn3TisqfMx5xMC/fpgZPP0eL7TYZo4=;
-        b=ek40dg9u6PY9p5yDFRjTOxpa6vDqCZFAN+FfzvCrm0BqPTd8VLD5yuw0tshuQgRzXL
-         Z9Zws+lkEhm7OSHbOH1YyDg5gyzfmRRPOQ2d7Ijqb1fVekg6cdgo49j2aic5hGA+62zV
-         YQOyIBm/HEPfJnbvnjCptoCEkZovXN7hWirJ9cwG5kJGOXeafaIhXuJy7dttDnThPQIJ
-         OroiIQta9PqAexB/3Tsu1215a63tRdEdyInhO8GikbPLxN7hONQkHtTqXWOgkk9Ww1KW
-         BCvvayr0MDm8B0lQpy20gRC7IDoUYEh6nFEqhvPxkH1aUcBOqaimPE2XStSxibQ3r2Y1
-         Dekw==
-X-Gm-Message-State: AOAM532eokaXmWqinM7c1K+1NwdseA2DRieP8YIj9LuyocXpOsMz8XyP
-        Bmsx0ia+CepbDFkTqEKhKPn0mz5O04BjZnP1gxc=
-X-Google-Smtp-Source: ABdhPJzIA1FGKrVz+9UgvnCvE4qHbM8WwKnt0yzT0Ej9MwEf3XXL3bZ9GG5bYf4/kar44nR6s2ZBVVKbKsVOWbpBIWw=
-X-Received: by 2002:a05:6102:a17:: with SMTP id t23mr9115865vsa.62.1590996132886;
- Mon, 01 Jun 2020 00:22:12 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=dwV5KdRye0e31ymiiDuE0zpC+cSqLV10md4bSh/xCrs=;
+        b=KFOezPLiW/B1yOyXoyUTmMXSWTqvCc6nlF6Df1cSvbUyx0Kd4ZTiqbMsRxPifkaB+m
+         BlWCKG29PH9tq7r1BS310GpKVfnmJND5PZyGlNjhwJmLtiyUqfNWfwxlsjNXW/OoZ293
+         bo7w2+YU7zUa+yDyOa9tOUB7XY5tmOoYTpAsE+s3zn0eigng6SlAWj5T40mp4bsrhERI
+         AWwoLbYYw6yKF166GU78EUMeXaBOOkT3veGsuo5OSqc1xFyJlvC67B2K4TEfM2ktk250
+         SjS0kR1GW9LF25SvmoiSkTEmZ3DQha6KaTS+kIZVN+mKMH3OT1j2nj49d4baXWbm0QJr
+         8HCg==
+X-Gm-Message-State: AOAM5315sjLYIZdldvVcx6ttL/nHRgmlP/BXuAK58yhoP4Pi+dxwTxoM
+        MYB+2OHerQkg8pUCLGQ/MQi3METeAJ+eK+JMCGuPhyAbajzQ
+X-Google-Smtp-Source: ABdhPJxz/d/kvpzjcnGN1c1YCmqhvS4eT/h31O/xXkEEpT7Iu7wQbzsuHtKsgejoNKPcjY0takGTNoR0er3BCM4tLC0eKtzPO+xJ
 MIME-Version: 1.0
-References: <20200529141100.37519-1-pilgrimtao@gmail.com> <c8412d98-0328-0976-e5f9-5beddc148a35@kernel.dk>
-In-Reply-To: <c8412d98-0328-0976-e5f9-5beddc148a35@kernel.dk>
-From:   Tao pilgrim <pilgrimtao@gmail.com>
-Date:   Mon, 1 Jun 2020 15:22:01 +0800
-Message-ID: <CAAWJmAZOQQQeNiTr48OSRRdO2pG+q4c=6gjT55CkWC5FN=HXmA@mail.gmail.com>
-Subject: Re: [PATCH v2] blkdev: Replace blksize_bits() with ilog2()
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     hch@lst.de, sth@linux.ibm.com, viro@zeniv.linux.org.uk, clm@fb.com,
-        jaegeuk@kernel.org, hch@infradead.org,
-        Mark Fasheh <mark@fasheh.com>, dhowells@redhat.com,
-        balbi@kernel.org, damien.lemoal@wdc.com, bvanassche@acm.org,
-        ming.lei@redhat.com, martin.petersen@oracle.com, satyat@google.com,
-        chaitanya.kulkarni@wdc.com, houtao1@huawei.com,
-        asml.silence@gmail.com, ajay.joshi@wdc.com,
-        linux-kernel@vger.kernel.org,
-        Muchun Song <songmuchun@bytedance.com>, hoeppner@linux.ibm.com,
-        heiko.carstens@de.ibm.com, gor@linux.ibm.com,
-        borntraeger@de.ibm.com, linux-s390@vger.kernel.org,
-        sagi@grimberg.me, linux-nvme@lists.infradead.org,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        Josef Bacik <josef@toxicpanda.com>, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, chao@kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, darrick.wong@oracle.com,
-        linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
-        ocfs2-devel@oss.oracle.com, deepa.kernel@gmail.com
+X-Received: by 2002:a02:1c83:: with SMTP id c125mr19792368jac.112.1590996243587;
+ Mon, 01 Jun 2020 00:24:03 -0700 (PDT)
+Date:   Mon, 01 Jun 2020 00:24:03 -0700
+In-Reply-To: <000000000000bbd09005a6fdc6cc@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f0261a05a700adf5@google.com>
+Subject: Re: WARNING in snd_usbmidi_submit_urb/usb_submit_urb
+From:   syzbot <syzbot+5f1d24c49c1d2c427497@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, balbi@kernel.org,
+        gregkh@linuxfoundation.org, ingrassia@epigenesys.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 29, 2020 at 10:13 PM Jens Axboe <axboe@kernel.dk> wrote:
->
-> On 5/29/20 8:11 AM, Kaitao Cheng wrote:
-> > There is a function named ilog2() exist which can replace blksize.
-> > The generated code will be shorter and more efficient on some
-> > architecture, such as arm64. And ilog2() can be optimized according
-> > to different architecture.
->
-> When you posted this last time, I said:
->
-> "I like the simplification, but do you have any results to back up
->  that claim? Is the generated code shorter? Runs faster?"
->
+syzbot has bisected this bug to:
 
-Hi  Jens Axboe:
+commit f2c2e717642c66f7fe7e5dd69b2e8ff5849f4d10
+Author: Andrey Konovalov <andreyknvl@google.com>
+Date:   Mon Feb 24 16:13:03 2020 +0000
 
-I did a test on ARM64.
-unsigned int ckt_blksize(int size)
-{
-   return blksize_bits(size);
-}
-unsigned int ckt_ilog2(int size)
-{
-    return ilog2(size);
-}
+    usb: gadget: add raw-gadget interface
 
-When I compiled it into assembly code, I got the following result,
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=164afcf2100000
+start commit:   bdc48fa1 checkpatch/coding-style: deprecate 80-column warn..
+git tree:       upstream
+final crash:    https://syzkaller.appspot.com/x/report.txt?x=154afcf2100000
+console output: https://syzkaller.appspot.com/x/log.txt?x=114afcf2100000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=129ea1e5950835e5
+dashboard link: https://syzkaller.appspot.com/bug?extid=5f1d24c49c1d2c427497
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12d70cf2100000
 
-0000000000000088 <ckt_blksize>:
-      88: 2a0003e8 mov w8, w0
-      8c: 321d03e0 orr w0, wzr, #0x8
-      90: 11000400 add w0, w0, #0x1
-      94: 7108051f cmp w8, #0x201
-      98: 53017d08 lsr w8, w8, #1
-      9c: 54ffffa8 b.hi 90 <ckt_blksize+0x8>
-      a0: d65f03c0 ret
-      a4: d503201f nop
+Reported-by: syzbot+5f1d24c49c1d2c427497@syzkaller.appspotmail.com
+Fixes: f2c2e717642c ("usb: gadget: add raw-gadget interface")
 
-00000000000000a8 <ckt_ilog2>:
-      a8: 320013e8 orr w8, wzr, #0x1f
-      ac: 5ac01009 clz w9, w0
-      b0: 4b090108 sub w8, w8, w9
-      b4: 7100001f cmp w0, #0x0
-      b8: 5a9f1100 csinv w0, w8, wzr, ne
-      bc: d65f03c0 ret
-
-The generated code of ilog2  is shorter , and  runs faster
-
-
-> which you handily ignored, yet sending out a new version. I'm not
-> going to apply this without justification, your commit message is
-> handwavy at best.
->
-
-Do I need to write the test content into commit message?
-
-
-
--- 
-Yours,
-Kaitao Cheng
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
