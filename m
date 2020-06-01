@@ -2,271 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 730801E9ADB
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Jun 2020 01:47:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1BA91E9C27
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Jun 2020 05:53:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728296AbgEaXra (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 31 May 2020 19:47:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35994 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725860AbgEaXr3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 31 May 2020 19:47:29 -0400
-Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8A1C061A0E;
-        Sun, 31 May 2020 16:47:29 -0700 (PDT)
-Received: by mail-qt1-x841.google.com with SMTP id w90so6437877qtd.8;
-        Sun, 31 May 2020 16:47:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=dHkNB29IroypU9npEenFoEQZGKmg3uiqvWsxQnbV8wk=;
-        b=WsUhc7s61uP5GJWAmtE9IgjeSFw01KWfEZNKzLwRm2B+35Pi7yB0XWFL+dpvnnYGBS
-         8xbJ+O02bUo6cqcR1+GTsfhJywiVrTq5wMFS1ksq+GADlzCjulqih6tG84m9KWoik24d
-         vxZRojLQOWG5MB1j2GTQwCGJ+FKzLNxMtVHL9zWJtrKhGPPuoaNj8cz05x+exOR6Mztn
-         HanaTpYxpG81QmBXdwzr+mAha8W1nntelB9ivtby3WGZABLsTo6jkb0GT2qyV2LcGJkk
-         fATtJJiu5wiHF09qUwQO/tdEoPNfVMqIEKjeYt6EO3qICE0gzpEOVqIwi+gYsTL3frke
-         snrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=dHkNB29IroypU9npEenFoEQZGKmg3uiqvWsxQnbV8wk=;
-        b=misrHlLFMl5xVWnf+SwuL6vxf3CM40cq3Hpzt71tGtyom0r/VJG2gUqYyTi9J1yoXV
-         W+z/EX5gshFJW2sqYu5zjCer/j7S/7ECKG4OBhx3leZAqkJ0oPNvPJXBHFY/WbdBokMD
-         TzZvyFjHJI5af5gwoNAYLdSTC/D+UfaneJrPGyvKvPwW3eOIfXeYQlgENsCUEXcRwxiA
-         PNVECBUp4qThp9cMyvM1Gj77OcYskUXFZmSdyfdRjmwk5e+sqKZWpU43JKriFSkfBv0d
-         NrTUkltoqyR9yv0oCK+047mdtkQtl4IUhg9HvMW0wdFI237Gz6l5n2+K8jhMb6eB37vr
-         g0fQ==
-X-Gm-Message-State: AOAM532c0rqbgRZ77ylwzLnAuSykRRqAU5PhqCU4XaKWDFjOu+tujS6d
-        RCxIsggYj03GPdraelBKv4ZomNZBjBdblAVzukMD23ys
-X-Google-Smtp-Source: ABdhPJzuqKbX8YD8xGmTwDocTOqymPR1nik/6If1N7+exU//MdtoHiq5tAd8dACIFETYfvNV3k/tbPPfqlRzUsVHaFI=
-X-Received: by 2002:ac8:750a:: with SMTP id u10mr19212217qtq.103.1590968848048;
- Sun, 31 May 2020 16:47:28 -0700 (PDT)
+        id S1726943AbgFADx1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 31 May 2020 23:53:27 -0400
+Received: from mail-eopbgr70074.outbound.protection.outlook.com ([40.107.7.74]:13382
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726002AbgFADx0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 31 May 2020 23:53:26 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OXP5iHVN86O3uknFGVda5bCMI6hHB5qBfSieCMe7RYn6Tw9NF32E9xBewvT8uFkjWZ0q6Xf41l0uNKo0uZiLVMsBAmts8srGrHMul+fTISTceCDwy4IqHDq0t66NaYYuPCbtscexm06T/j2v4L7+rrYMfRTjPYDvPiIZz2a8fDLHGMuwgu+5YKaOmoklHZPA3AbcuBi/LMLWep6boKytz7x8e8WwlyHyF4V8Pkjq0bre8gH0ztzGwYTs1TxQ3Dh3sDvp4Ayr/OtE9hZxGrWR6kJtAizTClrRoKbnhvU9x1rl1zDyxfluMRM8c7qOx5fNdW9i50HfsLMeFLVgHUvXpA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XMFa6JO/eRVgUrL4TNdfHh6q/x3V6R19119kuq0ASxs=;
+ b=gbhZDk1KXbgayzg2bQMtqUGSY8Xslx67i1YPUOcKDshhdytdOqMxZx6RHTWV42y1wttlxAX1EpSKJRpK/0yNVMeik6rHOJKJTGWEwqt3aEbVFgX8g5VXcvJWHoVHK+afgWrX/xbvuJYxDu8LtyuXZPhTJjThvcJ6wdpzAYDK79NUWRu9M/fkF7g1vf35otfW7oVhLOq6jUTuGCK3H7K3nQX+Uv1DmYvQaCsjjkcyfGEYG6yaMMBHK5fn2SCpw31XPCbizKsCk59ryXZYwa3JtGs/ESBRUXx9rkdpQLSL/FjnLBCFEf2CZUyCDZCOGpcmkB02RpjU5/mvx/8T8Q96dg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XMFa6JO/eRVgUrL4TNdfHh6q/x3V6R19119kuq0ASxs=;
+ b=hEWezhgW5yE7oxIvbLXz1VXqr3lPzcRJuqNLFa7vu4kOUjBrQg8SwvRC3IN+1wyyvsRqTH4JTIZvADeMA5yt9fa8TghadT9DW/ReF59dkpKJt6CoORPb0w22y31XGipDScqrcoDr1xrmMFgJqV3/oFlXnuE8aeMOG1fFGm4SDfQ=
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
+ by AM7PR04MB7160.eurprd04.prod.outlook.com (2603:10a6:20b:119::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3045.21; Mon, 1 Jun
+ 2020 03:53:22 +0000
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1101:adaa:ee89:af2a]) by AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1101:adaa:ee89:af2a%3]) with mapi id 15.20.3045.024; Mon, 1 Jun 2020
+ 03:53:22 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+CC:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: gadget: f_acm: don't disable disabled EP
+Thread-Topic: [PATCH] usb: gadget: f_acm: don't disable disabled EP
+Thread-Index: AQHWNXESSGSOBa+W40WQH/z+ZHSm4ai+toSAgABgMwCAALdzEIABEuQAgAJEkIA=
+Date:   Mon, 1 Jun 2020 03:53:22 +0000
+Message-ID: <20200601035346.GA13752@b29397-desktop>
+References: <237e4bc8c63680f9ce0388d35b4c34a856ed8595.1590690518.git.mirq-linux@rere.qmqm.pl>
+ <20200529081104.GD32755@b29397-desktop> <20200529135524.GA14614@qmqm.qmqm.pl>
+ <AM7PR04MB715735B54F24293ABF7B37908B8C0@AM7PR04MB7157.eurprd04.prod.outlook.com>
+ <20200530171552.GC16333@qmqm.qmqm.pl>
+In-Reply-To: <20200530171552.GC16333@qmqm.qmqm.pl>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: rere.qmqm.pl; dkim=none (message not signed)
+ header.d=none;rere.qmqm.pl; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 86814ae4-3a49-477d-8240-08d805df544f
+x-ms-traffictypediagnostic: AM7PR04MB7160:
+x-microsoft-antispam-prvs: <AM7PR04MB7160F679C55C9277F8F80A668B8A0@AM7PR04MB7160.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-forefront-prvs: 0421BF7135
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: YVV3nCOrg9tZBAdo+52dd0qGLjZy41Q9neR79/jDWWA4GNDavxEsA1+M0oqKyyS5UKJ5YpRntjC9Xot6ZrTUpqM7WOpPBCoz3WKkwp3lSr0im4CfHPp4K1eIDtlaSdyDGC8FfZmLnfbmMuw3XJwGiNpgv9xVs4WgvuAwjlH1QGFYTlH6OEHyjBetDv2IqO2N5PvtHad4DnzMzWcfa1LLXEwhkpXWiJzgTePSayfGt7NndrKgyYqmAYcEUjc6O+gVjOf8I7EjFXO/Gdl5TwXKlUfy28aotMXw83n8KaRtxSOnypzgM7OwxxsvbE0ONAUSjr5A8DV5Adeq+vAJ9sB1qA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(7916004)(4636009)(346002)(376002)(366004)(39860400002)(136003)(396003)(26005)(6486002)(91956017)(76116006)(53546011)(6506007)(71200400001)(83380400001)(4326008)(33716001)(8676002)(66574014)(316002)(86362001)(54906003)(6916009)(8936002)(1076003)(44832011)(33656002)(64756008)(66446008)(66476007)(186003)(478600001)(2906002)(6512007)(66556008)(66946007)(5660300002)(9686003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: yZYNEruk3z94IHyVhK8kGN7tmJpzfPtFq7nTZHjiM1J3BjNmfwUGaDBi/6ZdhvPLrnPHnhvLo5lD9KND/GXAnqaQsPrrq9/8xWaPuXL0NrkkYZg4t1vkO0VSHN7sOuojuSIeyiB4JuXWoaOC4XEh/jbXrdk0baaby6zNOlTBzROh26Fv+usCjhBVNmbKkK1Qrtt8DqOo8zIzRUlCS5ecJ3wE+KeRee9QU6Smg+nw9RWE6hu/KUWwNBiXuAETdunmOrUTIrpsiO/LKfgUpdyTklpdvWPDAchRDlrqbM5hTiP1cPof0QM1V6RHwcbRvW1Nw9cr5ow1+6lWadmtLat5lRbFLRULkO1b6sFHJgVFXUHPfJOO9MMsiitoX7BHEq+pqXiugiXfJZdyB7uVTd4bnGwHu13g89/Nf03Hb9nXtcjjA1c0P8TRz5FD/xKE80wH9KEM4Q4UEvxoWE75QI4bDW+peAs1uJoTypWvoep9/es=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <127836C7B08B7C4588F58FA16F149E38@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-From:   Vincent Pelletier <plr.vincent@gmail.com>
-Date:   Mon, 1 Jun 2020 08:47:17 +0900
-Message-ID: <CAF78GY0KH84QvFqbvetgGKVxBgm5761HojRSfj_Ch+pCS_urCA@mail.gmail.com>
-Subject: DMAR errors on Wildcat Point-LP xHCI (Lenovo T450s)
-To:     USB list <linux-usb@vger.kernel.org>,
-        iommu@lists.linux-foundation.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Henrique de Moraes Holschuh <ibm-acpi@hmh.eng.br>,
-        ibm-acpi-devel@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 86814ae4-3a49-477d-8240-08d805df544f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jun 2020 03:53:22.2371
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 0LlTY0cAExxTDFfyPvcvfrS7anMZGZ0Y3KQWaUf+ZvVT07qUy6gOqdexqwY4sYCJM9W7QQZv5SjY3Sv4DhhNCw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB7160
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
-
-Trying to use a built-in USB device I rarely use (Sierra EM7345 LTE
-modem), I ran into issues from the modem flapping (getting removed
-from USB bus before LTE network registration is visible) up to all
-devices on the bus being "disconnected" (xhci giving up, in my
-understanding, with only the root hubs listed by lsusb).
-Checking the syslog, I find this:
-
-May 30 17:35:46 localhost kernel: [  278.999480] DMAR: DRHD: handling
-fault status reg 3
-May 30 17:35:46 localhost kernel: [  278.999485] DMAR: [DMA Read]
-Request device [00:16.7] PASID ffffffff fault addr 9cdff000 [fault
-reason 02] Present bit in context entry is clear
-May 30 17:35:46 localhost kernel: [  278.999488] DMAR: DRHD: handling
-fault status reg 3
-May 30 17:35:46 localhost kernel: [  278.999490] DMAR: [DMA Read]
-Request device [00:16.7] PASID ffffffff fault addr 9cdff000 [fault
-reason 02] Present bit in context entry is clear
-May 30 17:35:46 localhost kernel: [  279.001076] DMAR: DRHD: handling
-fault status reg 2
-May 30 17:35:46 localhost kernel: [  279.001078] DMAR: [DMA Write]
-Request device [00:16.7] PASID ffffffff fault addr 9cdff000 [fault
-reason 02] Present bit in context entry is clear
-May 30 17:35:46 localhost kernel: [  279.001120] DMAR: DRHD: handling
-fault status reg 2
-May 30 17:35:47 localhost kernel: [  280.738192] usb 2-4: USB
-disconnect, device number 10
-May 30 17:35:47 localhost kernel: [  280.738224] cdc_mbim 2-4:1.0: Tx
-URB error: -19
-May 30 17:35:47 localhost kernel: [  280.738303] cdc_mbim 2-4:1.0
-wwan0: unregister 'cdc_mbim' usb-0000:00:14.0-4, CDC MBIM
-May 30 17:35:47 localhost ModemManager[736]: <info>  (net/wwan0):
-released by device '/sys/devices/pci0000:00/0000:00:14.0/usb2/2-4'
-May 30 17:35:47 localhost ModemManager[736]: [/dev/cdc-wdm0]
-unexpected port hangup!
-May 30 17:35:47 localhost ModemManager[736]: [/dev/cdc-wdm0] channel destroyed
-May 30 17:35:47 localhost ModemManager[736]: <info>  Connection to
-mbim-proxy for /dev/cdc-wdm0 lost, reprobing
-May 30 17:35:47 localhost ModemManager[736]: <info>  [device
-/sys/devices/pci0000:00/0000:00:14.0/usb2/2-4] creating modem with
-plugin 'Sierra' and '2' ports
-May 30 17:35:47 localhost ModemManager[736]: <warn>  Could not
-recreate modem for device
-'/sys/devices/pci0000:00/0000:00:14.0/usb2/2-4': Failed to find a net
-port in the MBIM modem
-May 30 17:35:47 localhost ModemManager[736]: <info>
-(usbmisc/cdc-wdm0): released by device
-'/sys/devices/pci0000:00/0000:00:14.0/usb2/2-4'
-May 30 17:35:47 localhost ModemManager[736]: <info>  (tty/ttyACM0):
-released by device '/sys/devices/pci0000:00/0000:00:14.0/usb2/2-4'
-May 30 17:35:48 localhost kernel: [  281.202173] usb 2-4: new
-high-speed USB device number 11 using xhci_hcd
-May 30 17:35:48 localhost kernel: [  281.224037] usb 2-4: New USB
-device found, idVendor=8087, idProduct=0716, bcdDevice= 0.00
-May 30 17:35:48 localhost kernel: [  281.224043] usb 2-4: New USB
-device strings: Mfr=0, Product=0, SerialNumber=0
-May 30 17:35:48 localhost kernel: [  281.225646] usb_serial_simple
-2-4:1.0: flashloader converter detected
-May 30 17:35:48 localhost kernel: [  281.225891] usb 2-4: flashloader
-converter now attached to ttyUSB0
-
-which makes me suspect a missing IOMMU mapping in ACPI for the xhci
-controller. In this case, the xhci could recover and re-enumerated the
-device fairly quickly.
-Booting with "intel_iommu=off" makes the LTE modem work at least far
-enough that it gets registered to network (can send/receive SMS). I
-have not tried data communication (no data plan on current SIM).
-I have noticed for a while that this machine had a tendency to lose
-all USB devices more often than I enable the LTE modem, so it seems
-the modem just make this issue more likely, and is not their direct
-cause.
-
-This is on a 5.6.7 (Debian Sid 5.6.0-1-amd64, version from which
-pasted logs are extracted), and reproduced with 5.6.14 (Debian Sid
-5.6.0-2-amd64).
-The USB issues have been happening for a long time, and I use this
-modem rarely enough that I would not notice a new issue before several
-kernel versions.
-The modem usually worked "well enough" but always has had a bit of
-flapping, sometimes working after one or two suspend/resume cycles,
-and until now I did not feel the need to investigate more (I assumed a
-less-than-optimal modem/modem driver).
-This time it never ended up working after several suspend/resume
-cycles and reboots. So I do not believe it is a localised regression,
-but a bad situation getting just nudged over the edge.
-
-$ lspci
-00:00.0 Host bridge: Intel Corporation Broadwell-U Host Bridge -OPI (rev 09)
-00:02.0 VGA compatible controller: Intel Corporation HD Graphics 5500 (rev 09)
-00:03.0 Audio device: Intel Corporation Broadwell-U Audio Controller (rev 09)
-00:14.0 USB controller: Intel Corporation Wildcat Point-LP USB xHCI
-Controller (rev 03)
-00:16.0 Communication controller: Intel Corporation Wildcat Point-LP
-MEI Controller #1 (rev 03)
-00:19.0 Ethernet controller: Intel Corporation Ethernet Connection (3)
-I218-V (rev 03)
-00:1b.0 Audio device: Intel Corporation Wildcat Point-LP High
-Definition Audio Controller (rev 03)
-00:1c.0 PCI bridge: Intel Corporation Wildcat Point-LP PCI Express
-Root Port #6 (rev e3)
-00:1c.1 PCI bridge: Intel Corporation Wildcat Point-LP PCI Express
-Root Port #3 (rev e3)
-00:1d.0 USB controller: Intel Corporation Wildcat Point-LP USB EHCI
-Controller (rev 03)
-00:1f.0 ISA bridge: Intel Corporation Wildcat Point-LP LPC Controller (rev 03)
-00:1f.2 SATA controller: Intel Corporation Wildcat Point-LP SATA
-Controller [AHCI Mode] (rev 03)
-00:1f.3 SMBus: Intel Corporation Wildcat Point-LP SMBus Controller (rev 03)
-00:1f.6 Signal processing controller: Intel Corporation Wildcat
-Point-LP Thermal Management Controller (rev 03)
-02:00.0 Unassigned class [ff00]: Realtek Semiconductor Co., Ltd.
-RTS5227 PCI Express Card Reader (rev 01)
-03:00.0 Network controller: Intel Corporation Wireless 7265 (rev 59)
-$ lsusb
-Bus 001 Device 002: ID 8087:8001 Intel Corp.
-Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-Bus 003 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-Bus 002 Device 006: ID 04f2:b449 Chicony Electronics Co., Ltd Integrated Camera
-Bus 002 Device 017: ID 8087:0a2a Intel Corp.
-Bus 002 Device 004: ID 138a:0017 Validity Sensors, Inc. VFS 5011
-fingerprint sensor
-Bus 002 Device 003: ID 058f:9540 Alcor Micro Corp. AU9540 Smartcard Reader
-Bus 002 Device 016: ID 1199:a001 Sierra Wireless, Inc. Sierra Wireless
-EM7345 4G LTE
-Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-
-Early boot messages are unhappy with firmware (1.37 is the latest
-available version to date):
-May 30 17:32:17 localhost kernel: [    0.168626] DMAR: Host address width 39
-May 30 17:32:17 localhost kernel: [    0.168629] DMAR: DRHD base:
-0x000000fed90000 flags: 0x0
-May 30 17:32:17 localhost kernel: [    0.168640] DMAR: dmar0:
-reg_base_addr fed90000 ver 1:0 cap 1c0000c40660462 ecap 7e1ff0505e
-May 30 17:32:17 localhost kernel: [    0.168643] DMAR: DRHD base:
-0x000000fed91000 flags: 0x1
-May 30 17:32:17 localhost kernel: [    0.168651] DMAR: dmar1:
-reg_base_addr fed91000 ver 1:0 cap d2008c20660462 ecap f010da
-May 30 17:32:17 localhost kernel: [    0.168653] DMAR: RMRR base:
-0x0000009c0f1000 end: 0x0000009c107fff
-May 30 17:32:17 localhost kernel: [    0.168655] DMAR: RMRR base:
-0x0000009d800000 end: 0x0000009fffffff
-May 30 17:32:17 localhost kernel: [    0.168658] DMAR: [Firmware Bug]:
-No firmware reserved region can cover this RMRR
-[0x000000009d800000-0x000000009fffffff], contact BIOS vendor for fixes
-May 30 17:32:17 localhost kernel: [    0.168671] DMAR: [Firmware Bug]:
-Your BIOS is broken; bad RMRR [0x000000009d800000-0x000000009fffffff]
-May 30 17:32:17 localhost kernel: [    0.168671] BIOS vendor: LENOVO;
-Ver: JBET73WW (1.37 ); Product Version: ThinkPad T450s
-May 30 17:32:17 localhost kernel: [    0.168675] DMAR-IR: IOAPIC id 2
-under DRHD base  0xfed91000 IOMMU 1
-May 30 17:32:17 localhost kernel: [    0.168677] DMAR-IR: HPET id 0
-under DRHD base 0xfed91000
-May 30 17:32:17 localhost kernel: [    0.168679] DMAR-IR: x2apic is
-disabled because BIOS sets x2apic opt out bit.
-May 30 17:32:17 localhost kernel: [    0.168680] DMAR-IR: Use
-'intremap=no_x2apic_optout' to override the BIOS setting.
-May 30 17:32:17 localhost kernel: [    0.169608] DMAR-IR: Enabled IRQ
-remapping in xapic mode
-[...]
-May 30 17:32:17 localhost kernel: [    0.890456] pci 0000:00:02.0:
-DMAR: Disabling IOMMU for graphics on this chipset
-[...]
-May 30 17:32:17 localhost kernel: [    2.574095] DMAR: No ATSR found
-May 30 17:32:17 localhost kernel: [    2.574207] DMAR: dmar1: Using
-Queued invalidation
-May 30 17:32:17 localhost kernel: [    2.574608] pci 0000:00:00.0:
-Adding to iommu group 0
-May 30 17:32:17 localhost kernel: [    2.574760] pci 0000:00:03.0:
-Adding to iommu group 1
-May 30 17:32:17 localhost kernel: [    2.575002] pci 0000:00:14.0:
-Adding to iommu group 2
-May 30 17:32:17 localhost kernel: [    2.575170] pci 0000:00:16.0:
-Adding to iommu group 3
-May 30 17:32:17 localhost kernel: [    2.575339] pci 0000:00:19.0:
-Adding to iommu group 4
-May 30 17:32:17 localhost kernel: [    2.575489] pci 0000:00:1b.0:
-Adding to iommu group 5
-May 30 17:32:17 localhost kernel: [    2.575652] pci 0000:00:1c.0:
-Adding to iommu group 6
-May 30 17:32:17 localhost kernel: [    2.575818] pci 0000:00:1c.1:
-Adding to iommu group 7
-May 30 17:32:17 localhost kernel: [    2.576035] pci 0000:00:1d.0:
-Adding to iommu group 8
-May 30 17:32:17 localhost kernel: [    2.580374] pci 0000:00:1f.0:
-Adding to iommu group 9
-May 30 17:32:17 localhost kernel: [    2.580411] pci 0000:00:1f.2:
-Adding to iommu group 9
-May 30 17:32:17 localhost kernel: [    2.580436] pci 0000:00:1f.3:
-Adding to iommu group 9
-May 30 17:32:17 localhost kernel: [    2.580461] pci 0000:00:1f.6:
-Adding to iommu group 9
-May 30 17:32:17 localhost kernel: [    2.580628] pci 0000:02:00.0:
-Adding to iommu group 10
-May 30 17:32:17 localhost kernel: [    2.581050] pci 0000:03:00.0:
-Adding to iommu group 11
-May 30 17:32:17 localhost kernel: [    2.581056] DMAR: Intel(R)
-Virtualization Technology for Directed I/O
-
-I am not sure what could fix this issue, hence the many recipients for
-this email:
-- An xhci module issue (should check/define extra IOMMU mappings, warn
-about them missing, or maybe be able to more reliably recover) ?
-- A new IOMMU quirk (workaround bad firmware) ?
-- A new thinkpad_acpi quirk (workaround bad firmware) ?
-Or somewhere else that I did not think of ? Hopefully it will not
-require a Lenovo BIOS fix, as this is an aging model.
-
-Regards,
--- 
-Vincent Pelletier
+T24gMjAtMDUtMzAgMTk6MTU6NTIsIE1pY2hhxYIgTWlyb3PFgmF3IHdyb3RlOg0KPiBPbiBTYXQs
+IE1heSAzMCwgMjAyMCBhdCAwMTowMzoxN0FNICswMDAwLCBQZXRlciBDaGVuIHdyb3RlOg0KPiA+
+ICANCj4gPiA+ID4gPiBAQCAtNDI1LDkgKzQyNSwxMSBAQCBzdGF0aWMgaW50IGFjbV9zZXRfYWx0
+KHN0cnVjdCB1c2JfZnVuY3Rpb24gKmYsIHVuc2lnbmVkDQo+ID4gPiBpbnRmLCB1bnNpZ25lZCBh
+bHQpDQo+ID4gPiA+ID4gIAkvKiB3ZSBrbm93IGFsdCA9PSAwLCBzbyB0aGlzIGlzIGFuIGFjdGl2
+YXRpb24gb3IgYSByZXNldCAqLw0KPiA+ID4gPiA+DQo+ID4gPiA+ID4gIAlpZiAoaW50ZiA9PSBh
+Y20tPmN0cmxfaWQpIHsNCj4gPiA+ID4gPiAtCQlkZXZfdmRiZygmY2Rldi0+Z2FkZ2V0LT5kZXYs
+DQo+ID4gPiA+ID4gLQkJCQkicmVzZXQgYWNtIGNvbnRyb2wgaW50ZXJmYWNlICVkXG4iLCBpbnRm
+KTsNCj4gPiA+ID4gPiAtCQl1c2JfZXBfZGlzYWJsZShhY20tPm5vdGlmeSk7DQo+ID4gPiA+ID4g
+KwkJaWYgKGFjbS0+bm90aWZ5LT5lbmFibGVkKSB7DQo+ID4gPiA+ID4gKwkJCWRldl92ZGJnKCZj
+ZGV2LT5nYWRnZXQtPmRldiwNCj4gPiA+ID4gPiArCQkJCQkicmVzZXQgYWNtIGNvbnRyb2wgaW50
+ZXJmYWNlICVkXG4iLCBpbnRmKTsNCj4gPiA+ID4gPiArCQkJdXNiX2VwX2Rpc2FibGUoYWNtLT5u
+b3RpZnkpOw0KPiA+ID4gPiA+ICsJCX0NCj4gPiA+ID4NCj4gPiA+ID4gQnV0IGl0IGRvZXMgbm90
+IGZpeCBhbnkgaXNzdWVzLCB0aGUgdXNiX2VwX2Rpc2FibGUgY2hlY2tzICdlbmFibGVkJyBmbGFn
+Lg0KPiA+ID4gDQo+ID4gPiBJdCBnZW5lcmF0ZXMgc3B1cmlvdXMgdHJhY2UgZXZlbnRzIGlmIHlv
+dSBlbmFibGUgdGhlbS4NCj4gPiBZb3UgbWVhbiB0aGUgdHJhY2UgZXZlbnRzIGZyb20gY29yZS5j
+PyBJZiBpdCBpcywgd2UgY291bGQgdHJ5IHRvIGltcHJvdmUgaXQNCj4gPiBhbmQgaW5kaWNhdGUg
+aXQgaXMgYWxyZWFkeSBlbmFibGVkIG9yIGRpc2FibGVkLg0KPiANCj4gSXQgaXMgaW5kaWNhdGVk
+IGluIHJldHVybiBjb2RlLCBidXQgdGhlIHByb2JsZW0gaXMgdGhhdCB0aGlzIGdlbmVyYXRlcw0K
+PiBub2lzZSBhbmQgd2FzdGVzIGRlYnVnZ2luZyB0aW1lLiBUaGUgcHJvYmxlbSBJIHdhcyBzZWVp
+bmcgbWFuaWZlc3RlZA0KPiBpdHNlbGYgYXMgZGlzYWJsaW5nIGRpc2FibGVkIEVQcyBhbmQgZGVz
+eW5jIG9mIEVQIHN0YXRlIGJldHdlZW4gY29yZQ0KPiBhbmQgVURDIGRyaXZlci4gVGhlIHBhdGNo
+IGF2b2lkcyB0aGUgbm9pc2UgYW5kIG1ha2VzIHRoZSBjb2RlIG9idmlvdXMuDQo+IChUaGlzIGNo
+ZWNrIHdhcyB0aGVyZSBhdCBzb21lIHBvaW50IGluIHRpbWUsIEJUVy4pDQo+IA0KDQpSZXZpZXdl
+ZC1ieTogUGV0ZXIgQ2hlbiA8cGV0ZXIuY2hlbkBueHAuY29tPg0KDQoNCg0KLS0gDQoNClRoYW5r
+cywNClBldGVyIENoZW4=
