@@ -2,124 +2,169 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1E9D1E9C3F
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Jun 2020 05:56:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C4901E9C66
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Jun 2020 06:10:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727770AbgFAD4Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 31 May 2020 23:56:16 -0400
-Received: from mail-io1-f71.google.com ([209.85.166.71]:34655 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726860AbgFAD4P (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 31 May 2020 23:56:15 -0400
-Received: by mail-io1-f71.google.com with SMTP id z20so3810940iog.1
-        for <linux-usb@vger.kernel.org>; Sun, 31 May 2020 20:56:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=2lVsqEau+OfjE24JbRCT3k2FzzgQCaY2jUo9KfMkRqc=;
-        b=B+RXKZXvFS3L9Wbh9+kV5vI660CmvK4CsIhp9n6c30W8UewVrqFbmrxFIKup2M+JCX
-         8G2wPcnX2gnyZH7QSG4oaufd98wuyRP2qgRRJNMLDIGYGLRDBaOI2W2yY8vbI+TO2lyL
-         UEmleE7bq/z67PVcFQTPi+lI0hViHW0o2SXw7LSn6MvxdEF21FoEjf/OHMbVlt37HBd6
-         3uMJLtSUQVoix7dp9KRiJopEgullb7FyHPLRoVVlHFCHCmhgE0bSbe1oBEqVl628DpdA
-         GexAWmbnua7ny9pPFJptcN28MB+UFdavXmpR1G9iY4XFzaA6bX/8nlbkY1wfhi9W48tZ
-         TRAg==
-X-Gm-Message-State: AOAM530i9XeaAOQsCCJvlkMh+VfWaLCwmnyz+Fmdc53gkL6TEA9VE0vJ
-        e2pn7ZPT2Mot52Nw3xLzcx/+Fj4vy0jIJp08EKdF915AyDCx
-X-Google-Smtp-Source: ABdhPJx7AKlcLyFaD1F3VWcDi4yr28z2sUl/7xATKlIccEUmlglIsDkCmfKqemlH/5EW7egV3t5uh+QVsnefYfkUph+sa4WDW0IE
+        id S1725955AbgFAEK2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Jun 2020 00:10:28 -0400
+Received: from mail-eopbgr20070.outbound.protection.outlook.com ([40.107.2.70]:25599
+        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725290AbgFAEK2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 1 Jun 2020 00:10:28 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=awftJkezXB3iVGT/ugtKGHqWE2pOn2OsmrX8gCRmGEaAlxmGZD1ArZGRyOx9bdTp29By37FXEr32paluyaFA7A4o8lrMAJIDn5RMOag4CtAz32N9QcT/Gf8V6izr1DgEZns3AJ4bPRLUB15isxU2Zgno1x6eWDfAXWREATru5x8SUh/4Z3wswp5wJCLwIPAK4GBVP3q30Ym9YmCk6Bvf3WUHbi5fiWtu5NA4QEUEFsfoDvfVKkpwqTwYWeWiKMyLYNOVuaSpzJvVdrQ5KaiM0WPDs1wc1yotPVy1lUYl+J1ha21g2W+5ttDZHeu7gFUUDq414VTCOyEkTsLxL5KWwg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YFfFnY0ADOOvtSrSXBhw7R8nAv2iCDo/O1xodSTWU2E=;
+ b=jrcOKQQ90k/4xv/jSItZs1aPl3FBsuk5oSLofypLId8QqgsQcxf5sy8hLOEcv/tv8FH7HcsHFNO8JMxB7uAxyWedg3D/sPvg7POq6Vl7Ek4SRaYsX/p2kk0Mobs0ucCt3q/g/lpRi2Xl3E4geK+MwGxlCex3UBhKFI4dObYhU4WJaHyCH1VYWeHUYm9ZEFirJ9G8jefc9fUNSU/loZ5tWhFb9YIfrTFkFWPRUFl4tAvIZNvA/eYirZMLFhMt1UJXdigJWuxaCIbFCJDSVPRp/a1uOD3PwvZ4hO2Iy2ZwH1ICuCzpyjBMTLCH4JRYHHMZP7BbjdIUZU4KIa9K4QBacA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YFfFnY0ADOOvtSrSXBhw7R8nAv2iCDo/O1xodSTWU2E=;
+ b=Mn0CZDgZsKLsZMFlSoDw5tk2/NA6894O5qzpgnAXRagl++Igq4H0i2y5C+fNRuH9O0357T2UxVEBl4dnWuon2nHsY33LwTO6Ea58e1tTqY8MDzqX5uvn2WVnPo6IcdLUTlMsYuYZZkDxWdItVrMWTOM0m1fmA/D6Rx0+02/NU/4=
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
+ by AM7PR04MB7096.eurprd04.prod.outlook.com (2603:10a6:20b:113::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3045.17; Mon, 1 Jun
+ 2020 04:10:24 +0000
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1101:adaa:ee89:af2a]) by AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1101:adaa:ee89:af2a%3]) with mapi id 15.20.3045.024; Mon, 1 Jun 2020
+ 04:10:24 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Jia-Ju Bai <baijiaju1990@gmail.com>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "pawell@cadence.com" <pawell@cadence.com>,
+        "rogerq@ti.com" <rogerq@ti.com>,
+        "colin.king@canonical.com" <colin.king@canonical.com>,
+        "yuehaibing@huawei.com" <yuehaibing@huawei.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: cdns3: fix possible buffer overflow caused by bad
+ DMA value
+Thread-Topic: [PATCH] usb: cdns3: fix possible buffer overflow caused by bad
+ DMA value
+Thread-Index: AQHWNjHPz6qvJgpZ+karMYRZFy9ss6jDKN4A
+Date:   Mon, 1 Jun 2020 04:10:24 +0000
+Message-ID: <20200601041048.GB13752@b29397-desktop>
+References: <20200530032400.12743-1-baijiaju1990@gmail.com>
+In-Reply-To: <20200530032400.12743-1-baijiaju1990@gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 28dd596c-3efd-49fb-026b-08d805e1b592
+x-ms-traffictypediagnostic: AM7PR04MB7096:
+x-microsoft-antispam-prvs: <AM7PR04MB7096408699CAD54F25AD47AF8B8A0@AM7PR04MB7096.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 0421BF7135
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: A2pk6eyvjeSKTXuzVZYtWz/3PcF3NJvQczPwLSHPwySUMvILC+QEiwhAkeow0jSBBU3aD0Ccy9i5itJEcwXbQna7FExq5nEYtPHZmPJojraoJWg8hptC8u6OMzuYqNVvCpU9YL4QjES+idXGkBDfhnywMSX1rFbW5/DHYDBnaCggndT8MJdNPCLVXZMbdE5tQJyOJv1ajkqIQyX3KycQx/A6vOoEK1JIPNygiNdI8b7/r4LAK83Gllkb8yz/+VHadlGft8Qa17UKh/NyXmW/bPoGwwPRxuJYXdDjNGcQf49utohNW6XF8MgSInIi6WFBOzfuA3PqVDyPndIHp6Q0DA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(7916004)(4636009)(346002)(376002)(136003)(396003)(366004)(39860400002)(66556008)(478600001)(64756008)(66446008)(9686003)(6512007)(8676002)(5660300002)(316002)(91956017)(76116006)(8936002)(4326008)(1076003)(66946007)(66476007)(44832011)(54906003)(2906002)(71200400001)(186003)(26005)(53546011)(6506007)(83380400001)(6486002)(6916009)(33656002)(33716001)(86362001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: Mx7HIYQ+L2PQEESqzVcaT1eKvl/LPaGd/Bv47orp+SbugaARaV2AX/uXtE8AsIRfKcoU+OnQsDRYdudj+G6a9nvK5MrehAAzQpxCMCcKCwznrUt9IaNeZBp7P4/kbTF9mQkHW1GJyk0NLcms6lIAKDX6Xw7UB0GXPnvWdC2QwjADOwBMblw/ulRN8oelzWPSOaDwTGH0CjvLng42KcWPqTAkllG03TPbNgX0fvcEKD09TMLveQbLYGEleFb2mrUeAEsNGdIZmNoUBeySe858MmWE54a8LugDECFZXmg7zzrZjpPxGkgiWJqlCaigJneEGdaLfTXcqD3LLg5qXasHTsUBevlgqYTFx6OMzvn+/IVJUOIO4WJFQf17vQcDqiERKpzzcl7ViLFb9vY4MQ3jB3XdbyPNOYaNa5ckApUDhFzBejoZzu2/f30J0qSTFljfDTSOo3tc60WVuGr7gd2llYBy1sFPyzYm0gOsQZ8RgCw=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <8DFBDA757AA7E047A20991C996909877@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-Received: by 2002:a92:cf52:: with SMTP id c18mr7392210ilr.142.1590983774685;
- Sun, 31 May 2020 20:56:14 -0700 (PDT)
-Date:   Sun, 31 May 2020 20:56:14 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000bbd09005a6fdc6cc@google.com>
-Subject: WARNING in snd_usbmidi_submit_urb/usb_submit_urb
-From:   syzbot <syzbot+5f1d24c49c1d2c427497@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, ingrassia@epigenesys.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 28dd596c-3efd-49fb-026b-08d805e1b592
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jun 2020 04:10:24.2959
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: UT6gjy/IQETs6N5KOPBsIiYgrw056Eq/YEV1Xjq43k0ila94ietYwMdsx0dhMOzZWug8OBBQFm93Ho5I/ITLhw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB7096
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On 20-05-30 11:24:00, Jia-Ju Bai wrote:
+> In cdns3_ep0_setup_phase():
+>   struct usb_ctrlrequest *ctrl =3D priv_dev->setup_buf;
+>=20
+> Because priv_dev->setup_buf (allocated in cdns3_gadget_start) is stored=20
+> in DMA memory, and thus ctrl is a DMA value.
+>=20
+> cdns3_ep0_setup_phase()
+>   cdns3_ep0_standard_request(priv_dev, ctrl)
+>     cdns3_req_ep0_get_status(priv_dev, ctrl)
+>       index =3D cdns3_ep_addr_to_index(ctrl->wIndex);
+>       priv_ep =3D priv_dev->eps[index];
+>=20
+> cdns3_ep0_setup_phase()
+>   cdns3_ep0_standard_request(priv_dev, ctrl)
+>     cdns3_req_ep0_handle_feature(priv_dev, ctrl_req, 0)
+>       cdns3_ep0_feature_handle_endpoint(priv_dev, ctrl, set)
+>         index =3D cdns3_ep_addr_to_index(ctrl->wIndex);
+>         priv_ep =3D priv_dev->eps[index];
+>=20
+> In these cases, ctrl->wIndex can be be modified at anytime by malicious
+> hardware, and thus a buffer overflow can occur when the code
+> "priv_dev->eps[index]" is executed.
+>=20
 
-syzbot found the following crash on:
+Did you see the setup buffer is overwritten before the setup handling is
+finished?
 
-HEAD commit:    bdc48fa1 checkpatch/coding-style: deprecate 80-column warn..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=15d64586100000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=129ea1e5950835e5
-dashboard link: https://syzkaller.appspot.com/bug?extid=5f1d24c49c1d2c427497
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12d70cf2100000
+> To fix these possible bugs, index is checked before being used.
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+5f1d24c49c1d2c427497@syzkaller.appspotmail.com
+I think the better fix is to use one additional buffer for struct
+usb_ctrlrequest, and copy the dma_buf to it after setup packet
+has received, then use the value stored in this buffer for later
+operation, it could avoid quitting the code which is useful in fact.
 
-RBP: 000000000078bf00 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000004
-R13: 00000000000007dc R14: 00000000004cab2a R15: 00007f5ab0e216d4
-------------[ cut here ]------------
-URB 00000000d6b1ff88 submitted while active
-WARNING: CPU: 1 PID: 8661 at drivers/usb/core/urb.c:363 usb_submit_urb+0x10c1/0x13b0 drivers/usb/core/urb.c:363
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 1 PID: 8661 Comm: syz-executor.0 Not tainted 5.7.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x188/0x20d lib/dump_stack.c:118
- panic+0x2e3/0x75c kernel/panic.c:221
- __warn.cold+0x2f/0x35 kernel/panic.c:582
- report_bug+0x27b/0x2f0 lib/bug.c:195
- fixup_bug arch/x86/kernel/traps.c:175 [inline]
- fixup_bug arch/x86/kernel/traps.c:170 [inline]
- do_error_trap+0x12b/0x220 arch/x86/kernel/traps.c:267
- do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
- invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
-RIP: 0010:usb_submit_urb+0x10c1/0x13b0 drivers/usb/core/urb.c:363
-Code: 89 de e8 32 54 6a fc 84 db 0f 85 42 f6 ff ff e8 f5 52 6a fc 4c 89 fe 48 c7 c7 60 46 ab 88 c6 05 22 f3 7b 05 01 e8 b7 82 3b fc <0f> 0b e9 20 f6 ff ff c7 44 24 14 01 00 00 00 e9 d7 f6 ff ff 41 bd
-RSP: 0018:ffffc9000a37f2c8 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff815cf161 RDI: fffff5200146fe4b
-RBP: dffffc0000000000 R08: ffff88808f2242c0 R09: ffffed1015ce66a9
-R10: ffff8880ae733547 R11: ffffed1015ce66a8 R12: 0000000000000cc0
-R13: 00000000fffffff0 R14: ffff8880a37b6400 R15: ffff8880894c1600
- snd_usbmidi_submit_urb+0x19/0x60 sound/usb/midi.c:194
- snd_usbmidi_input_start_ep sound/usb/midi.c:2313 [inline]
- snd_usbmidi_input_start.part.0+0xbe/0x1c0 sound/usb/midi.c:2329
- snd_usbmidi_input_start sound/usb/midi.c:1119 [inline]
- substream_open.isra.0+0x505/0x830 sound/usb/midi.c:1119
- open_substream+0x42e/0x880 sound/core/rawmidi.c:299
- rawmidi_open_priv+0x2e8/0x6e0 sound/core/rawmidi.c:342
- snd_rawmidi_kernel_open+0x1b5/0x270 sound/core/rawmidi.c:382
- midisynth_subscribe+0xf2/0x330 sound/core/seq/seq_midi.c:170
- subscribe_port sound/core/seq/seq_ports.c:412 [inline]
- check_and_subscribe_port+0x5b5/0x800 sound/core/seq/seq_ports.c:495
- snd_seq_port_connect+0x2e4/0x510 sound/core/seq/seq_ports.c:564
- snd_seq_ioctl_subscribe_port+0x1df/0x310 sound/core/seq/seq_clientmgr.c:1484
- snd_seq_kernel_client_ctl+0xeb/0x130 sound/core/seq/seq_clientmgr.c:2353
- snd_seq_oss_midi_open+0x3cb/0x640 sound/core/seq/oss/seq_oss_midi.c:364
- snd_seq_oss_synth_setup_midi+0x123/0x520 sound/core/seq/oss/seq_oss_synth.c:269
- snd_seq_oss_open+0x7fa/0x980 sound/core/seq/oss/seq_oss_init.c:261
- odev_open+0x6c/0x90 sound/core/seq/oss/seq_oss.c:125
- soundcore_open+0x446/0x600 sound/sound_core.c:593
- chrdev_open+0x219/0x5c0 fs/char_dev.c:414
- do_dentry_open+0x4ba/0x1290 fs/open.c:797
- do_open fs/namei.c:3229 [inline]
- path_openat+0x1e59/0x27d0 fs/namei.c:3346
- do_filp_open+0x192/0x260 fs/namei.c:3373
- do_sys_openat2+0x585/0x7d0 fs/open.c:1148
+Peter
 
+>=20
+> Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+> ---
+>  drivers/usb/cdns3/ep0.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+>=20
+> diff --git a/drivers/usb/cdns3/ep0.c b/drivers/usb/cdns3/ep0.c
+> index e71240b386b4..0a80c7ade613 100644
+> --- a/drivers/usb/cdns3/ep0.c
+> +++ b/drivers/usb/cdns3/ep0.c
+> @@ -265,6 +265,8 @@ static int cdns3_req_ep0_get_status(struct cdns3_devi=
+ce *priv_dev,
+>  		return cdns3_ep0_delegate_req(priv_dev, ctrl);
+>  	case USB_RECIP_ENDPOINT:
+>  		index =3D cdns3_ep_addr_to_index(ctrl->wIndex);
+> +		if (index >=3D CDNS3_ENDPOINTS_MAX_COUNT)
+> +			return -EINVAL;
+>  		priv_ep =3D priv_dev->eps[index];
+> =20
+>  		/* check if endpoint is stalled or stall is pending */
+> @@ -388,6 +390,9 @@ static int cdns3_ep0_feature_handle_endpoint(struct c=
+dns3_device *priv_dev,
+>  		return 0;
+> =20
+>  	index =3D cdns3_ep_addr_to_index(ctrl->wIndex);
+> +	if (index >=3D CDNS3_ENDPOINTS_MAX_COUNT)
+> +		return -EINVAL;
+> +
+>  	priv_ep =3D priv_dev->eps[index];
+> =20
+>  	cdns3_select_ep(priv_dev, ctrl->wIndex);
+> --=20
+> 2.17.1
+>=20
 
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+--=20
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Thanks,
+Peter Chen=
