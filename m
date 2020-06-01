@@ -2,122 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE85C1EA83E
-	for <lists+linux-usb@lfdr.de>; Mon,  1 Jun 2020 19:13:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 581BB1EB055
+	for <lists+linux-usb@lfdr.de>; Mon,  1 Jun 2020 22:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727826AbgFARNP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Jun 2020 13:13:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50686 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726067AbgFARNP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 1 Jun 2020 13:13:15 -0400
-Received: from pobox.suse.cz (nat1.prg.suse.com [195.250.132.148])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F365A206E2;
-        Mon,  1 Jun 2020 17:13:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591031594;
-        bh=MW1zQ6O98JjAj7Zrj46pW1wRQMbf9VGw6ZzUx98FmIo=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=WdtqwN2XruYNTB9JTpUHRMAV5zDpD6WysecesAw6sY5+fTEdHfWr37bA6tbkcv/Or
-         4jdI0PkcpNXA1jaeLMyQvjhaqOEk9gfF1G6eMxujmndO9LMF4Hf+s9p9MA7D3u7HpK
-         2jcM7eQHpBGt1hRgdC4sP27/e7hJWt7rfqoT9I98=
-Date:   Mon, 1 Jun 2020 19:13:02 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-cc:     Guenter Roeck <groeck@google.com>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Guenter Roeck <groeck@chromium.org>, linux-usb@vger.kernel.org,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] HID: usbhid: do not sleep when opening device
-In-Reply-To: <20200530013419.GN89269@dtor-ws>
-Message-ID: <nycvar.YFH.7.76.2006011912150.13242@cbobk.fhfr.pm>
-References: <20200529195951.GA3767@dtor-ws> <CANMq1KDDa8jGwo9BNneJ=8y1HunM9hiRS2c0i5ASJ6+X4qvodw@mail.gmail.com> <CABXOdTeTHUtWyutfQ3oO7c_g=q5GrDsdKZbSe1dwLWSeNFi-sQ@mail.gmail.com> <20200530010926.GM89269@dtor-ws> <CABXOdTexbFqvHNALBeXrU5djbrLaK93fBTd6_rTCOhbEadYRgg@mail.gmail.com>
- <20200530013419.GN89269@dtor-ws>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        id S1728376AbgFAUjn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 1 Jun 2020 16:39:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33800 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727096AbgFAUjn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 1 Jun 2020 16:39:43 -0400
+Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C39FC061A0E
+        for <linux-usb@vger.kernel.org>; Mon,  1 Jun 2020 13:39:43 -0700 (PDT)
+Received: by mail-ot1-x342.google.com with SMTP id 69so9154540otv.2
+        for <linux-usb@vger.kernel.org>; Mon, 01 Jun 2020 13:39:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=RPgsvmsceQElv0ozLEaWZZlkfQr9AeVv/O9Th10daWE=;
+        b=DWcC0fQiZp6+ZInLSwjYUS0CFltBHeRF68tsMCxpE7l8uOSzDXpY+MKIkKky/Ds9iB
+         igQ4g16lBhKmBAZWc3+1r3DtsyegD+6933LoY9y0wnwH2YgVK1tKerG9q9TdU2u0VA0k
+         z5oh6A7txCJ1YE34ZSNx+PyL0rNsqNBnm4nbW285GUY/gHUXCq1bPNc+eMKgIgsO3Lpc
+         eikymAtPmfq/O/1H7uWesqJeQleLIXdNkSa5IWDveiAn4tOTqJ0cGL0vWEDU2dJ3RYrA
+         m46y3vQYwOPSLd9LXVsqGv5QA736J72baUvZ1A8vHdQLAIB06ND0N1APRULKgncAac5R
+         DRfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=RPgsvmsceQElv0ozLEaWZZlkfQr9AeVv/O9Th10daWE=;
+        b=Lmd+8UoUiOb1rOck2unf9ctsmASzCv5+pk96k37AcmqJ2kUtXLL/zoKSyl2Q7w0JXs
+         GgoTF0D2C+Ju/eKq4YXwPXxrcJQrfEyxN9LCR2vJrGyuE8WYUI+NrFY+IRgKUV2hLMUc
+         c+nvL6wAGlO6l4UKw74v0HA50BUoBlp2osDNP5IJnbSoL0LvXCMLC8BYUd/gMc8ttd+l
+         jul/0jCAFNjOZjSQQl9/CfjthhLvXCBz+ynGcfR0Je6Iy5LTUgJ92736cB6XdPk/mRsH
+         zOH3JvdyP/a4Av7F1lKrlN1AD08o42hjoiCfur9+qosXayHvzgz7KPbG5DKE+UwllvjT
+         t4HQ==
+X-Gm-Message-State: AOAM533zeCSHoKFPhO6LXh6m+x6H2eO85/P/bQN34r5NwRBaxX/T80x1
+        0Wlzzv92nO4KYkLeilLRRP4GAf3s0RqzNi655nOJ8w==
+X-Google-Smtp-Source: ABdhPJyCPfMySEQtxJpkDiWwL2wlJS292G6oePG9DQUdgHs/FDEzPxFGSieFMMrsfRcZNonrrROnPncpVF/C9cwQrds=
+X-Received: by 2002:a9d:62cb:: with SMTP id z11mr19097563otk.102.1591043981750;
+ Mon, 01 Jun 2020 13:39:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <20200530040157.31038-1-john.stultz@linaro.org> <CAKgpwJXU9uuT6C0NMGhZRYQMxZ9b_cCZ8=8=Yb8DwQn7aZcV7g@mail.gmail.com>
+In-Reply-To: <CAKgpwJXU9uuT6C0NMGhZRYQMxZ9b_cCZ8=8=Yb8DwQn7aZcV7g@mail.gmail.com>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Mon, 1 Jun 2020 13:39:31 -0700
+Message-ID: <CALAqxLXmOjHvP2yB0nie8o7nCyT0xhVU+0+6DGiVaoDHwRr=ig@mail.gmail.com>
+Subject: Re: [RFC][PATCH] usb: typec: tcpci_rt1711h: Try to avoid screaming
+ irq causing boot hangs
+To:     Jun Li <lijun.kernel@gmail.com>
+Cc:     lkml <linux-kernel@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        YongQin Liu <yongqin.liu@linaro.org>,
+        Linux USB List <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 29 May 2020, Dmitry Torokhov wrote:
+On Sat, May 30, 2020 at 3:30 AM Jun Li <lijun.kernel@gmail.com> wrote:
+>
+> Hi John,
+>
+> John Stultz <john.stultz@linaro.org> =E4=BA=8E2020=E5=B9=B45=E6=9C=8830=
+=E6=97=A5=E5=91=A8=E5=85=AD =E4=B8=8B=E5=8D=8812:02=E5=86=99=E9=81=93=EF=BC=
+=9A
+> >
+> > I've recently (since 5.7-rc1) started noticing very rare hangs
+> > pretty early in bootup on my HiKey960 board.
+> >
+> > They have been particularly difficult to debug, as the system
+> > seems to not respond at all to sysrq- commands. However, the
+> > system is alive as I'll occaionally see firmware loading timeout
+> > errors after awhile. Adding changes like initcall_debug and
+> > lockdep weren't informative, as it tended to cause the problem
+> > to hide.
+> >
+> > I finally tried to dig in a bit more on this today, and noticed
+> > that the last dmesg output before the hang was usually:
+> >   "random: crng init done"
+> >
+> > So I dumped the stack at that point, and saw it was being called
+> > from the pl061 gpio irq, and the hang always occurred when the
+> > crng init finished on cpu 0. Instrumenting that more I could see
+> > that when the issue triggered, we were getting a stream of irqs.
+> >
+> > Chasing further, I found the screaming irq was for the rt1711h,
+> > and narrowed down that we were hitting the !chip->tcpci check
+> > which immediately returns IRQ_HANDLED, but does not stop the
+> > irq from triggering immediately afterwards.
+> >
+> > This patch slightly reworks the logic, so if we hit the irq
+> > before the chip->tcpci has been assigned, we still read and
+> > write the alert register, but just skip calling tcpci_irq().
+> >
+> > With this change, I haven't managed to trip over the problem
+> > (though it hasn't been super long - but I did confirm I hit
+> > the error case and it didn't hang the system).
+> >
+> > I still have some concern that I don't know why this cropped
+> > up since 5.7-rc, as there haven't been any changes to the
+> > driver since 5.4 (or before). It may just be the initialization
+> > timing has changed due to something else, and its just exposed
+> > this issue? I'm not sure, and that's not super re-assuring.
+> >
+> > Anyway, I'd love to hear your thoughts if this looks like a sane
+> > fix or not.
+>
+> I think a better solution may be move the irq request after port register=
+,
+> we should fire the irq after everything is setup.
+> does below change works for you?
 
-> > > > > > usbhid tries to give the device 50 milliseconds to drain its queues
-> > > > > > when opening the device, but does it naively by simply sleeping in open
-> > > > > > handler, which slows down device probing (and thus may affect overall
-> > > > > > boot time).
-> > > > > >
-> > > > > > However we do not need to sleep as we can instead mark a point of time
-> > > > > > in the future when we should start processing the events.
-> > > > > >
-> > > > > > Reported-by: Nicolas Boichat <drinkcat@chromium.org>
-> > > > > > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> > > > > > ---
-> > > > > >  drivers/hid/usbhid/hid-core.c | 27 +++++++++++++++------------
-> > > > > >  drivers/hid/usbhid/usbhid.h   |  1 +
-> > > > > >  2 files changed, 16 insertions(+), 12 deletions(-)
-> > > > > >
-> > > > > > diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
-> > > > > > index c7bc9db5b192..e69992e945b2 100644
-> > > > > > --- a/drivers/hid/usbhid/hid-core.c
-> > > > > > +++ b/drivers/hid/usbhid/hid-core.c
-> > > > > > @@ -95,6 +95,19 @@ static int hid_start_in(struct hid_device *hid)
-> > > > > >                                 set_bit(HID_NO_BANDWIDTH, &usbhid->iofl);
-> > > > > >                 } else {
-> > > > > >                         clear_bit(HID_NO_BANDWIDTH, &usbhid->iofl);
-> > > > > > +
-> > > > > > +                       if (test_and_clear_bit(HID_RESUME_RUNNING,
-> > > > > > +                                              &usbhid->iofl)) {
-> > > > > > +                               /*
-> > > > > > +                                * In case events are generated while nobody was
-> > > > > > +                                * listening, some are released when the device
-> > > > > > +                                * is re-opened. Wait 50 msec for the queue to
-> > > > > > +                                * empty before allowing events to go through
-> > > > > > +                                * hid.
-> > > > > > +                                */
-> > > > > > +                               usbhid->input_start_time = jiffies +
-> > > > > > +                                                          msecs_to_jiffies(50);
-> > > > > > +                       }
-> > > > > >                 }
-> > > > > >         }
-> > > > > >         spin_unlock_irqrestore(&usbhid->lock, flags);
-> > > > > > @@ -280,7 +293,8 @@ static void hid_irq_in(struct urb *urb)
-> > > > > >                 if (!test_bit(HID_OPENED, &usbhid->iofl))
-> > > > > >                         break;
-> > > > > >                 usbhid_mark_busy(usbhid);
-> > > > > > -               if (!test_bit(HID_RESUME_RUNNING, &usbhid->iofl)) {
-> > > > > > +               if (!test_bit(HID_RESUME_RUNNING, &usbhid->iofl) &&
-> > > > > > +                   time_after(jiffies, usbhid->input_start_time)) {
-> > > > >
-> > > > > Are we worried about jiffies overflowing (32-bit@1000Hz is "only" 49.7 days...)
-> > > > >
-> > > >
-> > > > time_after() is overflow-safe. That is why it is used and jiffies is
-> > > > not compared directly.
-> > >
-> > > Well, it is overflow safe, but still can not measure more than 50 days,
-> > > so if you have a device open for 50+ days there will be a 50msec gap
-> > > where it may lose events.
-> > >
-> > 
-> > Or you could explicitly use 64-bit jiffies.
-> 
-> Indeed.
-> 
-> Jiri, Benjamin, do you have preference between jiffies64 and ktime_t? I
-> guess jiffies64 is a tiny bit less expensive.
+Unfortunately the patch didn't seem to apply, but I recreated it by
+hand. I agree this looks like it should address the issue and I've not
+managed to trigger the problem in my (admittedly somewhat brief)
+attempts at testing.
 
-If I would be writing the code, I'd use ktime_t, because I personally like 
-that abstraction more :) But either variant works for me.
+Thanks for sending it out. Do you want to submit the patch and I'll
+provide a Tested-by tag, or would it help for me to submit your
+suggested change?
 
-Thanks!
-
--- 
-Jiri Kosina
-SUSE Labs
-
+thanks
+-john
