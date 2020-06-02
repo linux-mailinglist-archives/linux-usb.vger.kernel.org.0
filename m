@@ -2,121 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE941EB3B8
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jun 2020 05:17:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41AC01EB503
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jun 2020 07:21:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726007AbgFBDRq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 1 Jun 2020 23:17:46 -0400
-Received: from ozlabs.org ([203.11.71.1]:53761 "EHLO ozlabs.org"
+        id S1726223AbgFBFV5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Jun 2020 01:21:57 -0400
+Received: from foo.stuge.se ([212.116.89.98]:46030 "EHLO foo.stuge.se"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725841AbgFBDRq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 1 Jun 2020 23:17:46 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49bcft6Gdgz9sSn;
-        Tue,  2 Jun 2020 13:17:41 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ozlabs.org; s=201707;
-        t=1591067864; bh=b/bdhBRmnux6Rm4XZlS6YImDkqQA7n6ceo9UyjXrZQM=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=yzcRawpLTZ5VMzZYqYJspMYmCUI4oQhzXudOasPGmbg6w7jptnsifBvkPQm8UKynu
-         pBmJuAtM9Ht0REuGSFmg1W0zZo+S/DFjaBoVEV5Z4acTHyUScJGncTs/N0bXfRRDkq
-         xS6I7eRQ3aJCNxhUzvD4K0sMHPh6UbOHcwo/EHFDNBSkXJyT77N+nv/tv9Py7pG7VX
-         fOVT1I0MWJ3/23G8fJz+U4soe1lBnPFn/N57S5Ui1zpde4AUDfCJomgwKNK2vksPeq
-         xsawVUl4G9mLAYNkxPFlC9pndrwovlp0lXDukwdXsjRrqN3bJOOcSdXzuEqgona/A4
-         Qpx0X6mSSFlLg==
-Message-ID: <b9e1db7761761e321b23bd0d22ab981cbd5d6abe.camel@ozlabs.org>
-Subject: Re: [RFC PATCH] net: usb: ax88179_178a: fix packet alignment padding
-From:   Jeremy Kerr <jk@ozlabs.org>
-To:     Freddy Xin <freddy@asix.com.tw>, Allan Chou <allan@asix.com.tw>
-Cc:     Peter Fink <pfink@christ-es.de>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Date:   Tue, 02 Jun 2020 11:17:34 +0800
-In-Reply-To: <20200527060334.19441-1-jk@ozlabs.org>
-References: <20200527060334.19441-1-jk@ozlabs.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1725781AbgFBFV5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 2 Jun 2020 01:21:57 -0400
+Received: (qmail 1506 invoked by uid 1000); 2 Jun 2020 05:21:50 -0000
+Message-ID: <20200602052150.1505.qmail@stuge.se>
+Date:   Tue, 2 Jun 2020 05:21:50 +0000
+From:   Peter Stuge <peter@stuge.se>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     balbi@kernel.org, sam@ravnborg.org, linux-usb@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v3 4/6] drm: Add Generic USB Display driver
+References: <20200529175643.46094-1-noralf@tronnes.org>
+ <20200529175643.46094-5-noralf@tronnes.org>
+ <20200529224531.22261.qmail@stuge.se>
+ <614b0b0d-44d7-22e5-339d-cb8a13b426ac@tronnes.org>
+ <20200602001207.17171.qmail@stuge.se>
+ <20200602023254.GB15540@rowland.harvard.edu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200602023254.GB15540@rowland.harvard.edu>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Freddy and Allan,
+Hi Alan,
 
-Just following up on the RFC patch below: Can you confirm whether the
-packet len (in the hardware-provided packet RX metadata) includes the
-two-byte padding field? Is this the same for all ax88179 devices?
+Alan Stern wrote:
+> > The way I read composite_setup() after try_fun_setup: it calls f->setup()
+> > when available, and that can return < 0 to stall.
+> > 
+> > I expect that composite_setup() and thus f->setup() run when the
+> > SETUP packet has arrived, thus before the data packet arrives, and if
+> > composite_setup() stalls then the device/function should never see the
+> > data packet.
+> > 
+> > For an OUT transaction I think the host controller might still send
+> > the DATA packet, but the device controllers that I know don't make it
+> > visible to the application in that case.
+> 
+> ...
+> 
+> Are you guys interested in comments from other people who know more
+> about the kernel and how it works with USB?
 
-Cheers,
+I am, especially when it comes to the gadget code.
 
 
-Jeremy
+> The USB protocol forbids a device from sending a STALL response to a
+> SETUP packet.  The only valid response is ACK.  Thus, there is no way
+> to prevent the host from sending its DATA packet for a control-OUT
+> transfer.
 
-> Using a AX88179 device (0b95:1790), I see two bytes of appended data on
-> every RX packet. For example, this 48-byte ping, using 0xff as a
-> payload byte:
-> 
->   04:20:22.528472 IP 192.168.1.1 > 192.168.1.2: ICMP echo request, id 2447, seq 1, length 64
-> 	0x0000:  000a cd35 ea50 000a cd35 ea4f 0800 4500
-> 	0x0010:  0054 c116 4000 4001 f63e c0a8 0101 c0a8
-> 	0x0020:  0102 0800 b633 098f 0001 87ea cd5e 0000
-> 	0x0030:  0000 dcf2 0600 0000 0000 ffff ffff ffff
-> 	0x0040:  ffff ffff ffff ffff ffff ffff ffff ffff
-> 	0x0050:  ffff ffff ffff ffff ffff ffff ffff ffff
-> 	0x0060:  ffff 961f
-> 
-> Those last two bytes - 96 1f - aren't part of the original packet.
-> 
-> In the ax88179 RX path, the usbnet rx_fixup function trims a 2-byte
-> 'alignment pseudo header' from the start of the packet, and sets the
-> length from a per-packet field populated by hardware. It looks like that
-> length field *includes* the 2-byte header; the current driver assumes
-> that it's excluded.
-> 
-> This change trims the 2-byte alignment header after we've set the packet
-> length, so the resulting packet length is correct. While we're moving
-> the comment around, this also fixes the spelling of 'pseudo'.
-> 
-> Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
-> 
-> ---
-> RFC: I don't have access to docs for this hardware, so this is all based
-> on observed behaviour of the reported packet length.
-> ---
->  drivers/net/usb/ax88179_178a.c | 11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-> index 93044cf1417a..1fe4cc28d154 100644
-> --- a/drivers/net/usb/ax88179_178a.c
-> +++ b/drivers/net/usb/ax88179_178a.c
-> @@ -1414,10 +1414,10 @@ static int ax88179_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
->  		}
->  
->  		if (pkt_cnt == 0) {
-> -			/* Skip IP alignment psudo header */
-> -			skb_pull(skb, 2);
->  			skb->len = pkt_len;
-> -			skb_set_tail_pointer(skb, pkt_len);
-> +			/* Skip IP alignment pseudo header */
-> +			skb_pull(skb, 2);
-> +			skb_set_tail_pointer(skb, skb->len);
->  			skb->truesize = pkt_len + sizeof(struct sk_buff);
->  			ax88179_rx_checksum(skb, pkt_hdr);
->  			return 1;
-> @@ -1426,8 +1426,9 @@ static int ax88179_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
->  		ax_skb = skb_clone(skb, GFP_ATOMIC);
->  		if (ax_skb) {
->  			ax_skb->len = pkt_len;
-> -			ax_skb->data = skb->data + 2;
-> -			skb_set_tail_pointer(ax_skb, pkt_len);
-> +			/* Skip IP alignment pseudo header */
-> +			skb_pull(ax_skb, 2);
-> +			skb_set_tail_pointer(ax_skb, ax_skb->len);
->  			ax_skb->truesize = pkt_len + sizeof(struct sk_buff);
->  			ax88179_rx_checksum(ax_skb, pkt_hdr);
->  			usbnet_skb_return(dev, ax_skb);
-> 
+Right; a STALL handshake only after a DATA packet, but a udc could silently
+drop the first DATA packet if instructed to STALL during SETUP processing.
+I don't know how common that is for the udc:s supported by gadget, but some
+MCU:s behave like that.
 
+
+> A gadget driver can STALL in response to a control-OUT data packet,
+> but only before it has seen the packet.
+
+How can it do that for OUT, and IN if possible there too?
+
+Is it related to f->setup() returning < 0 ?
+
+
+The spec also allows NAK, but the gadget code seems to not (need to?)
+explicitly support that. Can you comment on this as well?
+
+
+> Once the driver knows what the data packet contains, the gadget API
+> doesn't provide any way to STALL the status stage.
+
+Thanks. I think this particular gadget driver doesn't need to decide late.
+
+Ideally the control transfers can even be avoided.
+
+
+Thanks and kind regards
+
+//Peter
