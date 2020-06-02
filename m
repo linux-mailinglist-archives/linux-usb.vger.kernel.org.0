@@ -2,156 +2,186 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ED8B1EB81B
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jun 2020 11:14:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F49E1EB911
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jun 2020 12:05:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726342AbgFBJOZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Jun 2020 05:14:25 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:33398 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725811AbgFBJOY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Jun 2020 05:14:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1591089262;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4RDDGu/p3yDXdb7tcQQ0NXx81PbLpa+m/UKBUd+JAOM=;
-        b=Oo56AxdHmF7A3xu3tjLlX+cY6uR00oyqyghbu8RBjn3LyKNkuLKpxAIzLHxzjRZNF7k/nW
-        /g/CpN9jkiqQqZ+oByJwgBEEwlfEgB/KtCaVMhpVY7CEgXkQ0VZA5P7+vSwdtmePMb4Ybc
-        fQnWKHirGKwHwaiCCgYelG/XriIzxWQ=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-452-VhfqUjRVOx-Eyyv9rakqFw-1; Tue, 02 Jun 2020 05:14:21 -0400
-X-MC-Unique: VhfqUjRVOx-Eyyv9rakqFw-1
-Received: by mail-qv1-f71.google.com with SMTP id r4so2861402qvh.10
-        for <linux-usb@vger.kernel.org>; Tue, 02 Jun 2020 02:14:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4RDDGu/p3yDXdb7tcQQ0NXx81PbLpa+m/UKBUd+JAOM=;
-        b=UTpNedXKvSea5Sp6FkX9KzoO9Om8r/puxizcvcNs4xhaE2vmb1XK2vmSCrdifM0Wn5
-         R1Vd83X0zcS8Fo8qbYtB2SZmCVRBpDSg2qVM6z0Xc/5nAB8L5G4BgBGzY8BSmv2i+h1g
-         LTi503jOHICMiTF5n2Fg5cepCc54QwoPPQc1htqt+hVjKssSmJF+53wtn+8mWJAEPywB
-         T7IuCWTsa8tdBoYr/1MR9b86uTiiKiIIkS3aXvru0A9b5fH3KfpdUxIZpAVgl9TcKzpl
-         mQ8+UisS2tidsh++j7fmbvGvxb3NUd29lMRedQJj/yEHAN7FeYKULwLJgPTVSxSLuFbL
-         UJiA==
-X-Gm-Message-State: AOAM530mDqbkwyA6mY9t7yDFk+ZxKJqpNJaX5TZtjlJCvKkK72B7Dfx0
-        E/hHvjvZTpSCT6dT2oaDCMvbAH3g0ygkNn04xn6FpDDRIFSFq6ym1pq64NM15yxtxOfZ2XD7OHB
-        bAStcq02/v8E5S3gk1JAqKZZkoo/esljCZZXV
-X-Received: by 2002:ac8:2a3a:: with SMTP id k55mr25902502qtk.294.1591089260956;
-        Tue, 02 Jun 2020 02:14:20 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx1WsROjUW769DDxgpU4rag4njM1zCpRsTRcIP45qynEm0hFX3w+3IiwkjfSW1L8qjbkw7t1oMXMfjCmYljgak=
-X-Received: by 2002:ac8:2a3a:: with SMTP id k55mr25902481qtk.294.1591089260695;
- Tue, 02 Jun 2020 02:14:20 -0700 (PDT)
+        id S1726377AbgFBKFZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Jun 2020 06:05:25 -0400
+Received: from mx2.suse.de ([195.135.220.15]:46340 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726012AbgFBKFZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 2 Jun 2020 06:05:25 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 8F90EAD12;
+        Tue,  2 Jun 2020 10:05:25 +0000 (UTC)
+Message-ID: <7cbe4da8ba4a1524824473f8c58720f412a00fc2.camel@suse.de>
+Subject: Re: [PATCH v8 4/4] USB: pci-quirks: Add Raspberry Pi 4 quirk
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com, tim.gover@raspberrypi.org,
+        linux-pci@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
+        gregkh@linuxfoundation.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Date:   Tue, 02 Jun 2020 12:05:20 +0200
+In-Reply-To: <20200505161318.26200-5-nsaenzjulienne@suse.de>
+References: <20200505161318.26200-1-nsaenzjulienne@suse.de>
+         <20200505161318.26200-5-nsaenzjulienne@suse.de>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-ePWuOhLXkyI0rM3f0PjZ"
+User-Agent: Evolution 3.36.2 
 MIME-Version: 1.0
-References: <20200529195951.GA3767@dtor-ws> <CANMq1KDDa8jGwo9BNneJ=8y1HunM9hiRS2c0i5ASJ6+X4qvodw@mail.gmail.com>
- <CABXOdTeTHUtWyutfQ3oO7c_g=q5GrDsdKZbSe1dwLWSeNFi-sQ@mail.gmail.com>
- <20200530010926.GM89269@dtor-ws> <CABXOdTexbFqvHNALBeXrU5djbrLaK93fBTd6_rTCOhbEadYRgg@mail.gmail.com>
- <20200530013419.GN89269@dtor-ws> <nycvar.YFH.7.76.2006011912150.13242@cbobk.fhfr.pm>
-In-Reply-To: <nycvar.YFH.7.76.2006011912150.13242@cbobk.fhfr.pm>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Tue, 2 Jun 2020 11:14:09 +0200
-Message-ID: <CAO-hwJLTrGs39OsxtY_r0He02Au64vg1x1_tzGjCQzyNzBCARw@mail.gmail.com>
-Subject: Re: [PATCH] HID: usbhid: do not sleep when opening device
-To:     Jiri Kosina <jikos@kernel.org>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Guenter Roeck <groeck@google.com>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 1, 2020 at 7:13 PM Jiri Kosina <jikos@kernel.org> wrote:
->
-> On Fri, 29 May 2020, Dmitry Torokhov wrote:
->
-> > > > > > > usbhid tries to give the device 50 milliseconds to drain its queues
-> > > > > > > when opening the device, but does it naively by simply sleeping in open
-> > > > > > > handler, which slows down device probing (and thus may affect overall
-> > > > > > > boot time).
-> > > > > > >
-> > > > > > > However we do not need to sleep as we can instead mark a point of time
-> > > > > > > in the future when we should start processing the events.
-> > > > > > >
-> > > > > > > Reported-by: Nicolas Boichat <drinkcat@chromium.org>
-> > > > > > > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> > > > > > > ---
-> > > > > > >  drivers/hid/usbhid/hid-core.c | 27 +++++++++++++++------------
-> > > > > > >  drivers/hid/usbhid/usbhid.h   |  1 +
-> > > > > > >  2 files changed, 16 insertions(+), 12 deletions(-)
-> > > > > > >
-> > > > > > > diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
-> > > > > > > index c7bc9db5b192..e69992e945b2 100644
-> > > > > > > --- a/drivers/hid/usbhid/hid-core.c
-> > > > > > > +++ b/drivers/hid/usbhid/hid-core.c
-> > > > > > > @@ -95,6 +95,19 @@ static int hid_start_in(struct hid_device *hid)
-> > > > > > >                                 set_bit(HID_NO_BANDWIDTH, &usbhid->iofl);
-> > > > > > >                 } else {
-> > > > > > >                         clear_bit(HID_NO_BANDWIDTH, &usbhid->iofl);
-> > > > > > > +
-> > > > > > > +                       if (test_and_clear_bit(HID_RESUME_RUNNING,
-> > > > > > > +                                              &usbhid->iofl)) {
-> > > > > > > +                               /*
-> > > > > > > +                                * In case events are generated while nobody was
-> > > > > > > +                                * listening, some are released when the device
-> > > > > > > +                                * is re-opened. Wait 50 msec for the queue to
-> > > > > > > +                                * empty before allowing events to go through
-> > > > > > > +                                * hid.
-> > > > > > > +                                */
-> > > > > > > +                               usbhid->input_start_time = jiffies +
-> > > > > > > +                                                          msecs_to_jiffies(50);
-> > > > > > > +                       }
-> > > > > > >                 }
-> > > > > > >         }
-> > > > > > >         spin_unlock_irqrestore(&usbhid->lock, flags);
-> > > > > > > @@ -280,7 +293,8 @@ static void hid_irq_in(struct urb *urb)
-> > > > > > >                 if (!test_bit(HID_OPENED, &usbhid->iofl))
-> > > > > > >                         break;
-> > > > > > >                 usbhid_mark_busy(usbhid);
-> > > > > > > -               if (!test_bit(HID_RESUME_RUNNING, &usbhid->iofl)) {
-> > > > > > > +               if (!test_bit(HID_RESUME_RUNNING, &usbhid->iofl) &&
-> > > > > > > +                   time_after(jiffies, usbhid->input_start_time)) {
-> > > > > >
-> > > > > > Are we worried about jiffies overflowing (32-bit@1000Hz is "only" 49.7 days...)
-> > > > > >
-> > > > >
-> > > > > time_after() is overflow-safe. That is why it is used and jiffies is
-> > > > > not compared directly.
-> > > >
-> > > > Well, it is overflow safe, but still can not measure more than 50 days,
-> > > > so if you have a device open for 50+ days there will be a 50msec gap
-> > > > where it may lose events.
-> > > >
-> > >
-> > > Or you could explicitly use 64-bit jiffies.
-> >
-> > Indeed.
-> >
-> > Jiri, Benjamin, do you have preference between jiffies64 and ktime_t? I
-> > guess jiffies64 is a tiny bit less expensive.
->
-> If I would be writing the code, I'd use ktime_t, because I personally like
-> that abstraction more :) But either variant works for me.
 
-I don't have a strong opinion on either variant. Feel free to use
-whatever you like the most.
+--=-ePWuOhLXkyI0rM3f0PjZ
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Cheers,
-Benjamin
+On Tue, 2020-05-05 at 18:13 +0200, Nicolas Saenz Julienne wrote:
+> On the Raspberry Pi 4, after a PCI reset, VL805's firmware may either be
+> loaded directly from an EEPROM or, if not present, by the SoC's
+> VideoCore. Inform VideoCore that VL805 was just reset.
+>=20
+> Also, as this creates a dependency between USB_PCI and VideoCore's
+> firmware interface, and since USB_PCI can't be set as a module neither
+> this can. Reflect that on the firmware interface Kconfg.
+>=20
+> Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+> ---
 
->
-> Thanks!
->
-> --
-> Jiri Kosina
-> SUSE Labs
->
+It was pointed out to me on the u-boot mailing lists that all this could be
+implemented trough a reset controller. In other words have xhci get the res=
+et
+controller trough device-tree, assert it, ultamately causing the firmware
+routine to be run.
+
+As much as it pains me to go over stuff that's already 'fixed', it seems to=
+ me
+it's a better solution. On one hand we get over the device-tree dependency =
+mess
+(see patch #3), and on the other we transform a pci-quirk into something le=
+ss
+hacky.
+
+That said, before getting my hands dirty, I was wondering if there is any
+obvious reasons why I shouldn't do this, note that:
+
+- We're talking here of a PCIe XCHI device, maybe there's an issue integrat=
+ing
+  it with DT, given the fact that, as of today, it's not really represented
+  there.
+
+- There is no reset controller support in xhci-pci, maybe there are good
+  reasons why. For instance, it's not something that's reflected in any way=
+ in
+  the spec.
+
+Regards,
+Nicolas
+
+>=20
+> Changes since v5:
+>  - Fix Kconfig issue with allmodconfig
+>=20
+> Changes since v4:
+>  - Do not split up error message
+>=20
+> Changes since v3:
+>  - Add more complete error message
+>=20
+> Changes since v1:
+>  - Make RASPBERRYPI_FIRMWARE dependent on this quirk to make sure it
+>    gets compiled when needed.
+>=20
+>  drivers/firmware/Kconfig      |  3 ++-
+>  drivers/usb/host/pci-quirks.c | 16 ++++++++++++++++
+>  2 files changed, 18 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
+> index 8007d4aa76dc..b42140cff8ac 100644
+> --- a/drivers/firmware/Kconfig
+> +++ b/drivers/firmware/Kconfig
+> @@ -178,8 +178,9 @@ config ISCSI_IBFT
+>  	  Otherwise, say N.
+> =20
+>  config RASPBERRYPI_FIRMWARE
+> -	tristate "Raspberry Pi Firmware Driver"
+> +	bool "Raspberry Pi Firmware Driver"
+>  	depends on BCM2835_MBOX
+> +	default USB_PCI
+>  	help
+>  	  This option enables support for communicating with the firmware on th=
+e
+>  	  Raspberry Pi.
+> diff --git a/drivers/usb/host/pci-quirks.c b/drivers/usb/host/pci-quirks.=
+c
+> index 92150ecdb036..0b949acfa258 100644
+> --- a/drivers/usb/host/pci-quirks.c
+> +++ b/drivers/usb/host/pci-quirks.c
+> @@ -16,6 +16,9 @@
+>  #include <linux/export.h>
+>  #include <linux/acpi.h>
+>  #include <linux/dmi.h>
+> +
+> +#include <soc/bcm2835/raspberrypi-firmware.h>
+> +
+>  #include "pci-quirks.h"
+>  #include "xhci-ext-caps.h"
+> =20
+> @@ -1243,11 +1246,24 @@ static void quirk_usb_handoff_xhci(struct pci_dev
+> *pdev)
+> =20
+>  static void quirk_usb_early_handoff(struct pci_dev *pdev)
+>  {
+> +	int ret;
+> +
+>  	/* Skip Netlogic mips SoC's internal PCI USB controller.
+>  	 * This device does not need/support EHCI/OHCI handoff
+>  	 */
+>  	if (pdev->vendor =3D=3D 0x184e)	/* vendor Netlogic */
+>  		return;
+> +
+> +	if (pdev->vendor =3D=3D PCI_VENDOR_ID_VIA && pdev->device =3D=3D 0x3483=
+) {
+> +		ret =3D rpi_firmware_init_vl805(pdev);
+> +		if (ret) {
+> +			/* Firmware might be outdated, or something failed */
+> +			dev_warn(&pdev->dev,
+> +				 "Failed to load VL805's firmware: %d. Will
+> continue to attempt to work, but bad things might happen. You should fix
+> this...\n",
+> +				 ret);
+> +		}
+> +	}
+> +
+>  	if (pdev->class !=3D PCI_CLASS_SERIAL_USB_UHCI &&
+>  			pdev->class !=3D PCI_CLASS_SERIAL_USB_OHCI &&
+>  			pdev->class !=3D PCI_CLASS_SERIAL_USB_EHCI &&
+
+
+--=-ePWuOhLXkyI0rM3f0PjZ
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl7WJGAACgkQlfZmHno8
+x/6SjQf/Qywc5xMG/WfuS5YbTgjiJzIg9nJVk2umtOVQOaE6cXK6I2HUcLXKSphG
+ZAIxOSd8yG38RZGU/E/XCiWpYe0uEjJYnR4gKLF4/QsTwWKvjXvksXvcZYD/d4/U
+JJeFUPeutvO90Q3WSiUowjt0/uEaH8PDdYSvPfqe/DZt6loaIHXJXhv8M1e/R8a8
+Jatksa8pTD5uVBYYJFgY83Mrwd/SJ8/LthiE5FCHc1z1L3sbaChf+26xKtvn3iHU
+j1taE9o84y6m2IqDVDLZVeU2yuYt/VPOsnA5JarsZX/y1HoFg9OdoJL7GTazUefj
+q6BBn3BmYTUIQvDBgXg/JY1MYyNoEA==
+=5e/e
+-----END PGP SIGNATURE-----
+
+--=-ePWuOhLXkyI0rM3f0PjZ--
 
