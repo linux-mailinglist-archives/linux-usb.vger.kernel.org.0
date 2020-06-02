@@ -2,72 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D3CB1EBABA
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jun 2020 13:48:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1FD91EBADE
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jun 2020 13:54:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726636AbgFBLrz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Jun 2020 07:47:55 -0400
-Received: from cmccmta2.chinamobile.com ([221.176.66.80]:51464 "EHLO
-        cmccmta2.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725966AbgFBLry (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Jun 2020 07:47:54 -0400
-Received: from spf.mail.chinamobile.com (unknown[172.16.121.13]) by rmmx-syy-dmz-app06-12006 (RichMail) with SMTP id 2ee65ed63c50f78-78663; Tue, 02 Jun 2020 19:47:29 +0800 (CST)
-X-RM-TRANSID: 2ee65ed63c50f78-78663
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG: 00000000
-Received: from localhost.localdomain (unknown[112.25.154.146])
-        by rmsmtp-syy-appsvr07-12007 (RichMail) with SMTP id 2ee75ed63c4e795-21a50;
-        Tue, 02 Jun 2020 19:47:29 +0800 (CST)
-X-RM-TRANSID: 2ee75ed63c4e795-21a50
-From:   Tang Bin <tangbin@cmss.chinamobile.com>
-To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        kgene@kernel.org, krzk@kernel.org
-Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tang Bin <tangbin@cmss.chinamobile.com>,
-        Zhang Shengju <zhangshengju@cmss.chinamobile.com>
-Subject: [PATCH] usb: host: ehci-exynos: Fix error check in exynos_ehci_probe()
-Date:   Tue,  2 Jun 2020 19:47:08 +0800
-Message-Id: <20200602114708.28620-1-tangbin@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.20.1.windows.1
+        id S1726664AbgFBLyP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Jun 2020 07:54:15 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:62304 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726267AbgFBLyP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Jun 2020 07:54:15 -0400
+X-UUID: db722be8915d4774a20434feec800d44-20200602
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=L8W+8mcW7tehoLHNruKxathHioAmFWgzPfCM36oBzVI=;
+        b=k9mn8oVKytEFmfU9V9wfE7bOeHl582gKVvTUdOLHqqCH7lSp7cflofcwSgaHQ0ZeaoDugr6BF/FB6eHeRMa4ma2CVUniQg21aktdRPhztGUzRTYCM7UqUwSZOh1PjvKZdklXygr7vZ8rdF/qyB5qTjsL4yEYpKiAmqrxOacpFw0=;
+X-UUID: db722be8915d4774a20434feec800d44-20200602
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 723940935; Tue, 02 Jun 2020 19:54:12 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs08n1.mediatek.inc (172.21.101.55) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 2 Jun 2020 19:54:01 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 2 Jun 2020 19:54:01 +0800
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        Alexander Tsoy <alexander@tsoy.me>,
+        "Johan Hovold" <johan@kernel.org>,
+        Hui Wang <hui.wang@canonical.com>,
+        =?UTF-8?q?Szabolcs=20Sz=C5=91ke?= <szszoke.code@gmail.com>,
+        Macpaul Lin <macpaul.lin@mediatek.com>,
+        <alsa-devel@alsa-project.org>, <linux-usb@vger.kernel.org>
+CC:     Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
+        Macpaul Lin <macpaul.lin@gmail.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH] sound: usb: pcm: fix incorrect power state when playing sound after PM_AUTO suspend
+Date:   Tue, 2 Jun 2020 19:53:41 +0800
+Message-ID: <1591098821-17910-1-git-send-email-macpaul.lin@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
+In-Reply-To: <linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org>
+References: <linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If the function platform_get_irq() failed, the negative value
-returned will not be detected here. So fix error handling in
-exynos_ehci_probe(). And when get irq failed, the function
-platform_get_irq() logs an error message, so remove redundant
-message here.
-
-Fixes: 1bcc5aa87f04 ("USB: Add initial S5P EHCI driver")
-Signed-off-by: Zhang Shengju <zhangshengju@cmss.chinamobile.com>
-Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
----
- drivers/usb/host/ehci-exynos.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/host/ehci-exynos.c b/drivers/usb/host/ehci-exynos.c
-index a4e9abcbd..1a9b7572e 100644
---- a/drivers/usb/host/ehci-exynos.c
-+++ b/drivers/usb/host/ehci-exynos.c
-@@ -203,9 +203,8 @@ static int exynos_ehci_probe(struct platform_device *pdev)
- 	hcd->rsrc_len = resource_size(res);
- 
- 	irq = platform_get_irq(pdev, 0);
--	if (!irq) {
--		dev_err(&pdev->dev, "Failed to get IRQ\n");
--		err = -ENODEV;
-+	if (irq < 0) {
-+		err = irq;
- 		goto fail_io;
- 	}
- 
--- 
-2.20.1.windows.1
-
-
+VGhpcyBwYXRjaCBmaXggaW5jb3JyZWN0IHBvd2VyIHN0YXRlIGNoYW5nZWQgYnkgdXNiX2F1ZGlv
+X3N1c3BlbmQoKQ0Kd2hlbiBDT05GSUdfUE0gaXMgZW5hYmxlZC4NCg0KQWZ0ZXIgcmVjZWl2aW5n
+IHN1c3BlbmQgUE0gbWVzc2FnZSB3aXRoIGF1dG8gZmxhZywgdXNiX2F1ZGlvX3N1c3BlbmQoKQ0K
+Y2hhbmdlIGNhcmQncyBwb3dlciBzdGF0ZSB0byBTTkRSVl9DVExfUE9XRVJfRDNob3QuIE9ubHkg
+d2hlbiB0aGUgb3RoZXINCnJlc3VtZSBQTSBtZXNzYWdlIHdpdGggYXV0byBmbGFnIGNhbiBjaGFu
+Z2UgcG93ZXIgc3RhdGUgdG8NClNORFJWX0NUTF9QT1dFUl9EMCBpbiBfX3VzYl9hdWRpb19yZXN1
+bWUoKS4NCg0KSG93ZXZlciwgd2hlbiBzeXN0ZW0gaXMgbm90IHVuZGVyIGF1dG8gc3VzcGVuZCwg
+cmVzdW1lIFBNIG1lc3NhZ2Ugd2l0aA0KYXV0byBmbGFnIG1pZ2h0IG5vdCBiZSBhYmxlIHRvIHJl
+Y2VpdmUgb24gdGltZSB3aGljaCBjYXVzZSB0aGUgcG93ZXINCnN0YXRlIHdhcyBpbmNvcnJlY3Qu
+IEF0IHRoaXMgdGltZSwgaWYgYSBwbGF5ZXIgc3RhcnRzIHRvIHBsYXkgc291bmQsDQp3aWxsIGNh
+dXNlIHNuZF91c2JfcGNtX29wZW4oKSB0byBhY2Nlc3MgdGhlIGNhcmQgYW5kIHNldHVwX2h3X2lu
+Zm8oKSB3aWxsDQpyZXN1bWUgdGhlIGNhcmQuDQoNCkJ1dCBldmVuIHRoZSBjYXJkIGlzIGJhY2sg
+dG8gd29yayBhbmQgYWxsIGZ1bmN0aW9uIG5vcm1hbCwgdGhlIHBvd2VyDQpzdGF0ZSBpcyBzdGls
+bCBpbiBTTkRSVl9DVExfUE9XRVJfRDNob3QuIFdoaWNoIGNhdXNlIHRoZSBpbmZpbml0ZSBsb29w
+DQpoYXBwZW5lZCBpbiBzbmRfcG93ZXJfd2FpdCgpIHRvIGNoZWNrIHRoZSBwb3dlciBzdGF0ZS4g
+VGh1cyB0aGUNCnN1Y2Nlc3NpdmUgc2V0dGluZyBpb2N0bCBjYW5ub3QgYmUgcGFzc2VkIHRvIGNh
+cmQuDQoNCkhlbmNlIHdlIHN1Z2dlc3QgdG8gY2hhbmdlIHBvd2VyIHN0YXRlIHRvIFNORFJWX0NU
+TF9QT1dFUl9EMCB3aGVuIGNhcmQNCmhhcyBiZWVuIHJlc3VtZWQgc3VjY2Vzc2Z1bGx5Lg0KDQpT
+aWduZWQtb2ZmLWJ5OiBNYWNwYXVsIExpbiA8bWFjcGF1bC5saW5AbWVkaWF0ZWsuY29tPg0KLS0t
+DQogc291bmQvdXNiL3BjbS5jIHwgICAxMSArKysrKysrKysrKw0KIDEgZmlsZSBjaGFuZ2VkLCAx
+MSBpbnNlcnRpb25zKCspDQoNCmRpZmYgLS1naXQgYS9zb3VuZC91c2IvcGNtLmMgYi9zb3VuZC91
+c2IvcGNtLmMNCmluZGV4IGE0ZTQwNjQuLmQ2NjdlY2IgMTAwNjQ0DQotLS0gYS9zb3VuZC91c2Iv
+cGNtLmMNCisrKyBiL3NvdW5kL3VzYi9wY20uYw0KQEAgLTEzMjIsNiArMTMyMiwxNyBAQCBzdGF0
+aWMgaW50IHNldHVwX2h3X2luZm8oc3RydWN0IHNuZF9wY21fcnVudGltZSAqcnVudGltZSwgc3Ry
+dWN0IHNuZF91c2Jfc3Vic3RyZQ0KIAlpZiAoZXJyIDwgMCkNCiAJCXJldHVybiBlcnI7DQogDQor
+CS8qIGZpeCBpbmNvcnJlY3QgcG93ZXIgc3RhdGUgd2hlbiByZXN1bWluZyBieSBvcGVuIGFuZCBs
+YXRlciBpb2N0bHMgKi8NCisJaWYgKElTX0VOQUJMRUQoQ09ORklHX1BNKSAmJg0KKwkJc25kX3Bv
+d2VyX2dldF9zdGF0ZShzdWJzLT5zdHJlYW0tPmNoaXAtPmNhcmQpDQorCQkJPT0gU05EUlZfQ1RM
+X1BPV0VSX0QzaG90KSB7DQorCQkvKiBzZXQgdGhlc2UgdmFyaWFibGVzIGZvciBwb3dlciBzdGF0
+ZSBjb3JyZWN0aW9uICovDQorCQlzdWJzLT5zdHJlYW0tPmNoaXAtPmF1dG9zdXNwZW5kZWQgPSAw
+Ow0KKwkJc3Vicy0+c3RyZWFtLT5jaGlwLT5udW1fc3VzcGVuZGVkX2ludGYgPSAxOw0KKwkJZGV2
+X2luZm8oJnN1YnMtPmRldi0+ZGV2LA0KKwkJCSJjaGFuZ2UgcG93ZXIgc3RhdGUgZnJvbSBEM2hv
+dCB0byBEMFxuIik7DQorCX0NCisNCiAJcmV0dXJuIHNuZF91c2JfYXV0b3Jlc3VtZShzdWJzLT5z
+dHJlYW0tPmNoaXApOw0KIH0NCiANCi0tIA0KMS43LjkuNQ0K
 
