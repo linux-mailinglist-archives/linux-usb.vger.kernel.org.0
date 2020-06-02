@@ -2,108 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A1B11EC3CA
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jun 2020 22:36:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B4FB1EC4B5
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jun 2020 23:58:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728878AbgFBUgf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Jun 2020 16:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59786 "EHLO
+        id S1728218AbgFBV5r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Jun 2020 17:57:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728876AbgFBUgf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Jun 2020 16:36:35 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6E3C08C5C0;
-        Tue,  2 Jun 2020 13:36:34 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id e4so14280965ljn.4;
-        Tue, 02 Jun 2020 13:36:34 -0700 (PDT)
+        with ESMTP id S1727794AbgFBV5q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Jun 2020 17:57:46 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 345F3C08C5C0;
+        Tue,  2 Jun 2020 14:57:46 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id x14so224146wrp.2;
+        Tue, 02 Jun 2020 14:57:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=/6WN4wkCmG7SU9YaUC+sl2e2YPCsY4XAbfPevLlAGZA=;
-        b=qFfVnD4uwQATrddMqS75/jMaK6yDvM0UIo6dFaBSv8BnTdJHZHescduFSARi1oUhBl
-         aaKyC3Shiz6nf3zuLL8cqQzlPz/GIwCsYCILAdhsjcg9Vs0h0gWoeU70lc/xRX9uIpXF
-         C7qEDlBtxHbkQ6jjHT6pxeIjDoBoF7O1Ab1YHkHmOqR8JMdnUG/75d4IuClf5z3Ixg1I
-         hYDRfi5AWSBhOCbc1OnzMby03n0ac0b8AWZMGhh5oYhWtYa/aWghoph43pr0wZWGt4UU
-         pwcFHAn9YM6Sz3/cOmcCaAAa48pHFK4Ogwy1vjBA2xhJh0haDIZmlD49pfb/9Xl8CiqD
-         Jsjg==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=x7AN5XUNLuQTYg56C70ga61tHZwFYIHa2AHQltczmFg=;
+        b=U0M5kO/8jyb/C740fEOYcR40kb1ux5x8uoxnQ9CONuX5Qf2+HD4+DUjHVay4hDowBx
+         emMBMfxfr0F+a7T6SH/gc6www4bjdTGBTxtrIr+bz30R+/swZKMnVC/CfMPIImjvUB8f
+         B+jsJqM46921FPCCtudANp8fvg9Ajl5OeqGjiehUVoiYQ9ovWDxjK72hDl+R1Ab/MV2Q
+         O4aS08d2IrlbGJYXzYfOJNRJ4YhXUGrNCYKN3RckPEaPwYX0cCQi9RovM/eUg9DYZ7Yt
+         +s7RQRJ6Ie3Mf8+yNLYSrqdr7fHtNKS47Um0woaZYpsO2nq9dMLoneWLzGRhnrlk2X7/
+         /bGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=/6WN4wkCmG7SU9YaUC+sl2e2YPCsY4XAbfPevLlAGZA=;
-        b=EvkHmMH5p8gIiptCPBLNcm17kMCPujW0DD60Ukgm+jAJO0Ao+f8Ez3YJxOZV2Q6Tws
-         TxUBWPbCHFtiMhvk+BhLJg6ZSd8k5Saa3AmKZquRIVaXhfsfY1Ix6th75FTrIU7rZ85w
-         7E1jAggdYvCJ6r2jnU3SOZRyPa25LW9dLPoEkSIkXNv/4Yxp2vhrOwyov5ijZyn/jIcm
-         wqk7K5oeJnO1b/6VojmU2xl1lXymDz50R6EBJ1rmPg4/ZlXsHcNHmqzVYvc1Mm+WWLu2
-         op2BmJpIn9pD6CeU0WuE0/XyGnIeELZ0IltCxHedE3MZMZngKttUvS4BE8koazjGKAEn
-         +cfw==
-X-Gm-Message-State: AOAM530k8WLDCH7jV7Cl740yYzdZ/AFJWc+cyUghV13KlFB66s7PlXUz
-        81I6n5WO2zO3wfDmf88RrpbZcc1+jFnJmyYvPX8LbamD7/4=
-X-Google-Smtp-Source: ABdhPJyHbROa60FqjVXQ22VDCg1ms51met8akvI1qNhBQjCmHsBvksYwZCE8Z+GXG/az795mNHKAejrS7L+j7ry+4Z8=
-X-Received: by 2002:a2e:8754:: with SMTP id q20mr443201ljj.270.1591130193295;
- Tue, 02 Jun 2020 13:36:33 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=x7AN5XUNLuQTYg56C70ga61tHZwFYIHa2AHQltczmFg=;
+        b=OjggjLVx2nMtuanJ+LlJkL8bPMWBeuvSixewFMHiwQDjnsiSupjzZU40gQSlxHxz1U
+         FA3LA/VOQiZEfvS3orfnjkeo0r8xizt9ZVJWWOOIL46UJcCKViaaIGr078muQlfe8wwd
+         vMI1rmXDIM/pN6EI//NPWWMW5sPpHd08uOxdEAUG38kz/y57z7wu9J5aeoIqKZn26l8Q
+         Xm07pBwrstz/g2p31VlE8c7RL8HUWNZtGhEsJ5wjmqMA80CXfTOsxgSta0wmIeyH3FL1
+         y7TXDEUzpT6XrGq+8Zt3c0kbh+QOAE6wdtsNNaobeb73DgwI1Gu+yKkOudF+kwtO/Car
+         Z+qw==
+X-Gm-Message-State: AOAM531g5I8zROVlA/PKvzThJF8k8cXxM4Su6Qvc0TUp8uzlM4pIerna
+        JKA0KZUJi8CkxTVNVRmMB+3tFu5I
+X-Google-Smtp-Source: ABdhPJy4YSjVEqczNAzcxEmsNN/lUYdvDuqjTKqzm2pWbMKypz5vH+9xQ5nc74+DxdvTResbkxAWHA==
+X-Received: by 2002:adf:e58c:: with SMTP id l12mr28203147wrm.34.1591135064541;
+        Tue, 02 Jun 2020 14:57:44 -0700 (PDT)
+Received: from [10.230.188.43] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id b201sm208844wmb.36.2020.06.02.14.57.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Jun 2020 14:57:44 -0700 (PDT)
+Subject: Re: [PATCH v8 4/4] USB: pci-quirks: Add Raspberry Pi 4 quirk
+To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com, tim.gover@raspberrypi.org,
+        linux-pci@vger.kernel.org, gregkh@linuxfoundation.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20200505161318.26200-1-nsaenzjulienne@suse.de>
+ <20200505161318.26200-5-nsaenzjulienne@suse.de>
+ <7cbe4da8ba4a1524824473f8c58720f412a00fc2.camel@suse.de>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <edcbc0a6-f901-d8ff-748f-73017397799d@gmail.com>
+Date:   Tue, 2 Jun 2020 14:57:40 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Firefox/68.0 Thunderbird/68.8.1
 MIME-Version: 1.0
-From:   Kyungtae Kim <kt0755@gmail.com>
-Date:   Tue, 2 Jun 2020 16:36:22 -0400
-Message-ID: <CAEAjamut9BM4q1-EGAt-G9ef640aDvzAgnoaNtiNBdpYvfexag@mail.gmail.com>
-Subject: memory leak in usbtest_probe
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        syzkaller <syzkaller@googlegroups.com>,
-        Dave Tian <dave.jing.tian@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <7cbe4da8ba4a1524824473f8c58720f412a00fc2.camel@suse.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-We report a bug (in linux-5.6.11) found by FuzzUSB (a modified version
-of syzkaller)
 
-The buf of an usbtest_dev instance (dev->buf) allocated in
-usbtest_probe() leaked.
 
-The usbtest_dev instance holding the buf is attached to a
-corresponding device instance
-through usb_set_intfdata().
-But later, the usbtest_dev instance seems to be freed without
-deallocating its buf field ahead.
+On 6/2/2020 3:05 AM, Nicolas Saenz Julienne wrote:
+> On Tue, 2020-05-05 at 18:13 +0200, Nicolas Saenz Julienne wrote:
+>> On the Raspberry Pi 4, after a PCI reset, VL805's firmware may either be
+>> loaded directly from an EEPROM or, if not present, by the SoC's
+>> VideoCore. Inform VideoCore that VL805 was just reset.
+>>
+>> Also, as this creates a dependency between USB_PCI and VideoCore's
+>> firmware interface, and since USB_PCI can't be set as a module neither
+>> this can. Reflect that on the firmware interface Kconfg.
+>>
+>> Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+>> ---
+> 
+> It was pointed out to me on the u-boot mailing lists that all this could be
+> implemented trough a reset controller. In other words have xhci get the reset
+> controller trough device-tree, assert it, ultamately causing the firmware
+> routine to be run.
 
-kernel config: https://kt0755.github.io/etc/config_v5.6.11
+That is actually a clever way to solve that problem.
 
-==================================================================
-BUG: memory leak
-unreferenced object 0xffff888055046e00 (size 256):
-  comm "kworker/2:9", pid 2570, jiffies 4294942129 (age 1095.500s)
-  hex dump (first 32 bytes):
-    00 70 04 55 80 88 ff ff 18 bb 5a 81 ff ff ff ff  .p.U......Z.....
-    f5 96 78 81 ff ff ff ff 37 de 8e 81 ff ff ff ff  ..x.....7.......
-  backtrace:
-    [<00000000d121dccf>] kmemleak_alloc_recursive
-include/linux/kmemleak.h:43 [inline]
-    [<00000000d121dccf>] slab_post_alloc_hook mm/slab.h:586 [inline]
-    [<00000000d121dccf>] slab_alloc_node mm/slub.c:2786 [inline]
-    [<00000000d121dccf>] slab_alloc mm/slub.c:2794 [inline]
-    [<00000000d121dccf>] kmem_cache_alloc_trace+0x15e/0x2d0 mm/slub.c:2811
-    [<000000005c3c3381>] kmalloc include/linux/slab.h:555 [inline]
-    [<000000005c3c3381>] usbtest_probe+0x286/0x19d0
-drivers/usb/misc/usbtest.c:2790
-    [<000000001cec6910>] usb_probe_interface+0x2bd/0x870
-drivers/usb/core/driver.c:361
-    [<000000007806c118>] really_probe+0x48d/0x8f0 drivers/base/dd.c:551
-    [<00000000a3308c3e>] driver_probe_device+0xfc/0x2a0 drivers/base/dd.c:724
-    [<000000003ef66004>] __device_attach_driver+0x1b6/0x240
-drivers/base/dd.c:831
-    [<00000000eee53e97>] bus_for_each_drv+0x14e/0x1e0 drivers/base/bus.c:431
-    [<00000000bb0648d0>] __device_attach+0x1f9/0x350 drivers/base/dd.c:897
-    [<00000000838b324a>] device_initial_probe+0x1a/0x20 drivers/base/dd.c:944
-    [<0000000030d501c1>] bus_probe_device+0x1e1/0x280 drivers/base/bus.c:491
-    [<000000005bd7adef>] device_add+0x131d/0x1c40 drivers/base/core.c:2504
-    [<00000000a0937814>] usb_set_configuration+0xe84/0x1ab0
-drivers/usb/core/message.c:2030
-    [<00000000e3934741>] generic_probe+0x6a/0xe0 drivers/usb/core/generic.c:210
-    [<0000000098ade0f1>] usb_probe_device+0x90/0xd0
-drivers/usb/core/driver.c:266
-    [<000000007806c118>] really_probe+0x48d/0x8f0 drivers/base/dd.c:551
-    [<00000000a3308c3e>] driver_probe_device+0xfc/0x2a0 drivers/base/dd.c:724
-==================================================================
+> 
+> As much as it pains me to go over stuff that's already 'fixed', it seems to me
+> it's a better solution. On one hand we get over the device-tree dependency mess
+> (see patch #3), and on the other we transform a pci-quirk into something less
+> hacky.
+> 
+> That said, before getting my hands dirty, I was wondering if there is any
+> obvious reasons why I shouldn't do this, note that:
+> 
+> - We're talking here of a PCIe XCHI device, maybe there's an issue integrating
+>   it with DT, given the fact that, as of today, it's not really represented
+>   there.
+
+You can always provide a PCIe device representation within the Device
+Tree, this is not very common, but it is sometimes useful for e.g.:
+assigning MAC addresses, see this example for instance:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm/boot/dts/imx6qdl-zii-rdu2.dtsi#n647
+
+(does not assign a MAC address, but it could). This should allow your
+XHCI pci_device::of_node pointer to point to node declared in the Device
+Tree. There you could add a 'resets' property accordingly.
+
+> 
+> - There is no reset controller support in xhci-pci, maybe there are good
+>   reasons why. For instance, it's not something that's reflected in any way in
+>   the spec.
+
+It seems to me this is not usually necessary for PC systems, so it was
+not really needed until now. Maybe you can write a small wrapper around
+xhci-pci.c, similar to what xhci-plat.c does which is responsible for
+grabbing and releasing the reset.
+-- 
+Florian
