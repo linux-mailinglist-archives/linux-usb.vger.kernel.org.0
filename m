@@ -2,240 +2,174 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 188451EC282
-	for <lists+linux-usb@lfdr.de>; Tue,  2 Jun 2020 21:15:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDB051EC3C6
+	for <lists+linux-usb@lfdr.de>; Tue,  2 Jun 2020 22:36:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727773AbgFBTPH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Jun 2020 15:15:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47082 "EHLO
+        id S1728688AbgFBUfq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Jun 2020 16:35:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726647AbgFBTPG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Jun 2020 15:15:06 -0400
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA21C08C5C0
-        for <linux-usb@vger.kernel.org>; Tue,  2 Jun 2020 12:15:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds201912; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=UjkYDBbSVvtYK5n+pdpjc87MoFU9Du2nwzMhJRuMyxM=; b=hkuMQCcApi59gO9cCdLZ3PYB2R
-        XwTjVP4sR+9w4XU05pWfBOAiwch1cKpc+mQ3aLunrVEje2xzsFVNHFJCFPbyE6R4S6nFYSj3Ra51g
-        IJJFjL4/9xPocxXjDdSGQewpvE/M19JnQOm0Q0hxbaOxexAk4+Oij7Bpl2DBTi70d5PRsshaTjbzQ
-        8HRmaSAgEeWNh4MbfBWN2HZO9HbTxbETHKy1h4Bm08eDymiVLg1xS8WkKyTF5stHKth/mWT+CU09L
-        sgrmIPO0blhhJbBSoEKA6Td9emsNnW8agMlmWZsR11tv8q1rrurQe6/hBD9dGMpiMZ7pg4rTrk/ah
-        Wg0s6zCg==;
-Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:58948 helo=[192.168.10.61])
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1jgCNJ-0001jV-RE; Tue, 02 Jun 2020 21:15:01 +0200
-Subject: Re: [PATCH v3 6/6] usb: gadget: function: Add Generic USB Display
- support
-To:     Felipe Balbi <balbi@kernel.org>, dri-devel@lists.freedesktop.org
-Cc:     linux-usb@vger.kernel.org, sam@ravnborg.org
-References: <20200529175643.46094-1-noralf@tronnes.org>
- <20200529175643.46094-7-noralf@tronnes.org> <87k10p1jr6.fsf@kernel.org>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-Message-ID: <0d0ec3f5-4b9a-e128-5d50-9e7096b3f984@tronnes.org>
-Date:   Tue, 2 Jun 2020 21:14:59 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.1
+        with ESMTP id S1728709AbgFBUfq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Jun 2020 16:35:46 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2944C08C5C0;
+        Tue,  2 Jun 2020 13:35:45 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id u10so13032155ljj.9;
+        Tue, 02 Jun 2020 13:35:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=xgZhJ/0PiwRCGGeVSX5ESFlWEeZ6yZH6gPsuCEl06yY=;
+        b=PgQk83LNStyULoWtcnPtjxZWOf7myP8fTxco6XL8EJ+Kaql/zDrzhzile8b1WsWiae
+         NVtMkDUX4rJnIMl75KoAwAcZLCdYdFkumiMC9Q0ItD9sfJGNFMaR8G5+6DAbgIPIYwxw
+         KUWFZwdJctg+5lNxxD8QfxDk+dt8aT+AhyCdy+7+ssep0eLhJ7G8wxeyCO5PUCpZjJfx
+         fbxdWZcmE3oXOKdrrvFbnhHwjS0+emYRDP/A8BV0dvhZ5paWHZT7Gg792xM+AXDIMCg6
+         jsMGfmfr6pb6nJ5OR7OcaaMY4xBoMJo65FNwiuf2zCGBPv67eNJh6argyeIIulO8vVk1
+         V+2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=xgZhJ/0PiwRCGGeVSX5ESFlWEeZ6yZH6gPsuCEl06yY=;
+        b=k8JW+FapVkPtaqPtOM8N1nL4VHfhpVnyxJQ0szJTMn+x0aWmsYPTnbPnT+Omy6nmeM
+         INk7A2WpOxbb6BDKO8fjm7KgZQgM4/P3XgVIdr4NhMuFw7AsivX+tym3eHeZzG9+M8vG
+         BvE2mejXtjcoQp9BH08ny80kGpBOmUNMCvMzQQ2x8wYAd/HqVwr2CnHrnVNfOqja3q/y
+         JOos8+awJ++f64uLrgG0+Oo8IKiJ/DgbdMqccvqXTAiXsNbznIfoqkH3ln13UrfHPTpo
+         0ZbCC0mYAPuJCD3MGYZwtoNlRon6KaY6MV2q4CWebXn2ZcNUqBY8b9hIJrY5BTA4K6MB
+         j/fQ==
+X-Gm-Message-State: AOAM5311VeUrmJ0yRd+YsmxRG2ZSILc4nIntaXphqXSOOE0XYbYIDEeD
+        PSwU3G8aPpcpL7SdYR3LcgHAjxGPigX/clZhfYs=
+X-Google-Smtp-Source: ABdhPJwxqwcMBYopvjpAI9BDGX+FzGiH119WPhtb52UHEwGZSLAxQa6b8DP0BsvDdciKmLorQkbTDFNbRnY23NJu7to=
+X-Received: by 2002:a2e:8115:: with SMTP id d21mr422843ljg.167.1591130144141;
+ Tue, 02 Jun 2020 13:35:44 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <87k10p1jr6.fsf@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+From:   Kyungtae Kim <kt0755@gmail.com>
+Date:   Tue, 2 Jun 2020 16:35:33 -0400
+Message-ID: <CAEAjamsJLRYarDLCUs-ymUWusk=oC=ko5iRgouBJdP34zXSQHg@mail.gmail.com>
+Subject: KASAN: use-after-free Read in printer_read
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        syzkaller <syzkaller@googlegroups.com>,
+        Dave Tian <dave.jing.tian@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+We report a bug (in linux-5.6.11) found by FuzzUSB (a modified version
+of syzkaller)
 
-Den 02.06.2020 19.05, skrev Felipe Balbi:
-> 
-> Hi,
-> 
-> I missed this completely until now.
-> Noralf Trønnes <noralf@tronnes.org> writes:
->> This adds the gadget side support for the Generic USB Display. It presents
->> a DRM display device as a USB Display configured through configfs.
->>
->> The display is implemented as a vendor type USB interface with one bulk
->> out endpoint. The protocol is implemented using control requests.
->> lz4 compressed framebuffer data/pixels are sent over the bulk endpoint.
->>
->> The DRM part of the gadget is placed in the DRM subsystem since it reaches
->> into the DRM internals.
-> 
-> First and foremost, could this be done in userspace using the raw gadget
-> or f_fs?
-> 
+This bug happened when accessing a deallocated instance in printer_read().
 
-An uncompressed 1920x1080-RGB565 frame is ~4MB. All frames can be
-compressed (lz4) even if just a little, so this is decompressed into the
-framebuffer of the attached DRM device. AFAIU I would need to be able to
-mmap the received bulk buffer if I were to do this from userspace
-without killing performance. So it doesn't look like I can use raw
-gadget or f_fs.
+printer_read() tries to access lock_printer_io of the printer_dev instance
+(f_printer.c:430). However, UAF arises because it had been freed
+by gprinter_free().
 
->> diff --git a/drivers/usb/gadget/function/f_gud_drm.c b/drivers/usb/gadget/function/f_gud_drm.c
->> new file mode 100644
->> index 000000000000..9a2d6bb9739f
->> --- /dev/null
->> +++ b/drivers/usb/gadget/function/f_gud_drm.c
->> @@ -0,0 +1,678 @@
->> +struct f_gud_drm {
->> +	struct usb_function func;
->> +	struct work_struct worker;
-> 
-> why do you need a worker?
-> 
+To fix, we can check if an instance of printer_dev is still in use
+before deallocating it.
 
-The gadget runs in interrupt context and I need to call into the DRM
-subsystem which can sleep.
+kernel config: https://kt0755.github.io/etc/config_v5.6.11
 
->> +	size_t max_buffer_size;
->> +	void *ctrl_req_buf;
->> +
->> +	u8 interface_id;
->> +	struct usb_request *ctrl_req;
->> +
->> +	struct usb_ep *bulk_ep;
->> +	struct usb_request *bulk_req;
-> 
-> single request? Don't you want to amortize the latency of
-> queue->complete by using a series of requests?
-> 
+==================================================================
+BUG: KASAN: use-after-free in __mutex_lock_common
+kernel/locking/mutex.c:938 [inline]
+BUG: KASAN: use-after-free in __mutex_lock+0x13a7/0x14d0
+kernel/locking/mutex.c:1103
+Read of size 8 at addr ffff8880540c3890 by task syz-executor.0/6819
 
-I use only one request per update or partial update.
-I kmalloc the biggest buffer I can get (default 4MB) and tell the host
-about this size. If a frame doesn't fit, the host splits it up into
-partial updates. I already support partial updates so this is built in.
-Userspace can tell the graphics driver which portion of the framebuffer
-it has touched to avoid sending the full frame each time.
-Having one continous buffer simplifies decompression.
+CPU: 1 PID: 6819 Comm: syz-executor.0 Not tainted 5.6.11 #1
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS Bochs 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xce/0x128 lib/dump_stack.c:118
+ print_address_description.constprop.4+0x21/0x3c0 mm/kasan/report.c:374
+ __kasan_report+0x131/0x1b0 mm/kasan/report.c:506
+ kasan_report+0x12/0x20 mm/kasan/common.c:641
+ __asan_report_load8_noabort+0x14/0x20 mm/kasan/generic_report.c:135
+ __mutex_lock_common kernel/locking/mutex.c:938 [inline]
+ __mutex_lock+0x13a7/0x14d0 kernel/locking/mutex.c:1103
+ mutex_lock_nested+0x16/0x20 kernel/locking/mutex.c:1118
+ printer_read+0xbc/0xd60 drivers/usb/gadget/function/f_printer.c:430
+ __vfs_read+0x85/0x110 fs/read_write.c:425
+ vfs_read+0x161/0x380 fs/read_write.c:461
+ ksys_read+0x18a/0x220 fs/read_write.c:587
+ __do_sys_read fs/read_write.c:597 [inline]
+ __se_sys_read fs/read_write.c:595 [inline]
+ __x64_sys_read+0x73/0xb0 fs/read_write.c:595
+ do_syscall_64+0x9e/0x510 arch/x86/entry/common.c:294
+ entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x4531a9
+Code: ed 60 fc ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48
+89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
+01 f0 ff ff 0f 83 bb 60 fc ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007f0024694c78 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+RAX: ffffffffffffffda RBX: 000000000073bfa8 RCX: 00000000004531a9
+RDX: 000000000000006b RSI: 0000000020000100 RDI: 0000000000000003
+RBP: 0000000000000003 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00000000004bd843
+R13: 00000000004d3468 R14: 00007f00246956d4 R15: 00000000ffffffff
 
-There's a control request preceding the bulk request which tells the
-area the update is for and whether it is compressed or not.
-I did some testing to see if I should avoid the control request overhead
-for split updates, but it turns out that the bottleneck is the
-decompression. The control request is just 400-500us, while the total
-time from control request to buffer is decompressed is 50-100ms
-(depending on how well the frame compresses).
+Allocated by task 2420:
+ save_stack+0x21/0x90 mm/kasan/common.c:72
+ set_track mm/kasan/common.c:80 [inline]
+ __kasan_kmalloc.constprop.3+0xa7/0xd0 mm/kasan/common.c:515
+ kasan_kmalloc+0x9/0x10 mm/kasan/common.c:529
+ kmem_cache_alloc_trace+0xfa/0x2d0 mm/slub.c:2813
+ kmalloc include/linux/slab.h:555 [inline]
+ kzalloc include/linux/slab.h:669 [inline]
+ gprinter_alloc+0xa1/0x870 drivers/usb/gadget/function/f_printer.c:1416
+ usb_get_function+0x58/0xc0 drivers/usb/gadget/functions.c:61
+ config_usb_cfg_link+0x1ed/0x3e0 drivers/usb/gadget/configfs.c:444
+ configfs_symlink+0x527/0x11d0 fs/configfs/symlink.c:202
+ vfs_symlink+0x33d/0x5b0 fs/namei.c:4201
+ do_symlinkat+0x11b/0x1d0 fs/namei.c:4228
+ __do_sys_symlinkat fs/namei.c:4242 [inline]
+ __se_sys_symlinkat fs/namei.c:4239 [inline]
+ __x64_sys_symlinkat+0x73/0xb0 fs/namei.c:4239
+ do_syscall_64+0x9e/0x510 arch/x86/entry/common.c:294
+ entry_SYSCALL_64_after_hwframe+0x49/0xbe
 
->> +	struct gud_drm_gadget *gdg;
->> +
->> +	spinlock_t lock; /* Protects the following members: */
->> +	bool ctrl_pending;
->> +	bool status_pending;
->> +	bool bulk_pending;
->> +	bool disable_pending;
-> 
-> could this be a single u32 with #define'd flags? That would be atomic,
-> right?
-> 
+Freed by task 6798:
+ save_stack+0x21/0x90 mm/kasan/common.c:72
+ set_track mm/kasan/common.c:80 [inline]
+ kasan_set_free_info mm/kasan/common.c:337 [inline]
+ __kasan_slab_free+0x135/0x190 mm/kasan/common.c:476
+ kasan_slab_free+0xe/0x10 mm/kasan/common.c:485
+ slab_free_hook mm/slub.c:1444 [inline]
+ slab_free_freelist_hook mm/slub.c:1477 [inline]
+ slab_free mm/slub.c:3034 [inline]
+ kfree+0xf7/0x410 mm/slub.c:3995
+ gprinter_free+0x49/0xd0 drivers/usb/gadget/function/f_printer.c:1353
+ usb_put_function+0x38/0x50 drivers/usb/gadget/functions.c:87
+ config_usb_cfg_unlink+0x2db/0x3b0 drivers/usb/gadget/configfs.c:485
+ configfs_unlink+0x3b9/0x7f0 fs/configfs/symlink.c:250
+ vfs_unlink+0x287/0x570 fs/namei.c:4073
+ do_unlinkat+0x4f9/0x620 fs/namei.c:4137
+ __do_sys_unlink fs/namei.c:4184 [inline]
+ __se_sys_unlink fs/namei.c:4182 [inline]
+ __x64_sys_unlink+0x42/0x50 fs/namei.c:4182
+ do_syscall_64+0x9e/0x510 arch/x86/entry/common.c:294
+ entry_SYSCALL_64_after_hwframe+0x49/0xbe
 
-I have never grasped all the concurrency issues, but wouldn't I need
-memory barriers as well?
+The buggy address belongs to the object at ffff8880540c3800
+ which belongs to the cache kmalloc-1k of size 1024
+The buggy address is located 144 bytes inside of
+ 1024-byte region [ffff8880540c3800, ffff8880540c3c00)
+The buggy address belongs to the page:
+page:ffffea0001503000 refcount:1 mapcount:0 mapping:ffff88806c00e300
+index:0xffff8880540c4800 compound_mapcount: 0
+flags: 0x100000000010200(slab|head)
+raw: 0100000000010200 ffffea0001ae3808 ffffea0001ac6c08 ffff88806c00e300
+raw: ffff8880540c4800 0000000000100007 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
 
->> +	u8 errno;
-> 
-> a global per-function error? Why?
-> 
-
-This is the result of the previously request operation. The host will
-request this value to see how it went. I might switch to using a bulk
-endpoint for status following a discussion with Alan Stern in the host
-driver thread in this patch series. If so I might not need this.
-
->> +	u16 request;
->> +	u16 value;
-> 
-> also why? Looks odd
-> 
-
-These values contains the operation (in addition to the payload) that
-the worker shall perform following the control-OUT requests.
-
-control-IN requests can run in interrupt context so in that case the
-payload is queued up immediately.
-
-<snip>
-
->> +static void f_gud_drm_bulk_complete(struct usb_ep *ep, struct usb_request *req)
->> +{
->> +	struct f_gud_drm *fgd = req->context;
->> +	unsigned long flags;
->> +
->> +	if (req->status || req->actual != req->length)
->> +		return;
-> 
-> so, if we complete with an erroneous status or a short packet, you'll
-> ignore it?
-> 
-
-Hmm yeah. When I wrote this I thought that the bottleneck was the USB
-transfers, so I didn't want the host to slow down performance by
-requesting this status. Now I know it's the decompression that takes
-time, so I could actually do a status check and retry the frame if the
-device detects an error.
-
->> +	spin_lock_irqsave(&fgd->lock, flags);
->> +	fgd->bulk_pending = true;
->> +	spin_unlock_irqrestore(&fgd->lock, flags);
->> +
->> +	queue_work(system_long_wq, &fgd->worker);
-> 
-> Do you need to offset this to a worker?
-> 
-
-Yes, long running (one operation can be >100ms) and can sleep.
-
->> +static int f_gud_drm_ctrl_req_set_buffer(struct f_gud_drm *fgd, void *buf, size_t len)
->> +{
->> +	int ret;
->> +
->> +	if (len != sizeof(struct gud_drm_req_set_buffer))
->> +		return -EINVAL;
->> +
->> +	ret = gud_drm_gadget_set_buffer(fgd->gdg, buf);
->> +	if (ret < 0)
->> +		return ret;
->> +
->> +	if (ret > fgd->max_buffer_size)
->> +		return -EOVERFLOW;
->> +
->> +	fgd->bulk_req->length = ret;
->> +
->> +	return usb_ep_queue(fgd->bulk_ep, fgd->bulk_req, GFP_KERNEL);
->> +}
->> +
->> +static void f_gud_drm_worker(struct work_struct *work)
->> +{
->> +	struct f_gud_drm *fgd = container_of(work, struct f_gud_drm, worker);
->> +	bool ctrl_pending, bulk_pending, disable_pending;
->> +	struct gud_drm_gadget *gdg = fgd->gdg;
->> +	unsigned long flags;
->> +	u16 request, value;
->> +	int ret;
->> +
->> +	spin_lock_irqsave(&fgd->lock, flags);
->> +	request = fgd->request;
->> +	value = fgd->value;
->> +	ctrl_pending = fgd->ctrl_pending;
->> +	bulk_pending = fgd->bulk_pending;
->> +	disable_pending = fgd->disable_pending;
->> +	spin_unlock_irqrestore(&fgd->lock, flags);
->> +
->> +	pr_debug("%s: bulk_pending=%u ctrl_pending=%u disable_pending=%u\n",
->> +		 __func__, bulk_pending, ctrl_pending, disable_pending);
-> 
-> could we use dev_dbg() at least?
-> 
-
-Sure.
-
-Noralf.
-
+Memory state around the buggy address:
+ ffff8880540c3780: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff8880540c3800: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff8880540c3880: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                         ^
+ ffff8880540c3900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff8880540c3980: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
