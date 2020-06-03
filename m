@@ -2,91 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75E6E1ED337
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jun 2020 17:22:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84D811ED368
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jun 2020 17:32:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726177AbgFCPV4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Jun 2020 11:21:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36398 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726011AbgFCPVz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Jun 2020 11:21:55 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53250C08C5C0
-        for <linux-usb@vger.kernel.org>; Wed,  3 Jun 2020 08:21:55 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id o8so1958339pgm.7
-        for <linux-usb@vger.kernel.org>; Wed, 03 Jun 2020 08:21:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hrMJmm7uV8Kq8FT0QWve+Yk2ZlMASQ0lIxNFVi0I4n8=;
-        b=lV4LTO8Z7CECN0h8bLPSecTfQfT3g1oO1DyrfJYHMsdQ+4mpGA7mv1RKZde+dOOwWz
-         ip0/JO5ZkcDWESyffNkXU9QiEZp0MvcN54BAffNkFC/7jDB7vEruTcPzxB/SDRH3WGJM
-         bf1Kz6QfoMgzuC1uL/1/WqtuG5XyhwbEWMclB94zwrm130ioJTBTLnYP8J8tyg3G9SEh
-         X6a1IwOFXv1cGc6gqCqCpQGAYMeGhb8ym2YMZJtjeqmZwBPx9OGctphAbjm5Ztmiy9up
-         sOX2sGV8hgfrbWPggLrEtdTgdRpHpYjQwPputqh6xWDNoi8DnGd3nSvfrPCOZzOzNQWn
-         Ldmg==
+        id S1726217AbgFCPcR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Jun 2020 11:32:17 -0400
+Received: from mail-il1-f197.google.com ([209.85.166.197]:57295 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725930AbgFCPcP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Jun 2020 11:32:15 -0400
+Received: by mail-il1-f197.google.com with SMTP id k13so1735862ilh.23
+        for <linux-usb@vger.kernel.org>; Wed, 03 Jun 2020 08:32:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hrMJmm7uV8Kq8FT0QWve+Yk2ZlMASQ0lIxNFVi0I4n8=;
-        b=UlY2ywJwLeunFbGbV7IRo6c3uIWIrEiX8cwxy1bnWM4kpYqW6k2KrYLT59XblN4Sy7
-         5RDykgvKlckOay2bYBRHdS1PGJ1QhUh8e9syMGu4KtU3N5ICSIEDthYecQOMLr4E88iv
-         hNHQ2o7ben8NbBM9XQMRY/ajNrfNjFiGVx2dLTyu7nkqhLhh6QVU8Qc1uBPCLOc0GSNk
-         Wdd0/SyGqJ23EXj2GURmj9U9nWWUmLc59S52WAkO+ABgW45iWI0YRjM1NFbL7/dIQs15
-         W+exItFots4UIT797ZKGxYnw4U4VP1sgKuQNzGiF20zGpQyb2d+vYiA/8aJ7FZ6Cc58G
-         zz5Q==
-X-Gm-Message-State: AOAM532HIOduVi4iOXrdwJQacae3Dj2IqWdSIUC5duGSLzwzzr5nn4C4
-        mLHEwlY5kwKM+HFT+BMsZynKG8gXMpmtlDawSj98gw==
-X-Google-Smtp-Source: ABdhPJx7lj+k4HtoDUnAWWncwUPHKPLtPH+5vE4OXVU+sm+4n/l4l4EMI32FhbCzRQUrAy9yuUVXzvZ388i3Ejt1yNo=
-X-Received: by 2002:a63:dd43:: with SMTP id g3mr29777399pgj.286.1591197714146;
- Wed, 03 Jun 2020 08:21:54 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=hCfKtti0OOVEwdCy57euieZ5015RvD0tBSXcPV4JeNE=;
+        b=K38ykaJCr31Kj1EYtfP4hvh8B974ruUPzRDGWn77ZbzeIVuXoRS58YtYMwMu7r5pX1
+         mYMOcb0uoadr5V0B8LegbFwXuzTKIXG2G/Bv/qtq/tzdTT0vx4NUPKAvOIyc1L/hJbQu
+         Bpk9R9M0gU0hoqlW8K5/EGnNT/9tyR6+GIt570mfb0OSNpOEfUzpKX6kpwlRDDJqV861
+         YA3bCu2kVEOl58OCGqDL+kTTDk6s7tNQc/N1ltRayw8E89WL0qiLbct+cet9bDh+MdBi
+         kLR/1OA+afrTuvFyLwSMtZafA2DIwIWNepqlJiwV7Q2xgLeC/z4fj8FKnCrTOBsksZ/8
+         m7Rg==
+X-Gm-Message-State: AOAM533SCwse4G5Mf4eNmn1HNhjOR2gtrycxge6Dx1XHlCY9g0jhbn2e
+        3bVPiQjxB+WJpMMHwTLq2shCUiH4I3dta1YRGkJ9xxJRiQcE
+X-Google-Smtp-Source: ABdhPJx4U0590dX2/3irztPqwY6mlmIxvcKI04nXLzNoErep5Repsw38p7vnSr+V9eNu+fWjmsmu1UaYe9DvHSmLOtLJCVAOP6C6
 MIME-Version: 1.0
-References: <000000000000bbd09005a6fdc6cc@google.com> <0000000000000eb4b905a7277a7d@google.com>
- <20200603061251.GA531505@kroah.com>
-In-Reply-To: <20200603061251.GA531505@kroah.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Wed, 3 Jun 2020 17:21:43 +0200
-Message-ID: <CAAeHK+ykNcRU2yyH_eH1w5Kkh9qp9W=zXS7u=6wwjhG0kJgshg@mail.gmail.com>
-Subject: Re: WARNING in snd_usbmidi_submit_urb/usb_submit_urb
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     syzbot <syzbot+5f1d24c49c1d2c427497@syzkaller.appspotmail.com>,
-        Felipe Balbi <balbi@kernel.org>, ingrassia@epigenesys.com,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+X-Received: by 2002:a02:3f58:: with SMTP id c24mr458448jaf.16.1591198334553;
+ Wed, 03 Jun 2020 08:32:14 -0700 (PDT)
+Date:   Wed, 03 Jun 2020 08:32:14 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007f94e205a72fbb2f@google.com>
+Subject: WARNING: locking bug in ath9k_htc_wait_for_target
+From:   syzbot <syzbot+644c73760fbf6c60a6c4@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, ath9k-devel@qca.qualcomm.com,
+        davem@davemloft.net, kuba@kernel.org, kvalo@codeaurora.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 3, 2020 at 8:12 AM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Tue, Jun 02, 2020 at 10:41:16PM -0700, syzbot wrote:
-> > syzbot has found a reproducer for the following crash on:
-> >
-> > HEAD commit:    1ee08de1 Merge tag 'for-5.8/io_uring-2020-06-01' of git://..
-> > git tree:       upstream
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=15f9e516100000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=b46ebd806238a886
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=5f1d24c49c1d2c427497
-> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > userspace arch: i386
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1667dcca100000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13f9e516100000
-> >
-> > The bug was bisected to:
-> >
-> > commit f2c2e717642c66f7fe7e5dd69b2e8ff5849f4d10
-> > Author: Andrey Konovalov <andreyknvl@google.com>
-> > Date:   Mon Feb 24 16:13:03 2020 +0000
-> >
-> >     usb: gadget: add raw-gadget interface
->
-> I thought this "bisect to the tool that finds bugs" issue was fixed :)
+Hello,
 
-The change was merged after this message was sent, and it also takes
-some time to be deployed.
+syzbot found the following crash on:
+
+HEAD commit:    2089c6ed usb: core: kcov: collect coverage from usb comple..
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=12576bd6100000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b7479d3935864b1b
+dashboard link: https://syzkaller.appspot.com/bug?extid=644c73760fbf6c60a6c4
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=179a24fe100000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16576bd6100000
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+644c73760fbf6c60a6c4@syzkaller.appspotmail.com
+
+usb 1-1: ath9k_htc: Firmware ath9k_htc/htc_9271-1.4.0.fw requested
+usb 1-1: ath9k_htc: Transferred FW: ath9k_htc/htc_9271-1.4.0.fw, size: 51008
+------------[ cut here ]------------
+DEBUG_LOCKS_WARN_ON(1)
+WARNING: CPU: 0 PID: 5 at kernel/locking/lockdep.c:183 hlock_class kernel/locking/lockdep.c:183 [inline]
+WARNING: CPU: 0 PID: 5 at kernel/locking/lockdep.c:183 hlock_class kernel/locking/lockdep.c:172 [inline]
+WARNING: CPU: 0 PID: 5 at kernel/locking/lockdep.c:183 check_wait_context kernel/locking/lockdep.c:4029 [inline]
+WARNING: CPU: 0 PID: 5 at kernel/locking/lockdep.c:183 __lock_acquire+0x2194/0x6650 kernel/locking/lockdep.c:4305
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 0 PID: 5 Comm: kworker/0:0 Not tainted 5.7.0-rc6-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events request_firmware_work_func
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xef/0x16e lib/dump_stack.c:118
+ panic+0x2aa/0x6e1 kernel/panic.c:221
+ __warn.cold+0x2f/0x30 kernel/panic.c:582
+ report_bug+0x27b/0x2f0 lib/bug.c:195
+ fixup_bug arch/x86/kernel/traps.c:175 [inline]
+ fixup_bug arch/x86/kernel/traps.c:170 [inline]
+ do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:267
+ do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
+ invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
+RIP: 0010:hlock_class kernel/locking/lockdep.c:183 [inline]
+RIP: 0010:hlock_class kernel/locking/lockdep.c:172 [inline]
+RIP: 0010:check_wait_context kernel/locking/lockdep.c:4029 [inline]
+RIP: 0010:__lock_acquire+0x2194/0x6650 kernel/locking/lockdep.c:4305
+Code: d2 0f 85 91 33 00 00 44 8b 35 38 f2 c1 06 45 85 f6 0f 85 b8 fb ff ff 48 c7 c6 c0 fa e6 85 48 c7 c7 00 fb e6 85 e8 84 6b ed ff <0f> 0b e9 9e fb ff ff e8 f0 89 c0 00 85 c0 0f 84 db fb ff ff 48 c7
+RSP: 0018:ffff8881da1d7748 EFLAGS: 00010086
+RAX: 0000000000000000 RBX: bd37a6f4de9bd740 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff812a339d RDI: ffffed103b43aedb
+RBP: ffff8881da19ebd0 R08: ffff8881da19e300 R09: fffffbfff0e20bd1
+R10: ffffffff87105e83 R11: fffffbfff0e20bd0 R12: ffff8881da19e300
+R13: ffff8881c679e460 R14: 0000000000000000 R15: 0000000000000000
+ lock_acquire+0x18b/0x7c0 kernel/locking/lockdep.c:4934
+ __raw_spin_lock_irq include/linux/spinlock_api_smp.h:128 [inline]
+ _raw_spin_lock_irq+0x2d/0x40 kernel/locking/spinlock.c:167
+ do_wait_for_common kernel/sched/completion.c:86 [inline]
+ __wait_for_common kernel/sched/completion.c:106 [inline]
+ wait_for_common kernel/sched/completion.c:117 [inline]
+ wait_for_completion_timeout+0x172/0x280 kernel/sched/completion.c:157
+ ath9k_htc_wait_for_target.isra.0+0xb9/0x1b0 drivers/net/wireless/ath/ath9k/htc_drv_init.c:89
+ ath9k_htc_probe_device+0x1a4/0x1da0 drivers/net/wireless/ath/ath9k/htc_drv_init.c:949
+ ath9k_htc_hw_init+0x31/0x60 drivers/net/wireless/ath/ath9k/htc_hst.c:501
+ ath9k_hif_usb_firmware_cb+0x274/0x510 drivers/net/wireless/ath/ath9k/hif_usb.c:1187
+ request_firmware_work_func+0x126/0x242 drivers/base/firmware_loader/main.c:1005
+ process_one_work+0x965/0x1630 kernel/workqueue.c:2268
+ worker_thread+0x96/0xe20 kernel/workqueue.c:2414
+ kthread+0x326/0x430 kernel/kthread.c:268
+ ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:351
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
