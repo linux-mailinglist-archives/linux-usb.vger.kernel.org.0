@@ -2,132 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B4871ED36E
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jun 2020 17:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 066251ED530
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jun 2020 19:42:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726066AbgFCPca (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Jun 2020 11:32:30 -0400
-Received: from mail-il1-f197.google.com ([209.85.166.197]:56216 "EHLO
-        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726173AbgFCPcQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Jun 2020 11:32:16 -0400
-Received: by mail-il1-f197.google.com with SMTP id l20so1343549ilk.22
-        for <linux-usb@vger.kernel.org>; Wed, 03 Jun 2020 08:32:15 -0700 (PDT)
+        id S1726356AbgFCRmz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Jun 2020 13:42:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58214 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726268AbgFCRmq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Jun 2020 13:42:46 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F2EDC08C5C2
+        for <linux-usb@vger.kernel.org>; Wed,  3 Jun 2020 10:33:31 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id e125so1859215lfd.1
+        for <linux-usb@vger.kernel.org>; Wed, 03 Jun 2020 10:33:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=RiYI0t+KrBvaJgMcqUi2332VvHKyX88P2wlQysjVLXM=;
+        b=gk244yjdaq9AeMPc0x74cYRwy2EEkQH/A2o2vAvYivtoPifzXZ4zIPTJxNnt6AEms3
+         lnpu4id+cI4xfoV50YJ3gBY/KHwO5czVFEAW3yZvg2XLVI0C+9X1+Ckei58TxH5yrgfU
+         PF13oW+pEFgFc9YI47rXwqVQRStTEWiZL8fC7FVTh8rSr0KJdluA2FI89xLVmbfQ+NEW
+         wlgPHeXOEVwRUcFUMyqo37mmdKmoeKXeGMAoiKXHwA/4WYa5strDvITPRW9Rem2vUDvL
+         zNBIpLEJlrIhR0I1My/Ub2bW9Sw0qyMOt/HBDths765G9kyJoGaQBb+35SazRc8zZLjg
+         m+LA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=Gl8DCI8PdMFP57T9AipLOavLrIwW1cuatNeoRe4hWbg=;
-        b=Sxuw34cwymrSNMlx42RaFIlbfpDT9AcUWaDxaWnwqWungloNozDstTXUbkWbEsLJQx
-         JQ9FBGPdNhOuHt0BI/EVbc11Z00yq9crZLs+xNE88IA1rCKiyal8XOSL5aL16dim/Ghg
-         /guT3zpxfaMv5alEu9j6Hs96oWFLHI2siTT1rrSv5QpaH61iBI/Jd/fiXDWdaPV2eYCy
-         1arcqVKcu209V3ldEzL8B+4PSA6kEttHMPaRQKJkBjhDDg7ULUYO1I64Gi6Xl0iP6bhi
-         GPo+RQAyMu0hF+euTAH6TT3v12fVFUYw9CMZYcfEXIEyyOfiChNEGR6E/Mu11jBWCGzF
-         Z0nQ==
-X-Gm-Message-State: AOAM531HheGv0wofH40TtacpnzLmhKse+VSK0Kf3Ldne69v+xGncixT1
-        idT3swv5l1wG2i21/IjKpnYmSULqU2y8+Jn6HJUwXGrNGCK8
-X-Google-Smtp-Source: ABdhPJy5Ka0KHHhvWlr51OHU3WnJemWLkBsFR4ZWyPRPCO6VwyWIBTXiNMdirWDuNq1OUicZ8NEv0kerl7DZV6+xqhHPTg15ivM5
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=RiYI0t+KrBvaJgMcqUi2332VvHKyX88P2wlQysjVLXM=;
+        b=cQEecQFwWUF75aIrQaUlGmt+7cZKE4PJuGggpuGwtwvS6ev+RuwFcQ/REs/2m3Mop4
+         Bv7toEogPXZQA74hGfT8Hhd5VWVCs6hyRE8YAkTzWzNswPPDmoWxneX5KuPx55o3/l9D
+         nmfnMqG1Qsue/UdNpCjeRt+oLT4Tq3kAv6ODiJUojxgEv5/0sQ4LcTHCCXh4Bkc8yKPc
+         A7eNrykKAN2+zEwQjXJqhvwenl6xhSnrFUhETbaWzMpebjNF1GSD0Ze/vRYgBKQVUr7j
+         2zQbn72R0XFpgD+rLil6oFHSoarFkfpbtAF2yjoqpkWtGYkvaH+qW3JJsBcDNZcvvqpW
+         K2/w==
+X-Gm-Message-State: AOAM530932CsMXoiAFfhMbMX9iKNJ6OnMllIBuTz38ZZ9Wb/Q7Rn7xAz
+        sS4gsSA9fkYjLoNvrgtDkXUOZa7Eeek=
+X-Google-Smtp-Source: ABdhPJxlDbpPhvBO2HwzpUWB+mZRWd3ea7bAmLgctD4jOZItUkkhqH0olCiHDFJagt7e80KPbSXkjA==
+X-Received: by 2002:ac2:489a:: with SMTP id x26mr297287lfc.111.1591205609563;
+        Wed, 03 Jun 2020 10:33:29 -0700 (PDT)
+Received: from ?IPv6:2a00:1fa0:448d:774a:2057:6699:2c75:847d? ([2a00:1fa0:448d:774a:2057:6699:2c75:847d])
+        by smtp.gmail.com with ESMTPSA id q8sm815921lfo.13.2020.06.03.10.33.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Jun 2020 10:33:28 -0700 (PDT)
+Subject: Re: [PATCH v3] usb: host: xhci-mtk: avoid runtime suspend when
+ removing hcd
+To:     Macpaul Lin <macpaul.lin@mediatek.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        stable@vger.kernel.org
+Cc:     Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
+        Macpaul Lin <macpaul.lin@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-usb@vger.kernel.org, linux-mediatek@lists.infradead.org
+References: <ebd32a2b-c4ba-8891-b13e-f6c641a94276@linux.intel.com>
+ <1591189767-21988-1-git-send-email-macpaul.lin@mediatek.com>
+From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Message-ID: <b2f3aa9f-a592-0e8c-f897-f5d885fb9740@cogentembedded.com>
+Date:   Wed, 3 Jun 2020 20:33:24 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.1
 MIME-Version: 1.0
-X-Received: by 2002:a92:9c52:: with SMTP id h79mr100851ili.252.1591198334773;
- Wed, 03 Jun 2020 08:32:14 -0700 (PDT)
-Date:   Wed, 03 Jun 2020 08:32:14 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000082f13605a72fbbcb@google.com>
-Subject: KASAN: out-of-bounds Read in ath9k_hif_usb_rx_cb
-From:   syzbot <syzbot+d7289ef49bcdfd654265@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, ath9k-devel@qca.qualcomm.com,
-        davem@davemloft.net, kuba@kernel.org, kvalo@codeaurora.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1591189767-21988-1-git-send-email-macpaul.lin@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Hello.
 
-syzbot found the following crash on:
+On 03.06.2020 16:09, Macpaul Lin wrote:
 
-HEAD commit:    2089c6ed usb: core: kcov: collect coverage from usb comple..
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=17cf6bd6100000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b7479d3935864b1b
-dashboard link: https://syzkaller.appspot.com/bug?extid=d7289ef49bcdfd654265
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> When runtime suspend was enabled, runtime suspend might happened
 
-Unfortunately, I don't have any reproducer for this crash yet.
+    Happen.
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+d7289ef49bcdfd654265@syzkaller.appspotmail.com
+> when xhci is removing hcd. This might cause kernel panic when hcd
+> has been freed but runtime pm suspend related handle need to
+> reference it.
+> 
+> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+> Reviewed-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+[...]
 
-==================================================================
-BUG: KASAN: out-of-bounds in ath9k_hif_usb_rx_stream drivers/net/wireless/ath/ath9k/hif_usb.c:622 [inline]
-BUG: KASAN: out-of-bounds in ath9k_hif_usb_rx_cb+0xe64/0xf90 drivers/net/wireless/ath/ath9k/hif_usb.c:666
-Read of size 4 at addr ffff8881acb6c0d0 by task swapper/1/0
-
-CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.7.0-rc6-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0xef/0x16e lib/dump_stack.c:118
- print_address_description.constprop.0.cold+0xd3/0x415 mm/kasan/report.c:382
- __kasan_report.cold+0x37/0x7d mm/kasan/report.c:511
- kasan_report+0x33/0x50 mm/kasan/common.c:625
- ath9k_hif_usb_rx_stream drivers/net/wireless/ath/ath9k/hif_usb.c:622 [inline]
- ath9k_hif_usb_rx_cb+0xe64/0xf90 drivers/net/wireless/ath/ath9k/hif_usb.c:666
- __usb_hcd_giveback_urb+0x29a/0x550 drivers/usb/core/hcd.c:1650
- usb_hcd_giveback_urb+0x368/0x420 drivers/usb/core/hcd.c:1716
- dummy_timer+0x125e/0x32b4 drivers/usb/gadget/udc/dummy_hcd.c:1967
- call_timer_fn+0x1ac/0x700 kernel/time/timer.c:1405
- expire_timers kernel/time/timer.c:1450 [inline]
- __run_timers kernel/time/timer.c:1774 [inline]
- __run_timers kernel/time/timer.c:1741 [inline]
- run_timer_softirq+0x5f9/0x1500 kernel/time/timer.c:1787
- __do_softirq+0x21e/0x9aa kernel/softirq.c:292
- invoke_softirq kernel/softirq.c:373 [inline]
- irq_exit+0x178/0x1a0 kernel/softirq.c:413
- exiting_irq arch/x86/include/asm/apic.h:546 [inline]
- smp_apic_timer_interrupt+0x141/0x540 arch/x86/kernel/apic/apic.c:1140
- apic_timer_interrupt+0xf/0x20 arch/x86/entry/entry_64.S:829
- </IRQ>
-RIP: 0010:default_idle+0x28/0x300 arch/x86/kernel/process.c:698
-Code: cc cc 41 56 41 55 65 44 8b 2d 94 3f 6b 7a 41 54 55 53 0f 1f 44 00 00 e8 16 28 af fb e9 07 00 00 00 0f 00 2d 7a e1 4b 00 fb f4 <65> 44 8b 2d 70 3f 6b 7a 0f 1f 44 00 00 5b 5d 41 5c 41 5d 41 5e c3
-RSP: 0018:ffff8881da227da8 EFLAGS: 00000246 ORIG_RAX: ffffffffffffff13
-RAX: 0000000000000007 RBX: ffff8881da20b180 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: 0000000000000006 RDI: ffff8881da20b9fc
-RBP: ffffed103b441630 R08: ffff8881da20b180 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000001
-R13: 0000000000000001 R14: ffffffff87e88c40 R15: 0000000000000000
- cpuidle_idle_call kernel/sched/idle.c:154 [inline]
- do_idle+0x3e0/0x500 kernel/sched/idle.c:269
- cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:361
- start_secondary+0x2ae/0x390 arch/x86/kernel/smpboot.c:268
- secondary_startup_64+0xb6/0xc0 arch/x86/kernel/head_64.S:242
-
-The buggy address belongs to the page:
-page:ffffea0006b2db00 refcount:0 mapcount:0 mapping:0000000080660f93 index:0x0
-flags: 0x200000000000000()
-raw: 0200000000000000 0000000000000000 ffffea0006b2db08 0000000000000000
-raw: 0000000000000000 0000000000000000 00000000ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
- ffff8881acb6bf80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff8881acb6c000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
->ffff8881acb6c080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-                                                 ^
- ffff8881acb6c100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff8881acb6c180: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-==================================================================
-
-
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+MBR, Sergei
