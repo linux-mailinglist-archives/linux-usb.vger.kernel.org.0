@@ -2,138 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 155E31ED52C
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jun 2020 19:42:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57C691ED644
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jun 2020 20:39:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726315AbgFCRmr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Jun 2020 13:42:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58204 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726241AbgFCRmq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Jun 2020 13:42:46 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA3BCC08C5C5
-        for <linux-usb@vger.kernel.org>; Wed,  3 Jun 2020 10:36:20 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id y11so1040779plt.12
-        for <linux-usb@vger.kernel.org>; Wed, 03 Jun 2020 10:36:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:content-transfer-encoding:in-reply-to:references
-         :subject:from:cc:to:date:message-id:user-agent;
-        bh=ylVKXMXoSHWxEfuprMtTy+ptfQH8F9MdYoQU37bFUNc=;
-        b=X829y22aorlO5+Du+MvNj8VULQUMImlRc6xjM+s9r8nWu/Mvpz3brR7ktjNpVrS/qS
-         c3IxPLMp50QFAk4JbZGm0JkHoLEj69/UAZ4NFoAl+ElHknCqhTWatOLZLvQ8AbtbDX3z
-         8sGKtZdcUt7n3AkgwohwgKQql80SaxCE3GTvI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:content-transfer-encoding
-         :in-reply-to:references:subject:from:cc:to:date:message-id
-         :user-agent;
-        bh=ylVKXMXoSHWxEfuprMtTy+ptfQH8F9MdYoQU37bFUNc=;
-        b=L0XuFaVvJgO8QqCxnIsVy6hrCHnl5FBZyV7E+yjXHxxpb5LiQAAXaZjITcKkCc3RUP
-         pVuZxklfD39bEKx9zZ7pQCOE443msWWSxEMc3gWLr9HD5i/+sIkN8Q967s0LNh4/UeJc
-         GQ+4RALaFj+OZeqUq3F8AIF8Mv9GzoYW5bqYjcfIk9FB8cVLA4ktPUGZKpHEVnWB3Hdi
-         JypX6kvCVrOxhCdcImTriboQIABB5tKhhkVkHUdMvsc1fqHMqg1wXAdkALlnJzaisShm
-         J3dA1kenYmNyZHjedSFl+XyN2yeDgcUakb7G1Rnxk8hu7LrF9Yx2+5jl1MEMpfQRtl6M
-         q8/g==
-X-Gm-Message-State: AOAM530NbzI1qBfiJseqkW5myl6OGGjdYdrmxvGKOkZcYRIYaTNW3xx8
-        f9Wyx/TOihXDzpNNIWP2+XvgFg==
-X-Google-Smtp-Source: ABdhPJzPNTYLHirFN1uXJ/hKbGPbDvfxX70mtZPZJ+nOvN+YGavJ90efgc+PB2Z8D+2TUOVWgjt5DA==
-X-Received: by 2002:a17:902:465:: with SMTP id 92mr844330ple.227.1591205780260;
-        Wed, 03 Jun 2020 10:36:20 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id w5sm2376042pfn.22.2020.06.03.10.36.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Jun 2020 10:36:19 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1726023AbgFCSj1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Jun 2020 14:39:27 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:45803 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1725920AbgFCSj1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Jun 2020 14:39:27 -0400
+Received: (qmail 26852 invoked by uid 1000); 3 Jun 2020 14:39:26 -0400
+Date:   Wed, 3 Jun 2020 14:39:26 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     qiang.zhang@windriver.com
+Cc:     gregkh@linuxfoundation.org, kt0755@gmail.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: usbtest: fix missing kfree(dev->buf) in
+ usbtest_disconnect
+Message-ID: <20200603183926.GA26504@rowland.harvard.edu>
+References: <20200603030506.31577-1-qiang.zhang@windriver.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1585718145-29537-3-git-send-email-sanm@codeaurora.org>
-References: <1585718145-29537-1-git-send-email-sanm@codeaurora.org> <1585718145-29537-3-git-send-email-sanm@codeaurora.org>
-Subject: Re: [PATCH v7 2/4] usb: dwc3: qcom: Add interconnect support in dwc3 driver
-From:   Stephen Boyd <swboyd@chromium.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Chandana Kishori Chiluveru <cchiluve@codeaurora.org>,
-        Sandeep Maheswaram <sanm@codeaurora.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sandeep Maheswaram <sanm@codeaurora.org>
-Date:   Wed, 03 Jun 2020 10:36:18 -0700
-Message-ID: <159120577830.69627.13288547914742515702@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200603030506.31577-1-qiang.zhang@windriver.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Quoting Sandeep Maheswaram (2020-03-31 22:15:43)
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index 1dfd024..d33ae86 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -76,8 +85,13 @@ struct dwc3_qcom {
->         enum usb_dr_mode        mode;
->         bool                    is_suspended;
->         bool                    pm_suspended;
-> +       struct icc_path         *usb_ddr_icc_path;
-> +       struct icc_path         *apps_usb_icc_path;
->  };
-> =20
-> +static int dwc3_qcom_interconnect_enable(struct dwc3_qcom *qcom);
-> +static int dwc3_qcom_interconnect_disable(struct dwc3_qcom *qcom);
+On Wed, Jun 03, 2020 at 11:05:06AM +0800, qiang.zhang@windriver.com wrote:
+> From: Zqiang <qiang.zhang@windriver.com>
+> 
+> BUG: memory leak
+> unreferenced object 0xffff888055046e00 (size 256):
+>   comm "kworker/2:9", pid 2570, jiffies 4294942129 (age 1095.500s)
+>   hex dump (first 32 bytes):
+>     00 70 04 55 80 88 ff ff 18 bb 5a 81 ff ff ff ff  .p.U......Z.....
+>     f5 96 78 81 ff ff ff ff 37 de 8e 81 ff ff ff ff  ..x.....7.......
+>   backtrace:
+>     [<00000000d121dccf>] kmemleak_alloc_recursive
+> include/linux/kmemleak.h:43 [inline]
+>     [<00000000d121dccf>] slab_post_alloc_hook mm/slab.h:586 [inline]
+>     [<00000000d121dccf>] slab_alloc_node mm/slub.c:2786 [inline]
+>     [<00000000d121dccf>] slab_alloc mm/slub.c:2794 [inline]
+>     [<00000000d121dccf>] kmem_cache_alloc_trace+0x15e/0x2d0 mm/slub.c:2811
+>     [<000000005c3c3381>] kmalloc include/linux/slab.h:555 [inline]
+>     [<000000005c3c3381>] usbtest_probe+0x286/0x19d0
+> drivers/usb/misc/usbtest.c:2790
+>     [<000000001cec6910>] usb_probe_interface+0x2bd/0x870
+> drivers/usb/core/driver.c:361
+>     [<000000007806c118>] really_probe+0x48d/0x8f0 drivers/base/dd.c:551
+>     [<00000000a3308c3e>] driver_probe_device+0xfc/0x2a0 drivers/base/dd.c:724
+>     [<000000003ef66004>] __device_attach_driver+0x1b6/0x240
+> drivers/base/dd.c:831
+>     [<00000000eee53e97>] bus_for_each_drv+0x14e/0x1e0 drivers/base/bus.c:431
+>     [<00000000bb0648d0>] __device_attach+0x1f9/0x350 drivers/base/dd.c:897
+>     [<00000000838b324a>] device_initial_probe+0x1a/0x20 drivers/base/dd.c:944
+>     [<0000000030d501c1>] bus_probe_device+0x1e1/0x280 drivers/base/bus.c:491
+>     [<000000005bd7adef>] device_add+0x131d/0x1c40 drivers/base/core.c:2504
+>     [<00000000a0937814>] usb_set_configuration+0xe84/0x1ab0
+> drivers/usb/core/message.c:2030
+>     [<00000000e3934741>] generic_probe+0x6a/0xe0 drivers/usb/core/generic.c:210
+>     [<0000000098ade0f1>] usb_probe_device+0x90/0xd0
+> drivers/usb/core/driver.c:266
+>     [<000000007806c118>] really_probe+0x48d/0x8f0 drivers/base/dd.c:551
+>     [<00000000a3308c3e>] driver_probe_device+0xfc/0x2a0 drivers/base/dd.c:724
+> 
+> Fixes: fabbf2196d0d ("USB: usbtest fix coding style")
 
-Please get rid of these. We shouldn't need forward declarations.
+This patch doesn't really fix that commit.  In fact, it has nothing to 
+do with that commit.  You shouldn't just put random commit IDs into your 
+Changelog.
 
-> +
->  static inline void dwc3_qcom_setbits(void __iomem *base, u32 offset, u32=
- val)
->  {
->         u32 reg;
-> @@ -285,6 +307,101 @@ static int dwc3_qcom_resume(struct dwc3_qcom *qcom)
->         return 0;
+> Reported-by: Kyungtae Kim <kt0755@gmail.com>
+> Signed-off-by: Zqiang <qiang.zhang@windriver.com>
+> ---
+>  drivers/usb/misc/usbtest.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/misc/usbtest.c b/drivers/usb/misc/usbtest.c
+> index 98ada1a3425c..bae88893ee8e 100644
+> --- a/drivers/usb/misc/usbtest.c
+> +++ b/drivers/usb/misc/usbtest.c
+> @@ -2873,6 +2873,7 @@ static void usbtest_disconnect(struct usb_interface *intf)
+>  
+>  	usb_set_intfdata(intf, NULL);
+>  	dev_dbg(&intf->dev, "disconnect\n");
+> +	kfree(dev->buf);
+>  	kfree(dev);
 >  }
-> =20
-> +
-> +/**
-> + * dwc3_qcom_interconnect_init() - Get interconnect path handles
-> + * @qcom:                      Pointer to the concerned usb core.
-> + *
-> + */
-> +static int dwc3_qcom_interconnect_init(struct dwc3_qcom *qcom)
-> +{
-> +       struct device *dev =3D qcom->dev;
-> +       int ret;
-> +
-> +       if (!device_is_bound(&qcom->dwc3->dev))
-> +               return -EPROBE_DEFER;
+>  
+> -- 
+> 2.24.1
 
-How is this supposed to work? I see that this was added in an earlier
-revision of this patch series but there isn't any mention of why
-device_is_bound() is used here. It would be great if there was a comment
-detailing why this is necessary. It sounds like maximum_speed is
-important?
+Aside from that one issue,
 
-Furthermore, dwc3_qcom_interconnect_init() is called by
-dwc3_qcom_probe() which is the function that registers the device for
-qcom->dwc3->dev. If that device doesn't probe between the time it is
-registered by dwc3_qcom_probe() and this function is called then we'll
-fail dwc3_qcom_probe() with -EPROBE_DEFER. And that will remove the
-qcom->dwc3->dev device from the platform bus because we call
-of_platform_depopulate() on the error path of dwc3_qcom_probe().
-
-So isn't this whole thing racy and can potentially lead us to a driver
-probe loop where the wrapper (dwc3_qcom) and the core (dwc3) are probing
-and we're trying to time it just right so that driver for dwc3 binds
-before we setup interconnects? I don't know if dwc3 can communicate to
-the wrapper but that would be more of a direct way to do this. Or maybe
-the wrapper should try to read the DT property for maximum speed and
-fallback to a worst case high bandwidth value if it can't figure it out
-itself without help from dwc3 core.
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
