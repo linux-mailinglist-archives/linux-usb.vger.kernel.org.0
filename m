@@ -2,109 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55A191ED160
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jun 2020 15:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E6E1ED337
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jun 2020 17:22:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725967AbgFCNuW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Jun 2020 09:50:22 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:28327 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725882AbgFCNuW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Jun 2020 09:50:22 -0400
-X-UUID: f02de469bbed45d2965093fe4b35b54b-20200603
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=jwnn3BpiVJ43Pjm9A4aConW48lY8yM/F4kKqerAKBTc=;
-        b=LhGZIho9jN0hDjOABgQ8qTYDj9w5Iyvxpas89RSIL8YaBplgybUe38w+Wtt1TMK4LRXLjE7c7IKX9Fnqwd2Sou1EHmdf05KEUSNlIdlIgiHncoMYI/aRlVufxEX8pH0aVYaMquBjDMt+fH5zix3Ue4Q0zNXiLA5JhD8jJshexIA=;
-X-UUID: f02de469bbed45d2965093fe4b35b54b-20200603
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 201727731; Wed, 03 Jun 2020 21:50:18 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 3 Jun 2020 21:50:13 +0800
-Received: from [172.21.77.33] (172.21.77.33) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 3 Jun 2020 21:50:12 +0800
-Message-ID: <1591192216.23525.72.camel@mtkswgap22>
-Subject: Re: [PATCH] sound: usb: pcm: fix incorrect power state when playing
- sound after PM_AUTO suspend
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-To:     Takashi Iwai <tiwai@suse.de>
-CC:     <alsa-devel@alsa-project.org>,
-        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        Johan Hovold <johan@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        Hui Wang <hui.wang@canonical.com>,
-        Alexander Tsoy <alexander@tsoy.me>,
-        <linux-mediatek@lists.infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Macpaul Lin <macpaul.lin@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Szabolcs =?UTF-8?Q?Sz=C5=91ke?= <szszoke.code@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>, <stable@vger.kernel.org>
-Date:   Wed, 3 Jun 2020 21:50:16 +0800
-In-Reply-To: <s5hr1uwco4c.wl-tiwai@suse.de>
-References: <s5hpnahhbz8.wl-tiwai@suse.de>
-         <1591153515.23525.50.camel@mtkswgap22> <s5heeqwfyti.wl-tiwai@suse.de>
-         <s5hblm0fxl0.wl-tiwai@suse.de> <s5h367cfsga.wl-tiwai@suse.de>
-         <1591187964.23525.61.camel@mtkswgap22> <s5hr1uwco4c.wl-tiwai@suse.de>
-Content-Type: text/plain; charset="ISO-8859-1"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
+        id S1726177AbgFCPV4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Jun 2020 11:21:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36398 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726011AbgFCPVz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Jun 2020 11:21:55 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53250C08C5C0
+        for <linux-usb@vger.kernel.org>; Wed,  3 Jun 2020 08:21:55 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id o8so1958339pgm.7
+        for <linux-usb@vger.kernel.org>; Wed, 03 Jun 2020 08:21:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hrMJmm7uV8Kq8FT0QWve+Yk2ZlMASQ0lIxNFVi0I4n8=;
+        b=lV4LTO8Z7CECN0h8bLPSecTfQfT3g1oO1DyrfJYHMsdQ+4mpGA7mv1RKZde+dOOwWz
+         ip0/JO5ZkcDWESyffNkXU9QiEZp0MvcN54BAffNkFC/7jDB7vEruTcPzxB/SDRH3WGJM
+         bf1Kz6QfoMgzuC1uL/1/WqtuG5XyhwbEWMclB94zwrm130ioJTBTLnYP8J8tyg3G9SEh
+         X6a1IwOFXv1cGc6gqCqCpQGAYMeGhb8ym2YMZJtjeqmZwBPx9OGctphAbjm5Ztmiy9up
+         sOX2sGV8hgfrbWPggLrEtdTgdRpHpYjQwPputqh6xWDNoi8DnGd3nSvfrPCOZzOzNQWn
+         Ldmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hrMJmm7uV8Kq8FT0QWve+Yk2ZlMASQ0lIxNFVi0I4n8=;
+        b=UlY2ywJwLeunFbGbV7IRo6c3uIWIrEiX8cwxy1bnWM4kpYqW6k2KrYLT59XblN4Sy7
+         5RDykgvKlckOay2bYBRHdS1PGJ1QhUh8e9syMGu4KtU3N5ICSIEDthYecQOMLr4E88iv
+         hNHQ2o7ben8NbBM9XQMRY/ajNrfNjFiGVx2dLTyu7nkqhLhh6QVU8Qc1uBPCLOc0GSNk
+         Wdd0/SyGqJ23EXj2GURmj9U9nWWUmLc59S52WAkO+ABgW45iWI0YRjM1NFbL7/dIQs15
+         W+exItFots4UIT797ZKGxYnw4U4VP1sgKuQNzGiF20zGpQyb2d+vYiA/8aJ7FZ6Cc58G
+         zz5Q==
+X-Gm-Message-State: AOAM532HIOduVi4iOXrdwJQacae3Dj2IqWdSIUC5duGSLzwzzr5nn4C4
+        mLHEwlY5kwKM+HFT+BMsZynKG8gXMpmtlDawSj98gw==
+X-Google-Smtp-Source: ABdhPJx7lj+k4HtoDUnAWWncwUPHKPLtPH+5vE4OXVU+sm+4n/l4l4EMI32FhbCzRQUrAy9yuUVXzvZ388i3Ejt1yNo=
+X-Received: by 2002:a63:dd43:: with SMTP id g3mr29777399pgj.286.1591197714146;
+ Wed, 03 Jun 2020 08:21:54 -0700 (PDT)
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 1B7292D25D0CC9D9E834BBB7EEEB79C45CDBB9BDCEBA293A96ABF504C88603DA2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+References: <000000000000bbd09005a6fdc6cc@google.com> <0000000000000eb4b905a7277a7d@google.com>
+ <20200603061251.GA531505@kroah.com>
+In-Reply-To: <20200603061251.GA531505@kroah.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Wed, 3 Jun 2020 17:21:43 +0200
+Message-ID: <CAAeHK+ykNcRU2yyH_eH1w5Kkh9qp9W=zXS7u=6wwjhG0kJgshg@mail.gmail.com>
+Subject: Re: WARNING in snd_usbmidi_submit_urb/usb_submit_urb
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     syzbot <syzbot+5f1d24c49c1d2c427497@syzkaller.appspotmail.com>,
+        Felipe Balbi <balbi@kernel.org>, ingrassia@epigenesys.com,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gV2VkLCAyMDIwLTA2LTAzIGF0IDE0OjQ3ICswMjAwLCBUYWthc2hpIEl3YWkgd3JvdGU6DQo+
-IE9uIFdlZCwgMDMgSnVuIDIwMjAgMTQ6Mzk6MjQgKzAyMDAsDQo+IE1hY3BhdWwgTGluIHdyb3Rl
-Og0KPiA+IA0KPiA+IE9uIFdlZCwgMjAyMC0wNi0wMyBhdCAxMDo0NSArMDIwMCwgVGFrYXNoaSBJ
-d2FpIHdyb3RlOg0KPiA+ID4gT24gV2VkLCAwMyBKdW4gMjAyMCAwODo1NDo1MSArMDIwMCwNCj4g
-PiA+IFRha2FzaGkgSXdhaSB3cm90ZToNCj4gPiA+ID4gDQo+ID4gPiA+IE9uIFdlZCwgMDMgSnVu
-IDIwMjAgMDg6Mjg6MDkgKzAyMDAsDQo+ID4gPiA+IFRha2FzaGkgSXdhaSB3cm90ZToNCj4gPiA+
-ID4gPiANCj4gPiA+ID4gPiBBbmQsIHRoZSBtb3N0IHN1c3BpY2lvdXMgY2FzZSBpcyB0aGUgbGFz
-dCBvbmUsDQo+ID4gPiA+ID4gY2hpcC0+bnVtX3N1c3BlbmRlZC1pbnRmLiAgSXQgbWVhbnMgdGhh
-dCB0aGUgZGV2aWNlIGhhcyBtdWx0aXBsZQ0KPiA+ID4gPiA+IFVTQiBpbnRlcmZhY2VzIGFuZCB0
-aGV5IHdlbnQgdG8gc3VzcGVuZCwgd2hpbGUgdGhlIHJlc3VtZSBpc24ndA0KPiA+ID4gPiA+IHBl
-cmZvcm1lZCBmb3IgdGhlIGFsbCBzdXNwZW5kZWQgaW50ZXJmYWNlcyBpbiByZXR1cm4uDQo+ID4g
-PiA+IA0KPiA+ID4gPiBJZiB0aGlzIGlzIHRoZSBjYXVzZSwgYSBwYXRjaCBsaWtlIGJlbG93IG1p
-Z2h0IGhlbHAuDQo+ID4gPiA+IEl0IGdldHMvcHV0cyB0aGUgYWxsIGFzc2lnbmVkIGludGVyZmFj
-ZWQgaW5zdGVhZCBvZiBvbmx5IHRoZSBwcmltYXJ5DQo+ID4gPiA+IG9uZS4NCj4gPiA+IA0KPiA+
-ID4gLi4uIGFuZCBjb25zaWRlcmluZyBvZiB0aGUgcHJvYmxlbSBhZ2FpbiwgcmF0aGVyIHRoZSBw
-YXRjaCBiZWxvdyBtaWdodA0KPiA+ID4gYmUgdGhlIHJpZ2h0IGFuc3dlci4gIE5vdyB0aGUgZHJp
-dmVyIHRyaWVzIHRvIHJlbWVtYmVyIGF0IHdoaWNoIHN0YXRlDQo+ID4gPiBpdCBlbnRlcmVkIGlu
-dG8gdGhlIHN5c3RlbS1zdXNwZW5kLiAgVXBvbiByZXN1bWUsIGluIHJldHVybiwgd2hlbiB0aGUN
-Cj4gPiA+IHN0YXRlIHJlYWNoZXMgYmFjayB0byB0aGF0IHBvaW50LCBzZXQgdGhlIGNhcmQgc3Rh
-dGUgdG8gRDAuDQo+ID4gPiANCj4gPiA+IFRoZSBwcmV2aW91cyBwYXRjaCBjYW4gYmUgYXBwbGll
-ZCBvbiB0aGUgdG9wLCB0b28sIGFuZCBpdCBtaWdodCBiZQ0KPiA+ID4gd29ydGggdG8gYXBwbHkg
-Ym90aC4NCj4gPiA+IA0KPiA+ID4gTGV0IG1lIGtub3cgaWYgYW55IG9mIHRob3NlIGFjdHVhbGx5
-IGhlbHBzLg0KPiA+ID4gDQo+ID4gPiANCj4gPiA+IFRha2FzaGkNCj4gPiANCj4gPiBUaGFua3Mg
-Zm9yIHlvdXIgcmVzcG9uc2Ugc28gcXVpY2tseS4NCj4gPiBJJ3ZlIGp1c3QgdGVzdCB0aGlzIHBh
-dGNoIHNpbmNlIGl0IGxvb2tzIGxpa2UgZW5vdWdoIGZvciB0aGUgaXNzdWUuDQo+IA0KPiBHb29k
-IHRvIGhlYXIhDQo+IA0KPiA+IFRoaXMgcGF0Y2ggd29ya2VkIHNpbmNlIHRoZSBmbGFnIHN5c3Rl
-bV9zdXNwZW5kIHdpbGwgYmUgc2V0IGF0IHRoZSBzYW1lDQo+ID4gdGltZSB3aGVuIHBvd2VyIHN0
-YXRlIGhhcyBiZWVuIGNoYW5nZWQuIEkgaGF2ZSAyIGludGVyZmFjZSB3aXRoIHRoZSBoZWFkDQo+
-ID4gc2V0LiBCdXQgYWN0dWFsbHkgdGhlIHByb2JsZW0gaGFwcGVuZWQgd2hlbiBwcmltYXJ5IG9u
-ZSBpcyBzdXNwZW5kZWQuDQo+IA0KPiBDdXJyZW50bHkgdGhlIGF1dG9zdXNwZW5kIGlzIHNldCBv
-bmx5IHRvIHRoZSBwcmltYXJ5IGludGVyZmFjZTsgSU9XLA0KPiB0aGUgb3RoZXIgaW50ZXJmYWNl
-cyB3aWxsIG5ldmVyIGdldCBhdXRvc3VzcGVuZCwgYW5kIHRoZSBhbm90aGVyDQo+IHN1c3BlbmQt
-YWxsLWludGYgcGF0Y2ggc2hvdWxkIGltcHJvdmUgdGhhdCBzaXR1YXRpb24uICBCdXQgaXQgd29u
-J3QNCj4gZml4IHlvdXIgYWN0dWFsIGJ1Zywgb2J2aW91c2x5IDopDQo+IA0KPiA+IFNvIEkgZGlk
-bid0IHRlc3QgdGhlIGVhcmxpZXIgcGF0Y2ggInN1c3BlbmQgYWxsIGludGVyZmFjZSBpbnN0ZWFk
-IG9mDQo+ID4gb25seSB0aGUgcHJpbWFyeSBvbmUuIg0KPiANCj4gQ291bGQgeW91IHRyeSBpdCBv
-bmUgb24gdG9wIG9mIHRoZSBsYXN0IHBhdGNoPyAgQXQgbGVhc3QgSSdkIGxpa2UgdG8NCj4gc2Vl
-IHdoZXRoZXIgaXQgY2F1c2VzIGFueSByZWdyZXNzaW9uLg0KDQpJJ3ZlIHRyaWVkIGJvdGggb2Yg
-dGhlc2UgMiBwYXRjaGVzIHRvZ2V0aGVyLCBhbmQgaXQgbG9va3Mgb2theS4NCg0KPiA+IFdpbGwg
-eW91IHJlc2VuZCB0aGlzIHBhdGNoIG9mZmljaWFsbHkgbGF0ZXI/IEkgdGhpbmsgdGhpcyBzb2x1
-dGlvbiBpcw0KPiA+IHJlcXVpcmVkIHRvIHNlbmQgdG8gc3RhYmxlLCB0b28uIEl0J3MgYmV0dGVy
-IHRvIGhhdmUgaXQgZm9yIG90aGVyIHN0YWJsZQ0KPiA+IGtlcm5lbCB2ZXJzaW9ucyBpbmNsdWRl
-IGFuZHJvaWQncy4NCj4gDQo+IFllcywgdGhhdCdzIGEgZ2VuZXJhbCBidWcgYW5kIHdvcnRoIHRv
-IGJlIG1lcmdlZCBxdWlja2x5Lg0KPiBJJ20gZ29pbmcgdG8gc3VibWl0IGEgcHJvcGVyIHBhdGNo
-IHNvb24gbGF0ZXIuDQo+IA0KPiANCj4gdGhhbmtzLA0KPiANCj4gVGFrYXNoaQ0KPiANCg0KVGhh
-bmtzIQ0KTWFjcGF1bCBMaW4NCg==
+On Wed, Jun 3, 2020 at 8:12 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Tue, Jun 02, 2020 at 10:41:16PM -0700, syzbot wrote:
+> > syzbot has found a reproducer for the following crash on:
+> >
+> > HEAD commit:    1ee08de1 Merge tag 'for-5.8/io_uring-2020-06-01' of git://..
+> > git tree:       upstream
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=15f9e516100000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=b46ebd806238a886
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=5f1d24c49c1d2c427497
+> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > userspace arch: i386
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1667dcca100000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13f9e516100000
+> >
+> > The bug was bisected to:
+> >
+> > commit f2c2e717642c66f7fe7e5dd69b2e8ff5849f4d10
+> > Author: Andrey Konovalov <andreyknvl@google.com>
+> > Date:   Mon Feb 24 16:13:03 2020 +0000
+> >
+> >     usb: gadget: add raw-gadget interface
+>
+> I thought this "bisect to the tool that finds bugs" issue was fixed :)
 
+The change was merged after this message was sent, and it also takes
+some time to be deployed.
