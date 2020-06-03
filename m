@@ -2,187 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5BB11ECC19
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jun 2020 11:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D6A01ECC21
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jun 2020 11:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726236AbgFCJAz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Jun 2020 05:00:55 -0400
-Received: from mail-eopbgr40076.outbound.protection.outlook.com ([40.107.4.76]:46362
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
+        id S1726123AbgFCJCc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Jun 2020 05:02:32 -0400
+Received: from mail-eopbgr80082.outbound.protection.outlook.com ([40.107.8.82]:56396
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725355AbgFCJAy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 3 Jun 2020 05:00:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=topicbv.onmicrosoft.com; s=selector2-topicbv-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bS1zS00LajhhOfn3hjKzJ2y54vhDSIN8HvXR5Hlwx5E=;
- b=avDFj9b0vyVWfTH8FCzE97pMB2yMYQNR8N54PFbQxTRZXu9EXhdThFdodlLo9JOmIS/qiwzXla3Tjfow5dz9LNBQC+VZtzpkNDmt7AyClWWGOx5IOyhVZjf4nL0JdnF1z7WYHtVJBGaJgvs4Jay5I4c5fJ8oKELR45uY56XjzP8=
-Received: from AM6P191CA0066.EURP191.PROD.OUTLOOK.COM (2603:10a6:209:7f::43)
- by VI1PR0401MB2463.eurprd04.prod.outlook.com (2603:10a6:800:4e::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3045.17; Wed, 3 Jun
- 2020 09:00:47 +0000
-Received: from HE1EUR01FT017.eop-EUR01.prod.protection.outlook.com
- (2603:10a6:209:7f:cafe::70) by AM6P191CA0066.outlook.office365.com
- (2603:10a6:209:7f::43) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3066.18 via Frontend
- Transport; Wed, 3 Jun 2020 09:00:47 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 40.68.112.65)
- smtp.mailfrom=topicproducts.com; vger.kernel.org; dkim=none (message not
- signed) header.d=none;vger.kernel.org; dmarc=none action=none
- header.from=topic.nl;
-Received-SPF: Pass (protection.outlook.com: domain of topicproducts.com
- designates 40.68.112.65 as permitted sender) receiver=protection.outlook.com;
- client-ip=40.68.112.65; helo=westeu12-emailsignatures-cloud.codetwo.com;
-Received: from westeu12-emailsignatures-cloud.codetwo.com (40.68.112.65) by
- HE1EUR01FT017.mail.protection.outlook.com (10.152.0.166) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3045.21 via Frontend Transport; Wed, 3 Jun 2020 09:00:47 +0000
-Received: from EUR02-VE1-obe.outbound.protection.outlook.com (104.47.6.54) by westeu12-emailsignatures-cloud.codetwo.com with CodeTwo SMTP Server (TLS12) via SMTP; Wed, 03 Jun 2020 09:00:45 +0000
+        id S1725881AbgFCJCb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 3 Jun 2020 05:02:31 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DYvfIE9iSdcZ8H4G8aCoEH9n708kIR3Eqg+RgJcxs+mvbV3nyX9DAEoUJh2s8eMuaCzGS0+YLWG1SVY8yBcJMB5TPlSWYl8lXhlsG+MO8Mm9a0zJQVGtBsX95MSueKc2xON0Cx7UEsxRs0HWsWZ6foJY0QU6AmRXXdtukxjbQV+sjFMTHd034A1iFU3m6I2Ninu9hXysh1KmRIVqqAimqTjYkHgoMARwha/Lj26nsQ3Cf7ZwEljxiTkaWKrvzK4S7SnNbLbewCwFVPnCtViZZevgJ5hMoximJ1VFoXqUWFLNgVNFdzKc3LygSr4+S+VEZzhPveD/8YYRAXLOgviTDA==
+ b=aAyh8HaC3jvgLFIuGVC6iMfRpVVes2YolQmR5+gkDw98RdgE9Tfek1tBRGMKXSxJOHeTKrLWx/O/C6FwrJNaBNtvhb/9/cb8RRYuDl/75zPurrlv2CftWemcF8cYYV8NMJLAFpN7rYNjhC95RfGCOIV5k7JNQDGJwOXBUINVdIJzeaWY5dh92FwgQGvmX8fFjWkWfW4p/aDZ/ARlKNHbNHmTe5crcbukDrAn1yXRbIIcnWTlFgk7dHJ0oTeTpl5Ep9YJvoCEPfVTHz3kf6CEuNnA5Tv0W7lhUiDfnMkzqG+wl+ZKSJU/OYCWLUmuB05sjBYLkzj9JCkjmco/hgBHIg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1Y1Oa5uUKN5gLX8DCuTeZu5z1P0xVPGA3V7vWQCZNok=;
- b=Lunnpz3F2Q9VIHos/e2mLQVHwiVRkzbgfBHmGKI58cYkcVvzt/sdqx7eRfl58qZhWOBlO0ed7vwF7kAcV6S6D+fdg0wAP+DidBkoqancYb/Ryi8Io4EhVwAurNAhKLHcxxqIqWl8uJAxznAGmz4KeyEJ/R5d4MgXEzaWNC1dSdRanVSTaZjdvIN9GEvU1FmNxtiyY+hrNcu4ijWpDvBvvFzT3GtIuebN1QFod5skAND2MkihBvUXlRCN9FjujwJsFd5uSQaxxAnyf1Z0HhDEdbsdyDOFkbyqd1bk7eckmcU6Anqo/qZKhIqbM2UWlt8ceUjFW+FbBtRQv9HK1hnjJg==
+ bh=Tm/4kULV6UzmAaPRCLYRuyNmd2+hAP0kVvNw/OO2uqU=;
+ b=d1PLHRdaTG0VeWS006pyLe7fgTvE4m6SNoEdCSc2TY/tqC5XHVEtAgzr8vu31laA3dvK70O30qR0pdVpcxdbqM+oC+t6cOSZUxF/e5rnvHbkavihiwYlwqqqD2dCzLy3hJWrhblB6qg3j9dfNQvUH4aakXLJf9TogfKXLkc+4vkXH7o1KFdi6zFifYoNYCTTv727OCbg1riNQSyXaEgKL5y9TrVJ+sU49dzVv3d5vaq9wIdNmvcvAxQNMSQZh6GNWPXpjp+eKzjKIk0R7+IjndykqhsbF2V0C83KS5aUnXwXOECQqGo+dG8srC0ju8NadLSMoPiZoAFA6KB0ZPay0w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=topicproducts.com; dmarc=pass action=none header.from=topic.nl;
- dkim=pass header.d=topic.nl; arc=none
-Authentication-Results-Original: vger.kernel.org; dkim=none (message not
- signed) header.d=none;vger.kernel.org; dmarc=none action=none
- header.from=topic.nl;
-Received: from DB8PR04MB6523.eurprd04.prod.outlook.com (2603:10a6:10:10f::26)
- by DB8PR04MB6969.eurprd04.prod.outlook.com (2603:10a6:10:11b::18) with
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Tm/4kULV6UzmAaPRCLYRuyNmd2+hAP0kVvNw/OO2uqU=;
+ b=ZXKiD0bt9P7Pw2G7En+jHD1kV67DYsfggHHwIMYR8/J0WiAtQJT1/PuhutnAs5x6R0vfp38mOXno5zYN14arZRWfMRdxoYxiLzjzg2FFZ9U15E6KMlgKxSnskpkLl9EluWpT83fyMhcWK0DfhRbmrBtP7243Gd7UDEDZWppWquM=
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
+ by AM7PR04MB6934.eurprd04.prod.outlook.com (2603:10a6:20b:10a::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3045.21; Wed, 3 Jun
- 2020 09:00:42 +0000
-Received: from DB8PR04MB6523.eurprd04.prod.outlook.com
- ([fe80::6cf6:7323:7395:eec9]) by DB8PR04MB6523.eurprd04.prod.outlook.com
- ([fe80::6cf6:7323:7395:eec9%7]) with mapi id 15.20.3045.024; Wed, 3 Jun 2020
- 09:00:42 +0000
-Subject: Re: [PATCH v2] usb/phy-generic: Add support for OTG VBUS supply
- control
-To:     Rob Herring <robh@kernel.org>
-CC:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
-        balbi@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20200529060045.25556-1-mike.looijmans@topic.nl>
- <20200529210816.GA2952126@bogus>
- <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.4a88d165-fef2-401c-bac5-b9c66c715faa@emailsignatures365.codetwo.com>
- <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.0d2bd5fa-15cc-4b27-b94e-83614f9e5b38.3ff37988-9502-4a43-9f09-0e852ed735ab@emailsignatures365.codetwo.com>
-From:   Mike Looijmans <mike.looijmans@topic.nl>
-Organization: Topic
-Message-ID: <18d1793e-e214-f83b-a582-8174132375b7@topic.nl>
-Date:   Wed, 3 Jun 2020 11:00:41 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
-In-Reply-To: <20200529210816.GA2952126@bogus>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: quoted-printable
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3066.18; Wed, 3 Jun
+ 2020 09:02:27 +0000
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1101:adaa:ee89:af2a]) by AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1101:adaa:ee89:af2a%3]) with mapi id 15.20.3066.018; Wed, 3 Jun 2020
+ 09:02:27 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Fabio Estevam <festevam@gmail.com>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        Jun Li <jun.li@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] Documentation: ABI: usb: chipidea: Update Li Jun's e-mail
+Thread-Topic: [PATCH] Documentation: ABI: usb: chipidea: Update Li Jun's
+ e-mail
+Thread-Index: AQHWNaXkLnwtl02bc0KsmiYR+a8dnKjGoDoA
+Date:   Wed, 3 Jun 2020 09:02:27 +0000
+Message-ID: <20200603090252.GA11199@b29397-desktop>
+References: <20200529104234.25136-1-festevam@gmail.com>
+In-Reply-To: <20200529104234.25136-1-festevam@gmail.com>
+Accept-Language: en-US
 Content-Language: en-US
-X-ClientProxiedBy: AM0PR02CA0012.eurprd02.prod.outlook.com
- (2603:10a6:208:3e::25) To DB8PR04MB6523.eurprd04.prod.outlook.com
- (2603:10a6:10:10f::26)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: c6f10a35-81fb-4dc5-fef8-08d8079cd706
+x-ms-traffictypediagnostic: AM7PR04MB6934:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM7PR04MB693421DCE8CF7FA30680A4568B880@AM7PR04MB6934.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-forefront-prvs: 04238CD941
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: UU2kEQGGAAFhgLFgBfDShS/Y+8FyLhdjMHVxiEURWKocq4opBRSb44DxP+gC8JpfqgDgEugxhUg7/uPnXj2rhX/RZw5hPmqEm6q9n0GcomSKOKpD/rNxMKKD60yHMtjpoDfNjepqs533dUK51EnPhLMrlHkSLHtflKm5QnrVPnNHhI/ZlntGhWMrgRDnaBt7GTa11tqmWJ2wgH4iinSkfhjCTB+KprX8EeNQ4anY124GPigvysnJ/nTRkZWpqDT6RYac1v9DKh3bLGSuOg/Y+U6mcsAGq891SVlSbJI2siVs34tZiRqGRkCpzL4Vv2Df
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(7916004)(4636009)(136003)(366004)(396003)(346002)(39860400002)(376002)(71200400001)(86362001)(186003)(33656002)(6916009)(5660300002)(6506007)(33716001)(6486002)(26005)(4326008)(53546011)(66446008)(2906002)(76116006)(91956017)(64756008)(83380400001)(8676002)(66556008)(54906003)(8936002)(1076003)(44832011)(478600001)(316002)(9686003)(6512007)(66476007)(66946007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: qy4910rvqK+p2I8ysRbjvmhln7y32omFLaC0SZnTHk9ZnBGtm9mXL58jfXOZIv7sJSnMY985YxExLZcUH4DcTstg5IAXRmhCz7s0ZKEKnUPFuhLFkmnsfpNYv/wdmcLv5TfUjqIVDTvxwg4Y16yphNF9jgRRHecvYRvZzsj1rrbE9yBbikxmVLy+TAaGHMl8aQX0q27W0g5qcArIYC1qmhaPkxpz1RENIiyXs0COYtkoO04IDwVXx97R2ZjCBZpQTOOe+ZXm+jtsSWjOwJ1jTxwUOtOzgHKyoxyuJDhC1pm4zHLbuAiC/kGefFdYVpysqd2u6qwq90A2PeDDr6EbPXaygYHPZD31EvMyMA1KM83zEIi2PQmCKGY5ounAsNLyjGmNPQi94fUsEyXgT00ttNAjEIB/feu2Ef1vhqXljV7v/7Fp/4fuWKZDcUzFK8cZ4e2JvDGWj2itjPKEKxqu8v4sa8wq26g5cszC8sxbMpg=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <64730699A4D8614CA6877B9A984880E2@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [192.168.1.130] (83.128.90.119) by AM0PR02CA0012.eurprd02.prod.outlook.com (2603:10a6:208:3e::25) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3066.18 via Frontend Transport; Wed, 3 Jun 2020 09:00:41 +0000
-X-Originating-IP: [83.128.90.119]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 540cd90b-26aa-472f-6f8a-08d8079c9b2e
-X-MS-TrafficTypeDiagnostic: DB8PR04MB6969:|VI1PR0401MB2463:
-X-Microsoft-Antispam-PRVS: <VI1PR0401MB2463C45C15253DA026FEB2CF96880@VI1PR0401MB2463.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4714;OLM:4714;
-X-Forefront-PRVS: 04238CD941
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: tOebhZ+AJ/ElScPQqR2TlUaCPjvvzTcdBet7Xznll+Datk6H2ZlqgQdK6LvVcAxp6EchpdqSKMK2Zz/123H0sYhYUQZP/SLLIsD4ji5rmuKKZ14Tzqpk8ilB2mqbrz7NDwGI3BW6OilAbMTImv7hnNu04OCIQEm0Mph25luiJKnVBr7Pm/Zn0KxGNVycTbHzbmwSQluYFZvyUitRhF1qTd/gKDpglbHlrCYib8QJceHo458wulyzPAB7eRSP0IBa6mLOcf5T9U65Q7jbjgiKBAP1RotZSp4ibYVVfuYvfamkjE+UhVorpin5BTOw+y1kRFSmcUE1/4VCHWBsF1KqFf1R3cIyiUQD0IqopwUCANzKC+MjObRK0zyRPNjBD/S58uKYB9WaT1NxuCJ3lt5O7Q==
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB6523.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(376002)(366004)(346002)(136003)(396003)(39840400004)(4326008)(2906002)(52116002)(6486002)(36916002)(508600001)(16576012)(31696002)(316002)(6916009)(31686004)(8676002)(66556008)(42882007)(53546011)(8936002)(83380400001)(26005)(16526019)(186003)(83170400001)(44832011)(2616005)(956004)(36756003)(66476007)(5660300002)(66946007)(41533002)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: dW4c+aFBNWnPkwXAF0C+3rfL/fcegYXgf1RU5AZeiJ4urQL2NNspsRgCsaragfqvGuggA3AgZBK74pJTmnp3CkjZPFGch/d+2WmXu2AQw/nei2mD+/cm8n89loHnldEY48ahR2F2PpnMhQZwuWLLywtofiqC4J/eglckIODaGFElwdWaPVdrgipUfMMCNACJLEIYuINNu/E8i8oxsrIUykkTGScb2MQQHtfQJtWMrh5i8HQ8sXB5sOpt/lL+Lt0OhSEvNs3sdlYKh8AbfW9zaymHtTAGFGg/X2UeTg4Lz5V9qhzglVLYt6i6OJVDqkSOHqczQ37C95nhuVv/U9R3+dvRcS2kCwavICwQ5P8B/YR8ZT6mtOIVTT4NXZpIbaoOwgktuqVpLIFEQGd4U+ToBOU1OOIQnZdye5mWKukBLNJwecUaOq6/fNV8cu9Oh6nEhIChafB7YVtSD6Eh6b8P+a2XS0gwnV/RsTmYnVhW18Y=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB6969
-X-CodeTwo-MessageID: e31ce2f2-5204-4588-9e47-fe8213f2f3e2.20200603090045@westeu12-emailsignatures-cloud.codetwo.com
-X-CodeTwoProcessed: true
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: HE1EUR01FT017.eop-EUR01.prod.protection.outlook.com
-X-Forefront-Antispam-Report: CIP:40.68.112.65;CTRY:NL;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:westeu12-emailsignatures-cloud.codetwo.com;PTR:westeu12-emailsignatures-cloud.codetwo.com;CAT:NONE;SFTY:;SFS:(376002)(346002)(396003)(39840400004)(136003)(46966005)(47076004)(31696002)(16576012)(316002)(15974865002)(44832011)(16526019)(31686004)(7636003)(26005)(53546011)(83170400001)(186003)(36756003)(36916002)(6486002)(7596003)(82310400002)(508600001)(70586007)(336012)(70206006)(2906002)(4326008)(2616005)(356005)(5660300002)(8936002)(6916009)(83380400001)(956004)(8676002)(42882007)(41533002)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Office365-Filtering-Correlation-Id-Prvs: 728dd7c4-d6fc-46fc-34da-08d8079c9816
-X-Forefront-PRVS: 04238CD941
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 71XO8r6RtPikIEXs6YnKlE/P5BaQpede7uaBGUfXNgvEnWXTmd9++p2fO6ffJ0QFbdUzwDjvcV78JGLXcIWRH/8UveZFanSWdyaCfqr6BJVHjEGvblcPf2i1m6ea1b8Wkl1NJGYcHJnJHtsjqHoFr6AY8DcdQ5c7epeGL5iL3b1wTlBbuWHSigoRGm1CcN+iWodWBQJN0UOZC2G1OOOf/T63exbhpxYNt2gvyA+lzjxetmptbnTPJnBgIjLdcggYQiGJ38guA3KFgN6Cb/ZGIBozBlDIkc9ZKKtBY7udviAZYoc2DfreCfPq1m18mpkDzNpzTopNPH7t5gU6Gj8QpT6BAh+PR7v6KCBQIYrLFqfx3jbw5/uwy5y5hqYW0qgzWd+j8/DxuJAeAUiDjgZvIJzHd8p4BVAMZ7xADjcvOI0jOF+lYZ8/g3korXhZn6++0bPzdh7JUPK8k6JcjMLsw7xMo7awYcUHQP9TjzUVkFQThx6F0iP3buTBx4+zaWVDlTGkIV6l5zszqBTPUFWlKUBrccM42015E+XOfhCGleQ=
-X-OriginatorOrg: topic.nl
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2020 09:00:47.0700
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c6f10a35-81fb-4dc5-fef8-08d8079cd706
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jun 2020 09:02:27.5752
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 540cd90b-26aa-472f-6f8a-08d8079c9b2e
-X-MS-Exchange-CrossTenant-Id: 449607a5-3517-482d-8d16-41dd868cbda3
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=449607a5-3517-482d-8d16-41dd868cbda3;Ip=[40.68.112.65];Helo=[westeu12-emailsignatures-cloud.codetwo.com]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0401MB2463
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: pFe6CdWjGR/oHkLsHpNH+ARDOOQpC3Dw+qDMT4rIpQAZsWfVmqbgdK51XG/xRUtZfOncJ+xruko/Ss4VJYXGyw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6934
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 20-05-29 07:42:34, Fabio Estevam wrote:
+> The freescale.com e-mail domain is no longer active for quite some
+> time. Switch Li Jun's e-mail address to the NXP domain.
+>=20
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
-Met vriendelijke groet / kind regards,=0A=
-=0A=
-Mike Looijmans=0A=
-System Expert=0A=
-=0A=
-=0A=
-TOPIC Embedded Products B.V.=0A=
-Materiaalweg 4, 5681 RJ Best=0A=
-The Netherlands=0A=
-=0A=
-T: +31 (0) 499 33 69 69=0A=
-E: mike.looijmans@topicproducts.com=0A=
-W: www.topicproducts.com=0A=
-=0A=
-Please consider the environment before printing this e-mail=0A=
-On 29-05-2020 23:08, Rob Herring wrote:
-> On Fri, May 29, 2020 at 08:00:45AM +0200, Mike Looijmans wrote:
->> This enables support for VBUS on boards where the power is supplied
->> by a regulator. The regulator is enabled when the USB port enters
->> HOST mode.
->>
->> Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
->> ---
->> v2: Added missing "return 0;" in set_vbus method
->>
->>   .../devicetree/bindings/usb/usb-nop-xceiv.txt |  3 ++
->>   drivers/usb/phy/phy-generic.c                 | 46 ++++++++++++++++++-
->>   drivers/usb/phy/phy-generic.h                 |  2 +
->>   3 files changed, 50 insertions(+), 1 deletion(-)
->>
->> diff --git a/Documentation/devicetree/bindings/usb/usb-nop-xceiv.txt b/D=
-ocumentation/devicetree/bindings/usb/usb-nop-xceiv.txt
->> index 4dc6a8ee3071..775a19fdb613 100644
->> --- a/Documentation/devicetree/bindings/usb/usb-nop-xceiv.txt
->> +++ b/Documentation/devicetree/bindings/usb/usb-nop-xceiv.txt
->> @@ -16,6 +16,9 @@ Optional properties:
->>  =20
->>   - vcc-supply: phandle to the regulator that provides power to the PHY.
->>  =20
->> +- vbus-supply: phandle to the regulator that provides the VBUS power fo=
-r when
->> +  the device is in HOST mode.
->> +
-> I'm going to say no to expanding this binding...
->
-> First, there sure are a lot of controls on a NOP tranceiver.
->
-> Second, unless Vbus is supplying the PHY, then this belongs in a
-> connector node for which this is already supported.
+Applied, thanks.
 
-Clear, I moved the implementation to the DWC3 driver and will submit a=20
-new patch for that.
-
-
->
->>   - reset-gpios: Should specify the GPIO for reset.
->>  =20
->>   - vbus-detect-gpio: should specify the GPIO detecting a VBus insertion
-
+Peter
+> ---
+>  Documentation/ABI/testing/sysfs-platform-chipidea-usb-otg | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/Documentation/ABI/testing/sysfs-platform-chipidea-usb-otg b/=
+Documentation/ABI/testing/sysfs-platform-chipidea-usb-otg
+> index 151c59578db4..f58cfb06b160 100644
+> --- a/Documentation/ABI/testing/sysfs-platform-chipidea-usb-otg
+> +++ b/Documentation/ABI/testing/sysfs-platform-chipidea-usb-otg
+> @@ -1,6 +1,6 @@
+>  What:		/sys/bus/platform/devices/ci_hdrc.0/inputs/a_bus_req
+>  Date:		Feb 2014
+> -Contact:	Li Jun <b47624@freescale.com>
+> +Contact:	Li Jun <jun.li@nxp.com>
+>  Description:
+>  		Can be set and read.
+>  		Set a_bus_req(A-device bus request) input to be 1 if
+> @@ -17,7 +17,7 @@ Description:
+> =20
+>  What:		/sys/bus/platform/devices/ci_hdrc.0/inputs/a_bus_drop
+>  Date:		Feb 2014
+> -Contact:	Li Jun <b47624@freescale.com>
+> +Contact:	Li Jun <jun.li@nxp.com>
+>  Description:
+>  		Can be set and read
+>  		The a_bus_drop(A-device bus drop) input is 1 when the
+> @@ -32,7 +32,7 @@ Description:
+> =20
+>  What:		/sys/bus/platform/devices/ci_hdrc.0/inputs/b_bus_req
+>  Date:		Feb 2014
+> -Contact:	Li Jun <b47624@freescale.com>
+> +Contact:	Li Jun <jun.li@nxp.com>
+>  Description:
+>  		Can be set and read.
+>  		The b_bus_req(B-device bus request) input is 1 during the time
+> @@ -47,7 +47,7 @@ Description:
+> =20
+>  What:		/sys/bus/platform/devices/ci_hdrc.0/inputs/a_clr_err
+>  Date:		Feb 2014
+> -Contact:	Li Jun <b47624@freescale.com>
+> +Contact:	Li Jun <jun.li@nxp.com>
+>  Description:
+>  		Only can be set.
+>  		The a_clr_err(A-device Vbus error clear) input is used to clear
+> --=20
 
 --=20
-Mike Looijmans
 
+Thanks,
+Peter Chen=
