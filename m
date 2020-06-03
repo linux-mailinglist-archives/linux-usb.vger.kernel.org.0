@@ -2,197 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7A091ECF7A
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jun 2020 14:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BEE71ECF83
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jun 2020 14:11:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726144AbgFCMJY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Jun 2020 08:09:24 -0400
-Received: from jax4mhob24.registeredsite.com ([64.69.218.112]:40472 "EHLO
-        jax4mhob24.registeredsite.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725854AbgFCMJX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Jun 2020 08:09:23 -0400
-X-Greylist: delayed 11307 seconds by postgrey-1.27 at vger.kernel.org; Wed, 03 Jun 2020 08:09:22 EDT
-Received: from mailpod.hostingplatform.com ([10.30.71.206])
-        by jax4mhob24.registeredsite.com (8.14.4/8.14.4) with ESMTP id 053C9K6Q015307
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL)
-        for <linux-usb@vger.kernel.org>; Wed, 3 Jun 2020 08:09:20 -0400
-Received: (qmail 14591 invoked by uid 0); 3 Jun 2020 12:09:20 -0000
-X-TCPREMOTEIP: 83.128.90.119
-X-Authenticated-UID: mike@milosoftware.com
-Received: from unknown (HELO phenom.domain?not?set.invalid) (mike@milosoftware.com@83.128.90.119)
-  by 0 with ESMTPA; 3 Jun 2020 12:09:19 -0000
-From:   Mike Looijmans <mike.looijmans@topic.nl>
-To:     linux-usb@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org, balbi@kernel.org,
-        Mike Looijmans <mike.looijmans@topic.nl>
-Subject: [PATCH v2] usb: dwc3: Add support for VBUS power control
-Date:   Wed,  3 Jun 2020 14:09:15 +0200
-Message-Id: <20200603120915.14001-1-mike.looijmans@topic.nl>
-X-Mailer: git-send-email 2.17.1
+        id S1725971AbgFCMLN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Jun 2020 08:11:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34874 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725920AbgFCMLM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Jun 2020 08:11:12 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7857C08C5C3
+        for <linux-usb@vger.kernel.org>; Wed,  3 Jun 2020 05:11:11 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id s1so2436784ljo.0
+        for <linux-usb@vger.kernel.org>; Wed, 03 Jun 2020 05:11:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YfIwoVqhINbM8JX02JQVBFl5UwDmm1K0R0OAHvfku4E=;
+        b=aWqv3ou5Qov3U3msHumGanAGhQDq5piVnxaH/XWJmipKJsOeWVNQIztptBeNCtMWG6
+         99b3l7r9pG46qUjWpv+WoQs+yVkeYL+OHYfJzjhbwlgDHanfANKMk5J6k2xrDF0jApcs
+         ITr+QKkVRhH2NduIS0rGnMoa1juq/PSUMUe+/Vobm+ot+3yv1cd8yFBR8RpnGpZzbD/i
+         KGvscj/DzzzJcfsZ/B2RW2XxwxgRgDyru1kGkFLZGIOB4klILxvqMmjRjUexshZjeou7
+         IWTl2Oef6qF/8FD3/+nq6Ege6qhULB4qLz6/BgG3qQflgRe1nkZ+ZiOB0fEUutqZ2TNb
+         CrWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YfIwoVqhINbM8JX02JQVBFl5UwDmm1K0R0OAHvfku4E=;
+        b=jAC2LZlRAb01X9k1kP6oTp7Z460ISypZkcY/jgJlNCri+570fud2iGNo7Ssm6UgGCZ
+         KuwQROdazj54dC3HgdZymzIiANiqbXAJeKjqoA8YTHR+bSp+PRf7fjtWWWLQhYaQ013p
+         Ei2S2903BQu9KQ4DJmJaJ+6fJveftaXjGgfo+NYTaqIOqRgz90ljU5cKcg2LFX6pFWVi
+         cHHqnkfXgYnNCFIWkTN10FqtN0Z8drmYrMAWmkCN3+RIJ2tSmAorMg/eiFVN1RW72mAZ
+         mxmfSQmxf5bE93cgz3N1j+SCE4Wup5QYs6xKwr1GxpuOOyRmWUmdbbXWqHTbaxA+jA5C
+         hS+A==
+X-Gm-Message-State: AOAM530sFi/7SgrRbN6xEmoNAr+75FiVE1JcUcJBWDcasxzVuAEmzzAz
+        gyqV3S4L/PUmQzuBKpzC1z/67pz1Hs8ahUgn8VncZw==
+X-Google-Smtp-Source: ABdhPJwGPqax4Ku+Y+HnI5jIvzA/eJkmp5Pc0XM9c3bmnH0a+2++YRcBgL324sT+NutIXiJsU51+xCLtJmEUSqS/sw4=
+X-Received: by 2002:a05:651c:112e:: with SMTP id e14mr1798631ljo.338.1591186270117;
+ Wed, 03 Jun 2020 05:11:10 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200513145935.22493-1-benjamin.gaignard@st.com> <20200513145935.22493-15-benjamin.gaignard@st.com>
+In-Reply-To: <20200513145935.22493-15-benjamin.gaignard@st.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 3 Jun 2020 14:10:59 +0200
+Message-ID: <CACRpkdYu2As27M60ogUoLfX1z=XZSCSx5qTLwm5ADdf9Jy7HGQ@mail.gmail.com>
+Subject: Re: [PATCH 14/15] dt-bindings: pinctrl: stm32: Add missing interrupts property
+To:     Benjamin Gaignard <benjamin.gaignard@st.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre TORGUE <alexandre.torgue@st.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-usb <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Support VBUS power control using regulator framework. Enables the regulator
-while the port is in host mode.
+On Wed, May 13, 2020 at 5:00 PM Benjamin Gaignard
+<benjamin.gaignard@st.com> wrote:
 
-Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
----
-v2: Add missing devm_regulator_get call which got lost during rebase
+> Driver use interrupt-parent field so update the bindings to allow it.
+>
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
 
- .../devicetree/bindings/usb/dwc3.txt          |  1 +
- drivers/usb/dwc3/core.c                       | 34 ++++++++++++++-----
- drivers/usb/dwc3/core.h                       |  4 +++
- drivers/usb/dwc3/drd.c                        |  6 ++--
- 4 files changed, 33 insertions(+), 12 deletions(-)
+Patch applied.
 
-diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt b/Documentation/devicetree/bindings/usb/dwc3.txt
-index 9946ff9ba735..56bc3f238e2d 100644
---- a/Documentation/devicetree/bindings/usb/dwc3.txt
-+++ b/Documentation/devicetree/bindings/usb/dwc3.txt
-@@ -37,6 +37,7 @@ Optional properties:
-  - phys: from the *Generic PHY* bindings
-  - phy-names: from the *Generic PHY* bindings; supported names are "usb2-phy"
- 	or "usb3-phy".
-+ - vbus-supply: Regulator handle that provides the VBUS power.
-  - resets: set of phandle and reset specifier pairs
-  - snps,usb2-lpm-disable: indicate if we don't want to enable USB2 HW LPM
-  - snps,usb3_lpm_capable: determines if platform is USB3 LPM capable
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index edc17155cb2b..ad341a182999 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -25,6 +25,7 @@
- #include <linux/of.h>
- #include <linux/acpi.h>
- #include <linux/pinctrl/consumer.h>
-+#include <linux/regulator/consumer.h>
- #include <linux/reset.h>
- 
- #include <linux/usb/ch9.h>
-@@ -112,6 +113,23 @@ void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode)
- 	dwc->current_dr_role = mode;
- }
- 
-+void dwc3_set_vbus(struct dwc3 *dwc, bool enable)
-+{
-+	int ret;
-+
-+	if (enable != dwc->vbus_reg_enabled) {
-+		if (enable)
-+			ret = regulator_enable(dwc->vbus_reg);
-+		else
-+			ret = regulator_disable(dwc->vbus_reg);
-+		if (!ret)
-+			dwc->vbus_reg_enabled = enable;
-+	}
-+
-+	if (dwc->usb2_phy)
-+		otg_set_vbus(dwc->usb2_phy->otg, enable);
-+}
-+
- static void __dwc3_set_mode(struct work_struct *work)
- {
- 	struct dwc3 *dwc = work_to_dwc(work);
-@@ -164,8 +182,7 @@ static void __dwc3_set_mode(struct work_struct *work)
- 		if (ret) {
- 			dev_err(dwc->dev, "failed to initialize host\n");
- 		} else {
--			if (dwc->usb2_phy)
--				otg_set_vbus(dwc->usb2_phy->otg, true);
-+			dwc3_set_vbus(dwc, true);
- 			phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_HOST);
- 			phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_HOST);
- 		}
-@@ -173,8 +190,7 @@ static void __dwc3_set_mode(struct work_struct *work)
- 	case DWC3_GCTL_PRTCAP_DEVICE:
- 		dwc3_event_buffers_setup(dwc);
- 
--		if (dwc->usb2_phy)
--			otg_set_vbus(dwc->usb2_phy->otg, false);
-+		dwc3_set_vbus(dwc, false);
- 		phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_DEVICE);
- 		phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_DEVICE);
- 
-@@ -1183,8 +1199,7 @@ static int dwc3_core_init_mode(struct dwc3 *dwc)
- 	case USB_DR_MODE_PERIPHERAL:
- 		dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_DEVICE);
- 
--		if (dwc->usb2_phy)
--			otg_set_vbus(dwc->usb2_phy->otg, false);
-+		dwc3_set_vbus(dwc, false);
- 		phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_DEVICE);
- 		phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_DEVICE);
- 
-@@ -1198,8 +1213,7 @@ static int dwc3_core_init_mode(struct dwc3 *dwc)
- 	case USB_DR_MODE_HOST:
- 		dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
- 
--		if (dwc->usb2_phy)
--			otg_set_vbus(dwc->usb2_phy->otg, true);
-+		dwc3_set_vbus(dwc, true);
- 		phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_HOST);
- 		phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_HOST);
- 
-@@ -1470,6 +1484,10 @@ static int dwc3_probe(struct platform_device *pdev)
- 
- 	dwc3_get_properties(dwc);
- 
-+	dwc->vbus_reg = devm_regulator_get_optional(dev, "vbus");
-+	if (IS_ERR(dwc->vbus_reg))
-+		return PTR_ERR(dwc->vbus_reg);
-+
- 	dwc->reset = devm_reset_control_array_get(dev, true, true);
- 	if (IS_ERR(dwc->reset))
- 		return PTR_ERR(dwc->reset);
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 4c171a8e215f..cee2574d7bf4 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -1085,6 +1085,9 @@ struct dwc3 {
- 
- 	bool			phys_ready;
- 
-+	struct regulator	*vbus_reg;
-+	bool			vbus_reg_enabled;
-+
- 	struct ulpi		*ulpi;
- 	bool			ulpi_ready;
- 
-@@ -1397,6 +1400,7 @@ struct dwc3_gadget_ep_cmd_params {
- 
- /* prototypes */
- void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode);
-+void dwc3_set_vbus(struct dwc3 *dwc, bool enable);
- void dwc3_set_mode(struct dwc3 *dwc, u32 mode);
- u32 dwc3_core_fifo_space(struct dwc3_ep *dep, u8 type);
- 
-diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
-index 7db1ffc92bbd..45fdec2d128d 100644
---- a/drivers/usb/dwc3/drd.c
-+++ b/drivers/usb/dwc3/drd.c
-@@ -384,8 +384,7 @@ void dwc3_otg_update(struct dwc3 *dwc, bool ignore_idstatus)
- 		if (ret) {
- 			dev_err(dwc->dev, "failed to initialize host\n");
- 		} else {
--			if (dwc->usb2_phy)
--				otg_set_vbus(dwc->usb2_phy->otg, true);
-+			dwc3_set_vbus(dwc, true);
- 			if (dwc->usb2_generic_phy)
- 				phy_set_mode(dwc->usb2_generic_phy,
- 					     PHY_MODE_USB_HOST);
-@@ -398,8 +397,7 @@ void dwc3_otg_update(struct dwc3 *dwc, bool ignore_idstatus)
- 		dwc3_event_buffers_setup(dwc);
- 		spin_unlock_irqrestore(&dwc->lock, flags);
- 
--		if (dwc->usb2_phy)
--			otg_set_vbus(dwc->usb2_phy->otg, false);
-+		dwc3_set_vbus(dwc, false);
- 		if (dwc->usb2_generic_phy)
- 			phy_set_mode(dwc->usb2_generic_phy,
- 				     PHY_MODE_USB_DEVICE);
--- 
-2.17.1
-
+Yours,
+Linus Walleij
