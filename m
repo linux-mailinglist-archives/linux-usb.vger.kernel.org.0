@@ -2,94 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BAEA1EC7A3
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jun 2020 04:57:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCD981EC7AD
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jun 2020 05:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725836AbgFCC5V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 2 Jun 2020 22:57:21 -0400
-Received: from mail5.windriver.com ([192.103.53.11]:51518 "EHLO mail5.wrs.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725780AbgFCC5V (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 2 Jun 2020 22:57:21 -0400
-Received: from ALA-HCA.corp.ad.wrs.com (ala-hca.corp.ad.wrs.com [147.11.189.40])
-        by mail5.wrs.com (8.15.2/8.15.2) with ESMTPS id 0532uQ2A009471
-        (version=TLSv1 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
-        Tue, 2 Jun 2020 19:56:36 -0700
-Received: from pek-lpg-core1-vm1.wrs.com (128.224.156.106) by
- ALA-HCA.corp.ad.wrs.com (147.11.189.40) with Microsoft SMTP Server id
- 14.3.487.0; Tue, 2 Jun 2020 19:56:16 -0700
-From:   <qiang.zhang@windriver.com>
-To:     <gregkh@linuxfoundation.org>
-CC:     <kt0755@gmail.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] usb: usbtest: fix missing kfree(dev->buf) in usbtest_disconnect
-Date:   Wed, 3 Jun 2020 11:05:06 +0800
-Message-ID: <20200603030506.31577-1-qiang.zhang@windriver.com>
-X-Mailer: git-send-email 2.24.1
+        id S1725854AbgFCDFX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 2 Jun 2020 23:05:23 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:24778 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725780AbgFCDFX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 2 Jun 2020 23:05:23 -0400
+X-UUID: 013f03ca456545518d26a021da9022c8-20200603
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=W7tF7Mgc/fvciJgJ7QAqTgTQjhCvBLQ6CPGKAAjG2D8=;
+        b=u7PlTMKUuiWIMlZ0yaBgoWCf4OpcgaFcNVfiVgNmlk2zLhiNPd3kUQlg7W6aIdqImhJbJprM8BCe3Cc/QNGHDs88+/FgsVcq8lVR6UyPHj5BPxHB6dIeK9exI0XwZxTTCekXvT/bOmbq28HrNagnnEmWfNr2V9pGwnMU32OhBq4=;
+X-UUID: 013f03ca456545518d26a021da9022c8-20200603
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 62782876; Wed, 03 Jun 2020 11:05:17 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 3 Jun 2020 11:05:10 +0800
+Received: from [172.21.77.33] (172.21.77.33) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 3 Jun 2020 11:05:10 +0800
+Message-ID: <1591153515.23525.50.camel@mtkswgap22>
+Subject: Re: [PATCH] sound: usb: pcm: fix incorrect power state when playing
+ sound after PM_AUTO suspend
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+To:     Takashi Iwai <tiwai@suse.de>
+CC:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Alexander Tsoy <alexander@tsoy.me>,
+        Johan Hovold <johan@kernel.org>,
+        Hui Wang <hui.wang@canonical.com>,
+        Szabolcs =?UTF-8?Q?Sz=C5=91ke?= <szszoke.code@gmail.com>,
+        <alsa-devel@alsa-project.org>, <linux-usb@vger.kernel.org>,
+        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
+        Macpaul Lin <macpaul.lin@gmail.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Date:   Wed, 3 Jun 2020 11:05:15 +0800
+In-Reply-To: <s5hpnahhbz8.wl-tiwai@suse.de>
+References: <s5hpnahhbz8.wl-tiwai@suse.de>
+Content-Type: text/plain; charset="ISO-8859-1"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
+X-TM-SNTS-SMTP: 586FA4C026DBFAB221D5480D4E6A63BFED753ABF860C0F7D852D822E2AAFD11B2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Zqiang <qiang.zhang@windriver.com>
-
-BUG: memory leak
-unreferenced object 0xffff888055046e00 (size 256):
-  comm "kworker/2:9", pid 2570, jiffies 4294942129 (age 1095.500s)
-  hex dump (first 32 bytes):
-    00 70 04 55 80 88 ff ff 18 bb 5a 81 ff ff ff ff  .p.U......Z.....
-    f5 96 78 81 ff ff ff ff 37 de 8e 81 ff ff ff ff  ..x.....7.......
-  backtrace:
-    [<00000000d121dccf>] kmemleak_alloc_recursive
-include/linux/kmemleak.h:43 [inline]
-    [<00000000d121dccf>] slab_post_alloc_hook mm/slab.h:586 [inline]
-    [<00000000d121dccf>] slab_alloc_node mm/slub.c:2786 [inline]
-    [<00000000d121dccf>] slab_alloc mm/slub.c:2794 [inline]
-    [<00000000d121dccf>] kmem_cache_alloc_trace+0x15e/0x2d0 mm/slub.c:2811
-    [<000000005c3c3381>] kmalloc include/linux/slab.h:555 [inline]
-    [<000000005c3c3381>] usbtest_probe+0x286/0x19d0
-drivers/usb/misc/usbtest.c:2790
-    [<000000001cec6910>] usb_probe_interface+0x2bd/0x870
-drivers/usb/core/driver.c:361
-    [<000000007806c118>] really_probe+0x48d/0x8f0 drivers/base/dd.c:551
-    [<00000000a3308c3e>] driver_probe_device+0xfc/0x2a0 drivers/base/dd.c:724
-    [<000000003ef66004>] __device_attach_driver+0x1b6/0x240
-drivers/base/dd.c:831
-    [<00000000eee53e97>] bus_for_each_drv+0x14e/0x1e0 drivers/base/bus.c:431
-    [<00000000bb0648d0>] __device_attach+0x1f9/0x350 drivers/base/dd.c:897
-    [<00000000838b324a>] device_initial_probe+0x1a/0x20 drivers/base/dd.c:944
-    [<0000000030d501c1>] bus_probe_device+0x1e1/0x280 drivers/base/bus.c:491
-    [<000000005bd7adef>] device_add+0x131d/0x1c40 drivers/base/core.c:2504
-    [<00000000a0937814>] usb_set_configuration+0xe84/0x1ab0
-drivers/usb/core/message.c:2030
-    [<00000000e3934741>] generic_probe+0x6a/0xe0 drivers/usb/core/generic.c:210
-    [<0000000098ade0f1>] usb_probe_device+0x90/0xd0
-drivers/usb/core/driver.c:266
-    [<000000007806c118>] really_probe+0x48d/0x8f0 drivers/base/dd.c:551
-    [<00000000a3308c3e>] driver_probe_device+0xfc/0x2a0 drivers/base/dd.c:724
-
-Fixes: fabbf2196d0d ("USB: usbtest fix coding style")
-Reported-by: Kyungtae Kim <kt0755@gmail.com>
-Signed-off-by: Zqiang <qiang.zhang@windriver.com>
----
- drivers/usb/misc/usbtest.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/usb/misc/usbtest.c b/drivers/usb/misc/usbtest.c
-index 98ada1a3425c..bae88893ee8e 100644
---- a/drivers/usb/misc/usbtest.c
-+++ b/drivers/usb/misc/usbtest.c
-@@ -2873,6 +2873,7 @@ static void usbtest_disconnect(struct usb_interface *intf)
- 
- 	usb_set_intfdata(intf, NULL);
- 	dev_dbg(&intf->dev, "disconnect\n");
-+	kfree(dev->buf);
- 	kfree(dev);
- }
- 
--- 
-2.24.1
+T24gVHVlLCAyMDIwLTA2LTAyIGF0IDE0OjQ2ICswMjAwLCBUYWthc2hpIEl3YWkgd3JvdGU6DQo+
+IE9uIFR1ZSwgMDIgSnVuIDIwMjAgMTM6NTM6NDEgKzAyMDAsDQo+IE1hY3BhdWwgTGluIHdyb3Rl
+Og0KPiA+IA0KPiA+IFRoaXMgcGF0Y2ggZml4IGluY29ycmVjdCBwb3dlciBzdGF0ZSBjaGFuZ2Vk
+IGJ5IHVzYl9hdWRpb19zdXNwZW5kKCkNCj4gPiB3aGVuIENPTkZJR19QTSBpcyBlbmFibGVkLg0K
+PiA+IA0KPiA+IEFmdGVyIHJlY2VpdmluZyBzdXNwZW5kIFBNIG1lc3NhZ2Ugd2l0aCBhdXRvIGZs
+YWcsIHVzYl9hdWRpb19zdXNwZW5kKCkNCj4gPiBjaGFuZ2UgY2FyZCdzIHBvd2VyIHN0YXRlIHRv
+IFNORFJWX0NUTF9QT1dFUl9EM2hvdC4gT25seSB3aGVuIHRoZSBvdGhlcg0KPiA+IHJlc3VtZSBQ
+TSBtZXNzYWdlIHdpdGggYXV0byBmbGFnIGNhbiBjaGFuZ2UgcG93ZXIgc3RhdGUgdG8NCj4gPiBT
+TkRSVl9DVExfUE9XRVJfRDAgaW4gX191c2JfYXVkaW9fcmVzdW1lKCkuDQo+ID4gDQo+ID4gSG93
+ZXZlciwgd2hlbiBzeXN0ZW0gaXMgbm90IHVuZGVyIGF1dG8gc3VzcGVuZCwgcmVzdW1lIFBNIG1l
+c3NhZ2Ugd2l0aA0KPiA+IGF1dG8gZmxhZyBtaWdodCBub3QgYmUgYWJsZSB0byByZWNlaXZlIG9u
+IHRpbWUgd2hpY2ggY2F1c2UgdGhlIHBvd2VyDQo+ID4gc3RhdGUgd2FzIGluY29ycmVjdC4gQXQg
+dGhpcyB0aW1lLCBpZiBhIHBsYXllciBzdGFydHMgdG8gcGxheSBzb3VuZCwNCj4gPiB3aWxsIGNh
+dXNlIHNuZF91c2JfcGNtX29wZW4oKSB0byBhY2Nlc3MgdGhlIGNhcmQgYW5kIHNldHVwX2h3X2lu
+Zm8oKSB3aWxsDQo+ID4gcmVzdW1lIHRoZSBjYXJkLg0KPiA+IA0KPiA+IEJ1dCBldmVuIHRoZSBj
+YXJkIGlzIGJhY2sgdG8gd29yayBhbmQgYWxsIGZ1bmN0aW9uIG5vcm1hbCwgdGhlIHBvd2VyDQo+
+ID4gc3RhdGUgaXMgc3RpbGwgaW4gU05EUlZfQ1RMX1BPV0VSX0QzaG90Lg0KPiANCj4gSG0sIGlu
+IGV4YWN0bHkgd2hpY2ggc2l0dWF0aW9uIGRvZXMgdGhpcyBoYXBwZW4/ICBJIHN0aWxsIGRvbid0
+IGdldA0KPiBpdC4gIENvdWxkIHlvdSBlbGFib3JhdGUgaG93IHRvIHRyaWdnZXIgdGhpcz8NCg0K
+SSdtIG5vdCBzdXJlIGlmIHRoaXMgd2lsbCBoYXBwZW4gb24gbGFwdG9wIG9yIG9uIFBDLg0KV2Un
+dmUgZm91bmQgdGhpcyBpc3N1ZSBvbiBBbmRyb2lkIHBob25lIChJJ20gbm90IHN1cmUgaWYgZWFj
+aCBBbmRyb2lkDQpwaG9uZSBjYW4gcmVwcm9kdWNlIHRoaXMuKS4NCg0KQWZ0ZXIgYm9vdGluZyB0
+aGUgYW5kcm9pZCBwaG9uZSwgaW5zZXJ0IHR5cGUtYyBoZWFkc2V0IHdpdGhvdXQgY2hhcmdpbmcN
+CmFuZCBwbGF5IG11c2ljIGF0IGFueSBkdXJhdGlvbiwgc2F5LCAxIHNlY29uZCwgdGhlbiBzdG9w
+LiBQdXQgcGhvbmUgYXdheQ0KdG8gaWRsZSBhYm91dCAxN34xOCBtaW51dGVzLiBXYWl0IGF1dG8g
+cG0gaGFwcGVuZWQgYW5kIHRoZSBwb3dlciBzdGF0ZQ0KY2hhbmdlIHRvIFNORFJWX0NUTF9QT1dF
+Ul9EM2hvdCBpbiBzb3VuZC91c2IvY2FyZC5jLiBUaGVuIHdha2UgdXAgdGhlDQpwaG9uZSwgcGxh
+eSBtdXNpYyBhZ2Fpbi4gVGhlbiB5b3UnbGwgcHJvYmFibHkgZm91bmQgdGhlIG11c2ljIHdhcyBu
+b3QNCnBsYXlpbmcgYW5kIHRoZSBwcm9ncmVzcyBiYXIga2VlcCBhdCB0aGUgc2FtZSBwb3NpdGlv
+bi4gSXQgb25seSBoYXBwZW4gDQp3aGVuIHBvd2VyIHN0YXRlIGlzIFNORFJWX0NUTF9QT1dFUl9E
+M2hvdC4gSWYgbm90ICh0aGUgcG93ZXIgc3RhdGUgaXMNClNORFJWX0NUTF9QT1dFUl9EMCksIHJl
+cGVhdCB0aGUgc3RlcHMgZm9yIHNldmVyYWwgdGltZXMsIHRoZW4gaXQgd2lsbCBiZQ0KcHJvZHVj
+ZWQgYXQgc29tZSB0aW1lLg0KDQpXaGVuIGl0IGhhcHBlbmVkLCBzb3VuZF91c2JfcGNtX29wZW4o
+KSB3aWxsIHdha2UgdXAgdGhlIHNvdW5kIGNhcmQgYnkgDQpzZXR1cF9od19pbmZvKCktPl9fdXNi
+X2F1ZGlvX3Jlc3VtZSgpLiBIb3dldmVyLCB0aGUgY2FyZCBhbmQgdGhlDQppbnRlcmZhY2UgaXMg
+ZnVuY3Rpb24gcHJvcGVybHkgcmlnaHQgbm93LCB0aGUgcG93ZXIgc3RhdGUga2VlcHMgcmVtYWlu
+DQpTTkRSVl9DVExfUE9XRVJfRDNob3QuIFRoZSBzdWdnZXN0aXZlIHBhcmFtZXRlciBzZXR0aW5n
+cyBmcm9tIHVwcGVyDQpzb3VuZCByZXF1ZXN0IHdpbGwgYmUgcGVuZGluZyBzaW5jZSBsYXRlciBz
+bmRfcG93ZXJfd2FpdCgpIGNhbGwgd2lsbA0Kc3RpbGwgd2FpdCB0aGUgY2FyZCBhd2FrZW4uIElk
+ZWFsbHksIGF1dG8gUE0gc2hvdWxkIGJlIHJlY292ZXJlZCBieQ0Kc291bmQgY2FyZCBpdHNlbGYu
+IEJ1dCBvbmNlIHRoZSBjYXJkIGlzIGF3YWtlbiBhdCB0aGlzIGNpcmN1bXN0YW5jZSwgaXQNCmxv
+b2tzIGxpa2UgdGhlcmUgYXJlIG5vdCBtb3JlIGF1dG8gcG0gZXZlbnQuIEFuZCB0aGUgc291bmQg
+c3lzdGVtIG9mDQp0aGlzIGludGVyZmFjZSB3aWxsIHN0dWNrIGhlcmUgZm9yZXZlciB1bnRpbCB1
+c2VyIHBsdWcgb3V0IHRoZSBoZWFkc2V0DQoocmVzZXQgdGhlIGhhcmR3YXJlKS4NCg0KVGhlIHJv
+b3QgY2F1c2UgaXMgdGhhdCBvbmNlIHRoZSBjYXJkIGhhcyBiZWVuIHJlc3VtZWQsIGl0IHNob3Vs
+ZCBpbmZvcm0NCmF1dG8gcG0gY2hhbmdlIHRoZSBzdGF0ZSBiYWNrIGludG8gU05EUlZfQ1RMX1BP
+V0VSX0QwIGFuZCBtYXJrIHRoZQ0KZGV2aWNlIGlzIHVzaW5nIGJ5IHNvbWUgb25lLg0KDQo+ID4g
+V2hpY2ggY2F1c2UgdGhlIGluZmluaXRlIGxvb3ANCj4gPiBoYXBwZW5lZCBpbiBzbmRfcG93ZXJf
+d2FpdCgpIHRvIGNoZWNrIHRoZSBwb3dlciBzdGF0ZS4gVGh1cyB0aGUNCj4gPiBzdWNjZXNzaXZl
+IHNldHRpbmcgaW9jdGwgY2Fubm90IGJlIHBhc3NlZCB0byBjYXJkLg0KPiA+IA0KPiA+IEhlbmNl
+IHdlIHN1Z2dlc3QgdG8gY2hhbmdlIHBvd2VyIHN0YXRlIHRvIFNORFJWX0NUTF9QT1dFUl9EMCB3
+aGVuIGNhcmQNCj4gPiBoYXMgYmVlbiByZXN1bWVkIHN1Y2Nlc3NmdWxseS4NCj4gDQo+IFRoaXMg
+ZG9lc24ndCBsb29rIGxpa2UgYSByaWdodCBzb2x1dGlvbiBmb3IgdGhlIHByb2JsZW0sIHNvcnJ5
+Lg0KPiBUaGUgY2FyZCBQTSBzdGF0dXMgbXVzdCBiZSByZWNvdmVyZWQgdG8gRDAgd2hlbiB0aGUg
+YXV0b3Jlc3VtZQ0KPiBzdWNjZWVkcy4gIElmIG5vdCwgc29tZXRoaW5nIGlzIGJyb2tlbiB0aGVy
+ZSwgYW5kIGl0IG11c3QgYmUgZml4ZWQNCj4gaW5zdGVhZCBvZiBmaWRkbGluZyB0aGUgc3RhdHVz
+IGZsYWcgZXh0ZXJuYWxseS4NCg0KWWVzLCBJIGFncmVlZCwgYnV0IGFmdGVyIGNoZWNraW5nIHRo
+ZSBjb2RlIGluIHNvdW5kIGRyaXZlcnMsIA0KaXQgbG9va3MgbGlrZSB0aGVyZSBpcyBvbmx5IGNo
+YW5jZSB0aGF0IGF1dG8gcG0gdHJpZ2dlcmVkIGJ5IGxvdy1sZXZlbA0KY29kZSBpbiBzb3VuZC91
+c2IvY2FyZC5jLiBJbiBrZXJuZWwgNC4xNCwgYXV0byBwbSBzdXNwZW5kIGlzIHRyaWdnZXJlZA0K
+Ynkgc25kX3BjbV9zdXNwZW5kX2FsbCgpLiBJbiBsYXRlciBrZXJuZWwsIGl0IGlzIHRyaWdnZXJl
+ZCBieQ0Kc25kX3VzYl9wY21fc3VzcGVuZCgpLiBIb3dldmVyLCBpdCBsb29rcyBsaWtlIHRoZXJl
+IGFyZSBubyBhbnkgcmVzdW1lDQp0cmlnZ2VyIHRvIHJlY292ZXIgYXV0byBwbSBzdGF0ZSB3aGVu
+IHRoZSBjYXJkIGhhcyBiZWVuIHdha2VuIGJ5DQpzb3VuZF91c2JfcGNtX29wZW4oKS4gVGhlIHJl
+bWFpbiByZXN1bWUgdHJpZ2dlciBpbg0Kc291bmQvY29yZS9wY21fbmF0aXZlLmMgd2VyZSBhbGwg
+c3RhdGljLiBJJ3ZlIHRyaWVkIHRvIHVzZSB0aGVzZSByZXN1bWUNCmZ1bmN0aW9uIGluIHNvdW5k
+L3VzYi9jYXJkLmMgYnV0IGl0IHNlZW1zIGNhbm5vdCBnZXQgYmV0dGVyIHJlc3VsdCB0aGFuDQpj
+aGFuZ2luZyB0aGUgcG93ZXIgc3RhdGUgd2hlbiBzb3VuZCBjYXJkIGlzIGluIHVzZS4gDQoNCkkn
+dmUgcmVwbGllZCBhbm90aGVyIG1haWwgZWFybGllciBpbmNsdWRlcyBkZWJ1ZyBwYXRjaCBhbmQg
+dGhlIG90aGVyDQp3b3JrIGFyb3VuZCB0byB2ZXJpZnkgdGhpcyBpc3N1ZS4gVGhlIGlzc3VlIGhh
+cyBiZWVuIGZvdW5kIG9uDQprZXJuZWwtNC4xNCwgYnV0IGNoZWNrIHRoZSBjb2RlIGxvZ2ljIGhl
+cmUgaW4gc291bmQvdXNiL2NhcmQuYyBhbmQNCnNvdW5kL3VzYi9wY20uYywgSSB0aGluayB0aGUg
+c2FtZSBwcm9ibGVtIHN0aWxsIGV4aXN0ZWQgaW4gNC4xOSwgNS40DQoodXNlZCBieSBhbmRyb2lk
+KSwgYW5kIGluIGN1cnJlbnQga2VybmVsIHRyZWUuDQoNCg0KPiB0aGFua3MsDQo+IA0KPiBUYWth
+c2hpDQoNCklmIHRoZSBhYm92ZSBleHBsYW5hdGlvbiB3ZXJlIG5vdCBjbGVhciBlbm91Z2gsIEkn
+bGwgdHJ5IG15IGJlc3QgdG8NCmV4cGxhaW4gaXQgaW4gbW9yZSBkZXRhaWwuIE1heWJlIHRoZSBi
+ZXR0ZXIgd2F5IGlzIHRvIHNlbmQgYm90aCBhdXRvIHBtDQpyZXN1bWUgYW5kIHJ1bnRpbWUgcmVz
+dW1lIHdoZW4gc291bmRfdXNiX3BjbV9vcGVuKCkgaXMgY2FsbGVkLiBCdXQNCmFjY29yZGluZyB0
+byB0aGUgY3VycmVudCBjb2RlcyBpbiBjYXJkLmMsIHdlIG1pZ2h0IG5lZWQgdG8gY2FsbA0KX191
+c2JfYXVkaW9fcmVzdW1lKCkgdHdpY2UgaW4gc2V0dXBfaHdfaW5mbygpLg0KDQpUaGFua3MNCk1h
+Y3BhdWwgTGluDQoNCg0KDQo=
 
