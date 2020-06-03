@@ -2,154 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 897511ECA7C
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jun 2020 09:26:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1EE41ECBBD
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jun 2020 10:45:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725877AbgFCH0M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Jun 2020 03:26:12 -0400
-Received: from smtp2.math.uni-bielefeld.de ([129.70.45.13]:56446 "EHLO
-        smtp2.math.uni-bielefeld.de" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725275AbgFCH0L (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Jun 2020 03:26:11 -0400
-Received: from math.uni-bielefeld.de (kvm01.math.uni-bielefeld.de [129.70.45.15])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by smtp2.math.uni-bielefeld.de (Postfix) with ESMTPSA id 5E79B6052F;
-        Wed,  3 Jun 2020 09:26:09 +0200 (CEST)
-Date:   Wed, 3 Jun 2020 09:26:07 +0200
-From:   Jean Rene Dawin <jdawin@math.uni-bielefeld.de>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: Kernel Oops in cdc_acm
-Message-ID: <20200603072607.GA2456@math.uni-bielefeld.de>
-References: <20200525120026.GA11378@math.uni-bielefeld.de>
- <1590409690.2838.7.camel@suse.com>
- <20200525191624.GA28647@math.uni-bielefeld.de>
- <1590491586.2838.38.camel@suse.com>
- <20200526195750.GA10336@math.uni-bielefeld.de>
- <1590569589.2838.50.camel@suse.com>
- <20200528085133.GA17192@math.uni-bielefeld.de>
+        id S1726268AbgFCIpc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Jun 2020 04:45:32 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:37350 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726243AbgFCIpc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Jun 2020 04:45:32 -0400
+X-UUID: f30f1bf5163c40d4b518c5f6d536a3c4-20200603
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=GqhgG6L1zGtST6u5yF493LQmjohmvvIpbn2zNdLG3lI=;
+        b=EglGzROtLnjGP6UZ7vtLOLO5lL7jNEVYEoUCIoIuLfLHEOTqUvF9DjQG4pbPUSbhipRSvqUq/8y9yfbB3PixdysjiKhpCwP1Kc8RRtA3Om4bWvICDizKNaBk7433ramkhTVmPUezXbIx6d7GXgKnXMF0Pujhp2WqTGC92QMAMlc=;
+X-UUID: f30f1bf5163c40d4b518c5f6d536a3c4-20200603
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1543401211; Wed, 03 Jun 2020 16:45:29 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by mtkmbs01n2.mediatek.inc
+ (172.21.101.79) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 3 Jun
+ 2020 16:45:26 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 3 Jun 2020 16:45:26 +0800
+Message-ID: <1591173806.15527.1.camel@mhfsdcap03>
+Subject: Re: [PATCH v2] usb: host: xhci-mtk: avoid runtime suspend when
+ removing hcd
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Macpaul Lin <macpaul.lin@mediatek.com>
+CC:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
+        Macpaul Lin <macpaul.lin@gmail.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <linux-mediatek@lists.infradead.org>
+Date:   Wed, 3 Jun 2020 16:43:26 +0800
+In-Reply-To: <1590726778-29065-1-git-send-email-macpaul.lin@mediatek.com>
+References: <1590726569-28248-1-git-send-email-macpaul.lin@mediatek.com>
+         <1590726778-29065-1-git-send-email-macpaul.lin@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200528085133.GA17192@math.uni-bielefeld.de>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+X-TM-SNTS-SMTP: CA6D6B5CA1B57E8E80E8EA32F96818490747DA2EE90F21A39CF72B716572D3462000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Jean Rene Dawin wrote on Thu 28/05/20 10:51:
-> Oliver Neukum wrote on Wed 27/05/20 10:53:
-> > OK, we have two possibilities here. Either
-> > a4e7279cd1d19f48f0af2a10ed020febaa9ac092 or
-> > 0afccd7601514c4b83d8cc58c740089cc447051d
-> 
-> Then I tested a4e7279cd1d19f48f0af2a10ed020febaa9ac092 with your patch
-> applied and it still showed the symptom
+T24gRnJpLCAyMDIwLTA1LTI5IGF0IDEyOjMyICswODAwLCBNYWNwYXVsIExpbiB3cm90ZToNCj4g
+V2hlbiBydW50aW1lIHN1c3BlbmQgd2FzIGVuYWJsZWQsIHJ1bnRpbWUgc3VzcGVuZCBtaWdodCBo
+YXBwZW5lZA0KPiB3aGVuIHhoY2kgaXMgcmVtb3ZpbmcgaGNkLiBUaGlzIG1pZ2h0IGNhdXNlIGtl
+cm5lbCBwYW5pYyB3aGVuIGhjZA0KPiBoYXMgYmVlbiBmcmVlZCBidXQgcnVudGltZSBwbSBzdXNw
+ZW5kIHJlbGF0ZWQgaGFuZGxlIG5lZWQgdG8NCj4gcmVmZXJlbmNlIGl0Lg0KPiANCj4gU2lnbmVk
+LW9mZi1ieTogTWFjcGF1bCBMaW4gPG1hY3BhdWwubGluQG1lZGlhdGVrLmNvbT4NCj4gLS0tDQo+
+ICBkcml2ZXJzL3VzYi9ob3N0L3hoY2ktbXRrLmMgfCAgICA1ICsrKy0tDQo+ICAxIGZpbGUgY2hh
+bmdlZCwgMyBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBh
+L2RyaXZlcnMvdXNiL2hvc3QveGhjaS1tdGsuYyBiL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1tdGsu
+Yw0KPiBpbmRleCBiZmJkYjNjLi42NDFkMjRlIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3VzYi9o
+b3N0L3hoY2ktbXRrLmMNCj4gKysrIGIvZHJpdmVycy91c2IvaG9zdC94aGNpLW10ay5jDQo+IEBA
+IC01ODcsNiArNTg3LDkgQEAgc3RhdGljIGludCB4aGNpX210a19yZW1vdmUoc3RydWN0IHBsYXRm
+b3JtX2RldmljZSAqZGV2KQ0KPiAgCXN0cnVjdCB4aGNpX2hjZAkqeGhjaSA9IGhjZF90b194aGNp
+KGhjZCk7DQo+ICAJc3RydWN0IHVzYl9oY2QgICpzaGFyZWRfaGNkID0geGhjaS0+c2hhcmVkX2hj
+ZDsNCj4gIA0KPiArCXBtX3J1bnRpbWVfcHV0X3N5bmMoJmRldi0+ZGV2KTsNCj4gKwlwbV9ydW50
+aW1lX2Rpc2FibGUoJmRldi0+ZGV2KTsNCj4gKw0KPiAgCXVzYl9yZW1vdmVfaGNkKHNoYXJlZF9o
+Y2QpOw0KPiAgCXhoY2ktPnNoYXJlZF9oY2QgPSBOVUxMOw0KPiAgCWRldmljZV9pbml0X3dha2V1
+cCgmZGV2LT5kZXYsIGZhbHNlKTsNCj4gQEAgLTU5Nyw4ICs2MDAsNiBAQCBzdGF0aWMgaW50IHho
+Y2lfbXRrX3JlbW92ZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpkZXYpDQo+ICAJeGhjaV9tdGtf
+c2NoX2V4aXQobXRrKTsNCj4gIAl4aGNpX210a19jbGtzX2Rpc2FibGUobXRrKTsNCj4gIAl4aGNp
+X210a19sZG9zX2Rpc2FibGUobXRrKTsNCj4gLQlwbV9ydW50aW1lX3B1dF9zeW5jKCZkZXYtPmRl
+dik7DQo+IC0JcG1fcnVudGltZV9kaXNhYmxlKCZkZXYtPmRldik7DQo+ICANCj4gIAlyZXR1cm4g
+MDsNCj4gIH0NCg0KUmV2aWV3ZWQtYnk6IENodW5mZW5nIFl1biA8Y2h1bmZlbmcueXVuQG1lZGlh
+dGVrLmNvbT4NCg0KVGhhbmtzDQoNCg0K
 
-Hi,
-
-more testing shows the crash can be triggered by 
-
-- romving the battery the first time (but only sometimes)
-- re-insertiing battery and turning on the phone (after some interval)
-
-The trace when crashing looks like this:
-
-[  122.890637] Call Trace:
-[  122.890640]  <IRQ>
-[  122.890645]  queue_work_on+0x36/0x40
-[  122.890650]  __usb_hcd_giveback_urb+0x6f/0x120
-[  122.890653]  usb_giveback_urb_bh+0xa6/0x100
-[  122.890657]  tasklet_action_common.isra.0+0x5f/0x130
-[  122.890661]  __do_softirq+0x111/0x34d
-[  122.890665]  irq_exit+0xac/0xd0
-[  122.890667]  do_IRQ+0x89/0x140
-[  122.890670]  common_interrupt+0xf/0xf
-[  122.890672]  </IRQ>
-
-Doing a function_graph ftrace on usb_giveback_urb_bh shows a difference
-between working and crashshing behaviour:
-
-Working:
-# remove battery
- 2802.875749 |   3)   0.331 us    |      usb_anchor_suspend_wakeups();
- 2802.875749 |   3)   0.283 us    |      usb_unanchor_urb();
- 2802.875750 |   3)   0.283 us    |      hub_irq();
-
-# insert battery
- 2818.992447 |   3)   0.265 us    |      usb_anchor_suspend_wakeups();
- 2818.992448 |   3)   0.279 us    |      usb_unanchor_urb();
- 2818.992448 |   3)   0.277 us    |      hub_irq();
-
-# turn on phone
- 2829.835833 |   3)   0.262 us    |      usb_anchor_suspend_wakeups();
- 2829.835834 |   3)   0.273 us    |      usb_unanchor_urb();
- 2829.835834 |   3)   0.294 us    |      hub_irq();
-
-
-Crashing:
-
-# from dmesg
-[ 1537.742750] WARNING: CPU: 3 PID: 0 at kernel/workqueue.c:1473 __queue_work+0x38a/0x430
-
-# remove battery / turn on phone
- 1536.448472 |   3)   0.373 us    |      usb_anchor_suspend_wakeups();
- 1536.448473 |   3)   0.280 us    |      usb_unanchor_urb();
- 1536.448473 |   3)               |      acm_read_bulk_callback [cdc_acm]() {
- 1536.448474 |   3)   0.306 us    |        ktime_get_mono_fast_ns();
-[...]                                                                
-
- 1536.748347 |   3)   0.279 us    |      usb_anchor_suspend_wakeups();
- 1536.748348 |   3)   0.289 us    |      usb_unanchor_urb();          
- 1536.748348 |   3)               |      acm_write_bulk [cdc_acm]() { 
- 1536.748349 |   3)               |        _raw_spin_lock_irqsave() {
-[...]                                                                
-                                                                     
- 1537.749348 |   3)   0.292 us    |      usb_anchor_suspend_wakeups();
- 1537.749348 |   3)   0.298 us    |      usb_unanchor_urb();          
- 1537.749349 |   3)               |      acm_write_bulk [cdc_acm]() { 
- 1537.749349 |   3)               |        _raw_spin_lock_irqsave() {
-[...]                                                                
-                                                                     
- 1537.749370 |   3)               |        queue_work_on() {
- 1537.749370 |   3)               |          __queue_work() {
- 1537.749370 |   3)   0.273 us    |            __rcu_read_lock();
- 1537.749371 |   3)   0.451 us    |            get_work_pool();  
- 1537.749372 |   3)               |            _raw_spin_lock() {
- 1537.749372 |   3)   0.270 us    |              preempt_count_add();
- 1537.749373 |   3)   0.836 us    |            }                     
- 1537.749373 |   3)               |            do_invalid_op() {     
- 1537.749374 |   3)   0.364 us    |              uprobe_get_trap_addr();
- 1537.749374 |   3)               |              do_error_trap() {      
- 1537.749375 |   3)               |                is_valid_bugaddr() { 
- 1537.749375 |   3)               |                  __probe_kernel_read() {
- 1537.749376 |   3)               |                    __check_object_size() {
- 1537.749376 |   3)   0.292 us    |                      check_stack_object();
- 1537.749377 |   3)   0.397 us    |                      __virt_addr_valid(); 
-
-
-To me it looks like the problem arises when urb->complete(urb) is called
-in 
-
-static void __usb_hcd_giveback_urb(struct urb *urb)
-
-from drivers/usb/core/hcd.c:
-
-1641    usb_anchor_suspend_wakeups(anchor);
-1642    usb_unanchor_urb(urb);
-1643    if (likely(status == 0))
-1644            usb_led_activity(USB_LED_EVENT_HOST);
-1645
-1646    /* pass ownership to the completion handler */
-1647    urb->status = status;
-1648    urb->complete(urb);
-
-If the "wrong" function is set in urb->complete I see the crash.
-In the normal case hub_irq() seems to be set. 
-In the crashing case something like acm_write_bulk.
-May this be the cause?
-
-Regards,
-Jean Rene
