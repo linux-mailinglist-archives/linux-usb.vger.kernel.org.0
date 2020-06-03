@@ -2,195 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50B1D1ED6C4
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jun 2020 21:22:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C5741ED766
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jun 2020 22:30:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726148AbgFCTVW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Jun 2020 15:21:22 -0400
-Received: from rnd-relay.smtp.broadcom.com ([192.19.229.170]:42982 "EHLO
-        rnd-relay.smtp.broadcom.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725922AbgFCTVT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Jun 2020 15:21:19 -0400
-Received: from mail-irv-17.broadcom.com (mail-irv-17.lvn.broadcom.net [10.75.242.48])
-        by rnd-relay.smtp.broadcom.com (Postfix) with ESMTP id 840DD30DD7D;
-        Wed,  3 Jun 2020 12:21:15 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 rnd-relay.smtp.broadcom.com 840DD30DD7D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-        s=dkimrelay; t=1591212075;
-        bh=/AQzYy/Wi51ZHDd+ThnXKaeww1EEOqsroMbykkRvvq8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=NtJkO7MeFX9UJlK8NUNrIV5R9Mx4cOS08pLbxG4NPk/I+q5/V9FpPpuH5/7NTn4h6
-         oXzIRd7IOw07qiMAAfQWzxBn0ktMI+2Y0HHNBVaAG6rqUobHv9JpcCr/2jYvZ/IP1F
-         NUugsjaWJwj9/B8MokjcNqcee5TK7Khm/EE80QP0=
-Received: from stbsrv-and-01.and.broadcom.net (stbsrv-and-01.and.broadcom.net [10.28.16.211])
-        by mail-irv-17.broadcom.com (Postfix) with ESMTP id 9DA8814008C;
-        Wed,  3 Jun 2020 12:21:11 -0700 (PDT)
-From:   Jim Quinlan <james.quinlan@broadcom.com>
-To:     linux-pci@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, Corey Minyard <minyard@acm.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        devel@driverdev.osuosl.org (open list:STAGING SUBSYSTEM),
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE),
-        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS FOR ALLWINNER
-        A10), Florian Fainelli <f.fainelli@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        iommu@lists.linux-foundation.org (open list:IOMMU DRIVERS),
-        Jens Axboe <axboe@kernel.dk>, Joerg Roedel <jroedel@suse.de>,
-        Julien Grall <julien.grall@arm.com>,
-        linux-acpi@vger.kernel.org (open list:ACPI FOR ARM64 (ACPI/arm64)),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM PORT),
-        linux-ide@vger.kernel.org (open list:LIBATA SUBSYSTEM (Serial and
-        Parallel ATA drivers)), linux-kernel@vger.kernel.org (open list),
-        linux-media@vger.kernel.org (open list:ALLWINNER A10 CSI DRIVER),
-        linux-remoteproc@vger.kernel.org (open list:REMOTE PROCESSOR
-        (REMOTEPROC) SUBSYSTEM),
-        linux-rpi-kernel@lists.infradead.org (moderated list:BROADCOM
-        BCM2711/BCM2835 ARM ARCHITECTURE),
-        linux-sh@vger.kernel.org (open list:SUPERH),
-        linux-usb@vger.kernel.org (open list:USB SUBSYSTEM),
-        Mark Brown <broonie@kernel.org>,
-        Oliver Neukum <oneukum@suse.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Rob Herring <robh@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH v3 00/13] PCI: brcmstb: enable PCIe for STB chips
-Date:   Wed,  3 Jun 2020 15:20:32 -0400
-Message-Id: <20200603192058.35296-1-james.quinlan@broadcom.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726216AbgFCUaE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Jun 2020 16:30:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55784 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725961AbgFCUaE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Jun 2020 16:30:04 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51716C08C5C0;
+        Wed,  3 Jun 2020 13:30:03 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id 202so2176392lfe.5;
+        Wed, 03 Jun 2020 13:30:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=biRAcPstG0F9XpAl3Hv8FW3JDKuIScrFIinXePuxTag=;
+        b=MbCrGRwP1OLWsGJzSuBBhqjn+X2eNHeZkr2JWPHepScxg4AXhkvxV/Y+cPGeEuhBg4
+         qQw9bxiUPNWD1hMl2Cr+IjHs2cTy8louutG2Wn6HmWp/6PpLrCMlrPrJI67BGMmQ96JP
+         uqdPzTJH9dHwDU4m3GDX8dvuhqNTCApJivMgQ30K2B+3fW+XKf2yQLswKnVwT+KD1va1
+         790Xy3rkbJ6OPLXMyHiMq4tpMGFWBW1KKS/R29wHrTZa0V0RXCjMW/SmA3fj9UfsAWv7
+         aLYmYw8zU6iYeB8e9qBsDseerI9b4lDSK36Rp2GmCo4pFSdDXdYzmG4f/JvUMXxo9lsG
+         RPyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=biRAcPstG0F9XpAl3Hv8FW3JDKuIScrFIinXePuxTag=;
+        b=Jm1WYu1EgESrYvadTTFYYAPfUOWXm+roB6vnb2vRMboUl/XpVFsaRIDB1cPMBNwYjY
+         lrF9XOssYeixdO6PEX3yfuQPLJ3aHbYNkUo5xuOOsmlyNAxxuv9GUcPfodY9xTTkPg3v
+         Lxgg1U6ZaRPH8H1U/aLRc+ppQFXkXi8h7hZ//SJkEJeRO7urnsjNLav/autCBFgElXSv
+         DwOxrexS6J0666+EV0h4Rr9HUMDhFC8dUA9TEcw65d+Cueqg+m3MevJ/uRBml8xL4EoP
+         FOWd5P60AjS+mZpAf0ro1N1Sk3AWoENKul935c6rz4xHlUJFidl4Z0431i4k6N/W7xU+
+         Leuw==
+X-Gm-Message-State: AOAM532ktMOIcBynoiAdW8dLgFV8axcnV6q76bXuGmtI6MMPSvmr3AmA
+        p+6JPWou2tQ66Y7bUbMiO/+eNM4zzWRPQqxQF88=
+X-Google-Smtp-Source: ABdhPJyN3aWHGy0yvsIDasYKJzXBtsMqHZknjUMH1/av/ICGzzumlmBwIvy++Q3X8KdEklM01HZ2Kd6p+kPiSnfq1Wo=
+X-Received: by 2002:ac2:485a:: with SMTP id 26mr639441lfy.57.1591216201712;
+ Wed, 03 Jun 2020 13:30:01 -0700 (PDT)
+MIME-Version: 1.0
+From:   Kyungtae Kim <kt0755@gmail.com>
+Date:   Wed, 3 Jun 2020 16:29:50 -0400
+Message-ID: <CAEAjamttx6-9-uFr3whGRYK1pPH3ivWue3ROnbRpPdcS_rdbiA@mail.gmail.com>
+Subject: KASAN: use-after-free Read in printer_ioctl
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        syzkaller <syzkaller@googlegroups.com>,
+        Dave Tian <dave.jing.tian@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-v3:
-  Commit "device core: Introduce multiple dma pfn offsets"
-  Commit "arm: dma-mapping: Invoke dma offset func if needed"
-  -- The above two commits have been squashed.  More importantly,
-     the code has been modified so that the functionality for
-     multiple pfn offsets subsumes the use of dev->dma_pfn_offset.
-     In fact, dma_pfn_offset is removed and supplanted by
-     dma_pfn_offset_map, which is a pointer to an array.  The
-     more common case of a uniform offset is now handled as
-     a map with a single entry, while cases requiring multiple
-     pfn offsets use a map with multiple entries.  Code paths
-     that used to do this:
+We report a bug (in linux-5.6.11) found by FuzzUSB (a modified version
+of syzkaller)
 
-         dev->dma_pfn_offset = mydrivers_pfn_offset;
+This bug happened when accessing a deallocated instance in printer_ioctl().
 
-     have been changed to do this:
+This seems to be in line with the following bug.
 
-         attach_uniform_dma_pfn_offset(dev, pfn_offset);
+https://groups.google.com/forum/#!topic/syzkaller/U2SJOYi-S08
 
-  Commit "dt-bindings: PCI: Add bindings for more Brcmstb chips"
-  -- Add if/then clause for required props: resets, reset-names (RobH)
-  -- Change compatible list from const to enum (RobH)
-  -- Change list of u32-tuples to u64 (RobH)
+==================================================================
+BUG: KASAN: use-after-free in __lock_acquire+0x3fd4/0x4180
+kernel/locking/lockdep.c:3831
+Read of size 8 at addr ffff8880683b0018 by task syz-executor.0/3377
 
-  Commit "of: Include a dev param in of_dma_get_range()"
-  -- modify of/unittests.c to add NULL param in of_dma_get_range() call.
+CPU: 1 PID: 3377 Comm: syz-executor.0 Not tainted 5.6.11 #1
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS Bochs 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xce/0x128 lib/dump_stack.c:118
+ print_address_description.constprop.4+0x21/0x3c0 mm/kasan/report.c:374
+ __kasan_report+0x131/0x1b0 mm/kasan/report.c:506
+ kasan_report+0x12/0x20 mm/kasan/common.c:641
+ __asan_report_load8_noabort+0x14/0x20 mm/kasan/generic_report.c:135
+ __lock_acquire+0x3fd4/0x4180 kernel/locking/lockdep.c:3831
+ lock_acquire+0x127/0x350 kernel/locking/lockdep.c:4488
+ __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+ _raw_spin_lock_irqsave+0x35/0x50 kernel/locking/spinlock.c:159
+ printer_ioctl+0x4a/0x110 drivers/usb/gadget/function/f_printer.c:723
+ vfs_ioctl fs/ioctl.c:47 [inline]
+ ksys_ioctl+0xfb/0x130 fs/ioctl.c:763
+ __do_sys_ioctl fs/ioctl.c:772 [inline]
+ __se_sys_ioctl fs/ioctl.c:770 [inline]
+ __x64_sys_ioctl+0x73/0xb0 fs/ioctl.c:770
+ do_syscall_64+0x9e/0x510 arch/x86/entry/common.c:294
+ entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x4531a9
+Code: ed 60 fc ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48
+89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
+01 f0 ff ff 0f 83 bb 60 fc ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007fd14ad72c78 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 000000000073bfa8 RCX: 00000000004531a9
+RDX: fffffffffffffff9 RSI: 000000000000009e RDI: 0000000000000003
+RBP: 0000000000000003 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00000000004bbd61
+R13: 00000000004d0a98 R14: 00007fd14ad736d4 R15: 00000000ffffffff
 
-  Commit "device core: Add ability to handle multiple dma offsets"
-  -- align comment in device.h (AndyS).
-  -- s/cpu_beg/cpu_start/ and s/dma_beg/dma_start/ in struct
-     dma_pfn_offset_region (AndyS).
+Allocated by task 2393:
+ save_stack+0x21/0x90 mm/kasan/common.c:72
+ set_track mm/kasan/common.c:80 [inline]
+ __kasan_kmalloc.constprop.3+0xa7/0xd0 mm/kasan/common.c:515
+ kasan_kmalloc+0x9/0x10 mm/kasan/common.c:529
+ kmem_cache_alloc_trace+0xfa/0x2d0 mm/slub.c:2813
+ kmalloc include/linux/slab.h:555 [inline]
+ kzalloc include/linux/slab.h:669 [inline]
+ gprinter_alloc+0xa1/0x870 drivers/usb/gadget/function/f_printer.c:1416
+ usb_get_function+0x58/0xc0 drivers/usb/gadget/functions.c:61
+ config_usb_cfg_link+0x1ed/0x3e0 drivers/usb/gadget/configfs.c:444
+ configfs_symlink+0x527/0x11d0 fs/configfs/symlink.c:202
+ vfs_symlink+0x33d/0x5b0 fs/namei.c:4201
+ do_symlinkat+0x11b/0x1d0 fs/namei.c:4228
+ __do_sys_symlinkat fs/namei.c:4242 [inline]
+ __se_sys_symlinkat fs/namei.c:4239 [inline]
+ __x64_sys_symlinkat+0x73/0xb0 fs/namei.c:4239
+ do_syscall_64+0x9e/0x510 arch/x86/entry/common.c:294
+ entry_SYSCALL_64_after_hwframe+0x49/0xbe
 
-v2:
-Commit: "device core: Add ability to handle multiple dma offsets"
-  o Added helper func attach_dma_pfn_offset_map() in address.c (Chistoph)
-  o Helpers funcs added to __phys_to_dma() & __dma_to_phys() (Christoph)
-  o Added warning when multiple offsets are needed and !DMA_PFN_OFFSET_MAP
-  o dev->dma_pfn_map => dev->dma_pfn_offset_map
-  o s/frm/from/ for dma_pfn_offset_frm_{phys,dma}_addr() (Christoph)
-  o In device.h: s/const void */const struct dma_pfn_offset_region */
-  o removed 'unlikely' from unlikely(dev->dma_pfn_offset_map) since
-    guarded by CONFIG_DMA_PFN_OFFSET_MAP (Christoph)
-  o Since dev->dma_pfn_offset is copied in usb/core/{usb,message}.c, now
-    dev->dma_pfn_offset_map is copied as well.
-  o Merged two of the DMA commits into one (Christoph).
+Freed by task 3368:
+ save_stack+0x21/0x90 mm/kasan/common.c:72
+ set_track mm/kasan/common.c:80 [inline]
+ kasan_set_free_info mm/kasan/common.c:337 [inline]
+ __kasan_slab_free+0x135/0x190 mm/kasan/common.c:476
+ kasan_slab_free+0xe/0x10 mm/kasan/common.c:485
+ slab_free_hook mm/slub.c:1444 [inline]
+ slab_free_freelist_hook mm/slub.c:1477 [inline]
+ slab_free mm/slub.c:3034 [inline]
+ kfree+0xf7/0x410 mm/slub.c:3995
+ gprinter_free+0x49/0xd0 drivers/usb/gadget/function/f_printer.c:1353
+ usb_put_function+0x38/0x50 drivers/usb/gadget/functions.c:87
+ config_usb_cfg_unlink+0x2db/0x3b0 drivers/usb/gadget/configfs.c:485
+ configfs_unlink+0x3b9/0x7f0 fs/configfs/symlink.c:250
+ vfs_unlink+0x287/0x570 fs/namei.c:4073
+ do_unlinkat+0x4f9/0x620 fs/namei.c:4137
+ __do_sys_unlink fs/namei.c:4184 [inline]
+ __se_sys_unlink fs/namei.c:4182 [inline]
+ __x64_sys_unlink+0x42/0x50 fs/namei.c:4182
+ do_syscall_64+0x9e/0x510 arch/x86/entry/common.c:294
+ entry_SYSCALL_64_after_hwframe+0x49/0xbe
 
-Commit "arm: dma-mapping: Invoke dma offset func if needed":
-  o Use helper functions instead of #if CONFIG_DMA_PFN_OFFSET
+The buggy address belongs to the object at ffff8880683b0000
+ which belongs to the cache kmalloc-1k of size 1024
+The buggy address is located 24 bytes inside of
+ 1024-byte region [ffff8880683b0000, ffff8880683b0400)
+The buggy address belongs to the page:
+page:ffffea0001a0ec00 refcount:1 mapcount:0 mapping:ffff88806c00e300
+index:0xffff8880683b1800 compound_mapcount: 0
+flags: 0x100000000010200(slab|head)
+raw: 0100000000010200 0000000000000000 0000000600000001 ffff88806c00e300
+raw: ffff8880683b1800 000000008010000a 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
 
-Other commits' changes:
-  o Removed need for carrying of_id var in priv (Nicolas)
-  o Commit message rewordings (Bjorn)
-  o Commit log messages filled to 75 chars (Bjorn)
-  o devm_reset_control_get_shared())
-    => devm_reset_control_get_optional_shared (Philipp)
-  o Add call to reset_control_assert() in PCIe remove routines (Philipp)
-
-v1:
-This patchset expands the usefulness of the Broadcom Settop Box PCIe
-controller by building upon the PCIe driver used currently by the
-Raspbery Pi.  Other forms of this patchset were submitted by me years
-ago and not accepted; the major sticking point was the code required
-for the DMA remapping needed for the PCIe driver to work [1].
-
-There have been many changes to the DMA and OF subsystems since that
-time, making a cleaner and less intrusive patchset possible.  This
-patchset implements a generalization of "dev->dma_pfn_offset", except
-that instead of a single scalar offset it provides for multiple
-offsets via a function which depends upon the "dma-ranges" property of
-the PCIe host controller.  This is required for proper functionality
-of the BrcmSTB PCIe controller and possibly some other devices.
-
-[1] https://lore.kernel.org/linux-arm-kernel/1516058925-46522-5-git-send-email-jim2101024@gmail.com/
-
-Jim Quinlan (13):
-  PCI: brcmstb: PCIE_BRCMSTB depends on ARCH_BRCMSTB
-  ata: ahci_brcm: Fix use of BCM7216 reset controller
-  dt-bindings: PCI: Add bindings for more Brcmstb chips
-  PCI: brcmstb: Add bcm7278 reigister info
-  PCI: brcmstb: Add suspend and resume pm_ops
-  PCI: brcmstb: Add bcm7278 PERST support
-  PCI: brcmstb: Add control of rescal reset
-  of: Include a dev param in of_dma_get_range()
-  device core: Introduce multiple dma pfn offsets
-  PCI: brcmstb: Set internal memory viewport sizes
-  PCI: brcmstb: Accommodate MSI for older chips
-  PCI: brcmstb: Set bus max burst size by chip type
-  PCI: brcmstb: Add bcm7211, bcm7216, bcm7445, bcm7278 to match list
-
- .../bindings/pci/brcm,stb-pcie.yaml           |  58 ++-
- arch/arm/include/asm/dma-mapping.h            |   9 +-
- arch/arm/mach-keystone/keystone.c             |   9 +-
- arch/sh/drivers/pci/pcie-sh7786.c             |   3 +-
- arch/sh/kernel/dma-coherent.c                 |  17 +-
- arch/x86/pci/sta2x11-fixup.c                  |   7 +-
- drivers/acpi/arm64/iort.c                     |   5 +-
- drivers/ata/ahci_brcm.c                       |  14 +-
- drivers/gpu/drm/sun4i/sun4i_backend.c         |   7 +-
- drivers/iommu/io-pgtable-arm.c                |   2 +-
- .../platform/sunxi/sun4i-csi/sun4i_csi.c      |   5 +-
- .../platform/sunxi/sun6i-csi/sun6i_csi.c      |   5 +-
- drivers/of/address.c                          |  97 ++++-
- drivers/of/device.c                           |  10 +-
- drivers/of/of_private.h                       |   8 +-
- drivers/of/unittest.c                         |   2 +-
- drivers/pci/controller/Kconfig                |   3 +-
- drivers/pci/controller/pcie-brcmstb.c         | 408 +++++++++++++++---
- drivers/remoteproc/remoteproc_core.c          |   2 +-
- .../staging/media/sunxi/cedrus/cedrus_hw.c    |   7 +-
- drivers/usb/core/message.c                    |   4 +-
- drivers/usb/core/usb.c                        |   2 +-
- include/linux/device.h                        |   4 +-
- include/linux/dma-direct.h                    |  16 +-
- include/linux/dma-mapping.h                   |  45 ++
- kernel/dma/coherent.c                         |  11 +-
- 26 files changed, 631 insertions(+), 129 deletions(-)
-
--- 
-2.17.1
-
+Memory state around the buggy address:
+ ffff8880683aff00: 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc fc
+ ffff8880683aff80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>ffff8880683b0000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                            ^
+ ffff8880683b0080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff8880683b0100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
