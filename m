@@ -2,146 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D6A01ECC21
-	for <lists+linux-usb@lfdr.de>; Wed,  3 Jun 2020 11:02:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F3AE1ECC93
+	for <lists+linux-usb@lfdr.de>; Wed,  3 Jun 2020 11:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726123AbgFCJCc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Jun 2020 05:02:32 -0400
-Received: from mail-eopbgr80082.outbound.protection.outlook.com ([40.107.8.82]:56396
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725881AbgFCJCb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 3 Jun 2020 05:02:31 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aAyh8HaC3jvgLFIuGVC6iMfRpVVes2YolQmR5+gkDw98RdgE9Tfek1tBRGMKXSxJOHeTKrLWx/O/C6FwrJNaBNtvhb/9/cb8RRYuDl/75zPurrlv2CftWemcF8cYYV8NMJLAFpN7rYNjhC95RfGCOIV5k7JNQDGJwOXBUINVdIJzeaWY5dh92FwgQGvmX8fFjWkWfW4p/aDZ/ARlKNHbNHmTe5crcbukDrAn1yXRbIIcnWTlFgk7dHJ0oTeTpl5Ep9YJvoCEPfVTHz3kf6CEuNnA5Tv0W7lhUiDfnMkzqG+wl+ZKSJU/OYCWLUmuB05sjBYLkzj9JCkjmco/hgBHIg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Tm/4kULV6UzmAaPRCLYRuyNmd2+hAP0kVvNw/OO2uqU=;
- b=d1PLHRdaTG0VeWS006pyLe7fgTvE4m6SNoEdCSc2TY/tqC5XHVEtAgzr8vu31laA3dvK70O30qR0pdVpcxdbqM+oC+t6cOSZUxF/e5rnvHbkavihiwYlwqqqD2dCzLy3hJWrhblB6qg3j9dfNQvUH4aakXLJf9TogfKXLkc+4vkXH7o1KFdi6zFifYoNYCTTv727OCbg1riNQSyXaEgKL5y9TrVJ+sU49dzVv3d5vaq9wIdNmvcvAxQNMSQZh6GNWPXpjp+eKzjKIk0R7+IjndykqhsbF2V0C83KS5aUnXwXOECQqGo+dG8srC0ju8NadLSMoPiZoAFA6KB0ZPay0w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Tm/4kULV6UzmAaPRCLYRuyNmd2+hAP0kVvNw/OO2uqU=;
- b=ZXKiD0bt9P7Pw2G7En+jHD1kV67DYsfggHHwIMYR8/J0WiAtQJT1/PuhutnAs5x6R0vfp38mOXno5zYN14arZRWfMRdxoYxiLzjzg2FFZ9U15E6KMlgKxSnskpkLl9EluWpT83fyMhcWK0DfhRbmrBtP7243Gd7UDEDZWppWquM=
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
- by AM7PR04MB6934.eurprd04.prod.outlook.com (2603:10a6:20b:10a::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3066.18; Wed, 3 Jun
- 2020 09:02:27 +0000
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1101:adaa:ee89:af2a]) by AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1101:adaa:ee89:af2a%3]) with mapi id 15.20.3066.018; Wed, 3 Jun 2020
- 09:02:27 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Fabio Estevam <festevam@gmail.com>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        Jun Li <jun.li@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] Documentation: ABI: usb: chipidea: Update Li Jun's e-mail
-Thread-Topic: [PATCH] Documentation: ABI: usb: chipidea: Update Li Jun's
- e-mail
-Thread-Index: AQHWNaXkLnwtl02bc0KsmiYR+a8dnKjGoDoA
-Date:   Wed, 3 Jun 2020 09:02:27 +0000
-Message-ID: <20200603090252.GA11199@b29397-desktop>
-References: <20200529104234.25136-1-festevam@gmail.com>
-In-Reply-To: <20200529104234.25136-1-festevam@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: c6f10a35-81fb-4dc5-fef8-08d8079cd706
-x-ms-traffictypediagnostic: AM7PR04MB6934:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM7PR04MB693421DCE8CF7FA30680A4568B880@AM7PR04MB6934.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-forefront-prvs: 04238CD941
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: UU2kEQGGAAFhgLFgBfDShS/Y+8FyLhdjMHVxiEURWKocq4opBRSb44DxP+gC8JpfqgDgEugxhUg7/uPnXj2rhX/RZw5hPmqEm6q9n0GcomSKOKpD/rNxMKKD60yHMtjpoDfNjepqs533dUK51EnPhLMrlHkSLHtflKm5QnrVPnNHhI/ZlntGhWMrgRDnaBt7GTa11tqmWJ2wgH4iinSkfhjCTB+KprX8EeNQ4anY124GPigvysnJ/nTRkZWpqDT6RYac1v9DKh3bLGSuOg/Y+U6mcsAGq891SVlSbJI2siVs34tZiRqGRkCpzL4Vv2Df
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(7916004)(4636009)(136003)(366004)(396003)(346002)(39860400002)(376002)(71200400001)(86362001)(186003)(33656002)(6916009)(5660300002)(6506007)(33716001)(6486002)(26005)(4326008)(53546011)(66446008)(2906002)(76116006)(91956017)(64756008)(83380400001)(8676002)(66556008)(54906003)(8936002)(1076003)(44832011)(478600001)(316002)(9686003)(6512007)(66476007)(66946007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: qy4910rvqK+p2I8ysRbjvmhln7y32omFLaC0SZnTHk9ZnBGtm9mXL58jfXOZIv7sJSnMY985YxExLZcUH4DcTstg5IAXRmhCz7s0ZKEKnUPFuhLFkmnsfpNYv/wdmcLv5TfUjqIVDTvxwg4Y16yphNF9jgRRHecvYRvZzsj1rrbE9yBbikxmVLy+TAaGHMl8aQX0q27W0g5qcArIYC1qmhaPkxpz1RENIiyXs0COYtkoO04IDwVXx97R2ZjCBZpQTOOe+ZXm+jtsSWjOwJ1jTxwUOtOzgHKyoxyuJDhC1pm4zHLbuAiC/kGefFdYVpysqd2u6qwq90A2PeDDr6EbPXaygYHPZD31EvMyMA1KM83zEIi2PQmCKGY5ounAsNLyjGmNPQi94fUsEyXgT00ttNAjEIB/feu2Ef1vhqXljV7v/7Fp/4fuWKZDcUzFK8cZ4e2JvDGWj2itjPKEKxqu8v4sa8wq26g5cszC8sxbMpg=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <64730699A4D8614CA6877B9A984880E2@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1725943AbgFCJ1O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 3 Jun 2020 05:27:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37514 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725854AbgFCJ1O (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Jun 2020 05:27:14 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B29C05BD43
+        for <linux-usb@vger.kernel.org>; Wed,  3 Jun 2020 02:27:13 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id c21so873604lfb.3
+        for <linux-usb@vger.kernel.org>; Wed, 03 Jun 2020 02:27:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vLHGvoEca7+d546E0zoaQLjsBT2fBfDNH2FAI/kI640=;
+        b=T+CQdkU9V4h6BEPP0VwSjIeRTR25CSgH7p+/xzNmCFkyq+xk65W+BjijuwsnVbBi+y
+         Cfd7GmWP+AzJntwVj1sSrFx3qEaJUJAMufRNxH2d1ewnmUy7Xru8SjPM1QdCyHeb4n2c
+         9ThS4QvebtJ9LEjq1ZlaHlBdjArGFGbHWajRHVfLXo4DnftPJDKPB5HTlWwM0//VYkab
+         jqk80UH2/SgfimnmmdJWgSY3RV8HaZw581ycbFfhFIdMalJst0m4nhi81xOqbGbI+evw
+         sc1Rm8z7aTpLOT5gmpv5K3RtYcmZr7DFaIn6P0p9pZc9DIu8mT/y5wLtY1vNq0wvGEOl
+         fdrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vLHGvoEca7+d546E0zoaQLjsBT2fBfDNH2FAI/kI640=;
+        b=TxhhDnzjRdbowPAEtawwcKt5aVqe/tP+rkHjKOl0nRkH0xudg/yo0q/nqrOmnY1LOj
+         hmTEEoI2+gT1S2x8dFu2AbPXA3sAEeRezEgAh2GSfgBAFOSseKN0FaxTdMMfE8tozm4v
+         Wh9SSc385q/KDz9R7E46g4EZoCSKKCjG03Ctrp7py1hyQzKSFsv4vj2BgEFBnsR23jnQ
+         imnQn9d4t7VhpCN1Klnql255lTBo/IaGXf6atBQOJ/TzlifeSeoyGNNpUux/pf9rtlv0
+         /kVeRlNw41xI2iadT5xyHsnA4M8wSginwi4BPLn5KxFvbAiTqaq+SvhQahhOGRUBeAm8
+         dUMQ==
+X-Gm-Message-State: AOAM5308ML2yF9UOavzc9BSU8bu082wjMAB7rYk6J8cFO+qP1vuFhwea
+        S8XUFn4v3W2o7OXl3W7/ELv6dBq9Juq3SiwTN+Q=
+X-Google-Smtp-Source: ABdhPJxUhZnCYRVW/4QMAekHSmkLxjE2PTg4V5rdJa41vpVJ8FHLVLXBzQygMxGA+LNDkxXCECszB2w469j0lWDLOdM=
+X-Received: by 2002:a19:c187:: with SMTP id r129mr1971488lff.35.1591176432357;
+ Wed, 03 Jun 2020 02:27:12 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c6f10a35-81fb-4dc5-fef8-08d8079cd706
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jun 2020 09:02:27.5752
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pFe6CdWjGR/oHkLsHpNH+ARDOOQpC3Dw+qDMT4rIpQAZsWfVmqbgdK51XG/xRUtZfOncJ+xruko/Ss4VJYXGyw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6934
+References: <20200523232304.23976-1-peter.chen@nxp.com> <20200523232304.23976-3-peter.chen@nxp.com>
+ <1591174278.15527.6.camel@mhfsdcap03>
+In-Reply-To: <1591174278.15527.6.camel@mhfsdcap03>
+From:   Peter Chen <hzpeterchen@gmail.com>
+Date:   Wed, 3 Jun 2020 17:27:00 +0800
+Message-ID: <CAL411-qedvd0fWiBt7WixeND03ZMYLeiqSxVmsKFCyZwsDz8YQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/9] usb: cdns3: add runtime PM support
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Peter Chen <peter.chen@nxp.com>, balbi@kernel.org,
+        mathias.nyman@intel.com, USB list <linux-usb@vger.kernel.org>,
+        linux-imx@nxp.com, pawell@cadence.com, rogerq@ti.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>, jun.li@nxp.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-05-29 07:42:34, Fabio Estevam wrote:
-> The freescale.com e-mail domain is no longer active for quite some
-> time. Switch Li Jun's e-mail address to the NXP domain.
->=20
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> > Introduce runtime PM and wakeup interrupt handler for cdns3,
+> > the runtime PM is default off since other cdns3 has not implemented
+> > glue layer support for runtime PM.
+> >
+> > When the controller is in low power mode, the lpm flag will be set.
+> > The interrupt triggered later than lpm flag is set considers as
+> > wakeup interrupt and handled at cdns_drd_irq.
+> Wonder to know that CPUs may be powered off in this case?
 
-Applied, thanks.
+Yes
+
+> Do you consider the case when usb controller is in low power mode, and
+> also power off CPUs, then how to wakeup usb controller?
+>
+
+About USB wakeup for system suspend, there are still some works need
+to do for this driver, will do later.
+
+For system wakeup, it is platform specific. If the main cores are
+powered off totally,
+and do not respond any wakeup events, it needs the other core to get this wakeup
+event, and power on main cores. After main cores are powered on, the
+wakeup interrupt
+status are there (if controller is not powered off), the controller
+driver could handle
+this wakeup event.
 
 Peter
-> ---
->  Documentation/ABI/testing/sysfs-platform-chipidea-usb-otg | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->=20
-> diff --git a/Documentation/ABI/testing/sysfs-platform-chipidea-usb-otg b/=
-Documentation/ABI/testing/sysfs-platform-chipidea-usb-otg
-> index 151c59578db4..f58cfb06b160 100644
-> --- a/Documentation/ABI/testing/sysfs-platform-chipidea-usb-otg
-> +++ b/Documentation/ABI/testing/sysfs-platform-chipidea-usb-otg
-> @@ -1,6 +1,6 @@
->  What:		/sys/bus/platform/devices/ci_hdrc.0/inputs/a_bus_req
->  Date:		Feb 2014
-> -Contact:	Li Jun <b47624@freescale.com>
-> +Contact:	Li Jun <jun.li@nxp.com>
->  Description:
->  		Can be set and read.
->  		Set a_bus_req(A-device bus request) input to be 1 if
-> @@ -17,7 +17,7 @@ Description:
-> =20
->  What:		/sys/bus/platform/devices/ci_hdrc.0/inputs/a_bus_drop
->  Date:		Feb 2014
-> -Contact:	Li Jun <b47624@freescale.com>
-> +Contact:	Li Jun <jun.li@nxp.com>
->  Description:
->  		Can be set and read
->  		The a_bus_drop(A-device bus drop) input is 1 when the
-> @@ -32,7 +32,7 @@ Description:
-> =20
->  What:		/sys/bus/platform/devices/ci_hdrc.0/inputs/b_bus_req
->  Date:		Feb 2014
-> -Contact:	Li Jun <b47624@freescale.com>
-> +Contact:	Li Jun <jun.li@nxp.com>
->  Description:
->  		Can be set and read.
->  		The b_bus_req(B-device bus request) input is 1 during the time
-> @@ -47,7 +47,7 @@ Description:
-> =20
->  What:		/sys/bus/platform/devices/ci_hdrc.0/inputs/a_clr_err
->  Date:		Feb 2014
-> -Contact:	Li Jun <b47624@freescale.com>
-> +Contact:	Li Jun <jun.li@nxp.com>
->  Description:
->  		Only can be set.
->  		The a_clr_err(A-device Vbus error clear) input is used to clear
-> --=20
 
---=20
-
-Thanks,
-Peter Chen=
+> Thanks
+>
+> > Once the wakeup
+> > occurs, it first disables interrupt to avoid later interrupt
+> > occurrence since the controller is in low power mode at that
+> > time, and access registers may be invalid at that time. At wakeup
+> > handler, it will call pm_runtime_get to wakeup controller, and
+> > at runtime resume handler, it will enable interrupt again.
+> >
+> > The API platform_suspend is introduced for glue layer to implement
+> > platform specific PM sequence.
+> >
+> > Signed-off-by: Peter Chen <peter.chen@nxp.com>
+> > ---
+> >  drivers/usb/cdns3/core.c   | 119 +++++++++++++++++++++++++++++++------
+> >  drivers/usb/cdns3/core.h   |  14 +++++
+> >  drivers/usb/cdns3/drd.c    |   7 +++
+> >  drivers/usb/cdns3/gadget.c |   4 ++
+> >  drivers/usb/cdns3/host.c   |   7 +++
+> >  5 files changed, 134 insertions(+), 17 deletions(-)
+>
