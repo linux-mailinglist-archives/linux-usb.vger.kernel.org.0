@@ -2,81 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 159A21EDB84
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jun 2020 05:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A0F1EDC20
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jun 2020 06:15:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726950AbgFDDCH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 3 Jun 2020 23:02:07 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:16223 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725992AbgFDDCH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 3 Jun 2020 23:02:07 -0400
-X-UUID: be76835fb3214aa3b7f98be91c9e5e1e-20200604
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=UrOXbDNOnHiFKXtwaHVgzKiUKHi9PYwsXdkt9BWMTQ0=;
-        b=l4b8g311ij1osd5rrSxatQoejISeR2FIM9I2BLjH5Z/lF5w8CdMBFRPcBp84q2OS4CxL9M56MOPd2wPBOp9D/552vfvJTfOKfHr0KlZa+rg9vZY3kxhFE+KCSJJutYqimi5pgAKHP6lUDwhjwveUlVkudm8n9bE0Ve4NyvBLQJA=;
-X-UUID: be76835fb3214aa3b7f98be91c9e5e1e-20200604
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 493531536; Thu, 04 Jun 2020 11:02:05 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 4 Jun 2020 11:02:03 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 4 Jun 2020 11:02:03 +0800
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>,
-        Macpaul Lin <macpaul.lin@gmail.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-usb@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
-        <stable@vger.kernel.org>
-Subject: [PATCH v4] usb: host: xhci-mtk: avoid runtime suspend when removing hcd
-Date:   Thu, 4 Jun 2020 11:01:53 +0800
-Message-ID: <1591239713-5081-1-git-send-email-macpaul.lin@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <1591189767-21988-1-git-send-email-macpaul.lin@mediatek.com>
-References: <1591189767-21988-1-git-send-email-macpaul.lin@mediatek.com>
+        id S1726257AbgFDEP0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Jun 2020 00:15:26 -0400
+Received: from mail1.windriver.com ([147.11.146.13]:62675 "EHLO
+        mail1.windriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725959AbgFDEP0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Jun 2020 00:15:26 -0400
+Received: from ALA-HCB.corp.ad.wrs.com (ala-hcb.corp.ad.wrs.com [147.11.189.41])
+        by mail1.windriver.com (8.15.2/8.15.2) with ESMTPS id 0544F8Uj017628
+        (version=TLSv1 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
+        Wed, 3 Jun 2020 21:15:08 -0700 (PDT)
+Received: from pek-lpg-core1-vm1.wrs.com (128.224.156.106) by
+ ALA-HCB.corp.ad.wrs.com (147.11.189.41) with Microsoft SMTP Server id
+ 14.3.487.0; Wed, 3 Jun 2020 21:14:50 -0700
+From:   <qiang.zhang@windriver.com>
+To:     <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, <kt0755@gmail.com>,
+        <stern@rowland.harvard.edu>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] usb: usbtest: fix missing kfree(dev->buf) in usbtest_disconnect
+Date:   Thu, 4 Jun 2020 12:23:41 +0800
+Message-ID: <20200604042341.25305-1-qiang.zhang@windriver.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: B6818B62397C1B7303376C105A3A0368FFDDA6D0DA11CA08A9A0942B6D3722342000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-V2hlbiBydW50aW1lIHN1c3BlbmQgd2FzIGVuYWJsZWQsIHJ1bnRpbWUgc3VzcGVuZCBtaWdodCBo
-YXBwZW4NCndoZW4geGhjaSBpcyByZW1vdmluZyBoY2QuIFRoaXMgbWlnaHQgY2F1c2Uga2VybmVs
-IHBhbmljIHdoZW4gaGNkDQpoYXMgYmVlbiBmcmVlZCBidXQgcnVudGltZSBwbSBzdXNwZW5kIHJl
-bGF0ZWQgaGFuZGxlIG5lZWQgdG8NCnJlZmVyZW5jZSBpdC4NCg0KU2lnbmVkLW9mZi1ieTogTWFj
-cGF1bCBMaW4gPG1hY3BhdWwubGluQG1lZGlhdGVrLmNvbT4NClJldmlld2VkLWJ5OiBDaHVuZmVu
-ZyBZdW4gPGNodW5mZW5nLnl1bkBtZWRpYXRlay5jb20+DQpDYzogc3RhYmxlQHZnZXIua2VybmVs
-Lm9yZw0KLS0tDQpDaGFuZ2VzIGZvciB2MzoNCiAgLSBSZXBsYWNlIGJldHRlciBzZXF1ZW5jZSBm
-b3IgZGlzYWJsaW5nIHRoZSBwbV9ydW50aW1lIHN1c3BlbmQuDQpDaGFuZ2VzIGZvciB2NDoNCiAg
-LSBUaGFua3MgZm9yIFNlcmdlaSdzIHJldmlldywgdHlwbyBpbiBjb21taXQgZGVzY3JpcHRpb24g
-aGFzIGJlZW4gY29ycmVjdGVkLg0KDQogZHJpdmVycy91c2IvaG9zdC94aGNpLW10ay5jIHwgICAg
-NSArKystLQ0KIDEgZmlsZSBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0p
-DQoNCmRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9ob3N0L3hoY2ktbXRrLmMgYi9kcml2ZXJzL3Vz
-Yi9ob3N0L3hoY2ktbXRrLmMNCmluZGV4IGJmYmRiM2MuLjY0MWQyNGUgMTAwNjQ0DQotLS0gYS9k
-cml2ZXJzL3VzYi9ob3N0L3hoY2ktbXRrLmMNCisrKyBiL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1t
-dGsuYw0KQEAgLTU4Nyw2ICs1ODcsOSBAQCBzdGF0aWMgaW50IHhoY2lfbXRrX3JlbW92ZShzdHJ1
-Y3QgcGxhdGZvcm1fZGV2aWNlICpkZXYpDQogCXN0cnVjdCB4aGNpX2hjZAkqeGhjaSA9IGhjZF90
-b194aGNpKGhjZCk7DQogCXN0cnVjdCB1c2JfaGNkICAqc2hhcmVkX2hjZCA9IHhoY2ktPnNoYXJl
-ZF9oY2Q7DQogDQorCXBtX3J1bnRpbWVfcHV0X25vaWRsZSgmZGV2LT5kZXYpOw0KKwlwbV9ydW50
-aW1lX2Rpc2FibGUoJmRldi0+ZGV2KTsNCisNCiAJdXNiX3JlbW92ZV9oY2Qoc2hhcmVkX2hjZCk7
-DQogCXhoY2ktPnNoYXJlZF9oY2QgPSBOVUxMOw0KIAlkZXZpY2VfaW5pdF93YWtldXAoJmRldi0+
-ZGV2LCBmYWxzZSk7DQpAQCAtNTk3LDggKzYwMCw2IEBAIHN0YXRpYyBpbnQgeGhjaV9tdGtfcmVt
-b3ZlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKmRldikNCiAJeGhjaV9tdGtfc2NoX2V4aXQobXRr
-KTsNCiAJeGhjaV9tdGtfY2xrc19kaXNhYmxlKG10ayk7DQogCXhoY2lfbXRrX2xkb3NfZGlzYWJs
-ZShtdGspOw0KLQlwbV9ydW50aW1lX3B1dF9zeW5jKCZkZXYtPmRldik7DQotCXBtX3J1bnRpbWVf
-ZGlzYWJsZSgmZGV2LT5kZXYpOw0KIA0KIAlyZXR1cm4gMDsNCiB9DQotLSANCjEuNy45LjUNCg==
+From: Zqiang <qiang.zhang@windriver.com>
+
+BUG: memory leak
+unreferenced object 0xffff888055046e00 (size 256):
+  comm "kworker/2:9", pid 2570, jiffies 4294942129 (age 1095.500s)
+  hex dump (first 32 bytes):
+    00 70 04 55 80 88 ff ff 18 bb 5a 81 ff ff ff ff  .p.U......Z.....
+    f5 96 78 81 ff ff ff ff 37 de 8e 81 ff ff ff ff  ..x.....7.......
+  backtrace:
+    [<00000000d121dccf>] kmemleak_alloc_recursive
+include/linux/kmemleak.h:43 [inline]
+    [<00000000d121dccf>] slab_post_alloc_hook mm/slab.h:586 [inline]
+    [<00000000d121dccf>] slab_alloc_node mm/slub.c:2786 [inline]
+    [<00000000d121dccf>] slab_alloc mm/slub.c:2794 [inline]
+    [<00000000d121dccf>] kmem_cache_alloc_trace+0x15e/0x2d0 mm/slub.c:2811
+    [<000000005c3c3381>] kmalloc include/linux/slab.h:555 [inline]
+    [<000000005c3c3381>] usbtest_probe+0x286/0x19d0
+drivers/usb/misc/usbtest.c:2790
+    [<000000001cec6910>] usb_probe_interface+0x2bd/0x870
+drivers/usb/core/driver.c:361
+    [<000000007806c118>] really_probe+0x48d/0x8f0 drivers/base/dd.c:551
+    [<00000000a3308c3e>] driver_probe_device+0xfc/0x2a0 drivers/base/dd.c:724
+    [<000000003ef66004>] __device_attach_driver+0x1b6/0x240
+drivers/base/dd.c:831
+    [<00000000eee53e97>] bus_for_each_drv+0x14e/0x1e0 drivers/base/bus.c:431
+    [<00000000bb0648d0>] __device_attach+0x1f9/0x350 drivers/base/dd.c:897
+    [<00000000838b324a>] device_initial_probe+0x1a/0x20 drivers/base/dd.c:944
+    [<0000000030d501c1>] bus_probe_device+0x1e1/0x280 drivers/base/bus.c:491
+    [<000000005bd7adef>] device_add+0x131d/0x1c40 drivers/base/core.c:2504
+    [<00000000a0937814>] usb_set_configuration+0xe84/0x1ab0
+drivers/usb/core/message.c:2030
+    [<00000000e3934741>] generic_probe+0x6a/0xe0 drivers/usb/core/generic.c:210
+    [<0000000098ade0f1>] usb_probe_device+0x90/0xd0
+drivers/usb/core/driver.c:266
+    [<000000007806c118>] really_probe+0x48d/0x8f0 drivers/base/dd.c:551
+    [<00000000a3308c3e>] driver_probe_device+0xfc/0x2a0 drivers/base/dd.c:724
+
+Reported-by: Kyungtae Kim <kt0755@gmail.com>
+Signed-off-by: Zqiang <qiang.zhang@windriver.com>
+---
+ v1->v2:
+ Remove Fixes field.
+
+ drivers/usb/misc/usbtest.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/usb/misc/usbtest.c b/drivers/usb/misc/usbtest.c
+index 98ada1a3425c..bae88893ee8e 100644
+--- a/drivers/usb/misc/usbtest.c
++++ b/drivers/usb/misc/usbtest.c
+@@ -2873,6 +2873,7 @@ static void usbtest_disconnect(struct usb_interface *intf)
+ 
+ 	usb_set_intfdata(intf, NULL);
+ 	dev_dbg(&intf->dev, "disconnect\n");
++	kfree(dev->buf);
+ 	kfree(dev);
+ }
+ 
+-- 
+2.24.1
 
