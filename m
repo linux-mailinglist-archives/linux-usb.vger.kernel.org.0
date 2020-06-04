@@ -2,138 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10CE51EE324
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jun 2020 13:16:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0AC31EE37D
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jun 2020 13:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726332AbgFDLQe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Jun 2020 07:16:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51752 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726175AbgFDLQe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Jun 2020 07:16:34 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD5DC03E96E
-        for <linux-usb@vger.kernel.org>; Thu,  4 Jun 2020 04:16:34 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id y18so2069887plr.4
-        for <linux-usb@vger.kernel.org>; Thu, 04 Jun 2020 04:16:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:content-transfer-encoding:in-reply-to:references
-         :subject:from:cc:to:date:message-id:user-agent;
-        bh=DEKbfIfXEu9wF9Z0rkW5J6S6e0LP/FIn5jqzqOD5wDs=;
-        b=J5RJ6b1svg73OcukZzTb62hfadQTam8cpOe6CX7zl/Yqm9toweh+CzSVUszQVZxgHc
-         MrzJlzQHPZiB/HszI+VdlKy0lFN8QKlDyAJ3lMMe45FqOCuMua5MMXQT/dYiM298BrDS
-         PwTgQO5xtayqQSu3nBzYBqxLzKEoVkKZOC5iQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:content-transfer-encoding
-         :in-reply-to:references:subject:from:cc:to:date:message-id
-         :user-agent;
-        bh=DEKbfIfXEu9wF9Z0rkW5J6S6e0LP/FIn5jqzqOD5wDs=;
-        b=ojPTEYnNsxcXUmLAyqr2tmVJZX+kbdQW8DbbML1SNzDNVRiK1uaiAMFMfvmtxiM75w
-         EdG8J/9Kf+E1SWlfowCs6lWlagkGuZgqrUy/IOsbhc/2jai6aiI1YB+MXdo2RqWaLtAL
-         J7VBrEIIPxXPG/86gkFp64JfNM7Xnq+a7//zO02mJtpEx9n3efAR/putEp3p/+raBijB
-         sUuXlMS0cp676cxb066Cif+wGnriideTJOS1NGDGJnCUC4aQtWK/MFB+AqAESs6TwV2l
-         mscKkWsj9GGJF6EAszPEpdgLhZpeIn5nH5qRG0UvfDgVGUmbrNAIl9aCZefNSVExKVtJ
-         6k5Q==
-X-Gm-Message-State: AOAM531klnfYPmgi3GOYZuZy511wolKfAaxuR9NtaN7D9XhooWGjD434
-        j84bFu0Ac0oRSpchAyYzIYBqWQ==
-X-Google-Smtp-Source: ABdhPJxCCivBhK/hg9K6wT5AEXVQ71u0Uha04pdnmjNrV/7G1HqPOOjkbI98CsYtuP81QhefKr6diQ==
-X-Received: by 2002:a17:902:aa48:: with SMTP id c8mr4478787plr.128.1591269393407;
-        Thu, 04 Jun 2020 04:16:33 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id a19sm4510338pfd.165.2020.06.04.04.16.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jun 2020 04:16:32 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <d9ccf188-4f00-d3ac-ba0f-73f06c087553@codeaurora.org>
-References: <1585718145-29537-1-git-send-email-sanm@codeaurora.org> <1585718145-29537-3-git-send-email-sanm@codeaurora.org> <159120577830.69627.13288547914742515702@swboyd.mtv.corp.google.com> <d9ccf188-4f00-d3ac-ba0f-73f06c087553@codeaurora.org>
-Subject: Re: [PATCH v7 2/4] usb: dwc3: qcom: Add interconnect support in dwc3 driver
-From:   Stephen Boyd <swboyd@chromium.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sandeep Maheswaram (Temp) <sanm@codeaurora.org>
-Date:   Thu, 04 Jun 2020 04:16:31 -0700
-Message-ID: <159126939154.69627.13027312816468830595@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9
+        id S1727776AbgFDLgf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Jun 2020 07:36:35 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:35856 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727091AbgFDLge (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 4 Jun 2020 07:36:34 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id EB97920122A;
+        Thu,  4 Jun 2020 13:36:32 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 87EF7201227;
+        Thu,  4 Jun 2020 13:36:30 +0200 (CEST)
+Received: from titan.ap.freescale.net (titan.ap.freescale.net [10.192.208.233])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 3D535402AD;
+        Thu,  4 Jun 2020 19:36:27 +0800 (SGT)
+From:   jun.li@nxp.com
+To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com
+Cc:     john.stultz@linaro.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH v3] usb: typec: tcpci_rt1711h: avoid screaming irq causing boot hangs
+Date:   Thu,  4 Jun 2020 19:21:18 +0800
+Message-Id: <20200604112118.38062-1-jun.li@nxp.com>
+X-Mailer: git-send-email 2.9.5
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Quoting Sandeep Maheswaram (Temp) (2020-06-04 02:43:09)
->=20
-> On 6/3/2020 11:06 PM, Stephen Boyd wrote:
-> > Quoting Sandeep Maheswaram (2020-03-31 22:15:43)
-> >> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom=
-.c
-> >> index 1dfd024..d33ae86 100644
-> >> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> >> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> >> @@ -285,6 +307,101 @@ static int dwc3_qcom_resume(struct dwc3_qcom *qc=
-om)
-> >>          return 0;
-> >>   }
-> >>  =20
-> >> +
-> >> +/**
-> >> + * dwc3_qcom_interconnect_init() - Get interconnect path handles
-> >> + * @qcom:                      Pointer to the concerned usb core.
-> >> + *
-> >> + */
-> >> +static int dwc3_qcom_interconnect_init(struct dwc3_qcom *qcom)
-> >> +{
-> >> +       struct device *dev =3D qcom->dev;
-> >> +       int ret;
-> >> +
-> >> +       if (!device_is_bound(&qcom->dwc3->dev))
-> >> +               return -EPROBE_DEFER;
-> > How is this supposed to work? I see that this was added in an earlier
-> > revision of this patch series but there isn't any mention of why
-> > device_is_bound() is used here. It would be great if there was a comment
-> > detailing why this is necessary. It sounds like maximum_speed is
-> > important?
-> >
-> > Furthermore, dwc3_qcom_interconnect_init() is called by
-> > dwc3_qcom_probe() which is the function that registers the device for
-> > qcom->dwc3->dev. If that device doesn't probe between the time it is
-> > registered by dwc3_qcom_probe() and this function is called then we'll
-> > fail dwc3_qcom_probe() with -EPROBE_DEFER. And that will remove the
-> > qcom->dwc3->dev device from the platform bus because we call
-> > of_platform_depopulate() on the error path of dwc3_qcom_probe().
-> >
-> > So isn't this whole thing racy and can potentially lead us to a driver
-> > probe loop where the wrapper (dwc3_qcom) and the core (dwc3) are probing
-> > and we're trying to time it just right so that driver for dwc3 binds
-> > before we setup interconnects? I don't know if dwc3 can communicate to
-> > the wrapper but that would be more of a direct way to do this. Or maybe
-> > the wrapper should try to read the DT property for maximum speed and
-> > fallback to a worst case high bandwidth value if it can't figure it out
-> > itself without help from dwc3 core.
-> >
-> This was added in V4 to address comments from Matthias in V3
->=20
-> https://patchwork.kernel.org/patch/11148587/
->=20
+From: Li Jun <jun.li@nxp.com>
 
-Yes, that why I said:
+John reported screaming irq caused by rt1711h when system boot[1],
+this is because irq request is done before tcpci_register_port(),
+so the chip->tcpci has not been setup, irq handler is entered but
+can't do anything, this patch is to address this by moving the irq
+request after tcpci_register_port().
 
-"I see that this was added in an earlier
- revision of this patch series but there isn't any mention of why
- device_is_bound() is used here. It would be great if there was a comment
- detailing why this is necessary. It sounds like maximum_speed is
- important?"
+[1] https://lore.kernel.org/linux-usb/20200530040157.31038-1-john.stultz@linaro.org
 
-Can you please respond to the rest of my email?
+Fixes: ce08eaeb6388 ("staging: typec: rt1711h typec chip driver")
+Cc: stable <stable@vger.kernel.org> # v4.18+
+Cc: John Stultz <john.stultz@linaro.org>
+Reported-and-tested-by: John Stultz <john.stultz@linaro.org>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Li Jun <jun.li@nxp.com>
+---
+changes for v3:
+- Add Cc to stable tag, add John's R-a-t-b and Heikki's R-b tag.
+
+changes for v2:
+- Add fix tag.
+- Use lore.kernel.org link.
+- Add Guenter's R-b tag.
+
+ drivers/usb/typec/tcpm/tcpci_rt1711h.c | 31 ++++++++++---------------------
+ 1 file changed, 10 insertions(+), 21 deletions(-)
+
+diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+index 0173890..b56a088 100644
+--- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
++++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+@@ -179,26 +179,6 @@ static irqreturn_t rt1711h_irq(int irq, void *dev_id)
+ 	return tcpci_irq(chip->tcpci);
+ }
+ 
+-static int rt1711h_init_alert(struct rt1711h_chip *chip,
+-			      struct i2c_client *client)
+-{
+-	int ret;
+-
+-	/* Disable chip interrupts before requesting irq */
+-	ret = rt1711h_write16(chip, TCPC_ALERT_MASK, 0);
+-	if (ret < 0)
+-		return ret;
+-
+-	ret = devm_request_threaded_irq(chip->dev, client->irq, NULL,
+-					rt1711h_irq,
+-					IRQF_ONESHOT | IRQF_TRIGGER_LOW,
+-					dev_name(chip->dev), chip);
+-	if (ret < 0)
+-		return ret;
+-	enable_irq_wake(client->irq);
+-	return 0;
+-}
+-
+ static int rt1711h_sw_reset(struct rt1711h_chip *chip)
+ {
+ 	int ret;
+@@ -260,7 +240,8 @@ static int rt1711h_probe(struct i2c_client *client,
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	ret = rt1711h_init_alert(chip, client);
++	/* Disable chip interrupts before requesting irq */
++	ret = rt1711h_write16(chip, TCPC_ALERT_MASK, 0);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -271,6 +252,14 @@ static int rt1711h_probe(struct i2c_client *client,
+ 	if (IS_ERR_OR_NULL(chip->tcpci))
+ 		return PTR_ERR(chip->tcpci);
+ 
++	ret = devm_request_threaded_irq(chip->dev, client->irq, NULL,
++					rt1711h_irq,
++					IRQF_ONESHOT | IRQF_TRIGGER_LOW,
++					dev_name(chip->dev), chip);
++	if (ret < 0)
++		return ret;
++	enable_irq_wake(client->irq);
++
+ 	return 0;
+ }
+ 
+-- 
+2.7.4
+
