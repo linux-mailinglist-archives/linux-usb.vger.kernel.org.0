@@ -2,117 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDF231EE623
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jun 2020 15:58:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0E261EE698
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jun 2020 16:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728760AbgFDN6u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Jun 2020 09:58:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48676 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728337AbgFDN6u (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Jun 2020 09:58:50 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A577C08C5C0;
-        Thu,  4 Jun 2020 06:58:50 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id o26so4819804edq.0;
-        Thu, 04 Jun 2020 06:58:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=3qC5bBE2TNzOj1a5qZ4ztpSJPzwogmBB/9SPnd42iqo=;
-        b=iT6orcQpn/Zi9wQ2jD0Zv6Ejjxgz46upF6pdzB8ylmJX5eM/yc1F7rzfJ77zsa3h6+
-         9+gSoxRgJ88r5eHycx4vpD6wv5Kgk68jXO2c679Qn11EMfJw9PsEkNMI88NBPV002slG
-         uJR2RVM0GH1wDx5EiO7DjUBGJWaKHdhAAlE7GDE31zlEd6eXFqqP/30ikBJ1/MvZMmrC
-         qwV5HOS2W8BbBaK8f1z7zHZVVw2c/RxCbQ6yBKiYrnEBIeSTZXooB5JWsM++eT6hxwFl
-         /la/P/dLY9kocRmiWWtTjD0k8qk8GsRG9b/BplEUVihPlWXZ19MIb9HK3YdAGoAXjaF9
-         jXDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=3qC5bBE2TNzOj1a5qZ4ztpSJPzwogmBB/9SPnd42iqo=;
-        b=frUUtv0XWPxN0RCeTYRXgDfjtxB4l+z1v4tm9Q3n3XTBDAmEY5m+/yTxBV4zkVYBCo
-         yPoFGpwUk3iC5qdnosyGTEQVIB9y/DNOZgTeOd/irLcbA4IHakQ+gvlhmZhEENq3nxFq
-         pNLMXF9fSCNgPAYGcGAsflZ6+6ctIXuKb8IlkLNyFkpsXbjcU35j5X2XqCEvHIuWqr6E
-         pj57ZWucjYCQnsG5JufcC6ob+BmsjC151bRlsjKT3zuSYcrhfUp1Lbg8FdGxMuyZYPcr
-         6glWfBBfn2+uRcz+rtbMmUSpG4CQ2DYq/iktL6y7r6TpeCpcoQYJSKr4NNBlXikPRhSH
-         DhNg==
-X-Gm-Message-State: AOAM530pkynx6vf+jmHuLsA8oR3hTjKNHGTIkyeIrhUGgfnLYB947ZJR
-        SH5QJHEl53GSFOKtH3i0aQ8=
-X-Google-Smtp-Source: ABdhPJznfDDx1LlyjwF9qSl9ZNsDXsrN8tt512tci2tZybQ3b4FkTErmLxkpVRFdHyfSZnNaDP1Oag==
-X-Received: by 2002:a05:6402:149:: with SMTP id s9mr4288851edu.375.1591279128550;
-        Thu, 04 Jun 2020 06:58:48 -0700 (PDT)
-Received: from localhost (pd9e51079.dip0.t-ipconnect.de. [217.229.16.121])
-        by smtp.gmail.com with ESMTPSA id kt10sm2221923ejb.54.2020.06.04.06.58.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jun 2020 06:58:47 -0700 (PDT)
-Date:   Thu, 4 Jun 2020 15:58:46 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Kishon Vijay Abraham I <kishon@ti.com>
-Cc:     Nagarjuna Kristam <nkristam@nvidia.com>, balbi@kernel.org,
-        gregkh@linuxfoundation.org, jonathanh@nvidia.com,
-        mark.rutland@arm.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V3 5/8] phy: tegra: xusb: Add soc ops API to enable UTMI
- PAD protection
-Message-ID: <20200604135846.GD1138399@ulmo>
-References: <1589437363-16727-1-git-send-email-nkristam@nvidia.com>
- <1589437363-16727-6-git-send-email-nkristam@nvidia.com>
- <db698a53-c5f6-d03f-edf0-f4fb38963e1f@ti.com>
+        id S1729014AbgFDO0J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Jun 2020 10:26:09 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:55721 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1728663AbgFDO0J (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Jun 2020 10:26:09 -0400
+Received: (qmail 27143 invoked by uid 1000); 4 Jun 2020 10:26:08 -0400
+Date:   Thu, 4 Jun 2020 10:26:08 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Longfang Liu <liulongfang@huawei.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        kong.kongxinwei@hisilicon.com, huangdaode@huawei.com,
+        yisen.zhuang@huawei.com
+Subject: Re: [PATCH v2] USB: ehci: reopen solution for Synopsys HC bug
+Message-ID: <20200604142608.GB26797@rowland.harvard.edu>
+References: <1591236678-36009-1-git-send-email-liulongfang@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="3Gf/FFewwPeBMqCJ"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <db698a53-c5f6-d03f-edf0-f4fb38963e1f@ti.com>
-User-Agent: Mutt/1.13.1 (2019-12-14)
+In-Reply-To: <1591236678-36009-1-git-send-email-liulongfang@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Thu, Jun 04, 2020 at 10:11:18AM +0800, Longfang Liu wrote:
+> A Synopsys USB2.0 core used in Huawei Kunpeng920 SoC has a bug which
+> might cause the host controller not issuing ping.
+> 
+> Bug description:
+> After indicating an Interrupt on Async Advance, the software uses the
+> doorbell mechanism to delete the Next Link queue head of the last
+> executed queue head. At this time, the host controller still references
+> the removed queue head(the queue head is NULL). NULL reference causes
+> the host controller to lose the USB device.
+> 
+> Solution:
+> After deleting the Next Link queue head, the software can write one of the
+> valid queue head addresses to the ASYNCLISTADDR register to allow
+> the host controller to get the valid queue head.
+> 
+> There are detailed instructions and solutions in this patch:
+> commit 2f7ac6c19997 ("USB: ehci: add workaround for Synopsys HC bug")
+> 
+> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
 
---3Gf/FFewwPeBMqCJ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This is a very bad patch description.  Do you understand why?  Because 
+it doesn't describe what the patch actually does!
 
-On Mon, May 18, 2020 at 05:54:03PM +0530, Kishon Vijay Abraham I wrote:
-> Thierry,
->=20
-> On 5/14/2020 11:52 AM, Nagarjuna Kristam wrote:
-> > When USB charger is enabled, UTMI PAD needs to be protected according
-> > to the direction and current level. Add support for the same on Tegra210
-> > and Tegra186.
-> >=20
-> > Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
->=20
-> Can you give your Acked by for pending patches in this series?
+The description talks about the original bug -- what it was and how it 
+was fixed.  But this patch doesn't contain the bug fix.  Instead, all 
+this patch does is set a quirk flag for the Huawei Kunpeng920.  The 
+patch description should explain why the quirk flag needs to be set; it 
+doesn't have to explain the original bug.
 
-I went through these patches one more time and I think they're all good
-now. I've acked the ones that didn't have my Acked-by yet.
+Alan Stern
 
-Thierry
-
---3Gf/FFewwPeBMqCJ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl7Y/hYACgkQ3SOs138+
-s6HnyA/9Fj2LLU1HqZfshnRjI3aQgaPbxFFuL1xOjZMMWSLk0qZ9BkE+knzQ9/c2
-G0EfbsP+Z0tp3HFRK37yT6YL2xNwciVYEQow+y0TMzwVCQdBY+ChdcL4M7Da/iNp
-VjJsEsmp7kWn2AApkN3CqZsrtYp+rzWTFoh7DPZfJr1Ny21gKaa7CHI72b/PXYoS
-sNnJvHwYBYZ9KofaSKteV+LyueAMuOxvQHA8CTWP9qgG5rpPb9n3lbv0D6BGOjSP
-xbt2Q1I5mxrTOVkpUpTjXDpVKglC3TCwUC9FLkDHOrfzjoF3pJFG1x97EuU2aH5Y
-E2xbIA7kSniYH+ZtxlL6f+iYmWqFyNsm6H6dWF3m/j5sryhLzwoa3KYSCdH2QSoc
-L/sW43agd+HcUKsHKk0mH1K1cVgGO2grnTQdSwbNRn8tlhchy0gikuCM1Ecs3Ehc
-bfSRDHVsV75gQtOxavNEdKfIwz9ExOKGolDsazpgLJ32c57lwGLHHGxPTmI5PmTo
-NgwrE40zXoC5fG3XuWg/Iel3zXvUZSHn/rfk+d41wZXN2CpDjESOkK+RTiSeherg
-UHYPTk5jGBFw9WVZFImkI+791yWp8cWpJej73wKj3bhoCcFpIXgFvV7R+iKvPxkp
-WqFTPpsaCZVq1WB2vzCxKhiYe1U6IuN+uhvNaoCCKFtZiq1NI1g=
-=91er
------END PGP SIGNATURE-----
-
---3Gf/FFewwPeBMqCJ--
+> ---
+> 
+> Changes in V2:
+> - updated comment message
+> 
+>  drivers/usb/host/ehci-pci.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
+> index 1a48ab1..7ff2cbd 100644
+> --- a/drivers/usb/host/ehci-pci.c
+> +++ b/drivers/usb/host/ehci-pci.c
+> @@ -216,6 +216,13 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
+>  		ehci_info(ehci, "applying MosChip frame-index workaround\n");
+>  		ehci->frame_index_bug = 1;
+>  		break;
+> +	case PCI_VENDOR_ID_HUAWEI:
+> +		/* Synopsys HC bug */
+> +		if (pdev->device == 0xa239) {
+> +			ehci_info(ehci, "applying Synopsys HC workaround\n");
+> +			ehci->has_synopsys_hc_bug = 1;
+> +		}
+> +		break;
+>  	}
+>  
+>  	/* optional debug port, normally in the first BAR */
+> -- 
+> 2.8.1
+> 
