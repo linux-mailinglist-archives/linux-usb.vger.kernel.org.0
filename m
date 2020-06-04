@@ -2,54 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 258C81EE438
-	for <lists+linux-usb@lfdr.de>; Thu,  4 Jun 2020 14:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5335C1EE4F9
+	for <lists+linux-usb@lfdr.de>; Thu,  4 Jun 2020 15:07:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728284AbgFDMJe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Jun 2020 08:09:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59944 "EHLO
+        id S1726883AbgFDNHY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Jun 2020 09:07:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727780AbgFDMJd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Jun 2020 08:09:33 -0400
-Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60A8FC08C5C1
-        for <linux-usb@vger.kernel.org>; Thu,  4 Jun 2020 05:09:32 -0700 (PDT)
-Received: by mail-qt1-x842.google.com with SMTP id k22so4935254qtm.6
-        for <linux-usb@vger.kernel.org>; Thu, 04 Jun 2020 05:09:32 -0700 (PDT)
+        with ESMTP id S1725926AbgFDNHY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Jun 2020 09:07:24 -0400
+Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8063FC08C5C1
+        for <linux-usb@vger.kernel.org>; Thu,  4 Jun 2020 06:07:24 -0700 (PDT)
+Received: by mail-qt1-x841.google.com with SMTP id d27so5111496qtg.4
+        for <linux-usb@vger.kernel.org>; Thu, 04 Jun 2020 06:07:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=+jNY0OxQKLd1WvX6JnPs3onyVCUthdyvu9aUn5huzkI=;
-        b=L8MKx8WkT410qkYvFSaTqRUr4fVYNHkSx0TMJzFvPuA2qozcz5nNF31doad1qmcZKG
-         P+/u60vsnCSow0+vcJywo5Va0rIDFMJI7XeaoXkowyTEd1A4yhgXqJZFl5lMpn1Vr9MN
-         gsB2kNOJ1Dbye6GCsOfSyAieGfa9zN8RmLiaawnsVZugTqUP3yMbERpToeMHPoNX+wQO
-         J+1uylPX/SIoay8Hu+MJW1JpozVVWfPbXAcE+VjSHVQpSbbt4WR8nzbWsdZeFFl+Wfp7
-         EmjmiF7TSLVX7Qm4hr7oiO1r7VTVCt0CkzDw4eb0qlSjivO5ACgwGxQ7h7e+ZS3g6fax
-         c2QQ==
+        bh=4ClLrIavOqOGDJWYrPRq16jGapJaGkyGJvYKPH8Mh8Y=;
+        b=hAY6TZyUVLdwz5BG4D68XEohh0RwANhV9ipETDtzkliGovl5W+0bYcARhxU0/Rh4tg
+         Cvqr17MrqBWl38Um1cwF9l4iaxAZGbZZyGAsHBTEf2lkSEmVBNePGowfVBYm1WIOQVZ0
+         O2MG10e9I2akcCxna1eN2iTse4VgW3QaZ0Qvoo7xvvwJ2Bp0fjONh0JArZBHueoWmdZE
+         LddK3d+yCLkBw4ukLnwHMKqdyS8u8HJW/VRnDqzwUASK0JOS5C3JrvADDMwWvlSUul26
+         voh3frxAjPQnNGQMI6oPUYkOu6OMFXD6YttSDnm4FIlwMAJInUn6GnbhklJQnso3BP0i
+         UpXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=+jNY0OxQKLd1WvX6JnPs3onyVCUthdyvu9aUn5huzkI=;
-        b=Pzm7RIDNA8ntQXrdAm0aBrXQPe4WtYSAMQZ0fvnWYV60aAk52yePNn8Y47qI0oKHB+
-         WSA7TszSeoXjgMF3yquLkOOz0yBP+OQswQ3DeNWpvGpZhgkmHgOFYONlaFUvrHIE2fbP
-         dl+XJmq5UcjLnhl+X04h7oVDI3h5vn2n9+uduFixU5MPwlylpnl7K38V67KDrQwxUTB9
-         e3DzdsIkvnQfLgShxdm19lrEi4ajvkw8sLB+/bbGXrtKyIXn1y1JLVOy7YTs5VjZsPSw
-         pD6CddZm21Sr5/QGGSX9syhxmOMOQBoN1c2c9iWfkjTAUhiNNrM01M3vyQnm0arco6CY
-         kmjg==
-X-Gm-Message-State: AOAM533AB+9Af0puAoMwlTTZUy90GuVncHl1MfeWRESHgmNKMmWxubiy
-        f65zzbEhQQulyIIvnNKBc/amTaF0w5ChbyytIgt4kg==
-X-Google-Smtp-Source: ABdhPJyC/ODun0saZltRdN6aUWpqSrTbDPEU82krsoQnxXg3qXfZSSCrXgNUXCpEpixt5SDFFEFb5jC0FeGyhciChxA=
-X-Received: by 2002:ac8:32dc:: with SMTP id a28mr4156710qtb.158.1591272571334;
- Thu, 04 Jun 2020 05:09:31 -0700 (PDT)
+        bh=4ClLrIavOqOGDJWYrPRq16jGapJaGkyGJvYKPH8Mh8Y=;
+        b=q1/VYreCa3P9P0r4dInBOKEKMbn7IV+dEObiqsuU0vTVJqRrp5vdCzyymHeRf4jkri
+         1dB9SX0g2NBwUl45wITluZ4bpXHOpNcqNC5YrVSuztq9SSVk6o+GIEjpCggFoCbdwPfC
+         oeKz0veIjTaM3jK9M3a/u/PDSNks03f6EJQvICirLRCUbN9jwYrVcDixQvxJrndksG/I
+         ZpejQm8x/guUEsMhESW3muvFKsoJm5u+PorJRy7gM4ckS2vApzGSkYl4AmFt09uAcg10
+         dmMhIj8nfefo5RNLjEVHhpOWckGKYhHpwL4gFMADFGtyd+Mfh3mrx4HcvSQ80eyLoBWE
+         NOfw==
+X-Gm-Message-State: AOAM532HRH/hb6cb/cIZjBX0fXKbWB2DDapy/6uvAe9W2QgvVLHGhxbg
+        xV5IHH1HvpTR1Y/OnHoNEeQvdiRaPH3DxllMY7z50Q==
+X-Google-Smtp-Source: ABdhPJzANH3aPPcoaGhaBOl/6Y4FjEYA167aD7BW2mye/1hE+No7niiOsusJLz1E0fH+Dh1MaO3Jd7aWqFfF+Hy+E/o=
+X-Received: by 2002:ac8:7a87:: with SMTP id x7mr4566443qtr.50.1591276043290;
+ Thu, 04 Jun 2020 06:07:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1585233617.git.andreyknvl@google.com> <6644839d3567df61ade3c4b246a46cacbe4f9e11.1585233617.git.andreyknvl@google.com>
-In-Reply-To: <6644839d3567df61ade3c4b246a46cacbe4f9e11.1585233617.git.andreyknvl@google.com>
+References: <cover.1585233617.git.andreyknvl@google.com> <5889efe35e0b300e69dba97216b1288d9c2428a8.1585233617.git.andreyknvl@google.com>
+In-Reply-To: <5889efe35e0b300e69dba97216b1288d9c2428a8.1585233617.git.andreyknvl@google.com>
 From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Thu, 4 Jun 2020 14:09:20 +0200
-Message-ID: <CACT4Y+aH-ScaO4wwciZQbOB-tLXYun3vFwGNf8MOpCQ+JMbptg@mail.gmail.com>
-Subject: Re: [PATCH v4 3/7] kcov: move t->kcov assignments into kcov_start/stop
+Date:   Thu, 4 Jun 2020 15:07:11 +0200
+Message-ID: <CACT4Y+ZR0FvQeRvfsTpwUMQ8gFfMT4BKPt79PdTN-_HCN8pdAw@mail.gmail.com>
+Subject: Re: [PATCH v4 4/7] kcov: move t->kcov_sequence assignment
 To:     Andrey Konovalov <andreyknvl@google.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Alan Stern <stern@rowland.harvard.edu>,
@@ -66,96 +66,33 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 On Thu, Mar 26, 2020 at 3:44 PM Andrey Konovalov <andreyknvl@google.com> wrote:
 >
-> Every time kcov_start/stop() is called, t->kcov is also assigned, so
-> move the assignment into the functions.
+> Move t->kcov_sequence assignment before assigning t->kcov_mode
+> for consistency.
 >
 > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 
 Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
 
 > ---
->  kernel/kcov.c | 16 +++++++---------
->  1 file changed, 7 insertions(+), 9 deletions(-)
+>  kernel/kcov.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
 > diff --git a/kernel/kcov.c b/kernel/kcov.c
-> index cc5900ac2467..888d0a236b04 100644
+> index 888d0a236b04..b985b7a72870 100644
 > --- a/kernel/kcov.c
 > +++ b/kernel/kcov.c
-> @@ -309,10 +309,12 @@ void notrace __sanitizer_cov_trace_switch(u64 val, u64 *cases)
->  EXPORT_SYMBOL(__sanitizer_cov_trace_switch);
->  #endif /* ifdef CONFIG_KCOV_ENABLE_COMPARISONS */
->
-> -static void kcov_start(struct task_struct *t, unsigned int size,
-> -                       void *area, enum kcov_mode mode, int sequence)
-> +static void kcov_start(struct task_struct *t, struct kcov *kcov,
-> +                       unsigned int size, void *area, enum kcov_mode mode,
-> +                       int sequence)
->  {
->         kcov_debug("t = %px, size = %u, area = %px\n", t, size, area);
-> +       t->kcov = kcov;
+> @@ -318,10 +318,10 @@ static void kcov_start(struct task_struct *t, struct kcov *kcov,
 >         /* Cache in task struct for performance. */
 >         t->kcov_size = size;
 >         t->kcov_area = area;
-> @@ -326,6 +328,7 @@ static void kcov_stop(struct task_struct *t)
->  {
->         WRITE_ONCE(t->kcov_mode, KCOV_MODE_DISABLED);
+> +       t->kcov_sequence = sequence;
+>         /* See comment in check_kcov_mode(). */
 >         barrier();
-> +       t->kcov = NULL;
->         t->kcov_size = 0;
->         t->kcov_area = NULL;
+>         WRITE_ONCE(t->kcov_mode, mode);
+> -       t->kcov_sequence = sequence;
 >  }
-> @@ -333,7 +336,6 @@ static void kcov_stop(struct task_struct *t)
->  static void kcov_task_reset(struct task_struct *t)
->  {
->         kcov_stop(t);
-> -       t->kcov = NULL;
->         t->kcov_sequence = 0;
->         t->kcov_handle = 0;
->  }
-> @@ -584,9 +586,8 @@ static int kcov_ioctl_locked(struct kcov *kcov, unsigned int cmd,
->                         return mode;
->                 kcov_fault_in_area(kcov);
->                 kcov->mode = mode;
-> -               kcov_start(t, kcov->size, kcov->area, kcov->mode,
-> +               kcov_start(t, kcov, kcov->size, kcov->area, kcov->mode,
->                                 kcov->sequence);
-> -               t->kcov = kcov;
->                 kcov->t = t;
->                 /* Put either in kcov_task_exit() or in KCOV_DISABLE. */
->                 kcov_get(kcov);
-> @@ -778,7 +779,6 @@ void kcov_remote_start(u64 handle)
->         kcov = remote->kcov;
->         /* Put in kcov_remote_stop(). */
->         kcov_get(kcov);
-> -       t->kcov = kcov;
->         /*
->          * Read kcov fields before unlock to prevent races with
->          * KCOV_DISABLE / kcov_remote_reset().
-> @@ -792,7 +792,6 @@ void kcov_remote_start(u64 handle)
->         if (!area) {
->                 area = vmalloc(size * sizeof(unsigned long));
->                 if (!area) {
-> -                       t->kcov = NULL;
->                         kcov_put(kcov);
->                         return;
->                 }
-> @@ -800,7 +799,7 @@ void kcov_remote_start(u64 handle)
->         /* Reset coverage size. */
->         *(u64 *)area = 0;
 >
-> -       kcov_start(t, size, area, mode, sequence);
-> +       kcov_start(t, kcov, size, area, mode, sequence);
->
->  }
->  EXPORT_SYMBOL(kcov_remote_start);
-> @@ -873,7 +872,6 @@ void kcov_remote_stop(void)
->                 return;
->
->         kcov_stop(t);
-> -       t->kcov = NULL;
->
->         spin_lock(&kcov->lock);
->         /*
+>  static void kcov_stop(struct task_struct *t)
 > --
 > 2.26.0.rc2.310.g2932bb562d-goog
 >
