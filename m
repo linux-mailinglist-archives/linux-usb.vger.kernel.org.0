@@ -2,115 +2,207 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1DDF1EF011
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jun 2020 05:44:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C87391EF013
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jun 2020 05:48:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726109AbgFEDou (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 4 Jun 2020 23:44:50 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:42476 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725995AbgFEDou (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 4 Jun 2020 23:44:50 -0400
-Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 7A992299E88422F68107;
-        Fri,  5 Jun 2020 11:44:47 +0800 (CST)
-Received: from [127.0.0.1] (10.67.102.118) by DGGEMS401-HUB.china.huawei.com
- (10.3.19.201) with Microsoft SMTP Server id 14.3.487.0; Fri, 5 Jun 2020
- 11:44:38 +0800
-Subject: Re: [PATCH v2] USB: ehci: reopen solution for Synopsys HC bug
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <kong.kongxinwei@hisilicon.com>, <huangdaode@huawei.com>,
-        <yisen.zhuang@huawei.com>
-References: <1591236678-36009-1-git-send-email-liulongfang@huawei.com>
- <20200604142608.GB26797@rowland.harvard.edu>
-From:   liulongfang <liulongfang@huawei.com>
-Message-ID: <3feae50c-3398-69ab-fa95-b0320e7ed865@huawei.com>
-Date:   Fri, 5 Jun 2020 11:44:37 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1726076AbgFEDsc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 4 Jun 2020 23:48:32 -0400
+Received: from mail.windriver.com ([147.11.1.11]:53459 "EHLO
+        mail.windriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725995AbgFEDsc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 4 Jun 2020 23:48:32 -0400
+Received: from ALA-HCB.corp.ad.wrs.com (ala-hcb.corp.ad.wrs.com [147.11.189.41])
+        by mail.windriver.com (8.15.2/8.15.2) with ESMTPS id 0553mE9i010497
+        (version=TLSv1 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
+        Thu, 4 Jun 2020 20:48:14 -0700 (PDT)
+Received: from pek-lpg-core1-vm1.wrs.com (128.224.156.106) by
+ ALA-HCB.corp.ad.wrs.com (147.11.189.41) with Microsoft SMTP Server id
+ 14.3.487.0; Thu, 4 Jun 2020 20:48:01 -0700
+From:   <qiang.zhang@windriver.com>
+To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>
+CC:     <stern@rowland.harvard.edu>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] usb: gadget: function: printer: fix use-after-free in __lock_acquire
+Date:   Fri, 5 Jun 2020 11:56:52 +0800
+Message-ID: <20200605035652.10387-1-qiang.zhang@windriver.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-In-Reply-To: <20200604142608.GB26797@rowland.harvard.edu>
-Content-Type: text/plain; charset="gbk"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.102.118]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2020/6/4 22:26, Alan Stern Wrote:
-> On Thu, Jun 04, 2020 at 10:11:18AM +0800, Longfang Liu wrote:
->> A Synopsys USB2.0 core used in Huawei Kunpeng920 SoC has a bug which
->> might cause the host controller not issuing ping.
->>
->> Bug description:
->> After indicating an Interrupt on Async Advance, the software uses the
->> doorbell mechanism to delete the Next Link queue head of the last
->> executed queue head. At this time, the host controller still references
->> the removed queue head(the queue head is NULL). NULL reference causes
->> the host controller to lose the USB device.
->>
->> Solution:
->> After deleting the Next Link queue head, the software can write one of the
->> valid queue head addresses to the ASYNCLISTADDR register to allow
->> the host controller to get the valid queue head.
->>
->> There are detailed instructions and solutions in this patch:
->> commit 2f7ac6c19997 ("USB: ehci: add workaround for Synopsys HC bug")
->>
->> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
-> This is a very bad patch description.  Do you understand why?  Because 
-> it doesn't describe what the patch actually does!
->
-> The description talks about the original bug -- what it was and how it 
-> was fixed.  But this patch doesn't contain the bug fix.  Instead, all 
-> this patch does is set a quirk flag for the Huawei Kunpeng920.  The 
-> patch description should explain why the quirk flag needs to be set; it 
-> doesn't have to explain the original bug.
->
-> Alan Stern
+From: Zqiang <qiang.zhang@windriver.com>
 
-Solution:
-After deleting the Next Link queue head, when has_synopsys_hc_bug set
-to 1£¬the software can write one of the valid queue head addresses to
-the ASYNCLISTADDR register to allow the host controller to get
-the valid queue head. in order to solve that problem, this patch set
-the flag for Huawei Kunpeng920
+Fix this by increase object reference count.
 
-Thanks.
-Longfang
+BUG: KASAN: use-after-free in __lock_acquire+0x3fd4/0x4180
+kernel/locking/lockdep.c:3831
+Read of size 8 at addr ffff8880683b0018 by task syz-executor.0/3377
 
->> ---
->>
->> Changes in V2:
->> - updated comment message
->>
->>  drivers/usb/host/ehci-pci.c | 7 +++++++
->>  1 file changed, 7 insertions(+)
->>
->> diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
->> index 1a48ab1..7ff2cbd 100644
->> --- a/drivers/usb/host/ehci-pci.c
->> +++ b/drivers/usb/host/ehci-pci.c
->> @@ -216,6 +216,13 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
->>  		ehci_info(ehci, "applying MosChip frame-index workaround\n");
->>  		ehci->frame_index_bug = 1;
->>  		break;
->> +	case PCI_VENDOR_ID_HUAWEI:
->> +		/* Synopsys HC bug */
->> +		if (pdev->device == 0xa239) {
->> +			ehci_info(ehci, "applying Synopsys HC workaround\n");
->> +			ehci->has_synopsys_hc_bug = 1;
->> +		}
->> +		break;
->>  	}
->>  
->>  	/* optional debug port, normally in the first BAR */
->> -- 
->> 2.8.1
->>
-> .
->
+CPU: 1 PID: 3377 Comm: syz-executor.0 Not tainted 5.6.11 #1
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS Bochs 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xce/0x128 lib/dump_stack.c:118
+ print_address_description.constprop.4+0x21/0x3c0 mm/kasan/report.c:374
+ __kasan_report+0x131/0x1b0 mm/kasan/report.c:506
+ kasan_report+0x12/0x20 mm/kasan/common.c:641
+ __asan_report_load8_noabort+0x14/0x20 mm/kasan/generic_report.c:135
+ __lock_acquire+0x3fd4/0x4180 kernel/locking/lockdep.c:3831
+ lock_acquire+0x127/0x350 kernel/locking/lockdep.c:4488
+ __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+ _raw_spin_lock_irqsave+0x35/0x50 kernel/locking/spinlock.c:159
+ printer_ioctl+0x4a/0x110 drivers/usb/gadget/function/f_printer.c:723
+ vfs_ioctl fs/ioctl.c:47 [inline]
+ ksys_ioctl+0xfb/0x130 fs/ioctl.c:763
+ __do_sys_ioctl fs/ioctl.c:772 [inline]
+ __se_sys_ioctl fs/ioctl.c:770 [inline]
+ __x64_sys_ioctl+0x73/0xb0 fs/ioctl.c:770
+ do_syscall_64+0x9e/0x510 arch/x86/entry/common.c:294
+ entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x4531a9
+Code: ed 60 fc ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48
+89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
+01 f0 ff ff 0f 83 bb 60 fc ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007fd14ad72c78 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 000000000073bfa8 RCX: 00000000004531a9
+RDX: fffffffffffffff9 RSI: 000000000000009e RDI: 0000000000000003
+RBP: 0000000000000003 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00000000004bbd61
+R13: 00000000004d0a98 R14: 00007fd14ad736d4 R15: 00000000ffffffff
+
+Allocated by task 2393:
+ save_stack+0x21/0x90 mm/kasan/common.c:72
+ set_track mm/kasan/common.c:80 [inline]
+ __kasan_kmalloc.constprop.3+0xa7/0xd0 mm/kasan/common.c:515
+ kasan_kmalloc+0x9/0x10 mm/kasan/common.c:529
+ kmem_cache_alloc_trace+0xfa/0x2d0 mm/slub.c:2813
+ kmalloc include/linux/slab.h:555 [inline]
+ kzalloc include/linux/slab.h:669 [inline]
+ gprinter_alloc+0xa1/0x870 drivers/usb/gadget/function/f_printer.c:1416
+ usb_get_function+0x58/0xc0 drivers/usb/gadget/functions.c:61
+ config_usb_cfg_link+0x1ed/0x3e0 drivers/usb/gadget/configfs.c:444
+ configfs_symlink+0x527/0x11d0 fs/configfs/symlink.c:202
+ vfs_symlink+0x33d/0x5b0 fs/namei.c:4201
+ do_symlinkat+0x11b/0x1d0 fs/namei.c:4228
+ __do_sys_symlinkat fs/namei.c:4242 [inline]
+ __se_sys_symlinkat fs/namei.c:4239 [inline]
+ __x64_sys_symlinkat+0x73/0xb0 fs/namei.c:4239
+ do_syscall_64+0x9e/0x510 arch/x86/entry/common.c:294
+ entry_SYSCALL_64_after_hwframe+0x49/0xbe
+
+Freed by task 3368:
+ save_stack+0x21/0x90 mm/kasan/common.c:72
+ set_track mm/kasan/common.c:80 [inline]
+ kasan_set_free_info mm/kasan/common.c:337 [inline]
+ __kasan_slab_free+0x135/0x190 mm/kasan/common.c:476
+ kasan_slab_free+0xe/0x10 mm/kasan/common.c:485
+ slab_free_hook mm/slub.c:1444 [inline]
+ slab_free_freelist_hook mm/slub.c:1477 [inline]
+ slab_free mm/slub.c:3034 [inline]
+ kfree+0xf7/0x410 mm/slub.c:3995
+ gprinter_free+0x49/0xd0 drivers/usb/gadget/function/f_printer.c:1353
+ usb_put_function+0x38/0x50 drivers/usb/gadget/functions.c:87
+ config_usb_cfg_unlink+0x2db/0x3b0 drivers/usb/gadget/configfs.c:485
+ configfs_unlink+0x3b9/0x7f0 fs/configfs/symlink.c:250
+ vfs_unlink+0x287/0x570 fs/namei.c:4073
+ do_unlinkat+0x4f9/0x620 fs/namei.c:4137
+ __do_sys_unlink fs/namei.c:4184 [inline]
+ __se_sys_unlink fs/namei.c:4182 [inline]
+ __x64_sys_unlink+0x42/0x50 fs/namei.c:4182
+ do_syscall_64+0x9e/0x510 arch/x86/entry/common.c:294
+ entry_SYSCALL_64_after_hwframe+0x49/0xbe
+
+The buggy address belongs to the object at ffff8880683b0000
+ which belongs to the cache kmalloc-1k of size 1024
+The buggy address is located 24 bytes inside of
+ 1024-byte region [ffff8880683b0000, ffff8880683b0400)
+The buggy address belongs to the page:
+page:ffffea0001a0ec00 refcount:1 mapcount:0 mapping:ffff88806c00e300
+index:0xffff8880683b1800 compound_mapcount: 0
+flags: 0x100000000010200(slab|head)
+raw: 0100000000010200 0000000000000000 0000000600000001 ffff88806c00e300
+raw: ffff8880683b1800 000000008010000a 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Reported-by: Kyungtae Kim <kt0755@gmail.com>
+Signed-off-by: Zqiang <qiang.zhang@windriver.com>
+---
+ drivers/usb/gadget/function/f_printer.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/f_printer.c b/drivers/usb/gadget/function/f_printer.c
+index 9c7ed2539ff7..8ed1295d7e35 100644
+--- a/drivers/usb/gadget/function/f_printer.c
++++ b/drivers/usb/gadget/function/f_printer.c
+@@ -31,6 +31,7 @@
+ #include <linux/types.h>
+ #include <linux/ctype.h>
+ #include <linux/cdev.h>
++#include <linux/kref.h>
+ 
+ #include <asm/byteorder.h>
+ #include <linux/io.h>
+@@ -64,7 +65,7 @@ struct printer_dev {
+ 	struct usb_gadget	*gadget;
+ 	s8			interface;
+ 	struct usb_ep		*in_ep, *out_ep;
+-
++	struct kref             kref;
+ 	struct list_head	rx_reqs;	/* List of free RX structs */
+ 	struct list_head	rx_reqs_active;	/* List of Active RX xfers */
+ 	struct list_head	rx_buffers;	/* List of completed xfers */
+@@ -218,6 +219,13 @@ static inline struct usb_endpoint_descriptor *ep_desc(struct usb_gadget *gadget,
+ 
+ /*-------------------------------------------------------------------------*/
+ 
++static void printer_dev_free(struct kref *kref)
++{
++	struct printer_dev *dev = container_of(kref, struct printer_dev, kref);
++
++	kfree(dev);
++}
++
+ static struct usb_request *
+ printer_req_alloc(struct usb_ep *ep, unsigned len, gfp_t gfp_flags)
+ {
+@@ -348,6 +356,7 @@ printer_open(struct inode *inode, struct file *fd)
+ 
+ 	spin_unlock_irqrestore(&dev->lock, flags);
+ 
++	kref_get(&dev->kref);
+ 	DBG(dev, "printer_open returned %x\n", ret);
+ 	return ret;
+ }
+@@ -365,6 +374,7 @@ printer_close(struct inode *inode, struct file *fd)
+ 	dev->printer_status &= ~PRINTER_SELECTED;
+ 	spin_unlock_irqrestore(&dev->lock, flags);
+ 
++	kref_put(&dev->kref, printer_dev_free);
+ 	DBG(dev, "printer_close\n");
+ 
+ 	return 0;
+@@ -1350,7 +1360,8 @@ static void gprinter_free(struct usb_function *f)
+ 	struct f_printer_opts *opts;
+ 
+ 	opts = container_of(f->fi, struct f_printer_opts, func_inst);
+-	kfree(dev);
++
++	kref_put(&dev->kref, printer_dev_free);
+ 	mutex_lock(&opts->lock);
+ 	--opts->refcnt;
+ 	mutex_unlock(&opts->lock);
+@@ -1419,6 +1430,7 @@ static struct usb_function *gprinter_alloc(struct usb_function_instance *fi)
+ 		return ERR_PTR(-ENOMEM);
+ 	}
+ 
++	kref_init(&dev->kref);
+ 	++opts->refcnt;
+ 	dev->minor = opts->minor;
+ 	dev->pnp_string = opts->pnp_string;
+-- 
+2.24.1
 
