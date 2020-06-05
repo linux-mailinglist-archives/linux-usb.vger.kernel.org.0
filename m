@@ -2,218 +2,228 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C98B51F019F
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jun 2020 23:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAE6B1F02C4
+	for <lists+linux-usb@lfdr.de>; Sat,  6 Jun 2020 00:13:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728472AbgFEV1S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Jun 2020 17:27:18 -0400
-Received: from rnd-relay.smtp.broadcom.com ([192.19.229.170]:38280 "EHLO
-        rnd-relay.smtp.broadcom.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726664AbgFEV1Q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Jun 2020 17:27:16 -0400
-Received: from mail-irv-17.broadcom.com (mail-irv-17.lvn.broadcom.net [10.75.242.48])
-        by rnd-relay.smtp.broadcom.com (Postfix) with ESMTP id 6323F30D861;
-        Fri,  5 Jun 2020 14:27:15 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 rnd-relay.smtp.broadcom.com 6323F30D861
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-        s=dkimrelay; t=1591392435;
-        bh=X1W5SBPglzGt+7ug7Z7PzaYs1FBERzpHlpxJDJ5NWW8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Yb7tCCTq3tEKqFK78fQleMf0F7oKo2GNKiGeJff4TJ8HjbO4U5hKMcBn5a/50b9QL
-         ASYiSDzdEAdFQtERUZgBWiULuxpC0aChlTLqu6cf55XS6z7yAfcc69QKiYMK0Af9yd
-         IC6UDRFn5YTpfAE57XQgz5wCaInS2sD8nKRoPv6w=
-Received: from stbsrv-and-01.and.broadcom.net (stbsrv-and-01.and.broadcom.net [10.28.16.211])
-        by mail-irv-17.broadcom.com (Postfix) with ESMTP id C1CD7140069;
-        Fri,  5 Jun 2020 14:27:11 -0700 (PDT)
-From:   Jim Quinlan <james.quinlan@broadcom.com>
-To:     linux-pci@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        David Kershner <david.kershner@unisys.com>,
-        devel@driverdev.osuosl.org (open list:STAGING SUBSYSTEM),
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE),
-        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS FOR ALLWINNER
-        A10), Florian Fainelli <f.fainelli@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        iommu@lists.linux-foundation.org (open list:IOMMU DRIVERS),
-        Jens Axboe <axboe@kernel.dk>,
-        Julien Grall <julien.grall@arm.com>,
-        linux-acpi@vger.kernel.org (open list:ACPI FOR ARM64 (ACPI/arm64)),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM PORT),
-        linux-ide@vger.kernel.org (open list:LIBATA SUBSYSTEM (Serial and
-        Parallel ATA drivers)), linux-kernel@vger.kernel.org (open list),
-        linux-media@vger.kernel.org (open list:ALLWINNER A10 CSI DRIVER),
-        linux-remoteproc@vger.kernel.org (open list:REMOTE PROCESSOR
-        (REMOTEPROC) SUBSYSTEM),
-        linux-rpi-kernel@lists.infradead.org (moderated list:BROADCOM
-        BCM2711/BCM2835 ARM ARCHITECTURE),
-        linux-sh@vger.kernel.org (open list:SUPERH),
-        linux-usb@vger.kernel.org (open list:USB SUBSYSTEM),
-        Mark Brown <broonie@kernel.org>,
-        Oliver Neukum <oneukum@suse.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Rob Herring <robh@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH v4 00/12] PCI: brcmstb: enable PCIe for STB chips
-Date:   Fri,  5 Jun 2020 17:26:40 -0400
-Message-Id: <20200605212706.7361-1-james.quinlan@broadcom.com>
-X-Mailer: git-send-email 2.17.1
+        id S1728331AbgFEWNS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Jun 2020 18:13:18 -0400
+Received: from mail-eopbgr690094.outbound.protection.outlook.com ([40.107.69.94]:8141
+        "EHLO NAM04-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728306AbgFEWNR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 5 Jun 2020 18:13:17 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oZgKNK+AeE2i1J2EaOsboDNWR3bLiiZIO1tXx/IaCB/onl/Jh/1XD9UR3OU/24eztt7OrmgmfS6XCXVMppB2tWA3EgdXy8plK/64uBWYAVgiKGBK+pEfcyCaRdGixRBw7QiDwcTha/SipZV6Rb9PMvgh6HCiJeyj4Q3c6HoycsOXd77JlkZBXsAI/iTnNQuNZFkS3owmcU0/3VzZ7QK4WFTzZm0rh8LHLtrXBO5Z0g9hqB0+2l/ARQTYft3RAY+n8OgBt/e1K689tLHI4QQMCRwpaziBKFtcQ7K+9clu3gEEPxWcUxM2PBxM4c4vuO95JnwmF5YtZiUUWh0YYkvJeg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oxl3Gu9T/n2UMogf578+jFc/e9ekIwU3cGr4jTCb88Q=;
+ b=oMX6CB3YdNP+xU6Nb7HeS2vYnD+5LecRezx9L191SC2sP6TxSRMG4+wBiajAqlrk09t9sYABFw9Y4YPmoJ+o5tG7/KQ4hKLommt2qxGYttIUI3pzu6FPSDNSMtAXGkcigdpLq5VnWYKc+uiguOiYYaV+rPQXhcppBc+XWQImMrNjovqyxaFknSVsSbl7DYkLvQGh5ZADF1gdmcli7evqFb57Q9SQ9Bl0ky+KuE+uVnClEQSp6thNl02CSCjxP5qneW+e4B7692QwV03tKePpzF9+ph1Vu9AVcWtEfKCh29VbSHLxjANVlHW0oa9OvC/ewh3wLgjM7MUW8OTuGFaItw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=northeastern.edu; dmarc=pass action=none
+ header.from=northeastern.edu; dkim=pass header.d=northeastern.edu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=northeastern.edu;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oxl3Gu9T/n2UMogf578+jFc/e9ekIwU3cGr4jTCb88Q=;
+ b=YPVl4OK5yk20iGITL6ae4nfgrTL61togJd5XwJo01pbM/4uJuzlTy43EeIFP/tX3fMRHs3AuSssnL/QxBT+1CKMh0BKCTc8QN9TWezrkpgKQK9VnDgt/N3SH4d8w5Qhuo7scY8xRnz9od7sxPplI1sMN66okA5q+kKnlQSUKdNw=
+Received: from BN6PR06MB2532.namprd06.prod.outlook.com (2603:10b6:404:2a::10)
+ by BN6PR06MB3236.namprd06.prod.outlook.com (2603:10b6:405:42::36) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3066.18; Fri, 5 Jun
+ 2020 22:13:14 +0000
+Received: from BN6PR06MB2532.namprd06.prod.outlook.com
+ ([fe80::e802:ad07:3832:e440]) by BN6PR06MB2532.namprd06.prod.outlook.com
+ ([fe80::e802:ad07:3832:e440%11]) with mapi id 15.20.3066.022; Fri, 5 Jun 2020
+ 22:13:14 +0000
+From:   Changming Liu <liu.changm@northeastern.edu>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     "thomas@winischhofer.net" <thomas@winischhofer.net>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH] USB: sisusbvga: Fix left shifting a possible negative
+ value
+Thread-Topic: [PATCH] USB: sisusbvga: Fix left shifting a possible negative
+ value
+Thread-Index: AdYu0IANqPvTKmyYS6uxDS+D7m5WgwAcgkiAABNU3kAAHoaTgAAYvU1gABcYxoACryq8EA==
+Date:   Fri, 5 Jun 2020 22:13:13 +0000
+Message-ID: <BN6PR06MB25321BBE3DE153B8D7D424A5E5860@BN6PR06MB2532.namprd06.prod.outlook.com>
+References: <BL0PR06MB45483EF82A54B8751524A2E7E5B60@BL0PR06MB4548.namprd06.prod.outlook.com>
+ <20200521073627.GB2579717@kroah.com>
+ <BL0PR06MB45480E2A734DEC31AB3F5CBBE5B70@BL0PR06MB4548.namprd06.prod.outlook.com>
+ <20200522072401.GA847030@kroah.com>
+ <BL0PR06MB4548FDD13144603AFAA92BEAE5B40@BL0PR06MB4548.namprd06.prod.outlook.com>
+ <20200523061343.GA3156699@kroah.com>
+In-Reply-To: <20200523061343.GA3156699@kroah.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: linuxfoundation.org; dkim=none (message not signed)
+ header.d=none;linuxfoundation.org; dmarc=none action=none
+ header.from=northeastern.edu;
+x-originating-ip: [155.33.134.7]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 85ad9186-0ab6-42af-8499-08d8099da434
+x-ms-traffictypediagnostic: BN6PR06MB3236:
+x-microsoft-antispam-prvs: <BN6PR06MB323602358258948E6E3843EBE5860@BN6PR06MB3236.namprd06.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-forefront-prvs: 0425A67DEF
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: KeASs179mmWYEkDtb49kpuWQiAWMIxXBY56lYrajkkmaj6ztAlsgjyuei6uXeOMgcB4Ju/stzHuUxQrRfCM3kGYrfIsz2kA+2l3ASgDG/S3MvhwAvXhO+GHaaNs6QkQ4T0PijobmrMKwf3vsnXnuvTuSBmI6nYEitFTwPqZ0u8fQ7pLQsQb4vWU0XWP6da/3I0Bk/HggUHQMyOXICQxbdQNsr0Kv1CCGaYX/vMhVV9MV4LHSQRjDz2P17kwcN3aEs1bsJ46GZbBlBRsVyb/F20X04qcsvJKgT/SuILSIgwsYez481evewgk1AhEEPDikXY1NGv7kKp6FYN4goseS3Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR06MB2532.namprd06.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(366004)(39860400002)(396003)(136003)(346002)(376002)(5660300002)(33656002)(86362001)(53546011)(8676002)(54906003)(83380400001)(8936002)(786003)(4326008)(316002)(7696005)(6506007)(71200400001)(66476007)(66446008)(478600001)(76116006)(9686003)(26005)(66946007)(66556008)(55016002)(64756008)(75432002)(2906002)(52536014)(186003)(6916009);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: 3H0UgPYyowXbN8ND4jb1HXpL9kJZfzY6UbpS1Pct5SWlMunfbDElY9Qe+hYJWo4X/KlGzUuJZ79vEPDjB9izM/gd3XHxY5y8ja+y+tTxT9g7x+fRGIoA+oM3WeDGObLuh59z/v7OY3T0SX7178N1NByQV9oibAHhOEPq8iJtNsQAWYD/acMB5gMu5wcyV3i14IQghywmiEQUphnlWUvn72G+eMs4T67Y/U7e1vX6QpQ35esg1IIgxeB2QkS8jfFZzefNXLThd9B+rr6HFVS8hJfNpowQ83JiGVq+dC84xNIXE0mdnxI4WK6N70/Z9BW3xDUGWfKGL7+W6RimOBK13rvb8/4yHAc8vyuJ7X1TCmoaRucR7oMxXGMKFXioaM0MrP3GzsHjSNQiVYxnaSCFei0fq89wkY01lzQIOjt6FnidZ+ujdiGHQ26+m75OvFFVLfkRVp6qBzLQsy+LVNP+12D9UOg+SipZERwZsbc+Nno=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: northeastern.edu
+X-MS-Exchange-CrossTenant-Network-Message-Id: 85ad9186-0ab6-42af-8499-08d8099da434
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jun 2020 22:13:14.0246
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a8eec281-aaa3-4dae-ac9b-9a398b9215e7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 8+bLhPJgLQTpVHSFu54Oxk6lnElwkOgxDWUPSGrMEoEFq2Xm80mEiBrAjF0cXgmcgjmLsH9XJWlzbuGZki96UenHZGlVmgod5WkbSSldLG4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR06MB3236
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
-v4:
-  Commit "device core: Introduce multiple dma pfn offsets"
-  -- of_dma_get_range() does not take a dev param but instead
-     takes two "out" params: map and map_size.  We do this so
-     that the code that parses dma-ranges is separate from
-     the code that modifies 'dev'.   (Nicolas)
-  -- the separate case of having a single pfn offset has
-     been removed and is now processed by going through the
-     map array. (Nicolas)
-  -- move attach_uniform_dma_pfn_offset() from of/address.c to
-     dma/mapping.c so that it does not depend on CONFIG_OF. (Nicolas)
-  -- devm_kcalloc => devm_kzalloc (DanC)
-  -- add/fix assignment to dev->dma_pfn_offset_map for func
-     attach_uniform_dma_pfn_offset() (DanC, Nicolas)
-  -- s/struct dma_pfn_offset_region/struct bus_dma_region/ (Nicolas)
-  -- s/attach_uniform_dma_pfn_offset/dma_attach_uniform_pfn_offset/
-  -- s/attach_dma_pfn_offset_map/dma_attach_pfn_offset_map/
-  -- More use of PFN_{PHYS,DOWN,UP}. (AndyS)
-  Commit "of: Include a dev param in of_dma_get_range()"
-  -- this commit was sqaushed with "device core: Introduce ..."
 
-v3:
-  Commit "device core: Introduce multiple dma pfn offsets"
-  Commit "arm: dma-mapping: Invoke dma offset func if needed"
-  -- The above two commits have been squashed.  More importantly,
-     the code has been modified so that the functionality for
-     multiple pfn offsets subsumes the use of dev->dma_pfn_offset.
-     In fact, dma_pfn_offset is removed and supplanted by
-     dma_pfn_offset_map, which is a pointer to an array.  The
-     more common case of a uniform offset is now handled as
-     a map with a single entry, while cases requiring multiple
-     pfn offsets use a map with multiple entries.  Code paths
-     that used to do this:
+> -----Original Message-----
+> From: Greg KH <gregkh@linuxfoundation.org>
+> Sent: Saturday, May 23, 2020 2:14 AM
+> To: Changming Liu <liu.changm@northeastern.edu>
+> Cc: thomas@winischhofer.net; linux-usb@vger.kernel.org
+> Subject: Re: [PATCH] USB: sisusbvga: Fix left shifting a possible negativ=
+e value
+>=20
+> On Fri, May 22, 2020 at 07:14:32PM +0000, Changming Liu wrote:
+> >
+> >
+> > > -----Original Message-----
+> > > From: Greg KH <gregkh@linuxfoundation.org>
+> > > Sent: Friday, May 22, 2020 3:24 AM
+> > > To: Changming Liu <liu.changm@northeastern.edu>
+> > > Cc: thomas@winischhofer.net; linux-usb@vger.kernel.org
+> > > Subject: Re: [PATCH] USB: sisusbvga: Fix left shifting a possible neg=
+ative
+> value
+> > >
+> > > On Thu, May 21, 2020 at 05:56:44PM +0000, Changming Liu wrote:
+> > > >
+> > > >
+> > > > > -----Original Message-----
+> > > > > From: Greg KH <gregkh@linuxfoundation.org>
+> > > > > Sent: Thursday, May 21, 2020 3:36 AM
+> > > > > To: Changming Liu <liu.changm@northeastern.edu>
+> > > > > Cc: thomas@winischhofer.net; linux-usb@vger.kernel.org
+> > > > > Subject: Re: [PATCH] USB: sisusbvga: Fix left shifting a possible=
+ negative
+> > > value
+> > > > >
+> > > > > On Wed, May 20, 2020 at 06:06:50PM +0000, Changming Liu wrote:
+> > > > > > The char buffer buf, accepts user data which might be negative =
+value
+> and
+> > > > > > the content is left shifted to form an unsigned integer.
+> > > > > >
+> > > > > > Since left shifting a negative value is undefined behavior, thu=
+s change
+> > > > > > the char to u8 to fix this
+> > > > > >
+> > > > > > Signed-off-by: Changming Liu <liu.changm@northeastern.edu>
+> > > > > > ---
+> > > > > >  drivers/usb/misc/sisusbvga/sisusb.c | 2 +-
+> > > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > > >
+> > > > > > diff --git a/drivers/usb/misc/sisusbvga/sisusb.c
+> > > > > b/drivers/usb/misc/sisusbvga/sisusb.c
+> > > > > > index fc8a5da4a07c..0734e6dd9386 100644
+> > > > > > --- a/drivers/usb/misc/sisusbvga/sisusb.c
+> > > > > > +++ b/drivers/usb/misc/sisusbvga/sisusb.c
+> > > > > > @@ -761,7 +761,7 @@ static int sisusb_write_mem_bulk(struct
+> > > > > sisusb_usb_data *sisusb, u32 addr,
+> > > > > >         u8   swap8, fromkern =3D kernbuffer ? 1 : 0;
+> > > > > >         u16  swap16;
+> > > > > >         u32  swap32, flag =3D (length >> 28) & 1;
+> > > > > > -       char buf[4];
+> > > > > > +       u8 buf[4];
+> > > > >
+> > > > > Do we also need to change the kernbuffer variable from char* to b=
+e u8*
+> > > > > as the same time to solve the same potential issue?
+> > > > >
+> > > >
+> > > > This is a very good point, sorry I didn't notice this.
+> > > > Indeed, according to the caller of sisusb_copy_memory, the wrapper =
+of
+> > > current function
+> > > > there is no guarantee that each char in kernbuffer is positive.
+> > > >
+> > > > However, it seems if we change the function argument type directly =
+from
+> > > char* to u8*,
+> > > > Other parts that call this function e.g. in sisusb_copy_memory
+> > > > or uses this pointer e.g. line 770,line 883 must change accordingly=
+.
+> > > > Looks like many force casts which doesn't look too necessary.
+> > > >
+> > > > I wonder how about just force casting the content of kernbuffer whe=
+n it's
+> > > read in line 823 to line 829
+> > > > from char to u8? This seems explicitly fix this bug.
+> > >
+> > > That will work, but how about just changing all instances of char to =
+u8
+> > > throughout this driver to make sure everything is working properly th=
+at
+> > > way.  char should not be used as a type when copying around "raw" dat=
+a
+> > > like this from user-to-device for these reasons.
+> > >
+> >
+> > This is a clean sweep, from the perspective of security I find no reaso=
+n against
+> it.
+> > Indeed, u8 is strictly better than char when there is no need for any v=
+alue to
+> be negative.
+> > I'd be very honored to see this through.
+> >
+> > I wonder, by this driver, you mean this sisusbvga module or something e=
+lse?
+> > Forgive me for my limited understanding of the module since I've only r=
+ead
+> the code related to this bug.
+> > Please let me know on what files do you want to apply this change.
+>=20
+> The sisusbvga module, all of the files that make it up, in
+> drivers/usb/misc/sisusbvga/ are what I am referring to here.
+>=20
+> > Or if you feel like doing this yourself please go ahead,
+> > I'm still a bit daunted by the scale of changes that need to be made fr=
+ankly :p
+>=20
+> Nope, you can do this, it shouldn't be that hard.  Might take a few
+> patches, do it as a patch series, doing one logical change per patch.
+>=20
+> If you have specific questions, please let us know!
+>=20
+Hi Greg,
+Sorry for following up so late, I have been traveling for the past
+ a few days.
 
-         dev->dma_pfn_offset = mydrivers_pfn_offset;
+I've received the emails from kbuild test robot about the=20
+sisbus_write and sisbus_read's declaration being incompilable
+ with struct file_operations because I changed the buffer
+from char* to u8* in my last patch.
 
-     have been changed to do this:
+Sorry I didn't know this would fail the test. Is there anything I=20
+could do to fix this? Should I submit another patch?
 
-         attach_uniform_dma_pfn_offset(dev, pfn_offset);
-
-  Commit "dt-bindings: PCI: Add bindings for more Brcmstb chips"
-  -- Add if/then clause for required props: resets, reset-names (RobH)
-  -- Change compatible list from const to enum (RobH)
-  -- Change list of u32-tuples to u64 (RobH)
-
-  Commit "of: Include a dev param in of_dma_get_range()"
-  -- modify of/unittests.c to add NULL param in of_dma_get_range() call.
-
-  Commit "device core: Add ability to handle multiple dma offsets"
-  -- align comment in device.h (AndyS).
-  -- s/cpu_beg/cpu_start/ and s/dma_beg/dma_start/ in struct
-     dma_pfn_offset_region (AndyS).
-
-v2:
-Commit: "device core: Add ability to handle multiple dma offsets"
-  o Added helper func attach_dma_pfn_offset_map() in address.c (Chistoph)
-  o Helpers funcs added to __phys_to_dma() & __dma_to_phys() (Christoph)
-  o Added warning when multiple offsets are needed and !DMA_PFN_OFFSET_MAP
-  o dev->dma_pfn_map => dev->dma_pfn_offset_map
-  o s/frm/from/ for dma_pfn_offset_frm_{phys,dma}_addr() (Christoph)
-  o In device.h: s/const void */const struct dma_pfn_offset_region */
-  o removed 'unlikely' from unlikely(dev->dma_pfn_offset_map) since
-    guarded by CONFIG_DMA_PFN_OFFSET_MAP (Christoph)
-  o Since dev->dma_pfn_offset is copied in usb/core/{usb,message}.c, now
-    dev->dma_pfn_offset_map is copied as well.
-  o Merged two of the DMA commits into one (Christoph).
-
-Commit "arm: dma-mapping: Invoke dma offset func if needed":
-  o Use helper functions instead of #if CONFIG_DMA_PFN_OFFSET
-
-Other commits' changes:
-  o Removed need for carrying of_id var in priv (Nicolas)
-  o Commit message rewordings (Bjorn)
-  o Commit log messages filled to 75 chars (Bjorn)
-  o devm_reset_control_get_shared())
-    => devm_reset_control_get_optional_shared (Philipp)
-  o Add call to reset_control_assert() in PCIe remove routines (Philipp)
-
-v1:
-This patchset expands the usefulness of the Broadcom Settop Box PCIe
-controller by building upon the PCIe driver used currently by the
-Raspbery Pi.  Other forms of this patchset were submitted by me years
-ago and not accepted; the major sticking point was the code required
-for the DMA remapping needed for the PCIe driver to work [1].
-
-There have been many changes to the DMA and OF subsystems since that
-time, making a cleaner and less intrusive patchset possible.  This
-patchset implements a generalization of "dev->dma_pfn_offset", except
-that instead of a single scalar offset it provides for multiple
-offsets via a function which depends upon the "dma-ranges" property of
-the PCIe host controller.  This is required for proper functionality
-of the BrcmSTB PCIe controller and possibly some other devices.
-
-[1] https://lore.kernel.org/linux-arm-kernel/1516058925-46522-5-git-send-email-jim2101024@gmail.com/
-
-Jim Quinlan (12):
-  PCI: brcmstb: PCIE_BRCMSTB depends on ARCH_BRCMSTB
-  ata: ahci_brcm: Fix use of BCM7216 reset controller
-  dt-bindings: PCI: Add bindings for more Brcmstb chips
-  PCI: brcmstb: Add bcm7278 register info
-  PCI: brcmstb: Add suspend and resume pm_ops
-  PCI: brcmstb: Add bcm7278 PERST support
-  PCI: brcmstb: Add control of rescal reset
-  device core: Introduce multiple dma pfn offsets
-  PCI: brcmstb: Set internal memory viewport sizes
-  PCI: brcmstb: Accommodate MSI for older chips
-  PCI: brcmstb: Set bus max burst size by chip type
-  PCI: brcmstb: Add bcm7211, bcm7216, bcm7445, bcm7278 to match list
-
- .../bindings/pci/brcm,stb-pcie.yaml           |  58 ++-
- arch/arm/include/asm/dma-mapping.h            |   9 +-
- arch/arm/mach-keystone/keystone.c             |   9 +-
- arch/sh/drivers/pci/pcie-sh7786.c             |   3 +-
- arch/sh/kernel/dma-coherent.c                 |  14 +-
- arch/x86/pci/sta2x11-fixup.c                  |   7 +-
- drivers/acpi/arm64/iort.c                     |   5 +-
- drivers/ata/ahci_brcm.c                       |  14 +-
- drivers/gpu/drm/sun4i/sun4i_backend.c         |   5 +-
- drivers/iommu/io-pgtable-arm.c                |   2 +-
- .../platform/sunxi/sun4i-csi/sun4i_csi.c      |   5 +-
- .../platform/sunxi/sun6i-csi/sun6i_csi.c      |   4 +-
- drivers/of/address.c                          |  72 +++-
- drivers/of/device.c                           |  19 +-
- drivers/of/of_private.h                       |  11 +-
- drivers/of/unittest.c                         |   8 +-
- drivers/pci/controller/Kconfig                |   3 +-
- drivers/pci/controller/pcie-brcmstb.c         | 408 +++++++++++++++---
- drivers/remoteproc/remoteproc_core.c          |   2 +-
- .../staging/media/sunxi/cedrus/cedrus_hw.c    |   7 +-
- drivers/usb/core/message.c                    |   4 +-
- drivers/usb/core/usb.c                        |   2 +-
- include/linux/device.h                        |   4 +-
- include/linux/dma-direct.h                    |  16 +-
- include/linux/dma-mapping.h                   |  38 ++
- kernel/dma/coherent.c                         |  11 +-
- kernel/dma/mapping.c                          |  38 ++
- 27 files changed, 647 insertions(+), 131 deletions(-)
-
--- 
-2.17.1
-
+Best,
+Changming
