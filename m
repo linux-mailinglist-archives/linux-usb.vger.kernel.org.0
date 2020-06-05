@@ -2,149 +2,218 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2321E1EFA27
-	for <lists+linux-usb@lfdr.de>; Fri,  5 Jun 2020 16:13:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C98B51F019F
+	for <lists+linux-usb@lfdr.de>; Fri,  5 Jun 2020 23:27:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727788AbgFEONR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 5 Jun 2020 10:13:17 -0400
-Received: from mail-il1-f198.google.com ([209.85.166.198]:40913 "EHLO
-        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727097AbgFEONR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Jun 2020 10:13:17 -0400
-Received: by mail-il1-f198.google.com with SMTP id s4so6472037ilc.7
-        for <linux-usb@vger.kernel.org>; Fri, 05 Jun 2020 07:13:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=rauaL61yD1b5TzBW2vli0M2yuBKLHU5KSUzfs5rkcSU=;
-        b=FOdK+X9rXDDl+RPiEFS0Pdo0iBfO/1NFkq/rhiIyCkogNQiE1zrH1rz7tQ2ZotnlLF
-         /WIWKtX3IzqcDXZX8xAWuCuKkNTxyny3qu5YP3vHpDk16UocIdbJ0JJonlNXZMUT4ZCH
-         MlEBaCaekAiihFuNx2onL5d/kDfAapnluB21K9w5imwlU6nESy60J+s8mXs/36n/zwtf
-         wVaAStTykkbQ9Ni6O3Jv5pBBAyRtNJroBih75F7iXxGyk0l6d1mGT8mD7Qz2UPOmtTG6
-         XI8MebGDFEfWcmk8/2YqXpjPcIFtOec1hNpGk4jzmjx9OKAMa+BMMi+q3wEpGlZjT7yI
-         NRWw==
-X-Gm-Message-State: AOAM531onQPmcDIxRWsu8hS3R+xsroE8Ie9rp1P0rBfPaAhc7yI6wz3q
-        Di/sMD0atPqvU1wIYFEEBMV/zagWITHt7qlyeAFVyShN7ZJW
-X-Google-Smtp-Source: ABdhPJwSkPouCqieqp4ZCn3u8m242dOVPy70VunYtbo8fv6L+1FTqnL2Xpq50eAm+Ig92E3Jv0bp1PQ4QQp+gWB5D/a1+VdbDSAE
-MIME-Version: 1.0
-X-Received: by 2002:a6b:e714:: with SMTP id b20mr8736368ioh.195.1591366396000;
- Fri, 05 Jun 2020 07:13:16 -0700 (PDT)
-Date:   Fri, 05 Jun 2020 07:13:15 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000bdc60705a756dcd2@google.com>
-Subject: WARNING in snd_usbmidi_input_start/usb_submit_urb
-From:   syzbot <syzbot+0f4ecfe6a2c322c81728@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, balbi@kernel.org,
-        gregkh@linuxfoundation.org, ingrassia@epigenesys.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+        id S1728472AbgFEV1S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 5 Jun 2020 17:27:18 -0400
+Received: from rnd-relay.smtp.broadcom.com ([192.19.229.170]:38280 "EHLO
+        rnd-relay.smtp.broadcom.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726664AbgFEV1Q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 5 Jun 2020 17:27:16 -0400
+Received: from mail-irv-17.broadcom.com (mail-irv-17.lvn.broadcom.net [10.75.242.48])
+        by rnd-relay.smtp.broadcom.com (Postfix) with ESMTP id 6323F30D861;
+        Fri,  5 Jun 2020 14:27:15 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 rnd-relay.smtp.broadcom.com 6323F30D861
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
+        s=dkimrelay; t=1591392435;
+        bh=X1W5SBPglzGt+7ug7Z7PzaYs1FBERzpHlpxJDJ5NWW8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Yb7tCCTq3tEKqFK78fQleMf0F7oKo2GNKiGeJff4TJ8HjbO4U5hKMcBn5a/50b9QL
+         ASYiSDzdEAdFQtERUZgBWiULuxpC0aChlTLqu6cf55XS6z7yAfcc69QKiYMK0Af9yd
+         IC6UDRFn5YTpfAE57XQgz5wCaInS2sD8nKRoPv6w=
+Received: from stbsrv-and-01.and.broadcom.net (stbsrv-and-01.and.broadcom.net [10.28.16.211])
+        by mail-irv-17.broadcom.com (Postfix) with ESMTP id C1CD7140069;
+        Fri,  5 Jun 2020 14:27:11 -0700 (PDT)
+From:   Jim Quinlan <james.quinlan@broadcom.com>
+To:     linux-pci@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        David Kershner <david.kershner@unisys.com>,
+        devel@driverdev.osuosl.org (open list:STAGING SUBSYSTEM),
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE),
+        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS FOR ALLWINNER
+        A10), Florian Fainelli <f.fainelli@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        iommu@lists.linux-foundation.org (open list:IOMMU DRIVERS),
+        Jens Axboe <axboe@kernel.dk>,
+        Julien Grall <julien.grall@arm.com>,
+        linux-acpi@vger.kernel.org (open list:ACPI FOR ARM64 (ACPI/arm64)),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM PORT),
+        linux-ide@vger.kernel.org (open list:LIBATA SUBSYSTEM (Serial and
+        Parallel ATA drivers)), linux-kernel@vger.kernel.org (open list),
+        linux-media@vger.kernel.org (open list:ALLWINNER A10 CSI DRIVER),
+        linux-remoteproc@vger.kernel.org (open list:REMOTE PROCESSOR
+        (REMOTEPROC) SUBSYSTEM),
+        linux-rpi-kernel@lists.infradead.org (moderated list:BROADCOM
+        BCM2711/BCM2835 ARM ARCHITECTURE),
+        linux-sh@vger.kernel.org (open list:SUPERH),
+        linux-usb@vger.kernel.org (open list:USB SUBSYSTEM),
+        Mark Brown <broonie@kernel.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Rob Herring <robh@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH v4 00/12] PCI: brcmstb: enable PCIe for STB chips
+Date:   Fri,  5 Jun 2020 17:26:40 -0400
+Message-Id: <20200605212706.7361-1-james.quinlan@broadcom.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
 
-syzbot found the following crash on:
+v4:
+  Commit "device core: Introduce multiple dma pfn offsets"
+  -- of_dma_get_range() does not take a dev param but instead
+     takes two "out" params: map and map_size.  We do this so
+     that the code that parses dma-ranges is separate from
+     the code that modifies 'dev'.   (Nicolas)
+  -- the separate case of having a single pfn offset has
+     been removed and is now processed by going through the
+     map array. (Nicolas)
+  -- move attach_uniform_dma_pfn_offset() from of/address.c to
+     dma/mapping.c so that it does not depend on CONFIG_OF. (Nicolas)
+  -- devm_kcalloc => devm_kzalloc (DanC)
+  -- add/fix assignment to dev->dma_pfn_offset_map for func
+     attach_uniform_dma_pfn_offset() (DanC, Nicolas)
+  -- s/struct dma_pfn_offset_region/struct bus_dma_region/ (Nicolas)
+  -- s/attach_uniform_dma_pfn_offset/dma_attach_uniform_pfn_offset/
+  -- s/attach_dma_pfn_offset_map/dma_attach_pfn_offset_map/
+  -- More use of PFN_{PHYS,DOWN,UP}. (AndyS)
+  Commit "of: Include a dev param in of_dma_get_range()"
+  -- this commit was sqaushed with "device core: Introduce ..."
 
-HEAD commit:    1ee08de1 Merge tag 'for-5.8/io_uring-2020-06-01' of git://..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1132dfe2100000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=764b977f857603f1
-dashboard link: https://syzkaller.appspot.com/bug?extid=0f4ecfe6a2c322c81728
-compiler:       clang version 10.0.0 (https://github.com/llvm/llvm-project/ c2443155a0fb245c8f17f2c1c72b6ea391e86e81)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12aa59ce100000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1701eb91100000
+v3:
+  Commit "device core: Introduce multiple dma pfn offsets"
+  Commit "arm: dma-mapping: Invoke dma offset func if needed"
+  -- The above two commits have been squashed.  More importantly,
+     the code has been modified so that the functionality for
+     multiple pfn offsets subsumes the use of dev->dma_pfn_offset.
+     In fact, dma_pfn_offset is removed and supplanted by
+     dma_pfn_offset_map, which is a pointer to an array.  The
+     more common case of a uniform offset is now handled as
+     a map with a single entry, while cases requiring multiple
+     pfn offsets use a map with multiple entries.  Code paths
+     that used to do this:
 
-The bug was bisected to:
+         dev->dma_pfn_offset = mydrivers_pfn_offset;
 
-commit f2c2e717642c66f7fe7e5dd69b2e8ff5849f4d10
-Author: Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon Feb 24 16:13:03 2020 +0000
+     have been changed to do this:
 
-    usb: gadget: add raw-gadget interface
+         attach_uniform_dma_pfn_offset(dev, pfn_offset);
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=171c33ee100000
-final crash:    https://syzkaller.appspot.com/x/report.txt?x=149c33ee100000
-console output: https://syzkaller.appspot.com/x/log.txt?x=109c33ee100000
+  Commit "dt-bindings: PCI: Add bindings for more Brcmstb chips"
+  -- Add if/then clause for required props: resets, reset-names (RobH)
+  -- Change compatible list from const to enum (RobH)
+  -- Change list of u32-tuples to u64 (RobH)
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+0f4ecfe6a2c322c81728@syzkaller.appspotmail.com
-Fixes: f2c2e717642c ("usb: gadget: add raw-gadget interface")
+  Commit "of: Include a dev param in of_dma_get_range()"
+  -- modify of/unittests.c to add NULL param in of_dma_get_range() call.
 
-------------[ cut here ]------------
-URB 00000000bfcadc71 submitted while active
-WARNING: CPU: 0 PID: 8955 at drivers/usb/core/urb.c:363 usb_submit_urb+0xe3d/0x13e0 drivers/usb/core/urb.c:363
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 0 PID: 8955 Comm: syz-executor958 Not tainted 5.7.0-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x1e9/0x30e lib/dump_stack.c:118
- panic+0x264/0x7a0 kernel/panic.c:221
- __warn+0x209/0x210 kernel/panic.c:582
- report_bug+0x1ac/0x2d0 lib/bug.c:195
- fixup_bug arch/x86/kernel/traps.c:105 [inline]
- do_error_trap+0xca/0x1c0 arch/x86/kernel/traps.c:197
- do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:216
- invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
-RIP: 0010:usb_submit_urb+0xe3d/0x13e0 drivers/usb/core/urb.c:363
-Code: 00 04 00 00 eb 50 e8 82 20 3e fc eb 49 e8 7b 20 3e fc c6 05 c8 a5 32 04 01 48 c7 c7 30 02 fe 88 4c 89 ee 31 c0 e8 13 10 10 fc <0f> 0b e9 38 f2 ff ff e8 57 20 3e fc c7 04 24 80 00 00 00 eb 17 e8
-RSP: 0018:ffffc90007c072e8 EFLAGS: 00010246
-RAX: f3c090533e8e2b00 RBX: ffff88809ff85b08 RCX: ffff8880a84e6400
-RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
-RBP: 0000000000000cc0 R08: ffffffff815cbfb9 R09: ffffed1015d06660
-R10: ffffed1015d06660 R11: 0000000000000000 R12: dffffc0000000000
-R13: ffff88809ff85b00 R14: dffffc0000000000 R15: ffff8880924c0000
- snd_usbmidi_submit_urb sound/usb/midi.c:194 [inline]
- snd_usbmidi_input_start_ep sound/usb/midi.c:2313 [inline]
- snd_usbmidi_input_start+0x15f/0x7a0 sound/usb/midi.c:2329
- substream_open+0x22b/0x6e0 sound/usb/midi.c:1119
- open_substream+0x369/0x6a0 sound/core/rawmidi.c:299
- rawmidi_open_priv+0x99/0x900 sound/core/rawmidi.c:342
- snd_rawmidi_kernel_open+0x1db/0x270 sound/core/rawmidi.c:382
- midisynth_subscribe+0x93/0x280 sound/core/seq/seq_midi.c:170
- subscribe_port sound/core/seq/seq_ports.c:412 [inline]
- check_and_subscribe_port+0x62c/0xb10 sound/core/seq/seq_ports.c:495
- snd_seq_port_connect+0x20f/0x460 sound/core/seq/seq_ports.c:564
- snd_seq_ioctl_subscribe_port+0x349/0x6c0 sound/core/seq/seq_clientmgr.c:1484
- snd_seq_oss_midi_open+0x4db/0x830 sound/core/seq/oss/seq_oss_midi.c:364
- snd_seq_oss_synth_setup_midi+0x108/0x510 sound/core/seq/oss/seq_oss_synth.c:269
- snd_seq_oss_open+0x899/0xe90 sound/core/seq/oss/seq_oss_init.c:261
- odev_open+0x5e/0x90 sound/core/seq/oss/seq_oss.c:125
- chrdev_open+0x498/0x580 fs/char_dev.c:414
- do_dentry_open+0x808/0x1020 fs/open.c:828
- do_open fs/namei.c:3229 [inline]
- path_openat+0x2790/0x38b0 fs/namei.c:3346
- do_filp_open+0x191/0x3a0 fs/namei.c:3373
- do_sys_openat2+0x463/0x770 fs/open.c:1179
- do_sys_open fs/open.c:1195 [inline]
- __do_sys_openat fs/open.c:1209 [inline]
- __se_sys_openat fs/open.c:1204 [inline]
- __x64_sys_openat+0x1c8/0x1f0 fs/open.c:1204
- do_syscall_64+0xf3/0x1b0 arch/x86/entry/common.c:295
- entry_SYSCALL_64_after_hwframe+0x49/0xb3
-RIP: 0033:0x445719
-Code: e8 8c e8 ff ff 48 83 c4 18 c3 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 eb cc fb ff c3 66 2e 0f 1f 84 00 00 00 00
-RSP: 002b:00007fff79d9b7c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 0000000000445719
-RDX: 0000000000000000 RSI: 0000000020000280 RDI: ffffffffffffff9c
-RBP: 000000000008b2e3 R08: 0000000000000000 R09: 00000000004002e0
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000402890
-R13: 0000000000402920 R14: 0000000000000000 R15: 0000000000000000
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
+  Commit "device core: Add ability to handle multiple dma offsets"
+  -- align comment in device.h (AndyS).
+  -- s/cpu_beg/cpu_start/ and s/dma_beg/dma_start/ in struct
+     dma_pfn_offset_region (AndyS).
 
+v2:
+Commit: "device core: Add ability to handle multiple dma offsets"
+  o Added helper func attach_dma_pfn_offset_map() in address.c (Chistoph)
+  o Helpers funcs added to __phys_to_dma() & __dma_to_phys() (Christoph)
+  o Added warning when multiple offsets are needed and !DMA_PFN_OFFSET_MAP
+  o dev->dma_pfn_map => dev->dma_pfn_offset_map
+  o s/frm/from/ for dma_pfn_offset_frm_{phys,dma}_addr() (Christoph)
+  o In device.h: s/const void */const struct dma_pfn_offset_region */
+  o removed 'unlikely' from unlikely(dev->dma_pfn_offset_map) since
+    guarded by CONFIG_DMA_PFN_OFFSET_MAP (Christoph)
+  o Since dev->dma_pfn_offset is copied in usb/core/{usb,message}.c, now
+    dev->dma_pfn_offset_map is copied as well.
+  o Merged two of the DMA commits into one (Christoph).
 
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Commit "arm: dma-mapping: Invoke dma offset func if needed":
+  o Use helper functions instead of #if CONFIG_DMA_PFN_OFFSET
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Other commits' changes:
+  o Removed need for carrying of_id var in priv (Nicolas)
+  o Commit message rewordings (Bjorn)
+  o Commit log messages filled to 75 chars (Bjorn)
+  o devm_reset_control_get_shared())
+    => devm_reset_control_get_optional_shared (Philipp)
+  o Add call to reset_control_assert() in PCIe remove routines (Philipp)
+
+v1:
+This patchset expands the usefulness of the Broadcom Settop Box PCIe
+controller by building upon the PCIe driver used currently by the
+Raspbery Pi.  Other forms of this patchset were submitted by me years
+ago and not accepted; the major sticking point was the code required
+for the DMA remapping needed for the PCIe driver to work [1].
+
+There have been many changes to the DMA and OF subsystems since that
+time, making a cleaner and less intrusive patchset possible.  This
+patchset implements a generalization of "dev->dma_pfn_offset", except
+that instead of a single scalar offset it provides for multiple
+offsets via a function which depends upon the "dma-ranges" property of
+the PCIe host controller.  This is required for proper functionality
+of the BrcmSTB PCIe controller and possibly some other devices.
+
+[1] https://lore.kernel.org/linux-arm-kernel/1516058925-46522-5-git-send-email-jim2101024@gmail.com/
+
+Jim Quinlan (12):
+  PCI: brcmstb: PCIE_BRCMSTB depends on ARCH_BRCMSTB
+  ata: ahci_brcm: Fix use of BCM7216 reset controller
+  dt-bindings: PCI: Add bindings for more Brcmstb chips
+  PCI: brcmstb: Add bcm7278 register info
+  PCI: brcmstb: Add suspend and resume pm_ops
+  PCI: brcmstb: Add bcm7278 PERST support
+  PCI: brcmstb: Add control of rescal reset
+  device core: Introduce multiple dma pfn offsets
+  PCI: brcmstb: Set internal memory viewport sizes
+  PCI: brcmstb: Accommodate MSI for older chips
+  PCI: brcmstb: Set bus max burst size by chip type
+  PCI: brcmstb: Add bcm7211, bcm7216, bcm7445, bcm7278 to match list
+
+ .../bindings/pci/brcm,stb-pcie.yaml           |  58 ++-
+ arch/arm/include/asm/dma-mapping.h            |   9 +-
+ arch/arm/mach-keystone/keystone.c             |   9 +-
+ arch/sh/drivers/pci/pcie-sh7786.c             |   3 +-
+ arch/sh/kernel/dma-coherent.c                 |  14 +-
+ arch/x86/pci/sta2x11-fixup.c                  |   7 +-
+ drivers/acpi/arm64/iort.c                     |   5 +-
+ drivers/ata/ahci_brcm.c                       |  14 +-
+ drivers/gpu/drm/sun4i/sun4i_backend.c         |   5 +-
+ drivers/iommu/io-pgtable-arm.c                |   2 +-
+ .../platform/sunxi/sun4i-csi/sun4i_csi.c      |   5 +-
+ .../platform/sunxi/sun6i-csi/sun6i_csi.c      |   4 +-
+ drivers/of/address.c                          |  72 +++-
+ drivers/of/device.c                           |  19 +-
+ drivers/of/of_private.h                       |  11 +-
+ drivers/of/unittest.c                         |   8 +-
+ drivers/pci/controller/Kconfig                |   3 +-
+ drivers/pci/controller/pcie-brcmstb.c         | 408 +++++++++++++++---
+ drivers/remoteproc/remoteproc_core.c          |   2 +-
+ .../staging/media/sunxi/cedrus/cedrus_hw.c    |   7 +-
+ drivers/usb/core/message.c                    |   4 +-
+ drivers/usb/core/usb.c                        |   2 +-
+ include/linux/device.h                        |   4 +-
+ include/linux/dma-direct.h                    |  16 +-
+ include/linux/dma-mapping.h                   |  38 ++
+ kernel/dma/coherent.c                         |  11 +-
+ kernel/dma/mapping.c                          |  38 ++
+ 27 files changed, 647 insertions(+), 131 deletions(-)
+
+-- 
+2.17.1
+
