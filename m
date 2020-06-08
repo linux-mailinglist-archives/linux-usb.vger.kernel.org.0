@@ -2,178 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A99481F1555
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Jun 2020 11:26:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3F91F1707
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Jun 2020 12:55:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729030AbgFHJ0K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Jun 2020 05:26:10 -0400
-Received: from mga05.intel.com ([192.55.52.43]:3297 "EHLO mga05.intel.com"
+        id S1729421AbgFHKz2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Jun 2020 06:55:28 -0400
+Received: from mout.web.de ([217.72.192.78]:44547 "EHLO mout.web.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728745AbgFHJ0K (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 8 Jun 2020 05:26:10 -0400
-IronPort-SDR: gnRlLFlILoFDHztL0UBiJTyJn62wFEbNSnJ5MFXvZfVzdbrzYdcJ4uVxW99HFlL1pMxWKvAyNK
- 3unn86obubBQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2020 02:26:08 -0700
-IronPort-SDR: 2tlcmwKl52Yp62zIC/6CDdjeuUJqP3+/85PpuxRjJ1EfrqPMXyvetaf6F3+fnJSPBfk171MGA5
- eJwcbNf5MF7w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,487,1583222400"; 
-   d="scan'208";a="270451160"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga003.jf.intel.com with ESMTP; 08 Jun 2020 02:26:06 -0700
-Subject: Re: [PATCH] xhci: Make debug message consistent with bus and port
- number
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        mathias.nyman@intel.com,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20200507061755.13280-1-kai.heng.feng@canonical.com>
- <20200507064510.GA787064@kroah.com>
- <C4A734C8-D1C6-45BC-9C0A-92364EAEE3C0@canonical.com>
- <20200507073119.GA876666@kroah.com>
- <90D5B23E-B037-49D2-BD44-7F9B0B2FC155@canonical.com>
- <20200507082149.GE1024567@kroah.com>
- <938b0ce5-cb56-a356-dec8-3a6adc502752@linux.intel.com>
- <E6AD21DC-A086-44B9-98F5-7FB320E9B457@canonical.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- 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 fiD/
-Message-ID: <dd75ab92-cb02-4a7d-0a03-f105878f71cd@linux.intel.com>
-Date:   Mon, 8 Jun 2020 12:29:06 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1726202AbgFHKzZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 8 Jun 2020 06:55:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
+        s=dbaedf251592; t=1591613715;
+        bh=2IDgC8eQl6HqmXppOxVMev5dv9F1nlZlWXIurSl4N+U=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=U+uDvESPVOYhc66c38ACcAoBupxljA5XH7FgCzJg62pxFtwTcO17O+hYs+2dcssqm
+         QfQQF+9r++E+TBsRYhymXklBckq0wLmb4LXBXvMwgJ8Q5o0uQTP9jMT3M0zrcsyrdE
+         24o5P3tkGhAdZ8c5CaKEZHkWDcmanbd/EaZDmtLA=
+X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
+Received: from [192.168.1.2] ([78.49.116.236]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1Md6tt-1j8ukS0a3v-00a3pV; Mon, 08
+ Jun 2020 12:55:15 +0200
+Subject: Re: usb: gadget: function: printer: Fix use-after-free in
+ __lock_acquire()
+To:     Qiang Zhang <Qiang.Zhang@windriver.com>, linux-usb@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kyungtae Kim <kt0755@gmail.com>
+References: <5207d179-0a7d-b5ff-af34-102fb21028b5@web.de>
+ <DM5PR11MB205835FB50BA296232BC3163FF850@DM5PR11MB2058.namprd11.prod.outlook.com>
+From:   Markus Elfring <Markus.Elfring@web.de>
+Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
+ 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 FEE=
+Message-ID: <ae59cac9-d770-36bd-ccb2-e5e442bd5e0a@web.de>
+Date:   Mon, 8 Jun 2020 12:55:13 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.1
 MIME-Version: 1.0
-In-Reply-To: <E6AD21DC-A086-44B9-98F5-7FB320E9B457@canonical.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <DM5PR11MB205835FB50BA296232BC3163FF850@DM5PR11MB2058.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=gbk
+Content-Language: en-GB
+X-Provags-ID: V03:K1:e6bmZdRHOhVGVGyhDrhy7dMsFBOpyKvNzCP7VcJ5KmXsTAmL3Ln
+ C3PZZ3bln5h2vRTNHU6CftmgS9EaMIfRACIspvTgLJ7K865EgQHZawWpOrs3k1A+aJFFVBW
+ OsJpqDQjt6l/KPZizk5pXpidKKncKEhb41jV/oBrQA/FC7EQbkgL0ys7NOEcWdnuxSdCr2D
+ iBwDEIX+2o5KpOd3sWiPQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:g0axPKi/NOk=:FsUsgo2Eptma7rjxDZF1rX
+ EzSumZ6jU+4oNpGJifV8DRnGnm+ACnbHqyMsIa2pj5OmQm4mh7wu+YHfGMPq66RrasyXTdr5d
+ OWHwhxqkiB/aDKBFN+k2zzVs2o1C7qBkGEgYOYqepcWOdckv/myvrlGY3eZj1cB5llUmSb2qE
+ Mq4Vw+5I6YJ6WUuBvAT5wEUFJUWqv1HfVeBz532nFBeoffac8GIcAKmsN6wefG/3IBa6hHoPk
+ Pmecogs6RQm7662Fdm+Stjmgg2LnJX1aTTmFDJiLJF+o3Yem8bnYIfxRoA2XuVNVPMFBmqU/I
+ o5U/QyblZgVN0KYSXcjVNq2Kj2uobYpf4srCviu2zvVhxUJ1sUl7CrHDKo3/RxE6gZd0Uz9Si
+ tggk+KXABVqkYt0sBiNhzmdJLGQJ46NZfBANdrNOEb+QWJ0SUpNGgxAAN0qTvVZ+QOehQ/BM2
+ vNbxSAiSVzBva8uc2qa2WlM4I8KdiBDiPrP6k9q49KxRny1GNPuoX6ewPyVm+vdL/dh7VzLpl
+ Cd32GgaglfDqss05MM8NS3Uu0QpaX0Vg6omHTG4VFH5GZbFPaeBNdsSu/bJ0DPwQ8cHbzE41F
+ ABtob6GVjHxO6N/M+cILI6DHxc4arpAPaCTqARemhE7MRBcfiQUYHeCoBFytwZX0JZAebjmKH
+ YX3jDzDj7eGuOjyfkT4A6qAt5tE+kur/wZRktx1NWOPZ8z+ekurd6o4fxscpzNbirBPHCQnCc
+ TjY4xlG7BIs9ep02ADzfhlQAZ9jYIdg1r93vGoqKHc9WBnGMvSEd2Zigv9v+DiUI/cwqOYBPE
+ NvtQJUaXikkFB7LDquiBvMe+CFjnH4vTrb+tJVLITSdcSTWeO6iwLMuoDWLGPmc6FoGW1mHrn
+ iug4DhGtVtskmD91/ht5fg0EAHBLdLS8i2MffK+U0kCf/cc7fJE5MliPO/eV+CC73CeDGgO6R
+ IVfM5w3xxC+8Qm4U/ot8ZL2mor5quiB5eH2FvJyK3WeETgAg37ImzhIgQ0FAwXTL8xHmCtu91
+ kWhhQFog22eiQPMqURUp0sR7MuYdHgql0KsBvovm2sVnx8ADb/tiuSbJyaqDWo74j8osiA1+u
+ pj3N5iGf68JiIj06Q9hpGuKiqaQ5wwXfA9y3yNbjBg0ZzJ4H3QRoXg7CWMuo8HfKfW8BBSxWh
+ st6BI9QXqMp4JzH8rv//j3E7yK+hfvz9VIfvqF/acYchoCrr9Ct+4eNFLLNcPZNyuzNrtYxC7
+ R5HA8PqdsbfqTE2rr
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 8.6.2020 6.57, Kai-Heng Feng wrote:
-> 
-> 
->> On May 7, 2020, at 18:35, Mathias Nyman <mathias.nyman@linux.intel.com> wrote:
->>
->> On 7.5.2020 11.21, Greg Kroah-Hartman wrote:
->>> On Thu, May 07, 2020 at 03:58:36PM +0800, Kai-Heng Feng wrote:
->>>>
->>>>
->>>>> On May 7, 2020, at 15:31, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
->>>>>
->>>>> On Thu, May 07, 2020 at 03:15:01PM +0800, Kai-Heng Feng wrote:
->>>>>>
->>>>>>
->>>>>>> On May 7, 2020, at 14:45, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
->>>>>>>
->>>>>>> On Thu, May 07, 2020 at 02:17:55PM +0800, Kai-Heng Feng wrote:
->>>>>>>> Current xhci debug message doesn't always output bus number, so it's
->>>>>>>> hard to figure out it's from USB2 or USB3 root hub.
->>>>>>>>
->>>>>>>> In addition to that, some port numbers are offset to 0 and others are
->>>>>>>> offset to 1. Use the latter to match the USB core.
->>>>>>>>
->>>>>>>> So use "bus number - port index + 1" to make debug message consistent.
->>>>>>>>
->>>>>>>> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
->>>>>>>> ---
->>>>>>>> drivers/usb/host/xhci-hub.c | 41 +++++++++++++++++++++----------------
->>>>>>>> 1 file changed, 23 insertions(+), 18 deletions(-)
->>>>>>>>
->>>>>>>> diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
->>>>>>>> index f37316d2c8fa..83088c262cc4 100644
->>>>>>>> --- a/drivers/usb/host/xhci-hub.c
->>>>>>>> +++ b/drivers/usb/host/xhci-hub.c
->>>>>>>> @@ -1241,7 +1241,8 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
->>>>>>>> 			temp = readl(ports[wIndex]->addr);
->>>>>>>> 			/* Disable port */
->>>>>>>> 			if (link_state == USB_SS_PORT_LS_SS_DISABLED) {
->>>>>>>> -				xhci_dbg(xhci, "Disable port %d\n", wIndex);
->>>>>>>> +				xhci_dbg(xhci, "Disable port %d-%d\n",
->>>>>>>> +					 hcd->self.busnum, wIndex + 1);
->>>>>>>
->>>>>>> Shouldn't xhci_dbg() show the bus number already?  
->>>>>>
->>>>>> It's the PCI bus number, different to USB2/USB3 root hub bus number...
->>>>>
->>>>> But if this is using dev_dbg(), and it is, then you know how to look
->>>>> that up by seeing where that device is in sysfs at that point in time.
->>>>>
->>>>> So why add this again?
->>>>
->>>> xHCI has two HCD, one for USB2 and one for USB3.
->>>> If both of their port with same number are in use, for instance, port 1, then they are port 1-1 and port 2-1.
->>>> Right now the debug message only show "Port 1", we still can't find the corresponding port via sysfs with insufficient info.
->>>
->>> Look at the full kernel log line, the xhci hcd device should be showing
->>> you unique information.  If not, something else is wrong.
->>>
->>
->> What Kai-Heng suggest here makes sense, and is useful.
->> We use similar style debugging in other places, and it is helpful as it matches
->> usb core debugging style.
->>
->> This might seem odd but reason is that the xHC controller is one device which
->> doesn't really separate USB2 and USB3.
->> All ports are for example in one long array.
->>
->> On the xhci driver side things look very different. We register two HCD's,
->> one for usb 2 and one for USB 3. In many cases the debugging is not tied to a HCD
->> in any way,  (starting, stopping controller, command completion interrupts etc),
->> other cases the debugging is very much tied to a specific hcd,
->> for example when we are handling a port requsts for the roothub.
-> 
-> A gentle ping...
-> 
+> I don't need to add Fix tag to view the code.
 
-Added to my for-usb-next branch, (which I'll need to rebase on 5.8-rc1 once released)
+I have got understanding difficulties for this kind of feedback.
+How much do you care for corresponding patch review concerns?
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/submitting-patches.rst?id=af7b4801030c07637840191c69eb666917e4135d#n183
 
--Mathias
-
+Regards,
+Markus
