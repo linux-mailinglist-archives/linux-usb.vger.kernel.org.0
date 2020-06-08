@@ -2,100 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D1C11F11B3
-	for <lists+linux-usb@lfdr.de>; Mon,  8 Jun 2020 05:29:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 183121F11DD
+	for <lists+linux-usb@lfdr.de>; Mon,  8 Jun 2020 05:47:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728799AbgFHD32 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 7 Jun 2020 23:29:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53340 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728065AbgFHD32 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 7 Jun 2020 23:29:28 -0400
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E29DC08C5C3
-        for <linux-usb@vger.kernel.org>; Sun,  7 Jun 2020 20:29:28 -0700 (PDT)
-Received: by mail-yb1-xb44.google.com with SMTP id y13so8428497ybj.10
-        for <linux-usb@vger.kernel.org>; Sun, 07 Jun 2020 20:29:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=IHdVpQ0BdfXNiTu5JHlOze0C3k/x5AyNV5jgRLzSMiU=;
-        b=QD+jqcqLr/d+fTxE1rovwZzX8kSIspSQAySDI7OLw7XzrqwDwg7mtQON3mX3gq0fLX
-         fSwh+I1kkwNKdRSdAVxIZ4nVCXGwa3o+DKuWo2eOR0E7sn88qCgxOG5qVInX895q6i4y
-         jNKa41fRVCxFQMHF5tUCw77Aofi1MXhLI2wc3f0LK3iD4IdXKc9Zctl56VnpGSMrtbr8
-         2+uGELlhCqYGUy2A0kUfzllFVmaeNQlcE/x3mIASbhJBUjNps0fppaqCtaqwrhXUoj9M
-         CQ+DLrJIMXP11NxEeZAeCbMqf1dYGg0tnKNxPeZJIn5iXD73SDb8NxICR6VJLw4ALATB
-         WCpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=IHdVpQ0BdfXNiTu5JHlOze0C3k/x5AyNV5jgRLzSMiU=;
-        b=DjVURgli7qZKJFmLdJrfC/9zhkEM/3BveAfHRWTLy6/+9e0My3YN8qtoPQUsxMR3m7
-         nPTO0mxLaj2knV/APJ+fPR65KI3ScC9PoIxl8Oqj/4piTi1/FUgWp8bG0SZV5Wf3a6Sx
-         5q1wLjOLHdZ2s/vDNva5vn3lwell/mEZGNKoDH73GJ//xf5yZTKNj6G+ifkIYNwqa904
-         SSeRf84OEptPy0pVbkXZsGS+5u05N3KF9AvZ27IMVBPzMh0mV/Jy/vuBoxnMqcS6nzG2
-         wwrPOiM/uTOkaoHpr6xTdYU9xFMDbSvRN2GP+4eJripzz5gQUHYleFRuU9xk7GkUqXoT
-         FYRw==
-X-Gm-Message-State: AOAM532HguLWLaOJiUP0aYKIuWm+HdRISpVTB6ouSFNEaiWtCWGOAjo5
-        LHk4UBKtDf4jEG743pOkjIREi72dBzXiSuDEg00=
-X-Google-Smtp-Source: ABdhPJyUnUsralnEXWduqqZZUJmHJTT6wFF9ltaJlStv6u9JMlfIj+nkMUqDaljnQopP8SiPFauCP78nvm1ORLn3xlo=
-X-Received: by 2002:a25:a165:: with SMTP id z92mr33901107ybh.48.1591586967455;
- Sun, 07 Jun 2020 20:29:27 -0700 (PDT)
+        id S1728782AbgFHDr3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 7 Jun 2020 23:47:29 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:5865 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728763AbgFHDr3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 7 Jun 2020 23:47:29 -0400
+Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 9F835F4F95FB4B424CE4;
+        Mon,  8 Jun 2020 11:47:26 +0800 (CST)
+Received: from huawei.com (10.67.165.24) by DGGEMS412-HUB.china.huawei.com
+ (10.3.19.212) with Microsoft SMTP Server id 14.3.487.0; Mon, 8 Jun 2020
+ 11:47:20 +0800
+From:   Longfang Liu <liulongfang@huawei.com>
+To:     <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, <kong.kongxinwei@hisilicon.com>,
+        <huangdaode@huawei.com>, <yisen.zhuang@huawei.com>
+Subject: [PATCH v3] USB: ehci: reopen solution for Synopsys HC bug
+Date:   Mon, 8 Jun 2020 11:46:59 +0800
+Message-ID: <1591588019-44284-1-git-send-email-liulongfang@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-Reply-To: abd747591@gmail.com
-Received: by 2002:a81:130e:0:0:0:0:0 with HTTP; Sun, 7 Jun 2020 20:29:26 -0700 (PDT)
-From:   Mr Abd Manaf <abdmanaf2002@gmail.com>
-Date:   Mon, 8 Jun 2020 04:29:26 +0100
-X-Google-Sender-Auth: Niu9HlGu_mfellIMkUl128KAbyQ
-Message-ID: <CAL=QX5DiwPjWmmh1-23zr6KatcoLj+EdMDHaje5F+dN4zFtsfg@mail.gmail.com>
-Subject: Good Day!
-To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.165.24]
+X-CFilter-Loop: Reflected
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dear how are you,
+A Synopsys USB2.0 core used in Huawei Kunpeng920 SoC has a bug which
+might cause the host controller not issuing ping.
 
+Bug description:
+After indicating an Interrupt on Async Advance, the software uses the
+doorbell mechanism to delete the Next Link queue head of the last
+executed queue head. At this time, the host controller still references
+the removed queue head(the queue head is NULL). NULL reference causes
+the host controller to lose the USB device.
 
-How Are You? I Know That This Mail May Come To You Almost A Surprise
-As We Never Met Before And Please Before You Proceed Reading This
-mail,This Is True and not An Well I Saw Your Contact Email From Yahoo
-Search when I Was Looking For a Foreign Partner, please I don=E2=80=99t now=
- if
-you can keep secret? A word of your own as a human-being? As I have
-gone through your profile.Well I have a deal worth 15.5m$ from the
-dormant account in the bank where I am working.so Please if you can
-keep secret, I will give you more details and the nest thing to do,
+Solution:
+After deleting the Next Link queue head, when has_synopsys_hc_bug set
+to 1，the software can write one of the valid queue head addresses to
+the ASYNCLISTADDR register to allow the host controller to get
+the valid queue head. in order to solve that problem, this patch set
+the flag for Huawei Kunpeng920
 
-Also all the documents that will back you up must send to you.
-Meanwhile before I contact you I have done every underground work
-through the documents of the deceases person, I have put or attachment
-his file to our favor. Also with my position every thing works
-successfully.
+There are detailed instructions and solutions in this patch:
+commit 2f7ac6c19997 ("USB: ehci: add workaround for Synopsys HC bug")
 
-Your Full Name,
-Phone No=E2=80=A6.,
-Receiver Country..,
-Occupation..,
+Signed-off-by: Longfang Liu <liulongfang@huawei.com>
+---
 
-thanks for your understandplease contact me base if you can control
-this fund once it transferinto your account before my family and I
-will arriver in your country for the sharing, 40% for you. 10% for the
-poorest, rest is for me.
-Give me your Phone number Let me call you so that we can talk one and one=
-=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6
+Changes in v3:
+- updated comment message
 
-You should contact me immediately as soon as you receive this
-letter,if only you are interested and ready to help On this Contact
-me. through my private email address(abd747591@gmail.com)Trusting to
-hear from you immediately. Do keep this a top secret for security
-reasons.
+Changes in v2:
+- Added comment message
 
-Yours faithfully,
+ drivers/usb/host/ehci-pci.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-MR.Abd Manaf.
+diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
+index 1a48ab1..7ff2cbd 100644
+--- a/drivers/usb/host/ehci-pci.c
++++ b/drivers/usb/host/ehci-pci.c
+@@ -216,6 +216,13 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
+ 		ehci_info(ehci, "applying MosChip frame-index workaround\n");
+ 		ehci->frame_index_bug = 1;
+ 		break;
++	case PCI_VENDOR_ID_HUAWEI:
++		/* Synopsys HC bug */
++		if (pdev->device == 0xa239) {
++			ehci_info(ehci, "applying Synopsys HC workaround\n");
++			ehci->has_synopsys_hc_bug = 1;
++		}
++		break;
+ 	}
+ 
+ 	/* optional debug port, normally in the first BAR */
+-- 
+2.8.1
+
