@@ -2,36 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD38B1F2CA1
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jun 2020 02:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6EDC1F2C33
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jun 2020 02:23:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733040AbgFIA0I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Jun 2020 20:26:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38202 "EHLO mail.kernel.org"
+        id S1732822AbgFIAVy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Jun 2020 20:21:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39462 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730343AbgFHXQr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:16:47 -0400
+        id S1728823AbgFHXRm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:17:42 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 594F220775;
-        Mon,  8 Jun 2020 23:16:46 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D809E2088E;
+        Mon,  8 Jun 2020 23:17:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658207;
-        bh=BSyonC01oOJYjmrWgRtX+/RL9lb+1Yqc92A7PwcFbRA=;
+        s=default; t=1591658262;
+        bh=uB/nrNTc33V1p9MjKZ2UT3WMBnL+IeRKZpIjZGkr7aQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FfsQ7hs4K9ReujV9aUh3DDpCwDbWYzpps63aDatXg4mQx8C28QgMo3FIMXCBHUKp1
-         zr56vJU/gej3f6FI9AkPCYZd9xY8ORKUS6xmPuMA3dNLOEf3Nzal67p/emd0tDJQU+
-         pB4kmK6DzjbEDVzAf44nNOBabfotNdbRyIGWguQQ=
+        b=RBPJPvL2gMWFzmViTjM7ZTk5gcgP88+ScGPJdWYcVvuM3AP/TFEiIK2/dHhwX6T0U
+         0BhMHhusKKpnyCvmc77vvwghqGsOi7eJ2yCtWPhP0iujpPPdh2zS+fcLYr7Gp9jx/+
+         ZD/2fLIro3LQXYeCrpECxNkUyTjUy5wcQ1Kl7UWU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Marc Payne <marc.payne@mdpsys.co.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 225/606] r8152: support additional Microsoft Surface Ethernet Adapter variant
-Date:   Mon,  8 Jun 2020 19:05:50 -0400
-Message-Id: <20200608231211.3363633-225-sashal@kernel.org>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.6 270/606] usb: phy: twl6030-usb: Fix a resource leak in an error handling path in 'twl6030_usb_probe()'
+Date:   Mon,  8 Jun 2020 19:06:35 -0400
+Message-Id: <20200608231211.3363633-270-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608231211.3363633-1-sashal@kernel.org>
 References: <20200608231211.3363633-1-sashal@kernel.org>
@@ -44,65 +44,62 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Marc Payne <marc.payne@mdpsys.co.uk>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit c27a204383616efba5a4194075e90819961ff66a ]
+[ Upstream commit f058764d19000d98aef72010468db1f69faf9fa0 ]
 
-Device id 0927 is the RTL8153B-based component of the 'Surface USB-C to
-Ethernet and USB Adapter' and may be used as a component of other devices
-in future. Tested and working with the r8152 driver.
+A call to 'regulator_get()' is hidden in 'twl6030_usb_ldo_init()'. A
+corresponding put must be performed in the error handling path, as
+already done in the remove function.
 
-Update the cdc_ether blacklist due to the RTL8153 'network jam on suspend'
-issue which this device will cause (personally confirmed).
+While at it, also move a 'free_irq()' call in the error handling path in
+order to be consistent.
 
-Signed-off-by: Marc Payne <marc.payne@mdpsys.co.uk>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Signed-off-by: Felipe Balbi <balbi@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/usb/cdc_ether.c | 11 +++++++++--
- drivers/net/usb/r8152.c     |  1 +
- 2 files changed, 10 insertions(+), 2 deletions(-)
+ drivers/usb/phy/phy-twl6030-usb.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/usb/cdc_ether.c b/drivers/net/usb/cdc_ether.c
-index 0cdb2ce47645..a657943c9f01 100644
---- a/drivers/net/usb/cdc_ether.c
-+++ b/drivers/net/usb/cdc_ether.c
-@@ -815,14 +815,21 @@ static const struct usb_device_id	products[] = {
- 	.driver_info = 0,
- },
+diff --git a/drivers/usb/phy/phy-twl6030-usb.c b/drivers/usb/phy/phy-twl6030-usb.c
+index bfebf1f2e991..9a7e655d5280 100644
+--- a/drivers/usb/phy/phy-twl6030-usb.c
++++ b/drivers/usb/phy/phy-twl6030-usb.c
+@@ -377,7 +377,7 @@ static int twl6030_usb_probe(struct platform_device *pdev)
+ 	if (status < 0) {
+ 		dev_err(&pdev->dev, "can't get IRQ %d, err %d\n",
+ 			twl->irq1, status);
+-		return status;
++		goto err_put_regulator;
+ 	}
  
--/* Microsoft Surface 3 dock (based on Realtek RTL8153) */
-+/* Microsoft Surface Ethernet Adapter (based on Realtek RTL8153) */
- {
- 	USB_DEVICE_AND_INTERFACE_INFO(MICROSOFT_VENDOR_ID, 0x07c6, USB_CLASS_COMM,
- 			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
- 	.driver_info = 0,
- },
+ 	status = request_threaded_irq(twl->irq2, NULL, twl6030_usb_irq,
+@@ -386,8 +386,7 @@ static int twl6030_usb_probe(struct platform_device *pdev)
+ 	if (status < 0) {
+ 		dev_err(&pdev->dev, "can't get IRQ %d, err %d\n",
+ 			twl->irq2, status);
+-		free_irq(twl->irq1, twl);
+-		return status;
++		goto err_free_irq1;
+ 	}
  
--	/* TP-LINK UE300 USB 3.0 Ethernet Adapters (based on Realtek RTL8153) */
-+/* Microsoft Surface Ethernet Adapter (based on Realtek RTL8153B) */
-+{
-+	USB_DEVICE_AND_INTERFACE_INFO(MICROSOFT_VENDOR_ID, 0x0927, USB_CLASS_COMM,
-+			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
-+	.driver_info = 0,
-+},
+ 	twl->asleep = 0;
+@@ -396,6 +395,13 @@ static int twl6030_usb_probe(struct platform_device *pdev)
+ 	dev_info(&pdev->dev, "Initialized TWL6030 USB module\n");
+ 
+ 	return 0;
 +
-+/* TP-LINK UE300 USB 3.0 Ethernet Adapters (based on Realtek RTL8153) */
- {
- 	USB_DEVICE_AND_INTERFACE_INFO(TPLINK_VENDOR_ID, 0x0601, USB_CLASS_COMM,
- 			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 95b19ce96513..7c8c45984a5c 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -6901,6 +6901,7 @@ static const struct usb_device_id rtl8152_table[] = {
- 	{REALTEK_USB_DEVICE(VENDOR_ID_REALTEK, 0x8153)},
- 	{REALTEK_USB_DEVICE(VENDOR_ID_MICROSOFT, 0x07ab)},
- 	{REALTEK_USB_DEVICE(VENDOR_ID_MICROSOFT, 0x07c6)},
-+	{REALTEK_USB_DEVICE(VENDOR_ID_MICROSOFT, 0x0927)},
- 	{REALTEK_USB_DEVICE(VENDOR_ID_SAMSUNG, 0xa101)},
- 	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x304f)},
- 	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3062)},
++err_free_irq1:
++	free_irq(twl->irq1, twl);
++err_put_regulator:
++	regulator_put(twl->usb3v3);
++
++	return status;
+ }
+ 
+ static int twl6030_usb_remove(struct platform_device *pdev)
 -- 
 2.25.1
 
