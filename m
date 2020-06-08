@@ -2,37 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46FDA1F23EA
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jun 2020 01:18:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD38B1F2CA1
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jun 2020 02:27:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730519AbgFHXRs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 8 Jun 2020 19:17:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39494 "EHLO mail.kernel.org"
+        id S1733040AbgFIA0I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 8 Jun 2020 20:26:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38202 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730505AbgFHXRo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:17:44 -0400
+        id S1730343AbgFHXQr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:16:47 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 028732086A;
-        Mon,  8 Jun 2020 23:17:42 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 594F220775;
+        Mon,  8 Jun 2020 23:16:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658263;
-        bh=vN3bm/W5eDb1TaNYXCarzKAed2YV4sq1ytDMwUyY3ec=;
+        s=default; t=1591658207;
+        bh=BSyonC01oOJYjmrWgRtX+/RL9lb+1Yqc92A7PwcFbRA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gKeZUGvC+brXbZup/MX5N6jEkUOt8rbibWQYW5euM979yYfNrjRT8SIIxIImV91IF
-         hZRf2G9iVljAY5I7adpcLtCVuHFpSB9bZvIMGwAfzm7TFtro4dm/ZVE1+1mz9wGjH7
-         FRZLNXA2l8r4bCU2vYwweMJ1SoXKEsUEYqtcLKkA=
+        b=FfsQ7hs4K9ReujV9aUh3DDpCwDbWYzpps63aDatXg4mQx8C28QgMo3FIMXCBHUKp1
+         zr56vJU/gej3f6FI9AkPCYZd9xY8ORKUS6xmPuMA3dNLOEf3Nzal67p/emd0tDJQU+
+         pB4kmK6DzjbEDVzAf44nNOBabfotNdbRyIGWguQQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        kbuild test robot <lkp@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 271/606] usb: gadget: legacy: fix redundant initialization warnings
-Date:   Mon,  8 Jun 2020 19:06:36 -0400
-Message-Id: <20200608231211.3363633-271-sashal@kernel.org>
+Cc:     Marc Payne <marc.payne@mdpsys.co.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.6 225/606] r8152: support additional Microsoft Surface Ethernet Adapter variant
+Date:   Mon,  8 Jun 2020 19:05:50 -0400
+Message-Id: <20200608231211.3363633-225-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200608231211.3363633-1-sashal@kernel.org>
 References: <20200608231211.3363633-1-sashal@kernel.org>
@@ -45,61 +44,65 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Masahiro Yamada <masahiroy@kernel.org>
+From: Marc Payne <marc.payne@mdpsys.co.uk>
 
-[ Upstream commit d13cce757954fa663c69845611957396843ed87a ]
+[ Upstream commit c27a204383616efba5a4194075e90819961ff66a ]
 
-Fix the following cppcheck warnings:
+Device id 0927 is the RTL8153B-based component of the 'Surface USB-C to
+Ethernet and USB Adapter' and may be used as a component of other devices
+in future. Tested and working with the r8152 driver.
 
-drivers/usb/gadget/legacy/inode.c:1364:8: style: Redundant initialization for 'value'. The initialized value is overwritten$
- value = -EOPNOTSUPP;
-       ^
-drivers/usb/gadget/legacy/inode.c:1331:15: note: value is initialized
- int    value = -EOPNOTSUPP;
-              ^
-drivers/usb/gadget/legacy/inode.c:1364:8: note: value is overwritten
- value = -EOPNOTSUPP;
-       ^
-drivers/usb/gadget/legacy/inode.c:1817:8: style: Redundant initialization for 'value'. The initialized value is overwritten$
- value = -EINVAL;
-       ^
-drivers/usb/gadget/legacy/inode.c:1787:18: note: value is initialized
- ssize_t   value = len, length = len;
-                 ^
-drivers/usb/gadget/legacy/inode.c:1817:8: note: value is overwritten
- value = -EINVAL;
-       ^
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Reported-by: kbuild test robot <lkp@intel.com>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Signed-off-by: Felipe Balbi <balbi@kernel.org>
+Update the cdc_ether blacklist due to the RTL8153 'network jam on suspend'
+issue which this device will cause (personally confirmed).
 
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Marc Payne <marc.payne@mdpsys.co.uk>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/gadget/legacy/inode.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/net/usb/cdc_ether.c | 11 +++++++++--
+ drivers/net/usb/r8152.c     |  1 +
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/gadget/legacy/inode.c b/drivers/usb/gadget/legacy/inode.c
-index b47938dff1a2..238f555fe494 100644
---- a/drivers/usb/gadget/legacy/inode.c
-+++ b/drivers/usb/gadget/legacy/inode.c
-@@ -1361,7 +1361,6 @@ gadgetfs_setup (struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
+diff --git a/drivers/net/usb/cdc_ether.c b/drivers/net/usb/cdc_ether.c
+index 0cdb2ce47645..a657943c9f01 100644
+--- a/drivers/net/usb/cdc_ether.c
++++ b/drivers/net/usb/cdc_ether.c
+@@ -815,14 +815,21 @@ static const struct usb_device_id	products[] = {
+ 	.driver_info = 0,
+ },
  
- 	req->buf = dev->rbuf;
- 	req->context = NULL;
--	value = -EOPNOTSUPP;
- 	switch (ctrl->bRequest) {
- 
- 	case USB_REQ_GET_DESCRIPTOR:
-@@ -1784,7 +1783,7 @@ static ssize_t
- dev_config (struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
+-/* Microsoft Surface 3 dock (based on Realtek RTL8153) */
++/* Microsoft Surface Ethernet Adapter (based on Realtek RTL8153) */
  {
- 	struct dev_data		*dev = fd->private_data;
--	ssize_t			value = len, length = len;
-+	ssize_t			value, length = len;
- 	unsigned		total;
- 	u32			tag;
- 	char			*kbuf;
+ 	USB_DEVICE_AND_INTERFACE_INFO(MICROSOFT_VENDOR_ID, 0x07c6, USB_CLASS_COMM,
+ 			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
+ 	.driver_info = 0,
+ },
+ 
+-	/* TP-LINK UE300 USB 3.0 Ethernet Adapters (based on Realtek RTL8153) */
++/* Microsoft Surface Ethernet Adapter (based on Realtek RTL8153B) */
++{
++	USB_DEVICE_AND_INTERFACE_INFO(MICROSOFT_VENDOR_ID, 0x0927, USB_CLASS_COMM,
++			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
++	.driver_info = 0,
++},
++
++/* TP-LINK UE300 USB 3.0 Ethernet Adapters (based on Realtek RTL8153) */
+ {
+ 	USB_DEVICE_AND_INTERFACE_INFO(TPLINK_VENDOR_ID, 0x0601, USB_CLASS_COMM,
+ 			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index 95b19ce96513..7c8c45984a5c 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -6901,6 +6901,7 @@ static const struct usb_device_id rtl8152_table[] = {
+ 	{REALTEK_USB_DEVICE(VENDOR_ID_REALTEK, 0x8153)},
+ 	{REALTEK_USB_DEVICE(VENDOR_ID_MICROSOFT, 0x07ab)},
+ 	{REALTEK_USB_DEVICE(VENDOR_ID_MICROSOFT, 0x07c6)},
++	{REALTEK_USB_DEVICE(VENDOR_ID_MICROSOFT, 0x0927)},
+ 	{REALTEK_USB_DEVICE(VENDOR_ID_SAMSUNG, 0xa101)},
+ 	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x304f)},
+ 	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3062)},
 -- 
 2.25.1
 
