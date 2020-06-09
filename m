@@ -2,43 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83EA81F3809
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jun 2020 12:25:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 556341F3913
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jun 2020 13:10:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727907AbgFIKZs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Jun 2020 06:25:48 -0400
-Received: from mx2.suse.de ([195.135.220.15]:56972 "EHLO mx2.suse.de"
+        id S1727071AbgFILK3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Jun 2020 07:10:29 -0400
+Received: from mga17.intel.com ([192.55.52.151]:39536 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728760AbgFIKZi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 9 Jun 2020 06:25:38 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id A55D0ABCF;
-        Tue,  9 Jun 2020 10:25:36 +0000 (UTC)
-Message-ID: <1591698316.26484.1.camel@suse.de>
-Subject: Re: [PATCH] cdc-acm: Add DISABLE_ECHO quirk for Microchip/SMSC chip
-From:   Oliver Neukum <oneukum@suse.de>
-To:     Joakim Tjernlund <Joakim.Tjernlund@infinera.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Cc:     "stable@vger.kernel.org" <stable@vger.kernel.org>
-Date:   Tue, 09 Jun 2020 12:25:16 +0200
-In-Reply-To: <20200605105418.22263-1-joakim.tjernlund@infinera.com>
-References: <20200605105418.22263-1-joakim.tjernlund@infinera.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1726083AbgFILK2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 9 Jun 2020 07:10:28 -0400
+IronPort-SDR: HZEpOpW3Sa3I0c5eXYCVsQF2z6S0GhpC9hoQL8lIF+GAgEMlRkjL0WUdLUTJlyt/zqATqFcSUx
+ UOKcLIZ+PA4Q==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2020 04:10:28 -0700
+IronPort-SDR: AEwrycebfpER+iAA9i20J217dU73zmxVPR+O4cMVHtQjNBhd9Jq//NPONiPpK4DllGf1CIwuVR
+ wBJx9oiFp5wQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,491,1583222400"; 
+   d="scan'208";a="349485957"
+Received: from sgsxdev004.isng.intel.com (HELO localhost) ([10.226.88.13])
+  by orsmga001.jf.intel.com with ESMTP; 09 Jun 2020 04:10:24 -0700
+From:   "Ramuthevar,Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+To:     linux-kernel@vger.kernel.org, balbi@kernel.org
+Cc:     gregkh@linuxfoundation.org, robh@kernel.org,
+        devicetree@vger.kernel.org, p.zabel@pengutronix.de,
+        linux-usb@vger.kernel.org, cheol.yong.kim@intel.com,
+        qi-ming.wu@intel.com, yin1.li@intel.com,
+        andriy.shevchenko@intel.com,
+        "Ramuthevar,Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Subject: [PATCH v1 0/2] usb : phy: Add USB PHY support on Intel LGM SoC
+Date:   Tue,  9 Jun 2020 19:08:48 +0800
+Message-Id: <20200609110850.43469-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Dienstag, den 09.06.2020, 09:18 +0000 schrieb Joakim Tjernlund:
-> USB_DEVICE(0x0424, 0x274e) can send data before cdc_acm is ready,
-> causing garbage chars on the TTY causing stray input to the shell
-> and/or login prompt.
-> 
-> Signed-off-by: Joakim Tjernlund <joakim.tjernlund@infinera.com>
-> Cc: stable@vger.kernel.org
-Acked-by: Oliver Neukum <oneukum@suse.com>
+The USB PHY provides the optimized for low power dissipation while active, idle, or on standby.
+Requires minimal external components, a single resistor, for best operation.
+Supports 10/5-Gbps high-speed data transmission rates through 3-m USB 3.x cable
+
+Ramuthevar Vadivel Murugan (2):
+  dt-bindings: usb: Add USB PHY support for Intel LGM SoC
+  usb: phy: Add USB3 PHY support for Intel LGM SoC
+
+ .../devicetree/bindings/usb/intel,lgm-usb-phy.yaml |  53 ++++
+ drivers/usb/phy/Kconfig                            |  11 +
+ drivers/usb/phy/Makefile                           |   1 +
+ drivers/usb/phy/phy-lgm-usb.c                      | 269 +++++++++++++++++++++
+ 4 files changed, 334 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/intel,lgm-usb-phy.yaml
+ create mode 100644 drivers/usb/phy/phy-lgm-usb.c
+
+-- 
+2.11.0
+
