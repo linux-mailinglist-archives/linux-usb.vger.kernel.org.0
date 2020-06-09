@@ -2,172 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 455201F4562
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jun 2020 20:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DDC11F44BF
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jun 2020 20:08:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388599AbgFISPR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Jun 2020 14:15:17 -0400
-Received: from mx2.suse.de ([195.135.220.15]:36842 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732673AbgFIRu1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 9 Jun 2020 13:50:27 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id C9705B183;
-        Tue,  9 Jun 2020 17:50:29 +0000 (UTC)
-From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-To:     f.fainelli@gmail.com, gregkh@linuxfoundation.org, wahrenst@gmx.net,
+        id S2388003AbgFISHw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Jun 2020 14:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44136 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388365AbgFISHr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Jun 2020 14:07:47 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304EFC05BD1E;
+        Tue,  9 Jun 2020 11:07:47 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id t7so8350253plr.0;
+        Tue, 09 Jun 2020 11:07:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=leBIztLZS+gycW5tDPBUooZkb1WMMdh915dWRfvmIIw=;
+        b=Udt/fSiioTBFCo+SzRpdK9Rp4MHzgaXKP91jdrViNRrlf3IhivsOFcUPaKMGiH9qjc
+         fN2N0NcPwTucK5KypB17fl/nvm9CzspLJBO6als1XmamXHhSN9cnHCAsoZSvdpSWUKjN
+         l825sZT/YT998dqltM51cESrg12VV98CQw+82l9Sx9501dWw8E0kGfdx+uAbRJX5s3Rl
+         Z8XQaXJs3RnCd8h2jO9x5crfltFaO8epHxFzBjU/w4j25gpsNmWdSUSPAIdqP3DkhfZV
+         D8a9nzX7BcUNAGspW4kLUgZ+6E0TLKXVDqo+Z7bMwmIWZKGtnMp53TPDDzVbfCJ/1Lm/
+         sh/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=leBIztLZS+gycW5tDPBUooZkb1WMMdh915dWRfvmIIw=;
+        b=ov2MTJ0azpv25KBz7YRK/ggZv2Uw6heqt7FTrYs6AEeGP1zgoRrdzqnfZkae8PInMM
+         wZ3podEvpd1ARD2H2jcUdvqPhEouE+svgvC0izmXZus21wLQHabmZ1v1RpiM0rjzQPhN
+         es7kRV0Pa+18IiwsC7AqpP5/oKFTrVAhtvbaWLihIxpZCuKcxAonEJtgAbGiJF7X2k93
+         W+LhZbs7FsHloEZrPyMSeEY+V3e8czukkvG2huAuAdUSx1PP8XNDOHDPgMglmv3N8zG1
+         eoNxIO575eSWCg3K2reeMTiW2M4LCRJ0JMT/tfaq74HqFBrbk+u782PERX8s9pe6y3nr
+         S6oQ==
+X-Gm-Message-State: AOAM533Q5gw6FKQ3ycMh8gOL4ar5me4Cv87jKOrUNgyvlYnz79rOpAJk
+        SgJ0szz4GWF17jtnaaxuJGmzFixn
+X-Google-Smtp-Source: ABdhPJw4by/dyQj/70rTpHEZGgpHl+ORIEEB5sxvU9/qLdJKKjKPZvj7a58YrGkamO5R6/SKn4HDQw==
+X-Received: by 2002:a17:902:ab81:: with SMTP id f1mr742977plr.321.1591726063862;
+        Tue, 09 Jun 2020 11:07:43 -0700 (PDT)
+Received: from [10.230.188.43] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id o18sm11683012pfu.138.2020.06.09.11.07.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Jun 2020 11:07:43 -0700 (PDT)
+Subject: Re: [PATCH v2 1/9] dt-bindings: reset: Add a binding for the RPi
+ Firmware reset controller
+To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        gregkh@linuxfoundation.org, wahrenst@gmx.net,
         p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
         Ray Jui <rjui@broadcom.com>,
         Scott Branden <sbranden@broadcom.com>,
         bcm-kernel-feedback-list@broadcom.com,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+        Eric Anholt <eric@anholt.net>
 Cc:     linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, tim.gover@raspberrypi.org,
         linux-pci@vger.kernel.org, helgaas@kernel.org,
         andy.shevchenko@gmail.com, mathias.nyman@linux.intel.com,
-        lorenzo.pieralisi@arm.com
-Subject: [PATCH v2 8/9] Revert "firmware: raspberrypi: Introduce vl805 init routine"
-Date:   Tue,  9 Jun 2020 19:50:01 +0200
-Message-Id: <20200609175003.19793-9-nsaenzjulienne@suse.de>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200609175003.19793-1-nsaenzjulienne@suse.de>
+        lorenzo.pieralisi@arm.com, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org
 References: <20200609175003.19793-1-nsaenzjulienne@suse.de>
+ <20200609175003.19793-2-nsaenzjulienne@suse.de>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <c3dc9b7e-4440-7e8a-3da8-b147c48c4c40@gmail.com>
+Date:   Tue, 9 Jun 2020 11:07:41 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Firefox/68.0 Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200609175003.19793-2-nsaenzjulienne@suse.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This reverts commit fbbc5ff3f7f9f4cad562e530ae2cf5d8964fe6d3.
 
-The vl805 init routine has moved into drivers/reset/reset-raspberrypi.c
 
-Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
----
- drivers/firmware/raspberrypi.c             | 61 ----------------------
- include/soc/bcm2835/raspberrypi-firmware.h |  7 ---
- 2 files changed, 68 deletions(-)
+On 6/9/2020 10:49 AM, Nicolas Saenz Julienne wrote:
+> The firmware running on the RPi VideoCore can be used to reset and
+> initialize HW controlled by the firmware.
+> 
+> Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+> 
+> ---
+> 
+> Changes since v1:
+>  - Correct cells binding as per Florian's comment
+>  - Change compatible string to be more generic
+> 
+>  .../arm/bcm/raspberrypi,bcm2835-firmware.yaml | 21 +++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml b/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml
+> index b48ed875eb8e..23a885af3a28 100644
+> --- a/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml
+> +++ b/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml
+> @@ -39,6 +39,22 @@ properties:
+>        - compatible
+>        - "#clock-cells"
+>  
+> +  reset:
+> +    type: object
+> +
+> +    properties:
+> +      compatible:
+> +        const: raspberrypi,firmware-reset
+> +
+> +      "#reset-cells":
+> +        const: 1
+> +        description: >
 
-diff --git a/drivers/firmware/raspberrypi.c b/drivers/firmware/raspberrypi.c
-index ef8098856a47..a3e85186f8e6 100644
---- a/drivers/firmware/raspberrypi.c
-+++ b/drivers/firmware/raspberrypi.c
-@@ -12,8 +12,6 @@
- #include <linux/of_platform.h>
- #include <linux/platform_device.h>
- #include <linux/slab.h>
--#include <linux/pci.h>
--#include <linux/delay.h>
- #include <soc/bcm2835/raspberrypi-firmware.h>
- 
- #define MBOX_MSG(chan, data28)		(((data28) & ~0xf) | ((chan) & 0xf))
-@@ -21,8 +19,6 @@
- #define MBOX_DATA28(msg)		((msg) & ~0xf)
- #define MBOX_CHAN_PROPERTY		8
- 
--#define VL805_PCI_CONFIG_VERSION_OFFSET		0x50
--
- static struct platform_device *rpi_hwmon;
- static struct platform_device *rpi_clk;
- 
-@@ -284,63 +280,6 @@ struct rpi_firmware *rpi_firmware_get(struct device_node *firmware_node)
- }
- EXPORT_SYMBOL_GPL(rpi_firmware_get);
- 
--/*
-- * The Raspberry Pi 4 gets its USB functionality from VL805, a PCIe chip that
-- * implements xHCI. After a PCI reset, VL805's firmware may either be loaded
-- * directly from an EEPROM or, if not present, by the SoC's co-processor,
-- * VideoCore. RPi4's VideoCore OS contains both the non public firmware load
-- * logic and the VL805 firmware blob. This function triggers the aforementioned
-- * process.
-- */
--int rpi_firmware_init_vl805(struct pci_dev *pdev)
--{
--	struct device_node *fw_np;
--	struct rpi_firmware *fw;
--	u32 dev_addr, version;
--	int ret;
--
--	fw_np = of_find_compatible_node(NULL, NULL,
--					"raspberrypi,bcm2835-firmware");
--	if (!fw_np)
--		return 0;
--
--	fw = rpi_firmware_get(fw_np);
--	of_node_put(fw_np);
--	if (!fw)
--		return -ENODEV;
--
--	/*
--	 * Make sure we don't trigger a firmware load unnecessarily.
--	 *
--	 * If something went wrong with PCI, this whole exercise would be
--	 * futile as VideoCore expects from us a configured PCI bus. Just take
--	 * the faulty version (likely ~0) and let xHCI's registration fail
--	 * further down the line.
--	 */
--	pci_read_config_dword(pdev, VL805_PCI_CONFIG_VERSION_OFFSET, &version);
--	if (version)
--		goto exit;
--
--	dev_addr = pdev->bus->number << 20 | PCI_SLOT(pdev->devfn) << 15 |
--		   PCI_FUNC(pdev->devfn) << 12;
--
--	ret = rpi_firmware_property(fw, RPI_FIRMWARE_NOTIFY_XHCI_RESET,
--				    &dev_addr, sizeof(dev_addr));
--	if (ret)
--		return ret;
--
--	/* Wait for vl805 to startup */
--	usleep_range(200, 1000);
--
--	pci_read_config_dword(pdev, VL805_PCI_CONFIG_VERSION_OFFSET,
--			      &version);
--exit:
--	pci_info(pdev, "VL805 firmware version %08x\n", version);
--
--	return 0;
--}
--EXPORT_SYMBOL_GPL(rpi_firmware_init_vl805);
--
- static const struct of_device_id rpi_firmware_of_match[] = {
- 	{ .compatible = "raspberrypi,bcm2835-firmware", },
- 	{},
-diff --git a/include/soc/bcm2835/raspberrypi-firmware.h b/include/soc/bcm2835/raspberrypi-firmware.h
-index 3025aca3c358..cc9cdbc66403 100644
---- a/include/soc/bcm2835/raspberrypi-firmware.h
-+++ b/include/soc/bcm2835/raspberrypi-firmware.h
-@@ -10,7 +10,6 @@
- #include <linux/of_device.h>
- 
- struct rpi_firmware;
--struct pci_dev;
- 
- enum rpi_firmware_property_status {
- 	RPI_FIRMWARE_STATUS_REQUEST = 0,
-@@ -142,7 +141,6 @@ int rpi_firmware_property(struct rpi_firmware *fw,
- int rpi_firmware_property_list(struct rpi_firmware *fw,
- 			       void *data, size_t tag_size);
- struct rpi_firmware *rpi_firmware_get(struct device_node *firmware_node);
--int rpi_firmware_init_vl805(struct pci_dev *pdev);
- #else
- static inline int rpi_firmware_property(struct rpi_firmware *fw, u32 tag,
- 					void *data, size_t len)
-@@ -160,11 +158,6 @@ static inline struct rpi_firmware *rpi_firmware_get(struct device_node *firmware
- {
- 	return NULL;
- }
--
--static inline int rpi_firmware_init_vl805(struct pci_dev *pdev)
--{
--	return 0;
--}
- #endif
- 
- #endif /* __SOC_RASPBERRY_FIRMWARE_H__ */
+Is this a stray '>' character? If so, with that fixed:
+
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.26.2
-
+Florian
