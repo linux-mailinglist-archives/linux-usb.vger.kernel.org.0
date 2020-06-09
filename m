@@ -2,34 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC18B1F4320
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jun 2020 19:50:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 834171F4568
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jun 2020 20:16:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732691AbgFIRub (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Jun 2020 13:50:31 -0400
-Received: from mx2.suse.de ([195.135.220.15]:36870 "EHLO mx2.suse.de"
+        id S1732646AbgFIRuX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Jun 2020 13:50:23 -0400
+Received: from mx2.suse.de ([195.135.220.15]:36676 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726784AbgFIRu3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 9 Jun 2020 13:50:29 -0400
+        id S1728609AbgFIRuU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 9 Jun 2020 13:50:20 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id D6EEFB1AD;
-        Tue,  9 Jun 2020 17:50:30 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id 3552BB183;
+        Tue,  9 Jun 2020 17:50:21 +0000 (UTC)
 From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
 To:     f.fainelli@gmail.com, gregkh@linuxfoundation.org, wahrenst@gmx.net,
         p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
         Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com
+        Eric Anholt <eric@anholt.net>
 Cc:     linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, tim.gover@raspberrypi.org,
         linux-pci@vger.kernel.org, helgaas@kernel.org,
         andy.shevchenko@gmail.com, mathias.nyman@linux.intel.com,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH v2 9/9] Revert "PCI: brcmstb: Wait for Raspberry Pi's firmware when present"
-Date:   Tue,  9 Jun 2020 19:50:02 +0200
-Message-Id: <20200609175003.19793-10-nsaenzjulienne@suse.de>
+        lorenzo.pieralisi@arm.com, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org
+Subject: [PATCH v2 1/9] dt-bindings: reset: Add a binding for the RPi Firmware reset controller
+Date:   Tue,  9 Jun 2020 19:49:54 +0200
+Message-Id: <20200609175003.19793-2-nsaenzjulienne@suse.de>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200609175003.19793-1-nsaenzjulienne@suse.de>
 References: <20200609175003.19793-1-nsaenzjulienne@suse.de>
@@ -40,57 +42,58 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This reverts commit 44331189f9082c7e659697bbac1747db3def73e7.
-
-Now that the VL805 init routine is run through a reset controller driver
-the device dependencies are being taken care of by the device core. No
-need to do it manually here.
+The firmware running on the RPi VideoCore can be used to reset and
+initialize HW controlled by the firmware.
 
 Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
----
- drivers/pci/controller/pcie-brcmstb.c | 17 -----------------
- 1 file changed, 17 deletions(-)
 
-diff --git a/drivers/pci/controller/pcie-brcmstb.c b/drivers/pci/controller/pcie-brcmstb.c
-index 7730ea845ff2..752f5b331579 100644
---- a/drivers/pci/controller/pcie-brcmstb.c
-+++ b/drivers/pci/controller/pcie-brcmstb.c
-@@ -28,8 +28,6 @@
- #include <linux/string.h>
- #include <linux/types.h>
+---
+
+Changes since v1:
+ - Correct cells binding as per Florian's comment
+ - Change compatible string to be more generic
+
+ .../arm/bcm/raspberrypi,bcm2835-firmware.yaml | 21 +++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml b/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml
+index b48ed875eb8e..23a885af3a28 100644
+--- a/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml
++++ b/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml
+@@ -39,6 +39,22 @@ properties:
+       - compatible
+       - "#clock-cells"
  
--#include <soc/bcm2835/raspberrypi-firmware.h>
--
- #include "../pci.h"
++  reset:
++    type: object
++
++    properties:
++      compatible:
++        const: raspberrypi,firmware-reset
++
++      "#reset-cells":
++        const: 1
++        description: >
++          The argument is the ID of the firmware reset line to affect.
++
++    required:
++      - compatible
++      - "#reset-cells"
++
+     additionalProperties: false
  
- /* BRCM_PCIE_CAP_REGS - Offset for the mandatory capability config regs */
-@@ -931,26 +929,11 @@ static int brcm_pcie_probe(struct platform_device *pdev)
- {
- 	struct device_node *np = pdev->dev.of_node, *msi_np;
- 	struct pci_host_bridge *bridge;
--	struct device_node *fw_np;
- 	struct brcm_pcie *pcie;
- 	struct pci_bus *child;
- 	struct resource *res;
- 	int ret;
- 
--	/*
--	 * We have to wait for Raspberry Pi's firmware interface to be up as a
--	 * PCI fixup, rpi_firmware_init_vl805(), depends on it. This driver's
--	 * probe can race with the firmware interface's (see
--	 * drivers/firmware/raspberrypi.c) and potentially break the PCI fixup.
--	 */
--	fw_np = of_find_compatible_node(NULL, NULL,
--					"raspberrypi,bcm2835-firmware");
--	if (fw_np && !rpi_firmware_get(fw_np)) {
--		of_node_put(fw_np);
--		return -EPROBE_DEFER;
--	}
--	of_node_put(fw_np);
--
- 	bridge = devm_pci_alloc_host_bridge(&pdev->dev, sizeof(*pcie));
- 	if (!bridge)
- 		return -ENOMEM;
+ required:
+@@ -55,5 +71,10 @@ examples:
+             compatible = "raspberrypi,firmware-clocks";
+             #clock-cells = <1>;
+         };
++
++        reset: reset {
++            compatible = "raspberrypi,firmware-reset";
++            #reset-cells = <1>;
++        };
+     };
+ ...
 -- 
 2.26.2
 
