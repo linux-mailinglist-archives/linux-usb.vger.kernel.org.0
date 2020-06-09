@@ -2,111 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 390BF1F3684
-	for <lists+linux-usb@lfdr.de>; Tue,  9 Jun 2020 10:54:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F6BF1F36DD
+	for <lists+linux-usb@lfdr.de>; Tue,  9 Jun 2020 11:18:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728243AbgFIIyv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Jun 2020 04:54:51 -0400
-Received: from mga12.intel.com ([192.55.52.136]:44502 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727942AbgFIIyv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 9 Jun 2020 04:54:51 -0400
-IronPort-SDR: IHZxHJjujf618vded86KWVE9FFt8198C9aapRyqsq08P2sEw5Kr5/umc3Alqp89iYOTsMI6RY0
- t5F9HRYBXTqA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2020 01:54:50 -0700
-IronPort-SDR: 4q6rf01iwrE8qQwBCVDCrNHzYVI8NmhkYfmIoRHi8G3XkTSehbzvgZZbnGhSUIo1wtxjt7PoFO
- uXnH68APGqYg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,491,1583222400"; 
-   d="scan'208";a="270825476"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga003.jf.intel.com with ESMTP; 09 Jun 2020 01:54:48 -0700
-Subject: Re: [PATCH v3 0/4] Add logic to consolidate TRBs for Synopsys xHC
-To:     Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-Cc:     John Youn <John.Youn@synopsys.com>
-References: <cover.1590415123.git.joglekar@synopsys.com>
- <ba1eb639-7c58-c2b2-1bd9-dacec5d1092b@synopsys.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- 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 fiD/
-Message-ID: <0083681d-6f68-918a-8109-75e511ef8bf5@linux.intel.com>
-Date:   Tue, 9 Jun 2020 11:57:49 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <ba1eb639-7c58-c2b2-1bd9-dacec5d1092b@synopsys.com>
-Content-Type: text/plain; charset=utf-8
+        id S1728453AbgFIJSe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Jun 2020 05:18:34 -0400
+Received: from mail-eopbgr680072.outbound.protection.outlook.com ([40.107.68.72]:46013
+        "EHLO NAM04-BN3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726923AbgFIJSb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 9 Jun 2020 05:18:31 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Uncn5GfsBPIr8sU4lemBCCUistKvtintmsIaEvkaT+KzLy7r5mAN9SE9g4KAmrPfamDXzLhSSodYurXHNmWz6CkohGBQsOjB/6HBFlX8UGRiAt2k7ftejkCmPJgLFMHq8yTM06kzOrsimuUdugn2lBBPEbtYZMBt45BYSydrxTelZhUOKJh1OI6lZP6fj1daeYM4LLpbTnvTutmgwJamdWlsnrFjisdCGVCnRG3TH2/83HUQjrzo6JKM2ax4Og1yzJHk/YFqw0bwO7Wz8hMfkU37U/VXauWb29UI5uz94tN749A8EAv5n1rrG0rR53T1QZ+DWnYch6qYAxlPYlJTrw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=n9FXM/4Rm6p2J10fmO81c6kmzrDwnV8wjw01f0850fs=;
+ b=Zk3CrLsbWYhfXkMf4EPUcrc0IlO0GLMBpFdVKu0Yc4UrCjWoHnHrDzxZhKbnYfPZoFKmS3KQIaF+lDXncxZwb31lqM6OqZihP+HyqPmf5ZZp80NeI///Kk7Of/mrg2PGiaf0fBEqcfZf0iRtVpuufNdgPtQPEsRduuASvyYmPoB8CyBsVFBS2E8cSF4BaSZRCi3Zq2NNWH4ti8SEgLH+BSpZLqm//+Mpky2EiUhvJz77n2m+8P6a9kzVJehQvZH+WBrU70ifOI/6rbBJHAyheuPAb2QzWRzwx/ZBA6Ek0J1H88KjL5MnTD1LzcRqtaKuan36N6veU+NQGW7UcoKPCw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=infinera.com; dmarc=pass action=none header.from=infinera.com;
+ dkim=pass header.d=infinera.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infinera.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=n9FXM/4Rm6p2J10fmO81c6kmzrDwnV8wjw01f0850fs=;
+ b=hYme+gDTKfWOUFKzg6GQ053GtBd1BqkOE9lTAdskmZigTm0au5xjnDL/fmmyeKnpuMG7PAZtQRK8iDQ+XczyC+E2++20AKkxIOJ8jY2Z+gOTma+wlZfW9ABpJB/Q45+126lFIDrfRa/ek8B21OyqRaXHxIbYpuzBt5tVWhVqU3U=
+Received: from BN8PR10MB3540.namprd10.prod.outlook.com (2603:10b6:408:ae::24)
+ by BN8PR10MB3345.namprd10.prod.outlook.com (2603:10b6:408:d0::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3066.19; Tue, 9 Jun
+ 2020 09:18:27 +0000
+Received: from BN8PR10MB3540.namprd10.prod.outlook.com
+ ([fe80::c158:d59f:e3bc:1941]) by BN8PR10MB3540.namprd10.prod.outlook.com
+ ([fe80::c158:d59f:e3bc:1941%2]) with mapi id 15.20.3066.023; Tue, 9 Jun 2020
+ 09:18:27 +0000
+From:   Joakim Tjernlund <Joakim.Tjernlund@infinera.com>
+To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+CC:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Joakim Tjernlund <Joakim.Tjernlund@infinera.com>
+Subject: [PATCH] cdc-acm: Add DISABLE_ECHO quirk for Microchip/SMSC chip
+Thread-Topic: [PATCH] cdc-acm: Add DISABLE_ECHO quirk for Microchip/SMSC chip
+Thread-Index: AQHWPj7vE6bGMvPEXUO2kanZKLBwtw==
+Date:   Tue, 9 Jun 2020 09:18:27 +0000
+Message-ID: <20200605105418.22263-1-joakim.tjernlund@infinera.com>
+Accept-Language: en-GB, en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+received-spf: Pass (protection.outlook.com: domain of infinera.com designates
+ 8.4.225.191 as permitted sender) receiver=protection.outlook.com;
+ client-ip=8.4.225.191; helo=owa.infinera.com;
+x-ms-publictraffictype: Email
+authentication-results: spf=pass (sender IP is 8.4.225.191)
+ smtp.mailfrom=infinera.com; infinera.mail.onmicrosoft.com; dkim=none (message
+ not signed) header.d=none;infinera.mail.onmicrosoft.com; dmarc=pass
+ action=none header.from=infinera.com;
+x-eopattributedmessage: 0
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR10MB3540.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(39860400002)(136003)(396003)(376002)(366004)(346002)(36756003)(26005)(1076003)(186003)(6512007)(5660300002)(6506007)(4744005)(2616005)(4326008)(8936002)(110136005)(107886003)(85236043)(316002)(83380400001)(91956017)(2906002)(66476007)(6486002)(478600001)(66446008)(64756008)(71200400001)(86362001)(8676002)(66556008)(54906003)(66946007);DIR:OUT;SFP:1101;
+x-ms-office365-filtering-correlation-id: 56a2e7ae-89d8-46f6-7681-08d8093ed2a7
+x-ms-traffictypediagnostic: BN7PR10MB2418:|BN8PR10MB3345:
+x-ms-exchange-atpmessageproperties: SA|SL
+x-mailer: git-send-email 2.26.2
+x-ms-exchange-crosstenant-id: 285643de-5f5b-4b03-a153-0ae2dc8aaf77
+x-ms-exchange-crosstenant-originalarrivaltime: 05 Jun 2020 10:54:29.9128 (UTC)
+x-microsoft-antispam: BCL:0;
+x-ms-exchange-transport-crosstenantheadersstamped: BN7PR10MB2418
+x-ms-exchange-crosstenant-fromentityheader: HybridOnPrem
+x-ms-oob-tlc-oobclassifiers: OLM:381;OLM:381;
+x-ms-exchange-crosstenant-network-message-id: 56a2e7ae-89d8-46f6-7681-08d8093ed2a7
+x-ms-exchange-transport-endtoendlatency: 00:00:02.0055123
+x-ms-exchange-processed-by-bccfoldering: 15.20.3066.021
+x-psinmdfa: 1.0
+x-originalarrivaltime: 05 Jun 2020 10:54:27.0387 (UTC)
+ FILETIME=[AEA5C0B0:01D63B27]
+x-microsoft-antispam-message-info: pzd+Vfa/JkdvlQYjdnbkdnH2p/jKXjsWfAno73QngvEX6/Zt7TRbS78lIIKXLFZCIf0xfA0fbd/JfErHVxkPWTkfiySVu3DupBzIafaBrzuE+mTsQKRJUdsAOvSWlL/6VlCtnsfZ7mNaoc+ilDqtNtUU+xhR8fZz6EhE6f54cPG73DpZapfeq/7SXmTQbdBzHZF+BqM2gPfbvHitPDDJ5ETz89I+YgO9vneIqf3qyh6oRNUBi5BnNFaU97BRi05KuNCIgnffYyTge6zfseGm/JN9p3G0szXBEWoLkFBWToiKsbwDaygSQQJ2ptCQ928L
+x-ms-exchange-crosstenant-originalattributedtenantconnectingip: TenantId=285643de-5f5b-4b03-a153-0ae2dc8aaf77;Ip=[8.4.225.191];Helo=[owa.infinera.com]
+x-originating-ip: [88.131.87.201]
+x-ms-office365-filtering-correlation-id-prvs: 56a2e7ae-89d8-46f6-7681-08d8093ed2a7
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <BN8PR10MB3345F0E17921BBD266419158F4820@BN8PR10MB3345.namprd10.prod.outlook.com>
+x-forefront-prvs: 042957ACD7
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-messagedata: ipEhc1K+5fARG7+UYOsbxkLOZRpTpWQRsNY0nePrShRlpskGMZO45JGNYJvK4Mk7QRALYYK7wIAQoOSnDmGZKzrWLzdbuvpKdqJR7UYriA2yvp+0ERncar3CLXfx2Uj/ViEqFzkw6MBW6DbOr2e3EVCWMQx4g0GY8r8Kh+OCM/7kMzCavjmnYs/kXeF7QxPJ5SxlTiYHOjyrrOZRvWPOldYUJfcbNDJ32C/0uuutqDL5UOjrAua+egpqcE6mVbc12v8qLxjFZoTdUzW6xR1lTjoL87OxeEuLvUv4RPDAtfLw8rtTyXAnbu3I2upeNfPIlE10p6rD9J4ZnMq4nWcpocmDSW93vmENC+lFSywywcnzeKIR9KvJ0uM8twaAIlGV2gvS9+RbJBzSYT6nCkhhwxlAqoDovms5WZJzt+I6I3bovTaVInl4twAZV/m1jQALCQvDvAfhuvbb0PiZxL8qOfl+TqxGrfkJHHT5uYWbybU=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: infinera.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 56a2e7ae-89d8-46f6-7681-08d8093ed2a7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jun 2020 09:18:27.6039
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 285643de-5f5b-4b03-a153-0ae2dc8aaf77
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: G4DB+B27DiXKczUf+NKPEaHqMVjrherY7ItAvp+shJCcBiAGnt0vJ/xu8dQ6hLYZAlBfOEvC9yBkGNqS+rcXEw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR10MB3345
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 8.6.2020 7.32, Tejas Joglekar wrote:
-> Hi Mathias,
->    Will this be added to your next branch ?
+USB_DEVICE(0x0424, 0x274e) can send data before cdc_acm is ready,
+causing garbage chars on the TTY causing stray input to the shell
+and/or login prompt.
 
-There are still some opens Rob Herring pointed out regarding devicetree.
-Adding a compatible string for the synopsys xhci and setting quirk based
-on that sounds good to me.
+Signed-off-by: Joakim Tjernlund <joakim.tjernlund@infinera.com>
+Cc: stable@vger.kernel.org
+---
+ drivers/usb/class/cdc-acm.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Not sure how that works in cases where the xhci device is created by the DWC3 driver.
-Once we have a solution that Felipe and Rob agrees with I can take the whole
-series.  
-
-The xhci parts and PCI case looks good to me.
-
--Mathias
-
+diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+index ded8d93834ca..d579b05a2c2b 100644
+--- a/drivers/usb/class/cdc-acm.c
++++ b/drivers/usb/class/cdc-acm.c
+@@ -1689,6 +1689,8 @@ static int acm_pre_reset(struct usb_interface *intf)
+=20
+ static const struct usb_device_id acm_ids[] =3D {
+ 	/* quirky and broken devices */
++	{ USB_DEVICE(0x0424, 0x274e), /* Microchip Technology, Inc. (formerly SMS=
+C) */
++	  .driver_info =3D DISABLE_ECHO, }, /* DISABLE ECHO in termios flag */
+ 	{ USB_DEVICE(0x076d, 0x0006), /* Denso Cradle CU-321 */
+ 	.driver_info =3D NO_UNION_NORMAL, },/* has no union descriptor */
+ 	{ USB_DEVICE(0x17ef, 0x7000), /* Lenovo USB modem */
+--=20
+2.26.2
 
