@@ -2,277 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C34F01F4C78
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Jun 2020 06:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 362301F4CB2
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Jun 2020 06:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726035AbgFJEoe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 Jun 2020 00:44:34 -0400
-Received: from mail-db8eur05on2073.outbound.protection.outlook.com ([40.107.20.73]:59617
-        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
+        id S1726042AbgFJE6r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 Jun 2020 00:58:47 -0400
+Received: from mail-mw2nam10on2085.outbound.protection.outlook.com ([40.107.94.85]:32097
+        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725908AbgFJEod (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 10 Jun 2020 00:44:33 -0400
+        id S1725908AbgFJE6q (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 10 Jun 2020 00:58:46 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fPWTsHLy87anLw1EhBIUgALzNyob+FcJcf0ybUtqt+ZOkCn1lpW1g59e2K6cyJ2LRm06/77fiE94zd2wNKuAEP0tVQIxs/xVSBm6EeBpCLKJbEkT+qbbabsOFvt/PvtacC0T8kXXZA5g7cwShHbc8tT1o/iUpcsPsIfJVMa7uDSi/i7aXuBletXr6HtBlZeVBBAAY9oiOUQ8Xwb2XGtwxxZJs7h3RFXwA5jBIGew0bnXrbYgwzcirfh6fP24eC5nAO1pq0LKOMzPavAkv4HfdfZL4eo68gUqM0lHqWCwHLEhJsaYAltYaeodkRnSuiH5xyqx6xxB8imIQLpwBwRVRg==
+ b=lBHe5i6diy7wDHyLk4NzLcEb7HXoglNnJd9PphA/O4jvyQKeKbMB5SSoexE/BcFhdfToHEhKTf+F1P1IDwO2OBDWG7aF6P+pVXfGgsu1+8EIkNqSw/AiPzQ2ELfsBiSyhJUO2O9194WshqqFD7QaPxBaUZM54MMUQzaWDZz7+/67B5iQWhSjZUSWrnfW3N+BGffJxHUA3gtYUiNtiJCRRuItunW6eIYUn5ogVS7qKBaRfTQdswz6uqAGiAzsf04xePveyoRv/VZQ4p4xDTk3no7hOt8G4ZXBgTR2FexKUI+r0dSbh/HlYfxj2f9NpQ3lZ7skO7thxCoZGfrPXdrRdg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6oltITg7nLZNREILYo5nYtOgdOky/5qcF0IGDvgmzmM=;
- b=T9n0hPo1bFPtUeMUQuzi4sx8+IRjzWR9EW0u5Bn8iVKDHWkCUQx/s7aXK6eFH8ClDgSpmAf2ltaGMqFf3dHIrs8etwLnCDXPMgnJnDmZNKtppttr5ICv0wtHTq8u7uKKOVYNHVYIOTqtqJ/8VCqh8fFlYuOwa3Uzy/Qrn/YUQ1CGoZ/q3U4/EDkhzxBbBUp0EAao7w3xMgx4Khvoi65aVlZK5LBKqjok8hB0eNNkJOHHI4TJyaUyyjlX2Wp+/4BdrOef2pwtUagfbc0UEHCcGIm0QqaKgQq/qyxd/C9Tp0o9d7mtNDrrOlz2RUoBWpiauxVemOSVHF0wjXxBWWbp9A==
+ bh=kAQhn9rlXyNAa6YXnp0jP7IFEtViPNZQB0XXfp4efMs=;
+ b=GMocdbYCMseGhBvKrE3ZrO8IC83cqC0DQYnkk3glispP+430Fqwc2pnXFNeCGGAx8lZW77wYz9+wOYaQ7txdkDcJaUlohhhHhZ3LpruCI+3uGJ8SERNUQ+bHxkN/PIc3Vz2qXGhcLVwYc21w5L2z5MGK3AveIRwuf9tXHFxK4CE9Fcqe/3/QSvyEUPbADZrs91VDkJZq0RXf/8nKCWrmAz8O6YwkLrXamz99BilTGV0nJASkjX4gpjI9huhoOIZi3pZZJT7+8DflXMi/beuTww75+67xnUgyHSkrRAzorHPiu89J3suT4YedjRBtPozAA8HZ1STL67WrrO+ty9UsFw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ smtp.mailfrom=windriver.com; dmarc=pass action=none
+ header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=windriversystems.onmicrosoft.com;
+ s=selector2-windriversystems-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6oltITg7nLZNREILYo5nYtOgdOky/5qcF0IGDvgmzmM=;
- b=cp/TT+Gy7vudzYN0jl6MgsjqI4M9/tLtcSlfZtxk0JU74F2fYefnV5yfVhkCQBXv2JaZ6Oy92AYHyPYLxJIp4t0af5uoFaATDB0s+o4VjLYj+x0IQ1Ze6F9QPAheE1IahkQtq76UwBOhXFsQYUufx1h4lZqrVm7GpWpIABS5bw4=
-Received: from DB8PR04MB7162.eurprd04.prod.outlook.com (2603:10a6:10:12c::13)
- by DB8PR04MB6585.eurprd04.prod.outlook.com (2603:10a6:10:103::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3066.18; Wed, 10 Jun
- 2020 04:44:22 +0000
-Received: from DB8PR04MB7162.eurprd04.prod.outlook.com
- ([fe80::f0c8:301c:ac45:5ba9]) by DB8PR04MB7162.eurprd04.prod.outlook.com
- ([fe80::f0c8:301c:ac45:5ba9%7]) with mapi id 15.20.3066.023; Wed, 10 Jun 2020
- 04:44:22 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Macpaul Lin <macpaul.lin@mediatek.com>
-CC:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        Macpaul Lin <macpaul.lin@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
+ bh=kAQhn9rlXyNAa6YXnp0jP7IFEtViPNZQB0XXfp4efMs=;
+ b=HzsKnYKxcEWbhlTVLMxvrSm9856hsxHZTZ7n5CVUNioFAK8CFyrkLMK0sUXgauD0X9k/JLnbJtWKBmyvKfxGCwpCm4sWSmLgFMb0ZpFA9UwvbRjpuz3eTXnvbVwhq9q9uWXHi0G5+sxGxg6rtThXrNMp6esbX7t05kCQfIjWTnk=
+Received: from DM5PR11MB2058.namprd11.prod.outlook.com (2603:10b6:3:12::23) by
+ DM5PR11MB1434.namprd11.prod.outlook.com (2603:10b6:4:9::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3066.18; Wed, 10 Jun 2020 04:58:44 +0000
+Received: from DM5PR11MB2058.namprd11.prod.outlook.com
+ ([fe80::38ae:4906:7fdb:3199]) by DM5PR11MB2058.namprd11.prod.outlook.com
+ ([fe80::38ae:4906:7fdb:3199%7]) with mapi id 15.20.3066.023; Wed, 10 Jun 2020
+ 04:58:44 +0000
+From:   "Zhang, Qiang" <Qiang.Zhang@windriver.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     "balbi@kernel.org" <balbi@kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        Justin Hsieh <justinhsieh@google.com>,
-        Hakieyin Hsieh <hakieyin@gmail.com>
-Subject: Re: [PATCH] usb/gadget/function: introduce Built-in CDROM support
-Thread-Topic: [PATCH] usb/gadget/function: introduce Built-in CDROM support
-Thread-Index: AQHWPs9uyeBNKYlTkUGbGwgcbN1ORqjRRhwA
-Date:   Wed, 10 Jun 2020 04:44:22 +0000
-Message-ID: <20200610044446.GA8540@b29397-desktop>
-References: <ejh@nvidia.com> <mchehab+samsung@kernel.org>
- <benh@kernel.crashing.org>
- <1591756349-17865-1-git-send-email-macpaul.lin@mediatek.com>
-In-Reply-To: <1591756349-17865-1-git-send-email-macpaul.lin@mediatek.com>
-Accept-Language: en-US
-Content-Language: en-US
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: =?gb2312?B?u9i4tDogu9i4tDogW1BBVENIIHYyXSB1c2I6IGdhZGdldDogZnVuY3Rpb246?=
+ =?gb2312?B?IHByaW50ZXI6IGZpeCB1c2UtYWZ0ZXItZnJlZSBpbiBfX2xvY2tfYWNxdWly?=
+ =?gb2312?Q?e?=
+Thread-Topic: =?gb2312?B?u9i4tDogW1BBVENIIHYyXSB1c2I6IGdhZGdldDogZnVuY3Rpb246IHByaW50?=
+ =?gb2312?B?ZXI6IGZpeCB1c2UtYWZ0ZXItZnJlZSBpbiBfX2xvY2tfYWNxdWlyZQ==?=
+Thread-Index: AQHWPWOPii6lUpWag0qF192Mw9Y0PajOU1GAgAGzxdeAAAR7AIABPnyA
+Date:   Wed, 10 Jun 2020 04:58:44 +0000
+Message-ID: <DM5PR11MB20589EB35828F823826FF4B3FF830@DM5PR11MB2058.namprd11.prod.outlook.com>
+References: <20200608071622.33081-1-qiang.zhang@windriver.com>
+ <20200608073305.GA252221@kroah.com>
+ <DM5PR11MB2058F82DF00D26338119BF0FFF820@DM5PR11MB2058.namprd11.prod.outlook.com>,<20200609094848.GA533476@kroah.com>
+In-Reply-To: <20200609094848.GA533476@kroah.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-authentication-results: mediatek.com; dkim=none (message not signed)
- header.d=none;mediatek.com; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.66]
+authentication-results: linuxfoundation.org; dkim=none (message not signed)
+ header.d=none;linuxfoundation.org; dmarc=none action=none
+ header.from=windriver.com;
+x-originating-ip: [60.247.85.82]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: b33682ac-0f69-417b-632a-08d80cf8f1e7
-x-ms-traffictypediagnostic: DB8PR04MB6585:
-x-microsoft-antispam-prvs: <DB8PR04MB65851621E67BDB962EF7B40D8B830@DB8PR04MB6585.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3631;
+x-ms-office365-filtering-correlation-id: cc59b38e-7f62-4081-557a-08d80cfaf3da
+x-ms-traffictypediagnostic: DM5PR11MB1434:
+x-microsoft-antispam-prvs: <DM5PR11MB14348D42EB05461150E2F3B1FF830@DM5PR11MB1434.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6108;
 x-forefront-prvs: 0430FA5CB7
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: +6Po5wV/Day/bT2yNtSSwqFdR2Oa9df92QaMxfNF6UQTzF2KqT2L/r//Dk1FYlI8KKjgxXjrdjdc4P040ZOTeGBCq54h9rvTS2FASklYn8HWoCCeWk7iePP7Zf0D9nv/vjXgNo5oH9LSk4mD3xDNHsRJ4NKfOqkdxksSyMgqlTDAtWLlpOrnOh3e6aECthRxLz0QZq2yNQdJqTpv7H/62CeQ519xHluMhz9b5v3W898htpWHgT2Niu7ZZgxsb1K1U3z4Ao6QWs5DnF1buJyinOSbY/bszLZq+4Gz9VNGDCe7wBVo1FNujBexhCpKcUag69M2T3yXY27eQZTFXU5gk0KU6BM3An6sHgDGRJ/n0H+iDENEMMHiAvCTim0HTRNX
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB7162.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(7916004)(136003)(376002)(396003)(39860400002)(366004)(346002)(1076003)(83380400001)(86362001)(33656002)(478600001)(44832011)(8676002)(4326008)(7416002)(33716001)(8936002)(316002)(6506007)(64756008)(186003)(54906003)(9686003)(5660300002)(6512007)(71200400001)(26005)(2906002)(66946007)(66556008)(53546011)(6486002)(66476007)(6916009)(76116006)(91956017)(66446008)(309714004);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: ThUREbbLX+Zy8AN5dZ7hOuOyx4Z5O7Msk1X4kCKPXAPrEYkH3Xdji6wSu/a/SSQwsC+7CtChyhc+OU2vmv6ry2WcV7KNmLvnExea7HajO7Ksu5HyWKFoNwxzBX1fVo9H2nIU0vG5XkI1XpTj/PaY1tGhrNSnrxmBrvEPaPQbWLVxsEm39pa9HXvbZWgve1c3yg72dmtR/b8wmsLz0yqRfoHmOpQSGKXG5iQhkzEZM/snDmxRZtR2aIoJ8GifX6DeawdDuWT0Puc8ZCMWhHEPA5fbUq5JCwH+EnscSTyQ9GxPaiVN2+bi7MLxhUnHD1syeNlNen5me2Vlk/hTlUnByFz5yoSACMOeBSoYYk81T/WOLemNLdTwcOK8n3F+/0tgMA3RJFGfQvstkh09/6WXzbhdC0cdZzp4OCmbNhWRTxGikTGD8IaU5kC0g16OdRYEYlPLDblOB5hHCwbvoMR+G5BhWieyny1wSbU3iCHGq7Gx4WuAKfaK/QIC3aH1RcEP
+x-microsoft-antispam-message-info: x4vfUed4M2QZ3QfTQM3knYZbXkT74UXIPMwjkf9JHpzeAVhBP+WhelvpFJFPHuG7v3XFpPoqGl27IAPYZPw4+D0FulLbzgl6bx+mMKyMcADlkceAzpsb5fdGdSOQGk7VgO9BO6oYrnf8g15NeD5eP3OkwfF9HjF5+p/5gB4NVBoe3c+R6NtAr2KiXpQPIcTZ2e92TPhKAKbgZ9SYxZA43aAAnPmZpIru4t42C9dPA94jR0D2k+jdcnXwfSBgOFj44NhIvCR6GXSp8gSs5fwOfvbpUkRGL+QxmvtaOcxiKaiM4tknz9/apLRu5coZ6/mCuOA+8hBb3jMBE1jP7CocAvj7ckkilknFDVEJr60DyVfl9tKEtVvrDTblJcn/e2zLXtb4IVPuj8A6c9qP8bkGTA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB2058.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(136003)(396003)(366004)(376002)(346002)(39840400004)(316002)(52536014)(5660300002)(54906003)(19625735003)(86362001)(966005)(8936002)(64756008)(2906002)(224303003)(26005)(66476007)(33656002)(6916009)(83380400001)(55016002)(66946007)(66556008)(478600001)(91956017)(9686003)(66446008)(76116006)(7696005)(4326008)(6506007)(186003)(71200400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: 68MmrNq8yf1sTUAnOKDWdrrO1uZAFkGvfTLggiOKVyZu8VYOiWEK1W92Ae2+26Aq/yAiTfseN5PYEY//6p2gf1+FT3p71cBjQiDGQlg6rXgEb2+YbwEnJPDPGuJ1Al3lce/A0Ms6hscqkzQcHveik2Qqj4ZX+05WwHC7PhODmiHEMe3VFZIgH9YlQSxqSS5Srb5JT/Ajx5Iq5XaLickXoVC+Lq0Oy9qPwU+AzwV6buGzX++0ngXxRkeKRabKVRm7J5yCpxbpkdMudKLkoO4FmQIV5VfstGLyd45MBaKkwVRFr7sklbFWmsaLgBYCXmu9qE8lX4YXnQjHVke2K3zfuqumvJsqq3ykZWFQfPc5Rxel9dDRypHvfW3KIvNaqjXCAAtJqWjZV37+l90hyNvfKc2aLu2M0pHaLd/kYt2ge8wS3oKerIxeb1ohW2JHln1CnNK9j7xMdiW5cjDPdpx9Bf7eEzaJXWqT0MvHcPisJaw=
 x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <07BA7B64689EFC45860B31D1ACDF78B1@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b33682ac-0f69-417b-632a-08d80cf8f1e7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jun 2020 04:44:22.1506
+X-OriginatorOrg: windriver.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cc59b38e-7f62-4081-557a-08d80cfaf3da
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jun 2020 04:58:44.4165
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: qEWxnmrEEx63WwG+SZII2AVk+7UAGjJWy79YjAW7yY+kiJbPzREP+MMQZlaASG9zdEgiqpVATkb4/ssoLriilA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB6585
+X-MS-Exchange-CrossTenant-userprincipalname: 8Ugnho1evnheL3SRXbk+Aa7URLM4POuLliBL5/6QOQKb8C5yjxqkQBaGfl2y7ylY7bPWtTxapc4H7WW6Jcl5VrWeXLqSc2C/yF7BM/bRmZY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR11MB1434
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-06-10 10:32:29, Macpaul Lin wrote:
-> Introduce Built-In CDROM (BICR) support.
-> This feature depends on USB_CONFIGFS_MASS_STORAGE option.
->=20
-> 1. Some settings and new function is introduced for BICR.
-> 2. Some work around for adapting Android settings is intorduced as well.
-
-%s/intorduced/introduced
-
-> --- a/drivers/usb/gadget/function/f_mass_storage.c
-> +++ b/drivers/usb/gadget/function/f_mass_storage.c
-> @@ -315,6 +315,9 @@ struct fsg_common {
->  	void			*private_data;
-> =20
->  	char inquiry_string[INQUIRY_STRING_LEN];
-> +
-> +	/* For build-in CDROM */
-> +	u8 bicr;
->  };
-> =20
->  struct fsg_dev {
-> @@ -369,6 +372,10 @@ static void set_bulk_out_req_length(struct fsg_commo=
-n *common,
->  	if (rem > 0)
->  		length +=3D common->bulk_out_maxpacket - rem;
->  	bh->outreq->length =3D length;
-> +
-> +	/* some USB 2.0 hardware requires this setting */
-> +	if (IS_ENABLED(USB_CONFIGFS_BICR))
-> +		bh->outreq->short_not_ok =3D 1;
->  }
-
-Why not use fsg_common.bicr instead of MACRO?
-
-Peter
-> =20
-> =20
-> @@ -527,7 +534,16 @@ static int fsg_setup(struct usb_function *f,
->  				w_length !=3D 1)
->  			return -EDOM;
->  		VDBG(fsg, "get max LUN\n");
-> -		*(u8 *)req->buf =3D _fsg_common_get_max_lun(fsg->common);
-> +		if (IS_ENABLED(USB_CONFIGFS_BICR) && fsg->common->bicr) {
-> +			/*
-> +			 * When Built-In CDROM is enabled,
-> +			 * we share only one LUN.
-> +			 */
-> +			*(u8 *)req->buf =3D 0;
-> +		} else {
-> +			*(u8 *)req->buf =3D _fsg_common_get_max_lun(fsg->common);
-> +		}
-> +		INFO(fsg, "get max LUN =3D %d\n", *(u8 *)req->buf);
-> =20
->  		/* Respond with data/status */
->  		req->length =3D min((u16)1, w_length);
-> @@ -1329,7 +1345,7 @@ static int do_start_stop(struct fsg_common *common)
->  	}
-> =20
->  	/* Are we allowed to unload the media? */
-> -	if (curlun->prevent_medium_removal) {
-> +	if (!curlun->nofua && curlun->prevent_medium_removal) {
->  		LDBG(curlun, "unload attempt prevented\n");
->  		curlun->sense_data =3D SS_MEDIUM_REMOVAL_PREVENTED;
->  		return -EINVAL;
-> @@ -2692,6 +2708,7 @@ int fsg_common_set_cdev(struct fsg_common *common,
->  	common->ep0 =3D cdev->gadget->ep0;
->  	common->ep0req =3D cdev->req;
->  	common->cdev =3D cdev;
-> +	common->bicr =3D 0;
-> =20
->  	us =3D usb_gstrings_attach(cdev, fsg_strings_array,
->  				 ARRAY_SIZE(fsg_strings));
-> @@ -2895,6 +2912,33 @@ static void fsg_common_release(struct fsg_common *=
-common)
->  		kfree(common);
->  }
-> =20
-> +#ifdef USB_CONFIGFS_BICR
-> +ssize_t fsg_bicr_show(struct fsg_common *common, char *buf)
-> +{
-> +	return sprintf(buf, "%d\n", common->bicr);
-> +}
-> +
-> +ssize_t fsg_bicr_store(struct fsg_common *common, const char *buf, size_=
-t size)
-> +{
-> +	int ret;
-> +
-> +	ret =3D kstrtou8(buf, 10, &common->bicr);
-> +	if (ret)
-> +		return -EINVAL;
-> +
-> +	/* Set Lun[0] is a CDROM when enable bicr.*/
-> +	if (!strcmp(buf, "1"))
-> +		common->luns[0]->cdrom =3D 1;
-> +	else {
-> +		common->luns[0]->cdrom =3D 0;
-> +		common->luns[0]->blkbits =3D 0;
-> +		common->luns[0]->blksize =3D 0;
-> +		common->luns[0]->num_sectors =3D 0;
-> +	}
-> +
-> +	return size;
-> +}
-> +#endif
-> =20
->  /*----------------------------------------------------------------------=
----*/
-> =20
-> @@ -3463,6 +3507,7 @@ void fsg_config_from_params(struct fsg_config *cfg,
->  		lun->ro =3D !!params->ro[i];
->  		lun->cdrom =3D !!params->cdrom[i];
->  		lun->removable =3D !!params->removable[i];
-> +		lun->nofua =3D !!params->nofua[i];
->  		lun->filename =3D
->  			params->file_count > i && params->file[i][0]
->  			? params->file[i]
-> diff --git a/drivers/usb/gadget/function/f_mass_storage.h b/drivers/usb/g=
-adget/function/f_mass_storage.h
-> index 3b8c4ce2a40a..7097e2ea5cc9 100644
-> --- a/drivers/usb/gadget/function/f_mass_storage.h
-> +++ b/drivers/usb/gadget/function/f_mass_storage.h
-> @@ -140,5 +140,8 @@ void fsg_common_set_inquiry_string(struct fsg_common =
-*common, const char *vn,
->  void fsg_config_from_params(struct fsg_config *cfg,
->  			    const struct fsg_module_parameters *params,
->  			    unsigned int fsg_num_buffers);
-> -
-> +#ifdef CONFIG_USB_CONFIGFS_BICR
-> +ssize_t fsg_bicr_show(struct fsg_common *common, char *buf);
-> +ssize_t fsg_bicr_store(struct fsg_common *common, const char *buf, size_=
-t size);
-> +#endif
->  #endif /* USB_F_MASS_STORAGE_H */
-> diff --git a/drivers/usb/gadget/function/storage_common.c b/drivers/usb/g=
-adget/function/storage_common.c
-> index f7e6c42558eb..8fe96eeddf35 100644
-> --- a/drivers/usb/gadget/function/storage_common.c
-> +++ b/drivers/usb/gadget/function/storage_common.c
-> @@ -441,6 +441,29 @@ ssize_t fsg_store_file(struct fsg_lun *curlun, struc=
-t rw_semaphore *filesem,
->  		return -EBUSY;				/* "Door is locked" */
->  	}
-> =20
-> +	pr_notice("%s file=3D%s, count=3D%d, curlun->cdrom=3D%d\n",
-> +			__func__, buf, (int)count, curlun->cdrom);
-> +
-> +	/*
-> +	 * WORKAROUND for Android:
-> +	 *   VOLD would clean the file path after switching to bicr.
-> +	 *   So when the lun is being a CD-ROM a.k.a. BICR.
-> +	 *   Don't clean the file path to empty.
-> +	 */
-> +	if (curlun->cdrom =3D=3D 1 && count =3D=3D 1)
-> +		return count;
-> +
-> +	/*
-> +	 * WORKAROUND: Should be closed the fsg lun for virtual cd-rom,
-> +	 * when switch to other usb functions.
-> +	 * Use the special keyword "off", because the init can
-> +	 * not parse the char '\n' in rc file and write into the sysfs.
-> +	 */
-> +	if (count =3D=3D 3 &&
-> +			buf[0] =3D=3D 'o' && buf[1] =3D=3D 'f' && buf[2] =3D=3D 'f' &&
-> +			fsg_lun_is_open(curlun))
-> +		((char *) buf)[0] =3D 0;
-> +
->  	/* Remove a trailing newline */
->  	if (count > 0 && buf[count-1] =3D=3D '\n')
->  		((char *) buf)[count-1] =3D 0;		/* Ugh! */
-> --=20
-> 2.18.0
-
---=20
-
-Thanks,
-Peter Chen=
+Y2RldiAgb2JqZWN0IHJlZmVyZW5jZSBjb3VudCBhbmQgInN0cnVjdCBwcmludGVyX2RldiIgb2Jq
+ZWN0ICByZWZlcmVuY2UgY291bnQoa3JlZiksIFRoaXMgdHdvIHJlZmVyZW5jZSBjb3VudHMgZG8g
+bm90IGNvbmZsaWN0LiAgaW4gZmlsZSB1c2Itc2tlbGV0b24uYyBhbHNvIHVzZWQgYSBzaW1pbGFy
+IG1ldGhvZKOsICJzdHJ1Y3QgdXNiX3NrZWwiICBjb250YWlucyBrcmVmIG1lbWJlcnMuDQoNCnRo
+YW5rcywNClpxaWFuZw0KDQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+DQq3orz+yMs6IEdyZWcgS0ggPGdyZWdraEBsaW51eGZvdW5kYXRpb24ub3JnPg0Kt6LLzcqxvOQ6
+IDIwMjDE6jbUwjnI1SAxNzo0OA0KytW8/sjLOiBaaGFuZywgUWlhbmcNCrOty806IGJhbGJpQGtl
+cm5lbC5vcmc7IGxpbnV4LXVzYkB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtl
+cm5lbC5vcmcNCtb3zOI6IFJlOiC72Li0OiBbUEFUQ0ggdjJdIHVzYjogZ2FkZ2V0OiBmdW5jdGlv
+bjogcHJpbnRlcjogZml4IHVzZS1hZnRlci1mcmVlIGluIF9fbG9ja19hY3F1aXJlDQoNCg0KQTog
+aHR0cDovL2VuLndpa2lwZWRpYS5vcmcvd2lraS9Ub3BfcG9zdA0KUTogV2VyZSBkbyBJIGZpbmQg
+aW5mbyBhYm91dCB0aGlzIHRoaW5nIGNhbGxlZCB0b3AtcG9zdGluZz8NCkE6IEJlY2F1c2UgaXQg
+bWVzc2VzIHVwIHRoZSBvcmRlciBpbiB3aGljaCBwZW9wbGUgbm9ybWFsbHkgcmVhZCB0ZXh0Lg0K
+UTogV2h5IGlzIHRvcC1wb3N0aW5nIHN1Y2ggYSBiYWQgdGhpbmc/DQpBOiBUb3AtcG9zdGluZy4N
+ClE6IFdoYXQgaXMgdGhlIG1vc3QgYW5ub3lpbmcgdGhpbmcgaW4gZS1tYWlsPw0KDQpBOiBOby4N
+ClE6IFNob3VsZCBJIGluY2x1ZGUgcXVvdGF0aW9ucyBhZnRlciBteSByZXBseT8NCg0KaHR0cDov
+L2RhcmluZ2ZpcmViYWxsLm5ldC8yMDA3LzA3L29uX3RvcA0KDQpPbiBUdWUsIEp1biAwOSwgMjAy
+MCBhdCAwOTozNToxMUFNICswMDAwLCBaaGFuZywgUWlhbmcgd3JvdGU6DQo+IFRoYW5rIHlvdSBm
+b3IgeW91ciBzdWdnZXN0aW9uDQo+IHR3byByZWZlcmVuY2VkIGNvdW50ZWQgb2JqZWN0cyBpbiB0
+aGUgc2FtZSBleGFjdCBzdHJ1Y3R1cmUuIGFub3RoZXIgIHJlZmVyZW5jZWQgaXMNCj4gImRldi0+
+cHJpbnRlcl9jZGV2X29wZW4iPw0KDQpNYXliZSwgSSBkb24ndCBrbm93LCBidXQgYSBjZGV2IGRv
+ZXMgaGF2ZSBhIHJlZmVyZW5jZSBjb3VudCBhbHJlYWR5LA0KcmlnaHQ/ICBXaHkgZG8geW91IG5l
+ZWQgcHJpbnRlcl9jZGV2X29wZW4gYXMgd2VsbD8NCg0KdGhhbmtzLA0KDQpncmVnIGstaA0K
