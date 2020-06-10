@@ -2,73 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B67AE1F4943
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Jun 2020 00:15:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 011991F4AA3
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Jun 2020 03:06:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728364AbgFIWPT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Jun 2020 18:15:19 -0400
-Received: from mail-il1-f194.google.com ([209.85.166.194]:44681 "EHLO
-        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726992AbgFIWPS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Jun 2020 18:15:18 -0400
-Received: by mail-il1-f194.google.com with SMTP id i1so20715544ils.11;
-        Tue, 09 Jun 2020 15:15:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=SIt9vqsJjlEz6zk3asMipOVTh2DgNRRsKYqkupl1gXg=;
-        b=R4PfPuu7ruGQ2sW7S52EvSElX8iMsBrSwCA16pKuFB2l+8imZj6e/5ulc7h1wFOIOX
-         sMlkWwnei7Uw0tAh1N8CWJLw/myv4uYeg+yONTEJFrt3ST+6wkUDFMOKX0dB57Kx1OYC
-         liXp9BxLTsRZAObYwYsr4Jgx/hY3Ua1aOkdDpzazBfpGlteyIH2R3+xIQ9cDrpvPf4fb
-         I4s346teVTV2PWzasj26i6ptbBB+8RAPuX9Rj8fddUP0u/fzoARP1yjumcPBHS68finI
-         OMT2EZpsx3+LFtIn04/5y9SnzYKFEYW1zHafcnfGWmgJsNq6AIp8Tt/uF7S/GToldoDn
-         JW5g==
-X-Gm-Message-State: AOAM5330jyi/usSXXsbQuPsflXW2FX7Z4bAR+0xXCQleZdcML3xDhZRT
-        EPnHAGvMbSe87v6vD07/3g==
-X-Google-Smtp-Source: ABdhPJxkmZxwK1ql79rrG5xPZG7HoeRwm/ev5DUJldBfp7gAWRH0Wlpng2yYdEmTRj4TYhFcRHYY+g==
-X-Received: by 2002:a05:6e02:13f4:: with SMTP id w20mr178303ilj.294.1591740917458;
-        Tue, 09 Jun 2020 15:15:17 -0700 (PDT)
-Received: from xps15 ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id w15sm9922978ilj.21.2020.06.09.15.15.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2020 15:15:17 -0700 (PDT)
-Received: (nullmailer pid 1592981 invoked by uid 1000);
-        Tue, 09 Jun 2020 22:15:15 -0000
-Date:   Tue, 9 Jun 2020 16:15:15 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>
-Cc:     linux-usb@vger.kernel.org, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, zhenwenjin@gmail.com,
-        gregkh@linuxfoundation.org, dongsheng.qiu@ingenic.com,
-        yanfei.li@ingenic.com, aric.pzqi@ingenic.com,
-        devicetree@vger.kernel.org, rick.tyliu@ingenic.com,
-        sernia.zhou@foxmail.com, balbi@kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: USB: Add Ingenic X1000 and X1830
- bindings.
-Message-ID: <20200609221515.GA1592928@bogus>
-References: <20200530165253.17445-1-zhouyanjie@wanyeetech.com>
- <20200530165253.17445-2-zhouyanjie@wanyeetech.com>
+        id S1726090AbgFJBGp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Jun 2020 21:06:45 -0400
+Received: from mga14.intel.com ([192.55.52.115]:22909 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726016AbgFJBGo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 9 Jun 2020 21:06:44 -0400
+IronPort-SDR: Bbj9fit/WQmiNdhHZ18Z2M/6t2ayw4Ba8S0caoj7ZbYlVujV2yPrXvjdRG2tLBNJdeYnKLNtGk
+ T2mmOOoR+H1A==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2020 18:06:43 -0700
+IronPort-SDR: cBww2uFpyUwLqQE3n0LavVVjC4gKq5MVZcVFC81JfRDr3eCz5+ooYv2iw6/YnxCxtI8cBgtXUv
+ wEN6FffG92gQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,494,1583222400"; 
+   d="scan'208";a="289014515"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga002.jf.intel.com with ESMTP; 09 Jun 2020 18:06:43 -0700
+Received: from [10.255.176.176] (unknown [10.255.176.176])
+        by linux.intel.com (Postfix) with ESMTP id DF8C3580698;
+        Tue,  9 Jun 2020 18:06:40 -0700 (PDT)
+Reply-To: vadivel.muruganx.ramuthevar@linux.intel.com
+Subject: Re: [PATCH v1 2/2] usb: phy: Add USB3 PHY support for Intel LGM SoC
+To:     Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-kernel@vger.kernel.org, balbi@kernel.org
+Cc:     gregkh@linuxfoundation.org, robh@kernel.org,
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        cheol.yong.kim@intel.com, qi-ming.wu@intel.com, yin1.li@intel.com,
+        andriy.shevchenko@intel.com
+References: <20200609110850.43469-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20200609110850.43469-3-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <d2f30dbde89050e428b61092a1e5bbcf8d257129.camel@pengutronix.de>
+From:   "Ramuthevar, Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Message-ID: <1ecf98d8-25f5-8f2b-1b6b-8d6f8f758761@linux.intel.com>
+Date:   Wed, 10 Jun 2020 09:06:40 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200530165253.17445-2-zhouyanjie@wanyeetech.com>
+In-Reply-To: <d2f30dbde89050e428b61092a1e5bbcf8d257129.camel@pengutronix.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, 31 May 2020 00:52:52 +0800, 周琰杰 (Zhou Yanjie) wrote:
-> Add the USB PHY bindings for the X1000 SoC and
-> the X1830 SoC from Ingenic.
-> 
-> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-> ---
->  Documentation/devicetree/bindings/usb/ingenic,jz4770-phy.yaml | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
+Hi Philipp,
 
-Acked-by: Rob Herring <robh@kernel.org>
+Thank you very much for review comments and your time...
+
+On 9/6/2020 8:14 pm, Philipp Zabel wrote:
+>> +
+>> +	for (i = 0; i < ARRAY_SIZE(CTL_RESETS); i++) {
+>> +		resets[i] = devm_reset_control_get(dev, CTL_RESETS[i]);
+> Please use devm_reset_control_get_exclusive() instead.
+Noted, will use it.
+> 
+>> +		if (IS_ERR(resets[i])) {
+>> +			dev_err(dev, "%s reset not found\n", CTL_RESETS[i]);
+>> +			return PTR_ERR(resets[i]);
+>> +		}
+>> +		reset_control_assert(resets[i]);
+>> +	}
+> You should request all reset controls first, and only then start
+> asserting / deasserting, otherwise you may end up with partially
+> asserted resets in case a later reset control is not found.
+Agreed!, re-write the assert/de-assert logic as you have suggested.
+> 
+>> +
+>> +	for (i = 0; i < ARRAY_SIZE(PHY_RESETS); i++) {
+>> +		ta->resets[i] = devm_reset_control_get(dev, PHY_RESETS[i]);
+> Same as above.
+> 
+>> +		if (IS_ERR(ta->resets[i])) {
+>> +			dev_err(dev, "%s reset not found\n", PHY_RESETS[i]);
+>> +			return PTR_ERR(ta->resets[i]);
+>> +		}
+>> +		reset_control_assert(ta->resets[i]);
+>> +	}
+>> +
+>> +	for (i = 0; i < ARRAY_SIZE(CTL_RESETS); i++)
+>> +		reset_control_deassert(resets[i]);
+>> +	/* Need to wait at least 20us before de-assert the PHY */
+>> +	usleep_range(20, 100);
+> This waits 20us after de-asserting the reset, not before. Is this in the
+> correct place?
+yes, you are right, it's in wrong place, Thanks!
+
+Regards
+Vadivel
+> 
