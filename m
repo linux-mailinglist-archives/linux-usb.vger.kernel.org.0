@@ -2,142 +2,171 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14E451F5869
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Jun 2020 17:55:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC61D1F5C08
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Jun 2020 21:38:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728705AbgFJPzn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 Jun 2020 11:55:43 -0400
-Received: from mga03.intel.com ([134.134.136.65]:40297 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728431AbgFJPzn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 10 Jun 2020 11:55:43 -0400
-IronPort-SDR: 9TlXgGqaoEoIKgy71D0hDVuSNFO8dK4E6MBgE8rdD4yf6RvaFhfTdZt7kcbXdi4I4k69w3m02Y
- X2dEH8BnePDQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2020 08:55:42 -0700
-IronPort-SDR: 9efg9fGoGODP1xTvJB+I/1ydlZnUayQEJ29ZCA7cJuOSoGkrIs1OcW/SLl7fnbmRfgQN+MXDi3
- fpYNDBB6OclA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,496,1583222400"; 
-   d="scan'208";a="271282719"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga003.jf.intel.com with ESMTP; 10 Jun 2020 08:55:40 -0700
-Subject: Re: [PATCH 1/2] xhci: Suspend ports to U3 directly from U1 or U2
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20200610064231.9454-1-kai.heng.feng@canonical.com>
- <20200610143220.GC11727@rowland.harvard.edu>
- <591D2A1F-9645-4B0B-896C-99544F06DFAA@canonical.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- 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 fiD/
-Message-ID: <9d7842de-9813-becd-80a0-a422e59c1e94@linux.intel.com>
-Date:   Wed, 10 Jun 2020 18:58:41 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1730266AbgFJTin (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 Jun 2020 15:38:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55044 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727011AbgFJTin (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Jun 2020 15:38:43 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6757C03E96B
+        for <linux-usb@vger.kernel.org>; Wed, 10 Jun 2020 12:38:42 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id b5so1541303pfp.9
+        for <linux-usb@vger.kernel.org>; Wed, 10 Jun 2020 12:38:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Td+Hx06E+e9F1O9JIhYF1vMbzyy7ZP3sq7uvC8JK3wg=;
+        b=dhG2Q0uTj+7iphhFpEGZ9PWuteEaHz4NrECdrVSSGdffrYMFXVSSnT74UWtAmIOK24
+         YCcBpZE2Z7evEd5PAvkn5NPs5ZB4EuRIB7KogEkhWxRp7r9V0t20jYbwjCAdYF660sMV
+         B8rQLO7dvBjnLTXyrzzk46jixbsNwddCwLODB1AKJ65TWIbaNhcAkXRU6mTwrT6IEd2K
+         LD0xS7Rju4gSW/2BU1JYgH9ie4ALFxjNeBn/nfkjH58MEey/OYoMvv87rzxnTa2vbaCU
+         +MU/sUH5O+eWsBggarxtoAVKukHFoxo6GjiwatZy3ESngigltmot2tM0gg5oAbFDBvyh
+         gkzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Td+Hx06E+e9F1O9JIhYF1vMbzyy7ZP3sq7uvC8JK3wg=;
+        b=d5JS7CHbxk8llg8YoDsdsuV8GZDzug++JBJL8DsmkYiD1Ct+dPh1eGqbRjyN1VZT4g
+         Ojf6ZXjzeUYTqSPjLrg8At+YmdwkjPTJ0OaJyVHMn+f1rJKG48wv8nEBRKckYp6zSkPZ
+         znLMmjGYx8X0XBl8efSjk1DfYle61MhgWsofUz+8ep+RJISjmEcjne9ueJm0ABwJOslw
+         OHHNySTJF4BgiY2qaKPuzKh81mHcW3YJW0xBVumeNME7bz3DuEbdG7dYzw7HXNLLxrp6
+         DHb26yQlQfk9K0Gd1njoF0qzpA5IHVLJ87BG3svBA/6X3wOULqUQxbn9aRu9Ha9lfDcV
+         fXvg==
+X-Gm-Message-State: AOAM531ziBPs+a6JnuIatL+vYjX1zHEOQXWQVGGwO7JczxHuJEkJOPcD
+        vJUjpMD9lTiMZfV23CdJjUcWOw==
+X-Google-Smtp-Source: ABdhPJwNMzK3e5aMgbzRItHsCHFq2d5DaCNeUz6V0o0/Or2vT7bu9rtBfB9dzhC6Ax/6GNC0nPiPJA==
+X-Received: by 2002:a62:86cd:: with SMTP id x196mr4080689pfd.158.1591817921979;
+        Wed, 10 Jun 2020 12:38:41 -0700 (PDT)
+Received: from builder.lan (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id w18sm680040pfq.121.2020.06.10.12.38.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jun 2020 12:38:41 -0700 (PDT)
+Date:   Wed, 10 Jun 2020 12:37:57 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Jack Pham <jackp@codeaurora.org>
+Cc:     Wesley Cheng <wcheng@codeaurora.org>,
+        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        mark.rutland@arm.com, robh+dt@kernel.org, agross@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        bryan.odonoghue@linaro.org
+Subject: Re: [PATCH 1/3] usb: typec: Add QCOM PMIC typec detection driver
+Message-ID: <20200610193757.GB1246811@builder.lan>
+References: <20200609205851.30113-1-wcheng@codeaurora.org>
+ <20200609205851.30113-2-wcheng@codeaurora.org>
+ <20200610011837.GA14816@jackp-linux.qualcomm.com>
 MIME-Version: 1.0
-In-Reply-To: <591D2A1F-9645-4B0B-896C-99544F06DFAA@canonical.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200610011837.GA14816@jackp-linux.qualcomm.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10.6.2020 18.43, Kai-Heng Feng wrote:
+On Tue 09 Jun 18:20 PDT 2020, Jack Pham wrote:
+
+> Hi Wesley,
 > 
+> On Tue, Jun 09, 2020 at 01:58:49PM -0700, Wesley Cheng wrote:
+> > The QCOM SPMI typec driver handles the role and orientation detection, and
+> > notifies client drivers using the USB role switch framework.   It registers
+> > as a typec port, so orientation can be communicated using the typec switch
+> > APIs.  The driver also registers the VBUS output regulator, so client
 > 
->> On Jun 10, 2020, at 22:32, Alan Stern <stern@rowland.harvard.edu> wrote:
->>
->> On Wed, Jun 10, 2020 at 02:42:30PM +0800, Kai-Heng Feng wrote:
->>> xHCI spec "4.15.1 Port Suspend" states that port can be put to U3 as long
->>> as Enabled bit is set and from U0, U1 or U2 state.
->>>
->>> Currently only USB_PORT_FEAT_LINK_STATE puts port to U3 directly, let's
->>> do the same for USB_PORT_FEAT_SUSPEND and bus suspend case.
->>>
->>> This is particularly useful for USB2 devices, which may take a very long
->>> time to switch USB2 LPM on and off.
->>
->> Have these two patches been tested with a variety of USB-2.0 and USB-2.1 
->> devices?
+> Doesn't look like it.. As we discussed in earlier revisions we decided
+> to drop the regulator.
 > 
-> I tested some laptops around and they work fine.
-> Only internally connected USB devices like USB Bluetooth and USB Camera have USB2 LPM enabled, so this patch won't affect external connected devices.
+> > drivers can enable the VBUS source when acting as a source/host.
+> > 
+> > Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+> > ---
+> >  drivers/usb/typec/Kconfig           |  11 ++
+> >  drivers/usb/typec/Makefile          |   1 +
+> >  drivers/usb/typec/qcom-pmic-typec.c | 278 ++++++++++++++++++++++++++++++++++++
+> >  3 files changed, 290 insertions(+)
+> >  create mode 100644 drivers/usb/typec/qcom-pmic-typec.c
+> > 
+> > diff --git a/drivers/usb/typec/Kconfig b/drivers/usb/typec/Kconfig
+> > index 559dd06..8de2520 100644
+> > --- a/drivers/usb/typec/Kconfig
+> > +++ b/drivers/usb/typec/Kconfig
+> > @@ -73,6 +73,17 @@ config TYPEC_TPS6598X
+> >  	  If you choose to build this driver as a dynamically linked module, the
+> >  	  module will be called tps6598x.ko.
+> >  
+> > +config TYPEC_QCOM_PMIC
+> > +	tristate "Qualcomm PMIC USB typec driver"
+> > +	depends on ARCH_QCOM
+> > +	help
+> > +	  Driver for supporting role switch over the Qualcomm PMIC.  This will
+> > +	  handle the type C role and orientation detection reported by the QCOM
+> > +	  PMIC if the PMIC has the capability to handle type C detection.
+> > +
+> > +	  It will also enable the VBUS output to connected devices when a
+> > +	  DFP connection is made.
+> > +
+> >  source "drivers/usb/typec/mux/Kconfig"
+> >  
+> >  source "drivers/usb/typec/altmodes/Kconfig"
+> > diff --git a/drivers/usb/typec/Makefile b/drivers/usb/typec/Makefile
+> > index 7753a5c3..cceffd9 100644
+> > --- a/drivers/usb/typec/Makefile
+> > +++ b/drivers/usb/typec/Makefile
+> > @@ -6,4 +6,5 @@ obj-$(CONFIG_TYPEC_TCPM)	+= tcpm/
+> >  obj-$(CONFIG_TYPEC_UCSI)	+= ucsi/
+> >  obj-$(CONFIG_TYPEC_HD3SS3220)	+= hd3ss3220.o
+> >  obj-$(CONFIG_TYPEC_TPS6598X)	+= tps6598x.o
+> > +obj-$(CONFIG_TYPEC_QCOM_PMIC)	+= qcom-pmic-typec.o
+> >  obj-$(CONFIG_TYPEC)		+= mux/
+> > diff --git a/drivers/usb/typec/qcom-pmic-typec.c b/drivers/usb/typec/qcom-pmic-typec.c
+> > new file mode 100644
+> > index 0000000..ce6319c
+> > --- /dev/null
+> > +++ b/drivers/usb/typec/qcom-pmic-typec.c
+> > @@ -0,0 +1,278 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Copyright (c) 2020, The Linux Foundation. All rights reserved.
+> > + */
+> > +
+> > +#include <linux/err.h>
+> > +#include <linux/regmap.h>
+> > +#include <linux/kernel.h>
+> > +#include <linux/module.h>
+> > +#include <linux/slab.h>
+> > +#include <linux/interrupt.h>
+> > +#include <linux/of_irq.h>
+> > +#include <linux/platform_device.h>
+> > +#include <linux/of_device.h>
+> > +#include <linux/usb/role.h>
+> > +#include <linux/usb/typec_mux.h>
+> > +#include <linux/workqueue.h>
+> > +#include <linux/regulator/consumer.h>
+> > +#include <linux/regulator/driver.h>
+> > +#include <linux/regulator/machine.h>
+> > +
+> > +#define DCDC_BASE			0x1100
+> 
+> along with USB_BASE @ 0x1300, is it ok to allow this driver to access
+> registers outside of its 'reg' base (0x1500 according to the DT
+> bindings)?
 > 
 
-Took a fresh look at the USB2 side and it's not as clear as the USB3 case, where
-we know the hub must support transition to U3 from any other state. [1]
+Depending on how entangled a future driver for the charger blocks would
+be one could either just upstream a dcdc regulator driver to control
+vbus today, or a "lite version" of a charging driver exposing just the
+vbus regulator.
 
-Supporting link state transition to U3 (USB2 L2) from any other U state for USB2 seems
-to be xHCI specific feature. xHC hardware will make sure it goes via the U0 state.
+Either way I would prefer this over poking the register directly from
+this driver, as it will make it tricky to migrate to a proper charger
+driver later.
 
-I have no clue about other hosts (or hubs), USB2 LPM ECN just shows that link
-state transitions to L1 or L2 should always goes via L0.
-It's possible this has to be done in software by disabling USB2 LPM before suspending the device.
-
-So I guess the original suggestion to wait for link state to reach U0 before
-is a better solution. Sorry about my hasty suggestion.
-
-Kai-Heng, does it help if you fist manually set the link to U0 before disabling
-USB2 LPM (set PLS to 0 before clearing the HLE bit). Does it transition to U0
-any faster, or get rid of the extra port event with PLC:U0?
-
--Mathias
-
- 
-[1]
-    USB3.1 spec (10.16.2.10) Set Port feature:   
-   "If the value is 3, then host software wants to selectively suspend the
-    device connected to this port. The hub shall transition the link to U3
-    from any of the other U states using allowed link state transitions.
-    If the port is not already in the U0 state, then it shall transition the
-    port to the U0 state and then initiate the transition to U3.
+Regards,
+Bjorn
