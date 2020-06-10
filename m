@@ -2,187 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6454B1F4B77
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Jun 2020 04:32:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 971921F4B97
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Jun 2020 04:47:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726021AbgFJCcj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 9 Jun 2020 22:32:39 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:56639 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725944AbgFJCcj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 9 Jun 2020 22:32:39 -0400
-X-UUID: d5a16b9c53bb47efa0f5066bc3f6e49e-20200610
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=ikAUH+oSTe3mRlWNNzglrPUeUjqFowmt3yvhPLlzaLI=;
-        b=PeOj0aIoCG2au5Qxq6ZrDWPs0n6odYH4nRjAp/IFkItVyQr3thMdUmMfZvlTYPWf4rdvD+z4v5aPQ3zqpVu/jG72XTh3jXz41ktimJUCp6hUbvKqAePFpl/kH9CWkHJ1oi81iqWvKl5P8ITVTMCYJ39agmFsw0PHaM0S0BgLXKQ=;
-X-UUID: d5a16b9c53bb47efa0f5066bc3f6e49e-20200610
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 455591256; Wed, 10 Jun 2020 10:32:32 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 10 Jun 2020 10:32:31 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 10 Jun 2020 10:32:30 +0800
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Bart Van Assche <bvanassche@acm.org>
-CC:     Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>,
-        Macpaul Lin <macpaul.lin@gmail.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-usb@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
-        Justin Hsieh <justinhsieh@google.com>,
-        Hakieyin Hsieh <hakieyin@gmail.com>
-Subject: [PATCH] usb/gadget/function: introduce Built-in CDROM support
-Date:   Wed, 10 Jun 2020 10:32:29 +0800
-Message-ID: <1591756349-17865-1-git-send-email-macpaul.lin@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <EJ Hsu <ejh@nvidia.com>, Mauro Carvalho Chehab
- <mchehab+samsung@kernel.org>, Benjamin Herrenschmidt
- <benh@kernel.crashing.org>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org>
-References: <EJ Hsu <ejh@nvidia.com>, Mauro Carvalho Chehab
- <mchehab+samsung@kernel.org>, Benjamin Herrenschmidt
- <benh@kernel.crashing.org>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org>
+        id S1726017AbgFJCr6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 9 Jun 2020 22:47:58 -0400
+Received: from mail-eopbgr130048.outbound.protection.outlook.com ([40.107.13.48]:17828
+        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725798AbgFJCr5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 9 Jun 2020 22:47:57 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Djp+brF9cl3PeOlLtERLQf8etjjOSPDVvYvlrHHj8bZ955lqdeseietW9zGfgMQcvOQWrz2yz+aH+1AzjVfEsDmXrgNCkRA8V9vPSGxgRI9FlLvbbHOfK4P+BZP3Mn+fwGZKs4PLDtB8Rb9PaszrIBOrziIFWc4fseufwn0OTnkyWiF52SvrMFLPQA6vnFHWwZO/6JSAhTnRNUnP8TtUOw/eN9ZrFJgwAJziP+kymtW9Qg3qd7b2at4Y/MyuXhmm5kZ/RfNnaXPejKa5w52gtVWUuKxUj3NNbyHCs+FxkO0f6PSYrJxuE7FD+BNneNq6w3WbOKGCFqRXQQufXW8now==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TZhxXPgPT0lHOapgh72QgeABSuI8bfXnK5XzS/7l7A8=;
+ b=cNZaeM+GfLooctvCsHSv06DCv4hbGyB4iTfxGu7MQxr4MT7Asu3V0ApF2bdbJ9/MCqxDD+siUZnM/qCJDImFWTpZr0XrVjofRFfM5RhVgZtbk296DuafX/xs3aXkqS1Ov/Gj493VAunSnxQpt2MHyAoPsl9NRBmhI1nrleHg4d9izGyh/61Dic79WEgHaHTlwOgJH9goJjb1GgR4Ni5RH7fw8uX8/rV5W2SsQ/xxjORO6EsXvt4YhNMJ3qmvkn/kiOaHY9KL6xAC1PwWEC98XpDq9h1jSd/dI+a97qh32qmJ/SzLhEmlGwf4wS8doA4/D3zv+wL4HAroAlpefcwM7Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TZhxXPgPT0lHOapgh72QgeABSuI8bfXnK5XzS/7l7A8=;
+ b=g51snoeyb7F2YEIp3Y03AlyNGuZ91oRkosVsddLNOvEPW+464sOzvPRZCxK1uV/zrRM6ugryVYJHsIcQpNQ++dcihdRKVDA9jmmzBwANePL037tCpaYkRbCSpp0pfVJQ/+grR/WEzT+phoYr8FC+GFMTTDCn80IjPKR1Fet/+uY=
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
+ by AM7PR04MB6837.eurprd04.prod.outlook.com (2603:10a6:20b:10b::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3066.18; Wed, 10 Jun
+ 2020 02:47:52 +0000
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1101:adaa:ee89:af2a]) by AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1101:adaa:ee89:af2a%3]) with mapi id 15.20.3066.023; Wed, 10 Jun 2020
+ 02:47:52 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Jun Li <jun.li@nxp.com>
+CC:     "balbi@kernel.org" <balbi@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH 1/6] dt-bindings: usb: dwc3: add property to disable xhci
+ 64bit support
+Thread-Topic: [PATCH 1/6] dt-bindings: usb: dwc3: add property to disable xhci
+ 64bit support
+Thread-Index: AQHWPlBrTuom4kZ7OUyC2lNKvwm9kKjRJo0A
+Date:   Wed, 10 Jun 2020 02:47:52 +0000
+Message-ID: <20200610024816.GA18494@b29397-desktop>
+References: <1591701165-12872-1-git-send-email-jun.li@nxp.com>
+ <1591701165-12872-2-git-send-email-jun.li@nxp.com>
+In-Reply-To: <1591701165-12872-2-git-send-email-jun.li@nxp.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: nxp.com; dkim=none (message not signed)
+ header.d=none;nxp.com; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 63e69d50-a95c-433b-76c1-08d80ce8abbb
+x-ms-traffictypediagnostic: AM7PR04MB6837:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM7PR04MB6837E9B050B541624BBBD5548B830@AM7PR04MB6837.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 0430FA5CB7
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: f24a9HS/LH0jbscaA/BBhO6APECiA6OTs7szkGgq2pf0AjbP+5BiytPzGLQDpAzYLTnGXtd2HcO3a2f4ZftaPxFwfwsHUKYNMAT40RnBk7VDuYBnsaRnFxs/ASHND4ZtS1q47Qd6wgg4OLIXtQ2mJVCGsJF/1LBf6lxcy/VclbiTFi6lklpByzQHMj3pgDR8Q3sd/VvMzZFoHUhUUp2mJ17l28wUQXRQGVo63TDn/Bkz70d7gimfEr8rVo6PBP3xx3jhxkRFzf9gakGdgmeA96gVbHCpCXMthKuVoh+l5TeLmtZR35kexD9x2A9Xo9gZ2XOf1mHQFivmiVOgRuUcXg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(7916004)(39860400002)(136003)(346002)(366004)(396003)(376002)(6486002)(6512007)(5660300002)(26005)(64756008)(86362001)(2906002)(66946007)(91956017)(66476007)(66446008)(186003)(1076003)(71200400001)(9686003)(4326008)(66556008)(76116006)(8676002)(8936002)(54906003)(33656002)(478600001)(33716001)(6506007)(316002)(6862004)(6636002)(44832011)(53546011);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: RU0Lek9CmdzYeY1KpqJbvlhNEkqNnJ1z3ImfJsuPwfmaaqwfLUFXoCUwqAr/KlXzWifyN7YNTWx22NtpEy33JPV9XHwhFG/OdXpe3+HvnSTpLkapOiZMRqrT+UHqjzDwSoQhHizbIVZWIupnZgAf671Ab6rBUV9BQVmhPyV/3EyUhIX7I/+oKhftOfC2xDvMA/fVADSdDjTQ8VkHgbIASH1171ybjmndZRZVuG7MphSywPXTdRHtsiBXUkM5tUqdq8fiEGbO9fkFCg3AEzImntN1J7qsnSuPYfNSi+Et1H9NPqnXEJHUJ0Xsl7NiC1Tw3AkD06tOY0VYHAnoXr1pYF9cWLoVXq2DuUH6g+h7r0lJiBcAvJCN9qDCLHKZsj655Ih4fpJgchyZfPkSbBq7KXd8rnDZ4LO8+P0gyZ8WYmeId2xQlxEHDTH20NJOT1I/JdAlWaVk0g+Huuxkh+bkuvdc+otN+F1eHInP2KhMfM4CNkhl2MJtxqrGWPeKwYpl
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <389AA3A11EE6EF4FA6D80A13C7B414F4@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 63e69d50-a95c-433b-76c1-08d80ce8abbb
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jun 2020 02:47:52.4875
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: frybLx72RoXriYmwfcoPw5gj2EVWh+6lVw3KwMzyfirhncBSJ2AeJTOYypp0EDFesEuIGY49xArHlMVryYwFBA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6837
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SW50cm9kdWNlIEJ1aWx0LUluIENEUk9NIChCSUNSKSBzdXBwb3J0Lg0KVGhpcyBmZWF0dXJlIGRl
-cGVuZHMgb24gVVNCX0NPTkZJR0ZTX01BU1NfU1RPUkFHRSBvcHRpb24uDQoNCjEuIFNvbWUgc2V0
-dGluZ3MgYW5kIG5ldyBmdW5jdGlvbiBpcyBpbnRyb2R1Y2VkIGZvciBCSUNSLg0KMi4gU29tZSB3
-b3JrIGFyb3VuZCBmb3IgYWRhcHRpbmcgQW5kcm9pZCBzZXR0aW5ncyBpcyBpbnRvcmR1Y2VkIGFz
-IHdlbGwuDQoNClNpZ25lZC1vZmYtYnk6IEp1c3RpbiBIc2llaCA8anVzdGluaHNpZWhAZ29vZ2xl
-LmNvbT4NClNpZ25lZC1vZmYtYnk6IEhha2lleWluIEhzaWVoIDxoYWtpZXlpbkBnbWFpbC5jb20+
-DQpTaWduZWQtb2ZmLWJ5OiBNYWNwYXVsIExpbiA8bWFjcGF1bC5saW5AbWVkaWF0ZWsuY29tPg0K
-LS0tDQogZHJpdmVycy91c2IvZ2FkZ2V0L0tjb25maWcgICAgICAgICAgICAgICAgICAgfCAxNiAr
-KysrKysrDQogZHJpdmVycy91c2IvZ2FkZ2V0L2Z1bmN0aW9uL2ZfbWFzc19zdG9yYWdlLmMgfCA0
-OSArKysrKysrKysrKysrKysrKysrLQ0KIGRyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi9mX21h
-c3Nfc3RvcmFnZS5oIHwgIDUgKy0NCiBkcml2ZXJzL3VzYi9nYWRnZXQvZnVuY3Rpb24vc3RvcmFn
-ZV9jb21tb24uYyB8IDIzICsrKysrKysrKw0KIDQgZmlsZXMgY2hhbmdlZCwgOTAgaW5zZXJ0aW9u
-cygrKSwgMyBkZWxldGlvbnMoLSkNCg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2dhZGdldC9L
-Y29uZmlnIGIvZHJpdmVycy91c2IvZ2FkZ2V0L0tjb25maWcNCmluZGV4IDRkYzRkNDhmZTZhNi4u
-Njg2YmEwMWJlZGI1IDEwMDY0NA0KLS0tIGEvZHJpdmVycy91c2IvZ2FkZ2V0L0tjb25maWcNCisr
-KyBiL2RyaXZlcnMvdXNiL2dhZGdldC9LY29uZmlnDQpAQCAtMTg4LDYgKzE4OCw5IEBAIGNvbmZp
-ZyBVU0JfRl9STkRJUw0KIGNvbmZpZyBVU0JfRl9NQVNTX1NUT1JBR0UNCiAJdHJpc3RhdGUNCiAN
-Citjb25maWcgVVNCX0ZfQklDUg0KKwl0cmlzdGF0ZQ0KKw0KIGNvbmZpZyBVU0JfRl9GUw0KIAl0
-cmlzdGF0ZQ0KIA0KQEAgLTM1Nyw2ICszNjAsMTkgQEAgY29uZmlnIFVTQl9DT05GSUdGU19NQVNT
-X1NUT1JBR0UNCiAJICBkZXZpY2UgKGluIG11Y2ggdGhlIHNhbWUgd2F5IGFzIHRoZSAibG9vcCIg
-ZGV2aWNlIGRyaXZlciksDQogCSAgc3BlY2lmaWVkIGFzIGEgbW9kdWxlIHBhcmFtZXRlciBvciBz
-eXNmcyBvcHRpb24uDQogDQorY29uZmlnIFVTQl9DT05GSUdGU19CSUNSDQorCWJvb2wgIkJ1aWx0
-LUluIENEUk9NIGVtdWxhdGlvbiINCisJZGVwZW5kcyBvbiBVU0JfQ09ORklHRlMNCisJZGVwZW5k
-cyBvbiBCTE9DSw0KKwlkZXBlbmRzIG9uIFVTQl9DT05GSUdGU19NQVNTX1NUT1JBR0UNCisJc2Vs
-ZWN0IFVTQl9GX0JJQ1INCisJaGVscA0KKwkgIFRoZSBCdWlsZC1JbiBDRFJPTSBHYWRnZXQgYWN0
-cyBhcyBhIENEUk9NIGVtdWxhdGlvbiBkaXNrIGRyaXZlLg0KKwkgIEl0IGlzIGJhc2VkIG9uIGtl
-cm5lbCBvcHRpb24gIlVTQl9DT05GSUdGU19NQVNTX1NUT1JBR0UiLg0KKwkgIEFzIGl0cyBzdG9y
-YWdlIHJlcG9zaXRvcnkgaXQgY2FuIHVzZSBhIHJlZ3VsYXIgZmlsZSBvciBhIGJsb2NrDQorCSAg
-ZGV2aWNlIChpbiBtdWNoIHRoZSBzYW1lIHdheSBhcyB0aGUgImxvb3AiIGRldmljZSBkcml2ZXIp
-LA0KKwkgIHNwZWNpZmllZCBhcyBhIG1vZHVsZSBwYXJhbWV0ZXIgb3Igc3lzZnMgb3B0aW9uLg0K
-Kw0KIGNvbmZpZyBVU0JfQ09ORklHRlNfRl9MQl9TUw0KIAlib29sICJMb29wYmFjayBhbmQgc291
-cmNlc2luayBmdW5jdGlvbiAoZm9yIHRlc3RpbmcpIg0KIAlkZXBlbmRzIG9uIFVTQl9DT05GSUdG
-Uw0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi9mX21hc3Nfc3RvcmFn
-ZS5jIGIvZHJpdmVycy91c2IvZ2FkZ2V0L2Z1bmN0aW9uL2ZfbWFzc19zdG9yYWdlLmMNCmluZGV4
-IDMzYzIyNjRhMGUzNS4uOWRlMWNkNDY1NjM1IDEwMDY0NA0KLS0tIGEvZHJpdmVycy91c2IvZ2Fk
-Z2V0L2Z1bmN0aW9uL2ZfbWFzc19zdG9yYWdlLmMNCisrKyBiL2RyaXZlcnMvdXNiL2dhZGdldC9m
-dW5jdGlvbi9mX21hc3Nfc3RvcmFnZS5jDQpAQCAtMzE1LDYgKzMxNSw5IEBAIHN0cnVjdCBmc2df
-Y29tbW9uIHsNCiAJdm9pZAkJCSpwcml2YXRlX2RhdGE7DQogDQogCWNoYXIgaW5xdWlyeV9zdHJp
-bmdbSU5RVUlSWV9TVFJJTkdfTEVOXTsNCisNCisJLyogRm9yIGJ1aWxkLWluIENEUk9NICovDQor
-CXU4IGJpY3I7DQogfTsNCiANCiBzdHJ1Y3QgZnNnX2RldiB7DQpAQCAtMzY5LDYgKzM3MiwxMCBA
-QCBzdGF0aWMgdm9pZCBzZXRfYnVsa19vdXRfcmVxX2xlbmd0aChzdHJ1Y3QgZnNnX2NvbW1vbiAq
-Y29tbW9uLA0KIAlpZiAocmVtID4gMCkNCiAJCWxlbmd0aCArPSBjb21tb24tPmJ1bGtfb3V0X21h
-eHBhY2tldCAtIHJlbTsNCiAJYmgtPm91dHJlcS0+bGVuZ3RoID0gbGVuZ3RoOw0KKw0KKwkvKiBz
-b21lIFVTQiAyLjAgaGFyZHdhcmUgcmVxdWlyZXMgdGhpcyBzZXR0aW5nICovDQorCWlmIChJU19F
-TkFCTEVEKFVTQl9DT05GSUdGU19CSUNSKSkNCisJCWJoLT5vdXRyZXEtPnNob3J0X25vdF9vayA9
-IDE7DQogfQ0KIA0KIA0KQEAgLTUyNyw3ICs1MzQsMTYgQEAgc3RhdGljIGludCBmc2dfc2V0dXAo
-c3RydWN0IHVzYl9mdW5jdGlvbiAqZiwNCiAJCQkJd19sZW5ndGggIT0gMSkNCiAJCQlyZXR1cm4g
-LUVET007DQogCQlWREJHKGZzZywgImdldCBtYXggTFVOXG4iKTsNCi0JCSoodTggKilyZXEtPmJ1
-ZiA9IF9mc2dfY29tbW9uX2dldF9tYXhfbHVuKGZzZy0+Y29tbW9uKTsNCisJCWlmIChJU19FTkFC
-TEVEKFVTQl9DT05GSUdGU19CSUNSKSAmJiBmc2ctPmNvbW1vbi0+Ymljcikgew0KKwkJCS8qDQor
-CQkJICogV2hlbiBCdWlsdC1JbiBDRFJPTSBpcyBlbmFibGVkLA0KKwkJCSAqIHdlIHNoYXJlIG9u
-bHkgb25lIExVTi4NCisJCQkgKi8NCisJCQkqKHU4ICopcmVxLT5idWYgPSAwOw0KKwkJfSBlbHNl
-IHsNCisJCQkqKHU4ICopcmVxLT5idWYgPSBfZnNnX2NvbW1vbl9nZXRfbWF4X2x1bihmc2ctPmNv
-bW1vbik7DQorCQl9DQorCQlJTkZPKGZzZywgImdldCBtYXggTFVOID0gJWRcbiIsICoodTggKily
-ZXEtPmJ1Zik7DQogDQogCQkvKiBSZXNwb25kIHdpdGggZGF0YS9zdGF0dXMgKi8NCiAJCXJlcS0+
-bGVuZ3RoID0gbWluKCh1MTYpMSwgd19sZW5ndGgpOw0KQEAgLTEzMjksNyArMTM0NSw3IEBAIHN0
-YXRpYyBpbnQgZG9fc3RhcnRfc3RvcChzdHJ1Y3QgZnNnX2NvbW1vbiAqY29tbW9uKQ0KIAl9DQog
-DQogCS8qIEFyZSB3ZSBhbGxvd2VkIHRvIHVubG9hZCB0aGUgbWVkaWE/ICovDQotCWlmIChjdXJs
-dW4tPnByZXZlbnRfbWVkaXVtX3JlbW92YWwpIHsNCisJaWYgKCFjdXJsdW4tPm5vZnVhICYmIGN1
-cmx1bi0+cHJldmVudF9tZWRpdW1fcmVtb3ZhbCkgew0KIAkJTERCRyhjdXJsdW4sICJ1bmxvYWQg
-YXR0ZW1wdCBwcmV2ZW50ZWRcbiIpOw0KIAkJY3VybHVuLT5zZW5zZV9kYXRhID0gU1NfTUVESVVN
-X1JFTU9WQUxfUFJFVkVOVEVEOw0KIAkJcmV0dXJuIC1FSU5WQUw7DQpAQCAtMjY5Miw2ICsyNzA4
-LDcgQEAgaW50IGZzZ19jb21tb25fc2V0X2NkZXYoc3RydWN0IGZzZ19jb21tb24gKmNvbW1vbiwN
-CiAJY29tbW9uLT5lcDAgPSBjZGV2LT5nYWRnZXQtPmVwMDsNCiAJY29tbW9uLT5lcDByZXEgPSBj
-ZGV2LT5yZXE7DQogCWNvbW1vbi0+Y2RldiA9IGNkZXY7DQorCWNvbW1vbi0+YmljciA9IDA7DQog
-DQogCXVzID0gdXNiX2dzdHJpbmdzX2F0dGFjaChjZGV2LCBmc2dfc3RyaW5nc19hcnJheSwNCiAJ
-CQkJIEFSUkFZX1NJWkUoZnNnX3N0cmluZ3MpKTsNCkBAIC0yODk1LDYgKzI5MTIsMzMgQEAgc3Rh
-dGljIHZvaWQgZnNnX2NvbW1vbl9yZWxlYXNlKHN0cnVjdCBmc2dfY29tbW9uICpjb21tb24pDQog
-CQlrZnJlZShjb21tb24pOw0KIH0NCiANCisjaWZkZWYgVVNCX0NPTkZJR0ZTX0JJQ1INCitzc2l6
-ZV90IGZzZ19iaWNyX3Nob3coc3RydWN0IGZzZ19jb21tb24gKmNvbW1vbiwgY2hhciAqYnVmKQ0K
-K3sNCisJcmV0dXJuIHNwcmludGYoYnVmLCAiJWRcbiIsIGNvbW1vbi0+Ymljcik7DQorfQ0KKw0K
-K3NzaXplX3QgZnNnX2JpY3Jfc3RvcmUoc3RydWN0IGZzZ19jb21tb24gKmNvbW1vbiwgY29uc3Qg
-Y2hhciAqYnVmLCBzaXplX3Qgc2l6ZSkNCit7DQorCWludCByZXQ7DQorDQorCXJldCA9IGtzdHJ0
-b3U4KGJ1ZiwgMTAsICZjb21tb24tPmJpY3IpOw0KKwlpZiAocmV0KQ0KKwkJcmV0dXJuIC1FSU5W
-QUw7DQorDQorCS8qIFNldCBMdW5bMF0gaXMgYSBDRFJPTSB3aGVuIGVuYWJsZSBiaWNyLiovDQor
-CWlmICghc3RyY21wKGJ1ZiwgIjEiKSkNCisJCWNvbW1vbi0+bHVuc1swXS0+Y2Ryb20gPSAxOw0K
-KwllbHNlIHsNCisJCWNvbW1vbi0+bHVuc1swXS0+Y2Ryb20gPSAwOw0KKwkJY29tbW9uLT5sdW5z
-WzBdLT5ibGtiaXRzID0gMDsNCisJCWNvbW1vbi0+bHVuc1swXS0+Ymxrc2l6ZSA9IDA7DQorCQlj
-b21tb24tPmx1bnNbMF0tPm51bV9zZWN0b3JzID0gMDsNCisJfQ0KKw0KKwlyZXR1cm4gc2l6ZTsN
-Cit9DQorI2VuZGlmDQogDQogLyotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tKi8NCiANCkBAIC0zNDYzLDYgKzM1
-MDcsNyBAQCB2b2lkIGZzZ19jb25maWdfZnJvbV9wYXJhbXMoc3RydWN0IGZzZ19jb25maWcgKmNm
-ZywNCiAJCWx1bi0+cm8gPSAhIXBhcmFtcy0+cm9baV07DQogCQlsdW4tPmNkcm9tID0gISFwYXJh
-bXMtPmNkcm9tW2ldOw0KIAkJbHVuLT5yZW1vdmFibGUgPSAhIXBhcmFtcy0+cmVtb3ZhYmxlW2ld
-Ow0KKwkJbHVuLT5ub2Z1YSA9ICEhcGFyYW1zLT5ub2Z1YVtpXTsNCiAJCWx1bi0+ZmlsZW5hbWUg
-PQ0KIAkJCXBhcmFtcy0+ZmlsZV9jb3VudCA+IGkgJiYgcGFyYW1zLT5maWxlW2ldWzBdDQogCQkJ
-PyBwYXJhbXMtPmZpbGVbaV0NCmRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9nYWRnZXQvZnVuY3Rp
-b24vZl9tYXNzX3N0b3JhZ2UuaCBiL2RyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi9mX21hc3Nf
-c3RvcmFnZS5oDQppbmRleCAzYjhjNGNlMmE0MGEuLjcwOTdlMmVhNWNjOSAxMDA2NDQNCi0tLSBh
-L2RyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi9mX21hc3Nfc3RvcmFnZS5oDQorKysgYi9kcml2
-ZXJzL3VzYi9nYWRnZXQvZnVuY3Rpb24vZl9tYXNzX3N0b3JhZ2UuaA0KQEAgLTE0MCw1ICsxNDAs
-OCBAQCB2b2lkIGZzZ19jb21tb25fc2V0X2lucXVpcnlfc3RyaW5nKHN0cnVjdCBmc2dfY29tbW9u
-ICpjb21tb24sIGNvbnN0IGNoYXIgKnZuLA0KIHZvaWQgZnNnX2NvbmZpZ19mcm9tX3BhcmFtcyhz
-dHJ1Y3QgZnNnX2NvbmZpZyAqY2ZnLA0KIAkJCSAgICBjb25zdCBzdHJ1Y3QgZnNnX21vZHVsZV9w
-YXJhbWV0ZXJzICpwYXJhbXMsDQogCQkJICAgIHVuc2lnbmVkIGludCBmc2dfbnVtX2J1ZmZlcnMp
-Ow0KLQ0KKyNpZmRlZiBDT05GSUdfVVNCX0NPTkZJR0ZTX0JJQ1INCitzc2l6ZV90IGZzZ19iaWNy
-X3Nob3coc3RydWN0IGZzZ19jb21tb24gKmNvbW1vbiwgY2hhciAqYnVmKTsNCitzc2l6ZV90IGZz
-Z19iaWNyX3N0b3JlKHN0cnVjdCBmc2dfY29tbW9uICpjb21tb24sIGNvbnN0IGNoYXIgKmJ1Ziwg
-c2l6ZV90IHNpemUpOw0KKyNlbmRpZg0KICNlbmRpZiAvKiBVU0JfRl9NQVNTX1NUT1JBR0VfSCAq
-Lw0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi9zdG9yYWdlX2NvbW1v
-bi5jIGIvZHJpdmVycy91c2IvZ2FkZ2V0L2Z1bmN0aW9uL3N0b3JhZ2VfY29tbW9uLmMNCmluZGV4
-IGY3ZTZjNDI1NThlYi4uOGZlOTZlZWRkZjM1IDEwMDY0NA0KLS0tIGEvZHJpdmVycy91c2IvZ2Fk
-Z2V0L2Z1bmN0aW9uL3N0b3JhZ2VfY29tbW9uLmMNCisrKyBiL2RyaXZlcnMvdXNiL2dhZGdldC9m
-dW5jdGlvbi9zdG9yYWdlX2NvbW1vbi5jDQpAQCAtNDQxLDYgKzQ0MSwyOSBAQCBzc2l6ZV90IGZz
-Z19zdG9yZV9maWxlKHN0cnVjdCBmc2dfbHVuICpjdXJsdW4sIHN0cnVjdCByd19zZW1hcGhvcmUg
-KmZpbGVzZW0sDQogCQlyZXR1cm4gLUVCVVNZOwkJCQkvKiAiRG9vciBpcyBsb2NrZWQiICovDQog
-CX0NCiANCisJcHJfbm90aWNlKCIlcyBmaWxlPSVzLCBjb3VudD0lZCwgY3VybHVuLT5jZHJvbT0l
-ZFxuIiwNCisJCQlfX2Z1bmNfXywgYnVmLCAoaW50KWNvdW50LCBjdXJsdW4tPmNkcm9tKTsNCisN
-CisJLyoNCisJICogV09SS0FST1VORCBmb3IgQW5kcm9pZDoNCisJICogICBWT0xEIHdvdWxkIGNs
-ZWFuIHRoZSBmaWxlIHBhdGggYWZ0ZXIgc3dpdGNoaW5nIHRvIGJpY3IuDQorCSAqICAgU28gd2hl
-biB0aGUgbHVuIGlzIGJlaW5nIGEgQ0QtUk9NIGEuay5hLiBCSUNSLg0KKwkgKiAgIERvbid0IGNs
-ZWFuIHRoZSBmaWxlIHBhdGggdG8gZW1wdHkuDQorCSAqLw0KKwlpZiAoY3VybHVuLT5jZHJvbSA9
-PSAxICYmIGNvdW50ID09IDEpDQorCQlyZXR1cm4gY291bnQ7DQorDQorCS8qDQorCSAqIFdPUktB
-Uk9VTkQ6IFNob3VsZCBiZSBjbG9zZWQgdGhlIGZzZyBsdW4gZm9yIHZpcnR1YWwgY2Qtcm9tLA0K
-KwkgKiB3aGVuIHN3aXRjaCB0byBvdGhlciB1c2IgZnVuY3Rpb25zLg0KKwkgKiBVc2UgdGhlIHNw
-ZWNpYWwga2V5d29yZCAib2ZmIiwgYmVjYXVzZSB0aGUgaW5pdCBjYW4NCisJICogbm90IHBhcnNl
-IHRoZSBjaGFyICdcbicgaW4gcmMgZmlsZSBhbmQgd3JpdGUgaW50byB0aGUgc3lzZnMuDQorCSAq
-Lw0KKwlpZiAoY291bnQgPT0gMyAmJg0KKwkJCWJ1ZlswXSA9PSAnbycgJiYgYnVmWzFdID09ICdm
-JyAmJiBidWZbMl0gPT0gJ2YnICYmDQorCQkJZnNnX2x1bl9pc19vcGVuKGN1cmx1bikpDQorCQko
-KGNoYXIgKikgYnVmKVswXSA9IDA7DQorDQogCS8qIFJlbW92ZSBhIHRyYWlsaW5nIG5ld2xpbmUg
-Ki8NCiAJaWYgKGNvdW50ID4gMCAmJiBidWZbY291bnQtMV0gPT0gJ1xuJykNCiAJCSgoY2hhciAq
-KSBidWYpW2NvdW50LTFdID0gMDsJCS8qIFVnaCEgKi8NCi0tIA0KMi4xOC4wDQo=
+On 20-06-09 19:12:40, Li Jun wrote:
+> Add a property "snps,xhci-dis-64bit-support-quirk" to disable xhci 64bit
+> address support, this is due to SoC integration can't support it but
+> the AC64 bit (bit 0) of HCCPARAMS1 is set to be 1.
+>=20
+> Signed-off-by: Li Jun <jun.li@nxp.com>
+> ---
+>  Documentation/devicetree/bindings/usb/dwc3.txt | 3 +++
+>  1 file changed, 3 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt b/Documentati=
+on/devicetree/bindings/usb/dwc3.txt
+> index d03edf9..d16cba7 100644
+> --- a/Documentation/devicetree/bindings/usb/dwc3.txt
+> +++ b/Documentation/devicetree/bindings/usb/dwc3.txt
+> @@ -109,6 +109,9 @@ Optional properties:
+>  			When just one value, which means INCRX burst mode enabled. When
+>  			more than one value, which means undefined length INCR burst type
+>  			enabled. The values can be 1, 4, 8, 16, 32, 64, 128 and 256.
+> + - snps,xhci-dis-64bit-support-quirk: set if the AC64 bit (bit 0) of HCC=
+PARAMS1 is set
+> +			to be 1, but the controller actually can't handle 64-bit address
+> +			due to SoC integration.
+> =20
+>   - in addition all properties from usb-xhci.txt from the current directo=
+ry are
+>     supported as well
 
+Why not adding it at usb-xhci.txt directly? It is more like general
+property, I see Renesas rcar platforms also have this quirk.
+
+--=20
+
+Thanks,
+Peter Chen=
