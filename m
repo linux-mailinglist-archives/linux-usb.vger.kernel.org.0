@@ -2,186 +2,270 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EEC41F4DF6
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Jun 2020 08:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D01BB1F4E0F
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Jun 2020 08:22:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726119AbgFJGPd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 Jun 2020 02:15:33 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:14391 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725988AbgFJGPc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Jun 2020 02:15:32 -0400
-X-UUID: 327b123795a04ebf8d9fdc0b9bb252f6-20200610
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=81Y2fVdBy50AQH7tnAGVr/bbzD+zlTSuDvNwyWyE3pk=;
-        b=jtdmFDFjG+qvDMCWSc/8DriAaIKl4oqTGI/cGIZnqlaE8Cbayz3pWxNqoqLsw7Ir3KzE+kQuljCoaiPhMxzn4bLfMYXitK7Go/X1wTMWJ7v9yt6x216T2CNNDqrMttsE612bEajxaF6o08reMpbGoRK3v2VKU8yBb+XJLB1KLz0=;
-X-UUID: 327b123795a04ebf8d9fdc0b9bb252f6-20200610
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 903741230; Wed, 10 Jun 2020 14:15:25 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 10 Jun 2020 14:15:24 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 10 Jun 2020 14:15:23 +0800
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S1726253AbgFJGWI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 Jun 2020 02:22:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45548 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725988AbgFJGWH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 10 Jun 2020 02:22:07 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0C28D20760;
+        Wed, 10 Jun 2020 06:22:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591770126;
+        bh=D1SFR63cq6HdbYoMldj+B+CcxDon+vNFYZHvLNzb4QE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SeO+vuxaGdJAUy+ZxxqZEjcKUnpNVFFT2twB7fe/f+cS2GP7LedlGj4lNO8sWsFXj
+         HKyFudyoMZHOnrMjgI5zTa24sxdHVm4H7l+ASztXjMtlE7xmrN//CPHx+IE+DFZFfs
+         iCamBJgCJjFg5reJq6oUJstCEArJMQc1n552OIgU=
+Date:   Wed, 10 Jun 2020 08:22:04 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Macpaul Lin <macpaul.lin@mediatek.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         Alan Stern <stern@rowland.harvard.edu>,
         Bart Van Assche <bvanassche@acm.org>,
-        EJ Hsu <ejh@nvidia.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Peter Chen <peter.chen@nxp.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-CC:     Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>,
+        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
         Macpaul Lin <macpaul.lin@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-usb@vger.kernel.org, linux-mediatek@lists.infradead.org,
         Justin Hsieh <justinhsieh@google.com>,
         Hakieyin Hsieh <hakieyin@gmail.com>
-Subject: [PATCH v2] usb/gadget/function: introduce Built-in CDROM support
-Date:   Wed, 10 Jun 2020 14:15:18 +0800
-Message-ID: <1591769718-3287-1-git-send-email-macpaul.lin@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <1591756349-17865-1-git-send-email-macpaul.lin@mediatek.com>
-References: <1591756349-17865-1-git-send-email-macpaul.lin@mediatek.com>
+Subject: Re: [PATCH] usb/gadget/function: introduce Built-in CDROM support
+Message-ID: <20200610062204.GC1890802@kroah.com>
+References: <ejh@nvidia.com>
+ <mchehab+samsung@kernel.org>
+ <benh@kernel.crashing.org>
+ <1591756349-17865-1-git-send-email-macpaul.lin@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1591756349-17865-1-git-send-email-macpaul.lin@mediatek.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SW50cm9kdWNlIEJ1aWx0LUluIENEUk9NIChCSUNSKSBzdXBwb3J0Lg0KVGhpcyBmZWF0dXJlIGRl
-cGVuZHMgb24gVVNCX0NPTkZJR0ZTX01BU1NfU1RPUkFHRSBvcHRpb24uDQoNCjEuIFNvbWUgc2V0
-dGluZ3MgYW5kIG5ldyBmdW5jdGlvbiBpcyBpbnRyb2R1Y2VkIGZvciBCSUNSLg0KMi4gU29tZSB3
-b3JrIGFyb3VuZCBmb3IgYWRhcHRpbmcgQW5kcm9pZCBzZXR0aW5ncyBpcyBpbnRyb2R1Y2VkIGFz
-IHdlbGwuDQoNClNpZ25lZC1vZmYtYnk6IEp1c3RpbiBIc2llaCA8anVzdGluaHNpZWhAZ29vZ2xl
-LmNvbT4NClNpZ25lZC1vZmYtYnk6IEhha2lleWluIEhzaWVoIDxoYWtpZXlpbkBnbWFpbC5jb20+
-DQpTaWduZWQtb2ZmLWJ5OiBNYWNwYXVsIExpbiA8bWFjcGF1bC5saW5AbWVkaWF0ZWsuY29tPg0K
-LS0tDQpDaGFuZ2VzIGZvciB2MjoNCiAgLSBUaGFua3MgZm9yIFBldGVyJ3MgcmV2aWV3Lg0KICAg
-IC0gRml4IHR5cG8gaW4gY29tbWl0IG1lc3NhZ2UuDQogICAgLSB1c2UgdmFyaWFibGUgY29tbW9u
-LT5iaWNyIGluc3RlYWQgb2YgSVNfRU5BQkxFRCgpLg0KICAgIC0gRml4ICNpZmRlZiBDT05GSUdf
-VVNCX0NPTkZJR0ZTX0JJQ1IuDQoNCiBkcml2ZXJzL3VzYi9nYWRnZXQvS2NvbmZpZyAgICAgICAg
-ICAgICAgICAgICB8IDE2ICsrKysrKysNCiBkcml2ZXJzL3VzYi9nYWRnZXQvZnVuY3Rpb24vZl9t
-YXNzX3N0b3JhZ2UuYyB8IDQ5ICsrKysrKysrKysrKysrKysrKystDQogZHJpdmVycy91c2IvZ2Fk
-Z2V0L2Z1bmN0aW9uL2ZfbWFzc19zdG9yYWdlLmggfCAgNSArLQ0KIGRyaXZlcnMvdXNiL2dhZGdl
-dC9mdW5jdGlvbi9zdG9yYWdlX2NvbW1vbi5jIHwgMjMgKysrKysrKysrDQogNCBmaWxlcyBjaGFu
-Z2VkLCA5MCBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQ0KDQpkaWZmIC0tZ2l0IGEvZHJp
-dmVycy91c2IvZ2FkZ2V0L0tjb25maWcgYi9kcml2ZXJzL3VzYi9nYWRnZXQvS2NvbmZpZw0KaW5k
-ZXggNGRjNGQ0OGZlNmE2Li42ODZiYTAxYmVkYjUgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL3VzYi9n
-YWRnZXQvS2NvbmZpZw0KKysrIGIvZHJpdmVycy91c2IvZ2FkZ2V0L0tjb25maWcNCkBAIC0xODgs
-NiArMTg4LDkgQEAgY29uZmlnIFVTQl9GX1JORElTDQogY29uZmlnIFVTQl9GX01BU1NfU1RPUkFH
-RQ0KIAl0cmlzdGF0ZQ0KIA0KK2NvbmZpZyBVU0JfRl9CSUNSDQorCXRyaXN0YXRlDQorDQogY29u
-ZmlnIFVTQl9GX0ZTDQogCXRyaXN0YXRlDQogDQpAQCAtMzU3LDYgKzM2MCwxOSBAQCBjb25maWcg
-VVNCX0NPTkZJR0ZTX01BU1NfU1RPUkFHRQ0KIAkgIGRldmljZSAoaW4gbXVjaCB0aGUgc2FtZSB3
-YXkgYXMgdGhlICJsb29wIiBkZXZpY2UgZHJpdmVyKSwNCiAJICBzcGVjaWZpZWQgYXMgYSBtb2R1
-bGUgcGFyYW1ldGVyIG9yIHN5c2ZzIG9wdGlvbi4NCiANCitjb25maWcgVVNCX0NPTkZJR0ZTX0JJ
-Q1INCisJYm9vbCAiQnVpbHQtSW4gQ0RST00gZW11bGF0aW9uIg0KKwlkZXBlbmRzIG9uIFVTQl9D
-T05GSUdGUw0KKwlkZXBlbmRzIG9uIEJMT0NLDQorCWRlcGVuZHMgb24gVVNCX0NPTkZJR0ZTX01B
-U1NfU1RPUkFHRQ0KKwlzZWxlY3QgVVNCX0ZfQklDUg0KKwloZWxwDQorCSAgVGhlIEJ1aWxkLUlu
-IENEUk9NIEdhZGdldCBhY3RzIGFzIGEgQ0RST00gZW11bGF0aW9uIGRpc2sgZHJpdmUuDQorCSAg
-SXQgaXMgYmFzZWQgb24ga2VybmVsIG9wdGlvbiAiVVNCX0NPTkZJR0ZTX01BU1NfU1RPUkFHRSIu
-DQorCSAgQXMgaXRzIHN0b3JhZ2UgcmVwb3NpdG9yeSBpdCBjYW4gdXNlIGEgcmVndWxhciBmaWxl
-IG9yIGEgYmxvY2sNCisJICBkZXZpY2UgKGluIG11Y2ggdGhlIHNhbWUgd2F5IGFzIHRoZSAibG9v
-cCIgZGV2aWNlIGRyaXZlciksDQorCSAgc3BlY2lmaWVkIGFzIGEgbW9kdWxlIHBhcmFtZXRlciBv
-ciBzeXNmcyBvcHRpb24uDQorDQogY29uZmlnIFVTQl9DT05GSUdGU19GX0xCX1NTDQogCWJvb2wg
-Ikxvb3BiYWNrIGFuZCBzb3VyY2VzaW5rIGZ1bmN0aW9uIChmb3IgdGVzdGluZykiDQogCWRlcGVu
-ZHMgb24gVVNCX0NPTkZJR0ZTDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvZ2FkZ2V0L2Z1bmN0
-aW9uL2ZfbWFzc19zdG9yYWdlLmMgYi9kcml2ZXJzL3VzYi9nYWRnZXQvZnVuY3Rpb24vZl9tYXNz
-X3N0b3JhZ2UuYw0KaW5kZXggMzNjMjI2NGEwZTM1Li45ZGUxY2Q0NjU2MzUgMTAwNjQ0DQotLS0g
-YS9kcml2ZXJzL3VzYi9nYWRnZXQvZnVuY3Rpb24vZl9tYXNzX3N0b3JhZ2UuYw0KKysrIGIvZHJp
-dmVycy91c2IvZ2FkZ2V0L2Z1bmN0aW9uL2ZfbWFzc19zdG9yYWdlLmMNCkBAIC0zMTUsNiArMzE1
-LDkgQEAgc3RydWN0IGZzZ19jb21tb24gew0KIAl2b2lkCQkJKnByaXZhdGVfZGF0YTsNCiANCiAJ
-Y2hhciBpbnF1aXJ5X3N0cmluZ1tJTlFVSVJZX1NUUklOR19MRU5dOw0KKw0KKwkvKiBGb3IgYnVp
-bGQtaW4gQ0RST00gKi8NCisJdTggYmljcjsNCiB9Ow0KIA0KIHN0cnVjdCBmc2dfZGV2IHsNCkBA
-IC0zNjksNiArMzcyLDEwIEBAIHN0YXRpYyB2b2lkIHNldF9idWxrX291dF9yZXFfbGVuZ3RoKHN0
-cnVjdCBmc2dfY29tbW9uICpjb21tb24sDQogCWlmIChyZW0gPiAwKQ0KIAkJbGVuZ3RoICs9IGNv
-bW1vbi0+YnVsa19vdXRfbWF4cGFja2V0IC0gcmVtOw0KIAliaC0+b3V0cmVxLT5sZW5ndGggPSBs
-ZW5ndGg7DQorDQorCS8qIHNvbWUgVVNCIDIuMCBoYXJkd2FyZSByZXF1aXJlcyB0aGlzIHNldHRp
-bmcgKi8NCisJaWYgKGNvbW1vbi0+YmljcikNCisJCWJoLT5vdXRyZXEtPnNob3J0X25vdF9vayA9
-IDE7DQogfQ0KIA0KIA0KQEAgLTUyNyw3ICs1MzQsMTYgQEAgc3RhdGljIGludCBmc2dfc2V0dXAo
-c3RydWN0IHVzYl9mdW5jdGlvbiAqZiwNCiAJCQkJd19sZW5ndGggIT0gMSkNCiAJCQlyZXR1cm4g
-LUVET007DQogCQlWREJHKGZzZywgImdldCBtYXggTFVOXG4iKTsNCi0JCSoodTggKilyZXEtPmJ1
-ZiA9IF9mc2dfY29tbW9uX2dldF9tYXhfbHVuKGZzZy0+Y29tbW9uKTsNCisJCWlmIChJU19FTkFC
-TEVEKFVTQl9DT05GSUdGU19CSUNSKSAmJiBmc2ctPmNvbW1vbi0+Ymljcikgew0KKwkJCS8qDQor
-CQkJICogV2hlbiBCdWlsdC1JbiBDRFJPTSBpcyBlbmFibGVkLA0KKwkJCSAqIHdlIHNoYXJlIG9u
-bHkgb25lIExVTi4NCisJCQkgKi8NCisJCQkqKHU4ICopcmVxLT5idWYgPSAwOw0KKwkJfSBlbHNl
-IHsNCisJCQkqKHU4ICopcmVxLT5idWYgPSBfZnNnX2NvbW1vbl9nZXRfbWF4X2x1bihmc2ctPmNv
-bW1vbik7DQorCQl9DQorCQlJTkZPKGZzZywgImdldCBtYXggTFVOID0gJWRcbiIsICoodTggKily
-ZXEtPmJ1Zik7DQogDQogCQkvKiBSZXNwb25kIHdpdGggZGF0YS9zdGF0dXMgKi8NCiAJCXJlcS0+
-bGVuZ3RoID0gbWluKCh1MTYpMSwgd19sZW5ndGgpOw0KQEAgLTEzMjksNyArMTM0NSw3IEBAIHN0
-YXRpYyBpbnQgZG9fc3RhcnRfc3RvcChzdHJ1Y3QgZnNnX2NvbW1vbiAqY29tbW9uKQ0KIAl9DQog
-DQogCS8qIEFyZSB3ZSBhbGxvd2VkIHRvIHVubG9hZCB0aGUgbWVkaWE/ICovDQotCWlmIChjdXJs
-dW4tPnByZXZlbnRfbWVkaXVtX3JlbW92YWwpIHsNCisJaWYgKCFjdXJsdW4tPm5vZnVhICYmIGN1
-cmx1bi0+cHJldmVudF9tZWRpdW1fcmVtb3ZhbCkgew0KIAkJTERCRyhjdXJsdW4sICJ1bmxvYWQg
-YXR0ZW1wdCBwcmV2ZW50ZWRcbiIpOw0KIAkJY3VybHVuLT5zZW5zZV9kYXRhID0gU1NfTUVESVVN
-X1JFTU9WQUxfUFJFVkVOVEVEOw0KIAkJcmV0dXJuIC1FSU5WQUw7DQpAQCAtMjY5Miw2ICsyNzA4
-LDcgQEAgaW50IGZzZ19jb21tb25fc2V0X2NkZXYoc3RydWN0IGZzZ19jb21tb24gKmNvbW1vbiwN
-CiAJY29tbW9uLT5lcDAgPSBjZGV2LT5nYWRnZXQtPmVwMDsNCiAJY29tbW9uLT5lcDByZXEgPSBj
-ZGV2LT5yZXE7DQogCWNvbW1vbi0+Y2RldiA9IGNkZXY7DQorCWNvbW1vbi0+YmljciA9IDA7DQog
-DQogCXVzID0gdXNiX2dzdHJpbmdzX2F0dGFjaChjZGV2LCBmc2dfc3RyaW5nc19hcnJheSwNCiAJ
-CQkJIEFSUkFZX1NJWkUoZnNnX3N0cmluZ3MpKTsNCkBAIC0yODk1LDYgKzI5MTIsMzMgQEAgc3Rh
-dGljIHZvaWQgZnNnX2NvbW1vbl9yZWxlYXNlKHN0cnVjdCBmc2dfY29tbW9uICpjb21tb24pDQog
-CQlrZnJlZShjb21tb24pOw0KIH0NCiANCisjaWZkZWYgQ09ORklHX1VTQl9DT05GSUdGU19CSUNS
-DQorc3NpemVfdCBmc2dfYmljcl9zaG93KHN0cnVjdCBmc2dfY29tbW9uICpjb21tb24sIGNoYXIg
-KmJ1ZikNCit7DQorCXJldHVybiBzcHJpbnRmKGJ1ZiwgIiVkXG4iLCBjb21tb24tPmJpY3IpOw0K
-K30NCisNCitzc2l6ZV90IGZzZ19iaWNyX3N0b3JlKHN0cnVjdCBmc2dfY29tbW9uICpjb21tb24s
-IGNvbnN0IGNoYXIgKmJ1Ziwgc2l6ZV90IHNpemUpDQorew0KKwlpbnQgcmV0Ow0KKw0KKwlyZXQg
-PSBrc3RydG91OChidWYsIDEwLCAmY29tbW9uLT5iaWNyKTsNCisJaWYgKHJldCkNCisJCXJldHVy
-biAtRUlOVkFMOw0KKw0KKwkvKiBTZXQgTHVuWzBdIGlzIGEgQ0RST00gd2hlbiBlbmFibGUgYmlj
-ci4qLw0KKwlpZiAoIXN0cmNtcChidWYsICIxIikpDQorCQljb21tb24tPmx1bnNbMF0tPmNkcm9t
-ID0gMTsNCisJZWxzZSB7DQorCQljb21tb24tPmx1bnNbMF0tPmNkcm9tID0gMDsNCisJCWNvbW1v
-bi0+bHVuc1swXS0+YmxrYml0cyA9IDA7DQorCQljb21tb24tPmx1bnNbMF0tPmJsa3NpemUgPSAw
-Ow0KKwkJY29tbW9uLT5sdW5zWzBdLT5udW1fc2VjdG9ycyA9IDA7DQorCX0NCisNCisJcmV0dXJu
-IHNpemU7DQorfQ0KKyNlbmRpZg0KIA0KIC8qLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSovDQogDQpAQCAtMzQ2
-Myw2ICszNTA3LDcgQEAgdm9pZCBmc2dfY29uZmlnX2Zyb21fcGFyYW1zKHN0cnVjdCBmc2dfY29u
-ZmlnICpjZmcsDQogCQlsdW4tPnJvID0gISFwYXJhbXMtPnJvW2ldOw0KIAkJbHVuLT5jZHJvbSA9
-ICEhcGFyYW1zLT5jZHJvbVtpXTsNCiAJCWx1bi0+cmVtb3ZhYmxlID0gISFwYXJhbXMtPnJlbW92
-YWJsZVtpXTsNCisJCWx1bi0+bm9mdWEgPSAhIXBhcmFtcy0+bm9mdWFbaV07DQogCQlsdW4tPmZp
-bGVuYW1lID0NCiAJCQlwYXJhbXMtPmZpbGVfY291bnQgPiBpICYmIHBhcmFtcy0+ZmlsZVtpXVsw
-XQ0KIAkJCT8gcGFyYW1zLT5maWxlW2ldDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvZ2FkZ2V0
-L2Z1bmN0aW9uL2ZfbWFzc19zdG9yYWdlLmggYi9kcml2ZXJzL3VzYi9nYWRnZXQvZnVuY3Rpb24v
-Zl9tYXNzX3N0b3JhZ2UuaA0KaW5kZXggM2I4YzRjZTJhNDBhLi43MDk3ZTJlYTVjYzkgMTAwNjQ0
-DQotLS0gYS9kcml2ZXJzL3VzYi9nYWRnZXQvZnVuY3Rpb24vZl9tYXNzX3N0b3JhZ2UuaA0KKysr
-IGIvZHJpdmVycy91c2IvZ2FkZ2V0L2Z1bmN0aW9uL2ZfbWFzc19zdG9yYWdlLmgNCkBAIC0xNDAs
-NSArMTQwLDggQEAgdm9pZCBmc2dfY29tbW9uX3NldF9pbnF1aXJ5X3N0cmluZyhzdHJ1Y3QgZnNn
-X2NvbW1vbiAqY29tbW9uLCBjb25zdCBjaGFyICp2biwNCiB2b2lkIGZzZ19jb25maWdfZnJvbV9w
-YXJhbXMoc3RydWN0IGZzZ19jb25maWcgKmNmZywNCiAJCQkgICAgY29uc3Qgc3RydWN0IGZzZ19t
-b2R1bGVfcGFyYW1ldGVycyAqcGFyYW1zLA0KIAkJCSAgICB1bnNpZ25lZCBpbnQgZnNnX251bV9i
-dWZmZXJzKTsNCi0NCisjaWZkZWYgQ09ORklHX1VTQl9DT05GSUdGU19CSUNSDQorc3NpemVfdCBm
-c2dfYmljcl9zaG93KHN0cnVjdCBmc2dfY29tbW9uICpjb21tb24sIGNoYXIgKmJ1Zik7DQorc3Np
-emVfdCBmc2dfYmljcl9zdG9yZShzdHJ1Y3QgZnNnX2NvbW1vbiAqY29tbW9uLCBjb25zdCBjaGFy
-ICpidWYsIHNpemVfdCBzaXplKTsNCisjZW5kaWYNCiAjZW5kaWYgLyogVVNCX0ZfTUFTU19TVE9S
-QUdFX0ggKi8NCmRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9nYWRnZXQvZnVuY3Rpb24vc3RvcmFn
-ZV9jb21tb24uYyBiL2RyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi9zdG9yYWdlX2NvbW1vbi5j
-DQppbmRleCBmN2U2YzQyNTU4ZWIuLjhmZTk2ZWVkZGYzNSAxMDA2NDQNCi0tLSBhL2RyaXZlcnMv
-dXNiL2dhZGdldC9mdW5jdGlvbi9zdG9yYWdlX2NvbW1vbi5jDQorKysgYi9kcml2ZXJzL3VzYi9n
-YWRnZXQvZnVuY3Rpb24vc3RvcmFnZV9jb21tb24uYw0KQEAgLTQ0MSw2ICs0NDEsMjkgQEAgc3Np
-emVfdCBmc2dfc3RvcmVfZmlsZShzdHJ1Y3QgZnNnX2x1biAqY3VybHVuLCBzdHJ1Y3Qgcndfc2Vt
-YXBob3JlICpmaWxlc2VtLA0KIAkJcmV0dXJuIC1FQlVTWTsJCQkJLyogIkRvb3IgaXMgbG9ja2Vk
-IiAqLw0KIAl9DQogDQorCXByX25vdGljZSgiJXMgZmlsZT0lcywgY291bnQ9JWQsIGN1cmx1bi0+
-Y2Ryb209JWRcbiIsDQorCQkJX19mdW5jX18sIGJ1ZiwgKGludCljb3VudCwgY3VybHVuLT5jZHJv
-bSk7DQorDQorCS8qDQorCSAqIFdPUktBUk9VTkQgZm9yIEFuZHJvaWQ6DQorCSAqICAgVk9MRCB3
-b3VsZCBjbGVhbiB0aGUgZmlsZSBwYXRoIGFmdGVyIHN3aXRjaGluZyB0byBiaWNyLg0KKwkgKiAg
-IFNvIHdoZW4gdGhlIGx1biBpcyBiZWluZyBhIENELVJPTSBhLmsuYS4gQklDUi4NCisJICogICBE
-b24ndCBjbGVhbiB0aGUgZmlsZSBwYXRoIHRvIGVtcHR5Lg0KKwkgKi8NCisJaWYgKGN1cmx1bi0+
-Y2Ryb20gPT0gMSAmJiBjb3VudCA9PSAxKQ0KKwkJcmV0dXJuIGNvdW50Ow0KKw0KKwkvKg0KKwkg
-KiBXT1JLQVJPVU5EOiBTaG91bGQgYmUgY2xvc2VkIHRoZSBmc2cgbHVuIGZvciB2aXJ0dWFsIGNk
-LXJvbSwNCisJICogd2hlbiBzd2l0Y2ggdG8gb3RoZXIgdXNiIGZ1bmN0aW9ucy4NCisJICogVXNl
-IHRoZSBzcGVjaWFsIGtleXdvcmQgIm9mZiIsIGJlY2F1c2UgdGhlIGluaXQgY2FuDQorCSAqIG5v
-dCBwYXJzZSB0aGUgY2hhciAnXG4nIGluIHJjIGZpbGUgYW5kIHdyaXRlIGludG8gdGhlIHN5c2Zz
-Lg0KKwkgKi8NCisJaWYgKGNvdW50ID09IDMgJiYNCisJCQlidWZbMF0gPT0gJ28nICYmIGJ1Zlsx
-XSA9PSAnZicgJiYgYnVmWzJdID09ICdmJyAmJg0KKwkJCWZzZ19sdW5faXNfb3BlbihjdXJsdW4p
-KQ0KKwkJKChjaGFyICopIGJ1ZilbMF0gPSAwOw0KKw0KIAkvKiBSZW1vdmUgYSB0cmFpbGluZyBu
-ZXdsaW5lICovDQogCWlmIChjb3VudCA+IDAgJiYgYnVmW2NvdW50LTFdID09ICdcbicpDQogCQko
-KGNoYXIgKikgYnVmKVtjb3VudC0xXSA9IDA7CQkvKiBVZ2ghICovDQotLSANCjIuMTguMA0K
+On Wed, Jun 10, 2020 at 10:32:29AM +0800, Macpaul Lin wrote:
+> Introduce Built-In CDROM (BICR) support.
+> This feature depends on USB_CONFIGFS_MASS_STORAGE option.
+> 
+> 1. Some settings and new function is introduced for BICR.
+> 2. Some work around for adapting Android settings is intorduced as well.
 
+If you have to list a number of things done in a single patch, you
+should break this up into multiple patches, as each patch should only do
+one thing.  Please make this a patch series.
+
+Also, you added new configuration settings, where are they documented?
+
+
+> 
+> Signed-off-by: Justin Hsieh <justinhsieh@google.com>
+> Signed-off-by: Hakieyin Hsieh <hakieyin@gmail.com>
+> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+> ---
+>  drivers/usb/gadget/Kconfig                   | 16 +++++++
+>  drivers/usb/gadget/function/f_mass_storage.c | 49 +++++++++++++++++++-
+>  drivers/usb/gadget/function/f_mass_storage.h |  5 +-
+>  drivers/usb/gadget/function/storage_common.c | 23 +++++++++
+>  4 files changed, 90 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/Kconfig b/drivers/usb/gadget/Kconfig
+> index 4dc4d48fe6a6..686ba01bedb5 100644
+> --- a/drivers/usb/gadget/Kconfig
+> +++ b/drivers/usb/gadget/Kconfig
+> @@ -188,6 +188,9 @@ config USB_F_RNDIS
+>  config USB_F_MASS_STORAGE
+>  	tristate
+>  
+> +config USB_F_BICR
+> +	tristate
+> +
+>  config USB_F_FS
+>  	tristate
+>  
+> @@ -357,6 +360,19 @@ config USB_CONFIGFS_MASS_STORAGE
+>  	  device (in much the same way as the "loop" device driver),
+>  	  specified as a module parameter or sysfs option.
+>  
+> +config USB_CONFIGFS_BICR
+> +	bool "Built-In CDROM emulation"
+> +	depends on USB_CONFIGFS
+> +	depends on BLOCK
+> +	depends on USB_CONFIGFS_MASS_STORAGE
+> +	select USB_F_BICR
+> +	help
+> +	  The Build-In CDROM Gadget acts as a CDROM emulation disk drive.
+> +	  It is based on kernel option "USB_CONFIGFS_MASS_STORAGE".
+> +	  As its storage repository it can use a regular file or a block
+> +	  device (in much the same way as the "loop" device driver),
+> +	  specified as a module parameter or sysfs option.
+> +
+>  config USB_CONFIGFS_F_LB_SS
+>  	bool "Loopback and sourcesink function (for testing)"
+>  	depends on USB_CONFIGFS
+> diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
+> index 33c2264a0e35..9de1cd465635 100644
+> --- a/drivers/usb/gadget/function/f_mass_storage.c
+> +++ b/drivers/usb/gadget/function/f_mass_storage.c
+> @@ -315,6 +315,9 @@ struct fsg_common {
+>  	void			*private_data;
+>  
+>  	char inquiry_string[INQUIRY_STRING_LEN];
+> +
+> +	/* For build-in CDROM */
+> +	u8 bicr;
+>  };
+>  
+>  struct fsg_dev {
+> @@ -369,6 +372,10 @@ static void set_bulk_out_req_length(struct fsg_common *common,
+>  	if (rem > 0)
+>  		length += common->bulk_out_maxpacket - rem;
+>  	bh->outreq->length = length;
+> +
+> +	/* some USB 2.0 hardware requires this setting */
+> +	if (IS_ENABLED(USB_CONFIGFS_BICR))
+> +		bh->outreq->short_not_ok = 1;
+>  }
+>  
+>  
+> @@ -527,7 +534,16 @@ static int fsg_setup(struct usb_function *f,
+>  				w_length != 1)
+>  			return -EDOM;
+>  		VDBG(fsg, "get max LUN\n");
+> -		*(u8 *)req->buf = _fsg_common_get_max_lun(fsg->common);
+> +		if (IS_ENABLED(USB_CONFIGFS_BICR) && fsg->common->bicr) {
+> +			/*
+> +			 * When Built-In CDROM is enabled,
+> +			 * we share only one LUN.
+> +			 */
+> +			*(u8 *)req->buf = 0;
+> +		} else {
+> +			*(u8 *)req->buf = _fsg_common_get_max_lun(fsg->common);
+> +		}
+> +		INFO(fsg, "get max LUN = %d\n", *(u8 *)req->buf);
+
+Why this message all the time?  Drivers should be quiet if all is good.
+
+
+
+>  
+>  		/* Respond with data/status */
+>  		req->length = min((u16)1, w_length);
+> @@ -1329,7 +1345,7 @@ static int do_start_stop(struct fsg_common *common)
+>  	}
+>  
+>  	/* Are we allowed to unload the media? */
+> -	if (curlun->prevent_medium_removal) {
+> +	if (!curlun->nofua && curlun->prevent_medium_removal) {
+>  		LDBG(curlun, "unload attempt prevented\n");
+>  		curlun->sense_data = SS_MEDIUM_REMOVAL_PREVENTED;
+>  		return -EINVAL;
+> @@ -2692,6 +2708,7 @@ int fsg_common_set_cdev(struct fsg_common *common,
+>  	common->ep0 = cdev->gadget->ep0;
+>  	common->ep0req = cdev->req;
+>  	common->cdev = cdev;
+> +	common->bicr = 0;
+>  
+>  	us = usb_gstrings_attach(cdev, fsg_strings_array,
+>  				 ARRAY_SIZE(fsg_strings));
+> @@ -2895,6 +2912,33 @@ static void fsg_common_release(struct fsg_common *common)
+>  		kfree(common);
+>  }
+>  
+> +#ifdef USB_CONFIGFS_BICR
+> +ssize_t fsg_bicr_show(struct fsg_common *common, char *buf)
+> +{
+> +	return sprintf(buf, "%d\n", common->bicr);
+> +}
+> +
+> +ssize_t fsg_bicr_store(struct fsg_common *common, const char *buf, size_t size)
+> +{
+> +	int ret;
+> +
+> +	ret = kstrtou8(buf, 10, &common->bicr);
+> +	if (ret)
+> +		return -EINVAL;
+> +
+> +	/* Set Lun[0] is a CDROM when enable bicr.*/
+> +	if (!strcmp(buf, "1"))
+> +		common->luns[0]->cdrom = 1;
+> +	else {
+> +		common->luns[0]->cdrom = 0;
+> +		common->luns[0]->blkbits = 0;
+> +		common->luns[0]->blksize = 0;
+> +		common->luns[0]->num_sectors = 0;
+> +	}
+> +
+> +	return size;
+> +}
+> +#endif
+>  
+>  /*-------------------------------------------------------------------------*/
+>  
+> @@ -3463,6 +3507,7 @@ void fsg_config_from_params(struct fsg_config *cfg,
+>  		lun->ro = !!params->ro[i];
+>  		lun->cdrom = !!params->cdrom[i];
+>  		lun->removable = !!params->removable[i];
+> +		lun->nofua = !!params->nofua[i];
+>  		lun->filename =
+>  			params->file_count > i && params->file[i][0]
+>  			? params->file[i]
+> diff --git a/drivers/usb/gadget/function/f_mass_storage.h b/drivers/usb/gadget/function/f_mass_storage.h
+> index 3b8c4ce2a40a..7097e2ea5cc9 100644
+> --- a/drivers/usb/gadget/function/f_mass_storage.h
+> +++ b/drivers/usb/gadget/function/f_mass_storage.h
+> @@ -140,5 +140,8 @@ void fsg_common_set_inquiry_string(struct fsg_common *common, const char *vn,
+>  void fsg_config_from_params(struct fsg_config *cfg,
+>  			    const struct fsg_module_parameters *params,
+>  			    unsigned int fsg_num_buffers);
+> -
+> +#ifdef CONFIG_USB_CONFIGFS_BICR
+> +ssize_t fsg_bicr_show(struct fsg_common *common, char *buf);
+> +ssize_t fsg_bicr_store(struct fsg_common *common, const char *buf, size_t size);
+> +#endif
+>  #endif /* USB_F_MASS_STORAGE_H */
+> diff --git a/drivers/usb/gadget/function/storage_common.c b/drivers/usb/gadget/function/storage_common.c
+> index f7e6c42558eb..8fe96eeddf35 100644
+> --- a/drivers/usb/gadget/function/storage_common.c
+> +++ b/drivers/usb/gadget/function/storage_common.c
+> @@ -441,6 +441,29 @@ ssize_t fsg_store_file(struct fsg_lun *curlun, struct rw_semaphore *filesem,
+>  		return -EBUSY;				/* "Door is locked" */
+>  	}
+>  
+> +	pr_notice("%s file=%s, count=%d, curlun->cdrom=%d\n",
+> +			__func__, buf, (int)count, curlun->cdrom);
+> +
+> +	/*
+> +	 * WORKAROUND for Android:
+> +	 *   VOLD would clean the file path after switching to bicr.
+> +	 *   So when the lun is being a CD-ROM a.k.a. BICR.
+> +	 *   Don't clean the file path to empty.
+> +	 */
+> +	if (curlun->cdrom == 1 && count == 1)
+> +		return count;
+> +
+> +	/*
+> +	 * WORKAROUND: Should be closed the fsg lun for virtual cd-rom,
+> +	 * when switch to other usb functions.
+> +	 * Use the special keyword "off", because the init can
+> +	 * not parse the char '\n' in rc file and write into the sysfs.
+> +	 */
+> +	if (count == 3 &&
+> +			buf[0] == 'o' && buf[1] == 'f' && buf[2] == 'f' &&
+> +			fsg_lun_is_open(curlun))
+> +		((char *) buf)[0] = 0;
+
+Why not fix Android userspace?  Wouldn't that be easier?
+
+And the indentation here is really odd...
+
+thanks,
+
+greg k-h
