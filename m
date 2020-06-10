@@ -2,47 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4DA41F56D9
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Jun 2020 16:32:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD8181F57ED
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Jun 2020 17:37:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726632AbgFJOcV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 Jun 2020 10:32:21 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:51685 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726506AbgFJOcV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Jun 2020 10:32:21 -0400
-Received: (qmail 14093 invoked by uid 1000); 10 Jun 2020 10:32:20 -0400
-Date:   Wed, 10 Jun 2020 10:32:20 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     mathias.nyman@intel.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] xhci: Suspend ports to U3 directly from U1 or U2
-Message-ID: <20200610143220.GC11727@rowland.harvard.edu>
-References: <20200610064231.9454-1-kai.heng.feng@canonical.com>
+        id S1730241AbgFJPhW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 Jun 2020 11:37:22 -0400
+Received: from mx2.suse.de ([195.135.220.15]:34026 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726955AbgFJPhV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 10 Jun 2020 11:37:21 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 345F3AD75;
+        Wed, 10 Jun 2020 15:37:23 +0000 (UTC)
+Message-ID: <252b688105ddff381798ec3150066288762178b0.camel@suse.de>
+Subject: Re: [PATCH v2 1/9] dt-bindings: reset: Add a binding for the RPi
+ Firmware reset controller
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        gregkh@linuxfoundation.org, wahrenst@gmx.net,
+        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Eric Anholt <eric@anholt.net>
+Cc:     linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, tim.gover@raspberrypi.org,
+        linux-pci@vger.kernel.org, helgaas@kernel.org,
+        andy.shevchenko@gmail.com, mathias.nyman@linux.intel.com,
+        lorenzo.pieralisi@arm.com, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org
+Date:   Wed, 10 Jun 2020 17:37:15 +0200
+In-Reply-To: <c3dc9b7e-4440-7e8a-3da8-b147c48c4c40@gmail.com>
+References: <20200609175003.19793-1-nsaenzjulienne@suse.de>
+         <20200609175003.19793-2-nsaenzjulienne@suse.de>
+         <c3dc9b7e-4440-7e8a-3da8-b147c48c4c40@gmail.com>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-n+aTWdme6r8Au4n90Rrf"
+User-Agent: Evolution 3.36.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200610064231.9454-1-kai.heng.feng@canonical.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 10, 2020 at 02:42:30PM +0800, Kai-Heng Feng wrote:
-> xHCI spec "4.15.1 Port Suspend" states that port can be put to U3 as long
-> as Enabled bit is set and from U0, U1 or U2 state.
-> 
-> Currently only USB_PORT_FEAT_LINK_STATE puts port to U3 directly, let's
-> do the same for USB_PORT_FEAT_SUSPEND and bus suspend case.
-> 
-> This is particularly useful for USB2 devices, which may take a very long
-> time to switch USB2 LPM on and off.
 
-Have these two patches been tested with a variety of USB-2.0 and USB-2.1 
-devices?
+--=-n+aTWdme6r8Au4n90Rrf
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Alan Stern
+Hi Florian, thanks for the review :)
+
+On Tue, 2020-06-09 at 11:07 -0700, Florian Fainelli wrote:
+>=20
+> On 6/9/2020 10:49 AM, Nicolas Saenz Julienne wrote:
+> > The firmware running on the RPi VideoCore can be used to reset and
+> > initialize HW controlled by the firmware.
+> >=20
+> > Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+> >=20
+> > ---
+> >=20
+> > Changes since v1:
+> >  - Correct cells binding as per Florian's comment
+> >  - Change compatible string to be more generic
+> >=20
+> >  .../arm/bcm/raspberrypi,bcm2835-firmware.yaml | 21 +++++++++++++++++++
+> >  1 file changed, 21 insertions(+)
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2=
+835-
+> > firmware.yaml
+> > b/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-
+> > firmware.yaml
+> > index b48ed875eb8e..23a885af3a28 100644
+> > --- a/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-
+> > firmware.yaml
+> > +++ b/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-
+> > firmware.yaml
+> > @@ -39,6 +39,22 @@ properties:
+> >        - compatible
+> >        - "#clock-cells"
+> > =20
+> > +  reset:
+> > +    type: object
+> > +
+> > +    properties:
+> > +      compatible:
+> > +        const: raspberrypi,firmware-reset
+> > +
+> > +      "#reset-cells":
+> > +        const: 1
+> > +        description: >
+>=20
+> Is this a stray '>' character? If so, with that fixed:
+
+No, it marks the formatting of the text below. | will keep the formatting a=
+s
+is, > will leave the formatting to whatever is going to use it.
+
+Regards,
+Nicolas
+
+
+--=-n+aTWdme6r8Au4n90Rrf
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl7g/isACgkQlfZmHno8
+x/5KnggAkIaMw+no0jjwGGwmLpYNI37OtXTlkJh7+vxBbP3/KDoYuOKodikYKYi7
+06IGVl60YiOtYKZmeBUpt5vxCnGpFdccflCssnih0CSXLSUYSA+0+XQ7/8WI+wDF
+iyBAZWn+BTleK3nJRM1EzWuiJvsH6hqE0X9SWqrH549wvJUKoh/EPMllsrrl2rr4
+k3MTRQ1qUaDh+m+ZxKA14Ah1Gwhm1nOnx0LLti9+W02o270Y7dQnWwzfXwlGJHPi
+kCkA5gj9PzDFq9+csd+n8ek73GJEoyQEsgphDBQbQCVb3uMpioF4jqdDxQaKFC21
+NG2lzd8rO+0Rlc3UUvOFg+sB04SUcg==
+=8jr+
+-----END PGP SIGNATURE-----
+
+--=-n+aTWdme6r8Au4n90Rrf--
+
