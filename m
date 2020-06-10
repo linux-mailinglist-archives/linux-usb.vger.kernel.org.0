@@ -2,75 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C4C21F5108
-	for <lists+linux-usb@lfdr.de>; Wed, 10 Jun 2020 11:21:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A2B71F5230
+	for <lists+linux-usb@lfdr.de>; Wed, 10 Jun 2020 12:25:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727111AbgFJJVg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 10 Jun 2020 05:21:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44122 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726219AbgFJJVe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 10 Jun 2020 05:21:34 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB746C03E96B
-        for <linux-usb@vger.kernel.org>; Wed, 10 Jun 2020 02:21:32 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id a9so1569968ljn.6
-        for <linux-usb@vger.kernel.org>; Wed, 10 Jun 2020 02:21:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=23+iiOsH90npQiNR3ps23JQX9xIarhkMtgHXf80ZkjI=;
-        b=OvZsfnmWeMFppV30C8OmPnNPBh8H3qR7jm2JTDO+Z+5ieP0haoDESFItogxILEfrRE
-         p0wwUO+37uofpeY56pts1TIRdwk6C47pt3HpCJLpv8roUkr5Hp0WcB/7iqEIRE9Id5KE
-         8ySDsiLxLjoLkK+cV+ZJWC0DbHa2yA5T71GO+jGXF1lQk+NX0Zy5qSZqNZrcNTzO3Rsb
-         1MesZs0DMGC0sIz95KWpGVODAF0IDc3uL9v4HbvlCRt/yMgKVnjXK+LvUrKskLHUcIvU
-         VQgrUer2Y3+NJ0lUBpveu+DvRVlHNW69SKoLmuPAEQ3ejgMYvVYrIjKYtr6nFBfjN3zG
-         8A/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=23+iiOsH90npQiNR3ps23JQX9xIarhkMtgHXf80ZkjI=;
-        b=In8kv8lH/q4N1aczW5dVEuiVLenPkPD1+C/Wj4gP/pbP+coqV0O8Huy5kmTbGiqjbS
-         LBKvgcw2VQ/cfBil6U1QtU6b35aEZ62mbcX7THfkxlq0Do982oqE8E7omqgnQPvkxA/R
-         jP+C2VT9nffjGf/5ro12PCTsSa18gnRcBOrsaUe+TpAX+GzTmPbS+q3X/f5HVWioZbfG
-         EtoGlE7bChab/9zJQzFgLUWP27UMv3vHvY82H2xOiMxk8a6RR17JrCC/j47Gg1aEUINg
-         NgwadKkmy8ZcH6CNb+f8NjIVt6wSrmONBjHA+ZCJbQ7P7PCnoTF9VBNAzbof00Jv0XVy
-         kGEg==
-X-Gm-Message-State: AOAM530ZZ5EWkRqFzwG7dSV//BG0D4NFA1BMLdNjLF8m7ZrDkhQgXVw8
-        mwuHWsnkl/5F8DKkUEl4c50qfg==
-X-Google-Smtp-Source: ABdhPJy7mSTt4o8mEJOvvz/shV15r9ISy8PzaErKT4YGXs2IXm8khPEYLvIgs+gCZp86ZDeL/jGYIw==
-X-Received: by 2002:a05:651c:1199:: with SMTP id w25mr1306889ljo.301.1591780891032;
-        Wed, 10 Jun 2020 02:21:31 -0700 (PDT)
-Received: from ?IPv6:2a00:1fa0:8b6:350a:b96f:7066:1c4d:ff8d? ([2a00:1fa0:8b6:350a:b96f:7066:1c4d:ff8d])
-        by smtp.gmail.com with ESMTPSA id o18sm4849528ljd.32.2020.06.10.02.21.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Jun 2020 02:21:30 -0700 (PDT)
-Subject: Re: [PATCH 2/2] USB: hub: Suspend and resume port with LPM enabled
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        mathias.nyman@intel.com
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Qi Zhou <atmgnd@outlook.com>,
-        Hardik Gajjar <hgajjar@de.adit-jv.com>,
-        Keiya Nobuta <nobuta.keiya@fujitsu.com>,
-        Jason Yan <yanaijie@huawei.com>,
-        David Heinzelmann <heinzelmann.david@gmail.com>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20200610064231.9454-1-kai.heng.feng@canonical.com>
- <20200610064231.9454-2-kai.heng.feng@canonical.com>
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Message-ID: <a6a241d4-309d-c022-b61b-050b90471324@cogentembedded.com>
-Date:   Wed, 10 Jun 2020 12:21:20 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
-MIME-Version: 1.0
-In-Reply-To: <20200610064231.9454-2-kai.heng.feng@canonical.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        id S1728149AbgFJKZk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 10 Jun 2020 06:25:40 -0400
+Received: from comms.puri.sm ([159.203.221.185]:45928 "EHLO comms.puri.sm"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726533AbgFJKZi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 10 Jun 2020 06:25:38 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id DCB5DDFAF7;
+        Wed, 10 Jun 2020 03:25:36 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id pG-POShH3U9r; Wed, 10 Jun 2020 03:25:35 -0700 (PDT)
+Subject: Re: Microchip USB2642 Hub not resuming from USB autosuspend
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        nicolas.ferre@microchip.com, ludovic.desroches@microchip.com,
+        cristian.birsan@microchip.com, iain.galloway@nxp.com
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "kernel@puri.sm" <kernel@puri.sm>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <8738e4d3-62b1-0144-107d-ff42000ed6c6@puri.sm>
+Autocrypt: addr=martin.kepplinger@puri.sm; keydata=
+ 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
+ ekMtxgNYb/8oDry09UFHbGHLsWn6oBo=
+Message-ID: <d2492ff1-c14e-7e75-1eab-31bbe687a450@puri.sm>
+Date:   Wed, 10 Jun 2020 12:25:25 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
+In-Reply-To: <8738e4d3-62b1-0144-107d-ff42000ed6c6@puri.sm>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
@@ -78,39 +117,56 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
-
-On 10.06.2020 9:42, Kai-Heng Feng wrote:
-
-> USB2 devices with LPM enabled may interrupt the system suspend:
-> [  932.510475] usb 1-7: usb suspend, wakeup 0
-> [  932.510549] hub 1-0:1.0: hub_suspend
-> [  932.510581] usb usb1: bus suspend, wakeup 0
-> [  932.510590] xhci_hcd 0000:00:14.0: port 9 not suspended
-> [  932.510593] xhci_hcd 0000:00:14.0: port 8 not suspended
-> ..
-> [  932.520323] xhci_hcd 0000:00:14.0: Port change event, 1-7, id 7, portsc: 0x400e03
-> ..
-> [  932.591405] PM: pci_pm_suspend(): hcd_pci_suspend+0x0/0x30 returns -16
-> [  932.591414] PM: dpm_run_callback(): pci_pm_suspend+0x0/0x160 returns -16
-> [  932.591418] PM: Device 0000:00:14.0 failed to suspend async: error -16
+On 26.05.20 09:04, Martin Kepplinger wrote:
+> hi all,
 > 
-> During system suspend, USB core will let HC suspends the device if it
-
-    Suspend. Perhaps can be fixed while applying...
-
-> doesn't have remote wakeup enabled and doesn't have any children.
-> However, from the log above we can see that the usb 1-7 doesn't get bus
-> suspended due to not in U0, because it requires a longer period for
-> disabling LPM. After a while the port finished its U2 -> U0 transition,
-> interrupts the suspend process.
+> our Librem 5 includes the microchip USB2642 hub with
+> integrated/connected SD cardcreader (and we connect the baseband modem
+> to it): https://www.microchip.com/wwwproducts/en/USB2642
 > 
-> Though PLC shouldn't be set for U2 -> U0 case, we can avoid all that by
-> directly put the port from U0/U1/U2 to U3, and solves this issue.
-            ^ putting                            ^ it?
+> When we remove the (integrated) SD cardreader entirely (in sysfs), the
+> Hub suspends as long as the modem doesn't need a connection. But then
+> the modem fails to *resume* the Hub. Linux xhci host times out and dies
+> during resuming, which leaves a system without the Hub entirely. You can
+> see some logs and tests here
+> https://source.puri.sm/Librem5/linux-next/issues/170#note_89808 (when
+> scrolling down).
+> 
+> Microchip says the their product has the following bug which results in
+> our problem:
+> https://microchipsupport.force.com/s/article/Device-attached-to-Hub-Downstream-Facing-Port-does-not-Resume-from-Suspend
+> (that may or may not be the real and only reason for our problem)
+> 
+> That issue suggests working around it in the HC by somehow
+> sending "HS SOF as soon as possible after the HS RESUME EOP".
+> 
+> We use imx8mq and the dwc3 driver for the designware USB hardware that
+> NXP documents in chapter 11.1.3 of the reference manual:
+> https://www.nxp.com/products/processors-and-microcontrollers/arm-processors/i-mx-applications-processors/i-mx-8-processors/i-mx-8m-family-armcortex-a53-cortex-m4-audio-voice-video:i.MX8M?tab=Documentation_Tab
+> 
+> What can we try to change in dwc3 or xhci drivers in order to achieve
+> sending SOF earlier after resume?
+> 
+> What else that I don't currently think of could lead to the USB
+> suspend/resume problem here?
+> 
 
-> Suggested-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-[...]
+Here's what USB traffic is going on when the connected (modem) device
+tries to resume the Hub, which fails:
 
-MBR, Sergei
+https://source.puri.sm/snippets/382
+
+you can see 1.3.x (SD cardreader) is being removed (manually) for this
+test (otherwise the Hub would never suspend). And I marked where I
+called the modem in order to resume...
+
+What could I try to change in order to improve my situation and make the
+Hub resume?
+
+
+btw, I'm still trying to get access to the DWC USB3 "programming guide"
+that is even reference in the mainline kernel docs:
+https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/usb/dwc3.txt#L101
+
+thanks,
+                              martin
