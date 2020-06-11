@@ -2,114 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 858581F642B
-	for <lists+linux-usb@lfdr.de>; Thu, 11 Jun 2020 11:01:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 099591F6A00
+	for <lists+linux-usb@lfdr.de>; Thu, 11 Jun 2020 16:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726868AbgFKJBf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Jun 2020 05:01:35 -0400
-Received: from mga03.intel.com ([134.134.136.65]:4803 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726790AbgFKJBf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 11 Jun 2020 05:01:35 -0400
-IronPort-SDR: KvLf+9Ogvw8N0u0grp2RQ022H0ic5Sr4PBQLlChemjuIl8dBz0SOtnAgcmXptgmV4eHygKLvrx
- EWTACex7fAwQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2020 02:01:35 -0700
-IronPort-SDR: 6ITRvQo4TaYdZoPDTI+zEjEv2DNIWe0IS8NPuGBRjpyrRvei3KLh76xmrcJ4dHShHvxTX7Ueog
- prduhYEpr2fQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,499,1583222400"; 
-   d="scan'208";a="260442809"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga007.jf.intel.com with ESMTP; 11 Jun 2020 02:01:34 -0700
-Received: from [10.214.154.243] (vramuthx-mobl1.gar.corp.intel.com [10.214.154.243])
-        by linux.intel.com (Postfix) with ESMTP id 5024B580458;
-        Thu, 11 Jun 2020 02:01:31 -0700 (PDT)
-Reply-To: vadivel.muruganx.ramuthevar@linux.intel.com
-Subject: Re: [PATCH v2 2/2] usb: phy: Add USB3 PHY support for Intel LGM SoC
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     linux-kernel@vger.kernel.org, balbi@kernel.org,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        robh@kernel.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, cheol.yong.kim@intel.com,
-        qi-ming.wu@intel.com, yin1.li@intel.com
-References: <20200611021246.3250-1-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20200611021246.3250-3-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20200611081254.GR2428291@smile.fi.intel.com>
- <21b5db0e-c45a-2255-0389-04b204685d63@linux.intel.com>
- <20200611085710.GV2428291@smile.fi.intel.com>
-From:   "Ramuthevar, Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>
-Message-ID: <086e01da-a834-4745-022a-8d59c52f98d6@linux.intel.com>
-Date:   Thu, 11 Jun 2020 17:01:29 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.1
-MIME-Version: 1.0
-In-Reply-To: <20200611085710.GV2428291@smile.fi.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1728346AbgFKO24 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 11 Jun 2020 10:28:56 -0400
+Received: from alexa-out-blr-02.qualcomm.com ([103.229.18.198]:25936 "EHLO
+        alexa-out-blr-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728321AbgFKO2z (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 11 Jun 2020 10:28:55 -0400
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by alexa-out-blr-02.qualcomm.com with ESMTP/TLS/AES256-SHA; 11 Jun 2020 19:58:44 +0530
+Received: from c-sanm-linux.qualcomm.com ([10.206.25.31])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 11 Jun 2020 19:58:16 +0530
+Received: by c-sanm-linux.qualcomm.com (Postfix, from userid 2343233)
+        id E908B2AC5; Thu, 11 Jun 2020 19:58:14 +0530 (IST)
+From:   Sandeep Maheswaram <sanm@codeaurora.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Michael Turquette <mturquette@baylibre.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manu Gautam <mgautam@codeaurora.org>,
+        linux-clk@vger.kernel.org, Taniya Das <tdas@codeaurora.org>,
+        Sandeep Maheswaram <sanm@codeaurora.org>
+Subject: [PATCH 0/2] usb: dwc3:  Host wake up support from system suspend
+Date:   Thu, 11 Jun 2020 19:58:01 +0530
+Message-Id: <1591885683-29514-1-git-send-email-sanm@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Andy,
+Avoiding phy powerdown in host mode so that it can be wake up by devices.
+Set usb controller wakeup capable when wakeup capable devices are
+connected to the host.
 
-  Thank you very much for prompt review comments...
+Added GENPD_FLAG_ACTIVE_WAKEUP flag to keep usb30_prim gdsc active
+when  wakeup capable devices are connected to the host.
 
-On 11/6/2020 4:57 pm, Andy Shevchenko wrote:
-> On Thu, Jun 11, 2020 at 04:36:29PM +0800, Ramuthevar, Vadivel MuruganX wrote:
->> On 11/6/2020 4:12 pm, Andy Shevchenko wrote:
->>> On Thu, Jun 11, 2020 at 10:12:46AM +0800, Ramuthevar,Vadivel MuruganX wrote:
->>>> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
-> 
-> ...
-> 
->>>> +	ret = readl_poll_timeout(ctrl1, val, val & SRAM_INIT_DONE,
->>>> +				 10, 10 * 1000);
->> exceeds more than 80 characters, so checkpatch throws warnings, to avoid
->> that move to next line.
-> 
->>> On one line easier to read.
-> 
-> It's 82 characters. It's fine.
-Noted.
-> 
->>>> +	if (ret) {
->>>> +		dev_err(ta->phy.dev, "SRAM init failed, 0x%x\n", val);
->>>> +		return ret;
->>>> +	}
-> 
-> ...
-> 
->>>> +	int ret = 0;
->>>
->>> Assignment is redundant.
->> so you mean , should be declared as
->> int ret;
->> right?
-> 
-> Right.
-okay, Thanks!
-> 
-> ...
-> 
->>>> +		dev_info(ta->phy.dev, "connected%s\n",
->>>> +			 flipped ? " flipped" : "");
->>>
->>> One line.
->> exceeds more than 80 characters, so checkpatch throw warnings, to avoid that
->> moved to next line.
-> 
-> It's fine to have on one line.
-> 
-> And by the way, try new checkpatch.
-Sure , will try and fix it.
+Sandeep Maheswaram (1):
+  usb: dwc3: Host wake up support from system suspend
 
-Regards
-Vadivel
-> 
-> 
+Taniya Das (1):
+  clk: qcom: gcc: Add genpd active wakeup flag for sc7180
+
+ drivers/clk/qcom/gcc-sc7180.c |  1 +
+ drivers/usb/dwc3/core.c       | 47 +++++++++++++++++++++++++-----
+ drivers/usb/dwc3/core.h       |  1 +
+ drivers/usb/dwc3/dwc3-qcom.c  | 66 ++++++++++++++++++++++++++++++++-----------
+ 4 files changed, 92 insertions(+), 23 deletions(-)
+
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
+
