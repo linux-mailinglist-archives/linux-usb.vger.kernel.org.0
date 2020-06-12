@@ -2,98 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C01F1F7298
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Jun 2020 05:44:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3C071F72C0
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Jun 2020 06:15:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726468AbgFLDoL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 11 Jun 2020 23:44:11 -0400
-Received: from mail5.windriver.com ([192.103.53.11]:41402 "EHLO mail5.wrs.com"
+        id S1726391AbgFLEPs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 Jun 2020 00:15:48 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:25839 "EHLO m43-7.mailgun.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726321AbgFLDoL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 11 Jun 2020 23:44:11 -0400
-Received: from ALA-HCA.corp.ad.wrs.com (ala-hca.corp.ad.wrs.com [147.11.189.40])
-        by mail5.wrs.com (8.15.2/8.15.2) with ESMTPS id 05C3hK26019534
-        (version=TLSv1 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
-        Thu, 11 Jun 2020 20:43:41 -0700
-Received: from pek-lpg-core1-vm1.wrs.com (128.224.156.106) by
- ALA-HCA.corp.ad.wrs.com (147.11.189.40) with Microsoft SMTP Server id
- 14.3.487.0; Thu, 11 Jun 2020 20:43:15 -0700
-From:   <qiang.zhang@windriver.com>
-To:     <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3] usb: usbtest: fix missing kfree(dev->buf) in usbtest_disconnect
-Date:   Fri, 12 Jun 2020 11:52:10 +0800
-Message-ID: <20200612035210.20494-1-qiang.zhang@windriver.com>
-X-Mailer: git-send-email 2.24.1
+        id S1725809AbgFLEPs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 12 Jun 2020 00:15:48 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1591935347; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=qOBjRzQMndVJEIv6uF7Wx6Dgh2zeX7Iww1fuxfR2S3I=; b=d+1yXJrMGA3GTsrMeQxj9ehn1rDROWmgWRHtufDYo9WFKveqHwSfdG4v8rRcKst3CHBG7UZf
+ Wd46JNU3Mc2aQo+itBcdBaHKwkYgmkffrFjnR6DN1Q7RFl26ppvYJvya771C7jPPCsruiMtx
+ cQu3J1zt8iPtiUfrmc01BnlAJDo=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n08.prod.us-west-2.postgun.com with SMTP id
+ 5ee301595866879c7691efbe (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 12 Jun 2020 04:15:21
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 8B986C43395; Fri, 12 Jun 2020 04:15:21 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.110.17.171] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 3145FC433CB;
+        Fri, 12 Jun 2020 04:15:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 3145FC433CB
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=wcheng@codeaurora.org
+Subject: Re: [PATCH 1/3] usb: typec: Add QCOM PMIC typec detection driver
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        mark.rutland@arm.com, robh+dt@kernel.org, agross@kernel.org,
+        bjorn.andersson@linaro.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        jackp@codeaurora.org, bryan.odonoghue@linaro.org
+References: <20200609205851.30113-1-wcheng@codeaurora.org>
+ <20200609205851.30113-2-wcheng@codeaurora.org>
+ <ccfc3e7c-d1ce-27bd-b24c-df5fbc468449@infradead.org>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <47651298-f94c-c487-d346-41abfb8a80a7@codeaurora.org>
+Date:   Thu, 11 Jun 2020 21:15:19 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
+In-Reply-To: <ccfc3e7c-d1ce-27bd-b24c-df5fbc468449@infradead.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Zqiang <qiang.zhang@windriver.com>
 
-BUG: memory leak
-unreferenced object 0xffff888055046e00 (size 256):
-  comm "kworker/2:9", pid 2570, jiffies 4294942129 (age 1095.500s)
-  hex dump (first 32 bytes):
-    00 70 04 55 80 88 ff ff 18 bb 5a 81 ff ff ff ff  .p.U......Z.....
-    f5 96 78 81 ff ff ff ff 37 de 8e 81 ff ff ff ff  ..x.....7.......
-  backtrace:
-    [<00000000d121dccf>] kmemleak_alloc_recursive
-include/linux/kmemleak.h:43 [inline]
-    [<00000000d121dccf>] slab_post_alloc_hook mm/slab.h:586 [inline]
-    [<00000000d121dccf>] slab_alloc_node mm/slub.c:2786 [inline]
-    [<00000000d121dccf>] slab_alloc mm/slub.c:2794 [inline]
-    [<00000000d121dccf>] kmem_cache_alloc_trace+0x15e/0x2d0 mm/slub.c:2811
-    [<000000005c3c3381>] kmalloc include/linux/slab.h:555 [inline]
-    [<000000005c3c3381>] usbtest_probe+0x286/0x19d0
-drivers/usb/misc/usbtest.c:2790
-    [<000000001cec6910>] usb_probe_interface+0x2bd/0x870
-drivers/usb/core/driver.c:361
-    [<000000007806c118>] really_probe+0x48d/0x8f0 drivers/base/dd.c:551
-    [<00000000a3308c3e>] driver_probe_device+0xfc/0x2a0 drivers/base/dd.c:724
-    [<000000003ef66004>] __device_attach_driver+0x1b6/0x240
-drivers/base/dd.c:831
-    [<00000000eee53e97>] bus_for_each_drv+0x14e/0x1e0 drivers/base/bus.c:431
-    [<00000000bb0648d0>] __device_attach+0x1f9/0x350 drivers/base/dd.c:897
-    [<00000000838b324a>] device_initial_probe+0x1a/0x20 drivers/base/dd.c:944
-    [<0000000030d501c1>] bus_probe_device+0x1e1/0x280 drivers/base/bus.c:491
-    [<000000005bd7adef>] device_add+0x131d/0x1c40 drivers/base/core.c:2504
-    [<00000000a0937814>] usb_set_configuration+0xe84/0x1ab0
-drivers/usb/core/message.c:2030
-    [<00000000e3934741>] generic_probe+0x6a/0xe0 drivers/usb/core/generic.c:210
-    [<0000000098ade0f1>] usb_probe_device+0x90/0xd0
-drivers/usb/core/driver.c:266
-    [<000000007806c118>] really_probe+0x48d/0x8f0 drivers/base/dd.c:551
-    [<00000000a3308c3e>] driver_probe_device+0xfc/0x2a0 drivers/base/dd.c:724
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Reported-by: Kyungtae Kim <kt0755@gmail.com>
-Signed-off-by: Zqiang <qiang.zhang@windriver.com>
----
- v1->v2:
- Remove Fixes field.
- v2->v3:
- Add Acked-by tags.
+On 6/9/2020 2:20 PM, Randy Dunlap wrote:
+> On 6/9/20 1:58 PM, Wesley Cheng wrote:
+>> diff --git a/drivers/usb/typec/Kconfig b/drivers/usb/typec/Kconfig
+>> index 559dd06..8de2520 100644
+>> --- a/drivers/usb/typec/Kconfig
+>> +++ b/drivers/usb/typec/Kconfig
+>> @@ -73,6 +73,17 @@ config TYPEC_TPS6598X
+>>  	  If you choose to build this driver as a dynamically linked module, the
+>>  	  module will be called tps6598x.ko.
+>>
+> 
+> Hi,
+> Please spell "Type-C" like all of the other drivers do.
+> 
+>> +config TYPEC_QCOM_PMIC
+>> +	tristate "Qualcomm PMIC USB typec driver"
+>> +	depends on ARCH_QCOM
+>> +	help
+>> +	  Driver for supporting role switch over the Qualcomm PMIC.  This will
+>> +	  handle the type C role and orientation detection reported by the QCOM
+>> +	  PMIC if the PMIC has the capability to handle type C detection.
+>> +
+>> +	  It will also enable the VBUS output to connected devices when a
+>> +	  DFP connection is made.
+>> +
+>>  source "drivers/usb/typec/mux/Kconfig"
+>>  
+>>  source "drivers/usb/typec/altmodes/Kconfig"
 
- drivers/usb/misc/usbtest.c | 1 +
- 1 file changed, 1 insertion(+)
+Hi Randy,
 
-diff --git a/drivers/usb/misc/usbtest.c b/drivers/usb/misc/usbtest.c
-index 98ada1a3425c..bae88893ee8e 100644
---- a/drivers/usb/misc/usbtest.c
-+++ b/drivers/usb/misc/usbtest.c
-@@ -2873,6 +2873,7 @@ static void usbtest_disconnect(struct usb_interface *intf)
- 
- 	usb_set_intfdata(intf, NULL);
- 	dev_dbg(&intf->dev, "disconnect\n");
-+	kfree(dev->buf);
- 	kfree(dev);
- }
- 
+Will do.
+
+Thanks
+> 
+> 
+
 -- 
-2.24.1
-
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
