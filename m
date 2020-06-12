@@ -2,213 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D45441F787D
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Jun 2020 15:08:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C65DD1F78A4
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Jun 2020 15:18:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726376AbgFLNI0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 Jun 2020 09:08:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43396 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726278AbgFLNIZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Jun 2020 09:08:25 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8AE5C08C5C1
-        for <linux-usb@vger.kernel.org>; Fri, 12 Jun 2020 06:08:25 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id p21so4096474pgm.13
-        for <linux-usb@vger.kernel.org>; Fri, 12 Jun 2020 06:08:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aUOnK/V6E2c0QjA3JcLB73isOrqlUh0EKxeqmn334Io=;
-        b=IQKavdnrV0XGnU+daxIx0alEG08pnm20vtMKXsBOcwc+Bh78Hm5odWCrFmWkSS5AJm
-         hSRpWUZ1VPaZk6feyGW9ZdCvI6mFFL8gYBvMw2nSzatX3a7/22Dz5VSHDGcABG74pgj4
-         v8XcX8PgtULnVoJhNaF+g7aCFn3nBi1mIrBOq4sfudLjQ78Uey6OZdK4rXEt0lXwNaEX
-         MeIelcVUwxq21fodJHNDwloZAUbPsWcawzI1c/Z+lAAEYH0SB/CTiZdZW+//PffNuvOl
-         5DI5NgsXMexooZeViItG8H/36mxRSleJW5jjlh9T3BMU4+3LDC+0D7TE17nuyl5qsI6a
-         MVPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aUOnK/V6E2c0QjA3JcLB73isOrqlUh0EKxeqmn334Io=;
-        b=L7cx+iAmu5tSyd0E+ne98Twl+c/EqZ1jXver8D4RmEw4s8U8t2s8QC95EtaVuqrc//
-         0fx+ijNQKGD3h0NJlewrZFjQ8PLpXPKmxYgcbJ5n8YuE0XrJmwyxHLp7JS6COSIYrfW0
-         AWUTIr1UWDVCHS8x+S27I7AMAkzXfcinTRXtbWgTaI5qo8Etas0XH80k9oDNj1AKjxMb
-         SEIDvHdrsGUF2qXZyNFtZQDMjJvqkUiazXQOkgLmVh2MkrF8ZyurOK/Sa47hmhR5SgnX
-         WPrLB5hRM0kJjGFJnszn3CAPwn2Fb4a+6iU/kRqSBpagkXuIvAv2/gv7xom84V6xPDif
-         2+lw==
-X-Gm-Message-State: AOAM530lEfmW+X+94Qoj7BwbHeFrrQE8KOTZ5eYgf21ce69pB8KwoOBJ
-        upncieUbT3yEhDcvMwaEsNqVyz3fPQLXefiDk/M9eA==
-X-Google-Smtp-Source: ABdhPJy6jtd2g64TNuQdLYvVvSWrDRdqdV9mmn4qEM7tRFhfxFTVQ1fW1hReIFhw5fkbil3HcpvOFG7oYMHRwqj33No=
-X-Received: by 2002:a63:724a:: with SMTP id c10mr10824235pgn.130.1591967305188;
- Fri, 12 Jun 2020 06:08:25 -0700 (PDT)
+        id S1726371AbgFLNSY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 Jun 2020 09:18:24 -0400
+Received: from mga03.intel.com ([134.134.136.65]:9961 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726108AbgFLNSX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 12 Jun 2020 09:18:23 -0400
+IronPort-SDR: Xl4wIJOotmnv+mePScFlOIvmkV/tpRdiaG1iXKyvcON0B0VUBWK48aSg14iuAzOEmnQnyJx2yx
+ hGRRbyiCYbFw==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2020 06:18:23 -0700
+IronPort-SDR: qbMMbC3vf1k45oMKqRqK8eRrYVgDJdMebeYGvLUSX5uo04mv8WSH1rUkKUqF6zrOAMAuZZuVnc
+ 5iGrelD9ButQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,503,1583222400"; 
+   d="scan'208";a="307297849"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga002.fm.intel.com with ESMTP; 12 Jun 2020 06:18:20 -0700
+Received: from andy by smile with local (Exim 4.93)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1jjjZe-00CZEa-Pq; Fri, 12 Jun 2020 16:18:22 +0300
+Date:   Fri, 12 Jun 2020 16:18:22 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     "Ramuthevar,Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, balbi@kernel.org, robh@kernel.org,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        cheol.yong.kim@intel.com, qi-ming.wu@intel.com, yin1.li@intel.com
+Subject: Re: [PATCH v3 2/2] usb: phy: Add USB3 PHY support for Intel LGM SoC
+Message-ID: <20200612131822.GG2428291@smile.fi.intel.com>
+References: <20200612025941.5484-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20200612025941.5484-3-vadivel.muruganx.ramuthevar@linux.intel.com>
 MIME-Version: 1.0
-References: <00000000000036317b05a301e1e4@google.com>
-In-Reply-To: <00000000000036317b05a301e1e4@google.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Fri, 12 Jun 2020 15:08:14 +0200
-Message-ID: <CAAeHK+z-kPmNc_rVaMht+p=1qRu110ue=LZ09=+DGZNt7f-TTg@mail.gmail.com>
-Subject: Re: KASAN: use-after-free Read in ath9k_htc_txcompletion_cb
-To:     syzbot <syzbot+809d3bdcdb4650cdbc83@syzkaller.appspotmail.com>
-Cc:     ath9k-devel@qca.qualcomm.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        linux-wireless@vger.kernel.org, netdev <netdev@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200612025941.5484-3-vadivel.muruganx.ramuthevar@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Apr 11, 2020 at 1:09 PM syzbot
-<syzbot+809d3bdcdb4650cdbc83@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following crash on:
->
-> HEAD commit:    0fa84af8 Merge tag 'usb-serial-5.7-rc1' of https://git.ker..
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=10af83b3e00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=6b9c154b0c23aecf
-> dashboard link: https://syzkaller.appspot.com/bug?extid=809d3bdcdb4650cdbc83
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
->
-> Unfortunately, I don't have any reproducer for this crash yet.
->
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+809d3bdcdb4650cdbc83@syzkaller.appspotmail.com
->
-> ==================================================================
-> BUG: KASAN: use-after-free in ath9k_htc_txcompletion_cb+0x285/0x2b0 drivers/net/wireless/ath/ath9k/htc_hst.c:341
-> Read of size 8 at addr ffff8881d1caf488 by task kworker/0:0/24267
->
-> CPU: 0 PID: 24267 Comm: kworker/0:0 Not tainted 5.6.0-rc7-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> Workqueue: events request_firmware_work_func
-> Call Trace:
->  <IRQ>
->  __dump_stack lib/dump_stack.c:77 [inline]
->  dump_stack+0xef/0x16e lib/dump_stack.c:118
->  print_address_description.constprop.0.cold+0xd3/0x314 mm/kasan/report.c:374
->  __kasan_report.cold+0x37/0x77 mm/kasan/report.c:506
->  kasan_report+0xe/0x20 mm/kasan/common.c:641
->  ath9k_htc_txcompletion_cb+0x285/0x2b0 drivers/net/wireless/ath/ath9k/htc_hst.c:341
->  hif_usb_regout_cb+0x10b/0x1b0 drivers/net/wireless/ath/ath9k/hif_usb.c:90
->  __usb_hcd_giveback_urb+0x1f2/0x470 drivers/usb/core/hcd.c:1648
->  usb_hcd_giveback_urb+0x368/0x420 drivers/usb/core/hcd.c:1713
->  dummy_timer+0x1258/0x32ae drivers/usb/gadget/udc/dummy_hcd.c:1966
->  call_timer_fn+0x195/0x6f0 kernel/time/timer.c:1404
->  expire_timers kernel/time/timer.c:1449 [inline]
->  __run_timers kernel/time/timer.c:1773 [inline]
->  __run_timers kernel/time/timer.c:1740 [inline]
->  run_timer_softirq+0x5f9/0x1500 kernel/time/timer.c:1786
->  __do_softirq+0x21e/0x950 kernel/softirq.c:292
->  invoke_softirq kernel/softirq.c:373 [inline]
->  irq_exit+0x178/0x1a0 kernel/softirq.c:413
->  exiting_irq arch/x86/include/asm/apic.h:546 [inline]
->  smp_apic_timer_interrupt+0x141/0x540 arch/x86/kernel/apic/apic.c:1146
->  apic_timer_interrupt+0xf/0x20 arch/x86/entry/entry_64.S:829
->  </IRQ>
-> RIP: 0010:arch_local_irq_restore arch/x86/include/asm/irqflags.h:85 [inline]
-> RIP: 0010:console_unlock+0xa6b/0xca0 kernel/printk/printk.c:2481
-> Code: 00 89 ee 48 c7 c7 60 3e 14 87 e8 10 c3 03 00 65 ff 0d c1 ed d8 7e e9 b5 f9 ff ff e8 0f 37 16 00 e8 0a 7f 1b 00 ff 74 24 30 9d <e9> fd fd ff ff e8 fb 36 16 00 48 8d 7d 08 48 89 f8 48 c1 e8 03 42
-> RSP: 0018:ffff8881d9227a50 EFLAGS: 00000293 ORIG_RAX: ffffffffffffff13
-> RAX: 0000000000000007 RBX: 0000000000000200 RCX: 0000000000000006
-> RDX: 0000000000000000 RSI: 0000000000000008 RDI: ffff8881aba6d1cc
-> RBP: 0000000000000000 R08: ffff8881aba6c980 R09: fffffbfff1266485
-> R10: fffffbfff1266484 R11: ffffffff89332427 R12: ffffffff82a092b0
-> R13: ffffffff874d3950 R14: 0000000000000057 R15: dffffc0000000000
->  vprintk_emit+0x171/0x3d0 kernel/printk/printk.c:1996
->  vprintk_func+0x75/0x113 kernel/printk/printk_safe.c:386
->  printk+0xba/0xed kernel/printk/printk.c:2056
->  ath9k_htc_hw_init.cold+0x17/0x2a drivers/net/wireless/ath/ath9k/htc_hst.c:502
->  ath9k_hif_usb_firmware_cb+0x26b/0x500 drivers/net/wireless/ath/ath9k/hif_usb.c:1187
->  request_firmware_work_func+0x126/0x242 drivers/base/firmware_loader/main.c:976
->  process_one_work+0x94b/0x1620 kernel/workqueue.c:2266
->  worker_thread+0x96/0xe20 kernel/workqueue.c:2412
->  kthread+0x318/0x420 kernel/kthread.c:255
->  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
->
-> Allocated by task 24267:
->  save_stack+0x1b/0x80 mm/kasan/common.c:72
->  set_track mm/kasan/common.c:80 [inline]
->  __kasan_kmalloc mm/kasan/common.c:515 [inline]
->  __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:488
->  slab_post_alloc_hook mm/slab.h:584 [inline]
->  slab_alloc_node mm/slub.c:2786 [inline]
->  kmem_cache_alloc_node+0xdc/0x330 mm/slub.c:2822
->  __alloc_skb+0xba/0x5a0 net/core/skbuff.c:198
->  alloc_skb include/linux/skbuff.h:1081 [inline]
->  htc_connect_service+0x2cc/0x840 drivers/net/wireless/ath/ath9k/htc_hst.c:257
->  ath9k_wmi_connect+0xd2/0x1a0 drivers/net/wireless/ath/ath9k/wmi.c:265
->  ath9k_init_htc_services.constprop.0+0xb4/0x650 drivers/net/wireless/ath/ath9k/htc_drv_init.c:146
->  ath9k_htc_probe_device+0x25a/0x1d80 drivers/net/wireless/ath/ath9k/htc_drv_init.c:959
->  ath9k_htc_hw_init+0x31/0x60 drivers/net/wireless/ath/ath9k/htc_hst.c:501
->  ath9k_hif_usb_firmware_cb+0x26b/0x500 drivers/net/wireless/ath/ath9k/hif_usb.c:1187
->  request_firmware_work_func+0x126/0x242 drivers/base/firmware_loader/main.c:976
->  process_one_work+0x94b/0x1620 kernel/workqueue.c:2266
->  worker_thread+0x96/0xe20 kernel/workqueue.c:2412
->  kthread+0x318/0x420 kernel/kthread.c:255
->  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
->
-> Freed by task 24267:
->  save_stack+0x1b/0x80 mm/kasan/common.c:72
->  set_track mm/kasan/common.c:80 [inline]
->  kasan_set_free_info mm/kasan/common.c:337 [inline]
->  __kasan_slab_free+0x117/0x160 mm/kasan/common.c:476
->  slab_free_hook mm/slub.c:1444 [inline]
->  slab_free_freelist_hook mm/slub.c:1477 [inline]
->  slab_free mm/slub.c:3034 [inline]
->  kmem_cache_free+0x9b/0x360 mm/slub.c:3050
->  kfree_skbmem net/core/skbuff.c:622 [inline]
->  kfree_skbmem+0xef/0x1b0 net/core/skbuff.c:616
->  __kfree_skb net/core/skbuff.c:679 [inline]
->  kfree_skb net/core/skbuff.c:696 [inline]
->  kfree_skb+0x102/0x3d0 net/core/skbuff.c:690
->  htc_connect_service.cold+0xa9/0x109 drivers/net/wireless/ath/ath9k/htc_hst.c:282
->  ath9k_wmi_connect+0xd2/0x1a0 drivers/net/wireless/ath/ath9k/wmi.c:265
->  ath9k_init_htc_services.constprop.0+0xb4/0x650 drivers/net/wireless/ath/ath9k/htc_drv_init.c:146
->  ath9k_htc_probe_device+0x25a/0x1d80 drivers/net/wireless/ath/ath9k/htc_drv_init.c:959
->  ath9k_htc_hw_init+0x31/0x60 drivers/net/wireless/ath/ath9k/htc_hst.c:501
->  ath9k_hif_usb_firmware_cb+0x26b/0x500 drivers/net/wireless/ath/ath9k/hif_usb.c:1187
->  request_firmware_work_func+0x126/0x242 drivers/base/firmware_loader/main.c:976
->  process_one_work+0x94b/0x1620 kernel/workqueue.c:2266
->  worker_thread+0x96/0xe20 kernel/workqueue.c:2412
->  kthread+0x318/0x420 kernel/kthread.c:255
->  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
->
-> The buggy address belongs to the object at ffff8881d1caf3c0
->  which belongs to the cache skbuff_head_cache of size 224
-> The buggy address is located 200 bytes inside of
->  224-byte region [ffff8881d1caf3c0, ffff8881d1caf4a0)
-> The buggy address belongs to the page:
-> page:ffffea0007472bc0 refcount:1 mapcount:0 mapping:ffff8881da16b400 index:0xffff8881d1caf280
-> flags: 0x200000000000200(slab)
-> raw: 0200000000000200 ffffea00074473c0 0000000900000009 ffff8881da16b400
-> raw: ffff8881d1caf280 00000000800c000b 00000001ffffffff 0000000000000000
-> page dumped because: kasan: bad access detected
->
-> Memory state around the buggy address:
->  ffff8881d1caf380: fc fc fc fc fc fc fc fc fb fb fb fb fb fb fb fb
->  ffff8881d1caf400: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> >ffff8881d1caf480: fb fb fb fb fc fc fc fc fc fc fc fc fc fc fc fc
->                       ^
->  ffff8881d1caf500: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->  ffff8881d1caf580: fb fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
-> ==================================================================
->
->
-> ---
-> This bug is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this bug report. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+On Fri, Jun 12, 2020 at 10:59:41AM +0800, Ramuthevar,Vadivel MuruganX wrote:
+> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+> 
+> Add support for USB PHY on Intel LGM SoC.
 
-#syz dup: KASAN: use-after-free Read in hif_usb_regout_cb
+Thank you for an update, looks pretty much good, my comments below.
+
+...
+
+> +static int get_flipped(struct tca_apb *ta, bool *flipped)
+> +{
+> +	union extcon_property_value property;
+> +	int ret;
+> +
+> +	ret = extcon_get_property(ta->phy.edev, EXTCON_USB_HOST,
+> +				  EXTCON_PROP_USB_TYPEC_POLARITY, &property);
+> +	if (ret) {
+
+> +		dev_err(ta->phy.dev, "no polarity property from extcon\n");
+
+(1)
+
+> +		return ret;
+> +	}
+> +
+> +	*flipped = property.intval;
+> +
+> +	return ret;
+> +}
+
+...
+
+> +	ret = get_flipped(ta, &flipped);
+> +	if (ret)
+> +		dev_err(ta->phy.dev, "no polarity property from extcon\n");
+
+You already has a message in (1). You should decide which one to leave.
+
+But note, if it's a fatal error, you have to return here, otherwise, if you
+decide to leave message here, it should be not on error level.
+
+> +	connected = extcon_get_state(ta->phy.edev, EXTCON_USB_HOST);
+> +	if (connected == ta->connected)
+> +		return;
+> +
+> +	ta->connected = connected;
+> +	if (connected) {
+> +		val = TCPC_VALID | FIELD_PREP(TCPC_MUX_CTL, MUX_USB);
+> +		if (flipped)
+> +			val |= TCPC_FLIPPED;
+> +		dev_info(ta->phy.dev, "connected%s\n", flipped ? " flipped" : "");
+> +	} else {
+> +		val = TCPC_DISCONN;
+> +		dev_info(ta->phy.dev, "disconnected\n");
+> +	}
+> +
+> +	writel(val, ta->phy.io_priv + TCPC_OFFSET);
+> +
+
+> +	if (ta->phy.set_vbus(&ta->phy, connected))
+> +		dev_err(ta->phy.dev, "failed to set VBUS\n");
+
+Please, split it to
+	ret = ...;
+	if (ret)
+
+> +}
+
+...
+
+> +static int vbus_notifier(struct notifier_block *nb,
+> +			 unsigned long event, void *ptr)
+
+Consider to put it on one line (you can also shrink the names of unused
+parameters.
+
+> +{
+> +	return NOTIFY_DONE;
+> +}
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
