@@ -2,149 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D22D1F731D
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Jun 2020 06:45:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCDA41F7388
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Jun 2020 07:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726349AbgFLEpd convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Fri, 12 Jun 2020 00:45:33 -0400
-Received: from asix.com.tw ([210.243.224.51]:31432 "EHLO freebsd2.asix.com.tw"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725763AbgFLEpd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 12 Jun 2020 00:45:33 -0400
-X-Greylist: delayed 1800 seconds by postgrey-1.27 at vger.kernel.org; Fri, 12 Jun 2020 00:45:32 EDT
-Received: from LouisSurfacePro (122-146-92-225.adsl.static.sparqnet.net [122.146.92.225] (may be forged))
-        (authenticated bits=0)
-        by freebsd2.asix.com.tw (8.15.2/8.15.2) with ESMTPSA id 05C4DwJs069313
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 12 Jun 2020 12:13:58 +0800 (CST)
-        (envelope-from louis@asix.com.tw)
-Authentication-Results: freebsd2.asix.com.tw; sender-id=softfail header.from=louis@asix.com.tw; auth=pass (LOGIN); spf=softfail smtp.mfrom=louis@asix.com.tw
-X-Authentication-Warning: freebsd2.asix.com.tw: Host 122-146-92-225.adsl.static.sparqnet.net [122.146.92.225] (may be forged) claimed to be LouisSurfacePro
-From:   <louis@asix.com.tw>
-To:     "'ASIX_Allan [Office]'" <allan@asix.com.tw>,
-        "'Jeremy Kerr'" <jk@ozlabs.org>,
-        "'Freddy Xin'" <freddy@asix.com.tw>
-Cc:     "'Peter Fink'" <pfink@christ-es.de>, <netdev@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>
-References: <20200527060334.19441-1-jk@ozlabs.org> <b9e1db7761761e321b23bd0d22ab981cbd5d6abe.camel@ozlabs.org> <000601d638a2$317f44d0$947dce70$@asix.com.tw>
-In-Reply-To: <000601d638a2$317f44d0$947dce70$@asix.com.tw>
-Subject: RE: [RFC PATCH] net: usb: ax88179_178a: fix packet alignment padding
-Date:   Fri, 12 Jun 2020 12:10:47 +0800
-Message-ID: <000801d6406f$757d45e0$6077d1a0$@asix.com.tw>
+        id S1726405AbgFLFdA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 Jun 2020 01:33:00 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:60208 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725763AbgFLFc7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Jun 2020 01:32:59 -0400
+X-UUID: 239d2498b3b74fe9acfc7227611e421b-20200612
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=bDIpgkDQG7YLT+F0rsdng9S3ADGmLirI0hK3z/BZOuY=;
+        b=kNYQIaTxVSeR2OoLWSPVuYo5ny3mIuwEwPFcqRNW1L6Cme2nqtm44PF8niJRfA/vZJsHqos5PzR8Bde6+6hjDU1rMQFJj784KxD92LC2v7llcZQMTw4jhQvxxkbmVwp+ilox0FbKzAfNrTr3DEyRAevgvYytmAykm7XDnnJdUPQ=;
+X-UUID: 239d2498b3b74fe9acfc7227611e421b-20200612
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1990203046; Fri, 12 Jun 2020 13:32:54 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 12 Jun 2020 13:32:51 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 12 Jun 2020 13:32:46 +0800
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, Jim Lin <jilin@nvidia.com>,
+        Siqi Lin <siqilin@google.com>
+CC:     Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
+        Macpaul Lin <macpaul.lin@mediatek.com>,
+        Macpaul Lin <macpaul.lin@gmail.com>
+Subject: [PATCH] usb: replace hardcoded maximum usb string length by definition
+Date:   Fri, 12 Jun 2020 13:32:47 +0800
+Message-ID: <1591939967-29943-1-git-send-email-macpaul.lin@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
+In-Reply-To: <y>
+References: <y>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 8BIT
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQHmoCzAkPvBY+mFBa6Wg5HaQv5jdQFGCLaeAakD2h+onCO8kA==
-Content-Language: zh-tw
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Jeremy,
-
-Thanks for the correction.
-Indeed, the hardware adds two bytes dummy data at beginning of Ethernet packet to make IP header aligned. 
-The original patch made by Freddy contains the length of dummy header. 
-Thanks for your concerning.
-Please let us know if you have any other question.
-
-Thank you,
-Louis.
-
----
-Best regards,
-Allan Chou
-ASIX Electronics Corporation
-TEL: 886-3-5799500 ext.228
-FAX: 886-3-5799558
-E-mail: allan@asix.com.tw 
-https://www.asix.com.tw/ 
-
-
-
------Original Message-----
-From: Jeremy Kerr <jk@ozlabs.org> 
-Sent: Tuesday, June 2, 2020 11:18 AM
-To: Freddy Xin <freddy@asix.com.tw>; Allan Chou <allan@asix.com.tw>
-Cc: Peter Fink <pfink@christ-es.de>; netdev@vger.kernel.org; linux-usb@vger.kernel.org
-Subject: Re: [RFC PATCH] net: usb: ax88179_178a: fix packet alignment padding
-
-Hi Freddy and Allan,
-
-Just following up on the RFC patch below: Can you confirm whether the packet len (in the hardware-provided packet RX metadata) includes the two-byte padding field? Is this the same for all ax88179 devices?
-
-Cheers,
-
-
-Jeremy
-
-> Using a AX88179 device (0b95:1790), I see two bytes of appended data 
-> on every RX packet. For example, this 48-byte ping, using 0xff as a 
-> payload byte:
-> 
->   04:20:22.528472 IP 192.168.1.1 > 192.168.1.2: ICMP echo request, id 2447, seq 1, length 64
-> 	0x0000:  000a cd35 ea50 000a cd35 ea4f 0800 4500
-> 	0x0010:  0054 c116 4000 4001 f63e c0a8 0101 c0a8
-> 	0x0020:  0102 0800 b633 098f 0001 87ea cd5e 0000
-> 	0x0030:  0000 dcf2 0600 0000 0000 ffff ffff ffff
-> 	0x0040:  ffff ffff ffff ffff ffff ffff ffff ffff
-> 	0x0050:  ffff ffff ffff ffff ffff ffff ffff ffff
-> 	0x0060:  ffff 961f
-> 
-> Those last two bytes - 96 1f - aren't part of the original packet.
-> 
-> In the ax88179 RX path, the usbnet rx_fixup function trims a 2-byte 
-> 'alignment pseudo header' from the start of the packet, and sets the 
-> length from a per-packet field populated by hardware. It looks like 
-> that length field *includes* the 2-byte header; the current driver 
-> assumes that it's excluded.
-> 
-> This change trims the 2-byte alignment header after we've set the 
-> packet length, so the resulting packet length is correct. While we're 
-> moving the comment around, this also fixes the spelling of 'pseudo'.
-> 
-> Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
-> 
-> ---
-> RFC: I don't have access to docs for this hardware, so this is all 
-> based on observed behaviour of the reported packet length.
-> ---
->  drivers/net/usb/ax88179_178a.c | 11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/net/usb/ax88179_178a.c 
-> b/drivers/net/usb/ax88179_178a.c index 93044cf1417a..1fe4cc28d154 
-> 100644
-> --- a/drivers/net/usb/ax88179_178a.c
-> +++ b/drivers/net/usb/ax88179_178a.c
-> @@ -1414,10 +1414,10 @@ static int ax88179_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
->  		}
->  
->  		if (pkt_cnt == 0) {
-> -			/* Skip IP alignment psudo header */
-> -			skb_pull(skb, 2);
->  			skb->len = pkt_len;
-> -			skb_set_tail_pointer(skb, pkt_len);
-> +			/* Skip IP alignment pseudo header */
-> +			skb_pull(skb, 2);
-> +			skb_set_tail_pointer(skb, skb->len);
->  			skb->truesize = pkt_len + sizeof(struct sk_buff);
->  			ax88179_rx_checksum(skb, pkt_hdr);
->  			return 1;
-> @@ -1426,8 +1426,9 @@ static int ax88179_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
->  		ax_skb = skb_clone(skb, GFP_ATOMIC);
->  		if (ax_skb) {
->  			ax_skb->len = pkt_len;
-> -			ax_skb->data = skb->data + 2;
-> -			skb_set_tail_pointer(ax_skb, pkt_len);
-> +			/* Skip IP alignment pseudo header */
-> +			skb_pull(ax_skb, 2);
-> +			skb_set_tail_pointer(ax_skb, ax_skb->len);
->  			ax_skb->truesize = pkt_len + sizeof(struct sk_buff);
->  			ax88179_rx_checksum(ax_skb, pkt_hdr);
->  			usbnet_skb_return(dev, ax_skb);
-> 
+UmVwbGFjZSBoYXJkY29kZWQgbWF4aW11bSB1c2Igc3RyaW5nIGxlbmd0aCAoMTI2IGJ5dGVzKSBi
+eSBkZWZpbml0aW9uDQoiTUFYX1VTQl9TVFJJTkdfTEVOIi4NCg0KU2lnbmVkLW9mZi1ieTogTWFj
+cGF1bCBMaW4gPG1hY3BhdWwubGluQG1lZGlhdGVrLmNvbT4NCi0tLQ0KIGRyaXZlcnMvdXNiL2dh
+ZGdldC9jb21wb3NpdGUuYyB8ICAgIDQgKystLQ0KIGRyaXZlcnMvdXNiL2dhZGdldC9jb25maWdm
+cy5jICB8ICAgIDMgKystDQogZHJpdmVycy91c2IvZ2FkZ2V0L3VzYnN0cmluZy5jIHwgICAgNSAr
+KystLQ0KIGluY2x1ZGUvbGludXgvdXNiLmggICAgICAgICAgICB8ICAgIDIgKysNCiA0IGZpbGVz
+IGNoYW5nZWQsIDkgaW5zZXJ0aW9ucygrKSwgNSBkZWxldGlvbnMoLSkNCg0KZGlmZiAtLWdpdCBh
+L2RyaXZlcnMvdXNiL2dhZGdldC9jb21wb3NpdGUuYyBiL2RyaXZlcnMvdXNiL2dhZGdldC9jb21w
+b3NpdGUuYw0KaW5kZXggY2I0OTUwYy4uZDBkZTAxNiAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvdXNi
+L2dhZGdldC9jb21wb3NpdGUuYw0KKysrIGIvZHJpdmVycy91c2IvZ2FkZ2V0L2NvbXBvc2l0ZS5j
+DQpAQCAtMTA0MSw3ICsxMDQxLDcgQEAgc3RhdGljIHZvaWQgY29sbGVjdF9sYW5ncyhzdHJ1Y3Qg
+dXNiX2dhZGdldF9zdHJpbmdzICoqc3AsIF9fbGUxNiAqYnVmKQ0KIAl3aGlsZSAoKnNwKSB7DQog
+CQlzID0gKnNwOw0KIAkJbGFuZ3VhZ2UgPSBjcHVfdG9fbGUxNihzLT5sYW5ndWFnZSk7DQotCQlm
+b3IgKHRtcCA9IGJ1ZjsgKnRtcCAmJiB0bXAgPCAmYnVmWzEyNl07IHRtcCsrKSB7DQorCQlmb3Ig
+KHRtcCA9IGJ1ZjsgKnRtcCAmJiB0bXAgPCAmYnVmW01BWF9VU0JfU1RSSU5HX0xFTl07IHRtcCsr
+KSB7DQogCQkJaWYgKCp0bXAgPT0gbGFuZ3VhZ2UpDQogCQkJCWdvdG8gcmVwZWF0Ow0KIAkJfQ0K
+QEAgLTExMTYsNyArMTExNiw3IEBAIHN0YXRpYyBpbnQgZ2V0X3N0cmluZyhzdHJ1Y3QgdXNiX2Nv
+bXBvc2l0ZV9kZXYgKmNkZXYsDQogCQkJY29sbGVjdF9sYW5ncyhzcCwgcy0+d0RhdGEpOw0KIAkJ
+fQ0KIA0KLQkJZm9yIChsZW4gPSAwOyBsZW4gPD0gMTI2ICYmIHMtPndEYXRhW2xlbl07IGxlbisr
+KQ0KKwkJZm9yIChsZW4gPSAwOyBsZW4gPD0gTUFYX1VTQl9TVFJJTkdfTEVOICYmIHMtPndEYXRh
+W2xlbl07IGxlbisrKQ0KIAkJCWNvbnRpbnVlOw0KIAkJaWYgKCFsZW4pDQogCQkJcmV0dXJuIC1F
+SU5WQUw7DQpkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvZ2FkZ2V0L2NvbmZpZ2ZzLmMgYi9kcml2
+ZXJzL3VzYi9nYWRnZXQvY29uZmlnZnMuYw0KaW5kZXggMzJiNjM3ZS4uYzlkNjFhYyAxMDA2NDQN
+Ci0tLSBhL2RyaXZlcnMvdXNiL2dhZGdldC9jb25maWdmcy5jDQorKysgYi9kcml2ZXJzL3VzYi9n
+YWRnZXQvY29uZmlnZnMuYw0KQEAgLTQsNiArNCw3IEBADQogI2luY2x1ZGUgPGxpbnV4L3NsYWIu
+aD4NCiAjaW5jbHVkZSA8bGludXgvZGV2aWNlLmg+DQogI2luY2x1ZGUgPGxpbnV4L25scy5oPg0K
+KyNpbmNsdWRlIDxsaW51eC91c2IuaD4NCiAjaW5jbHVkZSA8bGludXgvdXNiL2NvbXBvc2l0ZS5o
+Pg0KICNpbmNsdWRlIDxsaW51eC91c2IvZ2FkZ2V0X2NvbmZpZ2ZzLmg+DQogI2luY2x1ZGUgImNv
+bmZpZ2ZzLmgiDQpAQCAtMTE1LDcgKzExNiw3IEBAIHN0YXRpYyBpbnQgdXNiX3N0cmluZ19jb3B5
+KGNvbnN0IGNoYXIgKnMsIGNoYXIgKipzX2NvcHkpDQogCWNoYXIgKnN0cjsNCiAJY2hhciAqY29w
+eSA9ICpzX2NvcHk7DQogCXJldCA9IHN0cmxlbihzKTsNCi0JaWYgKHJldCA+IDEyNikNCisJaWYg
+KHJldCA+IE1BWF9VU0JfU1RSSU5HX0xFTikNCiAJCXJldHVybiAtRU9WRVJGTE9XOw0KIA0KIAlz
+dHIgPSBrc3RyZHVwKHMsIEdGUF9LRVJORUwpOw0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2dh
+ZGdldC91c2JzdHJpbmcuYyBiL2RyaXZlcnMvdXNiL2dhZGdldC91c2JzdHJpbmcuYw0KaW5kZXgg
+N2MyNGQxYy4uYzEyNWQ1OSAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvdXNiL2dhZGdldC91c2JzdHJp
+bmcuYw0KKysrIGIvZHJpdmVycy91c2IvZ2FkZ2V0L3VzYnN0cmluZy5jDQpAQCAtMTEsNiArMTEs
+NyBAQA0KICNpbmNsdWRlIDxsaW51eC9kZXZpY2UuaD4NCiAjaW5jbHVkZSA8bGludXgvbmxzLmg+
+DQogDQorI2luY2x1ZGUgPGxpbnV4L3VzYi5oPg0KICNpbmNsdWRlIDxsaW51eC91c2IvY2g5Lmg+
+DQogI2luY2x1ZGUgPGxpbnV4L3VzYi9nYWRnZXQuaD4NCiANCkBAIC01NSw5ICs1Niw5IEBADQog
+CQlyZXR1cm4gLUVJTlZBTDsNCiANCiAJLyogc3RyaW5nIGRlc2NyaXB0b3JzIGhhdmUgbGVuZ3Ro
+LCB0YWcsIHRoZW4gVVRGMTYtTEUgdGV4dCAqLw0KLQlsZW4gPSBtaW4gKChzaXplX3QpIDEyNiwg
+c3RybGVuIChzLT5zKSk7DQorCWxlbiA9IG1pbigoc2l6ZV90KU1BWF9VU0JfU1RSSU5HX0xFTiwg
+c3RybGVuKHMtPnMpKTsNCiAJbGVuID0gdXRmOHNfdG9fdXRmMTZzKHMtPnMsIGxlbiwgVVRGMTZf
+TElUVExFX0VORElBTiwNCi0JCQkod2NoYXJfdCAqKSAmYnVmWzJdLCAxMjYpOw0KKwkJCSh3Y2hh
+cl90ICopICZidWZbMl0sIE1BWF9VU0JfU1RSSU5HX0xFTik7DQogCWlmIChsZW4gPCAwKQ0KIAkJ
+cmV0dXJuIC1FSU5WQUw7DQogCWJ1ZiBbMF0gPSAobGVuICsgMSkgKiAyOw0KZGlmZiAtLWdpdCBh
+L2luY2x1ZGUvbGludXgvdXNiLmggYi9pbmNsdWRlL2xpbnV4L3VzYi5oDQppbmRleCA5ZjNjNzIx
+Li5kZjRhOWNiIDEwMDY0NA0KLS0tIGEvaW5jbHVkZS9saW51eC91c2IuaA0KKysrIGIvaW5jbHVk
+ZS9saW51eC91c2IuaA0KQEAgLTE4MTUsNiArMTgxNSw4IEBAIHN0YXRpYyBpbmxpbmUgaW50IHVz
+Yl9nZXRfcHRtX3N0YXR1cyhzdHJ1Y3QgdXNiX2RldmljZSAqZGV2LCB2b2lkICpkYXRhKQ0KIAkJ
+MCwgZGF0YSk7DQogfQ0KIA0KKy8qIFVTQiBTdHJpbmcgZGVzY3JpcHRvcnMgY2FuIGNvbnRhaW4g
+YXQgbW9zdCAxMjYgY2hhcmFjdGVycy4gKi8NCisjZGVmaW5lIE1BWF9VU0JfU1RSSU5HX0xFTgkx
+MjYNCiBleHRlcm4gaW50IHVzYl9zdHJpbmcoc3RydWN0IHVzYl9kZXZpY2UgKmRldiwgaW50IGlu
+ZGV4LA0KIAljaGFyICpidWYsIHNpemVfdCBzaXplKTsNCiANCi0tIA0KMS43LjkuNQ0K
 
