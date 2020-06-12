@@ -2,120 +2,155 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B5881F779C
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Jun 2020 14:04:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E2F41F783B
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Jun 2020 15:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726108AbgFLMEN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 Jun 2020 08:04:13 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:47577 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725886AbgFLMEN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Jun 2020 08:04:13 -0400
-Received: by mail-io1-f69.google.com with SMTP id m11so5923518ioj.14
-        for <linux-usb@vger.kernel.org>; Fri, 12 Jun 2020 05:04:12 -0700 (PDT)
+        id S1726367AbgFLNAd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 Jun 2020 09:00:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42106 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726347AbgFLNAc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Jun 2020 09:00:32 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B587C08C5C1
+        for <linux-usb@vger.kernel.org>; Fri, 12 Jun 2020 06:00:31 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id a45so4218009pje.1
+        for <linux-usb@vger.kernel.org>; Fri, 12 Jun 2020 06:00:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qTlS5c0XlIHho1ukeGMzh75bo5sQaeoFpUTTm2uNpzc=;
+        b=ft4U1xxFtlbip1IQ4vJGXDICBx5WHS15bbpBG5y7SmanxsV3SWv2M5Qg9H6UrzgKF0
+         eXz4RW47QtJWYbufLmVkPBrLLGXIVPtZp/fYH7Rs2rEYVNaZu//LA+sr46+lsdmRtN//
+         E7cMRFk5DsxnQF0l0xsGPlNajzxrlwYmsZ7UiRn6PJcjazwA0lPlct0gmeCue6ejDt1E
+         MlOYA1hpUQTTNXiXsHGlS//sYxqTWYIjhx/g0mTH4azyCsi4x7EXdeLhwnli5lLvRalP
+         I7XkdAecAqsACmxDzIgK+IvuwyISVHZeoL/rlSgZNHA3NGIUsoKEdZl7Gzl5e7vRxzRI
+         w4QA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=IkHmIMUWMarD7vGen6l4PRhP59HL7lvb5Tbsm+A67uU=;
-        b=IxoshX0jHQUD4rPSfqpHkvOUPc03Jt+zzPfdtDdckRjGXhUs8zcSvS3Rt2Gl2lGwdx
-         RQN1JoR+29KW0ezKMIbvqM7eZBQoFo5Jbu2fktCfzH22/JSbfE5db1f/wFOfRXLvE9E6
-         fVr3DQsMBrCGVTZsYzjcep2T2ApNTwpnVd24mYvOapfOlxI8fta/+CXnZcvvBezTBsrE
-         8siaLqbJzD7w7pnwvurasEiu4Vxe0ISjYJXQMbaQGiudF7rKfy1nJiSTW0TiGsNPMQHt
-         c9Y1hch2n8kCn0NgYusestmua4sqQzS5Eaf8b2cljbPEw58JbVjeWYE2w3Q6ByfOuEPK
-         wHxQ==
-X-Gm-Message-State: AOAM532EPk5WRgFSRvFxTKzpVJlLdOtdiV5IxIYNBTJQGW7aQ+ytCh+g
-        L0e2iJkgaxgmqWp9PWwOafBv2EG5zQPxofw3mjVsvv2hA4Ko
-X-Google-Smtp-Source: ABdhPJy212/T4MKm22Wz7/crkIu2MrbbmEL2fHGVtV5FCoO89jUr0s0+aG2iq3Yn4+UEJZPi8Oy+1gowNjZZZ+GrKx4Pvw8V2uTA
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qTlS5c0XlIHho1ukeGMzh75bo5sQaeoFpUTTm2uNpzc=;
+        b=d/nVhH51j4hQ6YZw2rnMaRNlpLfnIfpOpmRuVCsoVWiNW3OneCd3qoI/riAwzcKtkp
+         lPcsdgvclcnKAFT+0vvr55WZOK8hQZ2KxrFt/0TH2LUhRUGpZgwWBUsZcokoF0t1GvOw
+         Im31VsgOCKqosUSltJvNSJn/9x0qmOUWln4SEg+SIJyZF7GsS+gK6xlzPE//J7rA99Nl
+         Dfvv4gJLqnGwsK2AkJC/zTPd7MeZq9Bd6SFGOraTOqMEI8pSOpeS8QnjvrHgCci67Dwj
+         YXG4bF45ZTRxQcq4gT1Y+gdGsb3eTxVkeHiUk2WpRL24hMvmFtB7O0bnUCfPG6Jrrgai
+         ngyw==
+X-Gm-Message-State: AOAM530Y9LABFZ+MZhbhUgYae7YzgLByshnDL9RW5Ye/azJna4Hh5dI8
+        d34CkwGMZuKK0H8yfRKZ7PU3rRuVyzAAKxwSyQS0tg==
+X-Google-Smtp-Source: ABdhPJxLXgEx4GfAJqfhwAJWdjOcw9dtGnCoLWj0+bi1jKtbZk9fzVm5XRh6o4WAs9KLwblOs3WuZ4tEMRFwhu3Yq7U=
+X-Received: by 2002:a17:90a:c283:: with SMTP id f3mr12123076pjt.166.1591966829499;
+ Fri, 12 Jun 2020 06:00:29 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:d08:: with SMTP id q8mr7640983jaj.77.1591963452207;
- Fri, 12 Jun 2020 05:04:12 -0700 (PDT)
-Date:   Fri, 12 Jun 2020 05:04:12 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000107efa05a7e1e06c@google.com>
-Subject: WARNING in pegasus_open/usb_submit_urb
-From:   syzbot <syzbot+04ee0cb4caccaed12d78@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        ingrassia@epigenesys.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <00000000000082f13605a72fbbcb@google.com>
+In-Reply-To: <00000000000082f13605a72fbbcb@google.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Fri, 12 Jun 2020 15:00:18 +0200
+Message-ID: <CAAeHK+wxBFC65=sQY5q7zANk8RHJ1quMsSdN9zBn=i2G4jjhmg@mail.gmail.com>
+Subject: Re: KASAN: out-of-bounds Read in ath9k_hif_usb_rx_cb
+To:     syzbot <syzbot+d7289ef49bcdfd654265@syzkaller.appspotmail.com>
+Cc:     ath9k-devel@qca.qualcomm.com,
+        "David S. Miller" <davem@davemloft.net>, kuba@kernel.org,
+        Kalle Valo <kvalo@codeaurora.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        linux-wireless@vger.kernel.org, netdev <netdev@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Wed, Jun 3, 2020 at 5:32 PM syzbot
+<syzbot+d7289ef49bcdfd654265@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following crash on:
+>
+> HEAD commit:    2089c6ed usb: core: kcov: collect coverage from usb comple..
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=17cf6bd6100000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=b7479d3935864b1b
+> dashboard link: https://syzkaller.appspot.com/bug?extid=d7289ef49bcdfd654265
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+>
+> Unfortunately, I don't have any reproducer for this crash yet.
+>
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+d7289ef49bcdfd654265@syzkaller.appspotmail.com
+>
+> ==================================================================
+> BUG: KASAN: out-of-bounds in ath9k_hif_usb_rx_stream drivers/net/wireless/ath/ath9k/hif_usb.c:622 [inline]
+> BUG: KASAN: out-of-bounds in ath9k_hif_usb_rx_cb+0xe64/0xf90 drivers/net/wireless/ath/ath9k/hif_usb.c:666
+> Read of size 4 at addr ffff8881acb6c0d0 by task swapper/1/0
+>
+> CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.7.0-rc6-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> Call Trace:
+>  <IRQ>
+>  __dump_stack lib/dump_stack.c:77 [inline]
+>  dump_stack+0xef/0x16e lib/dump_stack.c:118
+>  print_address_description.constprop.0.cold+0xd3/0x415 mm/kasan/report.c:382
+>  __kasan_report.cold+0x37/0x7d mm/kasan/report.c:511
+>  kasan_report+0x33/0x50 mm/kasan/common.c:625
+>  ath9k_hif_usb_rx_stream drivers/net/wireless/ath/ath9k/hif_usb.c:622 [inline]
+>  ath9k_hif_usb_rx_cb+0xe64/0xf90 drivers/net/wireless/ath/ath9k/hif_usb.c:666
+>  __usb_hcd_giveback_urb+0x29a/0x550 drivers/usb/core/hcd.c:1650
+>  usb_hcd_giveback_urb+0x368/0x420 drivers/usb/core/hcd.c:1716
+>  dummy_timer+0x125e/0x32b4 drivers/usb/gadget/udc/dummy_hcd.c:1967
+>  call_timer_fn+0x1ac/0x700 kernel/time/timer.c:1405
+>  expire_timers kernel/time/timer.c:1450 [inline]
+>  __run_timers kernel/time/timer.c:1774 [inline]
+>  __run_timers kernel/time/timer.c:1741 [inline]
+>  run_timer_softirq+0x5f9/0x1500 kernel/time/timer.c:1787
+>  __do_softirq+0x21e/0x9aa kernel/softirq.c:292
+>  invoke_softirq kernel/softirq.c:373 [inline]
+>  irq_exit+0x178/0x1a0 kernel/softirq.c:413
+>  exiting_irq arch/x86/include/asm/apic.h:546 [inline]
+>  smp_apic_timer_interrupt+0x141/0x540 arch/x86/kernel/apic/apic.c:1140
+>  apic_timer_interrupt+0xf/0x20 arch/x86/entry/entry_64.S:829
+>  </IRQ>
+> RIP: 0010:default_idle+0x28/0x300 arch/x86/kernel/process.c:698
+> Code: cc cc 41 56 41 55 65 44 8b 2d 94 3f 6b 7a 41 54 55 53 0f 1f 44 00 00 e8 16 28 af fb e9 07 00 00 00 0f 00 2d 7a e1 4b 00 fb f4 <65> 44 8b 2d 70 3f 6b 7a 0f 1f 44 00 00 5b 5d 41 5c 41 5d 41 5e c3
+> RSP: 0018:ffff8881da227da8 EFLAGS: 00000246 ORIG_RAX: ffffffffffffff13
+> RAX: 0000000000000007 RBX: ffff8881da20b180 RCX: 0000000000000000
+> RDX: 0000000000000000 RSI: 0000000000000006 RDI: ffff8881da20b9fc
+> RBP: ffffed103b441630 R08: ffff8881da20b180 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000001
+> R13: 0000000000000001 R14: ffffffff87e88c40 R15: 0000000000000000
+>  cpuidle_idle_call kernel/sched/idle.c:154 [inline]
+>  do_idle+0x3e0/0x500 kernel/sched/idle.c:269
+>  cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:361
+>  start_secondary+0x2ae/0x390 arch/x86/kernel/smpboot.c:268
+>  secondary_startup_64+0xb6/0xc0 arch/x86/kernel/head_64.S:242
+>
+> The buggy address belongs to the page:
+> page:ffffea0006b2db00 refcount:0 mapcount:0 mapping:0000000080660f93 index:0x0
+> flags: 0x200000000000000()
+> raw: 0200000000000000 0000000000000000 ffffea0006b2db08 0000000000000000
+> raw: 0000000000000000 0000000000000000 00000000ffffffff 0000000000000000
+> page dumped because: kasan: bad access detected
+>
+> Memory state around the buggy address:
+>  ffff8881acb6bf80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>  ffff8881acb6c000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+> >ffff8881acb6c080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>                                                  ^
+>  ffff8881acb6c100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>  ffff8881acb6c180: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+> ==================================================================
+>
+>
+> ---
+> This bug is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this bug report. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-syzbot found the following crash on:
-
-HEAD commit:    2089c6ed usb: core: kcov: collect coverage from usb comple..
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=139b2e71100000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b7479d3935864b1b
-dashboard link: https://syzkaller.appspot.com/bug?extid=04ee0cb4caccaed12d78
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=141cc89e100000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10ca168e100000
-
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+04ee0cb4caccaed12d78@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-usb 1-1: BOGUS urb xfer, pipe 1 != type 3
-WARNING: CPU: 0 PID: 370 at drivers/usb/core/urb.c:478 usb_submit_urb+0x1188/0x1460 drivers/usb/core/urb.c:478
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 0 PID: 370 Comm: systemd-udevd Not tainted 5.7.0-rc6-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0xef/0x16e lib/dump_stack.c:118
- panic+0x2aa/0x6e1 kernel/panic.c:221
- __warn.cold+0x2f/0x30 kernel/panic.c:582
- report_bug+0x27b/0x2f0 lib/bug.c:195
- fixup_bug arch/x86/kernel/traps.c:175 [inline]
- fixup_bug arch/x86/kernel/traps.c:170 [inline]
- do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:267
- do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
- invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
-RIP: 0010:usb_submit_urb+0x1188/0x1460 drivers/usb/core/urb.c:478
-Code: 4d 85 ed 74 46 e8 98 af d2 fd 4c 89 f7 e8 d0 a3 16 ff 41 89 d8 44 89 e1 4c 89 ea 48 89 c6 48 c7 c7 00 56 3d 86 e8 80 85 a6 fd <0f> 0b e9 20 f4 ff ff e8 6c af d2 fd 0f 1f 44 00 00 e8 62 af d2 fd
-RSP: 0018:ffff8881cc58f770 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff812a339d RDI: ffffed10398b1ee0
-RBP: ffff8881cf6fcd00 R08: ffff8881cc7098c0 R09: ffffed103b64629a
-R10: ffff8881db2314cf R11: ffffed103b646299 R12: 0000000000000001
-R13: ffff8881c6a24510 R14: ffff8881cc96a0a0 R15: ffff8881cf92fb00
- pegasus_open+0x192/0x2f0 drivers/input/tablet/pegasus_notetaker.c:228
- input_open_device+0x16c/0x2c0 drivers/input/input.c:624
- evdev_open_device drivers/input/evdev.c:414 [inline]
- evdev_open+0x3e1/0x500 drivers/input/evdev.c:496
- chrdev_open+0x219/0x5c0 fs/char_dev.c:414
- do_dentry_open+0x4ac/0x1160 fs/open.c:797
- do_open fs/namei.c:3229 [inline]
- path_openat+0x1a0b/0x2740 fs/namei.c:3346
- do_filp_open+0x192/0x260 fs/namei.c:3373
- do_sys_openat2+0x585/0x7d0 fs/open.c:1148
- do_sys_open+0xc3/0x140 fs/open.c:1164
- do_syscall_64+0xb6/0x5a0 arch/x86/entry/common.c:295
- entry_SYSCALL_64_after_hwframe+0x49/0xb3
-RIP: 0033:0x7f0b5e166840
-Code: 73 01 c3 48 8b 0d 68 77 20 00 f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 83 3d 89 bb 20 00 00 75 10 b8 02 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 31 c3 48 83 ec 08 e8 1e f6 ff ff 48 89 04 24
-RSP: 002b:00007fff4c5536e8 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-RAX: ffffffffffffffda RBX: 000055d7ce74c400 RCX: 00007f0b5e166840
-RDX: 0000000000000000 RSI: 0000000000080000 RDI: 000055d7ce747d50
-RBP: 000055d7ce747d50 R08: 000055d7ccf12670 R09: 0000000000000078
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000020
-R13: 0000000000000000 R14: 0000000000000001 R15: 0000000000000000
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
-
-
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+#syz dup: KASAN: stack-out-of-bounds Write in ath9k_hif_usb_rx_cb
