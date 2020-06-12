@@ -2,101 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 168B31F72D0
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Jun 2020 06:19:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D22D1F731D
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Jun 2020 06:45:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726386AbgFLETX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 Jun 2020 00:19:23 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:49530 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725845AbgFLETX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 12 Jun 2020 00:19:23 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1591935562; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=P2KKmtNTkY3aQMCepZoevcFYFYgTZr4wbO0eMIvry+Y=; b=qJppggMUDCV/wACDOCyBQJz90vbutszeTKIGS/HaEw0Pm5KXbbaeuL69eGFhIShPilWXaODn
- d8313KoOvghcD20THDbMX6p96FEMnLQfY9kHgJMt3/Kx9VkN5jtGsbmYAqMpBNAWiORKyYoD
- HTquD/25+ZNU9MbviW//BuvSxTw=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
- 5ee302470206ad41d14bd0c7 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 12 Jun 2020 04:19:19
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 9F1F8C4339C; Fri, 12 Jun 2020 04:19:18 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [10.110.17.171] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 6E15FC433CA;
-        Fri, 12 Jun 2020 04:19:17 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 6E15FC433CA
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [PATCH 1/3] usb: typec: Add QCOM PMIC typec detection driver
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jack Pham <jackp@codeaurora.org>
-Cc:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-        mark.rutland@arm.com, robh+dt@kernel.org, agross@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        bryan.odonoghue@linaro.org
-References: <20200609205851.30113-1-wcheng@codeaurora.org>
- <20200609205851.30113-2-wcheng@codeaurora.org>
- <20200610011837.GA14816@jackp-linux.qualcomm.com>
- <20200610193757.GB1246811@builder.lan>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <659ee90a-3d8f-9e04-9dc5-0c1521a8ba97@codeaurora.org>
-Date:   Thu, 11 Jun 2020 21:19:16 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1726349AbgFLEpd convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 12 Jun 2020 00:45:33 -0400
+Received: from asix.com.tw ([210.243.224.51]:31432 "EHLO freebsd2.asix.com.tw"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725763AbgFLEpd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 12 Jun 2020 00:45:33 -0400
+X-Greylist: delayed 1800 seconds by postgrey-1.27 at vger.kernel.org; Fri, 12 Jun 2020 00:45:32 EDT
+Received: from LouisSurfacePro (122-146-92-225.adsl.static.sparqnet.net [122.146.92.225] (may be forged))
+        (authenticated bits=0)
+        by freebsd2.asix.com.tw (8.15.2/8.15.2) with ESMTPSA id 05C4DwJs069313
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 12 Jun 2020 12:13:58 +0800 (CST)
+        (envelope-from louis@asix.com.tw)
+Authentication-Results: freebsd2.asix.com.tw; sender-id=softfail header.from=louis@asix.com.tw; auth=pass (LOGIN); spf=softfail smtp.mfrom=louis@asix.com.tw
+X-Authentication-Warning: freebsd2.asix.com.tw: Host 122-146-92-225.adsl.static.sparqnet.net [122.146.92.225] (may be forged) claimed to be LouisSurfacePro
+From:   <louis@asix.com.tw>
+To:     "'ASIX_Allan [Office]'" <allan@asix.com.tw>,
+        "'Jeremy Kerr'" <jk@ozlabs.org>,
+        "'Freddy Xin'" <freddy@asix.com.tw>
+Cc:     "'Peter Fink'" <pfink@christ-es.de>, <netdev@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>
+References: <20200527060334.19441-1-jk@ozlabs.org> <b9e1db7761761e321b23bd0d22ab981cbd5d6abe.camel@ozlabs.org> <000601d638a2$317f44d0$947dce70$@asix.com.tw>
+In-Reply-To: <000601d638a2$317f44d0$947dce70$@asix.com.tw>
+Subject: RE: [RFC PATCH] net: usb: ax88179_178a: fix packet alignment padding
+Date:   Fri, 12 Jun 2020 12:10:47 +0800
+Message-ID: <000801d6406f$757d45e0$6077d1a0$@asix.com.tw>
 MIME-Version: 1.0
-In-Reply-To: <20200610193757.GB1246811@builder.lan>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQHmoCzAkPvBY+mFBa6Wg5HaQv5jdQFGCLaeAakD2h+onCO8kA==
+Content-Language: zh-tw
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Jeremy,
+
+Thanks for the correction.
+Indeed, the hardware adds two bytes dummy data at beginning of Ethernet packet to make IP header aligned. 
+The original patch made by Freddy contains the length of dummy header. 
+Thanks for your concerning.
+Please let us know if you have any other question.
+
+Thank you,
+Louis.
+
+---
+Best regards,
+Allan Chou
+ASIX Electronics Corporation
+TEL: 886-3-5799500 ext.228
+FAX: 886-3-5799558
+E-mail: allan@asix.com.tw 
+https://www.asix.com.tw/ 
 
 
-On 6/10/2020 12:37 PM, Bjorn Andersson wrote:
->> along with USB_BASE @ 0x1300, is it ok to allow this driver to access
->> registers outside of its 'reg' base (0x1500 according to the DT
->> bindings)?
->>
+
+-----Original Message-----
+From: Jeremy Kerr <jk@ozlabs.org> 
+Sent: Tuesday, June 2, 2020 11:18 AM
+To: Freddy Xin <freddy@asix.com.tw>; Allan Chou <allan@asix.com.tw>
+Cc: Peter Fink <pfink@christ-es.de>; netdev@vger.kernel.org; linux-usb@vger.kernel.org
+Subject: Re: [RFC PATCH] net: usb: ax88179_178a: fix packet alignment padding
+
+Hi Freddy and Allan,
+
+Just following up on the RFC patch below: Can you confirm whether the packet len (in the hardware-provided packet RX metadata) includes the two-byte padding field? Is this the same for all ax88179 devices?
+
+Cheers,
+
+
+Jeremy
+
+> Using a AX88179 device (0b95:1790), I see two bytes of appended data 
+> on every RX packet. For example, this 48-byte ping, using 0xff as a 
+> payload byte:
 > 
-> Depending on how entangled a future driver for the charger blocks would
-> be one could either just upstream a dcdc regulator driver to control
-> vbus today, or a "lite version" of a charging driver exposing just the
-> vbus regulator.
+>   04:20:22.528472 IP 192.168.1.1 > 192.168.1.2: ICMP echo request, id 2447, seq 1, length 64
+> 	0x0000:  000a cd35 ea50 000a cd35 ea4f 0800 4500
+> 	0x0010:  0054 c116 4000 4001 f63e c0a8 0101 c0a8
+> 	0x0020:  0102 0800 b633 098f 0001 87ea cd5e 0000
+> 	0x0030:  0000 dcf2 0600 0000 0000 ffff ffff ffff
+> 	0x0040:  ffff ffff ffff ffff ffff ffff ffff ffff
+> 	0x0050:  ffff ffff ffff ffff ffff ffff ffff ffff
+> 	0x0060:  ffff 961f
 > 
-> Either way I would prefer this over poking the register directly from
-> this driver, as it will make it tricky to migrate to a proper charger
-> driver later.
+> Those last two bytes - 96 1f - aren't part of the original packet.
 > 
-> Regards,
-> Bjorn
+> In the ax88179 RX path, the usbnet rx_fixup function trims a 2-byte 
+> 'alignment pseudo header' from the start of the packet, and sets the 
+> length from a per-packet field populated by hardware. It looks like 
+> that length field *includes* the 2-byte header; the current driver 
+> assumes that it's excluded.
+> 
+> This change trims the 2-byte alignment header after we've set the 
+> packet length, so the resulting packet length is correct. While we're 
+> moving the comment around, this also fixes the spelling of 'pseudo'.
+> 
+> Signed-off-by: Jeremy Kerr <jk@ozlabs.org>
+> 
+> ---
+> RFC: I don't have access to docs for this hardware, so this is all 
+> based on observed behaviour of the reported packet length.
+> ---
+>  drivers/net/usb/ax88179_178a.c | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/net/usb/ax88179_178a.c 
+> b/drivers/net/usb/ax88179_178a.c index 93044cf1417a..1fe4cc28d154 
+> 100644
+> --- a/drivers/net/usb/ax88179_178a.c
+> +++ b/drivers/net/usb/ax88179_178a.c
+> @@ -1414,10 +1414,10 @@ static int ax88179_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
+>  		}
+>  
+>  		if (pkt_cnt == 0) {
+> -			/* Skip IP alignment psudo header */
+> -			skb_pull(skb, 2);
+>  			skb->len = pkt_len;
+> -			skb_set_tail_pointer(skb, pkt_len);
+> +			/* Skip IP alignment pseudo header */
+> +			skb_pull(skb, 2);
+> +			skb_set_tail_pointer(skb, skb->len);
+>  			skb->truesize = pkt_len + sizeof(struct sk_buff);
+>  			ax88179_rx_checksum(skb, pkt_hdr);
+>  			return 1;
+> @@ -1426,8 +1426,9 @@ static int ax88179_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
+>  		ax_skb = skb_clone(skb, GFP_ATOMIC);
+>  		if (ax_skb) {
+>  			ax_skb->len = pkt_len;
+> -			ax_skb->data = skb->data + 2;
+> -			skb_set_tail_pointer(ax_skb, pkt_len);
+> +			/* Skip IP alignment pseudo header */
+> +			skb_pull(ax_skb, 2);
+> +			skb_set_tail_pointer(ax_skb, ax_skb->len);
+>  			ax_skb->truesize = pkt_len + sizeof(struct sk_buff);
+>  			ax88179_rx_checksum(ax_skb, pkt_hdr);
+>  			usbnet_skb_return(dev, ax_skb);
 > 
 
-Hi Bjorn/Jack,
-
-I have removed the need for referencing other base addresses other than
-the type C block within the  driver, and have moved the DCDC set to be
-handled by another regulator driver, which solely controls the vbus
-output.  The type C driver will control the vbus output using the
-regulator APIs.  Thanks for the input.
-
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
