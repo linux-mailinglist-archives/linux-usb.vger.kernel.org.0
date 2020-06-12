@@ -2,89 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 569EA1F7C76
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Jun 2020 19:24:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0C901F7F8E
+	for <lists+linux-usb@lfdr.de>; Sat, 13 Jun 2020 01:20:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726340AbgFLRYY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 Jun 2020 13:24:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54668 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726089AbgFLRYX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Jun 2020 13:24:23 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F87C03E96F;
-        Fri, 12 Jun 2020 10:24:22 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id l63so2175034pge.12;
-        Fri, 12 Jun 2020 10:24:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=yyx3aGH1IHsk8WwCSPgIF039LEqkrtOiEcxMrYeLSY4=;
-        b=A+ATlkXI9Yn9pkdpGFh7hZhvaRHi4S8bNSQAlaaQ25dacfgjH5T3vn4K3ZTQv2urqZ
-         30YuNP+iY2a8FZ89Z3Rfbsufy3rP9Hf7xO3DKkdSv4E35poG0rdTBUm1LNoUpfERvBmd
-         yXzC2VrZhxFcWaCMCHpWEhUKnUDYl8KwnlSBxWv0gzxYdm7ZfU2fdi3FuwpQGPHLBSvV
-         HvWUYmgpf6oE/Ehnfvzbf/zsCwK44SNy4J+ALNiq9APSP10xOmH2KWjmAW7G3jXPmxCU
-         2WfYxMmx0rSleKywVZCoPOVBvixlE0cf4xDXI10MD9luPNDRH+rBiUvTqKeY0tmJeeYk
-         6kYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=yyx3aGH1IHsk8WwCSPgIF039LEqkrtOiEcxMrYeLSY4=;
-        b=aEeyNA88rClrtKaq0y9BK3Dd2u3/9VmMB8scRQEeQzISXw4vtA9NlmYNG12c9Xw04g
-         5CsYkOOX/p8WvBWzmlokTBzU4Hdl+i8UI8lUl9VmV8w1bsIPr/tk1jFZP5imgGHjDBqL
-         YEYBVu4MmeyQAruoqE+Ne/i3nQ/ShfZ/Xp/2K9EdN8jHeQbzSoAUw7ZaWkBDBrOOANIf
-         X8kdb+Akov25yJ1OHuolNJndRuufAd3TUwdVccN3o4fQWjnkjvgOz/lPjYc0kzk0dXKx
-         3y2yY0vfCwMSAMgdGLMwLdB2acqglsmAbzkLZ3NXGhbpq8aAB2mC88/+RVyeykwAyeb8
-         zGgA==
-X-Gm-Message-State: AOAM532m4pMD5PRMWTyD32PCb7sCbbhOEXUphAPLU2VexZG/WR+bnrmn
-        wSR6zpSU86dcwRhMo6QDrGE=
-X-Google-Smtp-Source: ABdhPJzcMXRAo4TANZWsgs8un+/4P47C64drTFdnZEtpz2AR5bK8rHPpQQZyegMFr8iPbXvYl6TNwg==
-X-Received: by 2002:a63:461c:: with SMTP id t28mr12227620pga.316.1591982662374;
-        Fri, 12 Jun 2020 10:24:22 -0700 (PDT)
-Received: from [10.230.188.43] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id h7sm5903409pgg.17.2020.06.12.10.24.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Jun 2020 10:24:21 -0700 (PDT)
-Subject: Re: [PATCH v3 5/9] usb: xhci-pci: Add support for reset controllers
-To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        gregkh@linuxfoundation.org, wahrenst@gmx.net,
-        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@intel.com>
-Cc:     linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com, tim.gover@raspberrypi.org,
-        linux-pci@vger.kernel.org, helgaas@kernel.org,
-        andy.shevchenko@gmail.com, mathias.nyman@linux.intel.com,
-        lorenzo.pieralisi@arm.com
-References: <20200612171334.26385-1-nsaenzjulienne@suse.de>
- <20200612171334.26385-6-nsaenzjulienne@suse.de>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <4ef2d78f-64ea-b56e-7971-a60190a05a92@gmail.com>
-Date:   Fri, 12 Jun 2020 10:24:17 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Firefox/68.0 Thunderbird/68.9.0
+        id S1726506AbgFLXTo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 Jun 2020 19:19:44 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:50135 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726310AbgFLXTl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Jun 2020 19:19:41 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1592003980; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=fE3heu7IHyIgsQESfgZjPzMFAyntiQh36ilt5hn1fXk=; b=G9vNYY+LDb37QWMetakmRKrTUKkOfgziNN9rh0S+IaHK4lBXoXbwTlFK2SO/9TKaQSFcjGtH
+ PvEqPZYseAPnuwQXdJEvgYjPJhYbWcR1yzxEvUSKHA43kR0EFf9OeTCECIXaFdVT5Y9tiHDV
+ QTihhTjKADuwGrposuBXNQfKkP0=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n12.prod.us-west-2.postgun.com with SMTP id
+ 5ee40d7c3a8a8b20b84d91a4 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 12 Jun 2020 23:19:24
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 66020C433A0; Fri, 12 Jun 2020 23:19:24 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id ECE73C433C8;
+        Fri, 12 Jun 2020 23:19:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org ECE73C433C8
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=wcheng@codeaurora.org
+From:   Wesley Cheng <wcheng@codeaurora.org>
+To:     robh+dt@kernel.org, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org, mark.rutland@arm.com,
+        broonie@kernel.org, lgirdwood@gmail.com, agross@kernel.org,
+        bjorn.andersson@linaro.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        lijun.kernel@gmail.com, rdunlap@infradead.org,
+        jackp@codeaurora.org, bryan.odonoghue@linaro.org,
+        Wesley Cheng <wcheng@codeaurora.org>
+Subject: [PATCH v2 0/6] Introduce PMIC based USB type C detection
+Date:   Fri, 12 Jun 2020 16:19:12 -0700
+Message-Id: <20200612231918.8001-1-wcheng@codeaurora.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <20200612171334.26385-6-nsaenzjulienne@suse.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Changes in v2:
+ - Use devm_kzalloc() in qcom_pmic_typec_probe()
+ - Add checks to make sure return value of typec_find_port_power_role() is
+   valid
+ - Added a VBUS output regulator driver, which will be used by the PMIC USB
+   type c driver to enable/disable the source
+ - Added logic to control vbus source from the PMIC type c driver when
+   UFP/DFP is detected
+ - Added dt-binding for this new regulator driver
+ - Fixed Kconfig typec notation to match others
+ - Leave type C block disabled until enabled by a platform DTS
 
+Add the required drivers for implementing type C orientation and role
+detection using the Qualcomm PMIC.  Currently, PMICs such as the PM8150B
+have an integrated type C block, which can be utilized for this.  This
+series adds the dt-binding, PMIC type C driver, and DTS nodes.
 
-On 6/12/2020 10:13 AM, Nicolas Saenz Julienne wrote:
-> Some atypical users of xhci-pci might need to manually reset their xHCI
-> controller before starting the HCD setup. Check if a reset controller
-> device is available to the PCI bus and trigger a reset.
-> 
-> Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+The PMIC type C driver will register itself as a type C port w/ a
+registered type C switch for orientation, and will fetch a USB role switch
+handle for the role notifications.  It will also have the ability to enable
+the VBUS output to any connected devices based on if the device is behaving
+as a UFP or DFP.
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Wesley Cheng (6):
+  usb: typec: Add QCOM PMIC typec detection driver
+  dt-bindings: usb: Add Qualcomm PMIC type C controller dt-binding
+  arm64: boot: dts: qcom: pm8150b: Add node for USB type C block
+  regulator: Add support for QCOM PMIC VBUS booster
+  dt-bindings: regulator: Add dt-binding for QCOM PMIC VBUS output
+    regulator
+  arm64: boot: dts: qcom: pm8150b: Add DTS node for PMIC VBUS booster
+
+ .../regulator/qcom,usb-vbus-regulator.yaml    |  41 +++
+ .../bindings/usb/qcom,pmic-typec.yaml         | 117 ++++++++
+ arch/arm64/boot/dts/qcom/pm8150b.dtsi         |  13 +
+ arch/arm64/boot/dts/qcom/sm8150-mtp.dts       |   7 +
+ drivers/regulator/Kconfig                     |  10 +
+ drivers/regulator/Makefile                    |   1 +
+ drivers/regulator/qcom_usb_vbus-regulator.c   | 147 ++++++++++
+ drivers/usb/typec/Kconfig                     |  12 +
+ drivers/usb/typec/Makefile                    |   1 +
+ drivers/usb/typec/qcom-pmic-typec.c           | 275 ++++++++++++++++++
+ 10 files changed, 624 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml
+ create mode 100644 Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml
+ create mode 100644 drivers/regulator/qcom_usb_vbus-regulator.c
+ create mode 100644 drivers/usb/typec/qcom-pmic-typec.c
+
 -- 
-Florian
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+
