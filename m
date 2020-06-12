@@ -2,96 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC6B01F7C31
-	for <lists+linux-usb@lfdr.de>; Fri, 12 Jun 2020 19:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 569EA1F7C76
+	for <lists+linux-usb@lfdr.de>; Fri, 12 Jun 2020 19:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726478AbgFLRN7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 Jun 2020 13:13:59 -0400
-Received: from mx2.suse.de ([195.135.220.15]:50982 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726448AbgFLRNz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 12 Jun 2020 13:13:55 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id DC2AEAC64;
-        Fri, 12 Jun 2020 17:13:57 +0000 (UTC)
-From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-To:     f.fainelli@gmail.com, gregkh@linuxfoundation.org, wahrenst@gmx.net,
+        id S1726340AbgFLRYY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 12 Jun 2020 13:24:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54668 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726089AbgFLRYX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Jun 2020 13:24:23 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F87C03E96F;
+        Fri, 12 Jun 2020 10:24:22 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id l63so2175034pge.12;
+        Fri, 12 Jun 2020 10:24:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=yyx3aGH1IHsk8WwCSPgIF039LEqkrtOiEcxMrYeLSY4=;
+        b=A+ATlkXI9Yn9pkdpGFh7hZhvaRHi4S8bNSQAlaaQ25dacfgjH5T3vn4K3ZTQv2urqZ
+         30YuNP+iY2a8FZ89Z3Rfbsufy3rP9Hf7xO3DKkdSv4E35poG0rdTBUm1LNoUpfERvBmd
+         yXzC2VrZhxFcWaCMCHpWEhUKnUDYl8KwnlSBxWv0gzxYdm7ZfU2fdi3FuwpQGPHLBSvV
+         HvWUYmgpf6oE/Ehnfvzbf/zsCwK44SNy4J+ALNiq9APSP10xOmH2KWjmAW7G3jXPmxCU
+         2WfYxMmx0rSleKywVZCoPOVBvixlE0cf4xDXI10MD9luPNDRH+rBiUvTqKeY0tmJeeYk
+         6kYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=yyx3aGH1IHsk8WwCSPgIF039LEqkrtOiEcxMrYeLSY4=;
+        b=aEeyNA88rClrtKaq0y9BK3Dd2u3/9VmMB8scRQEeQzISXw4vtA9NlmYNG12c9Xw04g
+         5CsYkOOX/p8WvBWzmlokTBzU4Hdl+i8UI8lUl9VmV8w1bsIPr/tk1jFZP5imgGHjDBqL
+         YEYBVu4MmeyQAruoqE+Ne/i3nQ/ShfZ/Xp/2K9EdN8jHeQbzSoAUw7ZaWkBDBrOOANIf
+         X8kdb+Akov25yJ1OHuolNJndRuufAd3TUwdVccN3o4fQWjnkjvgOz/lPjYc0kzk0dXKx
+         3y2yY0vfCwMSAMgdGLMwLdB2acqglsmAbzkLZ3NXGhbpq8aAB2mC88/+RVyeykwAyeb8
+         zGgA==
+X-Gm-Message-State: AOAM532m4pMD5PRMWTyD32PCb7sCbbhOEXUphAPLU2VexZG/WR+bnrmn
+        wSR6zpSU86dcwRhMo6QDrGE=
+X-Google-Smtp-Source: ABdhPJzcMXRAo4TANZWsgs8un+/4P47C64drTFdnZEtpz2AR5bK8rHPpQQZyegMFr8iPbXvYl6TNwg==
+X-Received: by 2002:a63:461c:: with SMTP id t28mr12227620pga.316.1591982662374;
+        Fri, 12 Jun 2020 10:24:22 -0700 (PDT)
+Received: from [10.230.188.43] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id h7sm5903409pgg.17.2020.06.12.10.24.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Jun 2020 10:24:21 -0700 (PDT)
+Subject: Re: [PATCH v3 5/9] usb: xhci-pci: Add support for reset controllers
+To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        gregkh@linuxfoundation.org, wahrenst@gmx.net,
         p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com
+        Mathias Nyman <mathias.nyman@intel.com>
 Cc:     linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, tim.gover@raspberrypi.org,
+        linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com, tim.gover@raspberrypi.org,
         linux-pci@vger.kernel.org, helgaas@kernel.org,
         andy.shevchenko@gmail.com, mathias.nyman@linux.intel.com,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH v3 9/9] Revert "PCI: brcmstb: Wait for Raspberry Pi's firmware when present"
-Date:   Fri, 12 Jun 2020 19:13:33 +0200
-Message-Id: <20200612171334.26385-10-nsaenzjulienne@suse.de>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200612171334.26385-1-nsaenzjulienne@suse.de>
+        lorenzo.pieralisi@arm.com
 References: <20200612171334.26385-1-nsaenzjulienne@suse.de>
+ <20200612171334.26385-6-nsaenzjulienne@suse.de>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <4ef2d78f-64ea-b56e-7971-a60190a05a92@gmail.com>
+Date:   Fri, 12 Jun 2020 10:24:17 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Firefox/68.0 Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200612171334.26385-6-nsaenzjulienne@suse.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This reverts commit 44331189f9082c7e659697bbac1747db3def73e7.
 
-Now that the VL805 init routine is run through a reset controller driver
-the device dependencies are being taken care of by the device core. No
-need to do it manually here.
 
-Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+On 6/12/2020 10:13 AM, Nicolas Saenz Julienne wrote:
+> Some atypical users of xhci-pci might need to manually reset their xHCI
+> controller before starting the HCD setup. Check if a reset controller
+> device is available to the PCI bus and trigger a reset.
+> 
+> Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+
 Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
----
- drivers/pci/controller/pcie-brcmstb.c | 17 -----------------
- 1 file changed, 17 deletions(-)
-
-diff --git a/drivers/pci/controller/pcie-brcmstb.c b/drivers/pci/controller/pcie-brcmstb.c
-index 7730ea845ff2..752f5b331579 100644
---- a/drivers/pci/controller/pcie-brcmstb.c
-+++ b/drivers/pci/controller/pcie-brcmstb.c
-@@ -28,8 +28,6 @@
- #include <linux/string.h>
- #include <linux/types.h>
- 
--#include <soc/bcm2835/raspberrypi-firmware.h>
--
- #include "../pci.h"
- 
- /* BRCM_PCIE_CAP_REGS - Offset for the mandatory capability config regs */
-@@ -931,26 +929,11 @@ static int brcm_pcie_probe(struct platform_device *pdev)
- {
- 	struct device_node *np = pdev->dev.of_node, *msi_np;
- 	struct pci_host_bridge *bridge;
--	struct device_node *fw_np;
- 	struct brcm_pcie *pcie;
- 	struct pci_bus *child;
- 	struct resource *res;
- 	int ret;
- 
--	/*
--	 * We have to wait for Raspberry Pi's firmware interface to be up as a
--	 * PCI fixup, rpi_firmware_init_vl805(), depends on it. This driver's
--	 * probe can race with the firmware interface's (see
--	 * drivers/firmware/raspberrypi.c) and potentially break the PCI fixup.
--	 */
--	fw_np = of_find_compatible_node(NULL, NULL,
--					"raspberrypi,bcm2835-firmware");
--	if (fw_np && !rpi_firmware_get(fw_np)) {
--		of_node_put(fw_np);
--		return -EPROBE_DEFER;
--	}
--	of_node_put(fw_np);
--
- 	bridge = devm_pci_alloc_host_bridge(&pdev->dev, sizeof(*pcie));
- 	if (!bridge)
- 		return -ENOMEM;
 -- 
-2.26.2
-
+Florian
