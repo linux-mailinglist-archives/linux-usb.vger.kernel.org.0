@@ -2,99 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62CA01F80B7
-	for <lists+linux-usb@lfdr.de>; Sat, 13 Jun 2020 05:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC0311F839A
+	for <lists+linux-usb@lfdr.de>; Sat, 13 Jun 2020 16:06:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726414AbgFMD2Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 12 Jun 2020 23:28:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33796 "EHLO
+        id S1726278AbgFMOGf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 13 Jun 2020 10:06:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726392AbgFMD2X (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 12 Jun 2020 23:28:23 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4BD3C03E96F;
-        Fri, 12 Jun 2020 20:28:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=HPEdl5A02jMG4MY9KVqcUkeXN5vUrwEPXxu3d5xQjpI=; b=IXD79xACg/wXUc/d1TEJZl+Bi0
-        BlDkX2FljHwbWMLfk+pIEOCe6gqXrdZyskyPFWmITsAsYvapdVthF3zAiemSBYLML3oOqAzN9uRPt
-        lmF57zZeix7u8AbdTL4wuv3npO/aMQY4jF92IbeCvTCTllCiN20X+X0hmAdOwaNXqomrIq+TX/xtq
-        G9Qi83gc9cJDGO4vtVcN1dGUAvp0yDYxIa0OcqKtYSeKF7ZhSIRo0XuyNf7JA0NxNYDSSX5NDxrPC
-        ThQaGbCDpASszp1w5w5tRV/3L470FMwhG5qbDifHxWBmUa1fCFiYDCnwpjacmk52ThhBKgXST+LVq
-        t9xrD/bw==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jjwq8-0001Cf-Hn; Sat, 13 Jun 2020 03:28:16 +0000
-Subject: Re: [PATCH v2 4/6] regulator: Add support for QCOM PMIC VBUS booster
-To:     Wesley Cheng <wcheng@codeaurora.org>, robh+dt@kernel.org,
-        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-        mark.rutland@arm.com, broonie@kernel.org, lgirdwood@gmail.com,
-        agross@kernel.org, bjorn.andersson@linaro.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        lijun.kernel@gmail.com, jackp@codeaurora.org,
-        bryan.odonoghue@linaro.org
-References: <20200612231918.8001-1-wcheng@codeaurora.org>
- <20200612231918.8001-5-wcheng@codeaurora.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <6d23c903-abec-e2f8-1e63-c062211748c3@infradead.org>
-Date:   Fri, 12 Jun 2020 20:28:14 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
-MIME-Version: 1.0
-In-Reply-To: <20200612231918.8001-5-wcheng@codeaurora.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        with ESMTP id S1726132AbgFMOGe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 13 Jun 2020 10:06:34 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699BCC03E96F;
+        Sat, 13 Jun 2020 07:06:34 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id d6so5054593pjs.3;
+        Sat, 13 Jun 2020 07:06:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=IK5yC+mXW8ZLjiUHkz/X49N5nZRFi1/NuMVfIcCI63A=;
+        b=TjoAC/EVMbd/UAY7eQ7kuBpthFa6tila5Hde+XHB+I/x3VOzAvXcTq6u3eKTHkOMIN
+         kW5qoTuWbCXQ+Hjp0oLoF2FUk3+1nam88trCg5+nTwD9gIZraz4Dfml0Pvhv5bgiXCui
+         Aj4GbTtYqL/YPTDHXRCe+Ga99jecwt97255/aJIuTh+1DiWCdy70EpcbaST4FCNLCdug
+         Fb3c5P6ydgqDxIIBdX/BdL5wlLxeVbTlzrNuD+BzbXpVWbdrTik6XHcCoYzgFVNrpl0e
+         aUVJFoeeR98VKjoaMdKIzamOO402EQ97kevzpcH4siCypYlIsps9Aro9mxjar+kHifjM
+         57Jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=IK5yC+mXW8ZLjiUHkz/X49N5nZRFi1/NuMVfIcCI63A=;
+        b=jc4rDyT0hLyJbsx35Rmp+296gbOQ845LIlEfxcvF/Lrl24CiTfoKs+jvtk06f2Gcfy
+         UxyFJaBfFQFbY0NjV0XHNmSk/EP35xp5uFYchEy7Sabng7AIZIh2bfyG1QAvF1ATGpQ5
+         v3XuYp2UTGOy8xgTiOQa49L/HmyPHdkDqbYOERA15JFLHfl32mZejV+hESFNik7+OF4X
+         Urv+cJF2NId2HBnMDZfk2t9OR4URfR23dQ5edOYyHJjMEblfcAujDP6uAWghH1Ih+0oj
+         CtNmJmoRPW96Gs0gN/tZ+56my6KCkV71ZJm1i0LcyN0F6//I2gRlqysJdrOM7FfKitrB
+         60cA==
+X-Gm-Message-State: AOAM533aFxFm2iTeIwKQ4nRhDxAuCtrTuCsv3AHKJvodjdiqYubVfHHx
+        9ZzsrLs1ZljKC9eDiC3Ts+M=
+X-Google-Smtp-Source: ABdhPJzBjlWK9yd8lsoYPLMQRIvyiHWL206wgm7uKsMFuX2GOiRHzI8v9oyzHB7wal49BSkNISSfCQ==
+X-Received: by 2002:a17:902:b493:: with SMTP id y19mr15089701plr.186.1592057193745;
+        Sat, 13 Jun 2020 07:06:33 -0700 (PDT)
+Received: from localhost.localdomain ([2405:201:d809:ffb0:2ceb:aeb8:b257:998d])
+        by smtp.gmail.com with ESMTPSA id i3sm7786929pjv.1.2020.06.13.07.06.31
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 13 Jun 2020 07:06:33 -0700 (PDT)
+From:   Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>, Sam Ravnborg <sam@ravnborg.org>,
+        Noralf Tronnes <noralf@tronnes.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH 0/3] Support for tft displays based on ilitek,ili9488
+Date:   Sat, 13 Jun 2020 19:36:23 +0530
+Message-Id: <cover.1592055494.git.kamlesh.gurudasani@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 6/12/20 4:19 PM, Wesley Cheng wrote:
-> diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
-> index 074a2ef55943..f9165f9f9051 100644
-> --- a/drivers/regulator/Kconfig
-> +++ b/drivers/regulator/Kconfig
-> @@ -797,6 +797,16 @@ config REGULATOR_QCOM_SPMI
->  	  Qualcomm SPMI PMICs as a module. The module will be named
->  	  "qcom_spmi-regulator".
->  
-> +config REGULATOR_QCOM_USB_VBUS
-> +	tristate "Qualcomm USB Vbus regulator driver"
-> +	depends on SPMI || COMPILE_TEST
-> +	help
-> +	  If you say yes to this option, support will be included for the
-> +	  regulator used to enable the VBUS output.
-> +
-> +	  Say M here if you want to include support for enabling the VBUS output
-> +	  as a module. The module will be named "qcom_usb-regulator".
+The goal of this series is to get the displays based on ilitek,ili9488
+working.
+Eastrising,er-tft035-6 is a display based on ilitek,ili9488
 
-Hi,
-Shouldn't that module name match what is in the Makefile?
+Kamlesh Gurudasani (3):
+  dt-bindings: add vendor prefix for EastRising Technology Co.,Ltd
+  dt-bindings: add binding for Ilitek ili9488 based display panels
+  drm/tiny: add support for tft displays based on ilitek,ili9488
 
+ .../bindings/display/ilitek,ili9488.yaml           |  71 ++++
+ .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+ MAINTAINERS                                        |   7 +
+ drivers/gpu/drm/tiny/Kconfig                       |  13 +
+ drivers/gpu/drm/tiny/Makefile                      |   1 +
+ drivers/gpu/drm/tiny/ili9488.c                     | 446 +++++++++++++++++++++
+ 6 files changed, 540 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/display/ilitek,ili9488.yaml
+ create mode 100644 drivers/gpu/drm/tiny/ili9488.c
 
-> +
->  config REGULATOR_RC5T583
->  	tristate "RICOH RC5T583 Power regulators"
->  	depends on MFD_RC5T583
-> diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
-> index c0d6b96ebd78..cbab28aa7b56 100644
-> --- a/drivers/regulator/Makefile
-> +++ b/drivers/regulator/Makefile
-> @@ -89,6 +89,7 @@ obj-$(CONFIG_REGULATOR_QCOM_RPM) += qcom_rpm-regulator.o
->  obj-$(CONFIG_REGULATOR_QCOM_RPMH) += qcom-rpmh-regulator.o
->  obj-$(CONFIG_REGULATOR_QCOM_SMD_RPM) += qcom_smd-regulator.o
->  obj-$(CONFIG_REGULATOR_QCOM_SPMI) += qcom_spmi-regulator.o
-> +obj-$(CONFIG_REGULATOR_QCOM_USB_VBUS) += qcom_usb_vbus-regulator.o
->  obj-$(CONFIG_REGULATOR_PALMAS) += palmas-regulator.o
->  obj-$(CONFIG_REGULATOR_PFUZE100) += pfuze100-regulator.o
->  obj-$(CONFIG_REGULATOR_PV88060) += pv88060-regulator.o
-
-
-thanks.
 -- 
-~Randy
+2.7.4
 
