@@ -2,74 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A01C1F8660
-	for <lists+linux-usb@lfdr.de>; Sun, 14 Jun 2020 05:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B47101F8665
+	for <lists+linux-usb@lfdr.de>; Sun, 14 Jun 2020 05:34:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726657AbgFND1K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 13 Jun 2020 23:27:10 -0400
-Received: from mta-p6.oit.umn.edu ([134.84.196.206]:50988 "EHLO
-        mta-p6.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726630AbgFND1I (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 13 Jun 2020 23:27:08 -0400
+        id S1726686AbgFNDeB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 13 Jun 2020 23:34:01 -0400
+Received: from mta-p8.oit.umn.edu ([134.84.196.208]:46732 "EHLO
+        mta-p8.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726672AbgFNDeA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 13 Jun 2020 23:34:00 -0400
 Received: from localhost (unknown [127.0.0.1])
-        by mta-p6.oit.umn.edu (Postfix) with ESMTP id 49l0JC46vKz9vCCt
-        for <linux-usb@vger.kernel.org>; Sun, 14 Jun 2020 03:27:07 +0000 (UTC)
+        by mta-p8.oit.umn.edu (Postfix) with ESMTP id 49l0S73PGGz9vbsh
+        for <linux-usb@vger.kernel.org>; Sun, 14 Jun 2020 03:33:59 +0000 (UTC)
 X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p6.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p6.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id zVMhc-rSsXsT for <linux-usb@vger.kernel.org>;
-        Sat, 13 Jun 2020 22:27:07 -0500 (CDT)
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+Received: from mta-p8.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p8.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id CVjazQOD78AV for <linux-usb@vger.kernel.org>;
+        Sat, 13 Jun 2020 22:33:59 -0500 (CDT)
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mta-p6.oit.umn.edu (Postfix) with ESMTPS id 49l0JC2C7Fz9vCCG
-        for <linux-usb@vger.kernel.org>; Sat, 13 Jun 2020 22:27:07 -0500 (CDT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p6.oit.umn.edu 49l0JC2C7Fz9vCCG
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p6.oit.umn.edu 49l0JC2C7Fz9vCCG
-Received: by mail-io1-f70.google.com with SMTP id x2so3552610iof.0
-        for <linux-usb@vger.kernel.org>; Sat, 13 Jun 2020 20:27:07 -0700 (PDT)
+        by mta-p8.oit.umn.edu (Postfix) with ESMTPS id 49l0S71kDCz9vbsc
+        for <linux-usb@vger.kernel.org>; Sat, 13 Jun 2020 22:33:59 -0500 (CDT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p8.oit.umn.edu 49l0S71kDCz9vbsc
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p8.oit.umn.edu 49l0S71kDCz9vbsc
+Received: by mail-io1-f72.google.com with SMTP id c5so9019509ioh.2
+        for <linux-usb@vger.kernel.org>; Sat, 13 Jun 2020 20:33:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=umn.edu; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=trMCJ61FldcoujsZIY8Wf46yXCeSnen3DQpQ/YLOJjY=;
-        b=PMV4p27qe+K63USGyKIQ9bcGu/GsoDsDqegA8UwSQZw0sv3KC59At/WZujXLw9ZsUb
-         HcJryey5zYLoFYxvzv4U5dFXYsiMRj8Nc9C/6SQYiSSLClcKkFn1PKXhXGRYHnEIODSq
-         mQ3OxdnirTx75iKHaZJVJ+YacjtCKIFqgzDeMNR6OKmKA/Y+Jw1RJ4ojB7w61h/4hY+y
-         tePrA21qSLdtdIx48AicGEfPBBjCnN9KwLMgJ7xX+IoTH2Tt1Xc/CodBuA/aA4mFH4Mh
-         JTAkSVUIsBNAw4wjUMhfSJjlaBNDJS5phngaN5khm8wawlumTEWTRUvwOv0yAoXWeQ62
-         /smA==
+        bh=FySxf3tuC7inUbFdRrnqlCjs2f799IH8urJt6EX7/xk=;
+        b=RobdjC7BI9oSeEZz3+a/H55JwjJmB6QuBXEclDdafqqtrEhTehWky6u+IwqCYVPEIr
+         gGVgfJtPLMAL5MnZ9PLf+QBo7RNp9rvWI68hCRSah0fRmd4i9QXSvNkHwkxwtJtJytxl
+         p7wYH12Kng40SW8CFVDWLydDDMtfRo/A7E8rSHoeIdf5URdEFID4wOzmosURBb8M3qqN
+         NEP5W6p7HRvAfGhO0zdRk81N/gdeXHb0WHi4lMZasVMV63ZQP4yflh0DRJCTPJPQsKVG
+         w0p/M3gBglv4rQCM6A/cWDlOXeJ7aFqsM+H7mD89FXgWbelpreqKafkoxyYW/MMXrk3S
+         S8cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=trMCJ61FldcoujsZIY8Wf46yXCeSnen3DQpQ/YLOJjY=;
-        b=euYNmhCWygCWn288HQfjNRo48wfv/6q50CE/MCFVkCovEMgw2zzZwFy/YbBu1+paT3
-         lgXaQzS1uymZoGNUxFrIS3mwvaEKG7aVbktq3g0ikgH7UjS6PXu9jMWEUijk+EiccHU1
-         3UQ10ARCGE6lOi5so+1RLjtUyh5Oz7tmrYDREV/jSF+cGimvJfmNtabX8PoSUUPy3f8r
-         3vpZumxe00hlLTd61VMIb4jFkdHoEfhWidMx/V2MxCTT2he+d+s1H+uDVkUy+I66PzyA
-         QMo6jrLX+gsxpjj48GUubQSNXSoekjUQ+RuQ++FU6+ImOHuCfovCrr3Q5SFLOGfTl4kR
-         Kmsw==
-X-Gm-Message-State: AOAM533cO0yc74iWVC3/yVS/Bsng+Er3UowwGxvlEY1N72mcJr3G5Nsv
-        Y584Hyp/UOAGm5XWBXpUCt1W3sdjQ5Nlrdr3sgcBkg1K/2zrl863Cxpy8OBTdOzix7O8aCe735J
-        9gE1LsupEL6wAKT0XZ2GpYWsk
-X-Received: by 2002:a92:aa85:: with SMTP id p5mr21225375ill.19.1592105226916;
-        Sat, 13 Jun 2020 20:27:06 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw/2Mlse3DqnWhjkkv7/1KCD9SfYfqSen/Um715vQpYWXomgiHxEjTQtmup3MrFv0QCPVeL7Q==
-X-Received: by 2002:a92:aa85:: with SMTP id p5mr21225364ill.19.1592105226772;
-        Sat, 13 Jun 2020 20:27:06 -0700 (PDT)
+        bh=FySxf3tuC7inUbFdRrnqlCjs2f799IH8urJt6EX7/xk=;
+        b=i6wHxVgDR/1GeDkTErVrYDWQMM65uzKT+rlPNZZVxA6qals84dRCi68o8lwOBvbro5
+         5gUVRTlo/eCckkUH6I7wbnNqjmPjfaHmCFELlAoYRC+VYUq21ZQ732dj4t4qsWedxaEk
+         RX0hoa41wqtdZekorNtNccubdTQ03Xyc7L8oUkqc9DPSqzUP8CIRLkY6WEp4lc8Z0vi+
+         Cqh6YUEQwhNkabhE+JYups2SVRg3qXo7nCa8dFkvH+uQphVdV7G3DIrLzX4xjitYaLpg
+         enauSby4xeepMhr51kbnMTOYkQFOQPx1vlgYu9lejz1h5agbINXksNd9o2e2zaQDqw+0
+         K7pA==
+X-Gm-Message-State: AOAM533uAke57FuTm8anXuGZRYlTzKi0MIDA/+3R/72pfe72Go4BxLKS
+        7G57uBCiNuC1ZBq3Z/RX/q0p/SgC+ylOID2pKffxx2IaBugOkrvGAd/tLDS3ZPZOTYtz0V2vWw/
+        LQVIRPpe3UYYQxH/AUYLA2paq
+X-Received: by 2002:a92:9142:: with SMTP id t63mr19380942ild.191.1592105638817;
+        Sat, 13 Jun 2020 20:33:58 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzhY2fLTWyTL8+6HNSQtJlCbrEvVMcF9fyDtrSg1B8kJs5C8Hn0oHEC/O97di8LxiTg7tm7ag==
+X-Received: by 2002:a92:9142:: with SMTP id t63mr19380934ild.191.1592105638665;
+        Sat, 13 Jun 2020 20:33:58 -0700 (PDT)
 Received: from syssec1.cs.umn.edu ([2607:ea00:101:3c74:49fa:9c47:e40b:9c40])
-        by smtp.gmail.com with ESMTPSA id b13sm5654007ilq.20.2020.06.13.20.27.06
+        by smtp.gmail.com with ESMTPSA id v2sm5590818iol.36.2020.06.13.20.33.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Jun 2020 20:27:06 -0700 (PDT)
+        Sat, 13 Jun 2020 20:33:58 -0700 (PDT)
 From:   Aditya Pakki <pakki001@umn.edu>
 To:     pakki001@umn.edu
-Cc:     kjlu@umn.edu, wu000273@umn.edu, Bin Liu <b-liu@ti.com>,
+Cc:     kjlu@umn.edu, wu000273@umn.edu,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        "Lee, Chiasheng" <chiasheng.lee@intel.com>,
+        David Heinzelmann <heinzelmann.david@gmail.com>,
+        Hardik Gajjar <hgajjar@de.adit-jv.com>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: musb: fix reference count leak in musb_irq_work
-Date:   Sat, 13 Jun 2020 22:27:04 -0500
-Message-Id: <20200614032704.129010-1-pakki001@umn.edu>
+Subject: [PATCH] usb: core: fix reference count leak in usb_port_resume
+Date:   Sat, 13 Jun 2020 22:33:53 -0500
+Message-Id: <20200614033355.129442-1-pakki001@umn.edu>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -78,26 +86,26 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-musb_irq_work() calls pm_runtime_get_sync() that increments
+usb_port_resume() calls pm_runtime_get_sync() that increments
 the reference counter. In case of failure, decrement the reference
 count and return the error.
 
 Signed-off-by: Aditya Pakki <pakki001@umn.edu>
 ---
- drivers/usb/musb/musb_core.c | 1 +
+ drivers/usb/core/hub.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/musb/musb_core.c b/drivers/usb/musb/musb_core.c
-index 384a8039a7fd..fd36a026bef0 100644
---- a/drivers/usb/musb/musb_core.c
-+++ b/drivers/usb/musb/musb_core.c
-@@ -2070,6 +2070,7 @@ static void musb_irq_work(struct work_struct *data)
- 	error = pm_runtime_get_sync(musb->controller);
- 	if (error < 0) {
- 		dev_err(musb->controller, "Could not enable: %i\n", error);
-+		pm_runtime_put_autosuspend(musb->controller);
- 
- 		return;
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index b1e14beaac5f..a9231f27144e 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -3542,6 +3542,7 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
+ 		if (status < 0) {
+ 			dev_dbg(&udev->dev, "can't resume usb port, status %d\n",
+ 					status);
++			pm_runtime_put_sync(&port_dev->dev);
+ 			return status;
+ 		}
  	}
 -- 
 2.25.1
