@@ -2,66 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFA411F87B8
-	for <lists+linux-usb@lfdr.de>; Sun, 14 Jun 2020 10:50:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DED01F87BE
+	for <lists+linux-usb@lfdr.de>; Sun, 14 Jun 2020 10:51:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726851AbgFNIu1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 14 Jun 2020 04:50:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47970 "EHLO
+        id S1726857AbgFNIvb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 14 Jun 2020 04:51:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726755AbgFNIu0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 14 Jun 2020 04:50:26 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3130C03E969
-        for <linux-usb@vger.kernel.org>; Sun, 14 Jun 2020 01:50:24 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id c21so7777505lfb.3
-        for <linux-usb@vger.kernel.org>; Sun, 14 Jun 2020 01:50:24 -0700 (PDT)
+        with ESMTP id S1725265AbgFNIvb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 14 Jun 2020 04:51:31 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F470C03E969
+        for <linux-usb@vger.kernel.org>; Sun, 14 Jun 2020 01:51:29 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id d27so3195288lfq.5
+        for <linux-usb@vger.kernel.org>; Sun, 14 Jun 2020 01:51:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=zRg9XKIL4vBu4icocKftZKBDvYCe4QXeJ3tHeratzYk=;
-        b=UDLnelPfwlf525l+MyBjVDfxPBd2Oe89tkH5Gi/pAQNqFNVnQuBubyBZijjlGBtnJR
-         VF2YE93Btypk75ygsyas50iz61OirOjcoNmrpTPjnZ0MVJtzkTrxaUBpjkP0jDxfIP0f
-         FfvFr1xZlC1NaIID0JMIoVcAEkUQs0ECam5XakY7UIgiQR9mzYtyFJai1wAXympJNwy7
-         G3ca8HzdwHUjS4hXr5ni2T6RNvqznH5tFxR6UhC6b4Lqi/oFnt2MKeSGhAH4j4IVFSGi
-         gx+hLFnie7/jlzvJJiG+AaC2+6PDctR7ay0roquujQ8wAsevGKxHtwoc0cAl43JLHEvf
-         ZAEg==
+        bh=OHFcccCITD963Tsu3GgXPinLU/7uAM5t6Q2kJ5JaR4k=;
+        b=MySZLFLrZl58fEbYrERZ9j4T9iIuFuZDJuGjEkdqug8BNSBVAYFSDHe2mN6Cko0y1k
+         XkRTHkTS8pl1IzFPbl3qOk1ze/OiUew3oB6uzcHb0QGoi47Ejbmur3RXHRM57a/M9Xfu
+         qCQxeoeF0cVdU2bRJsC2c2x+dIAznkpEXGjq53FWmpTBBmUro06ucoRdMPvNFTRHRO1E
+         fPXZ1pDhrXTyXEQzpeAhV1JaLBFTlE1DfXYo/+Mhi9ktcCrP03h7XdVu7UCh3DstlniY
+         W7CPqDi5EI/SYxv+ibaJikZ7lKJ9JZWvfx7b90wrrd5cWrKDWQMUcnfX2wKAxqMs3zVO
+         OMpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=zRg9XKIL4vBu4icocKftZKBDvYCe4QXeJ3tHeratzYk=;
-        b=Kr0HBDtyT5KPsvP3Rv/Oa6sTaG1jXStWPrt3U/uypFH5mZocfeRiopFuIs+L+A60T1
-         pYbNsx1heo0VGNNR+jpFVqTdzqYqtAuCIFxD075LM8OybqAZC5AMyG7qdhdzR8uvMdYL
-         B/F9ucc/U5ghNEMi96p8fDtuDW9pnEDBVFeUcW6VQHk01vXbhOhL74aoid/NQUJyS4kp
-         4mZYRrRyyebOxhBxaxzCQWvS6zQ+aiJOSDPyzyFJj0lFIYoXNdTCEXp7Bd/B8nKmy9/T
-         8r6r+ujygIyAbRcDMJWZ+sWGN63LtYGiRv1dq5By5dvA5yq7yWMrHgkIT5VBZwzLY1mT
-         0zgQ==
-X-Gm-Message-State: AOAM533VynGX3xSxOzoA3rn+P0hdquQyOkwK6PfUHzKo+feFEt+SkvXk
-        CsaQA5xsevZFan21hZDCqKwjjg==
-X-Google-Smtp-Source: ABdhPJy5o7xwjtDRjce0A+7PCgU9ZEZGrjzSHYQmSs2+SswKlfCozNnp/FVZLU2hmh8PR0XP4hmSfA==
-X-Received: by 2002:a05:6512:3089:: with SMTP id z9mr601823lfd.83.1592124623089;
-        Sun, 14 Jun 2020 01:50:23 -0700 (PDT)
+        bh=OHFcccCITD963Tsu3GgXPinLU/7uAM5t6Q2kJ5JaR4k=;
+        b=t70vc2WtZjCIJk92mqBX32cJjSJaG8vOvu6E7m7G3Q4O/7M9QrPiuWw3wLyiAROmCe
+         /wz6PjwJeOj0dJREEA2zyUHigEXr6JIuY3+Y1OFbV9KRIJ2UoWwD306ZiH9Nh8lfwwun
+         10FdGqdOBieJFYRN9bBV56Mj48tIcOMVhe8x8pMVVpDg5l2uuhkYJrI/JBzNrgwaPG8X
+         qsolB0Yz8ge5zDF213P1PGQ7vET7ZakMDhbOWFPrhMvYXxkZBiQGsOw+bHQvcQp33T44
+         RFu0Q5ybiPplbanO3hSxsH+nTY8ZBJC5eositM0wDKRcVIphfFKnrVUHdX2X4tOMrC1Y
+         Mmow==
+X-Gm-Message-State: AOAM531q7zfWuzj/CGaxKmT1VWzv3+KCgB944pd+I6pUqfRSYlcm+bFo
+        maRyCegkyPcsMYAAFPSjxQogrQ==
+X-Google-Smtp-Source: ABdhPJyzDhO5IVobvDH5thC1gjdWtjjpYsAZKehWItV4+/Xut0BpI44AcMamSpebtINScuaZ17XZmA==
+X-Received: by 2002:ac2:59c3:: with SMTP id x3mr11073755lfn.117.1592124688107;
+        Sun, 14 Jun 2020 01:51:28 -0700 (PDT)
 Received: from ?IPv6:2a00:1fa0:42e0:5405:a560:8954:33ef:54e2? ([2a00:1fa0:42e0:5405:a560:8954:33ef:54e2])
-        by smtp.gmail.com with ESMTPSA id n21sm3166415ljj.97.2020.06.14.01.50.21
+        by smtp.gmail.com with ESMTPSA id 193sm3157011ljj.48.2020.06.14.01.51.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 14 Jun 2020 01:50:22 -0700 (PDT)
-Subject: Re: [PATCH] usb: dwc3: pci: Fix reference count leak in
- dwc3_pci_resume_work
+        Sun, 14 Jun 2020 01:51:27 -0700 (PDT)
+Subject: Re: [PATCH] usb: musb: fix reference count leak in musb_irq_work
 To:     Aditya Pakki <pakki001@umn.edu>
-Cc:     kjlu@umn.edu, wu000273@umn.edu, Felipe Balbi <balbi@kernel.org>,
+Cc:     kjlu@umn.edu, wu000273@umn.edu, Bin Liu <b-liu@ti.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200614031525.128556-1-pakki001@umn.edu>
+References: <20200614032704.129010-1-pakki001@umn.edu>
 From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Message-ID: <2e8e923c-3f3d-29ff-6abf-ae333b81bd45@cogentembedded.com>
-Date:   Sun, 14 Jun 2020 11:50:18 +0300
+Message-ID: <40e47a62-5359-4396-7f52-fb1a3cfa9d76@cogentembedded.com>
+Date:   Sun, 14 Jun 2020 11:51:23 +0300
 User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.9.0
 MIME-Version: 1.0
-In-Reply-To: <20200614031525.128556-1-pakki001@umn.edu>
+In-Reply-To: <20200614032704.129010-1-pakki001@umn.edu>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -70,37 +69,30 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
+On 14.06.2020 6:27, Aditya Pakki wrote:
 
-On 14.06.2020 6:15, Aditya Pakki wrote:
-
-> dwc3_pci_resume_work() calls pm_runtime_get_sync() that increments
+> musb_irq_work() calls pm_runtime_get_sync() that increments
 > the reference counter. In case of failure, decrement the reference
 > count and return the error.
 
-    In this case you still return nothing.
+    Again, *void* function, so no error returned.
 
-> 
 > Signed-off-by: Aditya Pakki <pakki001@umn.edu>
 > ---
->   drivers/usb/dwc3/dwc3-pci.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
+>   drivers/usb/musb/musb_core.c | 1 +
+>   1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
-> index b67372737dc9..96c05b121fac 100644
-> --- a/drivers/usb/dwc3/dwc3-pci.c
-> +++ b/drivers/usb/dwc3/dwc3-pci.c
-> @@ -206,8 +206,10 @@ static void dwc3_pci_resume_work(struct work_struct *work)
->   	int ret;
+> diff --git a/drivers/usb/musb/musb_core.c b/drivers/usb/musb/musb_core.c
+> index 384a8039a7fd..fd36a026bef0 100644
+> --- a/drivers/usb/musb/musb_core.c
+> +++ b/drivers/usb/musb/musb_core.c
+> @@ -2070,6 +2070,7 @@ static void musb_irq_work(struct work_struct *data)
+>   	error = pm_runtime_get_sync(musb->controller);
+>   	if (error < 0) {
+>   		dev_err(musb->controller, "Could not enable: %i\n", error);
+> +		pm_runtime_put_autosuspend(musb->controller);
 >   
->   	ret = pm_runtime_get_sync(&dwc3->dev);
-> -	if (ret)
-> +	if (ret) {
-> +		pm_runtime_put_sync_autosuspend(&dwc3->dev);
 >   		return;
-> +	}
->   
->   	pm_runtime_mark_last_busy(&dwc3->dev);
->   	pm_runtime_put_sync_autosuspend(&dwc3->dev);
+>   	}
 
 MBR, Sergei
