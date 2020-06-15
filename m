@@ -2,100 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22CFF1F95D1
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jun 2020 14:00:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29F671F97D3
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jun 2020 15:04:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729774AbgFOMAV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Jun 2020 08:00:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59994 "EHLO mail.kernel.org"
+        id S1730444AbgFONCm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Jun 2020 09:02:42 -0400
+Received: from mga14.intel.com ([192.55.52.115]:45787 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728510AbgFOMAU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 15 Jun 2020 08:00:20 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CE34320679;
-        Mon, 15 Jun 2020 12:00:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592222420;
-        bh=rwqUCTO58i5LtMrJbfCyPSZGV/lwxxKzZFf+w5tF0KU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HuhaZ1E/uhWGMwQOmHLl2x6A1HlqNMW1HoJtbYQhBCTFc1nVg02Z9xiV0yNrZ2reG
-         fj/OFvspf1huUFCt74ieeXEMIaZsNyKAz/9h7eJ08tsPsSMVGMk/Q08009XSx9VM6F
-         P5rY10LRbpeIRSbYQzyxKJYgWng20BFWrnTVI+2I=
-Date:   Mon, 15 Jun 2020 13:00:18 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Wesley Cheng <wcheng@codeaurora.org>
-Cc:     robh+dt@kernel.org, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, mark.rutland@arm.com,
-        lgirdwood@gmail.com, agross@kernel.org, bjorn.andersson@linaro.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        lijun.kernel@gmail.com, rdunlap@infradead.org,
-        jackp@codeaurora.org, bryan.odonoghue@linaro.org
-Subject: Re: [PATCH v2 4/6] regulator: Add support for QCOM PMIC VBUS booster
-Message-ID: <20200615120018.GI4447@sirena.org.uk>
-References: <20200612231918.8001-1-wcheng@codeaurora.org>
- <20200612231918.8001-5-wcheng@codeaurora.org>
+        id S1730372AbgFONCm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 15 Jun 2020 09:02:42 -0400
+IronPort-SDR: 53Wvwqqqq49dy76PVFloim9EW3SnfouneDBWMiW/aNgdW+mIKBf8mp00Qek2kGZ5c8ozh3R59B
+ l8xHjP+LYFUw==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2020 06:01:46 -0700
+IronPort-SDR: OU8DO0k8mLpXw9MLtDYXiZbdcioSozvvKSXEzILToNUeFRhzlKL3MkC65JNli+pfgB4/xVcXYW
+ /1kPUGzRuuDA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,514,1583222400"; 
+   d="scan'208";a="290687912"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 15 Jun 2020 06:01:40 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id A470F190; Mon, 15 Jun 2020 16:01:39 +0300 (EEST)
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        netdev@vger.kernel.org
+Subject: [PATCH 0/4] thunderbolt: XDomain and NHI improvements
+Date:   Mon, 15 Jun 2020 16:01:35 +0300
+Message-Id: <20200615130139.83854-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.27.0.rc2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="VkVuOCYP9O7H3CXI"
-Content-Disposition: inline
-In-Reply-To: <20200612231918.8001-5-wcheng@codeaurora.org>
-X-Cookie: Offer may end without notice.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi,
 
---VkVuOCYP9O7H3CXI
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This small series improves the "data" path handling when doing host-to-host
+connections over TBT/USB4 cable. First patch delays setting nodename upon
+first connect to allow the userspace to fill in host name. Rest of the
+series deal with the NHI (TBT/USB4 host interface) HopID allocation so that
+by dropping the E2E workaround which was never used, we can use DMA rings
+starting from 1 to transfer data over the TBT/USB4 fabric.
 
-On Fri, Jun 12, 2020 at 04:19:16PM -0700, Wesley Cheng wrote:
+Mika Westerberg (4):
+  thunderbolt: Build initial XDomain property block upon first connect
+  thunderbolt: No need to warn if NHI hop_count != 12 or hop_count != 32
+  thunderbolt: NHI can use HopIDs 1-7
+  thunderbolt: Get rid of E2E workaround
 
-> +++ b/drivers/regulator/qcom_usb_vbus-regulator.c
-> @@ -0,0 +1,147 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2020, The Linux Foundation. All rights reserved.
-> + */
+ drivers/net/thunderbolt.c     |  4 +-
+ drivers/thunderbolt/nhi.c     | 30 ++---------
+ drivers/thunderbolt/switch.c  |  7 ++-
+ drivers/thunderbolt/xdomain.c | 94 ++++++++++++++++++++---------------
+ include/linux/thunderbolt.h   |  2 -
+ 5 files changed, 64 insertions(+), 73 deletions(-)
 
-Please make the entire comment a C++ one so things look more
-intentional.
+-- 
+2.27.0.rc2
 
-> +static int qcom_usb_vbus_enable(struct regulator_dev *rdev)
-> +{
-
-> +static int qcom_usb_vbus_disable(struct regulator_dev *rdev)
-> +{
-
-> +static int qcom_usb_vbus_is_enabled(struct regulator_dev *rdev)
-> +{
-
-These operations can all be replaced by regulator_is_enabled_regmap()
-and friends.
-
-> +	init_data.constraints.valid_ops_mask |= REGULATOR_CHANGE_STATUS;
-
-No, this is broken - regulators should not override the constraints the
-machine sets.
-
---VkVuOCYP9O7H3CXI
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7nYtEACgkQJNaLcl1U
-h9B2xQf/elyk74snQRDjxhiJQzyG+kMEpR5muDGLg/ZKzb0LHtRNb+t0RcqkzTFm
-7YlZ6L0oMl4RX8ZsVlZT+RxWROHw+MuYF5itiC5pbDvWl2jjIJGn2jI5/wq+7zQD
-LfHAJWQCUCzjHGuTgtXXzoejILvkrSaxPkffHfQj/zTX/kfLciOlMmykYEDVTOWM
-h8AkuzhvtQEAJMpzF986hzyhjx/gAfNNbkGiCOmJPoeFMXF7kqtRjZDIN59pC/se
-oJ1zDYM0gzqUDki1mrfW9UdGKXKr5egUvBT11dbZKWzOOIKizDyLlmmaH8s2p5d5
-Y3gJnWM3vmGfn0YrVIAA8bzUHRrbRQ==
-=2JmG
------END PGP SIGNATURE-----
-
---VkVuOCYP9O7H3CXI--
