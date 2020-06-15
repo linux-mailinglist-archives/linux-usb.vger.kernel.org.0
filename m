@@ -2,154 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F06E91FA09B
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jun 2020 21:43:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 481151FA0CB
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jun 2020 21:52:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731322AbgFOTmt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Jun 2020 15:42:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58364 "EHLO
+        id S1729807AbgFOTw0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Jun 2020 15:52:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731179AbgFOTmo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Jun 2020 15:42:44 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0629C08C5C3
-        for <linux-usb@vger.kernel.org>; Mon, 15 Jun 2020 12:42:42 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id m7so7220680plt.5
-        for <linux-usb@vger.kernel.org>; Mon, 15 Jun 2020 12:42:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tNVFiaYWMiO2hIPSPELA+UbwGrUr+c9/QS6tPzZlZsA=;
-        b=Q1gomGsuoZPi4npsUFWHj1X8MZjjMEubXg7JRHxvk16FoLBYMBUvqQMm982CkHMfju
-         kTVQPbwC0DsOCx0LE6fgPtUKSTAeU8r5AWd12DkRI0M02V8Z+b+P4J2xJcfSFVf8Wchh
-         6A31hSMp5TIxadWGu7+0uTJE0uXGGueo9vk6M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tNVFiaYWMiO2hIPSPELA+UbwGrUr+c9/QS6tPzZlZsA=;
-        b=ltNUQ0VnNXUzDhkiM89ag3Go1SV2Nm66/VyWgEglFglANtK0LFcBkvJBLGOixwHJpx
-         4I2IlZVNbVdFU4OGHDtPFQ5WN5H4CjEvlL4KwrdlA9CUfXu/x1CwejwgglFxYa0CARFo
-         C89hrXS1E36dDpQNAYUl4UvmE71swnZxeYX4rmfz5hSnFkGMgb+F6ID8HAblQvg50PzU
-         ZIdg7xm1qO8hxi4HvM9kKZbzniw53BLL16RroJ6fo8pnwG7AOsS4+5Xe9MbRPhIdjm8z
-         nWXw5ff8Oo7ZuSspEcay1nimagRkVtkA0ReNEu864zW1bjNLwjfFgRAAzotwMRPkBXNj
-         3m3Q==
-X-Gm-Message-State: AOAM530omrr+y3ORCmzvGbP55Cqpom+N12+3Yx4ljbwiE+OumkLgx1a7
-        FEm2sbjNdTVZQuMt2L7VpFvzQQ==
-X-Google-Smtp-Source: ABdhPJxeWDuRfhj7W7RmVrlhoom2XQpVpwdGn2PnNXzzogrg7beHu71xLjlNVRnZ9EVTyBGEIkw/Uw==
-X-Received: by 2002:a17:902:ed53:: with SMTP id y19mr13563762plb.318.1592250162297;
-        Mon, 15 Jun 2020 12:42:42 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id m1sm264533pjr.56.2020.06.15.12.42.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Jun 2020 12:42:41 -0700 (PDT)
-Date:   Mon, 15 Jun 2020 12:42:39 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sandeep Maheswaram <sanm@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
-Subject: Re: [PATCH v7 2/4] usb: dwc3: qcom: Add interconnect support in dwc3
- driver
-Message-ID: <20200615194239.GW4525@google.com>
-References: <1585718145-29537-1-git-send-email-sanm@codeaurora.org>
- <1585718145-29537-3-git-send-email-sanm@codeaurora.org>
- <159120577830.69627.13288547914742515702@swboyd.mtv.corp.google.com>
- <d9ccf188-4f00-d3ac-ba0f-73f06c087553@codeaurora.org>
- <159126939154.69627.13027312816468830595@swboyd.mtv.corp.google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <159126939154.69627.13027312816468830595@swboyd.mtv.corp.google.com>
+        with ESMTP id S1728771AbgFOTw0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Jun 2020 15:52:26 -0400
+Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ADD9C061A0E;
+        Mon, 15 Jun 2020 12:52:26 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 0A972120ED483;
+        Mon, 15 Jun 2020 12:52:23 -0700 (PDT)
+Date:   Mon, 15 Jun 2020 12:52:20 -0700 (PDT)
+Message-Id: <20200615.125220.492630206908309571.davem@davemloft.net>
+To:     jk@ozlabs.org
+Cc:     netdev@vger.kernel.org, allan@asix.com.tw, freddy@asix.com.tw,
+        pfink@christ-es.de, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] net: usb: ax88179_178a: fix packet alignment padding
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20200615025456.30219-1-jk@ozlabs.org>
+References: <20200615025456.30219-1-jk@ozlabs.org>
+X-Mailer: Mew version 6.8 on Emacs 26.3
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Mon, 15 Jun 2020 12:52:23 -0700 (PDT)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 04, 2020 at 04:16:31AM -0700, Stephen Boyd wrote:
-> Quoting Sandeep Maheswaram (Temp) (2020-06-04 02:43:09)
-> > 
-> > On 6/3/2020 11:06 PM, Stephen Boyd wrote:
-> > > Quoting Sandeep Maheswaram (2020-03-31 22:15:43)
-> > >> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> > >> index 1dfd024..d33ae86 100644
-> > >> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> > >> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> > >> @@ -285,6 +307,101 @@ static int dwc3_qcom_resume(struct dwc3_qcom *qcom)
-> > >>          return 0;
-> > >>   }
-> > >>   
-> > >> +
-> > >> +/**
-> > >> + * dwc3_qcom_interconnect_init() - Get interconnect path handles
-> > >> + * @qcom:                      Pointer to the concerned usb core.
-> > >> + *
-> > >> + */
-> > >> +static int dwc3_qcom_interconnect_init(struct dwc3_qcom *qcom)
-> > >> +{
-> > >> +       struct device *dev = qcom->dev;
-> > >> +       int ret;
-> > >> +
-> > >> +       if (!device_is_bound(&qcom->dwc3->dev))
-> > >> +               return -EPROBE_DEFER;
-> > > How is this supposed to work? I see that this was added in an earlier
-> > > revision of this patch series but there isn't any mention of why
-> > > device_is_bound() is used here. It would be great if there was a comment
-> > > detailing why this is necessary. It sounds like maximum_speed is
-> > > important?
-> > >
-> > > Furthermore, dwc3_qcom_interconnect_init() is called by
-> > > dwc3_qcom_probe() which is the function that registers the device for
-> > > qcom->dwc3->dev. If that device doesn't probe between the time it is
-> > > registered by dwc3_qcom_probe() and this function is called then we'll
-> > > fail dwc3_qcom_probe() with -EPROBE_DEFER. And that will remove the
-> > > qcom->dwc3->dev device from the platform bus because we call
-> > > of_platform_depopulate() on the error path of dwc3_qcom_probe().
-> > >
-> > > So isn't this whole thing racy and can potentially lead us to a driver
-> > > probe loop where the wrapper (dwc3_qcom) and the core (dwc3) are probing
-> > > and we're trying to time it just right so that driver for dwc3 binds
-> > > before we setup interconnects? I don't know if dwc3 can communicate to
-> > > the wrapper but that would be more of a direct way to do this. Or maybe
-> > > the wrapper should try to read the DT property for maximum speed and
-> > > fallback to a worst case high bandwidth value if it can't figure it out
-> > > itself without help from dwc3 core.
-> > >
-> > This was added in V4 to address comments from Matthias in V3
-> > 
-> > https://patchwork.kernel.org/patch/11148587/
-> > 
-> 
-> Yes, that why I said:
-> 
-> "I see that this was added in an earlier
->  revision of this patch series but there isn't any mention of why
->  device_is_bound() is used here. It would be great if there was a comment
->  detailing why this is necessary. It sounds like maximum_speed is
->  important?"
-> 
-> Can you please respond to the rest of my email?
+From: Jeremy Kerr <jk@ozlabs.org>
+Date: Mon, 15 Jun 2020 10:54:56 +0800
 
-I agree with Stephen that using device_is_bound() isn't a good option
-in this case, when I suggested it I wasn't looking at the big picture
-of how probing the core driver is triggered, sorry about that.
+> Using a AX88179 device (0b95:1790), I see two bytes of appended data on
+> every RX packet. For example, this 48-byte ping, using 0xff as a
+> payload byte:
+> 
+>   04:20:22.528472 IP 192.168.1.1 > 192.168.1.2: ICMP echo request, id 2447, seq 1, length 64
+> 	0x0000:  000a cd35 ea50 000a cd35 ea4f 0800 4500
+> 	0x0010:  0054 c116 4000 4001 f63e c0a8 0101 c0a8
+> 	0x0020:  0102 0800 b633 098f 0001 87ea cd5e 0000
+> 	0x0030:  0000 dcf2 0600 0000 0000 ffff ffff ffff
+> 	0x0040:  ffff ffff ffff ffff ffff ffff ffff ffff
+> 	0x0050:  ffff ffff ffff ffff ffff ffff ffff ffff
+> 	0x0060:  ffff 961f
+> 
+> Those last two bytes - 96 1f - aren't part of the original packet.
 
-Reading the speed from the DT with usb_get_maximum_speed() as Stephen
-suggests would be an option, the inconvenient is that we then
-essentially require the property to be defined, while the core driver
-gets a suitable value from hardware registers. Not sure if the wrapper
-driver could read from the same registers.
+Does this happen for non-tail packets in a multi-packet cluster?
 
-One option could be to poll device_is_bound() for 100 ms (or so), with
-sleeps between polls. It's not elegant but would probably work if we
-don't find a better solution.
+Because that code in this loop makes the same calculations:
+
+		ax_skb = skb_clone(skb, GFP_ATOMIC);
+		if (ax_skb) {
+			ax_skb->len = pkt_len;
+			ax_skb->data = skb->data + 2;
+			skb_set_tail_pointer(ax_skb, pkt_len);
+			ax_skb->truesize = pkt_len + sizeof(struct sk_buff);
+			ax88179_rx_checksum(ax_skb, pkt_hdr);
+			usbnet_skb_return(dev, ax_skb);
+
+So if your change is right, it should be applied to this code block as
+well.
+
+And do we know that it's two extra tail bytes always?  Or some kind of
+alignment padding the chip performs for every sub-packet?
