@@ -2,130 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5666B1F93A3
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jun 2020 11:37:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1901F9457
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jun 2020 12:08:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729194AbgFOJhq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Jun 2020 05:37:46 -0400
-Received: from mail.windriver.com ([147.11.1.11]:54996 "EHLO
-        mail.windriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728815AbgFOJhq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Jun 2020 05:37:46 -0400
-Received: from ALA-HCB.corp.ad.wrs.com (ala-hcb.corp.ad.wrs.com [147.11.189.41])
-        by mail.windriver.com (8.15.2/8.15.2) with ESMTPS id 05F9bTtc012340
-        (version=TLSv1 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
-        Mon, 15 Jun 2020 02:37:30 -0700 (PDT)
-Received: from pek-lpg-core1-vm1.wrs.com (128.224.156.106) by
- ALA-HCB.corp.ad.wrs.com (147.11.189.41) with Microsoft SMTP Server id
- 14.3.487.0; Mon, 15 Jun 2020 02:37:09 -0700
-From:   <qiang.zhang@windriver.com>
-To:     <balbi@kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] usb: gadget: function: printer: Add gadget dev interface status judgment
-Date:   Mon, 15 Jun 2020 17:46:08 +0800
-Message-ID: <20200615094608.26179-1-qiang.zhang@windriver.com>
-X-Mailer: git-send-email 2.24.1
+        id S1729174AbgFOKIi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Jun 2020 06:08:38 -0400
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:17446 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726111AbgFOKIh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Jun 2020 06:08:37 -0400
+Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05FA4rPe026164;
+        Mon, 15 Jun 2020 12:08:23 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=STMicroelectronics;
+ bh=P5EQA0kAJCU+qpoArB1dL5j+XIOcEoHAZRZPU8tJLpA=;
+ b=fblue4OGMu74YEGyWEtTI5zp+7RsKb6+m9fchxDjseMEs6haCHJHJ4eF+YwlTFuwgeoe
+ NYmfJwVtfycsBB94nHzPJN7DTodmVR8fp021QY+QQ1DK5mucaHtj6NCWpWIrWt6kyNnX
+ W2Y9tVrCFHHpIXWwS+iFeQ0bYGXeuZPqpTKy2krM+5obz/WBGHLUeMpBuocsIOaJ/5SB
+ i/xxNKCidvMeEBha5oAVPNBaEh7GSebmHMgC/ufCu1oSgJfaL8xVOwrhGmsI30F0vunH
+ DT64ZluIZg6NcrfH+fW0WaPjsR7iCSO3MJQp1QslgstKQgpUz/SQFHst+j40TPnhi8mt 7Q== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 31mmjvs19m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 Jun 2020 12:08:23 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id EBF77100034;
+        Mon, 15 Jun 2020 12:08:22 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D99A72C38BB;
+        Mon, 15 Jun 2020 12:08:22 +0200 (CEST)
+Received: from lmecxl0912.tpe.st.com (10.75.127.51) by SFHDAG3NODE2.st.com
+ (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Mon, 15 Jun
+ 2020 12:08:22 +0200
+Subject: Re: [PATCH 00/15] Fix STM32 DT issues on v5.7-rc4
+To:     Benjamin Gaignard <benjamin.gaignard@st.com>,
+        <linus.walleij@linaro.org>, <robh+dt@kernel.org>,
+        <mcoquelin.stm32@gmail.com>, <gregkh@linuxfoundation.org>
+CC:     <linux-gpio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+References: <20200513145935.22493-1-benjamin.gaignard@st.com>
+From:   Alexandre Torgue <alexandre.torgue@st.com>
+Message-ID: <6b0e95ab-e240-c493-1bc1-276dd68933fe@st.com>
+Date:   Mon, 15 Jun 2020 12:08:21 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
+In-Reply-To: <20200513145935.22493-1-benjamin.gaignard@st.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.51]
+X-ClientProxiedBy: SFHDAG1NODE2.st.com (10.75.127.2) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-15_02:2020-06-15,2020-06-15 signatures=0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Zqiang <qiang.zhang@windriver.com>
+Hi Benjamin
 
-After the interface of gadget printer device was disabled,
-We should not continue operate the device.
+On 5/13/20 4:59 PM, Benjamin Gaignard wrote:
+> This series fixes issues hight lighted by dtbs_check on STM32 devicetrees.
+> The patches has been developped on top of v5.7-rc4 tag.
+> 
+> Benjamin Gaignard (15):
+>    ARM: dts: stm32: remove useless interrupt-names property on stm32f429
+>    ARM: dts: stm32: update pwm pinctrl node names for stm32f4
+>    ARM: dts: stm32: update led nodes names for stm32f249-disco
+>    ARM: dts: stm32: update led nodes names for stm32f469-disco
+>    ARM: dts: stm32: remove useless interrupt-names property on stm32f746
+>    ARM: dts: stm32: update led nodes names for stm32f429-eval
+>    ARM: dts: stm32: update led nodes names for stm32f769-disco
+>    ARM: dts: stm32: update led nodes names for stm32f746-eval
+>    ARM: dts: stm32: remove useless interrupt-names property on stm32f743
+>    ARM: dts: stm32: Update nodes names for stm32h743 pinctrl
+>    ARM: dts: stm32: Update nodes names for stm32mp15 pinctrl
+>    ARM: dts: stm32: Add missing #address and #size cells on spi node for
+>      stm32mp151
+>    ARM: dts: stm32: update led nodes names for stm32f746-eval
+>    dt-bindings: pinctrl: stm32: Add missing interrupts property
+>    dt-bindings: usb: dwc2: Fix issues for stm32mp15x SoC
+> 
+>   .../devicetree/bindings/pinctrl/st,stm32-pinctrl.yaml          |  3 +++
+>   Documentation/devicetree/bindings/usb/dwc2.yaml                |  6 ++++--
+>   arch/arm/boot/dts/stm32429i-eval.dts                           |  8 ++++----
+>   arch/arm/boot/dts/stm32746g-eval.dts                           |  8 ++++----
+>   arch/arm/boot/dts/stm32f4-pinctrl.dtsi                         |  4 ++--
+>   arch/arm/boot/dts/stm32f429-disco.dts                          |  4 ++--
+>   arch/arm/boot/dts/stm32f429.dtsi                               |  1 -
+>   arch/arm/boot/dts/stm32f469-disco.dts                          |  8 ++++----
+>   arch/arm/boot/dts/stm32f746.dtsi                               |  1 -
+>   arch/arm/boot/dts/stm32f769-disco.dts                          |  4 ++--
+>   arch/arm/boot/dts/stm32h743-pinctrl.dtsi                       | 10 +++++-----
+>   arch/arm/boot/dts/stm32h743.dtsi                               |  1 -
+>   arch/arm/boot/dts/stm32mp15-pinctrl.dtsi                       |  6 +++---
+>   arch/arm/boot/dts/stm32mp151.dtsi                              |  2 ++
+>   arch/arm/boot/dts/stm32mp15xx-dkx.dtsi                         |  2 +-
+>   15 files changed, 36 insertions(+), 32 deletions(-)
+> 
 
-Signed-off-by: Zqiang <qiang.zhang@windriver.com>
----
- drivers/usb/gadget/function/f_printer.c | 36 +++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+Series applied on stm32-next. Note that changes in patch 11 were already 
+present thanks to another patch and patch 14 has already been taken by 
+Linus.
 
-diff --git a/drivers/usb/gadget/function/f_printer.c b/drivers/usb/gadget/function/f_printer.c
-index 9c7ed2539ff7..2b45a61e4213 100644
---- a/drivers/usb/gadget/function/f_printer.c
-+++ b/drivers/usb/gadget/function/f_printer.c
-@@ -338,6 +338,11 @@ printer_open(struct inode *inode, struct file *fd)
- 
- 	spin_lock_irqsave(&dev->lock, flags);
- 
-+	if (dev->interface < 0) {
-+		spin_unlock_irqrestore(&dev->lock, flags);
-+		return -ENODEV;
-+	}
-+
- 	if (!dev->printer_cdev_open) {
- 		dev->printer_cdev_open = 1;
- 		fd->private_data = dev;
-@@ -430,6 +435,12 @@ printer_read(struct file *fd, char __user *buf, size_t len, loff_t *ptr)
- 	mutex_lock(&dev->lock_printer_io);
- 	spin_lock_irqsave(&dev->lock, flags);
- 
-+	if (dev->interface < 0) {
-+		spin_unlock_irqrestore(&dev->lock, flags);
-+		mutex_unlock(&dev->lock_printer_io);
-+		return -ENODEV;
-+	}
-+
- 	/* We will use this flag later to check if a printer reset happened
- 	 * after we turn interrupts back on.
- 	 */
-@@ -561,6 +572,12 @@ printer_write(struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
- 	mutex_lock(&dev->lock_printer_io);
- 	spin_lock_irqsave(&dev->lock, flags);
- 
-+	if (dev->interface < 0) {
-+		spin_unlock_irqrestore(&dev->lock, flags);
-+		mutex_unlock(&dev->lock_printer_io);
-+		return -ENODEV;
-+	}
-+
- 	/* Check if a printer reset happens while we have interrupts on */
- 	dev->reset_printer = 0;
- 
-@@ -667,6 +684,13 @@ printer_fsync(struct file *fd, loff_t start, loff_t end, int datasync)
- 
- 	inode_lock(inode);
- 	spin_lock_irqsave(&dev->lock, flags);
-+
-+	if (dev->interface < 0) {
-+		spin_unlock_irqrestore(&dev->lock, flags);
-+		inode_unlock(inode);
-+		return -ENODEV;
-+	}
-+
- 	tx_list_empty = (likely(list_empty(&dev->tx_reqs)));
- 	spin_unlock_irqrestore(&dev->lock, flags);
- 
-@@ -689,6 +713,13 @@ printer_poll(struct file *fd, poll_table *wait)
- 
- 	mutex_lock(&dev->lock_printer_io);
- 	spin_lock_irqsave(&dev->lock, flags);
-+
-+	if (dev->interface < 0) {
-+		spin_unlock_irqrestore(&dev->lock, flags);
-+		mutex_unlock(&dev->lock_printer_io);
-+		return EPOLLERR | EPOLLHUP;
-+	}
-+
- 	setup_rx_reqs(dev);
- 	spin_unlock_irqrestore(&dev->lock, flags);
- 	mutex_unlock(&dev->lock_printer_io);
-@@ -722,6 +753,11 @@ printer_ioctl(struct file *fd, unsigned int code, unsigned long arg)
- 
- 	spin_lock_irqsave(&dev->lock, flags);
- 
-+	if (dev->interface < 0) {
-+		spin_unlock_irqrestore(&dev->lock, flags);
-+		return -ENODEV;
-+	}
-+
- 	switch (code) {
- 	case GADGET_GET_PRINTER_STATUS:
- 		status = (int)dev->printer_status;
--- 
-2.24.1
-
+Regards
+Alex
