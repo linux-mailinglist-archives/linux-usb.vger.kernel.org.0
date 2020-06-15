@@ -2,164 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FDBE1F9534
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jun 2020 13:20:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FFB91F9556
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jun 2020 13:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729630AbgFOLUE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Jun 2020 07:20:04 -0400
-Received: from relmlor2.renesas.com ([210.160.252.172]:36610 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728285AbgFOLUE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Jun 2020 07:20:04 -0400
-X-IronPort-AV: E=Sophos;i="5.73,514,1583161200"; 
-   d="scan'208";a="49507830"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 15 Jun 2020 20:20:02 +0900
-Received: from localhost.localdomain (unknown [10.166.252.89])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 5F81940078B5;
-        Mon, 15 Jun 2020 20:20:02 +0900 (JST)
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     gregkh@linuxfoundation.org, robh+dt@kernel.org
-Cc:     prabhakar.mahadev-lad.rj@bp.renesas.com, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: [PATCH] dt-bindings: usb: renesas,usb-xhci: convert to YAML
-Date:   Mon, 15 Jun 2020 20:19:49 +0900
-Message-Id: <1592219989-28631-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-X-Mailer: git-send-email 2.7.4
+        id S1729651AbgFOL3d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Jun 2020 07:29:33 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:44392 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729038AbgFOL3d (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Jun 2020 07:29:33 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05FBRWUF059132;
+        Mon, 15 Jun 2020 11:29:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
+ bh=4coqbX3lUdocJ8nxjkh0UMsl/hf6XyG3L2JDfwHo3L4=;
+ b=rJC1rysNng2MECEcxXwLbn9S+Ptmi/G80oBYhAEnfuXhmuEsvNJwa8XNhyGbRrVJ53R8
+ RDN7wMyhAQNkP5gr8vLmW15X1Yr7cqgWCvIEDch4Cf1+3Mk6wBDY1hqlk2nypim6Kly7
+ 8KOLdlscwpJr7IfKGtyF6FSuW7b8ccz1/lkXt7DnAJCnPkc9FxJIbAle88OQpZY4kbkb
+ JbGbjTz3j+8+zn03zzROE/sOpMlpVhaaL4d6fySrM7ITsrgg1WUIqHfPgmOomtQ0KMGG
+ rPgwHETi1+jSRHPVcFC2Do7Trt8lprC0BvopIz4a20QSXsQFA/jJ3KFVlaGfv1olBkmh 4Q== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2120.oracle.com with ESMTP id 31p6e5rgms-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 15 Jun 2020 11:29:28 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05FBItJ4191125;
+        Mon, 15 Jun 2020 11:27:28 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3020.oracle.com with ESMTP id 31p6dd0utq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 15 Jun 2020 11:27:28 +0000
+Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 05FBRPlL017846;
+        Mon, 15 Jun 2020 11:27:25 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 15 Jun 2020 04:27:25 -0700
+Date:   Mon, 15 Jun 2020 14:27:19 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Felipe Balbi <balbi@kernel.org>, Chao Xie <chao.xie@marvell.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: [PATCH] usb: gadget: udc: Potential Oops in error handling code
+Message-ID: <20200615112719.GA1207669@mwanda>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9652 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=2 adultscore=0 bulkscore=0
+ phishscore=0 malwarescore=0 spamscore=0 mlxlogscore=999 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006150091
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9652 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 adultscore=0
+ mlxscore=0 phishscore=0 mlxlogscore=999 lowpriorityscore=0 clxscore=1011
+ suspectscore=2 spamscore=0 bulkscore=0 malwarescore=0 impostorscore=0
+ cotscore=-2147483648 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2006150092
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Convert renesas related part of usb-xhci to YAML.
+If this is in "transceiver" mode the the ->qwork isn't required and is
+a NULL pointer.  This can lead to a NULL dereference when we call
+destroy_workqueue(udc->qwork).
 
-Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Fixes: 3517c31a8ece ("usb: gadget: mv_udc: use devm_xxx for probe")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 ---
- .../devicetree/bindings/usb/renesas,usb-xhci.yaml  | 84 ++++++++++++++++++++++
- Documentation/devicetree/bindings/usb/usb-xhci.txt | 18 -----
- 2 files changed, 84 insertions(+), 18 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml
+ drivers/usb/gadget/udc/mv_udc_core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml b/Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml
-new file mode 100644
-index 0000000..279413b
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml
-@@ -0,0 +1,84 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/renesas,usb-xhci.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Renesas USB xHCI controllers
-+
-+maintainers:
-+  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-+  - Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-+
-+allOf:
-+  - $ref: "usb-hcd.yaml"
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - items:
-+          - enum:
-+              - renesas,xhci-r8a7742 # r8a7742 SoC
-+              - renesas,xhci-r8a7743 # r8a7743 SoC
-+              - renesas,xhci-r8a7744 # r8a7744 SoC
-+              - renesas,xhci-r8a7790 # r8a7790 SoC
-+              - renesas,xhci-r8a7791 # r8a7791 SoC
-+              - renesas,xhci-r8a7793 # r8a7793 SoC
-+          - const: renesas,rcar-gen2-xhci
-+      - items:
-+          - enum:
-+              - renesas,xhci-r8a774a1 # r8a774a1 SoC
-+              - renesas,xhci-r8a774b1 # r8a774b1 SoC
-+              - renesas,xhci-r8a774c0 # r8a774c0 SoC
-+              - renesas,xhci-r8a7795  # r8a7795 SoC
-+              - renesas,xhci-r8a7796  # r8a77960 SoC
-+              - renesas,xhci-r8a77961 # r8a77961 SoC
-+              - renesas,xhci-r8a77965 # r8a77965 SoC
-+              - renesas,xhci-r8a77990 # r8a77990 SoC
-+          - const: renesas,rcar-gen3-xhci
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  phys:
-+    maxItems: 1
-+
-+  phy-names:
-+    maxItems: 1
-+    items:
-+      - const: usb
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/r8a7795-cpg-mssr.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/power/r8a7795-sysc.h>
-+
-+    xhci0: usb@ee000000 {
-+        compatible = "renesas,xhci-r8a7795", "renesas,rcar-gen3-xhci";
-+        reg = <0xee000000 0xc00>;
-+        interrupts = <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks = <&cpg CPG_MOD 328>;
-+        power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
-+        resets = <&cpg 328>;
-+    };
-diff --git a/Documentation/devicetree/bindings/usb/usb-xhci.txt b/Documentation/devicetree/bindings/usb/usb-xhci.txt
-index b120dd6..0c5cff8 100644
---- a/Documentation/devicetree/bindings/usb/usb-xhci.txt
-+++ b/Documentation/devicetree/bindings/usb/usb-xhci.txt
-@@ -7,24 +7,6 @@ Required properties:
-     - "marvell,armada3700-xhci" for Armada 37xx SoCs
-     - "marvell,armada-375-xhci" for Armada 375 SoCs
-     - "marvell,armada-380-xhci" for Armada 38x SoCs
--    - "renesas,xhci-r8a7742" for r8a7742 SoC
--    - "renesas,xhci-r8a7743" for r8a7743 SoC
--    - "renesas,xhci-r8a7744" for r8a7744 SoC
--    - "renesas,xhci-r8a774a1" for r8a774a1 SoC
--    - "renesas,xhci-r8a774b1" for r8a774b1 SoC
--    - "renesas,xhci-r8a774c0" for r8a774c0 SoC
--    - "renesas,xhci-r8a7790" for r8a7790 SoC
--    - "renesas,xhci-r8a7791" for r8a7791 SoC
--    - "renesas,xhci-r8a7793" for r8a7793 SoC
--    - "renesas,xhci-r8a7795" for r8a7795 SoC
--    - "renesas,xhci-r8a7796" for r8a77960 SoC
--    - "renesas,xhci-r8a77961" for r8a77961 SoC
--    - "renesas,xhci-r8a77965" for r8a77965 SoC
--    - "renesas,xhci-r8a77990" for r8a77990 SoC
--    - "renesas,rcar-gen2-xhci" for a generic R-Car Gen2 or RZ/G1 compatible
--      device
--    - "renesas,rcar-gen3-xhci" for a generic R-Car Gen3 or RZ/G2 compatible
--      device
-     - "brcm,bcm7445-xhci" for Broadcom STB SoCs with XHCI
-     - "xhci-platform" (deprecated)
+diff --git a/drivers/usb/gadget/udc/mv_udc_core.c b/drivers/usb/gadget/udc/mv_udc_core.c
+index cafde053788bb..80a1b52c656e0 100644
+--- a/drivers/usb/gadget/udc/mv_udc_core.c
++++ b/drivers/usb/gadget/udc/mv_udc_core.c
+@@ -2313,7 +2313,8 @@ static int mv_udc_probe(struct platform_device *pdev)
+ 	return 0;
  
+ err_create_workqueue:
+-	destroy_workqueue(udc->qwork);
++	if (udc->qwork)
++		destroy_workqueue(udc->qwork);
+ err_destroy_dma:
+ 	dma_pool_destroy(udc->dtd_pool);
+ err_free_dma:
 -- 
-2.7.4
+2.26.2
 
