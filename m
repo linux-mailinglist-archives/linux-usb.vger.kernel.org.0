@@ -2,66 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C99111F88FC
-	for <lists+linux-usb@lfdr.de>; Sun, 14 Jun 2020 15:42:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC7601F8C01
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jun 2020 03:06:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727082AbgFNNmI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 14 Jun 2020 09:42:08 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:59017 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1725815AbgFNNmI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 14 Jun 2020 09:42:08 -0400
-Received: (qmail 17826 invoked by uid 1000); 14 Jun 2020 09:42:07 -0400
-Date:   Sun, 14 Jun 2020 09:42:07 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Aditya Pakki <pakki001@umn.edu>
-Cc:     kjlu@umn.edu, wu000273@umn.edu,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        "Lee, Chiasheng" <chiasheng.lee@intel.com>,
-        David Heinzelmann <heinzelmann.david@gmail.com>,
-        Hardik Gajjar <hgajjar@de.adit-jv.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: core: fix reference count leak in usb_port_resume
-Message-ID: <20200614134207.GA17297@rowland.harvard.edu>
-References: <20200614033355.129442-1-pakki001@umn.edu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200614033355.129442-1-pakki001@umn.edu>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1728045AbgFOBGk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 14 Jun 2020 21:06:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37910 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728039AbgFOBGk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 14 Jun 2020 21:06:40 -0400
+Received: from localhost.localdomain (unknown [222.65.251.6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 600FC206D7;
+        Mon, 15 Jun 2020 01:06:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592183200;
+        bh=9VIOf6lsfsVPbuFDmD1pBSLjQ3N/BX08jhYl67QMrjg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dKWXF92bOl9w57YUBDfQa+RHGRYYupZdTSnfeYtf0s7TAGCaBhdaedpwpqcKAnQ3/
+         nfakSrFyVHGxEKmh3J011BxHuQmFyYl63RN7ZBR7c5bKqjJCEs9IDxljNPWOubPpGR
+         JO0NsfAKiGqBzy3JLVTvNIFON7zpRiMkjoGO6TCo=
+From:   Peter Chen <peter.chen@kernel.org>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, pawell@cadence.com, rogerq@ti.com,
+        Peter Chen <peter.chen@nxp.com>
+Subject: [PATCH 1/1] MAINTAINERS: add Cadence USB3 DRD IP driver entry
+Date:   Mon, 15 Jun 2020 09:06:18 +0800
+Message-Id: <20200615010618.3888-1-peter.chen@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Jun 13, 2020 at 10:33:53PM -0500, Aditya Pakki wrote:
-> usb_port_resume() calls pm_runtime_get_sync() that increments
-> the reference counter. In case of failure, decrement the reference
-> count and return the error.
-> 
-> Signed-off-by: Aditya Pakki <pakki001@umn.edu>
-> ---
->  drivers/usb/core/hub.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index b1e14beaac5f..a9231f27144e 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -3542,6 +3542,7 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
->  		if (status < 0) {
->  			dev_dbg(&udev->dev, "can't resume usb port, status %d\n",
->  					status);
-> +			pm_runtime_put_sync(&port_dev->dev);
+From: Peter Chen <peter.chen@nxp.com>
 
-This is wrong; you need to do test_and_clear_bit(port1, 
-hub->child_usage_bits) before calling pm_runtime_put_sync().  Otherwise 
-the child_usage_bits value will get out of sync with the port's runtime 
-status.
+Add Cadence USB3 DRD IP driver entry
 
-Alan Stern
+Signed-off-by: Peter Chen <peter.chen@nxp.com>
+---
+Hi Greg & Felipe,
+
+Currently, most of Cadence3 code are through Felipe's tree, I changed it
+through my tree in this commit, both trees are OK for me.
+
+ MAINTAINERS | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f08f290df174..9e4d3f974f9f 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3783,6 +3783,16 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/mtd/cadence-nand-controller.txt
+ F:	drivers/mtd/nand/raw/cadence-nand-controller.c
+ 
++CADENCE USB3 DRD IP DRIVER
++M:	Peter Chen <peter.chen@nxp.org>
++M:	Pawel Laszczak <pawell@cadence.com>
++M:	Roger Quadros <rogerq@ti.com>
++L:	linux-usb@vger.kernel.org
++S:	Maintained
++T:	git git://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/usb.git
++F:	Documentation/devicetree/bindings/usb/cdns-usb3.txt
++F:	drivers/usb/cdns3/
++
+ CADET FM/AM RADIO RECEIVER DRIVER
+ M:	Hans Verkuil <hverkuil@xs4all.nl>
+ L:	linux-media@vger.kernel.org
+-- 
+2.17.1
 
