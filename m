@@ -2,90 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9B0E1F9243
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jun 2020 10:53:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5666B1F93A3
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jun 2020 11:37:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728746AbgFOIxk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Jun 2020 04:53:40 -0400
-Received: from wsip-184-185-158-229.sd.sd.cox.net ([184.185.158.229]:17372
-        "EHLO s0-postfix.allcaps.org" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728522AbgFOIxj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Jun 2020 04:53:39 -0400
-X-Greylist: delayed 450 seconds by postgrey-1.27 at vger.kernel.org; Mon, 15 Jun 2020 04:53:39 EDT
-Received: from MacBook-Pro.austin.rr.com (cpe-70-114-205-206.austin.res.rr.com [70.114.205.206])
-        by s0-postfix.allcaps.org (Postfix) with ESMTPSA id 7FBA11C64048
-        for <linux-usb@vger.kernel.org>; Mon, 15 Jun 2020 00:33:11 -0700 (PDT)
-To:     linux-usb@vger.kernel.org
-From:   "Andrew P. Lentvorski" <bsder@allcaps.org>
-Subject: Implementing WCID for a bulk function ... can't create String
- descriptor of 0xEE
-Autocrypt: addr=bsder@allcaps.org; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <205ac1dc-2e8b-e83a-85f0-5a8e796f4b16@allcaps.org>
-Date:   Mon, 15 Jun 2020 01:46:08 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:68.0)
- Gecko/20100101 Thunderbird/68.9.0
+        id S1729194AbgFOJhq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Jun 2020 05:37:46 -0400
+Received: from mail.windriver.com ([147.11.1.11]:54996 "EHLO
+        mail.windriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728815AbgFOJhq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Jun 2020 05:37:46 -0400
+Received: from ALA-HCB.corp.ad.wrs.com (ala-hcb.corp.ad.wrs.com [147.11.189.41])
+        by mail.windriver.com (8.15.2/8.15.2) with ESMTPS id 05F9bTtc012340
+        (version=TLSv1 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
+        Mon, 15 Jun 2020 02:37:30 -0700 (PDT)
+Received: from pek-lpg-core1-vm1.wrs.com (128.224.156.106) by
+ ALA-HCB.corp.ad.wrs.com (147.11.189.41) with Microsoft SMTP Server id
+ 14.3.487.0; Mon, 15 Jun 2020 02:37:09 -0700
+From:   <qiang.zhang@windriver.com>
+To:     <balbi@kernel.org>
+CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] usb: gadget: function: printer: Add gadget dev interface status judgment
+Date:   Mon, 15 Jun 2020 17:46:08 +0800
+Message-ID: <20200615094608.26179-1-qiang.zhang@windriver.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I've got a bulk transport kernel module composite function.  Nothing
-fancy, just opens the two pipes to a character device just like f_hid.c.
- It works fine, as far as I can tell.
+From: Zqiang <qiang.zhang@windriver.com>
 
-Now, I'm trying to implement WCID so that Windows will automatically
-recognize it and attach it to the WinUSB drivers.
+After the interface of gadget printer device was disabled,
+We should not continue operate the device.
 
-However, I simply cannot figure out how to create a string with an index
-of 0xEE and data of "MSFT100" so that Windows will pick up the device
-and then request the extra features.
+Signed-off-by: Zqiang <qiang.zhang@windriver.com>
+---
+ drivers/usb/gadget/function/f_printer.c | 36 +++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-Alternatively, I'm happy to adjust my bcdUSB to flag USB 2.01 or USB 2.1
-and use the BOS system.  However, as there appear to be very few
-examples of that in the Linux codebase (none that I can see--but I'm not
-on latest), I suspect that would be just swapping something that might
-be possible but I'm just missing the path vs something that has a path
-that is wholly untrod.
+diff --git a/drivers/usb/gadget/function/f_printer.c b/drivers/usb/gadget/function/f_printer.c
+index 9c7ed2539ff7..2b45a61e4213 100644
+--- a/drivers/usb/gadget/function/f_printer.c
++++ b/drivers/usb/gadget/function/f_printer.c
+@@ -338,6 +338,11 @@ printer_open(struct inode *inode, struct file *fd)
+ 
+ 	spin_lock_irqsave(&dev->lock, flags);
+ 
++	if (dev->interface < 0) {
++		spin_unlock_irqrestore(&dev->lock, flags);
++		return -ENODEV;
++	}
++
+ 	if (!dev->printer_cdev_open) {
+ 		dev->printer_cdev_open = 1;
+ 		fd->private_data = dev;
+@@ -430,6 +435,12 @@ printer_read(struct file *fd, char __user *buf, size_t len, loff_t *ptr)
+ 	mutex_lock(&dev->lock_printer_io);
+ 	spin_lock_irqsave(&dev->lock, flags);
+ 
++	if (dev->interface < 0) {
++		spin_unlock_irqrestore(&dev->lock, flags);
++		mutex_unlock(&dev->lock_printer_io);
++		return -ENODEV;
++	}
++
+ 	/* We will use this flag later to check if a printer reset happened
+ 	 * after we turn interrupts back on.
+ 	 */
+@@ -561,6 +572,12 @@ printer_write(struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
+ 	mutex_lock(&dev->lock_printer_io);
+ 	spin_lock_irqsave(&dev->lock, flags);
+ 
++	if (dev->interface < 0) {
++		spin_unlock_irqrestore(&dev->lock, flags);
++		mutex_unlock(&dev->lock_printer_io);
++		return -ENODEV;
++	}
++
+ 	/* Check if a printer reset happens while we have interrupts on */
+ 	dev->reset_printer = 0;
+ 
+@@ -667,6 +684,13 @@ printer_fsync(struct file *fd, loff_t start, loff_t end, int datasync)
+ 
+ 	inode_lock(inode);
+ 	spin_lock_irqsave(&dev->lock, flags);
++
++	if (dev->interface < 0) {
++		spin_unlock_irqrestore(&dev->lock, flags);
++		inode_unlock(inode);
++		return -ENODEV;
++	}
++
+ 	tx_list_empty = (likely(list_empty(&dev->tx_reqs)));
+ 	spin_unlock_irqrestore(&dev->lock, flags);
+ 
+@@ -689,6 +713,13 @@ printer_poll(struct file *fd, poll_table *wait)
+ 
+ 	mutex_lock(&dev->lock_printer_io);
+ 	spin_lock_irqsave(&dev->lock, flags);
++
++	if (dev->interface < 0) {
++		spin_unlock_irqrestore(&dev->lock, flags);
++		mutex_unlock(&dev->lock_printer_io);
++		return EPOLLERR | EPOLLHUP;
++	}
++
+ 	setup_rx_reqs(dev);
+ 	spin_unlock_irqrestore(&dev->lock, flags);
+ 	mutex_unlock(&dev->lock_printer_io);
+@@ -722,6 +753,11 @@ printer_ioctl(struct file *fd, unsigned int code, unsigned long arg)
+ 
+ 	spin_lock_irqsave(&dev->lock, flags);
+ 
++	if (dev->interface < 0) {
++		spin_unlock_irqrestore(&dev->lock, flags);
++		return -ENODEV;
++	}
++
+ 	switch (code) {
+ 	case GADGET_GET_PRINTER_STATUS:
+ 		status = (int)dev->printer_status;
+-- 
+2.24.1
 
-WCID References:
-https://github.com/pbatard/libwdi/wiki/WCID-Devices
-https://docs.microsoft.com/en-us/windows-hardware/drivers/usbcon/microsoft-defined-usb-descriptors
-
-Any help, advice or pointers would be appreciated.
-
-Thanks,
--a
