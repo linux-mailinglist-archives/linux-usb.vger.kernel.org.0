@@ -2,30 +2,30 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC7BE1F9A1D
+	by mail.lfdr.de (Postfix) with ESMTP id 4D43D1F9A1C
 	for <lists+linux-usb@lfdr.de>; Mon, 15 Jun 2020 16:27:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730552AbgFOO05 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        id S1730551AbgFOO05 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
         Mon, 15 Jun 2020 10:26:57 -0400
-Received: from mga05.intel.com ([192.55.52.43]:1143 "EHLO mga05.intel.com"
+Received: from mga09.intel.com ([134.134.136.24]:59958 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729243AbgFOO0y (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        id S1730490AbgFOO0y (ORCPT <rfc822;linux-usb@vger.kernel.org>);
         Mon, 15 Jun 2020 10:26:54 -0400
-IronPort-SDR: hfY1MFcl/eSO9PHZU1XhREqkFIKwoHw1T4hXV9gtboSik7PjCZY/CkIRSaQkwn1AgLckMDQRgM
- 7qUSLvlp6eOw==
+IronPort-SDR: xg1ZQCQWhTShDqTXdzNakTUJMSm3CotljZGZByz7nFMQEUEyoDWYLAV782dW/Fw6eOdUWIP5OC
+ H5K/YWTdc6cQ==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2020 07:26:52 -0700
-IronPort-SDR: oMdi/Xeo3CjPY17C47hf8rjLNPJXi5JmQMEmRuHhUWk4KYyl3fk28ARUHCNw3SLZzVkqzYFxfn
- 1hAkYrzfR+tw==
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2020 07:26:52 -0700
+IronPort-SDR: ZXfObPn9r75jlt36TUblFb5yhaowmj6Z472RBHAJD8Rhgb4hG6NCgJ3+50OXlMq/YYo9gDNcua
+ hQ/BstIc4WgA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,514,1583222400"; 
-   d="scan'208";a="449412040"
+   d="scan'208";a="262736097"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga005.jf.intel.com with ESMTP; 15 Jun 2020 07:26:49 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 15 Jun 2020 07:26:49 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 01B93574; Mon, 15 Jun 2020 17:26:46 +0300 (EEST)
+        id 1181B707; Mon, 15 Jun 2020 17:26:46 +0300 (EEST)
 From:   Mika Westerberg <mika.westerberg@linux.intel.com>
 To:     linux-usb@vger.kernel.org
 Cc:     Andreas Noever <andreas.noever@gmail.com>,
@@ -35,9 +35,9 @@ Cc:     Andreas Noever <andreas.noever@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rajmohan Mani <rajmohan.mani@intel.com>,
         Lukas Wunner <lukas@wunner.de>
-Subject: [PATCH 08/17] thunderbolt: Add DP IN resources for all routers
-Date:   Mon, 15 Jun 2020 17:26:36 +0300
-Message-Id: <20200615142645.56209-9-mika.westerberg@linux.intel.com>
+Subject: [PATCH 09/17] thunderbolt: Do not tunnel USB3 if link is not USB4
+Date:   Mon, 15 Jun 2020 17:26:37 +0300
+Message-Id: <20200615142645.56209-10-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.27.0.rc2
 In-Reply-To: <20200615142645.56209-1-mika.westerberg@linux.intel.com>
 References: <20200615142645.56209-1-mika.westerberg@linux.intel.com>
@@ -48,109 +48,119 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-USB4 spec allows DP tunneling from any router that has DP IN adapter,
-not just from host router. The driver currently only added the DP IN
-resources for the host router because Thunderbolt 1, 2 and 3 devices do
-not have DP IN adapters. However, USB4 allows device routers to have DP
-IN adapter as well so update the driver to add DP IN resources for each
-device that has one. One example would be an eGPU enclosure where the
-eGPU output is forwarded to DP IN port and then tunneled over the USB4
-fabric.
-
-Only limitation we add now is that the DP IN and DP OUT that gets paired
-for tunnel creation should both be under the same topology starting from
-host router downstream port. In other words we do not create DP tunnels
-across host router at this time even though that is possible as well but
-it complicates the bandwidth management and there is no real use-case
-for this anyway.
+USB3 tunneling is possible only over USB4 link so don't create USB3
+tunnels if that's not the case.
 
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/thunderbolt/tb.c | 50 ++++++++++++++++++++++++++++++++++++----
- 1 file changed, 46 insertions(+), 4 deletions(-)
+ drivers/thunderbolt/tb.c      |  3 +++
+ drivers/thunderbolt/tb.h      |  2 ++
+ drivers/thunderbolt/tb_regs.h |  1 +
+ drivers/thunderbolt/usb4.c    | 24 +++++++++++++++++++++---
+ 4 files changed, 27 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-index 107cd232f486..55daa7f1a87d 100644
+index 55daa7f1a87d..2da82259e77c 100644
 --- a/drivers/thunderbolt/tb.c
 +++ b/drivers/thunderbolt/tb.c
-@@ -404,6 +404,7 @@ static void tb_scan_port(struct tb_port *port)
- 	if (tcm->hotplug_active && tb_tunnel_usb3(sw->tb, sw))
- 		tb_sw_warn(sw, "USB3 tunnel creation failed\n");
+@@ -235,6 +235,9 @@ static int tb_tunnel_usb3(struct tb *tb, struct tb_switch *sw)
+ 	if (!up)
+ 		return 0;
  
-+	tb_add_dp_resources(sw);
- 	tb_scan_switch(sw);
++	if (!sw->link_usb4)
++		return 0;
++
+ 	/*
+ 	 * Look up available down port. Since we are chaining it should
+ 	 * be found right above this switch.
+diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+index b53ef5be7263..de8124949eaf 100644
+--- a/drivers/thunderbolt/tb.h
++++ b/drivers/thunderbolt/tb.h
+@@ -97,6 +97,7 @@ struct tb_switch_tmu {
+  * @device_name: Name of the device (or %NULL if not known)
+  * @link_speed: Speed of the link in Gb/s
+  * @link_width: Width of the link (1 or 2)
++ * @link_usb4: Upstream link is USB4
+  * @generation: Switch Thunderbolt generation
+  * @cap_plug_events: Offset to the plug events capability (%0 if not found)
+  * @cap_lc: Offset to the link controller capability (%0 if not found)
+@@ -136,6 +137,7 @@ struct tb_switch {
+ 	const char *device_name;
+ 	unsigned int link_speed;
+ 	unsigned int link_width;
++	bool link_usb4;
+ 	unsigned int generation;
+ 	int cap_plug_events;
+ 	int cap_lc;
+diff --git a/drivers/thunderbolt/tb_regs.h b/drivers/thunderbolt/tb_regs.h
+index c29c5075525a..77d4b8598835 100644
+--- a/drivers/thunderbolt/tb_regs.h
++++ b/drivers/thunderbolt/tb_regs.h
+@@ -290,6 +290,7 @@ struct tb_regs_port_header {
+ /* USB4 port registers */
+ #define PORT_CS_18				0x12
+ #define PORT_CS_18_BE				BIT(8)
++#define PORT_CS_18_TCM				BIT(9)
+ #define PORT_CS_19				0x13
+ #define PORT_CS_19_PC				BIT(3)
+ 
+diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
+index 50c7534ba31e..393771d50962 100644
+--- a/drivers/thunderbolt/usb4.c
++++ b/drivers/thunderbolt/usb4.c
+@@ -192,6 +192,20 @@ static int usb4_switch_op(struct tb_switch *sw, u16 opcode, u8 *status)
+ 	return 0;
  }
  
-@@ -573,6 +574,43 @@ static int tb_available_bw(struct tb_cm *tcm, struct tb_port *in,
- 	return available_bw;
- }
- 
-+static struct tb_port *tb_find_dp_out(struct tb *tb, struct tb_port *in)
++static bool link_is_usb4(struct tb_port *port)
 +{
-+	struct tb_port *host_port, *port;
-+	struct tb_cm *tcm = tb_priv(tb);
++	u32 val;
 +
-+	host_port = tb_route(in->sw) ?
-+		tb_port_at(tb_route(in->sw), tb->root_switch) : NULL;
++	if (!port->cap_usb4)
++		return false;
 +
-+	list_for_each_entry(port, &tcm->dp_resources, list) {
-+		if (!tb_port_is_dpout(port))
-+			continue;
++	if (tb_port_read(port, &val, TB_CFG_PORT,
++			 port->cap_usb4 + PORT_CS_18, 1))
++		return false;
 +
-+		if (tb_port_is_enabled(port)) {
-+			tb_port_dbg(port, "in use\n");
-+			continue;
-+		}
-+
-+		tb_port_dbg(port, "DP OUT available\n");
-+
-+		/*
-+		 * Keep the DP tunnel under the topology starting from
-+		 * the same host router downstream port.
-+		 */
-+		if (host_port && tb_route(port->sw)) {
-+			struct tb_port *p;
-+
-+			p = tb_port_at(tb_route(port->sw), tb->root_switch);
-+			if (p != host_port)
-+				continue;
-+		}
-+
-+		return port;
-+	}
-+
-+	return NULL;
++	return !(val & PORT_CS_18_TCM);
 +}
 +
- static void tb_tunnel_dp(struct tb *tb)
+ /**
+  * usb4_switch_setup() - Additional setup for USB4 device
+  * @sw: USB4 router to setup
+@@ -205,6 +219,7 @@ static int usb4_switch_op(struct tb_switch *sw, u16 opcode, u8 *status)
+  */
+ int usb4_switch_setup(struct tb_switch *sw)
  {
- 	struct tb_cm *tcm = tb_priv(tb);
-@@ -589,17 +627,21 @@ static void tb_tunnel_dp(struct tb *tb)
- 	in = NULL;
- 	out = NULL;
- 	list_for_each_entry(port, &tcm->dp_resources, list) {
-+		if (!tb_port_is_dpin(port))
-+			continue;
++	struct tb_port *downstream_port;
+ 	struct tb_switch *parent;
+ 	bool tbt3, xhci;
+ 	u32 val = 0;
+@@ -217,6 +232,11 @@ int usb4_switch_setup(struct tb_switch *sw)
+ 	if (ret)
+ 		return ret;
+ 
++	parent = tb_switch_parent(sw);
++	downstream_port = tb_port_at(tb_route(sw), parent);
++	sw->link_usb4 = link_is_usb4(downstream_port);
++	tb_sw_dbg(sw, "link: %s\n", sw->link_usb4 ? "USB4" : "TBT3");
 +
- 		if (tb_port_is_enabled(port)) {
- 			tb_port_dbg(port, "in use\n");
- 			continue;
- 		}
+ 	xhci = val & ROUTER_CS_6_HCI;
+ 	tbt3 = !(val & ROUTER_CS_6_TNS);
  
--		tb_port_dbg(port, "available\n");
-+		tb_port_dbg(port, "DP IN available\n");
+@@ -227,9 +247,7 @@ int usb4_switch_setup(struct tb_switch *sw)
+ 	if (ret)
+ 		return ret;
  
--		if (!in && tb_port_is_dpin(port))
-+		out = tb_find_dp_out(tb, port);
-+		if (out) {
- 			in = port;
--		else if (!out && tb_port_is_dpout(port))
--			out = port;
-+			break;
-+		}
+-	parent = tb_switch_parent(sw);
+-
+-	if (tb_switch_find_port(parent, TB_TYPE_USB3_DOWN)) {
++	if (sw->link_usb4 && tb_switch_find_port(parent, TB_TYPE_USB3_DOWN)) {
+ 		val |= ROUTER_CS_5_UTO;
+ 		xhci = false;
  	}
- 
- 	if (!in) {
 -- 
 2.27.0.rc2
 
