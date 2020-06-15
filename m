@@ -2,251 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37FAD1F906F
-	for <lists+linux-usb@lfdr.de>; Mon, 15 Jun 2020 09:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B0E1F9243
+	for <lists+linux-usb@lfdr.de>; Mon, 15 Jun 2020 10:53:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728997AbgFOHty (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Jun 2020 03:49:54 -0400
-Received: from mx2.suse.de ([195.135.220.15]:39998 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728865AbgFOHtV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 15 Jun 2020 03:49:21 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id C09C9AB76;
-        Mon, 15 Jun 2020 07:49:20 +0000 (UTC)
-From:   Jiri Slaby <jslaby@suse.cz>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiri Slaby <jslaby@suse.cz>,
-        Thomas Winischhofer <thomas@winischhofer.net>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-usb@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-parisc@vger.kernel.org
-Subject: [PATCH 26/38] vt: use newly defined CUR_* macros
-Date:   Mon, 15 Jun 2020 09:48:58 +0200
-Message-Id: <20200615074910.19267-26-jslaby@suse.cz>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200615074910.19267-1-jslaby@suse.cz>
-References: <20200615074910.19267-1-jslaby@suse.cz>
+        id S1728746AbgFOIxk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 15 Jun 2020 04:53:40 -0400
+Received: from wsip-184-185-158-229.sd.sd.cox.net ([184.185.158.229]:17372
+        "EHLO s0-postfix.allcaps.org" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728522AbgFOIxj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 15 Jun 2020 04:53:39 -0400
+X-Greylist: delayed 450 seconds by postgrey-1.27 at vger.kernel.org; Mon, 15 Jun 2020 04:53:39 EDT
+Received: from MacBook-Pro.austin.rr.com (cpe-70-114-205-206.austin.res.rr.com [70.114.205.206])
+        by s0-postfix.allcaps.org (Postfix) with ESMTPSA id 7FBA11C64048
+        for <linux-usb@vger.kernel.org>; Mon, 15 Jun 2020 00:33:11 -0700 (PDT)
+To:     linux-usb@vger.kernel.org
+From:   "Andrew P. Lentvorski" <bsder@allcaps.org>
+Subject: Implementing WCID for a bulk function ... can't create String
+ descriptor of 0xEE
+Autocrypt: addr=bsder@allcaps.org; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <205ac1dc-2e8b-e83a-85f0-5a8e796f4b16@allcaps.org>
+Date:   Mon, 15 Jun 2020 01:46:08 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:68.0)
+ Gecko/20100101 Thunderbird/68.9.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-We defined macros for all the magic constants in the previous patch. So
-let us use the macro in the code now.
+I've got a bulk transport kernel module composite function.  Nothing
+fancy, just opens the two pipes to a character device just like f_hid.c.
+ It works fine, as far as I can tell.
 
-No functional change intended.
+Now, I'm trying to implement WCID so that Windows will automatically
+recognize it and attach it to the WinUSB drivers.
 
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-Cc: Thomas Winischhofer <thomas@winischhofer.net>
-Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Cc: Helge Deller <deller@gmx.de>
-Cc: linux-usb@vger.kernel.org
-Cc: dri-devel@lists.freedesktop.org
-Cc: linux-fbdev@vger.kernel.org
-Cc: linux-parisc@vger.kernel.org
----
- drivers/tty/vt/vt.c                     | 22 +++++++++++++---------
- drivers/usb/misc/sisusbvga/sisusb_con.c |  2 +-
- drivers/video/console/mdacon.c          |  2 +-
- drivers/video/console/sticon.c          |  2 +-
- drivers/video/console/vgacon.c          |  2 +-
- drivers/video/fbdev/core/bitblit.c      |  2 +-
- drivers/video/fbdev/core/fbcon.c        |  2 +-
- drivers/video/fbdev/core/fbcon_ccw.c    |  2 +-
- drivers/video/fbdev/core/fbcon_cw.c     |  2 +-
- drivers/video/fbdev/core/fbcon_ud.c     |  2 +-
- drivers/video/fbdev/core/tileblit.c     |  2 +-
- 11 files changed, 23 insertions(+), 19 deletions(-)
+However, I simply cannot figure out how to create a string with an index
+of 0xEE and data of "MSFT100" so that Windows will pick up the device
+and then request the extra features.
 
-diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
-index af1ef717f416..2b9fc628f05b 100644
---- a/drivers/tty/vt/vt.c
-+++ b/drivers/tty/vt/vt.c
-@@ -866,17 +866,18 @@ static void add_softcursor(struct vc_data *vc)
- 	int i = scr_readw((u16 *) vc->vc_pos);
- 	u32 type = vc->vc_cursor_type;
- 
--	if (!(type & 0x10))
-+	if (!(type & CUR_SW))
- 		return;
- 	if (softcursor_original != -1)
- 		return;
- 	softcursor_original = i;
--	i |= (type >> 8) & 0xff00;
--	i ^= type & 0xff00;
--	if ((type & 0x20) && (softcursor_original & 0x7000) == (i & 0x7000))
--		i ^= 0x7000;
--	if ((type & 0x40) && (i & 0x700) == ((i & 0x7000) >> 4))
--		i ^= 0x0700;
-+	i |= CUR_SET(type);
-+	i ^= CUR_CHANGE(type);
-+	if ((type & CUR_ALWAYS_BG) &&
-+			(softcursor_original & CUR_BG) == (i & CUR_BG))
-+		i ^= CUR_BG;
-+	if ((type & CUR_INVERT_FG_BG) && (i & CUR_FG) == ((i & CUR_BG) >> 4))
-+		i ^= CUR_FG;
- 	scr_writew(i, (u16 *)vc->vc_pos);
- 	if (con_should_update(vc))
- 		vc->vc_sw->con_putc(vc, i, vc->state.y, vc->state.x);
-@@ -910,7 +911,7 @@ static void set_cursor(struct vc_data *vc)
- 		if (vc_is_sel(vc))
- 			clear_selection();
- 		add_softcursor(vc);
--		if ((vc->vc_cursor_type & 0x0f) != 1)
-+		if (CUR_SIZE(vc->vc_cursor_type) != CUR_NONE)
- 			vc->vc_sw->con_cursor(vc, CM_DRAW);
- 	} else
- 		hide_cursor(vc);
-@@ -2322,7 +2323,10 @@ static void do_con_trol(struct tty_struct *tty, struct vc_data *vc, int c)
- 		case 'c':
- 			if (vc->vc_priv == EPdec) {
- 				if (vc->vc_par[0])
--					vc->vc_cursor_type = vc->vc_par[0] | (vc->vc_par[1] << 8) | (vc->vc_par[2] << 16);
-+					vc->vc_cursor_type =
-+						CUR_MAKE(vc->vc_par[0],
-+							 vc->vc_par[1],
-+							 vc->vc_par[2]);
- 				else
- 					vc->vc_cursor_type = cur_default;
- 				return;
-diff --git a/drivers/usb/misc/sisusbvga/sisusb_con.c b/drivers/usb/misc/sisusbvga/sisusb_con.c
-index 80657c49310a..1058eaba3084 100644
---- a/drivers/usb/misc/sisusbvga/sisusb_con.c
-+++ b/drivers/usb/misc/sisusbvga/sisusb_con.c
-@@ -727,7 +727,7 @@ sisusbcon_cursor(struct vc_data *c, int mode)
- 
- 	baseline = c->vc_font.height - (c->vc_font.height < 10 ? 1 : 2);
- 
--	switch (c->vc_cursor_type & 0x0f) {
-+	switch (CUR_SIZE(c->vc_cursor_type)) {
- 		case CUR_BLOCK:		from = 1;
- 					to   = c->vc_font.height;
- 					break;
-diff --git a/drivers/video/console/mdacon.c b/drivers/video/console/mdacon.c
-index 00cb6245fbef..ef29b321967f 100644
---- a/drivers/video/console/mdacon.c
-+++ b/drivers/video/console/mdacon.c
-@@ -492,7 +492,7 @@ static void mdacon_cursor(struct vc_data *c, int mode)
- 
- 	mda_set_cursor(c->state.y * mda_num_columns * 2 + c->state.x * 2);
- 
--	switch (c->vc_cursor_type & 0x0f) {
-+	switch (CUR_SIZE(c->vc_cursor_type)) {
- 
- 		case CUR_LOWER_THIRD:	mda_set_cursor_size(10, 13); break;
- 		case CUR_LOWER_HALF:	mda_set_cursor_size(7,  13); break;
-diff --git a/drivers/video/console/sticon.c b/drivers/video/console/sticon.c
-index bbcdfd312c36..21a5c280c8c9 100644
---- a/drivers/video/console/sticon.c
-+++ b/drivers/video/console/sticon.c
-@@ -139,7 +139,7 @@ static void sticon_cursor(struct vc_data *conp, int mode)
- 	break;
-     case CM_MOVE:
-     case CM_DRAW:
--	switch (conp->vc_cursor_type & 0x0f) {
-+	switch (CUR_SIZE(conp->vc_cursor_type)) {
- 	case CUR_UNDERLINE:
- 	case CUR_LOWER_THIRD:
- 	case CUR_LOWER_HALF:
-diff --git a/drivers/video/console/vgacon.c b/drivers/video/console/vgacon.c
-index c1c4ce28ac5e..f0f3d573f848 100644
---- a/drivers/video/console/vgacon.c
-+++ b/drivers/video/console/vgacon.c
-@@ -728,7 +728,7 @@ static void vgacon_cursor(struct vc_data *c, int mode)
- 	case CM_MOVE:
- 	case CM_DRAW:
- 		write_vga(14, (c->vc_pos - vga_vram_base) / 2);
--		switch (c->vc_cursor_type & 0x0f) {
-+		switch (CUR_SIZE(c->vc_cursor_type)) {
- 		case CUR_UNDERLINE:
- 			vgacon_set_cursor_size(c->state.x,
- 					       c->vc_font.height -
-diff --git a/drivers/video/fbdev/core/bitblit.c b/drivers/video/fbdev/core/bitblit.c
-index 3b002b365a5a..dde8004d8610 100644
---- a/drivers/video/fbdev/core/bitblit.c
-+++ b/drivers/video/fbdev/core/bitblit.c
-@@ -241,7 +241,7 @@ static void bit_cursor(struct vc_data *vc, struct fb_info *info, int mode,
- 	unsigned short charmask = vc->vc_hi_font_mask ? 0x1ff : 0xff;
- 	int w = DIV_ROUND_UP(vc->vc_font.width, 8), c;
- 	int y = real_y(ops->p, vc->state.y);
--	int attribute, use_sw = (vc->vc_cursor_type & 0x10);
-+	int attribute, use_sw = vc->vc_cursor_type & CUR_SW;
- 	int err = 1;
- 	char *src;
- 
-diff --git a/drivers/video/fbdev/core/fbcon.c b/drivers/video/fbdev/core/fbcon.c
-index 38d2a00b0ccf..86fe41b1deb8 100644
---- a/drivers/video/fbdev/core/fbcon.c
-+++ b/drivers/video/fbdev/core/fbcon.c
-@@ -1393,7 +1393,7 @@ static void fbcon_cursor(struct vc_data *vc, int mode)
- 	if (fbcon_is_inactive(vc, info) || vc->vc_deccm != 1)
- 		return;
- 
--	if (vc->vc_cursor_type & 0x10)
-+	if (vc->vc_cursor_type & CUR_SW)
- 		fbcon_del_cursor_timer(info);
- 	else
- 		fbcon_add_cursor_timer(info);
-diff --git a/drivers/video/fbdev/core/fbcon_ccw.c b/drivers/video/fbdev/core/fbcon_ccw.c
-index 5b67bcebe34c..b5dd8317086d 100644
---- a/drivers/video/fbdev/core/fbcon_ccw.c
-+++ b/drivers/video/fbdev/core/fbcon_ccw.c
-@@ -226,7 +226,7 @@ static void ccw_cursor(struct vc_data *vc, struct fb_info *info, int mode,
- 	unsigned short charmask = vc->vc_hi_font_mask ? 0x1ff : 0xff;
- 	int w = (vc->vc_font.height + 7) >> 3, c;
- 	int y = real_y(ops->p, vc->state.y);
--	int attribute, use_sw = (vc->vc_cursor_type & 0x10);
-+	int attribute, use_sw = vc->vc_cursor_type & CUR_SW;
- 	int err = 1, dx, dy;
- 	char *src;
- 	u32 vyres = GETVYRES(ops->p->scrollmode, info);
-diff --git a/drivers/video/fbdev/core/fbcon_cw.c b/drivers/video/fbdev/core/fbcon_cw.c
-index f1aab3ae3bc9..dbb5dbf3dd01 100644
---- a/drivers/video/fbdev/core/fbcon_cw.c
-+++ b/drivers/video/fbdev/core/fbcon_cw.c
-@@ -209,7 +209,7 @@ static void cw_cursor(struct vc_data *vc, struct fb_info *info, int mode,
- 	unsigned short charmask = vc->vc_hi_font_mask ? 0x1ff : 0xff;
- 	int w = (vc->vc_font.height + 7) >> 3, c;
- 	int y = real_y(ops->p, vc->state.y);
--	int attribute, use_sw = (vc->vc_cursor_type & 0x10);
-+	int attribute, use_sw = vc->vc_cursor_type & CUR_SW;
- 	int err = 1, dx, dy;
- 	char *src;
- 	u32 vxres = GETVXRES(ops->p->scrollmode, info);
-diff --git a/drivers/video/fbdev/core/fbcon_ud.c b/drivers/video/fbdev/core/fbcon_ud.c
-index 81ed6f6bed67..b2c9cdbcc9e4 100644
---- a/drivers/video/fbdev/core/fbcon_ud.c
-+++ b/drivers/video/fbdev/core/fbcon_ud.c
-@@ -256,7 +256,7 @@ static void ud_cursor(struct vc_data *vc, struct fb_info *info, int mode,
- 	unsigned short charmask = vc->vc_hi_font_mask ? 0x1ff : 0xff;
- 	int w = (vc->vc_font.width + 7) >> 3, c;
- 	int y = real_y(ops->p, vc->state.y);
--	int attribute, use_sw = (vc->vc_cursor_type & 0x10);
-+	int attribute, use_sw = vc->vc_cursor_type & CUR_SW;
- 	int err = 1, dx, dy;
- 	char *src;
- 	u32 vyres = GETVYRES(ops->p->scrollmode, info);
-diff --git a/drivers/video/fbdev/core/tileblit.c b/drivers/video/fbdev/core/tileblit.c
-index ac51425687e4..1dfaff0881fb 100644
---- a/drivers/video/fbdev/core/tileblit.c
-+++ b/drivers/video/fbdev/core/tileblit.c
-@@ -83,7 +83,7 @@ static void tile_cursor(struct vc_data *vc, struct fb_info *info, int mode,
- 			int softback_lines, int fg, int bg)
- {
- 	struct fb_tilecursor cursor;
--	int use_sw = (vc->vc_cursor_type & 0x10);
-+	int use_sw = vc->vc_cursor_type & CUR_SW;
- 
- 	cursor.sx = vc->state.x;
- 	cursor.sy = vc->state.y;
--- 
-2.27.0
+Alternatively, I'm happy to adjust my bcdUSB to flag USB 2.01 or USB 2.1
+and use the BOS system.  However, as there appear to be very few
+examples of that in the Linux codebase (none that I can see--but I'm not
+on latest), I suspect that would be just swapping something that might
+be possible but I'm just missing the path vs something that has a path
+that is wholly untrod.
 
+WCID References:
+https://github.com/pbatard/libwdi/wiki/WCID-Devices
+https://docs.microsoft.com/en-us/windows-hardware/drivers/usbcon/microsoft-defined-usb-descriptors
+
+Any help, advice or pointers would be appreciated.
+
+Thanks,
+-a
