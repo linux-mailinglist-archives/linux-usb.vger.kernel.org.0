@@ -2,78 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53E391FC049
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Jun 2020 22:55:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE74F1FC158
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jun 2020 00:04:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726464AbgFPUzh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Jun 2020 16:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37994 "EHLO
+        id S1726510AbgFPWEV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 Jun 2020 18:04:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726296AbgFPUzh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Jun 2020 16:55:37 -0400
-Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F3FC061573;
-        Tue, 16 Jun 2020 13:55:37 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 5A163128D80DE;
-        Tue, 16 Jun 2020 13:55:36 -0700 (PDT)
-Date:   Tue, 16 Jun 2020 13:55:35 -0700 (PDT)
-Message-Id: <20200616.135535.379478681934951754.davem@davemloft.net>
-To:     jk@ozlabs.org
-Cc:     netdev@vger.kernel.org, allan@asix.com.tw, freddy@asix.com.tw,
-        pfink@christ-es.de, linux-usb@vger.kernel.org, louis@asix.com.tw
-Subject: Re: [PATCH] net: usb: ax88179_178a: fix packet alignment padding
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <e780f13fdde89d03ef863618d8de3dd67ba53c72.camel@ozlabs.org>
-References: <20200615025456.30219-1-jk@ozlabs.org>
-        <20200615.125220.492630206908309571.davem@davemloft.net>
-        <e780f13fdde89d03ef863618d8de3dd67ba53c72.camel@ozlabs.org>
-X-Mailer: Mew version 6.8 on Emacs 26.3
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Tue, 16 Jun 2020 13:55:36 -0700 (PDT)
+        with ESMTP id S1725894AbgFPWEU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Jun 2020 18:04:20 -0400
+Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A02C061573;
+        Tue, 16 Jun 2020 15:04:20 -0700 (PDT)
+Received: by mail-il1-x143.google.com with SMTP id j19so87201ilk.9;
+        Tue, 16 Jun 2020 15:04:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8YvR3KOM2+UZcgNgTkLEwMZFvasq6WqgYL2ECzZJc0w=;
+        b=nlTNk9uFvhANOGMZLtZLbE7jzXGMu0dJUAPNYNMRD9P2+cyhwqeKDAWH4/mdBfiSwl
+         wSoksVgqe1lpj+IkHblVp0CJTEwq1I2qqstXaY84kUwUVTVtsNfDT27lgKhNF4mvCzgC
+         EJvWgLJOC0Zkf6Prw5FWYXJuHRtTV2KGF7+f5rj95RvMt0WYsRKtoMgNub/z9HRMSH9K
+         y/2GO5kFph3kW1pazugHxDMliIZTedwQ0rWQy7tcXVQUsEnf2WD4NRroVzpZ4v+rOKU3
+         HDCb+i5Ugnbj2BuszGHdCSFOzIqJ7Va+k8uK0k1QUzU+dtTPH+Y7AhGeHxCyxJYurC4B
+         TT6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8YvR3KOM2+UZcgNgTkLEwMZFvasq6WqgYL2ECzZJc0w=;
+        b=TlHJpE7BKXGDOWGMgjNlb2H2Ez0lflh45CDzXeL1Mq3VO5t2VPiK5tXSRRc4xV+WPU
+         hxnPeVNrEVaKioZ3HqEVQrbgy3usjrIYxnGzWTlWU2zkY+fCwmvtZjzQOPLE00n++YAn
+         Kf7Nw3OBrphcMFYb2kh1BjrYsRd96apt6UDH5dFZAGEtoL0dHU5m/ghpXWt1BTGe69fp
+         anDeGCuYQ4GiZb1yVMsH2LY7+50ubIeRQhp8GVQRpRorTWcQj2qNtegwisZ3uTTrbQKs
+         sGuRQIrBcTl1pUciCFI8pGow/YGZZlqLsypzRuNb9bUn2pY3Zy4pP9ONpakA+FGrK3wK
+         uIwA==
+X-Gm-Message-State: AOAM531xZwBOFy33Ll+4P13pIvkZGTu2dkWqTwQWz0n+QXgNBYvkqgPt
+        bFmnJcZuirfPx57waueCxwiBfV96JRg=
+X-Google-Smtp-Source: ABdhPJyUCfOMuYDsR1gSHzPDSfFEAqkteNoF++Vl+LHEvELEpAVS3jnBoM7lG/MxZNIiRQwXurvIYA==
+X-Received: by 2002:a92:5e4a:: with SMTP id s71mr5214475ilb.119.1592345059173;
+        Tue, 16 Jun 2020 15:04:19 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-100-23.hlrn.qwest.net. [71.218.100.23])
+        by smtp.gmail.com with ESMTPSA id p12sm8571158ioj.37.2020.06.16.15.04.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Jun 2020 15:04:18 -0700 (PDT)
+From:   James Hilliard <james.hilliard1@gmail.com>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>,
+        James Hilliard <james.hilliard1@gmail.com>
+Subject: [PATCH v2] USB: Serial: cypress_M8: Enable Simply Automated UPB PIM
+Date:   Tue, 16 Jun 2020 16:04:03 -0600
+Message-Id: <20200616220403.1807003-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Jeremy Kerr <jk@ozlabs.org>
-Date: Tue, 16 Jun 2020 17:08:23 +0800
+This is a UPB(Universal Powerline Bus) PIM(Powerline Interface Module)
+which allows for controlling multiple UPB compatible devices from
+Linux using the standard serial interface.
 
->> Because that code in this loop makes the same calculations:
->> 
->>                 ax_skb = skb_clone(skb, GFP_ATOMIC);
->>                 if (ax_skb) {
->>                         ax_skb->len = pkt_len;
->>                         ax_skb->data = skb->data + 2;
->>                         skb_set_tail_pointer(ax_skb, pkt_len);
->>                         ax_skb->truesize = pkt_len + sizeof(struct sk_buff);
->>                         ax88179_rx_checksum(ax_skb, pkt_hdr);
->>                         usbnet_skb_return(dev, ax_skb);
->> 
->> So if your change is right, it should be applied to this code block
->> as well.
-> 
-> Yep, my patch changes that block too (or did I miss something?)
+Based on vendor application source code there are two different models
+of USB based PIM devices in addition to a number of RS232 based PIM's.
 
-Nope, you didn't miss anything.  I missed that completely.
+The vendor UPB application source contains the following USB ID's:
+#define USB_PCS_VENDOR_ID 0x04b4
+#define USB_PCS_PIM_PRODUCT_ID 0x5500
 
->> And do we know that it's two extra tail bytes always?  Or some kind
->> of alignment padding the chip performs for every sub-packet?
-> 
-> I've assumed it's a constant two bytes of prefix padding, as that's all
-> I've seen. But it would be great to have more detail from ASIX if
-> possible.
+#define USB_SAI_VENDOR_ID 0x17dd
+#define USB_SAI_PIM_PRODUCT_ID 0x5500
 
-I'll wait a bit for the ASIX folks to comment.
+The first set of ID's correspond to the PIM variant sold by Powerline
+Control Systems while the second corresponds to the Simply Automated
+Incorporated PIM. As the product ID for both of these match the default
+cypress HID->COM RS232 product ID it assumed that they both use an
+internal variant of this HID->COM RS232 converter hardware. However
+as the vendor ID for the Simply Automated variant is different we need
+to also add it to the cypress_M8 driver so that it is properly
+detected.
 
-It seems logical to me that what the chip does is align up the total
-sub-packet length to a multiple of 4 or larger, and then add those two
-prefix padding bytes.  Otherwise the prefix padding won't necessarily
-and reliably align the IP header after the link level header.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+Changes v1 -> v2:
+  - Add more detailed commit message.
+---
+ drivers/usb/serial/cypress_m8.c | 2 ++
+ drivers/usb/serial/cypress_m8.h | 3 +++
+ 2 files changed, 5 insertions(+)
 
-Thanks.
+diff --git a/drivers/usb/serial/cypress_m8.c b/drivers/usb/serial/cypress_m8.c
+index 216edd5826ca..ecda82198798 100644
+--- a/drivers/usb/serial/cypress_m8.c
++++ b/drivers/usb/serial/cypress_m8.c
+@@ -59,6 +59,7 @@ static const struct usb_device_id id_table_earthmate[] = {
+ 
+ static const struct usb_device_id id_table_cyphidcomrs232[] = {
+ 	{ USB_DEVICE(VENDOR_ID_CYPRESS, PRODUCT_ID_CYPHIDCOM) },
++	{ USB_DEVICE(VENDOR_ID_SAI, PRODUCT_ID_CYPHIDCOM) },
+ 	{ USB_DEVICE(VENDOR_ID_POWERCOM, PRODUCT_ID_UPS) },
+ 	{ USB_DEVICE(VENDOR_ID_FRWD, PRODUCT_ID_CYPHIDCOM_FRWD) },
+ 	{ }						/* Terminating entry */
+@@ -73,6 +74,7 @@ static const struct usb_device_id id_table_combined[] = {
+ 	{ USB_DEVICE(VENDOR_ID_DELORME, PRODUCT_ID_EARTHMATEUSB) },
+ 	{ USB_DEVICE(VENDOR_ID_DELORME, PRODUCT_ID_EARTHMATEUSB_LT20) },
+ 	{ USB_DEVICE(VENDOR_ID_CYPRESS, PRODUCT_ID_CYPHIDCOM) },
++	{ USB_DEVICE(VENDOR_ID_SAI, PRODUCT_ID_CYPHIDCOM) },
+ 	{ USB_DEVICE(VENDOR_ID_POWERCOM, PRODUCT_ID_UPS) },
+ 	{ USB_DEVICE(VENDOR_ID_FRWD, PRODUCT_ID_CYPHIDCOM_FRWD) },
+ 	{ USB_DEVICE(VENDOR_ID_DAZZLE, PRODUCT_ID_CA42) },
+diff --git a/drivers/usb/serial/cypress_m8.h b/drivers/usb/serial/cypress_m8.h
+index 35e223751c0e..ca2d951ee238 100644
+--- a/drivers/usb/serial/cypress_m8.h
++++ b/drivers/usb/serial/cypress_m8.h
+@@ -25,6 +25,9 @@
+ #define VENDOR_ID_CYPRESS		0x04b4
+ #define PRODUCT_ID_CYPHIDCOM		0x5500
+ 
++/* Simply Automated HID->COM UPB PIM */
++#define VENDOR_ID_SAI		0x17dd
++
+ /* FRWD Dongle - a GPS sports watch */
+ #define VENDOR_ID_FRWD			0x6737
+ #define PRODUCT_ID_CYPHIDCOM_FRWD	0x0001
+-- 
+2.25.1
+
