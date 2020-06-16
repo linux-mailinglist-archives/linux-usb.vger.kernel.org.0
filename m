@@ -2,86 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32F251FA495
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Jun 2020 01:41:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED4291FA56F
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Jun 2020 03:12:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727065AbgFOXlU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 15 Jun 2020 19:41:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54060 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725960AbgFOXlR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 15 Jun 2020 19:41:17 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9B32D20714;
-        Mon, 15 Jun 2020 23:41:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592264477;
-        bh=4B3zxx0t4t/cAMnTcb1CgWAE+WyO6z4UCRqXbi4xzFg=;
-        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=AxBMUE88327gyD7AWPGhve+Wh8ybmWBfw1Vr5OWesrVIVG7NxKRQswpbnAXtofFbO
-         sLu3+N4jgXfA/ewD0/dj0zcDJeqxyFwsdjQymufuXtNvL6JVXHeVeKRAOTHmv+8yXX
-         grzN41FYi/g6IrCDmey/eZzzF6h2ijQ5jvrYbNpA=
-Date:   Tue, 16 Jun 2020 00:41:15 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc:     linux-gpio@vger.kernel.org, ath10k@lists.infradead.org,
-        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        dri-devel@lists.freedesktop.org, linux-input@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-scsi@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-rdma@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org
-In-Reply-To: <20200609124610.3445662-1-kieran.bingham+renesas@ideasonboard.com>
-References: <20200609124610.3445662-1-kieran.bingham+renesas@ideasonboard.com>
-Subject: Re: [PATCH 00/17] spelling.txt: /decriptors/descriptors/
-Message-Id: <159226447507.27673.16785893373246037922.b4-ty@kernel.org>
+        id S1726721AbgFPBMC convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 15 Jun 2020 21:12:02 -0400
+Received: from asix.com.tw ([210.243.224.51]:57329 "EHLO freebsd2.asix.com.tw"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726564AbgFPBMC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 15 Jun 2020 21:12:02 -0400
+Received: from AllanWin10 ([210.243.224.52])
+        (authenticated bits=0)
+        by freebsd2.asix.com.tw (8.15.2/8.15.2) with ESMTPSA id 05G1BSwx057632
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Tue, 16 Jun 2020 09:11:35 +0800 (CST)
+        (envelope-from allan@asix.com.tw)
+Authentication-Results: freebsd2.asix.com.tw; sender-id=softfail header.from=allan@asix.com.tw; auth=pass (LOGIN); spf=softfail smtp.mfrom=allan@asix.com.tw
+X-Authentication-Warning: freebsd2.asix.com.tw: Host [210.243.224.52] claimed to be AllanWin10
+From:   "ASIX_Allan [Office]" <allan@asix.com.tw>
+To:     "'David Miller'" <davem@davemloft.net>, <jk@ozlabs.org>,
+        =?utf-8?B?QVNJWCBMb3VpcyBb6JiH5aiB6Zm4XQ==?= <louis@asix.com.tw>
+Cc:     <netdev@vger.kernel.org>, <pfink@christ-es.de>,
+        <linux-usb@vger.kernel.org>
+References: <20200615025456.30219-1-jk@ozlabs.org> <20200615.125220.492630206908309571.davem@davemloft.net>
+In-Reply-To: <20200615.125220.492630206908309571.davem@davemloft.net>
+Subject: RE: [PATCH] net: usb: ax88179_178a: fix packet alignment padding
+Date:   Tue, 16 Jun 2020 09:08:30 +0800
+Message-ID: <000f01d6437a$ab60b080$02221180$@asix.com.tw>
+MIME-Version: 1.0
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: zh-tw
+Thread-Index: AQHuQNNAcJozatbpD9iQc3OpXVVaxAIJkOpNqJomUbA=
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 9 Jun 2020 13:45:53 +0100, Kieran Bingham wrote:
-> I wouldn't normally go through spelling fixes, but I caught sight of
-> this typo twice, and then foolishly grepped the tree for it, and saw how
-> pervasive it was.
+Added ASIX S/W, Louis in the CC loop. 
+
+ 
+---
+Best regards,
+Allan Chou
+ASIX Electronics Corporation
+TEL: 886-3-5799500 ext.228
+FAX: 886-3-5799558
+E-mail: allan@asix.com.tw 
+https://www.asix.com.tw/ 
+
+
+
+-----Original Message-----
+From: David Miller <davem@davemloft.net> 
+Sent: Tuesday, June 16, 2020 3:52 AM
+To: jk@ozlabs.org
+Cc: netdev@vger.kernel.org; allan@asix.com.tw; freddy@asix.com.tw; pfink@christ-es.de; linux-usb@vger.kernel.org
+Subject: Re: [PATCH] net: usb: ax88179_178a: fix packet alignment padding
+
+From: Jeremy Kerr <jk@ozlabs.org>
+Date: Mon, 15 Jun 2020 10:54:56 +0800
+
+> Using a AX88179 device (0b95:1790), I see two bytes of appended data 
+> on every RX packet. For example, this 48-byte ping, using 0xff as a 
+> payload byte:
 > 
-> so here I am ... fixing a typo globally... but with an addition in
-> scripts/spelling.txt so it shouldn't re-appear ;-)
+>   04:20:22.528472 IP 192.168.1.1 > 192.168.1.2: ICMP echo request, id 2447, seq 1, length 64
+> 	0x0000:  000a cd35 ea50 000a cd35 ea4f 0800 4500
+> 	0x0010:  0054 c116 4000 4001 f63e c0a8 0101 c0a8
+> 	0x0020:  0102 0800 b633 098f 0001 87ea cd5e 0000
+> 	0x0030:  0000 dcf2 0600 0000 0000 ffff ffff ffff
+> 	0x0040:  ffff ffff ffff ffff ffff ffff ffff ffff
+> 	0x0050:  ffff ffff ffff ffff ffff ffff ffff ffff
+> 	0x0060:  ffff 961f
 > 
-> [...]
+> Those last two bytes - 96 1f - aren't part of the original packet.
 
-Applied to
+Does this happen for non-tail packets in a multi-packet cluster?
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+Because that code in this loop makes the same calculations:
 
-Thanks!
+		ax_skb = skb_clone(skb, GFP_ATOMIC);
+		if (ax_skb) {
+			ax_skb->len = pkt_len;
+			ax_skb->data = skb->data + 2;
+			skb_set_tail_pointer(ax_skb, pkt_len);
+			ax_skb->truesize = pkt_len + sizeof(struct sk_buff);
+			ax88179_rx_checksum(ax_skb, pkt_hdr);
+			usbnet_skb_return(dev, ax_skb);
 
-[1/2] regulator: Fix trivial spelling
-      commit: d3f3723387f97118c337689fc73e4199fb4331ce
-[2/2] regulator: gpio: Fix trivial spelling
-      commit: 1f0b740004f09d2f1b716fd6c2fdca81004ded05
+So if your change is right, it should be applied to this code block as well.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+And do we know that it's two extra tail bytes always?  Or some kind of alignment padding the chip performs for every sub-packet?
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
