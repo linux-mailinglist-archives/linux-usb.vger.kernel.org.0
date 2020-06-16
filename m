@@ -2,96 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A9331FABCD
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Jun 2020 11:03:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D73BA1FABE6
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Jun 2020 11:08:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726261AbgFPJDY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Jun 2020 05:03:24 -0400
-Received: from mail-co1nam11on2067.outbound.protection.outlook.com ([40.107.220.67]:6144
-        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725710AbgFPJDY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 16 Jun 2020 05:03:24 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MD0AtnFlewPij0ASAWRT5JIXp0anEdFNgzLycFRyuHQkxoUaUgjKtL4Ze8Fs+vdXyqpSA5XUYP3DaAD7/OrHFuAYytVVglbmJcNWmFXZdaBkOr3Er/EacRHHA2eKl3mSWgcIGNmYmD+pw3+H3DI0RczQXu3Csjpi7Z8JJWCQfchhQWXRJTAvGVTSgMPdbmbdU/fMNIlW+L+d7UWrAGMN/fpVwo+hcbHwRJyGG2ubE/ASsvluxOWCHOMrkNrj9hbMvzGk0hVSMatMf2ExAG8zzeI+NQ6Ca2OaoaiNWHLekDp39Yv0clnkjBlv9/luJKixzSfT40RmS9od2+O3gFrkTQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5LIPuUCQfNj+KHiK9rx5zNCPa/+ndf2ma/xPZg6UMoc=;
- b=QSzrnRRiQhMP8tZtlxm4G7QUx0LfnikYw4MZWjqH74QiAIiifrOz190EzMEGIOGddkHztZ/IXFHvaEgkD8ZBAsV8tp6v/BrCXXhtqZYcEdkRg0IGHG0597dsHg3Dp5tR68+ddAl8rlLXALGjqb5wGm6i0f9l6A0kvuk1K/mrrKgwvyJ/A9H6E8LaF+3ic8xVM1JC1tgTAs9BZhNO/3/9yN+3jSGJgC33xPZ4rMJlwV381ibCPIpZ7sgqWw4j9SQJLMwJTm+Qr+MmXTIh8X4tBqp6xLw8UNXxBRv8eGleBRU+VFo9uyOkacl+kCci62CcJr00Vc8Vth2YuLUL4C3TXg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synaptics.com; dmarc=pass action=none
- header.from=synaptics.com; dkim=pass header.d=synaptics.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=Synaptics.onmicrosoft.com; s=selector2-Synaptics-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5LIPuUCQfNj+KHiK9rx5zNCPa/+ndf2ma/xPZg6UMoc=;
- b=BL1D7zf5hbwsdeUFXvtD3TNFE40nfxcHX4lnSSa36YI2y+PAcCBljd9M+gbM7rBXU8AU+FhPXM3l4nVCNYkSHPpXKrdoU7nCQFC0ZjmjnzFsWon6aCom6cc4keuRxHOkAKAA+diOYiZjhxBsYMESCWypzHer3WHTrPPaashd8Mw=
-Authentication-Results: synopsys.com; dkim=none (message not signed)
- header.d=none;synopsys.com; dmarc=none action=none header.from=synaptics.com;
-Received: from BYAPR03MB3573.namprd03.prod.outlook.com (2603:10b6:a02:ae::15)
- by BYAPR03MB4792.namprd03.prod.outlook.com (2603:10b6:a03:135::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3088.18; Tue, 16 Jun
- 2020 09:03:21 +0000
-Received: from BYAPR03MB3573.namprd03.prod.outlook.com
- ([fe80::d1ae:8ea7:ea:8998]) by BYAPR03MB3573.namprd03.prod.outlook.com
- ([fe80::d1ae:8ea7:ea:8998%7]) with mapi id 15.20.3088.028; Tue, 16 Jun 2020
- 09:03:21 +0000
-Date:   Tue, 16 Jun 2020 17:03:11 +0800
-From:   Jisheng Zhang <Jisheng.Zhang@synaptics.com>
-To:     Minas Harutyunyan <hminas@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [Query]usb: dwc2: suspend/resume support for
- DWC2_POWER_DOWN_PARAM_NONE case
-Message-ID: <20200616164712.67bf105c@xhacker.debian>
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
+        id S1727942AbgFPJI1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 Jun 2020 05:08:27 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:46947 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727819AbgFPJI1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 16 Jun 2020 05:08:27 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49mMn40N2Nz9sR4;
+        Tue, 16 Jun 2020 19:08:23 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ozlabs.org; s=201707;
+        t=1592298505; bh=u1FRa3Ay1JFMfOQ5OAd+l2EnGRttEMM/Y3auoqc9gak=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=YYh3cpSOIs3PAB7FdMmy+XjumRkKpExTM1htZKx87R14wjigHoOHPtF5WHixWm2ll
+         k2xJU33UBJJyWpn85sfJXlqsGPbE29Xrd02lqJTTmb33tPYw3edMwTrYjgxC9HcY1z
+         0obdT9BRY60sYJG0fZhJ8Q9mH3dZp/ROlYBDnE73llyAuCcdYa3ErXGiHIL2Nc/fDG
+         g2YrvosbyPiACGmtaNAuAeWZOLn2xV7cuqGZq+Iz/3s/2UFSdv224xeETM6Fi+WfX4
+         sJndU39bXHDsBYak+hajaoROeeUF9o03PHdJ6A2CwWGPzEOzenCdNyWEMooEA3cEEX
+         Ks6XVWtyBhBzA==
+Message-ID: <e780f13fdde89d03ef863618d8de3dd67ba53c72.camel@ozlabs.org>
+Subject: Re: [PATCH] net: usb: ax88179_178a: fix packet alignment padding
+From:   Jeremy Kerr <jk@ozlabs.org>
+To:     David Miller <davem@davemloft.net>
+Cc:     netdev@vger.kernel.org, allan@asix.com.tw, freddy@asix.com.tw,
+        pfink@christ-es.de, linux-usb@vger.kernel.org, louis@asix.com.tw
+Date:   Tue, 16 Jun 2020 17:08:23 +0800
+In-Reply-To: <20200615.125220.492630206908309571.davem@davemloft.net>
+References: <20200615025456.30219-1-jk@ozlabs.org>
+         <20200615.125220.492630206908309571.davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: TY2PR02CA0059.apcprd02.prod.outlook.com
- (2603:1096:404:e2::23) To BYAPR03MB3573.namprd03.prod.outlook.com
- (2603:10b6:a02:ae::15)
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from xhacker.debian (124.74.246.114) by TY2PR02CA0059.apcprd02.prod.outlook.com (2603:1096:404:e2::23) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3088.21 via Frontend Transport; Tue, 16 Jun 2020 09:03:19 +0000
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-X-Originating-IP: [124.74.246.114]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b6658c7b-9af4-462b-413b-08d811d41e37
-X-MS-TrafficTypeDiagnostic: BYAPR03MB4792:
-X-Microsoft-Antispam-PRVS: <BYAPR03MB4792F8D0B59DF94C3AD60EDCED9D0@BYAPR03MB4792.namprd03.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
-X-Forefront-PRVS: 04362AC73B
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0qyQ6EsN/fVnp0YS4zkIdX4K4ck1rOvkzemdh9rpWi0lm2PQDwNFvDh1GnW4SUjdZ5ZHuqK33Q6Z5/OJ8l9rn03W5H+6x0wLhmDwmKui6iVbFpdLay0hcS9O4Aw3xFaQxJ7VYc035R1oYCOLKhLQquueW5Hqqk07fXX8HuCFsSyZNPMQVknB6SfjV4SjMeoh6/vCsrAFM42kJeXW1AKMfeaC9CsWvmM0iaL50Tu3Iqm04Fgw8m/uqUV0we5wT1Vl+uxdq/p4cll7Dmde482fJG380dZKw1fV9OhAbsp6a59DtKfg3VoWQMoeb7NpmeePZjceUR9cp+oGArSppQS7Og==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR03MB3573.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(136003)(346002)(376002)(396003)(39860400002)(366004)(316002)(2906002)(6506007)(66556008)(66946007)(66476007)(26005)(15650500001)(16526019)(4326008)(186003)(55016002)(7696005)(52116002)(956004)(86362001)(9686003)(6666004)(478600001)(1076003)(5660300002)(4744005)(110136005)(83380400001)(8676002)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: RdzuWZJH5n3HhgFx/2kdPW52M4FjdBVzcU+Zm+wgFuK/IK0IMjdJhth6FHCYIaxmyfjPL5z680ibFHjHXy/vInGFOvWviHRyyOgjpfwzNNevjf5iWa/x2nbp3yUS4oTi5ftnu9Y47kIKZuMuu38wGcU0YHG6pt1Sn6yijA8mALiP2lMHnQEW6W+zfnoedAP9QWliZydCE0ffEFF32aEa4ipANaDSNfwDRPj31a3EvYx8XopX2tXHa5yuhZlYwN8C3zALZRn6Mo/nvQTAqvBexURUa2wYDljL96jzHALT97wR3f1ePq794D3ASYgjJckN1y4Ch/MIYW79QdvoXT8AkIX5Lny4osM/ohzVH8cCJWZFr6TKbZXwUSOvfp1HWbFMvmcOqw7f72JO3/PSukT+3ICTifrNa+cYlnbCyc5b7BGqlVPK0v/L717LXwa0zqqjE/q4iK7ng5iYOXo96g0z9UDf0JioI+NET5cZ2W/IbRD7pBSALyXRh4zCIZ+d/g3N
-X-OriginatorOrg: synaptics.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b6658c7b-9af4-462b-413b-08d811d41e37
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jun 2020 09:03:21.4189
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 335d1fbc-2124-4173-9863-17e7051a2a0e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: m4QZ32oArkmgJDBX8ghu0IHRvyGgKbbGCITuKwOMFdRedFUMu1F7k4FV/VLfugyKq9bljBD9OoTB3pdfMjKMOA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR03MB4792
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Hi David,
 
-After reading current dwc2 code, I got an impression that resume from suspend
-to ram isn't supported for DWC2_POWER_DOWN_PARAM_NONE case, right? In fact
-we do see usb device can't resume properly with DWC2_POWER_DOWN_PARAM_NONE case.
+> > Those last two bytes - 96 1f - aren't part of the original packet.
+> 
+> Does this happen for non-tail packets in a multi-packet cluster?
 
-If the impression is true, what's the proper technical direction? Add 
-dwc2_host_enter_suspend() as dwc2_host_enter_hibernation()
-and 
-dwc2_host_exit_suspend() as dwc2_host_exit_hibernation()?
+I believe so, yes. I haven't been able to reliably reproduce the multi-
+packet behaviour though, so input from ASIX would be good.
 
-Thanks in advance,
-Jisheng
+> 
+> Because that code in this loop makes the same calculations:
+> 
+>                 ax_skb = skb_clone(skb, GFP_ATOMIC);
+>                 if (ax_skb) {
+>                         ax_skb->len = pkt_len;
+>                         ax_skb->data = skb->data + 2;
+>                         skb_set_tail_pointer(ax_skb, pkt_len);
+>                         ax_skb->truesize = pkt_len + sizeof(struct sk_buff);
+>                         ax88179_rx_checksum(ax_skb, pkt_hdr);
+>                         usbnet_skb_return(dev, ax_skb);
+> 
+> So if your change is right, it should be applied to this code block
+> as well.
+
+Yep, my patch changes that block too (or did I miss something?)
+
+> And do we know that it's two extra tail bytes always?  Or some kind
+> of alignment padding the chip performs for every sub-packet?
+
+I've assumed it's a constant two bytes of prefix padding, as that's all
+I've seen. But it would be great to have more detail from ASIX if
+possible.
+
+Cheers,
+
+
+Jeremy
+
