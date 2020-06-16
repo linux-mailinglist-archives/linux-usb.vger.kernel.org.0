@@ -2,182 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 736991FA7F9
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Jun 2020 06:53:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 256081FA84A
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Jun 2020 07:31:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725913AbgFPExT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Jun 2020 00:53:19 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:21219 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726394AbgFPExP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 16 Jun 2020 00:53:15 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1592283193; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=TnM1d+LijmPwv3QcoivuaXlgi9UGoODJljwXJ93Cqh0=; b=fEACi4oBUtScMh6Xy1vi4lG1P9weOzAP8J0cGNIrGNXErirIFU16ZYu3/OEu03rQl4qkkMKd
- /tZl8E7UndmB2zqajjvsJ7ipr6ujYRB/K//lA5Joh2zpC1In3o4gLILwbM/RPsnKaEkm3QL3
- OW8w2GhQigJ9PcK6g28N/R1kY9c=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n11.prod.us-west-2.postgun.com with SMTP id
- 5ee8502aad153efa340722a4 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 16 Jun 2020 04:52:58
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id BE0E2C43387; Tue, 16 Jun 2020 04:52:58 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [10.206.24.160] (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sanm)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 4E765C433C8;
-        Tue, 16 Jun 2020 04:52:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 4E765C433C8
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sanm@codeaurora.org
-Subject: Re: [PATCH v7 2/4] usb: dwc3: qcom: Add interconnect support in dwc3
- driver
-To:     Matthias Kaehlcke <mka@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Felipe Balbi <balbi@kernel.org>,
+        id S1726837AbgFPFbp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 Jun 2020 01:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726261AbgFPFbp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Jun 2020 01:31:45 -0400
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6184C05BD43;
+        Mon, 15 Jun 2020 22:31:44 -0700 (PDT)
+Received: by mail-il1-x141.google.com with SMTP id c75so17634093ila.8;
+        Mon, 15 Jun 2020 22:31:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vNrZSk1BNxvGmkzA5HV5T4wgysnOkc6TWySqTow+ilw=;
+        b=coHOgwnXZorOZdKwwycOKzDXVwrks/h95MI/pzkQkzbcn1Yg+JB7q7Lg7D+ZaylgBO
+         tsEiY0bTqBEDRrVb6Gu8z6j/Fk6Z/u1ya4NC/UoVu5rU5HuZ0vY1BrsYyi78ma0Nnl0/
+         FpesvUh/BlL1+90tMMGfJ0T2al05jCEuEmVfo7Wx6e43NkzIWaGhpgYZ4nQ3GpMPVknA
+         h3tH3ASFw1KmxDd61otYU6jmk1AKeu+7wJCW7Z4Yra6Cg8ZYas7Frg2uQhNKnwVu+PAx
+         umXwLZsFMmY1f84ig8+HqNxQUiak+ely92CGnSRURaaHaDeqd2D1neG9FoM6so8HWdwY
+         C8og==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vNrZSk1BNxvGmkzA5HV5T4wgysnOkc6TWySqTow+ilw=;
+        b=GW8BT9yK/U0YwKcDS6uClT53FpPXHt+El5jvWGAlWMjIej4PiVeY1DuD9+kDNrR3De
+         j8gruv8AU6FmlcosnQn7EjrSJeRrzqR/+Wz71cjV0qf/NVpujm6rJsAJJZbtpgg9Rq2x
+         D1DUuX8jBJdJzsfs4g/b6eTZgNA3zz5Vc60Fye5PYs8bXxupDT/aJfPRPreFOuHkfGBy
+         Pz/ASxyF1NgZRIKFBNQSfHp1AqHUNgSdbCKgGPtf51ayJPyFkfHQZMVIs5HiZ8AKKCbh
+         QKJ+XOQ9rBwr16Cu7L+yrlQNAJNwT7fSz2hGa4+55eRppBDqu55HrE6MMIHMh+Blh5bj
+         Aihw==
+X-Gm-Message-State: AOAM532LzYOwAQpShetI+eJ3SbMjaRHLnCxvJCGFU46aopk5KMYY3ZkE
+        +Nq90kxaewJ1kwlbEKnTeaIOI2fZuCo=
+X-Google-Smtp-Source: ABdhPJyIfjq+WLaCs9A+AKdCSCbl4o8wSfYkqHGps+xUbtM2MYbOARPhy6iQ+LJzBS9MsSOhY+DeSQ==
+X-Received: by 2002:a92:a1d1:: with SMTP id b78mr1494407ill.164.1592285503741;
+        Mon, 15 Jun 2020 22:31:43 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-100-23.hlrn.qwest.net. [71.218.100.23])
+        by smtp.gmail.com with ESMTPSA id y12sm9089077ili.83.2020.06.15.22.31.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Jun 2020 22:31:43 -0700 (PDT)
+From:   James Hilliard <james.hilliard1@gmail.com>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
-References: <1585718145-29537-1-git-send-email-sanm@codeaurora.org>
- <1585718145-29537-3-git-send-email-sanm@codeaurora.org>
- <159120577830.69627.13288547914742515702@swboyd.mtv.corp.google.com>
- <d9ccf188-4f00-d3ac-ba0f-73f06c087553@codeaurora.org>
- <159126939154.69627.13027312816468830595@swboyd.mtv.corp.google.com>
- <20200615194239.GW4525@google.com>
-From:   "Sandeep Maheswaram (Temp)" <sanm@codeaurora.org>
-Message-ID: <3f8fcb0e-387d-e902-9f6b-1fde9d6ae404@codeaurora.org>
-Date:   Tue, 16 Jun 2020 10:22:47 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.1
+        Johan Hovold <johan@kernel.org>,
+        James Hilliard <james.hilliard1@gmail.com>
+Subject: [PATCH] USB: Serial: cypress_M8: Enable Simply Automated UPB PIM
+Date:   Mon, 15 Jun 2020 23:31:13 -0600
+Message-Id: <20200616053113.1792598-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20200615194239.GW4525@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+This is UPB(Universal Powerline Bus) PIM(Powerline Interface Module)
+which allows for controlling multiple UPB comaptible devices from
+Linux.
 
-On 6/16/2020 1:12 AM, Matthias Kaehlcke wrote:
-> On Thu, Jun 04, 2020 at 04:16:31AM -0700, Stephen Boyd wrote:
->> Quoting Sandeep Maheswaram (Temp) (2020-06-04 02:43:09)
->>> On 6/3/2020 11:06 PM, Stephen Boyd wrote:
->>>> Quoting Sandeep Maheswaram (2020-03-31 22:15:43)
->>>>> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
->>>>> index 1dfd024..d33ae86 100644
->>>>> --- a/drivers/usb/dwc3/dwc3-qcom.c
->>>>> +++ b/drivers/usb/dwc3/dwc3-qcom.c
->>>>> @@ -285,6 +307,101 @@ static int dwc3_qcom_resume(struct dwc3_qcom *qcom)
->>>>>           return 0;
->>>>>    }
->>>>>    
->>>>> +
->>>>> +/**
->>>>> + * dwc3_qcom_interconnect_init() - Get interconnect path handles
->>>>> + * @qcom:                      Pointer to the concerned usb core.
->>>>> + *
->>>>> + */
->>>>> +static int dwc3_qcom_interconnect_init(struct dwc3_qcom *qcom)
->>>>> +{
->>>>> +       struct device *dev = qcom->dev;
->>>>> +       int ret;
->>>>> +
->>>>> +       if (!device_is_bound(&qcom->dwc3->dev))
->>>>> +               return -EPROBE_DEFER;
->>>> How is this supposed to work? I see that this was added in an earlier
->>>> revision of this patch series but there isn't any mention of why
->>>> device_is_bound() is used here. It would be great if there was a comment
->>>> detailing why this is necessary. It sounds like maximum_speed is
->>>> important?
->>>>
->>>> Furthermore, dwc3_qcom_interconnect_init() is called by
->>>> dwc3_qcom_probe() which is the function that registers the device for
->>>> qcom->dwc3->dev. If that device doesn't probe between the time it is
->>>> registered by dwc3_qcom_probe() and this function is called then we'll
->>>> fail dwc3_qcom_probe() with -EPROBE_DEFER. And that will remove the
->>>> qcom->dwc3->dev device from the platform bus because we call
->>>> of_platform_depopulate() on the error path of dwc3_qcom_probe().
->>>>
->>>> So isn't this whole thing racy and can potentially lead us to a driver
->>>> probe loop where the wrapper (dwc3_qcom) and the core (dwc3) are probing
->>>> and we're trying to time it just right so that driver for dwc3 binds
->>>> before we setup interconnects? I don't know if dwc3 can communicate to
->>>> the wrapper but that would be more of a direct way to do this. Or maybe
->>>> the wrapper should try to read the DT property for maximum speed and
->>>> fallback to a worst case high bandwidth value if it can't figure it out
->>>> itself without help from dwc3 core.
->>>>
->>> This was added in V4 to address comments from Matthias in V3
->>>
->>> https://patchwork.kernel.org/patch/11148587/
->>>
->> Yes, that why I said:
->>
->> "I see that this was added in an earlier
->>   revision of this patch series but there isn't any mention of why
->>   device_is_bound() is used here. It would be great if there was a comment
->>   detailing why this is necessary. It sounds like maximum_speed is
->>   important?"
->>
->> Can you please respond to the rest of my email?
-> I agree with Stephen that using device_is_bound() isn't a good option
-> in this case, when I suggested it I wasn't looking at the big picture
-> of how probing the core driver is triggered, sorry about that.
->
-> Reading the speed from the DT with usb_get_maximum_speed() as Stephen
-> suggests would be an option, the inconvenient is that we then
-> essentially require the property to be defined, while the core driver
-> gets a suitable value from hardware registers. Not sure if the wrapper
-> driver could read from the same registers.
->
-> One option could be to poll device_is_bound() for 100 ms (or so), with
-> sleeps between polls. It's not elegant but would probably work if we
-> don't find a better solution.
-if (np)
-         ret = dwc3_qcom_of_register_core(pdev);
-     else
-         ret = dwc3_qcom_acpi_register_core(pdev);
+This device internally uses a Cypress HID->COM interface.
 
-     if (ret) {
-         dev_err(dev, "failed to register DWC3 Core, err=%d\n", ret);
-         goto depopulate;
-     }
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ drivers/usb/serial/cypress_m8.c | 2 ++
+ drivers/usb/serial/cypress_m8.h | 3 +++
+ 2 files changed, 5 insertions(+)
 
-     ret = dwc3_qcom_interconnect_init(qcom);
-     if (ret)
-         goto depopulate;
-
-     qcom->mode = usb_get_dr_mode(&qcom->dwc3->dev);
-
-Before calling dwc3_qcom_interconnect_init we are checking
-
-     if (ret) {
-         dev_err(dev, "failed to register DWC3 Core, err=%d\n", ret);
-         goto depopulate;
-     }
-
-Doesn't  this condition confirm the core driver is probed?
-
+diff --git a/drivers/usb/serial/cypress_m8.c b/drivers/usb/serial/cypress_m8.c
+index 216edd5826ca..ecda82198798 100644
+--- a/drivers/usb/serial/cypress_m8.c
++++ b/drivers/usb/serial/cypress_m8.c
+@@ -59,6 +59,7 @@ static const struct usb_device_id id_table_earthmate[] = {
+ 
+ static const struct usb_device_id id_table_cyphidcomrs232[] = {
+ 	{ USB_DEVICE(VENDOR_ID_CYPRESS, PRODUCT_ID_CYPHIDCOM) },
++	{ USB_DEVICE(VENDOR_ID_SAI, PRODUCT_ID_CYPHIDCOM) },
+ 	{ USB_DEVICE(VENDOR_ID_POWERCOM, PRODUCT_ID_UPS) },
+ 	{ USB_DEVICE(VENDOR_ID_FRWD, PRODUCT_ID_CYPHIDCOM_FRWD) },
+ 	{ }						/* Terminating entry */
+@@ -73,6 +74,7 @@ static const struct usb_device_id id_table_combined[] = {
+ 	{ USB_DEVICE(VENDOR_ID_DELORME, PRODUCT_ID_EARTHMATEUSB) },
+ 	{ USB_DEVICE(VENDOR_ID_DELORME, PRODUCT_ID_EARTHMATEUSB_LT20) },
+ 	{ USB_DEVICE(VENDOR_ID_CYPRESS, PRODUCT_ID_CYPHIDCOM) },
++	{ USB_DEVICE(VENDOR_ID_SAI, PRODUCT_ID_CYPHIDCOM) },
+ 	{ USB_DEVICE(VENDOR_ID_POWERCOM, PRODUCT_ID_UPS) },
+ 	{ USB_DEVICE(VENDOR_ID_FRWD, PRODUCT_ID_CYPHIDCOM_FRWD) },
+ 	{ USB_DEVICE(VENDOR_ID_DAZZLE, PRODUCT_ID_CA42) },
+diff --git a/drivers/usb/serial/cypress_m8.h b/drivers/usb/serial/cypress_m8.h
+index 35e223751c0e..ca2d951ee238 100644
+--- a/drivers/usb/serial/cypress_m8.h
++++ b/drivers/usb/serial/cypress_m8.h
+@@ -25,6 +25,9 @@
+ #define VENDOR_ID_CYPRESS		0x04b4
+ #define PRODUCT_ID_CYPHIDCOM		0x5500
+ 
++/* Simply Automated HID->COM UPB PIM */
++#define VENDOR_ID_SAI		0x17dd
++
+ /* FRWD Dongle - a GPS sports watch */
+ #define VENDOR_ID_FRWD			0x6737
+ #define PRODUCT_ID_CYPHIDCOM_FRWD	0x0001
 -- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, hosted by The Linux Foundation
+2.25.1
 
