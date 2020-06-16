@@ -2,30 +2,30 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 411711FB311
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Jun 2020 15:58:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 948071FB366
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Jun 2020 16:04:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728869AbgFPN6w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Jun 2020 09:58:52 -0400
-Received: from mga14.intel.com ([192.55.52.115]:36502 "EHLO mga14.intel.com"
+        id S1729366AbgFPOEb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 Jun 2020 10:04:31 -0400
+Received: from mga14.intel.com ([192.55.52.115]:36218 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726606AbgFPN6w (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 16 Jun 2020 09:58:52 -0400
-IronPort-SDR: aQRfo4m+9Rb8aFITVybexRgAKU03vvlexfw6lkSCaflM1SOTrYIh6AR8mmJyiA0QDrlNTm20Vi
- Ji1eK2sRfJvw==
+        id S1729109AbgFPOE3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 16 Jun 2020 10:04:29 -0400
+IronPort-SDR: YdaiwlB5Ywa5mOSAwtSjNJKam/TkjY8f2E8fUCdvd8/evRg+LGXk2Tna1HBsBES80/944APuEd
+ RGTk3u7lfJLw==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
   by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2020 06:56:25 -0700
-IronPort-SDR: ufyo5RXoY36EtWNGcdU+yl64i9cynnGzP5kxE8y6GiPSUk+qyJ6bcYWIJQuWipw7KMD6XTw8Ab
- xlm6lucLxZkA==
+IronPort-SDR: T7JWllKoSle3ECZlRfSC/Lc4PTe+SwhNjav8yTY3Xp99rLPCRhPw43ROrlCcp77dD50+RTfuTt
+ L5D2O6GGOekQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.73,518,1583222400"; 
-   d="scan'208";a="420769364"
+   d="scan'208";a="420769365"
 Received: from black.fi.intel.com ([10.237.72.28])
   by orsmga004.jf.intel.com with ESMTP; 16 Jun 2020 06:56:22 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 4DC58913; Tue, 16 Jun 2020 16:56:18 +0300 (EEST)
+        id 5CBE8946; Tue, 16 Jun 2020 16:56:18 +0300 (EEST)
 From:   Mika Westerberg <mika.westerberg@linux.intel.com>
 To:     linux-usb@vger.kernel.org
 Cc:     Andreas Noever <andreas.noever@gmail.com>,
@@ -37,9 +37,9 @@ Cc:     Andreas Noever <andreas.noever@gmail.com>,
         Mario.Limonciello@dell.com,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Lukas Wunner <lukas@wunner.de>
-Subject: [PATCH 5/6] thunderbolt: Implement USB4 port sideband operations for retimer access
-Date:   Tue, 16 Jun 2020 16:56:16 +0300
-Message-Id: <20200616135617.85752-6-mika.westerberg@linux.intel.com>
+Subject: [PATCH 6/6] thunderbolt: Add support for on-board retimers
+Date:   Tue, 16 Jun 2020 16:56:17 +0300
+Message-Id: <20200616135617.85752-7-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.27.0.rc2
 In-Reply-To: <20200616135617.85752-1-mika.westerberg@linux.intel.com>
 References: <20200616135617.85752-1-mika.westerberg@linux.intel.com>
@@ -50,596 +50,757 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Rajmohan Mani <rajmohan.mani@intel.com>
+From: Kranthi Kuntala <kranthi.kuntala@intel.com>
 
-USB4 spec specifies standard set of sideband operations that are send
-over the low speed link to access either retimers on the link or the
-link parter (the other router). The USB4 retimer spec extends these and
-adds operations for retimer NVM upgrade.
+USB4 spec specifies standard access to retimers (both on-board and
+cable) through USB4 port sideband access. This makes it possible to
+upgrade their firmware in the same way than we already do with the
+routers.
 
-This implements the retimer access and NVM upgrade USB4 port sideband
-operations which we need for retimer support in the patch that follows.
+This enumerates on-board retimers under each USB4 port when the link
+comes up and adds them to the bus under the router the retimer belongs
+to. Retimers are exposed in sysfs with name like <device>:<port>.<index>
+where device is the router the retimer belongs to, port is the USB4 port
+the retimer is connected to and index is the retimer index under that
+port (starting from 1). This applies to the upstream USB4 port as well
+so if there is on-board retimer between the port and the router it is
+also added accordingly.
 
-Signed-off-by: Rajmohan Mani <rajmohan.mani@intel.com>
+At this time we do not add cable retimers but there is no techincal
+restriction to do so in the future if needed. It is not clear whether it
+makes sense to upgrade their firmwares and at least Thunderbolt 3 cables
+it has not been done outside of lab environments.
+
+The sysfs interface is made to follow the router NVM upgrade to make it
+easy to extend the existing userspace (fwupd) to handle these as well.
+
+Signed-off-by: Kranthi Kuntala <kranthi.kuntala@intel.com>
 Co-developed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/thunderbolt/sb_regs.h |  31 +++
- drivers/thunderbolt/tb.h      |  16 ++
- drivers/thunderbolt/tb_regs.h |  10 +
- drivers/thunderbolt/usb4.c    | 459 ++++++++++++++++++++++++++++++++++
- 4 files changed, 516 insertions(+)
- create mode 100644 drivers/thunderbolt/sb_regs.h
+ .../ABI/testing/sysfs-bus-thunderbolt         |  33 ++
+ Documentation/admin-guide/thunderbolt.rst     |  11 +-
+ drivers/thunderbolt/Makefile                  |   2 +-
+ drivers/thunderbolt/retimer.c                 | 485 ++++++++++++++++++
+ drivers/thunderbolt/sb_regs.h                 |   2 +
+ drivers/thunderbolt/switch.c                  |   3 +
+ drivers/thunderbolt/tb.c                      |  10 +
+ drivers/thunderbolt/tb.h                      |  38 ++
+ 8 files changed, 578 insertions(+), 6 deletions(-)
+ create mode 100644 drivers/thunderbolt/retimer.c
 
-diff --git a/drivers/thunderbolt/sb_regs.h b/drivers/thunderbolt/sb_regs.h
+diff --git a/Documentation/ABI/testing/sysfs-bus-thunderbolt b/Documentation/ABI/testing/sysfs-bus-thunderbolt
+index 82e80de78dd0..bd504ed323e8 100644
+--- a/Documentation/ABI/testing/sysfs-bus-thunderbolt
++++ b/Documentation/ABI/testing/sysfs-bus-thunderbolt
+@@ -236,3 +236,36 @@ KernelVersion:	4.15
+ Contact:	thunderbolt-software@lists.01.org
+ Description:	This contains XDomain service specific settings as
+ 		bitmask. Format: %x
++
++What:		/sys/bus/thunderbolt/devices/<device>:<port>.<index>/device
++Date:		Oct 2020
++KernelVersion:	v5.9
++Contact:	Mika Westerberg <mika.westerberg@linux.intel.com>
++Description:	Retimer device identifier read from the hardware.
++
++What:		/sys/bus/thunderbolt/devices/<device>:<port>.<index>/nvm_authenticate
++Date:		Oct 2020
++KernelVersion:	v5.9
++Contact:	Mika Westerberg <mika.westerberg@linux.intel.com>
++Description:	When new NVM image is written to the non-active NVM
++		area (through non_activeX NVMem device), the
++		authentication procedure is started by writing 1 to
++		this file. If everything goes well, the device is
++		restarted with the new NVM firmware. If the image
++		verification fails an error code is returned instead.
++
++		When read holds status of the last authentication
++		operation if an error occurred during the process.
++		Format: %x.
++
++What:		/sys/bus/thunderbolt/devices/<device>:<port>.<index>/nvm_version
++Date:		Oct 2020
++KernelVersion:	v5.9
++Contact:	Mika Westerberg <mika.westerberg@linux.intel.com>
++Description:	Holds retimer NVM version number. Format: %x.%x, major.minor.
++
++What:		/sys/bus/thunderbolt/devices/<device>:<port>.<index>/vendor
++Date:		Oct 2020
++KernelVersion:	v5.9
++Contact:	Mika Westerberg <mika.westerberg@linux.intel.com>
++Description:	Retimer vendor identifier read from the hardware.
+diff --git a/Documentation/admin-guide/thunderbolt.rst b/Documentation/admin-guide/thunderbolt.rst
+index 10c4f0ce2ad0..613cb24c76c7 100644
+--- a/Documentation/admin-guide/thunderbolt.rst
++++ b/Documentation/admin-guide/thunderbolt.rst
+@@ -173,8 +173,8 @@ following ``udev`` rule::
+ 
+   ACTION=="add", SUBSYSTEM=="thunderbolt", ATTRS{iommu_dma_protection}=="1", ATTR{authorized}=="0", ATTR{authorized}="1"
+ 
+-Upgrading NVM on Thunderbolt device or host
+--------------------------------------------
++Upgrading NVM on Thunderbolt device, host or retimer
++----------------------------------------------------
+ Since most of the functionality is handled in firmware running on a
+ host controller or a device, it is important that the firmware can be
+ upgraded to the latest where possible bugs in it have been fixed.
+@@ -185,9 +185,10 @@ for some machines:
+ 
+   `Thunderbolt Updates <https://thunderbolttechnology.net/updates>`_
+ 
+-Before you upgrade firmware on a device or host, please make sure it is a
+-suitable upgrade. Failing to do that may render the device (or host) in a
+-state where it cannot be used properly anymore without special tools!
++Before you upgrade firmware on a device, host or retimer, please make
++sure it is a suitable upgrade. Failing to do that may render the device
++in a state where it cannot be used properly anymore without special
++tools!
+ 
+ Host NVM upgrade on Apple Macs is not supported.
+ 
+diff --git a/drivers/thunderbolt/Makefile b/drivers/thunderbolt/Makefile
+index 7ee257cee7ff..cf7e1b42f4ad 100644
+--- a/drivers/thunderbolt/Makefile
++++ b/drivers/thunderbolt/Makefile
+@@ -2,6 +2,6 @@
+ obj-${CONFIG_USB4} := thunderbolt.o
+ thunderbolt-objs := nhi.o nhi_ops.o ctl.o tb.o switch.o cap.o path.o tunnel.o eeprom.o
+ thunderbolt-objs += domain.o dma_port.o icm.o property.o xdomain.o lc.o tmu.o usb4.o
+-thunderbolt-objs += nvm.o
++thunderbolt-objs += nvm.o retimer.o
+ 
+ obj-${CONFIG_USB4_KUNIT_TEST} += test.o
+diff --git a/drivers/thunderbolt/retimer.c b/drivers/thunderbolt/retimer.c
 new file mode 100644
-index 000000000000..0e587b7b9200
+index 000000000000..620bcf586ee2
 --- /dev/null
-+++ b/drivers/thunderbolt/sb_regs.h
-@@ -0,0 +1,31 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
++++ b/drivers/thunderbolt/retimer.c
+@@ -0,0 +1,485 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * USB4 port sideband registers found on routers and retimers
++ * Thunderbolt/USB4 retimer support.
 + *
 + * Copyright (C) 2020, Intel Corporation
-+ * Authors: Mika Westerberg <mika.westerberg@linux.intel.com>
-+ *	    Rajmohan Mani <rajmohan.mani@intel.com>
++ * Authors: Kranthi Kuntala <kranthi.kuntala@intel.com>
++ *	    Mika Westerberg <mika.westerberg@linux.intel.com>
 + */
 +
-+#ifndef _SB_REGS
-+#define _SB_REGS
++#include <linux/delay.h>
++#include <linux/pm_runtime.h>
++#include <linux/sched/signal.h>
 +
-+#define USB4_SB_OPCODE				0x08
-+
-+enum usb4_sb_opcode {
-+	USB4_SB_OPCODE_ERR = 0x20525245,			/* "ERR " */
-+	USB4_SB_OPCODE_ONS = 0x444d4321,			/* "!CMD" */
-+	USB4_SB_OPCODE_ENUMERATE_RETIMERS = 0x4d554e45,		/* "ENUM" */
-+	USB4_SB_OPCODE_QUERY_LAST_RETIMER = 0x5453414c,		/* "LAST" */
-+	USB4_SB_OPCODE_GET_NVM_SECTOR_SIZE = 0x53534e47,	/* "GNSS" */
-+	USB4_SB_OPCODE_NVM_SET_OFFSET = 0x53504f42,		/* "BOPS" */
-+	USB4_SB_OPCODE_NVM_BLOCK_WRITE = 0x574b4c42,		/* "BLKW" */
-+	USB4_SB_OPCODE_NVM_AUTH_WRITE = 0x48545541,		/* "AUTH" */
-+	USB4_SB_OPCODE_NVM_READ = 0x52524641,			/* "AFRR" */
-+};
-+
-+#define USB4_SB_METADATA			0x09
-+#define USB4_SB_METADATA_NVM_AUTH_WRITE_MASK	GENMASK(5, 0)
-+#define USB4_SB_DATA				0x12
-+
-+#endif
-diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-index 3d54f36f8805..8f840148378a 100644
---- a/drivers/thunderbolt/tb.h
-+++ b/drivers/thunderbolt/tb.h
-@@ -876,6 +876,22 @@ struct tb_port *usb4_switch_map_usb3_down(struct tb_switch *sw,
- 					  const struct tb_port *port);
- 
- int usb4_port_unlock(struct tb_port *port);
-+int usb4_port_enumerate_retimers(struct tb_port *port);
-+
-+int usb4_port_retimer_read(struct tb_port *port, u8 index, u8 reg, void *buf,
-+			   u8 size);
-+int usb4_port_retimer_write(struct tb_port *port, u8 index, u8 reg,
-+			    const void *buf, u8 size);
-+int usb4_port_retimer_is_last(struct tb_port *port, u8 index);
-+int usb4_port_retimer_nvm_sector_size(struct tb_port *port, u8 index);
-+int usb4_port_retimer_nvm_write(struct tb_port *port, u8 index,
-+				unsigned int address, const void *buf,
-+				size_t size);
-+int usb4_port_retimer_nvm_authenticate(struct tb_port *port, u8 index);
-+int usb4_port_retimer_nvm_authenticate_status(struct tb_port *port, u8 index,
-+					      u32 *status);
-+int usb4_port_retimer_nvm_read(struct tb_port *port, u8 index,
-+			       unsigned int address, void *buf, size_t size);
- 
- int usb4_usb3_port_max_link_rate(struct tb_port *port);
- int usb4_usb3_port_actual_link_rate(struct tb_port *port);
-diff --git a/drivers/thunderbolt/tb_regs.h b/drivers/thunderbolt/tb_regs.h
-index 4fc561347b7c..2ac6af8e0c13 100644
---- a/drivers/thunderbolt/tb_regs.h
-+++ b/drivers/thunderbolt/tb_regs.h
-@@ -288,6 +288,16 @@ struct tb_regs_port_header {
- #define LANE_ADP_CS_1_CURRENT_WIDTH_SHIFT	20
- 
- /* USB4 port registers */
-+#define PORT_CS_1				0x01
-+#define PORT_CS_1_LENGTH_SHIFT			8
-+#define PORT_CS_1_TARGET_MASK			GENMASK(18, 16)
-+#define PORT_CS_1_TARGET_SHIFT			16
-+#define PORT_CS_1_RETIMER_INDEX_SHIFT		20
-+#define PORT_CS_1_WNR_WRITE			BIT(24)
-+#define PORT_CS_1_NR				BIT(25)
-+#define PORT_CS_1_RC				BIT(26)
-+#define PORT_CS_1_PND				BIT(31)
-+#define PORT_CS_2				0x02
- #define PORT_CS_18				0x12
- #define PORT_CS_18_BE				BIT(8)
- #define PORT_CS_18_TCM				BIT(9)
-diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
-index 142c7244bdb1..966f334b4010 100644
---- a/drivers/thunderbolt/usb4.c
-+++ b/drivers/thunderbolt/usb4.c
-@@ -10,6 +10,7 @@
- #include <linux/delay.h>
- #include <linux/ktime.h>
- 
 +#include "sb_regs.h"
- #include "tb.h"
- 
- #define USB4_DATA_DWORDS		16
-@@ -27,6 +28,12 @@ enum usb4_switch_op {
- 	USB4_SWITCH_OP_NVM_SECTOR_SIZE = 0x25,
- };
- 
-+enum usb4_sb_target {
-+	USB4_SB_TARGET_ROUTER,
-+	USB4_SB_TARGET_PARTNER,
-+	USB4_SB_TARGET_RETIMER,
-+};
++#include "tb.h"
 +
- #define USB4_NVM_READ_OFFSET_MASK	GENMASK(23, 2)
- #define USB4_NVM_READ_OFFSET_SHIFT	2
- #define USB4_NVM_READ_LENGTH_MASK	GENMASK(27, 24)
-@@ -810,6 +817,458 @@ static int usb4_port_wait_for_bit(struct tb_port *port, u32 offset, u32 bit,
- 	return -ETIMEDOUT;
- }
- 
-+static int usb4_port_read_data(struct tb_port *port, void *data, size_t dwords)
++#define TB_MAX_RETIMER_INDEX	6
++
++static int tb_retimer_nvm_read(void *priv, unsigned int offset, void *val,
++			       size_t bytes)
 +{
-+	if (dwords > USB4_DATA_DWORDS)
-+		return -EINVAL;
-+
-+	return tb_port_read(port, data, TB_CFG_PORT, port->cap_usb4 + PORT_CS_2,
-+			    dwords);
-+}
-+
-+static int usb4_port_write_data(struct tb_port *port, const void *data,
-+				size_t dwords)
-+{
-+	if (dwords > USB4_DATA_DWORDS)
-+		return -EINVAL;
-+
-+	return tb_port_write(port, data, TB_CFG_PORT, port->cap_usb4 + PORT_CS_2,
-+			     dwords);
-+}
-+
-+static int usb4_port_sb_read(struct tb_port *port, enum usb4_sb_target target,
-+			     u8 index, u8 reg, void *buf, u8 size)
-+{
-+	size_t dwords = DIV_ROUND_UP(size, 4);
++	struct tb_nvm *nvm = priv;
++	struct tb_retimer *rt = tb_to_retimer(nvm->dev);
 +	int ret;
-+	u32 val;
 +
-+	if (!port->cap_usb4)
-+		return -EINVAL;
++	pm_runtime_get_sync(&rt->dev);
 +
-+	val = reg;
-+	val |= size << PORT_CS_1_LENGTH_SHIFT;
-+	val |= (target << PORT_CS_1_TARGET_SHIFT) & PORT_CS_1_TARGET_MASK;
-+	if (target == USB4_SB_TARGET_RETIMER)
-+		val |= (index << PORT_CS_1_RETIMER_INDEX_SHIFT);
-+	val |= PORT_CS_1_PND;
-+
-+	ret = tb_port_write(port, &val, TB_CFG_PORT,
-+			    port->cap_usb4 + PORT_CS_1, 1);
-+	if (ret)
-+		return ret;
-+
-+	ret = usb4_port_wait_for_bit(port, port->cap_usb4 + PORT_CS_1,
-+				     PORT_CS_1_PND, 0, 500);
-+	if (ret)
-+		return ret;
-+
-+	ret = tb_port_read(port, &val, TB_CFG_PORT,
-+			    port->cap_usb4 + PORT_CS_1, 1);
-+	if (ret)
-+		return ret;
-+
-+	if (val & PORT_CS_1_NR)
-+		return -ENODEV;
-+	if (val & PORT_CS_1_RC)
-+		return -EIO;
-+
-+	return buf ? usb4_port_read_data(port, buf, dwords) : 0;
-+}
-+
-+static int usb4_port_sb_write(struct tb_port *port, enum usb4_sb_target target,
-+			      u8 index, u8 reg, const void *buf, u8 size)
-+{
-+	size_t dwords = DIV_ROUND_UP(size, 4);
-+	int ret;
-+	u32 val;
-+
-+	if (!port->cap_usb4)
-+		return -EINVAL;
-+
-+	if (buf) {
-+		ret = usb4_port_write_data(port, buf, dwords);
-+		if (ret)
-+			return ret;
++	if (!mutex_trylock(&rt->tb->lock)) {
++		ret = restart_syscall();
++		goto out;
 +	}
 +
-+	val = reg;
-+	val |= size << PORT_CS_1_LENGTH_SHIFT;
-+	val |= PORT_CS_1_WNR_WRITE;
-+	val |= (target << PORT_CS_1_TARGET_SHIFT) & PORT_CS_1_TARGET_MASK;
-+	if (target == USB4_SB_TARGET_RETIMER)
-+		val |= (index << PORT_CS_1_RETIMER_INDEX_SHIFT);
-+	val |= PORT_CS_1_PND;
++	ret = usb4_port_retimer_nvm_read(rt->port, rt->index, offset, val, bytes);
++	mutex_unlock(&rt->tb->lock);
 +
-+	ret = tb_port_write(port, &val, TB_CFG_PORT,
-+			    port->cap_usb4 + PORT_CS_1, 1);
++out:
++	pm_runtime_mark_last_busy(&rt->dev);
++	pm_runtime_put_autosuspend(&rt->dev);
++
++	return ret;
++}
++
++static int tb_retimer_nvm_write(void *priv, unsigned int offset, void *val,
++				size_t bytes)
++{
++	struct tb_nvm *nvm = priv;
++	struct tb_retimer *rt = tb_to_retimer(nvm->dev);
++	int ret = 0;
++
++	if (!mutex_trylock(&rt->tb->lock))
++		return restart_syscall();
++
++	ret = tb_nvm_write_buf(nvm, offset, val, bytes);
++	mutex_unlock(&rt->tb->lock);
++
++	return ret;
++}
++
++static int tb_retimer_nvm_add(struct tb_retimer *rt)
++{
++	struct tb_nvm *nvm;
++	u32 val, nvm_size;
++	int ret;
++
++	nvm = tb_nvm_alloc(&rt->dev);
++	if (IS_ERR(nvm))
++		return PTR_ERR(nvm);
++
++	ret = usb4_port_retimer_nvm_read(rt->port, rt->index, NVM_VERSION, &val,
++					 sizeof(val));
++	if (ret)
++		goto err_nvm;
++
++	nvm->major = val >> 16;
++	nvm->minor = val >> 8;
++
++	ret = usb4_port_retimer_nvm_read(rt->port, rt->index, NVM_FLASH_SIZE,
++					 &val, sizeof(val));
++	if (ret)
++		goto err_nvm;
++
++	nvm_size = (SZ_1M << (val & 7)) / 8;
++	nvm_size = (nvm_size - SZ_16K) / 2;
++
++	ret = tb_nvm_add_active(nvm, nvm_size, tb_retimer_nvm_read);
++	if (ret)
++		goto err_nvm;
++
++	ret = tb_nvm_add_non_active(nvm, NVM_MAX_SIZE, tb_retimer_nvm_write);
++	if (ret)
++		goto err_nvm;
++
++	rt->nvm = nvm;
++	return 0;
++
++err_nvm:
++	tb_nvm_free(nvm);
++	return ret;
++}
++
++static int tb_retimer_nvm_validate_and_write(struct tb_retimer *rt)
++{
++	unsigned int image_size, hdr_size;
++	const u8 *buf = rt->nvm->buf;
++	u16 ds_size, device;
++
++	image_size = rt->nvm->buf_data_size;
++	if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE)
++		return -EINVAL;
++
++	/*
++	 * FARB pointer must point inside the image and must at least
++	 * contain parts of the digital section we will be reading here.
++	 */
++	hdr_size = (*(u32 *)buf) & 0xffffff;
++	if (hdr_size + NVM_DEVID + 2 >= image_size)
++		return -EINVAL;
++
++	/* Digital section start should be aligned to 4k page */
++	if (!IS_ALIGNED(hdr_size, SZ_4K))
++		return -EINVAL;
++
++	/*
++	 * Read digital section size and check that it also fits inside
++	 * the image.
++	 */
++	ds_size = *(u16 *)(buf + hdr_size);
++	if (ds_size >= image_size)
++		return -EINVAL;
++
++	/*
++	 * Make sure the device ID in the image matches the retimer
++	 * hardware.
++	 */
++	device = *(u16 *)(buf + hdr_size + NVM_DEVID);
++	if (device != rt->device)
++		return -EINVAL;
++
++	/* Skip headers in the image */
++	buf += hdr_size;
++	image_size -= hdr_size;
++
++	return usb4_port_retimer_nvm_write(rt->port, rt->index, 0, buf,
++					   image_size);
++}
++
++static ssize_t device_show(struct device *dev, struct device_attribute *attr,
++			   char *buf)
++{
++	struct tb_retimer *rt = tb_to_retimer(dev);
++
++	return sprintf(buf, "%#x\n", rt->device);
++}
++static DEVICE_ATTR_RO(device);
++
++static ssize_t nvm_authenticate_show(struct device *dev,
++	struct device_attribute *attr, char *buf)
++{
++	struct tb_retimer *rt = tb_to_retimer(dev);
++	int ret;
++
++	if (!mutex_trylock(&rt->tb->lock))
++		return restart_syscall();
++
++	if (!rt->nvm)
++		ret = -EAGAIN;
++	else
++		ret = sprintf(buf, "%#x\n", rt->auth_status);
++
++	mutex_unlock(&rt->tb->lock);
++
++	return ret;
++}
++
++static ssize_t nvm_authenticate_store(struct device *dev,
++	struct device_attribute *attr, const char *buf, size_t count)
++{
++	struct tb_retimer *rt = tb_to_retimer(dev);
++	bool val;
++	int ret;
++
++	pm_runtime_get_sync(&rt->dev);
++
++	if (!mutex_trylock(&rt->tb->lock)) {
++		ret = restart_syscall();
++		goto exit_rpm;
++	}
++
++	if (!rt->nvm) {
++		ret = -EAGAIN;
++		goto exit_unlock;
++	}
++
++	ret = kstrtobool(buf, &val);
++	if (ret)
++		goto exit_unlock;
++
++	/* Always clear status */
++	rt->auth_status = 0;
++
++	if (val) {
++		if (!rt->nvm->buf) {
++			ret = -EINVAL;
++			goto exit_unlock;
++		}
++
++		ret = tb_retimer_nvm_validate_and_write(rt);
++		if (ret)
++			goto exit_unlock;
++
++		ret = usb4_port_retimer_nvm_authenticate(rt->port, rt->index);
++	}
++
++exit_unlock:
++	mutex_unlock(&rt->tb->lock);
++exit_rpm:
++	pm_runtime_mark_last_busy(&rt->dev);
++	pm_runtime_put_autosuspend(&rt->dev);
++
 +	if (ret)
 +		return ret;
++	return count;
++}
++static DEVICE_ATTR_RW(nvm_authenticate);
 +
-+	ret = usb4_port_wait_for_bit(port, port->cap_usb4 + PORT_CS_1,
-+				     PORT_CS_1_PND, 0, 500);
-+	if (ret)
++static ssize_t nvm_version_show(struct device *dev,
++				struct device_attribute *attr, char *buf)
++{
++	struct tb_retimer *rt = tb_to_retimer(dev);
++	int ret;
++
++	if (!mutex_trylock(&rt->tb->lock))
++		return restart_syscall();
++
++	if (!rt->nvm)
++		ret = -EAGAIN;
++	else
++		ret = sprintf(buf, "%x.%x\n", rt->nvm->major, rt->nvm->minor);
++
++	mutex_unlock(&rt->tb->lock);
++	return ret;
++}
++static DEVICE_ATTR_RO(nvm_version);
++
++static ssize_t vendor_show(struct device *dev, struct device_attribute *attr,
++			   char *buf)
++{
++	struct tb_retimer *rt = tb_to_retimer(dev);
++
++	return sprintf(buf, "%#x\n", rt->vendor);
++}
++static DEVICE_ATTR_RO(vendor);
++
++static struct attribute *retimer_attrs[] = {
++	&dev_attr_device.attr,
++	&dev_attr_nvm_authenticate.attr,
++	&dev_attr_nvm_version.attr,
++	&dev_attr_vendor.attr,
++	NULL
++};
++
++static const struct attribute_group retimer_group = {
++	.attrs = retimer_attrs,
++};
++
++static const struct attribute_group *retimer_groups[] = {
++	&retimer_group,
++	NULL
++};
++
++static void tb_retimer_release(struct device *dev)
++{
++	struct tb_retimer *rt = tb_to_retimer(dev);
++
++	kfree(rt);
++}
++
++struct device_type tb_retimer_type = {
++	.name = "thunderbolt_retimer",
++	.groups = retimer_groups,
++	.release = tb_retimer_release,
++};
++
++static int tb_retimer_add(struct tb_port *port, u8 index, u32 auth_status)
++{
++	struct tb_retimer *rt;
++	u32 vendor, device;
++	int ret;
++
++	if (!port->cap_usb4)
++		return -EINVAL;
++
++	ret = usb4_port_retimer_read(port, index, USB4_SB_VENDOR_ID, &vendor,
++				     sizeof(vendor));
++	if (ret) {
++		if (ret != -ENODEV)
++			tb_port_warn(port, "failed read retimer VendorId: %d\n", ret);
++		return ret;
++	}
++
++	ret = usb4_port_retimer_read(port, index, USB4_SB_PRODUCT_ID, &device,
++				     sizeof(device));
++	if (ret) {
++		if (ret != -ENODEV)
++			tb_port_warn(port, "failed read retimer ProductId: %d\n", ret);
++		return ret;
++	}
++
++	if (vendor != PCI_VENDOR_ID_INTEL && vendor != 0x8087) {
++		tb_port_info(port, "retimer NVM format of vendor %#x is not supported\n",
++			     vendor);
++		return -EOPNOTSUPP;
++	}
++
++	/*
++	 * Check that it supports NVM operations. If not then don't add
++	 * the device at all.
++	 */
++	ret = usb4_port_retimer_nvm_sector_size(port, index);
++	if (ret < 0)
 +		return ret;
 +
-+	ret = tb_port_read(port, &val, TB_CFG_PORT,
-+			    port->cap_usb4 + PORT_CS_1, 1);
-+	if (ret)
-+		return ret;
++	rt = kzalloc(sizeof(*rt), GFP_KERNEL);
++	if (!rt)
++		return -ENOMEM;
 +
-+	if (val & PORT_CS_1_NR)
-+		return -ENODEV;
-+	if (val & PORT_CS_1_RC)
-+		return -EIO;
++	rt->index = index;
++	rt->vendor = vendor;
++	rt->device = device;
++	rt->auth_status = auth_status;
++	rt->port = port;
++	rt->tb = port->sw->tb;
++
++	rt->dev.parent = &port->sw->dev;
++	rt->dev.bus = &tb_bus_type;
++	rt->dev.type = &tb_retimer_type;
++	dev_set_name(&rt->dev, "%s:%u.%u", dev_name(&port->sw->dev),
++		     port->port, index);
++
++	ret = device_register(&rt->dev);
++	if (ret) {
++		dev_err(&rt->dev, "failed to register retimer: %d\n", ret);
++		put_device(&rt->dev);
++		return ret;
++	}
++
++	ret = tb_retimer_nvm_add(rt);
++	if (ret) {
++		dev_err(&rt->dev, "failed to add NVM devices: %d\n", ret);
++		device_del(&rt->dev);
++		return ret;
++	}
++
++	dev_info(&rt->dev, "new retimer found, vendor=%#x device=%#x\n",
++		 rt->vendor, rt->device);
++
++	pm_runtime_no_callbacks(&rt->dev);
++	pm_runtime_set_active(&rt->dev);
++	pm_runtime_enable(&rt->dev);
++	pm_runtime_set_autosuspend_delay(&rt->dev, TB_AUTOSUSPEND_DELAY);
++	pm_runtime_mark_last_busy(&rt->dev);
++	pm_runtime_use_autosuspend(&rt->dev);
 +
 +	return 0;
 +}
 +
-+static int usb4_port_sb_op(struct tb_port *port, enum usb4_sb_target target,
-+			   u8 index, enum usb4_sb_opcode opcode, int timeout_msec)
++static void tb_retimer_remove(struct tb_retimer *rt)
 +{
-+	ktime_t timeout;
-+	u32 val;
-+	int ret;
-+
-+	val = opcode;
-+	ret = usb4_port_sb_write(port, target, index, USB4_SB_OPCODE, &val,
-+				 sizeof(val));
-+	if (ret)
-+		return ret;
-+
-+	timeout = ktime_add_ms(ktime_get(), timeout_msec);
-+
-+	do {
-+		/* Check results */
-+		ret = usb4_port_sb_read(port, target, index, USB4_SB_OPCODE,
-+					&val, sizeof(val));
-+		if (ret)
-+			return ret;
-+
-+		switch (val) {
-+		case 0:
-+			return 0;
-+
-+		case USB4_SB_OPCODE_ERR:
-+			return -EAGAIN;
-+
-+		case USB4_SB_OPCODE_ONS:
-+			return -EOPNOTSUPP;
-+
-+		default:
-+			if (val != opcode)
-+				return -EIO;
-+			break;
-+		}
-+	} while (ktime_before(ktime_get(), timeout));
-+
-+	return -ETIMEDOUT;
++	dev_info(&rt->dev, "retimer disconnected\n");
++	tb_nvm_free(rt->nvm);
++	device_unregister(&rt->dev);
 +}
 +
-+/**
-+ * usb4_port_enumerate_retimers() - Send RT broadcast transaction
-+ * @port: USB4 port
-+ *
-+ * This forces the USB4 port to send broadcast RT transaction which
-+ * makes the retimers on the link to assign index to themselves. Returns
-+ * %0 in case of success and negative errno if there was an error.
-+ */
-+int usb4_port_enumerate_retimers(struct tb_port *port)
-+{
-+	u32 val;
-+
-+	val = USB4_SB_OPCODE_ENUMERATE_RETIMERS;
-+	return usb4_port_sb_write(port, USB4_SB_TARGET_ROUTER, 0,
-+				  USB4_SB_OPCODE, &val, sizeof(val));
-+}
-+
-+static inline int usb4_port_retimer_op(struct tb_port *port, u8 index,
-+				       enum usb4_sb_opcode opcode,
-+				       int timeout_msec)
-+{
-+	return usb4_port_sb_op(port, USB4_SB_TARGET_RETIMER, index, opcode,
-+			       timeout_msec);
-+}
-+
-+/**
-+ * usb4_port_retimer_read() - Read from retimer sideband registers
-+ * @port: USB4 port
-+ * @index: Retimer index
-+ * @reg: Sideband register to read
-+ * @buf: Data from @reg is stored here
-+ * @size: Number of bytes to read
-+ *
-+ * Function reads retimer sideband registers starting from @reg. The
-+ * retimer is connected to @port at @index. Returns %0 in case of
-+ * success, and read data is copied to @buf. If there is no retimer
-+ * present at given @index returns %-ENODEV. In any other failure
-+ * returns negative errno.
-+ */
-+int usb4_port_retimer_read(struct tb_port *port, u8 index, u8 reg, void *buf,
-+			   u8 size)
-+{
-+	return usb4_port_sb_read(port, USB4_SB_TARGET_RETIMER, index, reg, buf,
-+				 size);
-+}
-+
-+/**
-+ * usb4_port_retimer_write() - Write to retimer sideband registers
-+ * @port: USB4 port
-+ * @index: Retimer index
-+ * @reg: Sideband register to write
-+ * @buf: Data that is written starting from @reg
-+ * @size: Number of bytes to write
-+ *
-+ * Writes retimer sideband registers starting from @reg. The retimer is
-+ * connected to @port at @index. Returns %0 in case of success. If there
-+ * is no retimer present at given @index returns %-ENODEV. In any other
-+ * failure returns negative errno.
-+ */
-+int usb4_port_retimer_write(struct tb_port *port, u8 index, u8 reg,
-+			    const void *buf, u8 size)
-+{
-+	return usb4_port_sb_write(port, USB4_SB_TARGET_RETIMER, index, reg, buf,
-+				  size);
-+}
-+
-+/**
-+ * usb4_port_retimer_is_last() - Is the retimer last on-board retimer
-+ * @port: USB4 port
-+ * @index: Retimer index
-+ *
-+ * If the retimer at @index is last one (connected directly to the
-+ * Type-C port) this function returns %1. If it is not returns %0. If
-+ * the retimer is not present returns %-ENODEV. Otherwise returns
-+ * negative errno.
-+ */
-+int usb4_port_retimer_is_last(struct tb_port *port, u8 index)
-+{
-+	u32 metadata;
-+	int ret;
-+
-+	ret = usb4_port_retimer_op(port, index, USB4_SB_OPCODE_QUERY_LAST_RETIMER,
-+				   500);
-+	if (ret)
-+		return ret;
-+
-+	ret = usb4_port_retimer_read(port, index, USB4_SB_METADATA, &metadata,
-+				     sizeof(metadata));
-+	return ret ? ret : metadata & 1;
-+}
-+
-+/**
-+ * usb4_port_retimer_nvm_sector_size() - Read retimer NVM sector size
-+ * @port: USB4 port
-+ * @index: Retimer index
-+ *
-+ * Reads NVM sector size (in bytes) of a retimer at @index. This
-+ * operation can be used to determine whether the retimer supports NVM
-+ * upgrade for example. Returns sector size in bytes or negative errno
-+ * in case of error. Specifically returns %-ENODEV if there is no
-+ * retimer at @index.
-+ */
-+int usb4_port_retimer_nvm_sector_size(struct tb_port *port, u8 index)
-+{
-+	u32 metadata;
-+	int ret;
-+
-+	ret = usb4_port_retimer_op(port, index, USB4_SB_OPCODE_GET_NVM_SECTOR_SIZE,
-+				   500);
-+	if (ret)
-+		return ret;
-+
-+	ret = usb4_port_retimer_read(port, index, USB4_SB_METADATA, &metadata,
-+				     sizeof(metadata));
-+	return ret ? ret : metadata & USB4_NVM_SECTOR_SIZE_MASK;
-+}
-+
-+static int usb4_port_retimer_nvm_set_offset(struct tb_port *port, u8 index,
-+					    unsigned int address)
-+{
-+	u32 metadata, dwaddress;
-+	int ret;
-+
-+	dwaddress = address / 4;
-+	metadata = (dwaddress << USB4_NVM_SET_OFFSET_SHIFT) &
-+		  USB4_NVM_SET_OFFSET_MASK;
-+
-+	ret = usb4_port_retimer_write(port, index, USB4_SB_METADATA, &metadata,
-+				      sizeof(metadata));
-+	if (ret)
-+		return ret;
-+
-+	return usb4_port_retimer_op(port, index, USB4_SB_OPCODE_NVM_SET_OFFSET,
-+				    500);
-+}
-+
-+struct retimer_info {
-+	struct tb_port *port;
++struct tb_retimer_lookup {
++	const struct tb_port *port;
 +	u8 index;
 +};
 +
-+static int usb4_port_retimer_nvm_write_next_block(void *data, const void *buf,
-+						  size_t dwords)
-+
++static int retimer_match(struct device *dev, void *data)
 +{
-+	const struct retimer_info *info = data;
-+	struct tb_port *port = info->port;
-+	u8 index = info->index;
-+	int ret;
++	const struct tb_retimer_lookup *lookup = data;
++	struct tb_retimer *rt = tb_to_retimer(dev);
 +
-+	ret = usb4_port_retimer_write(port, index, USB4_SB_DATA,
-+				      buf, dwords * 4);
-+	if (ret)
-+		return ret;
++	return rt && rt->port == lookup->port && rt->index == lookup->index;
++}
 +
-+	return usb4_port_retimer_op(port, index,
-+			USB4_SB_OPCODE_NVM_BLOCK_WRITE, 1000);
++static struct tb_retimer *tb_port_find_retimer(struct tb_port *port, u8 index)
++{
++	struct tb_retimer_lookup lookup = { .port = port, .index = index };
++	struct device *dev;
++
++	dev = device_find_child(&port->sw->dev, &lookup, retimer_match);
++	if (dev)
++		return tb_to_retimer(dev);
++
++	return NULL;
 +}
 +
 +/**
-+ * usb4_port_retimer_nvm_write() - Write to retimer NVM
-+ * @port: USB4 port
-+ * @index: Retimer index
-+ * @address: Byte address where to start the write
-+ * @buf: Data to write
-+ * @size: Size in bytes how much to write
++ * tb_retimer_scan() - Scan for on-board retimers under port
++ * @port: USB4 port to scan
 + *
-+ * Writes @size bytes from @buf to the retimer NVM. Used for NVM
-+ * upgrade. Returns %0 if the data was written successfully and negative
-+ * errno in case of failure. Specifically returns %-ENODEV if there is
-+ * no retimer at @index.
++ * Tries to enumerate on-board retimers connected to @port. Found
++ * retimers are registered as children of @port. Does not scan for cable
++ * retimers for now.
 + */
-+int usb4_port_retimer_nvm_write(struct tb_port *port, u8 index, unsigned int address,
-+				const void *buf, size_t size)
++int tb_retimer_scan(struct tb_port *port)
 +{
-+	struct retimer_info info = { .port = port, .index = index };
-+	int ret;
++	u32 status[TB_MAX_RETIMER_INDEX] = {};
++	int ret, i, last_idx = 0;
 +
-+	ret = usb4_port_retimer_nvm_set_offset(port, index, address);
-+	if (ret)
-+		return ret;
-+
-+	return usb4_do_write_data(address, buf, size,
-+			usb4_port_retimer_nvm_write_next_block, &info);
-+}
-+
-+/**
-+ * usb4_port_retimer_nvm_authenticate() - Start retimer NVM upgrade
-+ * @port: USB4 port
-+ * @index: Retimer index
-+ *
-+ * After the new NVM image has been written via usb4_port_retimer_nvm_write()
-+ * this function can be used to trigger the NVM upgrade process. If
-+ * successful the retimer restarts with the new NVM and may not have the
-+ * index set so one needs to call usb4_port_enumerate_retimers() to
-+ * force index to be assigned.
-+ */
-+int usb4_port_retimer_nvm_authenticate(struct tb_port *port, u8 index)
-+{
-+	u32 val;
++	if (!port->cap_usb4)
++		return 0;
 +
 +	/*
-+	 * We need to use the raw operation here because once the
-+	 * authentication completes the retimer index is not set anymore
-+	 * so we do not get back the status now.
++	 * Send broadcast RT to make sure retimer indices facing this
++	 * port are set.
 +	 */
-+	val = USB4_SB_OPCODE_NVM_AUTH_WRITE;
-+	return usb4_port_sb_write(port, USB4_SB_TARGET_RETIMER, index,
-+				  USB4_SB_OPCODE, &val, sizeof(val));
-+}
-+
-+/**
-+ * usb4_port_retimer_nvm_authenticate_status() - Read status of NVM upgrade
-+ * @port: USB4 port
-+ * @index: Retimer index
-+ * @status: Raw status code read from metadata
-+ *
-+ * This can be called after usb4_port_retimer_nvm_authenticate() and
-+ * usb4_port_enumerate_retimers() to fetch status of the NVM upgrade.
-+ *
-+ * Returns %0 if the authentication status was successfully read. The
-+ * completion metadata (the result) is then stored into @status. If
-+ * reading the status fails, returns negative errno.
-+ */
-+int usb4_port_retimer_nvm_authenticate_status(struct tb_port *port, u8 index,
-+					      u32 *status)
-+{
-+	u32 metadata, val;
-+	int ret;
-+
-+	ret = usb4_port_retimer_read(port, index, USB4_SB_OPCODE, &val,
-+				     sizeof(val));
++	ret = usb4_port_enumerate_retimers(port);
 +	if (ret)
 +		return ret;
 +
-+	switch (val) {
-+	case 0:
-+		*status = 0;
-+		return 0;
++	/*
++	 * Before doing anything else, read the authentication status.
++	 * If the retimer has it set, store it for the new retimer
++	 * device instance.
++	 */
++	for (i = 1; i <= TB_MAX_RETIMER_INDEX; i++)
++		usb4_port_retimer_nvm_authenticate_status(port, i, &status[i]);
 +
-+	case USB4_SB_OPCODE_ERR:
-+		ret = usb4_port_retimer_read(port, index, USB4_SB_METADATA,
-+					     &metadata, sizeof(metadata));
-+		if (ret)
-+			return ret;
-+
-+		*status = metadata & USB4_SB_METADATA_NVM_AUTH_WRITE_MASK;
-+		return 0;
-+
-+	case USB4_SB_OPCODE_ONS:
-+		return -EOPNOTSUPP;
-+
-+	default:
-+		return -EIO;
++	for (i = 1; i <= TB_MAX_RETIMER_INDEX; i++) {
++		/*
++		 * Last retimer is true only for the last on-board
++		 * retimer (the one connected directly to the Type-C
++		 * port).
++		 */
++		ret = usb4_port_retimer_is_last(port, i);
++		if (ret > 0)
++			last_idx = i;
++		else if (ret < 0)
++			break;
 +	}
++
++	if (!last_idx)
++		return 0;
++
++	/* Add on-board retimers if they do not exist already */
++	for (i = 1; i <= last_idx; i++) {
++		struct tb_retimer *rt;
++
++		rt = tb_port_find_retimer(port, i);
++		if (rt) {
++			put_device(&rt->dev);
++		} else {
++			ret = tb_retimer_add(port, i, status[i]);
++			if (ret && ret != -EOPNOTSUPP)
++				return ret;
++		}
++	}
++
++	return 0;
 +}
 +
-+static int usb4_port_retimer_nvm_read_block(void *data, unsigned int dwaddress,
-+					    void *buf, size_t dwords)
++static int remove_retimer(struct device *dev, void *data)
 +{
-+	const struct retimer_info *info = data;
-+	struct tb_port *port = info->port;
-+	u8 index = info->index;
-+	u32 metadata;
-+	int ret;
++	struct tb_retimer *rt = tb_to_retimer(dev);
++	struct tb_port *port = data;
 +
-+	metadata = dwaddress << USB4_NVM_READ_OFFSET_SHIFT;
-+	if (dwords < USB4_DATA_DWORDS)
-+		metadata |= dwords << USB4_NVM_READ_LENGTH_SHIFT;
-+
-+	ret = usb4_port_retimer_write(port, index, USB4_SB_METADATA, &metadata,
-+				      sizeof(metadata));
-+	if (ret)
-+		return ret;
-+
-+	ret = usb4_port_retimer_op(port, index, USB4_SB_OPCODE_NVM_READ, 500);
-+	if (ret)
-+		return ret;
-+
-+	return usb4_port_retimer_read(port, index, USB4_SB_DATA, buf,
-+				      dwords * 4);
++	if (rt && rt->port == port)
++		tb_retimer_remove(rt);
++	return 0;
 +}
 +
 +/**
-+ * usb4_port_retimer_nvm_read() - Read contents of retimer NVM
-+ * @port: USB4 port
-+ * @index: Retimer index
-+ * @address: NVM address (in bytes) to start reading
-+ * @buf: Data read from NVM is stored here
-+ * @size: Number of bytes to read
++ * tb_retimer_remove_all() - Remove all retimers under port
++ * @port: USB4 port whose retimers to remove
 + *
-+ * Reads retimer NVM and copies the contents to @buf. Returns %0 if the
-+ * read was successful and negative errno in case of failure.
-+ * Specifically returns %-ENODEV if there is no retimer at @index.
++ * This removes all previously added retimers under @port.
 + */
-+int usb4_port_retimer_nvm_read(struct tb_port *port, u8 index,
-+			       unsigned int address, void *buf, size_t size)
++void tb_retimer_remove_all(struct tb_port *port)
 +{
-+	struct retimer_info info = { .port = port, .index = index };
-+
-+	return usb4_do_read_data(address, buf, size,
-+			usb4_port_retimer_nvm_read_block, &info);
++	if (port->cap_usb4)
++		device_for_each_child_reverse(&port->sw->dev, port,
++					      remove_retimer);
 +}
+diff --git a/drivers/thunderbolt/sb_regs.h b/drivers/thunderbolt/sb_regs.h
+index 0e587b7b9200..9dafd696612f 100644
+--- a/drivers/thunderbolt/sb_regs.h
++++ b/drivers/thunderbolt/sb_regs.h
+@@ -10,6 +10,8 @@
+ #ifndef _SB_REGS
+ #define _SB_REGS
+ 
++#define USB4_SB_VENDOR_ID			0x00
++#define USB4_SB_PRODUCT_ID			0x01
+ #define USB4_SB_OPCODE				0x08
+ 
+ enum usb4_sb_opcode {
+diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+index c8ed614f14e6..817c66c7adcf 100644
+--- a/drivers/thunderbolt/switch.c
++++ b/drivers/thunderbolt/switch.c
+@@ -2392,6 +2392,9 @@ void tb_switch_remove(struct tb_switch *sw)
+ 			tb_xdomain_remove(port->xdomain);
+ 			port->xdomain = NULL;
+ 		}
++
++		/* Remove any downstream retimers */
++		tb_retimer_remove_all(port);
+ 	}
+ 
+ 	if (!sw->is_unplugged)
+diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+index bbcf0f25617c..f507815040eb 100644
+--- a/drivers/thunderbolt/tb.c
++++ b/drivers/thunderbolt/tb.c
+@@ -539,6 +539,9 @@ static void tb_scan_port(struct tb_port *port)
+ 		tb_port_dbg(port, "port already has a remote\n");
+ 		return;
+ 	}
++
++	tb_retimer_scan(port);
++
+ 	sw = tb_switch_alloc(port->sw->tb, &port->sw->dev,
+ 			     tb_downstream_route(port));
+ 	if (IS_ERR(sw)) {
+@@ -595,6 +598,9 @@ static void tb_scan_port(struct tb_port *port)
+ 	if (tb_enable_tmu(sw))
+ 		tb_sw_warn(sw, "failed to enable TMU\n");
+ 
++	/* Scan upstream retimers */
++	tb_retimer_scan(upstream_port);
++
+ 	/*
+ 	 * Create USB 3.x tunnels only when the switch is plugged to the
+ 	 * domain. This is because we scan the domain also during discovery
+@@ -674,6 +680,7 @@ static void tb_free_unplugged_children(struct tb_switch *sw)
+ 			continue;
+ 
+ 		if (port->remote->sw->is_unplugged) {
++			tb_retimer_remove_all(port);
+ 			tb_remove_dp_resources(port->remote->sw);
+ 			tb_switch_lane_bonding_disable(port->remote->sw);
+ 			tb_switch_remove(port->remote->sw);
+@@ -1039,6 +1046,8 @@ static void tb_handle_hotplug(struct work_struct *work)
+ 		goto put_sw;
+ 	}
+ 	if (ev->unplug) {
++		tb_retimer_remove_all(port);
++
+ 		if (tb_port_has_remote(port)) {
+ 			tb_port_dbg(port, "switch unplugged\n");
+ 			tb_sw_set_unplugged(port->remote->sw);
+@@ -1283,6 +1292,7 @@ static int tb_free_unplugged_xdomains(struct tb_switch *sw)
+ 		if (tb_is_upstream_port(port))
+ 			continue;
+ 		if (port->xdomain && port->xdomain->is_unplugged) {
++			tb_retimer_remove_all(port);
+ 			tb_xdomain_remove(port->xdomain);
+ 			port->xdomain = NULL;
+ 			ret++;
+diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+index 8f840148378a..736d1589c31e 100644
+--- a/drivers/thunderbolt/tb.h
++++ b/drivers/thunderbolt/tb.h
+@@ -210,6 +210,28 @@ struct tb_port {
+ 	struct list_head list;
+ };
+ 
++/**
++ * tb_retimer: Thunderbolt retimer
++ * @dev: Device for the retimer
++ * @tb: Pointer to the domain the retimer belongs to
++ * @index: Retimer index facing the router USB4 port
++ * @vendor: Vendor ID of the retimer
++ * @device: Device ID of the retimer
++ * @port: Pointer to the lane 0 adapter
++ * @nvm: Pointer to the NVM if the retimer has one (%NULL otherwise)
++ * @auth_status: Status of last NVM authentication
++ */
++struct tb_retimer {
++	struct device dev;
++	struct tb *tb;
++	u8 index;
++	u32 vendor;
++	u32 device;
++	struct tb_port *port;
++	struct tb_nvm *nvm;
++	u32 auth_status;
++};
 +
  /**
-  * usb4_usb3_port_max_link_rate() - Maximum support USB3 link rate
-  * @port: USB3 adapter port
+  * struct tb_path_hop - routing information for a tb_path
+  * @in_port: Ingress port of a switch
+@@ -553,6 +575,7 @@ struct tb *icm_probe(struct tb_nhi *nhi);
+ struct tb *tb_probe(struct tb_nhi *nhi);
+ 
+ extern struct device_type tb_domain_type;
++extern struct device_type tb_retimer_type;
+ extern struct device_type tb_switch_type;
+ 
+ int tb_domain_init(void);
+@@ -853,6 +876,21 @@ void tb_xdomain_remove(struct tb_xdomain *xd);
+ struct tb_xdomain *tb_xdomain_find_by_link_depth(struct tb *tb, u8 link,
+ 						 u8 depth);
+ 
++int tb_retimer_scan(struct tb_port *port);
++void tb_retimer_remove_all(struct tb_port *port);
++
++static inline bool tb_is_retimer(const struct device *dev)
++{
++	return dev->type == &tb_retimer_type;
++}
++
++static inline struct tb_retimer *tb_to_retimer(struct device *dev)
++{
++	if (tb_is_retimer(dev))
++		return container_of(dev, struct tb_retimer, dev);
++	return NULL;
++}
++
+ int usb4_switch_setup(struct tb_switch *sw);
+ int usb4_switch_read_uid(struct tb_switch *sw, u64 *uid);
+ int usb4_switch_drom_read(struct tb_switch *sw, unsigned int address, void *buf,
 -- 
 2.27.0.rc2
 
