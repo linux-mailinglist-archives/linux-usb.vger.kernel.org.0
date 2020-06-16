@@ -2,91 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AE1D1FAF95
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Jun 2020 13:55:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFA7A1FB0CF
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Jun 2020 14:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728367AbgFPLz0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Jun 2020 07:55:26 -0400
-Received: from mga18.intel.com ([134.134.136.126]:44132 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726261AbgFPLzZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 16 Jun 2020 07:55:25 -0400
-IronPort-SDR: v7bwRE7z84WGNk5SbG7E6nnw5XjXuFXRPj3eZhp9WW77LYIVv3TTmQz1WhibWyHmZOy17SRhfj
- Ai7/ylbqDrxg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2020 04:55:24 -0700
-IronPort-SDR: Gdf9x4vhfnBK9yRrH1GCDkAox6VRqjPK7PHG807wKts5Ku+qezPDs6y+HiDDjjwBUyh5Szfsp6
- Ch44Km7jqGsA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,518,1583222400"; 
-   d="scan'208";a="382851130"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga001.fm.intel.com with SMTP; 16 Jun 2020 04:55:21 -0700
-Received: by lahna (sSMTP sendmail emulation); Tue, 16 Jun 2020 14:55:20 +0300
-Date:   Tue, 16 Jun 2020 14:55:20 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Yehezkel Bernat <yehezkelshb@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Michael Jamet <michael.jamet@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>, netdev@vger.kernel.org
-Subject: Re: [PATCH 4/4] thunderbolt: Get rid of E2E workaround
-Message-ID: <20200616115520.GK2795@lahna.fi.intel.com>
-References: <20200615130139.83854-5-mika.westerberg@linux.intel.com>
- <CA+CmpXtpAaY+zKG-ofPNYHTChTiDtwCAnd8uYQSqyJ8hLE891Q@mail.gmail.com>
- <20200615135112.GA1402792@kroah.com>
- <CA+CmpXst-5i4L5nW-Z66ZmxuLhdihjeNkHU1JdzTwow1rNH7Ng@mail.gmail.com>
- <20200615142247.GN247495@lahna.fi.intel.com>
- <CA+CmpXuN+su50RYHvW4S-twqiUjScnqM5jvG4ipEvWORyKfd1g@mail.gmail.com>
- <20200615153249.GR247495@lahna.fi.intel.com>
- <CA+CmpXtRZ4JMe2V2-kWiYWR0pnnzLQMbXQESni6ne8eFeDCCXg@mail.gmail.com>
- <20200615155512.GS247495@lahna.fi.intel.com>
- <CA+CmpXtOAUnSdhjwi5HXaJhPzbUUsZZsitFifyhyPk+X2c=wYw@mail.gmail.com>
+        id S1726799AbgFPMe6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 Jun 2020 08:34:58 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:62858 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726452AbgFPMe6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Jun 2020 08:34:58 -0400
+X-UUID: c02764eaeb6245f7bd17e571a64225b0-20200616
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=1y6jYCU5bn8D2X7/K/Tvzzlj7X36JuNHASO4pxrPu4w=;
+        b=JCHVluwvubnAC79HGWfxQzzbZHBAdnggu2+TvgzBhgLQH4zt6HkdYKRLcHgEjSFP1988uVhl5+eAJEQbL0bMrRiwaP9khpc8Xbb1LkhQmOc+g1uDNSo0O1yVDknyGEbVlrFM/wekguEQ6endFEJxhF6jHvaNLC1NPDBnivckaFE=;
+X-UUID: c02764eaeb6245f7bd17e571a64225b0-20200616
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1283620589; Tue, 16 Jun 2020 20:34:54 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 16 Jun 2020 20:34:45 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 16 Jun 2020 20:34:45 +0800
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
+        Sergey Organov <sorganov@gmail.com>,
+        Fabrice Gasnier <fabrice.gasnier@st.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
+        Macpaul Lin <macpaul.lin@mediatek.com>,
+        Macpaul Lin <macpaul.lin@gmail.com>
+Subject: [PATCH 1/2] usb: gadget: introduce flag for large request
+Date:   Tue, 16 Jun 2020 20:34:43 +0800
+Message-ID: <1592310884-4307-1-git-send-email-macpaul.lin@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+CmpXtOAUnSdhjwi5HXaJhPzbUUsZZsitFifyhyPk+X2c=wYw@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 15, 2020 at 10:54:52PM +0300, Yehezkel Bernat wrote:
-> On Mon, Jun 15, 2020 at 6:55 PM Mika Westerberg
-> <mika.westerberg@linux.intel.com> wrote:
-> >
-> > On Mon, Jun 15, 2020 at 06:41:32PM +0300, Yehezkel Bernat wrote:
-> > > > I think you are talking about the "prtstns" property in the network
-> > > > driver. There we only set TBNET_MATCH_FRAGS_ID (bit 1). This is the
-> > > > thing that get exposed to the other side of the connection and we never
-> > > > announced support for full E2E.
-> > >
-> > >
-> > > Ah, yes, this one, Thanks!
-> > > As Windows driver uses it for flagging full-E2E, and we completely drop E2E
-> > > support here, it may worth to mention there that this is what bit 2 is used in
-> > > Windows so any reuse should consider the possible compatibility issue.
-> >
-> > Note we only drop dead code in this patch. It is that workaround for
-> > Falcon Ridge controller we actually never used.
-> >
-> > I can add a comment to the network driver about the full E2E support
-> > flag as a separate patch if you think it is useful.
-> >
-> > The network protocol will be public soon I guess because USB4 spec
-> > refers to "USB4 Inter-Domain Specification, Revision 1.0, [to be
-> > published] – (USB4 Inter-Domain Specification)" so I would expect it to
-> > be explained there as well.
-> 
-> I see. I leave it for your decision, then.
-> Thanks for bearing with me.
+U29tZSBVU0IgaGFyZHdhcmUgbGlrZSBETUEgZW5naW5lIGNhbiBoZWxwIHRvIHByb2Nlc3MgKHNw
+bGl0KSB0aGUgZGF0YQ0Kb2YgZWFjaCBVUkIgcmVxdWVzdCBpbnRvIHNtYWxsIHBhY2tldHMuIEZv
+ciBleGFtcGxlLCB0aGUgbWF4IHBhY2tldCBzaXplDQpvZiBoaWdoIHNwZWVkIGlzIDUxMiBieXRl
+cy4gVGhlc2Uga2luZHMgb2YgaGFyZHdhcmUgY2FuIGhlbHAgdG8gc3BsaXQNCnRoZSBjb250aW51
+ZSBUeC9SeCBkYXRhIHJlcXVlc3RzIGludG8gcGFja2V0cyBqdXN0IGF0IHRoZSBtYXggcGFja2V0
+DQpzaXplIGR1cmluZyB0cmFuc21pc3Npb24uIEhlbmNlIHVwcGVyIGxheWVyIHNvZnR3YXJlIGNh
+biByZWR1Y2Ugc29tZQ0KZWZmb3J0IGZvciBxdWV1ZWluZyBtYW55IHJlcXVlc3RzIGJhY2sgYW5k
+IGZvcnRoIGZvciBsYXJnZXIgZGF0YS4NCg0KSGVyZSB3ZSBpbnRyb2R1Y2UgImNhbl9leGNlZWRf
+bWF4cCIgZmxhZyBpbiBnYWRnZXQgd2hlbiB0aGVzZSBraW5kcyBvZg0KaGFyZHdhcmUgaXMgcmVh
+ZHkgdG8gc3VwcG9ydCB0aGVzZSBvcGVyYXRpb25zLg0KDQpTaWduZWQtb2ZmLWJ5OiBNYWNwYXVs
+IExpbiA8bWFjcGF1bC5saW5AbWVkaWF0ZWsuY29tPg0KLS0tDQogZHJpdmVycy91c2IvbXR1My9t
+dHUzX3FtdS5jIHwgICAxMSArKysrKysrKysrLQ0KIGluY2x1ZGUvbGludXgvdXNiL2dhZGdldC5o
+ICB8ICAgIDEgKw0KIDIgZmlsZXMgY2hhbmdlZCwgMTEgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlv
+bigtKQ0KDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvbXR1My9tdHUzX3FtdS5jIGIvZHJpdmVy
+cy91c2IvbXR1My9tdHUzX3FtdS5jDQppbmRleCAzZjQxNGY5Li4yYjUxYTIwIDEwMDY0NA0KLS0t
+IGEvZHJpdmVycy91c2IvbXR1My9tdHUzX3FtdS5jDQorKysgYi9kcml2ZXJzL3VzYi9tdHUzL210
+dTNfcW11LmMNCkBAIC02MjAsNyArNjIwLDcgQEAgaXJxcmV0dXJuX3QgbXR1M19xbXVfaXNyKHN0
+cnVjdCBtdHUzICptdHUpDQogDQogaW50IG10dTNfcW11X2luaXQoc3RydWN0IG10dTMgKm10dSkN
+CiB7DQotDQorCWludCBpOw0KIAljb21waWxldGltZV9hc3NlcnQoUU1VX0dQRF9TSVpFID09IDE2
+LCAiUU1VX0dQRCBzaXplIFNIT1VMRCBiZSAxNkIiKTsNCiANCiAJbXR1LT5xbXVfZ3BkX3Bvb2wg
+PSBkbWFfcG9vbF9jcmVhdGUoIlFNVV9HUEQiLCBtdHUtPmRldiwNCkBAIC02MjksMTAgKzYyOSwx
+OSBAQCBpbnQgbXR1M19xbXVfaW5pdChzdHJ1Y3QgbXR1MyAqbXR1KQ0KIAlpZiAoIW10dS0+cW11
+X2dwZF9wb29sKQ0KIAkJcmV0dXJuIC1FTk9NRU07DQogDQorCS8qIExldCBnYWRnZXQga25vdyB3
+ZSBjYW4gcHJvY2VzcyByZXF1ZXN0IGxhcmdlciB0aGFuIG1heCBwYWNrZXQgKi8NCisJZm9yIChp
+ID0gMTsgaSA8IG10dS0+bnVtX2VwczsgaSsrKQ0KKwkJbXR1LT5lcF9hcnJheVtpXS5lcC5jYW5f
+ZXhjZWVkX21heHAgPSAxOw0KKw0KIAlyZXR1cm4gMDsNCiB9DQogDQogdm9pZCBtdHUzX3FtdV9l
+eGl0KHN0cnVjdCBtdHUzICptdHUpDQogew0KKwlpbnQgaTsNCiAJZG1hX3Bvb2xfZGVzdHJveSht
+dHUtPnFtdV9ncGRfcG9vbCk7DQorDQorCS8qIERpc2FibGUgbGFyZ2UgcmVxdWVzdCBzdXBwb3J0
+ICovDQorCWZvciAoaSA9IDE7IGkgPCBtdHUtPm51bV9lcHM7IGkrKykNCisJCW10dS0+ZXBfYXJy
+YXlbaV0uZXAuY2FuX2V4Y2VlZF9tYXhwID0gMDsNCiB9DQpkaWZmIC0tZ2l0IGEvaW5jbHVkZS9s
+aW51eC91c2IvZ2FkZ2V0LmggYi9pbmNsdWRlL2xpbnV4L3VzYi9nYWRnZXQuaA0KaW5kZXggNmEx
+NzgxNy4uNjBlMDY0NSAxMDA2NDQNCi0tLSBhL2luY2x1ZGUvbGludXgvdXNiL2dhZGdldC5oDQor
+KysgYi9pbmNsdWRlL2xpbnV4L3VzYi9nYWRnZXQuaA0KQEAgLTIzNiw2ICsyMzYsNyBAQCBzdHJ1
+Y3QgdXNiX2VwIHsNCiAJdW5zaWduZWQJCW1heF9zdHJlYW1zOjE2Ow0KIAl1bnNpZ25lZAkJbXVs
+dDoyOw0KIAl1bnNpZ25lZAkJbWF4YnVyc3Q6NTsNCisJdW5zaWduZWQJCWNhbl9leGNlZWRfbWF4
+cDoxOw0KIAl1OAkJCWFkZHJlc3M7DQogCWNvbnN0IHN0cnVjdCB1c2JfZW5kcG9pbnRfZGVzY3Jp
+cHRvcgkqZGVzYzsNCiAJY29uc3Qgc3RydWN0IHVzYl9zc19lcF9jb21wX2Rlc2NyaXB0b3IJKmNv
+bXBfZGVzYzsNCi0tIA0KMS43LjkuNQ0K
 
-OK, I think it makes sense to add the comment so I'll do that as
-a separate patch (will probably go next week since I have some other
-patches to deal with this week, and Friday is holiday in Finland).
