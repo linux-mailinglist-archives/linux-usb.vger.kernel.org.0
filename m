@@ -2,101 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C777F1FB383
-	for <lists+linux-usb@lfdr.de>; Tue, 16 Jun 2020 16:07:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C35F1FB460
+	for <lists+linux-usb@lfdr.de>; Tue, 16 Jun 2020 16:28:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729252AbgFPOHv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Jun 2020 10:07:51 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:22980 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729190AbgFPOHt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Jun 2020 10:07:49 -0400
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05GE40DX030295;
-        Tue, 16 Jun 2020 16:07:31 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=STMicroelectronics;
- bh=qf90D1xvlnaVfhKX1/rwsBGrTYh73cmLPEcHyOqACys=;
- b=s1a4cmtUiRTnoTgkwNmfLkVXn5TN8gzQUcyPiBcdmJH3ya+Y7rR1bMTLziEKgm7ORCBh
- E7AZVHUFfDhFynDZERPyPbFLv6eqnd9UHuNzJNtKmJM2nexSwIDgwjvu4TSWMTHVbVwh
- 9eZMZGCHHO5puUDk0VXXdBUC9+oBl25NgNhn0rjJu4ilVn89TBxBG3iYIuuHsY9pUBvM
- QqEjD95KRIaLHoTnWzWHuliv1zOrmbrr/i4Y2hrOqqzHMlIzNSlJodlkGDy4tldb+xG/
- w4puvqs+AQ3VmjeAlIrdrQRDdcPJFzQ4XcWpwEYaTCW/zEikQgPm4FkqpE2PM4YqHoGz sg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 31mkx97uff-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 16 Jun 2020 16:07:31 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D0C4810002A;
-        Tue, 16 Jun 2020 16:07:30 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C18B22B569A;
-        Tue, 16 Jun 2020 16:07:30 +0200 (CEST)
-Received: from localhost (10.75.127.46) by SFHDAG3NODE2.st.com (10.75.127.8)
- with Microsoft SMTP Server (TLS) id 15.0.1347.2; Tue, 16 Jun 2020 16:07:30
- +0200
-From:   Amelie Delaunay <amelie.delaunay@st.com>
-To:     Minas Harutyunyan <hminas@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>
-CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Fabrice Gasnier <fabrice.gasnier@st.com>,
-        Amelie Delaunay <amelie.delaunay@st.com>
-Subject: [PATCH 3/3] ARM: dts: stm32: enable usb-role-switch on USB OTG on stm32mp15xx-dkx
-Date:   Tue, 16 Jun 2020 16:07:17 +0200
-Message-ID: <20200616140717.28465-4-amelie.delaunay@st.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200616140717.28465-1-amelie.delaunay@st.com>
-References: <20200616140717.28465-1-amelie.delaunay@st.com>
+        id S1729051AbgFPO2g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 Jun 2020 10:28:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34260 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727804AbgFPO2f (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Jun 2020 10:28:35 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FACBC061573
+        for <linux-usb@vger.kernel.org>; Tue, 16 Jun 2020 07:28:34 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id m7so8466518plt.5
+        for <linux-usb@vger.kernel.org>; Tue, 16 Jun 2020 07:28:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=pUbj8Du8Z5onm6GeFo+xyj7FWys6v8bBApLzSvNwZvg=;
+        b=hhYQ3+WPEWyTnhCjYXDEF2LSVrHMYLi9n4wtbgDZ7yOKoONwHvkMNfbHjIZ9P18sa+
+         2hIM7ZcbCwWWWWrEk1igfevivtYq4sIuuf/5G3KLugU7awzeyfhX/TOuRzaNb/trxpac
+         gJLi9HfMlv2OML4geXIEm8Y4DqynfSB8S9dQ80twBb9CiIlFqAC3qeD77eK/E5GGAlBm
+         D8OD9YlFUAaPzhgv7yXw47tcKYg/MvcOup8PS/fyTf/YdJyD50NfwykqgSGpQMZW/QSk
+         ye3WiqQiRKuqrEVBOrzw2Mc7fTZJu9olJ47nnJzIiX8hN4ou3sZuAenldTbuEwGZ5Jz7
+         6y8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=pUbj8Du8Z5onm6GeFo+xyj7FWys6v8bBApLzSvNwZvg=;
+        b=kLU/CNYzW3t8gSEQn+z2LVZx0LvU5YeWLS2Hl6SKl831sJGakFLZ1eAXOVIPhzF4Gx
+         ln5Qz/pMT1625kxU+mSxm0TZbG9rE6Ylw0a8AIW1+6p86lX6yyHCWksp12QME1gfeq94
+         MznlcwiIWyAwzfidq336K8yUHDZXvDMO66Dhg73eFuXaPY+rXnupwfbdkxgsCS1dGZ9c
+         P08MfHyEC3bsWKRw4LDlMalv7UfMlHlPRcsRgaEeNXFUU2wPPWe87vuCr5gmJYcjCbsO
+         6ZrkGWU5ZJCtYiNp3E1bdjTS5rqoEp2CF1U7+5Nf/3K/iF0bRhcnFAfw2Rz3Wci8uyRe
+         98Jw==
+X-Gm-Message-State: AOAM530kXadP697FdNHV29HXiz+Fw/4mlpWlw9qx7CwHddkwldA21wr8
+        QiDvDg14K7ZmMPLNATaWa6LsiqMgYgOydLi2JwWbcQ==
+X-Google-Smtp-Source: ABdhPJwMXM8NuLDzoP/thvCZjVY6kz43Uri3cwW/h24JYzdfyzX9avpQrxe/MbWAZ1ajQyPrLoC33+Q7ah45LZHWBIQ=
+X-Received: by 2002:a17:902:e9d2:: with SMTP id 18mr2268050plk.336.1592317713771;
+ Tue, 16 Jun 2020 07:28:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG3NODE2.st.com
- (10.75.127.8)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-16_04:2020-06-16,2020-06-16 signatures=0
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Tue, 16 Jun 2020 16:28:22 +0200
+Message-ID: <CAAeHK+z3tVrvWLa591rDZpbUFR0e_CicDmcgccco+KWyH9Yy1g@mail.gmail.com>
+Subject: syzbot USB fuzzing update
+To:     syzkaller <syzkaller@googlegroups.com>
+Cc:     USB list <linux-usb@vger.kernel.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Kostya Serebryany <kcc@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Now that USB OTG driver supports usb role switch by overriding PHY input
-signals (A-Valid, B-Valid and Vbus-Valid), enable it on stm32mp15xx-dkx.
-dr_mode needn't to be forced to Peripheral anymore, it is set to OTG in
-SoC device tree.
-USB role (USB_ROLE_NONE, USB_ROLE_DEVICE, USB_ROLE_HOST) will be provided
-by STUSB1600 Type-C controller driver.
+Hi,
 
-This patch depends on "Add STUSB160x Type-C port controller support"
-series, which is under review.
+As of now all kernel changes required for USB fuzzing have been merged
+into the mainline (the last one during the 5.8-rc1 merge window)
+(woohoo! thanks for everyone's help :), so the USB fuzzing instance
+[1] has been switched to target the Greg's usb-testing tree. As a
+result, testing kernel patches on the USB fuzzing instance now follows
+the same principle as on the mainline instances, with a few caveats
+[2]:
 
-Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
----
- arch/arm/boot/dts/stm32mp15xx-dkx.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+1. You may specify any kernel tree for `syz test` as long as it
+includes all mainline patches up to 5.8-rc1 (technically all dummy-hcd
+and raw-gadget patches up to 5.8-rc1). (Specifying commit ids from the
+usb-fuzzer branch still works too, for now.)
 
-diff --git a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
-index d946e0a02f5c..ab31db801eec 100644
---- a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
-+++ b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
-@@ -595,9 +595,9 @@
- };
- 
- &usbotg_hs {
--	dr_mode = "peripheral";
- 	phys = <&usbphyc_port1 0>;
- 	phy-names = "usb2-phy";
-+	usb-role-switch;
- 	status = "okay";
- };
- 
--- 
-2.17.1
+2. Some of the bugs have reproducers generated on kernel versions with
+an old custom kernel (when fuzzing was performed with in-development
+kernel patches), and therefore those reproducers might not work with
+the mainline kernel. The recommended workflow is to: first, execute a
+`syz test` command on a target tree to make sure that the bug
+reproduces, and then execute a `syz test` command with a fix/debug
+patch.
 
+On top of that, the USB fuzzing instance now has bisection enabled,
+but it will only work for newly introduced bugs (as the old ones will
+just bisect to raw-gadget patches).
+
+In time, as we get fresh bugs and reproducers, these issues should go away.
+
+At this point I think we can consider USB fuzzing support for
+syzkaller completed. There are always some things to be improved of
+course [3], but all the major parts are now in place.
+
+Thanks!
+
+[1] https://syzkaller.appspot.com/upstream?manager=ci2-upstream-usb
+
+[2] https://github.com/google/syzkaller/blob/master/docs/syzbot.md#usb-bugs
+
+[3] https://github.com/google/syzkaller/blob/master/docs/linux/external_fuzzing_usb.md#todo-list
