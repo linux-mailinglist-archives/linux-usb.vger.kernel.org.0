@@ -2,145 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 264C41FD559
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jun 2020 21:21:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5AA31FD58D
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jun 2020 21:49:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726861AbgFQTVg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Jun 2020 15:21:36 -0400
-Received: from mx2.suse.de ([195.135.220.15]:34460 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726597AbgFQTVg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 17 Jun 2020 15:21:36 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 0E869ADC9;
-        Wed, 17 Jun 2020 19:21:38 +0000 (UTC)
-Message-ID: <9450f86c15ecd8435bcdbc395f8674172a975100.camel@suse.de>
-Subject: Re: [PATCH v3 4/9] ARM: dts: bcm2711: Add reset controller to xHCI
- node
-From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-To:     f.fainelli@gmail.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com, tim.gover@raspberrypi.org,
-        linux-pci@vger.kernel.org, andy.shevchenko@gmail.com,
-        mathias.nyman@linux.intel.com, lorenzo.pieralisi@arm.com,
-        devicetree@vger.kernel.org, wahrenst@gmx.net,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Date:   Wed, 17 Jun 2020 21:21:31 +0200
-In-Reply-To: <20200612171334.26385-5-nsaenzjulienne@suse.de>
-References: <20200612171334.26385-1-nsaenzjulienne@suse.de>
-         <20200612171334.26385-5-nsaenzjulienne@suse.de>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-lfIoWXagrdDHMww3Jq4T"
-User-Agent: Evolution 3.36.3 
+        id S1726848AbgFQTtR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Jun 2020 15:49:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52380 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726761AbgFQTtQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Jun 2020 15:49:16 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9305DC061755
+        for <linux-usb@vger.kernel.org>; Wed, 17 Jun 2020 12:49:16 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id d66so1647805pfd.6
+        for <linux-usb@vger.kernel.org>; Wed, 17 Jun 2020 12:49:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:content-transfer-encoding:in-reply-to:references
+         :subject:from:cc:to:date:message-id:user-agent;
+        bh=2BRxeAR+U6q8t+VU1Iu1irJtfc0+1W6flWjeS/gZ7T8=;
+        b=hDONFDdA35jwcrsrcwtljPYfAXJ+ZmME34vuqf3PAughzKJZ1/OAdT5pImyJiR1tAa
+         H6ZZjZniZRTl0cff2Pbfi/effw6aD5YvJ0bViib0/ViMh+lVhNKJ3QrtrkUSmGwSOpwG
+         kpJlOSnb+SyKLA5yi+j/aNOkhYgCdrt7CAC20=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:content-transfer-encoding
+         :in-reply-to:references:subject:from:cc:to:date:message-id
+         :user-agent;
+        bh=2BRxeAR+U6q8t+VU1Iu1irJtfc0+1W6flWjeS/gZ7T8=;
+        b=ABfZcTSDTOAWSUM60Aq/Bf7jxvYiaQqTZOcH5eKuWF3cGBG8PMcQcpJGh27EOAQypJ
+         3PTmHDzbEYlBcmF2NIQc+LJ81Ajv+/gCCXHdl5P8zz3JNpR9jI4DZkz2ZO3/e9EA6YEL
+         qzOnOPG65wGUMpeXvlq+dacr/FhEBHAdmLJhGGmLl9L26VUCkqc6x3nKd8g4uEdkBG59
+         50KM1v4bOhiw6Al3pI1pvHN3c2kOznElEklpd9cMd1XPSki3bbUIWdueGiOeQ8QD+pWK
+         qFswsulIG82Sq4LB4mBxWuQqVDKNimLpCHNLOtulFcMqz7cEcmscOSRpPz/7muIafIgQ
+         tRzA==
+X-Gm-Message-State: AOAM531GNf4FgW/B47LHIEhwkq1dy5FA0JxilNp7+NmD7pAkavCupoEk
+        mRn/Pc31pXpytUltD2iNewnESg==
+X-Google-Smtp-Source: ABdhPJxunyHTm899ykNDEVyFYCetYC6rQz0rgIj2zO9ixuXYkV5AOgtWHO3XXmVghGaFh6muOUaZmw==
+X-Received: by 2002:a65:4bc8:: with SMTP id p8mr372814pgr.418.1592423354823;
+        Wed, 17 Jun 2020 12:49:14 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id m24sm530608pgb.78.2020.06.17.12.49.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Jun 2020 12:49:14 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200616133734.1.I1902d0d48e4f3d4c5b5f1a2008108a4cd3c5ddb5@changeid>
+References: <20200616133734.1.I1902d0d48e4f3d4c5b5f1a2008108a4cd3c5ddb5@changeid>
+Subject: Re: [PATCH] usb: dwc3: qcom: Make sure core device is fully initialized before it is used
+From:   Stephen Boyd <swboyd@chromium.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Manu Gautam <mgautam@codeaurora.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sandeep Maheswaram <sanm@codeaurora.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Andy Gross <agross@kernel.org>, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Date:   Wed, 17 Jun 2020 12:49:13 -0700
+Message-ID: <159242335325.62212.8113067612959846891@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
---=-lfIoWXagrdDHMww3Jq4T
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hi All,
-
-On Fri, 2020-06-12 at 19:13 +0200, Nicolas Saenz Julienne wrote:
-> The chip is hardwired to the board's PCIe bus and needs to be properly
-> setup trough a firmware routine after a PCI fundamental reset. Pass the
-> reset controller phandle that takes care of triggering the
-> initialization to the relevant PCI device.
->
-> Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
->
+Quoting Matthias Kaehlcke (2020-06-16 13:37:37)
+> dwc3_qcom_of_register_core() uses of_platform_populate() to add
+> the dwc3 core device. The driver core will try to probe the device,
+> however this might fail (e.g. due to deferred probing) and
+> of_platform_populate() would still return 0 if the device was
+> successully added to the platform bus. Verify that the core device
+> is actually bound to its driver before using it, defer probing of the
+> dwc3_qcom device if the core device isn't ready (yet).
+>=20
+> Fixes: a4333c3a6ba9 ("usb: dwc3: Add Qualcomm DWC3 glue driver").
+> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
 > ---
->
-> Changes since v2:
->  - Use dt-bindings to access IDs
->
-> Changes since v1:
->  - Update to match new binding
->
->  arch/arm/boot/dts/bcm2711-rpi-4-b.dts | 9 +++++++++
->  1 file changed, 9 insertions(+)
->
-> diff --git a/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
-> b/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
-> index 0cef95058fb0..e20979013414 100644
-> --- a/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
-> +++ b/arch/arm/boot/dts/bcm2711-rpi-4-b.dts
-> @@ -4,6 +4,8 @@
->  #include "bcm2835-rpi.dtsi"
->  #include "bcm283x-rpi-usb-peripheral.dtsi"
->
-> +#include <dt-bindings/reset/raspberrypi,firmware-reset.h>
+> depends on:
+>   https://lore.kernel.org/patchwork/patch/1251661/ ("driver core:Export
+>     the symbol device_is_bound")
+>=20
+>  drivers/usb/dwc3/dwc3-qcom.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>=20
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 1dfd024cd06b..5a9036b050c6 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -537,6 +537,16 @@ static int dwc3_qcom_of_register_core(struct platfor=
+m_device *pdev)
+>                 return -ENODEV;
+>         }
+> =20
+> +       /*
+> +        * A successful return from of_platform_populate() only guarantee=
+s that
+> +        * the core device was added to the platform bus, however it migh=
+t not
+> +        * be bound to its driver (e.g. due to deferred probing). This dr=
+iver
+> +        * requires the core device to be fully initialized, so defer pro=
+bing
+> +        * if it isn't ready (yet).
+> +        */
+> +       if (!device_is_bound(&qcom->dwc3->dev))
+> +               return -EPROBE_DEFER;
+
+Isn't this still broken? i.e. the dwc3 core driver may bind much later
+and then device_is_bound() will return an error here and then we'll
+return to the caller, dwc3_qcom_probe(), and that will depopulate the
+device with of_platform_depopulate(). It seems like we need to run some
+sort of wait for driver to be bound function instead of a one-shot check
+for the driver being bound.
+
 > +
->  / {
->  	compatible =3D "raspberrypi,4-model-b", "brcm,bcm2711";
->  	model =3D "Raspberry Pi 4 Model B";
-> @@ -207,6 +209,13 @@ phy1: ethernet-phy@1 {
->  	};
->  };
->
-> +&pcie0 {
-> +	usb@1,0 {
-> +		reg =3D <0 0 0 0 0>;
-> +		resets =3D <&reset RASPBERRYPI_FIRMWARE_RESET_ID_USB>;
-> +	};
-> +};
-> +
+>         return 0;
 
-I'm now double-guessing this is correct. With this lspci -tv output:
-
-[0000:00]---00.0-[01]----00.0  VIA Technologies, Inc. VL805 USB 3.0 Host Co=
-ntroller
-
-The DT patch should be more like this:
-
-+&pcie0 {
-+       pci@0 {
-+               #address-cells =3D <3>;
-+               #size-cells =3D <2>;
-+               ranges;
-+
-+               reg =3D <0 0 0 0 0>;
-+
-+               usb@1,0 {
-+                       reg =3D <0x10000 0 0 0 0>;
-+                       resets =3D <&reset RASPBERRYPI_FIRMWARE_RESET_ID_US=
-B>;
-+               };
-+       };
-+};
-
-Small details aside I'm pretty confident this is the way to go, but would
-appreciate some comments/validation.
-
-Regards,
-Nicolas
-
-
---=-lfIoWXagrdDHMww3Jq4T
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl7qbTsACgkQlfZmHno8
-x/4CVggAn3Z1hf15FCwZBqJ5vtu95aPDbATL/d0KQ7jGrs66dTwaOP6aBJFw48YF
-0wKRsvMe9LukIRSOBh9HluSEszmQj7/hUGRYcsXaBgmHeOVs9PCXDbJb0/XtgBwF
-3EvokrD1MRS9bcpXwVOCKsMu+wjaGMlCiiJ6wmvD2ffybDPtYA19Xci86XF3Y2WT
-PTeuhEXh+/+wADvH/z0Gi4ivdIAh6FGLbdaSSVgEpf1JChHkSH0anKhw78keHGWK
-WXifnT/7XqG9VtvNNmFvQ1+q7MoyyJlzCn/NXfNuhjmBV+A6gxhefrVRq+P2yeb7
-LzlXGvG8m8RsQQgt1TlpTQwfAjB8KQ==
-=jUpw
------END PGP SIGNATURE-----
-
---=-lfIoWXagrdDHMww3Jq4T--
-
+Also, what about acpi? That has the same problem but it isn't covered by
+the dwc3_qcom_of_register_core() function.
