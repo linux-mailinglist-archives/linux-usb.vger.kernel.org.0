@@ -2,149 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D595C1FD193
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jun 2020 18:08:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40D5C1FD1B4
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jun 2020 18:13:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726761AbgFQQIz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Jun 2020 12:08:55 -0400
-Received: from blockout.pre-sense.de ([213.238.39.74]:44045 "EHLO
-        mail.pre-sense.de" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726597AbgFQQIx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Jun 2020 12:08:53 -0400
-Received: from smtp.pre-sense.de (tetris_b.pre-sense.de [10.9.0.76])
-        by mail.pre-sense.de (Postfix) with ESMTP id 2AFD85E153;
-        Wed, 17 Jun 2020 18:08:48 +0200 (CEST)
-Received: from atlan.none (unknown [212.12.60.67])
-        by smtp.pre-sense.de (Postfix) with ESMTPS id 0F6BB1439;
-        Wed, 17 Jun 2020 18:08:36 +0200 (CEST)
-Subject: Re: Ext. HDDs not working under Linux via USB 3.0 but under Windows
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org
-References: <512118bc-e639-2387-e608-56b7e30fc3b2@pre-sense.de>
- <20200523154817.GA7091@rowland.harvard.edu>
- <34933b01-e4b0-10da-c935-9e6a9a6ae427@pre-sense.de>
- <20200523203349.GA12853@rowland.harvard.edu>
-From:   =?UTF-8?Q?Till_D=c3=b6rges?= <doerges@pre-sense.de>
-Autocrypt: addr=doerges@pre-sense.de; prefer-encrypt=mutual; keydata=
- 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
-Organization: PRESENSE Technologies GmbH
-Message-ID: <5bd5e8be-f8a9-9456-cced-c2bc75455556@pre-sense.de>
-Date:   Wed, 17 Jun 2020 18:02:32 +0200
-User-Agent: Thunderbird
+        id S1726955AbgFQQNY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Jun 2020 12:13:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49872 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726763AbgFQQNV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 17 Jun 2020 12:13:21 -0400
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 263D421852;
+        Wed, 17 Jun 2020 16:13:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592410400;
+        bh=lpXuFKE5NwbxL+Myuog+8MQSFJww+kAisP26ypU0cmA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=hQKB6GGuZecoXsBHLTmTayNjiY525hIvfwz4Ll3WGkpczPsJSiGwwJj3DTf+4SuvZ
+         fs9Ii5ZsPU8SWmCnXu2g4c5AUlDblZbcZohUyYL/dTWwqdHxGVPSckL/8wBUP/xHnR
+         hCzmG6LwsBojyDDqWKl+/v3MKeXu+e7lC68m7oKo=
+Received: by mail-ot1-f47.google.com with SMTP id m2so2034469otr.12;
+        Wed, 17 Jun 2020 09:13:20 -0700 (PDT)
+X-Gm-Message-State: AOAM5316vtWlq+QZYy/dbCUbaAyt6QzvQ8SgyA5UAYGPvz8Yvttv0sX6
+        828JUugR97v4ZgW1tufHWCg707upwvA7ZJF53A==
+X-Google-Smtp-Source: ABdhPJzOrYA9hUrCB4Q/Kh4sdCOF7GT0r5cBhyDZEnpNTZzHilQLgrTjTn8l5D6KcVq8iv4r8qlOvEYhFOIkrU6sScc=
+X-Received: by 2002:a9d:c29:: with SMTP id 38mr7003769otr.107.1592410399429;
+ Wed, 17 Jun 2020 09:13:19 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200523203349.GA12853@rowland.harvard.edu>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20200603120915.14001-1-mike.looijmans@topic.nl>
+ <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.37aec1ae-7fee-44cb-ae24-a10a151abcb3@emailsignatures365.codetwo.com>
+ <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.0d2bd5fa-15cc-4b27-b94e-83614f9e5b38.3fedbcf4-0977-416b-9979-d557fd9233a7@emailsignatures365.codetwo.com>
+ <20200610202255.GA3646369@bogus> <504080a1-cbc9-f781-04bb-12d5679ba697@topic.nl>
+In-Reply-To: <504080a1-cbc9-f781-04bb-12d5679ba697@topic.nl>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 17 Jun 2020 10:13:04 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+6cj99+7cb1vrZ9eLouo-pPWTDjDEOotDQExazdrx-XA@mail.gmail.com>
+Message-ID: <CAL_Jsq+6cj99+7cb1vrZ9eLouo-pPWTDjDEOotDQExazdrx-XA@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: dwc3: Add support for VBUS power control
+To:     Mike Looijmans <mike.looijmans@topic.nl>
+Cc:     Linux USB List <linux-usb@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Alan,
+On Wed, Jun 17, 2020 at 8:38 AM Mike Looijmans <mike.looijmans@topic.nl> wrote:
+>
+>
+> Met vriendelijke groet / kind regards,
+>
+> Mike Looijmans
+> System Expert
+>
+>
+> TOPIC Embedded Products B.V.
+> Materiaalweg 4, 5681 RJ Best
+> The Netherlands
+>
+> T: +31 (0) 499 33 69 69
+> E: mike.looijmans@topicproducts.com
+> W: www.topicproducts.com
+>
+> Please consider the environment before printing this e-mail
+> On 10-06-2020 22:22, Rob Herring wrote:
+> > On Wed, Jun 03, 2020 at 02:09:15PM +0200, Mike Looijmans wrote:
+> >> Support VBUS power control using regulator framework. Enables the regulator
+> >> while the port is in host mode.
+> >>
+> >> Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
+> >> ---
+> >> v2: Add missing devm_regulator_get call which got lost during rebase
+> >>
+> >>   .../devicetree/bindings/usb/dwc3.txt          |  1 +
+> >>   drivers/usb/dwc3/core.c                       | 34 ++++++++++++++-----
+> >>   drivers/usb/dwc3/core.h                       |  4 +++
+> >>   drivers/usb/dwc3/drd.c                        |  6 ++--
+> >>   4 files changed, 33 insertions(+), 12 deletions(-)
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt b/Documentation/devicetree/bindings/usb/dwc3.txt
+> >> index 9946ff9ba735..56bc3f238e2d 100644
+> >> --- a/Documentation/devicetree/bindings/usb/dwc3.txt
+> >> +++ b/Documentation/devicetree/bindings/usb/dwc3.txt
+> >> @@ -37,6 +37,7 @@ Optional properties:
+> >>    - phys: from the *Generic PHY* bindings
+> >>    - phy-names: from the *Generic PHY* bindings; supported names are "usb2-phy"
+> >>      or "usb3-phy".
+> >> + - vbus-supply: Regulator handle that provides the VBUS power.
+> > Does the DWC3 block require Vbus to power itself? Doubtful. This
+> > belongs in a usb-connector node. If the DWC3 driver wants to get the
+> > Vbus supply, it can fetch it from that node.
+> >
+> > Rob
+>
+> Okay, I've been digging into that. But there's no actual driver that
+> binds to a "usb-b-connector" compatible, so how do we get to the
+> vbus-supply from there?
+>
+> [devm_]regulator_get only accepts a device as argument, and will not
+> look into child nodes. The only way to get at the vbus of a child node
+> (or a node linked through a port) would be to hand-code the equivalent
+> of of_regulator_get(), which will not be acceptable.
 
-sorry for the delay. It took me a while to get back to this.
+Doesn't it look into child nodes calling of_get_child_regulator()?
 
-Am 23.05.20 um 22:33 schrieb Alan Stern:
+You're right that it wouldn't work if graph is used. The connector has
+to be either a child of a controller for the connector or the USB
+controller. I'd expect you'd have the former for Type-C, but for
+"usb-b-connector" the parent is more likely just the USB controller.
 
->>>> I'm trying to get external HDDs from Sony to work under Linux with USB 3.0.
->> [...]
->>>>  - PSZ-HA2T: idVendor=054c, idProduct=087d
->>>>  - PSZ-HA1T: idVendor=054c, idProduct=087d
->>>>  - PSZ-HA50: idVendor=054c, idProduct=087d
->>>>  - PSZ-HC1T: idVendor=054c, idProduct=0c4f
->> [...]
->>>> I've also tried several of the quirk settings
->>>> (https://github.com/torvalds/linux/blob/ead751507de86d90fa250431e9990a8b881f713c/drivers/usb/storage/usb.c#L527).
+In any case, having a struct device shouldn't be a requirement and
+most subsystems expose a get function only needing the DT node.
 
-[...]
->>> Try adding an entry to the unusual_uas.h file for the device, specifying 
->>> the USB_FL_NO_REPORT_OPCODES flag.
->>
->> I'm not sure I understand correctly. Do I have to compile the uas Kernel module
->> myself if I want to test a flag?
->>
->> Because with setting the f flag (via options usb-storage quirks=054c:087d:f) the
->> PSZ-HA*1*T starts behaving nicely.
->>
->> --- snip ---
->> $ cat /sys/module/usb_storage/parameters/quirks
->> 054c:087d:f,054c:0c4f:f
->> --- snip ---
->>
->>
->> The PSZ-HA*2*T, however, still doesn't work with that.
-Since the device stopped working under windows, I'm guessing that it's simply broken.
+> Or is it the intention that I write a usb-X-connector device driver
+> first that handles the vbus?
 
-I'll try to get my hands on a new sample.
+That's a kernel implementation detail that is independent of the
+binding, but yes we'll probably need a driver or library helper
+functions eventually. Note that it is possible to have a struct device
+without a driver.
 
-
-The PSZ-HA50 and the PSZ-HA1T work nicely when attached to USB 3.0 with this setting:
-
---- snip ---
-$ cat /sys/module/usb_storage/parameters/quirks
-054c:087d:u
---- snip ---
-
-W/o this quirk they do not work.
-
-
-I'd be surprised if a non-broken PSZ-HA2T behaved any differently.
-
-So perhaps you might want to consider adding that quirk directly into the Kernel?
-
-
-FTR, the PSZ-HC1T just worked.
-
-
-Thanks again!
-
-
-Regards -- Till
--- 
-Dipl.-Inform. Till Dörges                  doerges@pre-sense.de
-PRESENSE Technologies GmbH             Nagelsweg 41, D-20097 HH
-Geschäftsführer/Managing Directors       AG Hamburg, HRB 107844
-Till Dörges, Jürgen Sander               USt-IdNr.: DE263765024
+Rob
