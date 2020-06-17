@@ -2,89 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBD051FC43A
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jun 2020 04:47:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5959B1FC4DF
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jun 2020 06:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726505AbgFQCrB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Jun 2020 22:47:01 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:18229 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726275AbgFQCrB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Jun 2020 22:47:01 -0400
-X-UUID: 29cb5b068b674c549fb17cb674c4c795-20200617
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=ZB3PDgfcBojaJ/fPpU6l0md70bnLTvLTU3jl+XWvIfE=;
-        b=UQNlZQuY0/jpjIyCUaZKGd/4VnP5RTrlQYm4MJYqT6cBPb4hKiOKDz0U1f0kjvNOmwd331xjUs47K8ji18ypFCErWOq5PEmc5xWaGbptHlwbAPqsZsKtKVJXW69RULvBnlcW8Tq0de6144qXGe/K9IJV8zaz1JVe1VU8B6ydnKU=;
-X-UUID: 29cb5b068b674c549fb17cb674c4c795-20200617
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 464138752; Wed, 17 Jun 2020 10:46:56 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 17 Jun 2020 10:46:50 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 17 Jun 2020 10:46:52 +0800
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
-        Sergey Organov <sorganov@gmail.com>,
-        Fabrice Gasnier <fabrice.gasnier@st.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>,
-        Macpaul Lin <macpaul.lin@gmail.com>
-Subject: [PATCH v2] usb: gadget: u_serial: improve performance for large data
-Date:   Wed, 17 Jun 2020 10:46:47 +0800
-Message-ID: <1592362007-7120-1-git-send-email-macpaul.lin@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <1592310884-4307-1-git-send-email-macpaul.lin@mediatek.com>
-References: <1592310884-4307-1-git-send-email-macpaul.lin@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: 341107C8CF0BF6B3E6614FF7FFDF49CB2287241339A1BF5421EE54432FA9522B2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+        id S1725814AbgFQEAO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Jun 2020 00:00:14 -0400
+Received: from mga17.intel.com ([192.55.52.151]:6256 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725536AbgFQEAO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 17 Jun 2020 00:00:14 -0400
+IronPort-SDR: QYsxM9WkPp3YQof9RyZjPIbLqtqTlwgtVZgBVZDqO1EEj5H5pu2MtbDvbqstmM0EBs6H4koDfV
+ pFSd71/Hgkbw==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2020 21:00:12 -0700
+IronPort-SDR: P7JJITls+VcK+ReROrNmm5B8xeFakBdTNJba/+p5kSYiQ8bhLUnumWMWQPn7PtjJqWlQSCJ9vS
+ 8SNXjQn/doww==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,521,1583222400"; 
+   d="scan'208";a="273382466"
+Received: from sgsxdev004.isng.intel.com (HELO localhost) ([10.226.88.13])
+  by orsmga003.jf.intel.com with ESMTP; 16 Jun 2020 21:00:09 -0700
+From:   "Ramuthevar,Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+To:     linux-kernel@vger.kernel.org, balbi@kernel.org, robh@kernel.org,
+        p.zabel@pengutronix.de
+Cc:     gregkh@linuxfoundation.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, cheol.yong.kim@intel.com,
+        qi-ming.wu@intel.com, yin1.li@intel.com,
+        andriy.shevchenko@intel.com,
+        "Ramuthevar,Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Subject: [PATCH v4 0/2]usb : phy: Add USB PHY support on Intel LGM SoC
+Date:   Wed, 17 Jun 2020 11:58:16 +0800
+Message-Id: <20200617035818.54110-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Tm93YWRheXMgc29tZSBlbWJlZGRlZCBzeXN0ZW1zIHVzZSBWQ09NIHRvIHRyYW5zZmVyIGxhcmdl
-IGxvZyBhbmQgZGF0YS4NClRha2UgTFRFIE1PREVNIGFzIGFuIGV4YW1wbGUsIGR1cmluZyB0aGUg
-bG9uZyBkZWJ1Z2dpbmcgc3RhZ2UsIGxhcmdlDQpsb2cgYW5kIGRhdGEgd2VyZSB0cmFuc2ZlciB0
-aHJvdWdoIFZDT00gd2hlbiBkb2luZyBmaWVsZCB0cnkgb3IgaW4NCm9wZXJhdG9yJ3MgbGFiLiBI
-ZXJlIHdlIHN1Z2dlc3Qgc2xpZ2h0bHkgaW5jcmVhc2UgdGhlIHRyYW5zZmVyIGJ1ZmZlcg0KaW4g
-dV9zZXJpYWwuYyBmb3IgcGVyZm9ybWFuY2UgaW1wcm92aW5nLg0KDQpTaWduZWQtb2ZmLWJ5OiBN
-YWNwYXVsIExpbiA8bWFjcGF1bC5saW5AbWVkaWF0ZWsuY29tPg0KLS0tDQogZHJpdmVycy91c2Iv
-Z2FkZ2V0L2Z1bmN0aW9uL3Vfc2VyaWFsLmMgfCAgICA1ICsrKy0tDQogMSBmaWxlIGNoYW5nZWQs
-IDMgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkNCg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMv
-dXNiL2dhZGdldC9mdW5jdGlvbi91X3NlcmlhbC5jIGIvZHJpdmVycy91c2IvZ2FkZ2V0L2Z1bmN0
-aW9uL3Vfc2VyaWFsLmMNCmluZGV4IDNjZmM2ZTIuLmQ3OTEyYTkgMTAwNjQ0DQotLS0gYS9kcml2
-ZXJzL3VzYi9nYWRnZXQvZnVuY3Rpb24vdV9zZXJpYWwuYw0KKysrIGIvZHJpdmVycy91c2IvZ2Fk
-Z2V0L2Z1bmN0aW9uL3Vfc2VyaWFsLmMNCkBAIC04MCw2ICs4MCw3IEBADQogI2RlZmluZSBRVUVV
-RV9TSVpFCQkxNg0KICNkZWZpbmUgV1JJVEVfQlVGX1NJWkUJCTgxOTIJCS8qIFRYIG9ubHkgKi8N
-CiAjZGVmaW5lIEdTX0NPTlNPTEVfQlVGX1NJWkUJODE5Mg0KKyNkZWZpbmUgUkVRX0JVRl9TSVpF
-CQk0MDk2DQogDQogLyogY29uc29sZSBpbmZvICovDQogc3RydWN0IGdzX2NvbnNvbGUgew0KQEAg
-LTI0Nyw3ICsyNDgsNyBAQCBzdGF0aWMgaW50IGdzX3N0YXJ0X3R4KHN0cnVjdCBnc19wb3J0ICpw
-b3J0KQ0KIAkJCWJyZWFrOw0KIA0KIAkJcmVxID0gbGlzdF9lbnRyeShwb29sLT5uZXh0LCBzdHJ1
-Y3QgdXNiX3JlcXVlc3QsIGxpc3QpOw0KLQkJbGVuID0gZ3Nfc2VuZF9wYWNrZXQocG9ydCwgcmVx
-LT5idWYsIGluLT5tYXhwYWNrZXQpOw0KKwkJbGVuID0gZ3Nfc2VuZF9wYWNrZXQocG9ydCwgcmVx
-LT5idWYsIFJFUV9CVUZfU0laRSk7DQogCQlpZiAobGVuID09IDApIHsNCiAJCQl3YWtlX3VwX2lu
-dGVycnVwdGlibGUoJnBvcnQtPmRyYWluX3dhaXQpOw0KIAkJCWJyZWFrOw0KQEAgLTUxNCw3ICs1
-MTUsNyBAQCBzdGF0aWMgaW50IGdzX2FsbG9jX3JlcXVlc3RzKHN0cnVjdCB1c2JfZXAgKmVwLCBz
-dHJ1Y3QgbGlzdF9oZWFkICpoZWFkLA0KIAkgKiBiZSBhcyBzcGVlZHkgYXMgd2UgbWlnaHQgb3Ro
-ZXJ3aXNlIGJlLg0KIAkgKi8NCiAJZm9yIChpID0gMDsgaSA8IG47IGkrKykgew0KLQkJcmVxID0g
-Z3NfYWxsb2NfcmVxKGVwLCBlcC0+bWF4cGFja2V0LCBHRlBfQVRPTUlDKTsNCisJCXJlcSA9IGdz
-X2FsbG9jX3JlcShlcCwgUkVRX0JVRl9TSVpFLCBHRlBfQVRPTUlDKTsNCiAJCWlmICghcmVxKQ0K
-IAkJCXJldHVybiBsaXN0X2VtcHR5KGhlYWQpID8gLUVOT01FTSA6IDA7DQogCQlyZXEtPmNvbXBs
-ZXRlID0gZm47DQotLSANCjEuNy45LjUNCg==
+The USB PHY provides the optimized for low power dissipation while active, idle, or on standby.
+Requires minimal external components, a single resistor, for best operation.
+Supports 10/5-Gbps high-speed data transmission rates through 3-m USB 3.x cable
+---
+v4:
+  - Andy's review comments addressed
+  - drop the excess error debug prints
+  - error check optimized
+  - merge the split line to one line
+v3:
+  - Andy's review comments update
+  - hardcode return value changed to actual return value from the callee
+  - add error check is fixed according to the above
+  - correct the assignment in redundant
+  - combine the split line into one line
+v2:
+  - Address Phillip's review comments
+  - replace devm_reset_control_get() by devm_reset_control_get_exclusive()
+  - re-design the assert and deassert fucntion calls as per review comments
+  - address kbuild bot warnings
+  - add the comments
+v1:
+  - initial version
+
+---
+dt-bindings: usb: Add USB PHY support for Intel LGM SoC
+v4:
+  - No Change
+v3:
+  - No Change
+v2:
+  - No Change
+v1:
+  - initial version
+ 
+
+
+Ramuthevar Vadivel Murugan (2):
+  dt-bindings: usb: Add USB PHY support for Intel LGM SoC
+  usb: phy: Add USB3 PHY support for Intel LGM SoC
+
+ .../devicetree/bindings/usb/intel,lgm-usb-phy.yaml |  53 ++++
+ drivers/usb/phy/Kconfig                            |  11 +
+ drivers/usb/phy/Makefile                           |   1 +
+ drivers/usb/phy/phy-lgm-usb.c                      | 275 +++++++++++++++++++++
+ 4 files changed, 340 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/intel,lgm-usb-phy.yaml
+ create mode 100644 drivers/usb/phy/phy-lgm-usb.c
+
+-- 
+2.11.0
 
