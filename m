@@ -2,106 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C7FF1FCB34
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jun 2020 12:46:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0FD81FCC30
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jun 2020 13:24:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726919AbgFQKpJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Jun 2020 06:45:09 -0400
-Received: from mx2.suse.de ([195.135.220.15]:49664 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725967AbgFQKpJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 17 Jun 2020 06:45:09 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 79F5AAC12;
-        Wed, 17 Jun 2020 10:45:11 +0000 (UTC)
-Message-ID: <b324122e8bd93302215a77d0dcf6d8b2897d3597.camel@suse.de>
-Subject: Re: [PATCH v3 2/9] reset: Add Raspberry Pi 4 firmware reset
- controller
-From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-To:     Philipp Zabel <p.zabel@pengutronix.de>, f.fainelli@gmail.com,
-        gregkh@linuxfoundation.org, wahrenst@gmx.net,
-        linux-kernel@vger.kernel.org
-Cc:     linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com, tim.gover@raspberrypi.org,
-        linux-pci@vger.kernel.org, helgaas@kernel.org,
-        andy.shevchenko@gmail.com, mathias.nyman@linux.intel.com,
-        lorenzo.pieralisi@arm.com
-Date:   Wed, 17 Jun 2020 12:44:59 +0200
-In-Reply-To: <c1ccb77ef0bc56b96a8ad991f8345d0ffbd76fc2.camel@pengutronix.de>
-References: <20200612171334.26385-1-nsaenzjulienne@suse.de>
-         <20200612171334.26385-3-nsaenzjulienne@suse.de>
-         <c1ccb77ef0bc56b96a8ad991f8345d0ffbd76fc2.camel@pengutronix.de>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-KqcsH4zLbO6uBhNeqN+i"
-User-Agent: Evolution 3.36.3 
+        id S1726211AbgFQLYP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Jun 2020 07:24:15 -0400
+Received: from mail-il1-f198.google.com ([209.85.166.198]:46187 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725901AbgFQLYO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Jun 2020 07:24:14 -0400
+Received: by mail-il1-f198.google.com with SMTP id t69so1273371ilk.13
+        for <linux-usb@vger.kernel.org>; Wed, 17 Jun 2020 04:24:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=9VMHnIpjIIoaGQ215cnFAeiATHBF0bn8x+y3MmR8AgQ=;
+        b=QG0+M6QBo3w7ipzivudUGA0+QVmHvl+DF71bkObiZvek8lg1P3jfoLl6o4iX8hcSEE
+         R9Nu1PRsNUzM0Fm0M+YkGd/JbN7NhN+ib9sj4kl1uJXq7tEUCCXclKBe3lbDOduzapzm
+         b0ljltwOV1PRKOe7JrxbiAy1reaLPJiaXOMx9zxVr5HO+4DMW7xokwVsqKv4y5bfFk/A
+         Gse2TtC0dCajzJah9II4+dKoiL/AKUCONneJYmj71FJ9Qd3LBcMeQQ0l0BX2TBQZrGzj
+         S5MZ9aOxx7LtHh1FQQykhst+/3iGcwMvNL+xIGRl+OLdVBl+51gc8eISAfVftLIYCz89
+         YpNQ==
+X-Gm-Message-State: AOAM533jiftnV//8Pkm7BcTLS/Qrul1S6+bBXMrDOBgTfWUdpPNHwFTW
+        F2mWXxFJzf0Ik/nYiF79FwaE0Kw/ttxWYukKkBTiXFubbbJL
+X-Google-Smtp-Source: ABdhPJz+MKzCz57Sskv3R4M7HkZVgsQXcDzJSbuIE2ID1x4nS22bOI4xWyIeeKHQACnWTf4GEd01RV7L8EZRL/Fg5EPei9GeEXff
 MIME-Version: 1.0
+X-Received: by 2002:a02:6305:: with SMTP id j5mr29038718jac.140.1592393053856;
+ Wed, 17 Jun 2020 04:24:13 -0700 (PDT)
+Date:   Wed, 17 Jun 2020 04:24:13 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005166b905a845e639@google.com>
+Subject: WARNING in corrupted/usb_submit_urb
+From:   syzbot <syzbot+120d387f677320f6a57c@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, ingrassia@epigenesys.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hello,
 
---=-KqcsH4zLbO6uBhNeqN+i
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+syzbot found the following crash on:
 
-On Wed, 2020-06-17 at 12:02 +0200, Philipp Zabel wrote:
-> Hi Nicolas,
->=20
-> On Fri, 2020-06-12 at 19:13 +0200, Nicolas Saenz Julienne wrote:
-> > Raspberry Pi 4's co-processor controls some of the board's HW
-> > initialization process, but it's up to Linux to trigger it when
-> > relevant. Introduce a reset controller capable of interfacing with
-> > RPi4's co-processor that models these firmware initialization routines =
-as
-> > reset lines.
-> >=20
-> > Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-> > Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
->=20
-> Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+HEAD commit:    d6ff8147 usb: gadget: add raw-gadget interface
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=140052c3e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=90a3d9bed5648419
+dashboard link: https://syzkaller.appspot.com/bug?extid=120d387f677320f6a57c
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16195fd9e00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1610f2c3e00000
 
-Thanks!
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+120d387f677320f6a57c@syzkaller.appspotmail.com
 
-> If there is a good reason for the single DT specified reset id, I can
-> pick up patches 1 and 2.
-
-The idea here is to make sure we're reasonably covered against further chan=
-ges
-in firmware. If we define constraints too narrow it can be a pain to suppor=
-t
-new features without breaking backwards compatibility in dt.
-
-> If you change the dts patch 4 to use a number instead of the reset id
-> define for now, there wouldn't even be a dependency between these reset
-> and dts patches.
-
-I was under the impression that having an explicit definition was nice to h=
-ave.
-What's troubling about creating the dependency?
-
-Regards,
-Nicolas
+ati_remote 1-1:0.0: Unknown Medion X10 receiver, using default ati_remote Medion keymap
+------------[ cut here ]------------
+usb 1-1: BOGUS urb xfer, pipe 1 != type 3
+WARNING: CPU: 1 PID: 81 at drivers/usb/core/urb.c:478 usb_submit_urb+0x1188/0x1460 drivers/usb/core/urb.c:478
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 1 PID: 81 Comm: kworker/1:1 Not tainted 5.6.0-rc3-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xef/0x16e lib/dump_stack.c:118
+ panic+0x2aa/0x6e1 kernel/panic.c:221
+ __warn.cold+0x2f/0x30 kernel/panic.c:582
+ report_bug+0x27b/0x2f0 lib/bug.c:195
+ fixup_bug arch/x86/kernel/traps.c:174 [inline]
+ fixup_bug arch/x86/kernel/traps.c:169 [inline]
+ do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:267
+ do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
+ invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
+RIP: 0010:usb_submit_urb+0x1188/0x1460 drivers/usb/core/urb.c:478
+Code: 4d 85 ed 74 46 e8 18 ce dd fd 4c 89 f7 e8 d0 5c 17 ff 41 89 d8 44 89 e1 4c 89 ea 48 89 c6 48 c7 c7 e0 e7 3b 86 e8 a0 5f b2 fd <0f> 0b e9 20 f4 ff ff e8 ec cd dd fd 0f 1f 44 00 00 e8 e2 cd dd fd
+RSP: 0018:ffff8881d8a0f0b8 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
 
 
---=-KqcsH4zLbO6uBhNeqN+i
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl7p9CwACgkQlfZmHno8
-x/7mAAgAgVtbDaKmFM/GZJ/GA7I4dmOhQBlzhWyHsjI2Hp+6ZFKIGY+b9KqVzMdX
-5nQP/wqDPSfiq8LzYvCRWo0totXpsNghOxPEIp9RAbhDDp/la2hLGKtQei0BxmeU
-sl3JZAVMm1WpgjN7KTX7wTYttJ+NfRoGa2JRtyw2joFKcBhJUN3OCnC398MJJGfA
-6Dqy4My6ptKkdJeQL/7KO6vgojwV52bcvEl/lnCD9IdeKJdyNdR8VqWN66Uhr+SW
-SDwBOUcoE82o/bzlYOuQ4wPpDKAEwibDXQcRmapmYiKL1HackBHYB40sWjp2VuOh
-8MBdmCLRl4oR7yWnPESbeQOwEshLGg==
-=9ROq
------END PGP SIGNATURE-----
-
---=-KqcsH4zLbO6uBhNeqN+i--
-
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
