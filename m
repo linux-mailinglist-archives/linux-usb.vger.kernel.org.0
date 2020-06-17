@@ -2,80 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 550E11FCFDB
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jun 2020 16:40:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D595C1FD193
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jun 2020 18:08:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727073AbgFQOjq convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 17 Jun 2020 10:39:46 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([146.101.78.151]:23775 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726954AbgFQOjp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Jun 2020 10:39:45 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-195-Gpypvq5LNJmsm7HP-7qKTQ-1; Wed, 17 Jun 2020 15:39:41 +0100
-X-MC-Unique: Gpypvq5LNJmsm7HP-7qKTQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Wed, 17 Jun 2020 15:39:40 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Wed, 17 Jun 2020 15:39:40 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Jeremy Kerr' <jk@ozlabs.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-CC:     Allan Chou <allan@asix.com.tw>, Freddy Xin <freddy@asix.com.tw>,
-        "Peter Fink" <pfink@christ-es.de>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH] net: usb: ax88179_178a: fix packet alignment padding
-Thread-Topic: [PATCH] net: usb: ax88179_178a: fix packet alignment padding
-Thread-Index: AQHWQsBxb9lhlKPSLUytvkfxXgQEpqjc5Apg
-Date:   Wed, 17 Jun 2020 14:39:40 +0000
-Message-ID: <2136b5e36d804821846064fafbf72941@AcuMS.aculab.com>
-References: <20200615025456.30219-1-jk@ozlabs.org>
-In-Reply-To: <20200615025456.30219-1-jk@ozlabs.org>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S1726761AbgFQQIz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Jun 2020 12:08:55 -0400
+Received: from blockout.pre-sense.de ([213.238.39.74]:44045 "EHLO
+        mail.pre-sense.de" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726597AbgFQQIx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Jun 2020 12:08:53 -0400
+Received: from smtp.pre-sense.de (tetris_b.pre-sense.de [10.9.0.76])
+        by mail.pre-sense.de (Postfix) with ESMTP id 2AFD85E153;
+        Wed, 17 Jun 2020 18:08:48 +0200 (CEST)
+Received: from atlan.none (unknown [212.12.60.67])
+        by smtp.pre-sense.de (Postfix) with ESMTPS id 0F6BB1439;
+        Wed, 17 Jun 2020 18:08:36 +0200 (CEST)
+Subject: Re: Ext. HDDs not working under Linux via USB 3.0 but under Windows
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org
+References: <512118bc-e639-2387-e608-56b7e30fc3b2@pre-sense.de>
+ <20200523154817.GA7091@rowland.harvard.edu>
+ <34933b01-e4b0-10da-c935-9e6a9a6ae427@pre-sense.de>
+ <20200523203349.GA12853@rowland.harvard.edu>
+From:   =?UTF-8?Q?Till_D=c3=b6rges?= <doerges@pre-sense.de>
+Autocrypt: addr=doerges@pre-sense.de; prefer-encrypt=mutual; keydata=
+ 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
+Organization: PRESENSE Technologies GmbH
+Message-ID: <5bd5e8be-f8a9-9456-cced-c2bc75455556@pre-sense.de>
+Date:   Wed, 17 Jun 2020 18:02:32 +0200
+User-Agent: Thunderbird
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20200523203349.GA12853@rowland.harvard.edu>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Jeremy Kerr
-> Sent: 15 June 2020 03:55
+Hi Alan,
 
-While you are looking as this driver you might want to worry
-about what it sets skp->truesize to.
+sorry for the delay. It took me a while to get back to this.
 
-> --- a/drivers/net/usb/ax88179_178a.c
-> +++ b/drivers/net/usb/ax88179_178a.c
-> @@ -1414,10 +1414,10 @@ static int ax88179_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
->  		}
-> 
->  		if (pkt_cnt == 0) {
-> -			/* Skip IP alignment psudo header */
-> -			skb_pull(skb, 2);
->  			skb->len = pkt_len;
-> -			skb_set_tail_pointer(skb, pkt_len);
-> +			/* Skip IP alignment pseudo header */
-> +			skb_pull(skb, 2);
-> +			skb_set_tail_pointer(skb, skb->len);
->  			skb->truesize = pkt_len + sizeof(struct sk_buff);
+Am 23.05.20 um 22:33 schrieb Alan Stern:
 
-IIRC the memory allocated to the packet is likely to be over 64k.
+>>>> I'm trying to get external HDDs from Sony to work under Linux with USB 3.0.
+>> [...]
+>>>>  - PSZ-HA2T: idVendor=054c, idProduct=087d
+>>>>  - PSZ-HA1T: idVendor=054c, idProduct=087d
+>>>>  - PSZ-HA50: idVendor=054c, idProduct=087d
+>>>>  - PSZ-HC1T: idVendor=054c, idProduct=0c4f
+>> [...]
+>>>> I've also tried several of the quirk settings
+>>>> (https://github.com/torvalds/linux/blob/ead751507de86d90fa250431e9990a8b881f713c/drivers/usb/storage/usb.c#L527).
 
-	David
+[...]
+>>> Try adding an entry to the unusual_uas.h file for the device, specifying 
+>>> the USB_FL_NO_REPORT_OPCODES flag.
+>>
+>> I'm not sure I understand correctly. Do I have to compile the uas Kernel module
+>> myself if I want to test a flag?
+>>
+>> Because with setting the f flag (via options usb-storage quirks=054c:087d:f) the
+>> PSZ-HA*1*T starts behaving nicely.
+>>
+>> --- snip ---
+>> $ cat /sys/module/usb_storage/parameters/quirks
+>> 054c:087d:f,054c:0c4f:f
+>> --- snip ---
+>>
+>>
+>> The PSZ-HA*2*T, however, still doesn't work with that.
+Since the device stopped working under windows, I'm guessing that it's simply broken.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+I'll try to get my hands on a new sample.
 
+
+The PSZ-HA50 and the PSZ-HA1T work nicely when attached to USB 3.0 with this setting:
+
+--- snip ---
+$ cat /sys/module/usb_storage/parameters/quirks
+054c:087d:u
+--- snip ---
+
+W/o this quirk they do not work.
+
+
+I'd be surprised if a non-broken PSZ-HA2T behaved any differently.
+
+So perhaps you might want to consider adding that quirk directly into the Kernel?
+
+
+FTR, the PSZ-HC1T just worked.
+
+
+Thanks again!
+
+
+Regards -- Till
+-- 
+Dipl.-Inform. Till Dörges                  doerges@pre-sense.de
+PRESENSE Technologies GmbH             Nagelsweg 41, D-20097 HH
+Geschäftsführer/Managing Directors       AG Hamburg, HRB 107844
+Till Dörges, Jürgen Sander               USt-IdNr.: DE263765024
