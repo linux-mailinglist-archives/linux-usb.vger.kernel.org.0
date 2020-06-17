@@ -2,130 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A27171FC5B2
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jun 2020 07:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33E9C1FC5C0
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jun 2020 07:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726830AbgFQFfa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Jun 2020 01:35:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32998 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726497AbgFQFf3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Jun 2020 01:35:29 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBF2C06174E
-        for <linux-usb@vger.kernel.org>; Tue, 16 Jun 2020 22:35:28 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id n6so691528otl.0
-        for <linux-usb@vger.kernel.org>; Tue, 16 Jun 2020 22:35:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fHG/w1e8yLTHpzr4hwGwsEUCs6bE9NYtF8uNRp5AdUU=;
-        b=nwPD8fK4PQg4o/1yR3F4U2FVp6SkohvK02Jo12KlG+lE4CvKKo3uzuUsUCaAuOWM+i
-         BweN6R9rl/Oj0UT+wqVgkPLpVzXF0IFCS/HlQBzPpnYtebAOxK/D6EW8wOKGF8ISakGO
-         Pvfciz4gpGntdifhUsMsh2wF7K/rQ2FXSQbdXIp33MuphrUuj2cmJhrPl2pDV1Ze8nX8
-         AViBLqFenVRVbqQu496+XkSpl9cEnBlhOR1DgK2Qi0IHXqItacw7cYFZFcDGoy39ecrm
-         4HTGDZT/vtkQJ0PUBvXO+8SgoWoEsvECFm5y+bj3z7JQA1sJXAfWcUFA23sUN0ut34wK
-         DmKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fHG/w1e8yLTHpzr4hwGwsEUCs6bE9NYtF8uNRp5AdUU=;
-        b=jcNf/6Yjwax3XMMAU6oESXuONVfxNMaYbhlwxpX8r1whlpDPQ+EJH5MmPKrJQbXtj5
-         7+8vQ2ChAbP7scalN4HpYfxTGN0fNxl0quLhqXYH4q7GrV2S6F1mAFyWZ1eTl3akMkPK
-         Fz1ybrfTqZG/d2QwaSTc2REsolT0azDt5NMXSDa+HoE4eFLEnIK62rU+hL5NjIHyrlOa
-         yCZl4a8uY4gUnOW0D16O0DK7Z/7eCbgfh7p6J4yINsZipRnnq1WzCwrF7NF8GKtSGAJp
-         SMGuhQ9iO3d3m5itv/hWWnmvbUq4XnIVf2Uy+w7cFk+DAJO/9iXbkP3KmEUVX8H9MV+J
-         qkzw==
-X-Gm-Message-State: AOAM532hCVBaGOdS2r5m4Aid0QxQgivNm0dvwNmAKbCWuFITot2N+Rud
-        T1rBo1xb0K9LWfinICbI2bYxqw==
-X-Google-Smtp-Source: ABdhPJwg1mt33T11n882LJlXCOpmqr4Mfv8iLvxPSI8/+BHZ4PTHoIG3vNbEKlfuxtahElyRBc88sw==
-X-Received: by 2002:a9d:6949:: with SMTP id p9mr5645333oto.7.1592372128046;
-        Tue, 16 Jun 2020 22:35:28 -0700 (PDT)
-Received: from yoga (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id 53sm4582582otv.22.2020.06.16.22.35.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jun 2020 22:35:27 -0700 (PDT)
-Date:   Tue, 16 Jun 2020 22:35:24 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Felipe Balbi <balbi@kernel.org>,
+        id S1725929AbgFQFnT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Jun 2020 01:43:19 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:1574 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725851AbgFQFnS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Jun 2020 01:43:18 -0400
+X-UUID: 4d3606af9abb4eb3b71ff1d3b9ba594b-20200617
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=rdDoFRdKNzLFxd2DJUrNxctB8vmIe5DS4Jzw+A+aOnM=;
+        b=bIYfQxQM3ixEWbj5ddGKb24ocTww1yEbDTKx/93ZPyi8XNFz2M6uH+9eRIrW6rDf0VbYOgfD5Y1BnL2k0VWGBSeg0QcT7JLHLhZxjWt1NpASrJ/eEmDrLjMo8FRJbFjPFx3Qab69Dl11ksLchHh5nmX6ZEFRj1y53VoKuxR63zM=;
+X-UUID: 4d3606af9abb4eb3b71ff1d3b9ba594b-20200617
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 854175745; Wed, 17 Jun 2020 13:43:14 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs08n1.mediatek.inc (172.21.101.55) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 17 Jun 2020 13:43:12 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 17 Jun 2020 13:43:12 +0800
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Manu Gautam <mgautam@codeaurora.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sandeep Maheswaram <sanm@codeaurora.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>
-Subject: Re: [PATCH] usb: dwc3: qcom: Make sure core device is fully
- initialized before it is used
-Message-ID: <20200617053524.GD11847@yoga>
-References: <20200616133734.1.I1902d0d48e4f3d4c5b5f1a2008108a4cd3c5ddb5@changeid>
+        Felipe Balbi <balbi@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
+        Sergey Organov <sorganov@gmail.com>,
+        Fabrice Gasnier <fabrice.gasnier@st.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
+        Macpaul Lin <macpaul.lin@mediatek.com>,
+        Macpaul Lin <macpaul.lin@gmail.com>
+Subject: [PATCH v3] usb: gadget: u_serial: improve performance for large data
+Date:   Wed, 17 Jun 2020 13:42:57 +0800
+Message-ID: <1592372577-7986-1-git-send-email-macpaul.lin@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
+In-Reply-To: <1592362007-7120-1-git-send-email-macpaul.lin@mediatek.com>
+References: <1592362007-7120-1-git-send-email-macpaul.lin@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200616133734.1.I1902d0d48e4f3d4c5b5f1a2008108a4cd3c5ddb5@changeid>
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue 16 Jun 13:37 PDT 2020, Matthias Kaehlcke wrote:
+Tm93YWRheXMgc29tZSBlbWJlZGRlZCBzeXN0ZW1zIHVzZSBWQ09NIHRvIHRyYW5zZmVyIGxhcmdl
+IGxvZyBhbmQgZGF0YS4NClRha2UgTFRFIE1PREVNIGFzIGFuIGV4YW1wbGUsIGR1cmluZyB0aGUg
+bG9uZyBkZWJ1Z2dpbmcgc3RhZ2UsIGxhcmdlDQpsb2cgYW5kIGRhdGEgd2VyZSB0cmFuc2ZlciB0
+aHJvdWdoIFZDT00gd2hlbiBkb2luZyBmaWVsZCB0cnkgb3IgaW4NCm9wZXJhdG9yJ3MgbGFiLiBI
+ZXJlIHdlIHN1Z2dlc3Qgc2xpZ2h0bHkgaW5jcmVhc2UgdGhlIHRyYW5zZmVyIGJ1ZmZlcg0KaW4g
+dV9zZXJpYWwuYyBmb3IgcGVyZm9ybWFuY2UgaW1wcm92aW5nLg0KDQpTaWduZWQtb2ZmLWJ5OiBN
+YWNwYXVsIExpbiA8bWFjcGF1bC5saW5AbWVkaWF0ZWsuY29tPg0KLS0tDQpDaGFuZ2VzIGZvciB2
+MjoNCiAgLSBEcm9wIHByZXZpb3VzIHBhdGNoIGZvciBhZGRpbmcgZmxhZyB3aGljaCBpbmRpY2F0
+ZXMgaGFyZHdhcmUgY2FwYWJpbGl0eSBpbg0KICAgIGdhZGdldC5oIGFuZCBpbiBETUEgZW5naW5l
+IGFjY29yZGluZyB0byBBbGFuJ3Mgc3VnZ2VzdGlvbi4gVGhhbmtzLg0KICAtIFJlcGxhY2UgcmVx
+dWVzdGVkIGJ1ZmZlciBzaXplICJSRVFfQlVGX1NJWkUiIGluc3RlYWQgb2YgY2hlY2tpbmcgaGFy
+ZHdhcmUNCiAgICBjYXBhYmlsaXR5Lg0KICAtIFJlZmluZSBjb21taXQgbWVzc2FnZXMuDQpDaGFu
+Z2VzIGZvciB2MzoNCiAgLSBDb2RlOiBubyBjaGFuZ2UuDQogICAgQ29tbWl0OiBBZGQgbWlzc2lu
+ZyBjaGFuZ2UgbG9nIGluIHYyLg0KDQogZHJpdmVycy91c2IvZ2FkZ2V0L2Z1bmN0aW9uL3Vfc2Vy
+aWFsLmMgfCAgICA1ICsrKy0tDQogMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMiBk
+ZWxldGlvbnMoLSkNCg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi91
+X3NlcmlhbC5jIGIvZHJpdmVycy91c2IvZ2FkZ2V0L2Z1bmN0aW9uL3Vfc2VyaWFsLmMNCmluZGV4
+IDNjZmM2ZTIuLmQ3OTEyYTkgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL3VzYi9nYWRnZXQvZnVuY3Rp
+b24vdV9zZXJpYWwuYw0KKysrIGIvZHJpdmVycy91c2IvZ2FkZ2V0L2Z1bmN0aW9uL3Vfc2VyaWFs
+LmMNCkBAIC04MCw2ICs4MCw3IEBADQogI2RlZmluZSBRVUVVRV9TSVpFCQkxNg0KICNkZWZpbmUg
+V1JJVEVfQlVGX1NJWkUJCTgxOTIJCS8qIFRYIG9ubHkgKi8NCiAjZGVmaW5lIEdTX0NPTlNPTEVf
+QlVGX1NJWkUJODE5Mg0KKyNkZWZpbmUgUkVRX0JVRl9TSVpFCQk0MDk2DQogDQogLyogY29uc29s
+ZSBpbmZvICovDQogc3RydWN0IGdzX2NvbnNvbGUgew0KQEAgLTI0Nyw3ICsyNDgsNyBAQCBzdGF0
+aWMgaW50IGdzX3N0YXJ0X3R4KHN0cnVjdCBnc19wb3J0ICpwb3J0KQ0KIAkJCWJyZWFrOw0KIA0K
+IAkJcmVxID0gbGlzdF9lbnRyeShwb29sLT5uZXh0LCBzdHJ1Y3QgdXNiX3JlcXVlc3QsIGxpc3Qp
+Ow0KLQkJbGVuID0gZ3Nfc2VuZF9wYWNrZXQocG9ydCwgcmVxLT5idWYsIGluLT5tYXhwYWNrZXQp
+Ow0KKwkJbGVuID0gZ3Nfc2VuZF9wYWNrZXQocG9ydCwgcmVxLT5idWYsIFJFUV9CVUZfU0laRSk7
+DQogCQlpZiAobGVuID09IDApIHsNCiAJCQl3YWtlX3VwX2ludGVycnVwdGlibGUoJnBvcnQtPmRy
+YWluX3dhaXQpOw0KIAkJCWJyZWFrOw0KQEAgLTUxNCw3ICs1MTUsNyBAQCBzdGF0aWMgaW50IGdz
+X2FsbG9jX3JlcXVlc3RzKHN0cnVjdCB1c2JfZXAgKmVwLCBzdHJ1Y3QgbGlzdF9oZWFkICpoZWFk
+LA0KIAkgKiBiZSBhcyBzcGVlZHkgYXMgd2UgbWlnaHQgb3RoZXJ3aXNlIGJlLg0KIAkgKi8NCiAJ
+Zm9yIChpID0gMDsgaSA8IG47IGkrKykgew0KLQkJcmVxID0gZ3NfYWxsb2NfcmVxKGVwLCBlcC0+
+bWF4cGFja2V0LCBHRlBfQVRPTUlDKTsNCisJCXJlcSA9IGdzX2FsbG9jX3JlcShlcCwgUkVRX0JV
+Rl9TSVpFLCBHRlBfQVRPTUlDKTsNCiAJCWlmICghcmVxKQ0KIAkJCXJldHVybiBsaXN0X2VtcHR5
+KGhlYWQpID8gLUVOT01FTSA6IDA7DQogCQlyZXEtPmNvbXBsZXRlID0gZm47DQotLSANCjEuNy45
+LjUNCg==
 
-> dwc3_qcom_of_register_core() uses of_platform_populate() to add
-> the dwc3 core device. The driver core will try to probe the device,
-> however this might fail (e.g. due to deferred probing) and
-> of_platform_populate() would still return 0 if the device was
-> successully added to the platform bus. Verify that the core device
-> is actually bound to its driver before using it, defer probing of the
-> dwc3_qcom device if the core device isn't ready (yet).
-> 
-> Fixes: a4333c3a6ba9 ("usb: dwc3: Add Qualcomm DWC3 glue driver").
-> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-
-I wish there was a better way than to unregistering the dwc3 device when
-this happens. E.g. if dwc3 fails for some other reason we still would
-keep probe deferring the qcom part and each time attempt to reprobe dwc3.
-
-But with the way the device model is used here I don't have any better
-suggestions, and until a better solution appears this does improve the
-situation...
-
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
-Regards,
-Bjorn
-
-> ---
-> depends on:
->   https://lore.kernel.org/patchwork/patch/1251661/ ("driver core:Export
->     the symbol device_is_bound")
-> 
->  drivers/usb/dwc3/dwc3-qcom.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index 1dfd024cd06b..5a9036b050c6 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -537,6 +537,16 @@ static int dwc3_qcom_of_register_core(struct platform_device *pdev)
->  		return -ENODEV;
->  	}
->  
-> +	/*
-> +	 * A successful return from of_platform_populate() only guarantees that
-> +	 * the core device was added to the platform bus, however it might not
-> +	 * be bound to its driver (e.g. due to deferred probing). This driver
-> +	 * requires the core device to be fully initialized, so defer probing
-> +	 * if it isn't ready (yet).
-> +	 */
-> +	if (!device_is_bound(&qcom->dwc3->dev))
-> +		return -EPROBE_DEFER;
-> +
->  	return 0;
->  }
->  
-> -- 
-> 2.27.0.290.gba653c62da-goog
-> 
