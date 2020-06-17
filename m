@@ -2,89 +2,180 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 949A51FC9DD
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jun 2020 11:32:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85DE41FCA12
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jun 2020 11:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726542AbgFQJcE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Jun 2020 05:32:04 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:6303 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725554AbgFQJcE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Jun 2020 05:32:04 -0400
-X-UUID: c0668f6be54f4e37ab9d06e6f23eb73e-20200617
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=2Uc00OvqQOe/lmf1GLJboKZ6rmYpxT2fY8sxKg5cx9g=;
-        b=ZlyqApBEl6yJTqJf8/+N/2hMBVo8HTj2M/pCHiHT4xFyMoKXLj9WOCjtkomaxnPAk2ztD0NlVVMV1IdKOLk8YA5796S7uhSl8u2XvkSgqjRNR8yJ2cJMuO788f12ENrjvo+fkkNXHZ/Lq+ziqIGe2/3Tt9YIKalJDn4g2EvOLsA=;
-X-UUID: c0668f6be54f4e37ab9d06e6f23eb73e-20200617
-Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw01.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1683399060; Wed, 17 Jun 2020 17:31:59 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs08n2.mediatek.inc (172.21.101.56) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 17 Jun 2020 17:31:55 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by mtkcas07.mediatek.inc
- (172.21.101.84) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 17 Jun
- 2020 17:31:56 +0800
-Received: from [172.21.77.33] (172.21.77.33) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 17 Jun 2020 17:31:56 +0800
-Message-ID: <1592386317.5395.2.camel@mtkswgap22>
-Subject: Re: [PATCH 4/6] usb: musb: mediatek: add reset FADDR to zero in
- reset interrupt handle
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Macpaul Lin <macpaul@gmail.com>, Bin Liu <b-liu@ti.com>,
-        <linux-usb@vger.kernel.org>, <stable@vger.kernel.org>
-Date:   Wed, 17 Jun 2020 17:31:57 +0800
-In-Reply-To: <20200617085804.GA1736257@kroah.com>
-References: <20200525025049.3400-1-b-liu@ti.com>
-         <20200525025049.3400-5-b-liu@ti.com>
-         <CACCg+XNfOaE7LE01NPeR6amvCTyrJaJ3sj3AF+Se49T0YFy_Uw@mail.gmail.com>
-         <20200617085804.GA1736257@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
+        id S1726496AbgFQJpC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Jun 2020 05:45:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58598 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725536AbgFQJpC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 17 Jun 2020 05:45:02 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D789F207E8;
+        Wed, 17 Jun 2020 09:44:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592387100;
+        bh=qHnoIIiMCJHQD3PRVlt1FQDon52HF/kXtPa6XVkCzYs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NqbtHA5J1U0PToLQ0IBvcazWgFIKY+tK8OEcbZiVgJEbXE1H0tiigScdm4WZIjCfv
+         25YCHYjeMPN8T+ZQ8QSPToh+Q5QS2gpQUVMx8v2YGUc1DVOwpALnWt/dVGgOglv99F
+         tZLFtg2rc2kUTU0YPF+mvHGd0qvGiAJtO8NrJrFg=
+Date:   Wed, 17 Jun 2020 11:44:53 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     =?utf-8?B?77+977+977+977+977+977+9?= <jh0801.jung@samsung.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH] ANDROID: sound: usb: Add vendor's hooking interface
+Message-ID: <20200617094453.GA1944221@kroah.com>
+References: <CGME20200617020305epcas2p35de377f38ec42a41adb47a49dfc33791@epcas2p3.samsung.com>
+ <1592358930-28684-1-git-send-email-jh0801.jung@samsung.com>
+ <20200617051738.GB1331778@kroah.com>
+ <20200617075249.GA1547648@kroah.com>
+ <033901d64487$2bab03f0$83010bd0$@samsung.com>
 MIME-Version: 1.0
-X-MTK:  N
-X-TM-SNTS-SMTP: A27705E4EDBE49C719E912324865AE26FA61B6C51002A43C6A76078686B110122000:8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <033901d64487$2bab03f0$83010bd0$@samsung.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gV2VkLCAyMDIwLTA2LTE3IGF0IDEwOjU4ICswMjAwLCBHcmVnIEtyb2FoLUhhcnRtYW4gd3Jv
-dGU6DQo+IE9uIFdlZCwgSnVuIDE3LCAyMDIwIGF0IDA0OjE3OjA3UE0gKzA4MDAsIE1hY3BhdWwg
-TGluIHdyb3RlOg0KPiA+IEJpbiBMaXUgPGItbGl1QHRpLmNvbT4g5pa8IDIwMjDlubQ15pyIMjXm
-l6Ug6YCx5LiAIOS4iuWNiDEwOjUz5a+r6YGT77yaDQo+ID4gPg0KPiA+ID4gRnJvbTogTWFjcGF1
-bCBMaW4gPG1hY3BhdWwubGluQG1lZGlhdGVrLmNvbT4NCj4gPiA+DQo+ID4gPiBXaGVuIHJlY2Vp
-dmluZyByZXNldCBpbnRlcnJ1cHQsIEZBRERSIG5lZWQgdG8gYmUgcmVzZXQgdG8gemVybyBpbg0K
-PiA+ID4gcGVyaXBoZXJhbCBtb2RlLiBPdGhlcndpc2UgZXAwIGNhbm5vdCBkbyBlbnVtZXJhdGlv
-biB3aGVuIHJlLXBsdWdnaW5nIFVTQg0KPiA+ID4gY2FibGUuDQo+ID4gPg0KPiA+ID4gU2lnbmVk
-LW9mZi1ieTogTWFjcGF1bCBMaW4gPG1hY3BhdWwubGluQG1lZGlhdGVrLmNvbT4NCj4gPiA+IEFj
-a2VkLWJ5OiBNaW4gR3VvIDxtaW4uZ3VvQG1lZGlhdGVrLmNvbT4NCj4gPiA+IFNpZ25lZC1vZmYt
-Ynk6IEJpbiBMaXUgPGItbGl1QHRpLmNvbT4NCj4gPiA+IC0tLQ0KPiA+ID4gIGRyaXZlcnMvdXNi
-L211c2IvbWVkaWF0ZWsuYyB8IDYgKysrKysrDQo+ID4gPiAgMSBmaWxlIGNoYW5nZWQsIDYgaW5z
-ZXJ0aW9ucygrKQ0KPiA+ID4NCj4gPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9tdXNiL21l
-ZGlhdGVrLmMgYi9kcml2ZXJzL3VzYi9tdXNiL21lZGlhdGVrLmMNCj4gPiA+IGluZGV4IDYxOTZi
-MGU4ZDc3ZC4uZWViZWFkZDI2OTQ2IDEwMDY0NA0KPiA+ID4gLS0tIGEvZHJpdmVycy91c2IvbXVz
-Yi9tZWRpYXRlay5jDQo+ID4gPiArKysgYi9kcml2ZXJzL3VzYi9tdXNiL21lZGlhdGVrLmMNCj4g
-PiA+IEBAIC0yMDgsNiArMjA4LDEyIEBAIHN0YXRpYyBpcnFyZXR1cm5fdCBnZW5lcmljX2ludGVy
-cnVwdChpbnQgaXJxLCB2b2lkICpfX2hjaSkNCj4gPiA+ICAgICAgICAgbXVzYi0+aW50X3J4ID0g
-bXVzYl9jbGVhcncobXVzYi0+bXJlZ3MsIE1VU0JfSU5UUlJYKTsNCj4gPiA+ICAgICAgICAgbXVz
-Yi0+aW50X3R4ID0gbXVzYl9jbGVhcncobXVzYi0+bXJlZ3MsIE1VU0JfSU5UUlRYKTsNCj4gPiA+
-DQo+ID4gPiArICAgICAgIGlmICgobXVzYi0+aW50X3VzYiAmIE1VU0JfSU5UUl9SRVNFVCkgJiYg
-IWlzX2hvc3RfYWN0aXZlKG11c2IpKSB7DQo+ID4gPiArICAgICAgICAgICAgICAgLyogZXAwIEZB
-RERSIG11c3QgYmUgMCB3aGVuIChyZSllbnRlcmluZyBwZXJpcGhlcmFsIG1vZGUgKi8NCj4gPiA+
-ICsgICAgICAgICAgICAgICBtdXNiX2VwX3NlbGVjdChtdXNiLT5tcmVncywgMCk7DQo+ID4gPiAr
-ICAgICAgICAgICAgICAgbXVzYl93cml0ZWIobXVzYi0+bXJlZ3MsIE1VU0JfRkFERFIsIDApOw0K
-PiA+ID4gKyAgICAgICB9DQo+ID4gPiArDQo+ID4gPiAgICAgICAgIGlmIChtdXNiLT5pbnRfdXNi
-IHx8IG11c2ItPmludF90eCB8fCBtdXNiLT5pbnRfcngpDQo+ID4gPiAgICAgICAgICAgICAgICAg
-cmV0dmFsID0gbXVzYl9pbnRlcnJ1cHQobXVzYik7DQo+ID4gPg0KPiA+ID4gLS0NCj4gPiA+IDIu
-MTcuMQ0KPiA+ID4NCj4gPiBDb3VsZCB0aGlzIGJ1ZyBmaXggYWxzbyBiZWVuIGFwcGxpZWQgdG8g
-c3RhYmxlIGtlcm5lbD8NCj4gDQo+IFN1cmUsIHdoYXQgaXMgdGhlIGdpdCBjb21taXQgb2YgaXQg
-aW4gTGludXMncyB0cmVlPw0KPiANCj4gdGhhbmtzLA0KPiANCj4gZ3JlZyBrLWgNCg0KVGhlIGNv
-bW1pdCBpZCBvZiB0aGlzIHBhdGNoIHNob3VsZCBiZQ0KNDAyYmNhYzRiMjViNTIwYzg5YmE2MGRi
-ODVlYjYzMTZmMzZlNzk3Zg0KDQpUaGFuayB5b3UgdmVyeSBtdWNoLg0KDQpCUg0KTWFjcGF1bCBM
-aW4NCg==
+On Wed, Jun 17, 2020 at 06:10:39PM +0900, ������ wrote:
+> 
+> 
+> > -----Original Message-----
+> > From: linux-usb-owner@vger.kernel.org [mailto:linux-usb-
+> > owner@vger.kernel.org] On Behalf Of Greg KH
+> > Sent: Wednesday, June 17, 2020 4:53 PM
+> > To: JaeHun Jung
+> > Cc: linux-usb@vger.kernel.org
+> > Subject: Re: [PATCH] ANDROID: sound: usb: Add vendor's hooking interface
+> > 
+> > On Wed, Jun 17, 2020 at 07:17:38AM +0200, Greg KH wrote:
+> > > On Wed, Jun 17, 2020 at 10:55:30AM +0900, JaeHun Jung wrote:
+> > > > In mobile, a co-processor is used when using USB audio to improve
+> > > > power consumption.
+> > > > hooking is required for sync-up when operating the co-processor. So
+> > > > register call-back function.
+> > > > The main operation of the call-back function is as follows:
+> > > > - Initialize the co-processor by transmitting data
+> > > >   when initializing.
+> > > > - Change the co-processor setting value through
+> > > >   the interface function.
+> > > > - Configure sampling rate
+> > > > - pcm open/close
+> > > >
+> > > > Bug: 156315379
+> > > >
+> > > > Change-Id: I32e1dd408e64aaef68ee06c480c4b4d4c95546dc
+> > >
+> > > No need for Bug or Change-Id on patches submitted to us, same for the
+> > > odd "ANDROID:" in the subject.
+> > >
+> 
+> Ok, I will delete it.
+> 
+> > > > Signed-off-by: JaeHun Jung <jh0801.jung@samsung.com>
+> > > > ---
+> > > >  sound/usb/card.c     | 16 ++++++++++++++++
+> > > >  sound/usb/card.h     |  1 +
+> > > >  sound/usb/clock.c    |  5 +++++
+> > > >  sound/usb/pcm.c      | 33 +++++++++++++++++++++++++++++++++
+> > > >  sound/usb/usbaudio.h | 30 ++++++++++++++++++++++++++++++
+> > > >  5 files changed, 85 insertions(+)
+> > >
+> > > Did you run scripts/get_maintainer.pl on this patch to determine that
+> > > maybe the alsa-devel list should also be needed?
+> > >
+> 
+> Yes, it was sent looking for maintainer of sound/usb.
+> This callbacks is for sync with Audio Core.
+> So, I was implement on sound/usb.
+> 
+> > >
+> > >
+> > > >
+> > > > diff --git a/sound/usb/card.c b/sound/usb/card.c index
+> > > > fd6fd17..2f3fa14 100644
+> > > > --- a/sound/usb/card.c
+> > > > +++ b/sound/usb/card.c
+> > > > @@ -111,6 +111,7 @@ MODULE_PARM_DESC(skip_validation, "Skip unit
+> > > > descriptor validation (default: no)  static
+> > > > DEFINE_MUTEX(register_mutex);  static struct snd_usb_audio
+> > > > *usb_chip[SNDRV_CARDS];  static struct usb_driver usb_audio_driver;
+> > > > +struct snd_usb_audio_vendor_ops *usb_audio_ops;
+> > > >
+> > > >  /*
+> > > >   * disconnect streams
+> > > > @@ -210,6 +211,12 @@ static int snd_usb_create_stream(struct
+> > snd_usb_audio *chip, int ctrlif, int int
+> > > >  	return 0;
+> > > >  }
+> > > >
+> > > > +void snd_set_vender_interface(struct snd_usb_audio_vendor_ops
+> > > > +*vendor_ops) {
+> > > > +	usb_audio_ops = vendor_ops;
+> > > > +}
+> > > > +EXPORT_SYMBOL_GPL(snd_set_vender_interface);
+> > >
+> > > You are exporting a lot of new symbols, but you have no user of these
+> > > symbols, which is not allowed, as you know.  Please also post your
+> > > user of them so we can see if you are doing things correctly or not.
+> > >
+> 
+> Yes, I know.
+> This is called from Audio core module.
+> Audio related drivers associated with this module cannot disclose because
+> of security.
 
+What do you mean?  The license of the code is GPL version 2, so there is
+no "security" reason to not publish it.
+
+> I think this is true of other vendors as well.
+
+What other vendor needs these hooks?
+
+> > > Also, only one set of "vendor ops" does not make any sense at all,
+> > > this needs to be on a per-host-controller basis, right?  If so, why is
+> > > this all in the sound driver?
+> > 
+> 
+> Currently, this interface is only for USB audio. USB information is that is
+> has in the xhci host driver.
+> When USB audio is connected, F/W of audio core performs the control of USB
+> host for low power.
+
+But that's not how these hooks are being created, you need to properly
+handle any USB bus type.  As-is these will not work correctly.
+
+> > Also, your api is making a lot of assumptions about the running system,
+> > there seems to not be any way to always "know" what bus/device the
+> > callbacks are being used for in many places.
+> 
+> This is only used in limited scenarios. And the information of USB host get
+> through from exynos_usb_audio driver.
+
+But that's not what these hooks show.
+
+Again, please publish all of the code, we can not just add random kernel
+hooks (that aren't even correct), without having a user of the code.
+
+Would you want to have to maintain such a system?
+
+> > Why not just add the needed functionality to the sound driver itself
+> > instead of trying to rely on these odd "callbacks"?
+> 
+> Audio core operates in F/W and is module.
+> Because there are many connected modules, it is cannot on built-in and
+> module to implement the non-callbacks
+
+I do not understand, sorry.  Perhaps the code that uses the hooks would
+better explain this.
+
+thanks,
+
+greg k-h
