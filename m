@@ -2,147 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F36B01FC7EB
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jun 2020 09:52:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC15F1FC85F
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jun 2020 10:17:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726511AbgFQHw4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Jun 2020 03:52:56 -0400
-Received: from out2-smtp.messagingengine.com ([66.111.4.26]:47945 "EHLO
-        out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725536AbgFQHw4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Jun 2020 03:52:56 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id B13705C0042;
-        Wed, 17 Jun 2020 03:52:55 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Wed, 17 Jun 2020 03:52:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=jdewwhHmaaDfh9nfyOXAAhEhrGY
-        n782r7CvvQRi1ncE=; b=N+kCvmPyGgzdloYhoeZfwIN/c6FoamsIEhS4+rqrKts
-        mxPPWGlsBjn/362LYDlf5cKBmDXEid/137dZ+baFq3NhL+3tjk5P73sUu5VSglKZ
-        r/qSPKUN444DoG5aa8EqLhm8RFrpqR+tXxWLqsl8ZwZmzqHTTFhjI+guEUTXZZvT
-        6SlBP5zo0wqgVCFLltIzVYCpZBissnqLg02jtgIdwXibGTXYHuuj7PCz+X4dwCdR
-        8Pkao/eBUzZ+0j6qUvyJ15Ksf9aVJLjxYk/unPapibRKsATkY2ZblGpIsBhD4qOl
-        FStAJGuj7A0yxsEv/QbzRw+nkGwcB9wgOfUJIIhmRvg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=jdewwh
-        HmaaDfh9nfyOXAAhEhrGYn782r7CvvQRi1ncE=; b=sQHabR0RrB1P2dyZHRhoev
-        IjiIcYUfUoztbmkC6lZ3TCIywBk89Q/QjcU0wboQp4Z7UpcP3qsW7D0cf4qkKTOc
-        7Wv72IlcqKMYPzGbTbvMqI5eg6ufnB1E4E8mdBzzphm6MjZmV5F9bv9LhKYPLgAt
-        cArNbZHITvvO9rQgtZRV+ix+YfJFgZlnFZBng/QR9O+OXS5bEdzw3l2MHxw+OFtl
-        akKtrmFgxJVI5yg/aqizbuNw3ZEIUI4/272vJxKluyIZVdl1IB6CgW8NWvxFeyCc
-        XRh3lq41XzbGZxnzqO0LE1ex5EAyd3hMEKZM/XuLMhUZv0C04+9btFtIJ58T7E+A
-        ==
-X-ME-Sender: <xms:18vpXifXBsBsHtzk1t_Vuzivz_gK4DvkXHFweYUZFk2vOlAknWUAsA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrudejuddguddvkecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuhe
-    ejgfffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecukfhppeek
-    fedrkeeirdekledruddtjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:18vpXsPBIFqo9zAX_O8ghEdKocNQHBmwLx1m16vvGeFfCRwumE6Jvg>
-    <xmx:18vpXjgKLH9ARgTtTPnSMbMNEQ5_Kx1RQdnKhn7V4f7B-SsvbEjmeg>
-    <xmx:18vpXv8VcvdqgRcy8p0sZ9WqB_YI_dhNRs0SLV1JgBSpBIZ_tiQVew>
-    <xmx:18vpXs5fdt6znFwbCeaBL--VGfbchTUFwaN5kbREvhhr_tnQTA0fog>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 4A35C328005D;
-        Wed, 17 Jun 2020 03:52:55 -0400 (EDT)
-Date:   Wed, 17 Jun 2020 09:52:49 +0200
-From:   Greg KH <greg@kroah.com>
-To:     JaeHun Jung <jh0801.jung@samsung.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH] ANDROID: sound: usb: Add vendor's hooking interface
-Message-ID: <20200617075249.GA1547648@kroah.com>
-References: <CGME20200617020305epcas2p35de377f38ec42a41adb47a49dfc33791@epcas2p3.samsung.com>
- <1592358930-28684-1-git-send-email-jh0801.jung@samsung.com>
- <20200617051738.GB1331778@kroah.com>
+        id S1725941AbgFQIRX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Jun 2020 04:17:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57882 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725860AbgFQIRV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 17 Jun 2020 04:17:21 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6199CC061573;
+        Wed, 17 Jun 2020 01:17:20 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id y5so1701340iob.12;
+        Wed, 17 Jun 2020 01:17:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=PsTw2FmNStfH4y60NRLUawfmwCoZcfnTxnkA/RcGv3Y=;
+        b=lRLAR04rQ53JYXf3cpvtIjqVvXpGVVnKsjsI9/kJp3saObwCu4DTe89t7Bd29cACQg
+         NooYTkYf/qZvQmat3GV9UUudiHHrhtEP8yQkSX14b0vVyMpYJdqVNax15SM64cNXR/iA
+         HfRle2f3uSUogyxnEYXMTrTKwB9Ymk9IXyka0UqmRGHvOxxbniXfcpa6QoexUc8IdGL+
+         5CvrjWs8sTXPAirblhLAySefibkvNKChxbMkPWQ+SPtMxFC2dwyM7eSPHiLxDWEkFkul
+         BsMWP19Vn/qjxlEKo7SxOMW4ahSd94ydXizylzL7fUTsfIOioGVZpOQ9WURmoV2Gq6EN
+         SZdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=PsTw2FmNStfH4y60NRLUawfmwCoZcfnTxnkA/RcGv3Y=;
+        b=eTqLuOYxrrtDp61bP8eeVdzYoYuq3a+GUXBniaeBWktGKSdpfBnAeIJwHE9bnlowYj
+         mui79Cp1XGNZQYeKR1ZOVQoDHDIVZIquGB/reIEeTv76JRQK1dQpOxyKl5jFJkNI5VRw
+         +Y9S5y97qURBz4RiaIPGRPAtdQa3OVRDxijopklKXyL9SpWJgKCajL3SilogWvhUptsz
+         9bxnJjybvGh8oJtjQtvEeAHFnh18mVzcvRXw7lbSJwfDaXM2WzxTJnUAAqloXi/3XREP
+         bnB/duy1AfHs48rj+BM2eYwvZkFXziVRyRf6ULlDwKxxs4cEZOlVUVonYdilsD/5jPC/
+         HPfQ==
+X-Gm-Message-State: AOAM532Jj6h/K9PCo3ufpOQJzefziTvMMiQBGPfzc0zZ38yv0oOoj9zp
+        pX+zQMcXg2bHeaYBbwvO66dzwgBvCZFXaw3w9uX8CUj1Eb8=
+X-Google-Smtp-Source: ABdhPJyUB0qrHEjmlOPPDD1pUhS9xxVKwZ+hljmmvTC1+D0nLw84O0Yh0oOdSy+SqKZZIuKkk49y1vDlBej1UH5Si/o=
+X-Received: by 2002:a05:6602:34f:: with SMTP id w15mr7111702iou.2.1592381839097;
+ Wed, 17 Jun 2020 01:17:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200617051738.GB1331778@kroah.com>
+References: <20200525025049.3400-1-b-liu@ti.com> <20200525025049.3400-5-b-liu@ti.com>
+In-Reply-To: <20200525025049.3400-5-b-liu@ti.com>
+From:   Macpaul Lin <macpaul@gmail.com>
+Date:   Wed, 17 Jun 2020 16:17:07 +0800
+Message-ID: <CACCg+XNfOaE7LE01NPeR6amvCTyrJaJ3sj3AF+Se49T0YFy_Uw@mail.gmail.com>
+Subject: Re: [PATCH 4/6] usb: musb: mediatek: add reset FADDR to zero in reset
+ interrupt handle
+To:     Bin Liu <b-liu@ti.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 17, 2020 at 07:17:38AM +0200, Greg KH wrote:
-> On Wed, Jun 17, 2020 at 10:55:30AM +0900, JaeHun Jung wrote:
-> > In mobile, a co-processor is used when using USB audio
-> > to improve power consumption.
-> > hooking is required for sync-up when operating
-> > the co-processor. So register call-back function.
-> > The main operation of the call-back function is as follows:
-> > - Initialize the co-processor by transmitting data
-> >   when initializing.
-> > - Change the co-processor setting value through
-> >   the interface function.
-> > - Configure sampling rate
-> > - pcm open/close
-> > 
-> > Bug: 156315379
-> > 
-> > Change-Id: I32e1dd408e64aaef68ee06c480c4b4d4c95546dc
-> 
-> No need for Bug or Change-Id on patches submitted to us, same for the
-> odd "ANDROID:" in the subject.
-> 
-> > Signed-off-by: JaeHun Jung <jh0801.jung@samsung.com>
-> > ---
-> >  sound/usb/card.c     | 16 ++++++++++++++++
-> >  sound/usb/card.h     |  1 +
-> >  sound/usb/clock.c    |  5 +++++
-> >  sound/usb/pcm.c      | 33 +++++++++++++++++++++++++++++++++
-> >  sound/usb/usbaudio.h | 30 ++++++++++++++++++++++++++++++
-> >  5 files changed, 85 insertions(+)
-> 
-> Did you run scripts/get_maintainer.pl on this patch to determine that
-> maybe the alsa-devel list should also be needed?
-> 
-> 
-> 
-> > 
-> > diff --git a/sound/usb/card.c b/sound/usb/card.c
-> > index fd6fd17..2f3fa14 100644
-> > --- a/sound/usb/card.c
-> > +++ b/sound/usb/card.c
-> > @@ -111,6 +111,7 @@ MODULE_PARM_DESC(skip_validation, "Skip unit descriptor validation (default: no)
-> >  static DEFINE_MUTEX(register_mutex);
-> >  static struct snd_usb_audio *usb_chip[SNDRV_CARDS];
-> >  static struct usb_driver usb_audio_driver;
-> > +struct snd_usb_audio_vendor_ops *usb_audio_ops;
-> >  
-> >  /*
-> >   * disconnect streams
-> > @@ -210,6 +211,12 @@ static int snd_usb_create_stream(struct snd_usb_audio *chip, int ctrlif, int int
-> >  	return 0;
-> >  }
-> >  
-> > +void snd_set_vender_interface(struct snd_usb_audio_vendor_ops *vendor_ops)
-> > +{
-> > +	usb_audio_ops = vendor_ops;
-> > +}
-> > +EXPORT_SYMBOL_GPL(snd_set_vender_interface);
-> 
-> You are exporting a lot of new symbols, but you have no user of these
-> symbols, which is not allowed, as you know.  Please also post your user
-> of them so we can see if you are doing things correctly or not.
-> 
-> Also, only one set of "vendor ops" does not make any sense at all, this
-> needs to be on a per-host-controller basis, right?  If so, why is this
-> all in the sound driver?
+Bin Liu <b-liu@ti.com> =E6=96=BC 2020=E5=B9=B45=E6=9C=8825=E6=97=A5 =E9=80=
+=B1=E4=B8=80 =E4=B8=8A=E5=8D=8810:53=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> From: Macpaul Lin <macpaul.lin@mediatek.com>
+>
+> When receiving reset interrupt, FADDR need to be reset to zero in
+> peripheral mode. Otherwise ep0 cannot do enumeration when re-plugging USB
+> cable.
+>
+> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+> Acked-by: Min Guo <min.guo@mediatek.com>
+> Signed-off-by: Bin Liu <b-liu@ti.com>
+> ---
+>  drivers/usb/musb/mediatek.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/drivers/usb/musb/mediatek.c b/drivers/usb/musb/mediatek.c
+> index 6196b0e8d77d..eebeadd26946 100644
+> --- a/drivers/usb/musb/mediatek.c
+> +++ b/drivers/usb/musb/mediatek.c
+> @@ -208,6 +208,12 @@ static irqreturn_t generic_interrupt(int irq, void *=
+__hci)
+>         musb->int_rx =3D musb_clearw(musb->mregs, MUSB_INTRRX);
+>         musb->int_tx =3D musb_clearw(musb->mregs, MUSB_INTRTX);
+>
+> +       if ((musb->int_usb & MUSB_INTR_RESET) && !is_host_active(musb)) {
+> +               /* ep0 FADDR must be 0 when (re)entering peripheral mode =
+*/
+> +               musb_ep_select(musb->mregs, 0);
+> +               musb_writeb(musb->mregs, MUSB_FADDR, 0);
+> +       }
+> +
+>         if (musb->int_usb || musb->int_tx || musb->int_rx)
+>                 retval =3D musb_interrupt(musb);
+>
+> --
+> 2.17.1
+>
+Could this bug fix also been applied to stable kernel?
+Thanks!
 
-Also, your api is making a lot of assumptions about the running system,
-there seems to not be any way to always "know" what bus/device the
-callbacks are being used for in many places.
-
-Why not just add the needed functionality to the sound driver itself
-instead of trying to rely on these odd "callbacks"?
-
-thanks,
-
-greg k-h
+Best regards,
+Macpaul Lin
