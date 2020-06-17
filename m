@@ -2,134 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE74F1FC158
-	for <lists+linux-usb@lfdr.de>; Wed, 17 Jun 2020 00:04:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 369691FC29C
+	for <lists+linux-usb@lfdr.de>; Wed, 17 Jun 2020 02:11:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726510AbgFPWEV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 16 Jun 2020 18:04:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48712 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725894AbgFPWEU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 16 Jun 2020 18:04:20 -0400
-Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A02C061573;
-        Tue, 16 Jun 2020 15:04:20 -0700 (PDT)
-Received: by mail-il1-x143.google.com with SMTP id j19so87201ilk.9;
-        Tue, 16 Jun 2020 15:04:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8YvR3KOM2+UZcgNgTkLEwMZFvasq6WqgYL2ECzZJc0w=;
-        b=nlTNk9uFvhANOGMZLtZLbE7jzXGMu0dJUAPNYNMRD9P2+cyhwqeKDAWH4/mdBfiSwl
-         wSoksVgqe1lpj+IkHblVp0CJTEwq1I2qqstXaY84kUwUVTVtsNfDT27lgKhNF4mvCzgC
-         EJvWgLJOC0Zkf6Prw5FWYXJuHRtTV2KGF7+f5rj95RvMt0WYsRKtoMgNub/z9HRMSH9K
-         y/2GO5kFph3kW1pazugHxDMliIZTedwQ0rWQy7tcXVQUsEnf2WD4NRroVzpZ4v+rOKU3
-         HDCb+i5Ugnbj2BuszGHdCSFOzIqJ7Va+k8uK0k1QUzU+dtTPH+Y7AhGeHxCyxJYurC4B
-         TT6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8YvR3KOM2+UZcgNgTkLEwMZFvasq6WqgYL2ECzZJc0w=;
-        b=TlHJpE7BKXGDOWGMgjNlb2H2Ez0lflh45CDzXeL1Mq3VO5t2VPiK5tXSRRc4xV+WPU
-         hxnPeVNrEVaKioZ3HqEVQrbgy3usjrIYxnGzWTlWU2zkY+fCwmvtZjzQOPLE00n++YAn
-         Kf7Nw3OBrphcMFYb2kh1BjrYsRd96apt6UDH5dFZAGEtoL0dHU5m/ghpXWt1BTGe69fp
-         anDeGCuYQ4GiZb1yVMsH2LY7+50ubIeRQhp8GVQRpRorTWcQj2qNtegwisZ3uTTrbQKs
-         sGuRQIrBcTl1pUciCFI8pGow/YGZZlqLsypzRuNb9bUn2pY3Zy4pP9ONpakA+FGrK3wK
-         uIwA==
-X-Gm-Message-State: AOAM531xZwBOFy33Ll+4P13pIvkZGTu2dkWqTwQWz0n+QXgNBYvkqgPt
-        bFmnJcZuirfPx57waueCxwiBfV96JRg=
-X-Google-Smtp-Source: ABdhPJyUCfOMuYDsR1gSHzPDSfFEAqkteNoF++Vl+LHEvELEpAVS3jnBoM7lG/MxZNIiRQwXurvIYA==
-X-Received: by 2002:a92:5e4a:: with SMTP id s71mr5214475ilb.119.1592345059173;
-        Tue, 16 Jun 2020 15:04:19 -0700 (PDT)
-Received: from james-x399.localdomain (71-218-100-23.hlrn.qwest.net. [71.218.100.23])
-        by smtp.gmail.com with ESMTPSA id p12sm8571158ioj.37.2020.06.16.15.04.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jun 2020 15:04:18 -0700 (PDT)
-From:   James Hilliard <james.hilliard1@gmail.com>
-To:     linux-usb@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>,
-        James Hilliard <james.hilliard1@gmail.com>
-Subject: [PATCH v2] USB: Serial: cypress_M8: Enable Simply Automated UPB PIM
-Date:   Tue, 16 Jun 2020 16:04:03 -0600
-Message-Id: <20200616220403.1807003-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        id S1726271AbgFQALC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 16 Jun 2020 20:11:02 -0400
+Received: from mga04.intel.com ([192.55.52.120]:12749 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725894AbgFQALC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 16 Jun 2020 20:11:02 -0400
+IronPort-SDR: HEl8dHQAngKmfV+LKbhSexzEQqUA0f4lvnddg8BLe17G/i3RcvBOU4Qm2pQzkEL7A1+y9IEFg0
+ VYYodHQWG+mA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2020 17:11:00 -0700
+IronPort-SDR: Ic1p5T8W1QCzSqe9lmhp5ybj+bZUIbIjZ3r0ByG7ZOe+wKHgC56m3Gv4aK2LaglZ4Rw+MX0jOE
+ 1+cgNNIwMOkg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,520,1583222400"; 
+   d="scan'208";a="277101692"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga006.jf.intel.com with ESMTP; 16 Jun 2020 17:11:00 -0700
+Received: from [10.214.159.136] (unknown [10.214.159.136])
+        by linux.intel.com (Postfix) with ESMTP id 8FE065800BD;
+        Tue, 16 Jun 2020 17:10:57 -0700 (PDT)
+Reply-To: vadivel.muruganx.ramuthevar@linux.intel.com
+Subject: Re: [PATCH v3 2/2] usb: phy: Add USB3 PHY support for Intel LGM SoC
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     linux-kernel@vger.kernel.org, balbi@kernel.org, robh@kernel.org,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        cheol.yong.kim@intel.com, qi-ming.wu@intel.com, yin1.li@intel.com
+References: <20200612025941.5484-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20200612025941.5484-3-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20200612131822.GG2428291@smile.fi.intel.com>
+From:   "Ramuthevar, Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Message-ID: <530dc44b-59d7-7ecd-4ec9-fd13f5f0e129@linux.intel.com>
+Date:   Wed, 17 Jun 2020 08:10:55 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200612131822.GG2428291@smile.fi.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is a UPB(Universal Powerline Bus) PIM(Powerline Interface Module)
-which allows for controlling multiple UPB compatible devices from
-Linux using the standard serial interface.
+Hi Andy,
 
-Based on vendor application source code there are two different models
-of USB based PIM devices in addition to a number of RS232 based PIM's.
+Thank you very much for the review comments and your time...
 
-The vendor UPB application source contains the following USB ID's:
-#define USB_PCS_VENDOR_ID 0x04b4
-#define USB_PCS_PIM_PRODUCT_ID 0x5500
+On 12/6/2020 9:18 pm, Andy Shevchenko wrote:
+> On Fri, Jun 12, 2020 at 10:59:41AM +0800, Ramuthevar,Vadivel MuruganX wrote:
+>> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+>>
+>> Add support for USB PHY on Intel LGM SoC.
+> 
+> Thank you for an update, looks pretty much good, my comments below.
+Sure, will update.
+> 
+> ...
+> 
+>> +static int get_flipped(struct tca_apb *ta, bool *flipped)
+>> +{
+>> +	union extcon_property_value property;
+>> +	int ret;
+>> +
+>> +	ret = extcon_get_property(ta->phy.edev, EXTCON_USB_HOST,
+>> +				  EXTCON_PROP_USB_TYPEC_POLARITY, &property);
+>> +	if (ret) {
+> 
+>> +		dev_err(ta->phy.dev, "no polarity property from extcon\n");
+> 
+> (1)
+Noted.
+> 
+>> +		return ret;
+>> +	}
+>> +
+>> +	*flipped = property.intval;
+>> +
+>> +	return ret;
+>> +}
+> 
+> ...
+> 
+>> +	ret = get_flipped(ta, &flipped);
+>> +	if (ret)
+>> +		dev_err(ta->phy.dev, "no polarity property from extcon\n");
+> 
+> You already has a message in (1). You should decide which one to leave.
+> 
+> But note, if it's a fatal error, you have to return here, otherwise, if you
+> decide to leave message here, it should be not on error level.
+Agreed!, let double and update as per your suggestion if it is fatal error.
+> 
+>> +	connected = extcon_get_state(ta->phy.edev, EXTCON_USB_HOST);
+>> +	if (connected == ta->connected)
+>> +		return;
+>> +
+>> +	ta->connected = connected;
+>> +	if (connected) {
+>> +		val = TCPC_VALID | FIELD_PREP(TCPC_MUX_CTL, MUX_USB);
+>> +		if (flipped)
+>> +			val |= TCPC_FLIPPED;
+>> +		dev_info(ta->phy.dev, "connected%s\n", flipped ? " flipped" : "");
+>> +	} else {
+>> +		val = TCPC_DISCONN;
+>> +		dev_info(ta->phy.dev, "disconnected\n");
+>> +	}
+>> +
+>> +	writel(val, ta->phy.io_priv + TCPC_OFFSET);
+>> +
+> 
+>> +	if (ta->phy.set_vbus(&ta->phy, connected))
+>> +		dev_err(ta->phy.dev, "failed to set VBUS\n");
+> 
+> Please, split it to
+> 	ret = ...;
+Noted, will update.
+> 	if (ret)
+> 
+>> +}
+> 
+> ...
+> 
+>> +static int vbus_notifier(struct notifier_block *nb,
+>> +			 unsigned long event, void *ptr)
+> 
+> Consider to put it on one line (you can also shrink the names of unused
+> parameters.
+Sure, will try to reduce the length of the variable names.
 
-#define USB_SAI_VENDOR_ID 0x17dd
-#define USB_SAI_PIM_PRODUCT_ID 0x5500
-
-The first set of ID's correspond to the PIM variant sold by Powerline
-Control Systems while the second corresponds to the Simply Automated
-Incorporated PIM. As the product ID for both of these match the default
-cypress HID->COM RS232 product ID it assumed that they both use an
-internal variant of this HID->COM RS232 converter hardware. However
-as the vendor ID for the Simply Automated variant is different we need
-to also add it to the cypress_M8 driver so that it is properly
-detected.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
-Changes v1 -> v2:
-  - Add more detailed commit message.
----
- drivers/usb/serial/cypress_m8.c | 2 ++
- drivers/usb/serial/cypress_m8.h | 3 +++
- 2 files changed, 5 insertions(+)
-
-diff --git a/drivers/usb/serial/cypress_m8.c b/drivers/usb/serial/cypress_m8.c
-index 216edd5826ca..ecda82198798 100644
---- a/drivers/usb/serial/cypress_m8.c
-+++ b/drivers/usb/serial/cypress_m8.c
-@@ -59,6 +59,7 @@ static const struct usb_device_id id_table_earthmate[] = {
- 
- static const struct usb_device_id id_table_cyphidcomrs232[] = {
- 	{ USB_DEVICE(VENDOR_ID_CYPRESS, PRODUCT_ID_CYPHIDCOM) },
-+	{ USB_DEVICE(VENDOR_ID_SAI, PRODUCT_ID_CYPHIDCOM) },
- 	{ USB_DEVICE(VENDOR_ID_POWERCOM, PRODUCT_ID_UPS) },
- 	{ USB_DEVICE(VENDOR_ID_FRWD, PRODUCT_ID_CYPHIDCOM_FRWD) },
- 	{ }						/* Terminating entry */
-@@ -73,6 +74,7 @@ static const struct usb_device_id id_table_combined[] = {
- 	{ USB_DEVICE(VENDOR_ID_DELORME, PRODUCT_ID_EARTHMATEUSB) },
- 	{ USB_DEVICE(VENDOR_ID_DELORME, PRODUCT_ID_EARTHMATEUSB_LT20) },
- 	{ USB_DEVICE(VENDOR_ID_CYPRESS, PRODUCT_ID_CYPHIDCOM) },
-+	{ USB_DEVICE(VENDOR_ID_SAI, PRODUCT_ID_CYPHIDCOM) },
- 	{ USB_DEVICE(VENDOR_ID_POWERCOM, PRODUCT_ID_UPS) },
- 	{ USB_DEVICE(VENDOR_ID_FRWD, PRODUCT_ID_CYPHIDCOM_FRWD) },
- 	{ USB_DEVICE(VENDOR_ID_DAZZLE, PRODUCT_ID_CA42) },
-diff --git a/drivers/usb/serial/cypress_m8.h b/drivers/usb/serial/cypress_m8.h
-index 35e223751c0e..ca2d951ee238 100644
---- a/drivers/usb/serial/cypress_m8.h
-+++ b/drivers/usb/serial/cypress_m8.h
-@@ -25,6 +25,9 @@
- #define VENDOR_ID_CYPRESS		0x04b4
- #define PRODUCT_ID_CYPHIDCOM		0x5500
- 
-+/* Simply Automated HID->COM UPB PIM */
-+#define VENDOR_ID_SAI		0x17dd
-+
- /* FRWD Dongle - a GPS sports watch */
- #define VENDOR_ID_FRWD			0x6737
- #define PRODUCT_ID_CYPHIDCOM_FRWD	0x0001
--- 
-2.25.1
-
+Regards
+Vadivel
+> 
+>> +{
+>> +	return NOTIFY_DONE;
+>> +}
+> 
