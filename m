@@ -2,141 +2,638 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E87191FF4FA
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 16:42:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B96B1FF4FD
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 16:42:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730831AbgFROl7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Jun 2020 10:41:59 -0400
-Received: from mail-eopbgr10120.outbound.protection.outlook.com ([40.107.1.120]:13440
-        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726478AbgFROl6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 18 Jun 2020 10:41:58 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=j6vizPeE/3NEtCY/ejRpijS2L2SVL6QP2OldNsl/J1VSypPyW1m6v87U7kzr8/BKfkx7PUz/wdrB0uYfDsLeORYKG4HwJ/C4BDpWyyPgBbXXcGa6krmHv3xOS/cYcKNTdWjBIZoMwsvRh39R2FAM2A+nSPtZqQvYJ0wgHwhp0G/G9a0qx/VtuL5TwrhUi0+x7sgbyrJ0F3d654aQ/qvAJ465/boUFhvjVAvNGSJ1foiXIu2dK9dxZF0kgpnRkIeytoul0JbUVcavUBfId9FbeErFpjexuBpaGIS8zM/OTlsVCHuT8sfcdjUJvIp+4wvvhtfBvlpR0CXppq+ooAH/oA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dwx12fV87ThCGqU9ft9paYJmh1+PR+XOiGL+ExS38rg=;
- b=S4JBbdPvDg+0FLRE21KdgNIuFhutGXx7fuTpDwHwi7wbJN5uCE9pFSoUxi2/VYuQ599LHa+L5RUor7wV2dyg0e0W4RFLupmFG5sZAOin05aQyEMZQnTaGu7J9nYqqM7NFtj2Oxu2IhmLgEMJYXW02jqb0vWY3bA5i+c9Kj/df9IZILiVcoJUn8rFlAVpNiAcOCzmwEnpiTjCvxR0ToSKsgfwXc59nuJ9uAi3zToCzT7yLFiMb+j/xJSAyhWjIf/KwjKj8kWU3M98XXxNWYbDwN2hMuBPNqfPmfSQdE04ND6ZT2GgzS03NzHtuxD64ENKvmPZ/NRmjehgXp0R8pFH4A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=toradex.com; dmarc=pass action=none header.from=toradex.com;
- dkim=pass header.d=toradex.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=toradex.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dwx12fV87ThCGqU9ft9paYJmh1+PR+XOiGL+ExS38rg=;
- b=rjBeSo+9KzX2ugAbZYQLozDvU+mqLd4AMeSOKsHEJynBsBgqubJoL4r588zN0IxlBe3KW5woN6UzYPgPZHZ0Snet33PL+7KZIddA8ZxDhFNJQ5TC65UwvXPt4GI3rtqUIEUgpaJMKlWssVLycDXY17jIUVFi6mZsgZpuz7ZyFJI=
-Received: from AM6PR05MB6120.eurprd05.prod.outlook.com (2603:10a6:20b:a8::25)
- by AM6PR05MB5285.eurprd05.prod.outlook.com (2603:10a6:20b:64::30) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3088.18; Thu, 18 Jun
- 2020 14:41:53 +0000
-Received: from AM6PR05MB6120.eurprd05.prod.outlook.com
- ([fe80::d8d3:ead7:9f42:4289]) by AM6PR05MB6120.eurprd05.prod.outlook.com
- ([fe80::d8d3:ead7:9f42:4289%6]) with mapi id 15.20.3088.029; Thu, 18 Jun 2020
- 14:41:53 +0000
-From:   Philippe Schenker <philippe.schenker@toradex.com>
-To:     "hzpeterchen@gmail.com" <hzpeterchen@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-CC:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Stefan Agner <stefan.agner@toradex.com>
-Subject: USB difficulties with an iMX6ULL
-Thread-Topic: USB difficulties with an iMX6ULL
-Thread-Index: AQHWRX6bY1fYG3LvHU+Nxv9VFjLuKw==
-Date:   Thu, 18 Jun 2020 14:41:52 +0000
-Message-ID: <87837d44165d71ecfb0ec22ec2dae6460cb0503c.camel@toradex.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.36.3 
-authentication-results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=toradex.com;
-x-originating-ip: [51.154.7.61]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5938886d-638e-45d8-7ce4-08d81395be15
-x-ms-traffictypediagnostic: AM6PR05MB5285:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM6PR05MB5285F1CF9FAB4FC54FD264E3F49B0@AM6PR05MB5285.eurprd05.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 0438F90F17
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Q/D8Z2/OImTkJkSi1+tjku8g1UEkTAIt6mQBDZxVtidMh7wpd7kh0gU/7yDWSubrNQUSeBHDdaSo5hkhy0X/Tpo8XWVVvofmB/qGmjqx14Ax++DVFAwq7DRoWXpjukkRddfe+3mZi+UA0cHxpCQ/Sk0Gdv+iWDy6RPnCwnDDP8GUxp4jh+1FLiyFUzAlS8Trj0XpN21P9/f2zYWMHj+DAOQNahYMF3dJMm6UKIwebOAgqTwInrwJZW/Gwd0VCtz/E5WwPLjloIsCIVY0aEGpYUIjMuviBuhghs4inYtthMCVwwQci2HD+uLt14WcXTTK6MkGKEYj/FqwTzO1GbELskksT4rxGfDitd6AenchV0VvQfbIkEOBOv6+si8V1ch1
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR05MB6120.eurprd05.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(396003)(136003)(39850400004)(366004)(376002)(346002)(36756003)(2616005)(66946007)(71200400001)(44832011)(76116006)(91956017)(66446008)(64756008)(66556008)(66476007)(8676002)(478600001)(6506007)(186003)(8936002)(6486002)(316002)(5660300002)(107886003)(54906003)(110136005)(83380400001)(2906002)(4326008)(26005)(86362001)(6512007)(32563001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: 8ncsXC+rRQm0Lz76nHaZub0EUHlyawMywI7MmuzwFoQSE3LMQNQSNzfyBzdS3txB7pVO7WHfunXo2dpMwFpuVEoussfjUx1fSq9TDlfHCTM59Lk6QhhcW7ZkSC8zYIEluqJSdl7ubJrNKvyN4AwyTUiN1SLfkf2EQ/x5IrNo9SibpKX7Q7dPWQTqyoR3B/nhQYilDc42eaovQZ+Sqni/rk2MFL6+aXLRXcwPkD0dxxSHuZoAxAwuPphcAC7lABm/uG4hiXEL8cAY7T1/ATQw5GruboOgADooGaNUChZabCTwHWdd1NOOwrFDWfzUBRQKQlyeQlP0298rKe9wGuBkF67VwA3dQmdu2cXkgvS7J9L16tkzhYlY5T6frUWKz0bZARGdRzSOrvBdVm1yaE4IW74NPe/dH7autiPAppizFAPMTATPiqri3lQhmEjXCpg5knvrgJtSAbg+9futTEKHvjGTK66rkWVou9Nm9rILGEw=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <1C6452017082DB479DC4065DC273C642@eurprd05.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1730842AbgFROmS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Jun 2020 10:42:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33712 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726478AbgFROmR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 18 Jun 2020 10:42:17 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3C3E720773;
+        Thu, 18 Jun 2020 14:42:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592491335;
+        bh=oBt8/U6kHv9j3UuQGoxk/K5wLv3bsWNnjxmDL3miXI8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=IQv2BfW6/Su1ZWqEXDgjGPYWCioI8hlgamdDxDLh/e37n+UrVeLU86OgifuC7Jprk
+         0zZrkrrrh3SsPW+R1OXdG8i17zFEJDSGECjPP6xX285XmmNGPMIlCCR8oJMFhBeb0q
+         JaOKRFc2BPPZ6kqP8TaTcZGUkIr4lxFi0MbjoOrI=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-usb@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Bin Liu <b-liu@ti.com>, Pawel Laszczak <pawell@cadence.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Jason Yan <yanaijie@huawei.com>,
+        Jia-Ju Bai <baijiaju1990@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jules Irenge <jbi.octave@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Rob Gill <rrobgill@protonmail.com>,
+        Macpaul Lin <macpaul.lin@mediatek.com>
+Subject: [PATCH] USB: ch9: add "USB_" prefix in front of TEST defines
+Date:   Thu, 18 Jun 2020 16:42:06 +0200
+Message-Id: <20200618144206.2655890-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-X-OriginatorOrg: toradex.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5938886d-638e-45d8-7ce4-08d81395be15
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jun 2020 14:41:52.9441
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d9995866-0d9b-4251-8315-093f062abab4
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: XnQRY4JFl+BSLOkgdFUBEYjMFAZULhSG3vL+pYbw4QUadyo3TfiG+zEEmMWymzKW5UIHFa+rdHH3tNhv0iwe1lSSB4sC92bT4zVcFG0StTA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR05MB5285
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGVsbG8gRXZlcnlvbmUsIEhpIFBldGVyDQoNCkknbSBjdXJyZW50bHkgZmFjaW5nIHR3byBVU0Ig
-cHJvYmxlbXMgd2l0aCBvdXIgQ29saWJyaSBpTVg2VUxMIENvTS4gSSdtDQphc2tpbmcgaGVyZSBv
-biB0aGUgbWFpbGluZ2xpc3QgaWYgYW55b25lIGVsc2UgaGFzIHNlZW4gc2ltaWxhciBwcm9ibGVt
-cw0KYW5kIGlmIGFueW9uZSBoYXZlIGFueSBpZGVhIGhvdyBJIGNvdWxkIHNvbHZlIHRoaXMuDQoN
-Ck9uIG91ciBpTVg3IGJhc2VkIENvTSB0aGUgQ29saWJyaSBpTVg3IGV2ZXJ5dGhpbmcgaXMgd29y
-a2luZyBmaW5lIGFuZA0KZnJvbSB3aGF0IEkgY2FuIHRlbGwgaXQgaGFzIHRoZSBzYW1lIENoaXBp
-ZGVhIElQIGFzIHRoZSBpTVg2VUxMIHdoaWNoDQptYWtlcyBpdCBzdHJhbmdlIHRvIG1lIHRoYXQg
-b25lIGlzIHdvcmtpbmcgYnV0IG5vdCB0aGUgb3RoZXIgb25lLg0KDQoNCjFzdCBwcm9ibGVtIC0g
-Uk5ESVMNCldlIHRyeSB0byB1c2UgUk5ESVMgb24gb25lIG9mIHRoZSBVU0IgcG9ydHMgdGhlIENv
-bGlicmkgaU1YNlVMTCBoYXMuIEZvcg0KdGhpcyBwdXJwb3NlIEknbSB1c2luZyB0aGUgdXNiX2Zf
-cm5kaXMua28ga2VybmVsIG1vZHVsZSBhbmQgc2V0dGluZw0KZHJfbW9kZSBvZiAmdXNib3RnMSB0
-byAicGVyaXBoZXJhbCINClRoaXMgd29ya3MgZmluZSBvbiBpTVg3IGJ1dCBkb2VzIG5vdCBvbiBp
-TVg2VUxMLiBPbiB0aGUgVUxMIGJvYXJkIEkgY2FuDQpzZWUgYSAiY2lfaGRyYy4wIiBpbiAvc3lz
-L2NsYXNzL3VkYyBhZnRlciBib290LiBJZiBJIGFkZCBub3cgYW4gVVNCIEdQSU8NCmV4dGNvbiB0
-byB1c2JvdGcgdGhpcyBjaGFuZ2VzIHRvICJjaV9oZHJjLjEiIGFuZCBldmVyeXRoaW5nIHdvcmtz
-IGZpbmUNCmFmdGVyIGJvb3QsIGJ1dCBub3QgYWZ0ZXIgdW5wbHVnZ2luZyBVU0IgYW5kIHJlcGx1
-Z2dpbmcuDQpUbyBzZXR1cCBSTkRJUyBJIHVzZSB0aGUgY29tbWFuZHMgWzFdIEkgcHV0IGF0IHRo
-ZSBlbmQgb2YgdGhpcyBlbWFpbCBmb3INCnJlZmVyZW5jZS4NCg0KMm5kIHByb2JsZW0gLSBjb25z
-dGFudCByZXNldHRpbmcNCldoZW4gSSBjb21waWxlIGEgcGxhaW4gbWFpbmxpbmUga2VybmVsIHdp
-dGggImlteF92Nl92N19kZWZjb25maWciIGFuZA0KYm9vdCB0aGUgaU1YNlVMTCB3aXRoIGl0IEkg
-c2VlIHRoYXQgdGhlIFVTQiBpcyBjb25zdGFudGx5IHJlc2V0dGluZyB0aGUNCmh1YiB0aGF0IGlz
-IHByZXNlbnQgb24gdGhlIENvbGlicmkgRXZhbHVhdGlvbiBjYXJyaWVyIGJvYXJkLg0KDQpbICAg
-NDkuNjU0NjIxXSB1c2IgMS0xOiByZXNldCBoaWdoLXNwZWVkIFVTQiBkZXZpY2UgbnVtYmVyIDIg
-dXNpbmcNCmNpX2hkcmMNClsgICA1Mi4xODA3ODFdIHVzYiAxLTE6IHJlc2V0IGhpZ2gtc3BlZWQg
-VVNCIGRldmljZSBudW1iZXIgMiB1c2luZw0KY2lfaGRyYw0KWyAgIDU0LjY5OTY3OF0gdXNiIDEt
-MTogcmVzZXQgaGlnaC1zcGVlZCBVU0IgZGV2aWNlIG51bWJlciAyIHVzaW5nDQpjaV9oZHJjDQoN
-Cg0KVGhpcyBsb29rcyB0byBtZSBsaWtlIHNvbWV0aGluZyBpcyBzdGlsbCBub3QgcXVpdGUgcmln
-aHQgZm9yIHRoZSB1c2UtDQpjYXNlIG9mIFVMTC4gSSBkb3VidCB0aGF0IG91ciBoYXJkd2FyZSBp
-cyB0aGUgcHJvYmxlbSBhcyB3ZSBuZXZlciBoYXZlDQpzZWVuIHRob3NlIHByb2JsZW1zIGRvd25z
-dHJlYW0uDQoNCkBQZXRlcjogU3RlZmFuIEFnbmVyIHN1Z2dlc3RlZCB0byBpbmNsdWRlIHlvdSB0
-b28gaW4gdGhpcyBtYWlsIGFzIHlvdQ0KaGF2ZSBpbiBkZXB0aCBrbm93bGVkZ2Ugb2YgZGlmZmVy
-ZW5jaWVzIG9mIHRoZSBDaGlwaWRlYSBJUCBvZiBpTVg3IGFuZA0KaU1YNlVMTC4gSSBob3BlIHlv
-dSBjYW4gcG9pbnQgbWUgdG8gYSBkaXJlY3Rpb24gd2hlcmUgSSBjYW4gcGljayB1cA0KYWdhaW4g
-YW5kIHNvbHZlIHRob3NlIGlzc3VlcyA6LSkuDQoNCkZvciBhbnkgc3VnZ2VzdGlvbnMgb3IgY29u
-ZmlybWF0aW9ucyBvZiB0aG9zZSBwcm9ibGVtcyBJIHdvdWxkIGJlIHZlcnkNCmdyYXRlZnVsLg0K
-DQpCZXN0IFJlZ2FyZHMsDQpQaGlsaXBwZSBTY2hlbmtlcg0KDQoNCg0KWzFdDQoNCkNPTkZJR0ZT
-PSIvc3lzL2tlcm5lbC9jb25maWcvdXNiX2dhZGdldC9ncm5kaXMiDQoNCmVjaG8gIlRlc3RzY3Jp
-cHQgZm9yIFJORElTLCBzZXR0aW5nIHVwIFJORElTIHN0dWZmIGluICR7Q09ORklHRlN9Ig0KDQpt
-a2RpciAkQ09ORklHRlMNCmVjaG8gNzAxNSA+ICIke0NPTkZJR0ZTfS9pZFZlbmRvciINCmVjaG8g
-MTY0MTIgPiAiJHtDT05GSUdGU30vaWRQcm9kdWN0Ig0KDQpta2RpciAiJHtDT05GSUdGU30vc3Ry
-aW5ncy8weDQwOSINCmVjaG8gIlRvcmFkZXgiID4gJHtDT05GSUdGU30vc3RyaW5ncy8weDQwOS9t
-YW51ZmFjdHVyZXINCmVjaG8gIlRlc3QtTW9kdWxlIiA+ICR7Q09ORklHRlN9L3N0cmluZ3MvMHg0
-MDkvcHJvZHVjdA0KZWNobyAiMTIzNDU2NzgiID4gJHtDT05GSUdGU30vc3RyaW5ncy8weDQwOS9z
-ZXJpYWxudW1iZXINCg0KbWtkaXIgLXAgIiR7Q09ORklHRlN9L2NvbmZpZ3MvYy4xL3N0cmluZ3Mv
-MHg0MDkvIg0KZWNobyAxID4gJHtDT05GSUdGU30vY29uZmlncy9jLjEvTWF4UG93ZXINCmVjaG8g
-MTkyID4gJHtDT05GSUdGU30vY29uZmlncy9jLjEvYm1BdHRyaWJ1dGVzDQoNCm1rZGlyIC1wICIk
-e0NPTkZJR0ZTfS9mdW5jdGlvbnMvcm5kaXMudXNiMCINCmVjaG8gIjAyIiA+ICIke0NPTkZJR0ZT
-fS9mdW5jdGlvbnMvcm5kaXMudXNiMC9jbGFzcyINCmVjaG8gIjAwOjE0OjJkOmZmOmZmOmZmIiA+
-ICIke0NPTkZJR0ZTfS9mdW5jdGlvbnMvcm5kaXMudXNiMC9kZXZfYWRkciINCmVjaG8gIjAwOjE0
-OjJkOmZmOmZmOmZlIiA+ICIke0NPTkZJR0ZTfS9mdW5jdGlvbnMvcm5kaXMudXNiMC9ob3N0X2Fk
-ZHIiDQplY2hvICIwMCIgPiAiJHtDT05GSUdGU30vZnVuY3Rpb25zL3JuZGlzLnVzYjAvcHJvdG9j
-b2wiDQplY2hvIDUgPiAiJHtDT05GSUdGU30vZnVuY3Rpb25zL3JuZGlzLnVzYjAvcW11bHQiDQpl
-Y2hvICIwNiIgPiAiJHtDT05GSUdGU30vZnVuY3Rpb25zL3JuZGlzLnVzYjAvc3ViY2xhc3MiDQoN
-CmxuIC1zICIke0NPTkZJR0ZTfS9mdW5jdGlvbnMvcm5kaXMudXNiMCINCiIke0NPTkZJR0ZTfS9j
-b25maWdzL2MuMS9ybmRpcy51c2IwIg0KDQplY2hvICJjaV9oZHJjLjAiID4gIiR7Q09ORklHRlN9
-L1VEQyINCg==
+For some reason, the TEST_ defines in the usb/ch9.h files did not have
+the USB_ prefix on it, making it a bit confusing when reading the file,
+as well as not the nicest thing to do in a uapi file.
+
+So fix that up and add the USB_ prefix on to them, and fix up all
+in-kernel usages.  This included deleting the duplicate copy in the
+net2272.h file.
+
+Cc: Peter Chen <Peter.Chen@nxp.com>
+Cc: Minas Harutyunyan <hminas@synopsys.com>
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: Michal Simek <michal.simek@xilinx.com>
+Cc: Mathias Nyman <mathias.nyman@intel.com>
+Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc: Bin Liu <b-liu@ti.com>
+Cc: Pawel Laszczak <pawell@cadence.com>
+Cc: YueHaibing <yuehaibing@huawei.com>
+Cc: Nathan Chancellor <natechancellor@gmail.com>
+Cc: Jason Yan <yanaijie@huawei.com>
+Cc: Jia-Ju Bai <baijiaju1990@gmail.com>
+Cc: Stephen Boyd <swboyd@chromium.org>
+Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Jules Irenge <jbi.octave@gmail.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Rob Gill <rrobgill@protonmail.com>
+Cc: Macpaul Lin <macpaul.lin@mediatek.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/usb/cdns3/ep0.c              |  8 ++++----
+ drivers/usb/chipidea/udc.c           | 10 +++++-----
+ drivers/usb/common/debug.c           | 10 +++++-----
+ drivers/usb/dwc2/debugfs.c           | 20 ++++++++++----------
+ drivers/usb/dwc2/gadget.c            | 10 +++++-----
+ drivers/usb/dwc3/debugfs.c           | 20 ++++++++++----------
+ drivers/usb/dwc3/ep0.c               | 10 +++++-----
+ drivers/usb/dwc3/gadget.c            | 10 +++++-----
+ drivers/usb/gadget/udc/bdc/bdc_ep.c  | 10 +++++-----
+ drivers/usb/gadget/udc/gr_udc.c      |  4 ++--
+ drivers/usb/gadget/udc/mv_udc_core.c |  2 +-
+ drivers/usb/gadget/udc/net2272.c     |  2 +-
+ drivers/usb/gadget/udc/net2272.h     |  5 -----
+ drivers/usb/gadget/udc/udc-xilinx.c  |  4 ++--
+ drivers/usb/host/xhci-hub.c          |  7 ++++---
+ drivers/usb/misc/ehset.c             |  8 ++++----
+ drivers/usb/mtu3/mtu3_gadget_ep0.c   | 16 ++++++++--------
+ drivers/usb/musb/musb_gadget_ep0.c   | 20 ++++++++------------
+ drivers/usb/musb/musb_virthub.c      | 20 ++++++++++----------
+ include/uapi/linux/usb/ch9.h         | 10 +++++-----
+ 20 files changed, 99 insertions(+), 107 deletions(-)
+
+diff --git a/drivers/usb/cdns3/ep0.c b/drivers/usb/cdns3/ep0.c
+index 82645a2a0f52..04a522f5ae58 100644
+--- a/drivers/usb/cdns3/ep0.c
++++ b/drivers/usb/cdns3/ep0.c
+@@ -328,10 +328,10 @@ static int cdns3_ep0_feature_handle_device(struct cdns3_device *priv_dev,
+ 			return -EINVAL;
+ 
+ 		switch (tmode >> 8) {
+-		case TEST_J:
+-		case TEST_K:
+-		case TEST_SE0_NAK:
+-		case TEST_PACKET:
++		case USB_TEST_J:
++		case USB_TEST_K:
++		case USB_TEST_SE0_NAK:
++		case USB_TEST_PACKET:
+ 			cdns3_set_register_bit(&priv_dev->regs->usb_cmd,
+ 					       USB_CMD_STMODE |
+ 					       USB_STS_TMODE_SEL(tmode - 1));
+diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
+index db0cfde0cc3c..4beb25888917 100644
+--- a/drivers/usb/chipidea/udc.c
++++ b/drivers/usb/chipidea/udc.c
+@@ -1215,11 +1215,11 @@ __acquires(ci->lock)
+ 			case USB_DEVICE_TEST_MODE:
+ 				tmode = le16_to_cpu(req.wIndex) >> 8;
+ 				switch (tmode) {
+-				case TEST_J:
+-				case TEST_K:
+-				case TEST_SE0_NAK:
+-				case TEST_PACKET:
+-				case TEST_FORCE_EN:
++				case USB_TEST_J:
++				case USB_TEST_K:
++				case USB_TEST_SE0_NAK:
++				case USB_TEST_PACKET:
++				case USB_TEST_FORCE_ENABLE:
+ 					ci->test_mode = tmode;
+ 					err = isr_setup_status_phase(
+ 							ci);
+diff --git a/drivers/usb/common/debug.c b/drivers/usb/common/debug.c
+index 92a986aeaa5d..410acd670ca7 100644
+--- a/drivers/usb/common/debug.c
++++ b/drivers/usb/common/debug.c
+@@ -53,15 +53,15 @@ static const char *usb_decode_device_feature(u16 wValue)
+ static const char *usb_decode_test_mode(u16 wIndex)
+ {
+ 	switch (wIndex) {
+-	case TEST_J:
++	case USB_TEST_J:
+ 		return ": TEST_J";
+-	case TEST_K:
++	case USB_TEST_K:
+ 		return ": TEST_K";
+-	case TEST_SE0_NAK:
++	case USB_TEST_SE0_NAK:
+ 		return ": TEST_SE0_NAK";
+-	case TEST_PACKET:
++	case USB_TEST_PACKET:
+ 		return ": TEST_PACKET";
+-	case TEST_FORCE_EN:
++	case USB_TEST_FORCE_ENABLE:
+ 		return ": TEST_FORCE_EN";
+ 	default:
+ 		return ": UNKNOWN";
+diff --git a/drivers/usb/dwc2/debugfs.c b/drivers/usb/dwc2/debugfs.c
+index 3a0dcbfbc827..aaafd463d72a 100644
+--- a/drivers/usb/dwc2/debugfs.c
++++ b/drivers/usb/dwc2/debugfs.c
+@@ -37,15 +37,15 @@ static ssize_t testmode_write(struct file *file, const char __user *ubuf, size_t
+ 		return -EFAULT;
+ 
+ 	if (!strncmp(buf, "test_j", 6))
+-		testmode = TEST_J;
++		testmode = USB_TEST_J;
+ 	else if (!strncmp(buf, "test_k", 6))
+-		testmode = TEST_K;
++		testmode = USB_TEST_K;
+ 	else if (!strncmp(buf, "test_se0_nak", 12))
+-		testmode = TEST_SE0_NAK;
++		testmode = USB_TEST_SE0_NAK;
+ 	else if (!strncmp(buf, "test_packet", 11))
+-		testmode = TEST_PACKET;
++		testmode = USB_TEST_PACKET;
+ 	else if (!strncmp(buf, "test_force_enable", 17))
+-		testmode = TEST_FORCE_EN;
++		testmode = USB_TEST_FORCE_ENABLE;
+ 	else
+ 		testmode = 0;
+ 
+@@ -78,19 +78,19 @@ static int testmode_show(struct seq_file *s, void *unused)
+ 	case 0:
+ 		seq_puts(s, "no test\n");
+ 		break;
+-	case TEST_J:
++	case USB_TEST_J:
+ 		seq_puts(s, "test_j\n");
+ 		break;
+-	case TEST_K:
++	case USB_TEST_K:
+ 		seq_puts(s, "test_k\n");
+ 		break;
+-	case TEST_SE0_NAK:
++	case USB_TEST_SE0_NAK:
+ 		seq_puts(s, "test_se0_nak\n");
+ 		break;
+-	case TEST_PACKET:
++	case USB_TEST_PACKET:
+ 		seq_puts(s, "test_packet\n");
+ 		break;
+-	case TEST_FORCE_EN:
++	case USB_TEST_FORCE_ENABLE:
+ 		seq_puts(s, "test_force_enable\n");
+ 		break;
+ 	default:
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index 12b98b466287..38fc46b0c026 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -1561,11 +1561,11 @@ int dwc2_hsotg_set_test_mode(struct dwc2_hsotg *hsotg, int testmode)
+ 
+ 	dctl &= ~DCTL_TSTCTL_MASK;
+ 	switch (testmode) {
+-	case TEST_J:
+-	case TEST_K:
+-	case TEST_SE0_NAK:
+-	case TEST_PACKET:
+-	case TEST_FORCE_EN:
++	case USB_TEST_J:
++	case USB_TEST_K:
++	case USB_TEST_SE0_NAK:
++	case USB_TEST_PACKET:
++	case USB_TEST_FORCE_ENABLE:
+ 		dctl |= testmode << DCTL_TSTCTL_SHIFT;
+ 		break;
+ 	default:
+diff --git a/drivers/usb/dwc3/debugfs.c b/drivers/usb/dwc3/debugfs.c
+index 6d9de334e46a..14dc6a37305d 100644
+--- a/drivers/usb/dwc3/debugfs.c
++++ b/drivers/usb/dwc3/debugfs.c
+@@ -466,19 +466,19 @@ static int dwc3_testmode_show(struct seq_file *s, void *unused)
+ 	case 0:
+ 		seq_printf(s, "no test\n");
+ 		break;
+-	case TEST_J:
++	case USB_TEST_J:
+ 		seq_printf(s, "test_j\n");
+ 		break;
+-	case TEST_K:
++	case USB_TEST_K:
+ 		seq_printf(s, "test_k\n");
+ 		break;
+-	case TEST_SE0_NAK:
++	case USB_TEST_SE0_NAK:
+ 		seq_printf(s, "test_se0_nak\n");
+ 		break;
+-	case TEST_PACKET:
++	case USB_TEST_PACKET:
+ 		seq_printf(s, "test_packet\n");
+ 		break;
+-	case TEST_FORCE_EN:
++	case USB_TEST_FORCE_ENABLE:
+ 		seq_printf(s, "test_force_enable\n");
+ 		break;
+ 	default:
+@@ -506,15 +506,15 @@ static ssize_t dwc3_testmode_write(struct file *file,
+ 		return -EFAULT;
+ 
+ 	if (!strncmp(buf, "test_j", 6))
+-		testmode = TEST_J;
++		testmode = USB_TEST_J;
+ 	else if (!strncmp(buf, "test_k", 6))
+-		testmode = TEST_K;
++		testmode = USB_TEST_K;
+ 	else if (!strncmp(buf, "test_se0_nak", 12))
+-		testmode = TEST_SE0_NAK;
++		testmode = USB_TEST_SE0_NAK;
+ 	else if (!strncmp(buf, "test_packet", 11))
+-		testmode = TEST_PACKET;
++		testmode = USB_TEST_PACKET;
+ 	else if (!strncmp(buf, "test_force_enable", 17))
+-		testmode = TEST_FORCE_EN;
++		testmode = USB_TEST_FORCE_ENABLE;
+ 	else
+ 		testmode = 0;
+ 
+diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
+index 6dee4dabc0a4..8dd69728add3 100644
+--- a/drivers/usb/dwc3/ep0.c
++++ b/drivers/usb/dwc3/ep0.c
+@@ -425,11 +425,11 @@ static int dwc3_ep0_handle_test(struct dwc3 *dwc, enum usb_device_state state,
+ 		return -EINVAL;
+ 
+ 	switch (wIndex >> 8) {
+-	case TEST_J:
+-	case TEST_K:
+-	case TEST_SE0_NAK:
+-	case TEST_PACKET:
+-	case TEST_FORCE_EN:
++	case USB_TEST_J:
++	case USB_TEST_K:
++	case USB_TEST_SE0_NAK:
++	case USB_TEST_PACKET:
++	case USB_TEST_FORCE_ENABLE:
+ 		dwc->test_mode_nr = wIndex >> 8;
+ 		dwc->test_mode = true;
+ 		break;
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 80c3ef134e41..0b59b2f1cf26 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -46,11 +46,11 @@ int dwc3_gadget_set_test_mode(struct dwc3 *dwc, int mode)
+ 	reg &= ~DWC3_DCTL_TSTCTRL_MASK;
+ 
+ 	switch (mode) {
+-	case TEST_J:
+-	case TEST_K:
+-	case TEST_SE0_NAK:
+-	case TEST_PACKET:
+-	case TEST_FORCE_EN:
++	case USB_TEST_J:
++	case USB_TEST_K:
++	case USB_TEST_SE0_NAK:
++	case USB_TEST_PACKET:
++	case USB_TEST_FORCE_ENABLE:
+ 		reg |= mode << 1;
+ 		break;
+ 	default:
+diff --git a/drivers/usb/gadget/udc/bdc/bdc_ep.c b/drivers/usb/gadget/udc/bdc/bdc_ep.c
+index d49c6dc1082d..ba250cf75bef 100644
+--- a/drivers/usb/gadget/udc/bdc/bdc_ep.c
++++ b/drivers/usb/gadget/udc/bdc/bdc_ep.c
+@@ -927,11 +927,11 @@ static int bdc_set_test_mode(struct bdc *bdc)
+ 	usb2_pm &= ~BDC_PTC_MASK;
+ 	dev_dbg(bdc->dev, "%s\n", __func__);
+ 	switch (bdc->test_mode) {
+-	case TEST_J:
+-	case TEST_K:
+-	case TEST_SE0_NAK:
+-	case TEST_PACKET:
+-	case TEST_FORCE_EN:
++	case USB_TEST_J:
++	case USB_TEST_K:
++	case USB_TEST_SE0_NAK:
++	case USB_TEST_PACKET:
++	case USB_TEST_FORCE_ENABLE:
+ 		usb2_pm |= bdc->test_mode << 28;
+ 		break;
+ 	default:
+diff --git a/drivers/usb/gadget/udc/gr_udc.c b/drivers/usb/gadget/udc/gr_udc.c
+index 7164ad9800f1..345e28d76709 100644
+--- a/drivers/usb/gadget/udc/gr_udc.c
++++ b/drivers/usb/gadget/udc/gr_udc.c
+@@ -912,9 +912,9 @@ static int gr_device_request(struct gr_udc *dev, u8 type, u8 request,
+ 			return gr_ep0_respond_empty(dev);
+ 
+ 		case USB_DEVICE_TEST_MODE:
+-			/* The hardware does not support TEST_FORCE_EN */
++			/* The hardware does not support USB_TEST_FORCE_ENABLE */
+ 			test = index >> 8;
+-			if (test >= TEST_J && test <= TEST_PACKET) {
++			if (test >= USB_TEST_J && test <= USB_TEST_PACKET) {
+ 				dev->test_mode = test;
+ 				return gr_ep0_respond(dev, NULL, 0,
+ 						      gr_ep0_testmode_complete);
+diff --git a/drivers/usb/gadget/udc/mv_udc_core.c b/drivers/usb/gadget/udc/mv_udc_core.c
+index cafde053788b..69289717d856 100644
+--- a/drivers/usb/gadget/udc/mv_udc_core.c
++++ b/drivers/usb/gadget/udc/mv_udc_core.c
+@@ -1502,7 +1502,7 @@ udc_prime_status(struct mv_udc *udc, u8 direction, u16 status, bool empty)
+ 
+ static void mv_udc_testmode(struct mv_udc *udc, u16 index)
+ {
+-	if (index <= TEST_FORCE_EN) {
++	if (index <= USB_TEST_FORCE_ENABLE) {
+ 		udc->test_mode = index;
+ 		if (udc_prime_status(udc, EP_DIR_IN, 0, true))
+ 			ep0_stall(udc);
+diff --git a/drivers/usb/gadget/udc/net2272.c b/drivers/usb/gadget/udc/net2272.c
+index 928057b206f1..fbbe62513545 100644
+--- a/drivers/usb/gadget/udc/net2272.c
++++ b/drivers/usb/gadget/udc/net2272.c
+@@ -1688,7 +1688,7 @@ net2272_set_test_mode(struct net2272 *dev, int mode)
+ 	net2272_write(dev, USBTEST, mode);
+ 
+ 	/* load test packet */
+-	if (mode == TEST_PACKET) {
++	if (mode == USB_TEST_PACKET) {
+ 		/* switch to 8 bit mode */
+ 		net2272_write(dev, LOCCTL, net2272_read(dev, LOCCTL) &
+ 				~(1 << DATA_WIDTH));
+diff --git a/drivers/usb/gadget/udc/net2272.h b/drivers/usb/gadget/udc/net2272.h
+index 8e644627992d..87d0ab9ffeeb 100644
+--- a/drivers/usb/gadget/udc/net2272.h
++++ b/drivers/usb/gadget/udc/net2272.h
+@@ -105,11 +105,6 @@
+ #define USBTEST				0x32
+ #define 	TEST_MODE_SELECT			0
+ #define 		NORMAL_OPERATION			0
+-#define 		TEST_J					1
+-#define 		TEST_K					2
+-#define 		TEST_SE0_NAK				3
+-#define 		TEST_PACKET				4
+-#define 		TEST_FORCE_ENABLE			5
+ #define XCVRDIAG			0x33
+ #define 	FORCE_FULL_SPEED			2
+ #define 	FORCE_HIGH_SPEED			3
+diff --git a/drivers/usb/gadget/udc/udc-xilinx.c b/drivers/usb/gadget/udc/udc-xilinx.c
+index 709553bdb233..d5e9d20c097d 100644
+--- a/drivers/usb/gadget/udc/udc-xilinx.c
++++ b/drivers/usb/gadget/udc/udc-xilinx.c
+@@ -2097,9 +2097,9 @@ static int xudc_probe(struct platform_device *pdev)
+ 	/* Check for IP endianness */
+ 	udc->write_fn = xudc_write32_be;
+ 	udc->read_fn = xudc_read32_be;
+-	udc->write_fn(udc->addr, XUSB_TESTMODE_OFFSET, TEST_J);
++	udc->write_fn(udc->addr, XUSB_TESTMODE_OFFSET, USB_TEST_J);
+ 	if ((udc->read_fn(udc->addr + XUSB_TESTMODE_OFFSET))
+-			!= TEST_J) {
++			!= USB_TEST_J) {
+ 		udc->write_fn = xudc_write32;
+ 		udc->read_fn = xudc_read32;
+ 	}
+diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
+index f37316d2c8fa..073c54e42223 100644
+--- a/drivers/usb/host/xhci-hub.c
++++ b/drivers/usb/host/xhci-hub.c
+@@ -612,7 +612,7 @@ static void xhci_port_set_test_mode(struct xhci_hcd *xhci,
+ 	temp |= test_mode << PORT_TEST_MODE_SHIFT;
+ 	writel(temp, port->addr + PORTPMSC);
+ 	xhci->test_mode = test_mode;
+-	if (test_mode == TEST_FORCE_EN)
++	if (test_mode == USB_TEST_FORCE_ENABLE)
+ 		xhci_start(xhci);
+ }
+ 
+@@ -666,7 +666,7 @@ static int xhci_exit_test_mode(struct xhci_hcd *xhci)
+ 		xhci_err(xhci, "Not in test mode, do nothing.\n");
+ 		return 0;
+ 	}
+-	if (xhci->test_mode == TEST_FORCE_EN &&
++	if (xhci->test_mode == USB_TEST_FORCE_ENABLE &&
+ 		!(xhci->xhc_state & XHCI_STATE_HALTED)) {
+ 		retval = xhci_halt(xhci);
+ 		if (retval)
+@@ -1421,7 +1421,8 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 			/* 4.19.6 Port Test Modes (USB2 Test Mode) */
+ 			if (hcd->speed != HCD_USB2)
+ 				goto error;
+-			if (test_mode > TEST_FORCE_EN || test_mode < TEST_J)
++			if (test_mode > USB_TEST_FORCE_ENABLE ||
++			    test_mode < USB_TEST_J)
+ 				goto error;
+ 			retval = xhci_enter_test_mode(xhci, test_mode, wIndex,
+ 						      &flags);
+diff --git a/drivers/usb/misc/ehset.c b/drivers/usb/misc/ehset.c
+index 7895d61e733b..2752e1f4f4d0 100644
+--- a/drivers/usb/misc/ehset.c
++++ b/drivers/usb/misc/ehset.c
+@@ -33,28 +33,28 @@ static int ehset_probe(struct usb_interface *intf,
+ 		ret = usb_control_msg(hub_udev, usb_sndctrlpipe(hub_udev, 0),
+ 					USB_REQ_SET_FEATURE, USB_RT_PORT,
+ 					USB_PORT_FEAT_TEST,
+-					(TEST_SE0_NAK << 8) | portnum,
++					(USB_TEST_SE0_NAK << 8) | portnum,
+ 					NULL, 0, 1000);
+ 		break;
+ 	case TEST_J_PID:
+ 		ret = usb_control_msg(hub_udev, usb_sndctrlpipe(hub_udev, 0),
+ 					USB_REQ_SET_FEATURE, USB_RT_PORT,
+ 					USB_PORT_FEAT_TEST,
+-					(TEST_J << 8) | portnum,
++					(USB_TEST_J << 8) | portnum,
+ 					NULL, 0, 1000);
+ 		break;
+ 	case TEST_K_PID:
+ 		ret = usb_control_msg(hub_udev, usb_sndctrlpipe(hub_udev, 0),
+ 					USB_REQ_SET_FEATURE, USB_RT_PORT,
+ 					USB_PORT_FEAT_TEST,
+-					(TEST_K << 8) | portnum,
++					(USB_TEST_K << 8) | portnum,
+ 					NULL, 0, 1000);
+ 		break;
+ 	case TEST_PACKET_PID:
+ 		ret = usb_control_msg(hub_udev, usb_sndctrlpipe(hub_udev, 0),
+ 					USB_REQ_SET_FEATURE, USB_RT_PORT,
+ 					USB_PORT_FEAT_TEST,
+-					(TEST_PACKET << 8) | portnum,
++					(USB_TEST_PACKET << 8) | portnum,
+ 					NULL, 0, 1000);
+ 		break;
+ 	case TEST_HS_HOST_PORT_SUSPEND_RESUME:
+diff --git a/drivers/usb/mtu3/mtu3_gadget_ep0.c b/drivers/usb/mtu3/mtu3_gadget_ep0.c
+index 2be182bd793a..563a0a2e970d 100644
+--- a/drivers/usb/mtu3/mtu3_gadget_ep0.c
++++ b/drivers/usb/mtu3/mtu3_gadget_ep0.c
+@@ -278,20 +278,20 @@ static int handle_test_mode(struct mtu3 *mtu, struct usb_ctrlrequest *setup)
+ 	u32 value;
+ 
+ 	switch (le16_to_cpu(setup->wIndex) >> 8) {
+-	case TEST_J:
+-		dev_dbg(mtu->dev, "TEST_J\n");
++	case USB_TEST_J:
++		dev_dbg(mtu->dev, "USB_TEST_J\n");
+ 		mtu->test_mode_nr = TEST_J_MODE;
+ 		break;
+-	case TEST_K:
+-		dev_dbg(mtu->dev, "TEST_K\n");
++	case USB_TEST_K:
++		dev_dbg(mtu->dev, "USB_TEST_K\n");
+ 		mtu->test_mode_nr = TEST_K_MODE;
+ 		break;
+-	case TEST_SE0_NAK:
+-		dev_dbg(mtu->dev, "TEST_SE0_NAK\n");
++	case USB_TEST_SE0_NAK:
++		dev_dbg(mtu->dev, "USB_TEST_SE0_NAK\n");
+ 		mtu->test_mode_nr = TEST_SE0_NAK_MODE;
+ 		break;
+-	case TEST_PACKET:
+-		dev_dbg(mtu->dev, "TEST_PACKET\n");
++	case USB_TEST_PACKET:
++		dev_dbg(mtu->dev, "USB_TEST_PACKET\n");
+ 		mtu->test_mode_nr = TEST_PACKET_MODE;
+ 		break;
+ 	default:
+diff --git a/drivers/usb/musb/musb_gadget_ep0.c b/drivers/usb/musb/musb_gadget_ep0.c
+index 91a5027b5c1f..0ae3e0be043e 100644
+--- a/drivers/usb/musb/musb_gadget_ep0.c
++++ b/drivers/usb/musb/musb_gadget_ep0.c
+@@ -311,27 +311,23 @@ __acquires(musb->lock)
+ 						goto stall;
+ 
+ 					switch (ctrlrequest->wIndex >> 8) {
+-					case 1:
+-						pr_debug("TEST_J\n");
+-						/* TEST_J */
++					case USB_TEST_J:
++						pr_debug("USB_TEST_J\n");
+ 						musb->test_mode_nr =
+ 							MUSB_TEST_J;
+ 						break;
+-					case 2:
+-						/* TEST_K */
+-						pr_debug("TEST_K\n");
++					case USB_TEST_K:
++						pr_debug("USB_TEST_K\n");
+ 						musb->test_mode_nr =
+ 							MUSB_TEST_K;
+ 						break;
+-					case 3:
+-						/* TEST_SE0_NAK */
+-						pr_debug("TEST_SE0_NAK\n");
++					case USB_TEST_SE0_NAK:
++						pr_debug("USB_TEST_SE0_NAK\n");
+ 						musb->test_mode_nr =
+ 							MUSB_TEST_SE0_NAK;
+ 						break;
+-					case 4:
+-						/* TEST_PACKET */
+-						pr_debug("TEST_PACKET\n");
++					case USB_TEST_PACKET:
++						pr_debug("USB_TEST_PACKET\n");
+ 						musb->test_mode_nr =
+ 							MUSB_TEST_PACKET;
+ 						break;
+diff --git a/drivers/usb/musb/musb_virthub.c b/drivers/usb/musb/musb_virthub.c
+index a84ec27c4c12..cb7ae297a3af 100644
+--- a/drivers/usb/musb/musb_virthub.c
++++ b/drivers/usb/musb/musb_virthub.c
+@@ -385,25 +385,25 @@ int musb_hub_control(
+ 
+ 			wIndex >>= 8;
+ 			switch (wIndex) {
+-			case 1:
+-				pr_debug("TEST_J\n");
++			case USB_TEST_J:
++				pr_debug("USB_TEST_J\n");
+ 				temp = MUSB_TEST_J;
+ 				break;
+-			case 2:
+-				pr_debug("TEST_K\n");
++			case USB_TEST_K:
++				pr_debug("USB_TEST_K\n");
+ 				temp = MUSB_TEST_K;
+ 				break;
+-			case 3:
+-				pr_debug("TEST_SE0_NAK\n");
++			case USB_TEST_SE0_NAK:
++				pr_debug("USB_TEST_SE0_NAK\n");
+ 				temp = MUSB_TEST_SE0_NAK;
+ 				break;
+-			case 4:
+-				pr_debug("TEST_PACKET\n");
++			case USB_TEST_PACKET:
++				pr_debug("USB_TEST_PACKET\n");
+ 				temp = MUSB_TEST_PACKET;
+ 				musb_load_testpacket(musb);
+ 				break;
+-			case 5:
+-				pr_debug("TEST_FORCE_ENABLE\n");
++			case USB_TEST_FORCE_ENABLE:
++				pr_debug("USB_TEST_FORCE_ENABLE\n");
+ 				temp = MUSB_TEST_FORCE_HOST
+ 					| MUSB_TEST_FORCE_HS;
+ 
+diff --git a/include/uapi/linux/usb/ch9.h b/include/uapi/linux/usb/ch9.h
+index b1ed2ccfe9cf..48766fdf6580 100644
+--- a/include/uapi/linux/usb/ch9.h
++++ b/include/uapi/linux/usb/ch9.h
+@@ -138,11 +138,11 @@
+  * Test Mode Selectors
+  * See USB 2.0 spec Table 9-7
+  */
+-#define	TEST_J		1
+-#define	TEST_K		2
+-#define	TEST_SE0_NAK	3
+-#define	TEST_PACKET	4
+-#define	TEST_FORCE_EN	5
++#define	USB_TEST_J		1
++#define	USB_TEST_K		2
++#define	USB_TEST_SE0_NAK	3
++#define	USB_TEST_PACKET		4
++#define	USB_TEST_FORCE_ENABLE	5
+ 
+ /* Status Type */
+ #define USB_STATUS_TYPE_STANDARD	0
+-- 
+2.27.0
+
