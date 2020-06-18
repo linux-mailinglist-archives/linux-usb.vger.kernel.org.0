@@ -2,74 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F6081FEDF2
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 10:40:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B59B1FEE1A
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 10:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728647AbgFRIkf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Jun 2020 04:40:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56154 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728320AbgFRIkd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 18 Jun 2020 04:40:33 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 06C3C2089D;
-        Thu, 18 Jun 2020 08:40:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592469633;
-        bh=hFJYYoOy8ZgZSe7kwebjbwvT/qbmAaFVTlJYwv2eTuE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jS27CLq/ErVC7tBrwumIeEogglJYOluouLk5sKA8q/xozqXRfgJ1zHGjRInSf/P3Y
-         2+5bRkBM4uFbm/YA1KWXfIcmA96NgFIqfzGWZbraBDx+cZCX8PxxaEM/BzWyUxanLQ
-         ONtyeHAjcurQQ/D+lTk+tweznwTawo4iks6+/hIw=
-Date:   Thu, 18 Jun 2020 10:40:26 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Colin King <colin.king@canonical.com>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>, linux-usb@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] usb: xhci: fix spelling mistake in Kconfig
- "firwmare" -> "firmware"
-Message-ID: <20200618084026.GA1073692@kroah.com>
-References: <20200603121152.16550-1-colin.king@canonical.com>
+        id S1728891AbgFRIwf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Jun 2020 04:52:35 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:46418 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728452AbgFRIwe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Jun 2020 04:52:34 -0400
+Received: from [192.168.0.20] (cpc89242-aztw30-2-0-cust488.18-1.cable.virginm.net [86.31.129.233])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 85FB528D;
+        Thu, 18 Jun 2020 10:52:30 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1592470350;
+        bh=cQdDQYK5cYEmsz/Pb+jP6CxA60dH8BgafEV56iCSNs4=;
+        h=Reply-To:Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=XY55hUJ8tmgdmJpQrZNZ3WYlijnFZ4pBgLtJvo3tYovpZYH+fR8s69ZVNxlE2POyl
+         EGMoZU4VvyIsgXyP8Zb49khWHAaCDXdfafuUY974HYQHgVkBa7RNGt1KsMLWWEYSD0
+         M73zf8IsJc+56ZuQjksdu8z+795y3biTYjt0oRww=
+Reply-To: kieran.bingham+renesas@ideasonboard.com
+Subject: Re: [PATCH 07/17] drivers: usb: Fix trivial spelling
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        linux-renesas-soc@vger.kernel.org,
+        Jiri Kosina <trivial@kernel.org>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20200609124610.3445662-1-kieran.bingham+renesas@ideasonboard.com>
+ <20200609124610.3445662-8-kieran.bingham+renesas@ideasonboard.com>
+ <20200618082147.GA1050104@kroah.com>
+From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Organization: Ideas on Board
+Message-ID: <0d1fb492-7503-895c-82d3-b7f4611ef1f2@ideasonboard.com>
+Date:   Thu, 18 Jun 2020 09:52:28 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200603121152.16550-1-colin.king@canonical.com>
+In-Reply-To: <20200618082147.GA1050104@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 03, 2020 at 01:11:52PM +0100, Colin King wrote:
-> From: Colin Ian King <colin.king@canonical.com>
-> 
-> There are two spelling mistakes in the Kconfig text. Fix these.
-> 
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
-> ---
->  drivers/usb/host/Kconfig | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
-> index 62c348062e48..5f4b6c71392c 100644
-> --- a/drivers/usb/host/Kconfig
-> +++ b/drivers/usb/host/Kconfig
-> @@ -44,10 +44,10 @@ config USB_XHCI_PCI
->  	default y
->  
->  config USB_XHCI_PCI_RENESAS
-> -	tristate "Support for additional Renesas xHCI controller with firwmare"
-> +	tristate "Support for additional Renesas xHCI controller with firmware"
->  	---help---
->  	  Say 'Y' to enable the support for the Renesas xHCI controller with
-> -	  firwmare. Make sure you have the firwmare for the device and
-> +	  firmware. Make sure you have the firwmare for the device and
->  	  installed on your system for this device to work.
->  	  If unsure, say 'N'.
->  
-> -- 
-> 2.25.1
-> 
+Hi Greg,
 
-Does not apply to my tree :(
+On 18/06/2020 09:21, Greg Kroah-Hartman wrote:
+> On Tue, Jun 09, 2020 at 01:46:00PM +0100, Kieran Bingham wrote:
+>> The word 'descriptor' is misspelled throughout the tree.
+>>
+>> Fix it up accordingly:
+>>     decriptors -> descriptors
+>>
+>> Signed-off-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+>> ---
+>>  drivers/usb/core/of.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/core/of.c b/drivers/usb/core/of.c
+>> index 651708d8c908..617e92569b2c 100644
+>> --- a/drivers/usb/core/of.c
+>> +++ b/drivers/usb/core/of.c
+>> @@ -45,7 +45,7 @@ EXPORT_SYMBOL_GPL(usb_of_get_device_node);
+>>   *
+>>   * Determine whether a USB device has a so called combined node which is
+>>   * shared with its sole interface. This is the case if and only if the device
+>> - * has a node and its decriptors report the following:
+>> + * has a node and its descriptors report the following:
+>>   *
+>>   *	1) bDeviceClass is 0 or 9, and
+>>   *	2) bNumConfigurations is 1, and
+>> -- 
+>> 2.25.1
+>>
+> 
+> Already fixed in Linus's tree :(
+
+Don't be sad - that makes me happy ;-) This was just a global fixup
+while I added the correction to scripts/spelling.txt...
+
+But wait, are you sure? I've just rebased this series on top of
+1b5044021070 ("Merge tag 'dma-mapping-5.8-3' of
+git://git.infradead.org/users/hch/dma-mapping"), and this still applies
+for me ... Am I failing to pick up the latest branch from Linus?
+(https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
+looks like I'm on the latest, so I don't think so).
+
+I see a bot-notification from you saying it's been added to your
+usb-testing tree, so I'll assume this is all fine. No need to worry
+though It's only a trivial and can get picked up by the trivial bot I
+think if I resend when the dust settles.
+
+Thanks
+
+Kieran
