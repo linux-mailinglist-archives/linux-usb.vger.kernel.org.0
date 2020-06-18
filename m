@@ -2,160 +2,220 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D76741FFCE4
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 22:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B89A1FFCF8
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 22:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726976AbgFRUsC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Jun 2020 16:48:02 -0400
-Received: from mga09.intel.com ([134.134.136.24]:12177 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725829AbgFRUsC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 18 Jun 2020 16:48:02 -0400
-IronPort-SDR: s9EwaZakhUfxsJObD0kgs5XAOawxpuWtI+pvYiIsVMpyE/5VuecJBDLTtEaiqTsIgi9iUoVcI6
- EiqolmJuWmgA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9656"; a="144237006"
-X-IronPort-AV: E=Sophos;i="5.75,252,1589266800"; 
-   d="scan'208";a="144237006"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2020 13:48:01 -0700
-IronPort-SDR: AcSWL3OIYNNjyp33txJ0xKE8uhPK84k9sXsNm63pI4PwITOpBO12M59rRrXzwGeyWJORPCvP1t
- yK3TvCmSilUg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,252,1589266800"; 
-   d="scan'208";a="309949011"
-Received: from lkp-server02.sh.intel.com (HELO 5ce11009e457) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 18 Jun 2020 13:48:00 -0700
-Received: from kbuild by 5ce11009e457 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1jm1S3-0000Pc-CY; Thu, 18 Jun 2020 20:47:59 +0000
-Date:   Fri, 19 Jun 2020 04:47:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- 302c570bf36e997d55ad0d60628a2feec76954a4
-Message-ID: <5eebd2f5.+ueXes926a53R8Hh%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1727024AbgFRU5S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Jun 2020 16:57:18 -0400
+Received: from mail-io1-f71.google.com ([209.85.166.71]:51731 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726278AbgFRU5Q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Jun 2020 16:57:16 -0400
+Received: by mail-io1-f71.google.com with SMTP id c5so5034124iok.18
+        for <linux-usb@vger.kernel.org>; Thu, 18 Jun 2020 13:57:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=d4+iWLaVlBy8wzsOcjuAnUFW5E1j1kRl6+gfWh8J8Hk=;
+        b=AzrP+kczdJJMXw92sjBsJDHa3E8IaQj8BDpORio4pYvhRRyk6ieNDtEPK38wJJfDFa
+         P6cqW6r/2kvpPeKGTrEgjgfH8rILSU4F3Y3ZhGawdNf9sIcUX4Y4/lfctqrdIFUVUaPb
+         S0icLcQXGsUWkvRplk7Con37EZb3HX8qv9xOSLI/9KFKXpXm6XiX0i6zAXwkgDCy6f81
+         WGiTJC0TrWfvSjsQhBrIbZ00YESu0uiy8cM1JXMG43ZNh+G4subZTANkG/rApjg/kc3J
+         WcvFgW1TMUGTwSPodFUbU5G+Yd4Nsad1BKNlfhq7rnXFDUQTzzKcKKUM5HZ/78dzwuYt
+         feCw==
+X-Gm-Message-State: AOAM531fNVclSWDTAGvavshLKBjX1dc3Dnx5GjLlXai7ui8LQAwMEWce
+        Gwj41w6HNgLU2zAgmXMtjaCIvMMAQS+8GFRD8ROwEHcHW8BS
+X-Google-Smtp-Source: ABdhPJw4eac/XW53i+LMcaWE0Cd57xbpVKEng30kzh0FAwfMuCudWPv9v27oel9I+xEKgTlPlw44nRgE126xXcQ2DL0zIGQmWBcK
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a05:6602:15ca:: with SMTP id f10mr682018iow.52.1592513834771;
+ Thu, 18 Jun 2020 13:57:14 -0700 (PDT)
+Date:   Thu, 18 Jun 2020 13:57:14 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006bf03c05a86205bb@google.com>
+Subject: INFO: trying to register non-static key in ath9k_htc_rxep
+From:   syzbot <syzbot+4d2d56175b934b9a7bf9@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, ath9k-devel@qca.qualcomm.com,
+        davem@davemloft.net, kuba@kernel.org, kvalo@codeaurora.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-linus
-branch HEAD: 302c570bf36e997d55ad0d60628a2feec76954a4  usb: typec: tcpci_rt1711h: avoid screaming irq causing boot hangs
+Hello,
 
-elapsed time: 723m
+syzbot found the following crash on:
 
-configs tested: 98
-configs skipped: 1
+HEAD commit:    b791d1bd Merge tag 'locking-kcsan-2020-06-11' of git://git..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=1522cc25100000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=16c2467d4b6dbee2
+dashboard link: https://syzkaller.appspot.com/bug?extid=4d2d56175b934b9a7bf9
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Unfortunately, I don't have any reproducer for this crash yet.
 
-arm                                 defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                               allnoconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm64                            allmodconfig
-arm64                             allnoconfig
-i386                              allnoconfig
-i386                             allyesconfig
-i386                                defconfig
-i386                              debian-10.3
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                              allnoconfig
-m68k                           sun3_defconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-nios2                            allyesconfig
-openrisc                            defconfig
-c6x                              allyesconfig
-c6x                               allnoconfig
-openrisc                         allyesconfig
-nds32                               defconfig
-nds32                             allnoconfig
-csky                                defconfig
-csky                             allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-h8300                            allmodconfig
-xtensa                              defconfig
-arc                                 defconfig
-arc                              allyesconfig
-sh                               allmodconfig
-sh                                allnoconfig
-microblaze                        allnoconfig
-mips                             allyesconfig
-mips                              allnoconfig
-mips                             allmodconfig
-parisc                            allnoconfig
-parisc                              defconfig
-parisc                           allyesconfig
-parisc                           allmodconfig
-powerpc                             defconfig
-powerpc                          allyesconfig
-powerpc                          rhel-kconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-i386                 randconfig-a002-20200618
-i386                 randconfig-a006-20200618
-i386                 randconfig-a001-20200618
-i386                 randconfig-a004-20200618
-i386                 randconfig-a005-20200618
-i386                 randconfig-a003-20200618
-x86_64               randconfig-a001-20200618
-x86_64               randconfig-a003-20200618
-x86_64               randconfig-a006-20200618
-x86_64               randconfig-a002-20200618
-x86_64               randconfig-a005-20200618
-x86_64               randconfig-a004-20200618
-i386                 randconfig-a011-20200618
-i386                 randconfig-a015-20200618
-i386                 randconfig-a014-20200618
-i386                 randconfig-a016-20200618
-i386                 randconfig-a012-20200618
-i386                 randconfig-a013-20200618
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-s390                             allyesconfig
-s390                              allnoconfig
-s390                             allmodconfig
-s390                                defconfig
-sparc                            allyesconfig
-sparc                               defconfig
-sparc64                             defconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                          allmodconfig
-um                               allmodconfig
-um                                allnoconfig
-um                               allyesconfig
-um                                  defconfig
-x86_64                               rhel-7.6
-x86_64                    rhel-7.6-kselftests
-x86_64                               rhel-8.3
-x86_64                                  kexec
-x86_64                                   rhel
-x86_64                         rhel-7.2-clear
-x86_64                                    lkp
-x86_64                              fedora-25
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+4d2d56175b934b9a7bf9@syzkaller.appspotmail.com
+
+INFO: trying to register non-static key.
+the code is fine but needs lockdep annotation.
+turning off the locking correctness validator.
+CPU: 0 PID: 355 Comm: syz-executor.2 Not tainted 5.7.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <IRQ>
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xf6/0x16e lib/dump_stack.c:118
+ assign_lock_key kernel/locking/lockdep.c:894 [inline]
+ register_lock_class+0x1442/0x17e0 kernel/locking/lockdep.c:1206
+ __lock_acquire+0x101/0x6270 kernel/locking/lockdep.c:4259
+ lock_acquire+0x18b/0x7c0 kernel/locking/lockdep.c:4959
+ __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+ _raw_spin_lock_irqsave+0x32/0x50 kernel/locking/spinlock.c:159
+ ath9k_htc_rxep+0x31/0x210 drivers/net/wireless/ath/ath9k/htc_drv_txrx.c:1128
+ ath9k_htc_rx_msg+0x2d9/0xb00 drivers/net/wireless/ath/ath9k/htc_hst.c:459
+ ath9k_hif_usb_rx_stream drivers/net/wireless/ath/ath9k/hif_usb.c:638 [inline]
+ ath9k_hif_usb_rx_cb+0xc76/0x1050 drivers/net/wireless/ath/ath9k/hif_usb.c:671
+ __usb_hcd_giveback_urb+0x29a/0x550 drivers/usb/core/hcd.c:1650
+ usb_hcd_giveback_urb+0x368/0x420 drivers/usb/core/hcd.c:1716
+ dummy_timer+0x125e/0x32b4 drivers/usb/gadget/udc/dummy_hcd.c:1967
+ call_timer_fn+0x1ac/0x6e0 kernel/time/timer.c:1404
+ expire_timers kernel/time/timer.c:1449 [inline]
+ __run_timers kernel/time/timer.c:1773 [inline]
+ __run_timers kernel/time/timer.c:1740 [inline]
+ run_timer_softirq+0x5e5/0x14c0 kernel/time/timer.c:1786
+ __do_softirq+0x21e/0x996 kernel/softirq.c:292
+ invoke_softirq kernel/softirq.c:373 [inline]
+ irq_exit+0x178/0x1a0 kernel/softirq.c:413
+ exiting_irq arch/x86/include/asm/apic.h:546 [inline]
+ smp_apic_timer_interrupt+0x141/0x540 arch/x86/kernel/apic/apic.c:1107
+ apic_timer_interrupt+0xf/0x20 arch/x86/entry/entry_64.S:829
+ </IRQ>
+RIP: 0010:arch_local_irq_restore arch/x86/include/asm/irqflags.h:85 [inline]
+RIP: 0010:__raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:160 [inline]
+RIP: 0010:_raw_spin_unlock_irqrestore+0x3b/0x40 kernel/locking/spinlock.c:191
+Code: e8 1a 69 8d fb 48 89 ef e8 42 5d 8e fb f6 c7 02 75 11 53 9d e8 26 e6 ab fb 65 ff 0d 57 e4 68 7a 5b 5d c3 e8 e7 de ab fb 53 9d <eb> ed 0f 1f 00 55 48 89 fd 65 ff 05 3d e4 68 7a 45 31 c9 41 b8 01
+RSP: 0018:ffff8881ae06fba0 EFLAGS: 00000246 ORIG_RAX: ffffffffffffff13
+RAX: 0000000000000000 RBX: 0000000000000246 RCX: 1ffffffff0fd4d4a
+RDX: 1ffff11039bbe747 RSI: 0000000000000000 RDI: ffff8881cddf3a38
+RBP: ffff8881db228400 R08: 0000000000000000 R09: 0000000000000001
+R10: 0000000000000000 R11: 0000000000000000 R12: dffffc0000000000
+R13: ffff8881db228480 R14: ffff8881ae06fdf8 R15: ffff8881db228400
+ unlock_hrtimer_base kernel/time/hrtimer.c:898 [inline]
+ hrtimer_start_range_ns+0x5cd/0xb50 kernel/time/hrtimer.c:1136
+ hrtimer_start_expires include/linux/hrtimer.h:435 [inline]
+ hrtimer_sleeper_start_expires kernel/time/hrtimer.c:1800 [inline]
+ do_nanosleep+0x1b9/0x650 kernel/time/hrtimer.c:1876
+ hrtimer_nanosleep+0x1df/0x3a0 kernel/time/hrtimer.c:1932
+ __do_sys_nanosleep kernel/time/hrtimer.c:1966 [inline]
+ __se_sys_nanosleep kernel/time/hrtimer.c:1953 [inline]
+ __x64_sys_nanosleep+0x1dc/0x260 kernel/time/hrtimer.c:1953
+ do_syscall_64+0xb6/0x5a0 arch/x86/entry/common.c:295
+ entry_SYSCALL_64_after_hwframe+0x49/0xb3
+RIP: 0033:0x45af70
+Code: Bad RIP value.
+RSP: 002b:00007fff27bba8e8 EFLAGS: 00000246 ORIG_RAX: 0000000000000023
+RAX: ffffffffffffffda RBX: 000000000009722e RCX: 000000000045af70
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007fff27bba8f0
+RBP: 00000000000001de R08: 0000000000000001 R09: 0000000001410940
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fff27bba940 R14: 000000000009722e R15: 00007fff27bba950
+BUG: unable to handle page fault for address: ffffffffffffffc8
+#PF: supervisor read access in kernel mode
+#PF: error_code(0x0000) - not-present page
+PGD 7026067 P4D 7026067 PUD 7028067 PMD 0 
+Oops: 0000 [#1] SMP KASAN
+CPU: 0 PID: 355 Comm: syz-executor.2 Not tainted 5.7.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:ath9k_htc_rxep+0xb5/0x210 drivers/net/wireless/ath/ath9k/htc_drv_txrx.c:1130
+Code: 8b 43 38 48 8d 58 c8 49 39 c4 0f 84 ee 00 00 00 e8 90 fd 61 fe 48 89 d8 48 c1 e8 03 0f b6 04 28 84 c0 74 06 0f 8e 0a 01 00 00 <44> 0f b6 3b 31 ff 44 89 fe e8 cd fe 61 fe 45 84 ff 75 a8 e8 63 fd
+RSP: 0018:ffff8881db209870 EFLAGS: 00010046
+RAX: 0000000000000000 RBX: ffffffffffffffc8 RCX: ffffc900004a7000
+RDX: 0000000000040000 RSI: ffffffff82ddb320 RDI: ffff8881db2097e0
+RBP: dffffc0000000000 R08: 0000000000000004 R09: ffffed103b6412fd
+R10: 0000000000000003 R11: ffffed103b6412fc R12: ffff8881ac34b4d8
+R13: ffff8881ac34b0a0 R14: ffff8881ac34b4e8 R15: ffffed10392efc10
+FS:  0000000001410940(0000) GS:ffff8881db200000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffc8 CR3: 00000001ae02b000 CR4: 00000000001406f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <IRQ>
+ ath9k_htc_rx_msg+0x2d9/0xb00 drivers/net/wireless/ath/ath9k/htc_hst.c:459
+ ath9k_hif_usb_rx_stream drivers/net/wireless/ath/ath9k/hif_usb.c:638 [inline]
+ ath9k_hif_usb_rx_cb+0xc76/0x1050 drivers/net/wireless/ath/ath9k/hif_usb.c:671
+ __usb_hcd_giveback_urb+0x29a/0x550 drivers/usb/core/hcd.c:1650
+ usb_hcd_giveback_urb+0x368/0x420 drivers/usb/core/hcd.c:1716
+ dummy_timer+0x125e/0x32b4 drivers/usb/gadget/udc/dummy_hcd.c:1967
+ call_timer_fn+0x1ac/0x6e0 kernel/time/timer.c:1404
+ expire_timers kernel/time/timer.c:1449 [inline]
+ __run_timers kernel/time/timer.c:1773 [inline]
+ __run_timers kernel/time/timer.c:1740 [inline]
+ run_timer_softirq+0x5e5/0x14c0 kernel/time/timer.c:1786
+ __do_softirq+0x21e/0x996 kernel/softirq.c:292
+ invoke_softirq kernel/softirq.c:373 [inline]
+ irq_exit+0x178/0x1a0 kernel/softirq.c:413
+ exiting_irq arch/x86/include/asm/apic.h:546 [inline]
+ smp_apic_timer_interrupt+0x141/0x540 arch/x86/kernel/apic/apic.c:1107
+ apic_timer_interrupt+0xf/0x20 arch/x86/entry/entry_64.S:829
+ </IRQ>
+RIP: 0010:arch_local_irq_restore arch/x86/include/asm/irqflags.h:85 [inline]
+RIP: 0010:__raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:160 [inline]
+RIP: 0010:_raw_spin_unlock_irqrestore+0x3b/0x40 kernel/locking/spinlock.c:191
+Code: e8 1a 69 8d fb 48 89 ef e8 42 5d 8e fb f6 c7 02 75 11 53 9d e8 26 e6 ab fb 65 ff 0d 57 e4 68 7a 5b 5d c3 e8 e7 de ab fb 53 9d <eb> ed 0f 1f 00 55 48 89 fd 65 ff 05 3d e4 68 7a 45 31 c9 41 b8 01
+RSP: 0018:ffff8881ae06fba0 EFLAGS: 00000246 ORIG_RAX: ffffffffffffff13
+RAX: 0000000000000000 RBX: 0000000000000246 RCX: 1ffffffff0fd4d4a
+RDX: 1ffff11039bbe747 RSI: 0000000000000000 RDI: ffff8881cddf3a38
+RBP: ffff8881db228400 R08: 0000000000000000 R09: 0000000000000001
+R10: 0000000000000000 R11: 0000000000000000 R12: dffffc0000000000
+R13: ffff8881db228480 R14: ffff8881ae06fdf8 R15: ffff8881db228400
+ unlock_hrtimer_base kernel/time/hrtimer.c:898 [inline]
+ hrtimer_start_range_ns+0x5cd/0xb50 kernel/time/hrtimer.c:1136
+ hrtimer_start_expires include/linux/hrtimer.h:435 [inline]
+ hrtimer_sleeper_start_expires kernel/time/hrtimer.c:1800 [inline]
+ do_nanosleep+0x1b9/0x650 kernel/time/hrtimer.c:1876
+ hrtimer_nanosleep+0x1df/0x3a0 kernel/time/hrtimer.c:1932
+ __do_sys_nanosleep kernel/time/hrtimer.c:1966 [inline]
+ __se_sys_nanosleep kernel/time/hrtimer.c:1953 [inline]
+ __x64_sys_nanosleep+0x1dc/0x260 kernel/time/hrtimer.c:1953
+ do_syscall_64+0xb6/0x5a0 arch/x86/entry/common.c:295
+ entry_SYSCALL_64_after_hwframe+0x49/0xb3
+RIP: 0033:0x45af70
+Code: Bad RIP value.
+RSP: 002b:00007fff27bba8e8 EFLAGS: 00000246 ORIG_RAX: 0000000000000023
+RAX: ffffffffffffffda RBX: 000000000009722e RCX: 000000000045af70
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007fff27bba8f0
+RBP: 00000000000001de R08: 0000000000000001 R09: 0000000001410940
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fff27bba940 R14: 000000000009722e R15: 00007fff27bba950
+Modules linked in:
+CR2: ffffffffffffffc8
+---[ end trace 4488f3a2c836a427 ]---
+RIP: 0010:ath9k_htc_rxep+0xb5/0x210 drivers/net/wireless/ath/ath9k/htc_drv_txrx.c:1130
+Code: 8b 43 38 48 8d 58 c8 49 39 c4 0f 84 ee 00 00 00 e8 90 fd 61 fe 48 89 d8 48 c1 e8 03 0f b6 04 28 84 c0 74 06 0f 8e 0a 01 00 00 <44> 0f b6 3b 31 ff 44 89 fe e8 cd fe 61 fe 45 84 ff 75 a8 e8 63 fd
+RSP: 0018:ffff8881db209870 EFLAGS: 00010046
+RAX: 0000000000000000 RBX: ffffffffffffffc8 RCX: ffffc900004a7000
+RDX: 0000000000040000 RSI: ffffffff82ddb320 RDI: ffff8881db2097e0
+RBP: dffffc0000000000 R08: 0000000000000004 R09: ffffed103b6412fd
+R10: 0000000000000003 R11: ffffed103b6412fc R12: ffff8881ac34b4d8
+R13: ffff8881ac34b0a0 R14: ffff8881ac34b4e8 R15: ffffed10392efc10
+FS:  0000000001410940(0000) GS:ffff8881db200000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffc8 CR3: 00000001ae02b000 CR4: 00000000001406f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
 
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
