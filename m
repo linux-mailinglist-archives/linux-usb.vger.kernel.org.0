@@ -2,37 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DA501FE0EB
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 03:52:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A171FE0B4
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 03:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732119AbgFRBuc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Jun 2020 21:50:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35546 "EHLO mail.kernel.org"
+        id S1731973AbgFRBtw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Jun 2020 21:49:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35738 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731857AbgFRB1Y (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:27:24 -0400
+        id S1731884AbgFRB1e (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:27:34 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 03D2F20776;
-        Thu, 18 Jun 2020 01:27:22 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DB512221FA;
+        Thu, 18 Jun 2020 01:27:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592443643;
-        bh=IKPyz6tJZvLQGO9raFAy7/YNlQnRZ+ZjNkL39vKhCpk=;
+        s=default; t=1592443653;
+        bh=hviPfHuYHn7yXMIW6qqR39TKTdiniUR1z8s3DQP+CAg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BKcpRE3W8j0sYYuJY7wvjLqUtO29Rza+V2F1rZQ7nWb+o4rYTnOP3Dw/x2LLW0aDO
-         MuEMGPE7X7thL8DEO/2+RjgzBygEUVJR7/Ni0kl2a2F/A7EHi3Vtjut0XVRiP+r0PK
-         6lQqc43oKRXREWMGKpmaT1LFJOFsD3I9zmFFsKLw=
+        b=2gt6psi/7h5EloCpE2EB32j7BR6H25s10ORVl9fDqnEKw2aoClCbYYEhO8PgZhu/B
+         BxhUo4bvdtAYU1GbtUBm0c0HP6KSfZScxw8EkIrqf6QgeKPkH2TRf3bErAZvt43Yu/
+         ezVVsVte6rlxPmNLQraKq3Vg0X3ZFLmbniaMmO9E=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tang Bin <tangbin@cmss.chinamobile.com>,
-        Zhang Shengju <zhangshengju@cmss.chinamobile.com>,
-        Peter Chen <peter.chen@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Cc:     Fabrice Gasnier <fabrice.gasnier@st.com>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 065/108] USB: host: ehci-mxc: Add error handling in ehci_mxc_drv_probe()
-Date:   Wed, 17 Jun 2020 21:25:17 -0400
-Message-Id: <20200618012600.608744-65-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 073/108] usb: dwc2: gadget: move gadget resume after the core is in L0 state
+Date:   Wed, 17 Jun 2020 21:25:25 -0400
+Message-Id: <20200618012600.608744-73-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200618012600.608744-1-sashal@kernel.org>
 References: <20200618012600.608744-1-sashal@kernel.org>
@@ -45,37 +44,49 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Tang Bin <tangbin@cmss.chinamobile.com>
+From: Fabrice Gasnier <fabrice.gasnier@st.com>
 
-[ Upstream commit d49292025f79693d3348f8e2029a8b4703be0f0a ]
+[ Upstream commit 8c935deacebb8fac8f41378701eb79d12f3c2e2d ]
 
-The function ehci_mxc_drv_probe() does not perform sufficient error
-checking after executing platform_get_irq(), thus fix it.
+When the remote wakeup interrupt is triggered, lx_state is resumed from L2
+to L0 state. But when the gadget resume is called, lx_state is still L2.
+This prevents the resume callback to queue any request. Any attempt
+to queue a request from resume callback will result in:
+- "submit request only in active state" debug message to be issued
+- dwc2_hsotg_ep_queue() returns -EAGAIN
 
-Fixes: 7e8d5cd93fac ("USB: Add EHCI support for MX27 and MX31 based boards")
-Signed-off-by: Zhang Shengju <zhangshengju@cmss.chinamobile.com>
-Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
-Reviewed-by: Peter Chen <peter.chen@nxp.com>
-Link: https://lore.kernel.org/r/20200513132647.5456-1-tangbin@cmss.chinamobile.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Call the gadget resume routine after the core is in L0 state.
+
+Fixes: f81f46e1f530 ("usb: dwc2: implement hibernation during bus suspend/resume")
+
+Acked-by: Minas Harutyunyan <hminas@synopsys.com>
+Signed-off-by: Fabrice Gasnier <fabrice.gasnier@st.com>
+Signed-off-by: Felipe Balbi <balbi@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/ehci-mxc.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/usb/dwc2/core_intr.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/host/ehci-mxc.c b/drivers/usb/host/ehci-mxc.c
-index c7a9b31eeaef..637079a35003 100644
---- a/drivers/usb/host/ehci-mxc.c
-+++ b/drivers/usb/host/ehci-mxc.c
-@@ -63,6 +63,8 @@ static int ehci_mxc_drv_probe(struct platform_device *pdev)
- 	}
+diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
+index b8bcb007c92a..e3e0a3ab31da 100644
+--- a/drivers/usb/dwc2/core_intr.c
++++ b/drivers/usb/dwc2/core_intr.c
+@@ -364,10 +364,13 @@ static void dwc2_handle_wakeup_detected_intr(struct dwc2_hsotg *hsotg)
+ 			if (ret && (ret != -ENOTSUPP))
+ 				dev_err(hsotg->dev, "exit hibernation failed\n");
  
- 	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0)
-+		return irq;
- 
- 	hcd = usb_create_hcd(&ehci_mxc_hc_driver, dev, dev_name(dev));
- 	if (!hcd)
++			/* Change to L0 state */
++			hsotg->lx_state = DWC2_L0;
+ 			call_gadget(hsotg, resume);
++		} else {
++			/* Change to L0 state */
++			hsotg->lx_state = DWC2_L0;
+ 		}
+-		/* Change to L0 state */
+-		hsotg->lx_state = DWC2_L0;
+ 	} else {
+ 		if (hsotg->params.hibernation)
+ 			return;
 -- 
 2.25.1
 
