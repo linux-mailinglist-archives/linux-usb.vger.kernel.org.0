@@ -2,100 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B59B1FEE1A
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 10:52:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 245941FEE64
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 11:14:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728891AbgFRIwf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Jun 2020 04:52:35 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:46418 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728452AbgFRIwe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Jun 2020 04:52:34 -0400
-Received: from [192.168.0.20] (cpc89242-aztw30-2-0-cust488.18-1.cable.virginm.net [86.31.129.233])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 85FB528D;
-        Thu, 18 Jun 2020 10:52:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1592470350;
-        bh=cQdDQYK5cYEmsz/Pb+jP6CxA60dH8BgafEV56iCSNs4=;
-        h=Reply-To:Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=XY55hUJ8tmgdmJpQrZNZ3WYlijnFZ4pBgLtJvo3tYovpZYH+fR8s69ZVNxlE2POyl
-         EGMoZU4VvyIsgXyP8Zb49khWHAaCDXdfafuUY974HYQHgVkBa7RNGt1KsMLWWEYSD0
-         M73zf8IsJc+56ZuQjksdu8z+795y3biTYjt0oRww=
-Reply-To: kieran.bingham+renesas@ideasonboard.com
-Subject: Re: [PATCH 07/17] drivers: usb: Fix trivial spelling
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        linux-renesas-soc@vger.kernel.org,
-        Jiri Kosina <trivial@kernel.org>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20200609124610.3445662-1-kieran.bingham+renesas@ideasonboard.com>
- <20200609124610.3445662-8-kieran.bingham+renesas@ideasonboard.com>
- <20200618082147.GA1050104@kroah.com>
-From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Organization: Ideas on Board
-Message-ID: <0d1fb492-7503-895c-82d3-b7f4611ef1f2@ideasonboard.com>
-Date:   Thu, 18 Jun 2020 09:52:28 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1728964AbgFRJOT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Jun 2020 05:14:19 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:60309 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727037AbgFRJOT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Jun 2020 05:14:19 -0400
+X-UUID: a674bac57478429b9da3629ca5aeca07-20200618
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=4XnqJ20IExga/K0IhPzstjZ7zg9Stdygd6pci2+yWAc=;
+        b=CVo1LLaj/bLv/34Qw0lYsCGE0OrALjDzYWCBKeZGuV+xQ3RmI6L5eX5nOpqEgjwIT60kNz8sSV28Blwn0dABSfY1j1Xd3CGF8R13DcZHX70JHXxH4cZQx9KDqjPb7Zst5NkAxNaojoqwBS2YA8JWMZCM6E+2OhnNNzZK+QZFAVQ=;
+X-UUID: a674bac57478429b9da3629ca5aeca07-20200618
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1166593568; Thu, 18 Jun 2020 17:14:13 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 18 Jun 2020 17:14:10 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 18 Jun 2020 17:14:09 +0800
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, Jim Lin <jilin@nvidia.com>,
+        Siqi Lin <siqilin@google.com>,
+        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
+        Macpaul Lin <macpaul.lin@gmail.com>
+CC:     Macpaul Lin <macpaul.lin@mediatek.com>
+Subject: [PATCH v3] usb: replace hardcode maximum usb string length by definition
+Date:   Thu, 18 Jun 2020 17:13:38 +0800
+Message-ID: <1592471618-29428-1-git-send-email-macpaul.lin@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
+In-Reply-To: <1592201855-8218-1-git-send-email-macpaul.lin@mediatek.com>
+References: <1592201855-8218-1-git-send-email-macpaul.lin@mediatek.com>
 MIME-Version: 1.0
-In-Reply-To: <20200618082147.GA1050104@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+UmVwbGFjZSBoYXJkY29kZSBtYXhpbXVtIHVzYiBzdHJpbmcgbGVuZ3RoICgxMjYgYnl0ZXMpIGJ5
+IGRlZmluaXRpb24NCiJNQVhfVVNCX1NUUklOR19MRU4iLg0KDQpTaWduZWQtb2ZmLWJ5OiBNYWNw
+YXVsIExpbiA8bWFjcGF1bC5saW5AbWVkaWF0ZWsuY29tPg0KQWNrZWQtYnk6IEFsYW4gU3Rlcm4g
+PHN0ZXJuQHJvd2xhbmQuaGFydmFyZC5lZHU+DQotLS0NCkNoYW5nZXMgZm9yIHYyOg0KICAtIEFk
+ZCBkZWZpbml0aW9uICJNQVhfVVNCX1NUUklOR19MRU4iIGluIGNoOS5oIGluc3RlYWQgb2YgaW4g
+dXNiLmguDQogICAgVGhhbmtzIGZvciBBbGFuJ3Mgc3VnZ2VzdGlvbi4NCkNoYW5nZXMgZm9yIHYz
+Og0KICAtIFJlYmFzZSB0byA1LjgtcmMxIGFuZCByZXNvbHZlIGNvbmZsaWN0Lg0KDQogZHJpdmVy
+cy91c2IvZ2FkZ2V0L2NvbXBvc2l0ZS5jIHwgICAgNCArKy0tDQogZHJpdmVycy91c2IvZ2FkZ2V0
+L2NvbmZpZ2ZzLmMgIHwgICAgMiArLQ0KIGRyaXZlcnMvdXNiL2dhZGdldC91c2JzdHJpbmcuYyB8
+ICAgIDQgKystLQ0KIGluY2x1ZGUvdWFwaS9saW51eC91c2IvY2g5LmggICB8ICAgIDMgKysrDQog
+NCBmaWxlcyBjaGFuZ2VkLCA4IGluc2VydGlvbnMoKyksIDUgZGVsZXRpb25zKC0pDQoNCmRpZmYg
+LS1naXQgYS9kcml2ZXJzL3VzYi9nYWRnZXQvY29tcG9zaXRlLmMgYi9kcml2ZXJzL3VzYi9nYWRn
+ZXQvY29tcG9zaXRlLmMNCmluZGV4IGNiNDk1MGMuLmQwZGUwMTYgMTAwNjQ0DQotLS0gYS9kcml2
+ZXJzL3VzYi9nYWRnZXQvY29tcG9zaXRlLmMNCisrKyBiL2RyaXZlcnMvdXNiL2dhZGdldC9jb21w
+b3NpdGUuYw0KQEAgLTEwNDEsNyArMTA0MSw3IEBAIHN0YXRpYyB2b2lkIGNvbGxlY3RfbGFuZ3Mo
+c3RydWN0IHVzYl9nYWRnZXRfc3RyaW5ncyAqKnNwLCBfX2xlMTYgKmJ1ZikNCiAJd2hpbGUgKCpz
+cCkgew0KIAkJcyA9ICpzcDsNCiAJCWxhbmd1YWdlID0gY3B1X3RvX2xlMTYocy0+bGFuZ3VhZ2Up
+Ow0KLQkJZm9yICh0bXAgPSBidWY7ICp0bXAgJiYgdG1wIDwgJmJ1ZlsxMjZdOyB0bXArKykgew0K
+KwkJZm9yICh0bXAgPSBidWY7ICp0bXAgJiYgdG1wIDwgJmJ1ZltNQVhfVVNCX1NUUklOR19MRU5d
+OyB0bXArKykgew0KIAkJCWlmICgqdG1wID09IGxhbmd1YWdlKQ0KIAkJCQlnb3RvIHJlcGVhdDsN
+CiAJCX0NCkBAIC0xMTE2LDcgKzExMTYsNyBAQCBzdGF0aWMgaW50IGdldF9zdHJpbmcoc3RydWN0
+IHVzYl9jb21wb3NpdGVfZGV2ICpjZGV2LA0KIAkJCWNvbGxlY3RfbGFuZ3Moc3AsIHMtPndEYXRh
+KTsNCiAJCX0NCiANCi0JCWZvciAobGVuID0gMDsgbGVuIDw9IDEyNiAmJiBzLT53RGF0YVtsZW5d
+OyBsZW4rKykNCisJCWZvciAobGVuID0gMDsgbGVuIDw9IE1BWF9VU0JfU1RSSU5HX0xFTiAmJiBz
+LT53RGF0YVtsZW5dOyBsZW4rKykNCiAJCQljb250aW51ZTsNCiAJCWlmICghbGVuKQ0KIAkJCXJl
+dHVybiAtRUlOVkFMOw0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2dhZGdldC9jb25maWdmcy5j
+IGIvZHJpdmVycy91c2IvZ2FkZ2V0L2NvbmZpZ2ZzLmMNCmluZGV4IDMyYjYzN2UuLjcwZGQ0YmEg
+MTAwNjQ0DQotLS0gYS9kcml2ZXJzL3VzYi9nYWRnZXQvY29uZmlnZnMuYw0KKysrIGIvZHJpdmVy
+cy91c2IvZ2FkZ2V0L2NvbmZpZ2ZzLmMNCkBAIC0xMTUsNyArMTE1LDcgQEAgc3RhdGljIGludCB1
+c2Jfc3RyaW5nX2NvcHkoY29uc3QgY2hhciAqcywgY2hhciAqKnNfY29weSkNCiAJY2hhciAqc3Ry
+Ow0KIAljaGFyICpjb3B5ID0gKnNfY29weTsNCiAJcmV0ID0gc3RybGVuKHMpOw0KLQlpZiAocmV0
+ID4gMTI2KQ0KKwlpZiAocmV0ID4gTUFYX1VTQl9TVFJJTkdfTEVOKQ0KIAkJcmV0dXJuIC1FT1ZF
+UkZMT1c7DQogDQogCXN0ciA9IGtzdHJkdXAocywgR0ZQX0tFUk5FTCk7DQpkaWZmIC0tZ2l0IGEv
+ZHJpdmVycy91c2IvZ2FkZ2V0L3VzYnN0cmluZy5jIGIvZHJpdmVycy91c2IvZ2FkZ2V0L3VzYnN0
+cmluZy5jDQppbmRleCA3YzI0ZDFjLi44YThkNjQ3IDEwMDY0NA0KLS0tIGEvZHJpdmVycy91c2Iv
+Z2FkZ2V0L3VzYnN0cmluZy5jDQorKysgYi9kcml2ZXJzL3VzYi9nYWRnZXQvdXNic3RyaW5nLmMN
+CkBAIC01NSw5ICs1NSw5IEBADQogCQlyZXR1cm4gLUVJTlZBTDsNCiANCiAJLyogc3RyaW5nIGRl
+c2NyaXB0b3JzIGhhdmUgbGVuZ3RoLCB0YWcsIHRoZW4gVVRGMTYtTEUgdGV4dCAqLw0KLQlsZW4g
+PSBtaW4gKChzaXplX3QpIDEyNiwgc3RybGVuIChzLT5zKSk7DQorCWxlbiA9IG1pbigoc2l6ZV90
+KU1BWF9VU0JfU1RSSU5HX0xFTiwgc3RybGVuKHMtPnMpKTsNCiAJbGVuID0gdXRmOHNfdG9fdXRm
+MTZzKHMtPnMsIGxlbiwgVVRGMTZfTElUVExFX0VORElBTiwNCi0JCQkod2NoYXJfdCAqKSAmYnVm
+WzJdLCAxMjYpOw0KKwkJCSh3Y2hhcl90ICopICZidWZbMl0sIE1BWF9VU0JfU1RSSU5HX0xFTik7
+DQogCWlmIChsZW4gPCAwKQ0KIAkJcmV0dXJuIC1FSU5WQUw7DQogCWJ1ZiBbMF0gPSAobGVuICsg
+MSkgKiAyOw0KZGlmZiAtLWdpdCBhL2luY2x1ZGUvdWFwaS9saW51eC91c2IvY2g5LmggYi9pbmNs
+dWRlL3VhcGkvbGludXgvdXNiL2NoOS5oDQppbmRleCAyYjYyM2YzLi5jYzAyZDA1IDEwMDY0NA0K
+LS0tIGEvaW5jbHVkZS91YXBpL2xpbnV4L3VzYi9jaDkuaA0KKysrIGIvaW5jbHVkZS91YXBpL2xp
+bnV4L3VzYi9jaDkuaA0KQEAgLTM2NCw2ICszNjQsOSBAQCBzdHJ1Y3QgdXNiX2NvbmZpZ19kZXNj
+cmlwdG9yIHsNCiANCiAvKi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0qLw0KIA0KKy8qIFVTQiBTdHJpbmcgZGVz
+Y3JpcHRvcnMgY2FuIGNvbnRhaW4gYXQgbW9zdCAxMjYgY2hhcmFjdGVycy4gKi8NCisjZGVmaW5l
+IE1BWF9VU0JfU1RSSU5HX0xFTgkxMjYNCisNCiAvKiBVU0JfRFRfU1RSSU5HOiBTdHJpbmcgZGVz
+Y3JpcHRvciAqLw0KIHN0cnVjdCB1c2Jfc3RyaW5nX2Rlc2NyaXB0b3Igew0KIAlfX3U4ICBiTGVu
+Z3RoOw0KLS0gDQoxLjcuOS41DQo=
 
-On 18/06/2020 09:21, Greg Kroah-Hartman wrote:
-> On Tue, Jun 09, 2020 at 01:46:00PM +0100, Kieran Bingham wrote:
->> The word 'descriptor' is misspelled throughout the tree.
->>
->> Fix it up accordingly:
->>     decriptors -> descriptors
->>
->> Signed-off-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
->> ---
->>  drivers/usb/core/of.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/usb/core/of.c b/drivers/usb/core/of.c
->> index 651708d8c908..617e92569b2c 100644
->> --- a/drivers/usb/core/of.c
->> +++ b/drivers/usb/core/of.c
->> @@ -45,7 +45,7 @@ EXPORT_SYMBOL_GPL(usb_of_get_device_node);
->>   *
->>   * Determine whether a USB device has a so called combined node which is
->>   * shared with its sole interface. This is the case if and only if the device
->> - * has a node and its decriptors report the following:
->> + * has a node and its descriptors report the following:
->>   *
->>   *	1) bDeviceClass is 0 or 9, and
->>   *	2) bNumConfigurations is 1, and
->> -- 
->> 2.25.1
->>
-> 
-> Already fixed in Linus's tree :(
-
-Don't be sad - that makes me happy ;-) This was just a global fixup
-while I added the correction to scripts/spelling.txt...
-
-But wait, are you sure? I've just rebased this series on top of
-1b5044021070 ("Merge tag 'dma-mapping-5.8-3' of
-git://git.infradead.org/users/hch/dma-mapping"), and this still applies
-for me ... Am I failing to pick up the latest branch from Linus?
-(https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-looks like I'm on the latest, so I don't think so).
-
-I see a bot-notification from you saying it's been added to your
-usb-testing tree, so I'll assume this is all fine. No need to worry
-though It's only a trivial and can get picked up by the trivial bot I
-think if I resend when the dust settles.
-
-Thanks
-
-Kieran
