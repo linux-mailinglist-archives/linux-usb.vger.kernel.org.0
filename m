@@ -2,103 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 033F91FFA65
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 19:36:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46BF21FFA73
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 19:41:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732166AbgFRRgm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Jun 2020 13:36:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55928 "EHLO
+        id S1731439AbgFRRlq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Jun 2020 13:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729533AbgFRRgl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Jun 2020 13:36:41 -0400
-Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA90C06174E
-        for <linux-usb@vger.kernel.org>; Thu, 18 Jun 2020 10:36:41 -0700 (PDT)
-Received: by mail-ot1-x341.google.com with SMTP id d4so5204444otk.2
-        for <linux-usb@vger.kernel.org>; Thu, 18 Jun 2020 10:36:41 -0700 (PDT)
+        with ESMTP id S1729612AbgFRRlp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Jun 2020 13:41:45 -0400
+Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C8F7C06174E
+        for <linux-usb@vger.kernel.org>; Thu, 18 Jun 2020 10:41:44 -0700 (PDT)
+Received: by mail-ot1-x342.google.com with SMTP id 97so5207793otg.3
+        for <linux-usb@vger.kernel.org>; Thu, 18 Jun 2020 10:41:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=vSAKdupfjUnpQv7PVZTpVtSwPY/+63YsbAN25Eh8aLo=;
-        b=GMzprk/8y3cOitItK+SVkpqGg8A/ZMra8JaEKJFMANat5jvqSWFNlHq5Q5MRgpHKQk
-         0nSqR41phZ4I+diI+SxDrGcHhAow3Igrv7jhP81S/JVMxmO/6ID6oGlfkwg4t4JLVp8j
-         yBBBe6KVTIshDSBdeEoT9bhloJCCd7B5/UiE8=
+        bh=Lj1OUnCiEL7PTb7sWZrbfYeYh4fsbN5F5NZdzahAeVM=;
+        b=iS7A+R/PQVXP2W8n9q0y8fisfHp/ivhVnFUztyN4rIj6i5bAhxr1cZJ+/Tnxlsxv60
+         O02SAY/YLf/uzvA20YQjycidu3BQ5drQVc0SAv2+dCZ0td/W9IGVTG1jJdLbWr3AZuQt
+         o0uUHNLNnJ3sTZKmqXCuwQhzIZfvUcD3XL9gU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=vSAKdupfjUnpQv7PVZTpVtSwPY/+63YsbAN25Eh8aLo=;
-        b=YHI45nI5bNKCqi+R/0dj4r6d6MIBZ7gr2PMlZDBicVmFVqJ67plqinvuqdTmagw24M
-         H3d+Nd+WEWdoUrN102yH7NmIjp6MfsvVfH/O3smemwKpCLgeBvqQdV0KOs1V9rSv+lNt
-         0qRuQ5ouSsO7fNbB8tz83PxjtoX9bpPYawkwufqBfwsmp5YuZkv8cDruTq5KbXK3eOrd
-         oojmwxkfUMnzq66aRB0sQT//zzfUgi63A806Qsrz3GExo62uPQjvzuYBY4OMr5Ch9FpK
-         LsCrKO7K2WHRSZJJZANDBl/WzeU/ZLtWRoBris/MlSmviCL3m4xKTC2nwuexnrn6hoEy
-         /tGw==
-X-Gm-Message-State: AOAM530neU6609dyGbSuBUYRu7dmFfX5F20T8guNDZ9dp0/Pb9IVjb5s
-        qDIwt8rwA9ZQvqPrsWDUO01XijKHP0E=
-X-Google-Smtp-Source: ABdhPJxbnv0wQeMddQlluY9O5pcY5u8TzvKuN4bf2b8PgHIYjZMViNvEKuwVnYxLt+tcNRzw9nnyYw==
-X-Received: by 2002:a9d:7b41:: with SMTP id f1mr4658243oto.363.1592501801252;
-        Thu, 18 Jun 2020 10:36:41 -0700 (PDT)
+        bh=Lj1OUnCiEL7PTb7sWZrbfYeYh4fsbN5F5NZdzahAeVM=;
+        b=RL9SC7Ga7qKCTGPvkdRIjkpKLxZnQlTqN1Z0wpx5/ryq15vc85lgCf+Yl3REMya3lj
+         ZC0RHdg8qeLY4bHfoJblYYDE2UpLe5nrFe3fAmlmwzQKzD1Zut6y7Y+WwhJVz8a7bpbw
+         BpVUTYHC9qWhhuum4rS1kcBUo3LcZw0myJPRhDYyw714ZvSK+nw5eOyMGErGPZBIcFbc
+         j6f57ZNQW8hW1dMrHVzoSkDGhOchtkLArgaolnNF5KjVyq7D9SX0pmlFaXRku/EdzPap
+         bD/1NSd0Fr1FeUP6hHxuLL0qp9CvQpGmdn6B0KA+70mc9y3KLzTPSRu1hPcWd4z9xVg9
+         EywA==
+X-Gm-Message-State: AOAM533JVJqksAum02TCDqe8gbrWO/oTVqIAxj9RS2FVkSH+JPbGHMo2
+        1PIkBiml4ZRIr3guZCN98IENHk2k47A=
+X-Google-Smtp-Source: ABdhPJx6zbH9zK6AjJTN6l6B0AqjYjqOqKk0tGRiB1y9/wvjnCM0jZ5TyMFv576NhAvH9MJgpjDVbQ==
+X-Received: by 2002:a9d:6e03:: with SMTP id e3mr4281845otr.71.1592502103915;
+        Thu, 18 Jun 2020 10:41:43 -0700 (PDT)
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id g10sm836752otn.34.2020.06.18.10.36.39
+        by smtp.gmail.com with ESMTPSA id f7sm832299otl.60.2020.06.18.10.41.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Jun 2020 10:36:40 -0700 (PDT)
-Subject: Re: [PATCH] usbip: tools: fix build error for multiple definition
+        Thu, 18 Jun 2020 10:41:43 -0700 (PDT)
+Subject: Re: [PATCH] usbip: tools: fix module name in man page
 To:     Antonio Borneo <borneo.antonio@gmail.com>,
         Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hewenliang <hewenliang4@huawei.com>, linux-usb@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, skhan@linuxfoundation.org
-References: <20200618000844.1048309-1-borneo.antonio@gmail.com>
+        Shuah Khan <shuah@kernel.org>, matt mooney <mfm@muteddisk.com>,
+        linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org
+References: <20200618000818.1048203-1-borneo.antonio@gmail.com>
+ <7902323e-fd72-8301-9a11-e6b912b61890@linuxfoundation.org>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <f914d6a1-20d6-2e00-bcf5-658848ad95a1@linuxfoundation.org>
-Date:   Thu, 18 Jun 2020 11:36:39 -0600
+Message-ID: <038c9454-9598-8b86-e63b-3b04e88a8cd5@linuxfoundation.org>
+Date:   Thu, 18 Jun 2020 11:41:42 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <20200618000844.1048309-1-borneo.antonio@gmail.com>
+In-Reply-To: <7902323e-fd72-8301-9a11-e6b912b61890@linuxfoundation.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 6/17/20 6:08 PM, Antonio Borneo wrote:
-> With GCC 10, building usbip triggers error for multiple definition
-> of 'udev_context', in:
-> - libsrc/vhci_driver.c:18 and
-> - libsrc/usbip_host_common.c:27.
+On 6/18/20 10:56 AM, Shuah Khan wrote:
+> On 6/17/20 6:08 PM, Antonio Borneo wrote:
+>> Commit 64e62426f40d ("staging: usbip: edit Kconfig and rename
+>> CONFIG options") renamed the module usbip as usbip-host, but the
+>> example in the man page still reports the old module name.
+>>
+>> Fix the module name in usbipd.8
+>>
+>> Signed-off-by: Antonio Borneo <borneo.antonio@gmail.com>
+>> Fixes: 64e62426f40d ("staging: usbip: edit Kconfig and rename CONFIG 
+>> options")
+>> ---
+>>   tools/usb/usbip/doc/usbipd.8 | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/tools/usb/usbip/doc/usbipd.8 b/tools/usb/usbip/doc/usbipd.8
+>> index ac4635db3f03..fb62a756893b 100644
+>> --- a/tools/usb/usbip/doc/usbipd.8
+>> +++ b/tools/usb/usbip/doc/usbipd.8
+>> @@ -73,7 +73,7 @@ USB/IP client can connect and use exported devices.
+>>   .SH EXAMPLES
+>> -    server:# modprobe usbip
+>> +    server:# modprobe usbip-host
+>>       server:# usbipd -D
+>>           - Start usbip daemon.
+>>
+>> base-commit: b3a9e3b9622ae10064826dccb4f7a52bd88c7407
+>>
 > 
-> Declare as extern the definition in libsrc/usbip_host_common.c.
+> Looks good. Thanks for fixing this.
 > 
-> Signed-off-by: Antonio Borneo <borneo.antonio@gmail.com>
-> ---
->   tools/usb/usbip/libsrc/usbip_host_common.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/usb/usbip/libsrc/usbip_host_common.c b/tools/usb/usbip/libsrc/usbip_host_common.c
-> index d1d8ba2a4a40..ca78aa368476 100644
-> --- a/tools/usb/usbip/libsrc/usbip_host_common.c
-> +++ b/tools/usb/usbip/libsrc/usbip_host_common.c
-> @@ -23,7 +23,7 @@
->   #include "list.h"
->   #include "sysfs_utils.h"
->   
-> -struct udev *udev_context;
-> +extern struct udev *udev_context;
->   
->   static int32_t read_attr_usbip_status(struct usbip_usb_device *udev)
->   {
+> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 > 
 
-Looks good to me.
++ Adding Greg
 
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+Odd. Looks like get_maintainers gave a very old address
+for Greg Kroah-Hartman <gregkh@suse.de>.
+
 
 thanks,
 -- Shuah
