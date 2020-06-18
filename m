@@ -2,61 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 542C31FF126
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 14:04:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1301FF139
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 14:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728096AbgFRMEl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Jun 2020 08:04:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60870 "EHLO
+        id S1728261AbgFRMHg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Jun 2020 08:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726313AbgFRMEj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Jun 2020 08:04:39 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A518DC0613ED
-        for <linux-usb@vger.kernel.org>; Thu, 18 Jun 2020 05:04:39 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id ga6so2458953pjb.1
-        for <linux-usb@vger.kernel.org>; Thu, 18 Jun 2020 05:04:39 -0700 (PDT)
+        with ESMTP id S1726958AbgFRMHe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Jun 2020 08:07:34 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CBB7C0613ED
+        for <linux-usb@vger.kernel.org>; Thu, 18 Jun 2020 05:07:33 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id y18so2358707plr.4
+        for <linux-usb@vger.kernel.org>; Thu, 18 Jun 2020 05:07:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=a//uCrVJPF15o3NZ8oa0wIr0G6H6hYlHi4uZ+SX5LZ8=;
-        b=pTNgZDNStw8h1YPuLypOjqvoisArtiCZnFpZS7mUjFCyPs8gz6ptyZlFXEaHVsk5V7
-         GfEJNSnCJLi+eWXByfnYittSyHNEK89ld4kCmbT06bnG1JzpymBFI2dhc0CxTIypJraf
-         iAxCB1qowyl5l+efEAqbLXIl7nengM8S+5Vs/z6gWYBQVfvOWIkPrTGmR/6JyovCCviQ
-         +7xdZxMLvH4Mdfd4NnzKmr5u7hpqV/L0G7jaLXblTTpCj3dLwJzhKOWdwhcHTyDKbjsO
-         m33zaRcY6qUrJZz2sly0DNIRS1XZzy2nGQlUHnoySC1Hs0ymdwFJxtd0kQLt17eP/6dE
-         qmbw==
+        bh=1bvM6zNWj16PXQdZkOlsMCBfhWXYM5bdxw8arWFMTEI=;
+        b=ndPgaNmhQG6zMU6NdDAEeZMkX/js1xw/roM54St6iCWN13VWSscNF0xOtxz4qDbWOr
+         8zctEK7hoe7+9GDxBUEZqk4aoHxCEaNeh6suauio24h3SY1JNNhNieJYQwsO05zosRmA
+         swvqPA4mFfW5la40Tj/PjrHQjZoEuIwJ/RxnOwdPlglLTY+9bHPe5vHHqK2sWffOnQSQ
+         Z2TwC+/hXv2X/boK7Ey29DgeAPif89ZWZiDaSruPwzQ1U2/D/k+ITYC6DFu14cB96umV
+         acDiZ0FrrDSuO0nffXG1lpzIGbbVUASMRvm4nXpSxuc0OwqI21S7NBxSjzhEpK3RNb2K
+         EC+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=a//uCrVJPF15o3NZ8oa0wIr0G6H6hYlHi4uZ+SX5LZ8=;
-        b=SmzxZCpe+cIPFCaMjcbKsylUkAjjXy9vzTlFS+FNIs/zDmCmOj7pLmcJ3d43xb+I8X
-         5PzXRxnuaYX7+us0arUYGEBUC/EBojlkPShz9iZ01OuKwFdCU8EH5cR7Bm1aZ5lKfW5m
-         EBo9RDruuJ27MsW8wnnGp2vTKSdFYFBXebTls5dQ5CUnsomULHzV9aQFOCuEzezJvSFe
-         Wwye7aP/2E4jqWUf4ufMXv+VfRG1mk0468A6Ri93zf4gpIeF4GdvGfc4jiGEPljqBPxy
-         CO2+iqhnYLz4pAcgQi/aWqGLKQDBCS4poWbmVEVXP47Gi+JXwef2H5hVF7yMMVhhTB9x
-         yqOQ==
-X-Gm-Message-State: AOAM530iRVlw/KkxfIl8HpVDMcFFk17pMyS0xMCdR2jg7OblmXbgFShl
-        WZUzReOzdPWy1rpueq9Woh29UbKsCRoSC+dRaUloGw==
-X-Google-Smtp-Source: ABdhPJzktztMvGvD7NTBr3Mk3hKVBOZMQxu0ukUcOQp9V1HsLlNe8tOkynCUSmNOssjI8wujbwWvfa7fiz8a9450K4A=
-X-Received: by 2002:a17:902:6ac1:: with SMTP id i1mr3563117plt.147.1592481878557;
- Thu, 18 Jun 2020 05:04:38 -0700 (PDT)
+        bh=1bvM6zNWj16PXQdZkOlsMCBfhWXYM5bdxw8arWFMTEI=;
+        b=ggy2wrKd+6pBE+xQR78ZXlDbaXbS5ebkzKOTe0owB3/6SB+l0Y0vfXy/fsMYJJW51S
+         qDBlHVmKcUDDuMFLvgu6rV0dR+QkBELYld42HfGZJH6EbNgZ/AUxG0ghHr50IRQdqHgQ
+         F0qn7WnyiUuxmRODBrRIYpDHh32MtTxQjLfwHt5eLgKY+YSrXDhB+aHzs7XDt/3m+VE2
+         6gPcc0x5w0uwO4eTUPs4xiyr7W0VsPgBiBH30Ka2/+mqkdTe/EAaKayDWfsP6gskwwry
+         gX9Wxy9hAwd1hF3Mw1KXoAuXajF9xpIBvqJVbu17aoZi1l24P5J87y7mxkpCOADe+h5q
+         x2dg==
+X-Gm-Message-State: AOAM533noe5DgB2l8T90tvRZ2Z2S7cGoCxKJrhhmvn4FT6AypJSpuqco
+        YIKE2wkB5hnO5mVxpuq4GnTtEx6GQ8OcBat1DMPkzg==
+X-Google-Smtp-Source: ABdhPJzcVn6aLnDjDvS6bxkFBNVmExAmuMN9EQ87x27lEjlCxnlX/d3VvkVaHEQQWkAgag8Ys5WlrZmJR2eGWgZ8b2g=
+X-Received: by 2002:a17:902:be05:: with SMTP id r5mr3184231pls.252.1592482052371;
+ Thu, 18 Jun 2020 05:07:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <000000000000da6a0e058d3ead50@google.com>
-In-Reply-To: <000000000000da6a0e058d3ead50@google.com>
+References: <000000000000448f5a058e804752@google.com>
+In-Reply-To: <000000000000448f5a058e804752@google.com>
 From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Thu, 18 Jun 2020 14:04:27 +0200
-Message-ID: <CAAeHK+zcrzHr8yzgM1UOEXqXhxv35-OEDte=YRpprQ+pUmzs0A@mail.gmail.com>
-Subject: Re: general protection fault in vidioc_querycap
-To:     syzbot <syzbot+646272341e25afebff05@syzkaller.appspotmail.com>
-Cc:     Allison Randal <allison@lohutok.net>,
+Date:   Thu, 18 Jun 2020 14:07:21 +0200
+Message-ID: <CAAeHK+xaACXn+CGCGiG+DcGkjuN0m2w3T7aMYvQz+zRr+R_-NQ@mail.gmail.com>
+Subject: Re: WARNING in __uwb_rc_neh_rm
+To:     syzbot <syzbot+c44bb3aca1a5e07c76df@syzkaller.appspotmail.com>
+Cc:     alexios.zavras@intel.com, Allison Randal <allison@lohutok.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        LKML <linux-kernel@vger.kernel.org>, linux-media@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
         USB list <linux-usb@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Richard Fontana <rfontana@redhat.com>,
         syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
         Thomas Gleixner <tglx@linutronix.de>
 Content-Type: text/plain; charset="UTF-8"
@@ -65,87 +64,96 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 9, 2019 at 2:27 PM syzbot
-<syzbot+646272341e25afebff05@syzkaller.appspotmail.com> wrote:
+On Thu, Jul 25, 2019 at 2:08 PM syzbot
+<syzbot+c44bb3aca1a5e07c76df@syzkaller.appspotmail.com> wrote:
 >
 > Hello,
 >
 > syzbot found the following crash on:
 >
-> HEAD commit:    7829a896 usb-fuzzer: main usb gadget fuzzer driver
+> HEAD commit:    6a3599ce usb-fuzzer: main usb gadget fuzzer driver
 > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1321f9a3a00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=f6d4561982f71f63
-> dashboard link: https://syzkaller.appspot.com/bug?extid=646272341e25afebff05
+> console output: https://syzkaller.appspot.com/x/log.txt?x=17eb58cc600000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=700ca426ab83faae
+> dashboard link: https://syzkaller.appspot.com/bug?extid=c44bb3aca1a5e07c76df
 > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12ac261ba00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=171d6739a00000
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14ebb65c600000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17d95382600000
 >
 > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+646272341e25afebff05@syzkaller.appspotmail.com
+> Reported-by: syzbot+c44bb3aca1a5e07c76df@syzkaller.appspotmail.com
 >
-> kasan: CONFIG_KASAN_INLINE enabled
-> kasan: GPF could be caused by NULL-ptr deref or user memory access
-> general protection fault: 0000 [#1] SMP KASAN
-> CPU: 1 PID: 1878 Comm: v4l_id Not tainted 5.2.0-rc6+ #13
+> ------------[ cut here ]------------
+> list_del corruption, ffff8881d0a03130->next is LIST_POISON1
+> (dead000000000100)
+> WARNING: CPU: 0 PID: 5 at lib/list_debug.c:45
+> __list_del_entry_valid+0xd3/0x170 lib/list_debug.c:45
+> Kernel panic - not syncing: panic_on_warn set ...
+> CPU: 0 PID: 5 Comm: kworker/0:0 Not tainted 5.2.0-rc6+ #15
 > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
 > Google 01/01/2011
-> RIP: 0010:usb_make_path include/linux/usb.h:913 [inline]
-> RIP: 0010:vidioc_querycap+0x12d/0x3e0
-> drivers/media/usb/usbvision/usbvision-video.c:461
-> Code: 3c 02 00 0f 85 ba 02 00 00 49 8b ac 24 58 16 00 00 48 b8 00 00 00 00
-> 00 fc ff df 48 8d 7d 48 4c 8d 45 04 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f
-> 85 7d 02 00 00 48 b8 00 00 00 00 00 fc ff df 48 8b
-> RSP: 0018:ffff8881cc727a28 EFLAGS: 00010206
-> RAX: dffffc0000000000 RBX: ffff8881cc727c20 RCX: 0000000000000000
-> RDX: 0000000000000009 RSI: 451f481f4b404f27 RDI: 0000000000000048
-> RBP: 0000000000000000 R08: 0000000000000004 R09: fffffbfff0c9ba38
-> R10: fffffbfff0c9ba37 R11: ffffffff864dd1b8 R12: ffff8881cc9aa100
-> R13: ffff8881cc9ab804 R14: ffff8881cc9aa998 R15: ffff8881cc727c50
-> FS:  00007f579210f700(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000000625208 CR3: 00000001cd192000 CR4: 00000000001406e0
+> Workqueue: usb_hub_wq hub_event
 > Call Trace:
->   v4l_querycap+0x121/0x340 drivers/media/v4l2-core/v4l2-ioctl.c:1058
->   __video_do_ioctl+0x5b0/0xb30 drivers/media/v4l2-core/v4l2-ioctl.c:2871
->   video_usercopy+0x446/0xee0 drivers/media/v4l2-core/v4l2-ioctl.c:3053
->   v4l2_ioctl+0x147/0x1a0 drivers/media/v4l2-core/v4l2-dev.c:360
->   vfs_ioctl fs/ioctl.c:46 [inline]
->   file_ioctl fs/ioctl.c:509 [inline]
->   do_vfs_ioctl+0xcda/0x12e0 fs/ioctl.c:696
->   ksys_ioctl+0x9b/0xc0 fs/ioctl.c:713
->   __do_sys_ioctl fs/ioctl.c:720 [inline]
->   __se_sys_ioctl fs/ioctl.c:718 [inline]
->   __x64_sys_ioctl+0x6f/0xb0 fs/ioctl.c:718
->   do_syscall_64+0xb7/0x560 arch/x86/entry/common.c:301
->   entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> RIP: 0033:0x7f5791c42347
-> Code: 90 90 90 48 8b 05 f1 fa 2a 00 64 c7 00 26 00 00 00 48 c7 c0 ff ff ff
-> ff c3 90 90 90 90 90 90 90 90 90 90 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff
-> ff 73 01 c3 48 8b 0d c1 fa 2a 00 31 d2 48 29 c2 64
-> RSP: 002b:00007ffced1878d8 EFLAGS: 00000206 ORIG_RAX: 0000000000000010
-> RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f5791c42347
-> RDX: 00007ffced1878e0 RSI: 0000000080685600 RDI: 0000000000000003
-> RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000206 R12: 0000000000400884
-> R13: 00007ffced187a30 R14: 0000000000000000 R15: 0000000000000000
-> Modules linked in:
-> ---[ end trace 5550531bc37b28bc ]---
-> RIP: 0010:usb_make_path include/linux/usb.h:913 [inline]
-> RIP: 0010:vidioc_querycap+0x12d/0x3e0
-> drivers/media/usb/usbvision/usbvision-video.c:461
-> Code: 3c 02 00 0f 85 ba 02 00 00 49 8b ac 24 58 16 00 00 48 b8 00 00 00 00
-> 00 fc ff df 48 8d 7d 48 4c 8d 45 04 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f
-> 85 7d 02 00 00 48 b8 00 00 00 00 00 fc ff df 48 8b
-> RSP: 0018:ffff8881cc727a28 EFLAGS: 00010206
-> RAX: dffffc0000000000 RBX: ffff8881cc727c20 RCX: 0000000000000000
-> RDX: 0000000000000009 RSI: 451f481f4b404f27 RDI: 0000000000000048
-> RBP: 0000000000000000 R08: 0000000000000004 R09: fffffbfff0c9ba38
-> R10: fffffbfff0c9ba37 R11: ffffffff864dd1b8 R12: ffff8881cc9aa100
-> R13: ffff8881cc9ab804 R14: ffff8881cc9aa998 R15: ffff8881cc727c50
-> FS:  00007f579210f700(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000000625208 CR3: 00000001cd192000 CR4: 00000000001406e0
+>   __dump_stack lib/dump_stack.c:77 [inline]
+>   dump_stack+0xca/0x13e lib/dump_stack.c:113
+>   panic+0x292/0x6c9 kernel/panic.c:219
+>   __warn.cold+0x20/0x4b kernel/panic.c:576
+>   report_bug+0x262/0x2a0 lib/bug.c:186
+>   fixup_bug arch/x86/kernel/traps.c:179 [inline]
+>   fixup_bug arch/x86/kernel/traps.c:174 [inline]
+>   do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
+>   do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
+>   invalid_op+0x14/0x20 arch/x86/entry/entry_64.S:986
+> RIP: 0010:__list_del_entry_valid+0xd3/0x170 lib/list_debug.c:45
+> Code: 93 00 00 00 49 8b 55 08 48 39 f2 75 51 b8 01 00 00 00 48 83 c4 08 41
+> 5c 41 5d c3 4c 89 ea 48 c7 c7 40 0b ba 85 e8 c8 d1 33 ff <0f> 0b 48 83 c4
+> 08 31 c0 41 5c 41 5d c3 4c 89 e2 48 c7 c7 a0 0b ba
+> RSP: 0018:ffff8881d9dc6d80 EFLAGS: 00010086
+> RAX: 0000000000000000 RBX: ffff8881d0a030c0 RCX: 0000000000000000
+> RDX: 0000000000000000 RSI: ffffffff8127ef3d RDI: ffffed103b3b8da2
+> RBP: 0000000000000000 R08: ffff8881d9d8e000 R09: 0000000000000008
+> R10: fffffbfff0d5dc9c R11: ffffffff86aee4e3 R12: dead000000000200
+> R13: dead000000000100 R14: ffff8881d3eab830 R15: 00000000ffffffb9
+>   __list_del_entry include/linux/list.h:117 [inline]
+>   list_del include/linux/list.h:125 [inline]
+>   __uwb_rc_neh_rm+0xc5/0x220 drivers/uwb/neh.c:243
+>   uwb_rc_neh_rm+0x30/0x60 drivers/uwb/neh.c:259
+>   uwb_rc_cmd_async+0x29a/0x310 drivers/uwb/reset.c:93
+>   __uwb_rc_cmd+0x10f/0x1e0 drivers/uwb/reset.c:171
+>   uwb_rc_cmd+0xc2/0x130 drivers/uwb/reset.c:220
+>   uwb_rc_reset+0x15e/0x218 drivers/uwb/reset.c:292
+>   uwb_rc_setup+0x84/0x320 drivers/uwb/lc-rc.c:282
+>   uwb_rc_add+0x246/0x42f drivers/uwb/lc-rc.c:351
+>   hwarc_probe+0x3ce/0x980 drivers/uwb/hwa-rc.c:843
+>   usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+>   really_probe+0x281/0x660 drivers/base/dd.c:509
+>   driver_probe_device+0x104/0x210 drivers/base/dd.c:670
+>   __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
+>   bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+>   __device_attach+0x217/0x360 drivers/base/dd.c:843
+>   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+>   device_add+0xae6/0x16f0 drivers/base/core.c:2111
+>   usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
+>   generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+>   usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
+>   really_probe+0x281/0x660 drivers/base/dd.c:509
+>   driver_probe_device+0x104/0x210 drivers/base/dd.c:670
+>   __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
+>   bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
+>   __device_attach+0x217/0x360 drivers/base/dd.c:843
+>   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+>   device_add+0xae6/0x16f0 drivers/base/core.c:2111
+>   usb_new_device.cold+0x6a4/0xe61 drivers/usb/core/hub.c:2536
+>   hub_port_connect drivers/usb/core/hub.c:5098 [inline]
+>   hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
+>   port_event drivers/usb/core/hub.c:5359 [inline]
+>   hub_event+0x1abd/0x3550 drivers/usb/core/hub.c:5441
+>   process_one_work+0x905/0x1570 kernel/workqueue.c:2269
+>   worker_thread+0x96/0xe20 kernel/workqueue.c:2415
+>   kthread+0x30b/0x410 kernel/kthread.c:255
+>   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+> Kernel Offset: disabled
+> Rebooting in 86400 seconds..
 >
 >
 > ---
