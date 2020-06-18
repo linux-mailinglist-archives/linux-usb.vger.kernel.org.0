@@ -2,44 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E48431FFB1A
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 20:33:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDB921FFC4D
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 22:09:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730025AbgFRSdV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Jun 2020 14:33:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47010 "EHLO mail.kernel.org"
+        id S1730006AbgFRUJT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Jun 2020 16:09:19 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:58955 "EHLO m43-7.mailgun.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729862AbgFRSdU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 18 Jun 2020 14:33:20 -0400
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+        id S1730108AbgFRUJS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 18 Jun 2020 16:09:18 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1592510958; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=NTUeymUReKpdIsjMtCi8NYeyBb1gfEMgmYaNDWEKN9I=; b=i8DLtamTd3S1Xs2e6TOhprhYsq831+8BAufQkwTf8lQeTu9rpyfqQALR7GytYiewpH2BeOPl
+ xBsdsmVkU26/cInlAVYYaj6I3nMA0/b0sHtT6BodA/oN2OYmzHJMrBNJSJmyFGFjpnlni13S
+ ZhV0mv5wRTiHnLy5sTStBsCrCqo=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
+ 5eebc9eb6f2ee827da204a21 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 18 Jun 2020 20:09:15
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 7733BC433A1; Thu, 18 Jun 2020 20:09:15 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.110.38.129] (i-global254.qualcomm.com [199.106.103.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CBC1F20DD4;
-        Thu, 18 Jun 2020 18:33:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592505199;
-        bh=Wa43T7w4Pf81pk4qHW8JXP2v08fY04xx7ru8epXTzJg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ecX5Ld1C7sjO0SKydvTx6QgyY74RFFqkiWnwMkxD4jX71EmRFAZbRf1SerGyIli3R
-         RZl95VzhTjcClNC29YOwPoiGgk7m7vhs8a1gruUkjU0bfitz0O1/8qARf5cXGIDbju
-         zjjHj9YihPIoZu0HkGVQjpeneXBfdHEM4Q05d4L8=
-Received: by mail-ot1-f44.google.com with SMTP id v13so5345603otp.4;
-        Thu, 18 Jun 2020 11:33:19 -0700 (PDT)
-X-Gm-Message-State: AOAM532oj0Lz6d7z6RBJL/UzqyzCpdjBDjNcid6/gwdCeNKAPD6q5QkG
-        QIjrSJprmw2HlEW2TPUUP32f/F4UWI1LwwnhrA==
-X-Google-Smtp-Source: ABdhPJx+Rb+JwD1PIWMOTJ6UqjOwSRAy1TpYrAkSXPkBhtxEkdRG5n3IX0zx8pWKa9xRNHPUxS5L8u5iKcFIdAX3nNk=
-X-Received: by 2002:a05:6830:3104:: with SMTP id b4mr68860ots.192.1592505199060;
- Thu, 18 Jun 2020 11:33:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200617180209.5636-1-wcheng@codeaurora.org> <20200617180209.5636-3-wcheng@codeaurora.org>
-In-Reply-To: <20200617180209.5636-3-wcheng@codeaurora.org>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 18 Jun 2020 12:33:07 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+fhXWGJvYxUDygd6hKs3dc8GKxKCz_Q+_C1AjK0J0N+w@mail.gmail.com>
-Message-ID: <CAL_Jsq+fhXWGJvYxUDygd6hKs3dc8GKxKCz_Q+_C1AjK0J0N+w@mail.gmail.com>
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id B30D0C433CA;
+        Thu, 18 Jun 2020 20:09:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org B30D0C433CA
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=wcheng@codeaurora.org
 Subject: Re: [PATCH v3 2/6] dt-bindings: usb: Add Qualcomm PMIC type C
  controller dt-binding
-To:     Wesley Cheng <wcheng@codeaurora.org>
+To:     Rob Herring <robh+dt@kernel.org>
 Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Mark Rutland <mark.rutland@arm.com>,
         Mark Brown <broonie@kernel.org>,
@@ -53,167 +57,79 @@ Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Jack Pham <jackp@codeaurora.org>,
         Randy Dunlap <rdunlap@infradead.org>,
-        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
         Jun Li <lijun.kernel@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+References: <20200617180209.5636-1-wcheng@codeaurora.org>
+ <20200617180209.5636-3-wcheng@codeaurora.org>
+ <CAL_Jsq+fhXWGJvYxUDygd6hKs3dc8GKxKCz_Q+_C1AjK0J0N+w@mail.gmail.com>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <fb448691-2bda-ada6-799f-ee389e647710@codeaurora.org>
+Date:   Thu, 18 Jun 2020 13:09:12 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
+MIME-Version: 1.0
+In-Reply-To: <CAL_Jsq+fhXWGJvYxUDygd6hKs3dc8GKxKCz_Q+_C1AjK0J0N+w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 17, 2020 at 12:02 PM Wesley Cheng <wcheng@codeaurora.org> wrote:
->
-> Introduce the dt-binding for enabling USB type C orientation and role
-> detection using the PM8150B.  The driver will be responsible for receiving
-> the interrupt at a state change on the CC lines, reading the orientation/role,
-> and communicating this information to the remote clients, which can include
-> a role switch node and a type C switch.
->
-> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
-> ---
->  .../bindings/usb/qcom,pmic-typec.yaml         | 117 ++++++++++++++++++
->  1 file changed, 117 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml
->
-> diff --git a/Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml b/Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml
-> new file mode 100644
-> index 000000000000..085b4547d75a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml
-> @@ -0,0 +1,117 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/usb/qcom,pmic-typec.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Qualcomm PMIC based USB type C Detection Driver
-> +
-> +maintainers:
-> +  - Wesley Cheng <wcheng@codeaurora.org>
-> +
-> +description: |
-> +  Qualcomm PMIC Type C Detect
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,pm8150b-usb-typec
-> +
-> +  reg:
-> +    maxItems: 1
-> +    description: Type C base address
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +    description: CC change interrupt from PMIC
-> +
-> +  connector:
-> +    description: Connector type for remote endpoints
-> +    type: object
 
-You are duplicating everything in usb-connector.yaml. You should have
-a $ref to it.
+On 6/18/2020 11:33 AM, Rob Herring wrote:
+> On Wed, Jun 17, 2020 at 12:02 PM Wesley Cheng <wcheng@codeaurora.org> wrote:
+> 
+> You are duplicating everything in usb-connector.yaml. You should have
+> a $ref to it.
+> 
 
-> +
-> +    properties:
-> +      compatible:
-> +        enum:
-> +          - usb-c-connector
-> +
-> +      power-role:
-> +       enum:
-> +         - dual
-> +         - source
-> +         - sink
-> +
-> +      data-role:
-> +        enum:
-> +          - dual
-> +          - host
-> +          - device
-> +
-> +      port:
-> +        description: Remote endpoint connections
-> +        type: object
-> +
-> +        properties:
-> +          endpoint@0:
-> +            description: Connection to USB type C mux node
+Hi Rob,
 
-This is wrong. The connector binding says port 0 is the connection the
-USB HS controller.
+Sure, I will add a reference to that doc.
 
-What's a type C mux node? Is there a binding for that? There's an
-ongoing discussion with the CrOS folks on how to describe Alt mode
-mux/switches.
+> 
+> This is wrong. The connector binding says port 0 is the connection the
+> USB HS controller.
+> 
+> What's a type C mux node? Is there a binding for that? There's an
+> ongoing discussion with the CrOS folks on how to describe Alt mode
+> mux/switches.
 
-> +            type: object
-> +
-> +            properties:
-> +              remote-endpoint:
-> +                maxItems: 1
-> +                description: Node reference to the type C mux
-> +
-> +          endpoint@1:
-> +            description: Connection to role switch node
+I reviewed the connector binding previously, and couldn't seem to come
+up with a model which fit a design where the type C controller (ie the
+entity which does the CC orientation and role detection) does not have
+the SS lane mux included.  The SS lane mux is the HW which handles the
+selection of the SS lanes to utilize based on cable orientation.
 
-Again, what's this?
+I looked at the FUSB302 TCPM driver, which doesn't have an integrated SS
+lane mux, and relies on an external FUSB340 switch to handle the
+polarity, but seems that in the fusb302.c driver it doesn't implement
+the polarity handler.  They might possibly have a HW output signal which
+controls the mux directly, but I'm not sure on that.
 
-> +            type: object
-> +
-> +            properties:
-> +              remote-endpoint:
-> +                maxItems: 1
-> +                description: Node reference to the role switch node
-> +
-> +    required:
-> +      - compatible
-> +
-> +required:
-> +  - compatible
-> +  - interrupts
-> +  - connector
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    pm8150b {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +        qcom,typec@1500 {
-> +            compatible = "qcom,pm8150b-usb-typec";
-> +            reg = <0x1500>;
-> +            interrupts =
-> +                <0x2 0x15 0x5 IRQ_TYPE_EDGE_RISING>;
-> +
-> +            connector {
-> +                compatible = "usb-c-connector";
-> +                power-role = "dual";
-> +                data-role = "dual";
-> +                port {
-> +                    #address-cells = <1>;
-> +                    #size-cells = <0>;
-> +                    usb3_data_ss: endpoint@0 {
-> +                        reg = <0>;
-> +                        remote-endpoint =
-> +                                <&qmp_ss_mux>;
-> +                    };
-> +
-> +                    usb3_role: endpoint@1 {
-> +
-> +                        reg = <1>;
-> +                        remote-endpoint =
-> +                                <&dwc3_drd_switch>;
-> +                    };
-> +                };
-> +            };
-> +        };
-> +    };
-> +...
-> --
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
->
+Anyway, if someone wanted to take a SW approach and program an external
+mux, this model doesn't seem to allow that.  This is somewhat unrelated
+to the DP AUX mode switching, as that probably will only come into the
+picture after the policy engine has detected there is a DP adapter
+connected, whereas this is applicable to non DP/alt mode situations.
+
+Thanks!
+
+>> +            type: object
+>> +
+>> +            properties:
+>> +              remote-endpoint:
+>> +                maxItems: 1
+>> +                description: Node reference to the type C mux
+>> +
+>> +          endpoint@1:
+>> +            description: Connection to role switch node
+> 
+> Again, what's this?
+> 
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
