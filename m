@@ -2,36 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D6921FE7B7
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 04:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C2D11FE768
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 04:41:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729314AbgFRCmv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Jun 2020 22:42:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39918 "EHLO mail.kernel.org"
+        id S1728921AbgFRBMc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Jun 2020 21:12:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41058 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728795AbgFRBLt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:11:49 -0400
+        id S1728909AbgFRBM2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:12:28 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D6681221EA;
-        Thu, 18 Jun 2020 01:11:47 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 357CD20EDD;
+        Thu, 18 Jun 2020 01:12:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592442708;
-        bh=mrZanQqxYIkssk95rfUSgIXPFQ0iY4bPahgIafhud7o=;
+        s=default; t=1592442748;
+        bh=D3F8OeDLQgHlOhxrNCZPhck53CQnJDDLhPaT7YaAwrI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LBBam0pL4kPrtQMHDdusiBu5BfHLjg+KA/vjD2kpQgh2a8+RdXu56ADf4LqgXFCfT
-         dyo4KyfJZId2t4e85vy+O8B3wIw2RzpucnCbIsxnoMfV0xiy8VAEFQbQ8UEpOzoPEh
-         rDIBJrDElJBcIZC8pwCQ754vSTgRHGJ1VwMZ9/BM=
+        b=XWaF37sJvBryMdy7DM/uqodwaiskEYnqZum8Uumx51IGDc4P0zQUgYMlohe5+aDb4
+         esyO1TFdik4NS8iQGoJudPBFZAlnaEr4gatkZcZRSQLu2o/oh2pm0XuYFW/WwgoWDN
+         RV6iNiP3Zyfq0vQbsXotVRyb8VFnP9m+a3Y7pJGo=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Thinh Nguyen <thinhn@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
+Cc:     Wei Yongjun <weiyongjun1@huawei.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 169/388] usb: dwc3: gadget: Properly handle failed kick_transfer
-Date:   Wed, 17 Jun 2020 21:04:26 -0400
-Message-Id: <20200618010805.600873-169-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.7 200/388] USB: ohci-sm501: fix error return code in ohci_hcd_sm501_drv_probe()
+Date:   Wed, 17 Jun 2020 21:04:57 -0400
+Message-Id: <20200618010805.600873-200-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200618010805.600873-1-sashal@kernel.org>
 References: <20200618010805.600873-1-sashal@kernel.org>
@@ -44,66 +44,41 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+From: Wei Yongjun <weiyongjun1@huawei.com>
 
-[ Upstream commit 8d99087c2db863c5fa3a4a1f3cb82b3a493705ca ]
+[ Upstream commit b919e077cccfbb77beb98809568b2fb0b4d113ec ]
 
-If dwc3 fails to issue START_TRANSFER/UPDATE_TRANSFER command, then we
-should properly end an active transfer and give back all the started
-requests. However if it's for an isoc endpoint, the failure maybe due to
-bus-expiry status. In this case, don't give back the requests and wait
-for the next retry.
+Fix to return a negative error code from the error handling
+case instead of 0, as done elsewhere in this function.
 
-Fixes: 72246da40f37 ("usb: Introduce DesignWare USB3 DRD Driver")
-Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
-Signed-off-by: Felipe Balbi <balbi@kernel.org>
+Fixes: 7d9e6f5aebe8 ("usb: host: ohci-sm501: init genalloc for local memory")
+Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Link: https://lore.kernel.org/r/20200506135625.106910-1-weiyongjun1@huawei.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc3/gadget.c | 24 ++++++++++++++++--------
- 1 file changed, 16 insertions(+), 8 deletions(-)
+ drivers/usb/host/ohci-sm501.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index ab6562c5b927..de3b92680935 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -1220,6 +1220,8 @@ static void dwc3_prepare_trbs(struct dwc3_ep *dep)
- 	}
- }
+diff --git a/drivers/usb/host/ohci-sm501.c b/drivers/usb/host/ohci-sm501.c
+index c158cda9e4b9..cff965240327 100644
+--- a/drivers/usb/host/ohci-sm501.c
++++ b/drivers/usb/host/ohci-sm501.c
+@@ -157,9 +157,10 @@ static int ohci_hcd_sm501_drv_probe(struct platform_device *pdev)
+ 	 * the call to usb_hcd_setup_local_mem() below does just that.
+ 	 */
  
-+static void dwc3_gadget_ep_cleanup_cancelled_requests(struct dwc3_ep *dep);
-+
- static int __dwc3_gadget_kick_transfer(struct dwc3_ep *dep)
- {
- 	struct dwc3_gadget_ep_cmd_params params;
-@@ -1259,14 +1261,20 @@ static int __dwc3_gadget_kick_transfer(struct dwc3_ep *dep)
- 
- 	ret = dwc3_send_gadget_ep_cmd(dep, cmd, &params);
- 	if (ret < 0) {
--		/*
--		 * FIXME we need to iterate over the list of requests
--		 * here and stop, unmap, free and del each of the linked
--		 * requests instead of what we do now.
--		 */
--		if (req->trb)
--			memset(req->trb, 0, sizeof(struct dwc3_trb));
--		dwc3_gadget_del_and_unmap_request(dep, req, ret);
-+		struct dwc3_request *tmp;
-+
-+		if (ret == -EAGAIN)
-+			return ret;
-+
-+		dwc3_stop_active_transfer(dep, true, true);
-+
-+		list_for_each_entry_safe(req, tmp, &dep->started_list, list)
-+			dwc3_gadget_move_cancelled_request(req);
-+
-+		/* If ep isn't started, then there's no end transfer pending */
-+		if (!(dep->flags & DWC3_EP_END_TRANSFER_PENDING))
-+			dwc3_gadget_ep_cleanup_cancelled_requests(dep);
-+
- 		return ret;
- 	}
- 
+-	if (usb_hcd_setup_local_mem(hcd, mem->start,
+-				    mem->start - mem->parent->start,
+-				    resource_size(mem)) < 0)
++	retval = usb_hcd_setup_local_mem(hcd, mem->start,
++					 mem->start - mem->parent->start,
++					 resource_size(mem));
++	if (retval < 0)
+ 		goto err5;
+ 	retval = usb_add_hcd(hcd, irq, IRQF_SHARED);
+ 	if (retval)
 -- 
 2.25.1
 
