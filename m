@@ -2,144 +2,197 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B812B1FF159
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 14:11:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EF4E1FF168
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 14:12:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729034AbgFRMLd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Jun 2020 08:11:33 -0400
-Received: from relmlor2.renesas.com ([210.160.252.172]:34169 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727873AbgFRML1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Jun 2020 08:11:27 -0400
-X-IronPort-AV: E=Sophos;i="5.73,526,1583161200"; 
-   d="scan'208";a="49805309"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 18 Jun 2020 21:11:26 +0900
-Received: from localhost.localdomain (unknown [10.166.252.89])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 7F7004231AA8;
-        Thu, 18 Jun 2020 21:11:26 +0900 (JST)
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: [PATCH] usb: renesas_usbhs: getting residue from callback_result
-Date:   Thu, 18 Jun 2020 21:11:17 +0900
-Message-Id: <1592482277-19563-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-X-Mailer: git-send-email 2.7.4
+        id S1727784AbgFRMMm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Jun 2020 08:12:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33892 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728926AbgFRMMg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Jun 2020 08:12:36 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13FC4C06174E
+        for <linux-usb@vger.kernel.org>; Thu, 18 Jun 2020 05:12:36 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id h95so2581873pje.4
+        for <linux-usb@vger.kernel.org>; Thu, 18 Jun 2020 05:12:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GdlgdDTvjjRb2Q6kli/MdcBOagZufmFAYpvYAAnqtCQ=;
+        b=oidgjg8sFSWeGIRW6UXjbEcF3+67aY4aD7olINj0o4sjtNK3nJIscMyp8BYBNFTq5E
+         V9wyb8V0XMPPbvzmwuUyWRZaSPQeEfjDMELUle08JMmAgW9XPgFj8xwxI9sl2LIyU8Tk
+         lOllP4gsrsncuUfzACMKHNtJnKCxSCRDxr+m3g3sFnwIg+uIUKpTn1q2UBmTKF5s1IG6
+         NRJ+mKo8mA2Jt1bn26TIJbrlDHSmhV14xz1v/TvSDStW5ATyxxbuEKsMuLtkR+5s1uVu
+         MwsOjbom+FMU2EF4NsVBk3Qo/SZfsGc78pL3sXg5Y0uFCVE6QaiA+EDEkSZPGWAZyBQm
+         RdWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GdlgdDTvjjRb2Q6kli/MdcBOagZufmFAYpvYAAnqtCQ=;
+        b=pXHNRFp4YipueKEy72aEGs+3UVzaWZvt8ETyB6+Yf4o9GmVD8BctzocmXFL+zB+eV4
+         jNbVaIbE5l8gGyuwUm2lVMOWE/05AUJU3IYFosFzRMs++9Gih/Keppz7n+tUljJP7IcW
+         7gY4HqJSnY8Ct8QWAeGTflnakRUItg1gI/fHmId8T8VVqpOXRShEL63/T58HoeQo88/F
+         AWKgKXRC/i6U8X6ErRLdiuNYZU5qn+9mGlkBpsKJzS2GfUwYWTa6idoPk+7LSrosl/Ar
+         iQ9aEseXdYMa4+/eJsOqw0UBOaT+/PMx0Rb60b7CgcDcIHOG3rlQ9JN6fhGihG6FE9oy
+         mbCA==
+X-Gm-Message-State: AOAM531jgn9n8wzcKh8FW3Dl1I9U3x/tGqJUCWx981I76INN/wNh85cs
+        FvgYdTw198JgQ+uooiGmpDI3tPnqOt82osR1ribiBA==
+X-Google-Smtp-Source: ABdhPJyPDuz57bUYCuQY8xA5slJW9VRX+QeUgKaH8NnE8woOIKRAdxI/EgeNiyiY8+VpjOHs5NPOsKa2zpwGnYBeNxc=
+X-Received: by 2002:a17:90b:1981:: with SMTP id mv1mr3913430pjb.41.1592482355410;
+ Thu, 18 Jun 2020 05:12:35 -0700 (PDT)
+MIME-Version: 1.0
+References: <0000000000006062280596203360@google.com>
+In-Reply-To: <0000000000006062280596203360@google.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Thu, 18 Jun 2020 14:12:24 +0200
+Message-ID: <CAAeHK+zuLW9O5SnTZeqapjPSV4nrkdUEu4dwCwNpZmM7ABL=Fg@mail.gmail.com>
+Subject: Re: KASAN: use-after-free Read in chaoskey_disconnect
+To:     syzbot <syzbot+6d8505fcdf25f00ac276@syzkaller.appspotmail.com>
+Cc:     alexandre.belloni@bootlin.com, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        linux-crypto@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>, lvivier@redhat.com,
+        mchehab+samsung@kernel.org, mpm@selenic.com, swboyd@chromium.org,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        "Theodore Ts'o" <tytso@mit.edu>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This driver assumed that dmaengine_tx_status() could return
-the residue even if the transfer was completed. However,
-this was not correct usage [1] and this caused to break getting
-the residue after the commit 24461d9792c2 ("dmaengine:
-virt-dma: Fix access after free in vchan_complete()") actually.
-So, this is possible to get wrong received size if the usb
-controller gets a short packet. For example, g_zero driver
-causes "bad OUT byte" errors.
+On Wed, Oct 30, 2019 at 1:52 PM syzbot
+<syzbot+6d8505fcdf25f00ac276@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following crash on:
+>
+> HEAD commit:    ff6409a6 usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=15e1ba24e00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3230c37d442895b7
+> dashboard link: https://syzkaller.appspot.com/bug?extid=6d8505fcdf25f00ac276
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=169b8904e00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=166f3104e00000
+>
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+6d8505fcdf25f00ac276@syzkaller.appspotmail.com
+>
+> usb 3-1: string descriptor 0 read error: -71
+> usb 3-1: USB disconnect, device number 2
+> ==================================================================
+> BUG: KASAN: use-after-free in atomic_read
+> include/asm-generic/atomic-instrumented.h:26 [inline]
+> BUG: KASAN: use-after-free in refcount_inc_not_zero_checked+0x72/0x1e0
+> lib/refcount.c:123
+> Read of size 4 at addr ffff8881cf679820 by task kworker/1:1/1730
+>
+> CPU: 1 PID: 1730 Comm: kworker/1:1 Not tainted 5.4.0-rc5+ #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
+> Google 01/01/2011
+> Workqueue: usb_hub_wq hub_event
+> Call Trace:
+>   __dump_stack lib/dump_stack.c:77 [inline]
+>   dump_stack+0xca/0x13e lib/dump_stack.c:113
+>   print_address_description.constprop.0+0x36/0x50 mm/kasan/report.c:374
+>   __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:506
+>   kasan_report+0xe/0x20 mm/kasan/common.c:634
+>   check_memory_region_inline mm/kasan/generic.c:185 [inline]
+>   check_memory_region+0x128/0x190 mm/kasan/generic.c:192
+>   atomic_read include/asm-generic/atomic-instrumented.h:26 [inline]
+>   refcount_inc_not_zero_checked+0x72/0x1e0 lib/refcount.c:123
+>   refcount_inc_checked+0x12/0x60 lib/refcount.c:156
+>   get_task_struct include/linux/sched/task.h:110 [inline]
+>   kthread_stop+0x6c/0x610 kernel/kthread.c:554
+>   hwrng_unregister+0x190/0x210 drivers/char/hw_random/core.c:538
+>   chaoskey_disconnect+0x1b2/0x200 drivers/usb/misc/chaoskey.c:232
+>   usb_unbind_interface+0x1bd/0x8a0 drivers/usb/core/driver.c:423
+>   __device_release_driver drivers/base/dd.c:1134 [inline]
+>   device_release_driver_internal+0x42f/0x500 drivers/base/dd.c:1165
+>   bus_remove_device+0x2dc/0x4a0 drivers/base/bus.c:532
+>   device_del+0x420/0xb20 drivers/base/core.c:2376
+>   usb_disable_device+0x211/0x690 drivers/usb/core/message.c:1237
+>   usb_disconnect+0x284/0x8d0 drivers/usb/core/hub.c:2200
+>   hub_port_connect drivers/usb/core/hub.c:5035 [inline]
+>   hub_port_connect_change drivers/usb/core/hub.c:5324 [inline]
+>   port_event drivers/usb/core/hub.c:5470 [inline]
+>   hub_event+0x16f2/0x3800 drivers/usb/core/hub.c:5552
+>   process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
+>   process_scheduled_works kernel/workqueue.c:2331 [inline]
+>   worker_thread+0x7ab/0xe20 kernel/workqueue.c:2417
+>   kthread+0x318/0x420 kernel/kthread.c:255
+>   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+>
+> Allocated by task 2:
+>   save_stack+0x1b/0x80 mm/kasan/common.c:69
+>   set_track mm/kasan/common.c:77 [inline]
+>   __kasan_kmalloc mm/kasan/common.c:510 [inline]
+>   __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:483
+>   slab_post_alloc_hook mm/slab.h:584 [inline]
+>   slab_alloc_node mm/slub.c:2779 [inline]
+>   kmem_cache_alloc_node+0xdc/0x310 mm/slub.c:2815
+>   alloc_task_struct_node kernel/fork.c:169 [inline]
+>   dup_task_struct kernel/fork.c:865 [inline]
+>   copy_process+0x4201/0x6470 kernel/fork.c:1851
+>   _do_fork+0x129/0xec0 kernel/fork.c:2366
+>   kernel_thread+0xaa/0xe0 kernel/fork.c:2453
+>   create_kthread kernel/kthread.c:278 [inline]
+>   kthreadd+0x4a2/0x680 kernel/kthread.c:596
+>   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+>
+> Freed by task 16:
+>   save_stack+0x1b/0x80 mm/kasan/common.c:69
+>   set_track mm/kasan/common.c:77 [inline]
+>   kasan_set_free_info mm/kasan/common.c:332 [inline]
+>   __kasan_slab_free+0x130/0x180 mm/kasan/common.c:471
+>   slab_free_hook mm/slub.c:1424 [inline]
+>   slab_free_freelist_hook mm/slub.c:1475 [inline]
+>   slab_free mm/slub.c:3025 [inline]
+>   kmem_cache_free+0xb9/0x380 mm/slub.c:3041
+>   __put_task_struct+0x1e2/0x4c0 kernel/fork.c:748
+>   put_task_struct include/linux/sched/task.h:119 [inline]
+>   delayed_put_task_struct+0x1b4/0x2c0 kernel/exit.c:182
+>   __rcu_reclaim kernel/rcu/rcu.h:222 [inline]
+>   rcu_do_batch kernel/rcu/tree.c:2157 [inline]
+>   rcu_core+0x630/0x1ca0 kernel/rcu/tree.c:2377
+>   __do_softirq+0x221/0x912 kernel/softirq.c:292
+>
+> The buggy address belongs to the object at ffff8881cf679800
+>   which belongs to the cache task_struct of size 5888
+> The buggy address is located 32 bytes inside of
+>   5888-byte region [ffff8881cf679800, ffff8881cf67af00)
+> The buggy address belongs to the page:
+> page:ffffea00073d9e00 refcount:1 mapcount:0 mapping:ffff8881da116000
+> index:0x0 compound_mapcount: 0
+> flags: 0x200000000010200(slab|head)
+> raw: 0200000000010200 dead000000000100 dead000000000122 ffff8881da116000
+> raw: 0000000000000000 0000000080050005 00000001ffffffff 0000000000000000
+> page dumped because: kasan: bad access detected
+>
+> Memory state around the buggy address:
+>   ffff8881cf679700: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>   ffff8881cf679780: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+> > ffff8881cf679800: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>                                 ^
+>   ffff8881cf679880: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>   ffff8881cf679900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> ==================================================================
+>
+>
+> ---
+> This bug is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this bug report. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> syzbot can test patches for this bug, for details see:
+> https://goo.gl/tpsmEJ#testing-patches
 
-The usb-dmac driver will support the callback_result, so this
-driver can use it to get residue correctly. Note that even if
-the usb-dmac driver has not supported the callback_result yet,
-this patch doesn't cause any side-effects.
-
-[1]
-https://lore.kernel.org/dmaengine/20200616165550.GP2324254@vkoul-mobl/
-
-Reported-by: Hien Dang <hien.dang.eb@renesas.com>
-Fixes: 24461d9792c2 ("dmaengine: virt-dma: Fix access after free in vchan_complete()")
-Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
----
- drivers/usb/renesas_usbhs/fifo.c | 23 +++++++++++++----------
- drivers/usb/renesas_usbhs/fifo.h |  2 +-
- 2 files changed, 14 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/usb/renesas_usbhs/fifo.c b/drivers/usb/renesas_usbhs/fifo.c
-index 01c6a48..ac9a81a 100644
---- a/drivers/usb/renesas_usbhs/fifo.c
-+++ b/drivers/usb/renesas_usbhs/fifo.c
-@@ -803,7 +803,8 @@ static int __usbhsf_dma_map_ctrl(struct usbhs_pkt *pkt, int map)
- 	return info->dma_map_ctrl(chan->device->dev, pkt, map);
- }
- 
--static void usbhsf_dma_complete(void *arg);
-+static void usbhsf_dma_complete(void *arg,
-+				const struct dmaengine_result *result);
- static void usbhsf_dma_xfer_preparing(struct usbhs_pkt *pkt)
- {
- 	struct usbhs_pipe *pipe = pkt->pipe;
-@@ -813,6 +814,7 @@ static void usbhsf_dma_xfer_preparing(struct usbhs_pkt *pkt)
- 	struct dma_chan *chan;
- 	struct device *dev = usbhs_priv_to_dev(priv);
- 	enum dma_transfer_direction dir;
-+	dma_cookie_t cookie;
- 
- 	fifo = usbhs_pipe_to_fifo(pipe);
- 	if (!fifo)
-@@ -827,11 +829,11 @@ static void usbhsf_dma_xfer_preparing(struct usbhs_pkt *pkt)
- 	if (!desc)
- 		return;
- 
--	desc->callback		= usbhsf_dma_complete;
--	desc->callback_param	= pipe;
-+	desc->callback_result	= usbhsf_dma_complete;
-+	desc->callback_param	= pkt;
- 
--	pkt->cookie = dmaengine_submit(desc);
--	if (pkt->cookie < 0) {
-+	cookie = dmaengine_submit(desc);
-+	if (cookie < 0) {
- 		dev_err(dev, "Failed to submit dma descriptor\n");
- 		return;
- 	}
-@@ -1152,12 +1154,10 @@ static size_t usbhs_dma_calc_received_size(struct usbhs_pkt *pkt,
- 					   struct dma_chan *chan, int dtln)
- {
- 	struct usbhs_pipe *pipe = pkt->pipe;
--	struct dma_tx_state state;
- 	size_t received_size;
- 	int maxp = usbhs_pipe_get_maxpacket(pipe);
- 
--	dmaengine_tx_status(chan, pkt->cookie, &state);
--	received_size = pkt->length - state.residue;
-+	received_size = pkt->length - pkt->dma_result->residue;
- 
- 	if (dtln) {
- 		received_size -= USBHS_USB_DMAC_XFER_SIZE;
-@@ -1363,13 +1363,16 @@ static int usbhsf_irq_ready(struct usbhs_priv *priv,
- 	return 0;
- }
- 
--static void usbhsf_dma_complete(void *arg)
-+static void usbhsf_dma_complete(void *arg,
-+				const struct dmaengine_result *result)
- {
--	struct usbhs_pipe *pipe = arg;
-+	struct usbhs_pkt *pkt = arg;
-+	struct usbhs_pipe *pipe = pkt->pipe;
- 	struct usbhs_priv *priv = usbhs_pipe_to_priv(pipe);
- 	struct device *dev = usbhs_priv_to_dev(priv);
- 	int ret;
- 
-+	pkt->dma_result = result;
- 	ret = usbhsf_pkt_handler(pipe, USBHSF_PKT_DMA_DONE);
- 	if (ret < 0)
- 		dev_err(dev, "dma_complete run_error %d : %d\n",
-diff --git a/drivers/usb/renesas_usbhs/fifo.h b/drivers/usb/renesas_usbhs/fifo.h
-index 7d3700b..039a2b9 100644
---- a/drivers/usb/renesas_usbhs/fifo.h
-+++ b/drivers/usb/renesas_usbhs/fifo.h
-@@ -50,7 +50,7 @@ struct usbhs_pkt {
- 		     struct usbhs_pkt *pkt);
- 	struct work_struct work;
- 	dma_addr_t dma;
--	dma_cookie_t cookie;
-+	const struct dmaengine_result *dma_result;
- 	void *buf;
- 	int length;
- 	int trans;
--- 
-2.7.4
-
+#syz fix: USB: chaoskey: fix use-after-free on release
