@@ -2,37 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B931FE412
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 04:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A53B61FE2EF
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 04:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730646AbgFRCPn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Jun 2020 22:15:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52664 "EHLO mail.kernel.org"
+        id S1730843AbgFRBWs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Jun 2020 21:22:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56002 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730304AbgFRBU2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:20:28 -0400
+        id S1730345AbgFRBWs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:22:48 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 49DC920CC7;
-        Thu, 18 Jun 2020 01:20:27 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5589420776;
+        Thu, 18 Jun 2020 01:22:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592443228;
-        bh=2SXgvA7tUSdP75dvHaiTMCQP+0FRDnVljzClLq3/NNo=;
+        s=default; t=1592443368;
+        bh=+LkZii1dP7fTREBqDrvivXDp8hq7SWXVnFnqZtEXXuw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=septxn67crc3dwdorjlqZCSSwrjS50+ctMveQVph0Wj2Ab/zcytIpWGe1tZq44QyC
-         0SXm3P623fs0TsJE4fw5bpELpfjVFeO6D8rJwA4LI4jn2scWXTtEjsu5ckTfs1eIe1
-         gAldO5R+elMQbB0n2rOQIpkaNLiA9iGtp2Dj9RwI=
+        b=tMiMhdtKtawpAAc4+xj4IEqxgp/6ewgK0YRhSvDUAytznyfwwSjvozvNqvDT0dCz5
+         0hyEjnu5lPche5B8sUDfZCe0a+7yfKGrrYhUcE4rHXqIategHn4J09Z0eoDwyjIKuP
+         L5D083jDwpNx1kX3nF0CBp/o53RSXIBWojqjJPWw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Qiushi Wu <wu000273@umn.edu>, Felipe Balbi <balbi@kernel.org>,
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        syzbot+be5b5f86a162a6c281e6@syzkaller.appspotmail.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 181/266] usb: gadget: fix potential double-free in m66592_probe.
-Date:   Wed, 17 Jun 2020 21:15:06 -0400
-Message-Id: <20200618011631.604574-181-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 023/172] usblp: poison URBs upon disconnect
+Date:   Wed, 17 Jun 2020 21:19:49 -0400
+Message-Id: <20200618012218.607130-23-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200618011631.604574-1-sashal@kernel.org>
-References: <20200618011631.604574-1-sashal@kernel.org>
+In-Reply-To: <20200618012218.607130-1-sashal@kernel.org>
+References: <20200618012218.607130-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -42,36 +44,48 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Qiushi Wu <wu000273@umn.edu>
+From: Oliver Neukum <oneukum@suse.com>
 
-[ Upstream commit 44734a594196bf1d474212f38fe3a0d37a73278b ]
+[ Upstream commit 296a193b06120aa6ae7cf5c0d7b5e5b55968026e ]
 
-m66592_free_request() is called under label "err_add_udc"
-and "clean_up", and m66592->ep0_req is not set to NULL after
-first free, leading to a double-free. Fix this issue by
-setting m66592->ep0_req to NULL after the first free.
+syzkaller reported an URB that should have been killed to be active.
+We do not understand it, but this should fix the issue if it is real.
 
-Fixes: 0f91349b89f3 ("usb: gadget: convert all users to the new udc infrastructure")
-Signed-off-by: Qiushi Wu <wu000273@umn.edu>
-Signed-off-by: Felipe Balbi <balbi@kernel.org>
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Reported-by: syzbot+be5b5f86a162a6c281e6@syzkaller.appspotmail.com
+Link: https://lore.kernel.org/r/20200507085806.5793-1-oneukum@suse.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/udc/m66592-udc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/class/usblp.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/gadget/udc/m66592-udc.c b/drivers/usb/gadget/udc/m66592-udc.c
-index a8288df6aadf..ea59b56e5402 100644
---- a/drivers/usb/gadget/udc/m66592-udc.c
-+++ b/drivers/usb/gadget/udc/m66592-udc.c
-@@ -1667,7 +1667,7 @@ static int m66592_probe(struct platform_device *pdev)
+diff --git a/drivers/usb/class/usblp.c b/drivers/usb/class/usblp.c
+index 4a80103675d5..419804c9c974 100644
+--- a/drivers/usb/class/usblp.c
++++ b/drivers/usb/class/usblp.c
+@@ -468,7 +468,8 @@ static int usblp_release(struct inode *inode, struct file *file)
+ 	usb_autopm_put_interface(usblp->intf);
  
- err_add_udc:
- 	m66592_free_request(&m66592->ep[0].ep, m66592->ep0_req);
--
-+	m66592->ep0_req = NULL;
- clean_up3:
- 	if (m66592->pdata->on_chip) {
- 		clk_disable(m66592->clk);
+ 	if (!usblp->present)		/* finish cleanup from disconnect */
+-		usblp_cleanup(usblp);
++		usblp_cleanup(usblp);	/* any URBs must be dead */
++
+ 	mutex_unlock(&usblp_mutex);
+ 	return 0;
+ }
+@@ -1375,9 +1376,11 @@ static void usblp_disconnect(struct usb_interface *intf)
+ 
+ 	usblp_unlink_urbs(usblp);
+ 	mutex_unlock(&usblp->mut);
++	usb_poison_anchored_urbs(&usblp->urbs);
+ 
+ 	if (!usblp->used)
+ 		usblp_cleanup(usblp);
++
+ 	mutex_unlock(&usblp_mutex);
+ }
+ 
 -- 
 2.25.1
 
