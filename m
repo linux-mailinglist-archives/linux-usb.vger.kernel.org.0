@@ -2,66 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D0A21FEEB8
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 11:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57B2F1FEED8
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 11:43:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729241AbgFRJc3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Jun 2020 05:32:29 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:46072 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728943AbgFRJc1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Jun 2020 05:32:27 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1jlquH-0007MQ-3N; Thu, 18 Jun 2020 09:32:25 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next][V2] usb: xhci: fix spelling mistake in Kconfig "firwmare" -> "firmware"
-Date:   Thu, 18 Jun 2020 10:32:24 +0100
-Message-Id: <20200618093224.10179-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.27.0.rc0
+        id S1729251AbgFRJnT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Jun 2020 05:43:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43552 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729060AbgFRJnM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 18 Jun 2020 05:43:12 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1BE5D21D7A;
+        Thu, 18 Jun 2020 09:43:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592473391;
+        bh=+RXnEyWQ9AZBlUJK9uGq1xTC7wqOFcAILUiorIVSfO8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=xmLusXzWT6s+rVn9d6aL2LzcxlFvxFSHhADDfCAPl4fJkdf6H//ZZTWxRdc33sghp
+         dFe4Sd53tTD714hLtgethmOjjabiejKN3RN4FBepIoK6/9YVrKisc5MRn/cZM17AAL
+         raVceltVD5e6C7S9dmUHRXEP0AivsnFooWvSjHVQ=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?q?Diego=20Elio=20Petten=C3=B2?= <flameeyes@flameeyes.com>,
+        "Lee, Chiasheng" <chiasheng.lee@intel.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
+        =?UTF-8?q?Thi=C3=A9baud=20Weksteen?= <tweek@google.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Bastien Nocera <hadess@hadess.net>, Bin Liu <b-liu@ti.com>,
+        David Heinzelmann <heinzelmann.david@gmail.com>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Hardik Gajjar <hgajjar@de.adit-jv.com>,
+        Harry Pan <harry.pan@intel.com>, Jens Axboe <axboe@kernel.dk>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Johan Hovold <johan@kernel.org>,
+        Jonathan Cox <jonathan@jdcox.net>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Keiya Nobuta <nobuta.keiya@fujitsu.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Nishad Kamdar <nishadkamdar@gmail.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Qi Zhou <atmgnd@outlook.com>,
+        Richard Dodd <richard.o.dodd@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: [PATCH 0/8] USB: fix up some old and obsolete terminology, we can do better
+Date:   Thu, 18 Jun 2020 11:42:52 +0200
+Message-Id: <20200618094300.1887727-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+There are a number of places in the USB kernel code where terms that are
+"loaded" are used.  Fix this up to be more specific and inclusive as
+there is no need for us to use these terms at all.
 
-There are two spelling mistakes in the Kconfig text. Fix these.
+In one case, this ends up saving code, a nice side affect.
 
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
----
+Greg Kroah-Hartman (8):
+  USB: rename USB quirk to USB_QUIRK_ENDPOINT_IGNORE
+  USB: rename USB OTG hub configuration option
+  USB: OHCI: remove obsolete FIXME comment
+  USB: serial: qcserial: fix up wording in a comment
+  USB: serial: sierra: unify quirk handling logic
+  USB: storage: fix wording in error message
+  USB: storage: scsi: fix up comment to be more specific
+  USB: OTG: rename product list of devices
 
-V2: rework so that it cleanly applies against Greg's current USB repo
+ arch/mips/configs/fuloong2e_defconfig         |  2 +-
+ arch/mips/configs/gcw0_defconfig              |  2 +-
+ arch/mips/configs/lemote2f_defconfig          |  2 +-
+ drivers/usb/core/Kconfig                      |  8 +--
+ drivers/usb/core/config.c                     |  8 +--
+ drivers/usb/core/hub.c                        |  6 +-
+ .../{otg_whitelist.h => otg_productlist.h}    | 14 ++---
+ drivers/usb/core/quirks.c                     | 18 +++---
+ drivers/usb/core/usb.h                        |  2 +-
+ drivers/usb/host/ohci-pci.c                   |  4 --
+ drivers/usb/musb/Kconfig                      |  2 +-
+ drivers/usb/musb/musb_core.c                  |  4 +-
+ drivers/usb/serial/qcserial.c                 |  5 +-
+ drivers/usb/serial/sierra.c                   | 57 +++++++------------
+ drivers/usb/storage/scsiglue.c                |  2 +-
+ drivers/usb/storage/uas-detect.h              |  2 +-
+ include/linux/usb/quirks.h                    |  4 +-
+ 17 files changed, 57 insertions(+), 85 deletions(-)
+ rename drivers/usb/core/{otg_whitelist.h => otg_productlist.h} (90%)
 
----
- drivers/usb/host/Kconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
-index 1cb3004ea7b2..ab12c4bf0ef1 100644
---- a/drivers/usb/host/Kconfig
-+++ b/drivers/usb/host/Kconfig
-@@ -44,10 +44,10 @@ config USB_XHCI_PCI
- 	default y
- 
- config USB_XHCI_PCI_RENESAS
--	tristate "Support for additional Renesas xHCI controller with firwmare"
-+	tristate "Support for additional Renesas xHCI controller with firmware"
- 	help
- 	  Say 'Y' to enable the support for the Renesas xHCI controller with
--	  firwmare. Make sure you have the firwmare for the device and
-+	  firmware. Make sure you have the firwmare for the device and
- 	  installed on your system for this device to work.
- 	  If unsure, say 'N'.
- 
 -- 
-2.27.0.rc0
+2.27.0
 
