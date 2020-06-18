@@ -2,134 +2,160 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDB921FFC4D
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 22:09:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D76741FFCE4
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 22:48:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730006AbgFRUJT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Jun 2020 16:09:19 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:58955 "EHLO m43-7.mailgun.net"
+        id S1726976AbgFRUsC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Jun 2020 16:48:02 -0400
+Received: from mga09.intel.com ([134.134.136.24]:12177 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730108AbgFRUJS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 18 Jun 2020 16:09:18 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1592510958; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=NTUeymUReKpdIsjMtCi8NYeyBb1gfEMgmYaNDWEKN9I=; b=i8DLtamTd3S1Xs2e6TOhprhYsq831+8BAufQkwTf8lQeTu9rpyfqQALR7GytYiewpH2BeOPl
- xBsdsmVkU26/cInlAVYYaj6I3nMA0/b0sHtT6BodA/oN2OYmzHJMrBNJSJmyFGFjpnlni13S
- ZhV0mv5wRTiHnLy5sTStBsCrCqo=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
- 5eebc9eb6f2ee827da204a21 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 18 Jun 2020 20:09:15
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 7733BC433A1; Thu, 18 Jun 2020 20:09:15 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [10.110.38.129] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id B30D0C433CA;
-        Thu, 18 Jun 2020 20:09:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org B30D0C433CA
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [PATCH v3 2/6] dt-bindings: usb: Add Qualcomm PMIC type C
- controller dt-binding
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jack Pham <jackp@codeaurora.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Jun Li <lijun.kernel@gmail.com>
-References: <20200617180209.5636-1-wcheng@codeaurora.org>
- <20200617180209.5636-3-wcheng@codeaurora.org>
- <CAL_Jsq+fhXWGJvYxUDygd6hKs3dc8GKxKCz_Q+_C1AjK0J0N+w@mail.gmail.com>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <fb448691-2bda-ada6-799f-ee389e647710@codeaurora.org>
-Date:   Thu, 18 Jun 2020 13:09:12 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S1725829AbgFRUsC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 18 Jun 2020 16:48:02 -0400
+IronPort-SDR: s9EwaZakhUfxsJObD0kgs5XAOawxpuWtI+pvYiIsVMpyE/5VuecJBDLTtEaiqTsIgi9iUoVcI6
+ EiqolmJuWmgA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9656"; a="144237006"
+X-IronPort-AV: E=Sophos;i="5.75,252,1589266800"; 
+   d="scan'208";a="144237006"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2020 13:48:01 -0700
+IronPort-SDR: AcSWL3OIYNNjyp33txJ0xKE8uhPK84k9sXsNm63pI4PwITOpBO12M59rRrXzwGeyWJORPCvP1t
+ yK3TvCmSilUg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,252,1589266800"; 
+   d="scan'208";a="309949011"
+Received: from lkp-server02.sh.intel.com (HELO 5ce11009e457) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 18 Jun 2020 13:48:00 -0700
+Received: from kbuild by 5ce11009e457 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1jm1S3-0000Pc-CY; Thu, 18 Jun 2020 20:47:59 +0000
+Date:   Fri, 19 Jun 2020 04:47:49 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 302c570bf36e997d55ad0d60628a2feec76954a4
+Message-ID: <5eebd2f5.+ueXes926a53R8Hh%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <CAL_Jsq+fhXWGJvYxUDygd6hKs3dc8GKxKCz_Q+_C1AjK0J0N+w@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-linus
+branch HEAD: 302c570bf36e997d55ad0d60628a2feec76954a4  usb: typec: tcpci_rt1711h: avoid screaming irq causing boot hangs
 
-On 6/18/2020 11:33 AM, Rob Herring wrote:
-> On Wed, Jun 17, 2020 at 12:02 PM Wesley Cheng <wcheng@codeaurora.org> wrote:
-> 
-> You are duplicating everything in usb-connector.yaml. You should have
-> a $ref to it.
-> 
+elapsed time: 723m
 
-Hi Rob,
+configs tested: 98
+configs skipped: 1
 
-Sure, I will add a reference to that doc.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> 
-> This is wrong. The connector binding says port 0 is the connection the
-> USB HS controller.
-> 
-> What's a type C mux node? Is there a binding for that? There's an
-> ongoing discussion with the CrOS folks on how to describe Alt mode
-> mux/switches.
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                               allnoconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+i386                              allnoconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                              debian-10.3
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                              allnoconfig
+m68k                           sun3_defconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+nios2                            allyesconfig
+openrisc                            defconfig
+c6x                              allyesconfig
+c6x                               allnoconfig
+openrisc                         allyesconfig
+nds32                               defconfig
+nds32                             allnoconfig
+csky                                defconfig
+csky                             allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+h8300                            allmodconfig
+xtensa                              defconfig
+arc                                 defconfig
+arc                              allyesconfig
+sh                               allmodconfig
+sh                                allnoconfig
+microblaze                        allnoconfig
+mips                             allyesconfig
+mips                              allnoconfig
+mips                             allmodconfig
+parisc                            allnoconfig
+parisc                              defconfig
+parisc                           allyesconfig
+parisc                           allmodconfig
+powerpc                             defconfig
+powerpc                          allyesconfig
+powerpc                          rhel-kconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+i386                 randconfig-a002-20200618
+i386                 randconfig-a006-20200618
+i386                 randconfig-a001-20200618
+i386                 randconfig-a004-20200618
+i386                 randconfig-a005-20200618
+i386                 randconfig-a003-20200618
+x86_64               randconfig-a001-20200618
+x86_64               randconfig-a003-20200618
+x86_64               randconfig-a006-20200618
+x86_64               randconfig-a002-20200618
+x86_64               randconfig-a005-20200618
+x86_64               randconfig-a004-20200618
+i386                 randconfig-a011-20200618
+i386                 randconfig-a015-20200618
+i386                 randconfig-a014-20200618
+i386                 randconfig-a016-20200618
+i386                 randconfig-a012-20200618
+i386                 randconfig-a013-20200618
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+s390                             allyesconfig
+s390                              allnoconfig
+s390                             allmodconfig
+s390                                defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+sparc64                             defconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                          allmodconfig
+um                               allmodconfig
+um                                allnoconfig
+um                               allyesconfig
+um                                  defconfig
+x86_64                               rhel-7.6
+x86_64                    rhel-7.6-kselftests
+x86_64                               rhel-8.3
+x86_64                                  kexec
+x86_64                                   rhel
+x86_64                         rhel-7.2-clear
+x86_64                                    lkp
+x86_64                              fedora-25
 
-I reviewed the connector binding previously, and couldn't seem to come
-up with a model which fit a design where the type C controller (ie the
-entity which does the CC orientation and role detection) does not have
-the SS lane mux included.  The SS lane mux is the HW which handles the
-selection of the SS lanes to utilize based on cable orientation.
-
-I looked at the FUSB302 TCPM driver, which doesn't have an integrated SS
-lane mux, and relies on an external FUSB340 switch to handle the
-polarity, but seems that in the fusb302.c driver it doesn't implement
-the polarity handler.  They might possibly have a HW output signal which
-controls the mux directly, but I'm not sure on that.
-
-Anyway, if someone wanted to take a SW approach and program an external
-mux, this model doesn't seem to allow that.  This is somewhat unrelated
-to the DP AUX mode switching, as that probably will only come into the
-picture after the policy engine has detected there is a DP adapter
-connected, whereas this is applicable to non DP/alt mode situations.
-
-Thanks!
-
->> +            type: object
->> +
->> +            properties:
->> +              remote-endpoint:
->> +                maxItems: 1
->> +                description: Node reference to the type C mux
->> +
->> +          endpoint@1:
->> +            description: Connection to role switch node
-> 
-> Again, what's this?
-> 
-
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
