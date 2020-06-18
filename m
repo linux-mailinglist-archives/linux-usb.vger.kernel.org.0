@@ -2,117 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA8011FFA57
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 19:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 033F91FFA65
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 19:36:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729542AbgFRReC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Jun 2020 13:34:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51222 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728384AbgFRReB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 18 Jun 2020 13:34:01 -0400
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 33A4D20CC7;
-        Thu, 18 Jun 2020 17:34:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592501641;
-        bh=7bAYDoSOKsBXo7n+wl8FVmIDDBqoaqP8Khk8lB2kWbw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=IsVqhHWvB+5h5r2AmLQfAAPGjIwHflWGk9qU0oGIBdUY39MQAAvYb63cEqW/DbA7i
-         PwtopF2osGqrc6slvKKcFEO2iDgSBydUV0yezMnwA97T2c2twNAKlVlAfsuQean/Nj
-         uzgCBhmYsOlL1BBWc+d9HWmOaBcXzH+kGg+1lTJs=
-Received: by mail-ot1-f42.google.com with SMTP id m2so5152992otr.12;
-        Thu, 18 Jun 2020 10:34:01 -0700 (PDT)
-X-Gm-Message-State: AOAM531820zNfHIJGb1fh/OnrRVy/ES95lkYuJt1tD5fnB1sNwsPcyE1
-        yppRv3VzcHrJ6+X2o4bZkoVYrF8QNBLtZgsmlA==
-X-Google-Smtp-Source: ABdhPJznBot1zRIf3mT//QAyCMg0HJbDF/5FGHU2eV3Y2WUSQryP8tTu3KPxwVMnn5BGgo6zOJop1+ZTJc4C4J62cVM=
-X-Received: by 2002:a9d:c29:: with SMTP id 38mr4268091otr.107.1592501640510;
- Thu, 18 Jun 2020 10:34:00 -0700 (PDT)
+        id S1732166AbgFRRgm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Jun 2020 13:36:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55928 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729533AbgFRRgl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Jun 2020 13:36:41 -0400
+Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA90C06174E
+        for <linux-usb@vger.kernel.org>; Thu, 18 Jun 2020 10:36:41 -0700 (PDT)
+Received: by mail-ot1-x341.google.com with SMTP id d4so5204444otk.2
+        for <linux-usb@vger.kernel.org>; Thu, 18 Jun 2020 10:36:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=vSAKdupfjUnpQv7PVZTpVtSwPY/+63YsbAN25Eh8aLo=;
+        b=GMzprk/8y3cOitItK+SVkpqGg8A/ZMra8JaEKJFMANat5jvqSWFNlHq5Q5MRgpHKQk
+         0nSqR41phZ4I+diI+SxDrGcHhAow3Igrv7jhP81S/JVMxmO/6ID6oGlfkwg4t4JLVp8j
+         yBBBe6KVTIshDSBdeEoT9bhloJCCd7B5/UiE8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=vSAKdupfjUnpQv7PVZTpVtSwPY/+63YsbAN25Eh8aLo=;
+        b=YHI45nI5bNKCqi+R/0dj4r6d6MIBZ7gr2PMlZDBicVmFVqJ67plqinvuqdTmagw24M
+         H3d+Nd+WEWdoUrN102yH7NmIjp6MfsvVfH/O3smemwKpCLgeBvqQdV0KOs1V9rSv+lNt
+         0qRuQ5ouSsO7fNbB8tz83PxjtoX9bpPYawkwufqBfwsmp5YuZkv8cDruTq5KbXK3eOrd
+         oojmwxkfUMnzq66aRB0sQT//zzfUgi63A806Qsrz3GExo62uPQjvzuYBY4OMr5Ch9FpK
+         LsCrKO7K2WHRSZJJZANDBl/WzeU/ZLtWRoBris/MlSmviCL3m4xKTC2nwuexnrn6hoEy
+         /tGw==
+X-Gm-Message-State: AOAM530neU6609dyGbSuBUYRu7dmFfX5F20T8guNDZ9dp0/Pb9IVjb5s
+        qDIwt8rwA9ZQvqPrsWDUO01XijKHP0E=
+X-Google-Smtp-Source: ABdhPJxbnv0wQeMddQlluY9O5pcY5u8TzvKuN4bf2b8PgHIYjZMViNvEKuwVnYxLt+tcNRzw9nnyYw==
+X-Received: by 2002:a9d:7b41:: with SMTP id f1mr4658243oto.363.1592501801252;
+        Thu, 18 Jun 2020 10:36:41 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id g10sm836752otn.34.2020.06.18.10.36.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Jun 2020 10:36:40 -0700 (PDT)
+Subject: Re: [PATCH] usbip: tools: fix build error for multiple definition
+To:     Antonio Borneo <borneo.antonio@gmail.com>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hewenliang <hewenliang4@huawei.com>, linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, skhan@linuxfoundation.org
+References: <20200618000844.1048309-1-borneo.antonio@gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <f914d6a1-20d6-2e00-bcf5-658848ad95a1@linuxfoundation.org>
+Date:   Thu, 18 Jun 2020 11:36:39 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-References: <1591123192-565-1-git-send-email-sanm@codeaurora.org>
- <20200618081443.GA1043700@kroah.com> <20200618154555.GD4525@google.com>
- <20200618155820.GA3076467@kroah.com> <20200618165151.GE4525@google.com>
-In-Reply-To: <20200618165151.GE4525@google.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 18 Jun 2020 11:33:49 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+5NCvvpKd-69QvgqK6wzbc53=MTt-TcVop23hjT6Rs_g@mail.gmail.com>
-Message-ID: <CAL_Jsq+5NCvvpKd-69QvgqK6wzbc53=MTt-TcVop23hjT6Rs_g@mail.gmail.com>
-Subject: Re: [PATCH] driver core:Export the symbol device_is_bound
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sandeep Maheswaram <sanm@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Manu Gautam <mgautam@codeaurora.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200618000844.1048309-1-borneo.antonio@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 18, 2020 at 10:51 AM Matthias Kaehlcke <mka@chromium.org> wrote:
->
-> On Thu, Jun 18, 2020 at 05:58:20PM +0200, Greg Kroah-Hartman wrote:
-> > On Thu, Jun 18, 2020 at 08:45:55AM -0700, Matthias Kaehlcke wrote:
-> > > Hi Greg,
-> > >
-> > > On Thu, Jun 18, 2020 at 10:14:43AM +0200, Greg Kroah-Hartman wrote:
-> > > > On Wed, Jun 03, 2020 at 12:09:52AM +0530, Sandeep Maheswaram wrote:
-> > > > > Export the symbol device_is_bound so that it can be used by the modules.
-> > > >
-> > > > What modules need this?
-> > >
-> > > drivers/usb/dwc3/dwc3-qcom.c (and probably other dwc3 'wrappers').
-> >
-> > Why wasn't that said here?  No context is not good :(
->
-> Agreed, this patch should probably have been part of a series to establish
-> the context.
->
-> > > Short summary: QCOM dwc3 support is split in two drivers, the core dwc3
-> > > driver and the QCOM specific parts. dwc3-qcom is probed first (through
-> > > a DT entry or ACPI), dwc3_qcom_probe() then calls of_platform_populate()
-> > > to probe the core part. After a successful return from _populate() the
-> > > driver assumes that the core device is fully initialized. However the
-> > > latter is not correct, the driver core doesn't propagate errors from
-> > > probe() to platform_populate(). The dwc3-qcom driver would use
-> > > device_is_bound() to make sure the core device was probed successfully.
-> >
-> > why does the dwc3-qcom driver care?
->
-> Currently the dwc3-qcom driver uses the core device to determine if the
-> controller is used in peripheral mode and it runtime resumes the XHCI
-> device when it sees a wakeup interrupt.
->
-> The WIP patch to add interconnect support relies on the core driver
-> to determine the max speed of the controller.
->
-> > And why is the driver split in a way that requires such "broken"
-> > structures?  Why can't that be fixed instead?
->
-> It seems determining the mode could be easily changed by getting it through
-> the pdev, as in st_dwc3_probe(). Not sure about the other two parts,
-> determining the maximum speed can involve evaluating hardware registers,
-> which currently are 'owned' by the core driver.
->
-> Manu or Sandeep who know the hardware and the driver better than me might
-> have ideas on how to improve things.
+On 6/17/20 6:08 PM, Antonio Borneo wrote:
+> With GCC 10, building usbip triggers error for multiple definition
+> of 'udev_context', in:
+> - libsrc/vhci_driver.c:18 and
+> - libsrc/usbip_host_common.c:27.
+> 
+> Declare as extern the definition in libsrc/usbip_host_common.c.
+> 
+> Signed-off-by: Antonio Borneo <borneo.antonio@gmail.com>
+> ---
+>   tools/usb/usbip/libsrc/usbip_host_common.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/usb/usbip/libsrc/usbip_host_common.c b/tools/usb/usbip/libsrc/usbip_host_common.c
+> index d1d8ba2a4a40..ca78aa368476 100644
+> --- a/tools/usb/usbip/libsrc/usbip_host_common.c
+> +++ b/tools/usb/usbip/libsrc/usbip_host_common.c
+> @@ -23,7 +23,7 @@
+>   #include "list.h"
+>   #include "sysfs_utils.h"
+>   
+> -struct udev *udev_context;
+> +extern struct udev *udev_context;
+>   
+>   static int32_t read_attr_usbip_status(struct usbip_usb_device *udev)
+>   {
+> 
 
-We never should have had this split either in the DT binding nor
-driver(s) as if the SoC wrapper crap and licensed IP block are
-independent things. The thing to do here is either make the DWC3 code
-a library which drivers call (e.g. SDHCI) or add hooks into the DWC3
-driver for platform specifics (e.g. Designware PCI). Neither is a
-simple solution though.
+Looks good to me.
 
-Rob
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah
