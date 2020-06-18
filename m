@@ -2,158 +2,207 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C1301FF139
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 14:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 354791FF14B
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 14:10:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728261AbgFRMHg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Jun 2020 08:07:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33100 "EHLO
+        id S1726945AbgFRMKG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Jun 2020 08:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726958AbgFRMHe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Jun 2020 08:07:34 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CBB7C0613ED
-        for <linux-usb@vger.kernel.org>; Thu, 18 Jun 2020 05:07:33 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id y18so2358707plr.4
-        for <linux-usb@vger.kernel.org>; Thu, 18 Jun 2020 05:07:33 -0700 (PDT)
+        with ESMTP id S1728749AbgFRMKD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Jun 2020 08:10:03 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B168AC0613EE
+        for <linux-usb@vger.kernel.org>; Thu, 18 Jun 2020 05:10:03 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id x11so2355988plo.7
+        for <linux-usb@vger.kernel.org>; Thu, 18 Jun 2020 05:10:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=1bvM6zNWj16PXQdZkOlsMCBfhWXYM5bdxw8arWFMTEI=;
-        b=ndPgaNmhQG6zMU6NdDAEeZMkX/js1xw/roM54St6iCWN13VWSscNF0xOtxz4qDbWOr
-         8zctEK7hoe7+9GDxBUEZqk4aoHxCEaNeh6suauio24h3SY1JNNhNieJYQwsO05zosRmA
-         swvqPA4mFfW5la40Tj/PjrHQjZoEuIwJ/RxnOwdPlglLTY+9bHPe5vHHqK2sWffOnQSQ
-         Z2TwC+/hXv2X/boK7Ey29DgeAPif89ZWZiDaSruPwzQ1U2/D/k+ITYC6DFu14cB96umV
-         acDiZ0FrrDSuO0nffXG1lpzIGbbVUASMRvm4nXpSxuc0OwqI21S7NBxSjzhEpK3RNb2K
-         EC+g==
+        bh=iztBMkO0MIdNbziG/ColrBO0vKnggtXjd9prWLF/hFE=;
+        b=OAzEHVHTeoFB6/APjUG6jBWnOXYCjUiEWTF1wdLw3I31tMEUcpA7LkfggPeKLf0ubA
+         ZAYVyDqmnBw+LR/vojb+qSVb837MUEdsl7Wjw4M+8MSobcD2FMw7M5Dk7ARSjGnIW4Qy
+         lHEazWDrhesd8IUMrh48sbnnQjf8qvUY+oKLyvSXMoZx6jnaJT60VUFAC/A5CBbCgi/B
+         UIXb0q+Th3a0TudtlkptelX3vOGhJXbGujHSXbcI/JOEtnHe7I4S43AVJpc+1VNivSiU
+         5ypC1cwBcGWJhAZFNOm7gZvLGegwhysTJvq89hqRJiHZ+/lKrlfbASPO1YNAJIUovBA5
+         uqLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=1bvM6zNWj16PXQdZkOlsMCBfhWXYM5bdxw8arWFMTEI=;
-        b=ggy2wrKd+6pBE+xQR78ZXlDbaXbS5ebkzKOTe0owB3/6SB+l0Y0vfXy/fsMYJJW51S
-         qDBlHVmKcUDDuMFLvgu6rV0dR+QkBELYld42HfGZJH6EbNgZ/AUxG0ghHr50IRQdqHgQ
-         F0qn7WnyiUuxmRODBrRIYpDHh32MtTxQjLfwHt5eLgKY+YSrXDhB+aHzs7XDt/3m+VE2
-         6gPcc0x5w0uwO4eTUPs4xiyr7W0VsPgBiBH30Ka2/+mqkdTe/EAaKayDWfsP6gskwwry
-         gX9Wxy9hAwd1hF3Mw1KXoAuXajF9xpIBvqJVbu17aoZi1l24P5J87y7mxkpCOADe+h5q
-         x2dg==
-X-Gm-Message-State: AOAM533noe5DgB2l8T90tvRZ2Z2S7cGoCxKJrhhmvn4FT6AypJSpuqco
-        YIKE2wkB5hnO5mVxpuq4GnTtEx6GQ8OcBat1DMPkzg==
-X-Google-Smtp-Source: ABdhPJzcVn6aLnDjDvS6bxkFBNVmExAmuMN9EQ87x27lEjlCxnlX/d3VvkVaHEQQWkAgag8Ys5WlrZmJR2eGWgZ8b2g=
-X-Received: by 2002:a17:902:be05:: with SMTP id r5mr3184231pls.252.1592482052371;
- Thu, 18 Jun 2020 05:07:32 -0700 (PDT)
+        bh=iztBMkO0MIdNbziG/ColrBO0vKnggtXjd9prWLF/hFE=;
+        b=QnSSfFVfg9O4kroaHg4ockdejWMjVBH8ZPQ+f5ZLfLycjDAJq5Kg6SYWlHSHTIxyBa
+         37JS0ipZtkMJG0EgpX/6YTdnT6IVTcU5RMT4rH1tOGwDR8cmltqVMY3gOn/Ym4+YF2rH
+         j1qPRMpkDSucn/d+MMoo3BTJPt538lztYKlou3pA4cf2fH6qZaS0HtNSvcqfyyZCZn1c
+         /o+2ZexJHLebWTO8fw8vfEhCMsEvW/u+pY6MgXWYajTUPENvt/O2Fy+Di7GI/fWq+gU1
+         rSLNlpzC0gWngMSKcNSTbck9pLtG3oZpZZ6JlWiiFYG+dUhVo78dJSNlDFNVhaUWWQko
+         n3Wg==
+X-Gm-Message-State: AOAM530hgh4JtJr4ODx4z7JZlgooj2i4j8NGvDLvqacYgvOZbd+OY4IT
+        WGDnO1AcIPcRJDGYbDOoHCTlAI1SyWRaAc0UA2H99w==
+X-Google-Smtp-Source: ABdhPJzRg/UDhkKGHU2k26B36BCioXSf3zawc8raCfUXu2582ut7jqipv1yPCJ01EY9G6/xDS43SnAMK3psVwFvn5vI=
+X-Received: by 2002:a17:90b:1244:: with SMTP id gx4mr3905040pjb.136.1592482202661;
+ Thu, 18 Jun 2020 05:10:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <000000000000448f5a058e804752@google.com>
-In-Reply-To: <000000000000448f5a058e804752@google.com>
+References: <0000000000006eca960599435e76@google.com>
+In-Reply-To: <0000000000006eca960599435e76@google.com>
 From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Thu, 18 Jun 2020 14:07:21 +0200
-Message-ID: <CAAeHK+xaACXn+CGCGiG+DcGkjuN0m2w3T7aMYvQz+zRr+R_-NQ@mail.gmail.com>
-Subject: Re: WARNING in __uwb_rc_neh_rm
-To:     syzbot <syzbot+c44bb3aca1a5e07c76df@syzkaller.appspotmail.com>
-Cc:     alexios.zavras@intel.com, Allison Randal <allison@lohutok.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Date:   Thu, 18 Jun 2020 14:09:51 +0200
+Message-ID: <CAAeHK+x4frtAkghA6EFLvLMRJMg7O+Bhn4Gut75CvL00OFZE2Q@mail.gmail.com>
+Subject: Re: KASAN: slab-out-of-bounds Write in hidinput_setkeycode
+To:     syzbot <syzbot+aed9115d05783f14777a@syzkaller.appspotmail.com>
+Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
         USB list <linux-usb@vger.kernel.org>,
-        Richard Fontana <rfontana@redhat.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Thomas Gleixner <tglx@linutronix.de>
+        Henrik Rydberg <rydberg@bitmath.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 25, 2019 at 2:08 PM syzbot
-<syzbot+c44bb3aca1a5e07c76df@syzkaller.appspotmail.com> wrote:
+On Mon, Dec 9, 2019 at 12:05 PM syzbot
+<syzbot+aed9115d05783f14777a@syzkaller.appspotmail.com> wrote:
 >
 > Hello,
 >
 > syzbot found the following crash on:
 >
-> HEAD commit:    6a3599ce usb-fuzzer: main usb gadget fuzzer driver
+> HEAD commit:    1f22d15c usb: gadget: add raw-gadget interface
 > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=17eb58cc600000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=700ca426ab83faae
-> dashboard link: https://syzkaller.appspot.com/bug?extid=c44bb3aca1a5e07c76df
+> console output: https://syzkaller.appspot.com/x/log.txt?x=13c9bb7ae00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=8ccee2968018adcb
+> dashboard link: https://syzkaller.appspot.com/bug?extid=aed9115d05783f14777a
 > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14ebb65c600000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17d95382600000
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13145c2ee00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17dca1eae00000
 >
 > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+c44bb3aca1a5e07c76df@syzkaller.appspotmail.com
+> Reported-by: syzbot+aed9115d05783f14777a@syzkaller.appspotmail.com
 >
-> ------------[ cut here ]------------
-> list_del corruption, ffff8881d0a03130->next is LIST_POISON1
-> (dead000000000100)
-> WARNING: CPU: 0 PID: 5 at lib/list_debug.c:45
-> __list_del_entry_valid+0xd3/0x170 lib/list_debug.c:45
-> Kernel panic - not syncing: panic_on_warn set ...
-> CPU: 0 PID: 5 Comm: kworker/0:0 Not tainted 5.2.0-rc6+ #15
+> ==================================================================
+> BUG: KASAN: slab-out-of-bounds in clear_bit
+> include/asm-generic/bitops-instrumented.h:56 [inline]
+> BUG: KASAN: slab-out-of-bounds in hidinput_setkeycode+0x16e/0x390
+> drivers/hid/hid-input.c:165
+> Write of size 8 at addr ffff8881cf9649e8 by task syz-executor105/1717
+>
+> CPU: 1 PID: 1717 Comm: syz-executor105 Not tainted 5.4.0-syzkaller #0
 > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
 > Google 01/01/2011
-> Workqueue: usb_hub_wq hub_event
 > Call Trace:
 >   __dump_stack lib/dump_stack.c:77 [inline]
->   dump_stack+0xca/0x13e lib/dump_stack.c:113
->   panic+0x292/0x6c9 kernel/panic.c:219
->   __warn.cold+0x20/0x4b kernel/panic.c:576
->   report_bug+0x262/0x2a0 lib/bug.c:186
->   fixup_bug arch/x86/kernel/traps.c:179 [inline]
->   fixup_bug arch/x86/kernel/traps.c:174 [inline]
->   do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
->   do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
->   invalid_op+0x14/0x20 arch/x86/entry/entry_64.S:986
-> RIP: 0010:__list_del_entry_valid+0xd3/0x170 lib/list_debug.c:45
-> Code: 93 00 00 00 49 8b 55 08 48 39 f2 75 51 b8 01 00 00 00 48 83 c4 08 41
-> 5c 41 5d c3 4c 89 ea 48 c7 c7 40 0b ba 85 e8 c8 d1 33 ff <0f> 0b 48 83 c4
-> 08 31 c0 41 5c 41 5d c3 4c 89 e2 48 c7 c7 a0 0b ba
-> RSP: 0018:ffff8881d9dc6d80 EFLAGS: 00010086
-> RAX: 0000000000000000 RBX: ffff8881d0a030c0 RCX: 0000000000000000
-> RDX: 0000000000000000 RSI: ffffffff8127ef3d RDI: ffffed103b3b8da2
-> RBP: 0000000000000000 R08: ffff8881d9d8e000 R09: 0000000000000008
-> R10: fffffbfff0d5dc9c R11: ffffffff86aee4e3 R12: dead000000000200
-> R13: dead000000000100 R14: ffff8881d3eab830 R15: 00000000ffffffb9
->   __list_del_entry include/linux/list.h:117 [inline]
->   list_del include/linux/list.h:125 [inline]
->   __uwb_rc_neh_rm+0xc5/0x220 drivers/uwb/neh.c:243
->   uwb_rc_neh_rm+0x30/0x60 drivers/uwb/neh.c:259
->   uwb_rc_cmd_async+0x29a/0x310 drivers/uwb/reset.c:93
->   __uwb_rc_cmd+0x10f/0x1e0 drivers/uwb/reset.c:171
->   uwb_rc_cmd+0xc2/0x130 drivers/uwb/reset.c:220
->   uwb_rc_reset+0x15e/0x218 drivers/uwb/reset.c:292
->   uwb_rc_setup+0x84/0x320 drivers/uwb/lc-rc.c:282
->   uwb_rc_add+0x246/0x42f drivers/uwb/lc-rc.c:351
->   hwarc_probe+0x3ce/0x980 drivers/uwb/hwa-rc.c:843
+>   dump_stack+0xef/0x16e lib/dump_stack.c:118
+>   print_address_description.constprop.0+0x36/0x50 mm/kasan/report.c:374
+>   __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:506
+>   kasan_report+0xe/0x20 mm/kasan/common.c:638
+>   check_memory_region_inline mm/kasan/generic.c:185 [inline]
+>   check_memory_region+0x128/0x190 mm/kasan/generic.c:192
+>   clear_bit include/asm-generic/bitops-instrumented.h:56 [inline]
+>   hidinput_setkeycode+0x16e/0x390 drivers/hid/hid-input.c:165
+>   input_set_keycode+0x104/0x320 drivers/input/input.c:935
+>   evdev_handle_set_keycode_v2+0xc4/0x120 drivers/input/evdev.c:882
+>   evdev_do_ioctl drivers/input/evdev.c:1150 [inline]
+>   evdev_ioctl_handler+0xd49/0x19f0 drivers/input/evdev.c:1284
+>   vfs_ioctl fs/ioctl.c:47 [inline]
+>   file_ioctl fs/ioctl.c:539 [inline]
+>   do_vfs_ioctl+0xd2d/0x1330 fs/ioctl.c:726
+>   ksys_ioctl+0x9b/0xc0 fs/ioctl.c:743
+>   __do_sys_ioctl fs/ioctl.c:750 [inline]
+>   __se_sys_ioctl fs/ioctl.c:748 [inline]
+>   __x64_sys_ioctl+0x6f/0xb0 fs/ioctl.c:748
+>   do_syscall_64+0xb7/0x5b0 arch/x86/entry/common.c:294
+>   entry_SYSCALL_64_after_hwframe+0x49/0xbe
+> RIP: 0033:0x446d59
+> Code: e8 2c ae 02 00 48 83 c4 18 c3 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7
+> 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff
+> ff 0f 83 1b d8 fb ff c3 66 2e 0f 1f 84 00 00 00 00
+> RSP: 002b:00007ffd75eec118 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> RAX: ffffffffffffffda RBX: 00007ffd75eec120 RCX: 0000000000446d59
+> RDX: 0000000020000080 RSI: 0000000040284504 RDI: 0000000000000005
+> RBP: 0000000000000000 R08: 0000000000000000 R09: 00000000004029f0
+> R10: 00007ffd75eebc70 R11: 0000000000000246 R12: 0000000000404a00
+> R13: 0000000000404a90 R14: 0000000000000000 R15: 0000000000000000
+>
+> Allocated by task 12:
+>   save_stack+0x1b/0x80 mm/kasan/common.c:71
+>   set_track mm/kasan/common.c:79 [inline]
+>   __kasan_kmalloc mm/kasan/common.c:512 [inline]
+>   __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:485
+>   kmalloc include/linux/slab.h:556 [inline]
+>   kzalloc include/linux/slab.h:670 [inline]
+>   input_allocate_device+0x3e/0x260 drivers/input/input.c:1810
+>   hidinput_allocate drivers/hid/hid-input.c:1654 [inline]
+>   hidinput_connect+0x3cab/0xdb90 drivers/hid/hid-input.c:1899
+>   hid_connect+0x965/0xbb0 drivers/hid/hid-core.c:1923
+>   hid_hw_start drivers/hid/hid-core.c:2027 [inline]
+>   hid_hw_start+0xa2/0x130 drivers/hid/hid-core.c:2018
+>   ms_probe+0x159/0x4d0 drivers/hid/hid-microsoft.c:394
+>   hid_device_probe+0x2be/0x3f0 drivers/hid/hid-core.c:2255
+>   really_probe+0x281/0x6d0 drivers/base/dd.c:548
+>   driver_probe_device+0x104/0x210 drivers/base/dd.c:721
+>   __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
+>   bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+>   __device_attach+0x217/0x360 drivers/base/dd.c:894
+>   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+>   device_add+0x1480/0x1c20 drivers/base/core.c:2487
+>   hid_add_device drivers/hid/hid-core.c:2411 [inline]
+>   hid_add_device+0x33c/0x9a0 drivers/hid/hid-core.c:2360
+>   usbhid_probe+0xa81/0xfa0 drivers/hid/usbhid/hid-core.c:1386
 >   usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
->   really_probe+0x281/0x660 drivers/base/dd.c:509
->   driver_probe_device+0x104/0x210 drivers/base/dd.c:670
->   __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
->   bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
->   __device_attach+0x217/0x360 drivers/base/dd.c:843
->   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
->   device_add+0xae6/0x16f0 drivers/base/core.c:2111
->   usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
+>   really_probe+0x281/0x6d0 drivers/base/dd.c:548
+>   driver_probe_device+0x104/0x210 drivers/base/dd.c:721
+>   __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
+>   bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+>   __device_attach+0x217/0x360 drivers/base/dd.c:894
+>   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+>   device_add+0x1480/0x1c20 drivers/base/core.c:2487
+>   usb_set_configuration+0xe67/0x1740 drivers/usb/core/message.c:2023
 >   generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
 >   usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
->   really_probe+0x281/0x660 drivers/base/dd.c:509
->   driver_probe_device+0x104/0x210 drivers/base/dd.c:670
->   __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:777
->   bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
->   __device_attach+0x217/0x360 drivers/base/dd.c:843
->   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
->   device_add+0xae6/0x16f0 drivers/base/core.c:2111
->   usb_new_device.cold+0x6a4/0xe61 drivers/usb/core/hub.c:2536
->   hub_port_connect drivers/usb/core/hub.c:5098 [inline]
->   hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
->   port_event drivers/usb/core/hub.c:5359 [inline]
->   hub_event+0x1abd/0x3550 drivers/usb/core/hub.c:5441
->   process_one_work+0x905/0x1570 kernel/workqueue.c:2269
->   worker_thread+0x96/0xe20 kernel/workqueue.c:2415
->   kthread+0x30b/0x410 kernel/kthread.c:255
+>   really_probe+0x281/0x6d0 drivers/base/dd.c:548
+>   driver_probe_device+0x104/0x210 drivers/base/dd.c:721
+>   __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
+>   bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+>   __device_attach+0x217/0x360 drivers/base/dd.c:894
+>   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+>   device_add+0x1480/0x1c20 drivers/base/core.c:2487
+>   usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2537
+>   hub_port_connect drivers/usb/core/hub.c:5184 [inline]
+>   hub_port_connect_change drivers/usb/core/hub.c:5324 [inline]
+>   port_event drivers/usb/core/hub.c:5470 [inline]
+>   hub_event+0x1e59/0x3860 drivers/usb/core/hub.c:5552
+>   process_one_work+0x92b/0x1530 kernel/workqueue.c:2264
+>   process_scheduled_works kernel/workqueue.c:2326 [inline]
+>   worker_thread+0x7ab/0xe20 kernel/workqueue.c:2412
+>   kthread+0x318/0x420 kernel/kthread.c:255
 >   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-> Kernel Offset: disabled
-> Rebooting in 86400 seconds..
+>
+> Freed by task 0:
+> (stack is not available)
+>
+> The buggy address belongs to the object at ffff8881cf964000
+>   which belongs to the cache kmalloc-2k of size 2048
+> The buggy address is located 488 bytes to the right of
+>   2048-byte region [ffff8881cf964000, ffff8881cf964800)
+> The buggy address belongs to the page:
+> page:ffffea00073e5800 refcount:1 mapcount:0 mapping:ffff8881da40c000
+> index:0x0 compound_mapcount: 0
+> raw: 0200000000010200 dead000000000100 dead000000000122 ffff8881da40c000
+> raw: 0000000000000000 0000000000080008 00000001ffffffff 0000000000000000
+> page dumped because: kasan: bad access detected
+>
+> Memory state around the buggy address:
+>   ffff8881cf964880: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>   ffff8881cf964900: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+> > ffff8881cf964980: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>                                                            ^
+>   ffff8881cf964a00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>   ffff8881cf964a80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+> ==================================================================
 >
 >
 > ---
@@ -166,6 +215,4 @@ On Thu, Jul 25, 2019 at 2:08 PM syzbot
 > syzbot can test patches for this bug, for details see:
 > https://goo.gl/tpsmEJ#testing-patches
 
-Closing old USB bugs that haven't happened for a long time.
-
-#syz invalid
+#syz dup: KASAN: global-out-of-bounds Write in kbd_event
