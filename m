@@ -2,109 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E6C1FF9F1
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 19:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA8011FFA57
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 19:34:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729705AbgFRRLf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 18 Jun 2020 13:11:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52078 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729512AbgFRRLd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 18 Jun 2020 13:11:33 -0400
-Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 468D9C0613ED
-        for <linux-usb@vger.kernel.org>; Thu, 18 Jun 2020 10:11:33 -0700 (PDT)
-Received: by mail-ot1-x342.google.com with SMTP id v13so5131799otp.4
-        for <linux-usb@vger.kernel.org>; Thu, 18 Jun 2020 10:11:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=m56O9oyGheb7iqPx3y65EPbbyQ1wr2kzzTnOcksS43k=;
-        b=cJp9zOQC0gC906ow0l6j8q9KiNEvGPpjzzHnBLW5f5UXJSp2JKMXzGknat9SRN+dkt
-         w2gA1CS6jHyZhHtYVhWLdjFU8pZgd1wfT0i734PuD7tNHBL1Xh5Il/+jJ4SBIx9e6K/p
-         VUyBzcvlvKaFRvjGYv2brWns5rtpJE9102tMo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=m56O9oyGheb7iqPx3y65EPbbyQ1wr2kzzTnOcksS43k=;
-        b=ucTpEDS0KyLmNfKkoLHOeOslTX/Zh4JAU7bXK9w9Ezjjlzswa5qfUxgZwhKcOB4ohh
-         kvnjXbf8q0XheLnRKgFNQwSLdvmhBbExDQxupVeX8JQiYtHje7JIftkTBMTEdZ+f19L8
-         zpx/SQkTGPNS6wIyX/K6RDxilDr3fEhUk3da7YIyWZEOFAaxJXWo6PHW0TH0TvIvDVKN
-         0H7RIF5PLhRyjnK+eBjKbncpEgAscuIMs3eZONghxTrK8sQjO88rn/oMajZP+McjMiLB
-         Y+zxDf3hYEjnMAg1AnCZAWDJZKO5mK9I24lvcOp6TH0s8etD5tNoAZ1g5Cjk27XloHvG
-         0L9g==
-X-Gm-Message-State: AOAM533ysVJVB2LY6e2uvr8+DZNXtzVL4oLTpJ/q7RkUtdCjJoqViMaO
-        s7kL9G5frMVfnCx9hs2yuxy4bA==
-X-Google-Smtp-Source: ABdhPJzp6MAPICetIONmQzCwKHp9K0QLrfalAs/N4dm2NHnxKcTJhjWi82s/9X+lJB9oBcs3ACitMA==
-X-Received: by 2002:a9d:62c6:: with SMTP id z6mr4184725otk.70.1592500292528;
-        Thu, 18 Jun 2020 10:11:32 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id c13sm817170otm.78.2020.06.18.10.11.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Jun 2020 10:11:32 -0700 (PDT)
-Subject: Re: [PATCH] usbip: tools: add in man page how to load the client's
- module
-To:     Antonio Borneo <borneo.antonio@gmail.com>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-usb@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20200618000831.1048255-1-borneo.antonio@gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <95bd8906-5864-e5ae-e0d7-eae093b2d8af@linuxfoundation.org>
-Date:   Thu, 18 Jun 2020 11:11:31 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1729542AbgFRReC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 18 Jun 2020 13:34:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51222 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728384AbgFRReB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 18 Jun 2020 13:34:01 -0400
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 33A4D20CC7;
+        Thu, 18 Jun 2020 17:34:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592501641;
+        bh=7bAYDoSOKsBXo7n+wl8FVmIDDBqoaqP8Khk8lB2kWbw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=IsVqhHWvB+5h5r2AmLQfAAPGjIwHflWGk9qU0oGIBdUY39MQAAvYb63cEqW/DbA7i
+         PwtopF2osGqrc6slvKKcFEO2iDgSBydUV0yezMnwA97T2c2twNAKlVlAfsuQean/Nj
+         uzgCBhmYsOlL1BBWc+d9HWmOaBcXzH+kGg+1lTJs=
+Received: by mail-ot1-f42.google.com with SMTP id m2so5152992otr.12;
+        Thu, 18 Jun 2020 10:34:01 -0700 (PDT)
+X-Gm-Message-State: AOAM531820zNfHIJGb1fh/OnrRVy/ES95lkYuJt1tD5fnB1sNwsPcyE1
+        yppRv3VzcHrJ6+X2o4bZkoVYrF8QNBLtZgsmlA==
+X-Google-Smtp-Source: ABdhPJznBot1zRIf3mT//QAyCMg0HJbDF/5FGHU2eV3Y2WUSQryP8tTu3KPxwVMnn5BGgo6zOJop1+ZTJc4C4J62cVM=
+X-Received: by 2002:a9d:c29:: with SMTP id 38mr4268091otr.107.1592501640510;
+ Thu, 18 Jun 2020 10:34:00 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200618000831.1048255-1-borneo.antonio@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <1591123192-565-1-git-send-email-sanm@codeaurora.org>
+ <20200618081443.GA1043700@kroah.com> <20200618154555.GD4525@google.com>
+ <20200618155820.GA3076467@kroah.com> <20200618165151.GE4525@google.com>
+In-Reply-To: <20200618165151.GE4525@google.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 18 Jun 2020 11:33:49 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+5NCvvpKd-69QvgqK6wzbc53=MTt-TcVop23hjT6Rs_g@mail.gmail.com>
+Message-ID: <CAL_Jsq+5NCvvpKd-69QvgqK6wzbc53=MTt-TcVop23hjT6Rs_g@mail.gmail.com>
+Subject: Re: [PATCH] driver core:Export the symbol device_is_bound
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sandeep Maheswaram <sanm@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Manu Gautam <mgautam@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 6/17/20 6:08 PM, Antonio Borneo wrote:
-> While the man page usbipd.8 already informs the user on which
-> kernel module has to be used on server side, the man page usbip.8
-> does not provide any equivalent information on client side.
-> Also, it could be hard for a newby to identify the proper usbip
-> client kernel module, due to the name "vhci-hcd" that has no
-> immediate assonance with usbip.
-> 
-> Add in usbip.8 the command to add the module vhci-hcd, similarly
-> as it's already present in usbipd.8 for usbip-host.
-> 
-> Signed-off-by: Antonio Borneo <borneo.antonio@gmail.com>
-> ---
->   tools/usb/usbip/doc/usbip.8 | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/tools/usb/usbip/doc/usbip.8 b/tools/usb/usbip/doc/usbip.8
-> index a6097be25d28..81313f4913b4 100644
-> --- a/tools/usb/usbip/doc/usbip.8
-> +++ b/tools/usb/usbip/doc/usbip.8
-> @@ -85,6 +85,8 @@ List local USB devices.
->       client:# usbip list --remote=server
->           - List exportable usb devices on the server.
->   
+On Thu, Jun 18, 2020 at 10:51 AM Matthias Kaehlcke <mka@chromium.org> wrote:
+>
+> On Thu, Jun 18, 2020 at 05:58:20PM +0200, Greg Kroah-Hartman wrote:
+> > On Thu, Jun 18, 2020 at 08:45:55AM -0700, Matthias Kaehlcke wrote:
+> > > Hi Greg,
+> > >
+> > > On Thu, Jun 18, 2020 at 10:14:43AM +0200, Greg Kroah-Hartman wrote:
+> > > > On Wed, Jun 03, 2020 at 12:09:52AM +0530, Sandeep Maheswaram wrote:
+> > > > > Export the symbol device_is_bound so that it can be used by the modules.
+> > > >
+> > > > What modules need this?
+> > >
+> > > drivers/usb/dwc3/dwc3-qcom.c (and probably other dwc3 'wrappers').
+> >
+> > Why wasn't that said here?  No context is not good :(
+>
+> Agreed, this patch should probably have been part of a series to establish
+> the context.
+>
+> > > Short summary: QCOM dwc3 support is split in two drivers, the core dwc3
+> > > driver and the QCOM specific parts. dwc3-qcom is probed first (through
+> > > a DT entry or ACPI), dwc3_qcom_probe() then calls of_platform_populate()
+> > > to probe the core part. After a successful return from _populate() the
+> > > driver assumes that the core device is fully initialized. However the
+> > > latter is not correct, the driver core doesn't propagate errors from
+> > > probe() to platform_populate(). The dwc3-qcom driver would use
+> > > device_is_bound() to make sure the core device was probed successfully.
+> >
+> > why does the dwc3-qcom driver care?
+>
+> Currently the dwc3-qcom driver uses the core device to determine if the
+> controller is used in peripheral mode and it runtime resumes the XHCI
+> device when it sees a wakeup interrupt.
+>
+> The WIP patch to add interconnect support relies on the core driver
+> to determine the max speed of the controller.
+>
+> > And why is the driver split in a way that requires such "broken"
+> > structures?  Why can't that be fixed instead?
+>
+> It seems determining the mode could be easily changed by getting it through
+> the pdev, as in st_dwc3_probe(). Not sure about the other two parts,
+> determining the maximum speed can involve evaluating hardware registers,
+> which currently are 'owned' by the core driver.
+>
+> Manu or Sandeep who know the hardware and the driver better than me might
+> have ideas on how to improve things.
 
-While you are making changes, please change the above to the
-following. This is more accurate.
+We never should have had this split either in the DT binding nor
+driver(s) as if the SoC wrapper crap and licensed IP block are
+independent things. The thing to do here is either make the DWC3 code
+a library which drivers call (e.g. SDHCI) or add hooks into the DWC3
+driver for platform specifics (e.g. Designware PCI). Neither is a
+simple solution though.
 
-List devices exported by remote=server
-
-> +    client:# modprobe vhci-hcd
-> +
-
->       client:# usbip attach --remote=server --busid=1-2
->           - Connect the remote USB device.
->   
-> 
-
-thanks,
--- Shuah
+Rob
