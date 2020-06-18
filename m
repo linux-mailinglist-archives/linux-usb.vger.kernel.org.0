@@ -2,35 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B538E1FE537
-	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 04:24:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D27DF1FE4A8
+	for <lists+linux-usb@lfdr.de>; Thu, 18 Jun 2020 04:20:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730153AbgFRCYU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 17 Jun 2020 22:24:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48950 "EHLO mail.kernel.org"
+        id S1729371AbgFRCT4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 17 Jun 2020 22:19:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50510 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729808AbgFRBRn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:17:43 -0400
+        id S1729736AbgFRBTI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:19:08 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 64786221F6;
-        Thu, 18 Jun 2020 01:17:42 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DBB6621D94;
+        Thu, 18 Jun 2020 01:19:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592443063;
-        bh=atwSE+rxvuN6MQ7zE6xGP+MVFSJ3dQQnYLMeGXFQR/I=;
+        s=default; t=1592443147;
+        bh=6u+e7ldCO7IESsKjBJ9w1J54TJ1gKUGwjSBt67RxAro=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U4zh2UnM4LJxnjztWB+VW/Xkw5mbv8KG7LtSTroOY8FrfyccXuFVEZt1k/N3IwGUv
-         oc1rhiPyYlNNQL+IIsHKDWrQf3qCYs9D0Cicj3bXf9yxhdSUSVkU8AnK46xnomMXyH
-         9h+PTuk06230ZOrvU7HCE4RzLggzDJpe9dm3z5+4=
+        b=CqNzFUiM5sFGlVjwt8nYZTZLNQBCemAz4/fVErWmCvyEl57nKyINgZE6zP+AvFd7c
+         DUSYthks7o58h9lAOAjufZAYz8w9lu9VULZrkOmZRxvw4fN59lNztPqBLONFuVvG9F
+         FIDmAPrmcKU/oOFxLwmMMWyYzvR3NCemtF0NsBis=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Peter Chen <peter.chen@nxp.com>, Jun Li <jun.li@nxp.com>,
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Thinh Nguyen <thinhn@synopsys.com>,
         Felipe Balbi <balbi@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 053/266] usb: gadget: core: sync interrupt before unbind the udc
-Date:   Wed, 17 Jun 2020 21:12:58 -0400
-Message-Id: <20200618011631.604574-53-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 116/266] usb: dwc3: gadget: Properly handle ClearFeature(halt)
+Date:   Wed, 17 Jun 2020 21:14:01 -0400
+Message-Id: <20200618011631.604574-116-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200618011631.604574-1-sashal@kernel.org>
 References: <20200618011631.604574-1-sashal@kernel.org>
@@ -43,135 +44,89 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Peter Chen <peter.chen@nxp.com>
+From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 
-[ Upstream commit 3c73bc52195def14165c3a7d91bdbb33b51725f5 ]
+[ Upstream commit cb11ea56f37a36288cdd0a4799a983ee3aa437dd ]
 
-The threaded interrupt handler may still be called after the
-usb_gadget_disconnect is called, it causes the structures used
-at interrupt handler was freed before it uses, eg the
-usb_request. This issue usually occurs we remove the udc function
-during the transfer. Below is the example when doing stress
-test for android switch function, the EP0's request is freed
-by .unbind (configfs_composite_unbind -> composite_dev_cleanup),
-but the threaded handler accesses this request during handling
-setup packet request.
+DWC3 must not issue CLEAR_STALL command to control endpoints. The
+controller automatically clears the STALL when it receives the SETUP
+token. Also, when the driver receives ClearFeature(halt_ep), DWC3 must
+stop any active transfer from the endpoint and give back all the
+requests to the function drivers.
 
-In fact, there is no protection between unbind the udc
-and udc interrupt handling, so we have to avoid the interrupt
-handler is occurred or scheduled during the .unbind flow.
-
-init: Sending signal 9 to service 'adbd' (pid 18077) process group...
-android_work: did not send uevent (0 0 000000007bec2039)
-libprocessgroup: Successfully killed process cgroup uid 0 pid 18077 in 6ms
-init: Service 'adbd' (pid 18077) received signal 9
-init: Sending signal 9 to service 'adbd' (pid 18077) process group...
-libprocessgroup: Successfully killed process cgroup uid 0 pid 18077 in 0ms
-init: processing action (init.svc.adbd=stopped) from (/init.usb.configfs.rc:14)
-init: Received control message 'start' for 'adbd' from pid: 399 (/vendor/bin/hw/android.hardware.usb@1.
-
-init: starting service 'adbd'...
-read descriptors
-read strings
-Unable to handle kernel read from unreadable memory at virtual address 000000000000002a
-android_work: sent uevent USB_STATE=CONNECTED
-Mem abort info:
-  ESR = 0x96000004
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-Data abort info:
-  ISV = 0, ISS = 0x00000004
-  CM = 0, WnR = 0
-user pgtable: 4k pages, 48-bit VAs, pgdp=00000000e97f1000
-using random self ethernet address
-[000000000000002a] pgd=0000000000000000
-Internal error: Oops: 96000004 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 0 PID: 232 Comm: irq/68-5b110000 Not tainted 5.4.24-06075-g94a6b52b5815 #92
-Hardware name: Freescale i.MX8QXP MEK (DT)
-pstate: 00400085 (nzcv daIf +PAN -UAO)
-using random host ethernet address
-pc : composite_setup+0x5c/0x1730
-lr : android_setup+0xc0/0x148
-sp : ffff80001349bba0
-x29: ffff80001349bba0 x28: ffff00083a50da00
-x27: ffff8000124e6000 x26: ffff800010177950
-x25: 0000000000000040 x24: ffff000834e18010
-x23: 0000000000000000 x22: 0000000000000000
-x21: ffff00083a50da00 x20: ffff00082e75ec40
-x19: 0000000000000000 x18: 0000000000000000
-x17: 0000000000000000 x16: 0000000000000000
-x15: 0000000000000000 x14: 0000000000000000
-x13: 0000000000000000 x12: 0000000000000001
-x11: ffff80001180fb58 x10: 0000000000000040
-x9 : ffff8000120fc980 x8 : 0000000000000000
-x7 : ffff00083f98df50 x6 : 0000000000000100
-x5 : 00000307e8978431 x4 : ffff800011386788
-x3 : 0000000000000000 x2 : ffff800012342000
-x1 : 0000000000000000 x0 : ffff800010c6d3a0
-Call trace:
- composite_setup+0x5c/0x1730
- android_setup+0xc0/0x148
- cdns3_ep0_delegate_req+0x64/0x90
- cdns3_check_ep0_interrupt_proceed+0x384/0x738
- cdns3_device_thread_irq_handler+0x124/0x6e0
- cdns3_thread_irq+0x94/0xa0
- irq_thread_fn+0x30/0xa0
- irq_thread+0x150/0x248
- kthread+0xfc/0x128
- ret_from_fork+0x10/0x18
-Code: 910e8000 f9400693 12001ed7 79400f79 (3940aa61)
----[ end trace c685db37f8773fba ]---
-Kernel panic - not syncing: Fatal exception
-SMP: stopping secondary CPUs
-Kernel Offset: disabled
-CPU features: 0x0002,20002008
-Memory Limit: none
-Rebooting in 5 seconds..
-
-Reviewed-by: Jun Li <jun.li@nxp.com>
-Signed-off-by: Peter Chen <peter.chen@nxp.com>
+Fixes: 72246da40f37 ("usb: Introduce DesignWare USB3 DRD Driver")
+Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
 Signed-off-by: Felipe Balbi <balbi@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/udc/core.c | 2 ++
- include/linux/usb/gadget.h    | 2 ++
- 2 files changed, 4 insertions(+)
+ drivers/usb/dwc3/gadget.c | 36 +++++++++++++++++++++++++++++++++---
+ 1 file changed, 33 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-index 51fa614b4079..0e7820158aaa 100644
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -1297,6 +1297,8 @@ static void usb_gadget_remove_driver(struct usb_udc *udc)
- 	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index c30c5b1c478c..05180a09e70d 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -1505,6 +1505,10 @@ static void dwc3_gadget_ep_skip_trbs(struct dwc3_ep *dep, struct dwc3_request *r
+ {
+ 	int i;
  
- 	usb_gadget_disconnect(udc->gadget);
-+	if (udc->gadget->irq)
-+		synchronize_irq(udc->gadget->irq);
- 	udc->driver->unbind(udc->gadget);
- 	usb_gadget_udc_stop(udc);
++	/* If req->trb is not set, then the request has not started */
++	if (!req->trb)
++		return;
++
+ 	/*
+ 	 * If request was already started, this means we had to
+ 	 * stop the transfer. With that we also need to ignore
+@@ -1595,6 +1599,8 @@ int __dwc3_gadget_ep_set_halt(struct dwc3_ep *dep, int value, int protocol)
+ {
+ 	struct dwc3_gadget_ep_cmd_params	params;
+ 	struct dwc3				*dwc = dep->dwc;
++	struct dwc3_request			*req;
++	struct dwc3_request			*tmp;
+ 	int					ret;
  
-diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
-index 124462d65eac..67f5adc9b875 100644
---- a/include/linux/usb/gadget.h
-+++ b/include/linux/usb/gadget.h
-@@ -373,6 +373,7 @@ struct usb_gadget_ops {
-  * @connected: True if gadget is connected.
-  * @lpm_capable: If the gadget max_speed is FULL or HIGH, this flag
-  *	indicates that it supports LPM as per the LPM ECN & errata.
-+ * @irq: the interrupt number for device controller.
-  *
-  * Gadgets have a mostly-portable "gadget driver" implementing device
-  * functions, handling all usb configurations and interfaces.  Gadget
-@@ -427,6 +428,7 @@ struct usb_gadget {
- 	unsigned			deactivated:1;
- 	unsigned			connected:1;
- 	unsigned			lpm_capable:1;
-+	int				irq;
- };
- #define work_to_gadget(w)	(container_of((w), struct usb_gadget, work))
+ 	if (usb_endpoint_xfer_isoc(dep->endpoint.desc)) {
+@@ -1631,13 +1637,37 @@ int __dwc3_gadget_ep_set_halt(struct dwc3_ep *dep, int value, int protocol)
+ 		else
+ 			dep->flags |= DWC3_EP_STALL;
+ 	} else {
++		/*
++		 * Don't issue CLEAR_STALL command to control endpoints. The
++		 * controller automatically clears the STALL when it receives
++		 * the SETUP token.
++		 */
++		if (dep->number <= 1) {
++			dep->flags &= ~(DWC3_EP_STALL | DWC3_EP_WEDGE);
++			return 0;
++		}
  
+ 		ret = dwc3_send_clear_stall_ep_cmd(dep);
+-		if (ret)
++		if (ret) {
+ 			dev_err(dwc->dev, "failed to clear STALL on %s\n",
+ 					dep->name);
+-		else
+-			dep->flags &= ~(DWC3_EP_STALL | DWC3_EP_WEDGE);
++			return ret;
++		}
++
++		dep->flags &= ~(DWC3_EP_STALL | DWC3_EP_WEDGE);
++
++		dwc3_stop_active_transfer(dep, true, true);
++
++		list_for_each_entry_safe(req, tmp, &dep->started_list, list)
++			dwc3_gadget_move_cancelled_request(req);
++
++		list_for_each_entry_safe(req, tmp, &dep->pending_list, list)
++			dwc3_gadget_move_cancelled_request(req);
++
++		if (!(dep->flags & DWC3_EP_END_TRANSFER_PENDING)) {
++			dep->flags &= ~DWC3_EP_DELAY_START;
++			dwc3_gadget_ep_cleanup_cancelled_requests(dep);
++		}
+ 	}
+ 
+ 	return ret;
 -- 
 2.25.1
 
