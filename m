@@ -2,92 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15566200872
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jun 2020 14:13:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D52E200892
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jun 2020 14:24:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730727AbgFSMNU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Jun 2020 08:13:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37986 "EHLO mail.kernel.org"
+        id S1732970AbgFSMYe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Jun 2020 08:24:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41052 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727074AbgFSMNT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 19 Jun 2020 08:13:19 -0400
+        id S1732956AbgFSMYd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 19 Jun 2020 08:24:33 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A29D7206F1;
-        Fri, 19 Jun 2020 12:13:18 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 263B221527;
+        Fri, 19 Jun 2020 12:24:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592568799;
-        bh=x99C7W2Q/rigDbBqMDFevgxyMwl6NKj83NncB/err6I=;
+        s=default; t=1592569472;
+        bh=NgZT449b3Tjszh2iaHpBq2sm55Q1GXGCww56Rd+tq8Y=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=k6tfrW9ZnkTaBqKztWk4rvnNencpO8gqPUIiO8qJv0i0dNB7GE4LKt3lByvG2HTEo
-         OKKE+lbVgrY0nk9Zs1IwkGbN3NkdCSRX8KvhnOIQz5wmpKzNRFOF/ql9RmY03cO6Fz
-         aN5l1VDw8HbeDKsCxVeDn32g61GP8GJsmO+x0XXw=
-Date:   Fri, 19 Jun 2020 14:13:12 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Rob Gill <rrobgill@protonmail.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] driver/usb MODULE_DESCRIPTION entries to usb modules
-Message-ID: <20200619121312.GB965960@kroah.com>
-References: <k9XZapJHJVXoO82YNf3IlaNfFbMsR4tzD22KaFWD_x_WL5ksH5DzaCy1knWtCBjSfPWExoNX0f3t4lRVU0UhNiDt4nkxU2juWmEkC4x7P3A=@protonmail.com>
+        b=A2tLbrRnfrG2lBiMrFuGqr8q4JuYAt4dq3a0/8s3di6IUQUw89cE5f+TWcf05iinu
+         frmvCXo96EpsesXRBmrdyd4rYtifuXy559caYiI3jB1kXWuPVkVo9Qlk485n6uQj4V
+         FxI+ABSadn3Pq/zmThEJA71fMazuCuFk29hJyD9Q=
+Date:   Fri, 19 Jun 2020 14:24:29 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Bastien Nocera <hadess@hadess.net>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Richard Dodd <richard.o.dodd@gmail.com>,
+        Jonathan Cox <jonathan@jdcox.net>,
+        =?iso-8859-1?Q?Thi=E9baud?= Weksteen <tweek@google.com>,
+        Nishad Kamdar <nishadkamdar@gmail.com>
+Subject: Re: [PATCH 1/8] USB: rename USB quirk to USB_QUIRK_ENDPOINT_IGNORE
+Message-ID: <20200619122429.GA1037991@kroah.com>
+References: <20200618094300.1887727-1-gregkh@linuxfoundation.org>
+ <20200618094300.1887727-2-gregkh@linuxfoundation.org>
+ <484c84b62140f6536f841e7027ddd9ddcf179a72.camel@hadess.net>
+ <62b8ddc4-8d26-1160-6934-fe6a68231938@redhat.com>
+ <f57cd2a9a27fb148f0bdfd0ad5e92b4d01ca77c6.camel@hadess.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <k9XZapJHJVXoO82YNf3IlaNfFbMsR4tzD22KaFWD_x_WL5ksH5DzaCy1knWtCBjSfPWExoNX0f3t4lRVU0UhNiDt4nkxU2juWmEkC4x7P3A=@protonmail.com>
+In-Reply-To: <f57cd2a9a27fb148f0bdfd0ad5e92b4d01ca77c6.camel@hadess.net>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 19, 2020 at 11:18:31AM +0000, Rob Gill wrote:
-> The user tool modinfo is used to get information on kernel modules, including a
-> description where it is available.
+On Fri, Jun 19, 2020 at 01:08:53PM +0200, Bastien Nocera wrote:
+> On Fri, 2020-06-19 at 12:53 +0200, Hans de Goede wrote:
+> > A note for future reference, not sure what you mean with driver
+> > 
+> > API here. If you mean the in kernel API, the kernel rules are
+> > 
+> > that we are always free to change that (Linux does not have a
+> > 
+> > stable driver API).
+> > 
+> > 
+> > 
+> > So if a header does not sit under include/uapi (indicating that
+> > 
+> > it is an userspace API) then a change like this is fine.
 > 
-> This patch adds a brief MODULE_DESCRIPTION to the following modules in driver/usb.
-> 
-> isight_firmware
-> mxuport
-> u_ether
-> uas
-> 
-> Signed-off-by: Rob Gill <rrobgill@protonmail.com>
-> ---
->  drivers/usb/gadget/function/u_ether.c | 1 +
->  drivers/usb/misc/isight_firmware.c    | 1 +
->  drivers/usb/serial/mxuport.c          | 1 +
->  drivers/usb/storage/uas.c             | 1 +
->  4 files changed, 4 insertions(+)
-> 
-> diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
-> index fbe96ef1a..579ab41c6 100644
-> --- a/drivers/usb/gadget/function/u_ether.c
-> +++ b/drivers/usb/gadget/function/u_ether.c
-> @@ -1180,3 +1180,4 @@ EXPORT_SYMBOL_GPL(gether_disconnect);
-> 
->  MODULE_LICENSE("GPL");
->  MODULE_AUTHOR("David Brownell");
-> +MODULE_DESCRIPTION("Ethernet-over-USB link layer utilities for Gadget stack");
+> I meant the internal driver API, which might break out-of-tree drivers.
 
-Is this really "utilities", or just the driver itself for a usb ethernet
-gadget?  I know you took this from the top of the file, but is that
-still correct?
+There is no such thing.  Well, there might be, but we don't care and
+have to act as if there are no such thing otherwise we would never be
+able to change anything :)
 
+> I know that this API is fluid, and that there are no stability
+> guarantees, but I'd still expect at least a note in the commit message
+> to that effect.
 
-
-
-
-> diff --git a/drivers/usb/misc/isight_firmware.c b/drivers/usb/misc/isight_firmware.c
-> index 4d30095d6..607c90c22 100644
-> --- a/drivers/usb/misc/isight_firmware.c
-> +++ b/drivers/usb/misc/isight_firmware.c
-> @@ -129,3 +129,4 @@ module_usb_driver(isight_firmware_driver);
-> 
->  MODULE_LICENSE("GPL");
->  MODULE_AUTHOR("Matthew Garrett <mjg@redhat.com>");
-> +MODULE_DESCRIPTION("USB isight camera firmware");
-
-This isn't the firmware itself, but a driver to load the firmware.  So
-maybe "USB isight camera firmware loader"?
+Why?  Who cares?  Anyone who lives outside of the kernel already knows
+they have to dig in the kernel if their code breaks, that's the cost of
+living outside of the kernel.
 
 thanks,
 
