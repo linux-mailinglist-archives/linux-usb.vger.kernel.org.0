@@ -2,176 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1651A200B37
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jun 2020 16:20:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8AFD200B5D
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jun 2020 16:24:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733060AbgFSOT5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Fri, 19 Jun 2020 10:19:57 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:37771 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726642AbgFSOTz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jun 2020 10:19:55 -0400
-Received: from mail-pj1-f70.google.com ([209.85.216.70])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1jmHs0-0003eE-KW
-        for linux-usb@vger.kernel.org; Fri, 19 Jun 2020 14:19:52 +0000
-Received: by mail-pj1-f70.google.com with SMTP id ge4so6576197pjb.7
-        for <linux-usb@vger.kernel.org>; Fri, 19 Jun 2020 07:19:52 -0700 (PDT)
+        id S1733079AbgFSOYN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Jun 2020 10:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50070 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731917AbgFSOYK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jun 2020 10:24:10 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06777C06174E
+        for <linux-usb@vger.kernel.org>; Fri, 19 Jun 2020 07:24:09 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id v24so3983005plo.6
+        for <linux-usb@vger.kernel.org>; Fri, 19 Jun 2020 07:24:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RY8kpVpM7lodY11RSLTnplr/cinEHPu5K7Smg6Q1P2A=;
+        b=bZ115KcWZXs7c4ahUvcb/xbiijlWUHIg/Q6K/9JF6JH2bIF5nB3FELlzmsmvv+YMEN
+         PyDgEY8NOeieSjyTd2BoFpdWV4pVcUZP06Dpqi5+3PxqsZbppXklk8KS4iDya1ykEtzK
+         lZOaRsr2ewTan+s1FzuZqfon33qyjfwlqXn4JDqXHBhBdD9Ifxr1/igYrgNq+End9KvI
+         K1Q0UrJJT0Kc0eY/VBeUlDDF+kVskjcI5feUmzCdn4c1vlrXnFL4TGqV2I4SJocp3dN5
+         lVBwDlpzGd2YLttjB7Q6ffasK4uyTYt7kdYKFpAE78muLB08JbSBZClrmAJoVKSFCOs6
+         4MEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=WMDBGknWyjd+4i+sbe8PAvtkOzhlh+B/m5/HQqBhznQ=;
-        b=uKj19p+vmM7t3BXEi1Sj1Cvl1Qg26Aei9jciT+41GDscJ1TNOP7OoVzCBWyPkZ2Bwx
-         d0KFSB11Y4+yLUJdha4GIovrdQPhR6sqtoODG5ZFDnhWNAR05g40gye6Xy0cKDrlejw9
-         8HaqfujOvOJJQ1MlZ7ovUGCGDxEuoDG0H7wIftbAfOXkozCCqEaRPfRLl/FG0V3U5m3s
-         oAswLD8AROqcDoobtPKzKYajJaELYeTvHYJO85yf5wTbT7+J8xAspixcH7rqNBO8Kfwy
-         t87LA1wA2wtjwQnU05Hb3YKaoCOwj62AEhID9dEgfmlKntN1gmdE4sk3E6WlY4uz0V5G
-         OP+g==
-X-Gm-Message-State: AOAM531n/3kQJVQ76dfw717gT8gmNHP/yrLePWiRb2YTFIEan/Vwx2fX
-        UFkYvPCl0KHmd3OxESwkBS8oiTvPtqtoC/9NvHepbBrCfWd+49dtdIANWd2+Fkj8Tu0LDfFqo2a
-        ZWomMld4TsRvbDgQekPsn6yYRlgW2a/XFpCOv6g==
-X-Received: by 2002:a17:902:c40c:: with SMTP id k12mr8573186plk.105.1592576391159;
-        Fri, 19 Jun 2020 07:19:51 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzKVtVcUI8/eYnIatX58zJs4lUv4lpkykPxuyMHs1wJ7nDK1P95gS3lxcsqSMOrbP5cKCcA1g==
-X-Received: by 2002:a17:902:c40c:: with SMTP id k12mr8573153plk.105.1592576390653;
-        Fri, 19 Jun 2020 07:19:50 -0700 (PDT)
-Received: from [192.168.1.208] (220-133-187-190.HINET-IP.hinet.net. [220.133.187.190])
-        by smtp.gmail.com with ESMTPSA id gg10sm5333211pjb.38.2020.06.19.07.19.48
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 19 Jun 2020 07:19:49 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.80.23.2.2\))
-Subject: Re: [PATCH 2/2] xhci: Poll for U0 after disabling USB2 LPM
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-In-Reply-To: <8327233C-5DE8-43F8-9208-5FF888629047@canonical.com>
-Date:   Fri, 19 Jun 2020 22:19:46 +0800
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: 8BIT
-Message-Id: <9FC0BA5C-4D00-4D33-B040-AA5584A8E9A6@canonical.com>
-References: <20200520101811.2623-1-kai.heng.feng@canonical.com>
- <20200520101811.2623-2-kai.heng.feng@canonical.com>
- <6c3ac2e5-73e9-6e4f-2940-63403821631f@linux.intel.com>
- <8327233C-5DE8-43F8-9208-5FF888629047@canonical.com>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-X-Mailer: Apple Mail (2.3608.80.23.2.2)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RY8kpVpM7lodY11RSLTnplr/cinEHPu5K7Smg6Q1P2A=;
+        b=t7kGFqbnacU1wW8bIPEZKp3ouGS7APDs+QUbfyV57KOXrHocxUkOq01S4vw19LkIa/
+         3LSbx64lXKCPcG9LrjZWDJALU3U+eMM3bRUZPWHksG7TGBiEJ+dHvGDmBfs4ynbYh/3h
+         D+PlMM/jDk3i1zcFaDItZ0GsDVL0mGGkScW9QLLjX5oyGyPg3914P2FGbc9BvHyInBDd
+         eUV3SgFw39P6wblEJ54JqACUc/+YY3+2troCh+rfm5P64W0Q4pmLRbb+z95fZys/MM7S
+         xhyWlzear5fQJG55ZXIL8vDWOs3SfXuj1nJcglYMxkt5Vjj3KUtysjnYrNAqOndPRPGM
+         a78g==
+X-Gm-Message-State: AOAM533I9ylCcKBDJLpTXA8yCw6LPUaGF5fRJJCd3gJSWEPBc7qhu0t3
+        NMva+NXmFp+8Ov56IrPjEOfFHVYCnuLV9kMMj/YuhQ==
+X-Google-Smtp-Source: ABdhPJyzkpKpXORnlDfu3HOs2bnsAu2O3ITik2hKPTV4r3qLFoVmfVixc+sjZhhgMJViipGH33mYgymarZBTBL8VVx0=
+X-Received: by 2002:a17:90a:c283:: with SMTP id f3mr3599488pjt.166.1592576649034;
+ Fri, 19 Jun 2020 07:24:09 -0700 (PDT)
+MIME-Version: 1.0
+References: <0000000000005166b905a845e639@google.com> <CAAeHK+zVVHK-XxFCTkRVB8WooDgCRbFRZqR7J8uPCNC0nu9fVQ@mail.gmail.com>
+In-Reply-To: <CAAeHK+zVVHK-XxFCTkRVB8WooDgCRbFRZqR7J8uPCNC0nu9fVQ@mail.gmail.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Fri, 19 Jun 2020 16:23:57 +0200
+Message-ID: <CAAeHK+xZrVVzmHov1hEr+=qPXXKXUFbQxE9U9LAD+qdRAYb4cw@mail.gmail.com>
+Subject: Re: WARNING in corrupted/usb_submit_urb
+To:     syzbot <syzbot+120d387f677320f6a57c@syzkaller.appspotmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        ingrassia@epigenesys.com, LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mathias,
+On Wed, Jun 17, 2020 at 2:58 PM Andrey Konovalov <andreyknvl@google.com> wrote:
+>
+> On Wed, Jun 17, 2020 at 1:24 PM syzbot
+> <syzbot+120d387f677320f6a57c@syzkaller.appspotmail.com> wrote:
+> >
+> > Hello,
+> >
+> > syzbot found the following crash on:
+> >
+> > HEAD commit:    d6ff8147 usb: gadget: add raw-gadget interface
+> > git tree:       https://github.com/google/kasan.git usb-fuzzer
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=140052c3e00000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=90a3d9bed5648419
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=120d387f677320f6a57c
+> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16195fd9e00000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1610f2c3e00000
+> >
+> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> > Reported-by: syzbot+120d387f677320f6a57c@syzkaller.appspotmail.com
+> >
+> > ati_remote 1-1:0.0: Unknown Medion X10 receiver, using default ati_remote Medion keymap
+> > ------------[ cut here ]------------
+> > usb 1-1: BOGUS urb xfer, pipe 1 != type 3
+> > WARNING: CPU: 1 PID: 81 at drivers/usb/core/urb.c:478 usb_submit_urb+0x1188/0x1460 drivers/usb/core/urb.c:478
+> > Kernel panic - not syncing: panic_on_warn set ...
+> > CPU: 1 PID: 81 Comm: kworker/1:1 Not tainted 5.6.0-rc3-syzkaller #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> > Workqueue: usb_hub_wq hub_event
+> > Call Trace:
+> >  __dump_stack lib/dump_stack.c:77 [inline]
+> >  dump_stack+0xef/0x16e lib/dump_stack.c:118
+> >  panic+0x2aa/0x6e1 kernel/panic.c:221
+> >  __warn.cold+0x2f/0x30 kernel/panic.c:582
+> >  report_bug+0x27b/0x2f0 lib/bug.c:195
+> >  fixup_bug arch/x86/kernel/traps.c:174 [inline]
+> >  fixup_bug arch/x86/kernel/traps.c:169 [inline]
+> >  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:267
+> >  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
+> >  invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
+> > RIP: 0010:usb_submit_urb+0x1188/0x1460 drivers/usb/core/urb.c:478
+> > Code: 4d 85 ed 74 46 e8 18 ce dd fd 4c 89 f7 e8 d0 5c 17 ff 41 89 d8 44 89 e1 4c 89 ea 48 89 c6 48 c7 c7 e0 e7 3b 86 e8 a0 5f b2 fd <0f> 0b e9 20 f4 ff ff e8 ec cd dd fd 0f 1f 44 00 00 e8 e2 cd dd fd
+> > RSP: 0018:ffff8881d8a0f0b8 EFLAGS: 00010282
+> > RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
+> >
+> >
+> > ---
+> > This bug is generated by a bot. It may contain errors.
+> > See https://goo.gl/tpsmEJ for more information about syzbot.
+> > syzbot engineers can be reached at syzkaller@googlegroups.com.
+> >
+> > syzbot will keep track of this bug report. See:
+> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> > syzbot can test patches for this bug, for details see:
+> > https://goo.gl/tpsmEJ#testing-patches
+> >
+> > --
+> > You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> > To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> > To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/0000000000005166b905a845e639%40google.com.
+>
+> Corrupted report, will be fixed by https://github.com/google/syzkaller/pull/1839
 
-> On Jun 9, 2020, at 18:15, Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
-> 
-> 
-> 
->> On Jun 8, 2020, at 19:21, Mathias Nyman <mathias.nyman@linux.intel.com> wrote:
->> 
->> On 20.5.2020 13.18, Kai-Heng Feng wrote:
->>> USB2 devices with LPM enabled may interrupt the system suspend:
->>> [  932.510475] usb 1-7: usb suspend, wakeup 0
->>> [  932.510549] hub 1-0:1.0: hub_suspend
->>> [  932.510581] usb usb1: bus suspend, wakeup 0
->>> [  932.510590] xhci_hcd 0000:00:14.0: port 9 not suspended
->>> [  932.510593] xhci_hcd 0000:00:14.0: port 8 not suspended
->>> ..
->>> [  932.520323] xhci_hcd 0000:00:14.0: Port change event, 1-7, id 7, portsc: 0x400e03
->> 
->> 400e03 = Connected, Enabled, U0 with port ink state change flag (PLC) set.
->> 
->>> ..
->>> [  932.591405] PM: pci_pm_suspend(): hcd_pci_suspend+0x0/0x30 returns -16
->>> [  932.591414] PM: dpm_run_callback(): pci_pm_suspend+0x0/0x160 returns -16
->>> [  932.591418] PM: Device 0000:00:14.0 failed to suspend async: error -16
->>> 
->>> During system suspend, USB core will let HC suspends the device if it
->>> doesn't have remote wakeup enabled and doesn't have any children.
->>> However, from the log above we can see that the usb 1-7 doesn't get bus
->>> suspended due to not in U0. After a while the port finished U2 -> U0
->>> transition, interrupts the suspend process.
->> 
->> In USB2 HW link PM the PLC flag should not be set in U2Exit -> U0 transitions.
->> Only case we should see a port change event is U2Entry -> U0 due to STALL or
->> error/timeout. (see xhci 4.23.5.1.1.1)
->> 
->>> 
->>> The observation is that after disabling LPM, port doesn't transit to U0
->>> immediately and can linger in U2. xHCI spec 4.23.5.2 states that the
->>> maximum exit latency for USB2 LPM should be BESL + 10us. The BESL for
->>> the affected device is advertised as 400us, which is still not enough
->>> based on my testing result.
->>> 
->>> So let's use the maximum permitted latency, 10000, to poll for U0
->>> status to solve the issue.
->> 
->> I don't recall all details, but it could be that disabling LPM before suspend
->> is unnecessary. 
->> At least xhci should be able to set a port to U3 from U1 and U2 (see xhci 4.15.1)
->> so that is one change that could be done to xhci_bus_suspend()
-> 
-> Yes, put the device to U3 directly does the trick.
-
-As discussed, will you pick this series over the v2?
-Or is there anything I should improve for this one?
-
-Kai-Heng
-
-> 
->> 
->> Also just noticed that we are not really checking L1S field in PORTPMSC register, 
->> this should tell if there was an issue with USB2 lpm state transitions, and
->> perhaps we should disable lpm for that device. 
->> 
->> Does the L1S field show anything unuaual in your case?
->> That could explain the port event with the PLC bit set.
-> 
-> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> index 2c255d0620b0..a2099d42e490 100644
-> --- a/drivers/usb/host/xhci-ring.c
-> +++ b/drivers/usb/host/xhci-ring.c
-> @@ -1592,7 +1592,7 @@ static void handle_port_status(struct xhci_hcd *xhci,
-> {
->        struct usb_hcd *hcd;
->        u32 port_id;
-> -       u32 portsc, cmd_reg;
-> +       u32 portsc, portpmsc, cmd_reg;
->        int max_ports;
->        int slot_id;
->        unsigned int hcd_portnum;
-> @@ -1634,9 +1634,10 @@ static void handle_port_status(struct xhci_hcd *xhci,
->        bus_state = &port->rhub->bus_state;
->        hcd_portnum = port->hcd_portnum;
->        portsc = readl(port->addr);
-> +       portpmsc = readl(port->addr + PORTPMSC);
-> 
-> -       xhci_dbg(xhci, "Port change event, %d-%d, id %d, portsc: 0x%x\n",
-> -                hcd->self.busnum, hcd_portnum + 1, port_id, portsc);
-> +       xhci_dbg(xhci, "Port change event, %d-%d, id %d, portsc: 0x%x, portpmsc 0x%0x\n",
-> +                hcd->self.busnum, hcd_portnum + 1, port_id, portsc, portpmsc);
-> 
->        trace_xhci_handle_port_status(hcd_portnum, portsc);
-> 
-> [  685.460054] xhci_hcd 0000:00:14.0: Port change event, 1-7, id 7, portsc: 0x400e03, portpmsc 0x1
-> [  685.460062] xhci_hcd 0000:00:14.0: resume root hub
-> [  685.460079] xhci_hcd 0000:00:14.0: handle_port_status: starting port polling.
-> [  685.460094] xhci_hcd 0000:00:14.0: xhci_hub_status_data: stopping port polling.
-> [  685.521685] PM: pci_pm_suspend(): hcd_pci_suspend+0x0/0x30 returns -16
-> [  685.521695] PM: dpm_run_callback(): pci_pm_suspend+0x0/0x160 returns -16
-> [  685.521699] PM: Device 0000:00:14.0 failed to suspend async: error -16
-> 
-> So after disabling LPM, it takes a long time to complete L1 transition, before transitioning to L0.
-> 
-> Kai-Heng
-> 
->> 
->> I think we can avoid a readl_poll_timeout() solution in this case.
->> 
->> -Mathias
-
+#syz invalid
