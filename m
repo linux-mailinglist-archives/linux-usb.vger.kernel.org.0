@@ -2,126 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8189E2003F1
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jun 2020 10:31:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CED0B20046C
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jun 2020 10:53:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731483AbgFSIbK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Jun 2020 04:31:10 -0400
-Received: from new3-smtp.messagingengine.com ([66.111.4.229]:50215 "EHLO
-        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730651AbgFSIbD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jun 2020 04:31:03 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.nyi.internal (Postfix) with ESMTP id D77D65802A6;
-        Fri, 19 Jun 2020 04:31:00 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Fri, 19 Jun 2020 04:31:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=cPGj9GS8nOdw4uD4AAEpm4pe3JQ
-        bsTnhxLAPKtdHq0Q=; b=dcoVTscfnyiG3XZe+6OhFHV21XhGtTpVz8ma8AIuz2/
-        qRJcG502Xu8eIXVW3UD3RWjyCxeMTP+sqwM1NMQkvkAVBkY7+OgnSPdYAbWRzxLR
-        taBsz60BFOVUCTW1f7ptX0ZMph/mS3Wby9QQrQ97ecWmZaHuuLn/1JN7f1z3YV5y
-        xBQZGvatSEv2kBWEEYLZqZ9jApTVpoO+KqS/yXutOTUof2q5DeTwqHpxn2KoqkU2
-        Ac16LtyRN/kFbGbgRRRlbBP5OCA3Na1HgtXsHm1OaDLW4yJKlVsa7MyqKIICYJOX
-        tq+QRUcydKlrFpcEH/WXi5BHFaOush0RLZF8ejad09Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=cPGj9G
-        S8nOdw4uD4AAEpm4pe3JQbsTnhxLAPKtdHq0Q=; b=JK58oyCNJVQf3dKVFi7Ohg
-        UQ526XPSS0NAmxmme3XGcBOcgltaTAI1V1k3vhErVUCbcrL4APDv1D3Wb5NS3hUa
-        keBWhXFXhaB1NgI/nYqa+v4dItdi4i8rUlr8fAQqw3XkIi+DeOIIraVbmm8hsilj
-        QRMb6rfBE/2v5Fy2Sqm/Bk71Z4e/tsaEgb2huFCYJyoCTnaX/KoKIPs1c8nGWkfG
-        nyfBAlywdOFf5hsZmsRYY0Dy4AhEm4V48P2xO8gqZmaXSVov7dhLkXrQud2k14Ed
-        0vtKhkZz7tJQVaWbUCUs7srgD1wLTh50ulXlwBBsAGfUHkfS8rQTGtO66/UnhGPA
-        ==
-X-ME-Sender: <xms:xHfsXhICKjVMvOxMsZVVG0b_K5NFdQDj2lu4jKs8B3vS4KPKbrrjog>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrudejiedgtdehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    goufhushhpvggtthffohhmrghinhculdegledmnecujfgurhepfffhvffukfhfgggtuggj
-    sehttdertddttddvnecuhfhrohhmpefirhgvghcumffjuceoghhrvghgsehkrhhorghhrd
-    gtohhmqeenucggtffrrghtthgvrhhnpeelgeegfffhffekkefgveeilefgjeekvdeludeu
-    udelgeekheegleevueegteekjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdgrph
-    hpshhpohhtrdgtohhmpdhgihhthhhusgdrtghomhenucfkphepkeefrdekiedrkeelrddu
-    tdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepgh
-    hrvghgsehkrhhorghhrdgtohhm
-X-ME-Proxy: <xmx:xHfsXtIpTS3TO97S7Wj2CUNSIXdstGPqDbpBUs8yBgaClS5bM4aSZg>
-    <xmx:xHfsXpvSZT6lKabLY-B8Zk5n9tjfSgn_1oezTk5_2Cbwf_Fw0htuJQ>
-    <xmx:xHfsXiZaWeLTiz4QKxEGJhdbNZtrLG8RvdTkf-uBv0ROEH_zOEr54A>
-    <xmx:xHfsXlSKW8dPinekqarl9cMK2cQoJymwWSu5AbKge1oWEwhbq-KGpw>
+        id S1730359AbgFSIvw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Jun 2020 04:51:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36882 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731288AbgFSIvr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 19 Jun 2020 04:51:47 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id A796F3061856;
-        Fri, 19 Jun 2020 04:30:59 -0400 (EDT)
-Date:   Fri, 19 Jun 2020 09:47:00 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     syzkaller <syzkaller@googlegroups.com>,
-        syzbot <syzbot+42bc0d31b9a21faebdf8@syzkaller.appspotmail.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Borislav Petkov <bp@alien8.de>, devel@etsukata.com,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        the arch/x86 maintainers <x86@kernel.org>
-Subject: Re: INFO: trying to register non-static key in is_dynamic_key
-Message-ID: <20200619074700.GA8425@kroah.com>
-References: <00000000000004a76305a8624d22@google.com>
- <20200619070527.GA544353@kroah.com>
- <CACT4Y+YEYT17HH=vh9XtRi7uRiY=db6u-L0dRYs7msF1jNX5Xw@mail.gmail.com>
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7FE9D214DB;
+        Fri, 19 Jun 2020 08:51:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592556706;
+        bh=+3EKnGY3tKJ041sxTHddGESHH8ydpd6WPq3jHXnYMis=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lGY0Ar/9VLI0/0v6eWtEb38G0oeoyCfpnoivWqJLykbxMgYwhXBw+1pFaXBolu9n+
+         OkAZfhVRUlw9WatgcnUo95ln/lnSxgYMLBzujFb/mfZd8mz4XxtTkFMKwfAOMmx/AL
+         JaDME+xNf0ZJCxQFEdUdoXgk6+UzAPF+gZyXcS5o=
+Date:   Fri, 19 Jun 2020 10:51:43 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Macpaul Lin <macpaul.lin@mediatek.com>
+Cc:     Macpaul Lin <macpaul@gmail.com>, Bin Liu <b-liu@ti.com>,
+        linux-usb@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 4/6] usb: musb: mediatek: add reset FADDR to zero in
+ reset interrupt handle
+Message-ID: <20200619085143.GA677266@kroah.com>
+References: <20200525025049.3400-1-b-liu@ti.com>
+ <20200525025049.3400-5-b-liu@ti.com>
+ <CACCg+XNfOaE7LE01NPeR6amvCTyrJaJ3sj3AF+Se49T0YFy_Uw@mail.gmail.com>
+ <20200617085804.GA1736257@kroah.com>
+ <1592386317.5395.2.camel@mtkswgap22>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CACT4Y+YEYT17HH=vh9XtRi7uRiY=db6u-L0dRYs7msF1jNX5Xw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1592386317.5395.2.camel@mtkswgap22>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 19, 2020 at 09:35:30AM +0200, Dmitry Vyukov wrote:
-> On Fri, Jun 19, 2020 at 9:07 AM Greg KH <greg@kroah.com> wrote:
-> >
-> > On Thu, Jun 18, 2020 at 02:17:15PM -0700, syzbot wrote:
-> > > Hello,
-> > >
-> > > syzbot found the following crash on:
-> > >
-> > > HEAD commit:    b791d1bd Merge tag 'locking-kcsan-2020-06-11' of git://git..
-> > > git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=13f305a9100000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=16c2467d4b6dbee2
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=42bc0d31b9a21faebdf8
-> > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=136ad566100000
-> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10138f7a100000
-> > >
-> > > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > > Reported-by: syzbot+42bc0d31b9a21faebdf8@syzkaller.appspotmail.com
-> > >
-> > > INFO: trying to register non-static key.
-> > > the code is fine but needs lockdep annotation.
-> >
-> > Why is INFO: triggering syzbot?
+On Wed, Jun 17, 2020 at 05:31:57PM +0800, Macpaul Lin wrote:
+> On Wed, 2020-06-17 at 10:58 +0200, Greg Kroah-Hartman wrote:
+> > On Wed, Jun 17, 2020 at 04:17:07PM +0800, Macpaul Lin wrote:
+> > > Bin Liu <b-liu@ti.com> 於 2020年5月25日 週一 上午10:53寫道：
+> > > >
+> > > > From: Macpaul Lin <macpaul.lin@mediatek.com>
+> > > >
+> > > > When receiving reset interrupt, FADDR need to be reset to zero in
+> > > > peripheral mode. Otherwise ep0 cannot do enumeration when re-plugging USB
+> > > > cable.
+> > > >
+> > > > Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+> > > > Acked-by: Min Guo <min.guo@mediatek.com>
+> > > > Signed-off-by: Bin Liu <b-liu@ti.com>
+> > > > ---
+> > > >  drivers/usb/musb/mediatek.c | 6 ++++++
+> > > >  1 file changed, 6 insertions(+)
+> > > >
+> > > > diff --git a/drivers/usb/musb/mediatek.c b/drivers/usb/musb/mediatek.c
+> > > > index 6196b0e8d77d..eebeadd26946 100644
+> > > > --- a/drivers/usb/musb/mediatek.c
+> > > > +++ b/drivers/usb/musb/mediatek.c
+> > > > @@ -208,6 +208,12 @@ static irqreturn_t generic_interrupt(int irq, void *__hci)
+> > > >         musb->int_rx = musb_clearw(musb->mregs, MUSB_INTRRX);
+> > > >         musb->int_tx = musb_clearw(musb->mregs, MUSB_INTRTX);
+> > > >
+> > > > +       if ((musb->int_usb & MUSB_INTR_RESET) && !is_host_active(musb)) {
+> > > > +               /* ep0 FADDR must be 0 when (re)entering peripheral mode */
+> > > > +               musb_ep_select(musb->mregs, 0);
+> > > > +               musb_writeb(musb->mregs, MUSB_FADDR, 0);
+> > > > +       }
+> > > > +
+> > > >         if (musb->int_usb || musb->int_tx || musb->int_rx)
+> > > >                 retval = musb_interrupt(musb);
+> > > >
+> > > > --
+> > > > 2.17.1
+> > > >
+> > > Could this bug fix also been applied to stable kernel?
+> > 
+> > Sure, what is the git commit of it in Linus's tree?
+> > 
+> > thanks,
+> > 
+> > greg k-h
 > 
-> This is a kernel bug, no?
-> 
-> And there are lots of other kernel bug types that start with INFO:
-> https://github.com/google/syzkaller/blob/master/pkg/report/linux.go#L1302
-> 
-> The rules to understand when linux kernel has bugged are insanely
-> complex in syzkaller:
-> https://github.com/google/syzkaller/blob/master/pkg/report/linux.go#L914-L1685
-> (+hundreds of hardcoded function names and file names above).
+> The commit id of this patch should be
+> 402bcac4b25b520c89ba60db85eb6316f36e797f
 
-I understand it's tough, but "the code is fine but needs lockdep
-annotation" feels like it's a "here's an improvement that you can make"
-type of report, not a "crash" like this message says.
-
-thanks,
+Now queued up, thanks.
 
 greg k-h
