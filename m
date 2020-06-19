@@ -2,103 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35BAE2009BE
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jun 2020 15:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C9F32009E0
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jun 2020 15:23:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732378AbgFSNQn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Jun 2020 09:16:43 -0400
-Received: from mail2.protonmail.ch ([185.70.40.22]:44760 "EHLO
-        mail2.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730753AbgFSNQb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jun 2020 09:16:31 -0400
-Date:   Fri, 19 Jun 2020 13:16:25 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail; t=1592572587;
-        bh=c/l97bXcD2Wgs9Y7+QsxzeSxiyhZmvSGi38B+bSt4oQ=;
-        h=Date:To:From:Cc:Reply-To:Subject:From;
-        b=OGWHgirzQnjF9TWwUDRhDW7qpZgbV3/O7nGBpNmUfxkqes16ggDDV5V6uehy+li78
-         iWFCh2/t+wGiB1IoeX/SF0RCZwrzaePW5U4fdO22dQg21Gi/Xvc9qphU4wH5aIhJ9S
-         XFvP4xuD2hgPhVGXmSB+XGgMdK1i4cE2gdTTTwX4=
-To:     linux-usb@vger.kernel.org
-From:   Rob Gill <rrobgill@protonmail.com>
-Cc:     Rob Gill <rrobgill@protonmail.com>
-Reply-To: Rob Gill <rrobgill@protonmail.com>
+        id S1732529AbgFSNXL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Jun 2020 09:23:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44478 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732463AbgFSNXK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 19 Jun 2020 09:23:10 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0A4A92166E;
+        Fri, 19 Jun 2020 13:23:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592572990;
+        bh=QcoyGcy0PDsnEo65xhEYvasczufMUodNe+jSfxfLLe8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=xitL1EYpIvvGM3fz4zIU21dOL3rvaafK6hcfvEj83lEi52uTseF7Ds9IlipAg5bSz
+         G73Vqx1kIiZqVRzOYz9oVwdYvGY6LiQ7XJRMS0kssNG5Ol8lNs8d35FEkpwZ0x7Jhd
+         +IcUuNsKZEUIS37sOxQ41pzZSOJT/rtHhvy32IH0=
+Date:   Fri, 19 Jun 2020 15:23:06 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Rob Gill <rrobgill@protonmail.com>
+Cc:     linux-usb@vger.kernel.org
 Subject: Re: [PATCH] driver/usb MODULE_DESCRIPTION entries to usb modules
-Message-ID: <20200619131606.30088-1-rrobgill@protonmail.com>
+Message-ID: <20200619132306.GA1250782@kroah.com>
+References: <20200619131606.30088-1-rrobgill@protonmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=7.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on mail.protonmail.ch
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200619131606.30088-1-rrobgill@protonmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The user tool modinfo is used to get information on kernel modules, includi=
-ng a
-description where it is available.
+On Fri, Jun 19, 2020 at 01:16:25PM +0000, Rob Gill wrote:
+> The user tool modinfo is used to get information on kernel modules, including a
+> description where it is available.
+> 
+> This patch adds a brief MODULE_DESCRIPTION to the following modules in driver/usb.
+> 
+> isight_firmware
+> mxuport
+> u_ether
+> uas
+> 
+> Signed-off-by: Rob Gill <rrobgill@protonmail.com>
+> 
+> ** Descriptions updated after review, thankyou.
 
-This patch adds a brief MODULE_DESCRIPTION to the following modules in driv=
-er/usb.
+This should go below the --- line, right?
 
-isight_firmware
-mxuport
-u_ether
-uas
+And is this a v2 patch?  Not "Re:" in the subject line?
 
-Signed-off-by: Rob Gill <rrobgill@protonmail.com>
+Can you fix this up and send a v3?
 
-** Descriptions updated after review, thankyou.
----
- drivers/usb/gadget/function/u_ether.c | 1 +
- drivers/usb/misc/isight_firmware.c    | 1 +
- drivers/usb/serial/mxuport.c          | 1 +
- drivers/usb/storage/uas.c             | 1 +
- 4 files changed, 4 insertions(+)
+thanks,
 
-diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/fun=
-ction/u_ether.c
-index fbe96ef1a..424a3a0a4 100644
---- a/drivers/usb/gadget/function/u_ether.c
-+++ b/drivers/usb/gadget/function/u_ether.c
-@@ -1180,3 +1180,4 @@ EXPORT_SYMBOL_GPL(gether_disconnect);
-=20
- MODULE_LICENSE("GPL");
- MODULE_AUTHOR("David Brownell");
-+MODULE_DESCRIPTION("Ethernet-over-USB Gadget");
-diff --git a/drivers/usb/misc/isight_firmware.c b/drivers/usb/misc/isight_f=
-irmware.c
-index 4d30095d6..925a5682f 100644
---- a/drivers/usb/misc/isight_firmware.c
-+++ b/drivers/usb/misc/isight_firmware.c
-@@ -129,3 +129,4 @@ module_usb_driver(isight_firmware_driver);
-=20
- MODULE_LICENSE("GPL");
- MODULE_AUTHOR("Matthew Garrett <mjg@redhat.com>");
-+MODULE_DESCRIPTION("USB isight camera firmware loader");
-diff --git a/drivers/usb/serial/mxuport.c b/drivers/usb/serial/mxuport.c
-index 2513ee902..c1d70d528 100644
---- a/drivers/usb/serial/mxuport.c
-+++ b/drivers/usb/serial/mxuport.c
-@@ -1323,3 +1323,4 @@ module_usb_serial_driver(serial_drivers, mxuport_idta=
-ble);
- MODULE_AUTHOR("Andrew Lunn <andrew@lunn.ch>");
- MODULE_AUTHOR("<support@moxa.com>");
- MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("MOXA UPort series driver");
-diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
-index d59207111..7f59748c4 100644
---- a/drivers/usb/storage/uas.c
-+++ b/drivers/usb/storage/uas.c
-@@ -1272,3 +1272,4 @@ MODULE_LICENSE("GPL");
- MODULE_IMPORT_NS(USB_STORAGE);
- MODULE_AUTHOR(
- =09"Hans de Goede <hdegoede@redhat.com>, Matthew Wilcox and Sarah Sharp");
-+MODULE_DESCRIPTION("USB attached SCSI");
---=20
-2.17.1
-
-
+greg k-h
