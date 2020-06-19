@@ -2,83 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D52E200892
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jun 2020 14:24:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35BAE2009BE
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jun 2020 15:16:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732970AbgFSMYe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Jun 2020 08:24:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41052 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732956AbgFSMYd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 19 Jun 2020 08:24:33 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 263B221527;
-        Fri, 19 Jun 2020 12:24:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592569472;
-        bh=NgZT449b3Tjszh2iaHpBq2sm55Q1GXGCww56Rd+tq8Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=A2tLbrRnfrG2lBiMrFuGqr8q4JuYAt4dq3a0/8s3di6IUQUw89cE5f+TWcf05iinu
-         frmvCXo96EpsesXRBmrdyd4rYtifuXy559caYiI3jB1kXWuPVkVo9Qlk485n6uQj4V
-         FxI+ABSadn3Pq/zmThEJA71fMazuCuFk29hJyD9Q=
-Date:   Fri, 19 Jun 2020 14:24:29 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Bastien Nocera <hadess@hadess.net>
-Cc:     Hans de Goede <hdegoede@redhat.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Richard Dodd <richard.o.dodd@gmail.com>,
-        Jonathan Cox <jonathan@jdcox.net>,
-        =?iso-8859-1?Q?Thi=E9baud?= Weksteen <tweek@google.com>,
-        Nishad Kamdar <nishadkamdar@gmail.com>
-Subject: Re: [PATCH 1/8] USB: rename USB quirk to USB_QUIRK_ENDPOINT_IGNORE
-Message-ID: <20200619122429.GA1037991@kroah.com>
-References: <20200618094300.1887727-1-gregkh@linuxfoundation.org>
- <20200618094300.1887727-2-gregkh@linuxfoundation.org>
- <484c84b62140f6536f841e7027ddd9ddcf179a72.camel@hadess.net>
- <62b8ddc4-8d26-1160-6934-fe6a68231938@redhat.com>
- <f57cd2a9a27fb148f0bdfd0ad5e92b4d01ca77c6.camel@hadess.net>
+        id S1732378AbgFSNQn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Jun 2020 09:16:43 -0400
+Received: from mail2.protonmail.ch ([185.70.40.22]:44760 "EHLO
+        mail2.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730753AbgFSNQb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jun 2020 09:16:31 -0400
+Date:   Fri, 19 Jun 2020 13:16:25 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail; t=1592572587;
+        bh=c/l97bXcD2Wgs9Y7+QsxzeSxiyhZmvSGi38B+bSt4oQ=;
+        h=Date:To:From:Cc:Reply-To:Subject:From;
+        b=OGWHgirzQnjF9TWwUDRhDW7qpZgbV3/O7nGBpNmUfxkqes16ggDDV5V6uehy+li78
+         iWFCh2/t+wGiB1IoeX/SF0RCZwrzaePW5U4fdO22dQg21Gi/Xvc9qphU4wH5aIhJ9S
+         XFvP4xuD2hgPhVGXmSB+XGgMdK1i4cE2gdTTTwX4=
+To:     linux-usb@vger.kernel.org
+From:   Rob Gill <rrobgill@protonmail.com>
+Cc:     Rob Gill <rrobgill@protonmail.com>
+Reply-To: Rob Gill <rrobgill@protonmail.com>
+Subject: Re: [PATCH] driver/usb MODULE_DESCRIPTION entries to usb modules
+Message-ID: <20200619131606.30088-1-rrobgill@protonmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f57cd2a9a27fb148f0bdfd0ad5e92b4d01ca77c6.camel@hadess.net>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=7.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on mail.protonmail.ch
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 19, 2020 at 01:08:53PM +0200, Bastien Nocera wrote:
-> On Fri, 2020-06-19 at 12:53 +0200, Hans de Goede wrote:
-> > A note for future reference, not sure what you mean with driver
-> > 
-> > API here. If you mean the in kernel API, the kernel rules are
-> > 
-> > that we are always free to change that (Linux does not have a
-> > 
-> > stable driver API).
-> > 
-> > 
-> > 
-> > So if a header does not sit under include/uapi (indicating that
-> > 
-> > it is an userspace API) then a change like this is fine.
-> 
-> I meant the internal driver API, which might break out-of-tree drivers.
+The user tool modinfo is used to get information on kernel modules, includi=
+ng a
+description where it is available.
 
-There is no such thing.  Well, there might be, but we don't care and
-have to act as if there are no such thing otherwise we would never be
-able to change anything :)
+This patch adds a brief MODULE_DESCRIPTION to the following modules in driv=
+er/usb.
 
-> I know that this API is fluid, and that there are no stability
-> guarantees, but I'd still expect at least a note in the commit message
-> to that effect.
+isight_firmware
+mxuport
+u_ether
+uas
 
-Why?  Who cares?  Anyone who lives outside of the kernel already knows
-they have to dig in the kernel if their code breaks, that's the cost of
-living outside of the kernel.
+Signed-off-by: Rob Gill <rrobgill@protonmail.com>
 
-thanks,
+** Descriptions updated after review, thankyou.
+---
+ drivers/usb/gadget/function/u_ether.c | 1 +
+ drivers/usb/misc/isight_firmware.c    | 1 +
+ drivers/usb/serial/mxuport.c          | 1 +
+ drivers/usb/storage/uas.c             | 1 +
+ 4 files changed, 4 insertions(+)
 
-greg k-h
+diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/fun=
+ction/u_ether.c
+index fbe96ef1a..424a3a0a4 100644
+--- a/drivers/usb/gadget/function/u_ether.c
++++ b/drivers/usb/gadget/function/u_ether.c
+@@ -1180,3 +1180,4 @@ EXPORT_SYMBOL_GPL(gether_disconnect);
+=20
+ MODULE_LICENSE("GPL");
+ MODULE_AUTHOR("David Brownell");
++MODULE_DESCRIPTION("Ethernet-over-USB Gadget");
+diff --git a/drivers/usb/misc/isight_firmware.c b/drivers/usb/misc/isight_f=
+irmware.c
+index 4d30095d6..925a5682f 100644
+--- a/drivers/usb/misc/isight_firmware.c
++++ b/drivers/usb/misc/isight_firmware.c
+@@ -129,3 +129,4 @@ module_usb_driver(isight_firmware_driver);
+=20
+ MODULE_LICENSE("GPL");
+ MODULE_AUTHOR("Matthew Garrett <mjg@redhat.com>");
++MODULE_DESCRIPTION("USB isight camera firmware loader");
+diff --git a/drivers/usb/serial/mxuport.c b/drivers/usb/serial/mxuport.c
+index 2513ee902..c1d70d528 100644
+--- a/drivers/usb/serial/mxuport.c
++++ b/drivers/usb/serial/mxuport.c
+@@ -1323,3 +1323,4 @@ module_usb_serial_driver(serial_drivers, mxuport_idta=
+ble);
+ MODULE_AUTHOR("Andrew Lunn <andrew@lunn.ch>");
+ MODULE_AUTHOR("<support@moxa.com>");
+ MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("MOXA UPort series driver");
+diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
+index d59207111..7f59748c4 100644
+--- a/drivers/usb/storage/uas.c
++++ b/drivers/usb/storage/uas.c
+@@ -1272,3 +1272,4 @@ MODULE_LICENSE("GPL");
+ MODULE_IMPORT_NS(USB_STORAGE);
+ MODULE_AUTHOR(
+ =09"Hans de Goede <hdegoede@redhat.com>, Matthew Wilcox and Sarah Sharp");
++MODULE_DESCRIPTION("USB attached SCSI");
+--=20
+2.17.1
+
+
