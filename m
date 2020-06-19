@@ -2,106 +2,182 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D96A3200A31
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jun 2020 15:32:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76D8A200A67
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jun 2020 15:41:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731341AbgFSNbz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Jun 2020 09:31:55 -0400
-Received: from mail2.protonmail.ch ([185.70.40.22]:22888 "EHLO
-        mail2.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726124AbgFSNbz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jun 2020 09:31:55 -0400
-Date:   Fri, 19 Jun 2020 13:31:48 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail; t=1592573513;
-        bh=4naruE0d5RhQtF/wuSLLsAMYxzpKtUCAr30N0GuXjSI=;
-        h=Date:To:From:Cc:Reply-To:Subject:From;
-        b=It9Az94lB5sGzqhaGybPmtL9TxrU24sI8xO4Yo8JKhuKhRsRhDfG0thhJ9BKiXGft
-         QLX1C1zs7nDKW3wgrxHEx7UBe0CFpMy0eGtPFRLnk0SKoAOoI3cTDXAsI3QEg8t3jq
-         MPW8cZFG/tMfPaUVPqum+GBh17HLyhxNdvRmMSPE=
-To:     linux-usb@vger.kernel.org
-From:   Rob Gill <rrobgill@protonmail.com>
-Cc:     Rob Gill <rrobgill@protonmail.com>
-Reply-To: Rob Gill <rrobgill@protonmail.com>
-Subject: [PATCH v3] driver/usb MODULE_DESCRIPTION entries to usb modules
-Message-ID: <20200619133141.31890-1-rrobgill@protonmail.com>
+        id S1732999AbgFSNjj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Jun 2020 09:39:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43186 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732991AbgFSNjg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jun 2020 09:39:36 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED44C06174E
+        for <linux-usb@vger.kernel.org>; Fri, 19 Jun 2020 06:39:35 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id y18so3945387plr.4
+        for <linux-usb@vger.kernel.org>; Fri, 19 Jun 2020 06:39:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=P6z1WoXbyKErhNE6Tp2clfySWFQeOwZaqr/w/IRKxzM=;
+        b=uxKooY1m8zt26BaQ7pp0BwB2Hz8VGn5h0VDQskeON/SVJ3b/vj65AH8w4JJnbSqKDw
+         3C5T8V6siQbA7SJrJ9hIu69tGYyrqON/s6pjqxnQ+tvtCR5loWcyJH6oRd4JTz9fNA9s
+         Ea0PggrWpvphGkuwtNOy7Kw6EUvQmvsg8pzsn80vYluJ8of0jju3p6g2Nflb+ADcghwN
+         c7Q6VxhSZA5w9TsDtykvRmQ7cavkVl8KFYDBmodM6G3SFSUJ45t2ypfmQ/s/ZOQcIv62
+         0x8NH92CaNQYgtAJNIRMqmeBs/clWKC6fyqB7wDFfIej5nrVnxUPU9fqpHaUb6DbOzjB
+         KyPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=P6z1WoXbyKErhNE6Tp2clfySWFQeOwZaqr/w/IRKxzM=;
+        b=txQnD8QSaVaM0D8gdNkht82Sb7i3n04rSXwq+JJWpIAeDyRST4Fzns0wlNypRE+eGC
+         L0FS2Dj+hF6N/JhSPGGjkWkqgiZJ7YbBPmtNeskO3fC22whxzWYpP7+EhsUG52o8iv9D
+         ZHXL/twDf15SJZV3X6BNxz8vNeY2ODl+2bDAv+pIpuhXF1msP/RkgQ3aQg+edHLxa5hl
+         O4RxcXSfcdiDubeCB0lI6so5j1VqVYYeGpkzA2Ay5yJh1a4G33nNpBreXPjx/CIBBj6R
+         gt8NF7h9QYEW+0arN88EKzAmlGsVHnhb3p5uysofXllyNk7PZ3rjCayfFIRK8+wU+TXG
+         syZA==
+X-Gm-Message-State: AOAM532R8eMKA0PaIm6cj2KySYJioOz+e/lKD9qqNnpWie3q/oWA9xpr
+        PP1dbzifw0FWQecwKCfInrk7/IZn7f0NkH1jUV+oPnwniw0=
+X-Google-Smtp-Source: ABdhPJyYWnwH0B9PgJ5hdzT8BtVrPZSQhiOIC4nhIghUPVzQ68/9f359Mu/AzkXqQ5E6pt9pMSqp438masJ3Mmhat2I=
+X-Received: by 2002:a17:90b:1244:: with SMTP id gx4mr3558685pjb.136.1592573975033;
+ Fri, 19 Jun 2020 06:39:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=7.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on mail.protonmail.ch
+References: <00000000000004a76305a8624d22@google.com> <20200619095342.GT576905@hirez.programming.kicks-ass.net>
+ <CACT4Y+aWkGTGXB+h1Hp1yxmrTBRDn1r4YHSQ6-SUK4SHn9serQ@mail.gmail.com>
+In-Reply-To: <CACT4Y+aWkGTGXB+h1Hp1yxmrTBRDn1r4YHSQ6-SUK4SHn9serQ@mail.gmail.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Fri, 19 Jun 2020 15:39:23 +0200
+Message-ID: <CAAeHK+xiQWyUzOMw8xWkCyshMmWHpEfZqhAkvYmwcsGcoSOpLg@mail.gmail.com>
+Subject: Re: INFO: trying to register non-static key in is_dynamic_key
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        syzbot <syzbot+42bc0d31b9a21faebdf8@syzkaller.appspotmail.com>,
+        Borislav Petkov <bp@alien8.de>, devel@etsukata.com,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The user tool modinfo is used to get information on kernel modules, includi=
-ng a
-description where it is available.
+On Fri, Jun 19, 2020 at 12:03 PM Dmitry Vyukov <dvyukov@google.com> wrote:
+>
+> On Fri, Jun 19, 2020 at 11:53 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Thu, Jun 18, 2020 at 02:17:15PM -0700, syzbot wrote:
+> >
+> > > INFO: trying to register non-static key.
+> > > the code is fine but needs lockdep annotation.
+> > > turning off the locking correctness validator.
+> > > CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.7.0-syzkaller #0
+> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> > > Call Trace:
+> > >  <IRQ>
+> > >  __dump_stack lib/dump_stack.c:77 [inline]
+> > >  dump_stack+0xf6/0x16e lib/dump_stack.c:118
+> > >  assign_lock_key kernel/locking/lockdep.c:894 [inline]
+> > >  register_lock_class+0x1442/0x17e0 kernel/locking/lockdep.c:1206
+> > >  arch_stack_walk+0x81/0xf0 arch/x86/kernel/stacktrace.c:25
+> > >  lock_downgrade+0x720/0x720 kernel/locking/lockdep.c:4624
+> > >  is_dynamic_key+0x1b0/0x1b0 kernel/locking/lockdep.c:1176
+> > >  trace_hardirqs_off+0x50/0x1f0 kernel/trace/trace_preemptirq.c:83
+> > >  __lock_acquire+0x101/0x6270 kernel/locking/lockdep.c:4259
+> > >  save_stack+0x32/0x40 mm/kasan/common.c:50
+> >
+> > So I'm thinking this is in fact:
+> >
+> >         spin_lock_irqsave(&depot_lock, flags);
+> >
+> > from lib/stackdepot.c:stack_depot_save(), which has gone missing from
+> > the stack due to tail-call optimizations.
+> >
+> > Now depot_lock is declared thusly:
+> >
+> >   static DEFINE_SPINLOCK(depot_lock);
+> >
+> > and I'm trying to figure out how lockdep manages to conclude that isn't
+> > static storage.... most odd.
+>
+> Note there also was something wrong with the unwinder:
+> https://syzkaller.appspot.com/x/log.txt?x=13f305a9100000
+> (or with something else in the kernel), so potentially it did not
+> happen save_stack.
+>
+> In fact, Andrey just reverted this parsing of questionable frames in syzkaller:
+> https://github.com/google/syzkaller/commit/4d2d1ebee3b65c404576d1c8573a0ec48b03b883
+> (was done because of what turned out to be ORC unwinder bug, which was fixed).
+>
+> So potentially we just need to close this is invalid now.
 
-This patch adds a brief MODULE_DESCRIPTION to the following modules in driv=
-er/usb.
+Rerunning the repro shows a different stack:
 
-isight_firmware
-mxuport
-u_ether
-uas
+INFO: trying to register non-static key.
+the code is fine but needs lockdep annotation.
+turning off the locking correctness validator.
+CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.8.0-rc1+ #2
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1 04/01/2014
+Call Trace:
+ <IRQ>
+ __dump_stack lib/dump_stack.c:77
+ dump_stack+0xf6/0x16e lib/dump_stack.c:118
+ assign_lock_key kernel/locking/lockdep.c:894
+ register_lock_class+0x1228/0x16d0 kernel/locking/lockdep.c:1206
+ __lock_acquire+0x100/0x6950 kernel/locking/lockdep.c:4259
+ lock_acquire+0x18b/0x7c0 kernel/locking/lockdep.c:4959
+ __raw_spin_lock_irqsave ./include/linux/spinlock_api_smp.h:110
+ _raw_spin_lock_irqsave+0x32/0x50 kernel/locking/spinlock.c:159
+ ath9k_htc_rxep+0x31/0x210 drivers/net/wireless/ath/ath9k/htc_drv_txrx.c:1128
+ ath9k_htc_rx_msg+0x2d9/0xb10 drivers/net/wireless/ath/ath9k/htc_hst.c:459
+ ath9k_hif_usb_rx_stream drivers/net/wireless/ath/ath9k/hif_usb.c:638
+ ath9k_hif_usb_rx_cb+0xc76/0x1050 drivers/net/wireless/ath/ath9k/hif_usb.c:671
+ __usb_hcd_giveback_urb+0x29a/0x550 drivers/usb/core/hcd.c:1650
+ usb_hcd_giveback_urb+0x367/0x410 drivers/usb/core/hcd.c:1716
+ dummy_timer+0x125d/0x333b drivers/usb/gadget/udc/dummy_hcd.c:1967
+ call_timer_fn+0x1ac/0x6e0 kernel/time/timer.c:1404
+ expire_timers kernel/time/timer.c:1449
+ __run_timers kernel/time/timer.c:1773
+ __run_timers kernel/time/timer.c:1740
+ run_timer_softirq+0x5e5/0x14c0 kernel/time/timer.c:1786
+ __do_softirq+0x21e/0x98b kernel/softirq.c:292
+ asm_call_on_stack+0xf/0x20 arch/x86/entry/entry_64.S:711
+ </IRQ>
+ __run_on_irqstack ./arch/x86/include/asm/irq_stack.h:22
+ run_on_irqstack_cond ./arch/x86/include/asm/irq_stack.h:48
+ do_softirq_own_stack+0x109/0x140 arch/x86/kernel/irq_64.c:77
+ invoke_softirq kernel/softirq.c:387
+ __irq_exit_rcu kernel/softirq.c:417
+ irq_exit_rcu+0x16f/0x1a0 kernel/softirq.c:429
+ sysvec_apic_timer_interrupt+0xd3/0x1b0 arch/x86/kernel/apic/apic.c:1091
+ asm_sysvec_apic_timer_interrupt+0x12/0x20 ./arch/x86/include/asm/idtentry.h:596
+RIP: 0010:native_safe_halt ./arch/x86/include/asm/irqflags.h:60
+RIP: 0010:arch_safe_halt ./arch/x86/include/asm/irqflags.h:103
+RIP: 0010:default_idle+0x28/0x2f0 arch/x86/kernel/process.c:700
+Code: cc cc 41 56 41 55 65 44 8b 2d 44 77 66 7a 41 54 55 53 0f 1f 44
+00 00 e8 f6 d7 a9 fb e9 07 00 00 00 0f 00 2d 2a 34 47 00 fb f4 <65> 44
+8b 2d 20 77 66 7a 0f 1f 44 00 00 5b 5d 41 3
+RSP: 0018:ffffffff87007da0 EFLAGS: 00000246
+RAX: 0000000000000000 RBX: ffffffff8702f840 RCX: 1ffffffff0fd45ea
+RDX: 1ffffffff0e0600f RSI: 0000000000000000 RDI: ffffffff87030078
+RBP: fffffbfff0e05f08 R08: 0000000000000000 R09: 0000000000000001
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000000 R14: ffffffff87ea1fc8 R15: 0000000000000000
+ cpuidle_idle_call kernel/sched/idle.c:154
+ do_idle+0x3ec/0x510 kernel/sched/idle.c:269
+ cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:365
+ start_kernel+0x9fc/0xa39 init/main.c:1043
+ secondary_startup_64+0xb6/0xc0 arch/x86/kernel/head_64.S:243
 
-Signed-off-by: Rob Gill <rrobgill@protonmail.com>
+So this is a dup of:
 
----
- drivers/usb/gadget/function/u_ether.c | 1 +
- drivers/usb/misc/isight_firmware.c    | 1 +
- drivers/usb/serial/mxuport.c          | 1 +
- drivers/usb/storage/uas.c             | 1 +
- 4 files changed, 4 insertions(+)
+#syz dup: INFO: trying to register non-static key in ath9k_htc_rxep
 
-diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/fun=
-ction/u_ether.c
-index fbe96ef1a..424a3a0a4 100644
---- a/drivers/usb/gadget/function/u_ether.c
-+++ b/drivers/usb/gadget/function/u_ether.c
-@@ -1180,3 +1180,4 @@ EXPORT_SYMBOL_GPL(gether_disconnect);
-=20
- MODULE_LICENSE("GPL");
- MODULE_AUTHOR("David Brownell");
-+MODULE_DESCRIPTION("Ethernet-over-USB Gadget");
-diff --git a/drivers/usb/misc/isight_firmware.c b/drivers/usb/misc/isight_f=
-irmware.c
-index 4d30095d6..925a5682f 100644
---- a/drivers/usb/misc/isight_firmware.c
-+++ b/drivers/usb/misc/isight_firmware.c
-@@ -129,3 +129,4 @@ module_usb_driver(isight_firmware_driver);
-=20
- MODULE_LICENSE("GPL");
- MODULE_AUTHOR("Matthew Garrett <mjg@redhat.com>");
-+MODULE_DESCRIPTION("USB isight camera firmware loader");
-diff --git a/drivers/usb/serial/mxuport.c b/drivers/usb/serial/mxuport.c
-index 2513ee902..c1d70d528 100644
---- a/drivers/usb/serial/mxuport.c
-+++ b/drivers/usb/serial/mxuport.c
-@@ -1323,3 +1323,4 @@ module_usb_serial_driver(serial_drivers, mxuport_idta=
-ble);
- MODULE_AUTHOR("Andrew Lunn <andrew@lunn.ch>");
- MODULE_AUTHOR("<support@moxa.com>");
- MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("MOXA UPort series driver");
-diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
-index d59207111..7f59748c4 100644
---- a/drivers/usb/storage/uas.c
-+++ b/drivers/usb/storage/uas.c
-@@ -1272,3 +1272,4 @@ MODULE_LICENSE("GPL");
- MODULE_IMPORT_NS(USB_STORAGE);
- MODULE_AUTHOR(
- =09"Hans de Goede <hdegoede@redhat.com>, Matthew Wilcox and Sarah Sharp");
-+MODULE_DESCRIPTION("USB attached SCSI");
---=20
-2.17.1
-
-
-
-** Descriptions updated after review, thankyou.
-
-
+Not sure why lockdep triggered on save_stack() in this run.
