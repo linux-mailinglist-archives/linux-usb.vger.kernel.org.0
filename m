@@ -2,68 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24695200286
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jun 2020 09:09:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DE02200283
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jun 2020 09:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729888AbgFSHJQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Jun 2020 03:09:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51340 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727096AbgFSHJP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 19 Jun 2020 03:09:15 -0400
+        id S1730435AbgFSHHD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Jun 2020 03:07:03 -0400
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:51629 "EHLO
+        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729009AbgFSHHC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jun 2020 03:07:02 -0400
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 3925E580110;
+        Fri, 19 Jun 2020 03:07:01 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Fri, 19 Jun 2020 03:07:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=Iaq/G/g6pbIsquztKfoYM/2rAsj
+        V4HKssqKg+8kxQbM=; b=L88q8AT/RGODoyttIOo/VtluZCybnabYcpoLzIW2uEV
+        FMKP4dNQ9Nl6HE/nSHxWU+kJazmFlrFknoX+AkHnR7UYdtKLYX+szv6rFsl/P3vy
+        GBKVsE2nOVk/x6Qv90LELqbheen81SbT0B5SnJvrLdFVXkC55YABWtL8SN8gTnZw
+        1/UANpjBsPZMiBFpER7XwI9p2iRPqDXYPHZUlvJnvajeLjU9tWCxzdC3DkJoegn5
+        uxjmAoijso6p/SfgpfMBvreIktsaOw9MdkrPGhWVeMS4Les6zcK5HETjwt1K3lFA
+        HpfguQpisi/m47dg9wui6cBghW0Rd/WoVktklKMN/rw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=Iaq/G/
+        g6pbIsquztKfoYM/2rAsjV4HKssqKg+8kxQbM=; b=YOIrJO8ZUj6zGNfOLzjcAx
+        b5RiG1iFbZcbL2/KeBLyZPcsopk/EQ5l4cQMRAnr2XFlTjzXwyRbpAlnBNP5p3T6
+        7M2v79P76YDSe9U+7ox397Sbj0S8VO71+rvNVszQE9MMj7kYUKXXOaKDCmJa95nK
+        racG0aJY6CeM4ozEzKesUYzChJ4bdhC/RQWx6DaLL9rPYAiCAQr/dl5xpDKwMKyZ
+        WVRGS5fD92Nb5K7PFpUwvlC+CsOBirzH9Bc43r46lkyknZIn0KaUOHLjs8X34gx1
+        tbFVVjTFaiVC2FRYBIBiaz9kPN1FewKyQT0kZoVlNHfncNYOm1tCPRyJZnJ4S4Kg
+        ==
+X-ME-Sender: <xms:FGTsXtliYZaq89sSjvtZu8aEyMEx0DQw79i6GJhxUQvxskPMs2iCUw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrudejhedgudduiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecuogfuuhhsphgvtghtffhomhgrihhnucdlgeelmd
+    enucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepjefhte
+    evueegjeejtddtkeetieeiheeuhedvfffffedvteeifeffgfejffeuvedtnecuffhomhgr
+    ihhnpehkvghrnhgvlhdrohhrghdprghpphhsphhothdrtghomhenucfkphepkeefrdekie
+    drkeelrddutdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhf
+    rhhomhepghhrvghgsehkrhhorghhrdgtohhm
+X-ME-Proxy: <xmx:FGTsXo0oSBxPcRILkBfAPAcAgoyJs1G_NNzcnYu1TQKSaTbvkKblgg>
+    <xmx:FGTsXjpKhH4OtvvVo6oi9Dse80IOClZerPBo7jkUCQSqOs9ciXHBuw>
+    <xmx:FGTsXtkiX7cfddVeeLSSXrZkzd__e7Ibd-PhWITKFpU4-Uwmzb0PbA>
+    <xmx:FWTsXkI1IsKBl76qrrWcY8Ga8m4HINlwk9uO17LAzlD_CMeJ7xijoA>
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CC91D20885;
-        Fri, 19 Jun 2020 07:09:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592550555;
-        bh=7vLq9k86D0t1kk12AhQU4ptqPgt3dMPPfZGCY+OCNZg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S5+v0R1D7BRVZxGVLTLvhwDslLxdRh8VRGPgXiQriYR13re0yGTZfe+RQ4wrf+0Ad
-         SwlC9ooag15G4+e7cOVVUKCzHLkyemAJbuXRh0qfOh0SY/EgCQR9B01CUnQ/wn5tFM
-         ka5xb1q+bhiQIAb/TJ83h940ujKI8+PMG1h0ly90=
-Date:   Fri, 19 Jun 2020 09:02:30 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Changming Liu <charley.ashbringer@gmail.com>
-Cc:     linux-usb@vger.kernel.org, thomas@winischhofer.net,
-        Changming Liu <liu.changm@northeastern.edu>
-Subject: Re: [PATCH 1/4] USB: sisusbvga: change sisusb_write_mem_bulk
-Message-ID: <20200619070230.GA543568@kroah.com>
-References: <1592526534-1739-1-git-send-email-liu.changm@northeastern.edu>
- <1592526534-1739-2-git-send-email-liu.changm@northeastern.edu>
+        by mail.messagingengine.com (Postfix) with ESMTPA id 1F79D3280059;
+        Fri, 19 Jun 2020 03:07:00 -0400 (EDT)
+Date:   Fri, 19 Jun 2020 09:05:27 +0200
+From:   Greg KH <greg@kroah.com>
+To:     syzbot <syzbot+42bc0d31b9a21faebdf8@syzkaller.appspotmail.com>
+Cc:     andreyknvl@google.com, bp@alien8.de, devel@etsukata.com,
+        hpa@zytor.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, mingo@redhat.com,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
+        viro@zeniv.linux.org.uk, x86@kernel.org
+Subject: Re: INFO: trying to register non-static key in is_dynamic_key
+Message-ID: <20200619070527.GA544353@kroah.com>
+References: <00000000000004a76305a8624d22@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1592526534-1739-2-git-send-email-liu.changm@northeastern.edu>
+In-Reply-To: <00000000000004a76305a8624d22@google.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 18, 2020 at 08:28:51PM -0400, Changming Liu wrote:
-> isusb_write_mem_bulk calls sisusb_send_bulk_msg and
-> is called by sisusb_write.
-> Changed their parameters accordingly.
-
-Accordingly to what?  The subject just says "change", it does not say
-what any of this was changed to here.
-
+On Thu, Jun 18, 2020 at 02:17:15PM -0700, syzbot wrote:
+> Hello,
 > 
-> Also change the local buf[4] of sisusb_write_mem_bulk
-> to u8. This fixed a potential undefined behavior.
-
-Shouldn't this be a separate patch so that I could be backported to
-older kernels as it would fix a potential issue?
-
-When you have "also" in a patch description, it almost always means you
-should split the patch up into multiple changes.
-
+> syzbot found the following crash on:
 > 
-> Signed-off-by: Changming Liu <liu.changm@northeastern.edu>
+> HEAD commit:    b791d1bd Merge tag 'locking-kcsan-2020-06-11' of git://git..
+> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+> console output: https://syzkaller.appspot.com/x/log.txt?x=13f305a9100000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=16c2467d4b6dbee2
+> dashboard link: https://syzkaller.appspot.com/bug?extid=42bc0d31b9a21faebdf8
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=136ad566100000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10138f7a100000
+> 
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+42bc0d31b9a21faebdf8@syzkaller.appspotmail.com
+> 
+> INFO: trying to register non-static key.
+> the code is fine but needs lockdep annotation.
 
-This email address doesn't match the "From:" line :(
+Why is INFO: triggering syzbot?
 
-thanks,
-
-greg k-h
