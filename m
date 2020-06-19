@@ -2,108 +2,160 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F9F5201AC3
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jun 2020 20:54:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F418201AE7
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jun 2020 21:10:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387417AbgFSSyz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Jun 2020 14:54:55 -0400
-Received: from blockout.pre-sense.de ([213.238.39.74]:49669 "EHLO
-        mail.pre-sense.de" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726990AbgFSSyx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jun 2020 14:54:53 -0400
-Received: from smtp.pre-sense.de (tetris_b.pre-sense.de [10.9.0.76])
-        by mail.pre-sense.de (Postfix) with ESMTP id 406E05E4D3;
-        Fri, 19 Jun 2020 20:54:50 +0200 (CEST)
-Received: from atlan.none (unknown [212.12.60.67])
-        by smtp.pre-sense.de (Postfix) with ESMTPS id 5BA9E15FB;
-        Fri, 19 Jun 2020 20:54:36 +0200 (CEST)
-Subject: Re: Ext. HDDs not working under Linux via USB 3.0 but under Windows
-To:     Alan Stern <stern@rowland.harvard.edu>
+        id S1732182AbgFSTKn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Jun 2020 15:10:43 -0400
+Received: from mga07.intel.com ([134.134.136.100]:26980 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732009AbgFSTKm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 19 Jun 2020 15:10:42 -0400
+IronPort-SDR: Xj3q55toI/9HXRjUWOH4lAOX9IVuFjwnwZsrl7EeDCicyF0EhhKZwy2EaJu7cX+O0ONIsPZdat
+ fRKyo3OUDkHQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9657"; a="208297458"
+X-IronPort-AV: E=Sophos;i="5.75,256,1589266800"; 
+   d="scan'208";a="208297458"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2020 12:10:42 -0700
+IronPort-SDR: pcmy1tv1lYEyQ0VymyEul2qp2NB4T9MsOdN0b9fgM8IcgT7tsLGrTaz03Zv2TdP4SIEIKMHlaP
+ ZZZOid05C8tQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,256,1589266800"; 
+   d="scan'208";a="265147816"
+Received: from lkp-server02.sh.intel.com (HELO 3aa54c81372e) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 19 Jun 2020 12:10:40 -0700
+Received: from kbuild by 3aa54c81372e with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1jmMPQ-00008n-4g; Fri, 19 Jun 2020 19:10:40 +0000
+Date:   Sat, 20 Jun 2020 03:10:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org
-References: <512118bc-e639-2387-e608-56b7e30fc3b2@pre-sense.de>
- <20200523154817.GA7091@rowland.harvard.edu>
- <34933b01-e4b0-10da-c935-9e6a9a6ae427@pre-sense.de>
- <20200523203349.GA12853@rowland.harvard.edu>
- <5bd5e8be-f8a9-9456-cced-c2bc75455556@pre-sense.de>
- <20200617163734.GC11314@rowland.harvard.edu>
- <763037ac-d8fa-8697-7f75-c0bf958b4308@pre-sense.de>
- <ce4d0606-b398-d23b-1a5f-25611eb4338f@pre-sense.de>
- <364ac09a-a877-c04e-5f2f-d5a559406590@pre-sense.de>
- <20200619150527.GA49731@rowland.harvard.edu>
-From:   =?UTF-8?Q?Till_D=c3=b6rges?= <doerges@pre-sense.de>
-Autocrypt: addr=doerges@pre-sense.de; prefer-encrypt=mutual; keydata=
- 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
-Organization: PRESENSE Technologies GmbH
-Message-ID: <c6fe1288-08a1-4d0a-37f5-c1ca44d46c25@pre-sense.de>
-Date:   Fri, 19 Jun 2020 20:01:57 +0200
-User-Agent: Thunderbird
+Subject: [usb:gregkh] BUILD SUCCESS
+ 6c502ca4df099bd92188c72974091ed35814f938
+Message-ID: <5eed0d8f.fp0gxNTvWL8TKAe0%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <20200619150527.GA49731@rowland.harvard.edu>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am 19.06.20 um 17:05 schrieb Alan Stern:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  gregkh
+branch HEAD: 6c502ca4df099bd92188c72974091ed35814f938  USB: ch9: add "USB_" prefix in front of TEST defines
 
-> Can you build and test a kernel with the patch below, to make sure it does 
-> what you want?
+elapsed time: 724m
 
-I was afraid you might say that. ;-)
+configs tested: 98
+configs skipped: 1
 
-I don't have a kernel dev environment handy (that was the main reason why I was happy
-with your offer of writing the patch).
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-I'll try setting one up, but it may take a moment.
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                               allnoconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+i386                              allnoconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                              debian-10.3
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                              allnoconfig
+m68k                           sun3_defconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+nios2                            allyesconfig
+openrisc                            defconfig
+c6x                              allyesconfig
+c6x                               allnoconfig
+openrisc                         allyesconfig
+nds32                               defconfig
+nds32                             allnoconfig
+csky                             allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+h8300                            allmodconfig
+xtensa                              defconfig
+arc                                 defconfig
+arc                              allyesconfig
+sh                               allmodconfig
+sh                                allnoconfig
+microblaze                        allnoconfig
+mips                             allyesconfig
+mips                              allnoconfig
+mips                             allmodconfig
+parisc                            allnoconfig
+parisc                              defconfig
+parisc                           allyesconfig
+parisc                           allmodconfig
+powerpc                          allyesconfig
+powerpc                          rhel-kconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+powerpc                             defconfig
+i386                 randconfig-a002-20200619
+i386                 randconfig-a006-20200619
+i386                 randconfig-a001-20200619
+i386                 randconfig-a004-20200619
+i386                 randconfig-a005-20200619
+i386                 randconfig-a003-20200619
+x86_64               randconfig-a015-20200619
+x86_64               randconfig-a016-20200619
+x86_64               randconfig-a011-20200619
+x86_64               randconfig-a012-20200619
+x86_64               randconfig-a014-20200619
+x86_64               randconfig-a013-20200619
+i386                 randconfig-a011-20200619
+i386                 randconfig-a015-20200619
+i386                 randconfig-a014-20200619
+i386                 randconfig-a013-20200619
+i386                 randconfig-a016-20200619
+i386                 randconfig-a012-20200619
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+s390                             allyesconfig
+s390                              allnoconfig
+s390                             allmodconfig
+s390                                defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+sparc64                             defconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                          allmodconfig
+um                               allmodconfig
+um                                allnoconfig
+um                               allyesconfig
+um                                  defconfig
+x86_64                               rhel-7.6
+x86_64                    rhel-7.6-kselftests
+x86_64                               rhel-8.3
+x86_64                                  kexec
+x86_64                                   rhel
+x86_64                         rhel-7.2-clear
+x86_64                                    lkp
+x86_64                              fedora-25
 
-Regards -- Till
--- 
-Dipl.-Inform. Till Dörges                  doerges@pre-sense.de
-PRESENSE Technologies GmbH             Nagelsweg 41, D-20097 HH
-Geschäftsführer/Managing Directors       AG Hamburg, HRB 107844
-Till Dörges, Jürgen Sander               USt-IdNr.: DE263765024
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
