@@ -2,380 +2,176 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25E33200AC8
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jun 2020 15:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1651A200B37
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jun 2020 16:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732598AbgFSN4o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Jun 2020 09:56:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45818 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725806AbgFSN4m (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jun 2020 09:56:42 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA90FC06174E
-        for <linux-usb@vger.kernel.org>; Fri, 19 Jun 2020 06:56:42 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id h10so4512530pgq.10
-        for <linux-usb@vger.kernel.org>; Fri, 19 Jun 2020 06:56:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vQWz53QGUJf0C5YSioH9sXMAZS0IX7EA0IdKtoTf5hQ=;
-        b=LSVeyVFRkMBbi1KP56QCucKRLMeD4uYBeygo8TxQBQmFsY+erjWwEit7cpMhtDWht/
-         gOouD75cVIsBdGpJepeRV38Z2jMaOwilBEIbPkfKg58b54tXcLH8IBtcyJOjZ9oYp4Qk
-         JGiBa5T1Hy41egE0DGd306xzTtX17/0upqXGqtp6+baNxkneMoRzezqNn4Lt3OL0Ap7h
-         SBWYPv21lNKKOsmEuu2t1tb7d4PiPGuhlMXoMBdqQXMcnoa3mZ33DAlM3MpWHOcvAf4w
-         fZ18Na64F0rxZdUxA6K0I0L2OS9yRGC5mYIHiSaxgs/uYU443bCKEhR4GdA4lPuHm1Xg
-         wwZw==
+        id S1733060AbgFSOT5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 19 Jun 2020 10:19:57 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:37771 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726642AbgFSOTz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jun 2020 10:19:55 -0400
+Received: from mail-pj1-f70.google.com ([209.85.216.70])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <kai.heng.feng@canonical.com>)
+        id 1jmHs0-0003eE-KW
+        for linux-usb@vger.kernel.org; Fri, 19 Jun 2020 14:19:52 +0000
+Received: by mail-pj1-f70.google.com with SMTP id ge4so6576197pjb.7
+        for <linux-usb@vger.kernel.org>; Fri, 19 Jun 2020 07:19:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vQWz53QGUJf0C5YSioH9sXMAZS0IX7EA0IdKtoTf5hQ=;
-        b=qy1FABXKWdxQlgejvgu2WXwpAfGzZBx5TrzrPT1puxXqWzKqnbEBqLpRZhIqn8MQSE
-         C9WVKlqWtoDmt3ycYjigAAILEhTKbUA5x3uB8PGG6NnaVs6hmG8KeCanWE7neBFJqF6D
-         FGrVLUTvEqX3YDTRV4jfoS/Mii3z0rzMXO2sQw9HyYi7N0srJJYi3xP3xzna7tn2uELB
-         OprsBy5YYuE8vqMWslXyiZUNN584FzsSe5bTcuezTL+tMvj1oxemFniGwRTMLVnj/3Kh
-         IH+jqYo9cQRMfc/T0XRm+/hw2/RZesdxPfVrrhtxsAHOgQcWz9zDN0Bbb3hX9Rv3R/4k
-         MAgA==
-X-Gm-Message-State: AOAM5338ryImwyueJ1qLJEpMftkRoxL+BhZwHypUu+BlI+9K3Gjm57yk
-        Rgcw1Ej4ez0AX89A24Ycrg3SJ1KId7VVjadk3Z7r0g==
-X-Google-Smtp-Source: ABdhPJzfGJmkULSyTehDYW/I6ilNb3+Lgmex1p4Zo4dX8+brPdLFZfqiCDhwIylXygfSBwHkvqWDybncFs8xxhnLd/0=
-X-Received: by 2002:a62:7ccb:: with SMTP id x194mr8664974pfc.318.1592575001721;
- Fri, 19 Jun 2020 06:56:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <1590408381.2838.4.camel@suse.com> <4a686d9a-d09f-44f3-553c-bcf0bd8a8ea1@i-love.sakura.ne.jp>
- <082ae642-0703-6c26-39f6-d725e395ef9a@i-love.sakura.ne.jp>
- <CAAeHK+ww0YLUKGjQF5KfzoUUsdfLJdv5guUXRq4q46VfPiQubQ@mail.gmail.com>
- <27b7545e-8f41-10b8-7c02-e35a08eb1611@i-love.sakura.ne.jp>
- <CAAeHK+ww0u0G94z_Y7VXLCVTQVZ9thO0q69n+Fj3jKT6MtpPng@mail.gmail.com>
- <20200528194057.GA21709@rowland.harvard.edu> <CAAeHK+ySAnU03cvg1=+yHh0YK1UFO4mrv-N9FcDDMt_0AfGZSQ@mail.gmail.com>
- <20200528205807.GB21709@rowland.harvard.edu> <1590852311.14886.3.camel@suse.com>
- <20200530154728.GB29298@rowland.harvard.edu> <0c43caf8-1135-1d38-cb57-9c0f84c4394d@i-love.sakura.ne.jp>
- <254939d4-f3a1-8c7e-94e5-9862c02774fa@i-love.sakura.ne.jp>
-In-Reply-To: <254939d4-f3a1-8c7e-94e5-9862c02774fa@i-love.sakura.ne.jp>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Fri, 19 Jun 2020 15:56:30 +0200
-Message-ID: <CAAeHK+w+wBNksK_wpczad3AU4oLQRsjL_5G8p1R55Zh_FLhprg@mail.gmail.com>
-Subject: Re: [PATCH] USB: cdc-wdm: Call wake_up_all() when clearing WDM_IN_USE bit.
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=WMDBGknWyjd+4i+sbe8PAvtkOzhlh+B/m5/HQqBhznQ=;
+        b=uKj19p+vmM7t3BXEi1Sj1Cvl1Qg26Aei9jciT+41GDscJ1TNOP7OoVzCBWyPkZ2Bwx
+         d0KFSB11Y4+yLUJdha4GIovrdQPhR6sqtoODG5ZFDnhWNAR05g40gye6Xy0cKDrlejw9
+         8HaqfujOvOJJQ1MlZ7ovUGCGDxEuoDG0H7wIftbAfOXkozCCqEaRPfRLl/FG0V3U5m3s
+         oAswLD8AROqcDoobtPKzKYajJaELYeTvHYJO85yf5wTbT7+J8xAspixcH7rqNBO8Kfwy
+         t87LA1wA2wtjwQnU05Hb3YKaoCOwj62AEhID9dEgfmlKntN1gmdE4sk3E6WlY4uz0V5G
+         OP+g==
+X-Gm-Message-State: AOAM531n/3kQJVQ76dfw717gT8gmNHP/yrLePWiRb2YTFIEan/Vwx2fX
+        UFkYvPCl0KHmd3OxESwkBS8oiTvPtqtoC/9NvHepbBrCfWd+49dtdIANWd2+Fkj8Tu0LDfFqo2a
+        ZWomMld4TsRvbDgQekPsn6yYRlgW2a/XFpCOv6g==
+X-Received: by 2002:a17:902:c40c:: with SMTP id k12mr8573186plk.105.1592576391159;
+        Fri, 19 Jun 2020 07:19:51 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzKVtVcUI8/eYnIatX58zJs4lUv4lpkykPxuyMHs1wJ7nDK1P95gS3lxcsqSMOrbP5cKCcA1g==
+X-Received: by 2002:a17:902:c40c:: with SMTP id k12mr8573153plk.105.1592576390653;
+        Fri, 19 Jun 2020 07:19:50 -0700 (PDT)
+Received: from [192.168.1.208] (220-133-187-190.HINET-IP.hinet.net. [220.133.187.190])
+        by smtp.gmail.com with ESMTPSA id gg10sm5333211pjb.38.2020.06.19.07.19.48
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 19 Jun 2020 07:19:49 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.80.23.2.2\))
+Subject: Re: [PATCH 2/2] xhci: Poll for U0 after disabling USB2 LPM
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+In-Reply-To: <8327233C-5DE8-43F8-9208-5FF888629047@canonical.com>
+Date:   Fri, 19 Jun 2020 22:19:46 +0800
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Colin Ian King <colin.king@canonical.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzbot <syzbot+854768b99f19e89d7f81@syzkaller.appspotmail.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Content-Type: text/plain; charset="UTF-8"
+        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: 8BIT
+Message-Id: <9FC0BA5C-4D00-4D33-B040-AA5584A8E9A6@canonical.com>
+References: <20200520101811.2623-1-kai.heng.feng@canonical.com>
+ <20200520101811.2623-2-kai.heng.feng@canonical.com>
+ <6c3ac2e5-73e9-6e4f-2940-63403821631f@linux.intel.com>
+ <8327233C-5DE8-43F8-9208-5FF888629047@canonical.com>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+X-Mailer: Apple Mail (2.3608.80.23.2.2)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 18, 2020 at 2:49 AM Tetsuo Handa
-<penguin-kernel@i-love.sakura.ne.jp> wrote:
->
-> On 2020/06/08 11:24, Tetsuo Handa wrote:
-> > As far as I tested, it seems that usb_kill_urb() sometimes fails to call
-> > wdm_out_callback() despite the comment for usb_kill_urb() says
-> >
-> >  * This routine cancels an in-progress request.  It is guaranteed that
-> >  * upon return all completion handlers will have finished and the URB
-> >  * will be totally idle and available for reuse.  These features make
-> >  * this an ideal way to stop I/O in a disconnect() callback or close()
-> >  * function.  If the request has not already finished or been unlinked
-> >  * the completion handler will see urb->status == -ENOENT.
-> >
-> > . Is something still wrong? Or just replacing
-> >
-> >               BUG_ON(test_bit(WDM_IN_USE, &desc->flags) &&
-> >                      !test_bit(WDM_DISCONNECTING, &desc->flags));
-> >
-> > with
-> >
-> >               wait_event(desc->wait, !test_bit(WDM_IN_USE, &desc->flags) ||
-> >                          test_bit(WDM_DISCONNECTING, &desc->flags));
-> >
-> > in the patch shown below is sufficient?
->
-> How is the progress?
->
-> Another debug printk() patch shown below says that while wdm_flush() waits for
-> clearing of WDM_IN_USE using wait_event(), concurrently executed wdm_write() also
-> waits for clearing of WDM_IN_USE using wait_event_interruptible(), and wdm_write() can
-> immediately set WDM_IN_USE again as soon as returning from wait_event_interruptible()
-> even if somebody was already waiting at wdm_flush() to clear WDM_IN_USE.
->
-> That is, wait_event() in wdm_flush() does not know whether there is usb_submit_urb()
-> request which is started after wait_event() found that WDM_IN_USE was cleared. Then,
-> what does this wait_event() in wdm_flush() want to flush? There is no need to wait for
-> completion of usb_submit_urb() ?
+Hi Mathias,
 
-Oliver, any chance you could help us with fixing the hang in this
-driver? You seem to be its original author. This hang is one of the
-top crashers on syzbot, with over 32000 crashed kernels.
+> On Jun 9, 2020, at 18:15, Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
+> 
+> 
+> 
+>> On Jun 8, 2020, at 19:21, Mathias Nyman <mathias.nyman@linux.intel.com> wrote:
+>> 
+>> On 20.5.2020 13.18, Kai-Heng Feng wrote:
+>>> USB2 devices with LPM enabled may interrupt the system suspend:
+>>> [  932.510475] usb 1-7: usb suspend, wakeup 0
+>>> [  932.510549] hub 1-0:1.0: hub_suspend
+>>> [  932.510581] usb usb1: bus suspend, wakeup 0
+>>> [  932.510590] xhci_hcd 0000:00:14.0: port 9 not suspended
+>>> [  932.510593] xhci_hcd 0000:00:14.0: port 8 not suspended
+>>> ..
+>>> [  932.520323] xhci_hcd 0000:00:14.0: Port change event, 1-7, id 7, portsc: 0x400e03
+>> 
+>> 400e03 = Connected, Enabled, U0 with port ink state change flag (PLC) set.
+>> 
+>>> ..
+>>> [  932.591405] PM: pci_pm_suspend(): hcd_pci_suspend+0x0/0x30 returns -16
+>>> [  932.591414] PM: dpm_run_callback(): pci_pm_suspend+0x0/0x160 returns -16
+>>> [  932.591418] PM: Device 0000:00:14.0 failed to suspend async: error -16
+>>> 
+>>> During system suspend, USB core will let HC suspends the device if it
+>>> doesn't have remote wakeup enabled and doesn't have any children.
+>>> However, from the log above we can see that the usb 1-7 doesn't get bus
+>>> suspended due to not in U0. After a while the port finished U2 -> U0
+>>> transition, interrupts the suspend process.
+>> 
+>> In USB2 HW link PM the PLC flag should not be set in U2Exit -> U0 transitions.
+>> Only case we should see a port change event is U2Entry -> U0 due to STALL or
+>> error/timeout. (see xhci 4.23.5.1.1.1)
+>> 
+>>> 
+>>> The observation is that after disabling LPM, port doesn't transit to U0
+>>> immediately and can linger in U2. xHCI spec 4.23.5.2 states that the
+>>> maximum exit latency for USB2 LPM should be BESL + 10us. The BESL for
+>>> the affected device is advertised as 400us, which is still not enough
+>>> based on my testing result.
+>>> 
+>>> So let's use the maximum permitted latency, 10000, to poll for U0
+>>> status to solve the issue.
+>> 
+>> I don't recall all details, but it could be that disabling LPM before suspend
+>> is unnecessary. 
+>> At least xhci should be able to set a port to U3 from U1 and U2 (see xhci 4.15.1)
+>> so that is one change that could be done to xhci_bus_suspend()
+> 
+> Yes, put the device to U3 directly does the trick.
 
->
-> diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
-> index e3db6fbeadef..d2c4d8b9cc18 100644
-> --- a/drivers/usb/class/cdc-wdm.c
-> +++ b/drivers/usb/class/cdc-wdm.c
-> @@ -82,6 +82,7 @@ struct wdm_device {
->         spinlock_t              iuspin;
->
->         unsigned long           flags;
-> +       atomic_t                flushers;
->         u16                     bufsize;
->         u16                     wMaxCommand;
->         u16                     wMaxPacketSize;
-> @@ -151,7 +152,7 @@ static void wdm_out_callback(struct urb *urb)
->         kfree(desc->outbuf);
->         desc->outbuf = NULL;
->         clear_bit(WDM_IN_USE, &desc->flags);
-> -       wake_up(&desc->wait);
-> +       wake_up_all(&desc->wait);
->  }
->
->  static void wdm_in_callback(struct urb *urb)
-> @@ -417,6 +418,13 @@ static ssize_t wdm_write
->         req->wValue = 0;
->         req->wIndex = desc->inum; /* already converted */
->         req->wLength = cpu_to_le16(count);
-> +       {
-> +               const int flushers = atomic_read(&desc->flushers);
-> +               if (flushers) {
-> +                       printk(KERN_ERR "There is %u flushers.\n", flushers);
-> +                       BUG_ON(1);
-> +               }
-> +       }
->         set_bit(WDM_IN_USE, &desc->flags);
->         desc->outbuf = buf;
->
-> @@ -424,6 +432,7 @@ static ssize_t wdm_write
->         if (rv < 0) {
->                 desc->outbuf = NULL;
->                 clear_bit(WDM_IN_USE, &desc->flags);
-> +               wake_up_all(&desc->wait);
->                 dev_err(&desc->intf->dev, "Tx URB error: %d\n", rv);
->                 rv = usb_translate_errors(rv);
->                 goto out_free_mem_pm;
-> @@ -587,15 +596,20 @@ static int wdm_flush(struct file *file, fl_owner_t id)
->  {
->         struct wdm_device *desc = file->private_data;
->
-> -       wait_event(desc->wait,
-> -                       /*
-> -                        * needs both flags. We cannot do with one
-> -                        * because resetting it would cause a race
-> -                        * with write() yet we need to signal
-> -                        * a disconnect
-> -                        */
-> -                       !test_bit(WDM_IN_USE, &desc->flags) ||
-> -                       test_bit(WDM_DISCONNECTING, &desc->flags));
-> +       /*
-> +        * needs both flags. We cannot do with one because resetting it would
-> +        * cause a race with write() yet we need to signal a disconnect
-> +        */
-> +       atomic_inc(&desc->flushers);
-> +       if (!wait_event_timeout(desc->wait, !test_bit(WDM_IN_USE, &desc->flags) ||
-> +                               test_bit(WDM_DISCONNECTING, &desc->flags), 20 * HZ)) {
-> +               atomic_dec(&desc->flushers);
-> +               kill_urbs(desc);
-> +               BUG_ON(test_bit(WDM_IN_USE, &desc->flags) &&
-> +                      !test_bit(WDM_DISCONNECTING, &desc->flags));
-> +       } else {
-> +               atomic_dec(&desc->flushers);
-> +       }
->
->         /* cannot dereference desc->intf if WDM_DISCONNECTING */
->         if (test_bit(WDM_DISCONNECTING, &desc->flags))
->
->
->
-> [  103.934085][  T118] usb 5-1: New USB device found, idVendor=2400, idProduct=4200, bcdDevice=42.ef
-> [  103.934093][  T118] usb 5-1: New USB device strings: Mfr=0, Product=0, SerialNumber=2
-> [  103.934100][  T118] usb 5-1: SerialNumber: syz
-> [  103.934145][ T4108] udc-core: couldn't find an available UDC or it's busy
-> [  103.934151][ T4108] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.934810][ T4109] udc-core: couldn't find an available UDC or it's busy
-> [  103.934821][ T4109] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.935385][ T4110] udc-core: couldn't find an available UDC or it's busy
-> [  103.935392][ T4110] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.935411][ T4106] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.938481][ T4112] udc-core: couldn't find an available UDC or it's busy
-> [  103.939183][ T4113] udc-core: couldn't find an available UDC or it's busy
-> [  103.939192][ T4113] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.939415][ T4114] udc-core: couldn't find an available UDC or it's busy
-> [  103.939421][ T4114] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.943069][ T4115] udc-core: couldn't find an available UDC or it's busy
-> [  103.943257][ T4116] udc-core: couldn't find an available UDC or it's busy
-> [  103.943266][ T4116] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.944118][ T4117] udc-core: couldn't find an available UDC or it's busy
-> [  103.944129][ T4117] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.944160][ T4118] udc-core: couldn't find an available UDC or it's busy
-> [  103.944169][ T4118] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.944738][ T4112] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.946715][ T4115] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.947159][ T4119] udc-core: couldn't find an available UDC or it's busy
-> [  103.947165][ T4119] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.947315][ T4120] udc-core: couldn't find an available UDC or it's busy
-> [  103.947324][ T4120] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.948093][ T4121] udc-core: couldn't find an available UDC or it's busy
-> [  103.948103][ T4121] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.949190][ T4122] udc-core: couldn't find an available UDC or it's busy
-> [  103.950070][ T4123] udc-core: couldn't find an available UDC or it's busy
-> [  103.950080][ T4123] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.950580][ T4124] udc-core: couldn't find an available UDC or it's busy
-> [  103.950587][ T4124] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.953081][ T4125] udc-core: couldn't find an available UDC or it's busy
-> [  103.953430][ T4126] udc-core: couldn't find an available UDC or it's busy
-> [  103.953437][ T4126] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.953963][ T4122] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.954780][ T4128] udc-core: couldn't find an available UDC or it's busy
-> [  103.954786][ T4128] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.955864][ T4129] udc-core: couldn't find an available UDC or it's busy
-> [  103.955872][ T4129] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.955962][ T4127] udc-core: couldn't find an available UDC or it's busy
-> [  103.955968][ T4127] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.956010][ T4125] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.958600][ T4130] udc-core: couldn't find an available UDC or it's busy
-> [  103.958962][ T4131] udc-core: couldn't find an available UDC or it's busy
-> [  103.958972][ T4131] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.959737][ T4132] udc-core: couldn't find an available UDC or it's busy
-> [  103.959749][ T4132] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.963405][ T4133] udc-core: couldn't find an available UDC or it's busy
-> [  103.963413][ T4133] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.964329][ T4134] udc-core: couldn't find an available UDC or it's busy
-> [  103.965201][ T4135] udc-core: couldn't find an available UDC or it's busy
-> [  103.965211][ T4135] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.965511][ T4136] udc-core: couldn't find an available UDC or it's busy
-> [  103.965520][ T4136] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.966011][ T4130] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.966939][ T4137] udc-core: couldn't find an available UDC or it's busy
-> [  103.966946][ T4137] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.967467][ T4138] udc-core: couldn't find an available UDC or it's busy
-> [  103.967473][ T4138] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.967909][ T4134] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.969292][ T4139] udc-core: couldn't find an available UDC or it's busy
-> [  103.969301][ T4139] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.969708][ T4140] udc-core: couldn't find an available UDC or it's busy
-> [  103.969717][ T4140] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.970343][ T4141] udc-core: couldn't find an available UDC or it's busy
-> [  103.973658][  T118] hub 5-1:118.0: bad descriptor, ignoring hub
-> [  103.974100][ T4142] udc-core: couldn't find an available UDC or it's busy
-> [  103.974107][ T4142] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.974518][ T4141] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.974657][ T4143] udc-core: couldn't find an available UDC or it's busy
-> [  103.974663][ T4143] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.975767][ T4144] udc-core: couldn't find an available UDC or it's busy
-> [  103.975774][ T4144] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.976777][  T118] hub: probe of 5-1:118.0 failed with error -5
-> [  103.977257][ T4145] udc-core: couldn't find an available UDC or it's busy
-> [  103.977263][ T4145] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.978020][ T4146] udc-core: couldn't find an available UDC or it's busy
-> [  103.978029][ T4146] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.978223][ T4148] udc-core: couldn't find an available UDC or it's busy
-> [  103.978229][ T4148] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.978388][ T4147] udc-core: couldn't find an available UDC or it's busy
-> [  103.978396][ T4147] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.980149][ T4149] udc-core: couldn't find an available UDC or it's busy
-> [  103.982395][ T4151] udc-core: couldn't find an available UDC or it's busy
-> [  103.982468][ T4152] udc-core: couldn't find an available UDC or it's busy
-> [  103.982478][ T4152] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.982674][ T4153] udc-core: couldn't find an available UDC or it's busy
-> [  103.982682][ T4153] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.982780][ T4150] udc-core: couldn't find an available UDC or it's busy
-> [  103.982788][ T4150] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.983634][ T4149] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.983843][  T118] cdc_wdm 5-1:118.0: cdc-wdm0: USB WDM device
-> [  103.984589][ T4155] udc-core: couldn't find an available UDC or it's busy
-> [  103.984595][ T4155] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.985615][ T4156] udc-core: couldn't find an available UDC or it's busy
-> [  103.985624][ T4156] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.985747][ T4151] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.985906][ T4157] udc-core: couldn't find an available UDC or it's busy
-> [  103.985912][ T4157] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.987838][ T4158] udc-core: couldn't find an available UDC or it's busy
-> [  103.987845][ T4158] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.987955][ T4159] udc-core: couldn't find an available UDC or it's busy
-> [  103.987962][ T4159] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.988233][ T4160] udc-core: couldn't find an available UDC or it's busy
-> [  103.988239][ T4160] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.989778][ T4161] udc-core: couldn't find an available UDC or it's busy
-> [  103.990308][ T4162] udc-core: couldn't find an available UDC or it's busy
-> [  103.990319][ T4162] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.991055][ T4163] udc-core: couldn't find an available UDC or it's busy
-> [  103.993669][ T4161] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.994007][ T4164] udc-core: couldn't find an available UDC or it's busy
-> [  103.994142][ T4165] udc-core: couldn't find an available UDC or it's busy
-> [  103.994151][ T4165] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.995212][ T4166] udc-core: couldn't find an available UDC or it's busy
-> [  103.995222][ T4166] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  103.996400][ T4163] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  106.505076][ T4164] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  124.793950][ T3360] cdc_wdm 5-1:118.0: Error in flush path: -2
-> [  124.793977][ T4165] cdc_wdm 5-1:118.0: Error in flush path: -2
-> [  124.793987][ T4166] cdc_wdm 5-1:118.0: Error in flush path: -2
-> [  124.793997][ T4164] cdc_wdm 5-1:118.0: Error in flush path: -2
-> [  124.794461][ T4163] cdc_wdm 5-1:118.0: Error in flush path: -2
-> [  124.798193][ T4168] udc-core: couldn't find an available UDC or it's busy
-> [  124.798218][ T4168] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  124.798292][ T4169] udc-core: couldn't find an available UDC or it's busy
-> [  124.798315][ T4169] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  124.798531][ T4170] udc-core: couldn't find an available UDC or it's busy
-> [  124.798537][ T4170] misc raw-gadget: fail, usb_gadget_probe_driver returned -19
-> [  124.812947][ T4170] There is 2 flushers.
-> [  124.812973][ T4161] cdc_wdm 5-1:118.0: Error in flush path: -32
-> [  124.812982][ T4168] cdc_wdm 5-1:118.0: Error in flush path: -32
-> [  124.812987][ T4169] cdc_wdm 5-1:118.0: Error in flush path: -32
-> [  124.823862][ T4170] ------------[ cut here ]------------
-> [  124.825440][ T4170] kernel BUG at drivers/usb/class/cdc-wdm.c:425!
-> [  124.827049][ T4170] invalid opcode: 0000 [#1] SMP KASAN
-> [  124.828439][ T4170] CPU: 3 PID: 4170 Comm: a.out Not tainted 5.7.0-rc5+ #27
-> [  124.830192][ T4170] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 02/27/2020
-> [  124.833192][ T4170] RIP: 0010:wdm_write+0xce7/0xf00
-> [  124.834683][ T4170] Code: 8b 7c 24 20 e8 ca 16 e5 fd 48 8b 54 24 18 e9 49 fa ff ff 89 34 24 e8 a8 ca be fd 8b 34 24 48 c7 c7 40 0f 01 86 e8 b2 2e aa fd <0f> 0b 48 89 ef e8 1f 16 e5 fd e9 ba f5 ff ff 48 89 cf 48 89 54 24
-> [  124.839523][ T4170] RSP: 0018:ffff8881e5ff7d30 EFLAGS: 00010286
-> [  124.841496][ T4170] RAX: 0000000000000014 RBX: ffff8881ee647800 RCX: ffffffff81d9c9dc
-> [  124.843673][ T4170] RDX: 0000000000000000 RSI: ffffffff81283169 RDI: ffff8881f6ce8dec
-> [  124.846399][ T4170] RBP: ffff8881ee647890 R08: ffffed103ed9e292 R09: ffff8881f6cf148f
-> [  124.848563][ T4170] R10: ffffed103dcc8f13 R11: ffffed103ed9e292 R12: 1ffff1103cbfefac
-> [  124.850559][ T4170] R13: 0000000000000010 R14: ffff8881e7fb5fac R15: 0000000000000000
-> [  124.852875][ T4170] FS:  00007fbf56199440(0000) GS:ffff8881f6cc0000(0000) knlGS:0000000000000000
-> [  124.855270][ T4170] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [  124.857106][ T4170] CR2: 00007fbf55bef225 CR3: 00000001e61cd002 CR4: 00000000003606e0
-> [  124.859118][ T4170] Call Trace:
-> [  124.860123][ T4170]  ? wdm_probe+0x2b0/0x2b0
-> [  124.861567][ T4170]  ? remove_wait_queue+0x190/0x190
-> [  124.862896][ T4170]  ? wdm_probe+0x2b0/0x2b0
-> [  124.864214][ T4170]  __vfs_write+0x76/0x100
-> [  124.865314][ T4170]  vfs_write+0x185/0x510
-> [  124.866418][ T4170]  ksys_write+0xff/0x200
-> [  124.867653][ T4170]  ? __ia32_sys_read+0xb0/0xb0
-> [  124.868851][ T4170]  ? trace_hardirqs_off_caller+0x22/0x1c0
-> [  124.870283][ T4170]  do_syscall_64+0x9b/0x510
-> [  124.871575][ T4170]  entry_SYSCALL_64_after_hwframe+0x49/0xb3
-> [  124.873352][ T4170] RIP: 0033:0x7fbf55cc2469
-> [  124.874481][ T4170] Code: 00 f3 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d ff 49 2b 00 f7 d8 64 89 01 48
-> [  124.879954][ T4170] RSP: 002b:00007ffdc294dd58 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-> [  124.882090][ T4170] RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007fbf55cc2469
-> [  124.884573][ T4170] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000004
-> [  124.887178][ T4170] RBP: 0000000000000000 R08: 000000000000000f R09: 00007ffdc294dd8e
-> [  124.889941][ T4170] R10: 0000000000000000 R11: 0000000000000246 R12: 00000000ffffffff
-> [  124.892208][ T4170] R13: 00000000000193a4 R14: 0000000000000000 R15: 0000000000000000
-> [  124.894103][ T4170] Modules linked in:
-> [  124.895465][ T4170] ---[ end trace 2aea2ce7d52c22e0 ]---
-> [  124.897307][ T4170] RIP: 0010:wdm_write+0xce7/0xf00
-> [  124.898975][ T4170] Code: 8b 7c 24 20 e8 ca 16 e5 fd 48 8b 54 24 18 e9 49 fa ff ff 89 34 24 e8 a8 ca be fd 8b 34 24 48 c7 c7 40 0f 01 86 e8 b2 2e aa fd <0f> 0b 48 89 ef e8 1f 16 e5 fd e9 ba f5 ff ff 48 89 cf 48 89 54 24
-> [  124.905012][ T4170] RSP: 0018:ffff8881e5ff7d30 EFLAGS: 00010286
-> [  124.906793][ T4170] RAX: 0000000000000014 RBX: ffff8881ee647800 RCX: ffffffff81d9c9dc
-> [  124.909151][ T4170] RDX: 0000000000000000 RSI: ffffffff81283169 RDI: ffff8881f6ce8dec
-> [  124.911276][ T4170] RBP: ffff8881ee647890 R08: ffffed103ed9e292 R09: ffff8881f6cf148f
-> [  124.913784][ T4170] R10: ffffed103dcc8f13 R11: ffffed103ed9e292 R12: 1ffff1103cbfefac
-> [  124.916882][ T4170] R13: 0000000000000010 R14: ffff8881e7fb5fac R15: 0000000000000000
-> [  124.919078][ T4170] FS:  00007fbf56199440(0000) GS:ffff8881f6cc0000(0000) knlGS:0000000000000000
-> [  124.921484][ T4170] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [  124.923337][ T4170] CR2: 00007fbf55bef225 CR3: 00000001e61cd002 CR4: 00000000003606e0
-> [  124.925606][ T4170] cdc_wdm 5-1:118.0: Error in flush path: -32
->
+As discussed, will you pick this series over the v2?
+Or is there anything I should improve for this one?
+
+Kai-Heng
+
+> 
+>> 
+>> Also just noticed that we are not really checking L1S field in PORTPMSC register, 
+>> this should tell if there was an issue with USB2 lpm state transitions, and
+>> perhaps we should disable lpm for that device. 
+>> 
+>> Does the L1S field show anything unuaual in your case?
+>> That could explain the port event with the PLC bit set.
+> 
+> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+> index 2c255d0620b0..a2099d42e490 100644
+> --- a/drivers/usb/host/xhci-ring.c
+> +++ b/drivers/usb/host/xhci-ring.c
+> @@ -1592,7 +1592,7 @@ static void handle_port_status(struct xhci_hcd *xhci,
+> {
+>        struct usb_hcd *hcd;
+>        u32 port_id;
+> -       u32 portsc, cmd_reg;
+> +       u32 portsc, portpmsc, cmd_reg;
+>        int max_ports;
+>        int slot_id;
+>        unsigned int hcd_portnum;
+> @@ -1634,9 +1634,10 @@ static void handle_port_status(struct xhci_hcd *xhci,
+>        bus_state = &port->rhub->bus_state;
+>        hcd_portnum = port->hcd_portnum;
+>        portsc = readl(port->addr);
+> +       portpmsc = readl(port->addr + PORTPMSC);
+> 
+> -       xhci_dbg(xhci, "Port change event, %d-%d, id %d, portsc: 0x%x\n",
+> -                hcd->self.busnum, hcd_portnum + 1, port_id, portsc);
+> +       xhci_dbg(xhci, "Port change event, %d-%d, id %d, portsc: 0x%x, portpmsc 0x%0x\n",
+> +                hcd->self.busnum, hcd_portnum + 1, port_id, portsc, portpmsc);
+> 
+>        trace_xhci_handle_port_status(hcd_portnum, portsc);
+> 
+> [  685.460054] xhci_hcd 0000:00:14.0: Port change event, 1-7, id 7, portsc: 0x400e03, portpmsc 0x1
+> [  685.460062] xhci_hcd 0000:00:14.0: resume root hub
+> [  685.460079] xhci_hcd 0000:00:14.0: handle_port_status: starting port polling.
+> [  685.460094] xhci_hcd 0000:00:14.0: xhci_hub_status_data: stopping port polling.
+> [  685.521685] PM: pci_pm_suspend(): hcd_pci_suspend+0x0/0x30 returns -16
+> [  685.521695] PM: dpm_run_callback(): pci_pm_suspend+0x0/0x160 returns -16
+> [  685.521699] PM: Device 0000:00:14.0 failed to suspend async: error -16
+> 
+> So after disabling LPM, it takes a long time to complete L1 transition, before transitioning to L0.
+> 
+> Kai-Heng
+> 
+>> 
+>> I think we can avoid a readl_poll_timeout() solution in this case.
+>> 
+>> -Mathias
+
