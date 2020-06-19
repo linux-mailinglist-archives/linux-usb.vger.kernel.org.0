@@ -2,683 +2,249 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB8CA20135A
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jun 2020 18:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAF70201472
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jun 2020 18:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392699AbgFSQAq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Jun 2020 12:00:46 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:43506 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391877AbgFSPOR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jun 2020 11:14:17 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 05JFDU7Y094806;
-        Fri, 19 Jun 2020 10:13:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1592579610;
-        bh=BlcNWYc3mxJ3NUMgKxYQgimIe3arVgAswQTcfarucDQ=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=md1IA15oN6PY4VS5XOFn1EbyHofGcSRuXNvuPcAtX2OlkamZOlZzQNRN+Iqgv5oU5
-         S0/NDkiLRP4Rytf9mufAsZgZHSkwiRsN9u2lt7xEng7evCcFriEyLvtLHudt2hNxop
-         4ZpmucYEuvrlwWdHrvGg1DSKrsBGzJd0UzKzyTck=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 05JFDUMS022368
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 19 Jun 2020 10:13:30 -0500
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Fri, 19
- Jun 2020 10:13:29 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Fri, 19 Jun 2020 10:13:29 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 05JFDT5E090892;
-        Fri, 19 Jun 2020 10:13:29 -0500
-Date:   Fri, 19 Jun 2020 10:13:29 -0500
-From:   Bin Liu <b-liu@ti.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, Peter Chen <Peter.Chen@nxp.com>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Pawel Laszczak <pawell@cadence.com>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Jason Yan <yanaijie@huawei.com>,
-        Jia-Ju Bai <baijiaju1990@gmail.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jules Irenge <jbi.octave@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Rob Gill <rrobgill@protonmail.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>
-Subject: Re: [PATCH] USB: ch9: add "USB_" prefix in front of TEST defines
-Message-ID: <20200619151329.GA15018@iaqt7>
-Mail-Followup-To: Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Peter Chen <Peter.Chen@nxp.com>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Pawel Laszczak <pawell@cadence.com>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Jason Yan <yanaijie@huawei.com>,
-        Jia-Ju Bai <baijiaju1990@gmail.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Arnd Bergmann <arnd@arndb.de>, Jules Irenge <jbi.octave@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Rob Gill <rrobgill@protonmail.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>
-References: <20200618144206.2655890-1-gregkh@linuxfoundation.org>
+        id S2391786AbgFSQKd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Jun 2020 12:10:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38264 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2394312AbgFSQKS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jun 2020 12:10:18 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC646C0613EF
+        for <linux-usb@vger.kernel.org>; Fri, 19 Jun 2020 09:10:18 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id a127so4596638pfa.12
+        for <linux-usb@vger.kernel.org>; Fri, 19 Jun 2020 09:10:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tTASVTiSXZsyhNQTM1i/jl+TLSbZb4AaMfa8Navk19E=;
+        b=vpreWgqaEL0hY65uQHwXkrI1bw0hlhvKUMRBvVleOAPt8JQ/GitPept7T9GRzNywIs
+         W2dOqIazGiiOvoSWqv3PycaYBGGtaFnJmikOwKlvx81VV+NIT06c4NueHo7lVGbRfmbu
+         J6MoX7JUIiQvfadTANBttCsI/2mNjQTAv/5q3SdAO5DDbq+e0drMP9VA+auz2XoRNtjT
+         sM6ssTKbWM/e88hJTaU5GgGrph/M5FFDili9NvLvjTOVefjwpFaOCSLr3Yqsi9zvo3lE
+         N3LB4jN44AMOn+eVgs34fWKsbIr46QT1ejTAZsUDJw1+U2f8C9b/miIubc6K86Jtj02I
+         pcoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tTASVTiSXZsyhNQTM1i/jl+TLSbZb4AaMfa8Navk19E=;
+        b=d+f3n+JRyIWwlXxqL8PWAYaguTKrFWXxQFQqXCklQ0p8HE9MGCQo+qsOmyyFWTRcJj
+         dva3S6WZuB/KYYAQvMHQtcRtJvicFAwXdR8jxWt6qbBHh5hy0Ud2VQGLy5fi0KuPPllH
+         x530FqNRRUE48JivsoWYaA7M1EVkm7j8ORWs9CNO+gT9jypzEXtosWHOh22TU8WHNtow
+         01+kTPt0y/e7lks6d6WavFyUPHgepfDtZtg7i49K7oiTtBkIl3fNdJrW0QORnjWecOPw
+         AFNnxDVn/a4ZRDUUNywYJv0peG9EqUNNdCk4dNctc2wFLEVyh630LvYHFeulaeutgBQB
+         EWew==
+X-Gm-Message-State: AOAM533kaZ/H6FTchlTwkAF5EBa+PVrBnG51sZjMaB9dOtP1N3bsXo1P
+        M2so8LUruYokQQwQnx6sTIr8gsqYY+4qUaQO6gLdSA==
+X-Google-Smtp-Source: ABdhPJxyC2UuE0NNmrY1qY4W7Z++jdlGfsPJt0+ldEi7tHtlwWMxYsJpYJCnjas5qPET4m31FTa/mR9QYlrakCnyz38=
+X-Received: by 2002:a62:25c5:: with SMTP id l188mr8813970pfl.178.1592583017934;
+ Fri, 19 Jun 2020 09:10:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20200618144206.2655890-1-gregkh@linuxfoundation.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <000000000000780999059c048dfc@google.com>
+In-Reply-To: <000000000000780999059c048dfc@google.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Fri, 19 Jun 2020 18:10:07 +0200
+Message-ID: <CAAeHK+xT12YpnLYw78RVS5PAFK=yFnYNhq0vny7C2O+zUsFwdg@mail.gmail.com>
+Subject: Re: KASAN: use-after-free Read in uvc_probe
+To:     syzbot <syzbot+9a48339b077c5a80b869@syzkaller.appspotmail.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-media@vger.kernel.org,
+        USB list <linux-usb@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 18, 2020 at 04:42:06PM +0200, Greg Kroah-Hartman wrote:
-> For some reason, the TEST_ defines in the usb/ch9.h files did not have
-> the USB_ prefix on it, making it a bit confusing when reading the file,
-> as well as not the nicest thing to do in a uapi file.
-> 
-> So fix that up and add the USB_ prefix on to them, and fix up all
-> in-kernel usages.  This included deleting the duplicate copy in the
-> net2272.h file.
-> 
-> Cc: Peter Chen <Peter.Chen@nxp.com>
-> Cc: Minas Harutyunyan <hminas@synopsys.com>
-> Cc: Felipe Balbi <balbi@kernel.org>
-> Cc: Michal Simek <michal.simek@xilinx.com>
-> Cc: Mathias Nyman <mathias.nyman@intel.com>
-> Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> Cc: Bin Liu <b-liu@ti.com>
-> Cc: Pawel Laszczak <pawell@cadence.com>
-> Cc: YueHaibing <yuehaibing@huawei.com>
-> Cc: Nathan Chancellor <natechancellor@gmail.com>
-> Cc: Jason Yan <yanaijie@huawei.com>
-> Cc: Jia-Ju Bai <baijiaju1990@gmail.com>
-> Cc: Stephen Boyd <swboyd@chromium.org>
-> Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Jules Irenge <jbi.octave@gmail.com>
-> Cc: Alan Stern <stern@rowland.harvard.edu>
-> Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> Cc: Rob Gill <rrobgill@protonmail.com>
-> Cc: Macpaul Lin <macpaul.lin@mediatek.com>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+On Mon, Jan 13, 2020 at 1:24 PM syzbot
+<syzbot+9a48339b077c5a80b869@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following crash on:
+>
+> HEAD commit:    ae179410 usb: gadget: add raw-gadget interface
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=132223fee00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=ad1d751a3a72ae57
+> dashboard link: https://syzkaller.appspot.com/bug?extid=9a48339b077c5a80b869
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16857325e00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=142e069ee00000
+>
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+9a48339b077c5a80b869@syzkaller.appspotmail.com
+>
+> usb 1-1: New USB device found, idVendor=0bd3, idProduct=0555,
+> bcdDevice=69.6a
+> usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+> usb 1-1: config 0 descriptor??
+> usb 1-1: string descriptor 0 read error: -71
+> uvcvideo: Found UVC 0.00 device <unnamed> (0bd3:0555)
+> ==================================================================
+> BUG: KASAN: use-after-free in uvc_register_terms
+> drivers/media/usb/uvc/uvc_driver.c:2038 [inline]
+> BUG: KASAN: use-after-free in uvc_register_chains
+> drivers/media/usb/uvc/uvc_driver.c:2070 [inline]
+> BUG: KASAN: use-after-free in uvc_probe.cold+0x2193/0x29de
+> drivers/media/usb/uvc/uvc_driver.c:2201
+> Read of size 2 at addr ffff8881d4f1bc2e by task kworker/1:2/94
+>
+> CPU: 1 PID: 94 Comm: kworker/1:2 Not tainted 5.5.0-rc3-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
+> Google 01/01/2011
+> Workqueue: usb_hub_wq hub_event
+> Call Trace:
+>   __dump_stack lib/dump_stack.c:77 [inline]
+>   dump_stack+0xef/0x16e lib/dump_stack.c:118
+>   print_address_description.constprop.0.cold+0xd3/0x314 mm/kasan/report.c:374
+>   __kasan_report.cold+0x37/0x85 mm/kasan/report.c:506
+>   kasan_report+0xe/0x20 mm/kasan/common.c:639
+>   uvc_register_terms drivers/media/usb/uvc/uvc_driver.c:2038 [inline]
+>   uvc_register_chains drivers/media/usb/uvc/uvc_driver.c:2070 [inline]
+>   uvc_probe.cold+0x2193/0x29de drivers/media/usb/uvc/uvc_driver.c:2201
+>   usb_probe_interface+0x310/0x800 drivers/usb/core/driver.c:361
+>   really_probe+0x290/0xad0 drivers/base/dd.c:548
+>   driver_probe_device+0x223/0x350 drivers/base/dd.c:721
+>   __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:828
+>   bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+>   __device_attach+0x217/0x390 drivers/base/dd.c:894
+>   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+>   device_add+0x1459/0x1bf0 drivers/base/core.c:2487
+>   usb_set_configuration+0xe47/0x17d0 drivers/usb/core/message.c:2023
+>   generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+>   usb_probe_device+0xaf/0x140 drivers/usb/core/driver.c:266
+>   really_probe+0x290/0xad0 drivers/base/dd.c:548
+>   driver_probe_device+0x223/0x350 drivers/base/dd.c:721
+>   __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:828
+>   bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+>   __device_attach+0x217/0x390 drivers/base/dd.c:894
+>   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+>   device_add+0x1459/0x1bf0 drivers/base/core.c:2487
+>   usb_new_device.cold+0x540/0xcd0 drivers/usb/core/hub.c:2537
+>   hub_port_connect drivers/usb/core/hub.c:5184 [inline]
+>   hub_port_connect_change drivers/usb/core/hub.c:5324 [inline]
+>   port_event drivers/usb/core/hub.c:5470 [inline]
+>   hub_event+0x21cb/0x4300 drivers/usb/core/hub.c:5552
+>   process_one_work+0x945/0x15c0 kernel/workqueue.c:2264
+>   worker_thread+0x96/0xe20 kernel/workqueue.c:2410
+>   kthread+0x318/0x420 kernel/kthread.c:255
+>   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+>
+> Allocated by task 94:
+>   save_stack+0x1b/0x80 mm/kasan/common.c:72
+>   set_track mm/kasan/common.c:80 [inline]
+>   __kasan_kmalloc mm/kasan/common.c:513 [inline]
+>   __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:486
+>   kmalloc include/linux/slab.h:556 [inline]
+>   kzalloc include/linux/slab.h:670 [inline]
+>   uvc_alloc_chain+0x48/0xfa drivers/media/usb/uvc/uvc_driver.c:1692
+>   uvc_scan_device drivers/media/usb/uvc/uvc_driver.c:1818 [inline]
+>   uvc_probe.cold+0x15f0/0x29de drivers/media/usb/uvc/uvc_driver.c:2197
+>   usb_probe_interface+0x310/0x800 drivers/usb/core/driver.c:361
+>   really_probe+0x290/0xad0 drivers/base/dd.c:548
+>   driver_probe_device+0x223/0x350 drivers/base/dd.c:721
+>   __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:828
+>   bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+>   __device_attach+0x217/0x390 drivers/base/dd.c:894
+>   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+>   device_add+0x1459/0x1bf0 drivers/base/core.c:2487
+>   usb_set_configuration+0xe47/0x17d0 drivers/usb/core/message.c:2023
+>   generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+>   usb_probe_device+0xaf/0x140 drivers/usb/core/driver.c:266
+>   really_probe+0x290/0xad0 drivers/base/dd.c:548
+>   driver_probe_device+0x223/0x350 drivers/base/dd.c:721
+>   __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:828
+>   bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+>   __device_attach+0x217/0x390 drivers/base/dd.c:894
+>   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+>   device_add+0x1459/0x1bf0 drivers/base/core.c:2487
+>   usb_new_device.cold+0x540/0xcd0 drivers/usb/core/hub.c:2537
+>   hub_port_connect drivers/usb/core/hub.c:5184 [inline]
+>   hub_port_connect_change drivers/usb/core/hub.c:5324 [inline]
+>   port_event drivers/usb/core/hub.c:5470 [inline]
+>   hub_event+0x21cb/0x4300 drivers/usb/core/hub.c:5552
+>   process_one_work+0x945/0x15c0 kernel/workqueue.c:2264
+>   worker_thread+0x96/0xe20 kernel/workqueue.c:2410
+>   kthread+0x318/0x420 kernel/kthread.c:255
+>   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+>
+> Freed by task 94:
+>   save_stack+0x1b/0x80 mm/kasan/common.c:72
+>   set_track mm/kasan/common.c:80 [inline]
+>   kasan_set_free_info mm/kasan/common.c:335 [inline]
+>   __kasan_slab_free+0x117/0x160 mm/kasan/common.c:474
+>   slab_free_hook mm/slub.c:1425 [inline]
+>   slab_free_freelist_hook mm/slub.c:1458 [inline]
+>   slab_free mm/slub.c:3005 [inline]
+>   kfree+0xd5/0x300 mm/slub.c:3957
+>   uvc_scan_device drivers/media/usb/uvc/uvc_driver.c:1825 [inline]
+>   uvc_probe.cold+0x16fd/0x29de drivers/media/usb/uvc/uvc_driver.c:2197
+>   usb_probe_interface+0x310/0x800 drivers/usb/core/driver.c:361
+>   really_probe+0x290/0xad0 drivers/base/dd.c:548
+>   driver_probe_device+0x223/0x350 drivers/base/dd.c:721
+>   __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:828
+>   bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+>   __device_attach+0x217/0x390 drivers/base/dd.c:894
+>   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+>   device_add+0x1459/0x1bf0 drivers/base/core.c:2487
+>   usb_set_configuration+0xe47/0x17d0 drivers/usb/core/message.c:2023
+>   generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+>   usb_probe_device+0xaf/0x140 drivers/usb/core/driver.c:266
+>   really_probe+0x290/0xad0 drivers/base/dd.c:548
+>   driver_probe_device+0x223/0x350 drivers/base/dd.c:721
+>   __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:828
+>   bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+>   __device_attach+0x217/0x390 drivers/base/dd.c:894
+>   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+>   device_add+0x1459/0x1bf0 drivers/base/core.c:2487
+>   usb_new_device.cold+0x540/0xcd0 drivers/usb/core/hub.c:2537
+>   hub_port_connect drivers/usb/core/hub.c:5184 [inline]
+>   hub_port_connect_change drivers/usb/core/hub.c:5324 [inline]
+>   port_event drivers/usb/core/hub.c:5470 [inline]
+>   hub_event+0x21cb/0x4300 drivers/usb/core/hub.c:5552
+>   process_one_work+0x945/0x15c0 kernel/workqueue.c:2264
+>   worker_thread+0x96/0xe20 kernel/workqueue.c:2410
+>   kthread+0x318/0x420 kernel/kthread.c:255
+>   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+>
+> The buggy address belongs to the object at ffff8881d4f1bc00
+>   which belongs to the cache kmalloc-256 of size 256
+> The buggy address is located 46 bytes inside of
+>   256-byte region [ffff8881d4f1bc00, ffff8881d4f1bd00)
+> The buggy address belongs to the page:
+> page:ffffea000753c680 refcount:1 mapcount:0 mapping:ffff8881da002780
+> index:0x0 compound_mapcount: 0
+> raw: 0200000000010200 ffffea000753c600 0000000300000003 ffff8881da002780
+> raw: 0000000000000000 0000000080100010 00000001ffffffff 0000000000000000
+> page dumped because: kasan: bad access detected
+>
+> Memory state around the buggy address:
+>   ffff8881d4f1bb00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>   ffff8881d4f1bb80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+> > ffff8881d4f1bc00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>                                    ^
+>   ffff8881d4f1bc80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>   ffff8881d4f1bd00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+> ==================================================================
+>
+>
 > ---
->  drivers/usb/cdns3/ep0.c              |  8 ++++----
->  drivers/usb/chipidea/udc.c           | 10 +++++-----
->  drivers/usb/common/debug.c           | 10 +++++-----
->  drivers/usb/dwc2/debugfs.c           | 20 ++++++++++----------
->  drivers/usb/dwc2/gadget.c            | 10 +++++-----
->  drivers/usb/dwc3/debugfs.c           | 20 ++++++++++----------
->  drivers/usb/dwc3/ep0.c               | 10 +++++-----
->  drivers/usb/dwc3/gadget.c            | 10 +++++-----
->  drivers/usb/gadget/udc/bdc/bdc_ep.c  | 10 +++++-----
->  drivers/usb/gadget/udc/gr_udc.c      |  4 ++--
->  drivers/usb/gadget/udc/mv_udc_core.c |  2 +-
->  drivers/usb/gadget/udc/net2272.c     |  2 +-
->  drivers/usb/gadget/udc/net2272.h     |  5 -----
->  drivers/usb/gadget/udc/udc-xilinx.c  |  4 ++--
->  drivers/usb/host/xhci-hub.c          |  7 ++++---
->  drivers/usb/misc/ehset.c             |  8 ++++----
->  drivers/usb/mtu3/mtu3_gadget_ep0.c   | 16 ++++++++--------
->  drivers/usb/musb/musb_gadget_ep0.c   | 20 ++++++++------------
->  drivers/usb/musb/musb_virthub.c      | 20 ++++++++++----------
+> This bug is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this bug report. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> syzbot can test patches for this bug, for details see:
+> https://goo.gl/tpsmEJ#testing-patches
 
-For musb:
+Fixed by something.
 
-Acked-by: Bin Liu <b-liu@ti.com>
-
-Thanks,
--Bin.
-
->  include/uapi/linux/usb/ch9.h         | 10 +++++-----
->  20 files changed, 99 insertions(+), 107 deletions(-)
-> 
-> diff --git a/drivers/usb/cdns3/ep0.c b/drivers/usb/cdns3/ep0.c
-> index 82645a2a0f52..04a522f5ae58 100644
-> --- a/drivers/usb/cdns3/ep0.c
-> +++ b/drivers/usb/cdns3/ep0.c
-> @@ -328,10 +328,10 @@ static int cdns3_ep0_feature_handle_device(struct cdns3_device *priv_dev,
->  			return -EINVAL;
->  
->  		switch (tmode >> 8) {
-> -		case TEST_J:
-> -		case TEST_K:
-> -		case TEST_SE0_NAK:
-> -		case TEST_PACKET:
-> +		case USB_TEST_J:
-> +		case USB_TEST_K:
-> +		case USB_TEST_SE0_NAK:
-> +		case USB_TEST_PACKET:
->  			cdns3_set_register_bit(&priv_dev->regs->usb_cmd,
->  					       USB_CMD_STMODE |
->  					       USB_STS_TMODE_SEL(tmode - 1));
-> diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
-> index db0cfde0cc3c..4beb25888917 100644
-> --- a/drivers/usb/chipidea/udc.c
-> +++ b/drivers/usb/chipidea/udc.c
-> @@ -1215,11 +1215,11 @@ __acquires(ci->lock)
->  			case USB_DEVICE_TEST_MODE:
->  				tmode = le16_to_cpu(req.wIndex) >> 8;
->  				switch (tmode) {
-> -				case TEST_J:
-> -				case TEST_K:
-> -				case TEST_SE0_NAK:
-> -				case TEST_PACKET:
-> -				case TEST_FORCE_EN:
-> +				case USB_TEST_J:
-> +				case USB_TEST_K:
-> +				case USB_TEST_SE0_NAK:
-> +				case USB_TEST_PACKET:
-> +				case USB_TEST_FORCE_ENABLE:
->  					ci->test_mode = tmode;
->  					err = isr_setup_status_phase(
->  							ci);
-> diff --git a/drivers/usb/common/debug.c b/drivers/usb/common/debug.c
-> index 92a986aeaa5d..410acd670ca7 100644
-> --- a/drivers/usb/common/debug.c
-> +++ b/drivers/usb/common/debug.c
-> @@ -53,15 +53,15 @@ static const char *usb_decode_device_feature(u16 wValue)
->  static const char *usb_decode_test_mode(u16 wIndex)
->  {
->  	switch (wIndex) {
-> -	case TEST_J:
-> +	case USB_TEST_J:
->  		return ": TEST_J";
-> -	case TEST_K:
-> +	case USB_TEST_K:
->  		return ": TEST_K";
-> -	case TEST_SE0_NAK:
-> +	case USB_TEST_SE0_NAK:
->  		return ": TEST_SE0_NAK";
-> -	case TEST_PACKET:
-> +	case USB_TEST_PACKET:
->  		return ": TEST_PACKET";
-> -	case TEST_FORCE_EN:
-> +	case USB_TEST_FORCE_ENABLE:
->  		return ": TEST_FORCE_EN";
->  	default:
->  		return ": UNKNOWN";
-> diff --git a/drivers/usb/dwc2/debugfs.c b/drivers/usb/dwc2/debugfs.c
-> index 3a0dcbfbc827..aaafd463d72a 100644
-> --- a/drivers/usb/dwc2/debugfs.c
-> +++ b/drivers/usb/dwc2/debugfs.c
-> @@ -37,15 +37,15 @@ static ssize_t testmode_write(struct file *file, const char __user *ubuf, size_t
->  		return -EFAULT;
->  
->  	if (!strncmp(buf, "test_j", 6))
-> -		testmode = TEST_J;
-> +		testmode = USB_TEST_J;
->  	else if (!strncmp(buf, "test_k", 6))
-> -		testmode = TEST_K;
-> +		testmode = USB_TEST_K;
->  	else if (!strncmp(buf, "test_se0_nak", 12))
-> -		testmode = TEST_SE0_NAK;
-> +		testmode = USB_TEST_SE0_NAK;
->  	else if (!strncmp(buf, "test_packet", 11))
-> -		testmode = TEST_PACKET;
-> +		testmode = USB_TEST_PACKET;
->  	else if (!strncmp(buf, "test_force_enable", 17))
-> -		testmode = TEST_FORCE_EN;
-> +		testmode = USB_TEST_FORCE_ENABLE;
->  	else
->  		testmode = 0;
->  
-> @@ -78,19 +78,19 @@ static int testmode_show(struct seq_file *s, void *unused)
->  	case 0:
->  		seq_puts(s, "no test\n");
->  		break;
-> -	case TEST_J:
-> +	case USB_TEST_J:
->  		seq_puts(s, "test_j\n");
->  		break;
-> -	case TEST_K:
-> +	case USB_TEST_K:
->  		seq_puts(s, "test_k\n");
->  		break;
-> -	case TEST_SE0_NAK:
-> +	case USB_TEST_SE0_NAK:
->  		seq_puts(s, "test_se0_nak\n");
->  		break;
-> -	case TEST_PACKET:
-> +	case USB_TEST_PACKET:
->  		seq_puts(s, "test_packet\n");
->  		break;
-> -	case TEST_FORCE_EN:
-> +	case USB_TEST_FORCE_ENABLE:
->  		seq_puts(s, "test_force_enable\n");
->  		break;
->  	default:
-> diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-> index 12b98b466287..38fc46b0c026 100644
-> --- a/drivers/usb/dwc2/gadget.c
-> +++ b/drivers/usb/dwc2/gadget.c
-> @@ -1561,11 +1561,11 @@ int dwc2_hsotg_set_test_mode(struct dwc2_hsotg *hsotg, int testmode)
->  
->  	dctl &= ~DCTL_TSTCTL_MASK;
->  	switch (testmode) {
-> -	case TEST_J:
-> -	case TEST_K:
-> -	case TEST_SE0_NAK:
-> -	case TEST_PACKET:
-> -	case TEST_FORCE_EN:
-> +	case USB_TEST_J:
-> +	case USB_TEST_K:
-> +	case USB_TEST_SE0_NAK:
-> +	case USB_TEST_PACKET:
-> +	case USB_TEST_FORCE_ENABLE:
->  		dctl |= testmode << DCTL_TSTCTL_SHIFT;
->  		break;
->  	default:
-> diff --git a/drivers/usb/dwc3/debugfs.c b/drivers/usb/dwc3/debugfs.c
-> index 6d9de334e46a..14dc6a37305d 100644
-> --- a/drivers/usb/dwc3/debugfs.c
-> +++ b/drivers/usb/dwc3/debugfs.c
-> @@ -466,19 +466,19 @@ static int dwc3_testmode_show(struct seq_file *s, void *unused)
->  	case 0:
->  		seq_printf(s, "no test\n");
->  		break;
-> -	case TEST_J:
-> +	case USB_TEST_J:
->  		seq_printf(s, "test_j\n");
->  		break;
-> -	case TEST_K:
-> +	case USB_TEST_K:
->  		seq_printf(s, "test_k\n");
->  		break;
-> -	case TEST_SE0_NAK:
-> +	case USB_TEST_SE0_NAK:
->  		seq_printf(s, "test_se0_nak\n");
->  		break;
-> -	case TEST_PACKET:
-> +	case USB_TEST_PACKET:
->  		seq_printf(s, "test_packet\n");
->  		break;
-> -	case TEST_FORCE_EN:
-> +	case USB_TEST_FORCE_ENABLE:
->  		seq_printf(s, "test_force_enable\n");
->  		break;
->  	default:
-> @@ -506,15 +506,15 @@ static ssize_t dwc3_testmode_write(struct file *file,
->  		return -EFAULT;
->  
->  	if (!strncmp(buf, "test_j", 6))
-> -		testmode = TEST_J;
-> +		testmode = USB_TEST_J;
->  	else if (!strncmp(buf, "test_k", 6))
-> -		testmode = TEST_K;
-> +		testmode = USB_TEST_K;
->  	else if (!strncmp(buf, "test_se0_nak", 12))
-> -		testmode = TEST_SE0_NAK;
-> +		testmode = USB_TEST_SE0_NAK;
->  	else if (!strncmp(buf, "test_packet", 11))
-> -		testmode = TEST_PACKET;
-> +		testmode = USB_TEST_PACKET;
->  	else if (!strncmp(buf, "test_force_enable", 17))
-> -		testmode = TEST_FORCE_EN;
-> +		testmode = USB_TEST_FORCE_ENABLE;
->  	else
->  		testmode = 0;
->  
-> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
-> index 6dee4dabc0a4..8dd69728add3 100644
-> --- a/drivers/usb/dwc3/ep0.c
-> +++ b/drivers/usb/dwc3/ep0.c
-> @@ -425,11 +425,11 @@ static int dwc3_ep0_handle_test(struct dwc3 *dwc, enum usb_device_state state,
->  		return -EINVAL;
->  
->  	switch (wIndex >> 8) {
-> -	case TEST_J:
-> -	case TEST_K:
-> -	case TEST_SE0_NAK:
-> -	case TEST_PACKET:
-> -	case TEST_FORCE_EN:
-> +	case USB_TEST_J:
-> +	case USB_TEST_K:
-> +	case USB_TEST_SE0_NAK:
-> +	case USB_TEST_PACKET:
-> +	case USB_TEST_FORCE_ENABLE:
->  		dwc->test_mode_nr = wIndex >> 8;
->  		dwc->test_mode = true;
->  		break;
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 80c3ef134e41..0b59b2f1cf26 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -46,11 +46,11 @@ int dwc3_gadget_set_test_mode(struct dwc3 *dwc, int mode)
->  	reg &= ~DWC3_DCTL_TSTCTRL_MASK;
->  
->  	switch (mode) {
-> -	case TEST_J:
-> -	case TEST_K:
-> -	case TEST_SE0_NAK:
-> -	case TEST_PACKET:
-> -	case TEST_FORCE_EN:
-> +	case USB_TEST_J:
-> +	case USB_TEST_K:
-> +	case USB_TEST_SE0_NAK:
-> +	case USB_TEST_PACKET:
-> +	case USB_TEST_FORCE_ENABLE:
->  		reg |= mode << 1;
->  		break;
->  	default:
-> diff --git a/drivers/usb/gadget/udc/bdc/bdc_ep.c b/drivers/usb/gadget/udc/bdc/bdc_ep.c
-> index d49c6dc1082d..ba250cf75bef 100644
-> --- a/drivers/usb/gadget/udc/bdc/bdc_ep.c
-> +++ b/drivers/usb/gadget/udc/bdc/bdc_ep.c
-> @@ -927,11 +927,11 @@ static int bdc_set_test_mode(struct bdc *bdc)
->  	usb2_pm &= ~BDC_PTC_MASK;
->  	dev_dbg(bdc->dev, "%s\n", __func__);
->  	switch (bdc->test_mode) {
-> -	case TEST_J:
-> -	case TEST_K:
-> -	case TEST_SE0_NAK:
-> -	case TEST_PACKET:
-> -	case TEST_FORCE_EN:
-> +	case USB_TEST_J:
-> +	case USB_TEST_K:
-> +	case USB_TEST_SE0_NAK:
-> +	case USB_TEST_PACKET:
-> +	case USB_TEST_FORCE_ENABLE:
->  		usb2_pm |= bdc->test_mode << 28;
->  		break;
->  	default:
-> diff --git a/drivers/usb/gadget/udc/gr_udc.c b/drivers/usb/gadget/udc/gr_udc.c
-> index 7164ad9800f1..345e28d76709 100644
-> --- a/drivers/usb/gadget/udc/gr_udc.c
-> +++ b/drivers/usb/gadget/udc/gr_udc.c
-> @@ -912,9 +912,9 @@ static int gr_device_request(struct gr_udc *dev, u8 type, u8 request,
->  			return gr_ep0_respond_empty(dev);
->  
->  		case USB_DEVICE_TEST_MODE:
-> -			/* The hardware does not support TEST_FORCE_EN */
-> +			/* The hardware does not support USB_TEST_FORCE_ENABLE */
->  			test = index >> 8;
-> -			if (test >= TEST_J && test <= TEST_PACKET) {
-> +			if (test >= USB_TEST_J && test <= USB_TEST_PACKET) {
->  				dev->test_mode = test;
->  				return gr_ep0_respond(dev, NULL, 0,
->  						      gr_ep0_testmode_complete);
-> diff --git a/drivers/usb/gadget/udc/mv_udc_core.c b/drivers/usb/gadget/udc/mv_udc_core.c
-> index cafde053788b..69289717d856 100644
-> --- a/drivers/usb/gadget/udc/mv_udc_core.c
-> +++ b/drivers/usb/gadget/udc/mv_udc_core.c
-> @@ -1502,7 +1502,7 @@ udc_prime_status(struct mv_udc *udc, u8 direction, u16 status, bool empty)
->  
->  static void mv_udc_testmode(struct mv_udc *udc, u16 index)
->  {
-> -	if (index <= TEST_FORCE_EN) {
-> +	if (index <= USB_TEST_FORCE_ENABLE) {
->  		udc->test_mode = index;
->  		if (udc_prime_status(udc, EP_DIR_IN, 0, true))
->  			ep0_stall(udc);
-> diff --git a/drivers/usb/gadget/udc/net2272.c b/drivers/usb/gadget/udc/net2272.c
-> index 928057b206f1..fbbe62513545 100644
-> --- a/drivers/usb/gadget/udc/net2272.c
-> +++ b/drivers/usb/gadget/udc/net2272.c
-> @@ -1688,7 +1688,7 @@ net2272_set_test_mode(struct net2272 *dev, int mode)
->  	net2272_write(dev, USBTEST, mode);
->  
->  	/* load test packet */
-> -	if (mode == TEST_PACKET) {
-> +	if (mode == USB_TEST_PACKET) {
->  		/* switch to 8 bit mode */
->  		net2272_write(dev, LOCCTL, net2272_read(dev, LOCCTL) &
->  				~(1 << DATA_WIDTH));
-> diff --git a/drivers/usb/gadget/udc/net2272.h b/drivers/usb/gadget/udc/net2272.h
-> index 8e644627992d..87d0ab9ffeeb 100644
-> --- a/drivers/usb/gadget/udc/net2272.h
-> +++ b/drivers/usb/gadget/udc/net2272.h
-> @@ -105,11 +105,6 @@
->  #define USBTEST				0x32
->  #define 	TEST_MODE_SELECT			0
->  #define 		NORMAL_OPERATION			0
-> -#define 		TEST_J					1
-> -#define 		TEST_K					2
-> -#define 		TEST_SE0_NAK				3
-> -#define 		TEST_PACKET				4
-> -#define 		TEST_FORCE_ENABLE			5
->  #define XCVRDIAG			0x33
->  #define 	FORCE_FULL_SPEED			2
->  #define 	FORCE_HIGH_SPEED			3
-> diff --git a/drivers/usb/gadget/udc/udc-xilinx.c b/drivers/usb/gadget/udc/udc-xilinx.c
-> index 709553bdb233..d5e9d20c097d 100644
-> --- a/drivers/usb/gadget/udc/udc-xilinx.c
-> +++ b/drivers/usb/gadget/udc/udc-xilinx.c
-> @@ -2097,9 +2097,9 @@ static int xudc_probe(struct platform_device *pdev)
->  	/* Check for IP endianness */
->  	udc->write_fn = xudc_write32_be;
->  	udc->read_fn = xudc_read32_be;
-> -	udc->write_fn(udc->addr, XUSB_TESTMODE_OFFSET, TEST_J);
-> +	udc->write_fn(udc->addr, XUSB_TESTMODE_OFFSET, USB_TEST_J);
->  	if ((udc->read_fn(udc->addr + XUSB_TESTMODE_OFFSET))
-> -			!= TEST_J) {
-> +			!= USB_TEST_J) {
->  		udc->write_fn = xudc_write32;
->  		udc->read_fn = xudc_read32;
->  	}
-> diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-> index f37316d2c8fa..073c54e42223 100644
-> --- a/drivers/usb/host/xhci-hub.c
-> +++ b/drivers/usb/host/xhci-hub.c
-> @@ -612,7 +612,7 @@ static void xhci_port_set_test_mode(struct xhci_hcd *xhci,
->  	temp |= test_mode << PORT_TEST_MODE_SHIFT;
->  	writel(temp, port->addr + PORTPMSC);
->  	xhci->test_mode = test_mode;
-> -	if (test_mode == TEST_FORCE_EN)
-> +	if (test_mode == USB_TEST_FORCE_ENABLE)
->  		xhci_start(xhci);
->  }
->  
-> @@ -666,7 +666,7 @@ static int xhci_exit_test_mode(struct xhci_hcd *xhci)
->  		xhci_err(xhci, "Not in test mode, do nothing.\n");
->  		return 0;
->  	}
-> -	if (xhci->test_mode == TEST_FORCE_EN &&
-> +	if (xhci->test_mode == USB_TEST_FORCE_ENABLE &&
->  		!(xhci->xhc_state & XHCI_STATE_HALTED)) {
->  		retval = xhci_halt(xhci);
->  		if (retval)
-> @@ -1421,7 +1421,8 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
->  			/* 4.19.6 Port Test Modes (USB2 Test Mode) */
->  			if (hcd->speed != HCD_USB2)
->  				goto error;
-> -			if (test_mode > TEST_FORCE_EN || test_mode < TEST_J)
-> +			if (test_mode > USB_TEST_FORCE_ENABLE ||
-> +			    test_mode < USB_TEST_J)
->  				goto error;
->  			retval = xhci_enter_test_mode(xhci, test_mode, wIndex,
->  						      &flags);
-> diff --git a/drivers/usb/misc/ehset.c b/drivers/usb/misc/ehset.c
-> index 7895d61e733b..2752e1f4f4d0 100644
-> --- a/drivers/usb/misc/ehset.c
-> +++ b/drivers/usb/misc/ehset.c
-> @@ -33,28 +33,28 @@ static int ehset_probe(struct usb_interface *intf,
->  		ret = usb_control_msg(hub_udev, usb_sndctrlpipe(hub_udev, 0),
->  					USB_REQ_SET_FEATURE, USB_RT_PORT,
->  					USB_PORT_FEAT_TEST,
-> -					(TEST_SE0_NAK << 8) | portnum,
-> +					(USB_TEST_SE0_NAK << 8) | portnum,
->  					NULL, 0, 1000);
->  		break;
->  	case TEST_J_PID:
->  		ret = usb_control_msg(hub_udev, usb_sndctrlpipe(hub_udev, 0),
->  					USB_REQ_SET_FEATURE, USB_RT_PORT,
->  					USB_PORT_FEAT_TEST,
-> -					(TEST_J << 8) | portnum,
-> +					(USB_TEST_J << 8) | portnum,
->  					NULL, 0, 1000);
->  		break;
->  	case TEST_K_PID:
->  		ret = usb_control_msg(hub_udev, usb_sndctrlpipe(hub_udev, 0),
->  					USB_REQ_SET_FEATURE, USB_RT_PORT,
->  					USB_PORT_FEAT_TEST,
-> -					(TEST_K << 8) | portnum,
-> +					(USB_TEST_K << 8) | portnum,
->  					NULL, 0, 1000);
->  		break;
->  	case TEST_PACKET_PID:
->  		ret = usb_control_msg(hub_udev, usb_sndctrlpipe(hub_udev, 0),
->  					USB_REQ_SET_FEATURE, USB_RT_PORT,
->  					USB_PORT_FEAT_TEST,
-> -					(TEST_PACKET << 8) | portnum,
-> +					(USB_TEST_PACKET << 8) | portnum,
->  					NULL, 0, 1000);
->  		break;
->  	case TEST_HS_HOST_PORT_SUSPEND_RESUME:
-> diff --git a/drivers/usb/mtu3/mtu3_gadget_ep0.c b/drivers/usb/mtu3/mtu3_gadget_ep0.c
-> index 2be182bd793a..563a0a2e970d 100644
-> --- a/drivers/usb/mtu3/mtu3_gadget_ep0.c
-> +++ b/drivers/usb/mtu3/mtu3_gadget_ep0.c
-> @@ -278,20 +278,20 @@ static int handle_test_mode(struct mtu3 *mtu, struct usb_ctrlrequest *setup)
->  	u32 value;
->  
->  	switch (le16_to_cpu(setup->wIndex) >> 8) {
-> -	case TEST_J:
-> -		dev_dbg(mtu->dev, "TEST_J\n");
-> +	case USB_TEST_J:
-> +		dev_dbg(mtu->dev, "USB_TEST_J\n");
->  		mtu->test_mode_nr = TEST_J_MODE;
->  		break;
-> -	case TEST_K:
-> -		dev_dbg(mtu->dev, "TEST_K\n");
-> +	case USB_TEST_K:
-> +		dev_dbg(mtu->dev, "USB_TEST_K\n");
->  		mtu->test_mode_nr = TEST_K_MODE;
->  		break;
-> -	case TEST_SE0_NAK:
-> -		dev_dbg(mtu->dev, "TEST_SE0_NAK\n");
-> +	case USB_TEST_SE0_NAK:
-> +		dev_dbg(mtu->dev, "USB_TEST_SE0_NAK\n");
->  		mtu->test_mode_nr = TEST_SE0_NAK_MODE;
->  		break;
-> -	case TEST_PACKET:
-> -		dev_dbg(mtu->dev, "TEST_PACKET\n");
-> +	case USB_TEST_PACKET:
-> +		dev_dbg(mtu->dev, "USB_TEST_PACKET\n");
->  		mtu->test_mode_nr = TEST_PACKET_MODE;
->  		break;
->  	default:
-> diff --git a/drivers/usb/musb/musb_gadget_ep0.c b/drivers/usb/musb/musb_gadget_ep0.c
-> index 91a5027b5c1f..0ae3e0be043e 100644
-> --- a/drivers/usb/musb/musb_gadget_ep0.c
-> +++ b/drivers/usb/musb/musb_gadget_ep0.c
-> @@ -311,27 +311,23 @@ __acquires(musb->lock)
->  						goto stall;
->  
->  					switch (ctrlrequest->wIndex >> 8) {
-> -					case 1:
-> -						pr_debug("TEST_J\n");
-> -						/* TEST_J */
-> +					case USB_TEST_J:
-> +						pr_debug("USB_TEST_J\n");
->  						musb->test_mode_nr =
->  							MUSB_TEST_J;
->  						break;
-> -					case 2:
-> -						/* TEST_K */
-> -						pr_debug("TEST_K\n");
-> +					case USB_TEST_K:
-> +						pr_debug("USB_TEST_K\n");
->  						musb->test_mode_nr =
->  							MUSB_TEST_K;
->  						break;
-> -					case 3:
-> -						/* TEST_SE0_NAK */
-> -						pr_debug("TEST_SE0_NAK\n");
-> +					case USB_TEST_SE0_NAK:
-> +						pr_debug("USB_TEST_SE0_NAK\n");
->  						musb->test_mode_nr =
->  							MUSB_TEST_SE0_NAK;
->  						break;
-> -					case 4:
-> -						/* TEST_PACKET */
-> -						pr_debug("TEST_PACKET\n");
-> +					case USB_TEST_PACKET:
-> +						pr_debug("USB_TEST_PACKET\n");
->  						musb->test_mode_nr =
->  							MUSB_TEST_PACKET;
->  						break;
-> diff --git a/drivers/usb/musb/musb_virthub.c b/drivers/usb/musb/musb_virthub.c
-> index a84ec27c4c12..cb7ae297a3af 100644
-> --- a/drivers/usb/musb/musb_virthub.c
-> +++ b/drivers/usb/musb/musb_virthub.c
-> @@ -385,25 +385,25 @@ int musb_hub_control(
->  
->  			wIndex >>= 8;
->  			switch (wIndex) {
-> -			case 1:
-> -				pr_debug("TEST_J\n");
-> +			case USB_TEST_J:
-> +				pr_debug("USB_TEST_J\n");
->  				temp = MUSB_TEST_J;
->  				break;
-> -			case 2:
-> -				pr_debug("TEST_K\n");
-> +			case USB_TEST_K:
-> +				pr_debug("USB_TEST_K\n");
->  				temp = MUSB_TEST_K;
->  				break;
-> -			case 3:
-> -				pr_debug("TEST_SE0_NAK\n");
-> +			case USB_TEST_SE0_NAK:
-> +				pr_debug("USB_TEST_SE0_NAK\n");
->  				temp = MUSB_TEST_SE0_NAK;
->  				break;
-> -			case 4:
-> -				pr_debug("TEST_PACKET\n");
-> +			case USB_TEST_PACKET:
-> +				pr_debug("USB_TEST_PACKET\n");
->  				temp = MUSB_TEST_PACKET;
->  				musb_load_testpacket(musb);
->  				break;
-> -			case 5:
-> -				pr_debug("TEST_FORCE_ENABLE\n");
-> +			case USB_TEST_FORCE_ENABLE:
-> +				pr_debug("USB_TEST_FORCE_ENABLE\n");
->  				temp = MUSB_TEST_FORCE_HOST
->  					| MUSB_TEST_FORCE_HS;
->  
-> diff --git a/include/uapi/linux/usb/ch9.h b/include/uapi/linux/usb/ch9.h
-> index b1ed2ccfe9cf..48766fdf6580 100644
-> --- a/include/uapi/linux/usb/ch9.h
-> +++ b/include/uapi/linux/usb/ch9.h
-> @@ -138,11 +138,11 @@
->   * Test Mode Selectors
->   * See USB 2.0 spec Table 9-7
->   */
-> -#define	TEST_J		1
-> -#define	TEST_K		2
-> -#define	TEST_SE0_NAK	3
-> -#define	TEST_PACKET	4
-> -#define	TEST_FORCE_EN	5
-> +#define	USB_TEST_J		1
-> +#define	USB_TEST_K		2
-> +#define	USB_TEST_SE0_NAK	3
-> +#define	USB_TEST_PACKET		4
-> +#define	USB_TEST_FORCE_ENABLE	5
->  
->  /* Status Type */
->  #define USB_STATUS_TYPE_STANDARD	0
-> -- 
-> 2.27.0
-> 
+#syz invalid
