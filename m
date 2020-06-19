@@ -2,28 +2,28 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A93920078C
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jun 2020 13:13:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8651C20079D
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jun 2020 13:18:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732583AbgFSLNB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Jun 2020 07:13:01 -0400
-Received: from mail2.protonmail.ch ([185.70.40.22]:27893 "EHLO
-        mail2.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726107AbgFSLNA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jun 2020 07:13:00 -0400
-Date:   Fri, 19 Jun 2020 11:12:51 +0000
+        id S1730880AbgFSLSk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Jun 2020 07:18:40 -0400
+Received: from mail-40131.protonmail.ch ([185.70.40.131]:15697 "EHLO
+        mail-40131.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729862AbgFSLSj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jun 2020 07:18:39 -0400
+Date:   Fri, 19 Jun 2020 11:18:31 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail; t=1592565175;
+        s=protonmail; t=1592565516;
         bh=1AzmnhJLRIRDco4o40tD39cv1TM9Ynazagg/M9JcAu4=;
         h=Date:To:From:Reply-To:Subject:From;
-        b=Uw1+EI552F8VRUzwfPXQW6BPgeEhbL4P6pgFR+Fqvq6PKFc4HaJvM4w3xnzxQ3g9v
-         M0bAOyoweC0ff20cA8amxqPyi0DGaxdRcKgSJWsfyePsSkoEhnA6HYdvDeLsuN8iPI
-         AH3JU4Gs+RyqLju3CGdOlUEgypIPsKf59qZigJew=
+        b=vYYX2IPveuM4YJWAxU8fHBUU8NjPq/1MarZRVkspmCgeRv6Rm4uOlVetd4t4B84DC
+         uj9lPzxA5rW0A+WVV128EpBbk5eUxwTXeihQhDq2GllcXH0C3/gaCTFKWDIR9tN9ye
+         bH7LKicAbgOk/klaMk9uZ/8KUvsnsXwJMKemuw4k=
 To:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
 From:   Rob Gill <rrobgill@protonmail.com>
 Reply-To: Rob Gill <rrobgill@protonmail.com>
 Subject: [PATCH] driver/usb MODULE_DESCRIPTION entries to usb modules
-Message-ID: <FYxjHrB1OHDNcbp2QWtbfQBnu2GBBIzB8ZxlWTDquJldTFfCuOPesBhAKygOtFMgyt0_AfJjOIZXc8HeNGKn_kKAZrSgQ09i_wDJEiiGwoE=@protonmail.com>
+Message-ID: <k9XZapJHJVXoO82YNf3IlaNfFbMsR4tzD22KaFWD_x_WL5ksH5DzaCy1knWtCBjSfPWExoNX0f3t4lRVU0UhNiDt4nkxU2juWmEkC4x7P3A=@protonmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
