@@ -2,28 +2,29 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8651C20079D
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jun 2020 13:18:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3A22007E9
+	for <lists+linux-usb@lfdr.de>; Fri, 19 Jun 2020 13:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730880AbgFSLSk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Jun 2020 07:18:40 -0400
-Received: from mail-40131.protonmail.ch ([185.70.40.131]:15697 "EHLO
-        mail-40131.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729862AbgFSLSj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jun 2020 07:18:39 -0400
-Date:   Fri, 19 Jun 2020 11:18:31 +0000
+        id S1728156AbgFSLd6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 19 Jun 2020 07:33:58 -0400
+Received: from mail2.protonmail.ch ([185.70.40.22]:51574 "EHLO
+        mail2.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727814AbgFSLdu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 19 Jun 2020 07:33:50 -0400
+Date:   Fri, 19 Jun 2020 11:26:19 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail; t=1592565516;
-        bh=1AzmnhJLRIRDco4o40tD39cv1TM9Ynazagg/M9JcAu4=;
-        h=Date:To:From:Reply-To:Subject:From;
-        b=vYYX2IPveuM4YJWAxU8fHBUU8NjPq/1MarZRVkspmCgeRv6Rm4uOlVetd4t4B84DC
-         uj9lPzxA5rW0A+WVV128EpBbk5eUxwTXeihQhDq2GllcXH0C3/gaCTFKWDIR9tN9ye
-         bH7LKicAbgOk/klaMk9uZ/8KUvsnsXwJMKemuw4k=
-To:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+        s=protonmail; t=1592565984;
+        bh=9P+Li2yelqHWQvsyWirHt1c2G2j+OOWUtGPzErBIbWY=;
+        h=Date:To:From:Cc:Reply-To:Subject:From;
+        b=Hql0VCReu0GAgXpiKINNOFagwvpru6TSd00bLVtCu/Y3xFFEm0/JC+ilRX0AVNcqC
+         tqzUSAiuZ4hNqPnpDyNKgfXLH/dHbFzaKRCie4O4tBg8q8jf2XxSFzrVd152cXdT3h
+         lx6z88ErlGCG7SJy+DO/FFVrxt3wplgcaIdJodEw=
+To:     linux-usb@vger.kernel.org
 From:   Rob Gill <rrobgill@protonmail.com>
+Cc:     Rob Gill <rrobgill@protonmail.com>
 Reply-To: Rob Gill <rrobgill@protonmail.com>
-Subject: [PATCH] driver/usb MODULE_DESCRIPTION entries to usb modules
-Message-ID: <k9XZapJHJVXoO82YNf3IlaNfFbMsR4tzD22KaFWD_x_WL5ksH5DzaCy1knWtCBjSfPWExoNX0f3t4lRVU0UhNiDt4nkxU2juWmEkC4x7P3A=@protonmail.com>
+Subject: RE: [PATCH] driver/usb MODULE_DESCRIPTION entries to usb modules
+Message-ID: <20200619112607.21763-1-rrobgill@protonmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
@@ -62,7 +63,7 @@ index fbe96ef1a..579ab41c6 100644
 --- a/drivers/usb/gadget/function/u_ether.c
 +++ b/drivers/usb/gadget/function/u_ether.c
 @@ -1180,3 +1180,4 @@ EXPORT_SYMBOL_GPL(gether_disconnect);
-
+=20
  MODULE_LICENSE("GPL");
  MODULE_AUTHOR("David Brownell");
 +MODULE_DESCRIPTION("Ethernet-over-USB link layer utilities for Gadget stac=
@@ -73,7 +74,7 @@ index 4d30095d6..607c90c22 100644
 --- a/drivers/usb/misc/isight_firmware.c
 +++ b/drivers/usb/misc/isight_firmware.c
 @@ -129,3 +129,4 @@ module_usb_driver(isight_firmware_driver);
-
+=20
  MODULE_LICENSE("GPL");
  MODULE_AUTHOR("Matthew Garrett <mjg@redhat.com>");
 +MODULE_DESCRIPTION("USB isight camera firmware");
@@ -96,11 +97,10 @@ index d59207111..7f59748c4 100644
  MODULE_AUTHOR(
  =09"Hans de Goede <hdegoede@redhat.com>, Matthew Wilcox and Sarah Sharp");
 +MODULE_DESCRIPTION("USB attached SCSI");
---
+--=20
 2.17.1
 
 
-
-Sent with ProtonMail Secure Email.
+Apologies for previous mangled emails.
 
 
