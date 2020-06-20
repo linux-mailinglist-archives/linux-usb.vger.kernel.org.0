@@ -2,247 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 260A7202621
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Jun 2020 21:22:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A067920264C
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Jun 2020 22:05:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728543AbgFTTWy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 20 Jun 2020 15:22:54 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:38096 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728514AbgFTTWx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 20 Jun 2020 15:22:53 -0400
-Received: by mail-wm1-f68.google.com with SMTP id f185so12095470wmf.3
-        for <linux-usb@vger.kernel.org>; Sat, 20 Jun 2020 12:22:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:subject:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QUIfvm1HGnDuLD5hZ4u/pZPXV6C62z/iUQR6xq2Qf6g=;
-        b=WYnNtU0oRzX1ZDk1wGv8nXJpvwu+odpw3UB5w3/4xSdN26arAhaw81CdPTO7mZJNmz
-         unwTnNbtC4b0aJmVmh8sTc2FGl8uekZ2Gjm+gAvPfMQMwPDyOyZcZE2/g1DKv3HGkNMF
-         HzHYZvTZZfHPndJ7kSOLAurMhqG5dRHhGP83VXLYm+XKZ/DLUGwCofCGOJWmqP2egINK
-         ZEx7aKQinae6iqQSShm89zWCINFQsOOn29owGR+9gMUDhgMV2MM3mwyDwIDKv8Hy1aII
-         LtnymiNyTI04ZbH3wLP5o/lqKYbIp351sZRFbf9dc1jgrjzuoBqBN+AmWibTeSp47G6y
-         umdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QUIfvm1HGnDuLD5hZ4u/pZPXV6C62z/iUQR6xq2Qf6g=;
-        b=qyPuWwvxRLsMLnpLo2/P3IazAk2TAGPLS4cWaWMiz+8r+04lqHqr8ufg2T87S1MYhn
-         4XTUIl1iP1whQqc/DDQPhIFur65K4pyCBqd10snJk9shaDOWWONPAnecLYUilVzOQlWS
-         1xo4RDgW2YUPGrGJjC9lNNYMZ0LoB8iQxbDHlsXRREYyClDYrrYqvr7A9OiYZ5M0Cjl9
-         kp0aKsHFUaEsNBmxi2LydLZBtVUHEHzGMFlkWuA97cwuGJr5OdS7NGtifWGowfAcUnPJ
-         JixEwtCXP2qFyC5VnMmCCAWQlSQjIdwdP9J80osnHJ8Z0zitDJr0m9yMA4hImA1W/0OI
-         rUTQ==
-X-Gm-Message-State: AOAM530gHux3wiCH1MiI6vizO/3p20EixzcZe0pGtaO9Vgngaaa5wx2g
-        UxjpIt+sLrWvO1pHevN0WMWWKflDIUw=
-X-Google-Smtp-Source: ABdhPJyl9MK4rrNrkT+oAXXnhc0dAA2KgwgQe2FkN/oU7JkeWonut9m5VyqIk3HdzERuUySm1T2yrQ==
-X-Received: by 2002:a7b:c041:: with SMTP id u1mr10443186wmc.56.1592680908280;
-        Sat, 20 Jun 2020 12:21:48 -0700 (PDT)
-Received: from ping (x4dbf8150.dyn.telefonica.de. [77.191.129.80])
-        by smtp.gmail.com with ESMTPSA id p7sm11455756wro.26.2020.06.20.12.21.47
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Jun 2020 12:21:47 -0700 (PDT)
-Date:   Sat, 20 Jun 2020 21:19:13 +0200
-From:   Fabian Melzow <fabian.melzow@gmail.com>
-To:     linux-usb@vger.kernel.org
-Subject: ERROR Transfer event TRB DMA ptr not part of current TD ep_index 4
- comp_code 1
-Message-ID: <20200620211913.1535bac0@ping>
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1728711AbgFTUFM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 20 Jun 2020 16:05:12 -0400
+Received: from smtp2bb.hosting90.cz ([37.46.87.1]:60214 "EHLO
+        smtp2bb.hosting90.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728640AbgFTUFM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 20 Jun 2020 16:05:12 -0400
+X-Greylist: delayed 382 seconds by postgrey-1.27 at vger.kernel.org; Sat, 20 Jun 2020 16:05:11 EDT
+Received: from [46.229.122.58] (helo=[10.10.0.107])
+        by smtp2.hosting90.cz with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.92)
+        (envelope-from <Jerry@jrr.cz>)
+        id 1jmjdS-0000yG-TE; Sat, 20 Jun 2020 21:58:43 +0200
+From:   Jerry <Jerry@jrr.cz>
+Subject: [PATCH 1/1] usbserial: cp210x - icount support for parity error
+ checking
+To:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Message-ID: <b4cd2557-9a61-5ccd-32ad-48b0c68bef6b@jrr.cz>
+Date:   Sat, 20 Jun 2020 21:58:40 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Firefox/60.0 SeaMonkey/2.53.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Antivirus: Clamav/CLEAN
+X-Scan-Signature: eebf8b9cd002dfa7a74ea8c2d9cb6246
+X-Authenticated-Id: jerry@jrr.cz
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi folks!
+usbserial: add cp210x support for icount to detect parity error in received data
 
-I have got a Canon LiDE 20 flatbed scanner (
-ID 04a9:220d Canon, Inc. CanoScan N670U/N676U/LiDE 20).
+Motivation - current version of cp210x driver doesn't provide any way to detect
+a parity error in received data from userspace. Some serial protocols like STM32
+bootloader protect data only by even parity so application needs to detect
+whether parity error happened to read again peripheral data.
 
-When I power up my PC and plug it in everything is fine, until I try to
-access it, and if it is only a "scanimage -L".
+I created a simple patch which adds support for icount (ioctl TIOCGICOUNT) which
+sends GET_COMM_STATUS command to CP210X and according received flags increments
+fields for parity error, frame error, break and overrun.
+So application can detect an error condition after reading data from ttyUSB
+and repeat operation. There is no impact for applications which don't
+call ioctl TIOCGICOUNT.
+This patch is also placed at http://yyy.jrr.cz/cp210x.patch (my first patch)
 
-To demonstrate the bug, I wrote a shell script (scandebug.sh) using
-some debugging hints from
-https://bugzilla.kernel.org/show_bug.cgi?id=202541
-which seems related to this bug.
-
-#! /bin/bash
-echo 'module xhci_* =p' >/sys/kernel/debug/dynamic_debug/control
-echo 'module usbcore =p' >/sys/kernel/debug/dynamic_debug/control
-echo 81920 > /sys/kernel/debug/tracing/buffer_size_kb
-echo 1 > /sys/kernel/debug/tracing/events/xhci-hcd/enable
-echo Plug in scanner...
-sleep 20
-echo Now doing first scanimage -L ...
-logger "Now doing first scanimage -L ..."
-time scanimage -L
-dmesg >/root/dmesg1.txt
-cp /sys/kernel/debug/tracing/trace /root/trace1.txt
-echo Now doing second scanimage -L ...
-logger "Now doing second scanimage -L ..."
-time scanimage -L
-dmesg >/root/dmesg2.txt
-cp /sys/kernel/debug/tracing/trace /root/trace2.txt
-lsusb -v >/root/lsusb.txt
-echo "module * =_" > /sys/kernel/debug/dynamic_debug/control
-echo 0 > /sys/kernel/debug/tracing/events/xhci-hcd/enable
-
-When it runs it outputs:
-
-[root@ping ~]# ./scandebug.sh
-Plug in scanner...
-Now doing first scanimage -L ...
-device `plustek:libusb:001:002' is a Canon CanoScan N670U/N676U/LiDE20
-flatbed scanner
-
-real    0m45,313s
-user    0m0,036s
-sys     0m0,067s
-Now doing second scanimage -L ...
-device `plustek:libusb:001:002' is a Canon CanoScan N670U/N676U/LiDE20
-flatbed scanner
-
-real    0m4,165s
-user    0m0,044s
-sys     0m0,070s
-
-As you can see, the first scanimage takes very long, in other tries it
-takes at least 25 seconds, while the second and any further always take
-around 4 s.
-
-After running the first scanimage I get the following errors/warnings:
-
-Jun 20 19:42:15 ping kernel: xhci_hcd 0000:01:00.0: // Ding dong!
-Jun 20 19:42:15 ping kernel: xhci_hcd 0000:01:00.0: Successful Set TR Deq Ptr cmd, deq = @d7615080
-Jun 20 19:42:15 ping kernel: xhci_hcd 0000:01:00.0: // Ding dong!
-Jun 20 19:42:15 ping kernel: xhci_hcd 0000:01:00.0: Set TR Deq Ptr cmd, new deq seg = 00000000de74ec7f (0xd7615000 dma), new deq ptr = 00000000ff17b5e1 (0xd7615080 dma), new cycle = 1
-Jun 20 19:42:15 ping kernel: xhci_hcd 0000:01:00.0: New dequeue pointer = 0xd7615080 (DMA)
-Jun 20 19:42:15 ping kernel: xhci_hcd 0000:01:00.0: New dequeue segment = 00000000de74ec7f (virtual)
-Jun 20 19:42:15 ping kernel: xhci_hcd 0000:01:00.0: Cycle state = 0x1
-Jun 20 19:42:15 ping kernel: xhci_hcd 0000:01:00.0: Finding endpoint context
-Jun 20 19:42:15 ping kernel: xhci_hcd 0000:01:00.0: Removing canceled TD starting at 0xd7615070 (dma).
-Jun 20 19:42:15 ping kernel: xhci_hcd 0000:01:00.0: Stopped on Transfer TRB for slot 1 ep 4
-Jun 20 19:42:15 ping kernel: xhci_hcd 0000:01:00.0: // Ding dong!
-Jun 20 19:42:15 ping kernel: xhci_hcd 0000:01:00.0: Cancel URB 00000000fa372bb8, dev 3, ep 0x82, starting at offset 0xd7615070
-Jun 20 19:41:55 ping kernel: xhci_hcd 0000:01:00.0: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x000d address=0xdc707028 flags=0x0020]
-Jun 20 19:41:55 ping kernel: xhci_hcd 0000:01:00.0: Looking for event-dma 00000000d7615060 trb-start 00000000d7615070 trb-end 00000000d7615070 seg-start 00000000d7615000 seg-end 00000000d7615ff0
-Jun 20 19:41:55 ping kernel: xhci_hcd 0000:01:00.0: ERROR Transfer event TRB DMA ptr not part of current TD ep_index 4 comp_code 1
-Jun 20 19:41:55 ping kernel: xhci_hcd 0000:01:00.0: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x000d address=0xc9b4c730 flags=0x0020]
-Jun 20 19:41:55 ping kernel: xhci_hcd 0000:01:00.0: ep 0x82 - asked for 1 bytes, 0 bytes untransferred
-Jun 20 19:41:55 ping kernel: xhci_hcd 0000:01:00.0: WARN Successful completion on short TX
-Jun 20 19:41:54 ping kernel: xhci_hcd 0000:01:00.0: // Ding dong!
-Jun 20 19:41:54 ping kernel: xhci_hcd 0000:01:00.0: // Ding dong!
-Jun 20 19:41:54 ping kernel: xhci_hcd 0000:01:00.0: Slot state = 3, EP state = 2
-Jun 20 19:41:54 ping kernel: xhci_hcd 0000:01:00.0: WARN Set TR Deq Ptr cmd failed due to incorrect slot or ep state.
-Jun 20 19:41:54 ping kernel: xhci_hcd 0000:01:00.0: // Ding dong!
-Jun 20 19:41:54 ping kernel: xhci_hcd 0000:01:00.0: Set TR Deq Ptr cmd, new deq seg = 00000000de74ec7f (0xd7615000 dma), new deq ptr = 00000000f035f701 (0xd7615060 dma), new cycle = 1
-Jun 20 19:41:54 ping kernel: xhci_hcd 0000:01:00.0: New dequeue pointer = 0xd7615060 (DMA)
-Jun 20 19:41:54 ping kernel: xhci_hcd 0000:01:00.0: New dequeue segment = 00000000de74ec7f (virtual)
-Jun 20 19:41:54 ping kernel: xhci_hcd 0000:01:00.0: Cycle state = 0x1
-Jun 20 19:41:54 ping kernel: xhci_hcd 0000:01:00.0: Finding endpoint context
-Jun 20 19:41:54 ping kernel: xhci_hcd 0000:01:00.0: Removing canceled TD starting at 0xd7615050 (dma).
-Jun 20 19:41:54 ping kernel: xhci_hcd 0000:01:00.0: // Ding dong!
-Jun 20 19:41:54 ping kernel: xhci_hcd 0000:01:00.0: Cancel URB 000000002fee127b, dev 3, ep 0x82, starting at offset 0xd7615050
+Signed-off-by: Jaromir Skorpil <Jerry@jrr.cz>
+---
 
 
-After the second scanimage -L I got no errors or warnings:
+diff -up linux-5.8-rc1/drivers/usb/serial/cp210x.c j/drivers/usb/serial/cp210x.c
+--- linux-5.8-rc1/drivers/usb/serial/cp210x.c	2020-06-14 21:45:04.000000000 +0200
++++ j/drivers/usb/serial/cp210x.c	2020-06-20 18:50:17.135843606 +0200
+@@ -43,6 +43,8 @@ static int cp210x_tiocmget(struct tty_st
+  static int cp210x_tiocmset(struct tty_struct *, unsigned int, unsigned int);
+  static int cp210x_tiocmset_port(struct usb_serial_port *port,
+  		unsigned int, unsigned int);
++static int cp210x_get_icount(struct tty_struct *tty,
++		struct serial_icounter_struct *icount);
+  static void cp210x_break_ctl(struct tty_struct *, int);
+  static int cp210x_attach(struct usb_serial *);
+  static void cp210x_disconnect(struct usb_serial *);
+@@ -274,6 +276,7 @@ static struct usb_serial_driver cp210x_d
+  	.tx_empty		= cp210x_tx_empty,
+  	.tiocmget		= cp210x_tiocmget,
+  	.tiocmset		= cp210x_tiocmset,
++	.get_icount		= cp210x_get_icount,
+  	.attach			= cp210x_attach,
+  	.disconnect		= cp210x_disconnect,
+  	.release		= cp210x_release,
+@@ -393,6 +396,13 @@ struct cp210x_comm_status {
+  	u8       bReserved;
+  } __packed;
+  
++/* cp210x_comm_status::ulErrors */
++#define CP210X_SERIAL_ERR_BREAK	BIT(0)
++#define CP210X_SERIAL_ERR_FRAME	BIT(1)
++#define CP210X_SERIAL_ERR_HW_OVERRUN	BIT(2)
++#define CP210X_SERIAL_ERR_QUEUE_OVERRUN	BIT(3)
++#define CP210X_SERIAL_ERR_PARITY	BIT(4)
++
+  /*
+   * CP210X_PURGE - 16 bits passed in wValue of USB request.
+   * SiLabs app note AN571 gives a strange description of the 4 bits:
+@@ -836,10 +846,10 @@ static void cp210x_close(struct usb_seri
+  }
+  
+  /*
+- * Read how many bytes are waiting in the TX queue.
++ * Read how many bytes are waiting in the TX queue and update error counters.
+   */
+-static int cp210x_get_tx_queue_byte_count(struct usb_serial_port *port,
+-		u32 *count)
++static int cp210x_get_comm_status(struct usb_serial_port *port,
++		u32 *tx_count)
+  {
+  	struct usb_serial *serial = port->serial;
+  	struct cp210x_port_private *port_priv = usb_get_serial_port_data(port);
+@@ -855,7 +865,18 @@ static int cp210x_get_tx_queue_byte_coun
+  			0, port_priv->bInterfaceNumber, sts, sizeof(*sts),
+  			USB_CTRL_GET_TIMEOUT);
+  	if (result == sizeof(*sts)) {
+-		*count = le32_to_cpu(sts->ulAmountInOutQueue);
++		if (tx_count)
++			*tx_count = le32_to_cpu(sts->ulAmountInOutQueue);
++		if (sts->ulErrors & CP210X_SERIAL_ERR_BREAK)
++			port->icount.brk++;
++		if (sts->ulErrors & CP210X_SERIAL_ERR_FRAME)
++			port->icount.frame++;
++		if (sts->ulErrors & CP210X_SERIAL_ERR_HW_OVERRUN)
++			port->icount.overrun++;
++		if (sts->ulErrors & CP210X_SERIAL_ERR_QUEUE_OVERRUN)
++			port->icount.buf_overrun++;
++		if (sts->ulErrors & CP210X_SERIAL_ERR_PARITY)
++			port->icount.parity++;
+  		result = 0;
+  	} else {
+  		dev_err(&port->dev, "failed to get comm status: %d\n", result);
+@@ -873,13 +894,26 @@ static bool cp210x_tx_empty(struct usb_s
+  	int err;
+  	u32 count;
+  
+-	err = cp210x_get_tx_queue_byte_count(port, &count);
++	err = cp210x_get_comm_status(port, &count);
+  	if (err)
+  		return true;
+  
+  	return !count;
+  }
+  
++static int cp210x_get_icount(struct tty_struct *tty,
++		struct serial_icounter_struct *icount)
++{
++	struct usb_serial_port *port = tty->driver_data;
++	int result;
++
++	result = cp210x_get_comm_status(port, NULL);
++	if (result)
++		return result;
++
++	return usb_serial_generic_get_icount(tty, icount);
++}
++
+  /*
+   * cp210x_get_termios
+   * Reads the baud rate, data bits, parity, stop bits and flow control mode
 
-Jun 20 19:42:33 ping kernel: xhci_hcd 0000:09:00.3: // Ding dong!
-Jun 20 19:42:33 ping kernel: xhci_hcd 0000:09:00.3: Cancel URB 00000000e5885748, dev 2, ep 0x0, starting at offset 0xfedf51c0
-Jun 20 19:42:28 ping kernel: xhci_hcd 0000:09:00.3: Successful Set TR Deq Ptr cmd, deq = @fedf51c0
-Jun 20 19:42:28 ping kernel: xhci_hcd 0000:09:00.3: // Ding dong!
-Jun 20 19:42:28 ping kernel: xhci_hcd 0000:09:00.3: Set TR Deq Ptr cmd, new deq seg = 00000000fcf95654 (0xfedf5000 dma), new deq ptr = 000000001c042f08 (0xfedf51c0 dma), new cycle = 1
-Jun 20 19:42:28 ping kernel: xhci_hcd 0000:09:00.3: New dequeue pointer = 0xfedf51c0 (DMA)
-Jun 20 19:42:28 ping kernel: xhci_hcd 0000:09:00.3: New dequeue segment = 00000000fcf95654 (virtual)
-Jun 20 19:42:28 ping kernel: xhci_hcd 0000:09:00.3: Cycle state = 0x1
-Jun 20 19:42:28 ping kernel: xhci_hcd 0000:09:00.3: Finding endpoint context
-Jun 20 19:42:28 ping kernel: xhci_hcd 0000:09:00.3: Removing canceled TD starting at 0xfedf5190 (dma).
-Jun 20 19:42:28 ping kernel: xhci_hcd 0000:09:00.3: Stopped on Transfer TRB for slot 1 ep 0
-Jun 20 19:42:28 ping kernel: xhci_hcd 0000:09:00.3: // Ding dong!
-Jun 20 19:42:28 ping kernel: xhci_hcd 0000:09:00.3: Cancel URB 00000000e5885748, dev 2, ep 0x0, starting at offset 0xfedf5190
-Jun 20 19:42:23 ping kernel: xhci_hcd 0000:09:00.3: Successful Set TR Deq Ptr cmd, deq = @fede7830
-Jun 20 19:42:23 ping kernel: xhci_hcd 0000:09:00.3: Ignoring reset ep completion code of 1
-Jun 20 19:42:23 ping kernel: xhci_hcd 0000:09:00.3: Giveback URB 00000000e5885748, len = 0, expected = 4, status = -32
-Jun 20 19:42:23 ping kernel: xhci_hcd 0000:09:00.3: // Ding dong!
-Jun 20 19:42:23 ping kernel: xhci_hcd 0000:09:00.3: Set TR Deq Ptr cmd, new deq seg = 0000000035cbb6da (0xfede7000 dma), new deq ptr = 00000000c7b3bb41 (0xfede7830 dma), new cycle = 1
-Jun 20 19:42:23 ping kernel: xhci_hcd 0000:09:00.3: Queueing new dequeue state
-Jun 20 19:42:23 ping kernel: xhci_hcd 0000:09:00.3: New dequeue pointer = 0xfede7830 (DMA)
-Jun 20 19:42:23 ping kernel: xhci_hcd 0000:09:00.3: New dequeue segment = 0000000035cbb6da (virtual)
-Jun 20 19:42:23 ping kernel: xhci_hcd 0000:09:00.3: Cycle state = 0x1
-Jun 20 19:42:23 ping kernel: xhci_hcd 0000:09:00.3: Finding endpoint context
-Jun 20 19:42:23 ping kernel: xhci_hcd 0000:09:00.3: Cleaning up stalled endpoint ring
-Jun 20 19:42:23 ping kernel: xhci_hcd 0000:09:00.3: Stalled endpoint for slot 2 ep 0
-Jun 20 19:42:23 ping kernel: xhci_hcd 0000:09:00.3: Successful Set TR Deq Ptr cmd, deq = @fede7800
-Jun 20 19:42:23 ping kernel: xhci_hcd 0000:09:00.3: Ignoring reset ep completion code of 1
-Jun 20 19:42:23 ping kernel: xhci_hcd 0000:09:00.3: Giveback URB 00000000e5885748, len = 0, expected = 10, status = -32
-Jun 20 19:42:23 ping kernel: xhci_hcd 0000:09:00.3: // Ding dong!
-Jun 20 19:42:23 ping kernel: xhci_hcd 0000:09:00.3: Set TR Deq Ptr cmd, new deq seg = 0000000035cbb6da (0xfede7000 dma), new deq ptr = 0000000025e70308 (0xfede7800 dma), new cycle = 1
-Jun 20 19:42:23 ping kernel: xhci_hcd 0000:09:00.3: Queueing new dequeue state
-Jun 20 19:42:23 ping kernel: xhci_hcd 0000:09:00.3: New dequeue pointer = 0xfede7800 (DMA)
-Jun 20 19:42:23 ping kernel: xhci_hcd 0000:09:00.3: New dequeue segment = 0000000035cbb6da (virtual)
-Jun 20 19:42:23 ping kernel: xhci_hcd 0000:09:00.3: Cycle state = 0x1
-Jun 20 19:42:23 ping kernel: xhci_hcd 0000:09:00.3: Finding endpoint context
-Jun 20 19:42:23 ping kernel: xhci_hcd 0000:09:00.3: Cleaning up stalled endpoint ring
-Jun 20 19:42:23 ping kernel: xhci_hcd 0000:09:00.3: Stalled endpoint for slot 2 ep 0
 
-I got no warnings after startup related to IOMMU or AMD-Vi:
-
-[fabi@ping ~]$ dmesg|grep IOMMU
-[    0.404420] pci 0000:00:00.2: AMD-Vi: IOMMU performance counters supported
-[    0.408184] pci 0000:00:00.2: AMD-Vi: Found IOMMU cap 0x40
-[    0.409389] perf/amd_iommu: Detected AMD IOMMU #0 (2 banks, 4 counters/bank).
-[    0.424729] AMD-Vi: AMD IOMMUv2 driver by Joerg Roedel <jroedel@suse.de>
-[fabi@ping ~]$ dmesg|grep AMD-Vi
-[    0.404420] pci 0000:00:00.2: AMD-Vi: IOMMU performance counters supported
-[    0.408184] pci 0000:00:00.2: AMD-Vi: Found IOMMU cap 0x40
-[    0.408185] pci 0000:00:00.2: AMD-Vi: Extended features (0xf77ef22294ada):
-[    0.408187] AMD-Vi: Interrupt remapping enabled
-[    0.408188] AMD-Vi: Virtual APIC enabled
-[    0.408283] AMD-Vi: Lazy IO/TLB flushing enabled
-[    0.424729] AMD-Vi: AMD IOMMUv2 driver by Joerg Roedel <jroedel@suse.de>
-
-Output of awk -f scripts/ver_linux:
-
-Linux ping 5.7.4 #1 SMP PREEMPT Sat Jun 20 14:34:20 CEST 2020 x86_64 GNU/Linux
-
-GNU C                   10.1.0
-GNU Make                4.3
-Binutils                2.34.0
-Util-linux              2.35.2
-Mount                   2.35.2
-Module-init-tools       27
-E2fsprogs               1.45.6
-Jfsutils                1.1.15
-Reiserfsprogs           3.6.27
-Xfsprogs                5.6.0
-PPP                     2.4.7
-Bison                   3.6.3
-Flex                    2.6.4
-Linux C++ Library       6.0.28
-Linux C Library         2.31
-Dynamic linker (ldd)    2.31
-Procps                  3.3.16
-Net-tools               2.10
-Kbd                     2.2.0
-Console-tools           2.2.0
-Sh-utils                8.32
-Udev                    245
-Modules Loaded          8021q acpi_cpufreq aesni_intel agpgart amdgpu asus_wmi battery ccp cdrom cec crc16 crc32c_generic crc32c_intel crc32_pclmul crct10dif_pclmul cryptd crypto_simd crypto_user dca drm drm_kms_helper edac_mce_amd eeepc_wmi evdev ext4 fat fb_sys_fops garp ghash_clmulni_intel glue_helper gpio_amdpt gpu_sched hid hid_generic hid_logitech_dj hid_logitech_hidpp i2c_algo_bit i2c_piix4 igb input_leds ip_tables irqbypass jbd2 joydev k10temp kvm kvm_amd ledtrig_audio libcrc32c llc mac_hid mbcache mousedev mrp mxm_wmi nf_conntrack nf_defrag_ipv4 nf_defrag_ipv6 nfnetlink nf_reject_ipv4 nf_reject_ipv6 nf_tables nft_ct nft_reject nft_reject_inet nls_cp437 nls_iso8859_1 pcspkr pinctrl_amd rc_core rfkill rng_core sg snd snd_hda_codec snd_hda_codec_generic snd_hda_codec_hdmi snd_hda_codec_realtek snd_hda_core snd_hda_intel snd_hwdep snd_intel_dspcfg snd_pcm snd_timer soundcore sp5100_tco sparse_keymap sr_mod stp syscopyarea sysfillrect sysimgblt tpm tpm_crb tpm_tis tpm_tis_core ttm usbhid usbip_core usbip_host vfat wmi wmi_bmof xhci_hcd xhci_pci x_tables
-
-CPU: AMD Ryzen 7 2700X Eight-Core Processor
-
-The complete output of the above script along lspci -vvv, lsusb -v
-and filtered journal (kernel messages and script markings) can be
-downloaded from
-
-http://fabi.bplaced.net/debuglogs1.tar.xz
-
-Greats
-Fabian Melzow
