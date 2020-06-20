@@ -2,128 +2,213 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5505201CBD
-	for <lists+linux-usb@lfdr.de>; Fri, 19 Jun 2020 22:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9322920212E
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Jun 2020 06:05:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390426AbgFSUu4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 19 Jun 2020 16:50:56 -0400
-Received: from mail-eopbgr770113.outbound.protection.outlook.com ([40.107.77.113]:4278
-        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2389556AbgFSUuz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 19 Jun 2020 16:50:55 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bDIeVkRHTHv+AJiKgtoPQPJiA6vMutxOSLqP0GE0FE6LtgljDbm5t2TNLB4iFTVAbNme6Y1V0Mx0oZlZhb+LsQLMN7CmaR6Rg9beGG05t+DiYDE7UrS89sfLxLmeoA1eB8zrxT+vcWxiTj/xnLg3GcbbUexCXPIV6PbSF6q8e5sKubYFAD2UXHmOIt7xi3iUFYhMIeXnvsiSxslRFczDUOmp1gf6et3F9UpM9yP7z8SoH8hR07dIaXl074cuB+X6SyyYKABplUD6Gm1U73XuT+Yc5Lo+9bxAU4PLGzjG0gwCmuJZQcEgWtC91vcpbl/fEF1IjXefDcCsyK4yGWw55g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nUlvchscKv8bp8mMTFEtdMcQ+OevaYxiMZnd2qFBc5s=;
- b=HYXzfOz76HJnJshWH/+sTwlRXK/J9mVqf+ZO4QmBMDqG0A9Ua2/w/Q9tfdpzIbr+2bp8tUfxy40iinW09CDpcg3DMsohY9uHLhJ3dJpSneNntELuSqlwTOmVkvLd2FlXIslDqpZyy5M80xJD93SadsH2IROZ+wIrk/4nELmCMM/HE+jk/9qBK2AvKfS2XkQFtCS6/tunkU2TkGJpq2CazGiUTR3ZzybPHVqvIphiXPTtIbgheQtpr9/dPqV5twKGkHrgIAR5zoFjg0g3zo4FonGfKfxcSrrOwHC7v58tD71bylsLaCtF5jPXCLGPT185wu3YhJy+krQgFn7nnf360A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=northeastern.edu; dmarc=pass action=none
- header.from=northeastern.edu; dkim=pass header.d=northeastern.edu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=northeastern.edu;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nUlvchscKv8bp8mMTFEtdMcQ+OevaYxiMZnd2qFBc5s=;
- b=rHrYg7m8MQHVnrpOPEZcRYYcoDipLdzltxTw2UplG+OgU0pOAKHxjW4GpHBy2IrRnMiGc8sDIwWPF1W/WKwwaL4BOj8DPImdY5KS2z/OrW9Gza3adjor504L7Ok/3bDFibaEJX5mkc5TNUiPCzrbhEmFtTQZifnfT26nz+DdlU8=
-Received: from BN6PR06MB2532.namprd06.prod.outlook.com (2603:10b6:404:2a::10)
- by BN7PR06MB6385.namprd06.prod.outlook.com (2603:10b6:408:35::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3109.22; Fri, 19 Jun
- 2020 20:50:53 +0000
-Received: from BN6PR06MB2532.namprd06.prod.outlook.com
- ([fe80::e802:ad07:3832:e440]) by BN6PR06MB2532.namprd06.prod.outlook.com
- ([fe80::e802:ad07:3832:e440%11]) with mapi id 15.20.3109.023; Fri, 19 Jun
- 2020 20:50:53 +0000
-From:   Changming Liu <liu.changm@northeastern.edu>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Changming Liu <charley.ashbringer@gmail.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "thomas@winischhofer.net" <thomas@winischhofer.net>
-Subject: RE: [PATCH 0/4] USB: sisusbvga: series of changes char to u8
-Thread-Topic: [PATCH 0/4] USB: sisusbvga: series of changes char to u8
-Thread-Index: AQHWRdCustgJgFU8iUioGtmJ1I0CNqjfgx2AgADXahA=
-Date:   Fri, 19 Jun 2020 20:50:52 +0000
-Message-ID: <BN6PR06MB2532B0A36A0C4781BEBB4387E5980@BN6PR06MB2532.namprd06.prod.outlook.com>
-References: <1592526534-1739-1-git-send-email-liu.changm@northeastern.edu>
- <20200619070053.GA543232@kroah.com>
-In-Reply-To: <20200619070053.GA543232@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: linuxfoundation.org; dkim=none (message not signed)
- header.d=none;linuxfoundation.org; dmarc=none action=none
- header.from=northeastern.edu;
-x-originating-ip: [155.33.134.7]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c3182115-ee6b-475c-6be5-08d8149274df
-x-ms-traffictypediagnostic: BN7PR06MB6385:
-x-microsoft-antispam-prvs: <BN7PR06MB6385BBF4F644B589B5D617FEE5980@BN7PR06MB6385.namprd06.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 0439571D1D
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: C8TebPwvJ7WSf18hoi0DRtHOkEBRWrK9c6TNl7lMHl13/ktfoGukX0xEwCRtktf7X1KrXQLYXEtV7OTN6dQaGBSyoIoovNxKpAFn+3svIUnQPgJ0DDIbL8vPcEqBndW+DsGZ0gqI12HrQI+OT4+b3S9+rjOQFPTUUL8/ckv74B2jqjrd9F5pUNvgepz9QBLoQv0XSV0RwVgNZaUJSfnBW2gaseTelYoswM9th8yEvPvLKPeky8SaNBr4ynAOxrybpbu9a/IlBdYoKtUgjdY5PFVXqnIri4yv4KXd0qnaUwi8poGpsU9cejI1JCTakdAMmF6oKnjlzQhg7dP+0Gm7kOPZemDjws1fNtlcMt/jFbwOjKUWzNcK/uXKnCi1OSA0pay1lOBVbzPixKllui1EsA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR06MB2532.namprd06.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(136003)(396003)(39860400002)(376002)(346002)(366004)(8676002)(4326008)(2906002)(71200400001)(33656002)(55016002)(186003)(26005)(966005)(54906003)(8936002)(5660300002)(66946007)(110136005)(478600001)(9686003)(83380400001)(7696005)(76116006)(75432002)(52536014)(66446008)(786003)(316002)(86362001)(66476007)(6506007)(66556008)(64756008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: khKuyqqOoNHydIemoE7HOtNBdQiGIdzqkvIdFExMU/gPeRjZ1oiEFlEwzL5yu8l3YFV2QRUTx4dpsT+BgQn1N77wzJ3G1jVswGkKM8TH7Re0PR4mYUexTXsDGaOzVswT2oxG0IDIHyoZNl0QZN38KEomS8n9LGCk1yxUW3nS71w5kJpqiji7MI2oezz6DFTtzeD6SdzLAtTqOwzjX4JfGW6Wie9i9Haqe5O6bc18xxzpMJJOW7sb/xkb01EHV0jXaSsz9STxjviHgsogXAs2BgMw1Bui/uT5ntOyHkxOmxVH47U5MDKkvAoJ6AV1WIl5xQuEUeU0BEKisTUfS4dMQYAgXn2nQja3NKwqTocUA4tquzdYp6JC3halu3PET9XMyIc6HFPpbDLEhpznG/IU7FZ+PafQhXDg7iXdAgjti3dDNddfxbaltNiE85gHI/UKoPhoUKNIWi0OvutiOwzHWW0D9Y6fWlILLOIlgwNq+3w=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: northeastern.edu
-X-MS-Exchange-CrossTenant-Network-Message-Id: c3182115-ee6b-475c-6be5-08d8149274df
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jun 2020 20:50:52.8436
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a8eec281-aaa3-4dae-ac9b-9a398b9215e7
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FJNuAnJHpkfKGaEMTaukBoGOI41haXPip75sPecbJy03TR7UG3+7VMGTDbkTcnbfGSWOG6N89jLqH0Ozd3IsytGcciLblLh8kYiF1u4SiiE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR06MB6385
+        id S1725819AbgFTEE7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 20 Jun 2020 00:04:59 -0400
+Received: from wout1-smtp.messagingengine.com ([64.147.123.24]:59725 "EHLO
+        wout1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725290AbgFTEE6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 20 Jun 2020 00:04:58 -0400
+Received: from compute7.internal (compute7.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 6CF63AF3
+        for <linux-usb@vger.kernel.org>; Sat, 20 Jun 2020 00:04:57 -0400 (EDT)
+Received: from imap21 ([10.202.2.71])
+  by compute7.internal (MEProxy); Sat, 20 Jun 2020 00:04:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aeam.us; h=
+        mime-version:message-id:date:from:to:subject:content-type; s=
+        fm2; bh=p32kzwZM0Sjc/uTSI1n2fD0NQM/uFlq8h1ybFbFy0MI=; b=Iz2HhDSf
+        tbZl9qt/80H2lNI2xfmhXTFZWexH4XBSHm0aVuPZbZDrcvTyNCpUeMcEe9h/QQSh
+        G9lWLklzGKj05KiX14cDlQVMMkx4N8L0hVszkBkT8NBZm7k0OE7CJigVkSgvM9Gz
+        orzYoL5+EeWJtW4JR0cDDUwUJvQ3ZMlVxW1BzJ4uArtwHRWcovUp/RGGAtpdkEiR
+        VDjbRxsdZ6rFvVfp2u60WWDEUuY8XiD1+Pz5yp+L8ziJipOj9O2teHbqQgt5NqOS
+        8/umi3s37Z0tsxKb7g28qeldtVwO5lvAckJXin5pm4ZyRxdegMKOqdQ26LJXcqyR
+        PRTGNJhwp+AXoQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=content-type:date:from:message-id
+        :mime-version:subject:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm3; bh=p32kzwZM0Sjc/uTSI1n2fD0NQM/uF
+        lq8h1ybFbFy0MI=; b=tgejTXjZUrZ8D+WcCSDLlPK2tLryhcbucHYPDRENzQqc3
+        pypT9VkOemMOEaUPgdNv/snqPksuFLRTZZAVUSOfTjMwcUVwfSHzBOKGMCtl4lnb
+        WyxjFswYkThWmhH+5NL6ssJ5qZZO3R7SYWlYEWaPYeKPZBpiO7MDt/b8QItdyO1b
+        eJDQSDbOxzI3HN4RpaU6FDWNlSoVD8ki3orYsKggEy3bt3p4q3LlDPxZSpurbgBI
+        hbfD1TqyBL9WthhR8q2UrAASb7LdDKhwaVY6ISvEhRCtFdzvU82fy0b3pZJsz0Ab
+        i1elWuWiyDvhN2H2baQLoi8AAkaBucUo5rY/cd9TA==
+X-ME-Sender: <xms:6IrtXvsFiWKYbD2JWfsARy4PMkn3SsGCWoybPgbqlcn-XGHaRxMvpQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrudejjedgjeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefofgggkfffhffvufgtsehttdertd
+    erredtnecuhfhrohhmpedfufhiugcuufhprhihfdcuoehsihgusegrvggrmhdruhhsqeen
+    ucggtffrrghtthgvrhhnpeeukeehieeuueegvedvjefhieeugfdvkedvuddvgedugfehfe
+    evtdegtedvheduteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhl
+    fhhrohhmpehsihgusegrvggrmhdruhhs
+X-ME-Proxy: <xmx:6IrtXgcqEYWZW9R55xXiHb5mp4YFLyOiq8SaMJThIvV5OgkZYjjZIw>
+    <xmx:6IrtXiyH5dvKuGF4-wwRnAHykJdY1RP9UeoFJ5KzR51DucCRMXeJtQ>
+    <xmx:6IrtXuOBn-H-zOFn0y8zsyQm2a_j3Rz6d3orfjJWzds2UqJd18W7Yw>
+    <xmx:6YrtXteH-w_Lq-lW9R7G78Qoi7FZdKnn-fqDNW17_VyKi1FsWKSIbQ>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 980B6660069; Sat, 20 Jun 2020 00:04:56 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.3.0-dev0-543-gda70334-fm-20200618.004-gda703345
+Mime-Version: 1.0
+Message-Id: <30d7899b-9723-4698-bec2-aabfeeedde1b@www.fastmail.com>
+Date:   Fri, 19 Jun 2020 23:04:31 -0500
+From:   "Sid Spry" <sid@aeam.us>
+To:     linux-usb@vger.kernel.org
+Subject: Unable to use struct usb_endpoint_descriptor in FunctionFS
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> > This patch series changes all appropriate instances of signed char
-> > arrays or buffer to unsigned char.
-> >
-> > For each patch, if changing one variable to u8 involves its
-> > callers/callees, then those changes are included in that patch as
-> > well.
-> >
-> > This doesn't apply to ioctl functions, since the types for buffer of
-> > ioctl-like functions needs to be char* instead of u8* to keep the
-> > compiler happy.
->=20
-> Why is that?  What is forcing those types to be that way?  These are all =
-self-
-> contained in the driver itself, so they should be able to be changed, rig=
-ht?
->=20
-> Do you have an example of a function that you want to change but somehow
-> can not?
->=20
-Sorry for this confusion, I should have put more context into this patch.
-This is a re-send of a former patch which was rejected by kernel build
-test robot when I tried to change all char instances of this driver to
-u8 in order to remove any potential undefined behaviors.
+Hello, I've figured out how to get my userspace driver code to enumerate for
+the host and send/receive from the device with bulk endpoints as demonstrated
+in ffs-test.c. I have successfully added another bulk endpoint, but issues
+arise when I try to add an isochronous endpoint.
 
-This patch(also the former rejected one) were based on a former discussion
-with you, the email was quite lengthy, so I attached the link here for=20
-your reference. https://www.spinics.net/lists/linux-usb/msg196153.html
+I've tracked the problem, I think, to the mere presence of the struct
+usb_endpoint_descriptor. Is anyone able to elucidate what I might be missing?
 
-In conclusion, only the one I noted in the link has security implication=20
-and should be fixed, the other changes from char to u8 are just=20
-"in case".
+The rejected set of descriptors follows. Note I set the usb_endpoint_descriptor
+struct to be a bulk endpoint; I expect the extra fields would be ignored.
 
-If you still think it's needed to change all instances=20
-of char in this driver to u8, I'll enrich the patch note(which I should=20
-have done earlier) and re-send the patch series again.
-Or if you think just fixing that specific UB in sisusb_write_mem_bulk
-is enough, I'll submit another patch.
+I can provide the full code if helpful. Superspeed descriptors commented out
+as I'm less familiar with USB3 and I found that the fs/hs/ss descriptor sets had
+to be equivalent.
 
-Sorry again for this lost of context and the inconvenience.
-Best,
-Changming
+```
+static const struct {
+	struct usb_functionfs_descs_head_v2 header;
+	__le32 fs_count;
+	__le32 hs_count;
+	//__le32 ss_count;
+	struct {
+		struct usb_interface_descriptor intf;
+		struct usb_endpoint_descriptor_no_audio sink;
+		struct usb_endpoint_descriptor_no_audio source;
+		struct usb_endpoint_descriptor iso_sink;
+	} __attribute__((packed)) fs_descs, hs_descs;
+	/*struct {
+		struct usb_interface_descriptor intf;
+		struct usb_endpoint_descriptor_no_audio sink;
+		struct usb_ss_ep_comp_descriptor sink_comp;
+		struct usb_endpoint_descriptor_no_audio source;
+		struct usb_ss_ep_comp_descriptor source_comp;
+	} ss_descs;*/
+} __attribute__((packed)) descriptors = {
+	.header = {
+		.magic  = cpu_to_le32(FUNCTIONFS_DESCRIPTORS_MAGIC_V2),
+		.length = cpu_to_le32(sizeof descriptors),
+		.flags  = cpu_to_le32(FUNCTIONFS_HAS_FS_DESC |
+				     FUNCTIONFS_HAS_HS_DESC), // |
+				     //FUNCTIONFS_HAS_SS_DESC),
+	},
+	.fs_count = cpu_to_le32(4),
+	.hs_count = cpu_to_le32(4),
+	//.ss_count = cpu_to_le32(5),
+	.fs_descs = {
+		.intf = {
+			.bLength = sizeof descriptors.fs_descs.intf,
+			.bDescriptorType = USB_DT_INTERFACE,
+			.bNumEndpoints = 2,
+			.bInterfaceClass = USB_CLASS_VENDOR_SPEC,
+			.iInterface = 1,
+		},
+		.sink = {
+			.bLength = sizeof descriptors.fs_descs.sink,
+			.bDescriptorType = USB_DT_ENDPOINT,
+			.bEndpointAddress = 1 | USB_DIR_IN,
+			.bmAttributes = USB_ENDPOINT_XFER_BULK,
+			/* .wMaxPacketSize = autoconfiguration (kernel) */
+		},
+		.source = {
+			.bLength = sizeof descriptors.fs_descs.source,
+			.bDescriptorType = USB_DT_ENDPOINT,
+			.bEndpointAddress = 2 | USB_DIR_OUT,
+			.bmAttributes = USB_ENDPOINT_XFER_BULK,
+			/* .wMaxPacketSize = autoconfiguration (kernel) */
+		},
+		.iso_sink = {
+			.bLength = sizeof descriptors.fs_descs.iso_sink,
+			.bDescriptorType = USB_DT_ENDPOINT,
+			.bEndpointAddress = 3 | USB_DIR_OUT,
+			.bmAttributes = USB_ENDPOINT_XFER_BULK,
+		},
+	},
+	.hs_descs = {
+		.intf = {
+			.bLength = sizeof descriptors.fs_descs.intf,
+			.bDescriptorType = USB_DT_INTERFACE,
+			.bNumEndpoints = 3,
+			.bInterfaceClass = USB_CLASS_VENDOR_SPEC,
+			.iInterface = 1,
+		},
+		.sink = {
+			.bLength = sizeof descriptors.hs_descs.sink,
+			.bDescriptorType = USB_DT_ENDPOINT,
+			.bEndpointAddress = 1 | USB_DIR_IN,
+			.bmAttributes = USB_ENDPOINT_XFER_BULK,
+			.wMaxPacketSize = cpu_to_le16(512),
+		},
+		.source = {
+			.bLength = sizeof descriptors.hs_descs.iso_sink,
+			.bDescriptorType = USB_DT_ENDPOINT,
+			.bEndpointAddress = 2 | USB_DIR_OUT,
+			.bmAttributes = USB_ENDPOINT_XFER_BULK,
+			.wMaxPacketSize = cpu_to_le16(512),
+			.bInterval = 1,
+		},
+		.iso_sink = {
+			.bLength = sizeof descriptors.hs_descs.source,
+			.bDescriptorType = USB_DT_ENDPOINT,
+			.bEndpointAddress = 3 | USB_DIR_OUT,
+			.bmAttributes = USB_ENDPOINT_XFER_BULK,
+			.wMaxPacketSize = cpu_to_le16(512),
+			.bInterval = 1,
+		},
+
+	},
+	/*.ss_descs = {
+		.intf = {
+			.bLength = sizeof descriptors.fs_descs.intf,
+			.bDescriptorType = USB_DT_INTERFACE,
+			.bNumEndpoints = 2,
+			.bInterfaceClass = USB_CLASS_VENDOR_SPEC,
+			.iInterface = 1,
+		},
+		.sink = {
+			.bLength = sizeof descriptors.hs_descs.sink,
+			.bDescriptorType = USB_DT_ENDPOINT,
+			.bEndpointAddress = 1 | USB_DIR_IN,
+			.bmAttributes = USB_ENDPOINT_XFER_BULK,
+			.wMaxPacketSize = cpu_to_le16(1024),
+		},
+		.sink_comp = {
+			.bLength = USB_DT_SS_EP_COMP_SIZE,
+			.bDescriptorType = USB_DT_SS_ENDPOINT_COMP,
+			.bMaxBurst = 0,
+			.bmAttributes = 0,
+			.wBytesPerInterval = 0,
+		},
+		.source = {
+			.bLength = sizeof descriptors.hs_descs.source,
+			.bDescriptorType = USB_DT_ENDPOINT,
+			.bEndpointAddress = 2 | USB_DIR_OUT,
+			.bmAttributes = USB_ENDPOINT_XFER_BULK,
+			.wMaxPacketSize = cpu_to_le16(1024),
+			.bInterval = 1,
+		},
+		.source_comp = {
+			.bLength = USB_DT_SS_EP_COMP_SIZE,
+			.bDescriptorType = USB_DT_SS_ENDPOINT_COMP,
+			.bMaxBurst = 0,
+			.bmAttributes = 0,
+			.wBytesPerInterval = 0,
+		},
+	},*/
+};
+```
+
+Cheers!
