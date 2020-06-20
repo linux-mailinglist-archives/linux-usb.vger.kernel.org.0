@@ -2,153 +2,204 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FFED202327
-	for <lists+linux-usb@lfdr.de>; Sat, 20 Jun 2020 12:18:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A76D2202343
+	for <lists+linux-usb@lfdr.de>; Sat, 20 Jun 2020 12:57:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727973AbgFTKSb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 20 Jun 2020 06:18:31 -0400
-Received: from mail-db8eur05on2084.outbound.protection.outlook.com ([40.107.20.84]:25026
-        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725298AbgFTKS2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 20 Jun 2020 06:18:28 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MNlp4Ac5MakOHkiq5qQ3T07pI6c5gc2Up42EmaliCvBKtlp2nJC4D8S53nuSQ9G7okMOeSx2q+X4iTw2h7dZvUMFj+I8lk1x2A7nM4FDbdOwc/UiOHxO9lPFlSqNO7bUj/5W/eErU6R/0gh3P0VsWZGXlNGV67aBx+hlCqH7XLPPds0UMQOQD2bH4TVXxA/y0QRbeSL6B0UDKdvGW1er8iPrPb4A/yhT014yC47bSWGACcqQBBnC1262LaB06Fh2mxXb/atimiS7O01SZNIH/gzOyDLddqiye6c00puG+KEMQnxEctBTJTF1gUtjkB635et1FQmPQ/TbPIEgkIiQQw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6wxLamc2oGw5nLQnK+jTNSJiTIhpqGjVzyoqUiv3sf0=;
- b=kGoggKWrVOyPd5zEjMXMvGrSn3vLsG2mVRjN+Ua/dSwgMQyLuCvXf8ppq6B5nqaBW90edHc6YjbIlm86NAvaXfJRucbIVZOfb3+3aMlaxED0Z6fsjMY3gcp8OAe5dBap1Y2Fuv8IgFq/yTcxWOQIiG6v+soXCVBCJsnKNvMg9NQtBxdCv8TcmAakA6XZWUjhI0Gtv+vcXRDZ0Fill8hwNblWraE6uLPVdSs//4PXRkmzuVAYcyPOY+mImvVANinhPQ9xGG3gAxjz69x5ohXuaFc2uUK8a1QWzKoa0mQsPAvZ/5F4wP68nus41+udrwo+bKfHGF+EP6Eht/ik5zya3w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6wxLamc2oGw5nLQnK+jTNSJiTIhpqGjVzyoqUiv3sf0=;
- b=rHTB+20kHWEt58ErNnUhF/5zDuwt05bmUtHVgdB+1RxrdqApr925adrx7KyvsRSSwrvLqtgagqIvYU1nP6cA+75lPfR9reQP7XJFNmHbm4A5tbQ3YJUsBfYDbMKMMV5ZbSGaTrZg/oG0ETBI2ov3o5GS5Nv9ghevZxJrJwQ0uxY=
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
- by AM7PR04MB7061.eurprd04.prod.outlook.com (2603:10a6:20b:114::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3109.22; Sat, 20 Jun
- 2020 10:18:24 +0000
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1101:adaa:ee89:af2a]) by AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1101:adaa:ee89:af2a%3]) with mapi id 15.20.3109.025; Sat, 20 Jun 2020
- 10:18:24 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Philippe Schenker <philippe.schenker@toradex.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-CC:     Igor Opanyuk <igor.opanyuk@toradex.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Stefan Agner <stefan.agner@toradex.com>
-Subject: RE: USB difficulties with an iMX6ULL
-Thread-Topic: USB difficulties with an iMX6ULL
-Thread-Index: AQHWRX6bY1fYG3LvHU+Nxv9VFjLuK6jfLU+wgADoSoCAATYcAA==
-Date:   Sat, 20 Jun 2020 10:18:24 +0000
-Message-ID: <AM7PR04MB7157C0AA9DD8DC024B28EE3B8B990@AM7PR04MB7157.eurprd04.prod.outlook.com>
-References: <87837d44165d71ecfb0ec22ec2dae6460cb0503c.camel@toradex.com>
-         <AM7PR04MB715741EAEAE277594DC0DE3B8B980@AM7PR04MB7157.eurprd04.prod.outlook.com>
- <f8d3d8233d3964e7eb726dc3ad0aa993b4e1567a.camel@toradex.com>
-In-Reply-To: <f8d3d8233d3964e7eb726dc3ad0aa993b4e1567a.camel@toradex.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: toradex.com; dkim=none (message not signed)
- header.d=none;toradex.com; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [222.65.251.6]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 1e6e31dd-f679-4ffb-10f6-08d815034419
-x-ms-traffictypediagnostic: AM7PR04MB7061:
-x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-x-microsoft-antispam-prvs: <AM7PR04MB70619CEE885645D3BCD286668B990@AM7PR04MB7061.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 0440AC9990
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: IxXZKC9aUhjRR3epbT8eCzMmAUoeS1O8+lGmSg632dCWj/OhzgJN4KohF2zwnSOg6ZXWbmrQXSKBJdlo8/AnstuPW3cD6qOTMM6RGxccZ9buM5QwgXAEaGS/87pEf9eY2pk39gL+l4dk+3kA7gFEox3HT9KKv+Zndu9UkX6iqRz/PS0g+b2urUmVo9hlrdNFj6ZXMVLASD0yKly6aQW5SgBitf8HT450p0iRJfQfv73trV9cu6PoviiqLkODIi7tPqMgKxbkZng/61evNflFN0Iv+jb2OEw7K0yXiPAhflsKNFbQZivk5G81JSdD9AOOKRan21aQ8nOKVPuca5UY7rIZwGc3IVLWD7sSxUbHf40wRlAhGOh1jw6kYBjvUSGb
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(396003)(376002)(39860400002)(366004)(346002)(136003)(76116006)(66446008)(66946007)(66476007)(66556008)(64756008)(7696005)(26005)(186003)(33656002)(316002)(54906003)(83380400001)(86362001)(44832011)(6506007)(71200400001)(8936002)(52536014)(8676002)(110136005)(2906002)(5660300002)(4326008)(9686003)(55016002)(478600001)(32563001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: DuITVa8mxBRWqdvhMgfnRlkTdIy++qHPRLFPsvulZUhtzZMxVge9TeqO+2Vo7MW2OXyR7mCZ+ST1B3opVkzUZfsPH9pHnX1EMHaZCrh6qErRiQVMzdlkvE2q6IUEEbc8OFY+FZWvd2ODoTJTgBxCbCLjHz8JgPH8O777mR3k9i3b0+vGs0Q9LjaQUZmJvq/HEBxQ3G57hWDWPmmKvEo/ye9DW7W6P2KDTdyHrS0nzTq8wsky6KRTPyZKzdP6RQPxtA2fdmWrJFP9RV79nqXU/u94aHl7CBNIoIz85h4/V9nkMJ8b9y/MGCjcriKCM42cAuA70jejikRfl0VHulRyV5o2cUD2YxvStzBY4N4ez2KWk3eLfVoFLN10HAxJFRDMH+YezNjRcZi4ShD6UXJL3YWFTCJuMy2pPXX9g/1FWtiypBiex/09yiwp8phLUQUlpoXgGAw4Iw7s4U7tVzbDQnuNarPYKI067tfMwR6bq+Q=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1728002AbgFTK5S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 20 Jun 2020 06:57:18 -0400
+Received: from mail-io1-f70.google.com ([209.85.166.70]:54602 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727990AbgFTK5O (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 20 Jun 2020 06:57:14 -0400
+Received: by mail-io1-f70.google.com with SMTP id t23so8704408iog.21
+        for <linux-usb@vger.kernel.org>; Sat, 20 Jun 2020 03:57:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=8GDLcHKAWL6B36TT6Nf4rJzMiJsHjfM/kCOmAs5JEyA=;
+        b=GbHNZAOKRGswf86c4wFmTqniU41r09Fjjlf5T/W4JT37eCddy2l71cRhsAZWdRb6t8
+         cqmUxuQyWT6yl2bRfXxBhQsqroSyihq4pJ2O0mfuncyP5FeaPoYl+P/Rr1lxpm1qbfDw
+         AZ7Y1f/PllDZ1jGmN5h4/vgkhDylYBLR0pzh9fxJORHwTQiB853KgHpYvyEtG3kw2j78
+         M2P0nYym8i9b2B4pDg9u+Ix6EoFNhKzX7HMEqpfmjm4eKMV7zs1NGN4ulICbwPtkvE0L
+         ksTFWLs5gArlAt8oH+BB8rqWA5KoJMnNqQffTfAu+vYW+dpQgjnW4MXsDnIJIFAzTg/i
+         zDUw==
+X-Gm-Message-State: AOAM533A93dgKNvW+ojijwRL/EriUIP5GYwm6Ewh5sANPAaqClYnGLLJ
+        jP6NpeokGOSUzYGX94ielHcSinWaIIuledergEzpO11IzzrY
+X-Google-Smtp-Source: ABdhPJzw9wh1dy1bqFQBiniZPWvy/ZxKf3U9KDNXoj4Sw1dPBRj2fhfGeQ31pI0G7ZHvkGYXVWMCVTFlfBqqtRBQ79v+km0Ub4N2
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1e6e31dd-f679-4ffb-10f6-08d815034419
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jun 2020 10:18:24.3607
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: nzoJEaUyR2PW96EeB7awAk090tIziBLKZrtCNFIdl2UeR1C7augctvZmDv2KMiGNwWSkvr0tCl3HKEEKLWOjGA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB7061
+X-Received: by 2002:a6b:9143:: with SMTP id t64mr3764177iod.55.1592650632570;
+ Sat, 20 Jun 2020 03:57:12 -0700 (PDT)
+Date:   Sat, 20 Jun 2020 03:57:12 -0700
+In-Reply-To: <0000000000006bf03c05a86205bb@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000034ad2805a881df44@google.com>
+Subject: Re: INFO: trying to register non-static key in ath9k_htc_rxep
+From:   syzbot <syzbot+4d2d56175b934b9a7bf9@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, ath9k-devel@qca.qualcomm.com,
+        davem@davemloft.net, kuba@kernel.org, kvalo@codeaurora.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-IA0KPiBPbiBGcmksIDIwMjAtMDYtMTkgYXQgMDI6MDUgKzAwMDAsIFBldGVyIENoZW4gd3JvdGU6
-DQo+ID4NCj4gPiA+DQo+ID4gPiAxc3QgcHJvYmxlbSAtIFJORElTDQo+ID4gPiBXZSB0cnkgdG8g
-dXNlIFJORElTIG9uIG9uZSBvZiB0aGUgVVNCIHBvcnRzIHRoZSBDb2xpYnJpIGlNWDZVTEwgaGFz
-Lg0KPiA+ID4gRm9yIHRoaXMNCj4gPiA+IHB1cnBvc2UgSSdtIHVzaW5nIHRoZSB1c2JfZl9ybmRp
-cy5rbyBrZXJuZWwgbW9kdWxlIGFuZCBzZXR0aW5nDQo+ID4gPiBkcl9tb2RlIG9mDQo+ID4gPiAm
-dXNib3RnMSB0byAicGVyaXBoZXJhbCINCj4gPiA+IFRoaXMgd29ya3MgZmluZSBvbiBpTVg3IGJ1
-dCBkb2VzIG5vdCBvbiBpTVg2VUxMLiBPbiB0aGUgVUxMIGJvYXJkIEkNCj4gPiA+IGNhbiBzZWUg
-YSAiY2lfaGRyYy4wIiBpbiAvc3lzL2NsYXNzL3VkYyBhZnRlciBib290LiBJZiBJIGFkZCBub3cg
-YW4NCj4gPiA+IFVTQiBHUElPIGV4dGNvbiB0byB1c2JvdGcgdGhpcyBjaGFuZ2VzIHRvICJjaV9o
-ZHJjLjEiIGFuZCBldmVyeXRoaW5nDQo+ID4gPiB3b3JrcyBmaW5lIGFmdGVyIGJvb3QsIGJ1dCBu
-b3QgYWZ0ZXIgdW5wbHVnZ2luZyBVU0IgYW5kIHJlcGx1Z2dpbmcuDQo+ID4gPiBUbyBzZXR1cCBS
-TkRJUyBJIHVzZSB0aGUgY29tbWFuZHMgWzFdIEkgcHV0IGF0IHRoZSBlbmQgb2YgdGhpcyBlbWFp
-bA0KPiA+ID4gZm9yIHJlZmVyZW5jZS4NCj4gPiA+DQo+ID4NCj4gPiBJZiB0aGUgYm9hcmQgZGVz
-aWducyBmb3IgVVNCIHBhcnQgYXJlIHRoZSBzYW1lIGJldHdlZW4gaU1YNyB2ZXJzaW9uDQo+ID4g
-YW5kIGlNWDZVTEwgdmVyc2lvbiwga2VlcCBkdHMgY29udGVudCBhcmUgdGhlIHNhbWUgZXhjZXB0
-IGZvciB0aGUgVVNCDQo+ID4gUEhZIHBvcnQgKGluY2x1ZGluZyB0aGUgcGhhbmRsZSBmb3IgaXQp
-LCB0aGVzZSB0d28gU29DcyB1c2VzIHRoZQ0KPiA+IGRpZmZlcmVudCBVU0IgUEhZLg0KPiANCj4g
-VGhhbmtzIGZvciB0aGlzIGhpbnQhIFRoZW4gaGVyZSBtYXkgc29tZXRoaW5nIGJlIGRpZmZlcmVu
-dCBvciBub3QgcXVpdGUgcmlnaHQgeWV0IChmb3INCj4gb3VyIHVzZWNhc2UpLg0KPiANCj4gSSBz
-YXcgdGhhdCBpbiBwaHktbXhzLXVzYi5jIHRoZXJlIGlzIG5vICJtb2RlIiBpbiBzdHJ1Y3QgbXhz
-X3BoeSBsaWtlIGl0IGlzIG9uDQo+IGRvd25zdHJlYW0gY29kZS4gSSBjb3VsZG4ndCBmaW5kIGhv
-dyB0aGUgY29kZSBzd2l0Y2hlcyB0aGUgUEhZIHRvIHBlcmlwaGVyYWwNCj4gbW9kZS4NCj4gDQo+
-IFNob3VsZCBpdCBldmVuIGJlIHBvc3NpYmxlIHdpdGggdGhpcyBwaHkgdG8gdXNlIGRyX21vZGUg
-PSAicGVyaXBoZXJhbCI/DQo+IA0KDQpObywgdGhpcyBtb2RlIGlzIHNldCBhdCB1ZGMuYywgaXQg
-bWF5IGJlIG5vdCByZWxhdGVkIHRvIHlvdXIgZmFpbHVyZSB1c2UgY2FzZS4NClRyeSB0byBkZWJ1
-ZyBhdCBwcm9iZSBmdW5jdGlvbiwgYW5kIHNlZSB3aGF0J3MgdGhlIGRpZmZlcmVuY2UuDQoNCj4g
-Pg0KPiA+IElmIHRoZSBSTkRJUyBjb3VsZCB3b3JrIGF0IHRoZSBmaXJzdCB0aW1lLCBpdCBzZWVt
-cyB5b3VyIGNvbmZpZ2ZzDQo+ID4gc2NyaXB0IHNob3VsZCBiZSBPSy4NCj4gPg0KPiA+ID4gMm5k
-IHByb2JsZW0gLSBjb25zdGFudCByZXNldHRpbmcNCj4gPiA+IFdoZW4gSSBjb21waWxlIGEgcGxh
-aW4gbWFpbmxpbmUga2VybmVsIHdpdGggImlteF92Nl92N19kZWZjb25maWciDQo+ID4gPiBhbmQg
-Ym9vdCB0aGUNCj4gPiA+IGlNWDZVTEwgd2l0aCBpdCBJIHNlZSB0aGF0IHRoZSBVU0IgaXMgY29u
-c3RhbnRseSByZXNldHRpbmcgdGhlIGh1Yg0KPiA+ID4gdGhhdCBpcyBwcmVzZW50IG9uIHRoZSBD
-b2xpYnJpIEV2YWx1YXRpb24gY2FycmllciBib2FyZC4NCj4gPiA+DQo+ID4gPiBbICAgNDkuNjU0
-NjIxXSB1c2IgMS0xOiByZXNldCBoaWdoLXNwZWVkIFVTQiBkZXZpY2UgbnVtYmVyIDIgdXNpbmcN
-Cj4gPiA+IGNpX2hkcmMNCj4gPiA+IFsgICA1Mi4xODA3ODFdIHVzYiAxLTE6IHJlc2V0IGhpZ2gt
-c3BlZWQgVVNCIGRldmljZSBudW1iZXIgMiB1c2luZw0KPiA+ID4gY2lfaGRyYw0KPiA+ID4gWyAg
-IDU0LjY5OTY3OF0gdXNiIDEtMTogcmVzZXQgaGlnaC1zcGVlZCBVU0IgZGV2aWNlIG51bWJlciAy
-IHVzaW5nDQo+ID4gPiBjaV9oZHJjDQo+ID4gPg0KPiA+DQo+ID4gVHJ5IHRvIGFkZCBleHRlcm5h
-bCBwb3dlciB0byB0aGUgVVNCIEhVQiBhdm9pZCB0aGUgYm9hcmQgY2FuJ3Qgc3VwcGx5DQo+ID4g
-ZW5vdWdoIHBvd2VyLg0KPiA+IElmIG5vdCwgdHJ5IHRvIGRpc2FibGUgcnVudGltZSBwbSwgYW5k
-IHNlZSBpZiBpdCB3b3Jrcy4NCj4gPg0KPiA+ICA1OSBzdGF0aWMgY29uc3Qgc3RydWN0IGNpX2hk
-cmNfaW14X3BsYXRmb3JtX2ZsYWcgaW14NnVsX3VzYl9kYXRhID0gew0KPiA+ICA2MCAgICAgICAg
-IC5mbGFncyA9IENJX0hEUkNfU1VQUE9SVFNfUlVOVElNRV9QTSB8DQo+ID4gIDYxICAgICAgICAg
-ICAgICAgICBDSV9IRFJDX1RVUk5fVkJVU19FQVJMWV9PTiwNCj4gPiAgNjIgfTsNCj4gPiAgNjMN
-Cj4gDQo+IFRoZSBwb3dlciBpcyBubyBwcm9ibGVtLiBUaGUgdXNiLWh1YiBpcyBzb2xkZXJlZCB0
-byB0aGUgY2Fycmllci1ib2FyZCwgSSBtZWFzdXJlZA0KPiBpdCBhbmQgdm9sdGFnZSBpcyByb2Nr
-IHNvbGlkLiBXZSB1c2UgYW4gVVNCMjUxNCBjaGlwLg0KPiANCj4gVGhhbmtzIGZvciB0aGUgaGlu
-dCwgZGlzYWJsaW5nIENJX0hEUkNfU1VQUE9SVFNfUlVOVElNRV9QTSBzb2x2ZXMgdGhlDQo+IGlz
-c3VlLg0KPiANCg0KVHJ5IHRvIHBvcnQgdGhpcyBwYXRjaCBmcm9tIGRvd25zdHJlYW0gQlNQLg0K
-DQpjb21taXQgNTg0MGIxNzRlODVlNjZiNTAyYjQ4ODcwMjZjZTQ0YzU2NjVjMjliMQ0KQXV0aG9y
-OiBMaSBKdW4gPGp1bi5saUBueHAuY29tPg0KRGF0ZTogICBNb24gT2N0IDE2IDIzOjEzOjE5IDIw
-MTcgKzA4MDANCg0KICAgIE1MSy0xNjU3NiB1c2I6IHBoeTogbXhzOiBzZXQgaG9sZF9yaW5nX29m
-ZiBmb3IgVVNCMiBQTEwgcG93ZXIgdXANCiAgICANCiAgICBVU0IyIFBMTCB1c2UgcmluZyBWQ08s
-IHdoZW4gdGhlIFBMTCBwb3dlciB1cCwgdGhlIHJpbmcgVkNP4oCZcyBzdXBwbHkgYWxzbw0KICAg
-IHJhbXAgdXAuIFRoZXJlIGlzIGEgcG9zc2liaWxpdHkgdGhhdCB0aGUgcmluZyBWQ08gc3RhcnQg
-b3NjaWxsYXRpb24gYXQNCiAgICBtdWx0aSBub2RlcyBpbiB0aGlzIHBoYXNlLCBlc3BlY2lhbGx5
-IGZvciBWQ08gd2hpY2ggaGFzIG1hbnkgc3RhZ2VzLCB0aGVuDQogICAgdGhlIG11bHRpd2F2ZSB3
-aWxsIGtlcHQgdW50aWwgUExMIHBvd2VyIGRvd24uIEhvbGRfcmluZ19vZmYoYml0MTEpIGNhbg0K
-ICAgIGZvcmNlIHRoZSBWQ08gaW4gb25lIGRldGVybWluZWQgc3RhdGUgd2hlbiBWQ08gc3VwcGx5
-IHN0YXJ0IHJhbXAgdXAsIHRvDQogICAgYXZvaWQgdGhpcyBtdWx0aXdhdmUgaXNzdWUuIFBlciBJ
-QyBkZXNpZ24ncyBzdWdnZXN0aW9uIGl0J3MgYmV0dGVyIHRoaXMNCiAgICBiaXQgY2FuIGJlIG9m
-ZiBmcm9tIDI1dXMgYWZ0ZXIgcGxsIHBvd2VyIHVwIHRvIDI1dXMgYmVmb3JlIFVTQiBUWC9SWC4N
-CiAgICANCiAgICBBY2tlZC1ieTogUGV0ZXIgQ2hlbiA8cGV0ZXIuY2hlbkBueHAuY29tPg0KICAg
-IFNpZ25lZC1vZmYtYnk6IExpIEp1biA8anVuLmxpQG54cC5jb20+DQoNClBldGVyDQo=
+syzbot has found a reproducer for the following crash on:
+
+HEAD commit:    f8f02d5c USB: OTG: rename product list of devices
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=15fd18a5100000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f1981539b6376b73
+dashboard link: https://syzkaller.appspot.com/bug?extid=4d2d56175b934b9a7bf9
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14519481100000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=110318e9100000
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+4d2d56175b934b9a7bf9@syzkaller.appspotmail.com
+
+INFO: trying to register non-static key.
+the code is fine but needs lockdep annotation.
+turning off the locking correctness validator.
+CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.8.0-rc1-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <IRQ>
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xf6/0x16e lib/dump_stack.c:118
+ assign_lock_key kernel/locking/lockdep.c:894 [inline]
+ register_lock_class+0x1228/0x16d0 kernel/locking/lockdep.c:1206
+ __lock_acquire+0x101/0x6270 kernel/locking/lockdep.c:4259
+ lock_acquire+0x18b/0x7c0 kernel/locking/lockdep.c:4959
+ __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+ _raw_spin_lock_irqsave+0x32/0x50 kernel/locking/spinlock.c:159
+ ath9k_htc_rxep+0x31/0x210 drivers/net/wireless/ath/ath9k/htc_drv_txrx.c:1128
+ ath9k_htc_rx_msg+0x2d9/0xb00 drivers/net/wireless/ath/ath9k/htc_hst.c:459
+ ath9k_hif_usb_rx_stream drivers/net/wireless/ath/ath9k/hif_usb.c:638 [inline]
+ ath9k_hif_usb_rx_cb+0xc76/0x1050 drivers/net/wireless/ath/ath9k/hif_usb.c:671
+ __usb_hcd_giveback_urb+0x29a/0x550 drivers/usb/core/hcd.c:1650
+ usb_hcd_giveback_urb+0x368/0x420 drivers/usb/core/hcd.c:1716
+ dummy_timer+0x125e/0x32b4 drivers/usb/gadget/udc/dummy_hcd.c:1967
+ call_timer_fn+0x1ac/0x6e0 kernel/time/timer.c:1404
+ expire_timers kernel/time/timer.c:1449 [inline]
+ __run_timers kernel/time/timer.c:1773 [inline]
+ __run_timers kernel/time/timer.c:1740 [inline]
+ run_timer_softirq+0x5e5/0x14c0 kernel/time/timer.c:1786
+ __do_softirq+0x21e/0x996 kernel/softirq.c:292
+ asm_call_on_stack+0xf/0x20 arch/x86/entry/entry_64.S:711
+ </IRQ>
+ __run_on_irqstack arch/x86/include/asm/irq_stack.h:22 [inline]
+ run_on_irqstack_cond arch/x86/include/asm/irq_stack.h:48 [inline]
+ do_softirq_own_stack+0x109/0x140 arch/x86/kernel/irq_64.c:77
+ invoke_softirq kernel/softirq.c:387 [inline]
+ __irq_exit_rcu kernel/softirq.c:417 [inline]
+ irq_exit_rcu+0x16f/0x1a0 kernel/softirq.c:429
+ sysvec_apic_timer_interrupt+0xd3/0x1b0 arch/x86/kernel/apic/apic.c:1091
+ asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:596
+RIP: 0010:native_irq_disable arch/x86/include/asm/irqflags.h:49 [inline]
+RIP: 0010:arch_local_irq_disable arch/x86/include/asm/irqflags.h:89 [inline]
+RIP: 0010:acpi_safe_halt drivers/acpi/processor_idle.c:112 [inline]
+RIP: 0010:acpi_safe_halt+0x72/0x90 drivers/acpi/processor_idle.c:108
+Code: 74 06 5b e9 c0 32 9f fb e8 bb 32 9f fb e8 c6 96 a4 fb e9 0c 00 00 00 e8 ac 32 9f fb 0f 00 2d 45 6e 84 00 e8 a0 32 9f fb fb f4 <fa> e8 b8 94 a4 fb 5b e9 92 32 9f fb 48 89 df e8 7a e1 c8 fb eb ab
+RSP: 0018:ffff8881da22fc60 EFLAGS: 00000293
+RAX: ffff8881da213200 RBX: 0000000000000000 RCX: 1ffffffff1014efa
+RDX: 0000000000000000 RSI: ffffffff85a03aa0 RDI: ffff8881da213a38
+RBP: ffff8881d8d2a864 R08: 0000000000000000 R09: 0000000000000001
+R10: 0000000000000000 R11: 0000000000000000 R12: ffff8881d8d2a864
+R13: 1ffff1103b445f96 R14: ffff8881d8d2a865 R15: 0000000000000001
+ acpi_idle_do_entry+0xa9/0xe0 drivers/acpi/processor_idle.c:525
+ acpi_idle_enter+0x42b/0xac0 drivers/acpi/processor_idle.c:651
+ cpuidle_enter_state+0xdb/0xc20 drivers/cpuidle/cpuidle.c:234
+ cpuidle_enter+0x4a/0xa0 drivers/cpuidle/cpuidle.c:345
+ call_cpuidle kernel/sched/idle.c:117 [inline]
+ cpuidle_idle_call kernel/sched/idle.c:207 [inline]
+ do_idle+0x3c2/0x500 kernel/sched/idle.c:269
+ cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:365
+ start_secondary+0x294/0x370 arch/x86/kernel/smpboot.c:268
+ secondary_startup_64+0xb6/0xc0 arch/x86/kernel/head_64.S:243
+BUG: unable to handle page fault for address: ffffffffffffffc8
+#PF: supervisor read access in kernel mode
+#PF: error_code(0x0000) - not-present page
+PGD 7226067 P4D 7226067 PUD 7228067 PMD 0 
+Oops: 0000 [#1] SMP KASAN
+CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.8.0-rc1-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:ath9k_htc_rxep+0xb5/0x210 drivers/net/wireless/ath/ath9k/htc_drv_txrx.c:1130
+Code: 8b 43 38 48 8d 58 c8 49 39 c4 0f 84 ee 00 00 00 e8 70 56 62 fe 48 89 d8 48 c1 e8 03 0f b6 04 28 84 c0 74 06 0f 8e 0a 01 00 00 <44> 0f b6 3b 31 ff 44 89 fe e8 ad 57 62 fe 45 84 ff 75 a8 e8 43 56
+RSP: 0018:ffff8881db3098b0 EFLAGS: 00010046
+RAX: 0000000000000000 RBX: ffffffffffffffc8 RCX: ffffffff81274370
+RDX: 0000000000000000 RSI: ffffffff82dd16d0 RDI: ffff8881db309820
+RBP: dffffc0000000000 R08: 0000000000000004 R09: ffffed103b661305
+R10: 0000000000000003 R11: ffffed103b661304 R12: ffff8881cd69b538
+R13: ffff8881cd69b100 R14: ffff8881cd69b548 R15: ffffed10392ce210
+FS:  0000000000000000(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffc8 CR3: 00000001cf9f6000 CR4: 00000000001406e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <IRQ>
+ ath9k_htc_rx_msg+0x2d9/0xb00 drivers/net/wireless/ath/ath9k/htc_hst.c:459
+ ath9k_hif_usb_rx_stream drivers/net/wireless/ath/ath9k/hif_usb.c:638 [inline]
+ ath9k_hif_usb_rx_cb+0xc76/0x1050 drivers/net/wireless/ath/ath9k/hif_usb.c:671
+ __usb_hcd_giveback_urb+0x29a/0x550 drivers/usb/core/hcd.c:1650
+ usb_hcd_giveback_urb+0x368/0x420 drivers/usb/core/hcd.c:1716
+ dummy_timer+0x125e/0x32b4 drivers/usb/gadget/udc/dummy_hcd.c:1967
+ call_timer_fn+0x1ac/0x6e0 kernel/time/timer.c:1404
+ expire_timers kernel/time/timer.c:1449 [inline]
+ __run_timers kernel/time/timer.c:1773 [inline]
+ __run_timers kernel/time/timer.c:1740 [inline]
+ run_timer_softirq+0x5e5/0x14c0 kernel/time/timer.c:1786
+ __do_softirq+0x21e/0x996 kernel/softirq.c:292
+ asm_call_on_stack+0xf/0x20 arch/x86/entry/entry_64.S:711
+ </IRQ>
+ __run_on_irqstack arch/x86/include/asm/irq_stack.h:22 [inline]
+ run_on_irqstack_cond arch/x86/include/asm/irq_stack.h:48 [inline]
+ do_softirq_own_stack+0x109/0x140 arch/x86/kernel/irq_64.c:77
+ invoke_softirq kernel/softirq.c:387 [inline]
+ __irq_exit_rcu kernel/softirq.c:417 [inline]
+ irq_exit_rcu+0x16f/0x1a0 kernel/softirq.c:429
+ sysvec_apic_timer_interrupt+0xd3/0x1b0 arch/x86/kernel/apic/apic.c:1091
+ asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:596
+RIP: 0010:native_irq_disable arch/x86/include/asm/irqflags.h:49 [inline]
+RIP: 0010:arch_local_irq_disable arch/x86/include/asm/irqflags.h:89 [inline]
+RIP: 0010:acpi_safe_halt drivers/acpi/processor_idle.c:112 [inline]
+RIP: 0010:acpi_safe_halt+0x72/0x90 drivers/acpi/processor_idle.c:108
+Code: 74 06 5b e9 c0 32 9f fb e8 bb 32 9f fb e8 c6 96 a4 fb e9 0c 00 00 00 e8 ac 32 9f fb 0f 00 2d 45 6e 84 00 e8 a0 32 9f fb fb f4 <fa> e8 b8 94 a4 fb 5b e9 92 32 9f fb 48 89 df e8 7a e1 c8 fb eb ab
+RSP: 0018:ffff8881da22fc60 EFLAGS: 00000293
+RAX: ffff8881da213200 RBX: 0000000000000000 RCX: 1ffffffff1014efa
+RDX: 0000000000000000 RSI: ffffffff85a03aa0 RDI: ffff8881da213a38
+RBP: ffff8881d8d2a864 R08: 0000000000000000 R09: 0000000000000001
+R10: 0000000000000000 R11: 0000000000000000 R12: ffff8881d8d2a864
+R13: 1ffff1103b445f96 R14: ffff8881d8d2a865 R15: 0000000000000001
+ acpi_idle_do_entry+0xa9/0xe0 drivers/acpi/processor_idle.c:525
+ acpi_idle_enter+0x42b/0xac0 drivers/acpi/processor_idle.c:651
+ cpuidle_enter_state+0xdb/0xc20 drivers/cpuidle/cpuidle.c:234
+ cpuidle_enter+0x4a/0xa0 drivers/cpuidle/cpuidle.c:345
+ call_cpuidle kernel/sched/idle.c:117 [inline]
+ cpuidle_idle_call kernel/sched/idle.c:207 [inline]
+ do_idle+0x3c2/0x500 kernel/sched/idle.c:269
+ cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:365
+ start_secondary+0x294/0x370 arch/x86/kernel/smpboot.c:268
+ secondary_startup_64+0xb6/0xc0 arch/x86/kernel/head_64.S:243
+Modules linked in:
+CR2: ffffffffffffffc8
+---[ end trace 5a637b710bbf1999 ]---
+RIP: 0010:ath9k_htc_rxep+0xb5/0x210 drivers/net/wireless/ath/ath9k/htc_drv_txrx.c:1130
+Code: 8b 43 38 48 8d 58 c8 49 39 c4 0f 84 ee 00 00 00 e8 70 56 62 fe 48 89 d8 48 c1 e8 03 0f b6 04 28 84 c0 74 06 0f 8e 0a 01 00 00 <44> 0f b6 3b 31 ff 44 89 fe e8 ad 57 62 fe 45 84 ff 75 a8 e8 43 56
+RSP: 0018:ffff8881db3098b0 EFLAGS: 00010046
+RAX: 0000000000000000 RBX: ffffffffffffffc8 RCX: ffffffff81274370
+RDX: 0000000000000000 RSI: ffffffff82dd16d0 RDI: ffff8881db309820
+RBP: dffffc0000000000 R08: 0000000000000004 R09: ffffed103b661305
+R10: 0000000000000003 R11: ffffed103b661304 R12: ffff8881cd69b538
+R13: ffff8881cd69b100 R14: ffff8881cd69b548 R15: ffffed10392ce210
+FS:  0000000000000000(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffc8 CR3: 00000001cf9f6000 CR4: 00000000001406e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
