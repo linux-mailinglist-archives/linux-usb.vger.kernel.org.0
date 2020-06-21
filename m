@@ -2,165 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C6CD202D7C
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jun 2020 00:48:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D397202DBB
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jun 2020 01:47:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726618AbgFUWs3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 21 Jun 2020 18:48:29 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:35472 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726064AbgFUWs3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Jun 2020 18:48:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1592779706; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:references; bh=W8v5qpEkJnRIN852lPSeQgbjFbf4oDUDEtLcrMPd8PQ=;
-        b=b4skdB/p7ZiolCg9gZot7J0Xka7x7c38c11eDflnfrbYx66cDRdA9IVMTlxZTI09oU0AwX
-        Y9Hc2FHkDvmkgJqh0H8oEFxSAJd5vrDCM3gasrF+DE+rbD08IKkGd5X3Q/0Rrdnpjhtoiu
-        7Qk8YHdCWGjqHLfjXLRQyZjHCOIP/TY=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>, od@zcrc.me,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paul Cercueil <paul@crapouillou.net>
-Subject: [RESEND PATCH] usb: common: usb-conn-gpio: Register optional charger
-Date:   Mon, 22 Jun 2020 00:48:07 +0200
-Message-Id: <20200621224807.882184-1-paul@crapouillou.net>
+        id S1726576AbgFUXqX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 21 Jun 2020 19:46:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37878 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726433AbgFUXqX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 21 Jun 2020 19:46:23 -0400
+Received: from localhost (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 95660214D8;
+        Sun, 21 Jun 2020 23:46:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592783182;
+        bh=MVR0P4Maf2NQU4Sq1jPI51OShsob/nufybi+jUBB13w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ftI1MpqQhEDFp02DgvKdYPmHMwhIRztrO2wfWj6QU1c45qDYsCl3N0zBwd2rs5ovg
+         +gw54xpoo52xBO5DVsDd6juHCqfCNjUbXjjokux9ULT/UMlgaltfHVhlC9rBrVTgb8
+         0I4H0gliAo7f55jAhAMQCtBBFNM8rnYLQaycr4Qo=
+Date:   Sun, 21 Jun 2020 19:46:21 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     Qais Yousef <qais.yousef@arm.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Tony Prisk <linux@prisktech.co.nz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Oliver Neukum <oneukum@suse.de>,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.7 229/388] usb/ohci-platform: Fix a warning
+ when hibernating
+Message-ID: <20200621234621.GC1931@sasha-vm>
+References: <20200618010805.600873-1-sashal@kernel.org>
+ <20200618010805.600873-229-sashal@kernel.org>
+ <20200618095600.umb4gyegy2hszlep@e107158-lin.cambridge.arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20200618095600.umb4gyegy2hszlep@e107158-lin.cambridge.arm.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Register a power supply charger, if the Kconfig option
-USB_CONN_GPIO_CHARGER is set, whose online state depends on whether
-the USB role is set to device or not.
+On Thu, Jun 18, 2020 at 10:56:01AM +0100, Qais Yousef wrote:
+>Hi Sasha/Alan
+>
+>On 06/17/20 21:05, Sasha Levin wrote:
+>
+>[...]
+>
+>> diff --git a/drivers/usb/host/ohci-platform.c b/drivers/usb/host/ohci-platform.c
+>> index 7addfc2cbadc..4a8456f12a73 100644
+>> --- a/drivers/usb/host/ohci-platform.c
+>> +++ b/drivers/usb/host/ohci-platform.c
+>> @@ -299,6 +299,11 @@ static int ohci_platform_resume(struct device *dev)
+>>  	}
+>>
+>>  	ohci_resume(hcd, false);
+>> +
+>> +	pm_runtime_disable(dev);
+>> +	pm_runtime_set_active(dev);
+>> +	pm_runtime_enable(dev);
+>> +
+>
+>I am not sure what's the protocol here, but the series was fixing similar
+>problems to this driver but I didn't myself directly observe a warning because
+>of that.
+>
+>https://lore.kernel.org/lkml/20200518154931.6144-2-qais.yousef@arm.com/
+>https://lore.kernel.org/lkml/20200518154931.6144-3-qais.yousef@arm.com/
+>
+>So just pointing it out in case they're worth backporting to stable too.
 
-This is useful when the USB role is the only way to know if the device
-is charging from USB. The API is the standard power supply charger API,
-you get a /sys/class/power_supply/xxx/online node which tells you the
-state of the charger.
+I'll grab them too, thanks!
 
-The sole purpose of this is to give userspace applications a way to
-know whether or not the charger is plugged.
-
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- drivers/usb/common/Kconfig         | 11 +++++++
- drivers/usb/common/usb-conn-gpio.c | 47 ++++++++++++++++++++++++++++++
- 2 files changed, 58 insertions(+)
-
-diff --git a/drivers/usb/common/Kconfig b/drivers/usb/common/Kconfig
-index d611477aae41..5405ae96c68f 100644
---- a/drivers/usb/common/Kconfig
-+++ b/drivers/usb/common/Kconfig
-@@ -49,3 +49,14 @@ config USB_CONN_GPIO
- 
- 	  To compile the driver as a module, choose M here: the module will
- 	  be called usb-conn-gpio.ko
-+
-+if USB_CONN_GPIO
-+
-+config USB_CONN_GPIO_CHARGER
-+	bool "USB charger support"
-+	select POWER_SUPPLY
-+	help
-+	  Register a charger with the power supply subsystem. This will allow
-+	  userspace to know whether or not the device is charging from USB.
-+
-+endif
-diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common/usb-conn-gpio.c
-index ed204cbb63ea..129d48db280b 100644
---- a/drivers/usb/common/usb-conn-gpio.c
-+++ b/drivers/usb/common/usb-conn-gpio.c
-@@ -17,6 +17,7 @@
- #include <linux/of.h>
- #include <linux/pinctrl/consumer.h>
- #include <linux/platform_device.h>
-+#include <linux/power_supply.h>
- #include <linux/regulator/consumer.h>
- #include <linux/usb/role.h>
- 
-@@ -38,6 +39,9 @@ struct usb_conn_info {
- 	struct gpio_desc *vbus_gpiod;
- 	int id_irq;
- 	int vbus_irq;
-+
-+	struct power_supply_desc desc;
-+	struct power_supply *charger;
- };
- 
- /**
-@@ -98,6 +102,8 @@ static void usb_conn_detect_cable(struct work_struct *work)
- 		ret = regulator_enable(info->vbus);
- 		if (ret)
- 			dev_err(info->dev, "enable vbus regulator failed\n");
-+	} else if (IS_ENABLED(CONFIG_USB_CONN_GPIO_CHARGER)) {
-+		power_supply_changed(info->charger);
- 	}
- 
- 	info->last_role = role;
-@@ -121,10 +127,35 @@ static irqreturn_t usb_conn_isr(int irq, void *dev_id)
- 	return IRQ_HANDLED;
- }
- 
-+static enum power_supply_property usb_charger_properties[] = {
-+	POWER_SUPPLY_PROP_ONLINE,
-+};
-+
-+static int usb_charger_get_property(struct power_supply *psy,
-+				    enum power_supply_property psp,
-+				    union power_supply_propval *val)
-+{
-+	struct usb_conn_info *info = power_supply_get_drvdata(psy);
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_ONLINE:
-+		val->intval = info->last_role == USB_ROLE_DEVICE;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
- static int usb_conn_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-+	struct power_supply_desc *desc;
- 	struct usb_conn_info *info;
-+	struct power_supply_config cfg = {
-+		.of_node = dev->of_node,
-+	};
- 	int ret = 0;
- 
- 	info = devm_kzalloc(dev, sizeof(*info), GFP_KERNEL);
-@@ -203,6 +234,22 @@ static int usb_conn_probe(struct platform_device *pdev)
- 		}
- 	}
- 
-+	if (IS_ENABLED(CONFIG_USB_CONN_GPIO_CHARGER)) {
-+		desc = &info->desc;
-+		desc->name = "usb-charger";
-+		desc->properties = usb_charger_properties;
-+		desc->num_properties = ARRAY_SIZE(usb_charger_properties);
-+		desc->get_property = usb_charger_get_property;
-+		desc->type = POWER_SUPPLY_TYPE_USB;
-+		cfg.drv_data = info;
-+
-+		info->charger = devm_power_supply_register(dev, desc, &cfg);
-+		if (IS_ERR(info->charger)) {
-+			dev_err(dev, "Unable to register charger\n");
-+			return PTR_ERR(info->charger);
-+		}
-+	}
-+
- 	platform_set_drvdata(pdev, info);
- 
- 	/* Perform initial detection */
 -- 
-2.27.0
-
+Thanks,
+Sasha
