@@ -2,74 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE6222029D7
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Jun 2020 11:40:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD3232029D9
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Jun 2020 11:45:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729626AbgFUJjk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 21 Jun 2020 05:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45500 "EHLO
+        id S1729599AbgFUJpP convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Sun, 21 Jun 2020 05:45:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726112AbgFUJjk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Jun 2020 05:39:40 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B53C061794
-        for <linux-usb@vger.kernel.org>; Sun, 21 Jun 2020 02:39:39 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id q19so16087070lji.2
-        for <linux-usb@vger.kernel.org>; Sun, 21 Jun 2020 02:39:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=C5bI6BadwEG4F91VxXf6a9mhksTwdAZCArE0TuvJz/0=;
-        b=c9E+vrFwQBgugOOclNk/Cqneke3HXKwIEHPNfSFsBd6SETE+nmPyCYM9EJ7RFFVliI
-         HCLHGclA1s5Y1mr4jMV/TAr85rK5gi5uvbeQO2JLzGSjg6B/ETvjPOin4cTJg9pjOgZc
-         1e3X1glLylDwirIU7DdzgWe0TA0NcNTEUeYUJ2FdJLTwpIqJ0C/jQmjp/Y96Sv9dpKdu
-         SKYS7NCRHUUASFKnbAspoSLWT/W8+YqCaP1QG0dhxMoWZ/zN58t1Juk+hl/T6tSajvJC
-         wv4uhJPFe2OpupmlTkLOY2XhelpVKHaIPwr35ufltImsCQcye2K2/TSsu/0OueYxwmv+
-         2+nA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=C5bI6BadwEG4F91VxXf6a9mhksTwdAZCArE0TuvJz/0=;
-        b=VCJIspVkUjflkuuuT89wxw+8KfbQDihc0QxSNZNFLxkXc4fxZmXCBXOYf7ZH6j9tiJ
-         btKycoXbIeROD9ELEbm32TpuiIaZEfe/IxtpzlKfFbiNkONnz36RVjFszhheE2pHo0jp
-         /0a6EQ3tn11uSh8h5N39OWlA9+EYqGgN3xv7eop2IyHXiCrNZ+Q1UnGAIm1qzhaYnPUK
-         Neu1RTqUcQazj5D6JPXjyjNW9slxI89yG9OFgnKuw9Ye1wrI2SVMz54GMnElR2Pef96e
-         gnsIEntxDXhZVgLlo2BX2WNbD97E9T79n/kTeD453x9Z345whT9pNtpuzDi3kqYTF/gx
-         kViw==
-X-Gm-Message-State: AOAM533wof21f13EhY0c9ImhKxcMYlUEiYzcGXIOga5GHfmHCBkw1Pp9
-        uYwMTTXN1aCqVhPGFhOu20c+Z8ZzSvLxj6CxO9+D3SiqGjA=
-X-Google-Smtp-Source: ABdhPJye+NAa2Hs/8HSWE3iwJc0pzkq0znXE7ovpjawQUte1ypkRIlOo8kxkxHn2CzEMS2UgqinRg/xAjKXP3gpDbSo=
-X-Received: by 2002:a05:651c:1181:: with SMTP id w1mr5614810ljo.432.1592732378167;
- Sun, 21 Jun 2020 02:39:38 -0700 (PDT)
+        with ESMTP id S1726112AbgFUJpP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Jun 2020 05:45:15 -0400
+X-Greylist: delayed 3063 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 21 Jun 2020 02:45:15 PDT
+Received: from smtp2.hosting90.cz (smtp2.hosting90.cz [IPv6:2a03:b780:1:0:216:3eff:fe00:24c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9C1C061794
+        for <linux-usb@vger.kernel.org>; Sun, 21 Jun 2020 02:45:15 -0700 (PDT)
+Received: from [46.229.122.58] (helo=[10.10.0.107])
+        by smtp2.hosting90.cz with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.92)
+        (envelope-from <Jerry@jrr.cz>)
+        id 1jmwXJ-0002u4-7y; Sun, 21 Jun 2020 11:45:13 +0200
+Subject: Re: [PATCH 1/1] usbserial: cp210x - icount support for parity error
+ checking
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
+References: <b4cd2557-9a61-5ccd-32ad-48b0c68bef6b@jrr.cz>
+ <20200621085816.GB95977@kroah.com>
+From:   Jerry <Jerry@jrr.cz>
+Message-ID: <03712b5a-ecb6-ae42-ff8e-8d5d6f2ed918@jrr.cz>
+Date:   Sun, 21 Jun 2020 11:45:11 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Firefox/60.0 SeaMonkey/2.53.2
 MIME-Version: 1.0
-From:   jaap aarts <jaap.aarts1@gmail.com>
-Date:   Sun, 21 Jun 2020 11:39:27 +0200
-Message-ID: <CACtzdJ2Yu_sHtJpWQ8UtF-yVEp5ON_vTWzaL72TJxW96MydVdQ@mail.gmail.com>
-Subject: kernel driver for USB liquid cooler controls
-To:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200621085816.GB95977@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8BIT
+X-Antivirus: Clamav/CLEAN
+X-Scan-Signature: c6374a04af50a10fd93232cdab733853
+X-Authenticated-Id: jerry@jrr.cz
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello USB mailing list,
+Greg Kroah-Hartman wrote on 6/21/20 10:58 AM:
+> On Sat, Jun 20, 2020 at 09:58:40PM +0200, Jerry wrote:
+>> usbserial: add cp210x support for icount to detect parity error in received data
+> Why is this here?
+>
+Because it seems be mandatory?
+https://www.kernel.org/doc/html/latest/process/5.Posting.html#patch-formatting-and-changelogs
 
-There are all-in-one liquid coolers for your CPU (like the corsair
-h100i), these are populair among gamers and high-end desktop
-enthusiasts for cooling their CPU. Under windows these have
-proprietary software that control the fan speed, pump speed and most
-importantly (for gamers) the RGB led controls.
-Under linux there is software that manages to control these devices by
-talking to the device via USB. But this doesn't allow for the fans to
-be controlled via generic fan control under linux.
-As a hobby project I started to implement some of the features from
-one of these user-space drivers as a kernel module.
-Some features would have to be device specific like RGB controls, but
-fan and pump speed could be controlled just like system fans.
-I was wondering if there would be any interest in having a driver for
-these all-in-one usb controlled coolers in the linux kernel itself?
+"A one-line description of what the patch does. This message should be 
+enough for a reader who sees it with no other context to figure out the 
+scope of the patch; it is the line that will show up in the “short form” 
+changelogs. This message is usually formatted with the relevant 
+subsystem name first, followed by the purpose of the patch. For example:
+gpio: fix build on CONFIG_GPIO_SYSFS=n"
 
-Thanks
+Did I misunderstand your rule or used wrong name of subsystem? Should I 
+type?
+USB serial: add cp210x support for icount to detect parity error in 
+received data
 
-Jaap Aarts
+>> Motivation - current version of cp210x driver doesn't provide any way to detect
+>> a parity error in received data from userspace. Some serial protocols like STM32
+>> bootloader protect data only by even parity so application needs to detect
+>> whether parity error happened to read again peripheral data.
+>>
+>> I created a simple patch which adds support for icount (ioctl TIOCGICOUNT) which
+>> sends GET_COMM_STATUS command to CP210X and according received flags increments
+>> fields for parity error, frame error, break and overrun.
+>> So application can detect an error condition after reading data from ttyUSB
+>> and repeat operation. There is no impact for applications which don't
+>> call ioctl TIOCGICOUNT.
+>> This patch is also placed at http://yyy.jrr.cz/cp210x.patch (my first patch)
+> Please read the section entitled "The canonical patch format" in the
+> kernel file, Documentation/SubmittingPatches for what is needed in order
+> to properly describe the change.
+I read it, but still not sure what exactly was wrong? Yes, I wrapped lines
+of description to 80 colums and now I noticed that only 75 columns is
+allowed but I doubt that it is all?
+Sorry for my bad English, it is hard to guess whether you see a problem 
+in function of patch, patch formatting, tab/spaces, description content, 
+spelling, line wrapping, mail client identification, something else or 
+all of them?
+>> Signed-off-by: Jaromir Skorpil <Jerry@jrr.cz>
+> This does not match your From: line :(
+I supposed that only mail address in From line matter?
+I understand that real name is mandatory only for Signed-off-by field?
+>
+> thanks,
+>
+> greg k-h
+Jerry
+
+
