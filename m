@@ -2,95 +2,165 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49638202CF5
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Jun 2020 23:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C6CD202D7C
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jun 2020 00:48:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726393AbgFUVco (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 21 Jun 2020 17:32:44 -0400
-Received: from sonic303-3.consmr.mail.bf2.yahoo.com ([74.6.131.42]:32785 "EHLO
-        sonic303-3.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729173AbgFUVco (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Jun 2020 17:32:44 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1592775162; bh=DPYuw2gUpgtMJzJhlH/AVmRGu2wSKCY1C+f8nOCoxu0=; h=Date:From:Reply-To:Subject:References:From:Subject; b=Te0IXwe9PGhJAa5IxNzBdlaq8NFw4NLWyYRK1pZHvl0kT5OODkM4v8suRV8O3zBfilT76vt709+/9I2XvCQQ8bKT03TEVUOUS7LidNw4KGxjLEFAsJ/KhYhJFKKBCnHx/YtQnF8O1Npuhx1rA3sY/AnMvJbkn7eu1JwcPYMf3aGmYPaSOmEG8MnHR5+728Qe3a71RX+fieJtbywbpRFL5LjUXNDF2f8Rq1kUrtbgOPN2Ql16ph1uqztQCdg0ZvPxb39a9i2NhMf0dz+GNuDyK0gJ1+2eYJtNKwArEEb+9WXBSUVEjKl/I3SAfdYsx06ZlCbjeMPYrcCU1jXF1R/CmA==
-X-YMail-OSG: ve.H2isVM1naPfy0phmi8fsgQ4_98KzmBUTRI1wE5xa8OC.Us7ghnZkKKLg0vey
- gOqy6YMikSkzxw.9cKlF6LTI9cXPZJcmcrbHILwrlkn5ZWrnTYFz4npOQsNzwu4z12rh.qUxj3xc
- cK_2QK7FRjc1BHJgHEsQThfYjQ8Y27HHCiTsHu8a.DG6qLPW0k5w9cFgZYRZGDO8Q1Da.WCfB4PE
- qSPxT_w5ufbgLTSVIIvHP2pGdjd7BoRVJno8hOv6UtVJr3x.UjFGeFee2SHbEQOQW6qQqnRspVL1
- lVasRXOtoAW63bnf34NPS3sM5zzvts.2Wned9PsAOvY_rw6ooFCThapkZ8Q_789J3JDu1sLhVC5E
- vjnX.IZF5d8uvznY85V7kph9vagmLMshjhxmcFsGlrRxmOsJG2JWknh4TCu5qOUUkY10.EK.95WU
- xmRpQWlvSz1MEXb.efH8j0lHWoKVlQqHUDwqtrLMKJiNuYLZnYzClW5W3bxCMiZ_fLURXIHbykiN
- Z1i2Ij_q.cpo5gsXGtaZIfHXjBdSCllPaS9sp5dV_kRj64zEN5_1TPsMI.DRefSbHBqSNHvn9cKA
- _PY3j5ht6_3kF2tAJ_IHvfkySTgRuM1Db2D6Fl6PRAdkvhjSCBo4WS8IKgx_NZGgBUNf8S8tkqXa
- n1Qh99rPyypnOZhALhZjXmCq5JaPpcqGyoeoVpsl19E.755QSM60Vpj0RDBTOtjc1djvn8INveWn
- c0UfG.Yl1emQwB5e89DuxfQSpMY53DVQ3h85z2s30_1PcRbOrowm1tQDgPttrQcWPSL5zDJ5_GYS
- iUKMqiisIc9OYMHtKZSIloiUU3S6cnVRgOCBp2B0dc27d4Bd2il5xcyGAyzYDkbSBLkulcmEyGVr
- FKQa8G1gS30KQLZJFR8KFQMIAgXCqQoX0RF6ZRNcnFnkb5Z7k0S6JF4LIMrEtXJyv_61YTUed.JO
- shErhZQnOf.w..w0HhQOyPDM5DIxVqF4gnmzRZTKup3Dotd9ZWxU6NTAhAQrXx3lxzCwWcgxCi_P
- Dn8Mr6OQnKpIBA2g3z4G62Ay4SpIWqwvepWZ8W1.FfRZMeL11Zee6NlvUya.rmRle8QRIZaS5HNC
- 5A5B33xoGWHKLjxfQ7v8vpqVnyvU4wG6GUnH4Q7NaRFc92p9GTme1yhIp5OsXxQvtI40WHC1j8VM
- kulcpmz4LgAky2BhzfVgraVg2ZYOhfrbsgpCnP1J0GNEdZqaHEfHsijVRlaftis2Z2u1AJTbKRDW
- 2Sf0nOfZbGUgfmFJMeXPHKmt8SvMZ5.64rtioR_m4IYPNlfEBFUmFEhVJdY1eyNlVEVbRRf.RV99
- Ixx9izk4RTGRzeVMGxF8jlFGz7eR.60DTJQo8wUDl_2M7
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic303.consmr.mail.bf2.yahoo.com with HTTP; Sun, 21 Jun 2020 21:32:42 +0000
-Date:   Sun, 21 Jun 2020 21:32:37 +0000 (UTC)
-From:   "Mrs. Mina A. Brunel" <brunelminaa@gmail.com>
-Reply-To: mrsminaabrunel63@gmail.com
-Message-ID: <946418698.391754.1592775157684@mail.yahoo.com>
-Subject: My Dear in the lord
+        id S1726618AbgFUWs3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 21 Jun 2020 18:48:29 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:35472 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726064AbgFUWs3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Jun 2020 18:48:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1592779706; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:references; bh=W8v5qpEkJnRIN852lPSeQgbjFbf4oDUDEtLcrMPd8PQ=;
+        b=b4skdB/p7ZiolCg9gZot7J0Xka7x7c38c11eDflnfrbYx66cDRdA9IVMTlxZTI09oU0AwX
+        Y9Hc2FHkDvmkgJqh0H8oEFxSAJd5vrDCM3gasrF+DE+rbD08IKkGd5X3Q/0Rrdnpjhtoiu
+        7Qk8YHdCWGjqHLfjXLRQyZjHCOIP/TY=
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>, od@zcrc.me,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paul Cercueil <paul@crapouillou.net>
+Subject: [RESEND PATCH] usb: common: usb-conn-gpio: Register optional charger
+Date:   Mon, 22 Jun 2020 00:48:07 +0200
+Message-Id: <20200621224807.882184-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-References: <946418698.391754.1592775157684.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.16138 YMailNodin Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Register a power supply charger, if the Kconfig option
+USB_CONN_GPIO_CHARGER is set, whose online state depends on whether
+the USB role is set to device or not.
 
+This is useful when the USB role is the only way to know if the device
+is charging from USB. The API is the standard power supply charger API,
+you get a /sys/class/power_supply/xxx/online node which tells you the
+state of the charger.
 
-My Dear in the lord
+The sole purpose of this is to give userspace applications a way to
+know whether or not the charger is plugged.
 
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+ drivers/usb/common/Kconfig         | 11 +++++++
+ drivers/usb/common/usb-conn-gpio.c | 47 ++++++++++++++++++++++++++++++
+ 2 files changed, 58 insertions(+)
 
-My name is Mrs. Mina A. Brunel I am a Norway Citizen who is living in Burki=
-na Faso, I am married to Mr. Brunel Patrice, a politicians who owns a small=
- gold company in Burkina Faso; He died of Leprosy and Radesyge, in year Feb=
-ruary 2010, During his lifetime he deposited the sum of =E2=82=AC 8.5 Milli=
-on Euro) Eight million, Five hundred thousand Euros in a bank in Ouagadougo=
-u the capital city of of Burkina in West Africa. The money was from the sal=
-e of his company and death benefits payment and entitlements of my deceased=
- husband by his company.
+diff --git a/drivers/usb/common/Kconfig b/drivers/usb/common/Kconfig
+index d611477aae41..5405ae96c68f 100644
+--- a/drivers/usb/common/Kconfig
++++ b/drivers/usb/common/Kconfig
+@@ -49,3 +49,14 @@ config USB_CONN_GPIO
+ 
+ 	  To compile the driver as a module, choose M here: the module will
+ 	  be called usb-conn-gpio.ko
++
++if USB_CONN_GPIO
++
++config USB_CONN_GPIO_CHARGER
++	bool "USB charger support"
++	select POWER_SUPPLY
++	help
++	  Register a charger with the power supply subsystem. This will allow
++	  userspace to know whether or not the device is charging from USB.
++
++endif
+diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common/usb-conn-gpio.c
+index ed204cbb63ea..129d48db280b 100644
+--- a/drivers/usb/common/usb-conn-gpio.c
++++ b/drivers/usb/common/usb-conn-gpio.c
+@@ -17,6 +17,7 @@
+ #include <linux/of.h>
+ #include <linux/pinctrl/consumer.h>
+ #include <linux/platform_device.h>
++#include <linux/power_supply.h>
+ #include <linux/regulator/consumer.h>
+ #include <linux/usb/role.h>
+ 
+@@ -38,6 +39,9 @@ struct usb_conn_info {
+ 	struct gpio_desc *vbus_gpiod;
+ 	int id_irq;
+ 	int vbus_irq;
++
++	struct power_supply_desc desc;
++	struct power_supply *charger;
+ };
+ 
+ /**
+@@ -98,6 +102,8 @@ static void usb_conn_detect_cable(struct work_struct *work)
+ 		ret = regulator_enable(info->vbus);
+ 		if (ret)
+ 			dev_err(info->dev, "enable vbus regulator failed\n");
++	} else if (IS_ENABLED(CONFIG_USB_CONN_GPIO_CHARGER)) {
++		power_supply_changed(info->charger);
+ 	}
+ 
+ 	info->last_role = role;
+@@ -121,10 +127,35 @@ static irqreturn_t usb_conn_isr(int irq, void *dev_id)
+ 	return IRQ_HANDLED;
+ }
+ 
++static enum power_supply_property usb_charger_properties[] = {
++	POWER_SUPPLY_PROP_ONLINE,
++};
++
++static int usb_charger_get_property(struct power_supply *psy,
++				    enum power_supply_property psp,
++				    union power_supply_propval *val)
++{
++	struct usb_conn_info *info = power_supply_get_drvdata(psy);
++
++	switch (psp) {
++	case POWER_SUPPLY_PROP_ONLINE:
++		val->intval = info->last_role == USB_ROLE_DEVICE;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
+ static int usb_conn_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
++	struct power_supply_desc *desc;
+ 	struct usb_conn_info *info;
++	struct power_supply_config cfg = {
++		.of_node = dev->of_node,
++	};
+ 	int ret = 0;
+ 
+ 	info = devm_kzalloc(dev, sizeof(*info), GFP_KERNEL);
+@@ -203,6 +234,22 @@ static int usb_conn_probe(struct platform_device *pdev)
+ 		}
+ 	}
+ 
++	if (IS_ENABLED(CONFIG_USB_CONN_GPIO_CHARGER)) {
++		desc = &info->desc;
++		desc->name = "usb-charger";
++		desc->properties = usb_charger_properties;
++		desc->num_properties = ARRAY_SIZE(usb_charger_properties);
++		desc->get_property = usb_charger_get_property;
++		desc->type = POWER_SUPPLY_TYPE_USB;
++		cfg.drv_data = info;
++
++		info->charger = devm_power_supply_register(dev, desc, &cfg);
++		if (IS_ERR(info->charger)) {
++			dev_err(dev, "Unable to register charger\n");
++			return PTR_ERR(info->charger);
++		}
++	}
++
+ 	platform_set_drvdata(pdev, info);
+ 
+ 	/* Perform initial detection */
+-- 
+2.27.0
 
-I am sending you this message with heavy tears in my eyes and great sorrow =
-in my heart, and also praying that it will reach you in good health because=
- I am not in good health, I sleep every night without knowing if I may be a=
-live to see the next day. I am suffering from long time cancer and presentl=
-y I am partially suffering from Leprosy, which has become difficult for me =
-to move around. I was married to my late husband for more than 6 years with=
-out having a child and my doctor confided that I have less chance to live, =
-having to know when the cup of death will come, I decided to contact you to=
- claim the fund since I don't have any relation I grew up from an orphanage=
- home.
-
-I have decided to donate this money for the support of helping Motherless b=
-abies/Less privileged/Widows and churches also to build the house of God be=
-cause I am dying and diagnosed with cancer for about 3 years ago. I have de=
-cided to donate from what I have inherited from my late husband to you for =
-the good work of Almighty God; I will be going in for an operation surgery =
-soon.
-
-Now I want you to stand as my next of kin to claim the funds for charity pu=
-rposes. Because of this money remains unclaimed after my death, the bank ex=
-ecutives or the government will take the money as unclaimed fund and maybe =
-use it for selfishness and worthless ventures, I need a very honest person =
-who can claim this money and use it for Charity works, for orphanages, wido=
-ws and also build schools and churches for less privilege that will be name=
-d after my late husband and my name.
-
-I need your urgent answer to know if you will be able to execute this proje=
-ct, and I will give you more information on how the fund will be transferre=
-d to your bank account or online banking.
-
-Thanks
-Mrs. Mina A. Brunel
