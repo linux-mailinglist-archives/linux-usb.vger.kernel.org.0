@@ -2,85 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C691D202A13
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Jun 2020 12:34:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A26E1202A1B
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Jun 2020 12:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729803AbgFUKez (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 21 Jun 2020 06:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53926 "EHLO
+        id S1729811AbgFUKnm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 21 Jun 2020 06:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729754AbgFUKez (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Jun 2020 06:34:55 -0400
-Received: from smtp2.hosting90.cz (smtp2.hosting90.cz [IPv6:2a03:b780:1:0:216:3eff:fe00:24c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F739C061794
-        for <linux-usb@vger.kernel.org>; Sun, 21 Jun 2020 03:34:55 -0700 (PDT)
-Received: from [46.229.122.58] (helo=[10.10.0.107])
-        by smtp2.hosting90.cz with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
-        (Exim 4.92)
-        (envelope-from <Jerry@jrr.cz>)
-        id 1jmxJM-0002x4-MN; Sun, 21 Jun 2020 12:34:53 +0200
-Subject: Re: [PATCH 1/1] usbserial: cp210x - icount support for parity error
- checking
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
-References: <b4cd2557-9a61-5ccd-32ad-48b0c68bef6b@jrr.cz>
- <20200621085816.GB95977@kroah.com>
- <03712b5a-ecb6-ae42-ff8e-8d5d6f2ed918@jrr.cz>
- <20200621095509.GA120230@kroah.com>
-From:   Jerry <Jerry@jrr.cz>
-Message-ID: <470484c8-7afc-c593-5ca9-cdb97dba39e1@jrr.cz>
-Date:   Sun, 21 Jun 2020 12:34:52 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Firefox/60.0 SeaMonkey/2.53.2
-MIME-Version: 1.0
-In-Reply-To: <20200621095509.GA120230@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Antivirus: Clamav/CLEAN
-X-Scan-Signature: c559c1d859b56cd26d86b8c439b16ace
-X-Authenticated-Id: jerry@jrr.cz
+        with ESMTP id S1729732AbgFUKnl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Jun 2020 06:43:41 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34E3C061794;
+        Sun, 21 Jun 2020 03:43:40 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id c17so16100437lji.11;
+        Sun, 21 Jun 2020 03:43:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=0jfMkEZWrYezS9uZR+4li6B/DaAPDq43HDV7xKrW+u8=;
+        b=ukvLAbAW5ZNyya2vWq5Gb0c9cPNSMt1D6x3tfXtr2WVBxxTrfGCWMcIy33yqZ6u8Ds
+         l34GXrTu0xzG9ztGv9kMtOEvZtx10P9uACreV1kdxP448hs+XsR1zDo0AG1TW396KOz2
+         j3nxndfPiXINklQeNn9u8ywdmEJXxafAGWWTe+Ito2Fi8aVC7Bms0wxMF1yS4wkgKRdg
+         1hCvL2oo0xCippc31mZPOTPM2WCrJoztGko69671sz/6jQlLoCKHgg36sG5Qd6mLA2ML
+         VXBwTjvaf3L+bQvf6/AzaCUMNoS5zDQPNYmRkK2L/0wYPM3SLJU2/QIA8FzPB2+o7v8y
+         gPZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=0jfMkEZWrYezS9uZR+4li6B/DaAPDq43HDV7xKrW+u8=;
+        b=mM33wwEcAFVw2bK9J5z2KavL9FjE43wBkASV0PsXDDhcsYRkuX4uXgnJmYIpTFIxxk
+         i7Qxk3v4vDwSKJP+rCiflz1xcqME5bgLjcdqJCA/Y1B08b7lFj2JSSlq2vVDQrurfbKw
+         4GJHkjHsLqevyh55bOa78MQZmq9h2F/ClYAOTT0zv4H3fob14Xyrd42fedjC5uMFgcNE
+         9z7BjsavQIWBNwwgjRQO+7IOCMuF4Y8WCCQo3RrAimlDJXWLb6aZKtW1qVeiWZl0jEGY
+         WK3T4hd9vc4aYyMog+Awo7vRs1+p/nFG8cBmEthTvRP7bKWfHO61oBqbJwClmPVda7+/
+         +hGQ==
+X-Gm-Message-State: AOAM533jhUh7fM+msE0AhSOj5s3oPer7ri1Fzga+Dmrluu5kj9OHGMpS
+        MoStnzNk7jVDNI7rr8mLuzWObpXW7rQ=
+X-Google-Smtp-Source: ABdhPJzs4X+XdCoLtfSEbtZoUdD/2KRC4uvUydI7B6w8pwlcxBOfgYRz2bPexgjJtZVxNPHzkh7GJA==
+X-Received: by 2002:a2e:974a:: with SMTP id f10mr6182456ljj.283.1592736219464;
+        Sun, 21 Jun 2020 03:43:39 -0700 (PDT)
+Received: from localhost.localdomain (n2e4fgqko6hxp4lot-1.v6.elisa-mobile.fi. [2001:999:0:6ffe:75bb:c470:73e0:b3cd])
+        by smtp.gmail.com with ESMTPSA id c20sm2652249lfb.33.2020.06.21.03.43.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 Jun 2020 03:43:38 -0700 (PDT)
+From:   Tuomas Tynkkynen <tuomas.tynkkynen@iki.fi>
+To:     steve.glendinning@shawell.net
+Cc:     UNGLinuxDriver@microchip.com, davem@davemloft.net, kuba@kernel.org,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Tuomas Tynkkynen <tuomas.tynkkynen@iki.fi>
+Subject: [PATCH] usbnet: smsc95xx: Fix use-after-free after removal
+Date:   Sun, 21 Jun 2020 13:43:26 +0300
+Message-Id: <20200621104326.30604-1-tuomas.tynkkynen@iki.fi>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Greg Kroah-Hartman wrote on 6/21/20 11:55 AM:
->> I read it, but still not sure what exactly was wrong? Yes, I wrapped lines
->> of description to 80 colums and now I noticed that only 75 columns is
->> allowed but I doubt that it is all?
-> That is one thing, but also the "This patch..." should not be in a
-> changelog, right?  Look at the other changes sent to the list for
-> examples of how to do this.
-Yes, I looked at another messages here and there are a lot of things 
-which I don't understand. For example two dash -- marker at the end 
-(bellow patch) with some strange number (2.7.4). I didn't find anything 
-about that in documentation.
+Syzbot reports an use-after-free in workqueue context:
 
-And documentation request diff -up
-https://www.kernel.org/doc/html/v4.17/process/submitting-patches.html#diff-up
-but patches here use another settings because diff -up never give me 
-line like
-index 86638c1..f1b46b5 100644
-before file names but put me file date and time next to filename. So 
-what version of diff should I use? I have diff (GNU diffutils) 3.7
->
->>>> Signed-off-by: Jaromir Skorpil <Jerry@jrr.cz>
->>> This does not match your From: line :(
->> I supposed that only mail address in From line matter?
->> I understand that real name is mandatory only for Signed-off-by field?
-> It has to match the From: line of your email to ensure that this really
-> is the same person.
-Really?
-I looked at another message as you advised and it seems that even YOUR 
-name often changes?
-https://marc.info/?l=linux-usb&m=159257306831535
-https://marc.info/?l=linux-usb&m=159256948030250
+BUG: KASAN: use-after-free in mutex_unlock+0x19/0x40 kernel/locking/mutex.c:737
+ mutex_unlock+0x19/0x40 kernel/locking/mutex.c:737
+ __smsc95xx_mdio_read drivers/net/usb/smsc95xx.c:217 [inline]
+ smsc95xx_mdio_read+0x583/0x870 drivers/net/usb/smsc95xx.c:278
+ check_carrier+0xd1/0x2e0 drivers/net/usb/smsc95xx.c:644
+ process_one_work+0x777/0xf90 kernel/workqueue.c:2274
+ worker_thread+0xa8f/0x1430 kernel/workqueue.c:2420
+ kthread+0x2df/0x300 kernel/kthread.c:255
 
-Why is a name so important when you can't verify it? Typing the same 
-text twice doesn't prove anything. In fact my real name can't be written 
-in ascii because of diacritics marks and I doubt that it will work here 
-correctly if I use unicode...
-> thanks,
->
-> greg k-h
-Jerry
+It looks like that smsc95xx_unbind() is freeing the structures that are
+still in use by the concurrently running workqueue callback. Thus switch
+to using cancel_delayed_work_sync() to ensure the work callback really
+is no longer active.
+
+Reported-by: syzbot+29dc7d4ae19b703ff947@syzkaller.appspotmail.com
+Signed-off-by: Tuomas Tynkkynen <tuomas.tynkkynen@iki.fi>
+---
+Compile tested only.
+---
+ drivers/net/usb/smsc95xx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
+index 355be77f4241..3cf4dc3433f9 100644
+--- a/drivers/net/usb/smsc95xx.c
++++ b/drivers/net/usb/smsc95xx.c
+@@ -1324,7 +1324,7 @@ static void smsc95xx_unbind(struct usbnet *dev, struct usb_interface *intf)
+ 	struct smsc95xx_priv *pdata = (struct smsc95xx_priv *)(dev->data[0]);
+ 
+ 	if (pdata) {
+-		cancel_delayed_work(&pdata->carrier_check);
++		cancel_delayed_work_sync(&pdata->carrier_check);
+ 		netif_dbg(dev, ifdown, dev->net, "free pdata\n");
+ 		kfree(pdata);
+ 		pdata = NULL;
+-- 
+2.17.1
+
