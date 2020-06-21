@@ -2,94 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 079A62029E3
-	for <lists+linux-usb@lfdr.de>; Sun, 21 Jun 2020 11:56:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C691D202A13
+	for <lists+linux-usb@lfdr.de>; Sun, 21 Jun 2020 12:34:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729746AbgFUJ43 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 21 Jun 2020 05:56:29 -0400
-Received: from wout2-smtp.messagingengine.com ([64.147.123.25]:41187 "EHLO
-        wout2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729573AbgFUJ43 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Jun 2020 05:56:29 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id A1911406;
-        Sun, 21 Jun 2020 05:56:28 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Sun, 21 Jun 2020 05:56:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=y4E5oBAv5Q20+cicR81onmu6k8a
-        42LDADTOKeufsf6E=; b=r84xF5L8zJsFULOm5QekLpz6H0AtN4JbkCF+j7lytZu
-        W0MhA6ftp0kKttTDSZT1scD9HpbV92BsWJ+LiZQgPODzAnnVHMT26wvo8k0sJJHA
-        ubNbGtPj+6DNRNs2EJZIWjoh/M8dEpfYT0+BEiQ0s2C3CD9Jdj5IeMVpUaZbd+Ha
-        W8KPZ4fF57kvzUe6ly+Cq7f82S7ocSAmzZYNiiCWqfRIB7QBlINeO0bEii7jXxya
-        wLRvyB+ZnNaZa4rB4+2RfSmrmN2tfYIfMXlQYkv+HccFhKLjBFzTYLTzsIIFMqxj
-        XlLgv1XbYg3DCRHb6wy5Jdz8bJCgdXv44JERCpeNAng==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=y4E5oB
-        Av5Q20+cicR81onmu6k8a42LDADTOKeufsf6E=; b=Td6R3bWcBODQHjYOCRrpV8
-        hOToSWE79bM35JmpzWOr6ACfmYOjb7AmkFOBLtccXna0OPrfKFh02n9BUQiJqKGL
-        vCx89kVJMKSFR/9wMV/OZWDjGgV1mDyPwCv92xCnNYc/KnRs/K3c8JgM2GCalg9x
-        RL4O2tGj0VBRA6kvp19RYg2K2/MS75+O5Yeq2S3A9k01Jl41yvKGg9hBEe0GM9Ma
-        G3Ur4WOHQlBhui7/n+Vt43mglDKoFG0xpp3n+cLO5ZuTsIVEbLqykOsmboboxNcN
-        ueORhQGWmmAEYX/lh47TxB8B+usei5kw4lm4v5YW+g1QADhA46mTpJS1YuJtghAg
-        ==
-X-ME-Sender: <xms:zC7vXjGQIMFa3cEsmLsuMzdleMydLm3v0mlQQcCdQQqWNcX22f-w9Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrudektddgvdefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
-    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucfkphepkeef
-    rdekiedrkeelrddutdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
-    hilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
-X-ME-Proxy: <xmx:zC7vXgWHiy8FJYkeAA9o6Uk4BSFu5ilx4vJAV5frwvjN4JJwL1WfaQ>
-    <xmx:zC7vXlJTs1-EmG5BWwh2J0hhVKQySleVM-FKWjCKjgF86PpedHUuqg>
-    <xmx:zC7vXhGSsQxlAewfjcW0dhoWJEmgIpUcxMa2gM9lUmo4BUAIx8k8qQ>
-    <xmx:zC7vXhhwJvEOy_B4gSnlMKWa6C9fCjYjUySe_cidHSQDVqyn8-RxnQ>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id C43003066D7B;
-        Sun, 21 Jun 2020 05:56:27 -0400 (EDT)
-Date:   Sun, 21 Jun 2020 11:56:25 +0200
-From:   Greg KH <greg@kroah.com>
-To:     jaap aarts <jaap.aarts1@gmail.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: kernel driver for USB liquid cooler controls
-Message-ID: <20200621095625.GB120230@kroah.com>
-References: <CACtzdJ2Yu_sHtJpWQ8UtF-yVEp5ON_vTWzaL72TJxW96MydVdQ@mail.gmail.com>
+        id S1729803AbgFUKez (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 21 Jun 2020 06:34:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53926 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729754AbgFUKez (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Jun 2020 06:34:55 -0400
+Received: from smtp2.hosting90.cz (smtp2.hosting90.cz [IPv6:2a03:b780:1:0:216:3eff:fe00:24c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F739C061794
+        for <linux-usb@vger.kernel.org>; Sun, 21 Jun 2020 03:34:55 -0700 (PDT)
+Received: from [46.229.122.58] (helo=[10.10.0.107])
+        by smtp2.hosting90.cz with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.92)
+        (envelope-from <Jerry@jrr.cz>)
+        id 1jmxJM-0002x4-MN; Sun, 21 Jun 2020 12:34:53 +0200
+Subject: Re: [PATCH 1/1] usbserial: cp210x - icount support for parity error
+ checking
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
+References: <b4cd2557-9a61-5ccd-32ad-48b0c68bef6b@jrr.cz>
+ <20200621085816.GB95977@kroah.com>
+ <03712b5a-ecb6-ae42-ff8e-8d5d6f2ed918@jrr.cz>
+ <20200621095509.GA120230@kroah.com>
+From:   Jerry <Jerry@jrr.cz>
+Message-ID: <470484c8-7afc-c593-5ca9-cdb97dba39e1@jrr.cz>
+Date:   Sun, 21 Jun 2020 12:34:52 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Firefox/60.0 SeaMonkey/2.53.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACtzdJ2Yu_sHtJpWQ8UtF-yVEp5ON_vTWzaL72TJxW96MydVdQ@mail.gmail.com>
+In-Reply-To: <20200621095509.GA120230@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Antivirus: Clamav/CLEAN
+X-Scan-Signature: c559c1d859b56cd26d86b8c439b16ace
+X-Authenticated-Id: jerry@jrr.cz
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jun 21, 2020 at 11:39:27AM +0200, jaap aarts wrote:
-> Hello USB mailing list,
-> 
-> There are all-in-one liquid coolers for your CPU (like the corsair
-> h100i), these are populair among gamers and high-end desktop
-> enthusiasts for cooling their CPU. Under windows these have
-> proprietary software that control the fan speed, pump speed and most
-> importantly (for gamers) the RGB led controls.
-> Under linux there is software that manages to control these devices by
-> talking to the device via USB. But this doesn't allow for the fans to
-> be controlled via generic fan control under linux.
-> As a hobby project I started to implement some of the features from
-> one of these user-space drivers as a kernel module.
-> Some features would have to be device specific like RGB controls, but
-> fan and pump speed could be controlled just like system fans.
-> I was wondering if there would be any interest in having a driver for
-> these all-in-one usb controlled coolers in the linux kernel itself?
+Greg Kroah-Hartman wrote on 6/21/20 11:55 AM:
+>> I read it, but still not sure what exactly was wrong? Yes, I wrapped lines
+>> of description to 80 colums and now I noticed that only 75 columns is
+>> allowed but I doubt that it is all?
+> That is one thing, but also the "This patch..." should not be in a
+> changelog, right?  Look at the other changes sent to the list for
+> examples of how to do this.
+Yes, I looked at another messages here and there are a lot of things 
+which I don't understand. For example two dash -- marker at the end 
+(bellow patch) with some strange number (2.7.4). I didn't find anything 
+about that in documentation.
 
-Sure, why not, just tie into the correct kernel subsystems and all will
-be good.  What exact device do you have, I have one here that I could
-test with if it's the same one.
+And documentation request diff -up
+https://www.kernel.org/doc/html/v4.17/process/submitting-patches.html#diff-up
+but patches here use another settings because diff -up never give me 
+line like
+index 86638c1..f1b46b5 100644
+before file names but put me file date and time next to filename. So 
+what version of diff should I use? I have diff (GNU diffutils) 3.7
+>
+>>>> Signed-off-by: Jaromir Skorpil <Jerry@jrr.cz>
+>>> This does not match your From: line :(
+>> I supposed that only mail address in From line matter?
+>> I understand that real name is mandatory only for Signed-off-by field?
+> It has to match the From: line of your email to ensure that this really
+> is the same person.
+Really?
+I looked at another message as you advised and it seems that even YOUR 
+name often changes?
+https://marc.info/?l=linux-usb&m=159257306831535
+https://marc.info/?l=linux-usb&m=159256948030250
 
-thanks,
-
-greg k-h
+Why is a name so important when you can't verify it? Typing the same 
+text twice doesn't prove anything. In fact my real name can't be written 
+in ascii because of diacritics marks and I doubt that it will work here 
+correctly if I use unicode...
+> thanks,
+>
+> greg k-h
+Jerry
