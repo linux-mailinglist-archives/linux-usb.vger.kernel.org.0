@@ -2,167 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42FD3203D62
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jun 2020 19:04:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80878203D79
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jun 2020 19:09:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729891AbgFVREX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Jun 2020 13:04:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52874 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729785AbgFVREX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Jun 2020 13:04:23 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D33DC061573;
-        Mon, 22 Jun 2020 10:04:22 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id q5so5049543wru.6;
-        Mon, 22 Jun 2020 10:04:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/YZmxJHhtEEJpXAJrYVtI3xkqXDiS8o7ELQWSGYDdQ4=;
-        b=jBbD4AKKTlfxveLKvJ3n8gvN7zOp7mztpZckngE9wTLFNwXqnsfDkXWiJqqKQWgbAs
-         L6dXmHnZaEwlDgYyA9KEa1tvJY5vB2DeBNALgmY/GJaDjzzF2a7MYftY4/D+AF69eH3u
-         mao68Pi9jJKjjg+mV1ihC+ieKjXycnYfdPRRxkiSToyEvAC5g09ZK4RMhggAzVPBxGgn
-         sccG9Nra+7qE04tAO5iZhZ9WsJ49xLRHirEQK4ub9MsV7MX5VWo0fP6AlFo3fZ7WC7Qq
-         X3ib3mttnoeiUN+IinUIoSNfi8n0Rf0T2xurPPSX7tP+dvb1/3Xj7A0w4P/TEfQGApHS
-         CQRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/YZmxJHhtEEJpXAJrYVtI3xkqXDiS8o7ELQWSGYDdQ4=;
-        b=Oqg3mhnan4b+36QUXBiQxA/QybjUPgLacZN7zxZTbNC7U5gMAr62Ti8U/bKDTfGtnB
-         9IQLqfHWPVA38X4xZXdaFV3K7bdKUhCFh4z7FpvRdrdtguAM5pNSOD3xxZZZQtIuFym2
-         NfE9B2qmZVikMdv0fkaAEJ84IZEF3w27cEEKB1oEOrauFmmfXgqYibmxyD10+xgPuK4l
-         d+RhwEjcBzhxtpde9lhHDXrwbFNcfLedFHwV7R48xqulwdH2LKH3Bdpt2bPsRF0mrvG3
-         AuW88rD8LA5b86OWiYQ26sUq8QB+YoyHW3nxNDTBs4IbBdmWsvY1kVeN6hawDH324zT6
-         4HMA==
-X-Gm-Message-State: AOAM53295BtWQ94BEo8YIjrZJMyjnaSvxDDyMv19FAiU02msiybmsnXL
-        hTsR847JkUzQRiKSoUE91oxbs9MYnwpFYJzZ13yabS2qK0I=
-X-Google-Smtp-Source: ABdhPJzuX5VTbn+UwgvL2wwzS49Z8KZe9AvBqyoNF++74pjXJiF08eyOSUE+r/vnqoS5O8wwB/GoBC/kIkgxlSeHygI=
-X-Received: by 2002:a5d:610a:: with SMTP id v10mr1796254wrt.108.1592845460681;
- Mon, 22 Jun 2020 10:04:20 -0700 (PDT)
+        id S1729815AbgFVRJK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Jun 2020 13:09:10 -0400
+Received: from mga11.intel.com ([192.55.52.93]:51793 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729563AbgFVRJK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 22 Jun 2020 13:09:10 -0400
+IronPort-SDR: rBKDNNUv/tMvvxPaNKHfwnCbFEBIIIkPFomf+yXIOYYIufMC6iRWFk74EWCdnwmA67zQ5/YY/Q
+ v0NhWcOW1ueA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9660"; a="142070173"
+X-IronPort-AV: E=Sophos;i="5.75,268,1589266800"; 
+   d="scan'208";a="142070173"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2020 10:09:09 -0700
+IronPort-SDR: VHxWJt7ptx9HHx4WK344vGUALukh8akHWvyCalEuZ9CS01Mc9dloFtzX3NjjYSecdNj6PrEglQ
+ 2M269qMSPB+w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,268,1589266800"; 
+   d="scan'208";a="281128230"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by orsmga007.jf.intel.com with SMTP; 22 Jun 2020 10:09:01 -0700
+Received: by lahna (sSMTP sendmail emulation); Mon, 22 Jun 2020 20:09:01 +0300
+Date:   Mon, 22 Jun 2020 20:09:01 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Mario.Limonciello@dell.com
+Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] Allow breaking up Thunderbolt/USB4 updates
+Message-ID: <20200622170901.GZ2795@lahna.fi.intel.com>
+References: <20200622143035.25327-1-mario.limonciello@dell.com>
+ <20200622163756.GV2795@lahna.fi.intel.com>
+ <1d2d1c3e753d42ed86cf89a6ed926a67@AUSX13MPC105.AMER.DELL.COM>
 MIME-Version: 1.0
-References: <20200616220403.1807003-1-james.hilliard1@gmail.com> <20200622085321.GA3334@localhost>
-In-Reply-To: <20200622085321.GA3334@localhost>
-From:   James Hilliard <james.hilliard1@gmail.com>
-Date:   Mon, 22 Jun 2020 11:04:09 -0600
-Message-ID: <CADvTj4rOYs6F3J2A72GiWGbYW_Fu7VNCd0GpWaJ9it6tEt+4Hw@mail.gmail.com>
-Subject: Re: [PATCH v2] USB: Serial: cypress_M8: Enable Simply Automated UPB PIM
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1d2d1c3e753d42ed86cf89a6ed926a67@AUSX13MPC105.AMER.DELL.COM>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 22, 2020 at 2:53 AM Johan Hovold <johan@kernel.org> wrote:
->
-> On Tue, Jun 16, 2020 at 04:04:03PM -0600, James Hilliard wrote:
-> > This is a UPB(Universal Powerline Bus) PIM(Powerline Interface Module)
-> > which allows for controlling multiple UPB compatible devices from
-> > Linux using the standard serial interface.
-> >
-> > Based on vendor application source code there are two different models
-> > of USB based PIM devices in addition to a number of RS232 based PIM's.
-> >
-> > The vendor UPB application source contains the following USB ID's:
-> > #define USB_PCS_VENDOR_ID 0x04b4
-> > #define USB_PCS_PIM_PRODUCT_ID 0x5500
-> >
-> > #define USB_SAI_VENDOR_ID 0x17dd
-> > #define USB_SAI_PIM_PRODUCT_ID 0x5500
-> >
-> > The first set of ID's correspond to the PIM variant sold by Powerline
-> > Control Systems while the second corresponds to the Simply Automated
-> > Incorporated PIM. As the product ID for both of these match the default
-> > cypress HID->COM RS232 product ID it assumed that they both use an
-> > internal variant of this HID->COM RS232 converter hardware. However
-> > as the vendor ID for the Simply Automated variant is different we need
-> > to also add it to the cypress_M8 driver so that it is properly
-> > detected.
-> >
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> > ---
-> > Changes v1 -> v2:
-> >   - Add more detailed commit message.
->
-> Now applied, thanks.
->
-> Would you mind posting the output of "lsusb -v" for this device for
-> completeness?
-Bus 001 Device 004: ID 17dd:5500
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               1.00
-  bDeviceClass            0
-  bDeviceSubClass         0
-  bDeviceProtocol         0
-  bMaxPacketSize0         8
-  idVendor           0x17dd
-  idProduct          0x5500
-  bcdDevice            0.00
-  iManufacturer           1 Simply Automated Inc.
-  iProduct                2 USB to Serial
-  iSerial                 0
-  bNumConfigurations      1
-  Configuration Descriptor:
-    bLength                 9
-    bDescriptorType         2
-    wTotalLength       0x0029
-    bNumInterfaces          1
-    bConfigurationValue     1
-    iConfiguration          4 Sample HID
-    bmAttributes         0x80
-      (Bus Powered)
-    MaxPower              100mA
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass         3
-      bInterfaceSubClass      0
-      bInterfaceProtocol      0
-      iInterface              0
-        HID Device Descriptor:
-          bLength                 9
-          bDescriptorType        33
-          bcdHID               1.00
-          bCountryCode            0 Not supported
-          bNumDescriptors         1
-          bDescriptorType        34 Report
-          wDescriptorLength      37
-         Report Descriptors:
-           ** UNAVAILABLE **
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x81  EP 1 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0008  1x 8 bytes
-        bInterval              10
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x02  EP 2 OUT
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0008  1x 8 bytes
-        bInterval              10
-can't get debug descriptor: Resource temporarily unavailable
-Device Status:     0x0000
-  (Bus Powered)
->
-> Johan
+On Mon, Jun 22, 2020 at 04:41:35PM +0000, Mario.Limonciello@dell.com wrote:
+> > -----Original Message-----
+> > From: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > Sent: Monday, June 22, 2020 11:38 AM
+> > To: Limonciello, Mario
+> > Cc: Andreas Noever; Michael Jamet; Yehezkel Bernat; linux-usb@vger.kernel.org;
+> > linux-kernel@vger.kernel.org
+> > Subject: Re: [PATCH 0/2] Allow breaking up Thunderbolt/USB4 updates
+> > 
+> > 
+> > [EXTERNAL EMAIL]
+> > 
+> > Hi Mario,
+> > 
+> > On Mon, Jun 22, 2020 at 09:30:33AM -0500, Mario Limonciello wrote:
+> > > Currently updates to Thunderbolt and USB4 controllers are fully atomic
+> > > actions. When writing into the non-active NVM nothing gets flushed to
+> > > the hardware until authenticate is sent.
+> > >
+> > > There has been some desire to improve the perceived performance of these
+> > > updates, particularly for userland that may perform the update upon
+> > > a performance sensitive time like logging out.
+> > >
+> > > So allow userland to flush the image to hardware at runtime, and then
+> > > allow authenticating the image at another time.
+> > >
+> > > For the Dell WD19TB some specific hardware capability exists that allows
+> > > extending this to automatically complete the update when unplugged.
+> > > Export that functionality to userspace as well.
+> > >
+> > > This patch series is done relative thunderbolt.git/next.
+> > 
+> > Thanks for the patch series. I wonder if you could base this on top of
+> > my "retimer NVM upgrade" series here (you are also Cc'd):
+> > 
+> >   https://lore.kernel.org/linux-usb/20200616135617.85752-1-
+> > mika.westerberg@linux.intel.com/
+> > 
+> > That series moves some of the common NVM functionality into a separate
+> > file (nvm.c).
+> 
+> Sure thing.  Do you by chance already have that on a public branch somewhere
+> that I can easily rebase it?
+
+I just pushed "bleeding-edge" branch that you should be able to base
+your stuff on top:
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git/log/?h=bleeding-edge
+
+It includes a couple of other patches as well (subject to change since
+they are also under review).
