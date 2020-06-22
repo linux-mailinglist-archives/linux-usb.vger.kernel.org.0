@@ -2,242 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0258203D3A
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jun 2020 18:57:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42FD3203D62
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jun 2020 19:04:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729965AbgFVQ5O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Jun 2020 12:57:14 -0400
-Received: from mail-il1-f200.google.com ([209.85.166.200]:50087 "EHLO
-        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729812AbgFVQ5N (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Jun 2020 12:57:13 -0400
-Received: by mail-il1-f200.google.com with SMTP id i7so12396413ilq.16
-        for <linux-usb@vger.kernel.org>; Mon, 22 Jun 2020 09:57:12 -0700 (PDT)
+        id S1729891AbgFVREX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Jun 2020 13:04:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52874 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729785AbgFVREX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Jun 2020 13:04:23 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D33DC061573;
+        Mon, 22 Jun 2020 10:04:22 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id q5so5049543wru.6;
+        Mon, 22 Jun 2020 10:04:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/YZmxJHhtEEJpXAJrYVtI3xkqXDiS8o7ELQWSGYDdQ4=;
+        b=jBbD4AKKTlfxveLKvJ3n8gvN7zOp7mztpZckngE9wTLFNwXqnsfDkXWiJqqKQWgbAs
+         L6dXmHnZaEwlDgYyA9KEa1tvJY5vB2DeBNALgmY/GJaDjzzF2a7MYftY4/D+AF69eH3u
+         mao68Pi9jJKjjg+mV1ihC+ieKjXycnYfdPRRxkiSToyEvAC5g09ZK4RMhggAzVPBxGgn
+         sccG9Nra+7qE04tAO5iZhZ9WsJ49xLRHirEQK4ub9MsV7MX5VWo0fP6AlFo3fZ7WC7Qq
+         X3ib3mttnoeiUN+IinUIoSNfi8n0Rf0T2xurPPSX7tP+dvb1/3Xj7A0w4P/TEfQGApHS
+         CQRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=/tYqKIp3w739fwVS3SNd0WI3Mq8mwz9vCMWpDnBTWzc=;
-        b=rDVIGCfrUnUFoe/89e4aQi8fEvGtE/zIWIu6itum3FDV9lLAIaCza1ORdmhKYri0Ue
-         mUZyKAdfnZnerTkpYpru0A/IrgsS/77h+TybxpV2jUWE5qnOnPjWwi0vUs5nIwLp1asQ
-         okUnGFxdgt/uaysKt+czEWjIkhDdTSEiHz/TBqyNdRJBARKjtURy/gAKmMt4nUvKlcG6
-         EFmDxm6mZKZF60PgNDRY196q13QCikSoGZtCGPAIrqouYayoKQM+JTGak88q46w+CQl+
-         oQHaCeh3AIw0C9iuL0yNk9+8Z4VwW7fNOFfSB0hU5bP2Y1JK52F/ts0tt3HpvgMlIO1r
-         eo7A==
-X-Gm-Message-State: AOAM532gSzxyG4ImdBrDUb9yNNLm48Hx/FqQE3JGGAFCPDgvZ6cP+nNb
-        fo+8YWHYViIC0es16wWIlAoZlLJJ6CLvf59p4FhDj29xn9l2
-X-Google-Smtp-Source: ABdhPJzQfc1w5CUXBr4Ohp9z3rjrpQ0KfJdv+hKTTA1bXg9+fvSQ7wpK8vMItpp1VmcPqVTiZfaZ+RgjnFO5MhhJPL6QDq/FZK73
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/YZmxJHhtEEJpXAJrYVtI3xkqXDiS8o7ELQWSGYDdQ4=;
+        b=Oqg3mhnan4b+36QUXBiQxA/QybjUPgLacZN7zxZTbNC7U5gMAr62Ti8U/bKDTfGtnB
+         9IQLqfHWPVA38X4xZXdaFV3K7bdKUhCFh4z7FpvRdrdtguAM5pNSOD3xxZZZQtIuFym2
+         NfE9B2qmZVikMdv0fkaAEJ84IZEF3w27cEEKB1oEOrauFmmfXgqYibmxyD10+xgPuK4l
+         d+RhwEjcBzhxtpde9lhHDXrwbFNcfLedFHwV7R48xqulwdH2LKH3Bdpt2bPsRF0mrvG3
+         AuW88rD8LA5b86OWiYQ26sUq8QB+YoyHW3nxNDTBs4IbBdmWsvY1kVeN6hawDH324zT6
+         4HMA==
+X-Gm-Message-State: AOAM53295BtWQ94BEo8YIjrZJMyjnaSvxDDyMv19FAiU02msiybmsnXL
+        hTsR847JkUzQRiKSoUE91oxbs9MYnwpFYJzZ13yabS2qK0I=
+X-Google-Smtp-Source: ABdhPJzuX5VTbn+UwgvL2wwzS49Z8KZe9AvBqyoNF++74pjXJiF08eyOSUE+r/vnqoS5O8wwB/GoBC/kIkgxlSeHygI=
+X-Received: by 2002:a5d:610a:: with SMTP id v10mr1796254wrt.108.1592845460681;
+ Mon, 22 Jun 2020 10:04:20 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a02:93ea:: with SMTP id z97mr14919283jah.40.1592845031963;
- Mon, 22 Jun 2020 09:57:11 -0700 (PDT)
-Date:   Mon, 22 Jun 2020 09:57:11 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005003fe05a8af2231@google.com>
-Subject: INFO: trying to register non-static key in skb_queue_tail
-From:   syzbot <syzbot+743547b2a7fd655ffb6d@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, ath9k-devel@qca.qualcomm.com,
-        davem@davemloft.net, kuba@kernel.org, kvalo@codeaurora.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+References: <20200616220403.1807003-1-james.hilliard1@gmail.com> <20200622085321.GA3334@localhost>
+In-Reply-To: <20200622085321.GA3334@localhost>
+From:   James Hilliard <james.hilliard1@gmail.com>
+Date:   Mon, 22 Jun 2020 11:04:09 -0600
+Message-ID: <CADvTj4rOYs6F3J2A72GiWGbYW_Fu7VNCd0GpWaJ9it6tEt+4Hw@mail.gmail.com>
+Subject: Re: [PATCH v2] USB: Serial: cypress_M8: Enable Simply Automated UPB PIM
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
-
-syzbot found the following crash on:
-
-HEAD commit:    f8f02d5c USB: OTG: rename product list of devices
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=17205bae100000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f1981539b6376b73
-dashboard link: https://syzkaller.appspot.com/bug?extid=743547b2a7fd655ffb6d
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11eab949100000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10dc82ed100000
-
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+743547b2a7fd655ffb6d@syzkaller.appspotmail.com
-
-INFO: trying to register non-static key.
-the code is fine but needs lockdep annotation.
-turning off the locking correctness validator.
-CPU: 0 PID: 323 Comm: systemd-udevd Not tainted 5.8.0-rc1-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0xf6/0x16e lib/dump_stack.c:118
- assign_lock_key kernel/locking/lockdep.c:894 [inline]
- register_lock_class+0x1228/0x16d0 kernel/locking/lockdep.c:1206
- __lock_acquire+0x101/0x6270 kernel/locking/lockdep.c:4259
- lock_acquire+0x18b/0x7c0 kernel/locking/lockdep.c:4959
- __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
- _raw_spin_lock_irqsave+0x32/0x50 kernel/locking/spinlock.c:159
- skb_queue_tail+0x27/0x180 net/core/skbuff.c:3143
- ath9k_htc_txep+0x287/0x400 drivers/net/wireless/ath/ath9k/htc_drv_txrx.c:707
- ath9k_htc_txcompletion_cb+0x1a1/0x2b0 drivers/net/wireless/ath/ath9k/htc_hst.c:346
- hif_usb_regout_cb+0x115/0x1c0 drivers/net/wireless/ath/ath9k/hif_usb.c:90
- __usb_hcd_giveback_urb+0x29a/0x550 drivers/usb/core/hcd.c:1650
- usb_hcd_giveback_urb+0x368/0x420 drivers/usb/core/hcd.c:1716
- dummy_timer+0x125e/0x32b4 drivers/usb/gadget/udc/dummy_hcd.c:1967
- call_timer_fn+0x1ac/0x6e0 kernel/time/timer.c:1404
- expire_timers kernel/time/timer.c:1449 [inline]
- __run_timers kernel/time/timer.c:1773 [inline]
- __run_timers kernel/time/timer.c:1740 [inline]
- run_timer_softirq+0x5e5/0x14c0 kernel/time/timer.c:1786
- __do_softirq+0x21e/0x996 kernel/softirq.c:292
- asm_call_on_stack+0xf/0x20 arch/x86/entry/entry_64.S:711
- </IRQ>
- __run_on_irqstack arch/x86/include/asm/irq_stack.h:22 [inline]
- run_on_irqstack_cond arch/x86/include/asm/irq_stack.h:48 [inline]
- do_softirq_own_stack+0x109/0x140 arch/x86/kernel/irq_64.c:77
- invoke_softirq kernel/softirq.c:387 [inline]
- __irq_exit_rcu kernel/softirq.c:417 [inline]
- irq_exit_rcu+0x16f/0x1a0 kernel/softirq.c:429
- sysvec_apic_timer_interrupt+0xd3/0x1b0 arch/x86/kernel/apic/apic.c:1091
- asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:596
-RIP: 0010:lock_release+0x3c9/0x710 kernel/locking/lockdep.c:4967
-Code: 0f b6 14 02 48 89 f8 83 e0 07 83 c0 03 38 d0 7c 08 84 d2 0f 85 bb 02 00 00 83 ad 84 08 00 00 01 0f 85 4a 01 00 00 ff 34 24 9d <48> b8 00 00 00 00 00 fc ff df 48 01 c3 48 c7 03 00 00 00 00 c7 43
-RSP: 0018:ffff8881cd71f8f0 EFLAGS: 00000246
-RAX: 0000000000000007 RBX: 1ffff11039ae3f21 RCX: 1ffff11039a85d8f
-RDX: 0000000000000000 RSI: 1ffff11039a85d96 RDI: ffff8881cd42ec84
-RBP: ffff8881cd42e400 R08: ffff8881cd42e400 R09: fffffbfff1014d0a
-R10: ffffffff880a684f R11: fffffbfff1014d09 R12: f002853324f3be8d
-R13: ffffffff816b05ef R14: ffff8881cd42ec80 R15: 0000000000000002
- zap_pte_range mm/memory.c:1089 [inline]
- zap_pmd_range mm/memory.c:1193 [inline]
- zap_pud_range mm/memory.c:1222 [inline]
- zap_p4d_range mm/memory.c:1243 [inline]
- unmap_page_range+0xe2f/0x1fc0 mm/memory.c:1264
- unmap_single_vma+0x196/0x300 mm/memory.c:1309
- unmap_vmas+0x174/0x2f0 mm/memory.c:1341
- exit_mmap+0x278/0x4d0 mm/mmap.c:3150
- __mmput kernel/fork.c:1093 [inline]
- mmput+0xce/0x3d0 kernel/fork.c:1114
- exit_mm kernel/exit.c:482 [inline]
- do_exit+0xaaf/0x2cb0 kernel/exit.c:792
- do_group_exit+0x125/0x340 kernel/exit.c:903
- __do_sys_exit_group kernel/exit.c:914 [inline]
- __se_sys_exit_group kernel/exit.c:912 [inline]
- __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:912
- do_syscall_64+0x50/0x90 arch/x86/entry/common.c:359
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x7f7ad8c2a618
-Code: Bad RIP value.
-RSP: 002b:00007ffd37c486a8 EFLAGS: 00000206 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 00007ffd37c48770 RCX: 00007f7ad8c2a618
-RDX: 0000000000000000 RSI: 000000000000003c RDI: 0000000000000000
-RBP: 00007ffd37c48820 R08: 00000000000000e7 R09: fffffffffffffe50
-R10: 00000000ffffffff R11: 0000000000000206 R12: 0000000000000000
-R13: 0000000000000000 R14: 0000000000000003 R15: 000000000000000e
-general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-CPU: 0 PID: 323 Comm: systemd-udevd Not tainted 5.8.0-rc1-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:__skb_insert include/linux/skbuff.h:1895 [inline]
-RIP: 0010:__skb_queue_before include/linux/skbuff.h:2001 [inline]
-RIP: 0010:__skb_queue_tail include/linux/skbuff.h:2034 [inline]
-RIP: 0010:skb_queue_tail+0xbb/0x180 net/core/skbuff.c:3144
-Code: 00 00 00 00 fc ff df 48 c1 ea 03 80 3c 02 00 0f 85 82 00 00 00 4c 89 e2 48 89 6b 08 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <80> 3c 02 00 75 55 48 8d 7b 10 49 89 2c 24 48 b8 00 00 00 00 00 fc
-RSP: 0018:ffff8881db2099f0 EFLAGS: 00010046
-RAX: dffffc0000000000 RBX: ffff8881cd7ab590 RCX: ffffffff81274370
-RDX: 0000000000000000 RSI: 0000000000000046 RDI: ffff8881cfdc1148
-RBP: ffff8881cfdc1140 R08: 0000000000000004 R09: ffffed103b64132d
-R10: 0000000000000003 R11: ffffed103b64132c R12: 0000000000000000
-R13: ffff8881cd7ab598 R14: ffff8881cd7ab5a8 R15: ffffffff82dcf820
-FS:  00007f7ad9dda8c0(0000) GS:ffff8881db200000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000559104643e60 CR3: 00000001ce0ed000 CR4: 00000000001406f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <IRQ>
- ath9k_htc_txep+0x287/0x400 drivers/net/wireless/ath/ath9k/htc_drv_txrx.c:707
- ath9k_htc_txcompletion_cb+0x1a1/0x2b0 drivers/net/wireless/ath/ath9k/htc_hst.c:346
- hif_usb_regout_cb+0x115/0x1c0 drivers/net/wireless/ath/ath9k/hif_usb.c:90
- __usb_hcd_giveback_urb+0x29a/0x550 drivers/usb/core/hcd.c:1650
- usb_hcd_giveback_urb+0x368/0x420 drivers/usb/core/hcd.c:1716
- dummy_timer+0x125e/0x32b4 drivers/usb/gadget/udc/dummy_hcd.c:1967
- call_timer_fn+0x1ac/0x6e0 kernel/time/timer.c:1404
- expire_timers kernel/time/timer.c:1449 [inline]
- __run_timers kernel/time/timer.c:1773 [inline]
- __run_timers kernel/time/timer.c:1740 [inline]
- run_timer_softirq+0x5e5/0x14c0 kernel/time/timer.c:1786
- __do_softirq+0x21e/0x996 kernel/softirq.c:292
- asm_call_on_stack+0xf/0x20 arch/x86/entry/entry_64.S:711
- </IRQ>
- __run_on_irqstack arch/x86/include/asm/irq_stack.h:22 [inline]
- run_on_irqstack_cond arch/x86/include/asm/irq_stack.h:48 [inline]
- do_softirq_own_stack+0x109/0x140 arch/x86/kernel/irq_64.c:77
- invoke_softirq kernel/softirq.c:387 [inline]
- __irq_exit_rcu kernel/softirq.c:417 [inline]
- irq_exit_rcu+0x16f/0x1a0 kernel/softirq.c:429
- sysvec_apic_timer_interrupt+0xd3/0x1b0 arch/x86/kernel/apic/apic.c:1091
- asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:596
-RIP: 0010:lock_release+0x3c9/0x710 kernel/locking/lockdep.c:4967
-Code: 0f b6 14 02 48 89 f8 83 e0 07 83 c0 03 38 d0 7c 08 84 d2 0f 85 bb 02 00 00 83 ad 84 08 00 00 01 0f 85 4a 01 00 00 ff 34 24 9d <48> b8 00 00 00 00 00 fc ff df 48 01 c3 48 c7 03 00 00 00 00 c7 43
-RSP: 0018:ffff8881cd71f8f0 EFLAGS: 00000246
-RAX: 0000000000000007 RBX: 1ffff11039ae3f21 RCX: 1ffff11039a85d8f
-RDX: 0000000000000000 RSI: 1ffff11039a85d96 RDI: ffff8881cd42ec84
-RBP: ffff8881cd42e400 R08: ffff8881cd42e400 R09: fffffbfff1014d0a
-R10: ffffffff880a684f R11: fffffbfff1014d09 R12: f002853324f3be8d
-R13: ffffffff816b05ef R14: ffff8881cd42ec80 R15: 0000000000000002
- zap_pte_range mm/memory.c:1089 [inline]
- zap_pmd_range mm/memory.c:1193 [inline]
- zap_pud_range mm/memory.c:1222 [inline]
- zap_p4d_range mm/memory.c:1243 [inline]
- unmap_page_range+0xe2f/0x1fc0 mm/memory.c:1264
- unmap_single_vma+0x196/0x300 mm/memory.c:1309
- unmap_vmas+0x174/0x2f0 mm/memory.c:1341
- exit_mmap+0x278/0x4d0 mm/mmap.c:3150
- __mmput kernel/fork.c:1093 [inline]
- mmput+0xce/0x3d0 kernel/fork.c:1114
- exit_mm kernel/exit.c:482 [inline]
- do_exit+0xaaf/0x2cb0 kernel/exit.c:792
- do_group_exit+0x125/0x340 kernel/exit.c:903
- __do_sys_exit_group kernel/exit.c:914 [inline]
- __se_sys_exit_group kernel/exit.c:912 [inline]
- __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:912
- do_syscall_64+0x50/0x90 arch/x86/entry/common.c:359
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x7f7ad8c2a618
-Code: Bad RIP value.
-RSP: 002b:00007ffd37c486a8 EFLAGS: 00000206 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 00007ffd37c48770 RCX: 00007f7ad8c2a618
-RDX: 0000000000000000 RSI: 000000000000003c RDI: 0000000000000000
-RBP: 00007ffd37c48820 R08: 00000000000000e7 R09: fffffffffffffe50
-R10: 00000000ffffffff R11: 0000000000000206 R12: 0000000000000000
-R13: 0000000000000000 R14: 0000000000000003 R15: 000000000000000e
-Modules linked in:
----[ end trace 53afd8f120df8e51 ]---
-RIP: 0010:__skb_insert include/linux/skbuff.h:1895 [inline]
-RIP: 0010:__skb_queue_before include/linux/skbuff.h:2001 [inline]
-RIP: 0010:__skb_queue_tail include/linux/skbuff.h:2034 [inline]
-RIP: 0010:skb_queue_tail+0xbb/0x180 net/core/skbuff.c:3144
-Code: 00 00 00 00 fc ff df 48 c1 ea 03 80 3c 02 00 0f 85 82 00 00 00 4c 89 e2 48 89 6b 08 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <80> 3c 02 00 75 55 48 8d 7b 10 49 89 2c 24 48 b8 00 00 00 00 00 fc
-RSP: 0018:ffff8881db2099f0 EFLAGS: 00010046
-RAX: dffffc0000000000 RBX: ffff8881cd7ab590 RCX: ffffffff81274370
-RDX: 0000000000000000 RSI: 0000000000000046 RDI: ffff8881cfdc1148
-RBP: ffff8881cfdc1140 R08: 0000000000000004 R09: ffffed103b64132d
-R10: 0000000000000003 R11: ffffed103b64132c R12: 0000000000000000
-R13: ffff8881cd7ab598 R14: ffff8881cd7ab5a8 R15: ffffffff82dcf820
-FS:  00007f7ad9dda8c0(0000) GS:ffff8881db200000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000559104643e60 CR3: 00000001ce0ed000 CR4: 00000000001406f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+On Mon, Jun 22, 2020 at 2:53 AM Johan Hovold <johan@kernel.org> wrote:
+>
+> On Tue, Jun 16, 2020 at 04:04:03PM -0600, James Hilliard wrote:
+> > This is a UPB(Universal Powerline Bus) PIM(Powerline Interface Module)
+> > which allows for controlling multiple UPB compatible devices from
+> > Linux using the standard serial interface.
+> >
+> > Based on vendor application source code there are two different models
+> > of USB based PIM devices in addition to a number of RS232 based PIM's.
+> >
+> > The vendor UPB application source contains the following USB ID's:
+> > #define USB_PCS_VENDOR_ID 0x04b4
+> > #define USB_PCS_PIM_PRODUCT_ID 0x5500
+> >
+> > #define USB_SAI_VENDOR_ID 0x17dd
+> > #define USB_SAI_PIM_PRODUCT_ID 0x5500
+> >
+> > The first set of ID's correspond to the PIM variant sold by Powerline
+> > Control Systems while the second corresponds to the Simply Automated
+> > Incorporated PIM. As the product ID for both of these match the default
+> > cypress HID->COM RS232 product ID it assumed that they both use an
+> > internal variant of this HID->COM RS232 converter hardware. However
+> > as the vendor ID for the Simply Automated variant is different we need
+> > to also add it to the cypress_M8 driver so that it is properly
+> > detected.
+> >
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > ---
+> > Changes v1 -> v2:
+> >   - Add more detailed commit message.
+>
+> Now applied, thanks.
+>
+> Would you mind posting the output of "lsusb -v" for this device for
+> completeness?
+Bus 001 Device 004: ID 17dd:5500
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               1.00
+  bDeviceClass            0
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0         8
+  idVendor           0x17dd
+  idProduct          0x5500
+  bcdDevice            0.00
+  iManufacturer           1 Simply Automated Inc.
+  iProduct                2 USB to Serial
+  iSerial                 0
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0029
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          4 Sample HID
+    bmAttributes         0x80
+      (Bus Powered)
+    MaxPower              100mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass         3
+      bInterfaceSubClass      0
+      bInterfaceProtocol      0
+      iInterface              0
+        HID Device Descriptor:
+          bLength                 9
+          bDescriptorType        33
+          bcdHID               1.00
+          bCountryCode            0 Not supported
+          bNumDescriptors         1
+          bDescriptorType        34 Report
+          wDescriptorLength      37
+         Report Descriptors:
+           ** UNAVAILABLE **
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0008  1x 8 bytes
+        bInterval              10
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x02  EP 2 OUT
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0008  1x 8 bytes
+        bInterval              10
+can't get debug descriptor: Resource temporarily unavailable
+Device Status:     0x0000
+  (Bus Powered)
+>
+> Johan
