@@ -2,112 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F0F202ED7
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jun 2020 05:15:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BC69202EFC
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jun 2020 06:17:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726834AbgFVDPN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 21 Jun 2020 23:15:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37900 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726783AbgFVDPM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Jun 2020 23:15:12 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C64EC061794;
-        Sun, 21 Jun 2020 20:15:11 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id d21so6630953lfb.6;
-        Sun, 21 Jun 2020 20:15:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=Ych9qsXYRdyWSqxacfEEmFrepQ/w/vnS3kTHuzEFOiA=;
-        b=J2t/laGm6RBErO7XT/08Vtz6eCSP0E5F0znEcjlnl01WqJfO3CQmf0G9jVRf04P1Fz
-         RHUU9hrr4KIiDIzG6Fcrli88122gfEFbOLEcV6lfBagN5367+SGnBk0KmJZ3JLnYHvHw
-         5o2PM+9w+o+zHHfCFpsdgIU3zlOcXng5k+3cxsZOhhuAra3X7wREErsqMfbirNz6oegT
-         BcwWtoRaO+cTbZn1qMhj6Tgt1AveggEFf7Xjt6sbLU3/Q7BP4aFMQqHpzlwmyetVnUaG
-         gXY7241eM2OkYoGtjJ4tCRQ6B5fIWUcJkMfoenkoG5xIkXIu8Xg+Pumtmuinp7U93Zlq
-         hDow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=Ych9qsXYRdyWSqxacfEEmFrepQ/w/vnS3kTHuzEFOiA=;
-        b=q1SEW3cmXYIK9XwhVRKpgDs/HxGL/L5ytMbRTHfm1/ikA/tk/pW6Htd45cvh8vlxdB
-         R5jfGrhutAZe5gpbxKiTFAm+AAfhxjHsXLzSHMMc4O7BpLYKNk5nomx786giqveGi2cl
-         oiXyt0lljIYO/LnnrwJAxGX0DFZvi+sM/0gmfhElRo2cCBVMlY8xgHiqFk+mzTDQLgW1
-         k5Aya4BvRkzVIIAoQYGNwteUTbQP0x43HKxkgHHeanUv/R0lAx44Q/auipgVnkcQnZdB
-         JydVglUKn9YJ9JIqzelPgC6VWZFE0sfh4DDKv65KeVYR2+zjBTFBeryqOkmStH6LLNjm
-         6idA==
-X-Gm-Message-State: AOAM531hgYcfM2xjaCdTv4tMP2n23EbvOozVDTpYgfIeVLNLTRUV+74e
-        5bjaUABZXx8DnP/xB1AmZJIqohdFnF4xzNSOORbLwdnz
-X-Google-Smtp-Source: ABdhPJw7OywllhUghoiimJ+k56wIeR0SenXFaTng87Z9PB6uNsjJIcwWyarl0STO+HmKMYTMRc6xR3B1u/+shC47AeE=
-X-Received: by 2002:a19:1d1:: with SMTP id 200mr8666888lfb.57.1592795709495;
- Sun, 21 Jun 2020 20:15:09 -0700 (PDT)
-MIME-Version: 1.0
-From:   Kyungtae Kim <kt0755@gmail.com>
-Date:   Sun, 21 Jun 2020 23:14:58 -0400
-Message-ID: <CAEAjamu8BjiCZ+93ptGQmPu9jyHbTu=nHqdbVGW-kw9nFq6SVA@mail.gmail.com>
-Subject: WARNING in usb_ep_queue
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        syzkaller <syzkaller@googlegroups.com>,
-        Dave Tian <dave.jing.tian@gmail.com>
+        id S1725973AbgFVERr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Jun 2020 00:17:47 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:19804 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725767AbgFVERr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Jun 2020 00:17:47 -0400
+X-UUID: 1040f021076140a19028f475c3459cf1-20200622
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=PuCl/lBl9iDBpplRpTMsgHwBlFg/ULmA93+bshgDaec=;
+        b=r8JBnb7V58Lzk+XcIxtOLeuiUReWX0XgaVfNcJIivSogSSvFhMYkyhjlOI/zmaihwKQ5/0h41OFRt5LS0Rh6rGRUwDk3+6oQfoymGAl+5oZUof497yGsKMvySsIPeNzpLC7py7HZ+8LGFKJr+WPrToDj4mrp3Wp6yumhzOjRzhI=;
+X-UUID: 1040f021076140a19028f475c3459cf1-20200622
+Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 1241328394; Mon, 22 Jun 2020 12:17:39 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31N2.mediatek.inc
+ (172.27.4.87) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 22 Jun
+ 2020 12:17:37 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 22 Jun 2020 12:17:36 +0800
+Message-ID: <1592799455.3798.1.camel@mhfsdcap03>
+Subject: Re: [PATCH] USB: ch9: add "USB_" prefix in front of TEST defines
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, Peter Chen <Peter.Chen@nxp.com>,
+        "Minas Harutyunyan" <hminas@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        "Michal Simek" <michal.simek@xilinx.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Bin Liu <b-liu@ti.com>, Pawel Laszczak <pawell@cadence.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Jason Yan <yanaijie@huawei.com>,
+        Jia-Ju Bai <baijiaju1990@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Jules Irenge" <jbi.octave@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Rob Gill <rrobgill@protonmail.com>,
+        Macpaul Lin <macpaul.lin@mediatek.com>
+Date:   Mon, 22 Jun 2020 12:17:35 +0800
+In-Reply-To: <20200618144206.2655890-1-gregkh@linuxfoundation.org>
+References: <20200618144206.2655890-1-gregkh@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
+MIME-Version: 1.0
+X-TM-SNTS-SMTP: 90C3A953C8EDBA825586FFED90CF686FE83FAFD48F4D38B165862DA8DB3D3B742000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-We report a bug (in linux-5.6.11) found by FuzzUSB (a modified version
-of syzkaller)
+T24gVGh1LCAyMDIwLTA2LTE4IGF0IDE2OjQyICswMjAwLCBHcmVnIEtyb2FoLUhhcnRtYW4gd3Jv
+dGU6DQo+IEZvciBzb21lIHJlYXNvbiwgdGhlIFRFU1RfIGRlZmluZXMgaW4gdGhlIHVzYi9jaDku
+aCBmaWxlcyBkaWQgbm90IGhhdmUNCj4gdGhlIFVTQl8gcHJlZml4IG9uIGl0LCBtYWtpbmcgaXQg
+YSBiaXQgY29uZnVzaW5nIHdoZW4gcmVhZGluZyB0aGUgZmlsZSwNCj4gYXMgd2VsbCBhcyBub3Qg
+dGhlIG5pY2VzdCB0aGluZyB0byBkbyBpbiBhIHVhcGkgZmlsZS4NCj4gDQo+IFNvIGZpeCB0aGF0
+IHVwIGFuZCBhZGQgdGhlIFVTQl8gcHJlZml4IG9uIHRvIHRoZW0sIGFuZCBmaXggdXAgYWxsDQo+
+IGluLWtlcm5lbCB1c2FnZXMuICBUaGlzIGluY2x1ZGVkIGRlbGV0aW5nIHRoZSBkdXBsaWNhdGUg
+Y29weSBpbiB0aGUNCj4gbmV0MjI3Mi5oIGZpbGUuDQo+IA0KPiBDYzogUGV0ZXIgQ2hlbiA8UGV0
+ZXIuQ2hlbkBueHAuY29tPg0KPiBDYzogTWluYXMgSGFydXR5dW55YW4gPGhtaW5hc0BzeW5vcHN5
+cy5jb20+DQo+IENjOiBGZWxpcGUgQmFsYmkgPGJhbGJpQGtlcm5lbC5vcmc+DQo+IENjOiBNaWNo
+YWwgU2ltZWsgPG1pY2hhbC5zaW1la0B4aWxpbnguY29tPg0KPiBDYzogTWF0aGlhcyBOeW1hbiA8
+bWF0aGlhcy5ueW1hbkBpbnRlbC5jb20+DQo+IENjOiBDaHVuZmVuZyBZdW4gPGNodW5mZW5nLnl1
+bkBtZWRpYXRlay5jb20+DQo+IENjOiBCaW4gTGl1IDxiLWxpdUB0aS5jb20+DQo+IENjOiBQYXdl
+bCBMYXN6Y3phayA8cGF3ZWxsQGNhZGVuY2UuY29tPg0KPiBDYzogWXVlSGFpYmluZyA8eXVlaGFp
+YmluZ0BodWF3ZWkuY29tPg0KPiBDYzogTmF0aGFuIENoYW5jZWxsb3IgPG5hdGVjaGFuY2VsbG9y
+QGdtYWlsLmNvbT4NCj4gQ2M6IEphc29uIFlhbiA8eWFuYWlqaWVAaHVhd2VpLmNvbT4NCj4gQ2M6
+IEppYS1KdSBCYWkgPGJhaWppYWp1MTk5MEBnbWFpbC5jb20+DQo+IENjOiBTdGVwaGVuIEJveWQg
+PHN3Ym95ZEBjaHJvbWl1bS5vcmc+DQo+IENjOiBDaHJpc3RvcGhlIEpBSUxMRVQgPGNocmlzdG9w
+aGUuamFpbGxldEB3YW5hZG9vLmZyPg0KPiBDYzogQXJuZCBCZXJnbWFubiA8YXJuZEBhcm5kYi5k
+ZT4NCj4gQ2M6IEp1bGVzIElyZW5nZSA8amJpLm9jdGF2ZUBnbWFpbC5jb20+DQo+IENjOiBBbGFu
+IFN0ZXJuIDxzdGVybkByb3dsYW5kLmhhcnZhcmQuZWR1Pg0KPiBDYzogVGhpbmggTmd1eWVuIDxU
+aGluaC5OZ3V5ZW5Ac3lub3BzeXMuY29tPg0KPiBDYzogUm9iIEdpbGwgPHJyb2JnaWxsQHByb3Rv
+bm1haWwuY29tPg0KPiBDYzogTWFjcGF1bCBMaW4gPG1hY3BhdWwubGluQG1lZGlhdGVrLmNvbT4N
+Cj4gU2lnbmVkLW9mZi1ieTogR3JlZyBLcm9haC1IYXJ0bWFuIDxncmVna2hAbGludXhmb3VuZGF0
+aW9uLm9yZz4NCj4gLS0tDQo+ICBkcml2ZXJzL3VzYi9jZG5zMy9lcDAuYyAgICAgICAgICAgICAg
+fCAgOCArKysrLS0tLQ0KPiAgZHJpdmVycy91c2IvY2hpcGlkZWEvdWRjLmMgICAgICAgICAgIHwg
+MTAgKysrKystLS0tLQ0KPiAgZHJpdmVycy91c2IvY29tbW9uL2RlYnVnLmMgICAgICAgICAgIHwg
+MTAgKysrKystLS0tLQ0KPiAgZHJpdmVycy91c2IvZHdjMi9kZWJ1Z2ZzLmMgICAgICAgICAgIHwg
+MjAgKysrKysrKysrKy0tLS0tLS0tLS0NCj4gIGRyaXZlcnMvdXNiL2R3YzIvZ2FkZ2V0LmMgICAg
+ICAgICAgICB8IDEwICsrKysrLS0tLS0NCj4gIGRyaXZlcnMvdXNiL2R3YzMvZGVidWdmcy5jICAg
+ICAgICAgICB8IDIwICsrKysrKysrKystLS0tLS0tLS0tDQo+ICBkcml2ZXJzL3VzYi9kd2MzL2Vw
+MC5jICAgICAgICAgICAgICAgfCAxMCArKysrKy0tLS0tDQo+ICBkcml2ZXJzL3VzYi9kd2MzL2dh
+ZGdldC5jICAgICAgICAgICAgfCAxMCArKysrKy0tLS0tDQo+ICBkcml2ZXJzL3VzYi9nYWRnZXQv
+dWRjL2JkYy9iZGNfZXAuYyAgfCAxMCArKysrKy0tLS0tDQo+ICBkcml2ZXJzL3VzYi9nYWRnZXQv
+dWRjL2dyX3VkYy5jICAgICAgfCAgNCArKy0tDQo+ICBkcml2ZXJzL3VzYi9nYWRnZXQvdWRjL212
+X3VkY19jb3JlLmMgfCAgMiArLQ0KPiAgZHJpdmVycy91c2IvZ2FkZ2V0L3VkYy9uZXQyMjcyLmMg
+ICAgIHwgIDIgKy0NCj4gIGRyaXZlcnMvdXNiL2dhZGdldC91ZGMvbmV0MjI3Mi5oICAgICB8ICA1
+IC0tLS0tDQo+ICBkcml2ZXJzL3VzYi9nYWRnZXQvdWRjL3VkYy14aWxpbnguYyAgfCAgNCArKy0t
+DQo+ICBkcml2ZXJzL3VzYi9ob3N0L3hoY2ktaHViLmMgICAgICAgICAgfCAgNyArKysrLS0tDQo+
+ICBkcml2ZXJzL3VzYi9taXNjL2Voc2V0LmMgICAgICAgICAgICAgfCAgOCArKysrLS0tLQ0KPiAg
+ZHJpdmVycy91c2IvbXR1My9tdHUzX2dhZGdldF9lcDAuYyAgIHwgMTYgKysrKysrKystLS0tLS0t
+LQ0KZm9yIG10dTMsDQpBY2tlZC1ieTogQ2h1bmZlbmcgWXVuIDxjaHVuZmVuZy55dW5AbWVkaWF0
+ZWsuY29tPg0KDQpUaGFua3MNCg0KPiAgZHJpdmVycy91c2IvbXVzYi9tdXNiX2dhZGdldF9lcDAu
+YyAgIHwgMjAgKysrKysrKystLS0tLS0tLS0tLS0NCj4gIGRyaXZlcnMvdXNiL211c2IvbXVzYl92
+aXJ0aHViLmMgICAgICB8IDIwICsrKysrKysrKystLS0tLS0tLS0tDQo+ICBpbmNsdWRlL3VhcGkv
+bGludXgvdXNiL2NoOS5oICAgICAgICAgfCAxMCArKysrKy0tLS0tDQo+ICAyMCBmaWxlcyBjaGFu
+Z2VkLCA5OSBpbnNlcnRpb25zKCspLCAxMDcgZGVsZXRpb25zKC0pDQoNCg==
 
-==================================================================
-WARNING: CPU: 0 PID: 4452 at drivers/usb/gadget/udc/core.c:276
-usb_ep_queue+0x157/0x3a0 drivers/usb/gadget/udc/core.c:276
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 0 PID: 4452 Comm: syz-executor.0 Not tainted 5.6.11 #1
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS Bochs 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0xce/0x128 lib/dump_stack.c:118
- panic+0x2de/0x6fa kernel/panic.c:221
- __warn+0x1e1/0x1f6 kernel/panic.c:582
- report_bug+0x208/0x320 lib/bug.c:195
- fixup_bug.part.6+0x37/0x80 arch/x86/kernel/traps.c:174
- fixup_bug arch/x86/kernel/traps.c:261 [inline]
- do_error_trap+0x131/0x170 arch/x86/kernel/traps.c:267
- do_invalid_op+0x36/0x40 arch/x86/kernel/traps.c:286
- invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
-RIP: 0010:usb_ep_queue+0x157/0x3a0 drivers/usb/gadget/udc/core.c:276
-Code: 48 0f a3 1d 7b c3 12 05 0f 82 2b 01 00 00 e8 e0 0a 8c fd 44 89
-e8 48 83 c4 08 5b 41 5c 41 5d 41 5e 41 5f 5d c3 e8 c9 0a 8c fd <0f> 0b
-41 bd 94 ff ff ff eb 96 e8 ba 0a 8c fd 65 44 8b 25 a2 da 4a
-RSP: 0018:ffff888039f37c78 EFLAGS: 00010216
-RAX: 0000000000040000 RBX: ffff888065ecc0d8 RCX: ffffffff83b6d8a7
-RDX: 00000000000000f1 RSI: ffffc900009b3000 RDI: ffff888065ecc10d
-RBP: ffff888039f37ca8 R08: ffffed100a825a17 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: 0000000000000a20 R14: ffff88803e970710 R15: 0000000000000001
- f_hidg_write+0x6a9/0x9e0 drivers/usb/gadget/function/f_hid.c:396
- __vfs_write+0x85/0x110 fs/read_write.c:494
- vfs_write+0x1cd/0x510 fs/read_write.c:558
- ksys_write+0x18a/0x220 fs/read_write.c:611
- __do_sys_write fs/read_write.c:623 [inline]
- __se_sys_write fs/read_write.c:620 [inline]
- __x64_sys_write+0x73/0xb0 fs/read_write.c:620
- do_syscall_64+0x9e/0x510 arch/x86/entry/common.c:294
- entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x4531a9
-Code: ed 60 fc ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48
-89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
-01 f0 ff ff 0f 83 bb 60 fc ff c3 66 2e 0f 1f 84 00 00 00 00
-RSP: 002b:00007efd8e783c78 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 000000000073bf00 RCX: 00000000004531a9
-RDX: 0000000000000001 RSI: 0000000020000080 RDI: 0000000000000005
-RBP: 0000000000000003 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00000000004c09c7
-R13: 00000000004d8a48 R14: 00007efd8e7846d4 R15: 00000000ffffffff
-==================================================================
-
-Thanks,
-Kyungtae Kim
