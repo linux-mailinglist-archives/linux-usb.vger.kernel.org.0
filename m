@@ -2,160 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCD54203E47
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jun 2020 19:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41B53203F8A
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jun 2020 20:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730166AbgFVRrW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Jun 2020 13:47:22 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:28026 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730080AbgFVRrW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 22 Jun 2020 13:47:22 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1592848041; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=RdP8Coca9hXqgxUVPdVNLur18MQ21Zv0dAHtp2pVhLs=; b=lgMvVrQJeGIWiZwDTk8cyTRnZ0/eV3Wl4gQVRgCTCkFPZ+19nvZ7sJe7yZWRguDMrrY20CGt
- kRBiKdbvKvUmc5F8vNQv5M7bTY2vqMvILxi8WpQobM05a5fJbOdUtWtPgAJB/irWg/HAWkO5
- H4TUbzgwSbWg97fPDEyao2jlWE8=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n12.prod.us-west-2.postgun.com with SMTP id
- 5ef0ee9fad153efa347caef3 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 22 Jun 2020 17:47:11
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 4A2F1C433A0; Mon, 22 Jun 2020 17:47:11 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [10.110.87.234] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 7603AC433C8;
-        Mon, 22 Jun 2020 17:47:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 7603AC433C8
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [PATCH v3 2/6] dt-bindings: usb: Add Qualcomm PMIC type C
- controller dt-binding
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jack Pham <jackp@codeaurora.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Jun Li <lijun.kernel@gmail.com>
-References: <20200617180209.5636-1-wcheng@codeaurora.org>
- <20200617180209.5636-3-wcheng@codeaurora.org>
- <CAL_Jsq+fhXWGJvYxUDygd6hKs3dc8GKxKCz_Q+_C1AjK0J0N+w@mail.gmail.com>
- <fb448691-2bda-ada6-799f-ee389e647710@codeaurora.org>
- <CAL_JsqLGWY_bBUzr6r0czxH32vvDnsR6=MzS=zH4tJ-5PEobZw@mail.gmail.com>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <9414034c-3f71-bdc1-bda2-6b3dc7758003@codeaurora.org>
-Date:   Mon, 22 Jun 2020 10:47:08 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S1730083AbgFVS6N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Jun 2020 14:58:13 -0400
+Received: from mx0a-00154904.pphosted.com ([148.163.133.20]:29100 "EHLO
+        mx0a-00154904.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730020AbgFVS6M (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Jun 2020 14:58:12 -0400
+Received: from pps.filterd (m0170391.ppops.net [127.0.0.1])
+        by mx0a-00154904.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05MIqNe0001082;
+        Mon, 22 Jun 2020 14:58:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=smtpout1; bh=5b1fSfonp/BJXJKqsOYlCbdrMWdCJ3vP3o0FriV+a6A=;
+ b=oYjdpjiUHSNXDf/bEayv/0RMQElJzfVHq3FHA5oTdeQIUv/B+kBeFdaXA7iqiMT2WwjJ
+ Dw+6MoLfT4gBcU3jTIXBD8urnEj2l1yJ5pGHdbhsplIn1rsNlUXRVH14xkaM3uxXdxzr
+ Cq6CQ0iTEfvEyuPnK8n/8X9Juwj5GksPSHhTDmPl5+3FmZexSyk/qY8qWp7Zt70/29TX
+ 9viYJowGRhCS3G3S5mHsLBVY+KHR6T2NmIllzPl2/5Yq3Gyqr3um4ZYpyMzYS/n5UqLc
+ oovPNSBcNe+T+cnzhaU49THIZB9CufX1gp0Nqn1VaMBipQ4flhFv+S+5Ly8Ao1jw2wWJ VA== 
+Received: from mx0a-00154901.pphosted.com (mx0a-00154901.pphosted.com [67.231.149.39])
+        by mx0a-00154904.pphosted.com with ESMTP id 31sdkwwxkt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 Jun 2020 14:58:12 -0400
+Received: from pps.filterd (m0142699.ppops.net [127.0.0.1])
+        by mx0a-00154901.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05MIspVu064442;
+        Mon, 22 Jun 2020 14:58:11 -0400
+Received: from ausc60ps301.us.dell.com (ausc60ps301.us.dell.com [143.166.148.206])
+        by mx0a-00154901.pphosted.com with ESMTP id 31tqd12cnp-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 22 Jun 2020 14:58:11 -0400
+X-LoopCount0: from 10.173.37.130
+X-PREM-Routing: D-Outbound
+X-IronPort-AV: E=Sophos;i="5.60,349,1549951200"; 
+   d="scan'208";a="1454816469"
+From:   Mario Limonciello <mario.limonciello@dell.com>
+To:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mario Limonciello <mario.limonciello@dell.com>
+Subject: [PATCH v2 0/2] Allow breaking up Thunderbolt/USB4 updates
+Date:   Mon, 22 Jun 2020 13:57:56 -0500
+Message-Id: <20200622185758.28145-1-mario.limonciello@dell.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <CAL_JsqLGWY_bBUzr6r0czxH32vvDnsR6=MzS=zH4tJ-5PEobZw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-22_11:2020-06-22,2020-06-22 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=722
+ malwarescore=0 adultscore=0 bulkscore=0 priorityscore=1501 spamscore=0
+ phishscore=0 lowpriorityscore=0 impostorscore=0 cotscore=-2147483648
+ suspectscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2006220126
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=776 malwarescore=0
+ phishscore=0 spamscore=0 bulkscore=0 adultscore=0 suspectscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2006220125
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Currently updates to Thunderbolt and USB4 controllers are fully atomic
+actions. When writing into the non-active NVM nothing gets flushed to
+the hardware until authenticate is sent.
 
+There has been some desire to improve the perceived performance of these
+updates, particularly for userland that may perform the update upon
+a performance sensitive time like logging out.
 
-On 6/18/2020 3:23 PM, Rob Herring wrote:
-> On Thu, Jun 18, 2020 at 2:09 PM Wesley Cheng <wcheng@codeaurora.org> wrote:
->>
->>
->> On 6/18/2020 11:33 AM, Rob Herring wrote:
->>> On Wed, Jun 17, 2020 at 12:02 PM Wesley Cheng <wcheng@codeaurora.org> wrote:
->>>
->>> You are duplicating everything in usb-connector.yaml. You should have
->>> a $ref to it.
->>>
->>
->> Hi Rob,
->>
->> Sure, I will add a reference to that doc.
->>
->>>
->>> This is wrong. The connector binding says port 0 is the connection the
->>> USB HS controller.
->>>
->>> What's a type C mux node? Is there a binding for that? There's an
->>> ongoing discussion with the CrOS folks on how to describe Alt mode
->>> mux/switches.
->>
->> I reviewed the connector binding previously, and couldn't seem to come
->> up with a model which fit a design where the type C controller (ie the
->> entity which does the CC orientation and role detection) does not have
->> the SS lane mux included.  The SS lane mux is the HW which handles the
->> selection of the SS lanes to utilize based on cable orientation.
-> 
-> The intent was the controller would be the parent node of the connector.
-> 
+So allow userland to flush the image to hardware at runtime, and then
+allow authenticating the image at another time.
 
-Hi Rob,
+For the Dell WD19TB some specific hardware capability exists that allows
+extending this to automatically complete the update when unplugged.
+Export that functionality to userspace as well.
 
-Correct, I agree with that point, and in the changes uploaded, the QCOM
-PMIC type C controller will be the parent node for the connector.
+Changes from v1 to v2:
+ - Improve documentation
+ - Drop tb-quirks.h
+ - Adjust function and parameter names to Mika's preferences
+ - Rebase onto thunderbolt.git/bleeding-edge to move on top of retimer work
 
-> How the SS lane mux is represented is what needs to be figured out. I
-> don't know what that looks like, but it needs to be something that
-> works for multiple designs. Ideally, that's an extension of the
-> existing 'usb-c-connector' binding, but if there's good reasons to
-> redesign it that can happen.
-> 
-> Rob
-> 
+Mario Limonciello (2):
+  thunderbolt: Add support for separating the flush to SPI and
+    authenticate
+  thunderbolt: Add support for authenticate on disconnect
 
-We probably wouldn't need to redesign it, but maybe if we can remove the
-connector port assignments requirement, it would allow for some
-flexibility.  From my knowledge, I don't think any driver is actually
-utilizing or checking the port number assignments, so there isn't a
-limitation on what could be defined in there.
+ .../ABI/testing/sysfs-bus-thunderbolt         | 24 +++++-
+ drivers/thunderbolt/Makefile                  |  1 +
+ drivers/thunderbolt/eeprom.c                  |  2 +
+ drivers/thunderbolt/lc.c                      | 14 ++++
+ drivers/thunderbolt/quirks.c                  | 38 +++++++++
+ drivers/thunderbolt/switch.c                  | 81 +++++++++++++++----
+ drivers/thunderbolt/tb-quirks.h               | 16 ++++
+ drivers/thunderbolt/tb.h                      |  4 +
+ drivers/thunderbolt/tb_regs.h                 |  1 +
+ 9 files changed, 162 insertions(+), 19 deletions(-)
+ create mode 100644 drivers/thunderbolt/quirks.c
+ create mode 100644 drivers/thunderbolt/tb-quirks.h
 
-Here's a simplified diagram of the FUSB302 reference design from the
-data sheet.  The I2C bus is just for CSR access to the FUSB302.
+--
+2.25.1
 
-				   _______		 _______
-                            ______|FUSB302|		|SOC	|
-			   |	  |Type C |		|	|
-			   |      |Cntrl  |__I2C_______	|	|
-			   |	  |_______|		|	|
- ___                       |       			|	|
-|   |______ CC1/2 _________|				|	|
-|   |______ HS DP/DM __________________________________	|	|
-|   |							|	|
-				   ________		|	|
-|   |______ SS RX/TX1 ____________|FUSB304 |__SS RX/TX_	|	|
-|   |______ SS RX/TX2 ____________|USB Mux |		|_______|
-|   |                             |________|
-|   |
-|___|
-
-
-Otherwise, we can just simply add another port definition for external
-SS lane muxes if possible.
-
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
