@@ -2,248 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94FC7202E57
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jun 2020 04:26:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F0F202ED7
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jun 2020 05:15:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731057AbgFVC0W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 21 Jun 2020 22:26:22 -0400
-Received: from out1-smtp.messagingengine.com ([66.111.4.25]:43537 "EHLO
-        out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731037AbgFVC0W (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Jun 2020 22:26:22 -0400
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 49BAC5C121A;
-        Sun, 21 Jun 2020 22:26:20 -0400 (EDT)
-Received: from imap21 ([10.202.2.71])
-  by compute7.internal (MEProxy); Sun, 21 Jun 2020 22:26:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aeam.us; h=
-        mime-version:message-id:in-reply-to:references:date:from:to:cc
-        :subject:content-type; s=fm2; bh=76LnwSjhFt3UkHK9WIsDzGQHA2l2tRV
-        y8glpO9OO7f8=; b=jVl/61NxowwuRVdZJjV1837u81urXVCWjXowsRXcykB2IYc
-        L0X07N5yatxXasWd9vD96gDuOccJpJ4cXVpDYXA5JkNWzZcevqn24jmS4crKoZRa
-        ppoe+2rO7OS0Rb99xKKNyyEl5WtX0GE1GYIDrQWttgN6DdH4aAe1YbKnT9Tg9cip
-        0fgYKz92XKHXEOQbl3ULzMSNUqsrNpBoCgY3SxaIKj/OYO3UD2snj0JIJfXYVjyB
-        y68yN4TSiQDrQtvlcQmtz8kl/2Mp5Vn7bA8aIuD5epVpS1/uOg6pQ6KIv8B/dC7l
-        Hv9VXr0hpAPhOY04M+7p3qaZ547BM4itjmpVpBw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=76LnwS
-        jhFt3UkHK9WIsDzGQHA2l2tRVy8glpO9OO7f8=; b=stVy5Ya9XPBYXbOAKYBv6w
-        woAVdV+jvfHAYrZIDWLhY+bt+4UE1WtKHamE9Q4wVIoQieiZaGjxVKsumy1qWX5d
-        IVZzFkLQKZHuUWOCyQZIPGPbvS2IMf8UMw+GpJwidNVWvd9UDD3GwdpWfu7qOuJB
-        p+HUXj2kFFkGR2G1e/lTSy4oMSA8PZ5Td578u/WWoJlI6fXzU36V1ITl/EOijLNJ
-        IfG4ug0Nnxy1w1KXEyxyY9WYKj1PkRXbtx3YUhSRTu3ZU0vzB9i0V6lAyvdRsRGH
-        Fsw1rEoAv1JRHC/AQCr7EJU8M2NDNsIFfN/umiCqWfwl2+2i8MhyRIRsbsNaiheQ
-        ==
-X-ME-Sender: <xms:yxbwXvG0QcmhXL6YsdRLWRR3y0Xw0eIi2TXr0dx_dQjX98sn3GnsQg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrudekuddgiedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdfuihgu
-    ucfuphhrhidfuceoshhiugesrggvrghmrdhusheqnecuggftrfgrthhtvghrnhepveeghf
-    evveetteefteekjeejhedufffffffhuefflefhueffudefudeljeefuefgnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhiugesrggvrghmrd
-    hush
-X-ME-Proxy: <xmx:zBbwXsWsrM0vGzAuWTjDGXNCIuCxCJHJ2CpeWcyWUjKSt2G8B4Yx8Q>
-    <xmx:zBbwXhLmusgd0h0Oig4WwEuyINPdKaXpnThy1syDr6Kz-ZsVtlqkAw>
-    <xmx:zBbwXtGNw1ub5DFB-IEHjl_wWkIKrUSqdl2MHlg7Z72y67Pyhhn6Pw>
-    <xmx:zBbwXths_yJPmuH8ku2eaU1d-8wXsllTnZPDInGrK12UsFOKxOngpA>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id D86F2660081; Sun, 21 Jun 2020 22:26:19 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.3.0-dev0-543-gda70334-fm-20200618.004-gda703345
-Mime-Version: 1.0
-Message-Id: <86137ba1-4a08-4862-b3b0-47544f60e9f6@www.fastmail.com>
-In-Reply-To: <20200621140916.GB107361@rowland.harvard.edu>
-References: <dc61359f-2a04-4590-9ac9-81b4f6e8d3b8@www.fastmail.com>
- <20200621140916.GB107361@rowland.harvard.edu>
-Date:   Sun, 21 Jun 2020 21:25:53 -0500
-From:   "Sid Spry" <sid@aeam.us>
-To:     "Alan Stern" <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: Unable to Use Isochronous Behavior w/ Isoc Endpoint in FunctionFC
-Content-Type: text/plain
+        id S1726834AbgFVDPN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 21 Jun 2020 23:15:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37900 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726783AbgFVDPM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 21 Jun 2020 23:15:12 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C64EC061794;
+        Sun, 21 Jun 2020 20:15:11 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id d21so6630953lfb.6;
+        Sun, 21 Jun 2020 20:15:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=Ych9qsXYRdyWSqxacfEEmFrepQ/w/vnS3kTHuzEFOiA=;
+        b=J2t/laGm6RBErO7XT/08Vtz6eCSP0E5F0znEcjlnl01WqJfO3CQmf0G9jVRf04P1Fz
+         RHUU9hrr4KIiDIzG6Fcrli88122gfEFbOLEcV6lfBagN5367+SGnBk0KmJZ3JLnYHvHw
+         5o2PM+9w+o+zHHfCFpsdgIU3zlOcXng5k+3cxsZOhhuAra3X7wREErsqMfbirNz6oegT
+         BcwWtoRaO+cTbZn1qMhj6Tgt1AveggEFf7Xjt6sbLU3/Q7BP4aFMQqHpzlwmyetVnUaG
+         gXY7241eM2OkYoGtjJ4tCRQ6B5fIWUcJkMfoenkoG5xIkXIu8Xg+Pumtmuinp7U93Zlq
+         hDow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=Ych9qsXYRdyWSqxacfEEmFrepQ/w/vnS3kTHuzEFOiA=;
+        b=q1SEW3cmXYIK9XwhVRKpgDs/HxGL/L5ytMbRTHfm1/ikA/tk/pW6Htd45cvh8vlxdB
+         R5jfGrhutAZe5gpbxKiTFAm+AAfhxjHsXLzSHMMc4O7BpLYKNk5nomx786giqveGi2cl
+         oiXyt0lljIYO/LnnrwJAxGX0DFZvi+sM/0gmfhElRo2cCBVMlY8xgHiqFk+mzTDQLgW1
+         k5Aya4BvRkzVIIAoQYGNwteUTbQP0x43HKxkgHHeanUv/R0lAx44Q/auipgVnkcQnZdB
+         JydVglUKn9YJ9JIqzelPgC6VWZFE0sfh4DDKv65KeVYR2+zjBTFBeryqOkmStH6LLNjm
+         6idA==
+X-Gm-Message-State: AOAM531hgYcfM2xjaCdTv4tMP2n23EbvOozVDTpYgfIeVLNLTRUV+74e
+        5bjaUABZXx8DnP/xB1AmZJIqohdFnF4xzNSOORbLwdnz
+X-Google-Smtp-Source: ABdhPJw7OywllhUghoiimJ+k56wIeR0SenXFaTng87Z9PB6uNsjJIcwWyarl0STO+HmKMYTMRc6xR3B1u/+shC47AeE=
+X-Received: by 2002:a19:1d1:: with SMTP id 200mr8666888lfb.57.1592795709495;
+ Sun, 21 Jun 2020 20:15:09 -0700 (PDT)
+MIME-Version: 1.0
+From:   Kyungtae Kim <kt0755@gmail.com>
+Date:   Sun, 21 Jun 2020 23:14:58 -0400
+Message-ID: <CAEAjamu8BjiCZ+93ptGQmPu9jyHbTu=nHqdbVGW-kw9nFq6SVA@mail.gmail.com>
+Subject: WARNING in usb_ep_queue
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        syzkaller <syzkaller@googlegroups.com>,
+        Dave Tian <dave.jing.tian@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jun 21, 2020, at 9:09 AM, Alan Stern wrote:
-> On Sat, Jun 20, 2020 at 10:38:33PM -0500, Sid Spry wrote:
-> 
-> > When I was using a repurposed audio device I had to set an alternate mode. Is
-> > that related to the issue here? The alternate mode seems to be a relic of the
-> > descriptor layout before I dropped the device class and substituted my own
-> > driver. The current descriptors specify no alternate modes.
-> 
-> I don't know much about FunctionFS, so I can't help with your main 
-> question about isochronous packets not being dropped.  But I can explain 
-> this.
-> 
+We report a bug (in linux-5.6.11) found by FuzzUSB (a modified version
+of syzkaller)
 
-Your responses have been quite helpful; I appreciate them.
+==================================================================
+WARNING: CPU: 0 PID: 4452 at drivers/usb/gadget/udc/core.c:276
+usb_ep_queue+0x157/0x3a0 drivers/usb/gadget/udc/core.c:276
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 0 PID: 4452 Comm: syz-executor.0 Not tainted 5.6.11 #1
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS Bochs 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xce/0x128 lib/dump_stack.c:118
+ panic+0x2de/0x6fa kernel/panic.c:221
+ __warn+0x1e1/0x1f6 kernel/panic.c:582
+ report_bug+0x208/0x320 lib/bug.c:195
+ fixup_bug.part.6+0x37/0x80 arch/x86/kernel/traps.c:174
+ fixup_bug arch/x86/kernel/traps.c:261 [inline]
+ do_error_trap+0x131/0x170 arch/x86/kernel/traps.c:267
+ do_invalid_op+0x36/0x40 arch/x86/kernel/traps.c:286
+ invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
+RIP: 0010:usb_ep_queue+0x157/0x3a0 drivers/usb/gadget/udc/core.c:276
+Code: 48 0f a3 1d 7b c3 12 05 0f 82 2b 01 00 00 e8 e0 0a 8c fd 44 89
+e8 48 83 c4 08 5b 41 5c 41 5d 41 5e 41 5f 5d c3 e8 c9 0a 8c fd <0f> 0b
+41 bd 94 ff ff ff eb 96 e8 ba 0a 8c fd 65 44 8b 25 a2 da 4a
+RSP: 0018:ffff888039f37c78 EFLAGS: 00010216
+RAX: 0000000000040000 RBX: ffff888065ecc0d8 RCX: ffffffff83b6d8a7
+RDX: 00000000000000f1 RSI: ffffc900009b3000 RDI: ffff888065ecc10d
+RBP: ffff888039f37ca8 R08: ffffed100a825a17 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000a20 R14: ffff88803e970710 R15: 0000000000000001
+ f_hidg_write+0x6a9/0x9e0 drivers/usb/gadget/function/f_hid.c:396
+ __vfs_write+0x85/0x110 fs/read_write.c:494
+ vfs_write+0x1cd/0x510 fs/read_write.c:558
+ ksys_write+0x18a/0x220 fs/read_write.c:611
+ __do_sys_write fs/read_write.c:623 [inline]
+ __se_sys_write fs/read_write.c:620 [inline]
+ __x64_sys_write+0x73/0xb0 fs/read_write.c:620
+ do_syscall_64+0x9e/0x510 arch/x86/entry/common.c:294
+ entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x4531a9
+Code: ed 60 fc ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48
+89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
+01 f0 ff ff 0f 83 bb 60 fc ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007efd8e783c78 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 000000000073bf00 RCX: 00000000004531a9
+RDX: 0000000000000001 RSI: 0000000020000080 RDI: 0000000000000005
+RBP: 0000000000000003 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00000000004c09c7
+R13: 00000000004d8a48 R14: 00007efd8e7846d4 R15: 00000000ffffffff
+==================================================================
 
-For those reading along I have gotten a set of descriptors working (detailed
-below) however write(2) still blocks meaning at least one stale data packet
-will be received. However, I realize now that typically a writer thread will be
-sending an asynchronously updated buffer and the single stale packet was
-probably never noticed, especially for AV applications.
-
-Unfortunately for my application the stale packet *does* matter, and I am still
-seeking a way to mitigate it.
-
-> In the USB-2.0 spec, at the end of section 5.6.3 the text says:
-> 
-> 	All device default interface settings must not include any 
-> 	isochronous endpoints with non-zero data payload sizes (specified 
-> 	via wMaxPacketSize in the endpoint descriptor). Alternate 
-> 	interface settings may specify non-zero data payload sizes for 
-> 	isochronous endpoints.
-> 
-> That's why you had to select an alternate setting before transferring 
-> any isochronous data.  Any isochronous endpoint in altsetting 0 must have 
-> its maxpacket size set to 0.
-> 
-
-This was the issue. I rely too heavily on the USB audio class spec, I should go
-through all of the spec.
-
-I now must ask the list: What is the relation of the isochronous endpoint setup
-to the allocated bandwidth on the bus? I understand the limit of 3 1024 byte
-transfers per frame, but this says nothing about how it will be allocated or
-how a device is refused bandwidth. Do I need to look for link degradation on
-the application layer? It seems like having a single non-spec device means
-the OS can't arbitrate link bandwidth.
-
-
-Also!
-
-For the list's consideration I have included an accepted but nonworking
-configuration that perplexes me. The application note for the original device
-I used specified a set of descriptors which was like so (device and
-configuration omitted):
-
-(Vendor Microphone Class Descriptors)
-```
-    INTERFACE 0: Vendor Specific ===========================
-     bLength            :    0x9 (9 bytes)
-     bDescriptorType    :    0x4 Interface
-     bInterfaceNumber   :    0x0
-     bAlternateSetting  :    0x0
-     bNumEndpoints      :    0x0
-     bInterfaceClass    :   0xff Vendor Specific
-     bInterfaceSubClass :    0x1
-     bInterfaceProtocol :    0x0
-     iInterface         :    0x0 
-    INTERFACE 1: Vendor Specific ===========================
-     bLength            :    0x9 (9 bytes)
-     bDescriptorType    :    0x4 Interface
-     bInterfaceNumber   :    0x1
-     bAlternateSetting  :    0x0
-     bNumEndpoints      :    0x0
-     bInterfaceClass    :   0xff Vendor Specific
-     bInterfaceSubClass :    0x2
-     bInterfaceProtocol :    0x0
-     iInterface         :    0x0 
-    INTERFACE 1, 1: Vendor Specific ========================
-     bLength            :    0x9 (9 bytes)
-     bDescriptorType    :    0x4 Interface
-     bInterfaceNumber   :    0x1
-     bAlternateSetting  :    0x1
-     bNumEndpoints      :    0x1
-     bInterfaceClass    :   0xff Vendor Specific
-     bInterfaceSubClass :    0x2
-     bInterfaceProtocol :    0x0
-     iInterface         :    0x0 
-      ENDPOINT 0x81: Isochronous IN ========================
-       bLength          :    0x9 (7 bytes)
-       bDescriptorType  :    0x5 Endpoint
-       bEndpointAddress :   0x81 IN
-       bmAttributes     :    0x5 Isochronous
-       wMaxPacketSize   :   0xc8 (200 bytes)
-       bInterval        :    0x1
-```
-
-If I (almost) match that:
-
-(FunctionFS Device Descriptors)
-```
-    INTERFACE 0: Vendor Specific ===========================
-     bLength            :    0x9 (9 bytes)
-     bDescriptorType    :    0x4 Interface
-     bInterfaceNumber   :    0x0
-     bAlternateSetting  :    0x0
-     bNumEndpoints      :    0x0
-     bInterfaceClass    :   0xff Vendor Specific
-     bInterfaceSubClass :    0x0
-     bInterfaceProtocol :    0x0
-     iInterface         :    0x5 Source/Sink
-    INTERFACE 1: Vendor Specific ===========================
-     bLength            :    0x9 (9 bytes)
-     bDescriptorType    :    0x4 Interface
-     bInterfaceNumber   :    0x1
-     bAlternateSetting  :    0x0
-     bNumEndpoints      :    0x0
-     bInterfaceClass    :   0xff Vendor Specific
-     bInterfaceSubClass :    0x0
-     bInterfaceProtocol :    0x0
-     iInterface         :    0x6 Isoc Source/Sink
-    INTERFACE 1, 1: Vendor Specific ========================
-     bLength            :    0x9 (9 bytes)
-     bDescriptorType    :    0x4 Interface
-     bInterfaceNumber   :    0x1
-     bAlternateSetting  :    0x1
-     bNumEndpoints      :    0x2
-     bInterfaceClass    :   0xff Vendor Specific
-     bInterfaceSubClass :    0x0
-     bInterfaceProtocol :    0x0
-     iInterface         :    0x6 Isoc Source/Sink
-      ENDPOINT 0x81: Isochronous IN ========================
-       bLength          :    0x9 (7 bytes)
-       bDescriptorType  :    0x5 Endpoint
-       bEndpointAddress :   0x81 IN
-       bmAttributes     :    0x5 Isochronous
-       wMaxPacketSize   :  0x200 (512 bytes)
-       bInterval        :    0x1
-      ENDPOINT 0x1: Isochronous OUT ========================
-       bLength          :    0x9 (7 bytes)
-       bDescriptorType  :    0x5 Endpoint
-       bEndpointAddress :    0x1 OUT
-       bmAttributes     :    0x5 Isochronous
-       wMaxPacketSize   :  0x200 (512 bytes)
-       bInterval        :    0x1
-```
-
-libusb seems to encounter an error:
-
-(pyusb error output)
-```
->>> import usb
->>> ds = [d for d in usb.core.find(find_all=True, idVendor=0x1d6b, idProduct=0x0104)]
->>> d = ds[0]
->>> d.set_interface_altsetting(interface=1, alternate_setting=1)
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-  File "/usr/lib/python3.7/site-packages/usb/core.py", line 902, in set_interface_altsetting
-    self._ctx.managed_set_interface(self, interface, alternate_setting)
-  File "/usr/lib/python3.7/site-packages/usb/core.py", line 102, in wrapper
-    return f(self, *args, **kwargs)
-  File "/usr/lib/python3.7/site-packages/usb/core.py", line 204, in managed_set_interface
-    self.backend.set_interface_altsetting(self.handle, i.bInterfaceNumber, alt)
-  File "/usr/lib/python3.7/site-packages/usb/backend/libusb1.py", line 807, in set_interface_altsetting
-    altsetting))
-  File "/usr/lib/python3.7/site-packages/usb/backend/libusb1.py", line 595, in _check
-    raise USBError(_strerror(ret), ret, _libusb_errno[ret])
-usb.core.USBError: [Errno None] Other error
-```
-
-(libusb error from C code)
-```
-libusb: error [op_set_interface] setintf failed error -1 errno 32
-```
-
-But, if interface 1 alternate setting 0 is dropped, and interface 1 alternate
-setting 1 is kept, both invocations work and my C code spits out data very
-fast, although I must inspect it further as I seem to be duplicating data in my
-reads.
+Thanks,
+Kyungtae Kim
