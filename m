@@ -2,190 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59AD9204277
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jun 2020 23:14:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5948D20435E
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jun 2020 00:15:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730327AbgFVVOJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Jun 2020 17:14:09 -0400
-Received: from out3-smtp.messagingengine.com ([66.111.4.27]:52577 "EHLO
-        out3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730295AbgFVVOI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Jun 2020 17:14:08 -0400
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id CC6D35C0D2F;
-        Mon, 22 Jun 2020 17:14:06 -0400 (EDT)
-Received: from imap21 ([10.202.2.71])
-  by compute7.internal (MEProxy); Mon, 22 Jun 2020 17:14:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aeam.us; h=
-        mime-version:message-id:in-reply-to:references:date:from:to:cc
-        :subject:content-type; s=fm2; bh=CPnevfLea/yO+Zmw5WfTkJ0vHLe66yA
-        rV3re+F6nmC0=; b=ru8xMdI8Ow8vdBqgrYVxXZQGSIj0L4IagpQ5qsB2kVjGi7I
-        NQ16nybyir9eok8BsVAwco0YYwB7NohzvhDz74QZ5PBraxCK1UBQABPqlj5K1yqL
-        YxzzxLq/kb2A6KLORi3NRthnS56wy1qZ99m+KlJ1fVZml/Jkvcspja0jlDPlA2OZ
-        Z75a3g+undRvpIB8eDnhikqJ6/ceeoNTklzujlsuZaH5E0QmMSKsXFIsdBSpZF+u
-        2lpSgcohwgtbbwZyYwrtwaVGxXLiRrryhQeJh8jFFRZW+hE9Zqa14mauIXcQG/vg
-        XGruy13zygbL8smiTdTExqnKKztb2aLfrFRNvhA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=CPnevf
-        Lea/yO+Zmw5WfTkJ0vHLe66yArV3re+F6nmC0=; b=RkYfhQvfzOUPQ36r1MZQOk
-        NTVE/g9YhiAlriL+LSwY5OBxMJ92Ub2lxLTXId/664pQaZ1JXFZsK4tNWyKkNfxQ
-        DHNASZexaINRN9FN1X7qCIH+OHAx2rZCyUAcTp8H0LWy/Bfa3oPlCbbeSDproG3D
-        aEthlCata/ps0vmxYve0Q8MksmGepHrujnErdkPGb2I1PWFiu9cAZAc8jZ+ui8W9
-        frveJSO8/7PU0EFs1PlSqUvnwAAR0GW+/knnnZbJUKHo22sQQCwMba1dCVZq2Yi9
-        f2h0p7AbXRX3o2Wp1AEnb5KHCQquhK4tq9LH+qIsT2pmiAjRcfcW6WmDQXckueFw
-        ==
-X-ME-Sender: <xms:Hh_xXhT0jiB-RQBXG6Djg113H8jWp10OeLD4vPO87S_ybsITXPgDfg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrudekvddgudeitdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfufhi
-    ugcuufhprhihfdcuoehsihgusegrvggrmhdruhhsqeenucggtffrrghtthgvrhhnpeeftd
-    egleejlefgveffheeukedvjeduueetvefhvdelgfevgffhfedtfefgtdehueenucffohhm
-    rghinhepsghoohhtlhhinhdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
-    grmhepmhgrihhlfhhrohhmpehsihgusegrvggrmhdruhhs
-X-ME-Proxy: <xmx:Hh_xXqwAju7rpMmM1Zoh5v76a85UBU3_fdGilBxwlOjWeRbtwQvLlA>
-    <xmx:Hh_xXm0pAeUHdalDhbC0k9I5zXPdMx9G4WwLiPtfqLEgay8QqROxiw>
-    <xmx:Hh_xXpD9FYg6kgp1hsJJ_0dfEEkpjfLxreG_Z823oK0b4YgbpAus_g>
-    <xmx:Hh_xXltNOjsgFbyE2Iu5Tbjqamw14nrKKqbyDOPwIoedo8Wx59GLHg>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 63702660081; Mon, 22 Jun 2020 17:14:06 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.3.0-dev0-543-gda70334-fm-20200618.004-gda703345
-Mime-Version: 1.0
-Message-Id: <26bbc5be-0329-4f78-9ba8-7d3d773a8d09@www.fastmail.com>
-In-Reply-To: <20200622164115.GD137824@rowland.harvard.edu>
-References: <dc61359f-2a04-4590-9ac9-81b4f6e8d3b8@www.fastmail.com>
- <20200621140916.GB107361@rowland.harvard.edu>
- <86137ba1-4a08-4862-b3b0-47544f60e9f6@www.fastmail.com>
- <20200622140202.GA134271@rowland.harvard.edu>
- <564fdd69-5e90-4a4c-a8dd-a33f251c025d@www.fastmail.com>
- <20200622164115.GD137824@rowland.harvard.edu>
-Date:   Mon, 22 Jun 2020 16:13:39 -0500
-From:   "Sid Spry" <sid@aeam.us>
-To:     "Alan Stern" <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: Unable to Use Isochronous Behavior w/ Isoc Endpoint in FunctionFC
-Content-Type: text/plain
+        id S1730774AbgFVWPP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Jun 2020 18:15:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45040 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727018AbgFVWPP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Jun 2020 18:15:15 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D25C061573
+        for <linux-usb@vger.kernel.org>; Mon, 22 Jun 2020 15:15:14 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id g2so10573599lfb.0
+        for <linux-usb@vger.kernel.org>; Mon, 22 Jun 2020 15:15:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+VqIBQR0rp7ZhSsu42GYUL1cnsRPk9RChZMbc9dtRoE=;
+        b=hewY3Z+bwnR6XriiUiWFqQ73Fk2HZquOj9sNNu1ZWsXKl9aDafDXPAI3d7BxdnXZSU
+         Q71FlFWDI+o/egz26JMGPMYss03iSvcQOexfbLV81zcFZ5BGSdblJdkJPHmqcoHvLHbZ
+         /lkJSo5OGDXbVBcOGYDHF/9sJ8TDuGxNNJJ60Zgb41EBvxyUN9TRJYAlgytZ5DzpBBv5
+         v6c8aiywU9Z9FWTh7KA0PmNd4PjudjYeD7dVIxlczP5v0qSTXwCxfEnIvVbg/ZT1Fi2f
+         Oshri1w2SRTSgx0iXaPxESXB4bycju07Cl0Fqk7pI7QXkrktFD70nXxnpCYsRFWTGO1j
+         niNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+VqIBQR0rp7ZhSsu42GYUL1cnsRPk9RChZMbc9dtRoE=;
+        b=kIZco05PX9XK3DZpX/mJb2nrtCrzEy5YXgGr+3UJg3K8dT89YhNLFMVXNrim5oblsF
+         8KAxOzC4/yLVr0BugkHvBNChbVWkmNhXquEhUAn6asr2BNkR5MtSPoosWpYIQGwFsk+T
+         jETy6snPQwzM10WWOp8Ucwz6fFbjsArFB9erUV21FAERJbtiWDX3B9PqlFoOck5gQgAz
+         rr5vVGf+X+QH1693G8ZAoadW9FsEZdWcLTpaPmqnvqgXKMxovyGfbZSltiltoL7a0mHz
+         Inf1qYDD/ACXTWKvCtxCiI+vnK+TkNt0cBEEXSW5nUYDTbtQYkLz1UAl+Gwb+xvu5XKS
+         m2BQ==
+X-Gm-Message-State: AOAM531uZxJBaNmYisOIEvNHBALVodw9gy6+AD3WCh69uXNQPsSQgeja
+        I7D+wnAhIa+X7c2n3RmB6WG+E93nFpgaWQ==
+X-Google-Smtp-Source: ABdhPJxdz1PqiT+PStsJH1SUI2xXW0c4xaLLGMSgvg/+O8+3XQTzOdl3TJ+67rd1IYuIXExMi/wFrw==
+X-Received: by 2002:a19:691c:: with SMTP id e28mr11064027lfc.131.1592864112904;
+        Mon, 22 Jun 2020 15:15:12 -0700 (PDT)
+Received: from localhost.localdomain (213-67-189-66-no148.tbcn.telia.com. [213.67.189.66])
+        by smtp.gmail.com with ESMTPSA id v22sm2926098ljg.12.2020.06.22.15.15.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Jun 2020 15:15:12 -0700 (PDT)
+From:   =?UTF-8?q?J=C3=B6rgen=20Storvist?= <jorgen.storvist@gmail.com>
+To:     johan@kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        =?UTF-8?q?J=C3=B6rgen=20Storvist?= <jorgen.storvist@gmail.com>
+Subject: [PATCH] USB: serial: option: add GosunCn GM500 series
+Date:   Tue, 23 Jun 2020 00:13:59 +0200
+Message-Id: <20200622221359.16729-1-jorgen.storvist@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 22, 2020, at 11:41 AM, Alan Stern wrote:
-> On Mon, Jun 22, 2020 at 10:41:14AM -0500, Sid Spry wrote:
-> > On Mon, Jun 22, 2020, at 9:02 AM, Alan Stern wrote:
-> > > On Sun, Jun 21, 2020 at 09:25:53PM -0500, Sid Spry wrote:
-> > > > I now must ask the list: What is the relation of the isochronous endpoint setup
-> > > > to the allocated bandwidth on the bus?
-> > > 
-> > > Bandwidth allocation is determined by the host controller driver, or in 
-> > > the case of xHCI, hardware.  Therefore it will vary with different drivers 
-> > > or controllers.
-> > > 
-> > 
-> > Ok, variation I expected. Sadly it seems like I am not made aware of which
-> > interface alternate setting is chosen.
-> > 
-> > See: https://elixir.bootlin.com/linux/latest/source/drivers/usb/gadget/
-> > function/f_fs.c#L3265.
-> > 
-> > The ctrlrequest struct (https://elixir.bootlin.com/linux/latest/source/include
-> > /uapi/linux/usb/ch9.h#L213) is only sent for SETUP events. Of which I have
-> > yet to triggered.
-> 
-> Like I said before, you'll need to ask someone who knows more about 
-> FunctionFS.
-> 
+Add USB IDs for GosunCn GM500 series cellular modules.
 
-This is a mailing list, I am not only expecting you to reply.
+RNDIS config:
+usb-devices
+T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 12 Spd=480 MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=305a ProdID=1404 Rev=03.18
+S:  Manufacturer=Android
+S:  Product=Android
+S:  SerialNumber=
+C:  #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:  If#=0x0 Alt= 0 #EPs= 1 Cls=e0(wlcon) Sub=01 Prot=03 Driver=rndis_host
+I:  If#=0x1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
+I:  If#=0x2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
 
-> > > > libusb seems to encounter an error:
-> > > > 
-> > > > (pyusb error output)
-> > > > ```
-> > > > >>> import usb
-> > > > >>> ds = [d for d in usb.core.find(find_all=True, idVendor=0x1d6b, idProduct=0x0104)]
-> > > > >>> d = ds[0]
-> > > > >>> d.set_interface_altsetting(interface=1, alternate_setting=1)
-> > > > Traceback (most recent call last):
-> > > >   File "<stdin>", line 1, in <module>
-> > > >   File "/usr/lib/python3.7/site-packages/usb/core.py", line 902, in set_interface_altsetting
-> > > >     self._ctx.managed_set_interface(self, interface, alternate_setting)
-> > > >   File "/usr/lib/python3.7/site-packages/usb/core.py", line 102, in wrapper
-> > > >     return f(self, *args, **kwargs)
-> > > >   File "/usr/lib/python3.7/site-packages/usb/core.py", line 204, in managed_set_interface
-> > > >     self.backend.set_interface_altsetting(self.handle, i.bInterfaceNumber, alt)
-> > > >   File "/usr/lib/python3.7/site-packages/usb/backend/libusb1.py", line 807, in set_interface_altsetting
-> > > >     altsetting))
-> > > >   File "/usr/lib/python3.7/site-packages/usb/backend/libusb1.py", line 595, in _check
-> > > >     raise USBError(_strerror(ret), ret, _libusb_errno[ret])
-> > > > usb.core.USBError: [Errno None] Other error
-> > > > ```
-> > > > 
-> > > > (libusb error from C code)
-> > > > ```
-> > > > libusb: error [op_set_interface] setintf failed error -1 errno 32
-> > > > ```
-> > > 
-> > > Error 32 means that the device returned a STALL status when it received 
-> > > the Set-Interface request.  The code responsible for this error response 
-> > > might be in FunctionFS or in your driver.
-> > >
-> > 
-> > I see the set-interface request in my code as a read/write error on the endpoints
-> > (errno 11: resource temporarily unavailable) and an enable event. Otherwise
-> > most things "just happen."
-> > 
-> > I've had issues reusing endpoint numbers like you are supposed to. Either the
-> > descriptors aren't accepted or more commonly the UDC won't bind. E.g. I have
-> > to give interface 0 eps 1, 2 and interface 1 eps 3, 4. The numbering is preserved
-> > on the host, kind of. Eps are compacted into their numbering based on direction.
-> > So you see interface 0 with eps 0x81 and 0x01, and interface 1 with eps 0x82 
-> > and 0x02.
-> 
-> That's exactly how it's supposed to work.  Don't mix up endpoint _numbers_ 
-> with endpoint _addresses_; they aren't the same thing.  Read through the 
-> USB-2.0 specification for more information.
-> 
-> Also don't forget that two interfaces in the same configuration are not 
-> allowed to share an endpoint (other than endpoint 0, which doesn't really 
-> belong to any interface).
-> 
-> > This isn't causing me problems per se but does seem improper.
-> 
-> Why?
-> 
+MBIM config:
+usb-devices
+T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 11 Spd=480 MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=305a ProdID=1405 Rev=03.18
+S:  Manufacturer=Android
+S:  Product=Android
+S:  SerialNumber=
+C:  #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:  If#=0x0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+I:  If#=0x1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x3 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+I:  If#=0x4 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
 
-Ah, yes, I was mixing up numbers/addresses. Strange as the only useful
-number to me seems to be the address.
+ECM config:
+usb-devices
+T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 13 Spd=480 MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=305a ProdID=1406 Rev=03.18
+S:  Manufacturer=Android
+S:  Product=Android
+S:  SerialNumber=
+C:  #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:  If#=0x0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+I:  If#=0x1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x3 Alt= 0 #EPs= 1 Cls=02(commc) Sub=06 Prot=00 Driver=cdc_ether
+I:  If#=0x4 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
 
-> > I'll look through the functionfs code when I have some time. The user mode
-> > does not seem to be passed much information.
-> 
-> If you think this is a weakness of FunctionFS and it needs to be fixed, 
-> report it to the FunctionFS maintainers.  See the MAINTAINERS file in the 
-> top-level directory of the kernel source code.
-> 
-> > > > But, if interface 1 alternate setting 0 is dropped, and interface 1 alternate
-> > > > setting 1 is kept, both invocations work and my C code spits out data very
-> > > > fast, although I must inspect it further as I seem to be duplicating data in my
-> > > > reads.
-> > > 
-> > > If you drop altsetting 0 then you're probably not issuing a Set-Interface 
-> > > request.  That would explain why you don't get a failure.
-> > > 
-> > > If you like, you can try issuing a Set-Interface(0) request (even though 
-> > > it's redundant) just to see if it fails.
-> > > 
-> > 
-> > Ah, yes, I had done set-interface(0 [, 0]). set-interface(1, 0) also works. It is just
-> > set-interface(1, 1) that is nonfunctional when an alternate mode 0 is provided.
-> 
-> Okay.  Maybe the problem occurs in the code that enables the endpoints for 
-> altsetting 1.
-> 
+Signed-off-by: Jörgen Storvist <jorgen.storvist@gmail.com>
+---
+ drivers/usb/serial/option.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-I do appreciate the help, I'll report to the maintainers later. I'll have to table it for
-now. As it is I'm able to send reliably on each frame so I'm happy.
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 254a8bbee..ef5284153 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -2028,6 +2028,9 @@ static const struct usb_device_id option_ids[] = {
+ 	  .driver_info = RSVD(4) | RSVD(5) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x0105, 0xff),			/* Fibocom NL678 series */
+ 	  .driver_info = RSVD(6) },
++	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1404, 0xff) },			/* GosunCn GM500 RNDIS */
++	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1405, 0xff) },			/* GosunCn GM500 MBIM */
++	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1406, 0xff) },			/* GosunCn GM500 ECM/NCM */
+ 	{ } /* Terminating entry */
+ };
+ MODULE_DEVICE_TABLE(usb, option_ids);
+-- 
+2.25.1
+
