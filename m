@@ -2,140 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B4A203CBE
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jun 2020 18:41:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5A09203CC0
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jun 2020 18:41:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729599AbgFVQlR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Jun 2020 12:41:17 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:33397 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1729260AbgFVQlQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Jun 2020 12:41:16 -0400
-Received: (qmail 142533 invoked by uid 1000); 22 Jun 2020 12:41:15 -0400
-Date:   Mon, 22 Jun 2020 12:41:15 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Sid Spry <sid@aeam.us>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: Unable to Use Isochronous Behavior w/ Isoc Endpoint in FunctionFC
-Message-ID: <20200622164115.GD137824@rowland.harvard.edu>
-References: <dc61359f-2a04-4590-9ac9-81b4f6e8d3b8@www.fastmail.com>
- <20200621140916.GB107361@rowland.harvard.edu>
- <86137ba1-4a08-4862-b3b0-47544f60e9f6@www.fastmail.com>
- <20200622140202.GA134271@rowland.harvard.edu>
- <564fdd69-5e90-4a4c-a8dd-a33f251c025d@www.fastmail.com>
+        id S1729605AbgFVQlk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Jun 2020 12:41:40 -0400
+Received: from mx0b-00154904.pphosted.com ([148.163.137.20]:34102 "EHLO
+        mx0b-00154904.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729260AbgFVQlk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Jun 2020 12:41:40 -0400
+Received: from pps.filterd (m0170396.ppops.net [127.0.0.1])
+        by mx0b-00154904.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05MGd6o0016079;
+        Mon, 22 Jun 2020 12:41:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dell.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=smtpout1;
+ bh=4e+uAadAxNl4v/JYwxLIt5dRfZPmx+iTuQ4DcVgTcKY=;
+ b=EuGxZy2RZn5poUwXKew27UpIv/YlDXjP5+amZIvGUWfjC8r7lcXeKfJkY4hM9NO8yL86
+ lzb86UR+MeCE4OOr7XoP5wRMBxAGAy4obhSbL8rZdJqGWmIA2HjQwhW0QJjgr4FAFlVw
+ 1mIb4NlWUe7QGLeLnoiiVlwzyvbFjxd1oaKf90dCBiqY4kqWgNYqwy1oZPpd8+Pknnmw
+ S1RGI2T9s/yBDek5ZNp/SL1O17/qI22ZBjtmYeGV0fORKVUR0xS1mETe4H8klqEKZzmD
+ m8Zm5OJPH2z7KSB1J2C9x76w3DFsPCDA62bF3oQSDz2uopH9ONkQq3y8uJ0p8dOXlnIg dw== 
+Received: from mx0a-00154901.pphosted.com (mx0a-00154901.pphosted.com [67.231.149.39])
+        by mx0b-00154904.pphosted.com with ESMTP id 31sng6cxqf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 Jun 2020 12:41:38 -0400
+Received: from pps.filterd (m0090351.ppops.net [127.0.0.1])
+        by mx0b-00154901.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05MGcAhd004826;
+        Mon, 22 Jun 2020 12:41:38 -0400
+Received: from ausxipps310.us.dell.com (AUSXIPPS310.us.dell.com [143.166.148.211])
+        by mx0b-00154901.pphosted.com with ESMTP id 31setf2nc8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 22 Jun 2020 12:41:38 -0400
+X-LoopCount0: from 10.166.132.130
+X-PREM-Routing: D-Outbound
+X-IronPort-AV: E=Sophos;i="5.60,349,1549951200"; 
+   d="scan'208";a="513734637"
+From:   <Mario.Limonciello@dell.com>
+To:     <mika.westerberg@linux.intel.com>
+CC:     <andreas.noever@gmail.com>, <michael.jamet@intel.com>,
+        <YehezkelShB@gmail.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 0/2] Allow breaking up Thunderbolt/USB4 updates
+Thread-Topic: [PATCH 0/2] Allow breaking up Thunderbolt/USB4 updates
+Thread-Index: AQHWSKG0WEYrvhtkREWS32dBR5sml6jlKYQA//+s3rA=
+Date:   Mon, 22 Jun 2020 16:41:35 +0000
+Message-ID: <1d2d1c3e753d42ed86cf89a6ed926a67@AUSX13MPC105.AMER.DELL.COM>
+References: <20200622143035.25327-1-mario.limonciello@dell.com>
+ <20200622163756.GV2795@lahna.fi.intel.com>
+In-Reply-To: <20200622163756.GV2795@lahna.fi.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Enabled=True;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_SiteId=945c199a-83a2-4e80-9f8c-5a91be5752dd;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Owner=Mario_Limonciello@Dell.com;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_SetDate=2020-06-22T16:41:34.0868671Z;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Name=External Public;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Application=Microsoft Azure
+ Information Protection;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_ActionId=3e926db7-959d-4eef-bc57-387d1dcc0b64;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Extended_MSFT_Method=Manual
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [143.166.24.40]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <564fdd69-5e90-4a4c-a8dd-a33f251c025d@www.fastmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-22_10:2020-06-22,2020-06-22 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
+ suspectscore=0 clxscore=1015 mlxscore=0 adultscore=0 malwarescore=0
+ lowpriorityscore=0 bulkscore=0 spamscore=0 priorityscore=1501
+ cotscore=-2147483648 mlxlogscore=662 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2006220118
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 mlxlogscore=705 suspectscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006220118
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 22, 2020 at 10:41:14AM -0500, Sid Spry wrote:
-> On Mon, Jun 22, 2020, at 9:02 AM, Alan Stern wrote:
-> > On Sun, Jun 21, 2020 at 09:25:53PM -0500, Sid Spry wrote:
-> > > I now must ask the list: What is the relation of the isochronous endpoint setup
-> > > to the allocated bandwidth on the bus?
-> > 
-> > Bandwidth allocation is determined by the host controller driver, or in 
-> > the case of xHCI, hardware.  Therefore it will vary with different drivers 
-> > or controllers.
-> > 
-> 
-> Ok, variation I expected. Sadly it seems like I am not made aware of which
-> interface alternate setting is chosen.
-> 
-> See: https://elixir.bootlin.com/linux/latest/source/drivers/usb/gadget/
-> function/f_fs.c#L3265.
-> 
-> The ctrlrequest struct (https://elixir.bootlin.com/linux/latest/source/include
-> /uapi/linux/usb/ch9.h#L213) is only sent for SETUP events. Of which I have
-> yet to triggered.
-
-Like I said before, you'll need to ask someone who knows more about 
-FunctionFS.
-
-> > > libusb seems to encounter an error:
-> > > 
-> > > (pyusb error output)
-> > > ```
-> > > >>> import usb
-> > > >>> ds = [d for d in usb.core.find(find_all=True, idVendor=0x1d6b, idProduct=0x0104)]
-> > > >>> d = ds[0]
-> > > >>> d.set_interface_altsetting(interface=1, alternate_setting=1)
-> > > Traceback (most recent call last):
-> > >   File "<stdin>", line 1, in <module>
-> > >   File "/usr/lib/python3.7/site-packages/usb/core.py", line 902, in set_interface_altsetting
-> > >     self._ctx.managed_set_interface(self, interface, alternate_setting)
-> > >   File "/usr/lib/python3.7/site-packages/usb/core.py", line 102, in wrapper
-> > >     return f(self, *args, **kwargs)
-> > >   File "/usr/lib/python3.7/site-packages/usb/core.py", line 204, in managed_set_interface
-> > >     self.backend.set_interface_altsetting(self.handle, i.bInterfaceNumber, alt)
-> > >   File "/usr/lib/python3.7/site-packages/usb/backend/libusb1.py", line 807, in set_interface_altsetting
-> > >     altsetting))
-> > >   File "/usr/lib/python3.7/site-packages/usb/backend/libusb1.py", line 595, in _check
-> > >     raise USBError(_strerror(ret), ret, _libusb_errno[ret])
-> > > usb.core.USBError: [Errno None] Other error
-> > > ```
-> > > 
-> > > (libusb error from C code)
-> > > ```
-> > > libusb: error [op_set_interface] setintf failed error -1 errno 32
-> > > ```
-> > 
-> > Error 32 means that the device returned a STALL status when it received 
-> > the Set-Interface request.  The code responsible for this error response 
-> > might be in FunctionFS or in your driver.
+> -----Original Message-----
+> From: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Sent: Monday, June 22, 2020 11:38 AM
+> To: Limonciello, Mario
+> Cc: Andreas Noever; Michael Jamet; Yehezkel Bernat; linux-usb@vger.kernel=
+.org;
+> linux-kernel@vger.kernel.org
+> Subject: Re: [PATCH 0/2] Allow breaking up Thunderbolt/USB4 updates
+>=20
+>=20
+> [EXTERNAL EMAIL]
+>=20
+> Hi Mario,
+>=20
+> On Mon, Jun 22, 2020 at 09:30:33AM -0500, Mario Limonciello wrote:
+> > Currently updates to Thunderbolt and USB4 controllers are fully atomic
+> > actions. When writing into the non-active NVM nothing gets flushed to
+> > the hardware until authenticate is sent.
 > >
-> 
-> I see the set-interface request in my code as a read/write error on the endpoints
-> (errno 11: resource temporarily unavailable) and an enable event. Otherwise
-> most things "just happen."
-> 
-> I've had issues reusing endpoint numbers like you are supposed to. Either the
-> descriptors aren't accepted or more commonly the UDC won't bind. E.g. I have
-> to give interface 0 eps 1, 2 and interface 1 eps 3, 4. The numbering is preserved
-> on the host, kind of. Eps are compacted into their numbering based on direction.
-> So you see interface 0 with eps 0x81 and 0x01, and interface 1 with eps 0x82 
-> and 0x02.
+> > There has been some desire to improve the perceived performance of thes=
+e
+> > updates, particularly for userland that may perform the update upon
+> > a performance sensitive time like logging out.
+> >
+> > So allow userland to flush the image to hardware at runtime, and then
+> > allow authenticating the image at another time.
+> >
+> > For the Dell WD19TB some specific hardware capability exists that allow=
+s
+> > extending this to automatically complete the update when unplugged.
+> > Export that functionality to userspace as well.
+> >
+> > This patch series is done relative thunderbolt.git/next.
+>=20
+> Thanks for the patch series. I wonder if you could base this on top of
+> my "retimer NVM upgrade" series here (you are also Cc'd):
+>=20
+>   https://lore.kernel.org/linux-usb/20200616135617.85752-1-
+> mika.westerberg@linux.intel.com/
+>=20
+> That series moves some of the common NVM functionality into a separate
+> file (nvm.c).
 
-That's exactly how it's supposed to work.  Don't mix up endpoint _numbers_ 
-with endpoint _addresses_; they aren't the same thing.  Read through the 
-USB-2.0 specification for more information.
+Sure thing.  Do you by chance already have that on a public branch somewher=
+e
+that I can easily rebase it?
 
-Also don't forget that two interfaces in the same configuration are not 
-allowed to share an endpoint (other than endpoint 0, which doesn't really 
-belong to any interface).
-
-> This isn't causing me problems per se but does seem improper.
-
-Why?
-
-> I'll look through the functionfs code when I have some time. The user mode
-> does not seem to be passed much information.
-
-If you think this is a weakness of FunctionFS and it needs to be fixed, 
-report it to the FunctionFS maintainers.  See the MAINTAINERS file in the 
-top-level directory of the kernel source code.
-
-> > > But, if interface 1 alternate setting 0 is dropped, and interface 1 alternate
-> > > setting 1 is kept, both invocations work and my C code spits out data very
-> > > fast, although I must inspect it further as I seem to be duplicating data in my
-> > > reads.
-> > 
-> > If you drop altsetting 0 then you're probably not issuing a Set-Interface 
-> > request.  That would explain why you don't get a failure.
-> > 
-> > If you like, you can try issuing a Set-Interface(0) request (even though 
-> > it's redundant) just to see if it fails.
-> > 
-> 
-> Ah, yes, I had done set-interface(0 [, 0]). set-interface(1, 0) also works. It is just
-> set-interface(1, 1) that is nonfunctional when an alternate mode 0 is provided.
-
-Okay.  Maybe the problem occurs in the code that enables the endpoints for 
-altsetting 1.
-
-Alan Stern
+>=20
+> > Mario Limonciello (2):
+> >   thunderbolt: Add support for separating the flush to SPI and
+> >     authenticate
+> >   thunderbolt: Add support for authenticate on disconnect
+> >
+> >  .../ABI/testing/sysfs-bus-thunderbolt         | 24 +++++-
+> >  drivers/thunderbolt/Makefile                  |  1 +
+> >  drivers/thunderbolt/eeprom.c                  |  2 +
+> >  drivers/thunderbolt/lc.c                      | 14 ++++
+> >  drivers/thunderbolt/quirks.c                  | 38 +++++++++
+> >  drivers/thunderbolt/switch.c                  | 81 +++++++++++++++----
+> >  drivers/thunderbolt/tb-quirks.h               | 16 ++++
+> >  drivers/thunderbolt/tb.h                      |  4 +
+> >  drivers/thunderbolt/tb_regs.h                 |  1 +
+> >  9 files changed, 162 insertions(+), 19 deletions(-)
+> >  create mode 100644 drivers/thunderbolt/quirks.c
+> >  create mode 100644 drivers/thunderbolt/tb-quirks.h
+> >
+> > --
+> > 2.25.1
