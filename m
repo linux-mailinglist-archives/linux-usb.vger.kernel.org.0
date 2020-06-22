@@ -2,91 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBCAC203294
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jun 2020 10:53:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CD3D2032C7
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jun 2020 11:03:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726987AbgFVIx0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Jun 2020 04:53:26 -0400
-Received: from mail-lj1-f175.google.com ([209.85.208.175]:41163 "EHLO
-        mail-lj1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725966AbgFVIx0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Jun 2020 04:53:26 -0400
-Received: by mail-lj1-f175.google.com with SMTP id 9so18356761ljc.8;
-        Mon, 22 Jun 2020 01:53:24 -0700 (PDT)
+        id S1725930AbgFVJD5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Jun 2020 05:03:57 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:33370 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726699AbgFVJDz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Jun 2020 05:03:55 -0400
+Received: by mail-lj1-f193.google.com with SMTP id s1so18421156ljo.0
+        for <linux-usb@vger.kernel.org>; Mon, 22 Jun 2020 02:03:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=nZTBXhwF66GMXMYe0wTj59WMwAfoF1kcnBYniC5n5Lk=;
-        b=De+tA9zcJGOWfFb/l9sfP6OoEAd1xrRtnLFcM+bDdL5YEIroDzpS76hF4UPBjBbUHd
-         us+R9wiNHH2LL95iuoNDzNRQsSk89nTJs+mjnjxt+qivLSDHj+Cx1VgBvEaeOgkH8684
-         opG+AeQSO8Ql+ZCqc8kLdaxhnjvKxIjZtPdPGuhMkaXN0+gZ51mYkcPfViTuRgl/wadP
-         uV+7EcDFfw4lCSknBPSJJWCdoBdneMRBRIHUsEOCwb/wzx8coPyEbeSXD0Y+ZSE70N8q
-         kK2HqgaY8VzoW/HgHIuG5WkYDOQLq92L6heK4UNh7grZNHkEl3/WXAbkzQC5wVyrxwn/
-         D5PQ==
-X-Gm-Message-State: AOAM5314ikFZO/N7HsBXZnnAgatZu6nZ5mKt9hKyJ9KekPWj6Hh2I6aE
-        7SZ0bf4KWCtMltfMrxn3IVs10kCt
-X-Google-Smtp-Source: ABdhPJxhy1Tbua04JsvQKGuKDKMK+vCeEpwG5Q/ZsF7deKMryw6WrVZjGR80MUIR2OdIl475OwDqOw==
-X-Received: by 2002:a2e:98c2:: with SMTP id s2mr8503520ljj.288.1592816003291;
-        Mon, 22 Jun 2020 01:53:23 -0700 (PDT)
+        bh=RDM7FJkHpnWTqwWUz/a7tne//mjT6QAg0+EYxz+tMRo=;
+        b=YAJkgBWsAaRTHPHv2KJ0jkIat9lxHoGjM1lR89j6ldmepoW+EHVpgEXGAu6NWQqMEA
+         UXbwOPsmKzk7IyraWZJhbkvRm67ytau/L5tEUam4hT1XpYllD0OR7sJTxLtBQqLxS6Zt
+         udU3Uy42qcqkMbraRUXXy1j7lPgTVm8wrlBbBXXQMc3zAMZTNwnthcEVayDSlSrueRQ1
+         xZbVVoYEY/272rz1BipTrbT5WH4Luz5SzSM/4Kl8etnt7FVZVuW79YMkAPImfCnrkJVB
+         S/Iwd08HDKrN0aLNY7Rl80ZiQDDaBJZYyQPQV8YmGWMpevpGFs66k2Jq9Q+JrOfTw1GW
+         ftuw==
+X-Gm-Message-State: AOAM530jWVCgYzuA/xB0n/48Fr6mlSO/bM6V2VEEjwXLN+dQEJksWOyx
+        AugAUSMeM77IwqCrhXgIh/w=
+X-Google-Smtp-Source: ABdhPJydYhbbHXOqAf79UG/yZyYeJCNFh4hoL5uvHwYViKbY+DrmGkqtpJajl5MFDAQ/3dH81gUUZA==
+X-Received: by 2002:a2e:890d:: with SMTP id d13mr8295634lji.75.1592816632794;
+        Mon, 22 Jun 2020 02:03:52 -0700 (PDT)
 Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id e80sm3333134lfd.64.2020.06.22.01.53.22
+        by smtp.gmail.com with ESMTPSA id g12sm2620567ljl.33.2020.06.22.02.03.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jun 2020 01:53:22 -0700 (PDT)
+        Mon, 22 Jun 2020 02:03:51 -0700 (PDT)
 Received: from johan by xi.terra with local (Exim 4.93.0.4)
         (envelope-from <johan@kernel.org>)
-        id 1jnICf-0004Dg-Td; Mon, 22 Jun 2020 10:53:21 +0200
-Date:   Mon, 22 Jun 2020 10:53:21 +0200
+        id 1jnIMp-0007Ob-FB; Mon, 22 Jun 2020 11:03:51 +0200
+Date:   Mon, 22 Jun 2020 11:03:51 +0200
 From:   Johan Hovold <johan@kernel.org>
-To:     James Hilliard <james.hilliard1@gmail.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>
-Subject: Re: [PATCH v2] USB: Serial: cypress_M8: Enable Simply Automated UPB
- PIM
-Message-ID: <20200622085321.GA3334@localhost>
-References: <20200616220403.1807003-1-james.hilliard1@gmail.com>
+To:     Charles Yeh <charlesyeh522@gmail.com>
+Cc:     gregkh@linuxfoundation.org, johan@kernel.org,
+        linux-usb@vger.kernel.org, charles-yeh@prolific.com.tw,
+        Vera.Wang@quantatw.com, Tim-Chen@quantatw.com, BenLin@quantatw.com
+Subject: Re: [PATCH] USB: serial: pl2303: Add new chip to support Chrome OS
+Message-ID: <20200622090351.GB3334@localhost>
+References: <20200617125924.1696-1-charlesyeh522@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200616220403.1807003-1-james.hilliard1@gmail.com>
+In-Reply-To: <20200617125924.1696-1-charlesyeh522@gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 16, 2020 at 04:04:03PM -0600, James Hilliard wrote:
-> This is a UPB(Universal Powerline Bus) PIM(Powerline Interface Module)
-> which allows for controlling multiple UPB compatible devices from
-> Linux using the standard serial interface.
+On Wed, Jun 17, 2020 at 08:59:24PM +0800, Charles Yeh wrote:
+> Prolific has developed a new USB to UART chip: PL2303HXN
+> PL2303HXN : PL2303GC/PL2303GS/PL2303GT/PL2303GL/PL2303GE/PL2303GB
+> The Vendor request used by the PL2303HXN (TYPE_HXN) is different from
+> the existing PL2303 series (TYPE_HX & TYPE_01).
+> Therefore, different Vendor requests are used to issue related commands.
 > 
-> Based on vendor application source code there are two different models
-> of USB based PIM devices in addition to a number of RS232 based PIM's.
+> Google Chrome OEM's vendor is Quanta
+> The modification requirements of this patch file are from
+> Google-->Quanta-->>Prolific
+> Currently Chrome OS does not support PL2303HXN (TYPE_HXN),
+> So Quanta hopes that Prolific provide patch files to support Chrome OS.
 > 
-> The vendor UPB application source contains the following USB ID's:
-> #define USB_PCS_VENDOR_ID 0x04b4
-> #define USB_PCS_PIM_PRODUCT_ID 0x5500
+> Below is the patch file modification instructions.
 > 
-> #define USB_SAI_VENDOR_ID 0x17dd
-> #define USB_SAI_PIM_PRODUCT_ID 0x5500
+> 1. Added a new TYPE_HXN type in pl2303_type_data, and then executes
+>    new Vendor request,new flow control and other related instructions
+>    if TYPE_HXN is recognized.
 > 
-> The first set of ID's correspond to the PIM variant sold by Powerline
-> Control Systems while the second corresponds to the Simply Automated
-> Incorporated PIM. As the product ID for both of these match the default
-> cypress HID->COM RS232 product ID it assumed that they both use an
-> internal variant of this HID->COM RS232 converter hardware. However
-> as the vendor ID for the Simply Automated variant is different we need
-> to also add it to the cypress_M8 driver so that it is properly
-> detected.
+> 2. Because the new PL2303HXN only accept the new Vendor request,
+>    the old Vendor request cannot be accepted (the error message
+>    will be returned)
+>    So first determine the TYPE_HX or TYPE_HXN through
+>    PL2303_READ_TYPE_HX_STATUS in pl2303_startup.
 > 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+>   2.1 If the return message is "1", then the PL2303 is the existing
+>       TYPE_HX/ TYPE_01 series.
+>       The other settings in pl2303_startup are to continue execution.
+>   2.2 If the return message is "not 1", then the PL2303 is the new
+>       TYPE_HXN series.
+>       The other settings in pl2303_startup are ignored.
+>       (PL2303HXN will directly use the default value in the hardware,
+>        no need to add additional settings through the software)
+> 
+> 3. In pl2303_open: Because TYPE_HXN is different from the instruction of reset
+>    down/up stream used by TYPE_HX.
+>    Therefore, we will also execute different instructions here.
+> 
+> 4. In pl2303_set_termios: The UART flow control instructions used by
+>    TYPE_HXN/TYPE_HX/TYPE_01 are different.
+>    Therefore, we will also execute different instructions here.
+> 
+> 5. In pl2303_vendor_read & pl2303_vendor_write, since TYPE_HXN is different
+>    from the vendor request instruction used by TYPE_HX/TYPE_01,
+>    it will also execute different instructions here.
+> 
+> 6. In pl2303_update_reg: TYPE_HXN used different register for flow control.
+>    Therefore, we will also execute different instructions here.
+> 
+> Signed-off-by: Charles Yeh <charlesyeh522@gmail.com>
 > ---
-> Changes v1 -> v2:
->   - Add more detailed commit message.
+>  drivers/usb/serial/pl2303.c | 124 +++++++++++++++++++++++++++++-------
+>  drivers/usb/serial/pl2303.h |   7 +-
+>  2 files changed, 107 insertions(+), 24 deletions(-)
 
-Now applied, thanks.
+Most, or even all, of this has already been merged to mainline. Why are
+you posting it again?
 
-Would you mind posting the output of "lsusb -v" for this device for
-completeness?
+If you want to add further features you need to base your patches on the
+latest code.
 
 Johan
