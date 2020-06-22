@@ -2,58 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFB10203BC4
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jun 2020 18:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E846F203CA3
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jun 2020 18:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729782AbgFVQCZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Jun 2020 12:02:25 -0400
-Received: from sonic302-21.consmr.mail.ne1.yahoo.com ([66.163.186.147]:37397
-        "EHLO sonic302-21.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729785AbgFVQCX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Jun 2020 12:02:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1592841741; bh=cK2qy9Lv5SAgMg9nAvfVmkJPj46H3ss3vOVyjpHm6Nk=; h=Date:From:Reply-To:Subject:References:From:Subject; b=imnMzKvnrwdEkzevY9v55JCHWrS7mFcRp2xLflBpdsWBX5v32iTt1Jwj292Sqyxc6zTWfVf6UW3RltjDxv8H8ZAxxFg96tpPBoXA2f/GRkfTuiNcUr3yDzOGiHeT9IqR//B+9C8c9YoGDJPnAeuuKcQvLl1HS8J+STK4/r0WZ3jbtWFF0MKDjydg+AbeXShoRDHqwsqAaAi7D9jDq8wNDWBIR81puaAh7APGDPK32RqjpFS85hxXrbmotW59Gm/gC9SoLB52q4udtwMI++FS4HYmIHt+kUh9tNcMAsNUvFYo0HWMN59EiLf7lYGm/4AR40adfmghUfkmt4dYpTZmZQ==
-X-YMail-OSG: AhKkJLAVM1lDQ3XPPTTJWpEw.A_YPk4v7tBrtMEv9XTYrBN0vKxPyUyPokZyCLH
- 0NPJEnbM.Ixt5u0eXkMwZesEBqS.rCtCLJgnod2Yg.I9TXOm0suNzcmJ92mBaA3mHgRFUusjI.6E
- 3Gu4LEq019.le8uhDgpgUZ.YgtmiKAQJK6Bd4WPLqozbdEc8urSPipLpvwJTvKec65xmptWyRiVv
- 5wejfhjut7ltVV2EWvbGnxpPsKrHXW63gZY0z7W.qC8yTTTM6xXIAPM6OYdYDYNn.6t5yJFWlC1P
- OIdbZEYbWLsjaYGAZ3nhw68imywZs7JgVqTzxfR4ZQQxpuo3K8t9CM9O0hpOCt10FP__XXwyrmrD
- TCoCE7B_Edu3G.zjOUn_rksR4jYB.m1Rp.1vZ_bLxnQwCiAul5Wqfj8PNdUGzT.zvxnBCUVqWq9J
- 8hXM6oMyn8gklCF.R8KCTVo6NRJRq4thjGWIexrpJEGu0QolvkJTIALFEd6_slAReLmAOEup3xKy
- .77XY9y0L2WZlQcf1QY4ryEv90HkLK9R59Zd1MxuC8qefRgY6y6xUFmVBWO8SDJCCjnQpB48PRDP
- pRTSfD8hEjxrcMoyLQRR8ik6SRBEuL1N.zoJ2juJT7TtdJItukcqyaFlw7VOC6cm49vWb13NtnZ0
- gQ2bWEWTG5v0uAlc54_ulltpKs.Fgm6hkagBtyzunEJ52PGAuturV.LPWyLoBYPiB1KC1HlV8gI8
- yJqtTplsyPL2eALndgi_xv5WXRslUdVun50zfx9iDK5v_kT1lyZrnl7BpPa5N7roHYs5FCR3fGlt
- 00HJ7sf.lnan3Im8PEbT96k38NwI6o6wqQk3XTx1x0TOib38VwKLgaWNY916uiRI1upzFCMVqmW6
- hKW.i_z2qDWeeQaZVyBhDmfLTpSCKpEZXqJt.HWEa0uB7F6lyRoT1rQEzhMY_zbISz6YbRmtNDlq
- VLlEzjYA6uILpMVD7EkmwXGP0XOJgDIix93HShigByDXDbmOlbnVPelpKvxPRFg3gnhpf.0Rc47i
- 08Ic.liUMCD9zHGFCga9cXgoGaM8kFbRyDB3CB8uLHuuV8rIwOstkm24RLt0t3H1wtfuP85AC7r8
- v042NbRsPX1Mj80LTxFt.KStV8ND4Dc1.IiPBslhVUpEA9f2YrGnkjCHG4.U4j0M0U489djAouYX
- y9F8lECiGIH30pwUi5p9NUzViYBtaTM7ID67rbGjIKdkEdFs14rCm3KSzct0U2izLUB1NerwsRiF
- IQWasnNhp61WOxqpf4zyo6bEJMCV1B8QkTG.8HvHCcJtAwYQhWHkE5SwAzxSGopkwGBC4.Xf9
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic302.consmr.mail.ne1.yahoo.com with HTTP; Mon, 22 Jun 2020 16:02:21 +0000
-Date:   Mon, 22 Jun 2020 16:02:19 +0000 (UTC)
-From:   Karim Zakari <kariim1960z@gmail.com>
-Reply-To: kzakari04@gmail.com
-Message-ID: <1507214802.1850985.1592841739314@mail.yahoo.com>
-Subject: URGENT REPLY.
+        id S1729677AbgFVQdz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Jun 2020 12:33:55 -0400
+Received: from mga18.intel.com ([134.134.136.126]:57928 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729604AbgFVQdz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 22 Jun 2020 12:33:55 -0400
+IronPort-SDR: RtKf2HnctkeV+fLtTsK1C6Fv6VnbwChHlDzo8zRFNc0CfUkpfAe+2YaS3IsWuM3ZfkH/EzG1Wm
+ jjOKiDZ8PtLw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9660"; a="131207938"
+X-IronPort-AV: E=Sophos;i="5.75,267,1589266800"; 
+   d="scan'208";a="131207938"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2020 09:33:52 -0700
+IronPort-SDR: ESHbFLnXvnDSL1D0OdIFiAZK6C1vaYwL7oK7wBCTVAzWtJoezumLNVWBaI7TIxhcnDo4Aw2Ycx
+ JRu3Juo31MaA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,267,1589266800"; 
+   d="scan'208";a="478516569"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga005.fm.intel.com with SMTP; 22 Jun 2020 09:33:48 -0700
+Received: by lahna (sSMTP sendmail emulation); Mon, 22 Jun 2020 19:33:48 +0300
+Date:   Mon, 22 Jun 2020 19:33:48 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Yehezkel Bernat <yehezkelshb@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Michael Jamet <michael.jamet@intel.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>, netdev@vger.kernel.org
+Subject: Re: [PATCH 4/4] thunderbolt: Get rid of E2E workaround
+Message-ID: <20200622163348.GU2795@lahna.fi.intel.com>
+References: <CA+CmpXtpAaY+zKG-ofPNYHTChTiDtwCAnd8uYQSqyJ8hLE891Q@mail.gmail.com>
+ <20200615135112.GA1402792@kroah.com>
+ <CA+CmpXst-5i4L5nW-Z66ZmxuLhdihjeNkHU1JdzTwow1rNH7Ng@mail.gmail.com>
+ <20200615142247.GN247495@lahna.fi.intel.com>
+ <CA+CmpXuN+su50RYHvW4S-twqiUjScnqM5jvG4ipEvWORyKfd1g@mail.gmail.com>
+ <20200615153249.GR247495@lahna.fi.intel.com>
+ <CA+CmpXtRZ4JMe2V2-kWiYWR0pnnzLQMbXQESni6ne8eFeDCCXg@mail.gmail.com>
+ <20200615155512.GS247495@lahna.fi.intel.com>
+ <CA+CmpXtOAUnSdhjwi5HXaJhPzbUUsZZsitFifyhyPk+X2c=wYw@mail.gmail.com>
+ <20200616115520.GK2795@lahna.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-References: <1507214802.1850985.1592841739314.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.16138 YMailNodin Mozilla/5.0 (Windows NT 6.1; ) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.106 Safari/537.36
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200616115520.GK2795@lahna.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Tue, Jun 16, 2020 at 02:55:25PM +0300, Mika Westerberg wrote:
+> On Mon, Jun 15, 2020 at 10:54:52PM +0300, Yehezkel Bernat wrote:
+> > On Mon, Jun 15, 2020 at 6:55 PM Mika Westerberg
+> > <mika.westerberg@linux.intel.com> wrote:
+> > >
+> > > On Mon, Jun 15, 2020 at 06:41:32PM +0300, Yehezkel Bernat wrote:
+> > > > > I think you are talking about the "prtstns" property in the network
+> > > > > driver. There we only set TBNET_MATCH_FRAGS_ID (bit 1). This is the
+> > > > > thing that get exposed to the other side of the connection and we never
+> > > > > announced support for full E2E.
+> > > >
+> > > >
+> > > > Ah, yes, this one, Thanks!
+> > > > As Windows driver uses it for flagging full-E2E, and we completely drop E2E
+> > > > support here, it may worth to mention there that this is what bit 2 is used in
+> > > > Windows so any reuse should consider the possible compatibility issue.
+> > >
+> > > Note we only drop dead code in this patch. It is that workaround for
+> > > Falcon Ridge controller we actually never used.
+> > >
+> > > I can add a comment to the network driver about the full E2E support
+> > > flag as a separate patch if you think it is useful.
+> > >
+> > > The network protocol will be public soon I guess because USB4 spec
+> > > refers to "USB4 Inter-Domain Specification, Revision 1.0, [to be
+> > > published] – (USB4 Inter-Domain Specification)" so I would expect it to
+> > > be explained there as well.
+> > 
+> > I see. I leave it for your decision, then.
+> > Thanks for bearing with me.
+> 
+> OK, I think it makes sense to add the comment so I'll do that as
+> a separate patch (will probably go next week since I have some other
+> patches to deal with this week, and Friday is holiday in Finland).
 
+OK, I sent it now and can be found here:
 
-Good-Day Friend,
-
- Hope you are doing great Today. I have a proposed business deal worthy (US$16.5 Million Dollars) that will benefit both parties. This is legitimate' legal and your personality will not be compromised.
-
-Waiting for your response for more details, As you are willing to execute this business opportunity with me.
-
-Sincerely Yours,
-Mr. Karim Zakari.
+  https://lore.kernel.org/netdev/20200622163022.53298-1-mika.westerberg@linux.intel.com/
