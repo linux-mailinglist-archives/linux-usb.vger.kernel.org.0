@@ -2,95 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB470203980
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jun 2020 16:28:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E5E820389E
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jun 2020 16:02:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729261AbgFVO0N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Jun 2020 10:26:13 -0400
-Received: from mx2.suse.de ([195.135.220.15]:44428 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728070AbgFVO0N (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 22 Jun 2020 10:26:13 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id ADB3FC1B7;
-        Mon, 22 Jun 2020 14:26:10 +0000 (UTC)
-From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-To:     f.fainelli@gmail.com, gregkh@linuxfoundation.org, robh@kernel.org,
-        wahrenst@gmx.net, p.zabel@pengutronix.de
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com, tim.gover@raspberrypi.org,
-        linux-pci@vger.kernel.org, helgaas@kernel.org,
-        andy.shevchenko@gmail.com, mathias.nyman@linux.intel.com,
-        lorenzo.pieralisi@arm.com,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Subject: [PATCH v4 9/9] Revert "PCI: brcmstb: Wait for Raspberry Pi's firmware when present"
-Date:   Mon, 22 Jun 2020 12:38:18 +0200
-Message-Id: <20200622103817.476-10-nsaenzjulienne@suse.de>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200622103817.476-1-nsaenzjulienne@suse.de>
-References: <20200622103817.476-1-nsaenzjulienne@suse.de>
+        id S1729095AbgFVOCF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Jun 2020 10:02:05 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:38121 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1728070AbgFVOCE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Jun 2020 10:02:04 -0400
+Received: (qmail 135245 invoked by uid 1000); 22 Jun 2020 10:02:03 -0400
+Date:   Mon, 22 Jun 2020 10:02:02 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Sid Spry <sid@aeam.us>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: Unable to Use Isochronous Behavior w/ Isoc Endpoint in FunctionFC
+Message-ID: <20200622140202.GA134271@rowland.harvard.edu>
+References: <dc61359f-2a04-4590-9ac9-81b4f6e8d3b8@www.fastmail.com>
+ <20200621140916.GB107361@rowland.harvard.edu>
+ <86137ba1-4a08-4862-b3b0-47544f60e9f6@www.fastmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <86137ba1-4a08-4862-b3b0-47544f60e9f6@www.fastmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This reverts commit 44331189f9082c7e659697bbac1747db3def73e7.
+On Sun, Jun 21, 2020 at 09:25:53PM -0500, Sid Spry wrote:
+> I now must ask the list: What is the relation of the isochronous endpoint setup
+> to the allocated bandwidth on the bus?
 
-Now that the VL805 init routine is run through a reset controller driver
-the device dependencies are being taken care of by the device core. No
-need to do it manually here.
+Bandwidth allocation is determined by the host controller driver, or in 
+the case of xHCI, hardware.  Therefore it will vary with different drivers 
+or controllers.
 
-Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
----
- drivers/pci/controller/pcie-brcmstb.c | 17 -----------------
- 1 file changed, 17 deletions(-)
+> I understand the limit of 3 1024 byte
+> transfers per frame, but this says nothing about how it will be allocated or
+> how a device is refused bandwidth. Do I need to look for link degradation on
+> the application layer? It seems like having a single non-spec device means
+> the OS can't arbitrate link bandwidth.
 
-diff --git a/drivers/pci/controller/pcie-brcmstb.c b/drivers/pci/controller/pcie-brcmstb.c
-index 7730ea845ff2..752f5b331579 100644
---- a/drivers/pci/controller/pcie-brcmstb.c
-+++ b/drivers/pci/controller/pcie-brcmstb.c
-@@ -28,8 +28,6 @@
- #include <linux/string.h>
- #include <linux/types.h>
- 
--#include <soc/bcm2835/raspberrypi-firmware.h>
--
- #include "../pci.h"
- 
- /* BRCM_PCIE_CAP_REGS - Offset for the mandatory capability config regs */
-@@ -931,26 +929,11 @@ static int brcm_pcie_probe(struct platform_device *pdev)
- {
- 	struct device_node *np = pdev->dev.of_node, *msi_np;
- 	struct pci_host_bridge *bridge;
--	struct device_node *fw_np;
- 	struct brcm_pcie *pcie;
- 	struct pci_bus *child;
- 	struct resource *res;
- 	int ret;
- 
--	/*
--	 * We have to wait for Raspberry Pi's firmware interface to be up as a
--	 * PCI fixup, rpi_firmware_init_vl805(), depends on it. This driver's
--	 * probe can race with the firmware interface's (see
--	 * drivers/firmware/raspberrypi.c) and potentially break the PCI fixup.
--	 */
--	fw_np = of_find_compatible_node(NULL, NULL,
--					"raspberrypi,bcm2835-firmware");
--	if (fw_np && !rpi_firmware_get(fw_np)) {
--		of_node_put(fw_np);
--		return -EPROBE_DEFER;
--	}
--	of_node_put(fw_np);
--
- 	bridge = devm_pci_alloc_host_bridge(&pdev->dev, sizeof(*pcie));
- 	if (!bridge)
- 		return -ENOMEM;
--- 
-2.27.0
+If allocation fails, the application will find out either when it tries to 
+issue a Set-Interface request or when it tries to submit an isochronous 
+URB.
 
+Did you say earlier that your host controller is xHCI?  If it is then the 
+OS doesn't arbitrate link bandwidth; the xHCI hardware does.
+
+> Also!
+> 
+> For the list's consideration I have included an accepted but nonworking
+> configuration that perplexes me. The application note for the original device
+> I used specified a set of descriptors which was like so (device and
+> configuration omitted):
+
+[apparently irrelevant details omitted]
+
+> libusb seems to encounter an error:
+> 
+> (pyusb error output)
+> ```
+> >>> import usb
+> >>> ds = [d for d in usb.core.find(find_all=True, idVendor=0x1d6b, idProduct=0x0104)]
+> >>> d = ds[0]
+> >>> d.set_interface_altsetting(interface=1, alternate_setting=1)
+> Traceback (most recent call last):
+>   File "<stdin>", line 1, in <module>
+>   File "/usr/lib/python3.7/site-packages/usb/core.py", line 902, in set_interface_altsetting
+>     self._ctx.managed_set_interface(self, interface, alternate_setting)
+>   File "/usr/lib/python3.7/site-packages/usb/core.py", line 102, in wrapper
+>     return f(self, *args, **kwargs)
+>   File "/usr/lib/python3.7/site-packages/usb/core.py", line 204, in managed_set_interface
+>     self.backend.set_interface_altsetting(self.handle, i.bInterfaceNumber, alt)
+>   File "/usr/lib/python3.7/site-packages/usb/backend/libusb1.py", line 807, in set_interface_altsetting
+>     altsetting))
+>   File "/usr/lib/python3.7/site-packages/usb/backend/libusb1.py", line 595, in _check
+>     raise USBError(_strerror(ret), ret, _libusb_errno[ret])
+> usb.core.USBError: [Errno None] Other error
+> ```
+> 
+> (libusb error from C code)
+> ```
+> libusb: error [op_set_interface] setintf failed error -1 errno 32
+> ```
+
+Error 32 means that the device returned a STALL status when it received 
+the Set-Interface request.  The code responsible for this error response 
+might be in FunctionFS or in your driver.
+
+> But, if interface 1 alternate setting 0 is dropped, and interface 1 alternate
+> setting 1 is kept, both invocations work and my C code spits out data very
+> fast, although I must inspect it further as I seem to be duplicating data in my
+> reads.
+
+If you drop altsetting 0 then you're probably not issuing a Set-Interface 
+request.  That would explain why you don't get a failure.
+
+If you like, you can try issuing a Set-Interface(0) request (even though 
+it's redundant) just to see if it fails.
+
+Alan Stern
