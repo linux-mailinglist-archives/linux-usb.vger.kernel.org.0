@@ -2,80 +2,174 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC52520333A
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jun 2020 11:22:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E19542034F0
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jun 2020 12:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726836AbgFVJWK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Jun 2020 05:22:10 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:35080 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726608AbgFVJWK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Jun 2020 05:22:10 -0400
-Received: by mail-lj1-f196.google.com with SMTP id q19so18482464lji.2
-        for <linux-usb@vger.kernel.org>; Mon, 22 Jun 2020 02:22:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YzggH+Jnr7As5TqqJqU+lziLZ+psRrAdT33Si9TbIfM=;
-        b=YPuvnCrjdDPWJoho+zgKqBd4/Ah7mAvxfqHVanMuhhJJX0kVD6HFn0R5UNkMCv7b0b
-         iXOhIJ/9PCsKByBTjbyl9PK8Gcc/qnrTwWCvJ91xV8hmpNKQXhBpgbrsuBT4CGcv+fHi
-         LNZpMO9FGlpJubPrtOSlU2BzhFcizFCQxMXGGJ0uP6ssT8C6THA0VeFC2sOC36lOxSUJ
-         zfqvmISN0G2vLgNHwej5w3uPJ3g07khIyGlrRk6Lb39SGuqYGPR1a+Ba8xi1yA2uWxSR
-         F8bmsfmxGxFXEVzph8TWjAyQftxEY11s1jyypxTuSBjL03qSl8Qype8kPj+IJ/dAQuPS
-         F4Xg==
-X-Gm-Message-State: AOAM531KJQFp3ceV8WHjrBBfQhi/Idr6ywZrYt4ZPqnqu/LTirAe9f4x
-        gGXXTU1LHcxAQG4CEOblnXQ=
-X-Google-Smtp-Source: ABdhPJx2rYsJ3BTPyaVrQ/QspB8GuQBPLEQwi4PNNiAjyndnnnE5X/peaPGjcEKpNDUUE062Xs/8FA==
-X-Received: by 2002:a2e:a407:: with SMTP id p7mr8607483ljn.470.1592817727983;
-        Mon, 22 Jun 2020 02:22:07 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id v24sm3347956lfo.4.2020.06.22.02.22.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jun 2020 02:22:07 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1jnIeU-0002Mt-1Q; Mon, 22 Jun 2020 11:22:06 +0200
-Date:   Mon, 22 Jun 2020 11:22:06 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Rob Gill <rrobgill@protonmail.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3] driver/usb MODULE_DESCRIPTION entries to usb modules
-Message-ID: <20200622092206.GC3334@localhost>
-References: <20200619133141.31890-1-rrobgill@protonmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200619133141.31890-1-rrobgill@protonmail.com>
+        id S1727030AbgFVKhg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Jun 2020 06:37:36 -0400
+Received: from relmlor2.renesas.com ([210.160.252.172]:33303 "EHLO
+        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726776AbgFVKhg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Jun 2020 06:37:36 -0400
+X-IronPort-AV: E=Sophos;i="5.75,266,1589209200"; 
+   d="scan'208";a="50072171"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie6.idc.renesas.com with ESMTP; 22 Jun 2020 19:37:34 +0900
+Received: from localhost.localdomain (unknown [10.166.252.89])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id A2208400855F;
+        Mon, 22 Jun 2020 19:37:34 +0900 (JST)
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     gregkh@linuxfoundation.org, robh+dt@kernel.org
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Subject: [PATCH v2] dt-bindings: usb: renesas,usb-xhci: convert to YAML
+Date:   Mon, 22 Jun 2020 19:37:32 +0900
+Message-Id: <1592822252-12338-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 19, 2020 at 01:31:48PM +0000, Rob Gill wrote:
-> The user tool modinfo is used to get information on kernel modules, including a
-> description where it is available.
-> 
-> This patch adds a brief MODULE_DESCRIPTION to the following modules in driver/usb.
-> 
-> isight_firmware
-> mxuport
-> u_ether
-> uas
+Convert Renesas related parts of usb-xhci to YAML because
+they are not compatible with generic-xhci.
 
-We have literally thousands of modules without a module description, so
-why this arbitrary and incomplete set?
+Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+---
+ Changes from v1:
+ - Update the commit description.
+ - Use SoC part names instead of part numbers in the comments.
+ - Add comments on renesas,rcar-gen[23]-xhci.
+ - Add power-domains and resets to required.
+ https://patchwork.kernel.org/patch/11604565/
 
-If the driver author did not care to add a description I don't think we
-should go adding mostly pointless descriptions to all those drivers now.
+ .../devicetree/bindings/usb/renesas,usb-xhci.yaml  | 86 ++++++++++++++++++++++
+ Documentation/devicetree/bindings/usb/usb-xhci.txt | 18 -----
+ 2 files changed, 86 insertions(+), 18 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml
 
-> Signed-off-by: Rob Gill <rrobgill@protonmail.com>
-> 
-> ---
->  drivers/usb/gadget/function/u_ether.c | 1 +
->  drivers/usb/misc/isight_firmware.c    | 1 +
->  drivers/usb/serial/mxuport.c          | 1 +
->  drivers/usb/storage/uas.c             | 1 +
->  4 files changed, 4 insertions(+)
+diff --git a/Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml b/Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml
+new file mode 100644
+index 0000000..add9f7b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml
+@@ -0,0 +1,86 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/usb/renesas,usb-xhci.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Renesas USB xHCI controllers
++
++maintainers:
++  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
++  - Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
++
++allOf:
++  - $ref: "usb-hcd.yaml"
++
++properties:
++  compatible:
++    oneOf:
++      - items:
++          - enum:
++              - renesas,xhci-r8a7742 # RZ/G1H
++              - renesas,xhci-r8a7743 # RZ/G1M
++              - renesas,xhci-r8a7744 # RZ/G1N
++              - renesas,xhci-r8a7790 # R-Car H2
++              - renesas,xhci-r8a7791 # R-Car M2-W
++              - renesas,xhci-r8a7793 # R-Car M2-N
++          - const: renesas,rcar-gen2-xhci # R-Car Gen2 and RZ/G1
++      - items:
++          - enum:
++              - renesas,xhci-r8a774a1 # RZ/G2M
++              - renesas,xhci-r8a774b1 # RZ/G2N
++              - renesas,xhci-r8a774c0 # RZ/G2E
++              - renesas,xhci-r8a7795  # R-Car H3
++              - renesas,xhci-r8a7796  # R-Car M3-W
++              - renesas,xhci-r8a77961 # R-Car M3-W+
++              - renesas,xhci-r8a77965 # R-Car M3-N
++              - renesas,xhci-r8a77990 # R-Car E3
++          - const: renesas,rcar-gen3-xhci # R-Car Gen3 and RZ/G2
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  phys:
++    maxItems: 1
++
++  phy-names:
++    maxItems: 1
++    items:
++      - const: usb
++
++  power-domains:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - power-domains
++  - resets
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/r8a7795-cpg-mssr.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/power/r8a7795-sysc.h>
++
++    xhci0: usb@ee000000 {
++        compatible = "renesas,xhci-r8a7795", "renesas,rcar-gen3-xhci";
++        reg = <0xee000000 0xc00>;
++        interrupts = <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>;
++        clocks = <&cpg CPG_MOD 328>;
++        power-domains = <&sysc R8A7795_PD_ALWAYS_ON>;
++        resets = <&cpg 328>;
++    };
+diff --git a/Documentation/devicetree/bindings/usb/usb-xhci.txt b/Documentation/devicetree/bindings/usb/usb-xhci.txt
+index b120dd6..0c5cff8 100644
+--- a/Documentation/devicetree/bindings/usb/usb-xhci.txt
++++ b/Documentation/devicetree/bindings/usb/usb-xhci.txt
+@@ -7,24 +7,6 @@ Required properties:
+     - "marvell,armada3700-xhci" for Armada 37xx SoCs
+     - "marvell,armada-375-xhci" for Armada 375 SoCs
+     - "marvell,armada-380-xhci" for Armada 38x SoCs
+-    - "renesas,xhci-r8a7742" for r8a7742 SoC
+-    - "renesas,xhci-r8a7743" for r8a7743 SoC
+-    - "renesas,xhci-r8a7744" for r8a7744 SoC
+-    - "renesas,xhci-r8a774a1" for r8a774a1 SoC
+-    - "renesas,xhci-r8a774b1" for r8a774b1 SoC
+-    - "renesas,xhci-r8a774c0" for r8a774c0 SoC
+-    - "renesas,xhci-r8a7790" for r8a7790 SoC
+-    - "renesas,xhci-r8a7791" for r8a7791 SoC
+-    - "renesas,xhci-r8a7793" for r8a7793 SoC
+-    - "renesas,xhci-r8a7795" for r8a7795 SoC
+-    - "renesas,xhci-r8a7796" for r8a77960 SoC
+-    - "renesas,xhci-r8a77961" for r8a77961 SoC
+-    - "renesas,xhci-r8a77965" for r8a77965 SoC
+-    - "renesas,xhci-r8a77990" for r8a77990 SoC
+-    - "renesas,rcar-gen2-xhci" for a generic R-Car Gen2 or RZ/G1 compatible
+-      device
+-    - "renesas,rcar-gen3-xhci" for a generic R-Car Gen3 or RZ/G2 compatible
+-      device
+     - "brcm,bcm7445-xhci" for Broadcom STB SoCs with XHCI
+     - "xhci-platform" (deprecated)
+ 
+-- 
+2.7.4
 
-Johan
