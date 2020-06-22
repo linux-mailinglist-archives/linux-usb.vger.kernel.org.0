@@ -2,397 +2,242 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEAF5203D23
-	for <lists+linux-usb@lfdr.de>; Mon, 22 Jun 2020 18:52:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0258203D3A
+	for <lists+linux-usb@lfdr.de>; Mon, 22 Jun 2020 18:57:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729905AbgFVQwg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 22 Jun 2020 12:52:36 -0400
-Received: from mga11.intel.com ([192.55.52.93]:49479 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729669AbgFVQwg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 22 Jun 2020 12:52:36 -0400
-IronPort-SDR: HGZfqZIR3wo5wRsJDpNM82N/Yf9Zqs2YH8786ptZc3ZMBA8wLONMiJbaW53kTZXk0yMONUFZ0r
- msihtipWLfNw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9660"; a="142064938"
-X-IronPort-AV: E=Sophos;i="5.75,268,1589266800"; 
-   d="scan'208";a="142064938"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2020 09:52:20 -0700
-IronPort-SDR: VVtfvjvc0bG/Con6KYQT+RM9Pk+onc6NpInsuBMYLvBWySUWIKMJGXrAVhBS1g0K9npUQcWhhF
- BaCHHRcQVvTA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,268,1589266800"; 
-   d="scan'208";a="310986419"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga002.fm.intel.com with SMTP; 22 Jun 2020 09:52:17 -0700
-Received: by lahna (sSMTP sendmail emulation); Mon, 22 Jun 2020 19:52:17 +0300
-Date:   Mon, 22 Jun 2020 19:52:17 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Mario Limonciello <mario.limonciello@dell.com>
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] thunderbolt: Add support for authenticate on
- disconnect
-Message-ID: <20200622165217.GX2795@lahna.fi.intel.com>
-References: <20200622143035.25327-1-mario.limonciello@dell.com>
- <20200622143035.25327-3-mario.limonciello@dell.com>
+        id S1729965AbgFVQ5O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 22 Jun 2020 12:57:14 -0400
+Received: from mail-il1-f200.google.com ([209.85.166.200]:50087 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729812AbgFVQ5N (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 22 Jun 2020 12:57:13 -0400
+Received: by mail-il1-f200.google.com with SMTP id i7so12396413ilq.16
+        for <linux-usb@vger.kernel.org>; Mon, 22 Jun 2020 09:57:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=/tYqKIp3w739fwVS3SNd0WI3Mq8mwz9vCMWpDnBTWzc=;
+        b=rDVIGCfrUnUFoe/89e4aQi8fEvGtE/zIWIu6itum3FDV9lLAIaCza1ORdmhKYri0Ue
+         mUZyKAdfnZnerTkpYpru0A/IrgsS/77h+TybxpV2jUWE5qnOnPjWwi0vUs5nIwLp1asQ
+         okUnGFxdgt/uaysKt+czEWjIkhDdTSEiHz/TBqyNdRJBARKjtURy/gAKmMt4nUvKlcG6
+         EFmDxm6mZKZF60PgNDRY196q13QCikSoGZtCGPAIrqouYayoKQM+JTGak88q46w+CQl+
+         oQHaCeh3AIw0C9iuL0yNk9+8Z4VwW7fNOFfSB0hU5bP2Y1JK52F/ts0tt3HpvgMlIO1r
+         eo7A==
+X-Gm-Message-State: AOAM532gSzxyG4ImdBrDUb9yNNLm48Hx/FqQE3JGGAFCPDgvZ6cP+nNb
+        fo+8YWHYViIC0es16wWIlAoZlLJJ6CLvf59p4FhDj29xn9l2
+X-Google-Smtp-Source: ABdhPJzQfc1w5CUXBr4Ohp9z3rjrpQ0KfJdv+hKTTA1bXg9+fvSQ7wpK8vMItpp1VmcPqVTiZfaZ+RgjnFO5MhhJPL6QDq/FZK73
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200622143035.25327-3-mario.limonciello@dell.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Received: by 2002:a02:93ea:: with SMTP id z97mr14919283jah.40.1592845031963;
+ Mon, 22 Jun 2020 09:57:11 -0700 (PDT)
+Date:   Mon, 22 Jun 2020 09:57:11 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005003fe05a8af2231@google.com>
+Subject: INFO: trying to register non-static key in skb_queue_tail
+From:   syzbot <syzbot+743547b2a7fd655ffb6d@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, ath9k-devel@qca.qualcomm.com,
+        davem@davemloft.net, kuba@kernel.org, kvalo@codeaurora.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 22, 2020 at 09:30:35AM -0500, Mario Limonciello wrote:
-> Some external devices can support completing thunderbolt authentication
-> when they are unplugged. For this to work though, the link controller must
-> remain operational.
-> 
-> The only device known to support this right now is the Dell WD19TB, so add
-> a quirk for this.
-> 
-> Signed-off-by: Mario Limonciello <mario.limonciello@dell.com>
-> ---
->  .../ABI/testing/sysfs-bus-thunderbolt         | 13 ++++++
->  drivers/thunderbolt/Makefile                  |  1 +
->  drivers/thunderbolt/eeprom.c                  |  2 +
->  drivers/thunderbolt/lc.c                      | 14 +++++++
->  drivers/thunderbolt/quirks.c                  | 38 +++++++++++++++++
->  drivers/thunderbolt/switch.c                  | 42 +++++++++++++++++--
->  drivers/thunderbolt/tb-quirks.h               | 16 +++++++
->  drivers/thunderbolt/tb.h                      |  3 ++
->  drivers/thunderbolt/tb_regs.h                 |  1 +
->  9 files changed, 126 insertions(+), 4 deletions(-)
->  create mode 100644 drivers/thunderbolt/quirks.c
->  create mode 100644 drivers/thunderbolt/tb-quirks.h
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-bus-thunderbolt b/Documentation/ABI/testing/sysfs-bus-thunderbolt
-> index 26b15cbc9881..30798f9a8f59 100644
-> --- a/Documentation/ABI/testing/sysfs-bus-thunderbolt
-> +++ b/Documentation/ABI/testing/sysfs-bus-thunderbolt
-> @@ -243,3 +243,16 @@ KernelVersion:	4.15
->  Contact:	thunderbolt-software@lists.01.org
->  Description:	This contains XDomain service specific settings as
->  		bitmask. Format: %x
-> +
-> +What:		/sys/bus/thunderbolt/devices/.../nvm_authenticate_on_disconnect
-> +Date:		August 2020
-> +KernelVersion:	5.9
-> +Contact:	thunderbolt-software@lists.01.org
+Hello,
 
-I think you can use your email address here instead.
+syzbot found the following crash on:
 
-> +Description:	For supported devices, automatically authenticate the new Thunderbolt
-> +		image when the device is disconnected from the host system.
-> +
-> +		This file will accept writing values "1" or "2"
-> +		- Writing "1" will flush the image to the storage
-> +		area and prepare the device for authentication on disconnect.
-> +		- Writing "2" will only flush the image to the storage
-> +		area.
+HEAD commit:    f8f02d5c USB: OTG: rename product list of devices
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=17205bae100000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f1981539b6376b73
+dashboard link: https://syzkaller.appspot.com/bug?extid=743547b2a7fd655ffb6d
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11eab949100000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10dc82ed100000
 
-Also here it does the basic image validation so probably good to
-mention.
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+743547b2a7fd655ffb6d@syzkaller.appspotmail.com
 
-> diff --git a/drivers/thunderbolt/Makefile b/drivers/thunderbolt/Makefile
-> index eae28dd45250..013c5564565a 100644
-> --- a/drivers/thunderbolt/Makefile
-> +++ b/drivers/thunderbolt/Makefile
-> @@ -2,3 +2,4 @@
->  obj-${CONFIG_USB4} := thunderbolt.o
->  thunderbolt-objs := nhi.o nhi_ops.o ctl.o tb.o switch.o cap.o path.o tunnel.o eeprom.o
->  thunderbolt-objs += domain.o dma_port.o icm.o property.o xdomain.o lc.o tmu.o usb4.o
-> +thunderbolt-objs += quirks.o
-> diff --git a/drivers/thunderbolt/eeprom.c b/drivers/thunderbolt/eeprom.c
-> index b451a5aa90b5..32838c016c4f 100644
-> --- a/drivers/thunderbolt/eeprom.c
-> +++ b/drivers/thunderbolt/eeprom.c
-> @@ -10,6 +10,7 @@
->  #include <linux/property.h>
->  #include <linux/slab.h>
->  #include "tb.h"
-> +#include "tb-quirks.h"
->  
->  /**
->   * tb_eeprom_ctl_write() - write control word
-> @@ -599,6 +600,7 @@ int tb_drom_read(struct tb_switch *sw)
->  		sw->uid = header->uid;
->  	sw->vendor = header->vendor_id;
->  	sw->device = header->model_id;
-> +	check_tbt_quirks(sw);
->  
->  	crc = tb_crc32(sw->drom + TB_DROM_DATA_START, header->data_len);
->  	if (crc != header->data_crc32) {
-> diff --git a/drivers/thunderbolt/lc.c b/drivers/thunderbolt/lc.c
-> index bd44d50246d2..45d2a1de2069 100644
-> --- a/drivers/thunderbolt/lc.c
-> +++ b/drivers/thunderbolt/lc.c
-> @@ -366,3 +366,17 @@ int tb_lc_dp_sink_dealloc(struct tb_switch *sw, struct tb_port *in)
->  	tb_port_dbg(in, "sink %d de-allocated\n", sink);
->  	return 0;
->  }
-> +
-> +/**
-> + * lc_force_power() - Force powers a ridge
+INFO: trying to register non-static key.
+the code is fine but needs lockdep annotation.
+turning off the locking correctness validator.
+CPU: 0 PID: 323 Comm: systemd-udevd Not tainted 5.8.0-rc1-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <IRQ>
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xf6/0x16e lib/dump_stack.c:118
+ assign_lock_key kernel/locking/lockdep.c:894 [inline]
+ register_lock_class+0x1228/0x16d0 kernel/locking/lockdep.c:1206
+ __lock_acquire+0x101/0x6270 kernel/locking/lockdep.c:4259
+ lock_acquire+0x18b/0x7c0 kernel/locking/lockdep.c:4959
+ __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+ _raw_spin_lock_irqsave+0x32/0x50 kernel/locking/spinlock.c:159
+ skb_queue_tail+0x27/0x180 net/core/skbuff.c:3143
+ ath9k_htc_txep+0x287/0x400 drivers/net/wireless/ath/ath9k/htc_drv_txrx.c:707
+ ath9k_htc_txcompletion_cb+0x1a1/0x2b0 drivers/net/wireless/ath/ath9k/htc_hst.c:346
+ hif_usb_regout_cb+0x115/0x1c0 drivers/net/wireless/ath/ath9k/hif_usb.c:90
+ __usb_hcd_giveback_urb+0x29a/0x550 drivers/usb/core/hcd.c:1650
+ usb_hcd_giveback_urb+0x368/0x420 drivers/usb/core/hcd.c:1716
+ dummy_timer+0x125e/0x32b4 drivers/usb/gadget/udc/dummy_hcd.c:1967
+ call_timer_fn+0x1ac/0x6e0 kernel/time/timer.c:1404
+ expire_timers kernel/time/timer.c:1449 [inline]
+ __run_timers kernel/time/timer.c:1773 [inline]
+ __run_timers kernel/time/timer.c:1740 [inline]
+ run_timer_softirq+0x5e5/0x14c0 kernel/time/timer.c:1786
+ __do_softirq+0x21e/0x996 kernel/softirq.c:292
+ asm_call_on_stack+0xf/0x20 arch/x86/entry/entry_64.S:711
+ </IRQ>
+ __run_on_irqstack arch/x86/include/asm/irq_stack.h:22 [inline]
+ run_on_irqstack_cond arch/x86/include/asm/irq_stack.h:48 [inline]
+ do_softirq_own_stack+0x109/0x140 arch/x86/kernel/irq_64.c:77
+ invoke_softirq kernel/softirq.c:387 [inline]
+ __irq_exit_rcu kernel/softirq.c:417 [inline]
+ irq_exit_rcu+0x16f/0x1a0 kernel/softirq.c:429
+ sysvec_apic_timer_interrupt+0xd3/0x1b0 arch/x86/kernel/apic/apic.c:1091
+ asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:596
+RIP: 0010:lock_release+0x3c9/0x710 kernel/locking/lockdep.c:4967
+Code: 0f b6 14 02 48 89 f8 83 e0 07 83 c0 03 38 d0 7c 08 84 d2 0f 85 bb 02 00 00 83 ad 84 08 00 00 01 0f 85 4a 01 00 00 ff 34 24 9d <48> b8 00 00 00 00 00 fc ff df 48 01 c3 48 c7 03 00 00 00 00 c7 43
+RSP: 0018:ffff8881cd71f8f0 EFLAGS: 00000246
+RAX: 0000000000000007 RBX: 1ffff11039ae3f21 RCX: 1ffff11039a85d8f
+RDX: 0000000000000000 RSI: 1ffff11039a85d96 RDI: ffff8881cd42ec84
+RBP: ffff8881cd42e400 R08: ffff8881cd42e400 R09: fffffbfff1014d0a
+R10: ffffffff880a684f R11: fffffbfff1014d09 R12: f002853324f3be8d
+R13: ffffffff816b05ef R14: ffff8881cd42ec80 R15: 0000000000000002
+ zap_pte_range mm/memory.c:1089 [inline]
+ zap_pmd_range mm/memory.c:1193 [inline]
+ zap_pud_range mm/memory.c:1222 [inline]
+ zap_p4d_range mm/memory.c:1243 [inline]
+ unmap_page_range+0xe2f/0x1fc0 mm/memory.c:1264
+ unmap_single_vma+0x196/0x300 mm/memory.c:1309
+ unmap_vmas+0x174/0x2f0 mm/memory.c:1341
+ exit_mmap+0x278/0x4d0 mm/mmap.c:3150
+ __mmput kernel/fork.c:1093 [inline]
+ mmput+0xce/0x3d0 kernel/fork.c:1114
+ exit_mm kernel/exit.c:482 [inline]
+ do_exit+0xaaf/0x2cb0 kernel/exit.c:792
+ do_group_exit+0x125/0x340 kernel/exit.c:903
+ __do_sys_exit_group kernel/exit.c:914 [inline]
+ __se_sys_exit_group kernel/exit.c:912 [inline]
+ __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:912
+ do_syscall_64+0x50/0x90 arch/x86/entry/common.c:359
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x7f7ad8c2a618
+Code: Bad RIP value.
+RSP: 002b:00007ffd37c486a8 EFLAGS: 00000206 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007ffd37c48770 RCX: 00007f7ad8c2a618
+RDX: 0000000000000000 RSI: 000000000000003c RDI: 0000000000000000
+RBP: 00007ffd37c48820 R08: 00000000000000e7 R09: fffffffffffffe50
+R10: 00000000ffffffff R11: 0000000000000206 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000000003 R15: 000000000000000e
+general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+CPU: 0 PID: 323 Comm: systemd-udevd Not tainted 5.8.0-rc1-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:__skb_insert include/linux/skbuff.h:1895 [inline]
+RIP: 0010:__skb_queue_before include/linux/skbuff.h:2001 [inline]
+RIP: 0010:__skb_queue_tail include/linux/skbuff.h:2034 [inline]
+RIP: 0010:skb_queue_tail+0xbb/0x180 net/core/skbuff.c:3144
+Code: 00 00 00 00 fc ff df 48 c1 ea 03 80 3c 02 00 0f 85 82 00 00 00 4c 89 e2 48 89 6b 08 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <80> 3c 02 00 75 55 48 8d 7b 10 49 89 2c 24 48 b8 00 00 00 00 00 fc
+RSP: 0018:ffff8881db2099f0 EFLAGS: 00010046
+RAX: dffffc0000000000 RBX: ffff8881cd7ab590 RCX: ffffffff81274370
+RDX: 0000000000000000 RSI: 0000000000000046 RDI: ffff8881cfdc1148
+RBP: ffff8881cfdc1140 R08: 0000000000000004 R09: ffffed103b64132d
+R10: 0000000000000003 R11: ffffed103b64132c R12: 0000000000000000
+R13: ffff8881cd7ab598 R14: ffff8881cd7ab5a8 R15: ffffffff82dcf820
+FS:  00007f7ad9dda8c0(0000) GS:ffff8881db200000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000559104643e60 CR3: 00000001ce0ed000 CR4: 00000000001406f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <IRQ>
+ ath9k_htc_txep+0x287/0x400 drivers/net/wireless/ath/ath9k/htc_drv_txrx.c:707
+ ath9k_htc_txcompletion_cb+0x1a1/0x2b0 drivers/net/wireless/ath/ath9k/htc_hst.c:346
+ hif_usb_regout_cb+0x115/0x1c0 drivers/net/wireless/ath/ath9k/hif_usb.c:90
+ __usb_hcd_giveback_urb+0x29a/0x550 drivers/usb/core/hcd.c:1650
+ usb_hcd_giveback_urb+0x368/0x420 drivers/usb/core/hcd.c:1716
+ dummy_timer+0x125e/0x32b4 drivers/usb/gadget/udc/dummy_hcd.c:1967
+ call_timer_fn+0x1ac/0x6e0 kernel/time/timer.c:1404
+ expire_timers kernel/time/timer.c:1449 [inline]
+ __run_timers kernel/time/timer.c:1773 [inline]
+ __run_timers kernel/time/timer.c:1740 [inline]
+ run_timer_softirq+0x5e5/0x14c0 kernel/time/timer.c:1786
+ __do_softirq+0x21e/0x996 kernel/softirq.c:292
+ asm_call_on_stack+0xf/0x20 arch/x86/entry/entry_64.S:711
+ </IRQ>
+ __run_on_irqstack arch/x86/include/asm/irq_stack.h:22 [inline]
+ run_on_irqstack_cond arch/x86/include/asm/irq_stack.h:48 [inline]
+ do_softirq_own_stack+0x109/0x140 arch/x86/kernel/irq_64.c:77
+ invoke_softirq kernel/softirq.c:387 [inline]
+ __irq_exit_rcu kernel/softirq.c:417 [inline]
+ irq_exit_rcu+0x16f/0x1a0 kernel/softirq.c:429
+ sysvec_apic_timer_interrupt+0xd3/0x1b0 arch/x86/kernel/apic/apic.c:1091
+ asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:596
+RIP: 0010:lock_release+0x3c9/0x710 kernel/locking/lockdep.c:4967
+Code: 0f b6 14 02 48 89 f8 83 e0 07 83 c0 03 38 d0 7c 08 84 d2 0f 85 bb 02 00 00 83 ad 84 08 00 00 01 0f 85 4a 01 00 00 ff 34 24 9d <48> b8 00 00 00 00 00 fc ff df 48 01 c3 48 c7 03 00 00 00 00 c7 43
+RSP: 0018:ffff8881cd71f8f0 EFLAGS: 00000246
+RAX: 0000000000000007 RBX: 1ffff11039ae3f21 RCX: 1ffff11039a85d8f
+RDX: 0000000000000000 RSI: 1ffff11039a85d96 RDI: ffff8881cd42ec84
+RBP: ffff8881cd42e400 R08: ffff8881cd42e400 R09: fffffbfff1014d0a
+R10: ffffffff880a684f R11: fffffbfff1014d09 R12: f002853324f3be8d
+R13: ffffffff816b05ef R14: ffff8881cd42ec80 R15: 0000000000000002
+ zap_pte_range mm/memory.c:1089 [inline]
+ zap_pmd_range mm/memory.c:1193 [inline]
+ zap_pud_range mm/memory.c:1222 [inline]
+ zap_p4d_range mm/memory.c:1243 [inline]
+ unmap_page_range+0xe2f/0x1fc0 mm/memory.c:1264
+ unmap_single_vma+0x196/0x300 mm/memory.c:1309
+ unmap_vmas+0x174/0x2f0 mm/memory.c:1341
+ exit_mmap+0x278/0x4d0 mm/mmap.c:3150
+ __mmput kernel/fork.c:1093 [inline]
+ mmput+0xce/0x3d0 kernel/fork.c:1114
+ exit_mm kernel/exit.c:482 [inline]
+ do_exit+0xaaf/0x2cb0 kernel/exit.c:792
+ do_group_exit+0x125/0x340 kernel/exit.c:903
+ __do_sys_exit_group kernel/exit.c:914 [inline]
+ __se_sys_exit_group kernel/exit.c:912 [inline]
+ __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:912
+ do_syscall_64+0x50/0x90 arch/x86/entry/common.c:359
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x7f7ad8c2a618
+Code: Bad RIP value.
+RSP: 002b:00007ffd37c486a8 EFLAGS: 00000206 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007ffd37c48770 RCX: 00007f7ad8c2a618
+RDX: 0000000000000000 RSI: 000000000000003c RDI: 0000000000000000
+RBP: 00007ffd37c48820 R08: 00000000000000e7 R09: fffffffffffffe50
+R10: 00000000ffffffff R11: 0000000000000206 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000000003 R15: 000000000000000e
+Modules linked in:
+---[ end trace 53afd8f120df8e51 ]---
+RIP: 0010:__skb_insert include/linux/skbuff.h:1895 [inline]
+RIP: 0010:__skb_queue_before include/linux/skbuff.h:2001 [inline]
+RIP: 0010:__skb_queue_tail include/linux/skbuff.h:2034 [inline]
+RIP: 0010:skb_queue_tail+0xbb/0x180 net/core/skbuff.c:3144
+Code: 00 00 00 00 fc ff df 48 c1 ea 03 80 3c 02 00 0f 85 82 00 00 00 4c 89 e2 48 89 6b 08 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <80> 3c 02 00 75 55 48 8d 7b 10 49 89 2c 24 48 b8 00 00 00 00 00 fc
+RSP: 0018:ffff8881db2099f0 EFLAGS: 00010046
+RAX: dffffc0000000000 RBX: ffff8881cd7ab590 RCX: ffffffff81274370
+RDX: 0000000000000000 RSI: 0000000000000046 RDI: ffff8881cfdc1148
+RBP: ffff8881cfdc1140 R08: 0000000000000004 R09: ffffed103b64132d
+R10: 0000000000000003 R11: ffffed103b64132c R12: 0000000000000000
+R13: ffff8881cd7ab598 R14: ffff8881cd7ab5a8 R15: ffffffff82dcf820
+FS:  00007f7ad9dda8c0(0000) GS:ffff8881db200000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000559104643e60 CR3: 00000001ce0ed000 CR4: 00000000001406f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
-Maybe "Forces LC to be powered on" or similar?
 
-> + * @sw: thunderbolt switch
-> + *
-> + * This is useful to let authentication cycle pass even without
-> + * a Thunderbolt link present
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Add "." at the end of the sentence.
-
-> + */
-> +int lc_force_power(struct tb_switch *sw)
-
-Also tb_lc_force_power() or so to follow the conventions used in the
-driver.
-
-> +{
-> +	u32 in = 0xFFFF;
-
-I prefer 0xffff instead.
-
-> +
-> +	return tb_sw_write(sw, &in, TB_CFG_SWITCH, TB_LC_POWER, 1);
-> +}
-> diff --git a/drivers/thunderbolt/quirks.c b/drivers/thunderbolt/quirks.c
-> new file mode 100644
-> index 000000000000..b9c5cfb97645
-> --- /dev/null
-> +++ b/drivers/thunderbolt/quirks.c
-> @@ -0,0 +1,38 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Thunderbolt driver - quirks
-> + *
-> + * Copyright (c) 2020 Mario Limonciello <mario.limonciello@dell.com>
-> + */
-> +
-> +#include "tb.h"
-> +#include "tb-quirks.h"
-> +
-> +static void quirk_force_power_link(struct tb_switch *sw)
-> +{
-> +	sw->quirks |= QUIRK_FORCE_POWER_LINK_CONTROLLER;
-> +}
-> +
-> +struct tbt_quirk {
-
-tb_quirk please.
-
-> +	u16 vendor;
-> +	u16 device;
-> +	void (*hook)(struct tb_switch *sw);
-> +};
-> +
-> +static struct tbt_quirk tbt_quirks[] = {
-
-const?
-
-> +	/* Dell WD19TB supports self-authentication on unplug */
-> +	{ 0x00d4, 0xb070, quirk_force_power_link },
-> +};
-> +
-> +void check_tbt_quirks(struct tb_switch *sw)
-
-Let's call it
-
-tb_check_quirks() or tb_detect_quirks() following USB.
-
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(tbt_quirks); i++) {
-> +		struct tbt_quirk *q = &tbt_quirks[i];
-> +
-> +		if (sw->device == q->device &&
-> +		    sw->vendor == q->vendor)
-
-I think you can write it like this:
-
-		if (sw->device == q->device && sw->vendor == q->vendor)
-
-> +			q->hook(sw);
-> +	}
-> +}
-> diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-> index 4c476a58db38..0576fe7c0054 100644
-> --- a/drivers/thunderbolt/switch.c
-> +++ b/drivers/thunderbolt/switch.c
-> @@ -16,6 +16,7 @@
->  #include <linux/vmalloc.h>
->  
->  #include "tb.h"
-> +#include "tb-quirks.h"
->  
->  /* Switch NVM support */
->  
-> @@ -1542,8 +1543,8 @@ static ssize_t nvm_authenticate_show(struct device *dev,
->  	return sprintf(buf, "%#x\n", status);
->  }
->  
-> -static ssize_t nvm_authenticate_store(struct device *dev,
-> -	struct device_attribute *attr, const char *buf, size_t count)
-> +static ssize_t nvm_authenticate_sysfs(struct device *dev, const char *buf,
-> +				      bool disconnect)
->  {
->  	struct tb_switch *sw = tb_to_switch(dev);
->  	int val;
-> @@ -1581,8 +1582,12 @@ static ssize_t nvm_authenticate_store(struct device *dev,
->  				goto exit_unlock;
->  		}
->  		if (val == WRITE_AND_AUTHENTICATE) {
-> -			sw->nvm->authenticating = true;
-> -			ret = nvm_authenticate(sw);
-> +			if (disconnect) {
-> +				ret = lc_force_power(sw);
-> +			} else {
-> +				sw->nvm->authenticating = true;
-> +				ret = nvm_authenticate(sw);
-> +			}
->  		}
->  	}
->  
-> @@ -1592,12 +1597,36 @@ static ssize_t nvm_authenticate_store(struct device *dev,
->  	pm_runtime_mark_last_busy(&sw->dev);
->  	pm_runtime_put_autosuspend(&sw->dev);
->  
-> +	return ret;
-> +}
-> +
-> +static ssize_t nvm_authenticate_store(struct device *dev,
-> +	struct device_attribute *attr, const char *buf, size_t count)
-> +{
-> +	int ret = nvm_authenticate_sysfs(dev, buf, false);
->  	if (ret)
->  		return ret;
->  	return count;
->  }
->  static DEVICE_ATTR_RW(nvm_authenticate);
->  
-> +static ssize_t nvm_authenticate_on_disconnect_show(struct device *dev,
-> +	struct device_attribute *attr, char *buf)
-> +{
-> +	return nvm_authenticate_show(dev, attr, buf);
-> +}
-> +
-> +static ssize_t nvm_authenticate_on_disconnect_store(struct device *dev,
-> +	struct device_attribute *attr, const char *buf, size_t count)
-> +{
-> +	int ret = nvm_authenticate_sysfs(dev, buf, true);
-> +
-> +	if (ret)
-> +		return ret;
-> +	return count;
-
-Hmm,
-
-perhaps like this:
-
-	int ret;
-
-	ret = nvm_authenticate_sysfs(dev, buf, true);
-	return ret ? ret : count;
-
-> +}
-> +static DEVICE_ATTR_RW(nvm_authenticate_on_disconnect);
-> +
->  static ssize_t nvm_version_show(struct device *dev,
->  				struct device_attribute *attr, char *buf)
->  {
-> @@ -1655,6 +1684,7 @@ static struct attribute *switch_attrs[] = {
->  	&dev_attr_generation.attr,
->  	&dev_attr_key.attr,
->  	&dev_attr_nvm_authenticate.attr,
-> +	&dev_attr_nvm_authenticate_on_disconnect.attr,
->  	&dev_attr_nvm_version.attr,
->  	&dev_attr_rx_speed.attr,
->  	&dev_attr_rx_lanes.attr,
-> @@ -1709,6 +1739,10 @@ static umode_t switch_attr_is_visible(struct kobject *kobj,
->  		if (tb_route(sw))
->  			return attr->mode;
->  		return 0;
-> +	} else if (attr == &dev_attr_nvm_authenticate_on_disconnect.attr) {
-> +		if (sw->quirks & QUIRK_FORCE_POWER_LINK_CONTROLLER)
-> +			return attr->mode;
-> +		return 0;
->  	}
->  
->  	return sw->safe_mode ? 0 : attr->mode;
-> diff --git a/drivers/thunderbolt/tb-quirks.h b/drivers/thunderbolt/tb-quirks.h
-> new file mode 100644
-> index 000000000000..6b644eaaac40
-> --- /dev/null
-> +++ b/drivers/thunderbolt/tb-quirks.h
-> @@ -0,0 +1,16 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Thunderbolt driver - quirks
-> + *
-> + * Copyright (c) 2020 Mario Limonciello <mario.limonciello@dell.com>
-> + */
-> +
-> +
-> +#ifndef _TB_QUIRKS
-> +#define _TB_QUIRKS
-> +
-> +#define QUIRK_FORCE_POWER_LINK_CONTROLLER       (1<<1)
-> +
-> +void check_tbt_quirks(struct tb_switch *sw);
-
-I think we can put these two lines into tb.h for now.
-
-> +
-> +#endif
-> diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-> index 222ec19737fa..22937be69a1f 100644
-> --- a/drivers/thunderbolt/tb.h
-> +++ b/drivers/thunderbolt/tb.h
-> @@ -118,6 +118,7 @@ struct tb_switch_tmu {
->   * @depth: Depth in the chain this switch is connected (ICM only)
->   * @rpm_complete: Completion used to wait for runtime resume to
->   *		  complete (ICM only)
-> + * @quirks: Quirks used for this Thunderbolt switch
->   *
->   * When the switch is being added or removed to the domain (other
->   * switches) you need to have domain lock held.
-> @@ -155,6 +156,7 @@ struct tb_switch {
->  	u8 link;
->  	u8 depth;
->  	struct completion rpm_complete;
-> +	unsigned long quirks;
->  };
->  
->  /**
-> @@ -784,6 +786,7 @@ bool tb_lc_lane_bonding_possible(struct tb_switch *sw);
->  bool tb_lc_dp_sink_query(struct tb_switch *sw, struct tb_port *in);
->  int tb_lc_dp_sink_alloc(struct tb_switch *sw, struct tb_port *in);
->  int tb_lc_dp_sink_dealloc(struct tb_switch *sw, struct tb_port *in);
-> +int lc_force_power(struct tb_switch *sw);
->  
->  static inline int tb_route_length(u64 route)
->  {
-> diff --git a/drivers/thunderbolt/tb_regs.h b/drivers/thunderbolt/tb_regs.h
-> index c29c5075525a..9a2fab9c5346 100644
-> --- a/drivers/thunderbolt/tb_regs.h
-> +++ b/drivers/thunderbolt/tb_regs.h
-> @@ -379,6 +379,7 @@ struct tb_regs_hop {
->  #define TB_LC_SNK_ALLOCATION_SNK1_SHIFT	4
->  #define TB_LC_SNK_ALLOCATION_SNK1_MASK	GENMASK(7, 4)
->  #define TB_LC_SNK_ALLOCATION_SNK1_CM	0x1
-> +#define TB_LC_POWER			0x740
->  
->  /* Link controller registers */
->  #define TB_LC_PORT_ATTR			0x8d
-> -- 
-> 2.25.1
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
