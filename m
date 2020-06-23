@@ -2,27 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2172D2065BA
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jun 2020 23:51:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A19EC206424
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jun 2020 23:30:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388800AbgFWUK2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Jun 2020 16:10:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51472 "EHLO mail.kernel.org"
+        id S2390904AbgFWVQj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Jun 2020 17:16:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47060 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388213AbgFWUKR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 23 Jun 2020 16:10:17 -0400
+        id S2390398AbgFWU1b (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 23 Jun 2020 16:27:31 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0B09220707;
-        Tue, 23 Jun 2020 20:10:16 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 99F642064B;
+        Tue, 23 Jun 2020 20:27:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592943016;
+        s=default; t=1592944051;
         bh=X1zmRIQzunuZkpm02VUcFkM7W8vrlvLe2V2q5DL0U5I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2OUHun87ky22n4XIye1qlDwcxf35i10X1+CUSW/i7364BcW0OoTb3RzA7CgCXn4ch
-         KC2FlRgNkUes09YJc3FQnataX4zld5i2jRdmkAonJSyKIQtgESxWL8HObxVT0W7lJD
-         w66lFFfGITPqMQRpjBbvDOkDGXphLNuP2XDfDUEk=
+        b=lxH+a7W4KgUkXyNugoemgub6qCiXEhe79X4+J4cyj4SKDCLpjQt8Q+zU2Zlvj10q4
+         tKO56c8xbBPmpYN4/vCGizoEp112W/PPg1ITHNIP/hEWKNH6CVBr5h5Jd5iwuqIce3
+         nbwa5YqP88YJtwDB+XtYU9Llb+bvNArKPcCpechc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -33,12 +33,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Oliver Neukum <oneukum@suse.de>,
         linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.7 226/477] usb/ohci-platform: Fix a warning when hibernating
-Date:   Tue, 23 Jun 2020 21:53:43 +0200
-Message-Id: <20200623195418.263092617@linuxfoundation.org>
+Subject: [PATCH 5.4 153/314] usb/ohci-platform: Fix a warning when hibernating
+Date:   Tue, 23 Jun 2020 21:55:48 +0200
+Message-Id: <20200623195346.154374802@linuxfoundation.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200623195407.572062007@linuxfoundation.org>
-References: <20200623195407.572062007@linuxfoundation.org>
+In-Reply-To: <20200623195338.770401005@linuxfoundation.org>
+References: <20200623195338.770401005@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
