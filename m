@@ -2,63 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42467205532
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jun 2020 16:54:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F0502056E0
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jun 2020 18:15:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732925AbgFWOyz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Jun 2020 10:54:55 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:57017 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1732821AbgFWOyy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Jun 2020 10:54:54 -0400
-Received: (qmail 179264 invoked by uid 1000); 23 Jun 2020 10:54:53 -0400
-Date:   Tue, 23 Jun 2020 10:54:53 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        nicolas.ferre@microchip.com, ludovic.desroches@microchip.com,
-        cristian.birsan@microchip.com, iain.galloway@nxp.com,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "kernel@puri.sm" <kernel@puri.sm>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: Microchip USB2642 Hub not resuming from USB autosuspend
-Message-ID: <20200623145453.GA178927@rowland.harvard.edu>
-References: <8738e4d3-62b1-0144-107d-ff42000ed6c6@puri.sm>
- <021b18e4-343d-76d2-5d35-817d576f503e@puri.sm>
+        id S1732312AbgFWQOx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Jun 2020 12:14:53 -0400
+Received: from mx0b-00154904.pphosted.com ([148.163.137.20]:21754 "EHLO
+        mx0b-00154904.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1732182AbgFWQOx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Jun 2020 12:14:53 -0400
+Received: from pps.filterd (m0170395.ppops.net [127.0.0.1])
+        by mx0b-00154904.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05NGBaXO013073;
+        Tue, 23 Jun 2020 12:14:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=smtpout1; bh=Fv+Pog/9CSf2u7nGXJo8lLetagBewZlyF3mcN1ukZUM=;
+ b=XRbcY4GhzLJkW60C70tG3twDoMURNQumuLiYpXaBWVA8IWcgIax/QmFe9dPueS5n/Olj
+ VYjqsQjoYly7SVp8uSrSc6me6HzR/yd9jrgxfLh7ALZSRhSl4O4FVdldVcXLM0qqFCDO
+ uhMfOi9Sn20vSbjr2ri+lAQSgyDn7Z/NhsiDEbbC3XqfAGv0HwbXQZOG26IYIH30UbQL
+ 1rVZGMartGKSaXlBiuxPU7LJXkIQLOjUemQe/4Z46cuxajZ3weXiFyAiixnE30QgO9fX
+ CBzXAei0mL2BE05bvPdV7WBcBaO9YspY+xXwKxLn1JXvkQFte49IvWzrCHphr+MUpYWc WQ== 
+Received: from mx0a-00154901.pphosted.com (mx0a-00154901.pphosted.com [67.231.149.39])
+        by mx0b-00154904.pphosted.com with ESMTP id 31uk5dgjkc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 23 Jun 2020 12:14:51 -0400
+Received: from pps.filterd (m0142693.ppops.net [127.0.0.1])
+        by mx0a-00154901.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05NG5V5D109532;
+        Tue, 23 Jun 2020 12:14:51 -0400
+Received: from ausc60pc101.us.dell.com (ausc60pc101.us.dell.com [143.166.85.206])
+        by mx0a-00154901.pphosted.com with ESMTP id 31uk2ejqd2-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 23 Jun 2020 12:14:50 -0400
+X-LoopCount0: from 10.173.37.130
+X-PREM-Routing: D-Outbound
+X-IronPort-AV: E=Sophos;i="5.60,349,1549951200"; 
+   d="scan'208";a="1568825312"
+From:   Mario Limonciello <mario.limonciello@dell.com>
+To:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        perry.yuan@dell.com, Mario Limonciello <mario.limonciello@dell.com>
+Subject: [PATCH v3 0/2] Allow breaking up Thunderbolt/USB4 updates
+Date:   Tue, 23 Jun 2020 11:14:27 -0500
+Message-Id: <20200623161429.24214-1-mario.limonciello@dell.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <021b18e4-343d-76d2-5d35-817d576f503e@puri.sm>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-23_10:2020-06-23,2020-06-23 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 clxscore=1015 mlxscore=0 bulkscore=0 phishscore=0
+ mlxlogscore=725 lowpriorityscore=0 adultscore=0 priorityscore=1501
+ spamscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006120000 definitions=main-2006230120
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 phishscore=0 spamscore=0
+ bulkscore=0 mlxlogscore=778 adultscore=0 malwarescore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006120000
+ definitions=main-2006230120
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 23, 2020 at 03:48:01PM +0200, Martin Kepplinger wrote:
+Currently updates to Thunderbolt and USB4 controllers are fully atomic
+actions. When writing into the non-active NVM nothing gets flushed to
+the hardware until authenticate is sent.
 
-> We've resolved this issue too. When scsi (sd) runtime pm is not enabled
-> by default, it needs to be enabled of course and events_dfl_poll_msecs
-> for the block layer set to 0.
+There has been some desire to improve the perceived performance of these
+updates, particularly for userland that may perform the update upon
+a performance sensitive time like logging out.
 
-Actually that last step isn't needed.  But if you don't do it, the device 
-will wake up from runtime suspend every time the block layer polls it.  So 
-you probably do want to either turn off polling or increase the polling 
-interval significantly.
+So allow userland to flush the image to hardware at runtime, and then
+allow authenticating the image at another time.
 
-> scsi sd has until now incomplete support for runtime pm and this
-> addition makes it work, i.e. suspend when not mounted:
-> https://lore.kernel.org/linux-scsi/20200623111018.31954-1-martin.kepplinger@puri.sm/T/
-> the whole USB path is suspended as a consequence - and woken up if opened.
+For the Dell WD19TB some specific hardware capability exists that allows
+extending this to automatically complete the update when unplugged.
+Export that functionality to userspace as well.
 
-I don't understand this.  As far as I know, runtime-PM support in the SCSI 
-and block layers has been complete for many years.  If you have to do 
-anything extra (like applying the patch in the email you mentioned) then 
-something is broken.  The device should be able to go into runtime suspend 
-just fine with the current code -- even when a file system is mounted.
+Changes from v2 to v3:
+ - Correct some whitespace and kernel-doc comments
+ - Add another missing 'const'
+ - For a quirk: (1<<1) -> BIT(0) 
 
-Alan Stern
+Changes from v1 to v2:
+ - Improve documentation
+ - Drop tb-quirks.h
+ - Adjust function and parameter names to Mika's preferences
+ - Rebase onto thunderbolt.git/bleeding-edge to move on top of retimer work
+
+Mario Limonciello (2):
+  thunderbolt: Add support for separating the flush to SPI and
+    authenticate
+  thunderbolt: Add support for authenticate on disconnect
+
+ .../ABI/testing/sysfs-bus-thunderbolt         | 24 +++++-
+ drivers/thunderbolt/Makefile                  |  1 +
+ drivers/thunderbolt/eeprom.c                  |  2 +
+ drivers/thunderbolt/lc.c                      | 14 ++++
+ drivers/thunderbolt/quirks.c                  | 38 +++++++++
+ drivers/thunderbolt/switch.c                  | 81 +++++++++++++++----
+ drivers/thunderbolt/tb-quirks.h               | 16 ++++
+ drivers/thunderbolt/tb.h                      |  4 +
+ drivers/thunderbolt/tb_regs.h                 |  1 +
+ 9 files changed, 162 insertions(+), 19 deletions(-)
+ create mode 100644 drivers/thunderbolt/quirks.c
+ create mode 100644 drivers/thunderbolt/tb-quirks.h
+
+--
+2.25.1
+
