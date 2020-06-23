@@ -2,43 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD718206148
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jun 2020 23:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A7162063D4
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jun 2020 23:30:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390359AbgFWUi1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Jun 2020 16:38:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33890 "EHLO mail.kernel.org"
+        id S2403849AbgFWVLw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Jun 2020 17:11:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52934 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391644AbgFWUiY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 23 Jun 2020 16:38:24 -0400
+        id S2391012AbgFWUcH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 23 Jun 2020 16:32:07 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B31E621556;
-        Tue, 23 Jun 2020 20:38:23 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5681B20723;
+        Tue, 23 Jun 2020 20:32:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592944704;
-        bh=COwQQIq2BSo+YT3BW9YLmQpGpJRw2ZT/EEfScMxkGMc=;
+        s=default; t=1592944327;
+        bh=76AYprGS4xOcYibcpWPdXZ7BtMA5jqXnRLPjojXgwGA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mPxoDc1PvovmBDwMwiHcnqTLBvpbo65zo6tIgAAvy8H86PkBoZwv6TervAZLDVWO+
-         rRb10rf17yTsKTl8K2w+GlRh4wLsgICiRIUYzkcywj2GeDwsecvgNMjSuPx0R8OBbv
-         mNUKU5LKcK/gjhVsol+sQxcMjuik+Mnv8E31B/Q0=
+        b=tz0Nj0QfZmLkq+imlnwDTN83wXq8cjhgmLbZfspgdzR5cemAEpzKrhImrUn1XkIKv
+         eSzexjja14uuQEgsqaRg3W61yTLKb9ORkfMnb1QW80P75/Mzu2FODAmfjA9nTG0iGR
+         EfUh6dY1g3gNDyaAeMX138j7pAgWYzvK9ePLFLh0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Qais Yousef <qais.yousef@arm.com>,
+        stable@vger.kernel.org, Qais Yousef <qais.yousef@arm.com>,
         Tony Prisk <linux@prisktech.co.nz>,
         Mathias Nyman <mathias.nyman@intel.com>,
         Oliver Neukum <oneukum@suse.de>,
         linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 091/206] usb/ohci-platform: Fix a warning when hibernating
-Date:   Tue, 23 Jun 2020 21:56:59 +0200
-Message-Id: <20200623195321.425222013@linuxfoundation.org>
+Subject: [PATCH 5.4 260/314] usb/xhci-plat: Set PM runtime as active on resume
+Date:   Tue, 23 Jun 2020 21:57:35 +0200
+Message-Id: <20200623195351.375876600@linuxfoundation.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200623195316.864547658@linuxfoundation.org>
-References: <20200623195316.864547658@linuxfoundation.org>
+In-Reply-To: <20200623195338.770401005@linuxfoundation.org>
+References: <20200623195338.770401005@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,67 +49,16 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: Qais Yousef <qais.yousef@arm.com>
 
-[ Upstream commit 1cb3b0095c3d0bb96912bfbbce4fc006d41f367c ]
+[ Upstream commit 79112cc3c29f4a8c73a21428fbcbcb0afb005e3e ]
 
-The following warning was observed when attempting to suspend to disk
-using a USB flash as a swap device.
+Follow suit of ohci-platform.c and perform pm_runtime_set_active() on
+resume.
 
-[  111.779649] ------------[ cut here ]------------
-[  111.788382] URB (____ptrval____) submitted while active
-[  111.796646] WARNING: CPU: 3 PID: 365 at drivers/usb/core/urb.c:363 usb_submit_urb+0x3d8/0x590
-[  111.805417] Modules linked in:
-[  111.808584] CPU: 3 PID: 365 Comm: kworker/3:2 Not tainted 5.6.0-rc6-00002-gdfd1731f9a3e-dirty #545
-[  111.817796] Hardware name: ARM Juno development board (r2) (DT)
-[  111.823896] Workqueue: usb_hub_wq hub_event
-[  111.828217] pstate: 60000005 (nZCv daif -PAN -UAO)
-[  111.833156] pc : usb_submit_urb+0x3d8/0x590
-[  111.837471] lr : usb_submit_urb+0x3d8/0x590
-[  111.841783] sp : ffff800018de38b0
-[  111.845205] x29: ffff800018de38b0 x28: 0000000000000003
-[  111.850682] x27: ffff000970530b20 x26: ffff8000133fd000
-[  111.856159] x25: ffff8000133fd000 x24: ffff800018de3b38
-[  111.861635] x23: 0000000000000004 x22: 0000000000000c00
-[  111.867112] x21: 0000000000000000 x20: 00000000fffffff0
-[  111.872589] x19: ffff0009704e7a00 x18: ffffffffffffffff
-[  111.878065] x17: 00000000a7c8f4bc x16: 000000002af33de8
-[  111.883542] x15: ffff8000133fda88 x14: 0720072007200720
-[  111.889019] x13: 0720072007200720 x12: 0720072007200720
-[  111.894496] x11: 0000000000000000 x10: 00000000a5286134
-[  111.899973] x9 : 0000000000000002 x8 : ffff000970c837a0
-[  111.905449] x7 : 0000000000000000 x6 : ffff800018de3570
-[  111.910926] x5 : 0000000000000001 x4 : 0000000000000003
-[  111.916401] x3 : 0000000000000000 x2 : ffff800013427118
-[  111.921879] x1 : 9d4e965b4b7d7c00 x0 : 0000000000000000
-[  111.927356] Call trace:
-[  111.929892]  usb_submit_urb+0x3d8/0x590
-[  111.933852]  hub_activate+0x108/0x7f0
-[  111.937633]  hub_resume+0xac/0x148
-[  111.941149]  usb_resume_interface.isra.10+0x60/0x138
-[  111.946265]  usb_resume_both+0xe4/0x140
-[  111.950225]  usb_runtime_resume+0x24/0x30
-[  111.954365]  __rpm_callback+0xdc/0x138
-[  111.958236]  rpm_callback+0x34/0x98
-[  111.961841]  rpm_resume+0x4a8/0x720
-[  111.965445]  rpm_resume+0x50c/0x720
-[  111.969049]  __pm_runtime_resume+0x4c/0xb8
-[  111.973276]  usb_autopm_get_interface+0x28/0x60
-[  111.977948]  hub_event+0x80/0x16d8
-[  111.981466]  process_one_work+0x2a4/0x748
-[  111.985604]  worker_thread+0x48/0x498
-[  111.989387]  kthread+0x13c/0x140
-[  111.992725]  ret_from_fork+0x10/0x18
-[  111.996415] irq event stamp: 354
-[  111.999756] hardirqs last  enabled at (353): [<ffff80001019ea1c>] console_unlock+0x504/0x5b8
-[  112.008441] hardirqs last disabled at (354): [<ffff8000100a95d0>] do_debug_exception+0x1a8/0x258
-[  112.017479] softirqs last  enabled at (350): [<ffff8000100818a4>] __do_softirq+0x4bc/0x568
-[  112.025984] softirqs last disabled at (343): [<ffff8000101145a4>] irq_exit+0x144/0x150
-[  112.034129] ---[ end trace dc96030b9cf6c8a3 ]---
+ohci-platform.c had a warning reported due to the missing
+pm_runtime_set_active() [1].
 
-The problem was tracked down to a missing call to
-pm_runtime_set_active() on resume in ohci-platform.
+[1] https://lore.kernel.org/lkml/20200323143857.db5zphxhq4hz3hmd@e107158-lin.cambridge.arm.com/
 
-Link: https://lore.kernel.org/lkml/20200323143857.db5zphxhq4hz3hmd@e107158-lin.cambridge.arm.com/
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
 Signed-off-by: Qais Yousef <qais.yousef@arm.com>
 CC: Tony Prisk <linux@prisktech.co.nz>
 CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -119,29 +67,34 @@ CC: Oliver Neukum <oneukum@suse.de>
 CC: linux-arm-kernel@lists.infradead.org
 CC: linux-usb@vger.kernel.org
 CC: linux-kernel@vger.kernel.org
-Link: https://lore.kernel.org/r/20200518154931.6144-1-qais.yousef@arm.com
+Link: https://lore.kernel.org/r/20200518154931.6144-2-qais.yousef@arm.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/ohci-platform.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/usb/host/xhci-plat.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/host/ohci-platform.c b/drivers/usb/host/ohci-platform.c
-index 65a1c3fdc88c6..f40112c5920d1 100644
---- a/drivers/usb/host/ohci-platform.c
-+++ b/drivers/usb/host/ohci-platform.c
-@@ -301,6 +301,11 @@ static int ohci_platform_resume(struct device *dev)
- 	}
+diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+index 52c625c023410..60d06e9b600f8 100644
+--- a/drivers/usb/host/xhci-plat.c
++++ b/drivers/usb/host/xhci-plat.c
+@@ -410,7 +410,15 @@ static int __maybe_unused xhci_plat_resume(struct device *dev)
+ 	if (ret)
+ 		return ret;
  
- 	ohci_resume(hcd, false);
+-	return xhci_resume(xhci, 0);
++	ret = xhci_resume(xhci, 0);
++	if (ret)
++		return ret;
 +
 +	pm_runtime_disable(dev);
 +	pm_runtime_set_active(dev);
 +	pm_runtime_enable(dev);
 +
- 	return 0;
++	return 0;
  }
- #endif /* CONFIG_PM_SLEEP */
+ 
+ static int __maybe_unused xhci_plat_runtime_suspend(struct device *dev)
 -- 
 2.25.1
 
