@@ -2,109 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA5A2204B7D
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jun 2020 09:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC17E204BBB
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jun 2020 09:54:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731346AbgFWHqr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Jun 2020 03:46:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48374 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731041AbgFWHqr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Jun 2020 03:46:47 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0928C061573;
-        Tue, 23 Jun 2020 00:46:46 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id i4so1190584pjd.0;
-        Tue, 23 Jun 2020 00:46:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=K7pLJ19JFWW+fjDOXAk3uKhCU5E/5p3QUJebzKwwRXw=;
-        b=UP8lLwyP9OMkz/XR2W62pC5h2fQzhmIQvvW8UAK2dFCacKya/qkNNT1A6KlVxaj+Dw
-         AU4Fjtc1SKhFsLz39puyCi0npCB9WsbEKYyZKSolVkSWqYdmxBi5lLd8C37rOG1eqA7j
-         AIKsWmqGu5ormxrTgRPkd72CUCVYdEajCeB80cDKieAxrOMRsmHUN6J4l3vBqaXZydUd
-         nuTtiGi4Sa3ikr8zFzrGsvQVbIRcqeoKJSsw/Ftu0s53ir/Uuc8BCOdH8/tyfYLlTpx5
-         toOEwEF23LAgTaWRoy0M3Qp8VHQaf1wriigmlVF27fk7EjFFVCOGdiWAw99lgqLDvIPq
-         udtA==
+        id S1731516AbgFWHxy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Jun 2020 03:53:54 -0400
+Received: from mail-lj1-f176.google.com ([209.85.208.176]:40604 "EHLO
+        mail-lj1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731158AbgFWHxx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Jun 2020 03:53:53 -0400
+Received: by mail-lj1-f176.google.com with SMTP id n23so22284766ljh.7;
+        Tue, 23 Jun 2020 00:53:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=K7pLJ19JFWW+fjDOXAk3uKhCU5E/5p3QUJebzKwwRXw=;
-        b=uNaNuzinCa5K/oHeuYkvAhnN9ckQLPdDjINJgpZEmKlpz0ivSUbjeQPfPZlM1UQCO5
-         2h+1zBPzvhkbk7Q5JZf692a8N85NlKNmopyGiYJGvWd7X1bqOWMzWdH4qTTr6kSs5qse
-         xEyIEGitIPEu3vqudFzpE0u3VjdM0QFFUTpUvJ0OlOqAyofpKprAbiJkWSrfWDwtNVoq
-         TVeo11BsR2lP9BiHXzB5cEAjZgOFv0P4M0/PlByJ+1v5m041yWAUbz13QBOZNgTz7i3n
-         EkJn12+EVOiEliwBbo1ad39jwyecVxafuVOmYnFmmEnjaSPZQmOERGXzednDFfGIwFHK
-         57bA==
-X-Gm-Message-State: AOAM530K9zUR+l1uG3BNjmU5qdZj6URStyM7yjHk737eAG55aL86+w53
-        6IqQf3K24JBfMRKWEMPEkO6Ob9xW
-X-Google-Smtp-Source: ABdhPJzqmg/USzmPszikwZIXmW+UZTIbGJSRpDpl9O5oDhBWqNjvORnAbzV9mh12ybPV0vEuUlMdvQ==
-X-Received: by 2002:a17:90a:d485:: with SMTP id s5mr20970108pju.61.1592898406106;
-        Tue, 23 Jun 2020 00:46:46 -0700 (PDT)
-Received: from localhost.localdomain ([103.51.74.220])
-        by smtp.gmail.com with ESMTPSA id i5sm15803522pfd.5.2020.06.23.00.46.43
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VH2f8geP5bsEeviiLJElCQbL4T/ZyD7yVRFLLYJHgAE=;
+        b=JwnrqjQNipKc8sxqbHzLIwHcvmjUMnWy+FOi9l0CrePM3BkLqVxgXOjCo+L+HGMQs9
+         1MIsr/zdG3pEXyntr3m4DTqj3A0CBQMMXsobb/2dkykUqZqvgJDHkigeKXx1+6WlIQrJ
+         Zz3BzLjHk2UjYRtP5u+YLBvP+DSbrW26fOfLa27z24mVrCDm07TPDy7meYcNb9YgB49z
+         nngYsy1+95vPW74l9qs+Jm0l8yYSi3miXy3utZC9fufFlA5MG4mvuylI4Xp5qllZuhwN
+         TKLgMNoojNpISjvzejSqnJslf7MB41AhIKrcyywvNMN+DOvOJ3IegvnK+e4mIRDHbsXH
+         o7aQ==
+X-Gm-Message-State: AOAM532zmfKMBl1ldHohO+ycVc9QMTHJ4JrzZ8FNhUx8ctoq1KaXEtsi
+        su9VhboXZdhFA4RfV+l/5fk=
+X-Google-Smtp-Source: ABdhPJy0uxWFjhCG4fPkYjOPRME5QUJ/s+7E9N0EkLfgzE3/FRTnH8tDUdNcwAfbB1pd9R0Gr+3rqg==
+X-Received: by 2002:a2e:b612:: with SMTP id r18mr9907331ljn.195.1592898830897;
+        Tue, 23 Jun 2020 00:53:50 -0700 (PDT)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id y188sm4661722lfc.36.2020.06.23.00.53.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jun 2020 00:46:45 -0700 (PDT)
-From:   Anand Moon <linux.amoon@gmail.com>
-To:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] Revert "usb: dwc3: exynos: Add support for Exynos5422 suspend clk"
-Date:   Tue, 23 Jun 2020 07:46:37 +0000
-Message-Id: <20200623074637.756-1-linux.amoon@gmail.com>
-X-Mailer: git-send-email 2.27.0
+        Tue, 23 Jun 2020 00:53:49 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1jndka-0000gZ-FF; Tue, 23 Jun 2020 09:53:49 +0200
+Date:   Tue, 23 Jun 2020 09:53:48 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     James Hilliard <james.hilliard1@gmail.com>
+Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v2] USB: Serial: cypress_M8: Enable Simply Automated UPB
+ PIM
+Message-ID: <20200623075348.GD3334@localhost>
+References: <20200616220403.1807003-1-james.hilliard1@gmail.com>
+ <20200622085321.GA3334@localhost>
+ <CADvTj4rOYs6F3J2A72GiWGbYW_Fu7VNCd0GpWaJ9it6tEt+4Hw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CADvTj4rOYs6F3J2A72GiWGbYW_Fu7VNCd0GpWaJ9it6tEt+4Hw@mail.gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This reverts commit 07f6842341abe978e6375078f84506ec3280ece5.
+On Mon, Jun 22, 2020 at 11:04:09AM -0600, James Hilliard wrote:
+> On Mon, Jun 22, 2020 at 2:53 AM Johan Hovold <johan@kernel.org> wrote:
+> >
+> > On Tue, Jun 16, 2020 at 04:04:03PM -0600, James Hilliard wrote:
+> > > This is a UPB(Universal Powerline Bus) PIM(Powerline Interface Module)
+> > > which allows for controlling multiple UPB compatible devices from
+> > > Linux using the standard serial interface.
+> > >
+> > > Based on vendor application source code there are two different models
+> > > of USB based PIM devices in addition to a number of RS232 based PIM's.
+> > >
+> > > The vendor UPB application source contains the following USB ID's:
+> > > #define USB_PCS_VENDOR_ID 0x04b4
+> > > #define USB_PCS_PIM_PRODUCT_ID 0x5500
+> > >
+> > > #define USB_SAI_VENDOR_ID 0x17dd
+> > > #define USB_SAI_PIM_PRODUCT_ID 0x5500
+> > >
+> > > The first set of ID's correspond to the PIM variant sold by Powerline
+> > > Control Systems while the second corresponds to the Simply Automated
+> > > Incorporated PIM. As the product ID for both of these match the default
+> > > cypress HID->COM RS232 product ID it assumed that they both use an
+> > > internal variant of this HID->COM RS232 converter hardware. However
+> > > as the vendor ID for the Simply Automated variant is different we need
+> > > to also add it to the cypress_M8 driver so that it is properly
+> > > detected.
+> > >
+> > > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > > ---
+> > > Changes v1 -> v2:
+> > >   - Add more detailed commit message.
+> >
+> > Now applied, thanks.
+> >
+> > Would you mind posting the output of "lsusb -v" for this device for
+> > completeness?
+> Bus 001 Device 004: ID 17dd:5500
+> Device Descriptor:
+>   bLength                18
+>   bDescriptorType         1
+>   bcdUSB               1.00
+>   bDeviceClass            0
+>   bDeviceSubClass         0
+>   bDeviceProtocol         0
+>   bMaxPacketSize0         8
+>   idVendor           0x17dd
+>   idProduct          0x5500
+>   bcdDevice            0.00
+>   iManufacturer           1 Simply Automated Inc.
+>   iProduct                2 USB to Serial
+>   iSerial                 0
+>   bNumConfigurations      1
+>   Configuration Descriptor:
+>     bLength                 9
+>     bDescriptorType         2
+>     wTotalLength       0x0029
+>     bNumInterfaces          1
+>     bConfigurationValue     1
+>     iConfiguration          4 Sample HID
+>     bmAttributes         0x80
+>       (Bus Powered)
+>     MaxPower              100mA
+>     Interface Descriptor:
+>       bLength                 9
+>       bDescriptorType         4
+>       bInterfaceNumber        0
+>       bAlternateSetting       0
+>       bNumEndpoints           2
+>       bInterfaceClass         3
+>       bInterfaceSubClass      0
+>       bInterfaceProtocol      0
+>       iInterface              0
+>         HID Device Descriptor:
+>           bLength                 9
+>           bDescriptorType        33
+>           bcdHID               1.00
+>           bCountryCode            0 Not supported
+>           bNumDescriptors         1
+>           bDescriptorType        34 Report
+>           wDescriptorLength      37
+>          Report Descriptors:
+>            ** UNAVAILABLE **
 
-Since SCLK_SCLK_USBD300 suspend clock need to be configured
-for phy module, I wrongly mapped this clock to DWC3 code.
+Thanks for posting this.
 
-Cc: Felipe Balbi <balbi@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Anand Moon <linux.amoon@gmail.com>
----
- drivers/usb/dwc3/dwc3-exynos.c | 9 ---------
- 1 file changed, 9 deletions(-)
+Don't you need to add this device to the HID driver's ignore list
+to prevent it from claiming the device (see hid_ignore_list) just like
+for the Cypress VID?
 
-diff --git a/drivers/usb/dwc3/dwc3-exynos.c b/drivers/usb/dwc3/dwc3-exynos.c
-index 48b68b6f0dc8..90bb022737da 100644
---- a/drivers/usb/dwc3/dwc3-exynos.c
-+++ b/drivers/usb/dwc3/dwc3-exynos.c
-@@ -162,12 +162,6 @@ static const struct dwc3_exynos_driverdata exynos5250_drvdata = {
- 	.suspend_clk_idx = -1,
- };
- 
--static const struct dwc3_exynos_driverdata exynos5420_drvdata = {
--	.clk_names = { "usbdrd30", "usbdrd30_susp_clk"},
--	.num_clks = 2,
--	.suspend_clk_idx = 1,
--};
--
- static const struct dwc3_exynos_driverdata exynos5433_drvdata = {
- 	.clk_names = { "aclk", "susp_clk", "pipe_pclk", "phyclk" },
- 	.num_clks = 4,
-@@ -184,9 +178,6 @@ static const struct of_device_id exynos_dwc3_match[] = {
- 	{
- 		.compatible = "samsung,exynos5250-dwusb3",
- 		.data = &exynos5250_drvdata,
--	}, {
--		.compatible = "samsung,exynos5420-dwusb3",
--		.data = &exynos5420_drvdata,
- 	}, {
- 		.compatible = "samsung,exynos5433-dwusb3",
- 		.data = &exynos5433_drvdata,
--- 
-2.27.0
-
+Johan
