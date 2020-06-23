@@ -2,73 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A94E204D36
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jun 2020 10:59:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB175204DBE
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jun 2020 11:20:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731758AbgFWI7e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Jun 2020 04:59:34 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:38043 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731887AbgFWI7d (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Jun 2020 04:59:33 -0400
-Received: by mail-lf1-f65.google.com with SMTP id t9so2317962lfl.5
-        for <linux-usb@vger.kernel.org>; Tue, 23 Jun 2020 01:59:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fvAEFObXPwowlhY3utZTnpUVnmZUs8+hrFXRQcv5crE=;
-        b=ZjQiD+zOC19q3xsqMB9TZQZCSCR9v4DW3dtBszT9aVzJQOvZ6MKnKZrOGFVyZ+RyYU
-         6l3XQB9+5eLmv5AV569GSoRxw7qTaM5cuW4QtCkmvhRS2IWuG00eXPlxOVCYQ39r/mG5
-         uWT4gxHRCxAE6s1qj//zs9/oURa5MFsHF5E+ZtJJOR+JmB9LitIfh/kInKBa+S/+Gaap
-         KYnOSQrs6psID6GND1q7NH6+GVW15hj7dVu/AVclPl9bazZdIRlBCycRRL6yxtN8DS9N
-         QiErfIpX0Y2pH/NLHIwDQEjyaOn9rc7L/CmmV7yRS7NhvZbdJbHTFq+A6T4I/5FhBDOj
-         +Tww==
-X-Gm-Message-State: AOAM53326yiam+6xCOz6QuNHCyokjvbmmzVtarah9VsAYQOi/dZB0KS+
-        QWoYDYm4xBzbwLbRYNIblYo=
-X-Google-Smtp-Source: ABdhPJy8I/A5Nj2SSAwAq05alz2pgtG9cwR+crFP+T7jXZtjolZHgJ35lUkWlC2rC8Qc8MOltyi4UA==
-X-Received: by 2002:a19:2292:: with SMTP id i140mr11869641lfi.95.1592902771670;
-        Tue, 23 Jun 2020 01:59:31 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id o19sm3136918ljc.23.2020.06.23.01.59.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jun 2020 01:59:30 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1jnemA-0002vG-0B; Tue, 23 Jun 2020 10:59:30 +0200
-Date:   Tue, 23 Jun 2020 10:59:29 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Igor Moura <imphilippini@gmail.com>
-Cc:     linux-usb <linux-usb@vger.kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] USB: serial: ch341: add new Product ID for CH340
-Message-ID: <20200623085929.GH3334@localhost>
-References: <20200623081111.288952-1-imphilippini@gmail.com>
+        id S1731995AbgFWJU3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Jun 2020 05:20:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49302 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731971AbgFWJU3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 23 Jun 2020 05:20:29 -0400
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id AA86420738;
+        Tue, 23 Jun 2020 09:20:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592904029;
+        bh=Xs7k99TsOgu0hzE+yFGCz3P3zA7V/AxXkL+HCRV3E6Q=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=gGzQytR7q9QIG6t6/Au7ZRQdVDc5oRMr4aY8NYa6nwhi4zMC06Gxu7KZf1BlhcYEQ
+         NGWO4ZPC+uVFQXdc7h7GtFWKbZO7dZ4mDrc2U/9y7Newo8Le3BgCGE+PEinTT9Ohz1
+         mw5i5FW1I0PfVQy+9qc1Vlqj4qAEdfy6V8uw3O6k=
+Received: by mail-lj1-f178.google.com with SMTP id s1so22629899ljo.0;
+        Tue, 23 Jun 2020 02:20:28 -0700 (PDT)
+X-Gm-Message-State: AOAM532+gEGgK45GcKUv9tSuAeCMXUYRKpg1wuxZkPluhbq9IsVvXtGh
+        a0OdL94CkKVDfrcOz8c3DIK3Z3tZ8uwoWDDug58=
+X-Google-Smtp-Source: ABdhPJyV3VmbaZQ13gtf4a6bK4ughLQLgVLF0ksu0UOJmt9DCx/22TnKAoKwGpKzy2WNreYJgun9j/SlLT0XuM5Re80=
+X-Received: by 2002:a2e:8651:: with SMTP id i17mr10751099ljj.45.1592904026921;
+ Tue, 23 Jun 2020 02:20:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200623081111.288952-1-imphilippini@gmail.com>
+References: <20200623074637.756-1-linux.amoon@gmail.com>
+In-Reply-To: <20200623074637.756-1-linux.amoon@gmail.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Tue, 23 Jun 2020 11:20:15 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPfU-1NF+MHnyCMoXkCD4BbOwqr3s+g+gUwDqRevO=L=sg@mail.gmail.com>
+Message-ID: <CAJKOXPfU-1NF+MHnyCMoXkCD4BbOwqr3s+g+gUwDqRevO=L=sg@mail.gmail.com>
+Subject: Re: [PATCH] Revert "usb: dwc3: exynos: Add support for Exynos5422
+ suspend clk"
+To:     Anand Moon <linux.amoon@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 23, 2020 at 05:11:11AM -0300, Igor Moura wrote:
-> Add PID for CH340 that's found on some ESP8266 dev boards made by
-> LilyGO. The specific device that contains such serial converter can be
-> seen here: https://github.com/LilyGO/LILYGO-T-OI.
-> 
-> Apparently, it's a regular CH340, but I've confirmed with others that
-> also bought this board that the PID found on this device (0x7522)
-> differs from other devices with the "same" converter (0x7523). 
-> Simply adding its PID to the driver and rebuilding it made it work
-> as expected.
-> 
-> Signed-off by: Igor Moura <imphilippini@gmail.com>
+On Tue, 23 Jun 2020 at 09:46, Anand Moon <linux.amoon@gmail.com> wrote:
+>
+> This reverts commit 07f6842341abe978e6375078f84506ec3280ece5.
+>
+> Since SCLK_SCLK_USBD300 suspend clock need to be configured
+> for phy module, I wrongly mapped this clock to DWC3 code.
+>
+> Cc: Felipe Balbi <balbi@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> ---
+>  drivers/usb/dwc3/dwc3-exynos.c | 9 ---------
+>  1 file changed, 9 deletions(-)
 
-There's a missing '-' here in the SOB tag, which I added.
+But why was this patch applied in the first place? It did not pass the
+review. For the v3 I replied:
+"This patchset should not be applied. As of now, it is not needed and
+not justified."
+There were no acks and no positive reviews.
 
-Now applied, thanks.
+My comments from previous versions of this patchset were not properly addressed.
 
-Johan
+So here - yes, makes sense to revert it as it should have never been applied.
+
+Best regards,
+Krzysztof
