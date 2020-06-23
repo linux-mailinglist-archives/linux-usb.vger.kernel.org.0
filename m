@@ -2,107 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8FC2205BC1
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jun 2020 21:24:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB5B8205BE3
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jun 2020 21:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387489AbgFWTYl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Jun 2020 15:24:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43692 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387440AbgFWTYk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Jun 2020 15:24:40 -0400
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED92C061573;
-        Tue, 23 Jun 2020 12:24:39 -0700 (PDT)
-Received: by mail-io1-xd42.google.com with SMTP id c4so11572311iot.4;
-        Tue, 23 Jun 2020 12:24:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mf9Js1eSrEzYPANfjsLFha86P4LGEC3rg5oEXl/xm9w=;
-        b=HGr+xeOyIK71FoE7YCb/kzmOKUUhCDLYJthrKC3aiUZDFT5wx/bap624uYK89XKRRm
-         9GlMD8VT5jJNR6Xdgma1ORw39L3H+a5OQAqtEH8rLBgkJAGceey6c9WFhE7XARBYQF5T
-         ChUObGe0+rFZ3bRIXTZ8ydv8w9jC/1q2+MrW0RewOthJ1wfubrYQRDrriGh0dZA9rHlp
-         zH3MLtad1JCG2ETcnCyk6w1dUDv2WuU5ay0VHEg0aOTYceyUVqDLOM3NAtx8WgBbfhy7
-         wxA1o+E6HHRArd82AlkOCyCknPnU7iBgRIQci1awjbxzTdcDWXWTbXuOoXMJwNdLB4QL
-         qk8Q==
+        id S2387418AbgFWThR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Jun 2020 15:37:17 -0400
+Received: from mail-io1-f71.google.com ([209.85.166.71]:52858 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733242AbgFWThR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Jun 2020 15:37:17 -0400
+Received: by mail-io1-f71.google.com with SMTP id p8so15815539ios.19
+        for <linux-usb@vger.kernel.org>; Tue, 23 Jun 2020 12:37:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mf9Js1eSrEzYPANfjsLFha86P4LGEC3rg5oEXl/xm9w=;
-        b=o1BzoWnS6ZRRgBUrpsWfLPrqMxkrw7dlu3bwAsW3Xn8r9DFbfe5D01rZwn2Jdjemqx
-         9iv0FBCkpKnJY3bcAJfKI+joL4qYGXADE5fB+PoKbFMNFWBNkPDR0H2vXgUFQabx0Vmp
-         f9mky717mg440volZPLF5ZaPqIUja3vOsAObBOi12mWxMCJCG/rlxkZoypEA/ojdAaYf
-         bjdG/TagTNmEXRe3cfKXZzbi85QE4Tu7XTnSLjIy+g0E4zNxQQqi8U3nrFtYVqJOXVa/
-         RNEW2sjrEgiggf/sFXZMJQPdJ6fNZ7wsV4SpzbQkAbQSFWBxEAMBMHZbaM353mT1zRms
-         l4/w==
-X-Gm-Message-State: AOAM530OmAX+xOmbO0yVPN3Dv6qIIHEGMkstIgsX7+HrfyhKHT8Z//Sh
-        lAHDVVlQ91vmD2Cuk6ClHLbz3P4KB84=
-X-Google-Smtp-Source: ABdhPJyjDqi9F8LfgEW43E9XiO7T/3m70HaxQ8gyJDkhV98i5ZmfexmCwBAFjBTnl0ZqTfezCAhebA==
-X-Received: by 2002:a6b:1ce:: with SMTP id 197mr14735915iob.76.1592940278940;
-        Tue, 23 Jun 2020 12:24:38 -0700 (PDT)
-Received: from james-x399.localdomain (71-218-100-23.hlrn.qwest.net. [71.218.100.23])
-        by smtp.gmail.com with ESMTPSA id b21sm3901503ioc.36.2020.06.23.12.24.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jun 2020 12:24:38 -0700 (PDT)
-From:   James Hilliard <james.hilliard1@gmail.com>
-To:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-usb@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>,
-        James Hilliard <james.hilliard1@gmail.com>,
-        stable <stable@vger.kernel.org>
-Subject: [PATCH] HID: quirks: Ignore Simply Automated UPB PIM
-Date:   Tue, 23 Jun 2020 13:24:15 -0600
-Message-Id: <20200623192415.2024242-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=LFs9FQwJPzjZsjyEnnKo03dPiOHsVYsyRFbI7NzHdGY=;
+        b=VtuE+ffLrlOvUITU7SdBKSBDkFvA74MrgOTbV+GgNj5s38w0V4meO+F9ilEoaRNnxj
+         8PoYWAJnkeoK1i7Fyltzr+HypeOAYrh/jQkhlmxHw17HxMElh5n/w9YnGNt0b0M+rexn
+         5OKa//J/YuEaB4f6IbSbk5Nc5ifCvpNgQ1A3FqOtwbGvG8MBfjttDehRUESxukGozzog
+         uKSMt5HupHXlqXb07Zn809SP0CWha0Vk1dIa2CueqkKA2kY8cNs93VrWwe7JszSwcR9Q
+         MQjzpHpWTdW6eNs+t7pSEdVDLxA0ura8t+SUjRdiQ/0KTPSm/4nGYXHHrRUH40NZycG1
+         WE4g==
+X-Gm-Message-State: AOAM533BjW0NLDij4agztujHpWGTaYehrMdcwUZyhwqEOnkZxom3RAmP
+        CMZCJzUMAdEWoUKn7n5Xo4GPjYJYlykhBcIc0eqqmV40Xuel
+X-Google-Smtp-Source: ABdhPJwxdrC6x0hoUScfPr1/tavnK5H+g8rGXHG32+HRw0zc5xkolu7hGrNUdJXkdsOV9CJz5MbcEseTO5h1+QVjMlzofA1upD6b
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a02:93ea:: with SMTP id z97mr21523141jah.40.1592941036070;
+ Tue, 23 Jun 2020 12:37:16 -0700 (PDT)
+Date:   Tue, 23 Jun 2020 12:37:16 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009a6e9805a8c57c58@google.com>
+Subject: BUG: corrupted list in corrupted (3)
+From:   syzbot <syzbot+0b3de1d31a24da20947b@syzkaller.appspotmail.com>
+To:     akpm@osdl.org, andreyknvl@google.com, keescook@chromium.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        paulmck@kernel.org, riel@redhat.com, rostedt@goodmis.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-As this is a cypress HID->COM RS232 style device that is handled
-by the cypress_M8 driver we also need to add it to the ignore list
-in hid-quirks.
+Hello,
 
-Cc: stable <stable@vger.kernel.org>
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+syzbot found the following crash on:
+
+HEAD commit:    f8f02d5c USB: OTG: rename product list of devices
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=11bfddf1100000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=fbe5dc26525767f1
+dashboard link: https://syzkaller.appspot.com/bug?extid=0b3de1d31a24da20947b
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11abf20d100000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17ea5a11100000
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+0b3de1d31a24da20947b@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+kernel BUG at lib/list_debug.c:26!
+
+
 ---
- drivers/hid/hid-ids.h    | 2 ++
- drivers/hid/hid-quirks.c | 1 +
- 2 files changed, 3 insertions(+)
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index 1c71a1aa76b2..3261de0b6bde 100644
---- a/drivers/hid/hid-ids.h
-+++ b/drivers/hid/hid-ids.h
-@@ -1005,6 +1005,8 @@
- #define USB_DEVICE_ID_ROCCAT_RYOS_MK_PRO	0x3232
- #define USB_DEVICE_ID_ROCCAT_SAVU	0x2d5a
- 
-+#define USB_VENDOR_ID_SAI		0x17dd
-+
- #define USB_VENDOR_ID_SAITEK		0x06a3
- #define USB_DEVICE_ID_SAITEK_RUMBLEPAD	0xff17
- #define USB_DEVICE_ID_SAITEK_PS1000	0x0621
-diff --git a/drivers/hid/hid-quirks.c b/drivers/hid/hid-quirks.c
-index e4cb543de0cd..b54fe18f1ed0 100644
---- a/drivers/hid/hid-quirks.c
-+++ b/drivers/hid/hid-quirks.c
-@@ -831,6 +831,7 @@ static const struct hid_device_id hid_ignore_list[] = {
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_PETZL, USB_DEVICE_ID_PETZL_HEADLAMP) },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_PHILIPS, USB_DEVICE_ID_PHILIPS_IEEE802154_DONGLE) },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_POWERCOM, USB_DEVICE_ID_POWERCOM_UPS) },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_SAI, USB_DEVICE_ID_CYPRESS_HIDCOM) },
- #if IS_ENABLED(CONFIG_MOUSE_SYNAPTICS_USB)
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_SYNAPTICS, USB_DEVICE_ID_SYNAPTICS_TP) },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_SYNAPTICS, USB_DEVICE_ID_SYNAPTICS_INT_TP) },
--- 
-2.25.1
-
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
