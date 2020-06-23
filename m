@@ -2,104 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0125420506F
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jun 2020 13:16:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B42FC20508F
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jun 2020 13:20:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732511AbgFWLQk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Jun 2020 07:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52760 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732459AbgFWLQi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Jun 2020 07:16:38 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400A8C061573
-        for <linux-usb@vger.kernel.org>; Tue, 23 Jun 2020 04:16:38 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id s10so138593wrw.12
-        for <linux-usb@vger.kernel.org>; Tue, 23 Jun 2020 04:16:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
-        b=Svs3YjwLlCHH1hpBFaBvYFdbmx2H1H8oWdDssHLarhnYCQEKxMAocbGwaj4/AwqNFE
-         EDy3xmivyOrpMLbbqrHqjTRvM/3WmnWRZcXNDumD5jv+w7a9D1pOs81Qkw+NnZxoTv2Z
-         +DF5VDxaClsSnvuDOkKoJmszM7hgB2ruywgI732+tH30+NsinBVRwuOJAHR6zOYRcCQW
-         psOtqAy/6uHii5iszKOKFbh8oVjR0h1XM7/POzafX0W+j26PIC7IX299MzlDA+KTRvn9
-         7wS3XcQvIAejL5KHcdWDPalzCdtt+D48oSHCopJlNbT212Efr11VqwzRCtejAEKx71Xk
-         VEFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
-        b=bJVGhg+yyvnDtrbGdQ2porTKKnNDM1uAnugYAhWuXrca5r2sTtlRqtbk8dRIPpSl9T
-         MGh19KzYXGmzIjoGOUBuBgQojYhvd9PaPGcjqPP8+pKzLNgltmtspkLfgYXQkNXy1xCr
-         ro1EVXllLyzB8EgodmBjUCe0o7UPjxY14RFKBY0MoMVVh7UT++2LgNfiZHgBqq0uArMJ
-         tJ5aRBNrL8s26qDWrWrzT9Vw6x09YSVj12ZMLErtr61/BvBy0VRqoGxN/u/Ga496oFpA
-         Me8JxTn8YN3knCJJAKZD8prQLQuWgYDjME0WW0aocC4Bk0EPJS8o+dX3KXW6/pUj/kZ5
-         Vj1A==
-X-Gm-Message-State: AOAM532J5j0d5vYlUdubJUEjFTgw5FMbhdTB5rN8LIdmhU1FcFVy5RS9
-        aMRyouhozwTgQEZCw0meil56QhZqcOtcKIJMVgg=
-X-Google-Smtp-Source: ABdhPJyALlyuF+HHNurDBPycXJdQGdinuoT9+1vAMtidu4iIc/fc5+hhmYgV+3SQ9QAFIrD2bzrgfjCcDSzEOrVFHJU=
-X-Received: by 2002:a5d:55c2:: with SMTP id i2mr24783684wrw.225.1592910996942;
- Tue, 23 Jun 2020 04:16:36 -0700 (PDT)
+        id S1732278AbgFWLUM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Jun 2020 07:20:12 -0400
+Received: from www262.sakura.ne.jp ([202.181.97.72]:50991 "EHLO
+        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732191AbgFWLUL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Jun 2020 07:20:11 -0400
+Received: from fsav102.sakura.ne.jp (fsav102.sakura.ne.jp [27.133.134.229])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 05NBK9hF041302;
+        Tue, 23 Jun 2020 20:20:09 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav102.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav102.sakura.ne.jp);
+ Tue, 23 Jun 2020 20:20:09 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav102.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 05NBK9bI041297
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO);
+        Tue, 23 Jun 2020 20:20:09 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Subject: Re: [PATCH] USB: cdc-wdm: Call wake_up_all() when clearing WDM_IN_USE
+ bit.
+To:     Andrey Konovalov <andreyknvl@google.com>,
+        Oliver Neukum <oneukum@suse.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Colin Ian King <colin.king@canonical.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        USB list <linux-usb@vger.kernel.org>,
+        syzbot <syzbot+854768b99f19e89d7f81@syzkaller.appspotmail.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+References: <1590408381.2838.4.camel@suse.com>
+ <4a686d9a-d09f-44f3-553c-bcf0bd8a8ea1@i-love.sakura.ne.jp>
+ <082ae642-0703-6c26-39f6-d725e395ef9a@i-love.sakura.ne.jp>
+ <CAAeHK+ww0YLUKGjQF5KfzoUUsdfLJdv5guUXRq4q46VfPiQubQ@mail.gmail.com>
+ <27b7545e-8f41-10b8-7c02-e35a08eb1611@i-love.sakura.ne.jp>
+ <CAAeHK+ww0u0G94z_Y7VXLCVTQVZ9thO0q69n+Fj3jKT6MtpPng@mail.gmail.com>
+ <20200528194057.GA21709@rowland.harvard.edu>
+ <CAAeHK+ySAnU03cvg1=+yHh0YK1UFO4mrv-N9FcDDMt_0AfGZSQ@mail.gmail.com>
+ <20200528205807.GB21709@rowland.harvard.edu>
+ <1590852311.14886.3.camel@suse.com>
+ <20200530154728.GB29298@rowland.harvard.edu>
+ <0c43caf8-1135-1d38-cb57-9c0f84c4394d@i-love.sakura.ne.jp>
+ <254939d4-f3a1-8c7e-94e5-9862c02774fa@i-love.sakura.ne.jp>
+ <CAAeHK+w+wBNksK_wpczad3AU4oLQRsjL_5G8p1R55Zh_FLhprg@mail.gmail.com>
+From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Message-ID: <c85331fc-874c-6e46-a77f-0ef1dc075308@i-love.sakura.ne.jp>
+Date:   Tue, 23 Jun 2020 20:20:08 +0900
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Received: by 2002:a1c:f002:0:0:0:0:0 with HTTP; Tue, 23 Jun 2020 04:16:36
- -0700 (PDT)
-Reply-To: sarahkoffi389@yahoo.co.jp
-From:   Sarah Koffi <paulwiliam782@gmail.com>
-Date:   Tue, 23 Jun 2020 12:16:36 +0100
-Message-ID: <CAHqcnY1H2iupBAz=FJNyXEV5G9HGjx-S86dp5pfwpHq27rjDWw@mail.gmail.com>
-Subject: Greetings From Mrs. Sarah Koffi
-To:     sarahkoffi389@yahoo.co.jp
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAAeHK+w+wBNksK_wpczad3AU4oLQRsjL_5G8p1R55Zh_FLhprg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Greetings From Mrs. Sarah Koffi
+On 2020/06/19 22:56, Andrey Konovalov wrote:
+> Oliver, any chance you could help us with fixing the hang in this
+> driver? You seem to be its original author. This hang is one of the
+> top crashers on syzbot, with over 32000 crashed kernels.
+> 
 
-I'm contacting you based on your good profiles I read and for a good
-reasons, I am in search of a property to buy in your country as I
-intended to come over to your
-country for investment, Though I have not meet with you before but I
-believe that one has to risk confiding in someone to succeed sometimes
-in life.
+Yes, I think that wdm_flush() has another bug and wdm_write() has yet another bug.
+I need the authors' comments.
 
-My name is Mrs. Sarah Koffi. My late husband deals on Crude Oil with
-Federal Government of Sudan and he has a personal Oil firm in Bentiu
-Oil zone town and Upper
-Nile city. What I have experience physically, I don't wish to
-experience it again in my life due to the recent civil Ethnic war
-cause by our President Mr. Salva Kiir
-and the rebel leader Mr Riek Machar, I have been Under United Nation
-refuge camp in chad to save my life and that of my little daughter.
+wdm_flush() says
 
-Though, I do not know how you will feel to my proposal, but the truth
-is that I sneaked into Chad our neighboring country where I am living
-now as a refugee.
-I escaped with my little daughter when the rebels bust into our house
-and killed my husband as one of the big oil dealers in the country,
-ever since then, I have being on the run.
+	/* cannot dereference desc->intf if WDM_DISCONNECTING */
+	if (test_bit(WDM_DISCONNECTING, &desc->flags))
+		return -ENODEV;
+	if (desc->werr < 0)
+		dev_err(&desc->intf->dev, "Error in flush path: %d\n",
+			desc->werr);
 
-I left my country and move to Chad our neighboring country with the
-little ceasefire we had, due to the face to face peace meeting accord
-coordinated by the US Secretary of State, Mr John Kerry and United
-Nations in Ethiopia (Addis Ababa) between our President Mr Salva Kiir
-and the rebel leader Mr Riek Machar to stop this war.
+but it seems to me that nothing guarantees that test_bit(WDM_DISCONNECTING) == false
+indicates dereferencing desc->intf->dev is safe, for wdm_flush() tests WDM_DISCONNECTING
+without any lock whereas wdm_disconnect() sets WDM_DISCONNECTING under wdm_mutex and
+desc->iuspin held. It might be safe to dereference from wdm_release() which holds wdm_mutex.
 
-I want to solicit for your partnership with trust to invest the $8
-million dollars deposited by my late husband in Bank because my life
-is no longer safe in our country, since the rebels are looking for the
-families of all the oil business men in the country to kill, saying
-that they are they one that is milking the country dry.
+Also, if wait_event() in wdm_flush() might fail to wake up (due to close() dependency
+problem this crash report is focusing on), wait_event_interruptible() in wdm_write() might
+also fail to wake up (unless interrupted) due to the same dependency. Then, why can't we
+wait for completion of wdm_out_callback() (with reasonable timeout) inside wdm_write() ?
 
-I will offer you 20% of the total fund for your help while I will
-partner with you for the investment in your country.
-If I get your reply.
-
-I will wait to hear from you so as to give you details.With love from
-
- i need you to contact me here sarahkoffi389@yahoo.co.jp
-
-Mrs. Sarah Koffi
+I feel that wdm_flush() is so bogus (which could/should be removed).
