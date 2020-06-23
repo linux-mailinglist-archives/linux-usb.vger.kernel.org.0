@@ -2,95 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B42FC20508F
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jun 2020 13:20:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E6A720523B
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jun 2020 14:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732278AbgFWLUM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Jun 2020 07:20:12 -0400
-Received: from www262.sakura.ne.jp ([202.181.97.72]:50991 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732191AbgFWLUL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Jun 2020 07:20:11 -0400
-Received: from fsav102.sakura.ne.jp (fsav102.sakura.ne.jp [27.133.134.229])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 05NBK9hF041302;
-        Tue, 23 Jun 2020 20:20:09 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav102.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav102.sakura.ne.jp);
- Tue, 23 Jun 2020 20:20:09 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav102.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 05NBK9bI041297
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO);
-        Tue, 23 Jun 2020 20:20:09 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Subject: Re: [PATCH] USB: cdc-wdm: Call wake_up_all() when clearing WDM_IN_USE
- bit.
-To:     Andrey Konovalov <andreyknvl@google.com>,
-        Oliver Neukum <oneukum@suse.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Colin Ian King <colin.king@canonical.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzbot <syzbot+854768b99f19e89d7f81@syzkaller.appspotmail.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-References: <1590408381.2838.4.camel@suse.com>
- <4a686d9a-d09f-44f3-553c-bcf0bd8a8ea1@i-love.sakura.ne.jp>
- <082ae642-0703-6c26-39f6-d725e395ef9a@i-love.sakura.ne.jp>
- <CAAeHK+ww0YLUKGjQF5KfzoUUsdfLJdv5guUXRq4q46VfPiQubQ@mail.gmail.com>
- <27b7545e-8f41-10b8-7c02-e35a08eb1611@i-love.sakura.ne.jp>
- <CAAeHK+ww0u0G94z_Y7VXLCVTQVZ9thO0q69n+Fj3jKT6MtpPng@mail.gmail.com>
- <20200528194057.GA21709@rowland.harvard.edu>
- <CAAeHK+ySAnU03cvg1=+yHh0YK1UFO4mrv-N9FcDDMt_0AfGZSQ@mail.gmail.com>
- <20200528205807.GB21709@rowland.harvard.edu>
- <1590852311.14886.3.camel@suse.com>
- <20200530154728.GB29298@rowland.harvard.edu>
- <0c43caf8-1135-1d38-cb57-9c0f84c4394d@i-love.sakura.ne.jp>
- <254939d4-f3a1-8c7e-94e5-9862c02774fa@i-love.sakura.ne.jp>
- <CAAeHK+w+wBNksK_wpczad3AU4oLQRsjL_5G8p1R55Zh_FLhprg@mail.gmail.com>
-From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Message-ID: <c85331fc-874c-6e46-a77f-0ef1dc075308@i-love.sakura.ne.jp>
-Date:   Tue, 23 Jun 2020 20:20:08 +0900
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S1732578AbgFWMRX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Jun 2020 08:17:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34090 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732567AbgFWMRW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Jun 2020 08:17:22 -0400
+Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6218FC061795
+        for <linux-usb@vger.kernel.org>; Tue, 23 Jun 2020 05:17:22 -0700 (PDT)
+Received: by mail-qt1-x844.google.com with SMTP id o38so6468888qtf.6
+        for <linux-usb@vger.kernel.org>; Tue, 23 Jun 2020 05:17:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=7fNnQnFssZCc2Jtw2cUlJB4v7zrpRiQS682aXMZO9+Q=;
+        b=lmnLTVPQ4JEakyORxWY/XrbqM/QlEMrBc4HFGfnWbReckTyfB2Ye8CMjocas7EBNFD
+         l6SZMCjHai5226z4Dpi1ry78cOkq1lZoE6AYFQFwNoqZT4qgJFuelDfTn5h8iywoZUzL
+         wE3fYEjdhgUbI9AUbecH2VltWvtspIzWdzDx7ha5gFpVdKnu9FRjL/qtnpj6HWYdaiMT
+         N0LsgmeIfkqP51u+Lc5mBo2Vy4DtCoGlJ47mRhmZnJVKH3P+EJbAKRMc7F0MdL7FkvcH
+         P1nHOxvbW6937ABhk/e+s+I9hj2v9HaQWcNZa0bl4905GStbNAhXOgbamsUFVEmjvl9G
+         DW5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=7fNnQnFssZCc2Jtw2cUlJB4v7zrpRiQS682aXMZO9+Q=;
+        b=U0XRTLN3uhq+SANOWRYo4sW1LRRU/RVCVtyQFkFAhQNLL0NAItZOokgssdkT+DFTHy
+         7aPIi8M37KWTM7nTby3hbtbjAkvIDukAn95dxFeFRBe0foNrP4GR/5DLtdIT7z1+7Jnx
+         uuoezGGVUUfx2yMDGZtMwwkscHEaw3mVuwv+ee4LNkJhFUirtpswsdEI/OiLcpU2Gd0P
+         SuDAjWvPTxUxuOTNGs+f/WjszFUQkbTdxdWXCSVDrvlonkk3IZj77D4tkF5zesp/Kwc+
+         +oBfFSazv1K7QZZDIYPJSqkQjz51v1mW2ivmdXPgU49nXNRhgdmcgfa7tgTeMeVUncAC
+         DKmA==
+X-Gm-Message-State: AOAM5307tFl5534DrF/ZImK+5L29QGq2t8yOuh1VhYpMf3UcOTX4nYTl
+        fb88IqwQtMomM/hYCrpBmBNEf2t2XGE9/Ibq1Pg=
+X-Google-Smtp-Source: ABdhPJzcVy7PYZXMq85OTFkPSD1ZRtPpZ7jK5MoUsE+koulYWObqvaf+obW/jzf92rcCzng2hkA3YT7mHzZyAadcJ1A=
+X-Received: by 2002:ac8:664a:: with SMTP id j10mr20006598qtp.85.1592914641645;
+ Tue, 23 Jun 2020 05:17:21 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAAeHK+w+wBNksK_wpczad3AU4oLQRsjL_5G8p1R55Zh_FLhprg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:ac8:47c2:0:0:0:0:0 with HTTP; Tue, 23 Jun 2020 05:17:21
+ -0700 (PDT)
+Reply-To: bektery@outlook.com
+From:   YAVUZ BEKTER <bakert.jg@gmail.com>
+Date:   Tue, 23 Jun 2020 05:17:21 -0700
+Message-ID: <CAAUSuTWsOrif_tNbgX40RT+8QErOmAfMAPPHqS94d6XOjNCX0A@mail.gmail.com>
+Subject: Hello.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2020/06/19 22:56, Andrey Konovalov wrote:
-> Oliver, any chance you could help us with fixing the hang in this
-> driver? You seem to be its original author. This hang is one of the
-> top crashers on syzbot, with over 32000 crashed kernels.
-> 
-
-Yes, I think that wdm_flush() has another bug and wdm_write() has yet another bug.
-I need the authors' comments.
-
-wdm_flush() says
-
-	/* cannot dereference desc->intf if WDM_DISCONNECTING */
-	if (test_bit(WDM_DISCONNECTING, &desc->flags))
-		return -ENODEV;
-	if (desc->werr < 0)
-		dev_err(&desc->intf->dev, "Error in flush path: %d\n",
-			desc->werr);
-
-but it seems to me that nothing guarantees that test_bit(WDM_DISCONNECTING) == false
-indicates dereferencing desc->intf->dev is safe, for wdm_flush() tests WDM_DISCONNECTING
-without any lock whereas wdm_disconnect() sets WDM_DISCONNECTING under wdm_mutex and
-desc->iuspin held. It might be safe to dereference from wdm_release() which holds wdm_mutex.
-
-Also, if wait_event() in wdm_flush() might fail to wake up (due to close() dependency
-problem this crash report is focusing on), wait_event_interruptible() in wdm_write() might
-also fail to wake up (unless interrupted) due to the same dependency. Then, why can't we
-wait for completion of wdm_out_callback() (with reasonable timeout) inside wdm_write() ?
-
-I feel that wdm_flush() is so bogus (which could/should be removed).
+I am the foreign operations director of Bank of Turkey.
+My name is Mr, Yavuz. I have a sensitive investment project to discuss
+with you, please reply now.
+________________________
+Ik ben de directeur buitenlandse activiteiten van de Bank of Turkey.
+Mijn naam is meneer Yavuz. Ik moet een gevoelig investeringsproject bespreken
+met u, antwoord dan nu.
