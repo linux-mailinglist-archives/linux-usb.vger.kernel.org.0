@@ -2,65 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E6A720523B
-	for <lists+linux-usb@lfdr.de>; Tue, 23 Jun 2020 14:17:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26CEF20529F
+	for <lists+linux-usb@lfdr.de>; Tue, 23 Jun 2020 14:37:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732578AbgFWMRX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 23 Jun 2020 08:17:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34090 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732567AbgFWMRW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 23 Jun 2020 08:17:22 -0400
-Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6218FC061795
-        for <linux-usb@vger.kernel.org>; Tue, 23 Jun 2020 05:17:22 -0700 (PDT)
-Received: by mail-qt1-x844.google.com with SMTP id o38so6468888qtf.6
-        for <linux-usb@vger.kernel.org>; Tue, 23 Jun 2020 05:17:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=7fNnQnFssZCc2Jtw2cUlJB4v7zrpRiQS682aXMZO9+Q=;
-        b=lmnLTVPQ4JEakyORxWY/XrbqM/QlEMrBc4HFGfnWbReckTyfB2Ye8CMjocas7EBNFD
-         l6SZMCjHai5226z4Dpi1ry78cOkq1lZoE6AYFQFwNoqZT4qgJFuelDfTn5h8iywoZUzL
-         wE3fYEjdhgUbI9AUbecH2VltWvtspIzWdzDx7ha5gFpVdKnu9FRjL/qtnpj6HWYdaiMT
-         N0LsgmeIfkqP51u+Lc5mBo2Vy4DtCoGlJ47mRhmZnJVKH3P+EJbAKRMc7F0MdL7FkvcH
-         P1nHOxvbW6937ABhk/e+s+I9hj2v9HaQWcNZa0bl4905GStbNAhXOgbamsUFVEmjvl9G
-         DW5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=7fNnQnFssZCc2Jtw2cUlJB4v7zrpRiQS682aXMZO9+Q=;
-        b=U0XRTLN3uhq+SANOWRYo4sW1LRRU/RVCVtyQFkFAhQNLL0NAItZOokgssdkT+DFTHy
-         7aPIi8M37KWTM7nTby3hbtbjAkvIDukAn95dxFeFRBe0foNrP4GR/5DLtdIT7z1+7Jnx
-         uuoezGGVUUfx2yMDGZtMwwkscHEaw3mVuwv+ee4LNkJhFUirtpswsdEI/OiLcpU2Gd0P
-         SuDAjWvPTxUxuOTNGs+f/WjszFUQkbTdxdWXCSVDrvlonkk3IZj77D4tkF5zesp/Kwc+
-         +oBfFSazv1K7QZZDIYPJSqkQjz51v1mW2ivmdXPgU49nXNRhgdmcgfa7tgTeMeVUncAC
-         DKmA==
-X-Gm-Message-State: AOAM5307tFl5534DrF/ZImK+5L29QGq2t8yOuh1VhYpMf3UcOTX4nYTl
-        fb88IqwQtMomM/hYCrpBmBNEf2t2XGE9/Ibq1Pg=
-X-Google-Smtp-Source: ABdhPJzcVy7PYZXMq85OTFkPSD1ZRtPpZ7jK5MoUsE+koulYWObqvaf+obW/jzf92rcCzng2hkA3YT7mHzZyAadcJ1A=
-X-Received: by 2002:ac8:664a:: with SMTP id j10mr20006598qtp.85.1592914641645;
- Tue, 23 Jun 2020 05:17:21 -0700 (PDT)
+        id S1732628AbgFWMhj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 23 Jun 2020 08:37:39 -0400
+Received: from mail-eopbgr130089.outbound.protection.outlook.com ([40.107.13.89]:4064
+        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729611AbgFWMhh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 23 Jun 2020 08:37:37 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bpRE0DnFcbP1rOk4pPNNRkBFe55tVIcdMi/7QDK0nHRPEwl89hoTKQYtKa4I8i7PlWVEt7859QSgVW4VfmKrYwLwLpqr9elEl24rjSqrQ4VRObBqsziN5YXVIymJfj/tbCnuxn5DlRmtqWqWUR2IngdPldU7u0V0UqSIMNN1Ta3XRhJnSY2o0v8VCTfdh1bSTtsOKYhJWr8spedHYCvq4V0mi54EE6QduUjfNKCptPizzfFiclyloTHdQi9uuo5Hiuokr/0m0HVYVNIiUQRz4i3BOfniBFi7+GBbEle4rrxSZ4ut0PUZKvcapSrfZTbvuTpX6n8KySV3Wgf8IvhG+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FVQxXTMKtlyt3gNaN6JrC8ZC/v89k20/HTa8KWVY5v4=;
+ b=eeYPjpH2APhqyC28wGGhiAdfRHmmxm1aESzXKZJdwZUhB/DSld/EpuJKk1//UcscMy9/d2GgC0CUv3sShmPEhUo+S43HOdrhFw9Hb8MzO6dWbG0nug/xxwc1pDUhdNJqr5fpxkzj17eJGBzPwmSRj7PcI4LMEZ7sExKiwjFB38rm2RzkkXP2vBnSdpaguli/MmmzEkAY1JxyoLivVjt1kXIDCXJGmIZL6X898ipFIrEsGa7VeH0v558R3yLFPr9NXRUCuXpeW94vWMJbvtEYub58FChunX0qpLjVU3bQns0aPavneS2JuTJeygqzF2ZLhk3vbTNj8jjtZHfMxQOhIA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FVQxXTMKtlyt3gNaN6JrC8ZC/v89k20/HTa8KWVY5v4=;
+ b=QOl6hv4v4n3VKx570SXPd5W/JLwTrzRB6uvtxKbVCvHP6lXA8DkWMJXdLeWnHRORa/nQFZJVxJZE9sQpVIdKGEICA1VXe7hX47O7U80ayqtr9j4rIFGV+bMya850KM+PVuIXKI6XgqSnxKx1ZMy6wHu0KaVwn08n+HtRLwKOPgA=
+Received: from VE1PR04MB6528.eurprd04.prod.outlook.com (2603:10a6:803:127::18)
+ by VE1PR04MB6351.eurprd04.prod.outlook.com (2603:10a6:803:128::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3109.23; Tue, 23 Jun
+ 2020 12:37:34 +0000
+Received: from VE1PR04MB6528.eurprd04.prod.outlook.com
+ ([fe80::30e2:71b0:ffd3:e39e]) by VE1PR04MB6528.eurprd04.prod.outlook.com
+ ([fe80::30e2:71b0:ffd3:e39e%7]) with mapi id 15.20.3109.027; Tue, 23 Jun 2020
+ 12:37:34 +0000
+From:   Jun Li <jun.li@nxp.com>
+To:     Shawn Guo <shawnguo@kernel.org>
+CC:     "balbi@kernel.org" <balbi@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Peter Chen <peter.chen@nxp.com>
+Subject: RE: [PATCH 5/6] arm64: dts: imx8mp-evk: enable usb1 as host mode
+Thread-Topic: [PATCH 5/6] arm64: dts: imx8mp-evk: enable usb1 as host mode
+Thread-Index: AQHWPlByhRTFPy8+3E+K0YuATAk1xKjmIkUAgAAVYHA=
+Date:   Tue, 23 Jun 2020 12:37:34 +0000
+Message-ID: <VE1PR04MB65283346BE373F8D0D2D8D4789940@VE1PR04MB6528.eurprd04.prod.outlook.com>
+References: <1591701165-12872-1-git-send-email-jun.li@nxp.com>
+ <1591701165-12872-6-git-send-email-jun.li@nxp.com>
+ <20200623111423.GZ30139@dragon>
+In-Reply-To: <20200623111423.GZ30139@dragon>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.71]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 9feea47b-146f-4afa-aedb-08d817723473
+x-ms-traffictypediagnostic: VE1PR04MB6351:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VE1PR04MB63511FF6ADD8CF102D6CB72089940@VE1PR04MB6351.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-forefront-prvs: 04433051BF
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: M7yI2GJeCSUy6oN0Td4deoILXxql3iF4GLtm6wKn+X/HOZTBL8GdtptwqIpbhr7a8RMACO4gPT7d31qyf8VASOHTq00/Q9PfxG1VnOg+W59PuzDbqWOuv+iscVatafkqQNOj8ViUWfr3Bfx0vAWo0J5nnwA3lnK+zx35qqao2k5rgj9T/RWSpfR6fPCLRfOa5f1dKsEo1EnIfrAAYL0Xfky7PuTolbxf0a3dCesaI7056mNA1f+u3M+u+h8Uals6dZ/29HRjtkc/PascyqZQ9YLIlEBQ+I9J1yz0GF3IioV+b/A7GTmy26TBTpjRNwHce4NSky2DGvS2SttsjeSOzAHkWK3WutJwkzy86rWdwNKCfoRPxahgv7aMVNtILtoQ
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6528.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(366004)(4744005)(86362001)(6916009)(8936002)(52536014)(5660300002)(8676002)(66446008)(64756008)(66476007)(76116006)(71200400001)(66946007)(33656002)(66556008)(44832011)(6506007)(4326008)(26005)(186003)(2906002)(9686003)(55016002)(7696005)(54906003)(498600001)(32563001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: oiRv8ClZWOpOWXu/InU366eMtTPzQfoQtjHpRZv0Go2OcLgbr/MUICfmVmtiY+ofZU9TbaPMgvc/ccQcvv7681Q3DTxJIyD8ZiShfth39X9XoSA9Q6S8NdnkuiVe23F0mMP6cEBTcaf+jAuSbVp8MxntOV2WGHIVsLb2aUAqYiHLJuNW8DmxMhNQEtVArnjiCfEMP4Ly3C3O/K9RmjDMVOh7Y18C0dQBNogVVNDjggpk7Fwn3R3CCyHeZjSpdjSUJXnQSfF814Hv121id0pgXM5N7LCbHz976308dQP3OYtmWceRi99xHKQVGwATydzQpBmCFPTQAZnGeX9GwgKbQZ+rlpAJGpGinnHXwPHWrNlxgIxft/F9ZeOg5fdJZNwbNJsAynD1cGJk15pHcbzY3JhUNSPszZki8GMxRKU6RDHNqI9cztEqWk8vyU9C2hWEgMhHcrItpPrgKDeZglrn8U38Pwj3CAPX3pjiPwJNGdI=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Received: by 2002:ac8:47c2:0:0:0:0:0 with HTTP; Tue, 23 Jun 2020 05:17:21
- -0700 (PDT)
-Reply-To: bektery@outlook.com
-From:   YAVUZ BEKTER <bakert.jg@gmail.com>
-Date:   Tue, 23 Jun 2020 05:17:21 -0700
-Message-ID: <CAAUSuTWsOrif_tNbgX40RT+8QErOmAfMAPPHqS94d6XOjNCX0A@mail.gmail.com>
-Subject: Hello.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9feea47b-146f-4afa-aedb-08d817723473
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jun 2020 12:37:34.5023
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: OJOyuax7NGH425gl4v955BU0dbRKvj7CmVwat4eMuyBHDFBFcSDrZl21l60PwrZv
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6351
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I am the foreign operations director of Bank of Turkey.
-My name is Mr, Yavuz. I have a sensitive investment project to discuss
-with you, please reply now.
-________________________
-Ik ben de directeur buitenlandse activiteiten van de Bank of Turkey.
-Mijn naam is meneer Yavuz. Ik moet een gevoelig investeringsproject bespreken
-met u, antwoord dan nu.
+> > +
+> > +	reg_usb1_host_vbus: regulator-usb1-vbus {
+> > +		compatible =3D "regulator-fixed";
+> > +		regulator-name =3D "usb1_host_vbus";
+> > +		pinctrl-names =3D "default";
+> > +		pinctrl-0 =3D <&pinctrl_usb1_vbus>;
+> > +		regulator-min-microvolt =3D <5000000>;
+> > +		regulator-max-microvolt =3D <5000000>;
+> > +		gpio =3D <&gpio1 14 GPIO_ACTIVE_HIGH>;
+> > +		enable-active-high;
+> > +		regulator-always-on;
+>=20
+> Instead of having it regulator-always-on, it should be controlled by usb =
+device,
+> right?
+
+Right, I will try to use that pin as usb power function instead of
+GPIO(regulator) for vbus control in v2.
+
+Thanks
+Li Jun
