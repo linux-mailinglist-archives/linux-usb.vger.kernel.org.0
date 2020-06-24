@@ -2,56 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC6F3206B9D
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jun 2020 07:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89C87206CC9
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jun 2020 08:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388512AbgFXFUU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 24 Jun 2020 01:20:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46540 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727957AbgFXFUU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 24 Jun 2020 01:20:20 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 208307] Alcor Micro Corp. Multi Flash Reader [058f:6366] keeps
- being detected and removed continuously
-Date:   Wed, 24 Jun 2020 05:20:19 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: jian-hong@endlessm.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-208307-208809-JpiigAjaey@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-208307-208809@https.bugzilla.kernel.org/>
-References: <bug-208307-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
+        id S2389201AbgFXGoc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 24 Jun 2020 02:44:32 -0400
+Received: from coyote.holtmann.net ([212.227.132.17]:38944 "EHLO
+        mail.holtmann.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389102AbgFXGoc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Jun 2020 02:44:32 -0400
+Received: from marcel-macpro.fritz.box (p5b3d2638.dip0.t-ipconnect.de [91.61.38.56])
+        by mail.holtmann.org (Postfix) with ESMTPSA id 42D4CCECD1;
+        Wed, 24 Jun 2020 08:54:23 +0200 (CEST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.80.23.2.2\))
+Subject: Re: next-20200623: oops in btusb_disconnect() at boot on thinkpad x60
+From:   Marcel Holtmann <marcel@holtmann.org>
+In-Reply-To: <20200623194533.GA3815@amd>
+Date:   Wed, 24 Jun 2020 08:44:29 +0200
+Cc:     kernel list <linux-kernel@vger.kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        BlueZ <linux-bluetooth@vger.kernel.org>,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        Miao-chen Chou <mcchou@chromium.org>
 Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
+Message-Id: <8C887FD6-DDC0-4FD6-8994-00939EFCB0F9@holtmann.org>
+References: <20200623194533.GA3815@amd>
+To:     Pavel Machek <pavel@ucw.cz>
+X-Mailer: Apple Mail (2.3608.80.23.2.2)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=208307
+Hi Pavel,
 
---- Comment #2 from jian-hong@endlessm.com ---
-Created attachment 289857
-  --> https://bugzilla.kernel.org/attachment.cgi?id=289857&action=edit
-The raw trace by usbmon listening on bus 3
+> I'm getting this at boot:
+> 
+> [    7.984584] *pdpt = 0000000033a31001 *pde = 0000000000000000
+> [    7.984584] Oops: 0000 [#1] PREEMPT SMP PTI
+> [    7.984584] CPU: 1 PID: 2532 Comm: systemd-udevd Not tainted
+> 5.8.0-rc2-next-20200623+ #126
+> [    7.998580] Hardware name: LENOVO 17097HU/17097HU, BIOS 7BETD8WW
+> (2.19 ) 03/31/2011
+> [    8.000592] EIP: __queue_work+0x139/0x320
+> [    8.000592] Code: 90 83 7d f0 08 0f 84 b6 00 00 00 8b 45 ec 8b 9f
+> 04 01 00 00 03 1c 85 40 63 1f c5 89 f0 e8 df f8 ff ff 85 c0 0f 85 4f
+> ff ff ff <8b> 03 e9 50 ff ff ff 89 45 e4 e8 48 0a cb 00 8b 4d e8 8b 45
+> e4 8b
+> [    8.007883] EAX: 00000000 EBX: 00000000 ECX: 47d88848 EDX: 03ffffff
+> [    8.007883] ESI: f4a348bc EDI: f492a600 EBP: f3b1dd0c ESP: f3b1dcf0
+> [    8.019981] DS: 007b ES: 007b FS: 00d8 GS: 00e0 SS: 0068 EFLAGS:
+> 00010046
+> [    8.023156] CR0: 80050033 CR2: 00000000 CR3: 33b1e000 CR4: 000006b0
+> [    8.028892] Call Trace:
+> [    8.034199]  queue_work_on+0x1d/0x30
+> [    8.034199]  hci_adv_monitors_clear+0x5c/0x80
+> [    8.042158]  hci_unregister_dev+0x161/0x2f0
+> [    8.042158]  ? usb_disable_endpoint+0x94/0xa0
+> [    8.042158]  btusb_disconnect+0x4b/0x120
+> [    8.057018]  usb_unbind_interface+0x64/0x230
+> [    8.057018]  device_release_driver_internal+0xc1/0x180
+> [    8.065196]  device_release_driver+0xc/0x10
+> [    8.068040]  bus_remove_device+0xa8/0x110
+> [    8.071767]  device_del+0x126/0x370
+> [    8.071767]  ? usb_remove_ep_devs+0x15/0x20
+> [    8.079199]  ? remove_intf_ep_devs+0x30/0x50
+> [    8.081371]  usb_disable_device+0x8e/0x240
+> [    8.087478]  usb_set_configuration+0x47c/0x800
+> [    8.087478]  usb_deauthorize_device+0x36/0x50
+> [    8.092662]  authorized_store+0x5d/0x70
+> [    8.096608]  ? authorized_default_store+0x60/0x60
+> [    8.096608]  dev_attr_store+0x13/0x20
+> [    8.096608]  ? component_bind_all.cold+0x52/0x52
+> [    8.106151]  sysfs_kf_write+0x2f/0x50
+> [    8.106151]  ? sysfs_file_ops+0x50/0x50
+> [    8.106151]  kernfs_fop_write+0x105/0x1a0
+> [    8.106151]  ? kernfs_fop_open+0x3c0/0x3c0
+> [    8.106151]  __vfs_write+0x2b/0x1e0
+> [    8.106151]  ? lock_acquire+0x3f/0x70
+> [    8.106151]  ? vfs_write+0x12a/0x180
+> [    8.106151]  ? __sb_start_write+0xd6/0x180
+> [    8.106151]  ? vfs_write+0x12a/0x180
+> [    8.106151]  vfs_write+0xa1/0x180
+> [    8.106151]  ksys_write+0x5c/0xd0
+> [    8.106151]  __ia32_sys_write+0x10/0x20
+> [    8.106151]  do_syscall_32_irqs_on+0x3a/0xf0
+> [    8.106151]  do_int80_syscall_32+0x9/0x20
+> [    8.106151]  entry_INT80_32+0x116/0x116
+> [    8.106151] EIP: 0xb7f45092
+> [    8.106151] Code: Bad RIP value.
+> [    8.146079] EAX: ffffffda EBX: 00000007 ECX: 004fb760 EDX: 00000001
+> [    8.146079] ESI: 004fb760 EDI: 00000001 EBP: 004c79f0 ESP: bfabc48c
+> [    8.146079] DS: 007b ES: 007b FS: 0000 GS: 0033 SS: 007b EFLAGS:
+> 00000246
+> [    8.150364] Modules linked in:
+> [    8.150364] CR2: 0000000000000000
+> [    8.150364] ---[ end trace 468d097aaf220284 ]---
 
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+I assume this is caused by commit e5e1e7fd470ccf2eb38ab7fb5a3ab0fc4792fe53 and mainly because it triggers the background scan workqueue. I think we need to distinguish clearing the monitors when removing the controller compared to clearing the controllers from bluetoothd as a runtime operation.
+
+Regards
+
+Marcel
+
