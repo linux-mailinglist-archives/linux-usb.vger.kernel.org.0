@@ -2,163 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ED8F206D04
-	for <lists+linux-usb@lfdr.de>; Wed, 24 Jun 2020 08:50:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2463206D39
+	for <lists+linux-usb@lfdr.de>; Wed, 24 Jun 2020 09:01:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389457AbgFXGuf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 24 Jun 2020 02:50:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36330 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389354AbgFXGuf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 24 Jun 2020 02:50:35 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1C4C061573;
-        Tue, 23 Jun 2020 23:50:34 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id d7so680323lfi.12;
-        Tue, 23 Jun 2020 23:50:34 -0700 (PDT)
+        id S2388928AbgFXHBg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 24 Jun 2020 03:01:36 -0400
+Received: from mail-mw2nam12on2043.outbound.protection.outlook.com ([40.107.244.43]:20609
+        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2387918AbgFXHBf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 24 Jun 2020 03:01:35 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HZbKwBKHbQZo+ehosjC00LJK5CE+/5qg2AFhxvSxgwjSyVMY07AFQv0s0gaqRYE7KwauHAwHBiXCdxeF7eFsm87CGVoYmSmLQ+ivaoCj30vWfz+3fP3ubo1Q8P+mPDpaRffWuapnCDE4FmJQgm04n2Ds/KrAEpn1S6uWdEiJXfD3jvt0vPQjG8f6LgpFX3hhzv0PP9uGYuQKMUMhi67ALpLQbkDrVegvh6nWaU2lnWmpTbVcLNLZqEqn4YQH/w9+t6hQBpfCNbDKQBIGG2u5j6rqnn37Y291XhD/eaAfNtRVOwv93r9PLCmOybZhEbouWuA88Owafjnjh80F8lIvag==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nb7/tpZa8Nh0TJ/Rh10KTnugLRq114RmPqgyVgHV2FQ=;
+ b=KaqBYZ0qIY1AVzPewDoLF827EY0PNe6S7m6WTonk6IC0Bmvp/AL06t5ROGXTnUlomYCxrYgW/U53smzQcWzt3LiY+lQi7/VT2QZ5f/ptz1DikQviSLMyKGVcL5e3eVhfDMKQGgRRgQ6LEAZCL0Uya6q0wfc2N+zB2aCQNdimKNu+RgCVbml6ajZwFhDGfqkJZoENz+Wpy1kZZdVbunosP+UCTF0A43RtSrt6SQ2i0HZ6YCMHAMkuZrleGFGj2pVgvXnPv7UZ4LAKqatBRw7DzdyDPRsiEFAs5xtx8d4GiXozp2emg/jh0bGfhaxMSH423YX0aXuVcs/5boJj/HVVow==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=silabs.com; dmarc=pass action=none header.from=silabs.com;
+ dkim=pass header.d=silabs.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=61dSScxI6iuAF78RADy83+D5pnqYcgk6lokCgPGWmSg=;
-        b=C56J+Wdbca7X/pJ4WBs137eTEr59uhNcjRq8+5vk8TMUPcC5qLXbcCR6NkuFnvE8X5
-         1RMauvmOt8FSdkXLLKhyrenX0v0r//m5Dz68C4LtyyELQaQ2A2ZQK5clX/SCJQDOREv6
-         5PfO0JpQv6KhB+zpCwvUv2r5QL+hxTfEkeLjKZqw3ajHYeAvRSkKy4ktqs8P5suIq2MH
-         ShtxMINMVRM8eIQk1knHThWjjAfvPL79AXy/kPd/vS0FtDMcqOfxgiIVnfZLu9eaI/5F
-         u3g8kDPystYJJULoLjTzdFDzaAI3XDWR+mGdaiCntcT7Ig/X+noIucdKCOjbM1dVgfZh
-         6TbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=61dSScxI6iuAF78RADy83+D5pnqYcgk6lokCgPGWmSg=;
-        b=Yd6+lybZX2S0vtsSp3ayRqK24wqLVEP+uH546Yn3P84rvLvIOJ/mGpVyUmul5nojBM
-         o0QtYp1cK1kiVq8l77pnB1IRnYURMrfo8vP1JqGasYFDEXeemSVAAu2yEIp91qC84MZx
-         us4ms+vhzgD9JIFSS5w8NhU1Woirfa3WHdXkVEg66xpDw6cbjSwBpDZLHP7TLGKbE6/D
-         UOXK4yAmVEF9/fpHJOKyBi0ZgOtSlVFrbjPhVIRxOMvtAVho1MjyLhcx09Yme2mFvuNU
-         5X971O3BlFtZaZdrx8q2TTDvx6Od6gx0rDtxGqpB8MzaUHbCskpq8h8NlGHt5jnfHRcu
-         dhJw==
-X-Gm-Message-State: AOAM531b62xrsBDqoRPiKM+tdWuxx4KwSS2r0HHIdbHdUaqj9CoHCtKp
-        o7QEtAKeUYiJtSMHqnNKfTei0g4HetA=
-X-Google-Smtp-Source: ABdhPJxA3rBIk4b4X5pIPprB3CAMDSFVUKhJEy8wdLddOY1/vmRY2AP2D6UP38M03ms6HWHaqc4XHg==
-X-Received: by 2002:a19:8c09:: with SMTP id o9mr6488675lfd.160.1592981433241;
-        Tue, 23 Jun 2020 23:50:33 -0700 (PDT)
-Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id i15sm4811522lfl.57.2020.06.23.23.50.31
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 23 Jun 2020 23:50:32 -0700 (PDT)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Macpaul Lin <macpaul.lin@mediatek.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        =?utf-8?Q?Micha=C5=82_Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
-        Sergey Organov <sorganov@gmail.com>,
-        Fabrice Gasnier <fabrice.gasnier@st.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>,
-        Macpaul Lin <macpaul.lin@gmail.com>
-Subject: Re: [PATCH v3] usb: gadget: u_serial: improve performance for large data
-In-Reply-To: <1592372577-7986-1-git-send-email-macpaul.lin@mediatek.com>
-References: <1592362007-7120-1-git-send-email-macpaul.lin@mediatek.com> <1592372577-7986-1-git-send-email-macpaul.lin@mediatek.com>
-Date:   Wed, 24 Jun 2020 09:50:27 +0300
-Message-ID: <87r1u5vtxo.fsf@kernel.org>
+ d=silabs.onmicrosoft.com; s=selector2-silabs-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nb7/tpZa8Nh0TJ/Rh10KTnugLRq114RmPqgyVgHV2FQ=;
+ b=ixIfRtbsKKZfgrIbBOcWP2l1LJ1/k4esli9mNgerOQNvRA3v5BULBq2fEkWpBsLtrIqnNH5/WP3V0nR/cASBBPbbI4BNUaNkUcBb68TKgsdiNUNsLknqnZjmCCZyb4KS6AqO4uyNdEQYPgjue+kmrupIiIoHTlCH4knlYiblM1k=
+Received: from DM6PR11MB2857.namprd11.prod.outlook.com (2603:10b6:5:cb::18) by
+ DM5PR11MB1578.namprd11.prod.outlook.com (2603:10b6:4:e::23) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3109.22; Wed, 24 Jun 2020 07:01:33 +0000
+Received: from DM6PR11MB2857.namprd11.prod.outlook.com
+ ([fe80::80a:1058:250c:28bf]) by DM6PR11MB2857.namprd11.prod.outlook.com
+ ([fe80::80a:1058:250c:28bf%5]) with mapi id 15.20.3131.020; Wed, 24 Jun 2020
+ 07:01:33 +0000
+From:   Phu Luu <Phu.Luu@silabs.com>
+To:     "johan@kernel.org" <johan@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Brant Merryman <Brant.Merryman@silabs.com>,
+        Richard Hendricks <Richard.Hendricks@silabs.com>
+Subject: [PATCH v3 1/2] USB: serial: cp210x: Enable usb generic
+ throttle/unthrottle
+Thread-Topic: [PATCH v3 1/2] USB: serial: cp210x: Enable usb generic
+ throttle/unthrottle
+Thread-Index: AdZJ9S1kJPjPfiDsQxixc1vTUuV8Kw==
+Date:   Wed, 24 Jun 2020 07:01:33 +0000
+Message-ID: <DM6PR11MB28578CA6D09D13A07D7959D99C950@DM6PR11MB2857.namprd11.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=silabs.com;
+x-originating-ip: [210.245.53.9]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: ff91920c-e3b5-4519-213d-08d8180c6e13
+x-ms-traffictypediagnostic: DM5PR11MB1578:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DM5PR11MB15783DAD834CB3BF552254E49C950@DM5PR11MB1578.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-forefront-prvs: 0444EB1997
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: nzUelbjQSKklYHhZDgoPCJz1C+hbiUJ7ovPdysciwBKWytjw3j/jpij0RMndINBEGkWhoDI8RP1ypgdMuqkOPvEs9tsJH0e5u/X48IEdHq8P0YlcHyk3UhqU6C6Kb8OxWnl+NwppAyr5ZZ+NHiXTooaCptIeCYnbeKoFOxv3gzL2p8nqAMnh1wlP54MG2f9OD5ENqJA20agRPVjcr2aGDWo30zjiklHdFKjK+kv0e2tKA9gHb5iKPG9UN2r3JwFVlDn+Wz66dvVpB0+cyKIqXIB6/NZ6E1lm7FvNShMUdXU4YOmDSKswL6jwyubdnyTa7jb0P1Jcx2rX4JNNZLmv1OatXLoe3K7GjEzjmjLybYTNADVJ+BlA3FF+nyX0TlCs
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB2857.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(396003)(366004)(346002)(376002)(39850400004)(136003)(64756008)(66946007)(66446008)(66556008)(66476007)(86362001)(54906003)(2906002)(71200400001)(5660300002)(52536014)(6506007)(4326008)(316002)(7696005)(76116006)(26005)(107886003)(110136005)(8676002)(8936002)(55016002)(186003)(33656002)(478600001)(9686003)(41533002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: hbdKZx4rAMFWlHZdj6BXly+uHAKN7DAlh2ip59k3I/afgnMueIWHs2vvhhaUU5VLmNgdqPhjbAWjj3ks9lRrZYI9b8iwD9ofHP0w798ZBHk4TpfaNMWw3V6MU+2z7AT3XQd9tdhJl+ZMica/nCXG8phJ98Z+2JlbQI+WvBrnxVOPjqUymjz70fAB3rotiI8maeLA4Wgkcl6RZKq6JsU9zrH3UDW5yYJ3PpSpNLBHVqv9SZBEwSoMXypymSSXxNnYyZjAEq6LlGyyd5VuNPCuRlcWJuuFgAtW2sqB6GZFhmPz1BfJPBJDaMrAxBuNERsriXblMGXgs6sbD4TPdyJwhTi6rxu0+qar6xDpjB0LuzYSwJWNM/UTh3zC5c42BdpQVr2eCfzlz+ogymZutHjZo7RqY3ZWucxTHaC0hp0Yk2E97x44acBpkd1I7rxkm1yUMavLLPQIPmKZqinHQ8fMygGHMIK7f2JZkc7fq6sGMec=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+X-OriginatorOrg: silabs.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ff91920c-e3b5-4519-213d-08d8180c6e13
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Jun 2020 07:01:33.7147
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 54dbd822-5231-4b20-944d-6f4abcd541fb
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: soZdCeCEnduAIXb0ZufRyn/nh8cwfoI9QY0XK94RPY6CYJP7BGlHqfAkZrF7T3QMqV1Z7wIdf4bZTntbt+NnfA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR11MB1578
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+Assign the .throttle and .unthrottle functions to be generic function
+in the driver structure to prevent data loss that can otherwise occur
+if the host does not enable USB throttling.
 
-Hi,
+Signed-off-by: Phu Luu <phu.luu@silabs.com>
+Signed-off-by: Brant Merryman <brant.merryman@silabs.com>
+---
+06/09/2020: Patch v3 1/2 Modified based on feedback from Johan Hovold <joha=
+n@kernel.org>
+12/18/2019: Patch v2 Broken into two patches and modified based on feedback=
+ from Johan Hovold <johan@kernel.org>
+12/09/2019: Initial submission of patch "Proper RTS control when buffers fi=
+ll"
 
-Macpaul Lin <macpaul.lin@mediatek.com> writes:
-> Nowadays some embedded systems use VCOM to transfer large log and data.
-> Take LTE MODEM as an example, during the long debugging stage, large
-> log and data were transfer through VCOM when doing field try or in
-> operator's lab. Here we suggest slightly increase the transfer buffer
-> in u_serial.c for performance improving.
->
-> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
-> ---
-> Changes for v2:
->   - Drop previous patch for adding flag which indicates hardware capabili=
-ty in
->     gadget.h and in DMA engine according to Alan's suggestion. Thanks.
->   - Replace requested buffer size "REQ_BUF_SIZE" instead of checking hard=
-ware
->     capability.
->   - Refine commit messages.
-> Changes for v3:
->   - Code: no change.
->     Commit: Add missing change log in v2.
->
->  drivers/usb/gadget/function/u_serial.c |    5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/=
-function/u_serial.c
-> index 3cfc6e2..d7912a9 100644
-> --- a/drivers/usb/gadget/function/u_serial.c
-> +++ b/drivers/usb/gadget/function/u_serial.c
-> @@ -80,6 +80,7 @@
->  #define QUEUE_SIZE		16
->  #define WRITE_BUF_SIZE		8192		/* TX only */
->  #define GS_CONSOLE_BUF_SIZE	8192
-> +#define REQ_BUF_SIZE		4096
->=20=20
->  /* console info */
->  struct gs_console {
-> @@ -247,7 +248,7 @@ static int gs_start_tx(struct gs_port *port)
->  			break;
->=20=20
->  		req =3D list_entry(pool->next, struct usb_request, list);
-> -		len =3D gs_send_packet(port, req->buf, in->maxpacket);
-> +		len =3D gs_send_packet(port, req->buf, REQ_BUF_SIZE);
->  		if (len =3D=3D 0) {
->  			wake_up_interruptible(&port->drain_wait);
->  			break;
-> @@ -514,7 +515,7 @@ static int gs_alloc_requests(struct usb_ep *ep, struc=
-t list_head *head,
->  	 * be as speedy as we might otherwise be.
->  	 */
->  	for (i =3D 0; i < n; i++) {
-> -		req =3D gs_alloc_req(ep, ep->maxpacket, GFP_ATOMIC);
-> +		req =3D gs_alloc_req(ep, REQ_BUF_SIZE, GFP_ATOMIC);
+ drivers/usb/serial/cp210x.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-since this can only be applied for the next merge window, it would be
-much better if you work rework how requests are used here and, as I
-mentioned in the other subthread, preallocate a list of requests that
-get recycled. This would allow us to allocate memory without GFP_ATOMIC.
+diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
+index f5143eedbc48..bcceb4ad8be0 100644
+--- a/drivers/usb/serial/cp210x.c
++++ b/drivers/usb/serial/cp210x.c
+@@ -272,6 +272,8 @@ static struct usb_serial_driver cp210x_device =3D {
+ 	.break_ctl		=3D cp210x_break_ctl,
+ 	.set_termios		=3D cp210x_set_termios,
+ 	.tx_empty		=3D cp210x_tx_empty,
++	.throttle		=3D usb_serial_generic_throttle,
++	.unthrottle		=3D usb_serial_generic_unthrottle,
+ 	.tiocmget		=3D cp210x_tiocmget,
+ 	.tiocmset		=3D cp210x_tiocmset,
+ 	.attach			=3D cp210x_attach,
+--=20
+2.17.0
 
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl7y97MACgkQzL64meEa
-mQbjAhAA0OOV27Nwx1Zd9bERbMUOxh2QI77f+9QskVbd7ub1hn/forW3/lSaOe66
-jDYjYKWyi2HFYijFbyYrEJXv2aCWSn4M9YM9DdDicvc9Ny1pTT20YhATcVhr4jOI
-9c3BUXc+TCcoSK/yTbs1Zt25PcktO/M07FpN4+nE1zr128yzpQmd8R5FMO68w7d/
-sckWvXnCoYA2b1udE/dw9+12DE4ae3k/yW+KPrqIKX9FfhACfiDTPhsN6HHj2RnH
-U5PvfahfRDPtAdUhDlB1FOyV6lDBH9I8v+2W3735aR37iylqZFVhkUoNuUoXhFcq
-9HfwA04pGcb5hQTxNQmP55QclnKyKT1YgxDzF6d/7MAhEkBaghzsFN8QJDvQXKAp
-3xiKH9PCD6VGOdqV7K5ID/t28hu68xaO1r+ulk53/unhCeY+6aBS7eod6PuXb0Ta
-NRPJ31rvjRaDUFudPl0C6rsxvkAYwh61lGjVaYboKhjcWBLJfTxnpmx1f89OYsYB
-+sIxhPgo89Q8MavGJ/F46hHm+d5/s8mGYR/kg4S04hyfO37mn9qWfUNNJf6bN5NG
-RSInU5zelNjcv5ox2RpRgY0uSw+/S6YrHF7qivP3ozrlD/AUOQtxeXWV/BGs+8p4
-PFWaCC0YtGYxCBY0oIzbRkRN9tU04zMZWB75NBF0gMhzBm84BBk=
-=zs8r
------END PGP SIGNATURE-----
---=-=-=--
