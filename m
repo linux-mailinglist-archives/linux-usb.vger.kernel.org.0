@@ -2,71 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C811E209A1E
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Jun 2020 08:53:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9373209A99
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Jun 2020 09:34:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389807AbgFYGxt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Jun 2020 02:53:49 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:38914 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389540AbgFYGxt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Jun 2020 02:53:49 -0400
-Received: by mail-lj1-f195.google.com with SMTP id b25so1647310ljp.6
-        for <linux-usb@vger.kernel.org>; Wed, 24 Jun 2020 23:53:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VOP/NHfjn+/doHshsSMj10KVzBVmk7y/J0P8NtnPDLs=;
-        b=NxpH/4OFsquLScoq1ixJhI+arjUycd59wehheiDcTY/7pf/KOZ1+zkSMk6Ww8VMV9y
-         LYyyOpfTGAY2TaBLuI/dK2SrxSlnvwbZl1AcfDp5FffltfOxzXYLST90W9YbHhnS8RZF
-         X0EbW/3VTV3qGeCkZCAyQ8O/2RAtHQ4B7a4P+uUhmFphNnT99I99JS56FlpbnkwIgpGh
-         xROezEDDwW0lll4hedbTaHsEmldiYuwL9KhfBg61L7JFc0ncKC6IHzHYrt+qf6gyCMnk
-         9I6auRsO700iaxTPZg53VtMSCsZk12ScjrvO2WyAQXtzKjCtdqLE3GjXYOxCB3SOMpuV
-         wBOA==
-X-Gm-Message-State: AOAM532mNBoXMYnxqXyda65baJ1l8vOqDCPU4qo9g5TZ3d+HMZ37ba9z
-        SyE4wEBLYC2eqt100t8NbCX7PY9TfoI=
-X-Google-Smtp-Source: ABdhPJwJ2d3z8paEWKpOsiNR/3gz1A/09KueoVfcmmEoFW0/bGG+zDHpmyQJIYhdy3CeuwQnn2F0Iw==
-X-Received: by 2002:a2e:8490:: with SMTP id b16mr16523545ljh.325.1593068026051;
-        Wed, 24 Jun 2020 23:53:46 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id a22sm4537875lfg.96.2020.06.24.23.53.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jun 2020 23:53:45 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1joLld-0005oO-4P; Thu, 25 Jun 2020 08:53:49 +0200
-Date:   Thu, 25 Jun 2020 08:53:49 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Jerry <Jerry@jrr.cz>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v4] usbserial: cp210x - icount support for parity error
- checking
-Message-ID: <20200625065349.GM3334@localhost>
-References: <b4cd2557-9a61-5ccd-32ad-48b0c68bef6b@jrr.cz>
- <20200621085816.GB95977@kroah.com>
- <03712b5a-ecb6-ae42-ff8e-8d5d6f2ed918@jrr.cz>
- <20200621095509.GA120230@kroah.com>
- <470484c8-7afc-c593-5ca9-cdb97dba39e1@jrr.cz>
- <20200621135838.GA125568@kroah.com>
- <7bdff86f-0988-2afc-e1a6-35df2931fd5b@jrr.cz>
- <20200622053146.GB134804@kroah.com>
- <838f09f9-4063-1c2c-8b4d-c18dee6c18de@jrr.cz>
- <6f9cfeb1-3f98-abd3-2471-7508326620ca@jrr.cz>
+        id S2390210AbgFYHef (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Jun 2020 03:34:35 -0400
+Received: from mga11.intel.com ([192.55.52.93]:8554 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2390196AbgFYHef (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 25 Jun 2020 03:34:35 -0400
+IronPort-SDR: rcmaXf3E4RbSdcYrr4PXNvRViGWHZylT7zJQM2O0bfRyIgONBBisBONoVnj7g1IA5RS5CoqFwK
+ OAgqFpXgcTpw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9662"; a="143022633"
+X-IronPort-AV: E=Sophos;i="5.75,278,1589266800"; 
+   d="scan'208";a="143022633"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2020 00:34:34 -0700
+IronPort-SDR: q6Tc4YWn5YHRx4eX/XB6G83PTBGR/1TLnELgelNQ7ADw5/5Epz/SFjzrVILR25kewYShjo3Ntu
+ 01dg4erQBCCg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,278,1589266800"; 
+   d="scan'208";a="385394612"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 25 Jun 2020 00:34:33 -0700
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [PATCH] usb: dwc3: pci: add support for the Intel Tiger Lake PCH -H variant
+Date:   Thu, 25 Jun 2020 10:34:32 +0300
+Message-Id: <20200625073432.82753-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6f9cfeb1-3f98-abd3-2471-7508326620ca@jrr.cz>
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 25, 2020 at 06:31:09AM +0200, Jerry wrote:
-> Hello, can I do anything more for this patch?
+This patch adds the necessary PCI ID for TGP-H devices.
 
-You posted the last update only this Monday. I'll try to review it next
-week.
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+---
+ drivers/usb/dwc3/dwc3-pci.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Johan
+diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
+index b67372737dc9b..41ff052a76d04 100644
+--- a/drivers/usb/dwc3/dwc3-pci.c
++++ b/drivers/usb/dwc3/dwc3-pci.c
+@@ -38,6 +38,7 @@
+ #define PCI_DEVICE_ID_INTEL_ICLLP		0x34ee
+ #define PCI_DEVICE_ID_INTEL_EHLLP		0x4b7e
+ #define PCI_DEVICE_ID_INTEL_TGPLP		0xa0ee
++#define PCI_DEVICE_ID_INTEL_TGPH		0x43ee
+ 
+ #define PCI_INTEL_BXT_DSM_GUID		"732b85d5-b7a7-4a1b-9ba0-4bbd00ffd511"
+ #define PCI_INTEL_BXT_FUNC_PMU_PWR	4
+@@ -356,6 +357,9 @@ static const struct pci_device_id dwc3_pci_id_table[] = {
+ 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_TGPLP),
+ 	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
+ 
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_TGPH),
++	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
++
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_NL_USB),
+ 	  (kernel_ulong_t) &dwc3_pci_amd_properties, },
+ 	{  }	/* Terminating Entry */
+-- 
+2.27.0
+
