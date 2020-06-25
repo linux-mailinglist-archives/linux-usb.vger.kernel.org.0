@@ -2,109 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F12A20A3E1
-	for <lists+linux-usb@lfdr.de>; Thu, 25 Jun 2020 19:18:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F58620A4A5
+	for <lists+linux-usb@lfdr.de>; Thu, 25 Jun 2020 20:19:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406737AbgFYRS6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Jun 2020 13:18:58 -0400
-Received: from out2-smtp.messagingengine.com ([66.111.4.26]:45497 "EHLO
-        out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2406723AbgFYRS5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Jun 2020 13:18:57 -0400
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 0F6A45C014B;
-        Thu, 25 Jun 2020 13:18:56 -0400 (EDT)
-Received: from imap21 ([10.202.2.71])
-  by compute7.internal (MEProxy); Thu, 25 Jun 2020 13:18:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aeam.us; h=
-        mime-version:message-id:in-reply-to:references:date:from:to:cc
-        :subject:content-type; s=fm2; bh=7//y0pvaH/Leo2C5ORpFmdyQyIr52gt
-        bW4xLroU8KJY=; b=NqqQuCLaVaxWL2gJBgiWY76Krzn333G3TbSXTMwG9qiWwnW
-        t5ugn7KBruIrU0ua2xHT7wUydIsMYC3tXWOJnYNJfYRKmkGO6lsNuYy4vYumLNbI
-        he7jJ6fdRL5EL4GkxZKA8Lrw0MDKgnHPcwpowT+BHJiT6rBmUDyMc/o+x1Tuvbu3
-        6iKVufxjQGXaDslJU6/CScdClCsMw4sh08QE2gmsgFn7nK1L/MM+5JnrOXbHoxPe
-        4pu0HEdCZYCX3Wz8sVr5ze0jjzN4FeEZVjF1YTA1tYxBMTH63tA+2FajHdJWRloh
-        +85a7jVtgjMB0w3mJl/bzmCu9VQ4mrNhKYIWrXA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=7//y0p
-        vaH/Leo2C5ORpFmdyQyIr52gtbW4xLroU8KJY=; b=s2HIR49GzKufBi5+GYbEuO
-        4V7EXiEWj3T+cM2rXQpfw3bxdchGfXZYC10+hBkqFsJnRB/G7mHSIaHrNJMGyufD
-        +pSuQq8NpyxTsIuIWAWD73cl3NQN02s2CLJw5TSf+tmKypdcU98EznQBn4LXAYud
-        D0aWzsLXgf63cbXVu/OGr/OUlO5hZJbghBsc9llHqFtOyi3EtHIqCtWRXqPZEkTF
-        YhrPH809+mzmK9T8RIuCBiFK4enb4cdI4WWUSi8GujBvFYd43TfeT+X3ok12F7q9
-        +lFKXP9ocG3hklo8x7Q1L8DbSVTwqtGD/aNPaKSdWmdctUDKfk5ZGaTIi0Sbw1dw
-        ==
-X-ME-Sender: <xms:f9z0Xm-wUjDh4W00tR3kKREbRtIwQuu-HtT5Ata1BCv64Vkd2lLKWA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrudekledgudduvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfufhi
-    ugcuufhprhihfdcuoehsihgusegrvggrmhdruhhsqeenucggtffrrghtthgvrhhnpeevge
-    fhveevteetfeetkeejjeehudffffffhfeuffelhfeuffdufeduleejfeeugfenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsihgusegrvggrmh
-    druhhs
-X-ME-Proxy: <xmx:f9z0Xmv1Ag5CRu6jJOpLrKGRN61r2jwSw7kCh9suf6QtYzEU2OwOXA>
-    <xmx:f9z0XsD4xJ_8CO7dQ3KnAS2Mgwjf_5KskJfOFmdSuJoHJSrPgVHJ8w>
-    <xmx:f9z0XufVPRTr4XEEGpeH0IGnWUpEP8tbAROkAPtDAVUqwn-gwzvhiw>
-    <xmx:gNz0XhYamZOiHK4b92VqRBnPCgX2mtWAS4-Uno7hV1Yx11DcEPpcMg>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 85161660085; Thu, 25 Jun 2020 13:18:55 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.3.0-dev0-543-gda70334-fm-20200618.004-gda703345
-Mime-Version: 1.0
-Message-Id: <c7d44079-49f9-4f6f-b6e3-212d10d20c26@www.fastmail.com>
-In-Reply-To: <CAP6JJ8_YEAj+kdEaEK_X0Q+7puSLX4odr_HAvS_pX5fOggbT0g@mail.gmail.com>
-References: <CAP6JJ88avATE3w7HMn94wTti8GY7uncXKT=zLLRbVTz9xbXKVg@mail.gmail.com>
- <37b88453-7346-400f-94d9-36e8854c9f10@www.fastmail.com>
- <CAP6JJ8_YEAj+kdEaEK_X0Q+7puSLX4odr_HAvS_pX5fOggbT0g@mail.gmail.com>
-Date:   Thu, 25 Jun 2020 12:18:22 -0500
-From:   "Sid Spry" <sid@aeam.us>
-To:     "Mark Deneen" <mdeneen@gmail.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: crash when cleaning up gadget configfs directory on sama5d2
-Content-Type: text/plain
+        id S2390147AbgFYSTh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 25 Jun 2020 14:19:37 -0400
+Received: from mon2.sibername.com ([162.144.51.228]:60057 "EHLO
+        mon1.sibername.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S2389648AbgFYSTh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Jun 2020 14:19:37 -0400
+X-Greylist: delayed 4234 seconds by postgrey-1.27 at vger.kernel.org; Thu, 25 Jun 2020 14:19:36 EDT
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lockie.ca;
+         s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:To:Subject:From:Sender:Reply-To:Cc:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=0xyPDz+3OeDLsiiO3ZTTTnOCmECoAqB2q7/qMLo96mE=; b=C+rpLg6inVaSeQM+8J8oZ7SOrt
+        kvXrAStES0sxn3kP/yHTlL7MqHS9WWtuwUfk0HuGcqOzOkZQ7r3NZQ3E8dA4aj8oB5oTF5OWoWaa0
+        Pz3n/a+v4RRct4mIcwmB9KvU/Tn5h5l/aF4zAxA840c27r62MGUXyFtSTbeQdMKxdybFNSNQDGBhF
+        k/P/PP/iQNUbYtzRFU6k143ZTuLFBEGpWQP88rw8thRbPhu8Rq/To7Uh2tvrZrFnn9Y9f51ThcdGA
+        LG4CR8FTtNj91akvugi+xB3Q2uPRSxsfBrEJ8BBcZMm8HowWg4If58MxERd3WTJ/iYwg4BbmHRGyW
+        YBhWmmkg==;
+Received: from 216-58-17-101.cpe.distributel.net ([216.58.17.101]:53902 helo=[192.168.1.4])
+        by montreal.sibername.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <bjlockie@lockie.ca>)
+        id 1joVMb-005UWG-8H
+        for linux-usb@vger.kernel.org; Thu, 25 Jun 2020 13:08:54 -0400
+From:   James <bjlockie@lockie.ca>
+Subject: Alfa AWUS036ACM (Mediatek MT7612U) problem
+To:     linux-usb <linux-usb@vger.kernel.org>
+Message-ID: <59c96b05-2bdb-44d3-7371-6e5e05c20927@lockie.ca>
+Date:   Thu, 25 Jun 2020 13:08:34 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-OutGoing-Spam-Status: No, score=-1.0
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - montreal.sibername.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lockie.ca
+X-Get-Message-Sender-Via: montreal.sibername.com: authenticated_id: bjlockie@lockie.ca
+X-Authenticated-Sender: montreal.sibername.com: bjlockie@lockie.ca
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 25, 2020, at 11:17 AM, Mark Deneen wrote:
-> On Thu, Jun 25, 2020 at 12:13 PM Sid Spry <sid@aeam.us> wrote:
-> >
-> > On Thu, Jun 25, 2020, at 9:18 AM, Mark Deneen wrote:
-> > > Am I doing something incorrectly? What can I do to debug this further?
-> > >
-> >
-> > On my device it's impossible to remove anything from the configuration once
-> > added. Are you sure it is expected that the gadget can be reconfigured after
-> > UDC binding and then unbinding? (This is a general question to the list as
-> > well, I'd like an answer to your original post also.)
-> >
-> > My workaround is creating a new gadget and binding the UDC to that instead.
-> > Or just rebooting.
-> 
-> I was able to remove the gadget configuration on Jetson Nano using
-> their BSP Kernel (tegra) without an oops, but I have no idea how much
-> that kernel differs from mainline.
-> 
-> If it is not possible, surely crashing is not the desirable behavior!
-> 
-> What happens on your device if you attempt to remove the configuration?
->
+I have an Alfa AWUS036ACM (Mediatek MT7612U) on a Raspberry Pi 4. with:
+OpenWrt SNAPSHOT r13626-751e6ab8e6 / LuCI Master git-20.175.45303-bb95e67
+Kernel Version: 5.4.48
 
-I get "Device or resource busy" even after ensuring I've unlinked the function
-from the configs directory. More recently after putting a FunctionFS filesystem
-in the gadget I am now unable to unbind the UDC, and dmesg shows that
-unbinding seems to erroneously invoke the binding code with an invalid
-argument ('').
+# lsusb
+Bus 002 Device 002: ID 0e8d:7612 MediaTek Inc.
 
-I've also been able to unbind the UDC but then been unable to rebind it to
-anything else but that is sporadic. More typically if I just use premade functions
-I can rebind as much as I want, just not change gadgets after the first binding.
+|My AP keeps dieing (I suspect when it's under load and some other 
+condition :-(). mt76x2u 2-1:1.0: error: mt76x02u_mcu_wait_resp failed 
+with -110| I tried:
 
-From an expected-functionality standpoint it is fairly obvious that what you (and
-I) are trying to do should be supported, but realistically it seems like only setup
-was tested in any detail as devices that reconfigure themselves are vanishingly
-rare.
+https://superuser.com/questions/176319/hard-reset-usb-in-ubuntu-10-04
+
+cd /sys/bus/usb/drivers/usb
+
+echo 2-2 > unbind ; sleep 3 ; echo 2-2 > bind I think it should be 2-1 
+so I tried that:
+
+echo 2-1 > unbind ; sleep 3 ; echo 2-1 > bind
+
+|[ 3539.309730] mt76x2u 2-1:1.0: firmware upload failed: -110
+[ 3540.828260] mt76x2u: probe of 2-1:1.0 failed with error -5|
+That didn't work.
+Physically removing reinserting works (if I also "reset" the wifi in 
+OpenWrt (I don't know what this does)).
+
+There must be a way to remove/reinsert in software instead of rebooting.
+
