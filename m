@@ -2,85 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB8A620B505
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jun 2020 17:43:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3525120B5D6
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jun 2020 18:23:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728634AbgFZPnT convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Fri, 26 Jun 2020 11:43:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59894 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726607AbgFZPnT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 26 Jun 2020 11:43:19 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 208337] New: ucsi_ccg 6-0008: con1: failed to register
- alternate modes
-Date:   Fri, 26 Jun 2020 15:43:18 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: neyuru@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version
- cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
- priority component assigned_to reporter cf_regression
-Message-ID: <bug-208337-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1726896AbgFZQXp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Jun 2020 12:23:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32782 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726832AbgFZQXo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Jun 2020 12:23:44 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2390CC03E979
+        for <linux-usb@vger.kernel.org>; Fri, 26 Jun 2020 09:23:44 -0700 (PDT)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1jor8a-0004qp-H9; Fri, 26 Jun 2020 18:23:36 +0200
+Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1jor8Z-0005kS-Jq; Fri, 26 Jun 2020 18:23:35 +0200
+Date:   Fri, 26 Jun 2020 18:23:35 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Anson Huang <Anson.Huang@nxp.com>, linux-clk@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Remove redundant 'maxItems'
+Message-ID: <20200626162335.ddfc23czvknblmqx@pengutronix.de>
+References: <20200611194738.1480393-1-robh@kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="gcokhkvcs44oti6s"
+Content-Disposition: inline
+In-Reply-To: <20200611194738.1480393-1-robh@kernel.org>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=208337
 
-            Bug ID: 208337
-           Summary: ucsi_ccg 6-0008: con1: failed to register alternate
-                    modes
-           Product: Drivers
-           Version: 2.5
-    Kernel Version: 5.4.38
-          Hardware: Intel
-                OS: Linux
-              Tree: Mainline
-            Status: NEW
-          Severity: normal
-          Priority: P1
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: neyuru@gmail.com
-        Regression: No
+--gcokhkvcs44oti6s
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Bug where the module ucsi_ccg intervenes. Hardware tested: NVIDIA Quadro RTX
-4000 with attached Startech HB31C4AB USB type-C hub
+On Thu, Jun 11, 2020 at 01:47:38PM -0600, Rob Herring wrote:
+> There's no need to specify 'maxItems' with the same value as the number
+> of entries in 'items'. A meta-schema update will catch future cases.
 
-nvidia-modeset: Loading NVIDIA Kernel Mode Setting Driver for UNIX platforms 
-440.82  Wed Apr  1 19:41:29 UTC 2020
-kernel: [drm] [nvidia-drm] [GPU ID 0x00000100] Loading driver
-kernel: [drm] Initialized nvidia-drm 0.0.0 20160202 for 0000:01:00.0 on minor 1
-kernel: nvidia-smi (368) used greatest stack depth: 12488 bytes left
-kernel: usb 5-1: New USB device found, idVendor=2109, idProduct=2820,
-bcdDevice= b.a3
-kernel: usb 5-1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-kernel: usb 5-1: Product: USB2.0 Hub
-kernel: usb 5-1: Manufacturer: VIA Labs, Inc.
-kernel: hub 5-1:1.0: USB hub found
-kernel: hub 5-1:1.0: 4 ports detected
-kernel: ucsi_ccg 6-0008: con1: failed to register alternate modes
+Sounds reasonable,
 
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--gcokhkvcs44oti6s
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAl72IQQACgkQwfwUeK3K
+7AkkTAf+P/Ix8I1Qk1/xQYx03skU0vfyzMw0MExu5t68JfypxlbIJ5xAmxuc6iUC
+85scAvE5q44rK35snt5WmCMjWf5F/afqu/ZOAY4XTp/M3Eb2S0vt9eMJ77myyRrQ
+re3PzISpIlToIUpR1370R5KoQoSDcmKrUHE7vo8Op72CilADbLlitOOp0DVNl+kU
+3q32VL9eUCLbSHTv528iAbzVr/OYNn1Hmq6jHVZBN3Y/kSY2ayep1jguHHtjv7Mi
+WcnKEkNgtQMJTcNQuhIqmfXLjjlN3kBy8taEKkuGsobWq1E2yFQUiBboD1poMXXe
+WlcAYJ4803KbT1JSUf/h1JAXT8Qbmw==
+=laHj
+-----END PGP SIGNATURE-----
+
+--gcokhkvcs44oti6s--
