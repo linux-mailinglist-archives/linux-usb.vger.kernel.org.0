@@ -2,110 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D59B420B8D5
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jun 2020 20:56:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25E6C20B930
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jun 2020 21:16:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725913AbgFZS4G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Jun 2020 14:56:06 -0400
-Received: from mail29.static.mailgun.info ([104.130.122.29]:45294 "EHLO
-        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725992AbgFZSzl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Jun 2020 14:55:41 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1593197740; h=Content-Transfer-Encoding: MIME-Version:
- References: In-Reply-To: Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=ulss9HHbM4ZJcwJ3mp+I9k0MAc5jrVWcm1JkPzBgFEg=; b=CfYXRop1r2MQ6ydG7mLKld+F6Pi2HVd007TIKzfMGkWvqRzzo2S6lYwz5TwSRQhPBBJDigex
- BDnI/9IG6KsPqTapGxkhlxn89VZMWro3QJf0YnEYRk8vc2i2alIeApPAMNN8F2RvDvm2pNBG
- 6UxdBc/p0d/dAXLiK1Y2sNo9lnk=
-X-Mailgun-Sending-Ip: 104.130.122.29
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n14.prod.us-east-1.postgun.com with SMTP id
- 5ef6449f8fe116ddd9a0779d (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 26 Jun 2020 18:55:27
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id D56DBC4339C; Fri, 26 Jun 2020 18:55:26 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 76FCBC433C8;
-        Fri, 26 Jun 2020 18:55:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 76FCBC433C8
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=wcheng@codeaurora.org
-From:   Wesley Cheng <wcheng@codeaurora.org>
-To:     heikki.krogerus@linux.intel.com, agross@kernel.org,
-        mark.rutland@arm.com, bjorn.andersson@linaro.org,
-        gregkh@linuxfoundation.org, broonie@kernel.org,
-        lgirdwood@gmail.com, robh+dt@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        jackp@codeaurora.org, rdunlap@infradead.org,
-        Wesley Cheng <wcheng@codeaurora.org>
-Subject: [PATCH v4 6/6] arm64: boot: dts: qcom: pm8150b: Add DTS node for PMIC VBUS booster
-Date:   Fri, 26 Jun 2020 11:55:16 -0700
-Message-Id: <20200626185516.18018-7-wcheng@codeaurora.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200626185516.18018-1-wcheng@codeaurora.org>
-References: <20200626185516.18018-1-wcheng@codeaurora.org>
+        id S1725958AbgFZTQj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Jun 2020 15:16:39 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:45993 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1725780AbgFZTQj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Jun 2020 15:16:39 -0400
+Received: (qmail 307998 invoked by uid 1000); 26 Jun 2020 15:16:38 -0400
+Date:   Fri, 26 Jun 2020 15:16:38 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     bugzilla-daemon@bugzilla.kernel.org
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [Bug 208307] New: Alcor Micro Corp. Multi Flash Reader
+ [058f:6366] keeps being detected and removed continuously
+Message-ID: <20200626191638.GB306201@rowland.harvard.edu>
+References: <bug-208307-208809@https.bugzilla.kernel.org/>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bug-208307-208809@https.bugzilla.kernel.org/>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add the required DTS node for the USB VBUS output regulator, which is
-available on PM8150B.  This will provide the VBUS source to connected
-peripherals.
+On Wed, Jun 24, 2020 at 05:05:49AM +0000, bugzilla-daemon@bugzilla.kernel.org wrote:
+> https://bugzilla.kernel.org/show_bug.cgi?id=208307
+> 
+>             Bug ID: 208307
+>            Summary: Alcor Micro Corp. Multi Flash Reader [058f:6366] keeps
+>                     being detected and removed continuously
+>            Product: Drivers
+>            Version: 2.5
+>     Kernel Version: 5.8-rc2
 
-Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
----
- arch/arm64/boot/dts/qcom/pm8150b.dtsi   | 6 ++++++
- arch/arm64/boot/dts/qcom/sm8150-mtp.dts | 4 ++++
- 2 files changed, 10 insertions(+)
+> We have a laptop equipped with AMD Ryzen 5 4500U with Radeon Graphics.  The
+> Alcor Micro Corp. Multi Flash Reader keeps being detected and removed
+> continuously.  Then, once the storage modules try to access it, there will be
+> the failure.  These messages keep showing up like floods in the kernel message
+> log.
 
-diff --git a/arch/arm64/boot/dts/qcom/pm8150b.dtsi b/arch/arm64/boot/dts/qcom/pm8150b.dtsi
-index 91b870345dda..18f64bca73bc 100644
---- a/arch/arm64/boot/dts/qcom/pm8150b.dtsi
-+++ b/arch/arm64/boot/dts/qcom/pm8150b.dtsi
-@@ -22,6 +22,12 @@ power-on@800 {
- 			status = "disabled";
- 		};
- 
-+		 pm8150b_vbus: dcdc@1100 {
-+			compatible = "qcom,pm8150b-vbus-reg";
-+			status = "disabled";
-+			reg = <0x1100>;
-+		};
-+
- 		pm8150b_typec: typec@1500 {
- 			compatible = "qcom,pm8150b-usb-typec";
- 			status = "disabled";
-diff --git a/arch/arm64/boot/dts/qcom/sm8150-mtp.dts b/arch/arm64/boot/dts/qcom/sm8150-mtp.dts
-index 6c6325c3af59..ba3b5b802954 100644
---- a/arch/arm64/boot/dts/qcom/sm8150-mtp.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8150-mtp.dts
-@@ -409,6 +409,10 @@ &ufs_mem_phy {
- 	vdda-pll-max-microamp = <19000>;
- };
- 
-+&pm8150b_vbus {
-+	status = "okay";
-+};
-+
- &usb_1_hsphy {
- 	status = "okay";
- 	vdda-pll-supply = <&vdd_usb_hs_core>;
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Try disabling Link Power Management for this device:
 
+   echo 058f:6366:k >/sys/module/usbcore/parameters/quirks
+
+Alan Stern
