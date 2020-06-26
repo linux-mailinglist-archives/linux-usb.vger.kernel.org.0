@@ -2,125 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0B6720B6E5
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jun 2020 19:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4DAE20B836
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jun 2020 20:26:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727854AbgFZRZG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Jun 2020 13:25:06 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:35040 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725833AbgFZRZF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Jun 2020 13:25:05 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05QHMYvR009908;
-        Fri, 26 Jun 2020 17:24:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=ftdr6mHim54L1C0LjxRdGjksokmlNmltTbluVqJWzgg=;
- b=ff+AldsaEEavTREY/UndN4fxK9RRCxWg6o7vMnL9Jr+465fnvPdA8INlJTr9fdoROhcn
- eonn5wv+4p1LxIVUTknAE2AVQTpTwZ6/dhkF0EB0CB2fsjIZqlzXrfVaEH5yGV8bMq5N
- pJ+IbL1tVs9GSsRSRPdKD7X3MidA+wnWohu1dW2cfXcmqzb5CrNg918MkZWy14LkVGPt
- o56EddzV2FsiSc9AIFmGJm8LWeFrF1jFEfIgMnww7SNvNK30WqS+mmVctGJY31XjW/XI
- Jj5D580JHjA/IdzgaOpK89Dw3GE9EmRA+75YJN0P+VbK7lupWuERZvkjQjWGUSkpZG2i Wg== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 31uusu79b4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 26 Jun 2020 17:24:33 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05QHMM9v098753;
-        Fri, 26 Jun 2020 17:24:33 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3020.oracle.com with ESMTP id 31uurctv1w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 26 Jun 2020 17:24:32 +0000
-Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 05QHORRU016433;
-        Fri, 26 Jun 2020 17:24:27 GMT
-Received: from kadam (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 26 Jun 2020 17:24:20 +0000
-Date:   Fri, 26 Jun 2020 20:24:11 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Pawel Laszczak <pawell@cadence.com>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "ben.dooks@codethink.co.uk" <ben.dooks@codethink.co.uk>,
-        "colin.king@canonical.com" <colin.king@canonical.com>,
-        "rogerq@ti.com" <rogerq@ti.com>,
-        "peter.chen@nxp.com" <peter.chen@nxp.com>,
-        "weiyongjun1@huawei.com" <weiyongjun1@huawei.com>,
-        Jayshri Dajiram Pawar <jpawar@cadence.com>,
-        Rahul Kumar <kurahul@cadence.com>,
-        Sanket Parmar <sparmar@cadence.com>
-Subject: Re: [PATCH RFC 2/5] usb:cdns3: Add pci to platform driver wrapper
-Message-ID: <20200626172411.GE2571@kadam>
-References: <20200626045450.10205-1-pawell@cadence.com>
- <20200626045450.10205-3-pawell@cadence.com>
- <20200626114057.GD2571@kadam>
- <DM6PR07MB5529E239FBA41BDDB52CAFC4DD930@DM6PR07MB5529.namprd07.prod.outlook.com>
+        id S1725824AbgFZS0H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Jun 2020 14:26:07 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:49509 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1725780AbgFZS0G (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Jun 2020 14:26:06 -0400
+Received: (qmail 305618 invoked by uid 1000); 26 Jun 2020 14:26:05 -0400
+Date:   Fri, 26 Jun 2020 14:26:05 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     syzbot <syzbot+145012a46658ac00fc9e@syzkaller.appspotmail.com>
+Cc:     alsa-devel@alsa-project.org, andreyknvl@google.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        perex@perex.cz, syzkaller-bugs@googlegroups.com, tiwai@suse.com
+Subject: Re: KASAN: use-after-free Read in line6_submit_audio_in_all_urbs
+Message-ID: <20200626182605.GA305214@rowland.harvard.edu>
+References: <000000000000d44c6d05a8ffe488@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DM6PR07MB5529E239FBA41BDDB52CAFC4DD930@DM6PR07MB5529.namprd07.prod.outlook.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9664 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 spamscore=0 adultscore=0
- malwarescore=0 mlxscore=0 mlxlogscore=999 phishscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006260122
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9664 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 bulkscore=0
- cotscore=-2147483648 malwarescore=0 mlxscore=0 clxscore=1011
- lowpriorityscore=0 mlxlogscore=999 phishscore=0 priorityscore=1501
- spamscore=0 impostorscore=0 adultscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006260122
+In-Reply-To: <000000000000d44c6d05a8ffe488@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 26, 2020 at 03:10:32PM +0000, Pawel Laszczak wrote:
-> >> +static int cdnsp_pci_probe(struct pci_dev *pdev,
-> >> +			   const struct pci_device_id *id)
-> >> +{
-> >> +	struct platform_device_info plat_info;
-> >> +	struct cdnsp_wrap *wrap;
-> >> +	struct resource *res;
-> >> +	struct pci_dev *func;
-> >> +	int err;
-> >> +
-> >> +	/*
-> >> +	 * For GADGET/HOST PCI (devfn) function number is 0,
-> >> +	 * for OTG PCI (devfn) function number is 1.
-> >> +	 */
-> >> +	if (!id || (pdev->devfn != PCI_DEV_FN_HOST_DEVICE &&
-> >> +		    pdev->devfn != PCI_DEV_FN_OTG))
-> >> +		return -EINVAL;
-> >> +
-> >> +	func = cdnsp_get_second_fun(pdev);
-> >> +	if (unlikely(!func))
-> >> +		return -EINVAL;
-> >> +
-> >> +	if (func->class == PCI_CLASS_SERIAL_USB_XHCI ||
-> >> +	    pdev->class == PCI_CLASS_SERIAL_USB_XHCI)
-> >> +		return -EINVAL;
-> >
-> >
-> >Do we need call pci_put_device(func) before returning?
+On Fri, Jun 26, 2020 at 10:18:12AM -0700, syzbot wrote:
+> Hello,
 > 
-> We don't need.
-> Such function doesn't exist.
+> syzbot found the following crash on:
 > 
+> HEAD commit:    fb574682 usbip: tools: fix module name in man page
+> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+> console output: https://syzkaller.appspot.com/x/log.txt?x=156560b1100000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=63b40b2ae167bad6
+> dashboard link: https://syzkaller.appspot.com/bug?extid=145012a46658ac00fc9e
+> compiler:       gcc (GCC) 10.1.0-syz 20200507
+> 
+> Unfortunately, I don't have any reproducer for this crash yet.
+> 
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+145012a46658ac00fc9e@syzkaller.appspotmail.com
+> 
+> snd_usb_toneport 5-1:0.0: URB in #0 submission failed (-19)
+> snd_usb_toneport 5-1:0.0: URB in #0 submission failed (-19)
+> snd_usb_toneport 5-1:0.0: URB in #0 submission failed (-19)
+> snd_usb_toneport 5-1:0.0: URB in #0 submission failed (-19)
+> ==================================================================
+> BUG: KASAN: use-after-free in line6_submit_audio_in_all_urbs+0x10b/0x120 sound/usb/line6/capture.c:72
+> Read of size 8 at addr ffff8881cffb1800 by task kworker/1:5/3257
+> 
+> CPU: 1 PID: 3257 Comm: kworker/1:5 Not tainted 5.8.0-rc1-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> Workqueue: events line6_startup_work
+> Call Trace:
+>  __dump_stack lib/dump_stack.c:77 [inline]
+>  dump_stack+0xf6/0x16e lib/dump_stack.c:118
+>  print_address_description.constprop.0+0x1a/0x210 mm/kasan/report.c:383
+>  __kasan_report mm/kasan/report.c:513 [inline]
+>  kasan_report.cold+0x37/0x7c mm/kasan/report.c:530
+>  line6_submit_audio_in_all_urbs+0x10b/0x120 sound/usb/line6/capture.c:72
+>  line6_stream_start+0x207/0x230 sound/usb/line6/pcm.c:197
+>  line6_pcm_acquire+0x161/0x210 sound/usb/line6/pcm.c:318
+>  line6_startup_work+0x42/0x50 sound/usb/line6/driver.c:734
+>  process_one_work+0x94c/0x15f0 kernel/workqueue.c:2269
+>  worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
+>  kthread+0x392/0x470 kernel/kthread.c:291
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:293
+> 
+> Allocated by task 76:
+>  save_stack+0x1b/0x40 mm/kasan/common.c:48
+>  set_track mm/kasan/common.c:56 [inline]
+>  __kasan_kmalloc.constprop.0+0xc2/0xd0 mm/kasan/common.c:494
+>  kmalloc include/linux/slab.h:555 [inline]
+>  kzalloc include/linux/slab.h:669 [inline]
+>  line6_init_pcm+0x2a7/0x9e0 sound/usb/line6/pcm.c:533
+>  toneport_init+0xdd/0x6b0 sound/usb/line6/toneport.c:419
+>  line6_probe+0xaa0/0x1330 sound/usb/line6/driver.c:809
 
-I meant pci_dev_put().  I'm pretty sure that we do need it to match the
-pci_get_device() in cdnsp_get_second_fun().
+It look like the cancel_delayed_work() in line6_disconnect() needs to be 
+cancel_delayed_work_sync().  Unfortunately we can't test this until syzbot 
+is able to reproduce the bug.
 
-regards,
-dan carpenter
-
+Alan Stern
