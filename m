@@ -2,41 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0933C20AD5B
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jun 2020 09:37:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A50A820AD6B
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jun 2020 09:42:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728633AbgFZHg4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Jun 2020 03:36:56 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:43436 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728082AbgFZHg4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Jun 2020 03:36:56 -0400
-Received: by mail-lf1-f65.google.com with SMTP id g139so4598516lfd.10;
-        Fri, 26 Jun 2020 00:36:54 -0700 (PDT)
+        id S1728533AbgFZHmF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Jun 2020 03:42:05 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:36538 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726128AbgFZHmE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Jun 2020 03:42:04 -0400
+Received: by mail-lf1-f68.google.com with SMTP id c21so4623319lfb.3;
+        Fri, 26 Jun 2020 00:42:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Z1GuqjxXj0a5brCAz0bg4jdrPWPLFBvV4Bc0SO/JPkQ=;
-        b=bC3K5LpV/spVJirEnCKlrOHAZvz63iF8bPk/L24EmjDdYCDMF4SKd6M41VEs8kX67g
-         iV5eNjY8rCoJHCwTG0RfFiB+HUVMDD4biyjVQXYTZBaipjQ8FcNNZAf57PW82Scok0vK
-         T1gOF1qIr70ZO3UbQ57j1h1MFsrhskzIjKdByVJOCab2RMHgRNn3FzVT6eH0RJRy85ws
-         6JAMCYfDinB5p4n57EvVNNM7qx3zNPL/v5b1Qa/PZnM9xVMEvSDAvpz1X88qZnV1UGpw
-         6yl5DIr0ktmkFUtNtotMyq1j29kZM5iwfTS3fAooQh1hk+jiDTpsYEDO0E2j0fbM5/VM
-         krtA==
-X-Gm-Message-State: AOAM533fVOjZcT2elW3w21/I+QHOtpizLo95NKszpYdci15zpjLf0I2t
-        KJM/3Z/N4fLHB0rirtgnjro=
-X-Google-Smtp-Source: ABdhPJwZHL2rfGXtcm26Me04W5/sadNXa1wrwI8Vuqr+7SPiZT2j0/nC4PRpqJdG4GZlGeLgXWx4OA==
-X-Received: by 2002:ac2:5f04:: with SMTP id 4mr1076433lfq.140.1593157013884;
-        Fri, 26 Jun 2020 00:36:53 -0700 (PDT)
+        bh=mz/Q5xHbOmwCEIDYAnNtu1WbEvpEmmozdU6zt7tewjs=;
+        b=ansPmfnjjY1i73OVPV6EwXdBi3KQsHqUFi84Flid0QgrqegXAYPLplcG+SI9oaFHFI
+         GwjZL4w+VMtE4dgKiIQu8Ei6WF//mjPGRLD0+cRbr1b3WsFVF0wD46jWhH6k1KMtlUDn
+         qHR8Da3dxtyhrAlvGVfgz/WkbLQfTkfILddMYlkLiQ/07SGmM2wGDqhHRnp+R+OFaNDs
+         k0SIzyHV/znoMyN8fQLZmbfWGt+V3p+DIJ2XpGrK9nMWQ/FsE/Q2R8/ZMFmYMEkYlkRI
+         nMo1mdpRw/JlZEKiOMqxvWErjZmfQX5GHinfDLsILiEiw9ErWu7CjJtuLdtVWW2lo8Tt
+         jYXQ==
+X-Gm-Message-State: AOAM530I/mtRWvM2xfSqaZt+4l7LUOYIjnLzrKeG+xfu0NaHoYv5+3b8
+        9Yn5NUQ9jfeb3NVJ91ge700=
+X-Google-Smtp-Source: ABdhPJx/Mub6cbZBQRh5pmIf6JDa6VYSNKLrybxnpwjY7gIu4zfOWe0CddowQEbi5MIfNPpapsnt/Q==
+X-Received: by 2002:a19:c744:: with SMTP id x65mr1133435lff.133.1593157322338;
+        Fri, 26 Jun 2020 00:42:02 -0700 (PDT)
 Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id s20sm6195817ljs.36.2020.06.26.00.36.52
+        by smtp.gmail.com with ESMTPSA id f24sm5312749ljk.125.2020.06.26.00.42.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Jun 2020 00:36:52 -0700 (PDT)
+        Fri, 26 Jun 2020 00:42:01 -0700 (PDT)
 Received: from johan by xi.terra with local (Exim 4.93.0.4)
         (envelope-from <johan@kernel.org>)
-        id 1joiuv-0005Dl-GU; Fri, 26 Jun 2020 09:36:58 +0200
-Date:   Fri, 26 Jun 2020 09:36:57 +0200
+        id 1joizu-0005Fh-Rj; Fri, 26 Jun 2020 09:42:06 +0200
+Date:   Fri, 26 Jun 2020 09:42:06 +0200
 From:   Johan Hovold <johan@kernel.org>
 To:     Phu Luu <Phu.Luu@silabs.com>
 Cc:     "johan@kernel.org" <johan@kernel.org>,
@@ -45,61 +45,91 @@ Cc:     "johan@kernel.org" <johan@kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Brant Merryman <Brant.Merryman@silabs.com>,
         Richard Hendricks <Richard.Hendricks@silabs.com>,
-        "hungnd3@fsoft.com.vn" <hungnd3@fsoft.com.vn>,
-        =?utf-8?B?UGjDuiBMxrB1?= An <luuanphu@gmail.com>
-Subject: Re: [PATCH v3 1/2] USB: serial: cp210x: Enable usb generic
- throttle/unthrottle
-Message-ID: <20200626073657.GO3334@localhost>
-References: <57401AF3-9961-461F-95E1-F8AFC2105F5E@silabs.com>
+        =?utf-8?B?UGjDuiBMxrB1?= An <luuanphu@gmail.com>,
+        "hungnd3@fsoft.com.vn" <hungnd3@fsoft.com.vn>
+Subject: Re: [PATCH v3 2/2] USB: serial: cp210x: Proper RTS control when
+ buffers fill
+Message-ID: <20200626074206.GP3334@localhost>
+References: <ECCF8E73-91F3-4080-BE17-1714BC8818FB@silabs.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <57401AF3-9961-461F-95E1-F8AFC2105F5E@silabs.com>
+In-Reply-To: <ECCF8E73-91F3-4080-BE17-1714BC8818FB@silabs.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 26, 2020 at 04:22:58AM +0000, Phu Luu wrote:
+On Fri, Jun 26, 2020 at 04:24:20AM +0000, Phu Luu wrote:
 > From: Brant Merryman <brant.merryman@silabs.com>
 > 
-> Assign the .throttle and .unthrottle functions to be generic function
-> in the driver structure to prevent data loss that can otherwise occur
-> if the host does not enable USB throttling.
+> CP210x hardware disables auto-RTS but leaves auto-CTS when
+> in hardware flow control mode and UART on cp210x hardware
+> is disabled. This allows data to flow out, but new data
+> will not come into the port. When re-opening the port, if
+> auto-CTS is enabled on the cp210x, then auto-RTS must be
+> re-enabled in the driver.
 > 
 > Signed-off-by: Phu Luu <phu.luu@silabs.com>
 > Signed-off-by: Brant Merryman <brant.merryman@silabs.com>
 
-Almost there. As I mentioned, the authori's SOB goes first and the
-following SOB lines indicates who forwarded the patch (e.g. you in this
-case).
+Please revisit these tags as well.
 
-If you also contributed to the patch you (e.g. you added the missing
-changelog text) you should also add a Co-developed-by tag as described
-in the process document I referred to:
+> ---
+> 06/09/2020: Patch v3 2/2 Modified based on feedback from Johan Hovold <johan@kernel.org>
+> 12/18/2019: Patch v2 Broken into two patches and modified based on feedback from Johan Hovold <johan@kernel.org>
+> 12/09/2019: Initial submission of patch "Proper RTS control when buffers fill"
+> 
+>  drivers/usb/serial/cp210x.c | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+> 
+> diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
+> index bcceb4ad8be0..091441b1c5b9 100644
+> --- a/drivers/usb/serial/cp210x.c
+> +++ b/drivers/usb/serial/cp210x.c
+> @@ -917,6 +917,7 @@ static void cp210x_get_termios_port(struct usb_serial_port *port,
+>  	u32 baud;
+>  	u16 bits;
+>  	u32 ctl_hs;
+> +	u32 flow_repl;
+>  
+>  	cp210x_read_u32_reg(port, CP210X_GET_BAUDRATE, &baud);
+>  
+> @@ -1017,6 +1018,23 @@ static void cp210x_get_termios_port(struct usb_serial_port *port,
+>  	ctl_hs = le32_to_cpu(flow_ctl.ulControlHandshake);
+>  	if (ctl_hs & CP210X_SERIAL_CTS_HANDSHAKE) {
+>  		dev_dbg(dev, "%s - flow control = CRTSCTS\n", __func__);
+> +		/*
+> +		 * When the port is closed, the CP210x hardware disables
+> +		 * auto-RTS and RTS is deasserted but it leaves auto-CTS when
+> +		 * in hardware flow control mode. This prevents new data from
+> +		 * being received by the port. When re-opening the port, if
+> +		 * auto-CTS is enabled on the cp210x, then auto-RTS must be
+> +		 * re-enabled in the driver.
+> +		 */
 
-	Co-developed-by: states that the patch was co-created by
-	multiple developers; it is a used to give attribution to
-	co-authors (in addition to the author attributed by the From:
-	tag) when several people work on a single patch.  Since
-	Co-developed-by: denotes authorship, every Co-developed-by: must
-	be immediately followed by a Signed-off-by: of the associated
-	co-author.  Standard sign-off procedure applies, i.e. the
-	ordering of Signed-off-by: tags should reflect the chronological
-	history of the patch insofar as possible, regardless of whether
-	the author is attributed via From: or Co-developed-by:.
-	Notably, the last Signed-off-by: must always be that of the
-	developer submitting the patch.
+I already asked this of Brant, but could you please be more specific
+about which state the RTS-line end up in when disabling the UART (e.g.
+0x00: statically inactive)?
 
-	- Documentation/process/submitting-patches.rst
+The reason I ask is that after open() returns, the tty layer would raise
+RTS, which should again allow data to flow in in contrast to what the
+comment and changelog text claims.
 
-So in this case the tags should probably be:
+We still want to enable auto-RTS of course so the patch is otherwise
+correct.
 
-	SOB: Brant
-	CDB: Phu
-	SOB: Phu
-
-Care to fix that up in a v4 (yes, please increment the patch revision
-every time you resubmit)?
+> +		flow_repl = le32_to_cpu(flow_ctl.ulFlowReplace);
+> +		flow_repl &= ~CP210X_SERIAL_RTS_MASK;
+> +		flow_repl |= CP210X_SERIAL_RTS_SHIFT(CP210X_SERIAL_RTS_FLOW_CTL);
+> +		flow_ctl.ulFlowReplace = cpu_to_le32(flow_repl);
+> +		cp210x_write_reg_block(port,
+> +				CP210X_SET_FLOW,
+> +				&flow_ctl,
+> +				sizeof(flow_ctl));
+> +
+>  		cflag |= CRTSCTS;
+>  	} else {
+>  		dev_dbg(dev, "%s - flow control = NONE\n", __func__);
 
 Johan
