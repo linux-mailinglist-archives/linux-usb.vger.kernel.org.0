@@ -2,66 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C846D20B2BF
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jun 2020 15:43:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 814A820B39A
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jun 2020 16:31:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728539AbgFZNnt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Jun 2020 09:43:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39982 "EHLO mail.kernel.org"
+        id S1725939AbgFZObp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Jun 2020 10:31:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40552 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725864AbgFZNnt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 26 Jun 2020 09:43:49 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        id S1725778AbgFZObp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 26 Jun 2020 10:31:45 -0400
+Received: from Mani-XPS-13-9360 (unknown [157.46.30.221])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AA69B20656;
-        Fri, 26 Jun 2020 13:43:48 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7651E206DD;
+        Fri, 26 Jun 2020 14:31:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593179029;
-        bh=gaVWyq4+IVSLWllMUFqnDbLAUXdRuZKIN4lmZPsTZgw=;
+        s=default; t=1593181904;
+        bh=BVMWvPhWg1IVXGZyHr7y/cDzo9HIeg1mzA0zLZ9Ejps=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rrLUh2Ym53eHVizZ0IDbQM/gCch3S7adJ8rKLLF1XNvslldix/AH6OmUpjU3Biqts
-         6eqg0o4NUrVLKj+DhTI0hl66ajOcfEOlakGPUZGtSf55r9EZgyC6CIGAcco58IzT+e
-         0LMTmznNhBeQBKWfrHns88X3u9jYZR+DwjErCBa4=
-Date:   Fri, 26 Jun 2020 15:43:44 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Pawel Laszczak <pawell@cadence.com>
-Cc:     robh+dt@kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, balbi@kernel.org,
-        devicetree@vger.kernel.org, dan.carpenter@oracle.com,
-        ben.dooks@codethink.co.uk, colin.king@canonical.com, rogerq@ti.com,
-        peter.chen@nxp.com, weiyongjun1@huawei.com, jpawar@cadence.com,
-        kurahul@cadene.com, sparmar@cadence.com
-Subject: Re: [PATCH RFC 2/5] usb:cdns3: Add pci to platform driver wrapper
-Message-ID: <20200626134344.GA4030531@kroah.com>
-References: <20200626045450.10205-1-pawell@cadence.com>
- <20200626045450.10205-3-pawell@cadence.com>
+        b=badPBwiYsRmYofQAi4idwNbti2jF26K3xs6g3nIV2db44SeDqs/iL1PFgxmBfJcyG
+         dQQbQD4WN5nREeUwl0lrG1vdpBgPLFg3nPdrZhttIHd5MHBwxo6NtCeF58Jmbkik8T
+         2blj98QTMW35DYtUf/ZA9kBBhv0k66OCaXgwA260=
+Date:   Fri, 26 Jun 2020 20:01:36 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     johan@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patong.mxl@gmail.com, linus.walleij@linaro.org,
+        mchehab+huawei@kernel.org
+Subject: Re: [PATCH v4 0/3] Add support for MaxLinear/Exar USB to serial
+ converters
+Message-ID: <20200626143136.GF8333@Mani-XPS-13-9360>
+References: <20200607160809.20192-1-mani@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200626045450.10205-3-pawell@cadence.com>
+In-Reply-To: <20200607160809.20192-1-mani@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 26, 2020 at 06:54:47AM +0200, Pawel Laszczak wrote:
-> Patch adds PCI specific glue driver that creates and registers in-system
-> cdns-usbssp platform device.
+On Sun, Jun 07, 2020 at 09:38:06PM +0530, Manivannan Sadhasivam wrote:
+> Hello,
+> 
+> This series adds support for MaxLinear/Exar USB to serial converters.
+> This driver only supports XR21V141X series but it can easily be extended
+> to other series in future.
+> 
+> This driver is inspired from the initial one submitted by Patong Yang:
+> 
+> https://patchwork.kernel.org/patch/10543261/
+> 
+> While the initial driver was a custom tty USB driver exposing whole
+> new serial interface ttyXRUSBn, this version is completely based on USB
+> serial core thus exposing the interfaces as ttyUSBn. This will avoid
+> the overhead of exposing a new USB serial interface which the userspace
+> tools are unaware of.
+> 
+> This series has been tested with Hikey970 board hosting XR21V141X chip.
+> 
 
-Ick, no.
+Gentle ping on this series!
 
-Platform devices are ONLY to be used for when you have a real platform
-device.  If your device is a PCI device, use that.  Don't try to be cute
-and make a platform device when you don't have one please.
+Thanks,
+Mani
 
-> Thanks to that we will be able to use
-> the cdns-usbssp platform driver for USBSS-DEV controller
-> build on PCI board.
-
-No, fix up that driver to not care about it being a platform device,
-make it just accept any type of 'struct device'.
-
-thanks,
-
-greg k-h
+> Thanks,
+> Mani
+> 
+> Changes in v4:
+> 
+> * Multiple improvements based on Johan's review. Noticeable ones are:
+>   - Now the driver claims both control and data interfaces but only registers
+>     tty device for data interface.
+>   - GPIO pin status is now shared between the console and gpiolib
+>     implementations. This is done to avoid changing the lines spuriously.
+>   - A separate port_open flag is added to reject GPIO requests while the tty
+>     port is open.
+>   - Removed padding PID to gpio device.
+> * Added Greg and Mauro's review and tested tags.
+> * Included a patch from Mauro to avoid the CDC-ACM driver to claim this device
+>   when this driver is built.
+> 
+> Changes in v3:
+> 
+> * Dropped the check for PID and also the reg_width property.
+> 
+> Changes in v2:
+> 
+> * Dropped the code related to handling variable register size. It's all u8 now.
+> * Dropped the header file and moved the contents to driver itself.
+> * Added Linus's reviewed-by tag for gpiochip patch.
+> * Added PID to gpiochip label
+> * Dropped gpiochip for interface 0 
+> 
+> Manivannan Sadhasivam (2):
+>   usb: serial: Add MaxLinear/Exar USB to Serial driver
+>   usb: serial: xr_serial: Add gpiochip support
+> 
+> Mauro Carvalho Chehab (1):
+>   usb: cdc-acm: Ignore Exar XR21V141X when serial driver is built
+> 
+>  drivers/usb/class/cdc-acm.c    |   6 +
+>  drivers/usb/serial/Kconfig     |   9 +
+>  drivers/usb/serial/Makefile    |   1 +
+>  drivers/usb/serial/xr_serial.c | 857 +++++++++++++++++++++++++++++++++
+>  4 files changed, 873 insertions(+)
+>  create mode 100644 drivers/usb/serial/xr_serial.c
+> 
+> -- 
+> 2.17.1
+> 
