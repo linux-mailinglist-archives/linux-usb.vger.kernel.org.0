@@ -2,57 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 463A520B95A
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jun 2020 21:34:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85E4120B95B
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jun 2020 21:34:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725838AbgFZTeq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Jun 2020 15:34:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33954 "EHLO
+        id S1725847AbgFZTes (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Jun 2020 15:34:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725768AbgFZTeq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Jun 2020 15:34:46 -0400
-Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE269C03E979
-        for <linux-usb@vger.kernel.org>; Fri, 26 Jun 2020 12:34:45 -0700 (PDT)
-Received: by mail-qt1-x844.google.com with SMTP id j10so8317254qtq.11
-        for <linux-usb@vger.kernel.org>; Fri, 26 Jun 2020 12:34:45 -0700 (PDT)
+        with ESMTP id S1725768AbgFZTer (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Jun 2020 15:34:47 -0400
+Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92ABDC03E979
+        for <linux-usb@vger.kernel.org>; Fri, 26 Jun 2020 12:34:47 -0700 (PDT)
+Received: by mail-qt1-x843.google.com with SMTP id v19so8313817qtq.10
+        for <linux-usb@vger.kernel.org>; Fri, 26 Jun 2020 12:34:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=Xc/KS1+lBdxXwaLwp7k6sHJ5EPV+57y26bhAeg9ND/g=;
-        b=Ws83tmIfX4UgNNgNbIsgrwG6IiYab7KzvS8BTdqsaYP97vNw/QCQLg4Eau6qbG3aBA
-         sCAY3bcaC4OOWlhmCziCFQlFCJkdbFducSk0YMVVCL62FiOGjS/xt1vLpUoVTvS0qJzf
-         NQtTTPgGqZ91LSVx6Zp8XVQaUe9BAIdcRa3tpWf+g7xjhv7z9ZKTj9554RHDNVu0L44u
-         8C0IQwc+Sq9M7lCqnlu39iHuBR5pXi9wzv3c5uWYiz7+XwjVjYSA384Q51UqbibZC9D+
-         KaJ0CklGRTlgXBzpe3Uv+3eyCXY3MgY8siA6UARgENtS14Q6x7zZrikR0MW2LuUaVYKN
-         w4UQ==
+        bh=V93KBbiqYgLQgxuCNYgxQaFkpJp0j4u3rwW0p2x9ALc=;
+        b=Z4UfUU8JvxEVmQLRNNIfJOjt0Q/4DyNLk3PxaaqVWVeeRDQVQpK+XqRGIuqT969nJI
+         5J8yWFeqhuiCEdJX2K68W38LwBQ1kp7Uidu8H69iMtt7HhT75LaeXZbEyXsOxb23lfh8
+         0MLt3coZlRokOTuhwk0e98WAAt69u7DEp7H3Rk/v3FP4ZDWAR5NrPhSXewFnjmHFBlnX
+         v+eP5bAA1l7O16LPM470awkgJOi4VmtLhhBxvAuM/jTsuy+vJgUZtuJ7aUU9o8WlFTkH
+         EX+yMdkwd6XZEeBVpjWibyIY2pbq7vGSpa0aL6atprnq4BqnKJiWtdS6pPKXJ9gTbg3p
+         OujQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=Xc/KS1+lBdxXwaLwp7k6sHJ5EPV+57y26bhAeg9ND/g=;
-        b=YuVTTrrdcSl+ykCtkCzxTNpZWdL98kegxEZ4Sd/tFM04QZwpY92NP9eRc5/MFp0A/a
-         FtIm6NkquAHUJ0VQyOiIegIq3g062pBpEhZg/AduXFib+FnGqCMsf5ZH5emseudyIMLb
-         iQmz1upTznOD9akH1CLXeyKNJnTv8VFp6V4+NMWTn073kG+dJvq7KSsl057JSerRWyZ3
-         4mdiFcgIF+jaltXDA7MrE9BXv5JD+PpZUj9aVYcvFipG+SB0M9exy/uqbU3qB8W6SKpP
-         5Wobv1LPA8JZmGCkRsF+qyIhwIKX263Ij8OsliFR1BN2mis0cTwNw1Tk34N+ElshbJ0g
-         S1YA==
-X-Gm-Message-State: AOAM530bPZKDoL1ufaibEegvvkzuXkC8KbMo5eTw/kGP3YgLcFTqErr6
-        HFDxRsOk05aXjjWYl49nmiA=
-X-Google-Smtp-Source: ABdhPJzkPMe+aiwY6ARgO3lZAQBRviVz5bnXjZP6DrG9I3KIvdIh6BvSKlt26SzAbS+3jjRNmCJJsA==
-X-Received: by 2002:ac8:2928:: with SMTP id y37mr4501131qty.245.1593200085105;
-        Fri, 26 Jun 2020 12:34:45 -0700 (PDT)
+        bh=V93KBbiqYgLQgxuCNYgxQaFkpJp0j4u3rwW0p2x9ALc=;
+        b=G8OK1/F/eO1+RFZz2Z3v1/Q/Yxa1N3E8ac4PD3b0KF9JZwDwGWEeobjqsCgJZOMIYW
+         hSTo3xcs/Px6XCbwr3TApQV2l//ASsCRlFcH8Qo4HEqeYiOchFKO5R2DOOmvFUX+h95x
+         0diS3N07OKLRwdbptmdGJnAYZsBM4i52F0dSRcnt5k2kE5jdHNHKzgoZl7Od0vFcDCz5
+         II9bPJsy4Tss5vTKbDX69o4H5Xx+c1dwZbvJFZHd+pgNwVhb9JrosTQJEOEv/TELniwO
+         SGZoiplTEOqNpc+mGblTsCYi06x5uG9+lExpJK9mv04I++suEfv0s2LLnpaZFYILvwqE
+         LR9Q==
+X-Gm-Message-State: AOAM531lczxbfUFc8H34szpJizwkS3shjblFnloIFW9WOMfld/ISeITe
+        RoALCJ75CnC3imZRtvO6xsE=
+X-Google-Smtp-Source: ABdhPJx4CwIXueNyvGETvcLwT3roW0eUftclFSR1xsWjcIll70233qqmnWLThRaEgoow9RVKOg2hzQ==
+X-Received: by 2002:ac8:2256:: with SMTP id p22mr4335341qtp.75.1593200086783;
+        Fri, 26 Jun 2020 12:34:46 -0700 (PDT)
 Received: from DESKTOP-JC0RTV5.neu.edu ([155.33.134.7])
-        by smtp.gmail.com with ESMTPSA id u124sm1089990qkf.83.2020.06.26.12.34.43
+        by smtp.gmail.com with ESMTPSA id u124sm1089990qkf.83.2020.06.26.12.34.45
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 26 Jun 2020 12:34:44 -0700 (PDT)
+        Fri, 26 Jun 2020 12:34:45 -0700 (PDT)
 From:   Changming Liu <charley.ashbringer@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-usb@vger.kernel.org, thomas@winischhofer.net,
         Changming Liu <charley.ashbringer@gmail.com>
-Subject: [PATCH 3/4] USB: sisusbvga: change the buffer in sisusb_recv_bulk_msg from char to u8
-Date:   Fri, 26 Jun 2020 15:34:16 -0400
-Message-Id: <1593200057-245-4-git-send-email-charley.ashbringer@gmail.com>
+Subject: [PATCH 4/4] USB: sisusbvga: change the buffers in sisusb_read_mem_bulk from char to u8
+Date:   Fri, 26 Jun 2020 15:34:17 -0400
+Message-Id: <1593200057-245-5-git-send-email-charley.ashbringer@gmail.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1593200057-245-1-git-send-email-charley.ashbringer@gmail.com>
 References: <1593200057-245-1-git-send-email-charley.ashbringer@gmail.com>
@@ -61,48 +61,70 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch changes the userbuffer of sisusb_recv_bulk_msg from char to u8
-to avoid related UB.
+This patch changes the userbuffer,kernbuffer in the header of 
+sisusb_read_mem_bulk from char to u8 to avoid related UB.
 
-Also, for kernbuffer declared as void* in the function header, force cast 
-the passed-in parameters from char* to u8*.
+Also a local buffer, buf, in sisusb_read_mem_bulk is changed
+from char to u8.
+
+Since sisusb_read_mem_bulk is called by sisusb_read_memory 
+sisusb_testreadwrite and sisusb_read, change their 
+passed-in parameters types from char to u8 accordingly.
 
 Signed-off-by: Changming Liu <charley.ashbringer@gmail.com>
 ---
- drivers/usb/misc/sisusbvga/sisusb.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/usb/misc/sisusbvga/sisusb.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/usb/misc/sisusbvga/sisusb.c b/drivers/usb/misc/sisusbvga/sisusb.c
-index 8878c28..86638c1 100644
+index 86638c1..f1b46b5 100644
 --- a/drivers/usb/misc/sisusbvga/sisusb.c
 +++ b/drivers/usb/misc/sisusbvga/sisusb.c
-@@ -448,7 +448,7 @@ static int sisusb_send_bulk_msg(struct sisusb_usb_data *sisusb, int ep, int len,
-  */
- 
- static int sisusb_recv_bulk_msg(struct sisusb_usb_data *sisusb, int ep, int len,
--		void *kernbuffer, char __user *userbuffer, ssize_t *bytes_read,
-+		void *kernbuffer, u8 __user *userbuffer, ssize_t *bytes_read,
- 		unsigned int tflags)
+@@ -1108,7 +1108,7 @@ static int sisusb_read_mem_bulk(struct sisusb_usb_data *sisusb, u32 addr,
+ 		ssize_t *bytes_read)
  {
- 	int result = 0, retry, count = len;
-@@ -551,7 +551,7 @@ static int sisusb_send_packet(struct sisusb_usb_data *sisusb, int len,
- 		 *    return value and write it to packet->data
- 		 */
- 		ret = sisusb_recv_bulk_msg(sisusb, SISUSB_EP_GFX_IN, 4,
--				(char *)&tmp, NULL, &bytes_transferred, 0);
-+				(u8 *)&tmp, NULL, &bytes_transferred, 0);
+ 	int ret = 0;
+-	char buf[4];
++	u8 buf[4];
+ 	u16 swap16;
+ 	u32 swap32;
  
- 		packet->data = le32_to_cpu(tmp);
- 	}
-@@ -587,7 +587,7 @@ static int sisusb_send_bridge_packet(struct sisusb_usb_data *sisusb, int len,
- 		 *    return value and write it to packet->data
- 		 */
- 		ret = sisusb_recv_bulk_msg(sisusb, SISUSB_EP_BRIDGE_IN, 4,
--				(char *)&tmp, NULL, &bytes_transferred, 0);
-+				(u8 *)&tmp, NULL, &bytes_transferred, 0);
+@@ -1293,7 +1293,7 @@ int sisusb_copy_memory(struct sisusb_usb_data *sisusb, char *src,
+ }
  
- 		packet->data = le32_to_cpu(tmp);
- 	}
+ #ifdef SISUSBENDIANTEST
+-static int sisusb_read_memory(struct sisusb_usb_data *sisusb, char *dest,
++static int sisusb_read_memory(struct sisusb_usb_data *sisusb, u8 *dest,
+ 		u32 src, int length)
+ {
+ 	size_t dummy;
+@@ -1308,7 +1308,7 @@ static int sisusb_read_memory(struct sisusb_usb_data *sisusb, char *dest,
+ static void sisusb_testreadwrite(struct sisusb_usb_data *sisusb)
+ {
+ 	static char srcbuffer[] = { 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77 };
+-	char destbuffer[10];
++	u8 destbuffer[10];
+ 	int i, j;
+ 
+ 	sisusb_copy_memory(sisusb, srcbuffer, sisusb->vrambase, 7);
+@@ -2561,7 +2561,7 @@ static ssize_t sisusb_read(struct file *file, char __user *buffer,
+ 		 * Remember: Data delivered is never endian-corrected
+ 		 */
+ 		errno = sisusb_read_mem_bulk(sisusb, address,
+-				NULL, count, buffer, &bytes_read);
++				NULL, count, (u8 __user *)buffer, &bytes_read);
+ 
+ 		if (bytes_read)
+ 			errno = bytes_read;
+@@ -2577,7 +2577,7 @@ static ssize_t sisusb_read(struct file *file, char __user *buffer,
+ 		 * Remember: Data delivered is never endian-corrected
+ 		 */
+ 		errno = sisusb_read_mem_bulk(sisusb, address,
+-				NULL, count, buffer, &bytes_read);
++				NULL, count, (u8 __user *)buffer, &bytes_read);
+ 
+ 		if (bytes_read)
+ 			errno = bytes_read;
 -- 
 2.7.4
 
