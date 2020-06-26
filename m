@@ -2,94 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF68720AFF3
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jun 2020 12:43:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8384420B028
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jun 2020 13:03:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728059AbgFZKnU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Fri, 26 Jun 2020 06:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36704 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726778AbgFZKnU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Jun 2020 06:43:20 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24196C08C5C1
-        for <linux-usb@vger.kernel.org>; Fri, 26 Jun 2020 03:43:20 -0700 (PDT)
-Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1jolp7-0005bM-Ek; Fri, 26 Jun 2020 12:43:09 +0200
-Received: from pza by lupine with local (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1jolp5-0000zL-9u; Fri, 26 Jun 2020 12:43:07 +0200
-Message-ID: <6ddaf69d4f5ad188864f62dcdbfbbe32acef9820.camel@pengutronix.de>
-Subject: Re: [PATCH v3 2/9] reset: Add Raspberry Pi 4 firmware reset
- controller
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        f.fainelli@gmail.com, gregkh@linuxfoundation.org, wahrenst@gmx.net,
+        id S1728277AbgFZLD3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Jun 2020 07:03:29 -0400
+Received: from mail-eopbgr50103.outbound.protection.outlook.com ([40.107.5.103]:48452
+        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728232AbgFZLD2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 26 Jun 2020 07:03:28 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Kc5CuQ9scZpPNKKtQRluPnztc/LRw61OO6l7YWq6vGFf6qvk20cdZFB2aD4+Yn94X81wPEdinywfZeRc6HIWvndSj075O/ls5rhT3ghqK1CjCX3R8/BSynVoffJFpxsAhbYgtCsa+TMclnY9HoQELu1ye1VxHVvr7dGd+jHKIQ0ixgCBzJLkyraHTRS+NBPgsEf81aiQDCekaodIM4adR5dsotHu2se03ih8coUsngyasB06vTyZ4R0XabABlmwNjVHlqCvA44wPYpM720WriNuM44vI76tn/PawM33806Ehrof1JNmh/20xxTUDaN0x1bnJL8DoD1jTy/lYfUQ19Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=T0ljPalc+eBqomCONPAW5sRlU5RzxDqkEHLR6pQZMj0=;
+ b=kkdvxtJC9ZzVr5t4eBa7IGfxe4PKUqjyKyCnMWhVGoCLhkYa2tOWY1Oe9DdnLmN3XqAN0LiCU7l605ew89JMIk2FRmdp70FwZ3bu3c1n70RUARi8Ip1Z9qUZN85RR1nfTVri9Wkd5uIYQ3SO8z4tV5t4hgFh1ebq6W228SWX4s7CzLAxaEdIlkkmDct00u30GTwiakSugsJ7ETbRKOVJjOU+wwUTS/kKxYTvQXnYFS/JGBrqvG1+FMNDHURD9kS5mOUfJ7V5JCIeyc/n6aopZbFxEciLPs0PWVlE1fCmCAm1AKZJDeHNzyrmuJe4L5wAZ4TWgcez82VhWylAfAqqPQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=toradex.com; dmarc=pass action=none header.from=toradex.com;
+ dkim=pass header.d=toradex.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=toradex.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=T0ljPalc+eBqomCONPAW5sRlU5RzxDqkEHLR6pQZMj0=;
+ b=WMZJfChnGPtQXWPD4XldQ/Mngo79yHL1AZIMziwZS+Boa4PeCliaTpXNY4pxqthFv8r6+4ln1V54I/cmcQEr5gzYeLHI9CeMtfQOVD0y4ihXgU9+MpA6lAgOuI4XfWRMMZ678f6fwKBN/wRCKzCNxx3MjwUK/LQAJ0LtrC0RzII=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none
+ header.from=toradex.com;
+Received: from AM6PR05MB6120.eurprd05.prod.outlook.com (2603:10a6:20b:a8::25)
+ by AM6PR05MB4952.eurprd05.prod.outlook.com (2603:10a6:20b:c::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3131.21; Fri, 26 Jun
+ 2020 11:03:24 +0000
+Received: from AM6PR05MB6120.eurprd05.prod.outlook.com
+ ([fe80::1d81:6a9b:8c26:3b7d]) by AM6PR05MB6120.eurprd05.prod.outlook.com
+ ([fe80::1d81:6a9b:8c26:3b7d%4]) with mapi id 15.20.3131.020; Fri, 26 Jun 2020
+ 11:03:24 +0000
+From:   Philippe Schenker <philippe.schenker@toradex.com>
+To:     linux-usb@vger.kernel.org, Peter Chen <Peter.Chen@nxp.com>
+Cc:     Stefan Agner <stefan.agner@toradex.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org
-Cc:     linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com, tim.gover@raspberrypi.org,
-        linux-pci@vger.kernel.org, helgaas@kernel.org,
-        andy.shevchenko@gmail.com, mathias.nyman@linux.intel.com,
-        lorenzo.pieralisi@arm.com
-Date:   Fri, 26 Jun 2020 12:43:07 +0200
-In-Reply-To: <b324122e8bd93302215a77d0dcf6d8b2897d3597.camel@suse.de>
-References: <20200612171334.26385-1-nsaenzjulienne@suse.de>
-         <20200612171334.26385-3-nsaenzjulienne@suse.de>
-         <c1ccb77ef0bc56b96a8ad991f8345d0ffbd76fc2.camel@pengutronix.de>
-         <b324122e8bd93302215a77d0dcf6d8b2897d3597.camel@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.30.5-1.1 
+Subject: [PATCH] usb: chipidea: fix ci_irq for role-switching use-case
+Date:   Fri, 26 Jun 2020 13:03:11 +0200
+Message-Id: <20200626110311.221596-1-philippe.schenker@toradex.com>
+X-Mailer: git-send-email 2.27.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: GV0P278CA0005.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:710:26::15) To AM6PR05MB6120.eurprd05.prod.outlook.com
+ (2603:10a6:20b:a8::25)
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from philippe-pc.toradex.int (31.10.206.124) by GV0P278CA0005.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:26::15) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3131.21 via Frontend Transport; Fri, 26 Jun 2020 11:03:23 +0000
+X-Mailer: git-send-email 2.27.0
+X-Originating-IP: [31.10.206.124]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2f0acd6b-d6b6-4d4f-4cce-08d819c08bbe
+X-MS-TrafficTypeDiagnostic: AM6PR05MB4952:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <AM6PR05MB495221C30A0E48C2D768BF53F4930@AM6PR05MB4952.eurprd05.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-Forefront-PRVS: 0446F0FCE1
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rtVzBmIRBlLtHDVwKrJuhbPp79NeAQD+Cu9ApJIyynrrSY7phR4yDrWAFGqy3E5AeJ6roukLV3qsDbofSRL1AZXRMg1e6jXMzWQA46+nPkCPKL5kdRilNf7CoZuoDMUQ1Yu75Wwf7jQyflKBlht6a5tTbu4bdozpc3KynsSc6cSK92m+D5P866EQif2MedpwOx8cMDNcQsIzdN8YeAqr3mtp/8ifNqQgCAFpNfsBRVvvRvQzK6nnpiQtJT0K4YtiTsFNErKvl7F/dxm75FJZEVrdeoLcqd16iti64uAxGFXzEZAYpGomaczfvOTVD3UPOw9+gP22zT/8crB5STjQcegmsXb2HwCo2VQC+wXUnPv/UbyPFmG1xq4Tv2yWWqqM
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR05MB6120.eurprd05.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(39850400004)(396003)(136003)(366004)(346002)(376002)(26005)(16526019)(4326008)(186003)(956004)(6916009)(66556008)(66476007)(2616005)(66946007)(5660300002)(6506007)(6666004)(52116002)(44832011)(8936002)(83380400001)(6512007)(1076003)(478600001)(6486002)(2906002)(36756003)(316002)(86362001)(8676002)(54906003)(16060500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: hEjgIuMDWIRebNQ7GRqYQ3DpHcfRaXGz/HO8aqbT0q7yqtZuZr5uYJsy3LV7DjWyqzo+p8I9mTsuxjO5sofipze+OMSbgkhq2iWkHEsLGi9XA+xn18Dggj4wDtC52i7rLgFlYpS+xDNdhMvhycUtPJK3tnjlSk7SnRVzoHyb/Q16jvSdfA2QJYdUIGr3+wf7MVgP7Nx5XIB8U7fXKC+5Gyed+7eZFKAl48m2LBYpuflvmvGArTbEvO1E4Vddm5TcPlSgEQL+eQhIY59YTrwdwNtrSZ6tiB9zxFVi/l6VAudqQnOBoCbNt/p47Sx/r2/SAcgWuAckzVVcz6YSMKPhHfuYZazrgtbBmumk3NV28rbKwTFvUYziV8/PvyGpII8ZI8+h3LOeEOzl+EKcPsQjSJRXznUf+JDMgT+XsChQSH/Czvz68kjlDsnF6cSsuEmFS8RFXiVONbhvvbhq96ucPPf0HewfeAgFqz1AuMrmei4=
+X-OriginatorOrg: toradex.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2f0acd6b-d6b6-4d4f-4cce-08d819c08bbe
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR05MB6120.eurprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2020 11:03:24.3194
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nq38itAEm5OueTmRj5fxxGJoCBr9dQBnQ+OSG3NMwuf6tq4xjO1Zxcgg7DBDRmMrAmZdSHwcYWWhqtuKJCAdTfaIEtDMHkwvKY51HUXmatk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR05MB4952
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 2020-06-17 at 12:44 +0200, Nicolas Saenz Julienne wrote:
-> On Wed, 2020-06-17 at 12:02 +0200, Philipp Zabel wrote:
-> > Hi Nicolas,
-> > 
-> > On Fri, 2020-06-12 at 19:13 +0200, Nicolas Saenz Julienne wrote:
-> > > Raspberry Pi 4's co-processor controls some of the board's HW
-> > > initialization process, but it's up to Linux to trigger it when
-> > > relevant. Introduce a reset controller capable of interfacing with
-> > > RPi4's co-processor that models these firmware initialization routines as
-> > > reset lines.
-> > > 
-> > > Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-> > > Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-> > 
-> > Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
-> 
-> Thanks!
-> 
-> > If there is a good reason for the single DT specified reset id, I can
-> > pick up patches 1 and 2.
-> 
-> The idea here is to make sure we're reasonably covered against further changes
-> in firmware. If we define constraints too narrow it can be a pain to support
-> new features without breaking backwards compatibility in dt.
+If the hardware is in low-power-mode and one plugs in device or host
+it did not switch the mode due to the early exit out of the interrupt.
 
-Ok.
+This patch fixes that behaviour and lets the rest of the code check if
+something has to be done. If nothing has to be done the same return
+value gets returned as before.
 
-> > If you change the dts patch 4 to use a number instead of the reset id
-> > define for now, there wouldn't even be a dependency between these reset
-> > and dts patches.
-> 
-> I was under the impression that having an explicit definition was nice to have.
-> What's troubling about creating the dependency?
+Fixes: 1f874edcb731 ("usb: chipidea: add runtime power management support")
+Signed-off-by: Philippe Schenker <philippe.schenker@toradex.com>
 
-Just that the last patch has to wait for the reset patches to be merged
-before it can be applied.
+---
 
-regards
-Philipp
+Hi Peter
+
+During my investigation I found a bug in ci_irq. I would appreciate
+if you could review this. From what I see this patch should be save to apply.
+
+This patch does not solve all of our issues. When I have RUNTIME_PM
+enabled on imx6ull or imx7. RNDIS still does not come up. So there
+has to be another bug hiding somewhere in the Runtime PM code to prevent
+RNDIS from working properly. I quickly looked through your patches
+that added this stuff back in 2015 but couldn't spot anything related to
+usb gadget-mode.
+
+If you right away know where the problem could be hiding itself,
+I would appreciate a hint.
+
+Thanks,
+Philippe
+
+---
+
+ drivers/usb/chipidea/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
+index 9a7c53d09ab4..5159420a23a4 100644
+--- a/drivers/usb/chipidea/core.c
++++ b/drivers/usb/chipidea/core.c
+@@ -518,7 +518,7 @@ static irqreturn_t ci_irq(int irq, void *data)
+ 		disable_irq_nosync(irq);
+ 		ci->wakeup_int = true;
+ 		pm_runtime_get(ci->dev);
+-		return IRQ_HANDLED;
++		ret = IRQ_HANDLED;
+ 	}
+ 
+ 	if (ci->is_otg) {
+-- 
+2.27.0
+
