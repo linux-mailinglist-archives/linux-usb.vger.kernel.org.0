@@ -2,90 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4DAE20B836
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jun 2020 20:26:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D020420B8C3
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jun 2020 20:55:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725824AbgFZS0H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Jun 2020 14:26:07 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:49509 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1725780AbgFZS0G (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Jun 2020 14:26:06 -0400
-Received: (qmail 305618 invoked by uid 1000); 26 Jun 2020 14:26:05 -0400
-Date:   Fri, 26 Jun 2020 14:26:05 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+145012a46658ac00fc9e@syzkaller.appspotmail.com>
-Cc:     alsa-devel@alsa-project.org, andreyknvl@google.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        perex@perex.cz, syzkaller-bugs@googlegroups.com, tiwai@suse.com
-Subject: Re: KASAN: use-after-free Read in line6_submit_audio_in_all_urbs
-Message-ID: <20200626182605.GA305214@rowland.harvard.edu>
-References: <000000000000d44c6d05a8ffe488@google.com>
+        id S1726005AbgFZSze (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Jun 2020 14:55:34 -0400
+Received: from mail29.static.mailgun.info ([104.130.122.29]:45294 "EHLO
+        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725806AbgFZSzc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Jun 2020 14:55:32 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1593197731; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=whbupFRIkpeTF/L3cGJyYouuxlPVBvaNdp4yZyqOh3U=; b=L+t426o6/cDL12vFE+2qwxApN1a+S0wlEZxBLSvTd97wg7qIjNH3m9qo2DzI0YpqBhzoZdtP
+ /5sh7o30gnpnbeTBGLRuTSBWvnPKhh8KgA7h/umEjYJQz1wYtv/qznIyr2cDjmwbTqkNgKuR
+ B1mPEefXbPBvsMzuVlZ/hbc0j6M=
+X-Mailgun-Sending-Ip: 104.130.122.29
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
+ 5ef6449a0206ad41d16a668a (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 26 Jun 2020 18:55:22
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 6565DC43395; Fri, 26 Jun 2020 18:55:21 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 1176FC433C6;
+        Fri, 26 Jun 2020 18:55:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 1176FC433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=wcheng@codeaurora.org
+From:   Wesley Cheng <wcheng@codeaurora.org>
+To:     heikki.krogerus@linux.intel.com, agross@kernel.org,
+        mark.rutland@arm.com, bjorn.andersson@linaro.org,
+        gregkh@linuxfoundation.org, broonie@kernel.org,
+        lgirdwood@gmail.com, robh+dt@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        jackp@codeaurora.org, rdunlap@infradead.org,
+        Wesley Cheng <wcheng@codeaurora.org>
+Subject: [PATCH v4 0/6] Introduce PMIC based USB type C detection
+Date:   Fri, 26 Jun 2020 11:55:10 -0700
+Message-Id: <20200626185516.18018-1-wcheng@codeaurora.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000d44c6d05a8ffe488@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 26, 2020 at 10:18:12AM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following crash on:
-> 
-> HEAD commit:    fb574682 usbip: tools: fix module name in man page
-> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> console output: https://syzkaller.appspot.com/x/log.txt?x=156560b1100000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=63b40b2ae167bad6
-> dashboard link: https://syzkaller.appspot.com/bug?extid=145012a46658ac00fc9e
-> compiler:       gcc (GCC) 10.1.0-syz 20200507
-> 
-> Unfortunately, I don't have any reproducer for this crash yet.
-> 
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+145012a46658ac00fc9e@syzkaller.appspotmail.com
-> 
-> snd_usb_toneport 5-1:0.0: URB in #0 submission failed (-19)
-> snd_usb_toneport 5-1:0.0: URB in #0 submission failed (-19)
-> snd_usb_toneport 5-1:0.0: URB in #0 submission failed (-19)
-> snd_usb_toneport 5-1:0.0: URB in #0 submission failed (-19)
-> ==================================================================
-> BUG: KASAN: use-after-free in line6_submit_audio_in_all_urbs+0x10b/0x120 sound/usb/line6/capture.c:72
-> Read of size 8 at addr ffff8881cffb1800 by task kworker/1:5/3257
-> 
-> CPU: 1 PID: 3257 Comm: kworker/1:5 Not tainted 5.8.0-rc1-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> Workqueue: events line6_startup_work
-> Call Trace:
->  __dump_stack lib/dump_stack.c:77 [inline]
->  dump_stack+0xf6/0x16e lib/dump_stack.c:118
->  print_address_description.constprop.0+0x1a/0x210 mm/kasan/report.c:383
->  __kasan_report mm/kasan/report.c:513 [inline]
->  kasan_report.cold+0x37/0x7c mm/kasan/report.c:530
->  line6_submit_audio_in_all_urbs+0x10b/0x120 sound/usb/line6/capture.c:72
->  line6_stream_start+0x207/0x230 sound/usb/line6/pcm.c:197
->  line6_pcm_acquire+0x161/0x210 sound/usb/line6/pcm.c:318
->  line6_startup_work+0x42/0x50 sound/usb/line6/driver.c:734
->  process_one_work+0x94c/0x15f0 kernel/workqueue.c:2269
->  worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
->  kthread+0x392/0x470 kernel/kthread.c:291
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:293
-> 
-> Allocated by task 76:
->  save_stack+0x1b/0x40 mm/kasan/common.c:48
->  set_track mm/kasan/common.c:56 [inline]
->  __kasan_kmalloc.constprop.0+0xc2/0xd0 mm/kasan/common.c:494
->  kmalloc include/linux/slab.h:555 [inline]
->  kzalloc include/linux/slab.h:669 [inline]
->  line6_init_pcm+0x2a7/0x9e0 sound/usb/line6/pcm.c:533
->  toneport_init+0xdd/0x6b0 sound/usb/line6/toneport.c:419
->  line6_probe+0xaa0/0x1330 sound/usb/line6/driver.c:809
+Changes in v4:
+ - Modified qcom,pmic-typec binding to include the SS mux and the DRD remote
+   endpoint nodes underneath port@1, which is assigned to the SSUSB path
+   according to usb-connector
+ - Added usb-connector reference to the typec dt-binding
+ - Added tags to the usb type c and vbus nodes
+ - Removed "qcom" tags from type c and vbus nodes
+ - Modified Kconfig module name, and removed module alias from the typec driver
+ 
+Changes in v3:
+ - Fix driver reference to match driver name in Kconfig for
+   qcom_usb_vbus-regulator.c
+ - Utilize regulator bitmap helpers for enable, disable and is enabled calls in
+   qcom_usb_vbus-regulator.c
+ - Use of_get_regulator_init_data() to initialize regulator init data, and to
+   set constraints in qcom_usb_vbus-regulator.c
+ - Remove the need for a local device structure in the vbus regulator driver
+ 
+Changes in v2:
+ - Use devm_kzalloc() in qcom_pmic_typec_probe()
+ - Add checks to make sure return value of typec_find_port_power_role() is
+   valid
+ - Added a VBUS output regulator driver, which will be used by the PMIC USB
+   type c driver to enable/disable the source
+ - Added logic to control vbus source from the PMIC type c driver when
+   UFP/DFP is detected
+ - Added dt-binding for this new regulator driver
+ - Fixed Kconfig typec notation to match others
+ - Leave type C block disabled until enabled by a platform DTS
 
-It look like the cancel_delayed_work() in line6_disconnect() needs to be 
-cancel_delayed_work_sync().  Unfortunately we can't test this until syzbot 
-is able to reproduce the bug.
+Add the required drivers for implementing type C orientation and role
+detection using the Qualcomm PMIC.  Currently, PMICs such as the PM8150B
+have an integrated type C block, which can be utilized for this.  This
+series adds the dt-binding, PMIC type C driver, and DTS nodes.
 
-Alan Stern
+The PMIC type C driver will register itself as a type C port w/ a
+registered type C switch for orientation, and will fetch a USB role switch
+handle for the role notifications.  It will also have the ability to enable
+the VBUS output to any connected devices based on if the device is behaving
+as a UFP or DFP.
+
+Wesley Cheng (6):
+  usb: typec: Add QCOM PMIC typec detection driver
+  dt-bindings: usb: Add Qualcomm PMIC type C controller dt-binding
+  arm64: boot: dts: qcom: pm8150b: Add node for USB type C block
+  regulator: Add support for QCOM PMIC VBUS booster
+  dt-bindings: regulator: Add dt-binding for QCOM PMIC VBUS output
+    regulator
+  arm64: boot: dts: qcom: pm8150b: Add DTS node for PMIC VBUS booster
+
+ .../regulator/qcom,usb-vbus-regulator.yaml    |  41 +++
+ .../bindings/usb/qcom,pmic-typec.yaml         | 113 +++++++
+ arch/arm64/boot/dts/qcom/pm8150b.dtsi         |  13 +
+ arch/arm64/boot/dts/qcom/sm8150-mtp.dts       |   4 +
+ drivers/regulator/Kconfig                     |  10 +
+ drivers/regulator/Makefile                    |   1 +
+ drivers/regulator/qcom_usb_vbus-regulator.c   |  97 ++++++
+ drivers/usb/typec/Kconfig                     |  12 +
+ drivers/usb/typec/Makefile                    |   1 +
+ drivers/usb/typec/qcom-pmic-typec.c           | 275 ++++++++++++++++++
+ 10 files changed, 567 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml
+ create mode 100644 Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml
+ create mode 100644 drivers/regulator/qcom_usb_vbus-regulator.c
+ create mode 100644 drivers/usb/typec/qcom-pmic-typec.c
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+
