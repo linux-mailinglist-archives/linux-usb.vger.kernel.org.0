@@ -2,56 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A102420AC81
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jun 2020 08:50:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A78E720AC86
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jun 2020 08:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728498AbgFZGuG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Jun 2020 02:50:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57120 "EHLO
+        id S1728507AbgFZGwQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Jun 2020 02:52:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726311AbgFZGuG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Jun 2020 02:50:06 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A396BC08C5C1
-        for <linux-usb@vger.kernel.org>; Thu, 25 Jun 2020 23:50:05 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id u25so4568700lfm.1
-        for <linux-usb@vger.kernel.org>; Thu, 25 Jun 2020 23:50:05 -0700 (PDT)
+        with ESMTP id S1726311AbgFZGwP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Jun 2020 02:52:15 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BAAAC08C5C1;
+        Thu, 25 Jun 2020 23:52:15 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id h22so2006880lji.9;
+        Thu, 25 Jun 2020 23:52:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:mime-version;
-        bh=iONrBNrycWt9xPJJ/xJe4GV/AccTV3fWSFYoc66udsE=;
-        b=R2Q+Ty/+n9v21cH5jXWuQbEBvuF9kxbAnNhIWa4+zMWw2cYwc6jWOY+pAMLwNsSci5
-         vs+OOPQN6v87ppgT8XvMCVRSiIWahcjr775C1/iZWjdh4eJJvSC/Axp/kPOO9CsZ3pF0
-         2JkfSti6Ju6hlNMp7cRnv5KJhgDG60JhGyyo8vRF7hlUbJUIJNk9uDhMfAIGH7N8vbQm
-         DjfZUWJMRX6/ykDC9ddFpegi9nzUrAWvVui2grXnlZfYettPJmDAfIp0Jnc23Urla+Lt
-         n9IMK2G6VFw3ikDgQhhNyXeqTxDIgRh6I9tHe3dDzyw5eWiU66/5WhSxhiwByET0FoZO
-         aTbA==
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=nFM3kop9ktvhCUlgVduYIaa6zuTPi9zx4zThaiWVhw4=;
+        b=IHfRxkbi+UPUJ5N40VXH4vaoWL9sjWCW9SvCSr79xo4P5MZjTEDcIJ9sSKXrzp/N2+
+         emFRcVbz+jVBa+awDJlc9nWSXvnKmBaZUWjXIRhx7+S+IDFO6rp4LNqKQFnwFv2oqwdl
+         vOR6dWa6+Gbb8ySKmMpqAHI7llo/PUd25iwNxsyIDqSkMMUF3xf3lzyKjBdBUZh0u8m5
+         xmOoO4hjc0KB1d9K34yehIbMZv8/iaQsjlGhCIwGHEOcfqY0+TATlSyYRCqBhLbLteBV
+         agITCK1Ef0jsGz0K7fEm4+e+EWcLqLnzNP7hQTq30pWfjcMiy5FXuYEsHPH7gvYFQEIA
+         pkUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version;
-        bh=iONrBNrycWt9xPJJ/xJe4GV/AccTV3fWSFYoc66udsE=;
-        b=Rg0NCio85IbBDmmuENudMPnrmuEwOTTb6Vw8f6r/xnYq/jq1lAoKNQuomceIijfV7V
-         jKWWcXRKS3XeABv9JYHPgMzxEK05Y7NDAsmhW0A6Y8tP68LIKiaEReLxZ19R1UfmZ+kx
-         c9MJCDVlrYaZT4+t834+rYHT/RwQ2hwnvSO6LegCvVolF911kA1VFi1nhVecmR+r8IlM
-         VjWvTSyJjhI2oij0TMrBzloEEwl6pJXfNwRibz2KLO7pZOQtQCtBintCTsv8pwk7MRwC
-         ln8mEx5w1aBecpgCTdFAhxTO7ioKDSQx4Tg7Msm5Aq+SYp0TZHvpjCm6XMuPJBc+v/K4
-         Dfaw==
-X-Gm-Message-State: AOAM532gssAkN6zJqSg+jLamTVHxGgkER+HL6duObhZ54ubwl7l2mDC8
-        WdEgNQPcALxna6Q2yleNUW/ilp6PoQM=
-X-Google-Smtp-Source: ABdhPJyrYIjIuKabu3rsZlWf1D1r3gXPdTxnEBelvUn2AB7mctzBpj6sMBnbmV1SV4vUJvxh7bT2LA==
-X-Received: by 2002:ac2:4550:: with SMTP id j16mr981987lfm.37.1593154203838;
-        Thu, 25 Jun 2020 23:50:03 -0700 (PDT)
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=nFM3kop9ktvhCUlgVduYIaa6zuTPi9zx4zThaiWVhw4=;
+        b=mDxQ64yqe9QkZ8rMGU83ZPgj0ORAvVh70KCwtiZWeIdNPeGwfWIlnc1ORDYmdYs4GC
+         scaRbR7yTGwuKo3dg28v5xOO3tedZnDgbwupQCmpnDIAQ3NpCIYJBofP8Zr48y4Xg0gr
+         0fOTCCUKU/RrVC5y+y2tg2Ud9kS3edGLHThNQU7R942XEDKvvFNSLHntRoQ7cwtDiB2k
+         MR5vyE9NXGMai3pp/kjUaUrwiytlPAJklkwcGieUAoCe/f4CGpxYXYo/BUnmXIwU0J00
+         BI7hJ7RLCnKd/ti5ndsQH2hdX8RNZSZ72nlEDS1s2QI4fYS6P41rvbtgdEsdUTPceTrH
+         JkSw==
+X-Gm-Message-State: AOAM5303lZTY7m6EWrXaGOmA8cGDwf8sQAAei4j15+aX7TBKGl+nCUTL
+        Tn3+Jsck8q4Ye+oXudw3C+U=
+X-Google-Smtp-Source: ABdhPJwtp1ZLwujD1qZAwEUI67yGIAEejThjkqWU9ZqERY6mYmJv4ZrW1uPxE64uAOUIjduvvUjWnQ==
+X-Received: by 2002:a2e:9141:: with SMTP id q1mr682251ljg.196.1593154333942;
+        Thu, 25 Jun 2020 23:52:13 -0700 (PDT)
 Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id q14sm6544166lfn.75.2020.06.25.23.50.02
+        by smtp.gmail.com with ESMTPSA id r11sm6559950lfc.29.2020.06.25.23.52.12
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 25 Jun 2020 23:50:03 -0700 (PDT)
+        Thu, 25 Jun 2020 23:52:13 -0700 (PDT)
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB: fixes for v5.8-rc
-Date:   Fri, 26 Jun 2020 09:49:58 +0300
-Message-ID: <87bll65njd.fsf@kernel.org>
+To:     Pawel Laszczak <pawell@cadence.com>, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     dan.carpenter@oracle.com, ben.dooks@codethink.co.uk,
+        colin.king@canonical.com, rogerq@ti.com, peter.chen@nxp.com,
+        weiyongjun1@huawei.com, jpawar@cadence.com, kurahul@cadene.com,
+        sparmar@cadence.com, Pawel Laszczak <pawell@cadence.com>
+Subject: Re: [PATCH RFC 0/5] Introduced new Cadence USBSSP DRD Driver.
+In-Reply-To: <20200626045450.10205-1-pawell@cadence.com>
+References: <20200626045450.10205-1-pawell@cadence.com>
+Date:   Fri, 26 Jun 2020 09:52:08 +0300
+Message-ID: <878sga5nfr.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -65,65 +73,46 @@ Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
 
-Hi Greg,
+Hi,
 
-here's the first set of fixes for the current -rc cycle. Patches have
-been soaking for a while now.
+Pawel Laszczak <pawell@cadence.com> writes:
+> This patch introduce new Cadence USBSS DRD driver to linux kernel.
+>
+> The Cadence USBSS DRD Controller is a highly configurable IP Core which
+> can be instantiated as Dual-Role Device (DRD), Peripheral Only and
+> Host Only (XHCI)configurations.
+>
+> The current driver has been validated with FPGA burned. We have support
+> for PCIe bus, which is used on FPGA prototyping.
+>
+> The host side of USBSS-DRD controller is compliance with XHCI
+> specification, so it works with standard XHCI Linux driver.
+>
+> The host side of USBSS DRD controller is compliant with XHCI.
+> The architecture for device side is almost the same as for host side,
+> and most of the XHCI specification can be used to understand how
+> this controller operates.
+>
+> This controller and driver support Full Speed, Hight Speed, Supper Speed
+> and Supper Speed Plus USB protocol.
+>
+> The prefix cdnsp used in driver has chosen by analogy to cdn3 driver.
+> The last letter of this acronym means PLUS. The formal name of controller
+> is USBSSP but it's to generic so I've decided to use CDNSP.
+>
+> The patch 1: adds DT binding.
+> The patch 2: adds PCI to platform wrapper used on Cadnece testing
+>              platform. It is FPGA based on platform.
+> The patches 3-5: add the main part of driver and has been intentionally
+>              split into 3 part. In my opinion such division should not
+>              affect understanding and reviewing the driver, and cause that
+>              main patch (4/5) is little smaller. Patch 3 introduces main
+>              header file for driver, 4 is the main part that implements a=
+ll
+>              functionality of driver and 5 introduces tracepoints.
 
-Let me know if you want anything to be changed.
-
-cheers
-
-PS: your branch is in -rc1, mine is in -rc2. Would you prefer that I
-rebase or can you merge -rc2 on your usb-linus?
-
-The following changes since commit 48778464bb7d346b47157d21ffde2af6b2d39110:
-
-  Linux 5.8-rc2 (2020-06-21 15:45:29 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git tags/fixes-fo=
-r-v5.8-rc2
-
-for you to fetch changes up to cd37c6976f6a5b681a900e74ff9d15062855bf87:
-
-  Revert "usb: dwc3: exynos: Add support for Exynos5422 suspend clk" (2020-=
-06-24 09:52:23 +0300)
-
-=2D---------------------------------------------------------------
-usb: fixes for v5.8-rc2
-
-A revert of Exynos5422 suspend clock support, it turns out it wasn't
-ready to be merged. CDNS3 got a fix for test mode initialization.
-
-Signed-off-by: Felipe Balbi <balbi@kernel.org>
-
-=2D---------------------------------------------------------------
-Aditya Pakki (1):
-      usb: dwc3: pci: Fix reference count leak in dwc3_pci_resume_work
-
-Anand Moon (1):
-      Revert "usb: dwc3: exynos: Add support for Exynos5422 suspend clk"
-
-Dan Carpenter (1):
-      usb: gadget: udc: Potential Oops in error handling code
-
-Peter Chen (3):
-      usb: cdns3: ep0: fix the test mode set incorrectly
-      usb: cdns3: trace: using correct dir value
-      usb: cdns3: ep0: add spinlock for cdns3_check_new_setup
-
-Tang Bin (1):
-      usb: phy: tegra: Fix unnecessary check in tegra_usb_phy_probe()
-
- drivers/usb/cdns3/ep0.c              | 10 ++++++----
- drivers/usb/cdns3/trace.h            |  2 +-
- drivers/usb/dwc3/dwc3-exynos.c       |  9 ---------
- drivers/usb/dwc3/dwc3-pci.c          |  4 +++-
- drivers/usb/gadget/udc/mv_udc_core.c |  3 ++-
- drivers/usb/phy/phy-tegra-usb.c      |  6 +-----
- 6 files changed, 13 insertions(+), 21 deletions(-)
+I'm more interested in how is this different from CDNS3. Aren't they SW com=
+patible?
 
 =2D-=20
 balbi
@@ -133,18 +122,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl71mpcACgkQzL64meEa
-mQYnpA/8C0gRdEzAYCc3c0jEnnJw48Wl7Cqah51ShyiM+BbcbdevWs03zCoOCGPb
-ZoGuGMOXu58S0XlkVfU/Tp3WtSh0+NSCTSquKdHO2PatE7HaUUkw9j6jzKcUwzov
-fVoc3ukeHf6Jur5JwmrIa/ptGhgGHMaZiGjreYvYhR5cKRG3nbqhCFgFgqU4g/4+
-kVPWyRJLhiMzxODfADEYWgnrPZyBmKHkdtQ0cKhyRbYumVPgczUhSexKLTd8CLqN
-NqPKnLBLVaUDA2pZh64QIGCxgSvw5CD8huQ9MoePgwaHYAa3FFh2U4ef2gDRsces
-35gPitHIzkukIknpgCn/vlcevY/qkmocYqv5wk+7Vjdr0T7yI6CSQVevn5kUMiX+
-FauqpvKAf3VjAtq8hbtYJHz1twjkemfAlSZZTS1SjjJde0J6jkmYAVKSP9OpWNMv
-PXdNLa3jz/MVFGW7qmwzfaXLqUhWSGIRtrHlRdCNegZY3QqD7UQidDNWhLm5QMsO
-qHcrbMzjU4LuL1U0VP6zGT28ksK18XLQi2OEzTCknPXRwB8+zsQzyN7B27B75pFo
-/yhlTLdGVtHVXds+kVXhHAwGeay7aUyKWFsqStsmwnL+0I2GVI6X06r0YWj0MemX
-fAxV5YmCTEioAzIifJ7AqwBkdjy4vCYZ1fuCLg22ncafXjJmw/Y=
-=pQsQ
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl71mxgACgkQzL64meEa
+mQaiPQ//a7Zb3mi4EERXBszW7rCLKyFOdQYjy83WFHOxrAV/iXqGsx6KARPngoDg
+1u8cCOef0xdHjXt8aP9BhD9n2yvSb0oIMZFcyw/BOPADEUN9OBqCVxWSLDTZ1YuX
+O6n61nGDVkC/WWqwoiE/+yXV1MvEPV1nH/RQlh8aJa5WXe2CglkmKEJJC/Wo83BO
+Q+tsXgN1BCUAGl8TILSlrWjaP9jSQINFuzyU+fqJs6nzI/vnxMSvCk00UEwOQVMa
+HXLftoVdg9q9i4fphnW0hAj80bSG4i6U9r7cH2Ne+0QZzkSv4FFaKs3AutA9il1Z
+tL88XIvUx5fXy7vfBJL+P4HY5IfbP42jVKvMrjA+A2wdI0IRhGAvZKFnuZV2B2Ad
+FswDnFwUXvY8PmWS9/JFKC/Xqharmo6+9ozS9KZpzFMgDJtWA31fRwrSrxFx56Lo
+JhJfzy5awku/qNSQgh48tfyaat28Ubj3PjHe6UDe6PCq4zcrwOfobdCb0CNroWoQ
+gG94c2i4cGbHRKSWhBYGkz11U5TN5KfArKR/oPiCc3O8BPoOj9nru+j559cHr34J
+Gt2ToK0H/ICL+OLyqkuEMu0CERM9JpDzYhytaC+VxJbvYBDV9GzO//nqNnJyLFNm
+gQzfbcNSALJJGNIB7grpjCMeqOYT588o0rF79MitN94HpHYFWuk=
+=ZsUv
 -----END PGP SIGNATURE-----
 --=-=-=--
