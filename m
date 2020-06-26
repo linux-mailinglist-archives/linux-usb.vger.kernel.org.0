@@ -2,84 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4140B20A8B5
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jun 2020 01:18:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B768720AB26
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jun 2020 06:23:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407760AbgFYXS4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 25 Jun 2020 19:18:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44260 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406605AbgFYXSz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 25 Jun 2020 19:18:55 -0400
-Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F9CC08C5DB
-        for <linux-usb@vger.kernel.org>; Thu, 25 Jun 2020 16:18:54 -0700 (PDT)
-Received: by mail-vs1-xe42.google.com with SMTP id k13so4503985vsm.13
-        for <linux-usb@vger.kernel.org>; Thu, 25 Jun 2020 16:18:54 -0700 (PDT)
+        id S1726598AbgFZEXB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 26 Jun 2020 00:23:01 -0400
+Received: from mail-eopbgr760081.outbound.protection.outlook.com ([40.107.76.81]:44595
+        "EHLO NAM02-CY1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726585AbgFZEXB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 26 Jun 2020 00:23:01 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oElofxOc9UMkAyCEtp+CgwHqjjFO9RuLDR8s5ImRoc8hp1Xe4B3h4whmwwB5KDgd7tKFmnGETIENq/m/8+OYmOyT/V4jsLCTlQM9oYalF400D9LdmDXarmTOvrIXtfiym0wXlUb0OBgfQ3w+Z3BakW61AjAswHMl48lGjfJwgq0doDv7N8Ymifpm/ecMywnOmz3/BaqQxD1Y9wkdDbaMW/Tc9QgRoz1wEHt6pNfWoenAe/MGts3fVX8jhzaRV+7VPrW1jGZ0umcPrbGbD/YrR0qexSvCYWWd6RB0VtGRwAgNmVLFJmR8MBp4O9SRVJP+xeGYMCuI4Aoh2rBUk6C31w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EQEnMftYKj8Sm4rMSi6vw2QRA+FQyuCo7aGOneOVgEg=;
+ b=OBw/go2vRD3p5tA/DcIN8LvT2o8T0wllMMUBKZe2UC+oIglCxp+5nhicxIhIjmWkpMzzEIDVn7q96PB6Evt9bpnvJpkCaXVeeFu1nE69YVstu2qEU6n3ZmXEH2z6Ele2GgC30qNJ3DLC8blC52Nnu7za4cXPPcSCDmCynA13njB6C6gS2Olr+GvA4EfGwghCONtTfsXjNS80hlu20+iNC68mqtbIb2nkt++82O8QGmY6WRnmtrB/xAginNzAecDlhcV/gg9U7Ootgt0PgvdiekpqmIDE0ej9XhpPAyn5ZcNJKRELqQBc0Y+wekjrd+fwFV3yNxNSdy9vSC4zkaBcyw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=silabs.com; dmarc=pass action=none header.from=silabs.com;
+ dkim=pass header.d=silabs.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UZUejZ4FxIPzgalcSBOTl7RrSB8oG1JXXKFu2TzIVTY=;
-        b=gEFD/h6/YccJ6NUPfYT/xgz0X+isX8Cd6CGn2UCUGx7jpM3t81GIEKLZxSIh9n3gSf
-         LyFFAVqzLW2EOg2vox4IxQFv/KkghELE3h+1pMYcAk3L5vCjE1vuqYv6ModKBhiykPJm
-         E+uZ3A7Yo3f2524NLn2qvAOct1Q0SfZjBL3KQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UZUejZ4FxIPzgalcSBOTl7RrSB8oG1JXXKFu2TzIVTY=;
-        b=pePxs844S321LaEYfEwLQYliVqVwopy0FWnYB5FXmgloNkJq0CIPrrIxUrk/jh9I9w
-         1EQrjQ8Tg/PQF+sjuIuwKsliINtvUni3LyhVoorZm8mOoDG+/3E1BpPzebfvQsSgZK1Y
-         +XNQXZhUiPSM+i1Gnx1cX1Vwb6z1+L5l1nfdbXzMCmInJWwdDnM8Z9fuYycF6Y+dICQg
-         4Sd7tKGCKUbhTY+il5TwfVjno9Ysv01/yujUxzpIjT/mX7KMLIId7zmP6Amt6D5JAvXa
-         IHmG4oBLva0nu5N0ni0un3DiO9O6bsX3kZrf75DB3GOU962B9Qa4R+eoUluizdlxBH+X
-         4BnA==
-X-Gm-Message-State: AOAM530K4c703/ws6w9WVv9mnTwojGa3WCiBTX5M0HonInLVSecnBB6d
-        oPGQcwvbA0WbeXVT9wLoCUYFXDo8n4hiaCH9KuPdQg==
-X-Google-Smtp-Source: ABdhPJzhi8dHdwc7k/3b1+iOeFD6RskzYY/+B8+g9RbXB08kX6vZ9AZiixX+D9Pnv0ODrkx1cdSZ8uCd7wY1U33lSFI=
-X-Received: by 2002:a05:6102:1167:: with SMTP id k7mr517235vsg.71.1593127133874;
- Thu, 25 Jun 2020 16:18:53 -0700 (PDT)
+ d=silabs.onmicrosoft.com; s=selector2-silabs-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EQEnMftYKj8Sm4rMSi6vw2QRA+FQyuCo7aGOneOVgEg=;
+ b=irNiqcbUQ1NZSX48CvC/WjBQ2C1+FtKIzYPNqqJLEtqGz2xJTb+JiqVILXY5hGrdwsirXfIZm8Y6cnP6d4I6FRcXd+KOhQ+CeLQzYWU29lXWqJRmumXyNRkMrhaKGjR65Jy+TR8kO+XvXfkOg1myFdKfOUQCn1uGHcG0RmoOupk=
+Received: from DM6PR11MB2857.namprd11.prod.outlook.com (2603:10b6:5:cb::18) by
+ DM6PR11MB3290.namprd11.prod.outlook.com (2603:10b6:5:59::25) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3131.21; Fri, 26 Jun 2020 04:22:58 +0000
+Received: from DM6PR11MB2857.namprd11.prod.outlook.com
+ ([fe80::80a:1058:250c:28bf]) by DM6PR11MB2857.namprd11.prod.outlook.com
+ ([fe80::80a:1058:250c:28bf%5]) with mapi id 15.20.3131.020; Fri, 26 Jun 2020
+ 04:22:58 +0000
+From:   Phu Luu <Phu.Luu@silabs.com>
+To:     "johan@kernel.org" <johan@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Brant Merryman <Brant.Merryman@silabs.com>,
+        Richard Hendricks <Richard.Hendricks@silabs.com>,
+        "hungnd3@fsoft.com.vn" <hungnd3@fsoft.com.vn>,
+        =?windows-1258?Q?Ph=FA_L=FDu_An?= <luuanphu@gmail.com>
+Subject: [PATCH v3 1/2] USB: serial: cp210x: Enable usb generic
+ throttle/unthrottle
+Thread-Topic: [PATCH v3 1/2] USB: serial: cp210x: Enable usb generic
+ throttle/unthrottle
+Thread-Index: AQHWS3F5PdCoZ8YA8U+lTX0A20r8MA==
+Date:   Fri, 26 Jun 2020 04:22:58 +0000
+Message-ID: <57401AF3-9961-461F-95E1-F8AFC2105F5E@silabs.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=silabs.com;
+x-originating-ip: [59.153.235.166]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 69b8adb9-529d-43e1-d8a0-08d819889b92
+x-ms-traffictypediagnostic: DM6PR11MB3290:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DM6PR11MB3290B69EC84CAC042B5064D29C930@DM6PR11MB3290.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-forefront-prvs: 0446F0FCE1
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: pQ2oQzLpAmmlpnYVp+qYluOVRWmgpFcgFbqVJmZDF62OM7uyQFDW2r0+cgXaJMMX8o1Sl6+e+e7g6azPklkfyVLM9U2gDQ62biorPCZbbkVsQySFiGT6lx+3nP+UdBEGHkl+glOp9S2OwwSfhpYFVV6mIU5nIi+OfvnS9mapLgpqhRWsny+VbsSbu6o+eWQSiMAjGL9A/OT0FUEo6fHZ+xSssnagmi1/gs2nwvxSgt6BoLU9KYaoXm94VzZYLue1J+r4NUFethBvZ+a4XMaJ4yVGNwWxWyXbn432HEAoVHgDaMwvzOzjp/RnJz7lX6xno6eOTZ3UfzwelXkfrO02BmgBqm6gZz8Ah0Jo9IJkT38cnmEPnQqNPVNdH198ryoT
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB2857.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(346002)(39850400004)(396003)(376002)(366004)(136003)(478600001)(71200400001)(4326008)(5660300002)(6512007)(36756003)(8676002)(86362001)(8936002)(33656002)(6486002)(2616005)(76116006)(66446008)(66476007)(110136005)(66556008)(64756008)(54906003)(2906002)(6506007)(316002)(91956017)(26005)(186003)(66946007)(41533002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: BM0T+CxE0rCPAPgcIE/cVmuWn+7CTw94Pr5WiH3jDkAcFvvwBeP6RnMPmVPG7CxmOjADmJES8pDdcIBGBmKNRKvuUK856BWg5GWFEU02Ey0a2dGtecLKTWle+W6zjFxuAQtJ/JRQwB2BKncJcJM+wO1IE2T7rjj5GOf90/8sAkAD6Zog6J6EkVrSeDkUQoFR3oPFjutOtrvAG/NlZym/nL5CAdfbHZj9K0AOCoopIrAJgzkyLyvRbIqcx2d26VOTlmtnTxSe8zidbSwnL9YLbcn3CYVpP025GvJPT3KFWiX7ZJbxkA7nIPRNI13WGGpe+TeV285IQog8mjil2fKcaDUmD2TWXuICn5BkBcADbaWoGt97onGUB30F/9CvWzA4qYlBxgmhis4hfq5Ah5FvtmJmKzLNql5uWYgMKCmBXBaGZfHbUfWaM5YjKScMoiWk+H94hsbYtno4z1TbgyuP0Dc2SLSSMywQWcDUP/zuZ1TK4cfqyb7Dsv38JMMbpmNc
+Content-Type: text/plain; charset="windows-1258"
+Content-ID: <BB73C7DF97CA8146B915C5B1FCA1A0C0@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20200624111128.v2.1.Ibae403db54245c458d14297f1892c77c5055da41@changeid>
- <1593080522.28236.17.camel@suse.com>
-In-Reply-To: <1593080522.28236.17.camel@suse.com>
-From:   Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Date:   Thu, 25 Jun 2020 16:18:42 -0700
-Message-ID: <CANFp7mUmk=HqPyJ5TS5uQPyaEtOWdz=D+7XBS8MyikuF9y9EJQ@mail.gmail.com>
-Subject: Re: [PATCH v2] Bluetooth: btusb: Reset port on cmd timeout
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Rocky Liao <rjliao@codeaurora.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Bluez mailing list <linux-bluetooth@vger.kernel.org>,
-        ChromeOS Bluetooth Upstreaming 
-        <chromeos-bluetooth-upstreaming@chromium.org>,
-        linux-usb@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: silabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB2857.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 69b8adb9-529d-43e1-d8a0-08d819889b92
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jun 2020 04:22:58.8404
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 54dbd822-5231-4b20-944d-6f4abcd541fb
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ZOsopy6VsMOY2VUps7zh9Y+cBKgUvLw9AxIz03N6jlHwWaOxd8hnea41Zj76hcUwAjnwuDSK8WZQIkR2siec8w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB3290
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Thanks for the heads up Oliver -- I will send a patch with a comment on this.
+From: Brant Merryman <brant.merryman@silabs.com>
 
-On Thu, Jun 25, 2020 at 3:22 AM Oliver Neukum <oneukum@suse.com> wrote:
->
-> Am Mittwoch, den 24.06.2020, 11:11 -0700 schrieb Abhishek Pandit-
-> Subedi:
-> > QCA_ROME sometimes gets into a state where it is unresponsive to
-> > commands. Since it doesn't have support for a reset gpio, reset the usb
-> > port when this occurs instead.
->
-> Hi,
->
-> on first glance this looks like an unbalanced PM reference. It is not
-> because the operation is suicidal, but this deserves a comment, unless
-> you want to get a note telling you that you caused an imbalance every
-> few weeks.
->
->         Regards
->                 Oliver
->
+Assign the .throttle and .unthrottle functions to be generic function
+in the driver structure to prevent data loss that can otherwise occur
+if the host does not enable USB throttling.
+
+Signed-off-by: Phu Luu <phu.luu@silabs.com>
+Signed-off-by: Brant Merryman <brant.merryman@silabs.com>
+---
+06/09/2020: Patch v3 1/2 Modified based on feedback from Johan Hovold <joha=
+n@kernel.org>
+12/18/2019: Patch v2 Broken into two patches and modified based on feedback=
+ from Johan Hovold <johan@kernel.org>
+12/09/2019: Initial submission of patch "Proper RTS control when buffers fi=
+ll"
+
+ drivers/usb/serial/cp210x.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
+index f5143eedbc48..bcceb4ad8be0 100644
+--- a/drivers/usb/serial/cp210x.c
++++ b/drivers/usb/serial/cp210x.c
+@@ -272,6 +272,8 @@ static struct usb_serial_driver cp210x_device =3D {
+ 	.break_ctl		=3D cp210x_break_ctl,
+ 	.set_termios		=3D cp210x_set_termios,
+ 	.tx_empty		=3D cp210x_tx_empty,
++	.throttle		=3D usb_serial_generic_throttle,
++	.unthrottle		=3D usb_serial_generic_unthrottle,
+ 	.tiocmget		=3D cp210x_tiocmget,
+ 	.tiocmset		=3D cp210x_tiocmset,
+ 	.attach			=3D cp210x_attach,
+--=20
+2.17.0
+
+
