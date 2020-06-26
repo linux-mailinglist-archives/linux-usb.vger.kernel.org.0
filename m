@@ -2,134 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A50A820AD6B
-	for <lists+linux-usb@lfdr.de>; Fri, 26 Jun 2020 09:42:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF68720AFF3
+	for <lists+linux-usb@lfdr.de>; Fri, 26 Jun 2020 12:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728533AbgFZHmF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 26 Jun 2020 03:42:05 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:36538 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726128AbgFZHmE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Jun 2020 03:42:04 -0400
-Received: by mail-lf1-f68.google.com with SMTP id c21so4623319lfb.3;
-        Fri, 26 Jun 2020 00:42:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mz/Q5xHbOmwCEIDYAnNtu1WbEvpEmmozdU6zt7tewjs=;
-        b=ansPmfnjjY1i73OVPV6EwXdBi3KQsHqUFi84Flid0QgrqegXAYPLplcG+SI9oaFHFI
-         GwjZL4w+VMtE4dgKiIQu8Ei6WF//mjPGRLD0+cRbr1b3WsFVF0wD46jWhH6k1KMtlUDn
-         qHR8Da3dxtyhrAlvGVfgz/WkbLQfTkfILddMYlkLiQ/07SGmM2wGDqhHRnp+R+OFaNDs
-         k0SIzyHV/znoMyN8fQLZmbfWGt+V3p+DIJ2XpGrK9nMWQ/FsE/Q2R8/ZMFmYMEkYlkRI
-         nMo1mdpRw/JlZEKiOMqxvWErjZmfQX5GHinfDLsILiEiw9ErWu7CjJtuLdtVWW2lo8Tt
-         jYXQ==
-X-Gm-Message-State: AOAM530I/mtRWvM2xfSqaZt+4l7LUOYIjnLzrKeG+xfu0NaHoYv5+3b8
-        9Yn5NUQ9jfeb3NVJ91ge700=
-X-Google-Smtp-Source: ABdhPJx/Mub6cbZBQRh5pmIf6JDa6VYSNKLrybxnpwjY7gIu4zfOWe0CddowQEbi5MIfNPpapsnt/Q==
-X-Received: by 2002:a19:c744:: with SMTP id x65mr1133435lff.133.1593157322338;
-        Fri, 26 Jun 2020 00:42:02 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id f24sm5312749ljk.125.2020.06.26.00.42.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Jun 2020 00:42:01 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1joizu-0005Fh-Rj; Fri, 26 Jun 2020 09:42:06 +0200
-Date:   Fri, 26 Jun 2020 09:42:06 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Phu Luu <Phu.Luu@silabs.com>
-Cc:     "johan@kernel.org" <johan@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Brant Merryman <Brant.Merryman@silabs.com>,
-        Richard Hendricks <Richard.Hendricks@silabs.com>,
-        =?utf-8?B?UGjDuiBMxrB1?= An <luuanphu@gmail.com>,
-        "hungnd3@fsoft.com.vn" <hungnd3@fsoft.com.vn>
-Subject: Re: [PATCH v3 2/2] USB: serial: cp210x: Proper RTS control when
- buffers fill
-Message-ID: <20200626074206.GP3334@localhost>
-References: <ECCF8E73-91F3-4080-BE17-1714BC8818FB@silabs.com>
+        id S1728059AbgFZKnU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 26 Jun 2020 06:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36704 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726778AbgFZKnU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 26 Jun 2020 06:43:20 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24196C08C5C1
+        for <linux-usb@vger.kernel.org>; Fri, 26 Jun 2020 03:43:20 -0700 (PDT)
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1jolp7-0005bM-Ek; Fri, 26 Jun 2020 12:43:09 +0200
+Received: from pza by lupine with local (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1jolp5-0000zL-9u; Fri, 26 Jun 2020 12:43:07 +0200
+Message-ID: <6ddaf69d4f5ad188864f62dcdbfbbe32acef9820.camel@pengutronix.de>
+Subject: Re: [PATCH v3 2/9] reset: Add Raspberry Pi 4 firmware reset
+ controller
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        f.fainelli@gmail.com, gregkh@linuxfoundation.org, wahrenst@gmx.net,
+        linux-kernel@vger.kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com, tim.gover@raspberrypi.org,
+        linux-pci@vger.kernel.org, helgaas@kernel.org,
+        andy.shevchenko@gmail.com, mathias.nyman@linux.intel.com,
+        lorenzo.pieralisi@arm.com
+Date:   Fri, 26 Jun 2020 12:43:07 +0200
+In-Reply-To: <b324122e8bd93302215a77d0dcf6d8b2897d3597.camel@suse.de>
+References: <20200612171334.26385-1-nsaenzjulienne@suse.de>
+         <20200612171334.26385-3-nsaenzjulienne@suse.de>
+         <c1ccb77ef0bc56b96a8ad991f8345d0ffbd76fc2.camel@pengutronix.de>
+         <b324122e8bd93302215a77d0dcf6d8b2897d3597.camel@suse.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.30.5-1.1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ECCF8E73-91F3-4080-BE17-1714BC8818FB@silabs.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 26, 2020 at 04:24:20AM +0000, Phu Luu wrote:
-> From: Brant Merryman <brant.merryman@silabs.com>
+On Wed, 2020-06-17 at 12:44 +0200, Nicolas Saenz Julienne wrote:
+> On Wed, 2020-06-17 at 12:02 +0200, Philipp Zabel wrote:
+> > Hi Nicolas,
+> > 
+> > On Fri, 2020-06-12 at 19:13 +0200, Nicolas Saenz Julienne wrote:
+> > > Raspberry Pi 4's co-processor controls some of the board's HW
+> > > initialization process, but it's up to Linux to trigger it when
+> > > relevant. Introduce a reset controller capable of interfacing with
+> > > RPi4's co-processor that models these firmware initialization routines as
+> > > reset lines.
+> > > 
+> > > Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+> > > Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+> > 
+> > Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
 > 
-> CP210x hardware disables auto-RTS but leaves auto-CTS when
-> in hardware flow control mode and UART on cp210x hardware
-> is disabled. This allows data to flow out, but new data
-> will not come into the port. When re-opening the port, if
-> auto-CTS is enabled on the cp210x, then auto-RTS must be
-> re-enabled in the driver.
+> Thanks!
 > 
-> Signed-off-by: Phu Luu <phu.luu@silabs.com>
-> Signed-off-by: Brant Merryman <brant.merryman@silabs.com>
-
-Please revisit these tags as well.
-
-> ---
-> 06/09/2020: Patch v3 2/2 Modified based on feedback from Johan Hovold <johan@kernel.org>
-> 12/18/2019: Patch v2 Broken into two patches and modified based on feedback from Johan Hovold <johan@kernel.org>
-> 12/09/2019: Initial submission of patch "Proper RTS control when buffers fill"
+> > If there is a good reason for the single DT specified reset id, I can
+> > pick up patches 1 and 2.
 > 
->  drivers/usb/serial/cp210x.c | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
+> The idea here is to make sure we're reasonably covered against further changes
+> in firmware. If we define constraints too narrow it can be a pain to support
+> new features without breaking backwards compatibility in dt.
+
+Ok.
+
+> > If you change the dts patch 4 to use a number instead of the reset id
+> > define for now, there wouldn't even be a dependency between these reset
+> > and dts patches.
 > 
-> diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-> index bcceb4ad8be0..091441b1c5b9 100644
-> --- a/drivers/usb/serial/cp210x.c
-> +++ b/drivers/usb/serial/cp210x.c
-> @@ -917,6 +917,7 @@ static void cp210x_get_termios_port(struct usb_serial_port *port,
->  	u32 baud;
->  	u16 bits;
->  	u32 ctl_hs;
-> +	u32 flow_repl;
->  
->  	cp210x_read_u32_reg(port, CP210X_GET_BAUDRATE, &baud);
->  
-> @@ -1017,6 +1018,23 @@ static void cp210x_get_termios_port(struct usb_serial_port *port,
->  	ctl_hs = le32_to_cpu(flow_ctl.ulControlHandshake);
->  	if (ctl_hs & CP210X_SERIAL_CTS_HANDSHAKE) {
->  		dev_dbg(dev, "%s - flow control = CRTSCTS\n", __func__);
-> +		/*
-> +		 * When the port is closed, the CP210x hardware disables
-> +		 * auto-RTS and RTS is deasserted but it leaves auto-CTS when
-> +		 * in hardware flow control mode. This prevents new data from
-> +		 * being received by the port. When re-opening the port, if
-> +		 * auto-CTS is enabled on the cp210x, then auto-RTS must be
-> +		 * re-enabled in the driver.
-> +		 */
+> I was under the impression that having an explicit definition was nice to have.
+> What's troubling about creating the dependency?
 
-I already asked this of Brant, but could you please be more specific
-about which state the RTS-line end up in when disabling the UART (e.g.
-0x00: statically inactive)?
+Just that the last patch has to wait for the reset patches to be merged
+before it can be applied.
 
-The reason I ask is that after open() returns, the tty layer would raise
-RTS, which should again allow data to flow in in contrast to what the
-comment and changelog text claims.
-
-We still want to enable auto-RTS of course so the patch is otherwise
-correct.
-
-> +		flow_repl = le32_to_cpu(flow_ctl.ulFlowReplace);
-> +		flow_repl &= ~CP210X_SERIAL_RTS_MASK;
-> +		flow_repl |= CP210X_SERIAL_RTS_SHIFT(CP210X_SERIAL_RTS_FLOW_CTL);
-> +		flow_ctl.ulFlowReplace = cpu_to_le32(flow_repl);
-> +		cp210x_write_reg_block(port,
-> +				CP210X_SET_FLOW,
-> +				&flow_ctl,
-> +				sizeof(flow_ctl));
-> +
->  		cflag |= CRTSCTS;
->  	} else {
->  		dev_dbg(dev, "%s - flow control = NONE\n", __func__);
-
-Johan
+regards
+Philipp
