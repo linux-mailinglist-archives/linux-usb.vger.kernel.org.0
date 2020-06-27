@@ -2,105 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F4120C108
-	for <lists+linux-usb@lfdr.de>; Sat, 27 Jun 2020 13:29:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 734F320C10A
+	for <lists+linux-usb@lfdr.de>; Sat, 27 Jun 2020 13:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726500AbgF0L3v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 27 Jun 2020 07:29:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55018 "EHLO mail.kernel.org"
+        id S1726532AbgF0LaL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 27 Jun 2020 07:30:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55146 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726439AbgF0L3v (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 27 Jun 2020 07:29:51 -0400
+        id S1726511AbgF0LaL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 27 Jun 2020 07:30:11 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 362E521789;
-        Sat, 27 Jun 2020 11:29:50 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 75F5D2168B;
+        Sat, 27 Jun 2020 11:30:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593257390;
-        bh=FAukEEirVmkSA4z/zFBcGpeifCgL/YscOsGHKQEosZc=;
+        s=default; t=1593257410;
+        bh=3Fs4W0OFMb19gMceHstl9X7MGQJjzH4mWT9h8cIEPn8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F/DROYmxgBVWodpQPmsgfAh2IEQCcVXnSpGvCo0IE3oi/rBu93XFtw8Zngb65HVdV
-         uXA9XRMTJIeU0ONcCUfTSnTn1E/gnG/tLJNZMDs32A5nJEkt4GPcyyoO9JFgS7A4Mp
-         nGguUeuv/hLoyxfOnnvc+xtrTWFZ1mx1HWCe8Amc=
-Date:   Sat, 27 Jun 2020 13:29:44 +0200
+        b=Tzz7GKEqMquwacHkXRIz2bb9RTXdK3/BXYko+xpd5nLL3gimjrsOYRNgSx4XgH4c6
+         uyI6MEs/zfhFnbgtv7ANXx19lWM4AkosgDCLZt08c82VS7/zCjnReYQoMSNFrSBdyh
+         7eNoLl3sWYBQ7oJJvH1RhVwaRkbaBUEWvR96nmyQ=
+Date:   Sat, 27 Jun 2020 13:30:04 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Changming Liu <charley.ashbringer@gmail.com>
 Cc:     linux-usb@vger.kernel.org, thomas@winischhofer.net
-Subject: Re: [PATCH 2/4] USB: sisusbvga: change the buffer members in
- sisusb_usb_data from char to u8
-Message-ID: <20200627112944.GB1596272@kroah.com>
+Subject: Re: [PATCH 3/4] USB: sisusbvga: change the buffer in
+ sisusb_recv_bulk_msg from char to u8
+Message-ID: <20200627113004.GC1596272@kroah.com>
 References: <1593200057-245-1-git-send-email-charley.ashbringer@gmail.com>
- <1593200057-245-3-git-send-email-charley.ashbringer@gmail.com>
+ <1593200057-245-4-git-send-email-charley.ashbringer@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1593200057-245-3-git-send-email-charley.ashbringer@gmail.com>
+In-Reply-To: <1593200057-245-4-git-send-email-charley.ashbringer@gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 26, 2020 at 03:34:15PM -0400, Changming Liu wrote:
-> This patch changes the buffer within struct sisusb_usb_data, 
-> namely, ibuf,obuf and font_backup
-> from char* to unsigned char* to avoid any related UB.
+On Fri, Jun 26, 2020 at 03:34:16PM -0400, Changming Liu wrote:
+> This patch changes the userbuffer of sisusb_recv_bulk_msg from char to u8
+> to avoid related UB.
 > 
-> Thia patch also changes the buffer declared in the code that gets 
-> assigned to by these buffers from char to u8 as well.
+> Also, for kernbuffer declared as void* in the function header, force cast 
+> the passed-in parameters from char* to u8*.
 > 
 > Signed-off-by: Changming Liu <charley.ashbringer@gmail.com>
 > ---
->  drivers/usb/misc/sisusbvga/sisusb.c | 4 ++--
->  drivers/usb/misc/sisusbvga/sisusb.h | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  drivers/usb/misc/sisusbvga/sisusb.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
 > diff --git a/drivers/usb/misc/sisusbvga/sisusb.c b/drivers/usb/misc/sisusbvga/sisusb.c
-> index 4aa717a..8878c28 100644
+> index 8878c28..86638c1 100644
 > --- a/drivers/usb/misc/sisusbvga/sisusb.c
 > +++ b/drivers/usb/misc/sisusbvga/sisusb.c
-> @@ -335,7 +335,7 @@ static int sisusb_send_bulk_msg(struct sisusb_usb_data *sisusb, int ep, int len,
->  	int fromuser = (userbuffer != NULL) ? 1 : 0;
->  	int fromkern = (kernbuffer != NULL) ? 1 : 0;
->  	unsigned int pipe;
-> -	char *buffer;
-> +	u8 *buffer;
+> @@ -448,7 +448,7 @@ static int sisusb_send_bulk_msg(struct sisusb_usb_data *sisusb, int ep, int len,
+>   */
 >  
->  	(*bytes_written) = 0;
->  
-> @@ -454,7 +454,7 @@ static int sisusb_recv_bulk_msg(struct sisusb_usb_data *sisusb, int ep, int len,
->  	int result = 0, retry, count = len;
->  	int bufsize, thispass, transferred_len;
->  	unsigned int pipe;
-> -	char *buffer;
-> +	u8 *buffer;
->  
->  	(*bytes_read) = 0;
->  
-> diff --git a/drivers/usb/misc/sisusbvga/sisusb.h b/drivers/usb/misc/sisusbvga/sisusb.h
-> index c0fb9e1..8fe5d07 100644
-> --- a/drivers/usb/misc/sisusbvga/sisusb.h
-> +++ b/drivers/usb/misc/sisusbvga/sisusb.h
-> @@ -109,7 +109,7 @@ struct sisusb_usb_data {
->  	int present;		/* !=0 if device is present on the bus */
->  	int ready;		/* !=0 if device is ready for userland */
->  	int numobufs;		/* number of obufs = number of out urbs */
-> -	char *obuf[NUMOBUFS], *ibuf;	/* transfer buffers */
-> +	unsigned char *obuf[NUMOBUFS], *ibuf;	/* transfer buffers */
+>  static int sisusb_recv_bulk_msg(struct sisusb_usb_data *sisusb, int ep, int len,
+> -		void *kernbuffer, char __user *userbuffer, ssize_t *bytes_read,
+> +		void *kernbuffer, u8 __user *userbuffer, ssize_t *bytes_read,
 
-u8 for this?
-
->  	int obufsize, ibufsize;
->  	struct urb *sisurbout[NUMOBUFS];
->  	struct urb *sisurbin;
-> @@ -140,7 +140,7 @@ struct sisusb_usb_data {
->  	int sisusb_cursor_size_to;
->  	int current_font_height, current_font_512;
->  	int font_backup_size, font_backup_height, font_backup_512;
-> -	char *font_backup;
-> +	unsigned char *font_backup;
-
-u8 like you say you are changing in the above text?
+Same as before, I do not think you need to change these, do you?
 
 thanks,
 
