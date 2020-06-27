@@ -2,70 +2,163 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 734F320C10A
-	for <lists+linux-usb@lfdr.de>; Sat, 27 Jun 2020 13:30:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73BD320C113
+	for <lists+linux-usb@lfdr.de>; Sat, 27 Jun 2020 13:40:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726532AbgF0LaL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 27 Jun 2020 07:30:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55146 "EHLO mail.kernel.org"
+        id S1726585AbgF0LkV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 27 Jun 2020 07:40:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56786 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726511AbgF0LaL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 27 Jun 2020 07:30:11 -0400
+        id S1725980AbgF0LkV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 27 Jun 2020 07:40:21 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 75F5D2168B;
-        Sat, 27 Jun 2020 11:30:10 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id EF1C9206A1;
+        Sat, 27 Jun 2020 11:40:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593257410;
-        bh=3Fs4W0OFMb19gMceHstl9X7MGQJjzH4mWT9h8cIEPn8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Tzz7GKEqMquwacHkXRIz2bb9RTXdK3/BXYko+xpd5nLL3gimjrsOYRNgSx4XgH4c6
-         uyI6MEs/zfhFnbgtv7ANXx19lWM4AkosgDCLZt08c82VS7/zCjnReYQoMSNFrSBdyh
-         7eNoLl3sWYBQ7oJJvH1RhVwaRkbaBUEWvR96nmyQ=
-Date:   Sat, 27 Jun 2020 13:30:04 +0200
+        s=default; t=1593258020;
+        bh=fz0wbjdILEJ+Bu6PJAJP5L16Ck/34PqrYhrCNwWdABw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=cQf1RpXrM1H72Yg03oehBFNL3+Xqk0NIqasOtAVWF4bON2LGbk8/XZ29tusymgiUT
+         JZQxjmX8iImLOssbDbDKU+0UbzoYq1GCIrONjcyy1VtWouzkCp4NL5GFwCfMQL+urZ
+         BU6wgLsZLybZn1bUaFEiIYiVtP8azhcA9lcOcWv8=
+Date:   Sat, 27 Jun 2020 13:40:13 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Changming Liu <charley.ashbringer@gmail.com>
-Cc:     linux-usb@vger.kernel.org, thomas@winischhofer.net
-Subject: Re: [PATCH 3/4] USB: sisusbvga: change the buffer in
- sisusb_recv_bulk_msg from char to u8
-Message-ID: <20200627113004.GC1596272@kroah.com>
-References: <1593200057-245-1-git-send-email-charley.ashbringer@gmail.com>
- <1593200057-245-4-git-send-email-charley.ashbringer@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB driver fixes for 5.8-rc3
+Message-ID: <20200627114013.GA1636882@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1593200057-245-4-git-send-email-charley.ashbringer@gmail.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 26, 2020 at 03:34:16PM -0400, Changming Liu wrote:
-> This patch changes the userbuffer of sisusb_recv_bulk_msg from char to u8
-> to avoid related UB.
-> 
-> Also, for kernbuffer declared as void* in the function header, force cast 
-> the passed-in parameters from char* to u8*.
-> 
-> Signed-off-by: Changming Liu <charley.ashbringer@gmail.com>
-> ---
->  drivers/usb/misc/sisusbvga/sisusb.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/misc/sisusbvga/sisusb.c b/drivers/usb/misc/sisusbvga/sisusb.c
-> index 8878c28..86638c1 100644
-> --- a/drivers/usb/misc/sisusbvga/sisusb.c
-> +++ b/drivers/usb/misc/sisusbvga/sisusb.c
-> @@ -448,7 +448,7 @@ static int sisusb_send_bulk_msg(struct sisusb_usb_data *sisusb, int ep, int len,
->   */
->  
->  static int sisusb_recv_bulk_msg(struct sisusb_usb_data *sisusb, int ep, int len,
-> -		void *kernbuffer, char __user *userbuffer, ssize_t *bytes_read,
-> +		void *kernbuffer, u8 __user *userbuffer, ssize_t *bytes_read,
+The following changes since commit 48778464bb7d346b47157d21ffde2af6b2d39110:
 
-Same as before, I do not think you need to change these, do you?
+  Linux 5.8-rc2 (2020-06-21 15:45:29 -0700)
 
-thanks,
+are available in the Git repository at:
 
-greg k-h
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.8-rc3
+
+for you to fetch changes up to ed8fa04243e22f7b8f470d08e5806c9f8c6a460a:
+
+  Merge tag 'fixes-for-v5.8-rc2' of git://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb into usb-linus (2020-06-26 17:16:52 +0200)
+
+----------------------------------------------------------------
+USB fixes for 5.8-rc3
+
+Here are some small USB fixes for 5.8-rc3 to resolve some reported
+issues.
+
+Nothing major here:
+	- gadget driver fixes
+	- cdns3 driver fixes
+	- xhci fixes
+	- renesas_usbhs driver fixes
+	- some new device support with ids
+	- documentation update
+
+All of these have been in linux-next with no reported issues.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Aditya Pakki (1):
+      usb: dwc3: pci: Fix reference count leak in dwc3_pci_resume_work
+
+Al Cooper (1):
+      xhci: Fix enumeration issue when setting max packet size for FS devices.
+
+Anand Moon (2):
+      Revert "usb: dwc3: exynos: Add support for Exynos5422 suspend clk"
+      Revert "usb: dwc3: exynos: Add support for Exynos5422 suspend clk"
+
+Chuhong Yuan (1):
+      USB: ohci-sm501: Add missed iounmap() in remove
+
+Dan Carpenter (1):
+      usb: gadget: udc: Potential Oops in error handling code
+
+Fabio Estevam (1):
+      Documentation: ABI: usb: chipidea: Update Li Jun's e-mail
+
+Greg Kroah-Hartman (2):
+      Merge 5.8-rc2 into usb-linus
+      Merge tag 'fixes-for-v5.8-rc2' of git://git.kernel.org/.../balbi/usb into usb-linus
+
+Heikki Krogerus (1):
+      usb: typec: mux: intel_pmc_mux: Fix DP alternate mode entry
+
+Joakim Tjernlund (1):
+      cdc-acm: Add DISABLE_ECHO quirk for Microchip/SMSC chip
+
+Kai-Heng Feng (2):
+      xhci: Return if xHCI doesn't support LPM
+      xhci: Poll for U0 after disabling USB2 LPM
+
+Li Jun (1):
+      usb: typec: tcpci_rt1711h: avoid screaming irq causing boot hangs
+
+Longfang Liu (1):
+      USB: ehci: reopen solution for Synopsys HC bug
+
+Macpaul Lin (1):
+      usb: host: xhci-mtk: avoid runtime suspend when removing hcd
+
+Mathias Nyman (1):
+      xhci: Fix incorrect EP_STATE_MASK
+
+Minas Harutyunyan (1):
+      usb: dwc2: Postponed gadget registration to the udc class driver
+
+Peter Chen (6):
+      usb: cdns3: ep0: fix the test mode set incorrectly
+      usb: cdns3: trace: using correct dir value
+      usb: cdns3: ep0: add spinlock for cdns3_check_new_setup
+      usb: cdns3: ep0: fix the test mode set incorrectly
+      usb: cdns3: trace: using correct dir value
+      usb: cdns3: ep0: add spinlock for cdns3_check_new_setup
+
+Tang Bin (2):
+      usb: host: ehci-exynos: Fix error check in exynos_ehci_probe()
+      usb: phy: tegra: Fix unnecessary check in tegra_usb_phy_probe()
+
+Tomasz Meresiński (1):
+      usb: add USB_QUIRK_DELAY_INIT for Logitech C922
+
+Yoshihiro Shimoda (1):
+      usb: renesas_usbhs: getting residue from callback_result
+
+Zqiang (1):
+      usb: usbtest: fix missing kfree(dev->buf) in usbtest_disconnect
+
+ .../ABI/testing/sysfs-platform-chipidea-usb-otg    |  8 +++---
+ drivers/usb/cdns3/ep0.c                            | 10 ++++---
+ drivers/usb/cdns3/trace.h                          |  2 +-
+ drivers/usb/class/cdc-acm.c                        |  2 ++
+ drivers/usb/core/quirks.c                          |  3 ++-
+ drivers/usb/dwc2/gadget.c                          |  6 -----
+ drivers/usb/dwc2/platform.c                        | 11 ++++++++
+ drivers/usb/dwc3/dwc3-exynos.c                     |  9 -------
+ drivers/usb/dwc3/dwc3-pci.c                        |  4 ++-
+ drivers/usb/gadget/udc/mv_udc_core.c               |  3 ++-
+ drivers/usb/host/ehci-exynos.c                     |  5 ++--
+ drivers/usb/host/ehci-pci.c                        |  7 +++++
+ drivers/usb/host/ohci-sm501.c                      |  1 +
+ drivers/usb/host/xhci-mtk.c                        |  5 ++--
+ drivers/usb/host/xhci.c                            |  9 ++++++-
+ drivers/usb/host/xhci.h                            |  2 +-
+ drivers/usb/misc/usbtest.c                         |  1 +
+ drivers/usb/phy/phy-tegra-usb.c                    |  6 +----
+ drivers/usb/renesas_usbhs/fifo.c                   | 23 +++++++++-------
+ drivers/usb/renesas_usbhs/fifo.h                   |  2 +-
+ drivers/usb/typec/mux/intel_pmc_mux.c              | 13 +++++++--
+ drivers/usb/typec/tcpm/tcpci_rt1711h.c             | 31 +++++++---------------
+ 22 files changed, 90 insertions(+), 73 deletions(-)
