@@ -2,140 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9D7520DD47
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jun 2020 23:50:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAFE620DFD9
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jun 2020 23:55:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728240AbgF2SkX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Jun 2020 14:40:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60654 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728191AbgF2SkV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 29 Jun 2020 14:40:21 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 90CF423CD0;
-        Mon, 29 Jun 2020 11:43:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593431023;
-        bh=ILZFwBhefvZnaUZ/7Eq1riYSV2CyDKBAdHgbSEH2bvk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=a6eq+b/baQ8GRm4G4tA7nJQs1RF4yoXbAet+TfIH2YL8pVHzyt+ujIBmMtuPw+G55
-         jk2YHqwBRV4QvVyqu7Lm5tk+mzwndE62UwmdaHWhRifb9Wje5gTGF7Z/oqO6+w8ENI
-         ZYQGRwJn1Dal6tPhfOoEcg1AFPn+JyMwbtSySjbc=
-Date:   Mon, 29 Jun 2020 13:43:33 +0200
-From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To:     Pawel Laszczak <pawell@cadence.com>
-Cc:     Peter Chen <peter.chen@nxp.com>, Felipe Balbi <balbi@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>,
-        "ben.dooks@codethink.co.uk" <ben.dooks@codethink.co.uk>,
-        "colin.king@canonical.com" <colin.king@canonical.com>,
-        "rogerq@ti.com" <rogerq@ti.com>,
-        "weiyongjun1@huawei.com" <weiyongjun1@huawei.com>,
-        Jayshri Dajiram Pawar <jpawar@cadence.com>,
-        Rahul Kumar <kurahul@cadence.com>,
-        Sanket Parmar <sparmar@cadence.com>
-Subject: Re: [PATCH RFC 0/5] Introduced new Cadence USBSSP DRD Driver.
-Message-ID: <20200629114333.GB121549@kroah.com>
-References: <20200626045450.10205-1-pawell@cadence.com>
- <878sga5nfr.fsf@kernel.org>
- <BL0PR07MB5522A8796EE7BFB5062A8E76DD930@BL0PR07MB5522.namprd07.prod.outlook.com>
- <20200629034213.GB30684@b29397-desktop>
- <20200629043146.GA323164@kroah.com>
- <DM6PR07MB552969E5B50BF3B29547DAEADD6E0@DM6PR07MB5529.namprd07.prod.outlook.com>
+        id S1729091AbgF2UkO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Jun 2020 16:40:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43388 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731711AbgF2TOM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Jun 2020 15:14:12 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2060b.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eab::60b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BDE8C0068B0
+        for <linux-usb@vger.kernel.org>; Mon, 29 Jun 2020 04:48:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QWAXFSMU/mPkbvtp5Cm+CPz4MK4XWVCxtJuefggfK9yz8uY+GC4pLgf39IjtjHW5f4WSo3TAVlFaW3+II2lUNBL73jWBjEU7Xp3nH7CBYv4mu/UFJrSNds35uaq1BEnn4NMUmggnzt+4q+WfQe09fp1enjPQesVLLh/TZKSxEB5ZzUeNRqq5DMdPNjDimDqdRsSiRAtHg5XYnRrrBK0uNMtJzHBDipDSV99owdRc/ghqQLNsqxN29Gt0dbUmQeHruK59UNpaJGMSmMDwdd79mXCNmw8ui6RJHYO7s4c/rm+SzPUDLcHxrQ6/ww0xSrAn1TfqKLNjGaToa/jyCF2skg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CIW6aNegH+SuyRQ8azYVFeTgYcabYtXJndYVbcX6MQM=;
+ b=E/OdoTjLv3adGl+5W01EYmU3UBz6Md+QoeiUZgG0v4o8X2HV06ny/D3SFuHEx5g1drLdc+D7nmu5kost/Z5QiZaYRvOAWzPqXORdg8Xm7UYdNkaoiVICBNo/yubZbnNaL+gY6hfFrOpwH2fpnAQJozAks3pcdUQFKDk9zJbxH+6ODEwYHNTAkVrIpOhUIUtm10cyYc89xgJvkBSHsba062Yn73OwbFOO56ZhdRDqj2NwCN6pAXvpD0WDa/7Puf7oA1gkraBZMP0t5y+Rm7Ax0pHy0N/BwOh3imVgdzEh47NNFxLfMY5rAjcN+lL6zjHj81GWZyaas3n6yVbLbxpprw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=infinera.com; dmarc=pass action=none header.from=infinera.com;
+ dkim=pass header.d=infinera.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infinera.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CIW6aNegH+SuyRQ8azYVFeTgYcabYtXJndYVbcX6MQM=;
+ b=Lo1yLo1NrKYn8ng9WGTSTGme8VuekmYGFu8UromSPsVvbu1WDSsnWY5dPOL92L34IZ3aI4wH/Hkj2XcfPJqXRze7o49gdPX68DaspH+XTEPa/5xenkdpxPT7qDKY9swP/gBnczDHo4GwjnUCIqBlco9E0jQWCJSxCdef2hZ5eD0=
+Received: from MWHPR1001MB2190.namprd10.prod.outlook.com
+ (2603:10b6:301:2e::20) by MWHPR1001MB2077.namprd10.prod.outlook.com
+ (2603:10b6:301:36::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3131.25; Mon, 29 Jun
+ 2020 11:48:20 +0000
+Received: from MWHPR1001MB2190.namprd10.prod.outlook.com
+ ([fe80::b439:ba0:98d6:c2d1]) by MWHPR1001MB2190.namprd10.prod.outlook.com
+ ([fe80::b439:ba0:98d6:c2d1%5]) with mapi id 15.20.3131.027; Mon, 29 Jun 2020
+ 11:48:20 +0000
+From:   Joakim Tjernlund <Joakim.Tjernlund@infinera.com>
+To:     "peter.chen@nxp.com" <peter.chen@nxp.com>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: "usb: gadget: core: sync interrupt before unbind the udc"
+ question
+Thread-Topic: "usb: gadget: core: sync interrupt before unbind the udc"
+ question
+Thread-Index: AQHWTfxUURogi5P0F06kOiJScuWkHajvdzDQgAADNIA=
+Date:   Mon, 29 Jun 2020 11:48:19 +0000
+Message-ID: <8968a345994bca4f1835804ff6e802ccf15826a0.camel@infinera.com>
+References: <3cbe4bf7fd4a152e600ecb1b85b8a24ad5aacc55.camel@infinera.com>
+         <AM7PR04MB7157E127429188EFDF829EAC8B6E0@AM7PR04MB7157.eurprd04.prod.outlook.com>
+In-Reply-To: <AM7PR04MB7157E127429188EFDF829EAC8B6E0@AM7PR04MB7157.eurprd04.prod.outlook.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.36.3 
+authentication-results: nxp.com; dkim=none (message not signed)
+ header.d=none;nxp.com; dmarc=none action=none header.from=infinera.com;
+x-originating-ip: [88.131.87.201]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c6c5d330-aa91-4cca-8ecc-08d81c2251d2
+x-ms-traffictypediagnostic: MWHPR1001MB2077:
+x-microsoft-antispam-prvs: <MWHPR1001MB20772D3D48EAAAF1D1B34E2DF46E0@MWHPR1001MB2077.namprd10.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:345;
+x-forefront-prvs: 044968D9E1
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 1FZqj1RRiYDCYNtBHcEZV+804aOcbD/Qx2PNcMnimNnj48igLFDVqd/XFty5fupHuXiMzOFlaTxbs5Qgnp48AgN9/5ryBYCSM1Yo0ELBVVAJc8bBKhuY2vGYl0lDbW/+RlIZBxMq1WSkYIsATFzM+quq5/UoHiyVX379e/jZZEBfUpMHbuLpASm7GGJGc76aLScfHN+DT6uD6tsj52KSxRVU+Bn7gExbeD7NVMK1lNzcX8+YdFsMQE/KUnLlKMqKtdxUumLLHsBGLYzukIEE5/CWHgRN1VcifVEvtZV7xjIj15EXmp1pNNxd4r+iMBMmBp+PHntE77cxVkZTLJ/9xNtHE1hQUZpor/ZYDxiVUe2IKU9KfePCS1EFkFEWJR5ZV2FdEZw95J44JIwYYyFRnA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2190.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(366004)(346002)(136003)(396003)(376002)(39850400004)(45080400002)(5660300002)(66946007)(86362001)(6506007)(91956017)(76116006)(6512007)(26005)(36756003)(66476007)(66556008)(6486002)(64756008)(186003)(66446008)(2906002)(2616005)(316002)(6916009)(478600001)(8936002)(966005)(71200400001)(8676002)(4326008);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: x/BekuT3sWbH/yPJW2r2TcHyjXCwT9PKr1b+wgfHx5tOXS3JXh67uyNxVbRSi6AD+iTL/YXQtlTmKPQuCynRiDyaXkyIOwYpJFv4eV/NCdB2XXBC4lI9q+lejscXcPf4VMfoNGLHUBSRJ+rF8VGxe+4K4iXP5rDVleLHXFKGNcKEh/rshNzyV8qo5A/E7FILhfvblU2On8/FwtidiH5B7NttS1y5lTUJJxh4OW6/hBJsvvTWeiZi9aReDlCVe4BJP9B7iToTtbSqYBnNStt1PYLGsGGKW1N2Pyh4NvcaKSeyF1peuc7xkssm4JO3Q0FAz85l+qSqLbMUqmqD0IioTdIRly+mAhunQj15T+oaqqgsyvd5zHrbSY38OgELKNfRnQhAJTmHXbi5HXEvCvfVoe3cCWg1RUKn9kCn2RqRtML/A8yWlXW8agMiLN46FPgzm39AeoPok/FzX5i68DslKeD0vBu84OllrpU0RgZ5pzA=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <5DADEAC910C636438D67020A56C558DF@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM6PR07MB552969E5B50BF3B29547DAEADD6E0@DM6PR07MB5529.namprd07.prod.outlook.com>
+X-OriginatorOrg: infinera.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2190.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c6c5d330-aa91-4cca-8ecc-08d81c2251d2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jun 2020 11:48:19.7604
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 285643de-5f5b-4b03-a153-0ae2dc8aaf77
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: jlb/1V5qMjdOuRZh+2wzRluINtKmw0NMDLTPVlvSuhVcLn+OsOMLh3JzBfGPOkeL+RE6gm1bXyfuVhiPqeoiiw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1001MB2077
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 29, 2020 at 11:20:00AM +0000, Pawel Laszczak wrote:
-> 
-> >> > Hi Felipe,
-> >> >
-> >> > >
-> >> > >Hi,
-> >> > >
-> >> > >Pawel Laszczak <pawell@cadence.com> writes:
-> >> > >> This patch introduce new Cadence USBSS DRD driver to linux kernel.
-> >> > >>
-> >> > >> The Cadence USBSS DRD Controller is a highly configurable IP Core which
-> >> > >> can be instantiated as Dual-Role Device (DRD), Peripheral Only and
-> >> > >> Host Only (XHCI)configurations.
-> >> > >>
-> >> > >> The current driver has been validated with FPGA burned. We have support
-> >> > >> for PCIe bus, which is used on FPGA prototyping.
-> >> > >>
-> >> > >> The host side of USBSS-DRD controller is compliance with XHCI
-> >> > >> specification, so it works with standard XHCI Linux driver.
-> >> > >>
-> >> > >> The host side of USBSS DRD controller is compliant with XHCI.
-> >> > >> The architecture for device side is almost the same as for host side,
-> >> > >> and most of the XHCI specification can be used to understand how
-> >> > >> this controller operates.
-> >> > >>
-> >> > >> This controller and driver support Full Speed, Hight Speed, Supper Speed
-> >> > >> and Supper Speed Plus USB protocol.
-> >> > >>
-> >> > >> The prefix cdnsp used in driver has chosen by analogy to cdn3 driver.
-> >> > >> The last letter of this acronym means PLUS. The formal name of controller
-> >> > >> is USBSSP but it's to generic so I've decided to use CDNSP.
-> >> > >>
-> >> > >> The patch 1: adds DT binding.
-> >> > >> The patch 2: adds PCI to platform wrapper used on Cadnece testing
-> >> > >>              platform. It is FPGA based on platform.
-> >> > >> The patches 3-5: add the main part of driver and has been intentionally
-> >> > >>              split into 3 part. In my opinion such division should not
-> >> > >>              affect understanding and reviewing the driver, and cause that
-> >> > >>              main patch (4/5) is little smaller. Patch 3 introduces main
-> >> > >>              header file for driver, 4 is the main part that implements all
-> >> > >>              functionality of driver and 5 introduces tracepoints.
-> >> > >
-> >> > >I'm more interested in how is this different from CDNS3. Aren't they SW compatible?
-> >> >
-> >> > In general, the controller can be split into 2 part- DRD part and the rest UDC.
-> >> >
-> >> > The second part UDC which consist gadget.c, ring.c and mem.c file is completely different.
-> >> >
-> >> > The DRD part contains drd.c and core.c.
-> >> > cdnsp drd.c is similar to cdns3 drd.c but it's little different. CDNSP has similar, but has different register space.
-> >> > Some register was moved, some was removed and some was added.
-> >> >
-> >> > core.c is very similar and eventually could be common for both drivers.  I thought about this but
-> >> > I wanted to avoid interfering with cdns3 driver at this point CDNSP is still under testing and
-> >> > CDNS3 is used by some products on the market.
-> >>
-> >> Pawel, I suggest adding CDNSP at driver/staging first since it is still
-> >> under testing. When you are thinking the driver (as well as hardware) are
-> >> mature, you could try to add gadget part (eg, gadget-v2) and make
-> >> necessary changes for core.c.
-> >
-> >I only take code for drivers/staging/ that for some reason is not
-> >meeting the normal coding style/rules/whatever.  For stuff that is an
-> >obvious duplicate of existing code like this, and needs to be
-> >rearchitected.  It is much more work to try to convert code once it is
-> >in the tree than to just do it out of the tree on your own and resubmit
-> >it, as you don't have to follow the in-kernel rules of "one patch does
-> >one thing" that you would if it was in staging.
-> >
-> >So don't think that staging is the right place for this, just spend a
-> >few weeks to get it right and then resubmit it.
-> >
-> 
-> Ok, 
-> I try to reuse the code from cdns3. Where  such common code should be
-> placed ? Should I move it to e.g. drivers/usb/common/cdns or it should remain in 
-> cdns3 directory.
-
-In the cdns3 directory makes the most sense.
-
-thanks,
-
-greg k-h
+T24gTW9uLCAyMDIwLTA2LTI5IGF0IDExOjM3ICswMDAwLCBQZXRlciBDaGVuIHdyb3RlOg0KPiBD
+QVVUSU9OOiBUaGlzIGVtYWlsIG9yaWdpbmF0ZWQgZnJvbSBvdXRzaWRlIG9mIHRoZSBvcmdhbml6
+YXRpb24uIERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3Ug
+cmVjb2duaXplIHRoZSBzZW5kZXIgYW5kIGtub3cgdGhlIGNvbnRlbnQgaXMgc2FmZS4NCj4gDQo+
+IA0KPiA+IEluDQo+ID4gaHR0cHM6Ly9ldXIwMS5zYWZlbGlua3MucHJvdGVjdGlvbi5vdXRsb29r
+LmNvbS8/dXJsPWh0dHBzJTNBJTJGJTJGZ2l0Lmtlcm5lbC5vcmcNCj4gPiAlMkZwdWIlMkZzY20l
+MkZsaW51eCUyRmtlcm5lbCUyRmdpdCUyRnN0YWJsZSUyRmxpbnV4LmdpdCUyRmNvbW1pdCUyRg0K
+PiA+ICUzRmglM0RsaW51eC0NCj4gPiA1LjQueSUyNmlkJTNEODA1YmFlNzU5MmZhMmNmZWRlODk4
+YjI0ZTJhOGQ4NWZkZDYzMTdlZSZhbXA7ZGF0YT0wMiU3Qw0KPiA+IDAxJTdDcGV0ZXIuY2hlbiU0
+MG54cC5jb20lN0M3NTUxNjRhZjRjMGQ0NDdjYmY3OTA4ZDgxYzEzNzkwNCU3QzY4NmUNCj4gPiBh
+MWQzYmMyYjRjNmZhOTJjZDk5YzVjMzAxNjM1JTdDMCU3QzAlN0M2MzcyOTAyMTcyNDA3MzQ3NDYm
+YW1wO3NkYXQNCj4gPiBhPVNMTkhSQ2dod0lZRk94TTZROVFlY3lNdlg5QXpVTmZoZmtNR0dNUksz
+NFElM0QmYW1wO3Jlc2VydmVkDQo+ID4gPTANCj4gPiANCj4gPiBZb3UgYWRkIGFuICJpbnQgaXJx
+IiBmaWVsZCBidXQgSSBkb24ndCBzZWUgYW55dGhpbmcgc2V0dGluZyB0aGlzIGZpZWxkLCBzb21l
+dGhpbmcNCj4gPiBtaXNzaW5nPw0KPiA+IA0KPiANCj4gaHR0cHM6Ly9uYW0wMy5zYWZlbGlua3Mu
+cHJvdGVjdGlvbi5vdXRsb29rLmNvbS8/dXJsPWh0dHBzJTNBJTJGJTJGZ2l0Lmtlcm5lbC5vcmcl
+MkZwdWIlMkZzY20lMkZsaW51eCUyRmtlcm5lbCUyRmdpdCUyRm5leHQlMkZsaW51eC1uZXh0Lmdp
+dCUyRmNvbW1pdCUyRiUzRmlkJTNENzdmMzBmZjQ5NzYxYWNiYjNkOTBhY2EwMDA0ZjM5M2ZkODFi
+NjNhOCZhbXA7ZGF0YT0wMiU3QzAxJTdDSm9ha2ltLlRqZXJubHVuZCU0MGluZmluZXJhLmNvbSU3
+QzBhYjQ3N2E1MWI1NzQ2MWNmYzAxMDhkODFjMjBlMDkzJTdDMjg1NjQzZGU1ZjViNGIwM2ExNTMw
+YWUyZGM4YWFmNzclN0MxJTdDMCU3QzYzNzI5MDI3NDgxNjU2OTMwNCZhbXA7c2RhdGE9eTM0eiUy
+QkZERzg2elEzckJWUmJMekRlSW1NTG1Uclppbmc5Um9vTzNRUzNZJTNEJmFtcDtyZXNlcnZlZD0w
+DQo+IA0KPiBQZXRlcg0KDQpPSywgYnV0IHRoYXQgaXMgbm90IGluIHN0YWJsZT8geWV0Pw0KDQog
+Sm9ja2UNCg==
