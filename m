@@ -2,194 +2,335 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2804820D64C
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jun 2020 22:05:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 035C920D74F
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jun 2020 22:07:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730983AbgF2TS4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Jun 2020 15:18:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43390 "EHLO
+        id S1732367AbgF2T2k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Jun 2020 15:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731765AbgF2TOU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Jun 2020 15:14:20 -0400
-Received: from EUR03-AM5-obe.outbound.protection.outlook.com (mail-am5eur03on070a.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe08::70a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6528C008649;
-        Mon, 29 Jun 2020 03:04:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lShKbRmB0J5eEkEW4N5PhK5fGGteVPmStCbBiVn9AXUhnPgFLF+eQGo/WuOVDxtCdYdnn5aNTWSS4MTpWnR5A0Crlsx8Qe047VyRUUTD7wMby0wD+bMFxnTjPuaxNn927fImDLhE4NNO7Kca4jy3s5B6GDox50rK3JvEppLXtaqC4UycWLDljK9CxJXpwWY5Tw3R9RIb2zgjefTbdy+JZWGkzha0Fh5umVj//XqY2h9qpmDmcZqShKkOfm8GSABed3Ge9XPxAVp1MksdhhjeZEWuCefCh0pcG+GmIs6slIJzk5/8r5rOBqs1KHBzHqaaBPXh3SdKz48gE/pDO/Dw+Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=in2MCgJq3Xc/5ZXebcY0aOhH359BoUq2fD4d3C5vmTQ=;
- b=JDxOVPnYQA9FalLLc3STPw7c0q6wi9/HH96PzgiqIZ1OtOXK2om3U34JJED/0ov9+3UZZI06R66t0xoHOace+Ou0myZkf79ejwXZqf+Jg1nPFhXKd5GcagGihoxBM/6EzNWnamE6gak53f2qMVztL/9uaSth6a108dFvnrzXCMJEOn8wYq0AZ3rD7kSf1uoyD/DqVMTvkSwJkwffmPrBp6OqohLBMIPnmT1P2864YWoXo9UIKAijCUuySUolwvcYlL6inJWusPstBZxyO3TFUSYviElN7/bTaIY+3NaxzIWoAp5/8j0UXvRqJeJVFZ8B6CWcSQD6Vp+i1McHbViUVA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=toradex.com; dmarc=pass action=none header.from=toradex.com;
- dkim=pass header.d=toradex.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=toradex.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=in2MCgJq3Xc/5ZXebcY0aOhH359BoUq2fD4d3C5vmTQ=;
- b=auSAoO5Phsbi0Wt4eTILKyH4TR2qbBWflfmbeRMeBHJ41s1LwAymmqevVgi983txILmLMBT/Zwd+DrHyEkQE7aapCd5Ht12cc0Ox/RLWJ6KorHSUSMUmCYYr2YpZB05t5gMJP6BdhviGkbjoQ6D7CruwaEMX151fHZDeIMQ2WMc=
-Received: from AM6PR05MB6120.eurprd05.prod.outlook.com (2603:10a6:20b:a8::25)
- by AM6PR05MB5733.eurprd05.prod.outlook.com (2603:10a6:20b:29::33) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3131.20; Mon, 29 Jun
- 2020 10:04:13 +0000
-Received: from AM6PR05MB6120.eurprd05.prod.outlook.com
- ([fe80::1d81:6a9b:8c26:3b7d]) by AM6PR05MB6120.eurprd05.prod.outlook.com
- ([fe80::1d81:6a9b:8c26:3b7d%4]) with mapi id 15.20.3131.027; Mon, 29 Jun 2020
- 10:04:13 +0000
-From:   Philippe Schenker <philippe.schenker@toradex.com>
-To:     "peter.chen@nxp.com" <peter.chen@nxp.com>
-CC:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        with ESMTP id S1732750AbgF2T1n (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Jun 2020 15:27:43 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0212C02A559
+        for <linux-usb@vger.kernel.org>; Mon, 29 Jun 2020 06:12:27 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1jptaE-0004Bk-8O; Mon, 29 Jun 2020 15:12:26 +0200
+Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1jptaC-0002as-UY; Mon, 29 Jun 2020 15:12:24 +0200
+Date:   Mon, 29 Jun 2020 15:12:24 +0200
+From:   Michael Grzeschik <mgr@pengutronix.de>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "balbi@kernel.org" <balbi@kernel.org>,
         "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Stefan Agner <stefan.agner@toradex.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: chipidea: fix ci_irq for role-switching use-case
-Thread-Topic: [PATCH] usb: chipidea: fix ci_irq for role-switching use-case
-Thread-Index: AQHWS6lpDotuJDHYTE6xfL+NZ7/3sKjvNfGAgAAsA4A=
-Date:   Mon, 29 Jun 2020 10:04:13 +0000
-Message-ID: <88f0a5bf564eded8b210457204facdf2c7a9c5dc.camel@toradex.com>
-References: <20200626110311.221596-1-philippe.schenker@toradex.com>
-         <20200629072703.GC30684@b29397-desktop>
-In-Reply-To: <20200629072703.GC30684@b29397-desktop>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.36.3 
-authentication-results: nxp.com; dkim=none (message not signed)
- header.d=none;nxp.com; dmarc=none action=none header.from=toradex.com;
-x-originating-ip: [31.10.206.124]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: edd9b0e6-d15c-4993-8ab1-08d81c13c6d2
-x-ms-traffictypediagnostic: AM6PR05MB5733:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM6PR05MB57338B6CD114BB30320B4BCAF46E0@AM6PR05MB5733.eurprd05.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 044968D9E1
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: DG4SW2paJ82qPJ+7yUvu25xZnBVAERjxBURLqh7HlTdDwWtq15CRFo4TX3Jss7gtJ9GtFNV6qaZiBnsAhAuYQbG6kBnSVFrigCPQRguxJL/C6LoKc3ZjuQGLjnfa8YeDfmcerPXTIqA/VsUI/+OXLrMMFFEueyT5FNn+W2J2l+GqriPBlq8CQfUeBQbU/NF/30UMhnNOaGOJ2ThDziJnfsZ8jVz9yJxv0P6uxkNjsBLDumgMp/WsUysZ30oFOV8XB7m1tg14R5gvbWWhjzDX6EoVDZTgOmvhSqn/jOtB/A1nMvJCFVWnCRP8xogXAHjXja3Gi1P0vjr9eLgpm3Bj/Q==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR05MB6120.eurprd05.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(376002)(346002)(396003)(136003)(39850400004)(366004)(478600001)(6916009)(71200400001)(8676002)(64756008)(66556008)(8936002)(2906002)(2616005)(66946007)(66476007)(66446008)(186003)(6506007)(76116006)(83380400001)(91956017)(86362001)(4326008)(316002)(6512007)(6486002)(36756003)(5660300002)(53546011)(44832011)(54906003)(26005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: HjqHgVTh/aEP3kFJT5ZFIax/kB587xfbdUDOpD1RKQOF4s44Rel3hOJLau3do29mlClcHhu7YqWNCL/LOrSwTlc6ESPNTb0i5NYrakGTxkCNJc670Tl5ZHKuXX23M1aJuXOLeIF+BBWMAMxQHOyKNB9WRkVSDdaas7ZsfF4/Twgkbk3uH+DVGIVc/QqIHNLelNgpb4WnaFGs/Z+zpwXMEkW1AGnEh5mRccEJiVYAIPYklvYQzj2PzuX95llYGywbnRpZ+xxfEOpCE1c20yju/vUfSiWPbqKlljNLGa2noY435dEIw7MfgPZODt5pYCaNErg1sDgy8PQL1Nei+KkhMZEVbqXSCMmqjx20999k1Ssl8bZXzpQmmWYjH1sNGXGbFYWcSB4UpNF7xlcf6mShkh7Gsd5gn/wZ3wZhIeEGxXRUb+1xJmZLoyF6aFlEA1qbZHskFLgppxV0g9jDYwl2w9806/ujYmmNqG9Su5Rm+oA=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <7F8B996D3B72A54792DA5F6A7A962314@eurprd05.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        Michael Olbrich <m.olbrich@pengutronix.de>
+Subject: Re: [PATCH v2 1/2] usb: dwc3: gadget: make starting isoc transfers
+ more robust
+Message-ID: <20200629131224.GI21325@pengutronix.de>
+References: <20200624144907.9604-1-m.grzeschik@pengutronix.de>
+ <20200624144907.9604-2-m.grzeschik@pengutronix.de>
+ <fde48c28-3e9b-02f4-d0b0-5a34af3461e1@synopsys.com>
+ <20200625114449.GF21325@pengutronix.de>
+ <daa160c6-ce69-93c4-a6ec-f4044541db3c@synopsys.com>
+ <f66f8231-b514-c63f-e8b2-2f7d4d67c8d8@synopsys.com>
+ <6d5cb659-5aa0-298f-23b1-b1bc937ca844@synopsys.com>
 MIME-Version: 1.0
-X-OriginatorOrg: toradex.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR05MB6120.eurprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: edd9b0e6-d15c-4993-8ab1-08d81c13c6d2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jun 2020 10:04:13.7678
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d9995866-0d9b-4251-8315-093f062abab4
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: y5y4jLqaa/DRqd5YqBrRlxEOJmSmViajvbF+vEQ9XWScmZFBmHh4Nug3vZVpVIzbPxXBy4ezzqSQmctuzFsuftH3DW/uN8dzsgW0S1KTPWc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR05MB5733
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2+N3zU4ZlskbnZaJ"
+Content-Disposition: inline
+In-Reply-To: <6d5cb659-5aa0-298f-23b1-b1bc937ca844@synopsys.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 15:08:06 up 130 days, 20:38, 121 users,  load average: 0.12, 0.36,
+ 0.28
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gTW9uLCAyMDIwLTA2LTI5IGF0IDA3OjI2ICswMDAwLCBQZXRlciBDaGVuIHdyb3RlOg0KPiBP
-biAyMC0wNi0yNiAxMzowMzoxMSwgUGhpbGlwcGUgU2NoZW5rZXIgd3JvdGU6DQo+ID4gSWYgdGhl
-IGhhcmR3YXJlIGlzIGluIGxvdy1wb3dlci1tb2RlIGFuZCBvbmUgcGx1Z3MgaW4gZGV2aWNlIG9y
-IGhvc3QNCj4gPiBpdCBkaWQgbm90IHN3aXRjaCB0aGUgbW9kZSBkdWUgdG8gdGhlIGVhcmx5IGV4
-aXQgb3V0IG9mIHRoZQ0KPiA+IGludGVycnVwdC4NCj4gDQo+IERvIHlvdSBtZWFuIHRoZXJlIGlz
-IG5vIGNvbWluZyBjYWxsIGZvciByb2xlLXN3aXRjaD8gQ291bGQgeW91IHBsZWFzZQ0KPiBzaGFy
-ZQ0KPiB5b3VyIGR0cyBjaGFuZ2VzPyBUcnkgYmVsb3cgcGF0Y2g6DQoNCkhlcmUgYXJlIG15IERU
-UyBjaGFuZ2VzOg0KDQpkaWZmIC0tZ2l0IGEvYXJjaC9hcm0vYm9vdC9kdHMvaW14Ny1jb2xpYnJp
-LWV2YWwtdjMuZHRzaQ0KYi9hcmNoL2FybS9ib290L2R0cy9pbXg3LWNvbGlicmktZXZhbC12My5k
-dHNpDQppbmRleCA5NzYwMTM3NWYyNjQwLi5jNDI0ZjcwN2ExYWZhIDEwMDY0NA0KLS0tIGEvYXJj
-aC9hcm0vYm9vdC9kdHMvaW14Ny1jb2xpYnJpLWV2YWwtdjMuZHRzaQ0KKysrIGIvYXJjaC9hcm0v
-Ym9vdC9kdHMvaW14Ny1jb2xpYnJpLWV2YWwtdjMuZHRzaQ0KQEAgLTEzLDYgKzEzLDEzIEBADQog
-ICAgICAgICAgICAgICAgc3Rkb3V0LXBhdGggPSAic2VyaWFsMDoxMTUyMDBuOCI7DQogICAgICAg
-IH07DQogDQorICAgICAgIGV4dGNvbl91c2JjX2RldDogdXNiY19kZXQgew0KKyAgICAgICAgICAg
-ICAgIGNvbXBhdGlibGUgPSAibGludXgsZXh0Y29uLXVzYi1ncGlvIjsNCisgICAgICAgICAgICAg
-ICBpZC1ncGlvID0gPCZncGlvNyAxNCBHUElPX0FDVElWRV9ISUdIPjsNCisgICAgICAgICAgICAg
-ICBwaW5jdHJsLW5hbWVzID0gImRlZmF1bHQiOw0KKyAgICAgICAgICAgICAgIHBpbmN0cmwtMCA9
-IDwmcGluY3RybF91c2JjX2RldD47DQorICAgICAgIH07DQorDQogICAgICAgIC8qIGZpeGVkIGNy
-eXN0YWwgZGVkaWNhdGVkIHRvIG1wYzI1OHggKi8NCiAgICAgICAgY2xrMTZtOiBjbGsxNm0gew0K
-ICAgICAgICAgICAgICAgIGNvbXBhdGlibGUgPSAiZml4ZWQtY2xvY2siOw0KQEAgLTE3NCw2ICsx
-ODEsNyBAQA0KIH07DQogDQogJnVzYm90ZzEgew0KKyAgICAgICBleHRjb24gPSA8JmV4dGNvbl91
-c2JjX2RldD4sIDwmZXh0Y29uX3VzYmNfZGV0PjsNCiAgICAgICAgc3RhdHVzID0gIm9rYXkiOw0K
-IH07DQogDQpkaWZmIC0tZ2l0IGEvYXJjaC9hcm0vYm9vdC9kdHMvaW14Ny1jb2xpYnJpLmR0c2kN
-CmIvYXJjaC9hcm0vYm9vdC9kdHMvaW14Ny1jb2xpYnJpLmR0c2kNCmluZGV4IGUxOGU4OWRlYzg3
-OTIuLmNhZWE5MGQyNDIxZmQgMTAwNjQ0DQotLS0gYS9hcmNoL2FybS9ib290L2R0cy9pbXg3LWNv
-bGlicmkuZHRzaQ0KKysrIGIvYXJjaC9hcm0vYm9vdC9kdHMvaW14Ny1jb2xpYnJpLmR0c2kNCkBA
-IC00NTcsNyArNDU3LDcgQEANCiB9Ow0KIA0KICZ1c2JvdGcxIHsNCi0gICAgICAgZHJfbW9kZSA9
-ICJob3N0IjsNCisgICAgICAgZHJfbW9kZSA9ICJvdGciOw0KIH07DQogDQogJnVzZGhjMSB7DQpA
-QCAtNDg2LDcgKzQ4Niw3IEBADQogJmlvbXV4YyB7DQogICAgICAgIHBpbmN0cmwtbmFtZXMgPSAi
-ZGVmYXVsdCI7DQogICAgICAgIHBpbmN0cmwtMCA9IDwmcGluY3RybF9ncGlvMSAmcGluY3RybF9n
-cGlvMiAmcGluY3RybF9ncGlvMw0KJnBpbmN0cmxfZ3BpbzQNCi0gICAgICAgICAgICAgICAgICAg
-ICZwaW5jdHJsX2dwaW83ICZwaW5jdHJsX3VzYmNfZGV0PjsNCisgICAgICAgICAgICAgICAgICAg
-ICZwaW5jdHJsX2dwaW83PjsNCiANCiAgICAgICAgcGluY3RybF9ncGlvMTogZ3BpbzEtZ3JwIHsN
-CiAgICAgICAgICAgICAgICBmc2wscGlucyA9IDwNCg0KPiANCj4gDQo+IGRpZmYgLS1naXQgYS9k
-cml2ZXJzL3VzYi9jaGlwaWRlYS9jb3JlLmMgYi9kcml2ZXJzL3VzYi9jaGlwaWRlYS9jb3JlLmMN
-Cj4gaW5kZXggZThjZTMwMGFkNDkwLi45ZTEwZGNmZWI5OGYgMTAwNjQ0DQo+IC0tLSBhL2RyaXZl
-cnMvdXNiL2NoaXBpZGVhL2NvcmUuYw0KPiArKysgYi9kcml2ZXJzL3VzYi9jaGlwaWRlYS9jb3Jl
-LmMNCj4gQEAgLTEzMTMsNiArMTMxMywyOSBAQCBzdGF0aWMgdm9pZCBjaV9jb250cm9sbGVyX3N1
-c3BlbmQoc3RydWN0DQo+IGNpX2hkcmMgKmNpKQ0KPiAgCWVuYWJsZV9pcnEoY2ktPmlycSk7DQo+
-ICB9DQo+ICANCj4gKy8qDQo+ICsgKiBIYW5kbGUgdGhlIHdha2V1cCBpbnRlcnJ1cHQgdHJpZ2dl
-cmVkIGJ5IGV4dGNvbiBjb25uZWN0b3INCj4gKyAqIFdlIG5lZWQgdG8gY2FsbCBjaV9pcnEgYWdh
-aW4gZm9yIGV4dGNvbiBzaW5jZSB0aGUgZmlyc3QNCj4gKyAqIGludGVycnVwdCAod2FrZXVwIGlu
-dCkgb25seSBsZXQgdGhlIGNvbnRyb2xsZXIgYmUgb3V0IG9mDQo+ICsgKiBsb3cgcG93ZXIgbW9k
-ZSwgYnV0IG5vdCBoYW5kbGUgYW55IGludGVycnVwdHMuDQo+ICsgKi8NCj4gK3N0YXRpYyB2b2lk
-IGNpX2V4dGNvbl93YWtldXBfaW50KHN0cnVjdCBjaV9oZHJjICpjaSkNCj4gK3sNCj4gKwlzdHJ1
-Y3QgY2lfaGRyY19jYWJsZSAqY2FibGVfaWQsICpjYWJsZV92YnVzOw0KPiArCXUzMiBvdGdzYyA9
-IGh3X3JlYWRfb3Rnc2MoY2ksIH4wKTsNCj4gKw0KPiArCWNhYmxlX2lkID0gJmNpLT5wbGF0ZGF0
-YS0+aWRfZXh0Y29uOw0KPiArCWNhYmxlX3ZidXMgPSAmY2ktPnBsYXRkYXRhLT52YnVzX2V4dGNv
-bjsNCj4gKw0KPiArCWlmICghSVNfRVJSKGNhYmxlX2lkLT5lZGV2KSAmJiBjaS0+aXNfb3RnICYm
-DQo+ICsJCShvdGdzYyAmIE9UR1NDX0lESUUpICYmIChvdGdzYyAmIE9UR1NDX0lESVMpKQ0KPiAr
-CQljaV9pcnEoY2ktPmlycSwgY2kpOw0KPiArDQo+ICsJaWYgKCFJU19FUlIoY2FibGVfdmJ1cy0+
-ZWRldikgJiYgY2ktPmlzX290ZyAmJg0KPiArCQkob3Rnc2MgJiBPVEdTQ19CU1ZJRSkgJiYgKG90
-Z3NjICYgT1RHU0NfQlNWSVMpKQ0KPiArCQljaV9pcnEoY2ktPmlycSwgY2kpOw0KPiArfQ0KPiAr
-DQo+ICBzdGF0aWMgaW50IGNpX2NvbnRyb2xsZXJfcmVzdW1lKHN0cnVjdCBkZXZpY2UgKmRldikN
-Cj4gIHsNCj4gIAlzdHJ1Y3QgY2lfaGRyYyAqY2kgPSBkZXZfZ2V0X2RydmRhdGEoZGV2KTsNCj4g
-QEAgLTEzNDMsNiArMTM2Niw3IEBAIHN0YXRpYyBpbnQgY2lfY29udHJvbGxlcl9yZXN1bWUoc3Ry
-dWN0IGRldmljZQ0KPiAqZGV2KQ0KPiAgCQllbmFibGVfaXJxKGNpLT5pcnEpOw0KPiAgCQlpZiAo
-Y2lfb3RnX2lzX2ZzbV9tb2RlKGNpKSkNCj4gIAkJCWNpX290Z19mc21fd2FrZXVwX2J5X3NycChj
-aSk7DQo+ICsJCWNpX2V4dGNvbl93YWtldXBfaW50KGNpKTsNCj4gIAl9DQo+ICANCj4gIAlyZXR1
-cm4gMDsNCg0KVGhhbmtzIGZvciBjcmVhdGluZyB0aGlzIHBhdGNoISBJIHdhbnRlZCBhbHNvIHNv
-bWV0aGluZyBsaWtlIHRoYXQsIGJ1dA0KY291bGRuJ3QgZmluZCBvdXQgd2hlcmUgdG8gcHV0IGl0
-LiANCg0KSSB0cmllZCB0aGlzIHBhdGNoIGFuZCB3aXRoIHRoZSBhYm92ZSBkZXZpY2V0cmVlIGNo
-YW5nZXMgdGhpcyB3b3Jrcw0KcGVyZmVjdGx5ISBUaGFua3MgUGV0ZXIhDQoNClNob3VsZCBJIHNl
-bmQgdGhlIHBhdGNoIHdpdGggeW91IGFzIHRoZSAiU3VnZ2VzdGVkLWJ5IiBvciBkbyB5b3Ugd2Fu
-dCB0bw0Kc2VuZCB0aGUgcGF0Y2ggc28geW91IGFyZSB0aGUgQXV0aG9yPyBJIHdvdWxkIGhhdmUg
-aXQgcmVhZHkgaW4gbXkgZ2l0DQpyZXBvLg0KDQo+IA0KPiA+IFRoaXMgcGF0Y2ggZml4ZXMgdGhh
-dCBiZWhhdmlvdXIgYW5kIGxldHMgdGhlIHJlc3Qgb2YgdGhlIGNvZGUgY2hlY2sNCj4gPiBpZg0K
-PiA+IHNvbWV0aGluZyBoYXMgdG8gYmUgZG9uZS4gSWYgbm90aGluZyBoYXMgdG8gYmUgZG9uZSB0
-aGUgc2FtZSByZXR1cm4NCj4gPiB2YWx1ZSBnZXRzIHJldHVybmVkIGFzIGJlZm9yZS4NCj4gDQo+
-IEJlZm9yZSB0aGUgY29udHJvbGxlciBsZWF2aW5nIGxvdyBwb3dlciBtb2RlLCBvdGdzYyB2YWx1
-ZSBtYXkgbm90DQo+IGNvcnJlY3Qgc2luY2UgdGhlIGNvbnRyb2xsZXIvUEhZIGlzIHN0aWxsIGlu
-IGxvdyBwb3dlciBtb2RlLg0KPiANCj4gPiBGaXhlczogMWY4NzRlZGNiNzMxICgidXNiOiBjaGlw
-aWRlYTogYWRkIHJ1bnRpbWUgcG93ZXIgbWFuYWdlbWVudA0KPiA+IHN1cHBvcnQiKQ0KPiA+IFNp
-Z25lZC1vZmYtYnk6IFBoaWxpcHBlIFNjaGVua2VyIDxwaGlsaXBwZS5zY2hlbmtlckB0b3JhZGV4
-LmNvbT4NCj4gPiANCj4gPiAtLS0NCj4gPiANCj4gPiBIaSBQZXRlcg0KPiA+IA0KPiA+IER1cmlu
-ZyBteSBpbnZlc3RpZ2F0aW9uIEkgZm91bmQgYSBidWcgaW4gY2lfaXJxLiBJIHdvdWxkIGFwcHJl
-Y2lhdGUNCj4gPiBpZiB5b3UgY291bGQgcmV2aWV3IHRoaXMuIEZyb20gd2hhdCBJIHNlZSB0aGlz
-IHBhdGNoIHNob3VsZCBiZSBzYXZlDQo+ID4gdG8gYXBwbHkuDQo+ID4gDQo+ID4gVGhpcyBwYXRj
-aCBkb2VzIG5vdCBzb2x2ZSBhbGwgb2Ygb3VyIGlzc3Vlcy4gV2hlbiBJIGhhdmUgUlVOVElNRV9Q
-TQ0KPiA+IGVuYWJsZWQgb24gaW14NnVsbCBvciBpbXg3LiBSTkRJUyBzdGlsbCBkb2VzIG5vdCBj
-b21lIHVwLiBTbyB0aGVyZQ0KPiA+IGhhcyB0byBiZSBhbm90aGVyIGJ1ZyBoaWRpbmcgc29tZXdo
-ZXJlIGluIHRoZSBSdW50aW1lIFBNIGNvZGUgdG8NCj4gPiBwcmV2ZW50DQo+ID4gUk5ESVMgZnJv
-bSB3b3JraW5nIHByb3Blcmx5LiBJIHF1aWNrbHkgbG9va2VkIHRocm91Z2ggeW91ciBwYXRjaGVz
-DQo+ID4gdGhhdCBhZGRlZCB0aGlzIHN0dWZmIGJhY2sgaW4gMjAxNSBidXQgY291bGRuJ3Qgc3Bv
-dCBhbnl0aGluZw0KPiA+IHJlbGF0ZWQgdG8NCj4gPiB1c2IgZ2FkZ2V0LW1vZGUuDQo+ID4gDQo+
-ID4gSWYgeW91IHJpZ2h0IGF3YXkga25vdyB3aGVyZSB0aGUgcHJvYmxlbSBjb3VsZCBiZSBoaWRp
-bmcgaXRzZWxmLA0KPiA+IEkgd291bGQgYXBwcmVjaWF0ZSBhIGhpbnQuDQo+ID4gDQo+IA0KPiBJ
-IG5lZWQgaW5mb3JtYXRpb24gZm9yIGNhbGwgdHJhY2UgZm9yIGZ1cnRoZXIgc3VnZ2VzdGlvbi4N
-Cj4gDQo+IFBldGVyDQo+IA0KPiA+IC0tLQ0KPiA+IA0KPiA+ICBkcml2ZXJzL3VzYi9jaGlwaWRl
-YS9jb3JlLmMgfCAyICstDQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBk
-ZWxldGlvbigtKQ0KPiA+IA0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9jaGlwaWRlYS9j
-b3JlLmMNCj4gPiBiL2RyaXZlcnMvdXNiL2NoaXBpZGVhL2NvcmUuYw0KPiA+IGluZGV4IDlhN2M1
-M2QwOWFiNC4uNTE1OTQyMGEyM2E0IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvdXNiL2NoaXBp
-ZGVhL2NvcmUuYw0KPiA+ICsrKyBiL2RyaXZlcnMvdXNiL2NoaXBpZGVhL2NvcmUuYw0KPiA+IEBA
-IC01MTgsNyArNTE4LDcgQEAgc3RhdGljIGlycXJldHVybl90IGNpX2lycShpbnQgaXJxLCB2b2lk
-ICpkYXRhKQ0KPiA+ICAJCWRpc2FibGVfaXJxX25vc3luYyhpcnEpOw0KPiA+ICAJCWNpLT53YWtl
-dXBfaW50ID0gdHJ1ZTsNCj4gPiAgCQlwbV9ydW50aW1lX2dldChjaS0+ZGV2KTsNCj4gPiAtCQly
-ZXR1cm4gSVJRX0hBTkRMRUQ7DQo+ID4gKwkJcmV0ID0gSVJRX0hBTkRMRUQ7DQo+ID4gIAl9DQo+
-ID4gIA0KPiA+ICAJaWYgKGNpLT5pc19vdGcpIHsNCj4gPiAtLSANCj4gPiAyLjI3LjANCj4gPiAN
-Cg==
+
+--2+N3zU4ZlskbnZaJ
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Jun 25, 2020 at 08:20:26PM +0000, Thinh Nguyen wrote:
+>Thinh Nguyen wrote:
+>> Thinh Nguyen wrote:
+>>> Hi,
+>>>
+>>> Michael Grzeschik wrote:
+>>>> Hi!
+>>>>
+>>>> On Wed, Jun 24, 2020 at 07:26:42PM +0000, Thinh Nguyen wrote:
+>>>>> Michael Grzeschik wrote:
+>>>>>> From: Michael Olbrich <m.olbrich@pengutronix.de>
+>>>>>>
+>>>>>> Currently __dwc3_gadget_start_isoc must be called very shortly after
+>>>>>> XferNotReady. Otherwise the frame number is outdated and start trans=
+fer
+>>>>>> will fail, even with several retries.
+>>>>> Did you try with the recent update for isoc? (e.i., after 5
+>>>>> START_TRANSFER failures, the driver will issue END_TRANSFER to retry =
+on
+>>>>> the next XferNotReady event)
+>>>>>
+>>>>> Let me know if you still run into issues with that.
+>>>> Yes. Without my patch I still see the issue. Event with the retry
+>>>> machanism. It is even worse. I even missed one additional patch,
+>>>> I had on top this one. See my note below.
+>>> Ok. Can you clarify what issue you're seeing?
+
+Yes. There are many missed xfer events, flooding the uvc gadget
+function driver.
+
+>>>>>> DSTS provides the lower 14 bit of the frame number. Use it in
+>>>>>> combination
+>>>>>> with the frame number provided by XferNotReady to guess the current
+>>>>>> frame
+>>>>>> number. This will succeed unless more than one 14 rollover has happe=
+ned
+>>>>>> since XferNotReady.
+>>>>>>
+>>>>>> Start transfer might still fail if the frame number is increased
+>>>>>> immediately after DSTS is read. So retries are still needed.
+>>>>>> Don't drop the current request if this happens. This way it is not
+>>>>>> lost and
+>>>>>> can be used immediately to try again with the next frame number.
+>>>>>>
+>>>>>> With this change, __dwc3_gadget_start_isoc is still not successfully
+>>>>>> in all
+>>>>>> cases bit it increases the acceptable delay after XferNotReady
+>>>>>> significantly.
+>>>>>>
+>>>>>> Signed-off-by: Michael Olbrich <m.olbrich@pengutronix.de>
+>>>>>> Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
+>>>>>> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+>>>>>>
+>>>>>> ---
+>>>>>> v1 -> v2: - removed last_frame_number from struct
+>>>>>>   =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 - included rollover variable
+>>>>>>
+>>>>>>   =A0 drivers/usb/dwc3/gadget.c | 37 +++++++++++++++++++++++++------=
+------
+>>>>>>   =A0 1 file changed, 25 insertions(+), 12 deletions(-)
+>>>>>>
+>>>>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>>>>>> index 421a0f73110a40b..0962ddd7fbf6ae6 100644
+>>>>>> --- a/drivers/usb/dwc3/gadget.c
+>>>>>> +++ b/drivers/usb/dwc3/gadget.c
+>>>>>> @@ -1276,7 +1276,7 @@ static void dwc3_prepare_trbs(struct dwc3_ep
+>>>>>> *dep)
+>>>>>>
+>>>>>>   =A0 static void dwc3_gadget_ep_cleanup_cancelled_requests(struct
+>>>>>> dwc3_ep *dep);
+>>>>>>
+>>>>>> -static int __dwc3_gadget_kick_transfer(struct dwc3_ep *dep)
+>>>>>> +static int __dwc3_gadget_kick_transfer(struct dwc3_ep *dep, bool
+>>>>>> keep_req)
+>>>>> Any reason to have keep_req? With the recent changes, if
+>>>>> dwc3_send_gadget_ep_cmd() returns -EAGAIN, then the controller driver
+>>>>> won't give back the request.
+>>>> Yes, we don't need the keep_req. I tried this and it worked without.
+>>>> I will remove the parameter in v3.
+>>>>
+>>>>>>   =A0 {
+>>>>>>   =A0=A0=A0=A0=A0 struct dwc3_gadget_ep_cmd_params params;
+>>>>>>   =A0=A0=A0=A0=A0 struct dwc3_request=A0=A0=A0=A0=A0=A0=A0 *req;
+>>>>>> @@ -1314,12 +1314,9 @@ static int __dwc3_gadget_kick_transfer(struct
+>>>>>> dwc3_ep *dep)
+>>>>>>   =A0=A0=A0=A0=A0 }
+>>>>>>
+>>>>>>   =A0=A0=A0=A0=A0 ret =3D dwc3_send_gadget_ep_cmd(dep, cmd, &params);
+>>>>>> -=A0=A0=A0 if (ret < 0) {
+>>>>>> +=A0=A0=A0 if (ret < 0 && (!keep_req || ret !=3D -EAGAIN)) {
+>>>>>>   =A0=A0=A0=A0=A0=A0=A0=A0=A0 struct dwc3_request *tmp;
+>>>>>>
+>>>>>> -=A0=A0=A0=A0=A0=A0=A0 if (ret =3D=3D -EAGAIN)
+>>>>>> -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 return ret;
+>>>>>> -
+>>>>>>   =A0=A0=A0=A0=A0=A0=A0=A0=A0 dwc3_stop_active_transfer(dep, true, t=
+rue);
+>>>>>>
+>>>>>>   =A0=A0=A0=A0=A0=A0=A0=A0=A0 list_for_each_entry_safe(req, tmp, &de=
+p->started_list, list)
+>>>>>> @@ -1335,7 +1332,7 @@ static int __dwc3_gadget_kick_transfer(struct
+>>>>>> dwc3_ep *dep)
+>>>>>>   =A0=A0=A0=A0=A0 if (dep->stream_capable && req->request.is_last)
+>>>>>>   =A0=A0=A0=A0=A0=A0=A0=A0=A0 dep->flags |=3D DWC3_EP_WAIT_TRANSFER_=
+COMPLETE;
+>>>>>>
+>>>>>> -=A0=A0=A0 return 0;
+>>>>>> +=A0=A0=A0 return ret;
+>>>>>>   =A0 }
+>>>>>>
+>>>>>>   =A0 static int __dwc3_gadget_get_frame(struct dwc3 *dwc)
+>>>>>> @@ -1458,7 +1455,7 @@ static int dwc3_gadget_start_isoc_quirk(struct
+>>>>>> dwc3_ep *dep)
+>>>>>>   =A0=A0=A0=A0=A0 dep->start_cmd_status =3D 0;
+>>>>>>   =A0=A0=A0=A0=A0 dep->combo_num =3D 0;
+>>>>>>
+>>>>>> -=A0=A0=A0 return __dwc3_gadget_kick_transfer(dep);
+>>>>>> +=A0=A0=A0 return __dwc3_gadget_kick_transfer(dep, false);
+>>>>>>   =A0 }
+>>>>>>
+>>>>>>   =A0 static int __dwc3_gadget_start_isoc(struct dwc3_ep *dep)
+>>>>>> @@ -1481,9 +1478,25 @@ static int __dwc3_gadget_start_isoc(struct
+>>>>>> dwc3_ep *dep)
+>>>>>>   =A0=A0=A0=A0=A0 }
+>>>>>>
+>>>>>>   =A0=A0=A0=A0=A0 for (i =3D 0; i < DWC3_ISOC_MAX_RETRIES; i++) {
+>>>>>> -=A0=A0=A0=A0=A0=A0=A0 dep->frame_number =3D DWC3_ALIGN_FRAME(dep, i=
+ + 1);
+>>>>>> +=A0=A0=A0=A0=A0=A0=A0 /*
+>>>>>> +=A0=A0=A0=A0=A0=A0=A0=A0 * frame_number is set from XferNotReady an=
+d may be already
+>>>>>> +=A0=A0=A0=A0=A0=A0=A0=A0 * out of date. DSTS only provides the lowe=
+r 14 bit of the
+>>>>>> +=A0=A0=A0=A0=A0=A0=A0=A0 * current frame number. So add the upper t=
+wo bits of
+>>>>>> +=A0=A0=A0=A0=A0=A0=A0=A0 * frame_number and handle a possible rollo=
+ver.
+>>>>>> +=A0=A0=A0=A0=A0=A0=A0=A0 * This will provide the correct frame_numb=
+er unless more than
+>>>>>> +=A0=A0=A0=A0=A0=A0=A0=A0 * rollover has happened since XferNotReady.
+>>>>>> +=A0=A0=A0=A0=A0=A0=A0=A0 */
+>>>>>> +=A0=A0=A0=A0=A0=A0=A0 u32 frame =3D __dwc3_gadget_get_frame(dwc);
+>>>>>> +=A0=A0=A0=A0=A0=A0=A0 bool rollover =3D frame < (dep->frame_number =
+& 0x3fff);
+>>>>>> +
+>>>>>> +=A0=A0=A0=A0=A0=A0=A0 dep->frame_number =3D (dep->frame_number & ~0=
+x3fff) | frame;
+>>>>>> +=A0=A0=A0=A0=A0=A0=A0 if (rollover)
+>>>>>> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 dep->frame_number +=3D BIT(14);
+>>>>>> +
+>>>>>> +=A0=A0=A0=A0=A0=A0=A0 dep->frame_number =3D DWC3_ALIGN_FRAME(dep, 1=
+);
+>>>> This is not enough, we have to add i into the alignment to ensure
+>>>> that the stream is not failing:
+>>>>
+>>>>   =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 dep->frame_number =3D DWC=
+3_ALIGN_FRAME(dep, i + 2);
+>>>>
+>>>> I am even thiking to move the frame number calculation into the
+>>>> DWC3_DEPCMD_STARTTRANSFER code path of dwc3_send_gadget_ep_cmd. But th=
+is
+>>>> will break the dwc3_gadget_start_isoc_quirk function. What do you thin=
+k?
+>>> You shouldn't be keep calling __dwc3_gadget_get_frame() in a loop. You
+>>> should do all these calculation to get the current frame_number only
+>>> once before entering the retry loop.
+>>>
+>>> The issue here is we don't know when the XferNotReady event will be
+>>> handled, which may be too late and multiple uframe had gone by. But once
+>>> the event is being handled, it shouldn't take much time at all. That
+>>> means __dwc3_gadget_get_frame() will return the same value.
+>>>
+>>> So, we need something like this:
+>>>
+>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>>> index f66ff7fd87a9..1cd73c2dbe71 100644
+>>> --- a/drivers/usb/dwc3/gadget.c
+>>> +++ b/drivers/usb/dwc3/gadget.c
+>>> @@ -1709,6 +1709,8 @@ static int dwc3_gadget_start_isoc_quirk(struct
+>>> dwc3_ep *dep)
+>>>    =A0static int __dwc3_gadget_start_isoc(struct dwc3_ep *dep)
+>>>    =A0{
+>>>    =A0=A0=A0=A0=A0=A0=A0 struct dwc3 *dwc =3D dep->dwc;
+>>> +=A0=A0=A0=A0=A0=A0 u32 current_frame;
+>>> +=A0=A0=A0=A0=A0=A0 bool rollover;
+>>>    =A0=A0=A0=A0=A0=A0=A0 int ret;
+>>>    =A0=A0=A0=A0=A0=A0=A0 int i;
+>>>
+>>> @@ -1725,6 +1727,13 @@ static int __dwc3_gadget_start_isoc(struct
+>>> dwc3_ep *dep)
+>>>    =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0 return dwc3_gadget_start_isoc_quirk(dep);
+>>>    =A0=A0=A0=A0=A0=A0=A0 }
+>>>
+>>> +=A0=A0=A0=A0=A0=A0 current_frame =3D __dwc3_gadget_get_frame(dwc);
+>>> +=A0=A0=A0=A0=A0=A0 rollover =3D current_frame < (dep->frame_number & 0=
+x3fff);
+>>> +
+>>> +=A0=A0=A0=A0=A0=A0=A0 dep->frame_number =3D (dep->frame_number & ~0x3f=
+ff) | current_frame;
+>>> +=A0=A0=A0=A0=A0=A0=A0 if (rollover)
+>>> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 dep->frame_number +=3D BIT(14);
+>>> +
+>>>    =A0=A0=A0=A0=A0=A0=A0 for (i =3D 0; i < DWC3_ISOC_MAX_RETRIES; i++) {
+>>>    =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 dep->frame_number =3D =
+DWC3_ALIGN_FRAME(dep, i + 1);
+>>>
+>>>
+>>> (Please create a macro for 0x3fff mask)
+>>>
+>> Forgot a couple of notes:
+>>
+>> 1) If bInterval is greater than 14, don't attempt to get current frame
+>> from DSTS and ignore this mechanism.
+>> 2) The rollover check needs to account for number of uframes per
+>> interval. If the difference is less than an interval length, then no
+>> need to update dep->frame_number.
+>>
+>
+>Ignore number 2), DWC3_ALIGN_FRAME() should take care of that...
+
+All right, I added the following changes to v3 before running
+the retry loop.
+
+        if (desc->bInterval <=3D 14) {
+                u32 current_frame =3D __dwc3_gadget_get_frame(dwc);
+                bool rollover =3D current_frame < (dep->frame_number & 0x3f=
+ff);
+
+                dep->frame_number =3D (dep->frame_number & ~0x3fff) | curre=
+nt_frame;
+                if (rollover)
+                dep->frame_number +=3D BIT(14);
+                        dep->frame_number +=3D BIT(14);
+        }
+
+Regards,
+Michael
+
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+--2+N3zU4ZlskbnZaJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAl756LUACgkQC+njFXoe
+LGSZeQ//a1dhHLRXnMDLV3HKdZ6zg9LlVbdbDR9S3b/l1STQtZQuKh2Dl+lKa95P
+YfIkVhoYz5bh5WIv6wQ3fwKhVu3lqmn0DFloug9EvLP413uMS295xluk62DsbD0v
+ns0jJFshkh1f4Dd9htUbYV0SrcD/Eq3rpMP/u6OfPwe1pRs4pZXuJjD763EonsT7
+Jy6cU6IA6DpY+uApnMTqks95vFA+9g4vQGt76tRXbSBQlcbVeOERC24JI0ZaRuc3
+UFNdibJ1uS93Voc8NSc1PManwxdkFhjuUmWnU04ek4p84H3XUQGa+tjmAOo7LRUB
+Fk20IGmo8xdcuKhDLpaJjmrKsU8iXYbU54opCmHL0erb1Gv22RqEuXS+sUfvlt1I
+vro/6ZQtXQZYmdLC6rLbVzKXGgNoiDYOOGZyZeI0HBvhBYAEd+dTCbbbBebTrJk5
+6mIc3+R9p91IFWaDUh/B6hSGR5IQYKr8YMkFIeNL4XmJo7lXTJgQnGn6nSmFG301
+mkR/PcnQrjoUz0ic1Fz1KhmXmnn+keMbr3akyambzRiMY4+elyKFHCh+9GENvkBS
+qGaKyzU1cePt1ZY7slmu2mOkJlMXT/canaH7bIyNgQRMzUswQd/J6Zl9lQZhJhmj
+X2JivB6DRjAMYHr2AKxYzTvD9vdxTBg/nbXeA8jg5hzmfTGOZS0=
+=2wmL
+-----END PGP SIGNATURE-----
+
+--2+N3zU4ZlskbnZaJ--
