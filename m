@@ -2,131 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 960AA20DB59
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jun 2020 22:15:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E113120E116
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jun 2020 23:58:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732458AbgF2UFu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Jun 2020 16:05:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52160 "EHLO
+        id S1733229AbgF2UwE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Jun 2020 16:52:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388393AbgF2UFp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Jun 2020 16:05:45 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2325C061755;
-        Mon, 29 Jun 2020 13:05:44 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id h19so19652998ljg.13;
-        Mon, 29 Jun 2020 13:05:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=+CNAZ3y5IAzA+T1hadUTboHpdjBaonxunr0d//76ia0=;
-        b=uaJzgVdBmCQn+kTrWjonbLQ45J0ZDHhNEAyQOlP1OOPXR+i3hcyT34b+v9V0iu/2db
-         WJVBJoxl4Vqb0moox/paal5+4fPmjSiyNOiTca9VLTZ4pLzNKkb4WXoKpfeH5IBQoS2g
-         U/PREcwFwW+uHBsUp/jQCQN1Q53G2sxopjbYSoteneUcq4z0TQes3KQCoijnEEotORsU
-         Ey+NZjBLOOkc92KsNF7dFRx62Iy6YULEcy7x+YhaS251rfAMJeLdfEgsFCHY8Ghpc+QG
-         kzK2j/lQqIAkVt8WQP/YQpqyGxgktv8nHZH2/Mt7il2wSR3rQAzaM+zIEejydk81ZOzy
-         NnQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=+CNAZ3y5IAzA+T1hadUTboHpdjBaonxunr0d//76ia0=;
-        b=bovBoRqjzieIMQq/mXr1Q/lH/N+/3tVH0aEgGvujCSj1LR+teWgjky3/3VQubATKe4
-         chnqGtgRetVqNIRwJWKDWNjGZawEOES6Qo+ERTaVnWhB8nkfF10P4RBtzjZlmd5FlCxa
-         KfResMKm1KWESWDmANnNFhfUrYmcpRNIEYmMNHgx/2uo0tkoUMjSITGaYVZDKMVCAd4H
-         Ajku1cFC/HiZEMT21k3/REY1e1E0G+4vyXElK8Db7yceF4AlBHrse7DiG4wCfVPeTBNm
-         bcEv4FYyq9MVlwzIC7vCCKfjtsMdfai8j0Vd5HaFTjzqcd9OHvypGCf8z0afgOFUH9+T
-         5qyA==
-X-Gm-Message-State: AOAM531R0FsKh73eRkQ+KKv6uuwx4DTgG/r7ohbDTeMbETGsJ83CDfoo
-        6BpddwOPOzt8PQLKarnejgQ=
-X-Google-Smtp-Source: ABdhPJytixeb2Sm4/OSsi8RJU0prbBFmaHuogWZM0zBRDGJfIsONHorDjVIYxvsixBlBfNFwaNMs9g==
-X-Received: by 2002:a2e:9c4b:: with SMTP id t11mr8284918ljj.412.1593461143194;
-        Mon, 29 Jun 2020 13:05:43 -0700 (PDT)
-Received: from localhost ([80.64.86.170])
-        by smtp.gmail.com with ESMTPSA id q11sm145044lfe.34.2020.06.29.13.05.42
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 29 Jun 2020 13:05:42 -0700 (PDT)
-From:   Ruslan Bilovol <ruslan.bilovol@gmail.com>
-To:     balbi@kernel.org
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: gadget: epautoconf: claim smallest endpoints first
-Date:   Mon, 29 Jun 2020 23:05:51 +0300
-Message-Id: <20200629200551.27040-1-ruslan.bilovol@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S1731385AbgF2TN1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Jun 2020 15:13:27 -0400
+Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A76C03E97A;
+        Sun, 28 Jun 2020 20:53:09 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 71370129AA550;
+        Sun, 28 Jun 2020 20:53:09 -0700 (PDT)
+Date:   Sun, 28 Jun 2020 20:53:08 -0700 (PDT)
+Message-Id: <20200628.205308.878058643318358498.davem@davemloft.net>
+To:     luc.vanoostenryck@gmail.com
+Cc:     kuba@kernel.org, netdev@vger.kernel.org, oss-drivers@netronome.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/15] always use netdev_tx_t for xmit()'s return type
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20200628195337.75889-1-luc.vanoostenryck@gmail.com>
+References: <20200628195337.75889-1-luc.vanoostenryck@gmail.com>
+X-Mailer: Mew version 6.8 on Emacs 26.3
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Sun, 28 Jun 2020 20:53:09 -0700 (PDT)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-UDC hardware may have endpoints with different maxpacket
-size. Current endpoint matching code takes first matching
-endpoint from the list.
+From: Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
+Date: Sun, 28 Jun 2020 21:53:22 +0200
 
-It's always possible that gadget allocates endpoints for
-small transfers (maxpacket size) first, then larger ones.
-That works fine if all matching UDC endpoints have same
-maxpacket size or are big enough to serve that allocation.
+> The ndo_start_xmit() methods should return a 'netdev_tx_t', not
+> an int, and so should return NETDEV_TX_OK, not 0.
+> The patches in the series fix most of the remaning drivers and
+> subsystems (those included in allyesconfig on x86).
 
-However, some UDCs have first endpoints in the list with
-bigger maxpacket size, whereas last endpoints are much
-smaller. In this case endpoint allocation will fail for
-the gadget (which allocates smaller endpoints first) on
-final endpoint allocations.
-
-To make endpoint allocation fair, pick up smallest
-matching endpoints first, leaving bigger ones for
-heavier applications.
-
-Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
----
- drivers/usb/gadget/epautoconf.c | 23 ++++++++++++++++++-----
- 1 file changed, 18 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/usb/gadget/epautoconf.c b/drivers/usb/gadget/epautoconf.c
-index 71b15c65b90f..1814a760ce48 100644
---- a/drivers/usb/gadget/epautoconf.c
-+++ b/drivers/usb/gadget/epautoconf.c
-@@ -66,7 +66,7 @@ struct usb_ep *usb_ep_autoconfig_ss(
- 	struct usb_ss_ep_comp_descriptor *ep_comp
- )
- {
--	struct usb_ep	*ep;
-+	struct usb_ep	*ep, *ep_min = NULL;
- 	u8		type;
- 
- 	type = desc->bmAttributes & USB_ENDPOINT_XFERTYPE_MASK;
-@@ -77,14 +77,27 @@ struct usb_ep *usb_ep_autoconfig_ss(
- 			goto found_ep;
- 	}
- 
--	/* Second, look at endpoints until an unclaimed one looks usable */
-+	/*
-+	 * Second, look at endpoints until an unclaimed one looks usable.
-+	 * Try to find one with smallest maxpacket limit, leaving larger
-+	 * endpoints for heavier applications
-+	 */
- 	list_for_each_entry (ep, &gadget->ep_list, ep_list) {
--		if (usb_gadget_ep_match_desc(gadget, ep, desc, ep_comp))
--			goto found_ep;
-+		if (usb_gadget_ep_match_desc(gadget, ep, desc, ep_comp)) {
-+			if (desc->wMaxPacketSize == 0)
-+				goto found_ep;
-+			else if (!ep_min)
-+				ep_min = ep;
-+			else if (ep->maxpacket_limit < ep_min->maxpacket_limit)
-+				ep_min = ep;
-+		}
- 	}
- 
- 	/* Fail */
--	return NULL;
-+	if (!ep_min)
-+		return NULL;
-+
-+	ep = ep_min;
- found_ep:
- 
- 	/*
--- 
-2.17.1
-
+Series applied, thanks.
