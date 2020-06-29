@@ -2,35 +2,37 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2D1C20E353
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jun 2020 00:02:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A6DA20E5B2
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jun 2020 00:07:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390608AbgF2VNI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Jun 2020 17:13:08 -0400
-Received: from mout.web.de ([212.227.15.3]:56259 "EHLO mout.web.de"
+        id S2391168AbgF2Vkl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Jun 2020 17:40:41 -0400
+Received: from mout.web.de ([212.227.15.14]:46537 "EHLO mout.web.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730135AbgF2VNE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 29 Jun 2020 17:13:04 -0400
+        id S1726966AbgF2Vkf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 29 Jun 2020 17:40:35 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1593465181;
-        bh=GbckntjVyg40tr+Z4lTM5jcF4Xd3zTNrMbsGyoGGFxM=;
+        s=dbaedf251592; t=1593466833;
+        bh=eFPVYKXOnSENohbuyonbWRq1F0OLlPtxo04hm41i4Jw=;
         h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=pQhv46/vni1NP7NVUPg0RRndwK8JFXB2jERnOkqwpjZwi0UWFBhkjGMdmNJcJKHdR
-         ns36YnU3zqTX2pzHzYDq66/4RaHw1KdmDxci3zyFxY6E5eOJy9efVkY0kgwjXUIaGP
-         j8KqI36mFLrrvbsnNToUjFv2C3F/EmJV+9VvJOWw=
+        b=J06awSLtc3S3FD0/WIxFXAZ6A8tsAOGPkFiKj4w4Dw7qgovMEvK43dPBjUiWb96Wc
+         DFh1KZ5/Hz1cunIGi+2mYpBL1Qlivu/behZT1oLTyGdMNOmHmanWGpUo5yEbASrMsA
+         nbaQmUUku0piBRnNX8gzOaqNgee+ICIe6eMgMaWg=
 X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.1.2] ([93.131.123.16]) by smtp.web.de (mrweb005
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1M28WT-1jnKLl1Yy1-002WRb; Mon, 29
- Jun 2020 09:31:00 +0200
-Subject: Re: [PATCH 1/2] usb: mtu3: disable USB2 LPM
+Received: from [192.168.1.2] ([93.131.123.16]) by smtp.web.de (mrweb003
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 0LecN4-1j2jaR3AmE-00qRv5; Mon, 29
+ Jun 2020 10:00:25 +0200
+Subject: Re: [PATCH 2/2] usb: mtu3: fix NULL pointer dereference
 To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Felipe Balbi <felipe.balbi@linux.intel.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Colin Ian King <colin.king@canonical.com>
 References: <1593410434-19406-1-git-send-email-chunfeng.yun@mediatek.com>
+ <1593410434-19406-2-git-send-email-chunfeng.yun@mediatek.com>
 From:   Markus Elfring <Markus.Elfring@web.de>
 Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
  mQINBFg2+xABEADBJW2hoUoFXVFWTeKbqqif8VjszdMkriilx90WB5c0ddWQX14h6w5bT/A8
@@ -75,64 +77,57 @@ Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
  Z/wsLiWTgKlih2QYULvW61XU+mWsK8+ZlYUrRMpkauN4CJ5yTpvp+Orcz5KixHQmc5tbkLWf
  x0n1QFc1xxJhbzN+r9djSGGN/5IBDfUqSANC8cWzHpWaHmSuU3JSAMB/N+yQjIad2ztTckZY
  pwT6oxng29LzZspTYUEzMz3wK2jQHw+U66qBFk8whA7B2uAU1QdGyPgahLYSOa4XAEGb6wbI FEE=
-Message-ID: <af16d716-8bb3-ea1f-e410-b27443f74c31@web.de>
-Date:   Mon, 29 Jun 2020 09:30:58 +0200
+Message-ID: <99fc1f6e-7907-6723-612a-8b68ffa871e5@web.de>
+Date:   Mon, 29 Jun 2020 10:00:22 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.9.0
 MIME-Version: 1.0
-In-Reply-To: <1593410434-19406-1-git-send-email-chunfeng.yun@mediatek.com>
+In-Reply-To: <1593410434-19406-2-git-send-email-chunfeng.yun@mediatek.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-GB
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:vLXtRvv0TPIyWN9QDTCY3pBL+OVkLjRd48pYastvVAu9WFwnilT
- YDtCWfgtPdH/nhAgtI95ZAX4lZwWqAhT7B131Oiuf21CgY61MSfQ6nm/gvgpBJK8A5jTAik
- 83z04u+HTxpKcmn/8++Lyl/HO1nhZEl4ZXwisCHH8XVIY+pvSqXGgxXPR4/dMEQS4IzO6kr
- 5QzwFKlMx1ZuvB9MZc+ww==
+X-Provags-ID: V03:K1:PizCbKGpJNTn7kZfWjisoo9mPDAoIPDPVWcuVGepIZSqN05lkgT
+ Jo9ebRyje6ZSgX/opQn11xFpj9UUyG0ffXxbkiFiO4htPDOISmUkxRHsR/eloV4jq9+OqKd
+ yN8ZmBwQMbdCf1xmBqYwpYe7p50esyW8f8KIEXM4VCevn6lM9v5BweWYI7L70ccGLYVMcQl
+ X6zhk1uLo88yIGF1bG5Nw==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:F6NqNKB0Afo=:WGpywVafLi1KJmyCAnHGjg
- amcrb+qcUyC7kwDqIy/U2DzsqxgpJrOTDniWgNnaLxbBUB8Qg0Zu2TOB4cBVYgccNvhG2V3m9
- FmTB4PmPluebdinCipPrA5CQNSacwRNecWwmcUbUSpaqUARrKybnGQPdXLP7Kmko6aG1v+fc9
- vTg/tfDKQgFTlNxFv7/mum6gprabU2naNxccAMkvwWUXEGAuRaw6yb0q5qegTH1dSEMXe4XF6
- d4pJozgfy0S3X72ooSxGoq/Oo9RQq1tIFWLuLfaNdMDTOVKvi0dXfOV6y6ERpFeZCE5MVbflZ
- 8v+r2mULwk+OR8iWmnwp7WSgmQc6yihtS/1Xizj2JwGdGBduz5gcIhTIlK+cEmR0lR+cIbAph
- LGsA3wbuBk7R8WBGEO/EmOjLPLrJJn1HK2LPVSUctvvI5YabqDir8PAhXXr1NvSCRLJ4MXuFh
- IyDcELCuomo6mShKc6OmXVI6osAVpzpEsPLe8sTcKRc1IFFUOwAGnR1ew54cYRnGEU8QgoCdH
- puk+YjVYbQX2xu75FfheUG/mej5WRFTQS98AsPomYoXu6nBb4EgwKnnr0UPqoZpKcVOrU5PYa
- wBFgxit+WxrpjAdv9NUpQGUYVjNH1I6SRXiwOt4s7ewsMT+iU0QFrlfa+2hYzm9Pd1mkxyOjr
- IHXLC6vjrhLCfK4gjlR15q+wKJKLt8IOiPxkIZsynyzr3jP4JmNvE31V1gcjqyeLfTXysRHxp
- u2Sqdz1cJMPJ+3H9jkRzj+Qmt0TaKQWYQ/ufVw7FbZh68GBgCcXO3kTtmeyLWpZrEOaT+terA
- Mseuay7gaAD2xBe+RsPDT3+PcIcYQsqejjrIYUGDVvk9xK/Y19FjzEF0gAItdy4GbW1VHFYpz
- NrNfflkOqXU6dg7APxhWjYJR7MuVflUVTUOL200LWY2EluJk+2lqi9FGERlWv9PXymiYJuTQs
- R6AVSsPKEtJ8SN2jrByD55HhUlQy0+ss6jcaUgCkqwyatXRIZxQ8OvX1MPNThFyjuQXdz6OT5
- +zA5HXCmcubxUqfq1ADzGEqIZ3uQpq0Tn1E3dBaVHH88fKJ35nKYNxHhU06TNk2WCWIFX8OoP
- UzT99Ke3likdno61IFH9ieZ2isqjJsEjzNa0ZstBVWYFHmPshlmlnButomHbfTouYfMtCaHnM
- igTLOMnB2V+JaYSIoQ2a3Oh9aFUCj0bxm5pOzNMR8o/qRnW4cq/goQnTDaKPQALRMqlc9Yjh8
- Zp4eVPKsn+npa2+dX
+X-UI-Out-Filterresults: notjunk:1;V03:K0:zLtPOaNklz0=:JkMQymRAveoWdcYHTx/oN+
+ uSljnuLc8FTYJXM6qdotS0v1/giq5xRC9gMsF1qpV5/6m7wiXlp7rLSm4PAWGU/4DfvGQH3sw
+ klTYtvVrUHkIsDwmLHNyYqUE5LyMcQUt2rlVOI7lDaABPOErImsNuW+A6QwtN8LxKI0w2a2Zd
+ AUNaFVTz5J8w/oGBIqiboMdxo8kUqG/WEhyMBI2vTNZQQUrEpkgGfi9v1er+elih0SCF12Uuz
+ E3fUlEpgebkWG7Tv7dWnBCLUtumlAgKCFhZfmT+rfLe6v4l27eq1zl1Is2Y2VeYFg2J5cUW1V
+ AuKYtjbVVb226G6eE009kFggXIgaY94RNcvhH33RpERDwxqfiwMntyA7gMQLuxdTtVR2vqBq3
+ 2GFTmOL1b3ZEidpi6mcAT4tNhMU38qZh74Tadb6nLl3eF0fGzVVWOQS3X1Ip257rvVKpOrf7/
+ c/qvymXM9Sd7r7yoT6eLJ80R/9/K/LfHKCD2NaJz7SH46rBuZVXWuS9NMS1HBfHxk/vsX2HX/
+ lA6cLhxq3ELqtYe2EAILJ5U82JccIthO3FUAQnaycVO2zSN6u99xdmbvWRjMGYHGDOD/I1xZs
+ KuFJIQAvZbB1QRKyHqPszEEtj5o0ik2mNyf9j7IcfZCldvMb+MPPTvwi+GhLvDaMT17wu9UQD
+ +l5vPvhD0VhvcPUYIVsKbx9NLDDbt4eF4HL9jPxIxhhN/WH8glbxoDtfiNhWyUE7yGOomFwzC
+ gsw07LhRqieH0SFEpt71B7QK2ti/CCpcvCXPjdrTK/XZtqA0BPRsaOBgTM90w6mxMabW9zAoY
+ WnCNIyfOlXqouVJOZDkyV3NdGXjqDVqQdTolFgtIgVPEYJXhjNvfn+SBDShkrz2LazW0MtMMx
+ mdXm3YkQJIvmv4k6DDAiq/nySgBSvwYca5Tp8x9fPX0jo1hXXdD4m7e4yJyZy0rDsJT4AfwgT
+ 9fRWmhaIbJ/kFYl1FTX0HmMCeeZX2+3ABru2ivMYlIUbqe35ICwm4fORxOK9OK5ps0f4HJQae
+ mOcqVm/mC4Qbs+cacNIyWDYDY99RMp+wQZB+e/J6SyYrOfAjeq3KBrVnRcbLq9NnqwzRpVS5A
+ k3ONY/brcgKbD0hj153cpl+wZCbV4ULEhJvgJ84V6VFHI/4EDBAtqU5upBTo2/sgvcRvOl8Is
+ jpRXnVjZH4R1F0HWPRrB37I6wB8HzpVaT3H80/xdJxjn5Z58eyzsIGvr+AhWMs4OwipJHrP12
+ dm2aK4vlUyo6QPJqJ
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> A SuperSpeed device shall include the USB 2.0 extension descriptor
-> and shall support LPM when operating in USB 2.0 HS mode(see usb3.2
-> spec9.6.2.1). But we always don't support it, so disable it by
-> default, otherwise device will enter LPM suspend mode when
-> connected to Win10 system.
+> Some pointers are dereferenced before successful checks.
 
-How do you think about a wording variant like the following?
+I suggest to reconsider and improve the change description.
 
-   Change description:
-   A SuperSpeed device shall include the USB 2.0 extension descriptor
-   and shall support Link Power Management when operating in USB 2.0
-   High Speed mode. (See also: USB 3.2 specification 9.6.2.1)
-   But we do not support it generally. Thus disable this functionality
-   by default.
-   Otherwise, the device will enter LPM suspend mode when connected
-   to Win10 system.
+* Would a null pointer dereference be possible only with the variables =E2=
+=80=9Cmep=E2=80=9D
+  and =E2=80=9Cmreq=E2=80=9D in the implementation of the function =E2=80=
+=9Cmtu3_gadget_dequeue=E2=80=9D?
 
+* How do you think about to adjust any more variable initialisations?
 
-Would you like to add the tag =E2=80=9CFixes=E2=80=9D to the commit messag=
-e?
+* Will it become helpful to add the tag =E2=80=9CFixes=E2=80=9D to the com=
+mit message?
 
 Regards,
 Markus
