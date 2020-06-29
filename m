@@ -2,70 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FF3520CB8C
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jun 2020 03:48:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81AF620CBE4
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jun 2020 04:55:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726613AbgF2Bsj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 28 Jun 2020 21:48:39 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:33625 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726395AbgF2Bsi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 28 Jun 2020 21:48:38 -0400
-X-UUID: ce063a1b2abb40eeb860e311d74ab731-20200629
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=mHQn5XmDpgJs5qFDU8hAACPxe8v4rKbaKOCTw7e63mM=;
-        b=Ji6sqIqUTPA68GxFSNlWWD8pZs/dENeDEu/2rW7Rf0MulW5RrY45t52jr3dBN73HgBt8upnpGaC0mFpRxH3n3V1NvtzI6qtn59zwk7czEJyrZPW7/b3o545nR0PLz+ukHs5D6GHwCFZv1ol5Pbny8MiMrthNpu2FL55+6UI5Ayc=;
-X-UUID: ce063a1b2abb40eeb860e311d74ab731-20200629
-Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 1365511381; Mon, 29 Jun 2020 09:48:33 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS32N2.mediatek.inc
- (172.27.4.72) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 29 Jun
- 2020 09:48:30 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 29 Jun 2020 09:48:29 +0800
-Message-ID: <1593395293.3798.3.camel@mhfsdcap03>
-Subject: Re: usb: mtu3: Checking initialisation of the variable
- =?UTF-8?Q?=E2=80=9Cmep=E2=80=9D?= in two functions
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Markus Elfring <Markus.Elfring@web.de>
-CC:     <linux-mediatek@lists.infradead.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
+        id S1726097AbgF2CzI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 28 Jun 2020 22:55:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34088 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725998AbgF2CzI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 28 Jun 2020 22:55:08 -0400
+Received: from casper.infradead.org (unknown [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5B2C03E979;
+        Sun, 28 Jun 2020 19:55:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:Date:Message-ID:Subject:From:To:Sender:Reply-To:Cc:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=pNAHqrMilcbQWkaDAeEtclkYgijfh3lLVD866ZFpqCE=; b=PrR32Ha/ShmmR9dae2Mk7M7oEZ
+        F928ffroGQqSckjotBhAMBxd0SrxJNX4wMMgURqRcdBzsamAraCjSkbumxH5i8BYMVf1kbIy+qTOo
+        oPzjuxuXjL5gudXSWNNzf3mGM32/llhnymKLGYVCF3TdVRfWlrmAf0bEHIEXWD4+KddpAq+wnupki
+        TxIVhMrtGvqOauK3H3jxx6ajdc88xE1HAnZp8YQo5frFPQCFpbmTYRFlJ8fiRm1xyPgWIE5FAPWPG
+        00q1wAEia4UNHRv+zsFiCwWCRNSDuKORDGytsflr0N4xHEESE7ic2+eYJ/sahiOs1vqd3QjMYsmuQ
+        DbiqDzYg==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jpjwW-0002dd-Ci; Mon, 29 Jun 2020 02:54:50 +0000
+To:     LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        <kernel-janitors@vger.kernel.org>,
-        "Colin Ian King" <colin.king@canonical.com>
-Date:   Mon, 29 Jun 2020 09:48:13 +0800
-In-Reply-To: <8efdb7aa-1188-e94a-3075-ab1dd30768bb@web.de>
-References: <8efdb7aa-1188-e94a-3075-ab1dd30768bb@web.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        Bastien Nocera <hadess@hadess.net>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH] usb: fix kernel-doc warnings and formatting in <linux/usb.h>
+Message-ID: <7014bab2-268c-69f6-7ef5-57fbd45c8b08@infradead.org>
+Date:   Sun, 28 Jun 2020 19:54:45 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 762530C185AC44AB10E0841002A5BE6820B6CDB3BFA860D26BD2569CB5C9AB4A2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGksDQpPbiBTYXQsIDIwMjAtMDYtMjcgYXQgMTQ6MjggKzAyMDAsIE1hcmt1cyBFbGZyaW5nIHdy
-b3RlOg0KPiBIZWxsbywNCj4gDQo+IEEgc291cmNlIGNvZGUgYW5hbHlzaXMgYXBwcm9hY2ggYnkg
-dGhlIG1lYW5zIG9mIHRoZSBzZW1hbnRpYyBwYXRjaCBsYW5ndWFnZQ0KPiAoQ29jY2luZWxsZSBz
-b2Z0d2FyZSkgcG9pbnRlZCBhbiBpbXBsZW1lbnRhdGlvbiBkZXRhaWwgb3V0IGZvciBmdXJ0aGVy
-DQo+IGRldmVsb3BtZW50IGNvbnNpZGVyYXRpb25zLg0KPiANCj4gVGhlIGZ1bmN0aW9ucyDigJxt
-dHUzX2dhZGdldF9lcF9zZXRfaGFsdOKAnSBhbmQg4oCcbXR1M19nYWRnZXRfZXBfc2V0X3dlZGdl
-4oCdIGNoZWNrDQo+IGF0IHRoZSBiZWdpbm5pbmcgaWYgdGhlIGlucHV0IHBhcmFtZXRlciDigJxl
-cOKAnSBpcyBhIG51bGwgcG9pbnRlci4NCj4gVGhlIGVycm9yIGNvZGUg4oCcLUVJTlZBTOKAnSB3
-aWxsIGJlIHJldHVybmVkIHRoZW4uDQo+IGh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9s
-aW51eC9rZXJuZWwvZ2l0L3RvcnZhbGRzL2xpbnV4LmdpdC90cmVlL2RyaXZlcnMvdXNiL210dTMv
-bXR1M19nYWRnZXQuYz9pZD0xNTkwYTJlMWM2ODFiMDk5MWJkNDJjOTkyY2FiZmQzODBlMDMzOGYy
-I24zNzENCj4gaHR0cHM6Ly9lbGl4aXIuYm9vdGxpbi5jb20vbGludXgvdjUuNy4yL3NvdXJjZS9k
-cml2ZXJzL3VzYi9tdHUzL210dTNfZ2FkZ2V0LmMjTDM3MQ0KPiANCj4gQ2FuIGl0IGJlIG5pY2Vy
-IHRvIGFzc2lnbiB0aGUgdmFyaWFibGUg4oCcbWVw4oCdIG9ubHkgYWZ0ZXIgYSBzdWNjZXNzZnVs
-IGNoZWNrDQo+IGluc3RlYWQgb2YgYW4gaW5pdGlhbGlzYXRpb24gYmVmb3JlPw0KWWVzLCBJJ2xs
-IGZpeCBpdCwgdGhhbmtzIGEgbG90DQoNCj4gDQo+IFJlZ2FyZHMsDQo+IE1hcmt1cw0KDQo=
+From: Randy Dunlap <rdunlap@infradead.org>
+
+Fix kernel-doc warnings in <linux/usb.h>:
+
+../include/linux/usb.h:713: warning: Function parameter or member 'use_generic_driver' not described in 'usb_device'
+../include/linux/usb.h:1253: warning: Function parameter or member 'match' not described in 'usb_device_driver'
+../include/linux/usb.h:1253: warning: Function parameter or member 'id_table' not described in 'usb_device_driver'
+
+Also drop an extra blank line and fix indentation.
+
+Fixes: 77419aa403ca ("USB: Fallback to generic driver when specific driver fails")
+Fixes: 88b7381a939d ("USB: Select better matching USB drivers when available")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Bastien Nocera <hadess@hadess.net>
+---
+ include/linux/usb.h |   10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+--- linux-next-20200626.orig/include/linux/usb.h
++++ linux-next-20200626/include/linux/usb.h
+@@ -620,9 +620,9 @@ struct usb3_lpm_parameters {
+  *	Management to be disabled for this usb_device.  This count should only
+  *	be manipulated by those functions, with the bandwidth_mutex is held.
+  * @hub_delay: cached value consisting of:
+- *		parent->hub_delay + wHubDelay + tTPTransmissionDelay (40ns)
+- *
++ *	parent->hub_delay + wHubDelay + tTPTransmissionDelay (40ns)
+  *	Will be used as wValue for SetIsochDelay requests.
++ * @use_generic_driver: ask driver core to reprobe using the generic driver.
+  *
+  * Notes:
+  * Usbcore drivers should not set usbdev->state directly.  Instead use
+@@ -1215,6 +1215,7 @@ struct usb_driver {
+  * struct usb_device_driver - identifies USB device driver to usbcore
+  * @name: The driver name should be unique among USB drivers,
+  *	and should normally be the same as the module name.
++ * @match: If set, used for better device/driver matching.
+  * @probe: Called to see if the driver is willing to manage a particular
+  *	device.  If it is, probe returns zero and uses dev_set_drvdata()
+  *	to associate driver-specific data with the device.  If unwilling
+@@ -1227,13 +1228,16 @@ struct usb_driver {
+  * @dev_groups: Attributes attached to the device that will be created once it
+  *	is bound to the driver.
+  * @drvwrap: Driver-model core structure wrapper.
++ * @id_table: used with @match() to select better matching driver at
++ * 	probe() time.
+  * @supports_autosuspend: if set to 0, the USB core will not allow autosuspend
+  *	for devices bound to this driver.
+  * @generic_subclass: if set to 1, the generic USB driver's probe, disconnect,
+  *	resume and suspend functions will be called in addition to the driver's
+  *	own, so this part of the setup does not need to be replicated.
+  *
+- * USB drivers must provide all the fields listed above except drvwrap.
++ * USB drivers must provide all the fields listed above except drvwrap,
++ * match, and id_table.
+  */
+ struct usb_device_driver {
+ 	const char *name;
 
