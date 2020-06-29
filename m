@@ -2,107 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 268F620E2EB
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jun 2020 00:02:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21CD120E3CA
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jun 2020 00:03:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390144AbgF2VKF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Jun 2020 17:10:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45462 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730229AbgF2TAS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:00:18 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 247C2254F6;
-        Mon, 29 Jun 2020 15:54:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593446053;
-        bh=bGzG+iPRM2VG9c8HA/q5X0aU7W1UiDFnnv1Hfm+zFNA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k+2koGM3uM14xxRjvUt5f5+efGUgvHMJpjlfkBxKrBaJBWOCRp1N9wtY+rvZ/XMhd
-         tY51UPJ52+UP6oPrCj7Qyx4VXM5mYlPLLPrhXO1nwaBej02Dfxt2u/tWubl/643RHc
-         5Xy7iX0dEPBA//BOCCIP97Gu47kqoo4ZIhTiU1NY=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Qais Yousef <qais.yousef@arm.com>,
-        Tony Prisk <linux@prisktech.co.nz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Oliver Neukum <oneukum@suse.de>,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.4 055/135] usb/xhci-plat: Set PM runtime as active on resume
-Date:   Mon, 29 Jun 2020 11:51:49 -0400
-Message-Id: <20200629155309.2495516-56-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200629155309.2495516-1-sashal@kernel.org>
-References: <20200629155309.2495516-1-sashal@kernel.org>
+        id S2390611AbgF2VSM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Jun 2020 17:18:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40050 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729795AbgF2Swu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Jun 2020 14:52:50 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FA7C030F19;
+        Mon, 29 Jun 2020 09:26:11 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id i4so8248442pjd.0;
+        Mon, 29 Jun 2020 09:26:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=w+DmP+C5HpOoE0pF5Z5NBc0Vqj5wfx4GqPu5fUO5SGM=;
+        b=NhrbggVY5sSA7Uyq25kP4AEcu29RMFWffcjdoxn8fLYgfOV5WcqwQ+YNsQo+QMriEo
+         vBkbD0/gUBC4SMrWBXdHrfVIwe2gSA+ICRHqVuafLo9YZ8qmhSQVanuTROaYj5Pw7LJv
+         5S7uEacqlfYOmg1qQEHcf834yWYWQRAsGaPxYkxQyvpjJmnRI4n+C8tSrKNaoJ6VaGH2
+         yVUsvnNDIji/TzBiS2aYdSB4wozC0ZIpPYyZ37Om2hWvgzpVEp6kaZgIue60O01DKAQp
+         PujheshRs6shypUCOuemDko9Xkl6aVdsWJ1EetsmsFkAM5rsfOkbEWbeJqyEbNCn8XDb
+         lKFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=w+DmP+C5HpOoE0pF5Z5NBc0Vqj5wfx4GqPu5fUO5SGM=;
+        b=T5btMXH3oGlE5XHM1I+kCQyJBYviGmqKhjhgdOlpPgMuk29RGxTWlfjijwGKLY8H1p
+         CtwGzgU2r9IeDjpwGjHnLgBAmBnCF7GOEgOUWMuD6OQAnCXBfQ3Z02ai5z77nk9B9E1l
+         ci9T36esAvJdQ5zeGPIbb1gUJHJYx/SIwcX5YPntdRRtOtRplybHqSSAre6/AKethiZW
+         Ow6UHMvA/9OXY+imvwhzshFSU7W5taPawwqnHgK0BvMW9dNKrGkonTVwtehNaw+eMVmn
+         L1ok8+6Pt3vUERqcXUtP+Q/3P2QD1Rq6Rqp/mv0sv7XoFHNC9sPYQwLKFYAJUPKpP+oj
+         uzPA==
+X-Gm-Message-State: AOAM532RNayVw5zCbfV0MAIa7oA1CP4bB4XY+ki+h3+Xa6zYR2NyQn4/
+        kurJLbhnP3cjOQPML+Wt6Fg=
+X-Google-Smtp-Source: ABdhPJwYMqR9MGGMB/wlqZcfyW8f9Ks2SubK7+20EyaN9ZO5KJ9PLbCQa+GSdhDr4AMPO4oeLPCiiw==
+X-Received: by 2002:a17:90b:f97:: with SMTP id ft23mr15508228pjb.21.1593447970738;
+        Mon, 29 Jun 2020 09:26:10 -0700 (PDT)
+Received: from [10.230.30.107] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id x7sm206783pfp.96.2020.06.29.09.26.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Jun 2020 09:26:09 -0700 (PDT)
+Subject: Re: [PATCH v5 4/9] ARM: dts: bcm2711: Add reset controller to xHCI
+ node
+To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        f.fainelli@gmail.com, gregkh@linuxfoundation.org, robh@kernel.org,
+        wahrenst@gmx.net, p.zabel@pengutronix.de, andy.shevchenko@gmail.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com, tim.gover@raspberrypi.org,
+        linux-pci@vger.kernel.org, helgaas@kernel.org,
+        mathias.nyman@linux.intel.com, lorenzo.pieralisi@arm.com
+References: <20200629161845.6021-1-nsaenzjulienne@suse.de>
+ <20200629161845.6021-5-nsaenzjulienne@suse.de>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <8490b6d4-1e9f-f7c4-71f1-8b04605924a9@gmail.com>
+Date:   Mon, 29 Jun 2020 09:26:07 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Firefox/68.0 Thunderbird/68.9.0
 MIME-Version: 1.0
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.4.229-rc1.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-4.4.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 4.4.229-rc1
-X-KernelTest-Deadline: 2020-07-01T15:53+00:00
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200629161845.6021-5-nsaenzjulienne@suse.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Qais Yousef <qais.yousef@arm.com>
 
-[ Upstream commit 79112cc3c29f4a8c73a21428fbcbcb0afb005e3e ]
 
-Follow suit of ohci-platform.c and perform pm_runtime_set_active() on
-resume.
+On 6/29/2020 9:18 AM, Nicolas Saenz Julienne wrote:
+> The chip is hardwired to the board's PCIe bus and needs to be properly
+> setup trough a firmware routine after a PCI fundamental reset. Pass the
+> reset controller phandle that takes care of triggering the
+> initialization to the relevant PCI device.
+> 
+> Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
 
-ohci-platform.c had a warning reported due to the missing
-pm_runtime_set_active() [1].
-
-[1] https://lore.kernel.org/lkml/20200323143857.db5zphxhq4hz3hmd@e107158-lin.cambridge.arm.com/
-
-Signed-off-by: Qais Yousef <qais.yousef@arm.com>
-CC: Tony Prisk <linux@prisktech.co.nz>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC: Mathias Nyman <mathias.nyman@intel.com>
-CC: Oliver Neukum <oneukum@suse.de>
-CC: linux-arm-kernel@lists.infradead.org
-CC: linux-usb@vger.kernel.org
-CC: linux-kernel@vger.kernel.org
-Link: https://lore.kernel.org/r/20200518154931.6144-2-qais.yousef@arm.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/usb/host/xhci-plat.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index c4c40e9d42471..510fb7853f92a 100644
---- a/drivers/usb/host/xhci-plat.c
-+++ b/drivers/usb/host/xhci-plat.c
-@@ -249,8 +249,17 @@ static int xhci_plat_resume(struct device *dev)
- {
- 	struct usb_hcd	*hcd = dev_get_drvdata(dev);
- 	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
-+	int ret;
-+
-+	ret = xhci_resume(xhci, 0);
-+	if (ret)
-+		return ret;
- 
--	return xhci_resume(xhci, 0);
-+	pm_runtime_disable(dev);
-+	pm_runtime_set_active(dev);
-+	pm_runtime_enable(dev);
-+
-+	return 0;
- }
- 
- static const struct dev_pm_ops xhci_plat_pm_ops = {
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.25.1
-
+Florian
