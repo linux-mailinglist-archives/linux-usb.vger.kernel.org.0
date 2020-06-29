@@ -2,94 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2081320D7BC
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jun 2020 22:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 960AA20DB59
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jun 2020 22:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729965AbgF2TcT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Jun 2020 15:32:19 -0400
-Received: from mx2.suse.de ([195.135.220.15]:36740 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730958AbgF2Tb1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:31:27 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 0060BAE7F;
-        Mon, 29 Jun 2020 16:19:01 +0000 (UTC)
-From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-To:     f.fainelli@gmail.com, gregkh@linuxfoundation.org, robh@kernel.org,
-        wahrenst@gmx.net, p.zabel@pengutronix.de, andy.shevchenko@gmail.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com, tim.gover@raspberrypi.org,
-        linux-pci@vger.kernel.org, helgaas@kernel.org,
-        mathias.nyman@linux.intel.com, lorenzo.pieralisi@arm.com,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Subject: [PATCH v5 9/9] Revert "PCI: brcmstb: Wait for Raspberry Pi's firmware when present"
-Date:   Mon, 29 Jun 2020 18:18:45 +0200
-Message-Id: <20200629161845.6021-10-nsaenzjulienne@suse.de>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200629161845.6021-1-nsaenzjulienne@suse.de>
-References: <20200629161845.6021-1-nsaenzjulienne@suse.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1732458AbgF2UFu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Jun 2020 16:05:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52160 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388393AbgF2UFp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Jun 2020 16:05:45 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2325C061755;
+        Mon, 29 Jun 2020 13:05:44 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id h19so19652998ljg.13;
+        Mon, 29 Jun 2020 13:05:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=+CNAZ3y5IAzA+T1hadUTboHpdjBaonxunr0d//76ia0=;
+        b=uaJzgVdBmCQn+kTrWjonbLQ45J0ZDHhNEAyQOlP1OOPXR+i3hcyT34b+v9V0iu/2db
+         WJVBJoxl4Vqb0moox/paal5+4fPmjSiyNOiTca9VLTZ4pLzNKkb4WXoKpfeH5IBQoS2g
+         U/PREcwFwW+uHBsUp/jQCQN1Q53G2sxopjbYSoteneUcq4z0TQes3KQCoijnEEotORsU
+         Ey+NZjBLOOkc92KsNF7dFRx62Iy6YULEcy7x+YhaS251rfAMJeLdfEgsFCHY8Ghpc+QG
+         kzK2j/lQqIAkVt8WQP/YQpqyGxgktv8nHZH2/Mt7il2wSR3rQAzaM+zIEejydk81ZOzy
+         NnQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=+CNAZ3y5IAzA+T1hadUTboHpdjBaonxunr0d//76ia0=;
+        b=bovBoRqjzieIMQq/mXr1Q/lH/N+/3tVH0aEgGvujCSj1LR+teWgjky3/3VQubATKe4
+         chnqGtgRetVqNIRwJWKDWNjGZawEOES6Qo+ERTaVnWhB8nkfF10P4RBtzjZlmd5FlCxa
+         KfResMKm1KWESWDmANnNFhfUrYmcpRNIEYmMNHgx/2uo0tkoUMjSITGaYVZDKMVCAd4H
+         Ajku1cFC/HiZEMT21k3/REY1e1E0G+4vyXElK8Db7yceF4AlBHrse7DiG4wCfVPeTBNm
+         bcEv4FYyq9MVlwzIC7vCCKfjtsMdfai8j0Vd5HaFTjzqcd9OHvypGCf8z0afgOFUH9+T
+         5qyA==
+X-Gm-Message-State: AOAM531R0FsKh73eRkQ+KKv6uuwx4DTgG/r7ohbDTeMbETGsJ83CDfoo
+        6BpddwOPOzt8PQLKarnejgQ=
+X-Google-Smtp-Source: ABdhPJytixeb2Sm4/OSsi8RJU0prbBFmaHuogWZM0zBRDGJfIsONHorDjVIYxvsixBlBfNFwaNMs9g==
+X-Received: by 2002:a2e:9c4b:: with SMTP id t11mr8284918ljj.412.1593461143194;
+        Mon, 29 Jun 2020 13:05:43 -0700 (PDT)
+Received: from localhost ([80.64.86.170])
+        by smtp.gmail.com with ESMTPSA id q11sm145044lfe.34.2020.06.29.13.05.42
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 29 Jun 2020 13:05:42 -0700 (PDT)
+From:   Ruslan Bilovol <ruslan.bilovol@gmail.com>
+To:     balbi@kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: gadget: epautoconf: claim smallest endpoints first
+Date:   Mon, 29 Jun 2020 23:05:51 +0300
+Message-Id: <20200629200551.27040-1-ruslan.bilovol@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This reverts commit 44331189f9082c7e659697bbac1747db3def73e7.
+UDC hardware may have endpoints with different maxpacket
+size. Current endpoint matching code takes first matching
+endpoint from the list.
 
-Now that the VL805 init routine is run through a reset controller driver
-the device dependencies are being taken care of by the device core. No
-need to do it manually here.
+It's always possible that gadget allocates endpoints for
+small transfers (maxpacket size) first, then larger ones.
+That works fine if all matching UDC endpoints have same
+maxpacket size or are big enough to serve that allocation.
 
-Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+However, some UDCs have first endpoints in the list with
+bigger maxpacket size, whereas last endpoints are much
+smaller. In this case endpoint allocation will fail for
+the gadget (which allocates smaller endpoints first) on
+final endpoint allocations.
+
+To make endpoint allocation fair, pick up smallest
+matching endpoints first, leaving bigger ones for
+heavier applications.
+
+Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
 ---
- drivers/pci/controller/pcie-brcmstb.c | 17 -----------------
- 1 file changed, 17 deletions(-)
+ drivers/usb/gadget/epautoconf.c | 23 ++++++++++++++++++-----
+ 1 file changed, 18 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/pci/controller/pcie-brcmstb.c b/drivers/pci/controller/pcie-brcmstb.c
-index 7730ea845ff2..752f5b331579 100644
---- a/drivers/pci/controller/pcie-brcmstb.c
-+++ b/drivers/pci/controller/pcie-brcmstb.c
-@@ -28,8 +28,6 @@
- #include <linux/string.h>
- #include <linux/types.h>
- 
--#include <soc/bcm2835/raspberrypi-firmware.h>
--
- #include "../pci.h"
- 
- /* BRCM_PCIE_CAP_REGS - Offset for the mandatory capability config regs */
-@@ -931,26 +929,11 @@ static int brcm_pcie_probe(struct platform_device *pdev)
+diff --git a/drivers/usb/gadget/epautoconf.c b/drivers/usb/gadget/epautoconf.c
+index 71b15c65b90f..1814a760ce48 100644
+--- a/drivers/usb/gadget/epautoconf.c
++++ b/drivers/usb/gadget/epautoconf.c
+@@ -66,7 +66,7 @@ struct usb_ep *usb_ep_autoconfig_ss(
+ 	struct usb_ss_ep_comp_descriptor *ep_comp
+ )
  {
- 	struct device_node *np = pdev->dev.of_node, *msi_np;
- 	struct pci_host_bridge *bridge;
--	struct device_node *fw_np;
- 	struct brcm_pcie *pcie;
- 	struct pci_bus *child;
- 	struct resource *res;
- 	int ret;
+-	struct usb_ep	*ep;
++	struct usb_ep	*ep, *ep_min = NULL;
+ 	u8		type;
  
--	/*
--	 * We have to wait for Raspberry Pi's firmware interface to be up as a
--	 * PCI fixup, rpi_firmware_init_vl805(), depends on it. This driver's
--	 * probe can race with the firmware interface's (see
--	 * drivers/firmware/raspberrypi.c) and potentially break the PCI fixup.
--	 */
--	fw_np = of_find_compatible_node(NULL, NULL,
--					"raspberrypi,bcm2835-firmware");
--	if (fw_np && !rpi_firmware_get(fw_np)) {
--		of_node_put(fw_np);
--		return -EPROBE_DEFER;
--	}
--	of_node_put(fw_np);
--
- 	bridge = devm_pci_alloc_host_bridge(&pdev->dev, sizeof(*pcie));
- 	if (!bridge)
- 		return -ENOMEM;
+ 	type = desc->bmAttributes & USB_ENDPOINT_XFERTYPE_MASK;
+@@ -77,14 +77,27 @@ struct usb_ep *usb_ep_autoconfig_ss(
+ 			goto found_ep;
+ 	}
+ 
+-	/* Second, look at endpoints until an unclaimed one looks usable */
++	/*
++	 * Second, look at endpoints until an unclaimed one looks usable.
++	 * Try to find one with smallest maxpacket limit, leaving larger
++	 * endpoints for heavier applications
++	 */
+ 	list_for_each_entry (ep, &gadget->ep_list, ep_list) {
+-		if (usb_gadget_ep_match_desc(gadget, ep, desc, ep_comp))
+-			goto found_ep;
++		if (usb_gadget_ep_match_desc(gadget, ep, desc, ep_comp)) {
++			if (desc->wMaxPacketSize == 0)
++				goto found_ep;
++			else if (!ep_min)
++				ep_min = ep;
++			else if (ep->maxpacket_limit < ep_min->maxpacket_limit)
++				ep_min = ep;
++		}
+ 	}
+ 
+ 	/* Fail */
+-	return NULL;
++	if (!ep_min)
++		return NULL;
++
++	ep = ep_min;
+ found_ep:
+ 
+ 	/*
 -- 
-2.27.0
+2.17.1
 
