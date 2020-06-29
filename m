@@ -2,102 +2,171 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4550020D1A9
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jun 2020 20:49:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9012620D2FA
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jun 2020 21:11:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729083AbgF2Smp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Jun 2020 14:42:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38396 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729052AbgF2Smo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Jun 2020 14:42:44 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06610C031C70;
-        Mon, 29 Jun 2020 11:03:23 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id o18so13135952eje.7;
-        Mon, 29 Jun 2020 11:03:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UDek8r7LVAlQow/T56rpM0Mc0RAnfT3YmV7KyKIShqI=;
-        b=Ll/Jzj6e8E7W0z4YvPrYwL5WQz9XTQod0TDSEmqcpjxqZk5M9nLAVisVGz45+a5XjA
-         bCrZsbqa82HIWtilj1auvdCn/SPpq7BotwvO6OnP9hWLZIBg237YZxGUMXxEqUwVmasm
-         EjWnzX7mL7eDV2pK5wSRfxfentHcXKyQPlAnywC6tukq/G+Ed/0HePHVcmWDQP4Ntin6
-         2c9cZHDieeLJ2veSQmr4nDhgNX3XnpZNenHB3v/rcxaZ9SjLi6rrqtC3l9wyCyP0qTpH
-         pWqFtp7nHHsRkXRUvJfUMjghm446ANL0ReYuNV9DIZBWuAcp5fSMqNLArA9REK62hNSd
-         qiiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UDek8r7LVAlQow/T56rpM0Mc0RAnfT3YmV7KyKIShqI=;
-        b=mJKseGqy1CaEi9MOO09/8ZZpYAAjLgWzV8W5Z1UpMk5OpsfAAdtB06hbnFFWnYbk7i
-         WtXWbddKD/SszKMO2PFo4JcPM3mreipzXh4Yz2F24g87epN7c9Dn6G6FpostV/xx0nvi
-         c8EmXkt3IrtuTNBta1vNn5hkm2FqfbFgheKHNVHCb4IzYbMjkfVne15dfG7VLQrjTJ9r
-         9vBpqZWi5mEcxwEopsJq3FzX3BuYqDTsY8KNfROGjbHMha4NA95+RmSTgcj0OsnOHSjD
-         GKOhrPdoA34TK/pbKMFkGINhGn7dJszyjNpGHO1UNemd9KE+Gw1Ycvk5vWizQ9y+SyGi
-         2CWw==
-X-Gm-Message-State: AOAM530B4IGXeNyIi0T12Pb+GLfqGFsMhGdSegSwvCOWC89Ulz3C7SAx
-        YTaahDJcY4FctsmIH8YCjrwn2l9b
-X-Google-Smtp-Source: ABdhPJwJJLAz8V9se/DJFmod23ChA3LmTLg4Fx00dNp+8eKcmvyS6wwPKQmKk9dxyMMpvQvw20cf/g==
-X-Received: by 2002:a17:906:26c3:: with SMTP id u3mr14456646ejc.483.1593453801692;
-        Mon, 29 Jun 2020 11:03:21 -0700 (PDT)
-Received: from localhost.localdomain (p200300f137396800428d5cfffeb99db8.dip0.t-ipconnect.de. [2003:f1:3739:6800:428d:5cff:feb9:9db8])
-        by smtp.googlemail.com with ESMTPSA id w17sm235449eju.42.2020.06.29.11.03.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jun 2020 11:03:21 -0700 (PDT)
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-To:     hminas@synopsys.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, marex@denx.de,
-        stable@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [RFC for-5.8] usb: dwc2: Cleanup debugfs when usb_add_gadget_udc() fails
-Date:   Mon, 29 Jun 2020 20:03:14 +0200
-Message-Id: <20200629180314.2878638-1-martin.blumenstingl@googlemail.com>
-X-Mailer: git-send-email 2.27.0
+        id S1729736AbgF2SyY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Jun 2020 14:54:24 -0400
+Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:3166 "EHLO
+        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729131AbgF2SyW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Jun 2020 14:54:22 -0400
+Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
+        by mx0b-0014ca01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05T6n7Ti028144;
+        Sun, 28 Jun 2020 23:51:24 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=proofpoint;
+ bh=+0P35LNO385j12ZZtG+CyUYW9igzCkHftnpikVV5Pss=;
+ b=dksmdyrGdyEmeYeUi5zsV364NAsO1x/Mqf+T2+Htw1bhubdTysrxUVPfJF/Qx8XroH6t
+ 3rGKqImeAha/5/lQA4yM/48z0aB/7UZOHV/8y0XuOnOly2MiQ8q4xD2tnoPUk445Pstw
+ Cu/qQiRyQpiNvI0URoBZnTI/Tx5uL6RoZZ8MDEj7NGZvn0wtws8GgRu889NsbflAJnek
+ sjCeIE6bQy21lpLWwU7W3iTmYj69GBfNWVskh9k4ZpShrr4Vu95pd5wJpBW3CAQvtkwP
+ HUFVyR6IYlpa9x1j5oY3JTG5koco8Ut2AjLhb1gT5A5eRIJSZm/XMN8I0FQD0T5BnJUT kQ== 
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2168.outbound.protection.outlook.com [104.47.59.168])
+        by mx0b-0014ca01.pphosted.com with ESMTP id 31x1pyd3nc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 28 Jun 2020 23:51:23 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Sj34d+SBjllHrzIVRq9CsYJ9lOEm/uVnSDrqLvMe5qwqcAd9vtMvj5jIEKSVtUXaIRl4KPv3+ytthEsL8r0+EOPyJYqlFq0tuItvjAf2f8QmPE930hdSHOBgLgMFcdLsiYt+4zc+n3kCJVOSpQYGyMLrArTWVT6eRvtPTxa9F7G7/FgvFw74ufyOL9SAy2cMpegvqJz/kntJRI0WIJ6dDtyOzuR5KqiL/0d2z1hFDIwqe5c3PFJzEzCkbkll+sAk7MgUKRILJ8Wg21Us0jcE7tDUPfeAzwjWVctt//mELOzKgKPtmnh+mVYW2yzf41cwrnaqrMKX8/1StEJOGob/WQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+0P35LNO385j12ZZtG+CyUYW9igzCkHftnpikVV5Pss=;
+ b=bGI48ElJ0/AibgVnY04bYG3nLbMw5kcJS9nShIvXFTol1N66yCBR0T7qkTY692eMxf6uUn/N09o/wOUZvU7NQZGs343Zm+CLKOtPlZ2CaupI5mKNQ0cx2pVFWn6qWcrMo0UGj5B7Wep/nMPtxxtUYQohDNLNxxmI+s/DIadlSoYZ+cncPdgTpjYzOUWRUN9ODUSIyYzDvhFyUmWWrzQ2r9hf8+lgdNwbWdJmIHbfQjK3rGlvIhYwG4xTFIAcqy9P8487qrtJiSF2vhp52MwSL5M+v3z4ZTA+WvhY0Df1jthcTikohOBOlDWZsLwWdFFixLtF7v4NTz9Tn6WdxGWoOw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
+ dkim=pass header.d=cadence.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+0P35LNO385j12ZZtG+CyUYW9igzCkHftnpikVV5Pss=;
+ b=RTrwBVAHM66pPAZGIG453G5kR3xL1Ow5TWbhwWIZSlJuW4J6NJ4az+oobORfilT1bhO2/M2eYm0Db5039zBdvDnY5LhmQXMnOgzeP/QQHvt784L7MgauGLPgifut45ZN71uBZdmCM6sehA9qoImXhaqkN6RICDgjIQ5vlM+9dgQ=
+Received: from DM6PR07MB5529.namprd07.prod.outlook.com (2603:10b6:5:7a::30) by
+ DS7PR07MB7736.namprd07.prod.outlook.com (2603:10b6:5:2cc::17) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3131.26; Mon, 29 Jun 2020 06:51:21 +0000
+Received: from DM6PR07MB5529.namprd07.prod.outlook.com
+ ([fe80::f447:6767:a746:9699]) by DM6PR07MB5529.namprd07.prod.outlook.com
+ ([fe80::f447:6767:a746:9699%7]) with mapi id 15.20.3131.027; Mon, 29 Jun 2020
+ 06:51:20 +0000
+From:   Pawel Laszczak <pawell@cadence.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "ben.dooks@codethink.co.uk" <ben.dooks@codethink.co.uk>,
+        "colin.king@canonical.com" <colin.king@canonical.com>,
+        "rogerq@ti.com" <rogerq@ti.com>,
+        "peter.chen@nxp.com" <peter.chen@nxp.com>,
+        "weiyongjun1@huawei.com" <weiyongjun1@huawei.com>,
+        Jayshri Dajiram Pawar <jpawar@cadence.com>,
+        Rahul Kumar <kurahul@cadence.com>,
+        Sanket Parmar <sparmar@cadence.com>
+Subject: RE: [PATCH RFC 2/5] usb:cdns3: Add pci to platform driver wrapper
+Thread-Topic: [PATCH RFC 2/5] usb:cdns3: Add pci to platform driver wrapper
+Thread-Index: AQHWS3YeujIotZUd8kOCCktMnZwmq6jqxmUAgAAx8KCAAC30gIAEBa6w
+Date:   Mon, 29 Jun 2020 06:51:20 +0000
+Message-ID: <DM6PR07MB55290187EE04FAB06CA69816DD6E0@DM6PR07MB5529.namprd07.prod.outlook.com>
+References: <20200626045450.10205-1-pawell@cadence.com>
+ <20200626045450.10205-3-pawell@cadence.com> <20200626114057.GD2571@kadam>
+ <DM6PR07MB5529E239FBA41BDDB52CAFC4DD930@DM6PR07MB5529.namprd07.prod.outlook.com>
+ <20200626172411.GE2571@kadam>
+In-Reply-To: <20200626172411.GE2571@kadam>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccGF3ZWxsXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctZWU0ZmVjMWYtYjlkNC0xMWVhLTg3NjctMWM0ZDcwMWRmYmE0XGFtZS10ZXN0XGVlNGZlYzIxLWI5ZDQtMTFlYS04NzY3LTFjNGQ3MDFkZmJhNGJvZHkudHh0IiBzej0iMTMxNCIgdD0iMTMyMzc4ODcwNzgwOTMxMTczIiBoPSJBanFBTGQzdWx1MzFPd2N4MnZQSDg0QUM2Mzg9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
+x-dg-rorf: true
+authentication-results: oracle.com; dkim=none (message not signed)
+ header.d=none;oracle.com; dmarc=none action=none header.from=cadence.com;
+x-originating-ip: [34.99.247.194]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 5357d86a-ac54-496f-9b40-08d81bf8d4ce
+x-ms-traffictypediagnostic: DS7PR07MB7736:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DS7PR07MB77361F36EF3DB26531196987DD6E0@DS7PR07MB7736.namprd07.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6108;
+x-forefront-prvs: 044968D9E1
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: D6d4dQiM9qLXmzV8VSOTaOvvgHTXhKYdFcAvpKzQn5pvGWNmGAbjaAI+iEceMov+ydd5taBP5OE2p+52IzLc/wLy0IFX7U5swRX0Y1+PVDEMRIy9BrD1jxg5paUtYiWcuwjLbsMKypLCES+F51Na3ZkJnZQ2EyeSSQpHm10xckmp87nozEqZYp6/eWCmW59koiQF9F8zjtAfbpNyUUVe5TN+jEuP5ducP5ge+ULdNJhof6HjdLprcpFKNz9VgUASrJwsmlnJRxBF6da2gXgteZ5aYjc8QZ23ziTNiX0wfsT/Prt0mJ1/oqFLNA6mCir1tjCKO58GU3FQCUmOc5t0QvrB8Kx3LtoG6jj2/2ZMVk80MRQckgJcMmkH34dGuynB
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR07MB5529.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(396003)(366004)(136003)(39850400004)(346002)(376002)(36092001)(316002)(7416002)(478600001)(54906003)(6916009)(86362001)(76116006)(66946007)(66476007)(66556008)(64756008)(66446008)(52536014)(33656002)(5660300002)(26005)(6506007)(8676002)(7696005)(55016002)(71200400001)(4326008)(2906002)(107886003)(186003)(8936002)(9686003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: 7AXBYED67znDSvHsRFs62CsLSDc2/0TY4hK9RJjYqiLLyYeqz+1tXHOYU0/vX8jXXZnRfT5JZKppi3TngvpbTHhEdgm55Yo6FzvplzXzWkXVd4UF8OdiBkVewYNSkxuN6tGoCLSWP35rxY5LpKa5AEoFusOQSgj5Y8vExE/D1dGDZ6yio84hKflRM5+YX/6XW8MmF7Xb1V39WQdcAKr9aQ/G5bklz7dVWqVSKJV12LDX+oksX6hfwHNRoYzcjvCOgEAxYIKGaKbX32oVCL0q2XI5tx3JVnXHdRM7M26LDdDfj8RQSPt4sRWrTHJpMyxQ7793iIMJNchmh2heARJ+cwatpEIpNdQbegnrDE9M/eU6azzMv8R1icpUHDalTFgpflg8j/bgcs/+ZzvpAmAmGzUF1SGe00gS74VpxD+Ztt3/d4OvE9TPLSpzA1IX4dfPMSw32v/j8DidGSsS+BFPxv0H1g5UBz9tY2dHfdWOpzM=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR07MB5529.namprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5357d86a-ac54-496f-9b40-08d81bf8d4ce
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jun 2020 06:51:20.6116
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: gyio5azIVHur0Mxmqd0SKu/gaaraJiju+lcj2EaCRwtpFJnnnPPsVr1S7wuV/B1/zwAzCxT+Bxq+tDMeVjamBlnX56/MlZnrde+02OqKswU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR07MB7736
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-29_07:2020-06-26,2020-06-29 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0
+ lowpriorityscore=0 priorityscore=1501 mlxscore=0 phishscore=0
+ malwarescore=0 cotscore=-2147483648 bulkscore=0 adultscore=0
+ suspectscore=0 impostorscore=0 mlxlogscore=973 spamscore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006290048
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Call dwc2_debugfs_exit() when usb_add_gadget_udc() has failed. This
-ensure that the debugfs entries created by dwc2_debugfs_init() are
-cleaned up in the error path.
 
-Fixes: 207324a321a866 ("usb: dwc2: Postponed gadget registration to the udc class driver")
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
----
-This patch is compile-tested only. I found this while trying to
-understand the latest changes to dwc2/platform.c.
+>
+>On Fri, Jun 26, 2020 at 03:10:32PM +0000, Pawel Laszczak wrote:
+>> >> +static int cdnsp_pci_probe(struct pci_dev *pdev,
+>> >> +			   const struct pci_device_id *id)
+>> >> +{
+>> >> +	struct platform_device_info plat_info;
+>> >> +	struct cdnsp_wrap *wrap;
+>> >> +	struct resource *res;
+>> >> +	struct pci_dev *func;
+>> >> +	int err;
+>> >> +
+>> >> +	/*
+>> >> +	 * For GADGET/HOST PCI (devfn) function number is 0,
+>> >> +	 * for OTG PCI (devfn) function number is 1.
+>> >> +	 */
+>> >> +	if (!id || (pdev->devfn !=3D PCI_DEV_FN_HOST_DEVICE &&
+>> >> +		    pdev->devfn !=3D PCI_DEV_FN_OTG))
+>> >> +		return -EINVAL;
+>> >> +
+>> >> +	func =3D cdnsp_get_second_fun(pdev);
+>> >> +	if (unlikely(!func))
+>> >> +		return -EINVAL;
+>> >> +
+>> >> +	if (func->class =3D=3D PCI_CLASS_SERIAL_USB_XHCI ||
+>> >> +	    pdev->class =3D=3D PCI_CLASS_SERIAL_USB_XHCI)
+>> >> +		return -EINVAL;
+>> >
+>> >
+>> >Do we need call pci_put_device(func) before returning?
+>>
+>> We don't need.
+>> Such function doesn't exist.
+>>
+>
+>I meant pci_dev_put().  I'm pretty sure that we do need it to match the
+>pci_get_device() in cdnsp_get_second_fun().
 
+Right, I will add this,
 
- drivers/usb/dwc2/platform.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+>
+>regards,
+>dan carpenter
 
-diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
-index c347d93eae64..02b6da7e21d7 100644
---- a/drivers/usb/dwc2/platform.c
-+++ b/drivers/usb/dwc2/platform.c
-@@ -582,12 +582,14 @@ static int dwc2_driver_probe(struct platform_device *dev)
- 		retval = usb_add_gadget_udc(hsotg->dev, &hsotg->gadget);
- 		if (retval) {
- 			dwc2_hsotg_remove(hsotg);
--			goto error_init;
-+			goto error_debugfs;
- 		}
- 	}
- #endif /* CONFIG_USB_DWC2_PERIPHERAL || CONFIG_USB_DWC2_DUAL_ROLE */
- 	return 0;
- 
-+error_debugfs:
-+	dwc2_debugfs_exit(hsotg);
- error_init:
- 	if (hsotg->params.activate_stm_id_vb_detection)
- 		regulator_disable(hsotg->usb33d);
--- 
-2.27.0
-
+regards,
+pawel
