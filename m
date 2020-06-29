@@ -2,103 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F3D920E026
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jun 2020 23:56:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9D7520DD47
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jun 2020 23:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732181AbgF2UnQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Jun 2020 16:43:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43360 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730941AbgF2TOC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Jun 2020 15:14:02 -0400
-Received: from EUR02-AM5-obe.outbound.protection.outlook.com (mail-am5eur02on0604.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe07::604])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D7EC00695F
-        for <linux-usb@vger.kernel.org>; Mon, 29 Jun 2020 04:38:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BGWDby71jHRN1S/TIP7U4HucwMcKR3oR8g2Tmjl7MSnllqj9t2enUWLWxEzMFbaw2IbiZ7qeK17drDMnKLPicZUI3MkFuxvj9d/HNVGDkiLGYqNrSxwSG7B+pNol54Rri/rZY5ocv6DEKAUGwzGP9DAFjofpfGveJnl1ZbS1rLlgOnrS0MUNUaiJk0iVk/j2xq2YLSoVlufuq0517VT5/eM0GpNaoqfwaywpl4u1urdphKO0IFFMm19JhNg9NrpcgrQkjCCl0GFObs23JSzWxQb/hzCRz1j56miaH+OShKKuZtdxn34z7YahwqFVWEtFxfnx7vjyW2AT9JbRUcYiyg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=haSOOQvf1aDmSioJjzKabnVHzfTn7iT1FgRKBwTciWg=;
- b=gDU8zPc3fO3YJ+4t0xt5pCNGKR28c1lUIMNhMF5pKT8ZEa43NmfZv1RPNJxuEiEnsFtt2EFjgrxJosQS3GaE8STVDegiJ+C5T7FVwjsNenIuOiLZhnyCU5RsBddjQrieffd1gYRlTVhMjwsS7ocyKQm4UDnbQLrlccpPPtJMKasmPfdukGmLeVtjk4MY/yWCsuhkEmU71Fq9/uFotlORLJ7xAcuSZoXMEMbvp2VR6UQRM0yIGbVZMAChHLuKHJ7sJy9KlsFOgvpWAnEx9ClZG84obcuFJvvncoBThBplzhmOwAwJ2J7VGCwRpJweRSypno5b1KGsVPAZabSyCamDMw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=haSOOQvf1aDmSioJjzKabnVHzfTn7iT1FgRKBwTciWg=;
- b=sAwfD0A5Rf01neyG5IU98uWZLlleiOZpqLfUeN/DDdfAh06BOCWEIjLINpZE4AKHbvyKddYqpTfD+0azeySaYrFN7ZPw1PuyGmUPFdMuSFWANJV3QE/cPFaQKbSw6R5WEKJ38WubDV5uCRzfG/eb9LQEKiaKx1jvqICX8h859dg=
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
- by AM6PR04MB5910.eurprd04.prod.outlook.com (2603:10a6:20b:af::27) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3131.25; Mon, 29 Jun
- 2020 11:37:58 +0000
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1101:adaa:ee89:af2a]) by AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1101:adaa:ee89:af2a%3]) with mapi id 15.20.3131.027; Mon, 29 Jun 2020
- 11:37:58 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     "jocke@infinera.com" <joakim.tjernlund@infinera.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: "usb: gadget: core: sync interrupt before unbind the udc"
- question
-Thread-Topic: "usb: gadget: core: sync interrupt before unbind the udc"
- question
-Thread-Index: AQHWTfxUURogi5P0F06kOiJScuWkHajvdzDQ
-Date:   Mon, 29 Jun 2020 11:37:58 +0000
-Message-ID: <AM7PR04MB7157E127429188EFDF829EAC8B6E0@AM7PR04MB7157.eurprd04.prod.outlook.com>
-References: <3cbe4bf7fd4a152e600ecb1b85b8a24ad5aacc55.camel@infinera.com>
-In-Reply-To: <3cbe4bf7fd4a152e600ecb1b85b8a24ad5aacc55.camel@infinera.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: infinera.com; dkim=none (message not signed)
- header.d=none;infinera.com; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [222.67.222.179]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 48be27da-6cd5-4dc3-2355-08d81c20df28
-x-ms-traffictypediagnostic: AM6PR04MB5910:
-x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-x-microsoft-antispam-prvs: <AM6PR04MB591053726DDA0AD4E2FA57098B6E0@AM6PR04MB5910.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:67;
-x-forefront-prvs: 044968D9E1
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: S7gIB/6j+f9Am3RtBuLHOxVoJweZNW+cqPMpHWmKom9hyW9XDUTFdHvqCnJH3LLVXwWOUUvmtp6ry6ksanop/GQTjTMzBifQx4dmjMovcQ4nA66uTYDaZQ5aK4OMf07x+JoeK2VvOQpXbBeZv44yrU/RtxKPkgB4sX7bxeWBdjl6BfSvKm6b+IjsAYXtoM9iXGr1zXi3RAG4mxXw2bmw0EtTuKB2q0zl5omywp/dWHLWGW3NclCstPhorSMRvVw51IAlfqwurBjO5294OWLdWj+b4tJXFtq/EsLgFDN2m5tQrY917rHfymE9hAe9yMqXaZMoj7dFtfsdSDBdTDlsig3EPqZBHpnNx5YOr+ffm4lD/4IReNs1D6QDKivTDdqpQ/cLhFgW+ZBBfNgMabO5xvWt7k13Cn8lKXZ4eafYwSEddPGn/h2KpVAMGetxgxsO
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(396003)(39860400002)(376002)(366004)(136003)(346002)(26005)(2906002)(4326008)(316002)(52536014)(71200400001)(86362001)(4744005)(5660300002)(66946007)(45080400002)(66446008)(64756008)(66556008)(66476007)(9686003)(8936002)(8676002)(6916009)(478600001)(966005)(33656002)(44832011)(6506007)(76116006)(55016002)(186003)(7696005)(491001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: 1EQTJmTpRMdlKU8KV321HbtQ3L9pNWsdAjYDsMUpVZ+IuPKkh//iuua6aYg37bhpEtH0xntfn/a42u3SO21HiTFK9E4fvCc6avOzfmkzosEv1n7ENVd8hwjkiL7r0dlIIDzTxPddT9c0R05RUDaGbPhuyKFnM8HFERwkGJEdXsbI7xvqzE1YJg240RaPk5yHKvYIWaphTpP+qQ+UP11Du0r59xW/OBH4Qye+lRHytyUbIQSAV/I5EpjahQgGS5h+WbAanQ+gi43xHuwpQjhVCCPDkSyYhPwpNRBL+n9ge8CdikrKlLKSwQ/aBYPhjOoWiwfSQPDJubUFf592/IEGgedII5DCewholGaKmPoADv2QhZFv4GTqaE5DO6tgfosKjBQbgjdEY5bukQ7B+0NtT+yISCS90CZI4pLWSWOSVT8ml8uyybuR0mNWjkTTXVlOj7p7KMD1rO83kKfnAzIwDbfiMhV41SSIq7BFkJJdRl30yVZDcQ63c5essizlh29j
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1728240AbgF2SkX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Jun 2020 14:40:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60654 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728191AbgF2SkV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 29 Jun 2020 14:40:21 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 90CF423CD0;
+        Mon, 29 Jun 2020 11:43:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1593431023;
+        bh=ILZFwBhefvZnaUZ/7Eq1riYSV2CyDKBAdHgbSEH2bvk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=a6eq+b/baQ8GRm4G4tA7nJQs1RF4yoXbAet+TfIH2YL8pVHzyt+ujIBmMtuPw+G55
+         jk2YHqwBRV4QvVyqu7Lm5tk+mzwndE62UwmdaHWhRifb9Wje5gTGF7Z/oqO6+w8ENI
+         ZYQGRwJn1Dal6tPhfOoEcg1AFPn+JyMwbtSySjbc=
+Date:   Mon, 29 Jun 2020 13:43:33 +0200
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     Pawel Laszczak <pawell@cadence.com>
+Cc:     Peter Chen <peter.chen@nxp.com>, Felipe Balbi <balbi@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>,
+        "ben.dooks@codethink.co.uk" <ben.dooks@codethink.co.uk>,
+        "colin.king@canonical.com" <colin.king@canonical.com>,
+        "rogerq@ti.com" <rogerq@ti.com>,
+        "weiyongjun1@huawei.com" <weiyongjun1@huawei.com>,
+        Jayshri Dajiram Pawar <jpawar@cadence.com>,
+        Rahul Kumar <kurahul@cadence.com>,
+        Sanket Parmar <sparmar@cadence.com>
+Subject: Re: [PATCH RFC 0/5] Introduced new Cadence USBSSP DRD Driver.
+Message-ID: <20200629114333.GB121549@kroah.com>
+References: <20200626045450.10205-1-pawell@cadence.com>
+ <878sga5nfr.fsf@kernel.org>
+ <BL0PR07MB5522A8796EE7BFB5062A8E76DD930@BL0PR07MB5522.namprd07.prod.outlook.com>
+ <20200629034213.GB30684@b29397-desktop>
+ <20200629043146.GA323164@kroah.com>
+ <DM6PR07MB552969E5B50BF3B29547DAEADD6E0@DM6PR07MB5529.namprd07.prod.outlook.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 48be27da-6cd5-4dc3-2355-08d81c20df28
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Jun 2020 11:37:58.1082
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: XjNY5TyAC86WB8HOdavrzTz/k/RoewpxjyigQvlN1i86mBH6mGolXvmmhBtSvHehgWDI5roiTAf0YBR58pzWtw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB5910
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DM6PR07MB552969E5B50BF3B29547DAEADD6E0@DM6PR07MB5529.namprd07.prod.outlook.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-IA0KPiANCj4gSW4NCj4gaHR0cHM6Ly9ldXIwMS5zYWZlbGlua3MucHJvdGVjdGlvbi5vdXRsb29r
-LmNvbS8/dXJsPWh0dHBzJTNBJTJGJTJGZ2l0Lmtlcm5lbC5vcmcNCj4gJTJGcHViJTJGc2NtJTJG
-bGludXglMkZrZXJuZWwlMkZnaXQlMkZzdGFibGUlMkZsaW51eC5naXQlMkZjb21taXQlMkYNCj4g
-JTNGaCUzRGxpbnV4LQ0KPiA1LjQueSUyNmlkJTNEODA1YmFlNzU5MmZhMmNmZWRlODk4YjI0ZTJh
-OGQ4NWZkZDYzMTdlZSZhbXA7ZGF0YT0wMiU3Qw0KPiAwMSU3Q3BldGVyLmNoZW4lNDBueHAuY29t
-JTdDNzU1MTY0YWY0YzBkNDQ3Y2JmNzkwOGQ4MWMxMzc5MDQlN0M2ODZlDQo+IGExZDNiYzJiNGM2
-ZmE5MmNkOTljNWMzMDE2MzUlN0MwJTdDMCU3QzYzNzI5MDIxNzI0MDczNDc0NiZhbXA7c2RhdA0K
-PiBhPVNMTkhSQ2dod0lZRk94TTZROVFlY3lNdlg5QXpVTmZoZmtNR0dNUkszNFElM0QmYW1wO3Jl
-c2VydmVkDQo+ID0wDQo+IA0KPiBZb3UgYWRkIGFuICJpbnQgaXJxIiBmaWVsZCBidXQgSSBkb24n
-dCBzZWUgYW55dGhpbmcgc2V0dGluZyB0aGlzIGZpZWxkLCBzb21ldGhpbmcNCj4gbWlzc2luZz8N
-Cj4gDQoNCmh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L25l
-eHQvbGludXgtbmV4dC5naXQvY29tbWl0Lz9pZD03N2YzMGZmNDk3NjFhY2JiM2Q5MGFjYTAwMDRm
-MzkzZmQ4MWI2M2E4DQoNClBldGVyDQo=
+On Mon, Jun 29, 2020 at 11:20:00AM +0000, Pawel Laszczak wrote:
+> 
+> >> > Hi Felipe,
+> >> >
+> >> > >
+> >> > >Hi,
+> >> > >
+> >> > >Pawel Laszczak <pawell@cadence.com> writes:
+> >> > >> This patch introduce new Cadence USBSS DRD driver to linux kernel.
+> >> > >>
+> >> > >> The Cadence USBSS DRD Controller is a highly configurable IP Core which
+> >> > >> can be instantiated as Dual-Role Device (DRD), Peripheral Only and
+> >> > >> Host Only (XHCI)configurations.
+> >> > >>
+> >> > >> The current driver has been validated with FPGA burned. We have support
+> >> > >> for PCIe bus, which is used on FPGA prototyping.
+> >> > >>
+> >> > >> The host side of USBSS-DRD controller is compliance with XHCI
+> >> > >> specification, so it works with standard XHCI Linux driver.
+> >> > >>
+> >> > >> The host side of USBSS DRD controller is compliant with XHCI.
+> >> > >> The architecture for device side is almost the same as for host side,
+> >> > >> and most of the XHCI specification can be used to understand how
+> >> > >> this controller operates.
+> >> > >>
+> >> > >> This controller and driver support Full Speed, Hight Speed, Supper Speed
+> >> > >> and Supper Speed Plus USB protocol.
+> >> > >>
+> >> > >> The prefix cdnsp used in driver has chosen by analogy to cdn3 driver.
+> >> > >> The last letter of this acronym means PLUS. The formal name of controller
+> >> > >> is USBSSP but it's to generic so I've decided to use CDNSP.
+> >> > >>
+> >> > >> The patch 1: adds DT binding.
+> >> > >> The patch 2: adds PCI to platform wrapper used on Cadnece testing
+> >> > >>              platform. It is FPGA based on platform.
+> >> > >> The patches 3-5: add the main part of driver and has been intentionally
+> >> > >>              split into 3 part. In my opinion such division should not
+> >> > >>              affect understanding and reviewing the driver, and cause that
+> >> > >>              main patch (4/5) is little smaller. Patch 3 introduces main
+> >> > >>              header file for driver, 4 is the main part that implements all
+> >> > >>              functionality of driver and 5 introduces tracepoints.
+> >> > >
+> >> > >I'm more interested in how is this different from CDNS3. Aren't they SW compatible?
+> >> >
+> >> > In general, the controller can be split into 2 part- DRD part and the rest UDC.
+> >> >
+> >> > The second part UDC which consist gadget.c, ring.c and mem.c file is completely different.
+> >> >
+> >> > The DRD part contains drd.c and core.c.
+> >> > cdnsp drd.c is similar to cdns3 drd.c but it's little different. CDNSP has similar, but has different register space.
+> >> > Some register was moved, some was removed and some was added.
+> >> >
+> >> > core.c is very similar and eventually could be common for both drivers.  I thought about this but
+> >> > I wanted to avoid interfering with cdns3 driver at this point CDNSP is still under testing and
+> >> > CDNS3 is used by some products on the market.
+> >>
+> >> Pawel, I suggest adding CDNSP at driver/staging first since it is still
+> >> under testing. When you are thinking the driver (as well as hardware) are
+> >> mature, you could try to add gadget part (eg, gadget-v2) and make
+> >> necessary changes for core.c.
+> >
+> >I only take code for drivers/staging/ that for some reason is not
+> >meeting the normal coding style/rules/whatever.  For stuff that is an
+> >obvious duplicate of existing code like this, and needs to be
+> >rearchitected.  It is much more work to try to convert code once it is
+> >in the tree than to just do it out of the tree on your own and resubmit
+> >it, as you don't have to follow the in-kernel rules of "one patch does
+> >one thing" that you would if it was in staging.
+> >
+> >So don't think that staging is the right place for this, just spend a
+> >few weeks to get it right and then resubmit it.
+> >
+> 
+> Ok, 
+> I try to reuse the code from cdns3. Where  such common code should be
+> placed ? Should I move it to e.g. drivers/usb/common/cdns or it should remain in 
+> cdns3 directory.
+
+In the cdns3 directory makes the most sense.
+
+thanks,
+
+greg k-h
