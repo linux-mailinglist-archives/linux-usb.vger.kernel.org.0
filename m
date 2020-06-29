@@ -2,106 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81AF620CBE4
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jun 2020 04:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D679D20CC02
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jun 2020 05:03:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726097AbgF2CzI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 28 Jun 2020 22:55:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34088 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725998AbgF2CzI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 28 Jun 2020 22:55:08 -0400
-Received: from casper.infradead.org (unknown [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5B2C03E979;
-        Sun, 28 Jun 2020 19:55:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:Date:Message-ID:Subject:From:To:Sender:Reply-To:Cc:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=pNAHqrMilcbQWkaDAeEtclkYgijfh3lLVD866ZFpqCE=; b=PrR32Ha/ShmmR9dae2Mk7M7oEZ
-        F928ffroGQqSckjotBhAMBxd0SrxJNX4wMMgURqRcdBzsamAraCjSkbumxH5i8BYMVf1kbIy+qTOo
-        oPzjuxuXjL5gudXSWNNzf3mGM32/llhnymKLGYVCF3TdVRfWlrmAf0bEHIEXWD4+KddpAq+wnupki
-        TxIVhMrtGvqOauK3H3jxx6ajdc88xE1HAnZp8YQo5frFPQCFpbmTYRFlJ8fiRm1xyPgWIE5FAPWPG
-        00q1wAEia4UNHRv+zsFiCwWCRNSDuKORDGytsflr0N4xHEESE7ic2+eYJ/sahiOs1vqd3QjMYsmuQ
-        DbiqDzYg==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jpjwW-0002dd-Ci; Mon, 29 Jun 2020 02:54:50 +0000
-To:     LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bastien Nocera <hadess@hadess.net>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH] usb: fix kernel-doc warnings and formatting in <linux/usb.h>
-Message-ID: <7014bab2-268c-69f6-7ef5-57fbd45c8b08@infradead.org>
-Date:   Sun, 28 Jun 2020 19:54:45 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S1725998AbgF2DDV convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Sun, 28 Jun 2020 23:03:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38724 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725976AbgF2DDV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 28 Jun 2020 23:03:21 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 208307] Alcor Micro Corp. Multi Flash Reader [058f:6366] keeps
+ being detected and removed continuously
+Date:   Mon, 29 Jun 2020 03:03:20 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: jian-hong@endlessm.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-208307-208809-BFyInOTTdT@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-208307-208809@https.bugzilla.kernel.org/>
+References: <bug-208307-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+https://bugzilla.kernel.org/show_bug.cgi?id=208307
 
-Fix kernel-doc warnings in <linux/usb.h>:
+--- Comment #4 from jian-hong@endlessm.com ---
+(In reply to Alan Stern from comment #3)
+> On Wed, Jun 24, 2020 at 05:05:49AM +0000,
+> bugzilla-daemon@bugzilla.kernel.org wrote:
+> Try disabling Link Power Management for this device:
+> 
+>    echo 058f:6366:k >/sys/module/usbcore/parameters/quirks
+Thanks for your information.  But the issue still happen, after the quirk is
+applied.
 
-../include/linux/usb.h:713: warning: Function parameter or member 'use_generic_driver' not described in 'usb_device'
-../include/linux/usb.h:1253: warning: Function parameter or member 'match' not described in 'usb_device_driver'
-../include/linux/usb.h:1253: warning: Function parameter or member 'id_table' not described in 'usb_device_driver'
-
-Also drop an extra blank line and fix indentation.
-
-Fixes: 77419aa403ca ("USB: Fallback to generic driver when specific driver fails")
-Fixes: 88b7381a939d ("USB: Select better matching USB drivers when available")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Bastien Nocera <hadess@hadess.net>
----
- include/linux/usb.h |   10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
-
---- linux-next-20200626.orig/include/linux/usb.h
-+++ linux-next-20200626/include/linux/usb.h
-@@ -620,9 +620,9 @@ struct usb3_lpm_parameters {
-  *	Management to be disabled for this usb_device.  This count should only
-  *	be manipulated by those functions, with the bandwidth_mutex is held.
-  * @hub_delay: cached value consisting of:
-- *		parent->hub_delay + wHubDelay + tTPTransmissionDelay (40ns)
-- *
-+ *	parent->hub_delay + wHubDelay + tTPTransmissionDelay (40ns)
-  *	Will be used as wValue for SetIsochDelay requests.
-+ * @use_generic_driver: ask driver core to reprobe using the generic driver.
-  *
-  * Notes:
-  * Usbcore drivers should not set usbdev->state directly.  Instead use
-@@ -1215,6 +1215,7 @@ struct usb_driver {
-  * struct usb_device_driver - identifies USB device driver to usbcore
-  * @name: The driver name should be unique among USB drivers,
-  *	and should normally be the same as the module name.
-+ * @match: If set, used for better device/driver matching.
-  * @probe: Called to see if the driver is willing to manage a particular
-  *	device.  If it is, probe returns zero and uses dev_set_drvdata()
-  *	to associate driver-specific data with the device.  If unwilling
-@@ -1227,13 +1228,16 @@ struct usb_driver {
-  * @dev_groups: Attributes attached to the device that will be created once it
-  *	is bound to the driver.
-  * @drvwrap: Driver-model core structure wrapper.
-+ * @id_table: used with @match() to select better matching driver at
-+ * 	probe() time.
-  * @supports_autosuspend: if set to 0, the USB core will not allow autosuspend
-  *	for devices bound to this driver.
-  * @generic_subclass: if set to 1, the generic USB driver's probe, disconnect,
-  *	resume and suspend functions will be called in addition to the driver's
-  *	own, so this part of the setup does not need to be replicated.
-  *
-- * USB drivers must provide all the fields listed above except drvwrap.
-+ * USB drivers must provide all the fields listed above except drvwrap,
-+ * match, and id_table.
-  */
- struct usb_device_driver {
- 	const char *name;
-
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
