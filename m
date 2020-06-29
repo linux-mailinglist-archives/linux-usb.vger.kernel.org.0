@@ -2,82 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F0D420E819
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jun 2020 00:12:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1775C20E87B
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jun 2020 00:13:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391568AbgF2WDb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Jun 2020 18:03:31 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:38804 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726235AbgF2WDa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Jun 2020 18:03:30 -0400
-Received: by mail-io1-f68.google.com with SMTP id f6so3269520ioj.5;
-        Mon, 29 Jun 2020 15:03:29 -0700 (PDT)
+        id S1731414AbgF2WHm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Jun 2020 18:07:42 -0400
+Received: from mail-il1-f194.google.com ([209.85.166.194]:40503 "EHLO
+        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730358AbgF2WHl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Jun 2020 18:07:41 -0400
+Received: by mail-il1-f194.google.com with SMTP id e18so5226053ilr.7;
+        Mon, 29 Jun 2020 15:07:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=cCuA/1H5zPFkQibB/1FVyUKxdfeDC7D9Mc34Pi/i1Bk=;
-        b=TahneyMEvXAwMXkAVcepLu2TEJe6a44UQUlMXNF588bh9E55ftMgEnRjslBkwEgFVw
-         1lZzxACgKsSVl6pjB4KC9BNsrfZMYLlquQjcL5aJJyGyTIEUcE1EHhoui6UU/KczTLW9
-         7O9CWwnKCNEpBlRU3aIUhBg/eM8KcxsQ7kWBPN7lFvnmyQhb/Ulkc9SqCyhR9y2o7ZrT
-         h21xnilNaHQvr8jsIy/zecePgniZ2DAafmMsywrPAZVxP3bmOMgWjqKBBscBPYfzDT/1
-         NI4b181pR4dyVKwxeYDW6+5wp3VAWeIbq7uzjcVlYSAtWjXL+rfvzDqOfEJ5hsPTpglL
-         dWcw==
-X-Gm-Message-State: AOAM532+uLIIMkfIpxfH4BUtPK0VxNet1PjRUEJjUGcVvR0QVeOuvsHW
-        +vCEikfAogM1rVgd/Pa3xg==
-X-Google-Smtp-Source: ABdhPJzQNlss41FGC2hfOql88X+H8ZgwM3IXBHQO6+dHsWdZNlR+AYQSnEQVWlioy6ByTnwwWVx/Bg==
-X-Received: by 2002:a5e:9b0b:: with SMTP id j11mr19140572iok.17.1593468209250;
-        Mon, 29 Jun 2020 15:03:29 -0700 (PDT)
+        bh=nnDzFwxtFG9f7VF90LCCUZA5nyXTH/oVzSfnrfIHYp4=;
+        b=G3NfjryIXlZhHvIqA0mDh+iYoivTLsTreT8fJknrWjf8UqlzDEs0Qnck6wOisb6e/d
+         +xZsYosHuABCchrPUbB5RemRXI1JLQ7gPdkix5zHgYDh9gggO9ji+J+K9DnbZekmcCbQ
+         8ZQYCTCjNevT7aBYdDmYi5RSc9nsjtxi088hD6vHHw/i2q3nYbPo8JpzLS1ZGxe/slld
+         Y/McOQWLQWyiWhU95kzNIcqCesQw1nKZIw8Fj6O5GroINhO5zXQAjTdjaiB9Ilucvv1w
+         Z4d7fgC5bsJxMKt3iQVGHUTw11fI2xp7WVQvO32yY+1Z8dcqu/uXWuZch/vR1MBKNMcv
+         5kFA==
+X-Gm-Message-State: AOAM531n3XHp2aYu/5R9GdV1VDHYcfqv2BrdZaAJW1HeZlrTQZiPsia3
+        4+syKsUGhPIV8HoxjqmX2A==
+X-Google-Smtp-Source: ABdhPJx4cPfy3pr5C+e02wlBVD5JeOddg6MDYpBU+7VS+0bIZyME4z2DTGIFLncaLT9VHWLyYw3ZtA==
+X-Received: by 2002:a92:c8c5:: with SMTP id c5mr8979452ilq.47.1593468460223;
+        Mon, 29 Jun 2020 15:07:40 -0700 (PDT)
 Received: from xps15 ([64.188.179.255])
-        by smtp.gmail.com with ESMTPSA id q4sm606515ils.11.2020.06.29.15.03.27
+        by smtp.gmail.com with ESMTPSA id m2sm634034iln.1.2020.06.29.15.07.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jun 2020 15:03:28 -0700 (PDT)
-Received: (nullmailer pid 3018066 invoked by uid 1000);
-        Mon, 29 Jun 2020 22:03:26 -0000
-Date:   Mon, 29 Jun 2020 16:03:26 -0600
+        Mon, 29 Jun 2020 15:07:39 -0700 (PDT)
+Received: (nullmailer pid 3027667 invoked by uid 1000);
+        Mon, 29 Jun 2020 22:07:37 -0000
+Date:   Mon, 29 Jun 2020 16:07:37 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Pawel Laszczak <pawell@cadence.com>
-Cc:     devicetree@vger.kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, ben.dooks@codethink.co.uk,
-        jpawar@cadence.com, sparmar@cadence.com, weiyongjun1@huawei.com,
-        rogerq@ti.com, linux-kernel@vger.kernel.org,
-        dan.carpenter@oracle.com, robh+dt@kernel.org,
-        colin.king@canonical.com, balbi@kernel.org, kurahul@cadene.com,
-        peter.chen@nxp.com
-Subject: Re: [PATCH RFC 1/5] dt-bindings: add binding for CDNSP-DRD controller
-Message-ID: <20200629220326.GA3017609@bogus>
-References: <20200626045450.10205-1-pawell@cadence.com>
- <20200626045450.10205-2-pawell@cadence.com>
+To:     Wesley Cheng <wcheng@codeaurora.org>
+Cc:     jackp@codeaurora.org, gregkh@linuxfoundation.org,
+        rdunlap@infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, lgirdwood@gmail.com,
+        linux-arm-msm@vger.kernel.org, broonie@kernel.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org, agross@kernel.org,
+        mark.rutland@arm.com, heikki.krogerus@linux.intel.com,
+        bjorn.andersson@linaro.org
+Subject: Re: [PATCH v4 2/6] dt-bindings: usb: Add Qualcomm PMIC type C
+ controller dt-binding
+Message-ID: <20200629220737.GA3027039@bogus>
+References: <20200626185516.18018-1-wcheng@codeaurora.org>
+ <20200626185516.18018-3-wcheng@codeaurora.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200626045450.10205-2-pawell@cadence.com>
+In-Reply-To: <20200626185516.18018-3-wcheng@codeaurora.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 26 Jun 2020 06:54:46 +0200, Pawel Laszczak wrote:
-> This patch aim at documenting USB related dt-bindings for the
-> Cadence CDNSP-DRD controller.
+On Fri, 26 Jun 2020 11:55:12 -0700, Wesley Cheng wrote:
+> Introduce the dt-binding for enabling USB type C orientation and role
+> detection using the PM8150B.  The driver will be responsible for receiving
+> the interrupt at a state change on the CC lines, reading the orientation/role,
+> and communicating this information to the remote clients, which can include
+> a role switch node and a type C switch.
 > 
-> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
 > ---
->  .../devicetree/bindings/usb/cdns-cdnsp.yaml   | 104 ++++++++++++++++++
->  1 file changed, 104 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/cdns-cdnsp.yaml
+>  .../bindings/usb/qcom,pmic-typec.yaml         | 126 ++++++++++++++++++
+>  1 file changed, 126 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml
 > 
 
 
 My bot found errors running 'make dt_binding_check' on your patch:
 
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/cdns-cdnsp.example.dt.yaml: example-0: usb@f3000000:reg:0: [0, 29437952, 0, 1024] is too long
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/cdns-cdnsp.example.dt.yaml: example-0: usb@f3000000:reg:1: [0, 4076929024, 0, 65536] is too long
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/cdns-cdnsp.example.dt.yaml: example-0: usb@f3000000:reg:2: [0, 4076994560, 0, 65536] is too long
+Documentation/devicetree/bindings/usb/qcom,pmic-typec.example.dts:40.54-42.31: Warning (unit_address_vs_reg): /example-0/pm8150b/typec@1500/connector/ports/port@1/endpoint@0: node has a unit name, but no reg or ranges property
+Documentation/devicetree/bindings/usb/qcom,pmic-typec.example.dts:43.51-45.31: Warning (unit_address_vs_reg): /example-0/pm8150b/typec@1500/connector/ports/port@1/endpoint@1: node has a unit name, but no reg or ranges property
 
 
-See https://patchwork.ozlabs.org/patch/1317380
+See https://patchwork.ozlabs.org/patch/1317984
 
 If you already ran 'make dt_binding_check' and didn't see the above
 error(s), then make sure dt-schema is up to date:
