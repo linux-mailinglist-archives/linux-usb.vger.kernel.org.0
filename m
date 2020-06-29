@@ -2,77 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7910220D622
-	for <lists+linux-usb@lfdr.de>; Mon, 29 Jun 2020 22:04:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81CCE20D7A4
+	for <lists+linux-usb@lfdr.de>; Mon, 29 Jun 2020 22:07:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731959AbgF2TRz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Jun 2020 15:17:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44308 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731962AbgF2TRo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Jun 2020 15:17:44 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F018AC02A563
-        for <linux-usb@vger.kernel.org>; Mon, 29 Jun 2020 06:22:10 -0700 (PDT)
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1jptjd-0005C7-Hs; Mon, 29 Jun 2020 15:22:09 +0200
-Received: from mgr by dude.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1jptjc-0001HS-8u; Mon, 29 Jun 2020 15:22:08 +0200
-From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
-To:     linux-usb@vger.kernel.org
-Cc:     Thinh.Nguyen@synopsys.com, balbi@kernel.org,
-        gregkh@linuxfoundation.org, kernel@pengutronix.de
-Subject: [PATCH v3 2/2] usb: dwc3: gadget: when the started list is empty stop the active xfer
-Date:   Mon, 29 Jun 2020 15:22:06 +0200
-Message-Id: <20200629132206.3914-3-m.grzeschik@pengutronix.de>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200629132206.3914-1-m.grzeschik@pengutronix.de>
-References: <20200629132206.3914-1-m.grzeschik@pengutronix.de>
+        id S1733180AbgF2Tb3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Jun 2020 15:31:29 -0400
+Received: from mx2.suse.de ([195.135.220.15]:36750 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1733164AbgF2Tb1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 29 Jun 2020 15:31:27 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 5418FAD33;
+        Mon, 29 Jun 2020 15:19:59 +0000 (UTC)
+Message-ID: <9e6d34b0d31829f1b6760191c9424dda65963bcd.camel@suse.de>
+Subject: Re: [PATCH v3 2/9] reset: Add Raspberry Pi 4 firmware reset
+ controller
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     Philipp Zabel <p.zabel@pengutronix.de>, f.fainelli@gmail.com,
+        gregkh@linuxfoundation.org, wahrenst@gmx.net,
+        linux-kernel@vger.kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com, tim.gover@raspberrypi.org,
+        linux-pci@vger.kernel.org, helgaas@kernel.org,
+        andy.shevchenko@gmail.com, mathias.nyman@linux.intel.com,
+        lorenzo.pieralisi@arm.com
+Date:   Mon, 29 Jun 2020 17:19:57 +0200
+In-Reply-To: <6ddaf69d4f5ad188864f62dcdbfbbe32acef9820.camel@pengutronix.de>
+References: <20200612171334.26385-1-nsaenzjulienne@suse.de>
+         <20200612171334.26385-3-nsaenzjulienne@suse.de>
+         <c1ccb77ef0bc56b96a8ad991f8345d0ffbd76fc2.camel@pengutronix.de>
+         <b324122e8bd93302215a77d0dcf6d8b2897d3597.camel@suse.de>
+         <6ddaf69d4f5ad188864f62dcdbfbbe32acef9820.camel@pengutronix.de>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-pYGBGq9PFJmcLEyUIZhw"
+User-Agent: Evolution 3.36.3 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When we have nothing left to be queued after handling the last trb
-we have to stop the current transfer. This way we can ensure that
-the next request will be queued with an new and valid timestamp
-and will not directly run into an missed xfer.
 
-Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+--=-pYGBGq9PFJmcLEyUIZhw
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
----
-v1 -> v2: - This Patch replaces the following patch by Michael Olbrich:
-            usb: dwc3: gadget: restart the transfer if a isoc request is queued too late
-v2 -> v3: - rearranged condition for easier read (suggested by Tinh Nguyen)
+On Fri, 2020-06-26 at 12:43 +0200, Philipp Zabel wrote:
+> On Wed, 2020-06-17 at 12:44 +0200, Nicolas Saenz Julienne wrote:
+> > On Wed, 2020-06-17 at 12:02 +0200, Philipp Zabel wrote:
+> > > Hi Nicolas,
+> > >=20
+> > > On Fri, 2020-06-12 at 19:13 +0200, Nicolas Saenz Julienne wrote:
+> > > > Raspberry Pi 4's co-processor controls some of the board's HW
+> > > > initialization process, but it's up to Linux to trigger it when
+> > > > relevant. Introduce a reset controller capable of interfacing with
+> > > > RPi4's co-processor that models these firmware initialization routi=
+nes
+> > > > as
+> > > > reset lines.
+> > > >=20
+> > > > Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+> > > > Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+> > >=20
+> > > Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+> >=20
+> > Thanks!
+> >=20
+> > > If there is a good reason for the single DT specified reset id, I can
+> > > pick up patches 1 and 2.
+> >=20
+> > The idea here is to make sure we're reasonably covered against further
+> > changes
+> > in firmware. If we define constraints too narrow it can be a pain to su=
+pport
+> > new features without breaking backwards compatibility in dt.
+>=20
+> Ok.
+>=20
+> > > If you change the dts patch 4 to use a number instead of the reset id
+> > > define for now, there wouldn't even be a dependency between these res=
+et
+> > > and dts patches.
+> >=20
+> > I was under the impression that having an explicit definition was nice =
+to
+> > have.
+> > What's troubling about creating the dependency?
+>=20
+> Just that the last patch has to wait for the reset patches to be merged
+> before it can be applied.
 
- drivers/usb/dwc3/gadget.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+TBH there is no hurry, this only provides a better design on something that=
+'s
+already available upstream. USB works on RPi4, so I don't mind if this gets
+delayed a release.
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 7ad85a7d06f70bf..2e15878aa8ae781 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2735,7 +2735,9 @@ static bool dwc3_gadget_endpoint_trbs_complete(struct dwc3_ep *dep,
- 	if (dep->flags & DWC3_EP_END_TRANSFER_PENDING)
- 		goto out;
- 
--	if (status == -EXDEV && list_empty(&dep->started_list))
-+	if (usb_endpoint_xfer_isoc(dep->endpoint.desc) &&
-+		list_empty(&dep->started_list) &&
-+		(list_empty(&dep->pending_list) || status == -EXDEV))
- 		dwc3_stop_active_transfer(dep, true, true);
- 	else if (dwc3_gadget_ep_should_continue(dep))
- 		if (__dwc3_gadget_kick_transfer(dep) == 0)
--- 
-2.27.0
+Regards,
+Nicolas
+
+
+--=-pYGBGq9PFJmcLEyUIZhw
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl76Bp4ACgkQlfZmHno8
+x/4Ajwf+K267YktdZT35ap4okjOsWgkfqAIAwxP52bNAwkVqxoMvi5Bvt7bQiZhF
+6yW4hejw30Ynb5u18w0FNOECF0/hV8XCTPYHcBDqplrtVwDAJSvHkjRZ4Ta4yR0e
+afhITI1v66VKfk6fXq/6a3UEC0mZoUX1JY+eVo2M7tQEgGGQrNjU1kTUl9nwJkSb
+E9iYX4L+qtAfXtvirFebov4CrdX2zZRaaQpRPIFGh2ZMBpXFIFaOVVBe9DS4Wbav
+kIKuL2AIisi8ZY6yssQTxECJuzir//mqRN+yBvmOJaB8Va83E7AaE1pE1uN0JhhN
+/P/W9lzR8Ku7wbNuORr35TFIKyEiXg==
+=iSMN
+-----END PGP SIGNATURE-----
+
+--=-pYGBGq9PFJmcLEyUIZhw--
 
