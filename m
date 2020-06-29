@@ -2,90 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1775C20E87B
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jun 2020 00:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 476A620E970
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jun 2020 01:41:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731414AbgF2WHm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 29 Jun 2020 18:07:42 -0400
-Received: from mail-il1-f194.google.com ([209.85.166.194]:40503 "EHLO
-        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730358AbgF2WHl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Jun 2020 18:07:41 -0400
-Received: by mail-il1-f194.google.com with SMTP id e18so5226053ilr.7;
-        Mon, 29 Jun 2020 15:07:40 -0700 (PDT)
+        id S1728143AbgF2XiF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 29 Jun 2020 19:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57530 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725936AbgF2XiF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 29 Jun 2020 19:38:05 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10CCCC061755;
+        Mon, 29 Jun 2020 16:38:05 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id u8so8391754pje.4;
+        Mon, 29 Jun 2020 16:38:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=xDmndeuf6+uwXZ1m8jycymUjCeI0m9qm4ZAV+tpUoqg=;
+        b=hfcENy/nu+8E+qPHtGgHggPo6FrtxlNt1g3/qmAgrr2o/GeOEqJpOKezxPVlV2RrRh
+         0KzMSRt54d77uU3CRpOsadNGCSfoFK6qKedJodEwFFHR0W/ZF5AQzl06oNG3A3o+KFEn
+         MzKOf00Bp6rabpwXlPL5ygB6sxRt8CRt9wZM3XAODkEaa56JTdG16bmehUOHrMm/ZX89
+         s7hvtrUVekSR3hNK4AVPO83dr5GpeL6ncNfFHhKSgoXQ+frCdgB3GxuQ0GwG1mmNoWZL
+         F5yTQyy1amwtjAv9UtHUwiQpqAWx/D64f6YQW+qYlYLJn5apqAZIQMWwX2+/etDOzU8X
+         X0Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=nnDzFwxtFG9f7VF90LCCUZA5nyXTH/oVzSfnrfIHYp4=;
-        b=G3NfjryIXlZhHvIqA0mDh+iYoivTLsTreT8fJknrWjf8UqlzDEs0Qnck6wOisb6e/d
-         +xZsYosHuABCchrPUbB5RemRXI1JLQ7gPdkix5zHgYDh9gggO9ji+J+K9DnbZekmcCbQ
-         8ZQYCTCjNevT7aBYdDmYi5RSc9nsjtxi088hD6vHHw/i2q3nYbPo8JpzLS1ZGxe/slld
-         Y/McOQWLQWyiWhU95kzNIcqCesQw1nKZIw8Fj6O5GroINhO5zXQAjTdjaiB9Ilucvv1w
-         Z4d7fgC5bsJxMKt3iQVGHUTw11fI2xp7WVQvO32yY+1Z8dcqu/uXWuZch/vR1MBKNMcv
-         5kFA==
-X-Gm-Message-State: AOAM531n3XHp2aYu/5R9GdV1VDHYcfqv2BrdZaAJW1HeZlrTQZiPsia3
-        4+syKsUGhPIV8HoxjqmX2A==
-X-Google-Smtp-Source: ABdhPJx4cPfy3pr5C+e02wlBVD5JeOddg6MDYpBU+7VS+0bIZyME4z2DTGIFLncaLT9VHWLyYw3ZtA==
-X-Received: by 2002:a92:c8c5:: with SMTP id c5mr8979452ilq.47.1593468460223;
-        Mon, 29 Jun 2020 15:07:40 -0700 (PDT)
-Received: from xps15 ([64.188.179.255])
-        by smtp.gmail.com with ESMTPSA id m2sm634034iln.1.2020.06.29.15.07.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jun 2020 15:07:39 -0700 (PDT)
-Received: (nullmailer pid 3027667 invoked by uid 1000);
-        Mon, 29 Jun 2020 22:07:37 -0000
-Date:   Mon, 29 Jun 2020 16:07:37 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Wesley Cheng <wcheng@codeaurora.org>
-Cc:     jackp@codeaurora.org, gregkh@linuxfoundation.org,
-        rdunlap@infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, lgirdwood@gmail.com,
-        linux-arm-msm@vger.kernel.org, broonie@kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org, agross@kernel.org,
-        mark.rutland@arm.com, heikki.krogerus@linux.intel.com,
-        bjorn.andersson@linaro.org
-Subject: Re: [PATCH v4 2/6] dt-bindings: usb: Add Qualcomm PMIC type C
- controller dt-binding
-Message-ID: <20200629220737.GA3027039@bogus>
-References: <20200626185516.18018-1-wcheng@codeaurora.org>
- <20200626185516.18018-3-wcheng@codeaurora.org>
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=xDmndeuf6+uwXZ1m8jycymUjCeI0m9qm4ZAV+tpUoqg=;
+        b=SRTIaQDAt2G8c/jLDMjy4gJxDjI9HqjtHDlfZ+TpfsYhYIkvjls5R5e17Uz72cSQbC
+         bJL84BVDAoDZOoi2LiokUXvbeEw1On0hZS9aZa2IsI3I4ESqIeHEUAH+of8qn7B1/WyG
+         HT0NzhOmoxXfKF/hPS/ZwPOr2G5cKYGBVqGJ85xsJQo0MZ4SW+JsK7vxvZ+9KYbGB5OV
+         CRTKvElr+6iy1QBgjpjW89tTmC2Z0uXDWVtXuouL6v/2qwVb/N6vYmi3uFqH+DQAbTbp
+         HvARRTxAi2ktXneKA9svoA3EPYlCylJJnDJ6y9LqZst2wNR/Tx113pBgawfuUcsCJQyu
+         rBjg==
+X-Gm-Message-State: AOAM530lsp0t0DB13jWjgVHMdgNI6rFCXD073tMGXzaaQtO0t0r9IZOO
+        abDSEyJ8kMj/lJtbHGBedQ8=
+X-Google-Smtp-Source: ABdhPJw6Bo4vFRwwv/fuSCRqDQFKj4SZC42yqkHiNSoyybyL4QJ4pKH13OihOF5unIFYUS8sr+jhfg==
+X-Received: by 2002:a17:90a:930f:: with SMTP id p15mr20182148pjo.85.1593473884458;
+        Mon, 29 Jun 2020 16:38:04 -0700 (PDT)
+Received: from taoren-ubuntu-R90MNF91 (c-73-252-146-110.hsd1.ca.comcast.net. [73.252.146.110])
+        by smtp.gmail.com with ESMTPSA id x69sm637205pfc.144.2020.06.29.16.38.03
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 29 Jun 2020 16:38:03 -0700 (PDT)
+Date:   Mon, 29 Jun 2020 16:37:57 -0700
+From:   Tao Ren <rentao.bupt@gmail.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>
+Subject: Re: [PATCH] usb: gadget: fix langid kernel-doc warning in usbstring.c
+Message-ID: <20200629233756.GA25245@taoren-ubuntu-R90MNF91>
+References: <b49b7e07-8986-f185-3a99-a088419a532b@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200626185516.18018-3-wcheng@codeaurora.org>
+In-Reply-To: <b49b7e07-8986-f185-3a99-a088419a532b@infradead.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 26 Jun 2020 11:55:12 -0700, Wesley Cheng wrote:
-> Introduce the dt-binding for enabling USB type C orientation and role
-> detection using the PM8150B.  The driver will be responsible for receiving
-> the interrupt at a state change on the CC lines, reading the orientation/role,
-> and communicating this information to the remote clients, which can include
-> a role switch node and a type C switch.
+On Sun, Jun 28, 2020 at 08:08:03PM -0700, Randy Dunlap wrote:
+> From: Randy Dunlap <rdunlap@infradead.org>
 > 
-> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+> Fix spelling of the 'langid' function argument in the kernel-doc
+> notation to quieten a kernel-doc warning.
+> 
+> ../drivers/usb/gadget/usbstring.c:77: warning: Function parameter or member 'langid' not described in 'usb_validate_langid'
+> ../drivers/usb/gadget/usbstring.c:77: warning: Excess function parameter 'lang' description in 'usb_validate_langid'
+> 
+> Fixes: 17309a6a4356 ("usb: gadget: add "usb_validate_langid" function")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Tao Ren <rentao.bupt@gmail.com>
+> Cc: Felipe Balbi <balbi@kernel.org>
+
+Thanks for the fix, Randy!
+
+Reviewed-by: Tao Ren <rentao.bupt@gmail.com>
+
 > ---
->  .../bindings/usb/qcom,pmic-typec.yaml         | 126 ++++++++++++++++++
->  1 file changed, 126 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/qcom,pmic-typec.yaml
+>  drivers/usb/gadget/usbstring.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-
-
-My bot found errors running 'make dt_binding_check' on your patch:
-
-Documentation/devicetree/bindings/usb/qcom,pmic-typec.example.dts:40.54-42.31: Warning (unit_address_vs_reg): /example-0/pm8150b/typec@1500/connector/ports/port@1/endpoint@0: node has a unit name, but no reg or ranges property
-Documentation/devicetree/bindings/usb/qcom,pmic-typec.example.dts:43.51-45.31: Warning (unit_address_vs_reg): /example-0/pm8150b/typec@1500/connector/ports/port@1/endpoint@1: node has a unit name, but no reg or ranges property
-
-
-See https://patchwork.ozlabs.org/patch/1317984
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure dt-schema is up to date:
-
-pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
-
-Please check and re-submit.
-
+> --- linux-next-20200626.orig/drivers/usb/gadget/usbstring.c
+> +++ linux-next-20200626/drivers/usb/gadget/usbstring.c
+> @@ -68,7 +68,7 @@ EXPORT_SYMBOL_GPL(usb_gadget_get_string)
+>  
+>  /**
+>   * usb_validate_langid - validate usb language identifiers
+> - * @lang: usb language identifier
+> + * @langid: usb language identifier
+>   *
+>   * Returns true for valid language identifier, otherwise false.
+>   */
+> 
