@@ -2,148 +2,344 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1520D20F2F6
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jun 2020 12:47:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 915C020F3AD
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jun 2020 13:39:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732619AbgF3KrW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Jun 2020 06:47:22 -0400
-Received: from mout.web.de ([212.227.15.3]:36763 "EHLO mout.web.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732510AbgF3KrU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 30 Jun 2020 06:47:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1593514025;
-        bh=bW0dU0D65jfP7kb5Hr9vfPa9nw3+9XUubQ8AWpz+DnA=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=qfVS7SLNwC/ErM638VtVhsKOnvmBPGWa7AYhZSgbZJFhDVU6RUB0YWvh6GyJUoCTA
-         596cUESPNCzZtRZN4qoV3dvBiVEwrfAtrXlatg0UoSbvB9K5V/xWrJU/343NpugHz5
-         K0gKGknLYficofLUde2ulJVoydeZadhEQsuIH8aA=
-X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.1.2] ([2.243.105.212]) by smtp.web.de (mrweb005
- [213.165.67.108]) with ESMTPSA (Nemesis) id 1Mrfou-1j55GX2eo8-00neTl; Tue, 30
- Jun 2020 12:47:05 +0200
-Subject: Re: [PATCH v2] usb: mtu3: Fix NULL pointer dereferences
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Colin Ian King <colin.king@canonical.com>
-References: <1593502942-24455-1-git-send-email-chunfeng.yun@mediatek.com>
-From:   Markus Elfring <Markus.Elfring@web.de>
-Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
- 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 FEE=
-Message-ID: <83ce087e-9da9-a8e1-8872-8520ccfc4108@web.de>
-Date:   Tue, 30 Jun 2020 12:47:03 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S1731800AbgF3LjO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Jun 2020 07:39:14 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:37270 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731382AbgF3LjN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Jun 2020 07:39:13 -0400
+Received: by mail-lj1-f195.google.com with SMTP id e4so22074264ljn.4
+        for <linux-usb@vger.kernel.org>; Tue, 30 Jun 2020 04:39:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fJ9+N4LELNuafVlzbJ2byP1QztsHNirLA67/MKJ/T0U=;
+        b=bBa0+/Pkdb19Mh6985mk3t9qm6O07UoUP+vJrkU1tqWoqKJ7bcPVGl5vv4lR9gUTHY
+         16RjZUq2WYvbS5pS+IpvNXGT3Io2p/Yvby+e6HzG4oXz4nGd7R+Ay9MhY4fZQuvkeWf9
+         Ivqf3kIGp/4uG7X9duxjA/FgWcwm1O6sL+KZ53ZqXWoPLDmIe51XZ8X80EK8ncf8ZYSt
+         qLoV5tuXZNbFKsYpXVh/vzti18aBp+LQzjdt53/XH/skLxCd/wGudR9JSak3rHn3RO+8
+         KJ1FNDxyCCP9DPZGP6clO4aUbUG20bj/+MhudyU1JMN27dwgbz5B3T/y6PUbvZgxbBO/
+         se1A==
+X-Gm-Message-State: AOAM530J50a1s/tsQ0ldA+JXUmF3muI3A3XCcx5amXS809KQkRhCMqFW
+        X5beyoHdXl5D3eF9DBD7Q+7oXupTkcU=
+X-Google-Smtp-Source: ABdhPJzxFIrJ0Mobi+vxedp6SKeh4kevhkg7B+qhfIUoJKYu4ihXUlUpSttfRgBEH0PN81zUB1FFjw==
+X-Received: by 2002:a2e:9e58:: with SMTP id g24mr7074715ljk.278.1593517150069;
+        Tue, 30 Jun 2020 04:39:10 -0700 (PDT)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id i24sm719966lfg.83.2020.06.30.04.39.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Jun 2020 04:39:09 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1jqEbS-0001Ec-TU; Tue, 30 Jun 2020 13:39:06 +0200
+Date:   Tue, 30 Jun 2020 13:39:06 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Michael Hanselmann <public@hansmi.ch>
+Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
+        Michael Dreher <michael@5dot1.de>,
+        Jonathan Olds <jontio@i4free.co.nz>
+Subject: Re: [PATCH v2 6/6] USB: serial: ch341: Simulate break condition if
+ not supported
+Message-ID: <20200630113906.GA3334@localhost>
+References: <cover.1585697281.git.public@hansmi.ch>
+ <91bacfa4097350b4731724f5820e06bc03e7e8f3.1585697281.git.public@hansmi.ch>
+ <20200514144721.GG25962@localhost>
+ <6e29707b-6774-9f25-25ac-4b4cd202a017@msgid.hansmi.ch>
 MIME-Version: 1.0
-In-Reply-To: <1593502942-24455-1-git-send-email-chunfeng.yun@mediatek.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:/rGr2Nx4vkPR57gCHYowrZOB8KWU+aTDjhBY6NYTxgX3lg6M6rf
- k3omu3Jszm19XWe4Tj558zLVMPfOZs4MaKn9V10eBpFM3ODC1tvKRDUmgjmwpEB+lQxmGFw
- iGqAWmKnOZMPjEY41s1HYcCT3T3Z4ooNAWAejF1zBxttVd2ktlDhDUjUDIBTTVFcFW/iDkH
- vioNBP6OcmbMtyLLKZh7Q==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:CQjErKL30T8=:jAQgQ5tHJAD+GSPqjruEma
- u99s4AhkkCL3I0MYUx/fDZ4kuOkzoSpZ1/zAAviTGLxAUhsXn2vkRjoRINNFcflBc4L8p2euH
- oExPWU3PoMTiPtV4xNM8IFS9vLVY4oZqMBHlKQcGuStf/9UHZRUJ33qvqcQPaVZel2EXwtol6
- bC6E6Iw79UYjJsugaR40i95NSYOkfg8fR0SapLZwi2StQoSkKDeysoqI9VhGl0uCqg2rd9Ppf
- qK+bHOprwHu8zpiJrP2Hn9qdPF1J7fHyY7Fe4YplxA3iAbkttg+eJjHetMz+KrM6SoOs+m93K
- a53/FqxziQtS85GvSq1apC9GAK9HAmD4ZKVd+OQI5X32qKUdJnxie1avd38dKIWciTvtiaFDn
- LB9owCbiGsbbbnFgpFjOvxbVBlQl6UIRa2Dc/L0KVOKakG4wXgFoBiczU1s+0VsV5xF2ecolU
- 93/XolrTRQlskm4DuC8Yo+xbNwNo2pFthrEMqSGvYN9b73xXxSvFpHW0cB4DxndyXrT5oXNsH
- e7M4kwHufd8ufUqKdjEvbn87klUt32CnaR1YCBfVDrVnUZTiFU4EbR/eQA6NSuC70/eOo0ah1
- SEIp81tPgiErpazD/so0ZeNUoEJYPZ5sCzG7+MgDmbdGJBolyvNlB+lkzSPdrsWffcey/oFoC
- 9lP+JHZSqo4gwx4/EcRDZMS5tlqgzk0Twr+WgPzmQyUUUbDYlqTcrGZy0SBTEM6eVDAICsrs7
- 8dY1pJKI6S8CFT8ku6z9tbcj4EYUIx6KVnkWzEcPWWPt2bDYE6/ZvwVM0c3/1jct0NWuSPRPI
- MA0jD47C2yKcviFPXjBpgD4SnMtt7ErUCXeJEWCXMnFKDhIT0wjnKkXWRo9oTfhARQzuRon7z
- bDi7G4zXrSoJ0DvKsNZWq95BT5VT5Fsqwfrj2kUZloTbJNHH1p4nQFgNFjUAQ3PWysA5+HAQ1
- UXOuGTNWP00B9gzmt7f1reBAdLXxDIiKG6wrHzUUvHdKWz0O/ytj76Su7GchG3vJ+Ku1BTKL/
- UsaEUYcBljVo9ikGkMjKTdEmMaXy9dOr91zJQrKOuMm+JHgyE5js7Zr4oJp0r+5HXp96/V5xN
- uvc6buOwhodzdsAILUDgWPASFJ3X6aNBSvbuxGoaxJblk04indRtEHmLwLK1V5mclaGISJ1ft
- IFHlkoZzS8mDcebl6XGNTbGNt6TTyO5S7GtCAjK5IGR/CIJi+cQ4sCXUQR8B2OljbtEyzHiQJ
- g0V69yEXyyThKkEmR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6e29707b-6774-9f25-25ac-4b4cd202a017@msgid.hansmi.ch>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> Some pointers are dereferenced before successful checks.
+On Thu, May 28, 2020 at 12:21:11AM +0200, Michael Hanselmann wrote:
+> On 14.05.20 16:47, Johan Hovold wrote:
+> > On Tue, Mar 31, 2020 at 11:37:22PM +0000, Michael Hanselmann wrote:
+> >>  static int ch341_set_baudrate_lcr(struct usb_device *dev,
+> >> -				  struct ch341_private *priv, u8 lcr)
+> >> +				  struct ch341_private *priv,
+> >> +				  unsigned baud_rate, u8 lcr)
+> > 
+> > Use speed_t.
+> 
+> Done. ch341_private.baud_rate and ch341_set_termios also use unsigned
+> though. Should those also be changed to speed_t?
 
-I propose to reconsider and improve also this change description.
+I'd just leave it for now.
 
-* Would a null pointer dereference be possible only with the variables =E2=
-=80=9Cmep=E2=80=9D
-  and =E2=80=9Cmreq=E2=80=9D in the implementation of the function =E2=80=
-=9Cmtu3_gadget_dequeue=E2=80=9D?
-  (Can it make sense to split the patch according to this detail?)
+> >> +		r = ch341_set_baudrate_lcr(port->serial->dev, priv,
+> >> +			CH341_MIN_BPS,
+> >> +			CH341_LCR_ENABLE_RX | CH341_LCR_ENABLE_TX |
+> > 
+> > Hmm. This would corrupt incoming data as well during the break.
+> 
+> Yes, there's no way to avoid that. In my opinion being able to send a
+> break signal for a serial console interrupt (SysRq) outweighs the
+> corruption. Updated the comment on ch341_simulate_break to mention
+> the caveat.
+> 
+> >> +	dev_dbg(&port->dev, "%s - Leave break state requested\n", __func__);
+> >> +
+> >> +	if (time_before(jiffies, priv->break_end)) {
+> >> +		/* Wait until NUL byte is written */
+> >> +		delay = min_t(unsigned long, HZ, priv->break_end - jiffies);
+> > 
+> > Looks like this can underflow if you're preempted after the check.
+> 
+> Moved the subtraction before the min_t macro to only evaluate it once.
 
-* How do you think about to convert any more variable initialisations
-  to later assignments?
+That's not sufficient; the problem is that jiffies may be updated after
+time_before().
 
-* Will it become helpful to add the tag =E2=80=9CFixes=E2=80=9D to the com=
-mit message?
-
-
-=E2=80=A6
+> >> +	if (priv->quirks & CH341_QUIRK_SIMULATE_BREAK) {
+> >> +		dev_warn_once(&port->dev,
+> >> +			      "%s - hardware doesn't support real break"
+> >> +			      " condition, simulating instead\n",
+> >> +			      __func__);
+> > 
+> > Don't break the string, and drop the __func__.
+> 
+> Done, also for the other error messages you pointed out.
+> 
+> Michael
+> 
 > ---
-> v2: nothing changed, but abandon another patch
-
-Are there chances to take any previous patch review comments better into a=
-ccount
-(besides the shown reduction of update steps)?
-
-
+> From 94fec46e814276491c9a027c5d3912b68deb9c55 Mon Sep 17 00:00:00 2001
+> From: Michael Hanselmann <public@hansmi.ch>
+> Date: Thu, 5 Mar 2020 01:50:35 +0100
+> Subject: [PATCH 2/2] USB: serial: ch341: Simulate break condition if not
+>  supported
+> 
+> A subset of all CH341 devices don't support a real break condition. This
+> fact is already used in the "ch341_detect_quirks" function. With this
+> change a quirk is implemented to simulate a break condition by
+> temporarily lowering the baud rate and sending a NUL byte.
+> 
+> The primary drawbacks of this approach are that the duration of the
+> break can't be controlled by userland and that data incoming during
+> a simulated break is corrupted.
+> 
+> The "TTY_DRIVER_HARDWARE_BREAK" serial driver flag was investigated as
+> an alternative. It's a driver-wide flag and would've required
+> significant changes to the serial and USB-serial driver frameworks to
+> expose it for individual USB-serial adapters.
+> 
+> Tested by sending a break condition and watching the TX pin using an
+> oscilloscope.
+> 
+> Signed-off-by: Michael Hanselmann <public@hansmi.ch>
 > ---
->  drivers/usb/mtu3/mtu3_gadget.c | 25 ++++++++++++++++++-------
+>  drivers/usb/serial/ch341.c | 105 ++++++++++++++++++++++++++++++++++---
+>  1 file changed, 97 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
+> index 202cfa4ef6c7..1e63310cfd9c 100644
+> --- a/drivers/usb/serial/ch341.c
+> +++ b/drivers/usb/serial/ch341.c
+> @@ -78,6 +78,7 @@
+>  #define CH341_LCR_CS5          0x00
+>  
+>  #define CH341_QUIRK_LIMITED_PRESCALER	BIT(0)
+> +#define CH341_QUIRK_SIMULATE_BREAK	BIT(1)
+>  
+>  static const struct usb_device_id id_table[] = {
+>  	{ USB_DEVICE(0x4348, 0x5523) },
+> @@ -94,6 +95,7 @@ struct ch341_private {
+>  	u8 msr;
+>  	u8 lcr;
+>  	unsigned long quirks;
+> +	unsigned long break_end;
+>  };
+>  
+>  static void ch341_set_termios(struct tty_struct *tty,
+> @@ -168,10 +170,9 @@ static const speed_t ch341_min_rates[] = {
+>   *		2 <= div <= 256 if fact = 0, or
+>   *		9 <= div <= 256 if fact = 1
+>   */
+> -static int ch341_get_divisor(struct ch341_private *priv)
+> +static int ch341_get_divisor(struct ch341_private *priv, speed_t speed)
+>  {
+>  	unsigned int fact, div, clk_div;
+> -	speed_t speed = priv->baud_rate;
+>  	bool force_fact0 = false;
+>  	int ps;
+>  
+> @@ -234,15 +235,16 @@ static int ch341_get_divisor(struct ch341_private *priv)
+>  }
+>  
+>  static int ch341_set_baudrate_lcr(struct usb_device *dev,
+> -				  struct ch341_private *priv, u8 lcr)
+> +				  struct ch341_private *priv,
+> +				  speed_t baud_rate, u8 lcr)
+>  {
+>  	int val;
+>  	int r;
+>  
+> -	if (!priv->baud_rate)
+> +	if (!baud_rate)
+>  		return -EINVAL;
+>  
+> -	val = ch341_get_divisor(priv);
+> +	val = ch341_get_divisor(priv, baud_rate);
+>  	if (val < 0)
+>  		return -EINVAL;
+>  
+> @@ -322,7 +324,7 @@ static int ch341_configure(struct usb_device *dev, struct ch341_private *priv)
+>  	if (r < 0)
+>  		goto out;
+>  
+> -	r = ch341_set_baudrate_lcr(dev, priv, priv->lcr);
+> +	r = ch341_set_baudrate_lcr(dev, priv, priv->baud_rate, priv->lcr);
+>  	if (r < 0)
+>  		goto out;
+>  
+> @@ -356,7 +358,7 @@ static int ch341_detect_quirks(struct usb_serial_port *port)
+>  			    CH341_REG_BREAK, 0, buffer, size, DEFAULT_TIMEOUT);
+>  	if (r == -EPIPE) {
+>  		dev_dbg(&port->dev, "break control not supported\n");
+> -		quirks = CH341_QUIRK_LIMITED_PRESCALER;
+> +		quirks = CH341_QUIRK_LIMITED_PRESCALER | CH341_QUIRK_SIMULATE_BREAK;
+>  		r = 0;
+>  		goto out;
+>  	}
+> @@ -537,7 +539,8 @@ static void ch341_set_termios(struct tty_struct *tty,
+>  	if (baud_rate) {
+>  		priv->baud_rate = baud_rate;
+>  
+> -		r = ch341_set_baudrate_lcr(port->serial->dev, priv, lcr);
+> +		r = ch341_set_baudrate_lcr(port->serial->dev, priv,
+> +					   priv->baud_rate, lcr);
+>  		if (r < 0 && old_termios) {
+>  			priv->baud_rate = tty_termios_baud_rate(old_termios);
+>  			tty_termios_copy_hw(&tty->termios, old_termios);
+> @@ -556,15 +559,101 @@ static void ch341_set_termios(struct tty_struct *tty,
+>  	ch341_set_handshake(port->serial->dev, priv->mcr);
+>  }
+>  
+> +/*
+> + * A subset of all CH34x devices don't support a real break condition and
+> + * reading CH341_REG_BREAK fails (see also ch341_detect_quirks). This function
+> + * simulates a break condition by lowering the baud rate to the minimum
+> + * supported by the hardware upon enabling the break condition and sending
+> + * a NUL byte.
+> + *
+> + * Incoming data is corrupted while the break condition is being simulated.
+> + *
+> + * Normally the duration of the break condition can be controlled individually
+> + * by userspace using TIOCSBRK and TIOCCBRK or by passing an argument to
+> + * TCSBRKP. Due to how the simulation is implemented the duration can't be
+> + * controlled. The duration is always about (1s / 46bd * 9bit) = 196ms.
+> + */
+> +static void ch341_simulate_break(struct tty_struct *tty, int break_state)
+> +{
+> +	struct usb_serial_port *port = tty->driver_data;
+> +	struct ch341_private *priv = usb_get_serial_port_data(port);
+> +	unsigned long delay;
+> +	int r;
+> +
+> +	if (break_state != 0) {
+> +		dev_dbg(&port->dev, "enter break state requested\n");
+> +
+> +		r = ch341_set_baudrate_lcr(port->serial->dev, priv,
+> +			CH341_MIN_BPS,
+> +			CH341_LCR_ENABLE_RX | CH341_LCR_ENABLE_TX |
+> +			CH341_LCR_CS8);
 
-I suggest to replace the triple dashes before this diffstat by a blank lin=
-e.
+Continuation lines should be indented at least two tabs further.
 
-Regards,
-Markus
+And let's just merge the last two lines.
+
+> +		if (r < 0) {
+> +			dev_err(&port->dev,
+> +				"failed to change baud rate to %u: %d\n",
+> +				CH341_MIN_BPS, r);
+> +			goto restore;
+> +		}
+> +
+> +		r = tty_put_char(tty, '\0');
+> +		if (r < 0) {
+> +			dev_err(&port->dev,
+> +				"failed to write NUL byte for simulated break condition: %d\n",
+> +				r);
+> +			goto restore;
+> +		}
+> +
+> +		/*
+> +		 * Compute how long transmission will take and add a bit of
+> +		 * safety margin.
+> +		 */
+
+Where's that margin?
+
+> +		priv->break_end = jiffies + (10 * HZ / CH341_MIN_BPS);
+> +
+> +		return;
+> +	}
+> +
+> +	dev_dbg(&port->dev, "leave break state requested\n");
+> +
+> +	if (time_before(jiffies, priv->break_end)) {
+> +		/*
+> +		 * Wait until NUL byte is written and limit delay to one second
+> +		 * at most.
+> +		 */
+
+So you could still be preempted here so that delay would wrap. Just
+store jiffies in a "now" temporary before the conditional?
+
+> +		delay = priv->break_end - jiffies;
+> +		delay = min_t(unsigned long, HZ, delay);
+
+And then you can skip the min_t() here.
+
+> +
+> +		dev_dbg(&port->dev,
+> +			"wait %d ms while transmitting NUL byte at %u baud\n",
+> +			jiffies_to_msecs(delay), CH341_MIN_BPS);
+> +		schedule_timeout_interruptible(delay);
+> +	}
+> +
+> +restore:
+> +	/* Restore original baud rate */
+> +	r = ch341_set_baudrate_lcr(port->serial->dev, priv, priv->baud_rate,
+> +				   priv->lcr);
+> +	if (r < 0)
+> +		dev_err(&port->dev,
+> +			"restoring original baud rate of %u failed: %d\n",
+> +			priv->baud_rate, r);
+> +}
+> +
+>  static void ch341_break_ctl(struct tty_struct *tty, int break_state)
+>  {
+>  	const uint16_t ch341_break_reg =
+>  			((uint16_t) CH341_REG_LCR << 8) | CH341_REG_BREAK;
+>  	struct usb_serial_port *port = tty->driver_data;
+> +	struct ch341_private *priv = usb_get_serial_port_data(port);
+>  	int r;
+>  	uint16_t reg_contents;
+>  	uint8_t *break_reg;
+>  
+> +	if (priv->quirks & CH341_QUIRK_SIMULATE_BREAK) {
+> +		dev_warn_once(&port->dev,
+> +			      "hardware doesn't support real break condition, simulating instead\n");
+
+This should probably be moved to probe and quirk_detect() and be a
+dev_info (e.g. consider having two of these devices in a system).
+
+> +		ch341_simulate_break(tty, break_state);
+> +		return;
+> +	}
+> +
+>  	break_reg = kmalloc(2, GFP_KERNEL);
+>  	if (!break_reg)
+>  		return;
+
+Care to respin as a v4?
+
+Johan
