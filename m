@@ -2,397 +2,299 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 543F320FC65
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jun 2020 21:00:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2C7420FDBD
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jun 2020 22:36:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727057AbgF3TAb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Jun 2020 15:00:31 -0400
-Received: from mga05.intel.com ([192.55.52.43]:57132 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726531AbgF3TAa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 30 Jun 2020 15:00:30 -0400
-IronPort-SDR: 32fFNbx8rIpnf47i37/S6JjDo1nnq5zJ3gRVcHzu2ghAMbca56Kq/5dNMLC6eZxWbZZu7iWbmL
- EQIZTRVteQQA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9668"; a="231223469"
-X-IronPort-AV: E=Sophos;i="5.75,298,1589266800"; 
-   d="scan'208,223";a="231223469"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2020 12:00:24 -0700
-IronPort-SDR: 7U+wKWYZ0sNOx9EKRrtrGmkBzQAonOXeHbCxEa1YvadqKjkZ0JdAKr3nSNVDqyDh76zZzQWHD8
- rQ/Tor57ktow==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,298,1589266800"; 
-   d="scan'208,223";a="312454015"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga008.jf.intel.com with ESMTP; 30 Jun 2020 12:00:22 -0700
-Subject: Re: ERROR Transfer event TRB DMA ptr not part of current TD ep_index
- 4 comp_code 1
-To:     Fabian Melzow <fabian.melzow@gmail.com>
-Cc:     linux-usb@vger.kernel.org
-References: <20200620211913.1535bac0@ping>
- <264e8287-b538-0798-36a6-7eafc4387a8d@linux.intel.com>
- <20200630185803.2a72c123@ping>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- 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 fiD/
-Message-ID: <f41aab00-ea04-bdd2-4174-33b2b19dc850@linux.intel.com>
-Date:   Tue, 30 Jun 2020 22:03:29 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <20200630185803.2a72c123@ping>
-Content-Type: multipart/mixed;
- boundary="------------3C74D052FCCB63EBEC5C4863"
+        id S1729105AbgF3UgL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Jun 2020 16:36:11 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:52870 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725872AbgF3UgK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Jun 2020 16:36:10 -0400
+Received: from mailhost.synopsys.com (sv1-mailhost2.synopsys.com [10.205.2.132])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 5057F40066;
+        Tue, 30 Jun 2020 20:36:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1593549370; bh=muumJeLuDadcvh2SI4/vRC2DJDK52xbkHlHlOkJUJao=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=aW3AE9ZtUGDyqbRbIZcu3OhYAkKaL8EoeRmD8zH1U667wVRyCBn/lhrQ1gJj4w5r2
+         F/RaaLqsY+3d/OL5BKGosQiPnDZMOTSs9u2RE0a/oB7oHJYl+T+2CYmKljy6YRCjCq
+         5yC4x58Tpvae2+AQIZz8NoveLcpPBl1sg52gLdCArpSsBDHllNnnw4UC57c9Gi24Cq
+         VKc2CBNYoP3gwYggnvGJBRsUnQag0i8wXfmU6dVNJDLHiAAw/LZcREWmRFZjUrHSdH
+         SX4MveHgb7SZKEsBeeLd5VsXw7bIjdDjpB9h6z6yrbMjlHdF05dE3pYHAlHQy/pxwz
+         dnt0J7kQ5YmkA==
+Received: from o365relay-in.synopsys.com (us03-o365relay3.synopsys.com [10.4.161.139])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPS id 4F168A006F;
+        Tue, 30 Jun 2020 20:36:07 +0000 (UTC)
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2172.outbound.protection.outlook.com [104.47.59.172])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "mail.protection.outlook.com", Issuer "GlobalSign Organization Validation CA - SHA256 - G3" (verified OK))
+        by o365relay-in.synopsys.com (Postfix) with ESMTPS id C6AD1800DF;
+        Tue, 30 Jun 2020 20:36:06 +0000 (UTC)
+Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=thinhn@synopsys.com
+Authentication-Results: o365relay-in.synopsys.com;
+        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="GY3rNmeo";
+        dkim-atps=neutral
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SifwWPwubqCd+NIPIPJJzysxKIuEy8hfEj2vzY6iY0LTTaH6BD/awy8MO4WJhn0OxkGzOQ2BKrHMx60TctXBLAnzzRZe6sD8TLDHmDzwke2B7/WPUqafdIhuThxrMqgIjNLrjsrktbYeUsxEbF0Az6NuqRBPx35YOiRGY2MuhGA3o9W4UbD6iaLwtki+gjhwlUqF2h55/ohriI1eWTNfY+UMJgspIIQZtqxVayEZgP9yCTya9ITa4g7KVcSXY77USc0BgakokHgw/mwM0txdmv5Xu2nxRLl/BGdqYYZ6JwPyEWEQmn4V5bmpbfq0Nj9QmqBe5fjVO2kbgL8SF4luBw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=muumJeLuDadcvh2SI4/vRC2DJDK52xbkHlHlOkJUJao=;
+ b=WZLf42l6TeLbf4S40xifAmFTtyC7hoviOjbwiIWs5gkkNJQ2+fFcRjKlQgAcbQjLZD7NbW0h/UdSwIVSI8pVFoiY3k2zOALcXwrj7gScG7T1UZZBesecb2h4N/XPKrKJG8oep+uSqiTvfyydYn23lh9g8/3vpAq/ErspC2dD3BT3G8dE7p6KBU4JdBwlgtd3V//sYEknBOn64SoOFdTTJfUC7i6gshC4vtkJbvMXNXoatXsTSdrnG6TA6rNHU/Kwk3LfTaop5Bl41gudPyTGLEfv5RsVMaeCcbtWm2B+pfFDk/zB15qVfxKAB4X4bh55dqjZCxbt7+8hmeP4Utdkug==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=muumJeLuDadcvh2SI4/vRC2DJDK52xbkHlHlOkJUJao=;
+ b=GY3rNmeo0C1F4wOxxvpAG4AC003O0lybNKfeqmPC4yaunL3x5+enR/NVFOXG+HMceuGR0ftXuON/bmVURhvtb2eD2VaL+e5sjrYSgttXQyx+wBVt9OkJtuv3YPZsQyAvSGAEmO6MIHkS+D6GWm66uiTu2/2kOClRP2UCW2YvzN0=
+Received: from BYAPR12MB2917.namprd12.prod.outlook.com (2603:10b6:a03:130::14)
+ by BYAPR12MB2680.namprd12.prod.outlook.com (2603:10b6:a03:63::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3153.20; Tue, 30 Jun
+ 2020 20:36:04 +0000
+Received: from BYAPR12MB2917.namprd12.prod.outlook.com
+ ([fe80::3844:ed8:654d:7456]) by BYAPR12MB2917.namprd12.prod.outlook.com
+ ([fe80::3844:ed8:654d:7456%5]) with mapi id 15.20.3131.027; Tue, 30 Jun 2020
+ 20:36:04 +0000
+X-SNPS-Relay: synopsys.com
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+To:     Michael Grzeschik <mgr@pengutronix.de>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        Michael Olbrich <m.olbrich@pengutronix.de>
+Subject: Re: [PATCH v3 1/2] usb: dwc3: gadget: make starting isoc transfers
+ more robust
+Thread-Topic: [PATCH v3 1/2] usb: dwc3: gadget: make starting isoc transfers
+ more robust
+Thread-Index: AQHWThhOzLrXo8ZwKEeViYgzIGbLnqjwGekAgACl2ICAAOAzgA==
+Date:   Tue, 30 Jun 2020 20:36:04 +0000
+Message-ID: <da7b953a-9a23-5f8d-91b8-58e03db4c373@synopsys.com>
+References: <20200629132206.3914-1-m.grzeschik@pengutronix.de>
+ <20200629132206.3914-2-m.grzeschik@pengutronix.de>
+ <20d3ff88-b4df-91e7-aaa6-ec05917c32ab@synopsys.com>
+ <20200630071337.GJ21325@pengutronix.de>
+In-Reply-To: <20200630071337.GJ21325@pengutronix.de>
+Accept-Language: en-US
 Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.1
+authentication-results: pengutronix.de; dkim=none (message not signed)
+ header.d=none;pengutronix.de; dmarc=none action=none
+ header.from=synopsys.com;
+x-originating-ip: [149.117.7.22]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: ec9ee344-37a2-4e2f-beb1-08d81d3535c9
+x-ms-traffictypediagnostic: BYAPR12MB2680:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <BYAPR12MB2680BF5A084489568C71BF42AA6F0@BYAPR12MB2680.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 0450A714CB
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 2CFIL17Wkdl5Og4+/eG29E2fqgoXERhTSMuzDlc0eVIc5cI2upmEgnAc6xZRHIdxXznbVb3Gu6vp2ZRZNTPfB3Y0chMiRy3eQCDiQTB0mP9/e5qSIQ4Mm8c5rMjE2XjGCDAphRfyowbH4eXn7cTujGt9omWMWlv2njpIj/qNoAXuw7CPXCEcHiPUGGyoRR0PdLK02xNJcL5o83Lhvdh5Ur2eEY0peDbJESppv4nuTkB8DRdVDcMzrPgGcbWzNP5+wQl/ljoVAyYJ/Jq6a1Ifuq5m4fob/aDKLiFouK/vYWhS/t8fdjivxiTrNgjFDpj2GTpGNKLHfjs/m8g9i9tRt8wVK8ORC7OhXhScB8sz6X/1G6uAerYigjrj5AzA7h2z
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB2917.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(346002)(136003)(376002)(39860400002)(396003)(366004)(478600001)(5660300002)(6486002)(6506007)(186003)(31696002)(36756003)(4326008)(26005)(86362001)(2616005)(6512007)(110136005)(31686004)(8936002)(66476007)(66556008)(64756008)(8676002)(66446008)(66946007)(316002)(76116006)(54906003)(83380400001)(71200400001)(2906002)(43740500002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: E6SLY/+RJKmQH+yf9Jjb5FZETiCahSxq/23cusTsAfMrlrZkTdNEq6qtgWCbd8kdVbiwmw7YpoQj/uSYJjCWAqpigvUuRyQ0x1UM7CbT+wYFFIXLD+EEQno3eKM/OBMV2W9SE44GDF+FdyttZRKEDSB1rXjfX3tZp4VpJA2XnODnpwrzZSVK0iHIDw6zUBnyEOzxGdLFVz7fEC6I+TgTA2nQbGlkVUdM82VK0uB1sIceJoMoR+8/9jMGg9m6H+ve1n0cSmisN/sGFfK4qimsD2OhTj5frOCUna5Y8Bbrcf/skw2o0mFqAqrvdY1vIIPkeyyKvqiRkGHwQKGxkP6CjjIkWnrXTWUGiJnh9+IC8VI8W9wT2Pd/2cE5FloekGALYvvef9iTCYmZ9IrsAZ6YHDCDHk9xDDtW3c/+jRewvIAe5LT55hu5BUtMypb7zjKEG+rmPWWEwdCKKnrQoFAhMPExa3YJFwMzF1sZ+bP3oLE=
+Content-Type: text/plain; charset="Windows-1252"
+Content-ID: <9887B074140C5744B0967827C8F6C5DB@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: synopsys.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB2917.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ec9ee344-37a2-4e2f-beb1-08d81d3535c9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jun 2020 20:36:04.4572
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: mnzIdHcBiA0iKB0oafpRW0oJgKJ4vj5j4HEJ3MJlZ3TQ+7unRs8AslWBOpi2Ji26LaCryf/lL1axUDrq1d1PEg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2680
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------3C74D052FCCB63EBEC5C4863
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+Hi,
 
-On 30.6.2020 19.58, Fabian Melzow wrote:
-> Hi!
-> 
-> Am Mon, 29 Jun 2020 20:47:24 +0300
-> schrieb Mathias Nyman <mathias.nyman@linux.intel.com>:
-> 
->> First issue I see is that the attempt to recover from a transaction
->> error with a soft retry isn't working. We expect the hardware to
->> retry the transfer but nothing seems to happen. Soft retry is
->> described in xhci specs 4.6.8.1 and is basically a reset endpoint
->> command with TSP set, followed by ringing the endpoint doorbell.
->> Traces indicate driver does this correctly but hardware isn't
->> retrying. We get don't get any event, no error, success or stall.
+Michael Grzeschik wrote:
+> On Mon, Jun 29, 2020 at 09:20:02PM +0000, Thinh Nguyen wrote:
+>> Hi,
 >>
->> This could be hardware flaw.
->> Any chance you could try this on a xHC from some other vendor?
-> 
-> There is no other xHC hardware available to me.
-> 
->> Second issue is a driver flaw, when nothing happened for 20 seconds
->> we see the URB is canceled. xhci driver needs to stop then endpoint
->> to cancel the URB, but there is a hw race and endpoint ends up halted
->> instead of stopped. The xhci driver can't handle a halted endpoint in
->> its stop endpoint handler properly, and the URB is never actually
->> removed from the ring.
+>> Michael Grzeschik wrote:
+>>> From: Michael Olbrich <m.olbrich@pengutronix.de>
+>>>
+>>> Currently __dwc3_gadget_start_isoc must be called very shortly after
+>>> XferNotReady. Otherwise the frame number is outdated and start transfer
+>>> will fail, even with several retries.
+>>>
+>>> DSTS provides the lower 14 bit of the frame number. Use it in=20
+>>> combination
+>>> with the frame number provided by XferNotReady to guess the current=20
+>>> frame
+>>> number. This will succeed unless more than one 14 rollover has happened
+>>> since XferNotReady.
+>>>
+>>> Start transfer might still fail if the frame number is increased
+>>> immediately after DSTS is read. So retries are still needed.
+>>> Don't drop the current request if this happens. This way it is not=20
+>>> lost and
+>>> can be used immediately to try again with the next frame number.
+>>>
+>>> With this change, __dwc3_gadget_start_isoc is still not successfully=20
+>>> in all
+>>> cases bit it increases the acceptable delay after XferNotReady
+>>> significantly.
+>>>
+>>> Signed-off-by: Michael Olbrich <m.olbrich@pengutronix.de>
+>>> Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
+>>> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+>>>
+>>> ---
+>>> v1 -> v2: - removed last_frame_number from struct
+>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 - included rollover variable
+>>> v2 -> v3: - moved the calculation before the retry loop
+>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 - skipping the calculation if bInterval =
+> 14
+>>>
+>>> =A0 drivers/usb/dwc3/gadget.c | 19 +++++++++++++++++++
+>>> =A0 1 file changed, 19 insertions(+)
+>>>
+>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>>> index 8de6f10d335e1c0..7ad85a7d06f70bf 100644
+>>> --- a/drivers/usb/dwc3/gadget.c
+>>> +++ b/drivers/usb/dwc3/gadget.c
+>>> @@ -1463,6 +1463,7 @@ static int dwc3_gadget_start_isoc_quirk(struct=20
+>>> dwc3_ep *dep)
+>>>
+>>> =A0 static int __dwc3_gadget_start_isoc(struct dwc3_ep *dep)
+>>> =A0 {
+>>> +=A0=A0=A0 const struct usb_endpoint_descriptor *desc =3D dep->endpoint=
+.desc;
+>>> =A0=A0=A0=A0=A0 struct dwc3 *dwc =3D dep->dwc;
+>>> =A0=A0=A0=A0=A0 int ret;
+>>> =A0=A0=A0=A0=A0 int i;
+>>> @@ -1480,6 +1481,24 @@ static int __dwc3_gadget_start_isoc(struct=20
+>>> dwc3_ep *dep)
+>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 return dwc3_gadget_start_isoc_q=
+uirk(dep);
+>>> =A0=A0=A0=A0=A0 }
+>>>
+>>> +=A0=A0=A0 if (desc->bInterval <=3D 14) {
+>>> +=A0=A0=A0=A0=A0=A0=A0 u32 frame =3D __dwc3_gadget_get_frame(dwc);
+>>> +=A0=A0=A0=A0=A0=A0=A0 bool rollover =3D frame < (dep->frame_number & 0=
+x3fff);
+>>> +
+>>> +=A0=A0=A0=A0=A0=A0=A0 /*
+>>> +=A0=A0=A0=A0=A0=A0=A0=A0 * frame_number is set from XferNotReady and m=
+ay be already
+>>> +=A0=A0=A0=A0=A0=A0=A0=A0 * out of date. DSTS only provides the lower 1=
+4 bit of the
+>>> +=A0=A0=A0=A0=A0=A0=A0=A0 * current frame number. So add the upper two =
+bits of
+>>> +=A0=A0=A0=A0=A0=A0=A0=A0 * frame_number and handle a possible rollover=
+.
+>>> +=A0=A0=A0=A0=A0=A0=A0=A0 * This will provide the correct frame_number =
+unless more than
+>>> +=A0=A0=A0=A0=A0=A0=A0=A0 * rollover has happened since XferNotReady.
+>>> +=A0=A0=A0=A0=A0=A0=A0=A0 */
+>>> +
+>>> +=A0=A0=A0=A0=A0=A0=A0 dep->frame_number =3D (dep->frame_number & ~0x3f=
+ff) | frame;
+>>> +=A0=A0=A0=A0=A0=A0=A0 if (rollover)
+>>> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 dep->frame_number +=3D BIT(14);
+>>> +=A0=A0=A0 }
+>>> +
+>>> =A0=A0=A0=A0=A0 for (i =3D 0; i < DWC3_ISOC_MAX_RETRIES; i++) {
+>>> =A0=A0=A0=A0=A0=A0=A0=A0=A0 dep->frame_number =3D DWC3_ALIGN_FRAME(dep,=
+ i + 1);
+>>>
 >>
->> The reason you see the IO_PAGE_FAULT is probably because once the
->> ring starts running the driver will handle the cancelled URB, and
->> touch already freed memory: AMD-Vi: Event logged [IO_PAGE_FAULT
->> domain=0x000d address=0xdc707028 flags=0x0020]
->>
->> I have a patch for this second case, I haven't upstreamed it as it
->> got some conflicting feedback earlier. It won't solve the 20 second
->> delay, but should solve the the IO_PAGE_FAULT and the "WARN Set TR
->> Deq Ptr cmd failed due to incorrect slot or ep state" message
->>
->> Can you try it out?
-> 
-> I successful applied the patch against Linux 5.7.4, but get this error when
-> compiling drivers/usb/host/xhci-ring.c:
-> 
->   CC [M]  drivers/usb/host/xhci-ring.o
-> drivers/usb/host/xhci-ring.c: In function ‘xhci_handle_cmd_stop_ep’:
-> drivers/usb/host/xhci-ring.c:857:3: error: implicit declaration of function ‘xhci_reset_halted_ep’ [-Werror=implicit-function-declaration]
->   857 |   xhci_reset_halted_ep(xhci, slot_id, ep_index, reset_type);
->       |   ^~~~~~~~~~~~~~~~~~~~
-> 
+>> I think it's cleaner to create a mask for 0x3fff, but I can see how it
+>> can arguably clearer for not using a macro also. It's fine to me=20
+>> either way.
+>
+> This mask is used on many usb controllers and
+> everyone is defining their own.
+>
+> drivers/usb/gadget/udc/mv_udc.h
+> 34:#define USB_FRINDEX_MASKS=A0=A0=A0 0x3fff
+>
+> drivers/usb/gadget/udc/fsl_usb2_udc.h
+> 116:#define=A0=A0=A0 USB_FRINDEX_MASKS=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 0=
+x3fff
+>
+>
+> Even other drivers using the mask without defining it:
+>
+> drivers/usb/misc/ftdi-elan.c
+> 2224:=A0=A0=A0 hc_fminterval &=3D 0x3fff;
+> 2313:=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 ((9 *hc_fmint=
+erval) / 10) & 0x3fff);
+>
+> drivers/usb/chipidea/udc.c
+> 1634:=A0=A0=A0 ret =3D hw_read(ci, OP_FRINDEX, 0x3fff);
+>
+> drivers/usb/dwc3/gadget.c
+> 1406:=A0=A0=A0=A0=A0=A0=A0 test_frame_number =3D dep->frame_number & 0x3f=
+ff;
+> 1453:=A0=A0=A0 dep->frame_number &=3D 0x3fff;
+>
+> drivers/usb/host/ohci-hcd.c
+> 557:=A0=A0=A0=A0=A0=A0=A0 ohci->fminterval =3D val & 0x3fff;
+>
+> drivers/usb/host/xhci-ring.c
+> 3980:=A0=A0=A0 start_frame &=3D 0x3fff;
+>
+> drivers/usb/host/ohci-dbg.c
+> 635:=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 rdata & 0x3fff);
+> 641:=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 rdata & 0x3fff);
+> 647:=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 rdata & 0x3fff);
+>
+> drivers/usb/host/u132-hcd.c
+> 1535:=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 ((9 * fi) / 10) & 0x3fff);
+> 1605:=A0=A0=A0=A0=A0=A0=A0 u132->hc_fminterval =3D temp & 0x3fff;
+>
+> drivers/usb/host/ohci.h
+> 701:=A0=A0=A0 ohci_writel (ohci, ((9 * fi) / 10) & 0x3fff,
+>
+> I could write a patch changing them all or at least
+> make a common gadget define.
+>
+> What could be a common place for that?
+>
+> On device level only it could be include/linux/usb/gadget.h
+> On whole usb level this could be include/uapi/linux/usb/ch9.h
+>
+> Ideas?
+>
 
-Right, forgot that you need another patch before this.
+It maybe common for usb controllers to report frame number as a 14-bit=20
+value (probably because of SOF/ITP packet format). But different=20
+controller may behave differently here. For DWC3 controller, this is=20
+read from the DSTS register, and it doesn't have to follow any standard.=20
+Only DWC3 driver knows the format (e.g., if the device is full-speed,=20
+DSTS.SOFFN is only valid as a 10 bit frame number and not uframe). So,=20
+we shouldn't create a common mask for all controllers.
 
-both patches attached, also applied to 5.8-rc1 in branch "fix_invalid_context_at_stop_endpoint"
-git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git fix_invalid_context_at_stop_endpoint
+Talking about full speed, you should also ignore this calculation if the=20
+device is in full-speed. Please make a fix in v4.
 
--Mathias
+With full-speed, there should be plenty of time for the system to handle=20
+XferNotReady since it's in frame and not uframe (with retry still apply=20
+of course).
 
-
---------------3C74D052FCCB63EBEC5C4863
-Content-Type: text/x-patch;
- name="0001-xhci-crete-xhci_reset_halted_ep-helper-function.patch"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment;
- filename*0="0001-xhci-crete-xhci_reset_halted_ep-helper-function.patch"
-
-=46rom ddb2004cb51fcf5acd668590c56fbf571ca66071 Mon Sep 17 00:00:00 2001
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-Date: Tue, 17 Dec 2019 14:03:34 +0200
-Subject: [PATCH 1/2] xhci: crete xhci_reset_halted_ep() helper function
-
-Create a separate helper function to only issue reset endpont
-commands to clear halted endpoints.
-
-This will be useful for cases where the a halted endpoint is discovered
-while completing some other command, and needs to be cleared before
-continuing.
-
-No functional changes
-
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/host/xhci-ring.c | 30 ++++++++++++++++++++++++------
- 1 file changed, 24 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 2c255d0620b0..5c223e92b8db 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -708,6 +708,26 @@ static void xhci_unmap_td_bounce_buffer(struct xhci_=
-hcd *xhci,
- 	seg->bounce_offs =3D 0;
- }
-=20
-+static int xhci_reset_halted_ep(struct xhci_hcd *xhci, unsigned int slot=
-_id,
-+				unsigned int ep_index, enum xhci_ep_reset_type reset_type)
-+{
-+	struct xhci_command *command;
-+	int ret =3D 0;
-+
-+	command =3D xhci_alloc_command(xhci, false, GFP_ATOMIC);
-+	if (!command) {
-+		ret =3D -ENOMEM;
-+		goto done;
-+	}
-+
-+	ret =3D xhci_queue_reset_ep(xhci, command, slot_id, ep_index, reset_typ=
-e);
-+done:
-+	if (ret)
-+		xhci_err(xhci, "ERROR queuing reset endpoint for slot %d ep_index %d, =
-%d\n",
-+			 slot_id, ep_index, ret);
-+	return ret;
-+}
-+
- /*
-  * When we get a command completion for a Stop Endpoint Command, we need=
- to
-  * unlink any cancelled TDs from the ring.  There are two ways to do tha=
-t:
-@@ -1855,7 +1875,7 @@ static void xhci_cleanup_halted_endpoint(struct xhc=
-i_hcd *xhci,
- 		enum xhci_ep_reset_type reset_type)
- {
- 	struct xhci_virt_ep *ep =3D &xhci->devs[slot_id]->eps[ep_index];
--	struct xhci_command *command;
-+	int err;
-=20
- 	/*
- 	 * Avoid resetting endpoint if link is inactive. Can cause host hang.
-@@ -1864,13 +1884,11 @@ static void xhci_cleanup_halted_endpoint(struct x=
-hci_hcd *xhci,
- 	if (xhci->devs[slot_id]->flags & VDEV_PORT_ERROR)
- 		return;
-=20
--	command =3D xhci_alloc_command(xhci, false, GFP_ATOMIC);
--	if (!command)
--		return;
--
- 	ep->ep_state |=3D EP_HALTED;
-=20
--	xhci_queue_reset_ep(xhci, command, slot_id, ep_index, reset_type);
-+	err =3D xhci_reset_halted_ep(xhci, slot_id, ep_index, reset_type);
-+	if (err)
-+		return;
-=20
- 	if (reset_type =3D=3D EP_HARD_RESET) {
- 		ep->ep_state |=3D EP_HARD_CLEAR_TOGGLE;
---=20
-2.17.1
-
-
---------------3C74D052FCCB63EBEC5C4863
-Content-Type: text/x-patch;
- name="0002-xhci-fix-halted-endpoint-at-stop-endpoint-command-co.patch"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment;
- filename*0="0002-xhci-fix-halted-endpoint-at-stop-endpoint-command-co.pa";
- filename*1="tch"
-
-=46rom 9483b48fd7167358d76d86d48790df4301ec7b43 Mon Sep 17 00:00:00 2001
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-Date: Tue, 7 Jan 2020 16:12:17 +0200
-Subject: [PATCH 2/2] xhci: fix halted endpoint at stop endpoint command
- completion
-
-xhci 4.6.9: A Busy endpoint may asynchronously transition from the
-Running to the Halted or Error state due to error conditions detected
-while processing TRBs. A possible race condition may occur if software,
-thinking an endpoint is in the Running state, issues a Stop Endpoint
-Command however at the same time the xHC asynchronously transitions
-the endpoint to the Halted or Error state. In this case, a Context
-State Error may be generated for the command completion. Software
-may verify that this case occurred by inspecting the EP State for
-Halted or Error when a Stop Endpoint Command results in a Context
-State Error.
-
-Fix this case by resetting the halted endpoint after cleaning
-up the calcelled trbs from the ring.
-If the TRB we halted on was cancelled then queue a new set TR dequeue
-pointer command as usually.
-If it wasn't cancelled then move past it with a set TR dequeue pointer
-and give it back with -EPIPE status as in a normal halted endpoint case.
-
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/host/xhci-ring.c | 56 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
-
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 5c223e92b8db..ceb3fac3f1c9 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -745,11 +745,13 @@ static void xhci_handle_cmd_stop_ep(struct xhci_hcd=
- *xhci, int slot_id,
- 	struct xhci_ring *ep_ring;
- 	struct xhci_virt_ep *ep;
- 	struct xhci_td *cur_td =3D NULL;
-+	struct xhci_td *halted_td =3D NULL;
- 	struct xhci_td *last_unlinked_td;
- 	struct xhci_ep_ctx *ep_ctx;
- 	struct xhci_virt_device *vdev;
- 	u64 hw_deq;
- 	struct xhci_dequeue_state deq_state;
-+	u32 comp_code;
-=20
- 	if (unlikely(TRB_TO_SUSPEND_PORT(le32_to_cpu(trb->generic.field[3])))) =
-{
- 		if (!xhci->devs[slot_id])
-@@ -764,9 +766,19 @@ static void xhci_handle_cmd_stop_ep(struct xhci_hcd =
-*xhci, int slot_id,
-=20
- 	vdev =3D xhci->devs[slot_id];
- 	ep_ctx =3D xhci_get_ep_ctx(xhci, vdev->out_ctx, ep_index);
-+
- 	trace_xhci_handle_cmd_stop_ep(ep_ctx);
-=20
- 	ep =3D &xhci->devs[slot_id]->eps[ep_index];
-+	comp_code =3D GET_COMP_CODE(le32_to_cpu(event->status));
-+
-+	if (comp_code =3D=3D COMP_CONTEXT_STATE_ERROR) {
-+		/* endpoint is halted and needs to be reset */
-+		if (GET_EP_CTX_STATE(ep_ctx) =3D=3D EP_STATE_HALTED) {
-+			ep->ep_state |=3D EP_HALTED;
-+		}
-+	}
-+
- 	last_unlinked_td =3D list_last_entry(&ep->cancelled_td_list,
- 			struct xhci_td, cancelled_td_list);
-=20
-@@ -833,16 +845,60 @@ static void xhci_handle_cmd_stop_ep(struct xhci_hcd=
- *xhci, int slot_id,
-=20
- 	xhci_stop_watchdog_timer_in_irq(xhci, ep);
-=20
-+	/*
-+	 * If stop endpoint command raced with a halting endpoint we need to
-+	 * reset the endpoint first. If the TD we halted on isn't cancelled we
-+	 * must give it back with -EPIPE status, and move ring dequeue past it.=
-
-+	 * If we can't find hw_deq, or the TD we halted on, do a soft reset
-+	 */
-+	   /* FIXME, is there a risk EP_HALTED is set from other cases */
-+	if (ep->ep_state & EP_HALTED) {
-+		enum xhci_ep_reset_type reset_type =3D EP_SOFT_RESET;
-+		struct xhci_td *td;
-+
-+		if (deq_state.new_deq_ptr && deq_state.new_deq_seg) {
-+			reset_type =3D EP_HARD_RESET;
-+		} else if (ep->ep_state & EP_HAS_STREAMS) {
-+			/* soft reset, nothing else */
-+		} else if (!list_empty(&ep->ring->td_list)) {
-+			hw_deq =3D xhci_get_hw_deq(xhci, vdev, ep_index, 0);
-+			hw_deq &=3D ~0xf;
-+			td =3D list_first_entry(&ep->ring->td_list,
-+						     struct xhci_td, td_list);
-+			if (trb_in_td(xhci, td->start_seg, td->first_trb,
-+				      td->last_trb, hw_deq, false)) {
-+				halted_td =3D td;
-+				reset_type =3D EP_HARD_RESET;
-+				xhci_find_new_dequeue_state(xhci, slot_id,
-+							    ep_index, 0, td,
-+							    &deq_state);
-+			}
-+		}
-+		xhci_reset_halted_ep(xhci, slot_id, ep_index, reset_type);
-+		/* FIXME xhci_clear_hub_tt_buffer(xhci, td, ep); */
-+	}
-+
- 	/* If necessary, queue a Set Transfer Ring Dequeue Pointer command */
- 	if (deq_state.new_deq_ptr && deq_state.new_deq_seg) {
- 		xhci_queue_new_dequeue_state(xhci, slot_id, ep_index,
- 					     &deq_state);
- 		xhci_ring_cmd_db(xhci);
-+	} else if (ep->ep_state & EP_HALTED) {
-+		xhci_ring_cmd_db(xhci); /* for endpoint soft reset command */
- 	} else {
- 		/* Otherwise ring the doorbell(s) to restart queued transfers */
- 		ring_doorbell_for_active_rings(xhci, slot_id, ep_index);
- 	}
-=20
-+	/* If TD we halted on wasn't cancelled give it back with -EPIPE */
-+	if (halted_td) {
-+		xhci_unmap_td_bounce_buffer(xhci, ep->ring, halted_td);
-+		list_del_init(&halted_td->td_list);
-+		inc_td_cnt(halted_td->urb);
-+		if (last_td_in_urb(halted_td))
-+			xhci_giveback_urb_in_irq(xhci, halted_td, -EPIPE);
-+	}
-+
- 	/*
- 	 * Drop the lock and complete the URBs in the cancelled TD list.
- 	 * New TDs to be cancelled might be added to the end of the list before=
-
---=20
-2.17.1
-
-
---------------3C74D052FCCB63EBEC5C4863--
+BR,
+Thinh
