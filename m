@@ -2,93 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B2DA20F477
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jun 2020 14:21:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A4C520F48C
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jun 2020 14:25:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732863AbgF3MVT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Jun 2020 08:21:19 -0400
-Received: from mga11.intel.com ([192.55.52.93]:41080 "EHLO mga11.intel.com"
+        id S1732866AbgF3MZC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Jun 2020 08:25:02 -0400
+Received: from mga06.intel.com ([134.134.136.31]:39865 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732803AbgF3MVS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 30 Jun 2020 08:21:18 -0400
-IronPort-SDR: UDMLQgg5MLC036FgGaiamcz6HSN3svZD4rXnm3C8+k1BOLE+HO4kVi6WP++fKezuMhI47XpUdo
- RqgBJvolVQwQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9666"; a="144397006"
+        id S1731651AbgF3MZC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 30 Jun 2020 08:25:02 -0400
+IronPort-SDR: 7JjOTQOInBILvkUhuLBAFhA39Zw6Nsexnmqvu7VlU5i4hqoQXXdBTiU/gvQEK6B5457sdzXI4o
+ ewZbhfVeb4pw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9666"; a="207730688"
 X-IronPort-AV: E=Sophos;i="5.75,297,1589266800"; 
-   d="scan'208";a="144397006"
+   d="scan'208";a="207730688"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2020 05:21:17 -0700
-IronPort-SDR: oHlhPHoPkxqVdRRYhCjTIJ2uisb2flhequ53SiSzRt+7GIVWORYdcAf1mZ2QQ0lY9mL6lVj0++
- okCrwEcL4mig==
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2020 05:25:01 -0700
+IronPort-SDR: 2pOfn8zxqd0SOwrf4yXuAjiDFN32EO2X9G7+8ggTtXMFJAPrr1DzrG6rt874iAxQ4/we6aiD/q
+ dB2Xuc9sxhMQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,297,1589266800"; 
-   d="scan'208";a="386682562"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga001.fm.intel.com with SMTP; 30 Jun 2020 05:21:14 -0700
-Received: by lahna (sSMTP sendmail emulation); Tue, 30 Jun 2020 15:21:13 +0300
-Date:   Tue, 30 Jun 2020 15:21:13 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Kranthi Kuntala <kranthi.kuntala@intel.com>,
-        Rajmohan Mani <rajmohan.mani@intel.com>,
-        Mario.Limonciello@dell.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lukas Wunner <lukas@wunner.de>
-Subject: Re: [PATCH 0/6] thunderbolt: Add retimer NVM upgrade support
-Message-ID: <20200630122113.GQ5180@lahna.fi.intel.com>
-References: <20200616135617.85752-1-mika.westerberg@linux.intel.com>
+   d="scan'208";a="386683135"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 30 Jun 2020 05:25:00 -0700
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [PATCH] usb: dwc3: pci: add support for the Intel Jasper Lake
+Date:   Tue, 30 Jun 2020 15:24:59 +0300
+Message-Id: <20200630122459.81733-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200616135617.85752-1-mika.westerberg@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 16, 2020 at 04:56:11PM +0300, Mika Westerberg wrote:
-> Hi all,
-> 
-> USB4 added standard means for accessing retimers on the link. This access
-> is done through the side-band channel (two side-band wires in Type-C
-> cable). The retimer specification is part of USB4 spec and can be
-> downloaded here:
-> 
->   https://www.usb.org/sites/default/files/USB4%20Specification_5.zip
-> 
-> On-board retimers are represented as devices and added under the router
-> they belong to with names like <device>:<port>.<index>. We re-use some of
-> the current NVM upgrade code for routers for retimers as well. Also we only
-> expose these when software connection manager is used. It is not clear if
-> firmware connection manager is going to support this (and what kind of
-> messaging it needs).
-> 
-> The user-space interface is the same we have for routers so that should
-> allow code re-use for tools such as fwupd.
-> 
-> Currently only Intel NVM format is supported but this will be relaxed once
-> we learn format of other vendors.
-> 
-> This series applies on top of the tunneling improvements series here:
-> 
->   https://lore.kernel.org/linux-usb/20200615142645.56209-1-mika.westerberg@linux.intel.com/
-> 
-> Kranthi Kuntala (1):
->   thunderbolt: Add support for on-board retimers
-> 
-> Mika Westerberg (4):
->   thunderbolt: Add Intel USB-IF ID to the NVM upgrade supported list
->   thunderbolt: Split common NVM functionality into a separate file
->   thunderbolt: Generalize usb4_switch_do_[read|write]_data()
->   thunderbolt: Retry USB4 block read operation
-> 
-> Rajmohan Mani (1):
->   thunderbolt: Implement USB4 port sideband operations for retimer access
+This patch adds the necessary PCI ID for Intel Jasper Lake
+devices.
 
-Queued for v5.9.
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+---
+ drivers/usb/dwc3/dwc3-pci.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
+index 47b7e83d90626..139474c3e77b1 100644
+--- a/drivers/usb/dwc3/dwc3-pci.c
++++ b/drivers/usb/dwc3/dwc3-pci.c
+@@ -39,6 +39,7 @@
+ #define PCI_DEVICE_ID_INTEL_EHLLP		0x4b7e
+ #define PCI_DEVICE_ID_INTEL_TGPLP		0xa0ee
+ #define PCI_DEVICE_ID_INTEL_TGPH		0x43ee
++#define PCI_DEVICE_ID_INTEL_JSP			0x4dee
+ 
+ #define PCI_INTEL_BXT_DSM_GUID		"732b85d5-b7a7-4a1b-9ba0-4bbd00ffd511"
+ #define PCI_INTEL_BXT_FUNC_PMU_PWR	4
+@@ -362,6 +363,9 @@ static const struct pci_device_id dwc3_pci_id_table[] = {
+ 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_TGPH),
+ 	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
+ 
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_JSP),
++	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
++
+ 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_NL_USB),
+ 	  (kernel_ulong_t) &dwc3_pci_amd_properties, },
+ 	{  }	/* Terminating Entry */
+-- 
+2.27.0
+
