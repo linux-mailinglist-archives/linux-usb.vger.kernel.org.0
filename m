@@ -2,48 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BB1C20F70E
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jun 2020 16:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B9DF20F72F
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jun 2020 16:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388831AbgF3OYK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Jun 2020 10:24:10 -0400
-Received: from mga11.intel.com ([192.55.52.93]:53758 "EHLO mga11.intel.com"
+        id S2388959AbgF3O2X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Jun 2020 10:28:23 -0400
+Received: from mga12.intel.com ([192.55.52.136]:43334 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726796AbgF3OYI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 30 Jun 2020 10:24:08 -0400
-IronPort-SDR: pOq4pq8/CYklsXybLSyFmlJqXXqLl5d8e4+i7qFc2FJcoIQtgMdBUD4/KlHiLmwikIChAKWh3X
- kwZ4hAXwPJ/A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9666"; a="144419399"
+        id S2388830AbgF3O2W (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 30 Jun 2020 10:28:22 -0400
+IronPort-SDR: oEXIa0yuHXVKasftCNfTFZ5qpMTHrHNzjDy6a95ea5eMI6qSpdCZGTQFnFcr6OjDKzWRteCXsP
+ v1+6cLvb4EEg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9666"; a="125879733"
 X-IronPort-AV: E=Sophos;i="5.75,297,1589266800"; 
-   d="scan'208";a="144419399"
+   d="scan'208";a="125879733"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2020 07:24:06 -0700
-IronPort-SDR: sQESveKzFayyMS5hcTi1zub1Bu4kAspDUDRNxWD3JP3oW0JK6SP/Y1wfLDxmHpEArOYo9KBr0q
- p9b2aAx22mkw==
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2020 07:28:22 -0700
+IronPort-SDR: DiUkHxYp5vLUZI3vrieeMntI/HQf/d/c7I0BaeJTj3UN4eaUHzbwZX28RuajZbArD8Jg7aUOcT
+ 3PNpHOYYHAmw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,297,1589266800"; 
-   d="scan'208";a="312379155"
+   d="scan'208";a="312380211"
 Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga008.jf.intel.com with ESMTP; 30 Jun 2020 07:24:03 -0700
-Subject: Re: XHCI vs PCM2903B/PCM2904 part 2
-To:     Rik van Riel <riel@surriel.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb <linux-usb@vger.kernel.org>, alsa-devel@alsa-project.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+  by orsmga008.jf.intel.com with ESMTP; 30 Jun 2020 07:28:20 -0700
+Subject: Re: [PATCH] xhci: Make debug message consistent with bus and port
+ number
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-References: <273cc1c074cc4a4058f31afe487fb233f5cf0351.camel@surriel.com>
- <20200520163840.GA11084@rowland.harvard.edu>
- <667d8d156fa5d8420ef1c3b1d08b94a10d2398cc.camel@surriel.com>
- <20200520203417.GA23602@rowland.harvard.edu>
- <d75c3a3cda51149a054838652243de2b8ac20854.camel@surriel.com>
- <059878e7-75b8-e033-ec9f-7e6b73df8f78@linux.intel.com>
- <b98bfefc2911e5265b6c28d9730a18e7953b847c.camel@surriel.com>
- <6917929c7dd7786b5b673743ce45bbcd56e6b1f1.camel@surriel.com>
- <90D456E4-328F-49F7-99C4-D729E38FA04E@surriel.com>
+        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20200507061755.13280-1-kai.heng.feng@canonical.com>
+ <20200507064510.GA787064@kroah.com>
+ <C4A734C8-D1C6-45BC-9C0A-92364EAEE3C0@canonical.com>
+ <20200507073119.GA876666@kroah.com>
+ <90D5B23E-B037-49D2-BD44-7F9B0B2FC155@canonical.com>
+ <20200507082149.GE1024567@kroah.com>
+ <938b0ce5-cb56-a356-dec8-3a6adc502752@linux.intel.com>
+ <E6AD21DC-A086-44B9-98F5-7FB320E9B457@canonical.com>
+ <dd75ab92-cb02-4a7d-0a03-f105878f71cd@linux.intel.com>
+ <2542B92A-9E0B-4907-BF29-EA244597CC7B@canonical.com>
 From:   Mathias Nyman <mathias.nyman@linux.intel.com>
 Openpgp: preference=signencrypt
 Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
@@ -88,54 +88,28 @@ Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
  Gjynb3sXforM/GVbr4mnuxTdLXQYlj2EJ4O4f0tkLlADT7podzKSlSuZsLi2D+ohKxtP3U/r
  42i8PBnX2oAV0UIkYk7Oel/3hr0+BP666SnTls9RJuoXc7R5XQVsomqXID6GmjwFQR5Wh/RE
  IJtkiDAsk37cfZ9d1kZ2gCQryTV9lmflSOB6AFZkOLuEVSC5qW8M/s6IGDfYXN12YJaZPptJ fiD/
-Message-ID: <4a463fe0-f1af-a0f9-af2e-e36c060e8105@linux.intel.com>
-Date:   Tue, 30 Jun 2020 17:27:10 +0300
+Message-ID: <b2bb44c1-d52a-166e-a82a-6c7fd814f563@linux.intel.com>
+Date:   Tue, 30 Jun 2020 17:31:26 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <90D456E4-328F-49F7-99C4-D729E38FA04E@surriel.com>
+In-Reply-To: <2542B92A-9E0B-4907-BF29-EA244597CC7B@canonical.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 30.6.2020 16.08, Rik van Riel wrote:
-> I misread the code, it's not a bitfield, so state 1 means an endpoint marked with running state. The next urb is never getting a response, though.
+On 30.6.2020 14.46, Kai-Heng Feng wrote:
 > 
-> However, the xhci spec says an endpoint is halted upon a babble error.
-
-I was looking at the same, so according to specs this state shouldn't be possible. 
-
+>>
+>> Added to my for-usb-next branch, (which I'll need to rebase on 5.8-rc1 once released)
 > 
-> The code right above the babble handling case adds halted into the endpoint state itself. Does the code handling the babble error need to do something similar to trigger cleanup elsewhere? 
+> Hmm, not seeing this patch from mainline, next or xhci tree..
+> 
 
-It's a flag to prevent ringing the doorbell for a halted endpoint.
-Anyway, reset endpoint is meant to recover an endpoint in a halted state.
-Resetting non-halted endpoints will just lead to a context state error, and
-besides, isoc endpoints shouldn't halt.
-
-Anyways, I haven't got any better idea at the moment.
-You can try and see what a forced reset does with:
-
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 2c255d0620b0..d79aca0df6d4 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -1900,8 +1900,7 @@ static int xhci_requires_manual_halt_cleanup(struct xhci_hcd *xhci,
-                 * endpoint anyway.  Check if a babble halted the
-                 * endpoint.
-                 */
--               if (GET_EP_CTX_STATE(ep_ctx) == EP_STATE_HALTED)
--                       return 1;
-+               return 1;
- 
-        return 0;
- }
-
-Traces also showed thet endpoint doorbell was rang after th babble error, so
-we know that didn't help restarting the endpoint.
+Apparently I never pushed it to kernel.org, now it should be in my for-usb-next branch
 
 -Mathias
