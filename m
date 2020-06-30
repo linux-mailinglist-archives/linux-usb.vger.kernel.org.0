@@ -2,92 +2,185 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DB2020EFB7
-	for <lists+linux-usb@lfdr.de>; Tue, 30 Jun 2020 09:43:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7834D20F064
+	for <lists+linux-usb@lfdr.de>; Tue, 30 Jun 2020 10:20:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731159AbgF3HnI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Jun 2020 03:43:08 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:3025 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1731148AbgF3HnI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Jun 2020 03:43:08 -0400
-X-UUID: 204592bd81da417395f4e1d8f98ebfbf-20200630
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=UdlqnIpqX91+qcJu2d7pulF4nEY7A/HDqmQfaO6yNK4=;
-        b=QvcLyBiHAc7o4RfjtJxOqKNe3OW7yML7zkp1ea/tBGkaQ9mFcmwI5dBhOF6HY5Kj4xz9iduxPaNEbbjqCA07CNZy6CkOMa7PS/6u+Vu27inL0ab7hNhDN+1uGx5/fU/pYANHg2gSLUxJBqFSNpmBfQxJ+AKxFUfzcsUomtl6JQs=;
-X-UUID: 204592bd81da417395f4e1d8f98ebfbf-20200630
-Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 1196866331; Tue, 30 Jun 2020 15:43:00 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- MTKMBS31DR.mediatek.inc (172.27.6.102) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 30 Jun 2020 15:42:58 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 30 Jun 2020 15:42:58 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Markus Elfring <Markus.Elfring@web.de>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [V2 PATCH] usb: mtu3: fix NULL pointer dereference
-Date:   Tue, 30 Jun 2020 15:42:22 +0800
-Message-ID: <1593502942-24455-1-git-send-email-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 1.8.1.1.dirty
+        id S1731372AbgF3IUd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Jun 2020 04:20:33 -0400
+Received: from mx0a-0014ca01.pphosted.com ([208.84.65.235]:37706 "EHLO
+        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727919AbgF3IUa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Jun 2020 04:20:30 -0400
+Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
+        by mx0a-0014ca01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05U8H1nK018416;
+        Tue, 30 Jun 2020 01:19:34 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=proofpoint;
+ bh=SNQC+xgsW4mZIXXqZCx1wLjkiVPDuvcjUKTHNqkx3Nw=;
+ b=kCIegd/QEAQQ5rCtZjBOy5W9GsKpMKotVN0HyjjOHgskeWfjgVMXzf15y7cVZBXhLyQm
+ KgP0Zn2Ofhe2c32hCtX0XnHtDemOatstfWF7s0TtyStfJ03SeqkFRKEpx3+CrilFx8i/
+ YHaBB8f7fSOnfg3uOIecru5OlPApd0Iqkd9pE3X8DTECNrrEikLBRBubHbeRj2AROSPh
+ 8gr78LVQJZnJxVLA8lVLyjMcEP78N70mt+rcTilDiZuOb78+ftCbhq3H5IYBmklop5Ey
+ CqirN9cEKZ3VDgDx2VFD+g3N2689I1DwfwF+zozLAkk/PnoxGgUXlpf2kMQVCGYz83PI eA== 
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2174.outbound.protection.outlook.com [104.47.58.174])
+        by mx0a-0014ca01.pphosted.com with ESMTP id 31x2nxsecv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Jun 2020 01:19:34 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=az975eDY0IBpVHHuN6Kl971tC5Gui+/7km0nlYy4uW/mBr22wK7jXA+y79ef8WHtiq6fbQh6RCLofBaUxGmDQtnQYggUGjxQbtN4K+hXn0tZX/fomgSHMRJ7LAxHRogFQfXK0UbI2iqruXjV/42L2x2D8HfUonq7ci9Pgeed3tONFYafsoL+pW7wMZ357V9uemuPbl/rOnIKCuNeZq7KxkNfhGYKv4Ms9gdsA/lNH16o/sdvHAS3oyn+elLA7+/bmU0kYnE7Afab7z1eyPwbovu9RBh9Yi6oiH9Az4sgO28EDscFc5F5Y8OBCBhMwgfRpIjtBxm3bnetUE1mBpGujw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SNQC+xgsW4mZIXXqZCx1wLjkiVPDuvcjUKTHNqkx3Nw=;
+ b=MW8jLJ6xgpWZ+tk38v/IXzs4LpIElDg+IcHxzqpPc0x8szFvBDeCbJ/6HrFa6cAIffPsPH9I24mHuY8HunOB2qMdpb8cteAB82FyCdnsG3G46/7qaDNMlTtco/gvYFf/BysoryQnPUeJHl79wgWMqsGatLdChn/cAZWQfzpMF7d8xBUSyZhvQl3dVFJxoAFYoybOg2JjfY1UgjovnSAjktGqj1508U49QBywydygypep/6ucGOGR4AOoTJyfVVX7zTXx0yJKTUPRhSHJvscz9rpWRID1oKEr06XLIg+6f/rVlFg0FxeS6WPz+MoedVT2wJJ7sa4u05idxGgCqq8lMg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
+ dkim=pass header.d=cadence.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SNQC+xgsW4mZIXXqZCx1wLjkiVPDuvcjUKTHNqkx3Nw=;
+ b=mhN7s0/bk7BXFje8/ePHEKbmspf74hJ5JEBwfXSDZj+qaDkoc8jziIpjqwkiPEcIzZqXrxpcusNgYfDd9V09N9yvhNcVfrieYSYL3uFUsVXFFuS0+h0wUMTfgS/T/05jB8LLpNoY7o9WY0olCepBnYRbH1Jsgk6nMh9CE9BKK/M=
+Received: from DM6PR07MB5529.namprd07.prod.outlook.com (2603:10b6:5:7a::30) by
+ DM6PR07MB5833.namprd07.prod.outlook.com (2603:10b6:5:15d::10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3131.21; Tue, 30 Jun 2020 08:19:31 +0000
+Received: from DM6PR07MB5529.namprd07.prod.outlook.com
+ ([fe80::f447:6767:a746:9699]) by DM6PR07MB5529.namprd07.prod.outlook.com
+ ([fe80::f447:6767:a746:9699%7]) with mapi id 15.20.3131.027; Tue, 30 Jun 2020
+ 08:19:31 +0000
+From:   Pawel Laszczak <pawell@cadence.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "ben.dooks@codethink.co.uk" <ben.dooks@codethink.co.uk>,
+        Jayshri Dajiram Pawar <jpawar@cadence.com>,
+        Sanket Parmar <sparmar@cadence.com>,
+        "weiyongjun1@huawei.com" <weiyongjun1@huawei.com>,
+        "rogerq@ti.com" <rogerq@ti.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "colin.king@canonical.com" <colin.king@canonical.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        Rahul Kumar <kurahul@cadence.com>,
+        "peter.chen@nxp.com" <peter.chen@nxp.com>
+Subject: RE: [PATCH RFC 1/5] dt-bindings: add binding for CDNSP-DRD controller
+Thread-Topic: [PATCH RFC 1/5] dt-bindings: add binding for CDNSP-DRD
+ controller
+Thread-Index: AQHWS3YaUXR5UoRWjU+yxJTU8QCwxqjwK00AgACovcA=
+Date:   Tue, 30 Jun 2020 08:19:31 +0000
+Message-ID: <DM6PR07MB5529615EED6E4A4322481383DD6F0@DM6PR07MB5529.namprd07.prod.outlook.com>
+References: <20200626045450.10205-1-pawell@cadence.com>
+ <20200626045450.10205-2-pawell@cadence.com> <20200629220326.GA3017609@bogus>
+In-Reply-To: <20200629220326.GA3017609@bogus>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccGF3ZWxsXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctNmE3NDA3NmQtYmFhYS0xMWVhLTg3NjctMWM0ZDcwMWRmYmE0XGFtZS10ZXN0XDZhNzQwNzZlLWJhYWEtMTFlYS04NzY3LTFjNGQ3MDFkZmJhNGJvZHkudHh0IiBzej0iMjA0OCIgdD0iMTMyMzc5Nzg3NjkyMTU1MDk2IiBoPSJEYWRrdFA0aW5iV1lwdnVWdmluRVgzME5EYVU9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
+x-dg-rorf: true
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=cadence.com;
+x-originating-ip: [185.217.253.59]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c6b939d7-717f-44cc-1001-08d81cce5095
+x-ms-traffictypediagnostic: DM6PR07MB5833:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DM6PR07MB5833AF451277119152DA4980DD6F0@DM6PR07MB5833.namprd07.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 0450A714CB
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: gFZSfe3z7s4TL6eY6pPQoEu87lVRtdGDLQtUniJ2GjjDZJr0MUzsnvW72sVg+TvhdRipo1dshnSkE9/wcn6UQh09X79gpTxPmZqWT4kOLk9Iytvlf8fe90YYuIUA5zj8hioyF3+qvJeQUaBmbtaivDbtFiJCJmUjj/LGiml5eRRBmLIzjZndow5fKSLfLu454MIY65fStyRSzZY1NrWshwXFQqkGSOUqTw4n3DwcldI7weTzj88YBql+FPnB9RQ3ttCNj0P1kVaSHtLT1CP5YC/o9S6fUUeos8xRq+89BW2FieqzgwtFrWoB4De/Q6RrpAoZNUsHeQBnt9mgzE4fVgwyoLE5CGO2VSmfYW+6nITOHWxrJ/O55fKoDqyXzLCu7Hlmo9JNzIzAWfQzWXcyRTxurWj2Ee5nMojUo42/ySvVs/sg38j7X9EzThuM1+mwo+gdTgGX/cxWdvEyluUxTA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR07MB5529.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(366004)(136003)(376002)(396003)(346002)(39860400002)(36092001)(966005)(478600001)(52536014)(26005)(9686003)(55016002)(186003)(86362001)(33656002)(7416002)(71200400001)(8676002)(6916009)(54906003)(6506007)(7696005)(2906002)(4326008)(66556008)(64756008)(66446008)(66476007)(66946007)(8936002)(5660300002)(83380400001)(316002)(76116006);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: Qv3yDTTbpoYdPvVR2ySi6Tx/s7RP/ejF5MRQCDc471VxBa7qWIxebPs+H/LTXIvmQ0h+4Jpug8+jEjGU87Yir5vN2liwOeata7hJ2VmQAEnGErDDkKfRIoO9oeKWUKIoQqlmp8tBANq5pchewLoiwxsYNALwGrEiz6hHR4h9XWc+GRrp9mQmS9gREHFV/UbbGtuNQTJ0HgKT1+0LcPaXS4+scRAckZMB2EIj6GEgNJfqKqzyMeiH8mKE9KJ9iKOPw1Zd/7FvJrpEZWMeSPUiL24jEDYU0mnhl/HlMZTW6YG/8a4J0ddEj/9PjHJAd5LoMYuvEmkPjZeDD/NPovohKVi3G7ZIWAihaEq8FXk97mujlGmQ+bRHEZQpHUn07LJ3WeTeiWC+BtHhp52fOvYYted11MzVnCJp7G8afCx11hjVyuyC8KXgo3rv38Ad2wRZ5PPcwMrgOpl/KT8WeWrBAY9c7/g4Zv9JcCXlw2/UKZ432QYL3GovfwG2Bdql+5aL
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: BBCAD5F173D4D802F40271206CF74BA46974853C7E2A6E35343B12D1811A5EB22000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR07MB5529.namprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c6b939d7-717f-44cc-1001-08d81cce5095
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jun 2020 08:19:31.2622
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: cl94vE5oQP9jvj5xigXS7g1mlm4MtHAQnkd2i9ZpuD5MeCB3Vog/msz08EW9JOVLBkLbemoeZJe2+e5YshZYBTvIqkMr9BiATyXO2iENVCI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR07MB5833
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-06-30_02:2020-06-30,2020-06-29 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 clxscore=1011
+ impostorscore=0 priorityscore=1501 malwarescore=0 phishscore=0
+ cotscore=-2147483648 mlxlogscore=907 bulkscore=0 suspectscore=0
+ adultscore=0 spamscore=0 mlxscore=0 lowpriorityscore=0 classifier=spam
+ adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006300060
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-U29tZSBwb2ludGVycyBhcmUgZGVyZWZlcmVuY2VkIGJlZm9yZSBzdWNjZXNzZnVsIGNoZWNrcy4N
-Cg0KUmVwb3J0ZWQtYnk6IE1hcmt1cyBFbGZyaW5nIDxNYXJrdXMuRWxmcmluZ0B3ZWIuZGU+DQpT
-aWduZWQtb2ZmLWJ5OiBDaHVuZmVuZyBZdW4gPGNodW5mZW5nLnl1bkBtZWRpYXRlay5jb20+DQot
-LS0NCnYyOiBub3RoaW5nIGNoYW5nZWQsIGJ1dCBhYmFuZG9uIGFub3RoZXIgcGF0Y2gNCi0tLQ0K
-IGRyaXZlcnMvdXNiL210dTMvbXR1M19nYWRnZXQuYyB8IDI1ICsrKysrKysrKysrKysrKysrKy0t
-LS0tLS0NCiAxIGZpbGUgY2hhbmdlZCwgMTggaW5zZXJ0aW9ucygrKSwgNyBkZWxldGlvbnMoLSkN
-Cg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL210dTMvbXR1M19nYWRnZXQuYyBiL2RyaXZlcnMv
-dXNiL210dTMvbXR1M19nYWRnZXQuYw0KaW5kZXggZjkzNzMyZS4uMTY4OWNhOCAxMDA2NDQNCi0t
-LSBhL2RyaXZlcnMvdXNiL210dTMvbXR1M19nYWRnZXQuYw0KKysrIGIvZHJpdmVycy91c2IvbXR1
-My9tdHUzX2dhZGdldC5jDQpAQCAtMzMyLDE0ICszMzIsMjEgQEAgc3RhdGljIGludCBtdHUzX2dh
-ZGdldF9xdWV1ZShzdHJ1Y3QgdXNiX2VwICplcCwNCiANCiBzdGF0aWMgaW50IG10dTNfZ2FkZ2V0
-X2RlcXVldWUoc3RydWN0IHVzYl9lcCAqZXAsIHN0cnVjdCB1c2JfcmVxdWVzdCAqcmVxKQ0KIHsN
-Ci0Jc3RydWN0IG10dTNfZXAgKm1lcCA9IHRvX210dTNfZXAoZXApOw0KLQlzdHJ1Y3QgbXR1M19y
-ZXF1ZXN0ICptcmVxID0gdG9fbXR1M19yZXF1ZXN0KHJlcSk7DQorCXN0cnVjdCBtdHUzX2VwICpt
-ZXA7DQorCXN0cnVjdCBtdHUzX3JlcXVlc3QgKm1yZXE7DQogCXN0cnVjdCBtdHUzX3JlcXVlc3Qg
-KnI7DQorCXN0cnVjdCBtdHUzICptdHU7DQogCXVuc2lnbmVkIGxvbmcgZmxhZ3M7DQogCWludCBy
-ZXQgPSAwOw0KLQlzdHJ1Y3QgbXR1MyAqbXR1ID0gbWVwLT5tdHU7DQogDQotCWlmICghZXAgfHwg
-IXJlcSB8fCBtcmVxLT5tZXAgIT0gbWVwKQ0KKwlpZiAoIWVwIHx8ICFyZXEpDQorCQlyZXR1cm4g
-LUVJTlZBTDsNCisNCisJbWVwID0gdG9fbXR1M19lcChlcCk7DQorCW10dSA9IG1lcC0+bXR1Ow0K
-Kw0KKwltcmVxID0gdG9fbXR1M19yZXF1ZXN0KHJlcSk7DQorCWlmIChtcmVxLT5tZXAgIT0gbWVw
-KQ0KIAkJcmV0dXJuIC1FSU5WQUw7DQogDQogCWRldl9kYmcobXR1LT5kZXYsICIlcyA6IHJlcT0l
-cFxuIiwgX19mdW5jX18sIHJlcSk7DQpAQCAtMzczLDggKzM4MCw4IEBAIHN0YXRpYyBpbnQgbXR1
-M19nYWRnZXRfZGVxdWV1ZShzdHJ1Y3QgdXNiX2VwICplcCwgc3RydWN0IHVzYl9yZXF1ZXN0ICpy
-ZXEpDQogICovDQogc3RhdGljIGludCBtdHUzX2dhZGdldF9lcF9zZXRfaGFsdChzdHJ1Y3QgdXNi
-X2VwICplcCwgaW50IHZhbHVlKQ0KIHsNCi0Jc3RydWN0IG10dTNfZXAgKm1lcCA9IHRvX210dTNf
-ZXAoZXApOw0KLQlzdHJ1Y3QgbXR1MyAqbXR1ID0gbWVwLT5tdHU7DQorCXN0cnVjdCBtdHUzX2Vw
-ICptZXA7DQorCXN0cnVjdCBtdHUzICptdHU7DQogCXN0cnVjdCBtdHUzX3JlcXVlc3QgKm1yZXE7
-DQogCXVuc2lnbmVkIGxvbmcgZmxhZ3M7DQogCWludCByZXQgPSAwOw0KQEAgLTM4Miw2ICszODks
-OSBAQCBzdGF0aWMgaW50IG10dTNfZ2FkZ2V0X2VwX3NldF9oYWx0KHN0cnVjdCB1c2JfZXAgKmVw
-LCBpbnQgdmFsdWUpDQogCWlmICghZXApDQogCQlyZXR1cm4gLUVJTlZBTDsNCiANCisJbWVwID0g
-dG9fbXR1M19lcChlcCk7DQorCW10dSA9IG1lcC0+bXR1Ow0KKw0KIAlkZXZfZGJnKG10dS0+ZGV2
-LCAiJXMgOiAlcy4uLiIsIF9fZnVuY19fLCBlcC0+bmFtZSk7DQogDQogCXNwaW5fbG9ja19pcnFz
-YXZlKCZtdHUtPmxvY2ssIGZsYWdzKTsNCkBAIC00MjIsMTEgKzQzMiwxMiBAQCBzdGF0aWMgaW50
-IG10dTNfZ2FkZ2V0X2VwX3NldF9oYWx0KHN0cnVjdCB1c2JfZXAgKmVwLCBpbnQgdmFsdWUpDQog
-LyogU2V0cyB0aGUgaGFsdCBmZWF0dXJlIHdpdGggdGhlIGNsZWFyIHJlcXVlc3RzIGlnbm9yZWQg
-Ki8NCiBzdGF0aWMgaW50IG10dTNfZ2FkZ2V0X2VwX3NldF93ZWRnZShzdHJ1Y3QgdXNiX2VwICpl
-cCkNCiB7DQotCXN0cnVjdCBtdHUzX2VwICptZXAgPSB0b19tdHUzX2VwKGVwKTsNCisJc3RydWN0
-IG10dTNfZXAgKm1lcDsNCiANCiAJaWYgKCFlcCkNCiAJCXJldHVybiAtRUlOVkFMOw0KIA0KKwlt
-ZXAgPSB0b19tdHUzX2VwKGVwKTsNCiAJbWVwLT53ZWRnZWQgPSAxOw0KIA0KIAlyZXR1cm4gdXNi
-X2VwX3NldF9oYWx0KGVwKTsNCi0tIA0KMS45LjENCg==
+H Rob
 
+Yes, I see the same issue.  As you wrote probably dt-schema was not up to d=
+ata.=20
+
+I have fresh system, and I had problem with running 'make dt_binding_check'=
+=20
+
+The script complain for:
+dtc needs libyaml for DT schema validation support. Install the necessary l=
+ibyaml development package
+but in reality it was lacking pkg-config.
+
+It could be good to add some information about this package in documentatio=
+n or some checking in script.=20
+
+I leave it to your decision.
+
+>
+>
+>On Fri, 26 Jun 2020 06:54:46 +0200, Pawel Laszczak wrote:
+>> This patch aim at documenting USB related dt-bindings for the
+>> Cadence CDNSP-DRD controller.
+>>
+>> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+>> ---
+>>  .../devicetree/bindings/usb/cdns-cdnsp.yaml   | 104 ++++++++++++++++++
+>>  1 file changed, 104 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/usb/cdns-cdnsp.yam=
+l
+>>
+>
+>
+>My bot found errors running 'make dt_binding_check' on your patch:
+>
+>/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/c=
+dns-cdnsp.example.dt.yaml: example-0:
+>usb@f3000000:reg:0: [0, 29437952, 0, 1024] is too long
+>/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/c=
+dns-cdnsp.example.dt.yaml: example-0:
+>usb@f3000000:reg:1: [0, 4076929024, 0, 65536] is too long
+>/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/c=
+dns-cdnsp.example.dt.yaml: example-0:
+>usb@f3000000:reg:2: [0, 4076994560, 0, 65536] is too long
+>
+>
+>See https://urldefense.com/v3/__https://patchwork.ozlabs.org/patch/1317380=
+__;!!EHscmS1ygiU1lA!THRFzEi4Bx7XfHahLfM_Oo53V-
+>hW49AW-xHAcJ7J53DIaLVRbpAOTe92Jrsu6A$
+>
+>If you already ran 'make dt_binding_check' and didn't see the above
+>error(s), then make sure dt-schema is up to date:
+>
+>pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --=
+upgrade
+>
+>Please check and re-submit.
+
+thanks,
+pawell=20
