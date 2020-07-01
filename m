@@ -2,197 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AC7121074A
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 11:03:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50E902107DB
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 11:18:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729166AbgGAJCt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Jul 2020 05:02:49 -0400
-Received: from mail-eopbgr70077.outbound.protection.outlook.com ([40.107.7.77]:14468
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728994AbgGAJCs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 1 Jul 2020 05:02:48 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WTEcbTaaePnlzT49QPXv464dwnSB/6DuUcAwa7Rkf7n7kBpoHP5hZrZDf0lSx+k7MjVlrsTGIJ1BGAiOYjJ/5GEfvL2HwL26COKCPG3GDB9oCa6rXqU2AJToRxFiiCfobq1Jv16Q8lp9+CQ6UGqkST2noG3O5IStoQU6uthcepTjlC892OJp5sMq4yvI/H9yj0rouEMu4znfOY7cS76wsZOm44t4K/eAaLSuzku2e4Cg5UMq1nIhyV2Fcz3/PWVds/bZgU1z7iYesN7csp6NErJGSpsYRmorhzg8Mr/sTubG4KJGDJiyRcPqAY74rEEyNFpRBgIR6vEq8g4ANCGPJw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rtlBwy8TKU6UUa9JbR7xxdsPgKeVccOjjdEaJgbC+xU=;
- b=eDTn0KGiKCEdXkSg6JKzpcbVqVCc6s4+XEo8katQaB14huFWk92JnvwCCb8EHCMOO5wM7E4tFuEVaAIOshsfuyWca36CU7lERApGvC6XaU39Wovra+3EGNlP9r+RLvThMQhqpE9ExMwVqWPvTDQfL9w3V78bFZSB7R7XqU9ZqBSq/mziis4P2raQb3KE9CzNfTz8apzghzG6UN8IpwfIt+KWSRx/T1OMIiCyrZk4Uff3TU0h0YnWlqc6qwOm1H1wy7tEeJ7jTILHtBjqp98FniZFHhHTuhbtZdzIwRUbbShelLqI7TZj8eMSEk4glvAA+N6BlF1MAbxQ/XUQ54gX3A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rtlBwy8TKU6UUa9JbR7xxdsPgKeVccOjjdEaJgbC+xU=;
- b=B/GSBvpuPeDwsbGbim+BN0WSqNfbchU8ER7L23fkjl6lLFtDzJVsTJoYGOFYJ8Xk46fEawc5vUvaMJT1OJfb4u93pakKm/wF26CrawYRKYTiKyAajMKIp8h+PQJbtgh6PmGbYwEfTgZXN5c+G3ETwb6LKBpIKTEuEzVYdXKljNQ=
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
- by AM6PR04MB4246.eurprd04.prod.outlook.com (2603:10a6:209:50::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3131.24; Wed, 1 Jul
- 2020 09:02:43 +0000
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1101:adaa:ee89:af2a]) by AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1101:adaa:ee89:af2a%3]) with mapi id 15.20.3153.023; Wed, 1 Jul 2020
- 09:02:43 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Philippe Schenker <philippe.schenker@toradex.com>
-CC:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Stefan Agner <stefan.agner@toradex.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: chipidea: fix ci_irq for role-switching use-case
-Thread-Topic: [PATCH] usb: chipidea: fix ci_irq for role-switching use-case
-Thread-Index: AQHWS6lrNGtWbd2boEmTo3bADIlBSqjvNguAgAAr6YCAAPWjgIAAvP+AgAD5YgCAAF78AIAACJcA
-Date:   Wed, 1 Jul 2020 09:02:43 +0000
-Message-ID: <20200701090305.GB22478@b29397-desktop>
-References: <20200626110311.221596-1-philippe.schenker@toradex.com>
- <20200629072703.GC30684@b29397-desktop>
- <88f0a5bf564eded8b210457204facdf2c7a9c5dc.camel@toradex.com>
- <20200630004323.GA12443@b29397-desktop>
- <7ee055810cb7c4a06bf978f3d443c908f237c006.camel@toradex.com>
- <20200701025223.GA11041@b29397-desktop>
- <b5c61ae5f17b74624c1e2e4b08fc2fdcd1fb53f6.camel@toradex.com>
-In-Reply-To: <b5c61ae5f17b74624c1e2e4b08fc2fdcd1fb53f6.camel@toradex.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: toradex.com; dkim=none (message not signed)
- header.d=none;toradex.com; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.67]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 238eae92-91e9-46a4-d6aa-08d81d9d842e
-x-ms-traffictypediagnostic: AM6PR04MB4246:
-x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-x-microsoft-antispam-prvs: <AM6PR04MB424669DE63673EB062A44CF28B6C0@AM6PR04MB4246.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 04519BA941
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: +AIOUD5f7/ttxMbTClzCO+632L6fKy/2erY89C2EIYwRCg+khLLVXDhHxJukefV4Srrnvq1EExPu1xg893sZ5RLuKY4tmjYSHao2z5gpyqiw7A9mjyX4WaECZeL/2r8xMx9HN20KIo+3ndqVUYvCVIahTkqj1G9C4wGZHVS5Hdn60+ci2EES45BOK/tIv1tl2tBtyM41PXt44YNAPjUTq6QUt8+gxpZTTdEPEsRJv+PhL1KzmvIRkL9zxBzp5MqSpcRy05+zz9XLWQomPxuuj6OMQUkJ+3SzY9kXyQIZ75aaGyGnPQV6Na520VN6pN+gmWebT+yK6nXIfmQkKrWYLw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(7916004)(39860400002)(366004)(136003)(346002)(376002)(396003)(26005)(6512007)(9686003)(33716001)(83380400001)(86362001)(54906003)(4326008)(316002)(8936002)(6486002)(478600001)(6916009)(1076003)(33656002)(8676002)(71200400001)(66476007)(66946007)(76116006)(66446008)(66556008)(64756008)(91956017)(5660300002)(6506007)(44832011)(53546011)(2906002)(186003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: Dzmf+hYcZ3ofK0pqvYoUbGt2HL+cz3pM3x1LRwPgSLoRCjp0c895HPESbo6gHd1hrOilr0yW++SHQq8Ut/Q733dAAmMR7m/FCcv9gu9p+Sd1r+3sej23OhqR0uuVGEK3scWflopBpOSDCNq1u46w88rD5krlQ+1mDwdV698GUvK1IHOCG5lGn0W15z55fyec6TCFUTu/LX/SaEgvOLCjx7QkQJlWucVxODdH8eXR/Bvoc4AR9HyTSc911iovIbgT5ak53xQsdCz23RJ0cbYV3QlAtVzWkg3PV/9UukCJywTADARtVuGwJC365dUTxqWTfwTtj79ziv8pDhiz0neBddR+fNAjOkxn43gC5yr/AQGLtrgK74hUQ6BBO8TfJUmB67LhPiBqj3zz2/0PjiYZTXX/mJgek0c0Eekmxb3+jaTf5GNX56j7Wl+N7yhrr0OSyjYHfXR65HXn/v4vQdGzrFqVEJwqtBnDNx5r+fgAjdQ=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <F0E516AD2A453E49B4AA27B5A50A6285@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1728784AbgGAJSB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Jul 2020 05:18:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58692 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726715AbgGAJSA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jul 2020 05:18:00 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6528BC061755
+        for <linux-usb@vger.kernel.org>; Wed,  1 Jul 2020 02:18:00 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id 17so22415029wmo.1
+        for <linux-usb@vger.kernel.org>; Wed, 01 Jul 2020 02:18:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=twVZXkY6BhygpK2M79Ns9GsoGVLMhJD+Dw3WFSCPqfU=;
+        b=vBBUpyZVa9IsPUfg9VuM7Cw3GOxH4pZzL09MR61wOhpG5D7Gv9Lfu28Jipmcq5px6j
+         +Dbggi4+JJkUQ1BHmKlKJtiV9RkDjK/dgCHqlQPPwxc9KT5+k/MXSeR8rmbpwB3esOJ2
+         S+R7d416J/ujOEn/sTW0ObngWbcvPR71Hj6BrjzDnzJDvX1TIkoDsj6NCaBBaCbcGdK/
+         Z/H+Wj1jdKhNN1WlMn298JxbZExu+cAo/wueBIuEGb6WR79Yt7JxjMktTY3C3ZgNTCWi
+         sNBvT8M56J5/ACMFrkUXF4LhnrlcTyzGvoC+vyMWgT7nLSwLYhXCGfeTx5Y485UL48vW
+         KK0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=twVZXkY6BhygpK2M79Ns9GsoGVLMhJD+Dw3WFSCPqfU=;
+        b=pAzlO3TUr5BQJBpGc6WgwYhj+reKRq8FN/NznLGOKexsSxhi0yTOjbkkcGiooiKU7e
+         f6UeQG3ocg5HOewvh/oysLFwJxAbMZby5nuS3RhoSPCPmGBP5TgXeqapVP+OCCEgk3Mb
+         lLcJKJGCaddqu6YrmyNHFfI+0C83R+Vn+x7oZO3//9Yde7qrG387Nbu7b7D6W7Wp5Ibl
+         05FOwB8kcGExx1TR3Rv9CrmG55tTGPDBaUy8sPyNnsvUt1jQMV8Y9M1TJhiUpd7Rj0wE
+         l/bvfhgaLW3jrZkXaJDsG93ikXstHNEAy1wqf6neCcKdMEgGMrv/uWyTCpAd0Mrg+Wgd
+         BPVg==
+X-Gm-Message-State: AOAM532YQaWs06g2N0brBwl+mtCODbaQhG/Qih39MrPU5D/yDKPckG86
+        Ge2ot9yjd/n2/dIo+rRDrg0=
+X-Google-Smtp-Source: ABdhPJxd5/OS8g0gMespazNpL/j7Em5ljDedMHRZeYMSv0dp3J3+tJYdz8Oer7dJAwse9rn72y4qag==
+X-Received: by 2002:a1c:96ce:: with SMTP id y197mr17816267wmd.86.1593595079044;
+        Wed, 01 Jul 2020 02:17:59 -0700 (PDT)
+Received: from dhe (p200300ded71b970079d5254590bfd822.dip0.t-ipconnect.de. [2003:de:d71b:9700:79d5:2545:90bf:d822])
+        by smtp.gmail.com with ESMTPSA id v20sm6125531wmh.26.2020.07.01.02.17.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jul 2020 02:17:58 -0700 (PDT)
+Date:   Wed, 1 Jul 2020 11:17:55 +0200
+From:   David Heinzelmann <heinzelmann.david@gmail.com>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Fabian Melzow <fabian.melzow@gmail.com>, linux-usb@vger.kernel.org
+Subject: Re: ERROR Transfer event TRB DMA ptr not part of current TD ep_index
+ 4 comp_code 1
+Message-ID: <20200701091755.GA17742@dhe>
+References: <20200620211913.1535bac0@ping>
+ <264e8287-b538-0798-36a6-7eafc4387a8d@linux.intel.com>
+ <20200630185803.2a72c123@ping>
+ <f41aab00-ea04-bdd2-4174-33b2b19dc850@linux.intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 238eae92-91e9-46a4-d6aa-08d81d9d842e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jul 2020 09:02:43.6583
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: zgtIqpoH7IKCTCCe6GlJnxhazGMWb7d88IxSPhYH70gCl6PMo5DvFN1ZlozLoGsM1HWqFYt4ClP17+zTD4/zGQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB4246
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f41aab00-ea04-bdd2-4174-33b2b19dc850@linux.intel.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-07-01 08:32:22, Philippe Schenker wrote:
-> On Wed, 2020-07-01 at 02:52 +0000, Peter Chen wrote:
-> > On 20-06-30 11:59:49, Philippe Schenker wrote:
-> > > On Tue, 2020-06-30 at 00:43 +0000, Peter Chen wrote:
-> > > > On 20-06-29 10:04:13, Philippe Schenker wrote:
-> > > > > On Mon, 2020-06-29 at 07:26 +0000, Peter Chen wrote:
-> > > > > > On 20-06-26 13:03:11, Philippe Schenker wrote:
-> > > > > > > If the hardware is in low-power-mode and one plugs in device
-> > > > > > > or
-> > > > > > > host
-> > > > > > > it did not switch the mode due to the early exit out of the
-> > > > > > > interrupt.
-> > > > > >=20
-> > > > > > Do you mean there is no coming call for role-switch? Could you
-> > > > > > please
-> > > > > > share
-> > > > > > your dts changes? Try below patch:
-> > > > >=20
-> > > > > Here are my DTS changes:
-> > > > >=20
-> > > > > diff --git a/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
-> > > > > b/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
-> > > > > index 97601375f2640..c424f707a1afa 100644
-> > > > > --- a/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
-> > > > > +++ b/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
-> > > > > @@ -13,6 +13,13 @@
-> > > > >                 stdout-path =3D "serial0:115200n8";
-> > > > >         };
-> > > > > =20
-> > > > > +       extcon_usbc_det: usbc_det {
-> > > > > +               compatible =3D "linux,extcon-usb-gpio";
-> > > > > +               id-gpio =3D <&gpio7 14 GPIO_ACTIVE_HIGH>;
-> > > > > +               pinctrl-names =3D "default";
-> > > > > +               pinctrl-0 =3D <&pinctrl_usbc_det>;
-> > > > > +       };
-> > > > > +
-> > > > >         /* fixed crystal dedicated to mpc258x */
-> > > > >         clk16m: clk16m {
-> > > > >                 compatible =3D "fixed-clock";
-> > > > > @@ -174,6 +181,7 @@
-> > > > >  };
-> > > > > =20
-> > > > >  &usbotg1 {
-> > > > > +       extcon =3D <&extcon_usbc_det>, <&extcon_usbc_det>;
-> > > >=20
-> > > > If you have only ID extcon, but no VBUS extcon, you only need to
-> > > > add only phandle, see dt-binding for detail please.
-> > >=20
-> > > You where right again! Thanks, this actually solves the RNDIS issue
-> > > for
-> > > our colibri-imx7 board:
-> > >=20
-> > > +       extcon =3D <0>, <&extcon_usbc_det>;
-> > >=20
-> > > Howevever on this iMX7 board we have VBUS hooked up to the SoC,
-> > > that's
-> > > why it works only with ID.
-> > >=20
-> > > On Colibri-iMX6ULL we do not have VBUS hooked up.
-> >=20
-> > So, there is no any events for connecting to Host? If it is, the
-> > workaround for this board is disable runtime pm. And you only need to
-> > write one extcon phandle for ID since you have external event for ID,
-> > but no event for VBUS. ID event is not the same with VBUS, for
-> > example,
-> > if you plug cable into host, you will not get the ID event, you could
-> > only get VBUS event if there is an event (eg, through GPIO) for it.
-> >=20
-> > Peter
->=20
-> No we don't have extra Host events. We have one GPIO, if it is high USB
-> should be in gadget mode and if the GPIO is low USB should be in host
-> mode.
->=20
-> Is there no way we can achieve this on mainline without disabling
-> runtime PM?
->=20
+On Tue, Jun 30, 2020 at 10:03:29PM +0300, Mathias Nyman wrote:
+> On 30.6.2020 19.58, Fabian Melzow wrote:
+> > Hi!
+> > 
+> > Am Mon, 29 Jun 2020 20:47:24 +0300
+> > schrieb Mathias Nyman <mathias.nyman@linux.intel.com>:
+> > 
+> >> First issue I see is that the attempt to recover from a transaction
+> >> error with a soft retry isn't working. We expect the hardware to
+> >> retry the transfer but nothing seems to happen. Soft retry is
+> >> described in xhci specs 4.6.8.1 and is basically a reset endpoint
+> >> command with TSP set, followed by ringing the endpoint doorbell.
+> >> Traces indicate driver does this correctly but hardware isn't
+> >> retrying. We get don't get any event, no error, success or stall.
+> >>
+> >> This could be hardware flaw.
+> >> Any chance you could try this on a xHC from some other vendor?
+> > 
+> > There is no other xHC hardware available to me.
+> > 
+> >> Second issue is a driver flaw, when nothing happened for 20 seconds
+> >> we see the URB is canceled. xhci driver needs to stop then endpoint
+> >> to cancel the URB, but there is a hw race and endpoint ends up halted
+> >> instead of stopped. The xhci driver can't handle a halted endpoint in
+> >> its stop endpoint handler properly, and the URB is never actually
+> >> removed from the ring.
+> >>
+> >> The reason you see the IO_PAGE_FAULT is probably because once the
+> >> ring starts running the driver will handle the cancelled URB, and
+> >> touch already freed memory: AMD-Vi: Event logged [IO_PAGE_FAULT
+> >> domain=0x000d address=0xdc707028 flags=0x0020]
+> >>
+> >> I have a patch for this second case, I haven't upstreamed it as it
+> >> got some conflicting feedback earlier. It won't solve the 20 second
+> >> delay, but should solve the the IO_PAGE_FAULT and the "WARN Set TR
+> >> Deq Ptr cmd failed due to incorrect slot or ep state" message
+> >>
+> >> Can you try it out?
+> > 
+> > I successful applied the patch against Linux 5.7.4, but get this error when
+> > compiling drivers/usb/host/xhci-ring.c:
+> > 
+> >   CC [M]  drivers/usb/host/xhci-ring.o
+> > drivers/usb/host/xhci-ring.c: In function ‘xhci_handle_cmd_stop_ep’:
+> > drivers/usb/host/xhci-ring.c:857:3: error: implicit declaration of function ‘xhci_reset_halted_ep’ [-Werror=implicit-function-declaration]
+> >   857 |   xhci_reset_halted_ep(xhci, slot_id, ep_index, reset_type);
+> >       |   ^~~~~~~~~~~~~~~~~~~~
+> > 
+> 
+> Right, forgot that you need another patch before this.
+> 
+> both patches attached, also applied to 5.8-rc1 in branch "fix_invalid_context_at_stop_endpoint"
+> git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git fix_invalid_context_at_stop_endpoint
+> 
+> -Mathias
+> 
 
-At least I think so, since you don't have any events to let the
-SW know you connects to host if the controller is in low power mode.
+Hi,
 
-Peter
+I've been investigating what appears to be an identical problem recently which I think is related
+to the description from xhci 4.6.9. I have an fx2 device which stalls its endpoint while at the
+same time the URBs are aborted from the software.
 
-> Philippe
->=20
-> >=20
-> > > So device/host
-> > > switching works only with 'extcon =3D <&extcon_usbc_det>,
-> > > <&extcon_usbc_det>;' but then RNDIS and also a normal thumb-drive
-> > > does
-> > > not work. How could I work around this fact? A dummy-gpio that would
-> > > always read "high" for vbus would be a solution for me.
-> > >=20
-> > > Philippe
-> > >=20
+Kernel logs which occured when the xhci driver is stucked at the halted endpoint.
 
---=20
+Jun 29 17:27:12 dhe-pc kernel: xhci_hcd 0000:00:14.0: WARN Cannot submit Set TR Deq Ptr
+Jun 29 17:27:12 dhe-pc kernel: xhci_hcd 0000:00:14.0: A Set TR Deq Ptr command is pending.
+Jun 29 17:27:12 dhe-pc kernel: xhci_hcd 0000:00:14.0: WARN Set TR Deq Ptr cmd failed due to incorrect slot or ep state.
+Jun 29 17:27:21 dhe-pc kernel: xhci_hcd 0000:00:14.0: ERROR Transfer event TRB DMA ptr not part of current TD ep_index 4 comp_code 6
+Jun 29 17:27:21 dhe-pc kernel: xhci_hcd 0000:00:14.0: Looking for event-dma 00000001173dc630 trb-start 00000001173dcc30 trb-end 0000000000000000 seg-start 00000001173dc000 seg-end 00000001173dcff0
+Jun 29 17:27:21 dhe-pc kernel: xhci_hcd 0000:00:14.0: Looking for event-dma 00000001173dc630 trb-start 0000000116e53000 trb-end 0000000116e53830 seg-start 0000000116e53000 seg-end 0000000116e53ff0
 
-Thanks,
-Peter Chen=
+I have applied your patch to kernel version 5.8-rc3 and I can confirm that the patch solves
+my problem for the halted endpoint.
+
+I still get the following error messages from time to time.
+
+Jul 01 09:56:56 dhe kernel: xhci_hcd 0000:00:14.0: WARN Event TRB for slot 11 ep 4 with no TDs queued?
+Jul 01 09:56:56 dhe kernel: xhci_hcd 0000:00:14.0: WARN Cannot submit Set TR Deq Ptr
+Jul 01 09:56:56 dhe kernel: xhci_hcd 0000:00:14.0: A Set TR Deq Ptr command is pending.
+
+or
+
+Jul 01 10:09:27 dhe kernel: xhci_hcd 0000:00:14.0: WARN Cannot submit Set TR Deq Ptr
+Jul 01 10:09:27 dhe kernel: xhci_hcd 0000:00:14.0: A Set TR Deq Ptr command is pending.
+Jul 01 10:09:29 dhe kernel: xhci_hcd 0000:00:14.0: ERROR Transfer event TRB DMA ptr not part of current TD ep_index 4 comp_code 13
+Jul 01 10:09:29 dhe kernel: xhci_hcd 0000:00:14.0: Looking for event-dma 0000000473d66d90 trb-start 0000000473d66e70 trb-end 0000000000000000 seg-start 0000000473d66000 seg-end 0000000473d66ff0
+Jul 01 10:09:29 dhe kernel: xhci_hcd 0000:00:14.0: Looking for event-dma 0000000473d66d90 trb-start 0000000473d65000 trb-end 0000000473d65a70 seg-start 0000000473d65000 seg-end 0000000473d65ff0
+Jul 01 10:09:29 dhe kernel: xhci_hcd 0000:00:14.0: ERROR Transfer event TRB DMA ptr not part of current TD ep_index 4 comp_code 13
+Jul 01 10:09:29 dhe kernel: xhci_hcd 0000:00:14.0: Looking for event-dma 0000000473d66e60 trb-start 0000000473d66e70 trb-end 0000000000000000 seg-start 0000000473d66000 seg-end 0000000473d66ff0
+Jul 01 10:09:29 dhe kernel: xhci_hcd 0000:00:14.0: Looking for event-dma 0000000473d66e60 trb-start 0000000473d65000 trb-end 0000000473d65a70 seg-start 0000000473d65000 seg-end 0000000473d65ff0
+
+but the core problem that the xhci is stucked at the halted endpoint state does not occur anymore.
+If you are interested in more detailed debug logs I can provide them.
+
+David
+
