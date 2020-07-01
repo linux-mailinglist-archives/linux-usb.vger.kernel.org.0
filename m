@@ -2,49 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85D69211149
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 18:54:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EFB62111C0
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 19:16:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732581AbgGAQyR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Jul 2020 12:54:17 -0400
-Received: from mail-lj1-f181.google.com ([209.85.208.181]:44965 "EHLO
-        mail-lj1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732801AbgGAQyP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jul 2020 12:54:15 -0400
-Received: by mail-lj1-f181.google.com with SMTP id s9so27948924ljm.11
-        for <linux-usb@vger.kernel.org>; Wed, 01 Jul 2020 09:54:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=gb/RUJ5ZowCAGUAzFbl/YHdM1aI+3dNxCl1/CW0J3uY=;
-        b=c2vx/+XMve1wAy1JK61D6s95QMfLM9J/Htonlmrw4xVwHNufXSwnYOiSayAhoMisdR
-         FXhFuNN449UnX23i7czOwEloiLQHNL8zG8w9fP4oNK2bS6ytU9pR0Uvw7cK/xSvfQS43
-         HsfN6Pi3iPJbBdUvsBppfgqJtz49FKlY2ccLF1GXvn7Ky5133lncHiP0GuVXV+tnc1B9
-         pF8ZFpYAvk8iIvXsoc6femkBy+zIdDzqMJT6LDG/e8UKlEiuS6Xn4IoaLk4rdMj+tsPQ
-         Q6DOL6c1aRNHSxiQsiYvGSHtsqQcZxB59wRycNY/yIq1B22MThpPe8zxj22DPV+5XvaU
-         OSug==
-X-Gm-Message-State: AOAM531nwJj4FrDXrre776mPrRIH/B4i2jFJ2tyaLOAYQAneKLQLIiVF
-        YVh9G5M3zpTYF9IV/WW3FbTVDsN+w1g=
-X-Google-Smtp-Source: ABdhPJzrTUS5bD7zJmlloW2n79rKnX/+FGzSdag5BU6TAFmUEH+XnV1vRQLmvd+Q2PmGgmdSa+W0mA==
-X-Received: by 2002:a2e:8699:: with SMTP id l25mr5102838lji.81.1593622453089;
-        Wed, 01 Jul 2020 09:54:13 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id s20sm2225530ljs.36.2020.07.01.09.54.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jul 2020 09:54:12 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@xi.terra>)
-        id 1jqfzq-00042P-ON; Wed, 01 Jul 2020 18:54:06 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [PATCH 5/5] USB: serial: quatech2: drop two stub functions
-Date:   Wed,  1 Jul 2020 18:53:42 +0200
-Message-Id: <20200701165342.15448-6-johan@kernel.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200701165342.15448-1-johan@kernel.org>
-References: <20200701165342.15448-1-johan@kernel.org>
+        id S1732711AbgGARQM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Jul 2020 13:16:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35008 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732584AbgGARQL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 1 Jul 2020 13:16:11 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2C95420747;
+        Wed,  1 Jul 2020 17:16:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1593623770;
+        bh=FYAlFEMRS1WiJv3/ZHFyo32zEs/Uyaxc8XAy7NNpdCw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OlZwctqwPB7GWvCwNCwvVpqeUtXV7rMudQdATkKf9JlgM1ldVH3jzHViPdAKCD6rq
+         LginZCfbswDBmLwFcTJKIsHfYaUeuoQrECH0DvlEs+Kc+E3c059ZQ78p4RKjNOHSCD
+         +iBOgYw19mITVkSS/KrVgAF9WC5RRSkWLPgpdFlo=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH] USB: Fix up terminology in include files
+Date:   Wed,  1 Jul 2020 19:15:55 +0200
+Message-Id: <20200701171555.3198836-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
@@ -52,58 +38,84 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Drop two unused stub functions which only served as documentation.
+USB is a HOST/DEVICE protocol, as per the specification and all
+documentation.  Fix up terms that are not applicable to make things
+match up with the terms used through the rest of the USB stack.
 
-This also avoids a W=1 (-Wunused-but-set-variable) warning.
-
-Signed-off-by: Johan Hovold <johan@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/serial/quatech2.c | 18 +-----------------
- 1 file changed, 1 insertion(+), 17 deletions(-)
+ include/linux/usb.h        | 2 +-
+ include/linux/usb/ch9.h    | 8 ++++----
+ include/linux/usb/gadget.h | 7 ++++---
+ 3 files changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/usb/serial/quatech2.c b/drivers/usb/serial/quatech2.c
-index f93b81a297d6..872d1bc86ab4 100644
---- a/drivers/usb/serial/quatech2.c
-+++ b/drivers/usb/serial/quatech2.c
-@@ -480,21 +480,6 @@ static void qt2_process_status(struct usb_serial_port *port, unsigned char *ch)
- 	}
- }
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index c86e4ec4d00f..c28fc391444a 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -422,7 +422,7 @@ struct usb_devmap {
+  * Allocated per bus (tree of devices) we have:
+  */
+ struct usb_bus {
+-	struct device *controller;	/* host/master side hardware */
++	struct device *controller;	/* host side hardware */
+ 	struct device *sysdev;		/* as seen from firmware or bus */
+ 	int busnum;			/* Bus number (in order of reg) */
+ 	const char *bus_name;		/* stable id (PCI slot_name etc) */
+diff --git a/include/linux/usb/ch9.h b/include/linux/usb/ch9.h
+index 58b83066bea4..604c6c514a50 100644
+--- a/include/linux/usb/ch9.h
++++ b/include/linux/usb/ch9.h
+@@ -6,13 +6,13 @@
+  * Wireless USB 1.0 (spread around).  Linux has several APIs in C that
+  * need these:
+  *
+- * - the master/host side Linux-USB kernel driver API;
++ * - the host side Linux-USB kernel driver API;
+  * - the "usbfs" user space API; and
+- * - the Linux "gadget" slave/device/peripheral side driver API.
++ * - the Linux "gadget" device/peripheral side driver API.
+  *
+  * USB 2.0 adds an additional "On The Go" (OTG) mode, which lets systems
+- * act either as a USB master/host or as a USB slave/device.  That means
+- * the master and slave side APIs benefit from working well together.
++ * act either as a USB host or as a USB device.  That means the host and
++ * device side APIs benefit from working well together.
+  *
+  * There's also "Wireless USB", using low power short range radios for
+  * peripheral interconnection but otherwise building on the USB framework.
+diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
+index 6a178177e4c9..298b334e2951 100644
+--- a/include/linux/usb/gadget.h
++++ b/include/linux/usb/gadget.h
+@@ -4,7 +4,8 @@
+  *
+  * We call the USB code inside a Linux-based peripheral device a "gadget"
+  * driver, except for the hardware-specific bus glue.  One USB host can
+- * master many USB gadgets, but the gadgets are only slaved to one host.
++ * talk to many USB gadgets, but the gadgets are only able to communicate
++ * to one host.
+  *
+  *
+  * (C) Copyright 2002-2004 by David Brownell
+@@ -328,7 +329,7 @@ struct usb_gadget_ops {
+ };
  
--/* not needed, kept to document functionality */
--static void qt2_process_xmit_empty(struct usb_serial_port *port,
--				   unsigned char *ch)
--{
--	int bytes_written;
--
--	bytes_written = (int)(*ch) + (int)(*(ch + 1) << 4);
--}
--
--/* not needed, kept to document functionality */
--static void qt2_process_flush(struct usb_serial_port *port, unsigned char *ch)
--{
--	return;
--}
--
- static void qt2_process_read_urb(struct urb *urb)
- {
- 	struct usb_serial *serial;
-@@ -540,7 +525,7 @@ static void qt2_process_read_urb(struct urb *urb)
- 						 __func__);
- 					break;
- 				}
--				qt2_process_xmit_empty(port, ch + 3);
-+				/* bytes_written = (ch[1] << 4) + ch[0]; */
- 				i += 4;
- 				escapeflag = true;
- 				break;
-@@ -569,7 +554,6 @@ static void qt2_process_read_urb(struct urb *urb)
- 				break;
- 			case QT2_REC_FLUSH:
- 			case QT2_XMIT_FLUSH:
--				qt2_process_flush(port, ch + 2);
- 				i += 2;
- 				escapeflag = true;
- 				break;
+ /**
+- * struct usb_gadget - represents a usb slave device
++ * struct usb_gadget - represents a usb device
+  * @work: (internal use) Workqueue to be used for sysfs_notify()
+  * @udc: struct usb_udc pointer for this gadget
+  * @ops: Function pointers used to access hardware-specific operations.
+@@ -602,7 +603,7 @@ static inline int usb_gadget_activate(struct usb_gadget *gadget)
+ /*-------------------------------------------------------------------------*/
+ 
+ /**
+- * struct usb_gadget_driver - driver for usb 'slave' devices
++ * struct usb_gadget_driver - driver for usb gadget devices
+  * @function: String describing the gadget's function
+  * @max_speed: Highest speed the driver handles.
+  * @setup: Invoked for ep0 control requests that aren't handled by
 -- 
-2.26.2
+2.27.0
 
