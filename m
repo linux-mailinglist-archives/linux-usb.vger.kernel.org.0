@@ -2,222 +2,172 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1817C21020B
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 04:27:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D559210237
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 04:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726208AbgGAC1L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 30 Jun 2020 22:27:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51442 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725988AbgGAC1K (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 30 Jun 2020 22:27:10 -0400
-Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B83C061755
-        for <linux-usb@vger.kernel.org>; Tue, 30 Jun 2020 19:27:10 -0700 (PDT)
-Received: by mail-il1-x142.google.com with SMTP id o3so2323381ilo.12
-        for <linux-usb@vger.kernel.org>; Tue, 30 Jun 2020 19:27:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9y5ChQXIg14Rw1nH836f+pZzZbc7BKn8u0EzY0RfquQ=;
-        b=SwliL6X6yswoNNFxWZqpe7qc+t85LgeYUBM+oliAzMVDdKxydVkUZShl+UIFtjREG5
-         HSKtqq3/Tztt1w4S/VeBnk1Mq5T616UQDbIziq1JRNFLNGlvfi/ERbPsRf2Eq0IOdv+Q
-         b5fUr1KIAFCP0yVBMhzM2kjEAjoBsd/TcEdjSI0c/U4UG30PZGDJAd7w+DJAHYSJbYXQ
-         BUNM39X9KiOkZGx3ucLPNzfZ14oo0N/UdLLgcSafk5aOKcZO9Nbx9xCyVD21iuWa/1fA
-         LI/qhg+Ny5IN5FB7ezGv7vt/68e3GJ1jn+dbg8vKUJYhRY+X3yi3Dd5Gt/2NNTZ9oFk3
-         dokQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9y5ChQXIg14Rw1nH836f+pZzZbc7BKn8u0EzY0RfquQ=;
-        b=seSBOCYFeO2RqPi19I3+mw+z89/xQYRh2eQndB+Lcchd9B/ewJWWAcKL2J8HAEa+Lo
-         7fxbYsyCtJZE1Gr98W7uRdGaM9G3p0OI+bgybT4gZY9LQoKk71xre5+rVg3CznlNUHis
-         MpvTzTcJJSDWdj5nriRoDi/JvbTSIlC74HhDZ8YNdKgyAgUNTAzKINZwxuAJOfDr0tx1
-         5zPYJr6hCmzk9ri3jWwRQ+45NWZou2Y0WXflb2GQWr3E3JbiOuZuhD0H5W2k7ERiQ18G
-         SS6rsWaWg/t5b1UWdQNA/vSpvH+rFVGC8PiE8KMwsW5QX9/lrVSZUb+bLsVY+m3XYeUW
-         iw4A==
-X-Gm-Message-State: AOAM5336YO5ANxE3rEhYtM4gt3AvPj98EOG3BSgwqLdub8+hCpfsCRLW
-        ohPZoJJUZA5T/yuDLO4UMY0jjWth9wv2pDuGMoU=
-X-Google-Smtp-Source: ABdhPJycZ212Z4ZTZrVQnBBjDruSU+29nclbIWgGYX3Ms9CdB2hIGcLDd9L86h0t8ISfeONkJctGpBuBZlDc9bUo0IQ=
-X-Received: by 2002:a05:6e02:926:: with SMTP id o6mr5815434ilt.239.1593570429228;
- Tue, 30 Jun 2020 19:27:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200629132206.3914-1-m.grzeschik@pengutronix.de>
- <20200629132206.3914-2-m.grzeschik@pengutronix.de> <20d3ff88-b4df-91e7-aaa6-ec05917c32ab@synopsys.com>
- <20200630071337.GJ21325@pengutronix.de>
-In-Reply-To: <20200630071337.GJ21325@pengutronix.de>
-From:   Peter Chen <hzpeterchen@gmail.com>
-Date:   Wed, 1 Jul 2020 10:26:56 +0800
-Message-ID: <CAL411-p19PX+utRb=x-pfBqXPjpHz54BO5OzdZVAuLQKjKxH5A@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] usb: dwc3: gadget: make starting isoc transfers
- more robust
-To:     Michael Grzeschik <mgr@pengutronix.de>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "balbi@kernel.org" <balbi@kernel.org>,
+        id S1726610AbgGACwG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 30 Jun 2020 22:52:06 -0400
+Received: from mail-eopbgr140042.outbound.protection.outlook.com ([40.107.14.42]:63397
+        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725988AbgGACwE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 30 Jun 2020 22:52:04 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oac1PoiOQNb5dWjD5E3QRo/VkUpys+YNczIXtZgoNakMPRdys/D7GulN5OpQ5R+zNDljwZ/rpeqNygyuzWLTtNwU9OJEeJHQsFgO31oceNswWyDTCw0ptDw2WuwW33XUa0FmkwxL+l9hMYjEW16XO2xSytJGFWaMZ2MtftLGbIZmITrP8gH8rjsSJCHso+VSc6ESx9+qrMx3VxfuYCX/Su0RSHEzF4l1rt1mpAJsM05ngqpfga7xgAy7J67mvjRGstKnu3SICfAW7yT5crtGLIH+UiDyLfoGGkvNbePETME46pEUHzXm7zpVpX3gdedC93YZoe09PXhMCgMDhJuHMQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bwluqcS5XLGeYrYzgQfbbAToVlCuofuvJ10xP7weyaM=;
+ b=Wd2sbXZVQviYqFZUYxb0E0b66EC2VyirmEX7SxUa/IEbnyK1EwzxOtkdNkgG4BX4UD557G10jfibKSjJ894RtzOLshm1RJgYqarb49E6N3/Cfx5/oPdBWmezgjkZPBIhIw0KcAWI5DFAzXnHV4TeZjR3Go2LYJVdjDxzAes8gI+3RrWVVqzOngLU68ndyZ0Jc1rDQmJUhcXrnrFeZQTK1YV5aN5c9HbSLd8ydLF74IXGEa/KKQTEJEb/6Lbl4dxOrJJmBzF74maMkyy4fVh/bTV81AVya4CYChs3gA/aQ0KK7+t3U9pnp6D6cjhSfiTy7P/kPTqV2R8ZpFf+23t+Kw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bwluqcS5XLGeYrYzgQfbbAToVlCuofuvJ10xP7weyaM=;
+ b=Uqwf/p3yY2jC6ZjciJSA/xGOZSrj3d0ZX93xl2H+UEX2iX4w8U/9/jRsSRN3Qcdp+TdafHDcwkqA5YmLHV2HKsHLZ85s9jmjXR2z0UgA+qlphiOZgEbvVj9TNsH2L3QPNyAK00xesuvNK9DDG0owGCtrY9KgABg10+szBj4O7d4=
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
+ by AM6PR04MB5496.eurprd04.prod.outlook.com (2603:10a6:20b:9d::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3131.23; Wed, 1 Jul
+ 2020 02:52:00 +0000
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1101:adaa:ee89:af2a]) by AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1101:adaa:ee89:af2a%3]) with mapi id 15.20.3131.030; Wed, 1 Jul 2020
+ 02:52:00 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Philippe Schenker <philippe.schenker@toradex.com>
+CC:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        Michael Olbrich <m.olbrich@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Stefan Agner <stefan.agner@toradex.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: chipidea: fix ci_irq for role-switching use-case
+Thread-Topic: [PATCH] usb: chipidea: fix ci_irq for role-switching use-case
+Thread-Index: AQHWS6lrNGtWbd2boEmTo3bADIlBSqjvNguAgAAr6YCAAPWjgIAAvP+AgAD5YgA=
+Date:   Wed, 1 Jul 2020 02:52:00 +0000
+Message-ID: <20200701025223.GA11041@b29397-desktop>
+References: <20200626110311.221596-1-philippe.schenker@toradex.com>
+ <20200629072703.GC30684@b29397-desktop>
+ <88f0a5bf564eded8b210457204facdf2c7a9c5dc.camel@toradex.com>
+ <20200630004323.GA12443@b29397-desktop>
+ <7ee055810cb7c4a06bf978f3d443c908f237c006.camel@toradex.com>
+In-Reply-To: <7ee055810cb7c4a06bf978f3d443c908f237c006.camel@toradex.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: toradex.com; dkim=none (message not signed)
+ header.d=none;toradex.com; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.67]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 7b3cbd72-5c55-4150-fccf-08d81d69ba50
+x-ms-traffictypediagnostic: AM6PR04MB5496:
+x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+x-microsoft-antispam-prvs: <AM6PR04MB54968262EA1B2C00944EE03A8B6C0@AM6PR04MB5496.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 04519BA941
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: j0Est4Wg2wtTyQCbEMMYQ2nuNwYBlES/cYVNS+fqCjWb9fox8OiIojdM6szwSdVNhkC0wy0Q6NFv1fQnlRqtPHxfnMVYKio8Q0zoPEz1ymI+RCFKUbRNSjWCIeOd9SgA3yBG4BpYC6ehPqsBz4R7+bym7LB9b1hBU57x1AN1aemBEG+JjF4rvqQVu952iNYDkLcXVXlwgWHtDlro/mos3te0gF2Si6NsBRATC6dS3VrXOApnjmF8W6rEpkkHleDCUbIlnq9anjVO7n6hcuSOKRQ81eOHZKjuGd4qOGFLAingm7a3257dLE71BUKBh1489p28c4tS2sQGph80H1+PvA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(7916004)(366004)(396003)(346002)(39860400002)(136003)(376002)(1076003)(54906003)(66446008)(76116006)(66946007)(2906002)(86362001)(53546011)(6506007)(91956017)(316002)(6512007)(9686003)(66556008)(66476007)(64756008)(4326008)(5660300002)(33716001)(44832011)(6486002)(6916009)(8676002)(478600001)(26005)(83380400001)(71200400001)(33656002)(186003)(8936002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: gMVXPgIh7871rRD/2ch5KWsp7d+IbZvafQX020nf3oMiPUJPxE224ficWarLYSRI7JDtmKgILQaXCHBGKVxLOCQGx6/2bj0JPhBcc533CXqv54Y//7zTdyt8aFikgjWB+lZAhc6xM8e8SN6WElh30s1Kdn2ZhdXLIbXC/F8HCCbDjINHY06gLRNtO3eo+IchqYitu4kFvIfmhfUylvpdpushstopTM35LvCdQi/OG/vOg2ZpaG/lPVHo6sN2nmIeKhlOg2gpQrn1eUt8CS8bjiwXxYJpspkVhJNy3pK8bGBZbuTx9JMYIPSphavimb95wuUO+FIlV80qF+78gzTW3KtjJSdF3WxDtN7XF+vOuFX3q3u3UXqQtoD5+FP/Xab1cDtYtGVbjvgSxDz3RC1Lw47QUj0Xa8IzbEuuycaU3yLTVyyY2VhbPbKPxu3sv2t/psTay0bDBEkEtKEWNBaTWoNG/h235hWKKVpmOM/fiWg=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3C913C65A0A6BA41894449CDA16825E6@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7b3cbd72-5c55-4150-fccf-08d81d69ba50
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jul 2020 02:52:00.6929
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: UoCu0rKADb45kwOJG8BMUMN+3SG8LbaxNE4NL4G9WS1kEC7H+GIAiqZfWjQde0Iyg5tfORsvFa7iVZFQioyoBw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB5496
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 30, 2020 at 3:15 PM Michael Grzeschik <mgr@pengutronix.de> wrote:
->
-> On Mon, Jun 29, 2020 at 09:20:02PM +0000, Thinh Nguyen wrote:
-> >Hi,
-> >
-> >Michael Grzeschik wrote:
-> >> From: Michael Olbrich <m.olbrich@pengutronix.de>
-> >>
-> >> Currently __dwc3_gadget_start_isoc must be called very shortly after
-> >> XferNotReady. Otherwise the frame number is outdated and start transfer
-> >> will fail, even with several retries.
-> >>
-> >> DSTS provides the lower 14 bit of the frame number. Use it in combination
-> >> with the frame number provided by XferNotReady to guess the current frame
-> >> number. This will succeed unless more than one 14 rollover has happened
-> >> since XferNotReady.
-> >>
-> >> Start transfer might still fail if the frame number is increased
-> >> immediately after DSTS is read. So retries are still needed.
-> >> Don't drop the current request if this happens. This way it is not lost and
-> >> can be used immediately to try again with the next frame number.
-> >>
-> >> With this change, __dwc3_gadget_start_isoc is still not successfully in all
-> >> cases bit it increases the acceptable delay after XferNotReady
-> >> significantly.
-> >>
-> >> Signed-off-by: Michael Olbrich <m.olbrich@pengutronix.de>
-> >> Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
-> >> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-> >>
-> >> ---
-> >> v1 -> v2: - removed last_frame_number from struct
-> >>            - included rollover variable
-> >> v2 -> v3: - moved the calculation before the retry loop
-> >>            - skipping the calculation if bInterval > 14
-> >>
-> >>   drivers/usb/dwc3/gadget.c | 19 +++++++++++++++++++
-> >>   1 file changed, 19 insertions(+)
-> >>
-> >> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> >> index 8de6f10d335e1c0..7ad85a7d06f70bf 100644
-> >> --- a/drivers/usb/dwc3/gadget.c
-> >> +++ b/drivers/usb/dwc3/gadget.c
-> >> @@ -1463,6 +1463,7 @@ static int dwc3_gadget_start_isoc_quirk(struct dwc3_ep *dep)
-> >>
-> >>   static int __dwc3_gadget_start_isoc(struct dwc3_ep *dep)
-> >>   {
-> >> +    const struct usb_endpoint_descriptor *desc = dep->endpoint.desc;
-> >>      struct dwc3 *dwc = dep->dwc;
-> >>      int ret;
-> >>      int i;
-> >> @@ -1480,6 +1481,24 @@ static int __dwc3_gadget_start_isoc(struct dwc3_ep *dep)
-> >>                      return dwc3_gadget_start_isoc_quirk(dep);
-> >>      }
-> >>
-> >> +    if (desc->bInterval <= 14) {
-> >> +            u32 frame = __dwc3_gadget_get_frame(dwc);
-> >> +            bool rollover = frame < (dep->frame_number & 0x3fff);
-> >> +
-> >> +            /*
-> >> +             * frame_number is set from XferNotReady and may be already
-> >> +             * out of date. DSTS only provides the lower 14 bit of the
-> >> +             * current frame number. So add the upper two bits of
-> >> +             * frame_number and handle a possible rollover.
-> >> +             * This will provide the correct frame_number unless more than
-> >> +             * rollover has happened since XferNotReady.
-> >> +             */
-> >> +
-> >> +            dep->frame_number = (dep->frame_number & ~0x3fff) | frame;
-> >> +            if (rollover)
-> >> +                    dep->frame_number += BIT(14);
-> >> +    }
-> >> +
-> >>      for (i = 0; i < DWC3_ISOC_MAX_RETRIES; i++) {
-> >>              dep->frame_number = DWC3_ALIGN_FRAME(dep, i + 1);
-> >>
-> >
-> >I think it's cleaner to create a mask for 0x3fff, but I can see how it
-> >can arguably clearer for not using a macro also. It's fine to me either way.
->
-> This mask is used on many usb controllers and
-> everyone is defining their own.
->
-> drivers/usb/gadget/udc/mv_udc.h
-> 34:#define USB_FRINDEX_MASKS    0x3fff
->
-> drivers/usb/gadget/udc/fsl_usb2_udc.h
-> 116:#define     USB_FRINDEX_MASKS                       0x3fff
->
->
-> Even other drivers using the mask without defining it:
->
-> drivers/usb/misc/ftdi-elan.c
-> 2224:   hc_fminterval &= 0x3fff;
-> 2313:                              ((9 *hc_fminterval) / 10) & 0x3fff);
->
-> drivers/usb/chipidea/udc.c
-> 1634:   ret = hw_read(ci, OP_FRINDEX, 0x3fff);
+On 20-06-30 11:59:49, Philippe Schenker wrote:
+> On Tue, 2020-06-30 at 00:43 +0000, Peter Chen wrote:
+> > On 20-06-29 10:04:13, Philippe Schenker wrote:
+> > > On Mon, 2020-06-29 at 07:26 +0000, Peter Chen wrote:
+> > > > On 20-06-26 13:03:11, Philippe Schenker wrote:
+> > > > > If the hardware is in low-power-mode and one plugs in device or
+> > > > > host
+> > > > > it did not switch the mode due to the early exit out of the
+> > > > > interrupt.
+> > > >=20
+> > > > Do you mean there is no coming call for role-switch? Could you
+> > > > please
+> > > > share
+> > > > your dts changes? Try below patch:
+> > >=20
+> > > Here are my DTS changes:
+> > >=20
+> > > diff --git a/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
+> > > b/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
+> > > index 97601375f2640..c424f707a1afa 100644
+> > > --- a/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
+> > > +++ b/arch/arm/boot/dts/imx7-colibri-eval-v3.dtsi
+> > > @@ -13,6 +13,13 @@
+> > >                 stdout-path =3D "serial0:115200n8";
+> > >         };
+> > > =20
+> > > +       extcon_usbc_det: usbc_det {
+> > > +               compatible =3D "linux,extcon-usb-gpio";
+> > > +               id-gpio =3D <&gpio7 14 GPIO_ACTIVE_HIGH>;
+> > > +               pinctrl-names =3D "default";
+> > > +               pinctrl-0 =3D <&pinctrl_usbc_det>;
+> > > +       };
+> > > +
+> > >         /* fixed crystal dedicated to mpc258x */
+> > >         clk16m: clk16m {
+> > >                 compatible =3D "fixed-clock";
+> > > @@ -174,6 +181,7 @@
+> > >  };
+> > > =20
+> > >  &usbotg1 {
+> > > +       extcon =3D <&extcon_usbc_det>, <&extcon_usbc_det>;
+> >=20
+> > If you have only ID extcon, but no VBUS extcon, you only need to
+> > add only phandle, see dt-binding for detail please.
+>=20
+> You where right again! Thanks, this actually solves the RNDIS issue for
+> our colibri-imx7 board:
+>=20
+> +       extcon =3D <0>, <&extcon_usbc_det>;
+>=20
+> Howevever on this iMX7 board we have VBUS hooked up to the SoC, that's
+> why it works only with ID.
+>=20
+> On Colibri-iMX6ULL we do not have VBUS hooked up.
 
-Hi Michael,
-
-I can't find the above code for chipidea, where did you get?
-The frame index value register is a standard EHCI register,
-but for UDC, it is not a common register. UDC design is varied
-for vendors.
+So, there is no any events for connecting to Host? If it is, the
+workaround for this board is disable runtime pm. And you only need to
+write one extcon phandle for ID since you have external event for ID,
+but no event for VBUS. ID event is not the same with VBUS, for example,
+if you plug cable into host, you will not get the ID event, you could
+only get VBUS event if there is an event (eg, through GPIO) for it.
 
 Peter
 
->
-> drivers/usb/dwc3/gadget.c
-> 1406:           test_frame_number = dep->frame_number & 0x3fff;
-> 1453:   dep->frame_number &= 0x3fff;
->
-> drivers/usb/host/ohci-hcd.c
-> 557:            ohci->fminterval = val & 0x3fff;
->
-> drivers/usb/host/xhci-ring.c
-> 3980:   start_frame &= 0x3fff;
->
-> drivers/usb/host/ohci-dbg.c
-> 635:                    rdata & 0x3fff);
-> 641:                    rdata & 0x3fff);
-> 647:                    rdata & 0x3fff);
->
-> drivers/usb/host/u132-hcd.c
-> 1535:          ((9 * fi) / 10) & 0x3fff);
-> 1605:           u132->hc_fminterval = temp & 0x3fff;
->
-> drivers/usb/host/ohci.h
-> 701:    ohci_writel (ohci, ((9 * fi) / 10) & 0x3fff,
->
-> I could write a patch changing them all or at least
-> make a common gadget define.
->
-> What could be a common place for that?
->
-> On device level only it could be include/linux/usb/gadget.h
-> On whole usb level this could be include/uapi/linux/usb/ch9.h
->
-> Ideas?
->
-> >For both patches in this series:
-> >Reviewed-by: Thinh Nguyen <thinhn@synopsys.com>
-> >
-> >Thanks,
-> >Thinh
->
-> Thanks!
-> Michael
->
-> --
-> Pengutronix e.K.                           |                             |
-> Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+> So device/host
+> switching works only with 'extcon =3D <&extcon_usbc_det>,
+> <&extcon_usbc_det>;' but then RNDIS and also a normal thumb-drive does
+> not work. How could I work around this fact? A dummy-gpio that would
+> always read "high" for vbus would be a solution for me.
+>=20
+> Philippe
+>=20
+
+--=20
+
+Thanks,
+Peter Chen=
