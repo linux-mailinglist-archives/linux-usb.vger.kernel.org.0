@@ -2,46 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 013EB211147
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 18:54:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A2C9211148
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 18:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732805AbgGAQyQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        id S1732807AbgGAQyQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
         Wed, 1 Jul 2020 12:54:16 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:35053 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732544AbgGAQyN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jul 2020 12:54:13 -0400
-Received: by mail-lj1-f194.google.com with SMTP id f8so15720195ljc.2
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:45308 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732739AbgGAQyO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jul 2020 12:54:14 -0400
+Received: by mail-lj1-f196.google.com with SMTP id t25so23410419lji.12
         for <linux-usb@vger.kernel.org>; Wed, 01 Jul 2020 09:54:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=XqN5BMTTSq0kRme7uXuwIzqY4FXUwpkC+v2C+TXGWC8=;
-        b=psvx4DkmFIjF94ZCeIbssc8X/FQa02u8MWtgprorfXGUDWXSwKMxumtf2JI0kVYAB9
-         qfKOZclPOsw5TGkJTA09N/vKxOk/f7crjTY4PhqzlwP6l1b9Pay1jNEDforLM4lIJxBV
-         UwO7fgbkK7mXFSipl0ZqVdxQPyMrZb4scBYI2uTRL/CvmEBwaaXbxUoJccBhcGh8yIMJ
-         2p3QReqxNk8UpSx48WR7+tjvRvCsI6XbijqzF8tVFpE95SVAnYd8wraJ3aIfiXOTjOcU
-         O9lShgisW8nSBeBy756hu227Ed7Uz8Si0JvEb/UA9YIkBbbe+tjxZHCE+OKcMCB0CJm/
-         dgZA==
-X-Gm-Message-State: AOAM533Yyym/BUT3D2WAKlchrGkwou+Cvr7Y/ydfAVQ/vPQkL2bv7i60
-        rb2Ip9vgF/2iAcn8e+x4c8FYdE9XA04=
-X-Google-Smtp-Source: ABdhPJxCVFwjbu6xEtiLyxmIbpoeE1K/b5YUK75ublcWu2kLG8Yj0LZJS2t3YJGioXg16NkTMt0xNA==
-X-Received: by 2002:a2e:161a:: with SMTP id w26mr13906073ljd.216.1593622451281;
+        bh=O8+XYERuEbaOaHVA/xOkb+c87xOkSEUM/pBHDX8Fe5c=;
+        b=atvw8v9tvsLyAp9TDRm3X1LrM8XXDRuLwOQiJR4hCwaIjC85eiyLsB6JNj17RR4KG/
+         Ba2aEtnGT3/gwIhZcm3fzpM0DRClG9i+xjdLFhmCBmr8AyVovG08aHKzCKKdWMnkC0Xa
+         B0CNls5QdyBLC1+lh8zb3MSmI7DRmzftEnADV/05oGNzVdle4UlUKNpMNq9926rJLXcf
+         4qVwnHM+9Kzksrx8h7Li9VXxwTDqEv98TMCnBXiseKAswgZyaVnqcmGQghblTg0kQDHt
+         xas9zphH3++/qVCObHFL/2iqvkj24rYb4iYEzqQb91bf8pFZ7Y2l67rFvo7PSYtXlys4
+         fTTw==
+X-Gm-Message-State: AOAM532GNa6SHPjZ3yCoCTMGU74aPFcpf70Fq9uSs/fPexkM3U3Ydvyd
+        e/g40hsjizoq8BNKooHMv4A=
+X-Google-Smtp-Source: ABdhPJxkw3CUXK1L6CdQ985miuHN01lOaXDKkKGh6Jr4MnDHiOrbOFVbaUzZpfxLHAA6uqB3YwIk/g==
+X-Received: by 2002:a2e:8783:: with SMTP id n3mr11600004lji.317.1593622451984;
         Wed, 01 Jul 2020 09:54:11 -0700 (PDT)
 Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id 81sm2253295lfj.24.2020.07.01.09.54.10
+        by smtp.gmail.com with ESMTPSA id n3sm1988777ljc.114.2020.07.01.09.54.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 01 Jul 2020 09:54:10 -0700 (PDT)
 Received: from johan by xi.terra with local (Exim 4.93.0.4)
         (envelope-from <johan@xi.terra>)
-        id 1jqfzq-000425-Ca; Wed, 01 Jul 2020 18:54:06 +0200
+        id 1jqfzq-00042A-Fa; Wed, 01 Jul 2020 18:54:06 +0200
 From:   Johan Hovold <johan@kernel.org>
 To:     Johan Hovold <johan@kernel.org>
 Cc:     linux-usb@vger.kernel.org
-Subject: [PATCH 1/5] USB: serial: garmin_gps: don't compile unused packet definitions
-Date:   Wed,  1 Jul 2020 18:53:38 +0200
-Message-Id: <20200701165342.15448-2-johan@kernel.org>
+Subject: [PATCH 2/5] USB: serial: iuu_phoenix: drop unused URB submission results
+Date:   Wed,  1 Jul 2020 18:53:39 +0200
+Message-Id: <20200701165342.15448-3-johan@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200701165342.15448-1-johan@kernel.org>
 References: <20200701165342.15448-1-johan@kernel.org>
@@ -52,48 +52,88 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Don't compile the four unused packet definitions but keep them around
-for documentation purposes.
+The driver is submitting URBs in various completion callbacks without
+bothering to log errors yet still assigned the return value to temporary
+variables. Let's drop those temporaries.
 
-This avoids the corresponding W=1 (-Wunused-const-variable) warnings.
+This suppresses the corresponding W=1 (-Wunused-but-set-variable)
+warnings.
 
 Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
- drivers/usb/serial/garmin_gps.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ drivers/usb/serial/iuu_phoenix.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/usb/serial/garmin_gps.c b/drivers/usb/serial/garmin_gps.c
-index d63072fee099..c02c19bb1183 100644
---- a/drivers/usb/serial/garmin_gps.c
-+++ b/drivers/usb/serial/garmin_gps.c
-@@ -179,19 +179,22 @@ static unsigned char const GARMIN_START_SESSION_REPLY[]
- 	= { 0, 0, 0, 0,  6, 0, 0, 0, 4, 0, 0, 0 };
- static unsigned char const GARMIN_BULK_IN_AVAIL_REPLY[]
- 	= { 0, 0, 0, 0,  2, 0, 0, 0, 0, 0, 0, 0 };
-+static unsigned char const GARMIN_STOP_TRANSFER_REQ[]
-+	= { 20, 0, 0, 0,  10, 0, 0, 0, 2, 0, 0, 0, 0, 0 };
-+static unsigned char const GARMIN_STOP_TRANSFER_REQ_V2[]
-+	= { 20, 0, 0, 0,  10, 0, 0, 0, 1, 0, 0, 0, 0 };
-+
-+/* packets currently unused, left as documentation */
-+#if 0
- static unsigned char const GARMIN_APP_LAYER_REPLY[]
- 	= { 0x14, 0, 0, 0 };
- static unsigned char const GARMIN_START_PVT_REQ[]
- 	= { 20, 0, 0, 0,  10, 0, 0, 0, 2, 0, 0, 0, 49, 0 };
- static unsigned char const GARMIN_STOP_PVT_REQ[]
- 	= { 20, 0, 0, 0,  10, 0, 0, 0, 2, 0, 0, 0, 50, 0 };
--static unsigned char const GARMIN_STOP_TRANSFER_REQ[]
--	= { 20, 0, 0, 0,  10, 0, 0, 0, 2, 0, 0, 0, 0, 0 };
--static unsigned char const GARMIN_STOP_TRANSFER_REQ_V2[]
--	= { 20, 0, 0, 0,  10, 0, 0, 0, 1, 0, 0, 0, 0 };
- static unsigned char const PRIVATE_REQ[]
- 	=    { 0x4B, 0x6E, 0x10, 0x01,  0xFF, 0, 0, 0, 0xFF, 0, 0, 0 };
--
-+#endif
+diff --git a/drivers/usb/serial/iuu_phoenix.c b/drivers/usb/serial/iuu_phoenix.c
+index d5bff69b1769..6336616fee49 100644
+--- a/drivers/usb/serial/iuu_phoenix.c
++++ b/drivers/usb/serial/iuu_phoenix.c
+@@ -158,7 +158,6 @@ static int iuu_tiocmget(struct tty_struct *tty)
+ static void iuu_rxcmd(struct urb *urb)
+ {
+ 	struct usb_serial_port *port = urb->context;
+-	int result;
+ 	int status = urb->status;
+ 
+ 	if (status) {
+@@ -174,7 +173,7 @@ static void iuu_rxcmd(struct urb *urb)
+ 					  port->bulk_out_endpointAddress),
+ 			  port->write_urb->transfer_buffer, 1,
+ 			  read_rxcmd_callback, port);
+-	result = usb_submit_urb(port->write_urb, GFP_ATOMIC);
++	usb_submit_urb(port->write_urb, GFP_ATOMIC);
+ }
+ 
+ static int iuu_reset(struct usb_serial_port *port, u8 wt)
+@@ -241,7 +240,6 @@ static void iuu_update_status_callback(struct urb *urb)
+ static void iuu_status_callback(struct urb *urb)
+ {
+ 	struct usb_serial_port *port = urb->context;
+-	int result;
+ 	int status = urb->status;
+ 
+ 	dev_dbg(&port->dev, "%s - status = %d\n", __func__, status);
+@@ -250,7 +248,7 @@ static void iuu_status_callback(struct urb *urb)
+ 					  port->bulk_in_endpointAddress),
+ 			  port->read_urb->transfer_buffer, 256,
+ 			  iuu_update_status_callback, port);
+-	result = usb_submit_urb(port->read_urb, GFP_ATOMIC);
++	usb_submit_urb(port->read_urb, GFP_ATOMIC);
+ }
+ 
+ static int iuu_status(struct usb_serial_port *port)
+@@ -351,7 +349,6 @@ static void iuu_rgbf_fill_buffer(u8 *buf, u8 r1, u8 r2, u8 g1, u8 g2, u8 b1,
+ static void iuu_led_activity_on(struct urb *urb)
+ {
+ 	struct usb_serial_port *port = urb->context;
+-	int result;
+ 	char *buf_ptr = port->write_urb->transfer_buffer;
+ 	*buf_ptr++ = IUU_SET_LED;
+ 	if (xmas) {
+@@ -366,13 +363,12 @@ static void iuu_led_activity_on(struct urb *urb)
+ 					  port->bulk_out_endpointAddress),
+ 			  port->write_urb->transfer_buffer, 8 ,
+ 			  iuu_rxcmd, port);
+-	result = usb_submit_urb(port->write_urb, GFP_ATOMIC);
++	usb_submit_urb(port->write_urb, GFP_ATOMIC);
+ }
+ 
+ static void iuu_led_activity_off(struct urb *urb)
+ {
+ 	struct usb_serial_port *port = urb->context;
+-	int result;
+ 	char *buf_ptr = port->write_urb->transfer_buffer;
+ 	if (xmas) {
+ 		iuu_rxcmd(urb);
+@@ -386,7 +382,7 @@ static void iuu_led_activity_off(struct urb *urb)
+ 					  port->bulk_out_endpointAddress),
+ 			  port->write_urb->transfer_buffer, 8 ,
+ 			  iuu_rxcmd, port);
+-	result = usb_submit_urb(port->write_urb, GFP_ATOMIC);
++	usb_submit_urb(port->write_urb, GFP_ATOMIC);
+ }
  
  
- static const struct usb_device_id id_table[] = {
 -- 
 2.26.2
 
