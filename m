@@ -2,130 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A69E210481
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 09:10:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0A1A210507
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 09:29:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728107AbgGAHKz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Jul 2020 03:10:55 -0400
-Received: from mail5.windriver.com ([192.103.53.11]:41688 "EHLO mail5.wrs.com"
+        id S1728161AbgGAH3W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Jul 2020 03:29:22 -0400
+Received: from mx2.suse.de ([195.135.220.15]:51368 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727847AbgGAHKy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 1 Jul 2020 03:10:54 -0400
-Received: from ALA-HCA.corp.ad.wrs.com (ala-hca.corp.ad.wrs.com [147.11.189.40])
-        by mail5.wrs.com (8.15.2/8.15.2) with ESMTPS id 0617A0oY022996
-        (version=TLSv1 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
-        Wed, 1 Jul 2020 00:10:10 -0700
-Received: from pek-lpg-core1-vm1.wrs.com (128.224.156.106) by
- ALA-HCA.corp.ad.wrs.com (147.11.189.40) with Microsoft SMTP Server id
- 14.3.487.0; Wed, 1 Jul 2020 00:09:49 -0700
-From:   <qiang.zhang@windriver.com>
-To:     <balbi@kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>
-Subject: [PATCH] usb: gadget: function: printer: Interface is disabled and returns error
-Date:   Tue, 30 Jun 2020 13:23:31 +0800
-Message-ID: <20200630052331.33020-1-qiang.zhang@windriver.com>
-X-Mailer: git-send-email 2.24.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
+        id S1727981AbgGAH3W (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 1 Jul 2020 03:29:22 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id E0980ADC8;
+        Wed,  1 Jul 2020 07:29:20 +0000 (UTC)
+Message-ID: <1593587327.2678.2.camel@suse.com>
+Subject: [TEST]Re: [PATCH] USB: cdc-wdm: Call wake_up_all() when clearing
+ WDM_IN_USE bit.
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Alan Stern <stern@rowland.harvard.edu>
+Cc:     USB list <linux-usb@vger.kernel.org>
+Date:   Wed, 01 Jul 2020 09:08:47 +0200
+In-Reply-To: <0c43caf8-1135-1d38-cb57-9c0f84c4394d@i-love.sakura.ne.jp>
+References: <1590408381.2838.4.camel@suse.com>
+         <4a686d9a-d09f-44f3-553c-bcf0bd8a8ea1@i-love.sakura.ne.jp>
+         <082ae642-0703-6c26-39f6-d725e395ef9a@i-love.sakura.ne.jp>
+         <CAAeHK+ww0YLUKGjQF5KfzoUUsdfLJdv5guUXRq4q46VfPiQubQ@mail.gmail.com>
+         <27b7545e-8f41-10b8-7c02-e35a08eb1611@i-love.sakura.ne.jp>
+         <CAAeHK+ww0u0G94z_Y7VXLCVTQVZ9thO0q69n+Fj3jKT6MtpPng@mail.gmail.com>
+         <20200528194057.GA21709@rowland.harvard.edu>
+         <CAAeHK+ySAnU03cvg1=+yHh0YK1UFO4mrv-N9FcDDMt_0AfGZSQ@mail.gmail.com>
+         <20200528205807.GB21709@rowland.harvard.edu>
+         <1590852311.14886.3.camel@suse.com>
+         <20200530154728.GB29298@rowland.harvard.edu>
+         <0c43caf8-1135-1d38-cb57-9c0f84c4394d@i-love.sakura.ne.jp>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Zqiang <qiang.zhang@windriver.com>
+Am Montag, den 08.06.2020, 11:24 +0900 schrieb Tetsuo Handa:
 
-After the device is disconnected from the host side, the interface of
-the device is reset. If the userspace operates the device again,
-an error code should be returned.
+I am having mail troubles. This is a test, as mail seems not to
+be delivered in this thread specifically.
 
-Signed-off-by: Zqiang <qiang.zhang@windriver.com>
----
- drivers/usb/gadget/function/f_printer.c | 36 +++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
-
-diff --git a/drivers/usb/gadget/function/f_printer.c b/drivers/usb/gadget/function/f_printer.c
-index 9c7ed2539ff7..2b45a61e4213 100644
---- a/drivers/usb/gadget/function/f_printer.c
-+++ b/drivers/usb/gadget/function/f_printer.c
-@@ -338,6 +338,11 @@ printer_open(struct inode *inode, struct file *fd)
- 
- 	spin_lock_irqsave(&dev->lock, flags);
- 
-+	if (dev->interface < 0) {
-+		spin_unlock_irqrestore(&dev->lock, flags);
-+		return -ENODEV;
-+	}
-+
- 	if (!dev->printer_cdev_open) {
- 		dev->printer_cdev_open = 1;
- 		fd->private_data = dev;
-@@ -430,6 +435,12 @@ printer_read(struct file *fd, char __user *buf, size_t len, loff_t *ptr)
- 	mutex_lock(&dev->lock_printer_io);
- 	spin_lock_irqsave(&dev->lock, flags);
- 
-+	if (dev->interface < 0) {
-+		spin_unlock_irqrestore(&dev->lock, flags);
-+		mutex_unlock(&dev->lock_printer_io);
-+		return -ENODEV;
-+	}
-+
- 	/* We will use this flag later to check if a printer reset happened
- 	 * after we turn interrupts back on.
- 	 */
-@@ -561,6 +572,12 @@ printer_write(struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
- 	mutex_lock(&dev->lock_printer_io);
- 	spin_lock_irqsave(&dev->lock, flags);
- 
-+	if (dev->interface < 0) {
-+		spin_unlock_irqrestore(&dev->lock, flags);
-+		mutex_unlock(&dev->lock_printer_io);
-+		return -ENODEV;
-+	}
-+
- 	/* Check if a printer reset happens while we have interrupts on */
- 	dev->reset_printer = 0;
- 
-@@ -667,6 +684,13 @@ printer_fsync(struct file *fd, loff_t start, loff_t end, int datasync)
- 
- 	inode_lock(inode);
- 	spin_lock_irqsave(&dev->lock, flags);
-+
-+	if (dev->interface < 0) {
-+		spin_unlock_irqrestore(&dev->lock, flags);
-+		inode_unlock(inode);
-+		return -ENODEV;
-+	}
-+
- 	tx_list_empty = (likely(list_empty(&dev->tx_reqs)));
- 	spin_unlock_irqrestore(&dev->lock, flags);
- 
-@@ -689,6 +713,13 @@ printer_poll(struct file *fd, poll_table *wait)
- 
- 	mutex_lock(&dev->lock_printer_io);
- 	spin_lock_irqsave(&dev->lock, flags);
-+
-+	if (dev->interface < 0) {
-+		spin_unlock_irqrestore(&dev->lock, flags);
-+		mutex_unlock(&dev->lock_printer_io);
-+		return EPOLLERR | EPOLLHUP;
-+	}
-+
- 	setup_rx_reqs(dev);
- 	spin_unlock_irqrestore(&dev->lock, flags);
- 	mutex_unlock(&dev->lock_printer_io);
-@@ -722,6 +753,11 @@ printer_ioctl(struct file *fd, unsigned int code, unsigned long arg)
- 
- 	spin_lock_irqsave(&dev->lock, flags);
- 
-+	if (dev->interface < 0) {
-+		spin_unlock_irqrestore(&dev->lock, flags);
-+		return -ENODEV;
-+	}
-+
- 	switch (code) {
- 	case GADGET_GET_PRINTER_STATUS:
- 		status = (int)dev->printer_status;
--- 
-2.24.1
+	Sorry
+		Oliver
 
