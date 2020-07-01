@@ -2,160 +2,251 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FBCF21137C
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 21:28:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB5AD2114F1
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 23:22:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726021AbgGAT2b convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 1 Jul 2020 15:28:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40814 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725875AbgGAT2a (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jul 2020 15:28:30 -0400
-Received: from smtp2.hosting90.cz (smtp2.hosting90.cz [IPv6:2a03:b780:1:0:216:3eff:fe00:24c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B756C08C5C1
-        for <linux-usb@vger.kernel.org>; Wed,  1 Jul 2020 12:28:30 -0700 (PDT)
-Received: from [46.229.122.58] (helo=[10.10.0.107])
-        by smtp2.hosting90.cz with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
-        (Exim 4.92)
-        (envelope-from <Jerry@jrr.cz>)
-        id 1jqiPD-0000IR-H7; Wed, 01 Jul 2020 21:28:27 +0200
-Subject: Re: [PATCH v4] usbserial: cp210x - icount support for parity error
- checking
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-References: <b4cd2557-9a61-5ccd-32ad-48b0c68bef6b@jrr.cz>
- <20200621085816.GB95977@kroah.com>
- <03712b5a-ecb6-ae42-ff8e-8d5d6f2ed918@jrr.cz>
- <20200621095509.GA120230@kroah.com>
- <470484c8-7afc-c593-5ca9-cdb97dba39e1@jrr.cz>
- <20200621135838.GA125568@kroah.com>
- <7bdff86f-0988-2afc-e1a6-35df2931fd5b@jrr.cz>
- <20200622053146.GB134804@kroah.com>
- <838f09f9-4063-1c2c-8b4d-c18dee6c18de@jrr.cz>
- <20200701154257.GF3334@localhost>
-From:   Jerry <Jerry@jrr.cz>
-Message-ID: <13482d69-b286-b20e-ee3a-f8c5f12aad18@jrr.cz>
-Date:   Wed, 1 Jul 2020 21:28:25 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Firefox/60.0 SeaMonkey/2.53.2
-MIME-Version: 1.0
-In-Reply-To: <20200701154257.GF3334@localhost>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8BIT
-X-Antivirus: Clamav/CLEAN
-X-Scan-Signature: 2ed922bdee5712e996d48f0f9a39b9da
-X-Authenticated-Id: jerry@jrr.cz
+        id S1727807AbgGAVWJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Jul 2020 17:22:09 -0400
+Received: from rnd-relay.smtp.broadcom.com ([192.19.229.170]:43036 "EHLO
+        rnd-relay.smtp.broadcom.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727124AbgGAVWI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jul 2020 17:22:08 -0400
+Received: from mail-irv-17.broadcom.com (mail-irv-17.lvn.broadcom.net [10.75.242.48])
+        by rnd-relay.smtp.broadcom.com (Postfix) with ESMTP id 8CF3430C0B2;
+        Wed,  1 Jul 2020 14:22:06 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 rnd-relay.smtp.broadcom.com 8CF3430C0B2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
+        s=dkimrelay; t=1593638526;
+        bh=nhrK2RlYox51CSLhX6kAW8Tc5Nzfqg2aOArAqXmjQoM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=rWmjvfLu2xdb5dBCSs2msmprlhJNkn8S5dVXenLzoHn34v3NkIG4LvR1NxJ8E4Yt0
+         GN0HE+FLpkmBfHttGAJUwKJJ5ofv2/RLGYZPDEwjVpSlvsq/WvDaLJfkA3eE8TTfFY
+         8fJtetnFJI2FqIGNf1NYqtVhOTROC88YoDWRlbEc=
+Received: from stbsrv-and-01.and.broadcom.net (stbsrv-and-01.and.broadcom.net [10.28.16.211])
+        by mail-irv-17.broadcom.com (Postfix) with ESMTP id 57535140096;
+        Wed,  1 Jul 2020 14:22:00 -0700 (PDT)
+From:   Jim Quinlan <james.quinlan@broadcom.com>
+To:     linux-pci@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        devel@driverdev.osuosl.org (open list:STAGING SUBSYSTEM),
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE),
+        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS FOR ALLWINNER
+        A10), Florian Fainelli <f.fainelli@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        iommu@lists.linux-foundation.org (open list:IOMMU DRIVERS),
+        Jens Axboe <axboe@kernel.dk>,
+        Julien Grall <julien.grall@arm.com>,
+        linux-acpi@vger.kernel.org (open list:ACPI FOR ARM64 (ACPI/arm64)),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM PORT),
+        linux-ide@vger.kernel.org (open list:LIBATA SUBSYSTEM (Serial and
+        Parallel ATA drivers)), linux-kernel@vger.kernel.org (open list),
+        linux-media@vger.kernel.org (open list:ALLWINNER A10 CSI DRIVER),
+        linux-remoteproc@vger.kernel.org (open list:REMOTE PROCESSOR
+        (REMOTEPROC) SUBSYSTEM),
+        linux-rpi-kernel@lists.infradead.org (moderated list:BROADCOM
+        BCM2711/BCM2835 ARM ARCHITECTURE),
+        linux-sh@vger.kernel.org (open list:SUPERH),
+        linux-usb@vger.kernel.org (open list:USB SUBSYSTEM),
+        Oliver Neukum <oneukum@suse.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Rob Herring <robh@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH v6 00/12] PCI: brcmstb: enable PCIe for STB chips
+Date:   Wed,  1 Jul 2020 17:21:30 -0400
+Message-Id: <20200701212155.37830-1-james.quinlan@broadcom.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Johan Hovold wrote on 7/1/20 5:42 PM:
-> It would be better if could detect both types of overrun.
->
-> Did you try moving the purge command at close to after disabling the
-> uart?
->
-> Or perhaps we can add a "dummy" comm-status command after disabling the
-> uart?
-Hello
-I try to describe more details about this overrun problem:
-1) I tried only CP2102 because our company uses it, I have no idea whether 
-the same apply for CP2104,2105... or not, I don't have another chip.
-2) Maybe I should note I'm always using even parity (because of STM32 
-bootloader protocol).
-3) I thought the problem is created by unreaded data when closing because 
-overrun was reported after closing if GET_COMM_STATUS shown positive 
-ulAmountInInQueue before closing. Later I discovered that if I close the 
-port, wait, send some data from outside, then open it, I will also get 
-HW_OVERRUN flag.
-4) So currently I suppose that problem is usually created by any incoming 
-data after disabling interface. If I remove UART_DISABLE from close method, 
-no overrun ever reported.
-5) Unfortunately this overrun is not reported immediately after port 
-opening but later after receiving first byte. I didn't find any way how to 
-purge nor dummy read this flag before transmitting data.
-6) I didn't find this problem in a chip errata and nobody complaining about it.
-7) I successfully reproduced the same problem in MS Windows 10. If some 
-data arrived to closed port, then I open it, everything is OK but after 
-sending request and receiving reply I often get overrun indication from 
-Win32 API ClearCommError()
-8) I removed HW_OVERRUN checking because I don't want to break anything but 
-maybe Linux driver should work the same way as Windows and don't hide this 
-problem?
-9) I needed just to detect parity error from user space and things 
-complicate.  :-)
->>    
->>    /*
->> - * Read how many bytes are waiting in the TX queue.
->> + * Read how many bytes are waiting in the TX queue and update error counters.
->>     */
->> -static int cp210x_get_tx_queue_byte_count(struct usb_serial_port *port,
->> -		u32 *count)
->> +static int cp210x_get_comm_status(struct usb_serial_port *port,
->> +		u32 *tx_count)
->>    {
->>    	struct usb_serial *serial = port->serial;
->>    	struct cp210x_port_private *port_priv = usb_get_serial_port_data(port);
->> @@ -855,7 +865,17 @@ static int cp210x_get_tx_queue_byte_coun
->>    			0, port_priv->bInterfaceNumber, sts, sizeof(*sts),
->>    			USB_CTRL_GET_TIMEOUT);
->>    	if (result == sizeof(*sts)) {
->> -		*count = le32_to_cpu(sts->ulAmountInOutQueue);
->> +		u32 flags = le32_to_cpu(sts->ulErrors);
->> +		if (flags & CP210X_SERIAL_ERR_BREAK)
->> +			port->icount.brk++;
->> +		if (flags & CP210X_SERIAL_ERR_FRAME)
->> +			port->icount.frame++;
->> +		if (flags & CP210X_SERIAL_ERR_QUEUE_OVERRUN)
->> +			port->icount.overrun++;
->> +		if (flags & CP210X_SERIAL_ERR_PARITY)
->> +			port->icount.parity++;
->> +		if (tx_count)
->> +			*tx_count = le32_to_cpu(sts->ulAmountInOutQueue);
->>    		result = 0;
->>    	} else {
->>    		dev_err(&port->dev, "failed to get comm status: %d\n", result);
->> @@ -873,13 +893,26 @@ static bool cp210x_tx_empty(struct usb_s
->>    	int err;
->>    	u32 count;
->>    
->> -	err = cp210x_get_tx_queue_byte_count(port, &count);
->> +	err = cp210x_get_comm_status(port, &count);
->>    	if (err)
->>    		return true;
->>    
->>    	return !count;
->>    }
-> It seems a bit weird to be updating the error counters while polling
-> for tx-empty during close. How about having cp210x_get_comm_status()
-> take two u32 pointers for tx_count and errors and only pass in one or
-> the other from cp210x_tx_empty() and cp210x_get_icount() respectively?
-I suppose that GET_COMM_STATUS reads and CLEAR pending error flags (not 
-explained in datasheet but behaves that way). So if some errors are 
-reported during cp210x_tx_empty() it can be either counted immediately or 
-lost. I'm not sure if cp210x_tx_empty() is called ONLY during close but 
-seems be more consistent to count every detected error regardless who calls 
-GET_COMM_STATUS.
->> +static int cp210x_get_icount(struct tty_struct *tty,
->> +		struct serial_icounter_struct *icount)
->> +{
->> +	struct usb_serial_port *port = tty->driver_data;
->> +	int result;
->> +
->> +	result = cp210x_get_comm_status(port, NULL);
->> +	if (result)
->> +		return result;
-> And then you update the error counters here, preferably under the port
-> lock.
->
-I wasn't sure about port lock. I looked in several usb drivers (ftdi, 
-pl2303) and it seems that port->icount.xxx increments are usually done out 
-of lock. But if you wish I put increments into 
-spin_lock_irqsave(&port->lock, flags), correct?
+Patchset Summary:
+  Enhance a PCIe host controller driver.  Because of its unusual design
+  we are foced to change dev->dma_pfn_offset into a more general role
+  allowing multiple offsets.  See the 'v1' notes below for more info.
 
-> Johan
-Jerry
+v6:
+  Commit "device core: Introduce DMA range map":
+  -- of_dma_get_range() now takes a single argument and returns either
+     NULL, a valid map, or an ERR_PTR. (Robin)
+  -- offsets are no longer a PFN value but an actual address. (Robin)
+  -- the bus_dma_region struct stores the range size instead of
+     the cpu_end and pci_end values. (Robin)
+  -- devices that were setting a single offset with no boundaries
+     have been modified to have boundaries; in a few places
+     where this informatino was unavilable a /* FIXME: ... */
+     comment was added. (Robin)
+  -- dma_attach_offset_range() can be called when an offset
+     map already exists; if it's range is already present
+     nothing is done and success is returned. (Robin)
+  All commits:
+  -- Man name/style/corrections/etc changed (Bjorn)
+  -- rebase to Torvalds master
 
+v5:
+  Commit "device core: Introduce multiple dma pfn offsets"
+  -- in of/address.c: "map_size = 0" => "*map_size = 0"
+  -- use kcalloc instead of kzalloc (AndyS)
+  -- use PHYS_ADDR_MAX instead of "~(phys_addr_t)0"
+  Commit "PCI: brcmstb: Set internal memory viewport sizes"
+  -- now gives error on missing dma-ranges property.
+  Commit "dt-bindings: PCI: Add bindings for more Brcmstb chips"
+  -- removed "Allof:" from brcm,scb-sizes definition (RobH)
+  All Commits:
+  -- indentation style, use max chars 100 (AndyS)
+  -- rebased to torvalds master
+
+v4:
+  Commit "device core: Introduce multiple dma pfn offsets"
+  -- of_dma_get_range() does not take a dev param but instead
+     takes two "out" params: map and map_size.  We do this so
+     that the code that parses dma-ranges is separate from
+     the code that modifies 'dev'.   (Nicolas)
+  -- the separate case of having a single pfn offset has
+     been removed and is now processed by going through the
+     map array. (Nicolas)
+  -- move attach_uniform_dma_pfn_offset() from of/address.c to
+     dma/mapping.c so that it does not depend on CONFIG_OF. (Nicolas)
+  -- devm_kcalloc => devm_kzalloc (DanC)
+  -- add/fix assignment to dev->dma_pfn_offset_map for func
+     attach_uniform_dma_pfn_offset() (DanC, Nicolas)
+  -- s/struct dma_pfn_offset_region/struct bus_dma_region/ (Nicolas)
+  -- s/attach_uniform_dma_pfn_offset/dma_attach_uniform_pfn_offset/
+  -- s/attach_dma_pfn_offset_map/dma_attach_pfn_offset_map/
+  -- More use of PFN_{PHYS,DOWN,UP}. (AndyS)
+  Commit "of: Include a dev param in of_dma_get_range()"
+  -- this commit was sqaushed with "device core: Introduce ..."
+
+v3:
+  Commit "device core: Introduce multiple dma pfn offsets"
+  Commit "arm: dma-mapping: Invoke dma offset func if needed"
+  -- The above two commits have been squashed.  More importantly,
+     the code has been modified so that the functionality for
+     multiple pfn offsets subsumes the use of dev->dma_pfn_offset.
+     In fact, dma_pfn_offset is removed and supplanted by
+     dma_pfn_offset_map, which is a pointer to an array.  The
+     more common case of a uniform offset is now handled as
+     a map with a single entry, while cases requiring multiple
+     pfn offsets use a map with multiple entries.  Code paths
+     that used to do this:
+
+         dev->dma_pfn_offset = mydrivers_pfn_offset;
+
+     have been changed to do this:
+
+         attach_uniform_dma_pfn_offset(dev, pfn_offset);
+
+  Commit "dt-bindings: PCI: Add bindings for more Brcmstb chips"
+  -- Add if/then clause for required props: resets, reset-names (RobH)
+  -- Change compatible list from const to enum (RobH)
+  -- Change list of u32-tuples to u64 (RobH)
+
+  Commit "of: Include a dev param in of_dma_get_range()"
+  -- modify of/unittests.c to add NULL param in of_dma_get_range() call.
+
+  Commit "device core: Add ability to handle multiple dma offsets"
+  -- align comment in device.h (AndyS).
+  -- s/cpu_beg/cpu_start/ and s/dma_beg/dma_start/ in struct
+     dma_pfn_offset_region (AndyS).
+
+v2:
+Commit: "device core: Add ability to handle multiple dma offsets"
+  o Added helper func attach_dma_pfn_offset_map() in address.c (Chistoph)
+  o Helpers funcs added to __phys_to_dma() & __dma_to_phys() (Christoph)
+  o Added warning when multiple offsets are needed and !DMA_PFN_OFFSET_MAP
+  o dev->dma_pfn_map => dev->dma_pfn_offset_map
+  o s/frm/from/ for dma_pfn_offset_frm_{phys,dma}_addr() (Christoph)
+  o In device.h: s/const void */const struct dma_pfn_offset_region */
+  o removed 'unlikely' from unlikely(dev->dma_pfn_offset_map) since
+    guarded by CONFIG_DMA_PFN_OFFSET_MAP (Christoph)
+  o Since dev->dma_pfn_offset is copied in usb/core/{usb,message}.c, now
+    dev->dma_pfn_offset_map is copied as well.
+  o Merged two of the DMA commits into one (Christoph).
+
+Commit "arm: dma-mapping: Invoke dma offset func if needed":
+  o Use helper functions instead of #if CONFIG_DMA_PFN_OFFSET
+
+Other commits' changes:
+  o Removed need for carrying of_id var in priv (Nicolas)
+  o Commit message rewordings (Bjorn)
+  o Commit log messages filled to 75 chars (Bjorn)
+  o devm_reset_control_get_shared())
+    => devm_reset_control_get_optional_shared (Philipp)
+  o Add call to reset_control_assert() in PCIe remove routines (Philipp)
+
+v1:
+This patchset expands the usefulness of the Broadcom Settop Box PCIe
+controller by building upon the PCIe driver used currently by the
+Raspbery Pi.  Other forms of this patchset were submitted by me years
+ago and not accepted; the major sticking point was the code required
+for the DMA remapping needed for the PCIe driver to work [1].
+
+There have been many changes to the DMA and OF subsystems since that
+time, making a cleaner and less intrusive patchset possible.  This
+patchset implements a generalization of "dev->dma_pfn_offset", except
+that instead of a single scalar offset it provides for multiple
+offsets via a function which depends upon the "dma-ranges" property of
+the PCIe host controller.  This is required for proper functionality
+of the BrcmSTB PCIe controller and possibly some other devices.
+
+[1] https://lore.kernel.org/linux-arm-kernel/1516058925-46522-5-git-send-email-jim2101024@gmail.com/
+
+
+Jim Quinlan (12):
+  PCI: brcmstb: PCIE_BRCMSTB depends on ARCH_BRCMSTB
+  ata: ahci_brcm: Fix use of BCM7216 reset controller
+  dt-bindings: PCI: Add bindings for more Brcmstb chips
+  PCI: brcmstb: Add bcm7278 register info
+  PCI: brcmstb: Add suspend and resume pm_ops
+  PCI: brcmstb: Add bcm7278 PERST# support
+  PCI: brcmstb: Add control of rescal reset
+  device core: Introduce DMA range map, supplanting dma_pfn_offset
+  PCI: brcmstb: Set additional internal memory DMA viewport sizes
+  PCI: brcmstb: Accommodate MSI for older chips
+  PCI: brcmstb: Set bus max burst size by chip type
+  PCI: brcmstb: Add bcm7211, bcm7216, bcm7445, bcm7278 to match list
+
+ .../bindings/pci/brcm,stb-pcie.yaml           |  56 ++-
+ arch/arm/include/asm/dma-mapping.h            |   9 +-
+ arch/arm/mach-keystone/keystone.c             |  17 +-
+ arch/sh/drivers/pci/pcie-sh7786.c             |   9 +-
+ arch/sh/kernel/dma-coherent.c                 |  14 +-
+ arch/x86/pci/sta2x11-fixup.c                  |   7 +-
+ drivers/acpi/arm64/iort.c                     |   5 +-
+ drivers/ata/ahci_brcm.c                       |  11 +-
+ drivers/gpu/drm/sun4i/sun4i_backend.c         |   7 +-
+ drivers/iommu/io-pgtable-arm.c                |   2 +-
+ .../platform/sunxi/sun4i-csi/sun4i_csi.c      |   6 +-
+ .../platform/sunxi/sun6i-csi/sun6i_csi.c      |   5 +-
+ drivers/of/address.c                          |  95 ++--
+ drivers/of/device.c                           |  50 ++-
+ drivers/of/of_private.h                       |   9 +-
+ drivers/of/unittest.c                         |  35 +-
+ drivers/pci/controller/Kconfig                |   3 +-
+ drivers/pci/controller/pcie-brcmstb.c         | 408 +++++++++++++++---
+ drivers/remoteproc/remoteproc_core.c          |   2 +-
+ .../staging/media/sunxi/cedrus/cedrus_hw.c    |   8 +-
+ drivers/usb/core/message.c                    |   4 +-
+ drivers/usb/core/usb.c                        |   2 +-
+ include/linux/device.h                        |   4 +-
+ include/linux/dma-direct.h                    |  10 +-
+ include/linux/dma-mapping.h                   |  37 ++
+ kernel/dma/coherent.c                         |  11 +-
+ kernel/dma/mapping.c                          |  53 +++
+ 27 files changed, 684 insertions(+), 195 deletions(-)
+
+-- 
+2.17.1
 
