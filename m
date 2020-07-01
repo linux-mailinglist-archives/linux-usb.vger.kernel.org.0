@@ -2,191 +2,189 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF186210613
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 10:22:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15816210638
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 10:32:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728692AbgGAIWd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Jul 2020 04:22:33 -0400
-Received: from mga17.intel.com ([192.55.52.151]:16270 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728479AbgGAIWd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 1 Jul 2020 04:22:33 -0400
-IronPort-SDR: uoHWjciRQc22/Cz7YqEBVodydEOWk0xyxsIzPgfctjmoXy/5pATslB7Wg3aQFomFPfqL8ovvC3
- apu1XfPOkxHw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9668"; a="126600356"
-X-IronPort-AV: E=Sophos;i="5.75,299,1589266800"; 
-   d="scan'208";a="126600356"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2020 01:22:33 -0700
-IronPort-SDR: UxfLNcQYuiJvpdPz8HpFrlTDXY+jczgF1A1EGlKOj/NjPYco/JmGWlpIw2C70SdMWBPuDFPnf9
- w5cNCeaFB4aw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,299,1589266800"; 
-   d="scan'208";a="386943357"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 01 Jul 2020 01:22:30 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 01 Jul 2020 11:22:30 +0300
-Date:   Wed, 1 Jul 2020 11:22:30 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, Benson Leung <bleung@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:USB TYPEC CLASS" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] usb: typec: Add num_altmodes partner attribute
-Message-ID: <20200701082230.GF856968@kuha.fi.intel.com>
-References: <20200701003149.3101219-1-pmalani@chromium.org>
+        id S1728939AbgGAIb7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Jul 2020 04:31:59 -0400
+Received: from mail-vi1eur05on2042.outbound.protection.outlook.com ([40.107.21.42]:25312
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728911AbgGAIb4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 1 Jul 2020 04:31:56 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UUkd8kdZ/CLyNpUcuIKB7z4+wed82rTGgULtnlbQga/giTm9c+CBwJy/Mu3ioxi8IuOXJV1BKLz37v+elrTz5oGFZ2UNksGtcf+AeUGKIkZ9u0ELVsuhrJua9roC6krZ5K2Hb3/Fg9CKMkZ0NToPQjhG5L+x2vbztoONpugw92G2L7QBp3Xb3KOTvUaU+so7m7Z5WypHRXRxKSab4UzrrJNPF7zUrq3/+Sn8OlonQ+IkzkIe9dJJ7R+QPJcXFQkVY7cM6nAs+IZIjVcxskXt+p+Kj/gNFG8q3CFXSLyp9qlJTdSh7XHB87qkRZHtM+QMBEo03SHHEWrWKmvfC01oHg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OY62pLQE/YYaigFS4TdTj9K5Le+mfCwWvTkIoipvG1s=;
+ b=g3OS4k59gsok/KozPswNCaPuc4AALD4uDWr0qNmohfUtil6c4XDBfeRQMHJG5zkDk4zXxiMl4AGfzAA1hQzXuaZZxpvxLGU7O4s5MKngD4lIXZxgWYgk/pJ7dt24dgSULAUMB6xKABgwX6kAqDjaT9sC9AtkFC2BD9PW90YoccdnfylNGJC2ttMX1yx+MRIr5QqTHrVdezdKxkZNoho14p7DPUZvXJ+sI4qYYsIGHQ0XSrqq5qed3kRwNoq55mH3Xz1E2TpjV9nla1T9ONY3be8jwA25nxOQnRDypBtNwKr+y7A9b5qRSPCUyvlo9v6M/vzJGSgmXZRMCRNDbWcIdA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OY62pLQE/YYaigFS4TdTj9K5Le+mfCwWvTkIoipvG1s=;
+ b=HqG1QYAJyDVAhP8chmLsKjDe3ec877EkildUyCSV1RSX5MsahD6bxkmlmsvPvJ58PXMfAuPyjxJxUOjJp7q+xrgmmgKkhrnTQ53L2+tha3kC9eX1F6KhPITXwXMH89FYHz5qvQsVGbRWGAH/OAx2NRpNqax7IklCdWsmMJwDciE=
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
+ by AM6PR04MB4856.eurprd04.prod.outlook.com (2603:10a6:20b:b::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3153.21; Wed, 1 Jul
+ 2020 08:31:51 +0000
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1101:adaa:ee89:af2a]) by AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1101:adaa:ee89:af2a%3]) with mapi id 15.20.3153.023; Wed, 1 Jul 2020
+ 08:31:51 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Felipe Balbi <balbi@kernel.org>
+CC:     Jia-Ju Bai <baijiaju1990@gmail.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "pawell@cadence.com" <pawell@cadence.com>,
+        "rogerq@ti.com" <rogerq@ti.com>,
+        "colin.king@canonical.com" <colin.king@canonical.com>,
+        "yuehaibing@huawei.com" <yuehaibing@huawei.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: cdns3: fix possible buffer overflow caused by bad
+ DMA value
+Thread-Topic: [PATCH] usb: cdns3: fix possible buffer overflow caused by bad
+ DMA value
+Thread-Index: AQHWNjHPz6qvJgpZ+karMYRZFy9ss6jDKN4AgC9TLoCAABvOAA==
+Date:   Wed, 1 Jul 2020 08:31:51 +0000
+Message-ID: <20200701083214.GA22478@b29397-desktop>
+References: <20200530032400.12743-1-baijiaju1990@gmail.com>
+ <20200601041048.GB13752@b29397-desktop> <87366b916s.fsf@kernel.org>
+In-Reply-To: <87366b916s.fsf@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.67]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 0326c165-9d79-4618-59db-08d81d993413
+x-ms-traffictypediagnostic: AM6PR04MB4856:
+x-microsoft-antispam-prvs: <AM6PR04MB4856DAA621F3984B46A0946E8B6C0@AM6PR04MB4856.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 04519BA941
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: fTgCnJs/XbuwUYPv4nVibwD1AmKSVJBIv8AyX8wu5gJn6FtNNAN4wXakEW8JhWeK7HkiI6CvjTluLyfX586TluqkXBatFMtJZvupor2jHZDdpiEMODzuCP06nFCaK2AggZpHmkH9T8xiPm4si2RQqymqF76vbNGUbW+2GZi0b27mSC4xxAeGuOjCxXFAv3q3w3vntPg9yiuqo4U2hlrlBAWFgG8PmLeRC+thtKEewSikFO69/6PmXwTxymAzwHEMSbbQcOifHxt3ZOnmxSuzqY0oQvqVwc+eNSpB0ijnb0h+u3ofvJSKecyFOh4Z7svCI5QhhQxJeIimvHI6RO2e5g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(7916004)(4636009)(39860400002)(136003)(396003)(366004)(346002)(376002)(4326008)(91956017)(2906002)(316002)(26005)(76116006)(54906003)(8936002)(1076003)(33716001)(6512007)(9686003)(71200400001)(478600001)(83380400001)(6486002)(53546011)(33656002)(8676002)(186003)(6506007)(5660300002)(6916009)(64756008)(66946007)(44832011)(66476007)(66556008)(86362001)(66446008);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: 1oNOTDVneA+4k3RXQSplFHc+DyqAgotWRZGGB4svTm3txUm9c5umCSsPE0Bf3uROZ+lyaYmKVHw5TFSHQkNK5n66W5/sXdKbgd8T5qE7VEELx744AmrNctEYomRpylDCHVtFiR2bxuGcI6HQASrlJIo5BrzUwHXkyDkh6OJlUUHP6FF3hw/6cuadtUUYYg/yCFFVjArkySqWq67CcY0dQUhtgYyq+S6n1++qZLH9HQ556gJbOdlk4VN8kp5Jh85prWgTwT/opZMvhvHIPJ5BSZHDf3aA3Om9DPp0h8ojcNaS12mkzDucj/x4Nr/t+J2AXFyOhg0mbkA64415l6hSXBC2LhfULFYFAxNyCn/BMI6xKdp901srWjcTYn4YI6EuNPCWFMlkOQu46lJLmOOiVpmFueevYHvb0fZ2mlUb7qRIn4qB1zPnYM13IbYdO5dmZ4jzZjEIrya85p0hRVkwlw3o5j502Mbu9S4rAJIfPHU=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <06751ABC84F89F4EA306AC8035D399D0@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200701003149.3101219-1-pmalani@chromium.org>
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0326c165-9d79-4618-59db-08d81d993413
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jul 2020 08:31:51.2745
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: YZNOSTJ/BoefWj9euf8mSaxOXNFyOQnEFD4B7hTzMD9dyxOuL1SDvuHLharemZog0SnmjC4jEwDMm9YsyWGo0A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB4856
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Prashant,
+On 20-07-01 09:52:43, Felipe Balbi wrote:
+> Peter Chen <peter.chen@nxp.com> writes:
+>=20
+> > On 20-05-30 11:24:00, Jia-Ju Bai wrote:
+> >> In cdns3_ep0_setup_phase():
+> >>   struct usb_ctrlrequest *ctrl =3D priv_dev->setup_buf;
+> >>=20
+> >> Because priv_dev->setup_buf (allocated in cdns3_gadget_start) is store=
+d=20
+> >> in DMA memory, and thus ctrl is a DMA value.
+> >>=20
+> >> cdns3_ep0_setup_phase()
+> >>   cdns3_ep0_standard_request(priv_dev, ctrl)
+> >>     cdns3_req_ep0_get_status(priv_dev, ctrl)
+> >>       index =3D cdns3_ep_addr_to_index(ctrl->wIndex);
+> >>       priv_ep =3D priv_dev->eps[index];
+> >>=20
+> >> cdns3_ep0_setup_phase()
+> >>   cdns3_ep0_standard_request(priv_dev, ctrl)
+> >>     cdns3_req_ep0_handle_feature(priv_dev, ctrl_req, 0)
+> >>       cdns3_ep0_feature_handle_endpoint(priv_dev, ctrl, set)
+> >>         index =3D cdns3_ep_addr_to_index(ctrl->wIndex);
+> >>         priv_ep =3D priv_dev->eps[index];
+> >>=20
+> >> In these cases, ctrl->wIndex can be be modified at anytime by maliciou=
+s
+> >> hardware, and thus a buffer overflow can occur when the code
+> >> "priv_dev->eps[index]" is executed.
+> >>=20
+> >
+> > Did you see the setup buffer is overwritten before the setup handling i=
+s
+> > finished?
+> >
+> >> To fix these possible bugs, index is checked before being used.
+> >
+> > I think the better fix is to use one additional buffer for struct
+> > usb_ctrlrequest, and copy the dma_buf to it after setup packet
+> > has received, then use the value stored in this buffer for later
+> > operation, it could avoid quitting the code which is useful in fact.
+>=20
+> Why is this a better fix? If you don't have that endpoint index, you
+> shouldn't try to access it. However, I think the problem here is
+> slightly easier to solve :-)
 
-On Tue, Jun 30, 2020 at 05:31:48PM -0700, Prashant Malani wrote:
-> Add a user-visible attribute for the number of alt modes available in a
-> partner. This allows userspace to determine whether there are any
-> remaining alt modes left to be registered by the kernel driver. It can
-> begin implementing any policy state machine after all available alt
-> modes have been registered with the connector class framework.
-> 
-> This value is set to "-1" initially, which is an invalid value,
-> signifying that a valid number of alt modes haven't been set for the
-> partner.
-> 
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
-> Cc: Benson Leung <bleung@chromium.org>
-> ---
->  drivers/usb/typec/class.c | 34 ++++++++++++++++++++++++++++++++++
->  include/linux/usb/typec.h |  1 +
->  2 files changed, 35 insertions(+)
+The possible problem here is: it is a correct setup packet, the memory
+it uses may be modified by controller wrongly (eg, try to get next setup
+packet) before it finishes using. So, I suggest adding a setup buf for
+struct cdns3 to store every setup packet after it receives to avoid
+the original setup buffer corrupted.
 
-You need to add documentation for the file. Add an entry for it to
-Documentation/ABI/testing/sysfs-class-typec
+Peter
 
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index c9234748537a..680cbcfbd427 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -33,6 +33,7 @@ struct typec_partner {
->  	struct usb_pd_identity		*identity;
->  	enum typec_accessory		accessory;
->  	struct ida			mode_ids;
-> +	int				num_altmodes;
->  };
->  
->  struct typec_port {
-> @@ -532,9 +533,18 @@ static ssize_t supports_usb_power_delivery_show(struct device *dev,
+>=20
+> >> diff --git a/drivers/usb/cdns3/ep0.c b/drivers/usb/cdns3/ep0.c
+> >> index e71240b386b4..0a80c7ade613 100644
+> >> --- a/drivers/usb/cdns3/ep0.c
+> >> +++ b/drivers/usb/cdns3/ep0.c
+> >> @@ -265,6 +265,8 @@ static int cdns3_req_ep0_get_status(struct cdns3_d=
+evice *priv_dev,
+> >>  		return cdns3_ep0_delegate_req(priv_dev, ctrl);
+> >>  	case USB_RECIP_ENDPOINT:
+> >>  		index =3D cdns3_ep_addr_to_index(ctrl->wIndex);
+>=20
+> diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
+> index 5e24c2e57c0d..96ba3eec805c 100644
+> --- a/drivers/usb/cdns3/gadget.c
+> +++ b/drivers/usb/cdns3/gadget.c
+> @@ -107,7 +107,10 @@ void cdns3_set_register_bit(void __iomem *ptr, u32 m=
+ask)
+>   */
+>  u8 cdns3_ep_addr_to_index(u8 ep_addr)
+>  {
+> -       return (((ep_addr & 0x7F)) + ((ep_addr & USB_DIR_IN) ? 16 : 0));
+> +       u8 num =3D ep_addr & USB_ENDPOINT_NUMBER_MASK;
+> +       u8 dir =3D ep_addr & USB_ENDPOINT_DIR_MASK;
+> +
+> +       return num + dir ? 16 : 0;
 >  }
->  static DEVICE_ATTR_RO(supports_usb_power_delivery);
->  
-> +static ssize_t num_altmodes_show(struct device *dev, struct device_attribute *attr, char *buf)
-> +{
-> +	struct typec_partner *p = to_typec_partner(dev);
-> +
-> +	return sprintf(buf, "%d\n", p->num_altmodes);
-> +}
-> +static DEVICE_ATTR_RO(num_altmodes);
+> =20
+>  static int cdns3_get_dma_pos(struct cdns3_device *priv_dev,
+>=20
+> This will guarantee that the number is never over the limit.
+>=20
+> --=20
+> balbi
 
-This is up to you, but please consider naming the file
-"number_of_alternate_modes".
 
-So now user space needs to understand that value -1 means "unknown",
-right?
 
-If so, then I think it would probable be better to just hide the file
-until the actual number of alternate modes is known.
+--=20
 
->  static struct attribute *typec_partner_attrs[] = {
->  	&dev_attr_accessory_mode.attr,
->  	&dev_attr_supports_usb_power_delivery.attr,
-> +	&dev_attr_num_altmodes.attr,
->  	NULL
->  };
->  ATTRIBUTE_GROUPS(typec_partner);
-
--ATTRIBUTE_GROUPS(typec_partner);
-
-static umode_t typec_partner_attr_is_visible(struct kobject *kobj,
-                                             struct attribute *attr, int n)
-{
-        struct typec_partner *partner = to_typec_partner(kobj_to_dev(kobj));
-
-        if (attr == &dev_attr_num_altmodes.attr) {
-                if (partner->num_altmodes < 0)
-                        return 0;
-        }
-
-        return attr->mode;
-}
-
-static struct attribute_group typec_partner_group = {
-        .is_visible = typec_partner_attr_is_visible,
-        .attrs = typec_partner_attrs
-};
-
-static const struct attribute_group *typec_partner_groups[] = {
-        &typec_partner_group,
-        NULL
-};
-
-> @@ -570,6 +580,29 @@ int typec_partner_set_identity(struct typec_partner *partner)
->  }
->  EXPORT_SYMBOL_GPL(typec_partner_set_identity);
->  
-> +/**
-> + * typec_partner_set_num_altmodes - Update number of available altmodes
-> + * @partner: The partner to be updated
-> + * @num_alt_modes: The number of altmodes we want to specify as available
-> + *
-> + * This routine is used to report the number of alternate modes supported by the
-> + * partner. This value is *not* enforced in alt mode registration routines.
-> + *
-> + * @partner.num_altmodes is set to -1 on partner registration, denoting that
-> + * a valid value has not been set for it yet.
-> + */
-> +int typec_partner_set_num_altmodes(struct typec_partner *partner, int num_altmodes)
-> +{
-> +	if (num_altmodes < 0)
-> +		return -EINVAL;
-> +
-> +	partner->num_altmodes = num_altmodes;
-> +	sysfs_notify(&partner->dev.kobj, NULL, "num_altmodes");
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(typec_partner_set_num_altmodes);
-> +
->  /**
->   * typec_partner_register_altmode - Register USB Type-C Partner Alternate Mode
->   * @partner: USB Type-C Partner that supports the alternate mode
-> @@ -612,6 +645,7 @@ struct typec_partner *typec_register_partner(struct typec_port *port,
->  	ida_init(&partner->mode_ids);
->  	partner->usb_pd = desc->usb_pd;
->  	partner->accessory = desc->accessory;
-> +	partner->num_altmodes = -1;
->  
->  	if (desc->identity) {
->  		/*
-> diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
-> index 5daa1c49761c..ab523caa23a4 100644
-> --- a/include/linux/usb/typec.h
-> +++ b/include/linux/usb/typec.h
-> @@ -112,6 +112,7 @@ struct typec_altmode_desc {
->  	enum typec_port_data	roles;
->  };
->  
-> +int typec_partner_set_num_altmodes(struct typec_partner *partner, int num_altmodes);
->  struct typec_altmode
->  *typec_partner_register_altmode(struct typec_partner *partner,
->  				const struct typec_altmode_desc *desc);
-
-thanks,
-
--- 
-heikki
+Thanks,
+Peter Chen=
