@@ -2,141 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5F04210BD1
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 15:09:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1A07210DDD
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 16:37:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730832AbgGANJd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Jul 2020 09:09:33 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:38677 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729402AbgGANJc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jul 2020 09:09:32 -0400
-Received: by mail-lf1-f65.google.com with SMTP id t9so13537481lfl.5;
-        Wed, 01 Jul 2020 06:09:30 -0700 (PDT)
+        id S1731442AbgGAOhx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Jul 2020 10:37:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52518 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726170AbgGAOhx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jul 2020 10:37:53 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02074C08C5C1
+        for <linux-usb@vger.kernel.org>; Wed,  1 Jul 2020 07:37:53 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id f3so11830704pgr.2
+        for <linux-usb@vger.kernel.org>; Wed, 01 Jul 2020 07:37:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=p5b1y2MCVOrf040MpW0TdG0kQXO6F6mzXFyW0gJdufc=;
+        b=kkKcI0OVbYAJGemjVYNNL+0ckR5Q9wU/ipXVEdJtirMRmFBup7NRYDkBrgupNw7sf6
+         UiOG2mxd5E/eNdFsG0hLQxh26dyfNc324KRcEXxz2w+KYmnrGXOH/umA09JNifLD/vlS
+         JpgpL9MkibNa0fa6noEsSzAwWOnSVIwELavQw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=COivOHfOocZwA37NPyRxnZREf917pes6hqCRF+dIcV4=;
-        b=t9lLcwTs0aM805no82txbKBtvbxqo1+q29NXY2JZ/7w5GAh0CUyJcm7dlZQmUCMnZk
-         PbmMmfKEMIjql3qF7iDnYJ7GEUTr0w4HpOco//7fw+rQFrbYoi1W1Ph3KgwwjYMAiESL
-         UucoXcKrW6Dr+VsuKarQYOD2fhdjPdPi4rmiZPGz9880ZwMvZdPy8aZ28H9d1L+z1bJ8
-         OY+l6uUmt3tW27BXUjHOJhq4rFo+u5HxH06lA4NNErdoRpRdKkbZn91lI28KvjYV+d1e
-         /GbivsAnDDKciAYi7nHBLcbjvc9o2uclmaMXiY3PbGVVYBfO0x14KtQCxfKizChNkR+7
-         zOwA==
-X-Gm-Message-State: AOAM5321jZ4q/QQmnxOCsm7HXk8Ace54UeQqPlPmJRxo6TUEoWCcjhSV
-        qqo0gv1SmWhQzCWOk3gsJPY=
-X-Google-Smtp-Source: ABdhPJwx42aReoFcxz2SU6ldQfkiBMixkdgzhIE0bt3elb89uv84Hv4kF3wLV76q/lOLuFga7griMw==
-X-Received: by 2002:a19:64c:: with SMTP id 73mr15464054lfg.0.1593608969420;
-        Wed, 01 Jul 2020 06:09:29 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id v24sm2035542lfo.4.2020.07.01.06.09.28
+        bh=p5b1y2MCVOrf040MpW0TdG0kQXO6F6mzXFyW0gJdufc=;
+        b=CHD4+SNXnCqHZnlYhJQa68l7aiXOMzQXUsulBSg/G23GVzlPg2iKRMbNx1QdFn5Pz0
+         LlRojfuY2LcKp11kAGMcAR+uUXkFpAJHuLj+cnYJWpxVN6pYEJmRD+no9ckZb8602L+s
+         u4PxIjzi578jFbTz6DiPaomkYwSsEF7amjLjDoNt02To7jhJFhVt0cvepazC+Ilvzi4D
+         5WXdR8k+9SSQ7j2WxtlYqKI7pH3xn5AiiHBL1pqp3NKQH8Lt7rP7tqyNYWl2wBZFrlF5
+         6qYV88oRaVA4toDC+Es7NRq6TtjkjJu+zvlddw8bbjKHXvNn5oWFFZ3Si/Hk5ENdVbJC
+         f7Lw==
+X-Gm-Message-State: AOAM5306pRA91IGZU1U9Zv+dMvcj0fTBU2WTMDN+9lQXvuWm+9axSIRg
+        jOXhzMZOvceGvu8IVo4buVX9zg==
+X-Google-Smtp-Source: ABdhPJx8zn6fZZDMbq1MfQBbaIy4J+r9PNkaiJ0W5gmaWGLyf++fPbP6nwy7sTxmK8I25fh+Xf3yDQ==
+X-Received: by 2002:a05:6a00:2257:: with SMTP id i23mr18069722pfu.25.1593614272457;
+        Wed, 01 Jul 2020 07:37:52 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:a28c:fdff:fef0:49dd])
+        by smtp.gmail.com with ESMTPSA id y80sm6221888pfb.165.2020.07.01.07.37.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jul 2020 06:09:28 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1jqcUO-0007YY-7N; Wed, 01 Jul 2020 15:09:24 +0200
-Date:   Wed, 1 Jul 2020 15:09:24 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Manivannan Sadhasivam <mani@kernel.org>
-Cc:     johan@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patong.mxl@gmail.com, linus.walleij@linaro.org,
-        mchehab+huawei@kernel.org
-Subject: Re: [RESEND PATCH v4 1/3] usb: serial: Add MaxLinear/Exar USB to
- Serial driver
-Message-ID: <20200701130924.GE3334@localhost>
-References: <20200607162350.21297-1-mani@kernel.org>
- <20200607162350.21297-2-mani@kernel.org>
+        Wed, 01 Jul 2020 07:37:51 -0700 (PDT)
+Date:   Wed, 1 Jul 2020 07:37:51 -0700
+From:   Prashant Malani <pmalani@chromium.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, Benson Leung <bleung@chromium.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "open list:USB TYPEC CLASS" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] usb: typec: Add num_altmodes partner attribute
+Message-ID: <20200701143751.GC235106@google.com>
+References: <20200701003149.3101219-1-pmalani@chromium.org>
+ <20200701120131.GC2184169@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200607162350.21297-2-mani@kernel.org>
+In-Reply-To: <20200701120131.GC2184169@kroah.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jun 07, 2020 at 09:53:48PM +0530, Manivannan Sadhasivam wrote:
-> Add support for MaxLinear/Exar USB to Serial converters. This driver
-> only supports XR21V141X series but it can be extended to other series
-> from Exar as well in future.
+Hi Greg,
+
+Thanks a lot for looking at the patch.
+
+(trimming text)
+On Wed, Jul 01, 2020 at 02:01:31PM +0200, Greg Kroah-Hartman wrote:
+> On Tue, Jun 30, 2020 at 05:31:48PM -0700, Prashant Malani wrote:
+> > Add a user-visible attribute for the number of alt modes available in a
+> > partner. This allows userspace to determine whether there are any
+> > remaining alt modes left to be registered by the kernel driver. It can
+> > begin implementing any policy state machine after all available alt
+> > modes have been registered with the connector class framework.
+> > 
+> > This value is set to "-1" initially, which is an invalid value,
+> > signifying that a valid number of alt modes haven't been set for the
+> > partner.
+> > 
+> > Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> > Cc: Benson Leung <bleung@chromium.org>
+> > + */
+> > +int typec_partner_set_num_altmodes(struct typec_partner *partner, int num_altmodes)
+> > +{
+> > +	if (num_altmodes < 0)
+> > +		return -EINVAL;
+> > +
+> > +	partner->num_altmodes = num_altmodes;
+> > +	sysfs_notify(&partner->dev.kobj, NULL, "num_altmodes");
+> > +
+> > +	return 0;
+> > +}
+> > +EXPORT_SYMBOL_GPL(typec_partner_set_num_altmodes);
 > 
-> This driver is inspired from the initial one submitted by Patong Yang:
+> Who is calling this?  We need a user before we can add a newly exported
+> function.
+
+cros-ec-typec (drivers/platform/chrome/cros_ec_typec.c), but the patch for that
+isn't ready yet. I will submit v2 when that patch is ready for review.
+
+My apologies for not considering this earlier.
+
+Best regards,
+
 > 
-> https://patchwork.kernel.org/patch/10543261/
+> thanks,
 > 
-> While the initial driver was a custom tty USB driver exposing whole
-> new serial interface ttyXRUSBn, this version is completely based on USB
-> serial core thus exposing the interfaces as ttyUSBn. This will avoid
-> the overhead of exposing a new USB serial interface which the userspace
-> tools are unaware of.
-> 
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Tested-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> Signed-off-by: Manivannan Sadhasivam <mani@kernel.org>
-> ---
->  drivers/usb/serial/Kconfig     |   9 +
->  drivers/usb/serial/Makefile    |   1 +
->  drivers/usb/serial/xr_serial.c | 650 +++++++++++++++++++++++++++++++++
->  3 files changed, 660 insertions(+)
->  create mode 100644 drivers/usb/serial/xr_serial.c
-
-> +static int xr_tiocmset_port(struct usb_serial_port *port,
-> +			    unsigned int set, unsigned int clear)
-> +{
-> +	struct xr_port_private *port_priv = usb_get_serial_port_data(port);
-> +	int ret = 0;
-> +	u8 gpio_set = 0;
-> +	u8 gpio_clr = 0;
-> +
-> +	/* Modem control pins are active low, so set & clr are swapped */
-> +	if (set & TIOCM_RTS)
-> +		gpio_clr |= UART_MODE_RTS;
-> +	if (set & TIOCM_DTR)
-> +		gpio_clr |= UART_MODE_DTR;
-> +	if (clear & TIOCM_RTS)
-> +		gpio_set |= UART_MODE_RTS;
-> +	if (clear & TIOCM_DTR)
-> +		gpio_set |= UART_MODE_DTR;
-> +
-> +	/* Writing '0' to gpio_{set/clr} bits has no effect, so no need to do */
-> +	if (gpio_clr) {
-> +		ret = xr_set_reg(port, XR21V141X_UART_REG_BLOCK,
-> +				 port_priv->regs->gpio_clr, gpio_clr);
-> +	}
-> +
-> +	if (gpio_set) {
-> +		ret = xr_set_reg(port, XR21V141X_UART_REG_BLOCK,
-> +				 port_priv->regs->gpio_set, gpio_set);
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int xr_tiocmset(struct tty_struct *tty,
-> +		       unsigned int set, unsigned int clear)
-> +{
-> +	struct usb_serial_port *port = tty->driver_data;
-> +
-> +	return xr_tiocmset_port(port, set, clear);
-> +}
-
-> +static void xr_dtr_rts(struct usb_serial_port *port, int on)
-> +{
-> +	if (on)
-> +		xr_tiocmset_port(port, TIOCM_DTR | TIOCM_RTS, 0);
-> +	else
-> +		xr_tiocmset_port(port, 0, TIOCM_DTR | TIOCM_RTS);
-> +}
-
-By the way, don't you need to configure the DTR and RTS pins as outputs
-for the serial driver as well?
-
-According to the datasheet they are both configured as inputs by default
-(or at least RTS is).
-
-In any case, you'll need to reconfigure each pin after they are released
-by gpiolib.
-
-Johan
+> greg k-h
