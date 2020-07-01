@@ -2,155 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A0B9210A99
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 13:56:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F600210AA1
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 13:58:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730459AbgGAL43 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Jul 2020 07:56:29 -0400
-Received: from mga07.intel.com ([134.134.136.100]:8600 "EHLO mga07.intel.com"
+        id S1730471AbgGAL6g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Jul 2020 07:58:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47434 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730374AbgGAL43 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 1 Jul 2020 07:56:29 -0400
-IronPort-SDR: Sr8GntgOj3wRgVx27MNPgqeyblQAh2eto6CVZTKK3AzQOA76DoYnGdMz4Q35tdnjQE2bzWq5t1
- a2nfpt+gukhw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9668"; a="211608004"
-X-IronPort-AV: E=Sophos;i="5.75,300,1589266800"; 
-   d="scan'208";a="211608004"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2020 04:56:28 -0700
-IronPort-SDR: za8VEdySbLBdepjdf1Pm6qoB6KF24icFD/cLXa+nDb/cXNm+0gIEn3nyvNEKhdTeYiSX9+JuRr
- YiiYR9KRzgaA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,300,1589266800"; 
-   d="scan'208";a="386988152"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 01 Jul 2020 04:56:27 -0700
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Prashant Malani <pmalani@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        "Mani, Rajmohan" <rajmohan.mani@intel.com>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH 4/4] usb: typec: intel_pmc_mux: Add support for USB4
-Date:   Wed,  1 Jul 2020 14:56:18 +0300
-Message-Id: <20200701115618.22482-5-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200701115618.22482-1-heikki.krogerus@linux.intel.com>
-References: <20200701115618.22482-1-heikki.krogerus@linux.intel.com>
+        id S1730133AbgGAL6f (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 1 Jul 2020 07:58:35 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1B7342067D;
+        Wed,  1 Jul 2020 11:58:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1593604715;
+        bh=nDHkQnF3GE7LeSK4D2XQD+Jb5LeVxf5LtuLUx72bPl0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UQcpx0io+u/a7HSMAtKB8tJpIHuA9tVGeE/1lhqC+fzTxXp/XFbgQWyziKZCMUo4V
+         9OmPXcF+enzCZDJ7tdbDXIq4TLpdl1kiP+3Fm8W6H/jzJqqM0PqwUVP/kzwmM7HC3u
+         ALCWydllZlvVZhfCIR7+pO9v/EQ96aN/uME61ewI=
+Date:   Wed, 1 Jul 2020 13:58:21 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Markus Elfring <Markus.Elfring@web.de>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [V2 PATCH] usb: mtu3: fix NULL pointer dereference
+Message-ID: <20200701115821.GA2184169@kroah.com>
+References: <1593502942-24455-1-git-send-email-chunfeng.yun@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1593502942-24455-1-git-send-email-chunfeng.yun@mediatek.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The PMC mux-agent can be used also to enter USB4 mode. The
-mux-agent does not have USB4 specific message, but it can be
-put into the TBT3 alternate mode also with USB4. That is OK
-because the controller is in any case the same with TBT3 and
-USB4.
+On Tue, Jun 30, 2020 at 03:42:22PM +0800, Chunfeng Yun wrote:
+> Some pointers are dereferenced before successful checks.
+> 
+> Reported-by: Markus Elfring <Markus.Elfring@web.de>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+> v2: nothing changed, but abandon another patch
+> ---
+>  drivers/usb/mtu3/mtu3_gadget.c | 25 ++++++++++++++++++-------
+>  1 file changed, 18 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/usb/mtu3/mtu3_gadget.c b/drivers/usb/mtu3/mtu3_gadget.c
+> index f93732e..1689ca8 100644
+> --- a/drivers/usb/mtu3/mtu3_gadget.c
+> +++ b/drivers/usb/mtu3/mtu3_gadget.c
+> @@ -332,14 +332,21 @@ static int mtu3_gadget_queue(struct usb_ep *ep,
+>  
+>  static int mtu3_gadget_dequeue(struct usb_ep *ep, struct usb_request *req)
+>  {
+> -	struct mtu3_ep *mep = to_mtu3_ep(ep);
+> -	struct mtu3_request *mreq = to_mtu3_request(req);
+> +	struct mtu3_ep *mep;
+> +	struct mtu3_request *mreq;
+>  	struct mtu3_request *r;
+> +	struct mtu3 *mtu;
+>  	unsigned long flags;
+>  	int ret = 0;
+> -	struct mtu3 *mtu = mep->mtu;
+>  
+> -	if (!ep || !req || mreq->mep != mep)
+> +	if (!ep || !req)
+> +		return -EINVAL;
 
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
- drivers/usb/typec/mux/intel_pmc_mux.c | 67 +++++++++++++++++++++++----
- 1 file changed, 58 insertions(+), 9 deletions(-)
+How will either of those ever be NULL?  The kernel will not call this
+function with either of them being NULL, right?
 
-diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
-index 31fa62f968fb2..2aba07c7b221a 100644
---- a/drivers/usb/typec/mux/intel_pmc_mux.c
-+++ b/drivers/usb/typec/mux/intel_pmc_mux.c
-@@ -10,6 +10,7 @@
- #include <linux/module.h>
- #include <linux/platform_device.h>
- #include <linux/property.h>
-+#include <linux/usb/pd.h>
- #include <linux/usb/role.h>
- #include <linux/usb/typec_mux.h>
- #include <linux/usb/typec_dp.h>
-@@ -231,6 +232,43 @@ pmc_usb_mux_tbt(struct pmc_usb_port *port, struct typec_mux_state *state)
- 	return pmc_usb_command(port, (void *)&req, sizeof(req));
- }
- 
-+static int
-+pmc_usb_mux_usb4(struct pmc_usb_port *port, struct typec_mux_state *state)
-+{
-+	struct enter_usb_data *data = state->data;
-+	struct altmode_req req = { };
-+	u8 cable_speed;
-+
-+	req.usage = PMC_USB_ALT_MODE;
-+	req.usage |= port->usb3_port << PMC_USB_MSG_USB3_PORT_SHIFT;
-+	req.mode_type = PMC_USB_MODE_TYPE_TBT << PMC_USB_MODE_TYPE_SHIFT;
-+
-+	/* USB4 Mode */
-+	req.mode_data = PMC_USB_ALTMODE_FORCE_LSR;
-+
-+	if (data->active_link_training)
-+		req.mode_data |= PMC_USB_ALTMODE_ACTIVE_LINK;
-+
-+	req.mode_data |= (port->orientation - 1) << PMC_USB_ALTMODE_ORI_SHIFT;
-+	req.mode_data |= (port->role - 1) << PMC_USB_ALTMODE_UFP_SHIFT;
-+
-+	switch ((data->eudo & EUDO_CABLE_TYPE_MASK) >> EUDO_CABLE_TYPE_SHIFT) {
-+	case EUDO_CABLE_TYPE_PASSIVE:
-+		break;
-+	case EUDO_CABLE_TYPE_OPTICAL:
-+		req.mode_data |= PMC_USB_ALTMODE_CABLE_TYPE;
-+		fallthrough;
-+	default:
-+		req.mode_data |= PMC_USB_ALTMODE_ACTIVE_CABLE;
-+		break;
-+	}
-+
-+	cable_speed = (data->eudo & EUDO_CABLE_SPEED_MASK) >> EUDO_CABLE_SPEED_SHIFT;
-+	req.mode_data |= PMC_USB_ALTMODE_CABLE_SPD(cable_speed);
-+
-+	return pmc_usb_command(port, (void *)&req, sizeof(req));
-+}
-+
- static int pmc_usb_mux_safe_state(struct pmc_usb_port *port)
- {
- 	u8 msg;
-@@ -272,17 +310,28 @@ pmc_usb_mux_set(struct typec_mux *mux, struct typec_mux_state *state)
- {
- 	struct pmc_usb_port *port = typec_mux_get_drvdata(mux);
- 
--	if (!state->alt)
--		return 0;
--
- 	if (state->mode == TYPEC_STATE_SAFE)
- 		return pmc_usb_mux_safe_state(port);
--
--	switch (state->alt->svid) {
--	case USB_TYPEC_TBT_SID:
--		return pmc_usb_mux_tbt(port, state);
--	case USB_TYPEC_DP_SID:
--		return pmc_usb_mux_dp(port, state);
-+	if (state->mode == TYPEC_STATE_USB)
-+		return pmc_usb_connect(port);
-+
-+	if (state->alt) {
-+		switch (state->alt->svid) {
-+		case USB_TYPEC_TBT_SID:
-+			return pmc_usb_mux_tbt(port, state);
-+		case USB_TYPEC_DP_SID:
-+			return pmc_usb_mux_dp(port, state);
-+		}
-+	} else {
-+		switch (state->mode) {
-+		case TYPEC_MODE_USB2:
-+			/* REVISIT: Try with usb3_port set to 0? */
-+			break;
-+		case TYPEC_MODE_USB3:
-+			return pmc_usb_connect(port);
-+		case TYPEC_MODE_USB4:
-+			return pmc_usb_mux_usb4(port, state);
-+		}
- 	}
- 
- 	return -EOPNOTSUPP;
--- 
-2.27.0
+> +
+> +	mep = to_mtu3_ep(ep);
+> +	mtu = mep->mtu;
+> +
+> +	mreq = to_mtu3_request(req);
+> +	if (mreq->mep != mep)
+>  		return -EINVAL;
+>  
+>  	dev_dbg(mtu->dev, "%s : req=%p\n", __func__, req);
+> @@ -373,8 +380,8 @@ static int mtu3_gadget_dequeue(struct usb_ep *ep, struct usb_request *req)
+>   */
+>  static int mtu3_gadget_ep_set_halt(struct usb_ep *ep, int value)
+>  {
+> -	struct mtu3_ep *mep = to_mtu3_ep(ep);
+> -	struct mtu3 *mtu = mep->mtu;
+> +	struct mtu3_ep *mep;
+> +	struct mtu3 *mtu;
+>  	struct mtu3_request *mreq;
+>  	unsigned long flags;
+>  	int ret = 0;
+> @@ -382,6 +389,9 @@ static int mtu3_gadget_ep_set_halt(struct usb_ep *ep, int value)
+>  	if (!ep)
+>  		return -EINVAL;
 
+Same here, how can that ever happen?
+
+>  
+> +	mep = to_mtu3_ep(ep);
+> +	mtu = mep->mtu;
+> +
+>  	dev_dbg(mtu->dev, "%s : %s...", __func__, ep->name);
+>  
+>  	spin_lock_irqsave(&mtu->lock, flags);
+> @@ -422,11 +432,12 @@ static int mtu3_gadget_ep_set_halt(struct usb_ep *ep, int value)
+>  /* Sets the halt feature with the clear requests ignored */
+>  static int mtu3_gadget_ep_set_wedge(struct usb_ep *ep)
+>  {
+> -	struct mtu3_ep *mep = to_mtu3_ep(ep);
+> +	struct mtu3_ep *mep;
+>  
+>  	if (!ep)
+>  		return -EINVAL;
+
+Again, same here.
+
+thanks,
+
+greg k-h
