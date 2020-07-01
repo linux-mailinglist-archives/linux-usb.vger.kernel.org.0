@@ -2,62 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63164210AAD
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 14:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52826210AB0
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 14:01:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730491AbgGAMAl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Jul 2020 08:00:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48038 "EHLO mail.kernel.org"
+        id S1730381AbgGAMBq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Jul 2020 08:01:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48306 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730466AbgGAMAl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 1 Jul 2020 08:00:41 -0400
+        id S1730103AbgGAMBq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 1 Jul 2020 08:01:46 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9F1702067D;
-        Wed,  1 Jul 2020 12:00:40 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0FDCF206B6;
+        Wed,  1 Jul 2020 12:01:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593604841;
-        bh=NG13c3uQXSir/eAaKL7wwEMGpJHpwyZCGaQheAVZGsc=;
+        s=default; t=1593604905;
+        bh=QKcT0eftuynQwl8bQ8Sy2DfoL4gw7pFgfGufIC0v47k=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IcGEsEOF/f84Oj5l0bBQIO6XojwamMD6nM/eF4R0TqbuPJKqySNuz2n4ZSHjdM2ot
-         Xl/MivwyW2kv+qBKUFxpHEuH/1Pzd7j9NkgotQXCo2QaaVLTHycsafT13C1ZfZ6tio
-         sOQ0C/HcSARtVCcTDIqH1OaglRiKgNaotKRyZioc=
-Date:   Wed, 1 Jul 2020 14:00:27 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     qiang.zhang@windriver.com
-Cc:     balbi@kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] usb: gadget: function: printer: Interface is disabled
- and returns error
-Message-ID: <20200701120027.GB2184169@kroah.com>
-References: <20200630054407.33165-1-qiang.zhang@windriver.com>
+        b=uUbTEgBYXPpk93oGdn1jAtGSgdTJW4t8pdSCJEJHGiCeBuprLp3JlhGpwjK4ahAej
+         QKPH1RQqgpEnwbdx5ns39hQfkIjKXI++KDRonv1WFbpxkvmJ+c0LAE/OAgkclHew7s
+         pDzDkr/ux5VdvCg3I9IIBLwPkUCDaGWvNj+vSE7o=
+Date:   Wed, 1 Jul 2020 14:01:31 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, Benson Leung <bleung@chromium.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "open list:USB TYPEC CLASS" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] usb: typec: Add num_altmodes partner attribute
+Message-ID: <20200701120131.GC2184169@kroah.com>
+References: <20200701003149.3101219-1-pmalani@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200630054407.33165-1-qiang.zhang@windriver.com>
+In-Reply-To: <20200701003149.3101219-1-pmalani@chromium.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 30, 2020 at 01:44:07PM +0800, qiang.zhang@windriver.com wrote:
-> From: Zqiang <qiang.zhang@windriver.com>
+On Tue, Jun 30, 2020 at 05:31:48PM -0700, Prashant Malani wrote:
+> Add a user-visible attribute for the number of alt modes available in a
+> partner. This allows userspace to determine whether there are any
+> remaining alt modes left to be registered by the kernel driver. It can
+> begin implementing any policy state machine after all available alt
+> modes have been registered with the connector class framework.
 > 
-> After the device is disconnected from the host side, the interface of
-> the device is reset. If the userspace operates the device again,
-> an error code should be returned.
+> This value is set to "-1" initially, which is an invalid value,
+> signifying that a valid number of alt modes haven't been set for the
+> partner.
 > 
-> Acked-by: Felipe Balbi <balbi@kernel.org>
-
-When did Felipe ack this?  I missed that, do you have a pointer to that
-on lore.kernel.org somewhere?
-
-> Signed-off-by: Zqiang <qiang.zhang@windriver.com>
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> Cc: Benson Leung <bleung@chromium.org>
 > ---
->  drivers/usb/gadget/function/f_printer.c | 36 +++++++++++++++++++++++++
->  1 file changed, 36 insertions(+)
+>  drivers/usb/typec/class.c | 34 ++++++++++++++++++++++++++++++++++
+>  include/linux/usb/typec.h |  1 +
+>  2 files changed, 35 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index c9234748537a..680cbcfbd427 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -33,6 +33,7 @@ struct typec_partner {
+>  	struct usb_pd_identity		*identity;
+>  	enum typec_accessory		accessory;
+>  	struct ida			mode_ids;
+> +	int				num_altmodes;
+>  };
+>  
+>  struct typec_port {
+> @@ -532,9 +533,18 @@ static ssize_t supports_usb_power_delivery_show(struct device *dev,
+>  }
+>  static DEVICE_ATTR_RO(supports_usb_power_delivery);
+>  
+> +static ssize_t num_altmodes_show(struct device *dev, struct device_attribute *attr, char *buf)
+> +{
+> +	struct typec_partner *p = to_typec_partner(dev);
+> +
+> +	return sprintf(buf, "%d\n", p->num_altmodes);
+> +}
+> +static DEVICE_ATTR_RO(num_altmodes);
+> +
+>  static struct attribute *typec_partner_attrs[] = {
+>  	&dev_attr_accessory_mode.attr,
+>  	&dev_attr_supports_usb_power_delivery.attr,
+> +	&dev_attr_num_altmodes.attr,
+>  	NULL
+>  };
+>  ATTRIBUTE_GROUPS(typec_partner);
+> @@ -570,6 +580,29 @@ int typec_partner_set_identity(struct typec_partner *partner)
+>  }
+>  EXPORT_SYMBOL_GPL(typec_partner_set_identity);
+>  
+> +/**
+> + * typec_partner_set_num_altmodes - Update number of available altmodes
+> + * @partner: The partner to be updated
+> + * @num_alt_modes: The number of altmodes we want to specify as available
+> + *
+> + * This routine is used to report the number of alternate modes supported by the
+> + * partner. This value is *not* enforced in alt mode registration routines.
+> + *
+> + * @partner.num_altmodes is set to -1 on partner registration, denoting that
+> + * a valid value has not been set for it yet.
+> + */
+> +int typec_partner_set_num_altmodes(struct typec_partner *partner, int num_altmodes)
+> +{
+> +	if (num_altmodes < 0)
+> +		return -EINVAL;
+> +
+> +	partner->num_altmodes = num_altmodes;
+> +	sysfs_notify(&partner->dev.kobj, NULL, "num_altmodes");
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(typec_partner_set_num_altmodes);
 
-What changed from v1?  That always goes below the --- line.
+Who is calling this?  We need a user before we can add a newly exported
+function.
 
 thanks,
 
