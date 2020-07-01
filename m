@@ -2,34 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F412E21128E
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 20:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA58F211290
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 20:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732972AbgGASZB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Jul 2020 14:25:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59290 "EHLO
+        id S1732946AbgGASZC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Jul 2020 14:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732946AbgGASY7 (ORCPT
+        with ESMTP id S1732939AbgGASY7 (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jul 2020 14:24:59 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ACBDC08C5DC
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652EFC08C5DB
         for <linux-usb@vger.kernel.org>; Wed,  1 Jul 2020 11:24:59 -0700 (PDT)
 Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mgr@pengutronix.de>)
-        id 1jqhPj-0004Pb-R0; Wed, 01 Jul 2020 20:24:55 +0200
+        id 1jqhPj-0004Pc-R0; Wed, 01 Jul 2020 20:24:55 +0200
 Received: from mgr by dude.hi.pengutronix.de with local (Exim 4.92)
         (envelope-from <mgr@pengutronix.de>)
-        id 1jqhPi-0007R2-UV; Wed, 01 Jul 2020 20:24:54 +0200
+        id 1jqhPj-0007R4-0C; Wed, 01 Jul 2020 20:24:55 +0200
 From:   Michael Grzeschik <m.grzeschik@pengutronix.de>
 To:     linux-usb@vger.kernel.org
 Cc:     Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
         kernel@pengutronix.de, balbi@kernel.org
-Subject: [PATCH v5 0/3] usb: dwc3: gadget: improve isoc handling
-Date:   Wed,  1 Jul 2020 20:24:50 +0200
-Message-Id: <20200701182453.25299-1-m.grzeschik@pengutronix.de>
+Subject: [PATCH v5 1/3] usb: dwc3: gadget: add frame number mask
+Date:   Wed,  1 Jul 2020 20:24:51 +0200
+Message-Id: <20200701182453.25299-2-m.grzeschik@pengutronix.de>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200701182453.25299-1-m.grzeschik@pengutronix.de>
+References: <20200701182453.25299-1-m.grzeschik@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
@@ -41,32 +43,54 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-These three patches improve the isoc handling and make the dwc3 gadget
-driver somewhat usable with the UVC gadget for isochronous endpoints.
+This patch adds a define DWC3_FRNUMBER_MASK for the commonly used
+0x3fff mask and uses it.
 
-The first patch makes starting isochronous transfers more reliable. I
-think it's more less, what Thinh suggested some time ago[1]. It's still
-not perfect because the first request must still be queued within 2
-seconds but it's a lot better than the current situation.
+Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
 
-The second patch makes it possible to have gaps in the data stream. The
-UVC gadget relies on such behaviour. Without this, using the UVC gadget
-with a live stream stops after the first frame that needs more time to
-be scheduled.
+---
+v4:       - first version
+v4 -> v5: - fixed wording in commit message
+---
+ drivers/usb/dwc3/gadget.c | 4 ++--
+ drivers/usb/dwc3/gadget.h | 2 ++
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-[1] https://marc.info/?l=linux-usb&m=156088170723824&w=4
-
-Michael Grzeschik (2):
-  usb: dwc3: gadget: add frame number mask
-  usb: dwc3: gadget: when the started list is empty stop the active xfer
-
-Michael Olbrich (1):
-  usb: dwc3: gadget: make starting isoc transfers more robust
-
- drivers/usb/dwc3/gadget.c | 30 +++++++++++++++++++++++++++---
- drivers/usb/dwc3/gadget.h |  2 ++
- 2 files changed, 29 insertions(+), 3 deletions(-)
-
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 8de6f10d335e1c0..5fb78535efa9bdc 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -1403,7 +1403,7 @@ static int dwc3_gadget_start_isoc_quirk(struct dwc3_ep *dep)
+ 		 * Check if we can start isoc transfer on the next interval or
+ 		 * 4 uframes in the future with BIT[15:14] as dep->combo_num
+ 		 */
+-		test_frame_number = dep->frame_number & 0x3fff;
++		test_frame_number = dep->frame_number & DWC3_FRNUMBER_MASK;
+ 		test_frame_number |= dep->combo_num << 14;
+ 		test_frame_number += max_t(u32, 4, dep->interval);
+ 
+@@ -1450,7 +1450,7 @@ static int dwc3_gadget_start_isoc_quirk(struct dwc3_ep *dep)
+ 	else if (test0 && test1)
+ 		dep->combo_num = 0;
+ 
+-	dep->frame_number &= 0x3fff;
++	dep->frame_number &= DWC3_FRNUMBER_MASK;
+ 	dep->frame_number |= dep->combo_num << 14;
+ 	dep->frame_number += max_t(u32, 4, dep->interval);
+ 
+diff --git a/drivers/usb/dwc3/gadget.h b/drivers/usb/dwc3/gadget.h
+index 24dca38720225dd..a0fc46f72b9e30a 100644
+--- a/drivers/usb/dwc3/gadget.h
++++ b/drivers/usb/dwc3/gadget.h
+@@ -54,6 +54,8 @@ struct dwc3;
+ /* U2 Device exit Latency */
+ #define DWC3_DEFAULT_U2_DEV_EXIT_LAT	0x1FF	/* Less then 511 microsec */
+ 
++/* Frame/Microframe Number Mask */
++#define DWC3_FRNUMBER_MASK		0x3fff
+ /* -------------------------------------------------------------------------- */
+ 
+ #define to_dwc3_request(r)	(container_of(r, struct dwc3_request, request))
 -- 
 2.27.0
 
