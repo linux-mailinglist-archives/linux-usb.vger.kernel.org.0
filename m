@@ -2,90 +2,170 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DFE321043D
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 08:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 969EF210445
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 08:53:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727987AbgGAGvF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Jul 2020 02:51:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50566 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727943AbgGAGvF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 1 Jul 2020 02:51:05 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0B77120663;
-        Wed,  1 Jul 2020 06:51:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593586264;
-        bh=IvkldxSKy6dI7BoDzvZmf7aeX4tfPJCRDYRLEDZqKMQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IPwJpsgotx+b38Fkxsx62wgi3q01XfBP3GU//4orXtlEWskY5MZ4mak46kahneNZg
-         Nm5VLRsavkVRP3LUdzeqXZnKkAF5RB11bcudAhuJYEFLYxBPB4Lvduq7qKPDs0vBv2
-         ypqOvhqvALfE9KsIE/SlzwECxKdcutu33CA6uZLg=
-Date:   Wed, 1 Jul 2020 08:50:51 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     Peter Chen <hzpeterchen@gmail.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] USB: Fix up terminology
-Message-ID: <20200701065051.GB2044019@kroah.com>
-References: <20200630174123.GA1906678@kroah.com>
- <CAL411-pgboix6=1=jKNv_4JaHiC8fKDJ4_mryooMepeHdB-2AA@mail.gmail.com>
- <20200701062924.GA5927@kroah.com>
- <DB8PR04MB7162C271B04650CBCC87729D8B6C0@DB8PR04MB7162.eurprd04.prod.outlook.com>
+        id S1727867AbgGAGwv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Jul 2020 02:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35818 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726144AbgGAGwv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jul 2020 02:52:51 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A931BC061755;
+        Tue, 30 Jun 2020 23:52:50 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id s9so25578861ljm.11;
+        Tue, 30 Jun 2020 23:52:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=E759cuZY8R5maJqc3TDNvEPB2MZH/E6EL1vX9MBhyHs=;
+        b=hhtnIQqZPD7xwnTRZshOTWoQT2XqHx1aUqCCaaMb6GUbN6SwngRoF0LiERFLMf/BZd
+         /F2ctFDwNXAuRysceP2DInK8todKzqYtHri1NMUE4nCTvX3pb8hBftvB9ZmbbHSEpn/N
+         KpXnW+M1rsewv4lJEtdmiDMU78cJDr2oxoiQiLCJv4CwC7EOTfsYfSJxb8kv3hh9MMGF
+         P7jBOpIae8J+CjTLGGiJgJgF7u+JU9ktxkqPQBaCepJTGh/Y1LLoAYKgM+a5WpIb2b3l
+         CH3poU3pSgLoicztgAQWrJO83xDI427b+nMurwz20bv2P9dVpZAHXWN9aJ9rHxM+xJP9
+         xa6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=E759cuZY8R5maJqc3TDNvEPB2MZH/E6EL1vX9MBhyHs=;
+        b=gWh3IORquTY2tM74zuTPWuIlCKtBPubcuLO0ePO90yj3tMEOcr08nUYj9musyLb4/Z
+         VG6jdZ5bJ465F6ycYwBySjOJ2/0Cnx7yw6lPCubt5wO7alX9efBNzAzAbTheWHKiNFlP
+         VzGKf5+DNlhIa38vixtvFrhAiZ/E8vxfgTTAzDsxJL5kgSwqIIgSi/TQn7DlSUi3rPmm
+         +kq+nts9FJPA5lwv5VkR4WnxhqdJ4rbAVKVhRhjZuPQLGJ7XL8l6z+GjHoVn6ec2cV99
+         Fu04VrXzQ5G97git5N2QDUX8Zs7rnVFGRmPOvArFR5IVhfcgwFf0eD/53WAvKJBMO0rn
+         AJdg==
+X-Gm-Message-State: AOAM532TWni2dwDBE3SpOIIV2s+1dOFn2G1wjD1BOeHMQbGzcK1AofZR
+        9Yk9GjdpkFjzA+AR7ib4/nj+3yG/
+X-Google-Smtp-Source: ABdhPJz2UA+m3Rpjzy0tkNpNyGBPPi3iBj1bQoDwhFaZ2YThzp1KHk6twtTOecGOPTWDrr/i7xgfEw==
+X-Received: by 2002:a2e:8216:: with SMTP id w22mr6028788ljg.2.1593586368770;
+        Tue, 30 Jun 2020 23:52:48 -0700 (PDT)
+Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
+        by smtp.gmail.com with ESMTPSA id v24sm1690263lfo.4.2020.06.30.23.52.47
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 30 Jun 2020 23:52:48 -0700 (PDT)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Peter Chen <peter.chen@nxp.com>,
+        Jia-Ju Bai <baijiaju1990@gmail.com>
+Cc:     "gregkh\@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "pawell\@cadence.com" <pawell@cadence.com>,
+        "rogerq\@ti.com" <rogerq@ti.com>,
+        "colin.king\@canonical.com" <colin.king@canonical.com>,
+        "yuehaibing\@huawei.com" <yuehaibing@huawei.com>,
+        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: cdns3: fix possible buffer overflow caused by bad DMA value
+In-Reply-To: <20200601041048.GB13752@b29397-desktop>
+References: <20200530032400.12743-1-baijiaju1990@gmail.com> <20200601041048.GB13752@b29397-desktop>
+Date:   Wed, 01 Jul 2020 09:52:43 +0300
+Message-ID: <87366b916s.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DB8PR04MB7162C271B04650CBCC87729D8B6C0@DB8PR04MB7162.eurprd04.prod.outlook.com>
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 01, 2020 at 06:40:20AM +0000, Peter Chen wrote:
->  
-> > 
-> > On Wed, Jul 01, 2020 at 02:02:00PM +0800, Peter Chen wrote:
-> > > > index 3a7179e90f4e..1a12aab208b4 100644
-> > > > --- a/drivers/usb/gadget/udc/Kconfig
-> > > > +++ b/drivers/usb/gadget/udc/Kconfig
-> > > > @@ -474,7 +474,7 @@ config USB_DUMMY_HCD
-> > > >         help
-> > > >           This host controller driver emulates USB, looping all data transfer
-> > > >           requests back to a USB "gadget driver" in the same host.  The host
-> > > > -         side is the master; the gadget side is the slave.  Gadget drivers
-> > > > +         side is the controller; the gadget side is the device.  Gadget drivers
-> > >
-> > > 'the host side is the controller' may not be suitable.
-> > 
-> > Really?  It is literally a "host controller" as per the specification :)
-> 
-> You are right. At first, I thought, there are device controller, host controller and dual-role
-> controller, why you only said, "the host side is the controller"? After checking USB 3.0 spec,
-> there are only "device", "host" and "host controller" at its Terms and Abbreviations.
-> 
-> device
-> A logical or physical entity that performs one or more functions. The actual entity
-> described depends on the context of the reference. At the lowest level, device may refer
-> to a single hardware component, as in a memory device. At a higher level, it may refer to
-> a collection of hardware components that perform a particular function, such as a USB
-> interface device. At an even higher level, device may refer to the function performed by
-> an entity attached to the USB. Devices may be physical, electrical, addressable, and
-> logical.
-> When used as a non-specific reference, a USB device is either a hub or a peripheral
-> device.
-> 
-> host
-> The host computer system where the USB host controller is installed. This includes the
-> host hardware platform (CPU, bus, etc.) and the operating system in use.
-> 
-> host controller
-> The interface provided to the system to support devices on the USB.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for the confirmation.  This is why we had to "invent" the term
-"gadget" to describe the code that runs in the device to try to reduce
-the confusion here.
+Peter Chen <peter.chen@nxp.com> writes:
 
-greg k-h
+> On 20-05-30 11:24:00, Jia-Ju Bai wrote:
+>> In cdns3_ep0_setup_phase():
+>>   struct usb_ctrlrequest *ctrl =3D priv_dev->setup_buf;
+>>=20
+>> Because priv_dev->setup_buf (allocated in cdns3_gadget_start) is stored=
+=20
+>> in DMA memory, and thus ctrl is a DMA value.
+>>=20
+>> cdns3_ep0_setup_phase()
+>>   cdns3_ep0_standard_request(priv_dev, ctrl)
+>>     cdns3_req_ep0_get_status(priv_dev, ctrl)
+>>       index =3D cdns3_ep_addr_to_index(ctrl->wIndex);
+>>       priv_ep =3D priv_dev->eps[index];
+>>=20
+>> cdns3_ep0_setup_phase()
+>>   cdns3_ep0_standard_request(priv_dev, ctrl)
+>>     cdns3_req_ep0_handle_feature(priv_dev, ctrl_req, 0)
+>>       cdns3_ep0_feature_handle_endpoint(priv_dev, ctrl, set)
+>>         index =3D cdns3_ep_addr_to_index(ctrl->wIndex);
+>>         priv_ep =3D priv_dev->eps[index];
+>>=20
+>> In these cases, ctrl->wIndex can be be modified at anytime by malicious
+>> hardware, and thus a buffer overflow can occur when the code
+>> "priv_dev->eps[index]" is executed.
+>>=20
+>
+> Did you see the setup buffer is overwritten before the setup handling is
+> finished?
+>
+>> To fix these possible bugs, index is checked before being used.
+>
+> I think the better fix is to use one additional buffer for struct
+> usb_ctrlrequest, and copy the dma_buf to it after setup packet
+> has received, then use the value stored in this buffer for later
+> operation, it could avoid quitting the code which is useful in fact.
+
+Why is this a better fix? If you don't have that endpoint index, you
+shouldn't try to access it. However, I think the problem here is
+slightly easier to solve :-)
+
+>> diff --git a/drivers/usb/cdns3/ep0.c b/drivers/usb/cdns3/ep0.c
+>> index e71240b386b4..0a80c7ade613 100644
+>> --- a/drivers/usb/cdns3/ep0.c
+>> +++ b/drivers/usb/cdns3/ep0.c
+>> @@ -265,6 +265,8 @@ static int cdns3_req_ep0_get_status(struct cdns3_dev=
+ice *priv_dev,
+>>  		return cdns3_ep0_delegate_req(priv_dev, ctrl);
+>>  	case USB_RECIP_ENDPOINT:
+>>  		index =3D cdns3_ep_addr_to_index(ctrl->wIndex);
+
+diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
+index 5e24c2e57c0d..96ba3eec805c 100644
+=2D-- a/drivers/usb/cdns3/gadget.c
++++ b/drivers/usb/cdns3/gadget.c
+@@ -107,7 +107,10 @@ void cdns3_set_register_bit(void __iomem *ptr, u32 mas=
+k)
+  */
+ u8 cdns3_ep_addr_to_index(u8 ep_addr)
+ {
+=2D       return (((ep_addr & 0x7F)) + ((ep_addr & USB_DIR_IN) ? 16 : 0));
++       u8 num =3D ep_addr & USB_ENDPOINT_NUMBER_MASK;
++       u8 dir =3D ep_addr & USB_ENDPOINT_DIR_MASK;
++
++       return num + dir ? 16 : 0;
+ }
+=20
+ static int cdns3_get_dma_pos(struct cdns3_device *priv_dev,
+
+This will guarantee that the number is never over the limit.
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl78MrsACgkQzL64meEa
+mQZjSxAAjXPp6UT5McnCzjDtput+cJ0BrzbOr9wmnVmU10pd6VKGxFzuljOOdQTQ
+LrXE6JPxgvBX+iS1i+6WEsbQrheEIKWht3lVzNuufZ5sFBsmXjU+Xv6bspsdctkv
+llWLp95AZ3GVB0x7TQfeyqL1qGVZpuCU8dkI2LIeLdW9amT/WFE4af0kxp2bOzU0
+5/mTAmXgv/cn5AjZj9WxljvedNwyr9dqTVxZt1rGzgLgSz1l5Ab3KnZqh6m5FJ5N
+sXAQttuo+Yod0NP7SRNuZDBMyPE1f4cdak/j34qnHMP1WrFh8DJPk67xHd88+pj6
+ubeJY93IdmX/uYov85v84Z26GnEI5gK+UVmmiO5HSyR5q72dI5L6sxMwzeUv8djQ
+QvtMxLJqT4/JM6qUvYjIfK/OPTPPkzQRv+Jn93JfIavjdlNMkku+jT+8tADMWoyX
+jCSmyIRssUXhotr2ZoiTbD32sqAYRIu2henWU6t9dsUus3Kp7o90daJ+bZsl3l4z
+AKEYjXmgQDI34B4TR9vvtSPldKujG0bEm6XggwZXlxtuWMyTMobnWvUum71adDul
+ZYOy6HnFJbZwbejM8/ekWeFLq1+8MPddlI2rlZS76SdCCXgSPvqCgCgtndSTkYVM
+QDSxXd+WhUEoSVZUTWJ+tL7Yl3qvSBz7LOLfxz4Vz3Z9J+Gp+PI=
+=K1QB
+-----END PGP SIGNATURE-----
+--=-=-=--
