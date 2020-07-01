@@ -2,57 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72865210A8F
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 13:53:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B36E0210A95
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 13:56:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730349AbgGALxS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Jul 2020 07:53:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45238 "EHLO mail.kernel.org"
+        id S1730382AbgGAL4W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Jul 2020 07:56:22 -0400
+Received: from mga07.intel.com ([134.134.136.100]:8600 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730250AbgGALxR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 1 Jul 2020 07:53:17 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 26A8620663;
-        Wed,  1 Jul 2020 11:53:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593604397;
-        bh=tGFdpGZ+ooCmOElFBX4cKChlQwy9IWrwQVWgL5Fs1KI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pV8zYjSMT9dmkx2+Q2nzlaNcKtlv9X1wv4k3+qrVvSGK5pVEBEEwJAK0U6NccBgw7
-         TVJq7KLD8PdlHzuIl+jpbtIQpYXeC3Rsvg+WbAKUj3VPJ1K1ZdiI1/6vXVMvimWKjU
-         6CROrdS+ZvBFAWStRW3hEx/qEY7zBHkyIeHgrKjA=
-Date:   Wed, 1 Jul 2020 13:53:04 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>, linux-usb@vger.kernel.org
-Subject: Re: [GIT PULL] Thunderbolt/USB4 fix for v5.8-rc4
-Message-ID: <20200701115304.GA2159061@kroah.com>
-References: <20200701104427.GP5180@lahna.fi.intel.com>
+        id S1730374AbgGAL4V (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 1 Jul 2020 07:56:21 -0400
+IronPort-SDR: pEgcKRmXaquLn2vRIBcVCIm26xdbn1cCR835xdWxI1FTR1c6xtCu1KakdcXAS/+nC0p/vEKol2
+ VsZMwcdjyB6A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9668"; a="211607994"
+X-IronPort-AV: E=Sophos;i="5.75,300,1589266800"; 
+   d="scan'208";a="211607994"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2020 04:56:21 -0700
+IronPort-SDR: 2HRkzlC33o/v4wJysgEW1gh2NIemFZMs9rCqLD3FZN1JUiHNh4obzjIZeUfyGyoekkFkg/ivWA
+ kM84bVF39jZw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,300,1589266800"; 
+   d="scan'208";a="386988127"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 01 Jul 2020 04:56:19 -0700
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        "Mani, Rajmohan" <rajmohan.mani@intel.com>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH 0/4] usb: typec: USB4 support to the Intel PMC mux driver
+Date:   Wed,  1 Jul 2020 14:56:14 +0300
+Message-Id: <20200701115618.22482-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200701104427.GP5180@lahna.fi.intel.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 01, 2020 at 01:44:27PM +0300, Mika Westerberg wrote:
-> Hi Greg,
-> 
-> The following changes since commit 48778464bb7d346b47157d21ffde2af6b2d39110:
-> 
->   Linux 5.8-rc2 (2020-06-21 15:45:29 -0700)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-fix-for-v5.8-rc4
+Hi Greg,
 
-Pulled and pushed out, thanks.
+These include a couple of USB4 related improvements to the USB Type-C
+class on top of the driver change.
 
-greg k-h
+FYI. I will be on vacation starting from next week (July 6th).
+
+thanks,
+
+Heikki Krogerus (4):
+  usb: typec: Combine the definitions for Accessory and USB modes
+  usb: typec: Add data structure for Enter_USB message
+  usb: typec: intel_pmc_mux: Definitions for response status bits
+  usb: typec: intel_pmc_mux: Add support for USB4
+
+ drivers/usb/typec/mux/intel_pmc_mux.c | 75 +++++++++++++++++++++++----
+ include/linux/usb/typec.h             | 14 +++++
+ include/linux/usb/typec_altmode.h     | 14 ++---
+ 3 files changed, 83 insertions(+), 20 deletions(-)
+
+-- 
+2.27.0
+
