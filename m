@@ -2,59 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C988921042A
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 08:49:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DFE321043D
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 08:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727816AbgGAGtJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Jul 2020 02:49:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48864 "EHLO mail.kernel.org"
+        id S1727987AbgGAGvF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Jul 2020 02:51:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50566 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726144AbgGAGtJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 1 Jul 2020 02:49:09 -0400
+        id S1727943AbgGAGvF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 1 Jul 2020 02:51:05 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 344F920747;
-        Wed,  1 Jul 2020 06:49:07 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0B77120663;
+        Wed,  1 Jul 2020 06:51:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593586148;
-        bh=QEBQrxZVM9HQ3uowb8hGXNoe0tIJpUE81nlcfRcemhc=;
+        s=default; t=1593586264;
+        bh=IvkldxSKy6dI7BoDzvZmf7aeX4tfPJCRDYRLEDZqKMQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o4QhDKEz/G2ez/no2RkaNsf6xNDdFzju45cTFL6m9O88NAWRZcAFKX6PRItpO9TnL
-         a9nYg4eNmpf8kOEMSoyODatJ+7JDh7Nm7TDkhTG40rz+aCBtRFOy59im6RrCwsatlf
-         5+doWk+rc380ToPrIccmSo5kJXAQzzk32yumynIs=
-Date:   Wed, 1 Jul 2020 08:48:55 +0200
+        b=IPwJpsgotx+b38Fkxsx62wgi3q01XfBP3GU//4orXtlEWskY5MZ4mak46kahneNZg
+         Nm5VLRsavkVRP3LUdzeqXZnKkAF5RB11bcudAhuJYEFLYxBPB4Lvduq7qKPDs0vBv2
+         ypqOvhqvALfE9KsIE/SlzwECxKdcutu33CA6uZLg=
+Date:   Wed, 1 Jul 2020 08:50:51 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     Peter Chen <hzpeterchen@gmail.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH] USB: Fix up terminology
-Message-ID: <20200701064855.GA2044019@kroah.com>
+Message-ID: <20200701065051.GB2044019@kroah.com>
 References: <20200630174123.GA1906678@kroah.com>
- <875zb791x1.fsf@kernel.org>
+ <CAL411-pgboix6=1=jKNv_4JaHiC8fKDJ4_mryooMepeHdB-2AA@mail.gmail.com>
+ <20200701062924.GA5927@kroah.com>
+ <DB8PR04MB7162C271B04650CBCC87729D8B6C0@DB8PR04MB7162.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <875zb791x1.fsf@kernel.org>
+In-Reply-To: <DB8PR04MB7162C271B04650CBCC87729D8B6C0@DB8PR04MB7162.eurprd04.prod.outlook.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 01, 2020 at 09:36:58AM +0300, Felipe Balbi wrote:
-> Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
+On Wed, Jul 01, 2020 at 06:40:20AM +0000, Peter Chen wrote:
+>  
+> > 
+> > On Wed, Jul 01, 2020 at 02:02:00PM +0800, Peter Chen wrote:
+> > > > index 3a7179e90f4e..1a12aab208b4 100644
+> > > > --- a/drivers/usb/gadget/udc/Kconfig
+> > > > +++ b/drivers/usb/gadget/udc/Kconfig
+> > > > @@ -474,7 +474,7 @@ config USB_DUMMY_HCD
+> > > >         help
+> > > >           This host controller driver emulates USB, looping all data transfer
+> > > >           requests back to a USB "gadget driver" in the same host.  The host
+> > > > -         side is the master; the gadget side is the slave.  Gadget drivers
+> > > > +         side is the controller; the gadget side is the device.  Gadget drivers
+> > >
+> > > 'the host side is the controller' may not be suitable.
+> > 
+> > Really?  It is literally a "host controller" as per the specification :)
 > 
-> > USB is a HOST/DEVICE protocol, as per the specification and all
-> > documentation.  Fix up terms that are not applicable to make things
-> > match up with the terms used through the rest of the USB stack.
-> >
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> You are right. At first, I thought, there are device controller, host controller and dual-role
+> controller, why you only said, "the host side is the controller"? After checking USB 3.0 spec,
+> there are only "device", "host" and "host controller" at its Terms and Abbreviations.
 > 
-> Do you want me to pick this up and send it back to you on a pull
-> request? It's fine for me either way:
+> device
+> A logical or physical entity that performs one or more functions. The actual entity
+> described depends on the context of the reference. At the lowest level, device may refer
+> to a single hardware component, as in a memory device. At a higher level, it may refer to
+> a collection of hardware components that perform a particular function, such as a USB
+> interface device. At an even higher level, device may refer to the function performed by
+> an entity attached to the USB. Devices may be physical, electrical, addressable, and
+> logical.
+> When used as a non-specific reference, a USB device is either a hub or a peripheral
+> device.
 > 
-> Acked-by: Felipe Balbi <balbi@kernel.org>
+> host
+> The host computer system where the USB host controller is installed. This includes the
+> host hardware platform (CPU, bus, etc.) and the operating system in use.
+> 
+> host controller
+> The interface provided to the system to support devices on the USB.
 
-Thanks, I'll just take this as a whole patch, as it touches many files
-in drivers/usb/ at once.
+Thanks for the confirmation.  This is why we had to "invent" the term
+"gadget" to describe the code that runs in the device to try to reduce
+the confusion here.
 
 greg k-h
