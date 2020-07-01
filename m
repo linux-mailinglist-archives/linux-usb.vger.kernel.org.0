@@ -2,131 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A41D321050F
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 09:31:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C452210566
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 09:51:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728238AbgGAHbD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Jul 2020 03:31:03 -0400
-Received: from mail1.windriver.com ([147.11.146.13]:45764 "EHLO
-        mail1.windriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727981AbgGAHbC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jul 2020 03:31:02 -0400
-Received: from ALA-HCB.corp.ad.wrs.com (ala-hcb.corp.ad.wrs.com [147.11.189.41])
-        by mail1.windriver.com (8.15.2/8.15.2) with ESMTPS id 0617UigY016025
-        (version=TLSv1 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
-        Wed, 1 Jul 2020 00:30:45 -0700 (PDT)
-Received: from pek-lpg-core1-vm1.wrs.com (128.224.156.106) by
- ALA-HCB.corp.ad.wrs.com (147.11.189.41) with Microsoft SMTP Server id
- 14.3.487.0; Wed, 1 Jul 2020 00:30:25 -0700
-From:   <qiang.zhang@windriver.com>
-To:     <balbi@kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>
-Subject: [PATCH v2] usb: gadget: function: printer: Interface is disabled and returns error
-Date:   Tue, 30 Jun 2020 13:44:07 +0800
-Message-ID: <20200630054407.33165-1-qiang.zhang@windriver.com>
-X-Mailer: git-send-email 2.24.1
+        id S1728443AbgGAHu5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Jul 2020 03:50:57 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:42261 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728349AbgGAHu4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jul 2020 03:50:56 -0400
+Received: by mail-lj1-f193.google.com with SMTP id h22so18630169lji.9;
+        Wed, 01 Jul 2020 00:50:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=V5USxJUqdNDMLfwU5wJfAdESBZenthDQ0zK5od654+k=;
+        b=fWCvcbToGLuUeogj4PEWGECpzTjIHxJe43I5nvoKXntAX93d2GP5HaTDNPPHLpCye6
+         eL5BPfDqdb6fv8wxkoxol3NeooIPqczF0Y+yGcWnGrxWKw5sBg0skRacrySPhEuxbo+R
+         jPHU0/nHZ6SFYTOuNUR5p+byG2Sdj4GSnHBrWQalBkbwPc5AX8lHJ9uAPTMAeWrQunXN
+         aN5xsf0d9SCKZgYXBFY6c7u19MxErFbGg7gMdO8X04ZPzNS1Q6IZDOUzcOMNdUrgIHGy
+         gX+l5cOfS8pebJeTvI0MvfXtqLZ1Eadw3izrX01nXYhuhl7DWZTe2Ynr2d0MhGlKonno
+         px9Q==
+X-Gm-Message-State: AOAM531n8yinI+8LdOZMAH2OaoaLDGmmLtdRIDSeXpoh1EEnEKrHPiYs
+        ZdD3HHq9yIvuNH9Qu0DMJn49lxZWCSI=
+X-Google-Smtp-Source: ABdhPJzcFqBA84jJpx6KwqXnUpdFMSRkHlEPlSIHbaryPhq0XLJl4MQGrzNcaj2OPvXqqXM5pR7hfA==
+X-Received: by 2002:a2e:9ed0:: with SMTP id h16mr13495821ljk.366.1593589853723;
+        Wed, 01 Jul 2020 00:50:53 -0700 (PDT)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id 23sm1744591lff.91.2020.07.01.00.50.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jul 2020 00:50:52 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1jqXW3-0006GS-8l; Wed, 01 Jul 2020 09:50:48 +0200
+Date:   Wed, 1 Jul 2020 09:50:47 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Manivannan Sadhasivam <mani@kernel.org>
+Cc:     johan@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patong.mxl@gmail.com, linus.walleij@linaro.org,
+        mchehab+huawei@kernel.org
+Subject: Re: [PATCH v4 0/3] Add support for MaxLinear/Exar USB to serial
+ converters
+Message-ID: <20200701075047.GB3334@localhost>
+References: <20200607160809.20192-1-mani@kernel.org>
+ <20200626143136.GF8333@Mani-XPS-13-9360>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200626143136.GF8333@Mani-XPS-13-9360>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Zqiang <qiang.zhang@windriver.com>
+On Fri, Jun 26, 2020 at 08:01:36PM +0530, Manivannan Sadhasivam wrote:
+> On Sun, Jun 07, 2020 at 09:38:06PM +0530, Manivannan Sadhasivam wrote:
+> > Hello,
+> > 
+> > This series adds support for MaxLinear/Exar USB to serial converters.
+> > This driver only supports XR21V141X series but it can easily be extended
+> > to other series in future.
+> > 
+> > This driver is inspired from the initial one submitted by Patong Yang:
+> > 
+> > https://patchwork.kernel.org/patch/10543261/
+> > 
+> > While the initial driver was a custom tty USB driver exposing whole
+> > new serial interface ttyXRUSBn, this version is completely based on USB
+> > serial core thus exposing the interfaces as ttyUSBn. This will avoid
+> > the overhead of exposing a new USB serial interface which the userspace
+> > tools are unaware of.
+> > 
+> > This series has been tested with Hikey970 board hosting XR21V141X chip.
+> > 
+> 
+> Gentle ping on this series!
 
-After the device is disconnected from the host side, the interface of
-the device is reset. If the userspace operates the device again,
-an error code should be returned.
+You sending this in reply to your superseded v4. Please make sure to
+always increment the revision number when updating a series, including
+when changing authorship.
 
-Acked-by: Felipe Balbi <balbi@kernel.org>
-Signed-off-by: Zqiang <qiang.zhang@windriver.com>
----
- drivers/usb/gadget/function/f_printer.c | 36 +++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
-
-diff --git a/drivers/usb/gadget/function/f_printer.c b/drivers/usb/gadget/function/f_printer.c
-index 9c7ed2539ff7..2b45a61e4213 100644
---- a/drivers/usb/gadget/function/f_printer.c
-+++ b/drivers/usb/gadget/function/f_printer.c
-@@ -338,6 +338,11 @@ printer_open(struct inode *inode, struct file *fd)
- 
- 	spin_lock_irqsave(&dev->lock, flags);
- 
-+	if (dev->interface < 0) {
-+		spin_unlock_irqrestore(&dev->lock, flags);
-+		return -ENODEV;
-+	}
-+
- 	if (!dev->printer_cdev_open) {
- 		dev->printer_cdev_open = 1;
- 		fd->private_data = dev;
-@@ -430,6 +435,12 @@ printer_read(struct file *fd, char __user *buf, size_t len, loff_t *ptr)
- 	mutex_lock(&dev->lock_printer_io);
- 	spin_lock_irqsave(&dev->lock, flags);
- 
-+	if (dev->interface < 0) {
-+		spin_unlock_irqrestore(&dev->lock, flags);
-+		mutex_unlock(&dev->lock_printer_io);
-+		return -ENODEV;
-+	}
-+
- 	/* We will use this flag later to check if a printer reset happened
- 	 * after we turn interrupts back on.
- 	 */
-@@ -561,6 +572,12 @@ printer_write(struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
- 	mutex_lock(&dev->lock_printer_io);
- 	spin_lock_irqsave(&dev->lock, flags);
- 
-+	if (dev->interface < 0) {
-+		spin_unlock_irqrestore(&dev->lock, flags);
-+		mutex_unlock(&dev->lock_printer_io);
-+		return -ENODEV;
-+	}
-+
- 	/* Check if a printer reset happens while we have interrupts on */
- 	dev->reset_printer = 0;
- 
-@@ -667,6 +684,13 @@ printer_fsync(struct file *fd, loff_t start, loff_t end, int datasync)
- 
- 	inode_lock(inode);
- 	spin_lock_irqsave(&dev->lock, flags);
-+
-+	if (dev->interface < 0) {
-+		spin_unlock_irqrestore(&dev->lock, flags);
-+		inode_unlock(inode);
-+		return -ENODEV;
-+	}
-+
- 	tx_list_empty = (likely(list_empty(&dev->tx_reqs)));
- 	spin_unlock_irqrestore(&dev->lock, flags);
- 
-@@ -689,6 +713,13 @@ printer_poll(struct file *fd, poll_table *wait)
- 
- 	mutex_lock(&dev->lock_printer_io);
- 	spin_lock_irqsave(&dev->lock, flags);
-+
-+	if (dev->interface < 0) {
-+		spin_unlock_irqrestore(&dev->lock, flags);
-+		mutex_unlock(&dev->lock_printer_io);
-+		return EPOLLERR | EPOLLHUP;
-+	}
-+
- 	setup_rx_reqs(dev);
- 	spin_unlock_irqrestore(&dev->lock, flags);
- 	mutex_unlock(&dev->lock_printer_io);
-@@ -722,6 +753,11 @@ printer_ioctl(struct file *fd, unsigned int code, unsigned long arg)
- 
- 	spin_lock_irqsave(&dev->lock, flags);
- 
-+	if (dev->interface < 0) {
-+		spin_unlock_irqrestore(&dev->lock, flags);
-+		return -ENODEV;
-+	}
-+
- 	switch (code) {
- 	case GADGET_GET_PRINTER_STATUS:
- 		status = (int)dev->printer_status;
--- 
-2.24.1
-
+Johan
