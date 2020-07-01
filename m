@@ -2,94 +2,195 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE32C211210
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 19:37:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F274C211232
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 19:51:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732662AbgGARhj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Jul 2020 13:37:39 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:44197 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726432AbgGARhi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jul 2020 13:37:38 -0400
-Received: by mail-lj1-f196.google.com with SMTP id s9so28143641ljm.11
-        for <linux-usb@vger.kernel.org>; Wed, 01 Jul 2020 10:37:37 -0700 (PDT)
+        id S1732800AbgGARvn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Jul 2020 13:51:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54160 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726675AbgGARvm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jul 2020 13:51:42 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354C3C08C5C1
+        for <linux-usb@vger.kernel.org>; Wed,  1 Jul 2020 10:51:42 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id p20so25827883ejd.13
+        for <linux-usb@vger.kernel.org>; Wed, 01 Jul 2020 10:51:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=iwOQ5aHEcC3Jyc/Qh2jDAhoCcHWl56+r+PeIpM17vNM=;
+        b=Gzzdife9D1K3w/YC8VoeMV3F7faZp2S073RRj6rWZ7iGodzqo9wNfMZ+ZbofuWV8R2
+         RgLoK4ZjtPnwX97ZQ0w4WV7sU+uiopcnn9Dq3pfQRL3HK1pC6hatn5VQEHaghgXgjz05
+         UIq6siPwpJhpxRuuqIrmKxxIAFSilQ22RUyNoNX2O2HQ9uDVnra90Eve2ztP5ZrCuLCr
+         5ZtNq1mvkBCRVzsx5e3L20bI86DzzRaQrCMItWvJZHKWCQYZg08GeBAFJhoyUmqcvC3o
+         QmXjUvR979/Tk7lxSFQixOF040MKApj5l+G5E6lRQRxJ6UfvBgpHOX9ATfxx6KUgkalN
+         QjeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1XTgTQyLuDvTOtwMWlKODGhPfC0PfoqcnqV1n11D/LE=;
-        b=YPlNgOY2jQZzWr5xoObGeyD0CNrqNqLXnu1m05zqq7y8SbGXHK/opXxLBZ/QjURNb7
-         9CXDp8jHI+UZBm9XU0FN5boMp8V9r6MNbZ7PT4mNvMGq+spzL+NsW/bBXL8mfFTuwrsG
-         52hVVmg6Uxezyk+jaEGUfciHX5sNKmcYEPPbM58PzFD219CR3t5QaRBohIQVUYb8nOYN
-         swHpR6fpq1V6r5F7ZyHtyDUPApqSpF0JJIpoYF0kebBiwtcdxhg0cMoG/zMwB+3/zm+w
-         WqvO9SI2wPphK9uggTl4OFrEJ2gqQE8BdP4+byg8nCP3TPAzZOL3+MjZ/j0Fb1SIjCKu
-         wmfw==
-X-Gm-Message-State: AOAM5303wLka8pL6HqhY0rzq89CvJNBtV1PFspgToAsiBAcuLLvgp/sU
-        efpzdIK/V6RQlWbtIeNH3mY=
-X-Google-Smtp-Source: ABdhPJyP4c7X4Er5slxTn5TVx103C+zcrxh2m3zWxVIGcKeM24dbeGRV8i3DnKEFikInBeIUl5Qk3A==
-X-Received: by 2002:a2e:9b04:: with SMTP id u4mr14866173lji.364.1593625056367;
-        Wed, 01 Jul 2020 10:37:36 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id 132sm2271926lfl.37.2020.07.01.10.37.35
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=iwOQ5aHEcC3Jyc/Qh2jDAhoCcHWl56+r+PeIpM17vNM=;
+        b=hczm+MMkWyeKBHeni+1iLCFWhrgwVQN7ZlgdOd9Qt1esCjF5CK7rG0t7dgF5zPLb4+
+         eCR7b0d4N1cYnmE8kqt+aYtonQmOFqSBXbfoiSdRKcbMvLA2LYgWAzxj4PTBDKcnQIsO
+         opSkk9UEuI5bvJ1SuY0i1u5BTs5XF7Tf8Xlpw2fSNGGG1DrIIogRW8uGlyG2H850996I
+         xSBBTU8WVMWkf2ixlNFCeOlSGmMtF+dNq6GO4HQhR8XgEabUiLMuYM9uEXFUyNoYnEFq
+         yg9IHc6M8fpdczaQdKz7jqmoDMMkWXoXO+TK8a4xwlvcfLNuQch7HGcd3VH8Xrm6YI1j
+         cgCg==
+X-Gm-Message-State: AOAM532DgRzV/irbhjBephiyFPUChfTtySqvi4MwYl3/wEL3oQtQMeCR
+        NxPylTIYtKukzqiXL7gGnl4=
+X-Google-Smtp-Source: ABdhPJziXQhKIcl9aBErV7qKXrcBHePnY2FgWFZngHK4DoRB3HBXt0eWB5MLwh5Yr0AMzVp515wUXg==
+X-Received: by 2002:a17:906:2c53:: with SMTP id f19mr21929465ejh.523.1593625900803;
+        Wed, 01 Jul 2020 10:51:40 -0700 (PDT)
+Received: from ping (x4dbf847f.dyn.telefonica.de. [77.191.132.127])
+        by smtp.gmail.com with ESMTPSA id v24sm5049637eja.29.2020.07.01.10.51.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jul 2020 10:37:35 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@xi.terra>)
-        id 1jqgfr-0001Bt-48; Wed, 01 Jul 2020 19:37:31 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
+        Wed, 01 Jul 2020 10:51:40 -0700 (PDT)
+Date:   Wed, 1 Jul 2020 19:51:38 +0200
+From:   Fabian Melzow <fabian.melzow@gmail.com>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
 Cc:     linux-usb@vger.kernel.org
-Subject: [PATCH] USB: serial: console: add support for enabling flow control
-Date:   Wed,  1 Jul 2020 19:37:22 +0200
-Message-Id: <20200701173722.4536-1-johan@kernel.org>
-X-Mailer: git-send-email 2.26.2
+Subject: Re: ERROR Transfer event TRB DMA ptr not part of current TD
+ ep_index 4 comp_code 1
+Message-ID: <20200701195138.21940697@ping>
+In-Reply-To: <f41aab00-ea04-bdd2-4174-33b2b19dc850@linux.intel.com>
+References: <20200620211913.1535bac0@ping>
+        <264e8287-b538-0798-36a6-7eafc4387a8d@linux.intel.com>
+        <20200630185803.2a72c123@ping>
+        <f41aab00-ea04-bdd2-4174-33b2b19dc850@linux.intel.com>
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add support for enabling hardware flow control using the 'r' command
-line option.
+Am Tue, 30 Jun 2020 22:03:29 +0300
+schrieb Mathias Nyman <mathias.nyman@linux.intel.com>:
 
-This also avoids a W=1 (-Wunused-but-set-variable) warning.
+> On 30.6.2020 19.58, Fabian Melzow wrote:
 
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
+> > I successful applied the patch against Linux 5.7.4, but get this
+> > error when compiling drivers/usb/host/xhci-ring.c:
+> >=20
+> >   CC [M]  drivers/usb/host/xhci-ring.o
+> > drivers/usb/host/xhci-ring.c: In function =E2=80=98xhci_handle_cmd_stop=
+_ep=E2=80=99:
+> > drivers/usb/host/xhci-ring.c:857:3: error: implicit declaration of
+> > function =E2=80=98xhci_reset_halted_ep=E2=80=99
+> > [-Werror=3Dimplicit-function-declaration] 857 |
+> > xhci_reset_halted_ep(xhci, slot_id, ep_index, reset_type); |
+> > ^~~~~~~~~~~~~~~~~~~~=20
+>=20
+> Right, forgot that you need another patch before this.
 
-Missed this one at first... The white space change is done on purpose to
-remove a stray tab.
+Applied it and after recompiling I get:
 
-Johan
+Jul 01 19:06:29 ping kernel: xhci_hcd 0000:09:00.3: Get port status 5-1 rea=
+d: 0x2a0, return 0x100
+Jul 01 19:06:29 ping kernel: xhci_hcd 0000:09:00.3: Waiting for status stag=
+e event
+Jul 01 19:06:29 ping kernel: xhci_hcd 0000:09:00.3: Successful Set TR Deq P=
+tr cmd, deq =3D @fedf51f0
+Jul 01 19:06:29 ping kernel: xhci_hcd 0000:09:00.3: Ignoring reset ep compl=
+etion code of 1
+Jul 01 19:06:29 ping kernel: xhci_hcd 0000:09:00.3: Giveback URB 0000000096=
+cbf5fe, len =3D 0, expected =3D 4, status =3D -32
+Jul 01 19:06:29 ping kernel: xhci_hcd 0000:09:00.3: // Ding dong!
+Jul 01 19:06:29 ping kernel: xhci_hcd 0000:09:00.3: Set TR Deq Ptr cmd, new=
+ deq seg =3D 00000000a8c5372f (0xfedf5000 dma), new deq ptr =3D 00000000037=
+c6b7a (0xfedf51f0 dma), new cycle =3D 1
+Jul 01 19:06:29 ping kernel: xhci_hcd 0000:09:00.3: Queueing new dequeue st=
+ate
+Jul 01 19:06:29 ping kernel: xhci_hcd 0000:09:00.3: New dequeue pointer =3D=
+ 0xfedf51f0 (DMA)
+Jul 01 19:06:29 ping kernel: xhci_hcd 0000:09:00.3: New dequeue segment =3D=
+ 00000000a8c5372f (virtual)
+Jul 01 19:06:29 ping kernel: xhci_hcd 0000:09:00.3: Cycle state =3D 0x1
+Jul 01 19:06:29 ping kernel: xhci_hcd 0000:09:00.3: Finding endpoint context
+Jul 01 19:06:29 ping kernel: xhci_hcd 0000:09:00.3: Cleaning up stalled end=
+point ring
+Jul 01 19:06:29 ping kernel: xhci_hcd 0000:09:00.3: Stalled endpoint for sl=
+ot 1 ep 0
+Jul 01 19:06:29 ping kernel: xhci_hcd 0000:09:00.3: Successful Set TR Deq P=
+tr cmd, deq =3D @fedf51c0
+Jul 01 19:06:29 ping kernel: xhci_hcd 0000:09:00.3: // Ding dong!
+Jul 01 19:06:29 ping kernel: xhci_hcd 0000:09:00.3: Set TR Deq Ptr cmd, new=
+ deq seg =3D 00000000a8c5372f (0xfedf5000 dma), new deq ptr =3D 000000007e1=
+8677c (0xfedf51c0 dma), new cycle =3D 1
+Jul 01 19:06:29 ping kernel: xhci_hcd 0000:09:00.3: New dequeue pointer =3D=
+ 0xfedf51c0 (DMA)
+Jul 01 19:06:29 ping kernel: xhci_hcd 0000:09:00.3: New dequeue segment =3D=
+ 00000000a8c5372f (virtual)
+Jul 01 19:06:29 ping kernel: xhci_hcd 0000:09:00.3: Cycle state =3D 0x1
+Jul 01 19:06:29 ping kernel: xhci_hcd 0000:09:00.3: Finding endpoint context
+Jul 01 19:06:29 ping kernel: xhci_hcd 0000:09:00.3: Removing canceled TD st=
+arting at 0xfedf5190 (dma).
+Jul 01 19:06:29 ping kernel: xhci_hcd 0000:09:00.3: Stopped on Transfer TRB=
+ for slot 1 ep 0
+Jul 01 19:06:29 ping kernel: xhci_hcd 0000:09:00.3: // Ding dong!
+Jul 01 19:06:29 ping kernel: xhci_hcd 0000:09:00.3: Cancel URB 000000009a11=
+684b, dev 2, ep 0x0, starting at offset 0xfedf5190
+Jul 01 19:06:24 ping kernel: xhci_hcd 0000:09:00.3: Successful Set TR Deq P=
+tr cmd, deq =3D @fede7830
+Jul 01 19:06:24 ping kernel: xhci_hcd 0000:09:00.3: Ignoring reset ep compl=
+etion code of 1
+Jul 01 19:06:24 ping kernel: xhci_hcd 0000:09:00.3: Giveback URB 000000009a=
+11684b, len =3D 0, expected =3D 4, status =3D -32
+Jul 01 19:06:24 ping kernel: xhci_hcd 0000:09:00.3: // Ding dong!
+Jul 01 19:06:24 ping kernel: xhci_hcd 0000:09:00.3: Set TR Deq Ptr cmd, new=
+ deq seg =3D 0000000010319786 (0xfede7000 dma), new deq ptr =3D 0000000083e=
+ff911 (0xfede7830 dma), new cycle =3D 1
+Jul 01 19:06:24 ping kernel: xhci_hcd 0000:09:00.3: Queueing new dequeue st=
+ate
+Jul 01 19:06:24 ping kernel: xhci_hcd 0000:09:00.3: New dequeue pointer =3D=
+ 0xfede7830 (DMA)
+Jul 01 19:06:24 ping kernel: xhci_hcd 0000:09:00.3: New dequeue segment =3D=
+ 0000000010319786 (virtual)
+Jul 01 19:06:24 ping kernel: xhci_hcd 0000:09:00.3: Cycle state =3D 0x1
+Jul 01 19:06:24 ping kernel: xhci_hcd 0000:09:00.3: Finding endpoint context
+Jul 01 19:06:24 ping kernel: xhci_hcd 0000:09:00.3: Cleaning up stalled end=
+point ring
+Jul 01 19:06:24 ping kernel: xhci_hcd 0000:09:00.3: Stalled endpoint for sl=
+ot 2 ep 0
+Jul 01 19:06:24 ping kernel: xhci_hcd 0000:09:00.3: Successful Set TR Deq P=
+tr cmd, deq =3D @fede7800
+Jul 01 19:06:24 ping kernel: xhci_hcd 0000:09:00.3: Ignoring reset ep compl=
+etion code of 1
+Jul 01 19:06:24 ping kernel: xhci_hcd 0000:09:00.3: Giveback URB 000000009a=
+11684b, len =3D 0, expected =3D 10, status =3D -32
+Jul 01 19:06:24 ping kernel: xhci_hcd 0000:09:00.3: // Ding dong!
+Jul 01 19:06:24 ping kernel: xhci_hcd 0000:09:00.3: Set TR Deq Ptr cmd, new=
+ deq seg =3D 0000000010319786 (0xfede7000 dma), new deq ptr =3D 00000000ad8=
+5653f (0xfede7800 dma), new cycle =3D 1
+Jul 01 19:06:24 ping kernel: xhci_hcd 0000:09:00.3: Queueing new dequeue st=
+ate
+Jul 01 19:06:24 ping kernel: xhci_hcd 0000:09:00.3: New dequeue pointer =3D=
+ 0xfede7800 (DMA)
+Jul 01 19:06:24 ping kernel: xhci_hcd 0000:09:00.3: New dequeue segment =3D=
+ 0000000010319786 (virtual)
+Jul 01 19:06:24 ping kernel: xhci_hcd 0000:09:00.3: Cycle state =3D 0x1
+Jul 01 19:06:24 ping kernel: xhci_hcd 0000:09:00.3: Finding endpoint context
+Jul 01 19:06:24 ping kernel: xhci_hcd 0000:09:00.3: Cleaning up stalled end=
+point ring
+Jul 01 19:06:24 ping kernel: xhci_hcd 0000:09:00.3: Stalled endpoint for sl=
+ot 2 ep 0
+Jul 01 19:06:24 ping kernel: xhci_hcd 0000:09:00.3: Waiting for status stag=
+e event
+Jul 01 19:06:24 ping kernel: xhci_hcd 0000:09:00.3: Waiting for status stag=
+e event
+Jul 01 19:06:24 ping kernel: xhci_hcd 0000:09:00.3: Waiting for status stag=
+e event
+Jul 01 19:06:24 ping kernel: xhci_hcd 0000:09:00.3: xhci_hub_status_data: s=
+topping port polling.
+Jul 01 19:06:24 ping kernel: usb usb6: bus auto-suspend, wakeup 1
 
+Look like the problem is fixed, but if you want, you can check the
+debuglogs at http://fabi.bplaced.net/debuglogs2.tar.xz
 
- drivers/usb/serial/console.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Thanks!
 
-diff --git a/drivers/usb/serial/console.c b/drivers/usb/serial/console.c
-index 7d289302ff6c..b97aa40ca4d1 100644
---- a/drivers/usb/serial/console.c
-+++ b/drivers/usb/serial/console.c
-@@ -79,7 +79,7 @@ static int usb_console_setup(struct console *co, char *options)
- 		if (*s)
- 			doflow = (*s++ == 'r');
- 	}
--	
-+
- 	/* Sane default */
- 	if (baud == 0)
- 		baud = 9600;
-@@ -102,6 +102,9 @@ static int usb_console_setup(struct console *co, char *options)
- 		break;
- 	}
- 
-+	if (doflow)
-+		cflag |= CRTSCTS;
-+
- 	/*
- 	 * no need to check the index here: if the index is wrong, console
- 	 * code won't call us
--- 
-2.26.2
-
+Fabian
