@@ -2,86 +2,191 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C452210566
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 09:51:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF186210613
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Jul 2020 10:22:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728443AbgGAHu5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Jul 2020 03:50:57 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:42261 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728349AbgGAHu4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jul 2020 03:50:56 -0400
-Received: by mail-lj1-f193.google.com with SMTP id h22so18630169lji.9;
-        Wed, 01 Jul 2020 00:50:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=V5USxJUqdNDMLfwU5wJfAdESBZenthDQ0zK5od654+k=;
-        b=fWCvcbToGLuUeogj4PEWGECpzTjIHxJe43I5nvoKXntAX93d2GP5HaTDNPPHLpCye6
-         eL5BPfDqdb6fv8wxkoxol3NeooIPqczF0Y+yGcWnGrxWKw5sBg0skRacrySPhEuxbo+R
-         jPHU0/nHZ6SFYTOuNUR5p+byG2Sdj4GSnHBrWQalBkbwPc5AX8lHJ9uAPTMAeWrQunXN
-         aN5xsf0d9SCKZgYXBFY6c7u19MxErFbGg7gMdO8X04ZPzNS1Q6IZDOUzcOMNdUrgIHGy
-         gX+l5cOfS8pebJeTvI0MvfXtqLZ1Eadw3izrX01nXYhuhl7DWZTe2Ynr2d0MhGlKonno
-         px9Q==
-X-Gm-Message-State: AOAM531n8yinI+8LdOZMAH2OaoaLDGmmLtdRIDSeXpoh1EEnEKrHPiYs
-        ZdD3HHq9yIvuNH9Qu0DMJn49lxZWCSI=
-X-Google-Smtp-Source: ABdhPJzcFqBA84jJpx6KwqXnUpdFMSRkHlEPlSIHbaryPhq0XLJl4MQGrzNcaj2OPvXqqXM5pR7hfA==
-X-Received: by 2002:a2e:9ed0:: with SMTP id h16mr13495821ljk.366.1593589853723;
-        Wed, 01 Jul 2020 00:50:53 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id 23sm1744591lff.91.2020.07.01.00.50.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jul 2020 00:50:52 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1jqXW3-0006GS-8l; Wed, 01 Jul 2020 09:50:48 +0200
-Date:   Wed, 1 Jul 2020 09:50:47 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Manivannan Sadhasivam <mani@kernel.org>
-Cc:     johan@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patong.mxl@gmail.com, linus.walleij@linaro.org,
-        mchehab+huawei@kernel.org
-Subject: Re: [PATCH v4 0/3] Add support for MaxLinear/Exar USB to serial
- converters
-Message-ID: <20200701075047.GB3334@localhost>
-References: <20200607160809.20192-1-mani@kernel.org>
- <20200626143136.GF8333@Mani-XPS-13-9360>
+        id S1728692AbgGAIWd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Jul 2020 04:22:33 -0400
+Received: from mga17.intel.com ([192.55.52.151]:16270 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728479AbgGAIWd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 1 Jul 2020 04:22:33 -0400
+IronPort-SDR: uoHWjciRQc22/Cz7YqEBVodydEOWk0xyxsIzPgfctjmoXy/5pATslB7Wg3aQFomFPfqL8ovvC3
+ apu1XfPOkxHw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9668"; a="126600356"
+X-IronPort-AV: E=Sophos;i="5.75,299,1589266800"; 
+   d="scan'208";a="126600356"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2020 01:22:33 -0700
+IronPort-SDR: UxfLNcQYuiJvpdPz8HpFrlTDXY+jczgF1A1EGlKOj/NjPYco/JmGWlpIw2C70SdMWBPuDFPnf9
+ w5cNCeaFB4aw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,299,1589266800"; 
+   d="scan'208";a="386943357"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 01 Jul 2020 01:22:30 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 01 Jul 2020 11:22:30 +0300
+Date:   Wed, 1 Jul 2020 11:22:30 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, Benson Leung <bleung@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:USB TYPEC CLASS" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] usb: typec: Add num_altmodes partner attribute
+Message-ID: <20200701082230.GF856968@kuha.fi.intel.com>
+References: <20200701003149.3101219-1-pmalani@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200626143136.GF8333@Mani-XPS-13-9360>
+In-Reply-To: <20200701003149.3101219-1-pmalani@chromium.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 26, 2020 at 08:01:36PM +0530, Manivannan Sadhasivam wrote:
-> On Sun, Jun 07, 2020 at 09:38:06PM +0530, Manivannan Sadhasivam wrote:
-> > Hello,
-> > 
-> > This series adds support for MaxLinear/Exar USB to serial converters.
-> > This driver only supports XR21V141X series but it can easily be extended
-> > to other series in future.
-> > 
-> > This driver is inspired from the initial one submitted by Patong Yang:
-> > 
-> > https://patchwork.kernel.org/patch/10543261/
-> > 
-> > While the initial driver was a custom tty USB driver exposing whole
-> > new serial interface ttyXRUSBn, this version is completely based on USB
-> > serial core thus exposing the interfaces as ttyUSBn. This will avoid
-> > the overhead of exposing a new USB serial interface which the userspace
-> > tools are unaware of.
-> > 
-> > This series has been tested with Hikey970 board hosting XR21V141X chip.
-> > 
+Hi Prashant,
+
+On Tue, Jun 30, 2020 at 05:31:48PM -0700, Prashant Malani wrote:
+> Add a user-visible attribute for the number of alt modes available in a
+> partner. This allows userspace to determine whether there are any
+> remaining alt modes left to be registered by the kernel driver. It can
+> begin implementing any policy state machine after all available alt
+> modes have been registered with the connector class framework.
 > 
-> Gentle ping on this series!
+> This value is set to "-1" initially, which is an invalid value,
+> signifying that a valid number of alt modes haven't been set for the
+> partner.
+> 
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> Cc: Benson Leung <bleung@chromium.org>
+> ---
+>  drivers/usb/typec/class.c | 34 ++++++++++++++++++++++++++++++++++
+>  include/linux/usb/typec.h |  1 +
+>  2 files changed, 35 insertions(+)
 
-You sending this in reply to your superseded v4. Please make sure to
-always increment the revision number when updating a series, including
-when changing authorship.
+You need to add documentation for the file. Add an entry for it to
+Documentation/ABI/testing/sysfs-class-typec
 
-Johan
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index c9234748537a..680cbcfbd427 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -33,6 +33,7 @@ struct typec_partner {
+>  	struct usb_pd_identity		*identity;
+>  	enum typec_accessory		accessory;
+>  	struct ida			mode_ids;
+> +	int				num_altmodes;
+>  };
+>  
+>  struct typec_port {
+> @@ -532,9 +533,18 @@ static ssize_t supports_usb_power_delivery_show(struct device *dev,
+>  }
+>  static DEVICE_ATTR_RO(supports_usb_power_delivery);
+>  
+> +static ssize_t num_altmodes_show(struct device *dev, struct device_attribute *attr, char *buf)
+> +{
+> +	struct typec_partner *p = to_typec_partner(dev);
+> +
+> +	return sprintf(buf, "%d\n", p->num_altmodes);
+> +}
+> +static DEVICE_ATTR_RO(num_altmodes);
+
+This is up to you, but please consider naming the file
+"number_of_alternate_modes".
+
+So now user space needs to understand that value -1 means "unknown",
+right?
+
+If so, then I think it would probable be better to just hide the file
+until the actual number of alternate modes is known.
+
+>  static struct attribute *typec_partner_attrs[] = {
+>  	&dev_attr_accessory_mode.attr,
+>  	&dev_attr_supports_usb_power_delivery.attr,
+> +	&dev_attr_num_altmodes.attr,
+>  	NULL
+>  };
+>  ATTRIBUTE_GROUPS(typec_partner);
+
+-ATTRIBUTE_GROUPS(typec_partner);
+
+static umode_t typec_partner_attr_is_visible(struct kobject *kobj,
+                                             struct attribute *attr, int n)
+{
+        struct typec_partner *partner = to_typec_partner(kobj_to_dev(kobj));
+
+        if (attr == &dev_attr_num_altmodes.attr) {
+                if (partner->num_altmodes < 0)
+                        return 0;
+        }
+
+        return attr->mode;
+}
+
+static struct attribute_group typec_partner_group = {
+        .is_visible = typec_partner_attr_is_visible,
+        .attrs = typec_partner_attrs
+};
+
+static const struct attribute_group *typec_partner_groups[] = {
+        &typec_partner_group,
+        NULL
+};
+
+> @@ -570,6 +580,29 @@ int typec_partner_set_identity(struct typec_partner *partner)
+>  }
+>  EXPORT_SYMBOL_GPL(typec_partner_set_identity);
+>  
+> +/**
+> + * typec_partner_set_num_altmodes - Update number of available altmodes
+> + * @partner: The partner to be updated
+> + * @num_alt_modes: The number of altmodes we want to specify as available
+> + *
+> + * This routine is used to report the number of alternate modes supported by the
+> + * partner. This value is *not* enforced in alt mode registration routines.
+> + *
+> + * @partner.num_altmodes is set to -1 on partner registration, denoting that
+> + * a valid value has not been set for it yet.
+> + */
+> +int typec_partner_set_num_altmodes(struct typec_partner *partner, int num_altmodes)
+> +{
+> +	if (num_altmodes < 0)
+> +		return -EINVAL;
+> +
+> +	partner->num_altmodes = num_altmodes;
+> +	sysfs_notify(&partner->dev.kobj, NULL, "num_altmodes");
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(typec_partner_set_num_altmodes);
+> +
+>  /**
+>   * typec_partner_register_altmode - Register USB Type-C Partner Alternate Mode
+>   * @partner: USB Type-C Partner that supports the alternate mode
+> @@ -612,6 +645,7 @@ struct typec_partner *typec_register_partner(struct typec_port *port,
+>  	ida_init(&partner->mode_ids);
+>  	partner->usb_pd = desc->usb_pd;
+>  	partner->accessory = desc->accessory;
+> +	partner->num_altmodes = -1;
+>  
+>  	if (desc->identity) {
+>  		/*
+> diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
+> index 5daa1c49761c..ab523caa23a4 100644
+> --- a/include/linux/usb/typec.h
+> +++ b/include/linux/usb/typec.h
+> @@ -112,6 +112,7 @@ struct typec_altmode_desc {
+>  	enum typec_port_data	roles;
+>  };
+>  
+> +int typec_partner_set_num_altmodes(struct typec_partner *partner, int num_altmodes);
+>  struct typec_altmode
+>  *typec_partner_register_altmode(struct typec_partner *partner,
+>  				const struct typec_altmode_desc *desc);
+
+thanks,
+
+-- 
+heikki
