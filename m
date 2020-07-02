@@ -2,103 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C9D3212364
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jul 2020 14:34:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1099212496
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jul 2020 15:26:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728995AbgGBMeH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jul 2020 08:34:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57540 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728830AbgGBMeH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jul 2020 08:34:07 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0159CC08C5C1;
-        Thu,  2 Jul 2020 05:34:07 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id g139so16001217lfd.10;
-        Thu, 02 Jul 2020 05:34:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=73mwDxKIIi5xy52ifDuHdmCPwFGyKXx2K9p8Tj3KFm4=;
-        b=oY2YIKKT6qdIqfACrZtZJq7fWxKXCzEkrVs6WeshydcoP7Slkr0sGzg39490BShUoj
-         phub7Sj9yTYm7jfOLyM300/F7uKeWW4Jgn7SRLoXAw3wtRtjveoPP8Nwtr0oliEsry4X
-         kapTDR9P/MCNSqI3wO3iQ0MGRS5kPJsLmfqM5OVimq/K5IsokwlY/0byBkFhu5buVdzn
-         twSH7dsp1dso8x/lAEswQTKiqKO+4WHRnJ8ti5TkGDP+H7StUbMETw/3u7MRTA0aklqB
-         DWtThsVo7GsEtOXod+PhUPtgBOFUiNbarR0wpejdMoXMKNO50SIrHQefzKX52gQbu5oi
-         aN3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=73mwDxKIIi5xy52ifDuHdmCPwFGyKXx2K9p8Tj3KFm4=;
-        b=DZFNtlZ1ibc6hmPJSFhGh1rX0RDzOkOU5Q85ATFBiRfjWIqj0GKkhgrnnnVksJzYbz
-         LGSoVP3szIabNk26FZf34dqZskKW0glfcZiSjfxgx2liKyXwHnlDzOj8zW1CfMW3uLop
-         60rw2uWohX/9AujcnDtuRC9N9zAHH+si/wdOWGGPo4JcONIo37J9rWE6akV+L/i2Wdmk
-         cCdA2NbsNywe+vEMiGPnmgoKjfc78vgxvlEyqPrUjNix/JRAYMoIRcOyCM/W20UkGLlO
-         yfwJsX247MvXUXvxoytcTemGjUL/6gRftoyVQL1Y7yQa6WLgmlNn2tj0aMDg+OkUKwoE
-         2f1A==
-X-Gm-Message-State: AOAM530pCcq1MlzK9CtRxGJamj8NjJBSejO2/Pkp9j8ikN7barFjo4DM
-        H/tzOl9ubGkV1k14tYgjnNuc7p/u
-X-Google-Smtp-Source: ABdhPJxbwzKvfyX0QzWCYzf/1I6Gwt8CNMRr23fYGL1xEirTzHrD/o9yt9N5AVdARjAROXlz6cPd1g==
-X-Received: by 2002:ac2:4889:: with SMTP id x9mr18419111lfc.162.1593693245337;
-        Thu, 02 Jul 2020 05:34:05 -0700 (PDT)
-Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id s62sm2906537lja.100.2020.07.02.05.34.03
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 02 Jul 2020 05:34:04 -0700 (PDT)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] USB: Fix up terminology in include files
-In-Reply-To: <20200701171555.3198836-1-gregkh@linuxfoundation.org>
-References: <20200701171555.3198836-1-gregkh@linuxfoundation.org>
-Date:   Thu, 02 Jul 2020 15:33:59 +0300
-Message-ID: <87r1tu6qq0.fsf@kernel.org>
+        id S1729367AbgGBN0J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Jul 2020 09:26:09 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:40955 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1729363AbgGBN0G (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jul 2020 09:26:06 -0400
+Received: (qmail 586630 invoked by uid 1000); 2 Jul 2020 09:26:05 -0400
+Date:   Thu, 2 Jul 2020 09:26:05 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Jagan Teki <jagan@amarulasolutions.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        mylene.josserand@collabora.com,
+        Suniel Mahesh <sunil@amarulasolutions.com>,
+        Michael Trimarchi <michael@amarulasolutions.com>,
+        linux-usb@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        linux-amarula <linux-amarula@amarulasolutions.com>,
+        William Wu <william.wu@rock-chips.com>
+Subject: Re: [PATCH] usb: host: ohci-platform: Disable ohci for rk3288
+Message-ID: <20200702132605.GA586616@rowland.harvard.edu>
+References: <20200702090504.36670-1-jagan@amarulasolutions.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200702090504.36670-1-jagan@amarulasolutions.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On Thu, Jul 02, 2020 at 02:35:04PM +0530, Jagan Teki wrote:
+> rk3288 has usb host0 ohci controller but doesn't actually work 
+> on real hardware but it works with new revision chip rk3288w.
+> 
+> So, disable ohci for rk3288.
+> 
+> For rk3288w chips the compatible update code is handled by bootloader.
+> 
+> Cc: William Wu <william.wu@rock-chips.com>
+> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+> ---
+> Note:
+> - U-Boot patch for compatible update
+> https://patchwork.ozlabs.org/project/uboot/patch/20200702084820.35942-1-jagan@amarulasolutions.com/
+> 
+>  drivers/usb/host/ohci-platform.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/host/ohci-platform.c b/drivers/usb/host/ohci-platform.c
+> index 7addfc2cbadc..24655ed6a7e0 100644
+> --- a/drivers/usb/host/ohci-platform.c
+> +++ b/drivers/usb/host/ohci-platform.c
+> @@ -96,7 +96,7 @@ static int ohci_platform_probe(struct platform_device *dev)
+>  	struct ohci_hcd *ohci;
+>  	int err, irq, clk = 0;
+>  
+> -	if (usb_disabled())
+> +	if (usb_disabled() || of_machine_is_compatible("rockchip,rk3288"))
+>  		return -ENODEV;
+>  
+>  	/*
+> -- 
+> 2.25.1
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
-
-> USB is a HOST/DEVICE protocol, as per the specification and all
-> documentation.  Fix up terms that are not applicable to make things
-> match up with the terms used through the rest of the USB stack.
->
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-Acked-by: Felipe Balbi <balbi@kernel.org>
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl791DcACgkQzL64meEa
-mQawzBAAyFcEX0ddbG6MFqGYmkToxPCvCxUrj81I3NWxoNMIX7C8zZ4JXsxXnUnm
-b8uJaE9i5ULATV/7yPyEzxDxz+vDhBJQ5NAprSZHx+56M44XWP+RCKMkXcShOS4Y
-5Od8V8K0xWpL8or2OGfEXyqWBKFypQgk8ev6r1UytqQmL+IJ8pWMJd4ei6STx9PS
-NxE4hqRTrN5GAja6wR4R873BP9nYBvuGm/vOFXpoiGHbf1d2ODBQBgc26xHkllJc
-INMU5CjEC5eyXAF0o7cmm6VcxumBpAOtu2iJVIG6CN8bGMus8HKLJNr881olrw30
-3p6VtuLGjIL7aLJvj2yFqufikEiKqjmov6SUpw5drgm+Mwyazre1mr0qZss9MwiO
-2q7tdRRYQNaSvNwzLuJ20q+oSHhw5AhmHD8NYCXCFUiwMjph+FaZXOFM0ja6HDth
-tVZhjWqoBi+5NjVLMChiPdzXDnwn74TSWf++3Rdazog8HsWrLfHh5bHAlSb5uwQ0
-lAE+DjW1rp43wqkiYHeoqOQC6L2lv82HpXXYhD9CTqf/QGjmeDYykcGVDjs8ch8H
-jQzPcx4JPoLEQrAx152+secRHmliOHa3MSQrqgS0jCISAE+G9y6JlH/1tJM19FMX
-tHDTYJ9rL5OacWdUn18N4xQ5WTdlWYsuuwR+F6oVpmxj35+Ujkg=
-=TfOn
------END PGP SIGNATURE-----
---=-=-=--
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
