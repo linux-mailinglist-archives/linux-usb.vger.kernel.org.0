@@ -2,59 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C582212162
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jul 2020 12:33:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 952FE2122B3
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jul 2020 13:53:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728574AbgGBKda (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jul 2020 06:33:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35872 "EHLO mail.kernel.org"
+        id S1728849AbgGBLxi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Jul 2020 07:53:38 -0400
+Received: from mga04.intel.com ([192.55.52.120]:5015 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728331AbgGBKda (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 2 Jul 2020 06:33:30 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 67DA42073E;
-        Thu,  2 Jul 2020 10:33:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593686010;
-        bh=qSuu7uAkT+1gy0iK1Dx2XV1S5skvkvweaOvFMBrx8ro=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=koKawob6+XsVXkTQSAtYP8+72nOIXIb2Xug5YeT7iiutUefkwpUA7ASVoKvy+4LkF
-         aUWgAWnfPqian/HcPyZY8gOdSrn+bWIqk8ylr2CncwgNbw5dUxALqn8Iasq7pPZ240
-         nl+6TodZNPE2hHgdlY6IDRrcYZkUA8SnELY2xMtk=
-Date:   Thu, 2 Jul 2020 12:33:33 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     "balbi@kernel.org" <balbi@kernel.org>,
-        Ran Wang <ran.wang_1@nxp.com>, Leo Li <leoyang.li@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] USB: phy: fsl-usb: remove character device usage
-Message-ID: <20200702103333.GA1313090@kroah.com>
-References: <20200702072914.1072878-1-gregkh@linuxfoundation.org>
- <20200702072914.1072878-2-gregkh@linuxfoundation.org>
- <AM7PR04MB71575977E680A7F6405D8B3F8B6D0@AM7PR04MB7157.eurprd04.prod.outlook.com>
+        id S1728813AbgGBLxi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 2 Jul 2020 07:53:38 -0400
+IronPort-SDR: LamNGFfkGgsD0cdlnwYwNghixb+lkyZ8n9CiweeWGJxc07aNTa7MM0HNXV1th5kB+dw9ffAawx
+ IMn+7ijUZkwQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9669"; a="144386689"
+X-IronPort-AV: E=Sophos;i="5.75,304,1589266800"; 
+   d="scan'208";a="144386689"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2020 04:53:37 -0700
+IronPort-SDR: bbbdfZyO3yEXTYX8WFFN2SRdDCYGGBsw17/NUBwRRvkexdjBdpLuSC4R4N9fh3hBFJ8n6VtUMw
+ 6L4M191McniA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,304,1589266800"; 
+   d="scan'208";a="387313386"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga001.fm.intel.com with SMTP; 02 Jul 2020 04:53:35 -0700
+Received: by lahna (sSMTP sendmail emulation); Thu, 02 Jul 2020 14:53:34 +0300
+Date:   Thu, 2 Jul 2020 14:53:34 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Wei Yongjun <weiyongjun1@huawei.com>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Mario Limonciello <mario.limonciello@dell.com>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH -next] thunderbolt: Fix old style declaration warning
+Message-ID: <20200702115334.GU5180@lahna.fi.intel.com>
+References: <20200702080750.70614-1-weiyongjun1@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <AM7PR04MB71575977E680A7F6405D8B3F8B6D0@AM7PR04MB7157.eurprd04.prod.outlook.com>
+In-Reply-To: <20200702080750.70614-1-weiyongjun1@huawei.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 02, 2020 at 09:07:43AM +0000, Peter Chen wrote:
->  
-> > 
-> > No idea why this driver is using a char device node, statically allocated, with no
-> > dynamic allocation or hook up with devtmpfs, along with a reserverd major number,
-> > for "special" operations, not all of which ever were implemented.
-> > 
-> > So just rip it out, as no one must be using it because no modern system will ever
-> > actually create the /dev/ node it needs.
-> > 
+On Thu, Jul 02, 2020 at 04:07:50PM +0800, Wei Yongjun wrote:
+> Fix gcc build warning:
 > 
-> Add related people from NXP.
+> drivers/thunderbolt/quirks.c:21:1: warning:
+>  'static' is not at beginning of declaration [-Wold-style-declaration]
+>    21 | const static struct tb_quirk tb_quirks[] = {
+>       | ^~~~~
+> 
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
 
-If there are related people, MAINTAINERS should have reflected that :)
+Applied, thanks!
