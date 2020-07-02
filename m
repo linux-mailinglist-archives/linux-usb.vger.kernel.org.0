@@ -2,90 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3FE211C9F
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jul 2020 09:24:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3FF1211CF9
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jul 2020 09:29:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726934AbgGBHYb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jul 2020 03:24:31 -0400
-Received: from mx2.suse.de ([195.135.220.15]:40764 "EHLO mx2.suse.de"
+        id S1727923AbgGBH3O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Jul 2020 03:29:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59168 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726630AbgGBHYb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 2 Jul 2020 03:24:31 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 9901FADD9;
-        Thu,  2 Jul 2020 07:24:29 +0000 (UTC)
-Message-ID: <1593674666.3609.3.camel@suse.com>
-Subject: Re: [PATCH] USB: cdc-wdm: Call wake_up_all() when clearing
- WDM_IN_USE bit.
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Andrey Konovalov <andreyknvl@google.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Colin Ian King <colin.king@canonical.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzbot <syzbot+854768b99f19e89d7f81@syzkaller.appspotmail.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Date:   Thu, 02 Jul 2020 09:24:26 +0200
-In-Reply-To: <b347b882-a986-24c6-2b37-0b1a092931b9@i-love.sakura.ne.jp>
-References: <1590408381.2838.4.camel@suse.com>
-         <4a686d9a-d09f-44f3-553c-bcf0bd8a8ea1@i-love.sakura.ne.jp>
-         <082ae642-0703-6c26-39f6-d725e395ef9a@i-love.sakura.ne.jp>
-         <CAAeHK+ww0YLUKGjQF5KfzoUUsdfLJdv5guUXRq4q46VfPiQubQ@mail.gmail.com>
-         <27b7545e-8f41-10b8-7c02-e35a08eb1611@i-love.sakura.ne.jp>
-         <CAAeHK+ww0u0G94z_Y7VXLCVTQVZ9thO0q69n+Fj3jKT6MtpPng@mail.gmail.com>
-         <20200528194057.GA21709@rowland.harvard.edu>
-         <CAAeHK+ySAnU03cvg1=+yHh0YK1UFO4mrv-N9FcDDMt_0AfGZSQ@mail.gmail.com>
-         <20200528205807.GB21709@rowland.harvard.edu>
-         <1590852311.14886.3.camel@suse.com>
-         <20200530154728.GB29298@rowland.harvard.edu>
-         <0c43caf8-1135-1d38-cb57-9c0f84c4394d@i-love.sakura.ne.jp>
-         <254939d4-f3a1-8c7e-94e5-9862c02774fa@i-love.sakura.ne.jp>
-         <CAAeHK+w+wBNksK_wpczad3AU4oLQRsjL_5G8p1R55Zh_FLhprg@mail.gmail.com>
-         <c85331fc-874c-6e46-a77f-0ef1dc075308@i-love.sakura.ne.jp>
-         <b347b882-a986-24c6-2b37-0b1a092931b9@i-love.sakura.ne.jp>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1726858AbgGBH3N (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 2 Jul 2020 03:29:13 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3BBEB206BE;
+        Thu,  2 Jul 2020 07:29:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1593674952;
+        bh=u29VM/PVO5QZE/Adf28yl93d1nQzkhUiMwFZCmk0V2Q=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BJHNo7S3LtJzfbzz7DTtUCKh5TGeXJlbdtD9ivfMqWhYZRpVaxGbGoXDGTwysxQtn
+         JAdTdqyPiLPuEEKtZbw3gYgiqzBlv/MhLR220966ugzLx6OBP3NxVBx26+cAJUyZoZ
+         nRPVLtRuzwdRfI+18mvnztIRfegO3N/7NKZwdqa4=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     balbi@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH 1/2] USB: phy: fsl-usb: remove sysfs abuse
+Date:   Thu,  2 Jul 2020 09:29:13 +0200
+Message-Id: <20200702072914.1072878-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Donnerstag, den 02.07.2020, 14:44 +0900 schrieb Tetsuo Handa:
+This file has a HUGE debugging sysfs file that spews out a lot of
+information all at once, which violates the one-value-per-file rule for
+sysfs.  If this is really needed, it should go into debugfs, but given
+the age of this driver, I strongly doubt anyone is using it anymore.
 
->  
->  	usb_autopm_put_interface(desc->intf)
->  	mutex_unlock(&desc->wlock);
-> +	if (rv >= 0 &&
-> +	    /*
-> +	     * needs both flags. We cannot do with one
-> +	     * because resetting it would cause a race
-> +	     * with write() yet we need to signal
-> +	     * a disconnect
-> +	     */
-> +	    wait_event_killable_timeout(desc->wait,
-> +					!test_bit(WDM_IN_USE, &desc->flags) ||
-> +					test_bit(WDM_DISCONNECTING, &desc->flags), 30 * HZ) == 0) {
-> +		if (mutex_lock_killable(&desc->wlock) == 0) {
-> +			if (!test_bit(WDM_DISCONNECTING, &desc->flags))
-> +				dev_err(&desc->intf->dev,
-> +					"Tx URB not responding index=%d\n",
-> +					le16_to_cpu(req->wIndex));
-> +			mutex_unlock(&desc->wlock);
-> +		}
-> +	}
+So just remove the file entirely, it was never documented, so obviously,
+no one actually needed it :)
 
-Hi,
+Cc: Felipe Balbi <balbi@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/usb/phy/phy-fsl-usb.c | 93 -----------------------------------
+ 1 file changed, 93 deletions(-)
 
-I am afraid this would
-
-1. serialize the driver, harming performance
-2. introduce a race with every timer a task is running
-
-	Regards
-		Oliver
+diff --git a/drivers/usb/phy/phy-fsl-usb.c b/drivers/usb/phy/phy-fsl-usb.c
+index b451f4695f3f..93d2257aeec8 100644
+--- a/drivers/usb/phy/phy-fsl-usb.c
++++ b/drivers/usb/phy/phy-fsl-usb.c
+@@ -957,98 +957,6 @@ int usb_otg_start(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
+-/*
+- * state file in sysfs
+- */
+-static ssize_t show_fsl_usb2_otg_state(struct device *dev,
+-				   struct device_attribute *attr, char *buf)
+-{
+-	struct otg_fsm *fsm = &fsl_otg_dev->fsm;
+-	char *next = buf;
+-	unsigned size = PAGE_SIZE;
+-	int t;
+-
+-	mutex_lock(&fsm->lock);
+-
+-	/* basic driver infomation */
+-	t = scnprintf(next, size,
+-			DRIVER_DESC "\n" "fsl_usb2_otg version: %s\n\n",
+-			DRIVER_VERSION);
+-	size -= t;
+-	next += t;
+-
+-	/* Registers */
+-	t = scnprintf(next, size,
+-			"OTGSC:   0x%08x\n"
+-			"PORTSC:  0x%08x\n"
+-			"USBMODE: 0x%08x\n"
+-			"USBCMD:  0x%08x\n"
+-			"USBSTS:  0x%08x\n"
+-			"USBINTR: 0x%08x\n",
+-			fsl_readl(&usb_dr_regs->otgsc),
+-			fsl_readl(&usb_dr_regs->portsc),
+-			fsl_readl(&usb_dr_regs->usbmode),
+-			fsl_readl(&usb_dr_regs->usbcmd),
+-			fsl_readl(&usb_dr_regs->usbsts),
+-			fsl_readl(&usb_dr_regs->usbintr));
+-	size -= t;
+-	next += t;
+-
+-	/* State */
+-	t = scnprintf(next, size,
+-		      "OTG state: %s\n\n",
+-		      usb_otg_state_string(fsl_otg_dev->phy.otg->state));
+-	size -= t;
+-	next += t;
+-
+-	/* State Machine Variables */
+-	t = scnprintf(next, size,
+-			"a_bus_req: %d\n"
+-			"b_bus_req: %d\n"
+-			"a_bus_resume: %d\n"
+-			"a_bus_suspend: %d\n"
+-			"a_conn: %d\n"
+-			"a_sess_vld: %d\n"
+-			"a_srp_det: %d\n"
+-			"a_vbus_vld: %d\n"
+-			"b_bus_resume: %d\n"
+-			"b_bus_suspend: %d\n"
+-			"b_conn: %d\n"
+-			"b_se0_srp: %d\n"
+-			"b_ssend_srp: %d\n"
+-			"b_sess_vld: %d\n"
+-			"id: %d\n",
+-			fsm->a_bus_req,
+-			fsm->b_bus_req,
+-			fsm->a_bus_resume,
+-			fsm->a_bus_suspend,
+-			fsm->a_conn,
+-			fsm->a_sess_vld,
+-			fsm->a_srp_det,
+-			fsm->a_vbus_vld,
+-			fsm->b_bus_resume,
+-			fsm->b_bus_suspend,
+-			fsm->b_conn,
+-			fsm->b_se0_srp,
+-			fsm->b_ssend_srp,
+-			fsm->b_sess_vld,
+-			fsm->id);
+-	size -= t;
+-	next += t;
+-
+-	mutex_unlock(&fsm->lock);
+-
+-	return PAGE_SIZE - size;
+-}
+-
+-static DEVICE_ATTR(fsl_usb2_otg_state, S_IRUGO, show_fsl_usb2_otg_state, NULL);
+-
+-static struct attribute *fsl_otg_attrs[] = {
+-	&dev_attr_fsl_usb2_otg_state.attr,
+-	NULL,
+-};
+-ATTRIBUTE_GROUPS(fsl_otg);
+-
+ /* Char driver interface to control some OTG input */
+ 
+ /*
+@@ -1167,7 +1075,6 @@ struct platform_driver fsl_otg_driver = {
+ 	.driver = {
+ 		.name = driver_name,
+ 		.owner = THIS_MODULE,
+-		.dev_groups = fsl_otg_groups,
+ 	},
+ };
+ 
+-- 
+2.27.0
 
