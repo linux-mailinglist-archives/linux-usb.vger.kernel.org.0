@@ -2,117 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0798E21264B
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jul 2020 16:30:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D719A21266F
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jul 2020 16:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729480AbgGBOaz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jul 2020 10:30:55 -0400
-Received: from mga11.intel.com ([192.55.52.93]:49010 "EHLO mga11.intel.com"
+        id S1729719AbgGBOih (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Jul 2020 10:38:37 -0400
+Received: from foss.arm.com ([217.140.110.172]:58548 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728651AbgGBOaz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 2 Jul 2020 10:30:55 -0400
-IronPort-SDR: 0iNtk55uzuMM04ODjERaAwkgP4Zmd3qV8QnuXQ3KR7nMb0CC3u4U37m0DdbQW7RSOyO1i18Bo6
- YgdJDk5eTWqw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9670"; a="145050208"
-X-IronPort-AV: E=Sophos;i="5.75,304,1589266800"; 
-   d="scan'208";a="145050208"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2020 07:30:48 -0700
-IronPort-SDR: vWrOKyo4v+GMkgqM72jmF51Rz3H5324+VLO8XgWWIvl9jhQL2aNXH/CVA88Lx3aQ9yfa/2r9wZ
- Q5z1+9DSYXDw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,304,1589266800"; 
-   d="scan'208";a="265713563"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga007.fm.intel.com with ESMTP; 02 Jul 2020 07:30:46 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id E24631A3; Thu,  2 Jul 2020 17:30:45 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1] usb: hcd: Try MSI interrupts on PCI devices
-Date:   Thu,  2 Jul 2020 17:30:45 +0300
-Message-Id: <20200702143045.23429-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.27.0
+        id S1728179AbgGBOig (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 2 Jul 2020 10:38:36 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E15A531B;
+        Thu,  2 Jul 2020 07:38:35 -0700 (PDT)
+Received: from [10.57.21.32] (unknown [10.57.21.32])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 66DA13F68F;
+        Thu,  2 Jul 2020 07:38:33 -0700 (PDT)
+Subject: Re: [PATCH] usb: host: ohci-platform: Disable ohci for rk3288
+To:     Jagan Teki <jagan@amarulasolutions.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        mylene.josserand@collabora.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        Suniel Mahesh <sunil@amarulasolutions.com>,
+        William Wu <william.wu@rock-chips.com>,
+        Michael Trimarchi <michael@amarulasolutions.com>,
+        linux-amarula <linux-amarula@amarulasolutions.com>
+References: <20200702090504.36670-1-jagan@amarulasolutions.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+Message-ID: <f0ae5915-9cb8-9550-f05c-6cebad191a14@arm.com>
+Date:   Thu, 2 Jul 2020 15:38:31 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200702090504.36670-1-jagan@amarulasolutions.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-It appears that some platforms share same IRQ line between several devices,
-some of which are EHCI and OHCI controllers. This is neither practical nor
-performance-wise, especially in the case when they are supporting MSI.
+On 2020-07-02 10:05, Jagan Teki wrote:
+> rk3288 has usb host0 ohci controller but doesn't actually work
+> on real hardware but it works with new revision chip rk3288w.
+> 
+> So, disable ohci for rk3288.
+> 
+> For rk3288w chips the compatible update code is handled by bootloader.
+> 
+> Cc: William Wu <william.wu@rock-chips.com>
+> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+> ---
+> Note:
+> - U-Boot patch for compatible update
+> https://patchwork.ozlabs.org/project/uboot/patch/20200702084820.35942-1-jagan@amarulasolutions.com/
+> 
+>   drivers/usb/host/ohci-platform.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/host/ohci-platform.c b/drivers/usb/host/ohci-platform.c
+> index 7addfc2cbadc..24655ed6a7e0 100644
+> --- a/drivers/usb/host/ohci-platform.c
+> +++ b/drivers/usb/host/ohci-platform.c
+> @@ -96,7 +96,7 @@ static int ohci_platform_probe(struct platform_device *dev)
+>   	struct ohci_hcd *ohci;
+>   	int err, irq, clk = 0;
+>   
+> -	if (usb_disabled())
+> +	if (usb_disabled() || of_machine_is_compatible("rockchip,rk3288"))
 
-In order to improve the situation try to allocate MSI and fallback to legacy
-IRQ if no MSI available.
+This seems unnecessary to me - if we've even started probing a driver 
+for a broken piece of hardware to the point that we need magic checks to 
+bail out again, then something is already fundamentally wrong.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/usb/core/hcd-pci.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+Old boards only sold with the original SoC variant have no reason to 
+enable the OHCI (since it never worked originally), thus will never 
+execute this check.
 
-diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
-index 1547aa6e5314..4dc443aaef5c 100644
---- a/drivers/usb/core/hcd-pci.c
-+++ b/drivers/usb/core/hcd-pci.c
-@@ -194,20 +194,21 @@ int usb_hcd_pci_probe(struct pci_dev *dev, const struct pci_device_id *id,
- 	 * make sure irq setup is not touched for xhci in generic hcd code
- 	 */
- 	if ((driver->flags & HCD_MASK) < HCD_USB3) {
--		if (!dev->irq) {
-+		retval = pci_alloc_irq_vectors(dev, 1, 1, PCI_IRQ_LEGACY | PCI_IRQ_MSI);
-+		if (retval < 0) {
- 			dev_err(&dev->dev,
- 			"Found HC with no IRQ. Check BIOS/PCI %s setup!\n",
- 				pci_name(dev));
- 			retval = -ENODEV;
- 			goto disable_pci;
- 		}
--		hcd_irq = dev->irq;
-+		hcd_irq = pci_irq_vector(dev, 0);
- 	}
- 
- 	hcd = usb_create_hcd(driver, &dev->dev, pci_name(dev));
- 	if (!hcd) {
- 		retval = -ENOMEM;
--		goto disable_pci;
-+		goto free_irq_vectors;
- 	}
- 
- 	hcd->amd_resume_bug = (usb_hcd_amd_remote_wakeup_quirk(dev) &&
-@@ -286,6 +287,9 @@ int usb_hcd_pci_probe(struct pci_dev *dev, const struct pci_device_id *id,
- 
- put_hcd:
- 	usb_put_hcd(hcd);
-+free_irq_vectors:
-+	if ((driver->flags & HCD_MASK) < HCD_USB3)
-+		pci_free_irq_vectors(dev);
- disable_pci:
- 	pci_disable_device(dev);
- 	dev_err(&dev->dev, "init %s fail, %d\n", pci_name(dev), retval);
-@@ -343,6 +347,8 @@ void usb_hcd_pci_remove(struct pci_dev *dev)
- 		up_read(&companions_rwsem);
- 	}
- 	usb_put_hcd(hcd);
-+	if ((hcd->driver->flags & HCD_MASK) < HCD_USB3)
-+		pci_free_irq_vectors(dev);
- 	pci_disable_device(dev);
- }
- EXPORT_SYMBOL_GPL(usb_hcd_pci_remove);
-@@ -454,7 +460,7 @@ static int suspend_common(struct device *dev, bool do_wakeup)
- 	 * synchronized here.
- 	 */
- 	if (!hcd->msix_enabled)
--		synchronize_irq(pci_dev->irq);
-+		synchronize_irq(pci_irq_vector(pci_dev, 0));
- 
- 	/* Downstream ports from this root hub should already be quiesced, so
- 	 * there will be no DMA activity.  Now we can shut down the upstream
--- 
-2.27.0
+New boards designed around the W variant to make use of the OHCI can 
+freely enable it either way.
 
+The only relative-edge-case where it might matter is older board designs 
+still in production which have shipped with both SoC variants. Enabling 
+OHCI can't be *necessary* given that it's still broken on a lot of 
+deployed boards, so at best it must be an opportunistic nice-to-have. 
+Since we're already having to rely on the bootloader to patch up the 
+devicetree for other low-level differences in this case, it should be 
+part of that responsibility for it to only enable the OHCI on the 
+appropriate SoC variant too. Statically enabling it in the DTS for a 
+board where it may well not work is just bad.
+
+As soon as a DTB with a broken piece of hardware enabled gets passed to 
+an OS, then the damage is already done. A driver patch in a future 
+version of Linux that magically knows better and ignores it isn't going 
+to help a user booting an older kernel image, or some other OS entirely.
+
+Robin.
+
+>   		return -ENODEV;
+>   
+>   	/*
+> 
