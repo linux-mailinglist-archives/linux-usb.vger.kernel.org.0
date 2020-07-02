@@ -2,90 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C082118DD
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jul 2020 03:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 014E0211A4D
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jul 2020 04:53:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729062AbgGBB3H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Jul 2020 21:29:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59172 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729457AbgGBB1V (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 1 Jul 2020 21:27:21 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7299320874;
-        Thu,  2 Jul 2020 01:27:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593653241;
-        bh=vtSw3xO97ia0vKC4RxF9VceEbRCcZtdHfy9qfJCSPLk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kMa+duSV8XWjwolujRnTDpcBRrPBGd9iA1VoY56qNMV6W5Tq4emTNKzQNLGwq4bV7
-         DB1WdgL5uZg5aN9TeJbUxiuBwdLI7+EKg99WFkARJkUX+mmhOTwWE4O9MKbR34CgVm
-         uxgWquNAvXDEC4t+IVqWWB4Y0C9WP6AMIOx+9fw8=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tuomas Tynkkynen <tuomas.tynkkynen@iki.fi>,
-        syzbot+29dc7d4ae19b703ff947@syzkaller.appspotmail.com,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 07/13] usbnet: smsc95xx: Fix use-after-free after removal
-Date:   Wed,  1 Jul 2020 21:27:06 -0400
-Message-Id: <20200702012712.2701986-7-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200702012712.2701986-1-sashal@kernel.org>
-References: <20200702012712.2701986-1-sashal@kernel.org>
+        id S1726187AbgGBCxZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Jul 2020 22:53:25 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:40039 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726146AbgGBCxZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 1 Jul 2020 22:53:25 -0400
+X-UUID: dee14df25634404982d404beca267926-20200702
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=afpaC7qRGVZ6JRFynQgro+7OJFSDdHfSPLeLJ/lq7kQ=;
+        b=aLSG1kWmHRehrrGQ3rqzjfigMarWaiFUhQ7v78o07HneYshjxm0TtsjxlfDJ93oVg48TrHNcYz/mTSwKXH2FX3xrwX0W8pO9A89pAl6spVO2XB7nXm8UocNMJ6AfRRU1t1SHBFdrmGxJHPd54OoLXPkaB+PsXp4NdKb2UAlrIFQ=;
+X-UUID: dee14df25634404982d404beca267926-20200702
+Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 290555990; Thu, 02 Jul 2020 10:53:16 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS32N1.mediatek.inc
+ (172.27.4.71) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 2 Jul
+ 2020 10:53:14 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 2 Jul 2020 10:53:09 +0800
+Message-ID: <1593658371.23885.16.camel@mhfsdcap03>
+Subject: Re: [V2 PATCH] usb: mtu3: fix NULL pointer dereference
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Markus Elfring <Markus.Elfring@web.de>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Date:   Thu, 2 Jul 2020 10:52:51 +0800
+In-Reply-To: <20200701115821.GA2184169@kroah.com>
+References: <1593502942-24455-1-git-send-email-chunfeng.yun@mediatek.com>
+         <20200701115821.GA2184169@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+X-TM-SNTS-SMTP: 9F8CFEA6CEBAFB7D9D5D9DF806B368CC530AA52FD6E6FE9C3269E92BF6BF031F2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Tuomas Tynkkynen <tuomas.tynkkynen@iki.fi>
-
-[ Upstream commit b835a71ef64a61383c414d6bf2896d2c0161deca ]
-
-Syzbot reports an use-after-free in workqueue context:
-
-BUG: KASAN: use-after-free in mutex_unlock+0x19/0x40 kernel/locking/mutex.c:737
- mutex_unlock+0x19/0x40 kernel/locking/mutex.c:737
- __smsc95xx_mdio_read drivers/net/usb/smsc95xx.c:217 [inline]
- smsc95xx_mdio_read+0x583/0x870 drivers/net/usb/smsc95xx.c:278
- check_carrier+0xd1/0x2e0 drivers/net/usb/smsc95xx.c:644
- process_one_work+0x777/0xf90 kernel/workqueue.c:2274
- worker_thread+0xa8f/0x1430 kernel/workqueue.c:2420
- kthread+0x2df/0x300 kernel/kthread.c:255
-
-It looks like that smsc95xx_unbind() is freeing the structures that are
-still in use by the concurrently running workqueue callback. Thus switch
-to using cancel_delayed_work_sync() to ensure the work callback really
-is no longer active.
-
-Reported-by: syzbot+29dc7d4ae19b703ff947@syzkaller.appspotmail.com
-Signed-off-by: Tuomas Tynkkynen <tuomas.tynkkynen@iki.fi>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/usb/smsc95xx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
-index e719ecd69d01b..6852ebafd4d3b 100644
---- a/drivers/net/usb/smsc95xx.c
-+++ b/drivers/net/usb/smsc95xx.c
-@@ -1327,7 +1327,7 @@ static void smsc95xx_unbind(struct usbnet *dev, struct usb_interface *intf)
- 	struct smsc95xx_priv *pdata = (struct smsc95xx_priv *)(dev->data[0]);
- 
- 	if (pdata) {
--		cancel_delayed_work(&pdata->carrier_check);
-+		cancel_delayed_work_sync(&pdata->carrier_check);
- 		netif_dbg(dev, ifdown, dev->net, "free pdata\n");
- 		kfree(pdata);
- 		pdata = NULL;
--- 
-2.25.1
+T24gV2VkLCAyMDIwLTA3LTAxIGF0IDEzOjU4ICswMjAwLCBHcmVnIEtyb2FoLUhhcnRtYW4gd3Jv
+dGU6DQo+IE9uIFR1ZSwgSnVuIDMwLCAyMDIwIGF0IDAzOjQyOjIyUE0gKzA4MDAsIENodW5mZW5n
+IFl1biB3cm90ZToNCj4gPiBTb21lIHBvaW50ZXJzIGFyZSBkZXJlZmVyZW5jZWQgYmVmb3JlIHN1
+Y2Nlc3NmdWwgY2hlY2tzLg0KPiA+IA0KPiA+IFJlcG9ydGVkLWJ5OiBNYXJrdXMgRWxmcmluZyA8
+TWFya3VzLkVsZnJpbmdAd2ViLmRlPg0KPiA+IFNpZ25lZC1vZmYtYnk6IENodW5mZW5nIFl1biA8
+Y2h1bmZlbmcueXVuQG1lZGlhdGVrLmNvbT4NCj4gPiAtLS0NCj4gPiB2Mjogbm90aGluZyBjaGFu
+Z2VkLCBidXQgYWJhbmRvbiBhbm90aGVyIHBhdGNoDQo+ID4gLS0tDQo+ID4gIGRyaXZlcnMvdXNi
+L210dTMvbXR1M19nYWRnZXQuYyB8IDI1ICsrKysrKysrKysrKysrKysrKy0tLS0tLS0NCj4gPiAg
+MSBmaWxlIGNoYW5nZWQsIDE4IGluc2VydGlvbnMoKyksIDcgZGVsZXRpb25zKC0pDQo+ID4gDQo+
+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL210dTMvbXR1M19nYWRnZXQuYyBiL2RyaXZlcnMv
+dXNiL210dTMvbXR1M19nYWRnZXQuYw0KPiA+IGluZGV4IGY5MzczMmUuLjE2ODljYTggMTAwNjQ0
+DQo+ID4gLS0tIGEvZHJpdmVycy91c2IvbXR1My9tdHUzX2dhZGdldC5jDQo+ID4gKysrIGIvZHJp
+dmVycy91c2IvbXR1My9tdHUzX2dhZGdldC5jDQo+ID4gQEAgLTMzMiwxNCArMzMyLDIxIEBAIHN0
+YXRpYyBpbnQgbXR1M19nYWRnZXRfcXVldWUoc3RydWN0IHVzYl9lcCAqZXAsDQo+ID4gIA0KPiA+
+ICBzdGF0aWMgaW50IG10dTNfZ2FkZ2V0X2RlcXVldWUoc3RydWN0IHVzYl9lcCAqZXAsIHN0cnVj
+dCB1c2JfcmVxdWVzdCAqcmVxKQ0KPiA+ICB7DQo+ID4gLQlzdHJ1Y3QgbXR1M19lcCAqbWVwID0g
+dG9fbXR1M19lcChlcCk7DQo+ID4gLQlzdHJ1Y3QgbXR1M19yZXF1ZXN0ICptcmVxID0gdG9fbXR1
+M19yZXF1ZXN0KHJlcSk7DQo+ID4gKwlzdHJ1Y3QgbXR1M19lcCAqbWVwOw0KPiA+ICsJc3RydWN0
+IG10dTNfcmVxdWVzdCAqbXJlcTsNCj4gPiAgCXN0cnVjdCBtdHUzX3JlcXVlc3QgKnI7DQo+ID4g
+KwlzdHJ1Y3QgbXR1MyAqbXR1Ow0KPiA+ICAJdW5zaWduZWQgbG9uZyBmbGFnczsNCj4gPiAgCWlu
+dCByZXQgPSAwOw0KPiA+IC0Jc3RydWN0IG10dTMgKm10dSA9IG1lcC0+bXR1Ow0KPiA+ICANCj4g
+PiAtCWlmICghZXAgfHwgIXJlcSB8fCBtcmVxLT5tZXAgIT0gbWVwKQ0KPiA+ICsJaWYgKCFlcCB8
+fCAhcmVxKQ0KPiA+ICsJCXJldHVybiAtRUlOVkFMOw0KPiANCj4gSG93IHdpbGwgZWl0aGVyIG9m
+IHRob3NlIGV2ZXIgYmUgTlVMTD8gIFRoZSBrZXJuZWwgd2lsbCBub3QgY2FsbCB0aGlzDQo+IGZ1
+bmN0aW9uIHdpdGggZWl0aGVyIG9mIHRoZW0gYmVpbmcgTlVMTCwgcmlnaHQ/DQpZZXMsIEkgZmlu
+ZCBhbGwgY2xhc3MgZHJpdmVycyBhbHJlYWR5IGVuc3VyZSB0aGV5IGFyZSBub3QgTlVMTC4NCg0K
+PiANCj4gPiArDQo+ID4gKwltZXAgPSB0b19tdHUzX2VwKGVwKTsNCj4gPiArCW10dSA9IG1lcC0+
+bXR1Ow0KPiA+ICsNCj4gPiArCW1yZXEgPSB0b19tdHUzX3JlcXVlc3QocmVxKTsNCj4gPiArCWlm
+IChtcmVxLT5tZXAgIT0gbWVwKQ0KPiA+ICAJCXJldHVybiAtRUlOVkFMOw0KPiA+ICANCj4gPiAg
+CWRldl9kYmcobXR1LT5kZXYsICIlcyA6IHJlcT0lcFxuIiwgX19mdW5jX18sIHJlcSk7DQo+ID4g
+QEAgLTM3Myw4ICszODAsOCBAQCBzdGF0aWMgaW50IG10dTNfZ2FkZ2V0X2RlcXVldWUoc3RydWN0
+IHVzYl9lcCAqZXAsIHN0cnVjdCB1c2JfcmVxdWVzdCAqcmVxKQ0KPiA+ICAgKi8NCj4gPiAgc3Rh
+dGljIGludCBtdHUzX2dhZGdldF9lcF9zZXRfaGFsdChzdHJ1Y3QgdXNiX2VwICplcCwgaW50IHZh
+bHVlKQ0KPiA+ICB7DQo+ID4gLQlzdHJ1Y3QgbXR1M19lcCAqbWVwID0gdG9fbXR1M19lcChlcCk7
+DQo+ID4gLQlzdHJ1Y3QgbXR1MyAqbXR1ID0gbWVwLT5tdHU7DQo+ID4gKwlzdHJ1Y3QgbXR1M19l
+cCAqbWVwOw0KPiA+ICsJc3RydWN0IG10dTMgKm10dTsNCj4gPiAgCXN0cnVjdCBtdHUzX3JlcXVl
+c3QgKm1yZXE7DQo+ID4gIAl1bnNpZ25lZCBsb25nIGZsYWdzOw0KPiA+ICAJaW50IHJldCA9IDA7
+DQo+ID4gQEAgLTM4Miw2ICszODksOSBAQCBzdGF0aWMgaW50IG10dTNfZ2FkZ2V0X2VwX3NldF9o
+YWx0KHN0cnVjdCB1c2JfZXAgKmVwLCBpbnQgdmFsdWUpDQo+ID4gIAlpZiAoIWVwKQ0KPiA+ICAJ
+CXJldHVybiAtRUlOVkFMOw0KPiANCj4gU2FtZSBoZXJlLCBob3cgY2FuIHRoYXQgZXZlciBoYXBw
+ZW4/DQpNYXliZSB3aGVuIHRoZSBjbGFzcyBkcml2ZXIgaGFzIHNvbWV0aGluZyB3cm9uZzopDQoN
+CllvdSBtZWFuIGl0J3MgYmV0dGVyIHRvIHJlbW92ZSB0aGVzZSB1bm5lY2Vzc2FyeSBjaGVja3M/
+DQoNClRoYW5rcw0KDQo+IA0KPiA+ICANCj4gPiArCW1lcCA9IHRvX210dTNfZXAoZXApOw0KPiA+
+ICsJbXR1ID0gbWVwLT5tdHU7DQo+ID4gKw0KPiA+ICAJZGV2X2RiZyhtdHUtPmRldiwgIiVzIDog
+JXMuLi4iLCBfX2Z1bmNfXywgZXAtPm5hbWUpOw0KPiA+ICANCj4gPiAgCXNwaW5fbG9ja19pcnFz
+YXZlKCZtdHUtPmxvY2ssIGZsYWdzKTsNCj4gPiBAQCAtNDIyLDExICs0MzIsMTIgQEAgc3RhdGlj
+IGludCBtdHUzX2dhZGdldF9lcF9zZXRfaGFsdChzdHJ1Y3QgdXNiX2VwICplcCwgaW50IHZhbHVl
+KQ0KPiA+ICAvKiBTZXRzIHRoZSBoYWx0IGZlYXR1cmUgd2l0aCB0aGUgY2xlYXIgcmVxdWVzdHMg
+aWdub3JlZCAqLw0KPiA+ICBzdGF0aWMgaW50IG10dTNfZ2FkZ2V0X2VwX3NldF93ZWRnZShzdHJ1
+Y3QgdXNiX2VwICplcCkNCj4gPiAgew0KPiA+IC0Jc3RydWN0IG10dTNfZXAgKm1lcCA9IHRvX210
+dTNfZXAoZXApOw0KPiA+ICsJc3RydWN0IG10dTNfZXAgKm1lcDsNCj4gPiAgDQo+ID4gIAlpZiAo
+IWVwKQ0KPiA+ICAJCXJldHVybiAtRUlOVkFMOw0KPiANCj4gQWdhaW4sIHNhbWUgaGVyZS4NCj4g
+DQo+IHRoYW5rcywNCj4gDQo+IGdyZWcgay1oDQoNCg==
 
