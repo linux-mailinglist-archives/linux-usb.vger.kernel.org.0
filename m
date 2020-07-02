@@ -2,37 +2,34 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95C0E211945
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jul 2020 03:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4529A211939
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jul 2020 03:37:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729312AbgGBBdL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 1 Jul 2020 21:33:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56972 "EHLO mail.kernel.org"
+        id S1728669AbgGBBck (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 1 Jul 2020 21:32:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57336 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728999AbgGBBZz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 1 Jul 2020 21:25:55 -0400
+        id S1728987AbgGBB0I (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 1 Jul 2020 21:26:08 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F1B852083E;
-        Thu,  2 Jul 2020 01:25:53 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 890D520899;
+        Thu,  2 Jul 2020 01:26:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593653154;
-        bh=j+luVCOiuymvrU9XJJwT00XGVyNwYxhXbV+YSqKKWww=;
+        s=default; t=1593653168;
+        bh=XShLMHFLIslsFzvvnDfxIF44y2nXE8NLb7s1NS6Wa0E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=myfVf3aYbLrPSbYnoEHafLo5uoHn3bKwNeu4RDNmHXINbjTUAkpASJH4f92OygJHs
-         WXypp46AF1r2KAbuh2zULTIW81wPjZHXt09KwRtEwBnJs+r27+z8QKrdg9oMyB7y6v
-         nddnS1m2Cp/GZwE45+CR4lMpLDsKptSDDmOlfHhc=
+        b=mkQQPXLPCAcDcejUQUR/7tcY5hGbB0vgrKVFY0O1kJayBy8UFSlr7emKq9cWXX+lt
+         v/cCDd1gUrHz0nxTuLwXxVjmTGGn9FsdBcKd5J7AGxlHKHFaT/crf8ExQlgKRz0J/O
+         DwZq6D8yOpxjAmQH9iecpuKpCHntRB9cRxaXWx68=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tuomas Tynkkynen <tuomas.tynkkynen@iki.fi>,
-        syzbot+29dc7d4ae19b703ff947@syzkaller.appspotmail.com,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 24/40] usbnet: smsc95xx: Fix use-after-free after removal
-Date:   Wed,  1 Jul 2020 21:23:45 -0400
-Message-Id: <20200702012402.2701121-24-sashal@kernel.org>
+Cc:     Aditya Pakki <pakki001@umn.edu>, Felipe Balbi <balbi@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 35/40] usb: dwc3: pci: Fix reference count leak in dwc3_pci_resume_work
+Date:   Wed,  1 Jul 2020 21:23:56 -0400
+Message-Id: <20200702012402.2701121-35-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200702012402.2701121-1-sashal@kernel.org>
 References: <20200702012402.2701121-1-sashal@kernel.org>
@@ -45,47 +42,37 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Tuomas Tynkkynen <tuomas.tynkkynen@iki.fi>
+From: Aditya Pakki <pakki001@umn.edu>
 
-[ Upstream commit b835a71ef64a61383c414d6bf2896d2c0161deca ]
+[ Upstream commit 2655971ad4b34e97dd921df16bb0b08db9449df7 ]
 
-Syzbot reports an use-after-free in workqueue context:
+dwc3_pci_resume_work() calls pm_runtime_get_sync() that increments
+the reference counter. In case of failure, decrement the reference
+before returning.
 
-BUG: KASAN: use-after-free in mutex_unlock+0x19/0x40 kernel/locking/mutex.c:737
- mutex_unlock+0x19/0x40 kernel/locking/mutex.c:737
- __smsc95xx_mdio_read drivers/net/usb/smsc95xx.c:217 [inline]
- smsc95xx_mdio_read+0x583/0x870 drivers/net/usb/smsc95xx.c:278
- check_carrier+0xd1/0x2e0 drivers/net/usb/smsc95xx.c:644
- process_one_work+0x777/0xf90 kernel/workqueue.c:2274
- worker_thread+0xa8f/0x1430 kernel/workqueue.c:2420
- kthread+0x2df/0x300 kernel/kthread.c:255
-
-It looks like that smsc95xx_unbind() is freeing the structures that are
-still in use by the concurrently running workqueue callback. Thus switch
-to using cancel_delayed_work_sync() to ensure the work callback really
-is no longer active.
-
-Reported-by: syzbot+29dc7d4ae19b703ff947@syzkaller.appspotmail.com
-Signed-off-by: Tuomas Tynkkynen <tuomas.tynkkynen@iki.fi>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Aditya Pakki <pakki001@umn.edu>
+Signed-off-by: Felipe Balbi <balbi@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/usb/smsc95xx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/dwc3/dwc3-pci.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
-index 355be77f42418..3cf4dc3433f91 100644
---- a/drivers/net/usb/smsc95xx.c
-+++ b/drivers/net/usb/smsc95xx.c
-@@ -1324,7 +1324,7 @@ static void smsc95xx_unbind(struct usbnet *dev, struct usb_interface *intf)
- 	struct smsc95xx_priv *pdata = (struct smsc95xx_priv *)(dev->data[0]);
+diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
+index b67372737dc9b..96c05b121fac8 100644
+--- a/drivers/usb/dwc3/dwc3-pci.c
++++ b/drivers/usb/dwc3/dwc3-pci.c
+@@ -206,8 +206,10 @@ static void dwc3_pci_resume_work(struct work_struct *work)
+ 	int ret;
  
- 	if (pdata) {
--		cancel_delayed_work(&pdata->carrier_check);
-+		cancel_delayed_work_sync(&pdata->carrier_check);
- 		netif_dbg(dev, ifdown, dev->net, "free pdata\n");
- 		kfree(pdata);
- 		pdata = NULL;
+ 	ret = pm_runtime_get_sync(&dwc3->dev);
+-	if (ret)
++	if (ret) {
++		pm_runtime_put_sync_autosuspend(&dwc3->dev);
+ 		return;
++	}
+ 
+ 	pm_runtime_mark_last_busy(&dwc3->dev);
+ 	pm_runtime_put_sync_autosuspend(&dwc3->dev);
 -- 
 2.25.1
 
