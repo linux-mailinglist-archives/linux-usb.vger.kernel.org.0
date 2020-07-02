@@ -2,60 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CAE72126F9
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jul 2020 16:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B36BD2126F1
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jul 2020 16:50:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729943AbgGBOtj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jul 2020 10:49:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50134 "EHLO
+        id S1729938AbgGBOqi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Jul 2020 10:46:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729920AbgGBOqd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jul 2020 10:46:33 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C2BC08C5DD
-        for <linux-usb@vger.kernel.org>; Thu,  2 Jul 2020 07:46:32 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id s10so28743780wrw.12
-        for <linux-usb@vger.kernel.org>; Thu, 02 Jul 2020 07:46:32 -0700 (PDT)
+        with ESMTP id S1729934AbgGBOqg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jul 2020 10:46:36 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E60C08C5DD
+        for <linux-usb@vger.kernel.org>; Thu,  2 Jul 2020 07:46:36 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id z13so28793184wrw.5
+        for <linux-usb@vger.kernel.org>; Thu, 02 Jul 2020 07:46:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=e63YwYltHzireeUJAWeq6I/Q+T+q+YjnJiKdRakYXIQ=;
-        b=hYKVXrVgkHraKOfZu3k2KQgkRHrWpQyoiVNITKkt1laLeRsQphMY2/cCQQJu6Yxeq3
-         THAbytYMpx+LL+OHe5i6N7aqfDGUYS1nwUVkXo86nqmsL/g1r1+o4D2Wwlw7xa1TDcb9
-         W0FNCE+rSz6eQGz46KlgSPYSL4YHs4RZlLpdVVMup84vGo0tmQSvHfVCcsPjRekNJ5wW
-         vdrw4fSR2Y/feAsgx9WotHu0jT2Hbr9cs6ccIIjdBkeW/AtD7DchmnTKJHB6qWLyY16k
-         twS52qFRMzmBCJOAOfwieDFpf/GDvlmB11h6Ajzx0RAxYR6IyNt/wbeNQ17pzw3BSd8F
-         407g==
+        bh=4sdX15PGQylOAZk6Sz4sNwGaJDX52Zxt56l3sZ9x1NU=;
+        b=XZH2/RewojhBFAi5cKK2xZmeR3hWYf8Hb36/KsjUtAhLmQnFfTaP8Wuv9p5IH61VoV
+         efJNPySFXVONCLPCM2T/ePyhmxItYP3DYGvzz56Zu+P7/aLhxohVyUz0Z92qbUD8YAcP
+         gW1RAsBSibUcihwFOp5v9MRBxdxnZlGRnYCxvIYAygFHFHNwsHGzxhwlQKvU68cWjNID
+         rpgAmudz5Jsxiq7nkwTC+fTuNVDcAZFoi949pT6WmfE6dk/I1ukGBVUuPhfxQCnNIBmJ
+         TzfYksu+oqhcRipLU3ELFM2PoikYmCtcBcVAXafRSkgr2ryeMdAE2WNPAdWvHEJhnRQT
+         jd1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=e63YwYltHzireeUJAWeq6I/Q+T+q+YjnJiKdRakYXIQ=;
-        b=lW7CpM9Pf3ujuGu8HvkffcUOF8GhS7YL1SzhS61MjksPYaXsLb46H4jjBByRN853zD
-         dTcL/cTmYTO1HQBABYzsuLOGkP+IFbi6szPvMUC/32Q0s8go+AjgWk3onQr6prcq1kDl
-         Xe60P/cGNx/AQPdvgLi65EwC5vhDWJqhDYBimZcxgpiRN5g+qangk4RH6loUmFFpdVd0
-         3YLLrpZ5J84c5AF6OBuc4COGz3DwjlN+jikwyDyg++u+JGaL3U5ahS4gd8uI98cgYa2d
-         0U/kw1nisVsqQpJbo+0G3arelWmOPx4VjxEoMOSYhLGqFLkJqVEMYgsTGdZ3kKgT8i9j
-         5ktg==
-X-Gm-Message-State: AOAM5327H2yA8M8Xaqbg5b4NEiayqiHe9tBbnS9rGAz6EGsVSLjPFB5x
-        +I1a05StvtCZyP9mZyZvTDNLYQ==
-X-Google-Smtp-Source: ABdhPJwVhXexGFtE5J767EHYTZ5ksk2T2JcVdBbrTkdpijHJTFgDlRPbD9D3pIbKZH4I57pFWKs9HA==
-X-Received: by 2002:adf:aa90:: with SMTP id h16mr32393226wrc.356.1593701191570;
-        Thu, 02 Jul 2020 07:46:31 -0700 (PDT)
+        bh=4sdX15PGQylOAZk6Sz4sNwGaJDX52Zxt56l3sZ9x1NU=;
+        b=roWzunH/VoqZkj8kJGnuE/vXjKCmi+7g4tPSXb2ts1kqPS+gn9s9izL/23Y0pb/833
+         72pm5rHl3kaMMFd/PO3auH0yP7kQZ1RCewW6Zo6njKSSVj677WlBkBs+WjD7glpWfX8V
+         +5cFWGdJ2CG/Ff3I7FATW3vzL3HKo7YfL51zNPjkCqqQ9hSLDjDRbZqZpOJIfHXLkavF
+         L8xm5p3YihMZmVgRhPnch1hcSBTQwjoSulvP8CjA79kBKP7vOW7az32GW9ssW/XyMrlA
+         VIQtOo1y43+kQVpupF0NtEb1W4MAp9BpTDsNCqDM3oTZ3ehZx1ZAaXJx6OxA+mDQsEYT
+         vQcg==
+X-Gm-Message-State: AOAM532//M8ah5bSa6EjJQ8qVmfrXjEcZA07dWRONx5yvQfTboE3GXxO
+        zsyRX46Zrlcg8CAGpCr0+2o0tw==
+X-Google-Smtp-Source: ABdhPJxFyuUUxdUJtEHuZrAVsfrI1ui/9Xt+xD6a5gkFDyf/gPZpnDWYSne4ItkG8mpc4zEYwpC1gw==
+X-Received: by 2002:a5d:6a06:: with SMTP id m6mr31648506wru.321.1593701195017;
+        Thu, 02 Jul 2020 07:46:35 -0700 (PDT)
 Received: from localhost.localdomain ([2.27.35.144])
-        by smtp.gmail.com with ESMTPSA id g14sm7002737wrw.83.2020.07.02.07.46.30
+        by smtp.gmail.com with ESMTPSA id g14sm7002737wrw.83.2020.07.02.07.46.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jul 2020 07:46:30 -0700 (PDT)
+        Thu, 02 Jul 2020 07:46:34 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-usb@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Martin Mares <mj@ucw.cz>, aleksey_gorelov@phoenix.com
-Subject: [PATCH 02/30] usb: host: pci-quirks: Demote function header from kerneldoc to comment block
-Date:   Thu,  2 Jul 2020 15:45:57 +0100
-Message-Id: <20200702144625.2533530-3-lee.jones@linaro.org>
+        Pawel Laszczak <pawell@cadence.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [PATCH 03/30] usb: common: debug: Demote comment blocks which are obviously not kerneldoc
+Date:   Thu,  2 Jul 2020 15:45:58 +0100
+Message-Id: <20200702144625.2533530-4-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200702144625.2533530-1-lee.jones@linaro.org>
 References: <20200702144625.2533530-1-lee.jones@linaro.org>
@@ -66,37 +67,51 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-quirk_usb_handoff_xhci()'s function header is the only one across
-the sourcefile which is denoted as a kerneldoc header.  Despite
-no attempt to document its arguments.  Drop it down in status from
-kerneldoc to a standard comment block to match the other headers
-in the file.
+File headers and simple comments are not kerneldoc worthy.
 
-Fixes the following W=1 kernel build warning:
+Fixes the following W=1 warnings:
 
- drivers/usb/host/pci-quirks.c:1145: warning: Function parameter or member 'pdev' not described in 'quirk_usb_handoff_xhci'
+ drivers/usb/common/debug.c:15: warning: Function parameter or member 'bRequestType' not described in 'usb_decode_get_status'
+ drivers/usb/common/debug.c:15: warning: Function parameter or member 'wIndex' not described in 'usb_decode_get_status'
+ drivers/usb/common/debug.c:15: warning: Function parameter or member 'wLength' not described in 'usb_decode_get_status'
+ drivers/usb/common/debug.c:15: warning: Function parameter or member 'str' not described in 'usb_decode_get_status'
+ drivers/usb/common/debug.c:15: warning: Function parameter or member 'size' not described in 'usb_decode_get_status'
+ drivers/usb/common/debug.c:216: warning: Function parameter or member 'str' not described in 'usb_decode_ctrl'
+ drivers/usb/common/debug.c:216: warning: Function parameter or member 'size' not described in 'usb_decode_ctrl'
+ drivers/usb/common/debug.c:216: warning: Function parameter or member 'bRequestType' not described in 'usb_decode_ctrl'
+ drivers/usb/common/debug.c:216: warning: Function parameter or member 'bRequest' not described in 'usb_decode_ctrl'
+ drivers/usb/common/debug.c:216: warning: Function parameter or member 'wValue' not described in 'usb_decode_ctrl'
+ drivers/usb/common/debug.c:216: warning: Function parameter or member 'wIndex' not described in 'usb_decode_ctrl'
+ drivers/usb/common/debug.c:216: warning: Function parameter or member 'wLength' not described in 'usb_decode_ctrl'
 
-Cc: Mathias Nyman <mathias.nyman@intel.com>
-Cc: Martin Mares <mj@ucw.cz>
-Cc: aleksey_gorelov@phoenix.com
+Cc: Pawel Laszczak <pawell@cadence.com>
+Cc: Felipe Balbi <felipe.balbi@linux.intel.com>
+Cc: Andrzej Siewior <bigeasy@linutronix.de>
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/usb/host/pci-quirks.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/common/debug.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/host/pci-quirks.c b/drivers/usb/host/pci-quirks.c
-index 0b949acfa2589..b8961c0381cfd 100644
---- a/drivers/usb/host/pci-quirks.c
-+++ b/drivers/usb/host/pci-quirks.c
-@@ -1133,7 +1133,7 @@ void usb_disable_xhci_ports(struct pci_dev *xhci_pdev)
+diff --git a/drivers/usb/common/debug.c b/drivers/usb/common/debug.c
+index 92a986aeaa5d6..092e179d5d5aa 100644
+--- a/drivers/usb/common/debug.c
++++ b/drivers/usb/common/debug.c
+@@ -1,5 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0
+-/**
++/*
+  * Common USB debugging functions
+  *
+  * Copyright (C) 2010-2011 Texas Instruments Incorporated - http://www.ti.com
+@@ -207,7 +207,7 @@ static void usb_decode_set_isoch_delay(__u8 wValue, char *str, size_t size)
+ 	snprintf(str, size, "Set Isochronous Delay(Delay = %d ns)", wValue);
  }
- EXPORT_SYMBOL_GPL(usb_disable_xhci_ports);
  
 -/**
 +/*
-  * PCI Quirks for xHCI.
-  *
-  * Takes care of the handoff between the Pre-OS (i.e. BIOS) and the OS.
+  * usb_decode_ctrl - returns a string representation of ctrl request
+  */
+ const char *usb_decode_ctrl(char *str, size_t size, __u8 bRequestType,
 -- 
 2.25.1
 
