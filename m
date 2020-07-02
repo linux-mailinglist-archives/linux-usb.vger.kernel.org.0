@@ -2,248 +2,252 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20FA22126C0
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jul 2020 16:49:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E074212727
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jul 2020 16:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730142AbgGBOr0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jul 2020 10:47:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730106AbgGBOrK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jul 2020 10:47:10 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AEF6C08C5C1
-        for <linux-usb@vger.kernel.org>; Thu,  2 Jul 2020 07:47:10 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id r12so28733177wrj.13
-        for <linux-usb@vger.kernel.org>; Thu, 02 Jul 2020 07:47:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=GGmNfPC5yyfRr4hRGf2JBNE4nTAK9gpUa3GW7C/jBWg=;
-        b=NF9g3FmC0XN5JQHD6tLzZePjEQQeNjaNgi80LtNDZOe509ZXtnM99as/gig4tZM43V
-         /LTUc4rwnO7YAurW0YGpnQulS7Cp9bzVFb5MH3rCEi5wm6YwY6TLAfRDomNexC4rnEu6
-         c5xrPVbs4ksyzWPLp2M9t0vP3nKHETS7MysXVUaWfe3bOIrGk4unP+NjuXwN8k0LwJtw
-         Ej7T4rjanV9O5oHL7oi80Dk6yFHa/VboIKRhhXnb9oa15jjYMbwKtD7RHz5ThbQ0ym31
-         CgYkfpCAvvclfI7u+tam5EKcoXhYGh1IWCaIoiClWayNYdv71V9J7NDWE+zvdknuUtiE
-         K2kA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=GGmNfPC5yyfRr4hRGf2JBNE4nTAK9gpUa3GW7C/jBWg=;
-        b=GtRGz3Uasuuh//fD4Lb4quegP2+qe+RvjiEfi0TCnNrbkMstJMZCBUhleQA26TViSj
-         1wivsJtdM+QCicQ3uXpLVrG30Z0jjITBni7crbqA1vMWs6oVtyNucY1JIegIDPQDz+Aa
-         LarOJTqI3ap8HS5Kx2YTEDJGmS8ZuLy6MzUHfp1WmLhSzYI7JtMbg95nXwlKTtUUO3h5
-         DT2u/8owMTCx+g3qy+754/uQ+1BuKSXrkGIxZ2CL2XwtNpCP2rD22C8GnqUBvpBMJvx6
-         U5aRSq937MFBXwkge//GPIFfMqEFN11xDU/sCz9F+k2w571PEVjfd1iLG7+d2I0IwcB+
-         /kkA==
-X-Gm-Message-State: AOAM532nndPmeXelKTJIQMAfqgsO5X007hbkDGLJTe/ZlNel/uIM5ZZd
-        JRONFTcfSnK8tphuymMQNLxcHw==
-X-Google-Smtp-Source: ABdhPJxOsbwXE/Dv8fyPSOwYjCV8DD+BU5x3NhIySmUznQc+FEh85NIDpK8tN/yFxlLe35byCsnobw==
-X-Received: by 2002:adf:f60a:: with SMTP id t10mr23432964wrp.64.1593701228692;
-        Thu, 02 Jul 2020 07:47:08 -0700 (PDT)
-Received: from localhost.localdomain ([2.27.35.144])
-        by smtp.gmail.com with ESMTPSA id g14sm7002737wrw.83.2020.07.02.07.47.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jul 2020 07:47:08 -0700 (PDT)
-From:   Lee Jones <lee.jones@linaro.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Peter Korsgaard <jacmet@sunsite.dk>
-Subject: [PATCH 30/30] usb: c67x00: c67x00-sched: Demote obvious misuse of kerneldoc to standard comment blocks
-Date:   Thu,  2 Jul 2020 15:46:25 +0100
-Message-Id: <20200702144625.2533530-31-lee.jones@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200702144625.2533530-1-lee.jones@linaro.org>
-References: <20200702144625.2533530-1-lee.jones@linaro.org>
+        id S1729878AbgGBO5X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Jul 2020 10:57:23 -0400
+Received: from mga05.intel.com ([192.55.52.43]:6136 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726032AbgGBO5X (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 2 Jul 2020 10:57:23 -0400
+IronPort-SDR: EZBR74VavdBdSERnAVtq+FldUEf05iYjImgzgyJbeYrVuaED5rhV6Zhtb0CV912X2HVcFNj2iR
+ /M6H3PeZvvkg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9670"; a="231777168"
+X-IronPort-AV: E=Sophos;i="5.75,304,1589266800"; 
+   d="scan'208";a="231777168"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2020 07:57:18 -0700
+IronPort-SDR: 33XB+1Pty6PW12CjevvOHuQL8/49xeYawTM9IG5iNkd+/cc101blHKrob49cTY0Xu6ErtfWuOi
+ WL31wngg3IGQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,304,1589266800"; 
+   d="scan'208";a="321548201"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by FMSMGA003.fm.intel.com with ESMTP; 02 Jul 2020 07:57:15 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1jr0eK-00HDzj-HF; Thu, 02 Jul 2020 17:57:16 +0300
+Date:   Thu, 2 Jul 2020 17:57:16 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: pch_udc: Convert to use GPIO descriptors
+Message-ID: <20200702145716.GX3703480@smile.fi.intel.com>
+References: <20200627111029.513642-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200627111029.513642-1-linus.walleij@linaro.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-No attempt has been made to document any of the functions here.
+On Sat, Jun 27, 2020 at 01:10:29PM +0200, Linus Walleij wrote:
+> This switches the PCH UDC driver to use GPIO descriptors. The way
+> this is supposed to be used is confusing. The code contains the
+> following:
+> 
+>     /* GPIO port for VBUS detecting */
+>     static int vbus_gpio_port = -1; /* GPIO port number (-1:Not used) */
+> 
+> So a hardcoded GPIO number in the code. Further the probe() path
+> very clearly will exit if the GPIO is not found, so this driver
+> can only be configured by editing the code, hard-coding a GPIO
+> number into this variable.
+> 
+> This is simply not how we do things. My guess is that this is
+> used in products by patching a GPIO number into this variable and
+> shipping a kernel that is compile-time tailored for the target
+> system.
+> 
+> I switched this mechanism to using a GPIO descriptor associated
+> with the parent PCI device. This can be added by using the 16bit
+> subsystem ID or similar to identify which exact machine we are
+> running on and what GPIO is present on that machine, and then
+> add a GPIO descriptor using gpiod_add_lookup_table() from
+> <linux/gpio/machine.h>. Since I don't have any target systems
+> I cannot add this but I'm happy to help. I put in a FIXME so
+> the people actually using this driver knows what to do.
+> 
+> Cc: Felipe Balbi <balbi@kernel.org>
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+> Andy: your input would be appreciated, this kind of code
+> customizing random embedded Intel systems is deep water for
+> me, so this is just a rough guess on how it should be done.
 
-Fixes the following W=1 kernel build warning(s):
+Linus, I have set up the device (it's actually available as Minnowboard v1) and
+will look at this.
 
- drivers/usb/c67x00/c67x00-sched.c:35: warning: Function parameter or member 'queue' not described in 'c67x00_ep_data'
- drivers/usb/c67x00/c67x00-sched.c:35: warning: Function parameter or member 'node' not described in 'c67x00_ep_data'
- drivers/usb/c67x00/c67x00-sched.c:35: warning: Function parameter or member 'hep' not described in 'c67x00_ep_data'
- drivers/usb/c67x00/c67x00-sched.c:35: warning: Function parameter or member 'dev' not described in 'c67x00_ep_data'
- drivers/usb/c67x00/c67x00-sched.c:35: warning: Function parameter or member 'next_frame' not described in 'c67x00_ep_data'
- drivers/usb/c67x00/c67x00-sched.c:71: warning: Function parameter or member 'ly_base_addr' not described in 'c67x00_td'
- drivers/usb/c67x00/c67x00-sched.c:71: warning: Function parameter or member 'port_length' not described in 'c67x00_td'
- drivers/usb/c67x00/c67x00-sched.c:71: warning: Function parameter or member 'pid_ep' not described in 'c67x00_td'
- drivers/usb/c67x00/c67x00-sched.c:71: warning: Function parameter or member 'dev_addr' not described in 'c67x00_td'
- drivers/usb/c67x00/c67x00-sched.c:71: warning: Function parameter or member 'ctrl_reg' not described in 'c67x00_td'
- drivers/usb/c67x00/c67x00-sched.c:71: warning: Function parameter or member 'status' not described in 'c67x00_td'
- drivers/usb/c67x00/c67x00-sched.c:71: warning: Function parameter or member 'retry_cnt' not described in 'c67x00_td'
- drivers/usb/c67x00/c67x00-sched.c:71: warning: Function parameter or member 'residue' not described in 'c67x00_td'
- drivers/usb/c67x00/c67x00-sched.c:71: warning: Function parameter or member 'next_td_addr' not described in 'c67x00_td'
- drivers/usb/c67x00/c67x00-sched.c:71: warning: Function parameter or member 'td_list' not described in 'c67x00_td'
- drivers/usb/c67x00/c67x00-sched.c:71: warning: Function parameter or member 'td_addr' not described in 'c67x00_td'
- drivers/usb/c67x00/c67x00-sched.c:71: warning: Function parameter or member 'data' not described in 'c67x00_td'
- drivers/usb/c67x00/c67x00-sched.c:71: warning: Function parameter or member 'urb' not described in 'c67x00_td'
- drivers/usb/c67x00/c67x00-sched.c:71: warning: Function parameter or member 'privdata' not described in 'c67x00_td'
- drivers/usb/c67x00/c67x00-sched.c:71: warning: Function parameter or member 'ep_data' not described in 'c67x00_td'
- drivers/usb/c67x00/c67x00-sched.c:71: warning: Function parameter or member 'pipe' not described in 'c67x00_td'
- drivers/usb/c67x00/c67x00-sched.c:137: warning: Function parameter or member 'c67x00' not described in 'dbg_td'
- drivers/usb/c67x00/c67x00-sched.c:137: warning: Function parameter or member 'td' not described in 'dbg_td'
- drivers/usb/c67x00/c67x00-sched.c:137: warning: Function parameter or member 'msg' not described in 'dbg_td'
- drivers/usb/c67x00/c67x00-sched.c:169: warning: Function parameter or member 'a' not described in 'frame_add'
- drivers/usb/c67x00/c67x00-sched.c:169: warning: Function parameter or member 'b' not described in 'frame_add'
- drivers/usb/c67x00/c67x00-sched.c:177: warning: Function parameter or member 'a' not described in 'frame_after'
- drivers/usb/c67x00/c67x00-sched.c:177: warning: Function parameter or member 'b' not described in 'frame_after'
- drivers/usb/c67x00/c67x00-sched.c:186: warning: Function parameter or member 'a' not described in 'frame_after_eq'
- drivers/usb/c67x00/c67x00-sched.c:186: warning: Function parameter or member 'b' not described in 'frame_after_eq'
- drivers/usb/c67x00/c67x00-sched.c:199: warning: Function parameter or member 'c67x00' not described in 'c67x00_release_urb'
- drivers/usb/c67x00/c67x00-sched.c:199: warning: Function parameter or member 'urb' not described in 'c67x00_release_urb'
- drivers/usb/c67x00/c67x00-sched.c:566: warning: Function parameter or member 'c67x00' not described in 'c67x00_create_td'
- drivers/usb/c67x00/c67x00-sched.c:566: warning: Function parameter or member 'urb' not described in 'c67x00_create_td'
- drivers/usb/c67x00/c67x00-sched.c:566: warning: Function parameter or member 'data' not described in 'c67x00_create_td'
- drivers/usb/c67x00/c67x00-sched.c:566: warning: Function parameter or member 'len' not described in 'c67x00_create_td'
- drivers/usb/c67x00/c67x00-sched.c:566: warning: Function parameter or member 'pid' not described in 'c67x00_create_td'
- drivers/usb/c67x00/c67x00-sched.c:566: warning: Function parameter or member 'toggle' not described in 'c67x00_create_td'
- drivers/usb/c67x00/c67x00-sched.c:566: warning: Function parameter or member 'privdata' not described in 'c67x00_create_td'
- drivers/usb/c67x00/c67x00-sched.c:692: warning: Function parameter or member 'c67x00' not described in 'c67x00_add_ctrl_urb'
- drivers/usb/c67x00/c67x00-sched.c:692: warning: Function parameter or member 'urb' not described in 'c67x00_add_ctrl_urb'
- drivers/usb/c67x00/c67x00-sched.c:830: warning: Function parameter or member 'c67x00' not described in 'c67x00_parse_td'
- drivers/usb/c67x00/c67x00-sched.c:830: warning: Function parameter or member 'td' not described in 'c67x00_parse_td'
- drivers/usb/c67x00/c67x00-sched.c:978: warning: Function parameter or member 'c67x00' not described in 'c67x00_check_td_list'
- drivers/usb/c67x00/c67x00-sched.c:1052: warning: Function parameter or member 'c67x00' not described in 'c67x00_send_td'
- drivers/usb/c67x00/c67x00-sched.c:1052: warning: Function parameter or member 'td' not described in 'c67x00_send_td'
- drivers/usb/c67x00/c67x00-sched.c:1088: warning: Function parameter or member 'c67x00' not described in 'c67x00_do_work'
+For time being there is a patch you need to fold into this (sorry, it's mangled):
 
-Cc: Peter Korsgaard <jacmet@sunsite.dk>
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
----
- drivers/usb/c67x00/c67x00-sched.c | 26 +++++++++++++-------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
+(Explanation: GPIO will be locked with request_irq() call)
 
-diff --git a/drivers/usb/c67x00/c67x00-sched.c b/drivers/usb/c67x00/c67x00-sched.c
-index 633c52de3bb36..ef1e4ecaee996 100644
---- a/drivers/usb/c67x00/c67x00-sched.c
-+++ b/drivers/usb/c67x00/c67x00-sched.c
-@@ -23,7 +23,7 @@
+--- a/drivers/usb/gadget/udc/pch_udc.c
++++ b/drivers/usb/gadget/udc/pch_udc.c
+@@ -1367,7 +1367,7 @@ static int pch_vbus_gpio_init(struct pch_udc_dev *dev)
+        dev->vbus_gpio.intr = 0;
  
- /* -------------------------------------------------------------------------- */
+        /* Retrieve the GPIO line from the USB gadget device */
+-       gpiod = devm_gpiod_get(dev->gadget.dev.parent, NULL, GPIOD_IN);
++       gpiod = gpiod_get(dev->gadget.dev.parent, NULL, GPIOD_IN);
+        if (IS_ERR(gpiod))
+                return PTR_ERR(gpiod);
+        gpiod_set_consumer_name(gpiod, "pch_vbus");
+@@ -1389,6 +1389,7 @@ static int pch_vbus_gpio_init(struct pch_udc_dev *dev)
+                                __func__, irq_num, err);
+                }
+        }
++       gpiod_put(gpiod);
  
--/**
-+/*
-  * struct c67x00_ep_data: Host endpoint data structure
-  */
- struct c67x00_ep_data {
-@@ -34,7 +34,7 @@ struct c67x00_ep_data {
- 	u16 next_frame;		/* For int/isoc transactions */
- };
- 
--/**
-+/*
-  * struct c67x00_td
-  *
-  * Hardware parts are little endiannes, SW in CPU endianess.
-@@ -130,7 +130,7 @@ struct c67x00_urb_priv {
- 
- /* -------------------------------------------------------------------------- */
- 
--/**
-+/*
-  * dbg_td - Dump the contents of the TD
-  */
- static void dbg_td(struct c67x00_hcd *c67x00, struct c67x00_td *td, char *msg)
-@@ -161,7 +161,7 @@ static inline u16 c67x00_get_current_frame_number(struct c67x00_hcd *c67x00)
- 	return c67x00_ll_husb_get_frame(c67x00->sie) & HOST_FRAME_MASK;
- }
- 
--/**
-+/*
-  * frame_add
-  * Software wraparound for framenumbers.
-  */
-@@ -170,7 +170,7 @@ static inline u16 frame_add(u16 a, u16 b)
- 	return (a + b) & HOST_FRAME_MASK;
- }
- 
--/**
-+/*
-  * frame_after - is frame a after frame b
-  */
- static inline int frame_after(u16 a, u16 b)
-@@ -179,7 +179,7 @@ static inline int frame_after(u16 a, u16 b)
- 	    (HOST_FRAME_MASK / 2);
- }
- 
--/**
-+/*
-  * frame_after_eq - is frame a after or equal to frame b
-  */
- static inline int frame_after_eq(u16 a, u16 b)
-@@ -190,7 +190,7 @@ static inline int frame_after_eq(u16 a, u16 b)
- 
- /* -------------------------------------------------------------------------- */
- 
--/**
-+/*
-  * c67x00_release_urb - remove link from all tds to this urb
-  * Disconnects the urb from it's tds, so that it can be given back.
-  * pre: urb->hcpriv != NULL
-@@ -557,7 +557,7 @@ static int c67x00_claim_frame_bw(struct c67x00_hcd *c67x00, struct urb *urb,
- 
- /* -------------------------------------------------------------------------- */
- 
--/**
-+/*
-  * td_addr and buf_addr must be word aligned
-  */
- static int c67x00_create_td(struct c67x00_hcd *c67x00, struct urb *urb,
-@@ -685,7 +685,7 @@ static int c67x00_add_data_urb(struct c67x00_hcd *c67x00, struct urb *urb)
- 	return 0;
- }
- 
--/**
-+/*
-  * return 0 in case more bandwidth is available, else errorcode
-  */
- static int c67x00_add_ctrl_urb(struct c67x00_hcd *c67x00, struct urb *urb)
-@@ -822,7 +822,7 @@ static void c67x00_fill_frame(struct c67x00_hcd *c67x00)
- 
- /* -------------------------------------------------------------------------- */
- 
--/**
-+/*
-  * Get TD from C67X00
-  */
- static inline void
-@@ -970,7 +970,7 @@ static void c67x00_handle_isoc(struct c67x00_hcd *c67x00, struct c67x00_td *td)
- 
- /* -------------------------------------------------------------------------- */
- 
--/**
-+/*
-  * c67x00_check_td_list - handle tds which have been processed by the c67x00
-  * pre: current_td == 0
-  */
-@@ -1045,7 +1045,7 @@ static inline int c67x00_all_tds_processed(struct c67x00_hcd *c67x00)
- 	return !c67x00_ll_husb_get_current_td(c67x00->sie);
- }
- 
--/**
-+/*
-  * Send td to C67X00
-  */
- static void c67x00_send_td(struct c67x00_hcd *c67x00, struct c67x00_td *td)
-@@ -1081,7 +1081,7 @@ static void c67x00_send_frame(struct c67x00_hcd *c67x00)
- 
- /* -------------------------------------------------------------------------- */
- 
--/**
-+/*
-  * c67x00_do_work - Schedulers state machine
-  */
- static void c67x00_do_work(struct c67x00_hcd *c67x00)
+        return 0;
+
+> ---
+>  drivers/usb/gadget/udc/pch_udc.c | 55 +++++++++++++-------------------
+>  1 file changed, 22 insertions(+), 33 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/udc/pch_udc.c b/drivers/usb/gadget/udc/pch_udc.c
+> index 3344fb8c4181..a9e332130091 100644
+> --- a/drivers/usb/gadget/udc/pch_udc.c
+> +++ b/drivers/usb/gadget/udc/pch_udc.c
+> @@ -12,12 +12,9 @@
+>  #include <linux/interrupt.h>
+>  #include <linux/usb/ch9.h>
+>  #include <linux/usb/gadget.h>
+> -#include <linux/gpio.h>
+> +#include <linux/gpio/consumer.h>
+>  #include <linux/irq.h>
+>  
+> -/* GPIO port for VBUS detecting */
+> -static int vbus_gpio_port = -1;		/* GPIO port number (-1:Not used) */
+> -
+>  #define PCH_VBUS_PERIOD		3000	/* VBUS polling period (msec) */
+>  #define PCH_VBUS_INTERVAL	10	/* VBUS polling interval (msec) */
+>  
+> @@ -302,13 +299,13 @@ struct pch_udc_ep {
+>  /**
+>   * struct pch_vbus_gpio_data - Structure holding GPIO informaton
+>   *					for detecting VBUS
+> - * @port:		gpio port number
+> + * @port:		gpio descriptor for the VBUS GPIO
+>   * @intr:		gpio interrupt number
+>   * @irq_work_fall	Structure for WorkQueue
+>   * @irq_work_rise	Structure for WorkQueue
+>   */
+>  struct pch_vbus_gpio_data {
+> -	int			port;
+> +	struct gpio_desc	*port;
+>  	int			intr;
+>  	struct work_struct	irq_work_fall;
+>  	struct work_struct	irq_work_rise;
+> @@ -1253,7 +1250,7 @@ static int pch_vbus_gpio_get_value(struct pch_udc_dev *dev)
+>  	int vbus = 0;
+>  
+>  	if (dev->vbus_gpio.port)
+> -		vbus = gpio_get_value(dev->vbus_gpio.port) ? 1 : 0;
+> +		vbus = gpiod_get_value(dev->vbus_gpio.port) ? 1 : 0;
+>  	else
+>  		vbus = -1;
+>  
+> @@ -1355,42 +1352,30 @@ static irqreturn_t pch_vbus_gpio_irq(int irq, void *data)
+>  /**
+>   * pch_vbus_gpio_init() - This API initializes GPIO port detecting VBUS.
+>   * @dev:	Reference to the driver structure
+> - * @vbus_gpio	Number of GPIO port to detect gpio
+>   *
+>   * Return codes:
+>   *	0: Success
+>   *	-EINVAL: GPIO port is invalid or can't be initialized.
+>   */
+> -static int pch_vbus_gpio_init(struct pch_udc_dev *dev, int vbus_gpio_port)
+> +static int pch_vbus_gpio_init(struct pch_udc_dev *dev)
+>  {
+>  	int err;
+>  	int irq_num = 0;
+> +	struct gpio_desc *gpiod;
+>  
+> -	dev->vbus_gpio.port = 0;
+> +	dev->vbus_gpio.port = NULL;
+>  	dev->vbus_gpio.intr = 0;
+>  
+> -	if (vbus_gpio_port <= -1)
+> -		return -EINVAL;
+> -
+> -	err = gpio_is_valid(vbus_gpio_port);
+> -	if (!err) {
+> -		pr_err("%s: gpio port %d is invalid\n",
+> -			__func__, vbus_gpio_port);
+> -		return -EINVAL;
+> -	}
+> -
+> -	err = gpio_request(vbus_gpio_port, "pch_vbus");
+> -	if (err) {
+> -		pr_err("%s: can't request gpio port %d, err: %d\n",
+> -			__func__, vbus_gpio_port, err);
+> -		return -EINVAL;
+> -	}
+> +	/* Retrieve the GPIO line from the USB gadget device */
+> +	gpiod = devm_gpiod_get(dev->gadget.dev.parent, NULL, GPIOD_IN);
+> +	if (IS_ERR(gpiod))
+> +		return PTR_ERR(gpiod);
+> +	gpiod_set_consumer_name(gpiod, "pch_vbus");
+>  
+> -	dev->vbus_gpio.port = vbus_gpio_port;
+> -	gpio_direction_input(vbus_gpio_port);
+> +	dev->vbus_gpio.port = gpiod;
+>  	INIT_WORK(&dev->vbus_gpio.irq_work_fall, pch_vbus_gpio_work_fall);
+>  
+> -	irq_num = gpio_to_irq(vbus_gpio_port);
+> +	irq_num = gpiod_to_irq(gpiod);
+>  	if (irq_num > 0) {
+>  		irq_set_irq_type(irq_num, IRQ_TYPE_EDGE_BOTH);
+>  		err = request_irq(irq_num, pch_vbus_gpio_irq, 0,
+> @@ -1416,9 +1401,6 @@ static void pch_vbus_gpio_free(struct pch_udc_dev *dev)
+>  {
+>  	if (dev->vbus_gpio.intr)
+>  		free_irq(dev->vbus_gpio.intr, dev);
+> -
+> -	if (dev->vbus_gpio.port)
+> -		gpio_free(dev->vbus_gpio.port);
+>  }
+>  
+>  /**
+> @@ -2894,7 +2876,7 @@ static int pch_udc_pcd_init(struct pch_udc_dev *dev)
+>  {
+>  	pch_udc_init(dev);
+>  	pch_udc_pcd_reinit(dev);
+> -	pch_vbus_gpio_init(dev, vbus_gpio_port);
+> +	pch_vbus_gpio_init(dev);
+>  	return 0;
+>  }
+>  
+> @@ -3096,6 +3078,13 @@ static int pch_udc_probe(struct pci_dev *pdev,
+>  
+>  	dev->base_addr = pcim_iomap_table(pdev)[bar];
+>  
+> +	/*
+> +	 * FIXME: add a GPIO descriptor table to pdev.dev using
+> +	 * gpiod_add_descriptor_table() from <linux/gpio/machine.h> based on
+> +	 * the PCI subsystem ID. The system-dependent GPIO is necessary for
+> +	 * VBUS operation.
+> +	 */
+> +
+>  	/* initialize the hardware */
+>  	if (pch_udc_pcd_init(dev))
+>  		return -ENODEV;
+> -- 
+> 2.25.4
+> 
+
 -- 
-2.25.1
+With Best Regards,
+Andy Shevchenko
+
 
