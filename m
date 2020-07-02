@@ -2,62 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 952FE2122B3
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jul 2020 13:53:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C9D3212364
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jul 2020 14:34:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728849AbgGBLxi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jul 2020 07:53:38 -0400
-Received: from mga04.intel.com ([192.55.52.120]:5015 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728813AbgGBLxi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 2 Jul 2020 07:53:38 -0400
-IronPort-SDR: LamNGFfkGgsD0cdlnwYwNghixb+lkyZ8n9CiweeWGJxc07aNTa7MM0HNXV1th5kB+dw9ffAawx
- IMn+7ijUZkwQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9669"; a="144386689"
-X-IronPort-AV: E=Sophos;i="5.75,304,1589266800"; 
-   d="scan'208";a="144386689"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2020 04:53:37 -0700
-IronPort-SDR: bbbdfZyO3yEXTYX8WFFN2SRdDCYGGBsw17/NUBwRRvkexdjBdpLuSC4R4N9fh3hBFJ8n6VtUMw
- 6L4M191McniA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,304,1589266800"; 
-   d="scan'208";a="387313386"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga001.fm.intel.com with SMTP; 02 Jul 2020 04:53:35 -0700
-Received: by lahna (sSMTP sendmail emulation); Thu, 02 Jul 2020 14:53:34 +0300
-Date:   Thu, 2 Jul 2020 14:53:34 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Wei Yongjun <weiyongjun1@huawei.com>
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Mario Limonciello <mario.limonciello@dell.com>,
+        id S1728995AbgGBMeH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Jul 2020 08:34:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57540 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728830AbgGBMeH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jul 2020 08:34:07 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0159CC08C5C1;
+        Thu,  2 Jul 2020 05:34:07 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id g139so16001217lfd.10;
+        Thu, 02 Jul 2020 05:34:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=73mwDxKIIi5xy52ifDuHdmCPwFGyKXx2K9p8Tj3KFm4=;
+        b=oY2YIKKT6qdIqfACrZtZJq7fWxKXCzEkrVs6WeshydcoP7Slkr0sGzg39490BShUoj
+         phub7Sj9yTYm7jfOLyM300/F7uKeWW4Jgn7SRLoXAw3wtRtjveoPP8Nwtr0oliEsry4X
+         kapTDR9P/MCNSqI3wO3iQ0MGRS5kPJsLmfqM5OVimq/K5IsokwlY/0byBkFhu5buVdzn
+         twSH7dsp1dso8x/lAEswQTKiqKO+4WHRnJ8ti5TkGDP+H7StUbMETw/3u7MRTA0aklqB
+         DWtThsVo7GsEtOXod+PhUPtgBOFUiNbarR0wpejdMoXMKNO50SIrHQefzKX52gQbu5oi
+         aN3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=73mwDxKIIi5xy52ifDuHdmCPwFGyKXx2K9p8Tj3KFm4=;
+        b=DZFNtlZ1ibc6hmPJSFhGh1rX0RDzOkOU5Q85ATFBiRfjWIqj0GKkhgrnnnVksJzYbz
+         LGSoVP3szIabNk26FZf34dqZskKW0glfcZiSjfxgx2liKyXwHnlDzOj8zW1CfMW3uLop
+         60rw2uWohX/9AujcnDtuRC9N9zAHH+si/wdOWGGPo4JcONIo37J9rWE6akV+L/i2Wdmk
+         cCdA2NbsNywe+vEMiGPnmgoKjfc78vgxvlEyqPrUjNix/JRAYMoIRcOyCM/W20UkGLlO
+         yfwJsX247MvXUXvxoytcTemGjUL/6gRftoyVQL1Y7yQa6WLgmlNn2tj0aMDg+OkUKwoE
+         2f1A==
+X-Gm-Message-State: AOAM530pCcq1MlzK9CtRxGJamj8NjJBSejO2/Pkp9j8ikN7barFjo4DM
+        H/tzOl9ubGkV1k14tYgjnNuc7p/u
+X-Google-Smtp-Source: ABdhPJxbwzKvfyX0QzWCYzf/1I6Gwt8CNMRr23fYGL1xEirTzHrD/o9yt9N5AVdARjAROXlz6cPd1g==
+X-Received: by 2002:ac2:4889:: with SMTP id x9mr18419111lfc.162.1593693245337;
+        Thu, 02 Jul 2020 05:34:05 -0700 (PDT)
+Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
+        by smtp.gmail.com with ESMTPSA id s62sm2906537lja.100.2020.07.02.05.34.03
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 02 Jul 2020 05:34:04 -0700 (PDT)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org
-Subject: Re: [PATCH -next] thunderbolt: Fix old style declaration warning
-Message-ID: <20200702115334.GU5180@lahna.fi.intel.com>
-References: <20200702080750.70614-1-weiyongjun1@huawei.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] USB: Fix up terminology in include files
+In-Reply-To: <20200701171555.3198836-1-gregkh@linuxfoundation.org>
+References: <20200701171555.3198836-1-gregkh@linuxfoundation.org>
+Date:   Thu, 02 Jul 2020 15:33:59 +0300
+Message-ID: <87r1tu6qq0.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200702080750.70614-1-weiyongjun1@huawei.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 02, 2020 at 04:07:50PM +0800, Wei Yongjun wrote:
-> Fix gcc build warning:
-> 
-> drivers/thunderbolt/quirks.c:21:1: warning:
->  'static' is not at beginning of declaration [-Wold-style-declaration]
->    21 | const static struct tb_quirk tb_quirks[] = {
->       | ^~~~~
-> 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Applied, thanks!
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
+
+> USB is a HOST/DEVICE protocol, as per the specification and all
+> documentation.  Fix up terms that are not applicable to make things
+> match up with the terms used through the rest of the USB stack.
+>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+Acked-by: Felipe Balbi <balbi@kernel.org>
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl791DcACgkQzL64meEa
+mQawzBAAyFcEX0ddbG6MFqGYmkToxPCvCxUrj81I3NWxoNMIX7C8zZ4JXsxXnUnm
+b8uJaE9i5ULATV/7yPyEzxDxz+vDhBJQ5NAprSZHx+56M44XWP+RCKMkXcShOS4Y
+5Od8V8K0xWpL8or2OGfEXyqWBKFypQgk8ev6r1UytqQmL+IJ8pWMJd4ei6STx9PS
+NxE4hqRTrN5GAja6wR4R873BP9nYBvuGm/vOFXpoiGHbf1d2ODBQBgc26xHkllJc
+INMU5CjEC5eyXAF0o7cmm6VcxumBpAOtu2iJVIG6CN8bGMus8HKLJNr881olrw30
+3p6VtuLGjIL7aLJvj2yFqufikEiKqjmov6SUpw5drgm+Mwyazre1mr0qZss9MwiO
+2q7tdRRYQNaSvNwzLuJ20q+oSHhw5AhmHD8NYCXCFUiwMjph+FaZXOFM0ja6HDth
+tVZhjWqoBi+5NjVLMChiPdzXDnwn74TSWf++3Rdazog8HsWrLfHh5bHAlSb5uwQ0
+lAE+DjW1rp43wqkiYHeoqOQC6L2lv82HpXXYhD9CTqf/QGjmeDYykcGVDjs8ch8H
+jQzPcx4JPoLEQrAx152+secRHmliOHa3MSQrqgS0jCISAE+G9y6JlH/1tJM19FMX
+tHDTYJ9rL5OacWdUn18N4xQ5WTdlWYsuuwR+F6oVpmxj35+Ujkg=
+=TfOn
+-----END PGP SIGNATURE-----
+--=-=-=--
