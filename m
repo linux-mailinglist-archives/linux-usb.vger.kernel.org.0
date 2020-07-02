@@ -2,194 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF4DA212D2F
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jul 2020 21:36:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA3F1212EFE
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jul 2020 23:44:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726118AbgGBTgM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jul 2020 15:36:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38458 "EHLO
+        id S1726010AbgGBVos (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Jul 2020 17:44:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725847AbgGBTgL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jul 2020 15:36:11 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3503C08C5C1
-        for <linux-usb@vger.kernel.org>; Thu,  2 Jul 2020 12:36:10 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id z13so29835814wrw.5
-        for <linux-usb@vger.kernel.org>; Thu, 02 Jul 2020 12:36:10 -0700 (PDT)
+        with ESMTP id S1725994AbgGBVor (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jul 2020 17:44:47 -0400
+Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C01FC08C5C1
+        for <linux-usb@vger.kernel.org>; Thu,  2 Jul 2020 14:44:47 -0700 (PDT)
+Received: by mail-ot1-x344.google.com with SMTP id 18so25242371otv.6
+        for <linux-usb@vger.kernel.org>; Thu, 02 Jul 2020 14:44:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=58oTnMT/MtJjFomhQl6lhOwVpv84uZYmbhCZv0q9vVw=;
-        b=QMPc7KmYrF+cR0jlMDxlE0P++W3Ib6D9Q6hCBb+FX8DUwCOONAj4mwZUKuqx8Lo1lc
-         JZG2ndUBnuMS54RGcjQfW3PK5hpCmlqT8gJDY8VQiWqGKUowtZkThjjOPKze907ga28H
-         YgjRVLqp71d8dx+BBDBTsI8E8SK72LgOmqhedek3H/PCqPkmiae3dRsOppAGvSinj8+y
-         p4pPKElEnjnALpQZg1tGdQg5nQu6E0FXrB70l1A+P0Oei5XIk00SnLB5DhIf8Bxji1K9
-         GLUotKj9Q65boa8O+CA0oL5kRI5t4RqkC46jy1pHxAXUl2zEeP6mW2txj7T29oa+7mf7
-         SvPA==
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=nCIcwwzcNmOiChMR7VCvrwnKak/viYEkjvBy8u4+DMQ=;
+        b=OqCMbL8CsKZSFofKQdJYc7rkFtUwhkdSssqAf/uut1p8p+QHLZM+SW5NerXbmhrkeJ
+         0Ol9A0N2QrjZxwiTmNyIqLBeiC7oHEVX8RDyF0Wag9MvE76nMKSMbyNZCQvgDuNDVTZp
+         g7fn4/q2tYqxZtyBKSGbL6TbktJpKxEe8Y5X4Uv5j1Enhx9+EEQmtJYYkQaOLVQ7R7Af
+         P2M+HADKNQI2fNaUY50xlZEijGHKLIquLVYHwbaYd9NuEDt+6MMAwjuMF7m59oHzeZHR
+         G4iA2YU5fR+ms4Q9/8nPwgQg0um1zUImiVDXVNZEuJ6fdpTWwJsq4Tbv/CCCexMhCX44
+         Urvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=58oTnMT/MtJjFomhQl6lhOwVpv84uZYmbhCZv0q9vVw=;
-        b=jIBxYRs1VkibOGKQPH+rCl0gla0tiEN/YdBIG1pBmo6BcdeB648W79RkrzeyZs4ut4
-         APKEG1n51xIigQOmK2saWfUrCjKkGjJE+cryjEcuCY076siX9N2rteGuhdtS5RAcG3+T
-         SoU4224j3KS6HuoIbVXFoDSMIdvERMW0h56k8tYR2FfzA+wFrofQ2e4d2y0VYeLhI2g1
-         biOIpiWHtnHea1tLTQ8qqRTMxs3/GGmrSSNAfxhc+PKwyAlxY13octxU8e08oW2x459D
-         ZfAn9Td1WlshTh8PIqOx3zSNURlecUq/i3rdRY70uSIzMl7bTrhSIGosga5NUHI68Bwd
-         cHGQ==
-X-Gm-Message-State: AOAM533Fc5BdY60k57Ms2rYaU1D8NGrNlwawSoOCkN3+VMkjupZAOqBe
-        Pb6JVOPRaXae5nk/6U12v6q2O05K
-X-Google-Smtp-Source: ABdhPJyEgs+qHIOVGmrVjSzZBWoR4vuJX+iQz/m5fo7SoY3jru+2apc5T4l/0A4iERdRa93LrC9QUw==
-X-Received: by 2002:adf:9283:: with SMTP id 3mr31750922wrn.231.1593718569309;
-        Thu, 02 Jul 2020 12:36:09 -0700 (PDT)
-Received: from [192.168.0.38] (59.94.91.79.rev.sfr.net. [79.91.94.59])
-        by smtp.gmail.com with ESMTPSA id c20sm14812698wrb.65.2020.07.02.12.36.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jul 2020 12:36:08 -0700 (PDT)
-Subject: Re: gadget mass storage with two USB OTG device controller
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-References: <8f870ba5-5dec-e362-51dd-65311315f6f2@gmail.com>
- <CAH8TKc9gaebqZOpv0OFxG-Dq+Tj+FdgJamQ=eP4SMJ-eYBrkOA@mail.gmail.com>
-From:   Benoit <benoit.sansoni@gmail.com>
-Message-ID: <391a537e-108d-210b-01be-c20dd9d0e68e@gmail.com>
-Date:   Thu, 2 Jul 2020 21:32:58 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=nCIcwwzcNmOiChMR7VCvrwnKak/viYEkjvBy8u4+DMQ=;
+        b=iZGAXtpj7OeI8CcDE4a9Dna/elXn0PQeSQM2dDoUQGoW16ROmI1Xh1Rru0oQ1kNgQO
+         g9gPAzRGDXepDJywplk+mqCoMoSANxFHj4x0N8yh3e8NmzG74QQJOTwXwzP7FfmOBVr7
+         cuuZ0olapwyU0xk5kP15VtYeeLaJZjxBgf0JkVuHur3Yi8/mCl5pAPpC6InvhV+qkHm6
+         8Xav+f7vMv6s4jHS8U5BJrq3eqnU1s2/EI89NTwIdrR3C3gxCVuVVXprRBA0KnSPn7V6
+         aV9ATCER/cIw/CTRvF5YNv+NvKky2ZAtg5hrbp1NIQ651tK/UjjlsDNSxDxNXDWYohpI
+         89UA==
+X-Gm-Message-State: AOAM530NRxbrZxC7csbeK2fMZ/w4iMBOg/I25z6LRC5NJdECGE/LpXV7
+        0mLX2lBhzOUwd/2gNatAfKSjrV/eH3dgnfxD3x33WA==
+X-Google-Smtp-Source: ABdhPJxbBGw51JgE7GUdatiCnFa5SPSWoxHnxNvo2ms6WD2+F8lWkWNgnXWiiZRMa8WVyspaZgs/Q89ydvLq5yWytVk=
+X-Received: by 2002:a9d:7303:: with SMTP id e3mr22118216otk.221.1593726286901;
+ Thu, 02 Jul 2020 14:44:46 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAH8TKc9gaebqZOpv0OFxG-Dq+Tj+FdgJamQ=eP4SMJ-eYBrkOA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Thu, 2 Jul 2020 14:44:36 -0700
+Message-ID: <CALAqxLWAvvHGo1RYef1fJ_k65WqHAPCDhLfehO6_j_f8E2jB7Q@mail.gmail.com>
+Subject: dwc3 inconsistent gadget connection state?
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Tejas Joglekar <tejas.joglekar@synopsys.com>,
+        Yang Fei <fei.yang@intel.com>,
+        Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>,
+        YongQin Liu <yongqin.liu@linaro.org>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Thinh Nguyen <thinhn@synopsys.com>,
+        Linux USB List <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Felipe,
+Hey Felipe,
 
-I am in fact a newbie in USB OTG device mode.
-The configfs is really convenient.
-It works like a charm.
+  I've been tripping over an issue on my HiKey960 where with the usb-c
+gadget cable connected, the gadget code doesn't consistently seem to
+initialize properly. I had rarely seen this behavior previously, but
+more recently it has become more frequent and annoying.
 
-I applied this configuration below and can see on the host the different 
-mass storage.
-This configuration can be set in boot init script file.
-But what is the best choice to apply this configuration at boot up ? (I 
-am currently using yocto.)
+Usually, unplugging and replugging the USB-C cable would get things
+working again (but that's not helpful in test labs).
+
+I annotated a bunch of code trying to understand what was going on and
+I narrowed down the difference in the good and bad case to a dwc3
+reset interrupts happening after usb_gadget_probe_driver() completes.
+In the good case, we see the reset interrupts, and in the failed case
+we don't.
+
+[   16.491953] JDB: usb_gadget_probe_driver
+[   16.495938] JDB: udc_bind_to_driver
+[   16.499555] JDB: dwc3_gadget_start irq: 65 revision: 1429417994
+[   16.503803] JDB: __dwc3_gadget_ep_enable
+[   16.507791] JDB: __dwc3_gadget_ep_enable
+[   16.511715] JDB: dwc3_gadget_enable_irq
+[   16.515582] JDB: usb_udc_connect_control
+[   16.519510] JDB: usb_gadget_connect
+<in the bad case, this is all we see, the gadget device doesn't come up>
+[   16.811010] JDB: dwc3_gadget_interrupt
+[   16.814783] JDB: dwc3_gadget_reset_interrupt
+[   16.819047] JDB: dwc3_reset_gadget
+[   16.823935] JDB: dwc3_gadget_interrupt
+[   16.827686] JDB: __dwc3_gadget_ep_enable
+[   16.831611] JDB: __dwc3_gadget_ep_enable
+[   16.994477] JDB: dwc3_gadget_interrupt
+[   16.998246] JDB: dwc3_gadget_reset_interrupt
+[   17.002519] JDB: dwc3_reset_gadget
+[   17.005922] JDB: usb_gadget_udc_reset
+[   17.062422] JDB: usb_gadget_set_state  state: 5
+[   17.067069] JDB: dwc3_gadget_interrupt
+[   17.070823] JDB: __dwc3_gadget_ep_enable
+[   17.074745] JDB: __dwc3_gadget_ep_enable
+[   17.170898] JDB: usb_gadget_set_state  state: 6
+[   17.195605] JDB: usb_gadget_set_state  state: 7
+[   17.200179] JDB: __dwc3_gadget_ep_enable
+[   17.204118] JDB: __dwc3_gadget_ep_enable
+[   17.208057] JDB: usb_gadget_vbus_draw
+[   17.211721] JDB: usb_gadget_set_state  state: 7
+<in the good case everything is happy here>
 
 
-Thank you so much for your help
-Benoit
+This sounds a bit like the issue in the comment here:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/dwc3/gadget.c?h=v5.8-rc3#n3143
 
-   root@samx8xqxp-hds:~# cd /sys/kernel/config/
-   root@samx8xqxp-hds:/sys/kernel/config# ls
-   usb_gadget
-   root@samx8xqxp-hds:/sys/kernel/config# cd usb_gadget/
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget# mkdir g1
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget# ls g1
-   UDC              bDeviceProtocol  bMaxPacketSize0 bcdUSB           
-functions        idVendor         strings
-   bDeviceClass     bDeviceSubClass  bcdDevice configs          
-idProduct        os_desc
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget# cd g1
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget/g1# mkdir configs/c.1
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget/g1# mkdir 
-functions/mass_storage.0
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget/g1# dd if=/dev/zero 
-of=/tmp/big1 bs=1024 count=200000
-   200000+0 records in
-   200000+0 records out
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget/g1# dd if=/dev/zero 
-of=/tmp/big2 bs=1024 count=200000
-   200000+0 records in
-   200000+0 records out
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget/g1#
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget/g1# ls
-   UDC              bDeviceProtocol  bMaxPacketSize0 bcdUSB           
-functions        idVendor         strings
-   bDeviceClass     bDeviceSubClass  bcdDevice configs          
-idProduct        os_desc
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget/g1# echo /tmp/big1 > 
-functions/mass_storage.0/lun.0/file
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget/g1# mkdir strings/0x409
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget/g1# mkdir 
-configs/c.1/strings/0x409
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget/g1# echo 0xa4a2 > 
-idProduct
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget/g1# echo 0x0525 > 
-idVendor
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget/g1# echo 000000001 > 
-strings/0x409/serialnumber
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget/g1# echo COMPANY > 
-strings/0x409/manufacturer
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget/g1# echo "Mass 
-Storage Gadget 1" > strings/0x409/product
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget/g1# echo "Conf 1" > 
-configs/c.1/strings/0x409/configuration
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget/g1# ln -s 
-functions/mass_storage.0 configs/c.1
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget/g1# echo 
-"5b110000.usb3" > UDC
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget/g1# cd ..
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget# ls
-   g1
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget# cd ..
-   root@samx8xqxp-hds:/sys/kernel/config# mkdir usb_gadget/g2
-   root@samx8xqxp-hds:/sys/kernel/config# cd usb_gadget/g2/
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget/g2# mkdir configs/c.2
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget/g2# mkdir 
-functions/mass_storage.0
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget/g2# echo /tmp/big2 > 
-functions/mass_storage.0/lun.0/file
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget/g2# mkdir strings/0x409
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget/g2# mkdir 
-configs/c.2/strings/0x409
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget/g2# echo 0xa4a2 > 
-idProduct
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget/g2# echo 0x0525 > 
-idVendor
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget/g2# echo 000000002 > 
-strings/0x409/serialnumber
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget/g2# echo COMPANY > 
-strings/0x409/manufacturer
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget/g2# echo "Mass 
-Storage Gadget 2" > strings/0x409/product
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget/g2# echo "Conf 2" > 
-configs/c.2/strings/0x409/configuration
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget/g2# ln -s 
-functions/mass_storage.0 configs/c.2
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget/g2# ls /sys/class/udc/
-   5b110000.usb3  ci_hdrc.0
-   root@samx8xqxp-hds:/sys/kernel/config/usb_gadget/g2# echo "ci_hdrc.0" 
- > UDC
+However, I've tried calling dwc3_gadget_reset_interrupt() and
+dwc3_reset_gadget() at the tail end of dwc3_gadget_start() but that
+doesn't seem to help.
 
-On 02/07/2020 20:12, Felipe Balbi wrote:
-> Hi,
->
-> On Thu, Jul 2, 2020 at 4:08 PM Benoit <benoit.sansoni@gmail.com> wrote:
->> Hello Felipe,
->>
->> I contact you because I used the perl script to check out which is the
->> maintainer of the gadget drivers.
->>
->> I am working on a project using NXP imx8 processor which has two USB OTG
->> controller.
->> Both support device mode.
->> I am using kernel release 4.19.35.
->>
->> I tried to use the g_mass_storage driver using different "file="
->> paramter to each of them without success.
->>
->> I dig into the Documentation folder, but did not find the way to do that.
->>
->>
->> Question:
->>
->> Is it possible to run at the same time the g_mass_storage driver on two
->> different USB OTG device controller?
-> yes, look at the configfs interface for the gadget framework
->
+I was curious if you or anyone else had any thoughts on how to debug
+this further?
 
+thanks
+-john
