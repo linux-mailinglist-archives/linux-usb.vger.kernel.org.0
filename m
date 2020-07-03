@@ -2,110 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 177DD213EB2
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Jul 2020 19:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0D10213EAB
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jul 2020 19:42:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726345AbgGCRmB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jul 2020 13:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44380 "EHLO
+        id S1726573AbgGCRmF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jul 2020 13:42:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726147AbgGCRl7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jul 2020 13:41:59 -0400
+        with ESMTP id S1726425AbgGCRmB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jul 2020 13:42:01 -0400
 Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B470C08C5DD
-        for <linux-usb@vger.kernel.org>; Fri,  3 Jul 2020 10:41:59 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id l2so33372431wmf.0
-        for <linux-usb@vger.kernel.org>; Fri, 03 Jul 2020 10:41:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E19C08C5DD
+        for <linux-usb@vger.kernel.org>; Fri,  3 Jul 2020 10:42:01 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id g75so32747479wme.5
+        for <linux-usb@vger.kernel.org>; Fri, 03 Jul 2020 10:42:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=YSysemk6/m3rdKU2ySMi9uU8qYuK0kuhW6Pw5qHpSnI=;
-        b=DiTMT+9THBotFZ8hAPsnuIbDSlmH+WPn87U6MQV2wdUqBmGs3uF0tKCXEfU7478vwj
-         hwRiHYDh4JpRpasNgymyRlZRKZYPomrYM9TJPmqWfJcxMLGduvnehwmmmjtysVHuv640
-         iQFbD58SHTQRqL/gBV171cuR8/WTeYhTRVk7h0EI46cXLbxvMZRbUIA5L7SH2rCkEbw6
-         NET+ildSzhaQAlJxNoSvdavC9aTyR7AzdS74FkZ+BefFZx0zPt+xwBXdSFYStsHg0rDd
-         ky0+csRp4oiOhk+Bjw68pqKMRSCnHLd+2J+YF8NR5NMSJyMbowwOIgMWQhjToihJ5crY
-         Azhw==
+        bh=GH9kLkzHctUtpjzMG5uKy/EUP0KmLjkarK3Zyi+F734=;
+        b=oPyrB8PidDxQT0BDJL8ttUMskiiCjdZZjs3FWjc7sJiQ3GTGABuuowxYHEb4PXYO9R
+         oUuXo2ZFCkIhfpc5FiL95BvY5X6H8sYdqjL+mtb7hHzsc5+VWC3YCMEvMqjGFbMZZtaG
+         c0W+rgRjDKk9CsLqqPh94NHRplYLc6no40CMSS2sqVsosXrilmdr4P4sTUGhyv3MvAFi
+         vSXEuHkzSkqfzBV05NAGb4G7gjUg4oLd7gld3YYCk6nJ6wyrZcO8NIGoeATjlSR43iDM
+         sW57euHO4YC6uPitM6vEsxyXp4WxMo/dVFUtPPoeuuSx3jG9FAR8gNR65w2CAGjEPmjw
+         QVGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=YSysemk6/m3rdKU2ySMi9uU8qYuK0kuhW6Pw5qHpSnI=;
-        b=ZV8MoVGz3eUNC/rNj5S++KSvpXWJ6psZyBVtP7NgrQo82VlzbsVHBv7vaQMbLi8Yad
-         z8froIra3elLihf0ZCek6P7e1yiO179LVkReLRHO8TKtqKeC+IDdExYzFxr0r0e6EnhS
-         x09/o5mzXkBijlw+wYqk5gJmafl+8nnzJB3f1NrUrpaI0ePCS0rwsIrGYFmoLCDxhmjF
-         DQHeSvG+EUy1sf+WNVRroHNJp2kd72/l3KVx+wIlewgQWw+a4TyHRu4Z1azD8uRA5gCF
-         aA9aXlgPY2JaFQ02IOgogAQtus1QrMwpMkiYHL/YIvEnhQ1RW1OVRFGEyF20sOYFXsi2
-         PMUw==
-X-Gm-Message-State: AOAM532MZuFLZAtq4dZv1Unw0JLYHX5PeYcVV/xipfU8kfe/F+U/wPUN
-        zkduZa2WhKdr9TnLAwtZhX3uPA==
-X-Google-Smtp-Source: ABdhPJwq6EJ8i4c07CyyjVONmZU0HR1br30HC+HrU3hY5Q/iNyS39dh2n8CRaJSQcQXq5fDuEcoNRg==
-X-Received: by 2002:a1c:9a02:: with SMTP id c2mr8726718wme.16.1593798117749;
-        Fri, 03 Jul 2020 10:41:57 -0700 (PDT)
+        bh=GH9kLkzHctUtpjzMG5uKy/EUP0KmLjkarK3Zyi+F734=;
+        b=HzJw6JZTG+vmtnHRvo4iyQ1v4mInZEtm6H3AzLfeY0qdzpdxmM2I2K8FB8rFXioxUq
+         ExsQcncDC8iMERKAJHQpYjFUJMv+IDHNWAQfQZ11+uXfsNJUO5cjealpTn2KlJAiSBX1
+         yh+pIqSWtZiSu2F14JTZv+aFiWWV1ON6bbDD3RvYMe0LEBsGjJ9NKZgfAMTlwiMDKWFg
+         PI8nNWAEOnuTWCNRIOIAEflyWf5DlwBvLG1bO9mV7kGEtLpkzs5d/nuymz96rW9Or3bv
+         M2ec+4b2+wQOwmSdLNE0SnavSq0s3PTRN6mWySsvku84NwTeJdawdJggfZNK1W+J5u57
+         KcOg==
+X-Gm-Message-State: AOAM533eFlUTHMIWjEVxzfy7GfiqRznrwMxcJFf71I5aC10dYIbeLem8
+        6IJO9tA5MEBfZyqQEQ80v0jaVA==
+X-Google-Smtp-Source: ABdhPJyR175xQdUE3YbXopU3B0c7WCXx8R0l/TMeTSCdkdTrAkW/AeSsiuMDCeOhzYob4uQ7e/uQvw==
+X-Received: by 2002:a05:600c:c1:: with SMTP id u1mr38510987wmm.48.1593798119975;
+        Fri, 03 Jul 2020 10:41:59 -0700 (PDT)
 Received: from localhost.localdomain ([2.27.35.144])
-        by smtp.gmail.com with ESMTPSA id x11sm13625799wmc.26.2020.07.03.10.41.56
+        by smtp.gmail.com with ESMTPSA id x11sm13625799wmc.26.2020.07.03.10.41.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jul 2020 10:41:57 -0700 (PDT)
+        Fri, 03 Jul 2020 10:41:59 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Lee Jones <lee.jones@linaro.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH 01/30] usb: mtu3: mtu3_debug: Add forward declaration of 'struct ssusb_mtk'
-Date:   Fri,  3 Jul 2020 18:41:19 +0100
-Message-Id: <20200703174148.2749969-2-lee.jones@linaro.org>
+        Alan Stern <stern@rowland.harvard.edu>,
+        Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Roman Weissgaerber <weissg@vienna.at>,
+        David Brownell <dbrownell@users.sourceforge.net>,
+        Christopher Hoover <ch@hpl.hp.com>,
+        Ben Dooks <ben@simtec.co.uk>, linux-samsung-soc@vger.kernel.org
+Subject: [PATCH 02/30] usb: host: ohci-s3c2410: Demote obvious misuse of kerneldoc to standard comment block
+Date:   Fri,  3 Jul 2020 18:41:20 +0100
+Message-Id: <20200703174148.2749969-3-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200703174148.2749969-1-lee.jones@linaro.org>
 References: <20200703174148.2749969-1-lee.jones@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Without it, the build system complains that it was declared inside
-the parameter list.
+No attempt has been made to document the function here.
 
 Fixes the following W=1 kernel build warning(s):
 
- In file included from drivers/usb/mtu3/mtu3_trace.c:11:
- drivers/usb/mtu3/mtu3_debug.h:29:36: warning: ‘struct ssusb_mtk’ declared inside parameter list will not be visible outside of this definition or declaration
- 29 | void ssusb_dev_debugfs_init(struct ssusb_mtk *ssusb);
- | ^~~~~~~~~
- drivers/usb/mtu3/mtu3_debug.h:30:35: warning: ‘struct ssusb_mtk’ declared inside parameter list will not be visible outside of this definition or declaration
- 30 | void ssusb_dr_debugfs_init(struct ssusb_mtk *ssusb);
- | ^~~~~~~~~
- drivers/usb/mtu3/mtu3_debug.h:31:39: warning: ‘struct ssusb_mtk’ declared inside parameter list will not be visible outside of this definition or declaration
- 31 | void ssusb_debugfs_create_root(struct ssusb_mtk *ssusb);
- | ^~~~~~~~~
- drivers/usb/mtu3/mtu3_debug.h:32:39: warning: ‘struct ssusb_mtk’ declared inside parameter list will not be visible outside of this definition or declaration
- 32 | void ssusb_debugfs_remove_root(struct ssusb_mtk *ssusb);
- | ^~~~~~~~~
+ drivers/usb/host/ohci-s3c2410.c:356: warning: Function parameter or member 'dev' not described in 'ohci_hcd_s3c2410_probe'
 
-Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc: linux-mediatek@lists.infradead.org
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Cc: Kukjin Kim <kgene@kernel.org>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Roman Weissgaerber <weissg@vienna.at>
+Cc: David Brownell <dbrownell@users.sourceforge.net>
+Cc: Christopher Hoover <ch@hpl.hp.com>
+Cc: Ben Dooks <ben@simtec.co.uk>
+Cc: linux-samsung-soc@vger.kernel.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/usb/mtu3/mtu3_debug.h | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/usb/host/ohci-s3c2410.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/mtu3/mtu3_debug.h b/drivers/usb/mtu3/mtu3_debug.h
-index fb6b28277c9b1..3084c46017c37 100644
---- a/drivers/usb/mtu3/mtu3_debug.h
-+++ b/drivers/usb/mtu3/mtu3_debug.h
-@@ -12,6 +12,8 @@
+diff --git a/drivers/usb/host/ohci-s3c2410.c b/drivers/usb/host/ohci-s3c2410.c
+index d961097c90f0e..de5e570c58bae 100644
+--- a/drivers/usb/host/ohci-s3c2410.c
++++ b/drivers/usb/host/ohci-s3c2410.c
+@@ -343,7 +343,7 @@ ohci_hcd_s3c2410_remove(struct platform_device *dev)
+ 	return 0;
+ }
  
- #include <linux/debugfs.h>
- 
-+struct ssusb_mtk;
-+
- #define MTU3_DEBUGFS_NAME_LEN 32
- 
- struct mtu3_regset {
+-/**
++/*
+  * ohci_hcd_s3c2410_probe - initialize S3C2410-based HCDs
+  * Context: !in_interrupt()
+  *
 -- 
 2.25.1
 
