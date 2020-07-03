@@ -2,168 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 552BA2138E6
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Jul 2020 12:46:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F51213948
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jul 2020 13:23:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726415AbgGCKqj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jul 2020 06:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37108 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725915AbgGCKqj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jul 2020 06:46:39 -0400
-Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08BF2C08C5C1;
-        Fri,  3 Jul 2020 03:46:39 -0700 (PDT)
-Received: by mail-ot1-x341.google.com with SMTP id 5so24369508oty.11;
-        Fri, 03 Jul 2020 03:46:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0c5wHg9VNJDHK0sa3QsCKAxp+om6hYF0jilSpO9w9y4=;
-        b=BiGOeYGCax7/oPiLMt4Z6w4thxBd15Pucyb6wzwm9ayylbBXjPbKcPMn3l4US3gxKl
-         3a9P3ymozjwGGbmCmfJkcEWBPFCjum2ytt4KF/NMM2a+TMkIMUhOZRBvmaQSrdWe8HxO
-         SRA4YAcWn4+aGzYPu5ia7biJCoQ+g6NwB+pdnRvO6KDOxZGLv4ZJfBEkege93pDsNm9m
-         0YqE+A6uO1o/11+Qz7Enq7db/XzHol53RA4CjLs66Tx931mv0sYxpPecF3a8vBdKkmdr
-         FxxjTK46Z4H86QU0qoCCgFxUuB9imHVi4fnVs1DbXo8twCcjvc6LU0+FKz1ErihB+eHF
-         1rgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0c5wHg9VNJDHK0sa3QsCKAxp+om6hYF0jilSpO9w9y4=;
-        b=nva5cordZ1UAt1popQZRQSUg8Sfy8F9457zQgOqtyBhq/Apj+LU539VxnIKeRFZisd
-         Md+235uYrIJ+EMCD9w7cAeOORNOKSL82jHmdTyU379aZQU4pR/lXxojBlFL8V2Ym2Fam
-         OKjtDhkKf5ZWHOjqtt1TqJJDJ/7c6AUMGM2cbfRqZD0FB1g5zFeLRMkjkSMR6IbWcNIt
-         caZUEbVL+W1RzNICzDZoRJVNp9c7QY7Ie8wjdZ2iYO6Ba5wY+s0MLldztFjRZGdrIXjo
-         L+ETTrqmpMvE19N7+La12C23bfGN/z8imm31knkNGB4ngLrjSMmnVLW+IuqXRLrGn8zd
-         8mXQ==
-X-Gm-Message-State: AOAM533+KXASeDeyGOPn6KsmgCaxae02VPom6JzKY3vfIPOkbZwe11jS
-        JLDKdXsvxQWqvd3jYXxXO0Fiij18BhzY+eSORIA=
-X-Google-Smtp-Source: ABdhPJy21MyHS89arWOkjOjzCKkhAW8rJyKdTPBlC3SxBSlhm8uBhnJ/okQbnyg8Agy85BzoVoq1mGIP+zq0w/SMlmA=
-X-Received: by 2002:a05:6830:1510:: with SMTP id k16mr10884514otp.336.1593773198367;
- Fri, 03 Jul 2020 03:46:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200629201845.28138-1-ruslan.bilovol@gmail.com> <20200630015843.GB12443@b29397-desktop>
-In-Reply-To: <20200630015843.GB12443@b29397-desktop>
-From:   Ruslan Bilovol <ruslan.bilovol@gmail.com>
-Date:   Fri, 3 Jul 2020 13:46:27 +0300
-Message-ID: <CAB=otbSnP7ecO9W5osxqSHSa4JRCUU4KR-g2BjBweDBUwjWobA@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: gadget: epautoconf: claim smallest endpoints first
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     "balbi@kernel.org" <balbi@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+        id S1726244AbgGCLXg convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 3 Jul 2020 07:23:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50816 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726039AbgGCLXg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 3 Jul 2020 07:23:36 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 203419] Logitech Group USB audio stopped working in 5.1-rc6
+Date:   Fri, 03 Jul 2020 11:23:36 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: mathias.nyman@linux.intel.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-203419-208809-JqHBQuHgsp@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-203419-208809@https.bugzilla.kernel.org/>
+References: <bug-203419-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 30, 2020 at 4:58 AM Peter Chen <peter.chen@nxp.com> wrote:
->
-> On 20-06-29 23:18:45, Ruslan Bilovol wrote:
-> > UDC hardware may have endpoints with different maxpacket
-> > size. Current endpoint matching code takes first matching
-> > endpoint from the list.
-> >
-> > It's always possible that gadget allocates endpoints for
-> > small transfers (maxpacket size) first, then larger ones.
-> > That works fine if all matching UDC endpoints have same
-> > maxpacket size or are big enough to serve that allocation.
-> >
-> > However, some UDCs have first endpoints in the list with
-> > bigger maxpacket size, whereas last endpoints are much
-> > smaller. In this case endpoint allocation will fail for
-> > the gadget (which allocates smaller endpoints first) on
-> > final endpoint allocations.
-> >
-> > To make endpoint allocation fair, pick up smallest
-> > matching endpoints first, leaving bigger ones for
-> > heavier applications.
-> >
-> > Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
-> > ---
-> >
-> > v2: rebased onto latest balbi/next branch
-> >
-> >  drivers/usb/gadget/epautoconf.c | 23 ++++++++++++++++++-----
-> >  1 file changed, 18 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/drivers/usb/gadget/epautoconf.c b/drivers/usb/gadget/epautoconf.c
-> > index 1eb4fa2e623f..6c453b5d87bb 100644
-> > --- a/drivers/usb/gadget/epautoconf.c
-> > +++ b/drivers/usb/gadget/epautoconf.c
-> > @@ -66,7 +66,7 @@ struct usb_ep *usb_ep_autoconfig_ss(
-> >       struct usb_ss_ep_comp_descriptor *ep_comp
-> >  )
-> >  {
-> > -     struct usb_ep   *ep;
-> > +     struct usb_ep   *ep, *ep_min = NULL;
-> >
-> >       if (gadget->ops->match_ep) {
-> >               ep = gadget->ops->match_ep(gadget, desc, ep_comp);
-> > @@ -74,14 +74,27 @@ struct usb_ep *usb_ep_autoconfig_ss(
-> >                       goto found_ep;
-> >       }
-> >
-> > -     /* Second, look at endpoints until an unclaimed one looks usable */
-> > +     /*
-> > +      * Second, look at endpoints until an unclaimed one looks usable.
-> > +      * Try to find one with smallest maxpacket limit, leaving larger
-> > +      * endpoints for heavier applications
-> > +      */
-> >       list_for_each_entry (ep, &gadget->ep_list, ep_list) {
-> > -             if (usb_gadget_ep_match_desc(gadget, ep, desc, ep_comp))
-> > -                     goto found_ep;
-> > +             if (usb_gadget_ep_match_desc(gadget, ep, desc, ep_comp)) {
-> > +                     if (desc->wMaxPacketSize == 0)
-> > +                             goto found_ep;
->
-> Why you do special handling for this? You still could give the smallest
-> maxpacket_limit EP for it, right?
+https://bugzilla.kernel.org/show_bug.cgi?id=203419
 
-Of course it's technically possible. However in case "wMaxPacketSize == 0"
-gadget driver wants to get maximum possible wMaxPacketSize from endpoint
-configuration and I was thinking about avoiding regressions if we always provide
-smaller endpoints.
+--- Comment #33 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
+So looks like patch:
+  8f97250c21f0 xhci: Don't clear hub TT buffer on ep0 protocol stall
 
-As I can see, providing smallest endpoint that matches requested wMaxPacketSize
-is OK, but if gadget driver just wants autoconf core to use it with
-maximum possible
-value, I'm thinking now if we can even change this part and if wMaxPacketSize
-is zero, find endpoint with maximum possible wMaxPacketSize
+Works for:
+  HUION tablet - Vincenzo Di Massa
+  C-Media Electronics, Inc. Audio Adapter - Florian Meyer
 
-Does it make sense?
+Doesn't work for:
+  Logitech ConfCam Connect - Dominique Archambault
+  Logic Group USB - Marco S 
 
-Thanks
-Ruslan
+For those that the patch doesn't work, could you take new
+traces and logs. See comment #21 for details
 
->
-> Peter
->
-> > +                     else if (!ep_min)
-> > +                             ep_min = ep;
-> > +                     else if (ep->maxpacket_limit < ep_min->maxpacket_limit)
-> > +                             ep_min = ep;
-> > +             }
-> >       }
-> >
-> >       /* Fail */
-> > -     return NULL;
-> > +     if (!ep_min)
-> > +             return NULL;
-> > +
-> > +     ep = ep_min;
-> >  found_ep:
-> >
-> >       /*
-> > --
-> > 2.17.1
-> >
->
-> --
->
-> Thanks,
-> Peter Chen
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
