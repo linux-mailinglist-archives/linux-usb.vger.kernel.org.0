@@ -2,152 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 794E9213EB1
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Jul 2020 19:44:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 177DD213EB2
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jul 2020 19:44:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726178AbgGCRl6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jul 2020 13:41:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44374 "EHLO
+        id S1726345AbgGCRmB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jul 2020 13:42:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726035AbgGCRl6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jul 2020 13:41:58 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1871C061794
-        for <linux-usb@vger.kernel.org>; Fri,  3 Jul 2020 10:41:57 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id r12so33506487wrj.13
-        for <linux-usb@vger.kernel.org>; Fri, 03 Jul 2020 10:41:57 -0700 (PDT)
+        with ESMTP id S1726147AbgGCRl7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jul 2020 13:41:59 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B470C08C5DD
+        for <linux-usb@vger.kernel.org>; Fri,  3 Jul 2020 10:41:59 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id l2so33372431wmf.0
+        for <linux-usb@vger.kernel.org>; Fri, 03 Jul 2020 10:41:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=As4hY4i9MK8iV/24T8EMNeA73jw6PU1siON2AJDWkyg=;
-        b=EAm+moPX549aWgfLSIIEtg1s6FbbNXpi4BLs2cMLGg3US93Xf2FKBNL7b/Ex6v/KGv
-         OVyZGPU/1QIQ945gCBdqPI32KpoQA1qxSWRHxj8yCyPGAA35BXSjou9ybf+DbZ9eXAx5
-         Nif/HVYYFPQg7gRjCW4iNAehlZYNqfzuqkwtK4akIOUBpUMGdMue6vb8z/pfCyAIwATE
-         2j8rUQ8Gg2jG2EdyDFbOOW+SQXGF3K9OpOFejYx4DPzN99ttxXGC8l9IZadQ423lTr06
-         mm5CBKMQOfyDp/2pJbPmHqi2Dn+2sDFQ118ZxYxTaQDG2hDXmQUv4+M0vHnwH/gzU2oO
-         eO/Q==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=YSysemk6/m3rdKU2ySMi9uU8qYuK0kuhW6Pw5qHpSnI=;
+        b=DiTMT+9THBotFZ8hAPsnuIbDSlmH+WPn87U6MQV2wdUqBmGs3uF0tKCXEfU7478vwj
+         hwRiHYDh4JpRpasNgymyRlZRKZYPomrYM9TJPmqWfJcxMLGduvnehwmmmjtysVHuv640
+         iQFbD58SHTQRqL/gBV171cuR8/WTeYhTRVk7h0EI46cXLbxvMZRbUIA5L7SH2rCkEbw6
+         NET+ildSzhaQAlJxNoSvdavC9aTyR7AzdS74FkZ+BefFZx0zPt+xwBXdSFYStsHg0rDd
+         ky0+csRp4oiOhk+Bjw68pqKMRSCnHLd+2J+YF8NR5NMSJyMbowwOIgMWQhjToihJ5crY
+         Azhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=As4hY4i9MK8iV/24T8EMNeA73jw6PU1siON2AJDWkyg=;
-        b=NE8PsDt5I+LkB1nWtc9gdeAwTGmmCDfhzBwYT8jf8ZlsCGC3DZWeE1rs6LqkiA/d9d
-         i7hLvJo/Pi8FQ9cJx1IM4F6Rng2eNn2HBnyKHVpTTSouNt8J/XtfSy1bGtB2Puh5kX3y
-         z+6WiXirZOUx/OCtqxtD2j2Yx88dedx9/yZ+Z0fOLKToGLyxD8NgC0rkSm6RuWha1nDw
-         6GKf1n1xoilh9yTT5TS9IZw4nxzIvP55DpoZeq0q2YhOdl5z7B5xuQh3hNFixpF95S/O
-         iP05SV+O2sBPAM2daW3eD1nc5CdPdnXWpXtVyyqU69fjE0qm3cWARHG6DPNoSlctbiVD
-         KISQ==
-X-Gm-Message-State: AOAM530U3ADPruPgN3rKu66x10h/cz896lpRtvKFwU2aIXjjVPgnTHyY
-        TuUD/VPLObMtSJq6FXBLJgf35A==
-X-Google-Smtp-Source: ABdhPJxL+2NW/+3Cvrw8qiuUura3g5ZSBVYDIQcc5J8oi2F8pt9r+S3zJ9piJWXAJ7Eu5S5IpGYlyA==
-X-Received: by 2002:adf:edd0:: with SMTP id v16mr37168565wro.214.1593798116249;
-        Fri, 03 Jul 2020 10:41:56 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=YSysemk6/m3rdKU2ySMi9uU8qYuK0kuhW6Pw5qHpSnI=;
+        b=ZV8MoVGz3eUNC/rNj5S++KSvpXWJ6psZyBVtP7NgrQo82VlzbsVHBv7vaQMbLi8Yad
+         z8froIra3elLihf0ZCek6P7e1yiO179LVkReLRHO8TKtqKeC+IDdExYzFxr0r0e6EnhS
+         x09/o5mzXkBijlw+wYqk5gJmafl+8nnzJB3f1NrUrpaI0ePCS0rwsIrGYFmoLCDxhmjF
+         DQHeSvG+EUy1sf+WNVRroHNJp2kd72/l3KVx+wIlewgQWw+a4TyHRu4Z1azD8uRA5gCF
+         aA9aXlgPY2JaFQ02IOgogAQtus1QrMwpMkiYHL/YIvEnhQ1RW1OVRFGEyF20sOYFXsi2
+         PMUw==
+X-Gm-Message-State: AOAM532MZuFLZAtq4dZv1Unw0JLYHX5PeYcVV/xipfU8kfe/F+U/wPUN
+        zkduZa2WhKdr9TnLAwtZhX3uPA==
+X-Google-Smtp-Source: ABdhPJwq6EJ8i4c07CyyjVONmZU0HR1br30HC+HrU3hY5Q/iNyS39dh2n8CRaJSQcQXq5fDuEcoNRg==
+X-Received: by 2002:a1c:9a02:: with SMTP id c2mr8726718wme.16.1593798117749;
+        Fri, 03 Jul 2020 10:41:57 -0700 (PDT)
 Received: from localhost.localdomain ([2.27.35.144])
-        by smtp.gmail.com with ESMTPSA id x11sm13625799wmc.26.2020.07.03.10.41.55
+        by smtp.gmail.com with ESMTPSA id x11sm13625799wmc.26.2020.07.03.10.41.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jul 2020 10:41:55 -0700 (PDT)
+        Fri, 03 Jul 2020 10:41:57 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>
-Subject: [PATCH 00/30] Fix a bunch more W=1 issues in USB
-Date:   Fri,  3 Jul 2020 18:41:18 +0100
-Message-Id: <20200703174148.2749969-1-lee.jones@linaro.org>
+        Lee Jones <lee.jones@linaro.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH 01/30] usb: mtu3: mtu3_debug: Add forward declaration of 'struct ssusb_mtk'
+Date:   Fri,  3 Jul 2020 18:41:19 +0100
+Message-Id: <20200703174148.2749969-2-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200703174148.2749969-1-lee.jones@linaro.org>
+References: <20200703174148.2749969-1-lee.jones@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This set is part of a larger effort attempting to clean-up W=1
-kernel builds, which are currently overwhelmingly riddled with
-niggly little warnings.
+Without it, the build system complains that it was declared inside
+the parameter list.
 
-Lee Jones (30):
-  usb: mtu3: mtu3_debug: Add forward declaration of 'struct ssusb_mtk'
-  usb: host: ohci-s3c2410: Demote obvious misuse of kerneldoc to
-    standard comment block
-  usb: core: ledtrig-usbport: Demote obvious misuse of kerneldoc to
-    standard comment blocks
-  usb: misc: sisusbvga: sisusb_init: Mark all 'static const' arrays as
-    __maybe_unused
-  usb: atm: ueagle-atm: Demote obvious misuse of kerneldoc to standard
-    comment blocks
-  usb: misc: adutux: Demote obvious misuse of kerneldoc to standard
-    comment blocks
-  usb: chipidea: core: Document hw_port_test_set()'s missing 'ci'
-    argument
-  usb: gadget: udc: core: Fix a bunch of kerneldoc misdemeanours
-  usb: chipidea: otg: Fix kerneldoc issues relating to description of
-    'ci'
-  usb: chipidea: debug: Demote obvious misuse of kerneldoc to standard
-    comment blocks
-  usb: chipidea: udc: Add missing descriptions for function arg 'ci'
-  usb: chipidea: udc: Help out kerneldoc headers that have tried, demote
-    the others
-  usb: host: xhci: Demote obvious misuse of kerneldoc to standard
-    comment block
-  usb: host: xhci-mem: Demote obvious misuse of kerneldoc to standard
-    comment block
-  usb: host: xhci-dbgcap: File headers are not good candidates for
-    kerneldoc
-  usb: host: xhci-dbgtty: File headers are not good candidates for
-    kerneldoc
-  usb: chipidea: udc: Fix a few kerneldoc issues
-  usb: host: xhci-debugfs: Use 'gnu_printf' format notation
-  usb: storage: alauda: Remove set but unchecked variable
-  usb: typec: altmodes: displayport: File headers are not good
-    candidates for kerneldoc
-  usb: typec: altmodes: displayport: Supply missing displayport.h
-    include file
-  usb: typec: tcpm: fusb302: Use 'gnu_printf' format notation
-  usb: chipidea: usbmisc_imx: Demote obvious misuse of kerneldoc to
-    standard comment block
-  usb: misc: iowarrior: Fix odd corruption issue in the file header
-  usb: misc: iowarrior: Demote obvious misuse of kerneldoc to standard
-    comment blocks
-  usb: gadget: function: u_serial: Repair misdocumented function
-    argument
-  usb: misc: ldusb: Demote obvious misuse of kerneldoc to standard
-    comment blocks
-  usb: musb: musb_dsps: Demote obvious misuse of kerneldoc to standard
-    comment blocks
-  usb: gadget: usbstring: Repair misspelled function argument 'langid'
-  usb: gadget: udc: dummy_hcd: Repair misspelled function argument
-    'dummy_hcd'
+Fixes the following W=1 kernel build warning(s):
 
- drivers/usb/atm/ueagle-atm.c             |  4 +-
- drivers/usb/chipidea/core.c              |  1 +
- drivers/usb/chipidea/debug.c             | 10 ++--
- drivers/usb/chipidea/otg.c               |  6 ++-
- drivers/usb/chipidea/udc.c               | 52 ++++++++++++-------
- drivers/usb/chipidea/usbmisc_imx.c       |  2 +-
- drivers/usb/core/ledtrig-usbport.c       |  6 +--
- drivers/usb/gadget/function/u_serial.c   |  2 +-
- drivers/usb/gadget/udc/core.c            | 18 ++++---
- drivers/usb/gadget/udc/dummy_hcd.c       |  2 +-
- drivers/usb/gadget/usbstring.c           |  2 +-
- drivers/usb/host/ohci-s3c2410.c          |  2 +-
- drivers/usb/host/xhci-dbgcap.c           |  2 +-
- drivers/usb/host/xhci-dbgtty.c           |  2 +-
- drivers/usb/host/xhci-debugfs.c          |  1 +
- drivers/usb/host/xhci-mem.c              |  2 +-
- drivers/usb/host/xhci.c                  |  2 +-
- drivers/usb/misc/adutux.c                |  6 +--
- drivers/usb/misc/iowarrior.c             | 16 +++---
- drivers/usb/misc/ldusb.c                 | 24 ++++-----
- drivers/usb/misc/sisusbvga/sisusb_init.h | 66 ++++++++++++------------
- drivers/usb/mtu3/mtu3_debug.h            |  2 +
- drivers/usb/musb/musb_dsps.c             |  8 +--
- drivers/usb/storage/alauda.c             |  3 +-
- drivers/usb/typec/altmodes/displayport.c |  3 +-
- drivers/usb/typec/tcpm/fusb302.c         |  1 +
- 26 files changed, 134 insertions(+), 111 deletions(-)
+ In file included from drivers/usb/mtu3/mtu3_trace.c:11:
+ drivers/usb/mtu3/mtu3_debug.h:29:36: warning: ‘struct ssusb_mtk’ declared inside parameter list will not be visible outside of this definition or declaration
+ 29 | void ssusb_dev_debugfs_init(struct ssusb_mtk *ssusb);
+ | ^~~~~~~~~
+ drivers/usb/mtu3/mtu3_debug.h:30:35: warning: ‘struct ssusb_mtk’ declared inside parameter list will not be visible outside of this definition or declaration
+ 30 | void ssusb_dr_debugfs_init(struct ssusb_mtk *ssusb);
+ | ^~~~~~~~~
+ drivers/usb/mtu3/mtu3_debug.h:31:39: warning: ‘struct ssusb_mtk’ declared inside parameter list will not be visible outside of this definition or declaration
+ 31 | void ssusb_debugfs_create_root(struct ssusb_mtk *ssusb);
+ | ^~~~~~~~~
+ drivers/usb/mtu3/mtu3_debug.h:32:39: warning: ‘struct ssusb_mtk’ declared inside parameter list will not be visible outside of this definition or declaration
+ 32 | void ssusb_debugfs_remove_root(struct ssusb_mtk *ssusb);
+ | ^~~~~~~~~
 
+Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc: linux-mediatek@lists.infradead.org
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+---
+ drivers/usb/mtu3/mtu3_debug.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/usb/mtu3/mtu3_debug.h b/drivers/usb/mtu3/mtu3_debug.h
+index fb6b28277c9b1..3084c46017c37 100644
+--- a/drivers/usb/mtu3/mtu3_debug.h
++++ b/drivers/usb/mtu3/mtu3_debug.h
+@@ -12,6 +12,8 @@
+ 
+ #include <linux/debugfs.h>
+ 
++struct ssusb_mtk;
++
+ #define MTU3_DEBUGFS_NAME_LEN 32
+ 
+ struct mtu3_regset {
 -- 
 2.25.1
 
