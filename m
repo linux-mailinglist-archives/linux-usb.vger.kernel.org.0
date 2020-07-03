@@ -2,181 +2,314 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B46921365C
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Jul 2020 10:27:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4FF8213683
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jul 2020 10:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725972AbgGCI1F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jul 2020 04:27:05 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:54664 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725648AbgGCI1F (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jul 2020 04:27:05 -0400
-Received: from mailhost.synopsys.com (badc-mailhost4.synopsys.com [10.192.0.82])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id B572FC050E;
-        Fri,  3 Jul 2020 08:27:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1593764824; bh=oHU8SCa2xFT6A7tc5/ZBQvNzTAN27Xdgj0Tu9XPp2bI=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=XRQogA9bPCQmjFAxqnQ1wHOQmmHkggljpBYvQTkeRFWug9f4k6XruqKrVV1cr5PRF
-         02swRL1FunWORiwnl328xHFWn2c1pa4BRENw3inTy+nSZ0fkj2WxdsW1ZYNtMTKS4y
-         NxodXZT5rxkTga9Qcf7GbwhhV2o8/tpNYvSR5+A7YuLZ5ltksMQBJ8OnrIj4QOIt2x
-         D4K1gQN/a/P25eKxfPI2NomTEHjRgh09kP+U0yiHlo88xg4Krwj30IPZGP7mZgPkfR
-         WV3choiManvd9yFZfDi/83nRguPAe6dw7vrShyomK3bRiT0wJU9BGsNCEHwVnu5S+n
-         v/wgUWX4/CIgw==
-Received: from o365relay-in.synopsys.com (sv2-o365relay3.synopsys.com [10.202.1.139])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id 5DDDCA0255;
-        Fri,  3 Jul 2020 08:27:04 +0000 (UTC)
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2109.outbound.protection.outlook.com [104.47.55.109])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "mail.protection.outlook.com", Issuer "GlobalSign Organization Validation CA - SHA256 - G3" (verified OK))
-        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 32FB640256;
-        Fri,  3 Jul 2020 08:27:04 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=hminas@synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="GbNqLvUv";
-        dkim-atps=neutral
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jfE3wfxFRl4DR0mr+mckTFcnpua3/VXSfY7UukmSTTpgjyl020uJA+y0XXBafi9g5BoL2ckFQ38G297YZvWEBJBxuJo15DMuTznBlebYxqMdmy+NaV3aftRMex4bBIazpA08IxspZMV5TOAhi40BF1fVGfwYblUsehGra0TlN8GEcj7wDN25m+0FHLT2l5ivda6Tj+TW6WZ4LpKgskYfJTi65Brk8GipnpmFdSVAZK2kUkKOYJDXL2vpOeYeJ/lXNP89scK0Dg94IUv2B4KyCG/8spSINuT6XzW2qCVDRgw2RX/zOXa3TRYWKn90ofaBwDcgCRzhh+8XOlbSg5Ui3w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oHU8SCa2xFT6A7tc5/ZBQvNzTAN27Xdgj0Tu9XPp2bI=;
- b=co91g2YyufomzJJbUFx6B7EVKW1DfsXadaNYKjNnjUQnebfjWsQsGiCXLV3XTnvqtx0R+NgZp843AiqZOC3z7n4uqyoOo6JnaWHBjPTttMLcaRITrcBHOlgtGc0WYSddp+lqtJLjYmeOvzGyUuaXm8SU2NRpjdvRDZsLyfizk1kReeiXaZtnsI3a9kqI+KNsNcSzuEii6kKXWFCUOem3dqZApEaGjkJpZRYS4G65MTR6l8sPNt1R2k7WEBuO90jNyVKPJbSsEM8+kDlkNEELUwTIP9f9Wwuo/jr84PYX6etONGd6gvX17MvDuzYimGB9F1Eio3hajuurAn0fluMRdA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oHU8SCa2xFT6A7tc5/ZBQvNzTAN27Xdgj0Tu9XPp2bI=;
- b=GbNqLvUv5PZi/+7Az27VY3yfVaS5pCuOtqpNV54p3VJsCPayl3iL6ibpF+jFSttKOgz9HpPvKqN008tSyz9fSkf8oANeC2sio+5V+J+LYNWXbZhlQOlEE7QuxzBdcze1DnibAXTRK01u+e4kqznfm6FhqZeseHEicp8HXMHpWqc=
-Received: from CY4PR12MB1432.namprd12.prod.outlook.com (2603:10b6:903:44::11)
- by CY4PR12MB1240.namprd12.prod.outlook.com (2603:10b6:903:3f::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3153.22; Fri, 3 Jul
- 2020 08:27:02 +0000
-Received: from CY4PR12MB1432.namprd12.prod.outlook.com
- ([fe80::3cb9:e2f2:a4ff:14bd]) by CY4PR12MB1432.namprd12.prod.outlook.com
- ([fe80::3cb9:e2f2:a4ff:14bd%10]) with mapi id 15.20.3153.023; Fri, 3 Jul 2020
- 08:27:02 +0000
-X-SNPS-Relay: synopsys.com
-From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-CC:     "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "ben@simtec.co.uk" <ben@simtec.co.uk>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: patch "usb: dwc2: gadget: Do not read GINTMSK2" added to
- usb-testing
-Thread-Topic: patch "usb: dwc2: gadget: Do not read GINTMSK2" added to
- usb-testing
-Thread-Index: AQHWUQxyYI6BZILKfUSqw3pWGfdTYqj1eRiAgAAKMICAAAIRgA==
-Date:   Fri, 3 Jul 2020 08:27:02 +0000
-Message-ID: <83a9539a-8eb3-b63f-b60f-3952bcff928a@synopsys.com>
-References: <15937616791863@kroah.com>
- <6eb59328-78c3-f925-45bb-fdfcf032814c@synopsys.com>
- <20200703081937.GA2396807@kroah.com>
-In-Reply-To: <20200703081937.GA2396807@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-authentication-results: linuxfoundation.org; dkim=none (message not signed)
- header.d=none;linuxfoundation.org; dmarc=none action=none
- header.from=synopsys.com;
-x-originating-ip: [37.252.92.106]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 4421a3fb-4faf-44ec-62b9-08d81f2adcc2
-x-ms-traffictypediagnostic: CY4PR12MB1240:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <CY4PR12MB12400789CDF6229B575D9565A76A0@CY4PR12MB1240.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 045315E1EE
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: UIwbUH4sRODI7UqmaT5ubLoV08TsRCmJKYwx4DXn4BRMvDdiDCC4sqU475BmN2BpXUVD/npn3PfJIwBGV+xbICEmnS+naR1vW426oDBl8zhMAMUaUnlXGbMk5BEM4gDk7s+E+8oDELVa6gJ0lsot+JNzeClM7NG0/kDRkP6fsOx1Yf4WiqwI/AspAb166weIDFC1nnRGOcBOCT8qOspO0q95s08jnCs69Nr4OfK6Pp/6vYjFM8XkMvVWeu7HPVPSh0zobT6qCDgoyMPvm30nIuWvUNsyDMySaGFPlrZDzSbdLIxXUwm7O7qa9kWdSXon5REbGQw4TauGtI9CKRQfbLCuUWRiJAbOZFJKqFDJTrAqSdRfV9wvzM2GZbMZEnqgkyUKQxG6ovUY4qYP1jkI/eDWh7+BhBVylT6UbEf/x/oSkCMyly0khdo5rCBAD3D7kacLdRfQTTeoAbbSMG4gnw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR12MB1432.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(366004)(8676002)(2616005)(26005)(53546011)(86362001)(6486002)(31696002)(186003)(83380400001)(2906002)(36756003)(71200400001)(31686004)(8936002)(66556008)(64756008)(66476007)(5660300002)(6512007)(4326008)(110136005)(498600001)(76116006)(6506007)(66446008)(54906003)(66946007)(966005)(91956017)(43740500002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: YFgvpe1O60WItxfjgr5tqLsEsW1yCWRyfxBzWksxuIGM4fjGe9jYU7AYUlk8XUTLPKvtxCpRb9ZpR9OjkJ5XRkCpATWB1ziXG5aFdzjPUtdhgYfkmnT4onTngavwd/UTj9Kag8eYihI5wHB0e3Fu9GGtDSYgnsxSjcQvWnS1vH84I4op2tThnatuzIP300Noy02orB//KiI4WmqlcuYizvuc4WdijB9iWCqtxOgKtHqJQ5LXYfv+KjyFzrWIfogFs5mfyTwmpdtaMgorcMhpur3YwB2cQQofDoNstXY3w5U/ePpRoUUUowy/jhSK6vlB0ZH5PfKCo5RHQYHiYuf3f68uJTf/AZWG3DaUeNV0V46Vokm2z6rf6L2PEBknpTxZGsSnUOLiDenWSSrgapBzlKvO9dIYqeIWnDWlW/WB9OOYcpgwOPecChdGjmn1f5cRr8wYObX7xrzdA/XQ9/8NOoAwj30wy0iLSpFpDPZb1pg=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <40D3C82BF0DAF841AA3B575A699DB06C@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1725949AbgGCIgo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jul 2020 04:36:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45392 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725764AbgGCIgo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jul 2020 04:36:44 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65ABAC08C5C1
+        for <linux-usb@vger.kernel.org>; Fri,  3 Jul 2020 01:36:44 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id g17so12392528plq.12
+        for <linux-usb@vger.kernel.org>; Fri, 03 Jul 2020 01:36:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=SoWMJOtoC4VF3gtGCj5O3Tu04aNeKdj58z7B8SFxIqM=;
+        b=PAjn5GY0lO+ZQvQrDH9Y9MqbRQbG8LPmLZZiRjcHjugAg20GgsDeEsOU0q/16iLEpB
+         z0V3w+qOkhc/yZbomHerqpe3agEdcyfx3oD9fLtOn2WcBMur73pAIHnZ++jSzfOZFovY
+         KAK4q083j2p7K6n7SkOjiXah48tTMt+CImfBk7mYR/OJOfi2EqkOwqt7sCM8Q+mKtPBG
+         rHkTowooO9hnNLnukEgF+HD6fpTDEHM0dQtXRxIg9zZVoDc+jIH3Wdjil9LcV2oKQ7RH
+         8aME4kYzH4IKMBo78SFj0WLNT1JXooVFjcRa9LWi9imn9wpaoog46Rv5RjF89dOKUDh3
+         aRtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=SoWMJOtoC4VF3gtGCj5O3Tu04aNeKdj58z7B8SFxIqM=;
+        b=cuIfd6Dniumd7iqXAiLK1ubLcIQnZZuP2mvZy2om75rghAyzQETOzEDEKs0JloVrsG
+         wx4VsscRmwFzq/bO9NBCp3fTkluOr3wzwBIUTt1PXGsWHbzhAvF+sf86Yu4Gaf0IooQF
+         tCKFuKeSyJgcPnFXDS8sQlSMIvo7KMyO7XRaldDx6Ia7BVeXj4vC6bwB2VwMzpgxy1xt
+         A+oPe/HiaD2hHL7iYCQRKSBajhzQIs6iJeTj4gFoVE+qlIpracB7Wzhm0F/5Gp4B8yEb
+         oYDIYaSk2LgsYDK3UqyCntemI9BN7WJP/SJcYxY/Kr9wpsFcPKiQXuhdUshjtwGyFJVS
+         GWYA==
+X-Gm-Message-State: AOAM531hKWKqa9HKTimY00EG4DXr5Upkkl92Cm5G5KYsNUDF4zIUljE9
+        DN2LuvR3y6ytRrl6AjFxSQY=
+X-Google-Smtp-Source: ABdhPJz4ZrLzGTxlc6zAj7n1JxzI+lG293o9yp1Z9B3gl0GdTpo3+tQZooXUQNjz8ZkOpdYZx89nPg==
+X-Received: by 2002:a17:90a:ed87:: with SMTP id k7mr27212839pjy.31.1593765403818;
+        Fri, 03 Jul 2020 01:36:43 -0700 (PDT)
+Received: from localhost.localdomain (cpe-70-95-176-223.san.res.rr.com. [70.95.176.223])
+        by smtp.gmail.com with ESMTPSA id w15sm10141937pjb.44.2020.07.03.01.36.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jul 2020 01:36:43 -0700 (PDT)
+From:   Chris Dickens <christopher.a.dickens@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb <linux-usb@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>, andrzej.p@samsung.com,
+        Chris Dickens <christopher.a.dickens@gmail.com>
+Subject: [PATCH] usb: gadget: composite: Remove dedicated OS Feature Descriptors request
+Date:   Fri,  3 Jul 2020 01:35:34 -0700
+Message-Id: <20200703083534.5292-1-christopher.a.dickens@gmail.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200703072436.GB2225285@kroah.com>
+References: <20200703072436.GB2225285@kroah.com>
 MIME-Version: 1.0
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR12MB1432.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4421a3fb-4faf-44ec-62b9-08d81f2adcc2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jul 2020 08:27:02.4739
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: rC5fEjGktPSG14fTxuxY5wzhEun6XUS3bLyRbKmG12W8H014LkmqSQU57fOaKOzDntb7x9DpAQetTQI8pDN9Jw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1240
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGksDQoNCk9uIDcvMy8yMDIwIDEyOjE5IFBNLCBncmVna2hAbGludXhmb3VuZGF0aW9uLm9yZyB3
-cm90ZToNCj4gT24gRnJpLCBKdWwgMDMsIDIwMjAgYXQgMDc6NDM6MTBBTSArMDAwMCwgTWluYXMg
-SGFydXR5dW55YW4gd3JvdGU6DQo+PiBIaSwNCj4+DQo+PiBPbiA3LzMvMjAyMCAxMTozNCBBTSwg
-Z3JlZ2toQGxpbnV4Zm91bmRhdGlvbi5vcmcgd3JvdGU6DQo+Pj4NCj4+PiBUaGlzIGlzIGEgbm90
-ZSB0byBsZXQgeW91IGtub3cgdGhhdCBJJ3ZlIGp1c3QgYWRkZWQgdGhlIHBhdGNoIHRpdGxlZA0K
-Pj4+DQo+Pj4gICAgICAgdXNiOiBkd2MyOiBnYWRnZXQ6IERvIG5vdCByZWFkIEdJTlRNU0syDQo+
-Pj4NCj4+PiB0byBteSB1c2IgZ2l0IHRyZWUgd2hpY2ggY2FuIGJlIGZvdW5kIGF0DQo+Pj4gICAg
-ICAgZ2l0Oi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L2dyZWdraC91
-c2IuZ2l0DQo+Pj4gaW4gdGhlIHVzYi10ZXN0aW5nIGJyYW5jaC4NCj4+Pg0KPj4+IFRoZSBwYXRj
-aCB3aWxsIHNob3cgdXAgaW4gdGhlIG5leHQgcmVsZWFzZSBvZiB0aGUgbGludXgtbmV4dCB0cmVl
-DQo+Pj4gKHVzdWFsbHkgc29tZXRpbWUgd2l0aGluIHRoZSBuZXh0IDI0IGhvdXJzIGR1cmluZyB0
-aGUgd2Vlay4pDQo+Pj4NCj4+PiBUaGUgcGF0Y2ggd2lsbCBiZSBtZXJnZWQgdG8gdGhlIHVzYi1u
-ZXh0IGJyYW5jaCBzb21ldGltZSBzb29uLA0KPj4+IGFmdGVyIGl0IHBhc3NlcyB0ZXN0aW5nLCBh
-bmQgdGhlIG1lcmdlIHdpbmRvdyBpcyBvcGVuLg0KPj4+DQo+Pj4gSWYgeW91IGhhdmUgYW55IHF1
-ZXN0aW9ucyBhYm91dCB0aGlzIHByb2Nlc3MsIHBsZWFzZSBsZXQgbWUga25vdy4NCj4+Pg0KPj4N
-Cj4+IFRoaXMgcGF0Y2ggaXMgbm90IGNvcnJlY3QuIFBsZWFzZSByZWFkIGJlbG93Lg0KPj4+DQo+
-Pj4gICBGcm9tIDRmMWFlOWQ2MGFkYjNkNGY5YjhlYTk0ZjAyYmZjODgzZjk1NGJlZDYgTW9uIFNl
-cCAxNyAwMDowMDowMCAyMDAxDQo+Pj4gRnJvbTogTGVlIEpvbmVzIDxsZWUuam9uZXNAbGluYXJv
-Lm9yZz4NCj4+PiBEYXRlOiBUaHUsIDIgSnVsIDIwMjAgMTU6NDY6MDQgKzAxMDANCj4+PiBTdWJq
-ZWN0OiB1c2I6IGR3YzI6IGdhZGdldDogRG8gbm90IHJlYWQgR0lOVE1TSzINCj4+PiBNSU1FLVZl
-cnNpb246IDEuMA0KPj4+IENvbnRlbnQtVHlwZTogdGV4dC9wbGFpbjsgY2hhcnNldD1VVEYtOA0K
-Pj4+IENvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhiaXQNCj4+Pg0KPj4+IFRoZSB2YWx1ZSBv
-ZiBHSU5UTVNLMiBoYXNuJ3QgYmVlbiBjaGVja2VkIHNpbmNlIHRoZSBpbmNlcHRpb24gb2YNCj4+
-PiBkd2MyX2dhZGdldF93a3VwX2FsZXJ0X2hhbmRsZXIoKSBpbiAyMDE4Lg0KPj4+DQo+Pj4gRml4
-ZXMgdGhlIGZvbGxvd2luZyBXPTEgd2FybmluZzoNCj4+Pg0KPj4+ICAgIGRyaXZlcnMvdXNiL2R3
-YzIvZ2FkZ2V0LmM6IEluIGZ1bmN0aW9uIOKAmGR3YzJfZ2FkZ2V0X3drdXBfYWxlcnRfaGFuZGxl
-cuKAmToNCj4+PiAgICBkcml2ZXJzL3VzYi9kd2MyL2dhZGdldC5jOjI1OTo2OiB3YXJuaW5nOiB2
-YXJpYWJsZSDigJhnaW50bXNrMuKAmSBzZXQgYnV0IG5vdCB1c2VkIFstV3VudXNlZC1idXQtc2V0
-LXZhcmlhYmxlXQ0KPj4+ICAgIDI1OSB8IHUzMiBnaW50bXNrMjsNCj4+PiAgICB8IF5+fn5+fn5+
-DQo+Pj4NCj4+PiBDYzogTWluYXMgSGFydXR5dW55YW4gPGhtaW5hc0BzeW5vcHN5cy5jb20+DQo+
-Pj4gQ2M6IEJlbiBEb29rcyA8YmVuQHNpbXRlYy5jby51az4NCj4+PiBTaWduZWQtb2ZmLWJ5OiBM
-ZWUgSm9uZXMgPGxlZS5qb25lc0BsaW5hcm8ub3JnPg0KPj4+IExpbms6IGh0dHBzOi8vdXJsZGVm
-ZW5zZS5jb20vdjMvX19odHRwczovL2xvcmUua2VybmVsLm9yZy9yLzIwMjAwNzAyMTQ0NjI1LjI1
-MzM1MzAtMTAtbGVlLmpvbmVzQGxpbmFyby5vcmdfXzshIUE0RjJSOUdfcGchTWxYdm4wdFNrVHZz
-R1pab1dENXpxXzFPd3EtVS1ESUhOYUhveVUxT2ZHOFR3R0dRQkVmbzlnMG45cjJUeHZRJA0KPj4+
-IFNpZ25lZC1vZmYtYnk6IEdyZWcgS3JvYWgtSGFydG1hbiA8Z3JlZ2toQGxpbnV4Zm91bmRhdGlv
-bi5vcmc+DQo+Pj4gLS0tDQo+Pj4gICAgZHJpdmVycy91c2IvZHdjMi9nYWRnZXQuYyB8IDIgLS0N
-Cj4+PiAgICAxIGZpbGUgY2hhbmdlZCwgMiBkZWxldGlvbnMoLSkNCj4+Pg0KPj4+IGRpZmYgLS1n
-aXQgYS9kcml2ZXJzL3VzYi9kd2MyL2dhZGdldC5jIGIvZHJpdmVycy91c2IvZHdjMi9nYWRnZXQu
-Yw0KPj4+IGluZGV4IDFkZWY5MDAwZjkzNi4uZWE3YzljNzNiNGZmIDEwMDY0NA0KPj4+IC0tLSBh
-L2RyaXZlcnMvdXNiL2R3YzIvZ2FkZ2V0LmMNCj4+PiArKysgYi9kcml2ZXJzL3VzYi9kd2MyL2dh
-ZGdldC5jDQo+Pj4gQEAgLTI1NiwxMCArMjU2LDggQEAgaW50IGR3YzJfaHNvdGdfdHhfZmlmb190
-b3RhbF9kZXB0aChzdHJ1Y3QgZHdjMl9oc290ZyAqaHNvdGcpDQo+Pj4gICAgc3RhdGljIHZvaWQg
-ZHdjMl9nYWRnZXRfd2t1cF9hbGVydF9oYW5kbGVyKHN0cnVjdCBkd2MyX2hzb3RnICpoc290ZykN
-Cj4+PiAgICB7DQo+Pj4gICAgCXUzMiBnaW50c3RzMjsNCj4+PiAtCXUzMiBnaW50bXNrMjsNCj4+
-PiAgICANCj4+PiAgICAJZ2ludHN0czIgPSBkd2MyX3JlYWRsKGhzb3RnLCBHSU5UU1RTMik7DQo+
-Pj4gLQlnaW50bXNrMiA9IGR3YzJfcmVhZGwoaHNvdGcsIEdJTlRNU0syKTsNCj4+PiAgICANCj4+
-PiAgICAJaWYgKGdpbnRzdHMyICYgR0lOVFNUUzJfV0tVUF9BTEVSVF9JTlQpIHsNCj4+PiAgICAJ
-CWRldl9kYmcoaHNvdGctPmRldiwgIiVzOiBXa3VwX0FsZXJ0X0ludFxuIiwgX19mdW5jX18pOw0K
-Pj4NCj4+IExlZSwgJ2dpbnRzdHMyJyBjYW4ndCBiZSByZW1vdmVkLiBKdXN0LCBwbGVhc2UgYWRk
-IGZvbGxvdyBsaW5lIGFmdGVyDQo+PiByZWFkaW5nIGdpbnRtc2syOg0KPj4NCj4+IAlnaW50c3Rz
-MiAmPSBnaW50bXNrMjsNCj4gDQo+IFNvIHRoYXQncyBhIHJlYWwgYnVnZml4IG5lZWRlZD8NCj4g
-DQoNClllcywgaGVyZSByZWFsIGJ1Z2ZpeCBuZWVkLCBvdGhlcndpc2Ugc3B1cmlvdXMgaW50ZXJy
-dXB0ICd3a3VwX2FsZXJ0JyANCmNhbiBiZSBoYW5kbGVkLg0KDQpUaGFua3MsDQpNaW5hcw0KDQo+
-IE9rLCBJJ2xsIGRyb3AgdGhpcyBwYXRjaCBmcm9tIHRoZSB0cmVlIG5vdywgdGhhbmtzLg0KPiAN
-Cj4gZ3JlZyBrLWgNCj4gDQo=
+Currently Microsoft OS Feature Descriptors are handled using a
+separately allocated USB request, however everything about this USB
+request is identical to the USB request used for all other control
+responses. Simplify the code by removing this separate USB request and
+using the same USB request as all other control responses.
+
+While at it, simplify the composite_ep0_queue() function by removing the
+req and gfp_flags arguments. The former is no longer necessary with a
+single USB request and the latter is always GFP_ATOMIC.
+
+Signed-off-by: Chris Dickens <christopher.a.dickens@gmail.com>
+---
+ drivers/usb/gadget/composite.c | 69 +++++-----------------------------
+ drivers/usb/gadget/configfs.c  | 11 ------
+ include/linux/usb/composite.h  |  9 -----
+ 3 files changed, 9 insertions(+), 80 deletions(-)
+
+diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+index 5c1eb96a5c57..020801e70caf 100644
+--- a/drivers/usb/gadget/composite.c
++++ b/drivers/usb/gadget/composite.c
+@@ -1443,26 +1443,17 @@ static void composite_setup_complete(struct usb_ep *ep, struct usb_request *req)
+ 
+ 	if (cdev->req == req)
+ 		cdev->setup_pending = false;
+-	else if (cdev->os_desc_req == req)
+-		cdev->os_desc_pending = false;
+ 	else
+ 		WARN(1, "unknown request %p\n", req);
+ }
+ 
+-static int composite_ep0_queue(struct usb_composite_dev *cdev,
+-		struct usb_request *req, gfp_t gfp_flags)
++static int composite_ep0_queue(struct usb_composite_dev *cdev)
+ {
+ 	int ret;
+ 
+-	ret = usb_ep_queue(cdev->gadget->ep0, req, gfp_flags);
+-	if (ret == 0) {
+-		if (cdev->req == req)
+-			cdev->setup_pending = true;
+-		else if (cdev->os_desc_req == req)
+-			cdev->os_desc_pending = true;
+-		else
+-			WARN(1, "unknown request %p\n", req);
+-	}
++	ret = usb_ep_queue(cdev->gadget->ep0, cdev->req, GFP_ATOMIC);
++	if (ret == 0)
++		cdev->setup_pending = true;
+ 
+ 	return ret;
+ }
+@@ -1519,7 +1510,7 @@ static int fill_ext_compat(struct usb_configuration *c, u8 *buf)
+ 				buf += 23;
+ 			}
+ 			count += 24;
+-			if (count + 24 >= USB_COMP_EP0_OS_DESC_BUFSIZ)
++			if (count + 24 >= USB_COMP_EP0_BUFSIZ)
+ 				return count;
+ 		}
+ 	}
+@@ -1581,7 +1572,7 @@ static int fill_ext_prop(struct usb_configuration *c, int interface, u8 *buf)
+ 			list_for_each_entry(ext_prop, &d->ext_prop, entry) {
+ 				n = ext_prop->data_len +
+ 					ext_prop->name_len + 14;
+-				if (count + n >= USB_COMP_EP0_OS_DESC_BUFSIZ)
++				if (count + n >= USB_COMP_EP0_BUFSIZ)
+ 					return count;
+ 				usb_ext_prop_put_size(buf, n);
+ 				usb_ext_prop_put_type(buf, ext_prop->type);
+@@ -1893,12 +1884,9 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
+ 			int				interface;
+ 			int				count = 0;
+ 
+-			req = cdev->os_desc_req;
+-			req->context = cdev;
+-			req->complete = composite_setup_complete;
+ 			buf = req->buf;
+ 			os_desc_cfg = cdev->os_desc_config;
+-			w_length = min_t(u16, w_length, USB_COMP_EP0_OS_DESC_BUFSIZ);
++			w_length = min_t(u16, w_length, USB_COMP_EP0_BUFSIZ);
+ 			memset(buf, 0, w_length);
+ 			buf[5] = 0x01;
+ 			switch (ctrl->bRequestType & USB_RECIP_MASK) {
+@@ -2019,7 +2007,7 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
+ 		req->length = value;
+ 		req->context = cdev;
+ 		req->zero = value < w_length;
+-		value = composite_ep0_queue(cdev, req, GFP_ATOMIC);
++		value = composite_ep0_queue(cdev);
+ 		if (value < 0) {
+ 			DBG(cdev, "ep_queue --> %d\n", value);
+ 			req->status = 0;
+@@ -2187,30 +2175,6 @@ int composite_dev_prepare(struct usb_composite_driver *composite,
+ 	return ret;
+ }
+ 
+-int composite_os_desc_req_prepare(struct usb_composite_dev *cdev,
+-				  struct usb_ep *ep0)
+-{
+-	int ret = 0;
+-
+-	cdev->os_desc_req = usb_ep_alloc_request(ep0, GFP_KERNEL);
+-	if (!cdev->os_desc_req) {
+-		ret = -ENOMEM;
+-		goto end;
+-	}
+-
+-	cdev->os_desc_req->buf = kmalloc(USB_COMP_EP0_OS_DESC_BUFSIZ,
+-					 GFP_KERNEL);
+-	if (!cdev->os_desc_req->buf) {
+-		ret = -ENOMEM;
+-		usb_ep_free_request(ep0, cdev->os_desc_req);
+-		goto end;
+-	}
+-	cdev->os_desc_req->context = cdev;
+-	cdev->os_desc_req->complete = composite_setup_complete;
+-end:
+-	return ret;
+-}
+-
+ void composite_dev_cleanup(struct usb_composite_dev *cdev)
+ {
+ 	struct usb_gadget_string_container *uc, *tmp;
+@@ -2220,15 +2184,6 @@ void composite_dev_cleanup(struct usb_composite_dev *cdev)
+ 		list_del(&uc->list);
+ 		kfree(uc);
+ 	}
+-	if (cdev->os_desc_req) {
+-		if (cdev->os_desc_pending)
+-			usb_ep_dequeue(cdev->gadget->ep0, cdev->os_desc_req);
+-
+-		kfree(cdev->os_desc_req->buf);
+-		cdev->os_desc_req->buf = NULL;
+-		usb_ep_free_request(cdev->gadget->ep0, cdev->os_desc_req);
+-		cdev->os_desc_req = NULL;
+-	}
+ 	if (cdev->req) {
+ 		if (cdev->setup_pending)
+ 			usb_ep_dequeue(cdev->gadget->ep0, cdev->req);
+@@ -2286,12 +2241,6 @@ static int composite_bind(struct usb_gadget *gadget,
+ 	if (status < 0)
+ 		goto fail;
+ 
+-	if (cdev->use_os_string) {
+-		status = composite_os_desc_req_prepare(cdev, gadget->ep0);
+-		if (status)
+-			goto fail;
+-	}
+-
+ 	update_unchanged_dev_desc(&cdev->desc, composite->dev);
+ 
+ 	/* has userspace failed to provide a serial number? */
+@@ -2460,7 +2409,7 @@ void usb_composite_setup_continue(struct usb_composite_dev *cdev)
+ 		DBG(cdev, "%s: Completing delayed status\n", __func__);
+ 		req->length = 0;
+ 		req->context = cdev;
+-		value = composite_ep0_queue(cdev, req, GFP_ATOMIC);
++		value = composite_ep0_queue(cdev);
+ 		if (value < 0) {
+ 			DBG(cdev, "ep_queue --> %d\n", value);
+ 			req->status = 0;
+diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+index 9dc06a4e1b30..24a86de6293c 100644
+--- a/drivers/usb/gadget/configfs.c
++++ b/drivers/usb/gadget/configfs.c
+@@ -1232,12 +1232,6 @@ static int configfs_do_nothing(struct usb_composite_dev *cdev)
+ 	return -EINVAL;
+ }
+ 
+-int composite_dev_prepare(struct usb_composite_driver *composite,
+-		struct usb_composite_dev *dev);
+-
+-int composite_os_desc_req_prepare(struct usb_composite_dev *cdev,
+-				  struct usb_ep *ep0);
+-
+ static void purge_configs_funcs(struct gadget_info *gi)
+ {
+ 	struct usb_configuration	*c;
+@@ -1393,11 +1387,6 @@ static int configfs_composite_bind(struct usb_gadget *gadget,
+ 		}
+ 		usb_ep_autoconfig_reset(cdev->gadget);
+ 	}
+-	if (cdev->use_os_string) {
+-		ret = composite_os_desc_req_prepare(cdev, gadget->ep0);
+-		if (ret)
+-			goto err_purge_funcs;
+-	}
+ 
+ 	usb_ep_autoconfig_reset(cdev->gadget);
+ 	return 0;
+diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
+index 2040696d75b6..505d3509a8bb 100644
+--- a/include/linux/usb/composite.h
++++ b/include/linux/usb/composite.h
+@@ -54,9 +54,6 @@
+ /* big enough to hold our biggest descriptor */
+ #define USB_COMP_EP0_BUFSIZ	4096
+ 
+-/* OS feature descriptor length <= 4kB */
+-#define USB_COMP_EP0_OS_DESC_BUFSIZ	4096
+-
+ #define USB_MS_TO_HS_INTERVAL(x)	(ilog2((x * 1000 / 125)) + 1)
+ struct usb_configuration;
+ 
+@@ -423,8 +420,6 @@ extern void usb_composite_unregister(struct usb_composite_driver *driver);
+ extern void usb_composite_setup_continue(struct usb_composite_dev *cdev);
+ extern int composite_dev_prepare(struct usb_composite_driver *composite,
+ 		struct usb_composite_dev *cdev);
+-extern int composite_os_desc_req_prepare(struct usb_composite_dev *cdev,
+-					 struct usb_ep *ep0);
+ void composite_dev_cleanup(struct usb_composite_dev *cdev);
+ 
+ static inline struct usb_composite_driver *to_cdriver(
+@@ -440,14 +435,12 @@ static inline struct usb_composite_driver *to_cdriver(
+  * struct usb_composite_device - represents one composite usb gadget
+  * @gadget: read-only, abstracts the gadget's usb peripheral controller
+  * @req: used for control responses; buffer is pre-allocated
+- * @os_desc_req: used for OS descriptors responses; buffer is pre-allocated
+  * @config: the currently active configuration
+  * @qw_sign: qwSignature part of the OS string
+  * @b_vendor_code: bMS_VendorCode part of the OS string
+  * @use_os_string: false by default, interested gadgets set it
+  * @os_desc_config: the configuration to be used with OS descriptors
+  * @setup_pending: true when setup request is queued but not completed
+- * @os_desc_pending: true when os_desc request is queued but not completed
+  *
+  * One of these devices is allocated and initialized before the
+  * associated device driver's bind() is called.
+@@ -478,7 +471,6 @@ static inline struct usb_composite_driver *to_cdriver(
+ struct usb_composite_dev {
+ 	struct usb_gadget		*gadget;
+ 	struct usb_request		*req;
+-	struct usb_request		*os_desc_req;
+ 
+ 	struct usb_configuration	*config;
+ 
+@@ -513,7 +505,6 @@ struct usb_composite_dev {
+ 
+ 	/* public: */
+ 	unsigned int			setup_pending:1;
+-	unsigned int			os_desc_pending:1;
+ };
+ 
+ extern int usb_string_id(struct usb_composite_dev *c);
+-- 
+2.27.0
+
