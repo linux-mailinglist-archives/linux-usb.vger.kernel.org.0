@@ -2,132 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AB4A213E79
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Jul 2020 19:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 794E9213EB1
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jul 2020 19:44:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726801AbgGCRVz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jul 2020 13:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41316 "EHLO
+        id S1726178AbgGCRl6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jul 2020 13:41:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726157AbgGCRVy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jul 2020 13:21:54 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB8C8C08C5DD
-        for <linux-usb@vger.kernel.org>; Fri,  3 Jul 2020 10:21:52 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id a6so22737927wmm.0
-        for <linux-usb@vger.kernel.org>; Fri, 03 Jul 2020 10:21:52 -0700 (PDT)
+        with ESMTP id S1726035AbgGCRl6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jul 2020 13:41:58 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1871C061794
+        for <linux-usb@vger.kernel.org>; Fri,  3 Jul 2020 10:41:57 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id r12so33506487wrj.13
+        for <linux-usb@vger.kernel.org>; Fri, 03 Jul 2020 10:41:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=8ete6I4ixSjbonl8sGfOuxL0bZF6e3pE/Fs8ioQCGKQ=;
-        b=mfAZokO+WjGIsaCnXXptSbe05uvi4l7PSLIxYAaKNw444xSdOO4zv8QucMewmHfitM
-         5wtOXBgXg8fP6E3JyQpl0HAr/fpB4sDFRKlFPefdk9+fczavZ4UjuXpLp/YicK4Rcr3U
-         TFqIhhRhx4yRK5PU6DBK9SZSfTLEwLBDt7i/4T0rHDzniT/pmRbJoTmH0njqmkoF/1fg
-         1PEyklputJfe5lw27QjiN7iIRVBhd1t6HO1xZxtMWugVAXqAALUNQIZZjwVkSVpE9TtJ
-         w9UwaCMAYOd4oQR6x2l5T+DQqjUMgOCxsBSLifHex5Lfl2Tpa9vLAtwfG7WYAS8/yBuf
-         3OWQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=As4hY4i9MK8iV/24T8EMNeA73jw6PU1siON2AJDWkyg=;
+        b=EAm+moPX549aWgfLSIIEtg1s6FbbNXpi4BLs2cMLGg3US93Xf2FKBNL7b/Ex6v/KGv
+         OVyZGPU/1QIQ945gCBdqPI32KpoQA1qxSWRHxj8yCyPGAA35BXSjou9ybf+DbZ9eXAx5
+         Nif/HVYYFPQg7gRjCW4iNAehlZYNqfzuqkwtK4akIOUBpUMGdMue6vb8z/pfCyAIwATE
+         2j8rUQ8Gg2jG2EdyDFbOOW+SQXGF3K9OpOFejYx4DPzN99ttxXGC8l9IZadQ423lTr06
+         mm5CBKMQOfyDp/2pJbPmHqi2Dn+2sDFQ118ZxYxTaQDG2hDXmQUv4+M0vHnwH/gzU2oO
+         eO/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=8ete6I4ixSjbonl8sGfOuxL0bZF6e3pE/Fs8ioQCGKQ=;
-        b=bH5NeNizRUGF5ixBM6WSm7pk9w1CwrA76ZBdM24In0CUM9y8/cElSNt2wX5an9/TVm
-         X4oHMODoVMzOqcEp4fHX64tGTC0tk7i6saN1qJoIgTu1I0fZmdBad3HZd7GNGlXWU8bF
-         +Ea68dtWMYNlyFploO+tQgV1feSTPxlV6/UFHPb26WV7Nt+GRk5M1+NcMEkhSBXRqWZd
-         XZehjbF1ebif5LpWMTJLRN/vKJmNau3eeYjnD3kHkGLwSPWwten9X+KqGJU/2kxNX6Fu
-         LawTkj+BbnAu8ETdfuv9WqzSFPC8ykoorJYZUpksrZkFzl6oZcSVgMmL/0O8Jlez+uhN
-         TpVA==
-X-Gm-Message-State: AOAM530FCPpdgjDxewFU/cmM6oCIrJwBzAXc7iONM1WdrZrzLlu/Sf5a
-        GmG/eHhjLvBK7CDp8myV2sL4tg==
-X-Google-Smtp-Source: ABdhPJwgqFiZK7yvPBmX2Ha7Poc2II8t97vwg4ExlUBs3GokKuV9Cz8COt1NQZk47tn4YMKaSWa/0A==
-X-Received: by 2002:a1c:80c8:: with SMTP id b191mr35735658wmd.37.1593796911630;
-        Fri, 03 Jul 2020 10:21:51 -0700 (PDT)
-Received: from dell ([2.27.35.144])
-        by smtp.gmail.com with ESMTPSA id x18sm14464840wrq.13.2020.07.03.10.21.50
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=As4hY4i9MK8iV/24T8EMNeA73jw6PU1siON2AJDWkyg=;
+        b=NE8PsDt5I+LkB1nWtc9gdeAwTGmmCDfhzBwYT8jf8ZlsCGC3DZWeE1rs6LqkiA/d9d
+         i7hLvJo/Pi8FQ9cJx1IM4F6Rng2eNn2HBnyKHVpTTSouNt8J/XtfSy1bGtB2Puh5kX3y
+         z+6WiXirZOUx/OCtqxtD2j2Yx88dedx9/yZ+Z0fOLKToGLyxD8NgC0rkSm6RuWha1nDw
+         6GKf1n1xoilh9yTT5TS9IZw4nxzIvP55DpoZeq0q2YhOdl5z7B5xuQh3hNFixpF95S/O
+         iP05SV+O2sBPAM2daW3eD1nc5CdPdnXWpXtVyyqU69fjE0qm3cWARHG6DPNoSlctbiVD
+         KISQ==
+X-Gm-Message-State: AOAM530U3ADPruPgN3rKu66x10h/cz896lpRtvKFwU2aIXjjVPgnTHyY
+        TuUD/VPLObMtSJq6FXBLJgf35A==
+X-Google-Smtp-Source: ABdhPJxL+2NW/+3Cvrw8qiuUura3g5ZSBVYDIQcc5J8oi2F8pt9r+S3zJ9piJWXAJ7Eu5S5IpGYlyA==
+X-Received: by 2002:adf:edd0:: with SMTP id v16mr37168565wro.214.1593798116249;
+        Fri, 03 Jul 2020 10:41:56 -0700 (PDT)
+Received: from localhost.localdomain ([2.27.35.144])
+        by smtp.gmail.com with ESMTPSA id x11sm13625799wmc.26.2020.07.03.10.41.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jul 2020 10:21:50 -0700 (PDT)
-Date:   Fri, 3 Jul 2020 18:21:48 +0100
+        Fri, 03 Jul 2020 10:41:55 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
+To:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 00/30] Fix a bunch of W=1 issues in USB
-Message-ID: <20200703172148.GD2743379@dell>
-References: <20200702144625.2533530-1-lee.jones@linaro.org>
- <20200703073725.GA2370189@kroah.com>
+        Lee Jones <lee.jones@linaro.org>
+Subject: [PATCH 00/30] Fix a bunch more W=1 issues in USB
+Date:   Fri,  3 Jul 2020 18:41:18 +0100
+Message-Id: <20200703174148.2749969-1-lee.jones@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200703073725.GA2370189@kroah.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 03 Jul 2020, Greg KH wrote:
+This set is part of a larger effort attempting to clean-up W=1
+kernel builds, which are currently overwhelmingly riddled with
+niggly little warnings.
 
-> On Thu, Jul 02, 2020 at 03:45:55PM +0100, Lee Jones wrote:
-> > This set is part of a larger effort attempting to clean-up W=1
-> > kernel builds, which are currently overwhelmingly riddled with
-> > niggly little warnings.
-> > 
-> > Lee Jones (30):
-> >   usb: phy: phy: Fix-up a whole bunch of formatting issues
-> >   usb: host: pci-quirks: Demote function header from kerneldoc to
-> >     comment block
-> >   usb: common: debug: Demote comment blocks which are obviously not
-> >     kerneldoc
-> >   usb: common: usb-conn-gpio: Demote comment block which is clearly not
-> >     kerneldoc
-> >   usb: dwc3: drd: File headers are not doc headers
-> >   usb: dwc3: ulpi: File headers are not doc headers
-> >   usb: common: ulpi: Fix a few kerneldoc related issues
-> >   usb: dwc3: dwc3-omap: Do not read DMA status
-> >   usb: dwc2: gadget: Do not read GINTMSK2
-> >   usb: dwc2: gadget: Remove assigned but never used 'maxsize'
-> >   usb: dwc2: gadget: Avoid pointless read of EP control register
-> >   usb: host: ehci-omap: Provide documentation for
-> >     ehci_hcd_omap_probe()'s arg 'pdev'
-> >   usb: cdns3: core: Fix incorrect formatting and misspelled function arg
-> >     docs
-> >   usb: cdns3: ep0: Fix a bunch of kerneldoc issues
-> >   usb: dwc3: dwc3-haps: Function headers are not suitable for kerneldoc
-> >   usb: mtu3: mtu3_trace: Function headers are not suitable for kerneldoc
-> >   usb: cdns3: gadget: Fix a bunch of kernel doc issues
-> >   usb: dwc3: dwc3-of-simple: Function headers are not good candidates
-> >     for kerneldoc
-> >   usb: host: isp1362: Mark the many unused ISP1362_REG entries as
-> >     __maybe_unused
-> >   usb: host: ohci-at91: Demote kerneldoc headers down to basic comment
-> >     blocks
-> >   usb: host: ohci: Mark cc_to_error as __maybe_unused
-> >   usb: cdns3: ep0: Move 'zlp' description to appropriate function header
-> >   usb: host: oxu210hp-hcd: Move declaration of 'qtd' into 'ifdef
-> >     OXU_URB_TRACE'
-> >   usb: mtu3: mtu3_trace: Supply missing mtu3_debug.h include file
-> >   usb: mtu3: mtu3_core: Demote obvious misuse of kerneldoc to standard
-> >     comment block
-> >   usb: c67x00: c67x00-ll-hpi: Demote obvious misuse of kerneldoc to
-> >     standard comment blocks
-> >   usb: class: cdc-wdm: Provide description for usb_cdc_wdm_register()'s
-> >     manage_power arg
-> >   usb: c67x00: c67x00-hcd: Demote obvious misuse of kerneldoc to
-> >     standard comment blocks
-> >   usb: class: usbtmc: File headers are not good candidates for kerneldoc
-> >   usb: c67x00: c67x00-sched: Demote obvious misuse of kerneldoc to
-> >     standard comment blocks
-> 
-> I've applied 25 of these, if you could rebase and resend the remaining
-> ones, after fixing up the review comments made on them, that would be
-> wonderful.
+Lee Jones (30):
+  usb: mtu3: mtu3_debug: Add forward declaration of 'struct ssusb_mtk'
+  usb: host: ohci-s3c2410: Demote obvious misuse of kerneldoc to
+    standard comment block
+  usb: core: ledtrig-usbport: Demote obvious misuse of kerneldoc to
+    standard comment blocks
+  usb: misc: sisusbvga: sisusb_init: Mark all 'static const' arrays as
+    __maybe_unused
+  usb: atm: ueagle-atm: Demote obvious misuse of kerneldoc to standard
+    comment blocks
+  usb: misc: adutux: Demote obvious misuse of kerneldoc to standard
+    comment blocks
+  usb: chipidea: core: Document hw_port_test_set()'s missing 'ci'
+    argument
+  usb: gadget: udc: core: Fix a bunch of kerneldoc misdemeanours
+  usb: chipidea: otg: Fix kerneldoc issues relating to description of
+    'ci'
+  usb: chipidea: debug: Demote obvious misuse of kerneldoc to standard
+    comment blocks
+  usb: chipidea: udc: Add missing descriptions for function arg 'ci'
+  usb: chipidea: udc: Help out kerneldoc headers that have tried, demote
+    the others
+  usb: host: xhci: Demote obvious misuse of kerneldoc to standard
+    comment block
+  usb: host: xhci-mem: Demote obvious misuse of kerneldoc to standard
+    comment block
+  usb: host: xhci-dbgcap: File headers are not good candidates for
+    kerneldoc
+  usb: host: xhci-dbgtty: File headers are not good candidates for
+    kerneldoc
+  usb: chipidea: udc: Fix a few kerneldoc issues
+  usb: host: xhci-debugfs: Use 'gnu_printf' format notation
+  usb: storage: alauda: Remove set but unchecked variable
+  usb: typec: altmodes: displayport: File headers are not good
+    candidates for kerneldoc
+  usb: typec: altmodes: displayport: Supply missing displayport.h
+    include file
+  usb: typec: tcpm: fusb302: Use 'gnu_printf' format notation
+  usb: chipidea: usbmisc_imx: Demote obvious misuse of kerneldoc to
+    standard comment block
+  usb: misc: iowarrior: Fix odd corruption issue in the file header
+  usb: misc: iowarrior: Demote obvious misuse of kerneldoc to standard
+    comment blocks
+  usb: gadget: function: u_serial: Repair misdocumented function
+    argument
+  usb: misc: ldusb: Demote obvious misuse of kerneldoc to standard
+    comment blocks
+  usb: musb: musb_dsps: Demote obvious misuse of kerneldoc to standard
+    comment blocks
+  usb: gadget: usbstring: Repair misspelled function argument 'langid'
+  usb: gadget: udc: dummy_hcd: Repair misspelled function argument
+    'dummy_hcd'
 
-Will do.  Thanks Greg.
+ drivers/usb/atm/ueagle-atm.c             |  4 +-
+ drivers/usb/chipidea/core.c              |  1 +
+ drivers/usb/chipidea/debug.c             | 10 ++--
+ drivers/usb/chipidea/otg.c               |  6 ++-
+ drivers/usb/chipidea/udc.c               | 52 ++++++++++++-------
+ drivers/usb/chipidea/usbmisc_imx.c       |  2 +-
+ drivers/usb/core/ledtrig-usbport.c       |  6 +--
+ drivers/usb/gadget/function/u_serial.c   |  2 +-
+ drivers/usb/gadget/udc/core.c            | 18 ++++---
+ drivers/usb/gadget/udc/dummy_hcd.c       |  2 +-
+ drivers/usb/gadget/usbstring.c           |  2 +-
+ drivers/usb/host/ohci-s3c2410.c          |  2 +-
+ drivers/usb/host/xhci-dbgcap.c           |  2 +-
+ drivers/usb/host/xhci-dbgtty.c           |  2 +-
+ drivers/usb/host/xhci-debugfs.c          |  1 +
+ drivers/usb/host/xhci-mem.c              |  2 +-
+ drivers/usb/host/xhci.c                  |  2 +-
+ drivers/usb/misc/adutux.c                |  6 +--
+ drivers/usb/misc/iowarrior.c             | 16 +++---
+ drivers/usb/misc/ldusb.c                 | 24 ++++-----
+ drivers/usb/misc/sisusbvga/sisusb_init.h | 66 ++++++++++++------------
+ drivers/usb/mtu3/mtu3_debug.h            |  2 +
+ drivers/usb/musb/musb_dsps.c             |  8 +--
+ drivers/usb/storage/alauda.c             |  3 +-
+ drivers/usb/typec/altmodes/displayport.c |  3 +-
+ drivers/usb/typec/tcpm/fusb302.c         |  1 +
+ 26 files changed, 134 insertions(+), 111 deletions(-)
 
 -- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+2.25.1
+
