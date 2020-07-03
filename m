@@ -2,77 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87572213F4B
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Jul 2020 20:35:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2A93213F61
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jul 2020 20:45:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726236AbgGCSfq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jul 2020 14:35:46 -0400
-Received: from smtprelay0123.hostedemail.com ([216.40.44.123]:55226 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726147AbgGCSfq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jul 2020 14:35:46 -0400
-X-Greylist: delayed 355 seconds by postgrey-1.27 at vger.kernel.org; Fri, 03 Jul 2020 14:35:46 EDT
-Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-        by smtpgrave06.hostedemail.com (Postfix) with ESMTP id 0DD858016908
-        for <linux-usb@vger.kernel.org>; Fri,  3 Jul 2020 18:29:52 +0000 (UTC)
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay02.hostedemail.com (Postfix) with ESMTP id B474F4DD0;
-        Fri,  3 Jul 2020 18:29:50 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:152:355:379:599:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2393:2559:2562:3138:3139:3140:3141:3142:3352:3622:3865:3866:3867:3868:3870:3871:4321:5007:6691:7903:8957:10004:10400:10471:10848:11026:11232:11473:11658:11914:12043:12296:12297:12740:12895:13069:13161:13229:13255:13311:13357:13894:14659:14721:21080:21451:21627:30054:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
-X-HE-Tag: steam78_241640d26e94
-X-Filterd-Recvd-Size: 2347
-Received: from XPS-9350.home (unknown [47.151.133.149])
-        (Authenticated sender: joe@perches.com)
-        by omf14.hostedemail.com (Postfix) with ESMTPA;
-        Fri,  3 Jul 2020 18:29:49 +0000 (UTC)
-Message-ID: <af66b6e94a26ebd500c1376631891b0bdd0912f0.camel@perches.com>
-Subject: Re: [PATCH 04/30] usb: misc: sisusbvga: sisusb_init: Mark all
- 'static const' arrays as __maybe_unused
-From:   Joe Perches <joe@perches.com>
-To:     Lee Jones <lee.jones@linaro.org>, gregkh@linuxfoundation.org,
+        id S1726818AbgGCSpw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jul 2020 14:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54302 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726703AbgGCSpu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jul 2020 14:45:50 -0400
+Received: from smtp2.hosting90.cz (smtp2.hosting90.cz [IPv6:2a03:b780:1:0:216:3eff:fe00:24c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041A3C061794
+        for <linux-usb@vger.kernel.org>; Fri,  3 Jul 2020 11:45:49 -0700 (PDT)
+Received: from [46.229.122.58] (helo=[10.10.0.107])
+        by smtp2.hosting90.cz with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.92)
+        (envelope-from <Jerry@jrr.cz>)
+        id 1jrQh0-0005mi-DP; Fri, 03 Jul 2020 20:45:46 +0200
+Subject: Re: [PATCH v4] usbserial: cp210x - icount support for parity error
+ checking
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Thomas Winischhofer <thomas@winischhofer.net>
-Date:   Fri, 03 Jul 2020 11:29:48 -0700
-In-Reply-To: <20200703174148.2749969-5-lee.jones@linaro.org>
-References: <20200703174148.2749969-1-lee.jones@linaro.org>
-         <20200703174148.2749969-5-lee.jones@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.3-0ubuntu1 
+References: <20200621085816.GB95977@kroah.com>
+ <03712b5a-ecb6-ae42-ff8e-8d5d6f2ed918@jrr.cz>
+ <20200621095509.GA120230@kroah.com>
+ <470484c8-7afc-c593-5ca9-cdb97dba39e1@jrr.cz>
+ <20200621135838.GA125568@kroah.com>
+ <7bdff86f-0988-2afc-e1a6-35df2931fd5b@jrr.cz>
+ <20200622053146.GB134804@kroah.com>
+ <838f09f9-4063-1c2c-8b4d-c18dee6c18de@jrr.cz>
+ <20200701154257.GF3334@localhost>
+ <13482d69-b286-b20e-ee3a-f8c5f12aad18@jrr.cz>
+ <20200703074539.GB3453@localhost>
+From:   Jerry <Jerry@jrr.cz>
+Message-ID: <8a501a7f-68fa-c6a3-30aa-c941f5c2a66f@jrr.cz>
+Date:   Fri, 3 Jul 2020 20:45:45 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Firefox/60.0 SeaMonkey/2.53.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200703074539.GB3453@localhost>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Antivirus: Clamav/CLEAN
+X-Scan-Signature: 9ac42a2ccaf5c48bc7e928793261b071
+X-Authenticated-Id: jerry@jrr.cz
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 2020-07-03 at 18:41 +0100, Lee Jones wrote:
-> drivers/usb/misc/sisusbvga/sisusb_init.h is included by a few
-> source files.  Most of which do not use the majority of the
-> shared static const arrays which have been declared.  This
-> causes the build system to spew 100's of warnings.
-> 
-> Fixes the following W=1 kernel build warning(s) - and a whole lot more:
-> 
->  In file included from drivers/usb/misc/sisusbvga/sisusb.c:54:
->  drivers/usb/misc/sisusbvga/sisusb_init.h:695:34: warning: ‘SiSUSB_VCLKData’ defined but not used [-Wunused-const-variable=]
->  695 | static const struct SiS_VCLKData SiSUSB_VCLKData[] = {
->  | ^~~~~~~~~~~~~~~
-> [10's of lines snipped]
->  drivers/usb/misc/sisusbvga/sisusb_init.h:206:28: warning: ‘SiS_VGA_DAC’ defined but not used [-Wunused-const-variable=]
->  206 | static const unsigned char SiS_VGA_DAC[] = {
->  | ^~~~~~~~~~~
-> [10's of lines snipped]
->  drivers/usb/misc/sisusbvga/sisusb_init.h:171:29: warning: ‘ModeIndex_1280x1024’ defined but not used [-Wunused-const-variable=]
->  171 | static const unsigned short ModeIndex_1280x1024[] = { 0x3a, 0x4d, 0x00, 0x65 };
->  | ^~~~~~~~~~~~~~~~~~~
-> [10's of lines snipped]
 
-They are not __maybe_unused, they _are_ used.
+Johan Hovold wrote on 7/3/20 9:45 AM:
+> Heh, yeah, it tends to be that way. :) But thanks for the great summary
+> of your findings!
+>
+> I think it probably makes most sense to keep the error in as it's a
+> quirk of the device rather than risk missing an actual overrun.
+OK
+> The problem here is that we're sort of violating the API and turning
+> TIOCGICOUNT into a polling interface instead of just returning our error
+> and interrupt counters. This means will always undercount any errors for
+> a start.
+>
+> The chip appears to have a mechanism for reporting errors in-band, but
+> that would amount to processing every character received to look for the
+> escape char, which adds overhead. I'm guessing that interface would also
+> insert an overrun error when returning the first character.
+Yes, it is posible to use EMBED_EVENTS and chip will insert event codes 
+into stream of data bytes. But it will cost some processing power and if 
+transmitted data contains ESC char it will be escaped so it will cost some 
+additional bandwidth. In the worst case (all received data = ESC) it means 
+double bandwidth.
 
-I think these instead should be moved to where
-they are used instead of being declared in an
-#include file.
+I have found such solution here:
+https://github.com/fortian/cp210x/blob/master/cp210x.c
+but it is quite complex and I expected argument that it costs too much 
+(especially when using maximum baudrate) so I suggested simple way which 
+doesn't have an impact until ioctl is called.
+> But perhaps that it was we should be using as it allows parity the
+> errors to be reported using the normal in-band methods. If we only
+> enable it when parity checking is enabled then the overhead seems
+> justified.
+>
+> I did a quick test here and the event insertion appears to work well for
+> parity errors. Didn't manage to get it to report break events yet, and
+> modem-status changes are being buffered and not reported until the next
+> character. But in theory we could expand the implementation to provide
+> more features later.
+>
+> I'll see if I can cook something up quickly.
 
+>> I suppose that GET_COMM_STATUS reads and CLEAR pending error flags (not
+>> explained in datasheet but behaves that way). So if some errors are
+>> reported during cp210x_tx_empty() it can be either counted immediately or
+>> lost. I'm not sure if cp210x_tx_empty() is called ONLY during close but
+>> seems be more consistent to count every detected error regardless who calls
+>> GET_COMM_STATUS.
+> tx_empty() is called when waiting for data to be drained for example
+> during close but also on when changing terminal settings with TCSADRAIN
+> or on tcdrain().
+But losing an error during tcdrain() is definitely wrong. It is common to 
+send (write) some request, then call tcdrain to be sure that whole request 
+was transmitted and then receive response. Calling tcdrain is necessary in 
+combination with GPIO manipulation but it can also be useful to measure 
+correct timeout because I need to know that data was already transmitted to 
+target (it can take long time for slow baudrate). There is no reason to 
+discard error flags during such waiting.
+
+> Correct.
+>
+> It's quite possible that that's missing elsewhere, but at least those
+> counters are updated in completion callbacks which do not run in
+> parallel unlike ioctls(), which are not serialised.
+>
+> Johan
+
+Jerry
 
