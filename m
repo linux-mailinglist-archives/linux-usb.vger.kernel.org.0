@@ -2,107 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CFE5213490
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Jul 2020 09:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B161B213494
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jul 2020 09:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725949AbgGCHAl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jul 2020 03:00:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49800 "EHLO mail.kernel.org"
+        id S1725960AbgGCHCR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jul 2020 03:02:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50042 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725764AbgGCHAl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 3 Jul 2020 03:00:41 -0400
+        id S1725764AbgGCHCR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 3 Jul 2020 03:02:17 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7DA3D20771;
-        Fri,  3 Jul 2020 07:00:40 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BA9BC206DF;
+        Fri,  3 Jul 2020 07:02:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593759641;
-        bh=1WDavdsilEKm5xWoHhjsqrLaLimDNs2dH/OKKPB/hoA=;
+        s=default; t=1593759737;
+        bh=BgND3EEs+d8uxCUH6k4pODMG5kSA1ZdIdK8o28GS5U0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=j5C8mmGzTZ3JGln/GZm4AY12M1gj2OLtJPKhO3DrEml3jgvwowKVF2cLL1KqsM4gr
-         0lsOOlh4eMcnhbIehVCaAtXAlJIQJd74gyQdkwouXXf3VCUTtg2vElJvw7yga3q+1j
-         8rzav0usTNm+dfGct0MilTzKeOO34Ebzu9F6vBCQ=
-Date:   Fri, 3 Jul 2020 09:00:44 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     balbi@kernel.org, mathias.nyman@intel.com,
-        linux-usb@vger.kernel.org, linux-imx@nxp.com, pawell@cadence.com,
-        rogerq@ti.com, jun.li@nxp.com
-Subject: Re: [PATCH v4 1/9] usb: cdns3: introduce cdns3_set_phy_power API
-Message-ID: <20200703070044.GB2220026@kroah.com>
-References: <20200703062653.29159-1-peter.chen@nxp.com>
- <20200703062653.29159-2-peter.chen@nxp.com>
+        b=WdzsXHjSYVyx1OL7BFS5pmV1UfIjn59q4VEl3zORWCnMBZ9Vpu3q1NMz+tbC4ACwQ
+         nPrc0jykxyEQtDl4y+aleTrNj/N/V+IgZs5dk7/UCrNVnjqHVIyGEOxoSOsvYx6PHZ
+         6yogSUX+6/ecOdLlGjifiD3Cv6S6VWcAyOJzvwSE=
+Date:   Fri, 3 Jul 2020 09:02:21 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Ran Wang <ran.wang_1@nxp.com>
+Cc:     Peter Chen <peter.chen@nxp.com>,
+        "balbi@kernel.org" <balbi@kernel.org>, Leo Li <leoyang.li@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] USB: phy: fsl-usb: remove character device usage
+Message-ID: <20200703070221.GA2221524@kroah.com>
+References: <20200702072914.1072878-1-gregkh@linuxfoundation.org>
+ <20200702072914.1072878-2-gregkh@linuxfoundation.org>
+ <AM7PR04MB71575977E680A7F6405D8B3F8B6D0@AM7PR04MB7157.eurprd04.prod.outlook.com>
+ <AM6PR04MB54133D6402EE1FDC7E44CB32F16A0@AM6PR04MB5413.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200703062653.29159-2-peter.chen@nxp.com>
+In-Reply-To: <AM6PR04MB54133D6402EE1FDC7E44CB32F16A0@AM6PR04MB5413.eurprd04.prod.outlook.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 03, 2020 at 02:26:45PM +0800, Peter Chen wrote:
-> Since we have both USB2 and USB3 PHYs for cdns3 controller, it is
-> better we have a unity API to handle both USB2 and USB3's power, it
-> could simplify code for error handling and further power management
-> implementation.
+On Fri, Jul 03, 2020 at 01:56:28AM +0000, Ran Wang wrote:
+> Hi
 > 
-> Reviewed-by: Jun Li <jun.li@nxp.com>
-> Signed-off-by: Peter Chen <peter.chen@nxp.com>
-> ---
->  drivers/usb/cdns3/core.c | 44 ++++++++++++++++++++++++++--------------
->  1 file changed, 29 insertions(+), 15 deletions(-)
+> On Thursday, July 2, 2020 5:08 PM, Peter Chen wrote
+> > >
+> > > No idea why this driver is using a char device node, statically
+> > > allocated, with no dynamic allocation or hook up with devtmpfs, along
+> > > with a reserverd major number, for "special" operations, not all of which ever
+> > were implemented.
+> > >
+> > > So just rip it out, as no one must be using it because no modern
+> > > system will ever actually create the /dev/ node it needs.
+> > >
+> > 
+> > Add related people from NXP.
+> > 
 > 
-> diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
-> index 19bbb5b7e6b6..bfd09aa98c12 100644
-> --- a/drivers/usb/cdns3/core.c
-> +++ b/drivers/usb/cdns3/core.c
-> @@ -384,6 +384,28 @@ static int cdns3_role_set(struct usb_role_switch *sw, enum usb_role role)
->  	return ret;
->  }
->  
-> +static int cdns3_set_phy_power(struct cdns3 *cdns, bool on)
+> Reviewed-by: Ran Wang <ran.wang_1@nxp.com>
 
-Please just make function calls self-describing, instead of having to
-try to remember what a specific flag means.  This isn't as bad as some
-functions, but the general idea remains, this should be 2 functions:
-	set_phy_power_off()
-	set_phy_power_on()
-
-no need for the cdns3_ prefix, it's a static function.
-
-Then have those two functions call a helper if you really want to, but
-that means that reading where those functions are called is obvious and
-no need to backtrack to where this was declared to determine that the
-second parameter meant on/off and not is_disabled/not_disabled or
-something crazy like that.
-
-
-
-> +{
-> +	int ret = 0;
-> +
-> +	if (on) {
-> +		ret = phy_power_on(cdns->usb2_phy);
-
-See, phy gets it right.
-
-> +		if (ret)
-> +			return ret;
-> +
-> +		ret = phy_power_on(cdns->usb3_phy);
-> +		if (ret) {
-> +			phy_power_off(cdns->usb2_phy);
-> +			return ret;
-> +		}
-> +	} else {
-> +		phy_power_off(cdns->usb3_phy);
-> +		phy_power_off(cdns->usb2_phy);
-
-Ick, even worse, this needs to be 2 separate functions as there is NO
-common code path here at all.
-
-thanks,
+Thanks for the review!
 
 greg k-h
