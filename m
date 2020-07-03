@@ -2,119 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFCFB213E35
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Jul 2020 19:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1762213E63
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jul 2020 19:16:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726775AbgGCRI5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jul 2020 13:08:57 -0400
-Received: from foss.arm.com ([217.140.110.172]:53300 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726616AbgGCRI4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 3 Jul 2020 13:08:56 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0883431B;
-        Fri,  3 Jul 2020 10:08:56 -0700 (PDT)
-Received: from [10.57.21.32] (unknown [10.57.21.32])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E8FBA3F73C;
-        Fri,  3 Jul 2020 10:08:53 -0700 (PDT)
-Subject: Re: [PATCH] usb: host: ohci-platform: Disable ohci for rk3288
-To:     Jagan Teki <jagan@amarulasolutions.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        =?UTF-8?Q?Myl=c3=a8ne_Josserand?= <mylene.josserand@collabora.com>,
-        linux-usb@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Suniel Mahesh <sunil@amarulasolutions.com>,
-        William Wu <william.wu@rock-chips.com>,
-        Michael Trimarchi <michael@amarulasolutions.com>,
-        linux-amarula <linux-amarula@amarulasolutions.com>,
-        Kever Yang <kever.yang@rock-chips.com>
-References: <20200702090504.36670-1-jagan@amarulasolutions.com>
- <f0ae5915-9cb8-9550-f05c-6cebad191a14@arm.com>
- <CAMty3ZBBdYdNOf-nQTdKZfi-VagaML6k+4PkAh6Uz936h9auow@mail.gmail.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-Message-ID: <a3d2bc2a-9c19-25fa-f2d7-1a26fcc0c047@arm.com>
-Date:   Fri, 3 Jul 2020 18:08:52 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726621AbgGCRQf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jul 2020 13:16:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40496 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726157AbgGCRQf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jul 2020 13:16:35 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A362C061794
+        for <linux-usb@vger.kernel.org>; Fri,  3 Jul 2020 10:16:35 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id 17so34762185wmo.1
+        for <linux-usb@vger.kernel.org>; Fri, 03 Jul 2020 10:16:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=FxRve2hMtUdns9GF1PPX+8MR3XJWnuq1p7ahPKHL6MQ=;
+        b=ovPlbeG7KEIVK7o4qcP59Ok3ZPRGlLd5S1y89McrPEzOQBlFT4tNSB24viKBYqRQWg
+         MlQ6G4FIJ/GSe4ipD7CVWoXpIRebMvjS8TfIpPzXLCur6k5HJitZM4Ail2i4iDq5z7Xo
+         luYVhegMxIl2EFx8iD5XHSeDNxkwiSB3WWdTLjYhXlrPi24NHlsswbIcLeEQO9SLErM0
+         HoJaaBnvW+QhecPljYZ9jr6YCGK+hLEG9FqR7Ev+riqOTrTMLtdoW+T6IYMPApJdsWqp
+         ixPdFtHnl4oH4jItXSrDHtQ2f5WDM6WrQmsrxCdiduXLya8qP6RKxikuIOXXc/OVAVAt
+         v8sA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=FxRve2hMtUdns9GF1PPX+8MR3XJWnuq1p7ahPKHL6MQ=;
+        b=E7QzxYuVuvrLNlgCxTfx9NuoJVfoEQVPC8s9xrwSPzpFB/VZNUrjnGLy0y36R0kbia
+         +Z/7MBQiU5yie7A2s469+gj2op0pB3JxUfIBWCP5sHtNfxTYVgqW8IreiL0IIIw5R7KE
+         XpRkgCEfpg82vS9KLyjygPDbwdtRBb1BZbCnUZwSjBccBRRuoQgK8RKop71vYFAvDAW3
+         CXgIiZffa8Ky8UA/8buptZKWAovpFYf+FOXpvONwr1sTA76ZwxMW2rBng7gdngo9zxPP
+         LvxJZ3pFIA+vUhRnzVoADV1N9KZ9V613dvP8gJbML1p7D18nJplydkHUBAzNUHCL1y5P
+         dCvA==
+X-Gm-Message-State: AOAM5333eS++qlQwigwX2dopEikk7VblrGctUhGDVPlwep5PqbQIbnVz
+        qINy4uwuCEnwoPVBVFlAr9tGww==
+X-Google-Smtp-Source: ABdhPJz6FPloh+OkdzSbAuHwscGFSOCatxSX27yxxqeWQ0bfdGxYpH2xoP1pjXeNtfBsfLlVZdOYiw==
+X-Received: by 2002:a05:600c:2187:: with SMTP id e7mr37102882wme.171.1593796593761;
+        Fri, 03 Jul 2020 10:16:33 -0700 (PDT)
+Received: from dell ([2.27.35.144])
+        by smtp.gmail.com with ESMTPSA id j6sm2243550wro.25.2020.07.03.10.16.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jul 2020 10:16:33 -0700 (PDT)
+Date:   Fri, 3 Jul 2020 18:16:26 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Ben Dooks <ben@simtec.co.uk>
+Subject: Re: [PATCH 11/30] usb: dwc2: gadget: Avoid pointless read of EP
+ control register
+Message-ID: <20200703171626.GC2743379@dell>
+References: <20200702144625.2533530-1-lee.jones@linaro.org>
+ <20200702144625.2533530-12-lee.jones@linaro.org>
+ <20200703072926.GA2322133@kroah.com>
+ <e88abd64-4acf-31f6-f76a-5a333df3d46a@synopsys.com>
 MIME-Version: 1.0
-In-Reply-To: <CAMty3ZBBdYdNOf-nQTdKZfi-VagaML6k+4PkAh6Uz936h9auow@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e88abd64-4acf-31f6-f76a-5a333df3d46a@synopsys.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2020-07-03 12:39, Jagan Teki wrote:
-> On Thu, Jul 2, 2020 at 8:08 PM Robin Murphy <robin.murphy@arm.com> wrote:
->>
->> On 2020-07-02 10:05, Jagan Teki wrote:
->>> rk3288 has usb host0 ohci controller but doesn't actually work
->>> on real hardware but it works with new revision chip rk3288w.
->>>
->>> So, disable ohci for rk3288.
->>>
->>> For rk3288w chips the compatible update code is handled by bootloader.
->>>
->>> Cc: William Wu <william.wu@rock-chips.com>
->>> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
->>> ---
->>> Note:
->>> - U-Boot patch for compatible update
->>> https://patchwork.ozlabs.org/project/uboot/patch/20200702084820.35942-1-jagan@amarulasolutions.com/
->>>
->>>    drivers/usb/host/ohci-platform.c | 2 +-
->>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/usb/host/ohci-platform.c b/drivers/usb/host/ohci-platform.c
->>> index 7addfc2cbadc..24655ed6a7e0 100644
->>> --- a/drivers/usb/host/ohci-platform.c
->>> +++ b/drivers/usb/host/ohci-platform.c
->>> @@ -96,7 +96,7 @@ static int ohci_platform_probe(struct platform_device *dev)
->>>        struct ohci_hcd *ohci;
->>>        int err, irq, clk = 0;
->>>
->>> -     if (usb_disabled())
->>> +     if (usb_disabled() || of_machine_is_compatible("rockchip,rk3288"))
->>
->> This seems unnecessary to me - if we've even started probing a driver
->> for a broken piece of hardware to the point that we need magic checks to
->> bail out again, then something is already fundamentally wrong.
->>
->> Old boards only sold with the original SoC variant have no reason to
->> enable the OHCI (since it never worked originally), thus will never
->> execute this check.
->>
->> New boards designed around the W variant to make use of the OHCI can
->> freely enable it either way.
->>
->> The only relative-edge-case where it might matter is older board designs
->> still in production which have shipped with both SoC variants. Enabling
->> OHCI can't be *necessary* given that it's still broken on a lot of
->> deployed boards, so at best it must be an opportunistic nice-to-have.
->> Since we're already having to rely on the bootloader to patch up the
->> devicetree for other low-level differences in this case, it should be
->> part of that responsibility for it to only enable the OHCI on the
->> appropriate SoC variant too. Statically enabling it in the DTS for a
->> board where it may well not work is just bad.
+On Fri, 03 Jul 2020, Minas Harutyunyan wrote:
+
+> Hi,
 > 
-> You mean enable OHCI by identifying revision W with dts status "okay"?
-> doesn't it complex for the bootloader to update all effecting changes?
+> On 7/3/2020 11:29 AM, Greg KH wrote:
+> > On Thu, Jul 02, 2020 at 03:46:06PM +0100, Lee Jones wrote:
+> >> Commit ec1f9d9f01384 ("usb: dwc2: gadget: parity fix in isochronous mode") moved
+> >> these checks to dwc2_hsotg_change_ep_iso_parity() back in 2015.  The assigned
+> >> value hasn't been read back since.  Let's remove the unnecessary H/W read.
+> >>
+> >> Fixes the following W=1 warning:
+> >>
+> >>   drivers/usb/dwc2/gadget.c: In function ‘dwc2_hsotg_epint’:
+> >>   drivers/usb/dwc2/gadget.c:2981:6: warning: variable ‘ctrl’ set but not used [-Wunused-but-set-variable]
+> >>   2981 | u32 ctrl;
+> >>   | ^~~~
+> >>
+> >> Cc: Minas Harutyunyan <hminas@synopsys.com>
+> >> Cc: Ben Dooks <ben@simtec.co.uk>
+> >> Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> >> ---
+> >>   drivers/usb/dwc2/gadget.c | 2 --
+> >>   1 file changed, 2 deletions(-)
+> >>
+> >> diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+> >> index 116e6175c7a48..fa07e3fcb8841 100644
+> >> --- a/drivers/usb/dwc2/gadget.c
+> >> +++ b/drivers/usb/dwc2/gadget.c
+> >> @@ -2975,10 +2975,8 @@ static void dwc2_hsotg_epint(struct dwc2_hsotg *hsotg, unsigned int idx,
+> >>   	u32 epctl_reg = dir_in ? DIEPCTL(idx) : DOEPCTL(idx);
+> >>   	u32 epsiz_reg = dir_in ? DIEPTSIZ(idx) : DOEPTSIZ(idx);
+> >>   	u32 ints;
+> >> -	u32 ctrl;
+> >>   
+> >>   	ints = dwc2_gadget_read_ep_interrupts(hsotg, idx, dir_in);
+> >> -	ctrl = dwc2_readl(hsotg, epctl_reg);
+> > 
+> > As you know, lots of hardware requires reads to happen to do things, so
+> > are you sure it is safe to remove this read call?
+> > 
+> 
+> Greg, yes, it's Ok to remove this unnecessary read which remained from 
+> previous implementations.
+> 
+> Lee, please add "Fixes:" tag and resubmit v2.
 
-Well, on boards which may have either SoC it's already got to detect the 
-difference and make at least a couple of other DT adjustments; a handful 
-more lines to check for a specific node and flip its status wouldn't be 
-too horrendous (although I suppose you'd also want to check whether the 
-EHCI is enabled first, to guess at whether the port's even wired up at all).
+Is this suitable for Stable Greg?
 
-Or alternatively, as I said, simply don't bother doing anything - boards 
-that only use RK3288W can enable OHCI in their DTS, and other boards 
-that have been not using it for however many years can continue not 
-using it even if it might technically be available on newer production runs.
-
-Robin.
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
