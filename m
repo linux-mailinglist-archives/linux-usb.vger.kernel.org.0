@@ -2,99 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5FDD213528
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Jul 2020 09:36:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E14B221352C
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jul 2020 09:37:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726236AbgGCHgc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jul 2020 03:36:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59502 "EHLO mail.kernel.org"
+        id S1726144AbgGCHhV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jul 2020 03:37:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59724 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725960AbgGCHgc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 3 Jul 2020 03:36:32 -0400
+        id S1725764AbgGCHhV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 3 Jul 2020 03:37:21 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 438E2206B6;
-        Fri,  3 Jul 2020 07:36:31 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 680E6206DF;
+        Fri,  3 Jul 2020 07:37:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593761791;
-        bh=Oentednt1zT1d2MtszJLU5AGg8bXKnXt96KHFyv+ulk=;
+        s=default; t=1593761841;
+        bh=3hXzjoxayCwIlMyaIVk4q1EyS1f0Z06EJ0cKKjqyt8o=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kF0XAOQMHGdSd0dtXCAyU3O7ghd04gWhLW67VC01rSbCFmq3g6lvehO4yb+gR4clx
-         X8il5WYAcNRHbxLEisp2nN1ayH6WM5bHCpIu97WufhBNCFGu087C2GtJCKWJqT6vdM
-         +Xn2Zm452MRCul3CBkZnTNd3kUPCMfEZANY7NCL0=
-Date:   Fri, 3 Jul 2020 09:36:35 +0200
+        b=YzrdJFEh0vrcKI86nCxCh++RcbHDCzwbiU4e55HeK+TI72KS4sd7/fIXjUnp+cPaS
+         zE6JPTVO7fNm5DMx9ZvqmKLPyiOklTmkTpMmTH/LTr+uliOl6DETVwTsxz24ds1miT
+         ckY9Rw9DxTrVC5u5Gu/pcRBDmjVUa7HdtIWhAiT4=
+Date:   Fri, 3 Jul 2020 09:37:25 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Lee Jones <lee.jones@linaro.org>
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Rodolfo Giometti <giometti@linux.it>,
-        "Eurotech S.p.A" <info@eurtech.it>
-Subject: Re: [PATCH 23/30] usb: host: oxu210hp-hcd: Move declaration of 'qtd'
- into 'ifdef OXU_URB_TRACE'
-Message-ID: <20200703073635.GA2364726@kroah.com>
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 00/30] Fix a bunch of W=1 issues in USB
+Message-ID: <20200703073725.GA2370189@kroah.com>
 References: <20200702144625.2533530-1-lee.jones@linaro.org>
- <20200702144625.2533530-24-lee.jones@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200702144625.2533530-24-lee.jones@linaro.org>
+In-Reply-To: <20200702144625.2533530-1-lee.jones@linaro.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 02, 2020 at 03:46:18PM +0100, Lee Jones wrote:
-> If we assign 'epnum' during the declaration we can also avoid "ISO
-> C90 forbids mixed declarations" issues.  So it does looks like we
-> can have our cake and eat it in this scenario.
+On Thu, Jul 02, 2020 at 03:45:55PM +0100, Lee Jones wrote:
+> This set is part of a larger effort attempting to clean-up W=1
+> kernel builds, which are currently overwhelmingly riddled with
+> niggly little warnings.
 > 
-> Fixes the following W=1 kernel build warning(s):
-> 
->  drivers/usb/host/oxu210hp-hcd.c: In function ‘submit_async’:
->  drivers/usb/host/oxu210hp-hcd.c:2040:19: warning: variable ‘qtd’ set but not used [-Wunused-but-set-variable]
->  2040 | struct ehci_qtd *qtd;
->  | ^~~
-> 
-> Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
-> Cc: Rodolfo Giometti <giometti@linux.it>
-> Cc: "Eurotech S.p.A" <info@eurtech.it>
-> Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> ---
->  drivers/usb/host/oxu210hp-hcd.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/host/oxu210hp-hcd.c b/drivers/usb/host/oxu210hp-hcd.c
-> index 120666a0d5901..b00673295c9fe 100644
-> --- a/drivers/usb/host/oxu210hp-hcd.c
-> +++ b/drivers/usb/host/oxu210hp-hcd.c
-> @@ -2037,16 +2037,15 @@ static struct ehci_qh *qh_append_tds(struct oxu_hcd *oxu,
->  static int submit_async(struct oxu_hcd	*oxu, struct urb *urb,
->  			struct list_head *qtd_list, gfp_t mem_flags)
->  {
-> -	struct ehci_qtd	*qtd;
-> -	int epnum;
-> +	int epnum = urb->ep->desc.bEndpointAddress;
->  	unsigned long flags;
->  	struct ehci_qh *qh = NULL;
->  	int rc = 0;
-> +#ifdef OXU_URB_TRACE
-> +	struct ehci_qtd	*qtd;
->  
->  	qtd = list_entry(qtd_list->next, struct ehci_qtd, qtd_list);
-> -	epnum = urb->ep->desc.bEndpointAddress;
->  
-> -#ifdef OXU_URB_TRACE
->  	oxu_dbg(oxu, "%s %s urb %p ep%d%s len %d, qtd %p [qh %p]\n",
->  		__func__, urb->dev->devpath, urb,
->  		epnum & 0x0f, (epnum & USB_DIR_IN) ? "in" : "out",
-> -- 
-> 2.25.1
-> 
+> Lee Jones (30):
+>   usb: phy: phy: Fix-up a whole bunch of formatting issues
+>   usb: host: pci-quirks: Demote function header from kerneldoc to
+>     comment block
+>   usb: common: debug: Demote comment blocks which are obviously not
+>     kerneldoc
+>   usb: common: usb-conn-gpio: Demote comment block which is clearly not
+>     kerneldoc
+>   usb: dwc3: drd: File headers are not doc headers
+>   usb: dwc3: ulpi: File headers are not doc headers
+>   usb: common: ulpi: Fix a few kerneldoc related issues
+>   usb: dwc3: dwc3-omap: Do not read DMA status
+>   usb: dwc2: gadget: Do not read GINTMSK2
+>   usb: dwc2: gadget: Remove assigned but never used 'maxsize'
+>   usb: dwc2: gadget: Avoid pointless read of EP control register
+>   usb: host: ehci-omap: Provide documentation for
+>     ehci_hcd_omap_probe()'s arg 'pdev'
+>   usb: cdns3: core: Fix incorrect formatting and misspelled function arg
+>     docs
+>   usb: cdns3: ep0: Fix a bunch of kerneldoc issues
+>   usb: dwc3: dwc3-haps: Function headers are not suitable for kerneldoc
+>   usb: mtu3: mtu3_trace: Function headers are not suitable for kerneldoc
+>   usb: cdns3: gadget: Fix a bunch of kernel doc issues
+>   usb: dwc3: dwc3-of-simple: Function headers are not good candidates
+>     for kerneldoc
+>   usb: host: isp1362: Mark the many unused ISP1362_REG entries as
+>     __maybe_unused
+>   usb: host: ohci-at91: Demote kerneldoc headers down to basic comment
+>     blocks
+>   usb: host: ohci: Mark cc_to_error as __maybe_unused
+>   usb: cdns3: ep0: Move 'zlp' description to appropriate function header
+>   usb: host: oxu210hp-hcd: Move declaration of 'qtd' into 'ifdef
+>     OXU_URB_TRACE'
+>   usb: mtu3: mtu3_trace: Supply missing mtu3_debug.h include file
+>   usb: mtu3: mtu3_core: Demote obvious misuse of kerneldoc to standard
+>     comment block
+>   usb: c67x00: c67x00-ll-hpi: Demote obvious misuse of kerneldoc to
+>     standard comment blocks
+>   usb: class: cdc-wdm: Provide description for usb_cdc_wdm_register()'s
+>     manage_power arg
+>   usb: c67x00: c67x00-hcd: Demote obvious misuse of kerneldoc to
+>     standard comment blocks
+>   usb: class: usbtmc: File headers are not good candidates for kerneldoc
+>   usb: c67x00: c67x00-sched: Demote obvious misuse of kerneldoc to
+>     standard comment blocks
 
-Ugh, nice hack, but those OXU_URB_TRACE defines really just need to be
-dropped entirely.  I'll take this for now though, thanks.
+I've applied 25 of these, if you could rebase and resend the remaining
+ones, after fixing up the review comments made on them, that would be
+wonderful.
+
+thanks,
 
 greg k-h
