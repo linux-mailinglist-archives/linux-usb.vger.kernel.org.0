@@ -2,101 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB6C2133F9
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Jul 2020 08:16:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C996213419
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jul 2020 08:25:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726142AbgGCGQK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jul 2020 02:16:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52062 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725764AbgGCGQK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jul 2020 02:16:10 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12EB0C08C5C1
-        for <linux-usb@vger.kernel.org>; Thu,  2 Jul 2020 23:16:10 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id c25so8324964otf.7
-        for <linux-usb@vger.kernel.org>; Thu, 02 Jul 2020 23:16:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5oJGVsNDOmgeEp8ItsLjhcVVDamnaAyg5U7tumkU5kM=;
-        b=sCwTDhzUbqNGBRJNcDMFVI6vZ6mCapv/AiDCwc8bWEtzDDeLkXrImBvN8iDHk09scQ
-         DAMrF6waj+6vTSRnzHxjr0ZHXZPlggXpgZs1TOsMQ+OWKdGISalDTH+r/vTQdy2gkAZq
-         BFgyaFrmR6FDvPttJrrNPTG22yHTBlOeSrjViDRgQAEHmScr6vWxMqmZkSVlHdEaVAiy
-         /YWWHh+LCpxvDJxFAujCKzqNoviWtcA7g52SyFkZTooaBK4KMs+0D43DubmE8ZzpG1Tn
-         VXK3OjjZx86c7yCD2nTyQgivSLx5tiFHrf/z5wzm8Zn+QtsUCbEyeh5j72OZqnQ0pacK
-         O0lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5oJGVsNDOmgeEp8ItsLjhcVVDamnaAyg5U7tumkU5kM=;
-        b=fvGfuoHvXYtaqfLR426o7wO+sOO0F8b2oHbpFBxrSsnTwFFYyyRknwXf6UUApw1sZ8
-         whI8/yFR/EkeZobrVAcC89q0G1017hmqbdekVxoLdfMrILWgNV2GxvWZbkzpAQ1JIL58
-         SSkvDno/f+FGCuiauGXWIlmT29lUYsRllv8wMc3GArkOYHEu76Y6s6wwivL7WUcObh4a
-         Fz1LOJTp6A0RkdZ4utkHy6z72JMJmbj1SZCKOZ3+2Cwdihib/coejlzclT3Cw1N/6hv8
-         G6OmIWlTtEFoH/XKN0gR7yhu/axNanK0fkefJLlmyOjouCWXvKKptmjcK2/+PyFVIi5l
-         EoZg==
-X-Gm-Message-State: AOAM532rapZohvSNE0CcwRoKFnj8GWgLFuxjQ848rLzibHa3v1V25bRI
-        JsoZxOba+gTmVEydTxheCADhrX9Ml+MB2O+ILEFr/w==
-X-Google-Smtp-Source: ABdhPJywFh47c+iGpTThEIT8FLdys0uBMlkKBP3RTr9CDbxTYYZ82LOHhq8eMokcMepkbwwcWBXZEGds++YR2c4l568=
-X-Received: by 2002:a05:6830:1e13:: with SMTP id s19mr31260230otr.102.1593756969412;
- Thu, 02 Jul 2020 23:16:09 -0700 (PDT)
+        id S1726118AbgGCGZj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jul 2020 02:25:39 -0400
+Received: from mail-vi1eur05on2076.outbound.protection.outlook.com ([40.107.21.76]:12304
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725764AbgGCGZi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 3 Jul 2020 02:25:38 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Qya/CDA8bm5WRQvVutE9sIg/htIocG2jLONcCeHUpDykC+1QECgIBiAJCoLvlGt7fskzRua4l8revyyjdAxMc6GFw4vP3Qz/P6eDvhvYTwlCXQSNSUcMBtPiOzXFAOjSabbfey8qoH6dPjCRK0aavtWhNRs0811rjIvyDfRJ4vqkt7dg/lRSRRoNrfP16j55Wg05H7MWbZNYqR+6eKPdD/Exd+XSNvvfVRqVsUqv+g/MZ9bjaFDXjcY9KwXiCydCPvS8Ks2Mor3pQ7NFWRDf2bsnLYrfvdVPES/DdCgg2rGsnEFCgq9JXXqSNYgiUVCqF8+BjKS8HsTgfNj5mbui/Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nrmJ77HfR4eGaLItuVwkP6lz2EknILl9bHDMpfXWWxs=;
+ b=IFhQLmOvQ2MmX48R/00pm5mwmLtMLibFs9FyexBQI8yaPG/eErCLQoDwbc+PeBmS0wy/3DUzVebyLtlBZDejlFtuyFD/gsAA6P2cYS9djcyb9puUrycbCZaXt1NbzrEEbj2tHfy1rIr698Di0kfk7zYczRgJczOz38XJagGr0FA+gRL+XJsykOjvL754mUuNtctEo0YW45foBK5I30HKhdt/BuZ/9uPxlZTbpjJLBw+zqxfEklqoAhYK+Ytq0lSvwhW362tw34WWJiAOVK9C5K/51RX145ARUdFgSwjIbBYYac1PfW3AYpCllo2z58WRCuarQ385VKJoOrNl+8pkcQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nrmJ77HfR4eGaLItuVwkP6lz2EknILl9bHDMpfXWWxs=;
+ b=jrpMLHkArpwbK4gjJEC8x3Gb5K69J4EJZ8STlu6qqsk+XfQ8Zwk7L4h+XUuIyXGqGFSg+jFPjJjVAlSnnKjWh79M3/Q3v4gCbaBWl3Z17U9l4EyRfYAaMUTvj8NLzOI8lgWnwhp5em5aa2TLCMACSBRViXd4x4lAElJSHyD5g5s=
+Authentication-Results: intel.com; dkim=none (message not signed)
+ header.d=none;intel.com; dmarc=none action=none header.from=nxp.com;
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
+ by AM6PR04MB4758.eurprd04.prod.outlook.com (2603:10a6:20b:f::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3153.21; Fri, 3 Jul
+ 2020 06:25:35 +0000
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1101:adaa:ee89:af2a]) by AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1101:adaa:ee89:af2a%3]) with mapi id 15.20.3153.023; Fri, 3 Jul 2020
+ 06:25:35 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     mathias.nyman@intel.com
+Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
+        linux-imx@nxp.com, Peter Chen <peter.chen@nxp.com>
+Subject: [PATCH 1/2] usb: host: xhci: avoid calling two contineous times for xhci_suspend
+Date:   Fri,  3 Jul 2020 14:25:31 +0800
+Message-Id: <20200703062532.29076-1-peter.chen@nxp.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR02CA0024.apcprd02.prod.outlook.com
+ (2603:1096:3:17::36) To AM7PR04MB7157.eurprd04.prod.outlook.com
+ (2603:10a6:20b:118::20)
 MIME-Version: 1.0
-References: <CALAqxLWAvvHGo1RYef1fJ_k65WqHAPCDhLfehO6_j_f8E2jB7Q@mail.gmail.com>
-In-Reply-To: <CALAqxLWAvvHGo1RYef1fJ_k65WqHAPCDhLfehO6_j_f8E2jB7Q@mail.gmail.com>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Thu, 2 Jul 2020 23:15:58 -0700
-Message-ID: <CALAqxLXjByaYaNweqGiSyArJ=1J-D7bSm+sndCtH_wf7h2avTA@mail.gmail.com>
-Subject: Re: dwc3 inconsistent gadget connection state?
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Tejas Joglekar <tejas.joglekar@synopsys.com>,
-        Yang Fei <fei.yang@intel.com>,
-        Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>,
-        YongQin Liu <yongqin.liu@linaro.org>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Thinh Nguyen <thinhn@synopsys.com>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Jun Li <lijun.kernel@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from b29397-desktop.ap.freescale.net (119.31.174.67) by SG2PR02CA0024.apcprd02.prod.outlook.com (2603:1096:3:17::36) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3153.23 via Frontend Transport; Fri, 3 Jul 2020 06:25:33 +0000
+X-Mailer: git-send-email 2.17.1
+X-Originating-IP: [119.31.174.67]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: c47d28c5-9be0-4dd8-341a-08d81f19e50d
+X-MS-TrafficTypeDiagnostic: AM6PR04MB4758:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <AM6PR04MB4758DB59726395D34B7846C58B6A0@AM6PR04MB4758.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
+X-Forefront-PRVS: 045315E1EE
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: j/DlLATXeTExK3UQWw9Ao1BC9BTRSKdhOSciDzoU5QVvuEs4Hw9yCddDtCsCBw4B46NwAVaQeG//n/4uSzZS2aayz5N6fHAIxeZ9dYKIgyoqlcKgHVWJHOEtLFvlqLHYFvRWW+FbDCYvrhIysnPqy3G3V7rcBJBkm+9ZF5met3DMLBmwVAVQhcNd47SGMJPJJofuOPB4cDQzIswGBSKieBBzsnJzUPQyYjWynfxXdrnGGH6IqRHdE2VM9hW+GVOGFC0Vw2wSI/yraWtgR9vb6L6N1s0CHZYQNbHekyofdnkvO1hXARoEyR5WDl03+VQA
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(136003)(346002)(376002)(39860400002)(396003)(366004)(316002)(4326008)(478600001)(6512007)(956004)(2616005)(5660300002)(6486002)(36756003)(66556008)(66476007)(44832011)(1076003)(52116002)(66946007)(6916009)(16526019)(186003)(86362001)(26005)(2906002)(6506007)(83380400001)(8936002)(8676002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: /uWnxKLsgM1Zhw2BfJFcHZK4RYblFfsCLv6DTygpgj2C8aRRRiWAqc9YvM8lcdfj1jhnl9OodccwM9+YDbJTyHRmp4M03aFp85np0HuM/JGUEql+P1BJseazfuEJ0yQhj6FZhSf2ui2k7eXvWirKCf31TvFZCayy77s3iF1GyvD/Z2CjD/VtZVpeoK3mpiPwFNC8Yt4rBrVhDo0clZxSsnlbu2uDaDs+8Jtfa9OvO55KkKSMFI837iBFgVG17NBdEjxBGBRftiZwbSKOragK4pGw7ABM5RhL8ekFpZx62om7AJP3WQK1DBKToDMKd1MiZdQQzDMaTx+QI2s9WG8ViPFuSn4atY8UmoqDt4uv5xdDpAiOzh4CDesNw56oWqqTY/ug93tKSwePstDQrFhys/jx/qE4Rfwi44j9DLqach5FgZiZTxxs42LSogXaAU5vhH0rT8aXL+OYGvNgDacJSKPzfspAuPfgQTpE6vsYmE8=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c47d28c5-9be0-4dd8-341a-08d81f19e50d
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jul 2020 06:25:35.4120
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: O3HEOglio7sFlhPxC/OG2AAdQt5oDwiJH3q/VYMHVjLkxXlVBqSspidNh1BQimlGCQpsGQvy9Dgjs00wfGyiog==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB4758
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 2, 2020 at 2:44 PM John Stultz <john.stultz@linaro.org> wrote:
->
->   I've been tripping over an issue on my HiKey960 where with the usb-c
-> gadget cable connected, the gadget code doesn't consistently seem to
-> initialize properly. I had rarely seen this behavior previously, but
-> more recently it has become more frequent and annoying.
->
-> Usually, unplugging and replugging the USB-C cable would get things
-> working again (but that's not helpful in test labs).
->
-> I annotated a bunch of code trying to understand what was going on and
-> I narrowed down the difference in the good and bad case to a dwc3
-> reset interrupts happening after usb_gadget_probe_driver() completes.
-> In the good case, we see the reset interrupts, and in the failed case
-> we don't.
+If the xhci-plat.c is the platform driver, after the runtime pm is
+enabled, the xhci_suspend is called if nothing is connected on
+the port. When the system goes to suspend, it will call xhci_suspend again
+if USB wakeup is enabled.
 
-So I've kept digging around on this, and started dumping registers at
-the end of dwc3_gadget_start() and then dwc3_gadget_pullup() as that
-still is called shortly after in both cases.
+Since the runtime suspend wakeup setting is not always the same with
+system suspend wakeup setting, eg, at runtime suspend, we always need
+wakeup if the controller is in low power mode; but at suspend system,
+we may not need wakeup. So, we move the judgement after changing
+wakeup setting.
 
-The one consistent difference between the working and not working case
-I saw was the DWC3_DSTS_COREIDLE bit in the DWC3_DSTS register.
+Signed-off-by: Peter Chen <peter.chen@nxp.com>
+---
+ drivers/usb/host/xhci.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-It seems when we get to gadget_start()/pullup() if the DSTS_COREIDLE
-bit isn't on we won't get the reset irq.
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index ed468eed299c..66c894626be6 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -982,12 +982,15 @@ int xhci_suspend(struct xhci_hcd *xhci, bool do_wakeup)
+ 			xhci->shared_hcd->state != HC_STATE_SUSPENDED)
+ 		return -EINVAL;
+ 
+-	xhci_dbc_suspend(xhci);
+-
+ 	/* Clear root port wake on bits if wakeup not allowed. */
+ 	if (!do_wakeup)
+ 		xhci_disable_port_wake_on_bits(xhci);
+ 
++	if (!HCD_HW_ACCESSIBLE(hcd))
++		return 0;
++
++	xhci_dbc_suspend(xhci);
++
+ 	/* Don't poll the roothubs on bus suspend. */
+ 	xhci_dbg(xhci, "%s: stopping port polling.\n", __func__);
+ 	clear_bit(HCD_FLAG_POLL_RH, &hcd->flags);
+-- 
+2.17.1
 
-I added a simple timeout loop to pullup() similar to the
-DSTS_DEVCTRLHLT loop, but in the failure mode it always times out with
-COREIDLE not being set.
-
-Searching around hasn't provided any info on what COREIDLE actually
-means, so I'm a bit in the dark.  Any clues?
-
-thanks
--john
