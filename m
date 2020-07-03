@@ -2,82 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDAF7213A4A
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Jul 2020 14:52:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C8F213AA9
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jul 2020 15:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726262AbgGCMwk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jul 2020 08:52:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46690 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726022AbgGCMwj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 3 Jul 2020 08:52:39 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0F90B20B80;
-        Fri,  3 Jul 2020 12:52:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593780759;
-        bh=tHVvGtkSl7bYJvZhNMXbvQk/XxuWeRiGzO4sWMx9IWY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xzoWZVPMoAYAqKrcLiWHawP6a6JjIWmEDh8WUckHT0qumaH/PV2Kk7Yez5ElgcD7D
-         ClUTWBsb3WbvJx7pkpcZrDoW+f34+1I+tOuQy4DfgkRaKNROhjd4mbVJr+gGrIWh86
-         HpCYn6OAa+bayffklwNrPWTkIVHd/8MR9iwItAyg=
-Date:   Fri, 3 Jul 2020 13:52:37 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Wesley Cheng <wcheng@codeaurora.org>
-Cc:     lgirdwood@gmail.com, mark.rutland@arm.com, agross@kernel.org,
-        heikki.krogerus@linux.intel.com, robh+dt@kernel.org,
-        gregkh@linuxfoundation.org, bjorn.andersson@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jackp@codeaurora.org, rdunlap@infradead.org,
-        bryan.odonoghue@linaro.org
-Subject: Re: [PATCH v5 4/6] regulator: Add support for QCOM PMIC VBUS booster
-Message-ID: <20200703125236.GA5417@sirena.org.uk>
-References: <20200703015102.27295-1-wcheng@codeaurora.org>
- <20200703015102.27295-5-wcheng@codeaurora.org>
+        id S1726048AbgGCNNI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jul 2020 09:13:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59604 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726022AbgGCNNH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jul 2020 09:13:07 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2D1C08C5C1
+        for <linux-usb@vger.kernel.org>; Fri,  3 Jul 2020 06:13:07 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id g2so18462428lfb.0
+        for <linux-usb@vger.kernel.org>; Fri, 03 Jul 2020 06:13:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yqRWIJhMC4M/71vzb+wdaZK54MriAOHFklGDRAsmSSE=;
+        b=jx/g9BXAXl5s9yHnomGbRXFf/i5G7s5Iz7ZuuNG4GtbSg3XroI5B+mT9+/JgtKfZ2t
+         GjknZBczMph7WigUdM79KNkxrIfi/XumLNotiWUyaaEt0Gfl6rdY3MhR13TPv9aFvemF
+         TYkKUKEADjmwBh1Eej34v99MW9/Y3oovxeNASU9RNCL6GVjHcpDc6A08q1lvARJnNNJS
+         fSC11/1YROnaEAw+Y7c4x8FDWEYbvH3cAzXhIHJhT6qaaiuJ4XPF0orDPkXvTLeomQ0j
+         ODszDdCYauSC+57zTC9OfnZNRYImX+4aB9CxP+zYumNlhNMsKlB0wUHWS3WEDnpR7aKV
+         ah6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yqRWIJhMC4M/71vzb+wdaZK54MriAOHFklGDRAsmSSE=;
+        b=algtmdZwAiZqHkWVJSbVtDIsP3RiOrUv2fzHhvgnr7yUET1uSWDgMXABkhJvdtYhpu
+         SGnLZcfYAWaqHy54CYuDaaYe0mi/XpPGG++PnJMCr87OGxRJdwoynQfEQJumJuJTtZkN
+         3fcZUYBgipPeH6lyG5su2JasR5BQQzxkX7Lfy1nCqGFP8LygHl6F36uN9jXXCyP1SntL
+         0DzDf1FN2VpTM17yumsSkBgRihwdjJXxhfTlhsKbcDTenUKbGMAxR5CBFJ1zjDw92yxn
+         DVo8W8vMdb3LUEHdB/nCnAkUGb4Oc3awRc/Tl0386hyatFB5mHizq7gvn/HI88ZJqRrW
+         8Bqw==
+X-Gm-Message-State: AOAM5334eUJ8MavCBoE09fJkyFdJkh51n/0805cly1azHrBSvToAOVj4
+        8E6GuomUn+jkqDonPmdO7oSJP1wDejEtYw==
+X-Google-Smtp-Source: ABdhPJzVbyrbXQbgh3H47rHAXCtYJyQ9DWXKbwP2B0hrguOr1THBnrtXL3WDPRjAKuSaJUbL3NRzXA==
+X-Received: by 2002:a19:22d6:: with SMTP id i205mr21859502lfi.50.1593781985503;
+        Fri, 03 Jul 2020 06:13:05 -0700 (PDT)
+Received: from localhost.localdomain (c-92d7225c.014-348-6c756e10.bbcust.telenor.se. [92.34.215.146])
+        by smtp.gmail.com with ESMTPSA id s14sm4107438ljs.52.2020.07.03.06.13.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jul 2020 06:13:04 -0700 (PDT)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Roger Quadros <rogerq@ti.com>,
+        Peter Ujfalusi <peter.ujfalusi@ti.com>,
+        Tony Lindgren <tony@atomide.com>
+Subject: [PATCH] usb: ehci-omap: Drop surplus include
+Date:   Fri,  3 Jul 2020 15:10:59 +0200
+Message-Id: <20200703131059.515436-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="HlL+5n6rz5pIUxbD"
-Content-Disposition: inline
-In-Reply-To: <20200703015102.27295-5-wcheng@codeaurora.org>
-X-Cookie: You need not be present to win.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+The EHCI OMAP driver includes <linux/gpio.h> but does not use
+any symbols from this file, so drop it.
 
---HlL+5n6rz5pIUxbD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Cc: Roger Quadros <rogerq@ti.com>
+Cc: Peter Ujfalusi <peter.ujfalusi@ti.com>
+Cc: Tony Lindgren <tony@atomide.com>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ drivers/usb/host/ehci-omap.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-On Thu, Jul 02, 2020 at 06:51:00PM -0700, Wesley Cheng wrote:
-> Some Qualcomm PMICs have the capability to source the VBUS output to
-> connected peripherals.  This driver will register a regulator to the
-> regulator list to enable or disable this source by an external driver.
+diff --git a/drivers/usb/host/ehci-omap.c b/drivers/usb/host/ehci-omap.c
+index fc125b3d06e7..94b4b3ea49c8 100644
+--- a/drivers/usb/host/ehci-omap.c
++++ b/drivers/usb/host/ehci-omap.c
+@@ -24,7 +24,6 @@
+ #include <linux/slab.h>
+ #include <linux/usb/ulpi.h>
+ #include <linux/pm_runtime.h>
+-#include <linux/gpio.h>
+ #include <linux/clk.h>
+ #include <linux/usb.h>
+ #include <linux/usb/hcd.h>
+-- 
+2.25.4
 
-Please do not submit new versions of already applied patches, please
-submit incremental updates to the existing code.  Modifying existing
-commits creates problems for other users building on top of those
-commits so it's best practice to only change pubished git commits if
-absolutely essential.
-
---HlL+5n6rz5pIUxbD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl7/KhQACgkQJNaLcl1U
-h9DbaQf/Wn1umae5C1ME7+FMgKDOFXFlSpprrYcQpuTvaPIjeXxeKcprAdP+rmS1
-C8yCog08z4Oy1H7KoXigS130MBOVajvjnX5lokFDq3ceNKHbO2Jj2qrQFpzlJ4xW
-vqbaSDD64DW4qHhqSoKbDAmmtYQRyG4+diCgQuIEkNpwVZxI73AkYpnIqmx9FhQN
-KjzXq4rBFdaEqpYfh298Cu/3JZztAHThrwpTFUV3Iu85gHSH4Yem4zZ25adZwglB
-xMnd4ntO8SI0A3tI8AXHuux5U7s+cG9XCFYQxd2EOy6px3proHG5+9fvWnPLxTz2
-4hQQ8EMqwcCZD0gRHrZBw92i08GUEQ==
-=VYnx
------END PGP SIGNATURE-----
-
---HlL+5n6rz5pIUxbD--
