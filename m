@@ -2,109 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F03342141CF
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Jul 2020 00:51:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B7252141FD
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Jul 2020 01:44:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726415AbgGCWvD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jul 2020 18:51:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35726 "EHLO
+        id S1726760AbgGCXoq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jul 2020 19:44:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726317AbgGCWvD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jul 2020 18:51:03 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F231C061794;
-        Fri,  3 Jul 2020 15:51:03 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id d16so22417379edz.12;
-        Fri, 03 Jul 2020 15:51:03 -0700 (PDT)
+        with ESMTP id S1726304AbgGCXon (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jul 2020 19:44:43 -0400
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00618C061794
+        for <linux-usb@vger.kernel.org>; Fri,  3 Jul 2020 16:44:42 -0700 (PDT)
+Received: by mail-qk1-x744.google.com with SMTP id 145so27659302qke.9
+        for <linux-usb@vger.kernel.org>; Fri, 03 Jul 2020 16:44:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HoJnjAdizKBcZS/TwdGFdcCHABPJEEKDcGriqvJQXl8=;
-        b=Aiyn4tkw+Jk2iDxJZDgHIBFvm9nZgBHvWtXlIUf9vqGwapr6RkAV3nJJskM7upei6H
-         V5qqqpyT33351Iiuer3bl4rf1DwooFpyugOWE8idDf5lgT8JqUUh0gaU0voAiFM6BJs5
-         Nxgyl6jmvNUejqWCQ2gYSWLQBfPR0AatS5MhiyhXA+tHVoNztHf31QL2Njn+TeW0zM6n
-         noHEoDYP266+Ds2VpCDzJiAnf/p/mKwoz1q4mzR0ZV26P0O7uDdYJrwHUARVKap0UZwk
-         zxxQExzAGCVKv56hc7Jbxx7AT4Al4J9HfvMg4eNadGN6Sk6Jyt/gdaebsu/lrh/9OXlA
-         6jng==
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=9MBMJHyuzyTfZ+cIgnghSJimXawm3lrGDRrH4lQpVs0=;
+        b=PtZ35nyOuzzyvZrCQlyBq5OrR/juUrm2Aq9SdIjbWeD6emWd4s6zS/C8M/MUrM14vI
+         8gjG1FMYHAzAU/ajTYLqrQ/I9YD9qQ2jS/NK9r+Oe1fJyXj/gtoMQsjJ7uYbtXpLhCQS
+         4WBKi4zYsAXqVSaqjIqlcvZvfQ4mawm5+QwlcAsOEZe+cF8E+sqxufvomSAtbeoACno+
+         pbz/+69Cs+GORoE9f4wV6e/IH/fEmAL5nZ0BfdqSUw9WMsiW+vbP6uDiXw28dEkr0/MQ
+         7B6CisF+HxThqLYX7s9CBg/dXgzDUk+4Hn5lTH2i1WxBM0syKbPVMR2CrqtJW4e9Hme0
+         P2WQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=HoJnjAdizKBcZS/TwdGFdcCHABPJEEKDcGriqvJQXl8=;
-        b=j0u5W56Br2Ey5btpQRCvcAHoaKqAHIoGSDYWSQZ2STNA4W2na5N6Aq0S66H7pNVvJu
-         rPW5BWZdqY/iupKQgEZ6DLZ/aJuzpmZWK1ZPJF7kLioyIAJxwDH3SitwaZPFqiAZasws
-         0RBIFsxd0Sipy6zRN4dgW1GQe+xBA6eCuirwPO+Tz4R/2iJleViuWAEROCaIx6sOCy9E
-         OAoIejxxA2ISSxPhSOICM4eS5kV1ZES2tdTdC5QNIfIX2zpMhi/0gpDxtu7nQk7SlRSk
-         OxT76n3W+osXAV49SomAmqQfDBxZOvX/osJz7uQ04OvycDFsUrCq6yTCJnT6LmHF6Qd/
-         687Q==
-X-Gm-Message-State: AOAM530AliTeFH9LfLboLeddmAGT2AvePcInC6eQYmWCte3H4RSYW4j5
-        cPqhz6uYQXptrN9vtUuDiD8AbMqW
-X-Google-Smtp-Source: ABdhPJwzOg7dxuPJBFeLCeyTj/hsz8BnW4Iwx8qroFdpbIfmXqPMr62Dvp/Am75GDKR2JIvVscEi+Q==
-X-Received: by 2002:aa7:d3ca:: with SMTP id o10mr44560137edr.138.1593816661803;
-        Fri, 03 Jul 2020 15:51:01 -0700 (PDT)
-Received: from localhost.localdomain (p200300f1372b7a00428d5cfffeb99db8.dip0.t-ipconnect.de. [2003:f1:372b:7a00:428d:5cff:feb9:9db8])
-        by smtp.googlemail.com with ESMTPSA id q25sm10440839ejz.97.2020.07.03.15.51.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jul 2020 15:51:00 -0700 (PDT)
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-To:     hminas@synopsys.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, marex@denx.de,
-        stable@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH for-5.8 v2] usb: dwc2: Add missing cleanups when usb_add_gadget_udc() fails
-Date:   Sat,  4 Jul 2020 00:50:43 +0200
-Message-Id: <20200703225043.387769-1-martin.blumenstingl@googlemail.com>
-X-Mailer: git-send-email 2.27.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=9MBMJHyuzyTfZ+cIgnghSJimXawm3lrGDRrH4lQpVs0=;
+        b=TwwDiSfK/8mS2dlgQbXvIIsa0UcXEdnEVIW8MktABsfLKXpxQHDh2XLeLdrO81wYmr
+         jE73sdIxL7sRH0nT3SYI5aXtDegiYOb9ot0BISEStETMhX5MhovT5Viqx7k2e0e0KP39
+         nEgD3rbsvsDJPbV7w1EuTvjd86+dELh3mJpFvQzUPttGCerkf+qzU15sWKp7FNc1xBGE
+         sjNi5CMOCHZKtT4ja0nhZ019lH7fDNHlfu1Tj4ikKLndt1XxljT1vQNYAeRieGyBIM4o
+         h9fgSnmFcekhqzr/oS/sdtDl3WS21xkqpLLxlogPghExBdKh71a7pNypel0XNs30Vcbg
+         6hKg==
+X-Gm-Message-State: AOAM531dbF5xaoA9+JVnTozC97xtgV0alNgOdlrA3yUxyMf/ak5Z5ulW
+        ncR5GD5Mpoqq4wscADhGMZvUwxm2luTKye8rTRA=
+X-Google-Smtp-Source: ABdhPJwzBoHalKAKHwsFBwPXIJG8SAdPkmrd3bqVu+FFRB2XCKrLVEURaTxGCnGdQCEFdrYDznDKFhf/ZZL4wOtSeF0=
+X-Received: by 2002:a37:4907:: with SMTP id w7mr37467627qka.492.1593819881826;
+ Fri, 03 Jul 2020 16:44:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a0c:aa57:0:0:0:0:0 with HTTP; Fri, 3 Jul 2020 16:44:41 -0700 (PDT)
+Reply-To: hamzakwadrago2@gmail.com
+From:   Hamzak Wadrago <nad.far83@gmail.com>
+Date:   Fri, 3 Jul 2020 23:44:41 +0000
+Message-ID: <CANDz0oXyR47J3xjV1EP9bFaSpJc1DOvqe3dhLOdFMkgaOVvGVg@mail.gmail.com>
+Subject: Awaiting your urgent response,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Call dwc2_debugfs_exit() and dwc2_hcd_remove() (if the HCD was enabled
-earlier) when usb_add_gadget_udc() has failed. This ensures that the
-debugfs entries created by dwc2_debugfs_init() as well as the HCD are
-cleaned up in the error path.
+Dear Friend,
 
-Fixes: 207324a321a866 ("usb: dwc2: Postponed gadget registration to the udc class driver")
-Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
----
-Changes since v1 at [0]
-- also cleanup the HCD as suggested by Minas (thank you!)
-- updated the subject accordingly
+I decided to contact you after a careful thought that you may be
+capable of handling this business transaction which I explained below,
+I am the head of Accounts and Audit Department of Bank of Africa
+Ouagadougou. In my department while cross-checking the files of
+foreigners. since our federal government has announced on the need of
+settling all foreign bills to enable foreign investors to come into
+our country and as an order from African unity governed by African
+heads, I discovered an abandoned sum of $15.5m US dollars (fifteen
+million, five hundred thousand US dollars). In an account that belongs
+to one of our foreign customer who died along with his entire family
+in a plane crash.
 
+Since i got information about his death, The bank have been expecting
+his next of kin to come over and claim his money because The fund
+cannot be released unless somebody applies for it as next of kin or
+relation to the deceased as indicated in our banking guidelines but
+unfortunately I learnt that his supposed next of kin(his son and wife)
+died alongside with him at the plane crash leaving nobody behind for
+the claim .It is therefore upon this discovery that I now decided to
+make this business proposal to you and release the money to you as the
+next of kin (I want to present you as his business associate )to the
+deceased for safety and subsequent disbursement since nobody is coming
+for it and I don't want this money to go into the Bank treasury as
+unclaimed Bill.
 
-[0] https://patchwork.kernel.org/patch/11631381/
+The Banking law and guideline here stipulates that if such money
+remained Unclaimed after Nine years, the money will be transferred
+into the Bank treasury as unclaimed fund.. The request of foreigner as
+next of kin in this business is occasioned by the fact that the
+customer was a foreigner and a Burkina be cannot stand as next of kin
+to a foreigner.
 
+I agree that 40% of this money will be for you as foreign partner, in
+respect to the provision of a foreign account, 60% would be for me .
+There after I will visit your country for disbursement according to
+the percentages indicated. Therefore to enable the immediate transfer
+of this fund to your account as arranged, you must apply first to the
+bank as next of kin of the deceased customer.
 
- drivers/usb/dwc2/platform.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Upon receipt of your reply, more details and text of application form
+will be given to you for immediate transfer of the fund, I will not
+fail to bring to your notice that this transaction is hitch free and
+that you should not entertain any atom of fear as all required
+arrangements have been made for the transfer.
 
-diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
-index c347d93eae64..9febae441069 100644
---- a/drivers/usb/dwc2/platform.c
-+++ b/drivers/usb/dwc2/platform.c
-@@ -582,12 +582,16 @@ static int dwc2_driver_probe(struct platform_device *dev)
- 		retval = usb_add_gadget_udc(hsotg->dev, &hsotg->gadget);
- 		if (retval) {
- 			dwc2_hsotg_remove(hsotg);
--			goto error_init;
-+			goto error_debugfs;
- 		}
- 	}
- #endif /* CONFIG_USB_DWC2_PERIPHERAL || CONFIG_USB_DWC2_DUAL_ROLE */
- 	return 0;
- 
-+error_debugfs:
-+	dwc2_debugfs_exit(hsotg);
-+	if (hsotg->hcd_enabled)
-+		dwc2_hcd_remove(hsotg);
- error_init:
- 	if (hsotg->params.activate_stm_id_vb_detection)
- 		regulator_disable(hsotg->usb33d);
--- 
-2.27.0
+i will like  you to send me this information about you such as  your
+full names, direct telephone numbers, and physical address.
 
+Yours sincerely,
+
+Mr. Hamzak Wadrago.
