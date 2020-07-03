@@ -2,71 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A031213060
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Jul 2020 02:11:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFE6221310B
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jul 2020 03:42:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726029AbgGCALY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 2 Jul 2020 20:11:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52688 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725937AbgGCALX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jul 2020 20:11:23 -0400
-Received: from mail-vk1-xa43.google.com (mail-vk1-xa43.google.com [IPv6:2607:f8b0:4864:20::a43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7872AC08C5C1
-        for <linux-usb@vger.kernel.org>; Thu,  2 Jul 2020 17:11:23 -0700 (PDT)
-Received: by mail-vk1-xa43.google.com with SMTP id g22so2548358vke.9
-        for <linux-usb@vger.kernel.org>; Thu, 02 Jul 2020 17:11:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=Y+Et5EkXYGsL7JRJ4AQ9XJdBe82k938L/i42V+8C0EY=;
-        b=Z9AmD8dPkx4fiiRjmYHxTMlqvOCjThlPmWKKLJvZ3T2o3+Yyvg+J+bsM3oqVB0FJ7E
-         ObLuWDyiASL1Qba08pZhuNAjwlMmVMzg1yVu7u5TgW+OqIVz958KU3RfPNw/+HSu9wxm
-         mOAs7MD8DP5pshHhrD/6qy6a/w0RcKw3jD5cIQ/xzQD/gD17kj4yBCALH0ANjREmW7RA
-         RlgOrtWkeEdV5ApddVfhULPJMte8Hg6OnztcMAqsEw8YIYy9lzS0XrMsRVK+kqa0Ei0p
-         CMvDJjEKiCdciXwMB/Cq1T90raGz5RDNO+4D/V+sfpsebZFoEzEoPWP8qadQAf323Cua
-         Uafw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=Y+Et5EkXYGsL7JRJ4AQ9XJdBe82k938L/i42V+8C0EY=;
-        b=ailuHcUTzjLg1qZzmC6g+htcqTL/C/VOO3tKAXEY9oxwoeL2Sof7Ot/kcg7+MhWkL2
-         K1VAQ0jj+lCv20sOTznWsxK8PykbilQRG6ltMHurcZ7S0ku6nfM596DfVBIafl0bSaaZ
-         mBX5ciYnDLZVM8xunAsPlnKI8DR2blbqThgSB6yvxRedO8ZuMw5zPv2ytQ1XVM3y3yAD
-         UomNrt/Xsb3rxJm5rx9puC0dJvUct+lV2kuCfT/vioS/2mbdd/UfN/XuwKjA052AIahY
-         xHLDoUUZ3c6FjykGCERW8yfhsfNEG36htvM31cU2VfXiL45JEAB2r2ctiqhlDhV0asyh
-         Ikdg==
-X-Gm-Message-State: AOAM531OnFyGir/A1dkVJanSDqi4SZGu4f4/f01jfgF1LccBqoMsvl71
-        aWxkyvdLIiGK0Ll/LYevzIwlS4FCC15wtlTaV7Ni5Q==
-X-Google-Smtp-Source: ABdhPJy9uq9KqE2omdBj1DEGuXHJ11ySwnW7lOaiCRmBRzKwAacAyxskombcxPx9euQoDmLWHkwSf1lyF/949Y1eI/4=
-X-Received: by 2002:a1f:9358:: with SMTP id v85mr8256509vkd.42.1593735082139;
- Thu, 02 Jul 2020 17:11:22 -0700 (PDT)
-MIME-Version: 1.0
-From:   Chris Dickens <christopher.a.dickens@gmail.com>
-Date:   Thu, 2 Jul 2020 17:11:11 -0700
-Message-ID: <CAL-1MmUi6OajEYNuP+OOEeekesZJjAGP-8VDSjGydXAMEFHhMA@mail.gmail.com>
-Subject: gadget: Why do Microsoft OS descriptors need their own USB request?
-To:     linux-usb <linux-usb@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     andrzej.p@samsung.com
+        id S1726048AbgGCBlv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 2 Jul 2020 21:41:51 -0400
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:45582 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726028AbgGCBlv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 2 Jul 2020 21:41:51 -0400
+X-UUID: ca18e9f1428243f9bbdd55803ab32466-20200703
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=sUHdggt26F3MOMSAq41fK1KG/YmQcbQ9D5Hb4j4vHwE=;
+        b=gTpT5exURc8zkpN1I2YB09E+U1WngkCfzhZbBniWYXIIouonZMOUHgZv1apcRyPZx4fI1x7Mx9tvlA8vXU3qn7JJ20luTSuI2eVOHEFpcDkoL5uc5qw9dKZkhpb5ZyH5w40FmtHW0aaoTLiAOtBiC+l3mMAHulyZHqXFrW0jpjI=;
+X-UUID: ca18e9f1428243f9bbdd55803ab32466-20200703
+Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 1849453336; Fri, 03 Jul 2020 09:41:35 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS32N1.mediatek.inc
+ (172.27.4.71) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 3 Jul
+ 2020 09:41:30 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 3 Jul 2020 09:41:30 +0800
+Message-ID: <1593740465.23885.19.camel@mhfsdcap03>
+Subject: Re: [PATCH 16/30] usb: mtu3: mtu3_trace: Function headers are not
+ suitable for kerneldoc
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Lee Jones <lee.jones@linaro.org>
+CC:     <gregkh@linuxfoundation.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>
+Date:   Fri, 3 Jul 2020 09:41:05 +0800
+In-Reply-To: <20200702144625.2533530-17-lee.jones@linaro.org>
+References: <20200702144625.2533530-1-lee.jones@linaro.org>
+         <20200702144625.2533530-17-lee.jones@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
+MIME-Version: 1.0
+X-TM-SNTS-SMTP: 6C16EDA848D1FBDB58785863678FD0E8CB02C388F192B15DB8BCAD8D1E917B032000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+T24gVGh1LCAyMDIwLTA3LTAyIGF0IDE1OjQ2ICswMTAwLCBMZWUgSm9uZXMgd3JvdGU6DQo+IEZp
+eGVzIHRoZSBmb2xsb3dpbmcgVz0xIGtlcm5lbCBidWlsZCB3YXJuaW5nczoNCj4gDQo+ICBkcml2
+ZXJzL3VzYi9tdHUzL210dTNfdHJhY2UuYzoxMzo2OiB3YXJuaW5nOiBubyBwcmV2aW91cyBwcm90
+b3R5cGUgZm9yIOKAmG10dTNfZGJnX3RyYWNl4oCZIFstV21pc3NpbmctcHJvdG90eXBlc10NCj4g
+IDEzIHwgdm9pZCBtdHUzX2RiZ190cmFjZShzdHJ1Y3QgZGV2aWNlICpkZXYsIGNvbnN0IGNoYXIg
+KmZtdCwgLi4uKQ0KPiAgfCBefn5+fn5+fn5+fn5+fg0KVGhlIGRlc2NyaXB0aW9uIGRvZXNuJ3Qg
+bWF0Y2ggd2l0aCB0aGUgdGl0bGUgYW5kIGNvZGUgY2hhbmdlcw0KDQo+IA0KPiBDYzogQ2h1bmZl
+bmcgWXVuIDxjaHVuZmVuZy55dW5AbWVkaWF0ZWsuY29tPg0KPiBDYzogbGludXgtbWVkaWF0ZWtA
+bGlzdHMuaW5mcmFkZWFkLm9yZw0KPiBTaWduZWQtb2ZmLWJ5OiBMZWUgSm9uZXMgPGxlZS5qb25l
+c0BsaW5hcm8ub3JnPg0KPiAtLS0NCj4gIGRyaXZlcnMvdXNiL210dTMvbXR1M190cmFjZS5jIHwg
+MiArLQ0KPiAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pDQo+
+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvbXR1My9tdHUzX3RyYWNlLmMgYi9kcml2ZXJz
+L3VzYi9tdHUzL210dTNfdHJhY2UuYw0KPiBpbmRleCA0ZjVlNzg1N2VjMzEyLi4xNTVlYWUxMjZl
+NWUyIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3VzYi9tdHUzL210dTNfdHJhY2UuYw0KPiArKysg
+Yi9kcml2ZXJzL3VzYi9tdHUzL210dTNfdHJhY2UuYw0KPiBAQCAtMSw1ICsxLDUgQEANCj4gIC8v
+IFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wDQo+IC0vKioNCj4gKy8qDQo+ICAgKiBt
+dHUzX3RyYWNlLmMgLSB0cmFjZSBzdXBwb3J0DQo+ICAgKg0KPiAgICogQ29weXJpZ2h0IChDKSAy
+MDE5IE1lZGlhVGVrIEluYy4NCg0K
 
-I've never understood it, so I figure I might as well just ask.  Why
-does the Microsoft OS descriptors support require the allocation of a
-separate USB request for the composite gadget device?  Both the
-default control request buffer and the "special" OS descriptors buffer
-are the same size (4KB) and use the same completion handler.  As far
-as I can tell there is nothing distinct between them.  There's only
-ever one outstanding USB request queued to ep0, so can the dedicated
-USB request be removed and just share the default one?  I'm happy to
-provide a patch, unless of course I've missed something.
-
-Regards,
-Chris
