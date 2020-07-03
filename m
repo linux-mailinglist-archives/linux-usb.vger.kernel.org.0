@@ -2,65 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05AB221348D
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Jul 2020 08:57:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CFE5213490
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jul 2020 09:00:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725960AbgGCG5M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jul 2020 02:57:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49366 "EHLO mail.kernel.org"
+        id S1725949AbgGCHAl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jul 2020 03:00:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49800 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725891AbgGCG5M (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 3 Jul 2020 02:57:12 -0400
+        id S1725764AbgGCHAl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 3 Jul 2020 03:00:41 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AA1E3206DF;
-        Fri,  3 Jul 2020 06:57:10 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7DA3D20771;
+        Fri,  3 Jul 2020 07:00:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593759431;
-        bh=uJWRWO43JxASaW/OKSqEM4bw3NlXSIESiHi5CvzRorU=;
+        s=default; t=1593759641;
+        bh=1WDavdsilEKm5xWoHhjsqrLaLimDNs2dH/OKKPB/hoA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CatH7o2K3W2nDRHS+T9tuBDmarfElrzHRJJRpie6w4C8hVYiMtwb/Nvch4g2aHCui
-         r0hEpyCXW5nsQUpvLaIc6T0atrL7OcleqYqR/0WiPoClELxC4UUGrRVEQIABsN5rsq
-         FtZ1yEj07j7BmZdLUYy2XxIUVq/yHTkSoxCeKz0A=
-Date:   Fri, 3 Jul 2020 08:57:15 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Chris Dickens <christopher.a.dickens@gmail.com>
-Cc:     linux-usb <linux-usb@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>, andrzej.p@samsung.com
-Subject: Re: gadget: Why do Microsoft OS descriptors need their own USB
- request?
-Message-ID: <20200703065715.GA2220026@kroah.com>
-References: <CAL-1MmUi6OajEYNuP+OOEeekesZJjAGP-8VDSjGydXAMEFHhMA@mail.gmail.com>
- <20200703060013.GA6188@kroah.com>
- <CAL-1MmX7xKjYUUAgSGfJ7roi6W3ucD+oyQT4vmxAaDtJpjU07Q@mail.gmail.com>
+        b=j5C8mmGzTZ3JGln/GZm4AY12M1gj2OLtJPKhO3DrEml3jgvwowKVF2cLL1KqsM4gr
+         0lsOOlh4eMcnhbIehVCaAtXAlJIQJd74gyQdkwouXXf3VCUTtg2vElJvw7yga3q+1j
+         8rzav0usTNm+dfGct0MilTzKeOO34Ebzu9F6vBCQ=
+Date:   Fri, 3 Jul 2020 09:00:44 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     balbi@kernel.org, mathias.nyman@intel.com,
+        linux-usb@vger.kernel.org, linux-imx@nxp.com, pawell@cadence.com,
+        rogerq@ti.com, jun.li@nxp.com
+Subject: Re: [PATCH v4 1/9] usb: cdns3: introduce cdns3_set_phy_power API
+Message-ID: <20200703070044.GB2220026@kroah.com>
+References: <20200703062653.29159-1-peter.chen@nxp.com>
+ <20200703062653.29159-2-peter.chen@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAL-1MmX7xKjYUUAgSGfJ7roi6W3ucD+oyQT4vmxAaDtJpjU07Q@mail.gmail.com>
+In-Reply-To: <20200703062653.29159-2-peter.chen@nxp.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-A: Because it messes up the order in which people normally read text.
-Q: Why is top-posting such a bad thing?
-A: Top-posting.
-Q: What is the most annoying thing in e-mail?
+On Fri, Jul 03, 2020 at 02:26:45PM +0800, Peter Chen wrote:
+> Since we have both USB2 and USB3 PHYs for cdns3 controller, it is
+> better we have a unity API to handle both USB2 and USB3's power, it
+> could simplify code for error handling and further power management
+> implementation.
+> 
+> Reviewed-by: Jun Li <jun.li@nxp.com>
+> Signed-off-by: Peter Chen <peter.chen@nxp.com>
+> ---
+>  drivers/usb/cdns3/core.c | 44 ++++++++++++++++++++++++++--------------
+>  1 file changed, 29 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
+> index 19bbb5b7e6b6..bfd09aa98c12 100644
+> --- a/drivers/usb/cdns3/core.c
+> +++ b/drivers/usb/cdns3/core.c
+> @@ -384,6 +384,28 @@ static int cdns3_role_set(struct usb_role_switch *sw, enum usb_role role)
+>  	return ret;
+>  }
+>  
+> +static int cdns3_set_phy_power(struct cdns3 *cdns, bool on)
 
-A: No.
-Q: Should I include quotations after my reply?
+Please just make function calls self-describing, instead of having to
+try to remember what a specific flag means.  This isn't as bad as some
+functions, but the general idea remains, this should be 2 functions:
+	set_phy_power_off()
+	set_phy_power_on()
 
-http://daringfireball.net/2007/07/on_top
+no need for the cdns3_ prefix, it's a static function.
 
-On Thu, Jul 02, 2020 at 11:47:09PM -0700, Chris Dickens wrote:
-> Well, the history shows it was there from the very beginning, so it is
-> unclear (at least to me) why it was needed.
+Then have those two functions call a helper if you really want to, but
+that means that reading where those functions are called is obvious and
+no need to backtrack to where this was declared to determine that the
+second parameter meant on/off and not is_disabled/not_disabled or
+something crazy like that.
 
-Look in the older history trees, perhaps it is in there?
 
-And if it pre-dates git, odds are we don't remember anymore, some of us
-deal with thousands of patches a week :)
+
+> +{
+> +	int ret = 0;
+> +
+> +	if (on) {
+> +		ret = phy_power_on(cdns->usb2_phy);
+
+See, phy gets it right.
+
+> +		if (ret)
+> +			return ret;
+> +
+> +		ret = phy_power_on(cdns->usb3_phy);
+> +		if (ret) {
+> +			phy_power_off(cdns->usb2_phy);
+> +			return ret;
+> +		}
+> +	} else {
+> +		phy_power_off(cdns->usb3_phy);
+> +		phy_power_off(cdns->usb2_phy);
+
+Ick, even worse, this needs to be 2 separate functions as there is NO
+common code path here at all.
 
 thanks,
 
