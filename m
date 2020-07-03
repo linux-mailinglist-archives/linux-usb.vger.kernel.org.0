@@ -2,112 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6368C214015
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Jul 2020 21:45:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8F8C214019
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jul 2020 21:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726771AbgGCTo4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jul 2020 15:44:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35148 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726236AbgGCTo4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jul 2020 15:44:56 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078A7C061794
-        for <linux-usb@vger.kernel.org>; Fri,  3 Jul 2020 12:44:56 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id r12so33807997wrj.13
-        for <linux-usb@vger.kernel.org>; Fri, 03 Jul 2020 12:44:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=F3b2vOuE0IiTF4n5D1mX7a/OT5cq2aJSt3VlxRKtnS4=;
-        b=IJg2Hr28t8MBlJ38XwGDbawIOS0VXTGu6C2fVNa2Cn4FxhLyOfZV4PRhmxLzkvhx1h
-         h0KlcVDXfpcmRwS4Wnm5rvhXEKAP2m73t5UQLBNKGIeZF1id7D6A+2MmhfQVS9Jp/4ax
-         n6MwmCFNOkrc8nsX5bf2pF0N6kzpfCI66jFn5yPzD9s5NlpVNUwkHD1/nIHhehfNS4yJ
-         h69ic3rtWrhtmvUUVMMfCbASJKgvpAJeKnKDm6GCb3F8IuNMjb+JdEzQ5azKvaK9/nKd
-         /r3OnvFHZFzXM7tu0Gb6YF7ouZMgYJnKMldGQDLvq2g4/0yb0FRFgJXG4vrfNZzi/y/y
-         PEbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=F3b2vOuE0IiTF4n5D1mX7a/OT5cq2aJSt3VlxRKtnS4=;
-        b=GpMGjm7auYSrdbWOOu0ET0TgE7YeYD3NXMekl1rMmr2cTtGEG+Phet1qJe4tN/9Ji4
-         4FTqKmqoaLzf9DxyoDESTxoOolo2kITSUwuop7RGLwfQayJlkvZGNDUfz7vHmSYBna1L
-         4iOtkTZC+OVT+m/HIK+4HPx0cL8NlZ83bdQfROqA5Arod84TI0pG+FHW9/K77R8vcNjE
-         HyeGWUgcKW0V20PbCgSOXpka82IXL/XwJS9ewsJKoet+xLUaZvTUG4mmZtGFqzRhSagG
-         Z1bvp1w/xDVaCzvuWQ7rj/44C9eYOYWqfav6/N7mX9lY6qXhCe0OCtmJRBxEwTCx4M8Y
-         OP/g==
-X-Gm-Message-State: AOAM532iInQxjCq8Zrx8Xa38swA/5KVeY0ORnK400jZzyLnvZZXbzTU9
-        im7o22jJaiqyhEj/4G1QFTRS9g==
-X-Google-Smtp-Source: ABdhPJxmI5XKxMwwvm/6A65zIhp6cs4iNAqe7col6ivLMh3hoqJWKRSLujYTZrqKsS+LfOwNZ3AmcQ==
-X-Received: by 2002:adf:f311:: with SMTP id i17mr39822583wro.237.1593805494725;
-        Fri, 03 Jul 2020 12:44:54 -0700 (PDT)
-Received: from dell ([2.27.35.144])
-        by smtp.gmail.com with ESMTPSA id f16sm14235349wmh.27.2020.07.03.12.44.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jul 2020 12:44:54 -0700 (PDT)
-Date:   Fri, 3 Jul 2020 20:44:52 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Joe Perches <joe@perches.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Thomas Winischhofer <thomas@winischhofer.net>
-Subject: Re: [PATCH 04/30] usb: misc: sisusbvga: sisusb_init: Mark all
- 'static const' arrays as __maybe_unused
-Message-ID: <20200703194452.GF2743379@dell>
-References: <20200703174148.2749969-1-lee.jones@linaro.org>
- <20200703174148.2749969-5-lee.jones@linaro.org>
- <af66b6e94a26ebd500c1376631891b0bdd0912f0.camel@perches.com>
+        id S1726645AbgGCTrK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jul 2020 15:47:10 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:44451 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726368AbgGCTrK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jul 2020 15:47:10 -0400
+Received: (qmail 632242 invoked by uid 1000); 3 Jul 2020 15:47:09 -0400
+Date:   Fri, 3 Jul 2020 15:47:09 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>
+Subject: Re: [PATCH 1/2] usb: ohci-omap: Create private state container
+Message-ID: <20200703194709.GB631551@rowland.harvard.edu>
+References: <20200703175701.570446-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <af66b6e94a26ebd500c1376631891b0bdd0912f0.camel@perches.com>
+In-Reply-To: <20200703175701.570446-1-linus.walleij@linaro.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 03 Jul 2020, Joe Perches wrote:
-
-> On Fri, 2020-07-03 at 18:41 +0100, Lee Jones wrote:
-> > drivers/usb/misc/sisusbvga/sisusb_init.h is included by a few
-> > source files.  Most of which do not use the majority of the
-> > shared static const arrays which have been declared.  This
-> > causes the build system to spew 100's of warnings.
-> > 
-> > Fixes the following W=1 kernel build warning(s) - and a whole lot more:
-> > 
-> >  In file included from drivers/usb/misc/sisusbvga/sisusb.c:54:
-> >  drivers/usb/misc/sisusbvga/sisusb_init.h:695:34: warning: ‘SiSUSB_VCLKData’ defined but not used [-Wunused-const-variable=]
-> >  695 | static const struct SiS_VCLKData SiSUSB_VCLKData[] = {
-> >  | ^~~~~~~~~~~~~~~
-> > [10's of lines snipped]
-> >  drivers/usb/misc/sisusbvga/sisusb_init.h:206:28: warning: ‘SiS_VGA_DAC’ defined but not used [-Wunused-const-variable=]
-> >  206 | static const unsigned char SiS_VGA_DAC[] = {
-> >  | ^~~~~~~~~~~
-> > [10's of lines snipped]
-> >  drivers/usb/misc/sisusbvga/sisusb_init.h:171:29: warning: ‘ModeIndex_1280x1024’ defined but not used [-Wunused-const-variable=]
-> >  171 | static const unsigned short ModeIndex_1280x1024[] = { 0x3a, 0x4d, 0x00, 0x65 };
-> >  | ^~~~~~~~~~~~~~~~~~~
-> > [10's of lines snipped]
+On Fri, Jul 03, 2020 at 07:57:00PM +0200, Linus Walleij wrote:
+> The OMAP1 was using static locals to hold the clock handles
+> which is uncommon and does not scale. Create a private data
+> struct and use that to hold the clocks.
 > 
-> They are not __maybe_unused, they _are_ used.
+> Cc: Janusz Krzysztofik <jmkrzyszt@gmail.com>
+> Cc: Tony Lindgren <tony@atomide.com>
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
 
-Potentially not by every consumer of this header file.
+Okay in principle, but the patch needs to be revised.
 
-> I think these instead should be moved to where
-> they are used instead of being declared in an
-> #include file.
+> @@ -196,6 +201,7 @@ static int ohci_omap_reset(struct usb_hcd *hcd)
+>  {
+>  	struct ohci_hcd		*ohci = hcd_to_ohci(hcd);
+>  	struct omap_usb_config	*config = dev_get_platdata(hcd->self.controller);
+> +	struct ohci_omap_priv *priv = hcd_to_ohci_omap_priv(hcd);
 
-That works if they are being used by only one source file.
+Use a tab to align with the other declarations, please.
 
-I'll look into it for this instance and get back to you.
+> @@ -341,6 +333,21 @@ static int ohci_hcd_omap_probe(struct platform_device *pdev)
+>  	}
+>  	hcd->rsrc_start = pdev->resource[0].start;
+>  	hcd->rsrc_len = pdev->resource[0].end - pdev->resource[0].start + 1;
+> +	priv = hcd_to_ohci_omap_priv(hcd);
+> +
+> +	priv->usb_host_ck = clk_get(&pdev->dev, "usb_hhc_ck");
+> +	if (IS_ERR(priv->usb_host_ck))
+> +		return PTR_ERR(priv->usb_host_ck);
+> +
+> +	if (!cpu_is_omap15xx())
+> +		priv->usb_dc_ck = clk_get(&pdev->dev, "usb_dc_ck");
+> +	else
+> +		priv->usb_dc_ck = clk_get(&pdev->dev, "lb_ck");
+> +
+> +	if (IS_ERR(priv->usb_dc_ck)) {
+> +		clk_put(priv->usb_host_ck);
+> +		return PTR_ERR(priv->usb_dc_ck);
 
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+If these two clk_get() calls fail, you mustn't just return.  You need to 
+perform the usb_put_hcd() at the bottom of the function.
+
+> +	}
+>  
+>  	if (!request_mem_region(hcd->rsrc_start, hcd->rsrc_len, hcd_name)) {
+>  		dev_dbg(&pdev->dev, "request_mem_region failed\n");
+> @@ -373,8 +380,8 @@ static int ohci_hcd_omap_probe(struct platform_device *pdev)
+>  err1:
+>  	usb_put_hcd(hcd);
+>  err0:
+> -	clk_put(usb_dc_ck);
+> -	clk_put(usb_host_ck);
+> +	clk_put(priv->usb_dc_ck);
+> +	clk_put(priv->usb_host_ck);
+
+When usb_put_hcd() is called, priv bacomes a stale pointer.  These two 
+lines need to come earlier.  Also, you may as well create a label for the 
+second one, so that you can jump there if the second clk_get() fails.
+
+In fact, it wouldn't hurt to rename all these error labels to something
+more meaningful than err0, err1, etc.  That could be done in a separate,
+preliminary patch.
+
+> @@ -406,8 +414,8 @@ static int ohci_hcd_omap_remove(struct platform_device *pdev)
+>  	iounmap(hcd->regs);
+>  	release_mem_region(hcd->rsrc_start, hcd->rsrc_len);
+>  	usb_put_hcd(hcd);
+> -	clk_put(usb_dc_ck);
+> -	clk_put(usb_host_ck);
+> +	clk_put(priv->usb_dc_ck);
+> +	clk_put(priv->usb_host_ck);
+
+Same comment about stale pointers here as before.
+
+Alan Stern
