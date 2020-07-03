@@ -2,65 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1623213BB4
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Jul 2020 16:19:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 853DA213C25
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jul 2020 16:53:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726048AbgGCOTM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jul 2020 10:19:12 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:37425 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726035AbgGCOTM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jul 2020 10:19:12 -0400
-Received: (qmail 623871 invoked by uid 1000); 3 Jul 2020 10:19:11 -0400
-Date:   Fri, 3 Jul 2020 10:19:11 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-        gregkh@linuxfoundation.org, linux-imx@nxp.com
-Subject: Re: [PATCH 2/2] usb: host: xhci-plat: add wakeup entry at /sys
-Message-ID: <20200703141911.GA623139@rowland.harvard.edu>
-References: <20200703062532.29076-1-peter.chen@nxp.com>
- <20200703062532.29076-2-peter.chen@nxp.com>
+        id S1726581AbgGCOxs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jul 2020 10:53:48 -0400
+Received: from mx2.suse.de ([195.135.220.15]:60512 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726053AbgGCOxs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 3 Jul 2020 10:53:48 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 2C652AF69;
+        Fri,  3 Jul 2020 14:53:47 +0000 (UTC)
+Message-ID: <a9058fd2c54bbea69fdf97e30277338a61b5c0b4.camel@suse.de>
+Subject: Re: [BUG] XHCI getting ZONE_DMA32 memory > than its bus_dma_limit
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     Jeremy Linton <jeremy.linton@arm.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>, linux-mm@kvack.org,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        rientjes@google.com, Christoph Hellwig <hch@lst.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>
+Date:   Fri, 03 Jul 2020 16:53:45 +0200
+In-Reply-To: <34619bdf-6527-ae82-7e4d-e2ea7c67ed56@arm.com>
+References: <34619bdf-6527-ae82-7e4d-e2ea7c67ed56@arm.com>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-jPh4P4ef6IRIm8gZjo2Z"
+User-Agent: Evolution 3.36.3 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200703062532.29076-2-peter.chen@nxp.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 03, 2020 at 02:25:32PM +0800, Peter Chen wrote:
-> After that, the user could enable controller as wakeup source
-> for system suspend through /sys entry.
-> 
-> Signed-off-by: Peter Chen <peter.chen@nxp.com>
-> ---
->  drivers/usb/host/xhci-plat.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-> index cebe24ec80a5..bb5d73f0a796 100644
-> --- a/drivers/usb/host/xhci-plat.c
-> +++ b/drivers/usb/host/xhci-plat.c
-> @@ -287,7 +287,7 @@ static int xhci_plat_probe(struct platform_device *pdev)
->  		*priv = *priv_match;
->  	}
->  
-> -	device_wakeup_enable(hcd->self.controller);
-> +	device_set_wakeup_capable(hcd->self.controller, true);
+
+--=-jPh4P4ef6IRIm8gZjo2Z
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Jeremy,
+thanks for the bug report.
+
+Just for the record the offending commit is: c84dc6e68a1d2 ("dma-pool: add
+additional coherent pools to map to gfp mask").
+
+On Thu, 2020-07-02 at 12:49 -0500, Jeremy Linton wrote:
+> Hi,
+>=20
+> Using 5.8rc3:
+>=20
+> The rpi4 has a 3G dev->bus_dma_limit on its XHCI controller. With a usb3=
+=20
+> hub, plus a few devices plugged in, randomly devices will fail=20
+> operations. This appears to because xhci_alloc_container_ctx() is=20
+> getting buffers > 3G via dma_pool_zalloc().
+>=20
+> Tracking that down, it seems to be caused by dma_alloc_from_pool() using=
+=20
+> dev_to_pool()->dma_direct_optimal_gfp_mask() to "optimistically" select=
+=20
+> the atomic_pool_dma32 but then failing to verify that the allocations in=
+=20
+> the pool are less than the dev bus_dma_limit.
+
+I can reproduce this too.
+
+The way I see it, dev_to_pool() wants a strict dma_direct_optimal_gfp_mask(=
+)
+that is never wrong, since it's going to stick to that pool for the device'=
+s
+lifetime. I've been looking at how to implement it, and it's not so trivial=
+ as
+I can't see a failproof way to make a distinction between who needs DMA32 a=
+nd
+who is OK with plain KERNEL memory.
+
+Otherwise, as Jeremy points out, the patch needs to implement allocations w=
+ith
+an algorithm similar to __dma_direct_alloc_pages()'s, which TBH I don't kno=
+w if
+it's a little overkill for the atomic context.
+
+Short of finding a fix in the coming rc's, I suggest we revert this.
+
+Regards,
+Nicolas
 
 
-In fact both this patch and the original code are wrong.  It really should 
-be:
+--=-jPh4P4ef6IRIm8gZjo2Z
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
-	device_init_wakeup(hcd->self.controller, true);
+-----BEGIN PGP SIGNATURE-----
 
-This will add the wakeup entry in sysfs and set it to Enabled.  This is 
-the appropriate behavior, as explained in the kerneldoc for 
-device_init_wakeup().  The reason is because the controller device doesn't 
-create any wakeup events on its own; it merely relays wakeup requests from 
-descendant devices (root hubs or USB devices).
+iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl7/RnkACgkQlfZmHno8
+x/7Hzwf9EK5UZ/nU0kNYHFn34OzNUw81RBxAseEJjDNzqtbLPFOnBapN7FTeMf3t
+SEVbR4NXtItrMqKjppBcAhqjw6geoWvgonDnZlMKZhV4CNSGqgBc8U1kn5FRY4H/
+6/nJ2yzcRtuYCmoIK/Rtc6g53+lJoM+Cmor1Bdp9RG+qOc9cylECc1FI6zx3HaZv
+vBfaKbqF6relsISrxWkD/iRne99hINnTvdE2LTz8VoZWWbN3G+lUkDw9KJbm4WaT
+3lFAMPf2XQ9pJVmDj+M2TYMLkCGTelhml4o1ngHvugQFfjaueuFdOcbXiTikx7RP
+IJWc4W/+qG6zKC3cOjN6oj6fLNCQaw==
+=5wyW
+-----END PGP SIGNATURE-----
 
-Alan Stern
+--=-jPh4P4ef6IRIm8gZjo2Z--
+
