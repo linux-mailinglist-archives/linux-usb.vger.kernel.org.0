@@ -2,73 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F17002146DF
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Jul 2020 17:21:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E4B42146ED
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Jul 2020 17:34:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726739AbgGDPVr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 4 Jul 2020 11:21:47 -0400
-Received: from smtp67.ord1d.emailsrvr.com ([184.106.54.67]:57504 "EHLO
-        smtp67.ord1d.emailsrvr.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726687AbgGDPVr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Jul 2020 11:21:47 -0400
-X-Greylist: delayed 377 seconds by postgrey-1.27 at vger.kernel.org; Sat, 04 Jul 2020 11:21:47 EDT
-X-Auth-ID: halbert@halwitz.org
-Received: by smtp9.relay.ord1d.emailsrvr.com (Authenticated sender: halbert-AT-halwitz.org) with ESMTPSA id 1E489C00B7
-        for <linux-usb@vger.kernel.org>; Sat,  4 Jul 2020 11:15:30 -0400 (EDT)
-To:     Linux USB List <linux-usb@vger.kernel.org>
-From:   Dan Halbert <halbert@halwitz.org>
-Subject: Kernel crash during USB device enumeration or MSC mounting
-Message-ID: <aa7c2ad9-3daa-7fec-3f2a-9e35a3196938@halwitz.org>
-Date:   Sat, 4 Jul 2020 11:15:29 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1726869AbgGDPe0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 4 Jul 2020 11:34:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48318 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726405AbgGDPe0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 4 Jul 2020 11:34:26 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5DFCC20747;
+        Sat,  4 Jul 2020 15:34:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1593876865;
+        bh=+fjCzy5OXfDBbp5TlsdttNfhj/6HagnqAIixisnClWQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=i9Kaf5DiiMddEyIiGkQMiWhu+DlK7LCMLoXZPiKVZsdKGVyeAXk1+pzWv/yRfSx/U
+         esbOYjjAFO9/sIK9dMYJnnmDwPQQYBmrrj2hYR6sX7YgZlBoDLtf93T483AzJbPrAj
+         NKIR2n7v2Mb9EakQlhNYwrWAG06ghepk3xsJWqMI=
+Date:   Sat, 4 Jul 2020 17:34:29 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Dan Halbert <halbert@halwitz.org>
+Cc:     Linux USB List <linux-usb@vger.kernel.org>
+Subject: Re: Kernel crash during USB device enumeration or MSC mounting
+Message-ID: <20200704153429.GA433456@kroah.com>
+References: <aa7c2ad9-3daa-7fec-3f2a-9e35a3196938@halwitz.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Classification-ID: d8795fb2-3552-4b42-b2ee-6161d687e8a0-1-1
+In-Reply-To: <aa7c2ad9-3daa-7fec-3f2a-9e35a3196938@halwitz.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi -- I was referred to this list by Kai-Heng Feng after filing an issue 
-on the Ubuntu bug tracker here:
+On Sat, Jul 04, 2020 at 11:15:29AM -0400, Dan Halbert wrote:
+> Hi -- I was referred to this list by Kai-Heng Feng after filing an issue on
+> the Ubuntu bug tracker here:
+> 
+>   https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1871143.
+> 
+> Many further details are in that report, including "lsusb -v", "lspci -v",
+> dmesg, and call trace output.
 
- Â  https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1871143.
+Where is the kernel crash in those logs?  I don't seem to be able to
+find the correct one, can you just send it here so we can read and
+comment on it in the email thread?  I see something odd with the fat
+driver, are you sure you are creating a correct filesystem image for it
+to handle?
 
-Many further details are in that report, including "lsusb -v", "lspci 
--v", dmesg, and call trace output.
+> We are seeing kernel crashes from certain composite USB devices that present
+> as MSC, CDC, HID, and MIDI. The devices are microcontroller boards running
+> CircuitPython (https://github.com/adafruit/circuitpython), which uses the
+> TinyUSB USB stack: https://github.com/hathach/tinyusb.
+> 
+> The board is commanded to forcibly reformat its MSC FAT12 filesystem and
+> then reset. This causes a USB reset and re-enumeration, which can often
+> (though not all the time) cause a kernel crash.
 
-We are seeing kernel crashes from certain composite USB devices that 
-present as MSC, CDC, HID, and MIDI. The devices are microcontroller 
-boards running CircuitPython 
-(https://github.com/adafruit/circuitpython), which uses the TinyUSB USB 
-stack: https://github.com/hathach/tinyusb.
+What do you mean by "reset"?  Are you disconnecting the device from the
+USB bus causing it to electronically be removed and then added back?  Or
+doing something else?
 
-The board is commanded to forcibly reformat its MSC FAT12 filesystem and 
-then reset. This causes a USB reset and re-enumeration, which can often 
-(though not all the time) cause a kernel crash.
+> The crashes may be some kind of use-after-free bug in the kernel USB driver.
 
-The crashes may be some kind of use-after-free bug in the kernel USB driver.
+Maybe, but the traces seem _very_ short on the stuff on the web page,
+can you send us the full traceback from the crash?
 
-We have seen this or similar crashes caused by several different boards 
-that use different microcontrollers. The hosts are x64, including Dell 
-Intel-chipset desktops and an older Mac Mini running Linux (also Intel 
-chipset).
+> We have seen this or similar crashes caused by several different boards that
+> use different microcontrollers. The hosts are x64, including Dell
+> Intel-chipset desktops and an older Mac Mini running Linux (also Intel
+> chipset).
 
-The ports in use can be either USB2 or USB3. Sometimes interposing a 
-USB2 hub helps.
+That's not good, but might mean it is a filesystem issue, not a USB
+issue.
 
-The boards and underlying software are from Adafruit. I work for 
-Adafruit on CircuitPython, and the maintainer of TinyUSB also works for 
-Adafrui, so we can provide further help to track this down. We can 
-provide Beagle 12 USB traces if that would be helpful.
+thanks,
 
-I have reproduced these crashes using kernels as far back as 4.10 and up 
-to 5.7, so it is a long-standing issue.
-
-We're very happy to provide further information. See the Launchpad bug 
-report for more details.
-
-Dan
+greg k-h
