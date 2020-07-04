@@ -2,176 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A2E12147C6
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Jul 2020 19:43:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B93E22147D9
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Jul 2020 20:02:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727785AbgGDRml (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 4 Jul 2020 13:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39756 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726643AbgGDRml (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Jul 2020 13:42:41 -0400
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13AEAC061794;
-        Sat,  4 Jul 2020 10:42:41 -0700 (PDT)
-Received: by mail-ed1-x543.google.com with SMTP id dm19so24361295edb.13;
-        Sat, 04 Jul 2020 10:42:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=s+WjqQhLnrBI9EZzuDqm8X/T4+BDu4Hvw8Pd6T2GP/0=;
-        b=bGJue6eFu/VA4Z82viDrc/TOb1htLvh2SOgSDczNVO7YU7sdfkKY28+EU8afJih10q
-         0N8YaAE/AmpRF6dp640fwh2aIEClOc56Zzav7IhwuCCIQMXGV6if3oeuYbKBWQu+ttlB
-         QSXNrork0ZteL5K5kxxc7oaaLoWxaN+xARlgoWRL6Cuv64rfoHyjMh980DsyvOLaynjR
-         K0UgWIugk+qbiApkZC9cKu2BfujP19Eu3jtymgrqJhYJR56xXgK8r/UgIHYnVhr8myrp
-         bd3Bb7hC2Gjq8H1hERABJXPPmgiFQpOD12As09QpFCPPWdVI1psRm4k36AKXbOJ5vNxk
-         EXYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=s+WjqQhLnrBI9EZzuDqm8X/T4+BDu4Hvw8Pd6T2GP/0=;
-        b=tVbzpDiLNbvt02kkKtppX6qjFIYSRFmUFtBJnKUxuMD1zMKBwqGnbu2TIkjwgBxwNH
-         BnLeA3CC0eS3ZWfzOtDdFTM6P+VeXfrFIXIZyiY1bQ91h84xA1A75pP6w5LwyZgId4n0
-         SA+gg3QoRjPwi8g6Z1IS+ugq0mUOJEKZWWL2Jl3O6tWrcyB59vkYaTk69bTzkXOjEeO5
-         J2c29jLYeWkQysSod38t7FofguD5nWO8IXwIuYRyqyDbfzAsSuNGM6KGbFroJjxpX3S0
-         SW7ft20N+hzXBcC/VHFrtqKQ/9rnxX6fAzCh8IAy0n7atDWm7m1neqCFxGoRm9Pv9EP4
-         04eA==
-X-Gm-Message-State: AOAM5334wtRk4ecCH7SGmCpQhO4wY/q70Wr6mYyXzpHwL5QfXbLDlmDx
-        HddsPAVAeoKIlNMkPxilB+4=
-X-Google-Smtp-Source: ABdhPJy0vTlYXslUqGyC33YSMiLi8X29/Je6nWzHxrmFVdZsP3IEJRoSrq69lLr/vXKxSdAkeSt+Cg==
-X-Received: by 2002:a05:6402:2c2:: with SMTP id b2mr46631661edx.184.1593884559571;
-        Sat, 04 Jul 2020 10:42:39 -0700 (PDT)
-Received: from localhost.localdomain (p200300f137244200428d5cfffeb99db8.dip0.t-ipconnect.de. [2003:f1:3724:4200:428d:5cff:feb9:9db8])
-        by smtp.googlemail.com with ESMTPSA id f17sm17671650edj.32.2020.07.04.10.42.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Jul 2020 10:42:39 -0700 (PDT)
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-To:     amelie.delaunay@st.com
-Cc:     alexandre.torgue@st.com, balbi@kernel.org,
-        devicetree@vger.kernel.org, fabrice.gasnier@st.com,
-        gregkh@linuxfoundation.org, hminas@synopsys.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-usb@vger.kernel.org, mcoquelin.stm32@gmail.com,
-        robh+dt@kernel.org
-Subject: RE: [PATCH 1/3] usb: dwc2: override PHY input signals with usb role switch support
-Date:   Sat,  4 Jul 2020 19:42:19 +0200
-Message-Id: <20200704174219.612060-1-martin.blumenstingl@googlemail.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200616140717.28465-2-amelie.delaunay@st.com>
-References: <20200616140717.28465-2-amelie.delaunay@st.com>
+        id S1726682AbgGDSCG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 4 Jul 2020 14:02:06 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:55359 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726643AbgGDSCG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Jul 2020 14:02:06 -0400
+Received: (qmail 654428 invoked by uid 1000); 4 Jul 2020 14:02:05 -0400
+Date:   Sat, 4 Jul 2020 14:02:05 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Dan Halbert <halbert@halwitz.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Linux USB List <linux-usb@vger.kernel.org>
+Subject: Re: Kernel crash during USB device enumeration or MSC mounting
+Message-ID: <20200704180205.GA654077@rowland.harvard.edu>
+References: <aa7c2ad9-3daa-7fec-3f2a-9e35a3196938@halwitz.org>
+ <20200704153429.GA433456@kroah.com>
+ <20200704153607.GB433456@kroah.com>
+ <20200704160914.GB650205@rowland.harvard.edu>
+ <e4028d6d-7a62-1887-67eb-81e39d25c162@halwitz.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e4028d6d-7a62-1887-67eb-81e39d25c162@halwitz.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Amelie,
+On Sat, Jul 04, 2020 at 12:33:38PM -0400, Dan Halbert wrote:
+> On 7/4/20 12:09 PM, Alan Stern wrote:
+> > It looks to me as though the user is reformatting the USB drive on the
+> > microcontroller while it is mounted on the host.  At least, the log
+> > message:
+> > 
+> > [40864.285807] FAT-fs (sdc1): Volume was not properly unmounted. Some data may be corrupt. Please run fsck.
+> > 
+> > seems to indicate that a FAT filesystem was mounted, and the circuitpython
+> > command storage.erase_filesystem() completely reinitializes the device's
+> > filesystem.
+> > 
+> > This is definitely a user error: It is forbidden for a device to
+> > manipulate data that it is exporting to a host as a USB drive.  And it's
+> > not surprising that doing so would cause the host to crash.
+> > 
+> > If you really want to call storage.erase_filesystem() while the device is
+> > connected to the host, you should at least unmount the drive on the host
+> > beforehand.
+> 
+> Thanks for your observations, which are very helpful in my thinking about
+> this. That's correct, that code does reformat the filesystem, but it also
+> does a USB reset, so the host should ideally not make an assumption that its
+> idea of what is on the drive is correct when it re-enumerates.
 
-thank you for this patch - I am hoping that it will help us on Amlogic
-Meson8, Meson8b, Meson8m2 and GXBB SoCs as well.
-On these SoCs the ID detection is performed by the PHY IP and needs to
-be polled.
-I think usb_role_switch is the perfect framework for this on dwc2 side.
-For the PHY driver I'm going to implement the cable state using the
-extcon framework and then having a new usb-conn-extcon driver. This is
-just to give you an overview why I'm interested in this.
+The host sees the reformat as it takes place, and that can mess up the 
+host.  The fact that there is a disconnect afterward limits the window 
+but does not eliminate it.
 
-[...]
-> +static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
-> +{
-> +	struct dwc2_hsotg *hsotg = usb_role_switch_get_drvdata(sw);
-> +	unsigned long flags;
-> +
-> +	/* Skip session not in line with dr_mode */
-> +	if ((role == USB_ROLE_DEVICE && hsotg->dr_mode == USB_DR_MODE_HOST) ||
-> +	    (role == USB_ROLE_HOST && hsotg->dr_mode == USB_DR_MODE_PERIPHERAL))
-> +		return -EINVAL;
-> +
-> +	/* Skip session if core is in test mode */
-> +	if (role == USB_ROLE_NONE && hsotg->test_mode) {
-> +		dev_dbg(hsotg->dev, "Core is in test mode\n");
-> +		return -EBUSY;
-> +	}
-> +
-> +	spin_lock_irqsave(&hsotg->lock, flags);
-due to this spin_lock_irqsave() ...
+> We cannot tell the host from the MSC side that we want to unmount cleanly
+> from the drive. We could disconnect from USB first.
 
-> +	if (role == USB_ROLE_HOST) {
-> +		if (dwc2_ovr_avalid(hsotg, true))
-> +			goto unlock;
-> +
-> +		if (hsotg->dr_mode == USB_DR_MODE_OTG)
-> +			/*
-> +			 * This will raise a Connector ID Status Change
-> +			 * Interrupt - connID A
-> +			 */
-> +			dwc2_force_mode(hsotg, true);
-... we cannot sleep in here. the call flow is:
-dwc2_drd_role_sw_set
-  spin_lock_irqsave
-  dwc2_force_mode
-    dwc2_wait_for_mode
-      usleep_range
+That would be a good idea.
 
-> +	} else if (role == USB_ROLE_DEVICE) {
-> +		if (dwc2_ovr_bvalid(hsotg, true))
-> +			goto unlock;
-> +
-> +		if (hsotg->dr_mode == USB_DR_MODE_OTG)
-> +			/*
-> +			 * This will raise a Connector ID Status Change
-> +			 * Interrupt - connID B
-> +			 */
-> +			dwc2_force_mode(hsotg, false);
-(same sleeping issue here)
+Still, what reason is there for reformatting the storage while it is 
+connected to a host?  That's equivalent to a real disk drive deciding to 
+erase itself while it is in use.  Why not do the reformat before the 
+device is attached to the host?
 
-[...]
-+int dwc2_drd_init(struct dwc2_hsotg *hsotg)
-+{
-+	struct usb_role_switch_desc role_sw_desc = {0};
-+	struct usb_role_switch *role_sw;
-+	int ret;
-+
-+	if (!device_property_read_bool(hsotg->dev, "usb-role-switch"))
-+		return 0;
-should we also return early here if dr_mode != "otg"?
+Or why not have the host do the reformat instead of doing it on the 
+device?
 
-[...]
-@@ -532,6 +534,13 @@ static int dwc2_driver_probe(struct platform_device *dev)
- 		dwc2_writel(hsotg, ggpio, GGPIO);
- 	}
- 
-+	retval = dwc2_drd_init(hsotg);
-+	if (retval) {
-+		if (retval != -EPROBE_DEFER)
-+			dev_err(hsotg->dev, "failed to initialize dual-role\n");
-+		goto error_init;
-+	}
-+
- 	if (hsotg->dr_mode != USB_DR_MODE_HOST) {
- 		retval = dwc2_gadget_init(hsotg);
- 		if (retval)
-I think dwc2_driver_probe() needs a new label (for example named
-error_drd) which then calls dwc2_drd_exit. See [0] which I have
-submitted as a patch for Linux 5.8, so it's not in usb-next yet.
+> I just confirmed with one of our users that he has also seen crashes on
+> simple unplug of the mounted device.
 
-Also in general I think you need to submit a dt-bindings patch that
-documents the usb-role-switch property. Personally I would use
-Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml as
-reference for that.
+That could be a separate issue.  I haven't seen reports of things like 
+that for quite a long time.  Is it reproducible?  If it is, you (or your 
+user) ought to be able to get the same result by unplugging an ordinary 
+USB flash drive while it is mounted.
 
-Can you please keep me Cc'ed on a v2 because I'm not subscribed to the
-linux-usb mailing list?
-I am going to test this on Amlogic SoCs - once I made "everything else"
-work I can give my Tested-by as well.
+> I would hope that the host would not crash when the MSC device does
+> something untoward, and that it would be more robust. It is a potential
+> kernel attack mechanism otherwise.
 
+Have you heard of Bad USB?  Yes, there are a lot of attack mechanisms 
+here.  The fact is, operating systems tend to trust the contents of 
+attached disk drives.  If you don't want the host to trust the contents of 
+the device's Mass Storage interface, don't allow the host to mount it.
 
-Thank you!
-Martin
+One of the most fundamental assumptions computers make about attached disk 
+drives is that they don't spontaneously change their contents.  When you 
+violate that assumption, almost anything can happen.
 
+> The first crash trace I mentioned in my reply to Greg does seem to be inside
+> the USB stack, not in the filesystem code. It's possible there are two
+> problems here, or it's possible the filesystem code gets confused and is
+> making the USB stack confused as well.
 
-[0] https://patchwork.kernel.org/patch/11642957/
+Whenever one subsystem in the kernel gets out of whack, it can fairly 
+easily corrupt the entire kernel.  You can't conclude anything just from 
+the immediate appearance of a bug.
+
+Anyway, the first crash in in your reply to Greg _wasn't_ in the USB 
+stack:
+
+[76707.692717] general protection fault: 0000 [#1] SMP PTI
+[76707.692723] CPU: 3 PID: 75883 Comm: kworker/3:1 Kdump: loaded Not tainted 5.4.0-21-generic #25-Ubuntu
+[76707.692725] Hardware name: Dell Inc. OptiPlex 7010/0WR7PY, BIOS A29 06/28/2018
+[76707.692732] Workqueue: usb_hub_wq hub_event
+[76707.692738] RIP: 0010:__kmalloc+0xa5/0x270
+
+As you can see, the problem occurred in __kmalloc(), which is part of the 
+memory management subsystem -- not the USB stack.
+
+Alan Stern
