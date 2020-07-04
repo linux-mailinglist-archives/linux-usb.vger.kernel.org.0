@@ -2,152 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCE6A2145DE
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Jul 2020 14:31:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E10B121467C
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Jul 2020 16:38:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728044AbgGDMbV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 4 Jul 2020 08:31:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48334 "EHLO
+        id S1726675AbgGDOiS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 4 Jul 2020 10:38:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726738AbgGDMbU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Jul 2020 08:31:20 -0400
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6D9C061794;
-        Sat,  4 Jul 2020 05:31:20 -0700 (PDT)
-Received: by mail-qk1-x741.google.com with SMTP id e13so30999188qkg.5;
-        Sat, 04 Jul 2020 05:31:20 -0700 (PDT)
+        with ESMTP id S1726258AbgGDOiS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Jul 2020 10:38:18 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C792DC061794
+        for <linux-usb@vger.kernel.org>; Sat,  4 Jul 2020 07:38:17 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id k15so20113560lfc.4
+        for <linux-usb@vger.kernel.org>; Sat, 04 Jul 2020 07:38:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wXVeQpxCI+iwkYlezHWcf0l5BZQJCmNvUa2xktmhOME=;
-        b=E1+xoB3rYQ0NBSpfC4fscDTPs9mkC68MYowA8nh/JRikBI2XWSsFtvSpAqy9F494RE
-         0leKOD5qmSi0BkobZ42sbTeyMRO7wxm14RZRZOhOxIkiX3nPIdCcI07bLj4olC9wYduq
-         4uzBC4jqPKxwUhCHDDzrmTxxBr2d8T2olx/cn7pGcxJV0QBlkCfqUQ1Z4WLwivN3O4AS
-         I4IC7dmrAZnY0A3r6sKrIcJAKFfJ5q/E6PEw3Ki+nZJnq+/3of4oB/1jISH3toeyuS33
-         oW2FXmHLG7fLa359OKo8IrsP7AmFyTc4Cg0SKXtooxgf9uEF1gpG0pbPkyOSx9tEkoXI
-         Ujcw==
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=r7BbZSJHXx9OGSO54imY/1DoSLqAEAmo7trY9hlmySA=;
+        b=lD9H/W2dq0sGKNfoPgPXsZUUzLKuvWMhvuFijELNqDzbxhXi6hKPwxHsQYayoeL67f
+         xgF3SId6HEAHwIuY0Z58MCtmz8WcCDAUI52IIochxV8wNvzkrR56LrIwJEf5jlfnnfK+
+         Iual2GgiGwHQD2kCO/4oDWp5Eps9EKoI9IaBXVUildDf1L8uto3hFC0D9h+g9PA8s115
+         /Wt3XKc/+wSjcdeEuZMfjr7IemeOJqQYpQF7OX+CEs2hLdwWbtQ++L5nyXCCopULdlaw
+         1261Mf8HtOMpxK0WY4r9zRs10HKRsSZ5zwT5cdphIgQR7mPX3DiAMGbWClxbVdOhKpKG
+         GDHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wXVeQpxCI+iwkYlezHWcf0l5BZQJCmNvUa2xktmhOME=;
-        b=cXeXnrW8rCJvnx00uR3VuX6ptamlzVDZPVasyNNkV8B6pfHk2Jgj6ZeeUV0/eQlT3G
-         05YiRkiIOXsMMfkg+1XqMYzRi5rpNP3LtugYraQFfHYAcY6hzw8uID7+Sa8qbCdk119Q
-         g/VjtpezpOcizJ91IHaxD4MosEILchlxXUDOm4bmjFXhRQkelOwBIPRiVmiX/EhW1b9U
-         Kp/Aj3EOL9ImvkYlarngoyisKuOZ9nD104JqsuQidr9dUTCR7Va7Ea2lcunIIzgv4+Fx
-         nAumeDqcZjTpSZkeU/37Kz+lV7T6pBwNmS/ilEvSduDoRHwOVnGSVbr4b2sh+wwnaIB8
-         QoQg==
-X-Gm-Message-State: AOAM530JipXxAEbQJ4UKV1xcvSNCd/cvmZayADwnl8th5A5YweFne69s
-        Jkl/hOsFD/ILR3oidmHKx6g=
-X-Google-Smtp-Source: ABdhPJxUcAycygrd/AP+v+wLXYj/t4ZGB/H3x+bdq/DHUXVvrvZSnflEAQw0KbOs9WzSAMnXvd0YaQ==
-X-Received: by 2002:a37:6589:: with SMTP id z131mr39309316qkb.235.1593865879534;
-        Sat, 04 Jul 2020 05:31:19 -0700 (PDT)
-Received: from shinobu (072-189-064-225.res.spectrum.com. [72.189.64.225])
-        by smtp.gmail.com with ESMTPSA id a25sm14159031qtk.40.2020.07.04.05.31.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Jul 2020 05:31:18 -0700 (PDT)
-Date:   Sat, 4 Jul 2020 08:31:16 -0400
-From:   William Breathitt Gray <vilhelm.gray@gmail.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        dmaengine@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-iio@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, Jon Mason <jdmason@kudzu.us>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Allen Hubbe <allenbh@gmail.com>, linux-ntb@googlegroups.com,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>, linux-nvdimm@lists.01.org,
-        linux-usb@vger.kernel.org, Eli Billauer <eli.billauer@gmail.com>
-Subject: Re: [PATCH 00/17] Documentation/driver-api: eliminate duplicated
- words
-Message-ID: <20200704123116.GB5194@shinobu>
-References: <20200704034502.17199-1-rdunlap@infradead.org>
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=r7BbZSJHXx9OGSO54imY/1DoSLqAEAmo7trY9hlmySA=;
+        b=iDWyek/T/FwcUxE98iXMxrxVUSCjUnUUL2V5XX4CmsAyW5UZPL9IgDeddbyswcCFsr
+         waWz0voDEgYMuGz1F0BcpYL84MHZbPw+V9qgCMKmbp3qnkKTiftSd6RkGw/gjsNwEilb
+         bVa3Lqeyw3oo5y8aVtzV+eO+2EtP55b/3ZmO0mLUupHgKbSfhNgoZnc6ZS0x3F481u8x
+         XNNj7R53/Iu2mNg46IFcVpMSP/1xdDVnLjufx/pW1P1jcW15CYOnO7bNz01/XiVfk1nn
+         GitgyiZz2rZmOHO2TAcu/24f6IAuUmjZfXMTCm1rIGXXiz3Tv4KT0pDPrw0pSi1N753A
+         EIOA==
+X-Gm-Message-State: AOAM530mdzGdFhWFW5k/LpVps07+OlhA8ROn4C3B+i1H9ELyU4KkmXj1
+        1zMtO8x7y7Pw1VJBQD8PuU773NUw
+X-Google-Smtp-Source: ABdhPJwi7oUbYxoSgLDfSZyaVyZdpnoyxtq27Wa3oXEGXwZ9AxU9ttTSzxeQfo/Tf0xymFzULyRczA==
+X-Received: by 2002:a19:ca11:: with SMTP id a17mr24717066lfg.120.1593873495918;
+        Sat, 04 Jul 2020 07:38:15 -0700 (PDT)
+Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
+        by smtp.gmail.com with ESMTPSA id s8sm3962865ljh.74.2020.07.04.07.38.14
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sat, 04 Jul 2020 07:38:14 -0700 (PDT)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     Tejas Joglekar <tejas.joglekar@synopsys.com>,
+        Yang Fei <fei.yang@intel.com>,
+        Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>,
+        YongQin Liu <yongqin.liu@linaro.org>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Thinh Nguyen <thinhn@synopsys.com>,
+        Linux USB List <linux-usb@vger.kernel.org>
+Subject: Re: dwc3 inconsistent gadget connection state?
+In-Reply-To: <CALAqxLVPOzD6FD9qJRJjTYai_zL_YzpCkPecWyE-KhTmEHNJYA@mail.gmail.com>
+References: <CALAqxLWAvvHGo1RYef1fJ_k65WqHAPCDhLfehO6_j_f8E2jB7Q@mail.gmail.com> <87o8ow7wka.fsf@kernel.org> <CALAqxLVPOzD6FD9qJRJjTYai_zL_YzpCkPecWyE-KhTmEHNJYA@mail.gmail.com>
+Date:   Sat, 04 Jul 2020 17:38:10 +0300
+Message-ID: <87lfjz73cd.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cvVnyQ+4j833TQvp"
-Content-Disposition: inline
-In-Reply-To: <20200704034502.17199-1-rdunlap@infradead.org>
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
---cvVnyQ+4j833TQvp
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+--=-=-=
+Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 03, 2020 at 08:44:45PM -0700, Randy Dunlap wrote:
-> Remove occurrences of duplicated words in Documentation/driver-api/.
->=20
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: linux-doc@vger.kernel.org
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: dmaengine@vger.kernel.org
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: William Breathitt Gray <vilhelm.gray@gmail.com>
-> Cc: linux-iio@vger.kernel.org
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: linux-media@vger.kernel.org
-> Cc: Jon Mason <jdmason@kudzu.us>
-> Cc: Dave Jiang <dave.jiang@intel.com>
-> Cc: Allen Hubbe <allenbh@gmail.com>
-> Cc: linux-ntb@googlegroups.com
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Cc: Vishal Verma <vishal.l.verma@intel.com>
-> Cc: Dave Jiang <dave.jiang@intel.com>
-> Cc: Ira Weiny <ira.weiny@intel.com>
-> Cc: linux-nvdimm@lists.01.org
-> Cc: linux-usb@vger.kernel.org
-> Cc: Eli Billauer <eli.billauer@gmail.com>
->=20
->=20
->  Documentation/driver-api/dmaengine/provider.rst        |    2 +-
->  Documentation/driver-api/driver-model/platform.rst     |    2 +-
->  Documentation/driver-api/firmware/built-in-fw.rst      |    2 +-
->  Documentation/driver-api/firmware/direct-fs-lookup.rst |    2 +-
->  Documentation/driver-api/firmware/firmware_cache.rst   |    2 +-
->  Documentation/driver-api/firmware/request_firmware.rst |    2 +-
->  Documentation/driver-api/generic-counter.rst           |    2 +-
->  Documentation/driver-api/iio/buffers.rst               |    2 +-
->  Documentation/driver-api/media/cec-core.rst            |    2 +-
->  Documentation/driver-api/media/dtv-frontend.rst        |    6 +++---
->  Documentation/driver-api/media/v4l2-controls.rst       |    4 ++--
->  Documentation/driver-api/media/v4l2-dev.rst            |    2 +-
->  Documentation/driver-api/ntb.rst                       |    2 +-
->  Documentation/driver-api/nvdimm/nvdimm.rst             |    2 +-
->  Documentation/driver-api/uio-howto.rst                 |    2 +-
->  Documentation/driver-api/usb/URB.rst                   |    2 +-
->  Documentation/driver-api/xillybus.rst                  |    2 +-
->  17 files changed, 20 insertions(+), 20 deletions(-)
 
-Acked-by: William Breathitt Gray <vilhelm.gray@gmail.com>
+Hi,
 
---cvVnyQ+4j833TQvp
+John Stultz <john.stultz@linaro.org> writes:
+> On Fri, Jul 3, 2020 at 2:54 AM Felipe Balbi <balbi@kernel.org> wrote:
+>> John Stultz <john.stultz@linaro.org> writes:
+>> > I was curious if you or anyone else had any thoughts on how to debug
+>> > this further?
+>>
+>> Try enabling dwc3 tracepoints and collecting working and failing
+>> cases. If I were to guess, I would say there's a small race condition
+>> between setting pullup and the transceiver sending the VBUS_VALID signal
+>> to dwc3.
+>
+> Trace logs attached. Let me know if you have any further ideas!
+
+You can see from failure case that we never got a Reset event. This
+happens, for instance, when dwc3 doesn't know that VBUS is above
+VBUS_VALID threshold (4.4V). When the problem happens, I'm assuming USB
+is completely dead, meaning that keeping the cable connected for longer
+won't change anything, right?
+
+In that case, could you dump DWC3 registers (there's a debugfs interface
+for that)? I'm mostly interested in the PHY registers, both USB2 and
+USB3. Check if the PHYs are suspended in the error case.
+
+If they are, try enabling the quirk flags that disable suspend for the
+PHYs (check binding documentation). If that helps, then discuss with
+your Silicon Validation guys what are the requirements when it comes to
+suspend. Some PHYs are inherently quirky and need some of the quirky
+flags dwc3 provides.
+
+Note that disabling suspend completely is a pretty large hammer that
+should only be used if nothing else helps. Some PHYs are happy with a
+simple delay of U1/U2/U3 entry but, again, check with your Silicon
+Validation folks, likely they have already gone through this during chip
+characterization.
+
+cheers
+
+=2D-=20
+balbi
+
+--=-=-=
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEk5I4PDJ2w1cDf/bghvpINdm7VJIFAl8AdpQACgkQhvpINdm7
-VJIBvxAAqwgnnmzKHJ8nY2Ip3r9kE7Fygjzlzj9bHCF7iXLQVTYqC4W7cN0q0Bfu
-QotqGgl0sAWKftn9qkvUzFI6TFRROjPuzPdDPucm+pQ5pW2m6HIEOgK42qjcuHLn
-wvVJmYNuV3L+Y6NQtUS1PBulobtAYL8fMMhtQiG6rialiiB6yaJeHkpU7BP5cdUn
-+n6i9IJIdl9//biQjBd5FQy7wqPLr+aXBZLAMSWT+hKl0huWGUXmFBTmcGLkGhAT
-OEKrj9H7j8U7CmavcpNe0bHRLlucKl3a1wQTtf6CV+SwfaaFEtKhaEKEIsB4M9QI
-sRvbV0gY9yJX2y3DabCS61B/EcCA2htBnk++AlNY+HvfXckvW9+g4xaMcCAU0cow
-1EFaMIVEGWrEuaBIRDQJX5f9n97Wvc0Zp2B/hlxYvSo1xmaCObehZ9+UecKCW1C0
-71A8NFc0cYiELXFZmQ+Vf7I9K3UeaRBaeoB8r4YEBNOO3JhmHq9E8re8ULoMvEse
-HKZyuoGyoOhW27cZXoBw1ymZZ07Nnmpupyukmh9wQllQcMj5smqQAcbCtBNCcqXb
-L+dlXBeIpE+KZHRFJ/2RtmDX903PaDcZ0Y5+NZUJsvt/KJCzg1rASkGcHC6lVTLj
-4jBBZt4JmxUWKLxsdnkHXb12eTXPB7DkjhCiSThpm1A2Re9P4Jg=
-=6Gqy
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl8AlFIACgkQzL64meEa
+mQYU8g//ef1SmQKU0d90L3vLJZm6b284mIWtxAwUBwnVlC70xwuBABuJMXzPlkE8
+9BgaAJ+44cqrLria+KfSFbJcmczAx25awUjjZOJ75oknhhrGP+W784xkpnNgQWZy
+fgZD6Sa9LvyatSKNYl6VxWY16dkMje24+Lxxx5rjTTTQf39aD6Ml7bdeH2KlaUCW
+z0drEW0wBi7bgr0RBeKQGGW3ipEtmKpPZEIXjGCvPgBln4+TUF9DwK0Cv9RrKo+Y
+wA9jkM/uc9JFBZNw14wP4jooDE9fev/Shv3LER2yvBtfpRDmXYQ6d8wmlMOkQNS0
+URjeAjBorTFxLEX9xvF09KzOCLOF07GLta55xc2+GchcPGxK/Z8DJ8S0KVHKIiDP
+32q4SrN222MXexvFq/ZUMwLfIhkq4X2sLFxTLvn0b0jNA6L1FdpD0YEIrcTyxbhV
+vsKz/m+UrX6NIH+scr8ctmsRoWiKK7QyANfhUlYa4oo1AjzO88XaHzBp0ZTTEbir
+cIjUBB2qObQBDuJ4HT3zrH9o9O/eNaMsKOeezVhN+kcWqXrJnKCw7WvsYW7cp9X8
+SpIhvdbWuDHe/ZBMp+9dhm+DBDy5jT1AZw/g7dG4ziNYxP5y2ZATnmLkFUT6maTJ
+m1rqz1qnM+sJlQbfyD0pAI2pC1MMmc0XMAgSVdlYH33x64KYBHw=
+=iY2C
 -----END PGP SIGNATURE-----
-
---cvVnyQ+4j833TQvp--
+--=-=-=--
