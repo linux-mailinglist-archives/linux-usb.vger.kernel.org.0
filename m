@@ -2,96 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD192146EE
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Jul 2020 17:36:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04B2321472F
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Jul 2020 18:01:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726718AbgGDPgE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 4 Jul 2020 11:36:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48428 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726405AbgGDPgE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 4 Jul 2020 11:36:04 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2C9CB207CD;
-        Sat,  4 Jul 2020 15:36:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593876963;
-        bh=S58PBhFmtFTxavATK5kJoeHt+dOf64C89QSvjQW7BaU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RkE7N2QwdQN0HT8FYYfjnv4um6WREnMDQB9+iWmfOQEC0Fc+A4Uwo0+YuAD2RZqcb
-         ys2aMRQMvzo5z4P84f2h5DNTy2wcviXON+/o7mD87KtsgQvPFeoXMON2nY5MV1BBT3
-         RDcLR4Wmy8kvHBikDOvhzZzTta0tUU2qWieQ4P2Y=
-Date:   Sat, 4 Jul 2020 17:36:07 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Dan Halbert <halbert@halwitz.org>
-Cc:     Linux USB List <linux-usb@vger.kernel.org>
+        id S1726897AbgGDQBp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 4 Jul 2020 12:01:45 -0400
+Received: from smtp101.ord1c.emailsrvr.com ([108.166.43.101]:59675 "EHLO
+        smtp101.ord1c.emailsrvr.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726869AbgGDQBp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Jul 2020 12:01:45 -0400
+X-Greylist: delayed 317 seconds by postgrey-1.27 at vger.kernel.org; Sat, 04 Jul 2020 12:01:44 EDT
+X-Auth-ID: halbert@halwitz.org
+Received: by smtp13.relay.ord1c.emailsrvr.com (Authenticated sender: halbert-AT-halwitz.org) with ESMTPSA id 64B6EA012E;
+        Sat,  4 Jul 2020 11:56:27 -0400 (EDT)
 Subject: Re: Kernel crash during USB device enumeration or MSC mounting
-Message-ID: <20200704153607.GB433456@kroah.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linux USB List <linux-usb@vger.kernel.org>
 References: <aa7c2ad9-3daa-7fec-3f2a-9e35a3196938@halwitz.org>
- <20200704153429.GA433456@kroah.com>
+ <20200704153429.GA433456@kroah.com> <20200704153607.GB433456@kroah.com>
+From:   Dan Halbert <halbert@halwitz.org>
+Message-ID: <72aca793-6383-8acb-e459-436c2805852f@halwitz.org>
+Date:   Sat, 4 Jul 2020 11:56:26 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200704153429.GA433456@kroah.com>
+In-Reply-To: <20200704153607.GB433456@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Classification-ID: 557aa241-f020-490b-8877-fdd1b1a0a984-1-1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Jul 04, 2020 at 05:34:29PM +0200, Greg KH wrote:
-> On Sat, Jul 04, 2020 at 11:15:29AM -0400, Dan Halbert wrote:
-> > Hi -- I was referred to this list by Kai-Heng Feng after filing an issue on
-> > the Ubuntu bug tracker here:
-> > 
-> >   https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1871143.
-> > 
-> > Many further details are in that report, including "lsusb -v", "lspci -v",
-> > dmesg, and call trace output.
-> 
+On 7/4/20 11:36 AM, Greg KH wrote
+
+Thanks for your quick reply, Greg.
+
 > Where is the kernel crash in those logs?  I don't seem to be able to
 > find the correct one, can you just send it here so we can read and
 > comment on it in the email thread?  I see something odd with the fat
 > driver, are you sure you are creating a correct filesystem image for it
 > to handle?
-> 
-> > We are seeing kernel crashes from certain composite USB devices that present
-> > as MSC, CDC, HID, and MIDI. The devices are microcontroller boards running
-> > CircuitPython (https://github.com/adafruit/circuitpython), which uses the
-> > TinyUSB USB stack: https://github.com/hathach/tinyusb.
-> > 
-> > The board is commanded to forcibly reformat its MSC FAT12 filesystem and
-> > then reset. This causes a USB reset and re-enumeration, which can often
-> > (though not all the time) cause a kernel crash.
-> 
+
+There are two crashes described in that report. In the first post, I 
+mentioned that the full kdump crash dump is here:
+https://drive.google.com/open?id=1ka3ySSccEMRSmnYgI9X16IndPDmIKTD6
+Is that what you are looking for?
+
+The first trace seems USB-related, and is in comment #2 (you have to 
+click Read More...),
+and starts out:
+
+[76707.692760] Call Trace:
+[76707.692767] ? usb_alloc_urb+0x29/0x60
+[76707.692772] usb_alloc_urb+0x29/0x60
+[76707.692779] acm_probe+0x6da/0xdb0 [cdc_acm]
+...
+
+The second trace is in comment #4, and seems filesystem-related:
+
+[40866.349358] Call Trace:
+[40866.349363] ? kernfs_fop_open+0xc2/0x3b0
+[40866.349366] kernfs_fop_open+0xc2/0x3b0
+[40866.349368] ? kernfs_fop_read+0x1b0/0x1b0
+[40866.349372] do_dentry_open+0x143/0x3a0
+[40866.349373] vfs_open+0x2d/0x30
+[40866.349376] do_last+0x194/0x900
+[40866.349392] path_openat+0x8d/0x290
+...
+
 > What do you mean by "reset"?  Are you disconnecting the device from the
 > USB bus causing it to electronically be removed and then added back?  Or
 > doing something else?
-> 
-> > The crashes may be some kind of use-after-free bug in the kernel USB driver.
-> 
-> Maybe, but the traces seem _very_ short on the stuff on the web page,
+
+The microcontroller is doing a hard reset, which causes an electrical 
+USB reset, if I understand correctly. We have also occasionally seen 
+crashes on plug-in (and maybe unplug, though I have not seen that 
+personally).
+
+> ... the traces seem _very_ short on the stuff on the web page,
 > can you send us the full traceback from the crash?
+
+I have the kdump stuff, but I'm not sure how to give you a full 
+traceback. Do you want the whole contents of the /var/crash dirs?
+
+>That's not good, but might mean it is a filesystem issue, not a USB
+>issue.
+
+Yes, possibly, though it might be an interaction between the filesystem 
+code and USB, since I'm seeing different traces. We have not seen these 
+crashes on some other motherboards, including some Intel laptop chipsets 
+and some AMD chipsets.
+
+> Ok, this trace:
+> 	https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1871143/comments/4
 > 
-> > We have seen this or similar crashes caused by several different boards that
-> > use different microcontrollers. The hosts are x64, including Dell
-> > Intel-chipset desktops and an older Mac Mini running Linux (also Intel
-> > chipset).
+> seems to point at the filesystem code.  Are you sure you are creating
+> the image correctly?
 > 
-> That's not good, but might mean it is a filesystem issue, not a USB
-> issue.
+> If you unplug and plug the device back in with that same filesystem
+> image, does it work, or still crash?
 
-Ok, this trace:
-	https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1871143/comments/4
+Yes, it works fine. It might be something about the abruptness of the 
+disconnect and the speed with which it tries to reconnect. It is 
+intermittent, and doesn't always cause a crash.
 
-seems to point at the filesystem code.  Are you sure you are creating
-the image correctly?
+We've been using these devices and their filesystems for years 
+successfully for several years. That doesn't mean the filesystem code 
+on-board is perfect, but we shouldn't be able to crash the kernel.
 
-If you unplug and plug the device back in with that same filesystem
-image, does it work, or still crash?
-
-thanks,
-
-greg k-h
+Thanks,
+Dan
