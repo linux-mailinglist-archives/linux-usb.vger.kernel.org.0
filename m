@@ -2,120 +2,305 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B93E22147D9
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Jul 2020 20:02:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81C302147E7
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Jul 2020 20:25:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726682AbgGDSCG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 4 Jul 2020 14:02:06 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:55359 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726643AbgGDSCG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Jul 2020 14:02:06 -0400
-Received: (qmail 654428 invoked by uid 1000); 4 Jul 2020 14:02:05 -0400
-Date:   Sat, 4 Jul 2020 14:02:05 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Dan Halbert <halbert@halwitz.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Linux USB List <linux-usb@vger.kernel.org>
-Subject: Re: Kernel crash during USB device enumeration or MSC mounting
-Message-ID: <20200704180205.GA654077@rowland.harvard.edu>
-References: <aa7c2ad9-3daa-7fec-3f2a-9e35a3196938@halwitz.org>
- <20200704153429.GA433456@kroah.com>
- <20200704153607.GB433456@kroah.com>
- <20200704160914.GB650205@rowland.harvard.edu>
- <e4028d6d-7a62-1887-67eb-81e39d25c162@halwitz.org>
+        id S1726895AbgGDSZI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 4 Jul 2020 14:25:08 -0400
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:42039 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726669AbgGDSZI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 4 Jul 2020 14:25:08 -0400
+X-Originating-IP: 81.6.44.16
+Received: from [172.22.0.20] (unknown [81.6.44.16])
+        (Authenticated sender: hansmi@hansmi.ch)
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id BF82960007;
+        Sat,  4 Jul 2020 18:25:03 +0000 (UTC)
+From:   Michael Hanselmann <public@hansmi.ch>
+Subject: Re: [PATCH v2 6/6] USB: serial: ch341: Simulate break condition if
+ not supported
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org, Michael Dreher <michael@5dot1.de>,
+        Jonathan Olds <jontio@i4free.co.nz>
+References: <cover.1585697281.git.public@hansmi.ch>
+ <91bacfa4097350b4731724f5820e06bc03e7e8f3.1585697281.git.public@hansmi.ch>
+ <20200514144721.GG25962@localhost>
+ <6e29707b-6774-9f25-25ac-4b4cd202a017@msgid.hansmi.ch>
+ <20200630113906.GA3334@localhost>
+X-Hello-World:  This header intentionally left blank
+Message-ID: <f34a9b6e-ec2a-0873-e97b-2d5b2170e2ff@msgid.hansmi.ch>
+Date:   Sat, 4 Jul 2020 20:25:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e4028d6d-7a62-1887-67eb-81e39d25c162@halwitz.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200630113906.GA3334@localhost>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Jul 04, 2020 at 12:33:38PM -0400, Dan Halbert wrote:
-> On 7/4/20 12:09 PM, Alan Stern wrote:
-> > It looks to me as though the user is reformatting the USB drive on the
-> > microcontroller while it is mounted on the host.  At least, the log
-> > message:
-> > 
-> > [40864.285807] FAT-fs (sdc1): Volume was not properly unmounted. Some data may be corrupt. Please run fsck.
-> > 
-> > seems to indicate that a FAT filesystem was mounted, and the circuitpython
-> > command storage.erase_filesystem() completely reinitializes the device's
-> > filesystem.
-> > 
-> > This is definitely a user error: It is forbidden for a device to
-> > manipulate data that it is exporting to a host as a USB drive.  And it's
-> > not surprising that doing so would cause the host to crash.
-> > 
-> > If you really want to call storage.erase_filesystem() while the device is
-> > connected to the host, you should at least unmount the drive on the host
-> > beforehand.
+On 30.06.20 13:39, Johan Hovold wrote:
+> On Thu, May 28, 2020 at 12:21:11AM +0200, Michael Hanselmann wrote:
+>> +		r = ch341_set_baudrate_lcr(port->serial->dev, priv,
+>> +			CH341_MIN_BPS,
+>> +			CH341_LCR_ENABLE_RX | CH341_LCR_ENABLE_TX |
+>> +			CH341_LCR_CS8);
 > 
-> Thanks for your observations, which are very helpful in my thinking about
-> this. That's correct, that code does reformat the filesystem, but it also
-> does a USB reset, so the host should ideally not make an assumption that its
-> idea of what is on the drive is correct when it re-enumerates.
+> Continuation lines should be indented at least two tabs further.
+> 
+> And let's just merge the last two lines.
 
-The host sees the reformat as it takes place, and that can mess up the 
-host.  The fact that there is a disconnect afterward limits the window 
-but does not eliminate it.
+Done.
 
-> We cannot tell the host from the MSC side that we want to unmount cleanly
-> from the drive. We could disconnect from USB first.
+>> +		/*
+>> +		 * Compute how long transmission will take and add a bit of
+>> +		 * safety margin.
+>> +		 */
+> 
+> Where's that margin?
 
-That would be a good idea.
+That wasn't obvious indeed. It's the 10 instead of 9 in the calculation.
+Updated the comment: "[…] and add a single bit of safety margin (the
+actual transmission is 8 bits plus one stop bit)."
 
-Still, what reason is there for reformatting the storage while it is 
-connected to a host?  That's equivalent to a real disk drive deciding to 
-erase itself while it is in use.  Why not do the reformat before the 
-device is attached to the host?
+>> +		priv->break_end = jiffies + (10 * HZ / CH341_MIN_BPS);
+>> +
+>> +		return;
+>> +	}
+>> +
+>> +	dev_dbg(&port->dev, "leave break state requested\n");
+>> +
+>> +	if (time_before(jiffies, priv->break_end)) {
+>> +		/*
+>> +		 * Wait until NUL byte is written and limit delay to one second
+>> +		 * at most.
+>> +		 */
+> 
+> So you could still be preempted here so that delay would wrap. Just
+> store jiffies in a "now" temporary before the conditional?
 
-Or why not have the host do the reformat instead of doing it on the 
-device?
+Done, thank you for the suggestion.
 
-> I just confirmed with one of our users that he has also seen crashes on
-> simple unplug of the mounted device.
+>> +	if (priv->quirks & CH341_QUIRK_SIMULATE_BREAK) {
+>> +		dev_warn_once(&port->dev,
+>> +			      "hardware doesn't support real break condition, simulating instead\n");
+> 
+> This should probably be moved to probe and quirk_detect() and be a
+> dev_info (e.g. consider having two of these devices in a system).
 
-That could be a separate issue.  I haven't seen reports of things like 
-that for quite a long time.  Is it reproducible?  If it is, you (or your 
-user) ought to be able to get the same result by unplugging an ordinary 
-USB flash drive while it is mounted.
+Done.
 
-> I would hope that the host would not crash when the MSC device does
-> something untoward, and that it would be more robust. It is a potential
-> kernel attack mechanism otherwise.
+Updated patch included below.
 
-Have you heard of Bad USB?  Yes, there are a lot of attack mechanisms 
-here.  The fact is, operating systems tend to trust the contents of 
-attached disk drives.  If you don't want the host to trust the contents of 
-the device's Mass Storage interface, don't allow the host to mount it.
+Michael
 
-One of the most fundamental assumptions computers make about attached disk 
-drives is that they don't spontaneously change their contents.  When you 
-violate that assumption, almost anything can happen.
+---
+From 41b8b06d343a69541a357d8c9d6d0fe3f22610d6 Mon Sep 17 00:00:00 2001
+Message-Id: <41b8b06d343a69541a357d8c9d6d0fe3f22610d6.1593887001.git.public@hansmi.ch>
+From: Michael Hanselmann <public@hansmi.ch>
+Date: Thu, 5 Mar 2020 01:50:35 +0100
+Subject: [PATCH] USB: serial: ch341: Simulate break condition if not supported
 
-> The first crash trace I mentioned in my reply to Greg does seem to be inside
-> the USB stack, not in the filesystem code. It's possible there are two
-> problems here, or it's possible the filesystem code gets confused and is
-> making the USB stack confused as well.
+A subset of all CH341 devices don't support a real break condition. This
+fact is already used in the "ch341_detect_quirks" function. With this
+change a quirk is implemented to simulate a break condition by
+temporarily lowering the baud rate and sending a NUL byte.
 
-Whenever one subsystem in the kernel gets out of whack, it can fairly 
-easily corrupt the entire kernel.  You can't conclude anything just from 
-the immediate appearance of a bug.
+The primary drawbacks of this approach are that the duration of the
+break can't be controlled by userland and that data incoming during
+a simulated break is corrupted.
 
-Anyway, the first crash in in your reply to Greg _wasn't_ in the USB 
-stack:
+The "TTY_DRIVER_HARDWARE_BREAK" serial driver flag was investigated as
+an alternative. It's a driver-wide flag and would've required
+significant changes to the serial and USB-serial driver frameworks to
+expose it for individual USB-serial adapters.
 
-[76707.692717] general protection fault: 0000 [#1] SMP PTI
-[76707.692723] CPU: 3 PID: 75883 Comm: kworker/3:1 Kdump: loaded Not tainted 5.4.0-21-generic #25-Ubuntu
-[76707.692725] Hardware name: Dell Inc. OptiPlex 7010/0WR7PY, BIOS A29 06/28/2018
-[76707.692732] Workqueue: usb_hub_wq hub_event
-[76707.692738] RIP: 0010:__kmalloc+0xa5/0x270
+Tested by sending a break condition and watching the TX pin using an
+oscilloscope.
 
-As you can see, the problem occurred in __kmalloc(), which is part of the 
-memory management subsystem -- not the USB stack.
+Signed-off-by: Michael Hanselmann <public@hansmi.ch>
+---
+ drivers/usb/serial/ch341.c | 101 +++++++++++++++++++++++++++++++++----
+ 1 file changed, 92 insertions(+), 9 deletions(-)
 
-Alan Stern
+diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
+index 55a1c6dbeeb2..0cb02d1bde02 100644
+--- a/drivers/usb/serial/ch341.c
++++ b/drivers/usb/serial/ch341.c
+@@ -78,6 +78,7 @@
+ #define CH341_LCR_CS5          0x00
+ 
+ #define CH341_QUIRK_LIMITED_PRESCALER	BIT(0)
++#define CH341_QUIRK_SIMULATE_BREAK	BIT(1)
+ 
+ static const struct usb_device_id id_table[] = {
+ 	{ USB_DEVICE(0x4348, 0x5523) },
+@@ -94,6 +95,7 @@ struct ch341_private {
+ 	u8 msr;
+ 	u8 lcr;
+ 	unsigned long quirks;
++	unsigned long break_end;
+ };
+ 
+ static void ch341_set_termios(struct tty_struct *tty,
+@@ -170,10 +172,9 @@ static const speed_t ch341_min_rates[] = {
+  *		2 <= div <= 256 if fact = 0, or
+  *		9 <= div <= 256 if fact = 1
+  */
+-static int ch341_get_divisor(struct ch341_private *priv)
++static int ch341_get_divisor(struct ch341_private *priv, speed_t speed)
+ {
+ 	unsigned int fact, div, clk_div;
+-	speed_t speed = priv->baud_rate;
+ 	bool force_fact0 = false;
+ 	int ps;
+ 
+@@ -236,15 +237,16 @@ static int ch341_get_divisor(struct ch341_private *priv)
+ }
+ 
+ static int ch341_set_baudrate_lcr(struct usb_device *dev,
+-				  struct ch341_private *priv, u8 lcr)
++				  struct ch341_private *priv,
++				  speed_t baud_rate, u8 lcr)
+ {
+ 	int val;
+ 	int r;
+ 
+-	if (!priv->baud_rate)
++	if (!baud_rate)
+ 		return -EINVAL;
+ 
+-	val = ch341_get_divisor(priv);
++	val = ch341_get_divisor(priv, baud_rate);
+ 	if (val < 0)
+ 		return -EINVAL;
+ 
+@@ -324,7 +326,7 @@ static int ch341_configure(struct usb_device *dev, struct ch341_private *priv)
+ 	if (r < 0)
+ 		goto out;
+ 
+-	r = ch341_set_baudrate_lcr(dev, priv, priv->lcr);
++	r = ch341_set_baudrate_lcr(dev, priv, priv->baud_rate, priv->lcr);
+ 	if (r < 0)
+ 		goto out;
+ 
+@@ -357,8 +359,8 @@ static int ch341_detect_quirks(struct usb_serial_port *port)
+ 			    USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_DIR_IN,
+ 			    CH341_REG_BREAK, 0, buffer, size, DEFAULT_TIMEOUT);
+ 	if (r == -EPIPE) {
+-		dev_dbg(&port->dev, "break control not supported\n");
+-		quirks = CH341_QUIRK_LIMITED_PRESCALER;
++		dev_info(&port->dev, "hardware doesn't support real break condition, using simulation instead\n");
++		quirks = CH341_QUIRK_LIMITED_PRESCALER | CH341_QUIRK_SIMULATE_BREAK;
+ 		r = 0;
+ 		goto out;
+ 	}
+@@ -539,7 +541,8 @@ static void ch341_set_termios(struct tty_struct *tty,
+ 	if (baud_rate) {
+ 		priv->baud_rate = baud_rate;
+ 
+-		r = ch341_set_baudrate_lcr(port->serial->dev, priv, lcr);
++		r = ch341_set_baudrate_lcr(port->serial->dev, priv,
++					   priv->baud_rate, lcr);
+ 		if (r < 0 && old_termios) {
+ 			priv->baud_rate = tty_termios_baud_rate(old_termios);
+ 			tty_termios_copy_hw(&tty->termios, old_termios);
+@@ -558,15 +561,95 @@ static void ch341_set_termios(struct tty_struct *tty,
+ 	ch341_set_handshake(port->serial->dev, priv->mcr);
+ }
+ 
++/*
++ * A subset of all CH34x devices don't support a real break condition and
++ * reading CH341_REG_BREAK fails (see also ch341_detect_quirks). This function
++ * simulates a break condition by lowering the baud rate to the minimum
++ * supported by the hardware upon enabling the break condition and sending
++ * a NUL byte.
++ *
++ * Incoming data is corrupted while the break condition is being simulated.
++ *
++ * Normally the duration of the break condition can be controlled individually
++ * by userspace using TIOCSBRK and TIOCCBRK or by passing an argument to
++ * TCSBRKP. Due to how the simulation is implemented the duration can't be
++ * controlled. The duration is always about (1s / 46bd * 9bit) = 196ms.
++ */
++static void ch341_simulate_break(struct tty_struct *tty, int break_state)
++{
++	struct usb_serial_port *port = tty->driver_data;
++	struct ch341_private *priv = usb_get_serial_port_data(port);
++	unsigned long now, delay;
++	int r;
++
++	if (break_state != 0) {
++		dev_dbg(&port->dev, "enter break state requested\n");
++
++		r = ch341_set_baudrate_lcr(port->serial->dev, priv, CH341_MIN_BPS,
++					CH341_LCR_ENABLE_RX | CH341_LCR_ENABLE_TX | CH341_LCR_CS8);
++		if (r < 0) {
++			dev_err(&port->dev,
++				"failed to change baud rate to %u: %d\n",
++				CH341_MIN_BPS, r);
++			goto restore;
++		}
++
++		r = tty_put_char(tty, '\0');
++		if (r < 0) {
++			dev_err(&port->dev,
++				"failed to write NUL byte for simulated break condition: %d\n",
++				r);
++			goto restore;
++		}
++
++		/*
++		 * Compute expected transmission duration and add a single bit
++		 * of safety margin (the actual NUL byte transmission is 8 bits
++		 * plus one stop bit).
++		 */
++		priv->break_end = jiffies + (10 * HZ / CH341_MIN_BPS);
++
++		return;
++	}
++
++	dev_dbg(&port->dev, "leave break state requested\n");
++
++	now = jiffies;
++
++	if (time_before(now, priv->break_end)) {
++		/* Wait until NUL byte is written */
++		delay = priv->break_end - now;
++		dev_dbg(&port->dev,
++			"wait %d ms while transmitting NUL byte at %u baud\n",
++			jiffies_to_msecs(delay), CH341_MIN_BPS);
++		schedule_timeout_interruptible(delay);
++	}
++
++restore:
++	/* Restore original baud rate */
++	r = ch341_set_baudrate_lcr(port->serial->dev, priv, priv->baud_rate,
++				   priv->lcr);
++	if (r < 0)
++		dev_err(&port->dev,
++			"restoring original baud rate of %u failed: %d\n",
++			priv->baud_rate, r);
++}
++
+ static void ch341_break_ctl(struct tty_struct *tty, int break_state)
+ {
+ 	const uint16_t ch341_break_reg =
+ 			((uint16_t) CH341_REG_LCR << 8) | CH341_REG_BREAK;
+ 	struct usb_serial_port *port = tty->driver_data;
++	struct ch341_private *priv = usb_get_serial_port_data(port);
+ 	int r;
+ 	uint16_t reg_contents;
+ 	uint8_t *break_reg;
+ 
++	if (priv->quirks & CH341_QUIRK_SIMULATE_BREAK) {
++		ch341_simulate_break(tty, break_state);
++		return;
++	}
++
+ 	break_reg = kmalloc(2, GFP_KERNEL);
+ 	if (!break_reg)
+ 		return;
+-- 
+2.20.1
