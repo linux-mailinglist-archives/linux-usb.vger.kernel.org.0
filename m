@@ -2,110 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B7252141FD
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Jul 2020 01:44:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8883D214359
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Jul 2020 05:45:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726760AbgGCXoq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 3 Jul 2020 19:44:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43974 "EHLO
+        id S1727085AbgGDDpN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 3 Jul 2020 23:45:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726304AbgGCXon (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jul 2020 19:44:43 -0400
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00618C061794
-        for <linux-usb@vger.kernel.org>; Fri,  3 Jul 2020 16:44:42 -0700 (PDT)
-Received: by mail-qk1-x744.google.com with SMTP id 145so27659302qke.9
-        for <linux-usb@vger.kernel.org>; Fri, 03 Jul 2020 16:44:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=9MBMJHyuzyTfZ+cIgnghSJimXawm3lrGDRrH4lQpVs0=;
-        b=PtZ35nyOuzzyvZrCQlyBq5OrR/juUrm2Aq9SdIjbWeD6emWd4s6zS/C8M/MUrM14vI
-         8gjG1FMYHAzAU/ajTYLqrQ/I9YD9qQ2jS/NK9r+Oe1fJyXj/gtoMQsjJ7uYbtXpLhCQS
-         4WBKi4zYsAXqVSaqjIqlcvZvfQ4mawm5+QwlcAsOEZe+cF8E+sqxufvomSAtbeoACno+
-         pbz/+69Cs+GORoE9f4wV6e/IH/fEmAL5nZ0BfdqSUw9WMsiW+vbP6uDiXw28dEkr0/MQ
-         7B6CisF+HxThqLYX7s9CBg/dXgzDUk+4Hn5lTH2i1WxBM0syKbPVMR2CrqtJW4e9Hme0
-         P2WQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=9MBMJHyuzyTfZ+cIgnghSJimXawm3lrGDRrH4lQpVs0=;
-        b=TwwDiSfK/8mS2dlgQbXvIIsa0UcXEdnEVIW8MktABsfLKXpxQHDh2XLeLdrO81wYmr
-         jE73sdIxL7sRH0nT3SYI5aXtDegiYOb9ot0BISEStETMhX5MhovT5Viqx7k2e0e0KP39
-         nEgD3rbsvsDJPbV7w1EuTvjd86+dELh3mJpFvQzUPttGCerkf+qzU15sWKp7FNc1xBGE
-         sjNi5CMOCHZKtT4ja0nhZ019lH7fDNHlfu1Tj4ikKLndt1XxljT1vQNYAeRieGyBIM4o
-         h9fgSnmFcekhqzr/oS/sdtDl3WS21xkqpLLxlogPghExBdKh71a7pNypel0XNs30Vcbg
-         6hKg==
-X-Gm-Message-State: AOAM531dbF5xaoA9+JVnTozC97xtgV0alNgOdlrA3yUxyMf/ak5Z5ulW
-        ncR5GD5Mpoqq4wscADhGMZvUwxm2luTKye8rTRA=
-X-Google-Smtp-Source: ABdhPJwzBoHalKAKHwsFBwPXIJG8SAdPkmrd3bqVu+FFRB2XCKrLVEURaTxGCnGdQCEFdrYDznDKFhf/ZZL4wOtSeF0=
-X-Received: by 2002:a37:4907:: with SMTP id w7mr37467627qka.492.1593819881826;
- Fri, 03 Jul 2020 16:44:41 -0700 (PDT)
+        with ESMTP id S1726746AbgGDDpM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 3 Jul 2020 23:45:12 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B6CC061794;
+        Fri,  3 Jul 2020 20:45:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=RjgXbItONDI8qoKZoagX/7fm2XOCDVB41PDHOzajmYk=; b=RWNe5fwbC3uETb+vlA25w47G3W
+        81y378w8gWI/l1I3BPLGTGJicfvdaYVSHZlWHL4Hr274m/Gu+9IT0kTIyL9CibvdIjGBGjA0sEIg2
+        zPhQ7y4YxWIMVJNCAjAtZPQxKkCok68tVHKhYM/AWFDo8STqJT6VWg8wFXfdJOdojDYsKxqN2zWGO
+        ILNhDg2rOINWSh94+fSvNzVs0SACUZiQvqnxJgiCJ2jzDTuI9P5RBHjoZOnCRuAiVODwJ3OIB3HUC
+        x4PHuDEI9filMB0QaqnSXiLe2h3crPRb65DfVRIkCXMmbrrFyBqlIQC0wi3nSpCE1f7DqmZJiG6je
+        HtGhnLOw==;
+Received: from [2601:1c0:6280:3f0::19c2] (helo=smtpauth.infradead.org)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jrZ6y-0001Xb-Bk; Sat, 04 Jul 2020 03:45:09 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        linux-iio@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, Jon Mason <jdmason@kudzu.us>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Allen Hubbe <allenbh@gmail.com>, linux-ntb@googlegroups.com,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>, linux-nvdimm@lists.01.org,
+        linux-usb@vger.kernel.org, Eli Billauer <eli.billauer@gmail.com>
+Subject: [PATCH 00/17] Documentation/driver-api: eliminate duplicated words
+Date:   Fri,  3 Jul 2020 20:44:45 -0700
+Message-Id: <20200704034502.17199-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Received: by 2002:a0c:aa57:0:0:0:0:0 with HTTP; Fri, 3 Jul 2020 16:44:41 -0700 (PDT)
-Reply-To: hamzakwadrago2@gmail.com
-From:   Hamzak Wadrago <nad.far83@gmail.com>
-Date:   Fri, 3 Jul 2020 23:44:41 +0000
-Message-ID: <CANDz0oXyR47J3xjV1EP9bFaSpJc1DOvqe3dhLOdFMkgaOVvGVg@mail.gmail.com>
-Subject: Awaiting your urgent response,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dear Friend,
+Remove occurrences of duplicated words in Documentation/driver-api/.
 
-I decided to contact you after a careful thought that you may be
-capable of handling this business transaction which I explained below,
-I am the head of Accounts and Audit Department of Bank of Africa
-Ouagadougou. In my department while cross-checking the files of
-foreigners. since our federal government has announced on the need of
-settling all foreign bills to enable foreign investors to come into
-our country and as an order from African unity governed by African
-heads, I discovered an abandoned sum of $15.5m US dollars (fifteen
-million, five hundred thousand US dollars). In an account that belongs
-to one of our foreign customer who died along with his entire family
-in a plane crash.
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: linux-doc@vger.kernel.org
+Cc: Vinod Koul <vkoul@kernel.org>
+Cc: dmaengine@vger.kernel.org
+Cc: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: William Breathitt Gray <vilhelm.gray@gmail.com>
+Cc: linux-iio@vger.kernel.org
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org
+Cc: Jon Mason <jdmason@kudzu.us>
+Cc: Dave Jiang <dave.jiang@intel.com>
+Cc: Allen Hubbe <allenbh@gmail.com>
+Cc: linux-ntb@googlegroups.com
+Cc: Dan Williams <dan.j.williams@intel.com>
+Cc: Vishal Verma <vishal.l.verma@intel.com>
+Cc: Dave Jiang <dave.jiang@intel.com>
+Cc: Ira Weiny <ira.weiny@intel.com>
+Cc: linux-nvdimm@lists.01.org
+Cc: linux-usb@vger.kernel.org
+Cc: Eli Billauer <eli.billauer@gmail.com>
 
-Since i got information about his death, The bank have been expecting
-his next of kin to come over and claim his money because The fund
-cannot be released unless somebody applies for it as next of kin or
-relation to the deceased as indicated in our banking guidelines but
-unfortunately I learnt that his supposed next of kin(his son and wife)
-died alongside with him at the plane crash leaving nobody behind for
-the claim .It is therefore upon this discovery that I now decided to
-make this business proposal to you and release the money to you as the
-next of kin (I want to present you as his business associate )to the
-deceased for safety and subsequent disbursement since nobody is coming
-for it and I don't want this money to go into the Bank treasury as
-unclaimed Bill.
 
-The Banking law and guideline here stipulates that if such money
-remained Unclaimed after Nine years, the money will be transferred
-into the Bank treasury as unclaimed fund.. The request of foreigner as
-next of kin in this business is occasioned by the fact that the
-customer was a foreigner and a Burkina be cannot stand as next of kin
-to a foreigner.
-
-I agree that 40% of this money will be for you as foreign partner, in
-respect to the provision of a foreign account, 60% would be for me .
-There after I will visit your country for disbursement according to
-the percentages indicated. Therefore to enable the immediate transfer
-of this fund to your account as arranged, you must apply first to the
-bank as next of kin of the deceased customer.
-
-Upon receipt of your reply, more details and text of application form
-will be given to you for immediate transfer of the fund, I will not
-fail to bring to your notice that this transaction is hitch free and
-that you should not entertain any atom of fear as all required
-arrangements have been made for the transfer.
-
-i will like  you to send me this information about you such as  your
-full names, direct telephone numbers, and physical address.
-
-Yours sincerely,
-
-Mr. Hamzak Wadrago.
+ Documentation/driver-api/dmaengine/provider.rst        |    2 +-
+ Documentation/driver-api/driver-model/platform.rst     |    2 +-
+ Documentation/driver-api/firmware/built-in-fw.rst      |    2 +-
+ Documentation/driver-api/firmware/direct-fs-lookup.rst |    2 +-
+ Documentation/driver-api/firmware/firmware_cache.rst   |    2 +-
+ Documentation/driver-api/firmware/request_firmware.rst |    2 +-
+ Documentation/driver-api/generic-counter.rst           |    2 +-
+ Documentation/driver-api/iio/buffers.rst               |    2 +-
+ Documentation/driver-api/media/cec-core.rst            |    2 +-
+ Documentation/driver-api/media/dtv-frontend.rst        |    6 +++---
+ Documentation/driver-api/media/v4l2-controls.rst       |    4 ++--
+ Documentation/driver-api/media/v4l2-dev.rst            |    2 +-
+ Documentation/driver-api/ntb.rst                       |    2 +-
+ Documentation/driver-api/nvdimm/nvdimm.rst             |    2 +-
+ Documentation/driver-api/uio-howto.rst                 |    2 +-
+ Documentation/driver-api/usb/URB.rst                   |    2 +-
+ Documentation/driver-api/xillybus.rst                  |    2 +-
+ 17 files changed, 20 insertions(+), 20 deletions(-)
