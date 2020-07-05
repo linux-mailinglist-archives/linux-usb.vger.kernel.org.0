@@ -2,95 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2B0D214FF4
-	for <lists+linux-usb@lfdr.de>; Sun,  5 Jul 2020 23:53:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32CA0215007
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Jul 2020 00:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728611AbgGEVxb convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Sun, 5 Jul 2020 17:53:31 -0400
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:12389 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728127AbgGEVxa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 5 Jul 2020 17:53:30 -0400
-Received: from sogo3.sd4.0x35.net (sogo3.sd4.0x35.net [10.200.201.53])
-        (Authenticated sender: kerneldev@karsmulder.nl)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPA id 8C598240004;
-        Sun,  5 Jul 2020 21:53:27 +0000 (UTC)
-From:   "Kars Mulder" <kerneldev@karsmulder.nl>
-In-Reply-To: <20200704115538.GD16083@amd>
-Content-Type: text/plain; charset="utf-8"
-X-Forward: 127.0.0.1
-Date:   Sun, 05 Jul 2020 23:53:27 +0200
-Cc:     "David Laight" <David.Laight@ACULAB.COM>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Kai-Heng Feng" <kai.heng.feng@canonical.com>,
-        "Pavel Machek" <pavel@denx.de>,
-        "Andy Shevchenko" <andy.shevchenko@gmail.com>,
-        "Oliver Neukum" <oneukum@suse.com>
-To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+        id S1728015AbgGEWLa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 5 Jul 2020 18:11:30 -0400
+Received: from l2mail1.panix.com ([166.84.1.75]:62190 "EHLO l2mail1.panix.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727842AbgGEWLa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 5 Jul 2020 18:11:30 -0400
+X-Greylist: delayed 1162 seconds by postgrey-1.27 at vger.kernel.org; Sun, 05 Jul 2020 18:11:30 EDT
+Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
+        by l2mail1.panix.com (Postfix) with ESMTPS id 4B0MqX060rzDQ4
+        for <linux-usb@vger.kernel.org>; Sun,  5 Jul 2020 17:52:07 -0400 (EDT)
+Received: from xps-7390 (cpe-23-242-39-94.socal.res.rr.com [23.242.39.94])
+        by mailbackend.panix.com (Postfix) with ESMTPSA id 4B0MqV4Bb6z1sFc;
+        Sun,  5 Jul 2020 17:52:06 -0400 (EDT)
+Date:   Sun, 5 Jul 2020 14:52:04 -0700 (PDT)
+From:   "Kenneth R. Crudup" <kenny@panix.com>
+Reply-To: "Kenneth R. Crudup" <kenny@panix.com>
+To:     mika.westerberg@linux.intel.com
+cc:     linux-usb@vger.kernel.org, "Kenneth R. Crudup" <kenny@panix.com>
+Subject: I get a new Thunderbolt domain UUID on every boot
+Message-ID: <alpine.DEB.2.23.453.2007051446170.4280@xps-7390>
+User-Agent: Alpine 2.23 (DEB 453 2020-06-18)
 MIME-Version: 1.0
-Message-ID: <3212-5f024c00-215-220fe080@174542169>
-Subject: =?utf-8?q?=5BPATCH=5D?==?utf-8?q?_usb=3A?==?utf-8?q?_core=3A?= fix 
- =?utf-8?q?quirks=5Fparam=5Fset=28=29?= writing to a const pointer
-User-Agent: SOGoMail 4.3.2
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The function quirks_param_set() takes as argument a const char* pointer
-to the new value of the usbcore.quirks parameter. It then casts this
-pointer to a non-const char* pointer and passes it to the strsep()
-function, which overwrites the value.
 
-Fix this by copying the value to a local buffer on the stack and 
-letting that buffer be written to by strsep().
+Does anyone know why my machine (Dell XPS 7390 2-in-1, i7-1065G7 CPU) gets a
+new Thunderbolt domain UUID on every boot?
 
-Fixes: 027bd6cafd9a ("usb: core: Add "quirks" parameter for usbcore")
-Signed-off-by: Kars Mulder <kerneldev@karsmulder.nl>
+----
+$ sudo boltctl domains | wc -l
+3320
+$ sudo boltctl domains | tail -20
+ o domain 815fe31a-99fd-8680-ffff-ffffffffffff
+   |- bootacl:  0/0
+   `- security: unknown
 
----
- drivers/usb/core/quirks.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ o domain 703bafdf-6a33-8680-ffff-ffffffffffff
+   |- bootacl:  0/0
+   `- security: unknown
 
-diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-index e0b77674869c..86b1a6739b4e 100644
---- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -12,6 +12,8 @@
- #include <linux/usb/hcd.h>
- #include "usb.h"
- 
-+#define QUIRKS_PARAM_SIZE 128
-+
- struct quirk_entry {
- 	u16 vid;
- 	u16 pid;
-@@ -23,19 +25,21 @@ static DEFINE_MUTEX(quirk_mutex);
- static struct quirk_entry *quirk_list;
- static unsigned int quirk_count;
- 
--static char quirks_param[128];
-+static char quirks_param[QUIRKS_PARAM_SIZE];
- 
--static int quirks_param_set(const char *val, const struct kernel_param *kp)
-+static int quirks_param_set(const char *value, const struct kernel_param *kp)
- {
-+	char val[QUIRKS_PARAM_SIZE];
- 	char *p, *field;
- 	u16 vid, pid;
- 	u32 flags;
- 	size_t i;
- 	int err;
- 
--	err = param_set_copystring(val, kp);
-+	err = param_set_copystring(value, kp);
- 	if (err)
- 		return err;
-+	strscpy(val, value, sizeof(val));
- 
- 	mutex_lock(&quirk_mutex);
- 
+ o domain 91c55303-9244-8680-ffff-ffffffffffff
+   |- bootacl:  0/0
+   `- security: unknown
+
+ * domain0 800e6342-557e-8680-ffff-ffffffffffff
+   |- bootacl:  0/0
+   `- security: iommu
+
+ * domain1 9128366f-c373-8680-ffff-ffffffffffff
+   |- bootacl:  0/0
+   `- security: iommu
+$
+----
+$ egrep '(THUNDER|USB4)' .config
+# CONFIG_MDIO_THUNDER is not set
+CONFIG_USB4_NET=m
+# CONFIG_USB_HSIC_USB4604 is not set
+CONFIG_INTEL_WMI_THUNDERBOLT=y
+CONFIG_USB4=y
+$
+----
+I did see this, too:
+$  dmesg | fgrep -i thunderbolt
+[    1.114106] thunderbolt 0000:00:0d.2: 0: uid crc8 mismatch (expected: 0x8e, got: 0xe7)
+[    1.657866] thunderbolt 0000:00:0d.3: 0: uid crc8 mismatch (expected: 0x8e, got: 0xe7)
+----
+
+Thanks,
+
+	-Kenny
+
 -- 
-2.27.0
-
+Kenneth R. Crudup  Sr. SW Engineer, Scott County Consulting, Orange County CA
