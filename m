@@ -2,51 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF11A215873
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA2C215871
 	for <lists+linux-usb@lfdr.de>; Mon,  6 Jul 2020 15:34:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729425AbgGFNej (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Jul 2020 09:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47328 "EHLO
+        id S1729413AbgGFNed (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Jul 2020 09:34:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729383AbgGFNeW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jul 2020 09:34:22 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82153C061794
-        for <linux-usb@vger.kernel.org>; Mon,  6 Jul 2020 06:34:22 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id f7so37936610wrw.1
-        for <linux-usb@vger.kernel.org>; Mon, 06 Jul 2020 06:34:22 -0700 (PDT)
+        with ESMTP id S1729391AbgGFNeY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jul 2020 09:34:24 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 996A6C061755
+        for <linux-usb@vger.kernel.org>; Mon,  6 Jul 2020 06:34:23 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id 22so39378299wmg.1
+        for <linux-usb@vger.kernel.org>; Mon, 06 Jul 2020 06:34:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=wUFrKyBE/rqHQUVcokgEiKeaeYpvOr+KJ0Q9vYwpje8=;
-        b=uusCAAiMYRyZu2CfIvDS4HCRjCXdZtQhAdbkpOMuxK8zvkQgvAiWP7osHCg5j0Lxi5
-         16z2up3T4hzLGYGUj30PuZuH/B1ZOaCs7UsgLTYfLAopJ+wzvauVq5wsuRkhS9mODBVO
-         xu3HpYfIRTGCABdG6OuYwyuSubTIL9fv8KfITH2PVNH6p+KU2u/VSZ88VFCHVaBSnUEE
-         qCSCG4xa+6MOhyRfi5aRon2mI3zyyZNLPzHx0yYiSZHLP1iZQY77tCT0GZB2yW+6Np0Z
-         oepj3m1na2bZFY8S7xZRfDmdzIbt82vIVRQ30dBiAEz2EguVEQm+DlN2OGXrSjBKXDOb
-         Soig==
+        bh=fYphPHtOnqXpEOjqEtrG2eQ5inMeigGW8H35HCVLb4A=;
+        b=pIQ9uuVnn+fW6hJfQP519yESrX2DO/yRDUtbTlObfQ7JiXoQk1gUB8izw+sRf4uiP8
+         0qRPMoy8V3fOjyBkwCzS9AG6yUdgQccA81mMdgPqR8VCUf9uNV6P4+i3drgluWiyuTmT
+         MQEXMjrNdksYTFKqr2MlVEY2y1S2VnIj7ZkoLfXk5UAfT4JD5GUm5dHUV+1okA6gW4No
+         9O2oZmH1/5mtvpALvC7xYtm7gHR72y8RzKnIJ29P1F/sxS16DaKnI1wHAtggBbdw+i3T
+         am7aikxGnPnMayMpGLeH64fpGjUAHyfWf/ZsNROTefX8AI4c+3cIjlt2iV9Amf5+79BV
+         DbAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wUFrKyBE/rqHQUVcokgEiKeaeYpvOr+KJ0Q9vYwpje8=;
-        b=D3HSVrawI3Xsgd4N49Jm++FeCmxco74wRM9lQSiOcNWHAyihmYdxaYyLi/wNMpO+br
-         vdRt8DaCd3Gvc90hvu6q2y1900UfArQBC8+5bs7P1wrjpHSghaq/0Wfv7yNXrJW1yBfb
-         H9+edcWNi2YgYPnEOTK4EzodvuqGqjaETZEClfPPS7yuQhOzC78m5W8UrawT0iVpeohc
-         a0hHPwCG3nrjsz3P+CvyKsvgJnIkG770lRod4y00UNEU0Z9gsfdNpmWbgOAfrUFBAMiX
-         KagbbwMUl/vtRrHLnaucDWQU39BhTKAUZ6CNmuv9AYvQRL3N0QArP/XDIT7fxg7kn8jE
-         JvzA==
-X-Gm-Message-State: AOAM531XDjmWcnjI0vmW9Dr+xdC9ymMDSjgAKw5JUUTB8+h2JLeoz8r+
-        OnZkLyIes7YMJT71CNxUYVUZVA==
-X-Google-Smtp-Source: ABdhPJyyqkr63bgakviOF8q+Q3TQCXiWUrHVNA65wDA49vqE6L9e5OtXIB/BD5KAE97IICp4FfjQqQ==
-X-Received: by 2002:a5d:470b:: with SMTP id y11mr50993618wrq.101.1594042461212;
-        Mon, 06 Jul 2020 06:34:21 -0700 (PDT)
+        bh=fYphPHtOnqXpEOjqEtrG2eQ5inMeigGW8H35HCVLb4A=;
+        b=JaQx5lIdPK4bHTXecc15umCCL2b2bEuiET5GNQYhmxlbzB21zejOE07aeAGFXQdCFk
+         +q83PfLvH1URpC6qB7gWiQz6Fu5OA01YcEM8YMcnaJTdaGMELoUrRRl4r0jJ8l9IiM2z
+         SqqmQ8zlwJ52oXj9VrQKN662lkFmp8KnVGa3gWAX15e7n37zJfXUikwARIPCCBlgx5SN
+         Jzw7dgWyiI75PWYwK71qboy3Wv+nTPtvWcKaEDhQ8QivvYN0h/G35F/Iui13H2a2TZSk
+         HL6Q/nJ334grqi208PlsjEgAWQiPcF5L4ubb2U8pjkI0s9qCtRyTigFj/qnoVfkth3xn
+         kpHQ==
+X-Gm-Message-State: AOAM531yhmHYRKF0ME39TzsWqqMRFluYZDddlfTalJ2Lcdb+KXXGS+GA
+        Kr180J1+xCA+08TwkcJiSPOolw==
+X-Google-Smtp-Source: ABdhPJxX/0H3QT2+4IGeuZMzXZfirJMCquWrp7wTX/H7qNjAS315WxUrQkgO2PIZ78d0/7Tv01PEFA==
+X-Received: by 2002:a05:600c:2219:: with SMTP id z25mr6860737wml.154.1594042462367;
+        Mon, 06 Jul 2020 06:34:22 -0700 (PDT)
 Received: from localhost.localdomain ([2.27.35.206])
-        by smtp.gmail.com with ESMTPSA id v18sm25416082wrv.49.2020.07.06.06.34.20
+        by smtp.gmail.com with ESMTPSA id v18sm25416082wrv.49.2020.07.06.06.34.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2020 06:34:20 -0700 (PDT)
+        Mon, 06 Jul 2020 06:34:21 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -55,9 +55,9 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Jerry Huang <Chang-Ming.Huang@freescale.com>,
         Peter Barada <peterb@logicpd.com>,
         Anton Vorontsov <avorontsov@ru.mvista.com>
-Subject: [PATCH 30/32] usb: host: fhci-tds: Remove unused variables 'buf' and 'extra_data'
-Date:   Mon,  6 Jul 2020 14:33:39 +0100
-Message-Id: <20200706133341.476881-31-lee.jones@linaro.org>
+Subject: [PATCH 31/32] usb: host: fhci-sched: Remove unused variable 'td'
+Date:   Mon,  6 Jul 2020 14:33:40 +0100
+Message-Id: <20200706133341.476881-32-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200706133341.476881-1-lee.jones@linaro.org>
 References: <20200706133341.476881-1-lee.jones@linaro.org>
@@ -69,21 +69,14 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Neither have been used since the driver's inception in 2009.
+'td' has been completely unused since the driver's inception in 2009.
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/usb/host/fhci-tds.c: In function ‘fhci_flush_bds’:
- drivers/usb/host/fhci-tds.c:472:6: warning: variable ‘buf’ set but not used [-Wunused-but-set-variable]
- 472 | u32 buf;
- | ^~~
- drivers/usb/host/fhci-tds.c:470:6: warning: variable ‘extra_data’ set but not used [-Wunused-but-set-variable]
- 470 | u16 extra_data;
- | ^~~~~~~~~~
- drivers/usb/host/fhci-tds.c: In function ‘fhci_flush_actual_frame’:
- drivers/usb/host/fhci-tds.c:527:6: warning: variable ‘extra_data’ set but not used [-Wunused-but-set-variable]
- 527 | u16 extra_data;
- | ^~~~~~~~~~
+ drivers/usb/host/fhci-sched.c: In function ‘fhci_queue_urb’:
+ drivers/usb/host/fhci-sched.c:704:13: warning: variable ‘td’ set but not used [-Wunused-but-set-variable]
+ 704 | struct td *td;
+ | ^~
 
 Cc: Shlomi Gridish <gridish@freescale.com>
 Cc: Jerry Huang <Chang-Ming.Huang@freescale.com>
@@ -91,59 +84,96 @@ Cc: Peter Barada <peterb@logicpd.com>
 Cc: Anton Vorontsov <avorontsov@ru.mvista.com>
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/usb/host/fhci-tds.c | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+ drivers/usb/host/fhci-sched.c | 19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/usb/host/fhci-tds.c b/drivers/usb/host/fhci-tds.c
-index f3308ce250438..d98fd9e1af0bc 100644
---- a/drivers/usb/host/fhci-tds.c
-+++ b/drivers/usb/host/fhci-tds.c
-@@ -467,17 +467,15 @@ u32 fhci_host_transaction(struct fhci_usb *usb,
- /* Reset the Tx BD ring */
- void fhci_flush_bds(struct fhci_usb *usb)
- {
--	u16 extra_data;
- 	u16 td_status;
--	u32 buf;
- 	struct usb_td __iomem *td;
- 	struct endpoint *ep = usb->ep0;
+diff --git a/drivers/usb/host/fhci-sched.c b/drivers/usb/host/fhci-sched.c
+index 3235d53074038..63c646c8f7d62 100644
+--- a/drivers/usb/host/fhci-sched.c
++++ b/drivers/usb/host/fhci-sched.c
+@@ -701,7 +701,6 @@ void fhci_queue_urb(struct fhci_hcd *fhci, struct urb *urb)
+ 	u32 data_len = urb->transfer_buffer_length;
+ 	int urb_state = 0;
+ 	int toggle = 0;
+-	struct td *td;
+ 	u8 *data;
+ 	u16 cnt = 0;
  
- 	td = ep->td_base;
- 	while (1) {
- 		td_status = in_be16(&td->status);
--		buf = in_be32(&td->buf_ptr);
--		extra_data = in_be16(&td->extra);
-+		in_be32(&td->buf_ptr);
-+		in_be16(&td->extra);
+@@ -770,7 +769,7 @@ void fhci_queue_urb(struct fhci_hcd *fhci, struct urb *urb)
+ 				usb_endpoint_maxp(&urb->ep->desc)) == 0))
+ 			urb_state = US_BULK0;
+ 		while (data_len > 4096) {
+-			td = fhci_td_fill(fhci, urb, urb_priv, ed, cnt,
++			fhci_td_fill(fhci, urb, urb_priv, ed, cnt,
+ 				usb_pipeout(urb->pipe) ? FHCI_TA_OUT :
+ 							 FHCI_TA_IN,
+ 				cnt ? USB_TD_TOGGLE_CARRY :
+@@ -781,7 +780,7 @@ void fhci_queue_urb(struct fhci_hcd *fhci, struct urb *urb)
+ 			cnt++;
+ 		}
  
- 		/* if the TD is not empty - we'll confirm it as Timeout */
- 		if (td_status & TD_R)
-@@ -524,7 +522,6 @@ void fhci_flush_actual_frame(struct fhci_usb *usb)
- {
- 	u8 mode;
- 	u16 tb_ptr;
--	u16 extra_data;
- 	u16 td_status;
- 	u32 buf_ptr;
- 	struct usb_td __iomem *td;
-@@ -538,7 +535,7 @@ void fhci_flush_actual_frame(struct fhci_usb *usb)
- 	td = cpm_muram_addr(tb_ptr);
- 	td_status = in_be16(&td->status);
- 	buf_ptr = in_be32(&td->buf_ptr);
--	extra_data = in_be16(&td->extra);
-+	in_be16(&td->extra);
- 	do {
- 		if (td_status & TD_R) {
- 			out_be16(&td->status, (td_status & ~TD_R) | TD_TO);
-@@ -552,7 +549,7 @@ void fhci_flush_actual_frame(struct fhci_usb *usb)
- 		td = next_bd(ep->td_base, td, td_status);
- 		td_status = in_be16(&td->status);
- 		buf_ptr = in_be32(&td->buf_ptr);
--		extra_data = in_be16(&td->extra);
-+		in_be16(&td->extra);
- 	} while ((td_status & TD_R) || buf_ptr);
+-		td = fhci_td_fill(fhci, urb, urb_priv, ed, cnt,
++		fhci_td_fill(fhci, urb, urb_priv, ed, cnt,
+ 			usb_pipeout(urb->pipe) ? FHCI_TA_OUT : FHCI_TA_IN,
+ 			cnt ? USB_TD_TOGGLE_CARRY : toggle,
+ 			data, data_len, 0, 0, true);
+@@ -789,7 +788,7 @@ void fhci_queue_urb(struct fhci_hcd *fhci, struct urb *urb)
  
- 	fhci_td_transaction_confirm(usb);
+ 		if (urb->transfer_flags & URB_ZERO_PACKET &&
+ 				cnt < urb_priv->num_of_tds) {
+-			td = fhci_td_fill(fhci, urb, urb_priv, ed, cnt,
++			fhci_td_fill(fhci, urb, urb_priv, ed, cnt,
+ 				usb_pipeout(urb->pipe) ? FHCI_TA_OUT :
+ 							 FHCI_TA_IN,
+ 				USB_TD_TOGGLE_CARRY, NULL, 0, 0, 0, true);
+@@ -798,7 +797,7 @@ void fhci_queue_urb(struct fhci_hcd *fhci, struct urb *urb)
+ 		break;
+ 	case FHCI_TF_INTR:
+ 		urb->start_frame = get_frame_num(fhci) + 1;
+-		td = fhci_td_fill(fhci, urb, urb_priv, ed, cnt++,
++		fhci_td_fill(fhci, urb, urb_priv, ed, cnt++,
+ 			usb_pipeout(urb->pipe) ? FHCI_TA_OUT : FHCI_TA_IN,
+ 			USB_TD_TOGGLE_DATA0, data, data_len,
+ 			urb->interval, urb->start_frame, true);
+@@ -808,12 +807,12 @@ void fhci_queue_urb(struct fhci_hcd *fhci, struct urb *urb)
+ 		ed->max_pkt_size = usb_endpoint_maxp(&urb->ep->desc);
+ 
+ 		/* setup stage */
+-		td = fhci_td_fill(fhci, urb, urb_priv, ed, cnt++, FHCI_TA_SETUP,
++		fhci_td_fill(fhci, urb, urb_priv, ed, cnt++, FHCI_TA_SETUP,
+ 			USB_TD_TOGGLE_DATA0, urb->setup_packet, 8, 0, 0, true);
+ 
+ 		/* data stage */
+ 		if (data_len > 0) {
+-			td = fhci_td_fill(fhci, urb, urb_priv, ed, cnt++,
++			fhci_td_fill(fhci, urb, urb_priv, ed, cnt++,
+ 				usb_pipeout(urb->pipe) ? FHCI_TA_OUT :
+ 							 FHCI_TA_IN,
+ 				USB_TD_TOGGLE_DATA1, data, data_len, 0, 0,
+@@ -822,12 +821,12 @@ void fhci_queue_urb(struct fhci_hcd *fhci, struct urb *urb)
+ 
+ 		/* status stage */
+ 		if (data_len > 0)
+-			td = fhci_td_fill(fhci, urb, urb_priv, ed, cnt++,
++			fhci_td_fill(fhci, urb, urb_priv, ed, cnt++,
+ 				(usb_pipeout(urb->pipe) ? FHCI_TA_IN :
+ 							  FHCI_TA_OUT),
+ 				USB_TD_TOGGLE_DATA1, data, 0, 0, 0, true);
+ 		else
+-			 td = fhci_td_fill(fhci, urb, urb_priv, ed, cnt++,
++			 fhci_td_fill(fhci, urb, urb_priv, ed, cnt++,
+ 				FHCI_TA_IN,
+ 				USB_TD_TOGGLE_DATA1, data, 0, 0, 0, true);
+ 
+@@ -844,7 +843,7 @@ void fhci_queue_urb(struct fhci_hcd *fhci, struct urb *urb)
+ 			 */
+ 			frame += cnt * urb->interval;
+ 			frame &= 0x07ff;
+-			td = fhci_td_fill(fhci, urb, urb_priv, ed, cnt,
++			fhci_td_fill(fhci, urb, urb_priv, ed, cnt,
+ 				usb_pipeout(urb->pipe) ? FHCI_TA_OUT :
+ 							 FHCI_TA_IN,
+ 				USB_TD_TOGGLE_DATA0,
 -- 
 2.25.1
 
