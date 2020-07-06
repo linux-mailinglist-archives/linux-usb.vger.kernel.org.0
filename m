@@ -2,119 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACDE3215945
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Jul 2020 16:20:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9520215970
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Jul 2020 16:30:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729242AbgGFOUz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Jul 2020 10:20:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54510 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728961AbgGFOUz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jul 2020 10:20:55 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0191BC061755
-        for <linux-usb@vger.kernel.org>; Mon,  6 Jul 2020 07:20:55 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id w3so29902581wmi.4
-        for <linux-usb@vger.kernel.org>; Mon, 06 Jul 2020 07:20:54 -0700 (PDT)
+        id S1729301AbgGFO3j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Jul 2020 10:29:39 -0400
+Received: from mail-dm6nam12on2048.outbound.protection.outlook.com ([40.107.243.48]:47712
+        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729201AbgGFO3j (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 6 Jul 2020 10:29:39 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RQbZVlWFVprl7ZKMUf9pcoqrszCqweAqVS1nJYmd9WG0FZqbJHgTo5CYinwmvwoMxkbMDUpN1T9yfA5r+5SlZKyL/+8dRnG2aHmPMSZIs48iDZF+bXgCP+f1Fe61owQ7ILyHLhHPB0j/hCwdLSlK5ZDF3UMO+YFUUzMY7FH/Fkp097W0H3FejpiDcAWi1uEfHPZxL7NcxMFNjqm+h0Yw+jnKTUlYxoPPFCqnBy99wvje09qfrazCJsHsfBa+BEb9g/6I7eDH3YXl7vz++ILYpoAB/jClL4CuqqY6FkgT9e6qW6rig9A0RbRwqMK+vaSTaIhxLucvPMIATwft8wkFng==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=B7Dx544Hh/IDUA2Pr5WTHrouJvb7zZ3ycTfNo5DsdUM=;
+ b=Y14eT7vlXLKxPH+Y+OtoFm9e5PRuXfJjkq+Dc4GDU2dTHKuFDnWlL4ooJgScDZUnIGdV+fcELvcFiQ04d+DEdna3z22DmmpFYPKoS4FNenNm8aVi5gDjZP0eF5Lff9OMcxrOCmfXexQYb0U4NUC9Rozw/xoSZ+88xUplcdymkVNWklqa+a3Q5X1OsMvMqPeW9xbnXKxbtrSsAHmJZ/y650jP0B4wchANxm3YaNuPWG0GhF5eyCCHqmu9tvPy6P0pIPOSTLE3cKqr6DdCHht/z0qZRAk7AZ5dMLzkvbG78gwVbmf5yMoupBhee/jLJoenNWNTeFqazowe2qh43++6cg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=windriver.com; dmarc=pass action=none
+ header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=/SQQ7AOqnp0abV0mTui8yYrs1UAgtqLR05qcleZcwQE=;
-        b=Ed6JrprbDjk8AXD6SCOI9yh0CysVyAtZO2nt/f6l1uLVAF7tPqo9QHp4648VE6/P0J
-         iJd3+qHMbx5g2R1VjGTps0BZqc1+nkfAtJ/DC0I/fty8HyNAXW3hQewEgWXpZQsoLOZd
-         FNf6j1vFI9bDcSZ19YcgSjidaauF0qGEx+UPTOMQVosbA7mKScWrXlbSiIyC8j4b2kTz
-         jQxjB+VuO/AByLPP+2/rnzTx6HTicNZY68TyLXs/k9slS+eZTpkmcJvLRvAKx+JyDmwI
-         PdzTFhyFHuxZvHNiDL4SdAdv6hIll/6VmdF8GZqofG4QIjSUW5v789VNT8yUZRQAyw7i
-         4C+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=/SQQ7AOqnp0abV0mTui8yYrs1UAgtqLR05qcleZcwQE=;
-        b=U7WvQa54wyLT5cGryXtkVgjlQS0TSaCUz462QdbGUUu0zOU7urtrHW+2J9TdQPRw10
-         yATeKdo82YMRZe8Ew+ZVdXu6IE72+hRnchSkFeg7IVwgahEeMJX9DN4iEUhtzn+59W+S
-         jsFV4CBTJYhQllkADonAs+1xx/E6InIUTb5OFwF/4NzVbz6Rb3A+IBne6bxLBW4lo3mU
-         mkEeAVK/VIA4JWJCL0xisATx8lW0C2H0VGxQYiUK7VWDlgA55nQtdNvR3D6TTDvFt1xT
-         xunMrAgjw0+P0aLY4/lwuu1bSBpuuRBaR80QZ1FYgjliD82hBrr7g6zt6eu9DCjyf/yU
-         9oZg==
-X-Gm-Message-State: AOAM532n6v2rOqnXM/qKD+aAU+cDi48O8LXvUUSJ0WdW8cZvAiSMs5yj
-        eIah1XCTFd2wH2Rtl6foqyOFxw==
-X-Google-Smtp-Source: ABdhPJxttEL31vKF295CqiyvKNlNLZN2K0H1vn3bWACeSCGgEgewna0f80KeGgsIGvd6NVLZTGM+Fw==
-X-Received: by 2002:a1c:1fd1:: with SMTP id f200mr48281159wmf.162.1594045253749;
-        Mon, 06 Jul 2020 07:20:53 -0700 (PDT)
-Received: from dell ([2.27.35.206])
-        by smtp.gmail.com with ESMTPSA id x7sm24950797wrr.72.2020.07.06.07.20.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2020 07:20:53 -0700 (PDT)
-Date:   Mon, 6 Jul 2020 15:20:51 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     gregkh@linuxfoundation.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Subject: Re: [PATCH 08/32] usb: typec: tcpm: tcpm: Remove dangling unused
- 'struct tcpm_altmode_ops'
-Message-ID: <20200706142051.GA3500@dell>
-References: <20200706133341.476881-1-lee.jones@linaro.org>
- <20200706133341.476881-9-lee.jones@linaro.org>
- <ca14707c-7d40-07ac-da1d-ca27a2e93dcd@redhat.com>
+ d=windriversystems.onmicrosoft.com;
+ s=selector2-windriversystems-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=B7Dx544Hh/IDUA2Pr5WTHrouJvb7zZ3ycTfNo5DsdUM=;
+ b=qJAL9bSVR+rqKW/NDxuObr9nnSkVJ6AgQtlRZCCydZOoac4j3grK9tGYm4yUPsqy5ncawUOtHgU0486Z4vKRkIutgLNbYQcO8kFylgCc6MRCrtBjW9Srmaz/yjlly6H5e9AIbvIy+W9cRlkr0f9NmkDLUsp/D6vJgXhLTfcKcXQ=
+Received: from BYAPR11MB2632.namprd11.prod.outlook.com (2603:10b6:a02:c4::17)
+ by BY5PR11MB4104.namprd11.prod.outlook.com (2603:10b6:a03:18f::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3153.23; Mon, 6 Jul
+ 2020 14:29:36 +0000
+Received: from BYAPR11MB2632.namprd11.prod.outlook.com
+ ([fe80::3d7d:dfc1:b35d:63d1]) by BYAPR11MB2632.namprd11.prod.outlook.com
+ ([fe80::3d7d:dfc1:b35d:63d1%7]) with mapi id 15.20.3153.029; Mon, 6 Jul 2020
+ 14:29:36 +0000
+From:   "Zhang, Qiang" <Qiang.Zhang@windriver.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     "balbi@kernel.org" <balbi@kernel.org>,
+        "colin.king@canonical.com" <colin.king@canonical.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: =?gb2312?B?u9i4tDogW1BBVENIIHYyXSB1c2I6IGdhZGdldDogZnVuY3Rpb246IGZpeCBt?=
+ =?gb2312?B?aXNzaW5nIHNwaW5sb2NrIGluIGZfdWFjMV9sZWdhY3k=?=
+Thread-Topic: [PATCH v2] usb: gadget: function: fix missing spinlock in
+ f_uac1_legacy
+Thread-Index: AQHWU2vcjKFwJdWIC0ms8vCJ2RZbE6j6WmEAgABBxzc=
+Date:   Mon, 6 Jul 2020 14:29:35 +0000
+Message-ID: <BYAPR11MB2632AD4B8022D3CD82E420EAFF690@BYAPR11MB2632.namprd11.prod.outlook.com>
+References: <20200705061616.833-1-qiang.zhang@windriver.com>,<20200706103130.GB10624@kroah.com>
+In-Reply-To: <20200706103130.GB10624@kroah.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: linuxfoundation.org; dkim=none (message not signed)
+ header.d=none;linuxfoundation.org; dmarc=none action=none
+ header.from=windriver.com;
+x-originating-ip: [106.39.149.61]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 9ffcc1b0-8d54-4447-9805-08d821b90216
+x-ms-traffictypediagnostic: BY5PR11MB4104:
+x-microsoft-antispam-prvs: <BY5PR11MB410460F6379E44E0746ABC9DFF690@BY5PR11MB4104.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2043;
+x-forefront-prvs: 04569283F9
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Eag2PFQDxYpdk3r0PKhMv3JGxGDe92oc4pynDTA9XHwsqC0pbE9BmooLFuxufAkjTNi5RRV7cJMr3HKLHMwjsC4gy2lIc53C6qvtqNjJUxXQIKD23I06Opvm/rPuqvOuDXwn61K8Q62bkdJ69R6ZbUU9acHIiaUzelv/MooQBtb8pTjivYO/jVc2s0OEyEI3jcDjNOIvQwEfmlV78MV/SgPFLH3IY9qr5+MwkK59jhbCH0kmnRHaKy20uPgBvKPbmhPyPX4U0QjHw2epj8JM0YBQSWyzm6Uy+PdV7NQYTHBnyL+mRcjSUmwLAmYYeRstRP1ptx3ySoUiU6KEZhl1Hg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB2632.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(39850400004)(376002)(396003)(136003)(346002)(366004)(83380400001)(71200400001)(478600001)(316002)(54906003)(4744005)(33656002)(7696005)(52536014)(64756008)(66556008)(66476007)(4326008)(66946007)(8936002)(6506007)(66446008)(186003)(86362001)(76116006)(91956017)(2906002)(6916009)(9686003)(26005)(5660300002)(55016002)(224303003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: juKj1NXw+98Pq85+6A8JtV9MV1jaxSAu5i3Q3YMT7fRzak7r2kthiJNNS94fkWIjE0TDuU46/dqxXe3Dpl2EVDpajTPrCoUexB2K2dkLSfVmw4XVKpqd7XYu9IjvkCvYQ9JJRCFfBsQSCE1B3OLw/7Bc10H6TUQ0rfuNAtNKtQNJyaTnG/jnbkDAZIRGhS8tmbVSAuXAETiA8gJVKmyE+eBbRodfa9K50HSPuGwwghHSVsYICnxla7yAHOwRBV/aL1qsisW39xG4AU2vEEbAe0wKB+RQNHcuyBJpy4hEz86jYhdWG9CKwfZ295Oi6JbqVD5Xf7lrkBZG7rViCHkDY5wLcUlB02A9JNJtVxi94mpp1w7oPChwppzs3RhzxQEVtyFNyKv2WZhiiPzeigXq+D08d8tseuhOhfhENe9zCRY79wOWS3mK7s6N3XZ8GvRNTPKtlJY5pTXR3MUofXMQtt5d90YiyUzxAGPj9x0JAb4=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ca14707c-7d40-07ac-da1d-ca27a2e93dcd@redhat.com>
+X-OriginatorOrg: windriver.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB2632.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9ffcc1b0-8d54-4447-9805-08d821b90216
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jul 2020 14:29:35.8887
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: jSHKoV9bYJNmQSGdLAesfaQpJ3JRJ/RAhURzCtnQM2ngXCeDRrvjzaF1LJmZCu17LfQXIZ8Z9xcLv7NErSHEodGKmndPa7UKgXq30IK0S0Q=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR11MB4104
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 06 Jul 2020, Hans de Goede wrote:
-
-> Hi,
-> 
-> On 7/6/20 3:33 PM, Lee Jones wrote:
-> > Looks as though a079973f462a3 ("usb: typec: tcpm: Remove tcpc_config
-> > configuration mechanism") pulled out the only use of 'tcpm_altmode_ops'
-> > last year.  No need to keep it around.
-> > 
-> > Fixes the following W=1 kernel build warning(s):
-> > 
-> >   drivers/usb/typec/tcpm/tcpm.c:1551:39: warning: ‘tcpm_altmode_ops’ defined but not used [-Wunused-const-variable=]
-> >   1551 | static const struct typec_altmode_ops tcpm_altmode_ops = {
-> >   | ^~~~~~~~~~~~~~~~
-> > 
-> > Cc: Guenter Roeck <linux@roeck-us.net>
-> > Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > Cc: Hans de Goede <hdegoede@redhat.com>
-> > Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> 
-> This is necessary for adding Display port over Type-C support
-> on devices using the tcpm code, rather then firmware, to do
-> the Type-C alt-mode negotiation.
-> 
-> I have a local patch in my tree which adds support for this.
-> 
-> But Heikki did not like my approach, so that patch
-> (which needs the bits you are removing) never landed
-> upstream:
-> 
-> https://patchwork.kernel.org/patch/11199517/
-> 
-> Which is somewhat old now.
-
-Yes, that's a just a little old now.
-
-If it drags on for much longer, perhaps consider taking it out for the
-time being and adding it back when you start to make use of it again?
-
-> Heikki said he would look into an approach to this more to
-> his liking. Heikki an progress on this area?
-
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+VGhhbmtzIGZvciB5b3VyIHN1Z2dlc3RpbiBHcmVnIEtIDQpJIHRoaW5rIHRoZXJlIGlzIG5vdCBu
+ZWVkIGZpeCB0YWdzLiBJIHdpbGwgcmVzZW5kLg0KDQp0aGFua3MsDQpaaGFuZyBRaWFuZw0KDQpf
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fDQq3orz+yMs6IEdyZWcgS0gg
+PGdyZWdraEBsaW51eGZvdW5kYXRpb24ub3JnPg0Kt6LLzcqxvOQ6IDIwMjDE6jfUwjbI1SAxODoz
+MQ0KytW8/sjLOiBaaGFuZywgUWlhbmcNCrOty806IGJhbGJpQGtlcm5lbC5vcmc7IGNvbGluLmtp
+bmdAY2Fub25pY2FsLmNvbTsgbGludXgtdXNiQHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVs
+QHZnZXIua2VybmVsLm9yZw0K1vfM4jogUmU6IFtQQVRDSCB2Ml0gdXNiOiBnYWRnZXQ6IGZ1bmN0
+aW9uOiBmaXggbWlzc2luZyBzcGlubG9jayBpbiBmX3VhYzFfbGVnYWN5DQoNCk9uIFN1biwgSnVs
+IDA1LCAyMDIwIGF0IDAyOjE2OjE2UE0gKzA4MDAsIHFpYW5nLnpoYW5nQHdpbmRyaXZlci5jb20g
+d3JvdGU6DQo+IEZyb206IFpoYW5nIFFpYW5nIDxxaWFuZy56aGFuZ0B3aW5kcml2ZXIuY29tPg0K
+Pg0KPiBBZGQgYSBtaXNzaW5nIHNwaW5sb2NrIHByb3RlY3Rpb24gdG8gdGhlIGFkZCBvcGVyYXRp
+b24gb2YgdGhlICJhdWRpby0+cGxheV9xdWV1ZSINCj4gaW4gImZfYXVkaW9fb3V0X2VwX2NvbXBs
+ZXRlIiBmdW5jdGlvbi4NCg0KVGhhdCBzYXlzIF93aGF0XyB5b3UgZGlkLCBidXQgbm90IF93aHlf
+IHlvdSBkaWQgdGhhdC4gIFdoeSBpcyBhIGxvY2sNCm5lZWRlZCBoZXJlPyAgV2hhdCBkb2VzIHRo
+aXMgcHJvdGVjdD8NCg0KV2hhdCBrZXJuZWwgY29tbWl0IGRvZXMgdGhpcyAiZml4Ij8gIFB1dCB0
+aGF0IGluIHRoZSAiRml4ZXM6IiBsaW5lLCBhbmQNCnByb2JhYmx5IHlvdSBuZWVkIGEgImNjOiBz
+dGFibGUiIGluIHRoYXQgYXJlYSB0b28sIHJpZ2h0Pw0KDQp0aGFua3MsDQoNCmdyZWcgay1oDQo=
