@@ -2,65 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E72CB215868
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Jul 2020 15:34:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97086215886
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Jul 2020 15:36:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729204AbgGFNeR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Jul 2020 09:34:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47290 "EHLO
+        id S1729365AbgGFNfA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Jul 2020 09:35:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729354AbgGFNeQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jul 2020 09:34:16 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB7EC061794
-        for <linux-usb@vger.kernel.org>; Mon,  6 Jul 2020 06:34:15 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id l2so40630820wmf.0
-        for <linux-usb@vger.kernel.org>; Mon, 06 Jul 2020 06:34:15 -0700 (PDT)
+        with ESMTP id S1729358AbgGFNeR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jul 2020 09:34:17 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C649CC061794
+        for <linux-usb@vger.kernel.org>; Mon,  6 Jul 2020 06:34:16 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id z15so29659570wrl.8
+        for <linux-usb@vger.kernel.org>; Mon, 06 Jul 2020 06:34:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=tuuvgBdpWU3P+bBrTu/2KsiGO4ss74gkTJhNI/l0mkY=;
-        b=tDxm68x6EEuzSyF8zb1P7MNnLA1RLSLV7ALNXgP2jbhLbdEirodV/LE4bXzaJbsPRg
-         SUs25JhonwmI4Zqrwaw4zG1N8CYo4lAXlnF26lpK/OFRkQCBCsW93WEi1lCMj5UWQUmj
-         QMnuck2Ci0chN7EEaR5qWLPh9Nag2b7j1MCcb9/mrCXgV+WBZ7ijQZzXPdT8Hjg0PTNS
-         goxdYPMOU0X2sc2aE1VXEpQk/0hLVxQjbMvmUCXhN28efa29/LuSc8kkdAhJT0CG2LUK
-         rVz1fvRtUKDbzGwTdNfqJrgIE5j/IDqenQl2BErSZqG2pPSnQFEsUwi3TsrnXUWaGjxc
-         gQXg==
+        bh=hOxuOAzmvEV55alflVuCU5810VX9tcA35muYC7R0MbA=;
+        b=w5P2aU6Doeac9XeMuviG7stwJdgM6WsIR+NBZVf+lZt+//ND6hJ0DXWizpA/m6bvwD
+         B2u0ApOKmiuQOBKM1YTtRRJXFMhrqsqF5Ykg3yCIhM78pF2i9vIJFL96Ve0I6gQrZww+
+         hipLqHTD9shzTQ0ixY1kUN5YsF9v2aMQynbFnVU+Qu+aWu0Ikiy2sbwjO0WWC78XIlyu
+         Jukm9EtNycZtWgB8LT/DwQWNu306tPsdPdKJ6yBLniVQ1uduG5/SYh+Cis1o7XDA4U9y
+         bpXkmFKaaIGenZXim6OybyyfkysmnYGI7GTOso3LNOgCj400PgZI42jXMSjLkXY+Bfio
+         7O8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=tuuvgBdpWU3P+bBrTu/2KsiGO4ss74gkTJhNI/l0mkY=;
-        b=jdRt0SXtbxxxi5a+nWNt5eKHNNlYBfsq0aGX4F9cnWZ60K1C4gBKnmLeU43tKVywaC
-         EjZvUQ5XhSZNvUp8mfOKLEBNCMT1yctHhjpd2Vpd2gj6wQC7T5lPLwueK1xOUydPdHYT
-         222B/MwAAqbcytllClnu8FYiJxtnt3SsTS1dBhkov6mQr5h/5UVFJIrdh81I/mMP4KZr
-         nDW7nBNXlVajsDRAFOcTDkbc5/glnUIacJqlwkR3DkjYAuFE3OmVPgj0QO8f+TjdirRr
-         /GRqN/UmSy+neEDnzQ7IBzR4Ii4ruAlOm9P5TI+9q1omPbqUQEdzbOBVvJgYJ4ys65WQ
-         AD2A==
-X-Gm-Message-State: AOAM530ebmRGEAJ4l4Siagl0DZ7OhTHJ5gADPxMyn0sWrCZtfAQKZsIW
-        yJ8MZX0y04wTfNovnO7RX1UH0Q==
-X-Google-Smtp-Source: ABdhPJzuzYNNW71b23BvSLPHgO5D0LojminjFAQt3G/egnKeifhMWhpTDqlAyYc41PSyJlYXg/HnVQ==
-X-Received: by 2002:a1c:49d4:: with SMTP id w203mr50012638wma.13.1594042454380;
-        Mon, 06 Jul 2020 06:34:14 -0700 (PDT)
+        bh=hOxuOAzmvEV55alflVuCU5810VX9tcA35muYC7R0MbA=;
+        b=ECbqtyOw05Q0FM87VwP6x71SG7B7mQPaL7Njjknm3nydP8GZu9cWfGb5a/my5omfqM
+         +PkRaZLxim4CcUIy6BhGkaCnNKJMoMWREkoapc1NFEQvVZra5nROr29P5fyPI/IUCyNl
+         X8/VBsGHrzpjgL2b8jKnzRK0e/9biZdWIgCUzb0GuPKtJ9OxE+e86u/2Ns9KWw1O8558
+         D/P/gJ2pvohKea8ydEHvWVK3cBr73xAIqU47SYV9Oocu0kYe1iDuA8A3s2qKDfQabR3S
+         NzniR0zWYFr3OsHiKRVeencxEowSJTmCJfgttHcIronr+QI2HIT6w4+2J/ExGZr0+xv/
+         ou1g==
+X-Gm-Message-State: AOAM5300Tgk37QMHDlPfy9Ssn8MimDp0DVNjwMGy3q2Lwv2EgIt+zReQ
+        R8tB//kKMYCUqNIQrxeSYkmTKg==
+X-Google-Smtp-Source: ABdhPJwQLKXTvfX4Y1+2PDutR0rJsq3ap9TgpalSECU387DommfB6/zibSUcLtGWIgZ9/g+LfFUx5A==
+X-Received: by 2002:adf:8024:: with SMTP id 33mr52421656wrk.117.1594042455545;
+        Mon, 06 Jul 2020 06:34:15 -0700 (PDT)
 Received: from localhost.localdomain ([2.27.35.206])
-        by smtp.gmail.com with ESMTPSA id v18sm25416082wrv.49.2020.07.06.06.34.13
+        by smtp.gmail.com with ESMTPSA id v18sm25416082wrv.49.2020.07.06.06.34.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2020 06:34:13 -0700 (PDT)
+        Mon, 06 Jul 2020 06:34:14 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-usb@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Petr Mladek <pmladek@suse.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Yinghai Lu <yhlu.kernel@gmail.com>,
-        Jason Wessel <jason.wessel@windriver.com>
-Subject: [PATCH 25/32] usb: early: ehci-dbgp: Remove set but never checked variable 'ret'
-Date:   Mon,  6 Jul 2020 14:33:34 +0100
-Message-Id: <20200706133341.476881-26-lee.jones@linaro.org>
+        Jann Horn <jannh@google.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>
+Subject: [PATCH 26/32] usb: early: xhci-dbc: Supply missing 'xhci-dbgp.h' headerfile
+Date:   Mon,  6 Jul 2020 14:33:35 +0100
+Message-Id: <20200706133341.476881-27-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200706133341.476881-1-lee.jones@linaro.org>
 References: <20200706133341.476881-1-lee.jones@linaro.org>
@@ -72,7 +67,9 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-'ret' hasn't  been checked since the driver's inception in 2009.
+If the header file containing a function's prototype isn't included by
+the sourcefile containing the associated function, the build system
+complains of missing prototypes.
 
 Fixes the following W=1 kernel build warning(s):
 
@@ -80,43 +77,35 @@ Fixes the following W=1 kernel build warning(s):
  drivers/usb/early/ehci-dbgp.c:915:13: warning: variable ‘ret’ set but not used [-Wunused-but-set-variable]
  915 | int chunk, ret;
  | ^~~
+ drivers/usb/early/xhci-dbc.c:600:12: warning: no previous prototype for ‘early_xdbc_parse_parameter’ [-Wmissing-prototypes]
+ 600 | int __init early_xdbc_parse_parameter(char *s)
+ | ^~~~~~~~~~~~~~~~~~~~~~~~~~
+ drivers/usb/early/xhci-dbc.c:653:12: warning: no previous prototype for ‘early_xdbc_setup_hardware’ [-Wmissing-prototypes]
+ 653 | int __init early_xdbc_setup_hardware(void)
+ | ^~~~~~~~~~~~~~~~~~~~~~~~~
+ drivers/usb/early/xhci-dbc.c:910:13: warning: no previous prototype for ‘early_xdbc_register_console’ [-Wmissing-prototypes]
+ 910 | void __init early_xdbc_register_console(void)
+ | ^~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Cc: Sumit Garg <sumit.garg@linaro.org>
-Cc: Daniel Thompson <daniel.thompson@linaro.org>
-Cc: Douglas Anderson <dianders@chromium.org>
-Cc: Petr Mladek <pmladek@suse.com>
-Cc: "Eric W. Biederman" <ebiederm@xmission.com>
-Cc: Yinghai Lu <yhlu.kernel@gmail.com>
-Cc: Jason Wessel <jason.wessel@windriver.com>
+Cc: Jann Horn <jannh@google.com>
+Cc: Lu Baolu <baolu.lu@linux.intel.com>
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/usb/early/ehci-dbgp.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/usb/early/xhci-dbc.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/early/ehci-dbgp.c b/drivers/usb/early/ehci-dbgp.c
-index 775cf70cfb3ed..b075dbfad730f 100644
---- a/drivers/usb/early/ehci-dbgp.c
-+++ b/drivers/usb/early/ehci-dbgp.c
-@@ -912,7 +912,7 @@ int __init early_dbgp_init(char *s)
+diff --git a/drivers/usb/early/xhci-dbc.c b/drivers/usb/early/xhci-dbc.c
+index 04ba11fff0edc..a9932c1ff20f7 100644
+--- a/drivers/usb/early/xhci-dbc.c
++++ b/drivers/usb/early/xhci-dbc.c
+@@ -21,6 +21,7 @@
+ #include <linux/module.h>
+ #include <linux/delay.h>
+ #include <linux/kthread.h>
++#include <linux/usb/xhci-dbgp.h>
  
- static void early_dbgp_write(struct console *con, const char *str, u32 n)
- {
--	int chunk, ret;
-+	int chunk;
- 	char buf[DBGP_MAX_PACKET];
- 	int use_cr = 0;
- 	u32 cmd, ctrl;
-@@ -951,8 +951,8 @@ static void early_dbgp_write(struct console *con, const char *str, u32 n)
- 			buf[chunk] = *str;
- 		}
- 		if (chunk > 0) {
--			ret = dbgp_bulk_write(USB_DEBUG_DEVNUM,
--				      dbgp_endpoint_out, buf, chunk);
-+			dbgp_bulk_write(USB_DEBUG_DEVNUM,
-+					dbgp_endpoint_out, buf, chunk);
- 		}
- 	}
- 	if (unlikely(reset_run)) {
+ #include "../host/xhci.h"
+ #include "xhci-dbc.h"
 -- 
 2.25.1
 
