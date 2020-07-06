@@ -2,168 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78CB521592A
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Jul 2020 16:09:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACDE3215945
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Jul 2020 16:20:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729243AbgGFOJl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Jul 2020 10:09:41 -0400
-Received: from mx2.suse.de ([195.135.220.15]:55352 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729121AbgGFOJl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 6 Jul 2020 10:09:41 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 60CABAD89;
-        Mon,  6 Jul 2020 14:09:39 +0000 (UTC)
-Message-ID: <32ee3bf222b1966caa98b67a9cec8712817a4b52.camel@suse.de>
-Subject: Re: [BUG] XHCI getting ZONE_DMA32 memory > than its bus_dma_limit
-From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-To:     David Rientjes <rientjes@google.com>,
-        Robin Murphy <robin.murphy@arm.com>
-Cc:     Jeremy Linton <jeremy.linton@arm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>, linux-mm@kvack.org,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>
-Date:   Mon, 06 Jul 2020 16:09:36 +0200
-In-Reply-To: <alpine.DEB.2.23.453.2007051635250.3687564@chino.kir.corp.google.com>
-References: <34619bdf-6527-ae82-7e4d-e2ea7c67ed56@arm.com>
-         <a9058fd2c54bbea69fdf97e30277338a61b5c0b4.camel@suse.de>
-         <cc17fe85-99a3-ec8c-985a-2a21cf09bf49@arm.com>
-         <alpine.DEB.2.23.453.2007051635250.3687564@chino.kir.corp.google.com>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-Lcrx70eLFfcZwFObGsLO"
-User-Agent: Evolution 3.36.3 
+        id S1729242AbgGFOUz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Jul 2020 10:20:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54510 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728961AbgGFOUz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jul 2020 10:20:55 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0191BC061755
+        for <linux-usb@vger.kernel.org>; Mon,  6 Jul 2020 07:20:55 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id w3so29902581wmi.4
+        for <linux-usb@vger.kernel.org>; Mon, 06 Jul 2020 07:20:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=/SQQ7AOqnp0abV0mTui8yYrs1UAgtqLR05qcleZcwQE=;
+        b=Ed6JrprbDjk8AXD6SCOI9yh0CysVyAtZO2nt/f6l1uLVAF7tPqo9QHp4648VE6/P0J
+         iJd3+qHMbx5g2R1VjGTps0BZqc1+nkfAtJ/DC0I/fty8HyNAXW3hQewEgWXpZQsoLOZd
+         FNf6j1vFI9bDcSZ19YcgSjidaauF0qGEx+UPTOMQVosbA7mKScWrXlbSiIyC8j4b2kTz
+         jQxjB+VuO/AByLPP+2/rnzTx6HTicNZY68TyLXs/k9slS+eZTpkmcJvLRvAKx+JyDmwI
+         PdzTFhyFHuxZvHNiDL4SdAdv6hIll/6VmdF8GZqofG4QIjSUW5v789VNT8yUZRQAyw7i
+         4C+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=/SQQ7AOqnp0abV0mTui8yYrs1UAgtqLR05qcleZcwQE=;
+        b=U7WvQa54wyLT5cGryXtkVgjlQS0TSaCUz462QdbGUUu0zOU7urtrHW+2J9TdQPRw10
+         yATeKdo82YMRZe8Ew+ZVdXu6IE72+hRnchSkFeg7IVwgahEeMJX9DN4iEUhtzn+59W+S
+         jsFV4CBTJYhQllkADonAs+1xx/E6InIUTb5OFwF/4NzVbz6Rb3A+IBne6bxLBW4lo3mU
+         mkEeAVK/VIA4JWJCL0xisATx8lW0C2H0VGxQYiUK7VWDlgA55nQtdNvR3D6TTDvFt1xT
+         xunMrAgjw0+P0aLY4/lwuu1bSBpuuRBaR80QZ1FYgjliD82hBrr7g6zt6eu9DCjyf/yU
+         9oZg==
+X-Gm-Message-State: AOAM532n6v2rOqnXM/qKD+aAU+cDi48O8LXvUUSJ0WdW8cZvAiSMs5yj
+        eIah1XCTFd2wH2Rtl6foqyOFxw==
+X-Google-Smtp-Source: ABdhPJxttEL31vKF295CqiyvKNlNLZN2K0H1vn3bWACeSCGgEgewna0f80KeGgsIGvd6NVLZTGM+Fw==
+X-Received: by 2002:a1c:1fd1:: with SMTP id f200mr48281159wmf.162.1594045253749;
+        Mon, 06 Jul 2020 07:20:53 -0700 (PDT)
+Received: from dell ([2.27.35.206])
+        by smtp.gmail.com with ESMTPSA id x7sm24950797wrr.72.2020.07.06.07.20.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jul 2020 07:20:53 -0700 (PDT)
+Date:   Mon, 6 Jul 2020 15:20:51 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     gregkh@linuxfoundation.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Subject: Re: [PATCH 08/32] usb: typec: tcpm: tcpm: Remove dangling unused
+ 'struct tcpm_altmode_ops'
+Message-ID: <20200706142051.GA3500@dell>
+References: <20200706133341.476881-1-lee.jones@linaro.org>
+ <20200706133341.476881-9-lee.jones@linaro.org>
+ <ca14707c-7d40-07ac-da1d-ca27a2e93dcd@redhat.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ca14707c-7d40-07ac-da1d-ca27a2e93dcd@redhat.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Mon, 06 Jul 2020, Hans de Goede wrote:
 
---=-Lcrx70eLFfcZwFObGsLO
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+> Hi,
+> 
+> On 7/6/20 3:33 PM, Lee Jones wrote:
+> > Looks as though a079973f462a3 ("usb: typec: tcpm: Remove tcpc_config
+> > configuration mechanism") pulled out the only use of 'tcpm_altmode_ops'
+> > last year.  No need to keep it around.
+> > 
+> > Fixes the following W=1 kernel build warning(s):
+> > 
+> >   drivers/usb/typec/tcpm/tcpm.c:1551:39: warning: ‘tcpm_altmode_ops’ defined but not used [-Wunused-const-variable=]
+> >   1551 | static const struct typec_altmode_ops tcpm_altmode_ops = {
+> >   | ^~~~~~~~~~~~~~~~
+> > 
+> > Cc: Guenter Roeck <linux@roeck-us.net>
+> > Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > Cc: Hans de Goede <hdegoede@redhat.com>
+> > Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> 
+> This is necessary for adding Display port over Type-C support
+> on devices using the tcpm code, rather then firmware, to do
+> the Type-C alt-mode negotiation.
+> 
+> I have a local patch in my tree which adds support for this.
+> 
+> But Heikki did not like my approach, so that patch
+> (which needs the bits you are removing) never landed
+> upstream:
+> 
+> https://patchwork.kernel.org/patch/11199517/
+> 
+> Which is somewhat old now.
 
-On Sun, 2020-07-05 at 16:41 -0700, David Rientjes wrote:
-> On Fri, 3 Jul 2020, Robin Murphy wrote:
->=20
-> > > Just for the record the offending commit is: c84dc6e68a1d2 ("dma-pool=
-: add
-> > > additional coherent pools to map to gfp mask").
-> > >=20
-> > > On Thu, 2020-07-02 at 12:49 -0500, Jeremy Linton wrote:
-> > > > Hi,
-> > > >=20
-> > > > Using 5.8rc3:
-> > > >=20
-> > > > The rpi4 has a 3G dev->bus_dma_limit on its XHCI controller. With a=
- usb3
-> > > > hub, plus a few devices plugged in, randomly devices will fail
-> > > > operations. This appears to because xhci_alloc_container_ctx() is
-> > > > getting buffers > 3G via dma_pool_zalloc().
-> > > >=20
-> > > > Tracking that down, it seems to be caused by dma_alloc_from_pool() =
-using
-> > > > dev_to_pool()->dma_direct_optimal_gfp_mask() to "optimistically" se=
-lect
-> > > > the atomic_pool_dma32 but then failing to verify that the allocatio=
-ns in
-> > > > the pool are less than the dev bus_dma_limit.
-> > >=20
-> > > I can reproduce this too.
-> > >=20
-> > > The way I see it, dev_to_pool() wants a strict
-> > > dma_direct_optimal_gfp_mask()
-> > > that is never wrong, since it's going to stick to that pool for the
-> > > device's
-> > > lifetime. I've been looking at how to implement it, and it's not so
-> > > trivial
-> > > as
-> > > I can't see a failproof way to make a distinction between who needs D=
-MA32
-> > > and
-> > > who is OK with plain KERNEL memory.
-> > >=20
-> > > Otherwise, as Jeremy points out, the patch needs to implement allocat=
-ions
-> > > with
-> > > an algorithm similar to __dma_direct_alloc_pages()'s, which TBH I don=
-'t
-> > > know
-> > > if
-> > > it's a little overkill for the atomic context.
-> > >=20
-> > > Short of finding a fix in the coming rc's, I suggest we revert this.
-> >=20
-> > Or perhaps just get rid of atomic_pool_dma32 (and allocate atomic_pool_=
-dma
-> > from ZONE_DMA32 if !ZONE_DMA). That should make it fall pretty much bac=
-k in
-> > line while still preserving the potential benefit of the kernel pool fo=
-r
-> > non-address-constrained devices.
-> >=20
->=20
-> I assume it depends on how often we have devices where=20
-> __dma_direct_alloc_pages() behavior is required, i.e. what requires the=
-=20
-> dma_coherent_ok() checks and altering of the gfp flags to get memory that=
-=20
-> works.
->=20
-> Is the idea that getting rid of atomic_pool_dma32 would use GFP_KERNEL=
-=20
-> (and atomic_pool_kernel) as the default policy here?  That doesn't do any=
-=20
-> dma_coherent_ok() checks so dma_direct_alloc_pages would return from=20
-> ZONE_NORMAL without a < 3G check?
+Yes, that's a just a little old now.
 
-IIUC this is not what Robin proposes.
+If it drags on for much longer, perhaps consider taking it out for the
+time being and adding it back when you start to make use of it again?
 
-The idea is to only have one DMA pool, located in ZONE_DMA, if enabled, and
-ZONE_DMA32 otherwise. This way you're always sure the memory is going to be
-good enough for any device while maintaining the benefits of
-atomic_pool_kernel.
+> Heikki said he would look into an approach to this more to
+> his liking. Heikki an progress on this area?
 
-> It *seems* like we want to check if dma_coherent_ok() succeeds for ret in=
-=20
-> dma_direct_alloc_pages() when allocating from the atomic pool and, based=
-=20
-> on criteria that allows fallback, just fall into=20
-> __dma_direct_alloc_pages()?
-
-I suspect I don't have enough perspective here but, isn't that breaking the
-point of having an atomic pool? Wouldn't that generate big latency spikes? =
-I
-can see how audio transfers over USB could be affected by this specifically=
-,
-IIRC those are allocated atomically and have timing constraints.
-
-That said, if Robin solution works for you, I don't mind having a go at it.
-
-Regards,
-Nicolas
-
-
---=-Lcrx70eLFfcZwFObGsLO
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl8DMKAACgkQlfZmHno8
-x/4PFwf8Capzlqn/Uy/aJ6xtWqywe8OWD8Bp6nVhwYFcckHhezshHDDl24+KBv3k
-nu27VBCWkHQ/zlOjIJtNhsPPX/Jx5es/SwRSqCU+zl1lB0GdwPZwLWpCXAEGOnsX
-A9FvFRMTxKU8U8ejMFhhOQguZNprBhlBGvyrMCxuj/ZkOn2Y/P6IUdbGPTUdE+/e
-CzPEIdc3M1YwWQrTR2XqC+/Ep0VwlU6GM10UYtf3R/BSIcjp5kHQlde3RB69OmCM
-fl69IxeAm1YWKbzx70a+bLzIfVRCjUXcTV9eOO/90IIzX8YFZgKFFyDpGNVhrbwc
-9ccaHAnpo8yHTIWxMt5N8Tpj0HdtKw==
-=bUSO
------END PGP SIGNATURE-----
-
---=-Lcrx70eLFfcZwFObGsLO--
-
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
