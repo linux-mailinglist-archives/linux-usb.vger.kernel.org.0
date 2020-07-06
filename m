@@ -2,63 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE14C21586C
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Jul 2020 15:34:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF11A215873
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Jul 2020 15:34:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729385AbgGFNeX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Jul 2020 09:34:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47322 "EHLO
+        id S1729425AbgGFNej (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Jul 2020 09:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729347AbgGFNeV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jul 2020 09:34:21 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F470C08C5E0
-        for <linux-usb@vger.kernel.org>; Mon,  6 Jul 2020 06:34:21 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id l17so39374582wmj.0
-        for <linux-usb@vger.kernel.org>; Mon, 06 Jul 2020 06:34:21 -0700 (PDT)
+        with ESMTP id S1729383AbgGFNeW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jul 2020 09:34:22 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82153C061794
+        for <linux-usb@vger.kernel.org>; Mon,  6 Jul 2020 06:34:22 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id f7so37936610wrw.1
+        for <linux-usb@vger.kernel.org>; Mon, 06 Jul 2020 06:34:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=JwlPz1VQoWtw/PPAMkJDslP79wmZUbGedUK151UzPVM=;
-        b=NVlmUCpq/lKEqVs2LNex5jpihdjoioJToXMlmV7xJlur5bBqqxQQ0ZA/CPEMp/YFYN
-         zo06ci+Iy0l18umuNeYhgFhN14h8r6U7kxH24seP3QCInrax1OBWeKQ1SE9H70pcJnMY
-         Y+3zvLqxSlGJHUh9Rzg3ntB0br++CashYLBwH4dCl6PYtf69SG4bkCjzXWpVyre6jT7Z
-         bs9jKtCs/nALiRvYyYsz/k1abSGU0I7VVN+9TLc1NZl+ZuCNQZNWPap0lcFqJXgO9nJp
-         JQTT4IqiZ5ED2DtL16qAF0f01uKhcxkAIoUDFBjNrhu/dSUyHaMzolCNKJUKIkCUvEqy
-         +HuQ==
+        bh=wUFrKyBE/rqHQUVcokgEiKeaeYpvOr+KJ0Q9vYwpje8=;
+        b=uusCAAiMYRyZu2CfIvDS4HCRjCXdZtQhAdbkpOMuxK8zvkQgvAiWP7osHCg5j0Lxi5
+         16z2up3T4hzLGYGUj30PuZuH/B1ZOaCs7UsgLTYfLAopJ+wzvauVq5wsuRkhS9mODBVO
+         xu3HpYfIRTGCABdG6OuYwyuSubTIL9fv8KfITH2PVNH6p+KU2u/VSZ88VFCHVaBSnUEE
+         qCSCG4xa+6MOhyRfi5aRon2mI3zyyZNLPzHx0yYiSZHLP1iZQY77tCT0GZB2yW+6Np0Z
+         oepj3m1na2bZFY8S7xZRfDmdzIbt82vIVRQ30dBiAEz2EguVEQm+DlN2OGXrSjBKXDOb
+         Soig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=JwlPz1VQoWtw/PPAMkJDslP79wmZUbGedUK151UzPVM=;
-        b=gqp+ihc9gfYX7QigcN1YT3w2lAt8BfZOjILeEUB0gi39u6ynp8iKGtW4uKwnKRxDYJ
-         /OYaS+fjlcEmdSHchU+irAzCvY/OnVwGykL6xdFFcykWxoEwnRx4OzY3tfKULUMe68ar
-         IvCRcuCAsLrgBmA/x0lS6F/qofw+nV9Bgos6xwZPzNq0EstcyxHa6Ko39xYBZk0zdXN3
-         +FT1gHGGh+z7RWNMNw0A5IIj7WyiPH+RfHgz0mwiY7nLhUqehy2K7C6ziRelOXIkMU1B
-         /BPTTcjmHFvWhWD9tULOZtrpAOwehe98MV0UAAA3MZEAc4JY72WR70LIRG/3uhpq9WdF
-         uazg==
-X-Gm-Message-State: AOAM533841mC6vcIR1ZPH0MDTXaoqwa8R7qSul6v+cf9KakioBoQo/UM
-        YZf9BwBo0l8ljQdflpI29RoLYQ==
-X-Google-Smtp-Source: ABdhPJwWAM9YUcyOeIqwvk9EC4yw+4vx9TJztDtgcS6azkPjILD4VT5pv7bUKjKcnm3I1NN1jBI33A==
-X-Received: by 2002:a1c:e914:: with SMTP id q20mr47372571wmc.145.1594042459982;
-        Mon, 06 Jul 2020 06:34:19 -0700 (PDT)
+        bh=wUFrKyBE/rqHQUVcokgEiKeaeYpvOr+KJ0Q9vYwpje8=;
+        b=D3HSVrawI3Xsgd4N49Jm++FeCmxco74wRM9lQSiOcNWHAyihmYdxaYyLi/wNMpO+br
+         vdRt8DaCd3Gvc90hvu6q2y1900UfArQBC8+5bs7P1wrjpHSghaq/0Wfv7yNXrJW1yBfb
+         H9+edcWNi2YgYPnEOTK4EzodvuqGqjaETZEClfPPS7yuQhOzC78m5W8UrawT0iVpeohc
+         a0hHPwCG3nrjsz3P+CvyKsvgJnIkG770lRod4y00UNEU0Z9gsfdNpmWbgOAfrUFBAMiX
+         KagbbwMUl/vtRrHLnaucDWQU39BhTKAUZ6CNmuv9AYvQRL3N0QArP/XDIT7fxg7kn8jE
+         JvzA==
+X-Gm-Message-State: AOAM531XDjmWcnjI0vmW9Dr+xdC9ymMDSjgAKw5JUUTB8+h2JLeoz8r+
+        OnZkLyIes7YMJT71CNxUYVUZVA==
+X-Google-Smtp-Source: ABdhPJyyqkr63bgakviOF8q+Q3TQCXiWUrHVNA65wDA49vqE6L9e5OtXIB/BD5KAE97IICp4FfjQqQ==
+X-Received: by 2002:a5d:470b:: with SMTP id y11mr50993618wrq.101.1594042461212;
+        Mon, 06 Jul 2020 06:34:21 -0700 (PDT)
 Received: from localhost.localdomain ([2.27.35.206])
-        by smtp.gmail.com with ESMTPSA id v18sm25416082wrv.49.2020.07.06.06.34.18
+        by smtp.gmail.com with ESMTPSA id v18sm25416082wrv.49.2020.07.06.06.34.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2020 06:34:19 -0700 (PDT)
+        Mon, 06 Jul 2020 06:34:20 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-usb@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH 29/32] usb: dwc3: dwc3-qcom: Do not define 'struct acpi_device_id' when !CONFIG_ACPI
-Date:   Mon,  6 Jul 2020 14:33:38 +0100
-Message-Id: <20200706133341.476881-30-lee.jones@linaro.org>
+        Shlomi Gridish <gridish@freescale.com>,
+        Jerry Huang <Chang-Ming.Huang@freescale.com>,
+        Peter Barada <peterb@logicpd.com>,
+        Anton Vorontsov <avorontsov@ru.mvista.com>
+Subject: [PATCH 30/32] usb: host: fhci-tds: Remove unused variables 'buf' and 'extra_data'
+Date:   Mon,  6 Jul 2020 14:33:39 +0100
+Message-Id: <20200706133341.476881-31-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200706133341.476881-1-lee.jones@linaro.org>
 References: <20200706133341.476881-1-lee.jones@linaro.org>
@@ -70,73 +69,81 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Since ACPI_PTR() is used to NULLify the value when !CONFIG_ACPI,
-struct dwc3_qcom_acpi_match becomes defined by unused.
-
-Also need to place the platform data obtained via the matching process
-inside the #ifdef, else that becomes unused too.
+Neither have been used since the driver's inception in 2009.
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/usb/dwc3/dwc3-qcom.c:761:36: warning: ‘dwc3_qcom_acpi_match’ defined but not used [-Wunused-const-variable=]
- 761 | static const struct acpi_device_id dwc3_qcom_acpi_match[] = {
- | ^~~~~~~~~~~~~~~~~~~~
+ drivers/usb/host/fhci-tds.c: In function ‘fhci_flush_bds’:
+ drivers/usb/host/fhci-tds.c:472:6: warning: variable ‘buf’ set but not used [-Wunused-but-set-variable]
+ 472 | u32 buf;
+ | ^~~
+ drivers/usb/host/fhci-tds.c:470:6: warning: variable ‘extra_data’ set but not used [-Wunused-but-set-variable]
+ 470 | u16 extra_data;
+ | ^~~~~~~~~~
+ drivers/usb/host/fhci-tds.c: In function ‘fhci_flush_actual_frame’:
+ drivers/usb/host/fhci-tds.c:527:6: warning: variable ‘extra_data’ set but not used [-Wunused-but-set-variable]
+ 527 | u16 extra_data;
+ | ^~~~~~~~~~
 
-Cc: Andy Gross <agross@kernel.org>
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Felipe Balbi <balbi@kernel.org>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: linux-arm-msm@vger.kernel.org
+Cc: Shlomi Gridish <gridish@freescale.com>
+Cc: Jerry Huang <Chang-Ming.Huang@freescale.com>
+Cc: Peter Barada <peterb@logicpd.com>
+Cc: Anton Vorontsov <avorontsov@ru.mvista.com>
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/usb/dwc3/dwc3-qcom.c | 22 ++++++++++++----------
- 1 file changed, 12 insertions(+), 10 deletions(-)
+ drivers/usb/host/fhci-tds.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index 1dfd024cd06b1..e1e78e9824b16 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -540,16 +540,6 @@ static int dwc3_qcom_of_register_core(struct platform_device *pdev)
- 	return 0;
- }
- 
--static const struct dwc3_acpi_pdata sdm845_acpi_pdata = {
--	.qscratch_base_offset = SDM845_QSCRATCH_BASE_OFFSET,
--	.qscratch_base_size = SDM845_QSCRATCH_SIZE,
--	.dwc3_core_base_size = SDM845_DWC3_CORE_SIZE,
--	.hs_phy_irq_index = 1,
--	.dp_hs_phy_irq_index = 4,
--	.dm_hs_phy_irq_index = 3,
--	.ss_phy_irq_index = 2
--};
--
- static int dwc3_qcom_probe(struct platform_device *pdev)
+diff --git a/drivers/usb/host/fhci-tds.c b/drivers/usb/host/fhci-tds.c
+index f3308ce250438..d98fd9e1af0bc 100644
+--- a/drivers/usb/host/fhci-tds.c
++++ b/drivers/usb/host/fhci-tds.c
+@@ -467,17 +467,15 @@ u32 fhci_host_transaction(struct fhci_usb *usb,
+ /* Reset the Tx BD ring */
+ void fhci_flush_bds(struct fhci_usb *usb)
  {
- 	struct device_node	*np = pdev->dev.of_node;
-@@ -758,11 +748,23 @@ static const struct of_device_id dwc3_qcom_of_match[] = {
- };
- MODULE_DEVICE_TABLE(of, dwc3_qcom_of_match);
+-	u16 extra_data;
+ 	u16 td_status;
+-	u32 buf;
+ 	struct usb_td __iomem *td;
+ 	struct endpoint *ep = usb->ep0;
  
-+#ifdef CONFIG_ACPI
-+static const struct dwc3_acpi_pdata sdm845_acpi_pdata = {
-+	.qscratch_base_offset = SDM845_QSCRATCH_BASE_OFFSET,
-+	.qscratch_base_size = SDM845_QSCRATCH_SIZE,
-+	.dwc3_core_base_size = SDM845_DWC3_CORE_SIZE,
-+	.hs_phy_irq_index = 1,
-+	.dp_hs_phy_irq_index = 4,
-+	.dm_hs_phy_irq_index = 3,
-+	.ss_phy_irq_index = 2
-+};
-+
- static const struct acpi_device_id dwc3_qcom_acpi_match[] = {
- 	{ "QCOM2430", (unsigned long)&sdm845_acpi_pdata },
- 	{ },
- };
- MODULE_DEVICE_TABLE(acpi, dwc3_qcom_acpi_match);
-+#endif
+ 	td = ep->td_base;
+ 	while (1) {
+ 		td_status = in_be16(&td->status);
+-		buf = in_be32(&td->buf_ptr);
+-		extra_data = in_be16(&td->extra);
++		in_be32(&td->buf_ptr);
++		in_be16(&td->extra);
  
- static struct platform_driver dwc3_qcom_driver = {
- 	.probe		= dwc3_qcom_probe,
+ 		/* if the TD is not empty - we'll confirm it as Timeout */
+ 		if (td_status & TD_R)
+@@ -524,7 +522,6 @@ void fhci_flush_actual_frame(struct fhci_usb *usb)
+ {
+ 	u8 mode;
+ 	u16 tb_ptr;
+-	u16 extra_data;
+ 	u16 td_status;
+ 	u32 buf_ptr;
+ 	struct usb_td __iomem *td;
+@@ -538,7 +535,7 @@ void fhci_flush_actual_frame(struct fhci_usb *usb)
+ 	td = cpm_muram_addr(tb_ptr);
+ 	td_status = in_be16(&td->status);
+ 	buf_ptr = in_be32(&td->buf_ptr);
+-	extra_data = in_be16(&td->extra);
++	in_be16(&td->extra);
+ 	do {
+ 		if (td_status & TD_R) {
+ 			out_be16(&td->status, (td_status & ~TD_R) | TD_TO);
+@@ -552,7 +549,7 @@ void fhci_flush_actual_frame(struct fhci_usb *usb)
+ 		td = next_bd(ep->td_base, td, td_status);
+ 		td_status = in_be16(&td->status);
+ 		buf_ptr = in_be32(&td->buf_ptr);
+-		extra_data = in_be16(&td->extra);
++		in_be16(&td->extra);
+ 	} while ((td_status & TD_R) || buf_ptr);
+ 
+ 	fhci_td_transaction_confirm(usb);
 -- 
 2.25.1
 
