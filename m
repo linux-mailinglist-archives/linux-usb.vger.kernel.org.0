@@ -2,121 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C130215BAF
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Jul 2020 18:22:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80599215BE1
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Jul 2020 18:35:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729367AbgGFQWi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Jul 2020 12:22:38 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:52629 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1729351AbgGFQWi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jul 2020 12:22:38 -0400
-Received: (qmail 705930 invoked by uid 1000); 6 Jul 2020 12:22:37 -0400
-Date:   Mon, 6 Jul 2020 12:22:37 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: Re: [PATCH 2/2] usb: host: xhci-plat: add wakeup entry at /sys
-Message-ID: <20200706162237.GC704149@rowland.harvard.edu>
-References: <20200703062532.29076-1-peter.chen@nxp.com>
- <20200703062532.29076-2-peter.chen@nxp.com>
- <20200703141911.GA623139@rowland.harvard.edu>
- <20200704092255.GA5695@b29397-desktop>
- <20200704144816.GA650205@rowland.harvard.edu>
- <20200705021256.GA29527@b29397-desktop>
- <20200705143151.GA672371@rowland.harvard.edu>
- <AM7PR04MB71571A625BEEE70F2D9B3C138B690@AM7PR04MB7157.eurprd04.prod.outlook.com>
+        id S1729503AbgGFQfA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Jul 2020 12:35:00 -0400
+Received: from out1-smtp.messagingengine.com ([66.111.4.25]:40749 "EHLO
+        out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729293AbgGFQe7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jul 2020 12:34:59 -0400
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id C5DF65C0228;
+        Mon,  6 Jul 2020 12:34:58 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Mon, 06 Jul 2020 12:34:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:content-transfer-encoding:in-reply-to; s=fm1; bh=W
+        U9KezS7Sf2OevfzQ4BIFxIHoo6xKxgUi6+Ebs4rEfY=; b=QdwDtp0posZP7Q2hD
+        uJcCR3qy8UdNFfnm6xps8tJ9DkFYT6FrAMw8FW3FSivXfOqGWpDY8/1LsrYgfqej
+        9QM3xdhjnodaJvgd8Y5HLHhmd60gpu0fVeLEOW7xPkUEoeTDO6HVjGdY+VnRvrwE
+        MUL+0JRIlNRu7yxZgZFDUivQJxab4X47dZFZ8eHlzFrNTfpLLrJzX9JBDRTnYZnO
+        4XUGm7pHkXO82fJssuEtJVJU8c++rAKwmJUbvl8pjEnIAau6q+n+gRAhR/UoyGrt
+        dEdgq3VaStQ6qzCwEUO8ummEvBz7cgbIumK62DthdCx6BVKjcBvSx3rVvkSPr1KM
+        acpOA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; bh=WU9KezS7Sf2OevfzQ4BIFxIHoo6xKxgUi6+Ebs4rE
+        fY=; b=ZhS67ro2e1ZgyDfnPPiol/jMuHKotcBl2FONOjUecoKUWbMIYR23o05lt
+        k8UDluB0Uw5WthIktUUtiopUIT6YW0fhUD4Pr3t6kPCttnKnWvxQZFAsebfBq/sI
+        jttJqESqmYqUsaFKrP6bHY567Z5Kn4XFfA4aVLBFQ3pIkOxfRSW4ULv0Esh5VSB6
+        NhtILvtdGyhguyIFXI1gOTp/oA5lTvz4dKpUpnlC4xpB8ZYtx3S9YwpSJ47wvk2p
+        WkGUHWlLCJ8nnpmLbhlPnaOr1HLcCoVuhjD5jD2LW7TcxkessuuQ4pUd7nxX5hBY
+        B8uyQZCDOpK71gqcSyL3G95gAnfoA==
+X-ME-Sender: <xms:slIDX_NC_83IM4JSRAy-hyG96lsBIYuU-TYqqmMssxOQPP5L-WK8Mw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedrudefgddutdegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvuffkfhggtggugfgjsehtke
+    ertddttddunecuhfhrohhmpefirhgvghcumffjuceoghhrvghgsehkrhhorghhrdgtohhm
+    qeenucggtffrrghtthgvrhhnpeevtdeileeuteeggefgueefhfevgfdttefgtefgtddvge
+    ejheeiuddvtdekffehffenucfkphepkeefrdekiedrkeelrddutdejnecuvehluhhsthgv
+    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrd
+    gtohhm
+X-ME-Proxy: <xmx:slIDX5_vz8Vh6ATCMNwDiM-17sQtY1N2V7pMP3I4NoR3YekuGc1QCQ>
+    <xmx:slIDX-Q4xsr85-DOmWE57-UVz88LjQpBXnGO8_uSsxjtvljXopKFoA>
+    <xmx:slIDXzt9ltyoaTOmND9CUfM2GJCvz2BBOOaiOWoZKWiudda9lKWn3Q>
+    <xmx:slIDXxr56z52ALqWr313qJy47SwqkyDOQl-4j472_FqmzqAgNjSubQ>
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        by mail.messagingengine.com (Postfix) with ESMTPA id F3BE53280063;
+        Mon,  6 Jul 2020 12:34:57 -0400 (EDT)
+Date:   Mon, 6 Jul 2020 18:34:58 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Diego Elio =?iso-8859-1?Q?Petten=F2?= <flameeyes@flameeyes.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] Remove documentation line that adds nothing and
+ sounds condescending.
+Message-ID: <20200706163458.GA2306919@kroah.com>
+References: <20200705150225.21500-1-flameeyes@flameeyes.com>
+ <20200706131014.19064-1-flameeyes@flameeyes.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <AM7PR04MB71571A625BEEE70F2D9B3C138B690@AM7PR04MB7157.eurprd04.prod.outlook.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200706131014.19064-1-flameeyes@flameeyes.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 06, 2020 at 04:03:08AM +0000, Peter Chen wrote:
-> > > Thanks for the information, Alan.
-> > >
-> > > I could not understand why device_wakeup_enable is used in these
-> > > device drivers? At Documentation/driver-api/pm/devices.rst, L189, it also says:
-> > >
-> > > 	during a system sleep transition.  Device drivers, however, are
-> > >        	not expected to call :c:func:`device_set_wakeup_enable()` directly
-> > >        	in any case.
-> > 
-> > It also says:
-> > 
-> > 	It should also default to "enabled" for devices that don't
-> > 	generate wakeup requests on their own but merely forward wakeup
-> > 	requests from one bus to another (like PCI Express ports).
-> > 
-> > The controller device falls into this category.  It doesn't generate wakeup requests
-> > on its own; it merely forwards wakeup requests from the root hub or USB devices.  I
-> > think the intention was that drivers for these devices would call device_init_wakeup()
-> > instead of calling both
-> > device_set_wakeup_capable() and device_wakeup_enable().
-> > 
-> > In any case, the rule about setting the default value is more important than the rule
-> > about not calling device_set_wakeup_enable() directly.
-> > 
-> > If you're concerned about connect-detect or disconnect-detect wakeup signals,
-> > these are supposed to be enabled or disabled by the root hub's wakeup setting.
-> > The idea is that root hubs should behave the same as external hubs -- and whether
-> > or not an external hub generates a wakeup request when a connect or disconnect
-> > event occurs is controlled by the hub's wakeup setting.
-> > 
-> 
-> So, you suggest:
-> At hcd-pci.c, ohci-platform.c, ehci-platform.c, and xhci-plat.c:
-> change device_wakeup_enable to device_init_wakeup(dev, true).
+On Mon, Jul 06, 2020 at 02:10:13PM +0100, Diego Elio Pettenò wrote:
+> Signed-off-by: Diego Elio Pettenò <flameeyes@flameeyes.com>
 
-I don't think it's necessary to do that.
+I can't take patches with no changelog text in them at all, sorry.
 
-device_init_wakeup(dev, true) just calls device_set_wakeup_capable() and 
-device_wakeup_enable().  The kernel already does the 
-device_set_wakeup_capable() part for these devices in the code that 
-registers them.  For instance, the PCI core calls 
-device_set_wakeup_capable() when a new device is discovered and 
-registered, so there's no need for hcd-pci.c to repeat this action.
-
-> For xhci_suspend, use both controller's wakeup setting and roothub wakeup setting to
-> judge if connect or disconnect wakeup needs to enable or not, like function ehci_adjust_port_wakeup_flags.
-
-Yes, something like that.  This probably should be done in any case.  
-Some hardware might not like it if port-level connect/disconnect wakeups 
-are enabled but the controller-level wakeup signal is disabled.
-
-> > If the controller's wakeup setting defaulted to "disabled", then anybody who wanted
-> > to get USB wakeup requests would have to enable them on both the USB device
-> > and the controller.  This would confuse users and cause problems.
-> > 
-> 
-> I think if controller's wakeup setting is only used for ehci or xhci common code, that's ok. If
-> it is also used for glue layer's power control and wakeup setting; it may need to set "disabled"
-> for default value.
-
-What sort of wakeup events can the glue layer generate?  It seems to me 
-that if there is no controller driver bound to the controller device 
-then the controller shouldn't be able to wake the system up in any case.
-
-> I am curious how PCI USB at PC determine whether it responds USB wakeup events or not?
-> At Linux kernel or BIOS? It has two places for enabling USB wakeup, one for USB devices
-> (including roothub), another is for PCI device?
-
-PCI devices send wakeup requests via a special PCI power management 
-signal called PME -- you can see its state in the output from "lspci 
--vv" in the Power Management Capability section.  In legacy systems this 
-signal was handled by the BIOS, but nowadays the PCI and ACPI subsystems 
-in the Linux kernel handle it.
-
-If a PCI host controller is in the D3 low-power state when a wakeup 
-event occurs, it uses the PME# signal to request a wakeup.  If it is in 
-the D0 full-power state when a wakeup event occurs, it uses its normal 
-IRQ signal to tell the system about the event.
-
-Alan Stern
