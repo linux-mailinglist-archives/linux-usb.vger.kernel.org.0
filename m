@@ -2,84 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F9DC2166DD
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jul 2020 08:56:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B6772166EF
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jul 2020 09:01:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728109AbgGGGzx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Jul 2020 02:55:53 -0400
-Received: from verein.lst.de ([213.95.11.211]:57417 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726788AbgGGGzx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 7 Jul 2020 02:55:53 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 21E0268BEB; Tue,  7 Jul 2020 08:55:50 +0200 (CEST)
-Date:   Tue, 7 Jul 2020 08:55:49 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-Cc:     David Rientjes <rientjes@google.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jeremy Linton <jeremy.linton@arm.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>, linux-mm@kvack.org,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-rpi-kernel <linux-rpi-kernel@lists.infradead.org>
-Subject: Re: [BUG] XHCI getting ZONE_DMA32 memory > than its bus_dma_limit
-Message-ID: <20200707065549.GA23760@lst.de>
-References: <34619bdf-6527-ae82-7e4d-e2ea7c67ed56@arm.com> <a9058fd2c54bbea69fdf97e30277338a61b5c0b4.camel@suse.de> <cc17fe85-99a3-ec8c-985a-2a21cf09bf49@arm.com> <alpine.DEB.2.23.453.2007051635250.3687564@chino.kir.corp.google.com> <32ee3bf222b1966caa98b67a9cec8712817a4b52.camel@suse.de>
+        id S1728125AbgGGHBf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Jul 2020 03:01:35 -0400
+Received: from mail1.windriver.com ([147.11.146.13]:53650 "EHLO
+        mail1.windriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726889AbgGGHBf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jul 2020 03:01:35 -0400
+Received: from ALA-HCB.corp.ad.wrs.com (ala-hcb.corp.ad.wrs.com [147.11.189.41])
+        by mail1.windriver.com (8.15.2/8.15.2) with ESMTPS id 06771Mct012838
+        (version=TLSv1 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
+        Tue, 7 Jul 2020 00:01:23 -0700 (PDT)
+Received: from pek-lpg-core1-vm1.wrs.com (128.224.156.106) by
+ ALA-HCB.corp.ad.wrs.com (147.11.189.41) with Microsoft SMTP Server id
+ 14.3.487.0; Tue, 7 Jul 2020 00:01:07 -0700
+From:   <qiang.zhang@windriver.com>
+To:     <balbi@kernel.org>
+CC:     <colin.king@canonical.com>, <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <stable@vger.kernel.org>
+Subject: [PATCH v4] usb: gadget: function: fix missing spinlock in f_uac1_legacy
+Date:   Mon, 6 Jul 2020 13:14:55 +0800
+Message-ID: <20200706051455.33198-1-qiang.zhang@windriver.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <32ee3bf222b1966caa98b67a9cec8712817a4b52.camel@suse.de>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 06, 2020 at 04:09:36PM +0200, Nicolas Saenz Julienne wrote:
-> On Sun, 2020-07-05 at 16:41 -0700, David Rientjes wrote:
-> > On Fri, 3 Jul 2020, Robin Murphy wrote:
-> > > Or perhaps just get rid of atomic_pool_dma32 (and allocate atomic_pool_dma
-> > > from ZONE_DMA32 if !ZONE_DMA). That should make it fall pretty much back in
-> > > line while still preserving the potential benefit of the kernel pool for
-> > > non-address-constrained devices.
-> > > 
-> > 
-> > I assume it depends on how often we have devices where 
-> > __dma_direct_alloc_pages() behavior is required, i.e. what requires the 
-> > dma_coherent_ok() checks and altering of the gfp flags to get memory that 
-> > works.
-> > 
-> > Is the idea that getting rid of atomic_pool_dma32 would use GFP_KERNEL 
-> > (and atomic_pool_kernel) as the default policy here?  That doesn't do any 
-> > dma_coherent_ok() checks so dma_direct_alloc_pages would return from 
-> > ZONE_NORMAL without a < 3G check?
-> 
-> IIUC this is not what Robin proposes.
-> 
-> The idea is to only have one DMA pool, located in ZONE_DMA, if enabled, and
-> ZONE_DMA32 otherwise. This way you're always sure the memory is going to be
-> good enough for any device while maintaining the benefits of
-> atomic_pool_kernel.
+From: Zhang Qiang <qiang.zhang@windriver.com>
 
-That is how I understood the proposal from Robin and I think it is
-the right thing to do.
+Add a missing spinlock protection for play_queue, because
+the play_queue may be destroyed when the "playback_work"
+work func and "f_audio_out_ep_complete" callback func
+operate this paly_queue at the same time.
 
-> > It *seems* like we want to check if dma_coherent_ok() succeeds for ret in 
-> > dma_direct_alloc_pages() when allocating from the atomic pool and, based 
-> > on criteria that allows fallback, just fall into 
-> > __dma_direct_alloc_pages()?
-> 
-> I suspect I don't have enough perspective here but, isn't that breaking the
-> point of having an atomic pool? Wouldn't that generate big latency spikes? I
-> can see how audio transfers over USB could be affected by this specifically,
-> IIRC those are allocated atomically and have timing constraints.
-> 
-> That said, if Robin solution works for you, I don't mind having a go at it.
+Fixes: c6994e6f067cf ("USB: gadget: add USB Audio Gadget driver")
+Cc: stable <stable@vger.kernel.org>
+Signed-off-by: Zhang Qiang <qiang.zhang@windriver.com>
+---
+ v1->v2->v3->v4:
+ Add changelog text and Cc tags, Fixes tags.
 
-We can't just fall back to __dma_direct_alloc_pages when allocation
-from the atomic pool fails, as the atomic pool exists for provide
-allocations that require sleeping actions for callers that can't
-sleep.
+ drivers/usb/gadget/function/f_uac1_legacy.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/usb/gadget/function/f_uac1_legacy.c b/drivers/usb/gadget/function/f_uac1_legacy.c
+index 349deae7cabd..e2d7f69128a0 100644
+--- a/drivers/usb/gadget/function/f_uac1_legacy.c
++++ b/drivers/usb/gadget/function/f_uac1_legacy.c
+@@ -336,7 +336,9 @@ static int f_audio_out_ep_complete(struct usb_ep *ep, struct usb_request *req)
+ 
+ 	/* Copy buffer is full, add it to the play_queue */
+ 	if (audio_buf_size - copy_buf->actual < req->actual) {
++		spin_lock_irq(&audio->lock);
+ 		list_add_tail(&copy_buf->list, &audio->play_queue);
++		spin_unlock_irq(&audio->lock);
+ 		schedule_work(&audio->playback_work);
+ 		copy_buf = f_audio_buffer_alloc(audio_buf_size);
+ 		if (IS_ERR(copy_buf))
+-- 
+2.24.1
+
