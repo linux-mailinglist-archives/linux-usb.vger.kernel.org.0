@@ -2,459 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65C3E21580D
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Jul 2020 15:10:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ED97215810
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Jul 2020 15:10:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729155AbgGFNKU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Jul 2020 09:10:20 -0400
-Received: from out5-smtp.messagingengine.com ([66.111.4.29]:60865 "EHLO
+        id S1729160AbgGFNKg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Jul 2020 09:10:36 -0400
+Received: from out5-smtp.messagingengine.com ([66.111.4.29]:35111 "EHLO
         out5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729080AbgGFNKT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jul 2020 09:10:19 -0400
+        by vger.kernel.org with ESMTP id S1729140AbgGFNKf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jul 2020 09:10:35 -0400
 Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 479B15C01AD;
-        Mon,  6 Jul 2020 09:10:18 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Mon, 06 Jul 2020 09:10:18 -0400
+        by mailout.nyi.internal (Postfix) with ESMTP id C5C5C5C01B5;
+        Mon,  6 Jul 2020 09:10:34 -0400 (EDT)
+Received: from imap21 ([10.202.2.71])
+  by compute4.internal (MEProxy); Mon, 06 Jul 2020 09:10:34 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flameeyes.com;
-         h=from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-type:content-transfer-encoding; s=fm2; bh=
-        bAMgdp5Ggw2IRiB1x90IpgZKQDeHy+/cvDLH9LbGzSo=; b=VwXxD2PJ4BqqDoYm
-        asyklydj5j9vsVbtFoR0csI9V0IYUWUj+MVazFyYZgmNMArDiK8iJthWxV0KPUDb
-        qLhzUBBxaflbwS1SGdVoVDrFfDKUkHT2wj799ViuaR4gcQjboyHWbmt9n4TU2vqT
-        iw3c3DhHy8MmXzJ3IlJLKXC1vX/vDyFwukS8neDmM70+fmJlWmWJAMO2Puomwkee
-        gC4Rz6U0LTsGy9pd4dZe9I3H22lTEB/XIf2+qceBEkEvum3DWZMl7GEDMS9qxlx/
-        DoQ59dQvbKoSfVRUWjXp7wKO2mON8vXuPbcqmQGbY/27jfHOGApMfoGbo5PBls5p
-        IlItuQ==
+         h=mime-version:message-id:in-reply-to:references:date:from:to
+        :cc:subject:content-type:content-transfer-encoding; s=fm2; bh=/Z
+        9LJci5aVXyHN1tTQr5u9Gg9+QmPfdTGgXJZgmr9KU=; b=e9AX55rNeLF/ObXX6L
+        M391q8wPfwzUA5KvYuLJCHDnzX02YY96hKN+dn0o0Cypx4HyOZqvvrjWnGXLlgfn
+        dPU15QqET1SS2SNMfS7JQtXn4CXL7BpuImP/Kuw8z9GgerZQC/zfIt+Jlj+ajOTc
+        UAMaTLEcY9crfe23cyYU1HGygnm26NHJwNSiBbfzZxn0OGcG3d12BFBGdU4p9MRS
+        ZNOAVj6o4DNp6hCwMNoK1jUdO8Xs/KIkjeLY1cTjOybX7+YwQl0OGlLQptSm/CLG
+        7iXzgALiuev3eVQpsxAeuvc6TZnd4E2ojgP28L43ze0Hgch6CQ7KwpTJvCedGUYQ
+        h9KQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-transfer-encoding:content-type
         :date:from:in-reply-to:message-id:mime-version:references
         :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; bh=bAMgdp5Ggw2IRiB1x90IpgZKQDeHy+/cvDLH9LbGz
-        So=; b=hQzzGfb0MCoFlDDpCwJ1H7WZc0JSpPLqZAOkDFjVkTXuAOthAzkH59x6U
-        FtVxVceAzlSDEPgNkz/QtycFXFoIxjVkICEwJQhR1zA20f/No8cmLs34LhNbcool
-        qMHeItTJ8X8Glov/OHJQfIVeXPZ1358LOlWlpvaxBi8B9crgcImoi3WewokBBUfb
-        NAXPsDaCRRdNdJv/oNgi3iw0NkSnSWzy5QewyeZ7lk1eveXf7beA/K3IOkXfBtBz
-        ZSkjfkSlh8fDW0ah14aY6N6JCqdQ0q9LHfQZ7IsqmovNgup0OftKydW2TgRobX3y
-        V/buiPr1H2RwkF/OIGFQgOe24NAXw==
-X-ME-Sender: <xms:uiIDX8tDixurvGCuKPpCIp9zUR0eVSJ_pXZXvacjpYOxFYLzWX8uQQ>
+        :x-sasl-enc; s=fm3; bh=/Z9LJci5aVXyHN1tTQr5u9Gg9+QmPfdTGgXJZgmr9
+        KU=; b=c6VP2/2I6SnjP6uDP641BPbSgmskbhRHUlVCRbpaFwkcmFMuciNR1JvYS
+        Xh9RnV/PHoWg7ggQ+tVR+gz1XkADjqIBIH2ONIqdd0X0L5fLFUrB1I5tdFpnKDGS
+        KTtU/9QsNGfT8X7VMolS7YJcgmCREnq5OFs5SmWGGrYywVgCGSLAoCx3W5uVjZbS
+        DDpmMfdaj3/R4K9lALjGqdX3npi1jiAOGDuX/6peIaFkIc4by+cPaQbClfu1a7C3
+        M2evO5siqBW/kjDmKStfs0xqwHoHXDfo7TqiuKHco2reqbejFOO6hGZy3a49nUFG
+        j4jS1W2p7uDUIdStt7K+4aAyWwoFg==
+X-ME-Sender: <xms:yiIDXwf-MzjMiQEZzpNUTL0B2B6H1kuxYaIJzuEa90lK0kX2ivwAeQ>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedrudefgdeivdcutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvffufffkofgjfhggtgfgsehtkeertdertdejnecuhfhrohhmpeffihgvghho
-    ucfglhhiohcurfgvthhtvghnjpcuoehflhgrmhgvvgihvghssehflhgrmhgvvgihvghsrd
-    gtohhmqeenucggtffrrghtthgvrhhnpeeljefgtdeufefhieetgfeuvedvtddvieefgeeh
-    vdfgvdelleekleekveevhfduueenucfkphepkeekrdelkedrvdefkedrudeftdenucevlh
-    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehflhgrmhgvvgih
-    vghssehflhgrmhgvvgihvghsrdgtohhm
-X-ME-Proxy: <xmx:uiIDX5dbTqoX19TWIrTQz_SApijRT2HvesohfsClS3JnpoxU5VaRrw>
-    <xmx:uiIDX3wBO0IO31sEq84h1yTtvwZ65W-lUL2t2DajxauGFpIgQ2VZ0Q>
-    <xmx:uiIDX_N1qGG2tG81nxszRHDJml_4TA3p7CmRGGPiu6J8F5U4TpUJCw>
-    <xmx:uiIDX-LG7OgKVSYveOBHqJTLUyaJTdRgYfjKt_c9VD4j3Z4zhYk22A>
-Received: from localhost.localdomain (unknown [88.98.238.130])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 6DDD3328005D;
-        Mon,  6 Jul 2020 09:10:17 -0400 (EDT)
-From:   =?UTF-8?q?Diego=20Elio=20Petten=C3=B2?= <flameeyes@flameeyes.com>
-To:     linux-usb@vger.kernel.org
-Cc:     =?UTF-8?q?Diego=20Elio=20Petten=C3=B2?= <flameeyes@flameeyes.com>,
-        Pete Zaitcev <zaitcev@redhat.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kris Katterjohn <katterjohn@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Subject: [PATCH v3 2/2] usbmon: expose the usbmon structures and constants as an UAPI header.
-Date:   Mon,  6 Jul 2020 14:10:14 +0100
-Message-Id: <20200706131014.19064-2-flameeyes@flameeyes.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200706131014.19064-1-flameeyes@flameeyes.com>
+    fjughrpefofgggkfgjfhffhffvufgtgfesthhqredtreerjeenucfhrhhomhepffhivghg
+    ohgpgfhlihhopgfrvghtthgvnhpjuceofhhlrghmvggvhigvshesfhhlrghmvggvhigvsh
+    drtghomheqnecuggftrfgrthhtvghrnhepfffftdfguddvkeeljefgteelgfeggfejheet
+    udeutdejleetiedvjeelteffvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomhepfhhlrghmvggvhigvshesfhhlrghmvggvhigvshdrtghomh
+X-ME-Proxy: <xmx:yiIDXyOPxyzyxQUEKu1WKimDpQsfgXyVvm4k45KZC4EXnxsBWagy-w>
+    <xmx:yiIDXxi8NaE6bKIaUrqABAche5b6fBbNqJj5fSWe-VQ-tJr8CGhE3Q>
+    <xmx:yiIDX18S4mVru_Jz-hGskhC3RNt74pDqDy2mXbrsAoop91QiqYgfnw>
+    <xmx:yiIDX5Vqn0828inSfO7S4SJsFxhgl89pTgAS9Lj5m5Jhj_5q8D7GTw>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 8BFA4660085; Mon,  6 Jul 2020 09:10:34 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.3.0-dev0-576-gfe2cd66-fm-20200629.001-gfe2cd668
+Mime-Version: 1.0
+Message-Id: <4b2de0b6-5410-4e64-b432-23458e09a97e@www.fastmail.com>
+In-Reply-To: <20200706124943.GA2270456@kroah.com>
 References: <20200705150225.21500-1-flameeyes@flameeyes.com>
- <20200706131014.19064-1-flameeyes@flameeyes.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+ <20200706121509.26439-1-flameeyes@flameeyes.com>
+ <20200706124943.GA2270456@kroah.com>
+Date:   Mon, 06 Jul 2020 14:10:14 +0100
+From:   =?UTF-8?Q?Diego_Elio_Petten=C3=B2?= <flameeyes@flameeyes.com>
+To:     "Greg KH" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, "Pete Zaitcev" <zaitcev@redhat.com>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        "Kris Katterjohn" <katterjohn@gmail.com>
+Subject: =?UTF-8?Q?Re:_[PATCH_v2]_usbmon:_expose_the_usbmon_structures_and_consta?=
+ =?UTF-8?Q?nts_as_an_UAPI_header.?=
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Previously any application wanting to implement the usbmon binary
-interfaces needed to re-declare the structures and constants, leading to
-structure duplication and confusion over whether these structures fall into
-the system call exception or not.
+On Mon, Jul 6, 2020, at 13:49, Greg KH wrote:
+> > -The overall architecture of the API is about the same as the one ab=
+ove,
+> > -only the events are delivered in binary format. Each event is sent =
+in
+> > -the following structure (its name is made up, so that we can refer =
+to it)::
+[snip]
+> > +The overall architecture of the API is about the same as the one ab=
+ove, only the
+>=20
+> Why change that line?
 
-Cc: linux-usb@vger.kernel.org
-Cc: Pete Zaitcev <zaitcev@redhat.com>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Kris Katterjohn <katterjohn@gmail.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>
-Signed-off-by: Diego Elio Pettenò <flameeyes@flameeyes.com>
----
- Documentation/usb/usbmon.rst |  70 ++++++++++++-----------
- drivers/usb/mon/mon_bin.c    |  92 +-----------------------------
- include/uapi/linux/usb/mon.h | 107 +++++++++++++++++++++++++++++++++++
- 3 files changed, 145 insertions(+), 124 deletions(-)
- create mode 100644 include/uapi/linux/usb/mon.h
+The original text says that the structure had a made up name =E2=80=94 s=
+ince there was no exposed structures to match. Now there is, it's no lon=
+ger made up.
 
-diff --git a/Documentation/usb/usbmon.rst b/Documentation/usb/usbmon.rst
-index e9ec7e40b3bf..31c14b38fd03 100644
---- a/Documentation/usb/usbmon.rst
-+++ b/Documentation/usb/usbmon.rst
-@@ -211,35 +211,37 @@ Bulk wrapper to a storage device at address 5::
- Raw binary format and API
- =========================
- 
--The overall architecture of the API is about the same as the one above,
--only the events are delivered in binary format. Each event is sent in
--the following structure (its name is made up, so that we can refer to it)::
--
--  struct usbmon_packet {
--	u64 id;			/*  0: URB ID - from submission to callback */
--	unsigned char type;	/*  8: Same as text; extensible. */
--	unsigned char xfer_type; /*    ISO (0), Intr, Control, Bulk (3) */
--	unsigned char epnum;	/*     Endpoint number and transfer direction */
--	unsigned char devnum;	/*     Device address */
--	u16 busnum;		/* 12: Bus number */
--	char flag_setup;	/* 14: Same as text */
--	char flag_data;		/* 15: Same as text; Binary zero is OK. */
--	s64 ts_sec;		/* 16: gettimeofday */
--	s32 ts_usec;		/* 24: gettimeofday */
--	int status;		/* 28: */
--	unsigned int length;	/* 32: Length of data (submitted or actual) */
--	unsigned int len_cap;	/* 36: Delivered length */
-+The overall architecture of the API is about the same as the one above, only the
-+events are delivered in binary format. The structures and constants are defined
-+in include/uapi/linux/usb/mon.h.
-+
-+Each event is sent in the following structure::
-+
-+  struct mon_bin_hdr {
-+	__u64 id;		/*  0: URB ID - from submission to callback */
-+	__u8 type;		/*  8: Same as text; extensible. */
-+	__u8 xfer_type;		/*    ISO (0), Intr, Control, Bulk (3) */
-+	__u8 epnum;		/*     Endpoint number and transfer direction */
-+	__u8 devnum;		/*     Device address */
-+	__u16 busnum;		/* 12: Bus number */
-+	__s8 flag_setup;	/* 14: Same as text */
-+	__s8 flag_data;		/* 15: Same as text; Binary zero is OK. */
-+	__s64 ts_sec;		/* 16: gettimeofday */
-+	__s32 ts_usec;		/* 24: gettimeofday */
-+	__s32 status;		/* 28: */
-+	__u32 length;		/* 32: Length of data (submitted or actual) */
-+	__u32 len_cap;		/* 36: Delivered length */
- 	union {			/* 40: */
--		unsigned char setup[SETUP_LEN];	/* Only for Control S-type */
-+		__u8 setup[MON_USB_SETUP_LEN];	/* Only for Control S-type */
- 		struct iso_rec {		/* Only for ISO */
--			int error_count;
--			int numdesc;
-+			__s32 error_count;
-+			__s32 numdesc;
- 		} iso;
- 	} s;
--	int interval;		/* 48: Only for Interrupt and ISO */
--	int start_frame;	/* 52: For ISO */
--	unsigned int xfer_flags; /* 56: copy of URB's transfer_flags */
--	unsigned int ndesc;	/* 60: Actual number of ISO descriptors */
-+	__s32 interval;		/* 48: Only for Interrupt and ISO */
-+	__s32 start_frame;	/* 52: For ISO */
-+	__u32 xfer_flags;	/* 56: copy of URB's transfer_flags */
-+	__u32 ndesc;		/* 60: Actual number of ISO descriptors */
-   };				/* 64 total length */
- 
- These events can be received from a character device by reading with read(2),
-@@ -267,8 +269,8 @@ no events are available.
- The argument is a pointer to the following structure::
- 
-   struct mon_bin_stats {
--	u32 queued;
--	u32 dropped;
-+	__u32 queued;
-+	__u32 dropped;
-   };
- 
- The member "queued" refers to the number of events currently queued in the
-@@ -296,9 +298,9 @@ then return the first event. The argument is a pointer to the following
- structure::
- 
-   struct mon_get_arg {
--	struct usbmon_packet *hdr;
-+	struct mon_bin_hdr *hdr;
- 	void *data;
--	size_t alloc;		/* Length of data (can be zero) */
-+	__kernel_size_t alloc;		/* Length of data (can be zero) */
-   };
- 
- Before the call, hdr, data, and alloc should be filled. Upon return, the area
-@@ -313,9 +315,9 @@ This ioctl is primarily used when the application accesses the buffer
- with mmap(2). Its argument is a pointer to the following structure::
- 
-   struct mon_mfetch_arg {
--	uint32_t *offvec;	/* Vector of events fetched */
--	uint32_t nfetch;	/* Number of events to fetch (out: fetched) */
--	uint32_t nflush;	/* Number of events to flush */
-+	__u32 *offvec;	/* Vector of events fetched */
-+	__u32 nfetch;	/* Number of events to fetch (out: fetched) */
-+	__u32 nflush;	/* Number of events to flush */
-   };
- 
- The ioctl operates in 3 stages.
-@@ -350,7 +352,7 @@ To prepare, map the buffer by getting the current size, then using mmap(2).
- Then, execute a loop similar to the one written in pseudo-code below::
- 
-    struct mon_mfetch_arg fetch;
--   struct usbmon_packet *hdr;
-+   struct mon_bin_hdr *hdr;
-    int nflush = 0;
-    for (;;) {
-       fetch.offvec = vec; // Has N 32-bit words
-@@ -359,7 +361,7 @@ Then, execute a loop similar to the one written in pseudo-code below::
-       ioctl(fd, MON_IOCX_MFETCH, &fetch);   // Process errors, too
-       nflush = fetch.nfetch;       // This many packets to flush when done
-       for (i = 0; i < nflush; i++) {
--         hdr = (struct ubsmon_packet *) &mmap_area[vec[i]];
-+         hdr = (struct mon_bin_hdr *) &mmap_area[vec[i]];
-          if (hdr->type == '@')     // Filler packet
-             continue;
-          caddr_t data = &mmap_area[vec[i]] + 64;
-diff --git a/drivers/usb/mon/mon_bin.c b/drivers/usb/mon/mon_bin.c
-index f48a23adbc35..e1a7e69a3b0c 100644
---- a/drivers/usb/mon/mon_bin.c
-+++ b/drivers/usb/mon/mon_bin.c
-@@ -23,34 +23,10 @@
- #include <linux/time64.h>
- 
- #include <linux/uaccess.h>
-+#include <linux/usb/mon.h>
- 
- #include "usb_mon.h"
- 
--/*
-- * Defined by USB 2.0 clause 9.3, table 9.2.
-- */
--#define SETUP_LEN  8
--
--/* ioctl macros */
--#define MON_IOC_MAGIC 0x92
--
--#define MON_IOCQ_URB_LEN _IO(MON_IOC_MAGIC, 1)
--/* #2 used to be MON_IOCX_URB, removed before it got into Linus tree */
--#define MON_IOCG_STATS _IOR(MON_IOC_MAGIC, 3, struct mon_bin_stats)
--#define MON_IOCT_RING_SIZE _IO(MON_IOC_MAGIC, 4)
--#define MON_IOCQ_RING_SIZE _IO(MON_IOC_MAGIC, 5)
--#define MON_IOCX_GET   _IOW(MON_IOC_MAGIC, 6, struct mon_bin_get)
--#define MON_IOCX_MFETCH _IOWR(MON_IOC_MAGIC, 7, struct mon_bin_mfetch)
--#define MON_IOCH_MFLUSH _IO(MON_IOC_MAGIC, 8)
--/* #9 was MON_IOCT_SETAPI */
--#define MON_IOCX_GETX   _IOW(MON_IOC_MAGIC, 10, struct mon_bin_get)
--
--#ifdef CONFIG_COMPAT
--#define MON_IOCX_GET32 _IOW(MON_IOC_MAGIC, 6, struct mon_bin_get32)
--#define MON_IOCX_MFETCH32 _IOWR(MON_IOC_MAGIC, 7, struct mon_bin_mfetch32)
--#define MON_IOCX_GETX32   _IOW(MON_IOC_MAGIC, 10, struct mon_bin_get32)
--#endif
--
- /*
-  * Some architectures have enormous basic pages (16KB for ia64, 64KB for ppc).
-  * But it's all right. Just use a simple way to make sure the chunk is never
-@@ -81,38 +57,6 @@
- #define BUFF_DFL   CHUNK_ALIGN(300*1024)
- #define BUFF_MIN     CHUNK_ALIGN(8*1024)
- 
--/*
-- * The per-event API header (2 per URB).
-- *
-- * This structure is seen in userland as defined by the documentation.
-- */
--struct mon_bin_hdr {
--	u64 id;			/* URB ID - from submission to callback */
--	unsigned char type;	/* Same as in text API; extensible. */
--	unsigned char xfer_type;	/* ISO, Intr, Control, Bulk */
--	unsigned char epnum;	/* Endpoint number and transfer direction */
--	unsigned char devnum;	/* Device address */
--	unsigned short busnum;	/* Bus number */
--	char flag_setup;
--	char flag_data;
--	s64 ts_sec;		/* ktime_get_real_ts64 */
--	s32 ts_usec;		/* ktime_get_real_ts64 */
--	int status;
--	unsigned int len_urb;	/* Length of data (submitted or actual) */
--	unsigned int len_cap;	/* Delivered length */
--	union {
--		unsigned char setup[SETUP_LEN];	/* Only for Control S-type */
--		struct iso_rec {
--			int error_count;
--			int numdesc;
--		} iso;
--	} s;
--	int interval;
--	int start_frame;
--	unsigned int xfer_flags;
--	unsigned int ndesc;	/* Actual number of ISO descriptors */
--};
--
- /*
-  * ISO vector, packed into the head of data stream.
-  * This has to take 16 bytes to make sure that the end of buffer
-@@ -125,38 +69,6 @@ struct mon_bin_isodesc {
- 	u32 _pad;
- };
- 
--/* per file statistic */
--struct mon_bin_stats {
--	u32 queued;
--	u32 dropped;
--};
--
--struct mon_bin_get {
--	struct mon_bin_hdr __user *hdr;	/* Can be 48 bytes or 64. */
--	void __user *data;
--	size_t alloc;		/* Length of data (can be zero) */
--};
--
--struct mon_bin_mfetch {
--	u32 __user *offvec;	/* Vector of events fetched */
--	u32 nfetch;		/* Number of events to fetch (out: fetched) */
--	u32 nflush;		/* Number of events to flush */
--};
--
--#ifdef CONFIG_COMPAT
--struct mon_bin_get32 {
--	u32 hdr32;
--	u32 data32;
--	u32 alloc32;
--};
--
--struct mon_bin_mfetch32 {
--        u32 offvec32;
--        u32 nfetch32;
--        u32 nflush32;
--};
--#endif
--
- /* Having these two values same prevents wrapping of the mon_bin_hdr */
- #define PKT_ALIGN   64
- #define PKT_SIZE    64
-@@ -396,7 +308,7 @@ static inline char mon_bin_get_setup(unsigned char *setupb,
- 
- 	if (urb->setup_packet == NULL)
- 		return 'Z';
--	memcpy(setupb, urb->setup_packet, SETUP_LEN);
-+	memcpy(setupb, urb->setup_packet, MON_USB_SETUP_LEN);
- 	return 0;
- }
- 
-diff --git a/include/uapi/linux/usb/mon.h b/include/uapi/linux/usb/mon.h
-new file mode 100644
-index 000000000000..3557fe6a93e6
---- /dev/null
-+++ b/include/uapi/linux/usb/mon.h
-@@ -0,0 +1,107 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+/*
-+ * USB Monitoring (usbmon) definitions
-+ *
-+ * See documentation in Documentation/usb/usbmon.rst.
-+ *
-+ * Copyright (C) 2006 Paolo Abeni (paolo.abeni@email.it)
-+ * Copyright (C) 2006,2007 Pete Zaitcev (zaitcev@redhat.com)
-+ */
-+
-+#ifndef __UAPI_LINUX_USB_MON_H
-+#define __UAPI_LINUX_USB_MON_H
-+
-+#include <linux/types.h>
-+
-+/* ioctl macros */
-+#define MON_IOC_MAGIC 0x92
-+
-+#define MON_IOCQ_URB_LEN	_IO(MON_IOC_MAGIC, 1)
-+/* #2 used to be MON_IOCX_URB, removed before it got into Linus tree */
-+#define MON_IOCG_STATS		_IOR(MON_IOC_MAGIC, 3, struct mon_bin_stats)
-+#define MON_IOCT_RING_SIZE	_IO(MON_IOC_MAGIC, 4)
-+#define MON_IOCQ_RING_SIZE	_IO(MON_IOC_MAGIC, 5)
-+#define MON_IOCX_GET		_IOW(MON_IOC_MAGIC, 6, struct mon_bin_get)
-+#define MON_IOCX_MFETCH		_IOWR(MON_IOC_MAGIC, 7, struct mon_bin_mfetch)
-+#define MON_IOCH_MFLUSH		_IO(MON_IOC_MAGIC, 8)
-+/* #9 was MON_IOCT_SETAPI */
-+#define MON_IOCX_GETX		_IOW(MON_IOC_MAGIC, 10, struct mon_bin_get)
-+
-+/* ioctl structures */
-+
-+/* per file statistic */
-+struct mon_bin_stats {
-+	__u32 queued;
-+	__u32 dropped;
-+};
-+
-+struct mon_bin_get {
-+	struct mon_bin_hdr __user *hdr;	/* Can be 48 bytes or 64. */
-+	void __user *data;
-+	size_t alloc;		/* Length of data (can be zero) */
-+};
-+
-+struct mon_bin_mfetch {
-+	__u32 __user *offvec;	/* Vector of events fetched */
-+	__u32 nfetch;		/* Number of events to fetch (out: fetched) */
-+	__u32 nflush;		/* Number of events to flush */
-+};
-+
-+
-+/* Only defined with CONFIG_COMPAT */
-+#define MON_IOCX_GET32		_IOW(MON_IOC_MAGIC, 6, struct mon_bin_get32)
-+#define MON_IOCX_MFETCH32	_IOWR(MON_IOC_MAGIC, 7, struct mon_bin_mfetch32)
-+#define MON_IOCX_GETX32		_IOW(MON_IOC_MAGIC, 10, struct mon_bin_get32)
-+
-+struct mon_bin_get32 {
-+	__u32 hdr32;
-+	__u32 data32;
-+	__u32 alloc32;
-+};
-+
-+struct mon_bin_mfetch32 {
-+	__u32 offvec32;
-+	__u32 nfetch32;
-+	__u32 nflush32;
-+};
-+
-+/* Data format */
-+
-+/*
-+ * Defined by USB 2.0 clause 9.3, table 9.2.
-+ */
-+#define MON_USB_SETUP_LEN  8
-+
-+/*
-+ * The per-event API header (2 per URB).
-+ *
-+ * This structure is seen in userland as defined by the documentation.
-+ */
-+struct mon_bin_hdr {
-+	__u64 id;	/* URB ID - from submission to callback */
-+	__u8 type;	/* Same as in text API; extensible. */
-+	__u8 xfer_type;	/* ISO, Intr, Control, Bulk */
-+	__u8 epnum;	/* Endpoint number and transfer direction */
-+	__u8 devnum;	/* Device address */
-+	__u16 busnum;	/* Bus number */
-+	__s8 flag_setup;
-+	__s8 flag_data;
-+	__s64 ts_sec;	/* ktime_get_real_ts64 */
-+	__s32 ts_usec;	/* ktime_get_real_ts64 */
-+	__s32 status;
-+	__u32 len_urb;	/* Length of data (submitted or actual) */
-+	__u32 len_cap;	/* Delivered length */
-+	union {
-+		__u8 setup[MON_USB_SETUP_LEN];	/* Only for Control S-type */
-+		struct iso_rec {
-+			__s32 error_count;
-+			__s32 numdesc;
-+		} iso;
-+	} s;
-+	__s32 interval;
-+	__s32 start_frame;
-+	__u32 xfer_flags;
-+	__u32 ndesc;	/* Actual number of ISO descriptors */
-+};
-+
-+#endif /* __UAPI_LINUX_USB_MON_H */
--- 
-2.27.0
+>=20
+> > +events are delivered in binary format. The structures and constants=
+ are defined
+> > +in linux/usb/mon.h.
+>=20
+> Not your new uapi file location?
 
+That is the new uapi header =E2=80=94 that'd be the location on the inst=
+alled system, updated with the location within the repository instead.
+
+> __u64, right?  Same for the rest of this file...
+
+Ack.
+
+> Why drop this?  If you want to clean up the documentation, wonderful,
+> but again, don't do that in the same patch.
+
+Okay split that one line change to a separate change. I really should tr=
+y to sit down and improve the docs overall, but that's a much bigger und=
+ertaking.
+
+> is size_t a value we can pass across user/kernel boundry?  Are you sur=
+e
+> this isn't __kernel_size_t?
+
+No I'm not sure and I was pondering myself. I'll trust your instinct bec=
+ause you know this much better than me.
+
+But=E2=80=A6 I'm not sure how to use that from an uapi header? The __ker=
+nel_size_t does not appear to be defined by including linux/types.h. The=
+re's only three users of it in include/uapi/ and the only one that does =
+not appear to re-define it as a typedef is include/uapi/linux/uio.h, but=
+ using the same include doesn't seem to work for me.
+
+So I expect I'll need a v3 for this one ;)
