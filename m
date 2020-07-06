@@ -2,132 +2,359 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1F54215566
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Jul 2020 12:18:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC16521558C
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Jul 2020 12:30:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728264AbgGFKSm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Jul 2020 06:18:42 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:40501 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728578AbgGFKSk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jul 2020 06:18:40 -0400
-Received: by mail-lj1-f196.google.com with SMTP id n23so44649530ljh.7;
-        Mon, 06 Jul 2020 03:18:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gOp2uyVBG5gwkjiva5Sfw6FnlHzL7jIzLJ/NT02k/uo=;
-        b=a6dCe4S/yJMZtUcFkJObVRlPEpKVilX4e3K8sMmncjgHxP+czLnnGgd2rTDgWRQGtZ
-         EqYfAGEaJR8i/AfJGiD5g1ZLp8Ei9bIC9mmRSNY5MgEBbeccQQmgpIeiC9dMEiDOedUt
-         OdAbJJLd0fyYXp8Rt72xFh6yyPlLqJgrza1l30s0RVIwAcGIcVO1qhhY62PwzdlBPrXy
-         Sltm5VllMucAbAZknCFQloKmYbd2cG4F1ajHNfM5u37PU5+SgEFeghKY3P92y+93mIZ2
-         FB0IsYmPdIGiUkaU/vqcCHVMrMrbNAEvByXLsmWkyCqYAE8s0/mL8wuS+8+xdNxAKFcF
-         HZtg==
-X-Gm-Message-State: AOAM53064T0qVzTSwoTAf0YCLhzG4jUB6362eWEfyjMTtIwBPKdU0Q0R
-        UWq8SFDvOXX3tLaE2q606r4=
-X-Google-Smtp-Source: ABdhPJynA0arFW9wLop6raoNt7g4KPdBmiU32EFC/I++X/OQyfmEqR8nPSQ5XEdGhYRjaSMBrQLI6A==
-X-Received: by 2002:a2e:8199:: with SMTP id e25mr11409062ljg.307.1594030717821;
-        Mon, 06 Jul 2020 03:18:37 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id n7sm7768397lji.97.2020.07.06.03.18.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2020 03:18:37 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1jsOCo-0006MM-Ju; Mon, 06 Jul 2020 12:18:34 +0200
-Date:   Mon, 6 Jul 2020 12:18:34 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Phu Luu <Phu.Luu@silabs.com>
-Cc:     "johan@kernel.org" <johan@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Brant Merryman <Brant.Merryman@silabs.com>,
-        Richard Hendricks <Richard.Hendricks@silabs.com>,
-        =?utf-8?B?UGjDuiBMxrB1?= An <luuanphu@gmail.com>,
-        "hungnd3@fsoft.com.vn" <hungnd3@fsoft.com.vn>
-Subject: Re: [PATCH v3 2/2] USB: serial: cp210x: Proper RTS control when
- buffers fill
-Message-ID: <20200706101834.GI3453@localhost>
-References: <ECCF8E73-91F3-4080-BE17-1714BC8818FB@silabs.com>
- <20200626074206.GP3334@localhost>
+        id S1728892AbgGFKab (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Jul 2020 06:30:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50808 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727896AbgGFKab (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 6 Jul 2020 06:30:31 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9198120739;
+        Mon,  6 Jul 2020 10:30:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1594031429;
+        bh=3VzGyE6D7NYg8y0xBRxSVGGhX0VzwdLoP405CEVCTiU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2buofFPDedX3GgOM1VV2Ozjdubj/KsthTNFCNusvzDKsNZPs9IDwd7BOWL1s8/BBi
+         HMDMQ8MMr94HsKm3qubXNi1s3CLJSqdocNgEqXRsYwe+3rqUjjKluyXg6G3GzTFCDh
+         N6BF6wA/8EbrK/xIjtDD7njgYZRR3rfLA2c0XlZs=
+Date:   Mon, 6 Jul 2020 12:30:26 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Diego Elio =?iso-8859-1?Q?Petten=F2?= <flameeyes@flameeyes.com>
+Cc:     linux-usb@vger.kernel.org, Pete Zaitcev <zaitcev@redhat.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kris Katterjohn <katterjohn@gmail.com>
+Subject: Re: [PATCH] usbmon: expose the usbmon structures and constants as an
+ UAPI header.
+Message-ID: <20200706103026.GA10624@kroah.com>
+References: <20200705150225.21500-1-flameeyes@flameeyes.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20200626074206.GP3334@localhost>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200705150225.21500-1-flameeyes@flameeyes.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 26, 2020 at 09:42:06AM +0200, Johan Hovold wrote:
-> On Fri, Jun 26, 2020 at 04:24:20AM +0000, Phu Luu wrote:
-> > From: Brant Merryman <brant.merryman@silabs.com>
-> > 
-> > CP210x hardware disables auto-RTS but leaves auto-CTS when
-> > in hardware flow control mode and UART on cp210x hardware
-> > is disabled. This allows data to flow out, but new data
-> > will not come into the port. When re-opening the port, if
-> > auto-CTS is enabled on the cp210x, then auto-RTS must be
-> > re-enabled in the driver.
-> > 
-> > Signed-off-by: Phu Luu <phu.luu@silabs.com>
-> > Signed-off-by: Brant Merryman <brant.merryman@silabs.com>
+On Sun, Jul 05, 2020 at 04:02:25PM +0100, Diego Elio Pettenò wrote:
+> Previously any application wanting to implement the usbmon binary
+> interfaces needed to re-declare the structures and constants, leading to
+> structure duplication and confusion over whether these structures fall into
+> the system call exception or not.
 > 
-> Please revisit these tags as well.
+> Also update Paolo's address to match `net/core/dst_cache.c` as the previous
+> one bounces.
+
+When you say "also" that means it should be a separate patch.  Please do
+that for this one.
+
 > 
-> > ---
-> > 06/09/2020: Patch v3 2/2 Modified based on feedback from Johan Hovold <johan@kernel.org>
-> > 12/18/2019: Patch v2 Broken into two patches and modified based on feedback from Johan Hovold <johan@kernel.org>
-> > 12/09/2019: Initial submission of patch "Proper RTS control when buffers fill"
-> > 
-> >  drivers/usb/serial/cp210x.c | 18 ++++++++++++++++++
-> >  1 file changed, 18 insertions(+)
-> > 
-> > diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-> > index bcceb4ad8be0..091441b1c5b9 100644
-> > --- a/drivers/usb/serial/cp210x.c
-> > +++ b/drivers/usb/serial/cp210x.c
-> > @@ -917,6 +917,7 @@ static void cp210x_get_termios_port(struct usb_serial_port *port,
-> >  	u32 baud;
-> >  	u16 bits;
-> >  	u32 ctl_hs;
-> > +	u32 flow_repl;
-> >  
-> >  	cp210x_read_u32_reg(port, CP210X_GET_BAUDRATE, &baud);
-> >  
-> > @@ -1017,6 +1018,23 @@ static void cp210x_get_termios_port(struct usb_serial_port *port,
-> >  	ctl_hs = le32_to_cpu(flow_ctl.ulControlHandshake);
-> >  	if (ctl_hs & CP210X_SERIAL_CTS_HANDSHAKE) {
-> >  		dev_dbg(dev, "%s - flow control = CRTSCTS\n", __func__);
-> > +		/*
-> > +		 * When the port is closed, the CP210x hardware disables
-> > +		 * auto-RTS and RTS is deasserted but it leaves auto-CTS when
-> > +		 * in hardware flow control mode. This prevents new data from
-> > +		 * being received by the port. When re-opening the port, if
-> > +		 * auto-CTS is enabled on the cp210x, then auto-RTS must be
-> > +		 * re-enabled in the driver.
-> > +		 */
+> Cc: linux-usb@vger.kernel.org
+> Cc: Pete Zaitcev <zaitcev@redhat.com>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: Kris Katterjohn <katterjohn@gmail.com>
+> Cc: Greg KH <gregkh@linuxfoundation.org>
+> Signed-off-by: Diego Elio Pettenò <flameeyes@flameeyes.com>
+> ---
+>  Documentation/usb/usbmon.rst |  12 ++---
+>  drivers/usb/mon/mon_bin.c    |  94 ++------------------------------
+>  include/uapi/linux/usb/mon.h | 102 +++++++++++++++++++++++++++++++++++
+>  3 files changed, 111 insertions(+), 97 deletions(-)
+>  create mode 100644 include/uapi/linux/usb/mon.h
 > 
-> I already asked this of Brant, but could you please be more specific
-> about which state the RTS-line end up in when disabling the UART (e.g.
-> 0x00: statically inactive)?
-> 
-> The reason I ask is that after open() returns, the tty layer would raise
-> RTS, which should again allow data to flow in in contrast to what the
-> comment and changelog text claims.
+> diff --git a/Documentation/usb/usbmon.rst b/Documentation/usb/usbmon.rst
+> index b0bd51080799..cf98ea553ba1 100644
+> --- a/Documentation/usb/usbmon.rst
+> +++ b/Documentation/usb/usbmon.rst
+> @@ -211,11 +211,13 @@ Bulk wrapper to a storage device at address 5::
+>  Raw binary format and API
+>  =========================
+>  
+> -The overall architecture of the API is about the same as the one above,
+> -only the events are delivered in binary format. Each event is sent in
+> -the following structure (its name is made up, so that we can refer to it)::
+> +The overall architecture of the API is about the same as the one above, only the
+> +events are delivered in binary format. The structures and constants are defined
+> +in linux/usb/mon.h.
+>  
+> -  struct usbmon_packet {
+> +Each event is sent in the following structure::
+> +
+> +  struct mon_bin_hdr {
+>  	u64 id;			/*  0: URB ID - from submission to callback */
+>  	unsigned char type;	/*  8: Same as text; extensible. */
+>  	unsigned char xfer_type; /*    ISO (0), Intr, Control, Bulk (3) */
+> @@ -346,8 +348,6 @@ be polled with select(2) and poll(2). But lseek(2) does not work.
+>  
+>  * Memory-mapped access of the kernel buffer for the binary API
+>  
+> -The basic idea is simple:
+> -
+>  To prepare, map the buffer by getting the current size, then using mmap(2).
+>  Then, execute a loop similar to the one written in pseudo-code below::
+>  
+> diff --git a/drivers/usb/mon/mon_bin.c b/drivers/usb/mon/mon_bin.c
+> index f48a23adbc35..e914fd8d039e 100644
+> --- a/drivers/usb/mon/mon_bin.c
+> +++ b/drivers/usb/mon/mon_bin.c
+> @@ -4,8 +4,8 @@
+>   *
+>   * This is a binary format reader.
+>   *
+> - * Copyright (C) 2006 Paolo Abeni (paolo.abeni@email.it)
+> - * Copyright (C) 2006,2007 Pete Zaitcev (zaitcev@redhat.com)
+> + * Copyright (C) 2006 Paolo Abeni <pabeni@redhat.com>
 
-I had another reason to look at this driver so I could determine that
-the patch description and comment were indeed incorrect; the tty layer
-asserts RTS when reopening the port just fine and data flows in.
+You can't change someone's copyright lines, sorry.
 
-> We still want to enable auto-RTS of course so the patch is otherwise
-> correct.
+> + * Copyright (C) 2006,2007 Pete Zaitcev <zaitcev@redhat.com>
 
-I've fixed up the commit message and comment, reordered the SOB tags
-and added your Co-developed-by tag before applying both of these now:
+Why this change?
 
-	https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git/log/?h=usb-next
 
-Johan
+>   */
+>  
+>  #include <linux/kernel.h>
+> @@ -23,34 +23,10 @@
+>  #include <linux/time64.h>
+>  
+>  #include <linux/uaccess.h>
+> +#include <linux/usb/mon.h>
+>  
+>  #include "usb_mon.h"
+>  
+> -/*
+> - * Defined by USB 2.0 clause 9.3, table 9.2.
+> - */
+> -#define SETUP_LEN  8
+> -
+> -/* ioctl macros */
+> -#define MON_IOC_MAGIC 0x92
+> -
+> -#define MON_IOCQ_URB_LEN _IO(MON_IOC_MAGIC, 1)
+> -/* #2 used to be MON_IOCX_URB, removed before it got into Linus tree */
+> -#define MON_IOCG_STATS _IOR(MON_IOC_MAGIC, 3, struct mon_bin_stats)
+> -#define MON_IOCT_RING_SIZE _IO(MON_IOC_MAGIC, 4)
+> -#define MON_IOCQ_RING_SIZE _IO(MON_IOC_MAGIC, 5)
+> -#define MON_IOCX_GET   _IOW(MON_IOC_MAGIC, 6, struct mon_bin_get)
+> -#define MON_IOCX_MFETCH _IOWR(MON_IOC_MAGIC, 7, struct mon_bin_mfetch)
+> -#define MON_IOCH_MFLUSH _IO(MON_IOC_MAGIC, 8)
+> -/* #9 was MON_IOCT_SETAPI */
+> -#define MON_IOCX_GETX   _IOW(MON_IOC_MAGIC, 10, struct mon_bin_get)
+> -
+> -#ifdef CONFIG_COMPAT
+> -#define MON_IOCX_GET32 _IOW(MON_IOC_MAGIC, 6, struct mon_bin_get32)
+> -#define MON_IOCX_MFETCH32 _IOWR(MON_IOC_MAGIC, 7, struct mon_bin_mfetch32)
+> -#define MON_IOCX_GETX32   _IOW(MON_IOC_MAGIC, 10, struct mon_bin_get32)
+> -#endif
+> -
+>  /*
+>   * Some architectures have enormous basic pages (16KB for ia64, 64KB for ppc).
+>   * But it's all right. Just use a simple way to make sure the chunk is never
+> @@ -81,38 +57,6 @@
+>  #define BUFF_DFL   CHUNK_ALIGN(300*1024)
+>  #define BUFF_MIN     CHUNK_ALIGN(8*1024)
+>  
+> -/*
+> - * The per-event API header (2 per URB).
+> - *
+> - * This structure is seen in userland as defined by the documentation.
+> - */
+> -struct mon_bin_hdr {
+> -	u64 id;			/* URB ID - from submission to callback */
+> -	unsigned char type;	/* Same as in text API; extensible. */
+> -	unsigned char xfer_type;	/* ISO, Intr, Control, Bulk */
+> -	unsigned char epnum;	/* Endpoint number and transfer direction */
+> -	unsigned char devnum;	/* Device address */
+> -	unsigned short busnum;	/* Bus number */
+> -	char flag_setup;
+> -	char flag_data;
+> -	s64 ts_sec;		/* ktime_get_real_ts64 */
+> -	s32 ts_usec;		/* ktime_get_real_ts64 */
+> -	int status;
+> -	unsigned int len_urb;	/* Length of data (submitted or actual) */
+> -	unsigned int len_cap;	/* Delivered length */
+> -	union {
+> -		unsigned char setup[SETUP_LEN];	/* Only for Control S-type */
+> -		struct iso_rec {
+> -			int error_count;
+> -			int numdesc;
+> -		} iso;
+> -	} s;
+> -	int interval;
+> -	int start_frame;
+> -	unsigned int xfer_flags;
+> -	unsigned int ndesc;	/* Actual number of ISO descriptors */
+> -};
+> -
+>  /*
+>   * ISO vector, packed into the head of data stream.
+>   * This has to take 16 bytes to make sure that the end of buffer
+> @@ -125,38 +69,6 @@ struct mon_bin_isodesc {
+>  	u32 _pad;
+>  };
+>  
+> -/* per file statistic */
+> -struct mon_bin_stats {
+> -	u32 queued;
+> -	u32 dropped;
+> -};
+> -
+> -struct mon_bin_get {
+> -	struct mon_bin_hdr __user *hdr;	/* Can be 48 bytes or 64. */
+> -	void __user *data;
+> -	size_t alloc;		/* Length of data (can be zero) */
+> -};
+> -
+> -struct mon_bin_mfetch {
+> -	u32 __user *offvec;	/* Vector of events fetched */
+> -	u32 nfetch;		/* Number of events to fetch (out: fetched) */
+> -	u32 nflush;		/* Number of events to flush */
+> -};
+> -
+> -#ifdef CONFIG_COMPAT
+> -struct mon_bin_get32 {
+> -	u32 hdr32;
+> -	u32 data32;
+> -	u32 alloc32;
+> -};
+> -
+> -struct mon_bin_mfetch32 {
+> -        u32 offvec32;
+> -        u32 nfetch32;
+> -        u32 nflush32;
+> -};
+> -#endif
+> -
+>  /* Having these two values same prevents wrapping of the mon_bin_hdr */
+>  #define PKT_ALIGN   64
+>  #define PKT_SIZE    64
+> diff --git a/include/uapi/linux/usb/mon.h b/include/uapi/linux/usb/mon.h
+> new file mode 100644
+> index 000000000000..265e0169e2ef
+> --- /dev/null
+> +++ b/include/uapi/linux/usb/mon.h
+> @@ -0,0 +1,102 @@
+> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> +/*
+> + * USB Monitoring (usbmon) definitions
+
+Put the copyright notices back in here.
+
+> + */
+> +
+> +#ifndef __UAPI_LINUX_USB_MON_H
+> +#define __UAPI_LINUX_USB_MON_H
+> +
+> +/* ioctl macros */
+> +#define MON_IOC_MAGIC 0x92
+> +
+> +#define MON_IOCQ_URB_LEN _IO(MON_IOC_MAGIC, 1)
+> +/* #2 used to be MON_IOCX_URB, removed before it got into Linus tree */
+> +#define MON_IOCG_STATS _IOR(MON_IOC_MAGIC, 3, struct mon_bin_stats)
+> +#define MON_IOCT_RING_SIZE _IO(MON_IOC_MAGIC, 4)
+> +#define MON_IOCQ_RING_SIZE _IO(MON_IOC_MAGIC, 5)
+> +#define MON_IOCX_GET   _IOW(MON_IOC_MAGIC, 6, struct mon_bin_get)
+> +#define MON_IOCX_MFETCH _IOWR(MON_IOC_MAGIC, 7, struct mon_bin_mfetch)
+> +#define MON_IOCH_MFLUSH _IO(MON_IOC_MAGIC, 8)
+> +/* #9 was MON_IOCT_SETAPI */
+> +#define MON_IOCX_GETX   _IOW(MON_IOC_MAGIC, 10, struct mon_bin_get)
+> +
+> +#ifdef CONFIG_COMPAT
+> +#define MON_IOCX_GET32 _IOW(MON_IOC_MAGIC, 6, struct mon_bin_get32)
+> +#define MON_IOCX_MFETCH32 _IOWR(MON_IOC_MAGIC, 7, struct mon_bin_mfetch32)
+> +#define MON_IOCX_GETX32   _IOW(MON_IOC_MAGIC, 10, struct mon_bin_get32)
+> +#endif
+
+Alignment?
+
+And you see the kbuild error for this, please fix that up.
+
+> +
+> +/* ioctl structures */
+> +
+> +/* per file statistic */
+> +struct mon_bin_stats {
+> +	u32 queued;
+> +	u32 dropped;
+> +};
+
+As you are making this a "real" uapi .h file, you have to use the "real"
+data types as well.  That means using __u32 and not u32.  Same for all
+others.
+
+> +
+> +struct mon_bin_get {
+> +	struct mon_bin_hdr __user *hdr;	/* Can be 48 bytes or 64. */
+> +	void __user *data;
+
+Does this cross the user/kernel boundry?  Ick, no wonder we need compat
+fixups :(
+
+> +	size_t alloc;		/* Length of data (can be zero) */
+> +};
+> +
+> +struct mon_bin_mfetch {
+> +	u32 __user *offvec;	/* Vector of events fetched */
+> +	u32 nfetch;		/* Number of events to fetch (out: fetched) */
+> +	u32 nflush;		/* Number of events to flush */
+> +};
+> +
+> +#ifdef CONFIG_COMPAT
+> +struct mon_bin_get32 {
+> +	u32 hdr32;
+> +	u32 data32;
+> +	u32 alloc32;
+> +};
+> +
+> +struct mon_bin_mfetch32 {
+> +	u32 offvec32;
+> +	u32 nfetch32;
+> +	u32 nflush32;
+> +};
+> +#endif
+> +
+> +/* Data format */
+> +
+> +/*
+> + * Defined by USB 2.0 clause 9.3, table 9.2.
+> + */
+> +#define SETUP_LEN  8
+
+Horrible global define, please use USB_MON_SETUP_LEN or something like
+that.
+
+
+> +
+> +/*
+> + * The per-event API header (2 per URB).
+> + *
+> + * This structure is seen in userland as defined by the documentation.
+> + */
+> +struct mon_bin_hdr {
+> +	u64 id;			/* URB ID - from submission to callback */
+> +	unsigned char type;	/* Same as in text API; extensible. */
+> +	unsigned char xfer_type;	/* ISO, Intr, Control, Bulk */
+> +	unsigned char epnum;	/* Endpoint number and transfer direction */
+> +	unsigned char devnum;	/* Device address */
+> +	unsigned short busnum;	/* Bus number */
+> +	char flag_setup;
+> +	char flag_data;
+> +	s64 ts_sec;		/* ktime_get_real_ts64 */
+> +	s32 ts_usec;		/* ktime_get_real_ts64 */
+> +	int status;
+> +	unsigned int len_urb;	/* Length of data (submitted or actual) */
+> +	unsigned int len_cap;	/* Delivered length */
+
+Again, correct types please.
+
+thanks,
+
+greg k-h
