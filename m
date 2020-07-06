@@ -2,91 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E03215B28
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Jul 2020 17:49:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 731BC215B7B
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Jul 2020 18:08:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729420AbgGFPtE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Jul 2020 11:49:04 -0400
-Received: from mout.kundenserver.de ([212.227.126.131]:42717 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729267AbgGFPtE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jul 2020 11:49:04 -0400
-Received: from mail-qv1-f42.google.com ([209.85.219.42]) by
- mrelayeu.kundenserver.de (mreue012 [212.227.15.129]) with ESMTPSA (Nemesis)
- id 1MSqbe-1kLaWR0xxu-00UIoq; Mon, 06 Jul 2020 17:49:01 +0200
-Received: by mail-qv1-f42.google.com with SMTP id dm12so17387338qvb.9;
-        Mon, 06 Jul 2020 08:49:00 -0700 (PDT)
-X-Gm-Message-State: AOAM532MAbMs/t9Qa0ooHRF83kC1762/JASdhcM+8zjWbEayQt30KX5w
-        k+8SkftcrwG+OvW9RwEIb6Nwl7Yc/lPqswyzyko=
-X-Google-Smtp-Source: ABdhPJz+rSYwvoaIC05554xtJJcX6aTZD2CARsW1DIjZRCOBqR8GKFy2UMmQDHx3vhwtV2/lBuJ8oEELr/LATPfbIi4=
-X-Received: by 2002:a0c:f385:: with SMTP id i5mr6184540qvk.4.1594050540067;
- Mon, 06 Jul 2020 08:49:00 -0700 (PDT)
+        id S1729548AbgGFQIh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Jul 2020 12:08:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43164 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729367AbgGFQIh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jul 2020 12:08:37 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A28C061755
+        for <linux-usb@vger.kernel.org>; Mon,  6 Jul 2020 09:08:36 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id f6so24357595ioj.5
+        for <linux-usb@vger.kernel.org>; Mon, 06 Jul 2020 09:08:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0+WVm/HjSi2jf8uZdSi4EI9UGoOb7MLDK//YEI66B4Y=;
+        b=V9WB+FMBApfWRAOK3ml3pRuHNo4W/Z3hfk6o39TVjedoqTDQo5Hs3G11HXHnwGRDYr
+         besReQP6I6GKnr+UFpJYqJSbbHVb5Ngb9rBqslXn+ZsqgdHHYh6fTiscyFt/hT6BOaO3
+         JTmyLT/I4f6npN92Yg4myQXZAZFN9CUw+fjsA672/KRW4eZvB9Aw5Idi9ppV0eSLQreO
+         CVlE0fezsNFbIxk/Jg1AymJxx1uU5TlDMu9CJLFQ4zOzERx8L5fhnwI77KLChOn5gbvZ
+         XjcgNcEqu2xiuFY2vZTZRxLZT0SKD5xfjaqR6pFKeQJRXGHbMjnV28U7yh/sKX+4A+lL
+         HR4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0+WVm/HjSi2jf8uZdSi4EI9UGoOb7MLDK//YEI66B4Y=;
+        b=saSPq+6VFHptASmeJ2oNNdaW1nLQfVpSVG7YPcP2TQb+B8XJlGE3DFvazR8fMMnoqQ
+         j0kook8xmJO1fp6ciro0g1d/J4wjOj1+Z5xLkO1EqR3OSBv9F/H7reZ3SC3jFeYXVtU5
+         hLGo7WU/PnZHhAvUW2K5UPYfbXCYnei5zTKA+xDPm5s9WQYYF1tq1zvdJIf4G4QfvW8f
+         D/z+nqQQSOzOxwJXAxss5G2PUJkyJkk97DvJru2iOZu0WeG9kuPATLpOA0+Sg/Xi02IS
+         Ckal0hCnqPRRt5qjNQU9EMJm3OKLE0Y0vmlKCu+0f5wetmVpvx+GNaJc7OYp55+wchcN
+         PKjg==
+X-Gm-Message-State: AOAM531MvlLT/tvDGXu5Z8Xi3MU1iRfxtgHWCpgq8CrJ98MKwyILR9K2
+        8/bYhuMt9od1/FMcyOqlSYH/l7sTJPMeptZPMLzWpw==
+X-Google-Smtp-Source: ABdhPJybFzSqqaU5Dc2CsDZhwwoSEtr9jFUO9cVopxHMAk/QFatZ7LOnS0l7obE1sXh+k1EtywMHmnAmF5m4W3EWjcw=
+X-Received: by 2002:a02:a19c:: with SMTP id n28mr54037974jah.13.1594051716242;
+ Mon, 06 Jul 2020 09:08:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200630115836.1283978-1-arnd@arndb.de> <a6812131-1b40-a5bf-ede5-07a1ecde57dd@mleia.com>
-In-Reply-To: <a6812131-1b40-a5bf-ede5-07a1ecde57dd@mleia.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 6 Jul 2020 17:48:44 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3PhmQ-tSHtMWVvjPzResAf6wyys--P7kcAUFGevfXCgg@mail.gmail.com>
-Message-ID: <CAK8P3a3PhmQ-tSHtMWVvjPzResAf6wyys--P7kcAUFGevfXCgg@mail.gmail.com>
-Subject: Re: [PATCH] udc: lpc32xx: mark local function static
-To:     Vladimir Zapolskiy <vz@mleia.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sylvain Lemieux <slemieux.tyco@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+References: <20200706133341.476881-1-lee.jones@linaro.org> <20200706133341.476881-24-lee.jones@linaro.org>
+In-Reply-To: <20200706133341.476881-24-lee.jones@linaro.org>
+From:   Jassi Brar <jaswinder.singh@linaro.org>
+Date:   Mon, 6 Jul 2020 11:08:25 -0500
+Message-ID: <CAJe_ZheZY-Vc+bZGGHKM7YkBxoOyf3CPBHY0=+cTw5Pp69FqEg@mail.gmail.com>
+Subject: Re: [PATCH 23/32] usb: gadget: udc: max3420_udc: Remove set, but
+ never checked variable 'addr'
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org,
+        lkml <linux-kernel@vger.kernel.org>,
+        Linux USB list <linux-usb@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:K2aEcLYHNV3JCVBibvrbPT+1Qx/n3hISrIxqZj3UaoSUws6v9vH
- 0tOvvstAIWUrVTEceXHmgubFbuSU3MpnY++lFzpDrXX6GOKHkb/TL9WlY4u1XDTR6PBDX0k
- 19BsgW3WVdl31ntXDU+DcoDz5PkiTk3UI9Rkj9APo4YrWqG3fOmqaXMqoj47tsLTW0XdEUo
- cedtZl5qdwNGhSrnc8LWQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:JTtVV3TPhGc=:IJCY3o2pwG0FMTw5Cz9G9i
- k2cZZM4nMlvAky4Y12f/LE8RaNmen/W2yeeTriA2yzuvq7pRXsTROwf28o2x2PlNXVrB9zSOx
- /HPV6aB9w2W3VprvhiYEqhEjPUd/9y12rb14x8ia/cPaQzASGw94oaE9oD/b4ehDCD66bMBQA
- 24pWow43VEj6lTi+nIF67Q1hxbFoKShdlHIIUcqruxZDuryPWjCsl4fKoAUlU3/cOzU8SMsiT
- PI6DAA+mdpaNoo1gOY1V0rBUhQXSbDAmY98Nwcxsq7Dr/DlKdxkaoxy4TQWrDrrPoMmj9K7mq
- B0IJoSaVxfuJtMHK1Ys4+ZUbAkcxd3bawmMvhQbuGl1s8blB7zosdT4vusPCTrzUGcbYsul/P
- 1PEUSQUpzOOajtcIGNrMbqj4qtoVG3DGlbb2OMDwxUBWtaffD1cKAIDA0r7ltPAg/BVU9UZGL
- weHibNeOBOySwCtlh4ln80v7OynyRRmCH8+tPaJyLX2KK4hQqUIpPw77ypO7cJ4kIv2WXlhp5
- rOz5AAuboQFS0obXIkhRfhLX89SUazjdFRV4wC4X3CwQ9RV5rUfySxKYP80tbOlx4m6bZyEY2
- QwjROdEyviThIl0WpQwWQ4T2SupKLTQs4jBQL00GfGnDQYh4VvpOpEQsmYtYrGcTbY1YsDZ8C
- 2a1l2O4oToHaGnBuoaqwgjaDb8q3fDpglyD2AsObRUpLpE/aO1R/pHdTHRKMruxk5ZXCtnoRu
- 45ZRoYHOQJAqy6wLdX1lpEayJWr1F79F5Ois8XtcCMf4yKd9SqneVGiyyxC+g4Lzrtr2+44QQ
- D+6DO1bvi4sGlKSiPD7o5T8VRhkbpVSTezD+lw1OlehJN0uNMFBPGdedowejd72lABgV2D3op
- mp+piNc4VQJFnPj25HUeK+3/jjbtvv7NgN8C6W+qAP5aeO5I2XLjsjdigD1Y4q48Cm1fkXW4b
- EG8ogWWhO/L6piIlpTaZKYUJeqdU/agjoIjEMBWs/wzfPPUfsaFR/
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 30, 2020 at 8:32 PM Vladimir Zapolskiy <vz@mleia.com> wrote:
->
-> Hi Arnd, thank you for the patch.
->
-> On 6/30/20 2:58 PM, Arnd Bergmann wrote:
-> > The kernel test robot reports two functions that should be marked
-> > static:
-> >
-> >>> drivers/usb/gadget/udc/lpc32xx_udc.c:1928:6: warning: no previous prototype for 'udc_send_in_zlp' [-Wmissing-prototypes]
-> >     1928 | void udc_send_in_zlp(struct lpc32xx_udc *udc, struct lpc32xx_ep *ep)
-> >>> drivers/usb/gadget/udc/lpc32xx_udc.c:1942:6: warning: no previous prototype for 'udc_handle_eps' [-Wmissing-prototypes]
-> >     1942 | void udc_handle_eps(struct lpc32xx_udc *udc, struct lpc32xx_ep *ep)
-> >
-> > This showed up after my commit 792e559e94bc ("udc: lpc32xx: fix 64-bit
-> > compiler warning") made it possible to build the driver on x86-64.
-> >
-> > Fix the warning as suggested.
-> >
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->
-> Acked-by: Vladimir Zapolskiy <vz@mleia.com>
+On Mon, 6 Jul 2020 at 08:34, Lee Jones <lee.jones@linaro.org> wrote:
 
-Applied to arm/soc branch now.
+> diff --git a/drivers/usb/gadget/udc/max3420_udc.c b/drivers/usb/gadget/udc/max3420_udc.c
+> index 23f33946d80c4..52884bae4af11 100644
+> --- a/drivers/usb/gadget/udc/max3420_udc.c
+> +++ b/drivers/usb/gadget/udc/max3420_udc.c
+> @@ -623,7 +623,6 @@ static void max3420_set_clear_feature(struct max3420_udc *udc)
+>  static void max3420_handle_setup(struct max3420_udc *udc)
+>  {
+>         struct usb_ctrlrequest setup;
+> -       u8 addr;
+>
+>         spi_rd_buf(udc, MAX3420_REG_SUDFIFO, (void *)&setup, 8);
+>
+> @@ -647,7 +646,7 @@ static void max3420_handle_setup(struct max3420_udc *udc)
+>                                 USB_TYPE_STANDARD | USB_RECIP_DEVICE)) {
+>                         break;
+>                 }
+> -               addr = spi_rd8_ack(udc, MAX3420_REG_FNADDR, 1);
+> +               spi_rd8_ack(udc, MAX3420_REG_FNADDR, 1);
+>                 dev_dbg(udc->dev, "Assigned Address=%d\n", udc->setup.wValue);
+>                 return;
+>         case USB_REQ_CLEAR_FEATURE:
 
-     Arnd
+Acked-by: Jassi Brar <jaswinder.singh@linaro.org>
