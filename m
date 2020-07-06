@@ -2,184 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D518B215900
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Jul 2020 16:01:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D28C21590C
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Jul 2020 16:02:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729308AbgGFOBH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Jul 2020 10:01:07 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:53541 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728940AbgGFOBD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jul 2020 10:01:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1594044060;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=plR445Drk3eeFEnzym0LmKRY+r16mbP2yKRnTLNcumQ=;
-        b=eyOmmyVVSqZQ3btGRHGkKYEr7d1xTaGPYqoC9w13l5x7vE+1ZrzdtSph9QOETrbNOavBto
-        p4V6qghd+Bmi0qIjj+hFS53Bs2O+6Ukh8BHuwOSEy0OU7/EcC32Kk+nUbE1O7QE0sxVBbH
-        bU09ygUaK9E/BaV7dlSp1Mm/gUx/8q8=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-273-jI-ZgKsHNlSUM7R25pNKcQ-1; Mon, 06 Jul 2020 10:00:58 -0400
-X-MC-Unique: jI-ZgKsHNlSUM7R25pNKcQ-1
-Received: by mail-ej1-f69.google.com with SMTP id op28so34277142ejb.15
-        for <linux-usb@vger.kernel.org>; Mon, 06 Jul 2020 07:00:58 -0700 (PDT)
+        id S1729316AbgGFOCU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Jul 2020 10:02:20 -0400
+Received: from mail-il1-f197.google.com ([209.85.166.197]:52014 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728940AbgGFOCU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jul 2020 10:02:20 -0400
+Received: by mail-il1-f197.google.com with SMTP id a26so918982ill.18
+        for <linux-usb@vger.kernel.org>; Mon, 06 Jul 2020 07:02:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=plR445Drk3eeFEnzym0LmKRY+r16mbP2yKRnTLNcumQ=;
-        b=S8IObjZZubDOl4MFszIEg6YbFN+YEFk6zV42Pb8nf3J5HvlkwLmcXGeWRtyLtVBeBZ
-         ucYT7wK2xkV2ulu/qTBxFn0TMQ+abEn3c63LIw0E0wYmlYJWA2AJE6Q9vihJNS1Yqz+K
-         Omb5zDQn9bv8CA2brKusvT5Trr6G1AiWxRHeS0LjSahevMqfruNfzMe3Z7dATLp7jA3Z
-         /++75gVTURnkL6gl0DqdDyIB8a3RG8KNHkqs2yji7e+ASKRKAT7IL6PfVE3O/cehEVbd
-         cidBjQB2HcC6gB9csiGEtzDis2yt1AdV542A1DyT2KS7w88EMBm5+CtD6Bna1VpStP6c
-         UXiA==
-X-Gm-Message-State: AOAM533NsVSQ8i0xUqR7EenPdeYjGshW0dYroSpmFZAyghDhUXRIXlED
-        +NxUdIQ51WkQxTk7TakvfmVUAw8SoAPRlEvfQ8QuR3lInZ9x+fNiXNXWcm5+TJs+WtnfOIvexeV
-        DmRbqNPevMCfo29FrYU7E
-X-Received: by 2002:a05:6402:202e:: with SMTP id ay14mr55866492edb.233.1594044057682;
-        Mon, 06 Jul 2020 07:00:57 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwokWAQDe0bD6JJ8Z9MjAp3h3YbM7dv+sokIOUz5rBXKpDFtUHf2aONLLEEwiCQIl5my75xOA==
-X-Received: by 2002:a05:6402:202e:: with SMTP id ay14mr55866456edb.233.1594044057460;
-        Mon, 06 Jul 2020 07:00:57 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
-        by smtp.gmail.com with ESMTPSA id mf24sm16808096ejb.58.2020.07.06.07.00.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jul 2020 07:00:56 -0700 (PDT)
-Subject: Re: [PATCH 08/32] usb: typec: tcpm: tcpm: Remove dangling unused
- 'struct tcpm_altmode_ops'
-To:     Lee Jones <lee.jones@linaro.org>, gregkh@linuxfoundation.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-References: <20200706133341.476881-1-lee.jones@linaro.org>
- <20200706133341.476881-9-lee.jones@linaro.org>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <ca14707c-7d40-07ac-da1d-ca27a2e93dcd@redhat.com>
-Date:   Mon, 6 Jul 2020 16:00:56 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=TU56PJ0SruRVGlc+hyGDp//x46DEkSJQb6WxaluOrro=;
+        b=Io9gs/rqOq7WhFMuqIl8vaynaEQolrxavs4C0cLh2GLa93upgqDJzEfRb2AXHb8wzQ
+         6kh2po5hRZAlAI4NOFkbHkhrPq+QWl60WO/FQl6v8n5YRSi1YVxrL4fsbnolAUHZpJbJ
+         vpoU6mtpAWHniNzWSQTkctbKk4AmdnnaUeX5/9cH2MzohCqmprKfJN2FewdVw62zWEk9
+         RuM/I5sY1fJVtNofXFoLR+kQhGVkjPEaPwexXt9UmMLoYgJFb2rF0LW6aEpZsKMZbyAg
+         1xBLJR0L//+PuXORpeo2+9uPMG1Sk1JlFZCe9X05KVdGM1+YcvJbrmJCUvxUrW5set1u
+         IyaA==
+X-Gm-Message-State: AOAM5310oDxx5GBTrqNz+NHBevjIvB9E8hLujxqoIdlMuoScs7PyssTI
+        VqHo0TQnPNXlFr2opyznBJHXqUAxX8kuVo/0QInjpp+Jxl7f
+X-Google-Smtp-Source: ABdhPJxMkirRHFifp7/A0JE2Uz061gcLSy9lmW8OXP8N6ifj8OoUfvqs7L3WuB7sHKBcWzZFwM/9TiBbuXoAifJCXchtzsj5dvH2
 MIME-Version: 1.0
-In-Reply-To: <20200706133341.476881-9-lee.jones@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6602:2805:: with SMTP id d5mr25528098ioe.124.1594044139324;
+ Mon, 06 Jul 2020 07:02:19 -0700 (PDT)
+Date:   Mon, 06 Jul 2020 07:02:19 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ae492f05a9c6527a@google.com>
+Subject: INFO: task hung in __do_sys_reboot
+From:   syzbot <syzbot+805f5f6ae37411f15b64@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        rafael@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Hello,
 
-On 7/6/20 3:33 PM, Lee Jones wrote:
-> Looks as though a079973f462a3 ("usb: typec: tcpm: Remove tcpc_config
-> configuration mechanism") pulled out the only use of 'tcpm_altmode_ops'
-> last year.  No need to keep it around.
-> 
-> Fixes the following W=1 kernel build warning(s):
-> 
->   drivers/usb/typec/tcpm/tcpm.c:1551:39: warning: ‘tcpm_altmode_ops’ defined but not used [-Wunused-const-variable=]
->   1551 | static const struct typec_altmode_ops tcpm_altmode_ops = {
->   | ^~~~~~~~~~~~~~~~
-> 
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Signed-off-by: Lee Jones <lee.jones@linaro.org>
+syzbot found the following crash on:
 
-This is necessary for adding Display port over Type-C support
-on devices using the tcpm code, rather then firmware, to do
-the Type-C alt-mode negotiation.
+HEAD commit:    768a0741 usb: dwc2: gadget: Remove assigned but never used..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=14ec52b7100000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=999be4eb2478ffa5
+dashboard link: https://syzkaller.appspot.com/bug?extid=805f5f6ae37411f15b64
+compiler:       gcc (GCC) 10.1.0-syz 20200507
 
-I have a local patch in my tree which adds support for this.
+Unfortunately, I don't have any reproducer for this crash yet.
 
-But Heikki did not like my approach, so that patch
-(which needs the bits you are removing) never landed
-upstream:
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+805f5f6ae37411f15b64@syzkaller.appspotmail.com
 
-https://patchwork.kernel.org/patch/11199517/
+INFO: task systemd-shutdow:1 blocked for more than 143 seconds.
+      Not tainted 5.8.0-rc3-syzkaller #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+systemd-shutdow D24504     1      0 0x00004000
+Call Trace:
+ context_switch kernel/sched/core.c:3453 [inline]
+ __schedule+0x88a/0x1cb0 kernel/sched/core.c:4178
+ schedule+0xcd/0x2b0 kernel/sched/core.c:4253
+ wait_for_device_probe+0x1be/0x220 drivers/base/dd.c:665
+ device_shutdown+0x18/0x5b5 drivers/base/core.c:3748
+ kernel_restart_prepare kernel/reboot.c:76 [inline]
+ kernel_restart kernel/reboot.c:246 [inline]
+ __do_sys_reboot.cold+0x5d/0x9d kernel/reboot.c:347
+ do_syscall_64+0x50/0x90 arch/x86/entry/common.c:359
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x7fc0c04788c6
+Code: Bad RIP value.
+RSP: 002b:00007fff74038008 EFLAGS: 00000202 ORIG_RAX: 00000000000000a9
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fc0c04788c6
+RDX: 0000000001234567 RSI: 0000000028121969 RDI: fffffffffee1dead
+RBP: 00007fff74038098 R08: 0000000000000028 R09: 0000000000000005
+R10: 0000000000000002 R11: 0000000000000202 R12: 0000000000000000
+R13: 0000000000000000 R14: 000055b9797c9150 R15: 00007fff74038388
 
-Which is somewhat old now.
+Showing all locks held in the system:
+1 lock held by systemd-shutdow/1:
+ #0: ffffffff872e8f68 (system_transition_mutex){+.+.}-{3:3}, at: __do_sys_reboot+0x1a4/0x3e0 kernel/reboot.c:344
+1 lock held by khungtaskd/23:
+ #0: ffffffff873124a0 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x53/0x264 kernel/locking/lockdep.c:5779
+5 locks held by kworker/1:2/67:
+ #0: ffff8881d880ed38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+ #0: ffff8881d880ed38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: atomic64_set include/asm-generic/atomic-instrumented.h:856 [inline]
+ #0: ffff8881d880ed38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: atomic_long_set include/asm-generic/atomic-long.h:41 [inline]
+ #0: ffff8881d880ed38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_data kernel/workqueue.c:616 [inline]
+ #0: ffff8881d880ed38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: set_work_pool_and_clear_pending kernel/workqueue.c:643 [inline]
+ #0: ffff8881d880ed38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x82b/0x15f0 kernel/workqueue.c:2240
+ #1: ffff8881d583fda8 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x85f/0x15f0 kernel/workqueue.c:2244
+ #2: ffff8881d450a218 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:768 [inline]
+ #2: ffff8881d450a218 (&dev->mutex){....}-{3:3}, at: hub_event+0x1c5/0x4390 drivers/usb/core/hub.c:5522
+ #3: ffff8881d23a4218 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:768 [inline]
+ #3: ffff8881d23a4218 (&dev->mutex){....}-{3:3}, at: __device_attach+0x7a/0x430 drivers/base/dd.c:850
+ #4: ffff8881ab7591a8 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:768 [inline]
+ #4: ffff8881ab7591a8 (&dev->mutex){....}-{3:3}, at: __device_attach+0x7a/0x430 drivers/base/dd.c:850
 
-Heikki said he would look into an approach to this more to
-his liking. Heikki an progress on this area?
+=============================================
 
-Regards,
+NMI backtrace for cpu 0
+CPU: 0 PID: 23 Comm: khungtaskd Not tainted 5.8.0-rc3-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xf6/0x16e lib/dump_stack.c:118
+ nmi_cpu_backtrace.cold+0x74/0xb6 lib/nmi_backtrace.c:101
+ nmi_trigger_cpumask_backtrace+0x1da/0x1f4 lib/nmi_backtrace.c:62
+ trigger_all_cpu_backtrace include/linux/nmi.h:146 [inline]
+ check_hung_uninterruptible_tasks kernel/hung_task.c:209 [inline]
+ watchdog+0xd6a/0xfd0 kernel/hung_task.c:295
+ kthread+0x392/0x470 kernel/kthread.c:291
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:293
+Sending NMI from CPU 0 to CPUs 1:
+NMI backtrace for cpu 1 skipped: idling at native_safe_halt arch/x86/include/asm/irqflags.h:60 [inline]
+NMI backtrace for cpu 1 skipped: idling at arch_safe_halt arch/x86/include/asm/irqflags.h:103 [inline]
+NMI backtrace for cpu 1 skipped: idling at acpi_safe_halt+0x72/0x90 drivers/acpi/processor_idle.c:111
 
-Hans
 
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-
-> ---
->   drivers/usb/typec/tcpm/tcpm.c | 51 -----------------------------------
->   1 file changed, 51 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 82b19ebd7838e..d6913eb0ea54d 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -1503,57 +1503,6 @@ static int tcpm_validate_caps(struct tcpm_port *port, const u32 *pdo,
->   	return 0;
->   }
->   
-> -static int tcpm_altmode_enter(struct typec_altmode *altmode, u32 *vdo)
-> -{
-> -	struct tcpm_port *port = typec_altmode_get_drvdata(altmode);
-> -	u32 header;
-> -
-> -	mutex_lock(&port->lock);
-> -	header = VDO(altmode->svid, vdo ? 2 : 1, CMD_ENTER_MODE);
-> -	header |= VDO_OPOS(altmode->mode);
-> -
-> -	tcpm_queue_vdm(port, header, vdo, vdo ? 1 : 0);
-> -	mod_delayed_work(port->wq, &port->vdm_state_machine, 0);
-> -	mutex_unlock(&port->lock);
-> -
-> -	return 0;
-> -}
-> -
-> -static int tcpm_altmode_exit(struct typec_altmode *altmode)
-> -{
-> -	struct tcpm_port *port = typec_altmode_get_drvdata(altmode);
-> -	u32 header;
-> -
-> -	mutex_lock(&port->lock);
-> -	header = VDO(altmode->svid, 1, CMD_EXIT_MODE);
-> -	header |= VDO_OPOS(altmode->mode);
-> -
-> -	tcpm_queue_vdm(port, header, NULL, 0);
-> -	mod_delayed_work(port->wq, &port->vdm_state_machine, 0);
-> -	mutex_unlock(&port->lock);
-> -
-> -	return 0;
-> -}
-> -
-> -static int tcpm_altmode_vdm(struct typec_altmode *altmode,
-> -			    u32 header, const u32 *data, int count)
-> -{
-> -	struct tcpm_port *port = typec_altmode_get_drvdata(altmode);
-> -
-> -	mutex_lock(&port->lock);
-> -	tcpm_queue_vdm(port, header, data, count - 1);
-> -	mod_delayed_work(port->wq, &port->vdm_state_machine, 0);
-> -	mutex_unlock(&port->lock);
-> -
-> -	return 0;
-> -}
-> -
-> -static const struct typec_altmode_ops tcpm_altmode_ops = {
-> -	.enter = tcpm_altmode_enter,
-> -	.exit = tcpm_altmode_exit,
-> -	.vdm = tcpm_altmode_vdm,
-> -};
-> -
->   /*
->    * PD (data, control) command handling functions
->    */
-> 
-
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
