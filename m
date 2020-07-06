@@ -2,106 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2315C21586F
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Jul 2020 15:34:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAC712158D1
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Jul 2020 15:50:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729377AbgGFNe0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Jul 2020 09:34:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47342 "EHLO
+        id S1729123AbgGFNuk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Jul 2020 09:50:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729395AbgGFNeZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jul 2020 09:34:25 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C44CC061755
-        for <linux-usb@vger.kernel.org>; Mon,  6 Jul 2020 06:34:24 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id r12so40881770wrj.13
-        for <linux-usb@vger.kernel.org>; Mon, 06 Jul 2020 06:34:24 -0700 (PDT)
+        with ESMTP id S1729109AbgGFNuk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jul 2020 09:50:40 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00BEAC061794
+        for <linux-usb@vger.kernel.org>; Mon,  6 Jul 2020 06:50:39 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id k15so22596680lfc.4
+        for <linux-usb@vger.kernel.org>; Mon, 06 Jul 2020 06:50:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=+aWkOnJjbe/7IK7NRoDvxRwORV+t2eCxVhOYLY5eRmU=;
-        b=gbx/6YjTbDOXIW4LuH0gXQ/axZ6vtr5Q+IM30lN6HSd2IbKna7uTyK10teMAt6y0Lk
-         0xliIWmuFyYSKC28K8Txu3/u3lIpSijGtDQGknnxxqv2omOKry0M4wAsRTesMW1jTCkw
-         /Ba0dcFpT+psH9sKfyWZCtE7LsLorCxeXUV4QsTez0/QuWDq2MrS6syfLhb7J2VnpAbZ
-         q2Q119ypezf9Whp4PGxmTQ+bdWH+i0HCBUEBAsa0C1SfsMKNGakHeNCRHHdN1ynTWw5y
-         33tnFoqLPdDQh4A3ja91qaZ+9hK40F/VuKoKaVKroSwGPK31KwufTLIdetqfGKmilXP3
-         l4yQ==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=bZa4D2WVaPlaakSVKPmHAJSxY8fXE4lQvmGAH+tBorA=;
+        b=ptGYskGv1m95IZBNJzIfZnin0DxW2ky4zsTAvaGQ7qCdVYqxtkWr3YkNMJk00OU6jl
+         rjKibEAOvR21dG93X0GtNYsFXtdyCoswPKAWlXqg2qf9GnSLKRldJRdkeOi2FdbkZ/Qx
+         oBmxb+zeaFCaQBqDONAmIphaLQdDp8JiZLLj4dNZr6UmY8/IvS5VTU7uzX0guza42Gem
+         EbPFPQQuDDIow4BRrJRDptF5BQQbJ8x6mVhfZ2c1LlG0UxYRjJP+7WS7YrjND9Fu8SGM
+         edJ1njN1w1Jdvoye53BRFDo6ju+wjPybEaRYR8Zi9JzZzYTe5v45cEWicsJMP9jH+KjG
+         1azA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+aWkOnJjbe/7IK7NRoDvxRwORV+t2eCxVhOYLY5eRmU=;
-        b=ts9vygYj6MnzG50a7GhXMoUePW+UR08oWsh9cuozkTtxAY/Nn811GBs1RvDTqTJmDX
-         FJOxAB/90DFRCW2AmxeQoawByqqw70qbMHiDIhWo/YwE2ukF6w118Q0MDjzUQHhBdka/
-         /ul1yfcYsHU+ZvPB9RbfbtD1bl6BVW7KkEH5UKD+nP+6alU+O1KHyA8l7Q4WTrkFhjry
-         KCBDd8QhvQZRilGc+8ywJWGgmCKzHu9SDCPSjfeY2SyLOEbCQnWc1jw5ZLw+vYVI82qq
-         f4mTObGzmlZe92tyQgHfBrUmdAz7ZRxw4FN4en1DKmGhEYimgqxKhwdMDBB8teoMRFnQ
-         9WCA==
-X-Gm-Message-State: AOAM5331u7Rg3jhFrYxwd4oj9EQza5ODfLicLFDdpUpi9lrqP9h10EiY
-        fXFacIHwcH/CZ3uRh4Gn/Oh2uw==
-X-Google-Smtp-Source: ABdhPJxzVzY9SwrV/olyY4sGtNbsNmUZ7ypHADkmoDe0zZ4QHpbHLQ5OWEWVzQ/lT81AhxcLun8qWw==
-X-Received: by 2002:adf:8024:: with SMTP id 33mr52422302wrk.117.1594042463436;
-        Mon, 06 Jul 2020 06:34:23 -0700 (PDT)
-Received: from localhost.localdomain ([2.27.35.206])
-        by smtp.gmail.com with ESMTPSA id v18sm25416082wrv.49.2020.07.06.06.34.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2020 06:34:22 -0700 (PDT)
-From:   Lee Jones <lee.jones@linaro.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [PATCH 32/32] usb: host: xhci-plat: Do not define 'struct acpi_device_id' when !CONFIG_ACPI
-Date:   Mon,  6 Jul 2020 14:33:41 +0100
-Message-Id: <20200706133341.476881-33-lee.jones@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200706133341.476881-1-lee.jones@linaro.org>
-References: <20200706133341.476881-1-lee.jones@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=bZa4D2WVaPlaakSVKPmHAJSxY8fXE4lQvmGAH+tBorA=;
+        b=twAgap+9Oc8LmnqoDVVwrhjhSThiH3qJ3fbsKmZDNj36xk+pFWFgI/vP5iTMwBZdcd
+         JDAz4vltg9zMF5FZ5UtzIda+aFuRzRebLpb5G5GyzDqNPlXvjR8Ab+xr5S3uU/6LLSkX
+         VzV4HlOEFOHEwO5EfEMp0j3ymeYVWBfu4H7YvqyLh2xy+WEUEHwPWqZ/4uMhhvCwCOmL
+         63GTNsVZEWTqWm5Fg8YkZtntrPNSikJeKjoqcCjSZATWCoy4T+CR3+Lf5pmvLTybOZeB
+         txbR09vCcdU2XH66nm32wcHtV4cCuulwvTiO2QXfR5ZRA1Vt+c5oMP3IcdvvQusDx0Wb
+         8wkg==
+X-Gm-Message-State: AOAM533RQcs/HUV/tgA1YqKbWJHMuC/2oRxBsyoYu5sKHbAcAAbvuMmJ
+        mWbOn0Ua6QeHHOuayRPNErCt7GIOVg+sydv3SVuKfw==
+X-Google-Smtp-Source: ABdhPJyE/i5NtJKyl94ORQWnZwkdrc7UJFTX3szYTfRnZPwJk3XM4Xzi3d1UQ20PCIRJq2mGQ94KPFghCdzVZx15ftU=
+X-Received: by 2002:a05:6512:3107:: with SMTP id n7mr30947798lfb.63.1594043438117;
+ Mon, 06 Jul 2020 06:50:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+References: <20200706133341.476881-1-lee.jones@linaro.org> <20200706133341.476881-27-lee.jones@linaro.org>
+In-Reply-To: <20200706133341.476881-27-lee.jones@linaro.org>
+From:   Jann Horn <jannh@google.com>
+Date:   Mon, 6 Jul 2020 15:50:11 +0200
+Message-ID: <CAG48ez3c98x7dEpKcSnhHKbHKfF6=XOdU5WGL8FtvdqsrYMNhg@mail.gmail.com>
+Subject: Re: [PATCH 26/32] usb: early: xhci-dbc: Supply missing 'xhci-dbgp.h' headerfile
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        linux-usb@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Since ACPI_PTR() is used to NULLify the value when !CONFIG_ACPI,
-struct usb_xhci_acpi_match becomes defined by unused.
+On Mon, Jul 6, 2020 at 3:34 PM Lee Jones <lee.jones@linaro.org> wrote:
+> If the header file containing a function's prototype isn't included by
+> the sourcefile containing the associated function, the build system
+> complains of missing prototypes.
+>
+> Fixes the following W=3D1 kernel build warning(s):
+>
+>  drivers/usb/early/ehci-dbgp.c: In function =E2=80=98early_dbgp_write=E2=
+=80=99:
+>  drivers/usb/early/ehci-dbgp.c:915:13: warning: variable =E2=80=98ret=E2=
+=80=99 set but not used [-Wunused-but-set-variable]
+>  915 | int chunk, ret;
+>  | ^~~
+>  drivers/usb/early/xhci-dbc.c:600:12: warning: no previous prototype for =
+=E2=80=98early_xdbc_parse_parameter=E2=80=99 [-Wmissing-prototypes]
+>  600 | int __init early_xdbc_parse_parameter(char *s)
+>  | ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>  drivers/usb/early/xhci-dbc.c:653:12: warning: no previous prototype for =
+=E2=80=98early_xdbc_setup_hardware=E2=80=99 [-Wmissing-prototypes]
+>  653 | int __init early_xdbc_setup_hardware(void)
+>  | ^~~~~~~~~~~~~~~~~~~~~~~~~
+>  drivers/usb/early/xhci-dbc.c:910:13: warning: no previous prototype for =
+=E2=80=98early_xdbc_register_console=E2=80=99 [-Wmissing-prototypes]
+>  910 | void __init early_xdbc_register_console(void)
+>  | ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>
+> Cc: Jann Horn <jannh@google.com>
+> Cc: Lu Baolu <baolu.lu@linux.intel.com>
+> Signed-off-by: Lee Jones <lee.jones@linaro.org>
 
-Fixes the following W=1 kernel build warning(s):
-
- drivers/usb/host/xhci-plat.c:457:36: warning: ‘usb_xhci_acpi_match’ defined but not used [-Wunused-const-variable=]
- 457 | static const struct acpi_device_id usb_xhci_acpi_match[] = {
- | ^~~~~~~~~~~~~~~~~~~
-
-Cc: Mathias Nyman <mathias.nyman@intel.com>
-Cc: Andrzej Siewior <bigeasy@linutronix.de>
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
----
- drivers/usb/host/xhci-plat.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index f6b4089bfc4a5..3e15b70a6fc99 100644
---- a/drivers/usb/host/xhci-plat.c
-+++ b/drivers/usb/host/xhci-plat.c
-@@ -454,12 +454,14 @@ static const struct dev_pm_ops xhci_plat_pm_ops = {
- 			   NULL)
- };
- 
-+#ifdef CONFIG_ACPI
- static const struct acpi_device_id usb_xhci_acpi_match[] = {
- 	/* XHCI-compliant USB Controller */
- 	{ "PNP0D10", },
- 	{ }
- };
- MODULE_DEVICE_TABLE(acpi, usb_xhci_acpi_match);
-+#endif
- 
- static struct platform_driver usb_xhci_driver = {
- 	.probe	= xhci_plat_probe,
--- 
-2.25.1
-
+Reviewed-by: Jann Horn <jannh@google.com>
