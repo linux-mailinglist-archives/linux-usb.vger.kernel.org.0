@@ -2,39 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC854216657
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jul 2020 08:24:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6535E21665E
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jul 2020 08:31:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727097AbgGGGYl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Jul 2020 02:24:41 -0400
-Received: from mail-vi1eur05on2069.outbound.protection.outlook.com ([40.107.21.69]:38020
+        id S1726946AbgGGGax (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Jul 2020 02:30:53 -0400
+Received: from mail-vi1eur05on2063.outbound.protection.outlook.com ([40.107.21.63]:38033
         "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726434AbgGGGYl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 7 Jul 2020 02:24:41 -0400
+        id S1726869AbgGGGax (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 7 Jul 2020 02:30:53 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EFFI0CxTgLklWEbSz0MvP/rk1wiChCKz2PkVRs07q1IDgPpd0tZXLt9fmdDd7SZE+RtHzBfAYseLYTA3I7eVpsLXrx8r7XEcoalBGy5jmcwWILZI+Lb8koBoI8foCmRCOFyHBbS+gnwOSW49lcCZy60TNTyWyMAsFQcQFbb3oCwIeEzCUxenKw0OSgfPCarzCTSpyBgTGzyYmuj575kuEZwACKSR0DG9rIDuXlA8NWbgX+p/rYLW4LuTnLe3rB17BA60qLL55djRqU9yqZTsZO4esCHNyPDbVQBfG3p8msvPVCM6FxIqpZafNMoxaw2WEnqqK3hiOv/l9/BXmymCmA==
+ b=mFpszsi9cT6jr8M4YElpQivDPbuEJtXBdjtBaZYAnwdcB+5HC62BmPYX+k/5Wr9JOY8rDjl7riFqml/vDrogv2Qja1IE/mDI2JJnKpwCYBQq+0gbOx/u7HvGijFsI+FFa9t1HxNBakbwHe5ZBRkLNWNSmoepyTwHWlyB2QAOVVoKf20vnEnMj6PIeSAYbXMN5jLLUVBig1iPL5QXWgCObKzv+0CG1xyKKneSwSgZN6N2BhhLd5zdu7+kWgQw70r0lZBURHvSNmMPZZZbmCEfPFF2l2EdwDQu6ZCp2+sMsykzXuXLyGp2kcVsXZfb3sDa7dWuENAF42OBpLoJRRvYUQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XvHEEaE282tbIWmvbHEES7lvROb1p3/zYTLb//+Npv4=;
- b=gMBN34g2NgkzPynghKTjWNRsDeNF8Klsb2Tk75DloolJnGxHyuXH6JmvJ+z+uGG7UzTQDnefivuDkfWBZqdIZUc2DbI1mHT+gto5fz6BImNPGhmnPnrQlufVhWntvLj6iJvEII+o1y3MmTyr/mOwZGiR2ezeWGUpSV7gtjQQ4sokdRgIh/ObD8nGBsPvGZ+zNuYnGM/JY0xkG/1BChpabb8O2vxRuiTeNmtAbsg1Kx1vBKDZvf11etZOtsKUH7fX0Rtbx/7Nr6rDjBlsFRl5Am7LIb8LpinPXiVSSy/VRWz5l5MjRQOKaUlFUAKtdS4JV7Ks9DCuBsZoDaHucx+c9w==
+ bh=XCl10eeCjyjMXKl3UEJMcM7cWfDth6F8YuhcJlqlxxM=;
+ b=CL/R/6JffNx63ZXoRIktJmz4Viy75yijNV6Ta3nkPVB/xesCUNdEKdmR8nK9pCJWRdXot7MBTiN/dKHyNFjYOXSmMmykcvGdKtTp53Vzbi9as6ywGLak2gOz35Q133PB+BJbmCGOWFOl+A/VRgBWrC+GvD9ZYbw2V+DKQ9wEYKpixcRYOHrItaWj8RxSUv/v4SLt9wyM/uDZf2oEH425g3fft5XLnX3RpZ8JA9/PGG+08tTu7c3eHzdK+mw/19df+lzQqFUR/C1Z3lUrMUbFA/cWNE25a5TdGKDx0vmy/Gvza7nvdOKMMl7sG9EsEvIhpuNEqWGmgi4u9j/GodE1iw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XvHEEaE282tbIWmvbHEES7lvROb1p3/zYTLb//+Npv4=;
- b=BmSe1lY8GHPfRWconFjqWgEDyYNu9QRvmBfaSXGEtXHhGwePLBGA9S/WmtTDQWGIlxMYrCrUbwE7azJ1nF9eieC9+qsU5NSamkp4eGcR/BCwqkR0nCAb5NjjcPsBQEs8p74UUJwVXHHwqyBCLfrPa4DnvylSl/BWNfNs3kAGPFI=
+ bh=XCl10eeCjyjMXKl3UEJMcM7cWfDth6F8YuhcJlqlxxM=;
+ b=Jz2Yms7zStVFL7rJ+hM5MqCfy3r0lmccuYbcuLHbB6igdNBQXpF/lV5k6iLYHy1xhYS40WwWTCM+zk1jBcdadwN8AJIltBoTCPnkO/yKQuP8IS3KWCZBbvy1vq6UbcHGtlBAy/r5X0arELVYZ/VLIS1h5ExfUBJVvvDbnEM7lP0=
 Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
- by AM7PR04MB6998.eurprd04.prod.outlook.com (2603:10a6:20b:10a::20) with
+ by AM5PR0401MB2484.eurprd04.prod.outlook.com (2603:10a6:203:36::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3153.23; Tue, 7 Jul
- 2020 06:24:38 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3153.27; Tue, 7 Jul
+ 2020 06:30:50 +0000
 Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
  ([fe80::1101:adaa:ee89:af2a]) by AM7PR04MB7157.eurprd04.prod.outlook.com
  ([fe80::1101:adaa:ee89:af2a%3]) with mapi id 15.20.3153.029; Tue, 7 Jul 2020
- 06:24:38 +0000
+ 06:30:50 +0000
 From:   Peter Chen <peter.chen@nxp.com>
 To:     Pawel Laszczak <pawell@cadence.com>
 CC:     "balbi@kernel.org" <balbi@kernel.org>,
@@ -49,14 +49,16 @@ CC:     "balbi@kernel.org" <balbi@kernel.org>,
         "ben.dooks@codethink.co.uk" <ben.dooks@codethink.co.uk>,
         "kurahul@cadence.com" <kurahul@cadence.com>,
         "sparmar@cadence.com" <sparmar@cadence.com>
-Subject: Re: [PATCH 3/9] usb: cnds3: Improvement: deleted !=
-Thread-Topic: [PATCH 3/9] usb: cnds3: Improvement: deleted !=
-Thread-Index: AQHWT3AY9oooruIrmEKoUul/1gn18Kj7r7+A
-Date:   Tue, 7 Jul 2020 06:24:37 +0000
-Message-ID: <20200707062447.GD16073@b29397-desktop>
+Subject: Re: [PATCH 6/9] usb: cdns3: Added CDNS3_ID_PERIPHERAL and
+ CDNS3_ID_HOST
+Thread-Topic: [PATCH 6/9] usb: cdns3: Added CDNS3_ID_PERIPHERAL and
+ CDNS3_ID_HOST
+Thread-Index: AQHWT3AYVVVPDhft+UO/YATov584VKj7sXqA
+Date:   Tue, 7 Jul 2020 06:30:50 +0000
+Message-ID: <20200707063059.GE16073@b29397-desktop>
 References: <20200701062004.29908-1-pawell@cadence.com>
- <20200701062004.29908-4-pawell@cadence.com>
-In-Reply-To: <20200701062004.29908-4-pawell@cadence.com>
+ <20200701062004.29908-7-pawell@cadence.com>
+In-Reply-To: <20200701062004.29908-7-pawell@cadence.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -66,69 +68,82 @@ authentication-results: cadence.com; dkim=none (message not signed)
 x-originating-ip: [119.31.174.67]
 x-ms-publictraffictype: Email
 x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 7a738e8d-3007-495c-c420-08d8223e6cb4
-x-ms-traffictypediagnostic: AM7PR04MB6998:
-x-microsoft-antispam-prvs: <AM7PR04MB699876C176EC17E69941F48F8B660@AM7PR04MB6998.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5236;
+x-ms-office365-filtering-correlation-id: 4454d870-8bd3-4b41-5bbf-08d8223f4aa9
+x-ms-traffictypediagnostic: AM5PR0401MB2484:
+x-microsoft-antispam-prvs: <AM5PR0401MB2484C8C6AFE804128BC9700B8B660@AM5PR0401MB2484.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
 x-forefront-prvs: 0457F11EAF
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 8XErZPCU4S68HNbMLF/wrUn9m3iF4mwt4L8J48892TNjKgakHtI5zKRvqv5+fqrsJX9oD+1fd7xCTjchjyLpTsz9OhD9Cf1U1UYdV/gjM7/AFprmoF4NE+96sOskfec8hO40+tOl1ougDHx1yEvHBbdAS907kEPoIQjw3vSoJGAPs48gEKDL2y+0Q057Hf5/9WC3pJ+mYJok2jYKefKo9y5FSFL3fpmMwK4SobOkPUf4HeNFTQZ60I7CiyetI9mVivoNm4GlOehCIeDuYESZjMh1o17S0J2ej6fxsvAstSYgCShdZ+2SQW43NTAFChYZ02E1hO0qZC+mcJ7bB30uug==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(7916004)(4636009)(39860400002)(376002)(346002)(366004)(396003)(136003)(8936002)(478600001)(44832011)(54906003)(316002)(8676002)(7416002)(86362001)(6512007)(9686003)(71200400001)(2906002)(33716001)(6916009)(66476007)(91956017)(66556008)(64756008)(1076003)(76116006)(4326008)(6506007)(53546011)(66446008)(66946007)(6486002)(33656002)(186003)(5660300002)(4744005)(26005)(83380400001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: zbmZwHoDFA5IPrJNbz50FCvomqOBM3A4Ll/ML/bXlaxJMWlRMygA8gY0IXskEz7ShaYJea+CaKEc96Dl/bLsYL9g90hvBPK4MzTzSfIPy/k7W0ERpJv82ZvCZUxrzGXPMBl4YrMYcO8yLyntdtEcRyZ4EVBQvN8Z/70lnQfba1Jt2B3XikzGh1bzQPDEPLLhd89xQO8S3/KRY/gXPxsA+LLE289c0kYfiRkCocFstEEbCLuTkkuT8i8otXCD3sxsUlIPeW2G9L5wFo8yUfD9291V0VRbkxcZPszrgItMLLS0IrdK62r5wNTDAee3m+tavxyFieqK4IghzhVlGiPBKmbWCZWdsIVhCjT8PUjP5NamyNe28P1fj/mA5w6u7wQaPbrfGgvSJ1gFXqXZSps8cQeovi5HxN9/eu0Zu3yIdmFj7U+P1Qvyr3bD0sVqwtvZiTHxVjBbznZz/vy8MakWIardGRHEm5OhrtxwA8lBHkDJDW5/UqQ6OfLlVpwZQk6Z
+x-microsoft-antispam-message-info: pfvUcWLoHIQDb2tHI47yv+8qzZMTWswTWSri+QheEqBk2kzv6PSF6t24HI6vKnRkbwhIR5wbcp0MJG4mplWMPBcAPSxNUb+WWKD7NkHacY50/diB4mZa7bO85YprFrxt3YPFcbFoCpdu0uGYUWbnEOO2nuYIub7TIsSx4NbbxRnTS8rFKBzt2ceCciUOx0VIlTRXOs0DjgsZYGK345P+qgn1yiBhQRbZxOAojCjRbcvtom8tDdNeyAtKCSKISxxcJRS91UQKnCVJ8ridh13U3zkx4DDRLe9TknNgPLeHBDZdlzN5C+a8cDpiBjDxOqivMaSnVHxBnu8rYNTOWJVpZg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(7916004)(39860400002)(396003)(366004)(376002)(136003)(346002)(186003)(91956017)(76116006)(8676002)(6512007)(9686003)(86362001)(33656002)(478600001)(54906003)(71200400001)(6486002)(44832011)(316002)(2906002)(53546011)(26005)(7416002)(64756008)(66946007)(6506007)(66446008)(66476007)(66556008)(83380400001)(8936002)(6916009)(5660300002)(4326008)(33716001)(1076003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: GdhTDqfGOycraDOR+hiXESVs4UXfKmQnE217cY04AoKiYHr3w8zkarfY2VACFAkNLtQH7DaGX456I0iz9YaUDJvDb5bxcy9c1dixMMv97UDNJs1WmPfs45rAA6orqaBQugNkd6oaHaGpcdVFSbyVjI9YP/jYwtEOtteHflbet4Tw1r4TxEMy03YslKyhwSAGU1MAo/FBpk2cx0du90wGpVlzy7PVqIoWPnVa42ZHv24J6k6V1P43KKKlvUuiFisT6TUIt9r+/yd86bT0nTyTC4jlKGJMtUx4C76jBWchAttNQKvy/ZGBa8DAw3pvu1Q09a8z+keEFuk+thgOdPRtsE5Oc19FFBh16098sFElmBXlnSchpsUgR8jXNqQXII55P64Z681aHpHrVT2fKJG8D3/S6dajnvqq5S4MLVrS9wkJ7kdnA3jH3BJaxIqep/oqw56g6oPED1B8BdzkcNXgN4zrufiVtDrc7VZsbSGeYM8RYoHD8KlE0MR1rZwVs5Nz
 x-ms-exchange-transport-forked: True
 Content-Type: text/plain; charset="us-ascii"
-Content-ID: <B64551B614AF6342AF7FB550D845D379@eurprd04.prod.outlook.com>
+Content-ID: <C596E9F0B24AAE43B287373CAF628AC3@eurprd04.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7a738e8d-3007-495c-c420-08d8223e6cb4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jul 2020 06:24:37.8982
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4454d870-8bd3-4b41-5bbf-08d8223f4aa9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jul 2020 06:30:50.2637
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: B0nUB8QX9YhNOl0nmNaPOqlTaJsxmKVZQWbpr6iF7z8LBbSe6GunxjDag7i+8kxZOfOcxD3RkzrR3TSsvxVwEA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6998
+X-MS-Exchange-CrossTenant-userprincipalname: xO3wIt047czEJnpxQ6ojrBkNBV39wukOdOamR0WaD7EYNY+THqu1a2Xj4TwEBRsfrCL5Rw3qUrwAwnH8b0TSrw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR0401MB2484
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-07-01 08:19:58, Pawel Laszczak wrote:
-> Patch deletes unnecessary !=3D from condition statement ini cdns3_drd_ini=
-t
-> function.
-
-Change the title.
-
-%s/ini/in
-
-Peter
+On 20-07-01 08:20:01, Pawel Laszczak wrote:
+> Patch adds 2 definitions that make it easier to understand the code.
 >=20
 > Signed-off-by: Pawel Laszczak <pawell@cadence.com>
 > ---
->  drivers/usb/cdns3/drd.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/usb/cdns3/drd.c | 4 ++--
+>  drivers/usb/cdns3/drd.h | 3 +++
+>  2 files changed, 5 insertions(+), 2 deletions(-)
 >=20
 > diff --git a/drivers/usb/cdns3/drd.c b/drivers/usb/cdns3/drd.c
-> index 4939a568d8a2..6d2da504ad49 100644
+> index 6fe092c828b3..8e7673da905e 100644
 > --- a/drivers/usb/cdns3/drd.c
 > +++ b/drivers/usb/cdns3/drd.c
-> @@ -365,7 +365,7 @@ int cdns3_drd_init(struct cdns3 *cdns)
->  	}
+> @@ -87,7 +87,7 @@ bool cdns3_is_host(struct cdns3 *cdns)
+>  {
+>  	if (cdns->dr_mode =3D=3D USB_DR_MODE_HOST)
+>  		return true;
+> -	else if (!cdns3_get_id(cdns))
+> +	else if (cdns3_get_id(cdns) =3D=3D CDNS3_ID_HOST)
+>  		return true;
 > =20
->  	state =3D readl(&cdns->otg_regs->sts);
-> -	if (OTGSTS_OTG_NRDY(state) !=3D 0) {
-> +	if (OTGSTS_OTG_NRDY(state)) {
->  		dev_err(cdns->dev, "Cadence USB3 OTG device not ready\n");
->  		return -ENODEV;
->  	}
-> --=20
-> 2.17.1
->=20
+>  	return false;
+> @@ -98,7 +98,7 @@ bool cdns3_is_device(struct cdns3 *cdns)
+>  	if (cdns->dr_mode =3D=3D USB_DR_MODE_PERIPHERAL)
+>  		return true;
+>  	else if (cdns->dr_mode =3D=3D USB_DR_MODE_OTG)
+> -		if (cdns3_get_id(cdns))
+> +		if (cdns3_get_id(cdns) =3D=3D CDNS3_ID_PERIPHERAL)
+>  			return true;
+> =20
+>  	return false;
+> diff --git a/drivers/usb/cdns3/drd.h b/drivers/usb/cdns3/drd.h
+> index 35b6d459ee58..3889fead9df1 100644
+> --- a/drivers/usb/cdns3/drd.h
+> +++ b/drivers/usb/cdns3/drd.h
+> @@ -153,6 +153,9 @@ struct cdns3_otg_common_regs {
+>  /* Only for CDNS3_CONTROLLER_V0 version */
+>  #define OVERRIDE_IDPULLUP_V0		BIT(24)
+> =20
+> +#define CDNS3_ID_PERIPHERAL		1
+> +#define CDNS3_ID_HOST			0
+> +
+
+Instead of adding MACRO, I prefer adding comments at the code to indicate
+"ID=3D0" means it is host mode, "ID=3D1" means it is device mode.
 
 --=20
 
