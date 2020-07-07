@@ -2,94 +2,190 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 959AC2175F9
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jul 2020 20:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEE8321773D
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jul 2020 20:55:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728246AbgGGSJc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Jul 2020 14:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58646 "EHLO
+        id S1728665AbgGGSzS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Jul 2020 14:55:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728149AbgGGSJc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jul 2020 14:09:32 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26112C061755
-        for <linux-usb@vger.kernel.org>; Tue,  7 Jul 2020 11:09:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=Zt1afFLK+YR3Gn7sHnyANaroV7mztKMD3gCNcqrzbhY=; b=aa02IVEUODTDwaDR522TyCsuWW
-        6y2rO9bwwEIIyesAHFtC4T5rtwmVqGIx73ddLK3xmg0RooAyGkLG/Hj6th5M+C+bPei8Fi7YhIN/6
-        vRB0gtYw/H4HlkWhkG5Fd4oanc2VGdkX2kvJz5Vp/i22DHIeJLeFNSlGoSJyY1OxmHb+tvefzVcRe
-        MJy/yk4ObkBR7a2uyMpN7E7MybOTtJyUx0ydvrLn6QsfMppLYtNCtCZbMkRm0qYKuqRdiEO6DplDL
-        iZ29XmFdphIJNRchldVI4xtF/eTgx1HOMnMfl4IJRAqeAUar01lV3pq4JH1K1FQ9T/JK9pq8v9AGR
-        4HKro0eQ==;
-Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jss25-0004k7-QG; Tue, 07 Jul 2020 18:09:30 +0000
-Subject: Re: [PATCH 1/2] usb: correct kernel-doc inconsistency
-To:     Greg KH <greg@kroah.com>
-Cc:     Colton Lewis <colton.w.lewis@protonmail.com>,
-        gregkh@linuxfoundation.og, balbi@kernel.org,
-        linux-usb@vger.kernel.org
-References: <20200707045207.235540-1-colton.w.lewis@protonmail.com>
- <6c25acb6-f702-0ce0-508d-d55080fe469f@infradead.org>
- <20200707180238.GA252415@kroah.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <f5602aa1-8207-6117-f507-e7fe743d84a4@infradead.org>
-Date:   Tue, 7 Jul 2020 11:09:26 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        with ESMTP id S1728029AbgGGSzR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jul 2020 14:55:17 -0400
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD8BC061755;
+        Tue,  7 Jul 2020 11:55:17 -0700 (PDT)
+Received: by mail-ej1-x642.google.com with SMTP id y10so47719109eje.1;
+        Tue, 07 Jul 2020 11:55:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RMd8tTCfjNB1oolYgjCGnbvueA8plaMd/4ysVp4hew8=;
+        b=MSqOBX8iZf3N6uIy8Wnm5L4m29/XEr8WCDGWKf500fbPsnl0xzYC6LVlONOf42h0CR
+         I4Rd/idVHgRuoGFtY+arKp+gSn5l1NRpVZPWVHS7fUt71j1qB3v2jBGggVQKiUaXawDQ
+         qNM+I9ABuRJwyg5qaqOAP2v7E/mgtgDyAf07ig2saLp6YrXGZCFFphghvpbv74afVMS8
+         hgukBbVyPl5VtFibxfDALfdkB8feg3dsrXD3cpQ8FTKR3WiUU7+WwLET7Fw8fB0Y9Ntx
+         fJHk1hgmFv1SXz42n9wzYn1nyBLlwu2BiOkVLXgOydApO9SPolevYiuOnuXVadp33hpE
+         sucw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RMd8tTCfjNB1oolYgjCGnbvueA8plaMd/4ysVp4hew8=;
+        b=EI62LqfxVmuWGRR0riabauCOYQMb4pWuSeGO6Vwy3Sm/tF38c1j1InDDIDN2+uYtRb
+         Bw2u14sPc85z2UnwPVqXcMP762pEF7XFlFRlDKRVmr43PcD5PHgtlas6Y9NY279IoKW8
+         7CLVIkWIC+D0EOnUXhmYpR/yYk8oL68LecFc7BVlIelTbzuY0S0IulqE6+ow+7FhzXRz
+         QnUD6FaaesDykqb84NymO7yoJDnvREnXIzp2GWoMtrfA986EyXqRZ8k4o/NcaC46Dmux
+         haieheaV1l4GWN0m2TKarMJfHzEyKg5R7rhJw6CGsWSo3SWFNyM4SVdM+OEkZbyLGEJa
+         083A==
+X-Gm-Message-State: AOAM532e/2irmO3SuowHNQiiybJuDkAjP0mmHGxNzzZue2q4SzFcudtR
+        rXr38tnsOduxVbKxFnVW+siAJuTZtjNgg4jdgtE=
+X-Google-Smtp-Source: ABdhPJyGaJyOnxq0gk8ybfmAthcx/e6Mw+KIY+a9E8de0FSUviN2dLI02eWmz8T4W3gH7eX3EhiPg+3nhWg5mmVWaSQ=
+X-Received: by 2002:a17:906:2287:: with SMTP id p7mr49705831eja.537.1594148115920;
+ Tue, 07 Jul 2020 11:55:15 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200707180238.GA252415@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200616140717.28465-2-amelie.delaunay@st.com>
+ <20200704174219.612060-1-martin.blumenstingl@googlemail.com> <05a81997-5ddb-ea81-7a89-8078b8a2b610@st.com>
+In-Reply-To: <05a81997-5ddb-ea81-7a89-8078b8a2b610@st.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Tue, 7 Jul 2020 20:55:05 +0200
+Message-ID: <CAFBinCCVYJ=DuKbqhJJ8463Gs+GW0bgxyXSFiLXhUfvWV6AR0Q@mail.gmail.com>
+Subject: Re: [PATCH 1/3] usb: dwc2: override PHY input signals with usb role
+ switch support
+To:     Amelie DELAUNAY <amelie.delaunay@st.com>
+Cc:     Alexandre TORGUE <alexandre.torgue@st.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Fabrice GASNIER <fabrice.gasnier@st.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "hminas@synopsys.com" <hminas@synopsys.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 7/7/20 11:02 AM, Greg KH wrote:
-> On Mon, Jul 06, 2020 at 10:14:24PM -0700, Randy Dunlap wrote:
->> On 7/6/20 9:52 PM, Colton Lewis wrote:
->>> Silence documentation  build warning by correcting  kernel-doc comment
->>> for sub_validate_langid function.
->>>
->>> ./drivers/usb/gadget/usbstring.c:77: warning: Function parameter or member 'langid' not described in 'usb_validate_langid'
->>> ./drivers/usb/gadget/usbstring.c:77: warning: Excess function parameter 'lang' description in 'usb_validate_langid'
->>>
->>> Signed-off-by: Colton Lewis <colton.w.lewis@protonmail.com>
->>> ---
->>>  drivers/usb/gadget/usbstring.c | 2 +-
->>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/usb/gadget/usbstring.c b/drivers/usb/gadget/usbstring.c
->>> index 58a4d3325090..119505fac777 100644
->>> --- a/drivers/usb/gadget/usbstring.c
->>> +++ b/drivers/usb/gadget/usbstring.c
->>> @@ -68,7 +68,7 @@ EXPORT_SYMBOL_GPL(usb_gadget_get_string);
->>>  
->>>  /**
->>>   * usb_validate_langid - validate usb language identifiers
->>> - * @lang: usb language identifier
->>> + * @langid: usb language identifier
->>>   *
->>>   * Returns true for valid language identifier, otherwise false.
->>>   */
->>>
->>
->> Hi,
->> I sent a patch for this on June 28, but it has not yet been merged anywhere
->> AFAIK.
-> 
-> Have a message-id?  I don't see it in my queue.
+Hi Amelie,
 
-Sure:  <b49b7e07-8986-f185-3a99-a088419a532b@infradead.org>
+On Tue, Jul 7, 2020 at 6:13 PM Amelie DELAUNAY <amelie.delaunay@st.com> wrote:
+>
+> Hi Martin,
+>
+> On 7/4/20 7:42 PM, Martin Blumenstingl wrote:
+> > Hello Amelie,
+> >
+> > thank you for this patch - I am hoping that it will help us on Amlogic
+> > Meson8, Meson8b, Meson8m2 and GXBB SoCs as well.
+> > On these SoCs the ID detection is performed by the PHY IP and needs to
+> > be polled.
+> > I think usb_role_switch is the perfect framework for this on dwc2 side.
+> > For the PHY driver I'm going to implement the cable state using the
+> > extcon framework and then having a new usb-conn-extcon driver. This is
+> > just to give you an overview why I'm interested in this.
+> >
+>
+> I'm wondering, why use extcon framework and not the usb role switch API
+> ? This patch on dwc2 is tested on STM32MP157C-DK2 board with STUSB160x
+> Type-C controller driver recently pushed with usb role switch. You can
+> have a look here https://lore.kernel.org/patchwork/patch/1256238/.
+one of the boards that I'm working on is for example the Odroid-C1. It
+has a Micro-USB port and there's no Type-C controller present.
 
-https://lore.kernel.org/linux-usb/b49b7e07-8986-f185-3a99-a088419a532b@infradead.org/
+in the next few days I'll try to send my idea as RFC, but this is the
+.dts I've come up with so far:
+&usb0 {
+    dr_mode = "otg";
+    usb-role-switch;
+
+    connector {
+        compatible = "extcon-usb-b-connector", "usb-b-connector";
+        type = "micro";
+        extcon = <&usb0_phy>;
+        vbus-supply = <&usb_vbus>;
+    };
+};
+
+I did this for two reasons:
+1. I think the PHY is not a connector and thus it's driver shouldn't
+implement any connector specific logic (managing VBUS)
+2. without the connector there would be a circular dependency: the USB
+controller needs the PHY to initialize but the PHY would need the USB
+controller so it can manage the role switch
+
+(or in other words: the connector replaces the Type-C controller in this case)
+
+> > [...]
+> >> +static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
+> >> +{
+> >> +     struct dwc2_hsotg *hsotg = usb_role_switch_get_drvdata(sw);
+> >> +     unsigned long flags;
+> >> +
+> >> +     /* Skip session not in line with dr_mode */
+> >> +     if ((role == USB_ROLE_DEVICE && hsotg->dr_mode == USB_DR_MODE_HOST) ||
+> >> +         (role == USB_ROLE_HOST && hsotg->dr_mode == USB_DR_MODE_PERIPHERAL))
+> >> +             return -EINVAL;
+> >> +
+> >> +     /* Skip session if core is in test mode */
+> >> +     if (role == USB_ROLE_NONE && hsotg->test_mode) {
+> >> +             dev_dbg(hsotg->dev, "Core is in test mode\n");
+> >> +             return -EBUSY;
+> >> +     }
+> >> +
+> >> +     spin_lock_irqsave(&hsotg->lock, flags);
+> > due to this spin_lock_irqsave() ...
+> >
+> >> +     if (role == USB_ROLE_HOST) {
+> >> +             if (dwc2_ovr_avalid(hsotg, true))
+> >> +                     goto unlock;
+> >> +
+> >> +             if (hsotg->dr_mode == USB_DR_MODE_OTG)
+> >> +                     /*
+> >> +                      * This will raise a Connector ID Status Change
+> >> +                      * Interrupt - connID A
+> >> +                      */
+> >> +                     dwc2_force_mode(hsotg, true);
+> > ... we cannot sleep in here. the call flow is:
+> > dwc2_drd_role_sw_set
+> >    spin_lock_irqsave
+> >    dwc2_force_mode
+> >      dwc2_wait_for_mode
+> >        usleep_range
+> >
+>
+> In fact, with the avalid or bvalid overriding + the debounce filter
+> bypass, GINTSTS_CURMOD is already in the expected mode, so that we exit
+> the loop directly, without running into usleep_range.
+on my Amlogic SoC this is not the case:
+The kernel complains because of that usleep_range from within the
+spinlock context
+
+Please let me know if/how I can help debug this.
+
+[...]
+> > +int dwc2_drd_init(struct dwc2_hsotg *hsotg)
+> > +{
+> > +       struct usb_role_switch_desc role_sw_desc = {0};
+> > +       struct usb_role_switch *role_sw;
+> > +       int ret;
+> > +
+> > +       if (!device_property_read_bool(hsotg->dev, "usb-role-switch"))
+> > +               return 0;
+> > should we also return early here if dr_mode != "otg"?
+> >
+>
+> No, because when VBUS is not connected to the controller, you also need
+> to get the usb_role_none from the usb-role-switch to catch the
+> unattached state (also in Peripheral or Host only mode).
+I see - thank you for the explanation!
 
 
--- 
-~Randy
-
+Best regards,
+Martin
