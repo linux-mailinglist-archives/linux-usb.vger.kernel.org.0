@@ -2,106 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 585F5216818
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jul 2020 10:16:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EA37216866
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jul 2020 10:34:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728121AbgGGIP4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Jul 2020 04:15:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50916 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725825AbgGGIP4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jul 2020 04:15:56 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2410C061755;
-        Tue,  7 Jul 2020 01:15:55 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id q17so2025206pls.9;
-        Tue, 07 Jul 2020 01:15:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=z3vMc4LhkvM4yfF4xOZK+pZlrg4hJ502eupJwkHg5Rc=;
-        b=UDNNtFX98E/fTkhc2Afidv/EWSDyn0nLvUNCO+zlbg7W/OPb3QFkEvmJoc8RfbEqBV
-         WB4zew9K5k+ZQ5i1MswUGRUfnZZlA/LixXwTR3M6rt23zQOHmJJ6i6qshGsSIdLVosOD
-         rAZdeCGxliI6pRLJa2DB8QjoFAiUNGzDvYTUt6JcSBQkOnE2MplH0606l8RMZmHIVqTc
-         mWEj1oUSoCR5JGyWun+ji8Ju9+9xr9SNo0g9+Rs8Aa0Q4FgLS+mDL+Q0hZWCoEGnnUTD
-         u8X15EdjjZ5vM5oaPFbOsyoJBGkeWKTC8Z1eSumozr+pRMpx8hqVznNSBOmVyrBzk/9Z
-         S0Iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=z3vMc4LhkvM4yfF4xOZK+pZlrg4hJ502eupJwkHg5Rc=;
-        b=A41DzoHTGwJprmcOTHGCSvmBGL1n0cM2DcCVSLgNamgFJrpm/Y+MRv+X9s9H3YnEdP
-         XFmz4Nf4uLOaXbyd1H73e00LUc74SDjkKwUxwJ7qu7IW2Ob9Khp2myP1gE71dY1UGtPT
-         bDq+Heh+ucsPcb7uxUoRrZJVQPtTL8siBb7yamTzIoVo5B4rVikEpne+ymGg+7yprLyk
-         8XBR2myDmZtvHsz01JIYcOTWb9liS25lI0yTvVMFwhB+4iLh49ZZ2Q/HLqj1qxM2UIXg
-         TdQU+NJk+RxhSgJbmr6jG6UaxPD7y1BCcXN19vVcoDy1ZD9Cv8JsjsIphTmCZQX3KuLU
-         Zmtg==
-X-Gm-Message-State: AOAM533cQFUeavf9Db4i7sbcK+WGLkiUT/w7qsib28xtmlzXJCbWKnKb
-        9yc9dVgS1ZFKRqPTSVX8oN4=
-X-Google-Smtp-Source: ABdhPJxG1jalnbzXoi3kqMl/iSY7eOwvKfh1RA4pUNaLydQ9VUxO7IghTw6o/IsXk3VhlY59MFVmrw==
-X-Received: by 2002:a17:90a:2e85:: with SMTP id r5mr3198189pjd.232.1594109755410;
-        Tue, 07 Jul 2020 01:15:55 -0700 (PDT)
-Received: from localhost (61-220-137-37.HINET-IP.hinet.net. [61.220.137.37])
-        by smtp.gmail.com with ESMTPSA id n15sm1780763pjf.12.2020.07.07.01.15.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2020 01:15:54 -0700 (PDT)
-From:   AceLan Kao <acelan.kao@canonical.com>
-To:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] USB: serial: option: add Quectel EG95 LTE modem
-Date:   Tue,  7 Jul 2020 16:15:53 +0800
-Message-Id: <20200707081553.1064456-1-acelan.kao@canonical.com>
-X-Mailer: git-send-email 2.25.1
+        id S1725941AbgGGIeF convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 7 Jul 2020 04:34:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56622 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725825AbgGGIeF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 7 Jul 2020 04:34:05 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 208353] Distorted Audio Output Through USB C Docking Station
+Date:   Tue, 07 Jul 2020 08:34:04 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: jwrdegoede@fedoraproject.org
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-208353-208809-6nhX2enY2H@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-208353-208809@https.bugzilla.kernel.org/>
+References: <bug-208353-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add support for Quectel Wireless Solutions Co., Ltd. EG95 LTE modem
+https://bugzilla.kernel.org/show_bug.cgi?id=208353
 
-T:  Bus=01 Lev=01 Prnt=01 Port=02 Cnt=02 Dev#=  5 Spd=480 MxCh= 0
-D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=2c7c ProdID=0195 Rev=03.18
-S:  Manufacturer=Android
-S:  Product=Android
-C:  #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
-I:  If#=0x0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-I:  If#=0x1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
-I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
-I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
-I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+--- Comment #9 from Hans de Goede (jwrdegoede@fedoraproject.org) ---
+Fedora is shipping 5.7.z kernels in our updates repo and it is raining
+bug-reports because of this issue.
 
-Signed-off-by: AceLan Kao <acelan.kao@canonical.com>
----
- drivers/usb/serial/option.c | 3 +++
- 1 file changed, 3 insertions(+)
+Can we please get a non test-patch fix for this ASAP?
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 254a8bbeea67..a12ad91a7e0b 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -245,6 +245,7 @@ static void option_instat_callback(struct urb *urb);
- /* These Quectel products use Quectel's vendor ID */
- #define QUECTEL_PRODUCT_EC21			0x0121
- #define QUECTEL_PRODUCT_EC25			0x0125
-+#define QUECTEL_PRODUCT_EG95			0x0195
- #define QUECTEL_PRODUCT_BG96			0x0296
- #define QUECTEL_PRODUCT_EP06			0x0306
- #define QUECTEL_PRODUCT_EM12			0x0512
-@@ -1097,6 +1098,8 @@ static const struct usb_device_id option_ids[] = {
- 	  .driver_info = RSVD(4) },
- 	{ USB_DEVICE(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC25),
- 	  .driver_info = RSVD(4) },
-+	{ USB_DEVICE(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EG95),
-+	  .driver_info = RSVD(4) },
- 	{ USB_DEVICE(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_BG96),
- 	  .driver_info = RSVD(4) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EP06, 0xff, 0xff, 0xff),
+Or get a revert of the commit causing this regression queued up for all the
+stable series where this got added and is causing regressions (also ASAP)?
+
 -- 
-2.25.1
-
+You are receiving this mail because:
+You are watching the assignee of the bug.
