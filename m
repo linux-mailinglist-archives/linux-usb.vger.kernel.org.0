@@ -2,86 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB322216F60
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jul 2020 16:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10CA6217056
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jul 2020 17:23:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728137AbgGGOxY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Jul 2020 10:53:24 -0400
-Received: from relay9-d.mail.gandi.net ([217.70.183.199]:43483 "EHLO
-        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725944AbgGGOxY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jul 2020 10:53:24 -0400
-X-Originating-IP: 81.6.44.16
-Received: from [172.22.0.20] (unknown [81.6.44.16])
-        (Authenticated sender: hansmi@hansmi.ch)
-        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 15957FF806;
-        Tue,  7 Jul 2020 14:53:22 +0000 (UTC)
-From:   Michael Hanselmann <public@hansmi.ch>
-Subject: Re: [PATCH] USB: serial: ch341: fix simulated-break comment
-To:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
-References: <20200707061957.17425-1-johan@kernel.org>
-X-Hello-World:  This header intentionally left blank
-Message-ID: <9909b288-294d-16b9-9f14-51eb79c63b6c@msgid.hansmi.ch>
-Date:   Tue, 7 Jul 2020 16:53:22 +0200
+        id S1729011AbgGGPQd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Jul 2020 11:16:33 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:40408 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727793AbgGGPQ2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jul 2020 11:16:28 -0400
+Received: by mail-lj1-f193.google.com with SMTP id j11so1607866ljo.7
+        for <linux-usb@vger.kernel.org>; Tue, 07 Jul 2020 08:16:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=sbNUy/pYmWizkuHMmgvAjN7GA5oVDSpsZn1jtB3HC2g=;
+        b=p3hEaby/uOTePjbeMk9N9uw8yiGaT4RZBvDjGgkTNOqlsRo+hslZwRkA9nfBdW5R1s
+         hc6d7UsDC0pxEUBBpZPT8O56vzYDZ3nFRM+yX54U+LmA14OwfbhR5+NWsozCkcnswCkh
+         76CBTp6+44SmBmo8EV9RcIXYvzlfpmWXw+uq+TL+nwUJrn8AlSQGERtR3YQHA77lf/qf
+         0omAbC1/nGBQPg8hePzSQt7gNSvd+5egJxxKmTEUFdhJl07vV6uY/AAQ5WYfzXIXrxpT
+         uOXdwMt0xPZkOt4fkwYC0JyXIoT3PjPAzShU7PGRPfZbRnJQcWMu2jGk8jylQOVHNIx8
+         2iVQ==
+X-Gm-Message-State: AOAM5330yChsWiNy8eXd6ob7gcIQVmBZlb6VuIPixEPZEiQRSJxDWJFN
+        xDHSKPcVVp3ofNXE13r6JSYX3WcAwIo=
+X-Google-Smtp-Source: ABdhPJxQ9Xb1c0A4x8UAfGSdI0ZqmvvvkgTkr/0I3y4whTdIEmSQg2GxdobmqtwFiB8J+7xx1W+vCA==
+X-Received: by 2002:a2e:574b:: with SMTP id r11mr19381503ljd.417.1594134986360;
+        Tue, 07 Jul 2020 08:16:26 -0700 (PDT)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id b26sm256227lji.36.2020.07.07.08.16.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jul 2020 08:16:25 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1jspKY-0007op-MG; Tue, 07 Jul 2020 17:16:22 +0200
+Date:   Tue, 7 Jul 2020 17:16:22 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Frank =?iso-8859-1?Q?Sch=E4fer?= <fschaefer.oss@googlemail.com>
+Cc:     Johan Hovold <johan@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: read() from removed usb-serial device
+Message-ID: <20200707151622.GK3453@localhost>
+References: <4f43f7ac-33ea-df67-f623-a7edc3d14c4c@googlemail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200707061957.17425-1-johan@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4f43f7ac-33ea-df67-f623-a7edc3d14c4c@googlemail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On devices which do not support break signalling a break condition is
-simulated by sending a NUL byte at the lowest possible speed. The break
-condition will be 9 bit periods long (start bit and eight data bits),
-but the transmission itself also includes the stop bit. The safety
-margin of one bit is kept to account for timing differences.
+On Tue, Jul 07, 2020 at 04:49:31PM +0200, Frank Schäfer wrote:
+> Hi,
+> 
+> I recently noticed that read() from a usb-serial device does not fail 
+> after the device got removed.
+> Is this really the correct/expected behavior or a bug ?
+> 
+> I would expect it to return -1 and set an appropriate errno, but it 
+> returns 0 (no error, no bytes read) instead.
+> 
+> According to the glibc developers "glibc just calls into the kernel and 
+> reports back whatever it receives from there."
 
-Signed-off-by: Michael Hanselmann <public@hansmi.ch>
----
+Yeah, this is the expected behaviour for a hung up tty (see poll(2) or
+the POSIX spec).
 
-Hi Johan
-
-On 07.07.20 08:19, Johan Hovold wrote:
-> I reread the break-end comment and found it a bit confusing still. The
-> below seems more correct to me. I'm assuming you did not intend to add
-> an additional bit period as margin?
-
-The additional bit was intentional, but I missed the start bit and was
-off by one. As such your fix indeed addresses the inconsistency between
-the comment and code. Considering the general quality of the ch341
-chips needing the simulation and to account for timing differences I'd
-instead prefer to increase the delay from 10 to 11 bits (1 start, 8 data,
-1 stop, 1 margin).
-
-Michael
-
- drivers/usb/serial/ch341.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
-index 0cb02d1bde02..580aa5833091 100644
---- a/drivers/usb/serial/ch341.c
-+++ b/drivers/usb/serial/ch341.c
-@@ -603,11 +603,13 @@ static void ch341_simulate_break(struct tty_struct *tty, int break_state)
- 		}
- 
- 		/*
--		 * Compute expected transmission duration and add a single bit
--		 * of safety margin (the actual NUL byte transmission is 8 bits
--		 * plus one stop bit).
-+		 * Compute expected transmission duration including safety
-+		 * margin. The original baud rate is only restored after the
-+		 * computed point in time.
-+		 *
-+		 * 11 bits = 1 start, 8 data, 1 stop, 1 margin
- 		 */
--		priv->break_end = jiffies + (10 * HZ / CH341_MIN_BPS);
-+		priv->break_end = jiffies + (11 * HZ / CH341_MIN_BPS);
- 
- 		return;
- 	}
--- 
-2.20.1
+Johan
