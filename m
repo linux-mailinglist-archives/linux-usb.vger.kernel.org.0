@@ -2,71 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C595D216A9D
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jul 2020 12:43:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD305216C45
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jul 2020 13:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727064AbgGGKnx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Jul 2020 06:43:53 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:39198 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726911AbgGGKnx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 7 Jul 2020 06:43:53 -0400
-Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id F2A6DBE51F2C418ED6C8;
-        Tue,  7 Jul 2020 18:43:50 +0800 (CST)
-Received: from kernelci-master.huawei.com (10.175.101.6) by
- DGGEMS409-HUB.china.huawei.com (10.3.19.209) with Microsoft SMTP Server id
- 14.3.487.0; Tue, 7 Jul 2020 18:43:41 +0800
-From:   Wei Yongjun <weiyongjun1@huawei.com>
-To:     Hulk Robot <hulkci@huawei.com>, Felipe Balbi <balbi@kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Sylvain Lemieux <slemieux.tyco@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        "Colin Ian King" <colin.king@canonical.com>,
-        Corentin Labbe <clabbe@baylibre.com>
-CC:     Wei Yongjun <weiyongjun1@huawei.com>, <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH -next] udc: lpc32xx: make symbol 'lpc32xx_usbddata' static
-Date:   Tue, 7 Jul 2020 18:53:50 +0800
-Message-ID: <20200707105350.7064-1-weiyongjun1@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726805AbgGGLsv convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 7 Jul 2020 07:48:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52018 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727116AbgGGLsv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 7 Jul 2020 07:48:51 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 208257] Kingston USB flash drive repeatedly disconnected after
+ "Set SEL for device-initiated U2 failed."
+Date:   Tue, 07 Jul 2020 11:48:50 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: julroy67@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.isobsolete attachments.created
+Message-ID: <bug-208257-208809-h1B0t7Nknx@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-208257-208809@https.bugzilla.kernel.org/>
+References: <bug-208257-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.175.101.6]
-X-CFilter-Loop: Reflected
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The sparse tool complains as follows:
+https://bugzilla.kernel.org/show_bug.cgi?id=208257
 
-drivers/usb/gadget/udc/lpc32xx_udc.c:2989:25: warning:
- symbol 'lpc32xx_usbddata' was not declared. Should it be static?
+Julien Humbert (julroy67@gmail.com) changed:
 
-This variable is not used outside of lpc32xx_udc.c, so this commit
-marks it static.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+ Attachment #289755|0                           |1
+        is obsolete|                            |
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
----
- drivers/usb/gadget/udc/lpc32xx_udc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--- Comment #1 from Julien Humbert (julroy67@gmail.com) ---
+Created attachment 290155
+  --> https://bugzilla.kernel.org/attachment.cgi?id=290155&action=edit
+Fedora kernel 5.7.7 dmesg log
 
-diff --git a/drivers/usb/gadget/udc/lpc32xx_udc.c b/drivers/usb/gadget/udc/lpc32xx_udc.c
-index 4a112670cc6c..e8a4637a9a17 100644
---- a/drivers/usb/gadget/udc/lpc32xx_udc.c
-+++ b/drivers/usb/gadget/udc/lpc32xx_udc.c
-@@ -2986,7 +2986,7 @@ static void lpc32xx_rmwkup_chg(int remote_wakup_enable)
- 	/* Enable or disable USB remote wakeup */
- }
- 
--struct lpc32xx_usbd_cfg lpc32xx_usbddata = {
-+static struct lpc32xx_usbd_cfg lpc32xx_usbddata = {
- 	.vbus_drv_pol = 0,
- 	.conn_chgb = &lpc32xx_usbd_conn_chg,
- 	.susp_chgb = &lpc32xx_usbd_susp_chg,
+Still the same as of kernel 5.7.7.
 
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
