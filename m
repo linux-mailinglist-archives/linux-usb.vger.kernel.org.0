@@ -2,479 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 723052174C3
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jul 2020 19:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD2321750C
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jul 2020 19:21:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728267AbgGGRJg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Jul 2020 13:09:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50976 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727975AbgGGRJf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 7 Jul 2020 13:09:35 -0400
-Received: from embeddedor (unknown [200.39.26.250])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1728232AbgGGRVs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Jul 2020 13:21:48 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:45106 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727777AbgGGRVr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jul 2020 13:21:47 -0400
+Received: from mailhost.synopsys.com (sv2-mailhost1.synopsys.com [10.205.2.133])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3B591206F6;
-        Tue,  7 Jul 2020 17:09:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594141774;
-        bh=Odjt+Ksu5iEmnU1+DzWsMVxiitqULRWzWch4x6q4jvk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=SdWvWY8DeYxm0jmlGaXcG1+a/3cX91+QEHeLpdEB0M7liHYeV/7hVEY+2pqtTg0QR
-         tU4P1/oeUa7sJDvaVzOPopa2QSO5ZjVKSIHMvAr/eq2Hbo2gSz6N7loaVM03uLwFeB
-         v52QeOk1FAJX9xWPHD1uUkpqgJspqwWDVak1uSEE=
-Date:   Tue, 7 Jul 2020 12:15:00 -0500
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Subject: [PATCH] usb: gadget: Use fallthrough pseudo-keyword
-Message-ID: <20200707171500.GA13620@embeddedor>
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 5155F4014E;
+        Tue,  7 Jul 2020 17:21:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1594142507; bh=YmVE99sJmhT5pVGylvh+nZ3ikH19cspbFAmQ20SabGc=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=Yvg2m51aTmks8ZFq7auj9pGBQwOKFZGREN2eKtGTjE6bqH2f/Z7TE/dmglzzBQ2ya
+         yDL3yYacHAlJA7vVFml92hiQ9Fh1xQ4UkzGo4BfdBCiTgjCksc7aAn4N3FLFAlkDkx
+         KrlRyXVvlq6Ko9X9wq6FaPBGFuOLpHyyZDIVM05z1j1B46GqCakoeb7sFg+qMn5Tbf
+         FTKM95Cq1A3LSZWJbqTFaVguHGxAopedPFtnAIgrPbSJ9X35nvHyHFEQbeZxmEgJ7s
+         neWMWdleh813gYfURuhm9QwOEZihu4cIqAVf2a7AyiEEvST4RzDWlSCr+yTjqOkBi2
+         iDLtvAAmyXR7w==
+Received: from o365relay-in.synopsys.com (sv2-o365relay3.synopsys.com [10.202.1.139])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPS id E906DA0252;
+        Tue,  7 Jul 2020 17:21:46 +0000 (UTC)
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2102.outbound.protection.outlook.com [104.47.55.102])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "mail.protection.outlook.com", Issuer "GlobalSign Organization Validation CA - SHA256 - G3" (verified OK))
+        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 48CC2400CB;
+        Tue,  7 Jul 2020 17:21:46 +0000 (UTC)
+Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=joglekar@synopsys.com
+Authentication-Results: o365relay-in.synopsys.com;
+        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="XjcNPW5b";
+        dkim-atps=neutral
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=J6fYqBN9wdBPfak27vsQ58CKTWY6wsoCM6KkgSMPJY+ITI1w6NcuCb81DZEFm9DJDXLc6n38RKWTlLpep0IVtWqE3usv8e+OC/+Nt3JhnIO+HQSknK/4N0+r+s9/c6GhyL0+xR1s+P9zkmjTcJ8ZoFtWviECo87YPNUPc2GqbvmMW9F3+CcG3MQNvZcyh+D1tHXTlNsBMIsHwviy9dvAFiYcKAjONqcRVxfwZxefo3U9FIFVyk4z+O3LulW43Loaj8tWWdo5WV1xKbJogIZo5ouUkPXniXWe+CGkKE2CkEMc9EWA87OxOK7ibZ+oc+tiyCLRqNMkkxWm+/nSNPEp9A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YmVE99sJmhT5pVGylvh+nZ3ikH19cspbFAmQ20SabGc=;
+ b=RRiZlWzMTOOvEd9xAAo6YV4iyEBPPPpOsIXtTNgifEaDtYt+4FW4/mCmFweHLXZL4rh5HE7tDoH3aKZnuMv/aW2SKehshqUVo5Cdil8e8Kh4sX4g7q0JadEF/CGm6V6NXdpB6AnxsrPMrwdvOhHwnaIP6UUrHnyg38KzmcbXjqtMhYIyaDOQ6nMz6vthDrtqXEu7NDC5qk7jw999cw9ssiiOlYKjJcxXIe26NqzBfPADz4GmCXQ7nj9PgE0Hc76NtG1PwCw6CA9+11PqOAfjJCo/AImYjM0/RhBiaJCgSF7LqLMLzu4HFY3+gZaGhTh/2gDqD7Kqwh8oZSl2QFT+wQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YmVE99sJmhT5pVGylvh+nZ3ikH19cspbFAmQ20SabGc=;
+ b=XjcNPW5bSsO9NIEnyljGF5sZQFZOnRQQg2e1mSP2+E5vQ/EF2qdHUVubCJbl+2M5QicmQ+L1FIOXFA8XB6Gfj97DRIxdhWxo4lGQV/MgakUY/3ZEf9KnLQKTt4w7RNcuqkyg6ZDxO8Z+vqPymK8lGmdMxk2B0Nt+Hz910Zc/OCc=
+Received: from BN8PR12MB3458.namprd12.prod.outlook.com (2603:10b6:408:44::32)
+ by BN6PR12MB1828.namprd12.prod.outlook.com (2603:10b6:404:108::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3153.28; Tue, 7 Jul
+ 2020 17:21:41 +0000
+Received: from BN8PR12MB3458.namprd12.prod.outlook.com
+ ([fe80::9559:91b2:aaa3:bfd6]) by BN8PR12MB3458.namprd12.prod.outlook.com
+ ([fe80::9559:91b2:aaa3:bfd6%2]) with mapi id 15.20.3153.029; Tue, 7 Jul 2020
+ 17:21:40 +0000
+X-SNPS-Relay: synopsys.com
+From:   Tejas Joglekar <Tejas.Joglekar@synopsys.com>
+To:     Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        John Youn <John.Youn@synopsys.com>,
+        "balbi@kernel.org" <balbi@kernel.org>
+Subject: Re: [PATCH v3 3/4] usb: dwc3: Add device property
+ sgl-trb-cache-size-quirk
+Thread-Topic: [PATCH v3 3/4] usb: dwc3: Add device property
+ sgl-trb-cache-size-quirk
+Thread-Index: AQHWNBPIzVDQozhV20CqjRBnx+8J26j6PmiAgAAa/YCAAkSZgA==
+Date:   Tue, 7 Jul 2020 17:21:40 +0000
+Message-ID: <8f3d7899-9e67-a133-aadc-f78059a59073@synopsys.com>
+References: <cover.1590415123.git.joglekar@synopsys.com>
+ <83eba2e9f0069f20ccc94537e3b99cbaec209441.1590415123.git.joglekar@synopsys.com>
+ <5534d9d6-5452-dade-e46e-f4b0910becdb@synopsys.com>
+ <877dvhqh2e.fsf@kernel.org>
+In-Reply-To: <877dvhqh2e.fsf@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: synopsys.com; dkim=none (message not signed)
+ header.d=none;synopsys.com; dmarc=none action=none header.from=synopsys.com;
+x-originating-ip: [49.207.193.249]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 20eedc5a-a846-417c-5776-08d8229a3692
+x-ms-traffictypediagnostic: BN6PR12MB1828:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <BN6PR12MB1828029DD03DDC62599EA399A4660@BN6PR12MB1828.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 0457F11EAF
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: rVzIiTmnlPsWvds0ybXAHjMqoLhiA+/NIx93AjP+VM4VKjlq/wBwlUoqBefRvreDbbKm9cSGHAHywqucUy5XYPRMXELUWSKPB8FuzernVRdR6SbWEc0HcADSiVfOQ3SGQJ7LCR4qFoEhwApwATtzGzPCtbJVrxn/sjPSA/nVECSpuwci/Wyy9zjeYNJLDS0SGyyiX1F24CxtNyXAhUWo++6xIEBzy1pErCHqYMrpizidE6l8bnLhXcmKdbFk4o3VsKRy0TfiEtJRINNKIm85EWnTVDpIw0zCrXVKuhDT8l3zrNL3CFsxbbYW8VXZCiUu5UrB0EEOpCq5alBW8REhzA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3458.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(396003)(346002)(376002)(39860400002)(136003)(366004)(478600001)(31696002)(6512007)(86362001)(110136005)(2906002)(6506007)(54906003)(4326008)(83380400001)(31686004)(6486002)(186003)(55236004)(66556008)(8676002)(64756008)(36756003)(66476007)(91956017)(76116006)(316002)(2616005)(66446008)(71200400001)(66946007)(5660300002)(8936002)(53546011)(26005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: E7nLneVpIyz8sLVOJ9kpvOuyq3gfhPbzCiH21ruBOCDoplGLzDhNJ0hN4xRrNKmiQDftyP8rr15W1f/w5iwsrWddYqwoiXBbMlor4HgcF3eEEV5mlQ2nT5h1+nEBIqMvB435PQpiYVO+CIbMTbiN88KHEYQf8chfYgwUGo+pJTvrHXrKaCG1qjsC52MuFWn+hKn0KZeW/lYwLo/tzabC3qkjgB3W4QvVCnu+BtkUtIfuPRgl0JWCFbYZ6DGk4zknsm/azL5/rrdSBLWMH/H2cK+PqxBZ0gVs8ny3Q34lKamiTNmac8kKuuTZJahYbPFTKUVGZplHSGjS1evJpRWW8QAN4g8xV4zCCAdbzn2wF3lUZBYhHsl963CoPgLFLe56CJyDa9W0zF51bgCy2sF3wAxWdtFRHhB+HhL2VUCt+DSLGhE6VfWqJZWgIdiTfRgZ4dn8QD7r3lwIhwVrDK6gDUte9pMKUvwuAx1J27Dfv6omJJZB9qleIkHcohVBVPUh
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <6DD812023FAA1F49A3893ECA6C2C5971@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+X-OriginatorOrg: synopsys.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3458.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 20eedc5a-a846-417c-5776-08d8229a3692
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jul 2020 17:21:40.7684
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: r2+3hERWN3MZRW1wy9zIGyIgufGFdOmW8bvk0pl2UMFHCM7OuOHEs06gGr4SqKhfHJd69YPNhrn3yqytG2ASjQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1828
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Replace the existing /* fall through */ comments and its variants with
-the new pseudo-keyword macro fallthrough[1]. Also, remove unnecessary
-fall-through markings when it is the case.
-
-[1] https://www.kernel.org/doc/html/latest/process/deprecated.html?highlight=fallthrough#implicit-switch-case-fall-through
-
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- drivers/usb/gadget/composite.c               |   16 ++++++++--------
- drivers/usb/gadget/function/f_fs.c           |    2 +-
- drivers/usb/gadget/function/f_hid.c          |    2 +-
- drivers/usb/gadget/function/f_mass_storage.c |    2 +-
- drivers/usb/gadget/function/f_phonet.c       |    4 ++--
- drivers/usb/gadget/function/f_printer.c      |    6 +++---
- drivers/usb/gadget/function/f_rndis.c        |    2 +-
- drivers/usb/gadget/function/f_tcm.c          |    2 +-
- drivers/usb/gadget/function/u_ether.c        |    4 ++--
- drivers/usb/gadget/function/u_serial.c       |    6 +++---
- drivers/usb/gadget/legacy/inode.c            |    7 +++----
- drivers/usb/gadget/udc/dummy_hcd.c           |   12 ++++++------
- drivers/usb/gadget/udc/goku_udc.c            |    9 ++++++---
- drivers/usb/gadget/udc/omap_udc.c            |    4 ++--
- drivers/usb/gadget/udc/s3c2410_udc.c         |    4 ++--
- drivers/usb/gadget/udc/tegra-xudc.c          |    2 +-
- 16 files changed, 43 insertions(+), 41 deletions(-)
-
-diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-index 5c1eb96a5c57..7ad648e53c05 100644
---- a/drivers/usb/gadget/composite.c
-+++ b/drivers/usb/gadget/composite.c
-@@ -72,17 +72,17 @@ function_descriptors(struct usb_function *f,
- 		descriptors = f->ssp_descriptors;
- 		if (descriptors)
- 			break;
--		/* FALLTHROUGH */
-+		fallthrough;
- 	case USB_SPEED_SUPER:
- 		descriptors = f->ss_descriptors;
- 		if (descriptors)
- 			break;
--		/* FALLTHROUGH */
-+		fallthrough;
- 	case USB_SPEED_HIGH:
- 		descriptors = f->hs_descriptors;
- 		if (descriptors)
- 			break;
--		/* FALLTHROUGH */
-+		fallthrough;
- 	default:
- 		descriptors = f->fs_descriptors;
- 	}
-@@ -170,20 +170,20 @@ int config_ep_by_speed_and_alt(struct usb_gadget *g,
- 			want_comp_desc = 1;
- 			break;
- 		}
--		/* fall through */
-+		fallthrough;
- 	case USB_SPEED_SUPER:
- 		if (gadget_is_superspeed(g)) {
- 			speed_desc = f->ss_descriptors;
- 			want_comp_desc = 1;
- 			break;
- 		}
--		/* fall through */
-+		fallthrough;
- 	case USB_SPEED_HIGH:
- 		if (gadget_is_dualspeed(g)) {
- 			speed_desc = f->hs_descriptors;
- 			break;
- 		}
--		/* fall through */
-+		fallthrough;
- 	default:
- 		speed_desc = f->fs_descriptors;
- 	}
-@@ -237,7 +237,7 @@ int config_ep_by_speed_and_alt(struct usb_gadget *g,
- 		case USB_ENDPOINT_XFER_ISOC:
- 			/* mult: bits 1:0 of bmAttributes */
- 			_ep->mult = (comp_desc->bmAttributes & 0x3) + 1;
--			/* fall through */
-+			fallthrough;
- 		case USB_ENDPOINT_XFER_BULK:
- 		case USB_ENDPOINT_XFER_INT:
- 			_ep->maxburst = comp_desc->bMaxBurst + 1;
-@@ -1697,7 +1697,7 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
- 			if (!gadget_is_dualspeed(gadget) ||
- 			    gadget->speed >= USB_SPEED_SUPER)
- 				break;
--			/* FALLTHROUGH */
-+			fallthrough;
- 		case USB_DT_CONFIG:
- 			value = config_desc(cdev, w_value);
- 			if (value >= 0)
-diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-index 490d353d5fde..5ff900e540c8 100644
---- a/drivers/usb/gadget/function/f_fs.c
-+++ b/drivers/usb/gadget/function/f_fs.c
-@@ -2726,7 +2726,7 @@ static void __ffs_event_add(struct ffs_data *ffs,
- 	switch (type) {
- 	case FUNCTIONFS_RESUME:
- 		rem_type2 = FUNCTIONFS_SUSPEND;
--		/* FALL THROUGH */
-+		fallthrough;
- 	case FUNCTIONFS_SUSPEND:
- 	case FUNCTIONFS_SETUP:
- 		rem_type1 = type;
-diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
-index df671acdd464..1125f4715830 100644
---- a/drivers/usb/gadget/function/f_hid.c
-+++ b/drivers/usb/gadget/function/f_hid.c
-@@ -477,7 +477,7 @@ static void hidg_set_report_complete(struct usb_ep *ep, struct usb_request *req)
- 		break;
- 	default:
- 		ERROR(cdev, "Set report failed %d\n", req->status);
--		/* FALLTHROUGH */
-+		fallthrough;
- 	case -ECONNABORTED:		/* hardware forced ep reset */
- 	case -ECONNRESET:		/* request dequeued */
- 	case -ESHUTDOWN:		/* disconnect from host */
-diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
-index 950d2a85f098..331c951d72dc 100644
---- a/drivers/usb/gadget/function/f_mass_storage.c
-+++ b/drivers/usb/gadget/function/f_mass_storage.c
-@@ -2039,7 +2039,7 @@ static int do_scsi_command(struct fsg_common *common)
- 	case RELEASE:
- 	case RESERVE:
- 	case SEND_DIAGNOSTIC:
--		/* Fall through */
-+		fallthrough;
- 
- 	default:
- unknown_cmnd:
-diff --git a/drivers/usb/gadget/function/f_phonet.c b/drivers/usb/gadget/function/f_phonet.c
-index d7f6cc51b7ec..0b468f5d55bc 100644
---- a/drivers/usb/gadget/function/f_phonet.c
-+++ b/drivers/usb/gadget/function/f_phonet.c
-@@ -212,7 +212,7 @@ static void pn_tx_complete(struct usb_ep *ep, struct usb_request *req)
- 	case -ESHUTDOWN: /* disconnected */
- 	case -ECONNRESET: /* disabled */
- 		dev->stats.tx_aborted_errors++;
--		/* fall through */
-+		fallthrough;
- 	default:
- 		dev->stats.tx_errors++;
- 	}
-@@ -360,7 +360,7 @@ static void pn_rx_complete(struct usb_ep *ep, struct usb_request *req)
- 	/* Do resubmit in these cases: */
- 	case -EOVERFLOW: /* request buffer overflow */
- 		dev->stats.rx_over_errors++;
--		/* fall through */
-+		fallthrough;
- 	default:
- 		dev->stats.rx_errors++;
- 		break;
-diff --git a/drivers/usb/gadget/function/f_printer.c b/drivers/usb/gadget/function/f_printer.c
-index 9c7ed2539ff7..ec15f7637e40 100644
---- a/drivers/usb/gadget/function/f_printer.c
-+++ b/drivers/usb/gadget/function/f_printer.c
-@@ -285,7 +285,7 @@ static void rx_complete(struct usb_ep *ep, struct usb_request *req)
- 
- 	/* data overrun */
- 	case -EOVERFLOW:
--		/* FALLTHROUGH */
-+		fallthrough;
- 
- 	default:
- 		DBG(dev, "rx status %d\n", status);
-@@ -304,7 +304,7 @@ static void tx_complete(struct usb_ep *ep, struct usb_request *req)
- 	switch (req->status) {
- 	default:
- 		VDBG(dev, "tx err %d\n", req->status);
--		/* FALLTHROUGH */
-+		fallthrough;
- 	case -ECONNRESET:		/* unlink */
- 	case -ESHUTDOWN:		/* disconnect etc */
- 		break;
-@@ -919,7 +919,7 @@ static bool gprinter_req_match(struct usb_function *f,
- 		if (!w_value && !w_length &&
- 		   !(USB_DIR_IN & ctrl->bRequestType))
- 			break;
--		/* fall through */
-+		fallthrough;
- 	default:
- 		return false;
- 	}
-diff --git a/drivers/usb/gadget/function/f_rndis.c b/drivers/usb/gadget/function/f_rndis.c
-index 0d8e4a364ca6..9534c8ab62a8 100644
---- a/drivers/usb/gadget/function/f_rndis.c
-+++ b/drivers/usb/gadget/function/f_rndis.c
-@@ -426,7 +426,7 @@ static void rndis_response_complete(struct usb_ep *ep, struct usb_request *req)
- 		DBG(cdev, "RNDIS %s response error %d, %d/%d\n",
- 			ep->name, status,
- 			req->actual, req->length);
--		/* FALLTHROUGH */
-+		fallthrough;
- 	case 0:
- 		if (ep != rndis->notify)
- 			break;
-diff --git a/drivers/usb/gadget/function/f_tcm.c b/drivers/usb/gadget/function/f_tcm.c
-index eaf556ceac32..d94b814328c8 100644
---- a/drivers/usb/gadget/function/f_tcm.c
-+++ b/drivers/usb/gadget/function/f_tcm.c
-@@ -1150,7 +1150,7 @@ static int usbg_submit_command(struct f_uas *fu,
- 	default:
- 		pr_debug_once("Unsupported prio_attr: %02x.\n",
- 				cmd_iu->prio_attr);
--		/* fall through */
-+		fallthrough;
- 	case UAS_SIMPLE_TAG:
- 		cmd->prio_attr = TCM_SIMPLE_TAG;
- 		break;
-diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
-index fbe96ef1ac7a..0230458b4de2 100644
---- a/drivers/usb/gadget/function/u_ether.c
-+++ b/drivers/usb/gadget/function/u_ether.c
-@@ -321,7 +321,7 @@ static void rx_complete(struct usb_ep *ep, struct usb_request *req)
- 	/* data overrun */
- 	case -EOVERFLOW:
- 		dev->net->stats.rx_over_errors++;
--		/* FALLTHROUGH */
-+		fallthrough;
- 
- 	default:
- 		dev->net->stats.rx_errors++;
-@@ -444,7 +444,7 @@ static void tx_complete(struct usb_ep *ep, struct usb_request *req)
- 	default:
- 		dev->net->stats.tx_errors++;
- 		VDBG(dev, "tx err %d\n", req->status);
--		/* FALLTHROUGH */
-+		fallthrough;
- 	case -ECONNRESET:		/* unlink */
- 	case -ESHUTDOWN:		/* disconnect etc */
- 		dev_kfree_skb_any(skb);
-diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
-index 3cfc6e2eba71..c1e5e72748d4 100644
---- a/drivers/usb/gadget/function/u_serial.c
-+++ b/drivers/usb/gadget/function/u_serial.c
-@@ -386,7 +386,7 @@ static void gs_rx_push(struct work_struct *work)
- 			/* presumably a transient fault */
- 			pr_warn("ttyGS%d: unexpected RX status %d\n",
- 				port->port_num, req->status);
--			/* FALLTHROUGH */
-+			fallthrough;
- 		case 0:
- 			/* normal completion */
- 			break;
-@@ -472,7 +472,7 @@ static void gs_write_complete(struct usb_ep *ep, struct usb_request *req)
- 		/* presumably a transient fault */
- 		pr_warn("%s: unexpected %s status %d\n",
- 			__func__, ep->name, req->status);
--		/* FALL THROUGH */
-+		fallthrough;
- 	case 0:
- 		/* normal completion */
- 		gs_start_tx(port);
-@@ -871,7 +871,7 @@ static void gs_console_complete_out(struct usb_ep *ep, struct usb_request *req)
- 	default:
- 		pr_warn("%s: unexpected %s status %d\n",
- 			__func__, ep->name, req->status);
--		/* fall through */
-+		fallthrough;
- 	case 0:
- 		/* normal completion */
- 		spin_lock(&cons->lock);
-diff --git a/drivers/usb/gadget/legacy/inode.c b/drivers/usb/gadget/legacy/inode.c
-index 9ee0bfe7bcda..1b430b36d0a6 100644
---- a/drivers/usb/gadget/legacy/inode.c
-+++ b/drivers/usb/gadget/legacy/inode.c
-@@ -312,7 +312,7 @@ get_ready_ep (unsigned f_flags, struct ep_data *epdata, bool is_write)
- 	case STATE_EP_READY:			/* not configured yet */
- 		if (is_write)
- 			return 0;
--		// FALLTHRU
-+		fallthrough;
- 	case STATE_EP_UNBOUND:			/* clean disconnect */
- 		break;
- 	// case STATE_EP_DISABLED:		/* "can't happen" */
-@@ -1084,7 +1084,7 @@ next_event (struct dev_data *dev, enum usb_gadgetfs_event_type type)
- 	case GADGETFS_DISCONNECT:
- 		if (dev->state == STATE_DEV_SETUP)
- 			dev->setup_abort = 1;
--		// FALL THROUGH
-+		fallthrough;
- 	case GADGETFS_CONNECT:
- 		dev->ev_next = 0;
- 		break;
-@@ -1381,7 +1381,6 @@ gadgetfs_setup (struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
- 			make_qualifier (dev);
- 			break;
- 		case USB_DT_OTHER_SPEED_CONFIG:
--			// FALLTHROUGH
- 		case USB_DT_CONFIG:
- 			value = config_buf (dev,
- 					w_value >> 8,
-@@ -1718,7 +1717,7 @@ gadgetfs_suspend (struct usb_gadget *gadget)
- 	case STATE_DEV_UNCONNECTED:
- 		next_event (dev, GADGETFS_SUSPEND);
- 		ep0_readable (dev);
--		/* FALLTHROUGH */
-+		fallthrough;
- 	default:
- 		break;
- 	}
-diff --git a/drivers/usb/gadget/udc/dummy_hcd.c b/drivers/usb/gadget/udc/dummy_hcd.c
-index 0eeaead5acea..f4ffd52010ce 100644
---- a/drivers/usb/gadget/udc/dummy_hcd.c
-+++ b/drivers/usb/gadget/udc/dummy_hcd.c
-@@ -567,12 +567,12 @@ static int dummy_enable(struct usb_ep *_ep,
- 			if (max <= 1024)
- 				break;
- 			/* save a return statement */
--			/* fall through */
-+			fallthrough;
- 		case USB_SPEED_FULL:
- 			if (max <= 64)
- 				break;
- 			/* save a return statement */
--			/* fall through */
-+			fallthrough;
- 		default:
- 			if (max <= 8)
- 				break;
-@@ -590,7 +590,7 @@ static int dummy_enable(struct usb_ep *_ep,
- 			if (max <= 1024)
- 				break;
- 			/* save a return statement */
--			/* fall through */
-+			fallthrough;
- 		case USB_SPEED_FULL:
- 			if (max <= 1023)
- 				break;
-@@ -1943,7 +1943,7 @@ static void dummy_timer(struct timer_list *t)
- 			 * this almost certainly polls too fast.
- 			 */
- 			limit = max(limit, periodic_bytes(dum, ep));
--			/* FALLTHROUGH */
-+			fallthrough;
- 
- 		default:
- treat_control_like_bulk:
-@@ -2252,7 +2252,7 @@ static int dummy_hub_control(
- 					 "supported for USB 2.0 roothub\n");
- 				goto error;
- 			}
--			/* FALLS THROUGH */
-+			fallthrough;
- 		case USB_PORT_FEAT_RESET:
- 			/* if it's already enabled, disable */
- 			if (hcd->speed == HCD_USB3) {
-@@ -2276,7 +2276,7 @@ static int dummy_hub_control(
- 			 * interval? Is it still 50msec as for HS?
- 			 */
- 			dum_hcd->re_timeout = jiffies + msecs_to_jiffies(50);
--			/* FALLS THROUGH */
-+			fallthrough;
- 		default:
- 			if (hcd->speed == HCD_USB3) {
- 				if ((dum_hcd->port_status &
-diff --git a/drivers/usb/gadget/udc/goku_udc.c b/drivers/usb/gadget/udc/goku_udc.c
-index 91dcb1995c27..25c1d6ab5adb 100644
---- a/drivers/usb/gadget/udc/goku_udc.c
-+++ b/drivers/usb/gadget/udc/goku_udc.c
-@@ -125,11 +125,14 @@ goku_ep_enable(struct usb_ep *_ep, const struct usb_endpoint_descriptor *desc)
- 	max = get_unaligned_le16(&desc->wMaxPacketSize);
- 	switch (max) {
- 	case 64:
--		mode++; /* fall through */
-+		mode++;
-+		fallthrough;
- 	case 32:
--		mode++; /* fall through */
-+		mode++;
-+		fallthrough;
- 	case 16:
--		mode++; /* fall through */
-+		mode++;
-+		fallthrough;
- 	case 8:
- 		mode <<= 3;
- 		break;
-diff --git a/drivers/usb/gadget/udc/omap_udc.c b/drivers/usb/gadget/udc/omap_udc.c
-index 4139da885651..494da00398d7 100644
---- a/drivers/usb/gadget/udc/omap_udc.c
-+++ b/drivers/usb/gadget/udc/omap_udc.c
-@@ -2831,7 +2831,7 @@ static int omap_udc_probe(struct platform_device *pdev)
- 				type = "integrated";
- 				break;
- 			}
--			/* FALL THROUGH */
-+			fallthrough;
- 		case 3:
- 		case 11:
- 		case 16:
-@@ -2848,7 +2848,7 @@ static int omap_udc_probe(struct platform_device *pdev)
- 		case 14:			/* transceiverless */
- 			if (cpu_is_omap1710())
- 				goto bad_on_1710;
--			/* FALL THROUGH */
-+			fallthrough;
- 		case 13:
- 		case 15:
- 			type = "no";
-diff --git a/drivers/usb/gadget/udc/s3c2410_udc.c b/drivers/usb/gadget/udc/s3c2410_udc.c
-index 80002d97b59d..bc2e8eb737c3 100644
---- a/drivers/usb/gadget/udc/s3c2410_udc.c
-+++ b/drivers/usb/gadget/udc/s3c2410_udc.c
-@@ -308,7 +308,7 @@ static int s3c2410_udc_write_fifo(struct s3c2410_ep *ep,
- 	switch (idx) {
- 	default:
- 		idx = 0;
--		/* fall through */
-+		fallthrough;
- 	case 0:
- 		fifo_reg = S3C2410_UDC_EP0_FIFO_REG;
- 		break;
-@@ -413,7 +413,7 @@ static int s3c2410_udc_read_fifo(struct s3c2410_ep *ep,
- 	switch (idx) {
- 	default:
- 		idx = 0;
--		/* fall through */
-+		fallthrough;
- 	case 0:
- 		fifo_reg = S3C2410_UDC_EP0_FIFO_REG;
- 		break;
-diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/udc/tegra-xudc.c
-index bbe1a04686da..404f77806c6a 100644
---- a/drivers/usb/gadget/udc/tegra-xudc.c
-+++ b/drivers/usb/gadget/udc/tegra-xudc.c
-@@ -2742,7 +2742,7 @@ static void tegra_xudc_handle_transfer_event(struct tegra_xudc *xudc,
- 		ep_wait_for_stopped(xudc, ep_index);
- 		ep->enq_ptr = ep->deq_ptr;
- 		tegra_xudc_ep_nuke(ep, -EIO);
--		/* FALLTHROUGH */
-+		fallthrough;
- 	case TRB_CMPL_CODE_STREAM_NUMP_ERROR:
- 	case TRB_CMPL_CODE_CTRL_DIR_ERR:
- 	case TRB_CMPL_CODE_INVALID_STREAM_TYPE_ERR:
-
+SGVsbG8gUm9iLA0KT24gNy82LzIwMjAgMTI6MTMgUE0sIEZlbGlwZSBCYWxiaSB3cm90ZToNCj4g
+DQo+IEhpLA0KPiANCj4gVGVqYXMgSm9nbGVrYXIgPFRlamFzLkpvZ2xla2FyQHN5bm9wc3lzLmNv
+bT4gd3JpdGVzOg0KPj4+IEBAIC05NSw2ICs5NSwxMCBAQCBpbnQgZHdjM19ob3N0X2luaXQoc3Ry
+dWN0IGR3YzMgKmR3YykNCj4+PiAgCWlmIChkd2MtPnVzYjJfbHBtX2Rpc2FibGUpDQo+Pj4gIAkJ
+cHJvcHNbcHJvcF9pZHgrK10gPSBQUk9QRVJUWV9FTlRSWV9CT09MKCJ1c2IyLWxwbS1kaXNhYmxl
+Iik7DQo+Pj4gIA0KPj4+ICsJaWYgKGR3Yy0+c2dsX3RyYl9jYWNoZV9zaXplX3F1aXJrKQ0KPj4+
+ICsJCXByb3BzW3Byb3BfaWR4KytdID0NCj4+PiArCQkJUFJPUEVSVFlfRU5UUllfQk9PTCgic2ds
+LXRyYi1jYWNoZS1zaXplLXF1aXJrIik7DQo+Pj4gKw0KPj4+ICAJLyoqDQo+Pj4gIAkgKiBXT1JL
+QVJPVU5EOiBkd2MzIHJldmlzaW9ucyA8PTMuMDBhIGhhdmUgYSBsaW1pdGF0aW9uDQo+Pj4gIAkg
+KiB3aGVyZSBQb3J0IERpc2FibGUgY29tbWFuZCBkb2Vzbid0IHdvcmsuDQo+Pj4NCj4+IERvZXMg
+dGhpcyBpbXBsZW1lbnRhdGlvbiBsb29rcyBnb29kIHRvIHlvdT8gUm9iIGhhcyBzb21lIGNvbmNl
+cm5lZCBvdmVyIHRoZSBEVCBlbnRyaWVzLA0KPj4geW91IHN1Z2dlc3RlZCB1c2luZyBjb21wYXRp
+YmxlIHN0cmluZyB3aXRoIHRoaXMgcXVpcmsgYWRkaXRpb24uDQo+PiBDYW4geW91IHBsZWFzZSBi
+cmllZiBhYm91dCBob3cgeW91IHdvdWxkIGxpa2UgdG8gaGF2ZSB0aGlzIHF1aXJrIGltcGxlbWVu
+dGVkPw0KPj4gSSBjYW4gc2VuZCB0aGUgdXBkYXRlZCBwYXRjaC4gTXkgcGF0Y2ggc2VyaWVzIGlz
+IHBlbmRpbmcgZm9yIG1lcmdlIGp1c3QgYmVjYXVzZSBvZiB0aGUNCj4+IERUIGFuZCBxdWlyayBp
+c3N1ZS4gQ2FuIHlvdSBwbGVhc2UgaGVscD8NCj4gDQo+IFllYWgsIHlvdSBuZWVkIHRvIGdldCBp
+bnRvIGFuIGFncmVlbWVudCB3aXRoIFJvYiA6LSkgSSBkb24ndCBtaW5kIGhhdmluZw0KPiBleHRy
+YSBEVCBmbGFncyBmb3IgdGhpbmdzIHdoaWNoIGNhbid0IGJlIGRldGVjdGVkIGluIHJ1bnRpbWUs
+IFJvYg0KPiBkaXNhZ3JlZXMuDQo+IA0KVGhlIGNvbXBhdGlibGUgc3RyaW5nIGlzIG5vdCBzdWl0
+YWJsZSBvcHRpb24gYXMgaXQgZG9lcyBub3Qgd29yayB3aXRoIHBsYXRmb3JtIGRyaXZlcnMNCndp
+dGggUENJIGJhc2VkIHN5c3RlbS4gQWxzbyBTeW5vcHN5cyBjb250cm9sbGVycyBJUCB2ZXJzaW9u
+IHJlZ2lzdGVyIGlzIG5vdCB2aXNpYmxlIHRvIHhoY2kNCmRyaXZlciBhbmQgaGVuY2Ugd2UgZG9u
+J3QgaGF2ZSBzZXBhcmF0ZSBjb21wYXRpYmxlIHN0cmluZyBmb3IgZWFjaCBTeW5vcHN5cyB2ZXJz
+aW9uIG9uIHRoZQ0KeGhjaSBkcml2ZXIgc2lkZS4gDQpEdWUgdG8gd2hpY2ggSSBkZXBlbmQgb24g
+RFQgZmxhZyBhZGRpdGlvbiBmb3IgdGhlIHF1aXJrLiBDYW4gd2UgYWRkIHRoZXNlIERUIGZsYWdz
+IGFuZCBxdWlyaz8NCg0KDQpUaGFua3MgJiBSZWdhcmRzLA0KIFRlamFzIEpvZ2xla2FyDQoNCg0K
