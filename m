@@ -2,82 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 765B1216640
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jul 2020 08:13:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36CC9216643
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jul 2020 08:16:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726661AbgGGGM6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Jul 2020 02:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60282 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725974AbgGGGM6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jul 2020 02:12:58 -0400
-Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44305C061755
-        for <linux-usb@vger.kernel.org>; Mon,  6 Jul 2020 23:12:58 -0700 (PDT)
-Received: by mail-il1-x144.google.com with SMTP id h16so11672058ilj.11
-        for <linux-usb@vger.kernel.org>; Mon, 06 Jul 2020 23:12:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jYFmwzjGtjPy9ccomrEq7B4vYHNI1kYoI6eFNRVl1e0=;
-        b=sUiiMxHsqXU/jItBWY79QsWScCEOTKW2Z5hf0QryYhLjjqXu5rRTel5WykX7hN1qSm
-         /R0lOv1iT6hFSaGq3OpnsufkRnImF5Y7lGlsmMt5ghEO9iVR6SFD0A7DWvIhvExeRbPN
-         G00r0Ik9P/Z1iAwEUrY07ay5cItV8kL2o1holLmX4a88Wg5NHtgLSBSpMs7j0Ud+ML33
-         pm0EwHIv36AA2ftwk0/mL4xSDdFdZKFOjjBiJ7qdJ88CiTcdEMTf8zQUBalr4SHu6Jwd
-         0JlTbhO6g2L5fhAjoTm/0FcVZ0OyLaH5jmHCAnUkXbiFL6bLZEp5gwWGVBfY92/80XyV
-         /z8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jYFmwzjGtjPy9ccomrEq7B4vYHNI1kYoI6eFNRVl1e0=;
-        b=hq2any5xubfI+k3Z2zxuMSV/YJMRAftWy5kkPRjTRGza/yZKFoBMUytoPctYshpUsG
-         D6Fp7MP4f6j9NmgiGvL0zTgyCtofetD0tt/71Oif4VNAe/a/hqsiUF68e0LsVo7dl+Od
-         wv6hL1AyhZcYbGLFlRKl6b+ar9eviZrq4/jipgT4wCq4ukqsnaIctP5blF5Ok+M4BTcp
-         oDs3VDcDLn4Vt9cFPJ9qpDXr1/nXEl6Ok0KAL5Mk1jNC8FSBMNK59wW1j5OwAavFuqFH
-         FdCVLLzCMMTcGBNCvwllrC8LVRhUMS0F4p6q29CkVh0FfQ7UDjRLig5FTMPnaqJHLShD
-         gDBQ==
-X-Gm-Message-State: AOAM533tqiojUfkm5e/4jiKbVoFmeahIq9f5fqJoNb4sHJj/f194RYd3
-        OUXbFlWCCBVf8k36HeI9Ni2Bwl8EZ26oh0Sm86c=
-X-Google-Smtp-Source: ABdhPJxt56DdxzXmkzSLgan9zfQ5FKnstS2fYAQ8J2J1JxOH4NWOpiri/Alvq2iWpdQhHK7sQLVIk2ySx4JrBOUeSFs=
-X-Received: by 2002:a92:5a05:: with SMTP id o5mr28703054ilb.237.1594102377487;
- Mon, 06 Jul 2020 23:12:57 -0700 (PDT)
+        id S1726757AbgGGGQV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Jul 2020 02:16:21 -0400
+Received: from mleia.com ([178.79.152.223]:40318 "EHLO mail.mleia.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726434AbgGGGQV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 7 Jul 2020 02:16:21 -0400
+Received: from mail.mleia.com (localhost [127.0.0.1])
+        by mail.mleia.com (Postfix) with ESMTP id 8251B3F31DE;
+        Tue,  7 Jul 2020 06:16:19 +0000 (UTC)
+Subject: Re: [PATCH 12/32] usb: gadget: udc: lpc32xx_udc: Staticify 2 local
+ functions
+To:     Lee Jones <lee.jones@linaro.org>, gregkh@linuxfoundation.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        Sylvain Lemieux <slemieux.tyco@gmail.com>,
+        Kevin Wells <kevin.wells@nxp.com>,
+        Roland Stigge <stigge@antcom.de>
+References: <20200706133341.476881-1-lee.jones@linaro.org>
+ <20200706133341.476881-13-lee.jones@linaro.org>
+From:   Vladimir Zapolskiy <vz@mleia.com>
+Message-ID: <c8ae6ed2-8739-e2fb-729a-872d38256ac8@mleia.com>
+Date:   Tue, 7 Jul 2020 09:16:18 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-References: <20200603065356.14124-1-peter.chen@nxp.com>
-In-Reply-To: <20200603065356.14124-1-peter.chen@nxp.com>
-From:   Peter Chen <hzpeterchen@gmail.com>
-Date:   Tue, 7 Jul 2020 14:12:45 +0800
-Message-ID: <CAL411-qtYLWE_W2bZTGrho4PADEY+8WRjUWEHcMXCz0Ej6P0Nw@mail.gmail.com>
-Subject: Re: [PATCH 0/3] usb: cdns3: fix some endian issues
-To:     balbi@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     USB list <linux-usb@vger.kernel.org>, linux-imx@nxp.com,
-        pawell@cadence.com, rogerq@ti.com, jun.li@nxp.com,
-        Peter Chen <peter.chen@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200706133341.476881-13-lee.jones@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
+X-CRM114-CacheID: sfid-20200707_061619_555379_BBAB11ED 
+X-CRM114-Status: UNSURE (   8.88  )
+X-CRM114-Notice: Please train this message. 
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 3, 2020 at 2:55 PM Peter Chen <peter.chen@nxp.com> wrote:
->
-> Reported by kbuild test robot.
->
-> Peter Chen (3):
->   usb: cdns3: ep0: fix some endian issues
->   usb: cdns3: trace: fix some endian issues
->   usb: cdns3: gadget: fix some endian issues
->
->  drivers/usb/cdns3/ep0.c    | 30 +++++++-------
->  drivers/usb/cdns3/gadget.c | 80 +++++++++++++++++++-------------------
->  drivers/usb/cdns3/trace.h  |  6 +--
->  3 files changed, 58 insertions(+), 58 deletions(-)
->
-> --
-> 2.17.1
->
+On 7/6/20 4:33 PM, Lee Jones wrote:
+> These are not used outside of this sourcefile, so make them static.
+> 
+> Fixes the following W=1 kernel build warning(s):
+> 
+>  drivers/usb/gadget/udc/lpc32xx_udc.c:1929:6: warning: no previous prototype for ‘udc_send_in_zlp’ [-Wmissing-prototypes]
+>  1929 | void udc_send_in_zlp(struct lpc32xx_udc *udc, struct lpc32xx_ep *ep)
+>  | ^~~~~~~~~~~~~~~
+>  drivers/usb/gadget/udc/lpc32xx_udc.c:1943:6: warning: no previous prototype for ‘udc_handle_eps’ [-Wmissing-prototypes]
+>  1943 | void udc_handle_eps(struct lpc32xx_udc *udc, struct lpc32xx_ep *ep)
+>  | ^~~~~~~~~~~~~~
+> 
+> Cc: Felipe Balbi <balbi@kernel.org>
+> Cc: Vladimir Zapolskiy <vz@mleia.com>
+> Cc: Sylvain Lemieux <slemieux.tyco@gmail.com>
+> Cc: Kevin Wells <kevin.wells@nxp.com>
+> Cc: Roland Stigge <stigge@antcom.de>
+> Signed-off-by: Lee Jones <lee.jones@linaro.org>
 
-A gentle ping...
+Acked-by: Vladimir Zapolskiy <vz@mleia.com>
 
-Peter
+--
+Best wishes,
+Vladimir
