@@ -2,87 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F20E217890
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jul 2020 22:06:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0CDD2179B0
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jul 2020 22:50:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728645AbgGGUG3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Jul 2020 16:06:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48534 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728254AbgGGUG2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jul 2020 16:06:28 -0400
-Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922ABC08C5DC
-        for <linux-usb@vger.kernel.org>; Tue,  7 Jul 2020 13:06:28 -0700 (PDT)
-Received: by mail-ot1-x342.google.com with SMTP id a21so11975336otq.8
-        for <linux-usb@vger.kernel.org>; Tue, 07 Jul 2020 13:06:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=r5PL45TtpUanLMjUFz1CcEwQghycNM5MHybEf6+OAdY=;
-        b=Ia/xRu4E5EmGy6Euz2yN+Lu4bpiUJmEdWdzTD8OqM8AxBU6FQFBhSUpyKT01Vr8Gfb
-         B1Z5wCAkGvzqfHGLEzzzBaknQJXeNrxuVnCP9kf8bRooXqJKq6zqnMXR+v5lLmKVtu5A
-         QTSvpd1Xn3a+ElGJKiVI+MGiIxrLD5plOOwc0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=r5PL45TtpUanLMjUFz1CcEwQghycNM5MHybEf6+OAdY=;
-        b=iCPmmmuqlhq7W7tTBYHdnxxBXWTm2KYoiaBReFQCE5G3DYKvwP9AUL75xKDzVZhgGd
-         bQhcNDUv+oCq8yRkoflIYijr7oI5jbBQHuVUrkG2Xcd0vVAi8+zn8tPnkH1ACCZwrHXN
-         iVvn3W1v4K1igGN0Kz8cfqY5kjR2O6RlRMeV5i8l27M/3VnYXoLOeNYIFzUVSEUe7h2I
-         8AGs4mHfJ12w+/I+uB/MGYg/YBSI/xaEAhNthneOOwsG0PGVa7OuJMF4PULvnd7iFTSX
-         Yf0zk7zhI8Zha58qqnPSpeVmDF5lzy+hKeg8DB4w/QSDMuLtjQ57Mxr0uKRtLpCW5u9y
-         XtuA==
-X-Gm-Message-State: AOAM532/VSxyUTDmY2dp8wn1Zqqg1dmypG+k/5g3HIOz1Sl8v7HgSSzc
-        xPDROhOLA8A8goUrNk4Rne8lGA==
-X-Google-Smtp-Source: ABdhPJwwnZXLOhRRrCJBbJ2DZTfTavUWiRd8aI97qtpmNCNSuXiRBk3Odg92UJhZ/9Q7+WOFz9Le2Q==
-X-Received: by 2002:a9d:2261:: with SMTP id o88mr8252897ota.334.1594152388040;
-        Tue, 07 Jul 2020 13:06:28 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id d193sm302792oib.53.2020.07.07.13.06.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jul 2020 13:06:27 -0700 (PDT)
-Subject: Re: [PATCH] usbip: Use fallthrough pseudo-keyword
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20200707195214.GA3932@embeddedor>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <977e88c2-58cb-9507-c889-854e574a8f31@linuxfoundation.org>
-Date:   Tue, 7 Jul 2020 14:06:26 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1728705AbgGGUuS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Jul 2020 16:50:18 -0400
+Received: from smtprelay0200.hostedemail.com ([216.40.44.200]:44778 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726273AbgGGUuS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jul 2020 16:50:18 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay08.hostedemail.com (Postfix) with ESMTP id 7AEAD182CED34;
+        Tue,  7 Jul 2020 20:50:17 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:152:355:379:599:968:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2393:2553:2559:2562:2693:3138:3139:3140:3141:3142:3354:3622:3865:3866:3867:3868:3870:3871:3872:4321:5007:6691:7903:8957:10004:10400:10471:10848:11026:11232:11473:11658:11914:12043:12296:12297:12740:12895:13069:13161:13229:13255:13311:13357:13894:14659:14721:21080:21451:21627:30054:30090:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
+X-HE-Tag: wine20_5511feb26eb7
+X-Filterd-Recvd-Size: 3058
+Received: from XPS-9350.home (unknown [47.151.133.149])
+        (Authenticated sender: joe@perches.com)
+        by omf01.hostedemail.com (Postfix) with ESMTPA;
+        Tue,  7 Jul 2020 20:50:16 +0000 (UTC)
+Message-ID: <51eeed808ce61e0d7b7978b2dfd4fd80f315b3b1.camel@perches.com>
+Subject: Re: [PATCH 04/30] usb: misc: sisusbvga: sisusb_init: Mark all
+ 'static const' arrays as __maybe_unused
+From:   Joe Perches <joe@perches.com>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Thomas Winischhofer <thomas@winischhofer.net>
+Date:   Tue, 07 Jul 2020 13:50:15 -0700
+In-Reply-To: <20200707080311.GE3500@dell>
+References: <20200703174148.2749969-1-lee.jones@linaro.org>
+         <20200703174148.2749969-5-lee.jones@linaro.org>
+         <af66b6e94a26ebd500c1376631891b0bdd0912f0.camel@perches.com>
+         <20200707080311.GE3500@dell>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.3-0ubuntu1 
 MIME-Version: 1.0
-In-Reply-To: <20200707195214.GA3932@embeddedor>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 7/7/20 1:52 PM, Gustavo A. R. Silva wrote:
-> Replace the existing /* fall through */ comments and its variants with
-> the new pseudo-keyword macro fallthrough[1]. Also, remove unnecessary
-> fall-through markings when it is the case.
+On Tue, 2020-07-07 at 09:03 +0100, Lee Jones wrote:
+> On Fri, 03 Jul 2020, Joe Perches wrote:
 > 
-> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html?highlight=fallthrough#implicit-switch-case-fall-through
+> > On Fri, 2020-07-03 at 18:41 +0100, Lee Jones wrote:
+> > > drivers/usb/misc/sisusbvga/sisusb_init.h is included by a few
+> > > source files.  Most of which do not use the majority of the
+> > > shared static const arrays which have been declared.  This
+> > > causes the build system to spew 100's of warnings.
+> > > 
+> > > Fixes the following W=1 kernel build warning(s) - and a whole lot more:
+> > > 
+> > >  In file included from drivers/usb/misc/sisusbvga/sisusb.c:54:
+> > >  drivers/usb/misc/sisusbvga/sisusb_init.h:695:34: warning: ‘SiSUSB_VCLKData’ defined but not used [-Wunused-const-variable=]
+> > >  695 | static const struct SiS_VCLKData SiSUSB_VCLKData[] = {
+> > >  | ^~~~~~~~~~~~~~~
+> > > [10's of lines snipped]
+> > >  drivers/usb/misc/sisusbvga/sisusb_init.h:206:28: warning: ‘SiS_VGA_DAC’ defined but not used [-Wunused-const-variable=]
+> > >  206 | static const unsigned char SiS_VGA_DAC[] = {
+> > >  | ^~~~~~~~~~~
+> > > [10's of lines snipped]
+> > >  drivers/usb/misc/sisusbvga/sisusb_init.h:171:29: warning: ‘ModeIndex_1280x1024’ defined but not used [-Wunused-const-variable=]
+> > >  171 | static const unsigned short ModeIndex_1280x1024[] = { 0x3a, 0x4d, 0x00, 0x65 };
+> > >  | ^~~~~~~~~~~~~~~~~~~
+> > > [10's of lines snipped]
+> > 
+> > They are not __maybe_unused, they _are_ used.
 > 
+> Actually, it looks like all of the ModeIndex_* table are *not* used,
+> so those will be removed.
+> 
+> > I think these instead should be moved to where
+> > they are used instead of being declared in an
+> > #include file.
+> 
+> The remaining tables are many and large, so stuffing them into the
+> source file does not seem like the correct thing to do.
 
-Is fallthrough syntax supported on our min gcc version?
+It the right thing to do is because otherwise they
+would be duplicated.  Either declare them only in
+the single file where use or declare them extern
+and define them only in one place.
 
-Does checkpatch or coccicheck catch these cases?
 
-The patch looks good.
-
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
-
-thanks,
--- Shuah
