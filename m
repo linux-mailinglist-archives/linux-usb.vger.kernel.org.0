@@ -2,80 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 136F1216F40
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jul 2020 16:48:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB322216F60
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jul 2020 16:53:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728259AbgGGOsb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Jul 2020 10:48:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55348 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726946AbgGGOsb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jul 2020 10:48:31 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C663C061755
-        for <linux-usb@vger.kernel.org>; Tue,  7 Jul 2020 07:48:31 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id r12so45380047wrj.13
-        for <linux-usb@vger.kernel.org>; Tue, 07 Jul 2020 07:48:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=to:cc:from:subject:message-id:date:user-agent:mime-version
-         :content-transfer-encoding:content-language;
-        bh=JzPHVkwxPeNm9siNX/pfXdzPUOVk711v5fUyNIxljXs=;
-        b=Cukjho0QSDSP82povLStXX16+KZC2FeZJjysYR/otvQr7jDcwPm7byDb7B9Z2piOKv
-         7zYKmoG3Ya5po5FoSmLdNT4SYAUqw6LHrew566FOukcdm1HawT14bzR7bh4UYmgvGXZ8
-         dNcjEC05vIaRIBK8zvJkfHx+OzakvVZv/opK4yzxhD7K3Wf5Jeh+hJUauRrivano6rQc
-         AJAa686hp5MAmRylo7p1oPZZP9vUGoUlaFxRoDvJW+CIQdaqABfMOLkAQ8D30hJX++ou
-         O/Glzlycmh7h1BcuewQOQn6YSfKSKV6sB9M0+wCqhPAza4JPYzYPtM1P57mlQ8fA7Gsp
-         Z15g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
-         :mime-version:content-transfer-encoding:content-language;
-        bh=JzPHVkwxPeNm9siNX/pfXdzPUOVk711v5fUyNIxljXs=;
-        b=NBM6pEXWEISIZym4EMnBkHgmHXHrmTWlx6rB0C9RyQ7acsLuGIdIcwiywarO2or5SW
-         e0wfbDUPutL33T7+OYw09SyyKek6euvBWDfJkLvfRHVQIUPtjYsmZWD2spV5UiupWvqi
-         6tdbsQNMhPlt0bSPDaBo3lnlI6fMtDhwJVfffPLeF0RtiCmA5ea3x4vvrt37XvEw0VDE
-         HCyBjDocOz/YjK+37W0TnXg30IKpV1xXTA+olNjzEMqvaDUPDKEQ75mIGLZYG9g/lk2w
-         eS5+Xx9wXqSXWPQ/rQelnp1ewWq4XbyNjQzFzTXLaNe1bYg09W4lZodLVlXJHvd/aVeY
-         3wZw==
-X-Gm-Message-State: AOAM531RKSl1W2lpyYvshwm3UyvVq5FZ4kUvjCM02cYlLJlvCf91POn4
-        HaWpEZZyWRviqsFZO3A=
-X-Google-Smtp-Source: ABdhPJwFdukdjJWeecwE4XkVglTKrRNzNFhYnU7/GKoKIp91D9t60lZDKw+gTXG5nxP2FbSeB7YTYA==
-X-Received: by 2002:adf:ea0f:: with SMTP id q15mr24341792wrm.113.1594133310081;
-        Tue, 07 Jul 2020 07:48:30 -0700 (PDT)
-Received: from [192.168.25.100] (ip-176-198-223-130.hsi05.unitymediagroup.de. [176.198.223.130])
-        by smtp.googlemail.com with ESMTPSA id q5sm1272729wrp.60.2020.07.07.07.48.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jul 2020 07:48:29 -0700 (PDT)
-To:     Johan Hovold <johan@kernel.org>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-From:   =?UTF-8?Q?Frank_Sch=c3=a4fer?= <fschaefer.oss@googlemail.com>
-Subject: read() from removed usb-serial device
-Message-ID: <4f43f7ac-33ea-df67-f623-a7edc3d14c4c@googlemail.com>
-Date:   Tue, 7 Jul 2020 16:49:31 +0200
-User-Agent: Mozilla/5.0 (X11; Linux i686; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S1728137AbgGGOxY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Jul 2020 10:53:24 -0400
+Received: from relay9-d.mail.gandi.net ([217.70.183.199]:43483 "EHLO
+        relay9-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725944AbgGGOxY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jul 2020 10:53:24 -0400
+X-Originating-IP: 81.6.44.16
+Received: from [172.22.0.20] (unknown [81.6.44.16])
+        (Authenticated sender: hansmi@hansmi.ch)
+        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 15957FF806;
+        Tue,  7 Jul 2020 14:53:22 +0000 (UTC)
+From:   Michael Hanselmann <public@hansmi.ch>
+Subject: Re: [PATCH] USB: serial: ch341: fix simulated-break comment
+To:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
+References: <20200707061957.17425-1-johan@kernel.org>
+X-Hello-World:  This header intentionally left blank
+Message-ID: <9909b288-294d-16b9-9f14-51eb79c63b6c@msgid.hansmi.ch>
+Date:   Tue, 7 Jul 2020 16:53:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20200707061957.17425-1-johan@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Content-Language: de-DE
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On devices which do not support break signalling a break condition is
+simulated by sending a NUL byte at the lowest possible speed. The break
+condition will be 9 bit periods long (start bit and eight data bits),
+but the transmission itself also includes the stop bit. The safety
+margin of one bit is kept to account for timing differences.
 
-I recently noticed that read() from a usb-serial device does not fail 
-after the device got removed.
-Is this really the correct/expected behavior or a bug ?
+Signed-off-by: Michael Hanselmann <public@hansmi.ch>
+---
 
-I would expect it to return -1 and set an appropriate errno, but it 
-returns 0 (no error, no bytes read) instead.
+Hi Johan
 
-According to the glibc developers "glibc just calls into the kernel and 
-reports back whatever it receives from there."
+On 07.07.20 08:19, Johan Hovold wrote:
+> I reread the break-end comment and found it a bit confusing still. The
+> below seems more correct to me. I'm assuming you did not intend to add
+> an additional bit period as margin?
 
-Regards,
-Frank
+The additional bit was intentional, but I missed the start bit and was
+off by one. As such your fix indeed addresses the inconsistency between
+the comment and code. Considering the general quality of the ch341
+chips needing the simulation and to account for timing differences I'd
+instead prefer to increase the delay from 10 to 11 bits (1 start, 8 data,
+1 stop, 1 margin).
 
+Michael
+
+ drivers/usb/serial/ch341.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
+index 0cb02d1bde02..580aa5833091 100644
+--- a/drivers/usb/serial/ch341.c
++++ b/drivers/usb/serial/ch341.c
+@@ -603,11 +603,13 @@ static void ch341_simulate_break(struct tty_struct *tty, int break_state)
+ 		}
+ 
+ 		/*
+-		 * Compute expected transmission duration and add a single bit
+-		 * of safety margin (the actual NUL byte transmission is 8 bits
+-		 * plus one stop bit).
++		 * Compute expected transmission duration including safety
++		 * margin. The original baud rate is only restored after the
++		 * computed point in time.
++		 *
++		 * 11 bits = 1 start, 8 data, 1 stop, 1 margin
+ 		 */
+-		priv->break_end = jiffies + (10 * HZ / CH341_MIN_BPS);
++		priv->break_end = jiffies + (11 * HZ / CH341_MIN_BPS);
+ 
+ 		return;
+ 	}
+-- 
+2.20.1
