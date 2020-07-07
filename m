@@ -2,35 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B13BB21782C
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jul 2020 21:45:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5F5A217834
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jul 2020 21:46:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728006AbgGGTo6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Jul 2020 15:44:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58070 "EHLO mail.kernel.org"
+        id S1728133AbgGGTqt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Jul 2020 15:46:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58426 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726763AbgGGTo5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 7 Jul 2020 15:44:57 -0400
+        id S1727791AbgGGTqt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 7 Jul 2020 15:46:49 -0400
 Received: from embeddedor (unknown [200.39.26.250])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A5494206BE;
-        Tue,  7 Jul 2020 19:44:55 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D54282067D;
+        Tue,  7 Jul 2020 19:46:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594151097;
-        bh=dJp+PL8g3KNnzNGMS1VZ8Vt2dsb5EvBdpIBRC+C9sWY=;
+        s=default; t=1594151208;
+        bh=5xc6pN2TBXNWEcR01qSPAYpgcIpDgrzlDuJ85S1dAn0=;
         h=Date:From:To:Cc:Subject:From;
-        b=BoRFD0r9+TcHRnVv+FIm6BwXiROBx8ed8M7u7mDC4gIYFVPEKAmatVdp9Sm5VdD4B
-         GJHbRulK1zxhW90BdSn6+UZFJ3f6JB/dgPngZseEGCZAutEFojqTCNolQhQH0hVJHI
-         J05mOUGHz8xvps0JZ3DFovWmLqxaGkHidq4L/55U=
-Date:   Tue, 7 Jul 2020 14:50:23 -0500
+        b=KrIiJh2ef4ESA5x5pkG3fH9Aqt75oiH5qXW4bb+WlvyY6y6Qy03uKi4QJO7rruhQT
+         bR4FAhRPYXNpm7ijlVoOmofnRAGYniIEV9QH3eBYXOL6/2gK4+3oR1DpdTLOj19b+A
+         P13h67E+N3b7oAmrDa7T6ZM9b76xeLAa7S4D/s3w=
+Date:   Tue, 7 Jul 2020 14:52:14 -0500
 From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Subject: [PATCH] usb: host: Use fallthrough pseudo-keyword
-Message-ID: <20200707195023.GA3792@embeddedor>
+Subject: [PATCH] usbip: Use fallthrough pseudo-keyword
+Message-ID: <20200707195214.GA3932@embeddedor>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -48,94 +49,90 @@ fall-through markings when it is the case.
 
 Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 ---
- drivers/usb/host/ehci-dbg.c   |    2 +-
- drivers/usb/host/ehci-fsl.c   |    4 ++--
- drivers/usb/host/ehci-hcd.c   |    4 ++--
- drivers/usb/host/ehci-q.c     |    2 +-
- drivers/usb/host/ehci-sched.c |    2 +-
- 5 files changed, 7 insertions(+), 7 deletions(-)
+ drivers/usb/usbip/stub_rx.c       |    2 +-
+ drivers/usb/usbip/vhci_hcd.c      |    7 +++----
+ drivers/usb/usbip/vhci_rx.c       |    2 +-
+ drivers/usb/usbip/vudc_transfer.c |    4 ++--
+ 4 files changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/usb/host/ehci-dbg.c b/drivers/usb/host/ehci-dbg.c
-index 7619cfb06883..0b7f1edd9eec 100644
---- a/drivers/usb/host/ehci-dbg.c
-+++ b/drivers/usb/host/ehci-dbg.c
-@@ -823,7 +823,7 @@ static ssize_t fill_registers_buffer(struct debug_buffer *buf)
- 				break;
- 			case 0:		/* illegal reserved capability */
- 				cap = 0;
--				/* FALLTHROUGH */
-+				fallthrough;
- 			default:		/* unknown */
- 				break;
- 			}
-diff --git a/drivers/usb/host/ehci-fsl.c b/drivers/usb/host/ehci-fsl.c
-index 9e9c232e896f..6c2b53baa515 100644
---- a/drivers/usb/host/ehci-fsl.c
-+++ b/drivers/usb/host/ehci-fsl.c
-@@ -234,7 +234,7 @@ static int ehci_fsl_setup_phy(struct usb_hcd *hcd,
- 		break;
- 	case FSL_USB2_PHY_UTMI_WIDE:
- 		portsc |= PORT_PTS_PTW;
--		/* fall through */
+diff --git a/drivers/usb/usbip/stub_rx.c b/drivers/usb/usbip/stub_rx.c
+index e2b019532234..325c22008e53 100644
+--- a/drivers/usb/usbip/stub_rx.c
++++ b/drivers/usb/usbip/stub_rx.c
+@@ -424,7 +424,7 @@ static void masking_bogus_flags(struct urb *urb)
+ 	case USB_ENDPOINT_XFER_BULK:
+ 		if (is_out)
+ 			allowed |= URB_ZERO_PACKET;
+-		/* FALLTHROUGH */
 +		fallthrough;
- 	case FSL_USB2_PHY_UTMI:
- 		/* Presence of this node "has_fsl_erratum_a006918"
- 		 * in device-tree is used to stop USB controller
-@@ -244,7 +244,7 @@ static int ehci_fsl_setup_phy(struct usb_hcd *hcd,
- 			dev_warn(dev, "USB PHY clock invalid\n");
- 			return -EINVAL;
- 		}
--		/* fall through */
-+		fallthrough;
- 	case FSL_USB2_PHY_UTMI_DUAL:
- 		/* PHY_CLK_VALID bit is de-featured from all controller
- 		 * versions below 2.4 and is to be checked only for
-diff --git a/drivers/usb/host/ehci-hcd.c b/drivers/usb/host/ehci-hcd.c
-index cf2b7ae93b7e..6257be4110ca 100644
---- a/drivers/usb/host/ehci-hcd.c
-+++ b/drivers/usb/host/ehci-hcd.c
-@@ -982,7 +982,7 @@ ehci_endpoint_disable (struct usb_hcd *hcd, struct usb_host_endpoint *ep)
- 			start_unlink_async(ehci, qh);
- 		else
- 			start_unlink_intr(ehci, qh);
--		/* FALL THROUGH */
-+		fallthrough;
- 	case QH_STATE_COMPLETING:	/* already in unlinking */
- 	case QH_STATE_UNLINK:		/* wait for hw to finish? */
- 	case QH_STATE_UNLINK_WAIT:
-@@ -999,7 +999,7 @@ ehci_endpoint_disable (struct usb_hcd *hcd, struct usb_host_endpoint *ep)
- 			qh_destroy(ehci, qh);
- 			break;
- 		}
--		/* fall through */
-+		fallthrough;
- 	default:
- 		/* caller was supposed to have unlinked any requests;
- 		 * that's not our job.  just leak this memory.
-diff --git a/drivers/usb/host/ehci-q.c b/drivers/usb/host/ehci-q.c
-index 8a5c9b3ebe1e..a826715ae9bd 100644
---- a/drivers/usb/host/ehci-q.c
-+++ b/drivers/usb/host/ehci-q.c
-@@ -874,7 +874,7 @@ qh_make (
- 	switch (urb->dev->speed) {
- 	case USB_SPEED_LOW:
- 		info1 |= QH_LOW_SPEED;
--		/* FALL THROUGH */
-+		fallthrough;
- 
- 	case USB_SPEED_FULL:
- 		/* EPS 0 means "full" */
-diff --git a/drivers/usb/host/ehci-sched.c b/drivers/usb/host/ehci-sched.c
-index da7b00a6110b..847979f265b1 100644
---- a/drivers/usb/host/ehci-sched.c
-+++ b/drivers/usb/host/ehci-sched.c
-@@ -2475,7 +2475,7 @@ static void scan_isoc(struct ehci_hcd *ehci)
- 			ehci_dbg(ehci, "corrupt type %d frame %d shadow %p\n",
- 					type, frame, q.ptr);
- 			/* BUG(); */
--			/* FALL THROUGH */
+ 	default:			/* all non-iso endpoints */
+ 		if (!is_out)
+ 			allowed |= URB_SHORT_NOT_OK;
+diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
+index 65850e9c7190..1b598db5d8b9 100644
+--- a/drivers/usb/usbip/vhci_hcd.c
++++ b/drivers/usb/usbip/vhci_hcd.c
+@@ -508,7 +508,7 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 		case USB_PORT_FEAT_U1_TIMEOUT:
+ 			usbip_dbg_vhci_rh(
+ 				" SetPortFeature: USB_PORT_FEAT_U1_TIMEOUT\n");
+-			/* Fall through */
 +			fallthrough;
- 		case Q_TYPE_QH:
- 		case Q_TYPE_FSTN:
- 			/* End of the iTDs and siTDs */
+ 		case USB_PORT_FEAT_U2_TIMEOUT:
+ 			usbip_dbg_vhci_rh(
+ 				" SetPortFeature: USB_PORT_FEAT_U2_TIMEOUT\n");
+@@ -561,7 +561,7 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 				       "supported for USB 2.0 roothub\n");
+ 				goto error;
+ 			}
+-			/* FALLS THROUGH */
++			fallthrough;
+ 		case USB_PORT_FEAT_RESET:
+ 			usbip_dbg_vhci_rh(
+ 				" SetPortFeature: USB_PORT_FEAT_RESET\n");
+@@ -584,8 +584,7 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 
+ 			/* 50msec reset signaling */
+ 			vhci_hcd->re_timeout = jiffies + msecs_to_jiffies(50);
+-
+-			/* FALLS THROUGH */
++			fallthrough;
+ 		default:
+ 			usbip_dbg_vhci_rh(" SetPortFeature: default %d\n",
+ 					  wValue);
+diff --git a/drivers/usb/usbip/vhci_rx.c b/drivers/usb/usbip/vhci_rx.c
+index 00fc98741c5d..266024cbb64f 100644
+--- a/drivers/usb/usbip/vhci_rx.c
++++ b/drivers/usb/usbip/vhci_rx.c
+@@ -27,7 +27,7 @@ struct urb *pickup_urb_and_free_priv(struct vhci_device *vdev, __u32 seqnum)
+ 
+ 		switch (status) {
+ 		case -ENOENT:
+-			/* fall through */
++			fallthrough;
+ 		case -ECONNRESET:
+ 			dev_dbg(&urb->dev->dev,
+ 				 "urb seq# %u was unlinked %ssynchronously\n",
+diff --git a/drivers/usb/usbip/vudc_transfer.c b/drivers/usb/usbip/vudc_transfer.c
+index c9db846ee4f6..7e801fee33bf 100644
+--- a/drivers/usb/usbip/vudc_transfer.c
++++ b/drivers/usb/usbip/vudc_transfer.c
+@@ -404,7 +404,7 @@ static void v_timer(struct timer_list *t)
+ 			 * for now, give unlimited bandwidth
+ 			 */
+ 			limit += urb->transfer_buffer_length;
+-			/* fallthrough */
++			fallthrough;
+ 		default:
+ treat_control_like_bulk:
+ 			total -= transfer(udc, urb, ep, limit);
+@@ -479,7 +479,7 @@ void v_kick_timer(struct vudc *udc, unsigned long time)
+ 		return;
+ 	case VUDC_TR_IDLE:
+ 		t->state = VUDC_TR_RUNNING;
+-		/* fallthrough */
++		fallthrough;
+ 	case VUDC_TR_STOPPED:
+ 		/* we may want to kick timer to unqueue urbs */
+ 		mod_timer(&t->timer, time);
 
