@@ -2,120 +2,168 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A10A216408
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jul 2020 04:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD5002164F3
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jul 2020 05:56:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727916AbgGGC2j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Jul 2020 22:28:39 -0400
-Received: from mail-eopbgr690088.outbound.protection.outlook.com ([40.107.69.88]:23125
-        "EHLO NAM04-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726900AbgGGC2j (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 6 Jul 2020 22:28:39 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dwptldaA/eiNZThYdw09ysjDxFOxVqDAIb+2VJeiaKbc6E2TFabqW1/4POcbQjbDHTPxHOYALTVbg80gYoGHMO5Jiy72WoM45fdYL+Fub0xFFLWrTn6n56iLKUwka3dh7p4qMlAheYreqopRlmkLPrKQgYZyrE1ZzWaoKzh8d6OuzSlzBLwrYiz82L8+VHpGK8MLnI1Ig6El3hiOL2elNTMPvTptlLLZcByqsi5K51P0bp7p2aU/U3Jap6gdCmVk7/wb1usFAwfKxGQdIBnjRz+LHonZ9a10aTrY6QnzD5CgEzTJUWEYnXbmVt0+pp8m4QjCDSLbdVuiyYUZGe/bEw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M4IR/4ALF159AU4slbTgbM462PUfZuy39KdQfEFCM+E=;
- b=Osloj+sEhvn/lRQE4wDxSYxmGwBUE2vNUaZ+glzj61CjsftDQxAeXEeTj1HADtQFoMgF+4wCNz0dJJR1Ga4rmFuijO1Qluj6xFdKrdRJEZ46uwSM2aE4d5ReJXIqMQGb038RNezUnK0YXBv4zpSUK9/bfTV2wMIzHX6MCWpcquYGRWrTLIu3tQYtEhOQDy0OZT3//9BpXceDcRaQtmDhO099GrG6O1vOM+H8S/d8B5HrO5WDDcuHEPYJ9PAZJX79VawMy+JiwM27IzvuL5/RfglhzbjRIeu0cWTEZ1XxA/Pl1lql+iluVYEwVe+mCsf7tyIyPAOJvFC4fENqFMRCbg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=windriver.com; dmarc=pass action=none
- header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
+        id S1727791AbgGGD4V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Jul 2020 23:56:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39292 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727077AbgGGD4V (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jul 2020 23:56:21 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42426C061755
+        for <linux-usb@vger.kernel.org>; Mon,  6 Jul 2020 20:56:21 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id t4so15994694oij.9
+        for <linux-usb@vger.kernel.org>; Mon, 06 Jul 2020 20:56:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=windriversystems.onmicrosoft.com;
- s=selector2-windriversystems-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M4IR/4ALF159AU4slbTgbM462PUfZuy39KdQfEFCM+E=;
- b=RwMcdawMBSFSYxsJ23a54gs+JBk2ZO2P+llz9hXa+RqUOKFpCCb7xnaqw/1dJKtLSpcJGnLpwjiDqA8/vgy3qoOGoZsw/Wq4l4Da51z83XgbJl+jc8m28QmmedX7P5MiuqpnrDEEMzX1KVRyx+TdCDp2Jxk2YRX6JRjiH2amUYI=
-Received: from BYAPR11MB2632.namprd11.prod.outlook.com (2603:10b6:a02:c4::17)
- by BYAPR11MB3608.namprd11.prod.outlook.com (2603:10b6:a03:b1::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3153.22; Tue, 7 Jul
- 2020 02:28:36 +0000
-Received: from BYAPR11MB2632.namprd11.prod.outlook.com
- ([fe80::3d7d:dfc1:b35d:63d1]) by BYAPR11MB2632.namprd11.prod.outlook.com
- ([fe80::3d7d:dfc1:b35d:63d1%7]) with mapi id 15.20.3153.029; Tue, 7 Jul 2020
- 02:28:36 +0000
-From:   "Zhang, Qiang" <Qiang.Zhang@windriver.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "balbi@kernel.org" <balbi@kernel.org>,
-        "colin.king@canonical.com" <colin.king@canonical.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: =?gb2312?B?u9i4tDogW1BBVENIIHYzXSB1c2I6IGdhZGdldDogZnVuY3Rpb246IGZpeCBt?=
- =?gb2312?B?aXNzaW5nIHNwaW5sb2NrIGluIGZfdWFjMV9sZWdhY3k=?=
-Thread-Topic: [PATCH v3] usb: gadget: function: fix missing spinlock in
- f_uac1_legacy
-Thread-Index: AQHWU6GFwxzNMTsA4EC2CGkysfw8Xqj6934AgABoBsA=
-Date:   Tue, 7 Jul 2020 02:28:36 +0000
-Message-ID: <BYAPR11MB26323A0A7687EC2CE3C9E17FFF660@BYAPR11MB2632.namprd11.prod.outlook.com>
-References: <20200705124027.30011-1-qiang.zhang@windriver.com>,<20200706195520.GA93712@kroah.com>
-In-Reply-To: <20200706195520.GA93712@kroah.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: linuxfoundation.org; dkim=none (message not signed)
- header.d=none;linuxfoundation.org; dmarc=none action=none
- header.from=windriver.com;
-x-originating-ip: [60.247.85.82]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e31533ee-dcfc-493e-10cc-08d8221d73a5
-x-ms-traffictypediagnostic: BYAPR11MB3608:
-x-microsoft-antispam-prvs: <BYAPR11MB36080443ADE5640615CAC0C6FF660@BYAPR11MB3608.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2331;
-x-forefront-prvs: 0457F11EAF
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: jbRb6xHzJAcrne2zFqsXPaAh0sl/Z/RrtEhSzqu6rRlT8WwhDVxUvvIGzqcblrqm1VPeo4gKaH98AUQ2d4w75Wupja6NP/kDEhLoxIZ8R5j5oSibnbg+43G/V4JxOSNF7HpSRS3ki7dEWaS/zxdbO0nhK00BpkNaPteQZDsGIfG7iLYGq6WHYGaQMeiUqjFZNGrPV+rPYqcw+6M8GHbXU7XnaYO2+hlYDy+sPvr4se929GoU/O8bfucOEKiQjhWnmvCUcHZdiyhKhcc1gK2gLk3y8Z58NcdFLnvfaMiJPJsfxbDEu3RQRuatdG5XboHpTJt4ZmZ3we+oVc0g/GT22w==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB2632.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(39850400004)(376002)(366004)(396003)(136003)(346002)(6506007)(33656002)(4326008)(5660300002)(8936002)(478600001)(316002)(54906003)(52536014)(83380400001)(55016002)(9686003)(186003)(2906002)(64756008)(224303003)(86362001)(71200400001)(26005)(7696005)(6916009)(66946007)(66476007)(66556008)(66446008)(76116006)(91956017);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: /1a7oyF7Bz7TBs7XIi+TcbkuTFu5nmwNutj5N0yHd7P1PN9dMGZcVvmz7oDHTsuLJfTaKMl/9qCIa5XvfhqkNmPDOMF+KsmvkKLmFEcsMYTLamPhqTU3umfYN+9PuO+hsKpQotzHbd1T7shfWu7gzvO85Ch2fXCqx+oURSmg1oBFA9Q9ZlRjI/aFrNWlZXQj0iyI2A/anT5UyYZf+cSvmjJ+ArdUErbYCB9XOUAcCQ9L1jasduVtD7w7tsPQIS2vft4ds2QSb6z15LcGOkxM/aItrjvk8qXOfq5177EE6hUcJRLEqLo1Xd/2VjAB0aiJpWFUYwd08DrZXzQvIE9u8IPK9jWwHkZRYX+2Sg/UxeI9fClljO2+b23WAl52VAVRRVOvPnNDg/v0aaLLjsd2rIAriPkEhorPtp8P243t522FHYgH8W1RlaGbijx5RaTRtTkGCkIFxfSwPRBq7y01PjDWjie0+Av423D+WgOhaAM=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dx43ajhLjESyCXf5IxKZ59xjiCbdqQbAPcW0/8Og+YE=;
+        b=SHEQ695czCyxi92BjesXE+7X8G9ruQia2GI50J3AF1hsD1ti7UDL0anlB1z3/rBTFj
+         +vaWgzSNGGOnv8sfLhwL8gp/cJDEjePWrOudvnFb0L6ptLpCThQ7SaO2W/dh8ogsEVNF
+         DXLGE7LPsyWEIQAZ8TldhFPIMcq12AcOITZUkQoqVJDWjFOE4+MYyUlXJ5gErSR+T7ni
+         PIQC5FwjlInTkwpT7lwLyC5HTAaRklDnE/hqwuWZLdJbzG6LNMFX58GCQZ6Q2Nao+Q7V
+         zKlR0gCzjyaYttBnwSkz+erH8mwmgLB6lch9DX+aHH7zYON+PDj0Y+ydpyQZmrwYsBR5
+         Azzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dx43ajhLjESyCXf5IxKZ59xjiCbdqQbAPcW0/8Og+YE=;
+        b=BSOmEMkU2qj/L/U0pb2aly78t8TFDmtPOht3VTbLuJNXQlGg+ojN/ec3IVo8g3SMVV
+         hT7DV3Si90LE2bqPKI0JksYN20Ge1DzTIkfCI9HfYyov4gLuDUMb4WM29hgegUPvP3Ba
+         MUVJifjKN6Kp7rop6iZs+v+Wm4672fxAfBfNt42SISaRpXEvtzTkNq/Nw2sAx/hBhbiX
+         4A7tpWgXw1kW/7HmdRoIDnICI3vpYhuvJeYDc55mTD/d4SlyWCgCTLmcPiBSzcBrhIn3
+         I3JWsEbqHIe3zScexTpIrx4XLAHn5cHzZ9DtJTw1GnwHH7HQN4WlocuSxkJWBAwHS31E
+         Z44Q==
+X-Gm-Message-State: AOAM532E+BTk9O/qtyJjOPyv10I48K90udgBYZHt5vOpds+WW6KH7ge0
+        g4JS9BA8EHuW245rpmhVel5lD1coQtI0mbfXfPvyhA==
+X-Google-Smtp-Source: ABdhPJzapC4Filrj9vnVZ5vbU6QG6qqgVvRY6gZlppzk3oqvFj5GEl43s0L+AK/QGRJR+IpeZfpsLtk8xABHA5nsQjo=
+X-Received: by 2002:aca:b5c3:: with SMTP id e186mr1970574oif.10.1594094180570;
+ Mon, 06 Jul 2020 20:56:20 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: windriver.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB2632.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e31533ee-dcfc-493e-10cc-08d8221d73a5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jul 2020 02:28:36.0909
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: P4Okis8j9aNZi11RCU+QfQubjedBYX2OUrPzpr4ROtwMkF9kclhZcUtkoe6xTt52Rh9I0YBbXna2cv5PSWXDYJYFkOiEhPGAmY/svA3kQg0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR11MB3608
+References: <CALAqxLWAvvHGo1RYef1fJ_k65WqHAPCDhLfehO6_j_f8E2jB7Q@mail.gmail.com>
+ <87o8ow7wka.fsf@kernel.org> <CALAqxLVPOzD6FD9qJRJjTYai_zL_YzpCkPecWyE-KhTmEHNJYA@mail.gmail.com>
+ <87lfjz73cd.fsf@kernel.org>
+In-Reply-To: <87lfjz73cd.fsf@kernel.org>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Mon, 6 Jul 2020 20:56:08 -0700
+Message-ID: <CALAqxLWMJikHCzxcna08UPFdf=frm5=2z3BB-FDrzy7MbrHF6g@mail.gmail.com>
+Subject: Re: dwc3 inconsistent gadget connection state?
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Tejas Joglekar <tejas.joglekar@synopsys.com>,
+        Yang Fei <fei.yang@intel.com>,
+        Anurag Kumar Vulisha <anurag.kumar.vulisha@xilinx.com>,
+        YongQin Liu <yongqin.liu@linaro.org>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Thinh Nguyen <thinhn@synopsys.com>,
+        Linux USB List <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgR3JlZyBLSApJbiB0aGUgZWFybHkgc3VibWlzc2lvbjoKImNvbW1pdCBpZCBjNjk5NGU2ZjA2
-N2NmMGZjNGM2Y2NhM2QxNjQwMThiMTE1MDkxNmY4IiB3aGljaCBhZGQgVVNCIEF1ZGlvIEdhZGdl
-dCBkcml2ZXIgIiAgIAp0aGUgImF1ZGlvLT5wbGF5X3F1ZXVlIiB3YXMgcHJvdGVjdGVkIGZyb20g
-ImF1ZGlvLT5sb2NrIgpzcGlubG9jayBpbiAicGxheWJhY2tfd29yayIgZnVuYywgQnV0IGluICJm
-X2F1ZGlvX291dF9lcF9jb21wbGV0ZSIgZnVuYyAKdGhlcmUgaXMgbm8gcHJvdGVjdGlvbiBmb3Ig
-dGhlIG9wZXJhdGlvbiBvZiB0aGlzICJhdWRpby0+cGxheV9xdWV1ZSIuIHRoZXJlCmFyZSBtaXNz
-aW5nIHNwaW5sb2NrLCAgRml4IHRhZ3Mgc2hvdWxkIGFkZCB1cCBoZXJlIGNvbW1pdKO/CgpfX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCreivP7IyzogR3JlZyBLSCA8Z3Jl
-Z2toQGxpbnV4Zm91bmRhdGlvbi5vcmc+Creiy83KsbzkOiAyMDIwxOo31MI3yNUgMzo1NQrK1bz+
-yMs6IFpoYW5nLCBRaWFuZwqzrcvNOiBiYWxiaUBrZXJuZWwub3JnOyBjb2xpbi5raW5nQGNhbm9u
-aWNhbC5jb207IGxpbnV4LXVzYkB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtl
-cm5lbC5vcmc7IHN0YWJsZUB2Z2VyLmtlcm5lbC5vcmcK1vfM4jogUmU6IFtQQVRDSCB2M10gdXNi
-OiBnYWRnZXQ6IGZ1bmN0aW9uOiBmaXggbWlzc2luZyBzcGlubG9jayBpbiBmX3VhYzFfbGVnYWN5
-CgpPbiBTdW4sIEp1bCAwNSwgMjAyMCBhdCAwODo0MDoyN1BNICswODAwLCBxaWFuZy56aGFuZ0B3
-aW5kcml2ZXIuY29tIHdyb3RlOgo+IEZyb206IFpoYW5nIFFpYW5nIDxxaWFuZy56aGFuZ0B3aW5k
-cml2ZXIuY29tPgo+Cj4gQWRkIGEgbWlzc2luZyBzcGlubG9jayBwcm90ZWN0aW9uIGZvciBwbGF5
-X3F1ZXVlLCBiZWNhdXNlCj4gdGhlIHBsYXlfcXVldWUgbWF5IGJlIGRlc3Ryb3llZCB3aGVuIHRo
-ZSAicGxheWJhY2tfd29yayIKPiB3b3JrIGZ1bmMgYW5kICJmX2F1ZGlvX291dF9lcF9jb21wbGV0
-ZSIgY2FsbGJhY2sgZnVuYwo+IG9wZXJhdGUgdGhpcyBwYWx5X3F1ZXVlIGF0IHRoZSBzYW1lIHRp
-bWUuCgoicGxheV9xdWV1ZSIsIHJpZ2h0PwoKPgo+IENjOiBzdGFibGUgPHN0YWJsZUB2Z2VyLmtl
-cm5lbC5vcmc+Cj4gU2lnbmVkLW9mZi1ieTogWmhhbmcgUWlhbmcgPHFpYW5nLnpoYW5nQHdpbmRy
-aXZlci5jb20+CgpCZWNhdXNlIHlvdSBkbyBub3QgaGF2ZSBhIEZpeGVzOiB0YWcgaW4gaGVyZSwg
-aG93IGZhciBiYWNrIGRvIHlvdSB3YW50CnRoZSBzdGFibGUgcGF0Y2ggdG8gZ28gdG8/ICBUaGF0
-J3Mgd2h5LCBpZiB5b3UgY2FuLCBpdCdzIGFsd2F5cyBnb29kIHRvCmhhdmUgYSAiRml4ZXM6IiB0
-YWcgaW4gdGhlcmUgdG8gc2hvdyB3aGF0IGNvbW1pdCBjYXVzZWQgdGhlIHByb2JsZW0geW91CmFy
-ZSBmaXhpbmcgaGVyZS4KClNvLCB3aGF0IGNvbW1pdCBjYXVzZWQgdGhpcz8KCnRoYW5rcywKCmdy
-ZSBnay1oCg==
+On Sat, Jul 4, 2020 at 7:38 AM Felipe Balbi <balbi@kernel.org> wrote:
+> John Stultz <john.stultz@linaro.org> writes:
+> > On Fri, Jul 3, 2020 at 2:54 AM Felipe Balbi <balbi@kernel.org> wrote:
+> >> John Stultz <john.stultz@linaro.org> writes:
+> >> > I was curious if you or anyone else had any thoughts on how to debug
+> >> > this further?
+> >>
+> >> Try enabling dwc3 tracepoints and collecting working and failing
+> >> cases. If I were to guess, I would say there's a small race condition
+> >> between setting pullup and the transceiver sending the VBUS_VALID signal
+> >> to dwc3.
+> >
+> > Trace logs attached. Let me know if you have any further ideas!
+>
+> You can see from failure case that we never got a Reset event. This
+> happens, for instance, when dwc3 doesn't know that VBUS is above
+> VBUS_VALID threshold (4.4V). When the problem happens, I'm assuming USB
+> is completely dead, meaning that keeping the cable connected for longer
+> won't change anything, right?
+
+Correct. The only way to get it working is to unplug and replug the
+cable (sometimes more than once).
+
+> In that case, could you dump DWC3 registers (there's a debugfs interface
+> for that)? I'm mostly interested in the PHY registers, both USB2 and
+> USB3. Check if the PHYs are suspended in the error case.
+
+Here's a diff of the regdump in bad and good cases:
+--- regdump.bad 2020-07-07 03:44:46.799514793 +0000
++++ regdump.good        2020-07-07 03:44:44.723534198 +0000
+@@ -24,7 +24,7 @@
+ GHWPARAMS7 = 0x04881e8d
+ GDBGFIFOSPACE = 0x00420000
+ GDBGLTSSM = 0x41090440
+-GDBGBMU = 0xa0b08000
++GDBGBMU = 0x20300000
+ GPRTBIMAP_HS0 = 0x00000000
+ GPRTBIMAP_HS1 = 0x00000000
+ GPRTBIMAP_FS0 = 0x00000000
+@@ -162,29 +162,29 @@
+ GEVNTSIZ(0) = 0x00001000
+ GEVNTCOUNT(0) = 0x00000000
+ GHWPARAMS8 = 0x00000fea
+-DCFG = 0x00120804
+-DCTL = 0x80f00000
++DCFG = 0x0052082c
++DCTL = 0x8cf00a00
+ DEVTEN = 0x00001217
+-DSTS = 0x00000000
++DSTS = 0x00820000
+ DGCMDPAR = 0x00000000
+ DGCMD = 0x00000000
+-DALEPENA = 0x00000003
++DALEPENA = 0x0000000f
+ DEPCMDPAR2(0) = 0x00000000
+-DEPCMDPAR1(0) = 0x17a8e000
++DEPCMDPAR1(0) = 0x15935000
+ DEPCMDPAR0(0) = 0x00000002
+ DEPCMD(0) = 0x00000006
+ DEPCMDPAR2(1) = 0x00000000
+-DEPCMDPAR1(1) = 0x02000500
+-DEPCMDPAR0(1) = 0x00001000
+-DEPCMD(1) = 0x00000001
++DEPCMDPAR1(1) = 0x15935000
++DEPCMDPAR0(1) = 0x00000002
++DEPCMD(1) = 0x00010006
+ DEPCMDPAR2(2) = 0x00000000
+ DEPCMDPAR1(2) = 0x00000000
+-DEPCMDPAR0(2) = 0x00000001
+-DEPCMD(2) = 0x00030002
++DEPCMDPAR0(2) = 0x00000000
++DEPCMD(2) = 0x00020007
+ DEPCMDPAR2(3) = 0x00000000
+ DEPCMDPAR1(3) = 0x00000000
+-DEPCMDPAR0(3) = 0x00000001
+-DEPCMD(3) = 0x00040002
++DEPCMDPAR0(3) = 0x00000000
++DEPCMD(3) = 0x00030007
+ DEPCMDPAR2(4) = 0x00000000
+ DEPCMDPAR1(4) = 0x00000000
+ DEPCMDPAR0(4) = 0x00000001
+
+
+> If they are, try enabling the quirk flags that disable suspend for the
+> PHYs (check binding documentation). If that helps, then discuss with
+> your Silicon Validation guys what are the requirements when it comes to
+> suspend. Some PHYs are inherently quirky and need some of the quirky
+> flags dwc3 provides.
+>
+> Note that disabling suspend completely is a pretty large hammer that
+> should only be used if nothing else helps. Some PHYs are happy with a
+> simple delay of U1/U2/U3 entry but, again, check with your Silicon
+> Validation folks, likely they have already gone through this during chip
+> characterization.
+
+Unfortunately I don't have any access to silicon validation folks.
+There is already a number of the quirk bindings in use, but I'll
+tinker around with them a bit to see if it causes any behavior change.
+
+Thanks so much for the ideas and feedback! Much appreciated!
+-john
