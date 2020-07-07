@@ -2,170 +2,215 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0756B217366
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jul 2020 18:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33734217379
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jul 2020 18:14:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728029AbgGGQLz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Jul 2020 12:11:55 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:37973 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727789AbgGGQLz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jul 2020 12:11:55 -0400
-Received: (qmail 743485 invoked by uid 1000); 7 Jul 2020 12:11:53 -0400
-Date:   Tue, 7 Jul 2020 12:11:53 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        id S1728589AbgGGQOK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Jul 2020 12:14:10 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:54370 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727789AbgGGQOK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jul 2020 12:14:10 -0400
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 067G9tuq013325;
+        Tue, 7 Jul 2020 18:13:50 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=STMicroelectronics;
+ bh=3Afx2BNI/P16pD98uz+SOHXGDbHLupUEHpZV47RnCLo=;
+ b=m0RDiPDM/I0GpRhFENOsWoTXnVZkezWbT606WIGk0x7Xb+EFofzEb2CVNsxRsVQZPOmn
+ pcxx2qga7NiCGHC2R7cjLdTLilLXsTAxkGAeqbjIOV4wSdoORuPzla/Cbt4O2ZGes8eV
+ ++U+L1KwWGpudPuBgiNvBURVoiDpQZyPRrU0k1bx0emIqFTMywBaz0N3e/zKpoXeDAM0
+ QLgh7n0FPxYt82pPLNWStz4xt+Zbk61ujtXaRes35hbq8IIs99aDgzCFtaFSQRunSefk
+ pwxFxO4hjamTB1qTT7O31I8DsvylAHIsJnakrhk8lyTyttvKgXU/cUu8Op4Rrf/C5Kau Rw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 322gnfhyr1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Jul 2020 18:13:50 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id DA37E10002A;
+        Tue,  7 Jul 2020 18:13:48 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C8ABB2C5AAF;
+        Tue,  7 Jul 2020 18:13:48 +0200 (CEST)
+Received: from lmecxl0995.lme.st.com (10.75.127.48) by SFHDAG3NODE2.st.com
+ (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Tue, 7 Jul
+ 2020 18:13:48 +0200
+Subject: Re: [PATCH 1/3] usb: dwc2: override PHY input signals with usb role
+ switch support
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     Alexandre TORGUE <alexandre.torgue@st.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Fabrice GASNIER <fabrice.gasnier@st.com>,
         "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: Re: [PATCH 2/2] usb: host: xhci-plat: add wakeup entry at /sys
-Message-ID: <20200707161153.GB740256@rowland.harvard.edu>
-References: <20200703062532.29076-1-peter.chen@nxp.com>
- <20200703062532.29076-2-peter.chen@nxp.com>
- <20200703141911.GA623139@rowland.harvard.edu>
- <20200704092255.GA5695@b29397-desktop>
- <20200704144816.GA650205@rowland.harvard.edu>
- <20200705021256.GA29527@b29397-desktop>
- <20200705143151.GA672371@rowland.harvard.edu>
- <AM7PR04MB71571A625BEEE70F2D9B3C138B690@AM7PR04MB7157.eurprd04.prod.outlook.com>
- <20200706162237.GC704149@rowland.harvard.edu>
- <20200707020137.GA5373@b29397-desktop>
+        "hminas@synopsys.com" <hminas@synopsys.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+References: <20200616140717.28465-2-amelie.delaunay@st.com>
+ <20200704174219.612060-1-martin.blumenstingl@googlemail.com>
+From:   Amelie DELAUNAY <amelie.delaunay@st.com>
+Message-ID: <05a81997-5ddb-ea81-7a89-8078b8a2b610@st.com>
+Date:   Tue, 7 Jul 2020 18:13:47 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200707020137.GA5373@b29397-desktop>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200704174219.612060-1-martin.blumenstingl@googlemail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.75.127.48]
+X-ClientProxiedBy: SFHDAG6NODE3.st.com (10.75.127.18) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-07_08:2020-07-07,2020-07-07 signatures=0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 07, 2020 at 02:01:28AM +0000, Peter Chen wrote:
-> On 20-07-06 12:22:37, Alan Stern wrote:
-> > On Mon, Jul 06, 2020 at 04:03:08AM +0000, Peter Chen wrote:
-> > > So, you suggest:
-> > > At hcd-pci.c, ohci-platform.c, ehci-platform.c, and xhci-plat.c:
-> > > change device_wakeup_enable to device_init_wakeup(dev, true).
-> > 
-> > I don't think it's necessary to do that.
-> > 
-> > device_init_wakeup(dev, true) just calls device_set_wakeup_capable() and 
-> > device_wakeup_enable().  The kernel already does the 
-> > device_set_wakeup_capable() part for these devices in the code that 
-> > registers them.  For instance, the PCI core calls 
-> > device_set_wakeup_capable() when a new device is discovered and 
-> > registered, so there's no need for hcd-pci.c to repeat this action.
+Hi Martin,
+
+On 7/4/20 7:42 PM, Martin Blumenstingl wrote:
+> Hello Amelie,
 > 
-> But, that's not all the use cases. There are still two other use cases:
-> (Taking xhci-plat.c as an example):
-> - It is a platform bus device created by platform bus driver
-> - It is a platform bus device created by glue layer parents
-> (eg, dwc3/cdns3), usually, it is dual-role controller.
-
-In these cases there would be a choice: xhci-plat.c could call 
-device_init_wakeup, or the platform-bus/glue-layer driver could call 
-device_set_wakeup_capable and xhci-plat.c could continue to call 
-device_enable_wakeup.
-
-
-> > > I think if controller's wakeup setting is only used for ehci or xhci common code, that's ok. If
-> > > it is also used for glue layer's power control and wakeup setting; it may need to set "disabled"
-> > > for default value.
-> > 
-> > What sort of wakeup events can the glue layer generate?  It seems to me 
-> > that if there is no controller driver bound to the controller device 
-> > then the controller shouldn't be able to wake the system up in any case.
+> thank you for this patch - I am hoping that it will help us on Amlogic
+> Meson8, Meson8b, Meson8m2 and GXBB SoCs as well.
+> On these SoCs the ID detection is performed by the PHY IP and needs to
+> be polled.
+> I think usb_role_switch is the perfect framework for this on dwc2 side.
+> For the PHY driver I'm going to implement the cable state using the
+> extcon framework and then having a new usb-conn-extcon driver. This is
+> just to give you an overview why I'm interested in this.
 > 
-> It should be the similar with PCI device you mentioned below. The
-> glue layer device is a platform device which is the parent of controller
-> device,
 
-I don't understand.  Let's consider EHCI as an example.  The controller 
-device is something like 0000:00:1d.7, which is on the PCI bus and is a 
-PCI device.  Its child is usb1, which is a root-hub device on the USB 
-bus.
+I'm wondering, why use extcon framework and not the usb role switch API 
+? This patch on dwc2 is tested on STM32MP157C-DK2 board with STUSB160x 
+Type-C controller driver recently pushed with usb role switch. You can 
+have a look here https://lore.kernel.org/patchwork/patch/1256238/.
 
-But you're saying that the glue layer device would be the parent of the 
-controller device, right?  This means it would be analogous to the 
-parent of 0000:00:1d.7.  In the PCI world, that parent would be a PCI 
-bridge or something similar.  It would have no understanding of 
-ID/VBUS/DP/DM/RX changes, since those are all USB concepts and have 
-nothing to do with PCI.
-
-> it could detect ID/VBUS/DP/DM/RX changes and generate wakeup
-> events, these wakeup events will trigger interrupt, this interrupt
-> number could be the same with controller interrupt number or not.
-
-This really sounds like you are talking about the controller, not the 
-controller's parent.  Or maybe a PHY, which is sort of next to the 
-controller without being its parent or child.
-
-I like to think of it this way: A controller or device is something that 
-sits at an endpoint of a bus or communication channel, or at the meeting 
-place of two buses or communication channels.  Thus, an EHCI controller 
-sits at the meeting place of a PCI bus and a USB bus.  As a result, it 
-has interfaces to two buses: an upward-facing PCI bus interface and a 
-downward-facing USB bus interface.  The controller and root-hub devices 
-are abstractions used by the kernel to represent these two interfaces.
-That's why the ehci-pci controller driver registers itself with a 
-struct pci_driver and why root hubs are bound to the usb_generic_driver, 
-even though the actual hardware is all part of a single EHCI controller 
-chip.
-
-So now, in the situations you're talking about, what exactly are the 
-buses, the interfaces, and the controllers/devices?
-
-> When the system is in suspend (D3), when the wakeup events occurs,
-> the system interrupt controller could trigger wakeup request, and
-> wake system up. When the system is in full-power state (D0), this
-> interrupt just wakes up glue layer, and glue layer wakes up common
-> USB stack (EHCI/XHCI).
-
-When a device or controller relays information from one bus or another, 
-the wakeup setting indicates whether or not it should relay wakeup 
-requests.  ID/VBUS/DP/DM/RX events are all things that take place on the 
-USB bus.  As a result, the corresponding wakeup requests are 
-theoretically generated by the root-hub device -- not by the controller 
-device, since the controller device is attached to the upward-facing bus 
-and not to the USB bus.  The controller's wakeup setting thus indicates 
-whether the controller should forward these wakeup requests from the 
-root hub to the upward-facing bus.  Once a request reaches the 
-upward-facing bus, it could take the form of an ordinary IRQ signal or a 
-system-level wakeup signal.
-
-> > > I am curious how PCI USB at PC determine whether it responds USB wakeup events or not?
-> > > At Linux kernel or BIOS? It has two places for enabling USB wakeup, one for USB devices
-> > > (including roothub), another is for PCI device?
-> > 
-> > PCI devices send wakeup requests via a special PCI power management 
-> > signal called PME -- you can see its state in the output from "lspci 
-> > -vv" in the Power Management Capability section.  In legacy systems this 
-> > signal was handled by the BIOS, but nowadays the PCI and ACPI subsystems 
-> > in the Linux kernel handle it.
-> > 
-> > If a PCI host controller is in the D3 low-power state when a wakeup 
-> > event occurs, it uses the PME# signal to request a wakeup.  If it is in 
-> > the D0 full-power state when a wakeup event occurs, it uses its normal 
-> > IRQ signal to tell the system about the event.
-> > 
+> [...]
+>> +static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
+>> +{
+>> +     struct dwc2_hsotg *hsotg = usb_role_switch_get_drvdata(sw);
+>> +     unsigned long flags;
+>> +
+>> +     /* Skip session not in line with dr_mode */
+>> +     if ((role == USB_ROLE_DEVICE && hsotg->dr_mode == USB_DR_MODE_HOST) ||
+>> +         (role == USB_ROLE_HOST && hsotg->dr_mode == USB_DR_MODE_PERIPHERAL))
+>> +             return -EINVAL;
+>> +
+>> +     /* Skip session if core is in test mode */
+>> +     if (role == USB_ROLE_NONE && hsotg->test_mode) {
+>> +             dev_dbg(hsotg->dev, "Core is in test mode\n");
+>> +             return -EBUSY;
+>> +     }
+>> +
+>> +     spin_lock_irqsave(&hsotg->lock, flags);
+> due to this spin_lock_irqsave() ...
 > 
-> If the USBCMD.RS is cleared, does the interrupt could still occur when
-> the system is at D0, or this interrupt is not USB interrupt, it is a
-> PCI interrupt?
+>> +     if (role == USB_ROLE_HOST) {
+>> +             if (dwc2_ovr_avalid(hsotg, true))
+>> +                     goto unlock;
+>> +
+>> +             if (hsotg->dr_mode == USB_DR_MODE_OTG)
+>> +                     /*
+>> +                      * This will raise a Connector ID Status Change
+>> +                      * Interrupt - connID A
+>> +                      */
+>> +                     dwc2_force_mode(hsotg, true);
+> ... we cannot sleep in here. the call flow is:
+> dwc2_drd_role_sw_set
+>    spin_lock_irqsave
+>    dwc2_force_mode
+>      dwc2_wait_for_mode
+>        usleep_range
+> 
 
-I don't remember the details offhand.  I think pretty much the same 
-events are generated regardless of whether USBCMD.RS is set or clear.  
+In fact, with the avalid or bvalid overriding + the debounce filter 
+bypass, GINTSTS_CURMOD is already in the expected mode, so that we exit 
+the loop directly, without running into usleep_range.
 
-Anyway, when one of these events occurs, it causes an interrupt flag to 
-be set in the hardware.  If the controller is in D0 then it will raise a 
-PCI IRQ whenever the interrupt flag is set (and not masked).  If the 
-controller is in D3 then it is not allowed to raise a PCI IRQ, so it 
-asserts the PCI PME signal instead.
+>> +     } else if (role == USB_ROLE_DEVICE) {
+>> +             if (dwc2_ovr_bvalid(hsotg, true))
+>> +                     goto unlock;
+>> +
+>> +             if (hsotg->dr_mode == USB_DR_MODE_OTG)
+>> +                     /*
+>> +                      * This will raise a Connector ID Status Change
+>> +                      * Interrupt - connID B
+>> +                      */
+>> +                     dwc2_force_mode(hsotg, false);
+> (same sleeping issue here)
+> 
+> [...]
+> +int dwc2_drd_init(struct dwc2_hsotg *hsotg)
+> +{
+> +       struct usb_role_switch_desc role_sw_desc = {0};
+> +       struct usb_role_switch *role_sw;
+> +       int ret;
+> +
+> +       if (!device_property_read_bool(hsotg->dev, "usb-role-switch"))
+> +               return 0;
+> should we also return early here if dr_mode != "otg"?
+> 
 
-I'm not sure what you mean by "USB interrupt".  The USB protocol doesn't 
-have interrupts.  (It has interrupt URBs, but those are completely 
-different things as you know.)  The closest thing USB has to an 
-interrupt is a wakeup request.
+No, because when VBUS is not connected to the controller, you also need 
+to get the usb_role_none from the usb-role-switch to catch the 
+unattached state (also in Peripheral or Host only mode).
 
-Alan Stern
+> [...]
+> @@ -532,6 +534,13 @@ static int dwc2_driver_probe(struct platform_device 
+> *dev)
+>                   dwc2_writel(hsotg, ggpio, GGPIO);
+>           }
+> 
+> +       retval = dwc2_drd_init(hsotg);
+> +       if (retval) {
+> +               if (retval != -EPROBE_DEFER)
+> +                       dev_err(hsotg->dev, "failed to initialize 
+> dual-role\n");
+> +               goto error_init;
+> +       }
+> +
+>           if (hsotg->dr_mode != USB_DR_MODE_HOST) {
+>                   retval = dwc2_gadget_init(hsotg);
+>                   if (retval)
+> I think dwc2_driver_probe() needs a new label (for example named
+> error_drd) which then calls dwc2_drd_exit. See [0] which I have
+> submitted as a patch for Linux 5.8, so it's not in usb-next yet.
+> 
+
+I agree.
+
+> Also in general I think you need to submit a dt-bindings patch that
+> documents the usb-role-switch property. Personally I would use
+> Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml as
+> reference for that.
+> 
+
+Sure. Will be done in V2 with new label for drd_exit in probe failure 
+path. I'll rebase my patch on yours to avoid conflicts.
+
+> Can you please keep me Cc'ed on a v2 because I'm not subscribed to the
+> linux-usb mailing list?
+
+OK. Thanks for your review and future tests!
+Regards,
+Amelie
+
+> I am going to test this on Amlogic SoCs - once I made "everything else"
+> work I can give my Tested-by as well.
+> 
+> 
+> Thank you!
+> Martin
+> 
+> 
+> [0] https://patchwork.kernel.org/patch/11642957/
