@@ -2,190 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEE8321773D
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jul 2020 20:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B13BB21782C
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jul 2020 21:45:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728665AbgGGSzS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 7 Jul 2020 14:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37592 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728029AbgGGSzR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 7 Jul 2020 14:55:17 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD8BC061755;
-        Tue,  7 Jul 2020 11:55:17 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id y10so47719109eje.1;
-        Tue, 07 Jul 2020 11:55:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RMd8tTCfjNB1oolYgjCGnbvueA8plaMd/4ysVp4hew8=;
-        b=MSqOBX8iZf3N6uIy8Wnm5L4m29/XEr8WCDGWKf500fbPsnl0xzYC6LVlONOf42h0CR
-         I4Rd/idVHgRuoGFtY+arKp+gSn5l1NRpVZPWVHS7fUt71j1qB3v2jBGggVQKiUaXawDQ
-         qNM+I9ABuRJwyg5qaqOAP2v7E/mgtgDyAf07ig2saLp6YrXGZCFFphghvpbv74afVMS8
-         hgukBbVyPl5VtFibxfDALfdkB8feg3dsrXD3cpQ8FTKR3WiUU7+WwLET7Fw8fB0Y9Ntx
-         fJHk1hgmFv1SXz42n9wzYn1nyBLlwu2BiOkVLXgOydApO9SPolevYiuOnuXVadp33hpE
-         sucw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RMd8tTCfjNB1oolYgjCGnbvueA8plaMd/4ysVp4hew8=;
-        b=EI62LqfxVmuWGRR0riabauCOYQMb4pWuSeGO6Vwy3Sm/tF38c1j1InDDIDN2+uYtRb
-         Bw2u14sPc85z2UnwPVqXcMP762pEF7XFlFRlDKRVmr43PcD5PHgtlas6Y9NY279IoKW8
-         7CLVIkWIC+D0EOnUXhmYpR/yYk8oL68LecFc7BVlIelTbzuY0S0IulqE6+ow+7FhzXRz
-         QnUD6FaaesDykqb84NymO7yoJDnvREnXIzp2GWoMtrfA986EyXqRZ8k4o/NcaC46Dmux
-         haieheaV1l4GWN0m2TKarMJfHzEyKg5R7rhJw6CGsWSo3SWFNyM4SVdM+OEkZbyLGEJa
-         083A==
-X-Gm-Message-State: AOAM532e/2irmO3SuowHNQiiybJuDkAjP0mmHGxNzzZue2q4SzFcudtR
-        rXr38tnsOduxVbKxFnVW+siAJuTZtjNgg4jdgtE=
-X-Google-Smtp-Source: ABdhPJyGaJyOnxq0gk8ybfmAthcx/e6Mw+KIY+a9E8de0FSUviN2dLI02eWmz8T4W3gH7eX3EhiPg+3nhWg5mmVWaSQ=
-X-Received: by 2002:a17:906:2287:: with SMTP id p7mr49705831eja.537.1594148115920;
- Tue, 07 Jul 2020 11:55:15 -0700 (PDT)
+        id S1728006AbgGGTo6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 7 Jul 2020 15:44:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58070 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726763AbgGGTo5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 7 Jul 2020 15:44:57 -0400
+Received: from embeddedor (unknown [200.39.26.250])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A5494206BE;
+        Tue,  7 Jul 2020 19:44:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1594151097;
+        bh=dJp+PL8g3KNnzNGMS1VZ8Vt2dsb5EvBdpIBRC+C9sWY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=BoRFD0r9+TcHRnVv+FIm6BwXiROBx8ed8M7u7mDC4gIYFVPEKAmatVdp9Sm5VdD4B
+         GJHbRulK1zxhW90BdSn6+UZFJ3f6JB/dgPngZseEGCZAutEFojqTCNolQhQH0hVJHI
+         J05mOUGHz8xvps0JZ3DFovWmLqxaGkHidq4L/55U=
+Date:   Tue, 7 Jul 2020 14:50:23 -0500
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Subject: [PATCH] usb: host: Use fallthrough pseudo-keyword
+Message-ID: <20200707195023.GA3792@embeddedor>
 MIME-Version: 1.0
-References: <20200616140717.28465-2-amelie.delaunay@st.com>
- <20200704174219.612060-1-martin.blumenstingl@googlemail.com> <05a81997-5ddb-ea81-7a89-8078b8a2b610@st.com>
-In-Reply-To: <05a81997-5ddb-ea81-7a89-8078b8a2b610@st.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Tue, 7 Jul 2020 20:55:05 +0200
-Message-ID: <CAFBinCCVYJ=DuKbqhJJ8463Gs+GW0bgxyXSFiLXhUfvWV6AR0Q@mail.gmail.com>
-Subject: Re: [PATCH 1/3] usb: dwc2: override PHY input signals with usb role
- switch support
-To:     Amelie DELAUNAY <amelie.delaunay@st.com>
-Cc:     Alexandre TORGUE <alexandre.torgue@st.com>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Fabrice GASNIER <fabrice.gasnier@st.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "hminas@synopsys.com" <hminas@synopsys.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Amelie,
+Replace the existing /* fall through */ comments and its variants with
+the new pseudo-keyword macro fallthrough[1]. Also, remove unnecessary
+fall-through markings when it is the case.
 
-On Tue, Jul 7, 2020 at 6:13 PM Amelie DELAUNAY <amelie.delaunay@st.com> wrote:
->
-> Hi Martin,
->
-> On 7/4/20 7:42 PM, Martin Blumenstingl wrote:
-> > Hello Amelie,
-> >
-> > thank you for this patch - I am hoping that it will help us on Amlogic
-> > Meson8, Meson8b, Meson8m2 and GXBB SoCs as well.
-> > On these SoCs the ID detection is performed by the PHY IP and needs to
-> > be polled.
-> > I think usb_role_switch is the perfect framework for this on dwc2 side.
-> > For the PHY driver I'm going to implement the cable state using the
-> > extcon framework and then having a new usb-conn-extcon driver. This is
-> > just to give you an overview why I'm interested in this.
-> >
->
-> I'm wondering, why use extcon framework and not the usb role switch API
-> ? This patch on dwc2 is tested on STM32MP157C-DK2 board with STUSB160x
-> Type-C controller driver recently pushed with usb role switch. You can
-> have a look here https://lore.kernel.org/patchwork/patch/1256238/.
-one of the boards that I'm working on is for example the Odroid-C1. It
-has a Micro-USB port and there's no Type-C controller present.
+[1] https://www.kernel.org/doc/html/latest/process/deprecated.html?highlight=fallthrough#implicit-switch-case-fall-through
 
-in the next few days I'll try to send my idea as RFC, but this is the
-.dts I've come up with so far:
-&usb0 {
-    dr_mode = "otg";
-    usb-role-switch;
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ drivers/usb/host/ehci-dbg.c   |    2 +-
+ drivers/usb/host/ehci-fsl.c   |    4 ++--
+ drivers/usb/host/ehci-hcd.c   |    4 ++--
+ drivers/usb/host/ehci-q.c     |    2 +-
+ drivers/usb/host/ehci-sched.c |    2 +-
+ 5 files changed, 7 insertions(+), 7 deletions(-)
 
-    connector {
-        compatible = "extcon-usb-b-connector", "usb-b-connector";
-        type = "micro";
-        extcon = <&usb0_phy>;
-        vbus-supply = <&usb_vbus>;
-    };
-};
+diff --git a/drivers/usb/host/ehci-dbg.c b/drivers/usb/host/ehci-dbg.c
+index 7619cfb06883..0b7f1edd9eec 100644
+--- a/drivers/usb/host/ehci-dbg.c
++++ b/drivers/usb/host/ehci-dbg.c
+@@ -823,7 +823,7 @@ static ssize_t fill_registers_buffer(struct debug_buffer *buf)
+ 				break;
+ 			case 0:		/* illegal reserved capability */
+ 				cap = 0;
+-				/* FALLTHROUGH */
++				fallthrough;
+ 			default:		/* unknown */
+ 				break;
+ 			}
+diff --git a/drivers/usb/host/ehci-fsl.c b/drivers/usb/host/ehci-fsl.c
+index 9e9c232e896f..6c2b53baa515 100644
+--- a/drivers/usb/host/ehci-fsl.c
++++ b/drivers/usb/host/ehci-fsl.c
+@@ -234,7 +234,7 @@ static int ehci_fsl_setup_phy(struct usb_hcd *hcd,
+ 		break;
+ 	case FSL_USB2_PHY_UTMI_WIDE:
+ 		portsc |= PORT_PTS_PTW;
+-		/* fall through */
++		fallthrough;
+ 	case FSL_USB2_PHY_UTMI:
+ 		/* Presence of this node "has_fsl_erratum_a006918"
+ 		 * in device-tree is used to stop USB controller
+@@ -244,7 +244,7 @@ static int ehci_fsl_setup_phy(struct usb_hcd *hcd,
+ 			dev_warn(dev, "USB PHY clock invalid\n");
+ 			return -EINVAL;
+ 		}
+-		/* fall through */
++		fallthrough;
+ 	case FSL_USB2_PHY_UTMI_DUAL:
+ 		/* PHY_CLK_VALID bit is de-featured from all controller
+ 		 * versions below 2.4 and is to be checked only for
+diff --git a/drivers/usb/host/ehci-hcd.c b/drivers/usb/host/ehci-hcd.c
+index cf2b7ae93b7e..6257be4110ca 100644
+--- a/drivers/usb/host/ehci-hcd.c
++++ b/drivers/usb/host/ehci-hcd.c
+@@ -982,7 +982,7 @@ ehci_endpoint_disable (struct usb_hcd *hcd, struct usb_host_endpoint *ep)
+ 			start_unlink_async(ehci, qh);
+ 		else
+ 			start_unlink_intr(ehci, qh);
+-		/* FALL THROUGH */
++		fallthrough;
+ 	case QH_STATE_COMPLETING:	/* already in unlinking */
+ 	case QH_STATE_UNLINK:		/* wait for hw to finish? */
+ 	case QH_STATE_UNLINK_WAIT:
+@@ -999,7 +999,7 @@ ehci_endpoint_disable (struct usb_hcd *hcd, struct usb_host_endpoint *ep)
+ 			qh_destroy(ehci, qh);
+ 			break;
+ 		}
+-		/* fall through */
++		fallthrough;
+ 	default:
+ 		/* caller was supposed to have unlinked any requests;
+ 		 * that's not our job.  just leak this memory.
+diff --git a/drivers/usb/host/ehci-q.c b/drivers/usb/host/ehci-q.c
+index 8a5c9b3ebe1e..a826715ae9bd 100644
+--- a/drivers/usb/host/ehci-q.c
++++ b/drivers/usb/host/ehci-q.c
+@@ -874,7 +874,7 @@ qh_make (
+ 	switch (urb->dev->speed) {
+ 	case USB_SPEED_LOW:
+ 		info1 |= QH_LOW_SPEED;
+-		/* FALL THROUGH */
++		fallthrough;
+ 
+ 	case USB_SPEED_FULL:
+ 		/* EPS 0 means "full" */
+diff --git a/drivers/usb/host/ehci-sched.c b/drivers/usb/host/ehci-sched.c
+index da7b00a6110b..847979f265b1 100644
+--- a/drivers/usb/host/ehci-sched.c
++++ b/drivers/usb/host/ehci-sched.c
+@@ -2475,7 +2475,7 @@ static void scan_isoc(struct ehci_hcd *ehci)
+ 			ehci_dbg(ehci, "corrupt type %d frame %d shadow %p\n",
+ 					type, frame, q.ptr);
+ 			/* BUG(); */
+-			/* FALL THROUGH */
++			fallthrough;
+ 		case Q_TYPE_QH:
+ 		case Q_TYPE_FSTN:
+ 			/* End of the iTDs and siTDs */
 
-I did this for two reasons:
-1. I think the PHY is not a connector and thus it's driver shouldn't
-implement any connector specific logic (managing VBUS)
-2. without the connector there would be a circular dependency: the USB
-controller needs the PHY to initialize but the PHY would need the USB
-controller so it can manage the role switch
-
-(or in other words: the connector replaces the Type-C controller in this case)
-
-> > [...]
-> >> +static int dwc2_drd_role_sw_set(struct usb_role_switch *sw, enum usb_role role)
-> >> +{
-> >> +     struct dwc2_hsotg *hsotg = usb_role_switch_get_drvdata(sw);
-> >> +     unsigned long flags;
-> >> +
-> >> +     /* Skip session not in line with dr_mode */
-> >> +     if ((role == USB_ROLE_DEVICE && hsotg->dr_mode == USB_DR_MODE_HOST) ||
-> >> +         (role == USB_ROLE_HOST && hsotg->dr_mode == USB_DR_MODE_PERIPHERAL))
-> >> +             return -EINVAL;
-> >> +
-> >> +     /* Skip session if core is in test mode */
-> >> +     if (role == USB_ROLE_NONE && hsotg->test_mode) {
-> >> +             dev_dbg(hsotg->dev, "Core is in test mode\n");
-> >> +             return -EBUSY;
-> >> +     }
-> >> +
-> >> +     spin_lock_irqsave(&hsotg->lock, flags);
-> > due to this spin_lock_irqsave() ...
-> >
-> >> +     if (role == USB_ROLE_HOST) {
-> >> +             if (dwc2_ovr_avalid(hsotg, true))
-> >> +                     goto unlock;
-> >> +
-> >> +             if (hsotg->dr_mode == USB_DR_MODE_OTG)
-> >> +                     /*
-> >> +                      * This will raise a Connector ID Status Change
-> >> +                      * Interrupt - connID A
-> >> +                      */
-> >> +                     dwc2_force_mode(hsotg, true);
-> > ... we cannot sleep in here. the call flow is:
-> > dwc2_drd_role_sw_set
-> >    spin_lock_irqsave
-> >    dwc2_force_mode
-> >      dwc2_wait_for_mode
-> >        usleep_range
-> >
->
-> In fact, with the avalid or bvalid overriding + the debounce filter
-> bypass, GINTSTS_CURMOD is already in the expected mode, so that we exit
-> the loop directly, without running into usleep_range.
-on my Amlogic SoC this is not the case:
-The kernel complains because of that usleep_range from within the
-spinlock context
-
-Please let me know if/how I can help debug this.
-
-[...]
-> > +int dwc2_drd_init(struct dwc2_hsotg *hsotg)
-> > +{
-> > +       struct usb_role_switch_desc role_sw_desc = {0};
-> > +       struct usb_role_switch *role_sw;
-> > +       int ret;
-> > +
-> > +       if (!device_property_read_bool(hsotg->dev, "usb-role-switch"))
-> > +               return 0;
-> > should we also return early here if dr_mode != "otg"?
-> >
->
-> No, because when VBUS is not connected to the controller, you also need
-> to get the usb_role_none from the usb-role-switch to catch the
-> unattached state (also in Peripheral or Host only mode).
-I see - thank you for the explanation!
-
-
-Best regards,
-Martin
