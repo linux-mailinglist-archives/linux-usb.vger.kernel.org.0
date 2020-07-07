@@ -2,459 +2,229 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 681E22161AA
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jul 2020 00:44:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42127216394
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jul 2020 04:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726911AbgGFWo1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 6 Jul 2020 18:44:27 -0400
-Received: from wout2-smtp.messagingengine.com ([64.147.123.25]:33335 "EHLO
-        wout2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726898AbgGFWo0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 6 Jul 2020 18:44:26 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 46448B81;
-        Mon,  6 Jul 2020 18:44:25 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Mon, 06 Jul 2020 18:44:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flameeyes.com;
-         h=from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-type:content-transfer-encoding; s=fm2; bh=
-        9WukcVHCaidzxEEwfI+GK5KajGXkKW3qmxGBLn9OJ2M=; b=fFAzSl18bn8RyHNC
-        rw/ojUwr2nDgJ3Rp9Tma5wuDbkepOf+XWeKC56uVmBNuzvfaCbFRCd/NusAvYvru
-        6q+HEopc9KEaQCpGOkyOXQvQNepwdhkur3NYxfiae+6yRQUv2XynxZ/j/ybUDXmB
-        z4aY+IYxZWKAf+TwbvcooTmdDSRs7DbknuJ5rCARdIjoJHGrWWXghHOvvM9DXkGz
-        p4evz0z8BEl5BSVWqGWKaF4DRtk/Yesqx9rMZuNb8ADX+xithGqySHmlpbhqcJ3P
-        npBpFdDOJXgi4dToqWPoNyAZVSpzqA1CCcqFqEGW4kIzjG3aKBPirxk6b7+NQYoQ
-        UPj7Hw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; bh=9WukcVHCaidzxEEwfI+GK5KajGXkKW3qmxGBLn9OJ
-        2M=; b=UI6AwMctQw4PAZ8ewbxQW8D7MqzXMHzsJA5nKmICFYH8VTnSYG3E4KMAx
-        lYHzCfGATgBVVJ+dG0r0FRqb/sbkrABUrPkdYMdVklNLAN3K9PQUvKdXkacmynCg
-        2Plm3JTa5cJVl62RMTiGqHBHchQAKNxrmxbv8HWaE9w3/1w3qujvGqhn/oUhrnnC
-        jlct6meUfah01oDalqf7NCSwC2XTIi2FYyRXDvjwveuEIpw+OlBt63hoomBv6flt
-        X8n1NzoKBmhphS/xF+TEbwFugAay+ozNcEPPBbAQkuIjkD94dYpAPINBiZcKfi0X
-        QpJS6vbHO1r6wAXBdLA3HanMhzQyQ==
-X-ME-Sender: <xms:SKkDXx8u32_SgLeyahCDbSSVZvCsOWeV8NSmtjdMaZy8MF6PX9gYLA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedrudeggddugecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvffufffkofgjfhggtgfgsehtkeertdertdejnecuhfhrohhmpeffihgvghho
-    ucfglhhiohcurfgvthhtvghnjpcuoehflhgrmhgvvgihvghssehflhgrmhgvvgihvghsrd
-    gtohhmqeenucggtffrrghtthgvrhhnpeeljefgtdeufefhieetgfeuvedvtddvieefgeeh
-    vdfgvdelleekleekveevhfduueenucfkphepkeekrdelkedrvdefkedrudeftdenucevlh
-    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehflhgrmhgvvgih
-    vghssehflhgrmhgvvgihvghsrdgtohhm
-X-ME-Proxy: <xmx:SKkDX1uZANRBgC0MzBA-OMzUES2Dy1tawZFXfAqJjptzDlk-DYUoHA>
-    <xmx:SKkDX_BlTQ-5jowSwAHVblG59rWSuJKmJJRJWkCIfW1Unj2-V1JyVA>
-    <xmx:SKkDX1dzrWsWb6zcRzu0NaL6HX3FgNPMCi9Yp1wpCjmpb6z3ZjtYSQ>
-    <xmx:SKkDX_bgwN1t5lfleutCleQVtk4JJSH_DzhTpBKFnWe-ua5aD0mmBw>
-Received: from localhost.localdomain (unknown [88.98.238.130])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 121463280067;
-        Mon,  6 Jul 2020 18:44:23 -0400 (EDT)
-From:   =?UTF-8?q?Diego=20Elio=20Petten=C3=B2?= <flameeyes@flameeyes.com>
-To:     linux-usb@vger.kernel.org
-Cc:     =?UTF-8?q?Diego=20Elio=20Petten=C3=B2?= <flameeyes@flameeyes.com>,
-        Pete Zaitcev <zaitcev@redhat.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kris Katterjohn <katterjohn@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Subject: [PATCH v4 2/2] usbmon: expose the usbmon structures and constants as an UAPI header.
-Date:   Mon,  6 Jul 2020 23:44:15 +0100
-Message-Id: <20200706224415.2854-2-flameeyes@flameeyes.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200706224415.2854-1-flameeyes@flameeyes.com>
-References: <20200705150225.21500-1-flameeyes@flameeyes.com>
- <20200706224415.2854-1-flameeyes@flameeyes.com>
+        id S1726478AbgGGCBe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 6 Jul 2020 22:01:34 -0400
+Received: from mail-eopbgr10073.outbound.protection.outlook.com ([40.107.1.73]:51983
+        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725987AbgGGCBe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 6 Jul 2020 22:01:34 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MU121Z5wBTFDwIw8VQhiAGPuZLYOljav7VVL37WEeloQn5UKaFUnFxbzPYcB6NErxHmWLF3vr4QbsiWimi43OzsVyCW+hc+oFcutxLJuasoXPgmj2KGvqnHlaTP4jnkjRK34TMiPZCZZ6Kv1WCTr7teqweQNFQ1D0JA2lqdwq+KMuOHDEdEPx+HvOW0NnIYGXOELRg+7lSbOa9pYqT04gkInwqH7j1nl6t/SbM7HRml8JLOGa1yC3yYBXJFIbQjybdi4wk1JjXWrvq+q/4jv+DUUjhnDhapYAkFQwYAeIRkaqO+tT6GKgjw/4njGhXl8wHL6BRNrefZr2YDgCLKm7A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2jYJITAb+McSk2R9l6jdrXZCMmSx1KhU7B1JujMy/OA=;
+ b=OphMbzxb5K78UnTyB78riNZsVv4gvxoGudhLKA+SE65BUqoCyZYyIGeg8RQo92wFzB+ABvb01LsgcsyLHvReRgW6MgjrIZej9w90xdTq9ghptKMVRa2xEY8SuoJeCQaw6o0RE1J6n886c7D047L3vJZNFiiTXvvaka5wccOcR+A2DljqwnOkaIvoHrMRA6mVnp2o5gJsLpPZpI9xe0vORKlox0GHLychGz0Zq78rm76VNcAw8UZYo7iCTyM46DIW9nx3FgfPkL9VJjvpMPNBQfWIfI01aUgBMf1szy1xUI9SvQZY/DqTg9DYUDJznOvmO+J3ctE57JOe3JaiWgHsUA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2jYJITAb+McSk2R9l6jdrXZCMmSx1KhU7B1JujMy/OA=;
+ b=EO1U8O4AQjS23e3uaSGCla73CIR/YaDE9UHJx2Nn1sQPk9OplD0EBj0XVouInt5SsOhEGvK+DVxjdUhqY4a69WfsnDacNybrlO94yk3yTgX9/hnP1Nyyh/Mts2kGVTFTRxTwUtwGpjjlKfUail5gMpEr+yv9XCf+EVEoGapgACA=
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
+ by AM6PR04MB5493.eurprd04.prod.outlook.com (2603:10a6:20b:2b::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3153.22; Tue, 7 Jul
+ 2020 02:01:28 +0000
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1101:adaa:ee89:af2a]) by AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1101:adaa:ee89:af2a%3]) with mapi id 15.20.3153.029; Tue, 7 Jul 2020
+ 02:01:28 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [PATCH 2/2] usb: host: xhci-plat: add wakeup entry at /sys
+Thread-Topic: [PATCH 2/2] usb: host: xhci-plat: add wakeup entry at /sys
+Thread-Index: AQHWUQLEv7puXBnz7kavmyMm4fC5l6j159KAgAE/joCAAFrnAIAAv0sAgADOc4CAANPw0IAA3ViAgAChxYA=
+Date:   Tue, 7 Jul 2020 02:01:28 +0000
+Message-ID: <20200707020137.GA5373@b29397-desktop>
+References: <20200703062532.29076-1-peter.chen@nxp.com>
+ <20200703062532.29076-2-peter.chen@nxp.com>
+ <20200703141911.GA623139@rowland.harvard.edu>
+ <20200704092255.GA5695@b29397-desktop>
+ <20200704144816.GA650205@rowland.harvard.edu>
+ <20200705021256.GA29527@b29397-desktop>
+ <20200705143151.GA672371@rowland.harvard.edu>
+ <AM7PR04MB71571A625BEEE70F2D9B3C138B690@AM7PR04MB7157.eurprd04.prod.outlook.com>
+ <20200706162237.GC704149@rowland.harvard.edu>
+In-Reply-To: <20200706162237.GC704149@rowland.harvard.edu>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: rowland.harvard.edu; dkim=none (message not signed)
+ header.d=none;rowland.harvard.edu; dmarc=none action=none
+ header.from=nxp.com;
+x-originating-ip: [119.31.174.67]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: f9ddd324-4cbb-4d65-7aa6-08d82219a94f
+x-ms-traffictypediagnostic: AM6PR04MB5493:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM6PR04MB5493631CBFAA383ED7D154698B660@AM6PR04MB5493.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 0457F11EAF
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: pE2bG66owkKChztuSfbxKtCI+Wrnax6I66MdQMqz7/3wgbykqxS0n1tHaZHejlMiYUrv4vyFn1a/kfUC8Eidl3pPektki7PTqurracnVW1o/VBqNFJfWosnu1Ii7aFpSjc5jn5leVILzEM6TZS7ZkTBuTwSO0T7xlcC8vh+b6/TJQ/HEDp2ez8u9v2azG0sqdrFHFxeXMxJ6dn71qF6uuQV8BEOXD+c1jh2USkuqy+0YD4TRUiD1e2BPS+0kBOIepqKEcckk4HgEN84hyPe5rAYZaHo+uHkaz0NvJGMpW7aUzp75uWOZ7OU2M99GZHCF4M7NQeZjLoDSB2homb+AJQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(7916004)(4636009)(39860400002)(376002)(366004)(396003)(136003)(346002)(6506007)(53546011)(1076003)(33656002)(4326008)(5660300002)(8936002)(478600001)(316002)(54906003)(83380400001)(9686003)(6512007)(186003)(8676002)(2906002)(64756008)(33716001)(86362001)(71200400001)(26005)(6486002)(6916009)(44832011)(66946007)(66476007)(66556008)(76116006)(66446008)(91956017);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: G6NECboiR2sI4wvWAot2pcvuKwLBSaGc7wjynsOI6In7iCQaPDZcG/ZjHxFHT3hGb57GvkXAuIcT8/zE173z+X6q257pA5V22NC2WL6EtjctJ9Kbq8n/vtlH3r+V8Z4kDtJJQj4LAZeH2Vyo9bIjWqdKZSLPW0ERnKp0yhTEhX3tNusi0ZsXwFmYlhNQtuULyltAqqkV91f74TwGI+qnQ2PkAJAD+oBae77Ovzbbr2G7EztBHFHw6HLqXyM2Z6W7rEa/0vTWlGxrwS/Ecfys97eZp431wpKIhLdS+Y8goZb7NbyJag31j35LxkXT78w/xWx45x9WoaDCAIqseSumVB1HEUivr9uEQXrZlrmrM8x/5g9EuaK6GwaUAeXXmfAVWFVVrXkklODAmk1a0rjcmdwpweMo4ZTamBRUt6Fb7/2C6PQ3nrkgxfBhLKEMaSsSEoFlsTHtdJOmEpLO/EKkpIWoSaVCOOuoREEEbOP7rnrL/uckUCYsEBdPp5kuYWjE
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <35D1E9AF4FF2B147B48AA6A18ED8A015@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f9ddd324-4cbb-4d65-7aa6-08d82219a94f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jul 2020 02:01:28.1994
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: f8t27fgcgWeIkBbDTySEYDA0pKeb9xcBDhOquX2nl+5rK99Fw82TYUonqWlwZ4F31nGyIorQCF6gjmkgbFxdcw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB5493
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This allows applications to use the usbmon ioctl() without declaring the
-constants.
+On 20-07-06 12:22:37, Alan Stern wrote:
+> On Mon, Jul 06, 2020 at 04:03:08AM +0000, Peter Chen wrote:
+> > > > Thanks for the information, Alan.
+> > > >
+> > > > I could not understand why device_wakeup_enable is used in these
+> > > > device drivers? At Documentation/driver-api/pm/devices.rst, L189, i=
+t also says:
+> > > >
+> > > > 	during a system sleep transition.  Device drivers, however, are
+> > > >        	not expected to call :c:func:`device_set_wakeup_enable()` d=
+irectly
+> > > >        	in any case.
+> > >=20
+> > > It also says:
+> > >=20
+> > > 	It should also default to "enabled" for devices that don't
+> > > 	generate wakeup requests on their own but merely forward wakeup
+> > > 	requests from one bus to another (like PCI Express ports).
+> > >=20
+> > > The controller device falls into this category.  It doesn't generate =
+wakeup requests
+> > > on its own; it merely forwards wakeup requests from the root hub or U=
+SB devices.  I
+> > > think the intention was that drivers for these devices would call dev=
+ice_init_wakeup()
+> > > instead of calling both
+> > > device_set_wakeup_capable() and device_wakeup_enable().
+> > >=20
+> > > In any case, the rule about setting the default value is more importa=
+nt than the rule
+> > > about not calling device_set_wakeup_enable() directly.
+> > >=20
+> > > If you're concerned about connect-detect or disconnect-detect wakeup =
+signals,
+> > > these are supposed to be enabled or disabled by the root hub's wakeup=
+ setting.
+> > > The idea is that root hubs should behave the same as external hubs --=
+ and whether
+> > > or not an external hub generates a wakeup request when a connect or d=
+isconnect
+> > > event occurs is controlled by the hub's wakeup setting.
+> > >=20
+> >=20
+> > So, you suggest:
+> > At hcd-pci.c, ohci-platform.c, ehci-platform.c, and xhci-plat.c:
+> > change device_wakeup_enable to device_init_wakeup(dev, true).
+>=20
+> I don't think it's necessary to do that.
+>=20
+> device_init_wakeup(dev, true) just calls device_set_wakeup_capable() and=
+=20
+> device_wakeup_enable().  The kernel already does the=20
+> device_set_wakeup_capable() part for these devices in the code that=20
+> registers them.  For instance, the PCI core calls=20
+> device_set_wakeup_capable() when a new device is discovered and=20
+> registered, so there's no need for hcd-pci.c to repeat this action.
 
-Update the documentation to reflect the new header.
+But, that's not all the use cases. There are still two other use cases:
+(Taking xhci-plat.c as an example):
+- It is a platform bus device created by platform bus driver
+- It is a platform bus device created by glue layer parents
+(eg, dwc3/cdns3), usually, it is dual-role controller.
 
-Cc: linux-usb@vger.kernel.org
-Cc: Pete Zaitcev <zaitcev@redhat.com>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Kris Katterjohn <katterjohn@gmail.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>
-Signed-off-by: Diego Elio Pettenò <flameeyes@flameeyes.com>
----
- Documentation/usb/usbmon.rst |  70 ++++++++++++-----------
- drivers/usb/mon/mon_bin.c    |  92 +-----------------------------
- include/uapi/linux/usb/mon.h | 107 +++++++++++++++++++++++++++++++++++
- 3 files changed, 145 insertions(+), 124 deletions(-)
- create mode 100644 include/uapi/linux/usb/mon.h
+>=20
+> > For xhci_suspend, use both controller's wakeup setting and roothub wake=
+up setting to
+> > judge if connect or disconnect wakeup needs to enable or not, like func=
+tion ehci_adjust_port_wakeup_flags.
+>=20
+> Yes, something like that.  This probably should be done in any case. =20
+> Some hardware might not like it if port-level connect/disconnect wakeups=
+=20
+> are enabled but the controller-level wakeup signal is disabled.
+>=20
+> > > If the controller's wakeup setting defaulted to "disabled", then anyb=
+ody who wanted
+> > > to get USB wakeup requests would have to enable them on both the USB =
+device
+> > > and the controller.  This would confuse users and cause problems.
+> > >=20
+> >=20
+> > I think if controller's wakeup setting is only used for ehci or xhci co=
+mmon code, that's ok. If
+> > it is also used for glue layer's power control and wakeup setting; it m=
+ay need to set "disabled"
+> > for default value.
+>=20
+> What sort of wakeup events can the glue layer generate?  It seems to me=20
+> that if there is no controller driver bound to the controller device=20
+> then the controller shouldn't be able to wake the system up in any case.
 
-diff --git a/Documentation/usb/usbmon.rst b/Documentation/usb/usbmon.rst
-index e9ec7e40b3bf..31c14b38fd03 100644
---- a/Documentation/usb/usbmon.rst
-+++ b/Documentation/usb/usbmon.rst
-@@ -211,35 +211,37 @@ Bulk wrapper to a storage device at address 5::
- Raw binary format and API
- =========================
- 
--The overall architecture of the API is about the same as the one above,
--only the events are delivered in binary format. Each event is sent in
--the following structure (its name is made up, so that we can refer to it)::
--
--  struct usbmon_packet {
--	u64 id;			/*  0: URB ID - from submission to callback */
--	unsigned char type;	/*  8: Same as text; extensible. */
--	unsigned char xfer_type; /*    ISO (0), Intr, Control, Bulk (3) */
--	unsigned char epnum;	/*     Endpoint number and transfer direction */
--	unsigned char devnum;	/*     Device address */
--	u16 busnum;		/* 12: Bus number */
--	char flag_setup;	/* 14: Same as text */
--	char flag_data;		/* 15: Same as text; Binary zero is OK. */
--	s64 ts_sec;		/* 16: gettimeofday */
--	s32 ts_usec;		/* 24: gettimeofday */
--	int status;		/* 28: */
--	unsigned int length;	/* 32: Length of data (submitted or actual) */
--	unsigned int len_cap;	/* 36: Delivered length */
-+The overall architecture of the API is about the same as the one above, only the
-+events are delivered in binary format. The structures and constants are defined
-+in include/uapi/linux/usb/mon.h.
-+
-+Each event is sent in the following structure::
-+
-+  struct mon_bin_hdr {
-+	__u64 id;		/*  0: URB ID - from submission to callback */
-+	__u8 type;		/*  8: Same as text; extensible. */
-+	__u8 xfer_type;		/*    ISO (0), Intr, Control, Bulk (3) */
-+	__u8 epnum;		/*     Endpoint number and transfer direction */
-+	__u8 devnum;		/*     Device address */
-+	__u16 busnum;		/* 12: Bus number */
-+	__s8 flag_setup;	/* 14: Same as text */
-+	__s8 flag_data;		/* 15: Same as text; Binary zero is OK. */
-+	__s64 ts_sec;		/* 16: gettimeofday */
-+	__s32 ts_usec;		/* 24: gettimeofday */
-+	__s32 status;		/* 28: */
-+	__u32 length;		/* 32: Length of data (submitted or actual) */
-+	__u32 len_cap;		/* 36: Delivered length */
- 	union {			/* 40: */
--		unsigned char setup[SETUP_LEN];	/* Only for Control S-type */
-+		__u8 setup[MON_USB_SETUP_LEN];	/* Only for Control S-type */
- 		struct iso_rec {		/* Only for ISO */
--			int error_count;
--			int numdesc;
-+			__s32 error_count;
-+			__s32 numdesc;
- 		} iso;
- 	} s;
--	int interval;		/* 48: Only for Interrupt and ISO */
--	int start_frame;	/* 52: For ISO */
--	unsigned int xfer_flags; /* 56: copy of URB's transfer_flags */
--	unsigned int ndesc;	/* 60: Actual number of ISO descriptors */
-+	__s32 interval;		/* 48: Only for Interrupt and ISO */
-+	__s32 start_frame;	/* 52: For ISO */
-+	__u32 xfer_flags;	/* 56: copy of URB's transfer_flags */
-+	__u32 ndesc;		/* 60: Actual number of ISO descriptors */
-   };				/* 64 total length */
- 
- These events can be received from a character device by reading with read(2),
-@@ -267,8 +269,8 @@ no events are available.
- The argument is a pointer to the following structure::
- 
-   struct mon_bin_stats {
--	u32 queued;
--	u32 dropped;
-+	__u32 queued;
-+	__u32 dropped;
-   };
- 
- The member "queued" refers to the number of events currently queued in the
-@@ -296,9 +298,9 @@ then return the first event. The argument is a pointer to the following
- structure::
- 
-   struct mon_get_arg {
--	struct usbmon_packet *hdr;
-+	struct mon_bin_hdr *hdr;
- 	void *data;
--	size_t alloc;		/* Length of data (can be zero) */
-+	__kernel_size_t alloc;		/* Length of data (can be zero) */
-   };
- 
- Before the call, hdr, data, and alloc should be filled. Upon return, the area
-@@ -313,9 +315,9 @@ This ioctl is primarily used when the application accesses the buffer
- with mmap(2). Its argument is a pointer to the following structure::
- 
-   struct mon_mfetch_arg {
--	uint32_t *offvec;	/* Vector of events fetched */
--	uint32_t nfetch;	/* Number of events to fetch (out: fetched) */
--	uint32_t nflush;	/* Number of events to flush */
-+	__u32 *offvec;	/* Vector of events fetched */
-+	__u32 nfetch;	/* Number of events to fetch (out: fetched) */
-+	__u32 nflush;	/* Number of events to flush */
-   };
- 
- The ioctl operates in 3 stages.
-@@ -350,7 +352,7 @@ To prepare, map the buffer by getting the current size, then using mmap(2).
- Then, execute a loop similar to the one written in pseudo-code below::
- 
-    struct mon_mfetch_arg fetch;
--   struct usbmon_packet *hdr;
-+   struct mon_bin_hdr *hdr;
-    int nflush = 0;
-    for (;;) {
-       fetch.offvec = vec; // Has N 32-bit words
-@@ -359,7 +361,7 @@ Then, execute a loop similar to the one written in pseudo-code below::
-       ioctl(fd, MON_IOCX_MFETCH, &fetch);   // Process errors, too
-       nflush = fetch.nfetch;       // This many packets to flush when done
-       for (i = 0; i < nflush; i++) {
--         hdr = (struct ubsmon_packet *) &mmap_area[vec[i]];
-+         hdr = (struct mon_bin_hdr *) &mmap_area[vec[i]];
-          if (hdr->type == '@')     // Filler packet
-             continue;
-          caddr_t data = &mmap_area[vec[i]] + 64;
-diff --git a/drivers/usb/mon/mon_bin.c b/drivers/usb/mon/mon_bin.c
-index f48a23adbc35..e1a7e69a3b0c 100644
---- a/drivers/usb/mon/mon_bin.c
-+++ b/drivers/usb/mon/mon_bin.c
-@@ -23,34 +23,10 @@
- #include <linux/time64.h>
- 
- #include <linux/uaccess.h>
-+#include <linux/usb/mon.h>
- 
- #include "usb_mon.h"
- 
--/*
-- * Defined by USB 2.0 clause 9.3, table 9.2.
-- */
--#define SETUP_LEN  8
--
--/* ioctl macros */
--#define MON_IOC_MAGIC 0x92
--
--#define MON_IOCQ_URB_LEN _IO(MON_IOC_MAGIC, 1)
--/* #2 used to be MON_IOCX_URB, removed before it got into Linus tree */
--#define MON_IOCG_STATS _IOR(MON_IOC_MAGIC, 3, struct mon_bin_stats)
--#define MON_IOCT_RING_SIZE _IO(MON_IOC_MAGIC, 4)
--#define MON_IOCQ_RING_SIZE _IO(MON_IOC_MAGIC, 5)
--#define MON_IOCX_GET   _IOW(MON_IOC_MAGIC, 6, struct mon_bin_get)
--#define MON_IOCX_MFETCH _IOWR(MON_IOC_MAGIC, 7, struct mon_bin_mfetch)
--#define MON_IOCH_MFLUSH _IO(MON_IOC_MAGIC, 8)
--/* #9 was MON_IOCT_SETAPI */
--#define MON_IOCX_GETX   _IOW(MON_IOC_MAGIC, 10, struct mon_bin_get)
--
--#ifdef CONFIG_COMPAT
--#define MON_IOCX_GET32 _IOW(MON_IOC_MAGIC, 6, struct mon_bin_get32)
--#define MON_IOCX_MFETCH32 _IOWR(MON_IOC_MAGIC, 7, struct mon_bin_mfetch32)
--#define MON_IOCX_GETX32   _IOW(MON_IOC_MAGIC, 10, struct mon_bin_get32)
--#endif
--
- /*
-  * Some architectures have enormous basic pages (16KB for ia64, 64KB for ppc).
-  * But it's all right. Just use a simple way to make sure the chunk is never
-@@ -81,38 +57,6 @@
- #define BUFF_DFL   CHUNK_ALIGN(300*1024)
- #define BUFF_MIN     CHUNK_ALIGN(8*1024)
- 
--/*
-- * The per-event API header (2 per URB).
-- *
-- * This structure is seen in userland as defined by the documentation.
-- */
--struct mon_bin_hdr {
--	u64 id;			/* URB ID - from submission to callback */
--	unsigned char type;	/* Same as in text API; extensible. */
--	unsigned char xfer_type;	/* ISO, Intr, Control, Bulk */
--	unsigned char epnum;	/* Endpoint number and transfer direction */
--	unsigned char devnum;	/* Device address */
--	unsigned short busnum;	/* Bus number */
--	char flag_setup;
--	char flag_data;
--	s64 ts_sec;		/* ktime_get_real_ts64 */
--	s32 ts_usec;		/* ktime_get_real_ts64 */
--	int status;
--	unsigned int len_urb;	/* Length of data (submitted or actual) */
--	unsigned int len_cap;	/* Delivered length */
--	union {
--		unsigned char setup[SETUP_LEN];	/* Only for Control S-type */
--		struct iso_rec {
--			int error_count;
--			int numdesc;
--		} iso;
--	} s;
--	int interval;
--	int start_frame;
--	unsigned int xfer_flags;
--	unsigned int ndesc;	/* Actual number of ISO descriptors */
--};
--
- /*
-  * ISO vector, packed into the head of data stream.
-  * This has to take 16 bytes to make sure that the end of buffer
-@@ -125,38 +69,6 @@ struct mon_bin_isodesc {
- 	u32 _pad;
- };
- 
--/* per file statistic */
--struct mon_bin_stats {
--	u32 queued;
--	u32 dropped;
--};
--
--struct mon_bin_get {
--	struct mon_bin_hdr __user *hdr;	/* Can be 48 bytes or 64. */
--	void __user *data;
--	size_t alloc;		/* Length of data (can be zero) */
--};
--
--struct mon_bin_mfetch {
--	u32 __user *offvec;	/* Vector of events fetched */
--	u32 nfetch;		/* Number of events to fetch (out: fetched) */
--	u32 nflush;		/* Number of events to flush */
--};
--
--#ifdef CONFIG_COMPAT
--struct mon_bin_get32 {
--	u32 hdr32;
--	u32 data32;
--	u32 alloc32;
--};
--
--struct mon_bin_mfetch32 {
--        u32 offvec32;
--        u32 nfetch32;
--        u32 nflush32;
--};
--#endif
--
- /* Having these two values same prevents wrapping of the mon_bin_hdr */
- #define PKT_ALIGN   64
- #define PKT_SIZE    64
-@@ -396,7 +308,7 @@ static inline char mon_bin_get_setup(unsigned char *setupb,
- 
- 	if (urb->setup_packet == NULL)
- 		return 'Z';
--	memcpy(setupb, urb->setup_packet, SETUP_LEN);
-+	memcpy(setupb, urb->setup_packet, MON_USB_SETUP_LEN);
- 	return 0;
- }
- 
-diff --git a/include/uapi/linux/usb/mon.h b/include/uapi/linux/usb/mon.h
-new file mode 100644
-index 000000000000..3557fe6a93e6
---- /dev/null
-+++ b/include/uapi/linux/usb/mon.h
-@@ -0,0 +1,107 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+/*
-+ * USB Monitoring (usbmon) definitions
-+ *
-+ * See documentation in Documentation/usb/usbmon.rst.
-+ *
-+ * Copyright (C) 2006 Paolo Abeni (paolo.abeni@email.it)
-+ * Copyright (C) 2006,2007 Pete Zaitcev (zaitcev@redhat.com)
-+ */
-+
-+#ifndef __UAPI_LINUX_USB_MON_H
-+#define __UAPI_LINUX_USB_MON_H
-+
-+#include <linux/types.h>
-+
-+/* ioctl macros */
-+#define MON_IOC_MAGIC 0x92
-+
-+#define MON_IOCQ_URB_LEN	_IO(MON_IOC_MAGIC, 1)
-+/* #2 used to be MON_IOCX_URB, removed before it got into Linus tree */
-+#define MON_IOCG_STATS		_IOR(MON_IOC_MAGIC, 3, struct mon_bin_stats)
-+#define MON_IOCT_RING_SIZE	_IO(MON_IOC_MAGIC, 4)
-+#define MON_IOCQ_RING_SIZE	_IO(MON_IOC_MAGIC, 5)
-+#define MON_IOCX_GET		_IOW(MON_IOC_MAGIC, 6, struct mon_bin_get)
-+#define MON_IOCX_MFETCH		_IOWR(MON_IOC_MAGIC, 7, struct mon_bin_mfetch)
-+#define MON_IOCH_MFLUSH		_IO(MON_IOC_MAGIC, 8)
-+/* #9 was MON_IOCT_SETAPI */
-+#define MON_IOCX_GETX		_IOW(MON_IOC_MAGIC, 10, struct mon_bin_get)
-+
-+/* ioctl structures */
-+
-+/* per file statistic */
-+struct mon_bin_stats {
-+	__u32 queued;
-+	__u32 dropped;
-+};
-+
-+struct mon_bin_get {
-+	struct mon_bin_hdr __user *hdr;	/* Can be 48 bytes or 64. */
-+	void __user *data;
-+	size_t alloc;		/* Length of data (can be zero) */
-+};
-+
-+struct mon_bin_mfetch {
-+	__u32 __user *offvec;	/* Vector of events fetched */
-+	__u32 nfetch;		/* Number of events to fetch (out: fetched) */
-+	__u32 nflush;		/* Number of events to flush */
-+};
-+
-+
-+/* Only defined with CONFIG_COMPAT */
-+#define MON_IOCX_GET32		_IOW(MON_IOC_MAGIC, 6, struct mon_bin_get32)
-+#define MON_IOCX_MFETCH32	_IOWR(MON_IOC_MAGIC, 7, struct mon_bin_mfetch32)
-+#define MON_IOCX_GETX32		_IOW(MON_IOC_MAGIC, 10, struct mon_bin_get32)
-+
-+struct mon_bin_get32 {
-+	__u32 hdr32;
-+	__u32 data32;
-+	__u32 alloc32;
-+};
-+
-+struct mon_bin_mfetch32 {
-+	__u32 offvec32;
-+	__u32 nfetch32;
-+	__u32 nflush32;
-+};
-+
-+/* Data format */
-+
-+/*
-+ * Defined by USB 2.0 clause 9.3, table 9.2.
-+ */
-+#define MON_USB_SETUP_LEN  8
-+
-+/*
-+ * The per-event API header (2 per URB).
-+ *
-+ * This structure is seen in userland as defined by the documentation.
-+ */
-+struct mon_bin_hdr {
-+	__u64 id;	/* URB ID - from submission to callback */
-+	__u8 type;	/* Same as in text API; extensible. */
-+	__u8 xfer_type;	/* ISO, Intr, Control, Bulk */
-+	__u8 epnum;	/* Endpoint number and transfer direction */
-+	__u8 devnum;	/* Device address */
-+	__u16 busnum;	/* Bus number */
-+	__s8 flag_setup;
-+	__s8 flag_data;
-+	__s64 ts_sec;	/* ktime_get_real_ts64 */
-+	__s32 ts_usec;	/* ktime_get_real_ts64 */
-+	__s32 status;
-+	__u32 len_urb;	/* Length of data (submitted or actual) */
-+	__u32 len_cap;	/* Delivered length */
-+	union {
-+		__u8 setup[MON_USB_SETUP_LEN];	/* Only for Control S-type */
-+		struct iso_rec {
-+			__s32 error_count;
-+			__s32 numdesc;
-+		} iso;
-+	} s;
-+	__s32 interval;
-+	__s32 start_frame;
-+	__u32 xfer_flags;
-+	__u32 ndesc;	/* Actual number of ISO descriptors */
-+};
-+
-+#endif /* __UAPI_LINUX_USB_MON_H */
--- 
-2.27.0
+It should be the similar with PCI device you mentioned below. The
+glue layer device is a platform device which is the parent of controller
+device, it could detect ID/VBUS/DP/DM/RX changes and generate wakeup
+events, these wakeup events will trigger interrupt, this interrupt
+number could be the same with controller interrupt number or not.
+When the system is in suspend (D3), when the wakeup events occurs,
+the system interrupt controller could trigger wakeup request, and
+wake system up. When the system is in full-power state (D0), this
+interrupt just wakes up glue layer, and glue layer wakes up common
+USB stack (EHCI/XHCI).
 
+>=20
+> > I am curious how PCI USB at PC determine whether it responds USB wakeup=
+ events or not?
+> > At Linux kernel or BIOS? It has two places for enabling USB wakeup, one=
+ for USB devices
+> > (including roothub), another is for PCI device?
+>=20
+> PCI devices send wakeup requests via a special PCI power management=20
+> signal called PME -- you can see its state in the output from "lspci=20
+> -vv" in the Power Management Capability section.  In legacy systems this=
+=20
+> signal was handled by the BIOS, but nowadays the PCI and ACPI subsystems=
+=20
+> in the Linux kernel handle it.
+>=20
+> If a PCI host controller is in the D3 low-power state when a wakeup=20
+> event occurs, it uses the PME# signal to request a wakeup.  If it is in=20
+> the D0 full-power state when a wakeup event occurs, it uses its normal=20
+> IRQ signal to tell the system about the event.
+>=20
+
+If the USBCMD.RS is cleared, does the interrupt could still occur when
+the system is at D0, or this interrupt is not USB interrupt, it is a
+PCI interrupt?
+
+--=20
+
+Thanks,
+Peter Chen=
