@@ -2,98 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 882AF218E6D
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jul 2020 19:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98E2A218F73
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jul 2020 20:04:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725982AbgGHRjY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jul 2020 13:39:24 -0400
-Received: from smtp.al2klimov.de ([78.46.175.9]:46244 "EHLO smtp.al2klimov.de"
+        id S1726044AbgGHSEL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jul 2020 14:04:11 -0400
+Received: from rere.qmqm.pl ([91.227.64.183]:42952 "EHLO rere.qmqm.pl"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725446AbgGHRjY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 8 Jul 2020 13:39:24 -0400
-X-Greylist: delayed 27855 seconds by postgrey-1.27 at vger.kernel.org; Wed, 08 Jul 2020 13:39:23 EDT
-Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
-        by smtp.al2klimov.de (Postfix) with ESMTPA id 810A7BC117;
-        Wed,  8 Jul 2020 17:39:21 +0000 (UTC)
-From:   "Alexander A. Klimov" <grandmaster@al2klimov.de>
-To:     b-liu@ti.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
-Subject: [PATCH] Replace HTTP links with HTTPS ones: MUSB MULTIPOINT HIGH SPEED DUAL-ROLE CONTROLLER
-Date:   Wed,  8 Jul 2020 19:39:14 +0200
-Message-Id: <20200708173914.15470-1-grandmaster@al2klimov.de>
+        id S1725879AbgGHSEL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 8 Jul 2020 14:04:11 -0400
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 4B26d3611Pz8v;
+        Wed,  8 Jul 2020 20:04:07 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1594231449; bh=JDXQmGIW53NRlTH7B094Eeot8dV9wNZ5qBuxOCKPMUY=;
+        h=Date:From:Subject:To:Cc:From;
+        b=PWSI+uRcBncSl4v4Y0KIX6FfAslvyNgdf1s13olgeunJEUOKFpG9A8GYv+00Kjky7
+         PqI7rKY+OJdFEq+bWOKX+OA3vLQmnjCmISkNask9a0pUYZtDO4ey1OeCAbgfwqJ+La
+         LJmUctLEdKZLtYmgTCshYGGdmZzwoXtt7wdvNTc3nc0LWYS4u0NOhAyxHIITtm7z7S
+         E1zn2am9t9aFHLFllBuEsOfYpZgECNQNZekhBYa1ibm3catVaZ1lGxAOlExcX8aeVP
+         SBJrQBHxHu6eDzcZfzeUTCjkee8CCbxRs6iv5lH1EAQ8J72wtJxH9XK4vyq9Asy/hQ
+         rHN6FsGnM5FnA==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.102.3 at mail
+Date:   Wed, 08 Jul 2020 20:04:06 +0200
+Message-Id: <cover.1594231056.git.mirq-linux@rere.qmqm.pl>
+From:   =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
+Subject: [PATCH RESEND 0/3] usb: gadget: udc: atmel: assorted fixes
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spamd-Bar: +++++
-X-Spam-Level: *****
-Authentication-Results: smtp.al2klimov.de;
-        auth=pass smtp.auth=aklimov@al2klimov.de smtp.mailfrom=grandmaster@al2klimov.de
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Cristian Birsan <cristian.birsan@microchip.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Songjun Wu <songjun.wu@atmel.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Rationale:
-Reduces attack surface on kernel devs opening the links for MITM
-as HTTPS traffic is much harder to manipulate.
+Two trivial fixes and .pullup implementation for Atmel UDC driver to
+make composite gadget happy when handling reconfiguration.
 
-Deterministic algorithm:
-For each file:
-  If not .svg:
-    For each line:
-      If doesn't contain `\bxmlns\b`:
-        For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
-	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
-            If both the HTTP and HTTPS versions
-            return 200 OK and serve the same content:
-              Replace HTTP with HTTPS.
+Michał Mirosław (3):
+  usb: gadget: udc: atmel: remove outdated comment in usba_ep_disable()
+  usb: gadget: udc: atmel: fix uninitialized read in debug printk
+  usb: gadget: udc: atmel: implement .pullup callback
 
-Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
----
- Continuing my work started at 93431e0607e5.
- See also: git log --oneline '--author=Alexander A. Klimov <grandmaster@al2klimov.de>' v5.7..master
- (Actually letting a shell for loop submit all this stuff for me.)
+ drivers/usb/gadget/udc/atmel_usba_udc.c | 30 ++++++++++++++++++-------
+ 1 file changed, 22 insertions(+), 8 deletions(-)
 
- If there are any URLs to be removed completely or at least not HTTPSified:
- Just clearly say so and I'll *undo my change*.
- See also: https://lkml.org/lkml/2020/6/27/64
-
- If there are any valid, but yet not changed URLs:
- See: https://lkml.org/lkml/2020/6/26/837
-
- If you apply the patch, please let me know.
-
-
- drivers/usb/musb/musb_trace.c | 2 +-
- drivers/usb/musb/musb_trace.h | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/musb/musb_trace.c b/drivers/usb/musb/musb_trace.c
-index 476872adce80..03ccf573eb63 100644
---- a/drivers/usb/musb/musb_trace.c
-+++ b/drivers/usb/musb/musb_trace.c
-@@ -2,7 +2,7 @@
- /*
-  * musb_trace.c - MUSB Controller Trace Support
-  *
-- * Copyright (C) 2015 Texas Instruments Incorporated - http://www.ti.com
-+ * Copyright (C) 2015 Texas Instruments Incorporated - https://www.ti.com
-  *
-  * Author: Bin Liu <b-liu@ti.com>
-  */
-diff --git a/drivers/usb/musb/musb_trace.h b/drivers/usb/musb/musb_trace.h
-index 380ebc77eab1..e302c219aa7c 100644
---- a/drivers/usb/musb/musb_trace.h
-+++ b/drivers/usb/musb/musb_trace.h
-@@ -2,7 +2,7 @@
- /*
-  * musb_trace.h - MUSB Controller Trace Support
-  *
-- * Copyright (C) 2015 Texas Instruments Incorporated - http://www.ti.com
-+ * Copyright (C) 2015 Texas Instruments Incorporated - https://www.ti.com
-  *
-  * Author: Bin Liu <b-liu@ti.com>
-  */
 -- 
-2.27.0
+2.20.1
 
