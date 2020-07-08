@@ -2,134 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1823F218A4E
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jul 2020 16:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32528218AAB
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jul 2020 17:02:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729799AbgGHOm3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jul 2020 10:42:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52300 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729699AbgGHOm3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jul 2020 10:42:29 -0400
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D02C7C08C5CE
-        for <linux-usb@vger.kernel.org>; Wed,  8 Jul 2020 07:42:28 -0700 (PDT)
-Received: by mail-io1-xd41.google.com with SMTP id q74so23685569iod.1
-        for <linux-usb@vger.kernel.org>; Wed, 08 Jul 2020 07:42:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=olFZheMiwXV/hWN7JvWbJtXZG77gpY4w4jkiOAkoKwM=;
-        b=A8AnotPqLSlZRRqYmspoS+6VXNBxfSG+I6aEVCqsfSgA+78sfaKBHlhDJuQvT5Z9fG
-         ATD9tzSA3JJaeER79AscDOhx8gESCzX2TQ1BQqbx7rOvAkErjONQaQ5YxEM79dJipabC
-         pCzFSpBDStem7TgumX2cqauSmd0K7vlrUSqHo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=olFZheMiwXV/hWN7JvWbJtXZG77gpY4w4jkiOAkoKwM=;
-        b=sun4HskziSRmuoLopHG1Mbn9i0z36yZPCt5Q4YFR5/9hMB00O6RZkGrq3iUHpoCNfV
-         2y1apwk3GZqgYO3beZt5Q3RWq0jPuAdJF1DzQWITdSF4cyp68Q6HKv1bhiAppaF++Z8r
-         TwI8jAjK+laodO9BfYVsHoPuzCA38EMYvjqK8nUQV0JK+uGKM7LGUcywCZHuTRYK2CqF
-         f5o25vBKzlLoLqvjAB0R41vMS002xmBAAORU2ixbIDq+3u/S1aAwYUcYs6oZdTBO98ov
-         OZ/5FlSBdlUNEu29KmIQSypd6ouu8b40Bl1AWCpbiZdkKxCs/v+/THVhRnvocrIWdIry
-         d6Hg==
-X-Gm-Message-State: AOAM533l/I/DAcc0L5d0BZlfAB8s+ZPv7YmqP3hPemQ1hHqH0pFvEtxT
-        t7LiZnf6yyOq6VZxFLKOlg7C9Q==
-X-Google-Smtp-Source: ABdhPJztx42BQruhpR+Eein2ofg+xHraiz1u5gK80gHGG1Sl2yr4WRL+agEWtq6nE56YmByNEYSJ+Q==
-X-Received: by 2002:a6b:1d7:: with SMTP id 206mr37360623iob.138.1594219348015;
-        Wed, 08 Jul 2020 07:42:28 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id b21sm121894ioc.36.2020.07.08.07.42.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jul 2020 07:42:27 -0700 (PDT)
-Subject: Re: [PATCH] usbip: Use fallthrough pseudo-keyword
-To:     Julia Lawall <julia.lawall@inria.fr>, Joe Perches <joe@perches.com>
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20200707195214.GA3932@embeddedor>
- <977e88c2-58cb-9507-c889-854e574a8f31@linuxfoundation.org>
- <8e08240671d65f1e92dbf5e1e066190149e0d074.camel@perches.com>
- <alpine.DEB.2.22.394.2007081209500.2558@hadrien>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <486d9450-21a9-fb35-3473-4e589005d1c7@linuxfoundation.org>
-Date:   Wed, 8 Jul 2020 08:42:26 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1729915AbgGHPCG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jul 2020 11:02:06 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:54219 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1729859AbgGHPCF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jul 2020 11:02:05 -0400
+Received: (qmail 778420 invoked by uid 1000); 8 Jul 2020 11:02:04 -0400
+Date:   Wed, 8 Jul 2020 11:02:04 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [PATCH 2/2] usb: host: xhci-plat: add wakeup entry at /sys
+Message-ID: <20200708150204.GC776368@rowland.harvard.edu>
+References: <20200703141911.GA623139@rowland.harvard.edu>
+ <20200704092255.GA5695@b29397-desktop>
+ <20200704144816.GA650205@rowland.harvard.edu>
+ <20200705021256.GA29527@b29397-desktop>
+ <20200705143151.GA672371@rowland.harvard.edu>
+ <AM7PR04MB71571A625BEEE70F2D9B3C138B690@AM7PR04MB7157.eurprd04.prod.outlook.com>
+ <20200706162237.GC704149@rowland.harvard.edu>
+ <20200707020137.GA5373@b29397-desktop>
+ <20200707161153.GB740256@rowland.harvard.edu>
+ <20200708064740.GA18440@b29397-desktop>
 MIME-Version: 1.0
-In-Reply-To: <alpine.DEB.2.22.394.2007081209500.2558@hadrien>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200708064740.GA18440@b29397-desktop>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 7/8/20 4:16 AM, Julia Lawall wrote:
-> 
-> 
-> On Tue, 7 Jul 2020, Joe Perches wrote:
-> 
->> On Tue, 2020-07-07 at 14:06 -0600, Shuah Khan wrote:
->>> On 7/7/20 1:52 PM, Gustavo A. R. Silva wrote:
->>>> Replace the existing /* fall through */ comments and its variants with
->>>> the new pseudo-keyword macro fallthrough[1]. Also, remove unnecessary
->>>> fall-through markings when it is the case.
->>>>
->>>> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html?highlight=fallthrough#implicit-switch-case-fall-through
->>>>
->>>
->>> Is fallthrough syntax supported on our min gcc version?
->>
->> No.  Introduced in gcc 7.
->>
->>> Does checkpatch or coccicheck catch these cases?
->>
->> Kinda.  checkpatch isn't very good at it.
->> I _believe_, though I'm not at all sure,
->> that coccinelle can find these.
-> 
-> I would not guarantee anything about the support of Coccinelle for switch.
-> Coccinelle does now have the ability to match on comments.  So since there
-> is a distinct comment that it is to be removed, it might be possible to do
-> that part automatically.
-> 
-> Maybe it would have to look something like this:
-> 
-> @r1@
-> comments c : script:python() { code to recognize the comment };
-> statement S;
-> @@
-> 
-> S@c
-> + fallthrough(); //or whatever is wanted
-> 
-> @@
-> statement r1.S;
-> @@
-> 
-> - S
-> - fallthrough();
-> + S
-> + fallthrough();
-> 
-> The second rule probably looks pretty strange, but the goal is to remove
-> the comments between S and fallthrough();
-> 
-> There is an example demos/comments.cocci that shows how to access the
-> comment information using both ocaml and python.
-> 
+On Wed, Jul 08, 2020 at 06:47:31AM +0000, Peter Chen wrote:
+> On 20-07-07 12:11:53, Alan Stern wrote:
 
-Thanks Julia. Maybe this is a way to address all of the cases. I am a
-bit concerned about min gcc which is 4.8 and the fallthrough syntax
-support is in gcc 7
+> > > But, that's not all the use cases. There are still two other use cases:
+> > > (Taking xhci-plat.c as an example):
+> > > - It is a platform bus device created by platform bus driver
+> > > - It is a platform bus device created by glue layer parents
+> > > (eg, dwc3/cdns3), usually, it is dual-role controller.
+> > 
+> > In these cases there would be a choice: xhci-plat.c could call 
+> > device_init_wakeup, or the platform-bus/glue-layer driver could call 
+> > device_set_wakeup_capable and xhci-plat.c could continue to call 
+> > device_enable_wakeup.
+> 
+> You said "the PCI core calls device_set_wakeup_capable() when a new device is
+> discovered and register", why PCI core does this, is every device on
+> PCI bus wakeup capable?
 
--- Shuah
+Sorry, I should have said that the PCI core does this for all devices 
+that are able to generate wakeup requests.  This ability is indicated by 
+a PCI capability setting, which the PCI core can read.
 
+> The reason I ask this is not every device on platform-bus is wakeup
+> capable, to let the controller device have defaulted "enabled" value,
+> we need to use device_init_wakeup at xhci-plat.c
+
+Yes.  In your case it makes sense for the glue layer or platform code to 
+call device_set_wakeup_capable for the appropriate devices.  Then the 
+generic code can call device_enable_wakeup (which doesn't do anything 
+if the device isn't wakeup-capable).
+
+> > > It should be the similar with PCI device you mentioned below. The
+> > > glue layer device is a platform device which is the parent of controller
+> > > device,
+> > 
+> > I don't understand.  Let's consider EHCI as an example.  The controller 
+> > device is something like 0000:00:1d.7, which is on the PCI bus and is a 
+> > PCI device.  Its child is usb1, which is a root-hub device on the USB 
+> > bus.
+> > 
+> > But you're saying that the glue layer device would be the parent of the 
+> > controller device, right?  This means it would be analogous to the 
+> > parent of 0000:00:1d.7.  In the PCI world, that parent would be a PCI 
+> > bridge or something similar.  It would have no understanding of 
+> > ID/VBUS/DP/DM/RX changes, since those are all USB concepts and have 
+> > nothing to do with PCI.
+> 
+> Sorry, my words were not precise.
+> 
+> From hardware level:
+> Controller includes core part and non-core part, core part is usually
+> designed by IP vendor, non-core part is usually designed by each SoC
+> vendors. Wakeup handling is part of non-core. The USB PHY gets
+> ID/VBUS/DP/DM/RX change events, the related signal ties to non-core part,
+> and non-core part knows the wakeup occurs.
+> 
+> From software level:
+> Taking single role controller as example:
+> Glue layer is a platform device, and handles non-core part events,
+> including wakeup events, it is the parent of common layer which handles
+> core part events (eg, xhci-plat.c)
+
+Can you give an example of how these different layers show up in sysfs 
+(the device names and paths)?
+
+> So, one controller includes two platform devices, one for glue layer,
+> one for common layer.
+
+Is there a mechanism that allows the xhci-hcd core driver to tell the 
+non-core or PHY driver to enable or disable these wakeup events?
+
+Or maybe better would be a way for the non-core/PHY driver to examine 
+the root hub's usb_device structure to see whether these wakeup events 
+should be enabled.
+
+> You are right, ID/VBUS/DP/DM/RX signal changing occurs at the USB bus,
+> and detected by USB PHY physically.
+>    
+> The controller device (core part) or glue layer device
+> (non-core part)'s wakeup setting is only used to enable/disable platform
+> related powers (regulators) for USB (PHY) which are used to detect
+> ID/VBUS/DP/DM/RX signal. If the platform doesn't need USB wakeup capabilities
+> for system suspend, it could turn off related powers. Besides, it could tell
+> the system if USB interrupt can be the wakeup interrupt.
+
+We want to make the system simple and logical for users, not necessarily 
+easy for hardware engineers.  This means that wakeup events such as port 
+connect, disconnect, and so on should be controlled by a single sysfs 
+setting, for a single device.  The most logical device for this purpose 
+is the root hub, as I mentioned earlier in this discussion.
+
+As a result, the wakeup settings for the other components (non-core or 
+PHY) should be based on the settings for the root hub.  If the root hub 
+is disabled for wakeup then the non-core hardware components shouldn't 
+generate any wakeup requests, no matter what their power/wakeup files 
+contain.  And if the root hub is enabled for wakeup then the non-core 
+hardware components should generate these requests, unless their own
+power/wakeup settings prevent them from doing so.
+
+From these conclusions, it logically follows that the default wakeup 
+setting for the non-core components should be "enabled" -- unless those 
+components are physically incapable of waking up the system.
+
+Alan Stern
