@@ -2,169 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CCAB218927
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jul 2020 15:34:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAFDA21894D
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jul 2020 15:38:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729680AbgGHNeA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jul 2020 09:34:00 -0400
-Received: from mail-eopbgr20051.outbound.protection.outlook.com ([40.107.2.51]:45771
-        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729436AbgGHNeA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 8 Jul 2020 09:34:00 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GmpbOBMnme8ZgoEpk9Me0ZMKjnV3oC4ufZ8DwrWNYx85gGOrIx2aUP6kgk+7ngXWY08lxojW/ezf9BhwLDTsvWOtHPKmb5Eky4OBgUpKXT9FYsthGhc+SJdVQs0ndQvBFnThn4rdkoBJE2/wbn6nQ8YL56vNVncSuBDnaGfWFP4OBmqZ42cQ907w1XASJwQ33JI+uDea2zXKMlBwI4a66aCF0qinTahiiHW1yqetnqy7ZehdIIRYxK/nGrPZEi7HjRVTD+J1cDeHyIak4yMBZu0Mxh84YY+Dv1xwFj40IbdDZrGhwEKEe/dZzEWC1eu/wzyaEX6iyDBh5s3jz70Jhw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kEv9QVWqQBmT8Op3NyolOCRsABpuhSApz4HKROj8qJg=;
- b=Ip+0AExpdbBQ3PJEIPB4na3sTmhHHMYI0gDInlVLkEaZ2txtyH1A4gO3ZJEgfhJzPivoRaAxSouImeRguQhPfS23/eMNQlfVv7Tb5PbNMjPXIraOJoytz1Exw/OoaH+AKS9WrnXt+mD7gTqtUqX64qxSVLG3oCZ/s4oAwURlpZ7MLuJj+v/ITeQEvMjGUV73gk8sC9QkY0r+hzIu+1sxx7MVYW/cDUggm7ihZTxh/WwB8a6c6pD1EFHrsIkJ7Rzxsu8xTG9VcJfOflOrU/hObZJzR46C1m7f5AsC+jfPPfw5LoAwNj8u5gVrUFKeOM4hK26ebYx/ZViFxt4lD/O2pA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kEv9QVWqQBmT8Op3NyolOCRsABpuhSApz4HKROj8qJg=;
- b=WaE874QL0Z8cEwG5KsW1957LiD12MB1Zcufdw6sPBmiP0tHufHcJspjSEdAaYj56yZINt6CV9DFDNp3P9K7seDDnURmO6h8jvomAIFwZNeCNysw6y5uyXIjiSues3UoyHNVOP90E6XPwOsUjp1cz2qBrYrm5f6bCeeOgomC0458=
-Received: from VE1PR04MB6528.eurprd04.prod.outlook.com (2603:10a6:803:127::18)
- by VE1PR04MB6717.eurprd04.prod.outlook.com (2603:10a6:803:129::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3153.23; Wed, 8 Jul
- 2020 13:33:57 +0000
-Received: from VE1PR04MB6528.eurprd04.prod.outlook.com
- ([fe80::30e2:71b0:ffd3:e39e]) by VE1PR04MB6528.eurprd04.prod.outlook.com
- ([fe80::30e2:71b0:ffd3:e39e%7]) with mapi id 15.20.3153.030; Wed, 8 Jul 2020
- 13:33:57 +0000
-From:   Jun Li <jun.li@nxp.com>
-To:     Peter Chen <peter.chen@nxp.com>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "pawell@cadence.com" <pawell@cadence.com>,
-        "rogerq@ti.com" <rogerq@ti.com>, stable <stable@vger.kernel.org>
-Subject: RE: [PATCH 1/1] usb: cdns3: gadget: own the lock wrongly at the
- suspend routine
-Thread-Topic: [PATCH 1/1] usb: cdns3: gadget: own the lock wrongly at the
- suspend routine
-Thread-Index: AQHWVQp3VFYjV/gMpE2zL2ZZVX89sKj9p6/A
-Date:   Wed, 8 Jul 2020 13:33:56 +0000
-Message-ID: <VE1PR04MB6528647055C8D740ED81E7C389670@VE1PR04MB6528.eurprd04.prod.outlook.com>
-References: <20200708093043.25756-1-peter.chen@nxp.com>
-In-Reply-To: <20200708093043.25756-1-peter.chen@nxp.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: nxp.com; dkim=none (message not signed)
- header.d=none;nxp.com; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.68]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: c9d5866c-5a6f-4d85-0246-08d8234390c7
-x-ms-traffictypediagnostic: VE1PR04MB6717:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VE1PR04MB67170C0DC4427D35F32F5ED789670@VE1PR04MB6717.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-forefront-prvs: 04583CED1A
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: bj0NVZwQedwRUbHwoZ1PV03f7xWU7+PjJcAScC4iBQ/5qBzuB4BsnHTQ/x1IMlRSNNoxogEvcosFLrNWbpL/J72j9zWtgh0JvT84/Frwa+FTwNsyI9qgtUdZ/QPMRJLukcG2GbZrOrjdohuMeCJ8/MZP8U3z9nw01NOYI351vYvX3EuygtcxKvG0YqVlGgy5ZXmuhI22ePL0bV1WK8bZibabghp3a1Jf9S/q+Ynkx93ITgP0n3E/yzmYiZ319ZwB8wB3oZkz5nUdHpWc6Yy+yM5mPRWy/iM5ux6PQ310kt7vx3IUMsMUjGmKBq1WBfdwknl1Z5Rq84QjyAM6qhPwCg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6528.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(376002)(39860400002)(396003)(366004)(136003)(346002)(44832011)(71200400001)(64756008)(316002)(83380400001)(110136005)(76116006)(54906003)(66446008)(66556008)(66476007)(66946007)(4326008)(9686003)(478600001)(55016002)(8676002)(7696005)(5660300002)(33656002)(2906002)(15650500001)(52536014)(8936002)(6506007)(53546011)(86362001)(26005)(186003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: 15eWJZ1WhKt9TWNW9MPHwGv0/B/Gt+J5QkuWZVACU+d5sswSkmWNO+HnC1v8uI8dxll6QFicPEXS0GiSmmz5PRFkvQGmrB1c5rsWu7sbaqNTxz6eZuglhoE6fny7k3CTz8EjknxUbq7uxArRNzUTylQ4+hNNJikOAY/DGV7GWRdnMnBTCZYeI/kAnh8xpsb4cRRQ5kkh0jX6O6jrD8kI5oFrl8nKBjDtKCQeIpujkTKXPcun/n8grRMpDJG+mhZ5unGLdZpC32C4u7xI2IaIlFgFeEDfYQ1OF1x3yvkaxRbNZcLADUTJtPkAPTUcUwgd842scj1aLmeSv4xIqI1FLwruLk9rkPpdVOeIqJzeB8HdvhuK3w+OUMAyGbldkRCAKP/KiQ3DQAFumDJ8BqC7BIfNP9CndtQJ68xmtOacHMvGzS5b6DIpy2ld4C1tgPwbZdPiXMlPdz/lq+OZTY7Erl77DbG16smFSJPxUHERjlk=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6528.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c9d5866c-5a6f-4d85-0246-08d8234390c7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jul 2020 13:33:57.0638
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 086NpdgMtKvXXjx07jvSFSd47U6XUkbz8N9VUa8TxITGMbVf9ijDxHl6GHFOSIsH
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6717
+        id S1729248AbgGHNiS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jul 2020 09:38:18 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:49094 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729721AbgGHNiP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jul 2020 09:38:15 -0400
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200708133812euoutp026c83be9be9645d60d3526256f50ad9ce~fyos0j-3Q0754207542euoutp02M
+        for <linux-usb@vger.kernel.org>; Wed,  8 Jul 2020 13:38:12 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200708133812euoutp026c83be9be9645d60d3526256f50ad9ce~fyos0j-3Q0754207542euoutp02M
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1594215492;
+        bh=Spljwi04NPz7tPwQDU3ylhpMAcBmPOyA+LcLqOe48yU=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=Vj7XMOqi0NxcchXdWTsCeHfGhTFBmBTugLzD6EPfrdpDsIPUI6hYbucJf+auRAzZr
+         2BlktYAI0O6akoR0FElXVBLbjy27eFFloXED8TIVvnH+inQkdppZpYNU3EwzHKVHVt
+         IuxCtttYJ3dUFKDV26BF/QZ1PSdV8gMZ7tDKvjyY=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20200708133811eucas1p23859cf25cecf8fe7eac4bc597e5354ed~fyosfTTEW0379703797eucas1p2L;
+        Wed,  8 Jul 2020 13:38:11 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 22.86.06456.34CC50F5; Wed,  8
+        Jul 2020 14:38:11 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20200708133811eucas1p1df7b92d7e0ba512c5a7ecdb948edbfcf~fyor-LiDI1425514255eucas1p1N;
+        Wed,  8 Jul 2020 13:38:11 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20200708133811eusmtrp1e04dd234da5007c86c0c63bcdfd07b28~fyor_lDj93178831788eusmtrp1v;
+        Wed,  8 Jul 2020 13:38:11 +0000 (GMT)
+X-AuditID: cbfec7f2-7efff70000001938-55-5f05cc436e60
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id F1.36.06314.34CC50F5; Wed,  8
+        Jul 2020 14:38:11 +0100 (BST)
+Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20200708133810eusmtip182b79244efc0f0790829ab647ea4e761~fyorgZg7g1357913579eusmtip1d;
+        Wed,  8 Jul 2020 13:38:10 +0000 (GMT)
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+To:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [PATCH RESEND] phy: exynos5-usbdrd: Calibrating makes sense only
+ for USB2.0 PHY
+Date:   Wed,  8 Jul 2020 15:38:00 +0200
+Message-Id: <20200708133800.3336-1-m.szyprowski@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrPIsWRmVeSWpSXmKPExsWy7djP87rOZ1jjDSbONLTYOGM9q8WFpz1s
+        FufPb2C3uLxrDpvFjPP7mCwWLWtltlh75C67xc47J5gdODw2repk8+jbsorR4/iN7UwenzfJ
+        BbBEcdmkpOZklqUW6dslcGVcOv+bsWAnR8Wzm9/ZGhhXsHcxcnJICJhIXDzQwdjFyMUhJLCC
+        UWLezwY2kISQwBdGiW+LXSASnxkljk+ZAJTgAOu4/jYIIr6cUWLSoXMsEA5Qw48n01hAutkE
+        DCW63naBTRIRcJBYsvQOG0gRs8B3RonuzgtMIAlhgSiJ5T+WgxWxCKhKzP1wkBHE5hWwkfjV
+        c4IZ4j55idUbDjCDNEsI3GaTuPvpECtEwkXi1rGnLBC2sMSr41ugHpKROD25hwWioZlR4uG5
+        tewQTg+jxOWmGYwQVdYSd879AnuIWUBTYv0ufYiwo8SBKUsYIf7kk7jxVhAkzAxkTto2nRki
+        zCvR0SYEUa0mMev4Ori1By9cgrrZQ+J52y1GSDDGSuy/+ZR5AqPcLIRdCxgZVzGKp5YW56an
+        FhvmpZbrFSfmFpfmpesl5+duYgQmg9P/jn/awfj1UtIhRgEORiUe3gkbWOOFWBPLiitzDzFK
+        cDArifA6nT0dJ8SbklhZlVqUH19UmpNafIhRmoNFSZzXeNHLWCGB9MSS1OzU1ILUIpgsEwen
+        FDDqD602vLeQ99fMi7vyfcSl+zaF+d6yN936Y1v+6xNbX4jdDjts+qz+y42H3PnOl00+t82M
+        UwyZ99Z4ad6WlUnBcbdjH07pm7Jyzomntv7Z/xsvRm0sFDov43w6IEipT+ZaWy7Llod57z/W
+        Gc9S4nzZvLs08IU/i7j3jidXly8xzN33sPLF1xluSizFGYmGWsxFxYkA7pFAqAIDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrCLMWRmVeSWpSXmKPExsVy+t/xu7rOZ1jjDZ5PkrTYOGM9q8WFpz1s
+        FufPb2C3uLxrDpvFjPP7mCwWLWtltlh75C67xc47J5gdODw2repk8+jbsorR4/iN7UwenzfJ
+        BbBE6dkU5ZeWpCpk5BeX2CpFG1oY6RlaWugZmVjqGRqbx1oZmSrp29mkpOZklqUW6dsl6GVc
+        Ov+bsWAnR8Wzm9/ZGhhXsHcxcnBICJhIXH8b1MXIxSEksJRR4uyXu2xdjJxAcRmJk9MaWCFs
+        YYk/17rYIIo+MUpMv3SPHSTBJmAo0fW2C6xBRMBJonPtaTCbWeA3o8SBiYYgtrBAhMSnTcvB
+        BrEIqErM/XCQEcTmFbCR+NVzghligbzE6g0HmCcw8ixgZFjFKJJaWpybnltsqFecmFtcmpeu
+        l5yfu4kRGILbjv3cvIPx0sbgQ4wCHIxKPLwvNrHGC7EmlhVX5h5ilOBgVhLhdTp7Ok6INyWx
+        siq1KD++qDQntfgQoynQ8onMUqLJ+cD4yCuJNzQ1NLewNDQ3Njc2s1AS5+0QOBgjJJCeWJKa
+        nZpakFoE08fEwSnVwKhcu/hV2OLtD48eNT/Vz/CjQ+dAwNxgl5nukgnlbS1TbmhVPfxeFH+E
+        l+OPzmJvrzMqnz0PHb91i/P4heCjLWtcijZaGdi//VH/cVNmmuPMI+om99Y+L/k5Wfq3ztWV
+        k1YyTp24al9zYrfr/kWsmxbc8pTZumJBqO0DLmEx5jDt8rP/XN3OLYhRYinOSDTUYi4qTgQA
+        atmfnlcCAAA=
+X-CMS-MailID: 20200708133811eucas1p1df7b92d7e0ba512c5a7ecdb948edbfcf
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20200708133811eucas1p1df7b92d7e0ba512c5a7ecdb948edbfcf
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20200708133811eucas1p1df7b92d7e0ba512c5a7ecdb948edbfcf
+References: <CGME20200708133811eucas1p1df7b92d7e0ba512c5a7ecdb948edbfcf@eucas1p1.samsung.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+PHY calibration is needed only for USB2.0 (UTMI) PHY, so skip calling
+calibration code when phy_calibrate() is called for USB3.0 (PIPE3) PHY.
 
-Hi,
-> -----Original Message-----
-> From: Peter Chen <peter.chen@nxp.com>
-> Sent: Wednesday, July 8, 2020 5:31 PM
-> To: balbi@kernel.org; gregkh@linuxfoundation.org
-> Cc: linux-usb@vger.kernel.org; dl-linux-imx <linux-imx@nxp.com>;
-> pawell@cadence.com; rogerq@ti.com; Jun Li <jun.li@nxp.com>; Peter Chen
-> <peter.chen@nxp.com>; stable <stable@vger.kernel.org>
-> Subject: [PATCH 1/1] usb: cdns3: gadget: own the lock wrongly at the susp=
-end routine
->=20
-> When it is device mode with cable connected to host, the call stack is:
-> cdns3_suspend->cdns3_gadget_suspend->cdns3_disconnect_gadget,
-> the cdns3_disconnect_gadget owns lock wrongly at this situation, it cause=
-s the
+Fixes: d8c80bb3b55b ("phy: exynos5-usbdrd: Calibrate LOS levels for exynos5420/5800")
+Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+---
+ drivers/phy/samsung/phy-exynos5-usbdrd.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Isn't afterwards the lock will be released in cdns3_suspend() by below code=
-?
-spin_unlock_irqrestore(&cdns->gadget_dev->lock, flags);
-
-> system being deadlock after resume due to at cdns3_device_thread_irq_hand=
-ler, it
-> tries to get the lock, but will never get it.
->=20
-> To fix it, we delete the lock operations, and add them at the caller when=
- necessary.
-
-There are 2 caller places, by this, another code path:
-cdns3_suspend->cdns3_gadget_suspend->cdns3_disconnect_gadget() will do
-gadget_driver->disconnect() with lock hold, is this intentional?
-
-Thanks
-Li Jun
-=20
->=20
-> Cc: stable <stable@vger.kernel.org>
-> Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
-> Signed-off-by: Peter Chen <peter.chen@nxp.com>
-> ---
->  drivers/usb/cdns3/gadget.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c inde=
-x
-> 13027ce6bed8..f6c51cc924a8 100644
-> --- a/drivers/usb/cdns3/gadget.c
-> +++ b/drivers/usb/cdns3/gadget.c
-> @@ -1674,11 +1674,8 @@ static int cdns3_check_ep_interrupt_proceed(struct
-> cdns3_endpoint *priv_ep)
->=20
->  static void cdns3_disconnect_gadget(struct cdns3_device *priv_dev)  {
-> -	if (priv_dev->gadget_driver && priv_dev->gadget_driver->disconnect) {
-> -		spin_unlock(&priv_dev->lock);
-> +	if (priv_dev->gadget_driver && priv_dev->gadget_driver->disconnect)
->  		priv_dev->gadget_driver->disconnect(&priv_dev->gadget);
-> -		spin_lock(&priv_dev->lock);
-> -	}
->  }
->=20
->  /**
-> @@ -1713,8 +1710,10 @@ static void cdns3_check_usb_interrupt_proceed(stru=
-ct
-> cdns3_device *priv_dev,
->=20
->  	/* Disconnection detected */
->  	if (usb_ists & (USB_ISTS_DIS2I | USB_ISTS_DISI)) {
-> +		spin_unlock(&priv_dev->lock);
->  		cdns3_disconnect_gadget(priv_dev);
->  		priv_dev->gadget.speed =3D USB_SPEED_UNKNOWN;
-> +		spin_lock(&priv_dev->lock);
->  		usb_gadget_set_state(&priv_dev->gadget, USB_STATE_NOTATTACHED);
->  		cdns3_hw_reset_eps_config(priv_dev);
->  	}
-> --
-> 2.17.1
+diff --git a/drivers/phy/samsung/phy-exynos5-usbdrd.c b/drivers/phy/samsung/phy-exynos5-usbdrd.c
+index 646259bee909..f07edd80d2f3 100644
+--- a/drivers/phy/samsung/phy-exynos5-usbdrd.c
++++ b/drivers/phy/samsung/phy-exynos5-usbdrd.c
+@@ -714,7 +714,9 @@ static int exynos5_usbdrd_phy_calibrate(struct phy *phy)
+ 	struct phy_usb_instance *inst = phy_get_drvdata(phy);
+ 	struct exynos5_usbdrd_phy *phy_drd = to_usbdrd_phy(inst);
+ 
+-	return exynos5420_usbdrd_phy_calibrate(phy_drd);
++	if (inst->phy_cfg->id == EXYNOS5_DRDPHY_UTMI)
++		return exynos5420_usbdrd_phy_calibrate(phy_drd);
++	return 0;
+ }
+ 
+ static const struct phy_ops exynos5_usbdrd_phy_ops = {
+-- 
+2.17.1
 
