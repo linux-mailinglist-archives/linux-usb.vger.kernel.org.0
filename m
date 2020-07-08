@@ -2,164 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 146D4217F77
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jul 2020 08:16:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D29F217FA0
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jul 2020 08:35:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726065AbgGHGQd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jul 2020 02:16:33 -0400
-Received: from mga04.intel.com ([192.55.52.120]:59689 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725903AbgGHGQd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 8 Jul 2020 02:16:33 -0400
-IronPort-SDR: Gu+CLvknaUPCJT5LsNvYU2OwyEztLhZKIyP9HfpmurHki0LeQ+YRo0XyCql+ZpkpoQj2HMMXux
- 7ZoWXGldfI1w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9675"; a="145247688"
-X-IronPort-AV: E=Sophos;i="5.75,326,1589266800"; 
-   d="scan'208";a="145247688"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2020 23:16:31 -0700
-IronPort-SDR: 7AODaR20z/zgdTDLF9AA3KQbeaZ3de6CG0mx2UDBNFa6YDoBftMqDb5bxKViQXgqPskmKxY3W2
- GGIi9dA+f7/w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,326,1589266800"; 
-   d="scan'208";a="358008837"
-Received: from lkp-server01.sh.intel.com (HELO f2047cb89c8e) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 07 Jul 2020 23:16:30 -0700
-Received: from kbuild by f2047cb89c8e with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1jt3Nd-0000Zp-Pn; Wed, 08 Jul 2020 06:16:29 +0000
-Date:   Wed, 08 Jul 2020 14:15:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- 876d4e1e8298ad1f94d9e9392fc90486755437b4
-Message-ID: <5f056487.TFJxsvBvfl2R7Q4L%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1729320AbgGHGey (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jul 2020 02:34:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60694 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726292AbgGHGex (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jul 2020 02:34:53 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C229C061755
+        for <linux-usb@vger.kernel.org>; Tue,  7 Jul 2020 23:34:51 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id r12so47535251wrj.13
+        for <linux-usb@vger.kernel.org>; Tue, 07 Jul 2020 23:34:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=N92QX9YZEEvlxOb5ijBkwhfWTJnn9g4c3VHtW0cFzH0=;
+        b=dSLPGlUndLvy1fGVV0FNs8Fv2ovwK3vqMROgk9WEF3u8LkOnLKIMN12Eid0o19PdG/
+         rqQnYwHjYJHt+u2Fn5hp0rHSitWEHOowmZeJJV4NKoK9RpK6Oeqq7R+g6CwVP4hWvAE6
+         FLHkUuqx8bqAottPlNDoY9BthtA3ZHUv6aXqNQjWXbB1/pAeAaUcAtehz94KRe1QucCE
+         W57aDxYoU88jAsahWwzunJOYWFE6ItZ8adLvaPtqS1NCF2jbbWGVA+SsN53rZDEBsr9R
+         nqg3pNxxdTZE+/k7nCgv4wO0zF8HA9WeuqwZCzMayZ7ViqpAzxxtLaXoC7a3gkLjrD69
+         JC3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=N92QX9YZEEvlxOb5ijBkwhfWTJnn9g4c3VHtW0cFzH0=;
+        b=BDAMTEDB+vF/KE5qVsJuTSNI70DQx1PfUQ/8436A3or9RUBJ/JKCzpRIpsQvGOzF8P
+         G2Eho1FY8mhj03hTiluDyB7MS4ykZE9cptJTumKvFzTGD2Oo+rL+TbMdDV06QTWUK2cG
+         BzekDo0b62NV1xUnt7SVKQV5+AOyDNe+D6muKpeQDjR/er2ZK4ULUL8fRei3Ci3XEMMR
+         w5nALjHuIuVlIOvsSCXNK+Qqt53Qy87cFFNviqbmIEHIYxmiaX3PR5+chgG+Vg5FMYgQ
+         xNRD46+lbm5sXf8ckCgol3i0ol1am5p726DToAEpsHgRBTIKm9Dngnv3T38sQmgCrGn2
+         C3Bg==
+X-Gm-Message-State: AOAM533WMsoPyWM4KrgPhURVLLU+9EtAbr9kNLGFkLs1dtIUEzvlGa8M
+        QJcJAa7jF5iIpqBoLM7cFam5fw==
+X-Google-Smtp-Source: ABdhPJz764DvGh/eCrVSAuXsmbNuLINUXpni7rvl11e9ky1g74tWCRJMsxjTH+J5eCJ8AK3AdOoT9A==
+X-Received: by 2002:adf:e647:: with SMTP id b7mr60992159wrn.170.1594190089831;
+        Tue, 07 Jul 2020 23:34:49 -0700 (PDT)
+Received: from dell ([2.27.35.206])
+        by smtp.gmail.com with ESMTPSA id a123sm4556077wmd.28.2020.07.07.23.34.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jul 2020 23:34:48 -0700 (PDT)
+Date:   Wed, 8 Jul 2020 07:34:47 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Joe Perches <joe@perches.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Thomas Winischhofer <thomas@winischhofer.net>
+Subject: Re: [PATCH 04/30] usb: misc: sisusbvga: sisusb_init: Mark all
+ 'static const' arrays as __maybe_unused
+Message-ID: <20200708063447.GI3500@dell>
+References: <20200703174148.2749969-1-lee.jones@linaro.org>
+ <20200703174148.2749969-5-lee.jones@linaro.org>
+ <af66b6e94a26ebd500c1376631891b0bdd0912f0.camel@perches.com>
+ <20200707080311.GE3500@dell>
+ <51eeed808ce61e0d7b7978b2dfd4fd80f315b3b1.camel@perches.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <51eeed808ce61e0d7b7978b2dfd4fd80f315b3b1.camel@perches.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-linus
-branch HEAD: 876d4e1e8298ad1f94d9e9392fc90486755437b4  usb: chipidea: core: add wakeup support for extcon
+On Tue, 07 Jul 2020, Joe Perches wrote:
 
-elapsed time: 725m
+> On Tue, 2020-07-07 at 09:03 +0100, Lee Jones wrote:
+> > On Fri, 03 Jul 2020, Joe Perches wrote:
+> > 
+> > > On Fri, 2020-07-03 at 18:41 +0100, Lee Jones wrote:
+> > > > drivers/usb/misc/sisusbvga/sisusb_init.h is included by a few
+> > > > source files.  Most of which do not use the majority of the
+> > > > shared static const arrays which have been declared.  This
+> > > > causes the build system to spew 100's of warnings.
+> > > > 
+> > > > Fixes the following W=1 kernel build warning(s) - and a whole lot more:
+> > > > 
+> > > >  In file included from drivers/usb/misc/sisusbvga/sisusb.c:54:
+> > > >  drivers/usb/misc/sisusbvga/sisusb_init.h:695:34: warning: ‘SiSUSB_VCLKData’ defined but not used [-Wunused-const-variable=]
+> > > >  695 | static const struct SiS_VCLKData SiSUSB_VCLKData[] = {
+> > > >  | ^~~~~~~~~~~~~~~
+> > > > [10's of lines snipped]
+> > > >  drivers/usb/misc/sisusbvga/sisusb_init.h:206:28: warning: ‘SiS_VGA_DAC’ defined but not used [-Wunused-const-variable=]
+> > > >  206 | static const unsigned char SiS_VGA_DAC[] = {
+> > > >  | ^~~~~~~~~~~
+> > > > [10's of lines snipped]
+> > > >  drivers/usb/misc/sisusbvga/sisusb_init.h:171:29: warning: ‘ModeIndex_1280x1024’ defined but not used [-Wunused-const-variable=]
+> > > >  171 | static const unsigned short ModeIndex_1280x1024[] = { 0x3a, 0x4d, 0x00, 0x65 };
+> > > >  | ^~~~~~~~~~~~~~~~~~~
+> > > > [10's of lines snipped]
+> > > 
+> > > They are not __maybe_unused, they _are_ used.
+> > 
+> > Actually, it looks like all of the ModeIndex_* table are *not* used,
+> > so those will be removed.
+> > 
+> > > I think these instead should be moved to where
+> > > they are used instead of being declared in an
+> > > #include file.
+> > 
+> > The remaining tables are many and large, so stuffing them into the
+> > source file does not seem like the correct thing to do.
+> 
+> It the right thing to do is because otherwise they
+> would be duplicated.  Either declare them only in
+> the single file where use or declare them extern
+> and define them only in one place.
 
-configs tested: 102
-configs skipped: 2
+I refuse to dump 700 lines of nonsensical cruft (data) into a
+source file.  No one wants to parse through that in any C file they
+maintain/operate on.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Not sure I understand why they would be duplicated.  The *-tables.h
+header file will only be included by the 1 source file that makes use
+of them.  Could you please elaborate?
 
-arm                                 defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                               allnoconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm64                            allmodconfig
-arm64                             allnoconfig
-s390                       zfcpdump_defconfig
-nios2                            alldefconfig
-sh                          r7785rp_defconfig
-arm                        trizeps4_defconfig
-i386                              allnoconfig
-i386                             allyesconfig
-i386                                defconfig
-i386                              debian-10.3
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                              allnoconfig
-m68k                           sun3_defconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-nios2                            allyesconfig
-openrisc                            defconfig
-c6x                              allyesconfig
-c6x                               allnoconfig
-openrisc                         allyesconfig
-nds32                               defconfig
-nds32                             allnoconfig
-csky                             allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-h8300                            allmodconfig
-xtensa                              defconfig
-arc                                 defconfig
-arc                              allyesconfig
-sh                               allmodconfig
-sh                                allnoconfig
-microblaze                        allnoconfig
-mips                             allyesconfig
-mips                              allnoconfig
-mips                             allmodconfig
-parisc                            allnoconfig
-parisc                              defconfig
-parisc                           allyesconfig
-parisc                           allmodconfig
-powerpc                             defconfig
-powerpc                          allyesconfig
-powerpc                          rhel-kconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a001-20200707
-i386                 randconfig-a002-20200707
-i386                 randconfig-a006-20200707
-i386                 randconfig-a004-20200707
-i386                 randconfig-a005-20200707
-i386                 randconfig-a003-20200707
-x86_64               randconfig-a012-20200707
-x86_64               randconfig-a016-20200707
-x86_64               randconfig-a014-20200707
-x86_64               randconfig-a011-20200707
-x86_64               randconfig-a015-20200707
-x86_64               randconfig-a013-20200707
-i386                 randconfig-a011-20200707
-i386                 randconfig-a014-20200707
-i386                 randconfig-a015-20200707
-i386                 randconfig-a016-20200707
-i386                 randconfig-a012-20200707
-i386                 randconfig-a013-20200707
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-s390                             allyesconfig
-s390                              allnoconfig
-s390                             allmodconfig
-s390                                defconfig
-sparc                            allyesconfig
-sparc                               defconfig
-sparc64                             defconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                          allmodconfig
-um                                allnoconfig
-um                                  defconfig
-um                               allmodconfig
-um                               allyesconfig
-x86_64                               rhel-7.6
-x86_64                    rhel-7.6-kselftests
-x86_64                               rhel-8.3
-x86_64                                  kexec
-x86_64                                   rhel
-x86_64                         rhel-7.2-clear
-x86_64                                    lkp
-x86_64                              fedora-25
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
