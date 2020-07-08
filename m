@@ -2,52 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CC03218AD7
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jul 2020 17:11:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F95218B7B
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jul 2020 17:39:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729858AbgGHPLE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jul 2020 11:11:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35484 "EHLO mail.kernel.org"
+        id S1730196AbgGHPj2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 8 Jul 2020 11:39:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46966 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729625AbgGHPLD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 8 Jul 2020 11:11:03 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EB94A2078D;
-        Wed,  8 Jul 2020 15:11:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594221063;
-        bh=JlkP9WBNvHgrvvtGhECXe1LtkxVQKlJIUqMRhWD/9b4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=z9UoilwvmjCK1gZidXRuXmrCSBkASOZ73D74AqCBsUvFQlgE6WWTbUdDgVPbpisXV
-         PJRZv24ZM5u5UrgzdDaGaN7PQetnTWhyYhfGp9bemogJ7B1HItaPkNx0WozPHkU7qa
-         TUeOMV9aoCWaHayl8iMyOJXzTWm7gAoHMOHt0Wf0=
-Date:   Wed, 8 Jul 2020 17:10:51 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [GIT PULL] USB-serial fixes for 5.8-rc5
-Message-ID: <20200708151051.GB685371@kroah.com>
-References: <20200708130710.GA25398@localhost>
+        id S1729022AbgGHPj1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 8 Jul 2020 11:39:27 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 208353] Distorted Audio Output Through USB C Docking Station
+Date:   Wed, 08 Jul 2020 15:39:27 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: pnqkernelbugzilla@inkvizice.org
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-208353-208809-plSXsHL6IL@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-208353-208809@https.bugzilla.kernel.org/>
+References: <bug-208353-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200708130710.GA25398@localhost>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 08, 2020 at 03:07:10PM +0200, Johan Hovold wrote:
-> The following changes since commit 48778464bb7d346b47157d21ffde2af6b2d39110:
-> 
->   Linux 5.8-rc2 (2020-06-21 15:45:29 -0700)
-> 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.8-rc5
+https://bugzilla.kernel.org/show_bug.cgi?id=208353
 
-Pulled and pushed out, thanks!
+pnqkernelbugzilla@inkvizice.org changed:
 
-greg k-h
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |pnqkernelbugzilla@inkvizice
+                   |                            |.org
+
+--- Comment #12 from pnqkernelbugzilla@inkvizice.org ---
+I have similar issue with audio output from Dell WD15 USB-C Dock. I decoded
+notorious song "Never Gonna Give You Up" to raw audio and ran it throug aplay.
+Before the commit it plays normally, since the commit it plays like this:
+https://central.szn.cz/s/tr9otisNwiFEE2A
+
+The first official release with the issue is 5.7.6, it is still present in
+5.8-rc4. Bisecting found the following commit
+d288dc74f8cf95cb7ae0aaf245b7128627a49bf3 (ALSA: usb-audio: Improve frames size
+computation), which is based on upstream commit
+f0bd62b64016508938df9babe47f65c2c727d25c.
+
+Release 5.7.7 with the patch from comment #5 seems okay.
+
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
