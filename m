@@ -2,89 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9554F218877
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jul 2020 15:07:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4230921889D
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jul 2020 15:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729133AbgGHNHQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jul 2020 09:07:16 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:38751 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728677AbgGHNHQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jul 2020 09:07:16 -0400
-Received: by mail-lj1-f193.google.com with SMTP id 9so54119483ljv.5
-        for <linux-usb@vger.kernel.org>; Wed, 08 Jul 2020 06:07:14 -0700 (PDT)
+        id S1729393AbgGHNMy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jul 2020 09:12:54 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:24418 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1729139AbgGHNMx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jul 2020 09:12:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1594213972;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=dpcN6uhzyYQ/ewztTgf0OWdeJAZ75wA/b6rJJQ+xVDs=;
+        b=LTXCD78c8WKfs+M4LqeYYWuXHRgNrp0qfwHxhr3jVpk0DT1mltbpbKj8RW3s314dufbVSX
+        Va/IcR31/AtFTEBfNUGcg/ypb9L1h1kgurxUVcjhWOFMGOE3XDWkbo2sN5DJy9DVMy2A4f
+        WoFFQcGPqciwYs8X1Ar9tX0jaHGeSyw=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-236-c5gZZ00eOYGLeZtXUXxWeg-1; Wed, 08 Jul 2020 09:12:50 -0400
+X-MC-Unique: c5gZZ00eOYGLeZtXUXxWeg-1
+Received: by mail-qk1-f197.google.com with SMTP id j79so30934292qke.5
+        for <linux-usb@vger.kernel.org>; Wed, 08 Jul 2020 06:12:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:content-transfer-encoding;
-        bh=qS3odsWec48dFtazz69JP5j9S7cwbZpN/VzwMraFQCw=;
-        b=lFCAFwloqfSBekUYNTyMilRyHqUtM5laHHyOJeXnp+XRYfzTJCSTQw7liDcyyRtUSU
-         R9HgNnbX/qGJRNQ1UmOML3S1cQVu71ApaYmThnP5cmUQY2ouNx9tJ96sAquOsQa7MXgJ
-         yfNDwo1UZy8ix5NNNVt7U5++qK7yOaTuRUTGirKvP2mGMP5VqhaBm2q20A1iNiqnyxMc
-         penp847irTIERorGlxQ1YWum8qkTsVllyIbxL/cTCkhO7JB2A8mu5uJMJi2+6yUrdvmU
-         t9w97JNf8JzvfYKtRpN//5iz2nnInF0MPaMLzlK4wMok524GfgKgn9y23+S4cgrxokTZ
-         SoeQ==
-X-Gm-Message-State: AOAM532lySLyfA1tZIl8XktCVue3dMbtSc1KHjKf/+B5k//K60RG11q/
-        1Rkw+PpwxrRNt2Ju0ELNQ+g=
-X-Google-Smtp-Source: ABdhPJyzaQm92EFUQ4QzEYf9lHqCBR7oWVx6AGjdsFxQOLFYhD2rKm77iQAFclnZxQ0GSzH7Z+Qugw==
-X-Received: by 2002:a05:651c:1117:: with SMTP id d23mr34785350ljo.277.1594213633812;
-        Wed, 08 Jul 2020 06:07:13 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id u5sm13407276lfm.81.2020.07.08.06.07.12
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=dpcN6uhzyYQ/ewztTgf0OWdeJAZ75wA/b6rJJQ+xVDs=;
+        b=pfh4IDwo+ulY3HUj8kpdcY4Tb2eDsBEHrhBkNC65x8fbFikhFhn+49V0RHGd5OwSvF
+         gjHY35nn1BLu7UD7pTdggxe6TR4txA0gbUpvAPRYg4al8WcHaUy3a5yxWoOOs2QguZ0M
+         dTJU9o4T+YiCBn0PtBeWqQIxNsGMnXKXznrXpI9DefsguIeJhswrbZUbMef+o8qJ4AbI
+         ntuA/2rurZaZbieTCs9ixBkXYT21f5uATdd7N1QtCLOyfGbx5PVjEY/qE9Trkk62K/Vt
+         0E8Ho3zxn3E/qhI0WfH5gaH8qKcLquzvO4ARkjl1YOlj5mMAaFmfDl3vGCqkQksy3RFz
+         h73Q==
+X-Gm-Message-State: AOAM533kK2+8eYcie4tLKK4z+aFpn2NE0noEO0xJLCuGwp50t1yyJqK/
+        LjYW81TOZ2+MWZUqTQOdQDb6VMm0M7t9FPVRm9SJ1Hqj4zN7zZ1ogPY8PEOq4/PW/PFjJKLsxPp
+        OePYgaCqYE1R4larGMmsl
+X-Received: by 2002:a05:620a:7d6:: with SMTP id 22mr56815620qkb.311.1594213970198;
+        Wed, 08 Jul 2020 06:12:50 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxitu/hHcDwF3flowJxfpEmgEDZRQIJzjglSzVYv/A5vvAMuGPmy88ZU3gyB0peMa9Z/OfSHA==
+X-Received: by 2002:a05:620a:7d6:: with SMTP id 22mr56815595qkb.311.1594213969919;
+        Wed, 08 Jul 2020 06:12:49 -0700 (PDT)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id k6sm21494856qki.123.2020.07.08.06.12.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jul 2020 06:07:13 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1jt9n4-0006c6-MY; Wed, 08 Jul 2020 15:07:10 +0200
-Date:   Wed, 8 Jul 2020 15:07:10 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB-serial fixes for 5.8-rc5
-Message-ID: <20200708130710.GA25398@localhost>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+        Wed, 08 Jul 2020 06:12:49 -0700 (PDT)
+From:   trix@redhat.com
+To:     jacmet@sunsite.dk, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] USB: c67x00: fix use after free in c67x00_giveback_urb
+Date:   Wed,  8 Jul 2020 06:12:43 -0700
+Message-Id: <20200708131243.24336-1-trix@redhat.com>
+X-Mailer: git-send-email 2.18.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit 48778464bb7d346b47157d21ffde2af6b2d39110:
+From: Tom Rix <trix@redhat.com>
 
-  Linux 5.8-rc2 (2020-06-21 15:45:29 -0700)
+clang static analysis flags this error
 
-are available in the Git repository at:
+c67x00-sched.c:489:55: warning: Use of memory after it is freed [unix.Malloc]
+        usb_hcd_giveback_urb(c67x00_hcd_to_hcd(c67x00), urb, urbp->status);
+                                                             ^~~~~~~~~~~~
+Problem happens in this block of code
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.8-rc5
+	c67x00_release_urb(c67x00, urb);
+	usb_hcd_unlink_urb_from_ep(c67x00_hcd_to_hcd(c67x00), urb);
+	spin_unlock(&c67x00->lock);
+	usb_hcd_giveback_urb(c67x00_hcd_to_hcd(c67x00), urb, urbp->status);
 
-for you to fetch changes up to da6902e5b6dbca9081e3d377f9802d4fd0c5ea59:
+In the call to c67x00_release_urb has this freeing of urbp
 
-  USB: serial: option: add Quectel EG95 LTE modem (2020-07-07 17:40:52 +0200)
+	urbp = urb->hcpriv;
+	urb->hcpriv = NULL;
+	list_del(&urbp->hep_node);
+	kfree(urbp);
 
-----------------------------------------------------------------
-USB-serial fixes for 5.8-rc5
+And so urbp is freed before usb_hcd_giveback_urb uses it as its 3rd
+parameter.
 
-Here are some new device ids for 5.8.
+Since all is required is the status, pass the status directly as is
+done in c64x00_urb_dequeue
 
-All have been in linux-next with no reported issues.
+Fixes: e9b29ffc519b ("USB: add Cypress c67x00 OTG controller HCD driver")
 
-----------------------------------------------------------------
-AceLan Kao (1):
-      USB: serial: option: add Quectel EG95 LTE modem
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/usb/c67x00/c67x00-sched.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Igor Moura (1):
-      USB: serial: ch341: add new Product ID for CH340
+diff --git a/drivers/usb/c67x00/c67x00-sched.c b/drivers/usb/c67x00/c67x00-sched.c
+index ef1e4ecaee99..f7f6229082ca 100644
+--- a/drivers/usb/c67x00/c67x00-sched.c
++++ b/drivers/usb/c67x00/c67x00-sched.c
+@@ -486,7 +486,7 @@ c67x00_giveback_urb(struct c67x00_hcd *c67x00, struct urb *urb, int status)
+ 	c67x00_release_urb(c67x00, urb);
+ 	usb_hcd_unlink_urb_from_ep(c67x00_hcd_to_hcd(c67x00), urb);
+ 	spin_unlock(&c67x00->lock);
+-	usb_hcd_giveback_urb(c67x00_hcd_to_hcd(c67x00), urb, urbp->status);
++	usb_hcd_giveback_urb(c67x00_hcd_to_hcd(c67x00), urb, status);
+ 	spin_lock(&c67x00->lock);
+ }
+ 
+-- 
+2.18.1
 
-James Hilliard (1):
-      USB: serial: cypress_m8: enable Simply Automated UPB PIM
-
-Jörgen Storvist (1):
-      USB: serial: option: add GosunCn GM500 series
-
- drivers/usb/serial/ch341.c      | 1 +
- drivers/usb/serial/cypress_m8.c | 2 ++
- drivers/usb/serial/cypress_m8.h | 3 +++
- drivers/usb/serial/option.c     | 6 ++++++
- 4 files changed, 12 insertions(+)
