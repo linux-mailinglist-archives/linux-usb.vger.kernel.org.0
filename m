@@ -2,263 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BCFE2190A9
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jul 2020 21:33:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 765882191F0
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jul 2020 23:05:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726534AbgGHTc4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jul 2020 15:32:56 -0400
-Received: from rnd-relay.smtp.broadcom.com ([192.19.229.170]:60736 "EHLO
-        rnd-relay.smtp.broadcom.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725903AbgGHTc1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jul 2020 15:32:27 -0400
-Received: from mail-irv-17.broadcom.com (mail-irv-17.lvn.broadcom.net [10.75.242.48])
-        by rnd-relay.smtp.broadcom.com (Postfix) with ESMTP id 8117D30C0C0;
-        Wed,  8 Jul 2020 12:32:25 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 rnd-relay.smtp.broadcom.com 8117D30C0C0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-        s=dkimrelay; t=1594236745;
-        bh=EwUpHpRkQBD8sV+nVCn/MQ7dk/rrClGaFM9+jr1cZU8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=drvkI27/fHhYXEkdId7+vJ5i7ud2y2ikwR+y7AE/J9w55EFR8sPGecnB7IsWGC5uz
-         QYnOtjYQKHGABcozhyAcYfAE4G1Ji4EbwN/BE2eVF+TGJcKtGInC4j8GhvM9G92paa
-         KZakrRTm8TE2epxp2zFEUFWeyuw6NGfh/Z+0hNrk=
-Received: from stbsrv-and-01.and.broadcom.net (stbsrv-and-01.and.broadcom.net [10.28.16.211])
-        by mail-irv-17.broadcom.com (Postfix) with ESMTP id 039BE140069;
-        Wed,  8 Jul 2020 12:32:21 -0700 (PDT)
-From:   Jim Quinlan <james.quinlan@broadcom.com>
-To:     linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        devel@driverdev.osuosl.org (open list:STAGING SUBSYSTEM),
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE),
-        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS FOR ALLWINNER
-        A10), Florian Fainelli <f.fainelli@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        iommu@lists.linux-foundation.org (open list:IOMMU DRIVERS),
-        Jens Axboe <axboe@kernel.dk>, Joerg Roedel <jroedel@suse.de>,
-        Julien Grall <julien.grall@arm.com>,
-        linux-acpi@vger.kernel.org (open list:ACPI FOR ARM64 (ACPI/arm64)),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM PORT),
-        linux-ide@vger.kernel.org (open list:LIBATA SUBSYSTEM (Serial and
-        Parallel ATA drivers)), linux-kernel@vger.kernel.org (open list),
-        linux-media@vger.kernel.org (open list:ALLWINNER A10 CSI DRIVER),
-        linux-remoteproc@vger.kernel.org (open list:REMOTE PROCESSOR
-        (REMOTEPROC) SUBSYSTEM),
-        linux-rpi-kernel@lists.infradead.org (moderated list:BROADCOM
-        BCM2711/BCM2835 ARM ARCHITECTURE),
-        linux-sh@vger.kernel.org (open list:SUPERH),
-        linux-usb@vger.kernel.org (open list:USB SUBSYSTEM),
-        Oliver Neukum <oneukum@suse.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Rob Herring <robh@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH v7 00/12] PCI: brcmstb: enable PCIe for STB chips
-Date:   Wed,  8 Jul 2020 15:31:53 -0400
-Message-Id: <20200708193219.47134-1-james.quinlan@broadcom.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726081AbgGHVFf convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 8 Jul 2020 17:05:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55170 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725787AbgGHVFf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jul 2020 17:05:35 -0400
+Received: from smtp2.hosting90.cz (smtp2.hosting90.cz [IPv6:2a03:b780:1:0:216:3eff:fe00:24c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BA1C061A0B
+        for <linux-usb@vger.kernel.org>; Wed,  8 Jul 2020 14:05:34 -0700 (PDT)
+Received: from [46.229.122.58] (helo=[10.10.0.107])
+        by smtp2.hosting90.cz with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.92)
+        (envelope-from <Jerry@jrr.cz>)
+        id 1jtHFy-000435-UK; Wed, 08 Jul 2020 23:05:31 +0200
+Subject: Re: [PATCH v4] usbserial: cp210x - icount support for parity error
+ checking
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+References: <470484c8-7afc-c593-5ca9-cdb97dba39e1@jrr.cz>
+ <20200621135838.GA125568@kroah.com>
+ <7bdff86f-0988-2afc-e1a6-35df2931fd5b@jrr.cz>
+ <20200622053146.GB134804@kroah.com>
+ <838f09f9-4063-1c2c-8b4d-c18dee6c18de@jrr.cz>
+ <20200701154257.GF3334@localhost>
+ <13482d69-b286-b20e-ee3a-f8c5f12aad18@jrr.cz>
+ <20200703074539.GB3453@localhost> <20200703150104.GE3453@localhost>
+ <61febd93-400b-d1f9-6fd9-82de0e799f3e@jrr.cz>
+ <20200706135904.GJ3453@localhost>
+From:   Jerry <Jerry@jrr.cz>
+Message-ID: <3fc7bd0e-6cf6-140c-592f-b8c69d483309@jrr.cz>
+Date:   Wed, 8 Jul 2020 23:05:29 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Firefox/60.0 SeaMonkey/2.53.2
+MIME-Version: 1.0
+In-Reply-To: <20200706135904.GJ3453@localhost>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8BIT
+X-Antivirus: Clamav/CLEAN
+X-Scan-Signature: 08f7bf3336dc390afce6d66a498c2669
+X-Authenticated-Id: jerry@jrr.cz
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Johan Hovold wrote on 7/6/20 3:59 PM:
+> On Mon, Jul 06, 2020 at 01:47:50PM +0200, Jerry wrote:
+>> Johan Hovold wrote on 7/3/20 5:01 PM:
+>>> Also, could try and see if your device detects breaks properly? Mine
+>>> just return a NUL char.
+I've done some experiments with CP2102 receiving a break.
+It seems that chip always receives 0x00 for the start of break (with 
+correct parity when even parity set, wrong for odd parity) and later 
+(probably after 250 ms) it also sets break flag in GET_COMM_STATUS.
+I don't see any indication of the break event in data. I tried to change 
+some things in your solution but without success.
 
-Patchset Summary:
-  Enhance a PCIe host controller driver.  Because of its unusual design
-  we are foced to change dev->dma_pfn_offset into a more general role
-  allowing multiple offsets.  See the 'v1' notes below for more info.
+I also haven't ever seen Frame error (neither way). I tried several ways 
+(different tx/rx baudrate, receive a parity data without parity enabled, 
+generating shorter breaks) and I suppose that CP2102 can't indicate framing 
+error.
 
-v7:
-  Commit: "device core: Introduce DMA range map, supplanting ..."
-  -- remove second kcalloc/copy in device.c (AndyS)
-  -- use PTR_ERR_OR_ZERO() and PHYS_PFN() (AndyS)
-  -- indentation, sizeof(struct ...) => sizeof(*r) (AndyS)
-  -- add pfn.h definitions: PFN_DMA_ADDR(), DMA_ADDR_PFN() (AndyS)
-  -- Fixed compile error in "sun6i_csi.c" (kernel test robot)
-  Commit "ata: ahci_brcm: Fix use of BCM7216 reset controller"
-  -- correct name of function in the commit msg (SergeiS)
-  
-v6:
-  Commit "device core: Introduce DMA range map":
-  -- of_dma_get_range() now takes a single argument and returns either
-     NULL, a valid map, or an ERR_PTR. (Robin)
-  -- offsets are no longer a PFN value but an actual address. (Robin)
-  -- the bus_dma_region struct stores the range size instead of
-     the cpu_end and pci_end values. (Robin)
-  -- devices that were setting a single offset with no boundaries
-     have been modified to have boundaries; in a few places
-     where this informatino was unavilable a /* FIXME: ... */
-     comment was added. (Robin)
-  -- dma_attach_offset_range() can be called when an offset
-     map already exists; if it's range is already present
-     nothing is done and success is returned. (Robin)
-  All commits:
-  -- Man name/style/corrections/etc changed (Bjorn)
-  -- rebase to Torvalds master
+Luckily I haven't found any problem with parity checking.  :-)
 
-v5:
-  Commit "device core: Introduce multiple dma pfn offsets"
-  -- in of/address.c: "map_size = 0" => "*map_size = 0"
-  -- use kcalloc instead of kzalloc (AndyS)
-  -- use PHYS_ADDR_MAX instead of "~(phys_addr_t)0"
-  Commit "PCI: brcmstb: Set internal memory viewport sizes"
-  -- now gives error on missing dma-ranges property.
-  Commit "dt-bindings: PCI: Add bindings for more Brcmstb chips"
-  -- removed "Allof:" from brcm,scb-sizes definition (RobH)
-  All Commits:
-  -- indentation style, use max chars 100 (AndyS)
-  -- rebased to torvalds master
+> I noticed that I can get comm-status to report a break condition when
+> event-insertion mode is disabled, but it just results in a NUL char in
+> event mode (the error flag isn't set then).
+>
+> Perhaps buggy firmware, unless there's some other command for masking
+> events. Haven't quite understood how the EVENTMASK requests are supposed
+> to be used. Replacing the break char (SET_CHAR) didn't help at least.
+Neither I understand EVENTMASK in AN571 but I suppose that it is used for 
+W32 API WaitCommEvent() because of very similar flag list
+https://docs.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-waitcommevent
+maybe somebody else can explain possible usage...
+>> An interesting thing that your patch don't report any overrun. I'm not able
+>> to create a real overrun (any idea?) but it doesn't report any fake overrun
+>> compared to GET_COMM_STATUS.
+> Yeah, I noticed that too, although I had a feeling the fake overrun
+> didn't even always show up when sending while closed here either.
+You are right, the fake HW overrun in GET_COMM_STATUS isn't reported always 
+but very often.
+>
+> Thanks,
+> Johan
 
-v4:
-  Commit "device core: Introduce multiple dma pfn offsets"
-  -- of_dma_get_range() does not take a dev param but instead
-     takes two "out" params: map and map_size.  We do this so
-     that the code that parses dma-ranges is separate from
-     the code that modifies 'dev'.   (Nicolas)
-  -- the separate case of having a single pfn offset has
-     been removed and is now processed by going through the
-     map array. (Nicolas)
-  -- move attach_uniform_dma_pfn_offset() from of/address.c to
-     dma/mapping.c so that it does not depend on CONFIG_OF. (Nicolas)
-  -- devm_kcalloc => devm_kzalloc (DanC)
-  -- add/fix assignment to dev->dma_pfn_offset_map for func
-     attach_uniform_dma_pfn_offset() (DanC, Nicolas)
-  -- s/struct dma_pfn_offset_region/struct bus_dma_region/ (Nicolas)
-  -- s/attach_uniform_dma_pfn_offset/dma_attach_uniform_pfn_offset/
-  -- s/attach_dma_pfn_offset_map/dma_attach_pfn_offset_map/
-  -- More use of PFN_{PHYS,DOWN,UP}. (AndyS)
-  Commit "of: Include a dev param in of_dma_get_range()"
-  -- this commit was sqaushed with "device core: Introduce ..."
+Jerry
 
-v3:
-  Commit "device core: Introduce multiple dma pfn offsets"
-  Commit "arm: dma-mapping: Invoke dma offset func if needed"
-  -- The above two commits have been squashed.  More importantly,
-     the code has been modified so that the functionality for
-     multiple pfn offsets subsumes the use of dev->dma_pfn_offset.
-     In fact, dma_pfn_offset is removed and supplanted by
-     dma_pfn_offset_map, which is a pointer to an array.  The
-     more common case of a uniform offset is now handled as
-     a map with a single entry, while cases requiring multiple
-     pfn offsets use a map with multiple entries.  Code paths
-     that used to do this:
-
-         dev->dma_pfn_offset = mydrivers_pfn_offset;
-
-     have been changed to do this:
-
-         attach_uniform_dma_pfn_offset(dev, pfn_offset);
-
-  Commit "dt-bindings: PCI: Add bindings for more Brcmstb chips"
-  -- Add if/then clause for required props: resets, reset-names (RobH)
-  -- Change compatible list from const to enum (RobH)
-  -- Change list of u32-tuples to u64 (RobH)
-
-  Commit "of: Include a dev param in of_dma_get_range()"
-  -- modify of/unittests.c to add NULL param in of_dma_get_range() call.
-
-  Commit "device core: Add ability to handle multiple dma offsets"
-  -- align comment in device.h (AndyS).
-  -- s/cpu_beg/cpu_start/ and s/dma_beg/dma_start/ in struct
-     dma_pfn_offset_region (AndyS).
-
-v2:
-Commit: "device core: Add ability to handle multiple dma offsets"
-  o Added helper func attach_dma_pfn_offset_map() in address.c (Chistoph)
-  o Helpers funcs added to __phys_to_dma() & __dma_to_phys() (Christoph)
-  o Added warning when multiple offsets are needed and !DMA_PFN_OFFSET_MAP
-  o dev->dma_pfn_map => dev->dma_pfn_offset_map
-  o s/frm/from/ for dma_pfn_offset_frm_{phys,dma}_addr() (Christoph)
-  o In device.h: s/const void */const struct dma_pfn_offset_region */
-  o removed 'unlikely' from unlikely(dev->dma_pfn_offset_map) since
-    guarded by CONFIG_DMA_PFN_OFFSET_MAP (Christoph)
-  o Since dev->dma_pfn_offset is copied in usb/core/{usb,message}.c, now
-    dev->dma_pfn_offset_map is copied as well.
-  o Merged two of the DMA commits into one (Christoph).
-
-Commit "arm: dma-mapping: Invoke dma offset func if needed":
-  o Use helper functions instead of #if CONFIG_DMA_PFN_OFFSET
-
-Other commits' changes:
-  o Removed need for carrying of_id var in priv (Nicolas)
-  o Commit message rewordings (Bjorn)
-  o Commit log messages filled to 75 chars (Bjorn)
-  o devm_reset_control_get_shared())
-    => devm_reset_control_get_optional_shared (Philipp)
-  o Add call to reset_control_assert() in PCIe remove routines (Philipp)
-
-v1:
-This patchset expands the usefulness of the Broadcom Settop Box PCIe
-controller by building upon the PCIe driver used currently by the
-Raspbery Pi.  Other forms of this patchset were submitted by me years
-ago and not accepted; the major sticking point was the code required
-for the DMA remapping needed for the PCIe driver to work [1].
-
-There have been many changes to the DMA and OF subsystems since that
-time, making a cleaner and less intrusive patchset possible.  This
-patchset implements a generalization of "dev->dma_pfn_offset", except
-that instead of a single scalar offset it provides for multiple
-offsets via a function which depends upon the "dma-ranges" property of
-the PCIe host controller.  This is required for proper functionality
-of the BrcmSTB PCIe controller and possibly some other devices.
-
-[1] https://lore.kernel.org/linux-arm-kernel/1516058925-46522-5-git-send-email-jim2101024@gmail.com/
-
-Jim Quinlan (12):
-  PCI: brcmstb: PCIE_BRCMSTB depends on ARCH_BRCMSTB
-  ata: ahci_brcm: Fix use of BCM7216 reset controller
-  dt-bindings: PCI: Add bindings for more Brcmstb chips
-  PCI: brcmstb: Add bcm7278 register info
-  PCI: brcmstb: Add suspend and resume pm_ops
-  PCI: brcmstb: Add bcm7278 PERST# support
-  PCI: brcmstb: Add control of rescal reset
-  device core: Introduce DMA range map, supplanting dma_pfn_offset
-  PCI: brcmstb: Set additional internal memory DMA viewport sizes
-  PCI: brcmstb: Accommodate MSI for older chips
-  PCI: brcmstb: Set bus max burst size by chip type
-  PCI: brcmstb: Add bcm7211, bcm7216, bcm7445, bcm7278 to match list
-
- .../bindings/pci/brcm,stb-pcie.yaml           |  56 ++-
- arch/arm/include/asm/dma-mapping.h            |   9 +-
- arch/arm/mach-keystone/keystone.c             |  17 +-
- arch/sh/drivers/pci/pcie-sh7786.c             |   9 +-
- arch/sh/kernel/dma-coherent.c                 |  16 +-
- arch/x86/pci/sta2x11-fixup.c                  |   7 +-
- drivers/acpi/arm64/iort.c                     |   5 +-
- drivers/ata/ahci_brcm.c                       |  11 +-
- drivers/gpu/drm/sun4i/sun4i_backend.c         |   7 +-
- drivers/iommu/io-pgtable-arm.c                |   2 +-
- .../platform/sunxi/sun4i-csi/sun4i_csi.c      |   6 +-
- .../platform/sunxi/sun6i-csi/sun6i_csi.c      |   5 +-
- drivers/of/address.c                          |  95 ++--
- drivers/of/device.c                           |  47 +-
- drivers/of/of_private.h                       |   9 +-
- drivers/of/unittest.c                         |  35 +-
- drivers/pci/controller/Kconfig                |   3 +-
- drivers/pci/controller/pcie-brcmstb.c         | 408 +++++++++++++++---
- drivers/remoteproc/remoteproc_core.c          |   2 +-
- .../staging/media/sunxi/cedrus/cedrus_hw.c    |   8 +-
- drivers/usb/core/message.c                    |   4 +-
- drivers/usb/core/usb.c                        |   2 +-
- include/linux/device.h                        |   4 +-
- include/linux/dma-direct.h                    |  10 +-
- include/linux/dma-mapping.h                   |  37 ++
- include/linux/pfn.h                           |   2 +
- kernel/dma/coherent.c                         |  10 +-
- kernel/dma/mapping.c                          |  53 +++
- 28 files changed, 682 insertions(+), 197 deletions(-)
-
--- 
-2.17.1
 
