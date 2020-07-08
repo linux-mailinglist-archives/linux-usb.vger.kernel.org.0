@@ -2,100 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4229C218FEF
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jul 2020 20:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40762219056
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jul 2020 21:17:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726533AbgGHStN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jul 2020 14:49:13 -0400
-Received: from smtp.al2klimov.de ([78.46.175.9]:40728 "EHLO smtp.al2klimov.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725953AbgGHStN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 8 Jul 2020 14:49:13 -0400
-Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
-        by smtp.al2klimov.de (Postfix) with ESMTPA id 06A1EBC0D4;
-        Wed,  8 Jul 2020 18:49:09 +0000 (UTC)
-From:   "Alexander A. Klimov" <grandmaster@al2klimov.de>
-To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        linux-kernel@vger.kernel.org
-Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
-Subject: [PATCH] USB: storage: replace HTTP links with HTTPS ones
-Date:   Wed,  8 Jul 2020 20:49:03 +0200
-Message-Id: <20200708184903.17350-1-grandmaster@al2klimov.de>
-In-Reply-To: <20200708103928.GC585606@kroah.com>
-References: <20200708103928.GC585606@kroah.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Bar: +++++
-X-Spam-Level: *****
-Authentication-Results: smtp.al2klimov.de;
-        auth=pass smtp.auth=aklimov@al2klimov.de smtp.mailfrom=grandmaster@al2klimov.de
+        id S1726492AbgGHTRU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jul 2020 15:17:20 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:32750 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726220AbgGHTRG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jul 2020 15:17:06 -0400
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 08 Jul 2020 12:11:03 -0700
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 08 Jul 2020 12:11:01 -0700
+Received: from c-sanm-linux.qualcomm.com ([10.206.25.31])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 09 Jul 2020 00:40:31 +0530
+Received: by c-sanm-linux.qualcomm.com (Postfix, from userid 2343233)
+        id 58EE52BFB; Thu,  9 Jul 2020 00:40:30 +0530 (IST)
+From:   Sandeep Maheswaram <sanm@codeaurora.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Sandeep Maheswaram <sanm@codeaurora.org>
+Subject: [PATCH v2 0/3] usb: dwc3: Host wake up support from system suspend 
+Date:   Thu,  9 Jul 2020 00:40:14 +0530
+Message-Id: <1594235417-23066-1-git-send-email-sanm@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Rationale:
-Reduces attack surface on kernel devs opening the links for MITM
-as HTTPS traffic is much harder to manipulate.
+Avoiding phy powerdown in host mode so that it can be wake up by devices.
+Set GENPD_FLAG_ACTIVE_WAKEUP flag to keep usb30_prim gdsc active
+when wakeup capable devices are connected to the host.
+Using PDC interrupts instead of GIC interrupst to support wakeup in
+xo shutdown case.
 
-Deterministic algorithm:
-For each file:
-  If not .svg:
-    For each line:
-      If doesn't contain `\bxmlns\b`:
-        For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
-	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
-            If both the HTTP and HTTPS versions
-            return 200 OK and serve the same content:
-              Replace HTTP with HTTPS.
+Changes in v2:
+Dropped the patch in clock to set GENPD_FLAG_ACTIVE_WAKEUP flag and 
+setting in usb dwc3 driver.
+Separated the core patch and glue driver patch.
+Made need_phy_for_wakeup flag part of dwc structure and 
+hs_phy_flags as unsgined int.
+Adrressed the comment on device_init_wakeup call.
+Corrected offset for reading portsc register.
+Added pacth to support wakeup in xo shutdown case.
 
-Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
----
- drivers/usb/storage/Kconfig        | 2 +-
- drivers/usb/storage/freecom.c      | 2 +-
- drivers/usb/storage/unusual_devs.h | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/usb/storage/Kconfig b/drivers/usb/storage/Kconfig
-index 5335a7ff5d14..d17b60a644ef 100644
---- a/drivers/usb/storage/Kconfig
-+++ b/drivers/usb/storage/Kconfig
-@@ -57,7 +57,7 @@ config USB_STORAGE_FREECOM
- 	tristate "Freecom USB/ATAPI Bridge support"
- 	help
- 	  Support for the Freecom USB to IDE/ATAPI adaptor.
--	  Freecom has a web page at <http://www.freecom.de/>.
-+	  Freecom has a web page at <https://www.freecom.de/>.
- 
- 	  If this driver is compiled as a module, it will be named ums-freecom.
- 
-diff --git a/drivers/usb/storage/freecom.c b/drivers/usb/storage/freecom.c
-index 34e7eaff1174..3d5f7d0ff0f1 100644
---- a/drivers/usb/storage/freecom.c
-+++ b/drivers/usb/storage/freecom.c
-@@ -11,7 +11,7 @@
-  *
-  * This driver was developed with information provided in FREECOM's USB
-  * Programmers Reference Guide.  For further information contact Freecom
-- * (http://www.freecom.de/)
-+ * (https://www.freecom.de/)
-  */
- 
- #include <linux/module.h>
-diff --git a/drivers/usb/storage/unusual_devs.h b/drivers/usb/storage/unusual_devs.h
-index b6a9a7451620..220ae2c356ee 100644
---- a/drivers/usb/storage/unusual_devs.h
-+++ b/drivers/usb/storage/unusual_devs.h
-@@ -44,7 +44,7 @@
-  * mode.  Existing userspace solutions are superior.
-  *
-  * New mode switching devices should instead be added to the database
-- * maintained at http://www.draisberghof.de/usb_modeswitch/
-+ * maintained at https://www.draisberghof.de/usb_modeswitch/
-  */
- 
- #if !defined(CONFIG_USB_STORAGE_SDDR09) && \
+
+Sandeep Maheswaram (3):
+  usb: dwc3: core: Host wake up support from system suspend
+  usb: dwc3: qcom: Configure wakeup interrupts and set genpd active
+    wakeup flag
+  arm64: dts: qcom: sc7180: Use pdc interrupts for USB instead of GIC
+    interrupts
+
+ arch/arm64/boot/dts/qcom/sc7180.dtsi |  8 ++--
+ drivers/usb/dwc3/core.c              | 47 +++++++++++++++++++----
+ drivers/usb/dwc3/core.h              |  2 +
+ drivers/usb/dwc3/dwc3-qcom.c         | 73 ++++++++++++++++++++++++++++--------
+ 4 files changed, 103 insertions(+), 27 deletions(-)
+
 -- 
-2.27.0
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
 
