@@ -2,57 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A2D7218080
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jul 2020 09:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 505D32183C7
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jul 2020 11:31:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729761AbgGHHLk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jul 2020 03:11:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40978 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726292AbgGHHLj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 8 Jul 2020 03:11:39 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 212B7206DF;
-        Wed,  8 Jul 2020 07:11:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594192299;
-        bh=xtTt1fCGAG9u3opMAAzSB3MbjWDFJ2s6qmvPoR4xOHs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wgYgruaeNXlSdjjrdOEe3WqY0JurTSNlthMC2wluYq85Wt1QhBzoK+kDjXr9PE8Z/
-         4BF3ux65I83sijGl6TihQTmlgLfeq/Wf94m74S+M2IIdhsBCtTGxNUa3YHt2rx1HUl
-         r7pY+6EEyKpDaF3wLzNdu1kBNrVwuonpLOviBB/c=
-Date:   Wed, 8 Jul 2020 09:11:36 +0200
-From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To:     "Zhang, Qiang" <Qiang.Zhang@windriver.com>
-Cc:     Felipe Balbi <felipe.balbi@linux.intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "andrzej.p@samsung.com" <andrzej.p@samsung.com>,
-        "andrzejtp2010@gmail.com" <andrzejtp2010@gmail.com>
-Subject: Re: =?utf-8?B?5Zue5aSNOiBbUEFUQ0hdIHVzYjog?= =?utf-8?Q?gadget?=
- =?utf-8?Q?=3A?= function: printer: Interface is disabled and returns error
-Message-ID: <20200708071136.GA351604@kroah.com>
-References: <20200630052331.33020-1-qiang.zhang@windriver.com>
- <BYAPR11MB26321795232DA6C583866F82FF690@BYAPR11MB2632.namprd11.prod.outlook.com>
- <BYAPR11MB263201D84DF870F9D65836BBFF670@BYAPR11MB2632.namprd11.prod.outlook.com>
+        id S1728507AbgGHJbS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jul 2020 05:31:18 -0400
+Received: from mail-db8eur05on2045.outbound.protection.outlook.com ([40.107.20.45]:1152
+        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728339AbgGHJaw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 8 Jul 2020 05:30:52 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IH4DVohHOMxDPOiGxP4mi43aQ6CrAuE0wLWQjSCm3rjk9px3BEUSipYPNc2Gp+9gtLu8lmBvK1Qjtm8gFkWUXApGH+Z9pNTiWpnS3u35mfrKivifkth20ajn7Tog4JqAF0hTT3k0J3wnUP6E8qkjhuK7bQk/3BPhNfTSX/QqcIrC+GPgKkNYSHnKKB2QK86yrJKMQ4NOGNHbdPhpZG/fYevQ6Nfr5ukkPwSJo4FH00TN1QwmJmnE7R+HsYl1gcyBb9Yt3pIrMJH8RW9W/mJMaI2q5Vda1Hp5OX0NX7LCwASnhQdMW1M+d9cr2+1fOu0mXgKJr2bF0Gq6rGS497BNvg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CJi9its5ZdzQmv+CJ0aLD37lq5eyalSOlgkHj7Ckkb8=;
+ b=QnmoE7yrd2v4mlbNnbCV2QhYHsmcqaIORJ76BqcEtgIZJTTEJC2ixEQeNbNSKxipiu/R/U22Dx9Yq3OXQNj771YMrVRMTnuJ9rQb4G9RVezR+NwefF5xjhNwdXoD3Is+wuUVOa51epy/xYCqvacyEuNgcfbiESh7pDV18kjwgVOG7bvB3bPs1h82KwjwB3QNX6DMxrsLWycgTXQsKQjKuLJkJJf8oVentqRtci42jT/GtJs7oVmAqswVkPsmzaCkzbWUYGvnZ5XZCmWwkhjqnJWhqofpBAgz/xeaOiVG1XQI2T7l48CsiEsxf+YbuvVb5JEM7ftXHtMekRBjRHgJbQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CJi9its5ZdzQmv+CJ0aLD37lq5eyalSOlgkHj7Ckkb8=;
+ b=M45bDR6hvO6m0//UNYGuw2VVgSisWEvDSz+P33uftwhtIfIrQd9DbpEwfvdAl4ZZv6ipX5DVkuFSQNw39MHifwpC9zZsWi+Z9ovwPCbO4F8ZnnA6FqoObnOlzSYCeGtHBQlGiDIoyHmPHWGWf1dwoN7fET21CUIsyEWYa59eQmg=
+Authentication-Results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
+ by AM6PR04MB4422.eurprd04.prod.outlook.com (2603:10a6:20b:24::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3153.29; Wed, 8 Jul
+ 2020 09:30:49 +0000
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1101:adaa:ee89:af2a]) by AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1101:adaa:ee89:af2a%3]) with mapi id 15.20.3174.021; Wed, 8 Jul 2020
+ 09:30:49 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com, pawell@cadence.com,
+        rogerq@ti.com, jun.li@nxp.com, Peter Chen <peter.chen@nxp.com>,
+        stable <stable@vger.kernel.org>
+Subject: [PATCH 1/1] usb: cdns3: gadget: own the lock wrongly at the suspend routine
+Date:   Wed,  8 Jul 2020 17:30:43 +0800
+Message-Id: <20200708093043.25756-1-peter.chen@nxp.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR02CA0118.apcprd02.prod.outlook.com
+ (2603:1096:4:92::34) To AM7PR04MB7157.eurprd04.prod.outlook.com
+ (2603:10a6:20b:118::20)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR11MB263201D84DF870F9D65836BBFF670@BYAPR11MB2632.namprd11.prod.outlook.com>
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from b29397-desktop.ap.freescale.net (119.31.174.67) by SG2PR02CA0118.apcprd02.prod.outlook.com (2603:1096:4:92::34) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3174.20 via Frontend Transport; Wed, 8 Jul 2020 09:30:45 +0000
+X-Mailer: git-send-email 2.17.1
+X-Originating-IP: [119.31.174.67]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 7c375608-cf9f-433a-234b-08d82321996e
+X-MS-TrafficTypeDiagnostic: AM6PR04MB4422:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <AM6PR04MB44225B03F7CC7496BFAC91108B670@AM6PR04MB4422.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4125;
+X-Forefront-PRVS: 04583CED1A
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: P40qX5BOe6vxlc3StRbnhNlO1JJDisMgZx1wYl4O9aIqwftBe7LStGFI+3Cl+xCia1JmQovMoxAxaXR29IW/d2RFMC74kd09F5lGeMaHXX3gJbB+21CNLpntwxbn2+LuDrRFQzz4T+Sd/+M2f5qY8Q4zFfjxq2F1HQ3MHanc5+lzqoT5g23GKbC16bwMwaXL4dVi+xfY0QSY1yvAPEaloFDlbTwjWuZjpWvNMWoAjFAo/bj6WA/cGwW3Njzrl8mEcvMb0xbUkWZsz/c6p5ihK3arj2QeWHyRo68cggz8712M+RisA9faLkqsWq+Y+kKqHxViX7UejC4RUwBLC9PrPg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(376002)(346002)(366004)(136003)(396003)(39860400002)(54906003)(6512007)(44832011)(6486002)(83380400001)(2906002)(8676002)(4326008)(52116002)(6506007)(26005)(36756003)(2616005)(316002)(956004)(1076003)(8936002)(16526019)(186003)(5660300002)(478600001)(66476007)(86362001)(66556008)(66946007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: lET5akunGJc5REWWnfJJnhp360mL1ZzUaCxxuJ/GCk576MCKVFoCIhUqxJ+qHwmVjjiOjRD2OKt8IDrr7aviRQDYx630IyH0zbuZWsLAIeWLcliMaWCrWyFRLd+9EFoIHFA+LpHAhKZO5dIW8BvB07bxQBknAI/v0G/vzyVMN5Cx1br3cqIfjJS36ISo8JaQGtWvGduWZI3KFCOf2zzQ9lXuDDXZSwx9gMbC9imN5QXoLZWiRsleGdVSjB8UR+O4Erx2r9/VN65oEZm5wzEVdEU3oi+iWIyInt3TFhlNOa4GMmHM6Ag/NA8mTy0mA0xxioV/7GSFaryHAp7bzCJTNzB7BLc8wMRTrkb+d6wTFGz9E0QAX03BGRQHCYuDyIwESbL1ZOGjosfuYFoD3Npufb8jBgB/w40P+nKW5hm3CF4Gc2GqgpAt6OneaBsZCOf6rVKgAOwDRqOWvsNBz7uLYJNHAgIGxikekr7hvMH/gn8=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7c375608-cf9f-433a-234b-08d82321996e
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jul 2020 09:30:48.9941
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +2iw5I6ZrFoLOm3ikiFrV5cLk/53XInOxBN0a0v7wxRimBNYbKvDC10uEfE/UwFToWI38E3Sgt7gRkjNOR3KPA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB4422
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 08, 2020 at 02:22:58AM +0000, Zhang, Qiang wrote:
-> 
-> Hi Felipe
-> Please review this change.
+When it is device mode with cable connected to host, the call
+stack is: cdns3_suspend->cdns3_gadget_suspend->cdns3_disconnect_gadget,
+the cdns3_disconnect_gadget owns lock wrongly at this situation,
+it causes the system being deadlock after resume due to at
+cdns3_device_thread_irq_handler, it tries to get the lock, but will
+never get it.
 
-Please give maintainers a chance, you sent this 1 day ago.
+To fix it, we delete the lock operations, and add them at the caller
+when necessary.
 
-Also, do not top-post.
+Cc: stable <stable@vger.kernel.org>
+Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
+Signed-off-by: Peter Chen <peter.chen@nxp.com>
+---
+ drivers/usb/cdns3/gadget.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-greg k-h
+diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
+index 13027ce6bed8..f6c51cc924a8 100644
+--- a/drivers/usb/cdns3/gadget.c
++++ b/drivers/usb/cdns3/gadget.c
+@@ -1674,11 +1674,8 @@ static int cdns3_check_ep_interrupt_proceed(struct cdns3_endpoint *priv_ep)
+ 
+ static void cdns3_disconnect_gadget(struct cdns3_device *priv_dev)
+ {
+-	if (priv_dev->gadget_driver && priv_dev->gadget_driver->disconnect) {
+-		spin_unlock(&priv_dev->lock);
++	if (priv_dev->gadget_driver && priv_dev->gadget_driver->disconnect)
+ 		priv_dev->gadget_driver->disconnect(&priv_dev->gadget);
+-		spin_lock(&priv_dev->lock);
+-	}
+ }
+ 
+ /**
+@@ -1713,8 +1710,10 @@ static void cdns3_check_usb_interrupt_proceed(struct cdns3_device *priv_dev,
+ 
+ 	/* Disconnection detected */
+ 	if (usb_ists & (USB_ISTS_DIS2I | USB_ISTS_DISI)) {
++		spin_unlock(&priv_dev->lock);
+ 		cdns3_disconnect_gadget(priv_dev);
+ 		priv_dev->gadget.speed = USB_SPEED_UNKNOWN;
++		spin_lock(&priv_dev->lock);
+ 		usb_gadget_set_state(&priv_dev->gadget, USB_STATE_NOTATTACHED);
+ 		cdns3_hw_reset_eps_config(priv_dev);
+ 	}
+-- 
+2.17.1
+
