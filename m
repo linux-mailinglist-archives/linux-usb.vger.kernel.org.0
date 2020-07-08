@@ -2,46 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 463DF21880A
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jul 2020 14:50:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB22218808
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jul 2020 14:50:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729352AbgGHMuZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jul 2020 08:50:25 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:35702 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728803AbgGHMuX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jul 2020 08:50:23 -0400
-Received: by mail-lj1-f193.google.com with SMTP id q4so18377077lji.2
-        for <linux-usb@vger.kernel.org>; Wed, 08 Jul 2020 05:50:22 -0700 (PDT)
+        id S1729347AbgGHMuY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jul 2020 08:50:24 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:42868 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729268AbgGHMuW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jul 2020 08:50:22 -0400
+Received: by mail-lj1-f194.google.com with SMTP id h22so46935204lji.9
+        for <linux-usb@vger.kernel.org>; Wed, 08 Jul 2020 05:50:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=pOZZQ2mEGRz/QumI30v5ahCBip5V6aX9/P7bGwMt+E4=;
-        b=icikPZ7uZ5x9SYjCgZg7h+htUhtPGeXpVwdL3OuG1eQ+r6X1H+HMuSUR8nlunqsZB6
-         KKrVM1/YjzLtixd2zLQoUdI9aHlo4uImZkwU/9WRcswaPhuBxF3OZ8YsCvIqs/VFuyXa
-         xkxe31vylNdrHt8Cqpb0GAoVYESIhbHjgv4nYxi3ovBgXdosrjLaioWmFI36bZLzzm1l
-         EgxNnTCIgM4MPWhTAGiPJqRc+bs7HHR2ZNvWbC3cRN1pmHvvezRjLDko4MWDVs7BUn8I
-         AJ7JxIaexP99IYn4fqpqS6p8BSD1pgGhBf9HvWwqhJNXqdDVdaWTWGavyz7ZnqtmngTP
-         pDmg==
-X-Gm-Message-State: AOAM533c2kmvp6AU+4uxZ15bfaw4LlIiJNRIeYkrrf+lf7PeByH6Epl9
-        g6jb0fyia6d7FZmDWE2bwIFjBz80CeM=
-X-Google-Smtp-Source: ABdhPJy+81I57mE5K7T8UJ9i1bevssbiiYY5I/V10zPlWtPOHbQFSdS9LQCYRv46WRXuMbqXkjlIOg==
-X-Received: by 2002:a2e:9d84:: with SMTP id c4mr2209971ljj.46.1594212621004;
-        Wed, 08 Jul 2020 05:50:21 -0700 (PDT)
+        bh=H0bjgyzH5s0eIqZUX6DEWjUkmcGB3TXKjdjC99HLXfE=;
+        b=B45aIkbos+r06pAJhSUZ7fqbpLRGmFrAKIpyPCYrsEkiTiBLxSGJ/JSjxtP18SvHT8
+         SU/Sxe+dhOq0uuE1VYgu2+uFnYBjEF7e3OvIn2shSlGFE0NfWXSlX9WHgTUhjH4oxVKx
+         +o6ApgkziIa+34HRZfCqhHecCw6bm8FzX9XMbi66Okc6j2RYFFIXg5/b9iz1DLpqWixv
+         jcGVcpOquc7DK0tZF/9Q3rEA9R9UUwDpA+klYWrwBnUbXnxxNAs//m9sF26FxWZd8tyv
+         7+kFVrcsYMRKJrA7P+PyuA9Ad2p7t5hIM/20b54prjWA/dYrmXfgFj5KXsZ7nB9tSOrb
+         67lw==
+X-Gm-Message-State: AOAM532jus2qS2XoVy54fq5rBexGsdPdI4iY1yYwIBWat4rM9FRfMlwh
+        WQD18VcDEIuGpNvFrVOjjEjj1e3eiBE=
+X-Google-Smtp-Source: ABdhPJzaxsQ7lhL3dKaHgJ4PLHLB76A2+N6y5EIDKtgmYGJoUYRLc3u8SLzi1TnXbkAQ/wd60eL6WQ==
+X-Received: by 2002:a2e:9042:: with SMTP id n2mr31644959ljg.208.1594212620444;
+        Wed, 08 Jul 2020 05:50:20 -0700 (PDT)
 Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id g24sm883055ljl.139.2020.07.08.05.50.16
+        by smtp.gmail.com with ESMTPSA id k14sm892552ljc.48.2020.07.08.05.50.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 08 Jul 2020 05:50:19 -0700 (PDT)
 Received: from johan by xi.terra with local (Exim 4.93.0.4)
         (envelope-from <johan@xi.terra>)
-        id 1jt9Wg-000461-Hm; Wed, 08 Jul 2020 14:50:14 +0200
+        id 1jt9Wg-000466-KL; Wed, 08 Jul 2020 14:50:14 +0200
 From:   Johan Hovold <johan@kernel.org>
 To:     linux-usb@vger.kernel.org
 Cc:     Johan Hovold <johan@kernel.org>
-Subject: [PATCH 07/10] USB: serial: add sysrq break-handler dummy
-Date:   Wed,  8 Jul 2020 14:49:57 +0200
-Message-Id: <20200708125000.15659-8-johan@kernel.org>
+Subject: [PATCH 08/10] USB: serial: drop unnecessary sysrq include
+Date:   Wed,  8 Jul 2020 14:49:58 +0200
+Message-Id: <20200708125000.15659-9-johan@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200708125000.15659-1-johan@kernel.org>
 References: <20200708125000.15659-1-johan@kernel.org>
@@ -52,65 +52,25 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add inline sysrq break-handler dummy to allow the compiler to eliminate
-further code when either console or sysrq support isn't enabled and to
-clearly mark the two sysrq functions as belonging together.
+There's no need to include sysrq.h in the subsystem header.
 
 Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
- drivers/usb/serial/generic.c | 4 ++--
- include/linux/usb/serial.h   | 6 +++++-
- 2 files changed, 7 insertions(+), 3 deletions(-)
+ include/linux/usb/serial.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/usb/serial/generic.c b/drivers/usb/serial/generic.c
-index a9b6d103aaf6..e60f74f11acc 100644
---- a/drivers/usb/serial/generic.c
-+++ b/drivers/usb/serial/generic.c
-@@ -585,11 +585,10 @@ int usb_serial_handle_sysrq_char(struct usb_serial_port *port, unsigned int ch)
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(usb_serial_handle_sysrq_char);
--#endif
- 
- int usb_serial_handle_break(struct usb_serial_port *port)
- {
--	if (!port->port.console || !IS_ENABLED(CONFIG_MAGIC_SYSRQ))
-+	if (!port->port.console)
- 		return 0;
- 
- 	if (!port->sysrq) {
-@@ -600,6 +599,7 @@ int usb_serial_handle_break(struct usb_serial_port *port)
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(usb_serial_handle_break);
-+#endif
- 
- /**
-  * usb_serial_handle_dcd_change - handle a change of carrier detect state
 diff --git a/include/linux/usb/serial.h b/include/linux/usb/serial.h
-index be73646706a9..c4ed4404335e 100644
+index c4ed4404335e..4becca7ae264 100644
 --- a/include/linux/usb/serial.h
 +++ b/include/linux/usb/serial.h
-@@ -369,14 +369,18 @@ extern int usb_serial_generic_prepare_write_buffer(struct usb_serial_port *port,
- #if defined(CONFIG_USB_SERIAL_CONSOLE) && defined(CONFIG_MAGIC_SYSRQ)
- extern int usb_serial_handle_sysrq_char(struct usb_serial_port *port,
- 					unsigned int ch);
-+extern int usb_serial_handle_break(struct usb_serial_port *port);
- #else
- static inline int usb_serial_handle_sysrq_char(struct usb_serial_port *port, unsigned int ch)
- {
- 	return 0;
- }
-+static inline int usb_serial_handle_break(struct usb_serial_port *port)
-+{
-+	return 0;
-+}
- #endif
+@@ -17,7 +17,6 @@
+ #include <linux/kref.h>
+ #include <linux/mutex.h>
+ #include <linux/serial.h>
+-#include <linux/sysrq.h>
+ #include <linux/kfifo.h>
  
--extern int usb_serial_handle_break(struct usb_serial_port *port);
- extern void usb_serial_handle_dcd_change(struct usb_serial_port *usb_port,
- 					 struct tty_struct *tty,
- 					 unsigned int status);
+ /* The maximum number of ports one device can grab at once */
 -- 
 2.26.2
 
