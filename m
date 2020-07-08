@@ -2,92 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF57A2184BF
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jul 2020 12:16:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FFEC2184F5
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jul 2020 12:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728385AbgGHKQt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jul 2020 06:16:49 -0400
-Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:63417 "EHLO
-        mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728148AbgGHKQt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jul 2020 06:16:49 -0400
-X-IronPort-AV: E=Sophos;i="5.75,327,1589234400"; 
-   d="scan'208";a="458905460"
-Received: from abo-173-121-68.mrs.modulonet.fr (HELO hadrien) ([85.68.121.173])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Jul 2020 12:16:47 +0200
-Date:   Wed, 8 Jul 2020 12:16:46 +0200 (CEST)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Joe Perches <joe@perches.com>
-cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usbip: Use fallthrough pseudo-keyword
-In-Reply-To: <8e08240671d65f1e92dbf5e1e066190149e0d074.camel@perches.com>
-Message-ID: <alpine.DEB.2.22.394.2007081209500.2558@hadrien>
-References: <20200707195214.GA3932@embeddedor>  <977e88c2-58cb-9507-c889-854e574a8f31@linuxfoundation.org> <8e08240671d65f1e92dbf5e1e066190149e0d074.camel@perches.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        id S1728304AbgGHKcQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jul 2020 06:32:16 -0400
+Received: from smtp05.smtpout.orange.fr ([80.12.242.127]:45128 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728239AbgGHKcQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jul 2020 06:32:16 -0400
+Received: from belgarion ([86.210.166.159])
+        by mwinf5d09 with ME
+        id 0aY52300c3SgWc603aYBzt; Wed, 08 Jul 2020 12:32:13 +0200
+X-ME-Helo: belgarion
+X-ME-Auth: amFyem1pay5yb2JlcnRAb3JhbmdlLmZy
+X-ME-Date: Wed, 08 Jul 2020 12:32:13 +0200
+X-ME-IP: 86.210.166.159
+From:   Robert Jarzmik <robert.jarzmik@free.fr>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     gregkh@linuxfoundation.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>
+Subject: Re: [PATCH 06/32] usb: gadget: udc: pxa27x_udc: Fix a bunch of kerneldoc issues
+References: <20200706133341.476881-1-lee.jones@linaro.org>
+        <20200706133341.476881-7-lee.jones@linaro.org>
+X-URL:  http://belgarath.falguerolles.org/
+Date:   Wed, 08 Jul 2020 12:32:05 +0200
+In-Reply-To: <20200706133341.476881-7-lee.jones@linaro.org> (Lee Jones's
+        message of "Mon, 6 Jul 2020 14:33:15 +0100")
+Message-ID: <878sfuxpp6.fsf@belgarion.home>
+User-Agent: Gnus/5.130008 (Ma Gnus v0.8) Emacs/26 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Lee Jones <lee.jones@linaro.org> writes:
 
-
-On Tue, 7 Jul 2020, Joe Perches wrote:
-
-> On Tue, 2020-07-07 at 14:06 -0600, Shuah Khan wrote:
-> > On 7/7/20 1:52 PM, Gustavo A. R. Silva wrote:
-> > > Replace the existing /* fall through */ comments and its variants with
-> > > the new pseudo-keyword macro fallthrough[1]. Also, remove unnecessary
-> > > fall-through markings when it is the case.
-> > >
-> > > [1] https://www.kernel.org/doc/html/latest/process/deprecated.html?highlight=fallthrough#implicit-switch-case-fall-through
-> > >
-> >
-> > Is fallthrough syntax supported on our min gcc version?
+> Mostly bitrotted argument descriptions/names.  Also the removal
+> of a blank line in the middle of a kerneldoc header, which is
+> not allowed.
 >
-> No.  Introduced in gcc 7.
+> Fixes the following W=1 kernel build warning(s):
 >
-> > Does checkpatch or coccicheck catch these cases?
+>  drivers/usb/gadget/udc/pxa27x_udc.c:398: warning: Function parameter or member 'ep' not described in 'ep_write_UDCCSR'
+>  drivers/usb/gadget/udc/pxa27x_udc.c:398: warning: Excess function parameter 'udc' description in 'ep_write_UDCCSR'
+>  drivers/usb/gadget/udc/pxa27x_udc.c:479: warning: Function parameter or member 'udc' not described in 'set_ep0state'
+>  drivers/usb/gadget/udc/pxa27x_udc.c:479: warning: Excess function parameter 'dev' description in 'set_ep0state'
+>  drivers/usb/gadget/udc/pxa27x_udc.c:506: warning: Excess function parameter 'req' description in 'inc_ep_stats_reqs'
+>  drivers/usb/gadget/udc/pxa27x_udc.c:1476: warning: bad line:
+>  drivers/usb/gadget/udc/pxa27x_udc.c:1697: warning: Function parameter or member 'udc' not described in 'udc_enable'
+>  drivers/usb/gadget/udc/pxa27x_udc.c:1697: warning: Excess function parameter 'dev' description in 'udc_enable'
+>  drivers/usb/gadget/udc/pxa27x_udc.c:1750: warning: Function parameter or member 'g' not described in 'pxa27x_udc_start'
+>  drivers/usb/gadget/udc/pxa27x_udc.c:1750: warning: Excess function parameter 'bind' description in 'pxa27x_udc_start'
+>  drivers/usb/gadget/udc/pxa27x_udc.c:1784: warning: Excess function parameter 'driver' description in 'stop_activity'
+>  drivers/usb/gadget/udc/pxa27x_udc.c:1800: warning: Function parameter or member 'g' not described in 'pxa27x_udc_stop'
+>  drivers/usb/gadget/udc/pxa27x_udc.c:1800: warning: Excess function parameter 'driver' description in 'pxa27x_udc_stop'
+>  drivers/usb/gadget/udc/pxa27x_udc.c:2358: warning: Function parameter or member 'pdev' not described in 'pxa_udc_probe'
+>  drivers/usb/gadget/udc/pxa27x_udc.c:2358: warning: Excess function parameter '_dev' description in 'pxa_udc_probe'
 >
-> Kinda.  checkpatch isn't very good at it.
-> I _believe_, though I'm not at all sure,
-> that coccinelle can find these.
+> Cc: Daniel Mack <daniel@zonque.org>
+> Cc: Haojian Zhuang <haojian.zhuang@gmail.com>
+> Cc: Robert Jarzmik <robert.jarzmik@free.fr>
+> Cc: Felipe Balbi <balbi@kernel.org>
+> Signed-off-by: Lee Jones <lee.jones@linaro.org>
+Acked-by: Robert Jarzmik <robert.jarzmik@free.fr>
 
-I would not guarantee anything about the support of Coccinelle for switch.
-Coccinelle does now have the ability to match on comments.  So since there
-is a distinct comment that it is to be removed, it might be possible to do
-that part automatically.
+Cheers.
 
-Maybe it would have to look something like this:
-
-@r1@
-comments c : script:python() { code to recognize the comment };
-statement S;
-@@
-
-S@c
-+ fallthrough(); //or whatever is wanted
-
-@@
-statement r1.S;
-@@
-
-- S
-- fallthrough();
-+ S
-+ fallthrough();
-
-The second rule probably looks pretty strange, but the goal is to remove
-the comments between S and fallthrough();
-
-There is an example demos/comments.cocci that shows how to access the
-comment information using both ocaml and python.
-
-julia
+--
+Robert
