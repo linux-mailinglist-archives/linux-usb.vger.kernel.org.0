@@ -2,87 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 845E9218FD4
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jul 2020 20:42:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4229C218FEF
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jul 2020 20:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726124AbgGHSmA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jul 2020 14:42:00 -0400
-Received: from smtp.al2klimov.de ([78.46.175.9]:38258 "EHLO smtp.al2klimov.de"
+        id S1726533AbgGHStN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jul 2020 14:49:13 -0400
+Received: from smtp.al2klimov.de ([78.46.175.9]:40728 "EHLO smtp.al2klimov.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725937AbgGHSl7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 8 Jul 2020 14:41:59 -0400
+        id S1725953AbgGHStN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 8 Jul 2020 14:49:13 -0400
 Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
-        by smtp.al2klimov.de (Postfix) with ESMTPA id F22C1BC102;
-        Wed,  8 Jul 2020 18:41:55 +0000 (UTC)
-Subject: Re: [PATCH] Replace HTTP links with HTTPS ones: USB MASS STORAGE
- DRIVER
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        David Miller <davem@davemloft.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20200708095500.13694-1-grandmaster@al2klimov.de>
- <20200708103928.GC585606@kroah.com>
+        by smtp.al2klimov.de (Postfix) with ESMTPA id 06A1EBC0D4;
+        Wed,  8 Jul 2020 18:49:09 +0000 (UTC)
 From:   "Alexander A. Klimov" <grandmaster@al2klimov.de>
-Message-ID: <6b78a3fd-04b9-fc8e-b5c6-f03372a4cd31@al2klimov.de>
-Date:   Wed, 8 Jul 2020 20:41:54 +0200
-MIME-Version: 1.0
+To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        linux-kernel@vger.kernel.org
+Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
+Subject: [PATCH] USB: storage: replace HTTP links with HTTPS ones
+Date:   Wed,  8 Jul 2020 20:49:03 +0200
+Message-Id: <20200708184903.17350-1-grandmaster@al2klimov.de>
 In-Reply-To: <20200708103928.GC585606@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+References: <20200708103928.GC585606@kroah.com>
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Spamd-Bar: +++++
+X-Spam-Level: *****
 Authentication-Results: smtp.al2klimov.de;
         auth=pass smtp.auth=aklimov@al2klimov.de smtp.mailfrom=grandmaster@al2klimov.de
-X-Spamd-Bar: /
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Rationale:
+Reduces attack surface on kernel devs opening the links for MITM
+as HTTPS traffic is much harder to manipulate.
 
+Deterministic algorithm:
+For each file:
+  If not .svg:
+    For each line:
+      If doesn't contain `\bxmlns\b`:
+        For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
+	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
+            If both the HTTP and HTTPS versions
+            return 200 OK and serve the same content:
+              Replace HTTP with HTTPS.
 
-Am 08.07.20 um 12:39 schrieb Greg KH:
-> On Wed, Jul 08, 2020 at 11:55:00AM +0200, Alexander A. Klimov wrote:
->> Rationale:
->> Reduces attack surface on kernel devs opening the links for MITM
->> as HTTPS traffic is much harder to manipulate.
->>
->> Deterministic algorithm:
->> For each file:
->>    If not .svg:
->>      For each line:
->>        If doesn't contain `\bxmlns\b`:
->>          For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
->> 	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
->>              If both the HTTP and HTTPS versions
->>              return 200 OK and serve the same content:
->>                Replace HTTP with HTTPS.
->>
->> Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
-> 
-> Your subject lines are very odd compared to all patches for this
-> subsystem, as well as all other kernel subsystems.  Any reason you are
-> doing it this way and not the normal and standard method of:
-> 	USB: storage: replace http links with https
-> 
-> That would look more uniform as well as not shout at anyone.
-> 
-> thanks,
-> 
-> greg k-h
-> 
-Hi,
+Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
+---
+ drivers/usb/storage/Kconfig        | 2 +-
+ drivers/usb/storage/freecom.c      | 2 +-
+ drivers/usb/storage/unusual_devs.h | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-I'm very sorry.
+diff --git a/drivers/usb/storage/Kconfig b/drivers/usb/storage/Kconfig
+index 5335a7ff5d14..d17b60a644ef 100644
+--- a/drivers/usb/storage/Kconfig
++++ b/drivers/usb/storage/Kconfig
+@@ -57,7 +57,7 @@ config USB_STORAGE_FREECOM
+ 	tristate "Freecom USB/ATAPI Bridge support"
+ 	help
+ 	  Support for the Freecom USB to IDE/ATAPI adaptor.
+-	  Freecom has a web page at <http://www.freecom.de/>.
++	  Freecom has a web page at <https://www.freecom.de/>.
+ 
+ 	  If this driver is compiled as a module, it will be named ums-freecom.
+ 
+diff --git a/drivers/usb/storage/freecom.c b/drivers/usb/storage/freecom.c
+index 34e7eaff1174..3d5f7d0ff0f1 100644
+--- a/drivers/usb/storage/freecom.c
++++ b/drivers/usb/storage/freecom.c
+@@ -11,7 +11,7 @@
+  *
+  * This driver was developed with information provided in FREECOM's USB
+  * Programmers Reference Guide.  For further information contact Freecom
+- * (http://www.freecom.de/)
++ * (https://www.freecom.de/)
+  */
+ 
+ #include <linux/module.h>
+diff --git a/drivers/usb/storage/unusual_devs.h b/drivers/usb/storage/unusual_devs.h
+index b6a9a7451620..220ae2c356ee 100644
+--- a/drivers/usb/storage/unusual_devs.h
++++ b/drivers/usb/storage/unusual_devs.h
+@@ -44,7 +44,7 @@
+  * mode.  Existing userspace solutions are superior.
+  *
+  * New mode switching devices should instead be added to the database
+- * maintained at http://www.draisberghof.de/usb_modeswitch/
++ * maintained at https://www.draisberghof.de/usb_modeswitch/
+  */
+ 
+ #if !defined(CONFIG_USB_STORAGE_SDDR09) && \
+-- 
+2.27.0
 
-As Torvalds has merged 93431e0607e5 and many of you devs (including big 
-maintainers like David Miller) just applied this stuff, I assumed that's OK.
-
-And now I've rolled out tens of patches via shell loop... *sigh*
-
-As this is the third (I think) change request like this, I assume this 
-rule applies to all subsystems – right?
-
-Best,
-AK
