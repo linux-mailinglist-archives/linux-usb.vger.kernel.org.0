@@ -2,115 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66B5E218470
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jul 2020 11:55:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF57A2184BF
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jul 2020 12:16:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728330AbgGHJzM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jul 2020 05:55:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35464 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726302AbgGHJzL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jul 2020 05:55:11 -0400
-Received: from smtp.al2klimov.de (smtp.al2klimov.de [IPv6:2a01:4f8:c0c:1465::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66684C08C5DC
-        for <linux-usb@vger.kernel.org>; Wed,  8 Jul 2020 02:55:11 -0700 (PDT)
-Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
-        by smtp.al2klimov.de (Postfix) with ESMTPA id B7D6DBC0C2;
-        Wed,  8 Jul 2020 09:55:06 +0000 (UTC)
-From:   "Alexander A. Klimov" <grandmaster@al2klimov.de>
-To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        id S1728385AbgGHKQt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jul 2020 06:16:49 -0400
+Received: from mail2-relais-roc.national.inria.fr ([192.134.164.83]:63417 "EHLO
+        mail2-relais-roc.national.inria.fr" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728148AbgGHKQt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jul 2020 06:16:49 -0400
+X-IronPort-AV: E=Sophos;i="5.75,327,1589234400"; 
+   d="scan'208";a="458905460"
+Received: from abo-173-121-68.mrs.modulonet.fr (HELO hadrien) ([85.68.121.173])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Jul 2020 12:16:47 +0200
+Date:   Wed, 8 Jul 2020 12:16:46 +0200 (CEST)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Joe Perches <joe@perches.com>
+cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
-Subject: [PATCH] Replace HTTP links with HTTPS ones: USB MASS STORAGE DRIVER
-Date:   Wed,  8 Jul 2020 11:55:00 +0200
-Message-Id: <20200708095500.13694-1-grandmaster@al2klimov.de>
+Subject: Re: [PATCH] usbip: Use fallthrough pseudo-keyword
+In-Reply-To: <8e08240671d65f1e92dbf5e1e066190149e0d074.camel@perches.com>
+Message-ID: <alpine.DEB.2.22.394.2007081209500.2558@hadrien>
+References: <20200707195214.GA3932@embeddedor>  <977e88c2-58cb-9507-c889-854e574a8f31@linuxfoundation.org> <8e08240671d65f1e92dbf5e1e066190149e0d074.camel@perches.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Bar: +++++
-X-Spam-Level: *****
-Authentication-Results: smtp.al2klimov.de;
-        auth=pass smtp.auth=aklimov@al2klimov.de smtp.mailfrom=grandmaster@al2klimov.de
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Rationale:
-Reduces attack surface on kernel devs opening the links for MITM
-as HTTPS traffic is much harder to manipulate.
-
-Deterministic algorithm:
-For each file:
-  If not .svg:
-    For each line:
-      If doesn't contain `\bxmlns\b`:
-        For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
-	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
-            If both the HTTP and HTTPS versions
-            return 200 OK and serve the same content:
-              Replace HTTP with HTTPS.
-
-Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
----
- Continuing my work started at 93431e0607e5.
- See also: git log --oneline '--author=Alexander A. Klimov <grandmaster@al2klimov.de>' v5.7..master
- (Actually letting a shell for loop submit all this stuff for me.)
-
- If there are any URLs to be removed completely or at least not HTTPSified:
- Just clearly say so and I'll *undo my change*.
- See also: https://lkml.org/lkml/2020/6/27/64
-
- If there are any valid, but yet not changed URLs:
- See: https://lkml.org/lkml/2020/6/26/837
-
- If you apply the patch, please let me know.
 
 
- drivers/usb/storage/Kconfig        | 2 +-
- drivers/usb/storage/freecom.c      | 2 +-
- drivers/usb/storage/unusual_devs.h | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+On Tue, 7 Jul 2020, Joe Perches wrote:
 
-diff --git a/drivers/usb/storage/Kconfig b/drivers/usb/storage/Kconfig
-index 5335a7ff5d14..d17b60a644ef 100644
---- a/drivers/usb/storage/Kconfig
-+++ b/drivers/usb/storage/Kconfig
-@@ -57,7 +57,7 @@ config USB_STORAGE_FREECOM
- 	tristate "Freecom USB/ATAPI Bridge support"
- 	help
- 	  Support for the Freecom USB to IDE/ATAPI adaptor.
--	  Freecom has a web page at <http://www.freecom.de/>.
-+	  Freecom has a web page at <https://www.freecom.de/>.
- 
- 	  If this driver is compiled as a module, it will be named ums-freecom.
- 
-diff --git a/drivers/usb/storage/freecom.c b/drivers/usb/storage/freecom.c
-index 34e7eaff1174..3d5f7d0ff0f1 100644
---- a/drivers/usb/storage/freecom.c
-+++ b/drivers/usb/storage/freecom.c
-@@ -11,7 +11,7 @@
-  *
-  * This driver was developed with information provided in FREECOM's USB
-  * Programmers Reference Guide.  For further information contact Freecom
-- * (http://www.freecom.de/)
-+ * (https://www.freecom.de/)
-  */
- 
- #include <linux/module.h>
-diff --git a/drivers/usb/storage/unusual_devs.h b/drivers/usb/storage/unusual_devs.h
-index b6a9a7451620..220ae2c356ee 100644
---- a/drivers/usb/storage/unusual_devs.h
-+++ b/drivers/usb/storage/unusual_devs.h
-@@ -44,7 +44,7 @@
-  * mode.  Existing userspace solutions are superior.
-  *
-  * New mode switching devices should instead be added to the database
-- * maintained at http://www.draisberghof.de/usb_modeswitch/
-+ * maintained at https://www.draisberghof.de/usb_modeswitch/
-  */
- 
- #if !defined(CONFIG_USB_STORAGE_SDDR09) && \
--- 
-2.27.0
+> On Tue, 2020-07-07 at 14:06 -0600, Shuah Khan wrote:
+> > On 7/7/20 1:52 PM, Gustavo A. R. Silva wrote:
+> > > Replace the existing /* fall through */ comments and its variants with
+> > > the new pseudo-keyword macro fallthrough[1]. Also, remove unnecessary
+> > > fall-through markings when it is the case.
+> > >
+> > > [1] https://www.kernel.org/doc/html/latest/process/deprecated.html?highlight=fallthrough#implicit-switch-case-fall-through
+> > >
+> >
+> > Is fallthrough syntax supported on our min gcc version?
+>
+> No.  Introduced in gcc 7.
+>
+> > Does checkpatch or coccicheck catch these cases?
+>
+> Kinda.  checkpatch isn't very good at it.
+> I _believe_, though I'm not at all sure,
+> that coccinelle can find these.
 
+I would not guarantee anything about the support of Coccinelle for switch.
+Coccinelle does now have the ability to match on comments.  So since there
+is a distinct comment that it is to be removed, it might be possible to do
+that part automatically.
+
+Maybe it would have to look something like this:
+
+@r1@
+comments c : script:python() { code to recognize the comment };
+statement S;
+@@
+
+S@c
++ fallthrough(); //or whatever is wanted
+
+@@
+statement r1.S;
+@@
+
+- S
+- fallthrough();
++ S
++ fallthrough();
+
+The second rule probably looks pretty strange, but the goal is to remove
+the comments between S and fallthrough();
+
+There is an example demos/comments.cocci that shows how to access the
+comment information using both ocaml and python.
+
+julia
