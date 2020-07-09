@@ -2,175 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BDDD21996F
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jul 2020 09:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4D87219989
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jul 2020 09:11:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726262AbgGIHJe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Jul 2020 03:09:34 -0400
-Received: from mga06.intel.com ([134.134.136.31]:50255 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726140AbgGIHJe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 9 Jul 2020 03:09:34 -0400
-IronPort-SDR: BooLcwSLd144xiKHvnx9v5jSl/TVD1NML541qSPjiJ3W+8LTfSrpqy9o7Md3ORsI44BQacgULf
- YP7gPqs4LLdQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9676"; a="209477828"
-X-IronPort-AV: E=Sophos;i="5.75,331,1589266800"; 
-   d="scan'208";a="209477828"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2020 00:09:33 -0700
-IronPort-SDR: ncswBr/s5nfin7wN9Ab63AjbbxVz8FmWc/BS5Ta5R7Mbunmf5nT9LMWFoHhMKby8V5jm0EZXGF
- PnzRbEPIBtnQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,331,1589266800"; 
-   d="scan'208";a="483693133"
-Received: from lkp-server01.sh.intel.com (HELO 6136dd46483e) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 09 Jul 2020 00:09:32 -0700
-Received: from kbuild by 6136dd46483e with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1jtQgV-0000UV-FU; Thu, 09 Jul 2020 07:09:31 +0000
-Date:   Thu, 09 Jul 2020 15:09:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- af3cf0ac6805a36740089a5f200c28a04d452404
-Message-ID: <5f06c2a9.0ztDwyFjer87epSV%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1726268AbgGIHLl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Jul 2020 03:11:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35434 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726185AbgGIHLk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jul 2020 03:11:40 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F98C061A0B
+        for <linux-usb@vger.kernel.org>; Thu,  9 Jul 2020 00:11:39 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id d17so1200848ljl.3
+        for <linux-usb@vger.kernel.org>; Thu, 09 Jul 2020 00:11:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=c6a2uUB7yh56jdbRVnYpimst4UcONZOKlwaFivx7gVw=;
+        b=oyECnKuaIq6kUVWNSw3aqVNtWnAGCad7LmhjTbdZnaT9a08wl4ZJz35zj6L+u00pLl
+         sQHLUSD3sxuy7i7VEURNh55ud6ZujxAK2c/pEPkPEUqx6oskHvps250J/8GSQC25sBjF
+         Y/+HaEM1Dw8V3QKrVdyXw/AJ77BCvO+ESNE7xXPb6ROm3Ch0SSIlytututq4y+MmsN2A
+         BxVO9L0tP8s+EgRhH5PuIl0Tl+15XLHVUkjUNWFSQ8huWL7qZb5rFIxJxZJsCRZKZzeO
+         tKE7wIK1tkVr2SJhTr8bL4uvWnA/lUCZycQG6AaVoNZ0Fucl5KtPk3emdNIHxADFlT5a
+         E/wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=c6a2uUB7yh56jdbRVnYpimst4UcONZOKlwaFivx7gVw=;
+        b=o48hN/iypmigWVj2n8dzG0podPVZgXBWT+fr1D4fiMRYcoEv0chPpINmLsDVtyOyYw
+         B8hgBDGuIywjqPZ2trGPa5Ee20W7KX9Ifid7XlVo+YxmvwtwPHfWOcZ6548y5347Emwy
+         KKCkB/w6hVqZWUiQDe52xDsJTdXI1EK7t9qejTHBNHftjMRKvXUqlbClr2gdt+uDLTSp
+         7P1Y8LCmMM5bYYMB2vNv8h8yAetF12yPSm9kEA8v0I2DL0TjT1rtm5nLej6MrRok9ZGJ
+         wNaFzxGhZcx9+IvVueddSVeFwel8AB+Zry77ACNACqO4+X5YMXJiRu2mAaXR6M/8iy+T
+         Ol/A==
+X-Gm-Message-State: AOAM532rau6E9U9brBJDWAnbaH1d8buDGt2ecOHBok/OkuhlRS5LQNCA
+        lcHnquDN+BHXAQubi8MDl+I=
+X-Google-Smtp-Source: ABdhPJzG8BO9JA8tmFynz54nuhPPR9Ak2Hm4mZG3QLMvNW8++EeH5eBDVsw7wpyYXMTeCKK7t6ZeVw==
+X-Received: by 2002:a2e:8e9a:: with SMTP id z26mr37562731ljk.470.1594278698434;
+        Thu, 09 Jul 2020 00:11:38 -0700 (PDT)
+Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
+        by smtp.gmail.com with ESMTPSA id g7sm623224lfe.62.2020.07.09.00.11.37
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 09 Jul 2020 00:11:37 -0700 (PDT)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "pawell\@cadence.com" <pawell@cadence.com>,
+        "rogerq\@ti.com" <rogerq@ti.com>,
+        "gregkh\@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        Jun Li <jun.li@nxp.com>
+Subject: RE: [PATCH 1/3] usb: cdns3: ep0: fix some endian issues
+In-Reply-To: <AM7PR04MB7157D60ED21E2B29461DC3F08B640@AM7PR04MB7157.eurprd04.prod.outlook.com>
+References: <20200603065356.14124-1-peter.chen@nxp.com> <20200603065356.14124-2-peter.chen@nxp.com> <87fta16vb9.fsf@kernel.org> <AM7PR04MB7157D60ED21E2B29461DC3F08B640@AM7PR04MB7157.eurprd04.prod.outlook.com>
+Date:   Thu, 09 Jul 2020 10:11:33 +0300
+Message-ID: <87d0556u3e.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-linus
-branch HEAD: af3cf0ac6805a36740089a5f200c28a04d452404  Merge tag 'usb-serial-5.8-rc5' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-elapsed time: 723m
 
-configs tested: 113
-configs skipped: 2
+Hi,
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Peter Chen <peter.chen@nxp.com> writes:
+>=20=20
+>> >
+>> > Reported-by: kbuild test robot <lkp@intel.com>
+>> > Signed-off-by: Peter Chen <peter.chen@nxp.com>
+>>=20
+>> Fixes?
+>> Cc stable?
+>>=20
+>
+> It does not fix a bug, and only improve the code for cross platforms
+> So, don't need to go stable tree.
 
-arm                                 defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                               allnoconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm64                            allmodconfig
-arm64                             allnoconfig
-xtensa                         virt_defconfig
-parisc                            allnoconfig
-mips                      pic32mzda_defconfig
-arm                       netwinder_defconfig
-openrisc                 simple_smp_defconfig
-powerpc                      pasemi_defconfig
-arm                        cerfcube_defconfig
-xtensa                          iss_defconfig
-sh                           se7343_defconfig
-arm                          ixp4xx_defconfig
-sh                           se7780_defconfig
-m68k                             alldefconfig
-arc                      axs103_smp_defconfig
-arm                          prima2_defconfig
-sh                           sh2007_defconfig
-mips                      maltaaprp_defconfig
-i386                              allnoconfig
-i386                             allyesconfig
-i386                                defconfig
-i386                              debian-10.3
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                              allnoconfig
-m68k                           sun3_defconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-nios2                            allyesconfig
-openrisc                            defconfig
-c6x                              allyesconfig
-c6x                               allnoconfig
-openrisc                         allyesconfig
-nds32                               defconfig
-nds32                             allnoconfig
-csky                             allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-h8300                            allmodconfig
-xtensa                              defconfig
-arc                                 defconfig
-arc                              allyesconfig
-sh                               allmodconfig
-sh                                allnoconfig
-microblaze                        allnoconfig
-mips                             allyesconfig
-mips                              allnoconfig
-mips                             allmodconfig
-parisc                              defconfig
-parisc                           allyesconfig
-parisc                           allmodconfig
-powerpc                             defconfig
-powerpc                          allyesconfig
-powerpc                          rhel-kconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a002-20200708
-i386                 randconfig-a001-20200708
-i386                 randconfig-a006-20200708
-i386                 randconfig-a005-20200708
-i386                 randconfig-a004-20200708
-i386                 randconfig-a003-20200708
-i386                 randconfig-a011-20200708
-i386                 randconfig-a015-20200708
-i386                 randconfig-a014-20200708
-i386                 randconfig-a016-20200708
-i386                 randconfig-a012-20200708
-i386                 randconfig-a013-20200708
-x86_64               randconfig-a001-20200708
-x86_64               randconfig-a006-20200708
-x86_64               randconfig-a003-20200708
-x86_64               randconfig-a002-20200708
-x86_64               randconfig-a004-20200708
-x86_64               randconfig-a005-20200708
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-s390                             allyesconfig
-s390                              allnoconfig
-s390                             allmodconfig
-s390                                defconfig
-sparc                            allyesconfig
-sparc                               defconfig
-sparc64                             defconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                          allmodconfig
-um                                allnoconfig
-um                               allyesconfig
-um                                  defconfig
-um                               allmodconfig
-x86_64                               rhel-7.6
-x86_64                    rhel-7.6-kselftests
-x86_64                               rhel-8.3
-x86_64                                  kexec
-x86_64                                   rhel
-x86_64                         rhel-7.2-clear
-x86_64                                    lkp
-x86_64                              fedora-25
+Fair enough, I'll enqueue it for the next merge window.
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl8GwyUACgkQzL64meEa
+mQYSkA/9F6XeDFu8azolxFThqp/bjothKgNhGdzQeudEzfXXZNQ1ndg2lCn6X0Yc
+O81IE1wqX0QcyG5kG8QDiz7/0qCf9bsyCKtBTSBqsV0gdPL6toZRttHNBfH7zbDb
+WtCEPaIYkM/Bo/32iJjgNUh4cfVe4tXrgIp4h9WotVZ6GgHToGieIWqTvS21u3nJ
+Fa+oSH28QkcavQ12eXJCX4JdD9SQdUpcEy2PoiV6lmwnU9pneDle464XwzN9SZmC
+224MbymSZsX/oZA6+8DB9eAhJU8tLSMiXdo+ziZVblfO1qRNlK7akXaD6VhrK0IK
+oP8Gfbe9sDLUTsxJNXXISuKjpG+KtJAvIse6+C+JoLSqW+NYgcTnm51V5UtcVwsr
+BoUWAzUO8QjclSCAmQ4oHi8JPdnX82eK99EgvdgYBrPnnRnsEUzjWrBJhkBmY8v7
+dXM7qOiIs6Ksft6VmEz3P6bvcXJkEdBwWKVWFzI8oH4qipG7ME8+1epjes/Ugq4q
+M+AeKXpsmO4tPGxruzPatcMxNCmf3Ln7IHPULSHyhJ79pugomGqnwG4wHNBYuCaz
+WnW6fQkZXOPpNwErVADfwDiFBB+lCw1ihqO5x2FaZARXGMGZ/DoKBvyPtAojLYrS
+NEvtealh/P5D1DK4dXDLnxECEJW/ylgFQDNdKSxQEIVM4FB3FRg=
+=jV1e
+-----END PGP SIGNATURE-----
+--=-=-=--
