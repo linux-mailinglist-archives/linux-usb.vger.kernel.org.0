@@ -2,18 +2,18 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3558221ABDC
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Jul 2020 02:01:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE5AD21AC61
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Jul 2020 03:09:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726449AbgGJAB6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Jul 2020 20:01:58 -0400
-Received: from v6.sk ([167.172.42.174]:36668 "EHLO v6.sk"
+        id S1726444AbgGJBJn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Jul 2020 21:09:43 -0400
+Received: from v6.sk ([167.172.42.174]:36698 "EHLO v6.sk"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726227AbgGJAB6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 9 Jul 2020 20:01:58 -0400
+        id S1726265AbgGJBJn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 9 Jul 2020 21:09:43 -0400
 Received: from localhost (v6.sk [IPv6:::1])
-        by v6.sk (Postfix) with ESMTP id 031FB60D19;
-        Fri, 10 Jul 2020 00:01:26 +0000 (UTC)
+        by v6.sk (Postfix) with ESMTP id 5325760D19;
+        Fri, 10 Jul 2020 01:09:11 +0000 (UTC)
 From:   Lubomir Rintel <lkundrak@v3.sk>
 To:     =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>
 Cc:     linux-usb@vger.kernel.org, sam@ravnborg.org,
