@@ -2,105 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E83C22198FC
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jul 2020 09:02:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66E6C21991F
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jul 2020 09:06:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726196AbgGIHC5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Jul 2020 03:02:57 -0400
-Received: from mail-eopbgr50065.outbound.protection.outlook.com ([40.107.5.65]:12328
-        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726299AbgGIHCy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 9 Jul 2020 03:02:54 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a783skOnSyzqLzp92+z3Ny/Ng/0yQImQQTCicq7ShL7Q+l4ojBa5elr2rN8DRipk5YQ4VUUq6Nf+DoPcS+qYhZc6GtTEdNFtaTzsnGLiVblbu9v6S5QjFoC7TctJeFEw7i5u1jLlfws8jBU+6vI3eUZ2k7GlF2AARgf5PEU26crFsNF++DYCiI9eKzditTeGsO7Izq2nSvkkdDznSnhQLyVOYOR8cfKUBY0Cn35TcBiM/8zv9mhBuXuAzbpIAywnFXmIsew1YjFXw/HtTQallzUMvbpmh6jxzul2eUdXMBmpjSQrrHi50CPBXjLGw2IHNyvWS1ettv4iyh2FbFrbIg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bYu/OVXyoAwjgPjr8RlKOK/GlR+EfatDIbYFllt1yIM=;
- b=DvEkI8wux2SS97VDZc6wPEH4+vhiq4mRwYv/eFSBwxt8lQgETYKlPfW83iAPqqmeOCsGtjzAWwrTEMmSvJLGS0INd1jia4sAsTXrg2iRyghzDpogut/3m4d5sJRubIheIfr55jnBmwAvYkAvw53hzIlF+9DZdPC94Zh1r5zwKvDEVfMQoE+afq6kV0BYniNbJgO5MI1GK3GndmBXefWGQ7TOem9Qj/F7nOOKhVlnZfCkIRkcqRXWMIqNqcIP5OXAU5ALJlyCctTTKrwrZOKcxMNrnSFNwmAPN7UiP7LzxJWGvm4WOpR1VSaLCLmTV+VbKdwj3m7PXI1fFjUyFgU6Pg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bYu/OVXyoAwjgPjr8RlKOK/GlR+EfatDIbYFllt1yIM=;
- b=CoAXe8hJKhh25jDZXE5Pg7/8h9WzzJFxVENB99ApPC6784she8E3+YtMU/nqZoWqf0+CUwrW6MdKzflhiFrsZItxGFzCXcFcbedpGIMcuTb1D4hPJD0BtL2+YQxgvI+t7oXY19xrAtxIzMT8uLZUTZXrB/g6fmC96EDsZ6g9KAo=
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
- by AM5PR04MB3025.eurprd04.prod.outlook.com (2603:10a6:206:a::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3153.22; Thu, 9 Jul
- 2020 07:02:51 +0000
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1101:adaa:ee89:af2a]) by AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1101:adaa:ee89:af2a%3]) with mapi id 15.20.3174.022; Thu, 9 Jul 2020
- 07:02:51 +0000
-From:   Peter Chen <peter.chen@nxp.com>
+        id S1726196AbgGIHGH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Jul 2020 03:06:07 -0400
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:12609 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726119AbgGIHGF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jul 2020 03:06:05 -0400
+X-UUID: c11e3528d1124c2485795b03bf731af9-20200709
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=JCdqhnmOrA4bIemjU77tSTchJtgxF3g3bcC1iZfUepU=;
+        b=HPwNJUBfC5mAmkq6ABB39yQCe3NGDKGEbk1VUPa9jI4VaCMy2mBj9KHePSK1DwEMtakTDttKta+WIGVOwIS9uxhjCM76+XHmLW0Sb44trDkjmf9/cTXZi4KPlG0DATBXHmAkmNRteq6fR8+05dKpcWPADMv3bWdlbNwS5im3p74=;
+X-UUID: c11e3528d1124c2485795b03bf731af9-20200709
+Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 746041579; Thu, 09 Jul 2020 15:06:00 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS33N2.mediatek.inc
+ (172.27.4.76) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 9 Jul
+ 2020 15:05:59 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 9 Jul 2020 15:05:58 +0800
+Message-ID: <1594278321.23885.26.camel@mhfsdcap03>
+Subject: Re: [V2 PATCH] usb: mtu3: fix NULL pointer dereference
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
 To:     Felipe Balbi <balbi@kernel.org>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "pawell@cadence.com" <pawell@cadence.com>,
-        "rogerq@ti.com" <rogerq@ti.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        Jun Li <jun.li@nxp.com>
-Subject: RE: [PATCH 1/3] usb: cdns3: ep0: fix some endian issues
-Thread-Topic: [PATCH 1/3] usb: cdns3: ep0: fix some endian issues
-Thread-Index: AQHWOXO6sZYH9su3hECCrbzFM8G876j/BhgAgAADwEA=
-Date:   Thu, 9 Jul 2020 07:02:51 +0000
-Message-ID: <AM7PR04MB7157D60ED21E2B29461DC3F08B640@AM7PR04MB7157.eurprd04.prod.outlook.com>
-References: <20200603065356.14124-1-peter.chen@nxp.com>
- <20200603065356.14124-2-peter.chen@nxp.com> <87fta16vb9.fsf@kernel.org>
-In-Reply-To: <87fta16vb9.fsf@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [222.67.222.179]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: ea9979c8-be10-49bf-102e-08d823d61871
-x-ms-traffictypediagnostic: AM5PR04MB3025:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM5PR04MB3025EC8298167A5623147EF98B640@AM5PR04MB3025.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4941;
-x-forefront-prvs: 04599F3534
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: AjpmgWBbtf3P97L7h5Sw4xmh6YiS5z2zCmlaxyLgtxJszeLwZ7clSetNNK6PBetvDDWWEm/KYKit1XEpOG+aLQkHNjK2fCbKJxPunj7Qtgh2FmdUEVTCElL8G0dOW0K+kwE9M567lDqBnV7+noINhVr3RAR7Ij2ywJR2To4GnTTCcyJIk+08VXiwukw3mumAhHQ05kRXe/SiVU8P9LcSaJqzhzFbT5EF6CkDsQOGy08HrSxoBnqBzTrFEqezSnfLAQjIuTP6DQRsd5cBS0s7Y6Txps5kWGzcrsQ6HICt9yuks2ESNkAra3WqqtijFvHX1efA/ZqWbpdL3Ego/xj17A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(366004)(136003)(346002)(376002)(396003)(39860400002)(54906003)(316002)(52536014)(26005)(558084003)(8676002)(55016002)(33656002)(186003)(478600001)(9686003)(86362001)(5660300002)(2906002)(6506007)(4326008)(7696005)(76116006)(66476007)(64756008)(66556008)(6916009)(66946007)(44832011)(71200400001)(8936002)(66446008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: 7XtgBdZwMwR60iAxQ2tIDPm+TrZqnsp4RLRzsgq66N6Ms2HWkReut7zHttFRXRDm5LGoonew5Wqz7DWdtpH2LQbj9lOaaqnH/w2oo0IEwDG5GojWA2W+Zawaqe2d+zrvPEo7dTwMpQGS6vr/7uIl4g3dB+qfEGdBK8Bd8NTLTbkUkCWG4BUdd5oZaiMVTdVSSz8/hZaQog/SmbnXF7esBR9u/qloOKT8z/LWH/7akEuId+ZjT4GGBod1sByabPRtEQOrwNPYTQBKkXgmw4muYo9YZPBW3fM2j8qwfAt0w4kmj5mg7D0TFZ/LY747BwuuXZX3SL02bpFcf3T7OSFncprOkNTYjX0gLSXLPtt4C1OZCex1hkVd4OcAWhyr4fRBQbBqU1PcOkJV20QkOQLL95XvPoLqOM6Kij7MV0Id50NqqZ+8kj0ENENbZJjE4i0EzZYT6/HOsaTj0sCuQmKTojqMcTRChiEJql8CW8co+i4o/xd6q0MUIkFqSw0iyJuS
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Markus Elfring <Markus.Elfring@web.de>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Date:   Thu, 9 Jul 2020 15:05:21 +0800
+In-Reply-To: <87lfjt6vjm.fsf@kernel.org>
+References: <1593502942-24455-1-git-send-email-chunfeng.yun@mediatek.com>
+         <87lfjt6vjm.fsf@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ea9979c8-be10-49bf-102e-08d823d61871
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jul 2020 07:02:51.1896
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: +oY/L+XidUsvjZdZT89HaUS59SSPG6cMjmPXm5DC377Ervj+ZrJSDsbtL1C+ioKhrQYfwQTwyMz6jhTJ6W26Bw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR04MB3025
+X-TM-SNTS-SMTP: F3256F28A9F380161FC65DD621C2647F2BB492FBFB0CAC48B3BADA5C9B75167D2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-=20
-> >
-> > Reported-by: kbuild test robot <lkp@intel.com>
-> > Signed-off-by: Peter Chen <peter.chen@nxp.com>
->=20
-> Fixes?
-> Cc stable?
->=20
+T24gVGh1LCAyMDIwLTA3LTA5IGF0IDA5OjQwICswMzAwLCBGZWxpcGUgQmFsYmkgd3JvdGU6DQo+
+IENodW5mZW5nIFl1biA8Y2h1bmZlbmcueXVuQG1lZGlhdGVrLmNvbT4gd3JpdGVzOg0KPiANCj4g
+PiBTb21lIHBvaW50ZXJzIGFyZSBkZXJlZmVyZW5jZWQgYmVmb3JlIHN1Y2Nlc3NmdWwgY2hlY2tz
+Lg0KPiA+DQo+ID4gUmVwb3J0ZWQtYnk6IE1hcmt1cyBFbGZyaW5nIDxNYXJrdXMuRWxmcmluZ0B3
+ZWIuZGU+DQo+ID4gU2lnbmVkLW9mZi1ieTogQ2h1bmZlbmcgWXVuIDxjaHVuZmVuZy55dW5AbWVk
+aWF0ZWsuY29tPg0KPiANCj4gZG8geW91IG5lZWQgYSBGaXhlcyB0YWcgaGVyZT8gUGVyaGFwcyBh
+IENjIHN0YWJsZSB0b28/DQpJdCB3aWxsIG5vdCBjYXVzZSBzb21lcyBpc3N1ZXMsIEkgdGhpbmsg
+bm8gbmVlZCBhZGQgaXQuDQoNCkFjY29yZGluZyB0byBHcmVnJ3MgY29tbWVudCwgSSBndWVzcyBo
+ZSBtZWFucyBubyBuZWVkIGNoZWNrIHRoZXNlDQpwb2ludGVycyBhdCBhbGwsIHNvIEknbGwgc2Vu
+ZCBhIG5ldyB2ZXJzaW9uIHRvIHJlbW92ZSBjaGVja3MuDQoNClRoYW5rIHlvdQ0KDQo+IA0KDQo=
 
-It does not fix a bug, and only improve the code for cross platforms
-So, don't need to go stable tree.
-
-Thanks,
-Peter
