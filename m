@@ -2,114 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4D87219989
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jul 2020 09:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C82A2199A3
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jul 2020 09:23:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726268AbgGIHLl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Jul 2020 03:11:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35434 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726185AbgGIHLk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jul 2020 03:11:40 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F98C061A0B
-        for <linux-usb@vger.kernel.org>; Thu,  9 Jul 2020 00:11:39 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id d17so1200848ljl.3
-        for <linux-usb@vger.kernel.org>; Thu, 09 Jul 2020 00:11:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=c6a2uUB7yh56jdbRVnYpimst4UcONZOKlwaFivx7gVw=;
-        b=oyECnKuaIq6kUVWNSw3aqVNtWnAGCad7LmhjTbdZnaT9a08wl4ZJz35zj6L+u00pLl
-         sQHLUSD3sxuy7i7VEURNh55ud6ZujxAK2c/pEPkPEUqx6oskHvps250J/8GSQC25sBjF
-         Y/+HaEM1Dw8V3QKrVdyXw/AJ77BCvO+ESNE7xXPb6ROm3Ch0SSIlytututq4y+MmsN2A
-         BxVO9L0tP8s+EgRhH5PuIl0Tl+15XLHVUkjUNWFSQ8huWL7qZb5rFIxJxZJsCRZKZzeO
-         tKE7wIK1tkVr2SJhTr8bL4uvWnA/lUCZycQG6AaVoNZ0Fucl5KtPk3emdNIHxADFlT5a
-         E/wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=c6a2uUB7yh56jdbRVnYpimst4UcONZOKlwaFivx7gVw=;
-        b=o48hN/iypmigWVj2n8dzG0podPVZgXBWT+fr1D4fiMRYcoEv0chPpINmLsDVtyOyYw
-         B8hgBDGuIywjqPZ2trGPa5Ee20W7KX9Ifid7XlVo+YxmvwtwPHfWOcZ6548y5347Emwy
-         KKCkB/w6hVqZWUiQDe52xDsJTdXI1EK7t9qejTHBNHftjMRKvXUqlbClr2gdt+uDLTSp
-         7P1Y8LCmMM5bYYMB2vNv8h8yAetF12yPSm9kEA8v0I2DL0TjT1rtm5nLej6MrRok9ZGJ
-         wNaFzxGhZcx9+IvVueddSVeFwel8AB+Zry77ACNACqO4+X5YMXJiRu2mAaXR6M/8iy+T
-         Ol/A==
-X-Gm-Message-State: AOAM532rau6E9U9brBJDWAnbaH1d8buDGt2ecOHBok/OkuhlRS5LQNCA
-        lcHnquDN+BHXAQubi8MDl+I=
-X-Google-Smtp-Source: ABdhPJzG8BO9JA8tmFynz54nuhPPR9Ak2Hm4mZG3QLMvNW8++EeH5eBDVsw7wpyYXMTeCKK7t6ZeVw==
-X-Received: by 2002:a2e:8e9a:: with SMTP id z26mr37562731ljk.470.1594278698434;
-        Thu, 09 Jul 2020 00:11:38 -0700 (PDT)
-Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id g7sm623224lfe.62.2020.07.09.00.11.37
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 09 Jul 2020 00:11:37 -0700 (PDT)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "pawell\@cadence.com" <pawell@cadence.com>,
-        "rogerq\@ti.com" <rogerq@ti.com>,
-        "gregkh\@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        Jun Li <jun.li@nxp.com>
-Subject: RE: [PATCH 1/3] usb: cdns3: ep0: fix some endian issues
-In-Reply-To: <AM7PR04MB7157D60ED21E2B29461DC3F08B640@AM7PR04MB7157.eurprd04.prod.outlook.com>
-References: <20200603065356.14124-1-peter.chen@nxp.com> <20200603065356.14124-2-peter.chen@nxp.com> <87fta16vb9.fsf@kernel.org> <AM7PR04MB7157D60ED21E2B29461DC3F08B640@AM7PR04MB7157.eurprd04.prod.outlook.com>
-Date:   Thu, 09 Jul 2020 10:11:33 +0300
-Message-ID: <87d0556u3e.fsf@kernel.org>
+        id S1726267AbgGIHXP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Jul 2020 03:23:15 -0400
+Received: from mail-eopbgr80051.outbound.protection.outlook.com ([40.107.8.51]:46339
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726006AbgGIHXO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 9 Jul 2020 03:23:14 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ik4BMEtrGBJjxAh4c3MuqaNrgi10oxwJINujTOI/HdTCSByTvHd7NWUCMEbx4OikjqEA9JavB3/W3EGIdCT2ov+fVRoUTkPR+gZxTFjmTSJh2Q9qf1E3JV5X68zruAez+Ii52G2Z4fH6S6f0JebtyYVIG1pC9GR3Y6mpHfWAy4JTbc+Rdu9WWXOBwTh2PXKajRMC1uXueDS1J2oh5sVtL/4xOJPcXZx+XGriCxd3gXBLOn8dC5+Pxo28BtrHc9DAZf0KtIzqYJAJb1PhgQ57t6m+L7uNVZ3Hmig8znsTOIs/r92SDX0IzDOEEg6geTeOP4l8Vyu9pkdL8KoVgZpm4Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2fEpkdSMwpa70y9Va1ncTlWwf5XIT9ssXgjZ4+jVRJc=;
+ b=CSQyKsY5lPa4DpRpFKBpj+JYHX/SjgEjp4hlbdkUv6O+NfInu6GhDHDllZBEwGBZjGnBqtdO6BawZ9FhBOuhXrh3al8qpfuDOfgDw1RBMxyFMxNhKScVkMfJg6yH3t9ynXVbfC0+YSjJ4aenqdNVe7BXp2F/W1fwAZW2vCoRO67hVkl0JeAScPUwkO+xVEwtUGi7NvhInMyFaFy47JLUl6rXAzsAmNnk1qjs56zT97hLTr4tjEX1i0pzN7ozXo1aPhz+UkdzBHscVwcOHhrNmxJZ9wJXynWP0pE261xJFKXVEwr57sQEQytAghnbXBYnMF3M/nH7YvaFZnLRyGFkOA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2fEpkdSMwpa70y9Va1ncTlWwf5XIT9ssXgjZ4+jVRJc=;
+ b=pd3Lei7ie3ojvxCfLIOLLN/yDFL6JknJZ7t06AbnaLIykIUO1fbTLfK1GPJ7loqZYufcoKi8AXgIXt6OH6WjwEd5j7bu4j1kG4cAx31U51SdY97zV0Hw62MPWTT6gnEDMw+JfZYTN+QYKxy9R3btf5kLVBacbfPPmmjCH1YFjdg=
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
+ by AM6PR04MB5622.eurprd04.prod.outlook.com (2603:10a6:20b:ad::30) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3174.22; Thu, 9 Jul
+ 2020 07:23:12 +0000
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1101:adaa:ee89:af2a]) by AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1101:adaa:ee89:af2a%3]) with mapi id 15.20.3174.022; Thu, 9 Jul 2020
+ 07:23:12 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Felipe Balbi <balbi@kernel.org>, Benoit <benoit.sansoni@gmail.com>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: gadget mass storage with two USB OTG device controller
+Thread-Topic: gadget mass storage with two USB OTG device controller
+Thread-Index: AQHWUJxdsyfCKA187EKrFqj5oCUvDaj0rfUAgAooJACAAAwmoA==
+Date:   Thu, 9 Jul 2020 07:23:12 +0000
+Message-ID: <AM7PR04MB71574B7256939ECA27B50CEA8B640@AM7PR04MB7157.eurprd04.prod.outlook.com>
+References: <8f870ba5-5dec-e362-51dd-65311315f6f2@gmail.com>
+ <CAH8TKc9gaebqZOpv0OFxG-Dq+Tj+FdgJamQ=eP4SMJ-eYBrkOA@mail.gmail.com>
+ <391a537e-108d-210b-01be-c20dd9d0e68e@gmail.com> <87o8op6vl9.fsf@kernel.org>
+In-Reply-To: <87o8op6vl9.fsf@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [222.67.222.179]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 7562ac12-5a9c-4e31-5785-08d823d8f075
+x-ms-traffictypediagnostic: AM6PR04MB5622:
+x-microsoft-antispam-prvs: <AM6PR04MB5622F22F74ECE7CBC4D712908B640@AM6PR04MB5622.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: NzrLPvUwLvMW512maLm44qkZ7B62h9uQktM83BP1QWYEZVX8WQyJIZt1/msHHooS9U+ffiDmtb0jO/gYitSeF5P8dMWmxAiUz56uiHc/iIZQUxdwN0aRbdymd17VXDaS02b6cXGMdArdklMuDfpfG0Mn9pxU9HWq33ciEiZ1jUBk1iTwbCI/Ffcvrc3PSerc3jJTowiecFliUR8ljqOW1HDh0zMsNKHGO/UfDY3jJS1p9M1H/mil2JkWn7k1hi1cDrzguJ5X8DLfEtRFwmCuqMFMMBFXYeRB1g4ejAXkOWeUvwIT5yAtGZHSFsnVR0GSCPy9KaSH/+uG7xZj1kb+Ug==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(39860400002)(136003)(346002)(366004)(376002)(396003)(66946007)(8676002)(55016002)(9686003)(8936002)(66476007)(4744005)(5660300002)(64756008)(66446008)(66556008)(52536014)(186003)(478600001)(316002)(26005)(110136005)(6506007)(44832011)(2906002)(76116006)(71200400001)(7696005)(33656002)(86362001)(4326008);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: 6Dl2MXmHheJ5hMOd6EWl36vzYLgIXZymF7e8NIkGPDJusIEsWdFdlV0uSutBjWzq5UilYVeotkv6UG4UHZ5MGrpyS8nuSoFjcVnuglbiA6zubraeFBqkewvW/euwxmRZxhz3wJbpTwB7YGeQ3/O7cpv+I8OQlN6+8Lu3vOOFH4C5VbdO1K8/h8Sjc8BSSekHIlfiOOwhWUzyZlasHlxxgExK6KDRTcGCQSlSTQlqesj8GPY1+MBWXMlz/xTGJXXVvWOezrjiAJhDGccs0sIE3baztTNYdpqGgfwzq6XK9kNVxwCNs2u5lSOaL9ENlpQlRgAMOE4RX9PF9Iyn2eRlzcUW//s6mukAvB/D6AsLb1rGoYmDBVOIo5UU9+bLASD0kF0ijjrwUR2GmH1NPxr54GLGCInWZOJIC6+I6mZ5cUGJ/V4EgUCtXkRsU5Oz8uljPtCWvmuQWWt6Cqt/VLMAWboyY42KVewGZlVhJvzXcpyY/1CP0a27b5W9HpEvaUZ/
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7562ac12-5a9c-4e31-5785-08d823d8f075
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jul 2020 07:23:12.6318
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: rEoHx2Vn//b1lCPpDqc4hL/4e/gKLQSU9XWTBh+Lg9OBiKlarkSPxRlLZYOAl5lEcaqVTlTmrhmdIM8sQx6xFA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB5622
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-
-
-Hi,
-
-Peter Chen <peter.chen@nxp.com> writes:
->=20=20
->> >
->> > Reported-by: kbuild test robot <lkp@intel.com>
->> > Signed-off-by: Peter Chen <peter.chen@nxp.com>
->>=20
->> Fixes?
->> Cc stable?
->>=20
+=20
+>=20
+> Benoit <benoit.sansoni@gmail.com> writes:
+> > I am in fact a newbie in USB OTG device mode.
+> > The configfs is really convenient.
+> > It works like a charm.
+> >
+> > I applied this configuration below and can see on the host the
+> > different mass storage.
+> > This configuration can be set in boot init script file.
+> > But what is the best choice to apply this configuration at boot up ?
+> > (I am currently using yocto.)
 >
-> It does not fix a bug, and only improve the code for cross platforms
-> So, don't need to go stable tree.
 
-Fair enough, I'll enqueue it for the next merge window.
+Try at:
 
-=2D-=20
-balbi
+/etc/rc.local
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl8GwyUACgkQzL64meEa
-mQYSkA/9F6XeDFu8azolxFThqp/bjothKgNhGdzQeudEzfXXZNQ1ndg2lCn6X0Yc
-O81IE1wqX0QcyG5kG8QDiz7/0qCf9bsyCKtBTSBqsV0gdPL6toZRttHNBfH7zbDb
-WtCEPaIYkM/Bo/32iJjgNUh4cfVe4tXrgIp4h9WotVZ6GgHToGieIWqTvS21u3nJ
-Fa+oSH28QkcavQ12eXJCX4JdD9SQdUpcEy2PoiV6lmwnU9pneDle464XwzN9SZmC
-224MbymSZsX/oZA6+8DB9eAhJU8tLSMiXdo+ziZVblfO1qRNlK7akXaD6VhrK0IK
-oP8Gfbe9sDLUTsxJNXXISuKjpG+KtJAvIse6+C+JoLSqW+NYgcTnm51V5UtcVwsr
-BoUWAzUO8QjclSCAmQ4oHi8JPdnX82eK99EgvdgYBrPnnRnsEUzjWrBJhkBmY8v7
-dXM7qOiIs6Ksft6VmEz3P6bvcXJkEdBwWKVWFzI8oH4qipG7ME8+1epjes/Ugq4q
-M+AeKXpsmO4tPGxruzPatcMxNCmf3Ln7IHPULSHyhJ79pugomGqnwG4wHNBYuCaz
-WnW6fQkZXOPpNwErVADfwDiFBB+lCw1ihqO5x2FaZARXGMGZ/DoKBvyPtAojLYrS
-NEvtealh/P5D1DK4dXDLnxECEJW/ylgFQDNdKSxQEIVM4FB3FRg=
-=jV1e
------END PGP SIGNATURE-----
---=-=-=--
+Peter
+=20
