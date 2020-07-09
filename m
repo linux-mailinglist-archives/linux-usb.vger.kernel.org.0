@@ -2,68 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E3552199A4
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jul 2020 09:23:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDA01219A93
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jul 2020 10:11:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726228AbgGIHXS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Jul 2020 03:23:18 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:45646 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726006AbgGIHXR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jul 2020 03:23:17 -0400
-Received: by mail-lf1-f67.google.com with SMTP id s16so556846lfp.12
-        for <linux-usb@vger.kernel.org>; Thu, 09 Jul 2020 00:23:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ny3oBP+I/wfaJYI3MuR02KIjMkWADaGiFWRFfcgpvRA=;
-        b=iwnaJZA0SuGrp+BcFgcVGOHG8FdqdgFJ3/B3KN7Er7ijNdtYXCzgIavm2Rou1RuYEg
-         CG47E+3ffM/nkY5kT/HFpK8qHmzcB1TIpW8T6y3tosGB087amdaEvRA69IZNNfWEMW8+
-         Ofkyk/hKa3+ZJYot+1GFChU3oe1MDUI64eRbOhhlVGLsikQfIpoXviT0Tvw23zg22Qn5
-         B1ZLQpgKxEey4DjmFb/qd2kU7qexrA0b1fRsIe+3+NB7sM8+21zYLXfDxAj+2uyeWtX+
-         LMveTzsOMErWUrREPp0mEH4bm3E8Od97QD6fzvYfDYatj5vRbLolgX8k7I72GYut1I/x
-         Dj2w==
-X-Gm-Message-State: AOAM532K8eoxd0xHQtCbSs28qgOsUCBEJiHSp7RB2mpG9pjLAuu3uFZd
-        Stv0V+NE/dbsFEztMb655sc=
-X-Google-Smtp-Source: ABdhPJyvaxro8q0JCFVDKXv7pTfrrNHyK9xrjgRCP9HkRx90vyn37ISwxUBzGGOGFJAOqEV9KbAAVw==
-X-Received: by 2002:a05:6512:752:: with SMTP id c18mr16137135lfs.141.1594279395979;
-        Thu, 09 Jul 2020 00:23:15 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id o6sm537037ljh.42.2020.07.09.00.23.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2020 00:23:15 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1jtQtm-0004Pr-3L; Thu, 09 Jul 2020 09:23:14 +0200
-Date:   Thu, 9 Jul 2020 09:23:14 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg KH <greg@kroah.com>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 00/10] USB: serial: break and sysrq fixes and cleanups
-Message-ID: <20200709072314.GP3453@localhost>
-References: <20200708125000.15659-1-johan@kernel.org>
- <20200708154535.GB717967@kroah.com>
+        id S1726272AbgGIILk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Jul 2020 04:11:40 -0400
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:65394 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726215AbgGIILk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jul 2020 04:11:40 -0400
+X-UUID: 6e9b63f79d02473db4515b1cba2e297c-20200709
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=EmxpDFVko6vGSPtolSl68cxmu0wfDYMew3MmoQC0gGU=;
+        b=nBxJcRD1CP+djsbHQpGpme/u8nI9OcJe4moXRREEiW1gud67tvRXHWdQXeoEbiqT0ryin7KMUuwazGeMxQ8DoOcgtWfUIvU5d2QtMiZYc4qAv68J7N9P5fOXoHk1W23J35yR2LDUA5aX6r+pr7nvq1zRui/VGz2AtM66INqwMz4=;
+X-UUID: 6e9b63f79d02473db4515b1cba2e297c-20200709
+Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 1010882677; Thu, 09 Jul 2020 16:11:30 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ MTKMBS31N2.mediatek.inc (172.27.4.87) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 9 Jul 2020 16:11:30 +0800
+Received: from localhost.localdomain (10.17.3.153) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 9 Jul 2020 16:11:28 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Felipe Balbi <balbi@kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>
+Subject: [RFC PATCH] usb: dwc3: fix maximum_speed check for usb2.0-only core
+Date:   Thu, 9 Jul 2020 16:10:50 +0800
+Message-ID: <1594282250-25544-1-git-send-email-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 1.8.1.1.dirty
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200708154535.GB717967@kroah.com>
+Content-Type: text/plain
+X-TM-SNTS-SMTP: E13421386F9A3D99A6F76BE1A8A8E25F83593278EF8CA57E9EC0A00D10D06AE22000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 08, 2020 at 05:45:35PM +0200, Greg Kroah-Hartman wrote:
-> On Wed, Jul 08, 2020 at 02:49:50PM +0200, Johan Hovold wrote:
-> > This series fixes the break and sysrq handling in the ftdi driver (which
-> > have never really worked) and optimises the sysrq handling somewhat.
-> > 
-> > Included are also some related clean ups.
-> 
-> Nice!
-> 
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+VGhlIG1heGltdW1fc3BlZWQgd2lsbCBiZSBVU0JfU1BFRURfU1VQRVJfUExVUywgYnV0IHRoZQ0K
+bWF4aW11bV9zcGVlZCBjaGVjayBmb3IgdXNiMi4wLW9ubHkgY29yZSBkb2Vzbid0IGNvbnNpZGVy
+IGl0LA0Kc28gZml4IGl0LCBhbmQgbW92ZSB0aGUgY2tlY2sgaW50byBkd2MzX2NoZWNrX3BhcmFt
+cygpLg0KDQpTaWduZWQtb2ZmLWJ5OiBDaHVuZmVuZyBZdW4gPGNodW5mZW5nLnl1bkBtZWRpYXRl
+ay5jb20+DQotLS0NCk5vdGU6DQoNCldoZW4gSSBsb29rIGF0IHRoZSBjb2RlLCBmaW5kIHRoYXQg
+dGhpcyBtYXkgYmUgYSBwcm9ibGVtLCBidXQgbm8NCnBsYXRmb3JtIHRvIHRlc3QgaXQuDQotLS0N
+CiBkcml2ZXJzL3VzYi9kd2MzL2NvcmUuYyB8IDE0ICsrKysrKystLS0tLS0tDQogMSBmaWxlIGNo
+YW5nZWQsIDcgaW5zZXJ0aW9ucygrKSwgNyBkZWxldGlvbnMoLSkNCg0KZGlmZiAtLWdpdCBhL2Ry
+aXZlcnMvdXNiL2R3YzMvY29yZS5jIGIvZHJpdmVycy91c2IvZHdjMy9jb3JlLmMNCmluZGV4IDI1
+YzY4NmE3Li5mZmQ1YWIzIDEwMDY0NA0KLS0tIGEvZHJpdmVycy91c2IvZHdjMy9jb3JlLmMNCisr
+KyBiL2RyaXZlcnMvdXNiL2R3YzMvY29yZS5jDQpAQCAtOTMwLDEzICs5MzAsNiBAQCBzdGF0aWMg
+aW50IGR3YzNfY29yZV9pbml0KHN0cnVjdCBkd2MzICpkd2MpDQogCSAqLw0KIAlkd2MzX3dyaXRl
+bChkd2MtPnJlZ3MsIERXQzNfR1VJRCwgTElOVVhfVkVSU0lPTl9DT0RFKTsNCiANCi0JLyogSGFu
+ZGxlIFVTQjIuMC1vbmx5IGNvcmUgY29uZmlndXJhdGlvbiAqLw0KLQlpZiAoRFdDM19HSFdQQVJB
+TVMzX1NTUEhZX0lGQyhkd2MtPmh3cGFyYW1zLmh3cGFyYW1zMykgPT0NCi0JCQlEV0MzX0dIV1BB
+UkFNUzNfU1NQSFlfSUZDX0RJUykgew0KLQkJaWYgKGR3Yy0+bWF4aW11bV9zcGVlZCA9PSBVU0Jf
+U1BFRURfU1VQRVIpDQotCQkJZHdjLT5tYXhpbXVtX3NwZWVkID0gVVNCX1NQRUVEX0hJR0g7DQot
+CX0NCi0NCiAJcmV0ID0gZHdjM19waHlfc2V0dXAoZHdjKTsNCiAJaWYgKHJldCkNCiAJCWdvdG8g
+ZXJyMDsNCkBAIC0xNDI2LDYgKzE0MTksMTMgQEAgc3RhdGljIHZvaWQgZHdjM19jaGVja19wYXJh
+bXMoc3RydWN0IGR3YzMgKmR3YykNCiANCiAJCWJyZWFrOw0KIAl9DQorDQorCS8qIEhhbmRsZSBV
+U0IyLjAtb25seSBjb3JlIGNvbmZpZ3VyYXRpb24gKi8NCisJaWYgKERXQzNfR0hXUEFSQU1TM19T
+U1BIWV9JRkMoZHdjLT5od3BhcmFtcy5od3BhcmFtczMpID09DQorCQkJRFdDM19HSFdQQVJBTVMz
+X1NTUEhZX0lGQ19ESVMpIHsNCisJCWlmIChkd2MtPm1heGltdW1fc3BlZWQgPiBVU0JfU1BFRURf
+SElHSCkNCisJCQlkd2MtPm1heGltdW1fc3BlZWQgPSBVU0JfU1BFRURfSElHSDsNCisJfQ0KIH0N
+CiANCiBzdGF0aWMgaW50IGR3YzNfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikN
+Ci0tIA0KMS45LjENCg==
 
-Thanks for reviewing. Now applied.
-
-Johan
