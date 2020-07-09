@@ -2,20 +2,20 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9B9521A1EB
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jul 2020 16:15:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72A5321A1F4
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jul 2020 16:19:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726725AbgGIOPm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 9 Jul 2020 10:15:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41178 "EHLO mail.kernel.org"
+        id S1726746AbgGIOT2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 9 Jul 2020 10:19:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41754 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726371AbgGIOPm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 9 Jul 2020 10:15:42 -0400
+        id S1726600AbgGIOT1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 9 Jul 2020 10:19:27 -0400
 From:   bugzilla-daemon@bugzilla.kernel.org
 Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
 To:     linux-usb@vger.kernel.org
 Subject: [Bug 208353] Distorted Audio Output Through USB C Docking Station
-Date:   Thu, 09 Jul 2020 14:15:41 +0000
+Date:   Thu, 09 Jul 2020 14:19:26 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -31,7 +31,7 @@ X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-208353-208809-fyPOWBLnjk@https.bugzilla.kernel.org/>
+Message-ID: <bug-208353-208809-FmY7pBx5OI@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-208353-208809@https.bugzilla.kernel.org/>
 References: <bug-208353-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -50,10 +50,10 @@ Takashi Iwai (tiwai@suse.de) changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-                 CC|                            |subjectdenied@gmail.com
+                 CC|                            |david@ixit.cz
 
---- Comment #15 from Takashi Iwai (tiwai@suse.de) ---
-*** Bug 208317 has been marked as a duplicate of this bug. ***
+--- Comment #16 from Takashi Iwai (tiwai@suse.de) ---
+*** Bug 208501 has been marked as a duplicate of this bug. ***
 
 -- 
 You are receiving this mail because:
