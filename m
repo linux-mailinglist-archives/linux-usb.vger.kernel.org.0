@@ -2,20 +2,20 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15BD921A1CE
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jul 2020 16:08:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4382221A1CF
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jul 2020 16:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726624AbgGIOIp convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 9 Jul 2020 10:08:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39690 "EHLO mail.kernel.org"
+        id S1726444AbgGIOKV convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 9 Jul 2020 10:10:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39900 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726340AbgGIOIp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 9 Jul 2020 10:08:45 -0400
+        id S1726340AbgGIOKV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 9 Jul 2020 10:10:21 -0400
 From:   bugzilla-daemon@bugzilla.kernel.org
 Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
 To:     linux-usb@vger.kernel.org
-Subject: [Bug 208357] snd-usb-audio broken for 06f8:b000 since 4.9.189
-Date:   Thu, 09 Jul 2020 14:08:45 +0000
+Subject: [Bug 208353] Distorted Audio Output Through USB C Docking Station
+Date:   Thu, 09 Jul 2020 14:10:20 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -23,17 +23,17 @@ X-Bugzilla-Product: Drivers
 X-Bugzilla-Component: USB
 X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: blocking
+X-Bugzilla-Severity: normal
 X-Bugzilla-Who: tiwai@suse.de
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: CODE_FIX
 X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc component assigned_to
-Message-ID: <bug-208357-208809-epecupxp3B@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-208357-208809@https.bugzilla.kernel.org/>
-References: <bug-208357-208809@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: bug_status resolution
+Message-ID: <bug-208353-208809-HTVSOgJKU6@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-208353-208809@https.bugzilla.kernel.org/>
+References: <bug-208353-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Bugzilla-URL: https://bugzilla.kernel.org/
@@ -44,19 +44,21 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=208357
+https://bugzilla.kernel.org/show_bug.cgi?id=208353
 
 Takashi Iwai (tiwai@suse.de) changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-                 CC|                            |tiwai@suse.de
-          Component|Sound(ALSA)                 |USB
-           Assignee|perex@perex.cz              |drivers_usb@kernel-bugs.ker
-                   |                            |nel.org
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |CODE_FIX
 
---- Comment #1 from Takashi Iwai (tiwai@suse.de) ---
-I thought the fix is on its way.  Reassigned the component to USB.
+--- Comment #13 from Takashi Iwai (tiwai@suse.de) ---
+The fix patch landed in Linus tree yesterday.  Sorry that it took long, as I've
+been off.
+
+FWIW, Greg already reverted the original commit that caused a problem on stable
+trees.
 
 -- 
 You are receiving this mail because:
