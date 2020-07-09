@@ -2,69 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E6FE21A43E
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jul 2020 18:01:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2500021A44D
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jul 2020 18:03:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728116AbgGIQAz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Jul 2020 12:00:55 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:41695 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726856AbgGIQAy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jul 2020 12:00:54 -0400
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 09 Jul 2020 09:00:54 -0700
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 09 Jul 2020 09:00:52 -0700
-Received: from c-sanm-linux.qualcomm.com ([10.206.25.31])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 09 Jul 2020 21:30:38 +0530
-Received: by c-sanm-linux.qualcomm.com (Postfix, from userid 2343233)
-        id F16DD2C1F; Thu,  9 Jul 2020 21:30:37 +0530 (IST)
-From:   Sandeep Maheswaram <sanm@codeaurora.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Sandeep Maheswaram <sanm@codeaurora.org>
-Subject: [PATCH v8 2/2] arm64: dts: qcom: sc7180: Add maximum speed property for DWC3 USB node
-Date:   Thu,  9 Jul 2020 21:30:12 +0530
-Message-Id: <1594310413-14577-3-git-send-email-sanm@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1594310413-14577-1-git-send-email-sanm@codeaurora.org>
-References: <1594310413-14577-1-git-send-email-sanm@codeaurora.org>
+        id S1726856AbgGIQDp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Jul 2020 12:03:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53120 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726408AbgGIQDo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 9 Jul 2020 12:03:44 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E249F2077D;
+        Thu,  9 Jul 2020 16:03:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1594310623;
+        bh=/qLNuerTrwjG6/a+LKc0jo1uZ+W04mB+ZjwvV2kkSCs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lAhqAzI4FjFgBF+ER82NIQbWhUGvE0O7C0dwzuNitVHpFXVkZTb/XUuKLQ9WHgAnF
+         Rc2CBBUoVzUizrlSTteq1DZKflVwbgzPGQgjW2S+/ff8H+WV4wxr0p4j27ziRz5p+p
+         UQRpUf29hGcYGnuBGKO/ztuF2YdlG1OXpk7eI7VI=
+Date:   Thu, 9 Jul 2020 18:03:49 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Diego Elio =?iso-8859-1?Q?Petten=F2?= <flameeyes@flameeyes.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] Remove documentation line that adds nothing and
+ sounds condescending.
+Message-ID: <20200709160349.GA863447@kroah.com>
+References: <20200705150225.21500-1-flameeyes@flameeyes.com>
+ <20200706224415.2854-1-flameeyes@flameeyes.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200706224415.2854-1-flameeyes@flameeyes.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Adding maximum speed property for DWC3 USB node which can be used
-for setting interconnect bandwidth.
+On Mon, Jul 06, 2020 at 11:44:14PM +0100, Diego Elio Pettenò wrote:
+> "Easy" is a subjective term, and while not adding more context, it can push
+> away some of the readers.
+> 
+> Signed-off-by: Diego Elio Pettenò <flameeyes@flameeyes.com>
 
-Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
----
- arch/arm64/boot/dts/qcom/sc7180.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+Nit, your subject line needs "USB: usbmon:" in it, and please cc: the
+proper people that get_maintainer.pl asks you to.
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-index 2be81a2..753e1a1 100644
---- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-@@ -2544,6 +2544,7 @@
- 				snps,dis_enblslpm_quirk;
- 				phys = <&usb_1_hsphy>, <&usb_1_ssphy>;
- 				phy-names = "usb2-phy", "usb3-phy";
-+				maximum-speed = "super-speed";
- 			};
- 		};
- 
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-of Code Aurora Forum, hosted by The Linux Foundation
+thanks,
 
+greg k-h
