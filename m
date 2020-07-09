@@ -2,72 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF8F621A44E
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jul 2020 18:04:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3558221ABDC
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Jul 2020 02:01:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726852AbgGIQEQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Jul 2020 12:04:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53218 "EHLO mail.kernel.org"
+        id S1726449AbgGJAB6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Jul 2020 20:01:58 -0400
+Received: from v6.sk ([167.172.42.174]:36668 "EHLO v6.sk"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726408AbgGIQEQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 9 Jul 2020 12:04:16 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CCFAC2077D;
-        Thu,  9 Jul 2020 16:04:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594310656;
-        bh=ETBFJDSAFiCnqi5o09DJlz6wtvExixkBaqJ2uj3S558=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d4+muDx70wcoGY0GPoXT2Si9krBefbZ+yFeApfrWKrnHchLtjNNZSfyLUU0lhuA2d
-         OKVVdoE9QaYPj6x1lqFD95NS8cSQYO6bJAaNl6FtWVa6tZ967z+hGualnWv8GixDS2
-         fb1buMt8fx9Om/xNG5VAtCbW3Wsf4BRmyfU8+kGI=
-Date:   Thu, 9 Jul 2020 18:04:23 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Diego Elio =?iso-8859-1?Q?Petten=F2?= <flameeyes@flameeyes.com>
-Cc:     linux-usb@vger.kernel.org, Pete Zaitcev <zaitcev@redhat.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kris Katterjohn <katterjohn@gmail.com>
-Subject: Re: [PATCH v4 2/2] usbmon: expose the usbmon structures and
- constants as an UAPI header.
-Message-ID: <20200709160423.GB863447@kroah.com>
-References: <20200705150225.21500-1-flameeyes@flameeyes.com>
- <20200706224415.2854-1-flameeyes@flameeyes.com>
- <20200706224415.2854-2-flameeyes@flameeyes.com>
+        id S1726227AbgGJAB6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 9 Jul 2020 20:01:58 -0400
+Received: from localhost (v6.sk [IPv6:::1])
+        by v6.sk (Postfix) with ESMTP id 031FB60D19;
+        Fri, 10 Jul 2020 00:01:26 +0000 (UTC)
+From:   Lubomir Rintel <lkundrak@v3.sk>
+To:     =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>
+Cc:     linux-usb@vger.kernel.org, sam@ravnborg.org,
+        dri-devel@lists.freedesktop.org, balbi@kernel.org,
+        Lubomir Rintel <lkundrak@v3.sk>
+Subject: Re: [PATCH v3 0/6] Generic USB Display driver
+Date:   Thu,  9 Jul 2020 18:32:35 +0200
+Message-Id: <20200709163235.360054-1-lkundrak@v3.sk>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200529175643.46094-1-noralf@tronnes.org>
+References: <20200529175643.46094-1-noralf@tronnes.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200706224415.2854-2-flameeyes@flameeyes.com>
+X-TUID: fTJ4QzHEkCkU
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 06, 2020 at 11:44:15PM +0100, Diego Elio Pettenò wrote:
-> This allows applications to use the usbmon ioctl() without declaring the
-> constants.
+Hello,
+
+On 29 May 2020 Noralf TrÃ¸nnes wrote:
+...
+> This series adds a USB host driver and a device/gadget driver to achieve
+> that.
 > 
-> Update the documentation to reflect the new header.
-> 
-> Cc: linux-usb@vger.kernel.org
-> Cc: Pete Zaitcev <zaitcev@redhat.com>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Kris Katterjohn <katterjohn@gmail.com>
-> Cc: Greg KH <gregkh@linuxfoundation.org>
-> Signed-off-by: Diego Elio Pettenò <flameeyes@flameeyes.com>
-> ---
->  Documentation/usb/usbmon.rst |  70 ++++++++++++-----------
->  drivers/usb/mon/mon_bin.c    |  92 +-----------------------------
->  include/uapi/linux/usb/mon.h | 107 +++++++++++++++++++++++++++++++++++
->  3 files changed, 145 insertions(+), 124 deletions(-)
->  create mode 100644 include/uapi/linux/usb/mon.h
+> The reason for calling it 'Generic' is so anyone can make a USB
+> display/adapter against this driver, all that's needed is to add a USB
+> vid:pid. I have done a microcontroller implementation hack just to see
+> how that would work out[1] (which unconvered a couple of bugs in the
+> host driver).
+...
 
-What changed from previous versions?  Always put that below the --- line
-like the documentation asks you to.   Please do that when you resend
-this series.
+This is actually very cool; finally a good way to drive the cheapo
+SPI/I2C displays from computers whose only means of expansion is USB
+with a little help from a microcontroller. I've actually had some
+success doing just that [1].
 
-thanks,
+[1] https://assets.octodon.social/media_attachments/files/009/983/960/original/64ad8ea46c1b06c5.jpg
 
-greg k-h
+I suppose you can add:
+
+Tested-by: Lubomir Rintel <lkundrak@v3.sk>
+
+I've had to jump through some hoops though.
+
+My OLED display is a 128x64 SSD1306 [1] driven from the SPI bus. The frame
+buffer SRAM is normally scanned out in stripes of 8 vertical pixels called
+"pages". When the display is turned on its side, with "vertical
+addressing mode" and "segment remapping" enabled and bytes being sent LSB
+first, it appears linear -- it's easy to repaint the whole display from
+what is now the top left corner to the bottom right. This is very
+convenient for painting pixels as they come, without bufferring them or
+doing any conversions (assuming that memory and cpu cycles are at
+premium on MCUs).
+
+[1] https://cdn-shop.adafruit.com/datasheets/SSD1306.pdf
+
+There doesn't seem a comfortable way to do partial redraws though. Would
+you find it objectionable if the device could indicate that needs full
+frames instead of just the damaged areas? Perhaps then the driver
+wouldn't even need to bother issuing GUD_DRM_USB_REQ_SET_BUFFER to
+displays dumb enough to be incapable of partial redraws and decompression.
+
+My work-in-progress code that works on STM32F103 (e.g. "Blue Pill"
+boards), or GD32VF103 (RISC-V "Polos Alef") is at [2]. The partial redraws
+that don't start from column zero or are not "page aligned" don't work
+correctly for the time being; X11 doesn't seem to care.
+
+[2] https://github.com/hackerspace/libopencm3-gf32v-examples/tree/lr/gd32v/examples/gd32v/f103/polos-alef/usb-display
+
+Thank you!
+Lubo
