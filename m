@@ -2,479 +2,246 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68E5121955D
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jul 2020 02:52:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 464072197B9
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jul 2020 07:15:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726118AbgGIAw4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jul 2020 20:52:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33820 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725903AbgGIAwz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jul 2020 20:52:55 -0400
-Received: from mail-qv1-xf43.google.com (mail-qv1-xf43.google.com [IPv6:2607:f8b0:4864:20::f43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E428C061A0B
-        for <linux-usb@vger.kernel.org>; Wed,  8 Jul 2020 17:52:55 -0700 (PDT)
-Received: by mail-qv1-xf43.google.com with SMTP id h17so252931qvr.0
-        for <linux-usb@vger.kernel.org>; Wed, 08 Jul 2020 17:52:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=timesys-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vcMRywPNH+vsgrFAeurilry6X+FPT5EQZAj21KdXsco=;
-        b=q3bwBMGYF+YfcFRhhJR2o+qqs5VBe8d4UQnQLGC4ucN7q0cI81T6x+JCHq0h/auHpS
-         ZUuGi918bxz+pUedk0yscQLJ44Wy/+Mr+qYPrbSDfMlSmGkkCTF1x9Zqa3DEvkLpfNaH
-         aLOM4T+aVDADw06dPiFCAZy22Mrg4b+nhaVtjOAHbh0E2oMM+2pIBvXIQYnyeBv6BUxa
-         XgbSKquJ0QtGLAKENRtwX00dlzP7VjrhPh0SMumDOw82Pu1svE5Un+QxQOkIOadBZj2A
-         xEgjtYqNe2HTTJn0MU8/6do4Rzia3s1GITEpm7U0OdIPoePKyi2ngx9dNMq62xtTT2jo
-         wKJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vcMRywPNH+vsgrFAeurilry6X+FPT5EQZAj21KdXsco=;
-        b=b9B5T744won+HCvscNUIuYqqeeSTZgvB2QXnDcDqfbxzCo8/0X+nYR81dFFBf5jksf
-         9qNgFbJNYHEfK6gFXF0y8zuYdOb3M3ngFtUUk/wh3LEYc/7RKXUiSU4/B6JMYsrGS5UG
-         RJZlRkfX5k3sW0wx9fFd3ScL6xLwWbdj8OKl4XN8B5fUaI6w7ciiklrEzsVFJGVqmfFt
-         UL3PMM3b4tKGaoRq2pxDS1caL/ZnTvVsoKjslGV4SWYEOS+zL4kgLT7V/h9zIy1i79P1
-         1dTAGF+/MTDKwz61UW/+gHJyr+7guqZU08HI++BYZxWFOmxaP7KZ0LMJPJwzUsRgmF33
-         CrDA==
-X-Gm-Message-State: AOAM532yMOuG3Ua9bVRg9fA12eH5JS3+UULtOrAIwgUikvHsJncGUNiP
-        249aajMBZJh+6n/ersZDjrZg+t/4KV3DBg==
-X-Google-Smtp-Source: ABdhPJzNQzkGMD25iDfjLVWoXNb3q5o0MbME791WOYwAGS2aNsib6r2Fj4aq0NWjpW8Bnh7sFtJv5g==
-X-Received: by 2002:a0c:8603:: with SMTP id p3mr58351466qva.227.1594255974508;
-        Wed, 08 Jul 2020 17:52:54 -0700 (PDT)
-Received: from dfj.bfc.timesys.com (host-79-30-36-203.retail.telecomitalia.it. [79.30.36.203])
-        by smtp.gmail.com with ESMTPSA id o184sm1931535qkd.41.2020.07.08.17.52.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jul 2020 17:52:53 -0700 (PDT)
-From:   Angelo Dureghello <angelo.dureghello@timesys.com>
-To:     johan@kernel.org
-Cc:     linux-usb@vger.kernel.org,
-        Angelo Dureghello <angelo.dureghello@timesys.com>
-Subject: [PATCH] USB: serial: add support for MaxLinear XR21V1412
-Date:   Thu,  9 Jul 2020 03:00:08 +0200
-Message-Id: <20200709010008.2784747-1-angelo.dureghello@timesys.com>
-X-Mailer: git-send-email 2.26.2
+        id S1726291AbgGIFPc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Jul 2020 01:15:32 -0400
+Received: from mail-eopbgr10059.outbound.protection.outlook.com ([40.107.1.59]:57191
+        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726064AbgGIFPb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 9 Jul 2020 01:15:31 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AkXkA3D+zHsl9UX5ZkEJAhYGOlRriA2Fyg16xUXbosMVdu871CanA+pGEi5Dcje+wHUDdtzNAa43l6Gd1/yvYKoebZ01qQWCW4R957BTeIP7Ap7kRzHUahzrXni1hkz3q+TMTeNQjL7LOSd1791RicVxQcjEkRaeX/+VojP8QPW9yls2Td8qExhRH3BPcLLsioGoIulqRdXvt/liviZohG4iMOO9hJmWEJyP4zRpn0HPwdZXgY01N6Qu2nI1m3SnVOJaVKcJGOcrtBv3s81T1NeV4qv2M0wYk5R0vWXv2UEBv9pYuWSYQ9+7N3/xkeOJurGD5Y5nyz9poPvX9azoEA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aZAmpFbAqNcKWv0UCgIFg3CG2/4Dycq2adFm8YqRWag=;
+ b=bPqeDwVmJI8sfAydK7nv88QU+sh/rVjgkDXkiCv2i18d5oQCY/Mf61IyC25RIIhn4smuZ7dUhPBO7vZt+NEu67DVEcEe/rlCHWGGtTTHmyMcPPxixf37iFBwgu5O1FIWhQiz36vKgdFvWBY/Nbm0qLPtoMkVI6pU7xwFYKLq0l1ZSQWdAIdeRoXFebRx05Lt/0T1Vvq99HQFdmtWTeBnMT+3X1dQ0Qf0FVNULYLMaT7EqPcbgcENCzgTaZWeD1BQXvwgvorGEoNVbtd3MoPnl3l36qZH06XFo/2C6NauCBZ2NHsCcLOwjaUb9TZ6LrbdktyuaGU1sXEfx46CZUXssw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aZAmpFbAqNcKWv0UCgIFg3CG2/4Dycq2adFm8YqRWag=;
+ b=RMooYyer2WYt9d15c26LOwWSD7hajVgc0ZJPoAzkatZ/yxDX9D1uwyRHPXsA/L49DX3N9JXHDjgKy0gP1Y01KWWIprKEiWbuIeaYWeWK4RboHK8eScHKPkWb7YPJofntSiiX3/mntYWqEHk6xveEX7+PmyH8wkHh+hy4EFDJXRA=
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (52.135.57.84) by
+ AM6PR04MB6150.eurprd04.prod.outlook.com (20.179.18.19) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3153.24; Thu, 9 Jul 2020 05:15:26 +0000
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1101:adaa:ee89:af2a]) by AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1101:adaa:ee89:af2a%3]) with mapi id 15.20.3174.022; Thu, 9 Jul 2020
+ 05:15:26 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [PATCH 2/2] usb: host: xhci-plat: add wakeup entry at /sys
+Thread-Topic: [PATCH 2/2] usb: host: xhci-plat: add wakeup entry at /sys
+Thread-Index: AQHWUQLEv7puXBnz7kavmyMm4fC5l6j159KAgAE/joCAAFrnAIAAv0sAgADOc4CAANPw0IAA3ViAgAChxYCAAO2QgIAA9LEAgACKIgCAAO53AA==
+Date:   Thu, 9 Jul 2020 05:15:25 +0000
+Message-ID: <20200709051534.GA17510@b29397-desktop>
+References: <20200704092255.GA5695@b29397-desktop>
+ <20200704144816.GA650205@rowland.harvard.edu>
+ <20200705021256.GA29527@b29397-desktop>
+ <20200705143151.GA672371@rowland.harvard.edu>
+ <AM7PR04MB71571A625BEEE70F2D9B3C138B690@AM7PR04MB7157.eurprd04.prod.outlook.com>
+ <20200706162237.GC704149@rowland.harvard.edu>
+ <20200707020137.GA5373@b29397-desktop>
+ <20200707161153.GB740256@rowland.harvard.edu>
+ <20200708064740.GA18440@b29397-desktop>
+ <20200708150204.GC776368@rowland.harvard.edu>
+In-Reply-To: <20200708150204.GC776368@rowland.harvard.edu>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: rowland.harvard.edu; dkim=none (message not signed)
+ header.d=none;rowland.harvard.edu; dmarc=none action=none
+ header.from=nxp.com;
+x-originating-ip: [119.31.174.67]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 886af9d2-ebd7-45ae-e0ba-08d823c716c2
+x-ms-traffictypediagnostic: AM6PR04MB6150:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM6PR04MB61505196D7AAF26D0DC11F0A8B640@AM6PR04MB6150.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 04599F3534
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 7oSvR7QoS54B+fBBTXJiviRmh+cnHWbl7EOhqqGn67hvCX9nEr/8uO65g76A7fqqLC3lwyhakpkZr0KGLvfIwRhZPn5EDHsKLIMfVYj5vI+zj23iRTQoipB1/A/7PoIwhhoNYZCtXQ5OBKJK09x/KU5Gl/MWXkP1jnGHl/i/DuMOwjH4OIkT6D+Ijyiiq5hDOgneeru6ZkW3CerMLOUKHrkE3BTqRMaDx8g2MZPk/U9H2p6DzaDjSJ23l52G3tLIo85MCx/xP1/4J/d+YqALqY+uwToWYn5tWYLFK1DT/RIj8eXnSgTtN4+9adkI85UCpiOPTvvpSR4twkcUu1TaMQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(7916004)(39860400002)(396003)(376002)(366004)(136003)(346002)(33716001)(316002)(54906003)(8676002)(9686003)(86362001)(6506007)(6916009)(33656002)(5660300002)(53546011)(83380400001)(26005)(6486002)(66446008)(66556008)(478600001)(6512007)(44832011)(64756008)(2906002)(66946007)(66476007)(71200400001)(76116006)(8936002)(91956017)(4326008)(1076003)(186003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: ip3HXOmgAdekhYB3H8El4/5yVykB1PDS2N6bEn1mvq082nA5CKYCtTPbD3cO0YZPpIeE/Z/b1Pz6tTM2Nx8NHsm6DwANx5dAVCtJ2iclt2dBsrY8h5n3DvELBC0PObpCM8EbB11NY6PqcH4q5RjcppVVfp3GKkXq5dhfYvlNbwWwRgDKoSdEuDShCuC58vVvSg+w1WNearKfA0bz3oXvx15ft5TaYjMsLAP5QvGBjzpAIU7IMijb4EzBCj/i95etaKe1TPrdGrAU/bCGFTWYqc2qN/vRVYIDMXf7nNp9JF2411JzKWgetyjPK2RhNYnpnWGEiRPH2fncXP/IUX26mFZrSjXcvkwBdmHbLhmeL5p+02Qq1kQWoQ0fc0rLOE6z7iXsDxsTX1mv2CAlFEFJG17CJN9mDpyRgz+6aOegSdtZG4+CTXWett+AtQHqeySFHdTzdzVrKyBB3xzMu/CQtCUa3K5AG5lYW4v6+xteoaM=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <C8F9D1254F03AD4B969E4963B6ECB623@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 886af9d2-ebd7-45ae-e0ba-08d823c716c2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jul 2020 05:15:25.9741
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 7ywdvpKxbGV1aSnsgFiwvYuACVfkVivmIFuTbD7vrFT8SIGHnwNH6biCP+0QdhWiYYpq910F62XLr9VIn+XEHw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB6150
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From some researches, this driver was available from the IC
-constructor site, but for older kernel versions. From there, decided
-to add a much simplier mainline version, written from sratch.
+On 20-07-08 11:02:04, Alan Stern wrote:
+> On Wed, Jul 08, 2020 at 06:47:31AM +0000, Peter Chen wrote:
+> > On 20-07-07 12:11:53, Alan Stern wrote:
+>=20
+> > > > But, that's not all the use cases. There are still two other use ca=
+ses:
+> > > > (Taking xhci-plat.c as an example):
+> > > > - It is a platform bus device created by platform bus driver
+> > > > - It is a platform bus device created by glue layer parents
+> > > > (eg, dwc3/cdns3), usually, it is dual-role controller.
+> > >=20
+> > > In these cases there would be a choice: xhci-plat.c could call=20
+> > > device_init_wakeup, or the platform-bus/glue-layer driver could call=
+=20
+> > > device_set_wakeup_capable and xhci-plat.c could continue to call=20
+> > > device_enable_wakeup.
+> >=20
+> > You said "the PCI core calls device_set_wakeup_capable() when a new dev=
+ice is
+> > discovered and register", why PCI core does this, is every device on
+> > PCI bus wakeup capable?
+>=20
+> Sorry, I should have said that the PCI core does this for all devices=20
+> that are able to generate wakeup requests.  This ability is indicated by=
+=20
+> a PCI capability setting, which the PCI core can read.
+>=20
+> > The reason I ask this is not every device on platform-bus is wakeup
+> > capable, to let the controller device have defaulted "enabled" value,
+> > we need to use device_init_wakeup at xhci-plat.c
+>=20
+> Yes.  In your case it makes sense for the glue layer or platform code to=
+=20
+> call device_set_wakeup_capable for the appropriate devices.  Then the=20
+> generic code can call device_enable_wakeup (which doesn't do anything=20
+> if the device isn't wakeup-capable).
+>=20
 
-This initial simple version is implemented without any flow control,
-tested mainly at 115200, but all standard baud rates are supported
-and applied as per serial terminal setting.
+Yes, in my case, I could do it. But xhci-plat.c is generic code, some
+controller devices using this driver are created by generic platform
+bus driver. So I think we should use device_init_wakeup(dev, true) like
+you suggested at the first, this driver should not be used by PCI USB
+controller, so no effect on PCI USB, right?
 
-Signed-off-by: Angelo Dureghello <angelo.dureghello@timesys.com>
----
- drivers/usb/serial/Kconfig     |   9 +
- drivers/usb/serial/Makefile    |   1 +
- drivers/usb/serial/xr21v1412.c | 361 +++++++++++++++++++++++++++++++++
- 3 files changed, 371 insertions(+)
- create mode 100644 drivers/usb/serial/xr21v1412.c
+> >=20
+> > From hardware level:
+> > Controller includes core part and non-core part, core part is usually
+> > designed by IP vendor, non-core part is usually designed by each SoC
+> > vendors. Wakeup handling is part of non-core. The USB PHY gets
+> > ID/VBUS/DP/DM/RX change events, the related signal ties to non-core par=
+t,
+> > and non-core part knows the wakeup occurs.
+> >=20
+> > From software level:
+> > Taking single role controller as example:
+> > Glue layer is a platform device, and handles non-core part events,
+> > including wakeup events, it is the parent of common layer which handles
+> > core part events (eg, xhci-plat.c)
+>=20
+> Can you give an example of how these different layers show up in sysfs=20
+> (the device names and paths)?
 
-diff --git a/drivers/usb/serial/Kconfig b/drivers/usb/serial/Kconfig
-index 4007fa25a8ff..5f215a736618 100644
---- a/drivers/usb/serial/Kconfig
-+++ b/drivers/usb/serial/Kconfig
-@@ -644,6 +644,15 @@ config USB_SERIAL_UPD78F0730
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called upd78f0730.
- 
-+config USB_SERIAL_XR21V1412
-+	tristate "USB MaxLinear XR21V1412 serial driver"
-+	help
-+	  Say Y here if you want to use the MaxLinear XR21V1412
-+	  serial driver.
-+
-+	  To compile this driver as a module, choose M here: the
-+	  module will be called xr21v1412.
-+
- config USB_SERIAL_DEBUG
- 	tristate "USB Debugging Device"
- 	help
-diff --git a/drivers/usb/serial/Makefile b/drivers/usb/serial/Makefile
-index 2d491e434f11..8b4afcc44b46 100644
---- a/drivers/usb/serial/Makefile
-+++ b/drivers/usb/serial/Makefile
-@@ -62,4 +62,5 @@ obj-$(CONFIG_USB_SERIAL_VISOR)			+= visor.o
- obj-$(CONFIG_USB_SERIAL_WISHBONE)		+= wishbone-serial.o
- obj-$(CONFIG_USB_SERIAL_WHITEHEAT)		+= whiteheat.o
- obj-$(CONFIG_USB_SERIAL_XIRCOM)			+= keyspan_pda.o
-+obj-$(CONFIG_USB_SERIAL_XR21V1412)		+= xr21v1412.o
- obj-$(CONFIG_USB_SERIAL_XSENS_MT)		+= xsens_mt.o
-diff --git a/drivers/usb/serial/xr21v1412.c b/drivers/usb/serial/xr21v1412.c
-new file mode 100644
-index 000000000000..9c9ace46bc41
---- /dev/null
-+++ b/drivers/usb/serial/xr21v1412.c
-@@ -0,0 +1,361 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * MaxLinear XR21V1412 USB to serial adaptor driver
-+ *
-+ * Copyright (C) 2020 Angelo Dureghello <angelo.dureghello@timesys.com>
-+ *
-+ * This driver has been started looking into ch341.c and f81232.c
-+ */
-+
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/slab.h>
-+#include <linux/tty.h>
-+#include <linux/usb.h>
-+#include <linux/usb/serial.h>
-+
-+/*
-+ * The internal register set of the XR21V1412 consists of 3 different
-+ * blocks of registers:
-+ * UART Manager,
-+ * UART registers,
-+ * UART miscellaneous.
-+ */
-+
-+#define index(reg, block)	((block << 8) | reg)
-+
-+#define REG_BLOCK_UART_A	0x0
-+#define REG_BLOCK_UART_B	0x1
-+#define REG_BLOCK_UART_MGR	0x4
-+#define REG_BLOCK_I2C_EE	0x65
-+#define REG_BLOCK_UART_CUSTOM	0x66
-+
-+#define REQ_CDC_ACM		35
-+#define REQ_SET_REG		0
-+#define REQ_GETN_REG		1
-+
-+#define REQ_TYPE_XR_SET_REG	0x40
-+
-+#define FIFO_ENABLE_CHA		0x10
-+#define FIFO_ENABLE_CHB		0x11
-+#define FIFO_ENABLE_TX		BIT(0)
-+#define FIFO_ENABLE_RX		BIT(1)
-+
-+#define REG_UART_ENABLE		0x03
-+#define REG_UART_DIV0		0x04
-+#define REG_UART_DIV1		0x05
-+#define REG_UART_DIV2		0x06
-+#define REG_UART_TXCLOCK_MASK0	0x07
-+#define REG_UART_TXCLOCK_MASK1	0x08
-+#define REG_UART_RXCLOCK_MASK0	0x09
-+#define REG_UART_RXCLOCK_MASK1	0x0a
-+#define REG_UART_CHAR_FMT	0x0b
-+
-+#define REG_SET_RETRY		2
-+
-+#define	REG_DIV0_MASK		GENMASK(7, 0)
-+#define REG_DIV1_MASK		GENMASK(15, 8)
-+#define REG_DIV2_MASK		GENMASK(18, 16)
-+#define	REG_DIV0(x)		(x & REG_DIV0_MASK)
-+#define	REG_DIV1(x)		((x & REG_DIV1_MASK) >> 8)
-+#define	REG_DIV2(x)		((x & REG_DIV2_MASK) >> 16)
-+
-+#define INT_OSC			48000000
-+
-+#define CLKM_TABLE_ENTRIES	32
-+#define CLKM_TX			0
-+#define CLKM_RX_ODD		1
-+#define CLKM_RX_EVEN		2
-+#define CLKM_ENTRIES		3
-+
-+#define	PARITY_NONE		0
-+#define	PARITY_ODD		1
-+#define	PARITY_EVEN		2
-+
-+#define DEFAULT_BAUDRATE	115200
-+#define DEFAULT_DATA_BITS	8
-+#define DEFAULT_PARITY		PARITY_NONE
-+#define DEFAULT_STOP_BITS	1
-+
-+static const int mask_lookup_table[CLKM_TABLE_ENTRIES][CLKM_ENTRIES] = {
-+	{0x0000, 0x0000, 0x0000},
-+	{0x0000, 0x0000, 0x0000},
-+	{0x0100, 0x0000, 0x0100},
-+	{0x0020, 0x0400, 0x0020},
-+	{0x0010, 0x0100, 0x0010},
-+	{0x0208, 0x0040, 0x0208},
-+	{0x0104, 0x0820, 0x0108},
-+	{0x0844, 0x0210, 0x0884},
-+	{0x0444, 0x0110, 0x0444},
-+	{0x0122, 0x0888, 0x0224},
-+	{0x0912, 0x0448, 0x0924},
-+	{0x0492, 0x0248, 0x0492},
-+	{0x0252, 0x0928, 0x0292},
-+	{0x094A, 0x04A4, 0x0A52},
-+	{0x052A, 0x0AA4, 0x054A},
-+	{0x0AAA, 0x0954, 0x04AA},
-+	{0x0AAA, 0x0554, 0x0AAA},
-+	{0x0555, 0x0AD4, 0x05AA},
-+	{0x0B55, 0x0AB4, 0x055A},
-+	{0x06B5, 0x05AC, 0x0B56},
-+	{0x05B5, 0x0D6C, 0x06D6},
-+	{0x0B6D, 0x0B6A, 0x0DB6},
-+	{0x076D, 0x06DA, 0x0BB6},
-+	{0x0EDD, 0x0DDA, 0x076E},
-+	{0x0DDD, 0x0BBA, 0x0EEE},
-+	{0x07BB, 0x0F7A, 0x0DDE},
-+	{0x0F7B, 0x0EF6, 0x07DE},
-+	{0x0DF7, 0x0BF6, 0x0F7E},
-+	{0x07F7, 0x0FEE, 0x0EFE},
-+	{0x0FDF, 0x0FBE, 0x07FE},
-+	{0x0F7F, 0x0EFE, 0x0FFE},
-+	{0x0FFF, 0x0FFE, 0x0FFD},
-+};
-+
-+struct xr21v1412_private {
-+	int baudrate;
-+	u8 parity;
-+	u8 data_bits;
-+	u8 stop_bits;
-+};
-+
-+static const struct usb_device_id id_table[] = {
-+	{ USB_DEVICE(0x04e2, 0x1412) },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(usb, id_table);
-+
-+static u8 xr21v1412_interface_num(struct usb_serial *serial)
-+{
-+	struct usb_host_interface *cur_altsetting;
-+
-+	cur_altsetting = serial->interface->cur_altsetting;
-+
-+	return cur_altsetting->desc.bInterfaceNumber;
-+}
-+
-+static int xr21v1412_xr_set_register(struct usb_device *udev, u16 reg, u16 val)
-+{
-+	int retry = REG_SET_RETRY;
-+	int status, size;
-+
-+	while (retry--) {
-+		status = usb_control_msg(udev,
-+					 usb_sndctrlpipe(udev, 0),
-+					 REQ_SET_REG,
-+					 REQ_TYPE_XR_SET_REG,
-+					 val & 0xff,
-+					 reg,
-+					 0,
-+					 0,
-+					 USB_CTRL_SET_TIMEOUT);
-+		if (status < 0) {
-+			status = usb_translate_errors(status);
-+			if (status == -EIO)
-+				continue;
-+		} else if (status != size) {
-+			/* Retry on short transfers */
-+			status = -EIO;
-+			continue;
-+		} else {
-+			status = 0;
-+		}
-+
-+		break;
-+	}
-+
-+	if (status) {
-+		dev_err(&udev->dev, "failed to set register 0x%x: %d\n",
-+				reg, status);
-+	}
-+
-+	return status;
-+}
-+
-+static inline int xr21v1412_get_clock_divisor(int baudrate)
-+{
-+	return (INT_OSC / baudrate);
-+}
-+
-+static inline int xr21v1412_get_mask_table_idx(int baudrate, int clock_divisor)
-+{
-+	uint32_t value;
-+
-+	value = (INT_OSC * 10) / (baudrate / 10);
-+	value -= (clock_divisor * 100);
-+	value = value * 32 / 100;
-+
-+	return value;
-+}
-+
-+static void xr21v1412_configure_port(struct usb_serial_port *port)
-+{
-+	struct xr21v1412_private *priv = usb_get_serial_port_data(port);
-+	struct usb_device *udev = port->serial->dev;
-+	int block, fifo_enable, clock_divisor, table_index, char_fmt;
-+	u8 div0, div1, div2;
-+	u16 mask_rx, mask_tx;
-+
-+	block = xr21v1412_interface_num(port->serial) >> 1;
-+
-+	fifo_enable = (block == 0) ? FIFO_ENABLE_CHA : FIFO_ENABLE_CHB;
-+
-+	xr21v1412_xr_set_register(udev,
-+				  index(fifo_enable, REG_BLOCK_UART_MGR),
-+				  FIFO_ENABLE_TX);
-+	xr21v1412_xr_set_register(udev, index(REG_UART_ENABLE, block), 0x3);
-+	xr21v1412_xr_set_register(udev,
-+				  index(fifo_enable, REG_BLOCK_UART_MGR),
-+				  FIFO_ENABLE_TX | FIFO_ENABLE_RX);
-+
-+	clock_divisor = xr21v1412_get_clock_divisor(priv->baudrate);
-+
-+	div0 = REG_DIV0(clock_divisor);
-+	div1 = REG_DIV1(clock_divisor);
-+	div2 = REG_DIV2(clock_divisor);
-+
-+	xr21v1412_xr_set_register(udev, index(REG_UART_DIV0, block), div0);
-+	xr21v1412_xr_set_register(udev, index(REG_UART_DIV1, block), div1);
-+	xr21v1412_xr_set_register(udev, index(REG_UART_DIV2, block), div2);
-+
-+	table_index = xr21v1412_get_mask_table_idx(priv->baudrate,
-+						   clock_divisor);
-+
-+	if (table_index > CLKM_TABLE_ENTRIES - 1)
-+		table_index = CLKM_TABLE_ENTRIES - 1;
-+
-+	mask_tx = mask_lookup_table[table_index][CLKM_TX];
-+	mask_rx = (clock_divisor & 1) ?
-+			mask_lookup_table[table_index][CLKM_RX_ODD] :
-+			mask_lookup_table[table_index][CLKM_RX_EVEN];
-+
-+	xr21v1412_xr_set_register(udev, index(REG_UART_TXCLOCK_MASK0, block),
-+				  mask_tx & 0xff);
-+	xr21v1412_xr_set_register(udev, index(REG_UART_TXCLOCK_MASK1, block),
-+				  mask_tx >> 8);
-+	xr21v1412_xr_set_register(udev, index(REG_UART_RXCLOCK_MASK0, block),
-+				  mask_rx & 0xff);
-+	xr21v1412_xr_set_register(udev, index(REG_UART_RXCLOCK_MASK1, block),
-+				  mask_rx >> 8);
-+
-+	char_fmt = priv->data_bits;
-+	char_fmt |= priv->parity << 4;
-+	char_fmt |= (priv->stop_bits - 1) << 7;
-+
-+	xr21v1412_xr_set_register(udev, index(REG_UART_CHAR_FMT, block),
-+				  char_fmt);
-+}
-+
-+static int xr21v1412_port_probe(struct usb_serial_port *port)
-+{
-+	struct xr21v1412_private *priv;
-+
-+	if (!port->bulk_in_size || !port->bulk_out_size)
-+		return -ENODEV;
-+
-+	priv = kzalloc(sizeof(struct xr21v1412_private), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->baudrate = DEFAULT_BAUDRATE;
-+	priv->data_bits = DEFAULT_DATA_BITS;
-+	priv->stop_bits = DEFAULT_STOP_BITS;
-+	priv->parity = DEFAULT_PARITY;
-+
-+	usb_set_serial_port_data(port, priv);
-+
-+	xr21v1412_configure_port(port);
-+
-+	return 0;
-+}
-+
-+static int xr21v1412_port_remove(struct usb_serial_port *port)
-+{
-+	struct xr21v1412_private *priv;
-+
-+	priv = usb_get_serial_port_data(port);
-+	kfree(priv);
-+
-+	return 0;
-+}
-+
-+static void xr21v1412_set_termios(struct tty_struct *tty,
-+				  struct usb_serial_port *port,
-+				  struct ktermios *old_termios)
-+{
-+	struct xr21v1412_private *priv = usb_get_serial_port_data(port);
-+
-+	/* Redundant changes may cause the chip to lose bytes */
-+	if (old_termios && !tty_termios_hw_change(&tty->termios, old_termios))
-+		return;
-+
-+	priv->baudrate = tty_get_baud_rate(tty);
-+
-+	switch (C_CSIZE(tty)) {
-+	case CS7:
-+		priv->data_bits = 7;
-+		break;
-+	case CS8:
-+	default:
-+		priv->data_bits = 8;
-+		break;
-+	}
-+
-+	if (C_PARENB(tty)) {
-+		priv->parity = (C_PARODD(tty) == 0) ?
-+			 PARITY_EVEN : PARITY_ODD;
-+	} else {
-+		priv->parity = PARITY_NONE;
-+	}
-+
-+	priv->stop_bits = (C_CSTOPB(tty)) ? 2 : 1;
-+
-+	xr21v1412_configure_port(port);
-+}
-+
-+static int xr21v1412_open(struct tty_struct *tty, struct usb_serial_port *port)
-+{
-+	int result;
-+
-+	result = usb_serial_generic_open(tty, port);
-+	if (result) {
-+		usb_kill_urb(port->interrupt_in_urb);
-+		return result;
-+	}
-+
-+	/* Setup termios */
-+	if (tty)
-+		xr21v1412_set_termios(tty, port, NULL);
-+
-+	return 0;
-+}
-+
-+static void xr21v1412_close(struct usb_serial_port *port)
-+{
-+	usb_serial_generic_close(port);
-+	usb_kill_urb(port->interrupt_in_urb);
-+}
-+
-+static struct usb_serial_driver xr21v1412_device = {
-+	.driver = {
-+		.owner = THIS_MODULE,
-+		.name =	"xr21v1412",
-+	},
-+	.id_table = id_table,
-+	.num_ports = 1,
-+	.open = xr21v1412_open,
-+	.close = xr21v1412_close,
-+	.set_termios = xr21v1412_set_termios,
-+	.port_probe = xr21v1412_port_probe,
-+	.port_remove = xr21v1412_port_remove,
-+};
-+
-+static struct usb_serial_driver * const serial_drivers[] = {
-+	&xr21v1412_device, NULL,
-+};
-+
-+module_usb_serial_driver(serial_drivers, id_table);
-+
-+MODULE_DESCRIPTION("MaxLinear XR21V1412 USB to serial driver");
-+MODULE_AUTHOR("Angelo Dureghello <angelo.dureghello@timesys.com>");
-+MODULE_LICENSE("GPL v2");
--- 
-2.26.2
+Our platforms are more complicated than this example, there are dual-role
+controllers (chipidea/cdns3/dwc3) at SoCs. Taking cdns3 as an example:
 
+/sys/bus/platform/devices/: the devices on the platform bus
+5b110000.usb3: non-core part (cdns3/cdns3-imx.c)
+5b130000.cdns3: the dual-role core part (cdns3/core.c)
+xhci-hcd.1.auto: the host core part (xhci-plat.c)
+usb1/usb2: roothubs for USB2 and USB3
+
+root@imx8qmmek:~# cat /sys/bus/platform/devices/5b110000.usb3/
+5b130000.cdns3/  driver_override  power/           uevent
+consumers        modalias         subsystem/      =20
+driver/          of_node/         suppliers       =20
+root@imx8qmmek:~# cat /sys/bus/platform/devices/5b110000.usb3/5b130000.cdns=
+3/
+consumers        modalias         power/           uevent
+driver/          of_node/         subsystem/       usb_role/
+driver_override  pools            suppliers        xhci-hcd.1.auto/
+root@imx8qmmek:~# cat /sys/bus/platform/devices/5b110000.usb3/5b130000.cdns=
+3/xhci-hcd.1.auto/
+consumers        modalias         suppliers        usb2/
+driver/          power/           uevent          =20
+driver_override  subsystem/       usb1/           =20
+
+>=20
+> > So, one controller includes two platform devices, one for glue layer,
+> > one for common layer.
+>=20
+> Is there a mechanism that allows the xhci-hcd core driver to tell the=20
+> non-core or PHY driver to enable or disable these wakeup events?
+>=20
+
+Not easy, see my comments below.
+
+> Or maybe better would be a way for the non-core/PHY driver to examine=20
+> the root hub's usb_device structure to see whether these wakeup events=20
+> should be enabled.
+>=20
+> > You are right, ID/VBUS/DP/DM/RX signal changing occurs at the USB bus,
+> > and detected by USB PHY physically.
+> >   =20
+> > The controller device (core part) or glue layer device
+> > (non-core part)'s wakeup setting is only used to enable/disable platfor=
+m
+> > related powers (regulators) for USB (PHY) which are used to detect
+> > ID/VBUS/DP/DM/RX signal. If the platform doesn't need USB wakeup capabi=
+lities
+> > for system suspend, it could turn off related powers. Besides, it could=
+ tell
+> > the system if USB interrupt can be the wakeup interrupt.
+>=20
+> We want to make the system simple and logical for users, not necessarily=
+=20
+> easy for hardware engineers.  This means that wakeup events such as port=
+=20
+> connect, disconnect, and so on should be controlled by a single sysfs=20
+> setting, for a single device.  The most logical device for this purpose=20
+> is the root hub, as I mentioned earlier in this discussion.
+>=20
+> As a result, the wakeup settings for the other components (non-core or=20
+> PHY) should be based on the settings for the root hub.  If the root hub=20
+> is disabled for wakeup then the non-core hardware components shouldn't=20
+> generate any wakeup requests, no matter what their power/wakeup files=20
+> contain.  And if the root hub is enabled for wakeup then the non-core=20
+> hardware components should generate these requests, unless their own
+> power/wakeup settings prevent them from doing so.
+>=20
+> From these conclusions, it logically follows that the default wakeup=20
+> setting for the non-core components should be "enabled" -- unless those=20
+> components are physically incapable of waking up the system.
+>=20
+
+I agree with you that the default wakeup setting of core part for host
+(xhci-plat.c) should be "enabled", but if for the dual-role controller,
+the wakeup events like VBUS and ID do not related with roothub, we can't
+set core part for controller (cdns3/core.c) for defaulted enabled, and
+there is no thing like gadget bus's wakeup setting we could depend on.
+
+Besides, the non-core part (glue layer) somethings can't visit core
+part, we had to depend on itself wakeup setting, but not the child's
+wakeup setting.
+
+--=20
+
+Thanks,
+Peter Chen=
