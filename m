@@ -2,73 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E535219482
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jul 2020 01:43:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23F6F219501
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jul 2020 02:25:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726193AbgGHXnZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 8 Jul 2020 19:43:25 -0400
-Received: from sonic315-14.consmr.mail.bf2.yahoo.com ([74.6.134.124]:33025
-        "EHLO sonic315-14.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726072AbgGHXnY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jul 2020 19:43:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1594251803; bh=NajTNMrfMLb6UXcjRhYpYerQX8PtVBLz0oFgaMINSWY=; h=Date:From:Reply-To:Subject:References:From:Subject; b=HN/tC86bgd9/bl0s6IeF7/tTIZBIL2DEL9PrwfD4kVUQ1LMi5I6lm6FBpl/KwSFQtXb2wamnZsFd3+s5GQLHbvZWMPE6bXjI4LmWKNNPYvKpNYd3sAjlI0CyjTzL7o7u1puNU63WnQ1Z8M2eFD+rWQf552GdEtjWNou67aqixJruaCX5ShsT3Z4RDlSHK5DpnRLtjFprtIRwEAypKTAIpUorNSa6zq1lHcRWnnXxxYQ9EbLBfXzINd6YFYAXmFhNLal23cmRn1UKz9oOCp9M6AfdyUoMonpp1c/aM3uh4Jcp4jFAzT1qY+KjeNt92/9HQmgroPrObTyzEMWxbOrsvw==
-X-YMail-OSG: ApNgELwVM1n3OnKggDcyUQbs6uDdswzcjNLrTQsL0FqezVfk.7hmyNK3PaHUDN0
- Fsn_WbNiwszR6kSu31R5FivOmyuuv5HGWx7vVuii.TR2HlbiqUHnb2KlzsMgqhZpOc3bxngF3ZCb
- cRjUjqmEL8x7NK8_4CuBWKPmJONtXQdP6eEwuDdUqOBPmVdR.7ypGNjMG1VPKsScoWSt.7A5yhmA
- J43kLhp5ahK4mBMGvU4.JR_o3BDIyEiyYpP3hYwKLhNZK.D0iQPAM7a4rtxwY_eo1HUr3NkIaPe6
- hHQJnz4C_f5CUkrRKBS0TnQToQZaHceZkWlXIX2BYt67EZOf7exqrdPpkvFKJNNurrFMativbm7X
- mDXGcmqxGMtQO8p73kIrkugcvVcw6pfCffrhiWGa2CLPDzIwnvPrSrl2Dyz2kYJ2B3sMdkxTAzTw
- UFTNsjiosfnJ.muRTIuR463gJ7tynb1k5Z5DIoLMsfL9dDSAvLUE702q_dBjQWU8z9aajFL6CDHT
- AyvbVuTSdgZq0CN5KRXbBvvj7uy6wbMPnx9VyUWk7NAojM1w6lQZFJI.NUthoUq55vNMf3ue3myr
- uxEPLl7ZoENxjrNGXG3iGP1P3AGS96G_cdX9.huM.nOj6zxwcCPQzm03LSrzYfrEQgc_q.4Sw29h
- jaRgIuE4P6Txfrt7l5y78zYidR5.RsJC8yPOW0qLiXET0L_UkE4635ZZ70R2osfK8SXGb4f2ByOO
- Qiq4qs.nhY69m.8HhZirKOGzF3jnx.Gf54jlYPBvtoaHa3Y4d1avdZEWyd_iXIIuyxNSqS0nXIhl
- R7iNuM0QE6INCccjK5ALf1tW2lGzPRzn.wOCu5ySSbaY25yvW9iWs1bnoHCgOcYtvAC6Ku.9_e.H
- .Fqo8q9u34mG.Ww1bEN.DwwPqGsyEULUCHgDKKNlTqacYTYcagUuCGpVLsrXh3Vd5TNpP2bF_tOu
- N_NsaloNmJi3Fcsoqq46HpiAUjUN0sVCqRQjwQR8i9LDWRTPJv0XeLIdvdb8m8pedbVouWwB8iF5
- Mjiol6S3IovfHEv0DTZh2t6wHqLYaYU62.5LKz9LnUIX5zrxV_a_fhNrSJlEKXOTHfiRsQbRo80z
- QAZV6cXio6GnJdpJ4kCPiTI1mjTSsjTESifKh6OaTfQv6XxQEkTd_8eWqcp39icC4_ZN5Y84J6Gi
- 8DNCP5uG8pt.XHkpGgCgH8tIaYmf3oGqfeNRNsXJwKM39QT0VlSQmitMO.GAQgiNj4.MYWZJjSGf
- O1bJiE05RUl6IpfNcgWdLfbcZBBCS8vZ_CJis5oFQSjO3KymQlAYmNw.76xleRyiGZtJHSPx5AG7
- A
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic315.consmr.mail.bf2.yahoo.com with HTTP; Wed, 8 Jul 2020 23:43:23 +0000
-Date:   Wed, 8 Jul 2020 23:43:20 +0000 (UTC)
-From:   Ms lisa Hugh <lisahugh531@gmail.com>
-Reply-To: ms.lisahugh000@gmail.com
-Message-ID: <538527762.4633085.1594251800761@mail.yahoo.com>
-Subject: MASSAGE FROM(Ms Lisa hugh).
+        id S1726211AbgGIAY7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 8 Jul 2020 20:24:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57774 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726124AbgGIAY6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 8 Jul 2020 20:24:58 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE7FC08C5C1
+        for <linux-usb@vger.kernel.org>; Wed,  8 Jul 2020 17:24:58 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id f2so80063plr.8
+        for <linux-usb@vger.kernel.org>; Wed, 08 Jul 2020 17:24:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1CxPOUUi/VbatXi14/IdiolcKlTmPYq8+lcAvYMRRs8=;
+        b=f0Gn/DiROddgQ0JOGDsL/zcY8e5gJXQ8wjtLQMEVX/E3zlaxESrwNVOFUxxVMdDRcs
+         zvw7m60HZ337fPgv5XDmOSJlclWpicJTIrMZHrJ44f+Kx5iL2vKKsFytVukYBeYotzPI
+         +KdIu08a5h497ORTYdb7Z6vDFsCtei0lodH0s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1CxPOUUi/VbatXi14/IdiolcKlTmPYq8+lcAvYMRRs8=;
+        b=roRM7lDcZsFGJnqO26vpd21yNjq+GhM66r0mcYKbzuadIau/blAhKcmo+SN0711isP
+         VBQDReas5b0NYgyFW7DjgKb2rYThWy0wTbfuFZtN7pzHgnqU2pDLW6YuGwwzYKZ5B6Qn
+         9U0ZSjqHKC5Fa8Z8N3MkWnklpnR/vmi0DRuQgM6sdL5ni40OjzOa7L/NS215f8d9j62q
+         AS+3VJ0pcbgBWFKZM40lbC3Da+BQPyqX7qAoLxv3W8G5Cb3J63XR+0EZckNae9JqpQbm
+         tXsgvDWdLhSkLFeDBi5SW7gC+V8yTgOTGE1b3s29h6AjPHkjRMwXbph+/RktKxWfUsBg
+         dIVA==
+X-Gm-Message-State: AOAM5305hCY1yAh7HNSC+6+r1oa2/2dRQBbHEDCKwp+GXnzHl8XK1R/d
+        LFwU06FUmxUgKkQ8EJMLtVRIWQ==
+X-Google-Smtp-Source: ABdhPJwH24Hq43xyUPIKQoirRhi89n1ZnZIWcNdyQ4OjdOq/VNjzcHD/Lpc8U13AKmMahPw/SjftuQ==
+X-Received: by 2002:a17:902:b40f:: with SMTP id x15mr15105881plr.329.1594254297879;
+        Wed, 08 Jul 2020 17:24:57 -0700 (PDT)
+Received: from pmalani2.mtv.corp.google.com ([2620:15c:202:201:a28c:fdff:fef0:49dd])
+        by smtp.gmail.com with ESMTPSA id b18sm589184pju.10.2020.07.08.17.24.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jul 2020 17:24:57 -0700 (PDT)
+From:   Prashant Malani <pmalani@chromium.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org,
+        Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Rajmohan Mani <rajmohan.mani@intel.com>,
+        linux-usb@vger.kernel.org (open list:USB TYPEC INTEL PMC MUX DRIVER)
+Subject: [PATCH] usb: typec: intel_pmc_mux: Avoid connect request on disconnect
+Date:   Wed,  8 Jul 2020 17:24:41 -0700
+Message-Id: <20200709002441.1309189-1-pmalani@chromium.org>
+X-Mailer: git-send-email 2.27.0.383.g050319c2ae-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-References: <538527762.4633085.1594251800761.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.16197 YMailNodin Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+When pmc_usb_mux_set() is invoked when a device is disconnected, a valid
+scenario is for state->alt == NULL and state->mode == TYPEC_STATE_USB.
 
+In such cases, if a pmc_usb_disconnect() has already been issued (from
+either pmc_usb_set_orientation() when orientation ==
+TYPEC_ORIENTATION_NONE, or pmc_usb_set_role() when role ==
+USB_ROLE_NONE), a pmc_usb_connect() will be issued despite no peripheral
+being present.
 
-Dear Friend,
+This confuses the PMC and leads to all subsequent PMC IPC requests
+returning errors due to timeout.
 
-I am Ms Lisa hugh, work with the department of Audit and accounting manager here in the Bank(B.O.A).
+To prevent this, return early if the port orientation or role is already
+set to none.
 
-Please i need your assistance for the transferring of thIs fund to your bank account for both of us benefit for life time investment, amount (US$4.5M DOLLARS).
+Cc: Benson Leung <bleung@chromium.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Rajmohan Mani <rajmohan.mani@intel.com>
+Fixes: f3c1c41ebc67 ("usb: typec: intel_pmc_mux: Add support for USB4")
+Signed-off-by: Prashant Malani <pmalani@chromium.org>
+---
+ drivers/usb/typec/mux/intel_pmc_mux.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-I have every inquiry details to make the bank believe you and release the fund in within 5 banking working days with your full co-operation with me for success.
+diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
+index 2aba07c7b221..e4021e13af40 100644
+--- a/drivers/usb/typec/mux/intel_pmc_mux.c
++++ b/drivers/usb/typec/mux/intel_pmc_mux.c
+@@ -310,6 +310,9 @@ pmc_usb_mux_set(struct typec_mux *mux, struct typec_mux_state *state)
+ {
+ 	struct pmc_usb_port *port = typec_mux_get_drvdata(mux);
+ 
++	if (port->orientation == TYPEC_ORIENTATION_NONE || port->role == USB_ROLE_NONE)
++		return 0;
++
+ 	if (state->mode == TYPEC_STATE_SAFE)
+ 		return pmc_usb_mux_safe_state(port);
+ 	if (state->mode == TYPEC_STATE_USB)
+-- 
+2.27.0.383.g050319c2ae-goog
 
-Note/ 50% for you why 50% for me after success of the transfer to your bank account.
-
-Below information is what i need from you so will can be reaching each other
-
-1)Full name ...
-2)Private telephone number...
-3)Age...
-4)Nationality...
-5)Occupation ...
-
-
-Thanks.
-
-Ms Lisa hugh.
