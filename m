@@ -2,50 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E6C21991F
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jul 2020 09:06:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7BEF219972
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jul 2020 09:09:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726196AbgGIHGH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Jul 2020 03:06:07 -0400
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:12609 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726119AbgGIHGF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jul 2020 03:06:05 -0400
-X-UUID: c11e3528d1124c2485795b03bf731af9-20200709
+        id S1726306AbgGIHJu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Jul 2020 03:09:50 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:20654 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726183AbgGIHJu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jul 2020 03:09:50 -0400
+X-UUID: 0436a738b37e4c1c8e2c04569d38f0df-20200709
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=JCdqhnmOrA4bIemjU77tSTchJtgxF3g3bcC1iZfUepU=;
-        b=HPwNJUBfC5mAmkq6ABB39yQCe3NGDKGEbk1VUPa9jI4VaCMy2mBj9KHePSK1DwEMtakTDttKta+WIGVOwIS9uxhjCM76+XHmLW0Sb44trDkjmf9/cTXZi4KPlG0DATBXHmAkmNRteq6fR8+05dKpcWPADMv3bWdlbNwS5im3p74=;
-X-UUID: c11e3528d1124c2485795b03bf731af9-20200709
-Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=KN9hhzoH05uLeemQtJA/oz8qydIgDPv4Z3bmecE5HhY=;
+        b=UAPYBQ5shMTeK3m01pYEwcU3+kokwT2eBJO7UG9yllafqBt3pjL+Gmea8VXejA3JVAmGhXHEAIkgzhUKOVN8DNLj+Y6lytNYM/pTKfnmHBegb8r9LpiFk7iCOF11KKuMv+JT7mJILqqRBnh8Y2iMrpNSE9z2EslPXLHwkqbs4gY=;
+X-UUID: 0436a738b37e4c1c8e2c04569d38f0df-20200709
+Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
         (envelope-from <chunfeng.yun@mediatek.com>)
         (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 746041579; Thu, 09 Jul 2020 15:06:00 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS33N2.mediatek.inc
- (172.27.4.76) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 9 Jul
- 2020 15:05:59 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 9 Jul 2020 15:05:58 +0800
-Message-ID: <1594278321.23885.26.camel@mhfsdcap03>
-Subject: Re: [V2 PATCH] usb: mtu3: fix NULL pointer dereference
+        with ESMTP id 2115013973; Thu, 09 Jul 2020 15:09:43 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ MTKMBS31DR.mediatek.inc (172.27.6.102) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 9 Jul 2020 15:09:43 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 9 Jul 2020 15:09:40 +0800
 From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Felipe Balbi <balbi@kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Markus Elfring <Markus.Elfring@web.de>,
-        <linux-usb@vger.kernel.org>,
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Date:   Thu, 9 Jul 2020 15:05:21 +0800
-In-Reply-To: <87lfjt6vjm.fsf@kernel.org>
-References: <1593502942-24455-1-git-send-email-chunfeng.yun@mediatek.com>
-         <87lfjt6vjm.fsf@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        <linux-mediatek@lists.infradead.org>
+Subject: [v3 PATCH] usb: mtu3: remove unnecessary NULL pointer checks
+Date:   Thu, 9 Jul 2020 15:09:01 +0800
+Message-ID: <1594278541-24968-1-git-send-email-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 1.8.1.1.dirty
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: F3256F28A9F380161FC65DD621C2647F2BB492FBFB0CAC48B3BADA5C9B75167D2000:8
+Content-Type: text/plain
+X-TM-SNTS-SMTP: E0704D007BDFE6557E27D3F2225493E6F51B016FC12D4C256CBF91EF0F07D15E2000:8
 X-MTK:  N
 Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
@@ -53,14 +49,48 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gVGh1LCAyMDIwLTA3LTA5IGF0IDA5OjQwICswMzAwLCBGZWxpcGUgQmFsYmkgd3JvdGU6DQo+
-IENodW5mZW5nIFl1biA8Y2h1bmZlbmcueXVuQG1lZGlhdGVrLmNvbT4gd3JpdGVzOg0KPiANCj4g
-PiBTb21lIHBvaW50ZXJzIGFyZSBkZXJlZmVyZW5jZWQgYmVmb3JlIHN1Y2Nlc3NmdWwgY2hlY2tz
-Lg0KPiA+DQo+ID4gUmVwb3J0ZWQtYnk6IE1hcmt1cyBFbGZyaW5nIDxNYXJrdXMuRWxmcmluZ0B3
-ZWIuZGU+DQo+ID4gU2lnbmVkLW9mZi1ieTogQ2h1bmZlbmcgWXVuIDxjaHVuZmVuZy55dW5AbWVk
-aWF0ZWsuY29tPg0KPiANCj4gZG8geW91IG5lZWQgYSBGaXhlcyB0YWcgaGVyZT8gUGVyaGFwcyBh
-IENjIHN0YWJsZSB0b28/DQpJdCB3aWxsIG5vdCBjYXVzZSBzb21lcyBpc3N1ZXMsIEkgdGhpbmsg
-bm8gbmVlZCBhZGQgaXQuDQoNCkFjY29yZGluZyB0byBHcmVnJ3MgY29tbWVudCwgSSBndWVzcyBo
-ZSBtZWFucyBubyBuZWVkIGNoZWNrIHRoZXNlDQpwb2ludGVycyBhdCBhbGwsIHNvIEknbGwgc2Vu
-ZCBhIG5ldyB2ZXJzaW9uIHRvIHJlbW92ZSBjaGVja3MuDQoNClRoYW5rIHlvdQ0KDQo+IA0KDQo=
+VGhlIGNsYXNzIGRyaXZlciB3aWxsIGVuc3VyZSB0aGUgcGFyYW1ldGVycyBhcmUgbm90IE5VTEwN
+CnBvaW50ZXJzIGJlZm9yZSBjYWxsIHRoZSBob29rIGZ1bmN0aW9uIG9mIHVzYl9lcF9vcHMsDQpz
+byBubyBuZWVkIGNoZWNrIHRoZW0gYWdhaW4uDQoNClJlcG9ydGVkLWJ5OiBNYXJrdXMgRWxmcmlu
+ZyA8TWFya3VzLkVsZnJpbmdAd2ViLmRlPg0KU2lnbmVkLW9mZi1ieTogQ2h1bmZlbmcgWXVuIDxj
+aHVuZmVuZy55dW5AbWVkaWF0ZWsuY29tPg0KLS0tDQp2MzogcmVtb3ZlIHVubmVjZXNzYXJ5IE5V
+TEwgcG9pbnRlciBjaGVja3MgYnV0IG5vdCBhZGQgbW9yZSBjaGVja3MuDQoNCnYyOiBub3RoaW5n
+IGNoYW5nZWQsIGJ1dCBhYmFuZG9uIGFub3RoZXIgcGF0Y2guDQotLS0NCiBkcml2ZXJzL3VzYi9t
+dHUzL210dTNfZ2FkZ2V0LmMgfCAyNSArKysrKystLS0tLS0tLS0tLS0tLS0tLS0tDQogMSBmaWxl
+IGNoYW5nZWQsIDYgaW5zZXJ0aW9ucygrKSwgMTkgZGVsZXRpb25zKC0pDQoNCmRpZmYgLS1naXQg
+YS9kcml2ZXJzL3VzYi9tdHUzL210dTNfZ2FkZ2V0LmMgYi9kcml2ZXJzL3VzYi9tdHUzL210dTNf
+Z2FkZ2V0LmMNCmluZGV4IGY5MzczMmUuLjZiMjZjYjggMTAwNjQ0DQotLS0gYS9kcml2ZXJzL3Vz
+Yi9tdHUzL210dTNfZ2FkZ2V0LmMNCisrKyBiL2RyaXZlcnMvdXNiL210dTMvbXR1M19nYWRnZXQu
+Yw0KQEAgLTI2MywyMyArMjYzLDE1IEBAIHZvaWQgbXR1M19mcmVlX3JlcXVlc3Qoc3RydWN0IHVz
+Yl9lcCAqZXAsIHN0cnVjdCB1c2JfcmVxdWVzdCAqcmVxKQ0KIHN0YXRpYyBpbnQgbXR1M19nYWRn
+ZXRfcXVldWUoc3RydWN0IHVzYl9lcCAqZXAsDQogCQlzdHJ1Y3QgdXNiX3JlcXVlc3QgKnJlcSwg
+Z2ZwX3QgZ2ZwX2ZsYWdzKQ0KIHsNCi0Jc3RydWN0IG10dTNfZXAgKm1lcDsNCi0Jc3RydWN0IG10
+dTNfcmVxdWVzdCAqbXJlcTsNCi0Jc3RydWN0IG10dTMgKm10dTsNCisJc3RydWN0IG10dTNfZXAg
+Km1lcCA9IHRvX210dTNfZXAoZXApOw0KKwlzdHJ1Y3QgbXR1M19yZXF1ZXN0ICptcmVxID0gdG9f
+bXR1M19yZXF1ZXN0KHJlcSk7DQorCXN0cnVjdCBtdHUzICptdHUgPSBtZXAtPm10dTsNCiAJdW5z
+aWduZWQgbG9uZyBmbGFnczsNCiAJaW50IHJldCA9IDA7DQogDQotCWlmICghZXAgfHwgIXJlcSkN
+Ci0JCXJldHVybiAtRUlOVkFMOw0KLQ0KIAlpZiAoIXJlcS0+YnVmKQ0KIAkJcmV0dXJuIC1FTk9E
+QVRBOw0KIA0KLQltZXAgPSB0b19tdHUzX2VwKGVwKTsNCi0JbXR1ID0gbWVwLT5tdHU7DQotCW1y
+ZXEgPSB0b19tdHUzX3JlcXVlc3QocmVxKTsNCi0JbXJlcS0+bXR1ID0gbXR1Ow0KLQ0KIAlpZiAo
+bXJlcS0+bWVwICE9IG1lcCkNCiAJCXJldHVybiAtRUlOVkFMOw0KIA0KQEAgLTMwMyw2ICsyOTUs
+NyBAQCBzdGF0aWMgaW50IG10dTNfZ2FkZ2V0X3F1ZXVlKHN0cnVjdCB1c2JfZXAgKmVwLA0KIAkJ
+cmV0dXJuIC1FU0hVVERPV047DQogCX0NCiANCisJbXJlcS0+bXR1ID0gbXR1Ow0KIAltcmVxLT5y
+ZXF1ZXN0LmFjdHVhbCA9IDA7DQogCW1yZXEtPnJlcXVlc3Quc3RhdHVzID0gLUVJTlBST0dSRVNT
+Ow0KIA0KQEAgLTMzNSwxMSArMzI4LDExIEBAIHN0YXRpYyBpbnQgbXR1M19nYWRnZXRfZGVxdWV1
+ZShzdHJ1Y3QgdXNiX2VwICplcCwgc3RydWN0IHVzYl9yZXF1ZXN0ICpyZXEpDQogCXN0cnVjdCBt
+dHUzX2VwICptZXAgPSB0b19tdHUzX2VwKGVwKTsNCiAJc3RydWN0IG10dTNfcmVxdWVzdCAqbXJl
+cSA9IHRvX210dTNfcmVxdWVzdChyZXEpOw0KIAlzdHJ1Y3QgbXR1M19yZXF1ZXN0ICpyOw0KKwlz
+dHJ1Y3QgbXR1MyAqbXR1ID0gbWVwLT5tdHU7DQogCXVuc2lnbmVkIGxvbmcgZmxhZ3M7DQogCWlu
+dCByZXQgPSAwOw0KLQlzdHJ1Y3QgbXR1MyAqbXR1ID0gbWVwLT5tdHU7DQogDQotCWlmICghZXAg
+fHwgIXJlcSB8fCBtcmVxLT5tZXAgIT0gbWVwKQ0KKwlpZiAobXJlcS0+bWVwICE9IG1lcCkNCiAJ
+CXJldHVybiAtRUlOVkFMOw0KIA0KIAlkZXZfZGJnKG10dS0+ZGV2LCAiJXMgOiByZXE9JXBcbiIs
+IF9fZnVuY19fLCByZXEpOw0KQEAgLTM3OSw5ICszNzIsNiBAQCBzdGF0aWMgaW50IG10dTNfZ2Fk
+Z2V0X2VwX3NldF9oYWx0KHN0cnVjdCB1c2JfZXAgKmVwLCBpbnQgdmFsdWUpDQogCXVuc2lnbmVk
+IGxvbmcgZmxhZ3M7DQogCWludCByZXQgPSAwOw0KIA0KLQlpZiAoIWVwKQ0KLQkJcmV0dXJuIC1F
+SU5WQUw7DQotDQogCWRldl9kYmcobXR1LT5kZXYsICIlcyA6ICVzLi4uIiwgX19mdW5jX18sIGVw
+LT5uYW1lKTsNCiANCiAJc3Bpbl9sb2NrX2lycXNhdmUoJm10dS0+bG9jaywgZmxhZ3MpOw0KQEAg
+LTQyNCw5ICs0MTQsNiBAQCBzdGF0aWMgaW50IG10dTNfZ2FkZ2V0X2VwX3NldF93ZWRnZShzdHJ1
+Y3QgdXNiX2VwICplcCkNCiB7DQogCXN0cnVjdCBtdHUzX2VwICptZXAgPSB0b19tdHUzX2VwKGVw
+KTsNCiANCi0JaWYgKCFlcCkNCi0JCXJldHVybiAtRUlOVkFMOw0KLQ0KIAltZXAtPndlZGdlZCA9
+IDE7DQogDQogCXJldHVybiB1c2JfZXBfc2V0X2hhbHQoZXApOw0KLS0gDQoxLjkuMQ0K
 
