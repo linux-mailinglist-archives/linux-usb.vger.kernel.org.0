@@ -2,32 +2,38 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D236A21BC6B
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Jul 2020 19:40:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8615121BD5D
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Jul 2020 21:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728142AbgGJRjs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Jul 2020 13:39:48 -0400
-Received: from smtp.al2klimov.de ([78.46.175.9]:60576 "EHLO smtp.al2klimov.de"
+        id S1727915AbgGJTJc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Jul 2020 15:09:32 -0400
+Received: from smtp.al2klimov.de ([78.46.175.9]:57874 "EHLO smtp.al2klimov.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727866AbgGJRjr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 10 Jul 2020 13:39:47 -0400
+        id S1726725AbgGJTJc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 10 Jul 2020 15:09:32 -0400
 Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
-        by smtp.al2klimov.de (Postfix) with ESMTPA id 1CD87BC078;
-        Fri, 10 Jul 2020 17:39:43 +0000 (UTC)
+        by smtp.al2klimov.de (Postfix) with ESMTPA id 2BE6DBC06E;
+        Fri, 10 Jul 2020 19:09:25 +0000 (UTC)
 From:   "Alexander A. Klimov" <grandmaster@al2klimov.de>
-To:     valentina.manea.m@gmail.com, shuah@kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
-Subject: [PATCH] USB OVER IP DRIVER: Replace HTTP links with HTTPS ones
-Date:   Fri, 10 Jul 2020 19:39:31 +0200
-Message-Id: <20200710173931.29270-1-grandmaster@al2klimov.de>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        alexandre.belloni@bootlin.com, grandmaster@al2klimov.de,
+        clabbe@baylibre.com, arnd@arndb.de, yuehaibing@huawei.com,
+        yanaijie@huawei.com, baijiaju1990@gmail.com,
+        chunfeng.yun@mediatek.com, swboyd@chromium.org,
+        christophe.jaillet@wanadoo.fr, jaswinder.singh@linaro.org,
+        linux-geode@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: gadget: Replace HTTP links with HTTPS ones
+Date:   Fri, 10 Jul 2020 21:09:19 +0200
+Message-Id: <20200710190919.31464-1-grandmaster@al2klimov.de>
+In-Reply-To: <20200710065939.GA1153760@kroah.com>
+References: <20200710065939.GA1153760@kroah.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spamd-Bar: ++++++
-X-Spam-Level: ******
+X-Spamd-Bar: +++++
+X-Spam-Level: *****
 Authentication-Results: smtp.al2klimov.de;
         auth=pass smtp.auth=aklimov@al2klimov.de smtp.mailfrom=grandmaster@al2klimov.de
-X-Spam: Yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
@@ -50,36 +56,95 @@ For each file:
 
 Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
 ---
- Continuing my work started at 93431e0607e5.
- See also: git log --oneline '--author=Alexander A. Klimov <grandmaster@al2klimov.de>' v5.7..master
- (Actually letting a shell for loop submit all this stuff for me.)
+ Sorry, my mistake.
+ Now better?
 
- If there are any URLs to be removed completely or at least not HTTPSified:
- Just clearly say so and I'll *undo my change*.
- See also: https://lkml.org/lkml/2020/6/27/64
+ drivers/usb/gadget/udc/amd5536udc.h     | 2 +-
+ drivers/usb/gadget/udc/amd5536udc_pci.c | 2 +-
+ drivers/usb/gadget/udc/gr_udc.c         | 2 +-
+ drivers/usb/gadget/udc/gr_udc.h         | 2 +-
+ drivers/usb/gadget/udc/max3420_udc.c    | 2 +-
+ drivers/usb/gadget/udc/snps_udc_core.c  | 2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
 
- If there are any valid, but yet not changed URLs:
- See: https://lkml.org/lkml/2020/6/26/837
-
- If you apply the patch, please let me know.
-
-
- tools/usb/usbip/vudc/vudc_server_example.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/usb/usbip/vudc/vudc_server_example.sh b/tools/usb/usbip/vudc/vudc_server_example.sh
-index 2736be64f203..fed53f51ee01 100755
---- a/tools/usb/usbip/vudc/vudc_server_example.sh
-+++ b/tools/usb/usbip/vudc/vudc_server_example.sh
-@@ -24,7 +24,7 @@
- # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- # OTHER DEALINGS IN THE SOFTWARE.
- #
--# For more information, please refer to <http://unlicense.org/>
-+# For more information, please refer to <https://unlicense.org/>
- ################################################################################
+diff --git a/drivers/usb/gadget/udc/amd5536udc.h b/drivers/usb/gadget/udc/amd5536udc.h
+index 0262383f8c79..3296f3fcee48 100644
+--- a/drivers/usb/gadget/udc/amd5536udc.h
++++ b/drivers/usb/gadget/udc/amd5536udc.h
+@@ -2,7 +2,7 @@
+ /*
+  * amd5536.h -- header for AMD 5536 UDC high/full speed USB device controller
+  *
+- * Copyright (C) 2007 AMD (http://www.amd.com)
++ * Copyright (C) 2007 AMD (https://www.amd.com)
+  * Author: Thomas Dahlmann
+  */
  
- ################################################################################
+diff --git a/drivers/usb/gadget/udc/amd5536udc_pci.c b/drivers/usb/gadget/udc/amd5536udc_pci.c
+index 80685e4306f3..a98b54b30882 100644
+--- a/drivers/usb/gadget/udc/amd5536udc_pci.c
++++ b/drivers/usb/gadget/udc/amd5536udc_pci.c
+@@ -2,7 +2,7 @@
+ /*
+  * amd5536udc_pci.c -- AMD 5536 UDC high/full speed USB device controller
+  *
+- * Copyright (C) 2005-2007 AMD (http://www.amd.com)
++ * Copyright (C) 2005-2007 AMD (https://www.amd.com)
+  * Author: Thomas Dahlmann
+  */
+ 
+diff --git a/drivers/usb/gadget/udc/gr_udc.c b/drivers/usb/gadget/udc/gr_udc.c
+index 7164ad9800f1..8fe0b65772b9 100644
+--- a/drivers/usb/gadget/udc/gr_udc.c
++++ b/drivers/usb/gadget/udc/gr_udc.c
+@@ -8,7 +8,7 @@
+  * GRLIB VHDL IP core library.
+  *
+  * Full documentation of the GRUSBDC core can be found here:
+- * http://www.gaisler.com/products/grlib/grip.pdf
++ * https://www.gaisler.com/products/grlib/grip.pdf
+  *
+  * Contributors:
+  * - Andreas Larsson <andreas@gaisler.com>
+diff --git a/drivers/usb/gadget/udc/gr_udc.h b/drivers/usb/gadget/udc/gr_udc.h
+index 417ad2aa2cc7..ac5b3f65adb5 100644
+--- a/drivers/usb/gadget/udc/gr_udc.h
++++ b/drivers/usb/gadget/udc/gr_udc.h
+@@ -8,7 +8,7 @@
+  * GRLIB VHDL IP core library.
+  *
+  * Full documentation of the GRUSBDC core can be found here:
+- * http://www.gaisler.com/products/grlib/grip.pdf
++ * https://www.gaisler.com/products/grlib/grip.pdf
+  *
+  * Contributors:
+  * - Andreas Larsson <andreas@gaisler.com>
+diff --git a/drivers/usb/gadget/udc/max3420_udc.c b/drivers/usb/gadget/udc/max3420_udc.c
+index 23f33946d80c..ea8cf9341dd5 100644
+--- a/drivers/usb/gadget/udc/max3420_udc.c
++++ b/drivers/usb/gadget/udc/max3420_udc.c
+@@ -7,7 +7,7 @@
+  *
+  * Based on:
+  *	o MAX3420E datasheet
+- *		http://datasheets.maximintegrated.com/en/ds/MAX3420E.pdf
++ *		https://datasheets.maximintegrated.com/en/ds/MAX3420E.pdf
+  *	o MAX342{0,1}E Programming Guides
+  *		https://pdfserv.maximintegrated.com/en/an/AN3598.pdf
+  *		https://pdfserv.maximintegrated.com/en/an/AN3785.pdf
+diff --git a/drivers/usb/gadget/udc/snps_udc_core.c b/drivers/usb/gadget/udc/snps_udc_core.c
+index 3fcded31405a..1102077facdc 100644
+--- a/drivers/usb/gadget/udc/snps_udc_core.c
++++ b/drivers/usb/gadget/udc/snps_udc_core.c
+@@ -2,7 +2,7 @@
+ /*
+  * amd5536.c -- AMD 5536 UDC high/full speed USB device controller
+  *
+- * Copyright (C) 2005-2007 AMD (http://www.amd.com)
++ * Copyright (C) 2005-2007 AMD (https://www.amd.com)
+  * Author: Thomas Dahlmann
+  */
+ 
 -- 
 2.27.0
 
