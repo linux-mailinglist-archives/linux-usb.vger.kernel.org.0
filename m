@@ -2,67 +2,168 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D835021AD14
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Jul 2020 04:30:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D83F21AD46
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Jul 2020 05:08:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726830AbgGJCar (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Jul 2020 22:30:47 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:47983 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726446AbgGJCar (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jul 2020 22:30:47 -0400
-X-UUID: 593811f480164a9ea9c7c0c594f73d8b-20200710
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=Kd0C+S4Ayp+24088Gsa5JiqqukKJHb4/Z3Dk20GZNaA=;
-        b=rD3EhzO4i+X+SbryJ8Nm4eTbBaXYYDXu/tvU8MWyfwbbt6SFX+bDQ7T9+y8sUZZt20w+Jy8gtnFuOU8S3pMx6rqZ9eMXUPRzIa6WbTT4zM5UTMUhQaqpFmfyB/b+o//4CTXqbSZ7hEUfRXKGtuKmJyhBt9EH/c688eN6j3rIG1s=;
-X-UUID: 593811f480164a9ea9c7c0c594f73d8b-20200710
-Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 299434186; Fri, 10 Jul 2020 10:30:26 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- MTKMBS31N2.mediatek.inc (172.27.4.87) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 10 Jul 2020 10:30:19 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 10 Jul 2020 10:30:18 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Mathias Nyman <mathias.nyman@intel.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        stable <stable@vger.kernel.org>
-Subject: [PATCH] usb: xhci-mtk: fix the failure of bandwidth allocation
-Date:   Fri, 10 Jul 2020 10:29:42 +0800
-Message-ID: <1594348182-431-1-git-send-email-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 1.8.1.1.dirty
+        id S1727074AbgGJDIz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Jul 2020 23:08:55 -0400
+Received: from mail29.static.mailgun.info ([104.130.122.29]:23405 "EHLO
+        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727076AbgGJDIv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jul 2020 23:08:51 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1594350530; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=u61ezaq/mKofrwr3vkAw+UCv+XkcrfufCL8jWoBDK3M=; b=jL7zy/SyJmlwWdk4Su+nnOZovYH34nZ1f0cm2vn2wdO7XwxouroFafXexJMnusurZ8htSbsa
+ jtpnEG4Y1rv8NFQMPBziBBPNLWv4jdX7rcEmO5OHZIUH+KphwKnVYXijkXcUSgB5mKLlWnTN
+ ds2mLje5HbbEXEUJV9yMi4g2h00=
+X-Mailgun-Sending-Ip: 104.130.122.29
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
+ 5f07dbc119b27ae9cedbee15 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 10 Jul 2020 03:08:49
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 8E7FEC433CA; Fri, 10 Jul 2020 03:08:47 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.110.59.15] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id DD3F5C433C8;
+        Fri, 10 Jul 2020 03:08:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org DD3F5C433C8
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=wcheng@codeaurora.org
+Subject: Re: [PATCH v5 2/6] dt-bindings: usb: Add Qualcomm PMIC type C
+ controller dt-binding
+To:     Rob Herring <robh@kernel.org>
+Cc:     lgirdwood@gmail.com, mark.rutland@arm.com, agross@kernel.org,
+        broonie@kernel.org, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org, bjorn.andersson@linaro.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jackp@codeaurora.org, rdunlap@infradead.org,
+        bryan.odonoghue@linaro.org
+References: <20200703015102.27295-1-wcheng@codeaurora.org>
+ <20200703015102.27295-3-wcheng@codeaurora.org>
+ <20200709224626.GA1021653@bogus>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <bef7638a-3f1d-2c92-a7a0-c7a17d2f63c0@codeaurora.org>
+Date:   Thu, 9 Jul 2020 20:08:45 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: 3E47718F58DC4962AF1F31FFDB8BDCC6908A18FE5C4F4A0FE152DF2C456BC00A2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <20200709224626.GA1021653@bogus>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-VGhlIHdNYXhQYWNrZXRTaXplIGZpZWxkIG9mIGVuZHBvaW50IGRlc2NyaXB0b3IgbWF5IGJlIHpl
-cm8NCmFzIGRlZmF1bHQgdmFsdWUgaW4gYWx0ZXJuYXRlIGludGVyZmFjZSwgYW5kIHRoZXkgYXJl
-IG5vdA0KYWN0dWFsbHkgc2VsZWN0ZWQgd2hlbiBzdGFydCBzdHJlYW0sIHNvIHNraXAgdGhlbSB3
-aGVuIHRyeSB0bw0KYWxsb2NhdGUgYmFuZHdpZHRoLg0KDQpDYzogc3RhYmxlIDxzdGFibGVAdmdl
-ci5rZXJuZWwub3JnPg0KU2lnbmVkLW9mZi1ieTogQ2h1bmZlbmcgWXVuIDxjaHVuZmVuZy55dW5A
-bWVkaWF0ZWsuY29tPg0KLS0tDQogZHJpdmVycy91c2IvaG9zdC94aGNpLW10ay1zY2guYyB8IDQg
-KysrKw0KIDEgZmlsZSBjaGFuZ2VkLCA0IGluc2VydGlvbnMoKykNCg0KZGlmZiAtLWdpdCBhL2Ry
-aXZlcnMvdXNiL2hvc3QveGhjaS1tdGstc2NoLmMgYi9kcml2ZXJzL3VzYi9ob3N0L3hoY2ktbXRr
-LXNjaC5jDQppbmRleCBmZWE1NTU1Li40NWM1NGQ1NiAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvdXNi
-L2hvc3QveGhjaS1tdGstc2NoLmMNCisrKyBiL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1tdGstc2No
-LmMNCkBAIC01NTcsNiArNTU3LDEwIEBAIHN0YXRpYyBib29sIG5lZWRfYndfc2NoKHN0cnVjdCB1
-c2JfaG9zdF9lbmRwb2ludCAqZXAsDQogCWlmIChpc19mc19vcl9scyhzcGVlZCkgJiYgIWhhc190
-dCkNCiAJCXJldHVybiBmYWxzZTsNCiANCisJLyogc2tpcCBlbmRwb2ludCB3aXRoIHplcm8gbWF4
-cGt0ICovDQorCWlmICh1c2JfZW5kcG9pbnRfbWF4cCgmZXAtPmRlc2MpID09IDApDQorCQlyZXR1
-cm4gZmFsc2U7DQorDQogCXJldHVybiB0cnVlOw0KIH0NCiANCi0tIA0KMS45LjENCg==
 
+On 7/9/2020 3:46 PM, Rob Herring wrote:
+> 
+> Why is all the connector schema duplicated here? You only need things 
+> that are further constrained like 'compatible'.
+> 
+
+Hi Rob,
+
+Most of the properties in this dt-binding are going to be constrained by
+the definitions/values specified by usb-connector.  I can add individual
+references to each property, such as compatible, power-role, data-role
+and ports, if that is the recommended approach.
+
+> 
+> 'remote-endpoint' in not an array.
+> 
+
+Agreed, I have removed the maxItems parameter.
+
+> 
+> So USB-SS data can come from 'type C mux' or 'role switch node'? That 
+> seems odd.
+> 
+
+This was one of the interpretations, which might work with the current
+usb-connector model.  From the previous block diagram I shared, we can
+see that the SS path has two potential "endpoints," one to the mux and
+another to the USB controller on the SOC.
+
+Another design consideration is when the device supports the "Audio
+Adapter Accessory Mode."  The audio accessory is mentioned in the type C
+spec as an adapter which will utilize the USB D+/- lines for audio
+output.  So now, you could potentially have something like below:
+
+				   _______		 _______
+                            ______|FUSB302|		|SOC	|
+			   |	  |Type C |		|	|
+			   |      |Cntrl  |__I2C_______	|	|
+			   |	  |_______|		|	|
+ ___                       |       			|	|
+|   |______ CC1/2 _________|				|	|
+|   |				   _______		|	|
+|   |			     ____*|Charger|		|	|
+|   |			    |	  |HW     |		|	|
+|   |			    |     |_______|		|	|
+|   |			    |	   ________      	|	|
+|   |______ HS DP/DM _______|____*|MAX20328|_HS D+/D-__	|	|
+|   |				  |________|__Audio Out_|	|
+|   |				   ________		|	|
+|   |______ SS RX/TX1 __________**|FUSB304 |_SS RX/TX**_|	|
+|   |______ SS RX/TX2 ____________|USB Mux |		|_______|
+|   |                             |________|
+|   |
+|___|
+
+With this kind of device, it would make sense to have multiple endpoints
+per path, which can be represented like the following:
+
+connector {
+        compatible = "usb-c-connector";
+	...
+        ports {
+        	port@0 {
+			...
+			//Charger endpoint*
+			usb_con_hs_chg: endpoint@0 {
+				reg = <0>;
+				remote-endpoint = <&max77865_usbc_hs>;
+			};
+			//Audio accessory adapter mux*
+			usb_con_hs_audio: endpoint@1 {
+				reg = <1>;
+				remote-endpoint = <&analog_audio>;
+			};
+                };
+		port@1 {
+			...
+			//USB3 lane mux**
+			usb3_data_ss: endpoint@0 {
+				reg = <0>;
+				remote-endpoint = <&qmp_ss_mux>;
+			};
+			//USB3 SOC controller**
+			usb3_role: endpoint@1 {
+				reg = <1>;
+				remote-endpoint = <&dwc3_drd_switch>;
+			};
+		};
+	};
+};
+
+Thanks
+Wesley Cheng
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
