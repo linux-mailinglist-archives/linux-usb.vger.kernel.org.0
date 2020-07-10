@@ -2,72 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FBC821AB3A
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Jul 2020 01:07:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D835021AD14
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Jul 2020 04:30:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727066AbgGIXHP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Jul 2020 19:07:15 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:43406 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726222AbgGIXHP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jul 2020 19:07:15 -0400
-Received: by mail-io1-f65.google.com with SMTP id k23so4088079iom.10;
-        Thu, 09 Jul 2020 16:07:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kpUPxSg4+S4VKiL42RctcMIj4F/VgQ6lAZPDiD3WZ1c=;
-        b=ZeTnPOo3ZOoOX4XMg2KJe3J23TDhOO1Xxx9fXdS2MRSdi7+3fKBFAEh8zd1RtuG+79
-         gys1YrjijNzy3qzss+c9sOjFAYgcD6YjcdgmPiC+1ve8LujKzladAcB/O8dW09wLaTjV
-         MR/y1mSRsHyUtY+3X9UPfJu/ameC5M8n0t+CuMP57cizZKrb9frzfaPz79lAj+MveKcl
-         EQteb0bXjHpluLSSg4kpmkLtWSTlF5yo9ujAgV/xEuSoDRu0qqYf6sE9PQGcX9IE+nUk
-         7Y9uZDtNxCQByvtPJgmRzcRa+0ZOYsqgYWEl98cENkJtHtNByI3V+/XNqSxRsT6f2KB9
-         P/NA==
-X-Gm-Message-State: AOAM530WsQXWaDe6ZShgg+MWiK4SWNtfTSHmUAeOUbvk3QtWvXb/DkWv
-        HpNo3cf2TM5vJowbTcuDtg==
-X-Google-Smtp-Source: ABdhPJwaXaUIQd+wSZRsx/L/XhnFNFY/DGeEFJ7JNWbK+VHIBsG3tfiZgEqUQ8jf1hhuDf+OE7e2aQ==
-X-Received: by 2002:a5d:94cc:: with SMTP id y12mr23644866ior.133.1594336034560;
-        Thu, 09 Jul 2020 16:07:14 -0700 (PDT)
-Received: from xps15 ([64.188.179.254])
-        by smtp.gmail.com with ESMTPSA id c77sm2720628ill.13.2020.07.09.16.07.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2020 16:07:14 -0700 (PDT)
-Received: (nullmailer pid 1063353 invoked by uid 1000);
-        Thu, 09 Jul 2020 23:07:12 -0000
-Date:   Thu, 9 Jul 2020 17:07:12 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     "Ramuthevar,Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>
-Cc:     devicetree@vger.kernel.org, andriy.shevchenko@intel.com,
-        yin1.li@intel.com, p.zabel@pengutronix.de,
-        linux-kernel@vger.kernel.org, balbi@kernel.org,
-        gregkh@linuxfoundation.org, cheol.yong.kim@intel.com,
-        linux-usb@vger.kernel.org, qi-ming.wu@intel.com
-Subject: Re: [PATCH v4 1/2] dt-bindings: usb: Add USB PHY support for Intel
- LGM SoC
-Message-ID: <20200709230712.GA1063293@bogus>
-References: <20200617035818.54110-1-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20200617035818.54110-2-vadivel.muruganx.ramuthevar@linux.intel.com>
+        id S1726830AbgGJCar (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Jul 2020 22:30:47 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:47983 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726446AbgGJCar (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jul 2020 22:30:47 -0400
+X-UUID: 593811f480164a9ea9c7c0c594f73d8b-20200710
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=Kd0C+S4Ayp+24088Gsa5JiqqukKJHb4/Z3Dk20GZNaA=;
+        b=rD3EhzO4i+X+SbryJ8Nm4eTbBaXYYDXu/tvU8MWyfwbbt6SFX+bDQ7T9+y8sUZZt20w+Jy8gtnFuOU8S3pMx6rqZ9eMXUPRzIa6WbTT4zM5UTMUhQaqpFmfyB/b+o//4CTXqbSZ7hEUfRXKGtuKmJyhBt9EH/c688eN6j3rIG1s=;
+X-UUID: 593811f480164a9ea9c7c0c594f73d8b-20200710
+Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 299434186; Fri, 10 Jul 2020 10:30:26 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ MTKMBS31N2.mediatek.inc (172.27.4.87) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 10 Jul 2020 10:30:19 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 10 Jul 2020 10:30:18 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Mathias Nyman <mathias.nyman@intel.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        stable <stable@vger.kernel.org>
+Subject: [PATCH] usb: xhci-mtk: fix the failure of bandwidth allocation
+Date:   Fri, 10 Jul 2020 10:29:42 +0800
+Message-ID: <1594348182-431-1-git-send-email-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 1.8.1.1.dirty
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200617035818.54110-2-vadivel.muruganx.ramuthevar@linux.intel.com>
+Content-Type: text/plain
+X-TM-SNTS-SMTP: 3E47718F58DC4962AF1F31FFDB8BDCC6908A18FE5C4F4A0FE152DF2C456BC00A2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 17 Jun 2020 11:58:17 +0800, Ramuthevar,Vadivel MuruganX wrote:
-> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
-> 
-> Add the dt-schema to support USB PHY on Intel LGM SoC
-> 
-> Signed-off-by: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
-> ---
->  .../devicetree/bindings/usb/intel,lgm-usb-phy.yaml | 53 ++++++++++++++++++++++
->  1 file changed, 53 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/intel,lgm-usb-phy.yaml
-> 
+VGhlIHdNYXhQYWNrZXRTaXplIGZpZWxkIG9mIGVuZHBvaW50IGRlc2NyaXB0b3IgbWF5IGJlIHpl
+cm8NCmFzIGRlZmF1bHQgdmFsdWUgaW4gYWx0ZXJuYXRlIGludGVyZmFjZSwgYW5kIHRoZXkgYXJl
+IG5vdA0KYWN0dWFsbHkgc2VsZWN0ZWQgd2hlbiBzdGFydCBzdHJlYW0sIHNvIHNraXAgdGhlbSB3
+aGVuIHRyeSB0bw0KYWxsb2NhdGUgYmFuZHdpZHRoLg0KDQpDYzogc3RhYmxlIDxzdGFibGVAdmdl
+ci5rZXJuZWwub3JnPg0KU2lnbmVkLW9mZi1ieTogQ2h1bmZlbmcgWXVuIDxjaHVuZmVuZy55dW5A
+bWVkaWF0ZWsuY29tPg0KLS0tDQogZHJpdmVycy91c2IvaG9zdC94aGNpLW10ay1zY2guYyB8IDQg
+KysrKw0KIDEgZmlsZSBjaGFuZ2VkLCA0IGluc2VydGlvbnMoKykNCg0KZGlmZiAtLWdpdCBhL2Ry
+aXZlcnMvdXNiL2hvc3QveGhjaS1tdGstc2NoLmMgYi9kcml2ZXJzL3VzYi9ob3N0L3hoY2ktbXRr
+LXNjaC5jDQppbmRleCBmZWE1NTU1Li40NWM1NGQ1NiAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvdXNi
+L2hvc3QveGhjaS1tdGstc2NoLmMNCisrKyBiL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1tdGstc2No
+LmMNCkBAIC01NTcsNiArNTU3LDEwIEBAIHN0YXRpYyBib29sIG5lZWRfYndfc2NoKHN0cnVjdCB1
+c2JfaG9zdF9lbmRwb2ludCAqZXAsDQogCWlmIChpc19mc19vcl9scyhzcGVlZCkgJiYgIWhhc190
+dCkNCiAJCXJldHVybiBmYWxzZTsNCiANCisJLyogc2tpcCBlbmRwb2ludCB3aXRoIHplcm8gbWF4
+cGt0ICovDQorCWlmICh1c2JfZW5kcG9pbnRfbWF4cCgmZXAtPmRlc2MpID09IDApDQorCQlyZXR1
+cm4gZmFsc2U7DQorDQogCXJldHVybiB0cnVlOw0KIH0NCiANCi0tIA0KMS45LjENCg==
 
-Reviewed-by: Rob Herring <robh@kernel.org>
