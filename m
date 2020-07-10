@@ -2,55 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AC1621AF2E
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Jul 2020 08:12:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E056C21AF3E
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Jul 2020 08:17:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726912AbgGJGMc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Jul 2020 02:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51736 "EHLO
+        id S1726920AbgGJGRE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Jul 2020 02:17:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726047AbgGJGMa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Jul 2020 02:12:30 -0400
+        with ESMTP id S1725943AbgGJGRB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Jul 2020 02:17:01 -0400
 Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F860C08C5DD
-        for <linux-usb@vger.kernel.org>; Thu,  9 Jul 2020 23:12:30 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id k71so2166488pje.0
-        for <linux-usb@vger.kernel.org>; Thu, 09 Jul 2020 23:12:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88C7C08C5CE
+        for <linux-usb@vger.kernel.org>; Thu,  9 Jul 2020 23:17:01 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id f16so2164794pjt.0
+        for <linux-usb@vger.kernel.org>; Thu, 09 Jul 2020 23:17:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:content-transfer-encoding:in-reply-to:references
          :subject:from:cc:to:date:message-id:user-agent;
-        bh=MDOqx8vxa/30A8XhY3uCkxkxCTIbX1UKL3i9UssXhro=;
-        b=YQN3wyrUqnoKyW6LkEnOAXbo1yEYXD4zeVsZah3jneZODo1vRwD80P1/DO3vAgKpo4
-         4q8jvKxSP8roPZPEXCfRBPzFVAixIeBB1c06dFtSgvQWiC4i1sfPaCzF76ziNbXao2h1
-         AXjyXvLz3UKJ8luQEI2qPMVB2HLJzTpYO79yA=
+        bh=Dm+DnuSu65AAz7ad3kKqpwMvvV9c9j5Xmv9xtyqJu+8=;
+        b=XxwiBGAN+c26EFwmdNtyCR5546KEhOr6l15A/2WA1cMLP8pN66LrG3+GuOSJsd6Hp1
+         P3RLqUYcFx0leBYljcKfft2ychVjMOysL/rNcIN+uHyImok3/nIrLFNcnANED1dCbRYj
+         AS5NtypFHnNy0fI3n6QTErnWlMhhZ+KYQiiF8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:content-transfer-encoding
          :in-reply-to:references:subject:from:cc:to:date:message-id
          :user-agent;
-        bh=MDOqx8vxa/30A8XhY3uCkxkxCTIbX1UKL3i9UssXhro=;
-        b=CzAnoUbvX4bqwBEQOAbnEgugZxaGDkGe5J4EGvr6fr4AtqPZ1SmAOh6SjL+1znfF41
-         Nd9yRgtK5l5paZ1dbiQmUsNYRMYc5Bq8RoxCoOS1bu038Dv56feTDC7pMmF5jvAfL78f
-         ErGpnKykp6HxKa7gEItzo/PMFw4jvQ5DrFcPruQ7zcs+ujPgV7ePsSRJ4xj/6To6XIsI
-         m6RbvEL1WGJkAW9Acss1ECS3JBJao32mJu88bK2PdpeW3fwWSgLwNt2bg0G0Jq3EQ6+/
-         5lyxpAS/Q/4d/vYtKx7bPG6j7kQwexpUS7EFbVewkxu8bXwW0Af927iK7vlpoOkNzUJy
-         Dn0w==
-X-Gm-Message-State: AOAM530Yd2vLbA+n/kMFhzHln1nJTTvQuJUxvL351dixv0rejMEiYG+c
-        sN6pvGVkuq3tuydGA4xTPe85PQ==
-X-Google-Smtp-Source: ABdhPJwPvKjchWKFqAIbyd/TdHITo1hj1fnDIECweruqTh33U9CzcEdR1JMeCauMakY0xW7tmhE7Hg==
-X-Received: by 2002:a17:90a:1b4a:: with SMTP id q68mr3871837pjq.1.1594361549533;
-        Thu, 09 Jul 2020 23:12:29 -0700 (PDT)
+        bh=Dm+DnuSu65AAz7ad3kKqpwMvvV9c9j5Xmv9xtyqJu+8=;
+        b=OKd4UrMsBGLgQTSEiAujgEcXqpb01ZX+QZ7pdCDk1Cr8YyUjaIwK/CN9c6uR72f4+X
+         9q8fP2A/R8cboakga5QFWo58cKtVV52AMQBZMtcEVvHAYDO4fVv6lJBTgVpo/dCA6rjp
+         8zNgRcmTr1T0RCddK5XC4/WS6Myydf7WT71sWRnTHiv4eegoPXMPJG4y3ORBVP0/8CbP
+         dvN8Hp4gy6lddDNh4mxN2F6l8TZSvYA+15FJKxHMzBUXnHGOkKSgVKwq898J4r+v8I8w
+         V4dl3j2cRxO7ViYvpk0eJmdpZ/3JlrLdBjTXIapJrDzDkqScZbeIARkXlPhJ/e9madfQ
+         V7Ag==
+X-Gm-Message-State: AOAM532R8WvUsya2gsFlXoKcxxx8Ll86rf6WuBijvChzEdGFPw23AtOB
+        TMf260k6d0vY9azmQyBJLW6OhQ==
+X-Google-Smtp-Source: ABdhPJxeORysV4VYKgc1U20BRm3mRz4m6pPLeqkD6XUKkuZx9wgWwg2gIJCbKPZnAH4/WMJhJFYXPw==
+X-Received: by 2002:a17:90a:30ea:: with SMTP id h97mr4037122pjb.32.1594361821473;
+        Thu, 09 Jul 2020 23:17:01 -0700 (PDT)
 Received: from chromium.org ([2620:15c:202:1:3e52:82ff:fe6c:83ab])
-        by smtp.gmail.com with ESMTPSA id z26sm4709566pfr.187.2020.07.09.23.12.28
+        by smtp.gmail.com with ESMTPSA id v197sm4888519pfc.35.2020.07.09.23.17.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2020 23:12:28 -0700 (PDT)
+        Thu, 09 Jul 2020 23:17:00 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1594235417-23066-3-git-send-email-sanm@codeaurora.org>
-References: <1594235417-23066-1-git-send-email-sanm@codeaurora.org> <1594235417-23066-3-git-send-email-sanm@codeaurora.org>
-Subject: Re: [PATCH v2 2/3] usb: dwc3: qcom: Configure wakeup interrupts and set genpd active wakeup flag
+In-Reply-To: <1594235417-23066-4-git-send-email-sanm@codeaurora.org>
+References: <1594235417-23066-1-git-send-email-sanm@codeaurora.org> <1594235417-23066-4-git-send-email-sanm@codeaurora.org>
+Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: sc7180: Use pdc interrupts for USB instead of GIC interrupts
 From:   Stephen Boyd <swboyd@chromium.org>
 Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -65,168 +65,21 @@ To:     Andy Gross <agross@kernel.org>,
         Matthias Kaehlcke <mka@chromium.org>,
         Rob Herring <robh+dt@kernel.org>,
         Sandeep Maheswaram <sanm@codeaurora.org>
-Date:   Thu, 09 Jul 2020 23:12:27 -0700
-Message-ID: <159436154779.1987609.882978770178758503@swboyd.mtv.corp.google.com>
+Date:   Thu, 09 Jul 2020 23:17:00 -0700
+Message-ID: <159436182019.1987609.12377232042152594056@swboyd.mtv.corp.google.com>
 User-Agent: alot/0.9
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Quoting Sandeep Maheswaram (2020-07-08 12:10:16)
-> configure interrupts based on hs_phy_flag. Set genpd active wakeup flag
-
-Please capitalize the start of a sentence. What is 'hs_phy_flag'?
-
-> for usb gdsc if wakeup capable devices are connected.
-
-This tells us what is happening in the code but doesn't tell us the
-important part, i.e. _why_ this patch is important. Why do we need to
-set the genpd active wakeup flag? Why configure interrupt based on
-hs_phy_flag, whatever that is.
-
+Quoting Sandeep Maheswaram (2020-07-08 12:10:17)
+> Using pdc interrupts for USB instead of GIC interrupts to
+> support wake up in case xo shutdown.
 >=20
 > Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
 > ---
->  drivers/usb/dwc3/dwc3-qcom.c | 73 ++++++++++++++++++++++++++++++++++----=
-------
->  1 file changed, 57 insertions(+), 16 deletions(-)
->=20
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index 1dfd024..8902670 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -192,21 +194,34 @@ static int dwc3_qcom_register_extcon(struct dwc3_qc=
-om *qcom)
-> =20
->  static void dwc3_qcom_disable_interrupts(struct dwc3_qcom *qcom)
->  {
-> +       struct dwc3 *dwc =3D platform_get_drvdata(qcom->dwc3);
-> +
->         if (qcom->hs_phy_irq) {
->                 disable_irq_wake(qcom->hs_phy_irq);
->                 disable_irq_nosync(qcom->hs_phy_irq);
->         }
-> +       if (dwc->hs_phy_flags & PHY_MODE_USB_HOST_LS) {
-> +               if (qcom->dp_hs_phy_irq) {
-> +                       disable_irq_wake(qcom->dp_hs_phy_irq);
-> +                       disable_irq_nosync(qcom->dp_hs_phy_irq);
-> +               }
-> +       } else if (dwc->hs_phy_flags & PHY_MODE_USB_HOST_HS) {
-> +               if (qcom->dm_hs_phy_irq) {
-> +                       disable_irq_wake(qcom->dm_hs_phy_irq);
-> +                       disable_irq_nosync(qcom->dm_hs_phy_irq);
-> +               }
-> +       } else {
-> =20
-> -       if (qcom->dp_hs_phy_irq) {
-> -               disable_irq_wake(qcom->dp_hs_phy_irq);
-> -               disable_irq_nosync(qcom->dp_hs_phy_irq);
-> -       }
-> +               if (qcom->dp_hs_phy_irq) {
-> +                       disable_irq_wake(qcom->dp_hs_phy_irq);
-> +                       disable_irq_nosync(qcom->dp_hs_phy_irq);
-> +               }
-> =20
-> -       if (qcom->dm_hs_phy_irq) {
-> -               disable_irq_wake(qcom->dm_hs_phy_irq);
-> -               disable_irq_nosync(qcom->dm_hs_phy_irq);
-> +               if (qcom->dm_hs_phy_irq) {
-> +                       disable_irq_wake(qcom->dm_hs_phy_irq);
-> +                       disable_irq_nosync(qcom->dm_hs_phy_irq);
-> +               }
->         }
-> -
 
-I liked the newline. Please keep it.
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 
->         if (qcom->ss_phy_irq) {
->                 disable_irq_wake(qcom->ss_phy_irq);
->                 disable_irq_nosync(qcom->ss_phy_irq);
-> @@ -215,21 +230,34 @@ static void dwc3_qcom_disable_interrupts(struct dwc=
-3_qcom *qcom)
-> =20
->  static void dwc3_qcom_enable_interrupts(struct dwc3_qcom *qcom)
->  {
-> +       struct dwc3 *dwc =3D platform_get_drvdata(qcom->dwc3);
-> +
->         if (qcom->hs_phy_irq) {
->                 enable_irq(qcom->hs_phy_irq);
->                 enable_irq_wake(qcom->hs_phy_irq);
->         }
-> +       if (dwc->hs_phy_flags & PHY_MODE_USB_HOST_LS) {
-> +               if (qcom->dp_hs_phy_irq) {
-> +                       enable_irq(qcom->dp_hs_phy_irq);
-> +                       enable_irq_wake(qcom->dp_hs_phy_irq);
-> +               }
-> +       } else if (dwc->hs_phy_flags & PHY_MODE_USB_HOST_HS) {
-> +               if (qcom->dm_hs_phy_irq) {
-> +                       enable_irq(qcom->dm_hs_phy_irq);
-> +                       enable_irq_wake(qcom->dm_hs_phy_irq);
-> +               }
-> +       } else {
-> =20
-> -       if (qcom->dp_hs_phy_irq) {
-> -               enable_irq(qcom->dp_hs_phy_irq);
-> -               enable_irq_wake(qcom->dp_hs_phy_irq);
-> -       }
-> +               if (qcom->dp_hs_phy_irq) {
-> +                       enable_irq(qcom->dp_hs_phy_irq);
-> +                       enable_irq_wake(qcom->dp_hs_phy_irq);
-> +               }
-> =20
-> -       if (qcom->dm_hs_phy_irq) {
-> -               enable_irq(qcom->dm_hs_phy_irq);
-> -               enable_irq_wake(qcom->dm_hs_phy_irq);
-> +               if (qcom->dm_hs_phy_irq) {
-> +                       enable_irq(qcom->dm_hs_phy_irq);
-> +                       enable_irq_wake(qcom->dm_hs_phy_irq);
-> +               }
->         }
-> -
->         if (qcom->ss_phy_irq) {
->                 enable_irq(qcom->ss_phy_irq);
->                 enable_irq_wake(qcom->ss_phy_irq);
-
-Can we use the wakeup irq support code in the kernel here? That would be
-preferred to having the driver enable and disable irq wake at various
-times when the irq is enabled and disabled (which is also odd by the
-way). Why can't we request the irqs and leave them enabled all the time?
-Also it seems like the binding should have 'wakeup-source' in it (see
-Documentation/devicetree/bindings/power/wakeup-source.txt for more
-info).
-
-> @@ -240,6 +268,14 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom)
->  {
->         u32 val;
->         int i;
-> +       struct dwc3 *dwc =3D platform_get_drvdata(qcom->dwc3);
-> +       struct usb_hcd  *hcd =3D platform_get_drvdata(dwc->xhci);
-> +       struct generic_pm_domain *genpd;
-> +
-> +       genpd =3D pd_to_genpd(qcom->dev->pm_domain);
-> +
-> +       if (genpd && usb_wakeup_enabled_descendants(hcd->self.root_hub))
-
-Feels like a comment would be good to explain why wakeup enabled
-descendants matters here.
-
-> +               genpd->flags |=3D GENPD_FLAG_ACTIVE_WAKEUP;
-> =20
->         if (qcom->is_suspended)
->                 return 0;
-> @@ -261,6 +297,11 @@ static int dwc3_qcom_resume(struct dwc3_qcom *qcom)
->  {
->         int ret;
->         int i;
-> +       struct generic_pm_domain *genpd;
-> +
-> +       genpd =3D pd_to_genpd(qcom->dev->pm_domain);
-
-This does container_of() so it can't return NULL.
-
-> +       if (genpd)
-
-So this check is wrong?
-
-> +               genpd->flags &=3D !GENPD_FLAG_ACTIVE_WAKEUP;
+I suppose wakeup-source should be added in the board files.
