@@ -2,128 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A755721B9F9
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Jul 2020 17:50:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94CFA21BA0F
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Jul 2020 17:56:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726977AbgGJPty (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Jul 2020 11:49:54 -0400
-Received: from mail-db8eur05on2108.outbound.protection.outlook.com ([40.107.20.108]:30784
-        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726950AbgGJPtx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 10 Jul 2020 11:49:53 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VIgj8tv0AI53AvBGa2SutPBL/Uw7xMuZBCbX4C0YDHfB1HM0BOZ+U+sC5zYaX8d7cFG1wz8RHwWkyojyVMBdGepVGwWiRzjEpNXGoPInAE1mAWBEHsuSYahTG0g+LiY0d9P9Nm1e+JjlsfTLVJXtdiKbWeW72CVNlLstFmNw2SYTu74ZN6SVycQAD4EZ9C/JNXfxI/o+zNoDEyBEERgTfeOACqL0tl6Nwmy51+QQTd6zuv+Z5kuqeBXhU25GB6oAvj76hJwcUU4fFRxrdeKjhmSm8dcmnMAqHaEOFTH5J8AVxiwkLjF8cSrLSXNBiSLloiHfD/c3gxjUCAmkUzSCig==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=P7VZ/lscJR0Q5fXY/y8VWvdcz2ufoRTZzeCN0LVp/6s=;
- b=g7+IdGn64n8H+Mz2l9Mdktdhpv7ed4PM0nvWV1kjgaq6LStv4zBqAggZ7SSOEgjpMZW1pEyoi+eZ1ZiRJuYlgG/1yGqk7ZarZXSvpXIMU6xmrkXLp2qEuDcV4apT7YvnnBSmf6BubFQsSatd54u6IWPT9yx6hF1fKIZxA77hiD2Umv80i9cZ6UciJfe0rm83b58Rdqo5+Ur/G3m7UcfpvHsn6dMPXbAYvPBRcObWXRlyI/Ijyh1N4uCzSezjmbTgXBpbXxnDaLQpE+cn5vdXz3MBUwn+j9hA8aG4MR5FjzMTR5i8VVcFIu5Z27zlaDMqDILAumTEH6BxQ0dejUz0+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=toradex.com; dmarc=pass action=none header.from=toradex.com;
- dkim=pass header.d=toradex.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=toradex.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=P7VZ/lscJR0Q5fXY/y8VWvdcz2ufoRTZzeCN0LVp/6s=;
- b=nx/gpwMp5XlkL3qXGrXNsGbKkBxK9nrD9EcrQzymqmW2v0Vqd40LrFSvsSZXrsoRzV+Pvk/EgTK+VnkUQW1e7DXUagYi3eC7cszc/SIelZCmy2VwU4S+MJz4QHF1Ws4Sj0wwkyUfVdrbBag6w2yZ5cY/pZwOCQrYPPCVmnwbAfc=
-Authentication-Results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=toradex.com;
-Received: from AM6PR05MB6120.eurprd05.prod.outlook.com (2603:10a6:20b:a8::25)
- by AM6PR05MB5879.eurprd05.prod.outlook.com (2603:10a6:20b:a2::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3174.20; Fri, 10 Jul
- 2020 15:49:45 +0000
-Received: from AM6PR05MB6120.eurprd05.prod.outlook.com
- ([fe80::1d81:6a9b:8c26:3b7d]) by AM6PR05MB6120.eurprd05.prod.outlook.com
- ([fe80::1d81:6a9b:8c26:3b7d%4]) with mapi id 15.20.3174.023; Fri, 10 Jul 2020
- 15:49:45 +0000
-From:   Philippe Schenker <philippe.schenker@toradex.com>
-To:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, Peter Chen <Peter.Chen@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>
-Cc:     Philippe Schenker <philippe.schenker@toradex.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] ARM: dts: colibri-imx6ull: disable runtime pm
-Date:   Fri, 10 Jul 2020 17:49:34 +0200
-Message-Id: <20200710154935.697190-3-philippe.schenker@toradex.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200710154935.697190-1-philippe.schenker@toradex.com>
-References: <20200710154935.697190-1-philippe.schenker@toradex.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: GV0P278CA0047.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:710:29::16) To AM6PR05MB6120.eurprd05.prod.outlook.com
- (2603:10a6:20b:a8::25)
+        id S1727782AbgGJP4n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Jul 2020 11:56:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57456 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726820AbgGJP4n (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Jul 2020 11:56:43 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920ABC08C5CE;
+        Fri, 10 Jul 2020 08:56:42 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id s9so7004718ljm.11;
+        Fri, 10 Jul 2020 08:56:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=C2jwZ+DTUt+/0PqQHnFq2z8XoC0/BJ4auZW7z0y2jMc=;
+        b=cPcxV2TTJwQAiEaNbWP9z9+K7QbPnltMgTaQkNRkoL+hPRj3AOYIRRDmsdv/HjLhBd
+         QvJiD8IR9r8qqV2d54iir0ckD+EGZcJ9osiT6dAYQ07Q3u8xGJ4VZtAX5my6LSb8p/Vz
+         CT7foH3UaZI6yhK/BRmU9znL15f9QPHj4X9fgptTeyMfil+x+vjm0kD9OO7UoswiEPRE
+         y3W0VMwfRDm5KoxyIQMSdr7l0soRN7p8Ia2Y+gjLihA9bwVeV1ySYn8qIO3oHJ7Yt2yq
+         QiG8TFkp4VSo/ozVaLwVhRVsUXdKcQW5nFAp7wN+TegnAoWCDKCeQSbfbTd5tvjtAVz7
+         9New==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=C2jwZ+DTUt+/0PqQHnFq2z8XoC0/BJ4auZW7z0y2jMc=;
+        b=NJ4YtsXwqzflrAFIV/q/2WvN+OesSbgj9TUZPHYhFTyKquPzuUoMdXnDoFqVwfntRp
+         7aorPSgH08PIOSHC1K0cBJTL1Dqlkc3arvCpj/WqBHYPomCDieqy1B5WBtXiLJC4g84H
+         pZb1F1fvv36ZuxDIfug44aF1trtq2S4PyyXxPbghg2juXM+WFTBXYlUCAUeZpOvLF+EE
+         ZvvZ5EiW8L2CdUXIyBhRvfhzBZ/2Kr5L6vujJs+IcfQ/G9Mi4gxGnczmJ8irj3M+dxoC
+         q6x748U9z2GL7Who4JmXm/qHhlTbDBEMY8X4SBG3whH+3UKJiMfhZUPr3z/fgoaRdLX/
+         nydg==
+X-Gm-Message-State: AOAM533U2SoS/Gro47RTlR+EfLxBwDMfpBWR1xzWy4va3l9qz/gu5YHJ
+        HRIWf6mullXvM3m9Bbra7ZQIFdQrTm0AK1N9YZA=
+X-Google-Smtp-Source: ABdhPJwHbAjospPHQTV5mJl6B9f6wI4iNS+jAIysLM7TFCmtAmWHcGftNV+CXq627FmF99I/vmuICSp7n8AyiSuBo4I=
+X-Received: by 2002:a2e:880e:: with SMTP id x14mr29680040ljh.218.1594396600956;
+ Fri, 10 Jul 2020 08:56:40 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from philippe-pc.toradex.int (31.10.206.124) by GV0P278CA0047.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:29::16) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3174.23 via Frontend Transport; Fri, 10 Jul 2020 15:49:44 +0000
-X-Mailer: git-send-email 2.27.0
-X-Originating-IP: [31.10.206.124]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 09073e39-6fe8-492b-5152-08d824e8de48
-X-MS-TrafficTypeDiagnostic: AM6PR05MB5879:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM6PR05MB5879703E116830737ED66A84F4650@AM6PR05MB5879.eurprd05.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:590;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: I0vW4diXeCXKZdVPHU+8MfSI+EdWYT5IJC6/ayB1AOTuYHIog8V45ju7XgPxtHuXnK8qKjdBwiB9tfzqz+j1Efs72BL9/inlQxv6YGnxHkCWzdyL4Ga5CZQlqrPtEqyXVlKTgpMJnC0LHR15ommpvC8emeHrVcT5XDx6pS7y8/l55jXMa0rEI49XJTOeezGjX5bPPm460iaa5kQmQ8FW2D1yFv0S3QZwPmxN3VBUDYRSNtjeJMJ3pON1S/qPBMhJctXM6ga30bi/Oogb7Dzm7kgOrWteV1yPYteF6yboJFWOExFabTrywQqHI3zery98U5IRKuOUDWy3oHNFFOdbtR9+ZjQLg1YxyfTUp4TovgdcLa3BhfCXpbNiIu0Q1w30
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR05MB6120.eurprd05.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(396003)(366004)(346002)(136003)(376002)(39850400004)(54906003)(66946007)(86362001)(52116002)(478600001)(110136005)(1076003)(6666004)(4326008)(6486002)(316002)(6506007)(26005)(7416002)(2906002)(8936002)(44832011)(36756003)(5660300002)(16526019)(6512007)(8676002)(66476007)(66556008)(956004)(2616005)(186003)(4744005)(16060500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: 3V2JP85FpzvMpYLYWYcUbqCLvwwApr7O4YV5JkLhxilc43qq1QCfVxS11ZqKqj6K+1cg8ojB2VC7WGn5klBmXFlbpTBMF6JRjrQoEXSmwhgX74YkM8qO3oOea9TwtdfPJSC5vLNvZthDfXytKBdEE+v5zZBU6iXXrGcDvWnHqiMvD3kSpg1QXo17hI4TPtYsYmU5tpbbU8zT/MZaADKqx8G7HoJCdwXSMFxlB+70SmyWyOUZFaDzYlaDcrb42TfNao8RMgKSRokIM3YwKaNud23h4REdnBTiOQVILGZ2/o1TFLsxG0Z3ZpCbH8hXPOI+ub7TU5QAealZfupxYo8uq/4b4R9uDZi6FJs6xxrtNgG5/nRscFy91Oirl0jhO0WpiTosW2vSaAdEYMKZPeSWRh9qa5HmqI7rIa6gocv9w/iGNeUFtLAmoPj19We+UCi2txALQCVrbrjGeGN1Vpcakz7Y/JCVPXy0tIJ4xvXZyyw=
-X-OriginatorOrg: toradex.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 09073e39-6fe8-492b-5152-08d824e8de48
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR05MB6120.eurprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2020 15:49:45.5198
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SIziJ+6Rq8dWgNRj8eRNFGzkSpLKOcYY/pxcRA3Rw4/vYkFau+0XQn8BHoXyv/J+MAixlL8JJtwB/7bHZqOYx9EvhOyYnsrk+tIQ62NXsLw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR05MB5879
+References: <20200710154935.697190-1-philippe.schenker@toradex.com>
+In-Reply-To: <20200710154935.697190-1-philippe.schenker@toradex.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Fri, 10 Jul 2020 12:56:29 -0300
+Message-ID: <CAOMZO5DvArJPAJ+PzDi=zpDmTdr3u0j9nbd3wSVT5tdV+STmWw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] dt-bindings: usb: ci-hdrc-usb2: add property disable-runtime-pm
+To:     Philippe Schenker <philippe.schenker@toradex.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, USB list <linux-usb@vger.kernel.org>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The Colibri iMX6ULL has a somewhat special hardware design due to some
-legacy decisions regarding USB OTG. This leads to different issues
-when runtime PM is enabled.
+Hi Philippe,
 
-Disable runtime power management on colibri-imx6ull USB.
+On Fri, Jul 10, 2020 at 12:51 PM Philippe Schenker
+<philippe.schenker@toradex.com> wrote:
+>
+> Chipidea depends on some hardware signals to be there in order
 
-Signed-off-by: Philippe Schenker <philippe.schenker@toradex.com>
+I think this description is too vague.
 
----
+Could you please provide more details so that a user can know if their
+hardware falls into this category?
 
- arch/arm/boot/dts/imx6ull-colibri.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/arm/boot/dts/imx6ull-colibri.dtsi b/arch/arm/boot/dts/imx6ull-colibri.dtsi
-index 9145c536d71a..1c6692237506 100644
---- a/arch/arm/boot/dts/imx6ull-colibri.dtsi
-+++ b/arch/arm/boot/dts/imx6ull-colibri.dtsi
-@@ -195,6 +195,7 @@ &uart5 {
- };
- 
- &usbotg1 {
-+	disable-runtime-pm;
- 	dr_mode = "otg";
- 	srp-disable;
- 	hnp-disable;
-@@ -202,6 +203,7 @@ &usbotg1 {
- };
- 
- &usbotg2 {
-+	disable-runtime-pm;
- 	dr_mode = "host";
- };
- 
--- 
-2.27.0
-
+It is not clear from seeing this series what is the hardware details
+that would require this property to be used.
