@@ -2,100 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E17DC21AFF9
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Jul 2020 09:21:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20B1321AFF6
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Jul 2020 09:20:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726536AbgGJHUy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Jul 2020 03:20:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34010 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725966AbgGJHUy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Jul 2020 03:20:54 -0400
-Received: from smtp.al2klimov.de (smtp.al2klimov.de [IPv6:2a01:4f8:c0c:1465::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A454C08C5CE;
-        Fri, 10 Jul 2020 00:20:54 -0700 (PDT)
-Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
-        by smtp.al2klimov.de (Postfix) with ESMTPA id E17D8BC070;
-        Fri, 10 Jul 2020 07:20:51 +0000 (UTC)
-From:   "Alexander A. Klimov" <grandmaster@al2klimov.de>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
-Subject: [PATCH] USB PHY LAYER: Replace HTTP links with HTTPS ones
-Date:   Fri, 10 Jul 2020 09:20:45 +0200
-Message-Id: <20200710072045.29133-1-grandmaster@al2klimov.de>
+        id S1726201AbgGJHUi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Jul 2020 03:20:38 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:56698 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725966AbgGJHUi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 10 Jul 2020 03:20:38 -0400
+Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 08D6C239FB6EC9E5B9A1;
+        Fri, 10 Jul 2020 15:20:36 +0800 (CST)
+Received: from kernelci-master.huawei.com (10.175.101.6) by
+ DGGEMS403-HUB.china.huawei.com (10.3.19.203) with Microsoft SMTP Server id
+ 14.3.487.0; Fri, 10 Jul 2020 15:20:26 +0800
+From:   Wei Yongjun <weiyongjun1@huawei.com>
+To:     Hulk Robot <hulkci@huawei.com>,
+        Cristian Birsan <cristian.birsan@microchip.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>
+CC:     Wei Yongjun <weiyongjun1@huawei.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-usb@vger.kernel.org>
+Subject: [PATCH -next] usb: gadget: udc: atmel: remove unused variable 'pp'
+Date:   Fri, 10 Jul 2020 15:30:33 +0800
+Message-ID: <20200710073033.58714-1-weiyongjun1@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Bar: +++++
-X-Spam-Level: *****
-Authentication-Results: smtp.al2klimov.de;
-        auth=pass smtp.auth=aklimov@al2klimov.de smtp.mailfrom=grandmaster@al2klimov.de
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.175.101.6]
+X-CFilter-Loop: Reflected
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Rationale:
-Reduces attack surface on kernel devs opening the links for MITM
-as HTTPS traffic is much harder to manipulate.
+Gcc report build warning as follows:
 
-Deterministic algorithm:
-For each file:
-  If not .svg:
-    For each line:
-      If doesn't contain `\bxmlns\b`:
-        For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
-	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
-            If both the HTTP and HTTPS versions
-            return 200 OK and serve the same content:
-              Replace HTTP with HTTPS.
+drivers/usb/gadget/udc/atmel_usba_udc.c:2106:22: warning:
+ variable pp set but not used [-Wunused-but-set-variable]
+ 2106 |  struct device_node *pp;
+      |                      ^~
 
-Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
+After commit e78355b577c4 ("usb: gadget: udc: atmel: Don't
+use DT to configure end point"), variable 'pp' is never used,
+so removing it to avoid warning.
+
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
 ---
- Continuing my work started at 93431e0607e5.
- See also: git log --oneline '--author=Alexander A. Klimov <grandmaster@al2klimov.de>' v5.7..master
- (Actually letting a shell for loop submit all this stuff for me.)
+ drivers/usb/gadget/udc/atmel_usba_udc.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
- If there are any URLs to be removed completely or at least not HTTPSified:
- Just clearly say so and I'll *undo my change*.
- See also: https://lkml.org/lkml/2020/6/27/64
-
- If there are any valid, but yet not changed URLs:
- See: https://lkml.org/lkml/2020/6/26/837
-
- If you apply the patch, please let me know.
-
-
- drivers/usb/phy/phy-keystone.c    | 2 +-
- drivers/usb/phy/phy-twl6030-usb.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/phy/phy-keystone.c b/drivers/usb/phy/phy-keystone.c
-index 9c226b57153b..358d05cb643d 100644
---- a/drivers/usb/phy/phy-keystone.c
-+++ b/drivers/usb/phy/phy-keystone.c
-@@ -2,7 +2,7 @@
- /*
-  * phy-keystone - USB PHY, talking to dwc3 controller in Keystone.
-  *
-- * Copyright (C) 2013 Texas Instruments Incorporated - http://www.ti.com
-+ * Copyright (C) 2013 Texas Instruments Incorporated - https://www.ti.com
-  *
-  * Author: WingMan Kwok <w-kwok2@ti.com>
-  */
-diff --git a/drivers/usb/phy/phy-twl6030-usb.c b/drivers/usb/phy/phy-twl6030-usb.c
-index 9a7e655d5280..8ba6c5a91557 100644
---- a/drivers/usb/phy/phy-twl6030-usb.c
-+++ b/drivers/usb/phy/phy-twl6030-usb.c
-@@ -2,7 +2,7 @@
- /*
-  * twl6030_usb - TWL6030 USB transceiver, talking to OMAP OTG driver.
-  *
-- * Copyright (C) 2010 Texas Instruments Incorporated - http://www.ti.com
-+ * Copyright (C) 2010 Texas Instruments Incorporated - https://www.ti.com
-  *
-  * Author: Hema HK <hemahk@ti.com>
-  */
--- 
-2.27.0
+diff --git a/drivers/usb/gadget/udc/atmel_usba_udc.c b/drivers/usb/gadget/udc/atmel_usba_udc.c
+index d69f61ff0181..a10b8d406e62 100644
+--- a/drivers/usb/gadget/udc/atmel_usba_udc.c
++++ b/drivers/usb/gadget/udc/atmel_usba_udc.c
+@@ -2103,7 +2103,6 @@ static struct usba_ep * atmel_udc_of_init(struct platform_device *pdev,
+ {
+ 	struct device_node *np = pdev->dev.of_node;
+ 	const struct of_device_id *match;
+-	struct device_node *pp;
+ 	int i, ret;
+ 	struct usba_ep *eps, *ep;
+ 	const struct usba_udc_config *udc_config;
+@@ -2128,7 +2127,6 @@ static struct usba_ep * atmel_udc_of_init(struct platform_device *pdev,
+ 						GPIOD_IN);
+ 
+ 	if (fifo_mode == 0) {
+-		pp = NULL;
+ 		udc->num_ep = udc_config->num_ep;
+ 		udc->configured_ep = 1;
+ 	} else {
+@@ -2144,7 +2142,6 @@ static struct usba_ep * atmel_udc_of_init(struct platform_device *pdev,
+ 
+ 	INIT_LIST_HEAD(&eps[0].ep.ep_list);
+ 
+-	pp = NULL;
+ 	i = 0;
+ 	while (i < udc->num_ep) {
+ 		const struct usba_ep_config *ep_cfg = &udc_config->config[i];
 
