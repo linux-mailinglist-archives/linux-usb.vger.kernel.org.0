@@ -2,129 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DDA121B33C
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Jul 2020 12:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 928ED21B33D
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Jul 2020 12:36:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726920AbgGJKgR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Jul 2020 06:36:17 -0400
-Received: from out1-smtp.messagingengine.com ([66.111.4.25]:55087 "EHLO
-        out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726820AbgGJKgQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Jul 2020 06:36:16 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 50DA35C01ED;
-        Fri, 10 Jul 2020 06:36:12 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Fri, 10 Jul 2020 06:36:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:content-transfer-encoding:in-reply-to; s=fm1; bh=g
-        SSmBGAat7cyRrfCecEmKUbWAv2icxzDzFG/ZQyaM8w=; b=mDaj+yKS4j+FfMSHg
-        SZ0BStHySaiJq3AuT+DjmADMnqM2VqRWu9G287R/601VNLantWljFU6jKM+b8Rqj
-        P73Uou05pB0c73uB8m/I7frRaSq1TYY05DBefWMGXwqToHSs2fJafEeETRE50V7e
-        EkhmkCeAmCZWB6kKqx/pJAeYXQA5ih7+dItPGBNKw3vlhW1SEDxzfDOqEyatXcXm
-        kAlQPgSu/U9q/fBqxrNozEkgqVYnvhCiVmQz6yWstYplQa+B0FaLo48v4L4ltBrZ
-        1SRs1n3Tob7vNaRETgcLAnaoi+KRmNxlUzVNTog0KfF4rt6wD1Sk839Snx+F3EMX
-        dDn4A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; bh=gSSmBGAat7cyRrfCecEmKUbWAv2icxzDzFG/ZQyaM
-        8w=; b=epyeURkReEl37bXH+CUzyhoESLAK+DVHhlT48TzW+6LC+ASxURPVQsiZd
-        R3qpZ8dIaI4JUmYysXcWtWxksXU/pT8JQGnWIsxhQy3Czve66DhWdW8ZxVsd27eh
-        4pWqgxggxrmea3Dt1c0jib80XWdwa40XnocjMzevwri0+rsWjCkm4HTO0RKehFlE
-        m3yyrYhXWLrzpRe7g6/5ncXU1Y5zNZv18CEYnNfp5lVftJTwwugxEZSKhKHu8HnU
-        D6d/4GWpwpUv6Jm1sq4QVR7QmJaXC0iLDScBC5h22Az8cL6bKfb81dPTuh6gvvW2
-        KnftySRiAplSfye9q5yj6gTVshQiQ==
-X-ME-Sender: <xms:nEQIX49qXOwbuCAD8b5GTZa3pch8EfoR2FcmxNJ1uI47fIq4NY0DEw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedrvddugdefvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggugfgjsehtkeertddttddunecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevtdeile
-    euteeggefgueefhfevgfdttefgtefgtddvgeejheeiuddvtdekffehffenucfkphepkeef
-    rdekiedrkeelrddutdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
-    hilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
-X-ME-Proxy: <xmx:nEQIXwv13zBJFr1ch_qdYnPyqqqEA6cvJCn_cgT4r-7aUyGa1iiGsQ>
-    <xmx:nEQIX-CPB21fPABGIINXufOxv0lUwjMZ57TOD5zZQYQlbw-CrEmkhw>
-    <xmx:nEQIX4fu3l66bgLt6_X-laeM64clmbVLxJuG9McwPpNxm04Id7Y8Yw>
-    <xmx:nEQIX_XIAtRb-8AkuzCijVi5-E6spCaatd1o_1mhjWUgEtTQaAgrEA>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id ABC10306005F;
-        Fri, 10 Jul 2020 06:36:11 -0400 (EDT)
-Date:   Fri, 10 Jul 2020 12:36:17 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Joakim Tjernlund <Joakim.Tjernlund@infinera.com>
-Cc:     "johan@kernel.org" <johan@kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] cdc-acm: acm_init: Set initial BAUD to B0
-Message-ID: <20200710103617.GB1203263@kroah.com>
-References: <20200710093518.22272-1-joakim.tjernlund@infinera.com>
- <20200710095445.GS3453@localhost>
- <b4fca29185bfce940bf52813b5f92af27282c738.camel@infinera.com>
+        id S1726965AbgGJKg2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Jul 2020 06:36:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36050 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726820AbgGJKg1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Jul 2020 06:36:27 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E4DC08C5CE;
+        Fri, 10 Jul 2020 03:36:25 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id z3so2347636pfn.12;
+        Fri, 10 Jul 2020 03:36:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=k6E7LH2Rsa+GnrRcP6ifXPuNeY+Ay8cfhxue4cHFp+Y=;
+        b=ejIuwuJ5q/l4SAyTZ676rI/EUXdB+Ulto0KXt0SF9qVV5BbhRNTZ640UK+ZjcFqiCw
+         lvYtAKQogEsJYqeqDlU8XbNzKFlWwYeABtU0sxsM4qy/NfbGEK70m1G0ZSSRVj85yGxi
+         oH8feGoAPTI0+mFzkr5hPGC5xpaBsXRavV5VPyydGheAbsiMM8ZMCNpYgNljruG0kM6K
+         2YuW5d5frWq1weZHjQKdVMLffSmb0cbSZxt0Baxzh/avmqvSFUZm7MuIbiTZEcU3b2D+
+         PRGMzMANKjY+TBPAjFxn8/KgSauqUvuzYyjoKyoR8LqLu42QjTKpB6692RVJzjkqx1DM
+         GwWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=k6E7LH2Rsa+GnrRcP6ifXPuNeY+Ay8cfhxue4cHFp+Y=;
+        b=G/quU/jUkBQYvsEVzE2niuXbi2FRq2bJLC3QggHFPNLtmqnniaklAhme6jzftmob9d
+         3V4t0vJa8Rm/9Mo6V2n4jRe57cszH5q9wBu0rL0adOrTlF1l/wrR8umshC7qZxdvjqeT
+         cJayJzbUIzPF65brxqrGJJBGiCDiguuMvrh+YGYPfS+NbPXr89KRH4TR6lFtQitk48ji
+         snOJ/2ER4OZxTdjAF9/7NcS6lNieXLRkViyTPnHMDRPLFfUdIMa+RCTZL2DUvZ9vbXnG
+         SSo7QVbOZdwwkUDwmG8koQ3cmKi8iMjTte7BUzdmcF2pazdjGP4GuRTz70gjNAEbJ+lx
+         Y2Cg==
+X-Gm-Message-State: AOAM53185RmfN+4mVTlMnXBtHIcbxwpwV6P0kLhYg0lT6E3VAhlLqUYN
+        H1HZGfNKHoRRS3FHd2MOoVzfTNkR
+X-Google-Smtp-Source: ABdhPJz6YyFV5tdcLS7lWZkNeBtZMvUFzkAfW8iEzo9m0Dw6sn8TUbjyhWIYFgcbO0LZha78s2iOgw==
+X-Received: by 2002:a63:6ec2:: with SMTP id j185mr26610040pgc.176.1594377384965;
+        Fri, 10 Jul 2020 03:36:24 -0700 (PDT)
+Received: from localhost (g175.219-103-161.ppp.wakwak.ne.jp. [219.103.161.175])
+        by smtp.gmail.com with ESMTPSA id 66sm5486863pfg.63.2020.07.10.03.36.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jul 2020 03:36:24 -0700 (PDT)
+Date:   Fri, 10 Jul 2020 19:36:21 +0900
+From:   Stafford Horne <shorne@gmail.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>,
+        stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        David Miller <davem@davemloft.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH] Replace HTTP links with HTTPS ones: USB MASS STORAGE
+ DRIVER
+Message-ID: <20200710103621.GA437393@lianli.shorne-pla.net>
+References: <20200708095500.13694-1-grandmaster@al2klimov.de>
+ <20200708103928.GC585606@kroah.com>
+ <6b78a3fd-04b9-fc8e-b5c6-f03372a4cd31@al2klimov.de>
+ <20200709061409.GA130260@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <b4fca29185bfce940bf52813b5f92af27282c738.camel@infinera.com>
+In-Reply-To: <20200709061409.GA130260@kroah.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 10, 2020 at 10:16:33AM +0000, Joakim Tjernlund wrote:
-> On Fri, 2020-07-10 at 11:54 +0200, Johan Hovold wrote:
-> > CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you recognize the sender and know the content is safe.
+On Thu, Jul 09, 2020 at 08:14:09AM +0200, Greg KH wrote:
+> On Wed, Jul 08, 2020 at 08:41:54PM +0200, Alexander A. Klimov wrote:
 > > 
 > > 
-> > On Fri, Jul 10, 2020 at 11:35:18AM +0200, Joakim Tjernlund wrote:
-> > > BO will disable USB input until the device opens. This will
-> > > avoid garbage chars waiting flood the TTY. This mimics a real UART
-> > > device better.
-> > > For initial termios to reach USB core, USB driver has to be
-> > > registered before TTY driver.
+> > Am 08.07.20 um 12:39 schrieb Greg KH:
+> > > On Wed, Jul 08, 2020 at 11:55:00AM +0200, Alexander A. Klimov wrote:
+> > > > Rationale:
+> > > > Reduces attack surface on kernel devs opening the links for MITM
+> > > > as HTTPS traffic is much harder to manipulate.
+> > > > 
+> > > > Deterministic algorithm:
+> > > > For each file:
+> > > >    If not .svg:
+> > > >      For each line:
+> > > >        If doesn't contain `\bxmlns\b`:
+> > > >          For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
+> > > > 	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
+> > > >              If both the HTTP and HTTPS versions
+> > > >              return 200 OK and serve the same content:
+> > > >                Replace HTTP with HTTPS.
+> > > >
+> > > > Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
 > > > 
-> > > Signed-off-by: Joakim Tjernlund <joakim.tjernlund@infinera.com>
-> > > Cc: stable@vger.kernel.org
-> > > ---
+> > > Your subject lines are very odd compared to all patches for this
+> > > subsystem, as well as all other kernel subsystems.  Any reason you are
+> > > doing it this way and not the normal and standard method of:
+> > > 	USB: storage: replace http links with https
 > > > 
-> > >  I hope this change makes sense to you, if so I belive
-> > >  ttyUSB could do the same.
+> > > That would look more uniform as well as not shout at anyone.
+
+I would agree.  The OpenRISC patch for this series says:
+  "OPENRISC ARCHITECTURE:..."
+
+Here it would just be "openrisc:..." I think fixing the whole series is needed.
+Greg is not the only on complaining.
+
+Ideally, I think, it would be good to have this sent out as a series i.e [PATCH 3/55]
+rather than individual patches so this could be discussed as a whole.
+
+-Stafford
+
+> > > thanks,
+> > > 
+> > > greg k-h
+> > > 
+> > Hi,
 > > 
-> > No, this doesn't make sense. B0 is used to hang up an already open tty.
-> 
-> This is at module init so there is no tty yet.
-> acm_probe() will later set:
->         acm->line.dwDTERate = cpu_to_le32(9600);
-> 	acm->line.bDataBits = 8;
-> 	acm_set_line(acm, &acm->line);
-> 
+> > I'm very sorry.
 > > 
-> > Furthermore, this change only affects the initial terminal settings and
-> > won't have any effect the next time you open the same port.
+> > As Torvalds has merged 93431e0607e5 and many of you devs (including big
+> > maintainers like David Miller) just applied this stuff, I assumed that's OK.
+> > 
+> > And now I've rolled out tens of patches via shell loop... *sigh*
+> > 
+> > As this is the third (I think) change request like this, I assume this rule
+> > applies to all subsystems â€“ right?
 > 
-> hmm, it is not ideal but acm_probe() will later set:
->         acm->line.dwDTERate = cpu_to_le32(9600);
-> 	acm->line.bDataBits = 8;
-> 	acm_set_line(acm, &acm->line);
-> 
-> But, would it not make sense to not accept input until TTY is opened ?
-> That would be more inline with a real RS232, would it not?
+> Yes, you should try to emulate what the subsystem does, look at other
+> patches for the same files, but the format I suggested is almost always
+> the correct one.  If not, I'm sure maintainers will be glad to tell you
+> otherwise :)
 
-You can't keep the chip in the usb-to-serial device from accepting data
-before you do anything with it, that requires firmware to not do this.
-Are you sure your firmware is correct?
 
-> > Why not fix your firmware so that it doesn't transmit before DTR is
-> > asserted during open()?
-> 
-> I would but it is not my firmware, it is a ready made USB to UART chip. will talk
-> to the manufacturer though.
-
-What chip is this?
-
-thanks,
-
-greg k-h
