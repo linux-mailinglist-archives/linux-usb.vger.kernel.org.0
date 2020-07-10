@@ -2,165 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 877A321B40B
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Jul 2020 13:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7027E21B52A
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Jul 2020 14:37:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727984AbgGJLdo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Jul 2020 07:33:44 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:49756 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726725AbgGJLdn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Jul 2020 07:33:43 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 06ABXe8D097451;
-        Fri, 10 Jul 2020 06:33:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1594380821;
-        bh=FxhfaLSX2SCVsKQvwGQevHvm0zAMmt0Sg5LDxf2xheM=;
-        h=From:To:CC:Subject:Date;
-        b=dskhWfK3vL5WhYCpJSkw8cWdGGe1t7n29p5Ycxcpv2v2TkXbvY0WFmZEBvs0mig+F
-         6mej2CW/JyaQPgxmMh5DkB7QjVtTCX5JbLS6vfijmwCCQVByRxQ3ffkIPc5PU5MXPM
-         20SrfuaRrKd70YihJStLroI5IiJWdXpaIb+jNhQA=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 06ABXeFX067124
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 10 Jul 2020 06:33:40 -0500
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Fri, 10
- Jul 2020 06:33:40 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Fri, 10 Jul 2020 06:33:40 -0500
-Received: from lta0400828a.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 06ABXc8g094805;
-        Fri, 10 Jul 2020 06:33:39 -0500
-From:   Roger Quadros <rogerq@ti.com>
-To:     <balbi@kernel.org>
-CC:     <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        Roger Quadros <rogerq@ti.com>
-Subject: [PATCH v2] dt-bindings: usb: ti,keystone-dwc3.yaml: Improve schema
-Date:   Fri, 10 Jul 2020 14:33:37 +0300
-Message-ID: <20200710113337.15954-1-rogerq@ti.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726942AbgGJMhH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Jul 2020 08:37:07 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:34593 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726725AbgGJMhG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Jul 2020 08:37:06 -0400
+Received: by mail-lj1-f196.google.com with SMTP id q7so6284309ljm.1;
+        Fri, 10 Jul 2020 05:37:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Z9d/yvvSeBYP/yFimwVEayW8WUm+SjIzXBwX9kNmYvs=;
+        b=uP4iU1LLUZ65cyArZsocxIny2R87LyXddkkUN0fuJPE+cUO6ctCPXgB2GX9Pj60pE7
+         QVDqraHxNSXG1Z8E2BSWDfFbrZpLBanBtaB3IzDQiOfww8Osxgz5doQ8GSQnIngYMD/P
+         LzCVAGmdZTidjIsSXPJyil7sBYiy8BpEj2hFr3SpUdvBQgzJA7tibXcAR1sYhyNmk37n
+         94/EteKT+7mkPsORNQLUG1A5RIF1r+ppqI7872KAraswtdfUO5BJOFPzUWvOWix4Pu0w
+         k3btZHhnyA8mRre7LNb4KtdIsGyyj37WZ/9Q11ayms9yBW38cgxqNWkk/BKh45COAi5p
+         LisQ==
+X-Gm-Message-State: AOAM530B0jODZOm1We/Mv6a/GUru5n/t++IzEqG1Y3Jzi4dLLCvCMu1r
+        1K+/0tPgudBH/h0FEZmHM2iHTWuKHno=
+X-Google-Smtp-Source: ABdhPJy7RRMhX3J6hOQmg2Ft3MtLYuIhL9vKehivsw1zElBeZUu9109qUnnYsVj3ER1hiN5ejJYutQ==
+X-Received: by 2002:a2e:9555:: with SMTP id t21mr19622039ljh.194.1594384624086;
+        Fri, 10 Jul 2020 05:37:04 -0700 (PDT)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id i10sm1853543ljg.80.2020.07.10.05.37.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jul 2020 05:37:03 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1jtsH3-00065K-Ns; Fri, 10 Jul 2020 14:37:06 +0200
+Date:   Fri, 10 Jul 2020 14:37:05 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Joakim Tjernlund <Joakim.Tjernlund@infinera.com>
+Cc:     "johan@kernel.org" <johan@kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] cdc-acm: acm_init: Set initial BAUD to B0
+Message-ID: <20200710123705.GT3453@localhost>
+References: <20200710093518.22272-1-joakim.tjernlund@infinera.com>
+ <20200710095445.GS3453@localhost>
+ <b4fca29185bfce940bf52813b5f92af27282c738.camel@infinera.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b4fca29185bfce940bf52813b5f92af27282c738.camel@infinera.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There were some review comments after the patch was integrated.
-Address those.
+On Fri, Jul 10, 2020 at 10:16:33AM +0000, Joakim Tjernlund wrote:
+> On Fri, 2020-07-10 at 11:54 +0200, Johan Hovold wrote:
+> > CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you recognize the sender and know the content is safe.
+> > 
+> > 
+> > On Fri, Jul 10, 2020 at 11:35:18AM +0200, Joakim Tjernlund wrote:
+> > > BO will disable USB input until the device opens. This will
+> > > avoid garbage chars waiting flood the TTY. This mimics a real UART
+> > > device better.
+> > > For initial termios to reach USB core, USB driver has to be
+> > > registered before TTY driver.
+> > > 
+> > > Signed-off-by: Joakim Tjernlund <joakim.tjernlund@infinera.com>
+> > > Cc: stable@vger.kernel.org
+> > > ---
+> > > 
+> > >  I hope this change makes sense to you, if so I belive
+> > >  ttyUSB could do the same.
+> > 
+> > No, this doesn't make sense. B0 is used to hang up an already open tty.
+> 
+> This is at module init so there is no tty yet.
 
-Fixes: 1883a934e156 ("dt-bindings: usb: convert keystone-usb.txt to YAML")
-Signed-off-by: Roger Quadros <rogerq@ti.com>
----
- .../bindings/usb/ti,keystone-dwc3.yaml        | 51 ++++++++++++++-----
- 1 file changed, 37 insertions(+), 14 deletions(-)
+Right, but init_termios is used for each tty later registered.
 
-diff --git a/Documentation/devicetree/bindings/usb/ti,keystone-dwc3.yaml b/Documentation/devicetree/bindings/usb/ti,keystone-dwc3.yaml
-index f127535feb0b..804b9b4f6654 100644
---- a/Documentation/devicetree/bindings/usb/ti,keystone-dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/ti,keystone-dwc3.yaml
-@@ -11,22 +11,36 @@ maintainers:
- 
- properties:
-   compatible:
--    oneOf:
--      - const: "ti,keystone-dwc3"
--      - const: "ti,am654-dwc3"
-+    items:
-+      - enum:
-+        - ti,keystone-dwc3
-+        - ti,am654-dwc3
- 
-   reg:
-     maxItems: 1
--    description: Address and length of the register set for the USB subsystem on
--      the SOC.
-+
-+  '#address-cells':
-+    const: 1
-+
-+  '#size-cells':
-+    const: 1
-+
-+  ranges: true
- 
-   interrupts:
-     maxItems: 1
--    description: The irq number of this device that is used to interrupt the MPU.
--
- 
-   clocks:
--    description: Clock ID for USB functional clock.
-+    minItems: 1
-+    maxItems: 2
-+
-+  assigned-clocks:
-+    minItems: 1
-+    maxItems: 2
-+
-+  assigned-clock-parents:
-+    minItems: 1
-+    maxItems: 2
- 
-   power-domains:
-     description: Should contain a phandle to a PM domain provider node
-@@ -42,33 +56,42 @@ properties:
- 
-   phy-names:
-     items:
--      - const: "usb3-phy"
-+      - const: usb3-phy
-+
-+  dma-coherent: true
- 
--  dwc3:
-+  dma-ranges: true
-+
-+patternProperties:
-+  "usb@[a-f0-9]+$":
-+    type: object
-     description: This is the node representing the DWC3 controller instance
-       Documentation/devicetree/bindings/usb/dwc3.txt
- 
- required:
-   - compatible
-   - reg
-+  - "#address-cells"
-+  - "#size-cells"
-+  - ranges
-   - interrupts
--  - clocks
-+
-+additionalProperties: false
- 
- examples:
-   - |
-     #include <dt-bindings/interrupt-controller/arm-gic.h>
- 
--    usb: usb@2680000 {
-+    dwc3@2680000 {
-       compatible = "ti,keystone-dwc3";
-       #address-cells = <1>;
-       #size-cells = <1>;
-       reg = <0x2680000 0x10000>;
-       clocks = <&clkusb>;
--      clock-names = "usb";
-       interrupts = <GIC_SPI 393 IRQ_TYPE_EDGE_RISING>;
-       ranges;
- 
--      dwc3@2690000 {
-+      usb@2690000 {
-         compatible = "synopsys,dwc3";
-         reg = <0x2690000 0x70000>;
-         interrupts = <GIC_SPI 393 IRQ_TYPE_EDGE_RISING>;
--- 
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+And B0 is supposed to be set after opening a tty if you want to trigger
+a modem disconnect (deassert DTR).
 
+> acm_probe() will later set:
+>         acm->line.dwDTERate = cpu_to_le32(9600);
+> 	acm->line.bDataBits = 8;
+> 	acm_set_line(acm, &acm->line);
+> 
+> > 
+> > Furthermore, this change only affects the initial terminal settings and
+> > won't have any effect the next time you open the same port.
+> 
+> hmm, it is not ideal but acm_probe() will later set:
+>         acm->line.dwDTERate = cpu_to_le32(9600);
+> 	acm->line.bDataBits = 8;
+> 	acm_set_line(acm, &acm->line);
+
+That's only during probe and won't affect a second open.
+
+> But, would it not make sense to not accept input until TTY is opened ?
+> That would be more inline with a real RS232, would it not?
+
+It's a quirk of some of these devices that some will accept input before
+the tty has been opened. It should be possible to handle using flow
+control if you control the other side of the application.
+
+I don't see how this patch would work at all as B0 only deasserts DTR
+when initialising the line settings in set_termios() (for example)
+during open but then the tty layer will assert it again shortly after.
+And your firmware ignores DTR anyway...
+
+Ahh, I see now that the driver is passing zero as dwDTERate to the
+device in set_termios() if B0 is requested, which is non-standard
+(drivers typically keep the current rate or set 9600 baud). Perhaps your
+firmware happens to disable the UART, but I can't seem to find anything
+in the spec that says that this is what is supposed to happen.
+
+> > Why not fix your firmware so that it doesn't transmit before DTR is
+> > asserted during open()?
+> 
+> I would but it is not my firmware, it is a ready made USB to UART
+> chip. will talk to the manufacturer though.
+
+Hope that works out.
+
+Johan
