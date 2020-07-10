@@ -2,89 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20B1321AFF6
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Jul 2020 09:20:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1796A21B075
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Jul 2020 09:44:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726201AbgGJHUi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Jul 2020 03:20:38 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:56698 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725966AbgGJHUi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 10 Jul 2020 03:20:38 -0400
-Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 08D6C239FB6EC9E5B9A1;
-        Fri, 10 Jul 2020 15:20:36 +0800 (CST)
-Received: from kernelci-master.huawei.com (10.175.101.6) by
- DGGEMS403-HUB.china.huawei.com (10.3.19.203) with Microsoft SMTP Server id
- 14.3.487.0; Fri, 10 Jul 2020 15:20:26 +0800
-From:   Wei Yongjun <weiyongjun1@huawei.com>
-To:     Hulk Robot <hulkci@huawei.com>,
-        Cristian Birsan <cristian.birsan@microchip.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>
-CC:     Wei Yongjun <weiyongjun1@huawei.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-usb@vger.kernel.org>
-Subject: [PATCH -next] usb: gadget: udc: atmel: remove unused variable 'pp'
-Date:   Fri, 10 Jul 2020 15:30:33 +0800
-Message-ID: <20200710073033.58714-1-weiyongjun1@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        id S1728001AbgGJHny (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Jul 2020 03:43:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37640 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726664AbgGJHny (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 10 Jul 2020 03:43:54 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id EE02D206A5;
+        Fri, 10 Jul 2020 07:43:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1594367033;
+        bh=SFQt0vxnwbG8QVBgOnlfaZeFajIEFrgh4tqcl3dJRaQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aN4Z3vbCN2d9QS2ITUdxqDzj3cytW5esIu1oMWQq4xVBbMNCIzyulWCz3at2y+nqr
+         j3ExIwo38spxxdY21kALdjLLm8MgIZaPYx+IXSjAIHkpRhG2MyHCL4BUsW9+Qe4MEI
+         hk1j3yfYTMfIJtNvqSA+LMR7ttlGThTLrdQsu77s=
+Date:   Fri, 10 Jul 2020 09:43:58 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
+Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB PHY LAYER: Replace HTTP links with HTTPS ones
+Message-ID: <20200710074358.GB1179998@kroah.com>
+References: <20200710072045.29133-1-grandmaster@al2klimov.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.175.101.6]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200710072045.29133-1-grandmaster@al2klimov.de>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Gcc report build warning as follows:
+On Fri, Jul 10, 2020 at 09:20:45AM +0200, Alexander A. Klimov wrote:
+> Rationale:
+> Reduces attack surface on kernel devs opening the links for MITM
+> as HTTPS traffic is much harder to manipulate.
+> 
+> Deterministic algorithm:
+> For each file:
+>   If not .svg:
+>     For each line:
+>       If doesn't contain `\bxmlns\b`:
+>         For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
+> 	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
+>             If both the HTTP and HTTPS versions
+>             return 200 OK and serve the same content:
+>               Replace HTTP with HTTPS.
+> 
+> Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
+> ---
+>  Continuing my work started at 93431e0607e5.
+>  See also: git log --oneline '--author=Alexander A. Klimov <grandmaster@al2klimov.de>' v5.7..master
+>  (Actually letting a shell for loop submit all this stuff for me.)
+> 
+>  If there are any URLs to be removed completely or at least not HTTPSified:
+>  Just clearly say so and I'll *undo my change*.
+>  See also: https://lkml.org/lkml/2020/6/27/64
+> 
+>  If there are any valid, but yet not changed URLs:
+>  See: https://lkml.org/lkml/2020/6/26/837
+> 
+>  If you apply the patch, please let me know.
 
-drivers/usb/gadget/udc/atmel_usba_udc.c:2106:22: warning:
- variable pp set but not used [-Wunused-but-set-variable]
- 2106 |  struct device_node *pp;
-      |                      ^~
-
-After commit e78355b577c4 ("usb: gadget: udc: atmel: Don't
-use DT to configure end point"), variable 'pp' is never used,
-so removing it to avoid warning.
-
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
----
- drivers/usb/gadget/udc/atmel_usba_udc.c | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/drivers/usb/gadget/udc/atmel_usba_udc.c b/drivers/usb/gadget/udc/atmel_usba_udc.c
-index d69f61ff0181..a10b8d406e62 100644
---- a/drivers/usb/gadget/udc/atmel_usba_udc.c
-+++ b/drivers/usb/gadget/udc/atmel_usba_udc.c
-@@ -2103,7 +2103,6 @@ static struct usba_ep * atmel_udc_of_init(struct platform_device *pdev,
- {
- 	struct device_node *np = pdev->dev.of_node;
- 	const struct of_device_id *match;
--	struct device_node *pp;
- 	int i, ret;
- 	struct usba_ep *eps, *ep;
- 	const struct usba_udc_config *udc_config;
-@@ -2128,7 +2127,6 @@ static struct usba_ep * atmel_udc_of_init(struct platform_device *pdev,
- 						GPIOD_IN);
- 
- 	if (fifo_mode == 0) {
--		pp = NULL;
- 		udc->num_ep = udc_config->num_ep;
- 		udc->configured_ep = 1;
- 	} else {
-@@ -2144,7 +2142,6 @@ static struct usba_ep * atmel_udc_of_init(struct platform_device *pdev,
- 
- 	INIT_LIST_HEAD(&eps[0].ep.ep_list);
- 
--	pp = NULL;
- 	i = 0;
- 	while (i < udc->num_ep) {
- 		const struct usba_ep_config *ep_cfg = &udc_config->config[i];
-
+Again, subject lines...
