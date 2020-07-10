@@ -2,72 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 281A121AFE1
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Jul 2020 09:07:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E17DC21AFF9
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Jul 2020 09:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726756AbgGJHHx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 10 Jul 2020 03:07:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53814 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725966AbgGJHHx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 10 Jul 2020 03:07:53 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3DA2F2077D;
-        Fri, 10 Jul 2020 07:07:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594364873;
-        bh=BvkMbxF8p9ePOnvbDwQMRLRHfDMC+k2cTE5KGnfyFng=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dCCem0174HgReRB61ts5VlAlIeO+QeUb/sV0BQxtHfpKxM1rG4NrUlteBpeJAyxVu
-         ym0TsOmbs6X1RR5CMGGscMyLfS28nNieP+1CNrxfL6ZGDJ/ihQImwH194/EgR2bkdw
-         14ngeh+5rTgzYtWVqM/DToyzddPm8JDcyRNNZoFw=
-Date:   Fri, 10 Jul 2020 09:07:58 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     "Ramuthevar,Vadivel MuruganX" 
-        <vadivel.muruganx.ramuthevar@linux.intel.com>,
-        linux-kernel@vger.kernel.org, robh@kernel.org,
-        p.zabel@pengutronix.de, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, cheol.yong.kim@intel.com,
-        qi-ming.wu@intel.com, yin1.li@intel.com,
-        andriy.shevchenko@intel.com
-Subject: Re: [PATCH v4 2/2] usb: phy: Add USB3 PHY support for Intel LGM SoC
-Message-ID: <20200710070758.GB1176018@kroah.com>
-References: <20200617035818.54110-1-vadivel.muruganx.ramuthevar@linux.intel.com>
- <20200617035818.54110-3-vadivel.muruganx.ramuthevar@linux.intel.com>
- <87blknrjg6.fsf@kernel.org>
+        id S1726536AbgGJHUy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 10 Jul 2020 03:20:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34010 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725966AbgGJHUy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 10 Jul 2020 03:20:54 -0400
+Received: from smtp.al2klimov.de (smtp.al2klimov.de [IPv6:2a01:4f8:c0c:1465::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A454C08C5CE;
+        Fri, 10 Jul 2020 00:20:54 -0700 (PDT)
+Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
+        by smtp.al2klimov.de (Postfix) with ESMTPA id E17D8BC070;
+        Fri, 10 Jul 2020 07:20:51 +0000 (UTC)
+From:   "Alexander A. Klimov" <grandmaster@al2klimov.de>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
+Subject: [PATCH] USB PHY LAYER: Replace HTTP links with HTTPS ones
+Date:   Fri, 10 Jul 2020 09:20:45 +0200
+Message-Id: <20200710072045.29133-1-grandmaster@al2klimov.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87blknrjg6.fsf@kernel.org>
+Content-Transfer-Encoding: 8bit
+X-Spamd-Bar: +++++
+X-Spam-Level: *****
+Authentication-Results: smtp.al2klimov.de;
+        auth=pass smtp.auth=aklimov@al2klimov.de smtp.mailfrom=grandmaster@al2klimov.de
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 10, 2020 at 09:08:09AM +0300, Felipe Balbi wrote:
-> 
-> Hi,
-> 
-> "Ramuthevar,Vadivel MuruganX"
-> <vadivel.muruganx.ramuthevar@linux.intel.com> writes:
-> 
-> > From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
-> >
-> > Add support for USB PHY on Intel LGM SoC.
-> >
-> > Signed-off-by: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
-> > ---
-> >  drivers/usb/phy/Kconfig       |  11 ++
-> >  drivers/usb/phy/Makefile      |   1 +
-> >  drivers/usb/phy/phy-lgm-usb.c | 275 ++++++++++++++++++++++++++++++++++++++++++
-> 
-> new phy drivers should use drivers/phy instead.
+Rationale:
+Reduces attack surface on kernel devs opening the links for MITM
+as HTTPS traffic is much harder to manipulate.
 
-Can we move all of the existing usb/phy drivers there too?
+Deterministic algorithm:
+For each file:
+  If not .svg:
+    For each line:
+      If doesn't contain `\bxmlns\b`:
+        For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
+	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
+            If both the HTTP and HTTPS versions
+            return 200 OK and serve the same content:
+              Replace HTTP with HTTPS.
 
-thanks,
+Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
+---
+ Continuing my work started at 93431e0607e5.
+ See also: git log --oneline '--author=Alexander A. Klimov <grandmaster@al2klimov.de>' v5.7..master
+ (Actually letting a shell for loop submit all this stuff for me.)
 
-greg k-h
+ If there are any URLs to be removed completely or at least not HTTPSified:
+ Just clearly say so and I'll *undo my change*.
+ See also: https://lkml.org/lkml/2020/6/27/64
+
+ If there are any valid, but yet not changed URLs:
+ See: https://lkml.org/lkml/2020/6/26/837
+
+ If you apply the patch, please let me know.
+
+
+ drivers/usb/phy/phy-keystone.c    | 2 +-
+ drivers/usb/phy/phy-twl6030-usb.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/phy/phy-keystone.c b/drivers/usb/phy/phy-keystone.c
+index 9c226b57153b..358d05cb643d 100644
+--- a/drivers/usb/phy/phy-keystone.c
++++ b/drivers/usb/phy/phy-keystone.c
+@@ -2,7 +2,7 @@
+ /*
+  * phy-keystone - USB PHY, talking to dwc3 controller in Keystone.
+  *
+- * Copyright (C) 2013 Texas Instruments Incorporated - http://www.ti.com
++ * Copyright (C) 2013 Texas Instruments Incorporated - https://www.ti.com
+  *
+  * Author: WingMan Kwok <w-kwok2@ti.com>
+  */
+diff --git a/drivers/usb/phy/phy-twl6030-usb.c b/drivers/usb/phy/phy-twl6030-usb.c
+index 9a7e655d5280..8ba6c5a91557 100644
+--- a/drivers/usb/phy/phy-twl6030-usb.c
++++ b/drivers/usb/phy/phy-twl6030-usb.c
+@@ -2,7 +2,7 @@
+ /*
+  * twl6030_usb - TWL6030 USB transceiver, talking to OMAP OTG driver.
+  *
+- * Copyright (C) 2010 Texas Instruments Incorporated - http://www.ti.com
++ * Copyright (C) 2010 Texas Instruments Incorporated - https://www.ti.com
+  *
+  * Author: Hema HK <hemahk@ti.com>
+  */
+-- 
+2.27.0
+
