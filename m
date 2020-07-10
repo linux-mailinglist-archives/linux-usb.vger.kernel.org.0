@@ -2,77 +2,187 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4790721AD8D
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Jul 2020 05:32:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C95421AD99
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Jul 2020 05:40:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727085AbgGJDbt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 9 Jul 2020 23:31:49 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:8845 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726495AbgGJDbr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 9 Jul 2020 23:31:47 -0400
-X-UUID: 60e408bae5c34e8199bd39f6c963ffae-20200710
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=EGM3/BWA8LhSsl+HU+sSKjzVuEq3sKi1FpSTwosiG/Y=;
-        b=nx0ywG3UFrBU0jPuTeVq7HNV5sLjB56T57UY7fFULkQTJYkIT4dhVbW4K97Ev+6/oUAkkB3uLcsaVrqGMn5TL8AYc5mOaLvOoxhSaSamMQo8eo8y4TWwzbqPL94LvpjZezJ2DgT9coKBwx876y7Z4lBhoiFEjNLk1T7SbRi/u4o=;
-X-UUID: 60e408bae5c34e8199bd39f6c963ffae-20200710
-Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 2019534727; Fri, 10 Jul 2020 11:31:40 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- MTKMBS31N2.mediatek.inc (172.27.4.87) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 10 Jul 2020 11:31:34 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 10 Jul 2020 11:31:38 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+        id S1726796AbgGJDkw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 9 Jul 2020 23:40:52 -0400
+Received: from mga03.intel.com ([134.134.136.65]:12605 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726509AbgGJDkv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 9 Jul 2020 23:40:51 -0400
+IronPort-SDR: 9AGpKEsApofNRE72yZ0y+QfFpgto+MvuIwcHiH+r2Ci8nKfniheD2Fx6frbAOLCtXXa0URUUQz
+ F8JWF08EDLZw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9677"; a="148134691"
+X-IronPort-AV: E=Sophos;i="5.75,334,1589266800"; 
+   d="scan'208";a="148134691"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2020 20:40:50 -0700
+IronPort-SDR: W5o4jXi7DNh6igZu6MYsy9UklhwKSOi/TJ1u/3Hxpc1nP4LTq5YhT3VNu39s+3XVJ5IhomzpSu
+ MRdkr8OuVZ5Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,334,1589266800"; 
+   d="scan'208";a="484038611"
+Received: from lkp-server02.sh.intel.com (HELO d197edaadf32) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 09 Jul 2020 20:40:49 -0700
+Received: from kbuild by d197edaadf32 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1jtju4-00002j-OA; Fri, 10 Jul 2020 03:40:48 +0000
+Date:   Fri, 10 Jul 2020 11:40:21 +0800
+From:   kernel test robot <lkp@intel.com>
 To:     Felipe Balbi <balbi@kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [PATCH] usb: gadget: bdc: use readl_poll_timeout() to simplify code
-Date:   Fri, 10 Jul 2020 11:30:56 +0800
-Message-ID: <1594351856-876-1-git-send-email-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 1.8.1.1.dirty
+Cc:     linux-omap@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [balbi-usb:testing/fixes] BUILD SUCCESS
+ 8778eb0927ddcd3f431805c37b78fa56481aeed9
+Message-ID: <5f07e325.mM6Q2bIAlbjG6bCk%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: FE010D8AB826172DBF251444CD9B52F4A7F285AF900E9FB851C849394F2C0CB92000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-VXNlIHJlYWRsX3BvbGxfdGltZW91dCgpIHRvIHBvbGwgcmVnaXN0ZXIgc3RhdHVzDQoNClNpZ25l
-ZC1vZmYtYnk6IENodW5mZW5nIFl1biA8Y2h1bmZlbmcueXVuQG1lZGlhdGVrLmNvbT4NCi0tLQ0K
-IGRyaXZlcnMvdXNiL2dhZGdldC91ZGMvYmRjL2JkY19jb3JlLmMgfCAyMiArKysrKysrKy0tLS0t
-LS0tLS0tLS0tDQogMSBmaWxlIGNoYW5nZWQsIDggaW5zZXJ0aW9ucygrKSwgMTQgZGVsZXRpb25z
-KC0pDQoNCmRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9nYWRnZXQvdWRjL2JkYy9iZGNfY29yZS5j
-IGIvZHJpdmVycy91c2IvZ2FkZ2V0L3VkYy9iZGMvYmRjX2NvcmUuYw0KaW5kZXggMDJhM2E3Ny4u
-ZmExNzNkZSAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvdXNiL2dhZGdldC91ZGMvYmRjL2JkY19jb3Jl
-LmMNCisrKyBiL2RyaXZlcnMvdXNiL2dhZGdldC91ZGMvYmRjL2JkY19jb3JlLmMNCkBAIC0xMiw2
-ICsxMiw3IEBADQogI2luY2x1ZGUgPGxpbnV4L3NwaW5sb2NrLmg+DQogI2luY2x1ZGUgPGxpbnV4
-L3BsYXRmb3JtX2RldmljZS5oPg0KICNpbmNsdWRlIDxsaW51eC9pbnRlcnJ1cHQuaD4NCisjaW5j
-bHVkZSA8bGludXgvaW9wb2xsLmg+DQogI2luY2x1ZGUgPGxpbnV4L2lvcG9ydC5oPg0KICNpbmNs
-dWRlIDxsaW51eC9pby5oPg0KICNpbmNsdWRlIDxsaW51eC9saXN0Lmg+DQpAQCAtMzIsMjEgKzMz
-LDE0IEBADQogc3RhdGljIGludCBwb2xsX29pcChzdHJ1Y3QgYmRjICpiZGMsIGludCB1c2VjKQ0K
-IHsNCiAJdTMyIHN0YXR1czsNCi0JLyogUG9sbCB0aWxsIFNUUyE9IE9JUCAqLw0KLQl3aGlsZSAo
-dXNlYykgew0KLQkJc3RhdHVzID0gYmRjX3JlYWRsKGJkYy0+cmVncywgQkRDX0JEQ1NDKTsNCi0J
-CWlmIChCRENfQ1NUUyhzdGF0dXMpICE9IEJEQ19PSVApIHsNCi0JCQlkZXZfZGJnKGJkYy0+ZGV2
-LA0KLQkJCQkicG9sbF9vaXAgY29tcGxldGUgc3RhdHVzPSVkIiwNCi0JCQkJQkRDX0NTVFMoc3Rh
-dHVzKSk7DQotCQkJcmV0dXJuIDA7DQotCQl9DQotCQl1ZGVsYXkoMTApOw0KLQkJdXNlYyAtPSAx
-MDsNCi0JfQ0KLQlkZXZfZXJyKGJkYy0+ZGV2LCAiRXJyOiBvcGVyYXRpb24gdGltZWRvdXQgQkRD
-U0M6IDB4JTA4eFxuIiwgc3RhdHVzKTsNCisJaW50IHJldDsNCiANCi0JcmV0dXJuIC1FVElNRURP
-VVQ7DQorCXJldCA9IHJlYWRsX3BvbGxfdGltZW91dChiZGMtPnJlZ3MgKyBCRENfQkRDU0MsIHN0
-YXR1cywNCisJCShCRENfQ1NUUyhzdGF0dXMpICE9IEJEQ19PSVApLCAxMCwgdXNlYyk7DQorCWlm
-IChyZXQpDQorCQlkZXZfZXJyKGJkYy0+ZGV2LCAiRXJyOiBvcGVyYXRpb24gdGltZWRvdXQgQkRD
-U0M6IDB4JTA4eFxuIiwgc3RhdHVzKTsNCisNCisJcmV0dXJuIHJldDsNCiB9DQogDQogLyogU3Rv
-cCB0aGUgQkRDIGNvbnRyb2xsZXIgKi8NCi0tIA0KMS45LjENCg==
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git  testing/fixes
+branch HEAD: 8778eb0927ddcd3f431805c37b78fa56481aeed9  usb: gadget: function: fix missing spinlock in f_uac1_legacy
 
+elapsed time: 721m
+
+configs tested: 125
+configs skipped: 8
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                               allnoconfig
+arm64                            allyesconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+arm64                               defconfig
+mips                         rt305x_defconfig
+sh                                  defconfig
+nios2                            alldefconfig
+m68k                         apollo_defconfig
+mips                        omega2p_defconfig
+powerpc                     mpc512x_defconfig
+s390                          debug_defconfig
+csky                             allyesconfig
+m68k                          amiga_defconfig
+powerpc                     ep8248e_defconfig
+arm                   milbeaut_m10v_defconfig
+mips                       rbtx49xx_defconfig
+arm                        spear6xx_defconfig
+m68k                       m5249evb_defconfig
+arm                        multi_v7_defconfig
+powerpc                       holly_defconfig
+x86_64                              defconfig
+arm                         ebsa110_defconfig
+ia64                                defconfig
+csky                                defconfig
+powerpc                      tqm8xx_defconfig
+powerpc                      ep88xc_defconfig
+arm                         at91_dt_defconfig
+m68k                          hp300_defconfig
+powerpc                  mpc866_ads_defconfig
+powerpc64                           defconfig
+um                             i386_defconfig
+openrisc                         allyesconfig
+sh                        edosk7705_defconfig
+m68k                          atari_defconfig
+sh                             espt_defconfig
+i386                              allnoconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                              debian-10.3
+ia64                             allmodconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                              allnoconfig
+m68k                           sun3_defconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+nios2                            allyesconfig
+openrisc                            defconfig
+c6x                              allyesconfig
+c6x                               allnoconfig
+nds32                               defconfig
+nds32                             allnoconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+h8300                            allmodconfig
+xtensa                              defconfig
+arc                                 defconfig
+arc                              allyesconfig
+sh                               allmodconfig
+sh                                allnoconfig
+microblaze                        allnoconfig
+mips                             allyesconfig
+mips                              allnoconfig
+mips                             allmodconfig
+parisc                            allnoconfig
+parisc                              defconfig
+parisc                           allyesconfig
+parisc                           allmodconfig
+powerpc                             defconfig
+powerpc                          allyesconfig
+powerpc                          rhel-kconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a002-20200709
+i386                 randconfig-a001-20200709
+i386                 randconfig-a006-20200709
+i386                 randconfig-a005-20200709
+i386                 randconfig-a004-20200709
+i386                 randconfig-a003-20200709
+x86_64               randconfig-a012-20200709
+x86_64               randconfig-a016-20200709
+x86_64               randconfig-a011-20200709
+x86_64               randconfig-a014-20200709
+x86_64               randconfig-a013-20200709
+x86_64               randconfig-a015-20200709
+i386                 randconfig-a011-20200709
+i386                 randconfig-a015-20200709
+i386                 randconfig-a014-20200709
+i386                 randconfig-a016-20200709
+i386                 randconfig-a012-20200709
+i386                 randconfig-a013-20200709
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+s390                             allyesconfig
+s390                              allnoconfig
+s390                             allmodconfig
+s390                                defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+sparc64                             defconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                          allmodconfig
+um                                allnoconfig
+um                                  defconfig
+um                               allyesconfig
+um                               allmodconfig
+x86_64                               rhel-7.6
+x86_64                    rhel-7.6-kselftests
+x86_64                               rhel-8.3
+x86_64                                  kexec
+x86_64                                   rhel
+x86_64                         rhel-7.2-clear
+x86_64                                    lkp
+x86_64                              fedora-25
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
