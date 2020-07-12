@@ -2,104 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE43E21C496
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Jul 2020 15:58:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CF8821C7AC
+	for <lists+linux-usb@lfdr.de>; Sun, 12 Jul 2020 07:51:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728440AbgGKN6e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 11 Jul 2020 09:58:34 -0400
-Received: from smtp.al2klimov.de ([78.46.175.9]:60026 "EHLO smtp.al2klimov.de"
+        id S1728146AbgGLFvA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 12 Jul 2020 01:51:00 -0400
+Received: from mga09.intel.com ([134.134.136.24]:64366 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727004AbgGKN6d (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 11 Jul 2020 09:58:33 -0400
-Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
-        by smtp.al2klimov.de (Postfix) with ESMTPA id 674A2BC078;
-        Sat, 11 Jul 2020 13:58:31 +0000 (UTC)
-From:   "Alexander A. Klimov" <grandmaster@al2klimov.de>
-To:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
-Subject: [PATCH] usb: typec: Replace HTTP links with HTTPS ones
-Date:   Sat, 11 Jul 2020 15:58:25 +0200
-Message-Id: <20200711135825.19862-1-grandmaster@al2klimov.de>
+        id S1727077AbgGLFu7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 12 Jul 2020 01:50:59 -0400
+IronPort-SDR: PqrVqmkYA2Ua5G8qqPBCNGv7WEro90R1EarS04Nwx6v5YHsepxS716QSa0SKfrjZDNCCX3pij5
+ 7buOec5zd2Cw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9679"; a="149932010"
+X-IronPort-AV: E=Sophos;i="5.75,342,1589266800"; 
+   d="scan'208";a="149932010"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2020 22:50:59 -0700
+IronPort-SDR: 6dIdGJ+V6iv5lTF00/dGQIFV7NJ7kgJvEJjz8QW2uFcxlA+MxeRH2jDsmK2S/OVKEYP3RWarmY
+ BVAZH/bmq31g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,342,1589266800"; 
+   d="scan'208";a="268087447"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga007.fm.intel.com with ESMTP; 11 Jul 2020 22:50:58 -0700
+Received: from [10.255.131.188] (unknown [10.255.131.188])
+        by linux.intel.com (Postfix) with ESMTP id D44F65805F0;
+        Sat, 11 Jul 2020 22:50:55 -0700 (PDT)
+Reply-To: vadivel.muruganx.ramuthevar@linux.intel.com
+Subject: Re: [PATCH v4 2/2] usb: phy: Add USB3 PHY support for Intel LGM SoC
+To:     Felipe Balbi <balbi@kernel.org>, linux-kernel@vger.kernel.org,
+        robh@kernel.org, p.zabel@pengutronix.de
+Cc:     gregkh@linuxfoundation.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, cheol.yong.kim@intel.com,
+        qi-ming.wu@intel.com, yin1.li@intel.com,
+        andriy.shevchenko@intel.com
+References: <20200617035818.54110-1-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <20200617035818.54110-3-vadivel.muruganx.ramuthevar@linux.intel.com>
+ <87blknrjg6.fsf@kernel.org>
+From:   "Ramuthevar, Vadivel MuruganX" 
+        <vadivel.muruganx.ramuthevar@linux.intel.com>
+Message-ID: <04a2d471-168f-7769-895e-b390c64e95ad@linux.intel.com>
+Date:   Sun, 12 Jul 2020 13:50:54 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Bar: +++++
-X-Spam-Level: *****
-Authentication-Results: smtp.al2klimov.de;
-        auth=pass smtp.auth=aklimov@al2klimov.de smtp.mailfrom=grandmaster@al2klimov.de
+In-Reply-To: <87blknrjg6.fsf@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Rationale:
-Reduces attack surface on kernel devs opening the links for MITM
-as HTTPS traffic is much harder to manipulate.
+Hi,
 
-Deterministic algorithm:
-For each file:
-  If not .svg:
-    For each line:
-      If doesn't contain `\bxmlns\b`:
-        For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
-	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
-            If both the HTTP and HTTPS versions
-            return 200 OK and serve the same content:
-              Replace HTTP with HTTPS.
+On 10/7/2020 2:08 pm, Felipe Balbi wrote:
+> 
+> Hi,
+> 
+> "Ramuthevar,Vadivel MuruganX"
+> <vadivel.muruganx.ramuthevar@linux.intel.com> writes:
+> 
+>> From: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+>>
+>> Add support for USB PHY on Intel LGM SoC.
+>>
+>> Signed-off-by: Ramuthevar Vadivel Murugan <vadivel.muruganx.ramuthevar@linux.intel.com>
+>> ---
+>>   drivers/usb/phy/Kconfig       |  11 ++
+>>   drivers/usb/phy/Makefile      |   1 +
+>>   drivers/usb/phy/phy-lgm-usb.c | 275 ++++++++++++++++++++++++++++++++++++++++++
+> 
+> new phy drivers should use drivers/phy instead.
+Noted, Will move to drivers/phy as per your suggestion, Thanks!
 
-Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
----
- Continuing my work started at 93431e0607e5.
- See also: git log --oneline '--author=Alexander A. Klimov <grandmaster@al2klimov.de>' v5.7..master
- (Actually letting a shell for loop submit all this stuff for me.)
-
- If there are any URLs to be removed completely or at least not just HTTPSified:
- Just clearly say so and I'll *undo my change*.
- See also: https://lkml.org/lkml/2020/6/27/64
-
- If there are any valid, but yet not changed URLs:
- See: https://lkml.org/lkml/2020/6/26/837
-
- If you apply the patch, please let me know.
-
- Sorry again to all maintainers who complained about subject lines.
- Now I realized that you want an actually perfect prefixes,
- not just subsystem ones.
- I tried my best...
- And yes, *I could* (at least half-)automate it.
- Impossible is nothing! :)
-
-
- drivers/usb/typec/tps6598x.c   | 2 +-
- drivers/usb/typec/ucsi/Kconfig | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/typec/tps6598x.c b/drivers/usb/typec/tps6598x.c
-index b7c9fe5caabe..3db33bb622c3 100644
---- a/drivers/usb/typec/tps6598x.c
-+++ b/drivers/usb/typec/tps6598x.c
-@@ -100,7 +100,7 @@ struct tps6598x {
- 
- /*
-  * Max data bytes for Data1, Data2, and other registers. See ch 1.3.2:
-- * http://www.ti.com/lit/ug/slvuan1a/slvuan1a.pdf
-+ * https://www.ti.com/lit/ug/slvuan1a/slvuan1a.pdf
-  */
- #define TPS_MAX_LEN	64
- 
-diff --git a/drivers/usb/typec/ucsi/Kconfig b/drivers/usb/typec/ucsi/Kconfig
-index 15c2ac7db02d..2192d7c4fec7 100644
---- a/drivers/usb/typec/ucsi/Kconfig
-+++ b/drivers/usb/typec/ucsi/Kconfig
-@@ -18,7 +18,7 @@ config TYPEC_UCSI
- 	  for every supported interface method.
- 
- 	  The UCSI specification can be downloaded from:
--	  http://www.intel.com/content/www/us/en/io/universal-serial-bus/usb-type-c-ucsi-spec.html
-+	  https://www.intel.com/content/www/us/en/io/universal-serial-bus/usb-type-c-ucsi-spec.html
- 
- 	  To compile the driver as a module, choose M here: the module will be
- 	  called typec_ucsi.
--- 
-2.27.0
-
+Regards
+Vadivel
+> 
