@@ -2,149 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D32021C98B
-	for <lists+linux-usb@lfdr.de>; Sun, 12 Jul 2020 15:45:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 068A021CAB7
+	for <lists+linux-usb@lfdr.de>; Sun, 12 Jul 2020 19:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728785AbgGLNpw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 12 Jul 2020 09:45:52 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:48044 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728754AbgGLNpv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 12 Jul 2020 09:45:51 -0400
-Received: from mailhost.synopsys.com (us03-mailhost1.synopsys.com [10.4.17.17])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id D832C40A60;
-        Sun, 12 Jul 2020 13:45:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1594561550; bh=fkLABs6z5lRjv1OC7U80RrDxO136qAEEgsbKJ3Dk7vU=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=GW5hMTFLpr6XKsLd2s3FH1SOqEMmVNiB6DNXbN0DpnNXkbkMJ8E6YmClZ1Huk9VOl
-         num9sUokHtrWHPTfImq51n+KkdA3VXWeOIuxEEROpvuo/iD9uPrypqI3Kmo1pk9WiI
-         OCleG1tF0T8WuTtJIw+G9laaUbB8NBDeb7tSJM9QXaabDb3s17hhx5pZ3ojScbzQn5
-         Vgm9QENbA7b+VFKc5P/zZREMoBKUPc1IJT4i6fd2XM7DRsYLhqu8LT1AwqkPggWJns
-         KSOPzoRf+rXTkte6CreLiGgG27j1lmz9g4QH6DP+JysDi/iGW7oesadijDnfr691Kl
-         J/GYHZXd3IDhg==
-Received: from o365relay-in.synopsys.com (sv2-o365relay3.synopsys.com [10.202.1.139])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id 527B3A005A;
-        Sun, 12 Jul 2020 13:45:50 +0000 (UTC)
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2169.outbound.protection.outlook.com [104.47.57.169])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "mail.protection.outlook.com", Issuer "GlobalSign Organization Validation CA - SHA256 - G3" (verified OK))
-        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 981E14016B;
-        Sun, 12 Jul 2020 13:45:49 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=joglekar@synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="NsOHdyAi";
-        dkim-atps=neutral
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L/KrjidSUkjMWDYReeIlbuBcC+GhvVlRX8xT/lyTwafLCdEdXx4i8SQ3gSoBMjl02DK/qhL3tJnaOxEIMBXhH8Qb6H45G1jkhyVhYC6mdKoj5C7iyeD0vInejT49Xd+kJMIaYECBOrmN2qeKoZm9xUO8PCp+uLs7XhGelUDyflHpe930amQCKDxMydVO0flUXQZ1QjHiD8DHSCVtwCx//Oi9GrLv3rDC+PVH/y3CsN5whq31ZLyS8mqIy6NhauLPExPmp7uJfTnRPx6JQ34HRKC7YRhCk4htRQ0ZwvWCCz2cApOkc25uQYHavuARlpYKlqLEECFSxLJPo8QjSgZ0Hg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fkLABs6z5lRjv1OC7U80RrDxO136qAEEgsbKJ3Dk7vU=;
- b=WSW6Hutom1K497PfvpV8c53a0W+CpdYiGuEubFaKC7l/YrX93W971Gz71bm8X/5VsfPVXMd/9fiE4HLAccxgrIVi3RRDRLvETR1rUl+seiXuFz0zlg8oAjnfv1+zR3b3Fo3vZ9W5yy7Swm9kvcxHyw+QilJYZa2H2i8J4pd+HcflMmDljjbnhx7J0OCYKktfNTWnWiles0jY8HSthhb/e/YZ298D47PWnCM8pycfHTOux8/H0yKVv+Sqx0n7eZawTFkAkV3kw7BsD5bFfSqP5SQtyNlf7E/jKeWCA9jA9gyi9mvheA64GGhIzFz+FFwQeaefFG0CahV/GsMW6FitlA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fkLABs6z5lRjv1OC7U80RrDxO136qAEEgsbKJ3Dk7vU=;
- b=NsOHdyAiLySK1pCZSe4sv9cJsrc8OMPIGp1Ae5tTdLcIZMYwDGJomd0E5RClOX8rUDCu+lIBzhLrbiCCRo3yNXp3VZ/f/6axyXXY95Jz3w9D2AjqeZHT+/QvgguwtMvBGPqmkgiXDw7ud+AB4lDhNESL/tr66CUlv6m+aUClSv0=
-Received: from BN8PR12MB3458.namprd12.prod.outlook.com (2603:10b6:408:44::32)
- by BN6PR12MB1201.namprd12.prod.outlook.com (2603:10b6:404:20::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3174.22; Sun, 12 Jul
- 2020 13:45:47 +0000
-Received: from BN8PR12MB3458.namprd12.prod.outlook.com
- ([fe80::9559:91b2:aaa3:bfd6]) by BN8PR12MB3458.namprd12.prod.outlook.com
- ([fe80::9559:91b2:aaa3:bfd6%2]) with mapi id 15.20.3174.025; Sun, 12 Jul 2020
- 13:45:47 +0000
-X-SNPS-Relay: synopsys.com
-From:   Tejas Joglekar <Tejas.Joglekar@synopsys.com>
-To:     Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
-        Rob Herring <robh+dt@kernel.org>, Rob Herring <robh@kernel.org>
-CC:     Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        John Youn <John.Youn@synopsys.com>
-Subject: Re: [PATCH v3 3/4] usb: dwc3: Add device property
- sgl-trb-cache-size-quirk
-Thread-Topic: [PATCH v3 3/4] usb: dwc3: Add device property
- sgl-trb-cache-size-quirk
-Thread-Index: AQHWNBPIzVDQozhV20CqjRBnx+8J26j6PmiAgAAa/YCACePvgA==
-Date:   Sun, 12 Jul 2020 13:45:47 +0000
-Message-ID: <819f3081-45a3-d225-fcb7-516908bd84ec@synopsys.com>
-References: <cover.1590415123.git.joglekar@synopsys.com>
- <83eba2e9f0069f20ccc94537e3b99cbaec209441.1590415123.git.joglekar@synopsys.com>
- <5534d9d6-5452-dade-e46e-f4b0910becdb@synopsys.com>
- <877dvhqh2e.fsf@kernel.org>
-In-Reply-To: <877dvhqh2e.fsf@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: synopsys.com; dkim=none (message not signed)
- header.d=none;synopsys.com; dmarc=none action=none header.from=synopsys.com;
-x-originating-ip: [49.207.193.201]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 98f2802a-2e1b-4d66-0bd0-08d82669e1b3
-x-ms-traffictypediagnostic: BN6PR12MB1201:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BN6PR12MB1201C9CE24A6920FBFC53845A4630@BN6PR12MB1201.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: RhP8woVOjo9xl4NaIzs4m4zRwiX81A+N/dn6VJUmDeKcwS0RJSYRT3dclGqfh4p5ZhE1mQEEx96alUSZ6T1AsGuHX1y3MtODlOmHJKpWghZesVWdZkAwlImg3X2LfDLZQHrgSfwhB2RJZ+0Cy2XOBrcxCQlsoH4fJypxx+tefntCzotN0xPFdD3ghWuHQbj15/+adRx7HKqa+SrL8gWqog9FOEIrGWx/VFRmBDAMjC4/4Twpu/stqOtHn1XTFw9ml7USZR7WmzrFnDIP7vh3g7Xu1ioJbbVjRodJyZwzmHy2HK0RG3OrTyahCE+T5+D5xUiQ5FJsMdoKNTROD93HrA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3458.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(366004)(136003)(346002)(376002)(39850400004)(396003)(91956017)(76116006)(83380400001)(4326008)(66946007)(2616005)(71200400001)(6486002)(110136005)(8676002)(107886003)(8936002)(31686004)(54906003)(186003)(2906002)(53546011)(26005)(5660300002)(86362001)(316002)(31696002)(66556008)(66476007)(66446008)(64756008)(55236004)(6512007)(478600001)(36756003)(6506007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: 1ZliorXqpg9Sr+CWClKpZNHMh0gDcJ4biuCKDOWtCxlP3TOYmttkkTUsUrl2D3caDcWXOEA0ffqFXQIn/5pFgz1cl/3ZMhj9Za8drKdTLcGyvBvxS7TmhwwK3w4zfFIDzJ4NEMCc0lBWBEATg9k3yaf8ddN2TynbLIBPFDjPaPgMwRFrS19hwq5qeZZqc8cVV96AMqgFKJrJTycAslr4iW9BX/H8Uvllxw7UWQyjXFYZJoH3DJYgIFEgf88C/oLS/I655fCIt4bzHaqJPnO3Vd6H9ePgxo5LDSDSD4tC1rf4cs9YptJzWdBrykipyzfT4qF3AN90zykh2KHE4/6GjOU4+w/aA7kIBmJKP1Dy0wnkKt9lJEamxst1vBt0zeOYciw2+oqbT5CEKhkSoagOwohopG/rCKLLlWdiR5o9xVWej/98kbRW8p1Gc2KVbfsq5Cbs8miinGau9rUJUTbBPGYdBfATd5D68OIVZ5YqRKHg7afV7dnB7uoUvzEriWmU
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <147A690DE83ECF45B15E77B12C556E76@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1729218AbgGLRcw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 12 Jul 2020 13:32:52 -0400
+Received: from crapouillou.net ([89.234.176.41]:41932 "EHLO crapouillou.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728882AbgGLRcw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 12 Jul 2020 13:32:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1594575169; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:content-transfer-encoding:in-reply-to:
+         references; bh=Jl9sMbotBoFxjS8mOnQpdRxUlMPwm3S5bXXI7/kn6hg=;
+        b=aCF0OIjxs6mijYBXp5VknjHnXmM+RLjBAkwN5ad589uEKjqSXRQmomSNyYPUthqjxsxXVm
+        wjrf/Nq1zKSBoZ7wHbQ1fFmpW/R39XSYMrUdwlzwSrw2ywgAmJaW08MDaskg7waqGlOyu9
+        mB+A1Bajx+R19XA6MR3RYoaPiY9fS9o=
+Date:   Sun, 12 Jul 2020 19:32:39 +0200
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Segfault in MUSB core
+To:     Bin Liu <b-liu@ti.com>
+Cc:     Linux USB List <linux-usb@vger.kernel.org>, od@zcrc.me
+Message-Id: <F2ADDQ.J4D20OIYC0823@crapouillou.net>
 MIME-Version: 1.0
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3458.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 98f2802a-2e1b-4d66-0bd0-08d82669e1b3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jul 2020 13:45:47.0745
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Vz20U9yijNjabIm/icUmHB6fJ31XnDusBcqCdvNLcnWcFnGIkmPmoefDdixkbKwKK7Rdw7IHOFQfDsO+0Bfqww==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1201
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGVsbG8gUm9iLA0KT24gNy82LzIwMjAgMTI6MTMgUE0sIEZlbGlwZSBCYWxiaSB3cm90ZToNCj4g
-DQo+IEhpLA0KPiANCj4gVGVqYXMgSm9nbGVrYXIgPFRlamFzLkpvZ2xla2FyQHN5bm9wc3lzLmNv
-bT4gd3JpdGVzOg0KPj4+IEBAIC05NSw2ICs5NSwxMCBAQCBpbnQgZHdjM19ob3N0X2luaXQoc3Ry
-dWN0IGR3YzMgKmR3YykNCj4+PiAgCWlmIChkd2MtPnVzYjJfbHBtX2Rpc2FibGUpDQo+Pj4gIAkJ
-cHJvcHNbcHJvcF9pZHgrK10gPSBQUk9QRVJUWV9FTlRSWV9CT09MKCJ1c2IyLWxwbS1kaXNhYmxl
-Iik7DQo+Pj4gIA0KPj4+ICsJaWYgKGR3Yy0+c2dsX3RyYl9jYWNoZV9zaXplX3F1aXJrKQ0KPj4+
-ICsJCXByb3BzW3Byb3BfaWR4KytdID0NCj4+PiArCQkJUFJPUEVSVFlfRU5UUllfQk9PTCgic2ds
-LXRyYi1jYWNoZS1zaXplLXF1aXJrIik7DQo+Pj4gKw0KPj4+ICAJLyoqDQo+Pj4gIAkgKiBXT1JL
-QVJPVU5EOiBkd2MzIHJldmlzaW9ucyA8PTMuMDBhIGhhdmUgYSBsaW1pdGF0aW9uDQo+Pj4gIAkg
-KiB3aGVyZSBQb3J0IERpc2FibGUgY29tbWFuZCBkb2Vzbid0IHdvcmsuDQo+Pj4NCj4+IERvZXMg
-dGhpcyBpbXBsZW1lbnRhdGlvbiBsb29rcyBnb29kIHRvIHlvdT8gUm9iIGhhcyBzb21lIGNvbmNl
-cm5lZCBvdmVyIHRoZSBEVCBlbnRyaWVzLA0KPj4geW91IHN1Z2dlc3RlZCB1c2luZyBjb21wYXRp
-YmxlIHN0cmluZyB3aXRoIHRoaXMgcXVpcmsgYWRkaXRpb24uDQo+PiBDYW4geW91IHBsZWFzZSBi
-cmllZiBhYm91dCBob3cgeW91IHdvdWxkIGxpa2UgdG8gaGF2ZSB0aGlzIHF1aXJrIGltcGxlbWVu
-dGVkPw0KPj4gSSBjYW4gc2VuZCB0aGUgdXBkYXRlZCBwYXRjaC4gTXkgcGF0Y2ggc2VyaWVzIGlz
-IHBlbmRpbmcgZm9yIG1lcmdlIGp1c3QgYmVjYXVzZSBvZiB0aGUNCj4+IERUIGFuZCBxdWlyayBp
-c3N1ZS4gQ2FuIHlvdSBwbGVhc2UgaGVscD8NCj4gDQo+IFllYWgsIHlvdSBuZWVkIHRvIGdldCBp
-bnRvIGFuIGFncmVlbWVudCB3aXRoIFJvYiA6LSkgSSBkb24ndCBtaW5kIGhhdmluZw0KPiBleHRy
-YSBEVCBmbGFncyBmb3IgdGhpbmdzIHdoaWNoIGNhbid0IGJlIGRldGVjdGVkIGluIHJ1bnRpbWUs
-IFJvYg0KPiBkaXNhZ3JlZXMuDQo+IA0KVGhlIGNvbXBhdGlibGUgc3RyaW5nIGlzIG5vdCBzdWl0
-YWJsZSBvcHRpb24gYXMgaXQgZG9lcyBub3Qgd29yayB3aXRoIHBsYXRmb3JtIGRyaXZlcnMNCndp
-dGggUENJIGJhc2VkIHN5c3RlbS4gQWxzbyBTeW5vcHN5cyBjb250cm9sbGVycyBJUCB2ZXJzaW9u
-IHJlZ2lzdGVyIGlzIG5vdCB2aXNpYmxlIHRvIHhoY2kNCmRyaXZlciBhbmQgaGVuY2Ugd2UgZG9u
-J3QgaGF2ZSBzZXBhcmF0ZSBjb21wYXRpYmxlIHN0cmluZyBmb3IgZWFjaCBTeW5vcHN5cyB2ZXJz
-aW9uIG9uIHRoZQ0KeGhjaSBkcml2ZXIgc2lkZS4gDQpEdWUgdG8gd2hpY2ggSSBkZXBlbmQgb24g
-RFQgZmxhZyBhZGRpdGlvbiBmb3IgdGhlIHF1aXJrLiBDYW4gd2UgYWRkIHRoZXNlIERUIGZsYWdz
-IGFuZCBxdWlyaz8NCiANCiANClRoYW5rcyAmIFJlZ2FyZHMsDQogVGVqYXMgSm9nbGVrYXINCg==
+Hi Bin,
+
+I'm trying to squash a bug that's been annoying me for a while. On 
+older Ingenic SoCs, trying to telnet after a reboot seems to result in 
+a 50% chance of having a kernel oops. It does happen on newer SoCs too 
+but much less often.
+
+Looking at the stack trace, it happens to segfault within musb_g_tx(), 
+when it's called by musb_interrupt(). But the reason why it segfaults 
+is beyond me.
+
+I can only guess it is related to the two error messages that can be 
+seen before the stack trace, but again I am clueless about why these 
+pop up.
+
+Any ideas about what's happening here?
+
+Thanks,
+-Paul
+
+------------------------
+
+[ 26.459013] musb-hdrc musb-hdrc.0.auto: could not add resume work 
+93e7adf0
+[ 26.472959] musb-hdrc musb-hdrc.0.auto: musb_gadget_queue resume work: 
+-150
+[ 27.462159] CPU 0 Unable to handle kernel paging request at virtual 
+address 00000104, epc == 802c5858, ra == 802c6370
+[ 27.483622] Oops[#1]:
+[ 27.488282] CPU: 0 PID: 3 Comm: kworker/0:0 Not tainted 5.8.0-rc4+ #37
+[ 27.501449] Workqueue: pm 0x80285f6c
+[ 27.508700] $ 0 : 00000000 10000000 00000122 00000100
+[ 27.519257] $ 4 : 8124e484 80a37d80 00000000 00002004
+[ 27.529815] $ 8 : 00000000 81028000 804a3108 00000000
+[ 27.540372] $12 : 804a310c fffffffd 00000000 77ce4890
+[ 27.550932] $16 : 000020a2 80a37d80 00000000 00000001
+[ 27.561489] $20 : 8124e4d4 b3040000 8124e484 b3040010
+[ 27.572049] $24 : 00000000 802bfff0
+[ 27.582608] $28 : 81080000 8102bbe0 80540000 802c6370
+[ 27.593170] Hi : 0000004a
+[ 27.599015] Lo : 00000000
+[ 27.604867] epc : 802c5858 0x802c5858
+[ 27.612636] ra : 802c6370 0x802c6370
+[ 27.620394] Status: 10000002 KERNEL EXL
+[ 27.628338] Cause : 0080000c (ExcCode 03)
+[ 27.636440] BadVA : 00000104
+[ 27.642289] PrId : 1ed0024f (Ingenic XBurst)
+[ 27.651123] Process kworker/0:0 (pid: 3, threadinfo=6c73c9fe, 
+task=3b071406, tls=00000000)
+[ 27.667828] Stack : 00000000 80884cc0 80a34280 81376000 000020a2 
+80a37d80 8124e080 802c6370
+[ 27.684738] 80893e40 8033ea00 8124e4b0 00002004 4f4bf699 00000000 
+8126c81c 803412e0
+[ 27.701649] 8124e080 00000000 00000001 00000000 80540000 0000001b 
+804016b4 804b0000
+[ 27.718557] 00000001 802c2f2c 00000000 89b20000 00000000 81376000 
+0000001b 80893e00
+[ 27.735465] 10000000 8035dd00 00000002 80893e00 8124e080 804a8d38 
+8124e080 00000000
+[ 27.752376] ...
+[ 27.757361] Call Trace:
+[ 27.757382] [<802c6370>] 0x802c6370 drivers/usb/musb/musb_gadget.c:500
+[ 27.769417] [<8033ea00>] 0x8033ea00 include/linux/netdevice.h:4626
+[ 27.776497] [<803412e0>] 0x803412e0 include/linux/netdevice.h:131
+[ 27.783577] [<802c2f2c>] 0x802c2f2c drivers/usb/musb/musb_core.c:1775 
+(discriminator 2)
+[ 27.790657] [<8035dd00>] 0x8035dd00 include/net/sch_generic.h:1088
+[ 27.797738] [<802c8098>] 0x802c8098 drivers/usb/musb/jz4740.c:51
+[ 27.804817] [<800b5764>] 0x800b5764 mm/slab.c:3313
+[ 27.811897] [<800557a8>] 0x800557a8 kernel/irq/handle.c:156
+[ 27.818975] [<8033eca8>] 0x8033eca8 include/net/pkt_sched.h:134
+[ 27.826055] [<8033eb04>] 0x8033eb04 include/net/dst.h:271
+[ 27.833136] [<80055884>] 0x80055884 kernel/irq/handle.c:198
+[ 27.840214] [<8005912c>] 0x8005912c kernel/irq/generic-chip.c:44
+[ 27.847292] [<802cf544>] 0x802cf544 include/linux/netdevice.h:3739
+[ 27.854371] [<80055904>] 0x80055904 kernel/irq/handle.c:216
+[ 27.861449] [<802c58b8>] 0x802c58b8 drivers/usb/musb/musb_gadget.c:150
+[ 27.868528] [<8005827c>] 0x8005827c include/linux/irq.h:331
+[ 27.875607] [<802c4cd4>] 0x802c4cd4 drivers/usb/musb/musb_gadget.c:394 
+(discriminator 4)
+[ 27.882686] [<80055120>] 0x80055120 kernel/irq/irqdesc.c:651
+[ 27.889766] [<801f1f00>] 0x801f1f00 drivers/irqchip/irq-ingenic.c:54
+[ 27.896848] [<800557a8>] 0x800557a8 kernel/irq/handle.c:156
+[ 27.903929] [<80055884>] 0x80055884 kernel/irq/handle.c:198
+[ 27.911011] [<8005841c>] 0x8005841c kernel/irq/chip.c:908
+[ 27.918092] [<80055120>] 0x80055120 kernel/irq/irqdesc.c:651
+[ 27.925171] [<803f6b58>] 0x803f6b58 arch/mips/kernel/irq.c:108
+[ 27.932252] [<800558b0>] 0x800558b0 kernel/irq/handle.c:203
+[ 27.939331] [<8005917c>] 0x8005917c kernel/irq/generic-chip.c:103
+[ 27.946411] [<801f1dfc>] 0x801f1dfc drivers/irqchip/irq-mips-cpu.c:146
+[ 27.953490] [<80057e30>] 0x80057e30 kernel/irq/chip.c:173
+[ 27.960569] [<80014d64>] 0x80014d64 arch/mips/kernel/genex.S:226
+[ 27.967647] [<80382a98>] 0x80382a98 net/ipv4/inet_connection_sock.c:717
+[ 27.974727] [<80055120>] 0x80055120 kernel/irq/irqdesc.c:651
+[ 27.981810] [<801f1cc0>] 0x801f1cc0 
+arch/mips/include/asm/mipsregs.h:2875
+[ 27.988890] [<803f6bf4>] 0x803f6bf4 kernel/softirq.c:295
+[ 27.995971] [<800558b0>] 0x800558b0 kernel/irq/handle.c:203
+[ 28.003049] [<8002c120>] 0x8002c120 
+arch/mips/include/asm/irqflags.h:118
+[ 28.010130] [<8005841c>] 0x8005841c kernel/irq/chip.c:908
+[ 28.017212] [<8002c2a0>] 0x8002c2a0 kernel/softirq.c:400
+[ 28.024292] [<801f1dfc>] 0x801f1dfc drivers/irqchip/irq-mips-cpu.c:146
+[ 28.031372] [<80283c8c>] 0x80283c8c drivers/base/power/generic_ops.c:41
+[ 28.038451] [<80014d64>] 0x80014d64 arch/mips/kernel/genex.S:226
+[ 28.045521]
+[ 28.048589] Code: 8ca2003c 8ca30038 90920059 <ac620004> ac430000 
+24020100 aca20038 8ca30030 24020122
+[ 28.068299]
+[ 28.071374] ---[ end trace bc487b9161cb41e4 ]---
+[ 28.080705] Kernel panic - not syncing: Fatal exception in interrupt
+[ 28.093529] ---[ end Kernel panic - not syncing: Fatal exception in 
+interrupt ]---
+
+
+
