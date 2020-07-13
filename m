@@ -2,146 +2,171 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B20921E15E
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Jul 2020 22:26:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FE0221E185
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Jul 2020 22:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726748AbgGMU0p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Jul 2020 16:26:45 -0400
-Received: from mail-dm6nam10on2085.outbound.protection.outlook.com ([40.107.93.85]:5561
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726321AbgGMU0o (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 13 Jul 2020 16:26:44 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Cwbo2KUS8yckXSCzWib+jXUd7rP5Ilvmq15LBwRHtLtFLXpcgzC91zcJAir2BdEBRPH4eEflCnKBdQ01Rfkhm3PF+YMtoliFwDPJi1+R8B8cpMF73CDhQyBWS7HAvUKlcD4/FkRxnfp9vhYs0NbgDknRXZW8nC7v/Cd16BxVXbdGDC48pN1/N9J+q6yXkdnquz/GKKVnyRG5IEUY2K1t32qqzNK0nsZ07/LZy9i3tNArsgJ6zFQS9p87J+XSv9IjPc85h9lpCHWgXXGGrw92gP0xrRT4Pxq/TM4aQID2oddjdVUosseDpY0C5wkUopRmmo1OSs75UW9uRd4JHgyLRw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hVJL3zB1r14idqo/k9+5YOEHx7UWZqfcISXBfk05VEg=;
- b=TqaQ3jDua+yJyIHwgTYz6P4+Un1S+h9WHzdk6h7P1zYvJDCYFK8NPHtyxUzPyk5kdnED6ennujlYOXunWHCK3xqN+2cyx4SbSHujj7wZxOTefVqVYwDWe33eLxSxT1rq+LidUAFE4uRAARhhONJpUd06qu3aeFUGPiHcgR9LyIRFPw9PiPuo2DJLJHxusUV7lHCx3vLMziW2NBVqUGdO/k288uEBf3hZN+/DosqwCR2D47ZiaSPlk22wwgNq1r7b3oCE2ncvMKFH14ln1GNQ46DBGSw94CgAJ+LewI2kcpLrLJryCTCCtRLZ9LJ97yzLgvNnr5X+n63lMGhwtkIwLA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=infinera.com; dmarc=pass action=none header.from=infinera.com;
- dkim=pass header.d=infinera.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infinera.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hVJL3zB1r14idqo/k9+5YOEHx7UWZqfcISXBfk05VEg=;
- b=d/yzPovLNn+Z/tfzyFkBStUFfxcy1ovo2HXYW0f2r3OFuPcBIJh8efxxy37h+dBQREqfSraIygFgc2sgscY5V7XeCXsHMApZe6kwqetyXPRjqvBPaEk0+3+xGk6YD3voPnA4uo3OCfla5zCaJln6a2OXeLAQAF/Lo1MNTe0JkxM=
-Received: from MWHPR1001MB2190.namprd10.prod.outlook.com
- (2603:10b6:301:2e::20) by MWHPR1001MB2224.namprd10.prod.outlook.com
- (2603:10b6:301:2e::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3174.21; Mon, 13 Jul
- 2020 20:26:41 +0000
-Received: from MWHPR1001MB2190.namprd10.prod.outlook.com
- ([fe80::b439:ba0:98d6:c2d1]) by MWHPR1001MB2190.namprd10.prod.outlook.com
- ([fe80::b439:ba0:98d6:c2d1%5]) with mapi id 15.20.3174.025; Mon, 13 Jul 2020
- 20:26:41 +0000
-From:   Joakim Tjernlund <Joakim.Tjernlund@infinera.com>
-To:     "oneukum@suse.de" <oneukum@suse.de>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] cdc-acm: acm_init: Set initial BAUD to B0
-Thread-Topic: [PATCH] cdc-acm: acm_init: Set initial BAUD to B0
-Thread-Index: AQHWVp10AvhYW+hsHEuT/7Zwfc2fs6kFTgWAgACsk4A=
-Date:   Mon, 13 Jul 2020 20:26:40 +0000
-Message-ID: <0180a0cae3ff2772df0f6cea93739ae2deb52b24.camel@infinera.com>
-References: <20200710093518.22272-1-joakim.tjernlund@infinera.com>
-         <1594634939.2541.3.camel@suse.de>
-In-Reply-To: <1594634939.2541.3.camel@suse.de>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.37.3 
-authentication-results: suse.de; dkim=none (message not signed)
- header.d=none;suse.de; dmarc=none action=none header.from=infinera.com;
-x-originating-ip: [62.109.37.155]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 574cffc2-44d6-4734-0fb0-08d8276b0d3f
-x-ms-traffictypediagnostic: MWHPR1001MB2224:
-x-microsoft-antispam-prvs: <MWHPR1001MB222477C9FBBC4C4E246AF29FF4600@MWHPR1001MB2224.namprd10.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5516;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: UKu3wtPNVKkq0LU9KUXoM1GFo95Rf2wdr0tOoK3vxe36djFulLdlaapNwT9D1JJ6KUQOI+iDoSxwX1UQ+bLTJG2Ug24kg0aPW8UIZgcLcICK4110IyxNlmGBqQYte8/SvsUL4eNi7d2YTnlv9C73d/m0y3BVwH2Ac2Cv66V/a0uMSxVefMgLi1O7IkN8N7cOOaukuMcSfDU4kE0pXdIWmE2SkfaN9TasQLCpuTyEx5uQneqIl3Xn1+oErnvUbKPERVdnnk+nbtHNGlYptUPHNcxL3KXzD878CRfOiex+wuuRybcg0APA1QoMfAeiNacy
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2190.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(396003)(376002)(346002)(136003)(39850400004)(366004)(8936002)(83380400001)(64756008)(66446008)(66946007)(66556008)(66476007)(36756003)(110136005)(86362001)(26005)(5660300002)(2616005)(71200400001)(2906002)(186003)(76116006)(316002)(6506007)(6486002)(6512007)(8676002)(478600001)(91956017);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: r5BejuVb94MMVAMwV5VZX1KY6t8T3xdHcZPoYLnOOH+lzR/MM7/Eces4rHkfvmeXS6theFJPAO1intmRweZj8ZQADbOaChnAg824oXzjK3nDydZpcfwhYNafze4uNKy9kkVcBo3VtLIeVYjOjh4BCypWTR4OSZ1j5FQ/DsLBovU8gNSaAC6OI6gRRBPkJuM9aSCXfTDFgISUBhQa+2GH0Ol5kVAFqerE3gW0IeXZWbfxYTIG3z8/MYCyxdejIsjc0NAMSaD2SoujdePGWeRA11DkC5/zNdMry8pl4oQTqNA3rWXPgKQbjdwUxSEih+9FuwRMrwryyxxwRpWvUkQs/yeuRHdi+DQDnUz3MCMNtVy5oYIA88c/mu7o/r7Z21D0IENzlKuWUTo80HKsodwwZiigicMCkniHKprGUjN5nuSSlYFHCWULh+d9sSh9LOYvsccfkUAMkXx9z5NLcf1CF8/WlOOuqjNL6V1CSvKYEi0=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="iso-8859-15"
-Content-ID: <AEA79026B2E39449AB4A8EAF2E32C7AA@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: infinera.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2190.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 574cffc2-44d6-4734-0fb0-08d8276b0d3f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jul 2020 20:26:40.8586
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 285643de-5f5b-4b03-a153-0ae2dc8aaf77
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FVLys0BbHvr9QKFCgr1rgtNErPCHRX/6eOTp1ts59CFLrMB6LjBiRgBCUEZJN4zzzSzPK6n/SUJgZN1rDybsHA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1001MB2224
+        id S1726892AbgGMUio (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Jul 2020 16:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58614 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726617AbgGMUin (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Jul 2020 16:38:43 -0400
+Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A8CC061794
+        for <linux-usb@vger.kernel.org>; Mon, 13 Jul 2020 13:38:43 -0700 (PDT)
+Received: by mail-qv1-xf49.google.com with SMTP id m8so8144135qvv.10
+        for <linux-usb@vger.kernel.org>; Mon, 13 Jul 2020 13:38:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=dGP3NBiuPYOp4kG6UmTmoWb3Yy//DSuALfFpCez22cA=;
+        b=HC46yhzEbc7uMnOMe0PWMfCPdnyTNb0RHGlCBCN93asvKXs8drlpZCe88L2xLYlpIj
+         N1/q9PF2f07DYTy5b5lvFqFlRGXcq9miO5L430N/PxUxTiAp5ThT806l0nHaT4jYWbP+
+         E5XlhYpR0qkolCuNP1G4eMAU8Km8Kxpbg6JmZ7/TKs/z/kuzshXLQ6uvt41HiIfe4XVC
+         UNHr8ps0dACDZ1xnJuKHt0xVxx4gb7ahEjto7DG70F6zDo+b2zAf0VBUVfWPNINKolLt
+         d1uXQPUQWPOPME/NCDLD53H5Jy4mcAoohlKFJ/HhelPdgaK9wUfPyo1G7kkDzMq6kKHZ
+         9ybA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=dGP3NBiuPYOp4kG6UmTmoWb3Yy//DSuALfFpCez22cA=;
+        b=dxt1NS8ONHerpWJdk4iehdzVZgV1IaWdtOLRb5rQsu+b0fMB67ihnxF6udzHEajcPM
+         z0tD0M8VgEYC2Ss1KIgCKV354iXVNC1zm2XacD8vZpliD5o7nuCBc8l9AbTUytqWNL/B
+         YsC6vVn/chEBiSDhbjIDJ1z/82AXFk8JrntjsQcTl2j0B/9YhpCJ05YUBoMci9Cnq+6c
+         0fgL7yHRY1xQg6cdRmTce24BVyF0vrAyFct4VsJ8qM9nFUw3TJ6h2VZ2ZLICmrpXiwXC
+         mW1iO8ATaO/7GWx+Gwk49PmOVqk2NRirUua4r27zdQCNu5hVtVWkiQC6tiXqF4gD4OXS
+         cIhA==
+X-Gm-Message-State: AOAM531rFWZqTV6wBtTRJ15NjH7Z7v4tjprFuJlOvUt9HWP+90GRSwDP
+        ffm/tOvYhHg9asuEnB/qp0mBUQJ1EcY=
+X-Google-Smtp-Source: ABdhPJzRvmcMJE/hMn2ryQpDopXmW4JA+HZ4UObh+jH6v+Sn6OcL47jpUcPp0QvVmneZvzPwEqdWhlJkNfk=
+X-Received: by 2002:a05:6214:26:: with SMTP id b6mr1239373qvr.239.1594672722444;
+ Mon, 13 Jul 2020 13:38:42 -0700 (PDT)
+Date:   Mon, 13 Jul 2020 13:38:37 -0700
+Message-Id: <20200713203838.339297-1-badhri@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.27.0.383.g050319c2ae-goog
+Subject: [PATCH 1/2] usb: typec: tcpm: Support bist test data mode for compliance
+From:   Badhri Jagan Sridharan <badhri@google.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        reg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Badhri Jagan Sridharan <badhri@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 2020-07-13 at 12:08 +0200, Oliver Neukum wrote:
->=20
-> Am Freitag, den 10.07.2020, 11:35 +0200 schrieb Joakim Tjernlund:
-> >=20
->=20
->=20
-> Hi,
->=20
-> > --- a/drivers/usb/class/cdc-acm.c
-> > +++ b/drivers/usb/class/cdc-acm.c
-> > @@ -1999,19 +1999,19 @@ static int __init acm_init(void)
-> > =A0=A0=A0=A0=A0=A0acm_tty_driver->subtype =3D SERIAL_TYPE_NORMAL,
-> > =A0=A0=A0=A0=A0=A0acm_tty_driver->flags =3D TTY_DRIVER_REAL_RAW |
-> > TTY_DRIVER_DYNAMIC_DEV;
-> > =A0=A0=A0=A0=A0=A0acm_tty_driver->init_termios =3D tty_std_termios;
-> > -     acm_tty_driver->init_termios.c_cflag =3D B9600 | CS8 | CREAD |
-> > +     acm_tty_driver->init_termios.c_cflag =3D B0 | CS8 | CREAD |
-> > =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0HUPCL
-> > | CLOCAL;
-> > =A0=A0=A0=A0=A0=A0tty_set_operations(acm_tty_driver, &acm_ops);
-> >=20
-> > -     retval =3D tty_register_driver(acm_tty_driver);
-> > +     retval =3D usb_register(&acm_driver);
->=20
->=20
-> No,
->=20
-> you cannot do that. This means that probe() is now live.
-> Probe() in turn does this:
->=20
-> =A0=A0=A0=A0=A0=A0=A0=A0tty_dev =3D tty_port_register_device(&acm->port,
-> acm_tty_driver, minor,
-> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0&=
-control_interface->dev);
-> =A0=A0=A0=A0=A0=A0=A0=A0if (IS_ERR(tty_dev)) {
-> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0rv =3D PTR_ERR(tty_dev);
-> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0goto alloc_fail6;
-> =A0=A0=A0=A0=A0=A0=A0=A0}
->=20
->=20
-> That is just not a good idea when the tty is not already registered.
-> You are opening up a race.
->=20
+TCPM supports BIST carried mode. PD compliance tests require
+BIST Test Data to be supported as well.
 
-OK, but it is strange that init_termios.c_cflag does not take/do
-anything unless I change order. Perhaps termios should move to probe
-instead?
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+---
+ drivers/usb/typec/tcpm/tcpci.c | 14 ++++++++++++++
+ drivers/usb/typec/tcpm/tcpci.h |  3 +++
+ drivers/usb/typec/tcpm/tcpm.c  |  7 +++++++
+ include/linux/usb/tcpm.h       |  2 ++
+ 4 files changed, 26 insertions(+)
 
-Also, the handling of DTR came up. It seems to me that ACM
-deassert DTR until open time which is fine/good.
-!DTR signals to the other end that ACM is not ready and don't
-want input but ACM still accepts input if received.
+diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+index 753645bb25273a..3616263f661233 100644
+--- a/drivers/usb/typec/tcpm/tcpci.c
++++ b/drivers/usb/typec/tcpm/tcpci.c
+@@ -227,6 +227,19 @@ static int tcpci_set_vconn(struct tcpc_dev *tcpc, bool enable)
+ 				enable ? TCPC_POWER_CTRL_VCONN_ENABLE : 0);
+ }
+ 
++static int tcpci_set_bist_data(struct tcpc_dev *tcpc, bool enable)
++{
++	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
++	int ret;
++
++	dev_info(tcpci->dev, "set bist %s\n", enable ? "true" : "false");
++	ret = regmap_update_bits(tcpci->regmap, TCPC_TCPC_CTRL,
++				 TCPC_TCPC_CTRL_BIST_TM, enable ?
++				 TCPC_TCPC_CTRL_BIST_TM : 0);
++
++	return ret;
++}
++
+ static int tcpci_set_roles(struct tcpc_dev *tcpc, bool attached,
+ 			   enum typec_role role, enum typec_data_role data)
+ {
+@@ -530,6 +543,7 @@ struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data)
+ 	tcpci->tcpc.set_pd_rx = tcpci_set_pd_rx;
+ 	tcpci->tcpc.set_roles = tcpci_set_roles;
+ 	tcpci->tcpc.pd_transmit = tcpci_pd_transmit;
++	tcpci->tcpc.set_bist_data = tcpci_set_bist_data;
+ 
+ 	err = tcpci_parse_config(tcpci);
+ 	if (err < 0)
+diff --git a/drivers/usb/typec/tcpm/tcpci.h b/drivers/usb/typec/tcpm/tcpci.h
+index 303ebde265465c..a29c8b6c2efe07 100644
+--- a/drivers/usb/typec/tcpm/tcpci.h
++++ b/drivers/usb/typec/tcpm/tcpci.h
+@@ -36,6 +36,7 @@
+ 
+ #define TCPC_TCPC_CTRL			0x19
+ #define TCPC_TCPC_CTRL_ORIENTATION	BIT(0)
++#define TCPC_TCPC_CTRL_BIST_TM		BIT(1)
+ 
+ #define TCPC_ROLE_CTRL			0x1a
+ #define TCPC_ROLE_CTRL_DRP		BIT(6)
+@@ -130,6 +131,8 @@ struct tcpci_data {
+ 			 bool enable);
+ 	int (*start_drp_toggling)(struct tcpci *tcpci, struct tcpci_data *data,
+ 				  enum typec_cc_status cc);
++	int (*set_bist_data)(struct tcpci *tcpci, struct tcpci_data *data,
++			     bool enable);
+ };
+ 
+ struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data);
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 82b19ebd7838e0..525379798d6c5c 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -2746,6 +2746,9 @@ static void tcpm_detach(struct tcpm_port *port)
+ 	if (!port->attached)
+ 		return;
+ 
++	if (port->tcpc->set_bist_data)
++		port->tcpc->set_bist_data(port->tcpc, false);
++
+ 	if (tcpm_port_is_disconnected(port))
+ 		port->hard_reset_count = 0;
+ 
+@@ -3555,6 +3558,10 @@ static void run_state_machine(struct tcpm_port *port)
+ 		case BDO_MODE_CARRIER2:
+ 			tcpm_pd_transmit(port, TCPC_TX_BIST_MODE_2, NULL);
+ 			break;
++		case BDO_MODE_TESTDATA:
++			if (port->tcpc->set_bist_data)
++				port->tcpc->set_bist_data(port->tcpc, true);
++			break;
+ 		default:
+ 			break;
+ 		}
+diff --git a/include/linux/usb/tcpm.h b/include/linux/usb/tcpm.h
+index e7979c01c3517c..89f58760cf4800 100644
+--- a/include/linux/usb/tcpm.h
++++ b/include/linux/usb/tcpm.h
+@@ -79,6 +79,7 @@ enum tcpm_transmit_type {
+  * @try_role:	Optional; called to set a preferred role
+  * @pd_transmit:Called to transmit PD message
+  * @mux:	Pointer to multiplexer data
++ * @set_bist_data: Turn on/off bist data mode for compliance testing
+  */
+ struct tcpc_dev {
+ 	struct fwnode_handle *fwnode;
+@@ -103,6 +104,7 @@ struct tcpc_dev {
+ 	int (*try_role)(struct tcpc_dev *dev, int role);
+ 	int (*pd_transmit)(struct tcpc_dev *dev, enum tcpm_transmit_type type,
+ 			   const struct pd_message *msg);
++	int (*set_bist_data)(struct tcpc_dev *dev, bool on);
+ };
+ 
+ struct tcpm_port;
+-- 
+2.27.0.383.g050319c2ae-goog
 
-Would it make sense to actually enforce DTR locally too?
-If input is unwanted, don't accept any either.
-
- Jocke
