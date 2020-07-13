@@ -2,85 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A39D21CDBD
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Jul 2020 05:31:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FB6D21CDE3
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Jul 2020 05:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726684AbgGMDbQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 12 Jul 2020 23:31:16 -0400
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:25052 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726261AbgGMDbQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 12 Jul 2020 23:31:16 -0400
-X-UUID: 202c5ae90e964ac088e2b85650f63f05-20200713
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=JuW3jP9J1lIS5V8IiLWPSVxE4HCb/Oj2hKarwYDEQFg=;
-        b=F39RfS2lfJlj5/DOJsZj+DHVxj3HTSsLROaSSuBi7UWZUekcJT4E7Y+irMlgdN6aO0s7OSpVXIt3I0tBG06qyFllSZad8TQgOXiDXOT9ARLQSskcdtYhypuYKYLabLBx1jRAFRhIjsO8+XMQbXe2MJEkBZWXBeCp2I0nAysh+yg=;
-X-UUID: 202c5ae90e964ac088e2b85650f63f05-20200713
-Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 666783389; Mon, 13 Jul 2020 11:31:12 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- MTKMBS31N2.mediatek.inc (172.27.4.87) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 13 Jul 2020 11:31:11 +0800
-Received: from localhost.localdomain (10.17.3.153) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 13 Jul 2020 11:31:09 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S1728644AbgGMDxI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 12 Jul 2020 23:53:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42682 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726465AbgGMDxH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 12 Jul 2020 23:53:07 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB212C061794;
+        Sun, 12 Jul 2020 20:53:07 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id u185so5436952pfu.1;
+        Sun, 12 Jul 2020 20:53:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=P/uMBAFsJSFsMe0s271yKJa7p3nRkmMFxcASFVx3X9s=;
+        b=VoY/vrzIzoUvpLLOWgA04fLa3of+ub+owBKbOFPm4LdVdlbMRJRIXMVMWrrc9BNOKF
+         r1GKF4a3rcQ658wT6pYylfRqzRAtJ0LnTHrzrbJj/RDqE/thsXDNuW6RBEHCF42iA3fG
+         xxO+aGacyGOZsWbLTZosotOjPPtD7nZhnnRp2HdoV1MNWNt3v5+07vL98jQ7SEDH37sY
+         MbzM0SBQhhYgZpuY/z2NCAsBS4v+BJ/xEnbSN7Axq0kCWAa79y7aPFHi/kmMj0PizaT1
+         a9XKlAFkkDACZCXA04uEUl2HNmTg9eaIZMBmmIGD4Qez8apholVrmNLQL7Ak2DfrBBkp
+         8Odg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=P/uMBAFsJSFsMe0s271yKJa7p3nRkmMFxcASFVx3X9s=;
+        b=DRfLaprybVqQ+egJ80tX4kPXJe2tldBy57Ky41KnSfNMz65qZoJcCyn1M+neDhV8+F
+         GAdDZezi5+Qh2RnivFTMzffXpOIdC68mH+o9n1zhgIrB20B4btvlLki39ijVElvN8nKY
+         pfTaQ7UE58j2ZDuwr1G0BB6PofrWxc5OKNMifZLJ2zb/dpRlzDbIN2wPNQHc2pS2tEdN
+         3RBi2iW/R2tRjjwcF8khCYPf1YsRdDY8zwjryRutwC5BGRNGZ2XMYgoY9UrWB0ng8N8/
+         ZHRYpCJZmUpnUKWE+uVJ9XmfjcZtJh/sNk1s77YOpOuxI7iz5MTaFmOQVrcYTPWMTWnG
+         kh6g==
+X-Gm-Message-State: AOAM530o9K5/MfzcaFeiFuuiiOAxW+aZo4f5UtmUNElz2lQka9aZnxTf
+        5bEb4WVCNVPZyrmK4jhTDV4=
+X-Google-Smtp-Source: ABdhPJwyduixaPXyl9nsR8wsh7T30kYdCLoB5U/CwQARqKP0/h/EygceJsHfNzJNv902tkQp43X7rA==
+X-Received: by 2002:a63:f50b:: with SMTP id w11mr66510839pgh.157.1594612387120;
+        Sun, 12 Jul 2020 20:53:07 -0700 (PDT)
+Received: from ?IPv6:2001:470:67:5b9:5dec:e971:4cde:a128? ([2001:470:67:5b9:5dec:e971:4cde:a128])
+        by smtp.gmail.com with ESMTPSA id 207sm13052897pfa.100.2020.07.12.20.53.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Jul 2020 20:53:06 -0700 (PDT)
+Subject: Re: [v2 PATCH] usb: gadget: bdc: use readl_poll_timeout() to simplify
+ code
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         YueHaibing <yuehaibing@huawei.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [v2 PATCH] usb: gadget: bdc: use readl_poll_timeout() to simplify code
-Date:   Mon, 13 Jul 2020 11:30:17 +0800
-Message-ID: <1594611017-4535-1-git-send-email-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 1.8.1.1.dirty
+        Stephen Boyd <swboyd@chromium.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <1594611017-4535-1-git-send-email-chunfeng.yun@mediatek.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <b73d8a90-96cd-42b5-bbc2-26e300da0603@gmail.com>
+Date:   Sun, 12 Jul 2020 20:53:04 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Firefox/68.0 Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: 68E0EF0317ACCA01D29A26B236ED2441F27383EAF5EEF084C4683CE8F0DE3D5E2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <1594611017-4535-1-git-send-email-chunfeng.yun@mediatek.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-VXNlIHJlYWRsX3BvbGxfdGltZW91dCgpIHRvIHBvbGwgcmVnaXN0ZXIgc3RhdHVzDQoNCkNjOiBG
-bG9yaWFuIEZhaW5lbGxpIDxmLmZhaW5lbGxpQGdtYWlsLmNvbT4NClNpZ25lZC1vZmYtYnk6IENo
-dW5mZW5nIFl1biA8Y2h1bmZlbmcueXVuQG1lZGlhdGVrLmNvbT4NCi0tLQ0KdjIgY2hhbmdlcywg
-c3VnZ2VzdGVkIGJ5IFN0ZXBoZW46DQogIDEuIHVzZSB1bnNpZ25lZCBpbnQgaW5zdGVhZCBvZiBp
-bnQgZm9yIEB1c2VjIHBhcmFtZXRlcg0KICAyLiBhZGQgZGV2X2xvZygpIGJhY2sNCiAgMy4gZHJv
-cCAiRXJyIiBpbiBlcnJvciBsb2cNCi0tLQ0KIGRyaXZlcnMvdXNiL2dhZGdldC91ZGMvYmRjL2Jk
-Y19jb3JlLmMgfCAyNiArKysrKysrKysrKy0tLS0tLS0tLS0tLS0tLQ0KIDEgZmlsZSBjaGFuZ2Vk
-LCAxMSBpbnNlcnRpb25zKCspLCAxNSBkZWxldGlvbnMoLSkNCg0KZGlmZiAtLWdpdCBhL2RyaXZl
-cnMvdXNiL2dhZGdldC91ZGMvYmRjL2JkY19jb3JlLmMgYi9kcml2ZXJzL3VzYi9nYWRnZXQvdWRj
-L2JkYy9iZGNfY29yZS5jDQppbmRleCAwMmEzYTc3Li41M2RjY2IxIDEwMDY0NA0KLS0tIGEvZHJp
-dmVycy91c2IvZ2FkZ2V0L3VkYy9iZGMvYmRjX2NvcmUuYw0KKysrIGIvZHJpdmVycy91c2IvZ2Fk
-Z2V0L3VkYy9iZGMvYmRjX2NvcmUuYw0KQEAgLTEyLDYgKzEyLDcgQEANCiAjaW5jbHVkZSA8bGlu
-dXgvc3BpbmxvY2suaD4NCiAjaW5jbHVkZSA8bGludXgvcGxhdGZvcm1fZGV2aWNlLmg+DQogI2lu
-Y2x1ZGUgPGxpbnV4L2ludGVycnVwdC5oPg0KKyNpbmNsdWRlIDxsaW51eC9pb3BvbGwuaD4NCiAj
-aW5jbHVkZSA8bGludXgvaW9wb3J0Lmg+DQogI2luY2x1ZGUgPGxpbnV4L2lvLmg+DQogI2luY2x1
-ZGUgPGxpbnV4L2xpc3QuaD4NCkBAIC0yOSwyNCArMzAsMTkgQEANCiAjaW5jbHVkZSAiYmRjX2Ri
-Zy5oIg0KIA0KIC8qIFBvbGwgdGlsbCBjb250cm9sbGVyIHN0YXR1cyBpcyBub3QgT0lQICovDQot
-c3RhdGljIGludCBwb2xsX29pcChzdHJ1Y3QgYmRjICpiZGMsIGludCB1c2VjKQ0KK3N0YXRpYyBp
-bnQgcG9sbF9vaXAoc3RydWN0IGJkYyAqYmRjLCB1MzIgdXNlYykNCiB7DQogCXUzMiBzdGF0dXM7
-DQotCS8qIFBvbGwgdGlsbCBTVFMhPSBPSVAgKi8NCi0Jd2hpbGUgKHVzZWMpIHsNCi0JCXN0YXR1
-cyA9IGJkY19yZWFkbChiZGMtPnJlZ3MsIEJEQ19CRENTQyk7DQotCQlpZiAoQkRDX0NTVFMoc3Rh
-dHVzKSAhPSBCRENfT0lQKSB7DQotCQkJZGV2X2RiZyhiZGMtPmRldiwNCi0JCQkJInBvbGxfb2lw
-IGNvbXBsZXRlIHN0YXR1cz0lZCIsDQotCQkJCUJEQ19DU1RTKHN0YXR1cykpOw0KLQkJCXJldHVy
-biAwOw0KLQkJfQ0KLQkJdWRlbGF5KDEwKTsNCi0JCXVzZWMgLT0gMTA7DQotCX0NCi0JZGV2X2Vy
-cihiZGMtPmRldiwgIkVycjogb3BlcmF0aW9uIHRpbWVkb3V0IEJEQ1NDOiAweCUwOHhcbiIsIHN0
-YXR1cyk7DQorCWludCByZXQ7DQogDQotCXJldHVybiAtRVRJTUVET1VUOw0KKwlyZXQgPSByZWFk
-bF9wb2xsX3RpbWVvdXQoYmRjLT5yZWdzICsgQkRDX0JEQ1NDLCBzdGF0dXMsDQorCQkoQkRDX0NT
-VFMoc3RhdHVzKSAhPSBCRENfT0lQKSwgMTAsIHVzZWMpOw0KKwlpZiAocmV0KQ0KKwkJZGV2X2Vy
-cihiZGMtPmRldiwgIm9wZXJhdGlvbiB0aW1lZG91dCBCRENTQzogMHglMDh4XG4iLCBzdGF0dXMp
-Ow0KKwllbHNlDQorCQlkZXZfZGJnKGJkYy0+ZGV2LCAiJXMgY29tcGxldGUgc3RhdHVzPSVkIiwg
-X19mdW5jX18sIEJEQ19DU1RTKHN0YXR1cykpOw0KKw0KKwlyZXR1cm4gcmV0Ow0KIH0NCiANCiAv
-KiBTdG9wIHRoZSBCREMgY29udHJvbGxlciAqLw0KLS0gDQoxLjkuMQ0K
 
+
+On 7/12/2020 8:30 PM, Chunfeng Yun wrote:
+> Use readl_poll_timeout() to poll register status
+> 
+> Cc: Florian Fainelli <f.fainelli@gmail.com>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+> v2 changes, suggested by Stephen:
+>   1. use unsigned int instead of int for @usec parameter
+>   2. add dev_log() back
+>   3. drop "Err" in error log
+> ---
+>  drivers/usb/gadget/udc/bdc/bdc_core.c | 26 +++++++++++---------------
+>  1 file changed, 11 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/udc/bdc/bdc_core.c b/drivers/usb/gadget/udc/bdc/bdc_core.c
+> index 02a3a77..53dccb1 100644
+> --- a/drivers/usb/gadget/udc/bdc/bdc_core.c
+> +++ b/drivers/usb/gadget/udc/bdc/bdc_core.c
+> @@ -12,6 +12,7 @@
+>  #include <linux/spinlock.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/interrupt.h>
+> +#include <linux/iopoll.h>
+>  #include <linux/ioport.h>
+>  #include <linux/io.h>
+>  #include <linux/list.h>
+> @@ -29,24 +30,19 @@
+>  #include "bdc_dbg.h"
+>  
+>  /* Poll till controller status is not OIP */
+> -static int poll_oip(struct bdc *bdc, int usec)
+> +static int poll_oip(struct bdc *bdc, u32 usec)
+>  {
+>  	u32 status;
+> -	/* Poll till STS!= OIP */
+> -	while (usec) {
+> -		status = bdc_readl(bdc->regs, BDC_BDCSC);
+> -		if (BDC_CSTS(status) != BDC_OIP) {
+> -			dev_dbg(bdc->dev,
+> -				"poll_oip complete status=%d",
+> -				BDC_CSTS(status));
+> -			return 0;
+> -		}
+> -		udelay(10);
+> -		usec -= 10;
+> -	}
+> -	dev_err(bdc->dev, "Err: operation timedout BDCSC: 0x%08x\n", status);
+> +	int ret;
+>  
+> -	return -ETIMEDOUT;
+> +	ret = readl_poll_timeout(bdc->regs + BDC_BDCSC, status,
+> +		(BDC_CSTS(status) != BDC_OIP), 10, usec);
+
+You could probably indent this to the opening parenthesis, but with or
+without it:
+
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+
+and thanks for picking up the MAINTAINERS file update ;)
+
+> +	if (ret)
+> +		dev_err(bdc->dev, "operation timedout BDCSC: 0x%08x\n", status);
+> +	else
+> +		dev_dbg(bdc->dev, "%s complete status=%d", __func__, BDC_CSTS(status));
+> +
+> +	return ret;
+>  }
+>  
+>  /* Stop the BDC controller */
+> 
+
+-- 
+Florian
