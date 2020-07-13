@@ -2,183 +2,202 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B521721D894
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Jul 2020 16:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF77A21DA4B
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Jul 2020 17:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730030AbgGMOcv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Jul 2020 10:32:51 -0400
-Received: from out28-122.mail.aliyun.com ([115.124.28.122]:43371 "EHLO
-        out28-122.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729659AbgGMOcu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Jul 2020 10:32:50 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07439106|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.118669-0.0191296-0.862201;FP=0|0|0|0|0|-1|-1|-1;HT=e01l07447;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=13;RT=13;SR=0;TI=SMTPD_---.I19VHhZ_1594650754;
-Received: from localhost.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.I19VHhZ_1594650754)
-          by smtp.aliyun-inc.com(10.147.41.158);
-          Mon, 13 Jul 2020 22:32:44 +0800
-From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
-        <zhouyanjie@wanyeetech.com>
-To:     balbi@kernel.org, robh+dt@kernel.org
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, yanfei.li@ingenic.com,
-        sernia.zhou@foxmail.com, zhenwenjin@gmail.com, paul@crapouillou.net
-Subject: [PATCH v2 3/3] USB: PHY: JZ4770: Reformat the code to align it.
-Date:   Mon, 13 Jul 2020 22:32:11 +0800
-Message-Id: <20200713143212.126399-4-zhouyanjie@wanyeetech.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20200713143212.126399-1-zhouyanjie@wanyeetech.com>
-References: <20200713143212.126399-1-zhouyanjie@wanyeetech.com>
+        id S1729811AbgGMPkS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Jul 2020 11:40:18 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:34035 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729644AbgGMPkR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Jul 2020 11:40:17 -0400
+Received: by mail-lj1-f196.google.com with SMTP id q7so18444875ljm.1;
+        Mon, 13 Jul 2020 08:40:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+jyng9Hgh2x8iRAD8u7WdBq+B8/Hrc2f6uvoQiIpjbE=;
+        b=EHSYFSNC+04xNfPy5Hp+cJ7zRnqIlvVnIFGzIC28ZtLWsOay7iFZOEG8PAvQDHqdW+
+         eKsxzn5w2FJHnmU9kDfr68+HkWm5A/pWN9rq+0AOL557H318gWsKypb3dPTONe/ZCaZZ
+         CxTfYAQq3uvBAyb1TbLQkurF3iNqLnykgJf2GuNE/jFC7QOjLEg9oh09DcYU04fO40oD
+         wv70Tl4yieZeO/RM8pYOZUNQa4DzZCUx9sab2CzBH3eStU5KKQgtxE0yOSb5N2BUO7Yh
+         B7N/oM1D+kxDghbsEirqwfVn0dErNbBcPk9lcTBByWwyqFGbIUx/O0ukX3xi8+n6LBqo
+         UHsA==
+X-Gm-Message-State: AOAM533xuvV9Yi/qLExcl/zbI5kynLDJfkmatXidD4HqQfoWui6Uv2xx
+        hS04PEWKZh6jE3Q4CokK2CEuvhDGD74=
+X-Google-Smtp-Source: ABdhPJyWh32U8JxNbVuaaonEO0IPDEPGJEcEI+ai5ippYeLJ92IgokzLCmXLTPN9JbhahoblNFju7g==
+X-Received: by 2002:a2e:9b0f:: with SMTP id u15mr182249lji.180.1594654813138;
+        Mon, 13 Jul 2020 08:40:13 -0700 (PDT)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id x24sm4137103ljh.21.2020.07.13.08.40.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jul 2020 08:40:12 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@xi.terra>)
+        id 1jv0Z3-0004hp-1R; Mon, 13 Jul 2020 17:40:21 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     linux-usb@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>
+Subject: [PATCH] USB: serial: sierra: clean up special-interface handling
+Date:   Mon, 13 Jul 2020 17:39:36 +0200
+Message-Id: <20200713153936.18032-1-johan@kernel.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Reformat the code (add one level of indentation before the values),
-to align the code in the macro definition section.
+Clean up the handling of special interfaces that either should be
+ignored or that need a larger number of URBs.
 
-Tested-by: 周正 (Zhou Zheng) <sernia.zhou@foxmail.com>
-Co-developed-by: 漆鹏振 (Qi Pengzhen) <aric.pzqi@ingenic.com>
-Signed-off-by: 漆鹏振 (Qi Pengzhen) <aric.pzqi@ingenic.com>
-Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+Commit 66f092ed3b94 ("USB: serial: sierra: unify quirk handling logic")
+replaced the previous is_blacklisted() and is_highmemory() helpers with
+a single is_quirk() helper which made it even harder to understand what
+the interface lists were used for.
+
+Rename the interface-list struct, its members and the interface-lookup
+helper and restructure the code somewhat in order to make it more
+self-explanatory.
+
+Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
+ drivers/usb/serial/sierra.c | 58 ++++++++++++++++++-------------------
+ 1 file changed, 29 insertions(+), 29 deletions(-)
 
-Notes:
-    v2:
-    New patch.
-
- drivers/usb/phy/phy-jz4770.c | 100 +++++++++++++++++++++----------------------
- 1 file changed, 50 insertions(+), 50 deletions(-)
-
-diff --git a/drivers/usb/phy/phy-jz4770.c b/drivers/usb/phy/phy-jz4770.c
-index d1055c908943..65e517290912 100644
---- a/drivers/usb/phy/phy-jz4770.c
-+++ b/drivers/usb/phy/phy-jz4770.c
-@@ -15,71 +15,71 @@
- #include <linux/usb/otg.h>
- #include <linux/usb/phy.h>
+diff --git a/drivers/usb/serial/sierra.c b/drivers/usb/serial/sierra.c
+index a862aa788a19..57fc3c31712e 100644
+--- a/drivers/usb/serial/sierra.c
++++ b/drivers/usb/serial/sierra.c
+@@ -45,10 +45,9 @@
  
--#define REG_USBPCR_OFFSET	0x00
--#define REG_USBRDT_OFFSET	0x04
--#define REG_USBVBFIL_OFFSET	0x08
--#define REG_USBPCR1_OFFSET	0x0c
-+#define REG_USBPCR_OFFSET			0x00
-+#define REG_USBRDT_OFFSET			0x04
-+#define REG_USBVBFIL_OFFSET			0x08
-+#define REG_USBPCR1_OFFSET			0x0c
+ static bool nmea;
  
- /*USB Parameter Control Register*/
--#define USBPCR_USB_MODE		BIT(31)
--#define USBPCR_AVLD_REG		BIT(30)
--#define USBPCR_INCR_MASK	BIT(27)
--#define USBPCR_COMMONONN	BIT(25)
--#define USBPCR_VBUSVLDEXT	BIT(24)
--#define USBPCR_VBUSVLDEXTSEL	BIT(23)
--#define USBPCR_POR		BIT(22)
--#define USBPCR_SIDDQ		BIT(21)
--#define USBPCR_OTG_DISABLE	BIT(20)
--#define USBPCR_TXPREEMPHTUNE	BIT(6)
--
--#define USBPCR_IDPULLUP_LSB	28
--#define USBPCR_IDPULLUP_MASK	GENMASK(29, USBPCR_IDPULLUP_LSB)
--#define USBPCR_IDPULLUP_ALWAYS	(0x2 << USBPCR_IDPULLUP_LSB)
--#define USBPCR_IDPULLUP_SUSPEND	(0x1 << USBPCR_IDPULLUP_LSB)
--#define USBPCR_IDPULLUP_OTG	(0x0 << USBPCR_IDPULLUP_LSB)
--
--#define USBPCR_COMPDISTUNE_LSB	17
--#define USBPCR_COMPDISTUNE_MASK	GENMASK(19, USBPCR_COMPDISTUNE_LSB)
--#define USBPCR_COMPDISTUNE_DFT	(0x4 << USBPCR_COMPDISTUNE_LSB)
--
--#define USBPCR_OTGTUNE_LSB	14
--#define USBPCR_OTGTUNE_MASK	GENMASK(16, USBPCR_OTGTUNE_LSB)
--#define USBPCR_OTGTUNE_DFT	(0x4 << USBPCR_OTGTUNE_LSB)
--
--#define USBPCR_SQRXTUNE_LSB	11
--#define USBPCR_SQRXTUNE_MASK	GENMASK(13, USBPCR_SQRXTUNE_LSB)
-+#define USBPCR_USB_MODE				BIT(31)
-+#define USBPCR_AVLD_REG				BIT(30)
-+#define USBPCR_INCR_MASK			BIT(27)
-+#define USBPCR_COMMONONN			BIT(25)
-+#define USBPCR_VBUSVLDEXT			BIT(24)
-+#define USBPCR_VBUSVLDEXTSEL		BIT(23)
-+#define USBPCR_POR					BIT(22)
-+#define USBPCR_SIDDQ				BIT(21)
-+#define USBPCR_OTG_DISABLE			BIT(20)
-+#define USBPCR_TXPREEMPHTUNE		BIT(6)
+-/* Used in interface quirks */
+-struct sierra_iface_quirk {
+-	const u32 infolen;	/* number of interface numbers on the list */
+-	const u8  *ifaceinfo;	/* pointer to the array holding the numbers */
++struct sierra_iface_list {
++	const u8 *nums;		/* array of interface numbers */
++	size_t count;		/* number of elements in array */
+ };
+ 
+ struct sierra_intf_private {
+@@ -101,20 +100,19 @@ static int sierra_calc_num_ports(struct usb_serial *serial,
+ 	return num_ports;
+ }
+ 
+-static int is_quirk(const u8 ifnum, const struct sierra_iface_quirk *quirk)
++static bool is_listed(const u8 ifnum, const struct sierra_iface_list *list)
+ {
+-	const u8  *info;
+ 	int i;
+ 
+-	if (quirk) {
+-		info = quirk->ifaceinfo;
++	if (!list)
++		return false;
+ 
+-		for (i = 0; i < quirk->infolen; i++) {
+-			if (info[i] == ifnum)
+-				return 1;
+-		}
++	for (i = 0; i < list->count; i++) {
++		if (list->nums[i] == ifnum)
++			return true;
+ 	}
+-	return 0;
 +
-+#define USBPCR_IDPULLUP_LSB			28
-+#define USBPCR_IDPULLUP_MASK		GENMASK(29, USBPCR_IDPULLUP_LSB)
-+#define USBPCR_IDPULLUP_ALWAYS		(0x2 << USBPCR_IDPULLUP_LSB)
-+#define USBPCR_IDPULLUP_SUSPEND		(0x1 << USBPCR_IDPULLUP_LSB)
-+#define USBPCR_IDPULLUP_OTG			(0x0 << USBPCR_IDPULLUP_LSB)
++	return false;
+ }
+ 
+ static u8 sierra_interface_num(struct usb_serial *serial)
+@@ -125,6 +123,7 @@ static u8 sierra_interface_num(struct usb_serial *serial)
+ static int sierra_probe(struct usb_serial *serial,
+ 			const struct usb_device_id *id)
+ {
++	const struct sierra_iface_list *ignore_list;
+ 	int result = 0;
+ 	struct usb_device *udev;
+ 	u8 ifnum;
+@@ -143,9 +142,10 @@ static int sierra_probe(struct usb_serial *serial,
+ 		usb_set_interface(udev, ifnum, 1);
+ 	}
+ 
+-	if (is_quirk(ifnum, (struct sierra_iface_quirk *)id->driver_info)) {
+-		dev_dbg(&serial->dev->dev,
+-			"Ignoring interface #%d\n", ifnum);
++	ignore_list = (const struct sierra_iface_list *)id->driver_info;
 +
-+#define USBPCR_COMPDISTUNE_LSB		17
-+#define USBPCR_COMPDISTUNE_MASK		GENMASK(19, USBPCR_COMPDISTUNE_LSB)
-+#define USBPCR_COMPDISTUNE_DFT		(0x4 << USBPCR_COMPDISTUNE_LSB)
-+
-+#define USBPCR_OTGTUNE_LSB			14
-+#define USBPCR_OTGTUNE_MASK			GENMASK(16, USBPCR_OTGTUNE_LSB)
-+#define USBPCR_OTGTUNE_DFT			(0x4 << USBPCR_OTGTUNE_LSB)
-+
-+#define USBPCR_SQRXTUNE_LSB			11
-+#define USBPCR_SQRXTUNE_MASK		GENMASK(13, USBPCR_SQRXTUNE_LSB)
- #define USBPCR_SQRXTUNE_DCR_20PCT	(0x7 << USBPCR_SQRXTUNE_LSB)
--#define USBPCR_SQRXTUNE_DFT	(0x3 << USBPCR_SQRXTUNE_LSB)
-+#define USBPCR_SQRXTUNE_DFT			(0x3 << USBPCR_SQRXTUNE_LSB)
++	if (is_listed(ifnum, ignore_list)) {
++		dev_dbg(&serial->dev->dev, "Ignoring interface #%d\n", ifnum);
+ 		return -ENODEV;
+ 	}
  
--#define USBPCR_TXFSLSTUNE_LSB	7
--#define USBPCR_TXFSLSTUNE_MASK	GENMASK(10, USBPCR_TXFSLSTUNE_LSB)
-+#define USBPCR_TXFSLSTUNE_LSB		7
-+#define USBPCR_TXFSLSTUNE_MASK		GENMASK(10, USBPCR_TXFSLSTUNE_LSB)
- #define USBPCR_TXFSLSTUNE_DCR_50PPT	(0xf << USBPCR_TXFSLSTUNE_LSB)
- #define USBPCR_TXFSLSTUNE_DCR_25PPT	(0x7 << USBPCR_TXFSLSTUNE_LSB)
--#define USBPCR_TXFSLSTUNE_DFT	(0x3 << USBPCR_TXFSLSTUNE_LSB)
-+#define USBPCR_TXFSLSTUNE_DFT		(0x3 << USBPCR_TXFSLSTUNE_LSB)
- #define USBPCR_TXFSLSTUNE_INC_25PPT	(0x1 << USBPCR_TXFSLSTUNE_LSB)
- #define USBPCR_TXFSLSTUNE_INC_50PPT	(0x0 << USBPCR_TXFSLSTUNE_LSB)
+@@ -154,22 +154,22 @@ static int sierra_probe(struct usb_serial *serial,
  
--#define USBPCR_TXHSXVTUNE_LSB	4
--#define USBPCR_TXHSXVTUNE_MASK	GENMASK(5, USBPCR_TXHSXVTUNE_LSB)
--#define USBPCR_TXHSXVTUNE_DFT	(0x3 << USBPCR_TXHSXVTUNE_LSB)
-+#define USBPCR_TXHSXVTUNE_LSB		4
-+#define USBPCR_TXHSXVTUNE_MASK		GENMASK(5, USBPCR_TXHSXVTUNE_LSB)
-+#define USBPCR_TXHSXVTUNE_DFT		(0x3 << USBPCR_TXHSXVTUNE_LSB)
- #define USBPCR_TXHSXVTUNE_DCR_15MV	(0x1 << USBPCR_TXHSXVTUNE_LSB)
+ /* interfaces with higher memory requirements */
+ static const u8 hi_memory_typeA_ifaces[] = { 0, 2 };
+-static const struct sierra_iface_quirk typeA_interface_list = {
+-	.infolen = ARRAY_SIZE(hi_memory_typeA_ifaces),
+-	.ifaceinfo = hi_memory_typeA_ifaces,
++static const struct sierra_iface_list typeA_interface_list = {
++	.nums	= hi_memory_typeA_ifaces,
++	.count	= ARRAY_SIZE(hi_memory_typeA_ifaces),
+ };
  
--#define USBPCR_TXRISETUNE_LSB	4
--#define USBPCR_TXRISETUNE_MASK	GENMASK(5, USBPCR_TXRISETUNE_LSB)
--#define USBPCR_TXRISETUNE_DFT	(0x3 << USBPCR_TXRISETUNE_LSB)
-+#define USBPCR_TXRISETUNE_LSB		4
-+#define USBPCR_TXRISETUNE_MASK		GENMASK(5, USBPCR_TXRISETUNE_LSB)
-+#define USBPCR_TXRISETUNE_DFT		(0x3 << USBPCR_TXRISETUNE_LSB)
+ static const u8 hi_memory_typeB_ifaces[] = { 3, 4, 5, 6 };
+-static const struct sierra_iface_quirk typeB_interface_list = {
+-	.infolen = ARRAY_SIZE(hi_memory_typeB_ifaces),
+-	.ifaceinfo = hi_memory_typeB_ifaces,
++static const struct sierra_iface_list typeB_interface_list = {
++	.nums	= hi_memory_typeB_ifaces,
++	.count	= ARRAY_SIZE(hi_memory_typeB_ifaces),
+ };
  
--#define USBPCR_TXVREFTUNE_LSB	0
--#define USBPCR_TXVREFTUNE_MASK	GENMASK(3, USBPCR_TXVREFTUNE_LSB)
-+#define USBPCR_TXVREFTUNE_LSB		0
-+#define USBPCR_TXVREFTUNE_MASK		GENMASK(3, USBPCR_TXVREFTUNE_LSB)
- #define USBPCR_TXVREFTUNE_INC_25PPT	(0x7 << USBPCR_TXVREFTUNE_LSB)
--#define USBPCR_TXVREFTUNE_DFT	(0x5 << USBPCR_TXVREFTUNE_LSB)
-+#define USBPCR_TXVREFTUNE_DFT		(0x5 << USBPCR_TXVREFTUNE_LSB)
+ /* 'ignorelist' of interfaces not served by this driver */
+ static const u8 direct_ip_non_serial_ifaces[] = { 7, 8, 9, 10, 11, 19, 20 };
+-static const struct sierra_iface_quirk direct_ip_interface_ignore = {
+-	.infolen = ARRAY_SIZE(direct_ip_non_serial_ifaces),
+-	.ifaceinfo = direct_ip_non_serial_ifaces,
++static const struct sierra_iface_list direct_ip_interface_ignore = {
++	.nums	= direct_ip_non_serial_ifaces,
++	.count	= ARRAY_SIZE(direct_ip_non_serial_ifaces),
+ };
  
- /*USB Reset Detect Timer Register*/
--#define USBRDT_UTMI_RST		BIT(27)
--#define USBRDT_HB_MASK		BIT(26)
--#define USBRDT_VBFIL_LD_EN	BIT(25)
--#define USBRDT_IDDIG_EN		BIT(24)
--#define USBRDT_IDDIG_REG	BIT(23)
--#define USBRDT_VBFIL_EN		BIT(2)
-+#define USBRDT_UTMI_RST				BIT(27)
-+#define USBRDT_HB_MASK				BIT(26)
-+#define USBRDT_VBFIL_LD_EN			BIT(25)
-+#define USBRDT_IDDIG_EN				BIT(24)
-+#define USBRDT_IDDIG_REG			BIT(23)
-+#define USBRDT_VBFIL_EN				BIT(2)
+ static const struct usb_device_id id_table[] = {
+@@ -859,7 +859,7 @@ static int sierra_port_probe(struct usb_serial_port *port)
+ {
+ 	struct usb_serial *serial = port->serial;
+ 	struct sierra_port_private *portdata;
+-	const struct sierra_iface_quirk *himemoryp;
++	const struct sierra_iface_list *himemory_list;
+ 	u8 ifnum;
  
- /*USB Parameter Control Register 1*/
- #define USBPCR1_BVLD_REG			BIT(31)
+ 	portdata = kzalloc(sizeof(*portdata), GFP_KERNEL);
+@@ -878,16 +878,16 @@ static int sierra_port_probe(struct usb_serial_port *port)
+ 	if (serial->num_ports == 1) {
+ 		/* Get interface number for composite device */
+ 		ifnum = sierra_interface_num(serial);
+-		himemoryp = &typeB_interface_list;
++		himemory_list = &typeB_interface_list;
+ 	} else {
+ 		/* This is really the usb-serial port number of the interface
+ 		 * rather than the interface number.
+ 		 */
+ 		ifnum = port->port_number;
+-		himemoryp = &typeA_interface_list;
++		himemory_list = &typeA_interface_list;
+ 	}
+ 
+-	if (is_quirk(ifnum, himemoryp)) {
++	if (is_listed(ifnum, himemory_list)) {
+ 		portdata->num_out_urbs = N_OUT_URB_HM;
+ 		portdata->num_in_urbs  = N_IN_URB_HM;
+ 	}
 -- 
-2.11.0
+2.26.2
 
