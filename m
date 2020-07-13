@@ -2,149 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 068A021CAB7
-	for <lists+linux-usb@lfdr.de>; Sun, 12 Jul 2020 19:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D70D921CD60
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Jul 2020 04:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729218AbgGLRcw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 12 Jul 2020 13:32:52 -0400
-Received: from crapouillou.net ([89.234.176.41]:41932 "EHLO crapouillou.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728882AbgGLRcw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 12 Jul 2020 13:32:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1594575169; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:content-transfer-encoding:in-reply-to:
-         references; bh=Jl9sMbotBoFxjS8mOnQpdRxUlMPwm3S5bXXI7/kn6hg=;
-        b=aCF0OIjxs6mijYBXp5VknjHnXmM+RLjBAkwN5ad589uEKjqSXRQmomSNyYPUthqjxsxXVm
-        wjrf/Nq1zKSBoZ7wHbQ1fFmpW/R39XSYMrUdwlzwSrw2ywgAmJaW08MDaskg7waqGlOyu9
-        mB+A1Bajx+R19XA6MR3RYoaPiY9fS9o=
-Date:   Sun, 12 Jul 2020 19:32:39 +0200
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Segfault in MUSB core
-To:     Bin Liu <b-liu@ti.com>
-Cc:     Linux USB List <linux-usb@vger.kernel.org>, od@zcrc.me
-Message-Id: <F2ADDQ.J4D20OIYC0823@crapouillou.net>
+        id S1728535AbgGMCtm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 12 Jul 2020 22:49:42 -0400
+Received: from mail-eopbgr40073.outbound.protection.outlook.com ([40.107.4.73]:14146
+        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728382AbgGMCtg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 12 Jul 2020 22:49:36 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fiaBNSU5gVBlLJ2mxzLiWagp1NAAtXkjoY/n2b0Qu0GHrfN+LPe5tS52xZcV8dh8Bk9iMSMtFu5r4pBREVRZLMQDUw8m1LP3Z7KgiOyfB+8PwiHi72toJY7eLyqsatc6QgkY1Yb58WnCP7ZHU2xj45vjjriWWhMKTS4eOPwz9Ou5IgzFERM8X8TzcWAQjkEtA924/sUNpqKgbrs1FaU5UtW8sQAD6uXumGVMG+jAJxPa7AyhFloXnbi7nfYUWhVaoGQDnbevFd8vq+a3IrqznXHRNVtxVkIMA6UfTSX6BHusiz1EkNCHvsx4pg7EzX91FeMGsjANI7HnA8RrRBsRIw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hLWDeMSRGQoO6W+Pz/yn0FwnMBVXlT5/E9G0BdvYsC4=;
+ b=Y9HAFKkIAbezlYCtfouGjWrRR+WKIo4CQd9qo+mhizhcpT9mw6h5TYrexoyrK3jVZvDOtG9PQ4KBUTECp3karjrRf8c81EnpXyWhrzx+ONJEqvRYKmfVW4BoyRCWOxM9GX9fFo8/o4A0mybw36783Aqa2udquf9Kk8w5VnsZooz7tL0KcMLr/9WtNrqZon7TET2Ldh582biAueefx78kVSkovrEuUWDLjuz5BbdX4NQ94B9k36Ysg/PbAii8aAzREF6kA2pWWPCma7NQH9kDnVwInhsUR7Ykgp2f3Q6uvCsUzJ4jWOlajn2WnY8Ytq15rpn+7+ti3bGWkdIARxNKKQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hLWDeMSRGQoO6W+Pz/yn0FwnMBVXlT5/E9G0BdvYsC4=;
+ b=pGezGzvoyDghmORA7kzN89qxy8YiD/5r7klo2W5z+d+nsA3JcVxMLhTm3Cl21+/u8lbSjdt52xwTErXcbnBUR3NoQ4Fo3MuMgxEObnbOvxqf5uvdnJiB19acrYbdhuAivxwM2PRT04nojAxZ00JmuY9bkAfwg5J0TUY7mBItWAA=
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
+ by AM5PR04MB3026.eurprd04.prod.outlook.com (2603:10a6:206:11::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3174.24; Mon, 13 Jul
+ 2020 02:49:32 +0000
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1101:adaa:ee89:af2a]) by AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1101:adaa:ee89:af2a%3]) with mapi id 15.20.3174.025; Mon, 13 Jul 2020
+ 02:49:32 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Philippe Schenker <philippe.schenker@toradex.com>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/3] usb: chipidea: imx: support disabling runtime-pm
+Thread-Topic: [PATCH 2/3] usb: chipidea: imx: support disabling runtime-pm
+Thread-Index: AQHWVtG+IVcgco4rmU66cFLuq3QOdakE0tqA
+Date:   Mon, 13 Jul 2020 02:49:31 +0000
+Message-ID: <20200713024937.GA2388@b29397-desktop>
+References: <20200710154935.697190-1-philippe.schenker@toradex.com>
+ <20200710154935.697190-2-philippe.schenker@toradex.com>
+In-Reply-To: <20200710154935.697190-2-philippe.schenker@toradex.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: toradex.com; dkim=none (message not signed)
+ header.d=none;toradex.com; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.67]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 348dd771-5046-45a5-67d9-08d826d75ea2
+x-ms-traffictypediagnostic: AM5PR04MB3026:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM5PR04MB30260B74EDB7DC90422AEE278B600@AM5PR04MB3026.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5797;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: yKBboGosYWud8naonZ/DduOHpNIN2b2swG46PziZmst3NGv5WEnGe9+SlGLIxFyByjHHh+318iYQ3wvCJEejDpwiINs6ye/EN/z5tln1pjf722hnda3a8BO8760l/1g+5G1+/TKm+z/qPZrIm0jUlo7L9hq0G0G4GXDWIZuLRd5D+gxDeGHbAeAYu3yK9reQ8t3n1Ewarh2ey+Ri9qvE//9Kwwtn1CJRNABHwwn+EbTEYXm12ngFqVUnW58EygUzUaJviH2eyAnvhAU9ZsoqAtIDr7aScrwj8d6BavOi3uQcYCGeRmjlWo9BfDcg0KLwtMKxvplCjmY/s1OPROOK1g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(7916004)(4636009)(366004)(33656002)(1076003)(498600001)(54906003)(4326008)(83380400001)(7416002)(8676002)(6916009)(5660300002)(44832011)(186003)(2906002)(53546011)(71200400001)(6506007)(26005)(33716001)(66446008)(64756008)(66556008)(66476007)(66946007)(76116006)(91956017)(6512007)(6486002)(9686003)(86362001)(8936002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: 3lHzXtDuygHccp/yLAPUGopM85gLrDAgAFPQcYN/xsb8XPmEIb2XPDbVlzWpEK71Ldj+tcZFmM8gUuJxs65JRal0Wg+issU1FC5jIl9zAjMd3z2hiSse46W/vGxYPdHNaxEcPL2ZPdD8FI9jqfPDoB9+vv6xqd67F4/t7no8XrDjCKW3J+v2kKkoy1BRUssIUH13oyAktFAG+yIJvGJ6+sgDZNTs+X7TixUPvT6iFjJrTLCjvPBeZDXtyWSpmEMMjORb027J2SdwnSSPP1TsY72dvXNI7ItSsgiz0JLg1MsTsEAR95FbUhKqJnZnHoUnM+8k4UiH1qrtIi4BYz87SKlCGb686k16ho3Sit3xYpx2Ww0V9ydj2ouJn6FZMib63lVkV0FgHnPTJzj1vzTGU/GJaNiLJDy4rf8jhrCKk3xThoYtv03br3j5S6JBAZFA6UHi6UmUN7AxSwvPvlO2XacGlyn36w0Jtwj7nCKoZSM=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2F244EAEAC2F4B48B3364DE58809684A@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 348dd771-5046-45a5-67d9-08d826d75ea2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jul 2020 02:49:31.9853
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: HrKhynSjcwM54KBc8XHzdzuGbGGaBBxqM7NNWJPpdft/H4taLkaLlotXFEKVFMkmqil9tMidrIOThmHTFFPS7g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR04MB3026
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Bin,
+On 20-07-10 17:49:33, Philippe Schenker wrote:
+> Chipidea depends on some hardware signals to be there in order
+> for runtime-pm to work well. Add the possibility to disable runtime
+> power management that is necessary for certain boards.
+>=20
+> Signed-off-by: Philippe Schenker <philippe.schenker@toradex.com>
+> ---
+>=20
+>  drivers/usb/chipidea/ci_hdrc_imx.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>=20
+> diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci=
+_hdrc_imx.c
+> index 5ae16368a0c7..5078d0695eb7 100644
+> --- a/drivers/usb/chipidea/ci_hdrc_imx.c
+> +++ b/drivers/usb/chipidea/ci_hdrc_imx.c
+> @@ -434,6 +434,9 @@ static int ci_hdrc_imx_probe(struct platform_device *=
+pdev)
+>  		usb_phy_init(pdata.usb_phy);
+>  	}
+> =20
+> +	if (of_property_read_bool(np, "disable-runtime-pm"))
+> +		pdata.flags &=3D ~CI_HDRC_SUPPORTS_RUNTIME_PM;
+> +
+>  	if (pdata.flags & CI_HDRC_SUPPORTS_RUNTIME_PM)
+>  		data->supports_runtime_pm =3D true;
+> =20
 
-I'm trying to squash a bug that's been annoying me for a while. On 
-older Ingenic SoCs, trying to telnet after a reboot seems to result in 
-a 50% chance of having a kernel oops. It does happen on newer SoCs too 
-but much less often.
+The changes are OK, you may add some descriptions like Fabio suggested,
+eg, your use cases.
 
-Looking at the stack trace, it happens to segfault within musb_g_tx(), 
-when it's called by musb_interrupt(). But the reason why it segfaults 
-is beyond me.
-
-I can only guess it is related to the two error messages that can be 
-seen before the stack trace, but again I am clueless about why these 
-pop up.
-
-Any ideas about what's happening here?
+--=20
 
 Thanks,
--Paul
-
-------------------------
-
-[ 26.459013] musb-hdrc musb-hdrc.0.auto: could not add resume work 
-93e7adf0
-[ 26.472959] musb-hdrc musb-hdrc.0.auto: musb_gadget_queue resume work: 
--150
-[ 27.462159] CPU 0 Unable to handle kernel paging request at virtual 
-address 00000104, epc == 802c5858, ra == 802c6370
-[ 27.483622] Oops[#1]:
-[ 27.488282] CPU: 0 PID: 3 Comm: kworker/0:0 Not tainted 5.8.0-rc4+ #37
-[ 27.501449] Workqueue: pm 0x80285f6c
-[ 27.508700] $ 0 : 00000000 10000000 00000122 00000100
-[ 27.519257] $ 4 : 8124e484 80a37d80 00000000 00002004
-[ 27.529815] $ 8 : 00000000 81028000 804a3108 00000000
-[ 27.540372] $12 : 804a310c fffffffd 00000000 77ce4890
-[ 27.550932] $16 : 000020a2 80a37d80 00000000 00000001
-[ 27.561489] $20 : 8124e4d4 b3040000 8124e484 b3040010
-[ 27.572049] $24 : 00000000 802bfff0
-[ 27.582608] $28 : 81080000 8102bbe0 80540000 802c6370
-[ 27.593170] Hi : 0000004a
-[ 27.599015] Lo : 00000000
-[ 27.604867] epc : 802c5858 0x802c5858
-[ 27.612636] ra : 802c6370 0x802c6370
-[ 27.620394] Status: 10000002 KERNEL EXL
-[ 27.628338] Cause : 0080000c (ExcCode 03)
-[ 27.636440] BadVA : 00000104
-[ 27.642289] PrId : 1ed0024f (Ingenic XBurst)
-[ 27.651123] Process kworker/0:0 (pid: 3, threadinfo=6c73c9fe, 
-task=3b071406, tls=00000000)
-[ 27.667828] Stack : 00000000 80884cc0 80a34280 81376000 000020a2 
-80a37d80 8124e080 802c6370
-[ 27.684738] 80893e40 8033ea00 8124e4b0 00002004 4f4bf699 00000000 
-8126c81c 803412e0
-[ 27.701649] 8124e080 00000000 00000001 00000000 80540000 0000001b 
-804016b4 804b0000
-[ 27.718557] 00000001 802c2f2c 00000000 89b20000 00000000 81376000 
-0000001b 80893e00
-[ 27.735465] 10000000 8035dd00 00000002 80893e00 8124e080 804a8d38 
-8124e080 00000000
-[ 27.752376] ...
-[ 27.757361] Call Trace:
-[ 27.757382] [<802c6370>] 0x802c6370 drivers/usb/musb/musb_gadget.c:500
-[ 27.769417] [<8033ea00>] 0x8033ea00 include/linux/netdevice.h:4626
-[ 27.776497] [<803412e0>] 0x803412e0 include/linux/netdevice.h:131
-[ 27.783577] [<802c2f2c>] 0x802c2f2c drivers/usb/musb/musb_core.c:1775 
-(discriminator 2)
-[ 27.790657] [<8035dd00>] 0x8035dd00 include/net/sch_generic.h:1088
-[ 27.797738] [<802c8098>] 0x802c8098 drivers/usb/musb/jz4740.c:51
-[ 27.804817] [<800b5764>] 0x800b5764 mm/slab.c:3313
-[ 27.811897] [<800557a8>] 0x800557a8 kernel/irq/handle.c:156
-[ 27.818975] [<8033eca8>] 0x8033eca8 include/net/pkt_sched.h:134
-[ 27.826055] [<8033eb04>] 0x8033eb04 include/net/dst.h:271
-[ 27.833136] [<80055884>] 0x80055884 kernel/irq/handle.c:198
-[ 27.840214] [<8005912c>] 0x8005912c kernel/irq/generic-chip.c:44
-[ 27.847292] [<802cf544>] 0x802cf544 include/linux/netdevice.h:3739
-[ 27.854371] [<80055904>] 0x80055904 kernel/irq/handle.c:216
-[ 27.861449] [<802c58b8>] 0x802c58b8 drivers/usb/musb/musb_gadget.c:150
-[ 27.868528] [<8005827c>] 0x8005827c include/linux/irq.h:331
-[ 27.875607] [<802c4cd4>] 0x802c4cd4 drivers/usb/musb/musb_gadget.c:394 
-(discriminator 4)
-[ 27.882686] [<80055120>] 0x80055120 kernel/irq/irqdesc.c:651
-[ 27.889766] [<801f1f00>] 0x801f1f00 drivers/irqchip/irq-ingenic.c:54
-[ 27.896848] [<800557a8>] 0x800557a8 kernel/irq/handle.c:156
-[ 27.903929] [<80055884>] 0x80055884 kernel/irq/handle.c:198
-[ 27.911011] [<8005841c>] 0x8005841c kernel/irq/chip.c:908
-[ 27.918092] [<80055120>] 0x80055120 kernel/irq/irqdesc.c:651
-[ 27.925171] [<803f6b58>] 0x803f6b58 arch/mips/kernel/irq.c:108
-[ 27.932252] [<800558b0>] 0x800558b0 kernel/irq/handle.c:203
-[ 27.939331] [<8005917c>] 0x8005917c kernel/irq/generic-chip.c:103
-[ 27.946411] [<801f1dfc>] 0x801f1dfc drivers/irqchip/irq-mips-cpu.c:146
-[ 27.953490] [<80057e30>] 0x80057e30 kernel/irq/chip.c:173
-[ 27.960569] [<80014d64>] 0x80014d64 arch/mips/kernel/genex.S:226
-[ 27.967647] [<80382a98>] 0x80382a98 net/ipv4/inet_connection_sock.c:717
-[ 27.974727] [<80055120>] 0x80055120 kernel/irq/irqdesc.c:651
-[ 27.981810] [<801f1cc0>] 0x801f1cc0 
-arch/mips/include/asm/mipsregs.h:2875
-[ 27.988890] [<803f6bf4>] 0x803f6bf4 kernel/softirq.c:295
-[ 27.995971] [<800558b0>] 0x800558b0 kernel/irq/handle.c:203
-[ 28.003049] [<8002c120>] 0x8002c120 
-arch/mips/include/asm/irqflags.h:118
-[ 28.010130] [<8005841c>] 0x8005841c kernel/irq/chip.c:908
-[ 28.017212] [<8002c2a0>] 0x8002c2a0 kernel/softirq.c:400
-[ 28.024292] [<801f1dfc>] 0x801f1dfc drivers/irqchip/irq-mips-cpu.c:146
-[ 28.031372] [<80283c8c>] 0x80283c8c drivers/base/power/generic_ops.c:41
-[ 28.038451] [<80014d64>] 0x80014d64 arch/mips/kernel/genex.S:226
-[ 28.045521]
-[ 28.048589] Code: 8ca2003c 8ca30038 90920059 <ac620004> ac430000 
-24020100 aca20038 8ca30030 24020122
-[ 28.068299]
-[ 28.071374] ---[ end trace bc487b9161cb41e4 ]---
-[ 28.080705] Kernel panic - not syncing: Fatal exception in interrupt
-[ 28.093529] ---[ end Kernel panic - not syncing: Fatal exception in 
-interrupt ]---
-
-
-
+Peter Chen=
