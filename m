@@ -2,63 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F52221E445
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 02:03:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7546421E57B
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 04:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726460AbgGNADk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Jul 2020 20:03:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33672 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726150AbgGNADj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Jul 2020 20:03:39 -0400
-Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB51C061755;
-        Mon, 13 Jul 2020 17:03:39 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 43BF71297FB30;
-        Mon, 13 Jul 2020 17:03:39 -0700 (PDT)
-Date:   Mon, 13 Jul 2020 17:03:38 -0700 (PDT)
-Message-Id: <20200713.170338.67090817978996414.davem@davemloft.net>
-To:     geert@linux-m68k.org
-Cc:     kuba@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: hso: Fix debug compile warning on sparc32
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20200713110513.10651-1-geert@linux-m68k.org>
-References: <20200713110513.10651-1-geert@linux-m68k.org>
-X-Mailer: Mew version 6.8 on Emacs 26.3
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=iso-8859-7
-Content-Transfer-Encoding: base64
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Mon, 13 Jul 2020 17:03:39 -0700 (PDT)
+        id S1726629AbgGNCMV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Jul 2020 22:12:21 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:46243 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726460AbgGNCMV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Jul 2020 22:12:21 -0400
+Received: by mail-io1-f66.google.com with SMTP id a12so15659121ion.13;
+        Mon, 13 Jul 2020 19:12:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rYKdpUqepou9jx1AglhXW1v3VmWcoBH3ywbADxlKubw=;
+        b=ew04cEZEkgwAKcTJjuPbY62pINv6QQ8VcdmfXAGB2iq8LRndqybfHgcJZpIcToQY77
+         5UE6h95VGo60eTnJYwgA/nt9Wp7h3ASOcAzgutPn3sETkYy2j0MSZ/kVGGTF86Gm2Jbg
+         +cYkcM4HcdSyLTcHw9BZzHndx5tE9dbnoBmd78QoiXpeLiV+9n7uPCqD6BujeQeBliHY
+         bY7fEjvMvu4m/06VtvsIr9+kG7C+oHOrj1sFc/ldTNEB8RrPm19mQXHsKVyKrR45T+Vi
+         p+BMlcW/FIwmhmpRSAogH+duXBfiZ4g6UefwnxWzD14pjDFxZeGtuW7btL7MrJqubg+p
+         goEg==
+X-Gm-Message-State: AOAM531MSHEVd/tgJBxGEpvShaO+ILk9ARvFXjvnDGMPd8zt1w/nrygg
+        1ghR6KarDBJ2xBV+zCN49Ov0JeV9qoRx
+X-Google-Smtp-Source: ABdhPJwCEYfAYaJ74OVjMWY5/7ctAi6PGeZuG0YxAFqpXycKurAzjq7l1ACdie74Vlon5me8aKoAKg==
+X-Received: by 2002:a05:6602:45:: with SMTP id z5mr2729761ioz.112.1594692740631;
+        Mon, 13 Jul 2020 19:12:20 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id 5sm8374172ion.7.2020.07.13.19.12.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jul 2020 19:12:19 -0700 (PDT)
+Received: (nullmailer pid 1136711 invoked by uid 1000);
+        Tue, 14 Jul 2020 02:12:18 -0000
+Date:   Mon, 13 Jul 2020 20:12:18 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Cc:     devicetree@vger.kernel.org, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org, linux-usb@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH v2] dt-bindings: usb: renesas,usb-xhci: convert to YAML
+Message-ID: <20200714021218.GA1136658@bogus>
+References: <1592822252-12338-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1592822252-12338-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-RnJvbTogR2VlcnQgVXl0dGVyaG9ldmVuIDxnZWVydEBsaW51eC1tNjhrLm9yZz4NCkRhdGU6IE1v
-biwgMTMgSnVsIDIwMjAgMTM6MDU6MTMgKzAyMDANCg0KPiBPbiBzcGFyYzMyLCB0Y2ZsYWdfdCBp
-cyAidW5zaWduZWQgbG9uZyIsIHVubGlrZSBvbiBhbGwgb3RoZXINCj4gYXJjaGl0ZWN0dXJlcywg
-d2hlcmUgaXQgaXMgInVuc2lnbmVkIGludCI6DQo+IA0KPiAgICAgZHJpdmVycy9uZXQvdXNiL2hz
-by5jOiBJbiBmdW5jdGlvbiChaHNvX3NlcmlhbF9zZXRfdGVybWlvc6I6DQo+ICAgICBpbmNsdWRl
-L2xpbnV4L2tlcm5fbGV2ZWxzLmg6NToxODogd2FybmluZzogZm9ybWF0IKElZKIgZXhwZWN0cyBh
-cmd1bWVudCBvZiB0eXBlIKF1bnNpZ25lZCBpbnSiLCBidXQgYXJndW1lbnQgNCBoYXMgdHlwZSCh
-dGNmbGFnX3Qge2FrYSBsb25nIHVuc2lnbmVkIGludH2iIFstV2Zvcm1hdD1dDQo+ICAgICBkcml2
-ZXJzL25ldC91c2IvaHNvLmM6MTM5MzozOiBub3RlOiBpbiBleHBhbnNpb24gb2YgbWFjcm8goWhz
-b19kYmeiDQo+ICAgICAgICBoc29fZGJnKDB4MTYsICJUZXJtaW9zIGNhbGxlZCB3aXRoOiBjZmxh
-Z3MgbmV3WyVkXSAtIG9sZFslZF1cbiIsDQo+ICAgICAgICBefn5+fn5+DQo+ICAgICBpbmNsdWRl
-L2xpbnV4L2tlcm5fbGV2ZWxzLmg6NToxODogd2FybmluZzogZm9ybWF0IKElZKIgZXhwZWN0cyBh
-cmd1bWVudCBvZiB0eXBlIKF1bnNpZ25lZCBpbnSiLCBidXQgYXJndW1lbnQgNSBoYXMgdHlwZSCh
-dGNmbGFnX3Qge2FrYSBsb25nIHVuc2lnbmVkIGludH2iIFstV2Zvcm1hdD1dDQo+ICAgICBkcml2
-ZXJzL25ldC91c2IvaHNvLmM6MTM5MzozOiBub3RlOiBpbiBleHBhbnNpb24gb2YgbWFjcm8goWhz
-b19kYmeiDQo+ICAgICAgICBoc29fZGJnKDB4MTYsICJUZXJtaW9zIGNhbGxlZCB3aXRoOiBjZmxh
-Z3MgbmV3WyVkXSAtIG9sZFslZF1cbiIsDQo+ICAgICAgICBefn5+fn5+DQo+IA0KPiBBcyAidW5z
-aWduZWQgbG9uZyIgaXMgMzItYml0IG9uIHNwYXJjMzIsIGZpeCB0aGlzIGJ5IGNhc3RpbmcgYWxs
-IHRjZmxhZ190DQo+IHBhcmFtZXRlcnMgdG8gInVuc2lnbmVkIGludCIuDQo+IFdoaWxlIGF0IGl0
-LCB1c2UgIiV1IiB0byBmb3JtYXQgdW5zaWduZWQgbnVtYmVycy4NCj4gDQo+IFNpZ25lZC1vZmYt
-Ynk6IEdlZXJ0IFV5dHRlcmhvZXZlbiA8Z2VlcnRAbGludXgtbTY4ay5vcmc+DQoNCkFwcGxpZWQs
-IHRoYW5rcy4NCg==
+On Mon, 22 Jun 2020 19:37:32 +0900, Yoshihiro Shimoda wrote:
+> Convert Renesas related parts of usb-xhci to YAML because
+> they are not compatible with generic-xhci.
+> 
+> Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+> ---
+>  Changes from v1:
+>  - Update the commit description.
+>  - Use SoC part names instead of part numbers in the comments.
+>  - Add comments on renesas,rcar-gen[23]-xhci.
+>  - Add power-domains and resets to required.
+>  https://patchwork.kernel.org/patch/11604565/
+> 
+>  .../devicetree/bindings/usb/renesas,usb-xhci.yaml  | 86 ++++++++++++++++++++++
+>  Documentation/devicetree/bindings/usb/usb-xhci.txt | 18 -----
+>  2 files changed, 86 insertions(+), 18 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/usb/renesas,usb-xhci.yaml
+> 
+
+Applied, thanks!
