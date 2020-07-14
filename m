@@ -2,53 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 059FD21E72C
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 06:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B795621E767
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 07:19:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726545AbgGNE7E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Jul 2020 00:59:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50632 "EHLO
+        id S1726370AbgGNFTx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Jul 2020 01:19:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726477AbgGNE7D (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jul 2020 00:59:03 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 641C5C061755;
-        Mon, 13 Jul 2020 21:59:03 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id cv18so640095pjb.1;
-        Mon, 13 Jul 2020 21:59:03 -0700 (PDT)
+        with ESMTP id S1725306AbgGNFTx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jul 2020 01:19:53 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC382C061755;
+        Mon, 13 Jul 2020 22:19:52 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id a14so7088025pfi.2;
+        Mon, 13 Jul 2020 22:19:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=aHwFrfp5DJN1YzrykTS+xRyjP+Xlss5LxtRFykLEPqg=;
-        b=VjbAat6xY+c3rMSObrntZ3ZQIQ6vwYRBuI93AKrvxehdnd03uuwsbQOUh6u5x4DK5F
-         MFwJga25rFx3P2V0CxKJ5PX8fZqImAnUQrC0OPE/UEOoqxEb+r+j5fC8WnvvfPWNStD5
-         g238DdQ5GoJnUkAHduBEXG0mDSYRwihJHyF2s/jaQoB8VQqCBMIZlPMIZpNOVTey67/v
-         wWEOSqUbMXjuN9WuLnoDzgaCc1Ih+dZCnG3szSM5TO0b3C3syhJP2Ymru6C11A22VUOe
-         QBes/qNRUX569FkQiborb+Xf0X5sDIXl00xTpSHKOtG9pf1THtnPxPY8cPQ4LCZ+TeJS
-         OvhA==
+        bh=3NWRwXT2os0AqIko2lQKPRTRyOChAMJjYkOouXYTsag=;
+        b=UHJPfaJ+z2yNMr/GBKses61OphFXKg9+ciuuT/b3YNN7Jg3d7ecKqaYjGpmSBrfda9
+         OJkiPT1vVYUt7uIyLq6e6S+VKMC+O6097lzFr/f92DFhacAnFP6f+ZaDWdvveRm2oQ6o
+         QhFzzkEJNeg4YmXMeo70NZdqDI/1pMU4PWM+JHrNzufyTbC0yfT2f8Xdd9bFi8U9A/4k
+         wjo09fYdtkcrweSZOK2yyJJV63Vz4k3A/FMY4NgqqeMAge0xK3QajjjbnjLg9MEEdndQ
+         2OlyPX00p2VwsnQUp/VHmxkiHjBxPW8qbJ/C6+Y8Pla2KRILgNJq6UneBEZHbRnFoP4z
+         S0oQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=aHwFrfp5DJN1YzrykTS+xRyjP+Xlss5LxtRFykLEPqg=;
-        b=Epysp2+xO6vfE/KujWGZxz8njWdzvBJY0rGH9SIBNWP8egPjNuC1tYbdlqpSOTMT0d
-         jtu0+XXrEsklN9msNrpNjyQQ/88c/8vovSoYL/Xp5wgJcF+Ov0cMnSMOvLH3PCHjzALW
-         jUvT+4mDexkglh6h4Xxrbx6wwyaiOpMeQtOrJUeysZMI2gZeyH5mHz8dOdkm1GuK2xke
-         2o2uYPTnnAut5m8ZVAqJN1DjqyiFbF7BeA/+yN5U49VDkqd/e6iav5N2pfrkMBVN6Ca7
-         nf76/0BuEujIh+CdCIjebG3YbQMJzXT+HIG3SQZrcQX9I1aJeSS/bmmdZGDleIfPXABV
-         Ur6A==
-X-Gm-Message-State: AOAM532DINQ7UQYRR9XgTLj3UmHezLKlxZFHgI3WvxpuTtfdjVzHhkBf
-        BPyivMVX/Dm1nDIayXY12eE=
-X-Google-Smtp-Source: ABdhPJwN60aq2tI002VZHXhxdFfSWeV9YReXRSccduLHJvxrxcsfeJveODKxay2MUOLRTf1wLR+pQg==
-X-Received: by 2002:a17:90b:358e:: with SMTP id mm14mr2915891pjb.54.1594702742672;
-        Mon, 13 Jul 2020 21:59:02 -0700 (PDT)
+        bh=3NWRwXT2os0AqIko2lQKPRTRyOChAMJjYkOouXYTsag=;
+        b=ZOzebiTcMhi430B8RP1q1FB5rsaKUSkxyP/2018SxlX9GBtFh81XTxOccIP+V/g7JE
+         YxOWfNQhdooUA7aMYAIPsfQyzTR55uf+88aoSmgwGyw78l1srCUve/IFoW0EeOO/g8sa
+         iGudEqTYzfLiQEJMhwPVaDPLFZQ//s7ZsWu7Ytj5wAo2uYtAD3G6wSNKQCFP8f1C/qcj
+         XzOSaXWUyW5gTsiF9bAqtigqPPzGx1qPPiF7/nt6A3ceynvhzr4B7D/dWfyX6t9Nm3Bj
+         c1ud0gs/X5i635/1h7JJHuK042MAvxrZ1MrhElaE5GMHgvVYuC9LQ9/De6+mIEnHK4Na
+         0qcA==
+X-Gm-Message-State: AOAM531E0b+JjM31iV8fLwgmGgaHb2RG9E8eB4APivnYLIAY/yLTVrKs
+        w1FCuOIrqEol5wBxbF9bghw=
+X-Google-Smtp-Source: ABdhPJx96f8X+GAwVE6MNKGlG4xK2bF1+hDUbsdy/guBnt9HF3gM7JmmXlakqrRDX/Uq0lwIpzvEhg==
+X-Received: by 2002:a63:9d87:: with SMTP id i129mr2094334pgd.412.1594703992596;
+        Mon, 13 Jul 2020 22:19:52 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c30sm15546763pfj.213.2020.07.13.21.59.01
+        by smtp.gmail.com with ESMTPSA id h9sm15752489pfk.155.2020.07.13.22.19.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jul 2020 21:59:01 -0700 (PDT)
+        Mon, 13 Jul 2020 22:19:52 -0700 (PDT)
 Subject: Re: [PATCH 1/6] skeleton for asetek gen 6 driver
 To:     jaap aarts <jaap.aarts1@gmail.com>,
         Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
@@ -99,8 +99,8 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <2647223e-74c2-8fd6-f649-9e051a7d9d6b@roeck-us.net>
-Date:   Mon, 13 Jul 2020 21:59:00 -0700
+Message-ID: <6167a01d-fe60-5066-a7fb-4530f9cd7650@roeck-us.net>
+Date:   Mon, 13 Jul 2020 22:19:51 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
@@ -116,7 +116,6 @@ X-Mailing-List: linux-usb@vger.kernel.org
 On 7/13/20 12:32 PM, jaap aarts wrote:
 > Signed-off-by: Jaap Aarts <jaap.aarts1@example.com>
 
-I am not going to review code which is later changed in the
-same patch series. Please combine all patches into one.
+That e-mail address does not exist.
 
 Guenter
