@@ -2,140 +2,173 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 989392200E9
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jul 2020 01:12:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C54E2200FB
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jul 2020 01:18:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727788AbgGNXMV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Jul 2020 19:12:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51374 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727768AbgGNXMU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jul 2020 19:12:20 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047F4C061755
-        for <linux-usb@vger.kernel.org>; Tue, 14 Jul 2020 16:12:20 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id e81so648878ybb.3
-        for <linux-usb@vger.kernel.org>; Tue, 14 Jul 2020 16:12:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc:content-transfer-encoding;
-        bh=bXA+H3/HCKdwgoTJOd9VMBnH1kr2GFc/ck2KdLGaIqE=;
-        b=WGgiL3BdHpX/P3jjKH03WkJvclqVTtDITF/41I54Zj5iBBqdozMu4WUgvS3ukt4mrP
-         /nDuCQLrljA8YOabhOEg+XW68BOg8DVGIC6nrUr8ZeLgC80uwu4eBJdtND0ImefA5cJF
-         0gmIuf4r8V0ILfAYXjh+ptVXmdUU7tOSDQlC8JIgO65+f6CF7n5/A+sbWbsEer5zjAeq
-         afSdzA3h2l14Q02s8OogKgSJR9XWREaklDm+CBJD5fzND4kRfhKTBH2NutU7QBIfgPx9
-         W+H/MryHTJ0mQm4NjVb6aDDFrtUi18M4aosQrDjgi7CBVlEpGkAVvUnm8+/gbq24lHFC
-         bgVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc:content-transfer-encoding;
-        bh=bXA+H3/HCKdwgoTJOd9VMBnH1kr2GFc/ck2KdLGaIqE=;
-        b=hdRq0p0enJ2jYeZGcq/bpXBz585SwhoUJs4kOomnzXcJO6Av76Tjf+Mt8/1I8r0M1V
-         DgHWinAQg6LN4gB0g2dsa755zCdXsjRaoYMe8BYfy0CKpwVAVR4pEzRD5CxBRlvOpkMn
-         KbnmSMgAN4wlWx/5j20j2xvbsO0lxp2FO+l+Wp7/KbqfN3OIKAfWdg5nfCFdceeAXgbe
-         EJpvh4/giVxKCd4RQvTJNLVNCry06cNMKGdBLlK8n4XJKYTzXUwvB8I6Fc8d5T3pG1Li
-         9Gwdm+5WbaOLj66rB2rXL8gKYXNozkwRU3Cn4SyzZBwASTI3cQ8Y6mKqGjJSiNiwCbBU
-         YwgA==
-X-Gm-Message-State: AOAM533ugxtGc7qZmU7gaxsC/nbr5VFBQv3B6JJ8TIy3SsnrJl5SQhDB
-        nS9O9nOZs700ApPG6uFyc6tdrRthMjo=
-X-Google-Smtp-Source: ABdhPJxF3XWJe6uwF6/UIR9n98HrROX//mA6vIE9k+M7f/Zv1XI85hq+I3I1YuJgbVUUSZxRJKF9E+0Zh5I=
-X-Received: by 2002:a25:395:: with SMTP id 143mr11392747ybd.505.1594768339210;
- Tue, 14 Jul 2020 16:12:19 -0700 (PDT)
-Date:   Tue, 14 Jul 2020 16:12:07 -0700
-In-Reply-To: <20200714231207.866838-1-badhri@google.com>
-Message-Id: <20200714231207.866838-3-badhri@google.com>
-Mime-Version: 1.0
-References: <20200714231207.866838-1-badhri@google.com>
-X-Mailer: git-send-email 2.27.0.389.gc38d7665816-goog
-Subject: [PATCH 3/3 v2] usb: typec: tcpm: Stay in BIST mode till hardreset or unattached
-From:   Badhri Jagan Sridharan <badhri@google.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        reg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Badhri Jagan Sridharan <badhri@google.com>
+        id S1726962AbgGNXS3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Jul 2020 19:18:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49946 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726187AbgGNXS2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 14 Jul 2020 19:18:28 -0400
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8583D2074B;
+        Tue, 14 Jul 2020 23:18:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1594768707;
+        bh=WbHcOuCS+rj4obHCGdLyDlzJy258Ll6RBipsjc9gqhs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=OTYv7SW64RJ7rcBLNLixgDhz1BOtm1ZlPfGu0RW7CKMz/+ee2kQZnsPya33XRsqSZ
+         NSY9JKrQ2FHqtYIo/G1nklBOWhlXLpB3Bb80i2eXAScH3Qkvmz4gkSVFZ3xyOmHSB2
+         fS1zjaVyGJOhZPsVcQWQD09xHBVeLAHPlnAO/7HE=
+Received: by mail-ot1-f47.google.com with SMTP id h13so68081otr.0;
+        Tue, 14 Jul 2020 16:18:27 -0700 (PDT)
+X-Gm-Message-State: AOAM531sTp1Rzu6UUNRYLmVqQbl0CpurZMh5yerLiQhkx5Ucm1Hde/hl
+        nUGH9qkEQoMlwdLXNKEmpqSFXENueBn9VUlgcQ==
+X-Google-Smtp-Source: ABdhPJzamyUgo6UiqW59FuZ+b+pvPCuOFw/T+vorF7nM8Yc7QjaPRAdppkgkTdGO/rge6EQOKevq7Mn09VhM3JKnhr0=
+X-Received: by 2002:a9d:4002:: with SMTP id m2mr6332092ote.129.1594768706856;
+ Tue, 14 Jul 2020 16:18:26 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200612171334.26385-1-nsaenzjulienne@suse.de>
+ <20200612171334.26385-2-nsaenzjulienne@suse.de> <20200713182356.GA413630@bogus>
+ <ed42e27eaf48fd19cc8ccccd15b0b25ba1d836ae.camel@suse.de> <20200714210708.GA2897216@bogus>
+ <925bab2c-91e0-bf60-9ec4-286eb53f72ab@gmail.com>
+In-Reply-To: <925bab2c-91e0-bf60-9ec4-286eb53f72ab@gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 14 Jul 2020 17:18:15 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+BvM+Z_QNkB47_8AQzZ6R3LOCjNWd5MA-9avxp0HHG2w@mail.gmail.com>
+Message-ID: <CAL_Jsq+BvM+Z_QNkB47_8AQzZ6R3LOCjNWd5MA-9avxp0HHG2w@mail.gmail.com>
+Subject: Re: [PATCH v3 1/9] dt-bindings: reset: Add a binding for the RPi
+ Firmware reset controller
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stefan Wahren <wahrenst@gmx.net>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Eric Anholt <eric@anholt.net>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        "moderated list:BROADCOM BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>, tim.gover@raspberrypi.org,
+        PCI <linux-pci@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        devicetree@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Port starts to toggle when transitioning to unattached state.
-This is incorrect while in BIST mode.
+On Tue, Jul 14, 2020 at 3:18 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>
+>
+>
+> On 7/14/2020 2:07 PM, Rob Herring wrote:
+> > On Tue, Jul 14, 2020 at 01:59:21PM +0200, Nicolas Saenz Julienne wrote:
+> >> On Mon, 2020-07-13 at 12:23 -0600, Rob Herring wrote:
+> >>> On Fri, Jun 12, 2020 at 07:13:25PM +0200, Nicolas Saenz Julienne wrote:
+> >>>> The firmware running on the RPi VideoCore can be used to reset and
+> >>>> initialize HW controlled by the firmware.
+> >>>>
+> >>>> Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+> >>>> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+> >>>>
+> >>>> ---
+> >>>> Changes since v2:
+> >>>>  - Add include file for reset IDs
+> >>>>
+> >>>> Changes since v1:
+> >>>>  - Correct cells binding as per Florian's comment
+> >>>>  - Change compatible string to be more generic
+> >>>>
+> >>>>  .../arm/bcm/raspberrypi,bcm2835-firmware.yaml | 21 +++++++++++++++++++
+> >>>>  .../reset/raspberrypi,firmware-reset.h        | 13 ++++++++++++
+> >>>>  2 files changed, 34 insertions(+)
+> >>>>  create mode 100644 include/dt-bindings/reset/raspberrypi,firmware-reset.h
+> >>>>
+> >>>> diff --git a/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-
+> >>>> firmware.yaml
+> >>>> b/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-
+> >>>> firmware.yaml
+> >>>> index b48ed875eb8e..23a885af3a28 100644
+> >>>> --- a/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-
+> >>>> firmware.yaml
+> >>>> +++ b/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-
+> >>>> firmware.yaml
+> >>>> @@ -39,6 +39,22 @@ properties:
+> >>>>        - compatible
+> >>>>        - "#clock-cells"
+> >>>>
+> >>>> +  reset:
+> >>>
+> >>> I'm not really thrilled how this is evolving with a node per provider.
+> >>> There's no reason you can't just add #clock-cells and #reset-cells to
+> >>> the parent firmware node.
+> >>
+> >> What are the downsides? The way I see it there is not much difference. And this
+> >> way of handling things is feels more intuitive and flexible (overlays can
+> >> control what to enable easily, we can take advantage of the platform device
+> >> core).
+> >
+> > What the OS wants can evolve, so designing around the current needs of
+> > the OS is not how bindings should be done.
+> >
+> > Using overlays to add clocks or resets wouldn't really work given they
+> > are spread out over the tree. And with clocks in particular, you'd have
+> > to replace dummy fixed clocks with actual firmware clocks. Sounds
+> > fragile and messy...
+> >
+> >>> I probably should have complained with the clocks node, but that's only
+> >>> pending for 5.9.
+> >>
+> >> Note that there are more users for this pattern: "raspberrypi,firmware-ts" and
+> >> "raspberrypi,firmware-gpio". Actually you were the one to originally propose
+> >> this it[1]. :P
+> >
+> > Sigh, this is why I dislike incomplete examples...
+> >
+> > Based on that,
+> >
+> > Acked-by: Rob Herring <robh@kernel.org>
+> >
+> > And please get gpio and ts converted to schema and referenced here
+> > before the next time I look at this.
+> >
+> >> There already is a fair amount of churn in these drivers because of all the DT
+> >> changes we did in the past, and if we need to change how we integrate these
+> >> again, I'd really like it to be for good.
+> >>
+> >>> The bigger issue is this stuff is just trickling in one bit at a time
+> >>> which gives no context for review. What's next? Is it really a mystery
+> >>> as to what functions the firmware provides?
+> >>
+> >> We have no control over it, RPi engineers integrate new designs and new
+> >> firmware interfaces show up. This is a good example of it.
+> >>
+> >> I proposed them to use SCMI as it covers most of what they are already
+> >> providing here. But no luck so far.
+> >
+> > Once we get tired of supporting all the different firmware interfaces
+> > and the mess they become, we'll just have to start refusing custom ones.
+> > Worked for PSCI.
+>
+> In this particular case, the Raspberry Pi Foundation VPU firmware should
+> just implement SCMI and that would avoid having to write new client
+> drivers for Linux, it is not clear to me why this has not been done yet.
 
-6.4.3.1 BIST Carrier Mode
-Upon receipt of a BIST Message, with a BIST Carrier Mode BIST Data Object,
-the UUT Shall send out a continuous string of BMC encoded alternating "1"s
-and =E2=80=9C0=E2=80=9Ds. The UUT Shall exit the Continuous BIST Mode withi=
-n
-tBISTContMode of this Continuous BIST Mode being enabled(see
-Section 6.6.7.2).
+Writing drivers is fun?
 
-6.4.3.2 BIST Test Data
-Upon receipt of a BIST Message, with a BIST Test Data BIST Data Object,
-the UUT Shall return a GoodCRC Message and Shall enter a test mode in which
-it sends no further Messages except for GoodCRC Messages in response to
-received Messages. See Section 5.9.2 for the definition of the Test Data
-Frame. The test Shall be ended by sending Hard Reset Signaling to reset the
-UUT.
+Perhaps we should start refusing new firmware interfaces now.
 
-Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
----
-Version history:
-Changes since V1:
--  None
----
- drivers/usb/typec/tcpm/tcpm.c | 8 ++++++--
- include/linux/usb/pd.h        | 1 +
- 2 files changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 379fcab9dbd973..245cfe80948502 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -3559,6 +3559,8 @@ static void run_state_machine(struct tcpm_port *port)
- 		switch (BDO_MODE_MASK(port->bist_request)) {
- 		case BDO_MODE_CARRIER2:
- 			tcpm_pd_transmit(port, TCPC_TX_BIST_MODE_2, NULL);
-+			tcpm_set_state(port, unattached_state(port),
-+				       PD_T_BIST_CONT_MODE);
- 			break;
- 		case BDO_MODE_TESTDATA:
- 			if (port->tcpc->set_bist_data) {
-@@ -3569,8 +3571,6 @@ static void run_state_machine(struct tcpm_port *port)
- 		default:
- 			break;
- 		}
--		/* Always switch to unattached state */
--		tcpm_set_state(port, unattached_state(port), 0);
- 		break;
- 	case GET_STATUS_SEND:
- 		tcpm_pd_send_control(port, PD_CTRL_GET_STATUS);
-@@ -3960,6 +3960,10 @@ static void _tcpm_pd_vbus_off(struct tcpm_port *port=
-)
- static void _tcpm_pd_hard_reset(struct tcpm_port *port)
- {
- 	tcpm_log_force(port, "Received hard reset");
-+	if (port->bist_request =3D=3D  BDO_MODE_TESTDATA &&
-+	    port->tcpc->set_bist_data)
-+		port->tcpc->set_bist_data(port->tcpc, false);
-+
- 	/*
- 	 * If we keep receiving hard reset requests, executing the hard reset
- 	 * must have failed. Revert to error recovery if that happens.
-diff --git a/include/linux/usb/pd.h b/include/linux/usb/pd.h
-index a665d7f211424d..b420d8d613cd23 100644
---- a/include/linux/usb/pd.h
-+++ b/include/linux/usb/pd.h
-@@ -483,4 +483,5 @@ static inline unsigned int rdo_max_power(u32 rdo)
- #define PD_N_CAPS_COUNT		(PD_T_NO_RESPONSE / PD_T_SEND_SOURCE_CAP)
- #define PD_N_HARD_RESET_COUNT	2
-=20
-+#define PD_T_BIST_CONT_MODE	60 /* 30 - 60 ms */
- #endif /* __LINUX_USB_PD_H */
---=20
-2.27.0.389.gc38d7665816-goog
-
+Rob
