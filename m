@@ -2,37 +2,37 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93AD121EF68
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 13:37:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A504221EF66
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 13:37:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727774AbgGNLgg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Jul 2020 07:36:36 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:24814 "EHLO
+        id S1727863AbgGNLgf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Jul 2020 07:36:35 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:37176 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727772AbgGNLgf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jul 2020 07:36:35 -0400
+        with ESMTP id S1727095AbgGNLge (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jul 2020 07:36:34 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1594726593;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=eW4Qd/bhHk5NUmcb0g7XgzqOCh78ICZfVEjjqbF1yOc=;
-        b=CdVNxNh0ilZQsds3HLw6MqZV90psFPeO8w64gAcSKz3hBPDcD71U+/ubrieM1sCxQ0g/p6
-        y6Rju13ALzCWzUQ/4yd+HDfZpbwNSVWHdHsc9BAZ77rVjECxoCq6zd3qNU3nOzoKsHR6gE
-        jEJajUVJmkYNgzCJ8d2oD//vuqdE5bk=
+        bh=vl3SmicR68+CmgJUazXfQ79ngQF4AVIz+REX8jVdPoE=;
+        b=glzkhBIT97EEHu9XirAhUNo5ojCCDqMhBOgwPP1Gjm+Uz0dpv9bsyILt3u4+junkPQiBQn
+        WEOwmtWSyRykKY84Whkc6wETVGVBN0EA6NqoKxfeZ/FGHVdAkrIG0wuRKkcnt/BBeIF8Tn
+        NIEcBdW61oXlKdSeEXqm/uA4cmFR7zI=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-343-HT0ITqPqOamqsia5firNdQ-1; Tue, 14 Jul 2020 07:36:28 -0400
-X-MC-Unique: HT0ITqPqOamqsia5firNdQ-1
+ us-mta-451-AaBnRBGcMOCtq6D0mzai7Q-1; Tue, 14 Jul 2020 07:36:31 -0400
+X-MC-Unique: AaBnRBGcMOCtq6D0mzai7Q-1
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E565F19253CF;
-        Tue, 14 Jul 2020 11:36:26 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2697980BCB1;
+        Tue, 14 Jul 2020 11:36:30 +0000 (UTC)
 Received: from x1.localdomain.com (ovpn-114-109.ams2.redhat.com [10.36.114.109])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3C4E479CEA;
-        Tue, 14 Jul 2020 11:36:24 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 39D1C797EF;
+        Tue, 14 Jul 2020 11:36:27 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -41,9 +41,9 @@ To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 Cc:     Hans de Goede <hdegoede@redhat.com>,
         Tobias Schramm <t.schramm@manjaro.org>,
         linux-usb@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH 2/4] usb: typec: Add typec_port_register_altmodes_from_fwnode()
-Date:   Tue, 14 Jul 2020 13:36:15 +0200
-Message-Id: <20200714113617.10470-3-hdegoede@redhat.com>
+Subject: [PATCH 3/4] usb: typec: tcpm: Add support for altmodes
+Date:   Tue, 14 Jul 2020 13:36:16 +0200
+Message-Id: <20200714113617.10470-4-hdegoede@redhat.com>
 In-Reply-To: <20200714113617.10470-1-hdegoede@redhat.com>
 References: <20200714113617.10470-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -54,108 +54,32 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This can be used by Type-C controller drivers which use a standard
-usb-connector fwnode, with altmodes sub-node, to describe the available
-altmodes.
+Add support for altmodes described in the usb-connector fwnode
+associated with the Type-C controller by calling the new
+typec_port_register_altmodes_from_fwnode() helper for this.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/usb/typec/class.c | 56 +++++++++++++++++++++++++++++++++++++++
- include/linux/usb/typec.h |  7 +++++
- 2 files changed, 63 insertions(+)
+ drivers/usb/typec/tcpm/tcpm.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index c9234748537a..47de2b2e3d54 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -1607,6 +1607,62 @@ typec_port_register_altmode(struct typec_port *port,
- }
- EXPORT_SYMBOL_GPL(typec_port_register_altmode);
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 82b19ebd7838..b4a66e6bf68c 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -4793,6 +4793,12 @@ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
+ 		goto out_role_sw_put;
+ 	}
  
-+void typec_port_register_altmodes_from_fwnode(struct typec_port *port,
-+	const struct typec_altmode_ops *ops, void *drvdata,
-+	struct typec_altmode **altmodes, size_t n,
-+	struct fwnode_handle *fwnode)
-+{
-+	struct fwnode_handle *altmodes_node, *child;
-+	struct typec_altmode_desc desc;
-+	struct typec_altmode *alt;
-+	size_t index = 0;
-+	u32 svid, vdo;
-+	int ret;
++	typec_port_register_altmodes_from_fwnode(port->typec_port,
++						 &tcpm_altmode_ops, port,
++						 port->port_altmode,
++						 ALTMODE_DISCOVERY_MAX,
++						 tcpc->fwnode);
 +
-+	altmodes_node = fwnode_get_named_child_node(fwnode, "altmodes");
-+	if (!altmodes_node)
-+		return;
-+
-+	child = NULL;
-+	while ((child = fwnode_get_next_child_node(altmodes_node, child))) {
-+		ret = fwnode_property_read_u32(child, "svid", &svid);
-+		if (ret) {
-+			dev_err(&port->dev, "Error reading svid for altmode %s\n",
-+				fwnode_get_name(child));
-+			continue;
-+		}
-+
-+		ret = fwnode_property_read_u32(child, "vdo", &vdo);
-+		if (ret) {
-+			dev_err(&port->dev, "Error reading vdo for altmode %s\n",
-+				fwnode_get_name(child));
-+			continue;
-+		}
-+
-+		if (index >= n) {
-+			dev_err(&port->dev, "Error not enough space for altmode %s\n",
-+				fwnode_get_name(child));
-+			continue;
-+		}
-+
-+		desc.svid = svid;
-+		desc.vdo = vdo;
-+		desc.mode = index + 1;
-+		alt = typec_port_register_altmode(port, &desc);
-+		if (IS_ERR(alt)) {
-+			dev_err(&port->dev, "Error registering altmode %s\n",
-+				fwnode_get_name(child));
-+			continue;
-+		}
-+
-+		alt->ops = ops;
-+		typec_altmode_set_drvdata(alt, drvdata);
-+		altmodes[index] = alt;
-+		index++;
-+	}
-+}
-+EXPORT_SYMBOL_GPL(typec_port_register_altmodes_from_fwnode);
-+
- /**
-  * typec_register_port - Register a USB Type-C Port
-  * @parent: Parent device
-diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
-index 5daa1c49761c..fbe4bccb3a98 100644
---- a/include/linux/usb/typec.h
-+++ b/include/linux/usb/typec.h
-@@ -17,6 +17,7 @@ struct typec_partner;
- struct typec_cable;
- struct typec_plug;
- struct typec_port;
-+struct typec_altmode_ops;
- 
- struct fwnode_handle;
- struct device;
-@@ -121,6 +122,12 @@ struct typec_altmode
- struct typec_altmode
- *typec_port_register_altmode(struct typec_port *port,
- 			     const struct typec_altmode_desc *desc);
-+
-+void typec_port_register_altmodes_from_fwnode(struct typec_port *port,
-+	const struct typec_altmode_ops *ops, void *drvdata,
-+	struct typec_altmode **altmodes, size_t n,
-+	struct fwnode_handle *fwnode);
-+
- void typec_unregister_altmode(struct typec_altmode *altmode);
- 
- struct typec_port *typec_altmode2port(struct typec_altmode *alt);
+ 	mutex_lock(&port->lock);
+ 	tcpm_init(port);
+ 	mutex_unlock(&port->lock);
 -- 
 2.26.2
 
