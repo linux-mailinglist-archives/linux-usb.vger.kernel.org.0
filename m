@@ -2,56 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FD1821E7B5
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 07:54:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED12E21E7D5
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 08:02:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726472AbgGNFyt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Jul 2020 01:54:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48294 "EHLO mail.kernel.org"
+        id S1726820AbgGNGCl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Jul 2020 02:02:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50614 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725306AbgGNFyt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 14 Jul 2020 01:54:49 -0400
+        id S1725925AbgGNGCk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 14 Jul 2020 02:02:40 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7418C221E7;
-        Tue, 14 Jul 2020 05:54:48 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D870D21D93;
+        Tue, 14 Jul 2020 06:02:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594706088;
-        bh=jVK2vp/0V0HW/84kapmG0T1XHl4bq5JefRjxwkQrdzU=;
+        s=default; t=1594706560;
+        bh=QdaFBpDRGpizTzOQaQSCq0rsbtp195RVw7IgKPGdycg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E4ePkiyqgCpIP+k3XAfKU9Yqs3CpOesILmbOGS/Kq79OHMmOYKBm8YVOxH8d2dZv3
-         fcWt5Xqz5mjvQ+7kbsKovDwU0SdrynKp6yRfmugQlv3GFTw2V6pCbaGDig0d0tnCZa
-         ZnHo7VkMAEDKgTxzZIg9NFX667nzxcKK42/8VqIg=
-Date:   Tue, 14 Jul 2020 07:54:46 +0200
+        b=KQSMa+VKG6cmXxYmbWcOmhW45JT/mB6y5x2wBTHQbfFeO8Zapfl0K9IEnKO4N/urg
+         WMqRO4abFXbvDRk8qJtUkMPUSRQML/qiZFL/lID4256toy0KYb2kJHX0ZlD4Qn8Yf1
+         Pvei3dwlHlyC6odSWabPDwCIN1T2X+ex0WLCd11c=
+Date:   Tue, 14 Jul 2020 08:02:38 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     jaap aarts <jaap.aarts1@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-hwmon@vger.kernel.org, linux-usb@vger.kernel.org,
-        Jaap Aarts <jaap.aarts1@example.com>
-Subject: Re: [PATCH 1/6] skeleton for asetek gen 6 driver
-Message-ID: <20200714055446.GA655193@kroah.com>
-References: <20200713193227.189751-1-jaap.aarts1@gmail.com>
+To:     Kyle Tso <kyletso@google.com>
+Cc:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        badhri@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] tcpm: Error handling for
+ tcpm_register_partner_altmodes
+Message-ID: <20200714060238.GA657428@kroah.com>
+References: <20200714033453.4044482-1-kyletso@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200713193227.189751-1-jaap.aarts1@gmail.com>
+In-Reply-To: <20200714033453.4044482-1-kyletso@google.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 13, 2020 at 09:32:22PM +0200, jaap aarts wrote:
-> Signed-off-by: Jaap Aarts <jaap.aarts1@example.com>
-> ---
+On Tue, Jul 14, 2020 at 11:34:51AM +0800, Kyle Tso wrote:
+> *** BLURB HERE ***
 
-I know I don't accept patches without any changelog text, and odds are,
-most other maintainers do not either :(
+No blurb?
 
-Also, please fix up the subject lines of your patches to match the
-subsystem it is being sent to.
-
-thanks,
-
-greg k-h
+:(
