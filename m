@@ -2,61 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 075E021E88F
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 08:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C549721E893
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 08:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726545AbgGNGsl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Jul 2020 02:48:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39202 "EHLO
+        id S1726893AbgGNGtK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Jul 2020 02:49:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725788AbgGNGsl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jul 2020 02:48:41 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CF07C061755;
-        Mon, 13 Jul 2020 23:48:41 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id gc9so1122530pjb.2;
-        Mon, 13 Jul 2020 23:48:41 -0700 (PDT)
+        with ESMTP id S1725977AbgGNGtJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jul 2020 02:49:09 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46071C061755;
+        Mon, 13 Jul 2020 23:49:09 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id j19so7164040pgm.11;
+        Mon, 13 Jul 2020 23:49:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=UUJVTXz/56oT2q3pLXpuWbAhAgG22wQrNgm2aVWNAg4=;
-        b=Wbwc3mji7S8mK4kfW4JXLLCGBodiz1Ue6tVZp7/uQoDXN8dE7bR0+Xb2k/Hnzm2wjX
-         owT/8cOGXoKZMHUlftNK5L3ioFR5HSWyQUEM6nfaw8D8i+y2TEN6oTnMFGrhi6vi4oxO
-         rolKYBJREAMNfXqwAsW4iQLrnO68s+zXyKtacmq5M4WW+224+PL1qgdnkQ3iYPmeJjw9
-         p094r6RCrMTblhZgXjp19gkv59mIv4fOJNRk9hUs7JoKGVLI/LhgWceqQMcfHFz21fCh
-         APx9U+JH1fsXJ5uSyuHj4ZqGS8/pJY6+oX/T4/OMS5vOeOUjbsv3vT3vU/qUwKJfsXMA
-         +AfQ==
+        bh=B4HVZHNcjx6g1V3CdNcyIWl1DLOBHNUUw7H1my3bsuY=;
+        b=NUH3Yv4LrYUBQGDKUdaXJ5f190dIR21S5yTkmhNKULG4fMtWnUFt2258Rk8L7SxBFh
+         kv4ZWKkSDrPm7xGiBraLBql0Z1cjBEHGDLaVPbGeCEbMqfIQst7Yhmg/SjpXzWwURG/j
+         8oBlVh4C9FvwC/8LuzPogButXVEVieSS03MFrMzxWygP7fWhD+zbmIhOHLlsk06/h9Ux
+         s/MC/3XCfr4GJZk2n1e5VidQr8qKnZsqkbnE4k7Qf4w37oeTEyutl95S8kJcLPExILRW
+         xFzQBAejJcVGc7e0QhS0uNgx9Qsd59cLFTpRPOpNIWZJxrPfpfv+q9WkvDMQ/HeJFkgP
+         g0Lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=UUJVTXz/56oT2q3pLXpuWbAhAgG22wQrNgm2aVWNAg4=;
-        b=AzfkhjiExhKQV9XEsIBXWM6IyhJ6dUVyXIUHsQvmMEOuy9Z0cBKUFqhmTUHzyvJWeR
-         NjpcADiMOYkDC6BE+rQuoIoEDN0KQZUfH6P8dz4IiP74XSAmFomTKBbiuMu7UIHs+45V
-         dALGtHcHm1ZZH132wj5xuqWpRBoU/Bi65DDCDPUNLSerYJVnNBoBbhbbw/YYqwaM2m4N
-         J0V/8tJ9g5e8izGT48Ndi7T2GESwj6h7bfZN4J6tEAyIBRh/hiz5X1gMcq2eVUUR5euy
-         VQr+KgexQKnZzd3rXLVQ8liNAqjYqeH4mZdZEAp5/LMWn6ZJVaQpgUJ0LUxXOjv/Gncy
-         kCEQ==
-X-Gm-Message-State: AOAM5313JCHeQB4DrI9j202QgNMX0Zq8n6wH97TqrxEduGj3xxnVO++X
-        xv2BDdzWooIKSai2hXernkGGby5b2NI=
-X-Google-Smtp-Source: ABdhPJwPSCS3dtaiFxDd/iWAR9pp/tIfKLXgrugT/8pNhx5U7co7TUdqR68fU1HsPL1sOq3i9bfV/w==
-X-Received: by 2002:a17:902:8c84:: with SMTP id t4mr2658000plo.315.1594709320384;
-        Mon, 13 Jul 2020 23:48:40 -0700 (PDT)
+        bh=B4HVZHNcjx6g1V3CdNcyIWl1DLOBHNUUw7H1my3bsuY=;
+        b=QHtl5jI0hb3CUpv3h2MDrOffw2tmyus5Bgr5cleaVeey3CeIFgNql8JambZ+vD1Ulh
+         YLRSNki5ZCRZRsQDa0GwxcI9pfgjmd7y059m9KOXQIvAFIpPYczQ9GgSlU7c3PXUjVh8
+         vkoNofukqDNNLdHZZZuszGlkeVwmmu6TxluRpfrHfF0NnmCi1k9ZR0mGtQ8lBgWK1O0m
+         fXBAhy2fmVoDWO7cWaxmuyLZDVmwfwVbAnGqp2xQTcUxriJc2JB2nO0PdWRlOmkVWHZG
+         lCvLI2o78KqAm0+MJGlOD/HzeIvCVZU/8o73PuxagMRcWBIC7BShQ1RIvomuCMtNGrGp
+         wFHg==
+X-Gm-Message-State: AOAM533Yc+u2t3Mf7u4a/HoRdFLw85llPaptwLjfLNKRw100WjqwDkd4
+        2O3aAlOOjV8ahHYXA3eTeoHzFQ9kNOA=
+X-Google-Smtp-Source: ABdhPJxWI32iR/dJ0UTg78wkKe5fIn468SF6UJrDrzrbhyDCCERQN7hPFEjpLmFKccLmDOBsvJFf8Q==
+X-Received: by 2002:a65:5502:: with SMTP id f2mr2206767pgr.375.1594709347831;
+        Mon, 13 Jul 2020 23:49:07 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m1sm1416971pjy.0.2020.07.13.23.48.39
+        by smtp.gmail.com with ESMTPSA id f2sm16677135pfb.184.2020.07.13.23.49.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jul 2020 23:48:39 -0700 (PDT)
-Subject: Re: [PATCH 1/2] usb: typec: Comment correction for
- typec_partner_register_altmode
+        Mon, 13 Jul 2020 23:49:07 -0700 (PDT)
+Subject: Re: [PATCH 2/2] usb: typec: tcpm: Error handling for
+ tcpm_register_partner_altmodes
 To:     Kyle Tso <kyletso@google.com>, heikki.krogerus@linux.intel.com,
         gregkh@linuxfoundation.org
 Cc:     badhri@google.com, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20200714033453.4044482-1-kyletso@google.com>
- <20200714033453.4044482-2-kyletso@google.com>
+ <20200714033453.4044482-3-kyletso@google.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -101,12 +101,12 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <2e840825-f73c-87b7-33d2-9f103a507a80@roeck-us.net>
-Date:   Mon, 13 Jul 2020 23:48:38 -0700
+Message-ID: <de0ea27c-0e73-6e8e-b7b5-fda4a0f4f545@roeck-us.net>
+Date:   Mon, 13 Jul 2020 23:49:06 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200714033453.4044482-2-kyletso@google.com>
+In-Reply-To: <20200714033453.4044482-3-kyletso@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -116,28 +116,33 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 On 7/13/20 8:34 PM, Kyle Tso wrote:
-> typec_register_altmode returns ERR_PTR on failure.
+> typec_partner_register_altmode returns ERR_PTR. Reset the pointer
+> altmode to NULL on failure.
 > 
 > Signed-off-by: Kyle Tso <kyletso@google.com>
 
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 > ---
->  drivers/usb/typec/class.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/usb/typec/tcpm/tcpm.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index c9234748537a..02655694f200 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -580,7 +580,7 @@ EXPORT_SYMBOL_GPL(typec_partner_set_identity);
->   * SVID listed in response to Discover Modes command need to be listed in an
->   * array in @desc.
->   *
-> - * Returns handle to the alternate mode on success or NULL on failure.
-> + * Returns handle to the alternate mode on success or ERR_PTR on failure.
->   */
->  struct typec_altmode *
->  typec_partner_register_altmode(struct typec_partner *partner,
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 82b19ebd7838..a6d4b03ec250 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -1061,9 +1061,11 @@ static void tcpm_register_partner_altmodes(struct tcpm_port *port)
+>  	for (i = 0; i < modep->altmodes; i++) {
+>  		altmode = typec_partner_register_altmode(port->partner,
+>  						&modep->altmode_desc[i]);
+> -		if (!altmode)
+> +		if (IS_ERR(altmode)) {
+>  			tcpm_log(port, "Failed to register partner SVID 0x%04x",
+>  				 modep->altmode_desc[i].svid);
+> +			altmode = NULL;
+> +		}
+>  		port->partner_altmode[i] = altmode;
+>  	}
+>  }
 > 
 
