@@ -2,136 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4377821F154
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 14:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD4D221F28E
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 15:31:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728145AbgGNMcf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Jul 2020 08:32:35 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:51854 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728047AbgGNMce (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jul 2020 08:32:34 -0400
-Received: from mailhost.synopsys.com (badc-mailhost1.synopsys.com [10.192.0.17])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id A7CC6C00E9;
-        Tue, 14 Jul 2020 12:32:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1594729953; bh=eeixpN2+EI6mUAAQ4cGP3s1R99EwwqmFBhljeDPOmFw=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=Ywc5bfCWGlLtKs8r7MbvaHpGFUI5pNkRzK6ju/aU3EnTmmUIzHNAIPx2m+4yrF2Vc
-         BtskSoftnzuoZWDV7APKpaLmnNshGDhNiSapf3UmtKjlZFK2BFrlCAiu0wx5fBSeQc
-         zUhdvilDhyu+ue/dxrllcOkpZWjcyR3TYn3wH0btYcu6k5smf5ZEqGk1KjHGCrXXOo
-         RJ+lCl9cGeE0pjCbPiXSka17FaJrQfmXroYL37CTPyl5urAECYN3P2TAOaUacRXe00
-         J00pCfcKJfFJUhqP6pZSzwyM2ZdYzktHor2ZZr8Qx/7qKQ08rnFlt1Si5I7RDF9+IG
-         CNnsJph8zgXTg==
-Received: from o365relay-in.synopsys.com (sv2-o365relay1.synopsys.com [10.202.1.137])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id 96FBAA0071;
-        Tue, 14 Jul 2020 12:32:31 +0000 (UTC)
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2173.outbound.protection.outlook.com [104.47.55.173])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "mail.protection.outlook.com", Issuer "GlobalSign Organization Validation CA - SHA256 - G3" (verified OK))
-        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 17C3440081;
-        Tue, 14 Jul 2020 12:32:30 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=hminas@synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="F26zBPK2";
-        dkim-atps=neutral
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JH0vPVUeqf7eubLWYg2RPc45/GdxGk6cjq1IXZytYOcdrfunqUEmz9YI9EchK1+J1F6vcf/6Foid1An7bWVniVNlbZnlr48gXD/l7j9U3zR6KtFQtRQsC35PDqtCR8zMoKSdvKW3EuoQs+CySop0aVCKAdywQlUNC/a8k/bdSXaEVQ82IUN2IFia0SMKmFmTSlSqo8M1YZSw3GVMkz6O8XHcNeQC5taXIzziaQWI7iIW5uppAnmwAGCzAAjRWCJrPVq5L2OqxeaXceZReedctnN5eoqxDRvbejZdnGkU4Yg/0psL3IreUGvG/qJZZ8iQziMYrLYLn+BavVJ9/o/02g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eeixpN2+EI6mUAAQ4cGP3s1R99EwwqmFBhljeDPOmFw=;
- b=NT4c0np0uhPhjzUgBTVdLwyhDGKEMFCWn4dW+KWHX4RYVg/N06lGf1QyI1SzOQPrg/RMoABwlI2X8zt8IntAen6VYiM2MM1YlZl5yvnQmKjllJRFADnhWkCjl/5mviP1PtwbbhPCCPFOZ/tKl37EhpBzBHTruGyRXIVR2YBgn0qBP8S/xThiMQ1yTkvylb6rebtLttDe0zewHLiiHTzGlzdPgAS+Hxacn31azJyYzva93ONJHAM0b4FesUGrQUeHpQ37LvvVsQ7Y66R9RCyEN7ypmciLKSIKsZeAAoZrh13ysD6aVG09qTsmE+U5D1OEwlLEb4DH1SNcYTMl6EYTGA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eeixpN2+EI6mUAAQ4cGP3s1R99EwwqmFBhljeDPOmFw=;
- b=F26zBPK2Eks97yIIGjB2zm/93SQGNPqbjyLbqeu1JjyE4X+JXHaQ3Wmp0qhQfJjJj9IlXW9fMQWIy6rxtEGAvRDWg8C5AblsDhdNy/zBLKSYjh5aijFwyexArgkepdrrzmP23Karo01gdpfIwBIu8FuPXzw6a5FRWzXjtdAwRhE=
-Received: from CY4PR12MB1432.namprd12.prod.outlook.com (2603:10b6:903:44::11)
- by CY4PR12MB1416.namprd12.prod.outlook.com (2603:10b6:903:44::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3174.21; Tue, 14 Jul
- 2020 12:32:28 +0000
-Received: from CY4PR12MB1432.namprd12.prod.outlook.com
- ([fe80::3cb9:e2f2:a4ff:14bd]) by CY4PR12MB1432.namprd12.prod.outlook.com
- ([fe80::3cb9:e2f2:a4ff:14bd%10]) with mapi id 15.20.3174.025; Tue, 14 Jul
- 2020 12:32:27 +0000
-X-SNPS-Relay: synopsys.com
-From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] usb: dwc2: Fix error path in gadget registration
-Thread-Topic: [PATCH] usb: dwc2: Fix error path in gadget registration
-Thread-Index: AQHWWbuDBUQ8jHqiX0W5003po+jOE6kHAjIA
-Date:   Tue, 14 Jul 2020 12:32:27 +0000
-Message-ID: <40bfbfd6-6516-5995-8250-c8e3df16e11e@synopsys.com>
-References: <CGME20200714084807eucas1p1f6e680d162573c6a0660037172a65805@eucas1p1.samsung.com>
- <20200714084800.11340-1-m.szyprowski@samsung.com>
-In-Reply-To: <20200714084800.11340-1-m.szyprowski@samsung.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-authentication-results: samsung.com; dkim=none (message not signed)
- header.d=none;samsung.com; dmarc=none action=none header.from=synopsys.com;
-x-originating-ip: [198.182.37.200]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 4921cfc0-20e3-4c29-fed0-08d827f1f841
-x-ms-traffictypediagnostic: CY4PR12MB1416:
-x-microsoft-antispam-prvs: <CY4PR12MB14165A9A0B7F1009D258477FA7610@CY4PR12MB1416.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: bI8SLaqlXjqnK5b8wEVCoT2Bznrg46c6K5K7tdh41jczT+vmcPazhzLeYCROlnnIdjEOXIzTkKnWV5j1PoG1tQkl1dhLPkCp9kenPenkgYyyySQw3B2fT9PG/8WLJNP9VLEPET78WaF1nXIzFjEv3cnK2jq07DJjYS5LAdCnKLsLMJ7tcUgDGTggAU+GdE0PK3S35rhy2747v2wfesVa/GHz9y+xQEg8MKl57UFJ9QBRhNZhvOt3fDflMLUEmMBHKu23B/DTY5scKtiNhlJEjGYZje42/Hg/0cakuXLLsGmiYrFsaQyCakA4HDWIJTPIeca966QxxIVBmSPcswPsv4b0RPj19x0gZxaxWqqfNJi0KFY3rfTFfE5FNLKMWyKc
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR12MB1432.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(136003)(376002)(39860400002)(366004)(396003)(346002)(31686004)(5660300002)(86362001)(8936002)(71200400001)(4744005)(2616005)(76116006)(83380400001)(66446008)(53546011)(8676002)(186003)(31696002)(26005)(91956017)(478600001)(6506007)(64756008)(316002)(4326008)(66556008)(66946007)(66476007)(2906002)(6512007)(110136005)(54906003)(6486002)(36756003)(43740500002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: +qUn7xyZoK9SjWq0HkcP12fp5j0nHSAgglgi6Y4jor141vtcQwD5AWPnb5IO6fzvGdNR6rfaFXUhEhT22wO5V/Rfl3jM6ZFw/UHWCdZPjV2v9HpMW4xDFh+7LL5GvWee3F8Wkfl6t0J+odwLe7QfTjpRJbhi4JQRlDMOn8wL9haLg8yHCXLOo99bAj8ra/USJYTYlFJByuC51VaePes2U8wCkhWq3ndT0wFsVdF3/OgDB3qqlTN1TduP/Hy6O6O7JS1tl2pEo4iTIfugjYE/FiQ7RYCl0u+HlrBezNQdh7Y8jvf0Cz+mxukMD3wBGM8eHsCSjzVd5tbskNRVZCHg49Zk8r28DZ9BqC6x7fK0Huk8sdFD3CqsEgh3Tp0MKrrYFDVH/JIHWK/P75SBJDBBE1OEpL1ew4UR/LD7e0EZ9vEEdKuABfy39uAaZ8QBGd8GYw1PWqe3ysQJamocoekBMDv3qlX4tx8l5mYuhmebOZgjGPceJJ46NGnRYnt0eFl1
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <5D5B43223C7A7143A0C61A9504EAF726@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1728092AbgGNNan (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Jul 2020 09:30:43 -0400
+Received: from sender4-op-o17.zoho.com ([136.143.188.17]:17787 "EHLO
+        sender4-op-o17.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725997AbgGNNan (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jul 2020 09:30:43 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1594733431; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=a4/bFkvIpFwG5LcsbUwHW050lXfCUc+YAXwi2/0OdkK/+aVS4B1dH3TwbL47zpOat2yBOFr/lYJfimRdiBk4qqTkh9LpTHel0jxhCnZjl0gkqRgijmwkkyLffqVXjYtLqnpbdhw9CqftpBZeaUNPrGHdeO9ut8x6/TOwHGMIx/I=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1594733431; h=Content-Type:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=5aS2Om7zs7QC5qSvMF4Wg9nw45NYTT5ngFfOSHgfKhg=; 
+        b=TJBt7X0wcY4Htu37AS/uU/8o7FCrOoA4JDcjji/0PyetbrBOAR65VsL2ePFlECS1GuXyIcXtbqSJPtnWJ9IKsNUhLWByT2bPjrYN5joQsolUvO6pHpyjl6Ap7jLc7JzzVrN9JYww+J3+07ZWWHBaSiweZP5Huxva0gorK8DCrRY=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        spf=pass  smtp.mailfrom=dan@dlrobertson.com;
+        dmarc=pass header.from=<dan@dlrobertson.com> header.from=<dan@dlrobertson.com>
+Received: from gothmog.test (pool-108-28-30-30.washdc.fios.verizon.net [108.28.30.30]) by mx.zohomail.com
+        with SMTPS id 1594733427187422.3583129792786; Tue, 14 Jul 2020 06:30:27 -0700 (PDT)
+Date:   Tue, 14 Jul 2020 09:30:24 -0400
+From:   Dan Robertson <dan@dlrobertson.com>
+To:     Anand Moon <linux.amoon@gmail.com>
+Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        linux-amlogic@lists.infradead.org,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH 0/1] usb: dwc3: meson-g12a: fix shared reset control use
+Message-ID: <20200714133024.GA27406@gothmog.test>
+References: <20200713160522.19345-1-dan@dlrobertson.com>
+ <CANAwSgR3ry19bxi8ZG026tHi-Bj+mP_O=PHuzUR_ujhjsdeLzA@mail.gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR12MB1432.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4921cfc0-20e3-4c29-fed0-08d827f1f841
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jul 2020 12:32:27.6482
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Kpo5oH9Exot7M+nZFZRaZCyD2AMz1+C1QyWJtINtEpf8V3DWNQhs2Po4rntbK6kSgtv1asCnHsHfzqG6lHUf+Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1416
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="sm4nu43k4a2Rpi4c"
+Content-Disposition: inline
+In-Reply-To: <CANAwSgR3ry19bxi8ZG026tHi-Bj+mP_O=PHuzUR_ujhjsdeLzA@mail.gmail.com>
+X-Zoho-Virus-Status: 1
+X-ZohoMailClient: External
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgTWFyZWssDQoNCk9uIDcvMTQvMjAyMCAxMjo0OCBQTSwgTWFyZWsgU3p5cHJvd3NraSB3cm90
-ZToNCj4gV2hlbiBnYWRnZXQgcmVnaXN0cmF0aW9uIGZhaWxzLCBvbmUgc2hvdWxkIG5vdCBjYWxs
-IHVzYl9kZWxfZ2FkZ2V0X3VkYygpLg0KPiBFbnN1cmUgdGhpcyBieSBzZXR0aW5nIGdhZGdldC0+
-dWRjIHRvIE5VTEwuIEFsc28gaW4gY2FzZSBvZiBhIGZhaWx1cmUNCkkgd2FzIGFibGUgdG8gcmVw
-cm9kdWNlIGlzc3VlLiBJJ20gT2sgd2l0aCB0aGlzIGZpeC4NCg0KPiB0aGVyZSBpcyBubyBuZWVk
-IHRvIGRpc2FibGUgbG93LWxldmVsIGhhcmR3YXJlLCBzbyByZXR1cm4gaW1taWVkZXRseQ0KPiBp
-bnN0ZWFkIG9mIGp1bXBpbmcgdG8gZXJyb3JfaW5pdCBsYWJlbC4NCj4gDQpXaHkgZG8geW91IHRo
-aW5rIHRoYXQgZGlzYWJsZSBsb3ctbGV2ZWwgaGFyZHdhcmUgbm90IHJlcXVpcmVkIHdoaWNoIHdh
-cyANCmVuYWJsZWQgYmVmb3JlPyBBbHNvIGZvciBzb21lIHBsYXRmb3JtcyByZXF1aXJlZCB0byBj
-YWxsIA0KcmVndWxhdG9yX2Rpc2FibGUoKSB3aGljaCB3YXMgZW5hYmxlZCBlYXJsaWVyIGluIHBy
-b2JlIGZ1bmN0aW9uLg0KU28sIEkgc3VnZ2VzdCB0byBrZWVwIGp1bXAgdG8gZXJyb3JfaW5pdCBs
-YWJlbC4NCg0KPiBUaGlzIGZpeGVzIHRoZSBmb2xsb3dpbmcga2VybmVsIE5VTEwgcHRyIGRlcmVm
-ZXJlbmNlIG9uIGdhZGdldCBmYWlsdXJlDQo+IChjYW4gYmUgZWFzaWx5IHRyaWdnZXJlZCB3aXRo
-IGdfbWFzc19zdG9yYWdlIHdpdGhvdXQgYW55IG1vZHVsZQ0KPiBwYXJhbWV0ZXJzKToNCj4gDQoN
-ClRoYW5rcywNCk1pbmFzDQo=
+
+--sm4nu43k4a2Rpi4c
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi Anand!
+
+On Tue, Jul 14, 2020 at 12:26:57PM +0530, Anand Moon wrote:
+> hi Dan,
+>=20
+> On Mon, 13 Jul 2020 at 21:37, Dan Robertson <dan@dlrobertson.com> wrote:
+> >
+> > When testing suspend for another driver I noticed the following warning:
+> >
+> > WARNING: CPU: 1 PID: 5530 at drivers/reset/core.c:355 reset_control_ass=
+ert+0x184/0x19c
+> > Hardware name: Hardkernel ODROID-N2 (DT)
+> > [..]
+> > pc : reset_control_assert+0x184/0x19c
+> > lr : dwc3_meson_g12a_suspend+0x68/0x7c
+> > [..]
+> > Call trace:
+> >  reset_control_assert+0x184/0x19c
+> >  dwc3_meson_g12a_suspend+0x68/0x7c
+> >  platform_pm_suspend+0x28/0x54
+> >  __device_suspend+0x590/0xabc
+> >  dpm_suspend+0x104/0x404
+> >  dpm_suspend_start+0x84/0x1bc
+> >  suspend_devices_and_enter+0xc4/0x4fc
+> >
+> > In my limited experience and knowlege it appears that we hit this
+> > because the reset control was switched to shared and the the use
+> > of the reset control was not changed.
+> >
+> > > * Calling reset_control_assert without first calling reset_control_de=
+assert
+> > > * is not allowed on a shared reset control. Calling reset_control_res=
+et is
+> > > * also not allowed on a shared reset control.
+> >
+> > The above snippet from reset_control_get_shared() seems to indicate that
+> > this is due to the use of reset_control_reset() in dwc3_meson_g12a_prob=
+e()
+> > and reset_control_deassert is not guaranteed to have been called
+> > before dwc3_meson_g12a_suspend() and reset_control_assert().
+> >
+> > After some basic tests with the following patch I no longer hit the
+> > warning. Comments and critiques on the patch are welcome. If there is a
+> > reason for the current use of the reset control, I'd love to learn why!
+> > Like I said before, I have not really looked at this driver before and
+> > have verify limited experience with reset controls... Was working on
+> > another driver, hit the warning, and thought I'd take a shot at the
+> > fix :-)
+> >
+> Thanks, I was also looking into this issue
+
+Awesome!
+
+> So best Fix to this issue is to drop the call of reset_control_assert
+> from dwc3_meson_g12a_suspend
+> and drop the call of reset_control_deassert from dwc3_meson_g12a_resume
+> With these changes we do not see the warning on suspend and resume
+
+We definitely would avoid hitting the warning without the
+reset_control_(de)assert calls in suspend and resume. That is a valid use of
+the reset control, but why would that be best?
+
+=46rom reset_control_reset():
+
+> * Consumers must not use reset_control_(de)assert on shared reset lines w=
+hen
+> * reset_control_reset has been used.
+
+If we use reset_control_reset() then we can not (de)assert the reset line
+on suspend/resume or any other time. Wouldn't we want to be able to
+(de)assert the reset line? And why do we no longer want to (de)assert the
+reset line on suspend/resume?
+
+> > Can you try this attached patch?
+>=20
+> Best Regards
+> -Anand
+
+I think I had already tested something similar. Removing the (de)assert cal=
+ls
+but keeping reset will definitely remove the warning, but it means we can n=
+ot
+(de)assert the line. My guess is that this is not what we want, but I could=
+ be
+wrong. Thoughts, input, or references to documentation on this would be
+appreciated.
+
+Cheers,
+
+ - Dan
+
+--sm4nu43k4a2Rpi4c
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEF5dO2RaKc5C+SCJ9RcSmUsR+QqUFAl8Ns24ACgkQRcSmUsR+
+QqV1fA//TIDTawaZrYwSlXoTvSYzWf101qruw0k8D6Mk8/iX3lU7m9aTi8LIS7S8
+82uAzZlLsufjz60YtWXiDFQzDUZDLEOc9Ga8lGpZRzdQlFDzpTe2ynr3aK69cpHW
+/ix5ws2mYYtYaER8IZAeUFahvKppcyDpRhPzjzUcdkGj9PWvJdhWXtm7b7QE8/0e
+lj9SEKaSFSoQB57coEs5Q2EDLPw907zu6kyiZsbhaad677EhaTS3jmikeVhD41SX
+GEOoyl+RgK+TqD/+bjSvzjMIsfwXM4DnWXy6T/kcBCRaipKi/H8z9kiFyk3reKQj
+mQ7M6+c0SZFz5yRL/n824dSr8QuYUQ0iCMtYs21GXzGafm2DBb6BU5HlildjsGxm
+MBDt+3sMRVzbmiTJjs4w1i/jT7KM2Rs3KozFrYYBfnL/jJu8J7ntJI3mzRx6wQIq
+L4NzU7fChJZyTLsQrWVyvBcXL7/PYk6lxM3+iu7XYfZ6leCfmRRkrTEGLSAECHUf
+sFzmcz1oqM0cRGI8YfOPBwVqM905e9Tmwvb/jheUzEZcPQv95VnImHYTlVO10dL4
+gaiYTtWj0GgfZJ/zKbcjLhi2zy39xlCxBh5A1hdPqGajjwSGDrg5qQt9+oTHQI5h
+lIptHP8xcjWxx4JjVIQaB+YsACUEYXMllZzVejW/2AL4aJCAhQQ=
+=OtX0
+-----END PGP SIGNATURE-----
+
+--sm4nu43k4a2Rpi4c--
