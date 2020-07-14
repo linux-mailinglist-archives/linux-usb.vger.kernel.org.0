@@ -2,130 +2,179 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBF7321F604
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 17:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EA4D21F625
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 17:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728058AbgGNPSv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Jul 2020 11:18:51 -0400
-Received: from mail-eopbgr60113.outbound.protection.outlook.com ([40.107.6.113]:11653
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725876AbgGNPSt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 14 Jul 2020 11:18:49 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ys1oD5TZpuLGFdYc+W+lX5qupd0nJAVx/uXMyDr/iSLQtv1U1mAVePDdtGpE1Q9K276J1UbISWMVn4MlOPskY22yhBLvwQBCNQcoIaJeY/e8joHSdz+juTE5WkLaRvmEEbQLB48n1swDPUltI4dBn1Obnf99QagoyHf4fcS8IwZutpUHaVdlNP5qHoSbS8dtokl50+EraxVkxM1aVakHTV1NXNZYGdt2ek3SKMJ6rmoDCVeXKMhFgFcFpcRuZVvKhdhWo9awhaW0nFA+9SLAfNjZhOgRhJLeOBOxH9GZX9bbML25klh5/SXEBqp6Xvw0DP1ox5qORfGtst85Bgdkew==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Z1qePeighLYZBdGgVpONpJ/bncdGzDKQCGsnUqfn6N4=;
- b=iy6xtp4V1LOAA6XNud7nsatUIW2NvX+kGwgzfsBl1aMGFH6Oy1wfKSZWfEeuirC9seEgezt6zR//ZyxqPkgc52xKOWMgSNwcloATI+31qrvsuMfLiWvacbbSbZ6BaWTk7tWMua7yQxP8A+k0awSW+pWFOPHFEK0tdMzONh+VI6AuI4woK243Llbxfrwv8rRP/i543rx5b+nTyh8q7MB04TzTAmjqcIBIhttHnAuk2UybWJ2ADAiYoJSpihRRWPe8EHh9DBhyoFef4N2M9yvs/ihtpiJKQc5fM2xmEhQk6ck1NfNdghm5TJQLkW9h0GnzAjKiIuvU8zRuqHT8WOB68A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=toradex.com; dmarc=pass action=none header.from=toradex.com;
- dkim=pass header.d=toradex.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=toradex.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Z1qePeighLYZBdGgVpONpJ/bncdGzDKQCGsnUqfn6N4=;
- b=NqUDJylOLjRxt43k03K16o9HccgJFR8e9U3bVtbBW50SAAeXuZyc/FpVdnAIXHYMaVD1e2SOkVnK0zr7MJEaSoD7a6i6IhauvG13vGZJHpA8q7vp9ec1AowGuc/umi0le7JPr9hsn+V8zYDmv01xbbicNH6flhC9TN7D0k5bR58=
-Authentication-Results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=toradex.com;
-Received: from AM6PR05MB6120.eurprd05.prod.outlook.com (2603:10a6:20b:a8::25)
- by AM6PR05MB5174.eurprd05.prod.outlook.com (2603:10a6:20b:66::26) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3174.24; Tue, 14 Jul
- 2020 15:18:39 +0000
-Received: from AM6PR05MB6120.eurprd05.prod.outlook.com
- ([fe80::1d81:6a9b:8c26:3b7d]) by AM6PR05MB6120.eurprd05.prod.outlook.com
- ([fe80::1d81:6a9b:8c26:3b7d%4]) with mapi id 15.20.3174.026; Tue, 14 Jul 2020
- 15:18:39 +0000
-From:   Philippe Schenker <philippe.schenker@toradex.com>
-To:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, Peter Chen <Peter.Chen@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>
-Cc:     Philippe Schenker <philippe.schenker@toradex.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] ARM: dts: colibri-imx6ull: disable runtime pm
-Date:   Tue, 14 Jul 2020 17:18:22 +0200
-Message-Id: <20200714151822.250783-3-philippe.schenker@toradex.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200714151822.250783-1-philippe.schenker@toradex.com>
-References: <20200714151822.250783-1-philippe.schenker@toradex.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: GV0P278CA0019.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:710:28::6) To AM6PR05MB6120.eurprd05.prod.outlook.com
- (2603:10a6:20b:a8::25)
+        id S1726858AbgGNP1s (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Jul 2020 11:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34802 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725884AbgGNP1r (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jul 2020 11:27:47 -0400
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66435C061755
+        for <linux-usb@vger.kernel.org>; Tue, 14 Jul 2020 08:27:47 -0700 (PDT)
+Received: by mail-io1-xd44.google.com with SMTP id f23so17699660iof.6
+        for <linux-usb@vger.kernel.org>; Tue, 14 Jul 2020 08:27:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BbZ9kr+tjhtn9gptP5s+2QHSlxvmisN7ysGLWO9RQ7g=;
+        b=nBS/Rh+xcf6Q7r1KHl496akxGYQmykeMq4rAxsJ7Yr0kbjZC+joldKAKLW0blahKsW
+         TunItucvFORMdOCQFLEwLK4jo6/SU+gFxLyvcds0VCBcfasaElbgbOYa90ce6h6ncxZm
+         kDjw2cZGTeLtphAOjx7cJ9xkDNvrXdfDkCvOcUMoM2d0dN3yyZTr6CTA1/6ezDLob6WS
+         PfquvNUYSE7qaVIGrv1r1q3Prn9IrBg7UmNxfHE8ZYInU2rbo0RA6bsQIWcm9meQwQtI
+         uLyeFLckbrliMlDV5s+OJn5Y2/2gFXw+/9Ne03wRwsepbbnOyiW1AinVZ2aT7GpKovf/
+         rHUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BbZ9kr+tjhtn9gptP5s+2QHSlxvmisN7ysGLWO9RQ7g=;
+        b=K0HF1lpGe6iGK6y8JfdRSVVugUbzbrUJLiIvwTMNCvGffPXhDBMjWvCFKvbFx1SiiH
+         Tyr85WL5bpBJIUsRyYHYcbw5FRZwYxjpvwyljVDeJISxOsAG6rDJ1CCYhHt7B+HpEg0w
+         nKoslzu7gHL0EhpOefOj6lWhByjB8zEchSgPykejt+M0+XASoCr0g+ZENuxG/q/NH4Vg
+         oSnejdwLb9408HFfDludPYHXzYHn3+SNBkp1nHikSN4YUQWct78bAoYF1ue/ulZmg+Fu
+         Xqgl1C8Y80x8DqEBSJhA8bVOartTYf/28/PDDN89YXP1rKTAHxlRZxYMCxbRD+Bn/8BC
+         3veg==
+X-Gm-Message-State: AOAM530UPpe3YKvllQ8hacrlXwzwQDS7pLU4OZktjXlwEpinyxsRGTd8
+        4yNJIJS6luSXyH8ZIjF6MpPBiFNy+RcmZ2t3Y28=
+X-Google-Smtp-Source: ABdhPJySWYJTKH+LCICqszWfwqAQWTKusitxWVAMF2CGsn85j3IrHlwtvJXrfe+2BJe0wHapdmCvaA1x/4lFI6i6hog=
+X-Received: by 2002:a05:6638:164a:: with SMTP id a10mr6662401jat.126.1594740466748;
+ Tue, 14 Jul 2020 08:27:46 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from philippe-pc.toradex.int (31.10.206.124) by GV0P278CA0019.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:28::6) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3195.17 via Frontend Transport; Tue, 14 Jul 2020 15:18:38 +0000
-X-Mailer: git-send-email 2.27.0
-X-Originating-IP: [31.10.206.124]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 444b7346-4b33-4c4b-7ecc-08d828092f7c
-X-MS-TrafficTypeDiagnostic: AM6PR05MB5174:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM6PR05MB51747FBB6433C47373645E2FF4610@AM6PR05MB5174.eurprd05.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2276;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5af6HB3h4H5qQIp1xJwJ/rJtsdU1baZRHu5BP561QbxTFMcIrlFIzrGsDdcqAv6lj2vV6Vbq5eW7TLqY9hUAUNPxDPLsDYjR3wvy4F1EoC5YKSophZ02qiF+QVBBLCjKNOrSEh7Ab1tnyQtfJ3kKQUbPQWO7/cnpR4ZiOL37DqsliGn5KYnoewK8zki1O7TL+2vcq1wqO0twHsuFL2/if921BOfNgL/xGZiBGKVBjsg+UDQNnqJH7zcBIaAtpWyT4L9XdKRCoAa89np8jyOC3TWy4RNl5Blzjd5sYE92BgGIkysVPg4y/Jn16CkBmVimUC+Ve9z3Ort7Pp7n0sQrvSHToS0dj8wZYv1DXOI7DZ+FOpiMsH0Ds0N+S9oJtgGs
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR05MB6120.eurprd05.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(376002)(346002)(366004)(136003)(396003)(39850400004)(110136005)(316002)(86362001)(4326008)(5660300002)(7416002)(8676002)(6666004)(1076003)(4744005)(6506007)(186003)(2906002)(6512007)(26005)(66556008)(6486002)(2616005)(956004)(478600001)(36756003)(16526019)(66946007)(66476007)(52116002)(8936002)(44832011)(54906003)(16060500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: F9DZ0H5fs4dIPjEjrDVCfBEnhiet4EA1uDGhyylieoJhkaSsR5OprE5yZG06e6WQhQ6FMkaRlrUGWaS/CCnqnxST2qQFKrTqY9OppFMyusGpJTgpwjjlQF6Rs2vFxnv0eIfJiNo7ZO1kGlwLl8izuhSOrY64CdCHS4mmZ3YoKHKQhD4t9nQwjXTE5dwROwUTD5RsdRG9SqGH7SJdbPfCc8XGbz3CSaeqvqEJZTPkx7KF6V8eO5BZndwtRO6Km7k1gqIbZpi7OMxL/5jb5Wpol/OzJQNZV6+YPUinhGLDuZBgWxIRu85AYh4iqTicwRys8RMbvR9jyXUhiUqs2kIiN/R+sg5iCkpeOhHiMcTsgyTHGMdWMrA7GK2NVNvT/ury933UeIdJMg/06sgz0Z8fDAc2YGyTqzhz+JzvfdcCiXSl11yhFKan/fHBd2slq3fcfSycnELveVd4f6hm9L5IljhrJj5vDbC+rrtzsR3sh54=
-X-OriginatorOrg: toradex.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 444b7346-4b33-4c4b-7ecc-08d828092f7c
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR05MB6120.eurprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jul 2020 15:18:39.1698
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dSzuqVRj8LdvLxs8zpBxVdS2ku79O5PuXuXiwaLinuUMIDUluDV8trFalUiFiF9r7x5t0W28i+r8mNr0WshME2mQufQhzGdTdVwylJurs1Y=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR05MB5174
+References: <20200713160522.19345-1-dan@dlrobertson.com> <CANAwSgR3ry19bxi8ZG026tHi-Bj+mP_O=PHuzUR_ujhjsdeLzA@mail.gmail.com>
+ <20200714133024.GA27406@gothmog.test>
+In-Reply-To: <20200714133024.GA27406@gothmog.test>
+From:   Anand Moon <linux.amoon@gmail.com>
+Date:   Tue, 14 Jul 2020 20:57:35 +0530
+Message-ID: <CANAwSgQJgqHC41D8f+9J5cEpeg71PD-Oc08wQgzdjRPY6ZsuLQ@mail.gmail.com>
+Subject: Re: [PATCH 0/1] usb: dwc3: meson-g12a: fix shared reset control use
+To:     Dan Robertson <dan@dlrobertson.com>
+Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        linux-amlogic@lists.infradead.org,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The Colibri iMX6ULL has a somewhat special hardware design due to some
-legacy decisions regarding USB OTG. This leads to different issues
-when runtime PM is enabled.
+Hi Dan,
 
-Disable runtime power management on colibri-imx6ull USB.
+On Tue, 14 Jul 2020 at 19:00, Dan Robertson <dan@dlrobertson.com> wrote:
+>
+> Hi Anand!
+>
+> On Tue, Jul 14, 2020 at 12:26:57PM +0530, Anand Moon wrote:
+> > hi Dan,
+> >
+> > On Mon, 13 Jul 2020 at 21:37, Dan Robertson <dan@dlrobertson.com> wrote:
+> > >
+> > > When testing suspend for another driver I noticed the following warning:
+> > >
+> > > WARNING: CPU: 1 PID: 5530 at drivers/reset/core.c:355 reset_control_assert+0x184/0x19c
+> > > Hardware name: Hardkernel ODROID-N2 (DT)
+> > > [..]
+> > > pc : reset_control_assert+0x184/0x19c
+> > > lr : dwc3_meson_g12a_suspend+0x68/0x7c
+> > > [..]
+> > > Call trace:
+> > >  reset_control_assert+0x184/0x19c
+> > >  dwc3_meson_g12a_suspend+0x68/0x7c
+> > >  platform_pm_suspend+0x28/0x54
+> > >  __device_suspend+0x590/0xabc
+> > >  dpm_suspend+0x104/0x404
+> > >  dpm_suspend_start+0x84/0x1bc
+> > >  suspend_devices_and_enter+0xc4/0x4fc
+> > >
+> > > In my limited experience and knowlege it appears that we hit this
+> > > because the reset control was switched to shared and the the use
+> > > of the reset control was not changed.
+> > >
+> > > > * Calling reset_control_assert without first calling reset_control_deassert
+> > > > * is not allowed on a shared reset control. Calling reset_control_reset is
+> > > > * also not allowed on a shared reset control.
+> > >
+> > > The above snippet from reset_control_get_shared() seems to indicate that
+> > > this is due to the use of reset_control_reset() in dwc3_meson_g12a_probe()
+> > > and reset_control_deassert is not guaranteed to have been called
+> > > before dwc3_meson_g12a_suspend() and reset_control_assert().
+> > >
+> > > After some basic tests with the following patch I no longer hit the
+> > > warning. Comments and critiques on the patch are welcome. If there is a
+> > > reason for the current use of the reset control, I'd love to learn why!
+> > > Like I said before, I have not really looked at this driver before and
+> > > have verify limited experience with reset controls... Was working on
+> > > another driver, hit the warning, and thought I'd take a shot at the
+> > > fix :-)
+> > >
+> > Thanks, I was also looking into this issue
+>
+> Awesome!
+>
+> > So best Fix to this issue is to drop the call of reset_control_assert
+> > from dwc3_meson_g12a_suspend
+> > and drop the call of reset_control_deassert from dwc3_meson_g12a_resume
+> > With these changes we do not see the warning on suspend and resume
+>
+> We definitely would avoid hitting the warning without the
+> reset_control_(de)assert calls in suspend and resume. That is a valid use of
+> the reset control, but why would that be best?
+>
+> From reset_control_reset():
 
-Signed-off-by: Philippe Schenker <philippe.schenker@toradex.com>
+Before entering the suspend state the code tries to do following
+     clk_bulk_disable_unprepare
+     regulator_disable
+     phy_power_off
+     phy_exit
 
----
+After this operation it's needless to call *reset_control_assert*
+I tried to move this call before all the above operations
+but still no success with this.
 
-Changes in v2: None
+Similarly on resume we should avoid calling resume
+*reset_control_deassert* earlier
+as the core is just reinitializing the devices.
+      clk_bulk_prepare_enable
+      usb_init
+      phy_init
+      phy_power_on
+      regulator_enable
+>
+> > * Consumers must not use reset_control_(de)assert on shared reset lines when
+> > * reset_control_reset has been used.
+>
+> If we use reset_control_reset() then we can not (de)assert the reset line
+> on suspend/resume or any other time. Wouldn't we want to be able to
+> (de)assert the reset line? And why do we no longer want to (de)assert the
+> reset line on suspend/resume?
+>
+> > > Can you try this attached patch?
+> >
+> > Best Regards
+> > -Anand
+>
+> I think I had already tested something similar. Removing the (de)assert calls
+> but keeping reset will definitely remove the warning, but it means we can not
+> (de)assert the line. My guess is that this is not what we want, but I could be
+> wrong. Thoughts, input, or references to documentation on this would be
+> appreciated.
+>
 
- arch/arm/boot/dts/imx6ull-colibri.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+As per my knowledge suspend to mem will do complete power down of the
+devices with support suspend and resume feature sequentially and then it tries
+to bring the device up one by one.
+So it should also take care of reset lines as well.
 
-diff --git a/arch/arm/boot/dts/imx6ull-colibri.dtsi b/arch/arm/boot/dts/imx6ull-colibri.dtsi
-index 9145c536d71a..1c6692237506 100644
---- a/arch/arm/boot/dts/imx6ull-colibri.dtsi
-+++ b/arch/arm/boot/dts/imx6ull-colibri.dtsi
-@@ -195,6 +195,7 @@ &uart5 {
- };
- 
- &usbotg1 {
-+	disable-runtime-pm;
- 	dr_mode = "otg";
- 	srp-disable;
- 	hnp-disable;
-@@ -202,6 +203,7 @@ &usbotg1 {
- };
- 
- &usbotg2 {
-+	disable-runtime-pm;
- 	dr_mode = "host";
- };
- 
--- 
-2.27.0
+> Cheers,
+>
+>  - Dan
 
+Best Regards
+-Anand
