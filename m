@@ -2,131 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9BA721EFEB
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 14:01:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4377821F154
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 14:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726729AbgGNMBk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Jul 2020 08:01:40 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:56177 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726332AbgGNMBk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jul 2020 08:01:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1594728098;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NzuBDHY8WxHVw+Kc5uxbtm+Tv/UGUbdolVzEdoMmBhE=;
-        b=dFbzFnOVdpB73j0vxaojqfmdbxN+Spuun/QOmPpYWSXlIJc4ckH+q9Q70dFhS7v7mpykZi
-        M66HMPHJZ9mSO6HvqcQfJutDiJWaCvXSJYARk+FV6dSRkDxVqA3FaBXrseCfIlMirfnCqX
-        KxtZ1NhDVrMZUZw1olVwCTH29dddHP4=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-35-m_tBIe7-MLSiBC7FXVJvSQ-1; Tue, 14 Jul 2020 08:01:37 -0400
-X-MC-Unique: m_tBIe7-MLSiBC7FXVJvSQ-1
-Received: by mail-wm1-f69.google.com with SMTP id c124so3632545wme.0
-        for <linux-usb@vger.kernel.org>; Tue, 14 Jul 2020 05:01:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=NzuBDHY8WxHVw+Kc5uxbtm+Tv/UGUbdolVzEdoMmBhE=;
-        b=bkiFR3L9yeTE5+cyXPKSxMGLH7d/6dP6IPgClRojP0qJFdeKeX05x8d+ZrLDl7a3r1
-         tnipKrPGbEKTiNElX//6uStMCDC9VYRURUxvbtXX11dmdglHStWfeveWDNqXFVuSmqh9
-         JnaBF7yba1/ci4RMsyP3hZzqDag6TlVVdJOkfwC7MtNhiRPmJZXA1znyEDYvTxt7hy/V
-         K1AVj+T788e+hdAwPWsMh8W/O5MSfSD6nsDwXVmd7ZVU2W4i1DpTxlAsmrtsQz9Z93Nq
-         /2jCxE3AWsJ230NVSEUcWzONkPpDxjFAIougWZLiQRFCVVRNU7xNkCPb4OuFZ38DmWf/
-         uNVQ==
-X-Gm-Message-State: AOAM532ZqpBYsvwEOfJaQuQzPPSYLH6oUpSdGQlQDp9elppNFTq8ogbq
-        IisUS31Kg+QGpqjkt59awzFpvvOQBODeEPQFfxlSCaMYNBd84vaVT00n8n3Yt6xvCTq79USI+Cl
-        sVRCMCrFexsCO1WI3H2uo
-X-Received: by 2002:a05:6000:46:: with SMTP id k6mr4915629wrx.102.1594728095803;
-        Tue, 14 Jul 2020 05:01:35 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwRWb7tTc7UzuLqaB4EtVaorEanJOKFyDzDcud2e1J9/uU8AvfG3tw0yBdSHRwNxyEMbrjmtQ==
-X-Received: by 2002:a05:6000:46:: with SMTP id k6mr4915596wrx.102.1594728095573;
-        Tue, 14 Jul 2020 05:01:35 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
-        by smtp.gmail.com with ESMTPSA id v7sm29697902wrp.45.2020.07.14.05.01.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jul 2020 05:01:34 -0700 (PDT)
-Subject: Re: [PATCH 08/32] usb: typec: tcpm: tcpm: Remove dangling unused
- 'struct tcpm_altmode_ops'
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     gregkh@linuxfoundation.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-References: <20200706133341.476881-1-lee.jones@linaro.org>
- <20200706133341.476881-9-lee.jones@linaro.org>
- <ca14707c-7d40-07ac-da1d-ca27a2e93dcd@redhat.com>
- <20200706142051.GA3500@dell>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <65f27abc-69c8-3877-be5b-e5e478153af9@redhat.com>
-Date:   Tue, 14 Jul 2020 14:01:34 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
-MIME-Version: 1.0
-In-Reply-To: <20200706142051.GA3500@dell>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        id S1728145AbgGNMcf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Jul 2020 08:32:35 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:51854 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728047AbgGNMce (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jul 2020 08:32:34 -0400
+Received: from mailhost.synopsys.com (badc-mailhost1.synopsys.com [10.192.0.17])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id A7CC6C00E9;
+        Tue, 14 Jul 2020 12:32:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1594729953; bh=eeixpN2+EI6mUAAQ4cGP3s1R99EwwqmFBhljeDPOmFw=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=Ywc5bfCWGlLtKs8r7MbvaHpGFUI5pNkRzK6ju/aU3EnTmmUIzHNAIPx2m+4yrF2Vc
+         BtskSoftnzuoZWDV7APKpaLmnNshGDhNiSapf3UmtKjlZFK2BFrlCAiu0wx5fBSeQc
+         zUhdvilDhyu+ue/dxrllcOkpZWjcyR3TYn3wH0btYcu6k5smf5ZEqGk1KjHGCrXXOo
+         RJ+lCl9cGeE0pjCbPiXSka17FaJrQfmXroYL37CTPyl5urAECYN3P2TAOaUacRXe00
+         J00pCfcKJfFJUhqP6pZSzwyM2ZdYzktHor2ZZr8Qx/7qKQ08rnFlt1Si5I7RDF9+IG
+         CNnsJph8zgXTg==
+Received: from o365relay-in.synopsys.com (sv2-o365relay1.synopsys.com [10.202.1.137])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPS id 96FBAA0071;
+        Tue, 14 Jul 2020 12:32:31 +0000 (UTC)
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2173.outbound.protection.outlook.com [104.47.55.173])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "mail.protection.outlook.com", Issuer "GlobalSign Organization Validation CA - SHA256 - G3" (verified OK))
+        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 17C3440081;
+        Tue, 14 Jul 2020 12:32:30 +0000 (UTC)
+Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=hminas@synopsys.com
+Authentication-Results: o365relay-in.synopsys.com;
+        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="F26zBPK2";
+        dkim-atps=neutral
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JH0vPVUeqf7eubLWYg2RPc45/GdxGk6cjq1IXZytYOcdrfunqUEmz9YI9EchK1+J1F6vcf/6Foid1An7bWVniVNlbZnlr48gXD/l7j9U3zR6KtFQtRQsC35PDqtCR8zMoKSdvKW3EuoQs+CySop0aVCKAdywQlUNC/a8k/bdSXaEVQ82IUN2IFia0SMKmFmTSlSqo8M1YZSw3GVMkz6O8XHcNeQC5taXIzziaQWI7iIW5uppAnmwAGCzAAjRWCJrPVq5L2OqxeaXceZReedctnN5eoqxDRvbejZdnGkU4Yg/0psL3IreUGvG/qJZZ8iQziMYrLYLn+BavVJ9/o/02g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eeixpN2+EI6mUAAQ4cGP3s1R99EwwqmFBhljeDPOmFw=;
+ b=NT4c0np0uhPhjzUgBTVdLwyhDGKEMFCWn4dW+KWHX4RYVg/N06lGf1QyI1SzOQPrg/RMoABwlI2X8zt8IntAen6VYiM2MM1YlZl5yvnQmKjllJRFADnhWkCjl/5mviP1PtwbbhPCCPFOZ/tKl37EhpBzBHTruGyRXIVR2YBgn0qBP8S/xThiMQ1yTkvylb6rebtLttDe0zewHLiiHTzGlzdPgAS+Hxacn31azJyYzva93ONJHAM0b4FesUGrQUeHpQ37LvvVsQ7Y66R9RCyEN7ypmciLKSIKsZeAAoZrh13ysD6aVG09qTsmE+U5D1OEwlLEb4DH1SNcYTMl6EYTGA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eeixpN2+EI6mUAAQ4cGP3s1R99EwwqmFBhljeDPOmFw=;
+ b=F26zBPK2Eks97yIIGjB2zm/93SQGNPqbjyLbqeu1JjyE4X+JXHaQ3Wmp0qhQfJjJj9IlXW9fMQWIy6rxtEGAvRDWg8C5AblsDhdNy/zBLKSYjh5aijFwyexArgkepdrrzmP23Karo01gdpfIwBIu8FuPXzw6a5FRWzXjtdAwRhE=
+Received: from CY4PR12MB1432.namprd12.prod.outlook.com (2603:10b6:903:44::11)
+ by CY4PR12MB1416.namprd12.prod.outlook.com (2603:10b6:903:44::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3174.21; Tue, 14 Jul
+ 2020 12:32:28 +0000
+Received: from CY4PR12MB1432.namprd12.prod.outlook.com
+ ([fe80::3cb9:e2f2:a4ff:14bd]) by CY4PR12MB1432.namprd12.prod.outlook.com
+ ([fe80::3cb9:e2f2:a4ff:14bd%10]) with mapi id 15.20.3174.025; Tue, 14 Jul
+ 2020 12:32:27 +0000
+X-SNPS-Relay: synopsys.com
+From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] usb: dwc2: Fix error path in gadget registration
+Thread-Topic: [PATCH] usb: dwc2: Fix error path in gadget registration
+Thread-Index: AQHWWbuDBUQ8jHqiX0W5003po+jOE6kHAjIA
+Date:   Tue, 14 Jul 2020 12:32:27 +0000
+Message-ID: <40bfbfd6-6516-5995-8250-c8e3df16e11e@synopsys.com>
+References: <CGME20200714084807eucas1p1f6e680d162573c6a0660037172a65805@eucas1p1.samsung.com>
+ <20200714084800.11340-1-m.szyprowski@samsung.com>
+In-Reply-To: <20200714084800.11340-1-m.szyprowski@samsung.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+authentication-results: samsung.com; dkim=none (message not signed)
+ header.d=none;samsung.com; dmarc=none action=none header.from=synopsys.com;
+x-originating-ip: [198.182.37.200]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 4921cfc0-20e3-4c29-fed0-08d827f1f841
+x-ms-traffictypediagnostic: CY4PR12MB1416:
+x-microsoft-antispam-prvs: <CY4PR12MB14165A9A0B7F1009D258477FA7610@CY4PR12MB1416.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: bI8SLaqlXjqnK5b8wEVCoT2Bznrg46c6K5K7tdh41jczT+vmcPazhzLeYCROlnnIdjEOXIzTkKnWV5j1PoG1tQkl1dhLPkCp9kenPenkgYyyySQw3B2fT9PG/8WLJNP9VLEPET78WaF1nXIzFjEv3cnK2jq07DJjYS5LAdCnKLsLMJ7tcUgDGTggAU+GdE0PK3S35rhy2747v2wfesVa/GHz9y+xQEg8MKl57UFJ9QBRhNZhvOt3fDflMLUEmMBHKu23B/DTY5scKtiNhlJEjGYZje42/Hg/0cakuXLLsGmiYrFsaQyCakA4HDWIJTPIeca966QxxIVBmSPcswPsv4b0RPj19x0gZxaxWqqfNJi0KFY3rfTFfE5FNLKMWyKc
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR12MB1432.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(136003)(376002)(39860400002)(366004)(396003)(346002)(31686004)(5660300002)(86362001)(8936002)(71200400001)(4744005)(2616005)(76116006)(83380400001)(66446008)(53546011)(8676002)(186003)(31696002)(26005)(91956017)(478600001)(6506007)(64756008)(316002)(4326008)(66556008)(66946007)(66476007)(2906002)(6512007)(110136005)(54906003)(6486002)(36756003)(43740500002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: +qUn7xyZoK9SjWq0HkcP12fp5j0nHSAgglgi6Y4jor141vtcQwD5AWPnb5IO6fzvGdNR6rfaFXUhEhT22wO5V/Rfl3jM6ZFw/UHWCdZPjV2v9HpMW4xDFh+7LL5GvWee3F8Wkfl6t0J+odwLe7QfTjpRJbhi4JQRlDMOn8wL9haLg8yHCXLOo99bAj8ra/USJYTYlFJByuC51VaePes2U8wCkhWq3ndT0wFsVdF3/OgDB3qqlTN1TduP/Hy6O6O7JS1tl2pEo4iTIfugjYE/FiQ7RYCl0u+HlrBezNQdh7Y8jvf0Cz+mxukMD3wBGM8eHsCSjzVd5tbskNRVZCHg49Zk8r28DZ9BqC6x7fK0Huk8sdFD3CqsEgh3Tp0MKrrYFDVH/JIHWK/P75SBJDBBE1OEpL1ew4UR/LD7e0EZ9vEEdKuABfy39uAaZ8QBGd8GYw1PWqe3ysQJamocoekBMDv3qlX4tx8l5mYuhmebOZgjGPceJJ46NGnRYnt0eFl1
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <5D5B43223C7A7143A0C61A9504EAF726@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: synopsys.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR12MB1432.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4921cfc0-20e3-4c29-fed0-08d827f1f841
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jul 2020 12:32:27.6482
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Kpo5oH9Exot7M+nZFZRaZCyD2AMz1+C1QyWJtINtEpf8V3DWNQhs2Po4rntbK6kSgtv1asCnHsHfzqG6lHUf+Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1416
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On 7/6/20 4:20 PM, Lee Jones wrote:
-> On Mon, 06 Jul 2020, Hans de Goede wrote:
-> 
->> Hi,
->>
->> On 7/6/20 3:33 PM, Lee Jones wrote:
->>> Looks as though a079973f462a3 ("usb: typec: tcpm: Remove tcpc_config
->>> configuration mechanism") pulled out the only use of 'tcpm_altmode_ops'
->>> last year.  No need to keep it around.
->>>
->>> Fixes the following W=1 kernel build warning(s):
->>>
->>>    drivers/usb/typec/tcpm/tcpm.c:1551:39: warning: ‘tcpm_altmode_ops’ defined but not used [-Wunused-const-variable=]
->>>    1551 | static const struct typec_altmode_ops tcpm_altmode_ops = {
->>>    | ^~~~~~~~~~~~~~~~
->>>
->>> Cc: Guenter Roeck <linux@roeck-us.net>
->>> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
->>> Cc: Hans de Goede <hdegoede@redhat.com>
->>> Signed-off-by: Lee Jones <lee.jones@linaro.org>
->>
->> This is necessary for adding Display port over Type-C support
->> on devices using the tcpm code, rather then firmware, to do
->> the Type-C alt-mode negotiation.
->>
->> I have a local patch in my tree which adds support for this.
->>
->> But Heikki did not like my approach, so that patch
->> (which needs the bits you are removing) never landed
->> upstream:
->>
->> https://patchwork.kernel.org/patch/11199517/
->>
->> Which is somewhat old now.
-> 
-> Yes, that's a just a little old now.
-> 
-> If it drags on for much longer, perhaps consider taking it out for the
-> time being and adding it back when you start to make use of it again?
-
-Ok, I've just submitted a reworked patch-series upstream which
-actually uses this code. So please drop this patch from your
-patch-set.
-
-Regards,
-
-Hans
-
-
-s
-
+SGkgTWFyZWssDQoNCk9uIDcvMTQvMjAyMCAxMjo0OCBQTSwgTWFyZWsgU3p5cHJvd3NraSB3cm90
+ZToNCj4gV2hlbiBnYWRnZXQgcmVnaXN0cmF0aW9uIGZhaWxzLCBvbmUgc2hvdWxkIG5vdCBjYWxs
+IHVzYl9kZWxfZ2FkZ2V0X3VkYygpLg0KPiBFbnN1cmUgdGhpcyBieSBzZXR0aW5nIGdhZGdldC0+
+dWRjIHRvIE5VTEwuIEFsc28gaW4gY2FzZSBvZiBhIGZhaWx1cmUNCkkgd2FzIGFibGUgdG8gcmVw
+cm9kdWNlIGlzc3VlLiBJJ20gT2sgd2l0aCB0aGlzIGZpeC4NCg0KPiB0aGVyZSBpcyBubyBuZWVk
+IHRvIGRpc2FibGUgbG93LWxldmVsIGhhcmR3YXJlLCBzbyByZXR1cm4gaW1taWVkZXRseQ0KPiBp
+bnN0ZWFkIG9mIGp1bXBpbmcgdG8gZXJyb3JfaW5pdCBsYWJlbC4NCj4gDQpXaHkgZG8geW91IHRo
+aW5rIHRoYXQgZGlzYWJsZSBsb3ctbGV2ZWwgaGFyZHdhcmUgbm90IHJlcXVpcmVkIHdoaWNoIHdh
+cyANCmVuYWJsZWQgYmVmb3JlPyBBbHNvIGZvciBzb21lIHBsYXRmb3JtcyByZXF1aXJlZCB0byBj
+YWxsIA0KcmVndWxhdG9yX2Rpc2FibGUoKSB3aGljaCB3YXMgZW5hYmxlZCBlYXJsaWVyIGluIHBy
+b2JlIGZ1bmN0aW9uLg0KU28sIEkgc3VnZ2VzdCB0byBrZWVwIGp1bXAgdG8gZXJyb3JfaW5pdCBs
+YWJlbC4NCg0KPiBUaGlzIGZpeGVzIHRoZSBmb2xsb3dpbmcga2VybmVsIE5VTEwgcHRyIGRlcmVm
+ZXJlbmNlIG9uIGdhZGdldCBmYWlsdXJlDQo+IChjYW4gYmUgZWFzaWx5IHRyaWdnZXJlZCB3aXRo
+IGdfbWFzc19zdG9yYWdlIHdpdGhvdXQgYW55IG1vZHVsZQ0KPiBwYXJhbWV0ZXJzKToNCj4gDQoN
+ClRoYW5rcywNCk1pbmFzDQo=
