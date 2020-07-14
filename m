@@ -2,177 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BE4121E609
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 05:00:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E53321E634
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 05:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726801AbgGNDAF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 13 Jul 2020 23:00:05 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:34627 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726150AbgGNDAE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Jul 2020 23:00:04 -0400
-Received: by mail-io1-f66.google.com with SMTP id q74so15820875iod.1;
-        Mon, 13 Jul 2020 20:00:04 -0700 (PDT)
+        id S1726545AbgGNDOV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 13 Jul 2020 23:14:21 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:42525 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726432AbgGNDOV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 13 Jul 2020 23:14:21 -0400
+Received: by mail-io1-f65.google.com with SMTP id c16so15803445ioi.9;
+        Mon, 13 Jul 2020 20:14:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=wSXghTdlLAieEFZ39iyyxrFmCFgGzVBzq1RNCvrRwsw=;
-        b=Dxopd11xoF+60OsIl/Ybc7YNMFS7CfEkuZxnmHccrBqfsiOGgjUXRljMek7ya2Abpk
-         gvVm+ZZcCWXis7LmdW8pHm1jZzSGaiwradCyCjBhR3Yj/MLzhA9PIuvISFaW2rvDS7BP
-         zMsMb7PQatWh0GTBCWq1Hi8k1mB0rF5uvFN2Bp10wMp9oFmTuqCmrI9vMA2Mf+pX8YPA
-         wa6qPdRfd4xHbxsJoWIOgcza5Xaf7DhIQqg/DTovjZ3OpFMuqgt5fIUxOXvs5/fokvZW
-         uA2D457Oy2PoRS8cCuRSUh53+BQ9iXez2Te7KriepNkugmOAB2qou9F8QXoDs6HS4+zW
-         R1+A==
-X-Gm-Message-State: AOAM533hs+BCKPR+Uyfl4LJ03MNqGSzdJri9xJu4gyiukqzMdtnVBabN
-        qyGMAs2L1M9/h9CDAOCvKlwiCGs39jwi
-X-Google-Smtp-Source: ABdhPJyYgsLrR7GdjWOSNztbmbu/GfZF0NPf4tc2WGYT9ElsoeWfIqN7HC5bGrGWEOd8HcW+Cgvzew==
-X-Received: by 2002:a02:6514:: with SMTP id u20mr3442335jab.94.1594695603704;
-        Mon, 13 Jul 2020 20:00:03 -0700 (PDT)
+        bh=eWIxzHqTyQlO7gsWJNB/FtRgRqh/Fa64GtgMJQmjQAI=;
+        b=fzRamVLVbKWSpsg05d4lOrrXs0DXQlv9ShOZiUdno/G64/tbUGKbp1COWl8CE9+PHX
+         iXr+AwkfI3alU/P6PLRBivnhiVxHBhk8SyMJA2qb37sS1KSmAEXdE5UX3EFuDX7XQhXn
+         1IqAIvGmztjj/6dcCyrO/WUbtjPjKYuxRqUp4M/8VdqU1rdK4r8xKrpbzJqv032Ju9I0
+         m32/tgxHH4pdxZWBg5pl5LWYNdV0ELzc45QK/P4sc2CrhHNjuC2HBUJyTjecXgNDgulV
+         HKQXsoAXGQ4uyA5QWSyhXQN+i8EorWW8yXG9sYwxy6EHxeZ9A5FVnIw4ZH9Sv1eWXqAC
+         0CNw==
+X-Gm-Message-State: AOAM533DfCLMsBOiaecwrSLI472JxmoA6poZ09HT657/mz7kJD62hG0H
+        0UdmAYDWoOPux7mzlQahLQ==
+X-Google-Smtp-Source: ABdhPJzZshEumH0EQvkXRPvklR8XuOkvRLypvsondiqlyMqTl2ZwimUYIZHPbsD+MVIRTHyPYbjKEg==
+X-Received: by 2002:a6b:640e:: with SMTP id t14mr2894003iog.39.1594696460267;
+        Mon, 13 Jul 2020 20:14:20 -0700 (PDT)
 Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id u62sm9418029ilc.87.2020.07.13.20.00.02
+        by smtp.gmail.com with ESMTPSA id f18sm9266140ilj.15.2020.07.13.20.14.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2020 20:00:03 -0700 (PDT)
-Received: (nullmailer pid 1201871 invoked by uid 1000);
-        Tue, 14 Jul 2020 03:00:01 -0000
-Date:   Mon, 13 Jul 2020 21:00:01 -0600
+        Mon, 13 Jul 2020 20:14:19 -0700 (PDT)
+Received: (nullmailer pid 1221488 invoked by uid 1000);
+        Tue, 14 Jul 2020 03:14:18 -0000
+Date:   Mon, 13 Jul 2020 21:14:18 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Li Jun <jun.li@nxp.com>
-Cc:     balbi@kernel.org, shawnguo@kernel.org, gregkh@linuxfoundation.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        peter.chen@nxp.com, Anson.Huang@nxp.com, peng.fan@nxp.com,
-        horia.geanta@nxp.com
-Subject: Re: [PATCH v2 5/5] dt-bindings: usb: dwc3-imx8mp: add imx8mp dwc3
- glue bindings
-Message-ID: <20200714030001.GA1196828@bogus>
-References: <1594028699-1055-1-git-send-email-jun.li@nxp.com>
- <1594028699-1055-6-git-send-email-jun.li@nxp.com>
+To:     Roger Quadros <rogerq@ti.com>
+Cc:     linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, balbi@kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2] dt-bindings: usb: ti,keystone-dwc3.yaml: Improve
+ schema
+Message-ID: <20200714031418.GA1221438@bogus>
+References: <20200710113337.15954-1-rogerq@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1594028699-1055-6-git-send-email-jun.li@nxp.com>
+In-Reply-To: <20200710113337.15954-1-rogerq@ti.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 06, 2020 at 05:44:59PM +0800, Li Jun wrote:
-> NXP imx8mp integrates 2 dwc3 3.30b IP and add some wakeup logic
-> to support low power mode, the glue layer is for this wakeup
-> functionality, which has a separated interrupt, can support
-> wakeup from U3 and connect events for host, and vbus wakeup for
-> device.
+On Fri, 10 Jul 2020 14:33:37 +0300, Roger Quadros wrote:
+> There were some review comments after the patch was integrated.
+> Address those.
 > 
-> Signed-off-by: Li Jun <jun.li@nxp.com>
+> Fixes: 1883a934e156 ("dt-bindings: usb: convert keystone-usb.txt to YAML")
+> Signed-off-by: Roger Quadros <rogerq@ti.com>
 > ---
->  .../devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml   | 87 ++++++++++++++++++++++
->  1 file changed, 87 insertions(+)
+>  .../bindings/usb/ti,keystone-dwc3.yaml        | 51 ++++++++++++++-----
+>  1 file changed, 37 insertions(+), 14 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml b/Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml
-> new file mode 100644
-> index 0000000..823db058
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.yaml
-> @@ -0,0 +1,87 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright (c) 2020 NXP
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/fsl,imx8mp-dwc3.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: NXP iMX8MP Soc USB Controller
-> +
-> +maintainers:
-> +  - Li Jun <jun.li@nxp.com>
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +    - const: fsl,imx8mp-dwc3
-> +
-> +  reg:
-> +    maxItems: 1
-> +    description: Address and length of the register set for the wrapper of
-> +      dwc3 core on the SOC.
-> +
-> +  "#address-cells":
-> +    enum: [ 1, 2 ]
-> +
-> +  "#size-cells":
-> +    enum: [ 1, 2 ]
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +    description: The interrupt that is asserted when a wakeup event is
-> +      received.
-> +
-> +  clocks:
-> +    description:
-> +      A list of phandle and clock-specifier pairs for the clocks
-> +      listed in clock-names.
-> +    items:
-> +      - description: system hsio root clock.
-> +      - description: system bus AXI clock.
-> +      - description: suspend clock, used for wakeup logic.
-> +
-> +  clock-names:
-> +    items:
-> +      - const: hsio
-> +      - const: bus
-> +      - const: suspend
-> +
-> +# Required child node:
-> +
-> +  dwc3:
 
-Needs to be a pattern with the unit-address.
-
-> +    description: This is the node representing the DWC3 controller instance
-> +      Documentation/devicetree/bindings/usb/dwc3.txt
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-
-Pretty sure you need a few more properties here...
-
-Add:
-
-additionalProperties: false
-
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/imx8mp-clock.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    usb3_0: usb@32f10100 {
-> +      compatible = "fsl,imx8mp-dwc3";
-> +      reg = <0x32f10100 0x8>;
-> +      clocks = <&clk IMX8MP_CLK_HSIO_ROOT>,
-> +               <&clk IMX8MP_CLK_HSIO_AXI_DIV>,
-> +               <&clk IMX8MP_CLK_USB_ROOT>;
-> +      clock-names = "hsio", "bus", "suspend";
-> +      assigned-clocks = <&clk IMX8MP_CLK_HSIO_AXI_SRC>;
-> +      assigned-clock-parents = <&clk IMX8MP_SYS_PLL2_500M>;
-> +      assigned-clock-rates = <500000000>;
-> +      interrupts = <GIC_SPI 148 IRQ_TYPE_LEVEL_HIGH>;
-> +      #address-cells = <1>;
-> +      #size-cells = <1>;
-> +      ranges;
-> +
-> +      dwc3@38100000 {
-> +        compatible = "snps,dwc3";
-> +        reg = <0x38100000 0x10000>;
-> +        interrupts = <GIC_SPI 40 IRQ_TYPE_LEVEL_HIGH>;
-> +        phys = <&usb3_phy0>, <&usb3_phy0>;
-> +        phy-names = "usb2-phy", "usb3-phy";
-> +      };
-> +    };
-> -- 
-> 2.7.4
-> 
+Reviewed-by: Rob Herring <robh@kernel.org>
