@@ -2,76 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E4FE21ED5D
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 11:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A22421ED92
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 12:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726788AbgGNJzt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Jul 2020 05:55:49 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:37290 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725884AbgGNJzs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jul 2020 05:55:48 -0400
-Received: by mail-lj1-f193.google.com with SMTP id e4so21675164ljn.4;
-        Tue, 14 Jul 2020 02:55:46 -0700 (PDT)
+        id S1727090AbgGNKDi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Jul 2020 06:03:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40920 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725906AbgGNKDh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jul 2020 06:03:37 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD09C061755;
+        Tue, 14 Jul 2020 03:03:36 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id x9so11728322ljc.5;
+        Tue, 14 Jul 2020 03:03:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HXDj3gnUGVFHVcsgX9QO4FSWY0VUn7oLs/BSegJIxMI=;
+        b=rUV1opepvZ/zZOcOpJDOu6HSnYJYLeq3Tyd3arPZtOn5AFAiPkBTniswPRx3v6YXi8
+         1Tj7rbHpVb+JkpfmI3EqCxox20eVzx6u6p+lkaY19bHjsgwiMmajMaBFEhCd2d8OCyzc
+         pXiIarwfbhMmD+4loVOu2oG92dE7Yax9/ys1xsWDh3DJO8fu/D6z/Wk6hhj4JV5i7HvM
+         YTTpwb72vTNvMyNzfnhb9aHrhAqYaxAOernkmlnauGnNEeYnSMz7Hz6OJjFP+M2+W3Uo
+         NEI0y00E1Pu8xMoUR1cM1WgjfXcDKaLX5CYNMtiLHLMQM011rTOl6ky8GPCLPyRqDhhX
+         D9qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7JmZ94tGXd3SBERSIl141jP1/VBkw6bU6NXbKGZdMJg=;
-        b=awiqCBwi2yEHBbm1tUDSr1Ew3guPnVN911Hl2pQ6osvLWHAPEY4zmDCz4AZKDIUZt8
-         Rb+NftBDiZGGYO4ZFr4o/TV++E3NWkgFuFtZstUuL4+jAAn4uBMf7aTaiEuDYXh/zwrq
-         bsNmEAvZxbxpTxDLArl1ebKy0o3biORCkSNS8mYamKiz+rQRxjasID/PjQdrAZUR0wYT
-         WYv/KPoOKRrZbMlexp/s7/B2DoesA8x1YDWtHPpmS9VSwUrjI/fcu8TA9wcDBINQtgbe
-         gnAlZ+r/3z1JCgC8W16CrbKDUE5mzSj22kUjehoa4ypYDYn1AF8PJqUSV11I8onjPDKQ
-         /uIg==
-X-Gm-Message-State: AOAM533xU9tHfQWLkrQHMmEGX+8SsQ1kXKqrSGQjXfyZFNaG5G5vAVTf
-        CmVG5kWFqYUX8LNqtN/Mmgg=
-X-Google-Smtp-Source: ABdhPJxLtJsIeNMTvo9ZG9iKC5VbDUDDIZGbPfkIjQ7Ej4GcXMYqme/5bUL+2WJ5Hv5DT9oydNSH6w==
-X-Received: by 2002:a2e:b88f:: with SMTP id r15mr1792878ljp.355.1594720546216;
-        Tue, 14 Jul 2020 02:55:46 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id 16sm4524652ljw.127.2020.07.14.02.55.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jul 2020 02:55:45 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1jvHfI-0006UA-DQ; Tue, 14 Jul 2020 11:55:56 +0200
-Date:   Tue, 14 Jul 2020 11:55:56 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: sierra: clean up special-interface handling
-Message-ID: <20200714095556.GA3453@localhost>
-References: <20200713153936.18032-1-johan@kernel.org>
- <20200713155127.GA267581@kroah.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HXDj3gnUGVFHVcsgX9QO4FSWY0VUn7oLs/BSegJIxMI=;
+        b=SkZuD2UvPz6FIlMg+8cI4xjnq6iv8n1dZsqdDp+CcIrTBcdt2mX9g+owWmK7OM2Jfy
+         1S/Oa33i2kL462Lf7krs5yblm97NVzDYwVhSPqrv+OeRUOcuHthRbMjdzY+KsV15HNtf
+         Ktsjo+8dfv6O8djtOmpwgZwkm14m+tYSkkTZFHrLqQtLzc2Z9tDBjmkGWUzAIvs/DJfU
+         1khnV6HqwputknVqGsAZwkmzgL+JKWMqm6f92eH2AgAYswQ3sTUXjqrKvFlSDMg29isQ
+         tV2HWo4lJcrVD24nf2fR8wJxhv433tJcPnkysTgA+pboDVbDHyFRfDCd/o1nHmsotdf8
+         wKSg==
+X-Gm-Message-State: AOAM533oJIQO18DNW8hfBPC/z6nMo7pbiCyNPXCkipBAGRS53rztq5Vi
+        37AeV4IxrXqly3rqt1VI+U+sWRqqmW7VPV6ruYGVlNXjAwM=
+X-Google-Smtp-Source: ABdhPJy3ZujR4YpO6KeS07MBMKLcbWxcTwzzpkQrWomdyoQaQXUIKCuOnO/huubEjmCOYNqINiAOnVI+ogJ1jMUYQ1c=
+X-Received: by 2002:a2e:968b:: with SMTP id q11mr1782079lji.300.1594721015191;
+ Tue, 14 Jul 2020 03:03:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200713155127.GA267581@kroah.com>
+References: <20200713193227.189751-1-jaap.aarts1@gmail.com> <2647223e-74c2-8fd6-f649-9e051a7d9d6b@roeck-us.net>
+In-Reply-To: <2647223e-74c2-8fd6-f649-9e051a7d9d6b@roeck-us.net>
+From:   jaap aarts <jaap.aarts1@gmail.com>
+Date:   Tue, 14 Jul 2020 12:03:24 +0200
+Message-ID: <CACtzdJ1+1FUaq0TMrUk1tkenOFfxE2Xrsrx1DOnd1P+vZwnSTA@mail.gmail.com>
+Subject: Re: [PATCH 1/6] skeleton for asetek gen 6 driver
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-usb@vger.kernel.org, Jaap Aarts <jaap.aarts1@example.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 13, 2020 at 05:51:27PM +0200, Greg Kroah-Hartman wrote:
-> On Mon, Jul 13, 2020 at 05:39:36PM +0200, Johan Hovold wrote:
-> > Clean up the handling of special interfaces that either should be
-> > ignored or that need a larger number of URBs.
-> > 
-> > Commit 66f092ed3b94 ("USB: serial: sierra: unify quirk handling logic")
-> > replaced the previous is_blacklisted() and is_highmemory() helpers with
-> > a single is_quirk() helper which made it even harder to understand what
-> > the interface lists were used for.
-> > 
-> > Rename the interface-list struct, its members and the interface-lookup
-> > helper and restructure the code somewhat in order to make it more
-> > self-explanatory.
-> 
-> Much better, that was messy, thanks for cleaning this up.
-> 
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+On Tue, 14 Jul 2020 at 06:59, Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 7/13/20 12:32 PM, jaap aarts wrote:
+> > Signed-off-by: Jaap Aarts <jaap.aarts1@example.com>
+>
+> I am not going to review code which is later changed in the
+> same patch series. Please combine all patches into one.
+>
+> Guenter
 
-Now applied.
+Thanks for the feedback, most guides state you should
+split up your changes into smaller patches if they get very big.
+Maybe I misunderstood the intent of that?
+Anyways I combined all patches, fixed my signoff line, added
+a changelog and fixed my subject line.
 
-Johan
+Thanks,
+
+Jaap Aarts
