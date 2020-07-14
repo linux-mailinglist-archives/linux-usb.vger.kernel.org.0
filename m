@@ -2,203 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4052221EFC9
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 13:53:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 607BE21EFE4
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 13:59:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728010AbgGNLxJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Jul 2020 07:53:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57856 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727991AbgGNLxH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jul 2020 07:53:07 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ECAEC061755;
-        Tue, 14 Jul 2020 04:53:07 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id w2so7485442pgg.10;
-        Tue, 14 Jul 2020 04:53:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=gcGnZKmOcvQR6JjKvFpEHmamTFte6m24wBtwFxccrg0=;
-        b=dW7IjMJ+MmtbcJCvGERY0fKKNbNVEGpkKBt+QKvOfV0raXbPhVTdFJ15c/F3EoMOIP
-         W4MHVxHoT4KPT7wGpNjkaDIQukZDXFi4F0SVN37jGB6Whhkqiwv0n2nBh7pDpwhK7+pz
-         tk+U2ekQl+BcEDcPa2jbD71DoBFYUn2P+BR16yuEjZkMYk/hd8vmnrd14m1iLp4Xehxw
-         Rk8CAED+knH/QWR56T1mqzlzRogmossepTgGXfJ4g9LVg4l5gB9IGbTkggVAamBtuYIa
-         RoVYRy1KiEuE9cACMIHEJy/c1yDRnZpQpukkFab0flTzgQuTfHPgltSfrdgHc3TCv5+7
-         O3pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=gcGnZKmOcvQR6JjKvFpEHmamTFte6m24wBtwFxccrg0=;
-        b=m9gZy51EYxwWAuEuJFR/yo00dfl/HG9d+1HzyTQ3lxszwm7Tqm+qWoIkyM9nIlYe9m
-         OaMwaTNLlYDIWTqXxdPvusfo4Jw+tzVVYJUENyfd/0LATGqbPRLrfjW04TQl9K44gQa4
-         aEov7R9E6LOAIUbGb+xt98ofjIdwJ7aafMmVRdQMpgbyXWSsfiFcv5WjL0EscQFTsF5+
-         pORt0aFX1NhrZBZozqhnVwh0jxx3UAtkJYRRASIIUfPuV5tk75SxbNv33QnbfqeBPIGa
-         WljBpGcZHgTQ6lrgXo/WFi4M3AJcxfD9hOz5kcle9/otzT4QGu8Tk6nrB4qcg8GAfRMR
-         /a+Q==
-X-Gm-Message-State: AOAM532jd0Mxlj+8VAQjtJtph8TKh0rIcx7AVfLWId5ejC18r8VLSmll
-        O771HJxVL6KtD4v+Gp9v9Xs9Ge35rJNGIA==
-X-Google-Smtp-Source: ABdhPJywmZS6ncd1jBuKpSljjO3Vp7b56juxOhpBOrNHard4BbokAUPnYhvuCgxRyl6ffJe4zXo5/g==
-X-Received: by 2002:a62:cd0c:: with SMTP id o12mr3951843pfg.70.1594727586628;
-        Tue, 14 Jul 2020 04:53:06 -0700 (PDT)
-Received: from blackclown ([103.88.82.145])
-        by smtp.gmail.com with ESMTPSA id u8sm2480068pjn.24.2020.07.14.04.53.03
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 14 Jul 2020 04:53:05 -0700 (PDT)
-Date:   Tue, 14 Jul 2020 17:22:49 +0530
-From:   Suraj Upadhyay <usuraj35@gmail.com>
-To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: [PATCH] USB: Remove pci-dma-compat wrapper APIs.
-Message-ID: <20200714115249.GA8563@blackclown>
+        id S1726748AbgGNL7Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Jul 2020 07:59:25 -0400
+Received: from mx2.suse.de ([195.135.220.15]:50290 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726041AbgGNL7Y (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 14 Jul 2020 07:59:24 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 710A2B013;
+        Tue, 14 Jul 2020 11:59:25 +0000 (UTC)
+Message-ID: <ed42e27eaf48fd19cc8ccccd15b0b25ba1d836ae.camel@suse.de>
+Subject: Re: [PATCH v3 1/9] dt-bindings: reset: Add a binding for the RPi
+ Firmware reset controller
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     Rob Herring <robh@kernel.org>
+Cc:     f.fainelli@gmail.com, gregkh@linuxfoundation.org, wahrenst@gmx.net,
+        p.zabel@pengutronix.de, linux-kernel@vger.kernel.org,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Eric Anholt <eric@anholt.net>, linux-usb@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, tim.gover@raspberrypi.org,
+        linux-pci@vger.kernel.org, helgaas@kernel.org,
+        andy.shevchenko@gmail.com, mathias.nyman@linux.intel.com,
+        lorenzo.pieralisi@arm.com, devicetree@vger.kernel.org
+Date:   Tue, 14 Jul 2020 13:59:21 +0200
+In-Reply-To: <20200713182356.GA413630@bogus>
+References: <20200612171334.26385-1-nsaenzjulienne@suse.de>
+         <20200612171334.26385-2-nsaenzjulienne@suse.de>
+         <20200713182356.GA413630@bogus>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-cyjjn9iMFbQ+NRASHXx8"
+User-Agent: Evolution 3.36.4 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jI8keyz6grp/JLjh"
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
---jI8keyz6grp/JLjh
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+--=-cyjjn9iMFbQ+NRASHXx8
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-The legacy API wrappers in include/linux/pci-dma-compat.h
-should go away as it creates unnecessary midlayering
-for include/linux/dma-mapping.h APIs, instead use dma-mapping.h
-APIs directly.
+On Mon, 2020-07-13 at 12:23 -0600, Rob Herring wrote:
+> On Fri, Jun 12, 2020 at 07:13:25PM +0200, Nicolas Saenz Julienne wrote:
+> > The firmware running on the RPi VideoCore can be used to reset and
+> > initialize HW controlled by the firmware.
+> >=20
+> > Signed-off-by: Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+> > Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+> >=20
+> > ---
+> > Changes since v2:
+> >  - Add include file for reset IDs
+> >=20
+> > Changes since v1:
+> >  - Correct cells binding as per Florian's comment
+> >  - Change compatible string to be more generic
+> >=20
+> >  .../arm/bcm/raspberrypi,bcm2835-firmware.yaml | 21 +++++++++++++++++++
+> >  .../reset/raspberrypi,firmware-reset.h        | 13 ++++++++++++
+> >  2 files changed, 34 insertions(+)
+> >  create mode 100644 include/dt-bindings/reset/raspberrypi,firmware-rese=
+t.h
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2=
+835-
+> > firmware.yaml
+> > b/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-
+> > firmware.yaml
+> > index b48ed875eb8e..23a885af3a28 100644
+> > --- a/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-
+> > firmware.yaml
+> > +++ b/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-
+> > firmware.yaml
+> > @@ -39,6 +39,22 @@ properties:
+> >        - compatible
+> >        - "#clock-cells"
+> > =20
+> > +  reset:
+>=20
+> I'm not really thrilled how this is evolving with a node per provider.=
+=20
+> There's no reason you can't just add #clock-cells and #reset-cells to=20
+> the parent firmware node.
 
-The patch has been generated with the coccinelle script below
-and compile-tested.
+What are the downsides? The way I see it there is not much difference. And =
+this
+way of handling things is feels more intuitive and flexible (overlays can
+control what to enable easily, we can take advantage of the platform device
+core).
 
-@@@@
-- PCI_DMA_BIDIRECTIONAL
-+ DMA_BIDIRECTIONAL
+> I probably should have complained with the clocks node, but that's only=
+=20
+> pending for 5.9.
 
-@@@@
-- PCI_DMA_TODEVICE
-+ DMA_TO_DEVICE
+Note that there are more users for this pattern: "raspberrypi,firmware-ts" =
+and
+"raspberrypi,firmware-gpio". Actually you were the one to originally propos=
+e
+this it[1]. :P
 
-@@@@
-- PCI_DMA_FROMDEVICE
-+ DMA_FROM_DEVICE
+There already is a fair amount of churn in these drivers because of all the=
+ DT
+changes we did in the past, and if we need to change how we integrate these
+again, I'd really like it to be for good.
 
-@@@@
-- PCI_DMA_NONE
-+ DMA_NONE
+> The bigger issue is this stuff is just trickling in one bit at a time=20
+> which gives no context for review. What's next? Is it really a mystery=
+=20
+> as to what functions the firmware provides?
 
-@@ expression E1, E2, E3; @@
-- pci_alloc_consistent(E1, E2, E3)
-+ dma_alloc_coherent(&E1->dev, E2, E3, GFP_)
+We have no control over it, RPi engineers integrate new designs and new
+firmware interfaces show up. This is a good example of it.
 
-@@ expression E1, E2, E3; @@
-- pci_zalloc_consistent(E1, E2, E3)
-+ dma_alloc_coherent(&E1->dev, E2, E3, GFP_)
+I proposed them to use SCMI as it covers most of what they are already
+providing here. But no luck so far.
 
-@@ expression E1, E2, E3, E4; @@
-- pci_free_consistent(E1, E2, E3, E4)
-+ dma_free_coherent(&E1->dev, E2, E3, E4)
+> You don't have to have a driver in place for every function.
 
-@@ expression E1, E2, E3, E4; @@
-- pci_map_single(E1, E2, E3, E4)
-+ dma_map_single(&E1->dev, E2, E3, E4)
+I see your point, it could be more monolithic, that said, having a driver i=
+s
+essential. See the reverts I managed to pull off at the end of the series.
 
-@@ expression E1, E2, E3, E4; @@
-- pci_unmap_single(E1, E2, E3, E4)
-+ dma_unmap_single(&E1->dev, E2, E3, E4)
-
-@@ expression E1, E2, E3, E4, E5; @@
-- pci_map_page(E1, E2, E3, E4, E5)
-+ dma_map_page(&E1->dev, E2, E3, E4, E5)
-
-@@ expression E1, E2, E3, E4; @@
-- pci_unmap_page(E1, E2, E3, E4)
-+ dma_unmap_page(&E1->dev, E2, E3, E4)
-
-@@ expression E1, E2, E3, E4; @@
-- pci_map_sg(E1, E2, E3, E4)
-+ dma_map_sg(&E1->dev, E2, E3, E4)
-
-@@ expression E1, E2, E3, E4; @@
-- pci_unmap_sg(E1, E2, E3, E4)
-+ dma_unmap_sg(&E1->dev, E2, E3, E4)
-
-@@ expression E1, E2, E3, E4; @@
-- pci_dma_sync_single_for_cpu(E1, E2, E3, E4)
-+ dma_sync_single_for_cpu(&E1->dev, E2, E3, E4)
-
-@@ expression E1, E2, E3, E4; @@
-- pci_dma_sync_single_for_device(E1, E2, E3, E4)
-+ dma_sync_single_for_device(&E1->dev, E2, E3, E4)
-
-@@ expression E1, E2, E3, E4; @@
-- pci_dma_sync_sg_for_cpu(E1, E2, E3, E4)
-+ dma_sync_sg_for_cpu(&E1->dev, E2, E3, E4)
-
-@@ expression E1, E2, E3, E4; @@
-- pci_dma_sync_sg_for_device(E1, E2, E3, E4)
-+ dma_sync_sg_for_device(&E1->dev, E2, E3, E4)
-
-@@ expression E1, E2; @@
-- pci_dma_mapping_error(E1, E2)
-+ dma_mapping_error(&E1->dev, E2)
-
-@@ expression E1, E2; @@
-- pci_set_consistent_dma_mask(E1, E2)
-+ dma_set_coherent_mask(&E1->dev, E2)
-
-@@ expression E1, E2; @@
-- pci_set_dma_mask(E1, E2)
-+ dma_set_mask(&E1->dev, E2)
-
-Signed-off-by: Suraj Upadhyay <usuraj35@gmail.com>
----
- drivers/usb/host/ehci-pci.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
-index af3c1b9b38b2..71ec3025686f 100644
---- a/drivers/usb/host/ehci-pci.c
-+++ b/drivers/usb/host/ehci-pci.c
-@@ -124,8 +124,7 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
- 		case 0x005b:	/* CK804 */
- 		case 0x00d8:	/* CK8 */
- 		case 0x00e8:	/* CK8S */
--			if (pci_set_consistent_dma_mask(pdev,
--						DMA_BIT_MASK(31)) < 0)
-+			if (dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(31)) < 0)
- 				ehci_warn(ehci, "can't enable NVidia "
- 					"workaround for >2GB RAM\n");
- 			break;
---=20
-2.17.1
+[1] https://patchwork.kernel.org/patch/10166783/#21421571
 
 
---jI8keyz6grp/JLjh
+--=-cyjjn9iMFbQ+NRASHXx8
 Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE7AbCa0kOsMJ4cx0j+gRsbIfe744FAl8NnIYACgkQ+gRsbIfe
-746pMRAAgh0C4G7yswFeFhknFnQoPRapRiqqXFb0kUimI5bl/yqvpdeJjzU37woq
-AXbP5yLLJCYkWsw2aJzuVrsB3Dj4MJ77+nWSx7iLwUp+0ys/9mf/bDoPD7EB/RNG
-EQymoql8dc1aSO3kIJwHzKe3CZ99gW8y0GONMoKuXtmJljbCrNVPOK9yV2YAzDTJ
-HRJ5n0xyKu9q8cZ0+uK2Hj48sDVragz+qmTZPdZCaGRr9dDwKO8hq5kn5yprbRsH
-ctj2UsJcgY+zWEZHbUQhBd91QrFNezMN62STle0HYOXar79dMxuNv5sTaMPgVd09
-30MrjTBm1dgkBKQlaUrAx5BmS6mVlilnYQEByBHlJaeHQe4aGr92z438dPZqDSNS
-SiukbO+R6r5fQY87U0/Qeu6J8rVbNBjQJPzl1BgHV4VWrbgeA9v2r010qTtMNYPY
-emqCyrDJ0lQQaDA3qD8NUCRX/+W+50tDljbvRoxxnjoVpJmo0EZiN84sQ+R119ms
-UZY8fMXcLDbrKf5wTpg3Cf/SnVE8IAr3vXHFquzf5CFoCK/sU9muOiVbpPtxYu6S
-OSDjtLEWvNN7TdB7CL8fq9t1mCoj/YZFjty1N2+poxlRKy6WPUdy0lRqzUBGH3ee
-liYhecVR+SyexL69Vf04oE0DoMPG6M4Y8XIrU3YeDgKpR5COn5Y=
-=DIFZ
+iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl8NnhkACgkQlfZmHno8
+x/7gMAf/WpgWrzZn8OWvm5HWyZhbLlpudApJFqIMveDTldhi/2C/3fqEMLewG6PW
+XjENuKydy6YXzpsn4CMxU8M2ELLf8hBU6rN0om2oW9IcQuxbNCT/DLQjjXxkzLkk
+HBZnE4AomVfl9BgNPVHtwodK1tmCuNLSxLggfnCmkgAB5/6mV3/1VhKUEe4AmTba
+/r7ZMNhJJHDdOc5BqCtPLj2MxwNzaFLhEgxR9TmYQuzX66BFJwggq/If8088Ektx
+pk1jTsE+mkRsOUq2Pdu2kl6WQM0mxOyPefDgJDQwry/YePCuVj1JOVeCnKvKgbF5
+JGPa7jelAE3azkvNQOBKXW1HiBYgsQ==
+=tEOc
 -----END PGP SIGNATURE-----
 
---jI8keyz6grp/JLjh--
+--=-cyjjn9iMFbQ+NRASHXx8--
+
