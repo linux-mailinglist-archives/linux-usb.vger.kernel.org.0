@@ -2,112 +2,168 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3768F21EA03
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 09:26:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0031521EBB7
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 10:48:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726282AbgGNH05 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Jul 2020 03:26:57 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:32962 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725306AbgGNH05 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jul 2020 03:26:57 -0400
-Received: by mail-lj1-f195.google.com with SMTP id e8so21285171ljb.0
-        for <linux-usb@vger.kernel.org>; Tue, 14 Jul 2020 00:26:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=qRXcQfRkKnflDvGfM9PMv7wF7mXrnvespRg4E3WBBcQ=;
-        b=NVw0+c/qkAueM1Zsp9j5GJxX6uWxFD2CbpqrjjXLRIMoPaAPjbIkQNKLaU1sjqQ/Sh
-         ixRC8Y/7ElTeQtN8WE0UFS7Q4pkguFP6b21ZRsEHjuKNk8r8Wc2LQ8wVHAB3gLgY/btV
-         SGaEhCwb5vy/rvjPda2AqC31vH5DtyrFRXpCO54KoJCYKqtR1sapiXbLTSc/Ga/Vv1/Y
-         G+b9P0+XX3b1UmZWq8WXOTV5yQkYpNAbOa5lUo6Nfb+IhzcoLiqU2CYKSR6i3uMdBYB4
-         fEIRhHgY36aO5bJEEGjukX16K2xVFk57f0bFTrGXchrvMjpajl/6BqoIriOwkFaO8Kap
-         eP7Q==
-X-Gm-Message-State: AOAM533Yi4Jmb7uY7bIQcy4bwO1AZv7Hn4cdeT01vj78j9kLcjUHRMI1
-        q+HljaLD6fbztf/co9siRO8=
-X-Google-Smtp-Source: ABdhPJyFEOifTPG3psCvKUBhzwF1ffRovM13usN4DH2sPHgLN1mqLFLCAikm3m7z+3eVUisfyx056g==
-X-Received: by 2002:a2e:90cc:: with SMTP id o12mr97415ljg.231.1594711615141;
-        Tue, 14 Jul 2020 00:26:55 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id o1sm5120052lfi.92.2020.07.14.00.26.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jul 2020 00:26:54 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1jvFLE-0008Kl-C6; Tue, 14 Jul 2020 09:27:05 +0200
-Date:   Tue, 14 Jul 2020 09:27:04 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Allen =?utf-8?B?TGVl6buO5Lqs5YCN?= <li.jingbei@neoway.com>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: option: Add support for Neoway N720
-Message-ID: <20200714072704.GB22214@localhost>
-References: <1594298156-21549-1-git-send-email-li.jingbei@neoway.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1594298156-21549-1-git-send-email-li.jingbei@neoway.com>
+        id S1725981AbgGNIsL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Jul 2020 04:48:11 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:51516 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725820AbgGNIsK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jul 2020 04:48:10 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200714084808euoutp02796d5a6a96c8bfa645aefccc33f0a44f~hkjJp0v4S0683906839euoutp02P
+        for <linux-usb@vger.kernel.org>; Tue, 14 Jul 2020 08:48:08 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200714084808euoutp02796d5a6a96c8bfa645aefccc33f0a44f~hkjJp0v4S0683906839euoutp02P
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1594716488;
+        bh=nf9+rmH806iB74WPwNFe4oqbior1dSEZhoJ7GlacjDk=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=fQNQBl071BT9nZGPGW5MqxTwd6FJBOO50PMkuGhb1BfM1KWFCnRQePG2aZGTa94w6
+         GU26+9s9H2U0Jt8dyHtH6VOPxJ+Y3NMhGYhzovsdULRDmqPibkO9N6aXT4Cx9OHkOy
+         YraeUZFUVK/gQGE3hKV6VTGTB5Lg1VosyUYRS6Jw=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20200714084808eucas1p19a340f9b3d245baa125565eafbc89992~hkjJeJzbP0985509855eucas1p1F;
+        Tue, 14 Jul 2020 08:48:08 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 44.FA.06456.7417D0F5; Tue, 14
+        Jul 2020 09:48:07 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20200714084807eucas1p1f6e680d162573c6a0660037172a65805~hkjJGzWkA3158931589eucas1p1e;
+        Tue, 14 Jul 2020 08:48:07 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20200714084807eusmtrp19327fdb45397ddfab5ad9af6edb2ba27~hkjJGJcdw0886508865eusmtrp1T;
+        Tue, 14 Jul 2020 08:48:07 +0000 (GMT)
+X-AuditID: cbfec7f2-7efff70000001938-a2-5f0d7147c03d
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id CE.49.06017.7417D0F5; Tue, 14
+        Jul 2020 09:48:07 +0100 (BST)
+Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20200714084807eusmtip16580d3ed95cbdcd055ffd5bf2b5ca7df~hkjIq9KwM1330213302eusmtip1Y;
+        Tue, 14 Jul 2020 08:48:07 +0000 (GMT)
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH] usb: dwc2: Fix error path in gadget registration
+Date:   Tue, 14 Jul 2020 10:48:00 +0200
+Message-Id: <20200714084800.11340-1-m.szyprowski@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrLIsWRmVeSWpSXmKPExsWy7djP87ruhbzxBq9v2FhsnLGe1eJY2xN2
+        i+bF69ksGn/tZbe4vGsOm8WiZa3MFmuP3GV3YPfYtKqTzWP/3DXsHn1bVjF6bNn/mdHj8ya5
+        ANYoLpuU1JzMstQifbsEroymvrtsBQ8lKw788WxgXCfWxcjJISFgInH94hPGLkYuDiGBFYwS
+        e47cYANJCAl8YZRouWcKkfjMKNHQ9YMZpqPrbSM7RGI5o8TLhd+hHKCOuf+2soBUsQkYAlV1
+        gY0SEZCVOHzlNzNIEbNAC5PE4vMHwEYJCzhK7D77B2g5BweLgKrE2/NVIGFeAVuJV+cnM0Js
+        k5dYveEA1ObrbBLN3zIhbBeJey2tLBC2sMSr41vYIWwZidOTe1hAdkkINDNKPDy3lh3C6WGU
+        uNw0A2qqtcSdc7/YQBYzC2hKrN+lDxF2lOh/8g3sHgkBPokbbwVBwsxA5qRt05khwrwSHW1C
+        ENVqErOOr4Nbe/DCJagzPSQOXT8ODcVYib3P2hgnMMrNQti1gJFxFaN4amlxbnpqsWFearle
+        cWJucWleul5yfu4mRmAiOP3v+KcdjF8vJR1iFOBgVOLhlfDniRdiTSwrrsw9xCjBwawkwut0
+        9nScEG9KYmVValF+fFFpTmrxIUZpDhYlcV7jRS9jhQTSE0tSs1NTC1KLYLJMHJxSDYym5ie3
+        nonubvZfEqoq31W7ePvMRy/8FxtbanbF/N+35/p5J8usYwdrVt7ccXCyKROD/7zyCpdvzh8V
+        ImZJtfg81L3fEXU79d0WlQfnLBxbOmLMome58Oo2Bl9U9fvRYdmZePDsb8kPoUW2t/k8A+bO
+        nXDD2Zr5GkPNpNNc0T1rj6h9WVwisVCJpTgj0VCLuag4EQD2V+OBAAMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrCLMWRmVeSWpSXmKPExsVy+t/xu7ruhbzxBgsmqFlsnLGe1eJY2xN2
+        i+bF69ksGn/tZbe4vGsOm8WiZa3MFmuP3GV3YPfYtKqTzWP/3DXsHn1bVjF6bNn/mdHj8ya5
+        ANYoPZui/NKSVIWM/OISW6VoQwsjPUNLCz0jE0s9Q2PzWCsjUyV9O5uU1JzMstQifbsEvYym
+        vrtsBQ8lKw788WxgXCfWxcjJISFgItH1tpG9i5GLQ0hgKaNEd+MjZoiEjMTJaQ2sELawxJ9r
+        XWwQRZ8YJQ41rWIDSbAJGAJ1d4HZIgKyEoev/GYGKWIW6GCS6O35yQiSEBZwlNh99g+QzcHB
+        IqAq8fZ8FUiYV8BW4tX5yYwQC+QlVm84wDyBkWcBI8MqRpHU0uLc9NxiI73ixNzi0rx0veT8
+        3E2MwBDcduznlh2MXe+CDzEKcDAq8fBK+PPEC7EmlhVX5h5ilOBgVhLhdTp7Ok6INyWxsiq1
+        KD++qDQntfgQoynQ7onMUqLJ+cD4yCuJNzQ1NLewNDQ3Njc2s1AS5+0QOBgjJJCeWJKanZpa
+        kFoE08fEwSnVwFjz1++FelXa3pRNzZf1jRyPXlbf2NpyN5atgOfkih38MslJy1ODV3T2M835
+        PY9X6frWfcFvTI032hou6fsVv+NhkGBX4Spl/6r/5tl8Hgyc0Xn3PFx2vBCXee8gtInz/o0b
+        Z6LuhO5+93iO5bXI5X6dvu+qfRvX7Ft3e4nQgms7o5Qt5vdJ2iqxFGckGmoxFxUnAgDdMmdb
+        VwIAAA==
+X-CMS-MailID: 20200714084807eucas1p1f6e680d162573c6a0660037172a65805
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20200714084807eucas1p1f6e680d162573c6a0660037172a65805
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20200714084807eucas1p1f6e680d162573c6a0660037172a65805
+References: <CGME20200714084807eucas1p1f6e680d162573c6a0660037172a65805@eucas1p1.samsung.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 09, 2020 at 08:35:56PM +0800, Allen Lee黎京倍 wrote:
-> N720 is a Cat. 4 LTE modem. There are three interface
-> mappings to meet different needs:
-> ID 2949:8241(Rndis + Modem + Nmea + At_port + Diag + Rmnet)
-> ID 2949:8243(Rmnet + Modem + Nmea + At_port + Diag + ADB)
-> ID 2949:8247(Modem + Nmea + At_port + Diag + Rmnet)
+When gadget registration fails, one should not call usb_del_gadget_udc().
+Ensure this by setting gadget->udc to NULL. Also in case of a failure
+there is no need to disable low-level hardware, so return immiedetly
+instead of jumping to error_init label.
 
-> Signed-off-by: Jingbei Li <li.jingbei@neoway.com>
+This fixes the following kernel NULL ptr dereference on gadget failure
+(can be easily triggered with g_mass_storage without any module
+parameters):
 
-The name here doesn't match the From (author) name (and checkpatch.pl
-complains).
+dwc2 12480000.hsotg: dwc2_check_params: Invalid parameter besl=1
+dwc2 12480000.hsotg: dwc2_check_params: Invalid parameter g_np_tx_fifo_size=1024
+dwc2 12480000.hsotg: EPs: 16, dedicated fifos, 7808 entries in SPRAM
+Mass Storage Function, version: 2009/09/11
+LUN: removable file: (no medium)
+no file given for LUN0
+g_mass_storage 12480000.hsotg: failed to start g_mass_storage: -22
+8<--- cut here ---
+Unable to handle kernel NULL pointer dereference at virtual address 00000104
+pgd = (ptrval)
+[00000104] *pgd=00000000
+Internal error: Oops: 805 [#1] PREEMPT SMP ARM
+Modules linked in:
+CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.8.0-rc5 #3133
+Hardware name: Samsung Exynos (Flattened Device Tree)
+Workqueue: events deferred_probe_work_func
+PC is at usb_del_gadget_udc+0x38/0xc4
+LR is at __mutex_lock+0x31c/0xb18
+...
+Process kworker/0:1 (pid: 12, stack limit = 0x(ptrval))
+Stack: (0xef121db0 to 0xef122000)
+...
+[<c076bf3c>] (usb_del_gadget_udc) from [<c0726bec>] (dwc2_hsotg_remove+0x10/0x20)
+[<c0726bec>] (dwc2_hsotg_remove) from [<c0711208>] (dwc2_driver_probe+0x57c/0x69c)
+[<c0711208>] (dwc2_driver_probe) from [<c06247c0>] (platform_drv_probe+0x6c/0xa4)
+[<c06247c0>] (platform_drv_probe) from [<c0621df4>] (really_probe+0x200/0x48c)
+[<c0621df4>] (really_probe) from [<c06221e8>] (driver_probe_device+0x78/0x1fc)
+[<c06221e8>] (driver_probe_device) from [<c061fcd4>] (bus_for_each_drv+0x74/0xb8)
+[<c061fcd4>] (bus_for_each_drv) from [<c0621b54>] (__device_attach+0xd4/0x16c)
+[<c0621b54>] (__device_attach) from [<c0620c98>] (bus_probe_device+0x88/0x90)
+[<c0620c98>] (bus_probe_device) from [<c06211b0>] (deferred_probe_work_func+0x3c/0xd0)
+[<c06211b0>] (deferred_probe_work_func) from [<c0149280>] (process_one_work+0x234/0x7dc)
+[<c0149280>] (process_one_work) from [<c014986c>] (worker_thread+0x44/0x51c)
+[<c014986c>] (worker_thread) from [<c0150b1c>] (kthread+0x158/0x1a0)
+[<c0150b1c>] (kthread) from [<c0100114>] (ret_from_fork+0x14/0x20)
+Exception stack(0xef121fb0 to 0xef121ff8)
+...
+---[ end trace 9724c2fc7cc9c982 ]---
 
-> ---
->  drivers/usb/serial/option.c | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index 8e74903..9191a24 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -524,6 +524,12 @@ static void option_instat_callback(struct urb *urb);
->  #define MEDIATEK_PRODUCT_FPDC_1COM		0x0043
->  #define MEDIATEK_PRODUCT_FPDC_2COM		0x0033
->  
-> +/* Neoway products */
-> +#define NEOWAY_VENDOR_ID			0x2949
-> +#define NEOWAY_PRODUCT_N720_8241		0x8241
-> +#define NEOWAY_PRODUCT_N720_8243		0x8243
-> +#define NEOWAY_PRODUCT_N720_8247		0x8247
+Fixes: 207324a321a8 ("usb: dwc2: Postponed gadget registration to the udc class driver")
+Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+---
+ drivers/usb/dwc2/platform.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Please drop these defines and add a short comment after the entry
-instead as we're trying to move away from these mostly redundant
-defines. Add your devices in numerical order towards the end of the
-table.
+diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
+index c347d93eae64..a6022dc4766d 100644
+--- a/drivers/usb/dwc2/platform.c
++++ b/drivers/usb/dwc2/platform.c
+@@ -581,8 +581,9 @@ static int dwc2_driver_probe(struct platform_device *dev)
+ 	if (hsotg->gadget_enabled) {
+ 		retval = usb_add_gadget_udc(hsotg->dev, &hsotg->gadget);
+ 		if (retval) {
++			hsotg->gadget.udc = NULL;
+ 			dwc2_hsotg_remove(hsotg);
+-			goto error_init;
++			return retval;
+ 		}
+ 	}
+ #endif /* CONFIG_USB_DWC2_PERIPHERAL || CONFIG_USB_DWC2_DUAL_ROLE */
+-- 
+2.17.1
 
-> +
->  /* Cellient products */
->  #define CELLIENT_VENDOR_ID			0x2692
->  #define CELLIENT_PRODUCT_MEN200			0x9005
-> @@ -1972,6 +1978,13 @@ static const struct usb_device_id option_ids[] = {
->  	{ USB_DEVICE_AND_INTERFACE_INFO(MEDIATEK_VENDOR_ID, MEDIATEK_PRODUCT_7106_2COM, 0x02, 0x02, 0x01) },
->  	{ USB_DEVICE_AND_INTERFACE_INFO(MEDIATEK_VENDOR_ID, MEDIATEK_PRODUCT_DC_4COM2, 0xff, 0x02, 0x01) },
->  	{ USB_DEVICE_AND_INTERFACE_INFO(MEDIATEK_VENDOR_ID, MEDIATEK_PRODUCT_DC_4COM2, 0xff, 0x00, 0x00) },
-> +	/* Neoway N720 4G Modem */
-> +	{ USB_DEVICE(NEOWAY_VENDOR_ID, NEOWAY_PRODUCT_N720_8241),
-> +	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
-> +	{ USB_DEVICE(NEOWAY_VENDOR_ID, NEOWAY_PRODUCT_N720_8243),
-> +	  .driver_info = RSVD(0) | RSVD(5) },
-> +	{ USB_DEVICE(NEOWAY_VENDOR_ID, NEOWAY_PRODUCT_N720_8247),
-> +	  .driver_info = RSVD(4) },
->  	{ USB_DEVICE(CELLIENT_VENDOR_ID, CELLIENT_PRODUCT_MEN200) },
->  	{ USB_DEVICE(PETATEL_VENDOR_ID, PETATEL_PRODUCT_NP10T_600A) },
->  	{ USB_DEVICE(PETATEL_VENDOR_ID, PETATEL_PRODUCT_NP10T_600E) },
-
-Johan
