@@ -2,167 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD4D221F28E
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 15:31:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4E7721F2A1
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 15:33:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728092AbgGNNan (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Jul 2020 09:30:43 -0400
-Received: from sender4-op-o17.zoho.com ([136.143.188.17]:17787 "EHLO
-        sender4-op-o17.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725997AbgGNNan (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jul 2020 09:30:43 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1594733431; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=a4/bFkvIpFwG5LcsbUwHW050lXfCUc+YAXwi2/0OdkK/+aVS4B1dH3TwbL47zpOat2yBOFr/lYJfimRdiBk4qqTkh9LpTHel0jxhCnZjl0gkqRgijmwkkyLffqVXjYtLqnpbdhw9CqftpBZeaUNPrGHdeO9ut8x6/TOwHGMIx/I=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1594733431; h=Content-Type:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=5aS2Om7zs7QC5qSvMF4Wg9nw45NYTT5ngFfOSHgfKhg=; 
-        b=TJBt7X0wcY4Htu37AS/uU/8o7FCrOoA4JDcjji/0PyetbrBOAR65VsL2ePFlECS1GuXyIcXtbqSJPtnWJ9IKsNUhLWByT2bPjrYN5joQsolUvO6pHpyjl6Ap7jLc7JzzVrN9JYww+J3+07ZWWHBaSiweZP5Huxva0gorK8DCrRY=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        spf=pass  smtp.mailfrom=dan@dlrobertson.com;
-        dmarc=pass header.from=<dan@dlrobertson.com> header.from=<dan@dlrobertson.com>
-Received: from gothmog.test (pool-108-28-30-30.washdc.fios.verizon.net [108.28.30.30]) by mx.zohomail.com
-        with SMTPS id 1594733427187422.3583129792786; Tue, 14 Jul 2020 06:30:27 -0700 (PDT)
-Date:   Tue, 14 Jul 2020 09:30:24 -0400
-From:   Dan Robertson <dan@dlrobertson.com>
-To:     Anand Moon <linux.amoon@gmail.com>
-Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        linux-amlogic@lists.infradead.org,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 0/1] usb: dwc3: meson-g12a: fix shared reset control use
-Message-ID: <20200714133024.GA27406@gothmog.test>
-References: <20200713160522.19345-1-dan@dlrobertson.com>
- <CANAwSgR3ry19bxi8ZG026tHi-Bj+mP_O=PHuzUR_ujhjsdeLzA@mail.gmail.com>
+        id S1725997AbgGNNdG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Jul 2020 09:33:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45350 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725883AbgGNNdF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jul 2020 09:33:05 -0400
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92B02C061755
+        for <linux-usb@vger.kernel.org>; Tue, 14 Jul 2020 06:33:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds201912; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=BfyzzkoolzGQOxyc6LjSkDanzQgp6Lev6ywvNOMJaqc=; b=glV4Hy0xeq+PmeIemp9nhA34MJ
+        7m7lOUXYcsA9ZzHN/EC4LSZpSHOtbNsxA5sZ0lEf6zKkiRlpL2m261D6aUSaVRN97CL16FZJutQkz
+        ETqZaKA0pJdkQi6li7Vp2WwLsXfcbUWjGF87y2PPQT7KU20V/8lnfyXPXXAoIrtxDHcaM7M/X6hXs
+        kXKU85dIiAojtyYBI9Yw4m5SiIPVAkwmvuc3TBcUhpS1c6S9/Vecoe/nkKeHWA3iXx6XdM3sI6wkp
+        ulkZtLsoV7q3uf/tZIF3JEnlapT+g0HiR8zlOyZjXWHwJoUx3sEQNU9awGPsCaYhQZA+IgFGAKrGh
+        9Ifgdzew==;
+Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:58790 helo=[192.168.10.61])
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1jvL3O-0005dK-Ow; Tue, 14 Jul 2020 15:33:02 +0200
+Subject: Re: [PATCH v3 0/6] Generic USB Display driver
+To:     Lubomir Rintel <lkundrak@v3.sk>
+Cc:     linux-usb@vger.kernel.org, sam@ravnborg.org,
+        dri-devel@lists.freedesktop.org, balbi@kernel.org,
+        Peter Stuge <peter@stuge.se>
+References: <20200529175643.46094-1-noralf@tronnes.org>
+ <20200709163235.360054-1-lkundrak@v3.sk>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+Message-ID: <1280ec51-7528-b993-3110-f6c28e98832c@tronnes.org>
+Date:   Tue, 14 Jul 2020 15:33:00 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="sm4nu43k4a2Rpi4c"
-Content-Disposition: inline
-In-Reply-To: <CANAwSgR3ry19bxi8ZG026tHi-Bj+mP_O=PHuzUR_ujhjsdeLzA@mail.gmail.com>
-X-Zoho-Virus-Status: 1
-X-ZohoMailClient: External
+In-Reply-To: <20200709163235.360054-1-lkundrak@v3.sk>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
---sm4nu43k4a2Rpi4c
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hi Anand!
+Den 09.07.2020 18.32, skrev Lubomir Rintel:
+> Hello,
+> 
+> On 29 May 2020 Noralf Trønnes wrote:
+> ...
+>> This series adds a USB host driver and a device/gadget driver to achieve
+>> that.
+>>
+>> The reason for calling it 'Generic' is so anyone can make a USB
+>> display/adapter against this driver, all that's needed is to add a USB
+>> vid:pid. I have done a microcontroller implementation hack just to see
+>> how that would work out[1] (which unconvered a couple of bugs in the
+>> host driver).
+> ...
+> 
+> This is actually very cool; finally a good way to drive the cheapo
+> SPI/I2C displays from computers whose only means of expansion is USB
+> with a little help from a microcontroller. I've actually had some
+> success doing just that [1].
 
-On Tue, Jul 14, 2020 at 12:26:57PM +0530, Anand Moon wrote:
-> hi Dan,
->=20
-> On Mon, 13 Jul 2020 at 21:37, Dan Robertson <dan@dlrobertson.com> wrote:
-> >
-> > When testing suspend for another driver I noticed the following warning:
-> >
-> > WARNING: CPU: 1 PID: 5530 at drivers/reset/core.c:355 reset_control_ass=
-ert+0x184/0x19c
-> > Hardware name: Hardkernel ODROID-N2 (DT)
-> > [..]
-> > pc : reset_control_assert+0x184/0x19c
-> > lr : dwc3_meson_g12a_suspend+0x68/0x7c
-> > [..]
-> > Call trace:
-> >  reset_control_assert+0x184/0x19c
-> >  dwc3_meson_g12a_suspend+0x68/0x7c
-> >  platform_pm_suspend+0x28/0x54
-> >  __device_suspend+0x590/0xabc
-> >  dpm_suspend+0x104/0x404
-> >  dpm_suspend_start+0x84/0x1bc
-> >  suspend_devices_and_enter+0xc4/0x4fc
-> >
-> > In my limited experience and knowlege it appears that we hit this
-> > because the reset control was switched to shared and the the use
-> > of the reset control was not changed.
-> >
-> > > * Calling reset_control_assert without first calling reset_control_de=
-assert
-> > > * is not allowed on a shared reset control. Calling reset_control_res=
-et is
-> > > * also not allowed on a shared reset control.
-> >
-> > The above snippet from reset_control_get_shared() seems to indicate that
-> > this is due to the use of reset_control_reset() in dwc3_meson_g12a_prob=
-e()
-> > and reset_control_deassert is not guaranteed to have been called
-> > before dwc3_meson_g12a_suspend() and reset_control_assert().
-> >
-> > After some basic tests with the following patch I no longer hit the
-> > warning. Comments and critiques on the patch are welcome. If there is a
-> > reason for the current use of the reset control, I'd love to learn why!
-> > Like I said before, I have not really looked at this driver before and
-> > have verify limited experience with reset controls... Was working on
-> > another driver, hit the warning, and thought I'd take a shot at the
-> > fix :-)
-> >
-> Thanks, I was also looking into this issue
+Nice to see a monochrome implementation, I actually planned to remove
+the R1 format from v3 since the gadget driver doesn't implement it.
+Having unused (and poorly tested) code isn't that great, but I forgot.
+It turns out it was a good thing that I forgot that :-)
 
-Awesome!
+> 
+> [1] https://assets.octodon.social/media_attachments/files/009/983/960/original/64ad8ea46c1b06c5.jpg
+> 
+> I suppose you can add:
+> 
+> Tested-by: Lubomir Rintel <lkundrak@v3.sk>
+> 
+> I've had to jump through some hoops though.
+> 
+> My OLED display is a 128x64 SSD1306 [1] driven from the SPI bus. The frame
+> buffer SRAM is normally scanned out in stripes of 8 vertical pixels called
+> "pages". When the display is turned on its side, with "vertical
+> addressing mode" and "segment remapping" enabled and bytes being sent LSB
+> first, it appears linear -- it's easy to repaint the whole display from
+> what is now the top left corner to the bottom right. This is very
+> convenient for painting pixels as they come, without bufferring them or
+> doing any conversions (assuming that memory and cpu cycles are at
+> premium on MCUs).
+> 
+> [1] https://cdn-shop.adafruit.com/datasheets/SSD1306.pdf
+> 
+> There doesn't seem a comfortable way to do partial redraws though. Would
+> you find it objectionable if the device could indicate that needs full
+> frames instead of just the damaged areas? Perhaps then the driver
+> wouldn't even need to bother issuing GUD_DRM_USB_REQ_SET_BUFFER to
+> displays dumb enough to be incapable of partial redraws and decompression.
+> 
 
-> So best Fix to this issue is to drop the call of reset_control_assert
-> from dwc3_meson_g12a_suspend
-> and drop the call of reset_control_deassert from dwc3_meson_g12a_resume
-> With these changes we do not see the warning on suspend and resume
+Yeah I figured always having full updates might benefit/simplify
+monochrome devices, but I'd wait for an actual device needing it before
+adding it. Now that you need it, I'll add a flag for it in the next
+version.
 
-We definitely would avoid hitting the warning without the
-reset_control_(de)assert calls in suspend and resume. That is a valid use of
-the reset control, but why would that be best?
+I would like to keep the SET_BUFFER request since it will serve as a
+syncing point between the host and the device. I'm no USB expert but I
+assume that a bulk transfer can fail halfway through and result in the
+next update starting where the previous one failed and thus writing
+beyond the end of the display buffer.
 
-=46rom reset_control_reset():
+Noralf.
 
-> * Consumers must not use reset_control_(de)assert on shared reset lines w=
-hen
-> * reset_control_reset has been used.
-
-If we use reset_control_reset() then we can not (de)assert the reset line
-on suspend/resume or any other time. Wouldn't we want to be able to
-(de)assert the reset line? And why do we no longer want to (de)assert the
-reset line on suspend/resume?
-
-> > Can you try this attached patch?
->=20
-> Best Regards
-> -Anand
-
-I think I had already tested something similar. Removing the (de)assert cal=
-ls
-but keeping reset will definitely remove the warning, but it means we can n=
-ot
-(de)assert the line. My guess is that this is not what we want, but I could=
- be
-wrong. Thoughts, input, or references to documentation on this would be
-appreciated.
-
-Cheers,
-
- - Dan
-
---sm4nu43k4a2Rpi4c
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEF5dO2RaKc5C+SCJ9RcSmUsR+QqUFAl8Ns24ACgkQRcSmUsR+
-QqV1fA//TIDTawaZrYwSlXoTvSYzWf101qruw0k8D6Mk8/iX3lU7m9aTi8LIS7S8
-82uAzZlLsufjz60YtWXiDFQzDUZDLEOc9Ga8lGpZRzdQlFDzpTe2ynr3aK69cpHW
-/ix5ws2mYYtYaER8IZAeUFahvKppcyDpRhPzjzUcdkGj9PWvJdhWXtm7b7QE8/0e
-lj9SEKaSFSoQB57coEs5Q2EDLPw907zu6kyiZsbhaad677EhaTS3jmikeVhD41SX
-GEOoyl+RgK+TqD/+bjSvzjMIsfwXM4DnWXy6T/kcBCRaipKi/H8z9kiFyk3reKQj
-mQ7M6+c0SZFz5yRL/n824dSr8QuYUQ0iCMtYs21GXzGafm2DBb6BU5HlildjsGxm
-MBDt+3sMRVzbmiTJjs4w1i/jT7KM2Rs3KozFrYYBfnL/jJu8J7ntJI3mzRx6wQIq
-L4NzU7fChJZyTLsQrWVyvBcXL7/PYk6lxM3+iu7XYfZ6leCfmRRkrTEGLSAECHUf
-sFzmcz1oqM0cRGI8YfOPBwVqM905e9Tmwvb/jheUzEZcPQv95VnImHYTlVO10dL4
-gaiYTtWj0GgfZJ/zKbcjLhi2zy39xlCxBh5A1hdPqGajjwSGDrg5qQt9+oTHQI5h
-lIptHP8xcjWxx4JjVIQaB+YsACUEYXMllZzVejW/2AL4aJCAhQQ=
-=OtX0
------END PGP SIGNATURE-----
-
---sm4nu43k4a2Rpi4c--
+> My work-in-progress code that works on STM32F103 (e.g. "Blue Pill"
+> boards), or GD32VF103 (RISC-V "Polos Alef") is at [2]. The partial redraws
+> that don't start from column zero or are not "page aligned" don't work
+> correctly for the time being; X11 doesn't seem to care.
+> 
+> [2] https://github.com/hackerspace/libopencm3-gf32v-examples/tree/lr/gd32v/examples/gd32v/f103/polos-alef/usb-display
+> 
+> Thank you!
+> Lubo
+> 
