@@ -2,122 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AF5921F7FD
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 19:17:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4394321F836
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 19:31:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728568AbgGNRRD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Jul 2020 13:17:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51978 "EHLO
+        id S1728683AbgGNRbC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Jul 2020 13:31:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726169AbgGNRRC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jul 2020 13:17:02 -0400
-Received: from mail-vk1-xa41.google.com (mail-vk1-xa41.google.com [IPv6:2607:f8b0:4864:20::a41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0273C061755
-        for <linux-usb@vger.kernel.org>; Tue, 14 Jul 2020 10:17:02 -0700 (PDT)
-Received: by mail-vk1-xa41.google.com with SMTP id v26so3854498vkn.2
-        for <linux-usb@vger.kernel.org>; Tue, 14 Jul 2020 10:17:02 -0700 (PDT)
+        with ESMTP id S1726364AbgGNRbC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jul 2020 13:31:02 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDDB5C061755;
+        Tue, 14 Jul 2020 10:31:01 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id p1so7308845pls.4;
+        Tue, 14 Jul 2020 10:31:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=laL9jqyDAhx8XNNdn2YvqLz5e2HsHmGbabHru5+6+ac=;
-        b=VBuqWZc3c+PV/wsheMBO3Vhs1BGr9+VWwRe05MDbpZdOf/G+daYhXw4yDzDIfW1fED
-         0lyxr9FjVC4EHq9r2uYZMsdGn8/tizR7hUsSwZjkerZ1wGgHr1OEHHQgSyshpcxJqqTf
-         7N4uMIWxxiO/fnIi4BbjtufFGzGoAK1VsSk1yoamyQcz10vtvr8/R6VJ64EoIaW/8H67
-         wvPp8gR3TyuOB9oSm5zH92PYfdfxFnytZyCnvhcBpdFNYdtibwY31XF1nQbwoU2ZE/EY
-         Y1igfMjeV6q1ZQRZfPD6/j+u35LjChvDXySpQk3KA9drVbJMTEAEowF9B68b7xc6hMmT
-         D5Ng==
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=PzntEiI+G6UNw1jwS+CfKfTz9gaFaIgKULPvWCc9Dsc=;
+        b=pL/URKFlN8xtMQNvTeDQX58frJBXXYMVGPtKptsSHFOgEpV7u0Q9QrhukvZLnTo8PD
+         Cu56XtguKZkJ93zMR8Gcol1oThoxPGQbJKZDltoKf+a6RFXnIEIkVIh1t6sDv5D/3c5h
+         TgKiD4l4P3AmzKltLZfR0ELb8pNm1uUnfpCoc9bqtI4qhqIwPtE2eF7LGqNQm5qon7Sz
+         j/UX9P7flq2cAWBRRCvcElsHyUSWPW0e+7SdbBQIip/Z1DxG61698mIcm548qi9ZLZ6n
+         JTNoghIyvjV+JGbFTqlr/FBJQl8xRUi3ItO2Rfx57py52uF6NeVjqOKNHgUep2cN6I8V
+         SWbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=laL9jqyDAhx8XNNdn2YvqLz5e2HsHmGbabHru5+6+ac=;
-        b=MTutF6t7958eHt2r8XFFG8rReCxmM5ObtM4G+9wrLEVIbcIpXvfawxl4YMHfH4a0+U
-         Us5LjvrkYSi9k114LCUEe0aVpO3w/desfXaImPX+0qdqsDASZy/gkxvgOs8vT7k51hB4
-         uH5O4Vc/jrqMN5K7nyt4Kj/tqXOUiQvum2HYPgkxWX5MxEhFRaIXz6jAS0zZR15wBLuF
-         pnCch6qHQOIZRef4aO97r+exf6TlBWfn5ub/eNOAS6Eyc+JhlxOH1XGiG2pVhnRFyXq5
-         zwJ5uIeHmY82T02dnoI5aP7Y6YFzst6jeQbfC9VASd4Ia/Tb0zSzz21xqzyE7kEYSZdp
-         NvrA==
-X-Gm-Message-State: AOAM5322uvsFfcUiC9culOoc5vs9HxWCxi3J4eeHEQHtsq5uaaofF2iS
-        As6BE1oLf7WZF4ZPXx4lb5sl7wHGW5HqIOEYv96MMQ==
-X-Google-Smtp-Source: ABdhPJzHNFrugBMO2S61VslrpSRXmFF2CHqMHlK2gROBSdoqMAnqNd/Z46gTkqHWdvA45vYX+KRznEjm7iQcOKGJrdc=
-X-Received: by 2002:ac5:c189:: with SMTP id z9mr4800999vkb.79.1594747021495;
- Tue, 14 Jul 2020 10:17:01 -0700 (PDT)
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=PzntEiI+G6UNw1jwS+CfKfTz9gaFaIgKULPvWCc9Dsc=;
+        b=k3pEKEi5fLlFS98+7LgB3hXNuf6znI8cgv+yhbsthyMU77fYDgFex7rC8mOndLYdQ8
+         THbeZhfRcuWi0J3Fx+JiIN/vc+6apqo49WCeY187xO6MluE2j1LVnGoBd/8gM+USmw0z
+         nRSoIrkdZbKAg07kxqhgjqDWK96cvw8l4E25nFcmVfFV280bf8XFCgdaR8bx8ubNWkDW
+         RJaSFtt8OLas+mIbaeKKHJqf34EwsFq1Cd9ar6T3IOEFz5dXRWOBERn5VPYXSBRwmQs4
+         hL7AvKpK1h02MidW4XzYVxz9tLLpTlyVyEnobbAmU1x6mIUqwvWdkI/OvbtlGxjEf1Rt
+         sEqQ==
+X-Gm-Message-State: AOAM533ZcOBlGRaMFrdWbTHmLN/H5o3DRRtNYP994gMNdtrY5zR5FioL
+        tbbDmpt3DyxFsnn88PMkYXs=
+X-Google-Smtp-Source: ABdhPJyJNJ5rhYebATAEAo72BfOEfcipNSDtj34J/ftTd4g90QJVctcBT5VfXF+gTniEDjzOR4P2XQ==
+X-Received: by 2002:a17:902:c3ca:: with SMTP id j10mr4970253plj.171.1594747861287;
+        Tue, 14 Jul 2020 10:31:01 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n18sm19085797pfd.99.2020.07.14.10.31.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jul 2020 10:31:00 -0700 (PDT)
+Subject: Re: [PATCH 1/6] skeleton for asetek gen 6 driver
+To:     jaap aarts <jaap.aarts1@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-usb@vger.kernel.org, Jaap Aarts <jaap.aarts1@example.com>
+References: <20200713193227.189751-1-jaap.aarts1@gmail.com>
+ <2647223e-74c2-8fd6-f649-9e051a7d9d6b@roeck-us.net>
+ <CACtzdJ1+1FUaq0TMrUk1tkenOFfxE2Xrsrx1DOnd1P+vZwnSTA@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
+ RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
+ nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
+ 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
+ gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
+ IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
+ kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
+ VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
+ jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
+ BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
+ ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
+ CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
+ nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
+ hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
+ c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
+ 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
+ GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
+ sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
+ Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
+ HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
+ BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
+ l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
+ 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
+ pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
+ J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
+ pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
+ 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
+ ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
+ I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
+ nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
+ HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
+ JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
+ J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
+ cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
+ wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
+ hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
+ nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
+ QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
+ trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
+ WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
+ HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <bad1784c-d484-b772-6a08-f460802e2aa2@roeck-us.net>
+Date:   Tue, 14 Jul 2020 10:30:59 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20200713204300.345975-1-badhri@google.com> <20200714060520.GB657428@kroah.com>
- <040b4cde-91d4-7776-60b5-8f55b6e75831@roeck-us.net>
-In-Reply-To: <040b4cde-91d4-7776-60b5-8f55b6e75831@roeck-us.net>
-From:   Badhri Jagan Sridharan <badhri@google.com>
-Date:   Tue, 14 Jul 2020 10:16:25 -0700
-Message-ID: <CAPTae5JHSrp5H47Dr9mrkS_PF_W8MH1TFMzNCc4Geva0-b-B0A@mail.gmail.com>
-Subject: Re: [PATCH] usb: typec: tcpm: Move to high priority workqueue for
- processing events
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     reg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        USB <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CACtzdJ1+1FUaq0TMrUk1tkenOFfxE2Xrsrx1DOnd1P+vZwnSTA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 13, 2020 at 11:58 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 7/13/20 11:05 PM, reg Kroah-Hartman wrote:
-> > On Mon, Jul 13, 2020 at 01:43:00PM -0700, Badhri Jagan Sridharan wrote:
-> >> "tReceiverResponse 15 ms Section 6.6.2
-> >> The receiver of a Message requiring a response Shall respond
-> >> within tReceiverResponse in order to ensure that the
-> >> sender=E2=80=99s SenderResponseTimer does not expire."
-> >>
-> >> When the cpu complex is busy running other lower priority
-> >> work items, TCPM's work queue sometimes does not get scheduled
-> >> on time to meet the above requirement from the spec.
-> >> Elevating the TCPM's work queue to higher priority allows
-> >> TCPM to meet tReceiverResponse in a busy system.
-> >>
-> >> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> >> ---
-> >>  drivers/usb/typec/tcpm/tcpm.c | 2 +-
-> >>  1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tc=
-pm.c
-> >> index 82b19ebd7838e0..088b6f1fa1ff89 100644
-> >> --- a/drivers/usb/typec/tcpm/tcpm.c
-> >> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> >> @@ -4747,7 +4747,7 @@ struct tcpm_port *tcpm_register_port(struct devi=
-ce *dev, struct tcpc_dev *tcpc)
-> >>      mutex_init(&port->lock);
-> >>      mutex_init(&port->swap_lock);
-> >>
-> >> -    port->wq =3D create_singlethread_workqueue(dev_name(dev));
-> >> +    port->wq =3D alloc_ordered_workqueue("%s", WQ_HIGHPRI, dev_name(d=
-ev));
-> >
-> > How are you "guaranteeing" that this is really going to change anything
-> > on a highly loaded machine?
-> >
-> > Yes, it might make things better, but if you have a hard deadline like
-> > this, you need to do things a bit differently to always ensure that you
-> > meet it.  I do not think this change is that fix, do you?
-> >
-Yes Greg I agree with you, moving to HIGHPRI was making it better but
-is not going to
-solve the problem always. I was wondering whether are there better
-ways of doing this.
+On 7/14/20 3:03 AM, jaap aarts wrote:
+> On Tue, 14 Jul 2020 at 06:59, Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> On 7/13/20 12:32 PM, jaap aarts wrote:
+>>> Signed-off-by: Jaap Aarts <jaap.aarts1@example.com>
+>>
+>> I am not going to review code which is later changed in the
+>> same patch series. Please combine all patches into one.
+>>
+>> Guenter
+> 
+> Thanks for the feedback, most guides state you should
+> split up your changes into smaller patches if they get very big.
 
->
-> Good point. The worker in drivers/watchdog/ !watchdog_dev.c might be
-> useful as a starting point. There may be better examples - this is
-> just one I know of which had a similar problem. See commits
-> 38a1222ae4f3 and 1ff688209e2e.
->
-> Guenter
+Yes, but not if the later patches change the initial ones. this
+is not the case here. Your first patch doesn't even register a
+hwmon device. The last two patches change previous patches, meaning
+I would just waste my time reviewing patches 1..4. Worse, all those
+style issues fixed in the last patch would create so much noise that
+I might miss real issues.
 
-Thanks a lot Guenter !! Very useful pointers, will review the
-approaches in both the
-commits !
+A split would have been fine if the first patch introduced working
+code, then subsequent patches built on it without replacing previously
+introduced code.
+
+Guenter
+
+> Maybe I misunderstood the intent of that?
+> Anyways I combined all patches, fixed my signoff line, added
+> a changelog and fixed my subject line.
+> 
+> Thanks,
+> 
+> Jaap Aarts
+> 
+
