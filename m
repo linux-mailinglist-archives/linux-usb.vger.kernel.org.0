@@ -2,134 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48D0221EED7
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 13:15:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F7321EF60
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 13:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726955AbgGNLPF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Jul 2020 07:15:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51992 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726610AbgGNLPF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jul 2020 07:15:05 -0400
-Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22309C061755
-        for <linux-usb@vger.kernel.org>; Tue, 14 Jul 2020 04:15:05 -0700 (PDT)
-Received: by mail-vs1-xe43.google.com with SMTP id s20so8306902vsq.5
-        for <linux-usb@vger.kernel.org>; Tue, 14 Jul 2020 04:15:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=timesys-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zl7LrnxmYaHwxZmWf03+01i+kBk3EWopG805KjftjH4=;
-        b=Bo33t4ngz26caatoDZYR2BfiO1zoVEeyOR68GXWsLo33BHLjKd7kPV/BbRKiV7kf3I
-         hxtdEuZmMT36Mvivn5/6er7gAdwe7fJKu/MGjSPP01hPBGKWsMqN5TKjpM5qlaNr7Lkw
-         elfejWgYsxIxwGg2SACsIe4TPRHbJYnzCbN5qKBj16mfr5Dt5Zf1gTLTd9pvC+GCsnqL
-         CpGb8p+J63ctF6yjLEoOhY4/MISlHtgVauUthP3lgQI/+S1X41xXT2ka7skCd3hn3Rx0
-         HDp4c4wbfT6nnuaDLv6bFsEuMqUrub00PQwp6Kn3AQSewjQkco6OUlZglMIfAq65cz0h
-         Genw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zl7LrnxmYaHwxZmWf03+01i+kBk3EWopG805KjftjH4=;
-        b=hwjabzpqk10rdLdmL8bcaEJ1fwTIqLq6c0kkAGh6yE8v0gWHybsf/RAQ6r7wSrjNVA
-         bhsRZSKZGU7hihxiby8o2t0gY3IC4tj+2xnXNcEAYRIQYSjxl9cRQPrCDORnpD0WA7sC
-         RBwFe4IN75+iQOKo2WPJYtWoYw0Ly533Mte/X2u8VEKYPEQb6okdp8wQ5tGm5taHmyUt
-         CpNMCKgE0MNLxC4FSm+di7JmOg+4l5Rmjm7gWfKh4ih7NI8ra3Zer5XUMaQM5LhX6K4L
-         lLlsmXDUUvv6PHtNovV6OdQm6Cr70ppEBomx5otdNzYJIx4wTDPbQpHfyAurmB2F5pEE
-         9EBA==
-X-Gm-Message-State: AOAM530JpOtNQL1lxDi8emcKUZ7Z6FRwNMdfq+r5SiW1MU7KmOAIeuBr
-        7movkkhQv36TyfGQYghHwoK0SvEZAqmeJhdKgVno3UTBMeo=
-X-Google-Smtp-Source: ABdhPJzfJbpffiujAkohhR2Us0KZ1ACt5WJPbnZl24ESaWVgjI/h+N+hXRemoM426mL3TG47ksA+NcuwXFOyY9tUX8Y=
-X-Received: by 2002:a67:6c47:: with SMTP id h68mr2678913vsc.126.1594725304187;
- Tue, 14 Jul 2020 04:15:04 -0700 (PDT)
+        id S1727067AbgGNLg1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Jul 2020 07:36:27 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:37325 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726041AbgGNLg0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jul 2020 07:36:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1594726585;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=4KHHcRC2VLgrkJIS1heGnq6O4q6D/sHPLprylxHZT2M=;
+        b=IY6U2dEZRBvUvwmeKdkb+/XVbODVDqRRE2dGIsnN7AFQGmiT6Mza5RBxV3VBHpWzKCM6VM
+        +juqImGO0sONjPMF59FzelK0zmJibrAZHltZw32OuppzX1+Y98xOK95ZOS0pfUMpoZK3je
+        ZR25nX0IdfnsrWYSim10HNkIp2jL+6Y=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-22-fQEPAtMEN-qURFflfOpU6w-1; Tue, 14 Jul 2020 07:36:21 -0400
+X-MC-Unique: fQEPAtMEN-qURFflfOpU6w-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7DDFD107ACCA;
+        Tue, 14 Jul 2020 11:36:20 +0000 (UTC)
+Received: from x1.localdomain.com (ovpn-114-109.ams2.redhat.com [10.36.114.109])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9BF18797E3;
+        Tue, 14 Jul 2020 11:36:18 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Tobias Schramm <t.schramm@manjaro.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org
+Subject: PATCH 0/4] usbd: typec: fusb302: Add support for specifying supported alternate-modes through devicetree/fwnodes
+Date:   Tue, 14 Jul 2020 13:36:13 +0200
+Message-Id: <20200714113617.10470-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-References: <20200709222126.5055-1-angelo.dureghello@timesys.com>
- <20200714100851.GB3453@localhost> <20200714103727.GA2626@Mani-XPS-13-9360>
-In-Reply-To: <20200714103727.GA2626@Mani-XPS-13-9360>
-From:   Angelo Dureghello <angelo.dureghello@timesys.com>
-Date:   Tue, 14 Jul 2020 13:22:03 +0200
-Message-ID: <CALJHbkB+hmD4XWghQ13fz33D9wB==0VuifyK9-ibyjk1uV6vmg@mail.gmail.com>
-Subject: Re: [PATCH v2] USB: serial: add support for MaxLinear XR21V1412
-To:     Manivannan Sadhasivam <mani@kernel.org>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Manivannan,
+Hi All,
 
-On Tue, Jul 14, 2020 at 12:37 PM Manivannan Sadhasivam <mani@kernel.org> wrote:
->
-> Hi,
->
-> On Tue, Jul 14, 2020 at 12:08:51PM +0200, Johan Hovold wrote:
-> > On Fri, Jul 10, 2020 at 12:21:26AM +0200, Angelo Dureghello wrote:
-> > > From some researches, this driver is available from the IC
-> > > constructor site, but for older kernel versions. From there, decided
-> > > to add a much simplier mainline version, written from scratch.
-> >
-> > Do you have a pointer to the vendor sources for reference?
-> >
-> > > This initial simple version is implemented without any flow control,
-> > > tested mainly at 115200, but all standard baud rates are supported
-> > > and applied as per serial terminal settings.
-> > >
-> > > Signed-off-by: Angelo Dureghello <angelo.dureghello@timesys.com>
->
-> Just curious, how are you accessing this chip? I mean any breakout board
-> or integrated in any custom board design.
->
+This is a replacement series for an earlier attempt by me for this
+from quite a while ago:
 
-well, generally i design boards too, so i select the chips as i like them,
-but this time the chip is mounted on a custom design i work in.
+https://patchwork.kernel.org/patch/11199517/
 
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > No need for a reported-by if the robot catches issues during review.
-> > Just mention it in the changelog as you already did below.
-> >
-> > > ---
-> > > Changes for v2:
-> > > - fix test robot warning, PARITY_ defines renamed
-> > > ---
-> > >  drivers/usb/serial/Kconfig     |   9 +
-> > >  drivers/usb/serial/Makefile    |   1 +
-> > >  drivers/usb/serial/xr21v1412.c | 361 +++++++++++++++++++++++++++++++++
-> > >  3 files changed, 371 insertions(+)
-> > >  create mode 100644 drivers/usb/serial/xr21v1412.c
-> >
-> > Thanks for the submitting this.
-> >
-> > There was another driver for this device posted recently, and which
-> > appears to have more features:
-> >
-> >       https://lore.kernel.org/r/20200607162350.21297-2-mani@kernel.org
-> >
-> > Would you mind taking a look and see if that one would work for you?
-> >
-> > I had some comments on the latest version that needs to be addressed,
-> > but I'm assuming Manivannan is working on a v5?
-> >
->
-> Yes! This driver is being worked on in my limited spare time. So I'm a bit
-> late to reiterate the patchset but planning to send v5 around this weekend.
->
+As discussed there, this series implements an altmodes devicetree-fwnode
+under the usb-connector node which has 1 child-node per supported
+altmode and in that child-node the svid and vdo for the supported
+altmode are specified.
 
-Ok, as said, i don't want to overlap, wasn't aware of the job in progress.
-Going standby on this. Good luck.
+Note this patch-set does not contain any devicetree users of the
+new bindings. The new support/binding is used on X86 Cherry Trail
+devices with a fusb302 Type-C controller (special variant of the
+INT33FE device in ACPI). But this patch should also help getting
+Display Port altmode to work with the mainline kernel on boards
+like the Pine RockPro64 and Pinebook Pro, which is why I've added
+Tobias Schramm to the Cc since he has done mainline devicetree
+work for the Pinebook Pro in the past.
 
-> Thanks,
-> Mani
->
-> > Johan
+The 1st patch adds the dt-bindings docs. I'm not sure if this one
+should go upstream through the USB tree together with patches 2-3 or
+if this should go upstream separately, Rob ?
 
+Patches 2-3 add support for the new binding to Type-C controller drivers
+using the tcpm framework, such as the fusb302 driver.
 
+Patch 4 uses swnodes to add the altmode info on the earlier mentioned
+X86 CHT devices, making DP-altmode work there for the first time.
 
--- 
-Angelo Dureghello
-Timesys
-e. angelo.dureghello@timesys.com
+Regards,
+
+Hans
+
