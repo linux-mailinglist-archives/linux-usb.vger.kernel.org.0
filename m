@@ -2,37 +2,37 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A504221EF66
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 13:37:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8759A21EF6A
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 13:37:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727863AbgGNLgf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Jul 2020 07:36:35 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:37176 "EHLO
+        id S1727886AbgGNLgi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Jul 2020 07:36:38 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:44556 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727095AbgGNLge (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jul 2020 07:36:34 -0400
+        with ESMTP id S1727867AbgGNLgh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jul 2020 07:36:37 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1594726593;
+        s=mimecast20190719; t=1594726596;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vl3SmicR68+CmgJUazXfQ79ngQF4AVIz+REX8jVdPoE=;
-        b=glzkhBIT97EEHu9XirAhUNo5ojCCDqMhBOgwPP1Gjm+Uz0dpv9bsyILt3u4+junkPQiBQn
-        WEOwmtWSyRykKY84Whkc6wETVGVBN0EA6NqoKxfeZ/FGHVdAkrIG0wuRKkcnt/BBeIF8Tn
-        NIEcBdW61oXlKdSeEXqm/uA4cmFR7zI=
+        bh=zE3tIVaCaZ/QMBFJn/FpgcTLYxPRQZwgwXEI4XKQg6o=;
+        b=dNDvpt/WO9PT1O9guEc+zKKbmbt8Q5mzBelE4l/IqOTbIM8dGGcfRaBazE1RbqJuMuiTbl
+        +YV37UBuPcpm0zHL3R5rBhHbWW9IraL9TPWjWevgIlN+JChhI8GgskfmCSXh20sL5R3BkQ
+        faFCuBhVoaQtcwhsB7EGkeJe8U6j+U8=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-451-AaBnRBGcMOCtq6D0mzai7Q-1; Tue, 14 Jul 2020 07:36:31 -0400
-X-MC-Unique: AaBnRBGcMOCtq6D0mzai7Q-1
+ us-mta-59-bC0Z7JmYP2aP59-J_zFvEQ-1; Tue, 14 Jul 2020 07:36:35 -0400
+X-MC-Unique: bC0Z7JmYP2aP59-J_zFvEQ-1
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2697980BCB1;
-        Tue, 14 Jul 2020 11:36:30 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 75039102CC32;
+        Tue, 14 Jul 2020 11:36:33 +0000 (UTC)
 Received: from x1.localdomain.com (ovpn-114-109.ams2.redhat.com [10.36.114.109])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 39D1C797EF;
-        Tue, 14 Jul 2020 11:36:27 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4D29C7B414;
+        Tue, 14 Jul 2020 11:36:30 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Guenter Roeck <linux@roeck-us.net>,
@@ -41,9 +41,9 @@ To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 Cc:     Hans de Goede <hdegoede@redhat.com>,
         Tobias Schramm <t.schramm@manjaro.org>,
         linux-usb@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH 3/4] usb: typec: tcpm: Add support for altmodes
-Date:   Tue, 14 Jul 2020 13:36:16 +0200
-Message-Id: <20200714113617.10470-4-hdegoede@redhat.com>
+Subject: [PATCH 4/4] platform/x86/intel_cht_int33fe: Add displayport altmode fwnode to the connector fwnode
+Date:   Tue, 14 Jul 2020 13:36:17 +0200
+Message-Id: <20200714113617.10470-5-hdegoede@redhat.com>
 In-Reply-To: <20200714113617.10470-1-hdegoede@redhat.com>
 References: <20200714113617.10470-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -54,32 +54,51 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add support for altmodes described in the usb-connector fwnode
-associated with the Type-C controller by calling the new
-typec_port_register_altmodes_from_fwnode() helper for this.
+Add a displayport altmode fwnode to the usb-connector fwnode,
+devices which use this driver support display-port altmode through
+the PI3USB30532 USB switch, this enables support for this.
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/usb/typec/tcpm/tcpm.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ .../platform/x86/intel_cht_int33fe_typec.c    | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 82b19ebd7838..b4a66e6bf68c 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -4793,6 +4793,12 @@ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
- 		goto out_role_sw_put;
- 	}
+diff --git a/drivers/platform/x86/intel_cht_int33fe_typec.c b/drivers/platform/x86/intel_cht_int33fe_typec.c
+index 48638d1c56e5..b61bad9cc8d2 100644
+--- a/drivers/platform/x86/intel_cht_int33fe_typec.c
++++ b/drivers/platform/x86/intel_cht_int33fe_typec.c
+@@ -124,12 +124,31 @@ static const struct software_node usb_connector_node = {
+ 	.properties = usb_connector_properties,
+ };
  
-+	typec_port_register_altmodes_from_fwnode(port->typec_port,
-+						 &tcpm_altmode_ops, port,
-+						 port->port_altmode,
-+						 ALTMODE_DISCOVERY_MAX,
-+						 tcpc->fwnode);
++static const struct software_node altmodes_node = {
++	.name = "altmodes",
++	.parent = &usb_connector_node,
++};
 +
- 	mutex_lock(&port->lock);
- 	tcpm_init(port);
- 	mutex_unlock(&port->lock);
++static const struct property_entry dp_altmode_properties[] = {
++	PROPERTY_ENTRY_U32("svid", 0xff01),
++	PROPERTY_ENTRY_U32("vdo", 0x0c0086),
++	{ }
++};
++
++static const struct software_node dp_altmode_node = {
++	.name = "displayport-altmode",
++	.parent = &altmodes_node,
++	.properties = dp_altmode_properties,
++};
++
+ static const struct software_node *node_group[] = {
+ 	&fusb302_node,
+ 	&max17047_node,
+ 	&pi3usb30532_node,
+ 	&displayport_node,
+ 	&usb_connector_node,
++	&altmodes_node,
++	&dp_altmode_node,
+ 	NULL
+ };
+ 
 -- 
 2.26.2
 
