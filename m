@@ -2,150 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7F7321E8B2
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 08:57:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD5BB21E8B6
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 08:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725905AbgGNG5K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Jul 2020 02:57:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40508 "EHLO
+        id S1726375AbgGNG6B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Jul 2020 02:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725853AbgGNG5J (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jul 2020 02:57:09 -0400
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A47BC061755
-        for <linux-usb@vger.kernel.org>; Mon, 13 Jul 2020 23:57:09 -0700 (PDT)
-Received: by mail-io1-xd43.google.com with SMTP id y2so16204921ioy.3
-        for <linux-usb@vger.kernel.org>; Mon, 13 Jul 2020 23:57:09 -0700 (PDT)
+        with ESMTP id S1725945AbgGNG6B (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jul 2020 02:58:01 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA24C061755;
+        Mon, 13 Jul 2020 23:58:01 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id t11so7166782pfq.11;
+        Mon, 13 Jul 2020 23:58:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OEqM3Kk6BInJrzhuFtYQ/dCvLcq7Qh6rb6FLoHzVLzc=;
-        b=Donu1wjoXrQsX1pILpkkyA0rN0SQQTpxz6CGP0MR07pL/HUwu/JQuRi5dDk4uYNyUZ
-         lAwnTEg/So2Z5k99tAC3ApWctA/ORGiUZANJFXoJ8WzRmxQ5MdruWGb9BilR0hjIovnx
-         s5D1mCFKe9Ao45I1LD2U7TP+vwe28+LRLjl5MhqaJ70V2+IG0M3UbWDe2z600+SScVrO
-         Tygva+yv/Opp4BTuM5+Nmn+pkQD9o1pptZNDkLzSgTb4q5xMtkVXmFa1h49w5SduLLhJ
-         LOK/ees8J3YW2O636JX+0WvfPZf3Yp5GfivpFTDroufTIaZk1amlbxeE7hzzZpFh20V+
-         7UFA==
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=5yxCNMicGWa93INkUcEnHD13vSlNuaiycpmdI3z0Ogs=;
+        b=aCRSlbZi9EgxLxadSqRQhBtgE0LdghN9j48R80UZC+LuwIf6zdA8jQyXIaGJCHa899
+         zwe15fFIW30ZC4PeGZKAK5oFe9RsaV/VCkp2H5ke5neFateJeV1AprQcmcXPlNbga85K
+         XOk+8pgSvtxle9nkV+/KCC39XdIiTQW6znTyVc/zRzjN0JAff8xWQ5tnT2+G9IjCvz2s
+         HeTn1TQfHoWCt3TydF3uA0ZQTqJJ0RBgwbjndeEioJPo81B6Tfh8PiJsxj8mlbXquMGO
+         A0sF1nzHU3MczWqPKP9WOWlDbSeI5bgeJh4Rkj67sMjWqOGZZdZnxCCOUPzgDCQf8Q6r
+         zRew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OEqM3Kk6BInJrzhuFtYQ/dCvLcq7Qh6rb6FLoHzVLzc=;
-        b=Gt3PwguHNSa3RO27xzHog2RbICKksoBmKlOpDwg9nMKuWruG9D8LAnJjYqW3fE3v0Z
-         TAknAXjeJgpoU+HM9GaGaNENSjeEZpIWXSjOzuC1Syn9M3VV5fCrcR1GBdFWuenaUflh
-         5bVDmS37X9wycMKVqo/yA2PZwvK3kYr3HIlLwBmMRWTJAlSpoe9mahbD6jmARfZENc/h
-         egit+RUYqzsLx6moL4R/PqVS9yje6XER3ylhZwL01Hf5Re1ys0OjGpTX+HfZD8xl32aa
-         Dvs8nULSsh3mfm9+kqqNLGJcNsosmfxyA4Z51fOC50vlpazCaa9GsSNwP69EiQiemkn9
-         ICCw==
-X-Gm-Message-State: AOAM533sdzVTskT0JRyzagx5nO/SWRO3c2YGOQG3AlhveQl4w0pvkpPV
-        1iotFtmiPe5q0Z0JzT/HNw0pJpHvYgh77yllMBlC+g==
-X-Google-Smtp-Source: ABdhPJzxFLyzZSkmMi6sKjYolxyBPfiL3C7xSHANSDOzO4iRPPIcOKQ2TcpdMziW9tRf6lkZpJDJJ7ux1WaNfGSrDuU=
-X-Received: by 2002:a05:6638:164a:: with SMTP id a10mr4476273jat.126.1594709828951;
- Mon, 13 Jul 2020 23:57:08 -0700 (PDT)
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=5yxCNMicGWa93INkUcEnHD13vSlNuaiycpmdI3z0Ogs=;
+        b=uGf/AKQ8RZXDLNx/Qcwe/tINY9U4WvxN/CaZxlI38P1yyZ48hF3aQFKpD7jaN80cRQ
+         rdcPUmSriwWK3qwiuBbt+vggA2JmOr/1v3Jm5I1CnMm7eEq7zfi1HDnRowuVEDiMPMtp
+         JQXSXAijMvQ/ag8nUmLxYJUPW9wCfXDRMxY5jr8iKnvNqsLe9NttsduI5GTFmOhcUN/I
+         YNET8HaGuPHO0v11lqoP5aEL+6iG9rhCUs6Jf2lAHz8mvolN3OoMZZQQKQxWQoByj9fK
+         Zp1ytF0lrS2JOO6HZj2tTFs+8BcXEyC/YOYIeqz9SqIx6IE5oorCAWRZ4q5HHAUJlwwe
+         tklg==
+X-Gm-Message-State: AOAM532Y9NlQ22zQWkJ1Lf2pG2Rno+7IsEvQgVe/xJi+qf33G/MOFaJ5
+        pFHEmVhh4Q4nVS75KNuir0tLuj3xrsw=
+X-Google-Smtp-Source: ABdhPJyhGOcCA6PDv+dZQDtLY7qiW2K+EL+egU2nW4jEwaj4nqFH9E/EKXJm+IQNvYLxTkXNYUu41w==
+X-Received: by 2002:a05:6a00:14ce:: with SMTP id w14mr3190147pfu.121.1594709880598;
+        Mon, 13 Jul 2020 23:58:00 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 137sm15287798pgg.72.2020.07.13.23.57.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jul 2020 23:58:00 -0700 (PDT)
+Subject: Re: [PATCH] usb: typec: tcpm: Move to high priority workqueue for
+ processing events
+To:     reg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200713204300.345975-1-badhri@google.com>
+ <20200714060520.GB657428@kroah.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <040b4cde-91d4-7776-60b5-8f55b6e75831@roeck-us.net>
+Date:   Mon, 13 Jul 2020 23:57:59 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20200713160522.19345-1-dan@dlrobertson.com>
-In-Reply-To: <20200713160522.19345-1-dan@dlrobertson.com>
-From:   Anand Moon <linux.amoon@gmail.com>
-Date:   Tue, 14 Jul 2020 12:26:57 +0530
-Message-ID: <CANAwSgR3ry19bxi8ZG026tHi-Bj+mP_O=PHuzUR_ujhjsdeLzA@mail.gmail.com>
-Subject: Re: [PATCH 0/1] usb: dwc3: meson-g12a: fix shared reset control use
-To:     Dan Robertson <dan@dlrobertson.com>
-Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        linux-amlogic@lists.infradead.org,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Content-Type: multipart/mixed; boundary="000000000000e00ede05aa6150f0"
+In-Reply-To: <20200714060520.GB657428@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---000000000000e00ede05aa6150f0
-Content-Type: text/plain; charset="UTF-8"
+On 7/13/20 11:05 PM, reg Kroah-Hartman wrote:
+> On Mon, Jul 13, 2020 at 01:43:00PM -0700, Badhri Jagan Sridharan wrote:
+>> "tReceiverResponse 15 ms Section 6.6.2
+>> The receiver of a Message requiring a response Shall respond
+>> within tReceiverResponse in order to ensure that the
+>> sender’s SenderResponseTimer does not expire."
+>>
+>> When the cpu complex is busy running other lower priority
+>> work items, TCPM's work queue sometimes does not get scheduled
+>> on time to meet the above requirement from the spec.
+>> Elevating the TCPM's work queue to higher priority allows
+>> TCPM to meet tReceiverResponse in a busy system.
+>>
+>> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+>> ---
+>>  drivers/usb/typec/tcpm/tcpm.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+>> index 82b19ebd7838e0..088b6f1fa1ff89 100644
+>> --- a/drivers/usb/typec/tcpm/tcpm.c
+>> +++ b/drivers/usb/typec/tcpm/tcpm.c
+>> @@ -4747,7 +4747,7 @@ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
+>>  	mutex_init(&port->lock);
+>>  	mutex_init(&port->swap_lock);
+>>  
+>> -	port->wq = create_singlethread_workqueue(dev_name(dev));
+>> +	port->wq = alloc_ordered_workqueue("%s", WQ_HIGHPRI, dev_name(dev));
+> 
+> How are you "guaranteeing" that this is really going to change anything
+> on a highly loaded machine?
+> 
+> Yes, it might make things better, but if you have a hard deadline like
+> this, you need to do things a bit differently to always ensure that you
+> meet it.  I do not think this change is that fix, do you?
+> 
 
-hi Dan,
+Good point. The worker in drivers/watchdog/watchdog_dev.c might be
+useful as a starting point. There may be better examples - this is
+just one I know of which had a similar problem. See commits
+38a1222ae4f3 and 1ff688209e2e.
 
-On Mon, 13 Jul 2020 at 21:37, Dan Robertson <dan@dlrobertson.com> wrote:
->
-> When testing suspend for another driver I noticed the following warning:
->
-> WARNING: CPU: 1 PID: 5530 at drivers/reset/core.c:355 reset_control_assert+0x184/0x19c
-> Hardware name: Hardkernel ODROID-N2 (DT)
-> [..]
-> pc : reset_control_assert+0x184/0x19c
-> lr : dwc3_meson_g12a_suspend+0x68/0x7c
-> [..]
-> Call trace:
->  reset_control_assert+0x184/0x19c
->  dwc3_meson_g12a_suspend+0x68/0x7c
->  platform_pm_suspend+0x28/0x54
->  __device_suspend+0x590/0xabc
->  dpm_suspend+0x104/0x404
->  dpm_suspend_start+0x84/0x1bc
->  suspend_devices_and_enter+0xc4/0x4fc
->
-> In my limited experience and knowlege it appears that we hit this
-> because the reset control was switched to shared and the the use
-> of the reset control was not changed.
->
-> > * Calling reset_control_assert without first calling reset_control_deassert
-> > * is not allowed on a shared reset control. Calling reset_control_reset is
-> > * also not allowed on a shared reset control.
->
-> The above snippet from reset_control_get_shared() seems to indicate that
-> this is due to the use of reset_control_reset() in dwc3_meson_g12a_probe()
-> and reset_control_deassert is not guaranteed to have been called
-> before dwc3_meson_g12a_suspend() and reset_control_assert().
->
-> After some basic tests with the following patch I no longer hit the
-> warning. Comments and critiques on the patch are welcome. If there is a
-> reason for the current use of the reset control, I'd love to learn why!
-> Like I said before, I have not really looked at this driver before and
-> have verify limited experience with reset controls... Was working on
-> another driver, hit the warning, and thought I'd take a shot at the
-> fix :-)
->
-Thanks, I was also looking into this issue
-So best Fix to this issue is to drop the call of reset_control_assert
-from dwc3_meson_g12a_suspend
-and drop the call of reset_control_deassert from dwc3_meson_g12a_resume
-With these changes we do not see the warning on suspend and resume
-
-Can you try this attached patch?
-
-Best Regards
--Anand
-
---000000000000e00ede05aa6150f0
-Content-Type: application/octet-stream; 
-	name="0001-usb-dwc3-meson-g12a-drop-reset-controller-call-from-.patch"
-Content-Disposition: attachment; 
-	filename="0001-usb-dwc3-meson-g12a-drop-reset-controller-call-from-.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_kclkz4tk0>
-X-Attachment-Id: f_kclkz4tk0
-
-RnJvbSA4NDE1MDBjNzg0YWM1MjUzZTllYWY5YWZlY2Q2Y2UxMjVlOGJmMWFkIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBBbmFuZCBNb29uIDxsaW51eC5hbW9vbkBnbWFpbC5jb20+CkRh
-dGU6IFR1ZSwgMTQgSnVsIDIwMjAgMTI6MTM6MTcgKzA1MzAKU3ViamVjdDogW1BBVENIXSB1c2I6
-IGR3YzM6IG1lc29uLWcxMmE6IGRyb3AgcmVzZXQgY29udHJvbGxlciBjYWxsIGZyb20KIHN1c3Bl
-bmQgYW5kIHJlc3VtZQoKRHJvcCB0aGUgcmVzZXQgY29udHJvbGxlciBjYWxsIGZyb20gc3VzcGVu
-ZCBhbmQgcmVzdW1lLgoKU2lnbmVkLW9mZi1ieTogQW5hbmQgTW9vbiA8bGludXguYW1vb25AZ21h
-aWwuY29tPgotLS0KIGRyaXZlcnMvdXNiL2R3YzMvZHdjMy1tZXNvbi1nMTJhLmMgfCA0IC0tLS0K
-IDEgZmlsZSBjaGFuZ2VkLCA0IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNi
-L2R3YzMvZHdjMy1tZXNvbi1nMTJhLmMgYi9kcml2ZXJzL3VzYi9kd2MzL2R3YzMtbWVzb24tZzEy
-YS5jCmluZGV4IDFmN2Y0ZDg4ZWQ5ZC4uMGMwZWE1NTIxNWNiIDEwMDY0NAotLS0gYS9kcml2ZXJz
-L3VzYi9kd2MzL2R3YzMtbWVzb24tZzEyYS5jCisrKyBiL2RyaXZlcnMvdXNiL2R3YzMvZHdjMy1t
-ZXNvbi1nMTJhLmMKQEAgLTg3Niw4ICs4NzYsNiBAQCBzdGF0aWMgaW50IF9fbWF5YmVfdW51c2Vk
-IGR3YzNfbWVzb25fZzEyYV9zdXNwZW5kKHN0cnVjdCBkZXZpY2UgKmRldikKIAkJcGh5X2V4aXQo
-cHJpdi0+cGh5c1tpXSk7CiAJfQogCi0JcmVzZXRfY29udHJvbF9hc3NlcnQocHJpdi0+cmVzZXQp
-OwotCiAJcmV0dXJuIDA7CiB9CiAKQEAgLTg4Niw4ICs4ODQsNiBAQCBzdGF0aWMgaW50IF9fbWF5
-YmVfdW51c2VkIGR3YzNfbWVzb25fZzEyYV9yZXN1bWUoc3RydWN0IGRldmljZSAqZGV2KQogCXN0
-cnVjdCBkd2MzX21lc29uX2cxMmEgKnByaXYgPSBkZXZfZ2V0X2RydmRhdGEoZGV2KTsKIAlpbnQg
-aSwgcmV0OwogCi0JcmVzZXRfY29udHJvbF9kZWFzc2VydChwcml2LT5yZXNldCk7Ci0KIAlyZXQg
-PSBwcml2LT5kcnZkYXRhLT51c2JfaW5pdChwcml2KTsKIAlpZiAocmV0KQogCQlyZXR1cm4gcmV0
-OwotLSAKMi4yNS4xCgo=
---000000000000e00ede05aa6150f0--
+Guenter
