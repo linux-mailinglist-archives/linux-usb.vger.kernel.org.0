@@ -2,130 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 064D821F631
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 17:32:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 258CB21F671
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jul 2020 17:49:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726370AbgGNPa4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Jul 2020 11:30:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35292 "EHLO
+        id S1727046AbgGNPtd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 14 Jul 2020 11:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725931AbgGNPaz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jul 2020 11:30:55 -0400
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A45B7C061755
-        for <linux-usb@vger.kernel.org>; Tue, 14 Jul 2020 08:30:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds201912; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:References:Cc:To:From:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=PWiq4sOIah4oZGqClqrpKj4xCE7yUvTVXmJd2jdm7lc=; b=QrLc1yd5Nw9lvitvjtN++bQ0n0
-        mG/Ts37lYSUnonDEI5K7qXU3/p9UgAVHHD39g1+V6IcWLJVbeehl9rF0aRPtAg3zciuNSMizQwVhJ
-        MdQ9Oz/3oTAA7Wuxbqsb1GhEeUzdmKjckBYgQ/zTXmqFDPvYyTgFudLxiZ2JvVc5FRUEXh3giBcAa
-        d0wew92tSjMbapMPhi9P4z3r1JqbTvYfef5Vj/wfMdxPsGWOKa7QH5W9F4B0u52Jpj/32QqEfj33G
-        SQLdGdyUnTu96ooZnVJavGTDqjNSYKLEifUYDA0/AjtcwZKoMqYPEWyEEu4dq4bVeFC1JVz1tPMzu
-        koVeeUjw==;
-Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:59021 helo=[192.168.10.61])
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1jvMtR-0000NQ-Pj; Tue, 14 Jul 2020 17:30:53 +0200
-Subject: Re: [PATCH v3 4/6] drm: Add Generic USB Display driver
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Peter Stuge <peter@stuge.se>
-Cc:     balbi@kernel.org, linux-usb@vger.kernel.org, sam@ravnborg.org,
-        dri-devel@lists.freedesktop.org
-References: <20200529175643.46094-1-noralf@tronnes.org>
- <20200529175643.46094-5-noralf@tronnes.org>
- <20200529224531.22261.qmail@stuge.se>
- <614b0b0d-44d7-22e5-339d-cb8a13b426ac@tronnes.org>
- <20200602001207.17171.qmail@stuge.se>
- <20200602023254.GB15540@rowland.harvard.edu>
- <a0f8030c-a609-ce03-ff92-027de37eb834@tronnes.org>
-Message-ID: <8c4f3cdf-ea51-40b9-aed9-70fa9fbe0622@tronnes.org>
-Date:   Tue, 14 Jul 2020 17:30:50 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+        with ESMTP id S1726062AbgGNPtc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 14 Jul 2020 11:49:32 -0400
+Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21AECC061755
+        for <linux-usb@vger.kernel.org>; Tue, 14 Jul 2020 08:49:32 -0700 (PDT)
+Received: by mail-ot1-x342.google.com with SMTP id 18so13362453otv.6
+        for <linux-usb@vger.kernel.org>; Tue, 14 Jul 2020 08:49:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:references:cc:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=6jLgbeQbR2y51QxkPXj1KM5ydm8hN4KlBS47bVAqPbo=;
+        b=bDY4rE0dt2u4c3T1MoOhMWAfTGN7nds8Xy1K6CacPGA+PTYOPZUtoy+jVY7bgXOfGC
+         qYpoFE8UJIdMqcyVmbdu4AdSAKLJS8DCSLEJPAIB72/KgXJjGINSdllY1z4R9llJ+YEq
+         FMMKB+CPbWzO60nbUhygXFx9+AtcKVLPBCoQw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=6jLgbeQbR2y51QxkPXj1KM5ydm8hN4KlBS47bVAqPbo=;
+        b=k6nSQaP2PCAtLCgW5go3wQu5vGMGvmUkEst34wqcLpIwfl4ypBOlPvN30qpcG2t/fA
+         S8bV71YKIYlp6qih5efu1nhEtwIGWvSLI38mS9jq9RsyvftbwuitJYkUAxBM5Ya6y/Q6
+         ycxIw+KtNjWYzaec5WAEnJHPkktPk6/TVDV448YeHWh0ci7rFJqcJ0a9m0sb/0LFi4rO
+         lReu0O+9FI1ZkLVxzAcKgkrSnI2eMDbxbDZTjvflvWckpiF96Fgx0YpI8CiKD/W+OL0i
+         d0FM5fOURt0ZQq0rXzu2MaliIIzSMGpz0LyDgDIChqPH9bwwQN6nVPht7IegoJVcHdjr
+         QqYA==
+X-Gm-Message-State: AOAM5308KhTtLiSY+tp0/d8VdF6F/af2r8EFgdSee3r0zRl8KdQrjJNK
+        bbwESKTBxEqW9w6LRS6SUe/FdA==
+X-Google-Smtp-Source: ABdhPJyiHPS6sDocyBlmPwMcOK3T5OJvhc9vK7owfgslvoVxglvfp5im8gyurA9CgafUTZMNcrKmRA==
+X-Received: by 2002:a05:6830:198:: with SMTP id q24mr4675315ota.202.1594741771493;
+        Tue, 14 Jul 2020 08:49:31 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id a6sm3653744otb.8.2020.07.14.08.49.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jul 2020 08:49:30 -0700 (PDT)
+Subject: Re: [PATCH] tools: usb: usbip: Replace HTTP links with HTTPS ones
+To:     "Alexander A. Klimov" <grandmaster@al2klimov.de>,
+        valentina.manea.m@gmail.com, shuah@kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200711062442.GA2784200@kroah.com>
+ <20200711123906.16325-1-grandmaster@al2klimov.de>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <55e97454-c376-e640-f020-cb297e176681@linuxfoundation.org>
+Date:   Tue, 14 Jul 2020 09:49:29 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <a0f8030c-a609-ce03-ff92-027de37eb834@tronnes.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200711123906.16325-1-grandmaster@al2klimov.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 7/11/20 6:39 AM, Alexander A. Klimov wrote:
+> Rationale:
+> Reduces attack surface on kernel devs opening the links for MITM
+> as HTTPS traffic is much harder to manipulate.
+> 
+> Deterministic algorithm:
+> For each file:
+>    If not .svg:
+>      For each line:
+>        If doesn't contain `\bxmlns\b`:
+>          For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
+> 	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
+>              If both the HTTP and HTTPS versions
+>              return 200 OK and serve the same content:
+>                Replace HTTP with HTTPS.
+> 
+> Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
 
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Den 02.06.2020 13.46, skrev Noralf Trønnes:
-> 
-> 
-> Den 02.06.2020 04.32, skrev Alan Stern:
->> On Tue, Jun 02, 2020 at 12:12:07AM +0000, Peter Stuge wrote:
->>
->> ...
->>
->>> The way I read composite_setup() after try_fun_setup: it calls f->setup()
->>> when available, and that can return < 0 to stall.
->>>
->>> I expect that composite_setup() and thus f->setup() run when the
->>> SETUP packet has arrived, thus before the data packet arrives, and if
->>> composite_setup() stalls then the device/function should never see the
->>> data packet.
->>>
->>> For an OUT transaction I think the host controller might still send
->>> the DATA packet, but the device controllers that I know don't make it
->>> visible to the application in that case.
->>
->> ...
->>
->> Are you guys interested in comments from other people who know more
->> about the kernel and how it works with USB?
-> 
-> Absolutely, I want something thats works well in the kernel and doesn't
-> look odd to kernel USB people.
-> 
->> Your messages have been
->> far too long to go into in any detail, but I will address this one issue.
->>
->> The USB protocol forbids a device from sending a STALL response to a
->> SETUP packet.  The only valid response is ACK.  Thus, there is no way
->> to prevent the host from sending its DATA packet for a control-OUT
->> transfer.
->>
->> A gadget driver can STALL in response to a control-OUT data packet,
->> but only before it has seen the packet.  Once the driver knows what
->> the data packet contains, the gadget API doesn't provide any way to
->> STALL the status stage.  There has been a proposal to change the API
->> to make this possible, but so far it hasn't gone forward.
->>
-> 
-> This confirms what I have seen in the kernel and the reason I added a
-> status request so I can know the result of the operation the device has
-> performed.
-> 
-> I have a problem that I've encountered with this status request.
-> In my first version the gadget would usb_ep_queue() the status value
-> when the operation was done and as long as this happended within the
-> host timeout (5s) everything worked fine.
-> 
-> Then I hit a 10s timeout in the gadget when performing a display modeset
-> operation (wait on missing vblank). The result of this was that the host
-> timed out and moved on. The gadget however didn't know that the host
-> gave up, so it queued up the status value. The result of this was that
-> all further requests from the host would time out.
-> Do you know a solution to this?
-> My work around is to just poll on the status request, which returns a
-> value immediately, until there's a result. The udc driver I use is dwc2.
-> 
+thanks,
+-- Shuah
 
-I have now tried this on a Beaglebone Black (musb udc driver) and it
-works just fine there (it displays an error message on the next
-request). So it has to be a dwc2 driver problem. I will try and chase
-down this problem when I get the time.
-
-This means I don't need this status request polling in my host driver.
-
-Noralf.
