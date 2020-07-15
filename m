@@ -2,61 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA473221266
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jul 2020 18:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ABC122127D
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jul 2020 18:39:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726916AbgGOQch (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Jul 2020 12:32:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42324 "EHLO
+        id S1726023AbgGOQjb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Jul 2020 12:39:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725912AbgGOQcf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jul 2020 12:32:35 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6000AC061755;
-        Wed, 15 Jul 2020 09:32:35 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id t6so3337811pgq.1;
-        Wed, 15 Jul 2020 09:32:35 -0700 (PDT)
+        with ESMTP id S1725770AbgGOQja (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jul 2020 12:39:30 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB83C061755;
+        Wed, 15 Jul 2020 09:39:30 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id 1so2322667pfn.9;
+        Wed, 15 Jul 2020 09:39:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=zdauEg1QYJHxq8lIpaEnDDgHmG9a8ZcmjBSfBB8sjJU=;
-        b=ast/VbZche5CTHwfZWsWG9DwetxqFuPcIQv2kUliATWkXFHHb0TIlwq3fhhGlhWBbD
-         sikCB4eMbWMl0zo75IQ+d2Jw5URzRDzW0wiIxFP+UWUcrfV6mVOQA7XIZxj5PvCyaqNm
-         vrlB2HWSKLE8RDN7RrxhZWya293Ld6VlgoUNPvDnqVS9On9Nq8XbGuh/xo3s4wDdQ+S0
-         q4osOqXF37WoiBwtPL32aTtcZRzfxVxwFC6qrqCKkygHvADn/10qJAt0qRhBDBhzK61Y
-         A7Ak6esJVSr1wfR5Hl1xB52ohqyVAbZQc5HMP+WakI6S3Vewa+5N2En8KWyBVUeUgBoI
-         V+bw==
+        bh=tih56cWIuhah+NxYjyGY7nozc2ke3B+ic/cpjo/VAs4=;
+        b=aTv1SNma4AeJkAn3An13OGAw51wR7sSn4ngpjS1KFXcunS5sSgFvqql4eGbNDXgBit
+         Ax4WruimzxUGWzlq7UuVnNdaKr9cG63zqL/Ul3ohgM3FQ+2h1KLBGY4u013nqkggr0gH
+         0QcoWIdjqhRBQ14MXirWgmeqUK4libtYWTF4j58JNEhUeyCBHQ8qrSIaeN/Jqt4Ji4iS
+         h1twCjlO9Xo/0RS3ZoV+NLei2OpXOftrggtt0rXX74rmbTWOwrmPhDJVXDRSHCW3qsi3
+         DkBVT01+/EQJwYIZx5Q1AanMP0quoqmsUrfO8eLeiYH1Qy9eS+EuYsEjptnxxXN/NqLd
+         896g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=zdauEg1QYJHxq8lIpaEnDDgHmG9a8ZcmjBSfBB8sjJU=;
-        b=GGQMZWycE9ULrNdjYWqy/UEvuylP8pXfs4ZRZoPLCgqEY4/JoeGpZ/i1mumXehYr30
-         QB3p7l0ui+u2NX6OxLnvb3lAlodpo9kaKswz1WthPQviLMPJb4VtrS27tsj7oPX8UO8D
-         c4vlMbGJrQYLba+aSQsz42qt2T9JPDfXwmEQny2+7uq7Up2441oIr+QxOfdjadB4P8IA
-         VPekCyDN2P0RyfTySTVS8SL7PTQ9O/zdKuBsUeCVlUEyfrm+v+yCXZSYbniO0kl475B9
-         T8pGrVrVYgNCV6+k+1/riTOr6dMQvOCi5ge8t54LHWbC6KlEVQo0MdeyqQ3O4CS0GmFB
-         Jnlg==
-X-Gm-Message-State: AOAM532XPpbF31jcSkMJisnzFAO3QViNXSaLwn9Gxe+xtnNZ+Vab8Num
-        rKVxAfUTM/5U1yEQijkEhR+X3dr8
-X-Google-Smtp-Source: ABdhPJxyx7Vf1yJ095YmEk1ZvI1xd+g2GJvmGrrv14Z+opklroTb5jaZ6eV+bxuKdx1qEVriAJO2pA==
-X-Received: by 2002:a63:7206:: with SMTP id n6mr460154pgc.342.1594830754731;
-        Wed, 15 Jul 2020 09:32:34 -0700 (PDT)
+        bh=tih56cWIuhah+NxYjyGY7nozc2ke3B+ic/cpjo/VAs4=;
+        b=BohNbmt7uBFgop0HWhaCyAsVQnygoVwbH3BDgQ5Lynb+s8YOb50EvIEA3t4W2a0xZW
+         AYW2HySyp3gaIWhwyZNxoS/GLW449hZwYp4c7TYjrCwv6HlhhoZ6FP62XJWA4OpQl5/p
+         CgHr6L2+k7yuTTV2zxqTfQSVzSVlx3d5oHXLoqAgGCTudjICGktvJd61VePSFN6pgrYk
+         93Zy3I+2DpheyQpsZaZeN6kJTGX3WW7xNWsgHXoo7hFsSH8eePMb+/JH7y8pEjb27Drl
+         naj2ajsgfZWzx0uwfpUtjT6n4Ss1tIohWFqSn+0l1tkJiQig1dVrSoQ7hzo8tyx44KZQ
+         tt4Q==
+X-Gm-Message-State: AOAM530btYqHxTlcv01JIGxaEwZ2kZ/bEr1ewOBY812Q0byLYEiQ9DHe
+        PhhOeqrg5vYOZ6wZVTdabqz0HK29
+X-Google-Smtp-Source: ABdhPJwGZTlNf3LlWQjyga5juGBAPkBlGX7f99NdT/kIAngA7YMaZpNFWW+Dw5t5Ky+yT41hORN5+A==
+X-Received: by 2002:a63:4f1f:: with SMTP id d31mr472080pgb.241.1594831169714;
+        Wed, 15 Jul 2020 09:39:29 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x7sm2277056pfp.96.2020.07.15.09.32.33
+        by smtp.gmail.com with ESMTPSA id o12sm2742308pfu.188.2020.07.15.09.39.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jul 2020 09:32:34 -0700 (PDT)
-Subject: Re: [PATCH 3/3 v2] usb: typec: tcpm: Stay in BIST mode till hardreset
- or unattached
-To:     Badhri Jagan Sridharan <badhri@google.com>,
+        Wed, 15 Jul 2020 09:39:29 -0700 (PDT)
+Subject: Re: [PATCH 2/4] usb: typec: Add
+ typec_port_register_altmodes_from_fwnode()
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        reg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200714231207.866838-1-badhri@google.com>
- <20200714231207.866838-3-badhri@google.com>
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Tobias Schramm <t.schramm@manjaro.org>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20200714113617.10470-1-hdegoede@redhat.com>
+ <20200714113617.10470-3-hdegoede@redhat.com>
 From:   Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
  xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
@@ -101,108 +103,132 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <2c9e0f1a-3071-8fe7-54d1-6ce670268197@roeck-us.net>
-Date:   Wed, 15 Jul 2020 09:32:33 -0700
+Message-ID: <38a0c13d-fd78-9e67-91c8-4b86c437593e@roeck-us.net>
+Date:   Wed, 15 Jul 2020 09:39:27 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200714231207.866838-3-badhri@google.com>
+In-Reply-To: <20200714113617.10470-3-hdegoede@redhat.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 7/14/20 4:12 PM, Badhri Jagan Sridharan wrote:
-> Port starts to toggle when transitioning to unattached state.
-> This is incorrect while in BIST mode.
+On 7/14/20 4:36 AM, Hans de Goede wrote:
+> This can be used by Type-C controller drivers which use a standard
+> usb-connector fwnode, with altmodes sub-node, to describe the available
+> altmodes.
 > 
-> 6.4.3.1 BIST Carrier Mode
-> Upon receipt of a BIST Message, with a BIST Carrier Mode BIST Data Object,
-> the UUT Shall send out a continuous string of BMC encoded alternating "1"s
-> and “0”s. The UUT Shall exit the Continuous BIST Mode within
-> tBISTContMode of this Continuous BIST Mode being enabled(see
-> Section 6.6.7.2).
-> 
-> 6.4.3.2 BIST Test Data
-> Upon receipt of a BIST Message, with a BIST Test Data BIST Data Object,
-> the UUT Shall return a GoodCRC Message and Shall enter a test mode in which
-> it sends no further Messages except for GoodCRC Messages in response to
-> received Messages. See Section 5.9.2 for the definition of the Test Data
-> Frame. The test Shall be ended by sending Hard Reset Signaling to reset the
-> UUT.
-> 
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 > ---
-> Version history:
-> Changes since V1:
-> -  None
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 8 ++++++--
->  include/linux/usb/pd.h        | 1 +
->  2 files changed, 7 insertions(+), 2 deletions(-)
+>  drivers/usb/typec/class.c | 56 +++++++++++++++++++++++++++++++++++++++
+>  include/linux/usb/typec.h |  7 +++++
+>  2 files changed, 63 insertions(+)
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 379fcab9dbd973..245cfe80948502 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -3559,6 +3559,8 @@ static void run_state_machine(struct tcpm_port *port)
->  		switch (BDO_MODE_MASK(port->bist_request)) {
->  		case BDO_MODE_CARRIER2:
->  			tcpm_pd_transmit(port, TCPC_TX_BIST_MODE_2, NULL);
-> +			tcpm_set_state(port, unattached_state(port),
-> +				       PD_T_BIST_CONT_MODE);
-
-One line should now be sufficient.
-
->  			break;
->  		case BDO_MODE_TESTDATA:
->  			if (port->tcpc->set_bist_data) {
-> @@ -3569,8 +3571,6 @@ static void run_state_machine(struct tcpm_port *port)
->  		default:
->  			break;
->  		}
-> -		/* Always switch to unattached state */
-> -		tcpm_set_state(port, unattached_state(port), 0);
->  		break;
->  	case GET_STATUS_SEND:
->  		tcpm_pd_send_control(port, PD_CTRL_GET_STATUS);
-> @@ -3960,6 +3960,10 @@ static void _tcpm_pd_vbus_off(struct tcpm_port *port)
->  static void _tcpm_pd_hard_reset(struct tcpm_port *port)
->  {
->  	tcpm_log_force(port, "Received hard reset");
-> +	if (port->bist_request ==  BDO_MODE_TESTDATA &&
-
-Nit: Extra space after "=="
-
-Also, I think this now fits into one line (line length limit is 100).
-
-> +	    port->tcpc->set_bist_data)
-> +		port->tcpc->set_bist_data(port->tcpc, false);
-> +
->  	/*
->  	 * If we keep receiving hard reset requests, executing the hard reset
->  	 * must have failed. Revert to error recovery if that happens.
-> diff --git a/include/linux/usb/pd.h b/include/linux/usb/pd.h
-> index a665d7f211424d..b420d8d613cd23 100644
-> --- a/include/linux/usb/pd.h
-> +++ b/include/linux/usb/pd.h
-> @@ -483,4 +483,5 @@ static inline unsigned int rdo_max_power(u32 rdo)
->  #define PD_N_CAPS_COUNT		(PD_T_NO_RESPONSE / PD_T_SEND_SOURCE_CAP)
->  #define PD_N_HARD_RESET_COUNT	2
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index c9234748537a..47de2b2e3d54 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -1607,6 +1607,62 @@ typec_port_register_altmode(struct typec_port *port,
+>  }
+>  EXPORT_SYMBOL_GPL(typec_port_register_altmode);
 >  
-> +#define PD_T_BIST_CONT_MODE	60 /* 30 - 60 ms */
+> +void typec_port_register_altmodes_from_fwnode(struct typec_port *port,
+> +	const struct typec_altmode_ops *ops, void *drvdata,
+> +	struct typec_altmode **altmodes, size_t n,
+> +	struct fwnode_handle *fwnode)
+> +{
+> +	struct fwnode_handle *altmodes_node, *child;
+> +	struct typec_altmode_desc desc;
+> +	struct typec_altmode *alt;
+> +	size_t index = 0;
+> +	u32 svid, vdo;
+> +	int ret;
+> +
+> +	altmodes_node = fwnode_get_named_child_node(fwnode, "altmodes");
+> +	if (!altmodes_node)
+> +		return;
+> +
+> +	child = NULL;
+> +	while ((child = fwnode_get_next_child_node(altmodes_node, child))) {
+> +		ret = fwnode_property_read_u32(child, "svid", &svid);
+> +		if (ret) {
+> +			dev_err(&port->dev, "Error reading svid for altmode %s\n",
+> +				fwnode_get_name(child));
+> +			continue;
 
-Maybe a bit less to ensure that it is disabled within 60 ms. If we use
-the maximum, we may end up having it enabled for more than 60 ms, which
-would violate the specification and may tick some picky compliance test
-system.
+The properties are mandatory. I think the errors should not be ignored.
 
-Thanks,
-Guenter
+> +		}
+> +
+> +		ret = fwnode_property_read_u32(child, "vdo", &vdo);
+> +		if (ret) {
+> +			dev_err(&port->dev, "Error reading vdo for altmode %s\n",
+> +				fwnode_get_name(child));
+> +			continue;
+> +		}
+> +
+> +		if (index >= n) {
+> +			dev_err(&port->dev, "Error not enough space for altmode %s\n",
+> +				fwnode_get_name(child));
+> +			continue;
 
->  #endif /* __LINUX_USB_PD_H */
+Seems to be pointless to continue here.
+
+> +		}
+> +
+> +		desc.svid = svid;
+> +		desc.vdo = vdo;
+> +		desc.mode = index + 1;
+> +		alt = typec_port_register_altmode(port, &desc);
+> +		if (IS_ERR(alt)) {
+> +			dev_err(&port->dev, "Error registering altmode %s\n",
+> +				fwnode_get_name(child));
+> +			continue;
+
+Maybe there is a reason to ignore all those errors. If so,
+that should be explained.
+
+> +		}
+> +
+> +		alt->ops = ops;
+> +		typec_altmode_set_drvdata(alt, drvdata);
+> +		altmodes[index] = alt;
+> +		index++;
+> +	}
+> +}
+> +EXPORT_SYMBOL_GPL(typec_port_register_altmodes_from_fwnode);
+> +
+>  /**
+>   * typec_register_port - Register a USB Type-C Port
+>   * @parent: Parent device
+> diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
+> index 5daa1c49761c..fbe4bccb3a98 100644
+> --- a/include/linux/usb/typec.h
+> +++ b/include/linux/usb/typec.h
+> @@ -17,6 +17,7 @@ struct typec_partner;
+>  struct typec_cable;
+>  struct typec_plug;
+>  struct typec_port;
+> +struct typec_altmode_ops;
+>  
+>  struct fwnode_handle;
+>  struct device;
+> @@ -121,6 +122,12 @@ struct typec_altmode
+>  struct typec_altmode
+>  *typec_port_register_altmode(struct typec_port *port,
+>  			     const struct typec_altmode_desc *desc);
+> +
+> +void typec_port_register_altmodes_from_fwnode(struct typec_port *port,
+> +	const struct typec_altmode_ops *ops, void *drvdata,
+> +	struct typec_altmode **altmodes, size_t n,
+> +	struct fwnode_handle *fwnode);
+> +
+>  void typec_unregister_altmode(struct typec_altmode *altmode);
+>  
+>  struct typec_port *typec_altmode2port(struct typec_altmode *alt);
 > 
 
