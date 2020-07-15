@@ -2,148 +2,327 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA0C0220CD8
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jul 2020 14:23:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A41F1220CDE
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jul 2020 14:25:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730054AbgGOMXN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Jul 2020 08:23:13 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:60516 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728781AbgGOMXN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jul 2020 08:23:13 -0400
-Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 999584047D;
-        Wed, 15 Jul 2020 12:23:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1594815792; bh=aHiJUoMPG5iYxbrk2IPeWgoyzgBmuxIcHBfIUA/psjc=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=Ghu+AnCyvrsdH5BOK9HneXxf0qNlWJZ0dOvBAz83mDpmods8M5BLz6qt8Q/0LthGc
-         1538y6wQO5yy03fxUHlPpme7ZwReobnI4GvF3VECJ5DqsgEFl/keZThqNDfCkRxLUe
-         5QOPeLx4dTKuZUuEQdq3gK+A6nO9EquHgRxQ5GhfOjPUeXn3I1dkpxlHBMk37HveE3
-         U+DWcBECEHphqegmqKq5oRNe79HEfb3QEyBLm5UDmryXPy68hss213N6n/iyUaIf8F
-         rM3Obfy8MLTzKLnvEHGicx4zRMUvE85McrkQyefI9rXnY5fSfvNIe3nOEdYcMzfVPE
-         VB0mGCXPlC7oA==
-Received: from o365relay-in.synopsys.com (sv2-o365relay1.synopsys.com [10.202.1.137])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id E5D51A009C;
-        Wed, 15 Jul 2020 12:23:07 +0000 (UTC)
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2174.outbound.protection.outlook.com [104.47.59.174])
+        id S1730853AbgGOMYK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Jul 2020 08:24:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45104 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729145AbgGOMYJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 15 Jul 2020 08:24:09 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "mail.protection.outlook.com", Issuer "GlobalSign Organization Validation CA - SHA256 - G3" (verified OK))
-        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 225A6400BA;
-        Wed, 15 Jul 2020 12:23:04 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=hminas@synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="pI+2yLoP";
-        dkim-atps=neutral
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OXhcsDMRuASDkpVaIhjbLAoYD02HP1or2Tb1CKvhL/5XvOgUyeaZ7pgy9clnJaEPjUDRHT3hz6/a8tf/9046YcB3NrA2wqa9ao4tGvlOgMko6JNIQ24b4FcAqlPrsBWvNlqUBPDfgJ3sDrviE7P97lQaW2cStYHyep/1hyXJgr9K3/uLwgm3kuFjW9x8+8oHwY1PoEo7ibUUbZ3oCAtUwkafWHAbksO8MZzu5I3s4Z0iawUtR1Z+61RsgDRZlU/Ib19V5rElgIuUofqAwec2X69M/PDPTgwG1VE9U4fAedI6H2z032TYTE5m2Boar2Tn1aDc6SRCJCFJor+cNO34cA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aHiJUoMPG5iYxbrk2IPeWgoyzgBmuxIcHBfIUA/psjc=;
- b=AKYOwVOuNypcr4yV9wRt69R/H7ApVsU05TxDfOHOqXGGyO8kRqHl9TZJUt5dV/mQzNbVYHe+n27KPUEZSqTIDa7O6JU46yQ8o2wrqnOkD4Pw0UMIR+wocCY9YbrxxElKLfEV8YUEhTlGHhyqUelDZ9eEA2e42ahqsv6DVpn6GjmGblE27Co9tFTQi+MO0f2lNBeuqqqxmjMOss/77Zed2X+KYO8xlo6fjhRcMircTDqE0WPogSdwEINEpZudzz3G4kXywrR+gCQK366jg9r6hfgg0MSeVfQS1iY6+CKp3moK8p/wIMgThDn0D9/Q4eZIb4EtxIvOK1OvylfeJ+bzbw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aHiJUoMPG5iYxbrk2IPeWgoyzgBmuxIcHBfIUA/psjc=;
- b=pI+2yLoP588gbnccUvF5bWeTWH5NJsBgMG8hpKaqS0oyHZdowYIFTJipdU9fJgfBbyCSx6e2575KFscLJlw087H8FeaOV6libY4hTibiIz3gzjhP4GIlrgp4gqkE0FOC7E0FByiEaWx/HoJp4smtxO4dLQkC5Wb74cE0JjkGHlw=
-Received: from CY4PR12MB1432.namprd12.prod.outlook.com (2603:10b6:903:44::11)
- by CY4PR12MB1832.namprd12.prod.outlook.com (2603:10b6:903:11f::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3174.22; Wed, 15 Jul
- 2020 12:23:02 +0000
-Received: from CY4PR12MB1432.namprd12.prod.outlook.com
- ([fe80::3cb9:e2f2:a4ff:14bd]) by CY4PR12MB1432.namprd12.prod.outlook.com
- ([fe80::3cb9:e2f2:a4ff:14bd%10]) with mapi id 15.20.3174.025; Wed, 15 Jul
- 2020 12:23:02 +0000
-X-SNPS-Relay: synopsys.com
-From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-To:     Lee Jones <lee.jones@linaro.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Ben Dooks <ben@simtec.co.uk>
-Subject: Re: [PATCH v2 1/8] usb: dwc2: gadget: Make use of GINTMSK2
-Thread-Topic: [PATCH v2 1/8] usb: dwc2: gadget: Make use of GINTMSK2
-Thread-Index: AQHWWorVyBqGE0pBtk+bf+VA53x5lqkIkEaA
-Date:   Wed, 15 Jul 2020 12:23:02 +0000
-Message-ID: <566f2d65-1b5a-ed2a-f33f-516b66be2624@synopsys.com>
-References: <20200715093209.3165641-1-lee.jones@linaro.org>
- <20200715093209.3165641-2-lee.jones@linaro.org>
-In-Reply-To: <20200715093209.3165641-2-lee.jones@linaro.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-authentication-results: linaro.org; dkim=none (message not signed)
- header.d=none;linaro.org; dmarc=none action=none header.from=synopsys.com;
-x-originating-ip: [198.182.37.200]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 50481411-dccb-4750-c2e2-08d828b9d1da
-x-ms-traffictypediagnostic: CY4PR12MB1832:
-x-microsoft-antispam-prvs: <CY4PR12MB1832B67CDF7FBB449491494FA77E0@CY4PR12MB1832.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: MC8n1NrdL7YVf/foctRwS5oltDIGczrPg7KsxQjK+XML86Dzj0t6GzOxmL/TAy/MOr7b5NPa0zIqmAbbnopgGTk8J2/bwj0pM6+zLTl6Ri+tZP/jKsY0dNNSnJtOwDUQHcH0RGBYTzqIXFFivnADqmYszI0H/XseLglvwJjD8RwHMzg9CCu5VqU7z30H2/vIFD43eMx+WGGxJUqSqeUaJ8Pq1+wAqmb6Fv5xFNRoguKlfKkEhovNVaJ+TIk5yHxGtH9Z+GqMFDGAhazEk+lMq0/qfbvzqtwlGvTSFwzBRA6ktRyXRjy2trnehqJrOzs/xgCaez0KzAQS93vxkQ2Y22mI2QyTbkCGSjPVmfKu8E0YFL9O/izeEbtxbDjC8yWZ
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR12MB1432.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(136003)(396003)(346002)(366004)(376002)(39860400002)(316002)(110136005)(83380400001)(2906002)(5660300002)(54906003)(31696002)(2616005)(66476007)(76116006)(186003)(91956017)(66946007)(6506007)(53546011)(64756008)(71200400001)(66556008)(4326008)(8936002)(8676002)(66446008)(86362001)(478600001)(6486002)(31686004)(36756003)(6512007)(26005)(43740500002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: wrbQGoHX9bBj8e87UzFg62KcL/OLaWb+2qvIo5ji+za86A9NyQtPScfQg8IkOO8QXNiVQGQmKb8Uc0yYhquAw1yRtUbJzWDhdS7ys7dAdFeIqcoXy+fVf8zLKn94R8bNVXP4sLPTRMFMq2Df8/Nw5wWhdnPLnVhdfMrAbjT7Pit3t19lZpJUs21j9RIJ+hulo2aLmik5SxjcQPoZ0s+/yVx4EnZCw+loe1KXgtS/fPzmYpZ1dcfA5Vil3dn7HUQK0uipRbxh40uMnU5RQSSo2KD+oYhV4H0obcKXgOuxyWctYcb9FoPzjKlMfKGY2xuSVv295YTjDDMz0nQZf+xxilKPzrkSGKeAkMxPr4VkT0LDYKRITnwyHXbZx4UaZQ2lvs7ITdhUiuppxxF8MHeBtS8ZreJUBXZH2skLmDo6LmgmJ+KCx23ajk15OOnOe2JfHYsVgSa7/DbHqdKPlMqL6U30FLxAc6ZAx8hfyql9XwuY2AfV+1xDzg2K+C985DZ2
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <01AEB015FA78424384F0C307E9F04ACE@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 93527206E9;
+        Wed, 15 Jul 2020 12:24:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1594815848;
+        bh=do5Y+nHZHqdoFUQxzJJ+vmQ9s9zZPvF7NTVSSBHIQ4k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=yMSLdJIch6+nLcO/r/CpnLkxa9uu5L9CjI2QdgcP8IkY80go+zCU043anvLOV5NFz
+         +q+KwSL2SR+ga9Kx8ZqVUOPaTbW5cS2Qni5MkvEEP3mp+2OMofB7KxyvDEcoUbr0+E
+         z/N5anjXBcRQQ4T9QPuXMzvd8xb2/dWeA5LWXZOA=
+Date:   Wed, 15 Jul 2020 14:24:03 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     David Guillen Fandos <david@davidgf.net>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: System crash/lockup after plugging CDC ACM device
+Message-ID: <20200715122403.GC2937397@kroah.com>
+References: <9778f9b8a8604e2c13979ea6909678c23cd286cb.camel@davidgf.net>
+ <20200715093029.GB2759174@kroah.com>
+ <867592c41350b09a0cb67e9a3924f8a2f758d79a.camel@davidgf.net>
+ <20200715105034.GB2880893@kroah.com>
+ <956ec3169eec6b121339ed6c1aedd0f7ca08db43.camel@davidgf.net>
+ <20200715111210.GA2892661@kroah.com>
+ <ed743fe1e0ede6d37bc4a62ba704f51c54c2f5bf.camel@davidgf.net>
 MIME-Version: 1.0
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR12MB1432.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 50481411-dccb-4750-c2e2-08d828b9d1da
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jul 2020 12:23:02.5172
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: wv2FrJVNSjjsIbXYjWLA/nwU5eKqxXZ/FOu60YicIAj8THOudEoclRFr7g3Vx8DViG6FvOpMmZ9276vp9k9bNw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1832
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ed743fe1e0ede6d37bc4a62ba704f51c54c2f5bf.camel@davidgf.net>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DQoNCk9uIDcvMTUvMjAyMCAxOjMyIFBNLCBMZWUgSm9uZXMgd3JvdGU6DQo+IFRoZSB2YWx1ZSBv
-YnRhaW5lZCBmcm9tIEdJTlRTVFMyIHNob3VsZCBiZSBtYXNrZWQgd2l0aCB0aGUgR0lOVE1TSzIN
-Cj4gdmFsdWUuICBMb29rcyBsaWtlIHRoaXMgaGFzIGJlZW4gYnJva2VuIHNpbmNlDQo+IGR3YzJf
-Z2FkZ2V0X3drdXBfYWxlcnRfaGFuZGxlcigpIHdhcyBhZGRlZCBiYWNrIGluIDIwMTguDQo+IA0K
-PiBBbHNvIGZpeGVzIHRoZSBmb2xsb3dpbmcgVz0xIHdhcm5pbmc6DQo+IA0KPiAgIGRyaXZlcnMv
-dXNiL2R3YzIvZ2FkZ2V0LmM6IEluIGZ1bmN0aW9uIOKAmGR3YzJfZ2FkZ2V0X3drdXBfYWxlcnRf
-aGFuZGxlcuKAmToNCj4gICBkcml2ZXJzL3VzYi9kd2MyL2dhZGdldC5jOjI1OTo2OiB3YXJuaW5n
-OiB2YXJpYWJsZSDigJhnaW50bXNrMuKAmSBzZXQgYnV0IG5vdCB1c2VkIFstV3VudXNlZC1idXQt
-c2V0LXZhcmlhYmxlXQ0KPiAgIDI1OSB8IHUzMiBnaW50bXNrMjsNCj4gICB8IF5+fn5+fn5+DQo+
-IA0KPiBDYzogTWluYXMgSGFydXR5dW55YW4gPGhtaW5hc0BzeW5vcHN5cy5jb20+DQo+IENjOiBC
-ZW4gRG9va3MgPGJlbkBzaW10ZWMuY28udWs+DQo+IEZpeGVzOiAxODdjNTI5OGExMjI5ICgidXNi
-OiBkd2MyOiBnYWRnZXQ6IEFkZCBoYW5kbGVyIGZvciBXa3VwQWxlcnQgaW50ZXJydXB0IikNCj4g
-U2lnbmVkLW9mZi1ieTogTGVlIEpvbmVzIDxsZWUuam9uZXNAbGluYXJvLm9yZz4NCg0KQWNrZWQt
-Ynk6IE1pbmFzIEhhcnV0eXVueWFuIDxobWluYXNAc3lub3BzeXMuY29tPg0KDQo+IC0tLQ0KPiBD
-aGFuZ2Vsb2c6DQo+IA0KPiB2MjogUmUtd3JpdHRlbiB0byAqdXNlKiBpbnN0YWQgb2YgKnJlbW92
-ZSogZ2ludG1zazINCj4gDQo+ICAgZHJpdmVycy91c2IvZHdjMi9nYWRnZXQuYyB8IDEgKw0KPiAg
-IDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZl
-cnMvdXNiL2R3YzIvZ2FkZ2V0LmMgYi9kcml2ZXJzL3VzYi9kd2MyL2dhZGdldC5jDQo+IGluZGV4
-IGRmNWZlZGFjYTYwYTAuLjAzY2YxZmE4NTYyMTkgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvdXNi
-L2R3YzIvZ2FkZ2V0LmMNCj4gKysrIGIvZHJpdmVycy91c2IvZHdjMi9nYWRnZXQuYw0KPiBAQCAt
-MjYwLDYgKzI2MCw3IEBAIHN0YXRpYyB2b2lkIGR3YzJfZ2FkZ2V0X3drdXBfYWxlcnRfaGFuZGxl
-cihzdHJ1Y3QgZHdjMl9oc290ZyAqaHNvdGcpDQo+ICAgDQo+ICAgCWdpbnRzdHMyID0gZHdjMl9y
-ZWFkbChoc290ZywgR0lOVFNUUzIpOw0KPiAgIAlnaW50bXNrMiA9IGR3YzJfcmVhZGwoaHNvdGcs
-IEdJTlRNU0syKTsNCj4gKwlnaW50c3RzMiAmPSBnaW50bXNrMjsNCj4gICANCj4gICAJaWYgKGdp
-bnRzdHMyICYgR0lOVFNUUzJfV0tVUF9BTEVSVF9JTlQpIHsNCj4gICAJCWRldl9kYmcoaHNvdGct
-PmRldiwgIiVzOiBXa3VwX0FsZXJ0X0ludFxuIiwgX19mdW5jX18pOw0KPiANCg==
+On Wed, Jul 15, 2020 at 01:20:54PM +0200, David Guillen Fandos wrote:
+> On Wed, 2020-07-15 at 13:12 +0200, Greg KH wrote:
+> > On Wed, Jul 15, 2020 at 12:57:14PM +0200, David Guillen Fandos wrote:
+> > > On Wed, 2020-07-15 at 12:50 +0200, Greg KH wrote:
+> > > > On Wed, Jul 15, 2020 at 12:31:42PM +0200, David Guillen Fandos
+> > > > wrote:
+> > > > > On Wed, 2020-07-15 at 11:30 +0200, Greg KH wrote:
+> > > > > > On Wed, Jul 15, 2020 at 10:58:03AM +0200, David Guillen
+> > > > > > Fandos
+> > > > > > wrote:
+> > > > > > > Hello linux-usb,
+> > > > > > > 
+> > > > > > > I think I might have found a kernel bug related to the USB
+> > > > > > > subsystem
+> > > > > > > (cdc_acm perhaps).
+> > > > > > > 
+> > > > > > > Context: I was playing around with a device I'm creating,
+> > > > > > > essentially a
+> > > > > > > USB quad modem device that exposes four modems to the host
+> > > > > > > system.
+> > > > > > > This
+> > > > > > > device is still a prototype so there's a few bugs here and
+> > > > > > > there,
+> > > > > > > most
+> > > > > > > likely in the USB descriptors and control requests.
+> > > > > > > 
+> > > > > > > What happens: After plugging the device the system starts
+> > > > > > > spitting
+> > > > > > > warnings and BUGs and it locks up. Most of the time some
+> > > > > > > CPUs
+> > > > > > > get
+> > > > > > > into
+> > > > > > > some spinloop and never comes back (you can see it being
+> > > > > > > detected
+> > > > > > > by
+> > > > > > > the watchdog after a few seconds). Generally after that the
+> > > > > > > USB
+> > > > > > > devices
+> > > > > > > stop working completely and at some point the machine
+> > > > > > > freezes
+> > > > > > > completely. In a couple of ocasions I managed to see a bug
+> > > > > > > in
+> > > > > > > dmesg
+> > > > > > > saying "unable to handle page fault for address XXX" and
+> > > > > > > "Supervisor
+> > > > > > > read access in kernel mode" "error code (0x0000) not
+> > > > > > > present
+> > > > > > > page".
+> > > > > > > I
+> > > > > > > could not get a trace for that one since the kernel died
+> > > > > > > completely
+> > > > > > > and
+> > > > > > > my log files were truncated/lost.
+> > > > > > > 
+> > > > > > > Since it is happening to my two machines (both Intel but
+> > > > > > > rather
+> > > > > > > different controllers, Sunrise Point-LP USB 3.0 vs 8
+> > > > > > > Series/C220)
+> > > > > > > and
+> > > > > > > with different kernel versions I suspect this might be a
+> > > > > > > bug in
+> > > > > > > the
+> > > > > > > kernel.
+> > > > > > > 
+> > > > > > > I have 4 logs that I collected, they are sort of long-ish,
+> > > > > > > not
+> > > > > > > sure
+> > > > > > > how
+> > > > > > > to best send them to the list.
+> > > > > > 
+> > > > > > Send the crashes with the callback list, that should be quite
+> > > > > > small,
+> > > > > > right?  We don't need the full log.
+> > > > > > 
+> > > > > > The first crash is the most important, the others can be from
+> > > > > > the
+> > > > > > first
+> > > > > > one and are not reliable.
+> > > > > > 
+> > > > > > thanks,
+> > > > > > 
+> > > > > > greg k-h
+> > > > > 
+> > > > > Ok then, here comes one of the logs, I selected some bits only
+> > > > > 
+> > > > > [  147.302016] WARNING: CPU: 3 PID: 134 at
+> > > > > kernel/workqueue.c:1473
+> > > > > __queue_work+0x364/0x410
+> > > > > [...]
+> > > > > [  147.302322] Call Trace:
+> > > > > [  147.302329]  <IRQ>
+> > > > > [  147.302342]  queue_work_on+0x36/0x40
+> > > > > [  147.302353]  __usb_hcd_giveback_urb+0x9c/0x110
+> > > > > [  147.302362]  usb_giveback_urb_bh+0xa0/0xf0
+> > > > > [  147.302372]  tasklet_action_common.constprop.0+0x66/0x100
+> > > > > [  147.302382]  __do_softirq+0xe9/0x2dc
+> > > > > [  147.302391]  irq_exit+0xcf/0x110
+> > > > > [  147.302397]  do_IRQ+0x55/0xe0
+> > > > > [  147.302408]  common_interrupt+0xf/0xf
+> > > > > [  147.302413]  </IRQ>
+> > > > > [...]
+> > > > > [  184.771172] watchdog: BUG: soft lockup - CPU#3 stuck for
+> > > > > 23s!
+> > > > > [kworker/3:2:134]
+> > > > 
+> > > > That was the first message?
+> > > > 
+> > > > Ok, we need some more logs, how about the 30 lines right before
+> > > > the
+> > > > above?
+> > > > 
+> > > > And what kernel version are you using?
+> > > > 
+> > > > thanks,
+> > > > 
+> > > > greg k-h
+> > > 
+> > > Heh I assumed you would find the 3rd stack more interesting since
+> > > it
+> > > involves more subsystems but anyway, here we got, the first one
+> > > with
+> > > more context. The trigger as you can see is me connecting the USB
+> > > device:
+> > > 
+> > > [  141.445367] usb 1-1: new full-speed USB device number 5 using
+> > > xhci_hcd
+> > > [  141.573592] usb 1-1: New USB device found, idVendor=0483,
+> > > idProduct=5740, bcdDevice= 2.00
+> > > [  141.573597] usb 1-1: New USB device strings: Mfr=1, Product=2,
+> > > SerialNumber=3
+> > > [  141.573601] usb 1-1: Product: Quad-UART serial USB device
+> > > [  141.573603] usb 1-1: Manufacturer: davidgf.net
+> > > [  141.573605] usb 1-1: SerialNumber: serialno
+> > > [  142.375007] cdc_acm 1-1:1.0: ttyACM0: USB ACM device
+> > > [  142.376623] cdc_acm 1-1:1.2: ttyACM1: USB ACM device
+> > > [  142.378350] cdc_acm 1-1:1.4: ttyACM2: USB ACM device
+> > > [  142.379637] cdc_acm 1-1:1.6: ttyACM3: USB ACM device
+> > > [  142.382473] usbcore: registered new interface driver cdc_acm
+> > > [  142.382476] cdc_acm: USB Abstract Control Model driver for USB
+> > > modems and ISDN adapters
+> > > [  147.301997] ------------[ cut here ]------------
+> > > [  147.302016] WARNING: CPU: 3 PID: 134 at kernel/workqueue.c:1473
+> > > __queue_work+0x364/0x410
+> > > [  147.302019] Modules linked in: cdc_acm rfcomm ccm wireguard
+> > > curve25519_x86_64 libchacha20poly1305 chacha_x86_64 poly1305_x86_64
+> > > libblake2s blake2s_x86_64 ip6_udp_tunnel udp_tunnel
+> > > libcurve25519_generic libchacha libblake2s_generic nft_fib_inet
+> > > nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4
+> > > nf_reject_ipv6 nft_reject nft_ct nft_chain_nat ip6table_nat
+> > > ip6table_mangle ip6table_raw ip6table_security iptable_nat nf_nat
+> > > nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 libcrc32c iptable_mangle
+> > > iptable_raw iptable_security ip_set nf_tables nfnetlink
+> > > ip6table_filter
+> > > ip6_tables iptable_filter cmac vboxnetadp(OE) vboxnetflt(OE) bnep
+> > > vboxdrv(OE) sunrpc vfat fat uvcvideo videobuf2_vmalloc
+> > > videobuf2_memops
+> > > videobuf2_v4l2 videobuf2_common videodev btusb btrtl btbcm btintel
+> > > mc
+> > > bluetooth ecdh_generic ecc iTCO_wdt iTCO_vendor_support mei_hdcp
+> > > intel_rapl_msr dell_laptop x86_pkg_temp_thermal intel_powerclamp
+> > > coretemp kvm_intel kvm irqbypass intel_cstate intel_uncore
+> > > intel_rapl_perf iwlmvm
+> > > [  147.302121]  snd_hda_codec_hdmi mac80211 snd_soc_skl
+> > > snd_soc_sst_ipc
+> > > snd_soc_sst_dsp dell_wmi snd_hda_ext_core dell_smbios
+> > > snd_hda_codec_realtek dcdbas libarc4 wmi_bmof dell_wmi_descriptor
+> > > snd_soc_acpi_intel_match snd_soc_acpi intel_wmi_thunderbolt
+> > > snd_hda_codec_generic snd_soc_core ledtrig_audio iwlwifi pcspkr
+> > > snd_compress ac97_bus snd_pcm_dmaengine snd_hda_intel
+> > > snd_intel_dspcfg
+> > > snd_hda_codec cfg80211 snd_hda_core snd_hwdep snd_seq
+> > > snd_seq_device
+> > > joydev snd_pcm rfkill snd_timer snd i2c_i801 soundcore idma64
+> > > int3403_thermal intel_hid int3400_thermal sparse_keymap
+> > > acpi_thermal_rel mei_me intel_xhci_usb_role_switch acpi_pad roles
+> > > mei
+> > > intel_pch_thermal processor_thermal_device intel_rapl_common
+> > > int340x_thermal_zone intel_soc_dts_iosf binfmt_misc ip_tables
+> > > dm_crypt
+> > > i915 rtsx_pci_sdmmc mmc_core crct10dif_pclmul crc32_pclmul
+> > > i2c_algo_bit
+> > > cec crc32c_intel drm_kms_helper nvme ghash_clmulni_intel drm
+> > > nvme_core
+> > > serio_raw rtsx_pci hid_multitouch wmi i2c_hid video
+> > > pinctrl_sunrisepoint pinctrl_intel
+> > > [  147.302218]  fuse
+> > > [  147.302230] CPU: 3 PID: 134 Comm: kworker/3:2 Tainted:
+> > > G          IOE     5.7.7-200.fc32.x86_64 #1
+> > > [  147.302233] Hardware name: Dell Inc. XPS 13 9350/0PWNCR, BIOS
+> > > 1.12.2
+> > > 12/15/2019
+> > > [  147.302260] Workqueue:  0x0 (mm_percpu_wq)
+> > > [  147.302275] RIP: 0010:__queue_work+0x364/0x410
+> > > [  147.302282] Code: e0 f1 69 a9 00 01 1f 00 75 0f 65 48 8b 3c 25
+> > > c0 8b
+> > > 01 00 f6 47 24 20 75 25 0f 0b 48 83 c4 10 5b 5d 41 5c 41 5d 41 5e
+> > > 41 5f
+> > > c3 <0f> 0b e9 78 fe ff ff 41 83 cc 02 49 8d 57 60 e9 5d fe ff ff e8
+> > > 53
+> > > [  147.302286] RSP: 0018:ffffbab980154e68 EFLAGS: 00010002
+> > > [  147.302292] RAX: ffff8f551b333790 RBX: 0000000000000048 RCX:
+> > > 0000000000000000
+> > > [  147.302295] RDX: ffff8f551b333798 RSI: ffff8f5575803718 RDI:
+> > > ffff8f5576daa840
+> > > [  147.302299] RBP: ffff8f551b333790 R08: ffffffff97856cb0 R09:
+> > > 0000000000000000
+> > > [  147.302302] R10: 0000000000000000 R11: ffffffff97856cb8 R12:
+> > > 0000000000000003
+> > > [  147.302306] R13: 0000000000002000 R14: ffff8f5575c14e00 R15:
+> > > ffff8f5576db0700
+> > > [  147.302311] FS:  0000000000000000(0000)
+> > > GS:ffff8f5576d80000(0000)
+> > > knlGS:0000000000000000
+> > > [  147.302315] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > [  147.302319] CR2: 00000000000000b0 CR3: 0000000267774004 CR4:
+> > > 00000000003606e0
+> > > [  147.302322] Call Trace:
+> > > [  147.302329]  <IRQ>
+> > > [  147.302342]  queue_work_on+0x36/0x40
+> > > [  147.302353]  __usb_hcd_giveback_urb+0x9c/0x110
+> > > [  147.302362]  usb_giveback_urb_bh+0xa0/0xf0
+> > 
+> > Are you sure your device is working properly and talking USB
+> > correctly
+> > to the host?  It looks like you are just timing out for some reason.
+> > 
+> > But, that warning is showing that something is odd in the usb
+> > workqueue,
+> > which is strange.
+> > 
+> > What type of host controller is this talking to?  And does your
+> > device
+> > actually answer the urbs being sent to it correctly?
+> > 
+> > Using usbmon on this might be the best way to watch the USB traffic,
+> > if
+> > you don't have a hardware protocol sniffer, which could provide some
+> > clues as to what is going wrong.
+> > 
+> > thanks,
+> > 
+> > greg k-h
+> 
+> As I mentioned the device is likely buggy, since I'm developing and
+> debugging it.
+> However my ability to debug and fix any issue is limited by the fact
+> that the kernel decides to stop working as usual, making my USB
+> keyboard and mouse useless, if not crashing later due to soft lockups.
+> 
+> Shouldn't the kernel be resilient to such devices?
+
+Yes it should, we should not crash.
+
+
+> I've developed quite
+> a few USB devices in the past and I've never ran into things like this
+> on Linux (Windows is another story, rather 'easy' to crash, hang or
+> bluescreen). In any case since I do not have access to a hardware
+> debugger and the machine goes bananas (preventing me from using
+> Wireshark) I do not think I can further debug this issue. I could try
+> to find a kernel version where this does not crash the machine (only
+> tested 5.6.X and 5.7.X so far). Or perhaps use VirtualBox, but I'd need
+> to convice the host OS to ignore the USB device and just forward it to
+> the guest.
+
+Trying to trace down what part of the setup is failing, by using usbmon,
+will be good to try to figure out what the problem is here, if you can
+do that.
+
+> The firmware for this device can be easily tweaked to expose an
+> arbitrary number (up to 7 I think) of CDC ACM interfaces. When I use
+> one or two there's no issues, three has had some issues (but did not
+> investigate further). Going to four is what consistently triggers
+> kernel issues.
+
+Hm, that might be a clue, what does the output of 'lsusb -v' for that
+device when you have 3 and then 4 interfaces?
+
+thanks,
+
+greg k-h
