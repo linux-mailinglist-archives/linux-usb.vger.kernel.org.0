@@ -2,49 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 665772208F9
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jul 2020 11:39:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F4CC2208FA
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jul 2020 11:39:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730644AbgGOJjQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Jul 2020 05:39:16 -0400
+        id S1730646AbgGOJjS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Jul 2020 05:39:18 -0400
 Received: from mail-eopbgr10063.outbound.protection.outlook.com ([40.107.1.63]:31605
         "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730612AbgGOJjO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 15 Jul 2020 05:39:14 -0400
+        id S1728820AbgGOJjR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 15 Jul 2020 05:39:17 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=V3GGXLGO7lKu5qxvNkIzCWb0iFWmpg0Z75TmbkPksD3yBN1o1Va7ZbUYm/OfTvuRxMtbkVsELxkmJbYvQtO76SeGRdgFy8tTFuTwpYydoAvmVxI8IFv8eBx5k5Vr8JKDVZ9fn0flPCD+Ot8lg9M875dd4pib8ZCfWeFKqPud0hJTpYC1hoDTTanQHEJqKi+ysKgJP936JMdC633Jhr6IxweqqJ/S37ji0xwjChkqdI1IMkrxglpto1ZZpt+naky8dXe+zaOrhcMHzwS7hGqyIAo2dBumolMz9U6IxEfPEmjKIrKwDbsG7lDDhFBlO/WU55l1XT+zNi/mHO7U4ytqFg==
+ b=l4u+HswWk9UqvEio9Jb6GZCpJA5lXbfegC3uI+IqTXpLpGnszPfUQanLlyGYafAz+ZwtJSxaPadCGRMRjxkSJwuIxYaNnSQ15I6L4N0KJ3eFenuXhkiBb/pGH5EnSjBRQgjUDvhDrBBsJaaqDKtE8QKX25stXPODUUGt8sHPcBalncBzGLBqXb4woKigyZLYIyKbqtEVDI6Xb44Fw1aMlSGAJNhodTfw7a8ApDfch0MFV859R3ijysOXVff5p82ZVjNeBIGKFPHwbOL2+xO2/fsJFbdRhoz5ytWe++FucTVKv8d0NJW3FQZDfm9ihL/z8opQLCQ1MQAz4Sj0NEOH3Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DNB1fiZu78+IZVQikpMkxUAKMB+QkfWJiFCGPtGLR/0=;
- b=IebwKt2eby+oP/U4tkxs1GSsFLxBoe95NI05iJwm3CiLAS2Ti8o6a+1nzNnFc4DLplRgSJ+Eaj0srdsgqhaU1TlduNeGyZWMAL55+VHnZQEuUoszVELjaF1v5RiVvTDHYste7pdXOl44+RfZ8l257izBp7O35pQ3QCWN/qJ5F9N+FxBz+PxEocsk88Cdj/5U2VAlZDsqi+N2bdxQc/+sIxv90COP0wnLGRzyHG7oiWgjXpH8gbvxZMPngaCGakrFRuOWOEoOWujBOa3PBjlKgENHL8rdJQ04X8P2nmAk42o4vWxcHSutFUD9VGkBcqmUi2o2+Vz/5Mxjz2qMT41bfQ==
+ bh=gSaFzyIYV/gkK0Ukz8YLMYdjsOE2PgBR/Wj4Ao1IWMo=;
+ b=RH7fT1kkvB+S6mwKosIK0WfBeQlnPYP6Lp/5rwYUuk791N7h+zuEgclKqUkShbkTGYHf47HMk8KUbQrnly0mrf7aDmrMP8mIX3xic4yHN8ewAdFYiL70V4UwnNstMYbBHNcEaU9bHgpVQpfz3WOUnxbq8cJiTSJnzUETc1wIEE8AD3PH6exyhXrQ0YlnXBqJT/nZ13ZeDNxx8lZ3bf7fjHLuIJt2ZmwyLlQwuVjcpgMdJ9bIGhUOLuhhV2bYRRZRgPlu+KHUszxpyDTNrRKsg5/bdd7C9QBSEPM1XFgyOyfeB4a2VTcUZKImBLQoXSYL0wB/ylCjym/6IQyWgC59pw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DNB1fiZu78+IZVQikpMkxUAKMB+QkfWJiFCGPtGLR/0=;
- b=aF0dbz7TvLA8QLT6vnPIrMR2ahykJ1dw/f07WrQGFVI5q2ZKOPTZ21qiICJqqYeYwMSmqoebYoR/e+y0n3fc4gI73IG+SHirFon7NYzaSExL3vaJlgxMXBxEDJwmTY4wDx+YD0uuWGJcT+FsaHG+8294Um6sXw6a6dVtbCbjp0A=
+ bh=gSaFzyIYV/gkK0Ukz8YLMYdjsOE2PgBR/Wj4Ao1IWMo=;
+ b=Idmf4XFgNieVv3GyWptLNPOGdc7qAIdXdBUOu3STkyBpIo/3+crlFpjEJoKyW0ZFTkePIE4IAPGEGKblIOSWzDX1Gbdib4/ti0Cp5A9axLCcSfFGYvT9+TTmvREJX/hDub3UFe+ljzgVuGEpgvJcm1D1jsFpIkoFHy4U2pcPIL0=
 Authentication-Results: intel.com; dkim=none (message not signed)
  header.d=none;intel.com; dmarc=none action=none header.from=nxp.com;
 Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
  by AM6PR04MB4245.eurprd04.prod.outlook.com (2603:10a6:209:4f::19) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3174.22; Wed, 15 Jul
- 2020 09:39:10 +0000
+ 2020 09:39:12 +0000
 Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
  ([fe80::1101:adaa:ee89:af2a]) by AM7PR04MB7157.eurprd04.prod.outlook.com
  ([fe80::1101:adaa:ee89:af2a%3]) with mapi id 15.20.3174.026; Wed, 15 Jul 2020
- 09:39:10 +0000
+ 09:39:12 +0000
 From:   Peter Chen <peter.chen@nxp.com>
 To:     mathias.nyman@intel.com
 Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
         linux-imx@nxp.com, stern@rowland.harvard.edu,
         Peter Chen <peter.chen@nxp.com>
-Subject: [PATCH 2/3] usb: host: xhci-plat: initialize device wakeup default enabled
-Date:   Wed, 15 Jul 2020 17:38:57 +0800
-Message-Id: <20200715093858.12830-2-peter.chen@nxp.com>
+Subject: [PATCH 3/3] usb: host: xhci-plat: improve the comments for xhci_plat_suspend
+Date:   Wed, 15 Jul 2020 17:38:58 +0800
+Message-Id: <20200715093858.12830-3-peter.chen@nxp.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200715093858.12830-1-peter.chen@nxp.com>
 References: <20200715093858.12830-1-peter.chen@nxp.com>
@@ -54,65 +54,61 @@ X-ClientProxiedBy: SG2PR02CA0003.apcprd02.prod.outlook.com
  (2603:10a6:20b:118::20)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from b29397-desktop.ap.freescale.net (119.31.174.67) by SG2PR02CA0003.apcprd02.prod.outlook.com (2603:1096:3:17::15) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3195.18 via Frontend Transport; Wed, 15 Jul 2020 09:39:07 +0000
+Received: from b29397-desktop.ap.freescale.net (119.31.174.67) by SG2PR02CA0003.apcprd02.prod.outlook.com (2603:1096:3:17::15) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3195.18 via Frontend Transport; Wed, 15 Jul 2020 09:39:10 +0000
 X-Mailer: git-send-email 2.17.1
 X-Originating-IP: [119.31.174.67]
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: db975079-93a0-4df2-f7f7-08d828a2ece1
+X-MS-Office365-Filtering-Correlation-Id: 70c176f2-071b-424a-1ab6-08d828a2ee5c
 X-MS-TrafficTypeDiagnostic: AM6PR04MB4245:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM6PR04MB4245C1EB499C6D0A714AA6218B7E0@AM6PR04MB4245.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4502;
+X-Microsoft-Antispam-PRVS: <AM6PR04MB4245D5919A80EC465B86A3B28B7E0@AM6PR04MB4245.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4714;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pHKwtKsebtx2VxudLR2QQJkF+LfPKGnk+nUIeQi/8jmhf3hKaaXwx4K8GlhTCyYYNjQo1vPq6dT1qxaprPJiK9umvbcbwrthmOhl/RP06p+EVFsdBT9B0inC28SJ7DsKhsmCVjl/l5oCRICZp/56Krpp0p/q85m80d69OclIww4+e1oOqgTGe0YteGqwAXKlZFicdl5Zp0Ikj85/QIUf21mdnDKFYW36zInsjC0oWaNqDJ8asW52dRo2WH4a6T4USF6GhyyPY6+JjAuRaMOmd4ji5Y+zPWpPMjW1hiL1a41croK2zYUdea1UODBc4Rn5EqThg+AybPhJcPWyY08reQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(136003)(396003)(366004)(346002)(39860400002)(376002)(5660300002)(8676002)(66476007)(6916009)(66946007)(4326008)(1076003)(36756003)(6512007)(186003)(16526019)(26005)(52116002)(478600001)(83380400001)(8936002)(956004)(6666004)(6506007)(2616005)(44832011)(66556008)(2906002)(316002)(6486002)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: wsMhYsrR3KPm6IOBFrtIQbblMgeXElZzu7bqweVqGIW9xwjwtXhoAUotzH4flJID5NtT59Ty1sRwiw7nwn7stj6/NDxLUheFIoRVLUDWgXIIeYnyVbgujLMGnBQ0rUx8KcOpQx12vrWbZcPxZLd8xqPqh3LVYFOOBT+AoBHPAImFjgPGWwvlhuAXAjoo4g2gg6gfv6F/8/xHuqnz4Bfr3R/rmEqLt+6pC4AgO4LHungJ8QF2CWnWXjpbrtG9txy9xBT+V5xCbhnqvvV9NoPWNKhbG8HeiAj7kdKdXMTC2bFuw2uu9Gs9OCU7Lf+jB+bkF5ECvuSC94KfHE/OmPVX0+H2vaH8iu5yGV6l9qRXsJl1X9TDeqdDhhXUPyM1tiVWWSSzlLKUtp0V4teLMlZFqGj9NSMZEs1AJWE8mXDBLvoX9tM8X9jkW9AN94Lfol3WrFGbwRCRnYz1bYyy8ecC241cdvf0W9NiwrKr1lyrixbbf9RJ/q0/ss6mnXS8XgXl
+X-Microsoft-Antispam-Message-Info: ur5OqPJnLvDTOKdXdXl7x4QBPJEBCYcupUhl+Ktv21I1uZqDbBxazLTlh5D2PqieZa2iNjMixBJ+Y28O/ET/QvpBVCMLojSMtjlt7AV9CjScw7dH/Xk5YklMh1UjdP8H5s+HfPkNoZgaLQXxIiWTylsM+lMu5umsYR7yUnY9HhgF1wX+M7lcXrFBQITswS8DxztAyzg3fvXyDxalxKRCknXlZIgCDcFRFFbsKF2YKX/HyvyJ5eVm+ON9AeqORa0kURfKxFxFiW7bg5qEGvLSd31+qI/jLAZwcWh3+W9+dT91/VcLkIsTeY3ifn43/2C5JY9tEUWhTz+mxPVkM9iSEw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(136003)(396003)(366004)(346002)(39860400002)(376002)(5660300002)(8676002)(66476007)(6916009)(4744005)(66946007)(4326008)(1076003)(36756003)(6512007)(186003)(16526019)(26005)(52116002)(478600001)(83380400001)(8936002)(956004)(6666004)(6506007)(2616005)(44832011)(66556008)(2906002)(316002)(6486002)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: BqWcLNDegSm34HJBLZl2S3LaGndLceN+qcUOBmi15/MN6/2A26MRGn7NnQUdfPWdy5ZgGHfN/ujCcSAWLw9Nx695ZerGdXYyHvsRt3MExKiaDAFcXmAKHZgJklV58R1rEb5Emssl7QCBk2U8b1iGz6+Ty74oUU6Xkp48HIcWJ8am9vJXsUoWliX63QmG8KD4l1DWGfZpDuq4fVeWD/yeqnKtPqF4A3J3YtYXpcfqQ5U1AMkSGAHuMpeLcs6lNPyRRNMh8DZ1+bUiB/rCiIzyoMwbVW3u4JhGOWsLThs1Krie8yOkxd5S/dsqFQCTlH2nVdq4dPTuCSJT95YNE0LRDnC5jUamYfDWZ0TeDa76cLVCCGvgfRFCpxUk6XV6fCjxg82uP7bHbZ0bqKH/GWzqQxh1CtwCG06elnnBGfb29ehi0Ay3eugDe7gzKeXDICzguWXvHEsr8GERQ84gJc1+jHiPXtGh2Twk/K2OGzP/F1+tUdaey++BSERLv9hldk/7
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: db975079-93a0-4df2-f7f7-08d828a2ece1
+X-MS-Exchange-CrossTenant-Network-Message-Id: 70c176f2-071b-424a-1ab6-08d828a2ee5c
 X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2020 09:39:10.0315
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jul 2020 09:39:12.5097
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: XY5rAjqmheQqfvcQjBY1d38sigAUefMx+gaX3ys7BIzCIuBHnCSXUNobxxN8UH5k/C46wPM9tPkkAII5BHbBkw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: jxuXW/hUZm5QRcIl0rxx+9jEa5gVeXWHJZwYnvn8n4qe2IQEJ4EJM3VhNyXpj6HMnsm8c2oQX2IYyQlsx1mZWA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB4245
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-It initializes the controller wakeup setting as default enabled
-unless the user changes it, whether the controller responds
-the wakeup event depends on roothub's wakeup setting since the
-wakeup occurs at the bus not the controller itself.
+To reflect the current code status.
 
-With this change, the controller uses this driver could have
-wakeup capability due to device_may_wakeup(dev) at xhci_plat_suspend
-is default true; without this change, this value is always false.
-
-Suggested-by: Alan Stern <stern@rowland.harvard.edu>
 Signed-off-by: Peter Chen <peter.chen@nxp.com>
 ---
- drivers/usb/host/xhci-plat.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/host/xhci-plat.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
 diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index 53e6f8f69ce0..4bf03aa0143d 100644
+index 4bf03aa0143d..abfa85145712 100644
 --- a/drivers/usb/host/xhci-plat.c
 +++ b/drivers/usb/host/xhci-plat.c
-@@ -287,7 +287,7 @@ static int xhci_plat_probe(struct platform_device *pdev)
- 		*priv = *priv_match;
- 	}
- 
--	device_wakeup_enable(hcd->self.controller);
-+	device_init_wakeup(hcd->self.controller, true);
- 
- 	xhci->main_hcd = hcd;
- 	xhci->shared_hcd = __usb_create_hcd(driver, sysdev, &pdev->dev,
+@@ -425,11 +425,7 @@ static int __maybe_unused xhci_plat_suspend(struct device *dev)
+ 		return ret;
+ 	/*
+ 	 * xhci_suspend() needs `do_wakeup` to know whether host is allowed
+-	 * to do wakeup during suspend. Since xhci_plat_suspend is currently
+-	 * only designed for system suspend, device_may_wakeup() is enough
+-	 * to dertermine whether host is allowed to do wakeup. Need to
+-	 * reconsider this when xhci_plat_suspend enlarges its scope, e.g.,
+-	 * also applies to runtime suspend.
++	 * to do wakeup during suspend, the wakeup is enabled by default.
+ 	 */
+ 	return xhci_suspend(xhci, device_may_wakeup(dev));
+ }
 -- 
 2.17.1
 
