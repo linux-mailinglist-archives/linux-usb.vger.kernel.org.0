@@ -2,59 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8278D2202CD
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jul 2020 05:12:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54E1F220429
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jul 2020 06:57:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728084AbgGODMR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 14 Jul 2020 23:12:17 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:60754 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726852AbgGODMQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 14 Jul 2020 23:12:16 -0400
-Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 3029CF1C7A3FF46CCD8E;
-        Wed, 15 Jul 2020 11:12:14 +0800 (CST)
-Received: from localhost (10.174.179.108) by DGGEMS403-HUB.china.huawei.com
- (10.3.19.203) with Microsoft SMTP Server id 14.3.487.0; Wed, 15 Jul 2020
- 11:12:06 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <b-liu@ti.com>, <gregkh@linuxfoundation.org>,
-        <nishadkamdar@gmail.com>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH -next] USB: musb: Remove unused inline function
-Date:   Wed, 15 Jul 2020 11:12:04 +0800
-Message-ID: <20200715031204.17308-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        id S1727065AbgGOE5H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Jul 2020 00:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47800 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725932AbgGOE5H (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jul 2020 00:57:07 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF1CC061755;
+        Tue, 14 Jul 2020 21:57:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=QH+Jx7GuW5CZ9F7NvhpWICwR1gQiO7ytC/JPD1xAQ8A=; b=wXbyNJerlnoUG/6yjY1iMxP/sc
+        8Yj3hhphZtZYY6RKYXh6qiGmCC2PdarEvOWBi6Bhp38zQiPeaN0rvv4Lfi+Cz/brvpGEopojNnQJF
+        A0Ao5/pJBCtzgYW8zfFiwyg5WvZVo7pGohEeiBq9SwS2LbVCUBim2v/+epB2+p4UjclZv4pozzGNl
+        ymxV4uUmiRN+7p8bNHckN2oc8FBh79+oOEfTX4+L+5ENooz2FoHFnd2PC9OCYZz7+No3eKSxKqzih
+        pHZ411/Vfp3R7sRu/RXSuZaFW/paMbqYwSpfsJad58WshVkUA4w22GoUw8vEjGSzqk8BRPAgjbrBC
+        z8P0vi3g==;
+Received: from [2601:1c0:6280:3f0::19c2] (helo=smtpauth.infradead.org)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jvZTc-0005gJ-I9; Wed, 15 Jul 2020 04:57:05 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH 1/4] usb: linux/usb.h: drop duplicated word in comment
+Date:   Tue, 14 Jul 2020 21:56:58 -0700
+Message-Id: <20200715045701.22949-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.174.179.108]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-It is never used, so can remove it.
+Drop the doubled word "the" in a comment.
 
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
 ---
- drivers/usb/musb/musb_host.h | 1 -
- 1 file changed, 1 deletion(-)
+ include/linux/usb.h |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/musb/musb_host.h b/drivers/usb/musb/musb_host.h
-index 32336571f05c..4804d4d85c15 100644
---- a/drivers/usb/musb/musb_host.h
-+++ b/drivers/usb/musb/musb_host.h
-@@ -97,7 +97,6 @@ static inline void musb_host_tx(struct musb *musb, u8 epnum)	{}
- static inline void musb_host_rx(struct musb *musb, u8 epnum)	{}
- static inline void musb_root_disconnect(struct musb *musb)	{}
- static inline void musb_host_resume_root_hub(struct musb *musb)	{}
--static inline void musb_host_poll_rh_status(struct musb *musb)	{}
- static inline void musb_host_poke_root_hub(struct musb *musb)	{}
- static inline int musb_port_suspend(struct musb *musb, bool do_suspend)
- {
--- 
-2.17.1
-
-
+--- linux-next-20200714.orig/include/linux/usb.h
++++ linux-next-20200714/include/linux/usb.h
+@@ -341,7 +341,7 @@ struct usb_interface_cache {
+  * @interface: array of pointers to usb_interface structures, one for each
+  *	interface in the configuration.  The number of interfaces is stored
+  *	in desc.bNumInterfaces.  These pointers are valid only while the
+- *	the configuration is active.
++ *	configuration is active.
+  * @intf_cache: array of pointers to usb_interface_cache structures, one
+  *	for each interface in the configuration.  These structures exist
+  *	for the entire life of the device.
