@@ -2,21 +2,20 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5D49221747
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jul 2020 23:46:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01BDC221769
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jul 2020 23:59:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727034AbgGOVp4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Jul 2020 17:45:56 -0400
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:36715 "EHLO
-        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726370AbgGOVpz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jul 2020 17:45:55 -0400
-X-Originating-IP: 90.65.108.121
+        id S1726989AbgGOV6G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Jul 2020 17:58:06 -0400
+Received: from relay11.mail.gandi.net ([217.70.178.231]:35375 "EHLO
+        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726370AbgGOV6G (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jul 2020 17:58:06 -0400
 Received: from localhost (lfbn-lyo-1-1676-121.w90-65.abo.wanadoo.fr [90.65.108.121])
         (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id 8DDB860002;
-        Wed, 15 Jul 2020 21:45:51 +0000 (UTC)
-Date:   Wed, 15 Jul 2020 23:45:51 +0200
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 5973B100008;
+        Wed, 15 Jul 2020 21:58:02 +0000 (UTC)
+Date:   Wed, 15 Jul 2020 23:58:01 +0200
 From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
 Cc:     Cristian Birsan <cristian.birsan@microchip.com>,
@@ -27,46 +26,78 @@ Cc:     Cristian Birsan <cristian.birsan@microchip.com>,
         Songjun Wu <songjun.wu@atmel.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-usb@vger.kernel.org
-Subject: Re: [PATCH RESEND 2/3] usb: gadget: udc: atmel: fix uninitialized
- read in debug printk
-Message-ID: <20200715214551.GF23553@piout.net>
+Subject: Re: [PATCH RESEND 3/3] usb: gadget: udc: atmel: implement .pullup
+ callback
+Message-ID: <20200715215801.GG23553@piout.net>
 References: <cover.1594231056.git.mirq-linux@rere.qmqm.pl>
- <248e7089f7fbb3727e83a1dfb43820d96a69e8c2.1594231056.git.mirq-linux@rere.qmqm.pl>
+ <63121e624012996a2f6f5f3763270ad834667a12.1594231056.git.mirq-linux@rere.qmqm.pl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <248e7089f7fbb3727e83a1dfb43820d96a69e8c2.1594231056.git.mirq-linux@rere.qmqm.pl>
+In-Reply-To: <63121e624012996a2f6f5f3763270ad834667a12.1594231056.git.mirq-linux@rere.qmqm.pl>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 08/07/2020 20:04:09+0200, Michał Mirosław wrote:
-> Fixed commit moved the assignment of 'req', but did not update a
-> reference in the DBG() call. Use the argument as it was renamed.
+On 08/07/2020 20:04:10+0200, Michał Mirosław wrote:
+> Implement udc->pullup callback, so that udc_connect/disconnect work.
+> This is needed for composite gadget, as it assumes udc_disconnect()
+> actually works and calls its ->disconnect callback.
 > 
-> Fixes: 5fb694f96e7c ("usb: gadget: udc: atmel: fix possible oops when unloading module")
 > Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
 Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
 
 > ---
->  drivers/usb/gadget/udc/atmel_usba_udc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/usb/gadget/udc/atmel_usba_udc.c | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
 > 
 > diff --git a/drivers/usb/gadget/udc/atmel_usba_udc.c b/drivers/usb/gadget/udc/atmel_usba_udc.c
-> index 9153e220848d..9342a3d24963 100644
+> index 9342a3d24963..c5128c229c52 100644
 > --- a/drivers/usb/gadget/udc/atmel_usba_udc.c
 > +++ b/drivers/usb/gadget/udc/atmel_usba_udc.c
-> @@ -865,7 +865,7 @@ static int usba_ep_dequeue(struct usb_ep *_ep, struct usb_request *_req)
->  	u32 status;
+> @@ -1028,6 +1028,7 @@ usba_udc_set_selfpowered(struct usb_gadget *gadget, int is_selfpowered)
+>  	return 0;
+>  }
 >  
->  	DBG(DBG_GADGET | DBG_QUEUE, "ep_dequeue: %s, req %p\n",
-> -			ep->ep.name, req);
-> +			ep->ep.name, _req);
+> +static int atmel_usba_pullup(struct usb_gadget *gadget, int is_on);
+>  static int atmel_usba_start(struct usb_gadget *gadget,
+>  		struct usb_gadget_driver *driver);
+>  static int atmel_usba_stop(struct usb_gadget *gadget);
+> @@ -1101,6 +1102,7 @@ static const struct usb_gadget_ops usba_udc_ops = {
+>  	.get_frame		= usba_udc_get_frame,
+>  	.wakeup			= usba_udc_wakeup,
+>  	.set_selfpowered	= usba_udc_set_selfpowered,
+> +	.pullup			= atmel_usba_pullup,
+>  	.udc_start		= atmel_usba_start,
+>  	.udc_stop		= atmel_usba_stop,
+>  	.match_ep		= atmel_usba_match_ep,
+> @@ -1957,6 +1959,24 @@ static irqreturn_t usba_vbus_irq_thread(int irq, void *devid)
+>  	return IRQ_HANDLED;
+>  }
 >  
->  	spin_lock_irqsave(&udc->lock, flags);
->  
+> +static int atmel_usba_pullup(struct usb_gadget *gadget, int is_on)
+> +{
+> +	struct usba_udc *udc = container_of(gadget, struct usba_udc, gadget);
+> +	unsigned long flags;
+> +	u32 ctrl;
+> +
+> +	spin_lock_irqsave(&udc->lock, flags);
+> +	ctrl = usba_readl(udc, CTRL);
+> +	if (is_on)
+> +		ctrl &= ~USBA_DETACH;
+> +	else
+> +		ctrl |= USBA_DETACH;
+> +	usba_writel(udc, CTRL, ctrl);
+> +	spin_unlock_irqrestore(&udc->lock, flags);
+> +
+> +	return 0;
+> +}
+> +
+>  static int atmel_usba_start(struct usb_gadget *gadget,
+>  		struct usb_gadget_driver *driver)
+>  {
 > -- 
 > 2.20.1
 > 
