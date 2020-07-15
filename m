@@ -2,151 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 254812204A2
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jul 2020 07:51:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 325652204D1
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jul 2020 08:15:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725991AbgGOFvk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Jul 2020 01:51:40 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:47956 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725850AbgGOFvj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jul 2020 01:51:39 -0400
-Received: from mailhost.synopsys.com (us03-mailhost2.synopsys.com [10.4.17.18])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 27B61401D7;
-        Wed, 15 Jul 2020 05:51:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1594792299; bh=tAnb9L1P6RC6zN6ugpHPN8tBv+1398iHoYwEpYIrASk=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=WpUeIieoepNXB4UOHHEcCWV33qB1TtrBj2uIZ4xuzFYZ+W7T7HerxT1XqIunhSt3n
-         mRWnqbK9y+tGqW301UbvPaSD7WjmH2nufC4CFseq9vjIQ8O+T2M/NAJzzIyXUjrrEb
-         Ee1dJ7ovi5rQsTQBAC//k5YPiAJnIi8aICUOLXSeA/XVFIJqgcHP5g5ZT1VjLv4pff
-         3K9wmrbdP42wSL8bt6wP00itdvaU5OMjNr8SQtbC11J96jkuPRb3eVeY+UBBRZCiWt
-         h4usDnNCJmHNQFtTrQODJC2TBwTybZ2vSm9fiH+9g22jjIkgLToCno1lTSHI3ghXrB
-         BcbkTUssPM/4w==
-Received: from o365relay-in.synopsys.com (sv2-o365relay3.synopsys.com [10.202.1.139])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id 0FE18A008D;
-        Wed, 15 Jul 2020 05:51:37 +0000 (UTC)
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2168.outbound.protection.outlook.com [104.47.58.168])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "mail.protection.outlook.com", Issuer "GlobalSign Organization Validation CA - SHA256 - G3" (verified OK))
-        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 0082540109;
-        Wed, 15 Jul 2020 05:51:36 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=joglekar@synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="hFeT3hM0";
-        dkim-atps=neutral
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LI4zJ3HuoeCC2R4TR7WimWv4trQ/fuL2Z0HAT7zLXVLRaO4eoE1fDiKggA/jslnsNmcy73aVt8ckbalVlNa3Emj8JJ3XsTtJ498gr7uKtmMWATCHxzanIczlJUPwRUH2AEfHRc7ytp57AyeC/jIPDdN496aetJv42EKdoMb3fVJlEJrvVU5/UI+QvODMbc/RWRSOtEF1Ekjr8WQtCWkSaCnP5BuoUkYkLnVfEVlicHOxe85DpwCnq1ugLx8DHh+fG8vAtjHkFe+GwD7BnzXA0E5ZR7lXBM0sWUdofDOZzf6PL5E3h2Mn3fBWKxo88f/gFHXEceJrlzR4PKZOdrgiJw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tAnb9L1P6RC6zN6ugpHPN8tBv+1398iHoYwEpYIrASk=;
- b=lNLalxHcE3sFDEHkY4hoXX5LcD0MDD2XhO+CO/Oe/eE++fpOTRbbtqCCTUGgf/K8wG2SEFafCQ5t0w+791s+RkwTcaKPypnyQYl4TM+g9BxTzWt4+lWhcyF732yilqJPoCEXpebbtQSkDtkW91wMbXSuVSGEz/MGw6qd6OUJJsj7dGpu5I/LBOIAzC0DQIdS637d0yvhxMhxke5II17hC8eh18ZsufJiVI0p0+rFvu03HLwtsS12ynQqMZ3mpIw34cRDezecC2wJjTdaf3JpKX4RNxii2s3wR8A+QHsFT5GcIFSyUXnXPeU/98iGpi4j4ETiIRbeGWdtywtgbsR5bg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tAnb9L1P6RC6zN6ugpHPN8tBv+1398iHoYwEpYIrASk=;
- b=hFeT3hM06fYo0OpyhmQ5QS1+wwSeAcr/eAwpEegst8cOPRJy2kjVSYouaX8GHGIpshE2WKOHA6xzJDgM30oR48U8q4R2NS1oZr1BUjY3AgpZZdE9igMg0Fo6brfL/3JvlBNU6IQXSIhxFgSTRTWsBLcDSRLbOkOFLjymKsLs6zY=
-Received: from BYAPR12MB3464.namprd12.prod.outlook.com (2603:10b6:a03:d9::16)
- by BYAPR12MB2727.namprd12.prod.outlook.com (2603:10b6:a03:71::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3174.21; Wed, 15 Jul
- 2020 05:51:35 +0000
-Received: from BYAPR12MB3464.namprd12.prod.outlook.com
- ([fe80::600d:8274:ced2:a746]) by BYAPR12MB3464.namprd12.prod.outlook.com
- ([fe80::600d:8274:ced2:a746%5]) with mapi id 15.20.3174.026; Wed, 15 Jul 2020
- 05:51:35 +0000
-X-SNPS-Relay: synopsys.com
-From:   Tejas Joglekar <Tejas.Joglekar@synopsys.com>
-To:     Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
-        Rob Herring <robh+dt@kernel.org>, Rob Herring <robh@kernel.org>
-CC:     Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        John Youn <John.Youn@synopsys.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v3 3/4] usb: dwc3: Add device property
- sgl-trb-cache-size-quirk
-Thread-Topic: [PATCH v3 3/4] usb: dwc3: Add device property
- sgl-trb-cache-size-quirk
-Thread-Index: AQHWNBPIzVDQozhV20CqjRBnx+8J26j6PmiAgAAa/YCADhZwgA==
-Date:   Wed, 15 Jul 2020 05:51:34 +0000
-Message-ID: <2f61133b-319d-80dc-f3f3-7e08e0228953@synopsys.com>
-References: <cover.1590415123.git.joglekar@synopsys.com>
- <83eba2e9f0069f20ccc94537e3b99cbaec209441.1590415123.git.joglekar@synopsys.com>
- <5534d9d6-5452-dade-e46e-f4b0910becdb@synopsys.com>
- <877dvhqh2e.fsf@kernel.org>
-In-Reply-To: <877dvhqh2e.fsf@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: synopsys.com; dkim=none (message not signed)
- header.d=none;synopsys.com; dmarc=none action=none header.from=synopsys.com;
-x-originating-ip: [49.207.206.162]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 24acf570-52ec-4a1c-09ca-08d82883220e
-x-ms-traffictypediagnostic: BYAPR12MB2727:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BYAPR12MB272798880AE595DD3D0ABDC7A47E0@BYAPR12MB2727.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Yvvf7Owmjh1bIs4V7RrlcNU0ylke8rmOIY5Zt9QvCyEr7WJnnfkqJHOPkzcb4yEoD/WocdwNLUtFDgza7QQmP3cehl/GN6mei8FgAJAM9/Wy/IzgkRl0t/c5bdAt6u6P3nZC9RLysseUyMRWusrXDZsl2ZVGMBDlBbRjvyKih7s8W2Xd2cQY3TSMpaM+mKsiK0o8Ydsf+O7aGiQGjLMFO03k0QFS7/kMQs9OifsWoarE9AFLAoyPOYFEx8YDEFPKO1+gE1DdO7Ia1QxC7r/xCRV2EXx9AnTsVN+Ns4D2KFKTXt2wzg+zHE5Fj+t44NkCbwCwGx1M70IA8qrqtNM9dw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3464.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(366004)(39860400002)(396003)(346002)(136003)(376002)(6506007)(53546011)(64756008)(66476007)(66556008)(71200400001)(86362001)(66946007)(36756003)(186003)(66446008)(316002)(26005)(110136005)(54906003)(2616005)(4326008)(91956017)(76116006)(8936002)(6486002)(31686004)(55236004)(83380400001)(6512007)(5660300002)(8676002)(31696002)(478600001)(2906002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: qVNtrtxQ1eDw1Opm13m738PaJKkGUtYvEijbdU4ul0Vwn6mvyzg3mmO3SOHi0KyXpvigZkYQq2zgRDAsZ8DMlQCRmV4RiGmDJDvDtq3fMH8+qBN7GX2VrqkGJSr0l6Aux8aPDhhRD9xa6HnUii1GvPZ7rh/kwJLdvndnfzCfjwojS7Wk92UAhIPHlium73FeZ2OB9dkT/XdE8ZLR8uBM51yfCFyxpJT28KCoepk3WZB+tRo2Lw7MxljgkaVym7erNyh8/ct7XBaAq8scvknh1Bz66mr2d8Oz8MSMp77EXyyfiXSfSpF1HmwR05zu3lg0pmSfSYESXgRtNRb/BSdshP8E/yfZOJLkyMxNM9XhjU/zchrNHxnzyBOKy5IOYK80hFmhUj9hMvwUhJfNtrt7ZqQ+bD+MpSRCXwS4itUivR3cLrf1oBb2WcOy4R3m4MedvGUUuQede/K108umV40/Ml53zR7OXERTjHQH9aMFdbk+Y+JF8bkc+wLPIa84Px9V
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <D56BB70C5150E54CB25926BCF06854C4@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1728290AbgGOGPV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Jul 2020 02:15:21 -0400
+Received: from www262.sakura.ne.jp ([202.181.97.72]:64313 "EHLO
+        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725866AbgGOGPU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jul 2020 02:15:20 -0400
+Received: from fsav102.sakura.ne.jp (fsav102.sakura.ne.jp [27.133.134.229])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 06F6FIiM070875;
+        Wed, 15 Jul 2020 15:15:18 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav102.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav102.sakura.ne.jp);
+ Wed, 15 Jul 2020 15:15:18 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav102.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 06F6FHnJ070871
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO);
+        Wed, 15 Jul 2020 15:15:17 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Subject: Re: [PATCH] USB: cdc-wdm: Call wake_up_all() when clearing WDM_IN_USE
+ bit.
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Andrey Konovalov <andreyknvl@google.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Colin Ian King <colin.king@canonical.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        USB list <linux-usb@vger.kernel.org>,
+        syzbot <syzbot+854768b99f19e89d7f81@syzkaller.appspotmail.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+References: <1590408381.2838.4.camel@suse.com>
+ <4a686d9a-d09f-44f3-553c-bcf0bd8a8ea1@i-love.sakura.ne.jp>
+ <082ae642-0703-6c26-39f6-d725e395ef9a@i-love.sakura.ne.jp>
+ <CAAeHK+ww0YLUKGjQF5KfzoUUsdfLJdv5guUXRq4q46VfPiQubQ@mail.gmail.com>
+ <27b7545e-8f41-10b8-7c02-e35a08eb1611@i-love.sakura.ne.jp>
+ <CAAeHK+ww0u0G94z_Y7VXLCVTQVZ9thO0q69n+Fj3jKT6MtpPng@mail.gmail.com>
+ <20200528194057.GA21709@rowland.harvard.edu>
+ <CAAeHK+ySAnU03cvg1=+yHh0YK1UFO4mrv-N9FcDDMt_0AfGZSQ@mail.gmail.com>
+ <20200528205807.GB21709@rowland.harvard.edu>
+ <1590852311.14886.3.camel@suse.com>
+ <20200530154728.GB29298@rowland.harvard.edu>
+ <0c43caf8-1135-1d38-cb57-9c0f84c4394d@i-love.sakura.ne.jp>
+ <254939d4-f3a1-8c7e-94e5-9862c02774fa@i-love.sakura.ne.jp>
+ <CAAeHK+w+wBNksK_wpczad3AU4oLQRsjL_5G8p1R55Zh_FLhprg@mail.gmail.com>
+ <c85331fc-874c-6e46-a77f-0ef1dc075308@i-love.sakura.ne.jp>
+ <b347b882-a986-24c6-2b37-0b1a092931b9@i-love.sakura.ne.jp>
+ <1593674666.3609.3.camel@suse.com>
+From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Message-ID: <f6de3d3a-6825-1904-65f4-8d96594a9846@i-love.sakura.ne.jp>
+Date:   Wed, 15 Jul 2020 15:15:15 +0900
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3464.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 24acf570-52ec-4a1c-09ca-08d82883220e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jul 2020 05:51:34.7798
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4MMYJiJxXshCEc8QXrAtfI+Vsw2le56mcna9Yhy7sKW6ZZVTnXsRzrrupzyJpvf4oGwDJ2KtxkwZumwXFwRm/A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2727
+In-Reply-To: <1593674666.3609.3.camel@suse.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgUm9iLA0KDQpPbiA3LzYvMjAyMCAxMjoxMyBQTSwgRmVsaXBlIEJhbGJpIHdyb3RlOg0KPiAN
-Cj4gSGksDQo+IA0KPiBUZWphcyBKb2dsZWthciA8VGVqYXMuSm9nbGVrYXJAc3lub3BzeXMuY29t
-PiB3cml0ZXM6DQo+Pj4gQEAgLTk1LDYgKzk1LDEwIEBAIGludCBkd2MzX2hvc3RfaW5pdChzdHJ1
-Y3QgZHdjMyAqZHdjKQ0KPj4+ICAJaWYgKGR3Yy0+dXNiMl9scG1fZGlzYWJsZSkNCj4+PiAgCQlw
-cm9wc1twcm9wX2lkeCsrXSA9IFBST1BFUlRZX0VOVFJZX0JPT0woInVzYjItbHBtLWRpc2FibGUi
-KTsNCj4+PiAgDQo+Pj4gKwlpZiAoZHdjLT5zZ2xfdHJiX2NhY2hlX3NpemVfcXVpcmspDQo+Pj4g
-KwkJcHJvcHNbcHJvcF9pZHgrK10gPQ0KPj4+ICsJCQlQUk9QRVJUWV9FTlRSWV9CT09MKCJzZ2wt
-dHJiLWNhY2hlLXNpemUtcXVpcmsiKTsNCj4+PiArDQo+Pj4gIAkvKioNCj4+PiAgCSAqIFdPUktB
-Uk9VTkQ6IGR3YzMgcmV2aXNpb25zIDw9My4wMGEgaGF2ZSBhIGxpbWl0YXRpb24NCj4+PiAgCSAq
-IHdoZXJlIFBvcnQgRGlzYWJsZSBjb21tYW5kIGRvZXNuJ3Qgd29yay4NCj4+Pg0KPj4gRG9lcyB0
-aGlzIGltcGxlbWVudGF0aW9uIGxvb2tzIGdvb2QgdG8geW91PyBSb2IgaGFzIHNvbWUgY29uY2Vy
-bmVkIG92ZXIgdGhlIERUIGVudHJpZXMsDQo+PiB5b3Ugc3VnZ2VzdGVkIHVzaW5nIGNvbXBhdGli
-bGUgc3RyaW5nIHdpdGggdGhpcyBxdWlyayBhZGRpdGlvbi4NCj4+IENhbiB5b3UgcGxlYXNlIGJy
-aWVmIGFib3V0IGhvdyB5b3Ugd291bGQgbGlrZSB0byBoYXZlIHRoaXMgcXVpcmsgaW1wbGVtZW50
-ZWQ/DQo+PiBJIGNhbiBzZW5kIHRoZSB1cGRhdGVkIHBhdGNoLiBNeSBwYXRjaCBzZXJpZXMgaXMg
-cGVuZGluZyBmb3IgbWVyZ2UganVzdCBiZWNhdXNlIG9mIHRoZQ0KPj4gRFQgYW5kIHF1aXJrIGlz
-c3VlLiBDYW4geW91IHBsZWFzZSBoZWxwPw0KPiANCj4gWWVhaCwgeW91IG5lZWQgdG8gZ2V0IGlu
-dG8gYW4gYWdyZWVtZW50IHdpdGggUm9iIDotKSBJIGRvbid0IG1pbmQgaGF2aW5nDQo+IGV4dHJh
-IERUIGZsYWdzIGZvciB0aGluZ3Mgd2hpY2ggY2FuJ3QgYmUgZGV0ZWN0ZWQgaW4gcnVudGltZSwg
-Um9iDQo+IGRpc2FncmVlcy4NCj4gDQpUaGUgY29tcGF0aWJsZSBzdHJpbmcgaXMgbm90IHN1aXRh
-YmxlIG9wdGlvbiBhcyBpdCBkb2VzIG5vdCB3b3JrIHdpdGggcGxhdGZvcm0gZHJpdmVycw0Kd2l0
-aCBQQ0kgYmFzZWQgc3lzdGVtLiBBbHNvIFN5bm9wc3lzIGNvbnRyb2xsZXJzIElQIHZlcnNpb24g
-cmVnaXN0ZXIgaXMgbm90IHZpc2libGUgdG8geGhjaQ0KZHJpdmVyIGFuZCBoZW5jZSB3ZSBkb24n
-dCBoYXZlIHNlcGFyYXRlIGNvbXBhdGlibGUgc3RyaW5nIGZvciBlYWNoIFN5bm9wc3lzIHZlcnNp
-b24gb24gdGhlDQp4aGNpIGRyaXZlciBzaWRlLiANCkR1ZSB0byB3aGljaCBJIGRlcGVuZCBvbiBE
-VCBmbGFnIGFkZGl0aW9uIGZvciB0aGUgcXVpcmsuIENhbiB3ZSBhZGQgdGhlc2UgRFQgZmxhZ3Mg
-YW5kIHF1aXJrPw0KDQoNClRoYW5rcyAmIFJlZ2FyZHMsDQogVGVqYXMgSm9nbGVrYXINCg==
+On 2020/07/02 16:24, Oliver Neukum wrote:
+> Am Donnerstag, den 02.07.2020, 14:44 +0900 schrieb Tetsuo Handa:
+> 
+>>  
+>>  	usb_autopm_put_interface(desc->intf)
+>>  	mutex_unlock(&desc->wlock);
+>> +	if (rv >= 0 &&
+>> +	    /*
+>> +	     * needs both flags. We cannot do with one
+>> +	     * because resetting it would cause a race
+>> +	     * with write() yet we need to signal
+>> +	     * a disconnect
+>> +	     */
+>> +	    wait_event_killable_timeout(desc->wait,
+>> +					!test_bit(WDM_IN_USE, &desc->flags) ||
+>> +					test_bit(WDM_DISCONNECTING, &desc->flags), 30 * HZ) == 0) {
+>> +		if (mutex_lock_killable(&desc->wlock) == 0) {
+>> +			if (!test_bit(WDM_DISCONNECTING, &desc->flags))
+>> +				dev_err(&desc->intf->dev,
+>> +					"Tx URB not responding index=%d\n",
+>> +					le16_to_cpu(req->wIndex));
+>> +			mutex_unlock(&desc->wlock);
+>> +		}
+>> +	}
+> 
+> Hi,
+> 
+> I am afraid this would
+> 
+> 1. serialize the driver, harming performance
+
+Is wdm_write() called so frequently (e.g. 1000 times per one second) ?
+
+> 2. introduce a race with every timer a task is running
+
+What is estimated response time from usb_submit_urb() to wdm_out_callback() ?
+Can it be many seconds?
+
+I didn't try your patches at https://lkml.kernel.org/r/1593078968.28236.15.camel@suse.com
+because it seems to me that your patch does not answer my 3 concerns:
+
+(1) wdm_flush() says
+    
+            /* cannot dereference desc->intf if WDM_DISCONNECTING */
+            if (test_bit(WDM_DISCONNECTING, &desc->flags))
+                    return -ENODEV;
+            if (desc->werr < 0)
+                    dev_err(&desc->intf->dev, "Error in flush path: %d\n",
+                            desc->werr);
+
+    but it seems to me that nothing guarantees that test_bit(WDM_DISCONNECTING) == false
+    indicates dereferencing desc->intf->dev is safe, for wdm_flush() tests WDM_DISCONNECTING
+    without any lock whereas wdm_disconnect() sets WDM_DISCONNECTING under wdm_mutex and
+    desc->iuspin held. It might be safe to dereference from wdm_release() which holds wdm_mutex.
+
+(2) If wait_event() in wdm_flush() might fail to wake up (due to close() dependency
+    problem this crash report is focusing on), wait_event_interruptible() in wdm_write() might
+    also fail to wake up (unless interrupted) due to the same dependency. Then, why can't we
+    wait for completion of wdm_out_callback() (with reasonable timeout) inside wdm_write() ?
+
+(3) While wdm_flush() waits for clearing of WDM_IN_USE using wait_event(), concurrently
+    executed wdm_write() also waits for clearing of WDM_IN_USE using wait_event_interruptible(),
+    and wdm_write() can immediately set WDM_IN_USE again as soon as returning from
+    wait_event_interruptible() even if somebody was already waiting at wdm_flush() to clear
+    WDM_IN_USE.
+
+    That is, wait_event() in wdm_flush() does not know whether there is usb_submit_urb()
+    request which is started after wait_event() found that WDM_IN_USE was cleared. Then,
+    why does this wait_event() in wdm_flush() want to flush which current thread might not
+    have issued?
+
+Current thread synchronously waits for completion of wdm_out_callback() issued by current
+thread's usb_submit_urb() request might make sense. But how much value is there for current
+thread waits for completion of wdm_out_callback() issued by other thread's usb_submit_urb()
+request? Multiple threads can use the same "desc" pointer, and trying to flush upon close()
+by each thread using that "desc" pointer...
+
+If synchronous waiting harms performance so much, do we want to know the error at all?
+wdm_write() already returned success (the number of bytes passed to write()). And there is
+no guarantee that the error code which current thread will receive from wmd_flush()
+corresponds with a request current thread has issued?
+
+I'm skeptical about the value of trying to synchronously return an error code for
+wmd_write() request to the caller. I'm really inclined to remove wdm_flush() completely.
+
