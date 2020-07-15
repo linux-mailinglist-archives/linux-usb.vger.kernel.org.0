@@ -2,108 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC67F221425
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jul 2020 20:19:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E8CA22146A
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jul 2020 20:41:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726661AbgGOSTT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Jul 2020 14:19:19 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:41554 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725861AbgGOSTS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jul 2020 14:19:18 -0400
-Received: by mail-io1-f65.google.com with SMTP id p205so3248249iod.8;
-        Wed, 15 Jul 2020 11:19:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8qir7BYEt1ePlYcSc9kQBoolo/NmI427EpRk3jCnc0E=;
-        b=MAMZCEyepTv0b0HymYM9Pt5xXg3EkaTRQOxe5Ec+mPPsIURDQaEDeO3jlLa7mxYqMA
-         bvTENVFP/SLmQPzmMrKM5gh9x50livFPdiaUmAyDcj+uzJHrvWArmGTNqUQUpD/SHpsD
-         fXAK4BIsT6u5524M8xDCXaYZew/CZGBp39X8S+3hak7cmkOM+caafEL91Wyo7IJh38xk
-         mDPkA7LXNGlqS4mVPMCg75+oBIrF5Abh9zL2AJRT/pCGcog8dIqffpzCD7LCJEgjF59J
-         QErn2OisfbYQsd7JlA9VjNYZ1veXN8swsLvo7XewKOLwil+Ey5fUdQIIT5nRJHrvQeTa
-         2coQ==
-X-Gm-Message-State: AOAM532k0gsgn5zO9TWmJBT4B31Os+cpTnpfR2XO+oJkbZfu4DxMNN5n
-        r5TYmx71R4uO7IcJj9/v5w==
-X-Google-Smtp-Source: ABdhPJy+MnYJTQwPRpfYQ3APxYiqsDRIvjF899R10bA6VgiAK98fT5sRURp5v0MVa13LsRx2/1boXA==
-X-Received: by 2002:a5d:8ac3:: with SMTP id e3mr575726iot.9.1594837157634;
-        Wed, 15 Jul 2020 11:19:17 -0700 (PDT)
-Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id t11sm1437942ils.3.2020.07.15.11.19.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jul 2020 11:19:17 -0700 (PDT)
-Received: (nullmailer pid 557898 invoked by uid 1000);
-        Wed, 15 Jul 2020 18:19:16 -0000
-Date:   Wed, 15 Jul 2020 12:19:16 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Amelie Delaunay <amelie.delaunay@st.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        Fabrice Gasnier <fabrice.gasnier@st.com>
-Subject: Re: [PATCH 1/6] dt-bindings: connector: add power-opmode optional
- property to usb-connector
-Message-ID: <20200715181916.GA551920@bogus>
-References: <20200615161512.19150-1-amelie.delaunay@st.com>
- <20200615161512.19150-2-amelie.delaunay@st.com>
+        id S1726954AbgGOSl0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Jul 2020 14:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33950 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726722AbgGOSlZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jul 2020 14:41:25 -0400
+Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 214B0C08C5DB;
+        Wed, 15 Jul 2020 11:41:24 -0700 (PDT)
+Received: from miraculix.mork.no (miraculix.mork.no [IPv6:2001:4641:0:2:7627:374e:db74:e353])
+        (authenticated bits=0)
+        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 06FIfHQs016674
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Wed, 15 Jul 2020 20:41:17 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1594838478; bh=XO4cHZWyZMEn/b68HAWj2tkmcP8C5MGEAPzztaFclIA=;
+        h=From:To:Cc:Subject:Date:Message-Id:From;
+        b=GeIgA4jvbQ2um49AnyFSyNGUdmFkhMpKUx+RW9xEPEDnLhT936CzemKxiNKC4k6wI
+         udnhvwmCubDqrKzEB3Uezxu5obsSQHAlL1QH3cYisXfBUSmrLgJOjgfWuvhQ+Pwbee
+         wZH5aYYVt/5Rqc5LzhAdWYLBPpUNfzoqorA0FRp8=
+Received: from bjorn by miraculix.mork.no with local (Exim 4.94)
+        (envelope-from <bjorn@miraculix.mork.no>)
+        id 1jvmLF-000SSQ-39; Wed, 15 Jul 2020 20:41:17 +0200
+From:   =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
+To:     netdev@vger.kernel.org
+Cc:     linux-usb@vger.kernel.org, wxcafe@wxcafe.net, oliver@neukum.org,
+        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
+Subject: [PATCH v5 net-next 0/5] usbnet: multicast filter support for cdc ncm devices
+Date:   Wed, 15 Jul 2020 20:40:55 +0200
+Message-Id: <20200715184100.109349-1-bjorn@mork.no>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200615161512.19150-2-amelie.delaunay@st.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.102.2 at canardo
+X-Virus-Status: Clean
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 15, 2020 at 06:15:07PM +0200, Amelie Delaunay wrote:
-> Power operation mode may depends on hardware design, so, add the optional
-> property power-opmode for usb-c connector to select the power operation
-> mode capability.
-> 
-> Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
-> ---
->  .../devicetree/bindings/connector/usb-connector.yaml  | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> index 9bd52e63c935..cd7feb2d4984 100644
-> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> @@ -88,6 +88,17 @@ properties:
->        - device
->        - dual
->  
-> +  power-opmode:
-> +    description: Determines the power operation mode that the Type C connector
-> +      will support.
-> +    allOf:
-> +      - $ref: /schemas/types.yaml#definitions/string
-> +    enum:
-> +      - default
+This revives a 2 year old patch set from Miguel Rodríguez
+Pérez, which appears to have been lost somewhere along the
+way.  I've based it on the last version I found (v4), and
+added one patch which I believe must have been missing in
+the original.
 
-Wouldn't this just be no property?
+I kept Oliver's ack on one of the patches, since both the patch and
+the motivation still is the same.  Hope this is OK..
 
-> +      - 1.5A
-> +      - 3.0A
+Thanks to the anonymous user <wxcafe@wxcafe.net> for bringing up this
+problem in https://bugs.debian.org/965074
 
-You'll need to explain these better.
+This is only build and load tested by me.  I don't have any device
+where I can test the actual functionality.
 
-> +      - usb_power_delivery
 
-I would have thought 'default' would be USB-PD. Though I thought Type-C 
-was always USB-PD. 
+Changes v5:
+ - added missing symbol export
+ - formatted patch subjects with subsystem
 
-> +
->    # The following are optional properties for "usb-c-connector" with power
->    # delivery support.
->    source-pdos:
-> -- 
-> 2.17.1
-> 
+
+Bjørn Mork (1):
+  net: usbnet: export usbnet_set_rx_mode()
+
+Miguel Rodríguez Pérez (4):
+  net: cdc_ether: use dev->intf to get interface information
+  net: cdc_ether: export usbnet_cdc_update_filter
+  net: cdc_ncm: add .ndo_set_rx_mode to cdc_ncm_netdev_ops
+  net: cdc_ncm: hook into set_rx_mode to admit multicast traffic
+
+ drivers/net/usb/cdc_ether.c | 7 +++----
+ drivers/net/usb/cdc_ncm.c   | 4 ++++
+ drivers/net/usb/usbnet.c    | 3 ++-
+ include/linux/usb/usbnet.h  | 2 ++
+ 4 files changed, 11 insertions(+), 5 deletions(-)
+
+-- 
+2.27.0
+
