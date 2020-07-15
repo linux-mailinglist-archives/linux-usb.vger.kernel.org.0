@@ -2,26 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED7C02211C1
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jul 2020 17:57:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C51782211C5
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jul 2020 17:57:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726661AbgGOP4X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Jul 2020 11:56:23 -0400
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:61791 "EHLO
-        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725798AbgGOP4X (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jul 2020 11:56:23 -0400
+        id S1726832AbgGOP5R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Jul 2020 11:57:17 -0400
+Received: from relay11.mail.gandi.net ([217.70.178.231]:38769 "EHLO
+        relay11.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725798AbgGOP5R (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jul 2020 11:57:17 -0400
 Received: from cwh (fob.gandi.net [217.70.181.1])
         (Authenticated sender: wxcafe@wxcafe.net)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 54A594000A;
-        Wed, 15 Jul 2020 15:56:20 +0000 (UTC)
-Message-ID: <ba544d6d55f72040b70f041911199e693f7855f7.camel@wxcafe.net>
-Subject: [PATCH 3/4] cdc_ncm: replace the way cdc_ncm hooks into
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id D362010001A;
+        Wed, 15 Jul 2020 15:57:14 +0000 (UTC)
+Message-ID: <5de5aa7b8a3c78b2772551601223f5b807e4e38a.camel@wxcafe.net>
+Subject: [PATCH 4/4] cdc_ncm: hook into set_rx_mode to admit multicast
+ traffic
 From:   =?ISO-8859-1?Q?Wxcaf=E9?= <wxcafe@wxcafe.net>
 To:     linux-usb@vger.kernel.org
 Cc:     Miguel =?ISO-8859-1?Q?Rodr=EDguez_P=E9rez?= 
         <miguel@det.uvigo.gal>, oliver@neukum.org, netdev@vger.kernel.org
-Date:   Wed, 15 Jul 2020 11:56:15 -0400
+Date:   Wed, 15 Jul 2020 11:57:11 -0400
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.36.3 
 MIME-Version: 1.0
@@ -31,54 +32,49 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From 352445fcbac243b8f10e1840726d67b41a45853d Mon Sep 17 00:00:00 2001
+From 8094e9fbdcfe9ae983ad74fc509cee9930a1ee64 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Miguel Rodr=C3=ADguez P=C3=A9rez? <miguel@det.uvigo.gal>
-Date: Tue, 14 Jul 2020 18:10:34 -0400
-Subject: [PATCH 3/4] cdc_ncm: replace the way cdc_ncm hooks into
- usbnet_change_mtu
+Date: Tue, 14 Jul 2020 18:12:59 -0400
+Subject: [PATCH 4/4] cdc_ncm: hook into set_rx_mode to admit multicast traffic
 
-Previously cdc_ncm overwrited netdev_ops used by usbnet
-thus preventing hooking into set_rx_mode. This patch
-preserves usbnet hooks into netdev_ops, and add an
-additional one for change_mtu needed by cdc_ncm.
+We set set_rx_mode to usbnet_cdc_update_filter provided
+by cdc_ether that simply admits all multicast traffic
+if there is more than one multicast filter configured.
 
 Signed-off-by: Miguel Rodríguez Pérez <miguel@det.uvigo.gal>
 Signed-off-by: Wxcafé <wxcafe@wxcafe.net>
 ---
- drivers/net/usb/cdc_ncm.c | 13 +++----------
- 1 file changed, 3 insertions(+), 10 deletions(-)
+ drivers/net/usb/cdc_ncm.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
-index 8929669b5e6d..2abaf5f8b23b 100644
+index 2abaf5f8b23b..c58aae2c90d1 100644
 --- a/drivers/net/usb/cdc_ncm.c
 +++ b/drivers/net/usb/cdc_ncm.c
-@@ -787,16 +787,7 @@ int cdc_ncm_change_mtu(struct net_device *net, int new_mtu)
- }
- EXPORT_SYMBOL_GPL(cdc_ncm_change_mtu);
+@@ -1888,6 +1888,7 @@ static const struct driver_info cdc_ncm_info = {
+ 	.status = cdc_ncm_status,
+ 	.rx_fixup = cdc_ncm_rx_fixup,
+ 	.tx_fixup = cdc_ncm_tx_fixup,
++	.set_rx_mode = usbnet_cdc_update_filter,
+ };
  
--static const struct net_device_ops cdc_ncm_netdev_ops = {
--	.ndo_open	     = usbnet_open,
--	.ndo_stop	     = usbnet_stop,
--	.ndo_start_xmit	     = usbnet_start_xmit,
--	.ndo_tx_timeout	     = usbnet_tx_timeout,
--	.ndo_get_stats64     = usbnet_get_stats64,
--	.ndo_change_mtu	     = cdc_ncm_change_mtu,
--	.ndo_set_mac_address = eth_mac_addr,
--	.ndo_validate_addr   = eth_validate_addr,
--};
-+static struct net_device_ops cdc_ncm_netdev_ops;
+ /* Same as cdc_ncm_info, but with FLAG_WWAN */
+@@ -1901,6 +1902,7 @@ static const struct driver_info wwan_info = {
+ 	.status = cdc_ncm_status,
+ 	.rx_fixup = cdc_ncm_rx_fixup,
+ 	.tx_fixup = cdc_ncm_tx_fixup,
++	.set_rx_mode = usbnet_cdc_update_filter,
+ };
  
- int cdc_ncm_bind_common(struct usbnet *dev, struct usb_interface *intf, u8 data_altsetting, int drvflags)
- {
-@@ -953,6 +944,8 @@ int cdc_ncm_bind_common(struct usbnet *dev, struct usb_interface *intf, u8 data_
- 	dev->net->sysfs_groups[0] = &cdc_ncm_sysfs_attr_group;
+ /* Same as wwan_info, but with FLAG_NOARP  */
+@@ -1914,6 +1916,7 @@ static const struct driver_info wwan_noarp_info = {
+ 	.status = cdc_ncm_status,
+ 	.rx_fixup = cdc_ncm_rx_fixup,
+ 	.tx_fixup = cdc_ncm_tx_fixup,
++	.set_rx_mode = usbnet_cdc_update_filter,
+ };
  
- 	/* must handle MTU changes */
-+	cdc_ncm_netdev_ops = *dev->net->netdev_ops;
-+	cdc_ncm_netdev_ops.ndo_change_mtu = cdc_ncm_change_mtu;
- 	dev->net->netdev_ops = &cdc_ncm_netdev_ops;
- 	dev->net->max_mtu = cdc_ncm_max_dgram_size(dev) - cdc_ncm_eth_hlen(dev);
- 
+ static const struct usb_device_id cdc_devs[] = {
 -- 
 2.27.0
 
