@@ -2,139 +2,192 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22ACE2209F0
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jul 2020 12:23:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A9CA220A0A
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jul 2020 12:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728932AbgGOKXv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Jul 2020 06:23:51 -0400
-Received: from mail-vi1eur05on2118.outbound.protection.outlook.com ([40.107.21.118]:27329
-        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728132AbgGOKXv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 15 Jul 2020 06:23:51 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Vh+OnCKXlojKRuydC92DXV0ZAPsuGLgG4FD/ldfaTSi8YMC0RtWTyiMceME5l05EVvDpcp+tMWSVNcQ2987ClufccQDbUQAaQhVJV8oYN3Z3rriQbz1Z92Y6CQE27Tvr5tQCaup4DqI4QC80eapCxVlWFs07QkFnkcThwU9k5SKD0+a/oUqfMd7YwoCjvB02sZyFOIVnxTZYD7F7NpboLpwpJHBvonRZXjrOb4yWHYPBrXkkqyokMCFbYzI7M9sC75fmBPbvUx19bLL1Ep9znRYFpAlXlxw6gg0AkALAoG5dWlDewsjygnIPQr7lXR4sE2zqbFEyC7i/gyVvxPqOlg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sfNsCcycx6W0X5eCr6pm+4h6ep2HJ2ebNkTLYTRaZqs=;
- b=DYG2mLobBEACFuSuuoatX8ZaFEKObjT1OjDHEY3f/55HS3AFeOtCPzQ9CjGPeWnuupEnxjzfTJbfO2683e89pMgFqutPZVqSV9z+SjHYyVsGeJ2OnrhPzM9RKT9dSU4D+xooY+LZ12kvleaUf0/vUY2yr2ZtwBcZt7zT8Bbf3YANB3QgnUiuyDshVf8JQ+S5Qgf/xBjDHHJEN6u+DybGrJtH2b7XuYL+PxTpZUjr7WpHRNaTvBOZM+kpOw5z8ik2YvDNk0ko5J17Pxjieq1yu3bkIXbIeQBbzuQ1U3suHZsSh8ctMAu+keXO9hMZ38x9Rt3JBpxIYCoM29bNAIz19w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=toradex.com; dmarc=pass action=none header.from=toradex.com;
- dkim=pass header.d=toradex.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=toradex.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sfNsCcycx6W0X5eCr6pm+4h6ep2HJ2ebNkTLYTRaZqs=;
- b=TIo6NaLVDehlIn8PmLWVwsYIqMXpbz3gkAGUlTWeI1yicBdMqxOReY62NsKb3oAmZorEAPBfNhJAbEIibTQ1yhoLZ+bEPqRSbPdZEWrKk02cXItfggkloKPBESy/3xMFGbUYMGc1AyCGtjEF6kkurV3C7dl4XFThAUVCSc7O6JM=
-Received: from AM6PR05MB6120.eurprd05.prod.outlook.com (2603:10a6:20b:a8::25)
- by AM6PR05MB5799.eurprd05.prod.outlook.com (2603:10a6:20b:93::28) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3174.23; Wed, 15 Jul
- 2020 10:23:45 +0000
-Received: from AM6PR05MB6120.eurprd05.prod.outlook.com
- ([fe80::1d81:6a9b:8c26:3b7d]) by AM6PR05MB6120.eurprd05.prod.outlook.com
- ([fe80::1d81:6a9b:8c26:3b7d%4]) with mapi id 15.20.3195.018; Wed, 15 Jul 2020
- 10:23:45 +0000
-From:   Philippe Schenker <philippe.schenker@toradex.com>
-To:     "peter.chen@nxp.com" <peter.chen@nxp.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>
-CC:     "festevam@gmail.com" <festevam@gmail.com>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-imx@nxp.com" <linux-imx@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2 2/3] usb: chipidea: imx: support disabling runtime-pm
-Thread-Topic: [PATCH v2 2/3] usb: chipidea: imx: support disabling runtime-pm
-Thread-Index: AQHWWfIMLexdmM4+M0C6zPGY8HP2U6kH0FqAgACfygA=
-Date:   Wed, 15 Jul 2020 10:23:45 +0000
-Message-ID: <08251297f72fe745be43205d0a73631f009681cc.camel@toradex.com>
-References: <20200714151822.250783-1-philippe.schenker@toradex.com>
-         <20200714151822.250783-2-philippe.schenker@toradex.com>
-         <AM7PR04MB7157793C6395C200DF5646C98B7E0@AM7PR04MB7157.eurprd04.prod.outlook.com>
-In-Reply-To: <AM7PR04MB7157793C6395C200DF5646C98B7E0@AM7PR04MB7157.eurprd04.prod.outlook.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.36.3 
-authentication-results: nxp.com; dkim=none (message not signed)
- header.d=none;nxp.com; dmarc=none action=none header.from=toradex.com;
-x-originating-ip: [31.10.206.124]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c899d077-cda1-471a-057f-08d828a927c6
-x-ms-traffictypediagnostic: AM6PR05MB5799:
-x-microsoft-antispam-prvs: <AM6PR05MB579905F7C31B2B1B0B446F14F47E0@AM6PR05MB5799.eurprd05.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: LFzGRkqCDUgqS6tadD+6DaeocC2hjDn3iiCeJcMIdqxYFPjGm6qOdbijCMeJJcRX+Xo2Z9Sph/Kg6P2qyW6iVktxbVcgxu2XMPbaFZzMMSf5agJd1Z9PjICxKuP1IE/jhQGamgPZpvg/7R5ugRXYO2wybqVT43tQavNSqBzvHjvDw6gV+1QP8cSZH5EIPxximMSqEIA0imQdCt4IRX9CC8HKuvLSgW2D+6Nz4jesmFmgtLkQuThePoCFKENDkw0LgMxwW15BdRyscOe6UZ0KnLNcfEasivBvlwPD6Kx0E4423e3JgkawpLhZCNG5NkvaovZp0WBcEJLaxsMwbMJV9g==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR05MB6120.eurprd05.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(136003)(396003)(39850400004)(366004)(346002)(376002)(36756003)(6486002)(110136005)(54906003)(5660300002)(8936002)(6506007)(44832011)(316002)(7416002)(86362001)(2906002)(66946007)(4326008)(66476007)(64756008)(66446008)(2616005)(91956017)(478600001)(8676002)(83380400001)(186003)(6512007)(26005)(76116006)(66556008)(71200400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: LqPrDxD3LFgSg7OFXm23NnnezDo6jW4uQrGv9DrKmo6wv1b9JD3+3CNYWCKQ5om45GFdWiRHs1dNZqurhsJ1ebfNksKH4YlxFUK619LuE6obr5NaspinRaHy13p5NqRUjCtfCZZqjiONXbrcRnqPToTiWrhyZ4A4Ax9wHIwh6ZEkT3HTGbRCm3h2tPCEsONFFlS8/j6peJWx4qHXyUbLFGKODB8r+7zAcUCjdNtZ9jroWbfFeCBH4Hkns+jMkza/iS96Xu3dptPB7NICuEAXDDWbmvrEKMoNR1oBlgWSj/OF5X4z6QrS2CpVb3kFSCevkZL0J5e7d+MRluvubEbBE/0RpbXpS98BCRfNdE0H85ghHHvL5c4tzoIwxYdREmKO1EdE0MSYebB8oDby68JiS0TsZzP3/F8oS1ALKIKBo2svhPAT3Hf51XK08AZKlCmbF6doaA8fCgLDBaGIi/M8fIU5ui+pzB0l4R8IaCfFX40=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <E76D1AC8E0C2194098F356273D293434@eurprd05.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1731157AbgGOKbq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Jul 2020 06:31:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43004 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731155AbgGOKbq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jul 2020 06:31:46 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29557C061755
+        for <linux-usb@vger.kernel.org>; Wed, 15 Jul 2020 03:31:46 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id k6so2015221wrn.3
+        for <linux-usb@vger.kernel.org>; Wed, 15 Jul 2020 03:31:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=davidgf-net.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=RzIboguu3JJyFfg1u1hEOeuju+I6gjvcRyGEFx9D3y8=;
+        b=goFToWi44iau5GtuUXQtVrTTVRyMNYUC1xSU9oQem6mwmJYZwD8l0M+Sc+Tw5unIRl
+         pCOZC63/pqgeH1ZMmnaEgIH/hLaqnsUQpLi0bbhmvm3b9pMBHEiUbDBHMq0iNc1wNQgc
+         CBv7N8VgqwmN0B+MIE/u8f9c5ImjiqYoByasmZPBy101OGcYKq+tj3QBFZij3e0q7ard
+         D9MtGBD1MHJj8W9OLxOThB8XB3VzQfnbqYC4ayOMBDLa3fKdHbgZBk0Z05dV3Njm1YEf
+         DnnD27N7Wsf8aaytqEPuvuULWrgakI7yeWpnE70WHEcGnTTnj+Pk1KTMjgl2McZD3hfF
+         pXyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=RzIboguu3JJyFfg1u1hEOeuju+I6gjvcRyGEFx9D3y8=;
+        b=CvZb0+lCpUML7TWlmkgPWDHCdoR/BrPUp30yFXQvGyivF16tSVMqYVT5J5oOFtByHR
+         NxfaE4KEbt+Kto4DjJqs8h/iKP/9X5KM5TCjsnbyMV9SUEmsEIXiQPO/bP40xCO/Rsem
+         sEP851RDuQBZxgXR3tECVaXQALNTtrfJGumGLFtZHArtjgHnmEIA2UKaVVbeFuHyQxfx
+         /QimA6QBc8xVZrrRMuqHI7CrU2uv2q86tduR/XVovnoGhCQHbSs5NfB373zDm/UZLBkH
+         QYBclMKP40MV4s5OYBHZHMQ/ClN2ley0pKFK8+OzLpYkHgMlIbdZP2wGvE3yP7b97jld
+         pKwA==
+X-Gm-Message-State: AOAM531bhdPGkfJIuNCvQwQtTNsY5hGoHGRsUMWmjyomaC+27i5b3jwf
+        DSd4L1TNXGxGevK5vaO/f89s6qo+GDR/
+X-Google-Smtp-Source: ABdhPJzTauXqJU+HNOojOXxHaZlRlLAlvp5omjWOCpE1u2MuCA3e9JDRMNGA5m7MAhKIy1KE0uMsyA==
+X-Received: by 2002:a5d:420b:: with SMTP id n11mr10536429wrq.91.1594809104775;
+        Wed, 15 Jul 2020 03:31:44 -0700 (PDT)
+Received: from linux-2.fritz.box (85-195-242-113.fiber7.init7.net. [85.195.242.113])
+        by smtp.gmail.com with ESMTPSA id u17sm2910421wrp.70.2020.07.15.03.31.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jul 2020 03:31:43 -0700 (PDT)
+Message-ID: <867592c41350b09a0cb67e9a3924f8a2f758d79a.camel@davidgf.net>
+Subject: Re: System crash/lockup after plugging CDC ACM device
+From:   David Guillen Fandos <david@davidgf.net>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Date:   Wed, 15 Jul 2020 12:31:42 +0200
+In-Reply-To: <20200715093029.GB2759174@kroah.com>
+References: <9778f9b8a8604e2c13979ea6909678c23cd286cb.camel@davidgf.net>
+         <20200715093029.GB2759174@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.3 (3.36.3-1.fc32) 
 MIME-Version: 1.0
-X-OriginatorOrg: toradex.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR05MB6120.eurprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c899d077-cda1-471a-057f-08d828a927c6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jul 2020 10:23:45.3798
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d9995866-0d9b-4251-8315-093f062abab4
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: kDsL+PVHs/D/yvIXmQ51JDdhNU0mxhAA+UoiYpf/5IzxXNNGezwB+mp1snYKgQ1U8wKnNFYzks/8272Oj/Afwrj+8qsFdqBa32L/bDgW+oA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR05MB5799
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gV2VkLCAyMDIwLTA3LTE1IGF0IDAwOjUxICswMDAwLCBQZXRlciBDaGVuIHdyb3RlOg0KPiAg
-DQo+ID4gVGhlIFRvcmFkZXggQ29saWJyaSBpTVg2VUxMIGJvYXJkIGhhcyBhIHNwZWNpYWwgVVNC
-IGhhcmR3YXJlIGRlc2lnbi4NCj4gPiBXaXRoIHJ1bnRpbWUtcG0gZW5hYmxlZCBVU0IgcmVzZXQg
-aXRzZWxmIGNvbnRpbnVvdXNseS4gRnVydGhlcm1vcmUNCj4gPiB0aGUgT1RHIHBvcnQNCj4gPiBp
-cyBhbHNvIG5vdCBlbnVtZXJhdGluZyBkZXZpY2VzIGlmIHRoZSBDaGlwaWRlYSBJUCBpcyBpbiBy
-dW50aW1lDQo+ID4gc2xlZXAgbW9kZSBhbmQgYQ0KPiA+IGRldmljZSBvciBob3N0IGdldHMgcGx1
-Z2dlZCBpbi4NCj4gPiANCj4gDQo+IEhpIFBoaWxpcHBlLA0KPiANCj4gWW91IG1heSBkZXNjcmli
-ZSB0aGUgZGV0YWlsIHdoYXQncyB0aGUgc3BlY2lhbCBVU0IgaGFyZHdhcmUgZGVzaWduIGZvcg0K
-PiB5b3VyIGJvYXJkLA0KDQpJZiBJIG9ubHkga25ldyB0aGUgcm9vdC1jYXVzZSBvZiB0aGF0IHBy
-b2JsZW0gLSB1bmZvcnR1bmF0ZWx5IEkgZG9uJ3QuDQpUaGF0J3MgYWxzbyB3aHkgSSBoYXZlIHN1
-Y2ggYSBoYXJkIHRpbWUgdG8gZGVzY3JpYmUgaXQuDQoNCj4gYW5kIHdoeSBpdCBjYXVzZXMgdGhl
-IHByb2JsZW0sIGFuZCB3aHkgZGlzYWJsZSBydW50aW1lIHBtIGNvdWxkIGZpeA0KPiB0aGlzIGlz
-c3VlLCB0aGVuLA0KDQpJIGNhbm5vdCBwcm92aWRlIHRoZSAnd2h5JyBwYXJ0IHlldC4gSSdsbCB0
-cnkgc29tZXRoaW5nIG1vcmUgYW5kIGhvcGUgSQ0KY2FuIHByb3ZpZGUgeW91IGd1eXMgd2l0aCB0
-aGUgZXhhY3QgZGVzY3JpcHRpb24uDQoNCj4gdGhlIG90aGVyIHVzZXJzIGNvdWxkIGtub3cgaWYg
-aXQgY291bGQgYXBwbHkgdG8gdGhlaXIgcGxhdGZvcm1zIG9yIG5vdA0KPiBpbiBmdXR1cmUuDQoN
-Ckkgb25seSBmb3VuZCBvdXQgYWJvdXQgaXQgYmVjYXVzZSB5b3Ugd2VyZSBwb2ludGluZyBtZSBp
-biB0aGF0DQpkaXJlY3Rpb24uIEkgZGVidWdnZWQgZm9yIGhvdXJzIG5vdyBhbmQgZGlkbid0IGNh
-bWUgdG8gdGhlIHJvb3QtY2F1c2Ugb2YNCnRoZSBpc3N1ZS4gSSB0aGluayB0byByZWFsbHkgdW5k
-ZXJzdGFuZCBpdCBJIHdvdWxkIG5lZWQgdG8ga25vdyBtdWNoDQptb3JlIGFib3V0IHRoZSBDaGlw
-aWRlYSBJUC4NCg0KSSdsbCBnZXQgYmFjayB0byB5b3UgZ3V5cyB3aXRoIGEgcHJvcG9zYWwgZm9y
-IGEgbmV3IGRlc2NyaXB0aW9uLg0KDQpQaGlsaXBwZQ0KDQo+IA0KPiBQZXRlcg0KPiANCj4gPiBU
-aGlzIHBhdGNoIGFkZHMgdGhlIG9wcG9ydHVuaXR5IHRvIGRpc2FibGUgUnVudGltZSBQb3dlciBN
-YW5hZ2VtZW50DQo+ID4gZnJvbQ0KPiA+IGRldmljZXRyZWUNCj4gPiANCj4gPiBTaWduZWQtb2Zm
-LWJ5OiBQaGlsaXBwZSBTY2hlbmtlciA8cGhpbGlwcGUuc2NoZW5rZXJAdG9yYWRleC5jb20+DQo+
-ID4gDQo+ID4gLS0tDQo+ID4gDQo+ID4gQ2hhbmdlcyBpbiB2MjoNCj4gPiAtIENoYW5nZSBjb21t
-aXQgbWVzc2FnZSB0byB0ZWxsIHRoZSB1c2UgY2FzZSBmb3IgQ29saWJyaSBpTVg2VUxMDQo+ID4g
-DQo+ID4gIGRyaXZlcnMvdXNiL2NoaXBpZGVhL2NpX2hkcmNfaW14LmMgfCAzICsrKw0KPiA+ICAx
-IGZpbGUgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCspDQo+ID4gDQo+ID4gZGlmZiAtLWdpdCBhL2Ry
-aXZlcnMvdXNiL2NoaXBpZGVhL2NpX2hkcmNfaW14LmMNCj4gPiBiL2RyaXZlcnMvdXNiL2NoaXBp
-ZGVhL2NpX2hkcmNfaW14LmMNCj4gPiBpbmRleCA1YWUxNjM2OGEwYzcuLjUwNzhkMDY5NWViNyAx
-MDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL3VzYi9jaGlwaWRlYS9jaV9oZHJjX2lteC5jDQo+ID4g
-KysrIGIvZHJpdmVycy91c2IvY2hpcGlkZWEvY2lfaGRyY19pbXguYw0KPiA+IEBAIC00MzQsNiAr
-NDM0LDkgQEAgc3RhdGljIGludCBjaV9oZHJjX2lteF9wcm9iZShzdHJ1Y3QNCj4gPiBwbGF0Zm9y
-bV9kZXZpY2UgKnBkZXYpDQo+ID4gIAkJdXNiX3BoeV9pbml0KHBkYXRhLnVzYl9waHkpOw0KPiA+
-ICAJfQ0KPiA+IA0KPiA+ICsJaWYgKG9mX3Byb3BlcnR5X3JlYWRfYm9vbChucCwgImRpc2FibGUt
-cnVudGltZS1wbSIpKQ0KPiA+ICsJCXBkYXRhLmZsYWdzICY9IH5DSV9IRFJDX1NVUFBPUlRTX1JV
-TlRJTUVfUE07DQo+ID4gKw0KPiA+ICAJaWYgKHBkYXRhLmZsYWdzICYgQ0lfSERSQ19TVVBQT1JU
-U19SVU5USU1FX1BNKQ0KPiA+ICAJCWRhdGEtPnN1cHBvcnRzX3J1bnRpbWVfcG0gPSB0cnVlOw0K
-PiA+IA0KPiA+IC0tDQo+ID4gMi4yNy4wDQo=
+On Wed, 2020-07-15 at 11:30 +0200, Greg KH wrote:
+> On Wed, Jul 15, 2020 at 10:58:03AM +0200, David Guillen Fandos wrote:
+> > Hello linux-usb,
+> > 
+> > I think I might have found a kernel bug related to the USB
+> > subsystem
+> > (cdc_acm perhaps).
+> > 
+> > Context: I was playing around with a device I'm creating,
+> > essentially a
+> > USB quad modem device that exposes four modems to the host system.
+> > This
+> > device is still a prototype so there's a few bugs here and there,
+> > most
+> > likely in the USB descriptors and control requests.
+> > 
+> > What happens: After plugging the device the system starts spitting
+> > warnings and BUGs and it locks up. Most of the time some CPUs get
+> > into
+> > some spinloop and never comes back (you can see it being detected
+> > by
+> > the watchdog after a few seconds). Generally after that the USB
+> > devices
+> > stop working completely and at some point the machine freezes
+> > completely. In a couple of ocasions I managed to see a bug in dmesg
+> > saying "unable to handle page fault for address XXX" and
+> > "Supervisor
+> > read access in kernel mode" "error code (0x0000) not present page".
+> > I
+> > could not get a trace for that one since the kernel died completely
+> > and
+> > my log files were truncated/lost.
+> > 
+> > Since it is happening to my two machines (both Intel but rather
+> > different controllers, Sunrise Point-LP USB 3.0 vs 8 Series/C220)
+> > and
+> > with different kernel versions I suspect this might be a bug in the
+> > kernel.
+> > 
+> > I have 4 logs that I collected, they are sort of long-ish, not sure
+> > how
+> > to best send them to the list.
+> 
+> Send the crashes with the callback list, that should be quite small,
+> right?  We don't need the full log.
+> 
+> The first crash is the most important, the others can be from the
+> first
+> one and are not reliable.
+> 
+> thanks,
+> 
+> greg k-h
+
+Ok then, here comes one of the logs, I selected some bits only
+
+[  147.302016] WARNING: CPU: 3 PID: 134 at kernel/workqueue.c:1473
+__queue_work+0x364/0x410
+[...]
+[  147.302322] Call Trace:
+[  147.302329]  <IRQ>
+[  147.302342]  queue_work_on+0x36/0x40
+[  147.302353]  __usb_hcd_giveback_urb+0x9c/0x110
+[  147.302362]  usb_giveback_urb_bh+0xa0/0xf0
+[  147.302372]  tasklet_action_common.constprop.0+0x66/0x100
+[  147.302382]  __do_softirq+0xe9/0x2dc
+[  147.302391]  irq_exit+0xcf/0x110
+[  147.302397]  do_IRQ+0x55/0xe0
+[  147.302408]  common_interrupt+0xf/0xf
+[  147.302413]  </IRQ>
+[...]
+[  184.771172] watchdog: BUG: soft lockup - CPU#3 stuck for 23s!
+[kworker/3:2:134]
+
+
+The other machines:
+
+Jul 15 01:22:16 localhost kernel: WARNING: CPU: 0 PID: 0 at
+kernel/workqueue.c:1473 __queue_work+0x342/0x3e0
+[...]
+Jul 15 01:22:16 localhost kernel: Call Trace:
+Jul 15 01:22:16 localhost kernel: <IRQ>
+Jul 15 01:22:16 localhost kernel: queue_work_on+0x36/0x40
+Jul 15 01:22:16 localhost kernel: __usb_hcd_giveback_urb+0x6f/0x120
+Jul 15 01:22:16 localhost kernel: usb_giveback_urb_bh+0xa0/0xf0
+Jul 15 01:22:16 localhost kernel:
+tasklet_action_common.isra.0+0x5b/0x100
+Jul 15 01:22:16 localhost kernel: __do_softirq+0xee/0x2ff
+Jul 15 01:22:16 localhost kernel: irq_exit+0xe9/0xf0
+Jul 15 01:22:16 localhost kernel: do_IRQ+0x55/0xe0
+Jul 15 01:22:16 localhost kernel: common_interrupt+0xf/0xf
+Jul 15 01:22:16 localhost kernel: </IRQ>
+
+Pretty similar as well. This is the first crash, the other ones mention
+the cdc-acm but the first ones do not.
+
+In one occasion the first crash seems different, here goes:
+
+[   46.713823] ------------[ cut here ]------------
+[   46.713827] refcount_t: underflow; use-after-free.
+[   46.713884] WARNING: CPU: 2 PID: 33 at lib/refcount.c:28
+refcount_warn_saturate+0xa6/0xf0
+[...]
+[   46.714148] Call Trace:
+[   46.714166]  acm_disconnect+0x198/0x280 [cdc_acm]
+[   46.714188]  usb_unbind_interface+0x8a/0x270
+[   46.714198]  __device_release_driver+0x15c/0x210
+[   46.714204]  device_release_driver+0x24/0x30
+[   46.714209]  bus_remove_device+0xdb/0x140
+[   46.714218]  device_del+0x16f/0x3f0
+[   46.714227]  usb_disable_device+0xd6/0x290
+[   46.714234]  usb_disconnect.cold+0x7e/0x205
+[   46.714242]  hub_event+0xbfa/0x1810
+[   46.714257]  process_one_work+0x1b4/0x380
+[   46.714264]  worker_thread+0x53/0x3e0
+[   46.714269]  ? process_one_work+0x380/0x380
+[   46.714276]  kthread+0x115/0x140
+[   46.714284]  ? __kthread_bind_mask+0x60/0x60
+[   46.714293]  ret_from_fork+0x35/0x40
+
+Let me know if you need more relevant/complete logs. Will be glad to
+send them over.
+
+Thanks
+David
+
