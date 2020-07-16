@@ -2,157 +2,336 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE5AD2221CE
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jul 2020 13:56:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74AD622220C
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jul 2020 13:58:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728497AbgGPLzy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jul 2020 07:55:54 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:44892 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728451AbgGPLzt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jul 2020 07:55:49 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20200716115547euoutp01de52c0eeb033f33c6c598508f958244b~iOZkOyfMN2075920759euoutp01g
-        for <linux-usb@vger.kernel.org>; Thu, 16 Jul 2020 11:55:47 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20200716115547euoutp01de52c0eeb033f33c6c598508f958244b~iOZkOyfMN2075920759euoutp01g
+        id S1728422AbgGPL6j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jul 2020 07:58:39 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:55831 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726515AbgGPL6i (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jul 2020 07:58:38 -0400
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200716115836euoutp02e5358232ac587b00a69c4cc999910602~iOcBK2Dpo1615316153euoutp02D
+        for <linux-usb@vger.kernel.org>; Thu, 16 Jul 2020 11:58:36 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200716115836euoutp02e5358232ac587b00a69c4cc999910602~iOcBK2Dpo1615316153euoutp02D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1594900547;
-        bh=cIRPYgYzinS3D/k4iPXOgxJ2xAK52n0VPhrt72zC4L8=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=PTV6kiSsaNe5BX/L9ICZVKWt7nwKVreSTu6SxkY2tnJbmLCunDv/6mAAZNhqV9Jov
-         NpfsJCIRJMSzg8krfIsWsgEqNJBarKnJpTG3tkYv9NOwORR3CV5oDDyM8VeO7QDCtm
-         OzqxRyVZpqWxx2kN4l/NU8l5V1IEro21BAH3NG0k=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20200716115547eucas1p11148d339d893a37a13328ca64197fbd1~iOZj8yLNt1829418294eucas1p1F;
-        Thu, 16 Jul 2020 11:55:47 +0000 (GMT)
+        s=mail20170921; t=1594900716;
+        bh=vtx3jeBSZlkSSE4CJuzfTrNlTUg36EUyD3G4y4muTe8=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=AaTJyHJQW2ofA4QbDc6V/lCCUPtbJYZBjuATPdYAkWxO8c4ZfNe79UDOf9XpvT7uG
+         fxjttRBsZVM4sxYx8yj35nRtYvQNBY8eh/OaUXG1hCqzZqLg8FMYrggvMvrJoqgrKN
+         sHFkDZoJITtlk1aUT1l1K8EHgs1a+NZpsa4Ox5co=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20200716115835eucas1p2243942f608670002fb43b0d2d513988f~iOcA9N5py0372703727eucas1p2C;
+        Thu, 16 Jul 2020 11:58:35 +0000 (GMT)
 Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id A3.28.05997.340401F5; Thu, 16
-        Jul 2020 12:55:47 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id FD.7C.06318.BE0401F5; Thu, 16
+        Jul 2020 12:58:35 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
         eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20200716115546eucas1p1deb159dd37bc1211f4579d4d85f9af92~iOZi6UUr61630116301eucas1p1L;
-        Thu, 16 Jul 2020 11:55:46 +0000 (GMT)
+        20200716115835eucas1p10870e0f4058f8f3fee0e13eb76aaee66~iOcAMA5oe0970809708eucas1p1U;
+        Thu, 16 Jul 2020 11:58:35 +0000 (GMT)
 Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20200716115546eusmtrp1e873061868ffda7051f7fa8691a21d53~iOZi5tFY20277402774eusmtrp1M;
-        Thu, 16 Jul 2020 11:55:46 +0000 (GMT)
-X-AuditID: cbfec7f4-677ff7000000176d-5c-5f1040433071
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 4B.55.06017.240401F5; Thu, 16
-        Jul 2020 12:55:46 +0100 (BST)
-Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20200716115545eusmtip1731eb7b09a570f30eea725174084b560~iOZidUo1U1478814788eusmtip18;
-        Thu, 16 Jul 2020 11:55:45 +0000 (GMT)
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-To:     linux-usb@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20200716115835eusmtrp2d90da11c2ad9eb66f15db8ddec2f96a0~iOcALaCV11205812058eusmtrp2U;
+        Thu, 16 Jul 2020 11:58:35 +0000 (GMT)
+X-AuditID: cbfec7f5-371ff700000018ae-59-5f1040ebe23d
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 57.C5.06017.AE0401F5; Thu, 16
+        Jul 2020 12:58:34 +0100 (BST)
+Received: from [106.210.88.143] (unknown [106.210.88.143]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20200716115834eusmtip2f562092237cfa95a0d4f328a9481f700~iOb-xFRrG2935029350eusmtip2f;
+        Thu, 16 Jul 2020 11:58:34 +0000 (GMT)
+Subject: Re: [PATCH] usb: dwc2: Fix error path in gadget registration
+To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Felipe Balbi <balbi@kernel.org>,
-        Minas Harutyunyan <hminas@synopsys.com>,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH] usb: gadget: udc: Flush pending work also in error path
-Date:   Thu, 16 Jul 2020 13:55:25 +0200
-Message-Id: <20200716115525.27519-1-m.szyprowski@samsung.com>
-X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrAIsWRmVeSWpSXmKPExsWy7djP87rODgLxBl++8VpsnLGe1eJY2xN2
-        i+bF69ksGn/tZbe4vGsOm8WiZa3MFmuP3GV3YPfYtKqTzWP/3DXsHn1bVjF6bNn/mdHj8ya5
-        ANYoLpuU1JzMstQifbsErow3fw+xFTwUqpj4cipzA2OjQBcjJ4eEgIlE/8N29i5GLg4hgRWM
-        EhfX3WCFcL4wSrz5dwsq85lRYvmju0wwLdumz2SESCxnlLhw8iwzXMvF22cZQarYBAwlut52
-        sYHYIgKyEoev/AYrYhZoYZK48O0zO0hCWMBD4tqvj6wgNouAqsTVlofMIDavgK3E2j+dbBDr
-        5CVWbzgA1iwhcJ1NYvXVJ1B3uEi8fXgAqkhY4tXxLewQtozE6ck9LBANzYwSD8+tZYdwehgl
-        LjfNYISospa4c+4XUDcH0E2aEut36UOEHSWm3OgDC0sI8EnceCsIEmYGMidtm84MEeaV6GgT
-        gqhWk5h1fB3c2oMXLkGVeEg0/ckBCQsJxEosufOAeQKj3CyEVQsYGVcxiqeWFuempxYb5aWW
-        6xUn5haX5qXrJefnbmIEpoPT/45/2cG460/SIUYBDkYlHl6Fn3zxQqyJZcWVuYcYJTiYlUR4
-        nc6ejhPiTUmsrEotyo8vKs1JLT7EKM3BoiTOa7zoZayQQHpiSWp2ampBahFMlomDU6qBUc96
-        luWf0vxpN3a2L1CXUn94Zl1clWvqEnG/6wr8nBtPH9dWWNi/y+S7bdT3P48O8u1xuRAYrbq2
-        t2pJS/KBXQm5/1zuLnu/4Fbw6VrG8wneH3tn7nC+9eIpY/7ZmZ9j9VK/Wii9PPWnS9lr+Zkj
-        PaXxy5iWc389qff5ckympcjOXAeBeoMpSUosxRmJhlrMRcWJAGjUnBIDAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrKLMWRmVeSWpSXmKPExsVy+t/xu7pODgLxBm3drBYbZ6xntTjW9oTd
-        onnxejaLxl972S0u75rDZrFoWSuzxdojd9kd2D02repk89g/dw27R9+WVYweW/Z/ZvT4vEku
-        gDVKz6Yov7QkVSEjv7jEVina0MJIz9DSQs/IxFLP0Ng81srIVEnfziYlNSezLLVI3y5BL+PN
-        30NsBQ+FKia+nMrcwNgo0MXIySEhYCKxbfpMRhBbSGApo8Sut1kQcRmJk9MaWCFsYYk/17rY
-        uhi5gGo+AdXcnscGkmATMJToetsFZosIyEocvvKbGaSIWaCDSaL18SxmkISwgIfEtV8fwSax
-        CKhKXG15CBbnFbCVWPunkw1ig7zE6g0HmCcw8ixgZFjFKJJaWpybnltspFecmFtcmpeul5yf
-        u4kRGITbjv3csoOx613wIUYBDkYlHl6Fn3zxQqyJZcWVuYcYJTiYlUR4nc6ejhPiTUmsrEot
-        yo8vKs1JLT7EaAq0fCKzlGhyPjBC8kriDU0NzS0sDc2NzY3NLJTEeTsEDsYICaQnlqRmp6YW
-        pBbB9DFxcEo1MJZteVus8f+3SGzRiante4XrWRaujw0wCjx49Z72xTSr93wVqirX+VkuLv0g
-        1LZ36g0nab8/ditKc348cq7wORJr+SNH8PuHO5NuTjc8cFjTcE92800hvXkq7XcmbZA6HKZ+
-        eee8X9N/PXrivenUjW7XpXbNs7bLtTvdn7Z0Q12Nys7WjjVH/hxUYinOSDTUYi4qTgQACLO1
-        F1gCAAA=
-X-CMS-MailID: 20200716115546eucas1p1deb159dd37bc1211f4579d4d85f9af92
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+Message-ID: <3bfb9bf3-3139-6447-fe0b-25473dabb0a0@samsung.com>
+Date:   Thu, 16 Jul 2020 13:58:36 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+        Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <13bfcc28-17d6-f399-2617-2edfb0cb8819@synopsys.com>
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrOKsWRmVeSWpSXmKPExsWy7djP87qvHQTiDXpvGFpsnLGe1eJY2xN2
+        i+bF69ksLu+aw2axaFkrs8W7KbeZHdg8Nq3qZPPYP3cNu0ffllWMHlv2f2b0+LxJLoA1issm
+        JTUnsyy1SN8ugSvj1Yz3LAW/QiuWfOpnbWC869XFyMkhIWAi0bJtBVsXIxeHkMAKRokVr3cw
+        QjhfGCUOTdzBCuF8ZpSYuWECC0zLpnU/oVqWM0ps+vqEBcJ5zyhxd/ZMVpAqYQFXiX2vXrOB
+        2CIChRIv3h4HK2IWOMsocbNrOxNIgk3AUKLrbRdYEa+AncSCg7vAbBYBVYmONf/B1okKxEms
+        fwlRzysgKHFy5hOwOKeAg8Sfu2fB6pkF5CWat85mhrDFJW49mc8EskxCYBW7RM/3j0ANHECO
+        i8Td3awQLwhLvDq+hR3ClpH4vxOmvplR4uG5tewQTg+jxOWmGYwQVdYSd879YgMZxCygKbF+
+        lz5E2FGi/8k3Roj5fBI33gpC3MAnMWnbdGaIMK9ER5sQRLWaxKzj6+DWHrxwiXkCo9IsJJ/N
+        QvLNLCTfzELYu4CRZRWjeGppcW56arFxXmq5XnFibnFpXrpecn7uJkZg8jn97/jXHYz7/iQd
+        YhTgYFTi4a34zRcvxJpYVlyZe4hRgoNZSYTX6ezpOCHelMTKqtSi/Pii0pzU4kOM0hwsSuK8
+        xotexgoJpCeWpGanphakFsFkmTg4pRoYd0ce0hac1ly41mf/+SMMWzWXqZpuOXT08pJvMX26
+        WUc9jDJrfJjD+Oc+1GpjXVrgPm/tVDOe/2sXFz81ORw0e+OxrT9nMO169CexMIzrafZ6QbU5
+        jEWTDfP7bm10TKtoP697JReYjB6zSuWcS359YPuTC30Jd1Yrqpe8mig/mX3Nu+Mx198HKbEU
+        ZyQaajEXFScCAFSG9IE6AwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrJIsWRmVeSWpSXmKPExsVy+t/xe7qvHATiDTZctLHYOGM9q8Wxtifs
+        Fs2L17NZXN41h81i0bJWZot3U24zO7B5bFrVyeaxf+4ado++LasYPbbs/8zo8XmTXABrlJ5N
+        UX5pSapCRn5xia1StKGFkZ6hpYWekYmlnqGxeayVkamSvp1NSmpOZllqkb5dgl7GqxnvWQp+
+        hVYs+dTP2sB416uLkZNDQsBEYtO6n2xdjFwcQgJLGSXaT61ngkjISJyc1sAKYQtL/LnWxQZi
+        Cwm8ZZSYMjMJxBYWcJXY9+o1WFxEoFBiZfdFsEHMAucZJaYf+cgIMXUTk8TV7/vZQarYBAwl
+        ut5CTOIVsJNYcHAXmM0ioCrRseY/C4gtKhAnsXzLfHaIGkGJkzOfgMU5BRwk/tw9C1bPLGAm
+        MW/zQ2YIW16ieetsKFtc4taT+UwTGIVmIWmfhaRlFpKWWUhaFjCyrGIUSS0tzk3PLTbSK07M
+        LS7NS9dLzs/dxAiMtm3Hfm7Zwdj1LvgQowAHoxIPr8JPvngh1sSy4srcQ4wSHMxKIrxOZ0/H
+        CfGmJFZWpRblxxeV5qQWH2I0BXpuIrOUaHI+MBHklcQbmhqaW1gamhubG5tZKInzdggcjBES
+        SE8sSc1OTS1ILYLpY+LglGpgVIpev1Iny0Y8m3XvS8ntV5bIemSIWV2u7DM6eGTLs18fd0Z1
+        z5Y12/1VQzhQwb3uotPlzQf6+Xg5mH/9dO+b4Cy65Q0PwzLdTa9dvaKZE2/xH9r+4D0zc47u
+        4sweF76DSjrKyqIFzfmZ67aLuEZmcj2Xt+E475hSmJujtmTmgZX2U2fYtJopsRRnJBpqMRcV
+        JwIAMzPxnswCAAA=
+X-CMS-MailID: 20200716115835eucas1p10870e0f4058f8f3fee0e13eb76aaee66
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200716115546eucas1p1deb159dd37bc1211f4579d4d85f9af92
+X-RootMTR: 20200714084807eucas1p1f6e680d162573c6a0660037172a65805
 X-EPHeader: CA
 CMS-TYPE: 201P
-X-CMS-RootMailID: 20200716115546eucas1p1deb159dd37bc1211f4579d4d85f9af92
-References: <CGME20200716115546eucas1p1deb159dd37bc1211f4579d4d85f9af92@eucas1p1.samsung.com>
+X-CMS-RootMailID: 20200714084807eucas1p1f6e680d162573c6a0660037172a65805
+References: <CGME20200714084807eucas1p1f6e680d162573c6a0660037172a65805@eucas1p1.samsung.com>
+        <20200714084800.11340-1-m.szyprowski@samsung.com>
+        <40bfbfd6-6516-5995-8250-c8e3df16e11e@synopsys.com>
+        <ad121efc-44a2-143a-84d3-afb0db03419f@samsung.com>
+        <13bfcc28-17d6-f399-2617-2edfb0cb8819@synopsys.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When binding an UDC driver to the pending gadget fails in
-check_pending_gadget_drivers(), the usb_add_gadget_udc_release() function
-ends without waiting for the usb_gadget_state_work to finish, what in
-turn might cause the whole struct usb_gadget being freed by the caller
-before the usb_gadget_state_work being executed.
+Hi Minas,
 
-This can be observed on some boards with USB Mass Storage gadget
-compiled-in and kernel booted without the needed module parameters:
+On 15.07.2020 15:54, Minas Harutyunyan wrote:
+> On 7/15/2020 12:42 PM, Marek Szyprowski wrote:
+>> On 14.07.2020 14:32, Minas Harutyunyan wrote:
+>>> On 7/14/2020 12:48 PM, Marek Szyprowski wrote:
+>>>> When gadget registration fails, one should not call usb_del_gadget_udc().
+>>>> Ensure this by setting gadget->udc to NULL. Also in case of a failure
+>>> I was able to reproduce issue. I'm Ok with this fix.
+>>>
+>>>> there is no need to disable low-level hardware, so return immiedetly
+>>>> instead of jumping to error_init label.
+>>>>
+>>> Why do you think that disable low-level hardware not required which was
+>>> enabled before? Also for some platforms required to call
+>>> regulator_disable() which was enabled earlier in probe function.
+>>> So, I suggest to keep jump to error_init label.
+>> If I keep the jump to error_init label, then there is unbalanced call to
+>> dwc2_lowlevel_hw_disable(). usb_add_gadget_udc() can fail in 2 places:
+>> on gadget->bind() or during udc_start(). In the first case, the HW was
+>> not yet enabled, so there is no need to disable it. In the latter one,
+>> the error might be returned only from the dwc2_lowlevel_hw_enable(), so
+>> again there is no need to call dwc2_lowlevel_hw_disable().
+>>
+>> If I keep the "goto error_init;" line, I get the following errors:
+>>
+>> dwc2 12480000.hsotg: dwc2_check_params: Invalid parameter besl=1
+>> dwc2 12480000.hsotg: dwc2_check_params: Invalid parameter
+>> g_np_tx_fifo_size=1024
+>> dwc2 12480000.hsotg: EPs: 16, dedicated fifos, 7808 entries in SPRAM
+>> Mass Storage Function, version: 2009/09/11
+>> LUN: removable file: (no medium)
+>> no file given for LUN0
+>> g_mass_storage 12480000.hsotg: failed to start g_mass_storage: -22
+>> ------------[ cut here ]------------
+>> WARNING: CPU: 3 PID: 49 at drivers/clk/clk.c:958
+>> clk_core_disable+0x1e4/0x314
+>> usb_device already disabled
+>> Modules linked in:
+>> CPU: 3 PID: 49 Comm: kworker/3:1 Not tainted
+>> 5.8.0-rc5-next-20200714-00003-g105f360ba595-dirty #8758
+>> Hardware name: Samsung Exynos (Flattened Device Tree)
+>> Workqueue: events deferred_probe_work_func
+>> [<c011184c>] (unwind_backtrace) from [<c010d250>] (show_stack+0x10/0x14)
+>> [<c010d250>] (show_stack) from [<c051b8fc>] (dump_stack+0xbc/0xe8)
+>> [<c051b8fc>] (dump_stack) from [<c0126ed8>] (__warn+0xf0/0x108)
+>> [<c0126ed8>] (__warn) from [<c0126f64>] (warn_slowpath_fmt+0x74/0xb8)
+>> [<c0126f64>] (warn_slowpath_fmt) from [<c056c338>]
+>> (clk_core_disable+0x1e4/0x314)
+>> [<c056c338>] (clk_core_disable) from [<c056c480>]
+>> (clk_core_disable_lock+0x18/0x24)
+>> [<c056c480>] (clk_core_disable_lock) from [<c073f9d4>]
+>> (__dwc2_lowlevel_hw_disable+0x3c/0xa0)
+>> [<c073f9d4>] (__dwc2_lowlevel_hw_disable) from [<c0740188>]
+>> (dwc2_driver_probe+0x2d4/0x6ac)
+>> [<c0740188>] (dwc2_driver_probe) from [<c0653640>]
+>> (platform_drv_probe+0x6c/0xa4)
+>> [<c0653640>] (platform_drv_probe) from [<c0650bdc>]
+>> (really_probe+0x200/0x4fc)
+>> [<c0650bdc>] (really_probe) from [<c0651040>]
+>> (driver_probe_device+0x78/0x1fc)
+>> [<c0651040>] (driver_probe_device) from [<c064ea78>]
+>> (bus_for_each_drv+0x74/0xb8)
+>> [<c064ea78>] (bus_for_each_drv) from [<c065093c>]
+>> (__device_attach+0xd4/0x16c)
+>> [<c065093c>] (__device_attach) from [<c064fa3c>]
+>> (bus_probe_device+0x88/0x90)
+>> [<c064fa3c>] (bus_probe_device) from [<c064ff54>]
+>> (deferred_probe_work_func+0x3c/0xd0)
+>> [<c064ff54>] (deferred_probe_work_func) from [<c0148a5c>]
+>> (process_one_work+0x234/0x7dc)
+>> [<c0148a5c>] (process_one_work) from [<c0149048>] (worker_thread+0x44/0x51c)
+>> [<c0149048>] (worker_thread) from [<c015039c>] (kthread+0x158/0x1a0)
+>> [<c015039c>] (kthread) from [<c0100114>] (ret_from_fork+0x14/0x20)
+>> Exception stack(0xee923fb0 to 0xee923ff8)
+>> ...
+>> irq event stamp: 36966
+>> hardirqs last  enabled at (36965): [<c02b92d8>] kfree+0x1a4/0x3f0
+>> hardirqs last disabled at (36966): [<c0569edc>] clk_enable_lock+0x14/0x134
+>> softirqs last  enabled at (36814): [<c010174c>] __do_softirq+0x50c/0x608
+>> softirqs last disabled at (36803): [<c0130218>] irq_exit+0x168/0x16c
+>> ---[ end trace f55f4b28f3080c12 ]---
+>> ------------[ cut here ]------------
+>> WARNING: CPU: 3 PID: 49 at drivers/clk/clk.c:817
+>> clk_core_unprepare+0x33c/0x470
+>> usb_device already unprepared
+>> Modules linked in:
+>> CPU: 3 PID: 49 Comm: kworker/3:1 Tainted: G        W
+>> 5.8.0-rc5-next-20200714-00003-g105f360ba595-dirty #8758
+>> Hardware name: Samsung Exynos (Flattened Device Tree)
+>> Workqueue: events deferred_probe_work_func
+>> [<c011184c>] (unwind_backtrace) from [<c010d250>] (show_stack+0x10/0x14)
+>> [<c010d250>] (show_stack) from [<c051b8fc>] (dump_stack+0xbc/0xe8)
+>> [<c051b8fc>] (dump_stack) from [<c0126ed8>] (__warn+0xf0/0x108)
+>> [<c0126ed8>] (__warn) from [<c0126f64>] (warn_slowpath_fmt+0x74/0xb8)
+>> [<c0126f64>] (warn_slowpath_fmt) from [<c056dcb8>]
+>> (clk_core_unprepare+0x33c/0x470)
+>> [<c056dcb8>] (clk_core_unprepare) from [<c056de10>]
+>> (clk_unprepare+0x24/0x2c)
+>> [<c056de10>] (clk_unprepare) from [<c073f9dc>]
+>> (__dwc2_lowlevel_hw_disable+0x44/0xa0)
+>> [<c073f9dc>] (__dwc2_lowlevel_hw_disable) from [<c0740188>]
+>> (dwc2_driver_probe+0x2d4/0x6ac)
+>> [<c0740188>] (dwc2_driver_probe) from [<c0653640>]
+>> (platform_drv_probe+0x6c/0xa4)
+>> [<c0653640>] (platform_drv_probe) from [<c0650bdc>]
+>> (really_probe+0x200/0x4fc)
+>> [<c0650bdc>] (really_probe) from [<c0651040>]
+>> (driver_probe_device+0x78/0x1fc)
+>> [<c0651040>] (driver_probe_device) from [<c064ea78>]
+>> (bus_for_each_drv+0x74/0xb8)
+>> [<c064ea78>] (bus_for_each_drv) from [<c065093c>]
+>> (__device_attach+0xd4/0x16c)
+>> [<c065093c>] (__device_attach) from [<c064fa3c>]
+>> (bus_probe_device+0x88/0x90)
+>> [<c064fa3c>] (bus_probe_device) from [<c064ff54>]
+>> (deferred_probe_work_func+0x3c/0xd0)
+>> [<c064ff54>] (deferred_probe_work_func) from [<c0148a5c>]
+>> (process_one_work+0x234/0x7dc)
+>> [<c0148a5c>] (process_one_work) from [<c0149048>] (worker_thread+0x44/0x51c)
+>> [<c0149048>] (worker_thread) from [<c015039c>] (kthread+0x158/0x1a0)
+>> [<c015039c>] (kthread) from [<c0100114>] (ret_from_fork+0x14/0x20)
+>> Exception stack(0xee923fb0 to 0xee923ff8)
+>> ...
+>> irq event stamp: 37073
+>> hardirqs last  enabled at (37081): [<c019d624>] console_unlock+0x430/0x6cc
+>> hardirqs last disabled at (37108): [<c019d348>] console_unlock+0x154/0x6cc
+>> softirqs last  enabled at (37124): [<c010174c>] __do_softirq+0x50c/0x608
+>> softirqs last disabled at (37135): [<c0130218>] irq_exit+0x168/0x16c
+>> ---[ end trace f55f4b28f3080c13 ]---
+>> ------------[ cut here ]------------
+>> WARNING: CPU: 3 PID: 49 at drivers/regulator/core.c:2603
+>> _regulator_disable+0x180/0x1d8
+>> unbalanced disables for VUOTG_3.0V
+>> Modules linked in:
+>> CPU: 3 PID: 49 Comm: kworker/3:1 Tainted: G        W
+>> 5.8.0-rc5-next-20200714-00003-g105f360ba595-dirty #8758
+>> Hardware name: Samsung Exynos (Flattened Device Tree)
+>> Workqueue: events deferred_probe_work_func
+>> [<c011184c>] (unwind_backtrace) from [<c010d250>] (show_stack+0x10/0x14)
+>> [<c010d250>] (show_stack) from [<c051b8fc>] (dump_stack+0xbc/0xe8)
+>> [<c051b8fc>] (dump_stack) from [<c0126ed8>] (__warn+0xf0/0x108)
+>> [<c0126ed8>] (__warn) from [<c0126f64>] (warn_slowpath_fmt+0x74/0xb8)
+>> [<c0126f64>] (warn_slowpath_fmt) from [<c0585e78>]
+>> (_regulator_disable+0x180/0x1d8)
+>> [<c0585e78>] (_regulator_disable) from [<c0585f04>]
+>> (regulator_disable+0x34/0xe0)
+>> [<c0585f04>] (regulator_disable) from [<c0587ef8>]
+>> (regulator_bulk_disable+0x28/0xb0)
+>> [<c0587ef8>] (regulator_bulk_disable) from [<c0740188>]
+>> (dwc2_driver_probe+0x2d4/0x6ac)
+>> [<c0740188>] (dwc2_driver_probe) from [<c0653640>]
+>> (platform_drv_probe+0x6c/0xa4)
+>> [<c0653640>] (platform_drv_probe) from [<c0650bdc>]
+>> (really_probe+0x200/0x4fc)
+>> [<c0650bdc>] (really_probe) from [<c0651040>]
+>> (driver_probe_device+0x78/0x1fc)
+>> [<c0651040>] (driver_probe_device) from [<c064ea78>]
+>> (bus_for_each_drv+0x74/0xb8)
+>> [<c064ea78>] (bus_for_each_drv) from [<c065093c>]
+>> (__device_attach+0xd4/0x16c)
+>> [<c065093c>] (__device_attach) from [<c064fa3c>]
+>> (bus_probe_device+0x88/0x90)
+>> [<c064fa3c>] (bus_probe_device) from [<c064ff54>]
+>> (deferred_probe_work_func+0x3c/0xd0)
+>> [<c064ff54>] (deferred_probe_work_func) from [<c0148a5c>]
+>> (process_one_work+0x234/0x7dc)
+>> [<c0148a5c>] (process_one_work) from [<c0149048>] (worker_thread+0x44/0x51c)
+>> [<c0149048>] (worker_thread) from [<c015039c>] (kthread+0x158/0x1a0)
+>> [<c015039c>] (kthread) from [<c0100114>] (ret_from_fork+0x14/0x20)
+>> Exception stack(0xee923fb0 to 0xee923ff8)
+>> ...
+>> irq event stamp: 37243
+>> hardirqs last  enabled at (37251): [<c019d624>] console_unlock+0x430/0x6cc
+>> hardirqs last disabled at (37274): [<c0ac0790>] __schedule+0xd8/0x860
+>> softirqs last  enabled at (37270): [<c010174c>] __do_softirq+0x50c/0x608
+>> softirqs last disabled at (37291): [<c0130218>] irq_exit+0x168/0x16c
+>> ---[ end trace f55f4b28f3080c14 ]---
+>> Failed to disable vusb_a: -5
+>> dwc2: probe of 12480000.hsotg failed with error -22
+>> 8<--- cut here ---
+>> Unable to handle kernel NULL pointer dereference at virtual address 00000004
+>> pgd = (ptrval)
+>> [00000004] *pgd=00000000
+>> Internal error: Oops: 5 [#1] PREEMPT SMP ARM
+>> Modules linked in:
+>> CPU: 3 PID: 87 Comm: kworker/3:2 Tainted: G        W
+>> 5.8.0-rc5-next-20200714-00003-g105f360ba595-dirty #8758
+>> Hardware name: Samsung Exynos (Flattened Device Tree)
+>> Workqueue:  0x0 (rcu_gp)
+>> PC is at process_one_work+0x44/0x7dc
+>> LR is at 0xedc226d0
+>> ...
+>> Process kworker/3:2 (pid: 87, stack limit = 0x(ptrval))
+>> Stack: (0xeda03f00 to 0xeda04000)
+>> ...
+>> [<c014886c>] (process_one_work) from [<c0149048>] (worker_thread+0x44/0x51c)
+>> [<c0149048>] (worker_thread) from [<c015039c>] (kthread+0x158/0x1a0)
+>> [<c015039c>] (kthread) from [<c0100114>] (ret_from_fork+0x14/0x20)
+>> Exception stack(0xeda03fb0 to 0xeda03ff8)
+>> ...
+>> ---[ end trace f55f4b28f3080c15 ]---
+>> note: kworker/3:2[87] exited with preempt_count 1
+>>
+>> Best regards
+>>
+> I guess you build driver in (hsotg->dr_mode == USB_DR_MODE_PERIPHERAL)
+> and this is why call of dwc2_lowlevel_hw_disable() at 'error:' label
+> create issue. Could you please test on your setup follow implementation:
+> ...
+> error:
+> 	if (hsotg->dr_mode != USB_DR_MODE_PERIPHERAL)
+> 		dwc2_lowlevel_hw_disable(hsotg);
+> 	return retval;
+> }
+> ...
 
-dwc2 12480000.hsotg: dwc2_check_params: Invalid parameter besl=1
-dwc2 12480000.hsotg: dwc2_check_params: Invalid parameter g_np_tx_fifo_size=1024
-dwc2 12480000.hsotg: EPs: 16, dedicated fifos, 7808 entries in SPRAM
-Mass Storage Function, version: 2009/09/11
-LUN: removable file: (no medium)
-no file given for LUN0
-g_mass_storage 12480000.hsotg: failed to start g_mass_storage: -22
-dwc2: probe of 12480000.hsotg failed with error -22
-8<--- cut here ---
-Unable to handle kernel NULL pointer dereference at virtual address 00000004
-pgd = (ptrval)
-[00000004] *pgd=00000000
-Internal error: Oops: 5 [#1] PREEMPT SMP ARM
-Modules linked in:
-CPU: 1 PID: 88 Comm: kworker/1:2 Not tainted 5.8.0-rc5-next-20200715-00062-gc5bb489ae825-dirty #8792
-Hardware name: Samsung Exynos (Flattened Device Tree)
-Workqueue:  0x0 (rcu_gp)
-PC is at process_one_work+0x44/0x7dc
-...
-Process kworker/1:2 (pid: 88, stack limit = 0x(ptrval))
-Stack: (0xed9f1f00 to 0xed9f2000)
-...
-[<c0148590>] (process_one_work) from [<c0148d6c>] (worker_thread+0x44/0x51c)
-[<c0148d6c>] (worker_thread) from [<c01500c0>] (kthread+0x158/0x1a0)
-[<c01500c0>] (kthread) from [<c0100114>] (ret_from_fork+0x14/0x20)
-Exception stack(0xed9f1fb0 to 0xed9f1ff8)
-...
----[ end trace 5033c1326a62e5f3 ]---
-note: kworker/1:2[88] exited with preempt_count 1
+Right, this will work. However, I would also change the order of 
+operations - disabling usb33d regulator should be done after disabling 
+lowlevel hardware to properly pair with the enable operations.
 
-Fix this by flushing pending work in error path.
+While playing with this I've also found an issue in UDC core:
 
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
----
- drivers/usb/gadget/udc/core.c | 1 +
- 1 file changed, 1 insertion(+)
+https://lore.kernel.org/linux-usb/20200716115525.27519-1-m.szyprowski@samsung.com/T/#u
 
-diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-index c33ad8a333ad..4f82bcd31fd3 100644
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -1230,6 +1230,7 @@ int usb_add_gadget_udc_release(struct device *parent, struct usb_gadget *gadget,
- 	return 0;
- 
-  err_del_udc:
-+	flush_work(&gadget->work);
- 	device_del(&udc->dev);
- 
-  err_unlist_udc:
+Best regards
 -- 
-2.17.1
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
