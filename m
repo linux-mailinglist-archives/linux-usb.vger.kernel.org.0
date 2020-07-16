@@ -2,181 +2,199 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 379F5222238
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jul 2020 14:11:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDCBA222247
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jul 2020 14:20:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728096AbgGPMJ7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jul 2020 08:09:59 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:60634 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726515AbgGPMJ6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jul 2020 08:09:58 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200716120957euoutp02d61e6993fcce85e19e9e6be3722a8dd2~iOl7bLqjv2359423594euoutp02u
-        for <linux-usb@vger.kernel.org>; Thu, 16 Jul 2020 12:09:57 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200716120957euoutp02d61e6993fcce85e19e9e6be3722a8dd2~iOl7bLqjv2359423594euoutp02u
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1594901397;
-        bh=qV/2zLgNvC0a3UfT7Zky5MCOQpz0Ag3pF7I6DZ5fm1s=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=GMNbWsWaqZ9GuLmZU3sVeZE3Lq1sE+7Lo/LhrnDVp8htNyf7lZ0pes+u7sm17AwL8
-         R0xZkMnBI33E7I5VKdWOTdYf+uaqYChZkE/+0NN4c4VYB7lZ2JTjFFcyjomQTwMORP
-         NI2BXmEU2NlDOtUcHz+G5kxd+SNwmOHm2K6mQqTg=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20200716120956eucas1p182b19f804e68f5e7359a54077682e848~iOl7KjAvP1344213442eucas1p1V;
-        Thu, 16 Jul 2020 12:09:56 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id FF.5E.06318.493401F5; Thu, 16
-        Jul 2020 13:09:56 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20200716120956eucas1p1c5fd8e24c16e6616041467f618034b44~iOl60-zXW1000010000eucas1p1C;
-        Thu, 16 Jul 2020 12:09:56 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200716120956eusmtrp28afd21a2b3556b05592dd73f0f68640a~iOl60a8Kt1849418494eusmtrp2U;
-        Thu, 16 Jul 2020 12:09:56 +0000 (GMT)
-X-AuditID: cbfec7f5-371ff700000018ae-0e-5f1043948671
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 49.16.06314.493401F5; Thu, 16
-        Jul 2020 13:09:56 +0100 (BST)
-Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200716120956eusmtip2c7234882333b6b2ce6f3b01c7cd3e0dc~iOl6Z26RE0100101001eusmtip2h;
-        Thu, 16 Jul 2020 12:09:55 +0000 (GMT)
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-To:     linux-usb@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Minas Harutyunyan <hminas@synopsys.com>,
+        id S1728525AbgGPMUD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jul 2020 08:20:03 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:53076 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728093AbgGPMUB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jul 2020 08:20:01 -0400
+Received: from mailhost.synopsys.com (us03-mailhost1.synopsys.com [10.4.17.17])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 7B110401B3;
+        Thu, 16 Jul 2020 12:20:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1594902000; bh=P0I6zX3npgrlS6lGhIc0dWVqCUewd/KhEmQhZ/rq/x0=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=GWh420UpGwQI53xa1ovzWJaQc6R2u13JH+X+NGbkKO5kZcEkrVFCC1ncqP4S4zW55
+         59z+4qYwEsLNPiEyP6jUawY/uM5LZoYSGAVrp+fBjPKDSiWGxrqm/PogRKX2Xe/5vz
+         wdVc9n7Z0+3v1Qd149aHCb9nf00w7wQPv3upqIAn1yzoOTg1yYR49evajGRSBM3MiE
+         e+w0vS39vnwQnjAYCi30z3SNbSK2BAeoOKeHY8fhNc6lxGYpv9PlI5y8v3P+ey8axi
+         GXbb5hJCcRT/LgY+XHevLFEsy6oo7TCQFIHOfJ2OPC/Kg2D15sNsHCYJ26AKAtMsO/
+         LTf4jA48Qa0ew==
+Received: from o365relay-in.synopsys.com (sv2-o365relay3.synopsys.com [10.202.1.139])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPS id 6C69EA005A;
+        Thu, 16 Jul 2020 12:19:59 +0000 (UTC)
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11lp2173.outbound.protection.outlook.com [104.47.56.173])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "mail.protection.outlook.com", Issuer "GlobalSign Organization Validation CA - SHA256 - G3" (verified OK))
+        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 3A89040032;
+        Thu, 16 Jul 2020 12:19:58 +0000 (UTC)
+Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=hminas@synopsys.com
+Authentication-Results: o365relay-in.synopsys.com;
+        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="gPYQDKxn";
+        dkim-atps=neutral
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HpAbaibIsXGANHKEG4nvyx3cixFKYAyoOBsSgXedraYz5zc1eS+9XDUmrrkurqaNeKQiykwQXEi+FjtIhGxVvKO2zkxSMiMFNWfzUHiIFzhMi9PHzV6VNe6LDXKvhMlsh0j5wXHoc1y1OX5B441xtrsKf3216SzLJPXQoqaw2rI2IYqamKWaF82H1ebwjTxdESonvpgnRFmKWVOW0XmJ9njGA9Uft89k2n4kBl8kcwjxIIWMQKSSDB40HQKYMyQmkphhb+8UgB2++031H4/s8WbekBT9zrh5K9vPwfHWfNdTB2fIgTcpL1usnPWL+sMHMWWUTaQ0118FTgMMlW88XA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=P0I6zX3npgrlS6lGhIc0dWVqCUewd/KhEmQhZ/rq/x0=;
+ b=cR0HUL2OZKv2oWwxoOP7Cgq+74uVf6J8q+7r/KRnxWxIiSkfPHSoPsBSahc06wSTuhqpSe1doNyyg6H+Z1Wi3VpeLC+jgo1wDQhrOl0WSbXbAIJd70ge4DgeeA0tgnREOoZqkNAlMv2aVbsss3B70DEOaeegHlzARonTPfpCfkka+mUfd9ZllBFAh48jWmwn1XpmeE3C+VLTrfdIxBT/wK3nupfWUA9pOGnyHhCEr72lXxSHQ0JPXKliIIlmpFN8Yj1boKp38iWz10CUact3wT0MzishVXsfDSHRanZBwYRA8vky0vn3mc7wKjcjPHlAXjexCeyaiy4Z8gmHEY7Hcw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=P0I6zX3npgrlS6lGhIc0dWVqCUewd/KhEmQhZ/rq/x0=;
+ b=gPYQDKxn4liDGXk/CpE53ICQnRgZIV66y4nHLc4Bobzhu+Um2yrMR+lraSnKMnTB5jpKoxUg62J1sApOgJttg4LjXynfbrkng3JNhaf7P+90ocNM6/Kr7P2GOhjfQMnr0T+wM+n9rPARnmK/61+NzLOnt7TakXMuPD6TbD8rsQ4=
+Received: from CY4PR12MB1432.namprd12.prod.outlook.com (2603:10b6:903:44::11)
+ by CY4PR12MB1381.namprd12.prod.outlook.com (2603:10b6:903:42::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3174.21; Thu, 16 Jul
+ 2020 12:19:54 +0000
+Received: from CY4PR12MB1432.namprd12.prod.outlook.com
+ ([fe80::3cb9:e2f2:a4ff:14bd]) by CY4PR12MB1432.namprd12.prod.outlook.com
+ ([fe80::3cb9:e2f2:a4ff:14bd%10]) with mapi id 15.20.3174.025; Thu, 16 Jul
+ 2020 12:19:54 +0000
+X-SNPS-Relay: synopsys.com
+From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Felipe Balbi <balbi@kernel.org>,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH v2] usb: dwc2: Fix error path in gadget registration
-Date:   Thu, 16 Jul 2020 14:09:48 +0200
-Message-Id: <20200716120948.28180-1-m.szyprowski@samsung.com>
-X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrPIsWRmVeSWpSXmKPExsWy7djPc7pTnAXiDQ4/1rPYOGM9q8Wxtifs
-        Fs2L17NZNP7ay25xedccNotFy1qZLdYeucvuwO6xaVUnm8f+uWvYPfq2rGL02LL/M6PH501y
-        AaxRXDYpqTmZZalF+nYJXBlrT05iKVguVzFzmmID42KpLkZODgkBE4m3866xdDFycQgJrGCU
-        WPf2ECOE84VR4vKRb1CZz4wSUzf1s8C0LH7SDFW1nFHi7/dNzCAJsJa700xAbDYBQ4mut11s
-        ILaIgKzE4Su/mUEamAVamCQWnz8A1iAs4CIxaW4XE4jNIqAq8WJpD1icV8BWYub/z1Db5CVW
-        bzgA1iwhcJ1NYvLfi6wQCReJrasOskHYwhKvjm9hh7BlJP7vnM8E0dDMKPHw3Fp2CKcH6KOm
-        GYwQVdYSd879AurmALpJU2L9Ln2IsKPEjheLmUDCEgJ8EjfeCoKEmYHMSdumM0OEeSU62oQg
-        qtUkZh1fB7f24IVLzBC2h0RD50YmSKDESpzY+Id1AqPcLIRdCxgZVzGKp5YW56anFhvnpZbr
-        FSfmFpfmpesl5+duYgQmg9P/jn/dwbjvT9IhRgEORiUe3orffPFCrIllxZW5hxglOJiVRHid
-        zp6OE+JNSaysSi3Kjy8qzUktPsQozcGiJM5rvOhlrJBAemJJanZqakFqEUyWiYNTqoExR6wn
-        Tcde6ssqrsrvXtOdhW7ps4TyPk+fddhn5s815Z7Fs9YXNBY2vTJTyvuzy/J22oS+/c4Cz05a
-        vWtQE4z/VZ/pebbz2NlFZlmsHKu+rHVlctikUBG2N8RL7Hum188bLCvn7QhL3pnaciti98eD
-        d171y7e83H5COPpNmKXCs+hdJYUTmhSUWIozEg21mIuKEwGE4vyFAgMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrCLMWRmVeSWpSXmKPExsVy+t/xe7pTnAXiDSbOErfYOGM9q8Wxtifs
-        Fs2L17NZNP7ay25xedccNotFy1qZLdYeucvuwO6xaVUnm8f+uWvYPfq2rGL02LL/M6PH501y
-        AaxRejZF+aUlqQoZ+cUltkrRhhZGeoaWFnpGJpZ6hsbmsVZGpkr6djYpqTmZZalF+nYJehlr
-        T05iKVguVzFzmmID42KpLkZODgkBE4nFT5oZuxi5OIQEljJKHDj4kwkiISNxcloDK4QtLPHn
-        WhcbiC0k8IlRYsYSSRCbTcBQoustRFxEQFbi8JXfzCCDmAU6mCR6e34ygiSEBVwkJs3tAhvK
-        IqAq8WJpDzOIzStgKzHz/2cWiAXyEqs3HGCewMizgJFhFaNIamlxbnpusaFecWJucWleul5y
-        fu4mRmAIbjv2c/MOxksbgw8xCnAwKvHwKvzkixdiTSwrrsw9xCjBwawkwut09nScEG9KYmVV
-        alF+fFFpTmrxIUZToOUTmaVEk/OB8ZFXEm9oamhuYWlobmxubGahJM7bIXAwRkggPbEkNTs1
-        tSC1CKaPiYNTqoExo9XhsGrrpyKlXdn8mTlJRjnvzt86veaXBb9G9OJDa/mvpX1eeuGSbOtc
-        Wb/XKfaiycfu/75zV8DKa8P7/5M4ZYX1+RMYjN4knDcvsvkU6D67Re9NiIPHv3ojSQ4evmcz
-        fFjfaq3/EFwZX/+c/5i0+72v+/9IVwU99DE+yurIN9UpiO+7xWwlluKMREMt5qLiRAANp9JC
-        VwIAAA==
-X-CMS-MailID: 20200716120956eucas1p1c5fd8e24c16e6616041467f618034b44
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200716120956eucas1p1c5fd8e24c16e6616041467f618034b44
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20200716120956eucas1p1c5fd8e24c16e6616041467f618034b44
+Subject: Re: [PATCH v2] usb: dwc2: Fix error path in gadget registration
+Thread-Topic: [PATCH v2] usb: dwc2: Fix error path in gadget registration
+Thread-Index: AQHWW2oJamYfC8nRWEuRTA5WsVW2gKkKH/2A
+Date:   Thu, 16 Jul 2020 12:19:54 +0000
+Message-ID: <b7571d9c-95ac-26ec-538e-60e1aae0cddb@synopsys.com>
 References: <CGME20200716120956eucas1p1c5fd8e24c16e6616041467f618034b44@eucas1p1.samsung.com>
+ <20200716120948.28180-1-m.szyprowski@samsung.com>
+In-Reply-To: <20200716120948.28180-1-m.szyprowski@samsung.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+authentication-results: samsung.com; dkim=none (message not signed)
+ header.d=none;samsung.com; dmarc=none action=none header.from=synopsys.com;
+x-originating-ip: [37.252.94.162]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 99cbe134-7297-4c7c-9845-08d829828c1f
+x-ms-traffictypediagnostic: CY4PR12MB1381:
+x-microsoft-antispam-prvs: <CY4PR12MB1381C5B942893038E4EF5670A77F0@CY4PR12MB1381.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: W/exGn4btM3qDR669F5J6SGu7vmPdExigMLytniPGoSlCKQS9QJKNJoUCw1F9g9PbO9RFm/Lb63fCcTUUVVpCPBoQ7q9/M/0G189BaKBRM02NaYhpGJz05JlPa+yh+qxECwHfI60bRG3cUonUFSMdhHebje++pc49Gt1zeS6QiHBxEKZ0eExzvM97YB7PpCdkdsKRILcAW3gRslOFVdYfR8TDl8pGFj1DVMNFAKNrxeYowQwXsSM9+OT1HxEYRRzsWFZklFnns1tQbr4w/bXe3ky/zBMN1uDahVO3X+nwK1unTVeBrNX2VAXjwMtA242tby3fuSaZaUR4kTi9V3MO+XlGtY0M5mJ0mYBkkzUZs/T+L0F4AqdbW+/pCvPyPuf
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR12MB1432.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(396003)(346002)(376002)(136003)(366004)(39860400002)(76116006)(66946007)(36756003)(31696002)(91956017)(8936002)(6486002)(8676002)(4326008)(2906002)(45080400002)(2616005)(71200400001)(478600001)(316002)(6506007)(53546011)(66476007)(110136005)(66446008)(66556008)(64756008)(6512007)(5660300002)(54906003)(86362001)(31686004)(83380400001)(186003)(26005)(43740500002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: xIJ2dp+Z1hl0INZxDM0xMRIj91ST46OBafqCwSB15WHVPxPy0YooeFab6G5td2VKRBGfh4T0ldGQPd9I1CCHqdjtSwHZIvNaUtLXxipVsNNcSteUskoyKup97B0hieTN0ZtX/1QI9ZHilC+xxh1H7U+aSdwMBJu7Q2mXVTcVJnOMgKHXtEbdIaE9sx9UwarW4Q8e+XHQ2IAJLeXCZ/91wqBXIJBStmPrj/wY8Vzwl8MmdBXPT1DX6rE5S4ixV9PqewqwbTy9bRUxBpfx9h3Kug7SVlFPhgH/6qKrqiopkkDYw832mTJV2QGXWpnA/zjiKoqxinlvzSrj5ZgV/tSf+bqee7RYw4/xtpVwHVqgyqX1xv/CsU/gWU5PITrj+L4XvUxCR7/+zIuMXtAZXOYblpzLGCWtCr+luozzudJ/IgyOm7eUfGm0oLR/kD7T4sfrZL23TWbpJ7hpzN6U/b18zLSQu9U6vL+am3tvRiDuapw=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <CF8C4D2D70A17B47B2A09A83DAFA7847@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: synopsys.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR12MB1432.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 99cbe134-7297-4c7c-9845-08d829828c1f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jul 2020 12:19:54.4784
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: RIW3pykt3yGHJT2H/okFCyET+86OyH3Qqsykiw9AetXIgYwf+OcPh23TaJu9gOR7N1TTRszBk5V7BJyhAHbeOw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1381
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When gadget registration fails, one should not call usb_del_gadget_udc().
-Ensure this by setting gadget->udc to NULL. Also in case of a failure
-there is no need to disable low-level hardware, so return immiedetly
-instead of jumping to error_init label.
-
-This fixes the following kernel NULL ptr dereference on gadget failure
-(can be easily triggered with g_mass_storage without any module
-parameters):
-
-dwc2 12480000.hsotg: dwc2_check_params: Invalid parameter besl=1
-dwc2 12480000.hsotg: dwc2_check_params: Invalid parameter g_np_tx_fifo_size=1024
-dwc2 12480000.hsotg: EPs: 16, dedicated fifos, 7808 entries in SPRAM
-Mass Storage Function, version: 2009/09/11
-LUN: removable file: (no medium)
-no file given for LUN0
-g_mass_storage 12480000.hsotg: failed to start g_mass_storage: -22
-8<--- cut here ---
-Unable to handle kernel NULL pointer dereference at virtual address 00000104
-pgd = (ptrval)
-[00000104] *pgd=00000000
-Internal error: Oops: 805 [#1] PREEMPT SMP ARM
-Modules linked in:
-CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.8.0-rc5 #3133
-Hardware name: Samsung Exynos (Flattened Device Tree)
-Workqueue: events deferred_probe_work_func
-PC is at usb_del_gadget_udc+0x38/0xc4
-LR is at __mutex_lock+0x31c/0xb18
-...
-Process kworker/0:1 (pid: 12, stack limit = 0x(ptrval))
-Stack: (0xef121db0 to 0xef122000)
-...
-[<c076bf3c>] (usb_del_gadget_udc) from [<c0726bec>] (dwc2_hsotg_remove+0x10/0x20)
-[<c0726bec>] (dwc2_hsotg_remove) from [<c0711208>] (dwc2_driver_probe+0x57c/0x69c)
-[<c0711208>] (dwc2_driver_probe) from [<c06247c0>] (platform_drv_probe+0x6c/0xa4)
-[<c06247c0>] (platform_drv_probe) from [<c0621df4>] (really_probe+0x200/0x48c)
-[<c0621df4>] (really_probe) from [<c06221e8>] (driver_probe_device+0x78/0x1fc)
-[<c06221e8>] (driver_probe_device) from [<c061fcd4>] (bus_for_each_drv+0x74/0xb8)
-[<c061fcd4>] (bus_for_each_drv) from [<c0621b54>] (__device_attach+0xd4/0x16c)
-[<c0621b54>] (__device_attach) from [<c0620c98>] (bus_probe_device+0x88/0x90)
-[<c0620c98>] (bus_probe_device) from [<c06211b0>] (deferred_probe_work_func+0x3c/0xd0)
-[<c06211b0>] (deferred_probe_work_func) from [<c0149280>] (process_one_work+0x234/0x7dc)
-[<c0149280>] (process_one_work) from [<c014986c>] (worker_thread+0x44/0x51c)
-[<c014986c>] (worker_thread) from [<c0150b1c>] (kthread+0x158/0x1a0)
-[<c0150b1c>] (kthread) from [<c0100114>] (ret_from_fork+0x14/0x20)
-Exception stack(0xef121fb0 to 0xef121ff8)
-...
----[ end trace 9724c2fc7cc9c982 ]---
-
-While fixing this also fix the double call to dwc2_lowlevel_hw_disable()
-if dr_mode is set to USB_DR_MODE_PERIPHERAL. In such case low-level
-hardware is already disabled before calling usb_add_gadget_udc(). That
-function correctly preserves low-level hardware state, there is no need
-for the second unconditional dwc2_lowlevel_hw_disable() call.
-
-Fixes: 207324a321a8 ("usb: dwc2: Postponed gadget registration to the udc class driver")
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
----
- drivers/usb/dwc2/platform.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
-index cb8ddbd53718..db9fd4bd1a38 100644
---- a/drivers/usb/dwc2/platform.c
-+++ b/drivers/usb/dwc2/platform.c
-@@ -582,6 +582,7 @@ static int dwc2_driver_probe(struct platform_device *dev)
- 	if (hsotg->gadget_enabled) {
- 		retval = usb_add_gadget_udc(hsotg->dev, &hsotg->gadget);
- 		if (retval) {
-+			hsotg->gadget.udc = NULL;
- 			dwc2_hsotg_remove(hsotg);
- 			goto error_init;
- 		}
-@@ -593,7 +594,8 @@ static int dwc2_driver_probe(struct platform_device *dev)
- 	if (hsotg->params.activate_stm_id_vb_detection)
- 		regulator_disable(hsotg->usb33d);
- error:
--	dwc2_lowlevel_hw_disable(hsotg);
-+	if (hsotg->dr_mode != USB_DR_MODE_PERIPHERAL)
-+		dwc2_lowlevel_hw_disable(hsotg);
- 	return retval;
- }
- 
--- 
-2.17.1
-
+SGkgTWFyZWssDQoNCk9uIDcvMTYvMjAyMCA0OjA5IFBNLCBNYXJlayBTenlwcm93c2tpIHdyb3Rl
+Og0KPiBXaGVuIGdhZGdldCByZWdpc3RyYXRpb24gZmFpbHMsIG9uZSBzaG91bGQgbm90IGNhbGwg
+dXNiX2RlbF9nYWRnZXRfdWRjKCkuDQo+IEVuc3VyZSB0aGlzIGJ5IHNldHRpbmcgZ2FkZ2V0LT51
+ZGMgdG8gTlVMTC4gQWxzbyBpbiBjYXNlIG9mIGEgZmFpbHVyZQ0KPiB0aGVyZSBpcyBubyBuZWVk
+IHRvIGRpc2FibGUgbG93LWxldmVsIGhhcmR3YXJlLCBzbyByZXR1cm4gaW1taWVkZXRseQ0KPiBp
+bnN0ZWFkIG9mIGp1bXBpbmcgdG8gZXJyb3JfaW5pdCBsYWJlbC4NCj4gDQo+IFRoaXMgZml4ZXMg
+dGhlIGZvbGxvd2luZyBrZXJuZWwgTlVMTCBwdHIgZGVyZWZlcmVuY2Ugb24gZ2FkZ2V0IGZhaWx1
+cmUNCj4gKGNhbiBiZSBlYXNpbHkgdHJpZ2dlcmVkIHdpdGggZ19tYXNzX3N0b3JhZ2Ugd2l0aG91
+dCBhbnkgbW9kdWxlDQo+IHBhcmFtZXRlcnMpOg0KPiANCj4gZHdjMiAxMjQ4MDAwMC5oc290Zzog
+ZHdjMl9jaGVja19wYXJhbXM6IEludmFsaWQgcGFyYW1ldGVyIGJlc2w9MQ0KPiBkd2MyIDEyNDgw
+MDAwLmhzb3RnOiBkd2MyX2NoZWNrX3BhcmFtczogSW52YWxpZCBwYXJhbWV0ZXIgZ19ucF90eF9m
+aWZvX3NpemU9MTAyNA0KPiBkd2MyIDEyNDgwMDAwLmhzb3RnOiBFUHM6IDE2LCBkZWRpY2F0ZWQg
+Zmlmb3MsIDc4MDggZW50cmllcyBpbiBTUFJBTQ0KPiBNYXNzIFN0b3JhZ2UgRnVuY3Rpb24sIHZl
+cnNpb246IDIwMDkvMDkvMTENCj4gTFVOOiByZW1vdmFibGUgZmlsZTogKG5vIG1lZGl1bSkNCj4g
+bm8gZmlsZSBnaXZlbiBmb3IgTFVOMA0KPiBnX21hc3Nfc3RvcmFnZSAxMjQ4MDAwMC5oc290Zzog
+ZmFpbGVkIHRvIHN0YXJ0IGdfbWFzc19zdG9yYWdlOiAtMjINCj4gODwtLS0gY3V0IGhlcmUgLS0t
+DQo+IFVuYWJsZSB0byBoYW5kbGUga2VybmVsIE5VTEwgcG9pbnRlciBkZXJlZmVyZW5jZSBhdCB2
+aXJ0dWFsIGFkZHJlc3MgMDAwMDAxMDQNCj4gcGdkID0gKHB0cnZhbCkNCj4gWzAwMDAwMTA0XSAq
+cGdkPTAwMDAwMDAwDQo+IEludGVybmFsIGVycm9yOiBPb3BzOiA4MDUgWyMxXSBQUkVFTVBUIFNN
+UCBBUk0NCj4gTW9kdWxlcyBsaW5rZWQgaW46DQo+IENQVTogMCBQSUQ6IDEyIENvbW06IGt3b3Jr
+ZXIvMDoxIE5vdCB0YWludGVkIDUuOC4wLXJjNSAjMzEzMw0KPiBIYXJkd2FyZSBuYW1lOiBTYW1z
+dW5nIEV4eW5vcyAoRmxhdHRlbmVkIERldmljZSBUcmVlKQ0KPiBXb3JrcXVldWU6IGV2ZW50cyBk
+ZWZlcnJlZF9wcm9iZV93b3JrX2Z1bmMNCj4gUEMgaXMgYXQgdXNiX2RlbF9nYWRnZXRfdWRjKzB4
+MzgvMHhjNA0KPiBMUiBpcyBhdCBfX211dGV4X2xvY2srMHgzMWMvMHhiMTgNCj4gLi4uDQo+IFBy
+b2Nlc3Mga3dvcmtlci8wOjEgKHBpZDogMTIsIHN0YWNrIGxpbWl0ID0gMHgocHRydmFsKSkNCj4g
+U3RhY2s6ICgweGVmMTIxZGIwIHRvIDB4ZWYxMjIwMDApDQo+IC4uLg0KPiBbPGMwNzZiZjNjPl0g
+KHVzYl9kZWxfZ2FkZ2V0X3VkYykgZnJvbSBbPGMwNzI2YmVjPl0gKGR3YzJfaHNvdGdfcmVtb3Zl
+KzB4MTAvMHgyMCkNCj4gWzxjMDcyNmJlYz5dIChkd2MyX2hzb3RnX3JlbW92ZSkgZnJvbSBbPGMw
+NzExMjA4Pl0gKGR3YzJfZHJpdmVyX3Byb2JlKzB4NTdjLzB4NjljKQ0KPiBbPGMwNzExMjA4Pl0g
+KGR3YzJfZHJpdmVyX3Byb2JlKSBmcm9tIFs8YzA2MjQ3YzA+XSAocGxhdGZvcm1fZHJ2X3Byb2Jl
+KzB4NmMvMHhhNCkNCj4gWzxjMDYyNDdjMD5dIChwbGF0Zm9ybV9kcnZfcHJvYmUpIGZyb20gWzxj
+MDYyMWRmND5dIChyZWFsbHlfcHJvYmUrMHgyMDAvMHg0OGMpDQo+IFs8YzA2MjFkZjQ+XSAocmVh
+bGx5X3Byb2JlKSBmcm9tIFs8YzA2MjIxZTg+XSAoZHJpdmVyX3Byb2JlX2RldmljZSsweDc4LzB4
+MWZjKQ0KPiBbPGMwNjIyMWU4Pl0gKGRyaXZlcl9wcm9iZV9kZXZpY2UpIGZyb20gWzxjMDYxZmNk
+ND5dIChidXNfZm9yX2VhY2hfZHJ2KzB4NzQvMHhiOCkNCj4gWzxjMDYxZmNkND5dIChidXNfZm9y
+X2VhY2hfZHJ2KSBmcm9tIFs8YzA2MjFiNTQ+XSAoX19kZXZpY2VfYXR0YWNoKzB4ZDQvMHgxNmMp
+DQo+IFs8YzA2MjFiNTQ+XSAoX19kZXZpY2VfYXR0YWNoKSBmcm9tIFs8YzA2MjBjOTg+XSAoYnVz
+X3Byb2JlX2RldmljZSsweDg4LzB4OTApDQo+IFs8YzA2MjBjOTg+XSAoYnVzX3Byb2JlX2Rldmlj
+ZSkgZnJvbSBbPGMwNjIxMWIwPl0gKGRlZmVycmVkX3Byb2JlX3dvcmtfZnVuYysweDNjLzB4ZDAp
+DQo+IFs8YzA2MjExYjA+XSAoZGVmZXJyZWRfcHJvYmVfd29ya19mdW5jKSBmcm9tIFs8YzAxNDky
+ODA+XSAocHJvY2Vzc19vbmVfd29yaysweDIzNC8weDdkYykNCj4gWzxjMDE0OTI4MD5dIChwcm9j
+ZXNzX29uZV93b3JrKSBmcm9tIFs8YzAxNDk4NmM+XSAod29ya2VyX3RocmVhZCsweDQ0LzB4NTFj
+KQ0KPiBbPGMwMTQ5ODZjPl0gKHdvcmtlcl90aHJlYWQpIGZyb20gWzxjMDE1MGIxYz5dIChrdGhy
+ZWFkKzB4MTU4LzB4MWEwKQ0KPiBbPGMwMTUwYjFjPl0gKGt0aHJlYWQpIGZyb20gWzxjMDEwMDEx
+ND5dIChyZXRfZnJvbV9mb3JrKzB4MTQvMHgyMCkNCj4gRXhjZXB0aW9uIHN0YWNrKDB4ZWYxMjFm
+YjAgdG8gMHhlZjEyMWZmOCkNCj4gLi4uDQo+IC0tLVsgZW5kIHRyYWNlIDk3MjRjMmZjN2NjOWM5
+ODIgXS0tLQ0KPiANCj4gV2hpbGUgZml4aW5nIHRoaXMgYWxzbyBmaXggdGhlIGRvdWJsZSBjYWxs
+IHRvIGR3YzJfbG93bGV2ZWxfaHdfZGlzYWJsZSgpDQo+IGlmIGRyX21vZGUgaXMgc2V0IHRvIFVT
+Ql9EUl9NT0RFX1BFUklQSEVSQUwuIEluIHN1Y2ggY2FzZSBsb3ctbGV2ZWwNCj4gaGFyZHdhcmUg
+aXMgYWxyZWFkeSBkaXNhYmxlZCBiZWZvcmUgY2FsbGluZyB1c2JfYWRkX2dhZGdldF91ZGMoKS4g
+VGhhdA0KPiBmdW5jdGlvbiBjb3JyZWN0bHkgcHJlc2VydmVzIGxvdy1sZXZlbCBoYXJkd2FyZSBz
+dGF0ZSwgdGhlcmUgaXMgbm8gbmVlZA0KPiBmb3IgdGhlIHNlY29uZCB1bmNvbmRpdGlvbmFsIGR3
+YzJfbG93bGV2ZWxfaHdfZGlzYWJsZSgpIGNhbGwuDQo+IA0KPiBGaXhlczogMjA3MzI0YTMyMWE4
+ICgidXNiOiBkd2MyOiBQb3N0cG9uZWQgZ2FkZ2V0IHJlZ2lzdHJhdGlvbiB0byB0aGUgdWRjIGNs
+YXNzIGRyaXZlciIpDQo+IFNpZ25lZC1vZmYtYnk6IE1hcmVrIFN6eXByb3dza2kgPG0uc3p5cHJv
+d3NraUBzYW1zdW5nLmNvbT4NCj4gLS0tDQo+ICAgZHJpdmVycy91c2IvZHdjMi9wbGF0Zm9ybS5j
+IHwgNCArKystDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlv
+bigtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2R3YzIvcGxhdGZvcm0uYyBiL2Ry
+aXZlcnMvdXNiL2R3YzIvcGxhdGZvcm0uYw0KPiBpbmRleCBjYjhkZGJkNTM3MTguLmRiOWZkNGJk
+MWEzOCAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy91c2IvZHdjMi9wbGF0Zm9ybS5jDQo+ICsrKyBi
+L2RyaXZlcnMvdXNiL2R3YzIvcGxhdGZvcm0uYw0KPiBAQCAtNTgyLDYgKzU4Miw3IEBAIHN0YXRp
+YyBpbnQgZHdjMl9kcml2ZXJfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqZGV2KQ0KPiAg
+IAlpZiAoaHNvdGctPmdhZGdldF9lbmFibGVkKSB7DQo+ICAgCQlyZXR2YWwgPSB1c2JfYWRkX2dh
+ZGdldF91ZGMoaHNvdGctPmRldiwgJmhzb3RnLT5nYWRnZXQpOw0KPiAgIAkJaWYgKHJldHZhbCkg
+ew0KPiArCQkJaHNvdGctPmdhZGdldC51ZGMgPSBOVUxMOw0KDQpDb25zaWRlciB5b3VyIHJlY2Vu
+dGx5IHNlbnQgcGF0Y2ggIltQQVRDSF0gdXNiOiBnYWRnZXQ6IHVkYzogRmx1c2ggDQpwZW5kaW5n
+IHdvcmsgYWxzbyBpbiBlcnJvciBwYXRoIiwgbW9yZSBwcm9iYWJseSBpdCdzIG5vdCByZXF1aXJl
+ZCwgDQpiZWNhdXNlIHJvb3QgY2F1c2Ugb2Ygb2JzZXJ2ZWQgZHdjMiBpc3N1ZSBjb21lcyBmcm9t
+IHVkYy4NCkFtIEkgd3Jvbmc/DQpPciB3ZSBjYW4ga2VlcCBpdCBhcyBzYW5pdHkgc29sdXRpb24g
+dG8gYXZvaWQgYW55IG90aGVyIHBvc3NpYmxlIGNhc2VzPw0KDQo+ICAgCQkJZHdjMl9oc290Z19y
+ZW1vdmUoaHNvdGcpOw0KPiAgIAkJCWdvdG8gZXJyb3JfaW5pdDsNCj4gICAJCX0NCj4gQEAgLTU5
+Myw3ICs1OTQsOCBAQCBzdGF0aWMgaW50IGR3YzJfZHJpdmVyX3Byb2JlKHN0cnVjdCBwbGF0Zm9y
+bV9kZXZpY2UgKmRldikNCj4gICAJaWYgKGhzb3RnLT5wYXJhbXMuYWN0aXZhdGVfc3RtX2lkX3Zi
+X2RldGVjdGlvbikNCj4gICAJCXJlZ3VsYXRvcl9kaXNhYmxlKGhzb3RnLT51c2IzM2QpOw0KPiAg
+IGVycm9yOg0KPiAtCWR3YzJfbG93bGV2ZWxfaHdfZGlzYWJsZShoc290Zyk7DQo+ICsJaWYgKGhz
+b3RnLT5kcl9tb2RlICE9IFVTQl9EUl9NT0RFX1BFUklQSEVSQUwpDQo+ICsJCWR3YzJfbG93bGV2
+ZWxfaHdfZGlzYWJsZShoc290Zyk7DQo+ICAgCXJldHVybiByZXR2YWw7DQo+ICAgfQ0KPiAgIA0K
+PiANCg0KVGhhbmtzLA0KTWluYXMNCg0K
