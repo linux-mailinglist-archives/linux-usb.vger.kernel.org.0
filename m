@@ -2,85 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E641E221CB9
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jul 2020 08:41:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F2D221D00
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jul 2020 09:05:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728067AbgGPGle (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jul 2020 02:41:34 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:4367 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727943AbgGPGle (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jul 2020 02:41:34 -0400
-X-UUID: 23d064985d8c44cb8eb27405b3e6b9e4-20200716
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=Ho71eZkBMon4Vz3VLsPtyCt1CUgMlDiLHMKnef2ILSA=;
-        b=XRXOcdeTwdFN5d5s8jX8hdz6O50rKSfYqC/FF81iO2+b53MPXL5/oC0kr7EVgPUpRORpRoYW96U7jERsz9vZ9HnAyr9cI8T9YQHHcldb5pesSvSRotu9pyGF/T3RirNz9Y82YCsHptjKZZ/PHrJZIhY7f3bsF0ReHtLCijHTROo=;
-X-UUID: 23d064985d8c44cb8eb27405b3e6b9e4-20200716
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 982203569; Thu, 16 Jul 2020 14:41:28 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 16 Jul 2020 14:41:20 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 16 Jul 2020 14:41:20 +0800
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-CC:     Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>,
-        Macpaul Lin <macpaul.lin@gmail.com>,
-        Eddie Hung <eddie.hung@mediatek.com>, <stable@vger.kernel.org>
-Subject: [PATCH] usb: gadget: configfs: Fix use-after-free issue with udc_name
-Date:   Thu, 16 Jul 2020 14:41:06 +0800
-Message-ID: <1594881666-8843-1-git-send-email-macpaul.lin@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
+        id S1728238AbgGPHFO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jul 2020 03:05:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37456 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725921AbgGPHFO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 16 Jul 2020 03:05:14 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 404502067D;
+        Thu, 16 Jul 2020 07:05:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1594883113;
+        bh=Z5RhkkqLX0D9XYZKqSxiQ7QYhDFUhsRN5R5vtcfRhec=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=n5zAmkh8wu5Nyyl5cprsTdFtEXaolIRhWe8a3K0gQQPvIaeq2KOcgDPksGPkR0fs4
+         +qXez5kL+vKEJG1Hl2QZbeZwkg2v2a2mb6oXUmJNr211Nqkk69y2zllc4nBzPEoNUU
+         pVa3OAe2I5nT4OTAKHZgmA4Ja2B4SqzyLNRmDv7w=
+Date:   Thu, 16 Jul 2020 09:05:08 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Rajmohan Mani <rajmohan.mani@intel.com>
+Cc:     Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Ayman Bagabas <ayman.bagabas@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Jithu Joseph <jithu.joseph@intel.com>,
+        =?utf-8?B?Qmxhxb4=?= Hrastnik <blaz@mxxn.io>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-usb@vger.kernel.org, pmalani@chromium.org,
+        bleung@chromium.org
+Subject: Re: [PATCH 2/2] usb: typec: intel_pmc_mux: Check the port status
+ before connect
+Message-ID: <20200716070508.GB962748@kroah.com>
+References: <20200716003310.26125-1-rajmohan.mani@intel.com>
+ <20200716003310.26125-3-rajmohan.mani@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200716003310.26125-3-rajmohan.mani@intel.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-VGhlcmUgaXMgYSB1c2UtYWZ0ZXItZnJlZSBpc3N1ZSwgaWYgYWNjZXNzIHVkY19uYW1lDQppbiBm
-dW5jdGlvbiBnYWRnZXRfZGV2X2Rlc2NfVURDX3N0b3JlIGFmdGVyIGFub3RoZXIgY29udGV4dA0K
-ZnJlZSB1ZGNfbmFtZSBpbiBmdW5jdGlvbiB1bnJlZ2lzdGVyX2dhZGdldC4NCg0KQ29udGV4IDE6
-DQpnYWRnZXRfZGV2X2Rlc2NfVURDX3N0b3JlKCktPnVucmVnaXN0ZXJfZ2FkZ2V0KCktPg0KZnJl
-ZSB1ZGNfbmFtZS0+c2V0IHVkY19uYW1lIHRvIE5VTEwNCg0KQ29udGV4IDI6DQpnYWRnZXRfZGV2
-X2Rlc2NfVURDX3Nob3coKS0+IGFjY2VzcyB1ZGNfbmFtZQ0KDQpDYWxsIHRyYWNlOg0KZHVtcF9i
-YWNrdHJhY2UrMHgwLzB4MzQwDQpzaG93X3N0YWNrKzB4MTQvMHgxYw0KZHVtcF9zdGFjaysweGU0
-LzB4MTM0DQpwcmludF9hZGRyZXNzX2Rlc2NyaXB0aW9uKzB4NzgvMHg0NzgNCl9fa2FzYW5fcmVw
-b3J0KzB4MjcwLzB4MmVjDQprYXNhbl9yZXBvcnQrMHgxMC8weDE4DQpfX2FzYW5fcmVwb3J0X2xv
-YWQxX25vYWJvcnQrMHgxOC8weDIwDQpzdHJpbmcrMHhmNC8weDEzOA0KdnNucHJpbnRmKzB4NDI4
-LzB4MTRkMA0Kc3ByaW50ZisweGU0LzB4MTJjDQpnYWRnZXRfZGV2X2Rlc2NfVURDX3Nob3crMHg1
-NC8weDY0DQpjb25maWdmc19yZWFkX2ZpbGUrMHgyMTAvMHgzYTANCl9fdmZzX3JlYWQrMHhmMC8w
-eDQ5Yw0KdmZzX3JlYWQrMHgxMzAvMHgyYjQNClN5U19yZWFkKzB4MTE0LzB4MjA4DQplbDBfc3Zj
-X25ha2VkKzB4MzQvMHgzOA0KDQpBZGQgbXV0ZXhfbG9jayB0byBwcm90ZWN0IHRoaXMga2luZCBv
-ZiBzY2VuYXJpby4NCg0KU2lnbmVkLW9mZi1ieTogRWRkaWUgSHVuZyA8ZWRkaWUuaHVuZ0BtZWRp
-YXRlay5jb20+DQpTaWduZWQtb2ZmLWJ5OiBNYWNwYXVsIExpbiA8bWFjcGF1bC5saW5AbWVkaWF0
-ZWsuY29tPg0KQ2M6IHN0YWJsZUB2Z2VyLmtlcm5lbC5vcmcNCi0tLQ0KIGRyaXZlcnMvdXNiL2dh
-ZGdldC9jb25maWdmcy5jIHwgMTEgKysrKysrKysrLS0NCiAxIGZpbGUgY2hhbmdlZCwgOSBpbnNl
-cnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQ0KDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvZ2Fk
-Z2V0L2NvbmZpZ2ZzLmMgYi9kcml2ZXJzL3VzYi9nYWRnZXQvY29uZmlnZnMuYw0KaW5kZXggOWRj
-MDZhNGUxYjMwLi4yMTExMGIyODY1YjkgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL3VzYi9nYWRnZXQv
-Y29uZmlnZnMuYw0KKysrIGIvZHJpdmVycy91c2IvZ2FkZ2V0L2NvbmZpZ2ZzLmMNCkBAIC0yMjEs
-OSArMjIxLDE2IEBAIHN0YXRpYyBzc2l6ZV90IGdhZGdldF9kZXZfZGVzY19iY2RVU0Jfc3RvcmUo
-c3RydWN0IGNvbmZpZ19pdGVtICppdGVtLA0KIA0KIHN0YXRpYyBzc2l6ZV90IGdhZGdldF9kZXZf
-ZGVzY19VRENfc2hvdyhzdHJ1Y3QgY29uZmlnX2l0ZW0gKml0ZW0sIGNoYXIgKnBhZ2UpDQogew0K
-LQljaGFyICp1ZGNfbmFtZSA9IHRvX2dhZGdldF9pbmZvKGl0ZW0pLT5jb21wb3NpdGUuZ2FkZ2V0
-X2RyaXZlci51ZGNfbmFtZTsNCisJc3RydWN0IGdhZGdldF9pbmZvICpnaSA9IHRvX2dhZGdldF9p
-bmZvKGl0ZW0pOw0KKwljaGFyICp1ZGNfbmFtZTsNCisJaW50IHJldDsNCisNCisJbXV0ZXhfbG9j
-aygmZ2ktPmxvY2spOw0KKwl1ZGNfbmFtZSA9IGdpLT5jb21wb3NpdGUuZ2FkZ2V0X2RyaXZlci51
-ZGNfbmFtZTsNCisJcmV0ID0gc3ByaW50ZihwYWdlLCAiJXNcbiIsIHVkY19uYW1lID86ICIiKTsN
-CisJbXV0ZXhfdW5sb2NrKCZnaS0+bG9jayk7DQogDQotCXJldHVybiBzcHJpbnRmKHBhZ2UsICIl
-c1xuIiwgdWRjX25hbWUgPzogIiIpOw0KKwlyZXR1cm4gcmV0Ow0KIH0NCiANCiBzdGF0aWMgaW50
-IHVucmVnaXN0ZXJfZ2FkZ2V0KHN0cnVjdCBnYWRnZXRfaW5mbyAqZ2kpDQotLSANCjIuMTguMA0K
+On Wed, Jul 15, 2020 at 05:33:10PM -0700, Rajmohan Mani wrote:
+> From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> 
+> The PMC microcontroller that we use for configuration, does
+> not supply any status information back. For port status we
+> need to talk to another controller on the board called IOM
+> (I/O manager).
+> 
+> By checking the port status before configuring the muxes, we
+> can make sure that we do not reconfigure the port after
+> bootup when the system firmware (for example BIOS) has
+> already configured it.
+> 
+> Using the status information also to check if DisplayPort
+> HPD is still asserted when the cable plug is disconnected,
+> and clearing it if it is.
+> 
+> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
+You can't just forward on patches from others without also adding your
+signed-off-by to them, right?
+
+Please fix up this series and try again.
+
+thanks,
+
+greg k-h
