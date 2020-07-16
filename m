@@ -2,91 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00BEA222BD9
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jul 2020 21:25:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BA2F222E3F
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jul 2020 23:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729148AbgGPTYz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jul 2020 15:24:55 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:36500 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728788AbgGPTYz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jul 2020 15:24:55 -0400
-Received: by mail-io1-f65.google.com with SMTP id y2so7263781ioy.3;
-        Thu, 16 Jul 2020 12:24:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fqIIt2FaEzVEayUbwq9mftLIMcW2zYTtnZ5OVri9Dh0=;
-        b=g6cwOhoL8WXzP9LMbsXVCDKNbTaO1x6Zz8fwt2aQ13Tc4S1SZNufJRWiZXos9GNB0j
-         qQa/yfmX8vLyacvZjV7qvWAAtb72CJ0MEmxtgIURjLrO44VLpJEUo2nvYhAGpGO92tLG
-         xJhMbIGtsSWODQG/sQa5rID8BAnlrtY7N8YLvo3C0hJwvwAdisVylvuRMsMeUXm2DeDD
-         FdwyS534DFCsToK+mlZIVd2pTVNJQ/13PXA0LzJOh+iWWQkg6phVQJsztsNM93dROJNx
-         yE+iODSSdC1Xs1YhEXqey76rIdzDiw7z/lrkdvOrAv1sGjpy5sUXgd7xitD1WnP14rq5
-         WXbg==
-X-Gm-Message-State: AOAM532anIEsgGaBA632PTHlX0vdfuVrB4zR2bfSxrXFXGCo+rZ3pYZ9
-        5xwovAb0sQ44XQsYHW8XjQ==
-X-Google-Smtp-Source: ABdhPJx3vjYXOYDEqcmC6qufmiQ19b+sBDpjjIfctsp1sTzarUVj/7pFcLH5uwwo3iYmhB30ZbjW7w==
-X-Received: by 2002:a02:b81a:: with SMTP id o26mr6534437jam.41.1594927494418;
-        Thu, 16 Jul 2020 12:24:54 -0700 (PDT)
-Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id a11sm3342231iow.26.2020.07.16.12.24.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jul 2020 12:24:53 -0700 (PDT)
-Received: (nullmailer pid 2701471 invoked by uid 1000);
-        Thu, 16 Jul 2020 19:24:52 -0000
-Date:   Thu, 16 Jul 2020 13:24:52 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Philippe Schenker <philippe.schenker@toradex.com>
-Cc:     devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        Peter Chen <Peter.Chen@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
+        id S1726873AbgGPV6c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jul 2020 17:58:32 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:46054 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726007AbgGPV6c (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jul 2020 17:58:32 -0400
+Received: from mailhost.synopsys.com (sv2-mailhost1.synopsys.com [10.205.2.133])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 8EDA7401D7;
+        Thu, 16 Jul 2020 21:58:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1594936712; bh=sK0ThbhK5CcurT3pB2csZyciDvpT2tyMTxoy+PRzJsQ=;
+        h=Date:From:Subject:To:Cc:From;
+        b=VeAeACVOA7S/ZMw+TnkTTaRba+0Hvugg4PluiXbBvL6SN2isF2D6uouKmRRJM+pkU
+         5gPKJ4R2VjEOhVphxzb0ADvVwh+JMBhEMdwjxWKW3vtdL8uRj58EfDTou3bendTo4i
+         CAGoX/QfKnOlFfy2eTc2ATS1K20GYT2OkSMjfcabBMKcrV5ptHKXVI69ak7t6rOgEH
+         Y+dNLv9+AOZKaI9kONnemTGULZrS21SQBWKHnZmnUPcdCR1QNkhnnsem4a/RZO1Gu0
+         2o2Lj17B9zUyskmZPKoWZDcgkKnfnRLpWmDJDYUF43mStybrKtWD06eYz7UB5IuB3u
+         s409IfCm8J0Sg==
+Received: from te-lab16 (nanobot.internal.synopsys.com [10.10.186.99])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id C599EA0258;
+        Thu, 16 Jul 2020 21:58:29 +0000 (UTC)
+Received: by te-lab16 (sSMTP sendmail emulation); Thu, 16 Jul 2020 14:58:29 -0700
+Date:   Thu, 16 Jul 2020 14:58:29 -0700
+Message-Id: <cover.1594935978.git.thinhn@synopsys.com>
+X-SNPS-Relay: synopsys.com
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: [PATCH 00/11] usb: Handle different sublink speeds
+To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] dt-bindings: usb: ci-hdrc-usb2: add property
- disable-runtime-pm
-Message-ID: <20200716192452.GA2699629@bogus>
-References: <20200714151822.250783-1-philippe.schenker@toradex.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200714151822.250783-1-philippe.schenker@toradex.com>
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Peter Chen <peter.chen@nxp.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Dejin Zheng <zhengdejin5@gmail.com>,
+        Roger Quadros <rogerq@ti.com>, Jun Li <jun.li@nxp.com>
+Cc:     John Youn <John.Youn@synopsys.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 14, 2020 at 05:18:20PM +0200, Philippe Schenker wrote:
-> Chipidea depends on some hardware signals to be there in order
-> for runtime-pm to work well. Add the possibility to disable runtime
-> power management that is necessary for certain boards.
+A USB super-speed-plus device may operate at different sublink speed and lane
+count (e.g. gen2x2, gen1x2, or gen2x1). The usb gadget stack needs to be able
+to handle a couple things:
 
-This is why we have SoC specific compatible strings. Use that.
+1) Report the sublink speed attributes the device support
+2) Select the sublink speed attribute
 
-> 
-> Signed-off-by: Philippe Schenker <philippe.schenker@toradex.com>
-> ---
-> 
-> Changes in v2: None
-> 
->  Documentation/devicetree/bindings/usb/ci-hdrc-usb2.txt | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.txt b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.txt
-> index 51376cbe5f3d..67a31df13e69 100644
-> --- a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.txt
-> +++ b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.txt
-> @@ -90,6 +90,7 @@ Optional properties:
->    case, the "idle" state needs to pull down the data and strobe pin
->    and the "active" state needs to pull up the strobe pin.
->  - pinctrl-n: alternate pin modes
-> +- disable-runtime-pm: This disables the runtime power management.
+This series introduces sublink speed attribute structure to ch9.h to capture
+the device capability of the gadget. It also introduces a new gadget ops
+udc_set_num_lanes_and_speed to select a specific sublink speed.
 
-This is a Linux feature, not h/w description or config.
+DWC3 needs this support for DWC_usb32 IP. Implement the new changes for DWC3.
 
->  
->  i.mx specific properties
->  - fsl,usbmisc: phandler of non-core register device, with one
-> -- 
-> 2.27.0
-> 
+
+Thinh Nguyen (11):
+  usb: ch9: Add sublink speed struct
+  usb: gadget: composite: Avoid using magic numbers
+  usb: gadget: Expose sublink speed attributes
+  usb: gadget: Set max speed for SSP devices
+  usb: composite: Properly report sublink speed
+  usb: devicetree: dwc3: Introduce num-lanes and lsm
+  usb: dwc3: Initialize lane count and sublink speed
+  usb: dwc3: gadget: Report sublink speed capability
+  usb: dwc3: gadget: Implement setting of sublink speed
+  usb: dwc3: gadget: Track connected lane and sublink speed
+  usb: dwc3: gadget: Set speed only up to the max supported
+
+ Documentation/devicetree/bindings/usb/dwc3.txt |   9 ++
+ drivers/usb/dwc3/core.c                        |  64 ++++++++++++
+ drivers/usb/dwc3/core.h                        |  18 ++++
+ drivers/usb/dwc3/gadget.c                      | 135 ++++++++++++++++++++++++-
+ drivers/usb/gadget/composite.c                 |  81 ++++++++++-----
+ drivers/usb/gadget/udc/core.c                  |  24 ++++-
+ include/linux/usb/gadget.h                     |  23 +++++
+ include/uapi/linux/usb/ch9.h                   |  42 ++++++++
+ 8 files changed, 360 insertions(+), 36 deletions(-)
+
+-- 
+2.11.0
+
