@@ -2,197 +2,174 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0676221B28
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jul 2020 06:17:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2CD6221B86
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jul 2020 06:46:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725976AbgGPERD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jul 2020 00:17:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37670 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725268AbgGPERD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jul 2020 00:17:03 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141DCC061755;
-        Wed, 15 Jul 2020 21:17:03 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id d4so4194463pgk.4;
-        Wed, 15 Jul 2020 21:17:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=NFWKAnqwIMZO+jCeZOqem/0WTb649YZirzCP4sMo3vU=;
-        b=NAxHUWpU88h2Es2qByrl1j7WIsDFhBB3rt9YvdCFI9yjg5nAMJ+wptf3dgOo4o1H61
-         sEjdQ4wOuFsHESze83Xib87RCB0pwOC3276duLKpex0gzUP70LtIu63TSeImhr7zKnAQ
-         MCOMVWcTJnRbZgzKdPdGfn9z37J0JSJJLL7GcBLnsRsQnZsubsGmeWxBumFYBZgOx8Wj
-         U7x1bLxlfLtFYGX3dW5IGc5QG91qhKiISTijylKiZZARTI8khdAddKvytNKRLNcyXY9C
-         PHZkrN0ifGz4o37iezrXBnwcMidTrHvtdOHzhpDrOBxpbCcdVktgIIR6M1OvagNiB23S
-         jk3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=NFWKAnqwIMZO+jCeZOqem/0WTb649YZirzCP4sMo3vU=;
-        b=MhmgsPzAxW3EnoBWljnawOSKd/rNrnjdmKYHu0xK49Yy17quyEjez8va4lztyPGPHF
-         5tTJbDnUQLOYs4AtpoOAIbkO3whnNJjJU1P7BblxrsmfdrgdfQ4jS4sOYiLzStVn4wKl
-         o7ymOaD6+vh1fUfT1zhMK0fbKFOOjVOFV/AeiFvCjnGPivxoaMo1oMqqhVYa3e79ZJec
-         zes+xXKJoWKdIxvizdUB2TAd2hrdZlQ3AYQ/h3Lzx4Xw8uHmUEhoVXfGiAmiuqWwBgjC
-         8eF8hpO/VLYRmcewnmRiIuL5nnQLKe/TRMtSdVeynDc2fL7zEIJ8QJLjvIWaQ3cydwwN
-         5v+w==
-X-Gm-Message-State: AOAM532K1Nv+02YHuR2Y3RlBumJqmOKmZ+/AyUxGWkmdmC4d5Dl2R7ul
-        G3DUn1tGxkQWIUuuQ8iJdIjkqFhU
-X-Google-Smtp-Source: ABdhPJy8CxHLVhY59zwXk75I8HIChF7zIF/EhGAiVtpMsr0XlKva4fUXA/Im8lKUH0vClRC/fxARmg==
-X-Received: by 2002:a63:7c4d:: with SMTP id l13mr2696707pgn.12.1594873022410;
-        Wed, 15 Jul 2020 21:17:02 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i125sm3428916pgd.21.2020.07.15.21.17.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jul 2020 21:17:01 -0700 (PDT)
-Subject: Re: [PATCH 3/3 v3] usb: typec: tcpm: Stay in BIST mode till hardreset
- or unattached
-To:     Badhri Jagan Sridharan <badhri@google.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        reg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200716034128.1251728-1-badhri@google.com>
- <20200716034128.1251728-3-badhri@google.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <0bfb2170-df93-0be2-1eeb-cdcac77bda0c@roeck-us.net>
-Date:   Wed, 15 Jul 2020 21:16:59 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1725844AbgGPEoy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jul 2020 00:44:54 -0400
+Received: from mga05.intel.com ([192.55.52.43]:18290 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725268AbgGPEoy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 16 Jul 2020 00:44:54 -0400
+IronPort-SDR: LeK8pCBY5ASzwWloBzBbBU9WDnhZrkC7XdY7rhM/p6HVl55Xw7/LqGJVUNeL3jucTQmCUv2vQt
+ xMCgMR1xf0Kw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9683"; a="234176463"
+X-IronPort-AV: E=Sophos;i="5.75,358,1589266800"; 
+   d="scan'208";a="234176463"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2020 21:44:53 -0700
+IronPort-SDR: OoJbIj7+BLSvOgrTCl/0JPB0tiRSfxpG76koYtS4IERY559UInKnu4giCAFEDOnhgXrP8yI+VA
+ W/6AjVW03AkA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,358,1589266800"; 
+   d="scan'208";a="326399306"
+Received: from lkp-server02.sh.intel.com (HELO 02dcbd16d3ea) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 15 Jul 2020 21:44:51 -0700
+Received: from kbuild by 02dcbd16d3ea with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1jvvlL-00002Z-1y; Thu, 16 Jul 2020 04:44:51 +0000
+Date:   Thu, 16 Jul 2020 12:43:38 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 313da01ad524771046beddb18faffc5b3caf930f
+Message-ID: <5f0fdafa.v4We1WOlwx/cXDpL%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <20200716034128.1251728-3-badhri@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 7/15/20 8:41 PM, Badhri Jagan Sridharan wrote:
-> Port starts to toggle when transitioning to unattached state.
-> This is incorrect while in BIST mode.
-> 
-> 6.4.3.1 BIST Carrier Mode
-> Upon receipt of a BIST Message, with a BIST Carrier Mode BIST Data Object,
-> the UUT Shall send out a continuous string of BMC encoded alternating "1"s
-> and “0”s. The UUT Shall exit the Continuous BIST Mode within
-> tBISTContMode of this Continuous BIST Mode being enabled(see
-> Section 6.6.7.2).
-> 
-> 6.4.3.2 BIST Test Data
-> Upon receipt of a BIST Message, with a BIST Test Data BIST Data Object,
-> the UUT Shall return a GoodCRC Message and Shall enter a test mode in which
-> it sends no further Messages except for GoodCRC Messages in response to
-> received Messages. See Section 5.9.2 for the definition of the Test Data
-> Frame. The test Shall be ended by sending Hard Reset Signaling to reset the
-> UUT.
-> 
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
+branch HEAD: 313da01ad524771046beddb18faffc5b3caf930f  usb: misc: sisusbvga: Move static const tables out to different include file
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+elapsed time: 722m
 
-> ---
-> Version history:
-> Changes since V1:
-> - None
-> 
-> Changes since V2:(Guenter's suggestions)
-> - Fixed formatting error
-> - Reduced timeout to 50ms
-> 
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 7 +++++--
->  include/linux/usb/pd.h        | 1 +
->  2 files changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 379fcab9dbd973..38b958a9650104 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -3559,6 +3559,8 @@ static void run_state_machine(struct tcpm_port *port)
->  		switch (BDO_MODE_MASK(port->bist_request)) {
->  		case BDO_MODE_CARRIER2:
->  			tcpm_pd_transmit(port, TCPC_TX_BIST_MODE_2, NULL);
-> +			tcpm_set_state(port, unattached_state(port),
-> +				       PD_T_BIST_CONT_MODE);
->  			break;
->  		case BDO_MODE_TESTDATA:
->  			if (port->tcpc->set_bist_data) {
-> @@ -3569,8 +3571,6 @@ static void run_state_machine(struct tcpm_port *port)
->  		default:
->  			break;
->  		}
-> -		/* Always switch to unattached state */
-> -		tcpm_set_state(port, unattached_state(port), 0);
->  		break;
->  	case GET_STATUS_SEND:
->  		tcpm_pd_send_control(port, PD_CTRL_GET_STATUS);
-> @@ -3960,6 +3960,9 @@ static void _tcpm_pd_vbus_off(struct tcpm_port *port)
->  static void _tcpm_pd_hard_reset(struct tcpm_port *port)
->  {
->  	tcpm_log_force(port, "Received hard reset");
-> +	if (port->bist_request == BDO_MODE_TESTDATA && port->tcpc->set_bist_data)
-> +		port->tcpc->set_bist_data(port->tcpc, false);
-> +
->  	/*
->  	 * If we keep receiving hard reset requests, executing the hard reset
->  	 * must have failed. Revert to error recovery if that happens.
-> diff --git a/include/linux/usb/pd.h b/include/linux/usb/pd.h
-> index a665d7f211424d..b6c233e79bd457 100644
-> --- a/include/linux/usb/pd.h
-> +++ b/include/linux/usb/pd.h
-> @@ -483,4 +483,5 @@ static inline unsigned int rdo_max_power(u32 rdo)
->  #define PD_N_CAPS_COUNT		(PD_T_NO_RESPONSE / PD_T_SEND_SOURCE_CAP)
->  #define PD_N_HARD_RESET_COUNT	2
->  
-> +#define PD_T_BIST_CONT_MODE	50 /* 30 - 60 ms */
->  #endif /* __LINUX_USB_PD_H */
-> 
+configs tested: 112
+configs skipped: 5
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                               allnoconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+i386                             allyesconfig
+mips                          malta_defconfig
+riscv                               defconfig
+c6x                        evmc6474_defconfig
+riscv                    nommu_k210_defconfig
+powerpc                  mpc866_ads_defconfig
+arm                       mainstone_defconfig
+arm                      tct_hammer_defconfig
+powerpc                        cell_defconfig
+sparc                            alldefconfig
+mips                       capcella_defconfig
+mips                        nlm_xlr_defconfig
+powerpc                      pmac32_defconfig
+arm                        clps711x_defconfig
+arm                           corgi_defconfig
+riscv                            allyesconfig
+arm                         orion5x_defconfig
+i386                              allnoconfig
+i386                                defconfig
+i386                              debian-10.3
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                              allnoconfig
+m68k                           sun3_defconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+nios2                            allyesconfig
+openrisc                            defconfig
+c6x                              allyesconfig
+c6x                               allnoconfig
+openrisc                         allyesconfig
+nds32                               defconfig
+nds32                             allnoconfig
+csky                             allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+h8300                            allmodconfig
+xtensa                              defconfig
+arc                                 defconfig
+arc                              allyesconfig
+sh                               allmodconfig
+sh                                allnoconfig
+microblaze                        allnoconfig
+mips                             allyesconfig
+mips                              allnoconfig
+mips                             allmodconfig
+parisc                            allnoconfig
+parisc                              defconfig
+parisc                           allyesconfig
+parisc                           allmodconfig
+powerpc                          allyesconfig
+powerpc                          rhel-kconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+powerpc                             defconfig
+x86_64               randconfig-a005-20200715
+x86_64               randconfig-a006-20200715
+x86_64               randconfig-a002-20200715
+x86_64               randconfig-a001-20200715
+x86_64               randconfig-a003-20200715
+x86_64               randconfig-a004-20200715
+i386                 randconfig-a001-20200715
+i386                 randconfig-a005-20200715
+i386                 randconfig-a002-20200715
+i386                 randconfig-a006-20200715
+i386                 randconfig-a003-20200715
+i386                 randconfig-a004-20200715
+x86_64               randconfig-a012-20200716
+x86_64               randconfig-a011-20200716
+x86_64               randconfig-a016-20200716
+x86_64               randconfig-a014-20200716
+x86_64               randconfig-a013-20200716
+x86_64               randconfig-a015-20200716
+i386                 randconfig-a016-20200715
+i386                 randconfig-a011-20200715
+i386                 randconfig-a015-20200715
+i386                 randconfig-a012-20200715
+i386                 randconfig-a013-20200715
+i386                 randconfig-a014-20200715
+riscv                             allnoconfig
+riscv                            allmodconfig
+s390                             allyesconfig
+s390                              allnoconfig
+s390                             allmodconfig
+s390                                defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+sparc64                             defconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                          allmodconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                               rhel-8.3
+x86_64                                  kexec
+x86_64                                   rhel
+x86_64                                    lkp
+x86_64                              fedora-25
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
