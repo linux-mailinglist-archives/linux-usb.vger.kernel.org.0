@@ -2,82 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E15FD221E6F
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jul 2020 10:32:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D69FC221ECB
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jul 2020 10:44:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726411AbgGPIcN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jul 2020 04:32:13 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:34534 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725950AbgGPIcN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jul 2020 04:32:13 -0400
-Received: by mail-lj1-f195.google.com with SMTP id q7so6233566ljm.1
-        for <linux-usb@vger.kernel.org>; Thu, 16 Jul 2020 01:32:11 -0700 (PDT)
+        id S1728347AbgGPIoy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jul 2020 04:44:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50730 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727106AbgGPIoy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jul 2020 04:44:54 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2676C061755
+        for <linux-usb@vger.kernel.org>; Thu, 16 Jul 2020 01:44:53 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id s9so6183699ljm.11
+        for <linux-usb@vger.kernel.org>; Thu, 16 Jul 2020 01:44:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cqThJOJm2KQFceq+P2unFnnFk2Bh3klDOvK6O7M43nE=;
+        b=NqcCp4frCBAGJJUzfEc2Oxy5ElWXWwaIjU2bx0QEpKeKOYWuVHQ8TPBMLqGujNx4wq
+         aynrp1wIUOk0sPmWmYQXiJsjCXJ1kfyZT+ZHYOwJTYOMfwrIhtvQbol5UyJdq+/VvwoD
+         8DmILZgcWV8wkUsg1AjD+HGDzvLC+v1aiVfXih+6GGnOSArCzj+GSwYha0GUWFOoZicb
+         eAekfTr+lao2bisPL89RLddHOFEz8Zb+W2gu8x4hsgSUdoBkSA4elHQ5hnry6tfAroP8
+         uN6+eDz9VwfFkKM6MBMVq96TrguDC2+3h0EsHKfcdigCfaY5XS/lcLg8tcXCf2g1Bu1X
+         qGig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=rwzhtqtjzpycPNdfJSvE0JwSP/0ugmgIfYcFeosUKYg=;
-        b=R/BQ6jslMjrGtjxH/33QDzozBgsXhvOVgVytNe9V2i1io8kq9qhLN00zh6Qsq+wec4
-         OcYnHzR6JKxctHYfwEW9zBGUMzzIIeSvz1SNFIQpHrIwnQa5FfBxxfPa/8PIl7BqBzIV
-         zshwEvmA1rcG+3EXlB8oGhCmpooghLZxvMef2JuF5iDn42Yh+N+0ftxhnjhSnpwN1ANW
-         FqfzS8nSY6CUXOr7F80QCtFLHk4WnzsxUCfbPsPwWOpkax5Q73CBnuRVTU/Pd5wCgkV2
-         ++a79sM9UtRO+FD1RJ6pIcTzljTb9oWnFfHquU2ReoZyBUVueAuBaqZlracI4R+NreGO
-         MSDg==
-X-Gm-Message-State: AOAM531VPrEpX0DjzzbbNKSEseu257+eJMsXB6K+cJ+5eCL0iTR4GBV0
-        ceBnO7LbQpqRJxspxk7hd+p96bTfp1k=
-X-Google-Smtp-Source: ABdhPJzCdWTQmPQaBlso4WkBDKc/Gy+dhKATetC79PYH8egUE+vgk/2sEESfA2zDjeiKVLkqWurXJw==
-X-Received: by 2002:a2e:a173:: with SMTP id u19mr1586260ljl.263.1594888331163;
-        Thu, 16 Jul 2020 01:32:11 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id p4sm176870lfk.0.2020.07.16.01.32.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jul 2020 01:32:10 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1jvzJa-00052r-ER; Thu, 16 Jul 2020 10:32:26 +0200
-Date:   Thu, 16 Jul 2020 10:32:26 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [GIT PULL] USB-serial fixes for 5.8-rc6
-Message-ID: <20200716083226.GA19339@localhost>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cqThJOJm2KQFceq+P2unFnnFk2Bh3klDOvK6O7M43nE=;
+        b=hYNgFsHwMMJFWwzQq5oBQe2UPHYU31P4/lHCqu76YrMMbubGIYNDFSrsPAw/QtdOvl
+         6f8VGUvIlFF9Rkn+OYoUzEZtb0ezTUeA3H8tUDiRrCBCNR6YJNcbxkp2ftAw1tAaLGZs
+         JGRV4jjTNP4LjxDAFozoYKu9e+vpAc5iiWP1R0l7QCIwGUyhSMK46foTy+6hMMpFuScm
+         LugEnpU2eKcKkUgTgUZ5QZDaoeBx1sBqqPVoD1vIYEPsqPv3S1nsfOo4lXjtOzVuDi6G
+         H/PQvGS7DcYjKSH3VQ9IuEP6DLkTCsDwyBaXfCrlepmyR5jhTXi2hBZDLc2SLuHEcTft
+         eEMw==
+X-Gm-Message-State: AOAM531ZgfOA8wiDZWhiiq9iTYNFCDd1xanpN+cvgwVpAn8vEgEcA47G
+        6uW3IbY38qV5pBaAO74104tMkn6JiRe8nnRTyapj4Q==
+X-Google-Smtp-Source: ABdhPJxHP+o0Mh+bT2HFZ0d/AQ/giAHe5P1GdSts9xsjk0eCA2HrZXcNHYLv1BMnh8puTnOq+ArA2wt8x9Q/478AV4U=
+X-Received: by 2002:a2e:810a:: with SMTP id d10mr1438333ljg.144.1594889092217;
+ Thu, 16 Jul 2020 01:44:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20200627111029.513642-1-linus.walleij@linaro.org> <20200702145716.GX3703480@smile.fi.intel.com>
+In-Reply-To: <20200702145716.GX3703480@smile.fi.intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 16 Jul 2020 10:44:41 +0200
+Message-ID: <CACRpkdZiO2t8pkt7tFMMzCgHYAiioGc_LY2R3iz=i=wGWF-8Bw@mail.gmail.com>
+Subject: Re: [PATCH] usb: gadget: pch_udc: Convert to use GPIO descriptors
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        linux-usb <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+On Thu, Jul 2, 2020 at 4:57 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 
-Here's a fix for 5.8 that should go to Linus this week.
+> > Andy: your input would be appreciated, this kind of code
+> > customizing random embedded Intel systems is deep water for
+> > me, so this is just a rough guess on how it should be done.
+>
+> Linus, I have set up the device (it's actually available as Minnowboard v1) and
+> will look at this.
 
-Johan
+OK whenever you have time, there is no hurry.
 
+> For time being there is a patch you need to fold into this (sorry, it's mangled):
+>
+> (Explanation: GPIO will be locked with request_irq() call)
 
-The following changes since commit da6902e5b6dbca9081e3d377f9802d4fd0c5ea59:
+I do not understand this, sadly. gpiod_lock_as_irq() will be called
+indeed, but we are requesting it as input and keeping it as such
+so this should be fine?
 
-  USB: serial: option: add Quectel EG95 LTE modem (2020-07-07 17:40:52 +0200)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.8-rc6
-
-for you to fetch changes up to e7b931bee739e8a77ae216e613d3b99342b6dec0:
-
-  USB: serial: iuu_phoenix: fix memory corruption (2020-07-16 10:20:21 +0200)
-
-----------------------------------------------------------------
-USB-serial fixes for 5.8-rc6
-
-Here's a fix for 5.8 addressing a long-standing bug in iuu_phoenix.
-
-----------------------------------------------------------------
-Johan Hovold (1):
-      USB: serial: iuu_phoenix: fix memory corruption
-
- drivers/usb/serial/iuu_phoenix.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+Yours,
+Linus Walleij
