@@ -2,148 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C57B221C34
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jul 2020 07:56:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E641E221CB9
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jul 2020 08:41:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727119AbgGPF4c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jul 2020 01:56:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53042 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725913AbgGPF4c (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jul 2020 01:56:32 -0400
-Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47529C061755;
-        Wed, 15 Jul 2020 22:56:32 -0700 (PDT)
-Received: by mail-il1-x143.google.com with SMTP id p15so4022439ilh.13;
-        Wed, 15 Jul 2020 22:56:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NKqwxZGmcFZhkY5PqY2mOI3LFTBG3HphbeVkF+HUG8I=;
-        b=Sl3ESia33DmCibkAjRcraHWL27fvPEF8j8dd17Jru4nbSwqYbWexILtWJHHa4lujF6
-         ZJa16QmCDxCr+AkYmjBPZP6Pi4r1RJ2OOjfj/x0YFt/dJqS8rFb71m2Iu7si3/xzSwJm
-         eDW407oO1We8b1NxGhofAq2djtIjynweShZBDUticICj6+9qGcgtTq7HVaBVaNKhJWFz
-         a2aP9wd3PME8RwWkLgX9KnJNRCZ9ILmgVVOIsYpT926KGWqU179QaI8l2yeHQ3OTxX39
-         clLipZ/jtiF5MjCcVAhHxK2NPAea//5SdiGIJVWIS7eBGLIiDKKoaaOveCVTpIyeHNUD
-         /zkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NKqwxZGmcFZhkY5PqY2mOI3LFTBG3HphbeVkF+HUG8I=;
-        b=cvJjJIIBAzvgWbbzNSV8p1UQLUNJSZu7LIeOu5k9rYHaOBiuZt6jIoYbCkUlWLFei/
-         1kpje3f7BPGAxIniynKYfbBx6cFAFIFBFd9fPGxfenPqUarp1RyZPI5PG6q7Zk38uA5C
-         yC6ohHicSkvmHvV0ZGeMRr8/RLGTOS4d9G5Q67qxosy7n3eH9nlvmJgyeLemZuSvHyLQ
-         3nLt+jO8szDz33IUNyIoBwwnU0Osq8rsQjXXpmtx3c+Mn/vqUd/i9mJT5T9AMStmeOFj
-         CRMEfmHw6W2c2+THRVjWK+t2rkpsPlsATV6d00/yGsqk0O0/JSZT2vhuyBGXTdcBv5Sv
-         AuWA==
-X-Gm-Message-State: AOAM531HH6rJfWeJZCIb8FImfwevj+7/Tx58ju4+CJ0j+oDJYqwfEFaR
-        AqXqZxm2GKsVqM6ex/jURxuYBSZY57A90be5BJE=
-X-Google-Smtp-Source: ABdhPJzplWKsBmnfCnlFFgUFbdLvvNrvpFk8y8sFgwWqO2bTqu25XaP4zfDj9HlbP17tw0BkEeEcAQuF3r2ybvsACjI=
-X-Received: by 2002:a05:6e02:1070:: with SMTP id q16mr2836705ilj.221.1594878991645;
- Wed, 15 Jul 2020 22:56:31 -0700 (PDT)
+        id S1728067AbgGPGle (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jul 2020 02:41:34 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:4367 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727943AbgGPGle (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jul 2020 02:41:34 -0400
+X-UUID: 23d064985d8c44cb8eb27405b3e6b9e4-20200716
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=Ho71eZkBMon4Vz3VLsPtyCt1CUgMlDiLHMKnef2ILSA=;
+        b=XRXOcdeTwdFN5d5s8jX8hdz6O50rKSfYqC/FF81iO2+b53MPXL5/oC0kr7EVgPUpRORpRoYW96U7jERsz9vZ9HnAyr9cI8T9YQHHcldb5pesSvSRotu9pyGF/T3RirNz9Y82YCsHptjKZZ/PHrJZIhY7f3bsF0ReHtLCijHTROo=;
+X-UUID: 23d064985d8c44cb8eb27405b3e6b9e4-20200716
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 982203569; Thu, 16 Jul 2020 14:41:28 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 16 Jul 2020 14:41:20 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 16 Jul 2020 14:41:20 +0800
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+CC:     Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
+        Macpaul Lin <macpaul.lin@mediatek.com>,
+        Macpaul Lin <macpaul.lin@gmail.com>,
+        Eddie Hung <eddie.hung@mediatek.com>, <stable@vger.kernel.org>
+Subject: [PATCH] usb: gadget: configfs: Fix use-after-free issue with udc_name
+Date:   Thu, 16 Jul 2020 14:41:06 +0800
+Message-ID: <1594881666-8843-1-git-send-email-macpaul.lin@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
 MIME-Version: 1.0
-References: <20200713074243.530-1-linux.amoon@gmail.com> <20200716055050.GE55478@vkoul-mobl>
-In-Reply-To: <20200716055050.GE55478@vkoul-mobl>
-From:   Anand Moon <linux.amoon@gmail.com>
-Date:   Thu, 16 Jul 2020 11:26:20 +0530
-Message-ID: <CANAwSgRcgOxwT1+avVJp3GaX1dKzFuzoDuggUXk7-MFQ7cOG8A@mail.gmail.com>
-Subject: Re: [PATCH v4] phy: samsung: Use readl_poll_timeout function
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        linux-samsung-soc@vger.kernel.org,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Vinod,
+VGhlcmUgaXMgYSB1c2UtYWZ0ZXItZnJlZSBpc3N1ZSwgaWYgYWNjZXNzIHVkY19uYW1lDQppbiBm
+dW5jdGlvbiBnYWRnZXRfZGV2X2Rlc2NfVURDX3N0b3JlIGFmdGVyIGFub3RoZXIgY29udGV4dA0K
+ZnJlZSB1ZGNfbmFtZSBpbiBmdW5jdGlvbiB1bnJlZ2lzdGVyX2dhZGdldC4NCg0KQ29udGV4IDE6
+DQpnYWRnZXRfZGV2X2Rlc2NfVURDX3N0b3JlKCktPnVucmVnaXN0ZXJfZ2FkZ2V0KCktPg0KZnJl
+ZSB1ZGNfbmFtZS0+c2V0IHVkY19uYW1lIHRvIE5VTEwNCg0KQ29udGV4IDI6DQpnYWRnZXRfZGV2
+X2Rlc2NfVURDX3Nob3coKS0+IGFjY2VzcyB1ZGNfbmFtZQ0KDQpDYWxsIHRyYWNlOg0KZHVtcF9i
+YWNrdHJhY2UrMHgwLzB4MzQwDQpzaG93X3N0YWNrKzB4MTQvMHgxYw0KZHVtcF9zdGFjaysweGU0
+LzB4MTM0DQpwcmludF9hZGRyZXNzX2Rlc2NyaXB0aW9uKzB4NzgvMHg0NzgNCl9fa2FzYW5fcmVw
+b3J0KzB4MjcwLzB4MmVjDQprYXNhbl9yZXBvcnQrMHgxMC8weDE4DQpfX2FzYW5fcmVwb3J0X2xv
+YWQxX25vYWJvcnQrMHgxOC8weDIwDQpzdHJpbmcrMHhmNC8weDEzOA0KdnNucHJpbnRmKzB4NDI4
+LzB4MTRkMA0Kc3ByaW50ZisweGU0LzB4MTJjDQpnYWRnZXRfZGV2X2Rlc2NfVURDX3Nob3crMHg1
+NC8weDY0DQpjb25maWdmc19yZWFkX2ZpbGUrMHgyMTAvMHgzYTANCl9fdmZzX3JlYWQrMHhmMC8w
+eDQ5Yw0KdmZzX3JlYWQrMHgxMzAvMHgyYjQNClN5U19yZWFkKzB4MTE0LzB4MjA4DQplbDBfc3Zj
+X25ha2VkKzB4MzQvMHgzOA0KDQpBZGQgbXV0ZXhfbG9jayB0byBwcm90ZWN0IHRoaXMga2luZCBv
+ZiBzY2VuYXJpby4NCg0KU2lnbmVkLW9mZi1ieTogRWRkaWUgSHVuZyA8ZWRkaWUuaHVuZ0BtZWRp
+YXRlay5jb20+DQpTaWduZWQtb2ZmLWJ5OiBNYWNwYXVsIExpbiA8bWFjcGF1bC5saW5AbWVkaWF0
+ZWsuY29tPg0KQ2M6IHN0YWJsZUB2Z2VyLmtlcm5lbC5vcmcNCi0tLQ0KIGRyaXZlcnMvdXNiL2dh
+ZGdldC9jb25maWdmcy5jIHwgMTEgKysrKysrKysrLS0NCiAxIGZpbGUgY2hhbmdlZCwgOSBpbnNl
+cnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQ0KDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvZ2Fk
+Z2V0L2NvbmZpZ2ZzLmMgYi9kcml2ZXJzL3VzYi9nYWRnZXQvY29uZmlnZnMuYw0KaW5kZXggOWRj
+MDZhNGUxYjMwLi4yMTExMGIyODY1YjkgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL3VzYi9nYWRnZXQv
+Y29uZmlnZnMuYw0KKysrIGIvZHJpdmVycy91c2IvZ2FkZ2V0L2NvbmZpZ2ZzLmMNCkBAIC0yMjEs
+OSArMjIxLDE2IEBAIHN0YXRpYyBzc2l6ZV90IGdhZGdldF9kZXZfZGVzY19iY2RVU0Jfc3RvcmUo
+c3RydWN0IGNvbmZpZ19pdGVtICppdGVtLA0KIA0KIHN0YXRpYyBzc2l6ZV90IGdhZGdldF9kZXZf
+ZGVzY19VRENfc2hvdyhzdHJ1Y3QgY29uZmlnX2l0ZW0gKml0ZW0sIGNoYXIgKnBhZ2UpDQogew0K
+LQljaGFyICp1ZGNfbmFtZSA9IHRvX2dhZGdldF9pbmZvKGl0ZW0pLT5jb21wb3NpdGUuZ2FkZ2V0
+X2RyaXZlci51ZGNfbmFtZTsNCisJc3RydWN0IGdhZGdldF9pbmZvICpnaSA9IHRvX2dhZGdldF9p
+bmZvKGl0ZW0pOw0KKwljaGFyICp1ZGNfbmFtZTsNCisJaW50IHJldDsNCisNCisJbXV0ZXhfbG9j
+aygmZ2ktPmxvY2spOw0KKwl1ZGNfbmFtZSA9IGdpLT5jb21wb3NpdGUuZ2FkZ2V0X2RyaXZlci51
+ZGNfbmFtZTsNCisJcmV0ID0gc3ByaW50ZihwYWdlLCAiJXNcbiIsIHVkY19uYW1lID86ICIiKTsN
+CisJbXV0ZXhfdW5sb2NrKCZnaS0+bG9jayk7DQogDQotCXJldHVybiBzcHJpbnRmKHBhZ2UsICIl
+c1xuIiwgdWRjX25hbWUgPzogIiIpOw0KKwlyZXR1cm4gcmV0Ow0KIH0NCiANCiBzdGF0aWMgaW50
+IHVucmVnaXN0ZXJfZ2FkZ2V0KHN0cnVjdCBnYWRnZXRfaW5mbyAqZ2kpDQotLSANCjIuMTguMA0K
 
-On Thu, 16 Jul 2020 at 11:20, Vinod Koul <vkoul@kernel.org> wrote:
->
-> On 13-07-20, 07:42, Anand Moon wrote:
-> > Instead of a busy waiting while loop using udelay
-> > use readl_poll_timeout function to check the condition
-> > is met or timeout occurs in crport_handshake function.
-> > readl_poll_timeout is called in non atomic context so
-> > it safe to sleep until the condition is met.
-> >
-> > Fixes: d8c80bb3b55b ("phy: exynos5-usbdrd: Calibrate LOS levels for exynos5420/5800")
-> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> > ---
-> > Changes v4:
-> > Rebased on to of patch [0] https://patchwork.kernel.org/patch/11651673/
-> > --Fix the commit message.
-> > --Fix the error timeout condition for -ETIMEDOUT
-> > ---
-> > Changes v3:
-> > --Fix the commit message.
-> > --Drop the variable, used the value directly.
-> > Changes v2:
-> > --used the default timeout values.
-> > --Added missing Fixed tags.
-> > ---
-> >  drivers/phy/samsung/phy-exynos5-usbdrd.c | 39 ++++++++----------------
-> >  1 file changed, 12 insertions(+), 27 deletions(-)
-> >
-> > diff --git a/drivers/phy/samsung/phy-exynos5-usbdrd.c b/drivers/phy/samsung/phy-exynos5-usbdrd.c
-> > index 7f6279fb4f8f..ad81aa65cdff 100644
-> > --- a/drivers/phy/samsung/phy-exynos5-usbdrd.c
-> > +++ b/drivers/phy/samsung/phy-exynos5-usbdrd.c
-> > @@ -16,6 +16,7 @@
-> >  #include <linux/of.h>
-> >  #include <linux/of_address.h>
-> >  #include <linux/of_device.h>
-> > +#include <linux/iopoll.h>
-> >  #include <linux/phy/phy.h>
-> >  #include <linux/platform_device.h>
-> >  #include <linux/mutex.h>
-> > @@ -556,41 +557,25 @@ static int exynos5_usbdrd_phy_power_off(struct phy *phy)
-> >  static int crport_handshake(struct exynos5_usbdrd_phy *phy_drd,
-> >                           u32 val, u32 cmd)
-> >  {
-> > -     u32 usec = 100;
-> >       unsigned int result;
-> > +     int err;
-> >
-> >       writel(val | cmd, phy_drd->reg_phy + EXYNOS5_DRD_PHYREG0);
-> >
-> > -     do {
-> > -             result = readl(phy_drd->reg_phy + EXYNOS5_DRD_PHYREG1);
-> > -             if (result & PHYREG1_CR_ACK)
-> > -                     break;
-> > -
-> > -             udelay(1);
-> > -     } while (usec-- > 0);
-> > -
-> > -     if (!usec) {
-> > -             dev_err(phy_drd->dev,
-> > -                     "CRPORT handshake timeout1 (0x%08x)\n", val);
-> > -             return -ETIME;
-> > +     err = readl_poll_timeout(phy_drd->reg_phy + EXYNOS5_DRD_PHYREG1,
-> > +                     result, (result & PHYREG1_CR_ACK), 1, 100);
->
-> pls align this line to opening brace of preceding line:
->
->         err = readl_poll_timeout(phy_drd->reg_phy + EXYNOS5_DRD_PHYREG1,
->                                  result, (result & PHYREG1_CR_ACK), 1, 100);
->
-> This is recommended way of splitting lines, see
-> Documentation/process/coding-style.rst and run checkpatch.pl with
-> --strict option
-
-Ok, I will do this, just waiting for some more feedback on these changes.
->
-> thanks
-> --
-> ~Vinod
-
--Anand
