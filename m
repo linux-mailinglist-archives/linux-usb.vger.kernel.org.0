@@ -2,413 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3A89222944
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jul 2020 19:20:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE6C222A37
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jul 2020 19:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729819AbgGPRUe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jul 2020 13:20:34 -0400
-Received: from relmlor2.renesas.com ([210.160.252.172]:48874 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728949AbgGPRUc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jul 2020 13:20:32 -0400
-X-IronPort-AV: E=Sophos;i="5.75,360,1589209200"; 
-   d="scan'208";a="52107540"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 17 Jul 2020 02:20:30 +0900
-Received: from localhost.localdomain (unknown [10.226.36.204])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 5C98840B5998;
-        Fri, 17 Jul 2020 02:20:25 +0900 (JST)
-From:   Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Mark Brown <broonie@kernel.org>,
-        Niklas <niklas.soderlund@ragnatech.se>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>, devicetree@vger.kernel.org
-Cc:     linux-ide@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-renesas-soc@vger.kernel.org,
-        linux-usb@vger.kernel.org, Prabhakar <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH 20/20] arm64: dts: renesas: r8a774e1: Add VIN and CSI-2 nodes
-Date:   Thu, 16 Jul 2020 18:18:35 +0100
-Message-Id: <1594919915-5225-21-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        id S1729412AbgGPRnq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jul 2020 13:43:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49584 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728182AbgGPRnp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jul 2020 13:43:45 -0400
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D89C061755
+        for <linux-usb@vger.kernel.org>; Thu, 16 Jul 2020 10:43:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds201912; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=nfUXCwgJ3xLhzLLyn9n5x7zqk1f2w9l5Rutjwzm+PeY=; b=IbXNmHMeiHGlizyfko5nDt+fTM
+        8PDL5FOsqLGCsEnO3kCInuz3XvH9uOM5/AMyCpqSRVnvoMefOPCHHjA6YcJXU4M8SjXhZeEgv2PiA
+        3rtPNOUyb3f3Bw83K/ivB73pPxu7rDQBeu6B7Fr5aShujbHr6moxuloDLO7FZY+Y0XJyPVH6ZVS+C
+        SRf48LFLWWgjQFh8xxYLQ1prmvB5CsO8Y4Ft+zAnvEZEVaPDi0Uaglxmw6ouMBjANOxJLaL5MD9iz
+        QPBxOssXbUhkRwZGcW0mAOkOdaBtdXSBLcSAxTLZoiYV3kJji1n1UQMvz3R43tV1Xm5RT47kYWTkV
+        rjt6y0PQ==;
+Received: from 211.81-166-168.customer.lyse.net ([81.166.168.211]:50035 helo=[192.168.10.61])
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1jw7v4-0000Wx-8D; Thu, 16 Jul 2020 19:43:42 +0200
+Subject: Re: [PATCH v3 0/6] Generic USB Display driver
+To:     Peter Stuge <peter@stuge.se>
+Cc:     Lubomir Rintel <lkundrak@v3.sk>, linux-usb@vger.kernel.org,
+        sam@ravnborg.org, dri-devel@lists.freedesktop.org, balbi@kernel.org
+References: <20200529175643.46094-1-noralf@tronnes.org>
+ <20200709163235.360054-1-lkundrak@v3.sk>
+ <1280ec51-7528-b993-3110-f6c28e98832c@tronnes.org>
+ <20200714174008.16272.qmail@stuge.se>
+ <befd06f1-d0cc-ab26-3ec1-5da3f3ab3f37@tronnes.org>
+ <20200714193841.18494.qmail@stuge.se>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+Message-ID: <915b4e6b-2d54-800c-0bbf-099504c70c69@tronnes.org>
+Date:   Thu, 16 Jul 2020 19:43:39 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <20200714193841.18494.qmail@stuge.se>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add VIN and CSI-2 nodes to RZ/G2H (R8A774E1) SoC dtsi.
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
----
- arch/arm64/boot/dts/renesas/r8a774e1.dtsi | 334 ++++++++++++++++++++++
- 1 file changed, 334 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/renesas/r8a774e1.dtsi b/arch/arm64/boot/dts/renesas/r8a774e1.dtsi
-index ce9e5615b932..bd87c4c4dcaf 100644
---- a/arch/arm64/boot/dts/renesas/r8a774e1.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a774e1.dtsi
-@@ -1415,6 +1415,246 @@
- 			status = "disabled";
- 		};
- 
-+		vin0: video@e6ef0000 {
-+			compatible = "renesas,vin-r8a774e1";
-+			reg = <0 0xe6ef0000 0 0x1000>;
-+			interrupts = <GIC_SPI 188 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 811>;
-+			power-domains = <&sysc R8A774E1_PD_ALWAYS_ON>;
-+			resets = <&cpg 811>;
-+			renesas,id = <0>;
-+			status = "disabled";
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@1 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					reg = <1>;
-+
-+					vin0csi20: endpoint@0 {
-+						reg = <0>;
-+						remote-endpoint = <&csi20vin0>;
-+					};
-+					vin0csi40: endpoint@2 {
-+						reg = <2>;
-+						remote-endpoint = <&csi40vin0>;
-+					};
-+				};
-+			};
-+		};
-+
-+		vin1: video@e6ef1000 {
-+			compatible = "renesas,vin-r8a774e1";
-+			reg = <0 0xe6ef1000 0 0x1000>;
-+			interrupts = <GIC_SPI 189 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 810>;
-+			power-domains = <&sysc R8A774E1_PD_ALWAYS_ON>;
-+			resets = <&cpg 810>;
-+			renesas,id = <1>;
-+			status = "disabled";
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@1 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					reg = <1>;
-+
-+					vin1csi20: endpoint@0 {
-+						reg = <0>;
-+						remote-endpoint = <&csi20vin1>;
-+					};
-+					vin1csi40: endpoint@2 {
-+						reg = <2>;
-+						remote-endpoint = <&csi40vin1>;
-+					};
-+				};
-+			};
-+		};
-+
-+		vin2: video@e6ef2000 {
-+			compatible = "renesas,vin-r8a774e1";
-+			reg = <0 0xe6ef2000 0 0x1000>;
-+			interrupts = <GIC_SPI 190 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 809>;
-+			power-domains = <&sysc R8A774E1_PD_ALWAYS_ON>;
-+			resets = <&cpg 809>;
-+			renesas,id = <2>;
-+			status = "disabled";
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@1 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					reg = <1>;
-+
-+					vin2csi20: endpoint@0 {
-+						reg = <0>;
-+						remote-endpoint = <&csi20vin2>;
-+					};
-+					vin2csi40: endpoint@2 {
-+						reg = <2>;
-+						remote-endpoint = <&csi40vin2>;
-+					};
-+				};
-+			};
-+		};
-+
-+		vin3: video@e6ef3000 {
-+			compatible = "renesas,vin-r8a774e1";
-+			reg = <0 0xe6ef3000 0 0x1000>;
-+			interrupts = <GIC_SPI 191 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 808>;
-+			power-domains = <&sysc R8A774E1_PD_ALWAYS_ON>;
-+			resets = <&cpg 808>;
-+			renesas,id = <3>;
-+			status = "disabled";
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@1 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					reg = <1>;
-+
-+					vin3csi20: endpoint@0 {
-+						reg = <0>;
-+						remote-endpoint = <&csi20vin3>;
-+					};
-+					vin3csi40: endpoint@2 {
-+						reg = <2>;
-+						remote-endpoint = <&csi40vin3>;
-+					};
-+				};
-+			};
-+		};
-+
-+		vin4: video@e6ef4000 {
-+			compatible = "renesas,vin-r8a774e1";
-+			reg = <0 0xe6ef4000 0 0x1000>;
-+			interrupts = <GIC_SPI 174 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 807>;
-+			power-domains = <&sysc R8A774E1_PD_ALWAYS_ON>;
-+			resets = <&cpg 807>;
-+			renesas,id = <4>;
-+			status = "disabled";
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@1 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					reg = <1>;
-+
-+					vin4csi20: endpoint@0 {
-+						reg = <0>;
-+						remote-endpoint = <&csi20vin4>;
-+					};
-+				};
-+			};
-+		};
-+
-+		vin5: video@e6ef5000 {
-+			compatible = "renesas,vin-r8a774e1";
-+			reg = <0 0xe6ef5000 0 0x1000>;
-+			interrupts = <GIC_SPI 175 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 806>;
-+			power-domains = <&sysc R8A774E1_PD_ALWAYS_ON>;
-+			resets = <&cpg 806>;
-+			renesas,id = <5>;
-+			status = "disabled";
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@1 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					reg = <1>;
-+
-+					vin5csi20: endpoint@0 {
-+						reg = <0>;
-+						remote-endpoint = <&csi20vin5>;
-+					};
-+				};
-+			};
-+		};
-+
-+		vin6: video@e6ef6000 {
-+			compatible = "renesas,vin-r8a774e1";
-+			reg = <0 0xe6ef6000 0 0x1000>;
-+			interrupts = <GIC_SPI 176 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 805>;
-+			power-domains = <&sysc R8A774E1_PD_ALWAYS_ON>;
-+			resets = <&cpg 805>;
-+			renesas,id = <6>;
-+			status = "disabled";
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@1 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					reg = <1>;
-+
-+					vin6csi20: endpoint@0 {
-+						reg = <0>;
-+						remote-endpoint = <&csi20vin6>;
-+					};
-+				};
-+			};
-+		};
-+
-+		vin7: video@e6ef7000 {
-+			compatible = "renesas,vin-r8a774e1";
-+			reg = <0 0xe6ef7000 0 0x1000>;
-+			interrupts = <GIC_SPI 171 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 804>;
-+			power-domains = <&sysc R8A774E1_PD_ALWAYS_ON>;
-+			resets = <&cpg 804>;
-+			renesas,id = <7>;
-+			status = "disabled";
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@1 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					reg = <1>;
-+
-+					vin7csi20: endpoint@0 {
-+						reg = <0>;
-+						remote-endpoint = <&csi20vin7>;
-+					};
-+				};
-+			};
-+		};
-+
- 		rcar_sound: sound@ec500000 {
- 			/*
- 			 * #sound-dai-cells is required
-@@ -2136,6 +2376,100 @@
- 			status = "disabled";
- 		};
- 
-+		csi20: csi2@fea80000 {
-+			compatible = "renesas,r8a774e1-csi2";
-+			reg = <0 0xfea80000 0 0x10000>;
-+			interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 714>;
-+			power-domains = <&sysc R8A774E1_PD_ALWAYS_ON>;
-+			resets = <&cpg 714>;
-+			status = "disabled";
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@1 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					reg = <1>;
-+
-+					csi20vin0: endpoint@0 {
-+						reg = <0>;
-+						remote-endpoint = <&vin0csi20>;
-+					};
-+					csi20vin1: endpoint@1 {
-+						reg = <1>;
-+						remote-endpoint = <&vin1csi20>;
-+					};
-+					csi20vin2: endpoint@2 {
-+						reg = <2>;
-+						remote-endpoint = <&vin2csi20>;
-+					};
-+					csi20vin3: endpoint@3 {
-+						reg = <3>;
-+						remote-endpoint = <&vin3csi20>;
-+					};
-+					csi20vin4: endpoint@4 {
-+						reg = <4>;
-+						remote-endpoint = <&vin4csi20>;
-+					};
-+					csi20vin5: endpoint@5 {
-+						reg = <5>;
-+						remote-endpoint = <&vin5csi20>;
-+					};
-+					csi20vin6: endpoint@6 {
-+						reg = <6>;
-+						remote-endpoint = <&vin6csi20>;
-+					};
-+					csi20vin7: endpoint@7 {
-+						reg = <7>;
-+						remote-endpoint = <&vin7csi20>;
-+					};
-+				};
-+			};
-+		};
-+
-+		csi40: csi2@feaa0000 {
-+			compatible = "renesas,r8a774e1-csi2";
-+			reg = <0 0xfeaa0000 0 0x10000>;
-+			interrupts = <GIC_SPI 246 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 716>;
-+			power-domains = <&sysc R8A774E1_PD_ALWAYS_ON>;
-+			resets = <&cpg 716>;
-+			status = "disabled";
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@1 {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					reg = <1>;
-+
-+					csi40vin0: endpoint@0 {
-+						reg = <0>;
-+						remote-endpoint = <&vin0csi40>;
-+					};
-+					csi40vin1: endpoint@1 {
-+						reg = <1>;
-+						remote-endpoint = <&vin1csi40>;
-+					};
-+					csi40vin2: endpoint@2 {
-+						reg = <2>;
-+						remote-endpoint = <&vin2csi40>;
-+					};
-+					csi40vin3: endpoint@3 {
-+						reg = <3>;
-+						remote-endpoint = <&vin3csi40>;
-+					};
-+				};
-+			};
-+		};
-+
- 		hdmi0: hdmi@fead0000 {
- 			reg = <0 0xfead0000 0 0x10000>;
- 			status = "disabled";
--- 
-2.17.1
+Den 14.07.2020 21.38, skrev Peter Stuge:
+> Noralf Trønnes wrote:
+>>> In all cases, the driver on the host knows/has available how many bytes
+>>> were successfully transfered.
+>>
+>> I was thinking about the device, that it could get out of sync. Let's
+>> say the host sends a 1k framebuffer and half of it gets transferred and
+>> the rest fails for some reason. Lubomir's MCU implementation has an
+>> endpoint max size of 64 bytes and a callback is called for each packet.
+>> If the 1k transfer fails at some point, will the device be able to
+>> detect this and know that the next time the rx callback is called that
+>> this is the start of a new framebuffer update?
+> 
+> Ah! No, a device can not detect that the host intended to send more (bulk)
+> packets but e.g. timed out.
+> 
+> I can't immediately think of other reasons for a larger transfer to fail,
+> which still allow communication to continue.
+> 
+> When the host recognizes a timeout with partial data transfer it could
+> simply send the remaining data in a new transfer.
+> 
+> 
+> While the device can not detect host intent, the protocol could allow
+> devices to specify requirements, e.g. that the host always sends full frames.
+> 
+> In any case, please avoid making a control request mandatory for frame
+> transfer.
+> 
+> Because control requests are scheduled differently onto the wire and
+> because they consist of more packets than bulk data, a control request
+> will interrupt a bulk data stream and likely introduce unneccessary latency.
+> 
+> If synchronization is always required then I'd suggest to place it inline
+> with frame data, e.g. in the first packet byte.
+> 
+> If synchronization is only required in rare cases then a control transfer
+> is probably the better choice, to not waste any inline bytes.
+> 
+> But the optimum would be that the device can describe its needs to the host
+> and the host driver ensures that the device always receives the data it needs.
+> 
+> Do you think this is possible?
+> 
 
+Looking at the host driver I see that I need to fix it so that it
+requeues the update if it fails (on SET_BUFFER or bulk out). Currently
+it just goes back to sleep waiting for userspace to announce a new change.
+
+I would like to avoid having a special case for retrying the failing
+part of a bulk transfer for devices that only want full updates, I would
+prefer to use the common error path of retrying the whole update.
+
+This is my suggestion for the new flag:
+
+/*
+ * Always send the entire framebuffer when flushing changes.
+ * The GUD_DRM_USB_REQ_SET_BUFFER request will not be sent before each
+bulk transfer,
+ * it will only be sent if the previous bulk transfer had failed. This
+is done to
+ * inform the device that the previous update failed and that a new one
+is started.
+ *
+ * This flag can not be used in combination with compression.
+ */
+#define GUD_DRM_DISPLAY_FLAG_FULL_UPDATE	BIT(1)
+
+
+Noralf.
