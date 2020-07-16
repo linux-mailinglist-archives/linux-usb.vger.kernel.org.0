@@ -2,194 +2,291 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ECB9222260
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jul 2020 14:33:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1620222262
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jul 2020 14:34:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728548AbgGPMdX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jul 2020 08:33:23 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:41923 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728188AbgGPMdW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jul 2020 08:33:22 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200716123320euoutp0285803efdddcbdeae5758e671a1611a8a~iO6WltjuQ0753907539euoutp02g
-        for <linux-usb@vger.kernel.org>; Thu, 16 Jul 2020 12:33:20 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200716123320euoutp0285803efdddcbdeae5758e671a1611a8a~iO6WltjuQ0753907539euoutp02g
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1594902800;
-        bh=9DnYj/Mcnl7D+N2vvSUiF6bYj4ztAICZv91rvBzSS78=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=WnesXrzb1QcYuaPgyeVOlr5pBdu2o8m97EmP2JI4tkskq58+r5F1FdpfyUssUjZ2+
-         rJgCcpHf5MaY6rjB3aPXd7MftcuzX7u9F9m4fdSW4rHchtVbAAlJJdpaVAADgb+KOT
-         Oa2paJhKhAHFMXH7g4rgspTLaoA21MjJXOic4FGY=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20200716123320eucas1p24638efb7279e556c85901f5a890f6def~iO6WbjzTi1698816988eucas1p2G;
-        Thu, 16 Jul 2020 12:33:20 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id AB.AF.06456.019401F5; Thu, 16
-        Jul 2020 13:33:20 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200716123319eucas1p219d57ab8efe9028686f2536e4ec935fa~iO6V4LNTj1227712277eucas1p2P;
-        Thu, 16 Jul 2020 12:33:19 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200716123319eusmtrp2fb3e7f43ba9a46631d7c04f4c0bc9eb3~iO6V3k-qT3164831648eusmtrp2a;
-        Thu, 16 Jul 2020 12:33:19 +0000 (GMT)
-X-AuditID: cbfec7f2-809ff70000001938-d8-5f1049105e59
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 43.A9.06314.F09401F5; Thu, 16
-        Jul 2020 13:33:19 +0100 (BST)
-Received: from [106.210.88.143] (unknown [106.210.88.143]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200716123319eusmtip2982c127d4f33a99ab59c352ee23a8364~iO6VeV0dN1703317033eusmtip2t;
-        Thu, 16 Jul 2020 12:33:19 +0000 (GMT)
-Subject: Re: [PATCH v2] usb: dwc2: Fix error path in gadget registration
-To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-Message-ID: <4741f20f-6e8e-157b-6ecb-828ad4423210@samsung.com>
-Date:   Thu, 16 Jul 2020 14:33:21 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
-        Thunderbird/68.10.0
+        id S1728225AbgGPMei (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jul 2020 08:34:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58024 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727844AbgGPMei (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jul 2020 08:34:38 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A474BC061755
+        for <linux-usb@vger.kernel.org>; Thu, 16 Jul 2020 05:34:37 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id s9so6906762ljm.11
+        for <linux-usb@vger.kernel.org>; Thu, 16 Jul 2020 05:34:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1iaEx2TowHnQOgWk7SFBQ/9pxmgBVuY3x9nyiWcgUiI=;
+        b=CzfWjqmIsRg/VcHAIRznYmhOpjuKQ/dfZTdbQN35l3GuDAiF5T+rr7zVp6eBNuTwNh
+         iLKjE3KOH0iQBtQSUo4zXrcyaeeBFZ0m0ubankJF6cJpS/xNJZHRWNzUYytJ9OPH4SUv
+         ZB8NKaZR6xl9PRycOfrV9ahyQZmYtDUOgZoWVGVLDfTyveD2WB9U8uE87bnWNsbjckfI
+         jRxLYHJsjgZg1eKIZIIt7sPOpCd3+s/bL0e9GJEIOGlF6yXirPxcwMxRJ9B0JF14O6OV
+         TMksS5slYVmPFFr8P1xZ2omoOrVmVAfN7fdck3c6HsESfJZdXg0qabbb6RdofmRb4Ivg
+         bx/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1iaEx2TowHnQOgWk7SFBQ/9pxmgBVuY3x9nyiWcgUiI=;
+        b=I34t1xVco+pgrmevUujV8uWQLnYKNRzStChNY4Gpkz9UtOeYUnaJEHaMwQ1FSnhcyv
+         HKtP3rIeqPLtfro1bvvSLxGcqLwNQF0DyJ0avQBU+0Zhk0SHSvNVzMU7E+cvs4l9w7n9
+         IqKk1FgK2v4puMhUIo1/FefSl8QVNFyHSgs3s/URa/rrOi0po0ODsDxhqk1XBqrB5bFs
+         44uHie7/aanbOApupOyyBxDrH/RraKJ25zsZxlpAPwSidwX3T4PkBWSyjbHYGM1eC+Q7
+         rma1983zZlXYH9wTgSaOB6E9nuq62J9JjklMWnewKOLmhMhodfX/caYGI1zWLXZqHDWH
+         8kRw==
+X-Gm-Message-State: AOAM533eyGKKYWjyFL7LArvZQstI9QHPqDsqEvwjHH7g8RllzAGoc3nE
+        wZR6ECxWqvDaolgCkhB2siF13A==
+X-Google-Smtp-Source: ABdhPJxP21VpVKhYxelSOhgB+xWBTS3IZFw7e/i+ac0z1Yi+tSETPu7FMsF3EKbiRtU8gT0yEKFTpA==
+X-Received: by 2002:a2e:9a47:: with SMTP id k7mr1947473ljj.96.1594902875557;
+        Thu, 16 Jul 2020 05:34:35 -0700 (PDT)
+Received: from genomnajs.ideon.se ([85.235.10.227])
+        by smtp.gmail.com with ESMTPSA id p4sm320682lfk.0.2020.07.16.05.34.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jul 2020 05:34:34 -0700 (PDT)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Alan Stern <stern@rowland.harvard.edu>
+Subject: [PATCH 1/2 v2] usb: ohci-omap: Create private state container
+Date:   Thu, 16 Jul 2020 14:34:32 +0200
+Message-Id: <20200716123433.155854-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-In-Reply-To: <b7571d9c-95ac-26ec-538e-60e1aae0cddb@synopsys.com>
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrOKsWRmVeSWpSXmKPExsWy7djPc7oCngLxBvO7ZCw2zljPanGs7Qm7
-        RfPi9WwWl3fNYbNYtKyV2eLdlNvMDmwem1Z1snnsn7uG3aNvyypGjy37PzN6fN4kF8AaxWWT
-        kpqTWZZapG+XwJXxvs2hoFWp4sjh98wNjJ9luhg5OSQETCSeHTnL3sXIxSEksIJR4uHy3UwQ
-        zhdGibPPV7JAOJ8ZJTpO3WKDafmx7QJUYjmjxM7jF6Fa3jNKzHg3iR2kSljAQ+J682ZGEFtE
-        oFDixdvjYB3MAmcZJW52bWcCSbAJGEp0ve0CG8srYCdx8fg1sDiLgKrE5N2PmUFsUYE4ifUv
-        Iep5BQQlTs58wgJicwo4SLzbuASsl1lAXmL72znMELa4xK0n88EukhBYxS5x4sUyFoi7XSTO
-        L4WxhSVeHd/CDmHLSPzfCdPQDAyCc2vZIZweRonLTTMYIaqsJe6c+wW0jgNohabE+l36EGFH
-        iR0vFjOBhCUE+CRuvBWEOIJPYtK26cwQYV6JjjYhiGo1iVnH18GtPXjhEvMERqVZSF6bheSd
-        WUjemYWwdwEjyypG8dTS4tz01GLDvNRyveLE3OLSvHS95PzcTYzA5HP63/FPOxi/Xko6xCjA
-        wajEw6vwky9eiDWxrLgy9xCjBAezkgiv09nTcUK8KYmVValF+fFFpTmpxYcYpTlYlMR5jRe9
-        jBUSSE8sSc1OTS1ILYLJMnFwSjUwLjdbe6TFWPmq8jq912/zmLTbqw76/NVQSpnNyeD767fn
-        02nxd5U9XR/8Pc1WfHK30pYVRk8LLx/e42i2rqj7yxUn8dAzf6SO3Cqpmzg7Kzm4Qfy8jePk
-        B5smqHQ52etVSO04/pLjs1nXpxxHe6lGyY38bc8jBC2Cr8/cfibS3+jzN04G4cvMSizFGYmG
-        WsxFxYkACyxw8ToDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrBIsWRmVeSWpSXmKPExsVy+t/xe7r8ngLxBl3vjSw2zljPanGs7Qm7
-        RfPi9WwWl3fNYbNYtKyV2eLdlNvMDmwem1Z1snnsn7uG3aNvyypGjy37PzN6fN4kF8AapWdT
-        lF9akqqQkV9cYqsUbWhhpGdoaaFnZGKpZ2hsHmtlZKqkb2eTkpqTWZZapG+XoJfxvs2hoFWp
-        4sjh98wNjJ9luhg5OSQETCR+bLvAAmILCSxllLh9UgAiLiNxcloDK4QtLPHnWhdbFyMXUM1b
-        Rok57e+YQBLCAh4S15s3M4LYIgKFEiu7L4IVMQucZ5SYfuQjI0THcUaJ5weOgFWxCRhKdL0F
-        GcXJwStgJ3Hx+DWwSSwCqhKTdz9mBrFFBeIklm+Zzw5RIyhxcuYTsPM4BRwk3m1cAtbLLGAm
-        MW/zQ2YIW15i+9s5ULa4xK0n85kmMArNQtI+C0nLLCQts5C0LGBkWcUoklpanJueW2yoV5yY
-        W1yal66XnJ+7iREYa9uO/dy8g/HSxuBDjAIcjEo8vAo/+eKFWBPLiitzDzFKcDArifA6nT0d
-        J8SbklhZlVqUH19UmpNafIjRFOi5icxSosn5wDSQVxJvaGpobmFpaG5sbmxmoSTO2yFwMEZI
-        ID2xJDU7NbUgtQimj4mDU6qBMUVFmXn29v8rk4Ikm99XL/mh46F/8trTXfsuxb688i5S/hrr
-        dyWNZ8kP7gaUuORMlxBQvxrwtuTI2q5NS67v7+uWN7C7773ILK2KT9BO8dyFL0XV9y7wHw1q
-        z8zKmnOr5vR+jnKeO8evv1wj1GTMltCt9XtuYnWU5MfmqlnhqV8M45eHJIdJKLEUZyQaajEX
-        FScCAFwdyUXLAgAA
-X-CMS-MailID: 20200716123319eucas1p219d57ab8efe9028686f2536e4ec935fa
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200716120956eucas1p1c5fd8e24c16e6616041467f618034b44
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20200716120956eucas1p1c5fd8e24c16e6616041467f618034b44
-References: <CGME20200716120956eucas1p1c5fd8e24c16e6616041467f618034b44@eucas1p1.samsung.com>
-        <20200716120948.28180-1-m.szyprowski@samsung.com>
-        <b7571d9c-95ac-26ec-538e-60e1aae0cddb@synopsys.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Minas,
+The OMAP1 was using static locals to hold the clock handles
+which is uncommon and does not scale. Create a private data
+struct and use that to hold the clocks.
 
-On 16.07.2020 14:19, Minas Harutyunyan wrote:
-> On 7/16/2020 4:09 PM, Marek Szyprowski wrote:
->> When gadget registration fails, one should not call usb_del_gadget_udc().
->> Ensure this by setting gadget->udc to NULL. Also in case of a failure
->> there is no need to disable low-level hardware, so return immiedetly
->> instead of jumping to error_init label.
->>
->> This fixes the following kernel NULL ptr dereference on gadget failure
->> (can be easily triggered with g_mass_storage without any module
->> parameters):
->>
->> dwc2 12480000.hsotg: dwc2_check_params: Invalid parameter besl=1
->> dwc2 12480000.hsotg: dwc2_check_params: Invalid parameter g_np_tx_fifo_size=1024
->> dwc2 12480000.hsotg: EPs: 16, dedicated fifos, 7808 entries in SPRAM
->> Mass Storage Function, version: 2009/09/11
->> LUN: removable file: (no medium)
->> no file given for LUN0
->> g_mass_storage 12480000.hsotg: failed to start g_mass_storage: -22
->> 8<--- cut here ---
->> Unable to handle kernel NULL pointer dereference at virtual address 00000104
->> pgd = (ptrval)
->> [00000104] *pgd=00000000
->> Internal error: Oops: 805 [#1] PREEMPT SMP ARM
->> Modules linked in:
->> CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.8.0-rc5 #3133
->> Hardware name: Samsung Exynos (Flattened Device Tree)
->> Workqueue: events deferred_probe_work_func
->> PC is at usb_del_gadget_udc+0x38/0xc4
->> LR is at __mutex_lock+0x31c/0xb18
->> ...
->> Process kworker/0:1 (pid: 12, stack limit = 0x(ptrval))
->> Stack: (0xef121db0 to 0xef122000)
->> ...
->> [<c076bf3c>] (usb_del_gadget_udc) from [<c0726bec>] (dwc2_hsotg_remove+0x10/0x20)
->> [<c0726bec>] (dwc2_hsotg_remove) from [<c0711208>] (dwc2_driver_probe+0x57c/0x69c)
->> [<c0711208>] (dwc2_driver_probe) from [<c06247c0>] (platform_drv_probe+0x6c/0xa4)
->> [<c06247c0>] (platform_drv_probe) from [<c0621df4>] (really_probe+0x200/0x48c)
->> [<c0621df4>] (really_probe) from [<c06221e8>] (driver_probe_device+0x78/0x1fc)
->> [<c06221e8>] (driver_probe_device) from [<c061fcd4>] (bus_for_each_drv+0x74/0xb8)
->> [<c061fcd4>] (bus_for_each_drv) from [<c0621b54>] (__device_attach+0xd4/0x16c)
->> [<c0621b54>] (__device_attach) from [<c0620c98>] (bus_probe_device+0x88/0x90)
->> [<c0620c98>] (bus_probe_device) from [<c06211b0>] (deferred_probe_work_func+0x3c/0xd0)
->> [<c06211b0>] (deferred_probe_work_func) from [<c0149280>] (process_one_work+0x234/0x7dc)
->> [<c0149280>] (process_one_work) from [<c014986c>] (worker_thread+0x44/0x51c)
->> [<c014986c>] (worker_thread) from [<c0150b1c>] (kthread+0x158/0x1a0)
->> [<c0150b1c>] (kthread) from [<c0100114>] (ret_from_fork+0x14/0x20)
->> Exception stack(0xef121fb0 to 0xef121ff8)
->> ...
->> ---[ end trace 9724c2fc7cc9c982 ]---
->>
->> While fixing this also fix the double call to dwc2_lowlevel_hw_disable()
->> if dr_mode is set to USB_DR_MODE_PERIPHERAL. In such case low-level
->> hardware is already disabled before calling usb_add_gadget_udc(). That
->> function correctly preserves low-level hardware state, there is no need
->> for the second unconditional dwc2_lowlevel_hw_disable() call.
->>
->> Fixes: 207324a321a8 ("usb: dwc2: Postponed gadget registration to the udc class driver")
->> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
->> ---
->>    drivers/usb/dwc2/platform.c | 4 +++-
->>    1 file changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
->> index cb8ddbd53718..db9fd4bd1a38 100644
->> --- a/drivers/usb/dwc2/platform.c
->> +++ b/drivers/usb/dwc2/platform.c
->> @@ -582,6 +582,7 @@ static int dwc2_driver_probe(struct platform_device *dev)
->>    	if (hsotg->gadget_enabled) {
->>    		retval = usb_add_gadget_udc(hsotg->dev, &hsotg->gadget);
->>    		if (retval) {
->> +			hsotg->gadget.udc = NULL;
-> Consider your recently sent patch "[PATCH] usb: gadget: udc: Flush
-> pending work also in error path", more probably it's not required,
-> because root cause of observed dwc2 issue comes from udc.
-> Am I wrong?
+Cc: Janusz Krzysztofik <jmkrzyszt@gmail.com>
+Cc: Tony Lindgren <tony@atomide.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ChangeLog v1->v2:
+- Fix up the error path to free the HCD *after* putting the
+  stuff inside the state container.
+- Also fix up the remove() path similarly.
+- Use some reasonable names on errorpath labels we are touching or
+  adding.
+- Fix a tab alignment.
+---
+ drivers/usb/host/ohci-omap.c | 85 +++++++++++++++++++++---------------
+ 1 file changed, 49 insertions(+), 36 deletions(-)
 
-They are two independent issues, both fatal on my test system.
-
-The first one (the lack of NULLing gadget->udc) can be easily triggered 
-on any system. The latter one (lack of flush in UDC core) depends on the 
-luck and memory layout on the test system.
-
-Best regards
-
+diff --git a/drivers/usb/host/ohci-omap.c b/drivers/usb/host/ohci-omap.c
+index d8d35d456456..a4bdd2b7af83 100644
+--- a/drivers/usb/host/ohci-omap.c
++++ b/drivers/usb/host/ohci-omap.c
+@@ -69,22 +69,27 @@ static inline int tps65010_set_gpio_out_value(unsigned gpio, unsigned value)
+ 
+ #endif
+ 
+-static struct clk *usb_host_ck;
+-static struct clk *usb_dc_ck;
++struct ohci_omap_priv {
++	struct clk *usb_host_ck;
++	struct clk *usb_dc_ck;
++};
+ 
+ static const char hcd_name[] = "ohci-omap";
+ static struct hc_driver __read_mostly ohci_omap_hc_driver;
+ 
+-static void omap_ohci_clock_power(int on)
++#define hcd_to_ohci_omap_priv(h) \
++	((struct ohci_omap_priv *)hcd_to_ohci(h)->priv)
++
++static void omap_ohci_clock_power(struct ohci_omap_priv *priv, int on)
+ {
+ 	if (on) {
+-		clk_enable(usb_dc_ck);
+-		clk_enable(usb_host_ck);
++		clk_enable(priv->usb_dc_ck);
++		clk_enable(priv->usb_host_ck);
+ 		/* guesstimate for T5 == 1x 32K clock + APLL lock time */
+ 		udelay(100);
+ 	} else {
+-		clk_disable(usb_host_ck);
+-		clk_disable(usb_dc_ck);
++		clk_disable(priv->usb_host_ck);
++		clk_disable(priv->usb_dc_ck);
+ 	}
+ }
+ 
+@@ -196,6 +201,7 @@ static int ohci_omap_reset(struct usb_hcd *hcd)
+ {
+ 	struct ohci_hcd		*ohci = hcd_to_ohci(hcd);
+ 	struct omap_usb_config	*config = dev_get_platdata(hcd->self.controller);
++	struct ohci_omap_priv	*priv = hcd_to_ohci_omap_priv(hcd);
+ 	int			need_transceiver = (config->otg != 0);
+ 	int			ret;
+ 
+@@ -235,7 +241,7 @@ static int ohci_omap_reset(struct usb_hcd *hcd)
+ 	}
+ #endif
+ 
+-	omap_ohci_clock_power(1);
++	omap_ohci_clock_power(priv, 1);
+ 
+ 	if (cpu_is_omap15xx()) {
+ 		omap_1510_local_bus_power(1);
+@@ -305,6 +311,7 @@ static int ohci_hcd_omap_probe(struct platform_device *pdev)
+ {
+ 	int retval, irq;
+ 	struct usb_hcd *hcd = 0;
++	struct ohci_omap_priv *priv;
+ 
+ 	if (pdev->num_resources != 2) {
+ 		dev_err(&pdev->dev, "invalid num_resources: %i\n",
+@@ -318,34 +325,35 @@ static int ohci_hcd_omap_probe(struct platform_device *pdev)
+ 		return -ENODEV;
+ 	}
+ 
+-	usb_host_ck = clk_get(&pdev->dev, "usb_hhc_ck");
+-	if (IS_ERR(usb_host_ck))
+-		return PTR_ERR(usb_host_ck);
++	hcd = usb_create_hcd(&ohci_omap_hc_driver, &pdev->dev,
++			dev_name(&pdev->dev));
++	if (!hcd)
++		return -ENOMEM;
+ 
+-	if (!cpu_is_omap15xx())
+-		usb_dc_ck = clk_get(&pdev->dev, "usb_dc_ck");
+-	else
+-		usb_dc_ck = clk_get(&pdev->dev, "lb_ck");
++	hcd->rsrc_start = pdev->resource[0].start;
++	hcd->rsrc_len = pdev->resource[0].end - pdev->resource[0].start + 1;
++	priv = hcd_to_ohci_omap_priv(hcd);
+ 
+-	if (IS_ERR(usb_dc_ck)) {
+-		clk_put(usb_host_ck);
+-		return PTR_ERR(usb_dc_ck);
++	priv->usb_host_ck = clk_get(&pdev->dev, "usb_hhc_ck");
++	if (IS_ERR(priv->usb_host_ck)) {
++		retval = PTR_ERR(priv->usb_host_ck);
++		goto err_put_hcd;
+ 	}
+ 
++	if (!cpu_is_omap15xx())
++		priv->usb_dc_ck = clk_get(&pdev->dev, "usb_dc_ck");
++	else
++		priv->usb_dc_ck = clk_get(&pdev->dev, "lb_ck");
+ 
+-	hcd = usb_create_hcd(&ohci_omap_hc_driver, &pdev->dev,
+-			dev_name(&pdev->dev));
+-	if (!hcd) {
+-		retval = -ENOMEM;
+-		goto err0;
++	if (IS_ERR(priv->usb_dc_ck)) {
++		retval = PTR_ERR(priv->usb_dc_ck);
++		goto err_put_host_ck;
+ 	}
+-	hcd->rsrc_start = pdev->resource[0].start;
+-	hcd->rsrc_len = pdev->resource[0].end - pdev->resource[0].start + 1;
+ 
+ 	if (!request_mem_region(hcd->rsrc_start, hcd->rsrc_len, hcd_name)) {
+ 		dev_dbg(&pdev->dev, "request_mem_region failed\n");
+ 		retval = -EBUSY;
+-		goto err1;
++		goto err_put_dc_ck;
+ 	}
+ 
+ 	hcd->regs = ioremap(hcd->rsrc_start, hcd->rsrc_len);
+@@ -370,11 +378,12 @@ static int ohci_hcd_omap_probe(struct platform_device *pdev)
+ 	iounmap(hcd->regs);
+ err2:
+ 	release_mem_region(hcd->rsrc_start, hcd->rsrc_len);
+-err1:
++err_put_dc_ck:
++	clk_put(priv->usb_dc_ck);
++err_put_host_ck:
++	clk_put(priv->usb_host_ck);
++err_put_hcd:
+ 	usb_put_hcd(hcd);
+-err0:
+-	clk_put(usb_dc_ck);
+-	clk_put(usb_host_ck);
+ 	return retval;
+ }
+ 
+@@ -393,10 +402,11 @@ static int ohci_hcd_omap_probe(struct platform_device *pdev)
+ static int ohci_hcd_omap_remove(struct platform_device *pdev)
+ {
+ 	struct usb_hcd	*hcd = platform_get_drvdata(pdev);
++	struct ohci_omap_priv *priv = hcd_to_ohci_omap_priv(hcd);
+ 
+ 	dev_dbg(hcd->self.controller, "stopping USB Controller\n");
+ 	usb_remove_hcd(hcd);
+-	omap_ohci_clock_power(0);
++	omap_ohci_clock_power(priv, 0);
+ 	if (!IS_ERR_OR_NULL(hcd->usb_phy)) {
+ 		(void) otg_set_host(hcd->usb_phy->otg, 0);
+ 		usb_put_phy(hcd->usb_phy);
+@@ -405,9 +415,9 @@ static int ohci_hcd_omap_remove(struct platform_device *pdev)
+ 		gpio_free(9);
+ 	iounmap(hcd->regs);
+ 	release_mem_region(hcd->rsrc_start, hcd->rsrc_len);
++	clk_put(priv->usb_dc_ck);
++	clk_put(priv->usb_host_ck);
+ 	usb_put_hcd(hcd);
+-	clk_put(usb_dc_ck);
+-	clk_put(usb_host_ck);
+ 	return 0;
+ }
+ 
+@@ -419,6 +429,7 @@ static int ohci_omap_suspend(struct platform_device *pdev, pm_message_t message)
+ {
+ 	struct usb_hcd *hcd = platform_get_drvdata(pdev);
+ 	struct ohci_hcd *ohci = hcd_to_ohci(hcd);
++	struct ohci_omap_priv *priv = hcd_to_ohci_omap_priv(hcd);
+ 	bool do_wakeup = device_may_wakeup(&pdev->dev);
+ 	int ret;
+ 
+@@ -430,7 +441,7 @@ static int ohci_omap_suspend(struct platform_device *pdev, pm_message_t message)
+ 	if (ret)
+ 		return ret;
+ 
+-	omap_ohci_clock_power(0);
++	omap_ohci_clock_power(priv, 0);
+ 	return ret;
+ }
+ 
+@@ -438,12 +449,13 @@ static int ohci_omap_resume(struct platform_device *dev)
+ {
+ 	struct usb_hcd	*hcd = platform_get_drvdata(dev);
+ 	struct ohci_hcd	*ohci = hcd_to_ohci(hcd);
++	struct ohci_omap_priv *priv = hcd_to_ohci_omap_priv(hcd);
+ 
+ 	if (time_before(jiffies, ohci->next_statechange))
+ 		msleep(5);
+ 	ohci->next_statechange = jiffies;
+ 
+-	omap_ohci_clock_power(1);
++	omap_ohci_clock_power(priv, 1);
+ 	ohci_resume(hcd, false);
+ 	return 0;
+ }
+@@ -470,7 +482,8 @@ static struct platform_driver ohci_hcd_omap_driver = {
+ 
+ static const struct ohci_driver_overrides omap_overrides __initconst = {
+ 	.product_desc	= "OMAP OHCI",
+-	.reset		= ohci_omap_reset
++	.reset		= ohci_omap_reset,
++	.extra_priv_size = sizeof(struct ohci_omap_priv),
+ };
+ 
+ static int __init ohci_omap_init(void)
 -- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+2.26.2
 
