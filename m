@@ -2,307 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B320A22191B
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jul 2020 02:52:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A052221946
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jul 2020 03:07:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727943AbgGPAuO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 15 Jul 2020 20:50:14 -0400
-Received: from mga14.intel.com ([192.55.52.115]:57225 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727906AbgGPAuK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 15 Jul 2020 20:50:10 -0400
-IronPort-SDR: iv80tgvSY1KB1bmMeTTTtoILCC0jVW7Ay8bmzuJ6UfAKIo47WDzwgmbCOZE4bhMh6wxMu7CRbV
- +kavISjahyvg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9683"; a="148445963"
-X-IronPort-AV: E=Sophos;i="5.75,357,1589266800"; 
-   d="scan'208";a="148445963"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2020 17:50:05 -0700
-IronPort-SDR: gbECWBVW9YAlTseyflmb4Carimxx5ju0QLQUUH4W33jnqjRW4qI1WPDJplbYIG3Yaw0lZMEk96
- w1ik/sd9re+Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,357,1589266800"; 
-   d="scan'208";a="316874134"
-Received: from glacier.sc.intel.com ([10.3.62.63])
-  by orsmga008.jf.intel.com with ESMTP; 15 Jul 2020 17:50:05 -0700
-From:   Rajmohan Mani <rajmohan.mani@intel.com>
-To:     Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Ayman Bagabas <ayman.bagabas@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Jithu Joseph <jithu.joseph@intel.com>,
-        =?UTF-8?q?Bla=C5=BE=20Hrastnik?= <blaz@mxxn.io>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     pmalani@chromium.org, bleung@chromium.org
-Subject: [PATCH 2/2] usb: typec: intel_pmc_mux: Check the port status before connect
-Date:   Wed, 15 Jul 2020 17:33:10 -0700
-Message-Id: <20200716003310.26125-3-rajmohan.mani@intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200716003310.26125-1-rajmohan.mani@intel.com>
-References: <20200716003310.26125-1-rajmohan.mani@intel.com>
+        id S1727912AbgGPBGN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 15 Jul 2020 21:06:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36594 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726785AbgGPBGN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 15 Jul 2020 21:06:13 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CAB1C08C5CE
+        for <linux-usb@vger.kernel.org>; Wed, 15 Jul 2020 18:06:13 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id md7so3848867pjb.1
+        for <linux-usb@vger.kernel.org>; Wed, 15 Jul 2020 18:06:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:content-transfer-encoding:in-reply-to:references
+         :subject:from:cc:to:date:message-id:user-agent;
+        bh=e2rVUlKuuIkQy85IOtUCVSZFDO7sfvuCwv9FBlIGudc=;
+        b=WBRwXuL1J49aFDX6OowkdQp60wkBLDyNji+VnP+47luf3SDgodM5CwOA/KeRQyBiK/
+         Ds76Qrv97EixHLwWaFyaLiwTYTLZejCwlFlXIoUV0aQV3W6LmFuXJ0T9YbB3FvLVWKvL
+         v9EEQ8v7wIiTl2OmiIYvZKqXM71Q7RR3K0iF8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:content-transfer-encoding
+         :in-reply-to:references:subject:from:cc:to:date:message-id
+         :user-agent;
+        bh=e2rVUlKuuIkQy85IOtUCVSZFDO7sfvuCwv9FBlIGudc=;
+        b=VfTZWGoNrqUnl+M2B2q/4+MNuAr31tYTBgOc3v+/ZjacliQCAhHp3JXcK0CzlYU/Ky
+         djxjNE1f+zQWhyrieoS1CzVFNtvGJ4TkNXgTxttGgYrk6FVWqi+KpIsMiDJNKycyWdXp
+         RdoVdXpkC3oDenUdqJHt3boY+sgy/feRdfPPSuJ5/laGs5GjuiHoXmcqiWtsVUrhzoSi
+         mZ26dh5jPI1dK9MUlRdVoZQ7rAXW4lbRq8+BTi/fLfxjTlqVmlRbwlNIHutArtFw6i6f
+         wpwFJMhAIKA1Yq93tUVbeAor+9gyw+bKfWT9itfPm+v2kPqTifSCXQGYKc444eWTYgLG
+         8vhQ==
+X-Gm-Message-State: AOAM533GWB2ww+d3n7k8LSn9QEqVaFxdFjd5f8CN8QxS6eJ1bt0nCqCJ
+        MNPEJAIp+Mg18aiEv3evsyVluN7FxI4=
+X-Google-Smtp-Source: ABdhPJwDuXNH1tttabpe1OV+jVg8VPDxCAe+DQNCQJLCDygr1r24B/9SZizwmtIKi2LthbUBcxYHIA==
+X-Received: by 2002:a17:902:8d8b:: with SMTP id v11mr1626798plo.221.1594861572552;
+        Wed, 15 Jul 2020 18:06:12 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:3e52:82ff:fe6c:83ab])
+        by smtp.gmail.com with ESMTPSA id j19sm3134274pjy.40.2020.07.15.18.06.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jul 2020 18:06:11 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <1594622881-6563-1-git-send-email-chunfeng.yun@mediatek.com>
+References: <1594622881-6563-1-git-send-email-chunfeng.yun@mediatek.com>
+Subject: Re: [v3 PATCH] usb: gadget: bdc: use readl_poll_timeout() to simplify code
+From:   Stephen Boyd <swboyd@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, YueHaibing <yuehaibing@huawei.com>,
+        linux-kernel@vger.kernel.org,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        linux-mediatek@lists.infradead.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Date:   Wed, 15 Jul 2020 18:06:10 -0700
+Message-ID: <159486157046.1987609.11356860908068064534@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Quoting Chunfeng Yun (2020-07-12 23:48:01)
+> diff --git a/drivers/usb/gadget/udc/bdc/bdc_core.c b/drivers/usb/gadget/u=
+dc/bdc/bdc_core.c
+> index 02a3a77..d567e20 100644
+> --- a/drivers/usb/gadget/udc/bdc/bdc_core.c
+> +++ b/drivers/usb/gadget/udc/bdc/bdc_core.c
+> @@ -29,24 +30,19 @@
+>  #include "bdc_dbg.h"
+> =20
+>  /* Poll till controller status is not OIP */
+> -static int poll_oip(struct bdc *bdc, int usec)
+> +static int poll_oip(struct bdc *bdc, u32 usec)
+>  {
+>         u32 status;
+> -       /* Poll till STS!=3D OIP */
+> -       while (usec) {
+> -               status =3D bdc_readl(bdc->regs, BDC_BDCSC);
+> -               if (BDC_CSTS(status) !=3D BDC_OIP) {
+> -                       dev_dbg(bdc->dev,
+> -                               "poll_oip complete status=3D%d",
+> -                               BDC_CSTS(status));
+> -                       return 0;
+> -               }
+> -               udelay(10);
+> -               usec -=3D 10;
+> -       }
+> -       dev_err(bdc->dev, "Err: operation timedout BDCSC: 0x%08x\n", stat=
+us);
+> +       int ret;
+> =20
+> -       return -ETIMEDOUT;
+> +       ret =3D readl_poll_timeout(bdc->regs + BDC_BDCSC, status,
+> +                                (BDC_CSTS(status) !=3D BDC_OIP), 10, use=
+c);
+> +       if (ret)
+> +               dev_err(bdc->dev, "operation timedout BDCSC: 0x%08x\n", s=
+tatus);
+> +       else
+> +               dev_dbg(bdc->dev, "%s complete status=3D%d", __func__, BD=
+C_CSTS(status));
 
-The PMC microcontroller that we use for configuration, does
-not supply any status information back. For port status we
-need to talk to another controller on the board called IOM
-(I/O manager).
+Different than before but OK.
 
-By checking the port status before configuring the muxes, we
-can make sure that we do not reconfigure the port after
-bootup when the system firmware (for example BIOS) has
-already configured it.
-
-Using the status information also to check if DisplayPort
-HPD is still asserted when the cable plug is disconnected,
-and clearing it if it is.
-
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
- drivers/usb/typec/mux/Kconfig         |  1 +
- drivers/usb/typec/mux/intel_pmc_mux.c | 73 +++++++++++++++++++++++----
- 2 files changed, 64 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/usb/typec/mux/Kconfig b/drivers/usb/typec/mux/Kconfig
-index a4dbd11f8ee2..46f5512de63d 100644
---- a/drivers/usb/typec/mux/Kconfig
-+++ b/drivers/usb/typec/mux/Kconfig
-@@ -12,6 +12,7 @@ config TYPEC_MUX_PI3USB30532
- config TYPEC_MUX_INTEL_PMC
- 	tristate "Intel PMC mux control"
- 	depends on INTEL_SCU_IPC
-+	depends on INTEL_IOM
- 	select USB_ROLE_SWITCH
- 	help
- 	  Driver for USB muxes controlled by Intel PMC FW. Intel PMC FW can
-diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
-index 2aba07c7b221..84101fb99934 100644
---- a/drivers/usb/typec/mux/intel_pmc_mux.c
-+++ b/drivers/usb/typec/mux/intel_pmc_mux.c
-@@ -9,6 +9,7 @@
- #include <linux/acpi.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
-+#include <linux/platform_data/x86/intel_iom.h>
- #include <linux/property.h>
- #include <linux/usb/pd.h>
- #include <linux/usb/role.h>
-@@ -83,10 +84,17 @@ enum {
- #define PMC_USB_DP_HPD_LVL		BIT(4)
- #define PMC_USB_DP_HPD_IRQ		BIT(5)
- 
-+/* IOM Port Status */
-+#define IOM_PORT_ACTIVITY_IS(_status_, _type_)				\
-+	((((_status_) & IOM_PORT_STATUS_ACTIVITY_TYPE_MASK) >>		\
-+	  IOM_PORT_STATUS_ACTIVITY_TYPE_SHIFT) ==			\
-+	 (IOM_PORT_STATUS_ACTIVITY_TYPE_##_type_))
-+
- struct pmc_usb;
- 
- struct pmc_usb_port {
- 	int num;
-+	u32 iom_status;
- 	struct pmc_usb *pmc;
- 	struct typec_mux *typec_mux;
- 	struct typec_switch *typec_sw;
-@@ -105,6 +113,7 @@ struct pmc_usb_port {
- struct pmc_usb {
- 	u8 num_ports;
- 	struct device *dev;
-+	struct intel_iom *iom;
- 	struct intel_scu_ipc_dev *ipc;
- 	struct pmc_usb_port *port;
- };
-@@ -145,18 +154,17 @@ static int pmc_usb_command(struct pmc_usb_port *port, u8 *msg, u32 len)
- }
- 
- static int
--pmc_usb_mux_dp_hpd(struct pmc_usb_port *port, struct typec_mux_state *state)
-+pmc_usb_mux_dp_hpd(struct pmc_usb_port *port, struct typec_displayport_data *dp)
- {
--	struct typec_displayport_data *data = state->data;
- 	u8 msg[2] = { };
- 
- 	msg[0] = PMC_USB_DP_HPD;
- 	msg[0] |= port->usb3_port << PMC_USB_MSG_USB3_PORT_SHIFT;
- 
--	if (data->status & DP_STATUS_IRQ_HPD)
-+	if (dp->status & DP_STATUS_IRQ_HPD)
- 		msg[1] = PMC_USB_DP_HPD_IRQ;
- 
--	if (data->status & DP_STATUS_HPD_STATE)
-+	if (dp->status & DP_STATUS_HPD_STATE)
- 		msg[1] |= PMC_USB_DP_HPD_LVL;
- 
- 	return pmc_usb_command(port, msg, sizeof(msg));
-@@ -169,8 +177,12 @@ pmc_usb_mux_dp(struct pmc_usb_port *port, struct typec_mux_state *state)
- 	struct altmode_req req = { };
- 	int ret;
- 
-+	if (IOM_PORT_ACTIVITY_IS(port->iom_status, DP) ||
-+	    IOM_PORT_ACTIVITY_IS(port->iom_status, DP_MFD))
-+		return 0;
-+
- 	if (data->status & DP_STATUS_IRQ_HPD)
--		return pmc_usb_mux_dp_hpd(port, state);
-+		return pmc_usb_mux_dp_hpd(port, state->data);
- 
- 	req.usage = PMC_USB_ALT_MODE;
- 	req.usage |= port->usb3_port << PMC_USB_MSG_USB3_PORT_SHIFT;
-@@ -193,7 +205,7 @@ pmc_usb_mux_dp(struct pmc_usb_port *port, struct typec_mux_state *state)
- 		return ret;
- 
- 	if (data->status & DP_STATUS_HPD_STATE)
--		return pmc_usb_mux_dp_hpd(port, state);
-+		return pmc_usb_mux_dp_hpd(port, state->data);
- 
- 	return 0;
- }
-@@ -205,6 +217,10 @@ pmc_usb_mux_tbt(struct pmc_usb_port *port, struct typec_mux_state *state)
- 	u8 cable_speed = TBT_CABLE_SPEED(data->cable_mode);
- 	struct altmode_req req = { };
- 
-+	if (IOM_PORT_ACTIVITY_IS(port->iom_status, TBT) ||
-+	    IOM_PORT_ACTIVITY_IS(port->iom_status, ALT_MODE_TBT_USB))
-+		return 0;
-+
- 	req.usage = PMC_USB_ALT_MODE;
- 	req.usage |= port->usb3_port << PMC_USB_MSG_USB3_PORT_SHIFT;
- 	req.mode_type = PMC_USB_MODE_TYPE_TBT << PMC_USB_MODE_TYPE_SHIFT;
-@@ -239,6 +255,10 @@ pmc_usb_mux_usb4(struct pmc_usb_port *port, struct typec_mux_state *state)
- 	struct altmode_req req = { };
- 	u8 cable_speed;
- 
-+	if (IOM_PORT_ACTIVITY_IS(port->iom_status, TBT) ||
-+	    IOM_PORT_ACTIVITY_IS(port->iom_status, ALT_MODE_TBT_USB))
-+		return 0;
-+
- 	req.usage = PMC_USB_ALT_MODE;
- 	req.usage |= port->usb3_port << PMC_USB_MSG_USB3_PORT_SHIFT;
- 	req.mode_type = PMC_USB_MODE_TYPE_TBT << PMC_USB_MODE_TYPE_SHIFT;
-@@ -273,6 +293,9 @@ static int pmc_usb_mux_safe_state(struct pmc_usb_port *port)
- {
- 	u8 msg;
- 
-+	if (IOM_PORT_ACTIVITY_IS(port->iom_status, SAFE_MODE))
-+		return 0;
-+
- 	msg = PMC_USB_SAFE_MODE;
- 	msg |= port->usb3_port << PMC_USB_MSG_USB3_PORT_SHIFT;
- 
-@@ -283,6 +306,9 @@ static int pmc_usb_connect(struct pmc_usb_port *port)
- {
- 	u8 msg[2];
- 
-+	if (port->iom_status & IOM_PORT_STATUS_CONNECTED)
-+		return 0;
-+
- 	msg[0] = PMC_USB_CONNECT;
- 	msg[0] |= port->usb3_port << PMC_USB_MSG_USB3_PORT_SHIFT;
- 
-@@ -295,8 +321,18 @@ static int pmc_usb_connect(struct pmc_usb_port *port)
- 
- static int pmc_usb_disconnect(struct pmc_usb_port *port)
- {
-+	struct typec_displayport_data data = { };
- 	u8 msg[2];
- 
-+	if (!(port->iom_status & IOM_PORT_STATUS_CONNECTED))
-+		return 0;
-+
-+	/* Clear DisplayPort HPD if it's still asserted. */
-+	if (((port->iom_status & IOM_PORT_STATUS_DHPD_HPD_STATUS_MASK) >>
-+	     IOM_PORT_STATUS_DHPD_HPD_STATUS_SHIFT) &
-+	    IOM_PORT_STATUS_DHPD_HPD_STATUS_ASSERT)
-+		pmc_usb_mux_dp_hpd(port, &data);
-+
- 	msg[0] = PMC_USB_DISCONNECT;
- 	msg[0] |= port->usb3_port << PMC_USB_MSG_USB3_PORT_SHIFT;
- 
-@@ -309,6 +345,11 @@ static int
- pmc_usb_mux_set(struct typec_mux *mux, struct typec_mux_state *state)
- {
- 	struct pmc_usb_port *port = typec_mux_get_drvdata(mux);
-+	int ret;
-+
-+	ret = intel_iom_port_status(port->pmc->iom, port->num, &port->iom_status);
-+	if (ret)
-+		return ret;
- 
- 	if (state->mode == TYPEC_STATE_SAFE)
- 		return pmc_usb_mux_safe_state(port);
-@@ -341,9 +382,11 @@ static int pmc_usb_set_orientation(struct typec_switch *sw,
- 				   enum typec_orientation orientation)
- {
- 	struct pmc_usb_port *port = typec_switch_get_drvdata(sw);
-+	int ret;
- 
--	if (port->orientation == orientation)
--		return 0;
-+	ret = intel_iom_port_status(port->pmc->iom, port->num, &port->iom_status);
-+	if (ret)
-+		return ret;
- 
- 	port->orientation = orientation;
- 
-@@ -360,9 +403,11 @@ static int pmc_usb_set_orientation(struct typec_switch *sw,
- static int pmc_usb_set_role(struct usb_role_switch *sw, enum usb_role role)
- {
- 	struct pmc_usb_port *port = usb_role_switch_get_drvdata(sw);
-+	int ret;
- 
--	if (port->role == role)
--		return 0;
-+	ret = intel_iom_port_status(port->pmc->iom, port->num, &port->iom_status);
-+	if (ret)
-+		return ret;
- 
- 	port->role = role;
- 
-@@ -472,6 +517,10 @@ static int pmc_usb_probe(struct platform_device *pdev)
- 
- 	pmc->dev = &pdev->dev;
- 
-+	pmc->iom = intel_iom_get();
-+	if (IS_ERR(pmc->iom))
-+		return PTR_ERR(pmc->iom);
-+
- 	/*
- 	 * For every physical USB connector (USB2 and USB3 combo) there is a
- 	 * child ACPI device node under the PMC mux ACPI device object.
-@@ -496,6 +545,8 @@ static int pmc_usb_probe(struct platform_device *pdev)
- 		typec_mux_unregister(pmc->port[i].typec_mux);
- 	}
- 
-+	intel_iom_put(pmc->iom);
-+
- 	return ret;
- }
- 
-@@ -509,6 +560,8 @@ static int pmc_usb_remove(struct platform_device *pdev)
- 		typec_mux_unregister(pmc->port[i].typec_mux);
- 	}
- 
-+	intel_iom_put(pmc->iom);
-+
- 	return 0;
- }
- 
--- 
-2.20.1
-
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
