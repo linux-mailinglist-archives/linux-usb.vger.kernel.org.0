@@ -2,86 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 223D3221EF9
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jul 2020 10:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4562D221F60
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jul 2020 11:05:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728285AbgGPIwZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jul 2020 04:52:25 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:7861 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725867AbgGPIwY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 16 Jul 2020 04:52:24 -0400
-Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id DF40A914ED1DA6CAABC5;
-        Thu, 16 Jul 2020 16:52:21 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- DGGEMS403-HUB.china.huawei.com (10.3.19.203) with Microsoft SMTP Server id
- 14.3.487.0; Thu, 16 Jul 2020 16:52:20 +0800
-From:   Qinglang Miao <miaoqinglang@huawei.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Sylvain Lemieux <slemieux.tyco@gmail.com>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next] usb: udc: lpc32xx: Convert to DEFINE_SHOW_ATTRIBUTE
-Date:   Thu, 16 Jul 2020 16:56:12 +0800
-Message-ID: <20200716085612.10712-1-miaoqinglang@huawei.com>
-X-Mailer: git-send-email 2.20.1
+        id S1725975AbgGPJFJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jul 2020 05:05:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45934 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725897AbgGPJFJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 16 Jul 2020 05:05:09 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id ABB3F2064C;
+        Thu, 16 Jul 2020 09:05:08 +0000 (UTC)
+Date:   Thu, 16 Jul 2020 11:05:03 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org, George Spelvin <lkml@sdf.org>
+Subject: Re: [PATCH] USB: serial: iuu_phoenix: fix led-activity helpers
+Message-ID: <20200716090503.GA1548743@kroah.com>
+References: <20200716085056.31471-1-johan@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200716085056.31471-1-johan@kernel.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use DEFINE_SHOW_ATTRIBUTE macro to simplify the code.
+On Thu, Jul 16, 2020 at 10:50:55AM +0200, Johan Hovold wrote:
+> The set-led command is eight bytes long and starts with a command byte
+> followed by six bytes of RGB data and ends with a byte encoding a
+> frequency (see iuu_led() and iuu_rgbf_fill_buffer()).
+> 
+> The led activity helpers had a few long-standing bugs which corrupted
+> the command packets by inserting a second command byte and thereby
+> offsetting the RGB data and dropping the frequency in non-xmas mode.
+> 
+> In xmas mode, a related off-by-one error left the frequency field
+> uninitialised.
+> 
+> Fixes: 60a8fc017103 ("USB: add iuu_phoenix driver")
+> Reported-by: George Spelvin <lkml@sdf.org>
+> Signed-off-by: Johan Hovold <johan@kernel.org>
 
-Signed-off-by: Qinglang Miao <miaoqinglang@huawei.com>
----
- drivers/usb/gadget/udc/lpc32xx_udc.c | 17 +++--------------
- 1 file changed, 3 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/usb/gadget/udc/lpc32xx_udc.c b/drivers/usb/gadget/udc/lpc32xx_udc.c
-index e79f5f286..3f1c62adc 100644
---- a/drivers/usb/gadget/udc/lpc32xx_udc.c
-+++ b/drivers/usb/gadget/udc/lpc32xx_udc.c
-@@ -495,7 +495,7 @@ static void proc_ep_show(struct seq_file *s, struct lpc32xx_ep *ep)
- 	}
- }
- 
--static int proc_udc_show(struct seq_file *s, void *unused)
-+static int udc_show(struct seq_file *s, void *unused)
- {
- 	struct lpc32xx_udc *udc = s->private;
- 	struct lpc32xx_ep *ep;
-@@ -524,22 +524,11 @@ static int proc_udc_show(struct seq_file *s, void *unused)
- 	return 0;
- }
- 
--static int proc_udc_open(struct inode *inode, struct file *file)
--{
--	return single_open(file, proc_udc_show, PDE_DATA(inode));
--}
--
--static const struct file_operations proc_ops = {
--	.owner		= THIS_MODULE,
--	.open		= proc_udc_open,
--	.read_iter		= seq_read_iter,
--	.llseek		= seq_lseek,
--	.release	= single_release,
--};
-+DEFINE_SHOW_ATTRIBUTE(udc);
- 
- static void create_debug_file(struct lpc32xx_udc *udc)
- {
--	udc->pde = debugfs_create_file(debug_filename, 0, NULL, udc, &proc_ops);
-+	udc->pde = debugfs_create_file(debug_filename, 0, NULL, udc, &udc_fops);
- }
- 
- static void remove_debug_file(struct lpc32xx_udc *udc)
--- 
-2.17.1
-
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
