@@ -2,170 +2,171 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81303223C34
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jul 2020 15:19:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE8B223CC7
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jul 2020 15:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726322AbgGQNTK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Jul 2020 09:19:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33144 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726333AbgGQNTH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jul 2020 09:19:07 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20DE9C08C5DE
-        for <linux-usb@vger.kernel.org>; Fri, 17 Jul 2020 06:19:07 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id r19so12514054ljn.12
-        for <linux-usb@vger.kernel.org>; Fri, 17 Jul 2020 06:19:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=npEG3Q8JCnzZnur7Cq6JNk21xogenaqhRA7YjsM9ezY=;
-        b=WJr5l5M97ciW2c/gjJQoeEJGmETPzM7Qr5IRBgUn1YBScg98hUkSzHSeJTg3OUPsqN
-         2Scj6G4YGWug3QNMtbZFC3QoKcWR/SfrE+ZlfdaUJN+16ebomabpyO890QKs0TfSwssg
-         GlwRJGVRacdblC9JpOlqVPmVq4YaiPWGimGKkIvrIMvoClA502INAywjscaO+jMQtYNV
-         FrdLzlPp8YBw4RfuDqDeOxlxXRKz4NzqUy+mC4V9pnVDfAFmeYBYR87xX8F1retQgweA
-         OtrVCgFfRj6hzdkmswIkViUTlADJQfm9E7KSYC+qLFxp8Njn3jYAupxNP8CkZ765YQba
-         sztw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=npEG3Q8JCnzZnur7Cq6JNk21xogenaqhRA7YjsM9ezY=;
-        b=rw52R5iZFdn2fUUDfVqTlh4jlotEfXb53l8vG+tNaWnHsrTc2jv8Nm4ogkHKOg2lcb
-         Qqc/zlxqY87DJ9N751t9g1CJAB3UDm/vxKQSSKboc9/kLwarsqhI6IwBYLJrgwF2fh0t
-         yyi/TCpcvT/mrH5iv+/plEXsIOK0cB/zSrFA5xy4vQs4nSTklc21oPVNtW2u0fZU8z3O
-         XPdMo6VIu4mcb5lnlqTLZYcZ5Ueesxv6yagDZ+dLwpn4WeS0mgbCaXUC61pRVamR/eL5
-         jjToLO/sxiqLe/YmEacRILF/MjNaoynO/E4V71meWVT0l1owcE4XRZFUko/VDoOuceic
-         C8Jg==
-X-Gm-Message-State: AOAM533jU2hYZhjt3l9DW0uruLyl7xTfrPFc7IWJtTrmvdA8W+sVdkNP
-        R82G8qQdOVToDEDTKJdkKm5cnQ==
-X-Google-Smtp-Source: ABdhPJxEMQOqJH/bssfF2AGyslt8NjbQrH6kwGSmbOflAyOcRsfWYlCaG5NnnWf5rAblr67M877IMw==
-X-Received: by 2002:a05:651c:c5:: with SMTP id 5mr4934690ljr.9.1594991945447;
-        Fri, 17 Jul 2020 06:19:05 -0700 (PDT)
-Received: from localhost (h-209-203.A463.priv.bahnhof.se. [155.4.209.203])
-        by smtp.gmail.com with ESMTPSA id y69sm1861534lfa.86.2020.07.17.06.19.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jul 2020 06:19:04 -0700 (PDT)
-Date:   Fri, 17 Jul 2020 15:19:04 +0200
-From:   Niklas <niklas.soderlund@ragnatech.se>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Mark Brown <broonie@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        devicetree@vger.kernel.org, linux-ide@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-pci@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-renesas-soc@vger.kernel.org, linux-usb@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Subject: Re: [PATCH 19/20] media: rcar-vin: Enable support for R8A774E1
-Message-ID: <20200717131904.GC175137@oden.dyn.berto.se>
-References: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1594919915-5225-20-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        id S1726564AbgGQNbn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Jul 2020 09:31:43 -0400
+Received: from mga05.intel.com ([192.55.52.43]:41282 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726071AbgGQNbm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 17 Jul 2020 09:31:42 -0400
+IronPort-SDR: AVoriAE0MoYaYEe9PrcuA1BSIcDWFZHuYS6VDBDiHBkzsn/DzhLtAnCIWDnTwxJ8WTdSY0AjAy
+ oT9MYLBoKdwQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9684"; a="234438008"
+X-IronPort-AV: E=Sophos;i="5.75,362,1589266800"; 
+   d="scan'208";a="234438008"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2020 06:31:38 -0700
+IronPort-SDR: Fp5w8h0Y29yyZX6UPXi5mLCYYKyg1FIK1eVhyuu4RGpwyGP+sVhomUAXqMJwhqRiJG8FYi99fT
+ oVSiQR1sCuZQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,362,1589266800"; 
+   d="scan'208";a="391387508"
+Received: from lkp-server02.sh.intel.com (HELO 50058c6ee6fc) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 17 Jul 2020 06:31:37 -0700
+Received: from kbuild by 50058c6ee6fc with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1jwQSf-0000K3-0o; Fri, 17 Jul 2020 13:31:37 +0000
+Date:   Fri, 17 Jul 2020 21:30:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ c7300cdf8f683ae00cf74616b5fd14ffac327979
+Message-ID: <5f11a7e8.gLuwEbvYUm+xYiVJ%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1594919915-5225-20-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Lad,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-linus
+branch HEAD: c7300cdf8f683ae00cf74616b5fd14ffac327979  Merge tag 'usb-serial-5.8-rc6' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
 
-Thanks for your work.
+elapsed time: 1247m
 
-On 2020-07-16 18:18:34 +0100, Lad Prabhakar wrote:
-> Add the SoC specific information for RZ/G2H (R8A774E1) SoC. Also add
-> the routing information between CSI2 and VIN (which is similar to
-> R-Car H3 except it lacks CSI41).
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
+configs tested: 109
+configs skipped: 1
 
-I do not have access to the datasheet so I can't verify the routing 
-table so I trust it is correct.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                               allnoconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+arm                       aspeed_g4_defconfig
+mips                           ip27_defconfig
+m68k                        m5307c3_defconfig
+sh                               j2_defconfig
+powerpc                       ppc64_defconfig
+parisc                           allyesconfig
+i386                              allnoconfig
+i386                                defconfig
+i386                              debian-10.3
+i386                             allyesconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                              allnoconfig
+m68k                           sun3_defconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+nios2                            allyesconfig
+openrisc                            defconfig
+c6x                              allyesconfig
+c6x                               allnoconfig
+openrisc                         allyesconfig
+nds32                               defconfig
+nds32                             allnoconfig
+csky                             allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+h8300                            allmodconfig
+xtensa                              defconfig
+arc                                 defconfig
+arc                              allyesconfig
+sh                               allmodconfig
+sh                                allnoconfig
+microblaze                        allnoconfig
+mips                             allyesconfig
+mips                              allnoconfig
+mips                             allmodconfig
+parisc                            allnoconfig
+parisc                              defconfig
+parisc                           allmodconfig
+powerpc                          allyesconfig
+powerpc                          rhel-kconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+powerpc                             defconfig
+x86_64               randconfig-a005-20200717
+x86_64               randconfig-a006-20200717
+x86_64               randconfig-a002-20200717
+x86_64               randconfig-a001-20200717
+x86_64               randconfig-a003-20200717
+x86_64               randconfig-a004-20200717
+i386                 randconfig-a001-20200717
+i386                 randconfig-a005-20200717
+i386                 randconfig-a002-20200717
+i386                 randconfig-a006-20200717
+i386                 randconfig-a003-20200717
+i386                 randconfig-a004-20200717
+x86_64               randconfig-a012-20200716
+x86_64               randconfig-a011-20200716
+x86_64               randconfig-a016-20200716
+x86_64               randconfig-a014-20200716
+x86_64               randconfig-a013-20200716
+x86_64               randconfig-a015-20200716
+i386                 randconfig-a016-20200716
+i386                 randconfig-a011-20200716
+i386                 randconfig-a015-20200716
+i386                 randconfig-a012-20200716
+i386                 randconfig-a013-20200716
+i386                 randconfig-a014-20200716
+i386                 randconfig-a016-20200717
+i386                 randconfig-a011-20200717
+i386                 randconfig-a015-20200717
+i386                 randconfig-a012-20200717
+i386                 randconfig-a013-20200717
+i386                 randconfig-a014-20200717
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+s390                             allyesconfig
+s390                              allnoconfig
+s390                             allmodconfig
+s390                                defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+sparc64                             defconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                          allmodconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                               rhel-8.3
+x86_64                                  kexec
+x86_64                                   rhel
+x86_64                                    lkp
+x86_64                              fedora-25
 
-> ---
->  drivers/media/platform/rcar-vin/rcar-core.c | 40 +++++++++++++++++++++
->  1 file changed, 40 insertions(+)
-> 
-> diff --git a/drivers/media/platform/rcar-vin/rcar-core.c b/drivers/media/platform/rcar-vin/rcar-core.c
-> index 7440c8965d27..4fb76d1df308 100644
-> --- a/drivers/media/platform/rcar-vin/rcar-core.c
-> +++ b/drivers/media/platform/rcar-vin/rcar-core.c
-> @@ -944,6 +944,42 @@ static const struct rvin_info rcar_info_gen2 = {
->  	.max_height = 2048,
->  };
->  
-> +static const struct rvin_group_route rcar_info_r8a774e1_routes[] = {
-> +	{ .csi = RVIN_CSI40, .channel = 0, .vin = 0, .mask = BIT(0) | BIT(3) },
-> +	{ .csi = RVIN_CSI20, .channel = 0, .vin = 0, .mask = BIT(1) | BIT(4) },
-> +	{ .csi = RVIN_CSI40, .channel = 1, .vin = 0, .mask = BIT(2) },
-> +	{ .csi = RVIN_CSI20, .channel = 0, .vin = 1, .mask = BIT(0) },
-> +	{ .csi = RVIN_CSI40, .channel = 1, .vin = 1, .mask = BIT(1) | BIT(3) },
-> +	{ .csi = RVIN_CSI40, .channel = 0, .vin = 1, .mask = BIT(2) },
-> +	{ .csi = RVIN_CSI20, .channel = 1, .vin = 1, .mask = BIT(4) },
-> +	{ .csi = RVIN_CSI20, .channel = 1, .vin = 2, .mask = BIT(0) },
-> +	{ .csi = RVIN_CSI40, .channel = 0, .vin = 2, .mask = BIT(1) },
-> +	{ .csi = RVIN_CSI20, .channel = 0, .vin = 2, .mask = BIT(2) },
-> +	{ .csi = RVIN_CSI40, .channel = 2, .vin = 2, .mask = BIT(3) },
-> +	{ .csi = RVIN_CSI20, .channel = 2, .vin = 2, .mask = BIT(4) },
-> +	{ .csi = RVIN_CSI40, .channel = 1, .vin = 3, .mask = BIT(0) },
-> +	{ .csi = RVIN_CSI20, .channel = 1, .vin = 3, .mask = BIT(1) | BIT(2) },
-> +	{ .csi = RVIN_CSI40, .channel = 3, .vin = 3, .mask = BIT(3) },
-> +	{ .csi = RVIN_CSI20, .channel = 3, .vin = 3, .mask = BIT(4) },
-> +	{ .csi = RVIN_CSI20, .channel = 0, .vin = 4, .mask = BIT(1) | BIT(4) },
-> +	{ .csi = RVIN_CSI20, .channel = 0, .vin = 5, .mask = BIT(0) },
-> +	{ .csi = RVIN_CSI20, .channel = 1, .vin = 5, .mask = BIT(4) },
-> +	{ .csi = RVIN_CSI20, .channel = 1, .vin = 6, .mask = BIT(0) },
-> +	{ .csi = RVIN_CSI20, .channel = 0, .vin = 6, .mask = BIT(2) },
-> +	{ .csi = RVIN_CSI20, .channel = 2, .vin = 6, .mask = BIT(4) },
-> +	{ .csi = RVIN_CSI20, .channel = 1, .vin = 7, .mask = BIT(1) | BIT(2) },
-> +	{ .csi = RVIN_CSI20, .channel = 3, .vin = 7, .mask = BIT(4) },
-> +	{ /* Sentinel */ }
-> +};
-> +
-> +static const struct rvin_info rcar_info_r8a774e1 = {
-> +	.model = RCAR_GEN3,
-> +	.use_mc = true,
-> +	.max_width = 4096,
-> +	.max_height = 4096,
-> +	.routes = rcar_info_r8a774e1_routes,
-> +};
-> +
->  static const struct rvin_group_route rcar_info_r8a7795_routes[] = {
->  	{ .csi = RVIN_CSI40, .channel = 0, .vin = 0, .mask = BIT(0) | BIT(3) },
->  	{ .csi = RVIN_CSI20, .channel = 0, .vin = 0, .mask = BIT(1) | BIT(4) },
-> @@ -1220,6 +1256,10 @@ static const struct of_device_id rvin_of_id_table[] = {
->  		.compatible = "renesas,vin-r8a774c0",
->  		.data = &rcar_info_r8a77990,
->  	},
-> +	{
-> +		.compatible = "renesas,vin-r8a774e1",
-> +		.data = &rcar_info_r8a774e1,
-> +	},
->  	{
->  		.compatible = "renesas,vin-r8a7778",
->  		.data = &rcar_info_m1,
-> -- 
-> 2.17.1
-> 
-
--- 
-Regards,
-Niklas Söderlund
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
