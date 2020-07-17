@@ -2,136 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BE78223375
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jul 2020 08:13:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BA7722337A
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jul 2020 08:16:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726083AbgGQGNo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Jul 2020 02:13:44 -0400
-Received: from mail-am6eur05on2073.outbound.protection.outlook.com ([40.107.22.73]:55712
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725904AbgGQGNo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 17 Jul 2020 02:13:44 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L0bM9sDbYKTYIZzKptCCT8DcecL4MfiQ5h8xjRe79KqacE+xe0C1ZhfWoIqR/hpkRsdvpIDynIoqrnAl9l7HTggYP7SnHLUniqcTyBjl20jlVtQEEGR4EjKTgRpb5w8LiONtAonjYnEG/a1HR1UBGKibHaPfz38lX4deWZ6vJFgzUfqccwwKSaFQYJFBPtd5N/hPMwDRGAyF5V1xgvN9W3D+kqkjI7Ta4LI05IRvt4rx/PWRQC4qT+z2EkkytTjvL1BfC5Zh8NKDax5kkMWJrEMXa+QYcA0k/rREsFEpMgdWu3XR4PKuYY1Frp29UrIH6i6K/qsEf9fyn7GPUsz/cA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HayxwauXYpog/7QVDKHa0JydC16E6XFVjfoFT28LUkY=;
- b=iu/xEA/0OzuM+wu9T9Xg9lvRUIBQ1OgS9fcXUcnG6pzrZb3fLRS3SRYnjJJP/FmnhR7BbS9D79Uzn8fGXLTWwFFy09t+ad2CjKzRV4rOzU4W1uyVdVtj7+epKixEMQZXWbMlZUXSO4V2EooS6nEfAok6YIaGGIQQdpDvnuGKaGw+xG6OYgOOPzh0W7UXeCEOagTE7wsJTdbFG6ZWLR5rLH6zaOhNuNe2lRxw9dHtmfjpLBc5pXwm2fzpwedsUyanTYxZPGDNLfUqRfh+rPyUGOd+CG6+43U4ETJubB3dF3e/GrMMriKeLJTXY9atjBwb0VE0LjSsby2ohx3GTzd1lw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HayxwauXYpog/7QVDKHa0JydC16E6XFVjfoFT28LUkY=;
- b=c5N7K5aSoL8lnKFxKqref6zReX1uXZYesox4vjqGr/ahUBuoP0tfygTEyQr22V5spre6jfqOgA+o29aKBcvx98Tz0qHzll2h3dKvwCAu2jkHr3KU3fPqwo+88QXWY4kz9VELd1bO/kEOTusCznZpqs6j3SugVWyl7+GPRq15PIo=
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
- by AM5PR0402MB2738.eurprd04.prod.outlook.com (2603:10a6:203:97::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3174.23; Fri, 17 Jul
- 2020 06:13:40 +0000
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1101:adaa:ee89:af2a]) by AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1101:adaa:ee89:af2a%3]) with mapi id 15.20.3174.026; Fri, 17 Jul 2020
- 06:13:40 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Peter Chen <peter.chen@nxp.com>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "pawell@cadence.com" <pawell@cadence.com>,
-        "rogerq@ti.com" <rogerq@ti.com>, Jun Li <jun.li@nxp.com>
-Subject: RE: [PATCH v5 0/9] usb: some PM changes for cdns3 and xhci-plat
-Thread-Topic: [PATCH v5 0/9] usb: some PM changes for cdns3 and xhci-plat
-Thread-Index: AQHWVDMt1I7Ql8zn9U6i9fyobWWrqKkLWiqQ
-Date:   Fri, 17 Jul 2020 06:13:40 +0000
-Message-ID: <AM7PR04MB71574E5D0E33587A14B0F73B8B7C0@AM7PR04MB7157.eurprd04.prod.outlook.com>
-References: <20200707074941.28078-1-peter.chen@nxp.com>
-In-Reply-To: <20200707074941.28078-1-peter.chen@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: nxp.com; dkim=none (message not signed)
- header.d=none;nxp.com; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [116.232.13.104]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: f058f363-af53-4898-f38b-08d82a188cfc
-x-ms-traffictypediagnostic: AM5PR0402MB2738:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM5PR0402MB2738B9CBDF06C5B9FBFF02EA8B7C0@AM5PR0402MB2738.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:635;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 6zn2Dzk2GgNAeirstuX+A129sPS0ZVCGMRDomvpfsu3CpU5UGk3sQdNx5JTZSryb9bNZDa8EfTS2a1UO9QczimYuoOoahSvoe8GLa7yqhVGkL2tyYPSjIV7V/I6kPKyzaq7IoNGZPbLw9xXTVmclOwNVAsZiTBRRV9lMOPHGxcfI5gZlqejor0wwkebKtGrZqrFo8dvm6AtLeGJp6/vPad96bBoI+Yj3fr/yJcU0mFE4UNM1h0+naIOYkWxiAlnntIOe2dd5GyFC4qiXnr6OypT8+xzXuar46cfrD6oH1LzVDkE7szbiuZD9aSmq6K/mMCepCdgb3ZFiEJVDWcdyfQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(346002)(376002)(366004)(396003)(136003)(39860400002)(6506007)(316002)(7696005)(55016002)(86362001)(44832011)(26005)(110136005)(9686003)(54906003)(64756008)(2906002)(8676002)(478600001)(33656002)(66946007)(186003)(66556008)(8936002)(66476007)(66446008)(4326008)(83380400001)(5660300002)(52536014)(71200400001)(76116006);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: 3aboMnuRRpIpxxXg6TEZk8eVbEcUNSevrHLpcQoq6Sq6lUw6F24YMMu4l9WFZivGqtn8jaUWwliTMtbmlDZKcJX85gYdXHO4T4c89nQmrifuMihSuj41W6A4LsvCOOOQqL1cXHFDwgXdd0cZG5WXUpefREB8LgeRQbc9na3yKQ/rofnW2rSwNv0Bz8Vgkgk/45YZwGvX+yhxL4QkTfkitoEB6faFLpPM6mYTpAsr6Nms9P0eA4kuVXFwfm+taHw+RfHX+UHgLXuLmCzSF3J0wIXiR3yMLU4AzDRTtNu99hAfeBCSY26+A6QoSPHR/XSc6YrVX1iQbBXZfTm96Mj/9eI01OyTMiD2vP6QFVC62D5ETm9KGo+P3fMHWYoSxlBujjh5gTIFZxOUroFiuzqVF2ySrDmuhDuCJdnJT/DfzLkOtO4+B3Aw/JLNvX1GXcWRZN89x53AxKsNw5wE/2Q70Fbm9iYWanwpdAgjglGam6QVyJSNWRpc32a+KSeM3v63
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1726113AbgGQGQD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Jul 2020 02:16:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52662 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725904AbgGQGQD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jul 2020 02:16:03 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5DFFC061755
+        for <linux-usb@vger.kernel.org>; Thu, 16 Jul 2020 23:16:02 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id o22so5890405pjw.2
+        for <linux-usb@vger.kernel.org>; Thu, 16 Jul 2020 23:16:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=d9OTxdvf24QIJCOgqfloFbJ1hEJZNMHayv9bSzxo+Rk=;
+        b=YF8qd0qxWw+K2lxnkt5EtdrQIhJ4rpp52QgVFrXs+ZPjSgiUAWv1ehgv8aFN22xEr9
+         78C5bL8KeAKxvg6Z2BDZQN7zlbf/IbqzTYfofWY3gka2CmYIuwfXDnf6/SjFygkcYHR9
+         Q1eWkHzThSUMtjR7CApmUgbEftdqPF+iiE818=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=d9OTxdvf24QIJCOgqfloFbJ1hEJZNMHayv9bSzxo+Rk=;
+        b=Mu8xvdwDd0SQSeUOyF6NCvHjssGBRvg1Hc1BKFJPUkko2EDYhHyXeU718MTVhFrxzn
+         kBP2mVAjnbh+8BcKbkVcEWgXrQtJv5qlxj6Ud6JiJwFPMKNmnorEMEbF70m5FSYc15Eq
+         sreS/Jj33o4LGyNHKmDssEGwa7X82GokUCaFFnYWDJpLlFXUNfZEYWpCv/3e4gupFoPf
+         +DtTWePJfBQU0H0gp4PpfYCTnrLGB0ODBX8VO9QV4GTsLbZ9ucDe13c8eMfoOVG8FCLz
+         XO/MPZhqQmgGUfs1ukcWcmZGh214XOTYB0DqN21Pck9OL/m/jaI5zORRBnHTXEccoBzI
+         nArg==
+X-Gm-Message-State: AOAM532u7PC7m8cDdnJ5QFXX5cYiU8FtCi2XNMHIrEk1Bp3Mpif4ls4m
+        tojZFwPTRYcd9yPsoJyssHG0EvCeGxQ=
+X-Google-Smtp-Source: ABdhPJySWUdWtpblGXA3U/kmuI16fgJdoREjbx1aYKsK26bPHwVYc8LykBeH9a4ggrg37yf/l77vDg==
+X-Received: by 2002:a17:90a:eb01:: with SMTP id j1mr8452662pjz.29.1594966562143;
+        Thu, 16 Jul 2020 23:16:02 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:a28c:fdff:fef0:49dd])
+        by smtp.gmail.com with ESMTPSA id y27sm6931006pgc.56.2020.07.16.23.16.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jul 2020 23:16:01 -0700 (PDT)
+Date:   Thu, 16 Jul 2020 23:16:00 -0700
+From:   Prashant Malani <pmalani@chromium.org>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rajmohan Mani <rajmohan.mani@intel.com>,
+        Lukas Wunner <lukas@wunner.de>
+Subject: Re: [PATCH 09/17] thunderbolt: Do not tunnel USB3 if link is not USB4
+Message-ID: <20200717061600.GC68629@google.com>
+References: <20200615142645.56209-1-mika.westerberg@linux.intel.com>
+ <20200615142645.56209-10-mika.westerberg@linux.intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f058f363-af53-4898-f38b-08d82a188cfc
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jul 2020 06:13:40.4878
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: w8ncW77IxN9LzvPDJlpCrhg3PEAP3Ihsp98EWHmCxopNLXDIe4438LqqyzO3dfjRiNOMVHAkpuT0yVhV+zJkMg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR0402MB2738
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200615142645.56209-10-mika.westerberg@linux.intel.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-IA0KUGluZy4uLg0KDQpQZXRlcg0KDQo+IA0KPiBIaSBGZWxpcGUgJiBNYXRoaWFzLA0KPiANCj4g
-SW4gdGhpcyBzZXJpZXMsIGl0IGFkZHMgY2RuczMgcnVudGltZSBQTSBzdXBwb3J0IGFzIHdlbGwg
-YXMgc29tZSB4aGNpLXBsYXQgY2hhbmdlcywNCj4gYW5kIHZlcmlmaWVkIGF0IE5YUCBpLk1YOFFN
-IGFuZCBpLk1YOFFYUCBwbGF0Zm9ybXMuDQo+IA0KPiBQYXRjaCAxLTM6IGFkZCBtYWluIHJ1bnRp
-bWUgUE0gc3VwcG9ydCBmb3IgY2RuczMgY29yZSBhbmQgaW14IGdsdWUgbGF5ZXIgUGF0Y2ggNC0N
-Cj4gOTogYWRkIHBsYXRmb3JtIGRhdGEgc3VwcG9ydCBhbmQgdHdvIHF1aXJrcyBmb3IgeGhjaS1w
-bGF0LmMuDQo+IC0gLnN1c3BlbmRfcXVpcmsgZm9yIHBsYXRmb3JtIHNwZWNpYWwgc2VxdWVuY2Ug
-YmV0d2VlbiB4aGNpX2J1c19zdXNwZW5kIGFuZA0KPiB4aGNpX3N1c3BlbmQuDQo+IC0gYWRkIFhI
-Q0lfU0tJUF9QSFlfSU5JVCBxdWlyayBmb3Igc2tpcCBQSFkgbWFuYWdlbWVudCBmcm9tIEhDRCBj
-b3JlLg0KPiANCj4gQ2hhbmdlcyBmb3IgdjU6DQo+IC0gQWRkcmVzcyBHcmVnJ3MgY29tbWVudHMg
-Zm9yIG1vcmUgb2J2aW91cyBQSFkgcG93ZXIgY29udHJvbGxlciBBUElzIFtQYXRjaCAxLzJdDQo+
-IC0gT25lIGJ1aWxkIHdhcm5pbmcgZnJvbSBrZXJuZWwgdGVzdCByb2JvdA0KPiANCj4gQ2hhbmdl
-cyBmb3IgdjQ6DQo+IC0gQWRkcmVzcyBKdW4gTGkncyBjb21tZW50cyBmb3IgY2RuczMgY29yZSBj
-aGFuZ2VzIFtQYXRjaCAyXQ0KPiAtIFNvbWUgc21hbGwgZml4ZXMgZm9yIGNkbnMzLWlteCBmb3Ig
-Q0xLXzEyNV9SRVEgYml0DQo+IC0gUmViYXNlIHRoZSBsYXRlc3QgdXNiLW5leHQNCj4gDQo+IENo
-YW5nZXMgZm9yIHYzOg0KPiBBZGQgSnVuIExp4oCZcyByZXZpZXdlZC1ieSBbUGF0Y2ggMSBhbmQg
-UGF0Y2ggNl0gQWRkIE1hdGhpYXPigJlzIGFja2VkLWJ5IFtQYXRjaCA0LTZdDQo+IFNvbWUgd2Fr
-ZXVwIGxvZ2ljIGltcHJvdmVtZW50IFtQYXRjaCAyXSBBZGQgZGVkaWNhdGVkIHdha2V1cCBpbnRl
-cnJ1cHQgZm9yIGNvcmUsDQo+IGFuZCBpbXByb3ZlIHRoZSBjb21taXQgbG9nIFtQYXRjaF0gRml4
-IGJ1aWxkIGVycm9yIGZvdW5kIGJ5IGtidWlsZCB0ZXN0IHJvYm90IFtQYXRjaA0KPiAzXSBVc2lu
-ZyB4aGNpX3BsYXRfcHJpdiBxdWlyayBmb3Igc2tpcCBQSFkgaW5pdGlhbGl6YXRpb24gW3BhdGNo
-IDcsIHBhdGNoIDldIFNvbWUgb3RoZXINCj4gdHlwbyBhbmQgdGlueSBpbXByb3ZlbWVudHMNCj4g
-DQo+IENoYW5nZXMgZm9yIHYyOg0KPiAtIEFkZCB0aGUgMXN0IHBhdGNoLiBXaXRob3V0IGl0LCB0
-aGUgYnVpbGQgb24gdGhlIHVzYi1uZXh0IHdpbGwgZmFpbC4NCj4gLSBDaGFuZ2UgdGhlIHN1Ympl
-Y3QgZm9yIGNvdmVyIGxldHRlciBhIGxpdHRsZSB0byByZWZsZWN0IGFsbCBjb250ZW50cy4NCj4g
-DQo+IFBldGVyIENoZW4gKDkpOg0KPiAgIHVzYjogY2RuczM6IGludHJvZHVjZSBzZXRfcGh5X3Bv
-d2VyX29ue29mZn0gQVBJcw0KPiAgIHVzYjogY2RuczM6IGFkZCBydW50aW1lIFBNIHN1cHBvcnQN
-Cj4gICB1c2I6IGNkbnMzOiBpbXg6IGFkZCBnbHVlIGxheWVyIHJ1bnRpbWUgcG0gaW1wbGVtZW50
-YXRpb24NCj4gICB1c2I6IGhvc3Q6IHhoY2ktcGxhdDogYWRkIHBsYXRmb3JtIGRhdGEgc3VwcG9y
-dA0KPiAgIHVzYjogaG9zdDogeGhjaS1wbGF0OiBhZGQgLnN1c3BlbmRfcXVpcmsgZm9yIHN0cnVj
-dCB4aGNpX3BsYXRfcHJpdg0KPiAgIHVzYjogaG9zdDogeGhjaS1wbGF0OiBkZWxldGUgdGhlIHVu
-bmVjZXNzYXJ5IGNvZGUNCj4gICB1c2I6IGhvc3Q6IHhoY2ktcGxhdDogYWRkIHByaXYgcXVpcmsg
-Zm9yIHNraXAgUEhZIGluaXRpYWxpemF0aW9uDQo+ICAgdXNiOiBjZG5zMzogaG9zdDogYWRkIC5z
-dXNwZW5kX3F1aXJrIGZvciB4aGNpLXBsYXQuYw0KPiAgIHVzYjogY2RuczM6IGhvc3Q6IGFkZCB4
-aGNpX3BsYXRfcHJpdiBxdWlyayBYSENJX1NLSVBfUEhZX0lOSVQNCj4gDQo+ICBkcml2ZXJzL3Vz
-Yi9jZG5zMy9jZG5zMy1pbXguYyAgIHwgMjAzICsrKysrKysrKysrKysrKysrKysrKysrKysrKysr
-Ky0tDQo+ICBkcml2ZXJzL3VzYi9jZG5zMy9jb3JlLmMgICAgICAgIHwgMTk2ICsrKysrKysrKysr
-KysrKysrKysrKysrKystLS0tLQ0KPiAgZHJpdmVycy91c2IvY2RuczMvY29yZS5oICAgICAgICB8
-ICAxNiArKysNCj4gIGRyaXZlcnMvdXNiL2NkbnMzL2RyZC5jICAgICAgICAgfCAgIDMgKw0KPiAg
-ZHJpdmVycy91c2IvY2RuczMvZ2FkZ2V0LmMgICAgICB8ICAgNCArDQo+ICBkcml2ZXJzL3VzYi9j
-ZG5zMy9ob3N0LWV4cG9ydC5oIHwgICA2ICsNCj4gIGRyaXZlcnMvdXNiL2NkbnMzL2hvc3QuYyAg
-ICAgICAgfCAgNDggKysrKysrKysNCj4gIGRyaXZlcnMvdXNiL2hvc3QveGhjaS1wbGF0LmMgICAg
-fCAgMzYgKysrKystDQo+ICBkcml2ZXJzL3VzYi9ob3N0L3hoY2ktcGxhdC5oICAgIHwgICAxICsN
-Cj4gIGRyaXZlcnMvdXNiL2hvc3QveGhjaS5oICAgICAgICAgfCAgIDEgKw0KPiAgMTAgZmlsZXMg
-Y2hhbmdlZCwgNDY2IGluc2VydGlvbnMoKyksIDQ4IGRlbGV0aW9ucygtKQ0KPiANCj4gLS0NCj4g
-Mi4xNy4xDQoNCg==
+Hi Mika,
+
+Sorry for the late comment..
+
+On Mon, Jun 15, 2020 at 05:26:37PM +0300, Mika Westerberg wrote:
+> USB3 tunneling is possible only over USB4 link so don't create USB3
+> tunnels if that's not the case.
+> 
+> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> ---
+>  drivers/thunderbolt/tb.c      |  3 +++
+>  drivers/thunderbolt/tb.h      |  2 ++
+>  drivers/thunderbolt/tb_regs.h |  1 +
+>  drivers/thunderbolt/usb4.c    | 24 +++++++++++++++++++++---
+>  4 files changed, 27 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+> index 55daa7f1a87d..2da82259e77c 100644
+> --- a/drivers/thunderbolt/tb.c
+> +++ b/drivers/thunderbolt/tb.c
+> @@ -235,6 +235,9 @@ static int tb_tunnel_usb3(struct tb *tb, struct tb_switch *sw)
+>  	if (!up)
+>  		return 0;
+>  
+> +	if (!sw->link_usb4)
+> +		return 0;
+On both here and the previous "up" check; should we be returning 0?
+Wouldn't it be better to return an appropriate error code? It sounds
+like 0 is considered a success....
+
+
+Best regards,
+
+-Prashant
+> +
+>  	/*
+> 
