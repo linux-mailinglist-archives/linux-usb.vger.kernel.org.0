@@ -2,118 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A396223990
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jul 2020 12:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CED87223A82
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jul 2020 13:29:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726113AbgGQKnk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Jul 2020 06:43:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37418 "EHLO
+        id S1726070AbgGQL23 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Jul 2020 07:28:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726059AbgGQKnj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jul 2020 06:43:39 -0400
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3742C061755;
-        Fri, 17 Jul 2020 03:43:39 -0700 (PDT)
-Received: by mail-io1-xd41.google.com with SMTP id f23so9940446iof.6;
-        Fri, 17 Jul 2020 03:43:39 -0700 (PDT)
+        with ESMTP id S1725950AbgGQL23 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jul 2020 07:28:29 -0400
+Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A916C061755;
+        Fri, 17 Jul 2020 04:28:29 -0700 (PDT)
+Received: by mail-oi1-x243.google.com with SMTP id e4so7744246oib.1;
+        Fri, 17 Jul 2020 04:28:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=k8uVrhgOhQqs7eK819gJP8Isbzose7d4S6jSpx+aI80=;
-        b=Sh5xu9u/wMBK0BIZ3S3CrccFZFXqFVJ4Ty0AQHr0cL8kZHGhS3jOuXUk9jXjaeRefF
-         y+C9/gckVZKpTLyBboNKSeD5GSoq5i2gnSTzY9jDo1h3YCoOiz021y7F01Wt1gFKGePd
-         ZEIpDHPAYgr9nTouyQ75MdKyfuqMKP/WY7KRH7f6B6cDSyWsBc0eTi6RWbW19OBEIpWR
-         7mu5uRRArsi5V/QNvhzymvCcRP0TD3pa0BJ+pTr2rbnt3ONv6qKPOKajYE/O+NHxx83H
-         7vJ/K9Y/CIfHTKFwaRU7xDEQeKUUtOjYSvtWxNDzSpOm0gdBf9n+IcV7LZJHGe/MSHLZ
-         3vzw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KpZSMSOiIQZq8CyamrA/cFs/7Iv54XIN60oRvTIJGts=;
+        b=mAOHJES7KyL/n8YfSQIN/eN6GDRElqFD2CYG2P86oB8JcK5F2kRKlbYPr7fT8vUqEX
+         BC8d9fVrpxMEr3WiMGGNO7RlaGwSI9WshQ5XR2nj6N1yLc+Fb1QBEqjTtPmG9dRbZioH
+         ukVwLz2yYrGJVcQW5ykOwCPTCOavKzW9x/CQg8fnxp1CzJajCz22M1JwvBMsDplfV0SU
+         xf6rkuQ+pDqjc2xBBCUAJHAys2nT1d3azvN+Hk3kaXvhgkZPvowkFIpXkPrvmOz6vPP2
+         BQRDwlH4nncgUOJGzx7lapoIUux775FqZ1r7Rd3cV+VRwxtsUQLIT4a6B+eW2mpPmiRF
+         pFuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=k8uVrhgOhQqs7eK819gJP8Isbzose7d4S6jSpx+aI80=;
-        b=oaLGEZLDPTUwrKyb3Q1+CkKQ1BbYh08jDTFoxlta5YUEvq1GYFgqVKsUGlH+prFLhx
-         hBaxcOisWoZ/C3l0aYcfKNb+raSXRt7wX+lPr2nkR6AC5iGB6wO0boc8ZQtEjN1sT7WH
-         5puzdvsiqr+GyU0Dj2ChfG+EUIm/8H1UdMePExglEdV+KlCU7uL+Up5CjoXBgT01hraV
-         XYx8KLD/mF5NuteBo9g2i7hPB9bzsg1/T9HBIOJR3ZX+U6eXZ1n3xVXDW5mK/nM8KeiN
-         VL1Z5bEp6k2Z6BlmiYcO9t599yVb+7sHWbZ/EknSVYVj0Pt9yW+aeoxsGrkiU1ZnuERM
-         qyCw==
-X-Gm-Message-State: AOAM531Msi8hvySRT+gVjBzGdG+c+OPHRhDGhnmtOw32H9xEwXx+W1gO
-        vuAq+lfuN9H5wVXjRdq3tcE4iVhrWdG2LKw1M9UZ0fAII2o=
-X-Google-Smtp-Source: ABdhPJxtuasrS8D2ZlPmVecjcSsGZsiTpJFsPWZr7RaOLcuYkOg1E6NK9odWW/xu2ORR28QduMslbT/r0b/7WEdeWxM=
-X-Received: by 2002:a6b:c343:: with SMTP id t64mr9228896iof.66.1594982618648;
- Fri, 17 Jul 2020 03:43:38 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KpZSMSOiIQZq8CyamrA/cFs/7Iv54XIN60oRvTIJGts=;
+        b=NRckfR3MeFA2XMYi33G20YHLWtC0ZZr11ELU16GZQMP7E0Epbu5vMAmVoyCYhcDq36
+         yiD7jLCckp9WILpLJuGlCS8SnXIeZWrEy319SD58Ppqbo3IE2zpB1eZR4kXTrivJZUz/
+         UCHPM2uYM7kfVLDvBtsZXxoF/m6Jfd4EbQ5NqgcA+yxbzKKgEX8MxMptZ/PPfdE8jW/E
+         8KUPoFouZeCaOj8DYkQ/2WZ+kk49PUGIk8cOX6UnnOhstW7zuTcw6S9+kvZOFjZrBOx1
+         Qk5XyZAPYO11CNu3W1yTTj9efoR8OIzjXYuUZXhD4/U+u4OPuoVnpFSyCgcKQzDKnY2b
+         TjVA==
+X-Gm-Message-State: AOAM532wnPq2WOJtcR7OMPkfr/Nb8vLxvs/Tz8cPcguNC7/kxrK/FWay
+        KFtsn08yOkgRRKwZevRw5yxfvswGVxA=
+X-Google-Smtp-Source: ABdhPJzcUa/CENx+1oHYc5uYbc3KX2O8Eu77Ni0ISogLFfB44arhOlnmoUVBafi1uaiFsJdaNO5coA==
+X-Received: by 2002:aca:f05:: with SMTP id 5mr6670289oip.93.1594985308347;
+        Fri, 17 Jul 2020 04:28:28 -0700 (PDT)
+Received: from localhost.localdomain ([170.130.31.90])
+        by smtp.gmail.com with ESMTPSA id g207sm1719358oib.43.2020.07.17.04.28.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jul 2020 04:28:27 -0700 (PDT)
+From:   Forest Crossman <cyrozap@gmail.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Forest Crossman <cyrozap@gmail.com>, mathias.nyman@intel.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: xhci: Fix ASM2142/ASM3142 DMA addressing
+Date:   Fri, 17 Jul 2020 06:27:34 -0500
+Message-Id: <20200717112734.328432-1-cyrozap@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <CAO3ALPy8_pxVyFROZUWNafEH1vUCP6LVpNmBBuMDSewGitzdLw@mail.gmail.com>
- <CAOSf1CEOu5jX6KXKWiConBf=TDwF3qdASMxtfDjqSR6vOKN4XA@mail.gmail.com> <CAO3ALPwZPN1vdqHaFsuSpgj63o6Z69VUg0LngmCSnvESrO4kNg@mail.gmail.com>
-In-Reply-To: <CAO3ALPwZPN1vdqHaFsuSpgj63o6Z69VUg0LngmCSnvESrO4kNg@mail.gmail.com>
-From:   "Oliver O'Halloran" <oohall@gmail.com>
-Date:   Fri, 17 Jul 2020 20:43:27 +1000
-Message-ID: <CAOSf1CEiCOjTQ8XX=cC10eghaC+1xaRG-bju8VBFQStOCaU_xQ@mail.gmail.com>
-Subject: Re: ASMedia USB 3.x host controllers triggering EEH on POWER9
-To:     Forest Crossman <cyrozap@gmail.com>
-Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-pci <linux-pci@vger.kernel.org>, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 17, 2020 at 8:10 PM Forest Crossman <cyrozap@gmail.com> wrote:
->
-> > From word 2 of the PEST entry the faulting DMA address is:
-> > 0x0000203974c00000. That address is interesting since it looks a lot
-> > like a memory address on the 2nd chip, but it doesn't have bit 59 set
-> > so TVE#0 is used to validate it. Obviously that address is above 2GB
-> > so we get the error.
->
-> Ah, I see. Do you know if the information on the PEST registers is
-> documented publicly somewhere? I tried searching for what those
-> registers meant in the PHB4 spec but it basically just said, "the PEST
-> registers contain PEST data," which isn't particularly helpful.
+The ASM2142/ASM3142 (same PCI IDs) does not support full 64-bit DMA
+addresses, which can cause silent memory corruption or IOMMU errors on
+platforms that use the upper bits. Add the XHCI_NO_64BIT_SUPPORT quirk
+to fix this issue.
 
-Most of it is in the IODA spec. See Sec 2.2.6 "Partitionable-Endpoint
-State Table", the only part that isn't documented there is the top
-bits of each word which are documented in the PHB spec for some
-reason. For word one the top bit (PPCBIT(0)) means MMIO is frozen and
-for word two (PPCBIT(64)) the top bit indicates DMA is frozen.
+Signed-off-by: Forest Crossman <cyrozap@gmail.com>
+---
+ drivers/usb/host/xhci-pci.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> > What's probably happening is that the ASmedia controller doesn't
-> > actually implement all 64 address bits and truncates the upper bits of
-> > the DMA address. Doing that is a blatant violation of the PCIe (and
-> > probably the xHCI) spec, but it's also pretty common since "it works
-> > on x86." Something to try would be booting with the iommu=nobypass in
-> > the kernel command line. That'll disable TVE#1 and force all DMAs to
-> > go through TVE#0.
->
-> Thanks, iommu=nobypass fixed it! Plugging in one or more USB devices
-> no longer triggers any EEH errors.
->
-> > Assuming the nobypass trick above works, what you really need to do is
-> > have the driver report that it can't address all 64bits by setting its
-> > DMA mask accordingly. For the xhci driver it looks like this is done
-> > in xhci_gen_setup(), there might be a quirks-style interface for
-> > working around bugs in specific controllers that you can use. Have a
-> > poke around and see what you can find :)
->
-> Yup, the xhci driver has a quirks system, and conveniently one of
-> those is XHCI_NO_64BIT_SUPPORT. After making a 3-line patch to
-> xhci-pci.c to add that quirk for this chip, the host controller is now
-> able to work without setting iommu=nobypass in the kernel arguments.
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index ef513c2fb843..9234c82e70e4 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -265,6 +265,9 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+ 	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
+ 			pdev->device == 0x1142)
+ 		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
++	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
++			pdev->device == 0x2142)
++		xhci->quirks |= XHCI_NO_64BIT_SUPPORT;
+ 
+ 	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
+ 		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042A_XHCI)
+-- 
+2.20.1
 
-Cool
-
-> Thank you so much for your help! You've likely saved me several hours
-> of reading documentation, as well as several more hours of fiddling
-> around with the xhci driver.
-
-> I'm almost disappointed the fix was so
-> simple, but the time savings alone more than makes up for it. I'll
-> submit the patch to the USB ML shortly.
-
-It might be only three lines, but it doesn't mean it's trivial. Most
-bugs like that require a lot of context to understand, let alone fix.
-Thanks for looking into it!
-
-Oliver
