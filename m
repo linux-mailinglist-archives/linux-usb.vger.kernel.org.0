@@ -2,106 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A67D42238EA
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jul 2020 12:05:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88B30223901
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jul 2020 12:10:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726401AbgGQKFE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Jul 2020 06:05:04 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:36456 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725912AbgGQKFE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jul 2020 06:05:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1594980303;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=2Cl26ld9ZGOVbX1b+g3zLKQapxqI7+XKQsCDyLyNA+Q=;
-        b=PypMSIoSBGhwSfyPR00Z6nDlq45N7beDd8lyAtKm0r/Cuv7gqUAiVwbcF1lRtKV3Bwm7hI
-        Kwefih8NPkMVx7BIY5VuA8/wYRhpaxopFG0P+pbCbUuWX6VW8R0xYi3rGF7zOh9rSDtcBP
-        7JuWOwKnsu7Qylr/HE3OCmU6qV74HAs=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-33-XS8-F_ChMe-XB0YWHmBzmQ-1; Fri, 17 Jul 2020 06:05:01 -0400
-X-MC-Unique: XS8-F_ChMe-XB0YWHmBzmQ-1
-Received: by mail-ed1-f71.google.com with SMTP id x20so5500392edr.20
-        for <linux-usb@vger.kernel.org>; Fri, 17 Jul 2020 03:05:00 -0700 (PDT)
+        id S1726040AbgGQKK3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Jul 2020 06:10:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60490 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725864AbgGQKK2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jul 2020 06:10:28 -0400
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F9EC061755;
+        Fri, 17 Jul 2020 03:10:28 -0700 (PDT)
+Received: by mail-lf1-x141.google.com with SMTP id u25so5727924lfm.1;
+        Fri, 17 Jul 2020 03:10:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jfWY5jjkwOivxzVlYNxSL/wnM+Xe26stMAR5QfxU8lI=;
+        b=rHGsF97wKV2dZ9VAw1cxfr2qcURcDnvZuxzYHcMQ9zN4JSARjf7t3kQs+TNjjzBM0d
+         wywss8b5HPMRXwUCSnq36xEJgIM+W94O66fo2szJBz1kiBkizB1WO1pW8RYSqzTlyk0x
+         HUPluuyxrooAgQx0J1xr+ogM00ZBRNH5yRELD27Yqv7OeO7qhuY5adHeHwmTl6/DDOrj
+         eoua2n0KqjrTuvZslcJ4ujgX1Qgk/TNvYW14B4EGnwgjJRvxvOzBPDWPez7xfNfBQB7N
+         MW26w0NZ0BpM5wHBEhR5DckDjZ9Cgayu2J8Ah/kBAjoDR8GI+PCa+LpcrSGSK5L1O1Bw
+         zTKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=2Cl26ld9ZGOVbX1b+g3zLKQapxqI7+XKQsCDyLyNA+Q=;
-        b=el9DjHOBHkWgUjs+g9z8kD/C1+wOHDldhxki/cXvo5vCzPZi+JVTBpOUnm4MG9cC4v
-         09Ng+bpPqFflZbETVkGWLuejfdFtnn/KbD7Tg87m/PGO6CVoEhxPZ0DsQg072YvomK4o
-         3+eSDfhcYckNW8nAb8KPWbEpQdVnJEkvABQ9YaWXVIzMmOaxGQ3JoP3aLfxACgDRcFeu
-         +1YWcO2Q/6bP0Hbe4JDb0Higjaao2PtS+lxcCJoKC3fvEdIMEqxjS/Mxh06ak5QLPWQh
-         usKmIb5zLXtfeDW0hf9YkCwurGfDRAbrev4fORfGJD2X8zT+EggZsqBUGjkQpjz7okgr
-         H+Zw==
-X-Gm-Message-State: AOAM533Ns2CiInPxuaIl7TpgvR3Kb4esxDzqim+r41JBEXb0rvjnsTy6
-        c86qcvmawpoDM4FrNvM8bQbPe/qeDFuzt5s6jOfIRqyd7701LDpdtevNLHpxh5kpNXqD6XR2HDa
-        I6wAM42WOYfTjXhIXSF3Y
-X-Received: by 2002:a17:906:494a:: with SMTP id f10mr8175330ejt.428.1594980299813;
-        Fri, 17 Jul 2020 03:04:59 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzs1k2JNMRCL7D7hyj4nVrmBh4WFWJeDyMBLFztKxswDS96+BBi+ZtGr03ls6TbEpcYJDTeNA==
-X-Received: by 2002:a17:906:494a:: with SMTP id f10mr8175313ejt.428.1594980299606;
-        Fri, 17 Jul 2020 03:04:59 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
-        by smtp.gmail.com with ESMTPSA id t2sm7903100eds.60.2020.07.17.03.04.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jul 2020 03:04:59 -0700 (PDT)
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     linux-usb <linux-usb@vger.kernel.org>
-From:   Hans de Goede <hdegoede@redhat.com>
-Subject: AB BA lock inversion in ucsi driver caused by "usb: typec: ucsi:
- displayport: Fix a potential race during registration"
-Message-ID: <734333be-aa48-d2fc-0463-6334115e3c12@redhat.com>
-Date:   Fri, 17 Jul 2020 12:04:58 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jfWY5jjkwOivxzVlYNxSL/wnM+Xe26stMAR5QfxU8lI=;
+        b=cP9DuG8cZ9B/TGs14oyLaPnChtOa/BLvQi7DyV3ySC+lkOJTVV3U6RK04sBOBAruc7
+         LeCBrAMDWu9u0YSafGqp9kVRFwQqwA0/keejblAs09pVYt79EhANF6QNErbmBruf0Juo
+         SYn59dUQA2+hkVyDv06FodDVKFwikMMo/Ui4TzFR1peYw1cAs77LETbn5TnE1/hdGGfh
+         WPWFzcvgVDczbrOTiOFBuWQCY7lgupGs+hRRkxDTzT9VvNQcouUkq0OQmHk8Qn4QsWsD
+         xwhkGCC/02f0PLSKnZ50aERCaueOJwJi2t8YJNi74CKM0kY8WWFMJBvFBcQHMlEbW1CO
+         WSLw==
+X-Gm-Message-State: AOAM533SufHniN5ZWv7ckDcVU1EtTNygra6puMqLYU0B9V7xsz9xJ7cW
+        Y/sQ+0HJIH3fstRM+K4fyWIyk3DQx6nIRtgTEyc=
+X-Google-Smtp-Source: ABdhPJxPBxHhz4fylBNxu3Ww6ZGTMTiva9W+pOXNqRslqU3UCWrS8ol488xCldxHTdn/S2wx+aKyA2tku+kbLJXnJns=
+X-Received: by 2002:ac2:4183:: with SMTP id z3mr1505854lfh.3.1594980627061;
+ Fri, 17 Jul 2020 03:10:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <CAO3ALPy8_pxVyFROZUWNafEH1vUCP6LVpNmBBuMDSewGitzdLw@mail.gmail.com>
+ <CAOSf1CEOu5jX6KXKWiConBf=TDwF3qdASMxtfDjqSR6vOKN4XA@mail.gmail.com>
+In-Reply-To: <CAOSf1CEOu5jX6KXKWiConBf=TDwF3qdASMxtfDjqSR6vOKN4XA@mail.gmail.com>
+From:   Forest Crossman <cyrozap@gmail.com>
+Date:   Fri, 17 Jul 2020 05:10:15 -0500
+Message-ID: <CAO3ALPwZPN1vdqHaFsuSpgj63o6Z69VUg0LngmCSnvESrO4kNg@mail.gmail.com>
+Subject: Re: ASMedia USB 3.x host controllers triggering EEH on POWER9
+To:     "Oliver O'Halloran" <oohall@gmail.com>
+Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-pci <linux-pci@vger.kernel.org>, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Heikki,
+> In the future you can use this script to automate some of the tedium
+> of parsing the eeh dumps:
+> https://patchwork.ozlabs.org/project/skiboot/patch/20200717044243.1195833-1-oohall@gmail.com/
 
-I've been running my personal kernel builds with lockdep enabled
-(more people should do that) and it found an AB BA lock inversion in the
-ucsi driver. This has been introduced by commit 081da1325d35 ("usb: typec:
-ucsi: displayport: Fix a potential race during registration").
+Ah, nice, thanks for showing me this! I had written my own parser that
+just dumped a few register names and what bits were set in each, but
+your script seems much more feature-complete.
 
-The problem is as follows:
+> Anyway, for background the way PHB3 and PHB4 handle incoming DMAs goes
+> as follows:
+>
+> 1. Map the 16bit <bus><devfn> number to an IOMMU context, we call
+> those PEs. PE means "partitionable endpoint", but for the purpose of
+> processing DMAs you can ignore that and just treat it as an IOMMU
+> context ID.
+> 2. Use the PE number and some of the upper bits of the DMA address to
+> form the index into the Translation Validation Table.
+> 3. Use the table entry to validate the DMA address is within bounds
+> and whether it should be translated by the IOMMU or used as-is.
+>
+> If the table entry says the DMA needs to be translated by the IOMMU we'll also:
+> 4. Walk the IOMMU table to get the relevant IOMMU table entry.
+> 5. Validate the device has permission to read/write to that address.
+>
+> The "TVT Address Range Error" you're seeing means that the bounds
+> checks done in 3) is failing. OPAL configures the PHB so there's two
+> TVT entries (TVEs for short) assigned to each PE. Bit 59 of the DMA
+> address is used to select which TVE to use. We typically configure
+> TVE#0 to map 0x0...0x8000_0000 so there's a 2GB 32bit DMA window.
+> TVE#1 is configured for no-translate (bypass) mode so you can convert
+> from a system physical address to a DMA address by ORing in bit 59.
 
-AB order:
+Thanks for the in-depth explanation, I find these low-level details
+really fascinating.
 
-1. ucsi_init takes ucsi->ppm_lock (it runs with that locked for the duration of the function)
-2. usci_init eventually end up calling ucsi_register_displayport, which takes
-    ucsi_connector->lock
+> From word 2 of the PEST entry the faulting DMA address is:
+> 0x0000203974c00000. That address is interesting since it looks a lot
+> like a memory address on the 2nd chip, but it doesn't have bit 59 set
+> so TVE#0 is used to validate it. Obviously that address is above 2GB
+> so we get the error.
 
-BA order:
+Ah, I see. Do you know if the information on the PEST registers is
+documented publicly somewhere? I tried searching for what those
+registers meant in the PHB4 spec but it basically just said, "the PEST
+registers contain PEST data," which isn't particularly helpful.
 
-1. ucsi_handle_connector_change work is started, takes ucsi_connector->lock
-2. ucsi_handle_connector_change calls ucsi_send_command which takes ucsi->ppm_lock
+> What's probably happening is that the ASmedia controller doesn't
+> actually implement all 64 address bits and truncates the upper bits of
+> the DMA address. Doing that is a blatant violation of the PCIe (and
+> probably the xHCI) spec, but it's also pretty common since "it works
+> on x86." Something to try would be booting with the iommu=nobypass in
+> the kernel command line. That'll disable TVE#1 and force all DMAs to
+> go through TVE#0.
 
-I think this can be fixed by doing the following:
+Thanks, iommu=nobypass fixed it! Plugging in one or more USB devices
+no longer triggers any EEH errors.
 
-a. Make ucsi_init drop the ucsi->ppm_lock before it starts registering ports; and
-    replacing any ucsi_run_command calls after this point with ucsi_send_command
-    (which is a wrapper around run_command taking the lock while handling the command)
+> Assuming the nobypass trick above works, what you really need to do is
+> have the driver report that it can't address all 64bits by setting its
+> DMA mask accordingly. For the xhci driver it looks like this is done
+> in xhci_gen_setup(), there might be a quirks-style interface for
+> working around bugs in specific controllers that you can use. Have a
+> poke around and see what you can find :)
 
-b. Move the taking of the ucsi_connector->lock from ucsi_register_displayport into
-    ucsi_register_port() to make sure that nothing can touch the connector/port until
-    ucsi_register_port() has completed.
+Yup, the xhci driver has a quirks system, and conveniently one of
+those is XHCI_NO_64BIT_SUPPORT. After making a 3-line patch to
+xhci-pci.c to add that quirk for this chip, the host controller is now
+able to work without setting iommu=nobypass in the kernel arguments.
 
+Thank you so much for your help! You've likely saved me several hours
+of reading documentation, as well as several more hours of fiddling
+around with the xhci driver. I'm almost disappointed the fix was so
+simple, but the time savings alone more than makes up for it. I'll
+submit the patch to the USB ML shortly.
 
-b. is not stricly necessary but it brings the locking during init more inline
-with locking done during runtime so this seems like a good idea.
+Thanks again!
 
-Regards,
-
-Hans
-
+Forest
