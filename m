@@ -2,77 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D754E223DE1
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jul 2020 16:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47115223E15
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jul 2020 16:33:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726656AbgGQOPL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Jul 2020 10:15:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59750 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726401AbgGQOPL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 17 Jul 2020 10:15:11 -0400
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D462820717;
-        Fri, 17 Jul 2020 14:15:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594995310;
-        bh=scjhaPmYBYlkHTCMPkS4HuQeVN/II4OmnYBJOma1450=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=A1k3rR5Vle/vTBP94Fxt2qQ3nj99Cg7bMK7U561DSmGEYVAQKGdK4JjFB5+p/dIqL
-         Fu1ezV1st0OIgRrz3n5ysTa1PiCXYaTJEfAOd4mFNC4vWIVCu+GVJRzqmZEA6RoUkc
-         bfe6lgfxz3IP33q9GVN5aUTZW8qEUt1VyFpSNzh8=
-Received: by mail-oi1-f175.google.com with SMTP id t4so8094603oij.9;
-        Fri, 17 Jul 2020 07:15:10 -0700 (PDT)
-X-Gm-Message-State: AOAM532YoqbptQ41G5+7uIOzxlcNh7LrUoUzwC6UpjAqMLEq7euPOGca
-        THEu9ZOWR9C7fY9YPIn0Vz98Ol7cvt5GwW7/GA==
-X-Google-Smtp-Source: ABdhPJzOkH/bGKW5lbTgJGLSIvdskhs13FPE8k2K6kft/+EkrgJ/rkNQpYnz5vnrmDpON5xD8RwrzShzXmccZD+Q6nk=
-X-Received: by 2002:aca:4844:: with SMTP id v65mr7988751oia.152.1594995310214;
- Fri, 17 Jul 2020 07:15:10 -0700 (PDT)
+        id S1726845AbgGQOdm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Jul 2020 10:33:42 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:38181 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726079AbgGQOdm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jul 2020 10:33:42 -0400
+Received: (qmail 1149545 invoked by uid 1000); 17 Jul 2020 10:33:41 -0400
+Date:   Fri, 17 Jul 2020 10:33:41 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>
+Subject: Re: [PATCH 2/2 v2] usb: ohci-omap: Convert to use GPIO descriptors
+Message-ID: <20200717143341.GB1147780@rowland.harvard.edu>
+References: <20200716123433.155854-1-linus.walleij@linaro.org>
+ <20200716123433.155854-2-linus.walleij@linaro.org>
+ <20200716154113.GD1112537@rowland.harvard.edu>
+ <CACRpkdZmDUH6QEoykD2mnf6689BVf4VMA4tzpb_xzS3zU6BLuw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20200714151822.250783-1-philippe.schenker@toradex.com>
- <20200716192452.GA2699629@bogus> <20200717023108.GA17070@b29397-desktop>
-In-Reply-To: <20200717023108.GA17070@b29397-desktop>
-From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 17 Jul 2020 08:14:58 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+A+Gj5Ry=eUakkD6bTVh73nmCt4=vyT62yjoh14QyU8w@mail.gmail.com>
-Message-ID: <CAL_Jsq+A+Gj5Ry=eUakkD6bTVh73nmCt4=vyT62yjoh14QyU8w@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] dt-bindings: usb: ci-hdrc-usb2: add property disable-runtime-pm
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     Philippe Schenker <philippe.schenker@toradex.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACRpkdZmDUH6QEoykD2mnf6689BVf4VMA4tzpb_xzS3zU6BLuw@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 16, 2020 at 8:31 PM Peter Chen <peter.chen@nxp.com> wrote:
->
-> On 20-07-16 13:24:52, Rob Herring wrote:
-> > On Tue, Jul 14, 2020 at 05:18:20PM +0200, Philippe Schenker wrote:
-> > > Chipidea depends on some hardware signals to be there in order
-> > > for runtime-pm to work well. Add the possibility to disable runtime
-> > > power management that is necessary for certain boards.
+On Fri, Jul 17, 2020 at 03:49:19PM +0200, Linus Walleij wrote:
+> On Thu, Jul 16, 2020 at 5:41 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > On Thu, Jul 16, 2020 at 02:34:33PM +0200, Linus Walleij wrote:
+> > > The OMAP1 OHCI driver is using the legacy GPIO API to grab some
+> > > random GPIO lines. One is from the TPS65010 chip and used for
+> > > power, another one is for overcurrent and while the driver picks
+> > > this line it doesn't watch it at all.
 > >
-> > This is why we have SoC specific compatible strings. Use that.
->
-> It is a board design limitation, not SoC's. To support USB low power
-> mode for device mode, either VBUS connects to SoC, or VBUS connect to
-> GPIO, or VBUS connect to Type-C IC, but none of the design is used
-> at that board. So the USB can't enter low power mode for that board,
-> otherwise, the USB controller can't be woken up since no any interrupts
-> will occur if USB cable (host at other side) connects to the connector.
+> > If the driver doesn't use this GPIO, why keep the code to grab it?
+> 
+> I think it gives a hint to someone who later tries to debug
+> problems with the hardware that they should maybe go and
+> complete this overcurrent feature.
 
-That's certainly a better explanation than the original.
+Okay, but in that case a nice comment would better serve the purpose.
 
-Don't you need to describe the Vbus connection in the above cases?
-Then you could handle this case based on the lack of a Vbus
-description?
+> Keeping with the paradigm that a patch should be one technological
+> step (converting to GPIO descriptors) that should be a
+> third patch (retireing dead code). But I can certainly add a
+> patch like that if required.
 
-Rob
+For example, you could insert a patch before this one to remove the 
+unused references and replace them with a comment.
+
+> > > Convert the driver and the OMAP1 OSK board file to pass these
+> > > two GPIOs as machine descrived GPIO descriptors.
+> > -----------------------------^
+> 
+> Oooups.
+> 
+> > > Cc: Janusz Krzysztofik <jmkrzyszt@gmail.com>
+> > > Cc: Tony Lindgren <tony@atomide.com>
+> > > Cc: Alan Stern <stern@rowland.harvard.edu>
+> > > Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> > > ---
+> >
+> > Aside from this I don't have any objections.
+> 
+> Does that qualify as an ACK or do you still want me to remove
+> the overcurrent template code?
+
+A little dead code with no explanation doesn't bother me very much, 
+although it will seem rather odd to anyone who reads the driver 
+carefully.  Mainly I wanted to bring this matter to your attention and 
+leave it up to your own taste as to how you should proceed.
+
+If you want to resubmit this patch as is (with just the typo fixed), you 
+can add my Acked-by.
+
+Alan Stern
