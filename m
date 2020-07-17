@@ -2,94 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4666223FC4
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jul 2020 17:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B0E224070
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jul 2020 18:17:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727971AbgGQPkD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Jul 2020 11:40:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58844 "EHLO mail.kernel.org"
+        id S1726710AbgGQQR3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Jul 2020 12:17:29 -0400
+Received: from foss.arm.com ([217.140.110.172]:43376 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726256AbgGQPkC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 17 Jul 2020 11:40:02 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D94742076A;
-        Fri, 17 Jul 2020 15:40:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595000401;
-        bh=oUWXy3XEEdACj4VXB3S0A8gloCT8UAGtaaANZlTOhcY=;
-        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=egmxPzhCJaO5Pklo2wFUgCisrdBaL7j2ncVrgoys66Ov9LXhgVzxXGFqIlODz/BYm
-         SBeDYsmknwq4gkwP74D2/j5goaQrPlJbtdJY2ErVv8nPqEDRjP6D+aAJZpnM8njnoZ
-         FRAkq9i/JLIztXRgN6hLt6p5JYwLKxyZ+Mt0PWp4=
-Date:   Fri, 17 Jul 2020 16:39:50 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Niklas <niklas.soderlund@ragnatech.se>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>
-Cc:     linux-usb@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        dmaengine@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-pci@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-ide@vger.kernel.org
-In-Reply-To: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH 00/20] Add support for SATA/PCIe/USB2[3]/VIN/CSI on R8A774E1
-Message-Id: <159500037996.27597.9512992990495217445.b4-ty@kernel.org>
+        id S1726104AbgGQQR2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 17 Jul 2020 12:17:28 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A864B142F;
+        Fri, 17 Jul 2020 09:17:27 -0700 (PDT)
+Received: from e107158-lin.cambridge.arm.com (e107158-lin.cambridge.arm.com [10.1.195.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AB4FF3F68F;
+        Fri, 17 Jul 2020 09:17:25 -0700 (PDT)
+Date:   Fri, 17 Jul 2020 17:17:23 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Eugeniu Rosca <erosca@de.adit-jv.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        Tony Prisk <linux@prisktech.co.nz>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Oliver Neukum <oneukum@suse.de>,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        Sasha Levin <sashal@kernel.org>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        Dirk Behme <dirk.behme@de.bosch.com>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+Subject: Re: [PATCH 4.14 105/136] usb/ehci-platform: Set PM runtime as active
+ on resume
+Message-ID: <20200717161639.37ptgbolborimcvs@e107158-lin.cambridge.arm.com>
+References: <20200623195303.601828702@linuxfoundation.org>
+ <20200623195308.955410923@linuxfoundation.org>
+ <20200709070023.GA18414@lxhi-065.adit-jv.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200709070023.GA18414@lxhi-065.adit-jv.com>
+User-Agent: NeoMutt/20171215
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 16 Jul 2020 18:18:15 +0100, Lad Prabhakar wrote:
-> This patch series adds support for the following peripherals on RZ/G2H SoC
->  * PCIe
->  * SATA
->  * USB2
->  * USB3
->  * Audio
->  * VIN
->  * CSI
+Hi Eugeniu
+
+On 07/09/20 09:00, Eugeniu Rosca wrote:
+> Hello everyone,
 > 
-> [...]
+> Cc: linux-renesas-soc
+> Cc: linux-pm
 
-Applied to
+[...]
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+> After integrating v4.14.186 commit 5410d158ca2a50 ("usb/ehci-platform:
+> Set PM runtime as active on resume") into downstream v4.14.x, we started
+> to consistently experience below panic [1] on every second s2ram of
+> R-Car H3 Salvator-X Renesas reference board.
+> 
+> After some investigations, we concluded the following:
+>  - the issue does not exist in vanilla v5.8-rc4+
+>  - [bisecting shows that] the panic on v4.14.186 is caused by the lack
+>    of v5.6-rc1 commit 987351e1ea7772 ("phy: core: Add consumer device
+>    link support"). Getting evidence for that is easy. Reverting
+>    987351e1ea7772 in vanilla leads to a similar backtrace [2].
+> 
+> Questions:
+>  - Backporting 987351e1ea7772 ("phy: core: Add consumer device
+>    link support") to v4.14.187 looks challenging enough, so probably not
+>    worth it. Anybody to contradict this?
+>  - Assuming no plans to backport the missing mainline commit to v4.14.x,
+>    should the following three v4.14.186 commits be reverted on v4.14.x?
+>    * baef809ea497a4 ("usb/ohci-platform: Fix a warning when hibernating")
+>    * 9f33eff4958885 ("usb/xhci-plat: Set PM runtime as active on resume")
+>    * 5410d158ca2a50 ("usb/ehci-platform: Set PM runtime as active on resume")
 
-Thanks!
+Thanks for investigating this.
 
-[1/1] dt-bindings: sound: renesas, rsnd: Document r8a774e1 bindings
-      commit: 92e37407811b98a7eb54eb6a6b3d65847a46e0e6
+Alan, Greg, do you have any ideas?
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Let me know if there's anything I can help with.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Thanks
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+--
+Qais Yousef
