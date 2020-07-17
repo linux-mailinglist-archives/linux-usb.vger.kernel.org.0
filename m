@@ -2,98 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E4D722419B
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jul 2020 19:16:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C571A22435B
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jul 2020 20:54:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726949AbgGQRQU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Jul 2020 13:16:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47860 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726463AbgGQRQU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 17 Jul 2020 13:16:20 -0400
-Received: from localhost (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 94967206BE;
-        Fri, 17 Jul 2020 17:16:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595006179;
-        bh=BMFDpLiXiIkNg05MYBPfN+bjURAfepPCUIPuHQlUSiY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MAqrX9/PcmveaIgPJnYWRFY21xgtKg5EMWwxh3g7nMazwXEBJonijbZPHU1R1AQSa
-         sag/nVtSM5RSL7FnVUtetWrUo05JniCdQjp8Hf6CEV9x3VnWZizsBv5sP2Ay/dRjQC
-         vJr/42dT/FSeYxESIvBNs8Ae8GKXBGnAmzp/RL9Y=
-Date:   Fri, 17 Jul 2020 13:16:18 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Qais Yousef <qais.yousef@arm.com>
-Cc:     Eugeniu Rosca <erosca@de.adit-jv.com>,
+        id S1728200AbgGQSwy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Jul 2020 14:52:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56686 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728175AbgGQSwy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jul 2020 14:52:54 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFF31C0619D3
+        for <linux-usb@vger.kernel.org>; Fri, 17 Jul 2020 11:52:53 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id a6so12186606wrm.4
+        for <linux-usb@vger.kernel.org>; Fri, 17 Jul 2020 11:52:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kryo-se.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Xqe7Qw0WyiL+wuTbQ9VtGHN4HAGXDzdIwIBa2ghU0+w=;
+        b=eSpAOLNjgPO+4ynK1QeAGem06+PQJ2ELwabhowXGkKNcNIOKlhjQXSyrMab6cu80wB
+         h3KpRAKPqbORG88Byyr8kWY1AYBus+orCbkYF0+xNY1K0cR0HjDN6CMJHMVSHcqWVbQG
+         GkOBz45cCyLeEomJlPA+2sLt+XcfAj84jkWQUFXkTGaUjDqkAXwJF+cFDVyfj14w8u8K
+         ELQIAEq+cbPQD4ca5Bz3w4T2rZq1YYzg/8uGcockqM9PMVamgWLvacGIDXanT0mtlhoE
+         ls7cveTn0aFTeL9YcYrDz7aoOEdRld+bpGDiy0NcOmAwzKC4+IntR3KdwwTVDXK45V72
+         Igbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Xqe7Qw0WyiL+wuTbQ9VtGHN4HAGXDzdIwIBa2ghU0+w=;
+        b=eJPACxKKgS74NtepaCdrsR6gK9Yor05oNTxCvGwB0RR4mvrLjt9VpOLYFd15JEXFnl
+         MVml5Ul9DhKqE+vPHmiGr1fCdxBxhPV1Y5Bx3U7o+nLjEJrxxhvR28SDJCBMCaNm7DWS
+         kOe0XTdUNZolrFJxggmhVgUnXjannRCq36bdvldKGw9FBU/PvUhK9plDQO+T4Y23Fy7g
+         U/+vAujK/P9GdHFnT9NhwlgWhDwAWvjTe6uekmygoJr/1sKiW1qENZ7eMjfV+CyrxZY8
+         uRKqHFgUQaR8v2XaL3qhXFaygAEB0CWuxt4GwtxpmbxSWrV5UEaRzn5evx9K/Cw7NHSW
+         fUww==
+X-Gm-Message-State: AOAM532j5RrX41Wpk4ekiCSLKsbH5xS9XB59L98KhafhcHg9O/4WZ5+C
+        /c4h17cyc4goChX77JAdzaY0eg==
+X-Google-Smtp-Source: ABdhPJzE5d0dkM9a09oOZDz+u5hpxgBvisFeklfsljGHZjkDPndRCBU2CjXLXgTfp47+WNblU4jIbg==
+X-Received: by 2002:a5d:484b:: with SMTP id n11mr11165656wrs.320.1595011972128;
+        Fri, 17 Jul 2020 11:52:52 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:168:9619:0:a7b:e9f6:ea26:8845])
+        by smtp.gmail.com with ESMTPSA id a15sm18030455wrh.54.2020.07.17.11.52.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jul 2020 11:52:51 -0700 (PDT)
+From:   Erik Ekman <erik@kryo.se>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Erik Ekman <erik@kryo.se>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        Tony Prisk <linux@prisktech.co.nz>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Oliver Neukum <oneukum@suse.de>,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
-        Dirk Behme <dirk.behme@de.bosch.com>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>
-Subject: Re: [PATCH 4.14 105/136] usb/ehci-platform: Set PM runtime as active
- on resume
-Message-ID: <20200717171618.GQ2722994@sasha-vm>
-References: <20200623195303.601828702@linuxfoundation.org>
- <20200623195308.955410923@linuxfoundation.org>
- <20200709070023.GA18414@lxhi-065.adit-jv.com>
- <20200717161639.37ptgbolborimcvs@e107158-lin.cambridge.arm.com>
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] USB: serial: qcserial: add EM7305 QDL product ID
+Date:   Fri, 17 Jul 2020 20:51:18 +0200
+Message-Id: <20200717185118.3640219-1-erik@kryo.se>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20200717161639.37ptgbolborimcvs@e107158-lin.cambridge.arm.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 17, 2020 at 05:17:23PM +0100, Qais Yousef wrote:
->Hi Eugeniu
->
->On 07/09/20 09:00, Eugeniu Rosca wrote:
->> Hello everyone,
->>
->> Cc: linux-renesas-soc
->> Cc: linux-pm
->
->[...]
->
->> After integrating v4.14.186 commit 5410d158ca2a50 ("usb/ehci-platform:
->> Set PM runtime as active on resume") into downstream v4.14.x, we started
->> to consistently experience below panic [1] on every second s2ram of
->> R-Car H3 Salvator-X Renesas reference board.
->>
->> After some investigations, we concluded the following:
->>  - the issue does not exist in vanilla v5.8-rc4+
->>  - [bisecting shows that] the panic on v4.14.186 is caused by the lack
->>    of v5.6-rc1 commit 987351e1ea7772 ("phy: core: Add consumer device
->>    link support"). Getting evidence for that is easy. Reverting
->>    987351e1ea7772 in vanilla leads to a similar backtrace [2].
->>
->> Questions:
->>  - Backporting 987351e1ea7772 ("phy: core: Add consumer device
->>    link support") to v4.14.187 looks challenging enough, so probably not
->>    worth it. Anybody to contradict this?
->>  - Assuming no plans to backport the missing mainline commit to v4.14.x,
->>    should the following three v4.14.186 commits be reverted on v4.14.x?
->>    * baef809ea497a4 ("usb/ohci-platform: Fix a warning when hibernating")
->>    * 9f33eff4958885 ("usb/xhci-plat: Set PM runtime as active on resume")
->>    * 5410d158ca2a50 ("usb/ehci-platform: Set PM runtime as active on resume")
->
->Thanks for investigating this.
->
->Alan, Greg, do you have any ideas?
+When running qmi-firmware-update on the Sierra Wireless EM7305 in a Toshiba
+laptop, it changed product ID to 0x9062 when entering QDL mode:
 
-I've reverted these 3 commits from 5.4 and earlier, thank you for
-investigating this issue.
+usb 2-4: new high-speed USB device number 78 using xhci_hcd
+usb 2-4: New USB device found, idVendor=1199, idProduct=9062, bcdDevice= 0.00
+usb 2-4: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+usb 2-4: Product: EM7305
+usb 2-4: Manufacturer: Sierra Wireless, Incorporated
 
+The upgrade could complete after running
+ # echo 1199 9062 > /sys/bus/usb-serial/drivers/qcserial/new_id
+
+qcserial 2-4:1.0: Qualcomm USB modem converter detected
+usb 2-4: Qualcomm USB modem converter now attached to ttyUSB0
+
+Signed-off-by: Erik Ekman <erik@kryo.se>
+---
+ drivers/usb/serial/qcserial.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/usb/serial/qcserial.c b/drivers/usb/serial/qcserial.c
+index d147feae83e6..0f60363c1bbc 100644
+--- a/drivers/usb/serial/qcserial.c
++++ b/drivers/usb/serial/qcserial.c
+@@ -155,6 +155,7 @@ static const struct usb_device_id id_table[] = {
+ 	{DEVICE_SWI(0x1199, 0x9056)},	/* Sierra Wireless Modem */
+ 	{DEVICE_SWI(0x1199, 0x9060)},	/* Sierra Wireless Modem */
+ 	{DEVICE_SWI(0x1199, 0x9061)},	/* Sierra Wireless Modem */
++	{DEVICE_SWI(0x1199, 0x9062)},	/* Sierra Wireless EM7305 QDL */
+ 	{DEVICE_SWI(0x1199, 0x9063)},	/* Sierra Wireless EM7305 */
+ 	{DEVICE_SWI(0x1199, 0x9070)},	/* Sierra Wireless MC74xx */
+ 	{DEVICE_SWI(0x1199, 0x9071)},	/* Sierra Wireless MC74xx */
 -- 
-Thanks,
-Sasha
+2.26.2
+
