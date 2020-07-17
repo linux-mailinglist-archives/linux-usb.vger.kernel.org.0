@@ -2,91 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41B2022412C
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jul 2020 18:58:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E4D722419B
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jul 2020 19:16:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726882AbgGQQ6O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Jul 2020 12:58:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38934 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726811AbgGQQ6O (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jul 2020 12:58:14 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9135C0619D2;
-        Fri, 17 Jul 2020 09:58:13 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id u5so5693588pfn.7;
-        Fri, 17 Jul 2020 09:58:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=kTW/vU9qPmPKn2Z7Y8y2u+6RPfS4JOq4IXRD9sDOkEw=;
-        b=LIK+O5YRTH0+YYmEybGySPOV6j9XxXLC2+aJMdoS3bJoRVQRmPZc6Ciuuz5qhYFdaA
-         AloS0c51m8IaynD02KZhF/YxFkcPhhkes7bGhxZIJBUUUOK4IbcRqSkyjdRI7waNnJSu
-         ApaTIgiQXRw6M/HeIC7qk2MBkMWKBz2UvnQwb7ddxeiDi30tAydeg30G/luARMn0Ct23
-         LIKnvppASD4cnGAB32kuzfGPq7byC39/nIC1+oc+Os81eULlOH2vUh21KXAf+UI+HnEL
-         8iPzbQwbrENJ2E4N2fCyTcQAaDOlWBY5cHutIarjA01i2vQGXoRHyk675VKVElJhyRkd
-         3sMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=kTW/vU9qPmPKn2Z7Y8y2u+6RPfS4JOq4IXRD9sDOkEw=;
-        b=F/utBM5MkzAYCXNUbPoXdKHrWe63bybyeER2pJ3D+TnlayqxgSGAZF06SG0oJ7VQdP
-         TIc78MNbW75KuJ+F2pA9/VCEnLJxNLzgag8NgomJhViGS0/dHzKVh9f5REOf4YT2wYFt
-         BPbNknoMnnR/F7XA2FHitIgjN7+PhgU9ketYtSAgYhFcnntA+cYNihw81RXv5qQ+PJKh
-         cGnNdrtBrNp5JLW8Uml6GD4P9VQhjMDYY68Bt4e3Qbne2Ioqbyr+3kidrZWduZYFuE0/
-         wRCb1rjsFFmUEuIXwDKZZsbN3V65MzkRDFnoMj/m4zJ073IkYpnuQ77Lvic/Rf81OQMH
-         M1WQ==
-X-Gm-Message-State: AOAM5332ii+T1Kyd8HAtn/Tg7nUJkwhX7nIMjZ1xQxLFOShDHIdEURBb
-        HdE/FiApEOYV7+UpVcK5ZlVGwmfZ
-X-Google-Smtp-Source: ABdhPJwp7YuDLAAWTOjsYPSUf0PF6prjtKgs0M5K4Sme12+cjSJrvh9vOQiH7T7JcxLNJCMirMGGnA==
-X-Received: by 2002:aa7:8f2a:: with SMTP id y10mr8517075pfr.182.1595005093463;
-        Fri, 17 Jul 2020 09:58:13 -0700 (PDT)
-Received: from [10.230.30.107] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id s14sm2475872pjl.14.2020.07.17.09.58.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jul 2020 09:58:12 -0700 (PDT)
-Subject: Re: [PATCH 5/7] usb: bdc: driver runs out of buffer descriptors on
- large ADB transfers
-To:     Al Cooper <alcooperx@gmail.com>, linux-kernel@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        id S1726949AbgGQRQU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Jul 2020 13:16:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47860 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726463AbgGQRQU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 17 Jul 2020 13:16:20 -0400
+Received: from localhost (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 94967206BE;
+        Fri, 17 Jul 2020 17:16:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595006179;
+        bh=BMFDpLiXiIkNg05MYBPfN+bjURAfepPCUIPuHQlUSiY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MAqrX9/PcmveaIgPJnYWRFY21xgtKg5EMWwxh3g7nMazwXEBJonijbZPHU1R1AQSa
+         sag/nVtSM5RSL7FnVUtetWrUo05JniCdQjp8Hf6CEV9x3VnWZizsBv5sP2Ay/dRjQC
+         vJr/42dT/FSeYxESIvBNs8Ae8GKXBGnAmzp/RL9Y=
+Date:   Fri, 17 Jul 2020 13:16:18 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     Qais Yousef <qais.yousef@arm.com>
+Cc:     Eugeniu Rosca <erosca@de.adit-jv.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Sasi Kumar <sasi.kumar@broadcom.com>
-References: <20200717152307.36705-1-alcooperx@gmail.com>
- <20200717152307.36705-6-alcooperx@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <5bc7603c-0e1f-762f-0d67-1c817c03c5ca@gmail.com>
-Date:   Fri, 17 Jul 2020 09:58:05 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Firefox/68.0 Thunderbird/68.10.0
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        Tony Prisk <linux@prisktech.co.nz>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Oliver Neukum <oneukum@suse.de>,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        Dirk Behme <dirk.behme@de.bosch.com>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+Subject: Re: [PATCH 4.14 105/136] usb/ehci-platform: Set PM runtime as active
+ on resume
+Message-ID: <20200717171618.GQ2722994@sasha-vm>
+References: <20200623195303.601828702@linuxfoundation.org>
+ <20200623195308.955410923@linuxfoundation.org>
+ <20200709070023.GA18414@lxhi-065.adit-jv.com>
+ <20200717161639.37ptgbolborimcvs@e107158-lin.cambridge.arm.com>
 MIME-Version: 1.0
-In-Reply-To: <20200717152307.36705-6-alcooperx@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20200717161639.37ptgbolborimcvs@e107158-lin.cambridge.arm.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Fri, Jul 17, 2020 at 05:17:23PM +0100, Qais Yousef wrote:
+>Hi Eugeniu
+>
+>On 07/09/20 09:00, Eugeniu Rosca wrote:
+>> Hello everyone,
+>>
+>> Cc: linux-renesas-soc
+>> Cc: linux-pm
+>
+>[...]
+>
+>> After integrating v4.14.186 commit 5410d158ca2a50 ("usb/ehci-platform:
+>> Set PM runtime as active on resume") into downstream v4.14.x, we started
+>> to consistently experience below panic [1] on every second s2ram of
+>> R-Car H3 Salvator-X Renesas reference board.
+>>
+>> After some investigations, we concluded the following:
+>>  - the issue does not exist in vanilla v5.8-rc4+
+>>  - [bisecting shows that] the panic on v4.14.186 is caused by the lack
+>>    of v5.6-rc1 commit 987351e1ea7772 ("phy: core: Add consumer device
+>>    link support"). Getting evidence for that is easy. Reverting
+>>    987351e1ea7772 in vanilla leads to a similar backtrace [2].
+>>
+>> Questions:
+>>  - Backporting 987351e1ea7772 ("phy: core: Add consumer device
+>>    link support") to v4.14.187 looks challenging enough, so probably not
+>>    worth it. Anybody to contradict this?
+>>  - Assuming no plans to backport the missing mainline commit to v4.14.x,
+>>    should the following three v4.14.186 commits be reverted on v4.14.x?
+>>    * baef809ea497a4 ("usb/ohci-platform: Fix a warning when hibernating")
+>>    * 9f33eff4958885 ("usb/xhci-plat: Set PM runtime as active on resume")
+>>    * 5410d158ca2a50 ("usb/ehci-platform: Set PM runtime as active on resume")
+>
+>Thanks for investigating this.
+>
+>Alan, Greg, do you have any ideas?
 
+I've reverted these 3 commits from 5.4 and earlier, thank you for
+investigating this issue.
 
-On 7/17/2020 8:23 AM, Al Cooper wrote:
-> Version v1.0.40 of the Android host ADB software increased maximum
-> transfer sizes from 256K to 1M. Since the STB ADB gadget driver
-> requests only 16K at a time, the BDC driver ran out of buffer
-> descriptors (BDs) if the queuing happens faster than the incoming
-> 16K transfers. This issue is fixed by doubling the number of BDs
-> that can be queued so that the entire 1M request can be queued
-> without running out of buffers.
-> 
-> Signed-off-by: Al Cooper <alcooperx@gmail.com>
-> Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
-
-You can certainly remove my SoB here, since you are carrying your own
-patch, thanks!
 -- 
-Florian
+Thanks,
+Sasha
