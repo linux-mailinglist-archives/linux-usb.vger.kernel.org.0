@@ -2,117 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9378E223385
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jul 2020 08:21:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5881722349E
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jul 2020 08:34:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726856AbgGQGTS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Jul 2020 02:19:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57132 "EHLO mail.kernel.org"
+        id S1726665AbgGQGeM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Jul 2020 02:34:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34690 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726113AbgGQGTR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 17 Jul 2020 02:19:17 -0400
+        id S1726141AbgGQGeL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 17 Jul 2020 02:34:11 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3B9EB2071A;
-        Fri, 17 Jul 2020 06:19:16 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C6A5521744;
+        Fri, 17 Jul 2020 06:34:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594966757;
-        bh=OXyJBDXtqGwT4BDStOxuECLiTBRqu25A/zU3+0iQzkU=;
+        s=default; t=1594967651;
+        bh=8yib4Kz1ghGHGqd4sNsAIsjxgobO7JhYwh5UEDfbV50=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qVwy0sp9T5j9unToIf/0RjeIhm19kOFbEa0bab+urAyJbH36Bp5I0ChnKDLGqK5i2
-         rvPhGpZqGPSvQ1dfQulUjvTPSoPWOEtyh35VWqOdIuPZVR1JzKvkbaGUf1JGJnINdi
-         XIB1smOwbVvbdM9MX5/VFhJ15HNvdKj7YMjIaZTM=
-Date:   Fri, 17 Jul 2020 08:19:09 +0200
+        b=AKvFNGQsjTGhsAVVYVNFNQGayLCCFiRnJW2Vfwt1uAR8yDW6sgkrhxrc2Kmfca8j7
+         3dDKRnfu5aFApT3v7ecQl9tfNienlc3sdPmOBtmUZeJLOVBNTRFkDDGUrPglprB4wq
+         /jHEEevjOQF89l/gCdsHqJVEWx053PpR4MZZwKQs=
+Date:   Fri, 17 Jul 2020 08:34:03 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Mani, Rajmohan" <rajmohan.mani@intel.com>
-Cc:     Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Ayman Bagabas <ayman.bagabas@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        "Joseph, Jithu" <jithu.joseph@intel.com>,
-        =?utf-8?B?Qmxhxb4=?= Hrastnik <blaz@mxxn.io>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "pmalani@chromium.org" <pmalani@chromium.org>,
-        "bleung@chromium.org" <bleung@chromium.org>
-Subject: Re: [PATCH 2/2] usb: typec: intel_pmc_mux: Check the port status
- before connect
-Message-ID: <20200717061909.GB3237166@kroah.com>
-References: <20200716003310.26125-1-rajmohan.mani@intel.com>
- <20200716003310.26125-3-rajmohan.mani@intel.com>
- <20200716070508.GB962748@kroah.com>
- <DM6PR11MB39632A8236161E4A27FAB1BBF67C0@DM6PR11MB3963.namprd11.prod.outlook.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        John Youn <John.Youn@synopsys.com>
+Subject: Re: [PATCH 01/11] usb: ch9: Add sublink speed struct
+Message-ID: <20200717063403.GC3238569@kroah.com>
+References: <cover.1594935978.git.thinhn@synopsys.com>
+ <90961eec3e1ed3c27e41e7169353cc295c551604.1594935978.git.thinhn@synopsys.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <DM6PR11MB39632A8236161E4A27FAB1BBF67C0@DM6PR11MB3963.namprd11.prod.outlook.com>
+In-Reply-To: <90961eec3e1ed3c27e41e7169353cc295c551604.1594935978.git.thinhn@synopsys.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 17, 2020 at 06:04:51AM +0000, Mani, Rajmohan wrote:
-> Hi Greg,
+On Thu, Jul 16, 2020 at 02:58:36PM -0700, Thinh Nguyen wrote:
+> USB 3.2 specification supports dual-lane for super-speed-plus. USB
+> devices may operate at different sublink speeds. To avoid using magic
+> numbers and capture the sublink speed better, introduce the
+> usb_sublink_speed structure and various sublink speed attribute enum.
 > 
-> > -----Original Message-----
-> > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Sent: Thursday, July 16, 2020 12:05 AM
-> > To: Mani, Rajmohan <rajmohan.mani@intel.com>
-> > Cc: Darren Hart <dvhart@infradead.org>; Andy Shevchenko
-> > <andy@infradead.org>; Mika Westerberg
-> > <mika.westerberg@linux.intel.com>; Dmitry Torokhov
-> > <dmitry.torokhov@gmail.com>; Lee Jones <lee.jones@linaro.org>; Ayman
-> > Bagabas <ayman.bagabas@gmail.com>; Masahiro Yamada
-> > <masahiroy@kernel.org>; Joseph, Jithu <jithu.joseph@intel.com>; Blaž
-> > Hrastnik <blaz@mxxn.io>; Srinivas Pandruvada
-> > <srinivas.pandruvada@linux.intel.com>; linux-kernel@vger.kernel.org;
-> > platform-driver-x86@vger.kernel.org; Heikki Krogerus
-> > <heikki.krogerus@linux.intel.com>; linux-usb@vger.kernel.org;
-> > pmalani@chromium.org; bleung@chromium.org
-> > Subject: Re: [PATCH 2/2] usb: typec: intel_pmc_mux: Check the port status
-> > before connect
-> > 
-> > On Wed, Jul 15, 2020 at 05:33:10PM -0700, Rajmohan Mani wrote:
-> > > From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > >
-> > > The PMC microcontroller that we use for configuration, does not supply
-> > > any status information back. For port status we need to talk to
-> > > another controller on the board called IOM (I/O manager).
-> > >
-> > > By checking the port status before configuring the muxes, we can make
-> > > sure that we do not reconfigure the port after bootup when the system
-> > > firmware (for example BIOS) has already configured it.
-> > >
-> > > Using the status information also to check if DisplayPort HPD is still
-> > > asserted when the cable plug is disconnected, and clearing it if it
-> > > is.
-> > >
-> > > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > 
-> > You can't just forward on patches from others without also adding your
-> > signed-off-by to them, right?
-> > 
+> See SSP BOS descriptor in USB 3.2 specification section 9.6.2.5
 > 
-> Sorry I missed this.
+> Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
+> ---
+>  include/uapi/linux/usb/ch9.h | 42 ++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 42 insertions(+)
 > 
-> > Please fix up this series and try again.
-> > 
-> 
-> Ack. Will fix this with v2.
+> diff --git a/include/uapi/linux/usb/ch9.h b/include/uapi/linux/usb/ch9.h
+> index 2b623f36af6b..d4fd403a3664 100644
+> --- a/include/uapi/linux/usb/ch9.h
+> +++ b/include/uapi/linux/usb/ch9.h
+> @@ -1145,6 +1145,48 @@ enum usb_device_speed {
+>  	USB_SPEED_SUPER_PLUS,			/* usb 3.1 */
+>  };
+>  
+> +/* USB 3.2 sublink speed attributes */
+> +
+> +enum usb_lane_speed_exponent {
+> +	USB_LSE_BPS = 0,
+> +	USB_LSE_KBPS = 1,
+> +	USB_LSE_MBPS = 2,
+> +	USB_LSE_GBPS = 3,
+> +};
+> +
+> +enum usb_sublink_type {
+> +	USB_ST_SYMMETRIC_RX = 0,
+> +	USB_ST_ASYMMETRIC_RX = 1,
+> +	USB_ST_SYMMETRIC_TX = 2,
+> +	USB_ST_ASYMMETRIC_TX = 3,
+> +};
+> +
+> +enum usb_link_protocol {
+> +	USB_LP_SS = 0,
+> +	USB_LP_SSP = 1,
+> +};
+> +
+> +/**
+> + * struct usb_sublink_speed - sublink speed attribute
+> + * @id: sublink speed attribute ID (SSID)
+> + * @mantissa: lane speed mantissa
+> + * @exponent: lane speed exponent
+> + * @sublink type: sublink type
+> + * @protocol: sublink protocol
+> + *
+> + * Super-speed-plus supports multiple lanes. Use the sublink speed attributes to
+> + * describe the sublink speed.
+> + *
+> + * See USB 3.2 spec section 9.6.2.6 for super-speed-plus capability for more
+> + * information.
+> + */
+> +struct usb_sublink_speed {
+> +	u8				id;
+> +	u16				mantissa;
 
-Stop and go talk to the proper people in Intel for how to submit patches
-to the kernel as you are not following the rules they have documented
-for you.
+You have to use the proper data types for crossing the user/kernel
+boundry here.  That would be __u8 and __u16, right?
+
+> +	enum usb_lane_speed_exponent	exponent;
+> +	enum usb_sublink_type		type;
+> +	enum usb_link_protocol		protocol;
+
+Are you _sure_ that an enum is the correct size for these fields?  How
+can you guarantee this?  We do not use enums in this way for any other
+field in this file for a reason...
+
+And did you look at the layout of this structure to verify it actually
+matches what is on the wire with USB?  I think you need to add a packed
+attribute to guarantee it.
 
 thanks,
 
 greg k-h
+
+
+> +};
+>  
+>  enum usb_device_state {
+>  	/* NOTATTACHED isn't in the USB spec, and this state acts
+> -- 
+> 2.11.0
+> 
