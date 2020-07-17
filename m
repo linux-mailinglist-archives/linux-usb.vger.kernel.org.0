@@ -2,104 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 677B2222E4E
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jul 2020 23:59:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECA9D222FE8
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jul 2020 02:23:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726954AbgGPV7k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 16 Jul 2020 17:59:40 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:45456 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726002AbgGPV7k (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 16 Jul 2020 17:59:40 -0400
-Received: from mailhost.synopsys.com (sv2-mailhost1.synopsys.com [10.205.2.133])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id D3100C078F;
-        Thu, 16 Jul 2020 21:59:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1594936779; bh=og/NNtInoyBzTFT88CauX7gkTjqH4tIoh+/Lr5DDJpA=;
-        h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=R1p8pTQxSoQaInwZueqdKmHcZ0/4Q+fBGD6qwahr6T687rYWqiN+OUzwZj1HjNXvw
-         IswjxPmNPpMTJ8StxC+7kcZVCvaUrQ4UHCO0t2mj3Icu5sEaA/5GJpO83z+wvgL4pE
-         ncVJ+M4i7jgjlwQf5hGydVgMI+EKjbWCGA3Yp/3OYbkAItbB8A9Q7lkzO3hmZZMGzP
-         jfLWtx1qIyoEkZiqqbqBDnq1XNlTmkXbPCIiY7PhpwUeHVv/Jc+ZRHtyF2rRlOEsuO
-         LqISIobBxJepix0WRLZB5ixbOGN2yeuIxjU4Zt+zj97Gq5MZWOUrRsXeHL6UfwgcaM
-         qoftjltQKafZA==
-Received: from te-lab16 (nanobot.internal.synopsys.com [10.10.186.99])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id A339EA0258;
-        Thu, 16 Jul 2020 21:59:38 +0000 (UTC)
-Received: by te-lab16 (sSMTP sendmail emulation); Thu, 16 Jul 2020 14:59:38 -0700
-Date:   Thu, 16 Jul 2020 14:59:38 -0700
-Message-Id: <8717065db3097cc0beedb0f6cf7e8fff52b1ba91.1594935978.git.thinhn@synopsys.com>
-In-Reply-To: <cover.1594935978.git.thinhn@synopsys.com>
-References: <cover.1594935978.git.thinhn@synopsys.com>
-X-SNPS-Relay: synopsys.com
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH 11/11] usb: dwc3: gadget: Set speed only up to the max supported
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-usb@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>
+        id S1726229AbgGQAWf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 16 Jul 2020 20:22:35 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:7772 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726125AbgGQAWf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 16 Jul 2020 20:22:35 -0400
+Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 5CA266E5D3DBC4F29409;
+        Fri, 17 Jul 2020 08:22:32 +0800 (CST)
+Received: from [127.0.0.1] (10.174.179.238) by DGGEMS407-HUB.china.huawei.com
+ (10.3.19.207) with Microsoft SMTP Server id 14.3.487.0; Fri, 17 Jul 2020
+ 08:22:23 +0800
+Subject: Re: [PATCH -next v2] usb: usbtest: reduce stack usage in test_queue
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     <linux-next@vger.kernel.org>, <gustavoars@kernel.org>,
+        <gregkh@linuxfoundation.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <qiang.zhang@windriver.com>,
+        "Wanghui (John)" <john.wanghui@huawei.com>
+References: <20200716082735.66342-1-cuibixuan@huawei.com>
+ <42fe1a83-38a5-816b-9258-8a344008f398@huawei.com>
+ <20200716154510.GE1112537@rowland.harvard.edu>
+From:   Bixuan Cui <cuibixuan@huawei.com>
+Message-ID: <3c01b28e-0568-b5d6-e8ce-9176da09466c@huawei.com>
+Date:   Fri, 17 Jul 2020 08:22:22 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
+MIME-Version: 1.0
+In-Reply-To: <20200716154510.GE1112537@rowland.harvard.edu>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.238]
+X-CFilter-Loop: Reflected
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The setting of device speed should be limited by the device's
-maximum_speed. This patch adds a check and prevent the driver from
-attempting to configure higher than the maximum_speed.
+Fix the warning: [-Werror=-Wframe-larger-than=]
 
-Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
+drivers/usb/misc/usbtest.c: In function 'test_queue':
+drivers/usb/misc/usbtest.c:2148:1:
+warning: the frame size of 1232 bytes is larger than 1024 bytes
+
+Reported-by: kbuild test robot <lkp@intel.com>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Bixuan Cui <cuibixuan@huawei.com>
 ---
- drivers/usb/dwc3/gadget.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+v2: Change MAX_SGLEN to param->sglen.
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 87a69a096b57..155251d67b4d 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2254,6 +2254,7 @@ static void dwc3_gadget_set_speed(struct usb_gadget *g,
- 				  enum usb_device_speed speed)
- {
- 	struct dwc3		*dwc = gadget_to_dwc(g);
-+	enum usb_device_speed	selected_speed = speed;
- 	unsigned long		flags;
- 	u32			reg;
- 
-@@ -2278,7 +2279,10 @@ static void dwc3_gadget_set_speed(struct usb_gadget *g,
- 	    !dwc->dis_metastability_quirk) {
- 		reg |= DWC3_DCFG_SUPERSPEED;
- 	} else {
--		switch (speed) {
-+		if (speed > dwc->maximum_speed)
-+			selected_speed = dwc->maximum_speed;
+ drivers/usb/misc/usbtest.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/misc/usbtest.c b/drivers/usb/misc/usbtest.c
+index 8b220d56647b..150090ee4ec1 100644
+--- a/drivers/usb/misc/usbtest.c
++++ b/drivers/usb/misc/usbtest.c
+@@ -2043,7 +2043,7 @@ test_queue(struct usbtest_dev *dev, struct usbtest_param_32 *param,
+ 	unsigned		i;
+ 	unsigned long		packets = 0;
+ 	int			status = 0;
+-	struct urb		*urbs[MAX_SGLEN];
++	struct urb		**urbs;
+
+ 	if (!param->sglen || param->iterations > UINT_MAX / param->sglen)
+ 		return -EINVAL;
+@@ -2051,6 +2051,10 @@ test_queue(struct usbtest_dev *dev, struct usbtest_param_32 *param,
+ 	if (param->sglen > MAX_SGLEN)
+ 		return -EINVAL;
+
++	urbs = kcalloc(param->sglen, sizeof(*urbs), GFP_KERNEL);
++	if (!urbs)
++		return -ENOMEM;
 +
-+		switch (selected_speed) {
- 		case USB_SPEED_LOW:
- 			reg |= DWC3_DCFG_LOWSPEED;
- 			break;
-@@ -2298,7 +2302,8 @@ static void dwc3_gadget_set_speed(struct usb_gadget *g,
- 				reg |= DWC3_DCFG_SUPERSPEED_PLUS;
- 			break;
- 		default:
--			dev_err(dwc->dev, "invalid speed (%d)\n", speed);
-+			dev_err(dwc->dev, "invalid speed (%d)\n",
-+				selected_speed);
- 
- 			if (DWC3_IP_IS(DWC3))
- 				reg |= DWC3_DCFG_SUPERSPEED;
-@@ -2307,7 +2312,7 @@ static void dwc3_gadget_set_speed(struct usb_gadget *g,
- 		}
+ 	memset(&context, 0, sizeof(context));
+ 	context.count = param->iterations * param->sglen;
+ 	context.dev = dev;
+@@ -2137,6 +2141,8 @@ test_queue(struct usbtest_dev *dev, struct usbtest_param_32 *param,
+ 	else if (context.errors >
+ 			(context.is_iso ? context.packet_count / 10 : 0))
+ 		status = -EIO;
++
++	kfree(urbs);
+ 	return status;
+
+ fail:
+@@ -2144,6 +2150,8 @@ test_queue(struct usbtest_dev *dev, struct usbtest_param_32 *param,
+ 		if (urbs[i])
+ 			simple_free_urb(urbs[i]);
  	}
- 
--	if (DWC3_IP_IS(DWC32) && speed < USB_SPEED_SUPER_PLUS)
-+	if (DWC3_IP_IS(DWC32) && selected_speed < USB_SPEED_SUPER_PLUS)
- 		reg &= ~DWC3_DCFG_NUMLANES(~0);
- 
- 	dwc3_writel(dwc->regs, DWC3_DCFG, reg);
--- 
-2.11.0
++
++	kfree(urbs);
+ 	return status;
+ }
+
+--
+2.17.1
+
+
+.
+
+
 
