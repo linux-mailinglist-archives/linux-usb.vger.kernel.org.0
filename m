@@ -2,124 +2,183 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9715D2231FC
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jul 2020 06:13:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85BD52231FF
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jul 2020 06:14:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726180AbgGQENw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 17 Jul 2020 00:13:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33822 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725300AbgGQENw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 17 Jul 2020 00:13:52 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093ECC061755;
-        Thu, 16 Jul 2020 21:13:52 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id u12so5296525lff.2;
-        Thu, 16 Jul 2020 21:13:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=3Lvy+/OH9z2jCzIK+z+Qwn1xr98qqMgmgQ1Ho1iSWBg=;
-        b=aXOnEeX1AuBGxenBuWAnRgMfbnP60RGVU/GV01wT86UYEXGdhCzG0oleFfg+4ScfnP
-         b6MP1CZh/armT48drJR5MHQ/Eu49ihapDOhIE8elHzd12sKuWxPCJI0rRosBDCxReOKV
-         h+WcDu0cqKlMYJtzxLUdYRFJKxIIgoakd9oFokqORQ9V+z8cV1AQgpQld91jZcVtAh/k
-         Eqm3I4djaf8eLq905PImT85t32cGUK1fnWJU6HGdilzGP4fr7BE3qhLn8aXpWvKDMl+8
-         tuVnNvRHqtV3GLnaXM60rBuXlvipONPnh8Mz2vc0iDEPUQCGz30IIfQqrBIxqhDz2hso
-         /Cxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=3Lvy+/OH9z2jCzIK+z+Qwn1xr98qqMgmgQ1Ho1iSWBg=;
-        b=p0R95marVSD1v6Q2YZHL6OOsYyLDaf4seEL44NOXGcPPnf7HX6ydnRGHrQ6B7M9D+m
-         pnSSjde9EyRMRJ15wNpIXsoG1u+EBWJFnRfPw5Imk9ND3H8L+yRzVQJHEIvwLrWZPaR0
-         IG0E3KAaDktRdewyhrhlTpdVOK+lJzV5bH2CXywiafpPLuPqA99Zlk+rfkik3o8s5vLc
-         d4uubLvSIdLJajytGRxtzRAf+8i8IniD16Rzabcr/4x4aC8tirv8JQDCOGySpg0Wmn2V
-         PYzybogUQnqqfUJ3d4LQ3uMDMgFx5bFRWZbCkMj7UupGSabwgUNc5uBxu0PDVWc35Bob
-         hqRg==
-X-Gm-Message-State: AOAM53210aN2xyTTlpHYRBD3zJ/qS9uUztuax7VTkE7M7YdMymRIMcHx
-        RbEbqJJxYSoBEVrVXcpn+G7sqIQQeSc8ZM+Pgph+OlCc
-X-Google-Smtp-Source: ABdhPJzcOfr0kEkGnnHuc0Oqz/LzUKcbRNEfEDLWudgveKV3OUDPPbeCgCGraLsK3wZapShpkimn7lL8cZsiCXQ9wSs=
-X-Received: by 2002:ac2:5593:: with SMTP id v19mr3613131lfg.43.1594959230410;
- Thu, 16 Jul 2020 21:13:50 -0700 (PDT)
+        id S1726524AbgGQEON (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 17 Jul 2020 00:14:13 -0400
+Received: from mail-eopbgr50084.outbound.protection.outlook.com ([40.107.5.84]:43494
+        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725300AbgGQEOM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 17 Jul 2020 00:14:12 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nUCt4T2mAOJqq2nfGGNwbxcTbsrT6ysf7LbpavEwbM764ZPgc0EE+52pLTwP7eyTLAtpnu3jUhB/sQOtN6QYI3oWIDtABBORg2+eIEvIkGXvCqnPbldtcq6jPruZmMDjBHZ7kWKRX2Z4NzqLuqszy1Lqg8GOmGhNYmNmCZSlXmAu6iGfTXr6o78Ke6yzmffwvXGSJ98cUr9OcvcFu89+wdDL1y4GyTacumUQYGyDNM5Qe0VQpDZdzq9zG1BKYnFYHLqQZlBoRrBORfYYNXxeBwbVUGJYiCNAlBNWjE5E+uTKPqtkF75UWWrzyeyKAnT8SKJIIny8/y8etwfVbd9Aag==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NxpFHtKNxGl+Ban9K+4fwV1n0rAVWCY6OTdfvh8zQ3M=;
+ b=bJ9N0KuAHcKJM3qpKCz78PH1wlW/bYDq341PbBRtcJH3As2BiNs/LEWIJngYIf3S0TQblF0uNkiA6dF05iHkjCY6FenI4JBZdCzCUvUSX1wwY2rueDEttIghW8uhbwy0j0VgV4PRu4RercvttQeNs6yHQmMSg575AJjth30iqesdNSWdzwKwftPvTUaqmj+aJMZP5/z+AtISz+P+rIBxSciZCLejSat97oP5gvFaEEZzeoiIBQYgCDNXTuhc7aIRWijB7/lIQOvS1JkrijDR24pdD4l6JDGUmbq/7+3KaNcIvk0qRs81CblzJXQJnGh60kHdJF3gibX85H1Rtaohkg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NxpFHtKNxGl+Ban9K+4fwV1n0rAVWCY6OTdfvh8zQ3M=;
+ b=r78Omc047T91+GjHMk0I6KqQKHRRJgjY0gjiQ6AdKuSYdc76IGknYR335dJPkmWdPHa5HIRvbGHh1rS0XI3Pj8t4l+uqHXB786dzuLufcZmDy9N0OltWf/ZZSe0T0RnzAVdWtQXp3PE0B96YPq5mZicYC8UJ5a4YYit7P5tqeVo=
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
+ by AM6PR04MB4632.eurprd04.prod.outlook.com (2603:10a6:20b:1a::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3174.20; Fri, 17 Jul
+ 2020 04:14:08 +0000
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1101:adaa:ee89:af2a]) by AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1101:adaa:ee89:af2a%3]) with mapi id 15.20.3174.026; Fri, 17 Jul 2020
+ 04:14:08 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Macpaul Lin <macpaul.lin@mediatek.com>
+CC:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
+        Macpaul Lin <macpaul.lin@gmail.com>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH] usb: gadget: configfs: Fix use-after-free issue with
+ udc_name
+Thread-Topic: [PATCH] usb: gadget: configfs: Fix use-after-free issue with
+ udc_name
+Thread-Index: AQHWWzwrDCeJbXR+QUOUa8VdThQTA6kLKvMA
+Date:   Fri, 17 Jul 2020 04:14:08 +0000
+Message-ID: <20200717041406.GC17070@b29397-desktop>
+References: <1594881666-8843-1-git-send-email-macpaul.lin@mediatek.com>
+In-Reply-To: <1594881666-8843-1-git-send-email-macpaul.lin@mediatek.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: mediatek.com; dkim=none (message not signed)
+ header.d=none;mediatek.com; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.67]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 56b7e20d-a623-476a-fff8-08d82a07da5f
+x-ms-traffictypediagnostic: AM6PR04MB4632:
+x-microsoft-antispam-prvs: <AM6PR04MB46321E525F2ED130F5A40D3D8B7C0@AM6PR04MB4632.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:411;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: T4b3+In0q3SxzoKxmnvtGDqRzsyDNapfZ8xY7NyZKh+ofjgB1AiDZmn94McV/k0mWb/5/Y3md6jZmEtPVpc2UGg9z5kVVRzR48ZjLhlS7tpprfTSF2jQ/4yjqxxzyCWN3kJxsoYMt6XVcWCfzwx98GqoowIf/QNdY4focTLwpeP6XXOetg0vVCU0zdHsKshMd6bDQmQn0TduQr8QHQdnuiRpzoTsBZJmThX16xXFy0NhJzASTNjV8MdJz10b/NO1aKINnWFIIv4fOTkDsN54DbqIUIh1DiA4Dr0Of6Id45uGGkrg/AS7ZooMbFTQ0qQvhJY1hMHGYEr63Gq1SEbVsg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(7916004)(136003)(396003)(366004)(346002)(376002)(39860400002)(6512007)(9686003)(8676002)(54906003)(5660300002)(478600001)(4326008)(44832011)(2906002)(6506007)(53546011)(26005)(186003)(66946007)(76116006)(1076003)(33656002)(6486002)(316002)(83380400001)(71200400001)(66476007)(8936002)(64756008)(91956017)(66446008)(33716001)(66556008)(86362001)(7416002)(6916009);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: ZBYrE0DjpM76uSm/mNc9ASz02BcknLvn9y2ZOhxrwkphpSxYWe/hyODG0kUWTpB9D8EsZQMdZC0jneM1IZSpcz0hTNXT2cDoPzfRIFhWnNqePwiZZh3PNerY1qdiVmGaqIybjdzmNQfq8M3wvSb0pjRWCFpI7zIchDvxR+UL2M4RmqudgY5Jww9k7Lr01KkTALfyOlSOHgALTihCXlIlZoyKdUi/EmXvXgmNa7dJcVRncQemPggJmc95dISMaRkPqC3Kcq3RmlC6bbMfPcff/Sp92WwQSiM/5e4LD+d/yCWlkFDFn/s78lFgGF6g2PhsyCH1Xf0450L1B+RMEA0m5395Xi5stMFZRVbUjhg/V0Bu5MI5DeHRM0y+LCCwh4AxZCTTCfqzkcGe7lLTlvq0qch83+xKK7REdvi2/Qe+8bZzSbcfPru0UZOUJCS1xxbCjwXEMZk6/ip+/GjvWjROLLkCrQxUeHWThXBMEEuhw0w=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <D34A2AF1CF166648B0A3C3B04631F398@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-From:   Forest Crossman <cyrozap@gmail.com>
-Date:   Thu, 16 Jul 2020 23:13:38 -0500
-Message-ID: <CAO3ALPy8_pxVyFROZUWNafEH1vUCP6LVpNmBBuMDSewGitzdLw@mail.gmail.com>
-Subject: ASMedia USB 3.x host controllers triggering EEH on POWER9
-To:     linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 56b7e20d-a623-476a-fff8-08d82a07da5f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jul 2020 04:14:08.8373
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: /z53Y/NZnovCg2sec/u8C2zD/Op7ZRqBMlklTVMsPoDKMoyY7q/fjOqxqA7QASlWYvRLHPDVgwk7r0gg+D9JfQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB4632
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi, all,
+On 20-07-16 14:41:06, Macpaul Lin wrote:
+> There is a use-after-free issue, if access udc_name
+> in function gadget_dev_desc_UDC_store after another context
+> free udc_name in function unregister_gadget.
+>=20
+> Contex 1:
 
-I have several ASMedia USB 3.x host controllers (ASM2142 and ASM3142,
-both share the same Vendor ID/Device ID pair) that I'd like to use
-with a POWER9 system (a Raptor Computing Systems Talos II).
-Unfortunately, while the kernel recognizes the controllers just fine,
-as soon as I plug in a device, an EEH error occurs and the host
-controller gets repeatedly reset until it eventually gets disabled. An
-example of one of these errors can be seen here:
-https://paste.debian.net/hidden/e39698eb
+%s/contex/context
 
-Based on the "PHB4 Diag-data" reported by the kernel, it seems that
-LEM_WOF_R bit 35, PHB_FESR bit 20, and RXE_ARB_FESR bit 28 have been
-set. According to the PHB4 specification
-(https://ibm.ent.box.com/s/jftnfhceul07qjh9jtn91xwjmclabc71), they
-respectively mean the following:
- - ARB: IODA TVT Errors - "TCE Validation Table error occurred. The
-entry is invalid, or the PCI Address was out of range as defined by
-the TTA bounds in the TVE entry."
- - RXE_ARB OR Error Status - "RXE_ARB error bits, ... OR of all error
-status bits."
- - IODA TVT Address Range Error - "IODA Error: The PCI Address was out
-of range as defined by the TTA bounds in the TVE entry."
+> gadget_dev_desc_UDC_store()->unregister_gadget()->
+> free udc_name->set udc_name to NULL
+>=20
+> Contex 2:
 
-In other words, the ASMedia USB controllers seem to be trying to write
-to addresses they're not supposed to, and thankfully the PHB4 is
-catching these bad writes before they can cause any corruption of my
-system's memory. Of course, this has the unfortunate side-effect that
-these devices are completely unable to operate with my computer, and
-since it seems to be possible to use these controllers on x86 systems
-(presumably because of the less-strict/disabled-by-default IOMMU), I
-wonder if maybe it would be possible to work around these errors in
-either the kernel or the OPAL firmware? My thinking is that instead of
-disconnecting the misbehaving devices, maybe the errors could be
-"forgiven" (but still blocked) and the device permitted to continue
-operating, possibly with some USB data loss from "writes to nowhere"
-or retries that may reduce performance. Or maybe if the issue is
-caused by some high address bits being set to random values, those
-bits could be masked-off so as to not trigger the errors and even
-avoid data loss.
+The same, otherwise:
 
-So, my question is, is any of this possible? I know the simple
-solution for me is to just RMA the cards and avoid purchasing
-ASMedia-based USB host controllers in the future, but the fact that
-they still seem to work "mostly ok" on x86 systems (with the
-occasional kernel panics and BSODs reported by users) piques my
-curiosity and makes me wonder if maybe there's a way for me to have my
-cheap, buggy hardware cake and eat it, too.
+Reviewed-by: Peter Chen <peter.chen@nxp.com>
 
-Now, I'm a novice at kernel hacking, so I don't really know what I'm
-doing, but just for fun I did try to paper over the issue by adding an
-EEH handler to the xhci driver
-(https://paste.debian.net/hidden/16081515), but as you might expect,
-that didn't do anything but prevent further communication with the
-device. I also read a bunch of the PHB4 and IODA2 specs to see if
-maybe there'd be a way to implement that bit-masking thing I
-mentioned, but both of those documents are, uh, rather dry reading, so
-I haven't read them in their entirety, and I don't know enough about
-how this all works to try to search the text for what I need.
+Peter
 
-All that said, if anyone has any suggestions or comments, I'd be
-really interested to hear them, even if it's just to question why I'd
-go to such ridiculous lengths to try to get software to account for
-buggy hardware.
+> gadget_dev_desc_UDC_show()-> access udc_name
+>=20
+> Call trace:
+> dump_backtrace+0x0/0x340
+> show_stack+0x14/0x1c
+> dump_stack+0xe4/0x134
+> print_address_description+0x78/0x478
+> __kasan_report+0x270/0x2ec
+> kasan_report+0x10/0x18
+> __asan_report_load1_noabort+0x18/0x20
+> string+0xf4/0x138
+> vsnprintf+0x428/0x14d0
+> sprintf+0xe4/0x12c
+> gadget_dev_desc_UDC_show+0x54/0x64
+> configfs_read_file+0x210/0x3a0
+> __vfs_read+0xf0/0x49c
+> vfs_read+0x130/0x2b4
+> SyS_read+0x114/0x208
+> el0_svc_naked+0x34/0x38
+>=20
+> Add mutex_lock to protect this kind of scenario.
 
+>=20
+> Signed-off-by: Eddie Hung <eddie.hung@mediatek.com>
+> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+> Cc: stable@vger.kernel.org
+> ---
+>  drivers/usb/gadget/configfs.c | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.=
+c
+> index 9dc06a4e1b30..21110b2865b9 100644
+> --- a/drivers/usb/gadget/configfs.c
+> +++ b/drivers/usb/gadget/configfs.c
+> @@ -221,9 +221,16 @@ static ssize_t gadget_dev_desc_bcdUSB_store(struct c=
+onfig_item *item,
+> =20
+>  static ssize_t gadget_dev_desc_UDC_show(struct config_item *item, char *=
+page)
+>  {
+> -	char *udc_name =3D to_gadget_info(item)->composite.gadget_driver.udc_na=
+me;
+> +	struct gadget_info *gi =3D to_gadget_info(item);
+> +	char *udc_name;
+> +	int ret;
+> +
+> +	mutex_lock(&gi->lock);
+> +	udc_name =3D gi->composite.gadget_driver.udc_name;
+> +	ret =3D sprintf(page, "%s\n", udc_name ?: "");
+> +	mutex_unlock(&gi->lock);
+> =20
+> -	return sprintf(page, "%s\n", udc_name ?: "");
+> +	return ret;
+>  }
+> =20
+>  static int unregister_gadget(struct gadget_info *gi)
+> --=20
+> 2.18.0
 
-All the best,
+--=20
 
-Forest
+Thanks,
+Peter Chen=
