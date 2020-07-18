@@ -2,641 +2,1018 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35371224C04
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Jul 2020 16:49:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17543224C4C
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Jul 2020 17:11:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727847AbgGROts (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 18 Jul 2020 10:49:48 -0400
-Received: from mout.gmx.net ([212.227.17.22]:42049 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726574AbgGROtr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 18 Jul 2020 10:49:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1595083782;
-        bh=qglHFGuBSxHPjuoqulT2+BsT9qtZxckGIrgXq+Fi0ek=;
-        h=X-UI-Sender-Class:From:To:Subject:Date;
-        b=ftq/Oy5nGRzMQbQOMDwYWiFGM4UHmTBMNhYXb5cLBWuX0kFCblGurIBxUoQreDPhj
-         vq+cKUXcB8bYhK3GWCr0f8IxtoOQDfv3+GGHI4Lzdr0yN2ZIEQNctPljgBjrc9r1yg
-         8GCiZz4X5j/zLBoomaUcfMnYRz8jxK4BKlphq3ms=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [2.204.111.63] ([2.204.111.63]) by web-mail.gmx.net
- (3c-app-gmx-bap08.server.lan [172.19.172.78]) (via HTTP); Sat, 18 Jul 2020
- 16:49:41 +0200
+        id S1727025AbgGRPKt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 18 Jul 2020 11:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45292 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726344AbgGRPKs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 18 Jul 2020 11:10:48 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B636C0619D2;
+        Sat, 18 Jul 2020 08:10:48 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id a9so2263793pjd.3;
+        Sat, 18 Jul 2020 08:10:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=dz9XktOJ3oNcDqHzpz1Afxz2uAwswO7hac7/zcHPYdM=;
+        b=UXFzDK0xtC2ZWqXcdxUWxlKT04SrlV9jeOKtmVzjfy2UUxqRepM1pJtatx66Clsc1c
+         Uek0mJjKK5nkT4M5PHlOoxz8RRukQI/0l2eMKavgrUPbgr1t18s1gjvyflSyHe4b4maX
+         uAPjmM5wDUodUxQAlzJbz+5e+2xFy4uyWsHpWZ9l+/ID3m+H0J9Xnw8864cccMY0Vgnn
+         c+zFPWHecqLn3ERhu1yeK/OnolWuUWyFMM60v6ITaSN+58WflyNFotdZYIeCFUXs3HFT
+         mdFwXo4Bn7cqRiYW5ca+7xnp+yfmkDFgE58WePPoom7OXarrH8W2kj+YYC99xV+8BDSV
+         hESQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=dz9XktOJ3oNcDqHzpz1Afxz2uAwswO7hac7/zcHPYdM=;
+        b=iuHnGRVzJDBsvC4eRSdTTjNjHevBWl/aSSu650To4cQDeEZeowytleYxZJbbtC3HFL
+         7+VGtkQeHbWmZ0SkWAjR7g+Spbc562i1fQaXvvT9AIgMuQjRQ0FyfEgJomEcgFYe3sOT
+         hMfxtX180YUqfUxQEujnhpV6HNT3ZzKErJcscemXhKZWVs56Jehr2KevrNuwtufS+2jK
+         QJbe3de6EPSmYC6y99goO6+DXyVGL04GCMLwbhIgK1AtGxA1Yi+5km4wFjmIYzaoPnBH
+         gHS8LSnrtdSHD00sp1Xaf5Sb7r2a+AyTYzvNzE/P9X58LswXfvnfzlSMwXjbdr1VLYFA
+         aB+g==
+X-Gm-Message-State: AOAM531Wry9QVlN6D3FgBzCthpHCJL6cXo8LKWbOKDoWEGIfSksQRHO8
+        oUokiNj2RsJZNF4/mH+xy3DzsznN
+X-Google-Smtp-Source: ABdhPJz/LW9OM98aT63t976Gwi4hEgZTPIi0phRQ6PUjZ4qWV1sezySAudNB4XD3kVzXQhTXXv8xoA==
+X-Received: by 2002:a17:90b:2243:: with SMTP id hk3mr5438991pjb.110.1595085047393;
+        Sat, 18 Jul 2020 08:10:47 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u26sm11012135pfn.54.2020.07.18.08.10.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 18 Jul 2020 08:10:46 -0700 (PDT)
+Subject: Re: [PATCH V2] hwmon: add fan/pwm driver for corsair h100i platinum
+To:     jaap aarts <jaap.aarts1@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <20200717121642.41022-1-jaap.aarts1@gmail.com>
+ <6a5bcebd-379b-58d8-ac26-0bb2a27b9291@roeck-us.net>
+ <CACtzdJ0AmukhtzAtL5Vj5p52nCd5hQ77gPWVpYb4YBo2n6QfdA@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <24b5dcf4-076c-427c-41b3-32a2220f755b@roeck-us.net>
+Date:   Sat, 18 Jul 2020 08:10:44 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Message-ID: <trinity-384b299a-61b0-461c-9abb-1a00fc942b85-1595083781938@3c-app-gmx-bap08>
-From:   Achim Dahlhoff <achimdahlhoff@gmx.de>
-To:     linux-usb@vger.kernel.org
-Subject: bug: Reproduceable hung-task in snd_usb_pcm or usb-core in VM with
- Behringer device.
-Content-Type: multipart/mixed;
- boundary=rekceb-2fe6ce97-fe85-4a50-942a-dd36ce4b7997
-Date:   Sat, 18 Jul 2020 16:49:41 +0200
-Importance: normal
-Sensitivity: Normal
-X-Priority: 3
-X-Provags-ID: V03:K1:ms825w2cP4Kxqr/1hgnCVynHghF5D+FlIASezaFitfZTDCUcDA9ZathW0lj3TwFygaMs5
- DWotuLCy+GNIh5HUuS41aHUkHbm5r0RXRRg0OQcFdHkdt0K+0C2V5CO47eBAqI4T4qPxUxoK4tMb
- WU0GdhapCJg/d77WDeERbn2cOexg/DcA1YO6W0ot1O4HFUBiH4nXmYgRlB+mgoc+VsygUgNOlo0e
- ylTU6HruXhu/bO34vJjRI9nLtEcE+9hKsot/V9jWEiAI/MNjvCZbEzcTowxg3WY+hOkqDsiZUtIF
- J4=
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:kNXxKj3Rl8o=:WoRyJNFjiGGbP+2ybfj0wO
- Bpa6CdEb0fTGYmCFEsAfqNJNJ0ogrxbgSwhZ86wrJrlB42HhrGZ/9HS8fsl1dCMu3jmWnV729
- OiVEW1WwMSj9sYydNG4Yuo/E+nIWzc21dmEZa32keRdOaEHntVcHUIIVv+D6BtoYXqsFp2eKT
- czkxCCA7zDLtiygDH1yYlaIMctmMubjAIum6cmZ48NNJPGMu8BtvteiIwb+ooaHgShk02h9EV
- V2ug6QkYmBSofsND69nYzyaujNhMPq6l4oxlCD14ixwB5VHfJFTjBfK5JoDAJ4vwt4+CwO4bd
- /qcxwjuVW7VlXvmJMAE/fANFKRmkFad0zkLugKgEBvv0qKYSJ94eLCqs+S8CGk7LIGw9TEuiK
- fW/pOQFPsH+Hgwl9KW8VVCqBPZqee/pxSbUi5cnEjuz62mGeYz9D8bq9KhCQfGIMX/MrWRUDV
- rFExPiloxIYcX9PYZXw8z4BxXuPB+F5ITNqNaTsJJ5WnoOK4JdbXCoYOC1+1TDmCbFx9mHK/z
- iF0pGOmMY96My/lr9g3EzwyWzgFGB1EUfCeXFxS9jSO1UtREWf18ucNhfK8XiNbwhzUJ1BpZy
- bsXmpHanBkMn5sSukNdEnWVx5IQWepXlX1DSDCGfyh9dp5Q6gqDgCM/1PTgYpg9AFgCqmasj0
- 7XQ4Q0FIG3jbf2mgw4Uuz+3IVvVm0Q83X37BZiHtAF4aDxVG4v3PxI9mD15g9ulhqfcE=
+In-Reply-To: <CACtzdJ0AmukhtzAtL5Vj5p52nCd5hQ77gPWVpYb4YBo2n6QfdA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---rekceb-2fe6ce97-fe85-4a50-942a-dd36ce4b7997
-Content-Type: text/plain; charset=UTF-8
+On 7/18/20 2:33 AM, jaap aarts wrote:
+> On Sat, 18 Jul 2020 at 01:15, Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> On 7/17/20 5:16 AM, jaap aarts wrote:
+>>> Adds fan/pwm support for H100i platinum.
+>>> Custom temp/fan curves are not supported, however
+>>> the presets found in the proprietary drivers are available.
+>>>
+>>> Signed-off-by: Jaap Aarts <jaap.aarts1@gmail.com>
+>>
+>> Most of my comments have not been addressed.
+> 
+> I replied to your comments, everything I mentioned as fixed/changed
+> has been addressed in this new patch. You didn't respond to that any
+> further even though you did reply to my other email. So I thought I
+> was supposed to just send in v2.
+> 
 
-Reproduceable hung-task in snd_usb_pcm or usb-core in VM with Behringer device.
+This is incorrect. I did say, for example, that I won't accept things
+like setting fan curves, and that the driver should provide sets of
+{temperature, pwm} attributes instead. There are several other comments
+which were not addressed, such as not using C++ comments and using
+"if (retval)" instead of "if (retval != 0)". There is still a
+100-second timeout. I didn't check any further, but I think that
+is sufficient to say that several of my comments were not addressed.
 
-Hello maintainers of usb,
+>> Change log is missing.
+> 
+> I don't know what you mean, I have a from line, I have a one-line
+> description of the patch, the email subject just like some other
+> patches, I have a multi-line description, and a signed-off-by line.
+> According to the linux docs
+> (https://www.kernel.org/doc/html/latest/process/5.Posting.html?highlight=changelog#patch-formatting-and-changelogs)
+> This is what a changelog should be.
+> If you mean changelog from v1, I mailed about all the fixed/changed
+> things in this patch. I also send a follow-up email noting that after
+> some research I found out that this driver should NOT work with
+> all asetek gen6 based coolers, and that I changed the scope of
+> the driver to just a single line of corsair products.
+> 
 
-I found a reproduceable hung-task problem when trying to use Behringer "Uphoria" audio devices inside VMware workstation, on Debian-SID with kernel 5.7 or with 5.8-rc5 . Kernel-trace and USB IDs are included.
+I don't see anything along the line of
 
-Am I right to post here?
+v2:
+- made this change
+- made that change
 
-The problem occurs every time when accessing the devices.
-The problem does NOT occur with:
- - another sound device (griffin)
- - on native Linux on another machine
+in this patch.
 
-I cannot tell if it is a bug with VMware, the Behringer audio devices, or if this might point to a bug in snd_usb_pcm.
+>> 0-day feedback has not been adressed.
+> 
+> True, I did not fix all of those, I wasn't sure how to take all of them
+> since it was a long list.
 
-If you have an idea what to try I can apply patches, rebuild kernel and try if an improvement works.
+I am not entirely sure how to respond to that. What would be the point
+of reviewing the code if a simple compile and sanity check reveals
+several errors, and you state yourself that you did not fix them all ?
 
-The system is a Debian-10 'unstable', running inside VMware 15.5.5 . I tried first the kernel 5.7.0 which comes with Debian-sid, and then a self-built 5.8-rc5, in which I activated the hung-task detection to get the traces.
+Guenter
 
-The two Behringer devices tried are these:
-
-USB ID 1397:0509,  "BEHRINGER Internaltional GmbH UMC404HD 192k"
-USB ID 1397:0507,  "BEHRINGER International GmbH UMC202HD 192k"
-
-lsusb -vv information attached as tar.gz
-
-The first is a 4-channel device, the second a 2-channel. Both support 192kHz, 24bit.
-
-In the native Linux and on Windows-10 both devices work fine.
-
-When connecting the device, the kernel log already points out some problems?
-[   62.084753] usb 2-1: new high-speed USB device number 2 using ehci-pci
-[   62.494602] usb 2-1: New USB device found, idVendor=1397, idProduct=0509, bcdDevice= 1.12
-[   62.497558] usb 2-1: New USB device strings: Mfr=1, Product=3, SerialNumber=0
-[   62.500158] usb 2-1: Product: UMC404HD 192k
-[   62.501660] usb 2-1: Manufacturer: BEHRINGER
-[   62.539826] mc: Linux media interface: v0.10
-[   64.121247] usbcore: registered new interface driver snd-usb-audio
-[   65.718107] usb 2-1: timeout: still 3 active urbs on EP #81
-[   66.717880] usb 2-1: timeout: still 12 active urbs on EP #1
-[   67.722105] usb 2-1: timeout: still 3 active urbs on EP #81
-[   68.722097] usb 2-1: timeout: still 12 active urbs on EP #1
-
-
-LAter, when trying to access the device by calling for 'pavucontrol', I can wait 2 mins then get the hung-task:
-[  243.337022] INFO: task pulseaudio:762 blocked for more than 120 seconds.
-[  243.339607]       Tainted: G        W   E     5.8.0-rc5+ #1
-[  243.341652] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-[  243.344445] pulseaudio      D    0   762    743 0x00000120
-[  243.346478] Call Trace:
-[  243.347401]  __schedule+0x361/0x950
-[  243.348665]  schedule+0x4a/0xb0
-[  243.349922]  usb_kill_urb+0x7d/0xb0 [usbcore]
-[  243.351373]  ? finish_wait+0x80/0x80
-[  243.352282]  usb_hcd_flush_endpoint+0xb4/0x170 [usbcore]
-[  243.353514]  usb_disable_endpoint+0xa6/0xb0 [usbcore]
-[  243.354647]  usb_disable_interface+0x3c/0x50 [usbcore]
-[  243.355796]  usb_set_interface+0x69/0x2f0 [usbcore]
-[  243.356931]  snd_usb_pcm_close+0x92/0xc0 [snd_usb_audio]
-[  243.358131]  snd_pcm_release_substream.part.0+0x40/0xa0 [snd_pcm]
-[  243.359484]  snd_pcm_release+0x54/0xb0 [snd_pcm]
-[  243.360520]  __fput+0xe3/0x250
-[  243.361260]  task_work_run+0x5f/0x90
-[  243.362082]  __prepare_exit_to_usermode+0x1b5/0x1c0
-[  243.363173]  do_syscall_64+0x62/0xe0
-[  243.363983]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
-[  243.365173] RIP: 0033:0x7fcfb3f6ebd7
-[  243.365970] Code: Bad RIP value.
-[  243.366626] RSP: 002b:00007ffedc79baa8 EFLAGS: 00000202 ORIG_RAX: 000000000000000b
-[  243.368140] RAX: 0000000000000000 RBX: 000055d40175cdb8 RCX: 00007fcfb3f6ebd7
-[  243.369595] RDX: 0000000000000010 RSI: 0000000000001000 RDI: 00007fcfb4459000
-[  243.371087] RBP: 000055d40175c710 R08: 0000000000000000 R09: 00007ffedc79ba40
-[  243.372599] R10: 000055d4015a0250 R11: 0000000000000202 R12: 0000000000000000
-[  243.374123] R13: 00007ffedc79baf4 R14: 000055d4016747e0 R15: 000055d4015e63c0
-[  243.375639] INFO: lockdep is turned off.
-
-
-The output of lsusb -vv is taken from the native linux machine, as this call also locks up in the VM.
-
-
-Attached is the kernel-log of the whole run, just in case it might contain some intesting information.
-The host of the VMware VM is a Win10 system with an AMD Rhyzen7.
-
-
-Sincerly
-
-Achim Dahlhoff.
-
---rekceb-2fe6ce97-fe85-4a50-942a-dd36ce4b7997
-Content-Type: application/octet-stream
-Content-Disposition: attachment; filename=kernel_full_log.txt.gz
-Content-Transfer-Encoding: base64
-
-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
-jAEA
---rekceb-2fe6ce97-fe85-4a50-942a-dd36ce4b7997
-Content-Type: application/octet-stream
-Content-Disposition: attachment; filename=lsusb_data.tar.gz
-Content-Transfer-Encoding: base64
-
-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
-gICAgICOh/4Pc1KSnQAYAQA=
---rekceb-2fe6ce97-fe85-4a50-942a-dd36ce4b7997--
+> The rest of the 0-day feedback will be fixed next round.
+> 
+>>
+>> Guenter
+> 
+> 
+>>
+>>> ---
+>>>  drivers/hwmon/Kconfig               |   6 +
+>>>  drivers/hwmon/Makefile              |   1 +
+>>>  drivers/hwmon/corsair_hydro_i_pro.c | 791 ++++++++++++++++++++++++++++
+>>>  3 files changed, 798 insertions(+)
+>>>  create mode 100644 drivers/hwmon/corsair_hydro_i_pro.c
+>>>
+>>> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+>>> index 288ae9f63588..9831a40fb05f 100644
+>>> --- a/drivers/hwmon/Kconfig
+>>> +++ b/drivers/hwmon/Kconfig
+>>> @@ -378,6 +378,12 @@ config SENSORS_ARM_SCPI
+>>>         and power sensors available on ARM Ltd's SCP based platforms. The
+>>>         actual number and type of sensors exported depend on the platform.
+>>>
+>>> +config SENSORS_CORSAIR_HYDRO_I_PRO
+>>> +     tristate "Corsair hydro HXXXi pro driver"
+>>> +     help
+>>> +       If you say yes here you get support for the corsair hydro HXXXi pro
+>>> +       range of devices.
+>>> +
+>>>  config SENSORS_ASB100
+>>>       tristate "Asus ASB100 Bach"
+>>>       depends on X86 && I2C
+>>> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+>>> index 3e32c21f5efe..ec63294b3ef1 100644
+>>> --- a/drivers/hwmon/Makefile
+>>> +++ b/drivers/hwmon/Makefile
+>>> @@ -20,6 +20,7 @@ obj-$(CONFIG_SENSORS_W83793)        += w83793.o
+>>>  obj-$(CONFIG_SENSORS_W83795) += w83795.o
+>>>  obj-$(CONFIG_SENSORS_W83781D)        += w83781d.o
+>>>  obj-$(CONFIG_SENSORS_W83791D)        += w83791d.o
+>>> +obj-$(CONFIG_SENSORS_CORSAIR_HYDRO_I_PRO)    += corsair_hydro_i_pro.o
+>>>
+>>>  obj-$(CONFIG_SENSORS_AB8500) += abx500.o ab8500.o
+>>>  obj-$(CONFIG_SENSORS_ABITUGURU)      += abituguru.o
+>>> diff --git a/drivers/hwmon/corsair_hydro_i_pro.c b/drivers/hwmon/corsair_hydro_i_pro.c
+>>> new file mode 100644
+>>> index 000000000000..43bf52d8d365
+>>> --- /dev/null
+>>> +++ b/drivers/hwmon/corsair_hydro_i_pro.c
+>>> @@ -0,0 +1,791 @@
+>>> +// SPDX-License-Identifier: GPL-2.0-or-later
+>>> +/*
+>>> + * A hwmon driver for all corsair hyxro HXXXi pro all-in-one liquid coolers.
+>>> + * Copyright (c) Jaap Aarts 2020
+>>> + *
+>>> + * Protocol reverse engineered by audiohacked
+>>> + * https://github.com/audiohacked/OpendriverLink
+>>> + */
+>>> +
+>>> +/*
+>>> + * Supports following liquid coolers:
+>>> + * H100i platinum
+>>> + *
+>>> + * Other products should work with this driver but no testing has been done.
+>>> + *
+>>> + * Note: platinum is the codename name for pro within the driver, so H100i platinum = H100i pro.
+>>> + * But some products are actually calles platinum, these are not intended to be supported.
+>>> + *
+>>> + * Note: fan curve control has not been implemented
+>>> + */
+>>> +#include <linux/errno.h>
+>>> +#include <linux/hwmon.h>
+>>> +#include <linux/kernel.h>
+>>> +#include <linux/module.h>
+>>> +#include <linux/slab.h>
+>>> +#include <linux/usb.h>
+>>> +
+>>> +struct hydro_i_pro_device {
+>>> +     struct usb_device *udev;
+>>> +
+>>> +     unsigned char *bulk_out_buffer;
+>>> +     char *bulk_in_buffer;
+>>> +     size_t bulk_out_size;
+>>> +     size_t bulk_in_size;
+>>> +     char bulk_in_endpointAddr;
+>>> +     char bulk_out_endpointAddr;
+>>> +
+>>> +     struct usb_interface *interface; /* the interface for this device */
+>>> +     struct semaphore
+>>> +             limit_sem; /* limiting the number of writes in progress */
+>>> +};
+>>> +
+>>> +struct curve_point {
+>>> +     uint8_t temp;
+>>> +     uint8_t pwm;
+>>> +};
+>>> +
+>>> +struct hwmon_fan_data {
+>>> +     char fan_channel;
+>>> +     long fan_target;
+>>> +     unsigned char fan_pwm_target;
+>>> +     long mode;
+>>> +     struct curve_point curve[7];
+>>> +};
+>>> +
+>>> +struct hwmon_data {
+>>> +     struct hydro_i_pro_device *hdev;
+>>> +     int channel_count;
+>>> +     void **channel_data;
+>>> +};
+>>> +
+>>> +struct curve_point quiet_curve[] = {
+>>> +     {
+>>> +             .temp = 0x1F,
+>>> +             .pwm = 0x15,
+>>> +     },
+>>> +     {
+>>> +             .temp = 0x21,
+>>> +             .pwm = 0x1E,
+>>> +     },
+>>> +     {
+>>> +             .temp = 0x24,
+>>> +             .pwm = 0x25,
+>>> +     },
+>>> +     {
+>>> +             .temp = 0x27,
+>>> +             .pwm = 0x2D,
+>>> +     },
+>>> +     {
+>>> +             .temp = 0x29,
+>>> +             .pwm = 0x38,
+>>> +     },
+>>> +     {
+>>> +             .temp = 0x2C,
+>>> +             .pwm = 0x4A,
+>>> +     },
+>>> +     {
+>>> +             .temp = 0x2F,
+>>> +             .pwm = 0x64,
+>>> +     },
+>>> +};
+>>> +
+>>> +struct curve_point balanced_curve[] = {
+>>> +     {
+>>> +             .temp = 0x1C,
+>>> +             .pwm = 0x15,
+>>> +     },
+>>> +     {
+>>> +             .temp = 0x1E,
+>>> +             .pwm = 0x1B,
+>>> +     },
+>>> +     {
+>>> +             .temp = 0x20,
+>>> +             .pwm = 0x23,
+>>> +     },
+>>> +     {
+>>> +             .temp = 0x22,
+>>> +             .pwm = 0x28,
+>>> +     },
+>>> +     {
+>>> +             .temp = 0x24,
+>>> +             .pwm = 0x32,
+>>> +     },
+>>> +     {
+>>> +             .temp = 0x27,
+>>> +             .pwm = 0x48,
+>>> +     },
+>>> +     {
+>>> +             .temp = 0x29,
+>>> +             .pwm = 0x64,
+>>> +     },
+>>> +};
+>>> +
+>>> +struct curve_point extreme_curve[] = {
+>>> +     {
+>>> +             .temp = 0x19,
+>>> +             .pwm = 0x28,
+>>> +     },
+>>> +     {
+>>> +             .temp = 0x1B,
+>>> +             .pwm = 0x2E,
+>>> +     },
+>>> +     {
+>>> +             .temp = 0x1D,
+>>> +             .pwm = 0x37,
+>>> +     },
+>>> +     {
+>>> +             .temp = 0x1E,
+>>> +             .pwm = 0x41,
+>>> +     },
+>>> +     {
+>>> +             .temp = 0x1F,
+>>> +             .pwm = 0x4C,
+>>> +     },
+>>> +     {
+>>> +             .temp = 0x20,
+>>> +             .pwm = 0x56,
+>>> +     },
+>>> +     {
+>>> +             .temp = 0x21,
+>>> +             .pwm = 0x64,
+>>> +     },
+>>> +};
+>>> +
+>>> +#define default_curve quiet_curve
+>>> +
+>>> +enum opcodes {
+>>> +     PWM_FAN_CURVE_CMD = 0x40,
+>>> +     PWM_GET_CURRENT_CMD = 0x41,
+>>> +     PWM_FAN_TARGET_CMD = 0x42,
+>>> +     RPM_FAN_TARGET_CMD = 0x43,
+>>> +};
+>>> +
+>>> +#define SUCCES_LENGTH 3
+>>> +#define SUCCES_CODE (0x12, 0x34)
+>>> +static const char SUCCESS[SUCCES_LENGTH - 1] = { 0x12, 0x34 };
+>>> +
+>>> +static bool check_succes(enum opcodes command, char ret[SUCCES_LENGTH])
+>>> +{
+>>> +     char success[SUCCES_LENGTH] = { command, SUCCES_CODE };
+>>> +
+>>> +     return strncmp(ret, success, SUCCES_LENGTH) == 0;
+>>> +}
+>>> +
+>>> +int set_fan_pwm_curve(struct hydro_i_pro_device *hdev,
+>>> +                   struct hwmon_fan_data *fan_data,
+>>> +                   struct curve_point point[7])
+>>> +{
+>>> +     int retval;
+>>> +     int wrote;
+>>> +     int sndpipe = usb_sndbulkpipe(hdev->udev, hdev->bulk_out_endpointAddr);
+>>> +     int rcvpipe = usb_rcvbulkpipe(hdev->udev, hdev->bulk_in_endpointAddr);
+>>> +     unsigned char *send_buf = hdev->bulk_out_buffer;
+>>> +     unsigned char *recv_buf = hdev->bulk_in_buffer;
+>>> +
+>>> +     memcpy(fan_data->curve, point, sizeof(fan_data->curve));
+>>> +
+>>> +     send_buf[0] = PWM_FAN_CURVE_CMD;
+>>> +     send_buf[1] = fan_data->fan_channel;
+>>> +     send_buf[2] = point[0].temp;
+>>> +     send_buf[3] = point[1].temp;
+>>> +     send_buf[4] = point[2].temp;
+>>> +     send_buf[5] = point[3].temp;
+>>> +     send_buf[6] = point[4].temp;
+>>> +     send_buf[7] = point[5].temp;
+>>> +     send_buf[8] = point[6].temp;
+>>> +     send_buf[9] = point[0].pwm;
+>>> +     send_buf[10] = point[1].pwm;
+>>> +     send_buf[11] = point[2].pwm;
+>>> +     send_buf[12] = point[3].pwm;
+>>> +     send_buf[13] = point[4].pwm;
+>>> +     send_buf[14] = point[5].pwm;
+>>> +     send_buf[15] = point[6].pwm;
+>>> +
+>>> +     retval = usb_bulk_msg(hdev->udev, sndpipe, send_buf, 16, &wrote, 100);
+>>> +     if (retval != 0)
+>>> +             return retval;
+>>> +
+>>> +     retval = usb_bulk_msg(hdev->udev, rcvpipe, recv_buf, 4, &wrote, 100);
+>>> +     if (retval != 0)
+>>> +             return retval;
+>>> +
+>>> +     if (!check_succes(send_buf[0], recv_buf)) {
+>>> +             dev_info(&hdev->udev->dev,
+>>> +                      "[*] failed setting fan curve %d,%d,%d/%d\n",
+>>> +                      recv_buf[0], recv_buf[1], recv_buf[2], recv_buf[3]);
+>>> +             return -EINVAL;
+>>> +     }
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +int set_fan_target_rpm(struct hydro_i_pro_device *hdev,
+>>> +                    struct hwmon_fan_data *fan_data, long val)
+>>> +{
+>>> +     int retval;
+>>> +     int wrote;
+>>> +     int sndpipe = usb_sndbulkpipe(hdev->udev, hdev->bulk_out_endpointAddr);
+>>> +     int rcvpipe = usb_rcvbulkpipe(hdev->udev, hdev->bulk_in_endpointAddr);
+>>> +
+>>> +     unsigned char *send_buf = hdev->bulk_out_buffer;
+>>> +     unsigned char *recv_buf = hdev->bulk_in_buffer;
+>>> +
+>>> +     fan_data->fan_target = val;
+>>> +     fan_data->fan_pwm_target = 0;
+>>> +
+>>> +     send_buf[0] = RPM_FAN_TARGET_CMD;
+>>> +     send_buf[1] = fan_data->fan_channel;
+>>> +     send_buf[2] = (fan_data->fan_target >> 8);
+>>> +     send_buf[3] = fan_data->fan_target;
+>>> +
+>>> +     retval = usb_bulk_msg(hdev->udev, sndpipe, send_buf, 4, &wrote, 100);
+>>> +     if (retval != 0)
+>>> +             return retval;
+>>> +
+>>> +     retval = usb_bulk_msg(hdev->udev, rcvpipe, recv_buf, 6, &wrote, 100);
+>>> +     if (retval != 0)
+>>> +             return retval;
+>>> +
+>>> +     if (!check_succes(send_buf[0], recv_buf)) {
+>>> +             dev_info(&hdev->udev->dev,
+>>> +                      "[*] failed setting fan rpm %d,%d,%d/%d\n",
+>>> +                      recv_buf[0], recv_buf[1], recv_buf[2], recv_buf[3]);
+>>> +             return -EINVAL;
+>>> +     }
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +int get_fan_current_rpm(struct hydro_i_pro_device *hdev,
+>>> +                     struct hwmon_fan_data *fan_data, long *val)
+>>> +{
+>>> +     int retval;
+>>> +     int wrote;
+>>> +     int sndpipe = usb_sndbulkpipe(hdev->udev, hdev->bulk_out_endpointAddr);
+>>> +     int rcvpipe = usb_rcvbulkpipe(hdev->udev, hdev->bulk_in_endpointAddr);
+>>> +
+>>> +     unsigned char *send_buf = hdev->bulk_out_buffer;
+>>> +     unsigned char *recv_buf = hdev->bulk_in_buffer;
+>>> +
+>>> +     send_buf[0] = PWM_GET_CURRENT_CMD;
+>>> +     send_buf[1] = fan_data->fan_channel;
+>>> +
+>>> +     retval = usb_bulk_msg(hdev->udev, sndpipe, send_buf, 2, &wrote, 100);
+>>> +     if (retval != 0)
+>>> +             return retval;
+>>> +
+>>> +     retval = usb_bulk_msg(hdev->udev, rcvpipe, recv_buf, 6, &wrote, 100);
+>>> +     if (retval != 0)
+>>> +             return retval;
+>>> +
+>>> +     if (!check_succes(send_buf[0], recv_buf) ||
+>>> +         recv_buf[3] != fan_data->fan_channel) {
+>>> +             dev_info(&hdev->udev->dev,
+>>> +                      "[*] failed retrieving fan rmp %d,%d,%d/%d\n",
+>>> +                      recv_buf[0], recv_buf[1], recv_buf[2], recv_buf[3]);
+>>> +             return -EINVAL;
+>>> +     }
+>>> +
+>>> +     *val = ((recv_buf[4]) << 8) + recv_buf[5];
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +int set_fan_target_pwm(struct hydro_i_pro_device *hdev,
+>>> +                    struct hwmon_fan_data *fan_data, long val)
+>>> +{
+>>> +     int retval;
+>>> +     int wrote;
+>>> +     int sndpipe = usb_sndbulkpipe(hdev->udev, hdev->bulk_out_endpointAddr);
+>>> +     int rcvpipe = usb_rcvbulkpipe(hdev->udev, hdev->bulk_in_endpointAddr);
+>>> +
+>>> +     unsigned char *send_buf = hdev->bulk_out_buffer;
+>>> +     unsigned char *recv_buf = hdev->bulk_in_buffer;
+>>> +
+>>> +     fan_data->fan_pwm_target = val;
+>>> +     fan_data->fan_target = 0;
+>>> +
+>>> +     send_buf[0] = PWM_FAN_TARGET_CMD;
+>>> +     send_buf[1] = fan_data->fan_channel;
+>>> +     send_buf[3] = fan_data->fan_pwm_target;
+>>> +
+>>> +     retval = usb_bulk_msg(hdev->udev, sndpipe, send_buf, 4, &wrote, 100);
+>>> +     if (retval != 0)
+>>> +             return retval;
+>>> +
+>>> +     retval = usb_bulk_msg(hdev->udev, rcvpipe, recv_buf, 6, &wrote, 100000);
+>>> +     if (retval != 0)
+>>> +             return retval;
+>>> +
+>>> +     if (!check_succes(send_buf[0], recv_buf)) {
+>>> +             dev_info(&hdev->udev->dev,
+>>> +                      "[*] failed setting fan pwm %d,%d,%d/%d\n",
+>>> +                      recv_buf[0], recv_buf[1], recv_buf[2], recv_buf[3]);
+>>> +             return -EINVAL;
+>>> +     }
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +umode_t hwmon_is_visible(const void *d, enum hwmon_sensor_types type, u32 attr,
+>>> +                      int channel)
+>>> +{
+>>> +     switch (type) {
+>>> +     case hwmon_fan:
+>>> +             switch (attr) {
+>>> +             case hwmon_fan_input:
+>>> +                     return 0444;
+>>> +                     break;
+>>> +             case hwmon_fan_target:
+>>> +                     return 0644;
+>>> +                     break;
+>>> +             case hwmon_fan_min:
+>>> +                     return 0444;
+>>> +                     break;
+>>> +             default:
+>>> +                     break;
+>>> +             }
+>>> +             break;
+>>> +     case hwmon_pwm:
+>>> +             switch (attr) {
+>>> +             case hwmon_pwm_input:
+>>> +                     return 0200;
+>>> +                     break;
+>>> +             case hwmon_pwm_enable:
+>>> +                     return 0644;
+>>> +                     break;
+>>> +             default:
+>>> +                     break;
+>>> +             }
+>>> +             break;
+>>> +     default:
+>>> +             break;
+>>> +     }
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +static int hwmon_write(struct device *dev, enum hwmon_sensor_types type,
+>>> +                    u32 attr, int channel, long val)
+>>> +{
+>>> +     struct hwmon_data *data = dev_get_drvdata(dev);
+>>> +     struct hydro_i_pro_device *hdev = data->hdev;
+>>> +     struct hwmon_fan_data *fan_data;
+>>> +     int retval = 0;
+>>> +
+>>> +     switch (type) {
+>>> +     case hwmon_fan:
+>>> +             switch (attr) {
+>>> +             case hwmon_fan_target:
+>>> +                     fan_data = data->channel_data[channel];
+>>> +                     if (fan_data->mode != 1)
+>>> +                             return -EINVAL;
+>>> +
+>>> +                     retval = usb_autopm_get_interface(hdev->interface);
+>>> +                     if (retval)
+>>> +                             goto exit;
+>>> +
+>>> +                     if (down_trylock(&hdev->limit_sem)) {
+>>> +                             retval = -EAGAIN;
+>>> +                             goto cleanup_interface;
+>>> +                     }
+>>> +
+>>> +                     retval = set_fan_target_rpm(hdev, fan_data, val);
+>>> +                     if (retval)
+>>> +                             goto cleanup;
+>>> +
+>>> +                     break;
+>>> +             default:
+>>> +                     return -EINVAL;
+>>> +             }
+>>> +             goto exit;
+>>> +     case hwmon_pwm:
+>>> +             switch (attr) {
+>>> +             case hwmon_pwm_input:
+>>> +                     fan_data = data->channel_data[channel];
+>>> +                     if (fan_data->mode != 1)
+>>> +                             return -EINVAL;
+>>> +
+>>> +                     retval = usb_autopm_get_interface(hdev->interface);
+>>> +                     if (retval)
+>>> +                             goto exit;
+>>> +
+>>> +                     if (down_trylock(&hdev->limit_sem)) {
+>>> +                             retval = -EAGAIN;
+>>> +                             goto cleanup_interface;
+>>> +                     }
+>>> +
+>>> +                     retval = set_fan_target_pwm(hdev, fan_data, val);
+>>> +                     if (retval)
+>>> +                             goto cleanup;
+>>> +
+>>> +                     break;
+>>> +             case hwmon_pwm_enable:
+>>> +                     fan_data = data->channel_data[channel];
+>>> +
+>>> +                     retval = usb_autopm_get_interface(hdev->interface);
+>>> +                     if (retval)
+>>> +                             goto exit;
+>>> +
+>>> +                     if (down_trylock(&hdev->limit_sem)) {
+>>> +                             retval = -EAGAIN;
+>>> +                             goto cleanup_interface;
+>>> +                     }
+>>> +                     fan_data->mode = val;
+>>> +
+>>> +                     switch (val) {
+>>> +                     case 0:
+>>> +                             set_fan_pwm_curve(hdev, fan_data,
+>>> +                                               default_curve);
+>>> +                             break;
+>>> +                     case 1:
+>>> +                             if (fan_data->fan_target != 0) {
+>>> +                                     retval = set_fan_target_rpm(
+>>> +                                             hdev, fan_data,
+>>> +                                             fan_data->fan_target);
+>>> +                                     if (retval)
+>>> +                                             goto cleanup;
+>>> +                             } else if (fan_data->fan_pwm_target != 0) {
+>>> +                                     retval = set_fan_target_pwm(
+>>> +                                             hdev, fan_data,
+>>> +                                             fan_data->fan_pwm_target);
+>>> +                                     if (retval)
+>>> +                                             goto cleanup;
+>>> +                             }
+>>> +                             break;
+>>> +                     case 2:
+>>> +                             set_fan_pwm_curve(hdev, fan_data, quiet_curve);
+>>> +                             break;
+>>> +                     case 3:
+>>> +                             set_fan_pwm_curve(hdev, fan_data,
+>>> +                                               balanced_curve);
+>>> +                             break;
+>>> +                     case 4:
+>>> +                             set_fan_pwm_curve(hdev, fan_data,
+>>> +                                               extreme_curve);
+>>> +                             break;
+>>> +                     }
+>>> +                     break;
+>>> +             default:
+>>> +                     return -EINVAL;
+>>> +             }
+>>> +             goto exit;
+>>> +     default:
+>>> +             return -EINVAL;
+>>> +     }
+>>> +
+>>> +cleanup:
+>>> +     up(&hdev->limit_sem);
+>>> +cleanup_interface:
+>>> +     usb_autopm_put_interface(hdev->interface);
+>>> +exit:
+>>> +     return retval;
+>>> +}
+>>> +
+>>> +int hwmon_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+>>> +            int channel, long *val)
+>>> +{
+>>> +     struct hwmon_data *data = dev_get_drvdata(dev);
+>>> +     struct hydro_i_pro_device *hdev = data->hdev;
+>>> +     struct hwmon_fan_data *fan_data;
+>>> +     int retval = 0;
+>>> +
+>>> +     if (channel >= data->channel_count)
+>>> +             return -EAGAIN;
+>>> +
+>>> +     switch (type) {
+>>> +     case hwmon_fan:
+>>> +             switch (attr) {
+>>> +             case hwmon_fan_input:
+>>> +                     fan_data = data->channel_data[channel];
+>>> +
+>>> +                     retval = usb_autopm_get_interface(hdev->interface);
+>>> +                     if (retval)
+>>> +                             goto exit;
+>>> +
+>>> +                     if (down_trylock(&hdev->limit_sem)) {
+>>> +                             retval = -EAGAIN;
+>>> +                             goto cleanup_interface;
+>>> +                     }
+>>> +
+>>> +                     retval = get_fan_current_rpm(hdev, fan_data, val);
+>>> +                     if (retval)
+>>> +                             goto cleanup;
+>>> +
+>>> +                     goto cleanup;
+>>> +             case hwmon_fan_target:
+>>> +                     fan_data = data->channel_data[channel];
+>>> +                     if (fan_data->mode != 1) {
+>>> +                             *val = 0;
+>>> +                             goto exit;
+>>> +                     }
+>>> +                     *val = fan_data->fan_target;
+>>> +                     goto exit;
+>>> +             case hwmon_fan_min:
+>>> +                     *val = 200;
+>>> +                     goto exit;
+>>> +
+>>> +             default:
+>>> +                     return -EINVAL;
+>>> +             }
+>>> +             goto exit;
+>>> +
+>>> +     case hwmon_pwm:
+>>> +             switch (attr) {
+>>> +             case hwmon_pwm_enable:
+>>> +                     fan_data = data->channel_data[channel];
+>>> +                     *val = fan_data->mode;
+>>> +                     goto exit;
+>>> +             default:
+>>> +                     return -EINVAL;
+>>> +             }
+>>> +             goto exit;
+>>> +
+>>> +     default:
+>>> +             return -EINVAL;
+>>> +     }
+>>> +
+>>> +cleanup:
+>>> +     up(&hdev->limit_sem);
+>>> +cleanup_interface:
+>>> +     usb_autopm_put_interface(hdev->interface);
+>>> +exit:
+>>> +     return retval;
+>>> +}
+>>> +
+>>> +#define fan_config (HWMON_F_INPUT | HWMON_F_TARGET | HWMON_F_MIN)
+>>> +#define pwm_config (HWMON_PWM_INPUT | HWMON_PWM_ENABLE)
+>>> +
+>>> +static const struct hwmon_ops i_pro_ops = {
+>>> +     .is_visible = hwmon_is_visible,
+>>> +     .read = hwmon_read,
+>>> +     .write = hwmon_write,
+>>> +};
+>>> +
+>>> +bool does_fan_exist(struct hydro_i_pro_device *hdev, int channel)
+>>> +{
+>>> +     int retval;
+>>> +     int wrote;
+>>> +     int sndpipe = usb_sndbulkpipe(hdev->udev, hdev->bulk_out_endpointAddr);
+>>> +     int rcvpipe = usb_rcvbulkpipe(hdev->udev, hdev->bulk_in_endpointAddr);
+>>> +
+>>> +     unsigned char *send_buf = hdev->bulk_out_buffer;
+>>> +     unsigned char *recv_buf = hdev->bulk_in_buffer;
+>>> +
+>>> +     send_buf[0] = RPM_FAN_TARGET_CMD;
+>>> +     send_buf[1] = channel;
+>>> +     send_buf[2] = (600 >> 8);
+>>> +     send_buf[3] = (unsigned char)600;
+>>> +
+>>> +     retval = usb_bulk_msg(hdev->udev, sndpipe, send_buf, 4, &wrote, 100);
+>>> +     if (retval != 0)
+>>> +             return false;
+>>> +
+>>> +     retval = usb_bulk_msg(hdev->udev, rcvpipe, recv_buf, 6, &wrote, 100000);
+>>> +     if (retval != 0)
+>>> +             return false;
+>>> +
+>>> +     if (!check_succes(send_buf[0], recv_buf))
+>>> +             return false;
+>>> +     return true;
+>>> +}
+>>> +
+>>> +int get_fan_count(struct hydro_i_pro_device *hdev)
+>>> +{
+>>> +     int fan;
+>>> +
+>>> +     for (fan = 0; does_fan_exist(hdev, fan); fan += 1)
+>>> +             ;
+>>> +     return fan;
+>>> +}
+>>> +
+>>> +void hwmon_init(struct hydro_i_pro_device *hdev)
+>>> +{
+>>> +     int fan_id;
+>>> +     struct device *hwmon_dev;
+>>> +     struct hwmon_fan_data *fan;
+>>> +     struct hwmon_data *data = devm_kzalloc(
+>>> +             &hdev->udev->dev, sizeof(struct hwmon_data), GFP_KERNEL);
+>>> +     struct hwmon_chip_info *hwmon_info = devm_kzalloc(
+>>> +             &hdev->udev->dev, sizeof(struct hwmon_chip_info), GFP_KERNEL);
+>>> +     //Allocate the info table
+>>> +     struct hwmon_channel_info **aio_info =
+>>> +             devm_kzalloc(&hdev->udev->dev,
+>>> +                          sizeof(struct hwmon_channel_info *) * 2,
+>>> +                          GFP_KERNEL); //2 for each channel info.
+>>> +
+>>> +     //Allocate the fan and PWM configuration
+>>> +     u32 *fans_config = devm_kzalloc(&hdev->udev->dev,
+>>> +                                     sizeof(u32) * (data->channel_count + 1),
+>>> +                                     GFP_KERNEL);
+>>> +     u32 *pwms_config = devm_kzalloc(&hdev->udev->dev,
+>>> +                                     sizeof(u32) * (data->channel_count + 1),
+>>> +                                     GFP_KERNEL);
+>>> +
+>>> +     data->channel_count = get_fan_count(hdev); //amount of fans
+>>> +     data->channel_data =
+>>> +             devm_kzalloc(&hdev->udev->dev,
+>>> +                          sizeof(char *) * data->channel_count, GFP_KERNEL);
+>>> +
+>>> +     //For each fan create a data channel a fan config entry and a pwm config entry
+>>> +     for (fan_id = 0; fan_id <= data->channel_count; fan_id++) {
+>>> +             fan = devm_kzalloc(&hdev->udev->dev,
+>>> +                                sizeof(struct hwmon_fan_data), GFP_KERNEL);
+>>> +             fan->fan_channel = fan_id;
+>>> +             fan->mode = 2;
+>>> +             data->channel_data[fan_id] = fan;
+>>> +             fans_config[fan_id] = fan_config;
+>>> +             pwms_config[fan_id] = pwm_config;
+>>> +     }
+>>> +     fans_config[data->channel_count] = 0;
+>>> +     pwms_config[data->channel_count] = 0;
+>>> +
+>>> +     aio_info[0] =
+>>> +             devm_kzalloc(&hdev->udev->dev,
+>>> +                          sizeof(struct hwmon_channel_info), GFP_KERNEL);
+>>> +     aio_info[0]->type = hwmon_fan;
+>>> +     aio_info[0]->config = fans_config;
+>>> +
+>>> +     aio_info[1] =
+>>> +             devm_kzalloc(&hdev->udev->dev,
+>>> +                          sizeof(struct hwmon_channel_info), GFP_KERNEL);
+>>> +     aio_info[1]->type = hwmon_pwm;
+>>> +     aio_info[1]->config = pwms_config;
+>>> +
+>>> +     hwmon_info->ops = &i_pro_ops;
+>>> +     hwmon_info->info = (const struct hwmon_channel_info **)aio_info;
+>>> +
+>>> +     data->hdev = hdev;
+>>> +     hwmon_dev = devm_hwmon_device_register_with_info(
+>>> +             &hdev->udev->dev, "driver_fan", data, hwmon_info, NULL);
+>>> +     dev_info(&hdev->udev->dev, "[*] Setup hwmon\n");
+>>> +}
+>>> +
+>>> +/*
+>>> + * Devices that work with this driver.
+>>> + * More devices should work, however none have been tested.
+>>> + */
+>>> +static const struct usb_device_id astk_table[] = {
+>>> +     { USB_DEVICE(0x1b1c, 0x0c15) },
+>>> +     {},
+>>> +};
+>>> +
+>>> +MODULE_DEVICE_TABLE(usb, astk_table);
+>>> +
+>>> +int init_device(struct usb_device *udev)
+>>> +{
+>>> +     int retval;
+>>> +
+>>> +     //This is needed because when running windows in a vm with proprietary driver
+>>> +     //and you switch to this driver, the device will not respond unless you run this.
+>>> +     retval = usb_control_msg(udev, usb_sndctrlpipe(udev, 0), 0x00, 0x40,
+>>> +                              0xffff, 0x0000, 0, 0, 0);
+>>> +     //this always returns error
+>>> +     if (retval != 0)
+>>> +             ;
+>>> +
+>>> +     retval = usb_control_msg(udev, usb_sndctrlpipe(udev, 0), 0x02, 0x40,
+>>> +                              0x0002, 0x0000, 0, 0, 0);
+>>> +     return retval;
+>>> +}
+>>> +
+>>> +int deinit_device(struct usb_device *udev)
+>>> +{
+>>> +     return usb_control_msg(udev, usb_sndctrlpipe(udev, 0), 0x02, 0x40,
+>>> +                            0x0004, 0x0000, 0, 0, 0);
+>>> +}
+>>> +
+>>> +static void astk_delete(struct hydro_i_pro_device *hdev)
+>>> +{
+>>> +     usb_put_intf(hdev->interface);
+>>> +     usb_put_dev(hdev->udev);
+>>> +     kfree(hdev->bulk_in_buffer);
+>>> +     kfree(hdev->bulk_out_buffer);
+>>> +     kfree(hdev);
+>>> +}
+>>> +
+>>> +static int astk_probe(struct usb_interface *interface,
+>>> +                   const struct usb_device_id *id)
+>>> +{
+>>> +     struct hydro_i_pro_device *hdev;
+>>> +     int retval;
+>>> +     struct usb_endpoint_descriptor *bulk_in, *bulk_out;
+>>> +
+>>> +     hdev = kzalloc(sizeof(*hdev), GFP_KERNEL);
+>>> +     if (!hdev) {
+>>> +             retval = -ENOMEM;
+>>> +             goto exit;
+>>> +     }
+>>> +
+>>> +     retval = usb_find_common_endpoints(interface->cur_altsetting, &bulk_in,
+>>> +                                        &bulk_out, NULL, NULL);
+>>> +     if (retval != 0)
+>>> +             goto exit;
+>>> +
+>>> +     hdev->udev = usb_get_dev(interface_to_usbdev(interface));
+>>> +     hdev->interface = usb_get_intf(interface);
+>>> +
+>>> +     /* set up the endpoint information */
+>>> +     /* use only the first bulk-in and bulk-out endpoints */
+>>> +     hdev->bulk_in_size = usb_endpoint_maxp(bulk_in);
+>>> +     hdev->bulk_in_buffer = kmalloc(hdev->bulk_in_size, GFP_KERNEL);
+>>> +     hdev->bulk_in_endpointAddr = bulk_in->bEndpointAddress;
+>>> +     hdev->bulk_out_size = usb_endpoint_maxp(bulk_out);
+>>> +     hdev->bulk_out_buffer = kmalloc(hdev->bulk_out_size, GFP_KERNEL);
+>>> +     hdev->bulk_out_endpointAddr = bulk_out->bEndpointAddress;
+>>> +
+>>> +     retval = init_device(hdev->udev);
+>>> +     if (retval) {
+>>> +             dev_err(&interface->dev, "failed initialising this device.\n");
+>>> +             goto exit;
+>>> +     }
+>>> +
+>>> +     hwmon_init(hdev);
+>>> +
+>>> +     usb_set_intfdata(interface, hdev);
+>>> +     sema_init(&hdev->limit_sem, 8);
+>>> +exit:
+>>> +     return retval;
+>>> +}
+>>> +
+>>> +static void astk_disconnect(struct usb_interface *interface)
+>>> +{
+>>> +     struct hydro_i_pro_device *hdev = usb_get_intfdata(interface);
+>>> +
+>>> +     dev_info(&hdev->udev->dev, "[*] DEINIT DEVICE\n");
+>>> +     usb_set_intfdata(interface, NULL);
+>>> +     astk_delete(hdev);
+>>> +     deinit_device(hdev->udev);
+>>> +}
+>>> +static int astk_resume(struct usb_interface *intf)
+>>> +{
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +static int astk_suspend(struct usb_interface *intf, pm_message_t message)
+>>> +{
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +static struct usb_driver hydro_i_pro_driver = {
+>>> +     .name = "hydro_i_pro_device",
+>>> +     .id_table = astk_table,
+>>> +     .probe = astk_probe,
+>>> +     .disconnect = astk_disconnect,
+>>> +     .resume = astk_resume,
+>>> +     .suspend = astk_suspend,
+>>> +     .supports_autosuspend = 1,
+>>> +};
+>>> +
+>>> +static int __init hydro_i_pro_init(void)
+>>> +{
+>>> +     return usb_register(&hydro_i_pro_driver);
+>>> +}
+>>> +
+>>> +static void __exit hydro_i_pro_exit(void)
+>>> +{
+>>> +     usb_deregister(&hydro_i_pro_driver);
+>>> +}
+>>> +
+>>> +module_init(hydro_i_pro_init);
+>>> +module_exit(hydro_i_pro_exit);
+>>> +
+>>> +MODULE_LICENSE("GPL");
+>>> +MODULE_AUTHOR("Jaap Aarts <jaap.aarts1@gmail.com>");
+>>> +MODULE_DESCRIPTION("Corsair HXXXi pro device driver");
+>>>
+>>
 
