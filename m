@@ -2,81 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 007502253BF
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Jul 2020 21:48:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98B782253D7
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Jul 2020 21:57:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726159AbgGSTsM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 19 Jul 2020 15:48:12 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:42865 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726073AbgGSTsM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Jul 2020 15:48:12 -0400
-Received: (qmail 1206014 invoked by uid 1000); 19 Jul 2020 15:48:11 -0400
-Date:   Sun, 19 Jul 2020 15:48:11 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Achim Dahlhoff <achimdahlhoff@gmx.de>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: Re: bug: Reproduceable hung-task in snd_usb_pcm or usb-core in
- VM with Behringer device.
-Message-ID: <20200719194811.GB1205645@rowland.harvard.edu>
-References: <trinity-384b299a-61b0-461c-9abb-1a00fc942b85-1595083781938@3c-app-gmx-bap08>
- <20200719144715.GB1200012@rowland.harvard.edu>
- <trinity-1ebbee57-9733-4e6a-8924-6364303e871f-1595185540319@3c-app-gmx-bs53>
+        id S1726587AbgGST4k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 19 Jul 2020 15:56:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54412 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726073AbgGST4k (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Jul 2020 15:56:40 -0400
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B10C0619D2;
+        Sun, 19 Jul 2020 12:56:39 -0700 (PDT)
+Received: by mail-ej1-x643.google.com with SMTP id y10so15997339eje.1;
+        Sun, 19 Jul 2020 12:56:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UkvPwVZQWgoIN1YiUvn+3mkMTZrdb6lXgiYZt8Sccuk=;
+        b=o/oSAcfUJWlBQjWyMztERWI8MDMmAtF1ufgmyl9EibnFkKRCLjLJ0YWUBr+t4lHrje
+         3JuoxxSFyL8YQwtaRqSzR52OTcsv1DL09gIMcvt76YwFYmsjadCx7fUt6e3wvZhgA5Pj
+         U2Q2AiwA8slQl0845vGlS/sZ6jaSWXyeqldkFj9kCN25aLH8J/zdE4AdTbhr1BqodAc3
+         G5elYV5C5Vd1DFpHJwV5cUNIHYSBBZGiHC/9pzfpZNLGA7uYFv5o+drLvubkOnI3opdk
+         9p9fK9Uf1sqv0qVc7GeDJEsVt1j9LUYa2Vt82kCV2/nWYP9WZz2CmoSq9e8xDw05RDT7
+         Ogig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UkvPwVZQWgoIN1YiUvn+3mkMTZrdb6lXgiYZt8Sccuk=;
+        b=r4ckjvSNf1ayYqE+E27FVwZ86LOjcPprVzXzTHiaUHLUK964XRAEZ7Pe7NnN4nCNDF
+         Xui7d4+HogV3DKmCHBeMjo+HdSUBw1XiLFu9Hx1t+//YTfEoxOX4vx52rH7hjTM9ejIa
+         /Dhbc+zTOCrSFjFxutV590LywcZ8X6oIaxTNI5su1kHt4RPHeIS82CqVac8VpJ8nDD2V
+         YmsD/ShrgLdbKXaSyAhO1B2xEtI+D4DcZZOsVhE9fZsw2oVdExuLzHVwMBOdCENS1uIB
+         C189hCuMun0P146pPEopKKpQELcG0A4tJOtN6bdBIy5w+I+49SEhOtxZr3/naOeuG4HM
+         hCxA==
+X-Gm-Message-State: AOAM5318LI/0blV5EqxaGslVT86EWQmXsJNfsupcgfQEzA2h5rQK8pbW
+        WA9cIOF22Od4nmBa7MOtvBh2cVxedcFoEmaJCF4=
+X-Google-Smtp-Source: ABdhPJyGNKE6IUTHOPmFmEyDoa7JuyZ+ziIL1QORMAJVC3zY1tBNeKPzbnMPk4bE3NtaqwOlMnSddTSskQ4hGBVYfpc=
+X-Received: by 2002:a17:906:dbe5:: with SMTP id yd5mr18079240ejb.328.1595188598479;
+ Sun, 19 Jul 2020 12:56:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <trinity-1ebbee57-9733-4e6a-8924-6364303e871f-1595185540319@3c-app-gmx-bs53>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20200616140717.28465-2-amelie.delaunay@st.com>
+ <20200704174219.612060-1-martin.blumenstingl@googlemail.com>
+ <05a81997-5ddb-ea81-7a89-8078b8a2b610@st.com> <CAFBinCCVYJ=DuKbqhJJ8463Gs+GW0bgxyXSFiLXhUfvWV6AR0Q@mail.gmail.com>
+ <ee4ee889-835e-2244-504c-2b1b605d78aa@st.com>
+In-Reply-To: <ee4ee889-835e-2244-504c-2b1b605d78aa@st.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Sun, 19 Jul 2020 21:56:27 +0200
+Message-ID: <CAFBinCDUxvovAyDywz3xVcu_1v4nai+ebR2D38U2B8oBGss=yg@mail.gmail.com>
+Subject: Re: [PATCH 1/3] usb: dwc2: override PHY input signals with usb role
+ switch support
+To:     Amelie DELAUNAY <amelie.delaunay@st.com>
+Cc:     Alexandre TORGUE <alexandre.torgue@st.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Fabrice GASNIER <fabrice.gasnier@st.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "hminas@synopsys.com" <hminas@synopsys.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jul 19, 2020 at 09:05:40PM +0200, Achim Dahlhoff wrote:
-> >> Reproduceable hung-task in snd_usb_pcm or usb-core
-> >> in VM with Behringer device.
-> >>
-> >> Hello maintainers of usb,
-> >>
-> >> I found a reproduceable hung-task problem when trying to use Behringer
-> >> "Uphoria" audio devices inside VMware workstation, on Debian-SID with
-> >> kernel 5.7 or with 5.8-rc5 . Kernel-trace and USB IDs are included.
-> >>
-> >> Am I right to post here?
-> >
-> >Yes.
-> >
-> >> The problem occurs every time when accessing the devices.
-> >> The problem does NOT occur with:
-> >> - another sound device (griffin)
-> >> - on native Linux on another machine
-> >
-> >What about when you use the problematic machine with native Linux?
-> >That's really the most important case.
-> 
-> I have run it with native Linux on the same AMD machine, and now it works.
-> Tried both the USB2 and the USB3 ports.
-> 
-> It still outputs these warnings when connecting:
-> 
-> [  205.639776] usb 1-6: new high-speed USB device number 8 using xhci_hcd
-> [  205.823725] usb 1-6: New USB device found, idVendor=1397, idProduct=0509, bcdDevice= 1.12
-> [  205.823732] usb 1-6: New USB device strings: Mfr=1, Product=3, SerialNumber=0
-> [  205.823736] usb 1-6: Product: UMC404HD 192k
-> [  205.823738] usb 1-6: Manufacturer: BEHRINGER
-> [  208.045722] xhci_hcd 0000:03:00.0: WARN: buffer overrun event for slot 7 ep 4 on endpoint
-> [  208.045844] xhci_hcd 0000:03:00.0: WARN: buffer overrun event for slot 7 ep 4 on endpoint
-> [  208.045969] xhci_hcd 0000:03:00.0: WARN: buffer overrun event for slot 7 ep 4 on endpoint
-> [  208.046094] xhci_hcd 0000:03:00.0: WARN: buffer overrun event for slot 7 ep 4 on endpoint
+Hello Amelie,
 
-I have no idea what those are caused by.  Do they show up when you use 
-the USB-2 port?
+sorry for the late reply
 
-> [  208.046468] retire_capture_urb: 3 callbacks suppressed
-> 
-> But I cannot see the problem anymore. So the problem is related to
-> VMware. But other devices, also audio, work in that VMware installation.
+On Wed, Jul 8, 2020 at 6:00 PM Amelie DELAUNAY <amelie.delaunay@st.com> wrote:
+[...]
+> Could you please test with:
+>
+> static int dwc2_drd_role_sw_set(struct device *dev, enum usb_role role)
+> {
+>         struct dwc2_hsotg *hsotg = dev_get_drvdata(dev);
+>         unsigned long flags;
+>         int already = 0;
+>
+>         /* Skip session not in line with dr_mode */
+>         if ((role == USB_ROLE_DEVICE && hsotg->dr_mode == USB_DR_MODE_HOST) ||
+>             (role == USB_ROLE_HOST && hsotg->dr_mode == USB_DR_MODE_PERIPHERAL))
+>                 return -EINVAL;
+>
+>         /* Skip session if core is in test mode */
+>         if (role == USB_ROLE_NONE && hsotg->test_mode) {
+>                 dev_dbg(hsotg->dev, "Core is in test mode\n");
+>                 return -EBUSY;
+>         }
+>
+>         spin_lock_irqsave(&hsotg->lock, flags);
+>
+>         if (role == USB_ROLE_HOST) {
+>                 already = dwc2_ovr_avalid(hsotg, true);
+>         } else if (role == USB_ROLE_DEVICE) {
+>                 already = dwc2_ovr_bvalid(hsotg, true);
+>                 /* This clear DCTL.SFTDISCON bit */
+>                 dwc2_hsotg_core_connect(hsotg);
+>         } else {
+>                 if (dwc2_is_device_mode(hsotg)) {
+>                     if (!dwc2_ovr_bvalid(hsotg, false))
+>                         /* This set DCTL.SFTDISCON bit */
+>                         dwc2_hsotg_core_disconnect(hsotg);
+>                 } else {
+>                         dwc2_ovr_avalid(hsotg, false);
+>                 }
+>         }
+>
+>         spin_unlock_irqrestore(&hsotg->lock, flags);
+>
+>         if (!already &&
+>             role != USB_ROLE_NONE && hsotg->dr_mode == USB_DR_MODE_OTG)
+>                 /* This will raise a Connector ID Status Change Interrupt */
+>                 dwc2_force_mode(hsotg, role == USB_ROLE_HOST);
+>
+>         dev_dbg(hsotg->dev, "%s-session valid\n",
+>                 role == USB_ROLE_NONE ? "No" :
+>                 role == USB_ROLE_HOST ? "A" : "B");
+>
+>         return 0;
+> }
+>
+>
+> dwc2_force_mode is called outside the spin_lock_irqsave so the kernel
+> should not complain. I've tested on my setup and the behavior seems the
+> same.
+this one is looking good - the previous kernel warnings are now gone!
+thank you very much
 
-So at least you have narrowed it down.  That's progress!
 
-Alan Stern
+Best regards,
+Martin
