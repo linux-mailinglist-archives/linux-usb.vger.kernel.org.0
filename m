@@ -2,33 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16DBC225276
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Jul 2020 17:27:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80E632252C0
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Jul 2020 18:09:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726428AbgGSP1d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 19 Jul 2020 11:27:33 -0400
-Received: from smtp.al2klimov.de ([78.46.175.9]:38064 "EHLO smtp.al2klimov.de"
+        id S1726219AbgGSQJX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 19 Jul 2020 12:09:23 -0400
+Received: from smtp.al2klimov.de ([78.46.175.9]:47754 "EHLO smtp.al2klimov.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726024AbgGSP1c (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 19 Jul 2020 11:27:32 -0400
+        id S1726024AbgGSQJX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 19 Jul 2020 12:09:23 -0400
 Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
-        by smtp.al2klimov.de (Postfix) with ESMTPA id 50710BC053;
-        Sun, 19 Jul 2020 15:27:28 +0000 (UTC)
+        by smtp.al2klimov.de (Postfix) with ESMTPA id 4B4B1BC053;
+        Sun, 19 Jul 2020 16:09:16 +0000 (UTC)
 From:   "Alexander A. Klimov" <grandmaster@al2klimov.de>
-To:     robh+dt@kernel.org, gregkh@linuxfoundation.org,
-        jaswinder.singh@linaro.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+To:     gregkh@linuxfoundation.org, corbet@lwn.net, balbi@kernel.org,
+        peter.chen@nxp.com, colin.king@canonical.com,
+        dinghao.liu@zju.edu.cn, rogerq@ti.com, pawell@cadence.com,
+        krzk@kernel.org, hadess@hadess.net, stern@rowland.harvard.edu,
+        masahiroy@kernel.org, linux-usb@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
-Subject: [PATCH for v5.9] ARM: dts: Replace HTTP links with HTTPS ones
-Date:   Sun, 19 Jul 2020 17:27:22 +0200
-Message-Id: <20200719152722.59701-1-grandmaster@al2klimov.de>
+Subject: [PATCH for v5.9] USB: Replace HTTP links with HTTPS ones
+Date:   Sun, 19 Jul 2020 18:09:10 +0200
+Message-Id: <20200719160910.60018-1-grandmaster@al2klimov.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spamd-Bar: ++++++
-X-Spam-Level: ******
+X-Spamd-Bar: +++++
+X-Spam-Level: *****
 Authentication-Results: smtp.al2klimov.de;
         auth=pass smtp.auth=aklimov@al2klimov.de smtp.mailfrom=grandmaster@al2klimov.de
-X-Spam: Yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
@@ -73,247 +75,160 @@ Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
  Impossible is nothing! :)
 
 
- Documentation/devicetree/bindings/arm/xen.txt                 | 2 +-
- Documentation/devicetree/bindings/bus/ti,da850-mstpri.txt     | 2 +-
- .../devicetree/bindings/memory-controllers/ti-aemif.txt       | 4 ++--
- .../bindings/memory-controllers/ti-da8xx-ddrctl.txt           | 2 +-
- Documentation/devicetree/bindings/usb/gr-udc.txt              | 2 +-
- Documentation/devicetree/bindings/usb/maxim,max3420-udc.yaml  | 2 +-
- Documentation/devicetree/bindings/usb/usb-device.txt          | 2 +-
- Documentation/devicetree/booting-without-of.txt               | 2 +-
- arch/arm/boot/dts/keystone.dtsi                               | 2 +-
- arch/arm/boot/dts/tps6507x.dtsi                               | 4 ++--
- arch/arm/boot/dts/tps65217.dtsi                               | 4 ++--
- arch/arm/boot/dts/tps65910.dtsi                               | 4 ++--
- arch/arm/boot/dts/twl4030.dtsi                                | 2 +-
- arch/arm/boot/dts/twl6030.dtsi                                | 4 ++--
- include/dt-bindings/pinctrl/dra.h                             | 2 +-
- include/dt-bindings/pinctrl/keystone.h                        | 2 +-
- 16 files changed, 21 insertions(+), 21 deletions(-)
+ Documentation/usb/gadget_hid.rst   |  2 +-
+ Documentation/usb/gadget_multi.rst | 10 +++++-----
+ Documentation/usb/linux.inf        |  2 +-
+ drivers/usb/cdns3/cdns3-ti.c       |  2 +-
+ drivers/usb/common/debug.c         |  2 +-
+ drivers/usb/host/max3421-hcd.c     |  6 +++---
+ drivers/usb/misc/Kconfig           |  4 ++--
+ include/linux/usb/phy_companion.h  |  2 +-
+ 8 files changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/arm/xen.txt b/Documentation/devicetree/bindings/arm/xen.txt
-index db5c56db30ec..1c75e45baaf2 100644
---- a/Documentation/devicetree/bindings/arm/xen.txt
-+++ b/Documentation/devicetree/bindings/arm/xen.txt
-@@ -57,4 +57,4 @@ The format and meaning of the "xen,uefi-*" parameters are similar to those in
- Documentation/arm/uefi.rst, which are provided by the regular UEFI stub. However
- they differ because they are provided by the Xen hypervisor, together with a set
- of UEFI runtime services implemented via hypercalls, see
--http://xenbits.xen.org/docs/unstable/hypercall/x86_64/include,public,platform.h.html.
-+https://xenbits.xen.org/docs/unstable/hypercall/x86_64/include,public,platform.h.html.
-diff --git a/Documentation/devicetree/bindings/bus/ti,da850-mstpri.txt b/Documentation/devicetree/bindings/bus/ti,da850-mstpri.txt
-index 72daefc6b4a1..8e3c95de9a96 100644
---- a/Documentation/devicetree/bindings/bus/ti,da850-mstpri.txt
-+++ b/Documentation/devicetree/bindings/bus/ti,da850-mstpri.txt
-@@ -5,7 +5,7 @@ DA8XX SoCs feature a set of registers allowing to change the priority of all
- peripherals classified as masters.
+diff --git a/Documentation/usb/gadget_hid.rst b/Documentation/usb/gadget_hid.rst
+index 098d563040cc..e623416de4f1 100644
+--- a/Documentation/usb/gadget_hid.rst
++++ b/Documentation/usb/gadget_hid.rst
+@@ -11,7 +11,7 @@ and HID reports can be sent/received through I/O on the
+ /dev/hidgX character devices.
  
- Documentation:
--OMAP-L138 (DA850) - http://www.ti.com/lit/ug/spruh82c/spruh82c.pdf
-+OMAP-L138 (DA850) - https://www.ti.com/lit/ug/spruh82c/spruh82c.pdf
+ For more details about HID, see the developer page on
+-http://www.usb.org/developers/hidpage/
++https://www.usb.org/developers/hidpage/
  
- Required properties:
+ Configuration
+ =============
+diff --git a/Documentation/usb/gadget_multi.rst b/Documentation/usb/gadget_multi.rst
+index 9806b55af301..3a22c1b2f39e 100644
+--- a/Documentation/usb/gadget_multi.rst
++++ b/Documentation/usb/gadget_multi.rst
+@@ -142,7 +142,7 @@ Footnotes
+ =========
  
-diff --git a/Documentation/devicetree/bindings/memory-controllers/ti-aemif.txt b/Documentation/devicetree/bindings/memory-controllers/ti-aemif.txt
-index 190437a0c146..808591a0b322 100644
---- a/Documentation/devicetree/bindings/memory-controllers/ti-aemif.txt
-+++ b/Documentation/devicetree/bindings/memory-controllers/ti-aemif.txt
-@@ -8,9 +8,9 @@ per chip select. Synchronous memories such as DDR1 SD RAM, SDR SDRAM
- and Mobile SDR are not supported.
+ [1] Remote Network Driver Interface Specification,
+-[[http://msdn.microsoft.com/en-us/library/ee484414.aspx]].
++[[https://msdn.microsoft.com/en-us/library/ee484414.aspx]].
  
- Documentation:
--Davinci DM646x - http://www.ti.com/lit/ug/sprueq7c/sprueq7c.pdf
-+Davinci DM646x - https://www.ti.com/lit/ug/sprueq7c/sprueq7c.pdf
- OMAP-L138 (DA850) - http://www.ti.com/lit/ug/spruh77a/spruh77a.pdf
--Kestone - http://www.ti.com/lit/ug/sprugz3a/sprugz3a.pdf
-+Kestone - https://www.ti.com/lit/ug/sprugz3a/sprugz3a.pdf
+ [2] Communications Device Class Abstract Control Model, spec for this
+ and other USB classes can be found at
+@@ -150,9 +150,9 @@ and other USB classes can be found at
  
- Required properties:
+ [3] CDC Ethernet Control Model.
  
-diff --git a/Documentation/devicetree/bindings/memory-controllers/ti-da8xx-ddrctl.txt b/Documentation/devicetree/bindings/memory-controllers/ti-da8xx-ddrctl.txt
-index ec1dd408d573..f5b3a46e6074 100644
---- a/Documentation/devicetree/bindings/memory-controllers/ti-da8xx-ddrctl.txt
-+++ b/Documentation/devicetree/bindings/memory-controllers/ti-da8xx-ddrctl.txt
-@@ -4,7 +4,7 @@ The DDR2/mDDR memory controller present on Texas Instruments da8xx SoCs features
- a set of registers which allow to tweak the controller's behavior.
+-[4] [[http://msdn.microsoft.com/en-us/library/ff537109(v=VS.85).aspx]]
++[4] [[https://msdn.microsoft.com/en-us/library/ff537109(v=VS.85).aspx]]
  
- Documentation:
--OMAP-L138 (DA850) - http://www.ti.com/lit/ug/spruh82c/spruh82c.pdf
-+OMAP-L138 (DA850) - https://www.ti.com/lit/ug/spruh82c/spruh82c.pdf
+-[5] [[http://msdn.microsoft.com/en-us/library/ff539234(v=VS.85).aspx]]
++[5] [[https://msdn.microsoft.com/en-us/library/ff539234(v=VS.85).aspx]]
  
- Required properties:
+ [6] To put it in some other nice words, Windows failed to respond to
+ any user input.
+@@ -160,6 +160,6 @@ any user input.
+ [7] You may find [[http://www.cygnal.org/ubb/Forum9/HTML/001050.html]]
+ useful.
  
-diff --git a/Documentation/devicetree/bindings/usb/gr-udc.txt b/Documentation/devicetree/bindings/usb/gr-udc.txt
-index e9445224fabd..45ebeec6e33c 100644
---- a/Documentation/devicetree/bindings/usb/gr-udc.txt
-+++ b/Documentation/devicetree/bindings/usb/gr-udc.txt
-@@ -31,4 +31,4 @@ Optional properties:
- 	only for as many endpoints as the array contains.
+-[8] http://www.nirsoft.net/utils/usb_devices_view.html
++[8] https://www.nirsoft.net/utils/usb_devices_view.html
  
- For further information look in the documentation for the GLIB IP core library:
--http://www.gaisler.com/products/grlib/grip.pdf
-+https://www.gaisler.com/products/grlib/grip.pdf
-diff --git a/Documentation/devicetree/bindings/usb/maxim,max3420-udc.yaml b/Documentation/devicetree/bindings/usb/maxim,max3420-udc.yaml
-index 4241d38d5864..b6db83bb5055 100644
---- a/Documentation/devicetree/bindings/usb/maxim,max3420-udc.yaml
-+++ b/Documentation/devicetree/bindings/usb/maxim,max3420-udc.yaml
-@@ -14,7 +14,7 @@ description: |
-   implementation over the SPI interface.
- 
-   Specifications about the part can be found at:
--    http://datasheets.maximintegrated.com/en/ds/MAX3420E.pdf
-+    https://datasheets.maximintegrated.com/en/ds/MAX3420E.pdf
- 
- properties:
-   compatible:
-diff --git a/Documentation/devicetree/bindings/usb/usb-device.txt b/Documentation/devicetree/bindings/usb/usb-device.txt
-index 036be172b1ae..dbc0fc452afb 100644
---- a/Documentation/devicetree/bindings/usb/usb-device.txt
-+++ b/Documentation/devicetree/bindings/usb/usb-device.txt
-@@ -2,7 +2,7 @@ Generic USB Device Properties
- 
- Usually, we only use device tree for hard wired USB device.
- The reference binding doc is from:
--http://www.devicetree.org/open-firmware/bindings/usb/usb-1_0.ps
-+https://www.devicetree.org/open-firmware/bindings/usb/usb-1_0.ps
- 
- Four types of device-tree nodes are defined: "host-controller nodes"
- representing USB host controllers, "device nodes" representing USB devices,
-diff --git a/Documentation/devicetree/booting-without-of.txt b/Documentation/devicetree/booting-without-of.txt
-index 4660ccee35a3..d53dcea71028 100644
---- a/Documentation/devicetree/booting-without-of.txt
-+++ b/Documentation/devicetree/booting-without-of.txt
-@@ -1282,7 +1282,7 @@ hierarchy and routing of interrupts in the hardware.
- The interrupt tree model is fully described in the
- document "Open Firmware Recommended Practice: Interrupt
- Mapping Version 0.9".  The document is available at:
--<http://www.devicetree.org/open-firmware/practice/>
-+<https://www.devicetree.org/open-firmware/practice/>
- 
- 1) interrupts property
- ----------------------
-diff --git a/arch/arm/boot/dts/keystone.dtsi b/arch/arm/boot/dts/keystone.dtsi
-index c298675a29a5..73196470d49b 100644
---- a/arch/arm/boot/dts/keystone.dtsi
-+++ b/arch/arm/boot/dts/keystone.dtsi
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * Copyright (C) 2013-2017 Texas Instruments Incorporated - http://www.ti.com/
-+ * Copyright (C) 2013-2017 Texas Instruments Incorporated - https://www.ti.com/
+-[9] [[http://msdn.microsoft.com/en-us/library/ff570620.aspx]]
++[9] [[https://msdn.microsoft.com/en-us/library/ff570620.aspx]]
+diff --git a/Documentation/usb/linux.inf b/Documentation/usb/linux.inf
+index 4ffa715b0ae8..c569ac6bec58 100644
+--- a/Documentation/usb/linux.inf
++++ b/Documentation/usb/linux.inf
+@@ -1,5 +1,5 @@
+ ; Based on template INF file found at
+-;    <http://msdn.microsoft.com/en-us/library/ff570620.aspx>
++;    <https://msdn.microsoft.com/en-us/library/ff570620.aspx>
+ ; which was:
+ ;    Copyright (c) Microsoft Corporation
+ ; and released under the MLPL as found at:
+diff --git a/drivers/usb/cdns3/cdns3-ti.c b/drivers/usb/cdns3/cdns3-ti.c
+index e701ab56b0a7..90e246601537 100644
+--- a/drivers/usb/cdns3/cdns3-ti.c
++++ b/drivers/usb/cdns3/cdns3-ti.c
+@@ -2,7 +2,7 @@
+ /**
+  * cdns3-ti.c - TI specific Glue layer for Cadence USB Controller
+  *
+- * Copyright (C) 2019 Texas Instruments Incorporated - http://www.ti.com
++ * Copyright (C) 2019 Texas Instruments Incorporated - https://www.ti.com
   */
  
- #include <dt-bindings/interrupt-controller/arm-gic.h>
-diff --git a/arch/arm/boot/dts/tps6507x.dtsi b/arch/arm/boot/dts/tps6507x.dtsi
-index db4809d308f9..6749d3f3d585 100644
---- a/arch/arm/boot/dts/tps6507x.dtsi
-+++ b/arch/arm/boot/dts/tps6507x.dtsi
-@@ -1,11 +1,11 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * Copyright (C) 2013 Texas Instruments Incorporated - http://www.ti.com/
-+ * Copyright (C) 2013 Texas Instruments Incorporated - https://www.ti.com/
-  */
+ #include <linux/bits.h>
+diff --git a/drivers/usb/common/debug.c b/drivers/usb/common/debug.c
+index 92a986aeaa5d..7a520d2f7e75 100644
+--- a/drivers/usb/common/debug.c
++++ b/drivers/usb/common/debug.c
+@@ -2,7 +2,7 @@
+ /**
+  * Common USB debugging functions
+  *
+- * Copyright (C) 2010-2011 Texas Instruments Incorporated - http://www.ti.com
++ * Copyright (C) 2010-2011 Texas Instruments Incorporated - https://www.ti.com
+  *
+  * Authors: Felipe Balbi <balbi@ti.com>,
+  *	    Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+diff --git a/drivers/usb/host/max3421-hcd.c b/drivers/usb/host/max3421-hcd.c
+index 8819f502b6a6..233b0eb6f02e 100644
+--- a/drivers/usb/host/max3421-hcd.c
++++ b/drivers/usb/host/max3421-hcd.c
+@@ -11,9 +11,9 @@
+  *
+  * Based on:
+  *	o MAX3421E datasheet
+- *		http://datasheets.maximintegrated.com/en/ds/MAX3421E.pdf
++ *		https://datasheets.maximintegrated.com/en/ds/MAX3421E.pdf
+  *	o MAX3421E Programming Guide
+- *		http://www.hdl.co.jp/ftpdata/utl-001/AN3785.pdf
++ *		https://www.hdl.co.jp/ftpdata/utl-001/AN3785.pdf
+  *	o gadget/dummy_hcd.c
+  *		For USB HCD implementation.
+  *	o Arduino MAX3421 driver
+@@ -317,7 +317,7 @@ static const int hrsl_to_error[] = {
+ };
  
  /*
-  * Integrated Power Management Chip
-- * http://www.ti.com/lit/ds/symlink/tps65070.pdf
-+ * https://www.ti.com/lit/ds/symlink/tps65070.pdf
+- * See http://www.beyondlogic.org/usbnutshell/usb4.shtml#Control for a
++ * See https://www.beyondlogic.org/usbnutshell/usb4.shtml#Control for a
+  * reasonable overview of how control transfers use the the IN/OUT
+  * tokens.
   */
+diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
+index 4e48f8eed168..6818ea689cd9 100644
+--- a/drivers/usb/misc/Kconfig
++++ b/drivers/usb/misc/Kconfig
+@@ -78,7 +78,7 @@ config USB_CYPRESS_CY7C63
+ 	  driver supports the pre-programmed devices (incl. firmware)
+ 	  by AK Modul-Bus Computer GmbH.
  
- &tps {
-diff --git a/arch/arm/boot/dts/tps65217.dtsi b/arch/arm/boot/dts/tps65217.dtsi
-index 0d463de5650f..262e0bb3eaac 100644
---- a/arch/arm/boot/dts/tps65217.dtsi
-+++ b/arch/arm/boot/dts/tps65217.dtsi
-@@ -1,11 +1,11 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * Copyright (C) 2012 Texas Instruments Incorporated - http://www.ti.com/
-+ * Copyright (C) 2012 Texas Instruments Incorporated - https://www.ti.com/
-  */
+-	  Please see: http://www.ak-modul-bus.de/stat/mikrocontroller.html
++	  Please see: https://www.ak-modul-bus.de/stat/mikrocontroller.html
  
- /*
-  * Integrated Power Management Chip
-- * http://www.ti.com/lit/ds/symlink/tps65217.pdf
-+ * https://www.ti.com/lit/ds/symlink/tps65217.pdf
-  */
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called cypress_cy7c63.
+@@ -106,7 +106,7 @@ config USB_IDMOUSE
+ 	  This driver creates an entry "/dev/idmouseX" or "/dev/usb/idmouseX",
+ 	  which can be used by, e.g.,"cat /dev/idmouse0 > fingerprint.pnm".
  
- &tps {
-diff --git a/arch/arm/boot/dts/tps65910.dtsi b/arch/arm/boot/dts/tps65910.dtsi
-index a941d1e62328..ab3a4ffd1298 100644
---- a/arch/arm/boot/dts/tps65910.dtsi
-+++ b/arch/arm/boot/dts/tps65910.dtsi
-@@ -1,11 +1,11 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * Copyright (C) 2012 Texas Instruments Incorporated - http://www.ti.com/
-+ * Copyright (C) 2012 Texas Instruments Incorporated - https://www.ti.com/
-  */
+-	  See also <http://www.fs.tum.de/~echtler/idmouse/>.
++	  See also <https://www.fs.tum.de/~echtler/idmouse/>.
  
- /*
-  * Integrated Power Management Chip
-- * http://www.ti.com/lit/ds/symlink/tps65910.pdf
-+ * https://www.ti.com/lit/ds/symlink/tps65910.pdf
-  */
- 
- &tps {
-diff --git a/arch/arm/boot/dts/twl4030.dtsi b/arch/arm/boot/dts/twl4030.dtsi
-index 93e07c18781b..a5d9c5738317 100644
---- a/arch/arm/boot/dts/twl4030.dtsi
-+++ b/arch/arm/boot/dts/twl4030.dtsi
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * Copyright (C) 2011 Texas Instruments Incorporated - http://www.ti.com/
-+ * Copyright (C) 2011 Texas Instruments Incorporated - https://www.ti.com/
-  */
- 
- /*
-diff --git a/arch/arm/boot/dts/twl6030.dtsi b/arch/arm/boot/dts/twl6030.dtsi
-index 9d588cfaa5cb..8da969035c41 100644
---- a/arch/arm/boot/dts/twl6030.dtsi
-+++ b/arch/arm/boot/dts/twl6030.dtsi
-@@ -1,11 +1,11 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * Copyright (C) 2011 Texas Instruments Incorporated - http://www.ti.com/
-+ * Copyright (C) 2011 Texas Instruments Incorporated - https://www.ti.com/
-  */
- 
- /*
-  * Integrated Power Management Chip
-- * http://www.ti.com/lit/ds/symlink/twl6030.pdf
-+ * https://www.ti.com/lit/ds/symlink/twl6030.pdf
-  */
- &twl {
- 	compatible = "ti,twl6030";
-diff --git a/include/dt-bindings/pinctrl/dra.h b/include/dt-bindings/pinctrl/dra.h
-index 252cdfd0d83e..d926987aea22 100644
---- a/include/dt-bindings/pinctrl/dra.h
-+++ b/include/dt-bindings/pinctrl/dra.h
+ config USB_FTDI_ELAN
+ 	tristate "Elan PCMCIA CardBus Adapter USB Client"
+diff --git a/include/linux/usb/phy_companion.h b/include/linux/usb/phy_companion.h
+index 407f530061cd..263196f05015 100644
+--- a/include/linux/usb/phy_companion.h
++++ b/include/linux/usb/phy_companion.h
 @@ -2,7 +2,7 @@
  /*
-  * This header provides constants for DRA pinctrl bindings.
+  * phy-companion.h -- phy companion to indicate the comparator part of PHY
   *
-- * Copyright (C) 2013 Texas Instruments Incorporated - http://www.ti.com/
-+ * Copyright (C) 2013 Texas Instruments Incorporated - https://www.ti.com/
-  * Author: Rajendra Nayak <rnayak@ti.com>
-  */
- 
-diff --git a/include/dt-bindings/pinctrl/keystone.h b/include/dt-bindings/pinctrl/keystone.h
-index 7f97d776a8ff..7a48a13e229d 100644
---- a/include/dt-bindings/pinctrl/keystone.h
-+++ b/include/dt-bindings/pinctrl/keystone.h
-@@ -1,7 +1,7 @@
- /*
-  * This header provides constants for Keystone pinctrl bindings.
-  *
-- * Copyright (C) 2016 Texas Instruments Incorporated - http://www.ti.com/
-+ * Copyright (C) 2016 Texas Instruments Incorporated - https://www.ti.com/
-  *
+- * Copyright (C) 2012 Texas Instruments Incorporated - http://www.ti.com
++ * Copyright (C) 2012 Texas Instruments Incorporated - https://www.ti.com
   * This program is free software; you can redistribute it and/or modify
-  * it under the terms of the GNU General Public License version 2 as
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation; either version 2 of the License, or
 -- 
 2.27.0
 
