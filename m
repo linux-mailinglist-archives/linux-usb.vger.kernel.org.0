@@ -2,53 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3EED2253E1
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Jul 2020 22:00:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3149622544A
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Jul 2020 23:29:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726680AbgGSUAF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 19 Jul 2020 16:00:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46260 "EHLO mail.kernel.org"
+        id S1726446AbgGSV3x convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Sun, 19 Jul 2020 17:29:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48966 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726131AbgGSUAE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 19 Jul 2020 16:00:04 -0400
-Subject: Re: [GIT PULL] USB driver fixes for 5.8-rc6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595188804;
-        bh=XSHHctdJjzm7uGuOOu6wyhlio5IM0Ddk19axRNIfP6s=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=uxg7p24Ur36QBkgoayJ0h42GlVAI2qnv0idS5iqEDfDOHB2DqZwDul3akrUeiusfy
-         7xl5KpFcQf+XnN7sbZIysybSsDsAqiJ8X0yLXQNGh9huvqZjKIwl/bMIPUyFF1d4Di
-         bNOBV85j3iHBNydU8n9iN6WLoMzPgHLKS6txV3jQ=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20200719091447.GA157963@kroah.com>
-References: <20200719091447.GA157963@kroah.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20200719091447.GA157963@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.8-rc6
-X-PR-Tracked-Commit-Id: c7300cdf8f683ae00cf74616b5fd14ffac327979
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: ce20d7bf6e00997496d8d5322b1253584d2a0908
-Message-Id: <159518880442.26827.3257229150899500793.pr-tracker-bot@kernel.org>
-Date:   Sun, 19 Jul 2020 20:00:04 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+        id S1726126AbgGSV3w (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 19 Jul 2020 17:29:52 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 208267] usbip broken with latest kernels?
+Date:   Sun, 19 Jul 2020 21:29:52 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: jdieter@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-208267-208809-qUgQYaxY5Q@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-208267-208809@https.bugzilla.kernel.org/>
+References: <bug-208267-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The pull request you sent on Sun, 19 Jul 2020 11:14:47 +0200:
+https://bugzilla.kernel.org/show_bug.cgi?id=208267
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.8-rc6
+Jonathan Dieter (jdieter@gmail.com) changed:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/ce20d7bf6e00997496d8d5322b1253584d2a0908
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |jdieter@gmail.com
 
-Thank you!
+--- Comment #6 from Jonathan Dieter (jdieter@gmail.com) ---
+FWIW, I've had this reported in Fedora as well:
+https://bugzilla.redhat.com/show_bug.cgi?id=1856443
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+You are receiving this mail because:
+You are watching the assignee of the bug.
