@@ -2,313 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C56F42252CA
-	for <lists+linux-usb@lfdr.de>; Sun, 19 Jul 2020 18:19:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C5B622539C
+	for <lists+linux-usb@lfdr.de>; Sun, 19 Jul 2020 21:05:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726126AbgGSQTb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 19 Jul 2020 12:19:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49546 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726024AbgGSQTb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 19 Jul 2020 12:19:31 -0400
-Received: from smtp.al2klimov.de (smtp.al2klimov.de [IPv6:2a01:4f8:c0c:1465::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7BAC0619D2;
-        Sun, 19 Jul 2020 09:19:30 -0700 (PDT)
-Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
-        by smtp.al2klimov.de (Postfix) with ESMTPA id 42349BC062;
-        Sun, 19 Jul 2020 16:19:27 +0000 (UTC)
-From:   "Alexander A. Klimov" <grandmaster@al2klimov.de>
-To:     johan@kernel.org, gregkh@linuxfoundation.org, corbet@lwn.net,
-        linux-usb@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
-Subject: [PATCH for v5.9] USB: serial: Replace HTTP links with HTTPS ones
-Date:   Sun, 19 Jul 2020 18:19:20 +0200
-Message-Id: <20200719161920.60087-1-grandmaster@al2klimov.de>
+        id S1726274AbgGSTFm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 19 Jul 2020 15:05:42 -0400
+Received: from mout.gmx.net ([212.227.15.18]:40259 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726161AbgGSTFm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 19 Jul 2020 15:05:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1595185540;
+        bh=2dAwBcSB523+7RrEZSh7oMoGe3VtaQETnkiTl5ymp/Q=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=TidY9omNUuBGFqxfrmAMj4KqxnEg3rqEHjhVSYMY1n3qcr55MNuTEfM9trFRnwDEp
+         6lCTXwif18j63wd5Xh3kNFKp/0iTnHbDXLuSNzDnFI58EtlxGMofuEksaeotfPZJvS
+         NIdadhGcBJcjx5hx4F5nwmO2jriDaHx5OFGT1sKw=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [2.204.111.63] ([2.204.111.63]) by web-mail.gmx.net
+ (3c-app-gmx-bs53.server.lan [172.19.170.137]) (via HTTP); Sun, 19 Jul 2020
+ 21:05:40 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Bar: +++++
-X-Spam-Level: *****
-Authentication-Results: smtp.al2klimov.de;
-        auth=pass smtp.auth=aklimov@al2klimov.de smtp.mailfrom=grandmaster@al2klimov.de
+Message-ID: <trinity-1ebbee57-9733-4e6a-8924-6364303e871f-1595185540319@3c-app-gmx-bs53>
+From:   Achim Dahlhoff <achimdahlhoff@gmx.de>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org
+Subject: Aw: Re: bug: Reproduceable hung-task in snd_usb_pcm or usb-core in
+ VM with Behringer device.
+Content-Type: text/plain; charset=UTF-8
+Date:   Sun, 19 Jul 2020 21:05:40 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <20200719144715.GB1200012@rowland.harvard.edu>
+References: <trinity-384b299a-61b0-461c-9abb-1a00fc942b85-1595083781938@3c-app-gmx-bap08>
+ <20200719144715.GB1200012@rowland.harvard.edu>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:Rv0m11HN91PV4DSZAyYhuzqcKRTP+kFaqELJfLzwxLpa5Oa8Y+Ky/Twr6Nxpga1qpoUFq
+ LV0LOJfTA5G9G2yqJXjXxsRfD/5YUrJ9m7+a/O5Ev+EOGjoJF+g0cOz2K+Kc6lJSCcXI5UUZuTZR
+ dt72S9hUXL7Cccl2b+o4lDIMGOnJvTQqtKpPG/bjlhj2bXfrD0cA+PbX3Vgn88LLNcWuWiNMkWzb
+ QVuQWxqSW8N6l9bis8cTXRetz/pCCaawpcEKEJorgVHGLGW7RJqNCBJPpKINT0MwladYQU2OiRkj
+ 8o=
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:bKZj4m6a2RI=:jJqmADvFZAQjcGqeyzRjTn
+ t3N0+zfizIw5pkXZW8l5JeumR4nVl+6Nxnw8EwreJysbHj5TSi+qgts0PUkc05CybLUzM9en8
+ SFABSj/DXuBkGpCLKXMBoeKRhnBWCRzkf84ETrLkbxStz4RL36aa7PeW4E1n/NfIAsjUfljjj
+ cMxpqw9fQc/TcMhCl0fbCT16z2hm6hdZ230DMC+OK5wLTCW5oBU5qaCfivePj5VLCu7q92oF1
+ IruEXoY13lDQq9FhZbLBN0t7lLaYk71zA41s25ZbST4QKd3rQpZjAXIp/eMB6M5ujDoDeEkZm
+ bDeVFrby1Q24X39JMnkr/U0v2q4EhV6+KlsTYxa7FJN3bjtf4CCH5LuYDjnfPMrWi7yaZB2f2
+ RUEmb/6iyzejZjx56yMJTh/q+Gkyz6tOoogDI7ARepBLJrs5r4I2HSWU+hs1qBauHgSEBgT9s
+ yOcYR3OR8GNbZ71HNNXm/IqxlizIWb531MVQHAz6RDgKLZDLmQN+99RgIHR5p9oqrjEGJgWP1
+ 1UQaA+m9Ui9YZ8YTlb4duG4jnP1PoL4VPOTrOHkeD0QC3D9Z4WWJhyWwyXZQ3ZysryrYv2s/H
+ L3lCs5w9GKEm9X+fQdfYJDCXB1D18/sYIk/QVBlOelv6E0PVT+MkDMmLLH6kF0zt3cbENuMRY
+ i7Y7vS1EA2ErAAOd5cempFCZ8+qxvvt2w6ZBFWvW8z4n7d8ogRBy5TDEmFli8+85ltDE=
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Rationale:
-Reduces attack surface on kernel devs opening the links for MITM
-as HTTPS traffic is much harder to manipulate.
+>> Reproduceable hung-task in snd_usb_pcm or usb-core
+>> in VM with Behringer device.
+>>
+>> Hello maintainers of usb,
+>>
+>> I found a reproduceable hung-task problem when trying to use Behringer
+>> "Uphoria" audio devices inside VMware workstation, on Debian-SID with
+>> kernel 5.7 or with 5.8-rc5 . Kernel-trace and USB IDs are included.
+>>
+>> Am I right to post here?
+>
+>Yes.
+>
+>> The problem occurs every time when accessing the devices.
+>> The problem does NOT occur with:
+>> - another sound device (griffin)
+>> - on native Linux on another machine
+>
+>What about when you use the problematic machine with native Linux?
+>That's really the most important case.
 
-Deterministic algorithm:
-For each file:
-  If not .svg:
-    For each line:
-      If doesn't contain `\bxmlns\b`:
-        For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
-	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
-            If both the HTTP and HTTPS versions
-            return 200 OK and serve the same content:
-              Replace HTTP with HTTPS.
+I have run it with native Linux on the same AMD machine, and now it works.
+Tried both the USB2 and the USB3 ports.
 
-Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
----
- Continuing my work started at 93431e0607e5.
- See also: git log --oneline '--author=Alexander A. Klimov <grandmaster@al2klimov.de>' v5.7..master
- (Actually letting a shell for loop submit all this stuff for me.)
+It still outputs these warnings when connecting:
 
- If there are any URLs to be removed completely
- or at least not (just) HTTPSified:
- Just clearly say so and I'll *undo my change*.
- See also: https://lkml.org/lkml/2020/6/27/64
+[  205.639776] usb 1-6: new high-speed USB device number 8 using xhci_hcd
+[  205.823725] usb 1-6: New USB device found, idVendor=3D1397, idProduct=
+=3D0509, bcdDevice=3D 1.12
+[  205.823732] usb 1-6: New USB device strings: Mfr=3D1, Product=3D3, Seri=
+alNumber=3D0
+[  205.823736] usb 1-6: Product: UMC404HD 192k
+[  205.823738] usb 1-6: Manufacturer: BEHRINGER
+[  208.045722] xhci_hcd 0000:03:00.0: WARN: buffer overrun event for slot =
+7 ep 4 on endpoint
+[  208.045844] xhci_hcd 0000:03:00.0: WARN: buffer overrun event for slot =
+7 ep 4 on endpoint
+[  208.045969] xhci_hcd 0000:03:00.0: WARN: buffer overrun event for slot =
+7 ep 4 on endpoint
+[  208.046094] xhci_hcd 0000:03:00.0: WARN: buffer overrun event for slot =
+7 ep 4 on endpoint
+[  208.046468] retire_capture_urb: 3 callbacks suppressed
 
- If there are any valid, but yet not changed URLs:
- See: https://lkml.org/lkml/2020/6/26/837
+But I cannot see the problem anymore. So the problem is related to
+VMware. But other devices, also audio, work in that VMware installation.
 
- If you apply the patch, please let me know.
+>
+>> I cannot tell if it is a bug with VMware, the Behringer
+>> audio devices,
+>> or if this might point to a bug in snd_usb_pcm.
+>
+>If the device works on the same machine under native Linux then
+>most likely it is a problem in VMware.
+>
+>If it doesn't, the failure symptoms (a hang inside usb_kill_urb)
+>indicate a problem in the USB host controller hardware or driver,
+>not in snd_usb_pcm or the audio device.
+>
+>> If you have an idea what to try I can apply patches,
+>> rebuild kernel and try if an improvement works.
+>
+>Try booting from a "Live" distribution and see what happens, if you
+>don't want to install Linux on the test machine.
+>
+>Alan Stern
 
- Sorry again to all maintainers who complained about subject lines.
- Now I realized that you want an actually perfect prefixes,
- not just subsystem ones.
- I tried my best...
- And yes, *I could* (at least half-)automate it.
- Impossible is nothing! :)
+Thanks for your answer!
 
-
- Documentation/usb/usb-serial.rst  |  2 +-
- drivers/usb/serial/cyberjack.c    |  2 +-
- drivers/usb/serial/ftdi_sio.h     |  4 ++--
- drivers/usb/serial/ftdi_sio_ids.h | 34 +++++++++++++++----------------
- drivers/usb/serial/kobil_sct.c    |  2 +-
- drivers/usb/serial/metro-usb.c    |  2 +-
- 6 files changed, 23 insertions(+), 23 deletions(-)
-
-diff --git a/Documentation/usb/usb-serial.rst b/Documentation/usb/usb-serial.rst
-index 8fa7dbd3da9a..0a2071953691 100644
---- a/Documentation/usb/usb-serial.rst
-+++ b/Documentation/usb/usb-serial.rst
-@@ -202,7 +202,7 @@ Keyspan USA-series Serial Adapters
- 
-   More information is available at:
- 
--        http://www.carnationsoftware.com/carnation/Keyspan.html
-+        https://www.carnationsoftware.com/carnation/Keyspan.html
- 
-   For any questions or problems with this driver, please contact Hugh
-   Blemings at hugh@misc.nu
-diff --git a/drivers/usb/serial/cyberjack.c b/drivers/usb/serial/cyberjack.c
-index 821970609695..ec9dd7925a51 100644
---- a/drivers/usb/serial/cyberjack.c
-+++ b/drivers/usb/serial/cyberjack.c
-@@ -20,7 +20,7 @@
-  *  Please note that later models of the cyberjack reader family are
-  *  supported by a libusb-based userspace device driver.
-  *
-- *  Homepage: http://www.reiner-sct.de/support/treiber_cyberjack.php#linux
-+ *  Homepage: https://www.reiner-sct.de/support/treiber_cyberjack.php#linux
-  */
- 
- 
-diff --git a/drivers/usb/serial/ftdi_sio.h b/drivers/usb/serial/ftdi_sio.h
-index a79a1325b4d9..818d4c7de661 100644
---- a/drivers/usb/serial/ftdi_sio.h
-+++ b/drivers/usb/serial/ftdi_sio.h
-@@ -14,7 +14,7 @@
-  * The device is based on the FTDI FT8U100AX chip. It has a DB25 on one side,
-  * USB on the other.
-  *
-- * Thanx to FTDI (http://www.ftdichip.com) for so kindly providing details
-+ * Thanx to FTDI (https://www.ftdichip.com) for so kindly providing details
-  * of the protocol required to talk to the device and ongoing assistence
-  * during development.
-  *
-@@ -452,7 +452,7 @@ enum ftdi_sio_baudrate {
-  * FTDI_SIO_READ_EEPROM
-  *
-  * EEPROM format found in FTDI AN_201, "FT-X MTP memory Configuration",
-- * http://www.ftdichip.com/Support/Documents/AppNotes/AN_201_FT-X%20MTP%20Memory%20Configuration.pdf
-+ * https://www.ftdichip.com/Support/Documents/AppNotes/AN_201_FT-X%20MTP%20Memory%20Configuration.pdf
-  */
- #define FTDI_SIO_READ_EEPROM_REQUEST_TYPE 0xc0
- #define FTDI_SIO_READ_EEPROM_REQUEST FTDI_SIO_READ_EEPROM
-diff --git a/drivers/usb/serial/ftdi_sio_ids.h b/drivers/usb/serial/ftdi_sio_ids.h
-index e8373528264c..a5bf2b974813 100644
---- a/drivers/usb/serial/ftdi_sio_ids.h
-+++ b/drivers/usb/serial/ftdi_sio_ids.h
-@@ -60,14 +60,14 @@
- /*
-  * Texas Instruments XDS100v2 JTAG / BeagleBone A3
-  * http://processors.wiki.ti.com/index.php/XDS100
-- * http://beagleboard.org/bone
-+ * https://beagleboard.org/bone
-  */
- #define TI_XDS100V2_PID		0xa6d0
- 
- #define FTDI_NXTCAM_PID		0xABB8 /* NXTCam for Mindstorms NXT */
- #define FTDI_EV3CON_PID		0xABB9 /* Mindstorms EV3 Console Adapter */
- 
--/* US Interface Navigator (http://www.usinterface.com/) */
-+/* US Interface Navigator (https://www.usinterface.com/) */
- #define FTDI_USINT_CAT_PID	0xb810	/* Navigator CAT and 2nd PTT lines */
- #define FTDI_USINT_WKEY_PID	0xb811	/* Navigator WKEY and FSK lines */
- #define FTDI_USINT_RS232_PID	0xb812	/* Navigator RS232 and CONFIG lines */
-@@ -92,11 +92,11 @@
- #define FTDI_OPENDCC_GBM_PID	0xBFDC
- #define FTDI_OPENDCC_GBM_BOOST_PID	0xBFDD
- 
--/* NZR SEM 16+ USB (http://www.nzr.de) */
-+/* NZR SEM 16+ USB (https://www.nzr.de) */
- #define FTDI_NZR_SEM_USB_PID	0xC1E0	/* NZR SEM-LOG16+ */
- 
- /*
-- * RR-CirKits LocoBuffer USB (http://www.rr-cirkits.com)
-+ * RR-CirKits LocoBuffer USB (https://www.rr-cirkits.com)
-  */
- #define FTDI_RRCIRKITS_LOCOBUFFER_PID	0xc7d0	/* LocoBuffer USB */
- 
-@@ -122,7 +122,7 @@
- 
- #define FTDI_DISTORTEC_JTAG_LOCK_PICK_PID	0xCFF8
- 
--/* SCS HF Radio Modems PID's (http://www.scs-ptc.com) */
-+/* SCS HF Radio Modems PID's (https://www.scs-ptc.com) */
- /* the VID is the standard ftdi vid (FTDI_VID) */
- #define FTDI_SCS_DEVICE_0_PID 0xD010    /* SCS PTC-IIusb */
- #define FTDI_SCS_DEVICE_1_PID 0xD011    /* SCS Tracker / DSP TNC */
-@@ -138,7 +138,7 @@
- #define FTDI_IPLUS2_PID 0xD071 /* Product Id */
- 
- /*
-- * Gamma Scout (http://gamma-scout.com/). Submitted by rsc@runtux.com.
-+ * Gamma Scout (https://gamma-scout.com/). Submitted by rsc@runtux.com.
-  */
- #define FTDI_GAMMA_SCOUT_PID		0xD678	/* Gamma Scout online */
- 
-@@ -153,7 +153,7 @@
- #define FTDI_VARDAAN_PID	0xF070
- 
- /*
-- * Xsens Technologies BV products (http://www.xsens.com).
-+ * Xsens Technologies BV products (https://www.xsens.com).
-  */
- #define XSENS_VID		0x2639
- #define XSENS_AWINDA_STATION_PID 0x0101
-@@ -360,7 +360,7 @@
- #define FTDI_MAXSTREAM_PID	0xEE18	/* Xbee PKG-U Module */
- 
- /*
-- * microHAM product IDs (http://www.microham.com).
-+ * microHAM product IDs (https://www.microham.com).
-  * Submitted by Justin Burket (KL1RL) <zorton@jtan.com>
-  * and Mike Studer (K6EEP) <k6eep@hamsoftware.org>.
-  * Ian Abbott <abbotti@mev.co.uk> added a few more from the driver INF file.
-@@ -576,7 +576,7 @@
- 
- /*
-  * Synapse Wireless product ids (FTDI_VID)
-- * http://www.synapse-wireless.com
-+ * https://www.synapse-wireless.com
-  */
- #define FTDI_SYNAPSE_SS200_PID 0x9090 /* SS200 - SNAP Stick 200 */
- 
-@@ -630,7 +630,7 @@
-  * applications.  The VID/PID has also been used in firmware
-  * emulating FTDI serial chips by:
-  * Hornby Elite - Digital Command Control Console
-- * http://www.hornby.com/hornby-dcc/controllers/
-+ * https://www.hornby.com/hornby-dcc/controllers/
-  */
- #define MICROCHIP_VID		0x04D8
- #define MICROCHIP_USB_BOARD_PID	0x000A /* CDC RS-232 Emulation Demo */
-@@ -746,7 +746,7 @@
- #define ICOM_ID_RP2KVR_PID	0x0013 /* ID-RP2000V Receive config port */
- 
- /*
-- * GN Otometrics (http://www.otometrics.com)
-+ * GN Otometrics (https://www.otometrics.com)
-  * Submitted by Ville Sundberg.
-  */
- #define GN_OTOMETRICS_VID	0x0c33	/* Vendor ID */
-@@ -969,7 +969,7 @@
- 
- /*
-  * Physik Instrumente
-- * http://www.physikinstrumente.com/en/products/
-+ * https://www.physikinstrumente.com/en/products/
-  */
- /* These two devices use the VID of FTDI */
- #define PI_C865_PID	0xe0a0  /* PI C-865 Piezomotor Controller */
-@@ -1399,7 +1399,7 @@
- #define MJSG_HD_RADIO_PID	0x937C
- 
- /*
-- * D.O.Tec products (http://www.directout.eu)
-+ * D.O.Tec products (https://www.directout.eu)
-  */
- #define FTDI_DOTEC_PID 0x9868
- 
-@@ -1419,7 +1419,7 @@
- 
- 
- /*
-- * Accesio USB Data Acquisition products (http://www.accesio.com/)
-+ * Accesio USB Data Acquisition products (https://www.accesio.com/)
-  */
- #define ACCESIO_COM4SM_PID 	0xD578
- 
-@@ -1435,7 +1435,7 @@
- #define MILKYMISTONE_JTAGSERIAL_PID	0x0713
- 
- /*
-- * CTI GmbH RS485 Converter http://www.cti-lean.com/
-+ * CTI GmbH RS485 Converter https://www.cti-lean.com/
-  */
- /* USB-485-Mini*/
- #define FTDI_CTI_MINI_PID	0xF608
-@@ -1443,7 +1443,7 @@
- #define FTDI_CTI_NANO_PID	0xF60B
- 
- /*
-- * ZeitControl cardsystems GmbH rfid-readers http://zeitcontrol.de
-+ * ZeitControl cardsystems GmbH rfid-readers https://zeitcontrol.de
-  */
- /* TagTracer MIFARE*/
- #define FTDI_ZEITCONTROL_TAGTRACE_MIFARE_PID	0xF7C0
-@@ -1523,7 +1523,7 @@
- #define BRAINBOXES_US_160_8_PID		0x9008 /* US-160 16xRS232 1Mbaud Port 15 and 16 */
- 
- /*
-- * ekey biometric systems GmbH (http://ekey.net/)
-+ * ekey biometric systems GmbH (https://ekey.net/)
-  */
- #define FTDI_EKEY_CONV_USB_PID		0xCB08	/* Converter USB */
- 
-diff --git a/drivers/usb/serial/kobil_sct.c b/drivers/usb/serial/kobil_sct.c
-index e9882ba20933..c1b24bdd30bc 100644
---- a/drivers/usb/serial/kobil_sct.c
-+++ b/drivers/usb/serial/kobil_sct.c
-@@ -33,7 +33,7 @@
- #include <linux/ioctl.h>
- #include "kobil_sct.h"
- 
--#define DRIVER_AUTHOR "KOBIL Systems GmbH - http://www.kobil.com"
-+#define DRIVER_AUTHOR "KOBIL Systems GmbH - https://www.kobil.com"
- #define DRIVER_DESC "KOBIL USB Smart Card Terminal Driver (experimental)"
- 
- #define KOBIL_VENDOR_ID			0x0D46
-diff --git a/drivers/usb/serial/metro-usb.c b/drivers/usb/serial/metro-usb.c
-index e63cea02cfd8..afd72c09c7fe 100644
---- a/drivers/usb/serial/metro-usb.c
-+++ b/drivers/usb/serial/metro-usb.c
-@@ -4,7 +4,7 @@
-   distributed with Linux.
- 
-   Copyright:	2007 Metrologic Instruments. All rights reserved.
--  Copyright:	2011 Azimut Ltd. <http://azimutrzn.ru/>
-+  Copyright:	2011 Azimut Ltd. <https://azimutrzn.ru/>
- */
- 
- #include <linux/kernel.h>
--- 
-2.27.0
+Achim.
 
