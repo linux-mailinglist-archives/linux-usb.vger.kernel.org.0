@@ -2,69 +2,160 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D8FC226D06
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jul 2020 19:19:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE3BA226D39
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jul 2020 19:36:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728827AbgGTRSv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Jul 2020 13:18:51 -0400
-Received: from yes.iam.tj ([109.74.197.121]:37664 "EHLO iam.tj"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728324AbgGTRSv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 20 Jul 2020 13:18:51 -0400
-Received: from [10.0.40.34] (unknown [51.155.44.233])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        by iam.tj (Postfix) with ESMTPSA id 2D6F1340AD;
-        Mon, 20 Jul 2020 18:18:49 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=elloe.vision; s=2019;
-        t=1595265529; bh=xY4C6LY/7UCNXipn4aaYMV8JyOTlb7TTMtY1Ddxk7QU=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=yWinw9tW1WaSE23AJcbrsLEdAa7p/4fC86oIAV+gwye1vnKFHaXY/SMEIa6GDhriW
-         g9nKXbRITBLQqDSddFEHV+2huuOmC4wDiJ6c/lWpK831kveYLiJ6iLsscXftNIJLEI
-         XIiJQ50S/ItIPcr2fdDcjbS8HVggDELpGLFiaYYTdrOwfPrEy+qFyZQI0QsozhlM+w
-         k3OGz272KJFPISRX0TvbsLkXECsAzr6rw2LxFJL/ropaN7vCXcsZY2P882yhyKymRr
-         L5WkR0LoThrokH7B+5Bu36Nr7rw9uKI2FHBHSOlEuQIkHIRaZIK8eUqwN/iTVpT8c4
-         8XC2TwxKfXSYA==
-Subject: Re: uas: bug: [sda] tag#21 uas_eh_abort_handler 0 uas-tag 6 inflight:
- IN
-To:     Oliver Neukum <oneukum@suse.de>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        linux-usb <linux-usb@vger.kernel.org>
-References: <9268a7b4-217e-e76d-af9a-9c5b4f6fe54a@elloe.vision>
- <20200719110901.GE266150@kroah.com>
- <c6720231-e30c-41e4-cd2b-1b4b9baa0852@elloe.vision>
- <1595235102.2531.7.camel@suse.de>
-From:   "Tj (Elloe Linux)" <ml.linux@elloe.vision>
-Organization: Elloe CIC
-Message-ID: <d22abd9c-0b04-f4a2-0f38-e271b5de2aa6@elloe.vision>
-Date:   Mon, 20 Jul 2020 18:18:47 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1732225AbgGTRfM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Jul 2020 13:35:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56798 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729307AbgGTRfL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jul 2020 13:35:11 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6349C061794;
+        Mon, 20 Jul 2020 10:35:11 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id a9so158487pjd.3;
+        Mon, 20 Jul 2020 10:35:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WABzq59H5eUVYxXK83gQCdP2ji4pUab0s2f+SVe9EGI=;
+        b=KSoBcGlL4mpyA6z70T5c3zPdITp8j0hU0JwBgNNjrWFX5gJFyC40y/wPD+vC1X5Ajd
+         ACXnjLQu44r8pQzWggycGix7CiwdtpBQnqEs1eCd6mesISSUECDr7flMAuMdzat62+8x
+         UVp1LgUsiBBveXrK+fl3TO3mHwCguR7ltdYZ6QZY3moTWDy0N/o6ECEXEJxW6tMC/j33
+         XhrUsYk6MvuafN9d4/bh91e4TTBHGYXXYFnnaYS52DipCZ7kkysEwhfFm29RirNivCG0
+         6Ed4+rxF4UoZP3TZ1H1YfZuoymiKZ9W+OCHT3lfjwd0s0jxHSQGmqL1dhv1qH3T2NjWU
+         5TGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WABzq59H5eUVYxXK83gQCdP2ji4pUab0s2f+SVe9EGI=;
+        b=twKbNESBEusvaKmLqs43on29jSO3YFve6PdEx6oGzJ9fyidy9RaxKuOaVBS8qB/1pu
+         mPp3wrhyPbzYn8LSaMsrAB9QiOLLdy9oORVQM6ZRHHC1fK2qGha3eai129tbxIzv1Y3/
+         pp7PwWSy1Ol8kpCnc83Do2wyxGjf6MCDbTQeQOFVr6QC93f8iPxGepyK4+10JuJ7fg4Y
+         zjWcq8GEtRpWeL+qrUEWXKnkb7V8mmRxpA3w1qKztH7Bb6urfmd7qieXAGcaYzF6ZM7L
+         GXFYu1MYYnQ4E+uGgPCK/axQgB5Lu0WhwsL+FPh3YgWiceOpmQ2laVE00a85Z0ce7WtA
+         W5Fw==
+X-Gm-Message-State: AOAM530c6yYf4DjY5JL8Aqp1QOq85kPU2qszmdHiCjsqH0ctgjiY4OX3
+        6H6b4fhi7uf63Z2gDgCO5/Y=
+X-Google-Smtp-Source: ABdhPJzK0dZp9lmnB+R8F0pxEFC0wQCOX+oQUQyN7tpsTVwmYqbun2SGzjyQ8+lsh/JrEyyFSbnfrQ==
+X-Received: by 2002:a17:90b:488:: with SMTP id bh8mr516495pjb.49.1595266511403;
+        Mon, 20 Jul 2020 10:35:11 -0700 (PDT)
+Received: from localhost.localdomain ([103.51.73.161])
+        by smtp.gmail.com with ESMTPSA id b22sm175972pju.26.2020.07.20.10.35.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jul 2020 10:35:10 -0700 (PDT)
+From:   Anand Moon <linux.amoon@gmail.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Anand Moon <linux.amoon@gmail.com>
+Subject: [PATCH v5] phy: samsung: Use readl_poll_timeout function
+Date:   Mon, 20 Jul 2020 17:35:02 +0000
+Message-Id: <20200720173502.542-1-linux.amoon@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <1595235102.2531.7.camel@suse.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20/07/2020 09:51, Oliver Neukum wrote:
-> Am Sonntag, den 19.07.2020, 12:55 +0100 schrieb Tj (Elloe Linux):
->> On 19/07/2020 12:09, Greg KH wrote:
->>> On Sun, Jul 19, 2020 at 11:22:10AM +0100, Tj (Elloe Linux) wrote:
-> 
->>> Where is an error here?  Those looks ok to me.
->>
->> These repeated 'zaps' and resets every 30 seconds or so are not errors?
-> 
-> They are errors. But whose errors? 0x28 looks like a READ10 to me.
+Instead of a busy waiting while loop using udelay
+use readl_poll_timeout function to check the condition
+is met or timeout occurs in crport_handshake function.
+readl_poll_timeout is called in non atomic context so
+it safe to sleep until the condition is met.
 
-Update for today: setting a quirk to not use UAS allows the device to
-work without any apparent failures.
+Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+---
+Changes v5:
+--Fix the indentation, checkpatch warning.
+--Drop the Fix tags.
+Changes v4:
+Rebased on to of patch [0] https://patchwork.kernel.org/patch/11651673/
+--Fix the commit message.
+--Fix the error timeout condition for -ETIMEDOUT
+Changes v3:
+--Fix the commit message.
+--Drop the variable, used the value directly.
+Changes v2:
+--used the default timeout values.
+--Added missing Fixed tags.
+---
+ drivers/phy/samsung/phy-exynos5-usbdrd.c | 39 ++++++++----------------
+ 1 file changed, 12 insertions(+), 27 deletions(-)
 
-usb-storage.quirks=0x152d:0x0562:u
+diff --git a/drivers/phy/samsung/phy-exynos5-usbdrd.c b/drivers/phy/samsung/phy-exynos5-usbdrd.c
+index 7f6279fb4f8f..c45ed9cabc5e 100644
+--- a/drivers/phy/samsung/phy-exynos5-usbdrd.c
++++ b/drivers/phy/samsung/phy-exynos5-usbdrd.c
+@@ -16,6 +16,7 @@
+ #include <linux/of.h>
+ #include <linux/of_address.h>
+ #include <linux/of_device.h>
++#include <linux/iopoll.h>
+ #include <linux/phy/phy.h>
+ #include <linux/platform_device.h>
+ #include <linux/mutex.h>
+@@ -556,41 +557,25 @@ static int exynos5_usbdrd_phy_power_off(struct phy *phy)
+ static int crport_handshake(struct exynos5_usbdrd_phy *phy_drd,
+ 			    u32 val, u32 cmd)
+ {
+-	u32 usec = 100;
+ 	unsigned int result;
++	int err;
+ 
+ 	writel(val | cmd, phy_drd->reg_phy + EXYNOS5_DRD_PHYREG0);
+ 
+-	do {
+-		result = readl(phy_drd->reg_phy + EXYNOS5_DRD_PHYREG1);
+-		if (result & PHYREG1_CR_ACK)
+-			break;
+-
+-		udelay(1);
+-	} while (usec-- > 0);
+-
+-	if (!usec) {
+-		dev_err(phy_drd->dev,
+-			"CRPORT handshake timeout1 (0x%08x)\n", val);
+-		return -ETIME;
++	err = readl_poll_timeout(phy_drd->reg_phy + EXYNOS5_DRD_PHYREG1,
++				 result, (result & PHYREG1_CR_ACK), 1, 100);
++	if (err == -ETIMEDOUT) {
++		dev_err(phy_drd->dev, "CRPORT handshake timeout1 (0x%08x)\n", val);
++		return err;
+ 	}
+ 
+-	usec = 100;
+-
+ 	writel(val, phy_drd->reg_phy + EXYNOS5_DRD_PHYREG0);
+ 
+-	do {
+-		result = readl(phy_drd->reg_phy + EXYNOS5_DRD_PHYREG1);
+-		if (!(result & PHYREG1_CR_ACK))
+-			break;
+-
+-		udelay(1);
+-	} while (usec-- > 0);
+-
+-	if (!usec) {
+-		dev_err(phy_drd->dev,
+-			"CRPORT handshake timeout2 (0x%08x)\n", val);
+-		return -ETIME;
++	err = readl_poll_timeout(phy_drd->reg_phy + EXYNOS5_DRD_PHYREG1,
++				 result, !(result & PHYREG1_CR_ACK), 1, 100);
++	if (err == -ETIMEDOUT) {
++		dev_err(phy_drd->dev, "CRPORT handshake timeout2 (0x%08x)\n", val);
++		return err;
+ 	}
+ 
+ 	return 0;
+-- 
+2.27.0
 
-I plan on capturing a USB debug log with and without the
-quirk tomorrow.
