@@ -2,97 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73CDD226E1C
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jul 2020 20:16:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62431226EAA
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jul 2020 21:05:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728930AbgGTSQK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Jul 2020 14:16:10 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:42791 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728589AbgGTSQK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jul 2020 14:16:10 -0400
-Received: by mail-wr1-f65.google.com with SMTP id o11so18777378wrv.9;
-        Mon, 20 Jul 2020 11:16:09 -0700 (PDT)
+        id S1729502AbgGTTFM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Jul 2020 15:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42386 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726012AbgGTTFM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jul 2020 15:05:12 -0400
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F26C061794;
+        Mon, 20 Jul 2020 12:05:12 -0700 (PDT)
+Received: by mail-qk1-x742.google.com with SMTP id g26so6433808qka.3;
+        Mon, 20 Jul 2020 12:05:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6xNou+cHACWFvHGNXzPofMh+CBZIQ8xW+dhFT3jGEbo=;
+        b=qGH3EGZrbBYJFFXLpy9788889L91tGMGugiOZhBG5mkmuOaHr8qDM4J+IGuyanGPhu
+         Vxw9qvA8wjLil9OOQMqcA36LhPMFBJkuR0e9m5fhddTmTp9pHfA5IGt9YTi+3ndcaQuR
+         L4iHvaYG3FlYLQNaKPSDnM/F4BFGwLPeEeqHRxhnjrRM0rM5cBpm0jx1vXcUuQGFT8e3
+         gDjYTnWK7GtT4p+w6abgKeVqvOO0ncOtFM2MFragZvc27GLYAM0zDQ9xVdCtz4YlFta7
+         IhjYfdyVkfF3bEeAeEZ5QtiyT0AN2J4NIEHs561V0bBVGf9tE1zwOcx6W6cHIDxqNI8F
+         TQ3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HXSsIJUOCvmbyYAUWXz+DeBNCaIkG6xpbOIrdCqj1uo=;
-        b=Df7SlEU7nWUi162tgHFplfVFK3z5gkKptqoI0uwFddUv1Co2iSkaP2q7iv66FKnu7p
-         hnaXyhjDpa6j4uxg/pY88VTti5ZuMXP1d9XsdcMRMZFwWIkfFnhS3zGC43IkXZted6hG
-         /CTaOCA4yLVgsAzVKPdyE1BMXDrWwbziJXwVNvzfnIVi7+LuD7x9K0OdtjsyX2IxdbTB
-         dmSP2hPDqoD1mlunRsc69VQIMwZXrZlIEHjUxgMZ05GINGmjol9ZqmxSkH/k5nwmVP25
-         EV0bN2RAnJZJTfIkIix8I4/x9SgdYUeMm9frjIZptWtlZD274n3/vo5H/8Ic9uKnmAgH
-         WBTg==
-X-Gm-Message-State: AOAM5333vAJVHQYSY21JMkCm2LrVKWL0//tmZiKKbV1uuypcHJkRpc+I
-        nTDu3byI5NzBCqH/kZFv0VI=
-X-Google-Smtp-Source: ABdhPJxtopxet5EFXRABidBi8j39aXqy+hWmkMAJBvpKRfR5By3gTl0qggq/Sw77B7di5086mN7Wsw==
-X-Received: by 2002:adf:a15c:: with SMTP id r28mr3902225wrr.151.1595268968556;
-        Mon, 20 Jul 2020 11:16:08 -0700 (PDT)
-Received: from localhost (ip-37-188-169-187.eurotel.cz. [37.188.169.187])
-        by smtp.gmail.com with ESMTPSA id 69sm462466wma.16.2020.07.20.11.16.06
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=6xNou+cHACWFvHGNXzPofMh+CBZIQ8xW+dhFT3jGEbo=;
+        b=hyHMdevaBGNI0RExZtvqrNxVzTO56PWJhF1K8eH7vnlyr5in+aMbfqvzGGSHxYb0Nk
+         JvVdhzCnhD7m9Cjp3s2Kuk8JpAO5uoJGTkg2PRt6bWFd2KwhqN/nj3VTktM9svpFQEF0
+         /8tyv871D3q7z7gtZZBWR4X/sdffvRBd3vYwPvgdEcsGYFCqpky27t2WbfjwYbiMNk44
+         kwlzIlHLmDdnvi96QliJ+L1GyFoIPMuLHYCS9QNw9PeRDeHZdULjhqAIldrao95RGjHy
+         DfS7+CLnYiF+Gyf35pqMmRDQPbjHXUB+l/EOxZCWeu4KLZpdruWyEwWbPJRXiUn/CyvV
+         rC0A==
+X-Gm-Message-State: AOAM531QnWJdqdIrzujGLmpTr5qQ55OMUHZSGsCnqsxeT2E07M72ZDML
+        1byPTWSaf1jILN8WaDNI1A==
+X-Google-Smtp-Source: ABdhPJzrXQwdWF+qa2wzWCIT1nZ5JLyIGIeu284ZR14tqRjIjGzf7/7OV2hINf0xqBRSi/yBapdmYQ==
+X-Received: by 2002:a37:80c:: with SMTP id 12mr7349989qki.149.1595271911228;
+        Mon, 20 Jul 2020 12:05:11 -0700 (PDT)
+Received: from PWN (c-76-119-149-155.hsd1.ma.comcast.net. [76.119.149.155])
+        by smtp.gmail.com with ESMTPSA id r2sm19318751qtn.27.2020.07.20.12.05.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jul 2020 11:16:07 -0700 (PDT)
-Date:   Mon, 20 Jul 2020 20:16:05 +0200
-From:   Michal Hocko <mhocko@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: Re: kworker/0:3+pm hogging CPU
-Message-ID: <20200720181605.GC4061@dhcp22.suse.cz>
-References: <20200720083956.GA4074@dhcp22.suse.cz>
- <20200720135857.GB1228057@rowland.harvard.edu>
- <20200720143213.GJ4074@dhcp22.suse.cz>
- <20200720151255.GE1228057@rowland.harvard.edu>
- <20200720163355.GA4061@dhcp22.suse.cz>
- <20200720173807.GJ1228057@rowland.harvard.edu>
- <20200720174530.GB4061@dhcp22.suse.cz>
- <20200720174812.GK1228057@rowland.harvard.edu>
+        Mon, 20 Jul 2020 12:05:10 -0700 (PDT)
+Date:   Mon, 20 Jul 2020 15:05:08 -0400
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        syzkaller-bugs@googlegroups.com,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [Linux-kernel-mentees] [PATCH v1] usbhid: Fix slab-out-of-bounds
+ write in hiddev_ioctl_usage()
+Message-ID: <20200720190508.GA1946@PWN>
+Reply-To: 20200720121257.GJ2571@kadam
+References: <20200718231218.170730-1-yepeilin.cs@gmail.com>
+ <20200720115400.GI2549@kadam>
+ <20200720121257.GJ2571@kadam>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200720174812.GK1228057@rowland.harvard.edu>
+In-Reply-To: <20200720121257.GJ2571@kadam>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon 20-07-20 13:48:12, Alan Stern wrote:
-> On Mon, Jul 20, 2020 at 07:45:30PM +0200, Michal Hocko wrote:
-> > On Mon 20-07-20 13:38:07, Alan Stern wrote:
-> > > On Mon, Jul 20, 2020 at 06:33:55PM +0200, Michal Hocko wrote:
-> > > > On Mon 20-07-20 11:12:55, Alan Stern wrote:
-> > > > [...]
-> > > > > 	sudo echo 'module usbcore =p' >/debug/dynamic_debug/control
-> > > > > 
-> > > > > Then wait long enough for some interesting messages to appear in the 
-> > > > > kernel log (it should only take a few seconds if the worker thread is as 
-> > > > > busy as you say) and collect the output from the dmesg command.
-> > > > > 
-> > > > > To turn dynamic debugging back off when you're finished, use the same 
-> > > > > command with "=p" changed to "-p".
-> > > > 
-> > > > [   95.395815] hub 2-0:1.0: state 7 ports 6 chg 0006 evt 0000
-> > > > [   95.395824] usb usb2-port1: status 0088, change 0000, 5.0 Gb/s
-> > > > [   95.395838] usb usb2-port2: status 0088, change 0000, 5.0 Gb/s
-> > > > [   95.396016] hub 2-0:1.0: hub_suspend
-> > > > [   95.396023] usb usb2: bus auto-suspend, wakeup 1
-> > > > [   95.396029] usb usb2: bus suspend fail, err -16
-> > > 
-> > > Okay, that's the problem.  You may get more specific information about 
-> > > the suspend failure if you turn on dynamic debugging for the xhci-hcd 
-> > > module (same command as above but with xhci-hcd instead of usbcore).
-> > 
-> > Would that help to pinpoint the problem down?
-> 
-> It might.  I can't say for sure without seeing the output.
+On Mon, Jul 20, 2020 at 03:12:57PM +0300, Dan Carpenter wrote:
+> So another option would be to just add HIDIOCGUSAGE and HIDIOCSUSAGE to
+> the earlier check.  That risks breaking userspace.  Another option is to
+> just add a check like you did earlier to the HIDIOCGUSAGE case.
+> Probably just do option #2 and resend.
 
-echo 'module xhci-hcd =p' >/sys/kernel/debug/dynamic_debug/control
+Sure, I will just add the same check to the HIDIOCGUSAGE case for the
+time being. Thank you for the detailed explanation.
 
-doesn't yield to any output. I have tried both with and without usbcore
-debug output enabled. In the former there is no new output and for the
-later I get the same I have posted earlier.
--- 
-Michal Hocko
-SUSE Labs
+Here's what I found after digging a bit further though:
+
+hid_parser_main() calls different functions in order to process
+different type of items:
+
+drivers/hid/hid-core.c:1193:
+
+	static int (*dispatch_type[])(struct hid_parser *parser,
+				      struct hid_item *item) = {
+		hid_parser_main,
+		hid_parser_global,
+		hid_parser_local,
+		hid_parser_reserved
+	};
+
+In this case, hid_parser_main() calls hid_add_field(), which in turn
+calls hid_register_field(), which allocates the `field` object as you
+mentioned:
+
+drivers/hid/hid-core.c:102:
+
+	field = kzalloc((sizeof(struct hid_field) +
+			 usages * sizeof(struct hid_usage) +
+			 values * sizeof(unsigned)), GFP_KERNEL);
+
+Here, `values` equals to `global.report_count`. See how it is being
+called:
+
+drivers/hid/hid-core.c:303:
+
+	field = hid_register_field(report, usages, parser->global.report_count);
+
+In hid_parser_main(), `global.report_count` can be set by calling
+hid_parser_global().
+
+However, the syzkaller reproducer made hid_parser_main() to call
+hid_parser_global() __before__ `global.report_count` is properly set. It's
+zero. So hid_register_field() allocated `field` with `values` equals to
+zero - No room for value[] at all. I believe this caused the bug.
+
+Apparently hid_parser_main() doesn't care about which item (main, local,
+global and reserved) gets processed first. I am new to this code and I
+don't know whether this is by design, but this arbitrarity is
+apparently causing some issues.
+
+As another example, in hid_add_field():
+
+drivers/hid/hid-core.c:289:
+
+	report->size += parser->global.report_size * parser->global.report_count;
+
+If `global.report_count` is zero, `report->size` gets increased by zero.
+Is this working as intended? It seems weird to me.
+
+Thank you,
+
+Peilin Ye
