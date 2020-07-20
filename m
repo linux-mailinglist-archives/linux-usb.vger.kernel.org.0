@@ -2,268 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6F4A225C7B
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jul 2020 12:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE4AA225C98
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jul 2020 12:25:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728155AbgGTKP0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Jul 2020 06:15:26 -0400
-Received: from jabberwock.ucw.cz ([46.255.230.98]:33930 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728007AbgGTKP0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jul 2020 06:15:26 -0400
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id BB5631C0BE5; Mon, 20 Jul 2020 12:15:23 +0200 (CEST)
-Date:   Mon, 20 Jul 2020 12:15:22 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     stable@kernel.org, kernel list <linux-kernel@vger.kernel.org>,
-        gregkh@duo.ucw.cz, erosca@de.adit-jv.com, roscaeugeniu@gmail.com,
-        stern@rowland.harvard.edu, qais.yousef@arm.com,
-        linux@prisktech.co.nz, mathias.nyman@intel.com, oneukum@suse.de,
-        linux-usb@vger.kernel.org
-Subject: hibernation reverts in 4.19.134: better alternative?
-Message-ID: <20200720101522.GB13137@amd>
+        id S1728381AbgGTKZW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Jul 2020 06:25:22 -0400
+Received: from yes.iam.tj ([109.74.197.121]:48498 "EHLO iam.tj"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728001AbgGTKZV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 20 Jul 2020 06:25:21 -0400
+X-Greylist: delayed 86538 seconds by postgrey-1.27 at vger.kernel.org; Mon, 20 Jul 2020 06:25:20 EDT
+Received: from [10.0.40.34] (unknown [51.155.44.233])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        by iam.tj (Postfix) with ESMTPSA id 365D6340AD;
+        Mon, 20 Jul 2020 11:25:19 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=elloe.vision; s=2019;
+        t=1595240719; bh=nqa/jknYi1C7oHzp0vb7GuOaC5otEjuCwBUe93Ia7TM=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=G7wAiTEVxor/avhuSuObnxzJRgJNzLNgZj4pxnuEpGti7zvxZD7m8FBtUc0t06eRZ
+         XxhhP2SrZJ/Uh67FDO3PFxly08Y6ApQDR57hdTVfkmnIznM/lxZSrw0am4dl085EJs
+         +TWa4nF1eYfHvDtT24avQeLdtJxrYfnbd8bESeTZrIw7FKC08/bmsbDmF752zB4lVv
+         Onl7DPeNiW7ZDaBn3fIuoCZWxNnicup1f/V6PleLBbaDhicA7DiyZMOLa0+G4Dkfuo
+         0mX1Q0rFWs2//UHnI/+8BkRldu73sXCR/7c5/5aC3BKD9RySOUeK31YCpTUNnvC2Pi
+         BdYCwc0QCn8pg==
+Subject: Re: uas: bug: [sda] tag#21 uas_eh_abort_handler 0 uas-tag 6 inflight:
+ IN
+To:     Oliver Neukum <oneukum@suse.de>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb <linux-usb@vger.kernel.org>
+References: <9268a7b4-217e-e76d-af9a-9c5b4f6fe54a@elloe.vision>
+ <20200719110901.GE266150@kroah.com>
+ <c6720231-e30c-41e4-cd2b-1b4b9baa0852@elloe.vision>
+ <1595235102.2531.7.camel@suse.de>
+From:   "Tj (Elloe Linux)" <ml.linux@elloe.vision>
+Organization: Elloe CIC
+Message-ID: <c280ec82-cc00-f4b6-cc1f-12317cc8c23c@elloe.vision>
+Date:   Mon, 20 Jul 2020 11:25:18 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="ZfOjI3PrQbgiZnxM"
-Content-Disposition: inline
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <1595235102.2531.7.camel@suse.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 20/07/2020 09:51, Oliver Neukum wrote:
+>>
+>> These repeated 'zaps' and resets every 30 seconds or so are not errors?
+> 
+> They are errors. But whose errors? 0x28 looks like a READ10 to me.
+> In other words at least Test Unit Ready and READ_CAPACITY have
+> already worked at this stage.
+> Without a trace it is not clear what exactly this read is for.
+> Is it always the same READ?
+> 
+> This looks like the error handling UAS does when a command times out.
+> 
+>> They never stop even though the devices are not mounted nor being
+>> accessed (by users).
+>>
+>>>> [  199.939976] blk_update_request: I/O error, dev sda, sector 500117464
+>>>> op 0x0:(READ) flags 0x80700 phys_seg 5 prio class 0
+>>>
+>>> So only the block layer is reporting errors, not the USB layer?  Any usb
+>>> controller errors?
+> 
+> The error is from the SCSI layer strictly speaking. It notices that a
+> command is taking longer than allowed and directs UAS to do error
+> handling. SUbsequently an error is reported up to the block layer.
+> 
+> The problem is that we have a lot of unusual stuff being tested.
 
---ZfOjI3PrQbgiZnxM
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I've just built a kernel with more debugging options enabled and will
+find time later today to install and test.
 
-Hi!
+We have limited windows of time to test due to the Mox being our primary
+gateway but I've ordered another Mox A (the main CPU module) so we can
+test at will.
 
-This is queued for 4.19.134-stable, reverting 3 patches. But it seems
-better alternative is available...
+I'll update with the additional logs later.
 
-commit f3e697b7b6f5e2c570226f8f8692fb7db57215ec
-Author: Sasha Levin <sashal@kernel.org>
-Date:   Fri Jul 17 12:58:32 2020 -0400
+Our Mox has maximum additional modules connected (they're named A
+through G). The main CPU module (A) has its own USB3 port (presumably
+via the SoC) but we're using the 4x USB3 module (F) which, I think, uses
+a separate PCIe controller.
 
-    Revert "usb/ohci-platform: Fix a warning when hibernating"
-   =20
-    This reverts commit c83258a757687ffccce37ed73dba56cc6d4b8a1b.
-   =20
-    Eugeniu Rosca writes:
+In our earlier tests the module A USB3 port wasn't active presumably
+because we missed off a config option. Once we're corrected that we'll
+test on the SoC USB3 port to help narrow down the responsible kernel
+module(s) and layers.
 
-=2E..
-
-    > - Backporting 987351e1ea7772 ("phy: core: Add consumer device
-    >   link support") to v4.14.187 looks challenging enough, so probably n=
-ot
-    >   worth it. Anybody to contradict this?
-
-Backporting 987351e1ea7772 to 4.4 may be "interesting", but backport
-to 4.19 seems trivial, here, and it seems to work ok according to CIP
-test suites:
-
-https://gitlab.com/cip-project/cip-kernel/linux-cip/-/pipelines/168487477
-
-(You can simply apply 987351e1ea7772 ignoring one file that is not yet
-present in 4.19.)
-
-Eugeniu, can you verify this works for you?
-
-Best regards,
-								Pavel
-
-Signed-off-by: Pavel Machek (CIP) <pavel@denx.de>
-
-diff --git a/drivers/phy/phy-core.c b/drivers/phy/phy-core.c
-index 35fd38c5a4a1..600a4e554d17 100644
---- a/drivers/phy/phy-core.c
-+++ b/drivers/phy/phy-core.c
-@@ -33,7 +33,7 @@ static void devm_phy_release(struct device *dev, void *re=
-s)
- {
- 	struct phy *phy =3D *(struct phy **)res;
-=20
--	phy_put(phy);
-+	phy_put(dev, phy);
- }
-=20
- static void devm_phy_provider_release(struct device *dev, void *res)
-@@ -490,12 +490,12 @@ struct phy *of_phy_get(struct device_node *np, const =
-char *con_id)
- EXPORT_SYMBOL_GPL(of_phy_get);
-=20
- /**
-- * phy_put() - release the PHY
-- * @phy: the phy returned by phy_get()
-+ * of_phy_put() - release the PHY
-+ * @phy: the phy returned by of_phy_get()
-  *
-- * Releases a refcount the caller received from phy_get().
-+ * Releases a refcount the caller received from of_phy_get().
-  */
--void phy_put(struct phy *phy)
-+void of_phy_put(struct phy *phy)
- {
- 	if (!phy || IS_ERR(phy))
- 		return;
-@@ -503,6 +503,20 @@ void phy_put(struct phy *phy)
- 	module_put(phy->ops->owner);
- 	put_device(&phy->dev);
- }
-+EXPORT_SYMBOL_GPL(of_phy_put);
-+
-+/**
-+ * phy_put() - release the PHY
-+ * @dev: device that wants to release this phy
-+ * @phy: the phy returned by phy_get()
-+ *
-+ * Releases a refcount the caller received from phy_get().
-+ */
-+void phy_put(struct device *dev, struct phy *phy)
-+{
-+	device_link_remove(dev, &phy->dev);
-+	of_phy_put(phy);
-+}
- EXPORT_SYMBOL_GPL(phy_put);
-=20
- /**
-@@ -570,6 +584,7 @@ struct phy *phy_get(struct device *dev, const char *str=
-ing)
- {
- 	int index =3D 0;
- 	struct phy *phy;
-+	struct device_link *link;
-=20
- 	if (string =3D=3D NULL) {
- 		dev_WARN(dev, "missing string\n");
-@@ -591,6 +606,13 @@ struct phy *phy_get(struct device *dev, const char *st=
-ring)
-=20
- 	get_device(&phy->dev);
-=20
-+	link =3D device_link_add(dev, &phy->dev, DL_FLAG_STATELESS);
-+	if (!link) {
-+		dev_err(dev, "failed to create device link to %s\n",
-+			dev_name(phy->dev.parent));
-+		return ERR_PTR(-EINVAL);
-+	}
-+
- 	return phy;
- }
- EXPORT_SYMBOL_GPL(phy_get);
-@@ -684,6 +706,7 @@ struct phy *devm_of_phy_get(struct device *dev, struct =
-device_node *np,
- 			    const char *con_id)
- {
- 	struct phy **ptr, *phy;
-+	struct device_link *link;
-=20
- 	ptr =3D devres_alloc(devm_phy_release, sizeof(*ptr), GFP_KERNEL);
- 	if (!ptr)
-@@ -695,6 +718,14 @@ struct phy *devm_of_phy_get(struct device *dev, struct=
- device_node *np,
- 		devres_add(dev, ptr);
- 	} else {
- 		devres_free(ptr);
-+		return phy;
-+	}
-+
-+	link =3D device_link_add(dev, &phy->dev, DL_FLAG_STATELESS);
-+	if (!link) {
-+		dev_err(dev, "failed to create device link to %s\n",
-+			dev_name(phy->dev.parent));
-+		return ERR_PTR(-EINVAL);
- 	}
-=20
- 	return phy;
-@@ -717,6 +748,7 @@ struct phy *devm_of_phy_get_by_index(struct device *dev=
-, struct device_node *np,
- 				     int index)
- {
- 	struct phy **ptr, *phy;
-+	struct device_link *link;
-=20
- 	ptr =3D devres_alloc(devm_phy_release, sizeof(*ptr), GFP_KERNEL);
- 	if (!ptr)
-@@ -738,6 +770,13 @@ struct phy *devm_of_phy_get_by_index(struct device *de=
-v, struct device_node *np,
- 	*ptr =3D phy;
- 	devres_add(dev, ptr);
-=20
-+	link =3D device_link_add(dev, &phy->dev, DL_FLAG_STATELESS);
-+	if (!link) {
-+		dev_err(dev, "failed to create device link to %s\n",
-+			dev_name(phy->dev.parent));
-+		return ERR_PTR(-EINVAL);
-+	}
-+
- 	return phy;
- }
- EXPORT_SYMBOL_GPL(devm_of_phy_get_by_index);
-diff --git a/drivers/usb/renesas_usbhs/rcar2.c b/drivers/usb/renesas_usbhs/=
-rcar2.c
-index 0027092b1118..c52d36c384e7 100644
---- a/drivers/usb/renesas_usbhs/rcar2.c
-+++ b/drivers/usb/renesas_usbhs/rcar2.c
-@@ -33,7 +33,7 @@ static int usbhs_rcar2_hardware_exit(struct platform_devi=
-ce *pdev)
- 	struct usbhs_priv *priv =3D usbhs_pdev_to_priv(pdev);
-=20
- 	if (priv->phy) {
--		phy_put(priv->phy);
-+		phy_put(&pdev->dev, priv->phy);
- 		priv->phy =3D NULL;
- 	}
-=20
-diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
-index 9713aebdd348..e969b604cb54 100644
---- a/include/linux/phy/phy.h
-+++ b/include/linux/phy/phy.h
-@@ -185,7 +185,8 @@ struct phy *devm_of_phy_get(struct device *dev, struct =
-device_node *np,
- 			    const char *con_id);
- struct phy *devm_of_phy_get_by_index(struct device *dev, struct device_nod=
-e *np,
- 				     int index);
--void phy_put(struct phy *phy);
-+void of_phy_put(struct phy *phy);
-+void phy_put(struct device *dev, struct phy *phy);
- void devm_phy_put(struct device *dev, struct phy *phy);
- struct phy *of_phy_get(struct device_node *np, const char *con_id);
- struct phy *of_phy_simple_xlate(struct device *dev,
-@@ -348,7 +349,11 @@ static inline struct phy *devm_of_phy_get_by_index(str=
-uct device *dev,
- 	return ERR_PTR(-ENOSYS);
- }
-=20
--static inline void phy_put(struct phy *phy)
-+static inline void of_phy_put(struct phy *phy)
-+{
-+}
-+
-+static inline void phy_put(struct device *dev, struct phy *phy)
- {
- }
-=20
-
-
---=20
-(english) http://www.livejournal.com/~pavelmachek
-(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
-g.html
-
---ZfOjI3PrQbgiZnxM
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iEYEARECAAYFAl8VbroACgkQMOfwapXb+vIsdgCeN8e0SOmPQhjKnsYZaF90xKl4
-lCEAoIOXJk+fLM5ZKytKp2EmossZ1aME
-=DooB
------END PGP SIGNATURE-----
-
---ZfOjI3PrQbgiZnxM--
+https://www.turris.com/en/mox/modules/
