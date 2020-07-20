@@ -2,202 +2,613 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E89B3226A69
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jul 2020 18:36:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CFA1226C80
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jul 2020 18:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732326AbgGTQeC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Jul 2020 12:34:02 -0400
-Received: from mail-wm1-f54.google.com ([209.85.128.54]:38462 "EHLO
-        mail-wm1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731806AbgGTQeA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jul 2020 12:34:00 -0400
-Received: by mail-wm1-f54.google.com with SMTP id f18so146320wml.3;
-        Mon, 20 Jul 2020 09:33:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vsumXDSjRCB3mjTpA+ep77yxk0IlkkZV6qgRHqWpdCo=;
-        b=lsqMeRJklChZBg1IlCoEfDJCPnGasGqcJXCtsskjtIRB8df+zICfx+/0We6BhSvZMq
-         gmvxKnOEYZis4+BRnnVd3yHQfLTR0nY201n6S8c0ekOx8UgEwNh0JAalCLLhBq1RNRRm
-         aUIHdi2WTmXtDj3pDtVHz3D/A+GcCMBRDJl2CHogIGlnanugCS3qyGCW2vu5o7PFcMk1
-         JehJ92HxO+F7iopgul+7DuPYMI1b0GRt4TWgbrxGTWBTJFgC5Z6ErVon6dytXDXJ4/+S
-         oNoZ3IVP6vRxmDn6NbCxAwBHLMwJ9VNHOaQNMZQ6I2OEkY5M/krpvU9IGoMrXoM43Le8
-         4c/w==
-X-Gm-Message-State: AOAM532Y6OwaZHkpY2cXE4z6AKZ1nMSkD8AOMEUsrw3lrxNOAQK9fbSa
-        WMYvZiBTeIpZHSWWwEI8MqE=
-X-Google-Smtp-Source: ABdhPJyBCfJt5mnYmvs0N2dm/zSvnpr7Pn7iHFOH6pzm91E8hNpV4jHXVySktCXThjCyz+o8Wxbjnw==
-X-Received: by 2002:a1c:7916:: with SMTP id l22mr170978wme.91.1595262837466;
-        Mon, 20 Jul 2020 09:33:57 -0700 (PDT)
-Received: from localhost (ip-37-188-169-187.eurotel.cz. [37.188.169.187])
-        by smtp.gmail.com with ESMTPSA id f9sm34272539wru.47.2020.07.20.09.33.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jul 2020 09:33:56 -0700 (PDT)
-Date:   Mon, 20 Jul 2020 18:33:55 +0200
-From:   Michal Hocko <mhocko@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: Re: kworker/0:3+pm hogging CPU
-Message-ID: <20200720163355.GA4061@dhcp22.suse.cz>
-References: <20200720083956.GA4074@dhcp22.suse.cz>
- <20200720135857.GB1228057@rowland.harvard.edu>
- <20200720143213.GJ4074@dhcp22.suse.cz>
- <20200720151255.GE1228057@rowland.harvard.edu>
+        id S1729400AbgGTQzq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Jul 2020 12:55:46 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:57001 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728876AbgGTQzn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jul 2020 12:55:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1595264141;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7KwyesGBzpMff+LVLa0B11nqr82Q73X27xBKk+3NHek=;
+        b=f3cXqPLWOEt9FRB+wNnIogb8qd1e7UN937h/tZPHMW1cBjBicGhLn0RHHvTBGJaYpi288C
+        mvopTP4m75vtU3YxDH5tF9XsjXicbijX2Lpts8n0r/B0nXjvmBXurLNb0Bw54rAkR2mDsJ
+        80Rn3nP2ldNeBYKiu4shYBbHyJilMHs=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-259-hsun4GRRNeWr4GqIoG6Q5g-1; Mon, 20 Jul 2020 12:55:35 -0400
+X-MC-Unique: hsun4GRRNeWr4GqIoG6Q5g-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 656D11005504;
+        Mon, 20 Jul 2020 16:55:34 +0000 (UTC)
+Received: from localhost.localdomain (unknown [10.3.128.5])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7763A5C298;
+        Mon, 20 Jul 2020 16:55:33 +0000 (UTC)
+Message-ID: <2017952c728bd0bb5d0e0c9df266de984f293df2.camel@redhat.com>
+Subject: Re: System crash/lockup after plugging CDC ACM device
+From:   Dan Williams <dcbw@redhat.com>
+To:     David Guillen Fandos <david@davidgf.net>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, dnlplm@gmail.com
+Date:   Mon, 20 Jul 2020 11:55:32 -0500
+In-Reply-To: <ae6813ea0d4144a624a7e98cbba87070d3ae6f30.camel@davidgf.net>
+References: <9778f9b8a8604e2c13979ea6909678c23cd286cb.camel@davidgf.net>
+         <20200715093029.GB2759174@kroah.com>
+         <867592c41350b09a0cb67e9a3924f8a2f758d79a.camel@davidgf.net>
+         <20200715105034.GB2880893@kroah.com>
+         <956ec3169eec6b121339ed6c1aedd0f7ca08db43.camel@davidgf.net>
+         <20200715111210.GA2892661@kroah.com>
+         <ed743fe1e0ede6d37bc4a62ba704f51c54c2f5bf.camel@davidgf.net>
+         <20200715122403.GC2937397@kroah.com>
+         <8ebe3fb975db65531e71fdf8a298e3b3f68ae3ca.camel@davidgf.net>
+         <5725602de85c43497e326ff745db01ba36caeac1.camel@davidgf.net>
+         <ae6813ea0d4144a624a7e98cbba87070d3ae6f30.camel@davidgf.net>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.3 (3.36.3-1.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200720151255.GE1228057@rowland.harvard.edu>
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon 20-07-20 11:12:55, Alan Stern wrote:
-[...]
-> 	sudo echo 'module usbcore =p' >/debug/dynamic_debug/control
+On Mon, 2020-07-20 at 01:36 +0200, David Guillen Fandos wrote:
+> On Thu, 2020-07-16 at 16:30 +0200, David Guillen Fandos wrote:
+> > On Wed, 2020-07-15 at 19:03 +0200, David Guillen Fandos wrote:
+> > > On Wed, 2020-07-15 at 14:24 +0200, Greg KH wrote:
+> > > > On Wed, Jul 15, 2020 at 01:20:54PM +0200, David Guillen Fandos
+> > > > wrote:
+> > > > > On Wed, 2020-07-15 at 13:12 +0200, Greg KH wrote:
+> > > > > > On Wed, Jul 15, 2020 at 12:57:14PM +0200, David Guillen
+> > > > > > Fandos
+> > > > > > wrote:
+> > > > > > > On Wed, 2020-07-15 at 12:50 +0200, Greg KH wrote:
+> > > > > > > > On Wed, Jul 15, 2020 at 12:31:42PM +0200, David Guillen
+> > > > > > > > Fandos
+> > > > > > > > wrote:
+> > > > > > > > > On Wed, 2020-07-15 at 11:30 +0200, Greg KH wrote:
+> > > > > > > > > > On Wed, Jul 15, 2020 at 10:58:03AM +0200, David
+> > > > > > > > > > Guillen
+> > > > > > > > > > Fandos
+> > > > > > > > > > wrote:
+> > > > > > > > > > > Hello linux-usb,
+> > > > > > > > > > > 
+> > > > > > > > > > > I think I might have found a kernel bug related
+> > > > > > > > > > > to
+> > > > > > > > > > > the
+> > > > > > > > > > > USB
+> > > > > > > > > > > subsystem
+> > > > > > > > > > > (cdc_acm perhaps).
+> > > > > > > > > > > 
+> > > > > > > > > > > Context: I was playing around with a device I'm
+> > > > > > > > > > > creating,
+> > > > > > > > > > > essentially a
+> > > > > > > > > > > USB quad modem device that exposes four modems to
+> > > > > > > > > > > the
+> > > > > > > > > > > host
+> > > > > > > > > > > system.
+> > > > > > > > > > > This
+> > > > > > > > > > > device is still a prototype so there's a few bugs
+> > > > > > > > > > > here
+> > > > > > > > > > > and
+> > > > > > > > > > > there,
+> > > > > > > > > > > most
+> > > > > > > > > > > likely in the USB descriptors and control
+> > > > > > > > > > > requests.
+> > > > > > > > > > > 
+> > > > > > > > > > > What happens: After plugging the device the
+> > > > > > > > > > > system
+> > > > > > > > > > > starts
+> > > > > > > > > > > spitting
+> > > > > > > > > > > warnings and BUGs and it locks up. Most of the
+> > > > > > > > > > > time
+> > > > > > > > > > > some
+> > > > > > > > > > > CPUs
+> > > > > > > > > > > get
+> > > > > > > > > > > into
+> > > > > > > > > > > some spinloop and never comes back (you can see
+> > > > > > > > > > > it
+> > > > > > > > > > > being
+> > > > > > > > > > > detected
+> > > > > > > > > > > by
+> > > > > > > > > > > the watchdog after a few seconds). Generally
+> > > > > > > > > > > after
+> > > > > > > > > > > that
+> > > > > > > > > > > the
+> > > > > > > > > > > USB
+> > > > > > > > > > > devices
+> > > > > > > > > > > stop working completely and at some point the
+> > > > > > > > > > > machine
+> > > > > > > > > > > freezes
+> > > > > > > > > > > completely. In a couple of ocasions I managed to
+> > > > > > > > > > > see
+> > > > > > > > > > > a
+> > > > > > > > > > > bug
+> > > > > > > > > > > in
+> > > > > > > > > > > dmesg
+> > > > > > > > > > > saying "unable to handle page fault for address
+> > > > > > > > > > > XXX"
+> > > > > > > > > > > and
+> > > > > > > > > > > "Supervisor
+> > > > > > > > > > > read access in kernel mode" "error code (0x0000)
+> > > > > > > > > > > not
+> > > > > > > > > > > present
+> > > > > > > > > > > page".
+> > > > > > > > > > > I
+> > > > > > > > > > > could not get a trace for that one since the
+> > > > > > > > > > > kernel
+> > > > > > > > > > > died
+> > > > > > > > > > > completely
+> > > > > > > > > > > and
+> > > > > > > > > > > my log files were truncated/lost.
+> > > > > > > > > > > 
+> > > > > > > > > > > Since it is happening to my two machines (both
+> > > > > > > > > > > Intel
+> > > > > > > > > > > but
+> > > > > > > > > > > rather
+> > > > > > > > > > > different controllers, Sunrise Point-LP USB 3.0
+> > > > > > > > > > > vs
+> > > > > > > > > > > 8
+> > > > > > > > > > > Series/C220)
+> > > > > > > > > > > and
+> > > > > > > > > > > with different kernel versions I suspect this
+> > > > > > > > > > > might
+> > > > > > > > > > > be
+> > > > > > > > > > > a
+> > > > > > > > > > > bug in
+> > > > > > > > > > > the
+> > > > > > > > > > > kernel.
+> > > > > > > > > > > 
+> > > > > > > > > > > I have 4 logs that I collected, they are sort of
+> > > > > > > > > > > long-
+> > > > > > > > > > > ish,
+> > > > > > > > > > > not
+> > > > > > > > > > > sure
+> > > > > > > > > > > how
+> > > > > > > > > > > to best send them to the list.
+> > > > > > > > > > 
+> > > > > > > > > > Send the crashes with the callback list, that
+> > > > > > > > > > should
+> > > > > > > > > > be
+> > > > > > > > > > quite
+> > > > > > > > > > small,
+> > > > > > > > > > right?  We don't need the full log.
+> > > > > > > > > > 
+> > > > > > > > > > The first crash is the most important, the others
+> > > > > > > > > > can
+> > > > > > > > > > be
+> > > > > > > > > > from
+> > > > > > > > > > the
+> > > > > > > > > > first
+> > > > > > > > > > one and are not reliable.
+> > > > > > > > > > 
+> > > > > > > > > > thanks,
+> > > > > > > > > > 
+> > > > > > > > > > greg k-h
+> > > > > > > > > 
+> > > > > > > > > Ok then, here comes one of the logs, I selected some
+> > > > > > > > > bits
+> > > > > > > > > only
+> > > > > > > > > 
+> > > > > > > > > [  147.302016] WARNING: CPU: 3 PID: 134 at
+> > > > > > > > > kernel/workqueue.c:1473
+> > > > > > > > > __queue_work+0x364/0x410
+> > > > > > > > > [...]
+> > > > > > > > > [  147.302322] Call Trace:
+> > > > > > > > > [  147.302329]  <IRQ>
+> > > > > > > > > [  147.302342]  queue_work_on+0x36/0x40
+> > > > > > > > > [  147.302353]  __usb_hcd_giveback_urb+0x9c/0x110
+> > > > > > > > > [  147.302362]  usb_giveback_urb_bh+0xa0/0xf0
+> > > > > > > > > [  147.302372]  tasklet_action_common.constprop.0+0x6
+> > > > > > > > > 6/
+> > > > > > > > > 0x
+> > > > > > > > > 10
+> > > > > > > > > 0
+> > > > > > > > > [  147.302382]  __do_softirq+0xe9/0x2dc
+> > > > > > > > > [  147.302391]  irq_exit+0xcf/0x110
+> > > > > > > > > [  147.302397]  do_IRQ+0x55/0xe0
+> > > > > > > > > [  147.302408]  common_interrupt+0xf/0xf
+> > > > > > > > > [  147.302413]  </IRQ>
+> > > > > > > > > [...]
+> > > > > > > > > [  184.771172] watchdog: BUG: soft lockup - CPU#3
+> > > > > > > > > stuck
+> > > > > > > > > for
+> > > > > > > > > 23s!
+> > > > > > > > > [kworker/3:2:134]
+> > > > > > > > 
+> > > > > > > > That was the first message?
+> > > > > > > > 
+> > > > > > > > Ok, we need some more logs, how about the 30 lines
+> > > > > > > > right
+> > > > > > > > before
+> > > > > > > > the
+> > > > > > > > above?
+> > > > > > > > 
+> > > > > > > > And what kernel version are you using?
+> > > > > > > > 
+> > > > > > > > thanks,
+> > > > > > > > 
+> > > > > > > > greg k-h
+> > > > > > > 
+> > > > > > > Heh I assumed you would find the 3rd stack more
+> > > > > > > interesting
+> > > > > > > since
+> > > > > > > it
+> > > > > > > involves more subsystems but anyway, here we got, the
+> > > > > > > first
+> > > > > > > one
+> > > > > > > with
+> > > > > > > more context. The trigger as you can see is me connecting
+> > > > > > > the
+> > > > > > > USB
+> > > > > > > device:
+> > > > > > > 
+> > > > > > > [  141.445367] usb 1-1: new full-speed USB device number
+> > > > > > > 5
+> > > > > > > using
+> > > > > > > xhci_hcd
+> > > > > > > [  141.573592] usb 1-1: New USB device found,
+> > > > > > > idVendor=0483,
+> > > > > > > idProduct=5740, bcdDevice= 2.00
+> > > > > > > [  141.573597] usb 1-1: New USB device strings: Mfr=1,
+> > > > > > > Product=2,
+> > > > > > > SerialNumber=3
+> > > > > > > [  141.573601] usb 1-1: Product: Quad-UART serial USB
+> > > > > > > device
+> > > > > > > [  141.573603] usb 1-1: Manufacturer: davidgf.net
+> > > > > > > [  141.573605] usb 1-1: SerialNumber: serialno
+> > > > > > > [  142.375007] cdc_acm 1-1:1.0: ttyACM0: USB ACM device
+> > > > > > > [  142.376623] cdc_acm 1-1:1.2: ttyACM1: USB ACM device
+> > > > > > > [  142.378350] cdc_acm 1-1:1.4: ttyACM2: USB ACM device
+> > > > > > > [  142.379637] cdc_acm 1-1:1.6: ttyACM3: USB ACM device
+> > > > > > > [  142.382473] usbcore: registered new interface driver
+> > > > > > > cdc_acm
+> > > > > > > [  142.382476] cdc_acm: USB Abstract Control Model driver
+> > > > > > > for
+> > > > > > > USB
+> > > > > > > modems and ISDN adapters
+> > > > > > > [  147.301997] ------------[ cut here ]------------
+> > > > > > > [  147.302016] WARNING: CPU: 3 PID: 134 at
+> > > > > > > kernel/workqueue.c:1473
+> > > > > > > __queue_work+0x364/0x410
+> > > > > > > [  147.302019] Modules linked in: cdc_acm rfcomm ccm
+> > > > > > > wireguard
+> > > > > > > curve25519_x86_64 libchacha20poly1305 chacha_x86_64
+> > > > > > > poly1305_x86_64
+> > > > > > > libblake2s blake2s_x86_64 ip6_udp_tunnel udp_tunnel
+> > > > > > > libcurve25519_generic libchacha libblake2s_generic
+> > > > > > > nft_fib_inet
+> > > > > > > nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet
+> > > > > > > nf_reject_ipv4
+> > > > > > > nf_reject_ipv6 nft_reject nft_ct nft_chain_nat
+> > > > > > > ip6table_nat
+> > > > > > > ip6table_mangle ip6table_raw ip6table_security
+> > > > > > > iptable_nat
+> > > > > > > nf_nat
+> > > > > > > nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 libcrc32c
+> > > > > > > iptable_mangle
+> > > > > > > iptable_raw iptable_security ip_set nf_tables nfnetlink
+> > > > > > > ip6table_filter
+> > > > > > > ip6_tables iptable_filter cmac vboxnetadp(OE)
+> > > > > > > vboxnetflt(OE)
+> > > > > > > bnep
+> > > > > > > vboxdrv(OE) sunrpc vfat fat uvcvideo videobuf2_vmalloc
+> > > > > > > videobuf2_memops
+> > > > > > > videobuf2_v4l2 videobuf2_common videodev btusb btrtl
+> > > > > > > btbcm
+> > > > > > > btintel
+> > > > > > > mc
+> > > > > > > bluetooth ecdh_generic ecc iTCO_wdt iTCO_vendor_support
+> > > > > > > mei_hdcp
+> > > > > > > intel_rapl_msr dell_laptop x86_pkg_temp_thermal
+> > > > > > > intel_powerclamp
+> > > > > > > coretemp kvm_intel kvm irqbypass intel_cstate
+> > > > > > > intel_uncore
+> > > > > > > intel_rapl_perf iwlmvm
+> > > > > > > [  147.302121]  snd_hda_codec_hdmi mac80211 snd_soc_skl
+> > > > > > > snd_soc_sst_ipc
+> > > > > > > snd_soc_sst_dsp dell_wmi snd_hda_ext_core dell_smbios
+> > > > > > > snd_hda_codec_realtek dcdbas libarc4 wmi_bmof
+> > > > > > > dell_wmi_descriptor
+> > > > > > > snd_soc_acpi_intel_match snd_soc_acpi
+> > > > > > > intel_wmi_thunderbolt
+> > > > > > > snd_hda_codec_generic snd_soc_core ledtrig_audio iwlwifi
+> > > > > > > pcspkr
+> > > > > > > snd_compress ac97_bus snd_pcm_dmaengine snd_hda_intel
+> > > > > > > snd_intel_dspcfg
+> > > > > > > snd_hda_codec cfg80211 snd_hda_core snd_hwdep snd_seq
+> > > > > > > snd_seq_device
+> > > > > > > joydev snd_pcm rfkill snd_timer snd i2c_i801 soundcore
+> > > > > > > idma64
+> > > > > > > int3403_thermal intel_hid int3400_thermal sparse_keymap
+> > > > > > > acpi_thermal_rel mei_me intel_xhci_usb_role_switch
+> > > > > > > acpi_pad
+> > > > > > > roles
+> > > > > > > mei
+> > > > > > > intel_pch_thermal processor_thermal_device
+> > > > > > > intel_rapl_common
+> > > > > > > int340x_thermal_zone intel_soc_dts_iosf binfmt_misc
+> > > > > > > ip_tables
+> > > > > > > dm_crypt
+> > > > > > > i915 rtsx_pci_sdmmc mmc_core crct10dif_pclmul
+> > > > > > > crc32_pclmul
+> > > > > > > i2c_algo_bit
+> > > > > > > cec crc32c_intel drm_kms_helper nvme ghash_clmulni_intel
+> > > > > > > drm
+> > > > > > > nvme_core
+> > > > > > > serio_raw rtsx_pci hid_multitouch wmi i2c_hid video
+> > > > > > > pinctrl_sunrisepoint pinctrl_intel
+> > > > > > > [  147.302218]  fuse
+> > > > > > > [  147.302230] CPU: 3 PID: 134 Comm: kworker/3:2 Tainted:
+> > > > > > > G          IOE     5.7.7-200.fc32.x86_64 #1
+> > > > > > > [  147.302233] Hardware name: Dell Inc. XPS 13
+> > > > > > > 9350/0PWNCR,
+> > > > > > > BIOS
+> > > > > > > 1.12.2
+> > > > > > > 12/15/2019
+> > > > > > > [  147.302260] Workqueue:  0x0 (mm_percpu_wq)
+> > > > > > > [  147.302275] RIP: 0010:__queue_work+0x364/0x410
+> > > > > > > [  147.302282] Code: e0 f1 69 a9 00 01 1f 00 75 0f 65 48
+> > > > > > > 8b
+> > > > > > > 3c
+> > > > > > > 25
+> > > > > > > c0 8b
+> > > > > > > 01 00 f6 47 24 20 75 25 0f 0b 48 83 c4 10 5b 5d 41 5c 41
+> > > > > > > 5d
+> > > > > > > 41
+> > > > > > > 5e
+> > > > > > > 41 5f
+> > > > > > > c3 <0f> 0b e9 78 fe ff ff 41 83 cc 02 49 8d 57 60 e9 5d
+> > > > > > > fe
+> > > > > > > ff
+> > > > > > > ff e8
+> > > > > > > 53
+> > > > > > > [  147.302286] RSP: 0018:ffffbab980154e68 EFLAGS:
+> > > > > > > 00010002
+> > > > > > > [  147.302292] RAX: ffff8f551b333790 RBX:
+> > > > > > > 0000000000000048
+> > > > > > > RCX:
+> > > > > > > 0000000000000000
+> > > > > > > [  147.302295] RDX: ffff8f551b333798 RSI:
+> > > > > > > ffff8f5575803718
+> > > > > > > RDI:
+> > > > > > > ffff8f5576daa840
+> > > > > > > [  147.302299] RBP: ffff8f551b333790 R08:
+> > > > > > > ffffffff97856cb0
+> > > > > > > R09:
+> > > > > > > 0000000000000000
+> > > > > > > [  147.302302] R10: 0000000000000000 R11:
+> > > > > > > ffffffff97856cb8
+> > > > > > > R12:
+> > > > > > > 0000000000000003
+> > > > > > > [  147.302306] R13: 0000000000002000 R14:
+> > > > > > > ffff8f5575c14e00
+> > > > > > > R15:
+> > > > > > > ffff8f5576db0700
+> > > > > > > [  147.302311] FS:  0000000000000000(0000)
+> > > > > > > GS:ffff8f5576d80000(0000)
+> > > > > > > knlGS:0000000000000000
+> > > > > > > [  147.302315] CS:  0010 DS: 0000 ES: 0000 CR0:
+> > > > > > > 0000000080050033
+> > > > > > > [  147.302319] CR2: 00000000000000b0 CR3:
+> > > > > > > 0000000267774004
+> > > > > > > CR4:
+> > > > > > > 00000000003606e0
+> > > > > > > [  147.302322] Call Trace:
+> > > > > > > [  147.302329]  <IRQ>
+> > > > > > > [  147.302342]  queue_work_on+0x36/0x40
+> > > > > > > [  147.302353]  __usb_hcd_giveback_urb+0x9c/0x110
+> > > > > > > [  147.302362]  usb_giveback_urb_bh+0xa0/0xf0
+> > > > > > 
+> > > > > > Are you sure your device is working properly and talking
+> > > > > > USB
+> > > > > > correctly
+> > > > > > to the host?  It looks like you are just timing out for
+> > > > > > some
+> > > > > > reason.
+> > > > > > 
+> > > > > > But, that warning is showing that something is odd in the
+> > > > > > usb
+> > > > > > workqueue,
+> > > > > > which is strange.
+> > > > > > 
+> > > > > > What type of host controller is this talking to?  And does
+> > > > > > your
+> > > > > > device
+> > > > > > actually answer the urbs being sent to it correctly?
+> > > > > > 
+> > > > > > Using usbmon on this might be the best way to watch the USB
+> > > > > > traffic,
+> > > > > > if
+> > > > > > you don't have a hardware protocol sniffer, which could
+> > > > > > provide
+> > > > > > some
+> > > > > > clues as to what is going wrong.
+> > > > > > 
+> > > > > > thanks,
+> > > > > > 
+> > > > > > greg k-h
+> > > > > 
+> > > > > As I mentioned the device is likely buggy, since I'm
+> > > > > developing
+> > > > > and
+> > > > > debugging it.
+> > > > > However my ability to debug and fix any issue is limited by
+> > > > > the
+> > > > > fact
+> > > > > that the kernel decides to stop working as usual, making my
+> > > > > USB
+> > > > > keyboard and mouse useless, if not crashing later due to soft
+> > > > > lockups.
+> > > > > 
+> > > > > Shouldn't the kernel be resilient to such devices?
+> > > > 
+> > > > Yes it should, we should not crash.
+> > > > 
+> > > > 
+> > > > > I've developed quite
+> > > > > a few USB devices in the past and I've never ran into things
+> > > > > like
+> > > > > this
+> > > > > on Linux (Windows is another story, rather 'easy' to crash,
+> > > > > hang
+> > > > > or
+> > > > > bluescreen). In any case since I do not have access to a
+> > > > > hardware
+> > > > > debugger and the machine goes bananas (preventing me from
+> > > > > using
+> > > > > Wireshark) I do not think I can further debug this issue. I
+> > > > > could
+> > > > > try
+> > > > > to find a kernel version where this does not crash the
+> > > > > machine
+> > > > > (only
+> > > > > tested 5.6.X and 5.7.X so far). Or perhaps use VirtualBox,
+> > > > > but
+> > > > > I'd
+> > > > > need
+> > > > > to convice the host OS to ignore the USB device and just
+> > > > > forward
+> > > > > it
+> > > > > to
+> > > > > the guest.
+> > > > 
+> > > > Trying to trace down what part of the setup is failing, by
+> > > > using
+> > > > usbmon,
+> > > > will be good to try to figure out what the problem is here, if
+> > > > you
+> > > > can
+> > > > do that.
+> > > > 
+> > > > > The firmware for this device can be easily tweaked to expose
+> > > > > an
+> > > > > arbitrary number (up to 7 I think) of CDC ACM interfaces.
+> > > > > When
+> > > > > I
+> > > > > use
+> > > > > one or two there's no issues, three has had some issues (but
+> > > > > did
+> > > > > not
+> > > > > investigate further). Going to four is what consistently
+> > > > > triggers
+> > > > > kernel issues.
+> > > > 
+> > > > Hm, that might be a clue, what does the output of 'lsusb -v'
+> > > > for
+> > > > that
+> > > > device when you have 3 and then 4 interfaces?
+> > > > 
+> > > > thanks,
+> > > > 
+> > > > greg k-h
+> > > 
+> > > Hello,
+> > > 
+> > > I will try to see how I can debug further, perhaps I can locate a
+> > > machine or kernel that does not crash. Another option can be to
+> > > disable
+> > > the firmware down to the minimum so that it does not response to
+> > > the
+> > > bulk endpoints (just to the enumeration and some basic things),
+> > > to
+> > > rule
+> > > out a bad behaviour.
+> > > 
+> > > The USB descriptor is what you could imagine, just replicate the
+> > > two
+> > > ACM interfaces (control & data) and add more endpoints. Here goes
+> > > the
+> > > one with three ports. Note this one seems to make the kernel
+> > > crash
+> > > just
+> > > like the one with four. The only ones that work well are 1 and 2
+> > > ports.
+> > > Since I'm not aware of any other commercial solutions (apart from
+> > > FTDI)
+> > > that use more than 2 ACM ports, could that be the issue? Meaning
+> > > there's a bug somewhere and no commercial hardware that can
+> > > trigger
+> > > it.
+> > > 
+> > > For reference the diff between two and three ports (in lsusb) is
+> > > that
+> > > it's missing the last two interaces (with the 3 EPs described).
+> > > Of
+> > > course the bNumInterfaces is 4 instead of 6, and wTotalLength has
+> > > a
+> > > different value.
+> > > 
+> > > Hope this can help somehow.
+> > > Thanks
+> > > David
+> > > 
+> > > Bus 003 Device 012: ID 0483:5740 STMicroelectronics Virtual COM
+> > > Port
+> > 
+> > Hey again,
+> > 
+> > I was not aware about the modems Daniele, thanks!
+> > 
+> > So I did some testing on my old BeagleBone black, which has a very
+> > old
+> > kernel (3.8.13-bone47). In this device the kernel is happy and I
+> > was
+> > able to do some testing, it seems to work well. The UARTs seem to
+> > work
+> > well in both directions, no weird shenanigans, no error/warn
+> > messages...
+> > 
+> > I'm a bit at loss on how I can debug this further, I will try to
+> > use
+> > a
+> > RPi with a newer kernel and see what happens. I could try to boot a
+> > Live USB with older kernels (in my Intel machines) to try to locate
+> > a
+> > version where it works. Since I'm no kernel expert: any way I can
+> > provide more info? The computer becomes unusable shortly after
+> > plugging
+> > the device so I can't really do any meaningful stuff on it.
+> > 
+> > Thanks again,
+> > David
+> > 
 > 
-> Then wait long enough for some interesting messages to appear in the 
-> kernel log (it should only take a few seconds if the worker thread is as 
-> busy as you say) and collect the output from the dmesg command.
+> Hey there again!
 > 
-> To turn dynamic debugging back off when you're finished, use the same 
-> command with "=p" changed to "-p".
+> I managed to get a PCAP capture for this. Note that NetworkManager
+> was
+> running and actively probing the ttyACM* devices for a modem, hence
+> why
+> you can see "AT\n" commands being sent to the four devices.
 
-[   95.395815] hub 2-0:1.0: state 7 ports 6 chg 0006 evt 0000
-[   95.395824] usb usb2-port1: status 0088, change 0000, 5.0 Gb/s
-[   95.395838] usb usb2-port2: status 0088, change 0000, 5.0 Gb/s
-[   95.396016] hub 2-0:1.0: hub_suspend
-[   95.396023] usb usb2: bus auto-suspend, wakeup 1
-[   95.396029] usb usb2: bus suspend fail, err -16
-[   95.396030] hub 2-0:1.0: hub_resume
-[   95.396094] hub 2-0:1.0: state 7 ports 6 chg 0006 evt 0000
-[   95.396160] usb usb2-port1: status 0088, change 0000, 5.0 Gb/s
-[   95.396166] usb usb2-port2: status 0088, change 0000, 5.0 Gb/s
-[   95.396259] hub 2-0:1.0: hub_suspend
-[   95.396300] usb usb2: bus auto-suspend, wakeup 1
-[   95.396321] usb usb2: bus suspend fail, err -16
-[   95.396332] hub 2-0:1.0: hub_resume
-[   95.396436] hub 2-0:1.0: state 7 ports 6 chg 0006 evt 0000
-[   95.396443] usb usb2-port1: status 0088, change 0000, 5.0 Gb/s
-[   95.396449] usb usb2-port2: status 0088, change 0000, 5.0 Gb/s
-[   95.396582] hub 2-0:1.0: hub_suspend
-[   95.396587] usb usb2: bus auto-suspend, wakeup 1
-[   95.396594] usb usb2: bus suspend fail, err -16
-[   95.396595] hub 2-0:1.0: hub_resume
-[   95.396718] hub 2-0:1.0: state 7 ports 6 chg 0006 evt 0000
-[   95.396725] usb usb2-port1: status 0088, change 0000, 5.0 Gb/s
-[   95.396731] usb usb2-port2: status 0088, change 0000, 5.0 Gb/s
-[   95.396870] hub 2-0:1.0: hub_suspend
-[   95.396874] usb usb2: bus auto-suspend, wakeup 1
-[   95.396881] usb usb2: bus suspend fail, err -16
-[   95.396882] hub 2-0:1.0: hub_resume
-[   95.396911] hub 2-0:1.0: state 7 ports 6 chg 0006 evt 0000
-[   95.396917] usb usb2-port1: status 0088, change 0000, 5.0 Gb/s
-[   95.396975] usb usb2-port2: status 0088, change 0000, 5.0 Gb/s
-[   95.397063] hub 2-0:1.0: hub_suspend
-[   95.397068] usb usb2: bus auto-suspend, wakeup 1
-[   95.397095] usb usb2: bus suspend fail, err -16
-[   95.397105] hub 2-0:1.0: hub_resume
-[   95.397200] hub 2-0:1.0: state 7 ports 6 chg 0006 evt 0000
-[   95.397207] usb usb2-port1: status 0088, change 0000, 5.0 Gb/s
-[   95.397213] usb usb2-port2: status 0088, change 0000, 5.0 Gb/s
-[   95.397367] hub 2-0:1.0: hub_suspend
-[   95.397372] usb usb2: bus auto-suspend, wakeup 1
-[   95.397379] usb usb2: bus suspend fail, err -16
-[   95.397380] hub 2-0:1.0: hub_resume
-[   95.397412] hub 2-0:1.0: state 7 ports 6 chg 0006 evt 0000
-[   95.397418] usb usb2-port1: status 0088, change 0000, 5.0 Gb/s
-[   95.397470] usb usb2-port2: status 0088, change 0000, 5.0 Gb/s
-[   95.397560] hub 2-0:1.0: hub_suspend
-[   95.397565] usb usb2: bus auto-suspend, wakeup 1
-[   95.397599] usb usb2: bus suspend fail, err -16
-[   95.397610] hub 2-0:1.0: hub_resume
-[   95.397740] hub 2-0:1.0: state 7 ports 6 chg 0006 evt 0000
-[   95.397746] usb usb2-port1: status 0088, change 0000, 5.0 Gb/s
-[   95.397753] usb usb2-port2: status 0088, change 0000, 5.0 Gb/s
-[   95.397888] hub 2-0:1.0: hub_suspend
-[   95.397893] usb usb2: bus auto-suspend, wakeup 1
-[   95.397900] usb usb2: bus suspend fail, err -16
-[   95.397901] hub 2-0:1.0: hub_resume
-[   95.397989] hub 2-0:1.0: state 7 ports 6 chg 0006 evt 0000
-[   95.398030] usb usb2-port1: status 0088, change 0000, 5.0 Gb/s
-[   95.398036] usb usb2-port2: status 0088, change 0000, 5.0 Gb/s
-[   95.398120] hub 2-0:1.0: hub_suspend
-[   95.398158] usb usb2: bus auto-suspend, wakeup 1
-[   95.398189] usb usb2: bus suspend fail, err -16
-[   95.398190] hub 2-0:1.0: hub_resume
-[   95.398231] hub 2-0:1.0: state 7 ports 6 chg 0006 evt 0000
-[   95.398237] usb usb2-port1: status 0088, change 0000, 5.0 Gb/s
-[   95.398243] usb usb2-port2: status 0088, change 0000, 5.0 Gb/s
-[   95.398381] hub 2-0:1.0: hub_suspend
-[   95.398385] usb usb2: bus auto-suspend, wakeup 1
-[   95.398392] usb usb2: bus suspend fail, err -16
-[   95.398393] hub 2-0:1.0: hub_resume
-[   95.398479] hub 2-0:1.0: state 7 ports 6 chg 0006 evt 0000
-[   95.398523] usb usb2-port1: status 0088, change 0000, 5.0 Gb/s
-[   95.398529] usb usb2-port2: status 0088, change 0000, 5.0 Gb/s
-[   95.398620] hub 2-0:1.0: hub_suspend
-[   95.398678] usb usb2: bus auto-suspend, wakeup 1
-[   95.398685] usb usb2: bus suspend fail, err -16
-[   95.398686] hub 2-0:1.0: hub_resume
-[   95.398717] hub 2-0:1.0: state 7 ports 6 chg 0006 evt 0000
-[   95.398724] usb usb2-port1: status 0088, change 0000, 5.0 Gb/s
-[   95.398730] usb usb2-port2: status 0088, change 0000, 5.0 Gb/s
-[   95.398869] hub 2-0:1.0: hub_suspend
-[   95.398874] usb usb2: bus auto-suspend, wakeup 1
-[   95.398880] usb usb2: bus suspend fail, err -16
-[   95.398882] hub 2-0:1.0: hub_resume
-[   95.399004] hub 2-0:1.0: state 7 ports 6 chg 0006 evt 0000
-[   95.399011] usb usb2-port1: status 0088, change 0000, 5.0 Gb/s
-[   95.399016] usb usb2-port2: status 0088, change 0000, 5.0 Gb/s
-[   95.399152] hub 2-0:1.0: hub_suspend
-[   95.399157] usb usb2: bus auto-suspend, wakeup 1
-[   95.399164] usb usb2: bus suspend fail, err -16
-[   95.399165] hub 2-0:1.0: hub_resume
-[   95.399194] hub 2-0:1.0: state 7 ports 6 chg 0006 evt 0000
-[   95.399201] usb usb2-port1: status 0088, change 0000, 5.0 Gb/s
-[   95.399241] usb usb2-port2: status 0088, change 0000, 5.0 Gb/s
-[   95.399346] hub 2-0:1.0: hub_suspend
-[   95.399350] usb usb2: bus auto-suspend, wakeup 1
-[   95.399357] usb usb2: bus suspend fail, err -16
-[   95.399358] hub 2-0:1.0: hub_resume
-[   95.399481] hub 2-0:1.0: state 7 ports 6 chg 0006 evt 0000
-[   95.399488] usb usb2-port1: status 0088, change 0000, 5.0 Gb/s
-[   95.399493] usb usb2-port2: status 0088, change 0000, 5.0 Gb/s
-[   95.399630] hub 2-0:1.0: hub_suspend
-[   95.399634] usb usb2: bus auto-suspend, wakeup 1
-[   95.399641] usb usb2: bus suspend fail, err -16
-[   95.399642] hub 2-0:1.0: hub_resume
-[   95.399671] hub 2-0:1.0: state 7 ports 6 chg 0006 evt 0000
-[   95.399707] usb usb2-port1: status 0088, change 0000, 5.0 Gb/s
-[   95.399750] usb usb2-port2: status 0088, change 0000, 5.0 Gb/s
-[   95.399934] hub 2-0:1.0: hub_suspend
-[   95.399985] usb usb2: bus auto-suspend, wakeup 1
-[   95.399992] usb usb2: bus suspend fail, err -16
-[   95.399995] hub 2-0:1.0: hub_resume
-[   95.400027] hub 2-0:1.0: state 7 ports 6 chg 0006 evt 0000
-[   95.400034] usb usb2-port1: status 0088, change 0000, 5.0 Gb/s
-[   95.400093] usb usb2-port2: status 0088, change 0000, 5.0 Gb/s
-[   95.400228] hub 2-0:1.0: hub_suspend
-[   95.400233] usb usb2: bus auto-suspend, wakeup 1
-[   95.400267] usb usb2: bus suspend fail, err -16
-[   95.400276] hub 2-0:1.0: hub_resume
-[   95.400363] hub 2-0:1.0: state 7 ports 6 chg 0006 evt 0000
-[   95.400370] usb usb2-port1: status 0088, change 0000, 5.0 Gb/s
-[   95.400377] usb usb2-port2: status 0088, change 0000, 5.0 Gb/s
-[   95.400514] hub 2-0:1.0: hub_suspend
-[   95.400519] usb usb2: bus auto-suspend, wakeup 1
-[   95.400526] usb usb2: bus suspend fail, err -16
-[   95.400527] hub 2-0:1.0: hub_resume
-[   95.400558] hub 2-0:1.0: state 7 ports 6 chg 0006 evt 0000
-[   95.400565] usb usb2-port1: status 0088, change 0000, 5.0 Gb/s
-[   95.400571] usb usb2-port2: status 0088, change 0000, 5.0 Gb/s
-[   95.400709] hub 2-0:1.0: hub_suspend
-[   95.400714] usb usb2: bus auto-suspend, wakeup 1
-[   95.400721] usb usb2: bus suspend fail, err -16
-[   95.400722] hub 2-0:1.0: hub_resume
--- 
-Michal Hocko
-SUSE Labs
+Do you mean ModemManager? NM moved the probing to ModemManager about 6
+or 7 years ago. In any case, ModemManager has both a "don't probe"
+list, a greylist, and build-time options to only probe things it knows
+are modems.
+
+Of course the build-time policy depends on your distro; upstream
+ModemManager now defaults to "strict" mode (only probe known
+modems/drivers/USB IDs).
+
+Dan
+
+> As you can also probably see is that the device currently ignores any
+> control requests (like Set Line Coding).
+> 
+> Hope it can help your debugging.
+> 
+> David
+> 
+> 
+
