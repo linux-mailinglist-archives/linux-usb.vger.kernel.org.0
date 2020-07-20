@@ -2,66 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F5DD2257E7
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jul 2020 08:37:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C3C3225808
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jul 2020 08:57:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727942AbgGTGgb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Jul 2020 02:36:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53808 "EHLO mail.kernel.org"
+        id S1726907AbgGTG5P convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 20 Jul 2020 02:57:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37830 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726084AbgGTGg3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 20 Jul 2020 02:36:29 -0400
-Received: from localhost (unknown [122.171.202.192])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C195920709;
-        Mon, 20 Jul 2020 06:36:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595226988;
-        bh=G8QKIIPp5D4K8kA/4r2aQzDTcpoqiOLy2Z0bz9pLapc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nBFRWN4wCbNdNNdFP/mf6w4VUKv5HBcMFBn5nomZjwH+fumLcehyvFrJ6jH9JQvHR
-         JxFsvy4D00XgAwF0QS/XApUT+dv74ujDXrAukRJo3IeT3yyY2TpWTHco5oBmJ9MuDz
-         1+QKf3jQpAbOuSmZbWpaisjBmBLnXMbycc7bj4oQ=
-Date:   Mon, 20 Jul 2020 12:06:25 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Mark Brown <broonie@kernel.org>,
-        Niklas <niklas.soderlund@ragnatech.se>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        devicetree@vger.kernel.org, linux-ide@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-pci@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-renesas-soc@vger.kernel.org, linux-usb@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Subject: Re: [PATCH 12/20] dt-bindings: dma: renesas,usb-dmac: Add binding
- for r8a774e1
-Message-ID: <20200720063625.GG12965@vkoul-mobl>
-References: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1594919915-5225-13-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        id S1725815AbgGTG5P (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 20 Jul 2020 02:57:15 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 208267] usbip broken with latest kernels?
+Date:   Mon, 20 Jul 2020 06:57:14 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: greg@kroah.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-208267-208809-20DubtP4SD@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-208267-208809@https.bugzilla.kernel.org/>
+References: <bug-208267-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1594919915-5225-13-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 16-07-20, 18:18, Lad Prabhakar wrote:
-> Add binding for R8A774E1 SoC (RZ/G2H).
+https://bugzilla.kernel.org/show_bug.cgi?id=208267
 
-Applied, thanks
+--- Comment #7 from Greg Kroah-Hartman (greg@kroah.com) ---
+On Sun, Jul 19, 2020 at 09:29:52PM +0000, bugzilla-daemon@bugzilla.kernel.org
+wrote:
+> https://bugzilla.kernel.org/show_bug.cgi?id=208267
+> 
+> Jonathan Dieter (jdieter@gmail.com) changed:
+> 
+>            What    |Removed                     |Added
+> ----------------------------------------------------------------------------
+>                  CC|                            |jdieter@gmail.com
+> 
+> --- Comment #6 from Jonathan Dieter (jdieter@gmail.com) ---
+> FWIW, I've had this reported in Fedora as well:
+> https://bugzilla.redhat.com/show_bug.cgi?id=1856443
+
+Any chance someone can run 'git bisect' to find the offending commit?
 
 -- 
-~Vinod
+You are receiving this mail because:
+You are watching the assignee of the bug.
