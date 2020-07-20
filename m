@@ -2,150 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B46D8226230
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jul 2020 16:32:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 216EC22625D
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jul 2020 16:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728600AbgGTOcS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Jul 2020 10:32:18 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:51415 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725815AbgGTOcS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jul 2020 10:32:18 -0400
-Received: by mail-wm1-f65.google.com with SMTP id 22so22499620wmg.1;
-        Mon, 20 Jul 2020 07:32:16 -0700 (PDT)
+        id S1726383AbgGTOnD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Jul 2020 10:43:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58446 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725934AbgGTOnD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jul 2020 10:43:03 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70C1AC061794
+        for <linux-usb@vger.kernel.org>; Mon, 20 Jul 2020 07:43:03 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id k23so17813703iom.10
+        for <linux-usb@vger.kernel.org>; Mon, 20 Jul 2020 07:43:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=AzSHEuv17HYVoMickq0zE1CffPl0lF4DcXAquwGOxlk=;
+        b=s+er6cMme0YcBfO/WgBfSK6vQInLeXTy1dHCm18g8utWUg6w6s7vhVjDyTqDfLREBV
+         pSYGvDYOKCkdTAZqTdT+ElPjfy/92xMDoE/EuxgzxPCAeoaPHU9t34vy11b9NYvCBzHG
+         6/9ix9x3UVPumvd14PKVjrphvnFY2D/ev/UYKGr2iPK1WKbsEFYlxf7Yz+4Hwk1wXFeQ
+         q23mDck9nVMbfeELvoYbyaZP/SkpiAc2c2rDXE/gIuIMLwRyfvd7uiqpHe5boicCDciy
+         vGTnsfGaXJnMVgM6IlJvPvZNhScwduZoXiMPLO0KZIPgSHOfeta4XyUBE9HsLOXDZaF/
+         1YIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=sVT35zDtcFJ4SrtuOpV/KcbsxZIq+XtepIT4986OMVM=;
-        b=LxK48p+OMAS7Gxt6WdlrLJHQPQMnpBHJfBz4plMZ2sZTYTcOxBTc1GBl8DeNuzq+30
-         ZKqLFC3ekbs4kH/JKyGPLApkvJfFaEcZSyakf3cGo5PjpOfwnOL5d99dLVstHAWBtDJZ
-         J8UP6gVpG7+FUJXzcqTprFmdDRUKNQBxUL6QPJkRD6FDmT95YNsgPPtuVXcks2ApXCxc
-         iHc0aX/915plhyMY9IOrzVKHOPQio2WlH+nr2/mOlS3wvwGD/lXH5ioE/sayyVGN18WA
-         FWN8VBZkaFXMB7mPcodFSXZmayqmIN82opwtp4XRbbBwlo2gKl2/FrH/CVbQlyPycPsg
-         tHyA==
-X-Gm-Message-State: AOAM533Uj3UWD6mSt9QCAMITgcUnRJY7hbZBXm2BLAK9AFIrQnySk8Bo
-        L+vQJhinpzFpXUCWU4iN1VI53k57
-X-Google-Smtp-Source: ABdhPJwxjULIzhcpgO60wcS3l6o8v6D2AqgNgfIOwRnKNgJLdchd2VS7oB9RDrRo6h+7EZZqSyJXzg==
-X-Received: by 2002:a7b:c5c5:: with SMTP id n5mr19779821wmk.103.1595255536295;
-        Mon, 20 Jul 2020 07:32:16 -0700 (PDT)
-Received: from localhost (ip-37-188-169-187.eurotel.cz. [37.188.169.187])
-        by smtp.gmail.com with ESMTPSA id t141sm34654245wmt.26.2020.07.20.07.32.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jul 2020 07:32:14 -0700 (PDT)
-Date:   Mon, 20 Jul 2020 16:32:13 +0200
-From:   Michal Hocko <mhocko@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: Re: kworker/0:3+pm hogging CPU
-Message-ID: <20200720143213.GJ4074@dhcp22.suse.cz>
-References: <20200720083956.GA4074@dhcp22.suse.cz>
- <20200720135857.GB1228057@rowland.harvard.edu>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=AzSHEuv17HYVoMickq0zE1CffPl0lF4DcXAquwGOxlk=;
+        b=WP6Pz2quylpUoHtvu8KI4AJqiMhHLQEjAUtK84CUUFEfqiYbikqc6m2ypzjeqkk895
+         WlzX6s844UMwOriEWP5Cn/pww+CY/WK6TEZtw0kSTzOu7bZ7FYLUyApllNGUTxbPEbCe
+         btfxsN+fs1Ts47suuUyg4Pxy2KOVXO4m5zytPR50lXvW9C0W3+h8DaKR7aOf00IHlrZK
+         ap5Na1G8q2++rZOQnYQ78Pw+MSs/TvF7wqmKH1htCqSJF6VKc6NYVU1ZU6TeC4OFdQz6
+         usmJxSerUbbW5USDcM3UdEuDJhI7jwsvJ6SDMUiOiiIMHINV+9tCG7aZhK77JeY8sEtg
+         zMAg==
+X-Gm-Message-State: AOAM533Syoc92hXqg4DPKkWr/RtBHeoeFOovxLhfTCeutgv2yVCAV6gz
+        sYturJDmUD4nDpmdYwz9djBDcY8TAmfoE/r+QNIbkiXRPQ8=
+X-Google-Smtp-Source: ABdhPJyuYdAQ85QziTeAdFLay+hWmFBshponT5LyYnvKEBqBHq6Cd3KTtBHuQJ76oBM27Pms5VpLnXwlc5y8GwLx3v8=
+X-Received: by 2002:a6b:b2d1:: with SMTP id b200mr22902590iof.137.1595256182670;
+ Mon, 20 Jul 2020 07:43:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="fdj2RfSjLxBAspz7"
-Content-Disposition: inline
-In-Reply-To: <20200720135857.GB1228057@rowland.harvard.edu>
+From:   =?UTF-8?B?U1pJR0VUVsOBUkkgSsOhbm9z?= <jszigetvari@gmail.com>
+Date:   Mon, 20 Jul 2020 16:42:26 +0200
+Message-ID: <CAJK_Yh-KwrrWeGY5s=RKJDhp0gyZBf+LsWCydKSfj0dEAYGHCA@mail.gmail.com>
+Subject: linux usb gadget - mass storage
+To:     linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi,
 
---fdj2RfSjLxBAspz7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I would like to ask a few questions about the Linux USB Gadget
+project, more specifically about the mass storage gadget itself.
+Currently it is possible to emulate a CD reader with an iso image
+file, which works okay, and has been around for some time.
+My use-case would be to use a Raspberry PI Zero, to emulate an optical
+drive through an iso file and boot a desktop machine with it.
+Unfortunately I also noticed that there were attempts a number of
+years ago to contribute support for DVD reader emulation, but
+unfortunately those efforts did not get into the mainline kernel.
 
-On Mon 20-07-20 09:58:57, Alan Stern wrote:
-[...]
-> Can you provide the contents of /sys/kernel/debug/usb/devices and also a 
+To be more specific I am referring to these:
+http://linuxehacking.ovh/2013/07/12/how-to-emulatore-dvd-rom-hardware-usb/
+https://lkml.org/lkml/2015/3/7/388
 
-attached.
+In an effort to explore the possibilities, I took Tiziano Bacocco's
+patch (the first of the two) and ported it (in a trivial way) to the
+current Raspberry PI kernel versions (both 4.19.118 and 5.4.44) and
+compiled the kernel and modules.
+The code compiled cleanly after a few minor changes, but when I tried
+to use it on an 11 GB CentOS iso image, the module crashed.
+I would need some help and guidance to resolve any of the possible
+issues, and hopefully to make DVD-ROM emulation finally a thing in the
+mass storage gadget.
+I can add further details later on if there will be anyone interested.
+Also, if this is not the correct forum to ask questions about the
+Linux USB Gadget codebase, then please let me know also.
 
-> usbmon trace showing a few rounds of this recurring activity?
+Thank you!
 
-This is not my area so I will need some help here. I assume I should
-look for debug/usb/usbmon which contains quite some files for me
-0s  0u  1s  1t  1u  2s  2t  2u
-most of them provide data when cating them.
+Best Regards,
+J=C3=A1nos Szigetv=C3=A1ri
+--
+Janos SZIGETVARI
+RHCE, License no. 150-053-692
 
-> section of the dmesg log with dynamic debugging enabled for the usbcore 
-> module, as well.
+LinkedIn: linkedin.com/in/janosszigetvari
 
-Could you give me more details steps please?
--- 
-Michal Hocko
-SUSE Labs
-
---fdj2RfSjLxBAspz7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment; filename="usb.devices"
-
-
-T:  Bus=01 Lev=00 Prnt=00 Port=00 Cnt=00 Dev#=  1 Spd=480  MxCh=12
-B:  Alloc=  0/800 us ( 0%), #Int=  0, #Iso=  0
-D:  Ver= 2.00 Cls=09(hub  ) Sub=00 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=1d6b ProdID=0002 Rev= 5.08
-S:  Manufacturer=Linux 5.8.0-rc6-00001-g5714ee50bb43 xhci-hcd
-S:  Product=xHCI Host Controller
-S:  SerialNumber=0000:00:14.0
-C:* #Ifs= 1 Cfg#= 1 Atr=e0 MxPwr=  0mA
-I:* If#= 0 Alt= 0 #EPs= 1 Cls=09(hub  ) Sub=00 Prot=00 Driver=hub
-E:  Ad=81(I) Atr=03(Int.) MxPS=   4 Ivl=256ms
-
-T:  Bus=01 Lev=01 Prnt=01 Port=06 Cnt=01 Dev#=  2 Spd=480  MxCh= 0
-D:  Ver= 1.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=0a5c ProdID=5800 Rev= 1.01
-S:  Manufacturer=Broadcom Corp
-S:  Product=5880
-S:  SerialNumber=0123456789ABCD
-C:* #Ifs= 2 Cfg#= 0 Atr=e0 MxPwr=100mA
-I:* If#= 0 Alt= 0 #EPs= 3 Cls=fe(app. ) Sub=00 Prot=00 Driver=(none)
-E:  Ad=81(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
-E:  Ad=01(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
-E:  Ad=85(I) Atr=03(Int.) MxPS=  16 Ivl=125us
-I:* If#= 1 Alt= 0 #EPs= 3 Cls=0b(scard) Sub=00 Prot=00 Driver=usbfs
-E:  Ad=82(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
-E:  Ad=86(I) Atr=03(Int.) MxPS=  16 Ivl=125us
-
-T:  Bus=01 Lev=01 Prnt=01 Port=07 Cnt=02 Dev#=  3 Spd=12   MxCh= 0
-D:  Ver= 2.00 Cls=e0(wlcon) Sub=01 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=8087 ProdID=0a2b Rev= 0.01
-C:* #Ifs= 2 Cfg#= 1 Atr=e0 MxPwr=100mA
-I:* If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
-E:  Ad=81(I) Atr=03(Int.) MxPS=  64 Ivl=1ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
-E:  Ad=03(O) Atr=01(Isoc) MxPS=   0 Ivl=1ms
-E:  Ad=83(I) Atr=01(Isoc) MxPS=   0 Ivl=1ms
-I:  If#= 1 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
-E:  Ad=03(O) Atr=01(Isoc) MxPS=   9 Ivl=1ms
-E:  Ad=83(I) Atr=01(Isoc) MxPS=   9 Ivl=1ms
-I:  If#= 1 Alt= 2 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  17 Ivl=1ms
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  17 Ivl=1ms
-I:  If#= 1 Alt= 3 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  25 Ivl=1ms
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  25 Ivl=1ms
-I:  If#= 1 Alt= 4 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  33 Ivl=1ms
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  33 Ivl=1ms
-I:  If#= 1 Alt= 5 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  49 Ivl=1ms
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  49 Ivl=1ms
-
-T:  Bus=02 Lev=00 Prnt=00 Port=00 Cnt=00 Dev#=  1 Spd=5000 MxCh= 6
-B:  Alloc=  0/800 us ( 0%), #Int=  0, #Iso=  0
-D:  Ver= 3.00 Cls=09(hub  ) Sub=00 Prot=03 MxPS= 9 #Cfgs=  1
-P:  Vendor=1d6b ProdID=0003 Rev= 5.08
-S:  Manufacturer=Linux 5.8.0-rc6-00001-g5714ee50bb43 xhci-hcd
-S:  Product=xHCI Host Controller
-S:  SerialNumber=0000:00:14.0
-C:* #Ifs= 1 Cfg#= 1 Atr=e0 MxPwr=  0mA
-I:* If#= 0 Alt= 0 #EPs= 1 Cls=09(hub  ) Sub=00 Prot=00 Driver=hub
-E:  Ad=81(I) Atr=03(Int.) MxPS=   4 Ivl=256ms
-
---fdj2RfSjLxBAspz7--
+__@__=CB=9AV=CB=9A
+Make the switch to open (source) applications, protocols, formats now:
+- windows -> Linux, iexplore -> Firefox, msoffice -> LibreOffice
+- msn -> jabber protocol (Pidgin, Google Talk)
+- mp3 -> ogg, wmv -> ogg, jpg -> png, doc/xls/ppt -> odt/ods/odp
