@@ -2,97 +2,160 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB2AD225C69
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jul 2020 12:07:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D04B225C78
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jul 2020 12:11:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728044AbgGTKH2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Jul 2020 06:07:28 -0400
-Received: from mga04.intel.com ([192.55.52.120]:52322 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728001AbgGTKH2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 20 Jul 2020 06:07:28 -0400
-IronPort-SDR: wA2Fa851weoJQZqqMsg9+gSt2/e4x74SSglk83ajYdJKdlqNAbJxh6NqrNXDik5+y3NHZgPZ8O
- TKZTIu8PoKmw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9687"; a="147381596"
-X-IronPort-AV: E=Sophos;i="5.75,374,1589266800"; 
-   d="scan'208";a="147381596"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2020 03:07:27 -0700
-IronPort-SDR: 6BF8Dgf/fJTGgRcvjglmRmjZcH7IaiNEeakLfruGY0U9iSAwygfbhB5N8xJuLWTUiHIYEEj2aY
- AxZuQLeGhaCQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,374,1589266800"; 
-   d="scan'208";a="391992865"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga001.fm.intel.com with SMTP; 20 Jul 2020 03:07:24 -0700
-Received: by lahna (sSMTP sendmail emulation); Mon, 20 Jul 2020 13:07:23 +0300
-Date:   Mon, 20 Jul 2020 13:07:23 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     "Kenneth R. Crudup" <kenny@panix.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: I get a new Thunderbolt domain UUID on every boot
-Message-ID: <20200720100723.GW5180@lahna.fi.intel.com>
-References: <alpine.DEB.2.23.453.2007051446170.4280@xps-7390>
+        id S1728308AbgGTKLG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Jul 2020 06:11:06 -0400
+Received: from mail-eopbgr130120.outbound.protection.outlook.com ([40.107.13.120]:52100
+        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728155AbgGTKLE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 20 Jul 2020 06:11:04 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SizEBc3wDcfSrryMsxKhTuXpXBK7qGZUqdruJ08US3e8IMdN+IFxdf1Wo71qsqSH58QePRVitUsBnex4fQ4lZGFol6ny95BnyvZlN5nHHZDbCduXLp+vo4w2lsq1AOFWRfNUpGjDvhlRw0J9nLvdmzrH4jdFhyc36NUSRZiujjU2TKZ1yepgPWv9VCMU5YH1Eaw5n3nvNxxTtdkqWMnqe7s2ZO8arpueKWwcmW9zxIJ0yjJWRadMQ7jtU/GxChuzLeY5W31PI0a7/1CFOif+hNODODokTpTzTM+mnHcs9uUuCN9hosC1a4+IKUnfLr3iOsePQc8Btr8USXE4AbBa6w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ou4p4h/zi2ZzT6xxfRYsyAy8ouBhIOYnsI/tgSEpr3A=;
+ b=cy7mEfa5FiUXVparnJmpw2VufSOmfY1Z2C3lOrTJnEKfohEwKcijslyOtY3J++6CXMDSdge5SV0sfHe1K26U1f+XgOGLXK0nN0xPLDOVcR7nHWon8CMoeX6qY2g4Nwb3nVG94cBNi4ig+MxgkWFsBh6aedtWyF6K+QBdqS2h+BxrfOcExmgYXJbPP803p6q8pWcKrWH8GVyji+xAZbzAj9iJonMx3h1VbGYMyLK1oaJmdAYkWYZeLRkoalHozY2FAA0NlJFOM29LDS/RkRA3t+9+/AsY2rPBL7jdslTeKxNnvPCx08mKlzeq8CR2V7UtUyC6DOK5jBrg/gI7PqKxOg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=toradex.com; dmarc=pass action=none header.from=toradex.com;
+ dkim=pass header.d=toradex.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=toradex.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ou4p4h/zi2ZzT6xxfRYsyAy8ouBhIOYnsI/tgSEpr3A=;
+ b=mS9jTq+6atPlggd3cyxG45n83BOBGuOMNJGhHfkbmrQwjE7QhGjdl4pqLS2n2KyMcKAaKEZNaCrVSlYN3cHxLBlGSMJITycfwkO2IxrjMQaazeh1L+y7+AGzl6N0vGkEiudUyh7ByPQFR9oxLgfMCTWwdgspz932jenKVl7b4so=
+Received: from AM6PR05MB6120.eurprd05.prod.outlook.com (2603:10a6:20b:a8::25)
+ by AM6PR05MB5173.eurprd05.prod.outlook.com (2603:10a6:20b:68::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3195.23; Mon, 20 Jul
+ 2020 10:10:58 +0000
+Received: from AM6PR05MB6120.eurprd05.prod.outlook.com
+ ([fe80::1d81:6a9b:8c26:3b7d]) by AM6PR05MB6120.eurprd05.prod.outlook.com
+ ([fe80::1d81:6a9b:8c26:3b7d%4]) with mapi id 15.20.3195.025; Mon, 20 Jul 2020
+ 10:10:58 +0000
+From:   Philippe Schenker <philippe.schenker@toradex.com>
+To:     "peter.chen@nxp.com" <peter.chen@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+CC:     "jun.li@nxp.com" <jun.li@nxp.com>,
+        "linux-imx@nxp.com" <linux-imx@nxp.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v2 2/3] usb: chipidea: imx: support disabling runtime-pm
+Thread-Topic: [PATCH v2 2/3] usb: chipidea: imx: support disabling runtime-pm
+Thread-Index: AQHWWfIMLexdmM4+M0C6zPGY8HP2U6kH0FqAgACfygCAB2wiAIAARP2AgAAEJ4CAACLRAA==
+Date:   Mon, 20 Jul 2020 10:10:58 +0000
+Message-ID: <23672d66d229d3be4cc854ddf1462c3507f1c2fc.camel@toradex.com>
+References: <20200714151822.250783-1-philippe.schenker@toradex.com>
+         <20200714151822.250783-2-philippe.schenker@toradex.com>
+         <AM7PR04MB7157793C6395C200DF5646C98B7E0@AM7PR04MB7157.eurprd04.prod.outlook.com>
+         <08251297f72fe745be43205d0a73631f009681cc.camel@toradex.com>
+         <AM7PR04MB71572600CE73140FE13CB17C8B7B0@AM7PR04MB7157.eurprd04.prod.outlook.com>
+         <163befb5f97724a1279a33023980da3264f0c00e.camel@toradex.com>
+         <AM7PR04MB715721D95968DDB78B45A3AF8B7B0@AM7PR04MB7157.eurprd04.prod.outlook.com>
+In-Reply-To: <AM7PR04MB715721D95968DDB78B45A3AF8B7B0@AM7PR04MB7157.eurprd04.prod.outlook.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.36.3 
+authentication-results: nxp.com; dkim=none (message not signed)
+ header.d=none;nxp.com; dmarc=none action=none header.from=toradex.com;
+x-originating-ip: [31.10.206.124]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 83b1e93a-0cb9-416f-e70a-08d82c9532e3
+x-ms-traffictypediagnostic: AM6PR05MB5173:
+x-microsoft-antispam-prvs: <AM6PR05MB51735D8388F0ED610D2A6D22F47B0@AM6PR05MB5173.eurprd05.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: B8cqjNHXrQswZCVvE9qOJcaQgdnVpcYEar2ApkejxtbMqeU8lGBUsFYFKQKG72y7e2/yt8jG6aFIZc0690BwjghB1DckhcgOrBfbzN0xB+4DdQQWm/I/YRFuxOHNL6Zi+WL4+3DonGpbxcuh9YhwfgodHbWKdyyeX1ySk1HHc70nh1K37ukKVzx4WPJzIr0XYMfLY6ajgcrLzq8U2lz/OdnyJgYfQ2MrDQvc0nzz9P6QgNzyuvXvHmdIxq6LOePKSCXz8rGPBSE/wiqJ3CtoE9BmwuTwYjiJ/h6nGve9rgqpCQtp56pwuciAsS40jomsDulrRLL6R03THgUL/PLw5Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR05MB6120.eurprd05.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(396003)(39850400004)(366004)(346002)(376002)(136003)(36756003)(316002)(91956017)(6512007)(8676002)(66946007)(64756008)(66446008)(66476007)(66556008)(2906002)(76116006)(71200400001)(8936002)(7416002)(86362001)(83380400001)(5660300002)(26005)(186003)(2616005)(6506007)(4326008)(6486002)(478600001)(110136005)(44832011)(54906003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: VJaVjDel6cdCUUjW9/N84jk3CuJ06jBYQsFNl7ACwwSDrzT+v73yAmTMm48Eupyf9rOhBA68gYSG3FTt1Mo+WJiS9/BKGOE+0HG1NW35nlhLSFQbozFOsnkAgw4ebgPQ9anb9fwPIlqINPX0YySJmXaMEu44Y9Bb/PxaChQILTvl5d8yZgh+3t2sxevfsC0fYxNPUbCGr/sE5ZHha2ksQ18mnYqGcCqIL8MW1ASo1IIebzNcVsHk5tiEjSImUGidIScav/e9v7J2le0SHzod2YwbWENKoXjMKRv7FsZQoA0QvXCEvbJozv+lx8qRUgq0O59nlVB7FTdjBt3UyfMgrDqUiEPAQgVwWq+Cw+ifWOh1IRGx9hDMHIJYuF2bdAPf8o2kjGdrxVk0sdY58Ykg4gpD8GZi1717/NwHS0AQqPilSTv8HyAriWJii/u8UEAcVmHwxNYohKMEGUoONlUmw5Wx7/IO96S+zHiArMz6NWk=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <0FA3308FC877D44581D78F1360C1BF12@eurprd05.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.23.453.2007051446170.4280@xps-7390>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-OriginatorOrg: toradex.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR05MB6120.eurprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 83b1e93a-0cb9-416f-e70a-08d82c9532e3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jul 2020 10:10:58.7421
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d9995866-0d9b-4251-8315-093f062abab4
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: AmarczWNfQy087IbXKfhMuKNlmjjIDnHEHHzAfuUxdV+qPRv1yrxguEQ5Ysyt5gOL72/4Vrd20M6Xtv6gsP1B11LraUgVFORxv/EtenRevQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR05MB5173
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On Sun, Jul 05, 2020 at 02:52:04PM -0700, Kenneth R. Crudup wrote:
-> 
-> Does anyone know why my machine (Dell XPS 7390 2-in-1, i7-1065G7 CPU) gets a
-> new Thunderbolt domain UUID on every boot?
-> 
-> ----
-> $ sudo boltctl domains | wc -l
-> 3320
-> $ sudo boltctl domains | tail -20
->  o domain 815fe31a-99fd-8680-ffff-ffffffffffff
->    |- bootacl:  0/0
->    `- security: unknown
-> 
->  o domain 703bafdf-6a33-8680-ffff-ffffffffffff
->    |- bootacl:  0/0
->    `- security: unknown
-> 
->  o domain 91c55303-9244-8680-ffff-ffffffffffff
->    |- bootacl:  0/0
->    `- security: unknown
-> 
->  * domain0 800e6342-557e-8680-ffff-ffffffffffff
->    |- bootacl:  0/0
->    `- security: iommu
-> 
->  * domain1 9128366f-c373-8680-ffff-ffffffffffff
->    |- bootacl:  0/0
->    `- security: iommu
-> $
-
-It is done on purpose. The BIOS generates new UUID every boot.
-
-> ----
-> $ egrep '(THUNDER|USB4)' .config
-> # CONFIG_MDIO_THUNDER is not set
-> CONFIG_USB4_NET=m
-> # CONFIG_USB_HSIC_USB4604 is not set
-> CONFIG_INTEL_WMI_THUNDERBOLT=y
-> CONFIG_USB4=y
-> $
-> ----
-> I did see this, too:
-> $  dmesg | fgrep -i thunderbolt
-> [    1.114106] thunderbolt 0000:00:0d.2: 0: uid crc8 mismatch (expected: 0x8e, got: 0xe7)
-> [    1.657866] thunderbolt 0000:00:0d.3: 0: uid crc8 mismatch (expected: 0x8e, got: 0xe7)
-
-This is harmless. Host router (the TBT host controller) on ICL does not
-have DROM so reading UID returns 0. Let me see if we can simply skip
-this check on such systems.
+T24gTW9uLCAyMDIwLTA3LTIwIGF0IDA4OjA2ICswMDAwLCBQZXRlciBDaGVuIHdyb3RlOg0KPiAg
+DQo+ID4gT24gTW9uLCAyMDIwLTA3LTIwIGF0IDAzOjQ0ICswMDAwLCBQZXRlciBDaGVuIHdyb3Rl
+Og0KPiA+ID4gPiBPbiBXZWQsIDIwMjAtMDctMTUgYXQgMDA6NTEgKzAwMDAsIFBldGVyIENoZW4g
+d3JvdGU6DQo+ID4gPiA+ID4gPiBUaGUgVG9yYWRleCBDb2xpYnJpIGlNWDZVTEwgYm9hcmQgaGFz
+IGEgc3BlY2lhbCBVU0IgaGFyZHdhcmUNCj4gPiA+ID4gPiA+IGRlc2lnbi4NCj4gPiA+ID4gPiA+
+IFdpdGggcnVudGltZS1wbSBlbmFibGVkIFVTQiByZXNldCBpdHNlbGYgY29udGludW91c2x5Lg0K
+PiA+ID4gPiA+ID4gRnVydGhlcm1vcmUNCj4gPiA+ID4gPiA+IHRoZSBPVEcgcG9ydCBpcyBhbHNv
+IG5vdCBlbnVtZXJhdGluZyBkZXZpY2VzIGlmIHRoZSBDaGlwaWRlYQ0KPiA+ID4gPiA+ID4gSVAN
+Cj4gPiA+ID4gPiA+IGlzIGluIHJ1bnRpbWUgc2xlZXAgbW9kZSBhbmQgYSBkZXZpY2Ugb3IgaG9z
+dCBnZXRzIHBsdWdnZWQNCj4gPiA+ID4gPiA+IGluLg0KPiA+ID4gPiA+ID4gDQo+ID4gPiA+ID4g
+DQo+ID4gPiA+ID4gSGkgUGhpbGlwcGUsDQo+ID4gPiA+ID4gDQo+ID4gPiA+ID4gWW91IG1heSBk
+ZXNjcmliZSB0aGUgZGV0YWlsIHdoYXQncyB0aGUgc3BlY2lhbCBVU0IgaGFyZHdhcmUNCj4gPiA+
+ID4gPiBkZXNpZ24NCj4gPiA+ID4gPiBmb3IgeW91ciBib2FyZCwNCj4gPiA+ID4gDQo+ID4gPiA+
+IElmIEkgb25seSBrbmV3IHRoZSByb290LWNhdXNlIG9mIHRoYXQgcHJvYmxlbSAtIHVuZm9ydHVu
+YXRlbHkgSQ0KPiA+ID4gPiBkb24ndC4NCj4gPiA+ID4gVGhhdCdzIGFsc28gd2h5IEkgaGF2ZSBz
+dWNoIGEgaGFyZCB0aW1lIHRvIGRlc2NyaWJlIGl0Lg0KPiA+ID4gPiANCj4gPiA+ID4gPiBhbmQg
+d2h5IGl0IGNhdXNlcyB0aGUgcHJvYmxlbSwgYW5kIHdoeSBkaXNhYmxlIHJ1bnRpbWUgcG0NCj4g
+PiA+ID4gPiBjb3VsZA0KPiA+ID4gPiA+IGZpeCB0aGlzIGlzc3VlLCB0aGVuLA0KPiA+ID4gPiAN
+Cj4gPiA+ID4gSSBjYW5ub3QgcHJvdmlkZSB0aGUgJ3doeScgcGFydCB5ZXQuIEknbGwgdHJ5IHNv
+bWV0aGluZyBtb3JlIGFuZA0KPiA+ID4gPiBob3BlIEkgY2FuIHByb3ZpZGUgeW91IGd1eXMgd2l0
+aCB0aGUgZXhhY3QgZGVzY3JpcHRpb24uDQo+ID4gPiA+IA0KPiA+ID4gPiA+IHRoZSBvdGhlciB1
+c2VycyBjb3VsZCBrbm93IGlmIGl0IGNvdWxkIGFwcGx5IHRvIHRoZWlyDQo+ID4gPiA+ID4gcGxh
+dGZvcm1zIG9yDQo+ID4gPiA+ID4gbm90IGluIGZ1dHVyZS4NCj4gPiA+ID4gDQo+ID4gPiA+IEkg
+b25seSBmb3VuZCBvdXQgYWJvdXQgaXQgYmVjYXVzZSB5b3Ugd2VyZSBwb2ludGluZyBtZSBpbiB0
+aGF0DQo+ID4gPiA+IGRpcmVjdGlvbi4gSSBkZWJ1Z2dlZCBmb3IgaG91cnMgbm93IGFuZCBkaWRu
+J3QgY2FtZSB0byB0aGUNCj4gPiA+ID4gcm9vdC1jYXVzZSBvZiB0aGUgaXNzdWUuIEkgdGhpbmsg
+dG8gcmVhbGx5IHVuZGVyc3RhbmQgaXQgSSB3b3VsZA0KPiA+ID4gPiBuZWVkIHRvIGtub3cgbXVj
+aCBtb3JlIGFib3V0IHRoZSBDaGlwaWRlYSBJUC4NCj4gPiA+ID4gDQo+ID4gPiA+IEknbGwgZ2V0
+IGJhY2sgdG8geW91IGd1eXMgd2l0aCBhIHByb3Bvc2FsIGZvciBhIG5ldyBkZXNjcmlwdGlvbi4N
+Cj4gPiA+ID4gDQo+ID4gPiANCj4gPiA+IFBoaWxpcHBlLCBpcyBpdCBwb3NzaWJsZSB0byBzaGFy
+ZSB5b3VyIFVTQiBoYXJkd2FyZSBkZXNpZ24gYXQNCj4gPiA+IDZVTEw/DQo+ID4gDQo+ID4gSXQn
+cyBhY3R1YWxseSBwcmV0dHkgc2ltcGxlOiBXZSBoYXZlIG9uIFVTQl9PVEcxX1ZCVVMgYSAxdUYN
+Cj4gPiBjYXBhY2l0b3IgYW5kDQo+ID4gKzMuMFYgb24gVkREX1VTQl9DQVAgdG9nZXRoZXIgd2l0
+aCAxMDBuIGFuZCAxMHUgYnlwYXNzIGNhcHMuIE5vdyB0aGUNCj4gPiBiaWcNCj4gPiBwcm9ibGVt
+IGlzIHRoYXQgdGhlIGRyaXZlciBjYW4gbm90IGRldGVjdCB0aGUgNVYgb24gVkJVUyBzaWduYWwu
+DQo+ID4gDQo+IA0KPiBDb3VsZCB5b3UgY29uZmlybSBpdCBkb2VzIG5vdCBzZWUgVkJVUyBhdCBy
+ZWdpc3RlciBPVEdTQz8gSWYgaXQgaXMsDQo+IGhvdyBjYW4gaXQgd29yayB3aXRoIHJ1bnRpbWUN
+Cj4gZGlzYWJsZWQsIHRoZSBVU0JDTUQuUlMgc2V0dGluZyAoY2lfaGRyY19nYWRnZXRfY29ubmVj
+dCBpcyBjYWxsZWQpDQo+IGRlcGVuZHMgb24gVkJVUy4NCj4gDQo+IFBldGVyDQoNCkZvciB0aGlz
+IHJlYXNvbiBJJ20gdXNpbmcgYSB3b3JrYXJvdW5kIGluIGV4dGNvbiBsaWtlIHRoaXM6DQoNCmV4
+dGNvbiA9IDwmZXh0Y29uX3VzYmNfZGV0PiwgPCZleHRjb25fdXNiY19kZXQ+Ow0KDQpJIGtub3cg
+dGhhdCB0aGlzIGlzIHVuZG9jdW1lbnRlZCBhbmQgd3JvbmcsIGJ1dCBpdCB3b3JrcyBmb3Igb3Vy
+DQpoYXJkd2FyZS4gV2l0aCB0aGlzIGFuZCBlbmFibGVkIHJ1bnRpbWUtcG0gZGV2aWNlcyBkbyBu
+b3QgZ2V0DQplbnVtZXJhdGVkLg0KDQpCdXQgd2l0aCBydW50aW1lLXBtIGRpc2FibGVkLCBkZXZp
+Y2VzIGdldCBlbnVtZXJhdGVkLg0KDQpGdXJ0aGVyIHdpdGggdGhpcyB3b3JrYXJvdW5kIHRoZSBW
+QlVTIHNpZ25hbCBnZXRzICdzaW11bGF0ZWQnDQppbiBod19yZWFkX290Z3NjLg0KDQpBbm90aGVy
+IHByb2JsZW0gd2l0aCBydW50aW1lLXBtIGVuYWJsZWQgaXMgdGhhdCB3aXRoIG5vIGRldmljZXMg
+cGx1Z2dlZA0KaW50byBVU0IgaXQgcmVzZXRzIGl0c2VsZiBldmVyeSB+MSBzZWNvbmQuDQoNClBo
+aWxpcHBlLg0KPiANCj4gPiBJIHRyaWVkIHRvICdpbmplY3QnIDVWIHRvIHRoYXQgcGluIGxhc3Qg
+d2VlayBhbmQgdGhpbmdzIGdvdCByZWFsbHkNCj4gPiBiZXR0ZXIgd2l0aCBydW50aW1lLXBtLg0K
+PiA+IEJ1dCBJIHN0aWxsIHRoaW5rcyBkaXNhYmxpbmcgaXQgZm9yIG91ciBib2FyZCB3b3VsZCBt
+YWtlIHNlbnNlLg0KPiA+IA0KPiA+IEknbGwgc2VuZCBhIG5ldyBkZXNjcmlwdGlvbiB0b2RheSB3
+aGVyZSBJIHRyeSB0byBwb2ludCB0byBWQlVTDQo+ID4gc2lnbmFsIG5vdCBjb25uZWN0ZWQuDQo+
+ID4gDQo+ID4gUGhpbGlwcGUNCj4gPiANCj4gPiA+IEFuZCBob3cgY2lfaGRyY19nYWRnZXRfY29u
+bmVjdCBpcyBjYWxsZWQgd2hlbiB0aGUgcnVudGltZSBwbSBpcw0KPiA+ID4gZGlzYWJsZWQ/DQo+
+ID4gPiANCj4gPiA+IFRoYW5rcywNCj4gPiA+IFBldGVyDQo+ID4gPiANCg==
