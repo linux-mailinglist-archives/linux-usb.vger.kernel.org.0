@@ -2,105 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D20225A9B
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jul 2020 10:58:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 088F3225AAF
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jul 2020 11:02:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728105AbgGTI6S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 20 Jul 2020 04:58:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60848 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727849AbgGTI6S (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 20 Jul 2020 04:58:18 -0400
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F49C061794;
-        Mon, 20 Jul 2020 01:58:18 -0700 (PDT)
-Received: by mail-il1-x141.google.com with SMTP id p15so12534831ilh.13;
-        Mon, 20 Jul 2020 01:58:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zh7Xd1q8w0eJ5dwux3SY0QwhMWb2Bu15xNtGs3cUDAU=;
-        b=SW+OJHzmVfozyQ74x1ednL/Ut9LiWwVAEc4zlcHzV7svVjqWd8H/kzYw3oMoto1wEV
-         87CgVUsrOeP0ORh51ZSzctS251uIWEIOeqmuso2uI6ozBo8FyppbdBz7M8hZIlLO6TeY
-         Mn1Y9NygIvW/yuis5631se98PPYqwd7wqguXtjK8zFpPyjPGkvpDTO4uoz1+1/CMb7oE
-         0qfB/KJsBthxDgOg+vqfqET1yhveGjHZucht9ouenewLaj97pRuSgNK1TjLsrih67io/
-         JKm15dt7DN69oBBhssgWaEa2+bDzRB8ah0MaT2C4N/sysxHcfbZDLRZKdan0SnjPRKLA
-         L+ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zh7Xd1q8w0eJ5dwux3SY0QwhMWb2Bu15xNtGs3cUDAU=;
-        b=d1oVWE5vYfg79APWpS1aW+pyod76OAx+D2L8y2kofeVFq8xVGbDJpAlzcDYQVpwH2+
-         Y++7SHkvNLDsKSbjeegdBuLsKttEAYv41arzy4TgtRivU+cbwD5k6bQhfKVg9me5f9b0
-         r5hud2rqaRcn50/LpVs/LU9xAiATFHJ7VHKufQAdvG1t/zY0WKqUK/sWl+8/Mv8GjjfO
-         mF5ylIDZ/bzQwSXSL9W+Q6m7cazm2Y5QmF4yG7Qt5fvJ8WlQH2PrhqEdbhwgpMFQjWrO
-         JZNweUQT5qmcBLATr6HPzLYiacPMmGmTa+wVzar/3/oOXNJ/KnYe8ifgsUda5eZSOo3M
-         cz0w==
-X-Gm-Message-State: AOAM532Pw1VmR/Bb8Fithmhy46X2c+j+OQgEaf3IGBgca+n0KQ+0L2LH
-        l7YBTPAnN56RJs5H+h1zIO/vvFmwAHPqsXHW5/sOhg==
-X-Google-Smtp-Source: ABdhPJwnIOuE/UoqUivSxKYwzVt0/RwqJ/memOEoi+PorBJfIKLe2TRZprgWIVxKly3HuVMuRjLH7ryKMmwn7Z46fXQ=
-X-Received: by 2002:a92:4810:: with SMTP id v16mr22260069ila.75.1595235497640;
- Mon, 20 Jul 2020 01:58:17 -0700 (PDT)
+        id S1727949AbgGTJCi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 20 Jul 2020 05:02:38 -0400
+Received: from mga04.intel.com ([192.55.52.120]:45631 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726030AbgGTJCh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 20 Jul 2020 05:02:37 -0400
+IronPort-SDR: 0YVz9tK/dlwGYQnOvcCfgs9LY3AIPj3cRPCKxMiNDxkwkG9z7PhdBV4hbr9qcwXO4iK1zNmZSv
+ QKYU8R0dsHkQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9687"; a="147375333"
+X-IronPort-AV: E=Sophos;i="5.75,374,1589266800"; 
+   d="scan'208";a="147375333"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2020 02:02:37 -0700
+IronPort-SDR: Y8OvluY9FctEdlDCt6y6frmwIjPJlAAkGi08P+b1ZV5upRwW3rBupeaEkYwM2SP+yNcbpD2JS7
+ f+3BgXBn924w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,374,1589266800"; 
+   d="scan'208";a="391980812"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga001.fm.intel.com with SMTP; 20 Jul 2020 02:02:34 -0700
+Received: by lahna (sSMTP sendmail emulation); Mon, 20 Jul 2020 12:02:33 +0300
+Date:   Mon, 20 Jul 2020 12:02:33 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-usb@vger.kernel.org,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rajmohan Mani <rajmohan.mani@intel.com>,
+        Lukas Wunner <lukas@wunner.de>
+Subject: Re: [PATCH 09/17] thunderbolt: Do not tunnel USB3 if link is not USB4
+Message-ID: <20200720090233.GT5180@lahna.fi.intel.com>
+References: <20200615142645.56209-1-mika.westerberg@linux.intel.com>
+ <20200615142645.56209-10-mika.westerberg@linux.intel.com>
+ <20200717061600.GC68629@google.com>
 MIME-Version: 1.0
-References: <20200713074243.530-1-linux.amoon@gmail.com> <20200720075013.GA6711@kozik-lap>
-In-Reply-To: <20200720075013.GA6711@kozik-lap>
-From:   Anand Moon <linux.amoon@gmail.com>
-Date:   Mon, 20 Jul 2020 14:28:07 +0530
-Message-ID: <CANAwSgSpnrX_sSNSB9i=0Awnu+ErfMAo49pnK9aHtdc+_h7-pA@mail.gmail.com>
-Subject: Re: [PATCH v4] phy: samsung: Use readl_poll_timeout function
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        linux-samsung-soc@vger.kernel.org,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, Kukjin Kim <kgene@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200717061600.GC68629@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Krzysztof,
+On Thu, Jul 16, 2020 at 11:16:00PM -0700, Prashant Malani wrote:
+> Hi Mika,
+> 
+> Sorry for the late comment..
 
-On Mon, 20 Jul 2020 at 13:20, Krzysztof Kozlowski <krzk@kernel.org> wrote:
->
-> On Mon, Jul 13, 2020 at 07:42:43AM +0000, Anand Moon wrote:
-> > Instead of a busy waiting while loop using udelay
-> > use readl_poll_timeout function to check the condition
-> > is met or timeout occurs in crport_handshake function.
-> > readl_poll_timeout is called in non atomic context so
-> > it safe to sleep until the condition is met.
-> >
-> > Fixes: d8c80bb3b55b ("phy: exynos5-usbdrd: Calibrate LOS levels for exynos5420/5800")
->
-> There is no bug in original code so Fixes tag is not appropriate. Remove
-> it please.
->
-Thanks for your review. Ok I will do that.
+Sorry for the late reply, was on vacation ;-)
 
-> Best regards,
-> Krzysztof
->
--Anand
+> On Mon, Jun 15, 2020 at 05:26:37PM +0300, Mika Westerberg wrote:
+> > USB3 tunneling is possible only over USB4 link so don't create USB3
+> > tunnels if that's not the case.
+> > 
+> > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > ---
+> >  drivers/thunderbolt/tb.c      |  3 +++
+> >  drivers/thunderbolt/tb.h      |  2 ++
+> >  drivers/thunderbolt/tb_regs.h |  1 +
+> >  drivers/thunderbolt/usb4.c    | 24 +++++++++++++++++++++---
+> >  4 files changed, 27 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+> > index 55daa7f1a87d..2da82259e77c 100644
+> > --- a/drivers/thunderbolt/tb.c
+> > +++ b/drivers/thunderbolt/tb.c
+> > @@ -235,6 +235,9 @@ static int tb_tunnel_usb3(struct tb *tb, struct tb_switch *sw)
+> >  	if (!up)
+> >  		return 0;
+> >  
+> > +	if (!sw->link_usb4)
+> > +		return 0;
+> On both here and the previous "up" check; should we be returning 0?
+> Wouldn't it be better to return an appropriate error code? It sounds
+> like 0 is considered a success....
 
-> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> > ---
-> > Changes v4:
-> > Rebased on to of patch [0] https://patchwork.kernel.org/patch/11651673/
-> > --Fix the commit message.
-> > --Fix the error timeout condition for -ETIMEDOUT
-> > ---
-> > Changes v3:
-> > --Fix the commit message.
-> > --Drop the variable, used the value directly.
-> > Changes v2:
-> > --used the default timeout values.
-> > --Added missing Fixed tags.
-> > ---
-> >  drivers/phy/samsung/phy-exynos5-usbdrd.c | 39 ++++++++----------------
-> >  1 file changed, 12 insertions(+), 27 deletions(-)
-> >
+The idea here is that you can call this function for every type of
+router (can be one without USB3 adapters so TBT 3,1,2) and it creates
+the tunnel if conditions for USB3 tunneling are met. It is not
+considered an error.
+
+However, if the operations fail for some reason we return appropriate
+error code.
