@@ -2,99 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DE3A228142
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 15:46:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51D712281B0
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 16:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728620AbgGUNpv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jul 2020 09:45:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47500 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726120AbgGUNpv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 09:45:51 -0400
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06923C061794;
-        Tue, 21 Jul 2020 06:45:51 -0700 (PDT)
-Received: by mail-io1-xd42.google.com with SMTP id l1so21407066ioh.5;
-        Tue, 21 Jul 2020 06:45:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Z7/kb+noIptWBZlCNM0tUJLWKrJyK4Uc4q4vqikSmVA=;
-        b=EbfasWIh4+wlDSDclRW4JCtu3k/GkwYZwV4FMR6NllX9SWWtKFfGVdiXqylXEhXJ4l
-         qs4HJ4MP0gNf0rnixDh1zehc4SYMLc1CcT6QRVUU00eH8CwaryFpY/hz0a7sVYkYv9fH
-         87IL11VjluA1leN7c2M294bHJzLa5twS3hNCyYfEuV/s8+iQGCGSN5sQpox7Xx5VfB0z
-         Pn8wk5cx4TsgxVsmGc8YWx4h0+Q5BKl4yJ4SJStOdTnOA1aGTU1C4FAATJVyFRa/0IvY
-         IiNuSfSVXP4uhcs/IhDW5rCEo0wWnCimYa1YrwxuzmDsb6XojBukIVwKHY6L8OKAIIbs
-         qyjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Z7/kb+noIptWBZlCNM0tUJLWKrJyK4Uc4q4vqikSmVA=;
-        b=G2AdmKoHAh4DBA2M18sGdaeu24ceLeYDwLotMBfkwadsVJR8T1X16j7n3GdNbzG3/J
-         7wIeC46Tw4J/l0jeCoy5W5D1FgQD2lR8zYtzSiuQXrQ+axZeKqPy5zPSllM+svssVyy0
-         g3V7rQOEAB/4s6pdUmhBWYuEo2tI9pyQ9/nO+pWTwUZmy20PphxGfP6qW1uOIfP7bkSP
-         81rlLjDDjtzwpd9UbQ42xZXMg1zadJLdwRc+HAweFl2rK//4IfVEaCOqWKB0MayBVbMv
-         q1Csi82CEJxq3AycwdgpG2UHGLyreTbBnv/EfRUhzgxQr3y+EjtK2IteqwjBSfgyr9J3
-         VztA==
-X-Gm-Message-State: AOAM533M/ICmbeE5uejyK0SA0wZHkmBmjR/V4Fmm7Le9iNF4x6aLsRU6
-        Ge994ePDKRx9LALnyWQo0xhg2DcvZ9DYcrXyptb57A==
-X-Google-Smtp-Source: ABdhPJw/AZflFKi8OhGhIi6gmJFA8xwTDeb81j9HKz/LcvMaEDr7KG2453i+UNvoNjCdsRwNGe2tREyMIuIhlwYjc3s=
-X-Received: by 2002:a02:b897:: with SMTP id p23mr32678862jam.32.1595339150299;
- Tue, 21 Jul 2020 06:45:50 -0700 (PDT)
+        id S1728547AbgGUOKy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jul 2020 10:10:54 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:47571 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726412AbgGUOKy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 10:10:54 -0400
+Received: (qmail 1273698 invoked by uid 1000); 21 Jul 2020 10:10:53 -0400
+Date:   Tue, 21 Jul 2020 10:10:53 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        dl-linux-imx <linux-imx@nxp.com>, Jun Li <jun.li@nxp.com>
+Subject: Re: [PATCH 2/2] usb: host: xhci-plat: add wakeup entry at /sys
+Message-ID: <20200721141053.GA1272082@rowland.harvard.edu>
+References: <20200705143151.GA672371@rowland.harvard.edu>
+ <AM7PR04MB71571A625BEEE70F2D9B3C138B690@AM7PR04MB7157.eurprd04.prod.outlook.com>
+ <20200706162237.GC704149@rowland.harvard.edu>
+ <20200707020137.GA5373@b29397-desktop>
+ <20200707161153.GB740256@rowland.harvard.edu>
+ <20200708064740.GA18440@b29397-desktop>
+ <20200708150204.GC776368@rowland.harvard.edu>
+ <20200709051534.GA17510@b29397-desktop>
+ <20200709145004.GB818352@rowland.harvard.edu>
+ <20200721110255.GA30348@b29397-desktop>
 MIME-Version: 1.0
-References: <20200717152307.36705-1-alcooperx@gmail.com> <87h7u1p5zd.fsf@kernel.org>
-In-Reply-To: <87h7u1p5zd.fsf@kernel.org>
-From:   Alan Cooper <alcooperx@gmail.com>
-Date:   Tue, 21 Jul 2020 09:45:38 -0400
-Message-ID: <CAOGqxeW9hd+_FJnS2ZBq0gEye9P15HM4fSmmPbJGC5Fb5nv_Fg@mail.gmail.com>
-Subject: Re: [PATCH 0/7] usb: bdc: Updates and fixes to the USB BDC driver
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     ": Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sasi Kumar <sasi.kumar@broadcom.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200721110255.GA30348@b29397-desktop>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 21, 2020 at 5:33 AM Felipe Balbi <balbi@kernel.org> wrote:
->
->
-> Hi,
->
-> Al Cooper <alcooperx@gmail.com> writes:
-> > Updates and fixes to the Broadcom USB BDC driver.
-> >
-> > Al Cooper (4):
-> >   dt-bindings: usb: bdc: Update compatible strings
-> >   usb: bdc: Add compatible string for new style USB DT nodes
-> >   usb: bdc: Adb shows offline after resuming from S2
-> >   usb: bdc: driver runs out of buffer descriptors on large ADB transfers
-> >
-> > Danesh Petigara (1):
-> >   usb: bdc: Halt controller on suspend
-> >
-> > Florian Fainelli (1):
-> >   usb: bdc: Use devm_clk_get_optional()
-> >
-> > Sasi Kumar (1):
-> >   bdc: Fix bug causing crash after multiple disconnects
->
-> What should we do here? There are few comments which seem
-> unresolved. Are we getting a new version?
+On Tue, Jul 21, 2020 at 11:03:03AM +0000, Peter Chen wrote:
+> On 20-07-09 10:50:04, Alan Stern wrote:
+> > > > We want to make the system simple and logical for users, not necessarily 
+> > > > easy for hardware engineers.  This means that wakeup events such as port 
+> > > > connect, disconnect, and so on should be controlled by a single sysfs 
+> > > > setting, for a single device.  The most logical device for this purpose 
+> > > > is the root hub, as I mentioned earlier in this discussion.
+> > > > 
+> > > > As a result, the wakeup settings for the other components (non-core or 
+> > > > PHY) should be based on the settings for the root hub.  If the root hub 
+> > > > is disabled for wakeup then the non-core hardware components shouldn't 
+> > > > generate any wakeup requests, no matter what their power/wakeup files 
+> > > > contain.  And if the root hub is enabled for wakeup then the non-core 
+> > > > hardware components should generate these requests, unless their own
+> > > > power/wakeup settings prevent them from doing so.
+> > > > 
+> > > > From these conclusions, it logically follows that the default wakeup 
+> > > > setting for the non-core components should be "enabled" -- unless those 
+> > > > components are physically incapable of waking up the system.
+> > > > 
+> > > 
+> > > I agree with you that the default wakeup setting of core part for host
+> > > (xhci-plat.c) should be "enabled", but if for the dual-role controller,
+> > > the wakeup events like VBUS and ID do not related with roothub, we can't
+> > > set core part for controller (cdns3/core.c) for defaulted enabled, and
+> > > there is no thing like gadget bus's wakeup setting we could depend on.
+> > > 
+> > > Besides, the non-core part (glue layer) somethings can't visit core
+> > > part, we had to depend on itself wakeup setting, but not the child's
+> > > wakeup setting.
+> > 
+> > All right.  Note that almost everything I wrote before was meant for the 
+> > case of a host controller; it did not consider what should happen with a 
+> > UDC or dual-role controller.
+> > 
+> > It seems like the best answer will be to call device_init_wakeup for the 
+> > core controller device, but not for the non-core devices.  Or maybe call 
+> > it for the non-core devices if the controller is host-only.
+> > 
+> > Alan Stern
+> 
+> Hi Alan,
+> 
+> Since the controller's wakeup setting (PORT_WKCONN_E/PORT_WKDISC_E)
+> should be decided by roothub's wakeup setting, then, why controller's
+> wakeup setting could affect it at current code, does the controller
+> device may affect wakeup function at some situations?
+> 
+> int xhci_suspend(struct xhci_hcd *xhci, bool do_wakeup)
+> int ehci_suspend(struct usb_hcd *hcd, bool do_wakeup)
+> 
+> It suggests the user needing to set both controller and roothub's wakeup
+> enabled to let the wakeup function work.
 
-I'm resolving the comments and submitting v2 today.
+That's right.  This is a tricky area.  A decision was made a long time 
+ago when the current wakeup mechanisms were being added into the kernel; 
+we decided that in order for a wakeup signal to propagate from the 
+originating device all the way up to the CPU, each of the intermediate 
+devices (representing various interconnects) along the way would have to 
+be enabled for wakeup.
 
-Thanks
-Al
+So for example, even if the root hub's power/wakeup file says "enabled", 
+if the controller's or one of the non-core devices' power/wakeup file is 
+"disabled" then the wakeup signal shouldn't go through.  It would be 
+like a situation where a device's interrupt flag is enabled and turned 
+on, but the device can't send an IRQ signal because it isn't allowed to 
+access the PCI bus.
 
->
-> --
-> balbi
+This is why I originally suggested that the wakeup setting for the 
+non-core devices and the controller should default to "enabled".
+
+Alan Stern
