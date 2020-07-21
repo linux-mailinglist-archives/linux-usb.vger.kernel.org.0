@@ -2,101 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C897122828F
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 16:44:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D4722831C
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 17:05:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729886AbgGUOoH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jul 2020 10:44:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56606 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729871AbgGUOoH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 10:44:07 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14CBC061794;
-        Tue, 21 Jul 2020 07:44:06 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id q5so21461820wru.6;
-        Tue, 21 Jul 2020 07:44:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=/f+3CAnVUu/WjuKg7piRBh88qTkT5e7hVX0fEyS5bwY=;
-        b=Ms7mwOupgucNKvHjaO51nVyunwKt6+TL6btD/qMIECU2mqYJHJGKfg0XiRiLB7OpCJ
-         io2x9OLHnMKcDRuYwpIFmGJUw9nx+4eIGRX1JD1S5w8M1Wrhi30qUR+SWaQj1hWwOdbx
-         rWzX12fpHhEHXa1DqPgEJal92k2p3qDfkbYvoUnQxIWle+DzQ0xhcAwa8jCEpHjFxIYC
-         uYcKJKepMIlbAx0dF6m8BO6vmQ3hY9qnFwuY1M65G/4vLNk+pdyOC5TLRQeIBRkfGquB
-         45o9VO43PPPeC0ELIrcBPy72cH2PtBh1xBrARSHHxwWlIfoo/AebnNF61SHg7Bt6Q/k5
-         bCUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=/f+3CAnVUu/WjuKg7piRBh88qTkT5e7hVX0fEyS5bwY=;
-        b=PFzv/1GssZdM+YH4gk1vlf1FYZ/KLT07U7xTMe9wyMZIdmWzN15kG2S6ruZWtTeK1q
-         dNRT2hLhkSAfG0ZUgvwWqr2uKcfCcDttYT0VXREFfkzj3gV1K5YFt6adEhQo1igAMvRe
-         XwWfWEDxT6+DtcyBZtozl+0aA3JS53YkVyc/A4TBEePzkT3aTY7ooS41U0PrUSZ8onWF
-         AzSOJfPJnTD8P0+gRhalSJrOKgxhzvbWMzoJT5rKgM+36WpLSKM73EhQocByiJlmwGfJ
-         AlTkq84itPAd7xr8ywF5MmzIslpP1yxmN2OuVOZDT2Vh0FnpCaXyL1fIhfRNnybTQj6a
-         e0GQ==
-X-Gm-Message-State: AOAM532cRKpDZBnx6AlnenycowcJT6aVg/8TknssdS5jHSA2EVT1BR8h
-        jruV8BwcoSHt4TH4zlMXkF2LZy/O
-X-Google-Smtp-Source: ABdhPJzB0wLvFkFof5pNtZA4xFonrctQrhfecc9Jb5K8Cw2fhCvUQR6jldysZfVCTluswm8bqGFpWA==
-X-Received: by 2002:adf:a15c:: with SMTP id r28mr7590524wrr.151.1595342645103;
-        Tue, 21 Jul 2020 07:44:05 -0700 (PDT)
-Received: from stbsrv-and-01.and.broadcom.net ([192.19.231.250])
-        by smtp.gmail.com with ESMTPSA id y6sm38043116wrr.74.2020.07.21.07.44.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2020 07:44:04 -0700 (PDT)
-From:   Al Cooper <alcooperx@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Al Cooper <alcooperx@gmail.com>, devicetree@vger.kernel.org,
-        Felipe Balbi <balbi@kernel.org>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Sasi Kumar <sasi.kumar@broadcom.com>
-Subject: [PATCH v2 7/7] usb: bdc: Use devm_clk_get_optional()
-Date:   Tue, 21 Jul 2020 10:43:26 -0400
-Message-Id: <20200721144326.7976-8-alcooperx@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200721144326.7976-1-alcooperx@gmail.com>
-References: <20200721144326.7976-1-alcooperx@gmail.com>
+        id S1729603AbgGUPFg convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 21 Jul 2020 11:05:36 -0400
+Received: from smtp12-hnd-sp2.mta.salesforce.com ([101.53.172.219]:13096 "EHLO
+        smtp12-hnd-sp2.mta.salesforce.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726436AbgGUPFg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 11:05:36 -0400
+X-Greylist: delayed 301 seconds by postgrey-1.27 at vger.kernel.org; Tue, 21 Jul 2020 11:05:35 EDT
+Authentication-Results:  mx2-hnd-sp2.mta.salesforce.com x-tls.subject="/C=US/ST=California/L=San Francisco/O=salesforce.com, inc./OU=0:app;1:hnd;2:hnd-sp2;3:ap17;4:prod/CN=ap17-app1-8-hnd.ops.sfdc.net"; auth=pass (cipher=ECDHE-RSA-AES256-GCM-SHA384)
+Received: from [10.219.237.7] ([10.219.237.7:37712] helo=ap17-app1-8-hnd.ops.sfdc.net)
+        by mx2-hnd-sp2.mta.salesforce.com (envelope-from <leandra=data-infocus.com__0-2fxx5rjstxt40e.cj005sq5ew1il1yt@08wg2nwqrzx03nqn.iak486u.2x-3tfytea2.ap17.bnc.salesforce.com>)
+        (ecelerity 4.2.38.62368 r(Core:release/4.2.38.0)) with ESMTPS (cipher=ECDHE-RSA-AES256-GCM-SHA384
+        subject="/C=US/ST=California/L=San Francisco/O=salesforce.com, inc./OU=0:app;1:hnd;2:hnd-sp2;3:ap17;4:prod/CN=ap17-app1-8-hnd.ops.sfdc.net") 
+        id EE/F9-06852-213071F5; Tue, 21 Jul 2020 15:00:34 +0000
+Date:   Tue, 21 Jul 2020 15:00:34 +0000 (GMT)
+From:   Leandra <leandra@data-infocus.com>
+To:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Message-ID: <3sLD-000000000000000000000000000000000000000000000QDTR0W00liAyTnOdR7OItedT4fQrJA@sfdc.net>
+Subject: Fintech Info - Accelerate your Marketing ROI and Investments
+MIME-Version: 1.0
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 8BIT
+X-Priority: 3
+X-SFDC-LK: 00D2x000003tFYT
+X-SFDC-User: 0052x000001fQYE
+X-Sender: postmaster@salesforce.com
+X-mail_abuse_inquiries: http://www.salesforce.com/company/abuse.jsp
+X-SFDC-TLS-NoRelay: 1
+X-SFDC-Binding: iCBT705cy8bBFz3B
+X-SFDC-EmailCategory: apiMassMail
+X-SFDC-EntityId: 0032x000005yaNA
+X-SFDC-Interface: internal
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Florian Fainelli <f.fainelli@gmail.com>
+Hello,
 
-The BDC clock is optional and we may get an -EPROBE_DEFER error code
-which would not be propagated correctly, fix this by using
-devm_clk_get_optional().
+Good day to you! I hope you are keeping safe!
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Al Cooper <alcooperx@gmail.com>
----
- drivers/usb/gadget/udc/bdc/bdc_core.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+Would you be interested in reaching out Professionals from Fintech, Finance services, Finance Institutions and Banking Sectors across the nation for your upcoming marketing campaigns?
 
-diff --git a/drivers/usb/gadget/udc/bdc/bdc_core.c b/drivers/usb/gadget/udc/bdc/bdc_core.c
-index c1650247ea39..f6e4026618e8 100644
---- a/drivers/usb/gadget/udc/bdc/bdc_core.c
-+++ b/drivers/usb/gadget/udc/bdc/bdc_core.c
-@@ -497,11 +497,9 @@ static int bdc_probe(struct platform_device *pdev)
- 
- 	dev_dbg(dev, "%s()\n", __func__);
- 
--	clk = devm_clk_get(dev, "sw_usbd");
--	if (IS_ERR(clk)) {
--		dev_info(dev, "Clock not found in Device Tree\n");
--		clk = NULL;
--	}
-+	clk = devm_clk_get_optional(dev, "sw_usbd");
-+	if (IS_ERR(clk))
-+		return PTR_ERR(clk);
- 
- 	ret = clk_prepare_enable(clk);
- 	if (ret) {
--- 
-2.17.1
+Job_titles: - CEO, CFO, CMO, COO,CTO, CIO, CXO, CBO, CCO, CDO,CKO, CSO, CPO, CLO, Controller, Director, Vice President, Presidents, Chairman's, GMs, Mid-level Managers, HR Managers, Finance Manager, IT Head, IT Director, IT Manager, VP IT, Purchasing Manager, Revenue Managers, Mortgage_Managers, Director of Banking, Pricing managers, Procurement Manager, Supply Chain, Head of Operations, Corporate Secretary, Treasurer, Administration, R & D Executives and many more…
 
+List Fields: Company name, Contact Name, job_title, phone number, Social_Profiles, email address, postal address, website, SIC_code, Industry type, Employee size, revenue size etc.
+
+Do let me know your thoughts on this, so that I will get back to you with counts, samples and pricing for your review Or we can jump on a Quick Zoom call for more info.
+
+Look forward for your response.
+
+Thanks and Regards,
+Leandra
+Marketing Executive
+
+Please reply us "Leave Out" if not interested
