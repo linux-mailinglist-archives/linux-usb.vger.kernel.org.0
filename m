@@ -2,101 +2,164 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84C48227907
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 08:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2025F22795F
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 09:16:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728411AbgGUGvI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jul 2020 02:51:08 -0400
-Received: from smtp1.de.adit-jv.com ([93.241.18.167]:39483 "EHLO
-        smtp1.de.adit-jv.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725294AbgGUGvH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 02:51:07 -0400
-Received: from localhost (smtp1.de.adit-jv.com [127.0.0.1])
-        by smtp1.de.adit-jv.com (Postfix) with ESMTP id 0A5053C04C1;
-        Tue, 21 Jul 2020 08:51:05 +0200 (CEST)
-Received: from smtp1.de.adit-jv.com ([127.0.0.1])
-        by localhost (smtp1.de.adit-jv.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id mz1PprRM934z; Tue, 21 Jul 2020 08:50:59 +0200 (CEST)
-Received: from HI2EXCH01.adit-jv.com (hi2exch01.adit-jv.com [10.72.92.24])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtp1.de.adit-jv.com (Postfix) with ESMTPS id B3F433C003F;
-        Tue, 21 Jul 2020 08:50:59 +0200 (CEST)
-Received: from lxhi-065.adit-jv.com (10.72.94.12) by HI2EXCH01.adit-jv.com
- (10.72.92.24) with Microsoft SMTP Server (TLS) id 14.3.487.0; Tue, 21 Jul
- 2020 08:50:58 +0200
-Date:   Tue, 21 Jul 2020 08:50:54 +0200
-From:   Eugeniu Rosca <erosca@de.adit-jv.com>
-To:     Pavel Machek <pavel@denx.de>
-CC:     <stable@kernel.org>, kernel list <linux-kernel@vger.kernel.org>,
-        <gregkh@duo.ucw.cz>, <erosca@de.adit-jv.com>,
-        <roscaeugeniu@gmail.com>, <stern@rowland.harvard.edu>,
-        <qais.yousef@arm.com>, <linux@prisktech.co.nz>,
-        <mathias.nyman@intel.com>, <oneukum@suse.de>,
-        <linux-usb@vger.kernel.org>
-Subject: Re: hibernation reverts in 4.19.134: better alternative?
-Message-ID: <20200721065054.GA8290@lxhi-065.adit-jv.com>
-References: <20200720101522.GB13137@amd>
+        id S1726749AbgGUHQz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jul 2020 03:16:55 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:54228 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725984AbgGUHQy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 03:16:54 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06L7CQZv153369;
+        Tue, 21 Jul 2020 07:16:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2020-01-29;
+ bh=AT8MPX1I7JDGF5HyAbGwZsBOaJxJlWlbPtr2s+bQvXI=;
+ b=j3+hqm0Hct2HUZjcrInvEK3Go5+dEl952yCfPrFY+14OMhtvvyYJps9H5hRVfvWdr6RM
+ 95mhMIC8q3WO3a6vyw76+NLfDBvRbr/npenLimFLByMOTtd7AZzf3rYpMMSLtzBPe1Ec
+ VAdnuXc0SuGoi5JFdcDZnfmGNGulxLNyYi+Fl2/pJMloycxyEEHDkHIGhlSWZ22E9taL
+ nlxtocn7MJLe62gjw+Fp3mEPRXgVVaHR87aIADY/ykGH4dWqxxx9dIIefCeGOvlbTFJD
+ kg6ggW2RbcsFVCTGUbTYuUrt384dtlE2ZgYCwnjzxCJUHxMGstyBGHVEV7yYwJw5Zs9d iw== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 32brgrb85p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 21 Jul 2020 07:16:46 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06L7D09F152262;
+        Tue, 21 Jul 2020 07:16:46 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 32dufdh135-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 21 Jul 2020 07:16:46 +0000
+Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 06L7Gijb015107;
+        Tue, 21 Jul 2020 07:16:45 GMT
+Received: from kadam (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 21 Jul 2020 07:16:44 +0000
+Date:   Tue, 21 Jul 2020 10:16:37 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Peilin Ye <yepeilin.cs@gmail.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        syzkaller-bugs@googlegroups.com,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [Linux-kernel-mentees] [PATCH v1] usbhid: Fix slab-out-of-bounds
+ write in hiddev_ioctl_usage()
+Message-ID: <20200721071637.GK2571@kadam>
+References: <20200718231218.170730-1-yepeilin.cs@gmail.com>
+ <20200720115400.GI2549@kadam>
+ <20200720121257.GJ2571@kadam>
+ <20200720191656.GA3366@PWN>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200720101522.GB13137@amd>
-X-Originating-IP: [10.72.94.12]
+In-Reply-To: <20200720191656.GA3366@PWN>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9688 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxscore=0 mlxlogscore=999
+ malwarescore=0 spamscore=0 adultscore=0 bulkscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2007210049
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9688 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 spamscore=0
+ impostorscore=0 suspectscore=0 adultscore=0 clxscore=1015 mlxlogscore=999
+ priorityscore=1501 phishscore=0 lowpriorityscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2007210049
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Pavel,
+For some reason the reply-to header on your email is bogus:
 
-On Mon, Jul 20, 2020 at 12:15:22PM +0200, Pavel Machek wrote:
-> This is queued for 4.19.134-stable, reverting 3 patches. But it seems
-> better alternative is available...
+Reply-To: 20200720121257.GJ2571@kadam
+
+"kadam" is a system on my home network.
+
+On Mon, Jul 20, 2020 at 03:16:56PM -0400, Peilin Ye wrote:
+> I made some mistakes in the previous e-mail. Please ignore that. There
+> are a lot of things going on...Sorry for that.
 > 
-> commit f3e697b7b6f5e2c570226f8f8692fb7db57215ec
-> Author: Sasha Levin <sashal@kernel.org>
-> Date:   Fri Jul 17 12:58:32 2020 -0400
+> On Mon, Jul 20, 2020 at 03:12:57PM +0300, Dan Carpenter wrote:
+> > So another option would be to just add HIDIOCGUSAGE and HIDIOCSUSAGE to
+> > the earlier check.  That risks breaking userspace.  Another option is to
+> > just add a check like you did earlier to the HIDIOCGUSAGE case.
+> > Probably just do option #2 and resend.
 > 
->     Revert "usb/ohci-platform: Fix a warning when hibernating"
->     
->     This reverts commit c83258a757687ffccce37ed73dba56cc6d4b8a1b.
->     
->     Eugeniu Rosca writes:
+> Sure, I will just add the same check to the HIDIOCGUSAGE case for the
+> time being. Thank you for the detailed explanation.
 > 
-> ...
+> Here's what I found after digging a bit further though:
 > 
->     > - Backporting 987351e1ea7772 ("phy: core: Add consumer device
->     >   link support") to v4.14.187 looks challenging enough, so probably not
->     >   worth it. Anybody to contradict this?
+> hid_open_report() calls different functions in order to process
+> different type of items:
 > 
-> Backporting 987351e1ea7772 to 4.4 may be "interesting", but backport
-
-Typo? 4.14 meant?
-
-> to 4.19 seems trivial, here, and it seems to work ok according to CIP
-> test suites:
+> drivers/hid/hid-core.c:1193:
 > 
-> https://gitlab.com/cip-project/cip-kernel/linux-cip/-/pipelines/168487477
+>         static int (*dispatch_type[])(struct hid_parser *parser,
+>                                       struct hid_item *item) = {
+>                 hid_parser_main,
+>                 hid_parser_global,
+>                 hid_parser_local,
+>                 hid_parser_reserved
+>         };
 > 
-> (You can simply apply 987351e1ea7772 ignoring one file that is not yet
-> present in 4.19.)
+> In this case, hid_parser_main() calls hid_add_field(), which in turn
+> calls hid_register_field(), which allocates the `field` object as you
+> mentioned:
+> 
+> drivers/hid/hid-core.c:102:
+> 
+>         field = kzalloc((sizeof(struct hid_field) +
+>                          usages * sizeof(struct hid_usage) +
+>                          values * sizeof(unsigned)), GFP_KERNEL);
 
-Technically yes. Backporting 987351e1ea7772 to v4.19.x avoids the panic.
-But it means integrating a v5.6 feature (isn't 987351e1ea7772 one?) into
-the v4.19.x stable tree. Isn't v4.19.x (just like any other stable
-branch) supposed to contain just fixes?
+Yeah.  And in the caller it does:
 
-Should then any missing prerequisite features be pumped in into the
-stable tree, whenever backporting a bugfix produces unexpected results?
+drivers/hid/hid-core.c
+   297          if (!parser->local.usage_index) /* Ignore padding fields */
+   298                  return 0;
+   299  
+   300          usages = max_t(unsigned, parser->local.usage_index,
+                ^^^^^^^^^^^^^^
+   301                                   parser->global.report_count);
+   302  
+   303          field = hid_register_field(report, usages, parser->global.report_count);
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+So ->usages is always greater or equal to ->global.report_count.
 
-FWIW I confirm that:
-* setup [A] leads to the issue reported in [C]
-* setup [B] resolves the issue reported in [C]
+   304          if (!field)
+   305                  return 0;
+   306  
+   307          field->physical = hid_lookup_collection(parser, HID_COLLECTION_PHYSICAL);
 
-[A] v4.19 + 16bdc04cc98 + 1cb3b0095c3 + 79112cc3c29f
-[B] v4.19 + 16bdc04cc98 + 1cb3b0095c3 + 79112cc3c29f + 987351e1ea7
-[C] https://lore.kernel.org/linux-usb/20200709070023.GA18414@lxhi-065.adit-jv.com/
+> 
+> Here, `values` equals to `global.report_count`. See how it is being
+> called:
+> 
+> drivers/hid/hid-core.c:303:
+> 
+>         field = hid_register_field(report, usages, parser->global.report_count);
+> 
+> In hid_open_report(), `global.report_count` can be set by calling
+> hid_parser_global().
+> 
+> However, the syzkaller reproducer made hid_open_report() to call
+> hid_parser_main() __before__ `global.report_count` is properly set. It's
+> zero. So hid_register_field() allocated `field` with `values` equals to
+> zero - No room for value[] at all. I believe this caused the bug.
 
--- 
-Best regards,
-Eugeniu Rosca
+I don't know if zero is valid or not.  I suspect it is valid.  We have
+no reason to think that it's invalid.
+
+regards,
+dan carpenter
+
