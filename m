@@ -2,63 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC3AD227BCC
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 11:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD6B7227BFA
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 11:43:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726919AbgGUJdv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jul 2020 05:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36682 "EHLO
+        id S1726188AbgGUJnF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jul 2020 05:43:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726109AbgGUJdu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 05:33:50 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54EA3C061794;
-        Tue, 21 Jul 2020 02:33:50 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id x9so23315758ljc.5;
-        Tue, 21 Jul 2020 02:33:50 -0700 (PDT)
+        with ESMTP id S1725984AbgGUJnF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 05:43:05 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A40FC061794;
+        Tue, 21 Jul 2020 02:43:04 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id q4so23425067lji.2;
+        Tue, 21 Jul 2020 02:43:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=H9OhidrR5GwaDx7LdnN3XVSRHXGq+Bmjj5l/pD+T9jk=;
-        b=SDQlOZ7bFq09vzSvuDSYV9oNaEPZIPUFqveaPvO0TRSOX+5d0R2A98aKiQlnNHSpJr
-         ru7KWvSzwpA7AWMpbgT7htw7RAeanCgFn5bVMuvifU1hSDuOm4CMFwIgmvgmOI1tz6yj
-         5gg+UdnUCQLYGkII0/8KcGvBEXmsni1VA8msdS6cNBYIaoDs86AcZ0fpRe9jEsvx+OwR
-         jqnboADHN0e+m1w7eSpt35hHWdf4OI0eAJ/sane8+LdJGdNSFKAG6COEcwi9c2xB20VD
-         qs+WS8Bs/aW5h3oX8OvXnlPr7NTJqpGVeE96DRGSRzijjpDhUqEai/b2syF2qwqMM/iv
-         ZPBQ==
+        bh=Bcjce0RSi5cAzugVx+NeI/QfodEd9VLTjD9tWZICZgU=;
+        b=csQ2h+t9/4bNMtFl20Jjm8Zy8IkQ0DVCWJ9xhRepggj3XwNjA1zV2aAOux6iX9mjUs
+         lddDYyEZeTuDmZaVz9tQVvAlrsDs5zIEqmM/F0RrgAmnNRjMb/4XaaiyShFmHm69WZTh
+         MYqybCeZ+7KVBztFmMdFCOHupgLGiP5FFeyu+nPuteNgS9ISab+QtAAA/uuu6QTelLgW
+         c2XGN5z/jYFwGVmKhiPAvAYFA37I9hxqO19+dlwS+362TRD1KV9ibQGzYHCc0v2GzCFq
+         FHWiuhlrageaKZJSfgN8Zs/Sm/EVKUrJLv8kvutZC3XReTurmROsNzQRjmXAGzamDTBn
+         DCFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
          :date:message-id:mime-version;
-        bh=H9OhidrR5GwaDx7LdnN3XVSRHXGq+Bmjj5l/pD+T9jk=;
-        b=YFldZTHOuO8Gl50UChT2C/HGWt5ub/fWuHm68RK7qjANn27mK+ssxUISLU9dkxwv+L
-         bOkkyvoTuXbec36avcbIvTHW2jOZCHnIhdWIxCyx3oQjk9Q0a6ZSK+aqKCBSApvodVI2
-         WCKnK7QV86GLGstmWfBUJzyo3ObtXukGlHVz2SH5J3P6OUnjYDWrU7Zs/yUUgc9yEeFA
-         dhBzffXX0Y2dqb0JeMh/FoBnerZQkh2rdNbH83+fetNQkL5XBXPNlwjWzepYOadKtC+L
-         y11PeaJrdTB2CLm4SSYnFtr/5XsFdM88cxsgFRrAXM30ZLy+lM0x6Riyc1c6+2N9qnxH
-         muww==
-X-Gm-Message-State: AOAM530gqfJhSCRtWOzkjVPQCU996L2mt8Tno4DiDTYmva27t53aueRy
-        I/h5+/LifwF1pHEzSY7cVznyxPmwJEjEmg==
-X-Google-Smtp-Source: ABdhPJwcw0HnE8axTsimOyA7XwYSPXVkGvMqpHntMdEsAtB+Fs0AFylRhtLZhnw3ra+Kcy6QbmCoWw==
-X-Received: by 2002:a2e:9855:: with SMTP id e21mr13129280ljj.424.1595324028411;
-        Tue, 21 Jul 2020 02:33:48 -0700 (PDT)
+        bh=Bcjce0RSi5cAzugVx+NeI/QfodEd9VLTjD9tWZICZgU=;
+        b=Q0ENozNdyf7SInOLHN8NqQ8/9x09xo4jFdZSuxc1pvX6XznhiVio6tTE7hcFQnxFvD
+         ly6OGfXA89MUCsczLFyK1xcJnW4PIxcGMtTGF0X0JMhO/65LXbikWIftdb3N5eTU4CxQ
+         u+hNRLjhf49b4rl2MaJLUsvX1ti52A4xm3+IRdnLXgZp+qNg5Wgw7RehO8J9eZOeKz3S
+         FHdv5PorXkGxcwb1TXhRlTQZJlqbf+oGVhy3V2vb7rAB4OtwwX7i0i3uE4AKSJ+zCvFI
+         N3rlTdqY8HIgvpOl1VwJlLfIWNC/O/iSIdzu9MJxhHK5f1moHSmJa/UupT5qinpf2d4A
+         JJLg==
+X-Gm-Message-State: AOAM531I0pU+IZpDDZqVRVHu7D6n4oKxo1b0vmeXTRampLfskVj+Husi
+        F88tUeyRU2nrREhYC/sNOaA=
+X-Google-Smtp-Source: ABdhPJxMAgGCe0cQOZaYb/3wDk2OTcBA7dPCflgu/NLzSq165ySZN9nZtSsFvVkOnnyS4JAFyqhZ3A==
+X-Received: by 2002:a2e:730c:: with SMTP id o12mr11930894ljc.165.1595324582604;
+        Tue, 21 Jul 2020 02:43:02 -0700 (PDT)
 Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id m1sm4960969lfa.22.2020.07.21.02.33.46
+        by smtp.gmail.com with ESMTPSA id b81sm2944612lfg.60.2020.07.21.02.43.00
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 21 Jul 2020 02:33:47 -0700 (PDT)
+        Tue, 21 Jul 2020 02:43:01 -0700 (PDT)
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Al Cooper <alcooperx@gmail.com>, linux-kernel@vger.kernel.org
-Cc:     Al Cooper <alcooperx@gmail.com>, devicetree@vger.kernel.org,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Sasi Kumar <sasi.kumar@broadcom.com>
-Subject: Re: [PATCH 0/7] usb: bdc: Updates and fixes to the USB BDC driver
-In-Reply-To: <20200717152307.36705-1-alcooperx@gmail.com>
-References: <20200717152307.36705-1-alcooperx@gmail.com>
-Date:   Tue, 21 Jul 2020 12:33:42 +0300
-Message-ID: <87h7u1p5zd.fsf@kernel.org>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [v3 PATCH] usb: gadget: bdc: use readl_poll_timeout() to simplify code
+In-Reply-To: <1594622881-6563-1-git-send-email-chunfeng.yun@mediatek.com>
+References: <1594622881-6563-1-git-send-email-chunfeng.yun@mediatek.com>
+Date:   Tue, 21 Jul 2020 12:42:56 +0300
+Message-ID: <87eep5p5jz.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -71,29 +75,19 @@ X-Mailing-List: linux-usb@vger.kernel.org
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
-
 Hi,
 
-Al Cooper <alcooperx@gmail.com> writes:
-> Updates and fixes to the Broadcom USB BDC driver.
+Chunfeng Yun <chunfeng.yun@mediatek.com> writes:
+> Use readl_poll_timeout() to poll register status
 >
-> Al Cooper (4):
->   dt-bindings: usb: bdc: Update compatible strings
->   usb: bdc: Add compatible string for new style USB DT nodes
->   usb: bdc: Adb shows offline after resuming from S2
->   usb: bdc: driver runs out of buffer descriptors on large ADB transfers
->
-> Danesh Petigara (1):
->   usb: bdc: Halt controller on suspend
->
-> Florian Fainelli (1):
->   usb: bdc: Use devm_clk_get_optional()
->
-> Sasi Kumar (1):
->   bdc: Fix bug causing crash after multiple disconnects
+> Cc: Florian Fainelli <f.fainelli@gmail.com>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 
-What should we do here? There are few comments which seem
-unresolved. Are we getting a new version?
+I had a lot of trouble to apply this patch, could you avoid base64
+encoding on the patch body next time?
+
+Thanks
 
 =2D-=20
 balbi
@@ -103,18 +97,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl8WtnYACgkQzL64meEa
-mQbgmRAApjEv4sPoy9DHfKAs4nJ1OcfivuXfGsdfBWCG4IJweHKB+MPPZLVwam1/
-w61d4KPH9EZZl+68JQV8Z7CoDQMEa6hKhf/12t+xhxdagBLhJbANQ4TpGuL2/QRx
-jHR47DvcQ3P2GbDiqwEuTP01XZuz1g97Bp9TON7KlKq7hqr5pCR8m/DUCLI5ZIEe
-W9dQKwDhRR9zmpptkh1JSNRdQ6F0CAucCtplxPrfg7FdoxBnr4m9nwZkWgcoe6o3
-IAoZ0UbEuaEHEnsBIiiJ3kWL1w7d/JClEC01P3H2kX+HUYvrslYGm1tvlyx/eXUB
-p4PiXz601s1XheCOFrgL2wkT5TjX+iGBnDdAZV9jAWR0vfH2zfbdq4+xqchAxsqv
-t0zHiTF6U2lI+J1VJXNlpoXz7LesgMawv9OK8euvHW0fvYQOM7QW7BO9Q3cb1PSm
-oQZj/IqLM8InIylbxwA8ucs7sMj2skkLwgVHpolAjRWEyqSh8d2WQq/QWGC2gsni
-4fg4w5Uq/bzQ+lDw/zNu4zcCyigSGZdJSD0MjvjH357ahWGpopxECKdU7LrK1XU4
-GF6Vndt+TG/TRo/1jVdjhQAw6i2bKE3NFV0du2OW534I5yLneYD42L4QTMiNaoc6
-8SkaibwYayTfO0x6ckWdaW+VU7CIg/z6IfxgaMd+T/Rdjs6zzeY=
-=FSV/
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl8WuKAACgkQzL64meEa
+mQbgQw/8D5MApknAagQ1QHV5vnpIQ0lR2Lv6nf7GyipydG0ROriUsdYZx0WIXYp8
+O2pMl9dzA5QI4MDMIwS8T8/iC7SZS30b9+5jNM3gIyIMgVirenhgMVHV6CJhbuMv
+76KpmPx87FGVgpW42X9YXfuSUqBjK9DeXt9QzRDJj7rho0jh6OQpVzwoy1dI1Hcq
+Qrdy96W+vG4XGfkdZRROLw9dkAzqLC2R7uhq2kWRKje4rYDKNV/bvj/MQ4K2fxu9
+3YbPPp+CMvTTsLuqIEyGy3FkQrXDRHB1miM7Ii9yAbmGTeNDpdtXPFCZV3evfCBI
+/xzTmUTcAkHlmlDP8O4/I2HsYsdqKbrBbbCYO1Sf8dKa5IeeXNc3dNGVtrKHlJgA
+x2p3Iy/Bydhyh3eEYnM4EOCX92vhu3CTCq9zzXF20pGtzbzqrItZcCIQ5uAiv1W5
+uEF/zyHg28QU6q1slo+nVWHwP+m4DDp6y3eFQfy5JejeJDUUUhMeFAqMTH9gSK3V
+5R1DC0hx6p9oLAGiXTzXzLa781ynVfQ3/7z4hLXpez8zXK4Vu7duiV7KSOSMKcyb
+Ai4gl+Iwloo0jkDk10vIZGMTvibbXeFkRxlZEV7OFGJn3I+SOEzQzKfiWKyhvBkA
+2vuAB0ozj32RV0IN8Ogzrc6m1z+yh+B77DOt1Lpx4BTL/daY5Ks=
+=4+GP
 -----END PGP SIGNATURE-----
 --=-=-=--
