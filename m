@@ -2,67 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D17ED227F02
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 13:33:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBEC9227F0E
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 13:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729357AbgGULdq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jul 2020 07:33:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51992 "EHLO mail.kernel.org"
+        id S1728454AbgGULiD convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 21 Jul 2020 07:38:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53606 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726266AbgGULdq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 21 Jul 2020 07:33:46 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3F832206F2;
-        Tue, 21 Jul 2020 11:33:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595331225;
-        bh=Mg6L1cR7Ir4UqEXXKL4h/HOxKKegC7bgckzLjWHf03E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MKKZRAuRSOYspVvmRoUmEGX/onlIPbHSCRzt75offJy0YinwoNaV1OYgOYFWjwBdH
-         WCzW83kOadlAR/4pgOZyfQDcdzsKQi1Q4TrHiDlucy1DEHBZ5iWAxSfbVsMcWZVryC
-         XYgebVnhamm5EbTSZXm+qR10TwLcPdP1Xj5aLlAo=
-Date:   Tue, 21 Jul 2020 13:33:53 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Macpaul Lin <macpaul.lin@mediatek.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Felipe Balbi <balbi@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Eddie Hung <eddie.hung@mediatek.com>, stable@vger.kernel.org,
-        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        Macpaul Lin <macpaul.lin@gmail.com>
-Subject: Re: [PATCH v2] usb: gadget: configfs: Fix use-after-free issue with
- udc_name
-Message-ID: <20200721113353.GA1686460@kroah.com>
-References: <1594881666-8843-1-git-send-email-macpaul.lin@mediatek.com>
- <1595040303-23046-1-git-send-email-macpaul.lin@mediatek.com>
- <1595041133.23887.4.camel@mtkswgap22>
+        id S1726942AbgGULiC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 21 Jul 2020 07:38:02 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 208267] usbip broken with latest kernels?
+Date:   Tue, 21 Jul 2020 11:38:02 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: jdieter@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-208267-208809-MJDc5Y1ht9@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-208267-208809@https.bugzilla.kernel.org/>
+References: <bug-208267-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1595041133.23887.4.camel@mtkswgap22>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Jul 18, 2020 at 10:58:53AM +0800, Macpaul Lin wrote:
-> On Sat, 2020-07-18 at 10:45 +0800, Macpaul Lin wrote:
-> > From: Eddie Hung <eddie.hung@mediatek.com>
-> > 
-> 
-> Well, it's strange, I simply replaced the uploader's name to my
-> colleague, git send-email pop up this line automatically.
-> 
-> Shouldn't I do that kind of change. It did not happened before.
-> Do I need to change it back and update patch v3?
+https://bugzilla.kernel.org/show_bug.cgi?id=208267
 
-Who is the real author of this, Eddie or you?  If Eddie, this is
-correct, if you, it is not.
+--- Comment #9 from Jonathan Dieter (jdieter@gmail.com) ---
+git bisect gives me the following:
+88b7381a939de0fa1f1b1629c56b03dca7077309 is the first bad commit
+commit 88b7381a939de0fa1f1b1629c56b03dca7077309
+Author: Bastien Nocera <hadess@hadess.net>
+Date:   Wed Oct 16 11:39:31 2019 +0200
 
-thanks,
+    USB: Select better matching USB drivers when available
 
-greg k-h
+    Now that USB device drivers can reuse code from the generic USB device
+    driver, we need to make sure that they get selected rather than the
+    generic driver. Add an id_table and match vfunc to the usb_device_driver
+    struct, which will get used to select a better matching driver at
+    ->probe time.
+
+    This is a similar mechanism to that used in the HID drivers, with the
+    generic driver being selected unless there's a better matching one found
+    in the registered drivers (see hid_generic_match() in
+    drivers/hid/hid-generic.c).
+
+    Signed-off-by: Bastien Nocera <hadess@hadess.net>
+    Acked-by: Alan Stern <stern@rowland.harvard.edu>
+    Link: https://lore.kernel.org/r/20191016093933.693-5-hadess@hadess.net
+    Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+ drivers/usb/core/driver.c  | 15 +++++++++++++--
+ drivers/usb/core/generic.c | 29 +++++++++++++++++++++++++++++
+ include/linux/usb.h        |  2 ++
+ 3 files changed, 44 insertions(+), 2 deletions(-)
+
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
