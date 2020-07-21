@@ -2,65 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB7D9227BFD
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 11:44:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 085DD227C11
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 11:48:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728006AbgGUJoF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jul 2020 05:44:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38260 "EHLO
+        id S1729016AbgGUJsH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jul 2020 05:48:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725984AbgGUJoE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 05:44:04 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661B6C061794;
-        Tue, 21 Jul 2020 02:44:04 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id q6so2346748ljp.4;
-        Tue, 21 Jul 2020 02:44:04 -0700 (PDT)
+        with ESMTP id S1728963AbgGUJsG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 05:48:06 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B941C061794;
+        Tue, 21 Jul 2020 02:48:06 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id i19so6086515lfj.8;
+        Tue, 21 Jul 2020 02:48:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=4B4uTKaYVVIs2NUU7WSS3PrxtkG5yE1ho1vSzkWNNJY=;
-        b=pdJRleq1eaXiymciRCaJyMpEjyPf0ED+Y0ls4trEfLYY1pCXRP0dEAYl7GKpTZrGN5
-         4GCC1/QU/PadIe17M5/f5otVVm34IdsMKlFm0E53OJ7M/CMFib65tcxSgVcwPbY669Tq
-         8ffyI9mQksGVgB9Mh2FJGtMdH0DRHXCI6GQGp3JL3k+bOa5AKg+Ww3F7MPO4prHB+Jl2
-         Gy/ZBuJKzVJ2p6EVq/HKKEKesmnzGdFI5P4H7gfxBOMgydhnzEFXTglpA5n/nhtz+V81
-         cZSZl1i31a2GiehcPueTGiGw+nYK7dUYaXhwXVWH83GmBnPWKRNoxtayXR2kQrU60a0w
-         vXsw==
+        bh=7wunV2ExdV89dWEoZPnYy/3JPsFVGoQ7tDA3ou4ObdQ=;
+        b=sPMrBqUcqLyd18Nf5OihoaB26bn/O/uwHcKyIMuRfy1j5mV9D83Dx3qQqiI53LjZ39
+         WErNKKJHGPufEGjgj/epsZLv3T6gcHrFoP8EmLZqfm1hK93jUvSDZa5AVZKDBUMz1X/5
+         59h4CstrQhEoG6cNF+Web7BLarRz2jg7BavRxiMN5URiV7it6uAnHEOsP1skd0NhPw3v
+         gzv7siKwnAVpoxUlMDS1ZbjUUjtF0OmZ23xFbImBRoKJhnxl/1nQ1fJjns9LwwkWE6R1
+         uKWYXwmnluw9B7VBzCgn1kDIhHoo1Mf90mMRFCdOn+A3EhmJBuJrXuxdz8Si9v0BsC8f
+         IV/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
          :date:message-id:mime-version;
-        bh=4B4uTKaYVVIs2NUU7WSS3PrxtkG5yE1ho1vSzkWNNJY=;
-        b=uZFeVN/WTEr6f7t7z0YJvXzvANQFZgIS0hwc9F0EPF1oat082YUBowKF7JjTPMK9zU
-         smcMC/tsG4HQ8ju06Yuc1VXRSgsEkdp2pLlCFnznN/q43Fb0WIhuaeOt6zDGcwCmBMEm
-         tt0Wobv3v/QOpgzzMcUKJ2UR/93oo0Hw9bjS5XuFY0Vq6Ah2e3ONEFif681AHhXIU/8V
-         IP0NpeafpFG9NULQvCQpU0X+ijlA2VZtbdaC7hv3jfNKlJOle1b1r4FnvMBGPlob3AMR
-         TLo3TXp9Hu099Ea8hRgNA71JeDCeksFUKBc3MzbwTqNRmfZVmajsxvbdDZ1+Lm9mVgfu
-         xE0A==
-X-Gm-Message-State: AOAM5306UMv/DUUBnf54K896/tFmtiNGDhKJHxfRE4S75FTGyMAYPoV2
-        4pHcD3c8WMgDWKv1qeFCzaHCfj4aqMTgLA==
-X-Google-Smtp-Source: ABdhPJzhA3jW9y1U/VHRqB2+TAhq8vBgv7fDywrgkTgJmnvYz3ND+eXb6bTGt9vwJhd+hEJYMucSKQ==
-X-Received: by 2002:a2e:8597:: with SMTP id b23mr11438006lji.338.1595324642702;
-        Tue, 21 Jul 2020 02:44:02 -0700 (PDT)
+        bh=7wunV2ExdV89dWEoZPnYy/3JPsFVGoQ7tDA3ou4ObdQ=;
+        b=p4inFEd41ohnUGfQT5Za+pndOrx+Yg0Tofkx78hh4AwvmM1Plap/gkikWWkkc90QLx
+         bwECWzE4793hhLqy8R1o60svvJm2D1ycW/GCdCoQduQL5GcdE0FjRjY0td+7Rb/UeggW
+         GIJ6sWGJvAX0Y+98wS3JQ7++TIYU4Yf46JMVkb0UfxiKKNgbkrAxu0mE79h0fNThBI4X
+         UK8X01FprcVP08pbh0iSQEL/DG3k5neszmXwSFXG/odbauycW6oB3jIXFgKpJ7uBsUxa
+         mLaMZtud3U2l22amyHLncPD5/HJyjLjF9rz1Ll8ppEEbbS8a83A5YNZ52gMZ9HjMZXaG
+         F3Yg==
+X-Gm-Message-State: AOAM5330prt6x+hvY1QKOxmUCJlWfT05xFtVI9MLszysjObEJQabmJ3S
+        oqeQY5UH5+xcLCrn7WTGR4crDhUcLuRfpA==
+X-Google-Smtp-Source: ABdhPJynB8qlKtpSomVyCX1Z2Rp34rWVjRCdLC/W6YvpOF2RYCUh8DCFP3S2yyWzCBX+v+Px3ubKIg==
+X-Received: by 2002:a05:6512:74f:: with SMTP id c15mr13283968lfs.26.1595324884741;
+        Tue, 21 Jul 2020 02:48:04 -0700 (PDT)
 Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id r22sm4192790ljc.25.2020.07.21.02.44.01
+        by smtp.gmail.com with ESMTPSA id d23sm4964236lfm.85.2020.07.21.02.48.03
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 21 Jul 2020 02:44:02 -0700 (PDT)
+        Tue, 21 Jul 2020 02:48:03 -0700 (PDT)
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        "gregkh\@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Cc:     "linux-arm-kernel\@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Ben Dooks <ben@simtec.co.uk>
-Subject: Re: [PATCH v2 1/8] usb: dwc2: gadget: Make use of GINTMSK2
-In-Reply-To: <566f2d65-1b5a-ed2a-f33f-516b66be2624@synopsys.com>
-References: <20200715093209.3165641-1-lee.jones@linaro.org> <20200715093209.3165641-2-lee.jones@linaro.org> <566f2d65-1b5a-ed2a-f33f-516b66be2624@synopsys.com>
-Date:   Tue, 21 Jul 2020 12:43:57 +0300
-Message-ID: <87blk9p5ia.fsf@kernel.org>
+To:     Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
+        Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
+        Rob Herring <robh+dt@kernel.org>, Rob Herring <robh@kernel.org>
+Cc:     "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        John Youn <John.Youn@synopsys.com>,
+        "gregkh\@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "devicetree\@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v3 3/4] usb: dwc3: Add device property sgl-trb-cache-size-quirk
+In-Reply-To: <2f61133b-319d-80dc-f3f3-7e08e0228953@synopsys.com>
+References: <cover.1590415123.git.joglekar@synopsys.com> <83eba2e9f0069f20ccc94537e3b99cbaec209441.1590415123.git.joglekar@synopsys.com> <5534d9d6-5452-dade-e46e-f4b0910becdb@synopsys.com> <877dvhqh2e.fsf@kernel.org> <2f61133b-319d-80dc-f3f3-7e08e0228953@synopsys.com>
+Date:   Tue, 21 Jul 2020 12:47:59 +0300
+Message-ID: <878sfdp5bk.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -70,34 +69,59 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 --=-=-=
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
-Minas Harutyunyan <Minas.Harutyunyan@synopsys.com> writes:
+Tejas Joglekar <Tejas.Joglekar@synopsys.com> writes:
 
-> On 7/15/2020 1:32 PM, Lee Jones wrote:
->> The value obtained from GINTSTS2 should be masked with the GINTMSK2
->> value.  Looks like this has been broken since
->> dwc2_gadget_wkup_alert_handler() was added back in 2018.
->>=20
->> Also fixes the following W=3D1 warning:
->>=20
->>   drivers/usb/dwc2/gadget.c: In function =E2=80=98dwc2_gadget_wkup_alert=
-_handler=E2=80=99:
->>   drivers/usb/dwc2/gadget.c:259:6: warning: variable =E2=80=98gintmsk2=
-=E2=80=99 set but not used [-Wunused-but-set-variable]
->>   259 | u32 gintmsk2;
->>   | ^~~~~~~~
->>=20
->> Cc: Minas Harutyunyan <hminas@synopsys.com>
->> Cc: Ben Dooks <ben@simtec.co.uk>
->> Fixes: 187c5298a1229 ("usb: dwc2: gadget: Add handler for WkupAlert inte=
-rrupt")
->> Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> Hi Rob,
 >
-> Acked-by: Minas Harutyunyan <hminas@synopsys.com>
+> On 7/6/2020 12:13 PM, Felipe Balbi wrote:
+>>=20
+>> Hi,
+>>=20
+>> Tejas Joglekar <Tejas.Joglekar@synopsys.com> writes:
+>>>> @@ -95,6 +95,10 @@ int dwc3_host_init(struct dwc3 *dwc)
+>>>>  	if (dwc->usb2_lpm_disable)
+>>>>  		props[prop_idx++] =3D PROPERTY_ENTRY_BOOL("usb2-lpm-disable");
+>>>>=20=20
+>>>> +	if (dwc->sgl_trb_cache_size_quirk)
+>>>> +		props[prop_idx++] =3D
+>>>> +			PROPERTY_ENTRY_BOOL("sgl-trb-cache-size-quirk");
+>>>> +
+>>>>  	/**
+>>>>  	 * WORKAROUND: dwc3 revisions <=3D3.00a have a limitation
+>>>>  	 * where Port Disable command doesn't work.
+>>>>
+>>> Does this implementation looks good to you? Rob has some concerned over=
+ the DT entries,
+>>> you suggested using compatible string with this quirk addition.
+>>> Can you please brief about how you would like to have this quirk implem=
+ented?
+>>> I can send the updated patch. My patch series is pending for merge just=
+ because of the
+>>> DT and quirk issue. Can you please help?
+>>=20
+>> Yeah, you need to get into an agreement with Rob :-) I don't mind having
+>> extra DT flags for things which can't be detected in runtime, Rob
+>> disagrees.
+>>=20
+> The compatible string is not suitable option as it does not work with pla=
+tform drivers
+> with PCI based system. Also Synopsys controllers IP version register is n=
+ot visible to xhci
+> driver and hence we don't have separate compatible string for each Synops=
+ys version on the
+> xhci driver side.=20
+> Due to which I depend on DT flag addition for the quirk. Can we add these=
+ DT flags and quirk?
 
-Should I apply the entire series or only 1/8?
+As I said, I'm well aware of the situation regarding usage of compatible
+strings and the fact that dwc3 must work on PCI and non-PCI systems (I
+wrote the thing as it is after all). The person blocking new quirk flags
+is Rob, not me. You need to convince Rob that this is the way to go.
+
+Rob, ball's in your court. Sorry.
 
 =2D-=20
 balbi
@@ -107,18 +131,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl8WuN0ACgkQzL64meEa
-mQacAQ//a/P5SYnBnlVVnSmY6/+H5xaTyA0frND1g+cvwxNLc8oWt8WK97bow8mn
-gHNkRsPUfur72sCbsHhbOczv7Kc2ea3d+0KJNTv0idAgr8zUG0we/lYewX7+YCDc
-x911DeDk19uqC84Xbt9LmC9iBJbqPA+IlzckS2CwunqNws57n01+/p+txsNOEwXc
-EfCJBfEljT+W8u+yoeAu2FDdL3etFHZuIEE/aSLYC5qTqtM8dnUcoci0NDb3J+If
-uhJ0U0E8S9u3D8vGaL78cZHvMCvY6C4NLj+CdwkTFIGh3wx0uYSyOGnvrd2mlupS
-UV0oUqJj6vqDZ0MjpUYpAYd9tqSiucigXy13vId9QOSgTGsVKYNHevUlUOLq8lYC
-q29fZ4qNprDyKdc/JRuzkqanRqVfP7+HArMOXajAbCb1Qbk+qoYp12LuDs4yFWBW
-cBe1/yy9ItxJAjp7oMBiuMsjWdn/Di7mf3HMt5fTti0jNptDq1BPGsksUudJ656I
-OewK0YelUC6ptvxRfE4YwI7MUoG5EciU9tonBpFGkU2euzs6VrIpIF9haDIKEuC8
-8eafrA9+yamuhElBP0xix/Bbif/Lk6oxK6yXVIwdB5qCNEgHRPjLzDEQykO1QBwp
-BMykpU5UXXpdqYD9kuT3k/hHTLq8GeO2o3bHVWoWZTvw7ZumzMk=
-=1ehQ
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl8Wuc8ACgkQzL64meEa
+mQajFg/+OrB8kftTAnhyjxcw+b5fL1n7lUgHqcXF1BNTWFia0/tfNkcW/XNjbPbv
+V50OdZ4SUdOQGvrmALzxGve+SSs55QLvRfA+e3VzAL9KYpDXLmp+3habfuIRHgDC
+JojlvbYKWevMma727Oj5vrdmbLmoLpivT1kcf5+RT+AXS1P8ujWKwj4nnMQgO0KZ
+FAVKSMB84Uam3sEn49eBFxGJNipdl3M1NBI/E39RTN9MaF9Y56cKMWtXC+VqZ+DQ
+bU0OiBs+YJHIgwfAB3kXk5lF/uuKc9TgAkDPT4XOoMPLVgWi25ZdZSdtI1wXeaxv
+cgiIEY/XUaQMij9+8Wr0Ii87gpLQmRDavANp/7xZRfh5DA/WuPuGpyjabMqkucX5
+hG+FUXv1IGqI1pdwzWlFqS1v2bJUjWEp2iZaXMbq5mmuS9KBgWfm32KsTMDcsrbC
+h76U09ljSIZfVfvtp/+Nroy2RkwPSRoRxmeujcB7gIksH0A9+1dCvco9WjewfHHq
+LDx8MVYOnt0fguKFVVwiebkTlgE17/z89mqFCP1jjFWg96+iwbcUuDdOvl3khPkV
+qxjf8eg0PxwsHunCSlHRA997QmtXckyQdrLyb3j2n6sd0E0+gAdxmL+m9O1/59qQ
+71CLZaeVgojR1Y0esRLVh4r9O6lFV+JCaUyzir/e23fRGahnJ7Y=
+=kiWu
 -----END PGP SIGNATURE-----
 --=-=-=--
