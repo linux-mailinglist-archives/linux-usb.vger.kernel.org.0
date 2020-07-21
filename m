@@ -2,77 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4F0B227974
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 09:27:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30A172279B7
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 09:45:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726510AbgGUH1R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jul 2020 03:27:17 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:43999 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725984AbgGUH1R (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 03:27:17 -0400
-Received: by mail-lj1-f194.google.com with SMTP id f5so22946539ljj.10
-        for <linux-usb@vger.kernel.org>; Tue, 21 Jul 2020 00:27:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uM1o/s5jzq3Whghqh/jti+1cVp5A7XS7/u7KiKObfzw=;
-        b=dK/ccoIXoxWdnuFXBlSKggTBMRev8C11kfURrvk2qzYkqPk+ZV1vGKN8899jzNwUDP
-         3jjgjaFf0fuI74CP8nC32frh0taa4B7wkbxEYIfFFG74JnWuCYidHz1Y1BgOEYE60rTW
-         J3fBpaMq6zN+5KA3nDGJ2TB6iwq6NAZhvmsQMT4J6oYR8CYpBFxLnJ35YmHYkhoi1ayX
-         LhEEjzZQo+GbYmFcY2DKvcOIIwaugkJMB20W8Q3p/CgHSa/DNJ4Y2pSakfFZb1CdUuTY
-         h0BExMkyKXXcb/0b9ppAvl4jjYDBF+oPVrbzFXBBomG+nzHGKg3zXXTFej0uDALpTKyI
-         1PMA==
-X-Gm-Message-State: AOAM533rbIkvuUfvbzG44tWcoAFapUkZFTsu/vIhVQSKG6xoIaCJyHV/
-        mZPm4G8fa0omoixWsO1lxsY=
-X-Google-Smtp-Source: ABdhPJxyeStatsLvCZKF3EpjB7NYMu4yJiHo/1E9PvelgaITTUWOnNbtf9xBG5cV3KBDKCSZRxomrw==
-X-Received: by 2002:a2e:9792:: with SMTP id y18mr12921037lji.172.1595316434520;
-        Tue, 21 Jul 2020 00:27:14 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id a5sm4775422lfh.15.2020.07.21.00.27.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2020 00:27:13 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1jxmgA-0006La-TZ; Tue, 21 Jul 2020 09:27:10 +0200
-Date:   Tue, 21 Jul 2020 09:27:10 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg KH <greg@kroah.com>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        George Spelvin <lkml@sdf.org>
-Subject: Re: [PATCH] USB: serial: iuu_phoenix: fix led-activity helpers
-Message-ID: <20200721072710.GD3634@localhost>
-References: <20200716085056.31471-1-johan@kernel.org>
- <20200716090503.GA1548743@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200716090503.GA1548743@kroah.com>
+        id S1728009AbgGUHp3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jul 2020 03:45:29 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:13786 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727916AbgGUHp3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 03:45:29 -0400
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 21 Jul 2020 00:45:28 -0700
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 21 Jul 2020 00:45:26 -0700
+Received: from c-sanm-linux.qualcomm.com ([10.206.25.31])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 21 Jul 2020 13:15:00 +0530
+Received: by c-sanm-linux.qualcomm.com (Postfix, from userid 2343233)
+        id 386A52BA8; Tue, 21 Jul 2020 13:14:59 +0530 (IST)
+From:   Sandeep Maheswaram <sanm@codeaurora.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Sandeep Maheswaram <sanm@codeaurora.org>
+Subject: [PATCH v9 0/2] ADD interconnect support for Qualcomm DWC3 driver
+Date:   Tue, 21 Jul 2020 13:14:47 +0530
+Message-Id: <1595317489-18432-1-git-send-email-sanm@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 16, 2020 at 11:05:03AM +0200, Greg Kroah-Hartman wrote:
-> On Thu, Jul 16, 2020 at 10:50:55AM +0200, Johan Hovold wrote:
-> > The set-led command is eight bytes long and starts with a command byte
-> > followed by six bytes of RGB data and ends with a byte encoding a
-> > frequency (see iuu_led() and iuu_rgbf_fill_buffer()).
-> > 
-> > The led activity helpers had a few long-standing bugs which corrupted
-> > the command packets by inserting a second command byte and thereby
-> > offsetting the RGB data and dropping the frequency in non-xmas mode.
-> > 
-> > In xmas mode, a related off-by-one error left the frequency field
-> > uninitialised.
-> > 
-> > Fixes: 60a8fc017103 ("USB: add iuu_phoenix driver")
-> > Reported-by: George Spelvin <lkml@sdf.org>
-> > Signed-off-by: Johan Hovold <johan@kernel.org>
-> 
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This path series aims to add interconnect support in
+dwc3-qcom driver on SDM845 and SC7180 SoCs.
 
-Thanks for reviewing. Now applied for -next.
+Changes from v8 -> v9
+  > Addressed comments from Matthias.
 
-Johan
+Changes from v7 -> v8
+  > Only driver change is pending all other patches are merged so dropped
+    from the series.
+  > Removed the device_is_bound call and getting speed from device tree
+    and rearranged interconnect functions to avoid forward declarations.	
+  > Added patch to specify maximum speed for dwc3 DT node.
+
+Changes from v6 -> v7
+  > [PATCH 2/4] Fixed review comments from Matthias in DWC3 driver.
+  > Other patches remain unchanged.
+
+Changes from v5 -> v6
+  > [PATCH 1/4] Addressed comments from Rob.
+  > [PATCH 2/4] Fixed review comments from Matthias in DWC3 driver.
+  > [PATCH 3/4] Ignoring 80 char limit in defining interconnect paths.
+  > Added [PATCH 4/4] in this series. Adding interconnect nodes for SC7180.
+    Depends on patch https://patchwork.kernel.org/patch/11417989/.	
+
+Changes from v4 -> v5
+  > [PATCH 1/3] Added the interconnect properties in yaml. This patch depends
+    on series https://patchwork.kernel.org/cover/11372641/.
+  > [PATCH 2/3] Fixed review comments from Matthias in DWC3 driver.
+  > [PATCH 3/3] Modified as per the new interconnect nodes in sdm845. Depends
+    on series https://patchwork.kernel.org/cover/11372211/. 
+
+
+Changes from v3 -> v4
+  > Fixed review comments from Matthias
+  > [PATCH 1/3] and [PATCH 3/3] remains unchanged
+
+Changes from v2 -> v3
+  > Fixed review comments from Matthias and Manu
+  > changed the functions prefix from usb_* to dwc3_qcom_*
+
+Changes since V1:
+  > Comments by Georgi Djakov on "[PATCH 2/3]" addressed
+  > [PATCH 1/3] and [PATCH 3/3] remains unchanged
+
+Sandeep Maheswaram (2):
+  usb: dwc3: qcom: Add interconnect support in dwc3 driver
+  arm64: dts: qcom: sc7180: Add maximum speed property for DWC3 USB node
+
+ arch/arm64/boot/dts/qcom/sc7180.dtsi |   1 +
+ drivers/usb/dwc3/dwc3-qcom.c         | 127 ++++++++++++++++++++++++++++++++++-
+ 2 files changed, 126 insertions(+), 2 deletions(-)
+
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
+
