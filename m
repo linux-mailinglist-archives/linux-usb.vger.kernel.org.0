@@ -2,144 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F25E22820C
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 16:23:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1349228247
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 16:33:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729290AbgGUOXn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jul 2020 10:23:43 -0400
-Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:50961 "EHLO
-        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726715AbgGUOXn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 10:23:43 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id BBC0F4ED;
-        Tue, 21 Jul 2020 10:23:41 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Tue, 21 Jul 2020 10:23:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:content-transfer-encoding:in-reply-to; s=fm1; bh=m
-        6PZkr/cAOzYBP0LeFtd4cumWstRM/jULtIkoXJtxGE=; b=bsJr0n93gqF2l+7jp
-        KrdVMAFj4rnB/kSLfTaK85l6Ytm+suo0gfkdophZ7gY8cvNyj9LKPS20xvj/PDVu
-        Z3lDVbaZmAQ+X/fpPW5iXAKTBtAkoLmss7s6NFkGhTaC53ouSVwcr7h0JvdIgaoa
-        P6pCal+hv9V2ejP9ZWXCFwthH1NNXt5RGQ50UQjB6e3CrGA0DP85ili/JrQuZFmW
-        hVCmGC2iZehl4yBOQF7vc2fiBab2HJuSMivyUj6RL1a4TNo+57T+evzOhnsJ9IM2
-        VppeAtqqVZdnjdfXJCf88sN5JKEigiobR5iHZjhJspBjwd+ByqFIX37zKcLOGAwt
-        73AWg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; bh=m6PZkr/cAOzYBP0LeFtd4cumWstRM/jULtIkoXJtx
-        GE=; b=g/gWqh9tD2n5JH3w6LwNK+lCEYHI91SiipkBUmf6ufhh1EYyUnQBq6dgN
-        hatStetY0S+zCIiT3jEJW9YOQTBXhYDbHHW1hsUn3PmWFk4kPU3R+1vpjNFlqYC1
-        dIU/kIFHPv/HBtSDBZiZwhY1dFGr5O5k9nKlKMspX7DP9A08OHEBzxrStvsPeqTc
-        HnPdG3vAj/Tvxg+jJNU+/LIsIDFGk5qAhiBSMliAnZBZs726/N6YtDVkExIANe7+
-        JFsyLwfuHvknvrzqMRAqj7S9lA6Zt+rgLXxKO+XaIcJ/v1Ci/SFkT4DhUbfAEj2s
-        THIn6IDXmCpyW0Bxez/3EeJjipH2w==
-X-ME-Sender: <xms:bfoWX7IaNhEDN9amlFo8vBk3D5_SxbhU9D-418ZDLnOnY-fwO-aL2g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedrgeeigdejvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehhfehge
-    dtleeuheetheetvdetveekteejkeehkefhudeujeeigfejgeetieejveenucffohhmrghi
-    nhepghhithhhuhgsrdgtohhmpdhkohdrihhnnecukfhppeekfedrkeeirdekledruddtje
-    enucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgv
-    gheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:bfoWX_JlEzAS7zJdDrEuJWTSWig1S-9kr9X3I3lNxvDOOtROe67KDA>
-    <xmx:bfoWXzssUrR6pT5WhsjmOGnNOa7HqShvviNU0-rzUWh-6I8BSrsArw>
-    <xmx:bfoWX0ZDAdDg3NIfOs9XsfNgcSHMqJpLD2K2UAM2cjmDci-Qr97gsg>
-    <xmx:bfoWXw2lj7joBQQLSD1MehHbU9nt0Ap6yDnx9vi4zBJbeQL3QLKXIA>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id AE2DC3280065;
-        Tue, 21 Jul 2020 10:23:40 -0400 (EDT)
-Date:   Tue, 21 Jul 2020 16:23:45 +0200
-From:   Greg KH <greg@kroah.com>
-To:     =?iso-8859-1?Q?SZIGETV=C1RI_J=E1nos?= <jszigetvari@gmail.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org
-Subject: Re: linux usb gadget - mass storage
-Message-ID: <20200721142345.GB1984873@kroah.com>
-References: <CAJK_Yh-KwrrWeGY5s=RKJDhp0gyZBf+LsWCydKSfj0dEAYGHCA@mail.gmail.com>
- <20200720162422.GG1228057@rowland.harvard.edu>
- <CAJK_Yh_ZAvuSBFdUitkPbzp_L69Fuew7cTKbeTH3X8aJdOJeqw@mail.gmail.com>
- <20200720172951.GI1228057@rowland.harvard.edu>
- <CAJK_Yh8rPPMkxXLAyQDN7Ux=_NKcfvHgb1iyt7bZmej0q4P-Qg@mail.gmail.com>
+        id S1728631AbgGUOd1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jul 2020 10:33:27 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:35963 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726710AbgGUOd1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 10:33:27 -0400
+Received: (qmail 1274749 invoked by uid 1000); 21 Jul 2020 10:33:25 -0400
+Date:   Tue, 21 Jul 2020 10:33:25 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Michal Hocko <mhocko@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: Re: kworker/0:3+pm hogging CPU
+Message-ID: <20200721143325.GB1272082@rowland.harvard.edu>
+References: <20200720135857.GB1228057@rowland.harvard.edu>
+ <20200720143213.GJ4074@dhcp22.suse.cz>
+ <20200720151255.GE1228057@rowland.harvard.edu>
+ <20200720163355.GA4061@dhcp22.suse.cz>
+ <20200720173807.GJ1228057@rowland.harvard.edu>
+ <20200720174530.GB4061@dhcp22.suse.cz>
+ <20200720174812.GK1228057@rowland.harvard.edu>
+ <20200720181605.GC4061@dhcp22.suse.cz>
+ <20200720200243.GA1244989@rowland.harvard.edu>
+ <20200721055917.GD4061@dhcp22.suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJK_Yh8rPPMkxXLAyQDN7Ux=_NKcfvHgb1iyt7bZmej0q4P-Qg@mail.gmail.com>
+In-Reply-To: <20200721055917.GD4061@dhcp22.suse.cz>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 21, 2020 at 02:20:27PM +0200, SZIGETVÁRI János wrote:
-> Hi Alan,
+On Tue, Jul 21, 2020 at 07:59:17AM +0200, Michal Hocko wrote:
+> > Sorry, my mistake.  The module name needs to be "xhci_hcd" with an '_' 
+> > character, not a '-' character -- the same as what shows up in the lsmod 
+> > output.
 > 
-> Alan Stern <stern@rowland.harvard.edu> ezt írta (időpont: 2020. júl.
-> 20., H, 19:29):
-> > 4.19 is a very old kernel.  You'd be a lot better off testing under a
-> > recent kernel, like 5.7.  It also would be more convenient to do your
-> > development on a regular PC instead of a Raspberry Pi.  You can use
-> > dummy-hcd for testing gadget drivers.
 > 
-> Okay, I put together a Slackware-current based VM to conduct the
-> development work on.
-> I compiled a patched version of kernel 5.7.9 with all the necessary
-> config parameters to have USB gadget support with debugging enabled,
-> and also the dummy HCD.
-> 
-> At first loaded the g_mass_storage module with a smaller ~700 MB iso
-> file, and it loaded seemingly fine, and functionality-wise it also
-> seemed to work fine, although there were frequent periodical debug
-> messages about the gadget returning command-failure status:
-> https://gist.github.com/jszigetvari/5bc4cdc8c55588907b71832558cb00a7
-> 
-> After that as a test I tried to dd all the data from /dev/sr1 (that's
-> the device file the gadget was assigned) to /dev/null.
-> The process completed without any user-visible errors, although the
-> failure status related messages kept on appearing:
-> https://gist.github.com/jszigetvari/ffa19850c94f12510c0b78ed5aaba2e1
-> 
-> Finally I tried to load the large, 11 GB CentOS iso file as the second
-> phase of the test. On the Raspberry Pi (with kernel 4.19) this was
-> when the crash happened, however this time it did not.
-> Originally Tiziano Bacocco's patch came around to be the time of the
-> 3.x kernels. The patch needed minimal adjustments to apply to 4.19 and
-> 5.4 and also to 5.7.9 (though there was a one line offset in
-> f_mass_storage.c).
-> https://gist.github.com/jszigetvari/5a9796c8af8a01c0edba6a8696540029
-> 
-> Although I have to admit that on the Pi Zero I was using the g_multi
-> kernel module, and not g_mass_storage I assumed they share the same
-> code base, so they should work the same way.
-> On the Pi zero I need the extra serial and Ethernet interface to have
-> access to the Pi Zero, as it doesn't have a wireless NIC, and that's
-> why I chose g_multi.ko.
-> 
-> In the end I did a dd with the 11 GB iso, and to my surprise it worked
-> well. dd returned without any errors and it did show the true 11 GB
-> size when it finished.
-> In the kernel logs most log entries were about block reads, but the
-> failure status messages were still around. If there was no activity on
-> the device, then they accounted for the majority of the logs
-> generated:
-> https://gist.github.com/jszigetvari/a9225fa3173e6c7b7b50673a494d9c37
-> 
-> I have to admit, I stand puzzled why it worked on an x86_64-based
-> machine and crashed on the Pi Zero.
-> I guess the next step will be either:
-> * to try using g_multi instead of g_mass_storage on the test machine
-> * upgrade the Pi Zero to run kernel 5.4.x (AFAIK that's the latest one
-> can get from the Raspberry Pi Foundation's git repo), and recompile
-> that kernel version with the patch applied. (This will likely take a
-> few days.)
-> 
-> Any further suggestions would also be welcome!
+> [14766.973734] xhci_hcd 0000:00:14.0: Get port status 2-1 read: 0xe000088, return 0x88
+> [14766.973738] xhci_hcd 0000:00:14.0: Get port status 2-2 read: 0xe000088, return 0x88
+> [14766.973742] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0xe0002a0, return 0x2a0
+> [14766.973746] xhci_hcd 0000:00:14.0: Get port status 2-4 read: 0xe0002a0, return 0x2a0
+> [14766.973750] xhci_hcd 0000:00:14.0: Get port status 2-5 read: 0xe0002a0, return 0x2a0
+> [14766.973754] xhci_hcd 0000:00:14.0: Get port status 2-6 read: 0xe0002a0, return 0x2a0
+> [14766.973759] xhci_hcd 0000:00:14.0: Get port status 2-1 read: 0xe000088, return 0x88
+> [14766.973763] xhci_hcd 0000:00:14.0: Get port status 2-2 read: 0xe000088, return 0x88
 
-One guess, the Pi Zero is running a 32bit kernel, while your desktop is
-running a 64bit one?
+According to the xHCI specification, those 02a0 values are normal and 
+the 0088 values indicate the port is disabled and has an over-current 
+condition.  I don't know about the e000 bits in the upper part of the 
+word; according to my copy of the spec those bits should be 0.
 
-greg k-h
+If your machine has only two physical SuperSpeed (USB-3) ports then 
+perhaps the other four ports are internally wired in a way that creates 
+a permanent over-current indication.
+
+> [14766.973771] xhci_hcd 0000:00:14.0: set port remote wake mask, actual port 0 status  = 0xe000088
+> [14766.973780] xhci_hcd 0000:00:14.0: set port remote wake mask, actual port 1 status  = 0xe000088
+> [14766.973789] xhci_hcd 0000:00:14.0: set port remote wake mask, actual port 2 status  = 0xe0002a0
+> [14766.973798] xhci_hcd 0000:00:14.0: set port remote wake mask, actual port 3 status  = 0xe0002a0
+> [14766.973807] xhci_hcd 0000:00:14.0: set port remote wake mask, actual port 4 status  = 0xe0002a0
+> [14766.973816] xhci_hcd 0000:00:14.0: set port remote wake mask, actual port 5 status  = 0xe0002a0
+> [14766.973830] xhci_hcd 0000:00:14.0: Bus suspend bailout, port over-current detected
+> 
+> Repeating again and again. The last message suggests a HW problem? But
+> why does the kernel try the same thing over and over?
+
+Because over-current is supposed to be a transient condition that goes 
+away quickly.  It means there's a short circuit or something similar.
+
+> > You could also try collect a usbmon trace from the .../2u file.  It does 
+> > seem that bus 2 is where the problem occurs.
+> 
+> a random sample
+
+...
+> ffff888040808cc0 2551256922 S Ci:2:001:0 s a3 00 0000 0001 0004 4 <
+> ffff888040808cc0 2551256925 C Ci:2:001:0 0 4 = 88000000
+> ffff888040808cc0 2551256927 S Ci:2:001:0 s a3 00 0000 0002 0004 4 <
+> ffff888040808cc0 2551256933 S Ci:2:001:0 s a3 00 0000 0003 0004 4 <
+> ffff888040808cc0 2551256936 C Ci:2:001:0 0 4 = a0020000
+> ffff888040808cc0 2551256942 C Ci:2:001:0 0 4 = a0020000
+...
+
+The usbmon output has a lot of gaps, but here we can see some of the 
+port status data contains 0x0088 (four bytes little-endian) and some 
+contains 0x02a0 -- the same as what the debugging log says.
+
+So yes, this looks like a hardware design error.  Turning off 
+autosuspend by writing to the sysfs power/control file is probably the 
+best way to handle the problem.
+
+Alan Stern
