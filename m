@@ -2,128 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03606227AE2
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 10:39:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B1E2227B32
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 10:55:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728835AbgGUIjm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jul 2020 04:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56572 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728418AbgGUIjl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 04:39:41 -0400
-Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED11C061794;
-        Tue, 21 Jul 2020 01:39:41 -0700 (PDT)
-Received: by mail-qt1-x844.google.com with SMTP id j10so15521033qtq.11;
-        Tue, 21 Jul 2020 01:39:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=pl7EZWmiDwJBT7lZl+dqeQwSQYq+gpMZJQPAX61Vc1k=;
-        b=japsxIaYfxBdMqncvjy5ilGa0f46e0ryCrw3nPjtP8bIcI3e6Cda4GMoR2yvJ9of4X
-         exN1AayGIZ2ZqEuJzgUO/h7w4c7FXIFPiZySVql8I3oVXAGTfXRaM70E4mQc0kT4m8l6
-         q7ZHk3dbYAb+fHPAN8/6n+6OldMzj/s9ikyxFbhwhK3yR/hbC6nS1AWDULLElQPYQRfk
-         LvakODx5M8I8gCRYdQ5xND272MzjvK7ALX4eSrg7tF1QkdPMVP7aqs77TkuxuMgBYqtt
-         GRNs2xMKToJ1xd5KjNYlTf6LQHJwW6uU2hPvkRZfifSBVoLxKJiRS1KRoHF+vV5mwgLA
-         ZkKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pl7EZWmiDwJBT7lZl+dqeQwSQYq+gpMZJQPAX61Vc1k=;
-        b=eJnNYiVCh4TRvEZuXJtHgZ9NchBQJ1ifEhgIF3axbh5Dkqw0g7mgu06MioVssLBu2D
-         MZ+Xep7QHR2HtHqzTClnDC4sCAROsn3MkNnv1FW2UGewm3DTrAfa7nK5iBcYjwJJZWNC
-         ttkLW2f29mJQ2gyu5V6b08obMC8/MH/gOhnhqWLZUn/3jsajs7pwWEd/vcBU8Vrvwp5S
-         AbAHFcjnLq5Q2qdHXL+O/CeR5LYp8/nmyJ0UdkxP10UqezS7xpI2gSZDdbqYkVOpVaov
-         X3hBNQfbl66hVHsEQq7kMuO7sQzMRuX/ZuzNhEoup+vGR70o9FLvpk6Dkc4ndXhfBVZi
-         Vozg==
-X-Gm-Message-State: AOAM5300Z/LgVjMWG133t0S5c2IH5tkaZZ6916mcMpaGg48QW2V30uZt
-        0Q6WpyT768qftGrIIVAK+Hr++h9mmQ==
-X-Google-Smtp-Source: ABdhPJxe1Z/jmzC0J6uu0OyPwe0gihfRluX1lhIi7H0/BdRm6UJYVkGpYiWbPdzC7W9ZSvEqERmqag==
-X-Received: by 2002:ac8:191b:: with SMTP id t27mr28779822qtj.16.1595320780558;
-        Tue, 21 Jul 2020 01:39:40 -0700 (PDT)
-Received: from PWN (c-76-119-149-155.hsd1.ma.comcast.net. [76.119.149.155])
-        by smtp.gmail.com with ESMTPSA id z36sm22239254qtd.22.2020.07.21.01.39.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2020 01:39:40 -0700 (PDT)
-Date:   Tue, 21 Jul 2020 04:39:38 -0400
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        id S1728789AbgGUIy5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jul 2020 04:54:57 -0400
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:19796 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726803AbgGUIy5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 04:54:57 -0400
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06L8rT3k004994;
+        Tue, 21 Jul 2020 10:54:44 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=STMicroelectronics;
+ bh=dWB555vjWWb7KL5jRYHRpdelX9CdrjuI9kFVMIuo3R4=;
+ b=fxF9M4+CSWyXKXsgrxhvvH4iNYe3uslzlrhuPkmJ9TB0YkYZXNe5sTk1qGFrgRd5xVCR
+ plDjHaMhALH3aSfArR42moZpqn06EzFczL6xfpoUUjOPXYtLi7badf2OIxugPq/2pwzW
+ fqb7xCbBMIJwCj/klveRMTwxUqo4Bh0Cme/C5olLOVPU4vEKMguXCu7stlef2GEbvrKF
+ rlH/He20nwioxhSq2TBMSP9Q/VWmJxoBb7Zo7owhGFuZXLLtd1uKbcqLDC9BTUp5x6Zr
+ EeIT13qL6Sf3j56pbKBNsLzpOi99Je7Y5pUmrjlQPKCwceguJDq3KIB+SI6WfrKX12nL UA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 32bsfpct3q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 21 Jul 2020 10:54:44 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 90E93100038;
+        Tue, 21 Jul 2020 10:54:43 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7F4A42A7536;
+        Tue, 21 Jul 2020 10:54:43 +0200 (CEST)
+Received: from lmecxl0912.lme.st.com (10.75.127.46) by SFHDAG3NODE2.st.com
+ (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Tue, 21 Jul
+ 2020 10:54:42 +0200
+Subject: Re: [PATCH 0/3] Add USB role switch support to DWC2
+To:     Amelie Delaunay <amelie.delaunay@st.com>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        syzkaller-bugs@googlegroups.com,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [Linux-kernel-mentees] [PATCH v1] usbhid: Fix slab-out-of-bounds
- write in hiddev_ioctl_usage()
-Message-ID: <20200721083938.GA8005@PWN>
-References: <20200718231218.170730-1-yepeilin.cs@gmail.com>
- <20200720115400.GI2549@kadam>
- <20200720121257.GJ2571@kadam>
- <20200720191656.GA3366@PWN>
- <20200721071637.GK2571@kadam>
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>
+CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Fabrice Gasnier <fabrice.gasnier@st.com>
+References: <20200616140717.28465-1-amelie.delaunay@st.com>
+From:   Alexandre Torgue <alexandre.torgue@st.com>
+Message-ID: <d8069a78-2640-d112-a2fb-d86b99a8e44f@st.com>
+Date:   Tue, 21 Jul 2020 10:54:42 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200721071637.GK2571@kadam>
+In-Reply-To: <20200616140717.28465-1-amelie.delaunay@st.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG5NODE3.st.com (10.75.127.15) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-21_02:2020-07-21,2020-07-21 signatures=0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 21, 2020 at 10:16:37AM +0300, Dan Carpenter wrote:
-> For some reason the reply-to header on your email is bogus:
-> 
-> Reply-To: 20200720121257.GJ2571@kadam
-> 
-> "kadam" is a system on my home network.
+Hi Amélie
 
-Ah...I thought `Reply-To` and `In-Reply-To` are the same thing...Sorry
-for the beginner's mistake...
-
-> Yeah.  And in the caller it does:
+On 6/16/20 4:07 PM, Amelie Delaunay wrote:
+> When using usb-c connector (but it can also be the case with a micro-b
+> connector), iddig, avalid, bvalid, vbusvalid input signals may not be
+> connected to the DWC2 OTG controller.
+> DWC2 OTG controller features an overriding control of the PHY voltage valid
+> and ID input signals.
+> So, missing signals can be forced using usb role from usb role switch and
+> this override feature.
 > 
-> drivers/hid/hid-core.c
->    297          if (!parser->local.usage_index) /* Ignore padding fields */
->    298                  return 0;
->    299  
->    300          usages = max_t(unsigned, parser->local.usage_index,
->                 ^^^^^^^^^^^^^^
->    301                                   parser->global.report_count);
->    302  
->    303          field = hid_register_field(report, usages, parser->global.report_count);
->                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> So ->usages is always greater or equal to ->global.report_count.
+> This series adds support for usb role switch to dwc2, by using overriding
+> control of the PHY voltage valid and ID input signals.
 > 
->    304          if (!field)
->    305                  return 0;
->    306  
->    307          field->physical = hid_lookup_collection(parser, HID_COLLECTION_PHYSICAL);
+> It has been tested on stm32mp157c-dk2 [1], which has a Type-C connector
+> managed by a Type-C port controller, and connected to USB OTG controller.
 > 
-> > 
-> > Here, `values` equals to `global.report_count`. See how it is being
-> > called:
-> > 
-> > drivers/hid/hid-core.c:303:
-> > 
-> >         field = hid_register_field(report, usages, parser->global.report_count);
-> > 
-> > In hid_open_report(), `global.report_count` can be set by calling
-> > hid_parser_global().
-> > 
-> > However, the syzkaller reproducer made hid_open_report() to call
-> > hid_parser_main() __before__ `global.report_count` is properly set. It's
-> > zero. So hid_register_field() allocated `field` with `values` equals to
-> > zero - No room for value[] at all. I believe this caused the bug.
+> [1] https://www.st.com/en/evaluation-tools/stm32mp157c-dk2.html
 > 
-> I don't know if zero is valid or not.  I suspect it is valid.  We have
-> no reason to think that it's invalid.
+> Amelie Delaunay (3):
+>    usb: dwc2: override PHY input signals with usb role switch support
+>    usb: dwc2: don't use ID/Vbus detection if usb-role-switch on STM32MP15
+>      SoCs
+>    ARM: dts: stm32: enable usb-role-switch on USB OTG on stm32mp15xx-dkx
+> 
+>   arch/arm/boot/dts/stm32mp15xx-dkx.dtsi |   2 +-
+>   drivers/usb/dwc2/Kconfig               |   1 +
+>   drivers/usb/dwc2/Makefile              |   2 +-
+>   drivers/usb/dwc2/core.h                |   8 ++
+>   drivers/usb/dwc2/drd.c                 | 190 +++++++++++++++++++++++++
+>   drivers/usb/dwc2/gadget.c              |   2 +-
+>   drivers/usb/dwc2/params.c              |   4 +-
+>   drivers/usb/dwc2/platform.c            |  13 ++
+>   8 files changed, 218 insertions(+), 4 deletions(-)
+>   create mode 100644 drivers/usb/dwc2/drd.c
+> 
 
-I see, I will stop guessing and wait for the maintainers' feedback.
+DT patch applied on stm32-next.
 
-Thank you,
-
-Peilin Ye
+Thanks
+Alex
