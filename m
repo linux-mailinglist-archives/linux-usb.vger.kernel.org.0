@@ -2,70 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F01A12279B3
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 09:45:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7202227A15
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 10:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728099AbgGUHpd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jul 2020 03:45:33 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:13786 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728049AbgGUHpc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 03:45:32 -0400
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 21 Jul 2020 00:45:31 -0700
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 21 Jul 2020 00:45:28 -0700
-Received: from c-sanm-linux.qualcomm.com ([10.206.25.31])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 21 Jul 2020 13:15:02 +0530
-Received: by c-sanm-linux.qualcomm.com (Postfix, from userid 2343233)
-        id DBEA82BA8; Tue, 21 Jul 2020 13:15:01 +0530 (IST)
-From:   Sandeep Maheswaram <sanm@codeaurora.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Sandeep Maheswaram <sanm@codeaurora.org>
-Subject: [PATCH v9 2/2] arm64: dts: qcom: sc7180: Add maximum speed property for DWC3 USB node
-Date:   Tue, 21 Jul 2020 13:14:49 +0530
-Message-Id: <1595317489-18432-3-git-send-email-sanm@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1595317489-18432-1-git-send-email-sanm@codeaurora.org>
-References: <1595317489-18432-1-git-send-email-sanm@codeaurora.org>
+        id S1728642AbgGUIBk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jul 2020 04:01:40 -0400
+Received: from mx2.suse.de ([195.135.220.15]:59328 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728077AbgGUIBk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 21 Jul 2020 04:01:40 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 31A34AFCD;
+        Tue, 21 Jul 2020 08:01:46 +0000 (UTC)
+Message-ID: <1595318497.29149.3.camel@suse.de>
+Subject: Re: System crash/lockup after plugging CDC ACM device
+From:   Oliver Neukum <oneukum@suse.de>
+To:     David Guillen Fandos <david@davidgf.net>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Date:   Tue, 21 Jul 2020 10:01:37 +0200
+In-Reply-To: <ed743fe1e0ede6d37bc4a62ba704f51c54c2f5bf.camel@davidgf.net>
+References: <9778f9b8a8604e2c13979ea6909678c23cd286cb.camel@davidgf.net>
+         <20200715093029.GB2759174@kroah.com>
+         <867592c41350b09a0cb67e9a3924f8a2f758d79a.camel@davidgf.net>
+         <20200715105034.GB2880893@kroah.com>
+         <956ec3169eec6b121339ed6c1aedd0f7ca08db43.camel@davidgf.net>
+         <20200715111210.GA2892661@kroah.com>
+         <ed743fe1e0ede6d37bc4a62ba704f51c54c2f5bf.camel@davidgf.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Adding maximum speed property for DWC3 USB node which can be used
-for setting interconnect bandwidth.
+Am Mittwoch, den 15.07.2020, 13:20 +0200 schrieb David Guillen Fandos:
+> Shouldn't the kernel be resilient to such devices? I've developed quite
+> a few USB devices in the past and I've never ran into things like this
+> on Linux
 
-Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
----
- arch/arm64/boot/dts/qcom/sc7180.dtsi | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-index 16df08d..3fe759b6 100644
---- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-@@ -2656,6 +2656,7 @@
- 				snps,dis_enblslpm_quirk;
- 				phys = <&usb_1_hsphy>, <&usb_1_ssphy>;
- 				phy-names = "usb2-phy", "usb3-phy";
-+				maximum-speed = "super-speed";
- 			};
- 		};
- 
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-of Code Aurora Forum, hosted by The Linux Foundation
+Yes. Unfortunately we do not know which module is crashing here.
+It may be as simple as CDC-ACM retrying without a delay or giving
+up. Or this is in usbcore. Could you initially try without
+CDC-ACM, so we can narrow this down? And tehn we can try with
+dynamic debugging or thought what can be done.
+
+And thank you for identifying the root cause for the malfunction.
+Yet you are clearly right that even such a device should not crash the
+kernel.
+
+	Regards
+		Oliver
 
