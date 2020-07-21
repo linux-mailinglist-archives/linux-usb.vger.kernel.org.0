@@ -2,149 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02F22227F65
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 13:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 399AC227F9F
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 14:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729867AbgGUL4D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jul 2020 07:56:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58704 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726919AbgGUL4C (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 07:56:02 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C89C061794;
-        Tue, 21 Jul 2020 04:56:02 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id z24so23713965ljn.8;
-        Tue, 21 Jul 2020 04:56:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=UuXQlL9wnaYJsw7ikLdLURfWd1VScHy70zV2v5mo5Wk=;
-        b=CR4B9VqyMBf+6kUn7fW8Fv6vPiDD0jb/DjgcVM7Xh66qnzbBkR1bwIrix3b9I7xvDq
-         2mx2dR52SsNoMtXi+c1dFVt5XxbgL1nu6+0rnXgzcGqc5ZcTnyDPcIyKSn2wSaOn1P9E
-         U4dMeIrfAr4c+gPzEmyT4MQpmY7vHX/n0feNKGSGSlg7CXemFsNr+qLBUf7aLVav0aWf
-         sEq0gatSaDPff5TLlqxQyH6AdsVpc1yR+2L3GQXxCU94W2gWR5xI14va9jlJhQgshxu0
-         nwQVXYn/QT3i5hknJsjxEtHdl33xEOdmEc5UY1+p//z3520f6XjmcHNI3eM/Jc4ES7e6
-         g8og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=UuXQlL9wnaYJsw7ikLdLURfWd1VScHy70zV2v5mo5Wk=;
-        b=MtmYJBRPEfIQL3u9oC3nvS2Iu/oRNRQlRS3iBCwY/bTLPgiHj8hi3UWVd2DzY6Lz0y
-         96IOcxXDYr+0k3y3vbr2Zx8mX+PemKnTJmm8MClLRxIPT+NKX5e6l5v4eeJyjpLbmV7+
-         JdNsw58mpUUPa4fD2+JD9TDps3fkjlAHLLDU9yWIqbWcUlGeEG9ibxxRRy3sGzowtkkf
-         keoWYO4VvTvHZwqO+qXMTXZDxYOCRnhkElOlZbkx/ARlWl9Inhvjcyh7P1n3ZT/lu7ia
-         WjqwHeCA5IQeSOt7Zx+3ujZEYn2itQJKemeCouo4Y5YyuZpp7nL3Cy0oRcFST0aELsUp
-         aLCA==
-X-Gm-Message-State: AOAM5320vtO1zvg6DYht5dKubjG+2LXM9VJzoO6USfS7JlIqJ12CSybr
-        EuNqJMo23Ij1Al0xWPFMd9M=
-X-Google-Smtp-Source: ABdhPJwqmos6ZZxG4AKGfzLwBOkpIcuG0XibJW5qPfhgTgkYeiH/Ax0CcD+xA/8ba028wsTG5rBo3g==
-X-Received: by 2002:a2e:1502:: with SMTP id s2mr11589814ljd.236.1595332560529;
-        Tue, 21 Jul 2020 04:56:00 -0700 (PDT)
-Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id y8sm4232793ljy.59.2020.07.21.04.55.58
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 21 Jul 2020 04:55:59 -0700 (PDT)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        "gregkh\@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-arm-kernel\@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Ben Dooks <ben@simtec.co.uk>
-Subject: Re: [PATCH v2 1/8] usb: dwc2: gadget: Make use of GINTMSK2
-In-Reply-To: <20200721115246.GE621928@dell>
-References: <20200715093209.3165641-1-lee.jones@linaro.org> <20200715093209.3165641-2-lee.jones@linaro.org> <566f2d65-1b5a-ed2a-f33f-516b66be2624@synopsys.com> <87blk9p5ia.fsf@kernel.org> <5862f649-8058-7e39-cb43-2a4b09303333@synopsys.com> <875zahp0i0.fsf@kernel.org> <20200721115246.GE621928@dell>
-Date:   Tue, 21 Jul 2020 14:55:55 +0300
-Message-ID: <87365lozec.fsf@kernel.org>
+        id S1727043AbgGUMK0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jul 2020 08:10:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40450 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726904AbgGUMK0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 21 Jul 2020 08:10:26 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1ED20206E9;
+        Tue, 21 Jul 2020 12:10:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595333425;
+        bh=3ztHPLRuvAYHfMj85OVDvlDJGicrpYlIuLYbeLlVLZU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M8xJALv/Uwzsm1bwx969XgnrN3Dwp9D2rYnmhFU/VZ6buvNoK4bAY0+ip6PlOUSro
+         N/AJ1zxnbd/621pghJ3QxHolgm0rGjgiYDyqmV58O22a+ipipSAfhzZnHg4kIR0YNq
+         /K1hnhaWEFcnRbzq0xkoggzuRLp5DjvSk0oDESEQ=
+Date:   Tue, 21 Jul 2020 14:09:33 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>, linux-usb@vger.kernel.org
+Subject: Re: [GIT PULL] Thunderbolt/USB4 changes for v5.9 merge window
+Message-ID: <20200721120933.GA1826843@kroah.com>
+References: <20200721114252.GD5180@lahna.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200721114252.GD5180@lahna.fi.intel.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+On Tue, Jul 21, 2020 at 02:42:52PM +0300, Mika Westerberg wrote:
+> Hi Greg,
+> 
+> The following changes since commit b3a9e3b9622ae10064826dccb4f7a52bd88c7407:
+> 
+>   Linux 5.8-rc1 (2020-06-14 12:45:04 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v5.9
 
-Hi,
+Pulled and pushed out, thanks.
 
-Lee Jones <lee.jones@linaro.org> writes:
-> On Tue, 21 Jul 2020, Felipe Balbi wrote:
->
->> Minas Harutyunyan <Minas.Harutyunyan@synopsys.com> writes:
->>=20
->> > Hi Felipe,
->> >
->> > On 7/21/2020 1:43 PM, Felipe Balbi wrote:
->> >> Minas Harutyunyan <Minas.Harutyunyan@synopsys.com> writes:
->> >>=20
->> >>> On 7/15/2020 1:32 PM, Lee Jones wrote:
->> >>>> The value obtained from GINTSTS2 should be masked with the GINTMSK2
->> >>>> value.  Looks like this has been broken since
->> >>>> dwc2_gadget_wkup_alert_handler() was added back in 2018.
->> >>>>
->> >>>> Also fixes the following W=3D1 warning:
->> >>>>
->> >>>>    drivers/usb/dwc2/gadget.c: In function =E2=80=98dwc2_gadget_wkup=
-_alert_handler=E2=80=99:
->> >>>>    drivers/usb/dwc2/gadget.c:259:6: warning: variable =E2=80=98gint=
-msk2=E2=80=99 set but not used [-Wunused-but-set-variable]
->> >>>>    259 | u32 gintmsk2;
->> >>>>    | ^~~~~~~~
->> >>>>
->> >>>> Cc: Minas Harutyunyan <hminas@synopsys.com>
->> >>>> Cc: Ben Dooks <ben@simtec.co.uk>
->> >>>> Fixes: 187c5298a1229 ("usb: dwc2: gadget: Add handler for WkupAlert=
- interrupt")
->> >>>> Signed-off-by: Lee Jones <lee.jones@linaro.org>
->> >>>
->> >>> Acked-by: Minas Harutyunyan <hminas@synopsys.com>
->> >>=20
->> >> Should I apply the entire series or only 1/8?
->> >>=20
->> > In this series only 2 patches are related to dwc2, which I'm already A=
-cked:
->> >
->> > [PATCH v2 1/8] usb: dwc2: gadget: Make use of GINTMSK2
->> > [PATCH v2 2/8] usb: dwc2: gadget: Avoid pointless read of EP control=20
->> > register
->> >
->> > I can't acked other patches from this series, because they are not=20
->> > related to dwc2.
->>=20
->> heh, I saw that after sending the email, sorry :-)
->
-> Also, all patches are already in -next, courtesy of Greg.
+> for you to fetch changes up to ef7e12078ab832c72315adcfa05e7a9498a5e109:
+> 
+>   thunderbolt: Fix old style declaration warning (2020-07-02 14:50:11 +0300)
+> 
+> ----------------------------------------------------------------
+> thunderbolt: Changes for v5.9 merge window
+> 
+> This includes following Thunderbolt/USB4 changes for v5.9 merge window:
+> 
+>   * Improvements around NHI (Native Host Interface) HopID allocation
+> 
+>   * Improvements to tunneling and USB3 bandwidth management support
+> 
+>   * Add KUnit tests for path walking and tunneling
+> 
+>   * Initial support for USB4 retimer firmware upgrade
+> 
+>   * Implement Thunderbolt device firmware upgrade mechanism that runs
+>     the NVM image authentication when the device is disconnected.
+> 
+>   * A couple of small non-critical fixes
+> 
+> ----------------------------------------------------------------
+> 
+> Please notice when merged with kunit-next tree there will be a build
+> error because the one member (allocation) of struct kunit_resource was
+> renamed with linux-next commit d4cdd146d0db ("kunit: generalize
+> kunit_resource API beyond allocated resources"). Linux-next carries a
+> fix that is at the end of this email to solve the issue (from Stephen
+> Rothwell).
+> 
+> Let me know if you prefer that I merge kunit-next branch to my -next
+> branch and resolve it there first.
 
-Cool, I'll rebase on top of Greg's branch
+Nah, that branch can worry about things when it gets to Linus :)
 
-=2D-=20
-balbi
+thanks,
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl8W18sACgkQzL64meEa
-mQZHExAAoXdNBgNtWBOLLiLM8dWumwGhOlOBXhu6BxEcUtofB9WWbKIKeQFYxSaq
-Oze/j7Z9hceIAIYK/xgW4Zv94oy7yYugNMD6EzvVuPk+XcTPlZj0NOM0eUAr/bwu
-mrfxB4gmuKddKjrrgSNQNqVlno2CnLaXhElqh61FxrsPICMoeQa8iyPfl3L5cwC3
-ty59TfHkaP3EU7TpRsj4y++z3jbLHlqtXE2p+yRsGht7UeLHd6qhJWjtVijpLU7t
-yGD8DHwBFsj9s9AnXXpzSDVhp/2MJnIegH73s8g3zFQ4S2KNubADBxF16Nuxf8NZ
-EOD/qUECHJSURDoXLJG07+Bf+FGNVbHWJMpWRPPz+NiNgSBBxbBqqBH4/cBYy6yd
-kksNBJlmZkC+Ix4hyMJ/uQdVe3laksEiP8W7chLGJlyldzYvwUys9S+sKvl7me3V
-92SOp4xj+dragFXknHtqUpIQHn+6KmRQJved8HhqTcAZ0o9dUAYa4SU8SF0aFXfX
-TJyrp6ySTlupacoabzg0CC4qUGfLH91hUpewjG35qiN3weWrzQHeUyZ9rdIAVa+8
-whlftnwMr/7EC2Dk1rCJJjahs8IfsHQhklI99sb+wDBl/kFVpDRyMwWO1Io4562E
-ldBZ6RHgOwhO3TbYatCtvhzCiy6dqENORarHcuI8I3TQC0MzyhA=
-=cJMs
------END PGP SIGNATURE-----
---=-=-=--
+greg k-h
