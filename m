@@ -2,164 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2025F22795F
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 09:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A87822796E
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 09:25:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726749AbgGUHQz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jul 2020 03:16:55 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:54228 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725984AbgGUHQy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 03:16:54 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06L7CQZv153369;
-        Tue, 21 Jul 2020 07:16:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=AT8MPX1I7JDGF5HyAbGwZsBOaJxJlWlbPtr2s+bQvXI=;
- b=j3+hqm0Hct2HUZjcrInvEK3Go5+dEl952yCfPrFY+14OMhtvvyYJps9H5hRVfvWdr6RM
- 95mhMIC8q3WO3a6vyw76+NLfDBvRbr/npenLimFLByMOTtd7AZzf3rYpMMSLtzBPe1Ec
- VAdnuXc0SuGoi5JFdcDZnfmGNGulxLNyYi+Fl2/pJMloycxyEEHDkHIGhlSWZ22E9taL
- nlxtocn7MJLe62gjw+Fp3mEPRXgVVaHR87aIADY/ykGH4dWqxxx9dIIefCeGOvlbTFJD
- kg6ggW2RbcsFVCTGUbTYuUrt384dtlE2ZgYCwnjzxCJUHxMGstyBGHVEV7yYwJw5Zs9d iw== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2130.oracle.com with ESMTP id 32brgrb85p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 21 Jul 2020 07:16:46 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06L7D09F152262;
-        Tue, 21 Jul 2020 07:16:46 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3030.oracle.com with ESMTP id 32dufdh135-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 21 Jul 2020 07:16:46 +0000
-Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 06L7Gijb015107;
-        Tue, 21 Jul 2020 07:16:45 GMT
-Received: from kadam (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 21 Jul 2020 07:16:44 +0000
-Date:   Tue, 21 Jul 2020 10:16:37 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Peilin Ye <yepeilin.cs@gmail.com>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        id S1726949AbgGUHX5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jul 2020 03:23:57 -0400
+Received: from mail-lj1-f169.google.com ([209.85.208.169]:44403 "EHLO
+        mail-lj1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725984AbgGUHX4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 03:23:56 -0400
+Received: by mail-lj1-f169.google.com with SMTP id s9so22937173ljm.11;
+        Tue, 21 Jul 2020 00:23:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iq3wUuhZioiO177l+TpqDsiXCkQPlbt663CBqkmosCw=;
+        b=YO6/ItSuiqu/cq1+3uQepqfY+AOqzK7bXuFU0gkODp3aFLcYwem5WwF5tvk9DaN4RI
+         cTpLNESXYIvUkRbPnZ5vFGN+3TuhUFw0FuY/Dw6Zmx1SodZa6sPpfM5IfOJVWMcYzrqG
+         d23NQuGCNb5Zw4p8HzRvK0dU7oyC8jk0KsjXXDr5ynIOGlj1mCRpZarI/CYaAigRhN/K
+         8wk9DoG7QQuSc5pCpUwthhWOjW2MeflVDk1BAC4MOEV3iQhh/2VzuJ8CvOU9Zw7QTOxg
+         qkFT/Qy83EosgYlBJ7z+lc2mqDelm2gXpqNs8w+GitrSlFPAGF1vqPhejZwD7MSY4ME2
+         SFkw==
+X-Gm-Message-State: AOAM5326YJfDrDDBZa4cG1mB8D69jI/z+7Zuk4Z5MOC1MuNt7gxDRWMH
+        yU9w4zWL9dqMy/1xAakLug2hzkpJ8H0=
+X-Google-Smtp-Source: ABdhPJwWmYDoU22uqy6cber6vfVaw5krIXT72V3t4aEAInm74g/AKFxrZZwkRtn3cCPQksawEYn/BA==
+X-Received: by 2002:a2e:8210:: with SMTP id w16mr11917513ljg.419.1595316234437;
+        Tue, 21 Jul 2020 00:23:54 -0700 (PDT)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id r13sm4011428ljg.101.2020.07.21.00.23.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jul 2020 00:23:53 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1jxmcw-0006eM-T0; Tue, 21 Jul 2020 09:23:50 +0200
+Date:   Tue, 21 Jul 2020 09:23:50 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Erik Ekman <erik@kryo.se>
+Cc:     Johan Hovold <johan@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        syzkaller-bugs@googlegroups.com,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [Linux-kernel-mentees] [PATCH v1] usbhid: Fix slab-out-of-bounds
- write in hiddev_ioctl_usage()
-Message-ID: <20200721071637.GK2571@kadam>
-References: <20200718231218.170730-1-yepeilin.cs@gmail.com>
- <20200720115400.GI2549@kadam>
- <20200720121257.GJ2571@kadam>
- <20200720191656.GA3366@PWN>
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: qcserial: add EM7305 QDL product ID
+Message-ID: <20200721072350.GC3634@localhost>
+References: <20200717185118.3640219-1-erik@kryo.se>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200720191656.GA3366@PWN>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9688 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxscore=0 mlxlogscore=999
- malwarescore=0 spamscore=0 adultscore=0 bulkscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007210049
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9688 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 spamscore=0
- impostorscore=0 suspectscore=0 adultscore=0 clxscore=1015 mlxlogscore=999
- priorityscore=1501 phishscore=0 lowpriorityscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007210049
+In-Reply-To: <20200717185118.3640219-1-erik@kryo.se>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-For some reason the reply-to header on your email is bogus:
+On Fri, Jul 17, 2020 at 08:51:18PM +0200, Erik Ekman wrote:
+> When running qmi-firmware-update on the Sierra Wireless EM7305 in a Toshiba
+> laptop, it changed product ID to 0x9062 when entering QDL mode:
+> 
+> usb 2-4: new high-speed USB device number 78 using xhci_hcd
+> usb 2-4: New USB device found, idVendor=1199, idProduct=9062, bcdDevice= 0.00
+> usb 2-4: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+> usb 2-4: Product: EM7305
+> usb 2-4: Manufacturer: Sierra Wireless, Incorporated
+> 
+> The upgrade could complete after running
+>  # echo 1199 9062 > /sys/bus/usb-serial/drivers/qcserial/new_id
+> 
+> qcserial 2-4:1.0: Qualcomm USB modem converter detected
+> usb 2-4: Qualcomm USB modem converter now attached to ttyUSB0
+> 
+> Signed-off-by: Erik Ekman <erik@kryo.se>
 
-Reply-To: 20200720121257.GJ2571@kadam
+Applied, thanks.
 
-"kadam" is a system on my home network.
+Would you mind posting the output of "usb-devices" (or "lsusb -v") for
+this device for completeness?
 
-On Mon, Jul 20, 2020 at 03:16:56PM -0400, Peilin Ye wrote:
-> I made some mistakes in the previous e-mail. Please ignore that. There
-> are a lot of things going on...Sorry for that.
-> 
-> On Mon, Jul 20, 2020 at 03:12:57PM +0300, Dan Carpenter wrote:
-> > So another option would be to just add HIDIOCGUSAGE and HIDIOCSUSAGE to
-> > the earlier check.  That risks breaking userspace.  Another option is to
-> > just add a check like you did earlier to the HIDIOCGUSAGE case.
-> > Probably just do option #2 and resend.
-> 
-> Sure, I will just add the same check to the HIDIOCGUSAGE case for the
-> time being. Thank you for the detailed explanation.
-> 
-> Here's what I found after digging a bit further though:
-> 
-> hid_open_report() calls different functions in order to process
-> different type of items:
-> 
-> drivers/hid/hid-core.c:1193:
-> 
->         static int (*dispatch_type[])(struct hid_parser *parser,
->                                       struct hid_item *item) = {
->                 hid_parser_main,
->                 hid_parser_global,
->                 hid_parser_local,
->                 hid_parser_reserved
->         };
-> 
-> In this case, hid_parser_main() calls hid_add_field(), which in turn
-> calls hid_register_field(), which allocates the `field` object as you
-> mentioned:
-> 
-> drivers/hid/hid-core.c:102:
-> 
->         field = kzalloc((sizeof(struct hid_field) +
->                          usages * sizeof(struct hid_usage) +
->                          values * sizeof(unsigned)), GFP_KERNEL);
-
-Yeah.  And in the caller it does:
-
-drivers/hid/hid-core.c
-   297          if (!parser->local.usage_index) /* Ignore padding fields */
-   298                  return 0;
-   299  
-   300          usages = max_t(unsigned, parser->local.usage_index,
-                ^^^^^^^^^^^^^^
-   301                                   parser->global.report_count);
-   302  
-   303          field = hid_register_field(report, usages, parser->global.report_count);
-                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-So ->usages is always greater or equal to ->global.report_count.
-
-   304          if (!field)
-   305                  return 0;
-   306  
-   307          field->physical = hid_lookup_collection(parser, HID_COLLECTION_PHYSICAL);
-
-> 
-> Here, `values` equals to `global.report_count`. See how it is being
-> called:
-> 
-> drivers/hid/hid-core.c:303:
-> 
->         field = hid_register_field(report, usages, parser->global.report_count);
-> 
-> In hid_open_report(), `global.report_count` can be set by calling
-> hid_parser_global().
-> 
-> However, the syzkaller reproducer made hid_open_report() to call
-> hid_parser_main() __before__ `global.report_count` is properly set. It's
-> zero. So hid_register_field() allocated `field` with `values` equals to
-> zero - No room for value[] at all. I believe this caused the bug.
-
-I don't know if zero is valid or not.  I suspect it is valid.  We have
-no reason to think that it's invalid.
-
-regards,
-dan carpenter
-
+Johan
