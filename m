@@ -2,65 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83ED12289AB
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 22:16:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 861C2228A3A
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 22:57:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727826AbgGUUQC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jul 2020 16:16:02 -0400
-Received: from mail.ispras.ru ([83.149.199.84]:54136 "EHLO mail.ispras.ru"
+        id S1730467AbgGUU5z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jul 2020 16:57:55 -0400
+Received: from mail2.ras.ru ([83.149.192.9]:49798 "EHLO mail3.ras.ru"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726029AbgGUUQB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 21 Jul 2020 16:16:01 -0400
-Received: from hellwig.intra.ispras.ru (unknown [10.10.2.182])
-        by mail.ispras.ru (Postfix) with ESMTPS id 39A094089EF1;
-        Tue, 21 Jul 2020 20:15:59 +0000 (UTC)
-From:   Evgeny Novikov <novikov@ispras.ru>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Evgeny Novikov <novikov@ispras.ru>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ldv-project@linuxtesting.org
-Subject: [PATCH] usb: gadget: net2280: fix memory leak on probe error handling paths
-Date:   Tue, 21 Jul 2020 23:15:58 +0300
-Message-Id: <20200721201558.20069-1-novikov@ispras.ru>
-X-Mailer: git-send-email 2.16.4
+        id S1726658AbgGUU5z (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 21 Jul 2020 16:57:55 -0400
+X-Greylist: delayed 608 seconds by postgrey-1.27 at vger.kernel.org; Tue, 21 Jul 2020 16:57:54 EDT
+Received: from webmail.ras.ru (unknown [83.149.192.24])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail3.ras.ru (Postfix) with ESMTPSA id AF00C29A3298;
+        Tue, 21 Jul 2020 23:47:37 +0300 (MSK)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Tue, 21 Jul 2020 13:47:37 -0700
+From:   Dr Campos <ninaz@ras.ru>
+To:     undisclosed-recipients:;
+Subject: Offer
+Reply-To: drcamposcharles@gmail.com
+Mail-Reply-To: drcamposcharles@gmail.com
+Message-ID: <24c1362718d645b81b89bb849af912d4@ras.ru>
+X-Sender: ninaz@ras.ru
+User-Agent: Roundcube Webmail/1.1.7
+X-Virus-Scanned: clamav-milter 0.99.2 at mail3.ras.ru
+X-Virus-Status: Clean
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ras.ru; s=mail;
+        t=1595364458; h=from:from:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:in-reply-to:
+         references:openpgp:autocrypt; bh=iE0wL0fNrdP8wnlxh9CgG94f2WdkZhiljGvolvtlAZ4=;
+        b=BNcpx6PllXvTKMwH4wZAu426x2mzf8qoTRo+9YDLpiNfNySe7c7hZGMzv0rhIpQyS1s4gn
+        nllO1u4NS1dU4SECC+C0dEFUaMbc+/1MFSRmaTW7YZlwQXjkIFHvR0BtG2GapOUNYrVOsA
+        7t0AMNAF3r7echg8y54rtwl0PrisfDM=
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Driver does not release memory for device on error handling paths in
-net2280_probe() when gadget_release() is not registered yet.
-
-The patch fixes the bug like in other similar drivers.
-
-Found by Linux Driver Verification project (linuxtesting.org).
-
-Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
----
- drivers/usb/gadget/udc/net2280.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/gadget/udc/net2280.c b/drivers/usb/gadget/udc/net2280.c
-index 5eff85eeaa5a..d5fe071b2db2 100644
---- a/drivers/usb/gadget/udc/net2280.c
-+++ b/drivers/usb/gadget/udc/net2280.c
-@@ -3781,8 +3781,10 @@ static int net2280_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	return 0;
- 
- done:
--	if (dev)
-+	if (dev) {
- 		net2280_remove(pdev);
-+		kfree(dev);
-+	}
- 	return retval;
- }
- 
--- 
-2.16.4
+Are you in an urgent need for money? Donate a Kidney to get the amount 
+you need in just days. Contact us on WhatsApp: ‪+91 6909 136 251‬ Email: 
+drcamposcharles@gmail.com
 
