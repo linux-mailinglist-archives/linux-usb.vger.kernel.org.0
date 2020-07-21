@@ -2,108 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 699B8228325
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 17:06:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B697228446
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 17:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729929AbgGUPG3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jul 2020 11:06:29 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:36575 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726436AbgGUPG3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 11:06:29 -0400
-Received: (qmail 1276524 invoked by uid 1000); 21 Jul 2020 11:06:28 -0400
-Date:   Tue, 21 Jul 2020 11:06:28 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     =?iso-8859-1?Q?SZIGETV=C1RI_J=E1nos?= <jszigetvari@gmail.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: linux usb gadget - mass storage
-Message-ID: <20200721150628.GC1272082@rowland.harvard.edu>
-References: <CAJK_Yh-KwrrWeGY5s=RKJDhp0gyZBf+LsWCydKSfj0dEAYGHCA@mail.gmail.com>
- <20200720162422.GG1228057@rowland.harvard.edu>
- <CAJK_Yh_ZAvuSBFdUitkPbzp_L69Fuew7cTKbeTH3X8aJdOJeqw@mail.gmail.com>
- <20200720172951.GI1228057@rowland.harvard.edu>
- <CAJK_Yh8rPPMkxXLAyQDN7Ux=_NKcfvHgb1iyt7bZmej0q4P-Qg@mail.gmail.com>
+        id S1726919AbgGUPyr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jul 2020 11:54:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39370 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726029AbgGUPyq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 11:54:46 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E64C061794
+        for <linux-usb@vger.kernel.org>; Tue, 21 Jul 2020 08:54:46 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id a24so10924631pfc.10
+        for <linux-usb@vger.kernel.org>; Tue, 21 Jul 2020 08:54:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=cWmiRVt9OP0cDzT8KrrhB9BgbTVxd4XxsTqHKDLwJrs=;
+        b=RjLmoBahnFY2RMO9NnqvAF/ncJxKfJsRoF4DVRAyNB1D0wl2Iepph3a4Yh7OnjikAy
+         N3bxu+chFLisbeWP2DNT/W60jCBRO4yMIkT0cdDTCDKwK+LfvgF/yilv/gWsIpad0A/8
+         AcJe+sfs/B+Ydlw1LoMon/tZvyc5gmsYvfmp2gcuRyKu9hPw/DRwvPvHj405CbY8q3kM
+         R0qHcDGiGZIeONwU9ac5iMz08SwSwcf4V1XXLDfVRzkGlBm5UY2NyfMJXJ9lksMwkt8L
+         QTPAxnzZmIxjBaBBBM+P4tFGozmFuQsyRLJr0Inuy4RMkJtBeaWdGyqIYct9AShrL90X
+         mj+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=cWmiRVt9OP0cDzT8KrrhB9BgbTVxd4XxsTqHKDLwJrs=;
+        b=qDwl/pd0um2x/GJ/MWokWj/9YOdKNQ17mtP0ka8m5vxRwLNQI7BmcoEiD3GX6umaPm
+         ABQVr/Ku18QBPSP5dUqSZQPRRyQkLufQW6Sae4rfhEXdSDlonFB2ogJJvG6bWkOBvzUe
+         rY6Zm2GbSOOYu6hqeclW1+j/2QO7nHYwOnM8KIm85j3nzhKoy01Jsf/lSbZ9b9wLxxY8
+         Mwl+lli/YfjF2w7BJ83gqJneh7fxpysn2Xnq6ESonHxBrISlfPuslWJJAVdQJnOYZDvU
+         MFq1rOm0w3cw/ptuuyGE0wMmytusrJ95dyfWAPzZsXLC4wLLcS8E+RPS1SLhYBYFKvM3
+         pWcA==
+X-Gm-Message-State: AOAM533bz5dnSUzUM5xR92bZHT8RdrMgY/OqU6YlfnStaZ0LSp08XDNb
+        Iyko80z9VoFygkj5TGGMcGc=
+X-Google-Smtp-Source: ABdhPJwNpr9wqohBG4nM2I01RkB/4ids7jdSoutCrlc3qpJylVUcKAxNNfKKyS8z+q22GWmLlSLEcQ==
+X-Received: by 2002:a65:5c43:: with SMTP id v3mr22678277pgr.214.1595346885777;
+        Tue, 21 Jul 2020 08:54:45 -0700 (PDT)
+Received: from gmail.com ([103.105.153.67])
+        by smtp.gmail.com with ESMTPSA id a26sm17795722pgm.20.2020.07.21.08.54.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jul 2020 08:54:45 -0700 (PDT)
+Date:   Tue, 21 Jul 2020 21:23:14 +0530
+From:   Vaibhav Gupta <vaibhavgupta40@gmail.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Bjorn Helgaas <bjorn@helgaas.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Bjorn Helgaas <helgaas@kernel.org>, linux-usb@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: generic power management for USB subsystem similar to PCI one?
+Message-ID: <20200721155314.GA395319@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJK_Yh8rPPMkxXLAyQDN7Ux=_NKcfvHgb1iyt7bZmej0q4P-Qg@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 21, 2020 at 02:20:27PM +0200, SZIGETVÁRI János wrote:
-> Hi Alan,
-> 
-> Alan Stern <stern@rowland.harvard.edu> ezt írta (időpont: 2020. júl.
-> 20., H, 19:29):
-> > 4.19 is a very old kernel.  You'd be a lot better off testing under a
-> > recent kernel, like 5.7.  It also would be more convenient to do your
-> > development on a regular PC instead of a Raspberry Pi.  You can use
-> > dummy-hcd for testing gadget drivers.
-> 
-> Okay, I put together a Slackware-current based VM to conduct the
-> development work on.
-> I compiled a patched version of kernel 5.7.9 with all the necessary
-> config parameters to have USB gadget support with debugging enabled,
-> and also the dummy HCD.
-> 
-> At first loaded the g_mass_storage module with a smaller ~700 MB iso
-> file, and it loaded seemingly fine, and functionality-wise it also
-> seemed to work fine, although there were frequent periodical debug
-> messages about the gadget returning command-failure status:
-> https://gist.github.com/jszigetvari/5bc4cdc8c55588907b71832558cb00a7
+Hello,
+Currently I am working on removing legacy power management .suspend() and
+.resume() callbacks from PCI subsystem. The updates aim to give power management
+control to PCI core and let drivers do the only device-specific jobs without
+using any PCI helper functions.
 
-There failures are normal.  They arise because the computer sends 
-commands that the gadget driver doesn't understand or support, such as 
-GET EVENT STATUS NOTIFICATION.
+I was wondering if similar changes can be applied to the USB subsystem?
+I explored and found that .suspend() in USB drivers also accept the pm_message_t
+type argument.
+Also, .suspend() and .resume() in usb drivers, accept "struct usb_interface *"
+type argument which seems similar to PCI legacy drivers accepting
+"struct pci_dev*" type.
 
-> After that as a test I tried to dd all the data from /dev/sr1 (that's
-> the device file the gadget was assigned) to /dev/null.
-> The process completed without any user-visible errors, although the
-> failure status related messages kept on appearing:
-> https://gist.github.com/jszigetvari/ffa19850c94f12510c0b78ed5aaba2e1
-> 
-> Finally I tried to load the large, 11 GB CentOS iso file as the second
-> phase of the test. On the Raspberry Pi (with kernel 4.19) this was
-> when the crash happened, however this time it did not.
-> Originally Tiziano Bacocco's patch came around to be the time of the
-> 3.x kernels. The patch needed minimal adjustments to apply to 4.19 and
-> 5.4 and also to 5.7.9 (though there was a one line offset in
-> f_mass_storage.c).
-> https://gist.github.com/jszigetvari/5a9796c8af8a01c0edba6a8696540029
-> 
-> Although I have to admit that on the Pi Zero I was using the g_multi
-> kernel module, and not g_mass_storage I assumed they share the same
-> code base, so they should work the same way.
-> On the Pi zero I need the extra serial and Ethernet interface to have
-> access to the Pi Zero, as it doesn't have a wireless NIC, and that's
-> why I chose g_multi.ko.
-> 
-> In the end I did a dd with the 11 GB iso, and to my surprise it worked
-> well. dd returned without any errors and it did show the true 11 GB
-> size when it finished.
-> In the kernel logs most log entries were about block reads, but the
-> failure status messages were still around. If there was no activity on
-> the device, then they accounted for the majority of the logs
-> generated:
-> https://gist.github.com/jszigetvari/a9225fa3173e6c7b7b50673a494d9c37
-> 
-> I have to admit, I stand puzzled why it worked on an x86_64-based
-> machine and crashed on the Pi Zero.
+Moreover, "struct usb_device_driver" seems analogous to "struct pci_driver" as
+it also has .suspend() and .resume() callback. Also, it has a bitfield
+"generic_subclass:1" which is described as, " @generic_subclass: if set to 1,
+the generic USB driver's probe, disconnect, resume and suspend functions will be
+called in addition to the driver's own, so this part of the setup does not need
+to be replicated. "
 
-The crash message on the Pi Zero indicated that there was a problem in 
-the host controller driver (dwc2-hsotg), not in the mass-storage driver.
+So the generic PM, talked about in USB drivers, is similar to PCI one? The
+non-generic PM in USB is similar to legacy PM in PCI?
 
-> I guess the next step will be either:
-> * to try using g_multi instead of g_mass_storage on the test machine
-> * upgrade the Pi Zero to run kernel 5.4.x (AFAIK that's the latest one
-> can get from the Raspberry Pi Foundation's git repo), and recompile
-> that kernel version with the patch applied. (This will likely take a
-> few days.)
+A similar update for the USB subsystem is possible?
 
-Yes, that might indeed help.
-
-Alan Stern
+--Vaibhav Gupta
