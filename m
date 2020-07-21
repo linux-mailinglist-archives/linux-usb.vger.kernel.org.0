@@ -2,193 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EF35227F2A
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 13:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EC2A227F52
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 13:52:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728210AbgGULnA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jul 2020 07:43:00 -0400
-Received: from mga14.intel.com ([192.55.52.115]:57748 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727103AbgGULm7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 21 Jul 2020 07:42:59 -0400
-IronPort-SDR: z/tlFwaDQR5WbHsEUS55iwhw2IL+E9qqKH65b2vOMDR39Kx1nk2LsDeyFRNPYn+0pbHpx7NHlk
- ugXeO0/3K3yg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9688"; a="149261558"
-X-IronPort-AV: E=Sophos;i="5.75,378,1589266800"; 
-   d="scan'208";a="149261558"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2020 04:42:55 -0700
-IronPort-SDR: sj0m4B7bK/pV4+paPk8PxgW95ipkImedkzFOLRZ1vGs+S3jR4+Tn3FuWTbsE5yYjgiUpgkJFUU
- IOjFWcsM86/g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,378,1589266800"; 
-   d="scan'208";a="392327784"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga001.fm.intel.com with SMTP; 21 Jul 2020 04:42:53 -0700
-Received: by lahna (sSMTP sendmail emulation); Tue, 21 Jul 2020 14:42:52 +0300
-Date:   Tue, 21 Jul 2020 14:42:52 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>, linux-usb@vger.kernel.org
-Subject: [GIT PULL] Thunderbolt/USB4 changes for v5.9 merge window
-Message-ID: <20200721114252.GD5180@lahna.fi.intel.com>
+        id S1728389AbgGULww (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jul 2020 07:52:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58204 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726698AbgGULwv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 07:52:51 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE4DC0619D8
+        for <linux-usb@vger.kernel.org>; Tue, 21 Jul 2020 04:52:49 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id z2so20951905wrp.2
+        for <linux-usb@vger.kernel.org>; Tue, 21 Jul 2020 04:52:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=YZopNL5/8ANY4qnCt9+wKywvq9+QBDbxQFIaGJPGSkU=;
+        b=TgrGhm+v1Mg3jVuL3BVaIhy8BL4lZKWs1CJ5bFyF8NCqc/f9wNyORftQhIAIS+awPP
+         lXfjUjWffFMBQ2bsP4cZY1Kvkw1IR7iTvP/AeVPsgUtQPuf/ew4WV66IVqGxg59czy1/
+         0hK9NHIXNYTuW0pWAP/TbkSXMR7X1C+GnBPEeK5VP1a06mrAejxwDn7uvoHrW5qMXraU
+         VM/Xx8uECxzqCY48+v4TYcTNadfgAyqfTTPPZXZpBR8Ty4ZeeetMqIq3iRLUZ1P/eT2i
+         +/YN/KGYQ+p6Cv2VDBkyV0d4+mhKQMWnvCkYPI75nGeG2dpPF3ImzwWb8hq4rZiOYjiN
+         etyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=YZopNL5/8ANY4qnCt9+wKywvq9+QBDbxQFIaGJPGSkU=;
+        b=uYfSiITEdBS9XgJbNDLiz5FDIMN7tAla+THz03ikCWnxMypV65JVAQWcnOCUXEYMAl
+         xzdI4e+qehRvULoISDETQaEZIdBpuX25q0+bqgQrxRG3xoxPnS9zG+IP94tnnJiAGlnO
+         ICO72Of7LdIAAsa9TvVZHC3uY9xV+3v2MFR95TvxUjxldaXSxprHnNxBVKo+jzDevOWM
+         4Lpb/xkKwYt0G/K+Q3esTNEkZJw9wcWsf+pZU3eHrYj0JMm8bpUxK8Lcw+L59mdi4YkE
+         iBtw/yrJKRejJbcwyhtIVO+QmumB/MROHbk+IGU+yvLAmxqNRCpRkbykkAGUa8ajbn6Y
+         em1A==
+X-Gm-Message-State: AOAM5300lh3H0qkF4y5Z7+8GUsOMFzvzzZu957nOM5+rumsZpqhPI1Ik
+        gvUOiegKjbTrgAwGGG3SfzOUMw==
+X-Google-Smtp-Source: ABdhPJzkuMo6BVRg+eIcLsNrunYrL7MrNDfMCxb56XFQ8NXNkSdiOirXEPWIr6xsfVjqdIMtGKLThA==
+X-Received: by 2002:a5d:490c:: with SMTP id x12mr13034598wrq.238.1595332368446;
+        Tue, 21 Jul 2020 04:52:48 -0700 (PDT)
+Received: from dell ([2.27.167.94])
+        by smtp.gmail.com with ESMTPSA id s203sm3250315wms.32.2020.07.21.04.52.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jul 2020 04:52:47 -0700 (PDT)
+Date:   Tue, 21 Jul 2020 12:52:46 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Ben Dooks <ben@simtec.co.uk>
+Subject: Re: [PATCH v2 1/8] usb: dwc2: gadget: Make use of GINTMSK2
+Message-ID: <20200721115246.GE621928@dell>
+References: <20200715093209.3165641-1-lee.jones@linaro.org>
+ <20200715093209.3165641-2-lee.jones@linaro.org>
+ <566f2d65-1b5a-ed2a-f33f-516b66be2624@synopsys.com>
+ <87blk9p5ia.fsf@kernel.org>
+ <5862f649-8058-7e39-cb43-2a4b09303333@synopsys.com>
+ <875zahp0i0.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <875zahp0i0.fsf@kernel.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+On Tue, 21 Jul 2020, Felipe Balbi wrote:
 
-The following changes since commit b3a9e3b9622ae10064826dccb4f7a52bd88c7407:
+> Minas Harutyunyan <Minas.Harutyunyan@synopsys.com> writes:
+> 
+> > Hi Felipe,
+> >
+> > On 7/21/2020 1:43 PM, Felipe Balbi wrote:
+> >> Minas Harutyunyan <Minas.Harutyunyan@synopsys.com> writes:
+> >> 
+> >>> On 7/15/2020 1:32 PM, Lee Jones wrote:
+> >>>> The value obtained from GINTSTS2 should be masked with the GINTMSK2
+> >>>> value.  Looks like this has been broken since
+> >>>> dwc2_gadget_wkup_alert_handler() was added back in 2018.
+> >>>>
+> >>>> Also fixes the following W=1 warning:
+> >>>>
+> >>>>    drivers/usb/dwc2/gadget.c: In function ‘dwc2_gadget_wkup_alert_handler’:
+> >>>>    drivers/usb/dwc2/gadget.c:259:6: warning: variable ‘gintmsk2’ set but not used [-Wunused-but-set-variable]
+> >>>>    259 | u32 gintmsk2;
+> >>>>    | ^~~~~~~~
+> >>>>
+> >>>> Cc: Minas Harutyunyan <hminas@synopsys.com>
+> >>>> Cc: Ben Dooks <ben@simtec.co.uk>
+> >>>> Fixes: 187c5298a1229 ("usb: dwc2: gadget: Add handler for WkupAlert interrupt")
+> >>>> Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> >>>
+> >>> Acked-by: Minas Harutyunyan <hminas@synopsys.com>
+> >> 
+> >> Should I apply the entire series or only 1/8?
+> >> 
+> > In this series only 2 patches are related to dwc2, which I'm already Acked:
+> >
+> > [PATCH v2 1/8] usb: dwc2: gadget: Make use of GINTMSK2
+> > [PATCH v2 2/8] usb: dwc2: gadget: Avoid pointless read of EP control 
+> > register
+> >
+> > I can't acked other patches from this series, because they are not 
+> > related to dwc2.
+> 
+> heh, I saw that after sending the email, sorry :-)
 
-  Linux 5.8-rc1 (2020-06-14 12:45:04 -0700)
+Also, all patches are already in -next, courtesy of Greg.
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v5.9
-
-for you to fetch changes up to ef7e12078ab832c72315adcfa05e7a9498a5e109:
-
-  thunderbolt: Fix old style declaration warning (2020-07-02 14:50:11 +0300)
-
-----------------------------------------------------------------
-thunderbolt: Changes for v5.9 merge window
-
-This includes following Thunderbolt/USB4 changes for v5.9 merge window:
-
-  * Improvements around NHI (Native Host Interface) HopID allocation
-
-  * Improvements to tunneling and USB3 bandwidth management support
-
-  * Add KUnit tests for path walking and tunneling
-
-  * Initial support for USB4 retimer firmware upgrade
-
-  * Implement Thunderbolt device firmware upgrade mechanism that runs
-    the NVM image authentication when the device is disconnected.
-
-  * A couple of small non-critical fixes
-
-----------------------------------------------------------------
-
-Please notice when merged with kunit-next tree there will be a build
-error because the one member (allocation) of struct kunit_resource was
-renamed with linux-next commit d4cdd146d0db ("kunit: generalize
-kunit_resource API beyond allocated resources"). Linux-next carries a
-fix that is at the end of this email to solve the issue (from Stephen
-Rothwell).
-
-Let me know if you prefer that I merge kunit-next branch to my -next
-branch and resolve it there first.
-
-Thanks!
-
-Colin Ian King (1):
-      thunderbolt: Ensure left shift of 512 does not overflow a 32 bit int
-
-Geert Uytterhoeven (1):
-      thunderbolt: Improve USB4 config symbol help text
-
-Kranthi Kuntala (1):
-      thunderbolt: Add support for on-board retimers
-
-Mario Limonciello (2):
-      thunderbolt: Add support for separating the flush to SPI and authenticate
-      thunderbolt: Add support for authenticate on disconnect
-
-Mika Westerberg (25):
-      thunderbolt: Build initial XDomain property block upon first connect
-      thunderbolt: No need to warn if NHI hop_count != 12 or hop_count != 32
-      thunderbolt: NHI can use HopIDs 1-7
-      thunderbolt: Get rid of E2E workaround
-      thunderbolt: Fix path indices used in USB3 tunnel discovery
-      thunderbolt: Make tb_next_port_on_path() work with tree topologies
-      thunderbolt: Make tb_path_alloc() work with tree topologies
-      thunderbolt: Check that both ports are reachable when allocating path
-      thunderbolt: Handle incomplete PCIe/USB3 paths correctly in discovery
-      thunderbolt: Increase path length in discovery
-      thunderbolt: Add KUnit tests for path walking
-      thunderbolt: Add DP IN resources for all routers
-      thunderbolt: Do not tunnel USB3 if link is not USB4
-      thunderbolt: Make usb4_switch_map_usb3_down() also return enabled ports
-      thunderbolt: Make usb4_switch_map_pcie_down() also return enabled ports
-      thunderbolt: Report consumed bandwidth in both directions
-      thunderbolt: Increase DP DPRX wait timeout
-      thunderbolt: Implement USB3 bandwidth negotiation routines
-      thunderbolt: Make tb_port_get_link_speed() available to other files
-      thunderbolt: Add USB3 bandwidth management
-      thunderbolt: Add KUnit tests for tunneling
-      thunderbolt: Add Intel USB-IF ID to the NVM upgrade supported list
-      thunderbolt: Split common NVM functionality into a separate file
-      thunderbolt: Generalize usb4_switch_do_[read|write]_data()
-      thunderbolt: Retry USB4 block read operation
-
-Rajmohan Mani (1):
-      thunderbolt: Implement USB4 port sideband operations for retimer access
-
-Wei Yongjun (1):
-      thunderbolt: Fix old style declaration warning
-
- Documentation/ABI/testing/sysfs-bus-thunderbolt |   57 +-
- Documentation/admin-guide/thunderbolt.rst       |   11 +-
- drivers/net/thunderbolt.c                       |    4 +-
- drivers/thunderbolt/Kconfig                     |    9 +-
- drivers/thunderbolt/Makefile                    |    3 +
- drivers/thunderbolt/domain.c                    |    2 +-
- drivers/thunderbolt/eeprom.c                    |    1 +
- drivers/thunderbolt/lc.c                        |   14 +
- drivers/thunderbolt/nhi.c                       |   30 +-
- drivers/thunderbolt/nvm.c                       |  170 +++
- drivers/thunderbolt/path.c                      |   38 +-
- drivers/thunderbolt/quirks.c                    |   42 +
- drivers/thunderbolt/retimer.c                   |  485 +++++++
- drivers/thunderbolt/sb_regs.h                   |   33 +
- drivers/thunderbolt/switch.c                    |  232 ++--
- drivers/thunderbolt/tb.c                        |  388 ++++--
- drivers/thunderbolt/tb.h                        |  131 +-
- drivers/thunderbolt/tb_regs.h                   |   31 +
- drivers/thunderbolt/test.c                      | 1626 +++++++++++++++++++++++
- drivers/thunderbolt/tunnel.c                    |  326 ++++-
- drivers/thunderbolt/tunnel.h                    |   37 +-
- drivers/thunderbolt/usb4.c                      |  874 +++++++++++-
- drivers/thunderbolt/xdomain.c                   |   94 +-
- include/linux/thunderbolt.h                     |    2 -
- 24 files changed, 4266 insertions(+), 374 deletions(-)
- create mode 100644 drivers/thunderbolt/nvm.c
- create mode 100644 drivers/thunderbolt/quirks.c
- create mode 100644 drivers/thunderbolt/retimer.c
- create mode 100644 drivers/thunderbolt/sb_regs.h
- create mode 100644 drivers/thunderbolt/test.c
-
------------
-
-diff --git a/drivers/thunderbolt/test.c b/drivers/thunderbolt/test.c
-index acb8b6256847..a4d78811f7e2 100644
---- a/drivers/thunderbolt/test.c
-+++ b/drivers/thunderbolt/test.c
-@@ -17,13 +17,13 @@ static int __ida_init(struct kunit_resource *res, void *context)
- 	struct ida *ida = context;
- 
- 	ida_init(ida);
--	res->allocation = ida;
-+	res->data = ida;
- 	return 0;
- }
- 
- static void __ida_destroy(struct kunit_resource *res)
- {
--	struct ida *ida = res->allocation;
-+	struct ida *ida = res->data;
- 
- 	ida_destroy(ida);
- }
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
