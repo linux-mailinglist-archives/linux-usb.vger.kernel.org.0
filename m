@@ -2,61 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3D4722831C
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 17:05:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76AC6228317
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 17:05:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729603AbgGUPFg convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 21 Jul 2020 11:05:36 -0400
-Received: from smtp12-hnd-sp2.mta.salesforce.com ([101.53.172.219]:13096 "EHLO
-        smtp12-hnd-sp2.mta.salesforce.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726436AbgGUPFg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 11:05:36 -0400
-X-Greylist: delayed 301 seconds by postgrey-1.27 at vger.kernel.org; Tue, 21 Jul 2020 11:05:35 EDT
-Authentication-Results:  mx2-hnd-sp2.mta.salesforce.com x-tls.subject="/C=US/ST=California/L=San Francisco/O=salesforce.com, inc./OU=0:app;1:hnd;2:hnd-sp2;3:ap17;4:prod/CN=ap17-app1-8-hnd.ops.sfdc.net"; auth=pass (cipher=ECDHE-RSA-AES256-GCM-SHA384)
-Received: from [10.219.237.7] ([10.219.237.7:37712] helo=ap17-app1-8-hnd.ops.sfdc.net)
-        by mx2-hnd-sp2.mta.salesforce.com (envelope-from <leandra=data-infocus.com__0-2fxx5rjstxt40e.cj005sq5ew1il1yt@08wg2nwqrzx03nqn.iak486u.2x-3tfytea2.ap17.bnc.salesforce.com>)
-        (ecelerity 4.2.38.62368 r(Core:release/4.2.38.0)) with ESMTPS (cipher=ECDHE-RSA-AES256-GCM-SHA384
-        subject="/C=US/ST=California/L=San Francisco/O=salesforce.com, inc./OU=0:app;1:hnd;2:hnd-sp2;3:ap17;4:prod/CN=ap17-app1-8-hnd.ops.sfdc.net") 
-        id EE/F9-06852-213071F5; Tue, 21 Jul 2020 15:00:34 +0000
-Date:   Tue, 21 Jul 2020 15:00:34 +0000 (GMT)
-From:   Leandra <leandra@data-infocus.com>
-To:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Message-ID: <3sLD-000000000000000000000000000000000000000000000QDTR0W00liAyTnOdR7OItedT4fQrJA@sfdc.net>
-Subject: Fintech Info - Accelerate your Marketing ROI and Investments
+        id S1729785AbgGUPFI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jul 2020 11:05:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45246 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726436AbgGUPFI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 21 Jul 2020 11:05:08 -0400
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 57FC72077D;
+        Tue, 21 Jul 2020 15:05:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595343907;
+        bh=F6SxBfdl4wNRW/1mURa5CcBLgQWhe+UrLwqJXivNcng=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=fzskyMThqWp3vPofTVlE7URWYrxG7mp9JN0O/mS8uUhQmQA8WSCgUg3QdybuMMXxe
+         SlyYa2xaf1BaIlj1RXI80nywhjvqG0BwiTC3NWV8wE4urSHPG12KsiYMxqkkr1Gr23
+         3sSt7KzI+692NrWW8WVxGo3d4n9/9gXrKkJ4imPA=
+Received: by mail-ot1-f52.google.com with SMTP id c25so15298525otf.7;
+        Tue, 21 Jul 2020 08:05:07 -0700 (PDT)
+X-Gm-Message-State: AOAM5301IX8gm61xLx/ypE0v5bDO/uGXzus4KYq+W9fOzc0MlQl9U4Qe
+        PIis6ynztSXDIYg5cWS5Ij3wAlcyI7o9gL+rSQ==
+X-Google-Smtp-Source: ABdhPJwg1qFu+GHeVDp8NETJ9sN5dj3TU0LVw4V3/6K8ZBPyo2KYrQFu1CZaOPP1xtFqiOsO9MGIf0TUDpBxmjtDLIY=
+X-Received: by 2002:a9d:46c:: with SMTP id 99mr5434638otc.192.1595343906622;
+ Tue, 21 Jul 2020 08:05:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 8BIT
-X-Priority: 3
-X-SFDC-LK: 00D2x000003tFYT
-X-SFDC-User: 0052x000001fQYE
-X-Sender: postmaster@salesforce.com
-X-mail_abuse_inquiries: http://www.salesforce.com/company/abuse.jsp
-X-SFDC-TLS-NoRelay: 1
-X-SFDC-Binding: iCBT705cy8bBFz3B
-X-SFDC-EmailCategory: apiMassMail
-X-SFDC-EntityId: 0032x000005yaNA
-X-SFDC-Interface: internal
+References: <cover.1594935978.git.thinhn@synopsys.com> <9684a2b2adb01b6b1a8c513928ea49b4a6436184.1594935978.git.thinhn@synopsys.com>
+ <20200721033908.GA3508628@bogus> <d7e3d5c6-05c1-f256-7773-2b88f6cd5ca3@synopsys.com>
+In-Reply-To: <d7e3d5c6-05c1-f256-7773-2b88f6cd5ca3@synopsys.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 21 Jul 2020 09:04:52 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLSKKT__dJaML4SWCpFpFYV_Cpkor=mNh5-Z7hE4n4fMA@mail.gmail.com>
+Message-ID: <CAL_JsqLSKKT__dJaML4SWCpFpFYV_Cpkor=mNh5-Z7hE4n4fMA@mail.gmail.com>
+Subject: Re: [PATCH 06/11] usb: devicetree: dwc3: Introduce num-lanes and lsm
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        John Youn <John.Youn@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Mon, Jul 20, 2020 at 11:01 PM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
+>
+> Rob Herring wrote:
+> > On Thu, Jul 16, 2020 at 02:59:08PM -0700, Thinh Nguyen wrote:
+> >> Introduce num-lanes and lane-speed-mantissa-gbps for devices operating
+> >> in super-speed-plus. DWC_usb32 IP supports multiple lanes and can
+> >> operate in different sublink speeds. Currently the device controller
+> >> does not have the information of the phy's number of lanes supported. As
+> >> a result, the user can specify them through these properties if they are
+> >> different than the default setting.
+> >>
+> >> Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
+> >> ---
+> >>   Documentation/devicetree/bindings/usb/dwc3.txt | 9 +++++++++
+> >>   1 file changed, 9 insertions(+)
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt b/Documentation/devicetree/bindings/usb/dwc3.txt
+> >> index d03edf9d3935..4eba0615562f 100644
+> >> --- a/Documentation/devicetree/bindings/usb/dwc3.txt
+> >> +++ b/Documentation/devicetree/bindings/usb/dwc3.txt
+> >> @@ -86,6 +86,15 @@ Optional properties:
+> >>    - snps,quirk-frame-length-adjustment: Value for GFLADJ_30MHZ field of GFLADJ
+> >>      register for post-silicon frame length adjustment when the
+> >>      fladj_30mhz_sdbnd signal is invalid or incorrect.
+> >> + - snps,num-lanes: set to specify the number of lanes to use. Valid inputs are
+> >> +                    1 or 2. Apply if the maximum-speed is super-speed-plus
+> >> +                    only. Default value is 2 for DWC_usb32. For DWC_usb31,
+> >> +                    it is always 1 at super-speed-plus.
+> >> + - snps,lane-speed-mantissa-gbps: set to specify the symmetric lane speed
+> >> +                    mantissa in Gbps. Valid inputs are 5 or 10. Apply if
+> >> +                    the maximum-speed is super-speed-plus only. Default
+> >> +                    value is 10. For DWC_usb31, it's always 10 at
+> >> +                    super-speed-plus.
+> > This is all common USB things and should be common properties (which we
+> > may already have).
+>
+> Sure. For "num-lanes" is simple, any objection if we use
+> "lane-speed-mantissa-gbps"? Or should we add "lane-speed-exponent"?
 
-Good day to you! I hope you are keeping safe!
+'num-lanes' is good as that's what PCIe uses. Document that with
+'maximum-speed'.
 
-Would you be interested in reaching out Professionals from Fintech, Finance services, Finance Institutions and Banking Sectors across the nation for your upcoming marketing campaigns?
+I think 'super-speed-plus' should mean gen 2 10G per lane. Then
+between num-lanes and maximum-speed you can define all 4 possible
+rates.
 
-Job_titles: - CEO, CFO, CMO, COO,CTO, CIO, CXO, CBO, CCO, CDO,CKO, CSO, CPO, CLO, Controller, Director, Vice President, Presidents, Chairman's, GMs, Mid-level Managers, HR Managers, Finance Manager, IT Head, IT Director, IT Manager, VP IT, Purchasing Manager, Revenue Managers, Mortgage_Managers, Director of Banking, Pricing managers, Procurement Manager, Supply Chain, Head of Operations, Corporate Secretary, Treasurer, Administration, R & D Executives and many more…
-
-List Fields: Company name, Contact Name, job_title, phone number, Social_Profiles, email address, postal address, website, SIC_code, Industry type, Employee size, revenue size etc.
-
-Do let me know your thoughts on this, so that I will get back to you with counts, samples and pricing for your review Or we can jump on a Quick Zoom call for more info.
-
-Look forward for your response.
-
-Thanks and Regards,
-Leandra
-Marketing Executive
-
-Please reply us "Leave Out" if not interested
+Rob
