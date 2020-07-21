@@ -2,170 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 469F62286B8
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 19:03:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C27C228769
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 19:33:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730763AbgGURDu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jul 2020 13:03:50 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:40678 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730399AbgGUQ7h (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 12:59:37 -0400
-Received: from mailhost.synopsys.com (us03-mailhost1.synopsys.com [10.4.17.17])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 979A2C00AE;
-        Tue, 21 Jul 2020 16:58:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1595350680; bh=6IEKf5IcZ4gel7f8CN3kjGa3YpRzkWLIMa6NCMNtwPo=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=Y9lsdwUmkmd8Yj42tN0w1/6OuxpFCx+Gruk9Ge8XJUuCBsoZYb2adUlvV2/6lPcci
-         UcWcguwFlVf+3ADJtpPhjrBn5qxlLxJKNPeTD+g50PboptBDcsN7ZYL/P3AUxr+8Dr
-         lC+Qc9MVaVpUzJcXOcUXH7wOqsqVc3p46MYl0HLWsR+fB/EisXSPEI2O0M44lK/92l
-         CNUapYHTlFyBSwr6opGurBfNTtr7e4Je2q5QKTi7jkNUJm1uJq1d/SF7TX8fi54yrh
-         uFLpAqlz9qT2a4xcn/Qv6HIbCGEJW2vNS7/HX034cbHG27+CLIyYUMfN3DMOTAWv97
-         hVNg1DunlZbIQ==
-Received: from o365relay-in.synopsys.com (sv2-o365relay3.synopsys.com [10.202.1.139])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id 23058A005A;
-        Tue, 21 Jul 2020 16:58:00 +0000 (UTC)
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2170.outbound.protection.outlook.com [104.47.59.170])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "mail.protection.outlook.com", Issuer "GlobalSign Organization Validation CA - SHA256 - G3" (verified OK))
-        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 9F4EE4014B;
-        Tue, 21 Jul 2020 16:57:59 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=joglekar@synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="PFljy1Mz";
-        dkim-atps=neutral
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gzyqOuZay3NXV7kbcmXpjiUdZL2xrgLC/uKAryH0VjderqmOFLHB+gmlmqofnOpue5pqXuYCiZH2EHBiF0pRO2RcF2NXtr3X1V++dkfEquHPMHIObCPBtAdFtizA7DA7WDibvC9TeaFg500I8ja4P1crYSmrCMz2jwgun6iv7XHxRe3UKAEG6c6cgV8Pq4Vs8ta+Omr+oI4h7lIdfMndmLf35zNCDrIHtYgGTGand8TJpZ2WMkZBbLJCQD+hyADS0RmHkdOjy8UMu2YuvwIgz7niYK5CGEeO+4XqW0WA9n91w7Dst8DzdM6X2lt2GM4c7e6jcZuhwSVOqauF7oEw4A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6IEKf5IcZ4gel7f8CN3kjGa3YpRzkWLIMa6NCMNtwPo=;
- b=ebbEd4LgMCaGzHGGAIrd+mCC3fB8or62d1JWGh3UPV3BGTic2s7LComChKksNaammUzIyOvUO6St0pAfGDEmZpJFKH0OF8pd3MHpTfPBhPYaWl++34Q0FtZZNgSeKR1w1vdt/w1clhwLW71r1YGhLhnAyAUmCmWPUXlS7vRRLfBrJctrQlNzlna/20+8RGDilvz5WGmBeZz9XGD2cqxhOLC7PBjdqAm/kZyT3+cT/ptsnjR0pgM8iEmY4tgouF+buRIr7YGaPAmM6/Ha2tiekHMCpnhc4QZA7fW9V98k7pai7nyj4pw6Da+Cs92VTdMIfdLGnKWCoGA1JQ9luSdYWA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6IEKf5IcZ4gel7f8CN3kjGa3YpRzkWLIMa6NCMNtwPo=;
- b=PFljy1Mz933eeP5WZP+Zp4700fOe7hYrqXsfLP3oOAKxhj1Gdt4+PtKG4bUB/QIJNGI1OoRHN8x1/gunpxeDPdAAx63y2/1dlognQedyhEDMgLZxaxq4gKY1qQOKqgYPzWC1B+/2ZxkLnElp0RtEAVE4mgjm6oaQT5k3c1h9Cs0=
-Received: from BN8PR12MB3458.namprd12.prod.outlook.com (2603:10b6:408:44::32)
- by BN6PR1201MB0001.namprd12.prod.outlook.com (2603:10b6:404:a7::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3216.21; Tue, 21 Jul
- 2020 16:57:58 +0000
-Received: from BN8PR12MB3458.namprd12.prod.outlook.com
- ([fe80::9559:91b2:aaa3:bfd6]) by BN8PR12MB3458.namprd12.prod.outlook.com
- ([fe80::9559:91b2:aaa3:bfd6%2]) with mapi id 15.20.3216.020; Tue, 21 Jul 2020
- 16:57:58 +0000
-X-SNPS-Relay: synopsys.com
-From:   Tejas Joglekar <Tejas.Joglekar@synopsys.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Tejas Joglekar <Tejas.Joglekar@synopsys.com>,
-        Rob Herring <robh+dt@kernel.org>, Rob Herring <robh@kernel.org>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        John Youn <John.Youn@synopsys.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v3 3/4] usb: dwc3: Add device property
- sgl-trb-cache-size-quirk
-Thread-Topic: [PATCH v3 3/4] usb: dwc3: Add device property
- sgl-trb-cache-size-quirk
-Thread-Index: AQHWNBPIzVDQozhV20CqjRBnx+8J26j6PmiAgAAa/YCADhZwgIAJsAyAgAB4IAA=
-Date:   Tue, 21 Jul 2020 16:57:58 +0000
-Message-ID: <48f1764e-4383-a149-b93b-3851095394e7@synopsys.com>
-References: <cover.1590415123.git.joglekar@synopsys.com>
- <83eba2e9f0069f20ccc94537e3b99cbaec209441.1590415123.git.joglekar@synopsys.com>
- <5534d9d6-5452-dade-e46e-f4b0910becdb@synopsys.com>
- <877dvhqh2e.fsf@kernel.org>
- <2f61133b-319d-80dc-f3f3-7e08e0228953@synopsys.com>
- <878sfdp5bk.fsf@kernel.org>
-In-Reply-To: <878sfdp5bk.fsf@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=synopsys.com;
-x-originating-ip: [49.207.204.153]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: df1453a2-fd58-45b9-3cfd-08d82d973880
-x-ms-traffictypediagnostic: BN6PR1201MB0001:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BN6PR1201MB0001C10C7325F92192BC7CFCA4780@BN6PR1201MB0001.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: fBJQZBSgREdLkVfQ14TRP7hU9tYvsAlETSke9f7kEhRpYJbMKU4f5ZYU2KZ3SIhEk8T490xCOxzeoOGgdz3ZyIpwK5WjhWTY3TChvqdX6W0mmP8Xus4QAGTsY3aN87l+HT1AUnM9I6IB/xy9Q4O46jypZBkk0QHaqrNtBXwUzRe0+Nr5n4B5hjc6UBSksORIORP02gM10u4swoliZuPryfhDczv6vO1ZppS/2AIMl6CDlCWuADlq+npoIOfoXCxfdbwGbvxpL7Y/ysrh2dyV2e9eA5bd1TeaGTba0uB1gj1Jm932MSZXYx5Bmz03I64DImF2v7C8A7i0U+srH1I/Vg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3458.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(39860400002)(136003)(366004)(346002)(396003)(376002)(86362001)(2906002)(71200400001)(31696002)(26005)(55236004)(53546011)(6506007)(31686004)(66446008)(64756008)(76116006)(91956017)(66476007)(66556008)(6486002)(186003)(2616005)(66946007)(110136005)(83380400001)(4326008)(8676002)(36756003)(54906003)(6512007)(478600001)(8936002)(316002)(5660300002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: LQaX+6jFtJNZclDDwrXrfCqhDyWDitFLeJPdWJRrlwmJ95Jpw/wZvUbnfYQRz4TQN4+VbYaVKtdlch7+Kkf4upYSJZ/uwYYI+aYiG9LuCmdJN970UXTzh99YL3QPxI98J42HR/7H5c8qtdBjeiEitJklB2BuOBQZeRIFY3vip+rpSMe1umTV8D1r1zZKn1U7rRqdY7GNBiCxlTBkzpk7GK1Jpay2pNPE1jmgDctt1l+Qk2g3MebhwLuN4OjnWVNSnrTeXEKSJ3GNWQMgt+MIHebkOI9789kMjoBRhIeMwcWOHQGOc3F/TuzqD3AoIJoEBv/zqKdYxEDlqMCTTu4PcOn8hYSkhV0PGYbG8gYF8CRTyxnZVnHUi7ia/6ggidA7L6Hcnv/quOozHnrkmLgVxvxKwE3AvuoLHi6sItzwiUkpwzmW3iz2/8mVIH3tzC+1UE3V+vFwuLjphp3+OyT2Vpzf8OLalAe+xdUbaMF/lrVXQ1DvmeRpQncRcQ2AYfGP
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <6ACF93066DF85C4B84E163ECC25953D8@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1730141AbgGURdO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jul 2020 13:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54926 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727778AbgGURdN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 13:33:13 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BACEBC061794;
+        Tue, 21 Jul 2020 10:33:12 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id 88so11713493wrh.3;
+        Tue, 21 Jul 2020 10:33:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Y1UGN/wQ+E3UrCbpp35EOWaLHnJLFmQCQ7zfOH5WWZo=;
+        b=re/rXe0MkpQDc2wrrQhlpJxeaVcYIyn3+NwDkNXVVs9vimzly74CcI/9X7qJd64iRT
+         XSrNH3xkGnEBFR2lUrH6+V3hJxIFkuNO9e1BZ/tjgeHtK2QxIwsZPayUa+wI3dnp2cw5
+         ZaKuWMB6+T2U77vtiac2lR2JZ0qz1eMrztj0gVmx+HuXcCUhWb/UKuaTOtKaByTIqvQB
+         1Lzi5Hwy8l99JBqKeL6224fFvUyYVb0YWd0nrkRpnXl8tXSkEWOa7mbkCldbc9w1QPdI
+         8Rp3pEWqXSsMc0jkcuZxeyaQhSweZsEOnRQ31rxhFNxs5PgTqddegIJvhrLfSNBGfTR/
+         OgPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=Y1UGN/wQ+E3UrCbpp35EOWaLHnJLFmQCQ7zfOH5WWZo=;
+        b=IztlDYtWxv6QG0P9ATo31FwfDWXptoqDhujBIc8w+PRDfmuy3EzZxAA2mRyy2BFoh1
+         AAO/zfzecGjk+LSpY3yhXuUbAOxEGHrNqbXX+IozabUc+91rkGPZaEmMdy3UzobTYE41
+         ll4CiRxxqCB6+AtXG4tzMYkAudWUFS8gLZCJrTbCQZ+b+v+LT2SIYPwz/FoRGHLyJg1j
+         MAbJOwl1yX++AgsIkNtTSLmGprPIlG1zBEgvyP2oE5NtojWtNJPVrscECFzwoimyJD6e
+         fq6jBUxXXCyIsGnF2jfLJNvrKh0soiuwoyBMX25WcsCI1MC8f1ulm8Re6ROb/ADRh4OY
+         C4ug==
+X-Gm-Message-State: AOAM530zsyvqeUpx9pru74ybVmUUmgpNARtKJQ4Y1Set9CpEINu+hJlI
+        5Ovv8aVWap5dOFnp++sjycU=
+X-Google-Smtp-Source: ABdhPJxAZuu9CRuXw7oieGfhgt2BnPW+cP8N1LWovJ536d7IXKB5M9KP1H3pV4jg902ZQk4cCC7w5A==
+X-Received: by 2002:adf:fa09:: with SMTP id m9mr9151128wrr.130.1595352791418;
+        Tue, 21 Jul 2020 10:33:11 -0700 (PDT)
+Received: from [10.67.50.75] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id p25sm4090948wmg.39.2020.07.21.10.33.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Jul 2020 10:33:10 -0700 (PDT)
+Subject: Re: [PATCH v2 1/7] dt-bindings: usb: bdc: Update compatible strings
+To:     Al Cooper <alcooperx@gmail.com>, linux-kernel@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Sasi Kumar <sasi.kumar@broadcom.com>
+References: <20200721144326.7976-1-alcooperx@gmail.com>
+ <20200721144326.7976-2-alcooperx@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Autocrypt: addr=f.fainelli@gmail.com; prefer-encrypt=mutual; keydata=
+ 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
+ G10n8gCguORqNGMsVRxrlLs7/himep7MrCc=
+Message-ID: <20f2641a-412a-db7e-3385-eba7466f5aa9@gmail.com>
+Date:   Tue, 21 Jul 2020 10:33:01 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3458.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: df1453a2-fd58-45b9-3cfd-08d82d973880
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jul 2020 16:57:58.2705
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ibKGMl3/iPpsuCL4g4LnbYyE/ZdEgZBoauqNxgeN8VN3T9xIJSLJCzMuJSENnw44c6gQu57A4xdNSOPdL304SQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1201MB0001
+In-Reply-To: <20200721144326.7976-2-alcooperx@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGVsbG8sDQoNCk9uIDcvMjEvMjAyMCAzOjE3IFBNLCBGZWxpcGUgQmFsYmkgd3JvdGU6DQo+IFRl
-amFzIEpvZ2xla2FyIDxUZWphcy5Kb2dsZWthckBzeW5vcHN5cy5jb20+IHdyaXRlczoNCj4gDQo+
-PiBIaSBSb2IsDQo+Pg0KPj4gT24gNy82LzIwMjAgMTI6MTMgUE0sIEZlbGlwZSBCYWxiaSB3cm90
-ZToNCj4+Pg0KPj4+IEhpLA0KPj4+DQo+Pj4gVGVqYXMgSm9nbGVrYXIgPFRlamFzLkpvZ2xla2Fy
-QHN5bm9wc3lzLmNvbT4gd3JpdGVzOg0KPj4+Pj4gQEAgLTk1LDYgKzk1LDEwIEBAIGludCBkd2Mz
-X2hvc3RfaW5pdChzdHJ1Y3QgZHdjMyAqZHdjKQ0KPj4+Pj4gIAlpZiAoZHdjLT51c2IyX2xwbV9k
-aXNhYmxlKQ0KPj4+Pj4gIAkJcHJvcHNbcHJvcF9pZHgrK10gPSBQUk9QRVJUWV9FTlRSWV9CT09M
-KCJ1c2IyLWxwbS1kaXNhYmxlIik7DQo+Pj4+PiAgDQo+Pj4+PiArCWlmIChkd2MtPnNnbF90cmJf
-Y2FjaGVfc2l6ZV9xdWlyaykNCj4+Pj4+ICsJCXByb3BzW3Byb3BfaWR4KytdID0NCj4+Pj4+ICsJ
-CQlQUk9QRVJUWV9FTlRSWV9CT09MKCJzZ2wtdHJiLWNhY2hlLXNpemUtcXVpcmsiKTsNCj4+Pj4+
-ICsNCj4+Pj4+ICAJLyoqDQo+Pj4+PiAgCSAqIFdPUktBUk9VTkQ6IGR3YzMgcmV2aXNpb25zIDw9
-My4wMGEgaGF2ZSBhIGxpbWl0YXRpb24NCj4+Pj4+ICAJICogd2hlcmUgUG9ydCBEaXNhYmxlIGNv
-bW1hbmQgZG9lc24ndCB3b3JrLg0KPj4+Pj4NCj4+Pj4gRG9lcyB0aGlzIGltcGxlbWVudGF0aW9u
-IGxvb2tzIGdvb2QgdG8geW91PyBSb2IgaGFzIHNvbWUgY29uY2VybmVkIG92ZXIgdGhlIERUIGVu
-dHJpZXMsDQo+Pj4+IHlvdSBzdWdnZXN0ZWQgdXNpbmcgY29tcGF0aWJsZSBzdHJpbmcgd2l0aCB0
-aGlzIHF1aXJrIGFkZGl0aW9uLg0KPj4+PiBDYW4geW91IHBsZWFzZSBicmllZiBhYm91dCBob3cg
-eW91IHdvdWxkIGxpa2UgdG8gaGF2ZSB0aGlzIHF1aXJrIGltcGxlbWVudGVkPw0KPj4+PiBJIGNh
-biBzZW5kIHRoZSB1cGRhdGVkIHBhdGNoLiBNeSBwYXRjaCBzZXJpZXMgaXMgcGVuZGluZyBmb3Ig
-bWVyZ2UganVzdCBiZWNhdXNlIG9mIHRoZQ0KPj4+PiBEVCBhbmQgcXVpcmsgaXNzdWUuIENhbiB5
-b3UgcGxlYXNlIGhlbHA/DQo+Pj4NCj4+PiBZZWFoLCB5b3UgbmVlZCB0byBnZXQgaW50byBhbiBh
-Z3JlZW1lbnQgd2l0aCBSb2IgOi0pIEkgZG9uJ3QgbWluZCBoYXZpbmcNCj4+PiBleHRyYSBEVCBm
-bGFncyBmb3IgdGhpbmdzIHdoaWNoIGNhbid0IGJlIGRldGVjdGVkIGluIHJ1bnRpbWUsIFJvYg0K
-Pj4+IGRpc2FncmVlcy4NCj4+Pg0KPj4gVGhlIGNvbXBhdGlibGUgc3RyaW5nIGlzIG5vdCBzdWl0
-YWJsZSBvcHRpb24gYXMgaXQgZG9lcyBub3Qgd29yayB3aXRoIHBsYXRmb3JtIGRyaXZlcnMNCj4+
-IHdpdGggUENJIGJhc2VkIHN5c3RlbS4gQWxzbyBTeW5vcHN5cyBjb250cm9sbGVycyBJUCB2ZXJz
-aW9uIHJlZ2lzdGVyIGlzIG5vdCB2aXNpYmxlIHRvIHhoY2kNCj4+IGRyaXZlciBhbmQgaGVuY2Ug
-d2UgZG9uJ3QgaGF2ZSBzZXBhcmF0ZSBjb21wYXRpYmxlIHN0cmluZyBmb3IgZWFjaCBTeW5vcHN5
-cyB2ZXJzaW9uIG9uIHRoZQ0KPj4geGhjaSBkcml2ZXIgc2lkZS4gDQo+PiBEdWUgdG8gd2hpY2gg
-SSBkZXBlbmQgb24gRFQgZmxhZyBhZGRpdGlvbiBmb3IgdGhlIHF1aXJrLiBDYW4gd2UgYWRkIHRo
-ZXNlIERUIGZsYWdzIGFuZCBxdWlyaz8NCj4gDQo+IEFzIEkgc2FpZCwgSSdtIHdlbGwgYXdhcmUg
-b2YgdGhlIHNpdHVhdGlvbiByZWdhcmRpbmcgdXNhZ2Ugb2YgY29tcGF0aWJsZQ0KPiBzdHJpbmdz
-IGFuZCB0aGUgZmFjdCB0aGF0IGR3YzMgbXVzdCB3b3JrIG9uIFBDSSBhbmQgbm9uLVBDSSBzeXN0
-ZW1zIChJDQo+IHdyb3RlIHRoZSB0aGluZyBhcyBpdCBpcyBhZnRlciBhbGwpLiBUaGUgcGVyc29u
-IGJsb2NraW5nIG5ldyBxdWlyayBmbGFncw0KPiBpcyBSb2IsIG5vdCBtZS4gWW91IG5lZWQgdG8g
-Y29udmluY2UgUm9iIHRoYXQgdGhpcyBpcyB0aGUgd2F5IHRvIGdvLg0KPiANCkBGZWxpcGU6IFNv
-cnJ5IGZvciBjb25mdXNpb24gaWYgYW55LCBwcmV2aW91cyBtYWlsIHdhcyBpbnRlbmRlZCBmb3Ig
-Um9iIGFza2luZyBhYm91dCBoaXMgYXBwcm92YWwuDQoNCj4gUm9iLCBiYWxsJ3MgaW4geW91ciBj
-b3VydC4gU29ycnkuPiANCkBSb2I6IEFzIEkgYW5kIEZlbGlwZSBoYXZlIG1lbnRpb25lZCBiZWZv
-cmUsIGl0IGlzIHZlcnkgbXVjaCBuZWNlc3NhcnkgdG8gaGF2ZSBxdWlyayBmbGFncw0KZm9yIHRo
-ZSBjdXJyZW50IGNoYW5nZXMgYXMgY29tcGF0aWJsZSBzdHJpbmcgd291bGQgbm90IGJlIGEgc29s
-dXRpb24gZm9yIFBDSSBhbmQgbm9uLVBDSQ0Kc3lzdGVtcy4gQ2FuIHlvdSBwbGVhc2UgYXBwcm92
-ZSB0aGlzIGNoYW5nZSA/IElmIHlvdSBoYXZlIGFueSBjb25jZXJuIGFib3V0IG5hbWluZyBvciBh
-bnkNCm90aGVyIHRoaW5nLCBwbGVhc2UgbGV0IHVzIGtub3cuDQoNClRoYW5rcyAmIFJlZ2FyZHMs
-DQogVGVqYXMgSm9nbGVrYXINCg==
+On 7/21/20 7:43 AM, Al Cooper wrote:
+> Remove "brcm,bdc-v0.16" because it was never used on any system.
+> Add "brcm,bdc-udc-v2" which exists for any STB system with BDC.
+> 
+> Signed-off-by: Al Cooper <alcooperx@gmail.com>
+
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
