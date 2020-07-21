@@ -2,85 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BCC1228465
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 18:00:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B02CC2284F0
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 18:09:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728969AbgGUQA3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jul 2020 12:00:29 -0400
-Received: from mail-wm1-f44.google.com ([209.85.128.44]:52664 "EHLO
-        mail-wm1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726892AbgGUQA3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 12:00:29 -0400
-Received: by mail-wm1-f44.google.com with SMTP id q15so3351135wmj.2;
-        Tue, 21 Jul 2020 09:00:28 -0700 (PDT)
+        id S1730262AbgGUQIl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jul 2020 12:08:41 -0400
+Received: from mail-il1-f193.google.com ([209.85.166.193]:43534 "EHLO
+        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727058AbgGUQIl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 12:08:41 -0400
+Received: by mail-il1-f193.google.com with SMTP id i18so16882111ilk.10;
+        Tue, 21 Jul 2020 09:08:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Kj4rsz080Snn4B9MG3ZbTEom1EbAEYgUHjT0erERj2Q=;
-        b=MsoC2nrwA9QFN2TrodngwqSSW83ssVxsL8z4dTOdESvejPa6Ulro/x0ajMDeryahrQ
-         gzZlUF53fkx4LGyXYyxmX9fLoV2jA4iyVZva5/b0ZeSSWImYImwAPU5v/FgwNCFYBHwZ
-         qjxuEkWvyez+mCrhW3412vMF28PV9cLPtXsQNmOjN+kcjKrjZ1dlCbDHWWwM4Ru10rYI
-         uB1Pjyt9aRNtTZCIxJ02QVQi140T0M6vnHT/8Yw4py41AhHUipL/W4efCSPVeZQ6DY6u
-         DNln2uPv43FCfeWJgBGBM2tDY4stueEJOl8Y3sebVNHDhsSnoIhzLT+UPBOcQF31wwie
-         CNXg==
-X-Gm-Message-State: AOAM533mNzEoTeGbQsTu+hJmb+dfDxf52ai7n2xaMMKywptbnYnemMNN
-        1A/GAtmzgB0zy1V6EkTOAK4=
-X-Google-Smtp-Source: ABdhPJziu+Xxu9YdgzKr7PT4T+W9SMer6L/whdz53Wdb7MYjUO3T40Yx4hEbcMOQz3ZpfMz9J0OH2A==
-X-Received: by 2002:a1c:65d5:: with SMTP id z204mr4602923wmb.15.1595347227554;
-        Tue, 21 Jul 2020 09:00:27 -0700 (PDT)
-Received: from localhost (ip-37-188-169-187.eurotel.cz. [37.188.169.187])
-        by smtp.gmail.com with ESMTPSA id s15sm4234729wmj.41.2020.07.21.09.00.26
+        bh=FjMXsxzFtaUreC3kbfmAv2v7/+I+dvMTekAmMNypevk=;
+        b=PIucpEwHCivJUKxO8ttX7BRqJM2YlKkxcz8cgnae43wQwXph8+cJmaxcdWMRLtHJ5Q
+         DL3kTYE/ork9cAlyLD8JNDIfx0tG1AjLGfXZ7vuKecI/Azmhcc3hun7FntYoqO4y0IFi
+         ESVWV46vwkYKURbTssOcYhJ+MwKXz4Lgu2s2i+EqzLcOkOi2cg5+AFOqb15OIHkB6atn
+         hWq4X62ET++alHdtUAqIWVqCsvnl2+YIefP0yCd2h7M5LrJwMkP2DF+URQCVoJzWz5xM
+         Fg6dYEtFcTOHMlPbXxZ8C9FDGaByPlzdQzrOqNC//tjmvww08vXELYRtQHCEKvgDmgB2
+         I7Dw==
+X-Gm-Message-State: AOAM532n5QdRFxVlpdEmHuVrStFeLEucxX2Zmr2x+UK3gWW/v4+sFmHY
+        p7xEFmS5Z0YxZaFhY8QyIw==
+X-Google-Smtp-Source: ABdhPJxyPY8gF2PcuZ6eVWiD1brwqr9E0n8BNki5/DOpSqJmzQt+fWfHePbEhzQUUPcEn1kQu2A6BA==
+X-Received: by 2002:a92:dc0f:: with SMTP id t15mr26156619iln.218.1595347719975;
+        Tue, 21 Jul 2020 09:08:39 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id c25sm10733962ioi.13.2020.07.21.09.08.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2020 09:00:26 -0700 (PDT)
-Date:   Tue, 21 Jul 2020 18:00:25 +0200
-From:   Michal Hocko <mhocko@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: Re: kworker/0:3+pm hogging CPU
-Message-ID: <20200721160025.GP4061@dhcp22.suse.cz>
-References: <20200720143213.GJ4074@dhcp22.suse.cz>
- <20200720151255.GE1228057@rowland.harvard.edu>
- <20200720163355.GA4061@dhcp22.suse.cz>
- <20200720173807.GJ1228057@rowland.harvard.edu>
- <20200720174530.GB4061@dhcp22.suse.cz>
- <20200720174812.GK1228057@rowland.harvard.edu>
- <20200720181605.GC4061@dhcp22.suse.cz>
- <20200720200243.GA1244989@rowland.harvard.edu>
- <20200721055917.GD4061@dhcp22.suse.cz>
- <20200721143325.GB1272082@rowland.harvard.edu>
+        Tue, 21 Jul 2020 09:08:38 -0700 (PDT)
+Received: (nullmailer pid 386158 invoked by uid 1000);
+        Tue, 21 Jul 2020 16:08:35 -0000
+Date:   Tue, 21 Jul 2020 10:08:35 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, jaswinder.singh@linaro.org
+Subject: Re: [PATCH for v5.9] ARM: dts: Replace HTTP links with HTTPS ones
+Message-ID: <20200721160835.GA386106@bogus>
+References: <20200719152722.59701-1-grandmaster@al2klimov.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200721143325.GB1272082@rowland.harvard.edu>
+In-Reply-To: <20200719152722.59701-1-grandmaster@al2klimov.de>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue 21-07-20 10:33:25, Alan Stern wrote:
-[...]
+On Sun, 19 Jul 2020 17:27:22 +0200, Alexander A. Klimov wrote:
+> Rationale:
+> Reduces attack surface on kernel devs opening the links for MITM
+> as HTTPS traffic is much harder to manipulate.
+> 
+> Deterministic algorithm:
+> For each file:
+>   If not .svg:
+>     For each line:
+>       If doesn't contain `\bxmlns\b`:
+>         For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
+> 	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
+>             If both the HTTP and HTTPS versions
+>             return 200 OK and serve the same content:
+>               Replace HTTP with HTTPS.
+> 
+> Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
+> ---
+>  Continuing my work started at 93431e0607e5.
+>  See also: git log --oneline '--author=Alexander A. Klimov <grandmaster@al2klimov.de>' v5.7..master
+>  (Actually letting a shell for loop submit all this stuff for me.)
+> 
+>  If there are any URLs to be removed completely
+>  or at least not (just) HTTPSified:
+>  Just clearly say so and I'll *undo my change*.
+>  See also: https://lkml.org/lkml/2020/6/27/64
+> 
+>  If there are any valid, but yet not changed URLs:
+>  See: https://lkml.org/lkml/2020/6/26/837
+> 
+>  If you apply the patch, please let me know.
+> 
+>  Sorry again to all maintainers who complained about subject lines.
+>  Now I realized that you want an actually perfect prefixes,
+>  not just subsystem ones.
+>  I tried my best...
+>  And yes, *I could* (at least half-)automate it.
+>  Impossible is nothing! :)
+> 
+> 
+>  Documentation/devicetree/bindings/arm/xen.txt                 | 2 +-
+>  Documentation/devicetree/bindings/bus/ti,da850-mstpri.txt     | 2 +-
+>  .../devicetree/bindings/memory-controllers/ti-aemif.txt       | 4 ++--
+>  .../bindings/memory-controllers/ti-da8xx-ddrctl.txt           | 2 +-
+>  Documentation/devicetree/bindings/usb/gr-udc.txt              | 2 +-
+>  Documentation/devicetree/bindings/usb/maxim,max3420-udc.yaml  | 2 +-
+>  Documentation/devicetree/bindings/usb/usb-device.txt          | 2 +-
+>  Documentation/devicetree/booting-without-of.txt               | 2 +-
+>  arch/arm/boot/dts/keystone.dtsi                               | 2 +-
+>  arch/arm/boot/dts/tps6507x.dtsi                               | 4 ++--
+>  arch/arm/boot/dts/tps65217.dtsi                               | 4 ++--
+>  arch/arm/boot/dts/tps65910.dtsi                               | 4 ++--
+>  arch/arm/boot/dts/twl4030.dtsi                                | 2 +-
+>  arch/arm/boot/dts/twl6030.dtsi                                | 4 ++--
+>  include/dt-bindings/pinctrl/dra.h                             | 2 +-
+>  include/dt-bindings/pinctrl/keystone.h                        | 2 +-
+>  16 files changed, 21 insertions(+), 21 deletions(-)
+> 
 
-Thanks a lot for your analysis. The laptop is slowly dying so this can
-be related.
-
-> So yes, this looks like a hardware design error.  Turning off 
-> autosuspend by writing to the sysfs power/control file is probably the 
-> best way to handle the problem.
-
-I can use that workaround. But it seems that this also prevents me from
-suspending the maching into RAM with
-PM: Some devices failed to suspend, or early wake event detected
-
-:/
-
-If there is any workaround for that then I would be really happy but
-considering the overal state of the machine I suspect this is not the
-case.
-
-Thanks again for your great help!
--- 
-Michal Hocko
-SUSE Labs
+Acked-by: Rob Herring <robh@kernel.org>
