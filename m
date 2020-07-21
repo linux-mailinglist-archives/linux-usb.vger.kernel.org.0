@@ -2,67 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6B7227BFA
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 11:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB7D9227BFD
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 11:44:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726188AbgGUJnF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jul 2020 05:43:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38106 "EHLO
+        id S1728006AbgGUJoF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jul 2020 05:44:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725984AbgGUJnF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 05:43:05 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A40FC061794;
-        Tue, 21 Jul 2020 02:43:04 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id q4so23425067lji.2;
-        Tue, 21 Jul 2020 02:43:04 -0700 (PDT)
+        with ESMTP id S1725984AbgGUJoE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 05:44:04 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661B6C061794;
+        Tue, 21 Jul 2020 02:44:04 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id q6so2346748ljp.4;
+        Tue, 21 Jul 2020 02:44:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=Bcjce0RSi5cAzugVx+NeI/QfodEd9VLTjD9tWZICZgU=;
-        b=csQ2h+t9/4bNMtFl20Jjm8Zy8IkQ0DVCWJ9xhRepggj3XwNjA1zV2aAOux6iX9mjUs
-         lddDYyEZeTuDmZaVz9tQVvAlrsDs5zIEqmM/F0RrgAmnNRjMb/4XaaiyShFmHm69WZTh
-         MYqybCeZ+7KVBztFmMdFCOHupgLGiP5FFeyu+nPuteNgS9ISab+QtAAA/uuu6QTelLgW
-         c2XGN5z/jYFwGVmKhiPAvAYFA37I9hxqO19+dlwS+362TRD1KV9ibQGzYHCc0v2GzCFq
-         FHWiuhlrageaKZJSfgN8Zs/Sm/EVKUrJLv8kvutZC3XReTurmROsNzQRjmXAGzamDTBn
-         DCFg==
+        bh=4B4uTKaYVVIs2NUU7WSS3PrxtkG5yE1ho1vSzkWNNJY=;
+        b=pdJRleq1eaXiymciRCaJyMpEjyPf0ED+Y0ls4trEfLYY1pCXRP0dEAYl7GKpTZrGN5
+         4GCC1/QU/PadIe17M5/f5otVVm34IdsMKlFm0E53OJ7M/CMFib65tcxSgVcwPbY669Tq
+         8ffyI9mQksGVgB9Mh2FJGtMdH0DRHXCI6GQGp3JL3k+bOa5AKg+Ww3F7MPO4prHB+Jl2
+         Gy/ZBuJKzVJ2p6EVq/HKKEKesmnzGdFI5P4H7gfxBOMgydhnzEFXTglpA5n/nhtz+V81
+         cZSZl1i31a2GiehcPueTGiGw+nYK7dUYaXhwXVWH83GmBnPWKRNoxtayXR2kQrU60a0w
+         vXsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
          :date:message-id:mime-version;
-        bh=Bcjce0RSi5cAzugVx+NeI/QfodEd9VLTjD9tWZICZgU=;
-        b=Q0ENozNdyf7SInOLHN8NqQ8/9x09xo4jFdZSuxc1pvX6XznhiVio6tTE7hcFQnxFvD
-         ly6OGfXA89MUCsczLFyK1xcJnW4PIxcGMtTGF0X0JMhO/65LXbikWIftdb3N5eTU4CxQ
-         u+hNRLjhf49b4rl2MaJLUsvX1ti52A4xm3+IRdnLXgZp+qNg5Wgw7RehO8J9eZOeKz3S
-         FHdv5PorXkGxcwb1TXhRlTQZJlqbf+oGVhy3V2vb7rAB4OtwwX7i0i3uE4AKSJ+zCvFI
-         N3rlTdqY8HIgvpOl1VwJlLfIWNC/O/iSIdzu9MJxhHK5f1moHSmJa/UupT5qinpf2d4A
-         JJLg==
-X-Gm-Message-State: AOAM531I0pU+IZpDDZqVRVHu7D6n4oKxo1b0vmeXTRampLfskVj+Husi
-        F88tUeyRU2nrREhYC/sNOaA=
-X-Google-Smtp-Source: ABdhPJxMAgGCe0cQOZaYb/3wDk2OTcBA7dPCflgu/NLzSq165ySZN9nZtSsFvVkOnnyS4JAFyqhZ3A==
-X-Received: by 2002:a2e:730c:: with SMTP id o12mr11930894ljc.165.1595324582604;
-        Tue, 21 Jul 2020 02:43:02 -0700 (PDT)
+        bh=4B4uTKaYVVIs2NUU7WSS3PrxtkG5yE1ho1vSzkWNNJY=;
+        b=uZFeVN/WTEr6f7t7z0YJvXzvANQFZgIS0hwc9F0EPF1oat082YUBowKF7JjTPMK9zU
+         smcMC/tsG4HQ8ju06Yuc1VXRSgsEkdp2pLlCFnznN/q43Fb0WIhuaeOt6zDGcwCmBMEm
+         tt0Wobv3v/QOpgzzMcUKJ2UR/93oo0Hw9bjS5XuFY0Vq6Ah2e3ONEFif681AHhXIU/8V
+         IP0NpeafpFG9NULQvCQpU0X+ijlA2VZtbdaC7hv3jfNKlJOle1b1r4FnvMBGPlob3AMR
+         TLo3TXp9Hu099Ea8hRgNA71JeDCeksFUKBc3MzbwTqNRmfZVmajsxvbdDZ1+Lm9mVgfu
+         xE0A==
+X-Gm-Message-State: AOAM5306UMv/DUUBnf54K896/tFmtiNGDhKJHxfRE4S75FTGyMAYPoV2
+        4pHcD3c8WMgDWKv1qeFCzaHCfj4aqMTgLA==
+X-Google-Smtp-Source: ABdhPJzhA3jW9y1U/VHRqB2+TAhq8vBgv7fDywrgkTgJmnvYz3ND+eXb6bTGt9vwJhd+hEJYMucSKQ==
+X-Received: by 2002:a2e:8597:: with SMTP id b23mr11438006lji.338.1595324642702;
+        Tue, 21 Jul 2020 02:44:02 -0700 (PDT)
 Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id b81sm2944612lfg.60.2020.07.21.02.43.00
+        by smtp.gmail.com with ESMTPSA id r22sm4192790ljc.25.2020.07.21.02.44.01
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 21 Jul 2020 02:43:01 -0700 (PDT)
+        Tue, 21 Jul 2020 02:44:02 -0700 (PDT)
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [v3 PATCH] usb: gadget: bdc: use readl_poll_timeout() to simplify code
-In-Reply-To: <1594622881-6563-1-git-send-email-chunfeng.yun@mediatek.com>
-References: <1594622881-6563-1-git-send-email-chunfeng.yun@mediatek.com>
-Date:   Tue, 21 Jul 2020 12:42:56 +0300
-Message-ID: <87eep5p5jz.fsf@kernel.org>
+To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        "gregkh\@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Cc:     "linux-arm-kernel\@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Ben Dooks <ben@simtec.co.uk>
+Subject: Re: [PATCH v2 1/8] usb: dwc2: gadget: Make use of GINTMSK2
+In-Reply-To: <566f2d65-1b5a-ed2a-f33f-516b66be2624@synopsys.com>
+References: <20200715093209.3165641-1-lee.jones@linaro.org> <20200715093209.3165641-2-lee.jones@linaro.org> <566f2d65-1b5a-ed2a-f33f-516b66be2624@synopsys.com>
+Date:   Tue, 21 Jul 2020 12:43:57 +0300
+Message-ID: <87blk9p5ia.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -72,22 +70,34 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 --=-=-=
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Minas Harutyunyan <Minas.Harutyunyan@synopsys.com> writes:
 
-Chunfeng Yun <chunfeng.yun@mediatek.com> writes:
-> Use readl_poll_timeout() to poll register status
+> On 7/15/2020 1:32 PM, Lee Jones wrote:
+>> The value obtained from GINTSTS2 should be masked with the GINTMSK2
+>> value.  Looks like this has been broken since
+>> dwc2_gadget_wkup_alert_handler() was added back in 2018.
+>>=20
+>> Also fixes the following W=3D1 warning:
+>>=20
+>>   drivers/usb/dwc2/gadget.c: In function =E2=80=98dwc2_gadget_wkup_alert=
+_handler=E2=80=99:
+>>   drivers/usb/dwc2/gadget.c:259:6: warning: variable =E2=80=98gintmsk2=
+=E2=80=99 set but not used [-Wunused-but-set-variable]
+>>   259 | u32 gintmsk2;
+>>   | ^~~~~~~~
+>>=20
+>> Cc: Minas Harutyunyan <hminas@synopsys.com>
+>> Cc: Ben Dooks <ben@simtec.co.uk>
+>> Fixes: 187c5298a1229 ("usb: dwc2: gadget: Add handler for WkupAlert inte=
+rrupt")
+>> Signed-off-by: Lee Jones <lee.jones@linaro.org>
 >
-> Cc: Florian Fainelli <f.fainelli@gmail.com>
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+> Acked-by: Minas Harutyunyan <hminas@synopsys.com>
 
-I had a lot of trouble to apply this patch, could you avoid base64
-encoding on the patch body next time?
-
-Thanks
+Should I apply the entire series or only 1/8?
 
 =2D-=20
 balbi
@@ -97,18 +107,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl8WuKAACgkQzL64meEa
-mQbgQw/8D5MApknAagQ1QHV5vnpIQ0lR2Lv6nf7GyipydG0ROriUsdYZx0WIXYp8
-O2pMl9dzA5QI4MDMIwS8T8/iC7SZS30b9+5jNM3gIyIMgVirenhgMVHV6CJhbuMv
-76KpmPx87FGVgpW42X9YXfuSUqBjK9DeXt9QzRDJj7rho0jh6OQpVzwoy1dI1Hcq
-Qrdy96W+vG4XGfkdZRROLw9dkAzqLC2R7uhq2kWRKje4rYDKNV/bvj/MQ4K2fxu9
-3YbPPp+CMvTTsLuqIEyGy3FkQrXDRHB1miM7Ii9yAbmGTeNDpdtXPFCZV3evfCBI
-/xzTmUTcAkHlmlDP8O4/I2HsYsdqKbrBbbCYO1Sf8dKa5IeeXNc3dNGVtrKHlJgA
-x2p3Iy/Bydhyh3eEYnM4EOCX92vhu3CTCq9zzXF20pGtzbzqrItZcCIQ5uAiv1W5
-uEF/zyHg28QU6q1slo+nVWHwP+m4DDp6y3eFQfy5JejeJDUUUhMeFAqMTH9gSK3V
-5R1DC0hx6p9oLAGiXTzXzLa781ynVfQ3/7z4hLXpez8zXK4Vu7duiV7KSOSMKcyb
-Ai4gl+Iwloo0jkDk10vIZGMTvibbXeFkRxlZEV7OFGJn3I+SOEzQzKfiWKyhvBkA
-2vuAB0ozj32RV0IN8Ogzrc6m1z+yh+B77DOt1Lpx4BTL/daY5Ks=
-=4+GP
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl8WuN0ACgkQzL64meEa
+mQacAQ//a/P5SYnBnlVVnSmY6/+H5xaTyA0frND1g+cvwxNLc8oWt8WK97bow8mn
+gHNkRsPUfur72sCbsHhbOczv7Kc2ea3d+0KJNTv0idAgr8zUG0we/lYewX7+YCDc
+x911DeDk19uqC84Xbt9LmC9iBJbqPA+IlzckS2CwunqNws57n01+/p+txsNOEwXc
+EfCJBfEljT+W8u+yoeAu2FDdL3etFHZuIEE/aSLYC5qTqtM8dnUcoci0NDb3J+If
+uhJ0U0E8S9u3D8vGaL78cZHvMCvY6C4NLj+CdwkTFIGh3wx0uYSyOGnvrd2mlupS
+UV0oUqJj6vqDZ0MjpUYpAYd9tqSiucigXy13vId9QOSgTGsVKYNHevUlUOLq8lYC
+q29fZ4qNprDyKdc/JRuzkqanRqVfP7+HArMOXajAbCb1Qbk+qoYp12LuDs4yFWBW
+cBe1/yy9ItxJAjp7oMBiuMsjWdn/Di7mf3HMt5fTti0jNptDq1BPGsksUudJ656I
+OewK0YelUC6ptvxRfE4YwI7MUoG5EciU9tonBpFGkU2euzs6VrIpIF9haDIKEuC8
+8eafrA9+yamuhElBP0xix/Bbif/Lk6oxK6yXVIwdB5qCNEgHRPjLzDEQykO1QBwp
+BMykpU5UXXpdqYD9kuT3k/hHTLq8GeO2o3bHVWoWZTvw7ZumzMk=
+=1ehQ
 -----END PGP SIGNATURE-----
 --=-=-=--
