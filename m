@@ -2,120 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06B85227ED0
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 13:27:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF3E5227EFB
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jul 2020 13:32:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729663AbgGUL1o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jul 2020 07:27:44 -0400
-Received: from jabberwock.ucw.cz ([46.255.230.98]:51918 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726415AbgGUL1n (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 07:27:43 -0400
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 9DC911C0BE5; Tue, 21 Jul 2020 13:27:40 +0200 (CEST)
-Date:   Tue, 21 Jul 2020 13:27:40 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Eugeniu Rosca <erosca@de.adit-jv.com>
-Cc:     Pavel Machek <pavel@denx.de>, stable@kernel.org,
-        kernel list <linux-kernel@vger.kernel.org>, gregkh@duo.ucw.cz,
-        roscaeugeniu@gmail.com, stern@rowland.harvard.edu,
-        qais.yousef@arm.com, linux@prisktech.co.nz,
-        mathias.nyman@intel.com, oneukum@suse.de, linux-usb@vger.kernel.org
-Subject: Re: hibernation reverts in 4.19.134: better alternative?
-Message-ID: <20200721112740.GA17778@duo.ucw.cz>
-References: <20200720101522.GB13137@amd>
- <20200721065054.GA8290@lxhi-065.adit-jv.com>
+        id S1728704AbgGULcP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jul 2020 07:32:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55046 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726266AbgGULcO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 07:32:14 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D874C061794;
+        Tue, 21 Jul 2020 04:32:14 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id h22so23659958lji.9;
+        Tue, 21 Jul 2020 04:32:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=hvBHByfuN4VYEKY+y/yvJNCDmWONLf8OUqOSVrmh4Q4=;
+        b=MGipDunY1c1w9J7bbp++6aGSvcXbN4qzm1hj5wdbM4Tvy9BDJrzitpV/pEaNkPI5HO
+         p10+qclaXvCngz4o/38MfLlt76Ax7RgT63bL1H2BZAZp8pkZMQwoIFNidpQQ3p73hxlm
+         N5nPQorpjmUbnUHTAalkXukqbQ6qCUjW/Tr7ZUi5iuLN2k4EzHNClREOekUYyTJO2VQc
+         EA8E3RiwFi/h/5JRXm44re0gx8mt3OeAYscQ3PJIy7/GC4CEYmGufD5bHLEjPw5ta4/S
+         pTu3DMsEdgevR/1RdrEXq302P+yrV+krAee4eVb2D0SEzcnUPnycLfi8Jv59zIV4TXPC
+         IJDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=hvBHByfuN4VYEKY+y/yvJNCDmWONLf8OUqOSVrmh4Q4=;
+        b=IVlacHq1YDrOBPHy1tcOh7kXxgEzbiOmt+KcZk6/n8OmVMmDqN2goH4OPxrt477CLp
+         sayWAfJdMBQhXUbKOwtvjjGUljoyKnW11/xcpjyjXGC+ppc+zlr0lYdM5QapFBRjW2MK
+         9nIv+PQu20f3mTbZVvMraHpNaAZt7pp/YC0gmyc+2QKWBIZkRR9pyn6vSW71IzJ3Hrux
+         NL6JI1QGU6N/IIGgJa55ZHG3N7BLZ1bTcgCOiVNyIRMF9lcvVDeW4rHsNJSAA04nRkmN
+         DsnKCFYswJT+dcG7DB2+SXxRKAVemHY0jVthnqpZ5aeLky6af/RYwWEQuc2Lewcd4Ftk
+         j1Fw==
+X-Gm-Message-State: AOAM53305flbFvltkaQ25YGmzx55ssg7HKgXj2VFE8DZU9PCoO+uvxDe
+        aYiAV98dzeCy10y8j8d4odM=
+X-Google-Smtp-Source: ABdhPJyYSOylUhpvpY66H7g9H8of+i4dnEuzb6if/mlO0vzJWxnMDWB1Z1US6G3nS8tjTbkUTDZ5Cg==
+X-Received: by 2002:a2e:9003:: with SMTP id h3mr12861735ljg.191.1595331132934;
+        Tue, 21 Jul 2020 04:32:12 -0700 (PDT)
+Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
+        by smtp.gmail.com with ESMTPSA id h21sm4321302ljk.31.2020.07.21.04.32.10
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 21 Jul 2020 04:32:11 -0700 (PDT)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        "gregkh\@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Cc:     "linux-arm-kernel\@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Ben Dooks <ben@simtec.co.uk>
+Subject: Re: [PATCH v2 1/8] usb: dwc2: gadget: Make use of GINTMSK2
+In-Reply-To: <5862f649-8058-7e39-cb43-2a4b09303333@synopsys.com>
+References: <20200715093209.3165641-1-lee.jones@linaro.org> <20200715093209.3165641-2-lee.jones@linaro.org> <566f2d65-1b5a-ed2a-f33f-516b66be2624@synopsys.com> <87blk9p5ia.fsf@kernel.org> <5862f649-8058-7e39-cb43-2a4b09303333@synopsys.com>
+Date:   Tue, 21 Jul 2020 14:32:07 +0300
+Message-ID: <875zahp0i0.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="3V7upXqbjpZ4EhLz"
-Content-Disposition: inline
-In-Reply-To: <20200721065054.GA8290@lxhi-065.adit-jv.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
---3V7upXqbjpZ4EhLz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+--=-=-=
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi!
+Minas Harutyunyan <Minas.Harutyunyan@synopsys.com> writes:
 
-> On Mon, Jul 20, 2020 at 12:15:22PM +0200, Pavel Machek wrote:
-> > This is queued for 4.19.134-stable, reverting 3 patches. But it seems
-> > better alternative is available...
-> >=20
-> > commit f3e697b7b6f5e2c570226f8f8692fb7db57215ec
-> > Author: Sasha Levin <sashal@kernel.org>
-> > Date:   Fri Jul 17 12:58:32 2020 -0400
-> >=20
-> >     Revert "usb/ohci-platform: Fix a warning when hibernating"
-> >    =20
-> >     This reverts commit c83258a757687ffccce37ed73dba56cc6d4b8a1b.
-> >    =20
-> >     Eugeniu Rosca writes:
-> >=20
-> > ...
-> >=20
-> >     > - Backporting 987351e1ea7772 ("phy: core: Add consumer device
-> >     >   link support") to v4.14.187 looks challenging enough, so probab=
-ly not
-> >     >   worth it. Anybody to contradict this?
-> >=20
-> > Backporting 987351e1ea7772 to 4.4 may be "interesting", but backport
->=20
-> Typo? 4.14 meant?
+> Hi Felipe,
+>
+> On 7/21/2020 1:43 PM, Felipe Balbi wrote:
+>> Minas Harutyunyan <Minas.Harutyunyan@synopsys.com> writes:
+>>=20
+>>> On 7/15/2020 1:32 PM, Lee Jones wrote:
+>>>> The value obtained from GINTSTS2 should be masked with the GINTMSK2
+>>>> value.  Looks like this has been broken since
+>>>> dwc2_gadget_wkup_alert_handler() was added back in 2018.
+>>>>
+>>>> Also fixes the following W=3D1 warning:
+>>>>
+>>>>    drivers/usb/dwc2/gadget.c: In function =E2=80=98dwc2_gadget_wkup_al=
+ert_handler=E2=80=99:
+>>>>    drivers/usb/dwc2/gadget.c:259:6: warning: variable =E2=80=98gintmsk=
+2=E2=80=99 set but not used [-Wunused-but-set-variable]
+>>>>    259 | u32 gintmsk2;
+>>>>    | ^~~~~~~~
+>>>>
+>>>> Cc: Minas Harutyunyan <hminas@synopsys.com>
+>>>> Cc: Ben Dooks <ben@simtec.co.uk>
+>>>> Fixes: 187c5298a1229 ("usb: dwc2: gadget: Add handler for WkupAlert in=
+terrupt")
+>>>> Signed-off-by: Lee Jones <lee.jones@linaro.org>
+>>>
+>>> Acked-by: Minas Harutyunyan <hminas@synopsys.com>
+>>=20
+>> Should I apply the entire series or only 1/8?
+>>=20
+> In this series only 2 patches are related to dwc2, which I'm already Acke=
+d:
+>
+> [PATCH v2 1/8] usb: dwc2: gadget: Make use of GINTMSK2
+> [PATCH v2 2/8] usb: dwc2: gadget: Avoid pointless read of EP control=20
+> register
+>
+> I can't acked other patches from this series, because they are not=20
+> related to dwc2.
 
-4.4 meant. I care about 4.4 and 4.19.
+heh, I saw that after sending the email, sorry :-)
 
-> > to 4.19 seems trivial, here, and it seems to work ok according to CIP
-> > test suites:
-> >=20
-> > https://gitlab.com/cip-project/cip-kernel/linux-cip/-/pipelines/1684874=
-77
-> >=20
-> > (You can simply apply 987351e1ea7772 ignoring one file that is not yet
-> > present in 4.19.)
->=20
-> Technically yes. Backporting 987351e1ea7772 to v4.19.x avoids the panic.
-> But it means integrating a v5.6 feature (isn't 987351e1ea7772 one?) into
-> the v4.19.x stable tree. Isn't v4.19.x (just like any other stable
-> branch) supposed to contain just fixes?
+=2D-=20
+balbi
 
-Well, backport might be preffered to reverting 3 patches that will
-re-introduce WARN()s. Yes, documentation does not match reality here.
-
-> Should then any missing prerequisite features be pumped in into the
-> stable tree, whenever backporting a bugfix produces unexpected results?
->=20
-> FWIW I confirm that:
-> * setup [A] leads to the issue reported in [C]
-> * setup [B] resolves the issue reported in [C]
-
-Thank you!
-
-> [A] v4.19 + 16bdc04cc98 + 1cb3b0095c3 + 79112cc3c29f
-> [B] v4.19 + 16bdc04cc98 + 1cb3b0095c3 + 79112cc3c29f + 987351e1ea7
-> [C] https://lore.kernel.org/linux-usb/20200709070023.GA18414@lxhi-065.adi=
-t-jv.com/
-
-Best regards,
-								Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---3V7upXqbjpZ4EhLz
+--=-=-=
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCXxbRLAAKCRAw5/Bqldv6
-8gemAKCaQwdHz0sm2+FFlMPzlc0Mr9Bt2gCffVQ9yd4JJPpnRhhrQP873z6IUi8=
-=UcJi
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl8W0jcACgkQzL64meEa
+mQYkNA//SvFqXwJajGIbMxt0zxlYlwOUMXjMJAoVSgOROAwJX1x/7BU9NfjuPv1C
+Ndy4KfZIOKX/QZVpFbVSAtK23AE5nS3dtPLuP1xhpX6ZDu6vKkwfRuXHPlotTx16
+Na9Xq1u2sh9FGa1HeeCEwWVTad672OOsRuqA3ueS+K1bU3GjgbL/dyKcp435CQeP
+oLw45QRIWWnOhmc+I1cs0dON4Xl6mCQwX+j7T3ztGUSLXjs8L+DOjBdo/ACBAdTp
+yJuvTETyDU11uuckNRywwAxAIdw0AxypK2gLInoYGdyLhxrvE4STtMIF5MT4Ts8J
+jnzD2ddDKLRS4mw2vpn1iKqKLt65loqJg7flcSAfV+wmcDIDpLOjWq5iYWl2Wto+
+iTbAZO9PQnWVrPtIB7ghVfIG0d/QYxOphGHBnVhrNPq6g0F0ZmHG7KipWUMXBcbQ
+v8pHE5cSh+R6SiWt8Exif0CeApworGdYb7bm8Cwe1pNSGWnjzzwphK1Dz4CSqjVI
+PE30gykBihvQD+pR3I92HidcLDzDlMKKp8BHwYqzthdNg+TPQO3sWanucJJGCQno
+FeGpLOiOX/8/TmMWZxILr+MEBsq8DI7ByxkQwqlqjXaRuVCFvQKQ5KBhSCpKlgOQ
+ve/gQG2kHf2q35Kj3VhW0YYznwZv+zufDws7NJ2jvgLWSo9H7XM=
+=Tbrc
 -----END PGP SIGNATURE-----
-
---3V7upXqbjpZ4EhLz--
+--=-=-=--
