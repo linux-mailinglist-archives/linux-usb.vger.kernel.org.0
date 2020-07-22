@@ -2,60 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CDEE229738
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jul 2020 13:14:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96BA6229739
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jul 2020 13:14:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726941AbgGVLN7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Jul 2020 07:13:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35252 "EHLO mail.kernel.org"
+        id S1727060AbgGVLOC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jul 2020 07:14:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35288 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726028AbgGVLN7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 22 Jul 2020 07:13:59 -0400
+        id S1726028AbgGVLOB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 22 Jul 2020 07:14:01 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1EAA7207CD;
-        Wed, 22 Jul 2020 11:13:57 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CBE7C20729;
+        Wed, 22 Jul 2020 11:14:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595416438;
-        bh=Vc/Dp55RwvxiJrMacEMsB1swnTr3sOi8WCoFa6p7Ok8=;
+        s=default; t=1595416441;
+        bh=/CZI05UsgzW8nXGf57dneDvTArf7y1QcJ+YN40nPFnk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QvGMuEhLUpQKr8j1ay7tPcZVH8KhEJ9HGQ1P3ZwU8K8Z43wiHh1hITUxlqGoLesRR
-         gldxh5e6atxe08nyuryijYbClinwLhPBjlx2zrAVv31Xi21xbp7fyRD+w19w5SmZY0
-         qnReQtkGgRsVgmOR+WxU3+IVd0l4Yml98xP4hiU0=
-Date:   Wed, 22 Jul 2020 13:12:33 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Bastien Nocera <hadess@hadess.net>
-Cc:     linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: [PATCH 1/2] USB: Fix device driver race
-Message-ID: <20200722111233.GA2912795@kroah.com>
-References: <20200722094628.4236-1-hadess@hadess.net>
+        b=qOc7GMd7DH3b06rnhpTCU/p4UucRPEQjVskbd4Z41YSAj+Aa8jj0VdLokV3qnkUFK
+         m8zUcRnkvyMG2M4HugLg+ZNataLN/wIaNeP923oN8AWGTWqAzNig6pyWEw4yfmKMbl
+         mn81YPkDByENzXH8gGQ25coMg4j/AFk3soh3UF/M=
+Date:   Wed, 22 Jul 2020 13:13:13 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: usbfs: stop using compat_alloc_user_space
+Message-ID: <20200722111313.GA2914116@kroah.com>
+References: <20200722073655.220011-1-hch@lst.de>
+ <20200722080959.GA2800885@kroah.com>
+ <20200722082153.GA27215@lst.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200722094628.4236-1-hadess@hadess.net>
+In-Reply-To: <20200722082153.GA27215@lst.de>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 22, 2020 at 11:46:27AM +0200, Bastien Nocera wrote:
-> When a new device with a specialised device driver is plugged in, the
-> new driver will be modprobe()'d but the driver core will attach the
-> "generic" driver to the device.
+On Wed, Jul 22, 2020 at 10:21:53AM +0200, Christoph Hellwig wrote:
+> On Wed, Jul 22, 2020 at 10:09:59AM +0200, Greg KH wrote:
+> > On Wed, Jul 22, 2020 at 09:36:55AM +0200, Christoph Hellwig wrote:
+> > > Just switch the low-level routines to take kernel structures, and do the
+> > > conversion from the compat to the native structure on that.
+> > > 
+> > > Signed-off-by: Christoph Hellwig <hch@lst.de>
+> > > ---
+> > >  drivers/usb/core/devio.c | 126 +++++++++++++++++++++------------------
+> > >  1 file changed, 69 insertions(+), 57 deletions(-)
+> > 
+> > No objection to this, but why?  Are you trying to get rid of
+> > compat_alloc_user_space()?
 > 
-> After that, nothing will trigger a reprobe when the modprobe()'d device
-> driver has finished initialising, as the device has the "generic"
-> driver attached to it.
+> Eventually, yes.  Al has been doing a fair amount of work on it,
+> and Linus hates it with passion.
 > 
-> Trigger a reprobe ourselves when new specialised drivers get registered.
+> > 
+> > And do you want me to take this through my tree, or do you need to take
+> > it through yours?
 > 
-> Signed-off-by: Bastien Nocera <hadess@hadess.net>
-> ---
+> I have no tree where this would fit in, so please take it.
+> 
 
-What commit id does this fix?  And if it's in an older kernel, should it
-be backported to the stable trees?
-
-thanks,
-
-greg k-h
+Ok, will do, thanks!
