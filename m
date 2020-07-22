@@ -2,91 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C89CB229B23
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jul 2020 17:17:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 012D9229B56
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jul 2020 17:27:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732648AbgGVPR4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 22 Jul 2020 11:17:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43860 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728046AbgGVPRz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 22 Jul 2020 11:17:55 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 208327] xhci_hcd issue transfer event - usb3.0
-Date:   Wed, 22 Jul 2020 15:17:55 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: ionut_n2001@yahoo.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-208327-208809-uJJJ129xzf@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-208327-208809@https.bugzilla.kernel.org/>
-References: <bug-208327-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1732648AbgGVP0l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jul 2020 11:26:41 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:57153 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1728812AbgGVP0l (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jul 2020 11:26:41 -0400
+Received: (qmail 1315600 invoked by uid 1000); 22 Jul 2020 11:26:40 -0400
+Date:   Wed, 22 Jul 2020 11:26:40 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Bastien Nocera <hadess@hadess.net>
+Cc:     linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH 1/2] USB: Fix device driver race
+Message-ID: <20200722152640.GC1310843@rowland.harvard.edu>
+References: <20200722094628.4236-1-hadess@hadess.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200722094628.4236-1-hadess@hadess.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=208327
+On Wed, Jul 22, 2020 at 11:46:27AM +0200, Bastien Nocera wrote:
+> When a new device with a specialised device driver is plugged in, the
+> new driver will be modprobe()'d but the driver core will attach the
+> "generic" driver to the device.
+> 
+> After that, nothing will trigger a reprobe when the modprobe()'d device
+> driver has finished initialising, as the device has the "generic"
+> driver attached to it.
+> 
+> Trigger a reprobe ourselves when new specialised drivers get registered.
+> 
+> Signed-off-by: Bastien Nocera <hadess@hadess.net>
+> ---
+>  drivers/usb/core/driver.c | 31 +++++++++++++++++++++++++++++--
+>  1 file changed, 29 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+> index f81606c6a35b..a6187dd2186c 100644
+> --- a/drivers/usb/core/driver.c
+> +++ b/drivers/usb/core/driver.c
+> @@ -905,6 +905,30 @@ static int usb_uevent(struct device *dev, struct kobj_uevent_env *env)
+>  	return 0;
+>  }
+>  
+> +static int __usb_bus_reprobe_drivers(struct device *dev, void *data)
+> +{
+> +	struct usb_device_driver *udriver = to_usb_device_driver(dev->driver);
+> +	struct usb_device *udev = to_usb_device(dev);
+> +
+> +	if (udriver == &usb_generic_driver &&
+> +	    !udev->use_generic_driver)
+> +		return device_reprobe(dev);
+> +
+> +	return 0;
+> +}
+> +
+> +static int __usb_device_driver_added(struct device_driver *drv, void *data)
+> +{
+> +	struct usb_device_driver *udrv = to_usb_device_driver(drv);
+> +
+> +	if (udrv->match) {
+> +		bus_for_each_dev(&usb_bus_type, NULL, udrv,
+> +				 __usb_bus_reprobe_drivers);
 
---- Comment #10 from sander44 (ionut_n2001@yahoo.com) ---
-I tried with this change:
+What does udrv get used for here?
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 2c255d0620b0..964cacc1092e 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -2302,6 +2302,7 @@ static int process_bulk_intr_td(struct xhci_hcd *xhci,
-struct xhci_td *td,
-                remaining       = 0;
-                break;
-        case COMP_USB_TRANSACTION_ERROR:
-+               break;
-                if ((ep_ring->err_count++ > MAX_SOFT_RETRY) ||
-                    le32_to_cpu(slot_ctx->tt_info) & TT_SLOT)
-                        break;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  /**
+>   * usb_register_device_driver - register a USB device (not interface) driver
+>   * @new_udriver: USB operations for the device driver
+> @@ -934,13 +958,16 @@ int usb_register_device_driver(struct usb_device_driver *new_udriver,
+>  
+>  	retval = driver_register(&new_udriver->drvwrap.driver);
+>  
+> -	if (!retval)
+> +	if (!retval) {
+> +		bus_for_each_drv(&usb_bus_type, NULL, NULL,
+> +				 __usb_device_driver_added);
 
-And it doesn't help.
-Error messages still appear.
+This looks funny.  You're calling both bus_for_each_drv() and 
+bus_for_each_dev().  Can't you skip this iterator and just call 
+bus_for_each_dev() directly?
 
-[  245.472838] xhci_hcd 0000:00:14.0: ERROR Transfer event TRB DMA ptr not part
-of current TD ep_index 1 comp_code 1
-[  245.473676] xhci_hcd 0000:00:14.0: Looking for event-dma 000000035ae0cea0
-trb-start 000000035ae0ceb0 trb-end 000000035ae0ceb0 seg-start 000000035ae0c000
-seg-end 000000035ae0cff0
-[  245.473828] xhci_hcd 0000:00:14.0: ERROR Transfer event TRB DMA ptr not part
-of current TD ep_index 1 comp_code 1
-[  245.474575] xhci_hcd 0000:00:14.0: Looking for event-dma 000000035ae0ceb0
-trb-start 000000035ae0cec0 trb-end 000000035ae0cec0 seg-start 000000035ae0c000
-seg-end 000000035ae0cff0
-[  245.474829] xhci_hcd 0000:00:14.0: ERROR Transfer event TRB DMA ptr not part
-of current TD ep_index 1 comp_code 1
-[  245.475710] xhci_hcd 0000:00:14.0: Looking for event-dma 000000035ae0cec0
-trb-start 000000035ae0ced0 trb-end 000000035ae0ced0 seg-start 000000035ae0c000
-seg-end 000000035ae0cff0
-[  245.475828] xhci_hcd 0000:00:14.0: ERROR Transfer event TRB DMA ptr not part
-of current TD ep_index 1 comp_code 1
-[  245.476706] xhci_hcd 0000:00:14.0: Looking for event-dma 000000035ae0ced0
-trb-start 000000035ae0cee0 trb-end 000000035ae0cee0 seg-start 000000035ae0c000
-seg-end 000000035ae0cff0
-
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+Alan Stern
