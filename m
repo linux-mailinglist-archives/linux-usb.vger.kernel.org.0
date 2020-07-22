@@ -2,88 +2,178 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 280CD229158
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jul 2020 08:53:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D05102291F1
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jul 2020 09:18:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730412AbgGVGxV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Jul 2020 02:53:21 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:20927 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728063AbgGVGxU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jul 2020 02:53:20 -0400
-X-UUID: db28a3ee4a26429e9b7e55e3a512057a-20200722
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=svTg6Y0J2kRBPHwhPL7b3ZSCWm0llLAuPVvNsUvQr4k=;
-        b=ptu5NTzV5sZ8K0cXD3yJgtkuWuYWZXvgySqhw2XyYAk/mjzHIVFR5ZkCbQp4DLUlHhBCsmKHZnmCKgj1ZRwCo+pBl+kWkOzymIGj7MXBsySMkknyyWDqJtUQdX66Jzb1dTLVrkL0G8svPRSGAyvq1QcIyecWAfpjUlmtP/dBZlc=;
-X-UUID: db28a3ee4a26429e9b7e55e3a512057a-20200722
-Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 135528816; Wed, 22 Jul 2020 14:53:16 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- MTKMBS31DR.mediatek.inc (172.27.6.102) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 22 Jul 2020 14:52:38 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 22 Jul 2020 14:52:37 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [RESEND v3 PATCH] usb: gadget: bdc: use readl_poll_timeout() to simplify code
-Date:   Wed, 22 Jul 2020 14:51:27 +0800
-Message-ID: <1595400687-7207-1-git-send-email-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 1.8.1.1.dirty
+        id S1731979AbgGVHSM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jul 2020 03:18:12 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:41758 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1731452AbgGVHSL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jul 2020 03:18:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1595402290;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gtsyT4mz+LNAUNpKdG4kBHqIVduUS0Y9Bmc1QqpE/F8=;
+        b=TQhpq9XZns6pUWHmcC8ojfVkrjuehr4G8YJEIb27s3q3qzP3mztlgAzySqlf5o33+SKOw0
+        qSRfmOi/0m2jrE9NmeKY4ni2jLlvKU8Z1AI86Y6wwa94ILROX6iIEY0i7U3soc8npew2ED
+        cSzorXISLTeQgkWM103RWNBTNqiO0so=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-514-2mJgOecDPJSsxCg1lHnS0A-1; Wed, 22 Jul 2020 03:18:05 -0400
+X-MC-Unique: 2mJgOecDPJSsxCg1lHnS0A-1
+Received: by mail-ej1-f70.google.com with SMTP id l18so633324ejn.17
+        for <linux-usb@vger.kernel.org>; Wed, 22 Jul 2020 00:18:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=gtsyT4mz+LNAUNpKdG4kBHqIVduUS0Y9Bmc1QqpE/F8=;
+        b=KpyEPVGHJS3GXYcYdTy/17iqui/b8pxCJOeCMD1BpahocLZ16SMWwju1gbfOuyrhZv
+         Z33R7WsMsK8bmRTjB/oyulo5MwOTyfl9rwqVNAKgC1Zd+iMQDFKzPh8usV52GQvD+3S+
+         AQKQJCianVPMWng4VwzOyLXJKt19+hpz/6duZs6EFFpnle0oyOHxoPUN6X9GwKjtrdj0
+         bWKcz3vR+NO+bkmKsIeFy3YzSA7VU5Eyb4ZUZyOy40c3GTnv7fCoNjR0cQvwJ6jQ/EXb
+         vMpTj7J1o6hGjRyyPXwdREEXZiseTmog0u2WSWoUmv16ywrL6HISZQspt4AxNhz+ZSTC
+         bxtw==
+X-Gm-Message-State: AOAM531S9BrQEEVZzSl+gI6I7pE9YwN8j8H9+5IwZ0zMSOuQyDE/jnc/
+        QjlgKIrbqYoQIudz+Ulu/ZplN66h0pY7CkNNQ6IzKLWsIi0j+DkbfyHRYsojhVWOc4JPttKerSk
+        a07bZc88WN+xFIu4+ZCSB
+X-Received: by 2002:a17:906:57c5:: with SMTP id u5mr27834201ejr.311.1595402283732;
+        Wed, 22 Jul 2020 00:18:03 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyceOzzKjVYzoyGWeTz9chUJQE8t5Cdl25VlPyxcK/im99H2NYsEVDg7gPuHMxJ5fCOsgw1Og==
+X-Received: by 2002:a17:906:57c5:: with SMTP id u5mr27834183ejr.311.1595402283431;
+        Wed, 22 Jul 2020 00:18:03 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
+        by smtp.gmail.com with ESMTPSA id f17sm18076914ejr.71.2020.07.22.00.18.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jul 2020 00:18:02 -0700 (PDT)
+Subject: Re: [PATCH 1/4] dt-bindings: usb-connector: Add support for Type-C
+ alternate-modes
+To:     Rob Herring <robh@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Tobias Schramm <t.schramm@manjaro.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org
+References: <20200714113617.10470-1-hdegoede@redhat.com>
+ <20200714113617.10470-2-hdegoede@redhat.com> <20200721022610.GA3391383@bogus>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <f143d626-2a78-e32f-b122-7dbae1b3a50e@redhat.com>
+Date:   Wed, 22 Jul 2020 09:18:02 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: 6BC2D767A334078E97F78F2FE45985FB26E6852540760D6A9D82AFBE3E0893672000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <20200721022610.GA3391383@bogus>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-VXNlIHJlYWRsX3BvbGxfdGltZW91dCgpIHRvIHBvbGwgcmVnaXN0ZXIgc3RhdHVzDQoNCkNjOiBG
-bG9yaWFuIEZhaW5lbGxpIDxmLmZhaW5lbGxpQGdtYWlsLmNvbT4NClNpZ25lZC1vZmYtYnk6IENo
-dW5mZW5nIFl1biA8Y2h1bmZlbmcueXVuQG1lZGlhdGVrLmNvbT4NClJldmlld2VkLWJ5OiBGbG9y
-aWFuIEZhaW5lbGxpIDxmLmZhaW5lbGxpQGdtYWlsLmNvbT4NCi0tLQ0KdjMgY2hhbmdlczoNCiAg
-MS4gaW5kZW50IGNvZGUgdG8gbWF0Y2ggb3BlbiBwYXJlbnRoZXNpcyBzdWdnZXN0ZWQgYnkgRmxv
-cmlhbg0KICAyLiBhZGQgUmV2aWV3ZWQtYnkgRmxvcmlhbg0KDQp2MiBjaGFuZ2VzLCBzdWdnZXN0
-ZWQgYnkgU3RlcGhlbjoNCiAgMS4gdXNlIHVuc2lnbmVkIGludCBpbnN0ZWFkIG9mIGludCBmb3Ig
-QHVzZWMgcGFyYW1ldGVyDQogIDIuIGFkZCBkZXZfbG9nKCkgYmFjaw0KICAzLiBkcm9wICJFcnIi
-IGluIGVycm9yIGxvZw0KLS0tDQogZHJpdmVycy91c2IvZ2FkZ2V0L3VkYy9iZGMvYmRjX2NvcmUu
-YyB8IDI2ICsrKysrKysrKysrLS0tLS0tLS0tLS0tLS0tDQogMSBmaWxlIGNoYW5nZWQsIDExIGlu
-c2VydGlvbnMoKyksIDE1IGRlbGV0aW9ucygtKQ0KDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2Iv
-Z2FkZ2V0L3VkYy9iZGMvYmRjX2NvcmUuYyBiL2RyaXZlcnMvdXNiL2dhZGdldC91ZGMvYmRjL2Jk
-Y19jb3JlLmMNCmluZGV4IDAyYTNhNzcuLmQ1NjdlMjAgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL3Vz
-Yi9nYWRnZXQvdWRjL2JkYy9iZGNfY29yZS5jDQorKysgYi9kcml2ZXJzL3VzYi9nYWRnZXQvdWRj
-L2JkYy9iZGNfY29yZS5jDQpAQCAtMTIsNiArMTIsNyBAQA0KICNpbmNsdWRlIDxsaW51eC9zcGlu
-bG9jay5oPg0KICNpbmNsdWRlIDxsaW51eC9wbGF0Zm9ybV9kZXZpY2UuaD4NCiAjaW5jbHVkZSA8
-bGludXgvaW50ZXJydXB0Lmg+DQorI2luY2x1ZGUgPGxpbnV4L2lvcG9sbC5oPg0KICNpbmNsdWRl
-IDxsaW51eC9pb3BvcnQuaD4NCiAjaW5jbHVkZSA8bGludXgvaW8uaD4NCiAjaW5jbHVkZSA8bGlu
-dXgvbGlzdC5oPg0KQEAgLTI5LDI0ICszMCwxOSBAQA0KICNpbmNsdWRlICJiZGNfZGJnLmgiDQog
-DQogLyogUG9sbCB0aWxsIGNvbnRyb2xsZXIgc3RhdHVzIGlzIG5vdCBPSVAgKi8NCi1zdGF0aWMg
-aW50IHBvbGxfb2lwKHN0cnVjdCBiZGMgKmJkYywgaW50IHVzZWMpDQorc3RhdGljIGludCBwb2xs
-X29pcChzdHJ1Y3QgYmRjICpiZGMsIHUzMiB1c2VjKQ0KIHsNCiAJdTMyIHN0YXR1czsNCi0JLyog
-UG9sbCB0aWxsIFNUUyE9IE9JUCAqLw0KLQl3aGlsZSAodXNlYykgew0KLQkJc3RhdHVzID0gYmRj
-X3JlYWRsKGJkYy0+cmVncywgQkRDX0JEQ1NDKTsNCi0JCWlmIChCRENfQ1NUUyhzdGF0dXMpICE9
-IEJEQ19PSVApIHsNCi0JCQlkZXZfZGJnKGJkYy0+ZGV2LA0KLQkJCQkicG9sbF9vaXAgY29tcGxl
-dGUgc3RhdHVzPSVkIiwNCi0JCQkJQkRDX0NTVFMoc3RhdHVzKSk7DQotCQkJcmV0dXJuIDA7DQot
-CQl9DQotCQl1ZGVsYXkoMTApOw0KLQkJdXNlYyAtPSAxMDsNCi0JfQ0KLQlkZXZfZXJyKGJkYy0+
-ZGV2LCAiRXJyOiBvcGVyYXRpb24gdGltZWRvdXQgQkRDU0M6IDB4JTA4eFxuIiwgc3RhdHVzKTsN
-CisJaW50IHJldDsNCiANCi0JcmV0dXJuIC1FVElNRURPVVQ7DQorCXJldCA9IHJlYWRsX3BvbGxf
-dGltZW91dChiZGMtPnJlZ3MgKyBCRENfQkRDU0MsIHN0YXR1cywNCisJCQkJIChCRENfQ1NUUyhz
-dGF0dXMpICE9IEJEQ19PSVApLCAxMCwgdXNlYyk7DQorCWlmIChyZXQpDQorCQlkZXZfZXJyKGJk
-Yy0+ZGV2LCAib3BlcmF0aW9uIHRpbWVkb3V0IEJEQ1NDOiAweCUwOHhcbiIsIHN0YXR1cyk7DQor
-CWVsc2UNCisJCWRldl9kYmcoYmRjLT5kZXYsICIlcyBjb21wbGV0ZSBzdGF0dXM9JWQiLCBfX2Z1
-bmNfXywgQkRDX0NTVFMoc3RhdHVzKSk7DQorDQorCXJldHVybiByZXQ7DQogfQ0KIA0KIC8qIFN0
-b3AgdGhlIEJEQyBjb250cm9sbGVyICovDQotLSANCjEuOS4xDQo=
+Hi,
+
+On 7/21/20 4:26 AM, Rob Herring wrote:
+> On Tue, Jul 14, 2020 at 01:36:14PM +0200, Hans de Goede wrote:
+>> This commit adds the minimum bindings required to allow describing which
+>> altmodes a port supports. Currently this is limited to just specifying:
+>>
+>> 1. The svid, which is the id of the altmode, e.g. displayport altmode has
+>> a svid of 0xff01.
+>>
+>> 2. The vdo, a 32 bit integer, typically used as a bitmask describing the
+>> capabilities of the altmode, the bits in the vdo are specified in the
+>> specification of the altmode, the dt-binding simply refers to the
+>> specification as that is the canonical source of the meaning of the bits.
+> 
+> What if this information should be derived from information already in
+> DT (or would be there if alt mode connections are described)?
+> 
+>>
+>> Later on we may want to extend the binding with extra properties specific
+>> to some altmode, but for now this is sufficient to e.g. hook up
+>> displayport alternate-mode.
+> 
+> I don't think this is sufficient as it doesn't describe how alternate
+> modes are connected to various components. This has been discussed some
+> here[1] with the CrOS folks. Maybe this is orthogonal, IDK, but I really
+> need something that is somewhat complete and not sprinkle a few new
+> properties at a time.
+
+Right, but that is an orthogonal problem, this is telling the Type-C
+controller which modes it is allowed to negotiate and which capabilties
+(altmode specific, stored in the vdo) it should advertise.
+
+I agree that if the connector is connected to a mux and how that mux is then
+connected to the SoC, or if the SoC has a multi-mode phy also needs to be
+specified in some cases. But that is mostly a separate problem.
+One thing which we will want to add to this part of the bindings when that
+other part is in place is a link to the endpoint *after* the mux, that is
+after the mode- and role-switch in Prashant's example here:
+https://lkml.org/lkml/2020/6/12/602
+
+The Type-C controller may receive out-of-band messages related to the
+altmode (through USB-PD messages) which need to be communicated to
+the endpoint, so in the case of display-port altmode, the dp0_out_ep
+from Prashant's example. Note the link/object reference I'm suggesting
+here deliberately skips the mux, since the oob messages need to be
+send through the endpoint without the mux being involved since they are
+oob after all.
+
+Specifically there is no pin on the Type-C connector for the display-port
+hotplug-detect pin, so hot(un)plug is signaled through altmode specific
+USB-PD messages.
+
+Note that this binding and the 2 patches implementing it for x86
+devices (*), are already useful / functional. The user just needs to
+manually run "xrandr" to force the video-output driver to manually
+recheck for new/changed monitors, just like an old VGA ports without
+load detection.
+
+I haven't fully figured out how to wire up the hotplug signal in the
+kernel yet, which is why the link to the DP endpoint is not yet part of
+the bindings.
+
+*) Using sw-fw-nodes to pass the info from a drivers/platform/x86/
+driver to the Type-C controller code which uses fw_nodes to get this info
+
+So since this is x86 only for now; and AFAIK you don't want to take bindings
+upstream until there is an actual DT user anyways, my main goal of including
+this was to see if we are at least on the right way with this. With x86 it
+is all in the kernel, so if the binding changes a bit we can easily adjust the
+drivers/platform/x86/ code generating the nodes at the same time as we
+update the Type-C controller code to implement the final binding. But it
+would be good to know that we are at least going in the right direction.
+
+BTW note that making the binding look like this was proposed by Heikki,
+the Type-C subsys maintainer, I ended up implementing this because Heikki
+did no have the time for it.
+
+Regards,
+
+Hans
+
+
+
+
+
+> 
+>> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+>> ---
+>> Note I hope I got the yaml correct, this is my first time writing a
+>> dt-binding in the new yaml style. I did run:
+>> make dt_binding_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/connector/usb-connector.yaml
+>> and that was happy.
+> 
+> That aspect of it looks fine.
+> 
+> Rob
+> 
+> [1] https://lkml.org/lkml/2020/4/22/1819
+> 
 
