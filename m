@@ -2,59 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F64622994E
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jul 2020 15:39:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A43229961
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jul 2020 15:47:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732162AbgGVNjc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 22 Jul 2020 09:39:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59592 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726567AbgGVNjc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 22 Jul 2020 09:39:32 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 208327] xhci_hcd issue transfer event - usb3.0
-Date:   Wed, 22 Jul 2020 13:39:31 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: mathias.nyman@linux.intel.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-208327-208809-a4OIr0BhAV@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-208327-208809@https.bugzilla.kernel.org/>
-References: <bug-208327-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1732514AbgGVNol (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jul 2020 09:44:41 -0400
+Received: from esa2.microchip.iphmx.com ([68.232.149.84]:56875 "EHLO
+        esa2.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727867AbgGVNok (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jul 2020 09:44:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1595425479; x=1626961479;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=x67atpIPPy7ehWiPrLyZwKmSAKD5xBofNyNuEjmdwpE=;
+  b=WF0S3HdBy0/3Xepi/MpZcvNhc5ZII/0m4AEMHYUsvXcxdb7KpvQ8vWTa
+   BhhO8jDHdflr7Zuywy2GWEs9oA8BJwATjLsSjMKPXESmXXsGCVlK/Lnc3
+   jEEZsJPQmdYg9p0qzZ0XTzf6vn7GHsFrrGZAVce3OSwNiEZy1RA9HEFAS
+   l+8qlNNRozmvpSz0Tng54r3cvzyN0SEbuLY5GwRCQMpV+hGrl3fmZe8BL
+   sFBKNP9Az/smkgdspzQ9Py3LcrvUhAnoYAdXw+v+GXTTV/VPN2ZqxMt6I
+   ak4ZOHm2fhgbIR1AFNv18OvyfeRl6edAlKMCiEF/cX2Fs2al9oNXk7O5G
+   w==;
+IronPort-SDR: XeGwUtETrr1LnBtY7gfFqS/EOwXn7H7vb+QjWX4iGr+F5ghYj1OsgdZZXMwgn/IwI4ci2GxPrO
+ SHv1LYKAWgIFw5e3dOzBMM/QxXvwnTuZLZqTcJ2mk8KltxnlmgF17t6cAz8rGPJxSefdHj/plt
+ 1a/dSFlS7mvhEgjgjOCoT563uSuSjM8YMtyhRC+oXuQMRG6I5v/l0th6q0asP8gnecW7++L5c8
+ XHN8mzSbjoanTEfK0y6Zrog21hjgwB2BcqUR+zIk91CdvDGmZZM133No7uwlyu4/yntJtVPKLl
+ Bjo=
+X-IronPort-AV: E=Sophos;i="5.75,383,1589266800"; 
+   d="scan'208";a="82819476"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Jul 2020 06:44:25 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Wed, 22 Jul 2020 06:44:25 -0700
+Received: from cristi-P53.amer.actel.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.1979.3 via Frontend Transport; Wed, 22 Jul 2020 06:43:43 -0700
+From:   <cristian.birsan@microchip.com>
+To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <ludovic.desroches@microchip.com>, <robh+dt@kernel.org>,
+        <mark.rutland@arm.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Cristian Birsan <cristian.birsan@microchip.com>
+Subject: [PATCH v3 0/6] usb: gadget: udc: atmel: add usb device support for SAM9x60 SoC
+Date:   Wed, 22 Jul 2020 16:44:15 +0300
+Message-ID: <20200722134421.190741-1-cristian.birsan@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=208327
+From: Cristian Birsan <cristian.birsan@microchip.com>
 
---- Comment #6 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
-Could you please dump the event ring ringht after seeing the 
-"Transfer event TRB DMA ptr not part of current TD.." message. 
-Just to verify hardware actually writes duplicate events on the ring buffer.
+This patch set adds usb device support for SAM9x60 SoC.
+The DPRAM memory for the USB High Speed Device Port (UDPHS) hardware
+block was increased and the allocation method is changed. This patch
+series simplifies the endpoint allocation scheme to acomodate this SoC
+and the old ones.
 
-This can be done by:
-mount -t debugfs none /sys/kernel/debug
-cat /sys/kernel/debug/usb/xhci/0000:00:14.0/event-ring/trbs
+Changes in v3:
+- rebase on top of testing/next
+- depends on https://lore.kernel.org/linux-arm-kernel/cover.1594231056.git.mirq-linux@rere.qmqm.pl/
+- extend usba_udc_config structure with endpoint preallocaion flag
+- collect acked-by tags
+
+Changes in v2:
+- drop the patch that adds reference to pmc for sam9x60
+- use dt-bindings: usb prefix
+- enable usb device in device tree
+
+Claudiu Beznea (1):
+  usb: gadget: udc: atmel: use of_find_matching_node_and_match
+
+Cristian Birsan (5):
+  dt-bindings: usb: atmel: Update DT bindings documentation for sam9x60
+  usb: gadget: udc: atmel: simplify endpoint allocation
+  usb: gadget: udc: atmel: use 1 bank endpoints for control transfers
+  usb: gadget: udc: atmel: update endpoint allocation for sam9x60
+  ARM: dts: at91: sam9x60ek: enable usb device
+
+ .../devicetree/bindings/usb/atmel-usb.txt     |  1 +
+ arch/arm/boot/dts/at91-sam9x60ek.dts          | 13 ++++
+ arch/arm/boot/dts/sam9x60.dtsi                | 14 ++++
+ drivers/usb/gadget/udc/atmel_usba_udc.c       | 67 ++++++++++++-------
+ drivers/usb/gadget/udc/atmel_usba_udc.h       |  3 +-
+ 5 files changed, 74 insertions(+), 24 deletions(-)
 
 -- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+2.25.1
+
