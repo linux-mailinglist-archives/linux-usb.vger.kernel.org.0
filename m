@@ -2,89 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D3122293E1
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jul 2020 10:47:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 468A12293ED
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jul 2020 10:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730650AbgGVIra (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Jul 2020 04:47:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55152 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726147AbgGVIra (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jul 2020 04:47:30 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE5EC0619DC;
-        Wed, 22 Jul 2020 01:47:29 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id q4so1647345lji.2;
-        Wed, 22 Jul 2020 01:47:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=qmcGYJPSuyo4WuFIfVqxApT7la3Q4Txd8FLQ6LnHWo4=;
-        b=IVlUjrqqH0pP9EmVDgkTU6EIgQeXEF3Gh/3cI5fsOThjWIECBl0cH1kSFmgcIfnw1+
-         fu8ccq1XZ7wNqWXqScglWb3UJKE62Du90zTwS76lkvNpXhZ3BV3006kgYMCQPGlSx6y7
-         veH8VJETf2hnCj6mfmjRBfbrR2oqMCxtTEGH0s49gHxXJsPHqtBDJ6mliw7ybiiG1W8d
-         xZm8d5jSNfIOpItyIFkqfcHt9PZVQQdw7u7ffOz7wb3hXBPSl6VNO1bo1JDl/jLUrvRr
-         EO0aw5NHOK0dtQuoCYEqXfFYrsCPzUfW1vk0ooc6fIs8J08l0H1KE0oaHWWPapYTO/Xo
-         ok+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=qmcGYJPSuyo4WuFIfVqxApT7la3Q4Txd8FLQ6LnHWo4=;
-        b=Jsnw2c+kO+kUVz5Vgs5AbWgmCIfeQDWx24DwzJ+hd4chGc3N+eKVodsga0DEs29fiW
-         GmP+IC+14qcQGq8io4W2fNY+zUnVLoMbpoFG2jaNhGKhry/8ekE//S4WjGuFfhETYrgV
-         8aMBDuZU5kc9Kx1Q0uZq0IUpJlQ/A2PjLYz++KE91eVFWw/m4dh5E4WDNe37kdyhKQxG
-         /Bltc+Nk2iAIpqjG6UDRjHWkYbiGByUV3e7i/DSWp1k2OMBBauGJamZjsEID9ZkdcXPv
-         6bja2DlW5Nh91Y69AO6K+VZQCiaVjcoeOOMZpUw5hwH6DCIpDNKSdLWto53j1OBYSuy7
-         Ievg==
-X-Gm-Message-State: AOAM533t4bDD8RovUZLesafNURPUZm9ZfaOX+/PDP4xjuhVyRbiAuhTe
-        pZtfvhwsXyfHvfClXWuaNXk=
-X-Google-Smtp-Source: ABdhPJzxgSeLeWfdE37PuacpR3Wt8B+Wgl2c49Vt2KIZs+uwNveItzbShKhFT6aBtIvL9eDMu8fxhg==
-X-Received: by 2002:a2e:8316:: with SMTP id a22mr13830785ljh.246.1595407648046;
-        Wed, 22 Jul 2020 01:47:28 -0700 (PDT)
-Received: from ?IPv6:2a00:1fa0:44d2:25a2:d4ec:7c9e:620b:fb8? ([2a00:1fa0:44d2:25a2:d4ec:7c9e:620b:fb8])
-        by smtp.gmail.com with ESMTPSA id y24sm6241661ljy.91.2020.07.22.01.47.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jul 2020 01:47:27 -0700 (PDT)
-Subject: Re: [PATCH v2 2/7] usb: bdc: Add compatible string for new style USB
- DT nodes
-To:     Al Cooper <alcooperx@gmail.com>, linux-kernel@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
+        id S1730997AbgGVIuY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jul 2020 04:50:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45574 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726526AbgGVIuX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 22 Jul 2020 04:50:23 -0400
+Received: from localhost (p54b33083.dip0.t-ipconnect.de [84.179.48.131])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6785D2065E;
+        Wed, 22 Jul 2020 08:50:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595407823;
+        bh=KBex7YObWFkv3ZED+tckY/19Y0OC0cIjEMo2Ccpv9Bg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iJzPYASLrtpyTXcRKDvZ/DG2+ITva/hZLilKwxh9W9WVvDgyr+Jf7zCm98iQodmP0
+         wXVnB3cdXiMmbV1Db++NNRZ35/pzumvSy/HpvIrhnm2t9ibHKi+f3AnTAYeoWSJnFY
+         yAsS1ll5wCriS7wGUkQlq5BljvfR5NCn3mALKCKs=
+Date:   Wed, 22 Jul 2020 10:50:20 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Mark Brown <broonie@kernel.org>,
+        Niklas <niklas.soderlund@ragnatech.se>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Sasi Kumar <sasi.kumar@broadcom.com>
-References: <20200721144326.7976-1-alcooperx@gmail.com>
- <20200721144326.7976-3-alcooperx@gmail.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Organization: Brain-dead Software
-Message-ID: <ca58400f-353b-64e6-d923-82978a48876a@gmail.com>
-Date:   Wed, 22 Jul 2020 11:47:18 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Magnus Damm <magnus.damm@gmail.com>,
+        devicetree@vger.kernel.org, linux-ide@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-pci@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-renesas-soc@vger.kernel.org, linux-usb@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Subject: Re: [PATCH 00/20] Add support for SATA/PCIe/USB2[3]/VIN/CSI on
+ R8A774E1
+Message-ID: <20200722085020.GD1030@ninjato>
+References: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-In-Reply-To: <20200721144326.7976-3-alcooperx@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="C1iGAkRnbeBonpVg"
+Content-Disposition: inline
+In-Reply-To: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
 
-On 21.07.2020 17:43, Al Cooper wrote:
+--C1iGAkRnbeBonpVg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> Add compatible string for some newer boards that only have this
-> as there match sting. Remove unused compatible string "brcm,bdc-v0.16".
 
-    s/there/their/.
+> This patch series adds support for the following peripherals on RZ/G2H SoC
+>  * PCIe
+>  * SATA
+>  * USB2
+>  * USB3
+>  * Audio
+>  * VIN
+>  * CSI
 
-> Signed-off-by: Al Cooper <alcooperx@gmail.com>
-[...]
+Nice. But please update your recipients list. No need to have the i2c
+mailing list in there.
 
-MBR, Sergei
+
+--C1iGAkRnbeBonpVg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8X/cwACgkQFA3kzBSg
+KbbCjg/9EwkGut+pjFLsSqqQcdsIzTD9kym4OTeB/bHTnHu+yCKyYJ0Sa6ytd/+O
+J9JLAahz7QkGnfOSFkz17HGK29XcNocub/8bIAuUBuydV8yQrleXLt/3oOKWOWrt
+FC9p8gGr1q0/DLKeCOeIG1ftIaOe22L6bJsuxCzhJG8DetJY0If4fZ+nZc08r6Af
+qMClhrnXZDqG7mYhLiWkeeKoiootXREJ8b2NozWKGLkQF0zMpSzQ0H+IwNrj6ElB
+OCZHdbRrRLc1oIHmNWosZiFrH20DmVdjRUaZhvP1sBiw7/CdjZAf10OedOF8fv48
+PGMhu3HM2FsqzPncnYAiNtTJrwESnDDROinJW8D+mAjFToABbnr1Nhc5iC38elIl
+HTsJgC03NEZfZ1k6rvr1t/cYGcHePKzXod1ftEvvmT9093mGLlArZhMmKDFcXiDU
+4g01TTz4SetHaOqdzZlPdxu5cJ1YGyMcOQQgBAC1C2vOLGg2Fsqs8VBI/ud/VAG2
+XYAILg0D7wbFUd1fMYkG1W4x9HNdVlNXd4cCZWr4Geqc51B/9CQyJPhPJfCMK8py
+KNcd8JmzsXN1oXW9E7K1VjHiMCb9TsBswsXXz8nnsfUuE09CpVQGfFqtmS+2nMjV
+4VyHziCHbgqRqmlFlzwkGp7gcBcxBywyBwhRobKdGCTwFF+J7VE=
+=oXte
+-----END PGP SIGNATURE-----
+
+--C1iGAkRnbeBonpVg--
