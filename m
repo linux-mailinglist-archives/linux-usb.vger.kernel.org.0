@@ -2,117 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CCB6229BE7
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jul 2020 17:53:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C0F4229DE4
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jul 2020 19:08:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729733AbgGVPx3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Jul 2020 11:53:29 -0400
-Received: from relay10.mail.gandi.net ([217.70.178.230]:58787 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726427AbgGVPx2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jul 2020 11:53:28 -0400
-Received: from classic (lns-bzn-39-82-255-60-242.adsl.proxad.net [82.255.60.242])
-        (Authenticated sender: hadess@hadess.net)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 4297A24000E;
-        Wed, 22 Jul 2020 15:53:25 +0000 (UTC)
-Message-ID: <407a8732f7e124e623f8687729d4d4775dd8ab27.camel@hadess.net>
-Subject: Re: [PATCH 1/2] USB: Fix device driver race
-From:   Bastien Nocera <hadess@hadess.net>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Date:   Wed, 22 Jul 2020 17:53:25 +0200
-In-Reply-To: <20200722152640.GC1310843@rowland.harvard.edu>
-References: <20200722094628.4236-1-hadess@hadess.net>
-         <20200722152640.GC1310843@rowland.harvard.edu>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.3 (3.36.3-1.fc32) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1730478AbgGVRIC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jul 2020 13:08:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48408 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726666AbgGVRIB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jul 2020 13:08:01 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3159FC0619DC;
+        Wed, 22 Jul 2020 10:08:01 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id 9so2565163wmj.5;
+        Wed, 22 Jul 2020 10:08:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=N0ZPzN8DV4plHFoK836X092XqX/974xvGzph7Wc1J9o=;
+        b=mPbgCIomQVQ70hDwbn+dBvoDgfzjcoSFqWbaVj09zbOGXNqBlwFBIIUrKa16ReBPSx
+         RW59ZRsAFwO0D88mIqHOW5ChhpKJxcGYQiE699Tb4LD1bG5phLlc41OLKld1E0OTSKcV
+         cgBkSiVBA6YQnc2xIrRzgTmI15RqBnYy1qVAhHtFIT3cnsa9Ho09Mh/uVKZKyzfOb7zg
+         JI5gJfpSYqBzu3qcWyLKX2DXHhfHiM2RKz9Oy3WtWKvAUxcGn1ADtMtOKUY2MoIfcm6C
+         lDHkyo92nSZaoXCxXOadyFL3EOpQtPeZ4zZC2YHx11SSfmSmaBvMS/6Zo349UNtT2nex
+         N+lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=N0ZPzN8DV4plHFoK836X092XqX/974xvGzph7Wc1J9o=;
+        b=bvCJ22BJxg5z9dwdOPu0GToM+RLmEFV4gDQd/W82B7X5J3pwHUpB/eMy645wf1OEQ8
+         xBC4aEhyrBeRNwoxWX7gaGO1q0EJZxo+92xjb71Vdz3UCLjpp+tIpiVUzJ+WN3XcGWGf
+         cQXKQMi5cOFaaiKy/Ra8250qheH4KA4pwT7VjBESP71Q5GZSTiD1bUsY7AqNnrzCjkPi
+         4+5VW03n9HVfOiegBeuCz/VJEmcHwkjfSfdAkiyfZ1/N1A4kdAwU89z1Oh2oViwFAgQm
+         l1UKBTfxqM3TsqY0OsE/naRAESHoHY8hpy2/Jx/jukYIrRrxY9SUqS1qSB2dWkOV+hg3
+         Bb0g==
+X-Gm-Message-State: AOAM533+05ZDjjZAW8AaPPwl7wg9ccsgA95Ejj56VEBvHgob0kJHE3kM
+        DCHZhvFVxTpwWRuHIq3OoEwoF6Nh
+X-Google-Smtp-Source: ABdhPJxxLzfIwYfks3+mUKbqfuvvt3kKdrc2SXcdfApmEmxURr7Q/3myDwXFyel6kBwrWb9RyXq1oQ==
+X-Received: by 2002:a1c:1bc6:: with SMTP id b189mr531548wmb.166.1595437679626;
+        Wed, 22 Jul 2020 10:07:59 -0700 (PDT)
+Received: from stbsrv-and-01.and.broadcom.net ([192.19.231.250])
+        by smtp.gmail.com with ESMTPSA id 133sm392960wme.5.2020.07.22.10.07.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jul 2020 10:07:59 -0700 (PDT)
+From:   Al Cooper <alcooperx@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Al Cooper <alcooperx@gmail.com>, devicetree@vger.kernel.org,
+        Felipe Balbi <balbi@kernel.org>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Sasi Kumar <sasi.kumar@broadcom.com>
+Subject: [PATCH v3 0/7] usb: bdc: Updates and fixes to the USB BDC driver
+Date:   Wed, 22 Jul 2020 13:07:39 -0400
+Message-Id: <20200722170746.5222-1-alcooperx@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 2020-07-22 at 11:26 -0400, Alan Stern wrote:
-> On Wed, Jul 22, 2020 at 11:46:27AM +0200, Bastien Nocera wrote:
-> > When a new device with a specialised device driver is plugged in,
-> > the
-> > new driver will be modprobe()'d but the driver core will attach the
-> > "generic" driver to the device.
-> > 
-> > After that, nothing will trigger a reprobe when the modprobe()'d
-> > device
-> > driver has finished initialising, as the device has the "generic"
-> > driver attached to it.
-> > 
-> > Trigger a reprobe ourselves when new specialised drivers get
-> > registered.
-> > 
-> > Signed-off-by: Bastien Nocera <hadess@hadess.net>
-> > ---
-> >  drivers/usb/core/driver.c | 31 +++++++++++++++++++++++++++++--
-> >  1 file changed, 29 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-> > index f81606c6a35b..a6187dd2186c 100644
-> > --- a/drivers/usb/core/driver.c
-> > +++ b/drivers/usb/core/driver.c
-> > @@ -905,6 +905,30 @@ static int usb_uevent(struct device *dev,
-> > struct kobj_uevent_env *env)
-> >  	return 0;
-> >  }
-> >  
-> > +static int __usb_bus_reprobe_drivers(struct device *dev, void
-> > *data)
-> > +{
-> > +	struct usb_device_driver *udriver = to_usb_device_driver(dev-
-> > >driver);
-> > +	struct usb_device *udev = to_usb_device(dev);
-> > +
-> > +	if (udriver == &usb_generic_driver &&
-> > +	    !udev->use_generic_driver)
-> > +		return device_reprobe(dev);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int __usb_device_driver_added(struct device_driver *drv,
-> > void *data)
-> > +{
-> > +	struct usb_device_driver *udrv = to_usb_device_driver(drv);
-> > +
-> > +	if (udrv->match) {
-> > +		bus_for_each_dev(&usb_bus_type, NULL, udrv,
-> > +				 __usb_bus_reprobe_drivers);
-> 
-> What does udrv get used for here?
-> 
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >  /**
-> >   * usb_register_device_driver - register a USB device (not
-> > interface) driver
-> >   * @new_udriver: USB operations for the device driver
-> > @@ -934,13 +958,16 @@ int usb_register_device_driver(struct
-> > usb_device_driver *new_udriver,
-> >  
-> >  	retval = driver_register(&new_udriver->drvwrap.driver);
-> >  
-> > -	if (!retval)
-> > +	if (!retval) {
-> > +		bus_for_each_drv(&usb_bus_type, NULL, NULL,
-> > +				 __usb_device_driver_added);
-> 
-> This looks funny.  You're calling both bus_for_each_drv() and 
-> bus_for_each_dev().  Can't you skip this iterator and just call 
-> bus_for_each_dev() directly?
+v3 - s/there/their/ in commit message in patch 2/7 as suggested
+     by Sergei Shtylyov.
+v2 - Fix Signed-off-by issues, remove internal bug reference.
+     Fix binding document to match driver.
 
-You're right, looks like this could be simplified somewhat. I'm
-building and testing a smaller patch.
+Updates and fixes to the Broadcom USB BDC driver.
 
-Thanks
+Al Cooper (4):
+  dt-bindings: usb: bdc: Update compatible strings
+  usb: bdc: Add compatible string for new style USB DT nodes
+  usb: bdc: Adb shows offline after resuming from S2
+  usb: bdc: driver runs out of buffer descriptors on large ADB transfers
+
+Danesh Petigara (1):
+  usb: bdc: Halt controller on suspend
+
+Florian Fainelli (1):
+  usb: bdc: Use devm_clk_get_optional()
+
+Sasi Kumar (1):
+  bdc: Fix bug causing crash after multiple disconnects
+
+ .../devicetree/bindings/usb/brcm,bdc.txt      |  4 +--
+ drivers/usb/gadget/udc/bdc/bdc.h              |  2 +-
+ drivers/usb/gadget/udc/bdc/bdc_core.c         | 27 +++++++++++++------
+ drivers/usb/gadget/udc/bdc/bdc_ep.c           | 16 ++++++-----
+ 4 files changed, 32 insertions(+), 17 deletions(-)
+
+-- 
+2.17.1
 
