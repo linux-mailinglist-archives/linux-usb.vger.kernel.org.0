@@ -2,154 +2,173 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12627228E64
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jul 2020 05:06:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41C0B228E81
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jul 2020 05:16:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731875AbgGVDGx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jul 2020 23:06:53 -0400
-Received: from mail-am6eur05hn2233.outbound.protection.outlook.com ([52.100.174.233]:42144
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1731781AbgGVDGw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 21 Jul 2020 23:06:52 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LH0CPMzPRILDa86H5PjwRKF8tCsnX8r2YQTCfxu3pvNH+Fe8hs6bRpoW+K2vjXcHK9blk1ka+uMPbnzOEccxcyv2voTeSsMRJDrZhd9D1r2B+Z30Nkv/+h8rtVSeW8j/p9gKtjDjgP9EXs73NEMI4p33S+ezaoFShewdvFUknnwuR3EgoW6a1cqVtw0LUdJn+OjBUAhUelXBpR14FfPsp+b3Zl12xZGlUpvWHksuoUHC2kgC56vlDjB+9eC+0BLXs3YCVyNJUBhZh2+gyto3XbReygNoEDIjmypYjM0bCpVsa561FEt3pSSSRpDMzdIJ3L0snzvO5uKjyaQgAySlMg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=L9dPd3C84+AH3ZrR6EwW8gSEEcu4EEl12599QsWdbmQ=;
- b=SP+Hs4twF2pGWICrVE9CPMd5BPdhnvolGEmeeXSi2RkA6ok0ivarIG9niQUs6+25S3jz5IudnuWMYq8JDPFWO1FZs4Kb05avSTQGid/Ek5AW3A1mfwuUAeHlO2j3dPUYm/GD7qnQEn812PVsxNdQ7K+puJNo+sI1r5XhxdDCxS2kXzHV75k6ZhdFebyXmx34nKbCSbvYJwTPRXAm+PLtltG4arQkCjUto+GC3lkguL7gAdemCFQf+7FpnE1k7xAA2v9G3x0vUZydaACqmpcbA49pmgV5YYxWKVmHd3LB6H1z6AyVlknvhb1aChLHxIHvoUAosrVtaa8A6PBlJq1uxA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=L9dPd3C84+AH3ZrR6EwW8gSEEcu4EEl12599QsWdbmQ=;
- b=Y9/FGulpWEMkYvUAeeqVS1TMa+SlEY4dX3lCd/8311tRHZly3dekRPu2NtpfXXHjRsG4y+g5r8HGSuNdqDI7qj4aQf+31TzqWjrMvCdaNMmEKrF88sRxSELyfixatqbOLQvm+xTJPJ5rDzso1+wUcgctfm3SrPAzhl9/dcsolpk=
-Authentication-Results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
- by AM5PR0402MB2738.eurprd04.prod.outlook.com (2603:10a6:203:97::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3195.23; Wed, 22 Jul
- 2020 03:06:48 +0000
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1101:adaa:ee89:af2a]) by AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1101:adaa:ee89:af2a%3]) with mapi id 15.20.3195.027; Wed, 22 Jul 2020
- 03:06:48 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     balbi@kernel.org, mathias.nyman@intel.com,
-        gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com, pawell@cadence.com,
-        rogerq@ti.com, jun.li@nxp.com, Peter Chen <peter.chen@nxp.com>,
-        stable <stable@vger.kernel.org>
-Subject: [PATCH 1/1] usb: cdns3: gadget: always zeroed TRB buffer when enable endpoint
-Date:   Wed, 22 Jul 2020 11:06:19 +0800
-Message-Id: <20200722030619.14344-1-peter.chen@nxp.com>
-X-Mailer: git-send-email 2.17.1
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR06CA0220.apcprd06.prod.outlook.com
- (2603:1096:4:68::28) To AM7PR04MB7157.eurprd04.prod.outlook.com
- (2603:10a6:20b:118::20)
+        id S1731888AbgGVDQs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jul 2020 23:16:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60576 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731815AbgGVDQr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 23:16:47 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85901C0619DB
+        for <linux-usb@vger.kernel.org>; Tue, 21 Jul 2020 20:16:47 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id l63so434964pge.12
+        for <linux-usb@vger.kernel.org>; Tue, 21 Jul 2020 20:16:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pesu-pes-edu.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=73iDvHgZEqxDKHnf/uCOIPrIaeopvlWxbBWmtJPTAqY=;
+        b=dCow/A8po4LX8y5ym1eyTRdPQpuQSddIgifUo78KscgUBsEBgoD9Z6ZK5W0bwOsFy7
+         R0ppkmcieeG5mkVldNDrgzSVyINZx3PSfv3WJil21IvA+4WblxApO5zcq/jQsi0KTjvF
+         RnBctvIv6B6iECXK8c8KmTHKyM+6H2OCAaiuMxb+T1Oev5zZvGWTm9ms+tezBJz5+hJd
+         4Pya96n6/Oq4RjHq/STntxi/04/LNCyeUotdgtu6Mduaw/u4gFMM3SfPlIfc/cGgEYgv
+         YgPROtEmfxuMJsJ44vSKebVEw9O0cwzZz2nDemUPp27Y1KYOqe74V5uoonwlAGchN/Uv
+         YDGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=73iDvHgZEqxDKHnf/uCOIPrIaeopvlWxbBWmtJPTAqY=;
+        b=uikPmNR4nkNAnYN14vg/qDrqHNWbv6ltsy2Pn452ZVd3RN/brPulhNKojLHLCYJcIG
+         NvkFIrpKGOwsbBIwB/9ZXH/KMF02GXjjqdUqdm1Rmn8CcQCr4lQZUEJV84M1GhBY2Ex+
+         uPRUFd9mvarPPEGlVnFYDFOwOUDbRTxNwW1REozFU5NApUTc5MY2LgIdf/W6oRBHrvBZ
+         h67kfhk3ANRaYVzmbibcWGz1908rObIi9quIsyi8ns/ZZXLxePuYYhnIwa7sXGftCm0G
+         bbElPrG1Phpf245gUplb98+L63AlTqU8qr4FrfGStKwvYgATqDAJhyP8upOWyQmJlYgV
+         vZUw==
+X-Gm-Message-State: AOAM532lc6peA37/EZ+Ahli8yH47Xwk/wgA9guj8SQWuwn5P/ghXC74T
+        mu6K5q7tot34Idw0iJRmCCEyMA==
+X-Google-Smtp-Source: ABdhPJxiYyKd4Ja+8DRUmZ6C26jpNvrnFt6CdOBi26vP34+ZKUHChtrHDj7JHF2j1PyrHm0xNcZ3Kg==
+X-Received: by 2002:a63:5b05:: with SMTP id p5mr24595098pgb.143.1595387807008;
+        Tue, 21 Jul 2020 20:16:47 -0700 (PDT)
+Received: from localhost ([2406:7400:73:c50a:d055:3e56:d1e4:ce99])
+        by smtp.gmail.com with ESMTPSA id c1sm4766225pje.9.2020.07.21.20.16.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jul 2020 20:16:45 -0700 (PDT)
+Date:   Wed, 22 Jul 2020 08:46:40 +0530
+From:   B K Karthik <bkkarthik@pesu.pes.edu>
+To:     syzbot <syzbot+e74a998ca8f1df9cc332@syzkaller.appspotmail.com>,
+        andreyknvl@google.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>, rafael@kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        Markus Elfring <Markus.Elfring@web.de>,
+        Hillf Danton <hdanton@sina.com>
+Subject: [PATCH v2] i2c: fix WARNING in pvr2_i2c_core_done
+Message-ID: <20200722031640.nobv2bfgex46sngo@pesu.pes.edu>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from b29397-desktop.ap.freescale.net (119.31.174.67) by SG2PR06CA0220.apcprd06.prod.outlook.com (2603:1096:4:68::28) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3195.19 via Frontend Transport; Wed, 22 Jul 2020 03:06:45 +0000
-X-Mailer: git-send-email 2.17.1
-X-Originating-IP: [119.31.174.67]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: fdb8dc71-2ea4-42d9-c8d4-08d82dec4618
-X-MS-TrafficTypeDiagnostic: AM5PR0402MB2738:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM5PR0402MB27388FB32910ED82579DDC158B790@AM5PR0402MB2738.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HS9KfxJMJ0TWMRizFOR2vyQXzXfDI5VJUDpiSwDTcm0Z4FYkkfK+JYx4UaWfihOEgB0n9zgd1fwZqVVbbaCvISOYWaLeMXTC7AEKPxZvC+1qL2irHOU9nhWB47d+wb+wU3jkApDgHxOxocu1XUGh9crO6nfBedksJ/HYCg1O0ySgVUhanXxB9tYkQlUet3unKx6QYC2zQbteJdKgkG7iHvPNs/1BJBjBVsXKAAXYGiWm17vps5Y6A9QVTqtY24TpbUzXHAYJbdVITu3+dPX5fPWuLIR3E7kuDHN2K/C7xA+Z7RQxzaVCswd9jm+AubTl84rPhGgDBG4hOneu61aUv3FbDGQoVuk6DlpVPjSZp+b/2MLsl76GHtcA/RVXsnntleKZI2W8slBFwR1GawFIXZfxDA1BdkS3MoSBQZjMFIWA3FIpHZOy1mSPpmFxnoRsbwbde4WvWJamqv9qXHYcx/3jTqJ7AOJbqaZcrlnMBR7VY/A1ZVp/msXyc10szOZV4zQtDbG9IrIgy9DK5rUnQ9b9eTsskF0NKzj7aH93Owmchen+82ge/mvnQTA4B1ETPq10CwSoEYHfGkTcia9PTGlkNCa6XhcmV9aUcfEcJa0X1gMrmtTGYWYlMzRSfgRiUIPMmq9LF1dCM3EVCxbqVUwZrnM0IMMOuICbVbKYWJ288xgtvjI67ck/e69Z3sPKF4XrrSXoGMF6qvb2H4qyGWnN5O0ABqI1lrrHYuaWgvs=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:5;SRV:;IPV:NLI;SFV:SPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:OSPM;SFTY:;SFS:(4636009)(136003)(396003)(376002)(39860400002)(366004)(346002)(6486002)(6512007)(26005)(186003)(44832011)(86362001)(956004)(2616005)(16526019)(2906002)(54906003)(8676002)(4326008)(8936002)(6506007)(478600001)(52116002)(316002)(66476007)(66946007)(66556008)(6666004)(1076003)(83380400001)(36756003)(5660300002)(46570200004)(414714003)(473944003);DIR:OUT;SFP:1501;
-X-MS-Exchange-AntiSpam-MessageData: FPwqMncedDQqH9hSbTZOKdAhuV4+nRH6bmYVhS9q3blqfB6bXonKslBKXTPHPJwJUZN9RpVvLlp6XH/PRQOBKYDcHyQsPhFalRjFcrvn7Ra5EVTqvt6wkPI3HDQqTheabBxVYyqkbwkdSWRFAfue+o4oiDyNUOn/uYm18BHZquik432q7voXsB6SKwfdknxzNmJW5MMnnPm/yfGFZkFakWZrXkRim3iKCxjm9CxjWp4Vt54YdXqQVAcd8t9pWVy5l9JNFDEJB423usv7CY3EjqxIJTeAHQjk4jeknO89aGD0dclC7gXa8kONEH1B/+IsZuKNeGGDnHAU4B/pyE7Rxpv6aeg+f3yJ3RC1JeYKrcNKGoNc/2VyZavK3yto6Ccf9NEQZfTcHg5T4Uh2KtMKMH2FpUDzcX4n/lvi8OSDnIbFtLlSigNOKQnGtQVd/Whm+vziwXVcpfxDOSyLNKAQEXOVoxdEPamk2JpWWsDWE36qdp5XCH+lj8jSJwscJMJM
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fdb8dc71-2ea4-42d9-c8d4-08d82dec4618
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jul 2020 03:06:48.5890
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: XeKafjRsrzlUQcd4w8fkzHXVmOZBPokE+fhSqO0FLh0FPCUlsn1YNILFtHWvq5BSFsd9s5fw7bnHmEzLxvRQwQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR0402MB2738
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="y22zpqil25qtpkyo"
+Content-Disposition: inline
+User-Agent: NeoMutt/20180716
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-During the endpoint dequeue operation, it changes dequeued TRB
-as link TRB, when the endpoint is disabled and re-reabled, the
-DMA fetches the TRB before the link TRB, after it handles current
-TRB, the DMA pointer will advance to the TRB after link TRB,
-but enqueue and dequene variables don't know it due to no hardware
-interrupt at the time, when the next TRB is added to link TRB
-position, the DMA will not handle this TRB due to its pointer
-is already at the next TRB. See the trace log like below:
 
-file-storage-675   [001] d..1    86.585657: usb_ep_queue: ep0: req 00000000df9b3a4f length 0/0 sgs 0/0 stream 0 zsI status 0 --> 0
-file-storage-675   [001] d..1    86.585663: cdns3_ep_queue: ep1out: req: 000000002ebce364, req buff 00000000f5bc96b4, length: 0/1024 zsi, status: -115, trb: [start:0, end:0: virt addr (null)], flags:0 SID: 0
-file-storage-675   [001] d..1    86.585671: cdns3_prepare_trb: ep1out: trb 000000007f770303, dma buf: 0xbd195800, size: 1024, burst: 128 ctrl: 0x00000425 (C=1, T=0, ISP, IOC, Normal) SID:0 LAST_SID:0
-file-storage-675   [001] d..1    86.585676: cdns3_ring:
-            Ring contents for ep1out:
-            Ring deq index: 0, trb: 000000007f770303 (virt), 0xc4003000 (dma)
-            Ring enq index: 1, trb: 0000000049c1ba21 (virt), 0xc400300c (dma)
-            free trbs: 38, CCS=1, PCS=1
-            @0x00000000c4003000 bd195800 80020400 00000425
-            @0x00000000c400300c c4003018 80020400 00001811
-            @0x00000000c4003018 bcfcc000 0000001f 00000426
-            @0x00000000c4003024 bcfce800 0000001f 00000426
+--y22zpqil25qtpkyo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-	    ...
+#syz test: https://github.com/google/kasan.git usb-fuzzer
 
- irq/144-5b13000-698   [000] d...    87.619286: usb_gadget_giveback_request: ep1in: req 0000000031b832eb length 13/13 sgs 0/0 stream 0 zsI status 0 --> 0
-    file-storage-675   [001] d..1    87.619287: cdns3_ep_queue: ep1out: req: 000000002ebce364, req buff 00000000f5bc96b4, length: 0/1024 zsi, status: -115, trb: [start:0, end:0: virt addr 0x80020400c400300c], flags:0 SID: 0
-    file-storage-675   [001] d..1    87.619294: cdns3_prepare_trb: ep1out: trb 0000000049c1ba21, dma buf: 0xbd198000, size: 1024, burst: 128 ctrl: 0x00000425 (C=1, T=0, ISP, IOC, Normal) SID:0 LAST_SID:0
-    file-storage-675   [001] d..1    87.619297: cdns3_ring:
-                Ring contents for ep1out:
-                Ring deq index: 1, trb: 0000000049c1ba21 (virt), 0xc400300c (dma)
-                Ring enq index: 2, trb: 0000000059b34b67 (virt), 0xc4003018 (dma)
-                free trbs: 38, CCS=1, PCS=1
-                @0x00000000c4003000 bd195800 0000001f 00000427
-                @0x00000000c400300c bd198000 80020400 00000425
-                @0x00000000c4003018 bcfcc000 0000001f 00000426
-                @0x00000000c4003024 bcfce800 0000001f 00000426
-		...
+fix WARNING in pvr2_i2c_core_done by
+unregistering device in the release handler
+instead of the disconnect handler, setting the
+linked flag after adding adapter to i2c,
+and removing a call to acpi_ut_delete_generic_state()
 
-    file-storage-675   [001] d..1    87.619305: cdns3_doorbell_epx: ep1out, ep_trbaddr c4003018
-    file-storage-675   [001] ....    87.619308: usb_ep_queue: ep1out: req 000000002ebce364 length 0/1024 sgs 0/0 stream 0 zsI status -115 --> 0
- irq/144-5b13000-698   [000] d..1    87.619315: cdns3_epx_irq: IRQ for ep1out: 01000c80 TRBERR , ep_traddr: c4003018 ep_last_sid: 00000000 use_streams: 0
- irq/144-5b13000-698   [000] d..1    87.619395: cdns3_usb_irq: IRQ 00000008 = Hot Reset
-
-Fixes: f616c3bda47e ("usb: cdns3: Fix dequeue implementation")
-Cc: stable <stable@vger.kernel.org>
-Signed-off-by: Peter Chen <peter.chen@nxp.com>
+Reported-by: syzbot+e74a998ca8f1df9cc332@syzkaller.appspotmail.com
+Signed-off-by: B K Karthik <bkkarthik@pesu.pes.edu>
 ---
- drivers/usb/cdns3/gadget.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+v1 -> v2:
+	remove a call to acpi_ut_delete_generic state
+	and set linked flag after adding adapter to
+	i2c as suggested by Hillf Danton <hdanton@sina.com>
 
-diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
-index 542a7baf3da8..8384b86363fd 100644
---- a/drivers/usb/cdns3/gadget.c
-+++ b/drivers/usb/cdns3/gadget.c
-@@ -242,9 +242,10 @@ int cdns3_allocate_trb_pool(struct cdns3_endpoint *priv_ep)
- 			return -ENOMEM;
- 
- 		priv_ep->alloc_ring_size = ring_size;
--		memset(priv_ep->trb_pool, 0, ring_size);
+ drivers/acpi/acpica/utdelete.c               | 5 -----
+ drivers/i2c/i2c-core-base.c                  | 2 +-
+ drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c | 4 ++--
+ 3 files changed, 3 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/acpi/acpica/utdelete.c b/drivers/acpi/acpica/utdelete.c
+index c365faf4e6cd..e36f51725854 100644
+--- a/drivers/acpi/acpica/utdelete.c
++++ b/drivers/acpi/acpica/utdelete.c
+@@ -648,11 +648,6 @@ acpi_ut_update_object_reference(union acpi_operand_obj=
+ect *object, u16 action)
+=20
+ 	/* Free any stacked Update State objects */
+=20
+-	while (state_list) {
+-		state =3D acpi_ut_pop_generic_state(&state_list);
+-		acpi_ut_delete_generic_state(state);
+-	}
+-
+ 	return (status);
+ }
+=20
+diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+index 26f03a14a478..2d377d2e89f1 100644
+--- a/drivers/i2c/i2c-core-base.c
++++ b/drivers/i2c/i2c-core-base.c
+@@ -462,6 +462,7 @@ static void i2c_device_shutdown(struct device *dev)
+=20
+ static void i2c_client_dev_release(struct device *dev)
+ {
++	i2c_unregister_device(to_i2c_client(dev));
+ 	kfree(to_i2c_client(dev));
+ }
+=20
+@@ -1527,7 +1528,6 @@ void i2c_del_adapter(struct i2c_adapter *adap)
+ 		dev_dbg(&adap->dev, "Removing %s at 0x%x\n", client->name,
+ 			client->addr);
+ 		list_del(&client->detected);
+-		i2c_unregister_device(client);
  	}
- 
-+	memset(priv_ep->trb_pool, 0, ring_size);
-+
- 	priv_ep->num_trbs = num_trbs;
- 
- 	if (!priv_ep->num)
--- 
-2.17.1
+ 	mutex_unlock(&adap->userspace_clients_lock);
+=20
+diff --git a/drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c b/drivers/media/u=
+sb/pvrusb2/pvrusb2-i2c-core.c
+index 63db04fe12d3..09b2c878f459 100644
+--- a/drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c
++++ b/drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c
+@@ -623,9 +623,9 @@ void pvr2_i2c_core_init(struct pvr2_hdw *hdw)
+ 	hdw->i2c_adap.dev.parent =3D &hdw->usb_dev->dev;
+ 	hdw->i2c_adap.algo =3D &hdw->i2c_algo;
+ 	hdw->i2c_adap.algo_data =3D hdw;
+-	hdw->i2c_linked =3D !0;
+ 	i2c_set_adapdata(&hdw->i2c_adap, &hdw->v4l2_dev);
+-	i2c_add_adapter(&hdw->i2c_adap);
++	if (!i2c_add_adapter(&hdw->i2c_adap))
++		hdw->i2c_linked =3D!0;
+ 	if (hdw->i2c_func[0x18] =3D=3D i2c_24xxx_ir) {
+ 		/* Probe for a different type of IR receiver on this
+ 		   device.  This is really the only way to differentiate
+--=20
+2.20.1
 
+
+--y22zpqil25qtpkyo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQGzBAEBCgAdFiEEIF+jd5Z5uS7xKTfpQZdt+T1HgiEFAl8Xr5gACgkQQZdt+T1H
+giF1vQv+P5FnsTUChLkkI/kfULIr4EuocSn7JwwbJacBalZeiu3qmmOY0gzPjq2b
+qlJEtiuehaZIGdCB0wp/kKum0umcluCO1nWgd2tNVmOKJv++xx2l/O4Rd4SXv2TD
+r72OfvdV72XYLdsnawwDnXqi/2dgQIN4ZozpDv2PqsB9Mi/rkp+pu/i9CxrpMDpM
+HukAL9uOn8BpTdubmeU2XZc1cmJcCQzOn5+VdBM8zC3tjy8JEzoNTRlzzBqzDw0P
+xITIeW9NYXcujFJeBCr3CHKDxNsmXkCxaIxkZtBuvISMP7hggRaOADUVnKTTbj/4
+F+0VhEHxcgevJhiJBZeX2ylYSZhzitG8gHfi23ex0b8rFqccNDE7kHXP6HC2KwyZ
+DaIxZ9APw2URMjEHDVVRaH4Pwr+1y14CIV5ae1AsnRrRTGzRjm7kbAPXR8FaF+QG
+eyGHv50p/xMjR685SWIfGp4HfXub5c6ok5XZZwmsMrITt8XVtJ3k/qS0+givqsSv
+/QNBs8Ti
+=z8sj
+-----END PGP SIGNATURE-----
+
+--y22zpqil25qtpkyo--
