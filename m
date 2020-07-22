@@ -2,126 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 328E62294B5
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jul 2020 11:20:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2080229554
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jul 2020 11:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728360AbgGVJS5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Jul 2020 05:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60002 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726153AbgGVJS5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jul 2020 05:18:57 -0400
-Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D71C0619DC;
-        Wed, 22 Jul 2020 02:18:57 -0700 (PDT)
-Received: by mail-vs1-xe43.google.com with SMTP id q15so756285vso.9;
-        Wed, 22 Jul 2020 02:18:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kinsg49RAoAeoKFx4gE6QT8ur/XktSQO/apO/E1SUuk=;
-        b=MAs2/hCaFfZeqtU62i0g5NZLteR8wQMQhlEZxQ3+w4bPb6XtDyQvxMJuPeXlrIOqJR
-         vpGG7cjO36cu4B+DRoVkjsfelhrvASK9oMG9c5is99YPGVN1X3/WytqJgkg5MKJEJcmA
-         iSiDPGLk8usr2Z26x7LmW9j1i9bVijfjculv2CVUmXPnAxaoTNQDwXFg7j6PqBNIX51+
-         cJ4IVlbArWhWNCgnkNZ+xL9h5iz/eBq0sdwMruYCxGHNQs2hNGq/fFRQbD2xd14tdwXN
-         xpvWHw0eVsSuPZR4dyvSFfFmhNC+DfHV2HyWreg2tevxI/NMvwUFpduos9hw/y45c498
-         tNaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kinsg49RAoAeoKFx4gE6QT8ur/XktSQO/apO/E1SUuk=;
-        b=LmJiuzftqakQCsUz9BoY/+cdBPM+CFPY30kDtQZ52OZX0C2GNdsWfo8TyX1gSciark
-         IIAyd+U9RVB2mfxCdAVx6ZDEcpNbJF7Nq21H3B1v4EKAXduO8RYr9d5KW5cYqRdSPoj6
-         IaEZ6c+VGIVsKKJPn/DO0CtsrqraRNVrjEXcWkvgGT//hpT/LAOfcFhTvybh+xAcFmnB
-         /ivmFHGebNBzArd3KaFctV9O1fzTY/yffC1AkzFhoQTsNnC5MPmH33tVb2b7cThpOuAQ
-         CWlOpalFVShwkg8NBhQMbLvuHnVAi3v63F5jD90sXW4Mhhe0K/A64lM7Ut2MmWtK9iey
-         o0WA==
-X-Gm-Message-State: AOAM530Fu+vVpcgYgNL62qZifEaIUFlisGfAsPAaSPgoe2WzIhiQV7R6
-        Me8voT+6m4GVf1SXdGagJM6+1LPch1aRG1PEEnA=
-X-Google-Smtp-Source: ABdhPJww+U423trzUzEsoS7wlKp+8bFRoI7RJGcypygmuZnFcx1FEDMKYSEKzljd2WthEMxN7WTvoK/RR2PBeRitGoY=
-X-Received: by 2002:a67:d086:: with SMTP id s6mr24027045vsi.130.1595409536016;
- Wed, 22 Jul 2020 02:18:56 -0700 (PDT)
+        id S1731875AbgGVJqe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jul 2020 05:46:34 -0400
+Received: from relay12.mail.gandi.net ([217.70.178.232]:59691 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731833AbgGVJqb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jul 2020 05:46:31 -0400
+Received: from localhost.localdomain (lns-bzn-39-82-255-60-242.adsl.proxad.net [82.255.60.242])
+        (Authenticated sender: hadess@hadess.net)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id EAAA1200008;
+        Wed, 22 Jul 2020 09:46:28 +0000 (UTC)
+From:   Bastien Nocera <hadess@hadess.net>
+To:     linux-usb@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Bastien Nocera <hadess@hadess.net>
+Subject: [PATCH 1/2] USB: Fix device driver race
+Date:   Wed, 22 Jul 2020 11:46:27 +0200
+Message-Id: <20200722094628.4236-1-hadess@hadess.net>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-References: <20200722031640.nobv2bfgex46sngo@pesu.pes.edu> <0000000000001fd19405aaffdc0a@google.com>
- <20200722091201.2076-1-hdanton@sina.com>
-In-Reply-To: <20200722091201.2076-1-hdanton@sina.com>
-From:   B K Karthik <bk.bk2000.kb@gmail.com>
-Date:   Wed, 22 Jul 2020 14:48:44 +0530
-Message-ID: <CAOEiV1ehZoknZ6b-DOjYxwH2F8UpXO3WXByuM_FcPDOy6=RSSA@mail.gmail.com>
-Subject: Re: WARNING in pvr2_i2c_core_done
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Markus.Elfring@web.de, andreyknvl@google.com,
-        bkkarthik@pesu.pes.edu, dan.carpenter@oracle.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, rafael@kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        syzbot <syzbot+e74a998ca8f1df9cc332@syzkaller.appspotmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 22 Jul 2020 at 14:42, Hillf Danton <hdanton@sina.com> wrote:
->
->
-> From: syzbot <syzbot+e74a998ca8f1df9cc332@syzkaller.appspotmail.com>
->
-> Tue, 21 Jul 2020 21:06:10 -0700
-> > Hello,
-> >
-> > syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-> > general protection fault in kernfs_find_ns
-> >
-> > pvrusb2: Invalid write control endpoint
-> > pvrusb2: Invalid write control endpoint
-> > pvrusb2: Invalid write control endpoint
-> > pvrusb2: Invalid write control endpoint
-> > general protection fault, probably for non-canonical address 0xdffffc000000000e: 0000 [#1] SMP KASAN
-> > KASAN: null-ptr-deref in range [0x0000000000000070-0x0000000000000077]
-> > CPU: 0 PID: 78 Comm: pvrusb2-context Not tainted 5.7.0-syzkaller #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> > RIP: 0010:kernfs_find_ns+0x31/0x370 fs/kernfs/dir.c:829
-> > Code: 49 89 d6 41 55 41 54 55 48 89 fd 53 48 83 ec 08 e8 f4 61 af ff 48 8d 7d 70 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 1e 03 00 00 48 8d bd 98 00 00 00 48 8b 5d 70 48
-> > RSP: 0018:ffff8881d419f938 EFLAGS: 00010202
-> > RAX: dffffc0000000000 RBX: ffffffff863789c0 RCX: ffffffff85a79ba7
-> > RDX: 000000000000000e RSI: ffffffff81901d1c RDI: 0000000000000070
-> > RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffff873ed1e7
-> > R10: fffffbfff0e7da3c R11: 0000000000000001 R12: 0000000000000000
-> > R13: 0000000000000000 R14: 0000000000000000 R15: ffffffff863790e0
-> > FS:  0000000000000000(0000) GS:ffff8881db200000(0000) knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: 00007f3a7e248000 CR3: 00000001d2224000 CR4: 00000000001406f0
-> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > Call Trace:
-> >  kernfs_find_and_get_ns+0x2f/0x60 fs/kernfs/dir.c:906
-> >  kernfs_find_and_get include/linux/kernfs.h:548 [inline]
-> >  sysfs_unmerge_group+0x5d/0x160 fs/sysfs/group.c:366
-> >  dpm_sysfs_remove+0x62/0xb0 drivers/base/power/sysfs.c:790
->
-> [3]
->
-> >  device_del+0x18b/0xd20 drivers/base/core.c:2834
-> >  device_unregister+0x22/0xc0 drivers/base/core.c:2889
-> >  i2c_unregister_device include/linux/err.h:41 [inline]
->
-> [2]
->
-> >  i2c_client_dev_release+0x39/0x50 drivers/i2c/i2c-core-base.c:465
-> >  device_release+0x71/0x200 drivers/base/core.c:1559
->
-> [1] kobject_del() goes before the release cb in kobject_cleanup() and
-> kobj is removed from sysfs, see [3] above.
+When a new device with a specialised device driver is plugged in, the
+new driver will be modprobe()'d but the driver core will attach the
+"generic" driver to the device.
 
-Oh, thank you for letting me know about this. Forgive me, but I did
-not understand you very clearly.
-I presume you are saying that the second call to
-i2c_unregister_device() is where the problem occurs?
+After that, nothing will trigger a reprobe when the modprobe()'d device
+driver has finished initialising, as the device has the "generic"
+driver attached to it.
 
-please let me know.
-thanks,
+Trigger a reprobe ourselves when new specialised drivers get registered.
 
-karthik
+Signed-off-by: Bastien Nocera <hadess@hadess.net>
+---
+ drivers/usb/core/driver.c | 31 +++++++++++++++++++++++++++++--
+ 1 file changed, 29 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+index f81606c6a35b..a6187dd2186c 100644
+--- a/drivers/usb/core/driver.c
++++ b/drivers/usb/core/driver.c
+@@ -905,6 +905,30 @@ static int usb_uevent(struct device *dev, struct kobj_uevent_env *env)
+ 	return 0;
+ }
+ 
++static int __usb_bus_reprobe_drivers(struct device *dev, void *data)
++{
++	struct usb_device_driver *udriver = to_usb_device_driver(dev->driver);
++	struct usb_device *udev = to_usb_device(dev);
++
++	if (udriver == &usb_generic_driver &&
++	    !udev->use_generic_driver)
++		return device_reprobe(dev);
++
++	return 0;
++}
++
++static int __usb_device_driver_added(struct device_driver *drv, void *data)
++{
++	struct usb_device_driver *udrv = to_usb_device_driver(drv);
++
++	if (udrv->match) {
++		bus_for_each_dev(&usb_bus_type, NULL, udrv,
++				 __usb_bus_reprobe_drivers);
++	}
++
++	return 0;
++}
++
+ /**
+  * usb_register_device_driver - register a USB device (not interface) driver
+  * @new_udriver: USB operations for the device driver
+@@ -934,13 +958,16 @@ int usb_register_device_driver(struct usb_device_driver *new_udriver,
+ 
+ 	retval = driver_register(&new_udriver->drvwrap.driver);
+ 
+-	if (!retval)
++	if (!retval) {
++		bus_for_each_drv(&usb_bus_type, NULL, NULL,
++				 __usb_device_driver_added);
+ 		pr_info("%s: registered new device driver %s\n",
+ 			usbcore_name, new_udriver->name);
+-	else
++	} else {
+ 		printk(KERN_ERR "%s: error %d registering device "
+ 			"	driver %s\n",
+ 			usbcore_name, retval, new_udriver->name);
++	}
+ 
+ 	return retval;
+ }
+-- 
+2.26.2
+
