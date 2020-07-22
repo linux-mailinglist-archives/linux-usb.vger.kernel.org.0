@@ -2,70 +2,170 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18232228DD1
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jul 2020 03:59:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 608FA228E41
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jul 2020 04:41:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731763AbgGVB7f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jul 2020 21:59:35 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:29639 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1731621AbgGVB7f (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 21:59:35 -0400
-X-UUID: 507314be90494080be33d838767b4236-20200722
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=HBs3aJUcIVxX1irCDgPsr1t6Sr5uliFctbO3YQ/k1Z0=;
-        b=hCj36RiEwIWbCdUWFFXm6ZVLELzbf7n6NNUclkHRzM6SZFmO5xaTMdJxTgH3hLLiYPHydUdkMURVM7mxcweXJ15cclEAPYZB8931jNp9Zk48q37kGzSza8GfXZyGpQfmbYCkcZP9UpBjAu9KHYv7wuKnOT8LQ+5yOmWozy6OoB0=;
-X-UUID: 507314be90494080be33d838767b4236-20200722
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1814161564; Wed, 22 Jul 2020 09:59:31 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs08n1.mediatek.inc (172.21.101.55) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 22 Jul 2020 09:59:29 +0800
-Received: from [172.21.77.33] (172.21.77.33) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 22 Jul 2020 09:59:29 +0800
-Message-ID: <1595383170.14937.2.camel@mtkswgap22>
-Subject: Re: [PATCH v2] usb: gadget: configfs: Fix use-after-free issue with
- udc_name
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Eddie Hung <eddie.hung@mediatek.com>, <stable@vger.kernel.org>,
-        "Mediatek WSD Upstream" <wsd_upstream@mediatek.com>,
-        Macpaul Lin <macpaul.lin@gmail.com>
-Date:   Wed, 22 Jul 2020 09:59:30 +0800
-In-Reply-To: <20200721113353.GA1686460@kroah.com>
-References: <1594881666-8843-1-git-send-email-macpaul.lin@mediatek.com>
-         <1595040303-23046-1-git-send-email-macpaul.lin@mediatek.com>
-         <1595041133.23887.4.camel@mtkswgap22> <20200721113353.GA1686460@kroah.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
+        id S1731796AbgGVClF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jul 2020 22:41:05 -0400
+Received: from mail-db8eur05on2052.outbound.protection.outlook.com ([40.107.20.52]:13318
+        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1731614AbgGVClF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 21 Jul 2020 22:41:05 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=alWA/zxBStmvg9KYlczUUnAC1b4qsZByPco7ZPQ0Wio0u0BJcQ6HZOhOaw7osrx7WnsZA8Jzb5wOsdWulG0oi1jpLME+/QBYsRjMzd0f90sfT+QTfzPNEPrY+vSRB2W8ne0lUP52qcNrn4j5WmqKmFHJIII6uJ7LCRWdrbBku+xEcylHp+/D5btF6P7XHH3byJ8oim+4SFwWYBFndo/k3xUcG2uniCoHOl4BGrQwuuoCaT9ayTFV8pgMF9GEIAIZyhIzDX3cG0qCtJNEDgWSLQPa3yV9sq73MYzUEYu45xzWCP5kP0xEcsTMHgk6qIZme6IRUWgTcQetCvnHLS/S/g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3hz3E/Qtj2ImsW96GJbNeUoAHWQmM7eFtPy3EfAgf+8=;
+ b=kRXU6fToHZ2Ziqs5afOPLRAWMBOvKs2eBLNQbjX424R2WIooKTJ2/iXsI2+xiRFQnWksasyXhM4Wyu83UvckN6VEIZFV6rLe1UG3nrK+J+rNDw5Z5lGfUqIgTzVPwUAVoZ13TV5jikvZWyM/dz/Jx+msu22VNOMhWYHcElOy8WTLVdxCNqw+T+YKpxoElCCzXJkLqUQFIOB/pVDgQJ1q9f86v2A5iyIpGCToU8AUDoPYTbN5k20iL4/72JXc5XeGfQF/8hJv/B/xdAPDDrKaB23+NUXluy6yxRofHMaMXmqAIzRojG0b7UVNcOL+bGiPENlWRkC469vz+enWHFLTyA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3hz3E/Qtj2ImsW96GJbNeUoAHWQmM7eFtPy3EfAgf+8=;
+ b=gHme3gHy3JB3fVqJPve0X90gJPlJfe8GYscyK5rZ6/z9LJikjDIR39pyv33i6B49rJ3ES6GtHudxfO/SAV31YOJbeAx4t9nIN38f5hwMRGjZy/rliMyaj5mIDD6PUvCruHpLUhL7YlOZUhXkNcADF1x5SFF4ooHWOtnL5I5yXVY=
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
+ by AM6PR04MB5318.eurprd04.prod.outlook.com (2603:10a6:20b:7::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3195.23; Wed, 22 Jul
+ 2020 02:41:01 +0000
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1101:adaa:ee89:af2a]) by AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1101:adaa:ee89:af2a%3]) with mapi id 15.20.3195.027; Wed, 22 Jul 2020
+ 02:41:01 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Pawel Laszczak <pawell@cadence.com>
+CC:     "balbi@kernel.org" <balbi@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rogerq@ti.com" <rogerq@ti.com>,
+        "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>,
+        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
+        "colin.king@canonical.com" <colin.king@canonical.com>,
+        "jpawar@cadence.com" <jpawar@cadence.com>,
+        "ben.dooks@codethink.co.uk" <ben.dooks@codethink.co.uk>,
+        "kurahul@cadence.com" <kurahul@cadence.com>,
+        "sparmar@cadence.com" <sparmar@cadence.com>
+Subject: Re: [PATCH v2 7/9] usb: cdns3: core: removed 'goto not_otg'
+Thread-Topic: [PATCH v2 7/9] usb: cdns3: core: removed 'goto not_otg'
+Thread-Index: AQHWWP1HOtuwuNPaqEyD/5ami1y3VqkS8QyA
+Date:   Wed, 22 Jul 2020 02:41:01 +0000
+Message-ID: <20200722024051.GF5807@b29397-desktop>
+References: <20200713100554.28530-1-pawell@cadence.com>
+ <20200713100554.28530-8-pawell@cadence.com>
+In-Reply-To: <20200713100554.28530-8-pawell@cadence.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: cadence.com; dkim=none (message not signed)
+ header.d=none;cadence.com; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.67]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: c2d439d4-d47e-402d-3640-08d82de8ac3a
+x-ms-traffictypediagnostic: AM6PR04MB5318:
+x-microsoft-antispam-prvs: <AM6PR04MB5318750FC355BCF4D68B92878B790@AM6PR04MB5318.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1013;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: BqkVVztIZtT4DiM0BEcY2CZ1YWt3V9vRdCIcg/PZB5iqeRiszcsoDkSvRRwfDeAVmYWKZp3BKRc9voz75k/Y1uRrewSvi5sVCCm5wDmNzhvsjOnuCemdlyFOxnTdYgUPXOTIbxDKSg5rJy8X6RJ5tlDsCWKH9fKP6vWqHDfyBuGkc8AhlUJ4+POsjDCV1Gr49SO/uUiNeETNOe8u9dAuEsltI8b+jVdWM2oAorLQFzElzizs7FX74bQNWhLhWQAsOmDY5aB/6eiKJORPRx4YVEEKRcUJASuMbCLW3cP2FwArT8bIG5XH6maJ/aJQneLk
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(7916004)(366004)(39860400002)(346002)(396003)(376002)(136003)(4326008)(478600001)(6916009)(8936002)(86362001)(8676002)(186003)(1076003)(26005)(71200400001)(33656002)(5660300002)(66476007)(83380400001)(6486002)(33716001)(91956017)(76116006)(2906002)(44832011)(66946007)(66556008)(64756008)(66446008)(54906003)(6512007)(7416002)(53546011)(6506007)(316002)(9686003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: 3vLS91/nY3gzTWZz8sFwaEZ1hQOp8wBokq1DbKavBEcOzC9sMzELM4OBrZ7oJhDzGRuinu8KSgmhIHWxKrnnb2swfdvg0xhQuHxjfznFeFd1nK86whUIPhySKJvgOafmHC4aICNeI1kWEJOAdIwhJOy9fBM+eLLvm59DznzjrOhvYw3mWJMnii+N8adLAPTg1AhyAfLztB72Eo6uAvJWg7jJiuCZvcQPTBwbm6QWYQHhxzS8G55YJehPf4uGl9SvMqHiqjHkWoLlwPnEf7ouBquyf1reg8GE8+OwnfU5TJdK/3shqXvIsbc7+uMMfzW+yrWmP6mdzCE+pZf6cjmqVGuOCvKsISxfVRJjw07kNJV6IVaxuAT23dYgyG9OB9u5Mykf9JPHBoKy2D1DSVfKM4d9MQQYuhpTcefZ+7fmL+RjPxpGG6upt5Jsww6P7gIdb3eH20ateRocif+ou6Pu6aQ0n7meCte1TlkRJBgDXqwB7jL1Ft77ztue9su6X0Fe
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <E11D0E8FAE001341B638A777DDF2A713@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c2d439d4-d47e-402d-3640-08d82de8ac3a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jul 2020 02:41:01.7038
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: W8M44x0BE4TT05yHeoD3yQ6GAL3BbAvb4Piw73eN/GQVuSdNJMSPFWoMLPdAiTuoWCsKuEMYvODKNseejMPt0A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB5318
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gVHVlLCAyMDIwLTA3LTIxIGF0IDEzOjMzICswMjAwLCBHcmVnIEtyb2FoLUhhcnRtYW4gd3Jv
-dGU6DQo+IE9uIFNhdCwgSnVsIDE4LCAyMDIwIGF0IDEwOjU4OjUzQU0gKzA4MDAsIE1hY3BhdWwg
-TGluIHdyb3RlOg0KPiA+IE9uIFNhdCwgMjAyMC0wNy0xOCBhdCAxMDo0NSArMDgwMCwgTWFjcGF1
-bCBMaW4gd3JvdGU6DQo+ID4gPiBGcm9tOiBFZGRpZSBIdW5nIDxlZGRpZS5odW5nQG1lZGlhdGVr
-LmNvbT4NCj4gPiA+IA0KPiA+IA0KPiA+IFdlbGwsIGl0J3Mgc3RyYW5nZSwgSSBzaW1wbHkgcmVw
-bGFjZWQgdGhlIHVwbG9hZGVyJ3MgbmFtZSB0byBteQ0KPiA+IGNvbGxlYWd1ZSwgZ2l0IHNlbmQt
-ZW1haWwgcG9wIHVwIHRoaXMgbGluZSBhdXRvbWF0aWNhbGx5Lg0KPiA+IA0KPiA+IFNob3VsZG4n
-dCBJIGRvIHRoYXQga2luZCBvZiBjaGFuZ2UuIEl0IGRpZCBub3QgaGFwcGVuZWQgYmVmb3JlLg0K
-PiA+IERvIEkgbmVlZCB0byBjaGFuZ2UgaXQgYmFjayBhbmQgdXBkYXRlIHBhdGNoIHYzPw0KPiAN
-Cj4gV2hvIGlzIHRoZSByZWFsIGF1dGhvciBvZiB0aGlzLCBFZGRpZSBvciB5b3U/ICBJZiBFZGRp
-ZSwgdGhpcyBpcw0KPiBjb3JyZWN0LCBpZiB5b3UsIGl0IGlzIG5vdC4NCj4gDQo+IHRoYW5rcywN
-Cj4gDQo+IGdyZWcgay1oDQoNCkl0IGlzIEVkZGllISBJIGp1c3QgY2hhbmdlZCB0aGUgdXBsb2Fk
-ZXIgdG8gdGhlIGNvcnJlY3QgYXV0aG9yIGZyb20gbXkNCndvcmtpbmcgdHJlZSENClRoYW5rcyEN
-Cg0KUmVnYXJkcywNCk1hY3BhdWwgTGluDQoNCg==
+On 20-07-13 12:05:52, Pawel Laszczak wrote:
+> Patch removes 'goto not_otg' instruction from
+> cdns3_hw_role_state_machine function.
+>=20
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> ---
+>  drivers/usb/cdns3/core.c | 20 +++++++++-----------
+>  1 file changed, 9 insertions(+), 11 deletions(-)
+>=20
+> diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
+> index c498b585eb13..8e3996f211a8 100644
+> --- a/drivers/usb/cdns3/core.c
+> +++ b/drivers/usb/cdns3/core.c
+> @@ -191,11 +191,17 @@ static int cdns3_core_init_role(struct cdns3 *cdns)
+>   */
+>  static enum usb_role cdns3_hw_role_state_machine(struct cdns3 *cdns)
+>  {
+> -	enum usb_role role;
+> +	enum usb_role role =3D USB_ROLE_NONE;
+>  	int id, vbus;
+> =20
+> -	if (cdns->dr_mode !=3D USB_DR_MODE_OTG)
+> -		goto not_otg;
+> +	if (cdns->dr_mode !=3D USB_DR_MODE_OTG) {
+> +		if (cdns3_is_host(cdns))
+> +			role =3D USB_ROLE_HOST;
+> +		if (cdns3_is_device(cdns))
+> +			role =3D USB_ROLE_DEVICE;
+> +
+> +		return role;
+> +	}
 
+Would you please improve it a bit like below:
+
+	if (cdns->dr_mode !=3D USB_DR_MODE_OTG) {
+		if (cdns3_is_host(cdns))
+			role =3D USB_ROLE_HOST;
+		else if (cdns3_is_device(cdns))
+			role =3D USB_ROLE_DEVICE;
+		else
+			role =3D USB_ROLE_NONE;
+
+		return role;
+	}
+
+Peter
+> =20
+>  	id =3D cdns3_get_id(cdns);
+>  	vbus =3D cdns3_get_vbus(cdns);
+> @@ -232,14 +238,6 @@ static enum usb_role cdns3_hw_role_state_machine(str=
+uct cdns3 *cdns)
+>  	dev_dbg(cdns->dev, "role %d -> %d\n", cdns->role, role);
+> =20
+>  	return role;
+> -
+> -not_otg:
+> -	if (cdns3_is_host(cdns))
+> -		role =3D USB_ROLE_HOST;
+> -	if (cdns3_is_device(cdns))
+> -		role =3D USB_ROLE_DEVICE;
+> -
+> -	return role;
+>  }
+> =20
+>  static int cdns3_idle_role_start(struct cdns3 *cdns)
+> --=20
+> 2.17.1
+>=20
+
+--=20
+
+Thanks,
+Peter Chen=
