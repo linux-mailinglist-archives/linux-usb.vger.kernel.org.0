@@ -2,145 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C5B6228E59
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jul 2020 05:03:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6976228E5C
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jul 2020 05:03:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731876AbgGVDDo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jul 2020 23:03:44 -0400
+        id S1731898AbgGVDDs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 21 Jul 2020 23:03:48 -0400
 Received: from mail-am6eur05on2063.outbound.protection.outlook.com ([40.107.22.63]:8617
         "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1731781AbgGVDDn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 21 Jul 2020 23:03:43 -0400
+        id S1731837AbgGVDDq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 21 Jul 2020 23:03:46 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UVLilKOkGLJtSklh9a+5ofKMzHYF9Z2Pz6JIPvFEzTQwr5C+mnLJlSLTJBgpPSURwCwdpWP3OQUtRM8hdkTDDd9377OPV4uXfltVZLu76BMiRh5ilpHkeVQ8t1awO/a4Kny4sKA4oGklUh7gce7M5i6tpKHMcKnXxuUOVFvtvwTBmyubd51zjFiOZKS6RS1+4wW5BHQPXQciokr08UJfpR73/qnDMgKE10Y8+xz47+cEUpByFa5RU9Q+ljowDxsLY+P5uJvgMvzypc8Gh6w2wF2UelL4tl4hkTLQy89V7oGdcDb2G0onzB/tuCVUD4NUgPuOGoJHffEN/kvCHVScxg==
+ b=eEX4LAW5gFvfzNHjJI5bPxgd5fguPIS2GwJOOjFavDrhJwOCYQ+5HU9qGMrXdXl3d6smXrtptGnJzjteExUKMw+m4u1C+2W8d9x3kSdPldbAIii2nJ99kDBrcclH0dZeuI6D/Xw1VyKAXPocJkjV+SDwUPOdhyTWssdXIk+PnWZM84XHH4YYRYsOWg6IpbHq3+E1rKjloZw8XFHAikqzI02m4hcViaZtPDgs7i0n07aK31KZ+9xnhz+YadN5VnuIgpWdFelrQXEqoc6Nzg0yylh8qfiYx49S/2Er8n3AP+joBqG7ZsJnbUH8luyu07CqeRDF7rkVkVxs+Hf6Fy1r5A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7FE/6fSS29qoNxhpO97Yyo4EsRmd9huRlVgOu+uWlqg=;
- b=OorAsbj582abrcNFiou3RQsy0n6w1ErMDe9QxKCXivpjKnC6uDUjsFSwKD3AGQm4hYeqChbmiGH19tKuf8qwGGGA9AH5s8O1rhGBWIcMwin0WMbY59l1NwUp9+V4zmt+NInW+9y+x5ILBgDQqO6Afm650qnzqFB2HvlePrNixbYXVgdld2AntUEdv3nHaYMurS3M2f817eMG65g/jOFkHWGJ8eDAxBREIjHoYshbR+Og8Ex7gOLsTgQ4lFSaCJnSSGVyImu/f3HoR0MU6a/3294JNs/tF/ddNQJBBIYDaLJI9b+GdtyUStHZ7GcTh0gbf6yb9dE0vCCKnzovb+U+Bg==
+ bh=vdsHTlw/t7Fy/hudlpPkarQoBRcqvklp+P+LCFWyT0k=;
+ b=ivi2g/srFIyPgcIlRgs2AeL10W+LM9q08qIpZA62WV7FG+YbhlebBG396AUo5kfWooR1Dy5bcKsKxuGmLldgHd3gR1zGIJlG/zXdkdMcocoe/oZVp6UJMn4O8w4AyvCqKtQWqA8tIRq5YWc2cLgLZRblIvRUXVwEr6SGYazWKz0x1Nr3Hs9eTP5uqJYalQAOaHue5Pnd1P4zpZbNTgu6wMISd+wGD5exIvTaypGjNnJNZbPecSWQ22nlqP0Xk3fRqLTtSnDlPNzuH638VlgULgBeFC9J6b7BsooPAYWC0g8ECG23aXE0cMzx6ovOjXffZv2zkriBd5aio/vcCDFBAQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7FE/6fSS29qoNxhpO97Yyo4EsRmd9huRlVgOu+uWlqg=;
- b=nwmrtlPlxIi0dwwYZcyU3WUXgYF3m+c7SawRVzIjP6Jz+Kd73rbyKixGpVZ8NtWTCn0CqF7cpE1/vChRfGUmnBHJvf6O+g3pCwILdOXT1VLtcktg0jlAp3xPdL9y0QhLfhDQ3E8jWmR03O+3aGjH3t9sKxt0TCHlu7DmG66WTDg=
+ bh=vdsHTlw/t7Fy/hudlpPkarQoBRcqvklp+P+LCFWyT0k=;
+ b=esBQ0azBLsL1JtP2heI2uLktmbcoDV6LPaXrwScGBhB3H32pOZJMdVmv8MKBIxsTeOJkK917nMCMaVfoMXLM1YVgYogWGgW2EpdoHfbuyLYHRFfCOp7jz11W2169bArxay662Df4WYO4h7zqbEOpWd8k3BS1pWSRCt18g2OxN3c=
 Authentication-Results: vger.kernel.org; dkim=none (message not signed)
  header.d=none;vger.kernel.org; dmarc=none action=none header.from=nxp.com;
 Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
  by AM5PR0402MB2738.eurprd04.prod.outlook.com (2603:10a6:203:97::20) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3195.23; Wed, 22 Jul
- 2020 03:03:39 +0000
+ 2020 03:03:41 +0000
 Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
  ([fe80::1101:adaa:ee89:af2a]) by AM7PR04MB7157.eurprd04.prod.outlook.com
  ([fe80::1101:adaa:ee89:af2a%3]) with mapi id 15.20.3195.027; Wed, 22 Jul 2020
- 03:03:39 +0000
+ 03:03:41 +0000
 From:   Peter Chen <peter.chen@nxp.com>
 To:     linux-usb@vger.kernel.org
 Cc:     linux-imx@nxp.com, jun.li@nxp.com, Peter Chen <peter.chen@nxp.com>
-Subject: [PATCH 1/2] usb: chipidea: add query_available_role interface
-Date:   Wed, 22 Jul 2020 11:03:16 +0800
-Message-Id: <20200722030317.14245-1-peter.chen@nxp.com>
+Subject: [PATCH 2/2] usb: chipidea: imx: get available runtime dr mode for wakeup setting
+Date:   Wed, 22 Jul 2020 11:03:17 +0800
+Message-Id: <20200722030317.14245-2-peter.chen@nxp.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200722030317.14245-1-peter.chen@nxp.com>
+References: <20200722030317.14245-1-peter.chen@nxp.com>
 Content-Type: text/plain
 X-ClientProxiedBy: SG2PR06CA0170.apcprd06.prod.outlook.com
  (2603:1096:1:1e::24) To AM7PR04MB7157.eurprd04.prod.outlook.com
  (2603:10a6:20b:118::20)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from b29397-desktop.ap.freescale.net (119.31.174.67) by SG2PR06CA0170.apcprd06.prod.outlook.com (2603:1096:1:1e::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3216.21 via Frontend Transport; Wed, 22 Jul 2020 03:03:37 +0000
+Received: from b29397-desktop.ap.freescale.net (119.31.174.67) by SG2PR06CA0170.apcprd06.prod.outlook.com (2603:1096:1:1e::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3216.21 via Frontend Transport; Wed, 22 Jul 2020 03:03:39 +0000
 X-Mailer: git-send-email 2.17.1
 X-Originating-IP: [119.31.174.67]
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: aa59b034-3d1b-4479-2185-08d82debd55e
+X-MS-Office365-Filtering-Correlation-Id: bf683574-f077-4e71-1d7a-08d82debd695
 X-MS-TrafficTypeDiagnostic: AM5PR0402MB2738:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM5PR0402MB27386C343E874AE198C53DF68B790@AM5PR0402MB2738.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:862;
+X-Microsoft-Antispam-PRVS: <AM5PR0402MB27384FAD6409EE31C42BA0B68B790@AM5PR0402MB2738.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0fMoF/jr5PI14sKHCmUzN3QExAAkRagFpUNa+ZlvloL2YYYbQmjmnkbTChptGkjRWRbtVd8TBQluRLuQ61zFU3+VuTQDPgd4raqketQZdwjdRWvUTlwC1R9sZYFCaCrP9eN3W2WQSkeTnl4tomBmfOs0myFNQhAG8AEiBM3PFF6XG+tc2D+v/Mf5B3GPb9w8Y62YMucwTOIHu5W4hljYJv77U7Ffu6BgSqfGE+WUTcWpxubK8FIcsIglofSiG8MyXF0DBJZ/rMzMY4hiEbs1w+d7pRWI6QSfpgqWLG85cJItWX9w1fRSb9X+vg1bSOhq6P4aUrI7P89LI8KXYp4bHfhCy3gOsH6hhCpZn/BSlCVwLzP5n7h0VPdZt33VKcf7
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(346002)(366004)(39860400002)(376002)(396003)(136003)(66556008)(6666004)(66946007)(66476007)(6506007)(52116002)(316002)(478600001)(36756003)(5660300002)(1076003)(44832011)(86362001)(186003)(16526019)(2906002)(956004)(2616005)(6486002)(26005)(6512007)(8936002)(4326008)(6916009)(8676002)(131093003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: BSuOL4onAFjwCT6xMEuqwxPlcpgjNH0tr3n8jkc/Pry6zDE7tGfFwNBXi6D+uLbg9RE1o7/jhjSZZ/J/9bH8gTbEihgKyTtisQ4M/W4T1qUaj7h8SAi5eyTOxdqr6SQrVLzfEkYfOuRdL1Gxwt09Ns6nSvLfBbi8myQFxWeCXrl2uZIzz206uAHwGm2tCUMFCaCPui0MQnVjsNc/Ak80MrHUUfo9of2ygEHeekxCdrNaTY/RBkF4t9z2X77aFtu3mYAepI/AGuLPFO03FHQFhByUePhp55xkq9c06yWowg3KYm66lnt+26ujXtFet/L/mDN5AMUgjwObDzrwbF0cLh1c8DOwNMTjbflVSv/fLTurj1UT9M438d/lFYvoCc04BgeS4XyU15jfxXDnaJ/HAhHuMhh5WkN+AtVDvtv+48fZdz2va7x7yUU2jmQYQys/IOb7PVo0Zl9ntzDl7JxbqRZmctMCzNBykViMSHdwEGc=
+X-Microsoft-Antispam-Message-Info: RZx5i7UO1LWOiDlp4I7wL2UFUXcSFlaq9EmMo/azcj4jq9+7tM58ej4wA/BHcEivhWHJmjk4dKtCxfugbXTB+5T+G87fOk2mrPZiTzWUHgO/gYJYzPopHryJmN66YNG+9shDUpJY4hNDVJKoWPY2/BoOJlIxIQ9OlFq/3t11fQi1IRsYPSQ/QwCCLDa5EVcIl8C54TN4uU3w3mSmOU1YQtapjXU8ukTu6hMqkUowZOXpkpON3AKrAYWTNsCGVBKdWqRLEjF7HhWedYZ5uFgEwdnn04/U7u6OlK6mEigBuWhRnojR2YJ7gpwTs65LlAYFWBGWlvUdYPXZCz6Eqpw0FgZtG23pYM7fF/lnpcan8Z5BfZpnOsh9J270VTGOSie/
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(346002)(366004)(39860400002)(376002)(396003)(136003)(66556008)(6666004)(66946007)(66476007)(6506007)(52116002)(316002)(478600001)(36756003)(5660300002)(1076003)(83380400001)(44832011)(86362001)(186003)(16526019)(2906002)(956004)(2616005)(6486002)(26005)(6512007)(8936002)(4326008)(6916009)(8676002)(131093003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: PpoC2CCUM4XX1xFZ/cSrDfOHDTKlPOfYr6nlxGIsSg5e3dmGnTc+WaYHVRniaHmXqF9DBI1ap2ACkYm8gC7Dm6iCTEfzhtYBUgkv5zgrzPSiv0WZ2D75msOhLCd/Lo2QJRyPqu687dbhO0yDAAa/sHhbPxV5PHVFNY9Oe0q+If/zRg8DdS362jO2kChHla1R5kOZbCpwbg+MFiQfg3xdMwQFd5gzC3W2cHp3b3tjLnC5gOJi9825vjwfMRCx19xQO92KMelsUbv3pU3bWF2RRO6humV8padVq5Y3GcBJBpLtx6m6cpHvFayzNN+iua/kxDj7TbbXP6KbqTzTMR1mukeu6G5+kIcPWhXKLTR5papy+2TX4Tki1EjKYTarjU/AiWWqZ9BeLa94mmxEDCKN0wc1x9rYjfX/yMRON/LDvYT4Tc6VOLUcARpVZkVXHwQU2szKJabyZ1hR3ThlqICNc/5sJjMdLUQjDF6NUF1jk3qT9ksu/r94qbQfA4BKBM1m
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aa59b034-3d1b-4479-2185-08d82debd55e
+X-MS-Exchange-CrossTenant-Network-Message-Id: bf683574-f077-4e71-1d7a-08d82debd695
 X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jul 2020 03:03:39.5087
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jul 2020 03:03:41.5079
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KqtjlJPIomMQ1tEosDF6kaBg3Ak93CFyBhOy/x6CuX2x+v8LGEmb3V39JtxFF/2HAnPBewZjUQHJ/F+0QSBCOA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6skoZxSPEnmb3jtyRfg0Sn3QphE6BEFyfJWNp9FWm2oDJeiT5J+LCyuiCiNfShvzB2kY8zfFDDjSWkLgD0PJUg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR0402MB2738
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The glue layer may need to know current available role to do some
-setting, eg, the wakeup setting. So we add ci_hdrc_query_available_role
-for that.
+If runtime dr_mode is not dual-role, it doesn't need to enable ID
+wakeup interrupt.
+If runtime dr_mode is host, it doesn't need to enable VBUS
+wakeup interrupt.
+With these changes, the user will not get the unexpected wakeup
+for single role use case. For example, the host-only use case at
+Micro-AB port, the controller should not be waken up by only
+plug in Micro-AB cable or the Micro-B cable with host.
 
 Signed-off-by: Peter Chen <peter.chen@nxp.com>
 ---
- drivers/usb/chipidea/core.c  | 27 +++++++++++++++++++++++++++
- include/linux/usb/chipidea.h |  2 ++
- 2 files changed, 29 insertions(+)
+ drivers/usb/chipidea/ci_hdrc_imx.c | 4 ++++
+ drivers/usb/chipidea/ci_hdrc_imx.h | 1 +
+ drivers/usb/chipidea/usbmisc_imx.c | 4 ++--
+ 3 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
-index 9a7c53d09ab4..87ae3c8686a7 100644
---- a/drivers/usb/chipidea/core.c
-+++ b/drivers/usb/chipidea/core.c
-@@ -877,6 +877,33 @@ void ci_hdrc_remove_device(struct platform_device *pdev)
- }
- EXPORT_SYMBOL_GPL(ci_hdrc_remove_device);
+diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_hdrc_imx.c
+index 58de0f3ac0e9..800ed9663172 100644
+--- a/drivers/usb/chipidea/ci_hdrc_imx.c
++++ b/drivers/usb/chipidea/ci_hdrc_imx.c
+@@ -467,6 +467,10 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
+ 		if (!IS_ERR(pdata.vbus_extcon.edev) ||
+ 		    of_property_read_bool(np, "usb-role-switch"))
+ 			data->usbmisc_data->ext_vbus = 1;
++
++		/* usbmisc needs to know dr mode to choose wakeup setting */
++		data->usbmisc_data->available_role =
++			ci_hdrc_query_available_role(data->ci_pdev);
+ 	}
  
-+/**
-+ * ci_hdrc_query_available_role: get runtime available operation mode
-+ *
-+ * The glue layer can get current operation mode (host/peripheral/otg)
-+ * This function should be called after ci core device has created.
-+ *
-+ * @pdev: the platform device of ci core.
-+ *
-+ * Return runtime usb_dr_mode.
-+ */
-+enum usb_dr_mode ci_hdrc_query_available_role(struct platform_device *pdev)
-+{
-+	struct ci_hdrc *ci = platform_get_drvdata(pdev);
-+
-+	if (!ci)
-+		return USB_DR_MODE_UNKNOWN;
-+	if (ci->roles[CI_ROLE_HOST] && ci->roles[CI_ROLE_GADGET])
-+		return USB_DR_MODE_OTG;
-+	else if (ci->roles[CI_ROLE_HOST])
-+		return USB_DR_MODE_HOST;
-+	else if (ci->roles[CI_ROLE_GADGET])
-+		return USB_DR_MODE_PERIPHERAL;
-+	else
-+		return USB_DR_MODE_UNKNOWN;
-+}
-+EXPORT_SYMBOL_GPL(ci_hdrc_query_available_role);
-+
- static inline void ci_role_destroy(struct ci_hdrc *ci)
+ 	ret = imx_usbmisc_init_post(data->usbmisc_data);
+diff --git a/drivers/usb/chipidea/ci_hdrc_imx.h b/drivers/usb/chipidea/ci_hdrc_imx.h
+index 367bb0d0cb6b..234d2dcd8a24 100644
+--- a/drivers/usb/chipidea/ci_hdrc_imx.h
++++ b/drivers/usb/chipidea/ci_hdrc_imx.h
+@@ -27,6 +27,7 @@ struct imx_usbmisc_data {
+ 	struct usb_phy *usb_phy;
+ 	int emp_curr_control;
+ 	int dc_vol_level_adjust;
++	enum usb_dr_mode available_role; /* runtime usb dr mode */
+ };
+ 
+ int imx_usbmisc_init(struct imx_usbmisc_data *data);
+diff --git a/drivers/usb/chipidea/usbmisc_imx.c b/drivers/usb/chipidea/usbmisc_imx.c
+index f9881aed468f..ce2e19d87387 100644
+--- a/drivers/usb/chipidea/usbmisc_imx.c
++++ b/drivers/usb/chipidea/usbmisc_imx.c
+@@ -373,10 +373,10 @@ static u32 usbmisc_wakeup_setting(struct imx_usbmisc_data *data)
  {
- 	ci_hdrc_gadget_destroy(ci);
-diff --git a/include/linux/usb/chipidea.h b/include/linux/usb/chipidea.h
-index 54167a2d28ea..025b41687ce9 100644
---- a/include/linux/usb/chipidea.h
-+++ b/include/linux/usb/chipidea.h
-@@ -99,5 +99,7 @@ struct platform_device *ci_hdrc_add_device(struct device *dev,
- 			struct ci_hdrc_platform_data *platdata);
- /* Remove ci hdrc device */
- void ci_hdrc_remove_device(struct platform_device *pdev);
-+/* Get current available role */
-+enum usb_dr_mode ci_hdrc_query_available_role(struct platform_device *pdev);
+ 	u32 wakeup_setting = MX6_USB_OTG_WAKEUP_BITS;
  
- #endif
+-	if (data->ext_id)
++	if (data->ext_id || data->available_role != USB_DR_MODE_OTG)
+ 		wakeup_setting &= ~MX6_BM_ID_WAKEUP;
+ 
+-	if (data->ext_vbus)
++	if (data->ext_vbus || data->available_role == USB_DR_MODE_HOST)
+ 		wakeup_setting &= ~MX6_BM_VBUS_WAKEUP;
+ 
+ 	return wakeup_setting;
 -- 
 2.17.1
 
