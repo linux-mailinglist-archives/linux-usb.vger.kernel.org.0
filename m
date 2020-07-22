@@ -2,195 +2,465 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 742E0229E89
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jul 2020 19:31:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A9A9229EB2
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jul 2020 19:44:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730896AbgGVRbF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Jul 2020 13:31:05 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:45562 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730800AbgGVRbF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jul 2020 13:31:05 -0400
-Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 157ABC0085;
-        Wed, 22 Jul 2020 17:31:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1595439064; bh=N+1dWZ1m43xny5asIQMgR3ozl/jv0Y1LG3X1dh1CVhA=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=fE59NjKE5eiBk2rbJZETIH6uEeflvdR/s7ZbSk0nxvYJWtrMr8tTnoCBhmWlDMcYQ
-         0rR2p9yI9TifPKQj4ZN7miBXekpWGzGLSb1jAbt15HtXATfvJ9s8/tUoOtEVoiIofA
-         VQOzNG4TXy347q2lb3RpLe+d+qBG4VsQQoLfpkFfE4SxXethWKEJsTFBLBkp1g1VZO
-         fwL2JkNIsRLPKKlnH9NGxQwpQ7uwVEALRzb6DnLtYiz/uYeb3//HjmQlytISuLXPdD
-         5A/ClCyYfsk1M8zwGJckfO/1SslBgvcT3Wf7NOs004kyaNfQZOAHr+HQHiPBeULL5I
-         SScQpdyXKDKfg==
-Received: from o365relay-in.synopsys.com (sv2-o365relay1.synopsys.com [10.202.1.137])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id 4A773A0096;
-        Wed, 22 Jul 2020 17:31:01 +0000 (UTC)
-Received: from NAM04-BN3-obe.outbound.protection.outlook.com (mail-bn3nam04lp2052.outbound.protection.outlook.com [104.47.46.52])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "mail.protection.outlook.com", Issuer "GlobalSign Organization Validation CA - SHA256 - G3" (verified OK))
-        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 26730400AF;
-        Wed, 22 Jul 2020 17:31:00 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=thinhn@synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="gzNROH0C";
-        dkim-atps=neutral
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=M62eyfFKeUrf2rUGRONIxjLr05kYDCIvy2e36F+0A5m+pyQXrXn4qdH6FgxfdlYNJK6h3qTaJXXs3m1z8BNfRp2xe20y8Lgs3iQLBxMupLcNGYe0Ue5ybf9J6djvuixc9CLYIwdSnsf0QHbZMQPOlavCt4HLlDtvvfoxyI87OduJpdMynaJRRIV74u2DCLmBCcIc7ODJS7bssIScJBhEpbXYj7LHL+OQ4XBHN4qEAOoSHPc9xei+kgWRwQYITuksQ6nGJd2zJ5z1LAI/TPernzCo8yLY0kwZpsaBEgi0Dg2S2GxWLyjnRt78jhehT8eJx9BPdv6LpPsCgUwUCch1eg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=N+1dWZ1m43xny5asIQMgR3ozl/jv0Y1LG3X1dh1CVhA=;
- b=epg5YaMgKu7+8Lt4J8bHKyJGzyBkXgPhXV2NI5CnaSIAwhPn+pmNYWTZqU1kHzEKcb/EvUDZD5OuggecT5rQ5wywpSAqKWBvDcQRsdazJZ1cquuKU1RgvbpNU+5VNV3hObyz6KA3d6VUiNfMk6Db6Kk01AjSBE/+2KKRxfCbCA3/CrzQQLdTdRw4aH5pDDtwu80xpZyfvK2MYSCII6ZYda3qTOgvs5+Egfn0T0n2PQAf6eu/W7jdfZi+ptaASplXDJekR/aiRYuXOKEwFLPrqD046952l7RfYhSy3bVKDOwshkub0/joapcPX1J9fHwU1KPsBfk2Z7YcxAj8QU/L4Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=N+1dWZ1m43xny5asIQMgR3ozl/jv0Y1LG3X1dh1CVhA=;
- b=gzNROH0C9vBjn9dZ6oTlW6CqZudQvNHy+Ly0hTISZVwSj0S9EEkQKnamzgln8JNTJOemwUEqoYvr6ehQNchpH4m6YL2cjH8P/XvQMZ/Dwr5ZKHXNeghhNwJyj0/RW32fDdfxbP0R40MCW7poYVGsCyaySqw0mrIRjfuSnvs/UOM=
-Received: from BYAPR12MB2917.namprd12.prod.outlook.com (2603:10b6:a03:130::14)
- by BYAPR12MB3576.namprd12.prod.outlook.com (2603:10b6:a03:d8::25) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3216.23; Wed, 22 Jul
- 2020 17:30:57 +0000
-Received: from BYAPR12MB2917.namprd12.prod.outlook.com
- ([fe80::3844:ed8:654d:7456]) by BYAPR12MB2917.namprd12.prod.outlook.com
- ([fe80::3844:ed8:654d:7456%5]) with mapi id 15.20.3195.026; Wed, 22 Jul 2020
- 17:30:57 +0000
-X-SNPS-Relay: synopsys.com
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        John Youn <John.Youn@synopsys.com>
-Subject: Re: [PATCH 06/11] usb: devicetree: dwc3: Introduce num-lanes and lsm
-Thread-Topic: [PATCH 06/11] usb: devicetree: dwc3: Introduce num-lanes and lsm
-Thread-Index: AQHWW7xVn29tfo9/DkKD4yu8ygVtF6kRaYEAgAAW7YCAAKirAIAAGx8AgAFx4gCAAAgVAIAAJg+A
-Date:   Wed, 22 Jul 2020 17:30:57 +0000
-Message-ID: <034f2463-becb-4de7-1dc6-d26e4f37957c@synopsys.com>
-References: <cover.1594935978.git.thinhn@synopsys.com>
- <9684a2b2adb01b6b1a8c513928ea49b4a6436184.1594935978.git.thinhn@synopsys.com>
- <20200721033908.GA3508628@bogus>
- <d7e3d5c6-05c1-f256-7773-2b88f6cd5ca3@synopsys.com>
- <CAL_JsqLSKKT__dJaML4SWCpFpFYV_Cpkor=mNh5-Z7hE4n4fMA@mail.gmail.com>
- <57fffdfb-a4fa-6e50-1156-1ada3765e362@synopsys.com>
- <CAL_JsqKSrs93wLrxy2gaBEhGfgZs7jpjFarQBoHGxMc6ur3WRQ@mail.gmail.com>
- <31d57197-6365-754b-2f1b-56d7cc8e8d89@synopsys.com>
-In-Reply-To: <31d57197-6365-754b-2f1b-56d7cc8e8d89@synopsys.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-authentication-results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=synopsys.com;
-x-originating-ip: [149.117.7.21]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 00a225c9-aa39-4caf-daba-08d82e64feae
-x-ms-traffictypediagnostic: BYAPR12MB3576:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BYAPR12MB3576E2FE79B5DC1773AE6A06AA790@BYAPR12MB3576.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: mCSbyWC1db6lbpErfovi4GQ4XWgiUYI3qBiRbFyBpqGbv65ZTOiryMFZxP6XKbA10sidjtqj2MJ+DPbF63+YEka5VbSkSiy5zQ3Qi5JmPoaGyRHOR5q8A5p8pSRqUaOe+65zSHz7NiGuoNTiSuYJVx8C+rZln5tElhhcywxUeJKYUTJYzp6zZkJ8Ya9Lh7PF/PgX78u9BBzsu2OmJS1u7VCma7CesI7I9PNadhTv4PKO8hbUVQFPPOp50DMkRBhwPIFhPSxXedejgKDkQh9h2vFCprDnmeqgmOk6D2YyQBR4tCPIEIHyYnAxFEBfMDuSXaYUnfM6owQowxMfSZklYfXqJT2G1FyvY5dZegPOTReOlUyF+sIJqOGBHPN0pa1o
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB2917.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(396003)(39860400002)(136003)(366004)(346002)(376002)(66476007)(64756008)(66556008)(107886003)(26005)(66446008)(76116006)(66946007)(54906003)(5660300002)(316002)(186003)(6512007)(2616005)(31686004)(8676002)(86362001)(8936002)(36756003)(478600001)(6486002)(53546011)(6916009)(6506007)(4326008)(83380400001)(71200400001)(2906002)(31696002)(43740500002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: R3MbPAaYamVn4on8v6y15ze4cWdZ3VMDtN2NjfdltLYBCUlm2n+z7m13nVW+XUIvcYvvTlYsYp4Oug7n2AhQla0a1lWBc5xtgdTddJs9SbIb9dS5BkIDtbai8ApYpWnZmzLBZjM7TrkiUMExg0K5vUxvYIC9IYPS9gl8O7AKrttENppL1ICSk3l5SnKdxIRaWHR6Cwa4R8ocfactv6gbAhCfD3lGC/Q4O3nrU7y+5UpyAQzoOnLvzH1xVe4w9Ow7/sIZnAbumKiPZY5lwZH24IqZ2blWoz/a6fKNypognWWwBEZTISjF2lL0Mc9j6arC+brZb/x94n2fS0hzzOZrOpHxF5Ua/O/13BhKfWnyQNdCR/vw+tBl1CwFZ+B+30GPs+EQAZxtDo5KgQMZ4ifu7sy3tOdbwkkB08vY2Ta+qPlf25IyU+qbfx9f88/qCimbmzluJCU/qEA2IRnY6UcqGM4RJbiDG3Jg5+6XAm7zqcE=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <C275FD5F4FED484E9CD4CD0AE2A7C04B@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1726649AbgGVRoN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jul 2020 13:44:13 -0400
+Received: from out28-99.mail.aliyun.com ([115.124.28.99]:42817 "EHLO
+        out28-99.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726462AbgGVRoN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jul 2020 13:44:13 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436282|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0238906-0.000253092-0.975856;FP=0|0|0|0|0|-1|-1|-1;HT=e01l07440;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.I6.RTvs_1595439842;
+Received: from 192.168.10.205(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.I6.RTvs_1595439842)
+          by smtp.aliyun-inc.com(10.147.43.95);
+          Thu, 23 Jul 2020 01:44:03 +0800
+Subject: Re: [PATCH v4 2/3] USB: PHY: JZ4770: Add support for new Ingenic
+ SoCs.
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, prasannatsmkumar@gmail.com,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, yanfei.li@ingenic.com,
+        sernia.zhou@foxmail.com, zhenwenjin@gmail.com
+References: <20200722063355.67781-1-zhouyanjie@wanyeetech.com>
+ <20200722063355.67781-3-zhouyanjie@wanyeetech.com>
+ <84SVDQ.U2WOG9BOMMYN1@crapouillou.net>
+From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Message-ID: <5116f2e7-6479-b7f0-eecc-910dcfa01448@wanyeetech.com>
+Date:   Thu, 23 Jul 2020 01:43:52 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.3.0
 MIME-Version: 1.0
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB2917.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 00a225c9-aa39-4caf-daba-08d82e64feae
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jul 2020 17:30:57.5685
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: s1H8BD1dPhKrrTGrtYJIE+ZhL7CX4HY4V/DKysFC0iE27KBroyWISgumB8UDbHpG/eh0Nww6R8LtuSCjpHq66Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3576
+In-Reply-To: <84SVDQ.U2WOG9BOMMYN1@crapouillou.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-VGhpbmggTmd1eWVuIHdyb3RlOg0KPiBSb2IgSGVycmluZyB3cm90ZToNCj4+IE9uIFR1ZSwgSnVs
-IDIxLCAyMDIwIGF0IDEwOjQyIEFNIFRoaW5oIE5ndXllbiA8VGhpbmguTmd1eWVuQHN5bm9wc3lz
-LmNvbT4gd3JvdGU6DQo+Pj4gUm9iIEhlcnJpbmcgd3JvdGU6DQo+Pj4+IE9uIE1vbiwgSnVsIDIw
-LCAyMDIwIGF0IDExOjAxIFBNIFRoaW5oIE5ndXllbiA8VGhpbmguTmd1eWVuQHN5bm9wc3lzLmNv
-bT4gd3JvdGU6DQo+Pj4+PiBSb2IgSGVycmluZyB3cm90ZToNCj4+Pj4+PiBPbiBUaHUsIEp1bCAx
-NiwgMjAyMCBhdCAwMjo1OTowOFBNIC0wNzAwLCBUaGluaCBOZ3V5ZW4gd3JvdGU6DQo+Pj4+Pj4+
-IEludHJvZHVjZSBudW0tbGFuZXMgYW5kIGxhbmUtc3BlZWQtbWFudGlzc2EtZ2JwcyBmb3IgZGV2
-aWNlcyBvcGVyYXRpbmcNCj4+Pj4+Pj4gaW4gc3VwZXItc3BlZWQtcGx1cy4gRFdDX3VzYjMyIElQ
-IHN1cHBvcnRzIG11bHRpcGxlIGxhbmVzIGFuZCBjYW4NCj4+Pj4+Pj4gb3BlcmF0ZSBpbiBkaWZm
-ZXJlbnQgc3VibGluayBzcGVlZHMuIEN1cnJlbnRseSB0aGUgZGV2aWNlIGNvbnRyb2xsZXINCj4+
-Pj4+Pj4gZG9lcyBub3QgaGF2ZSB0aGUgaW5mb3JtYXRpb24gb2YgdGhlIHBoeSdzIG51bWJlciBv
-ZiBsYW5lcyBzdXBwb3J0ZWQuIEFzDQo+Pj4+Pj4+IGEgcmVzdWx0LCB0aGUgdXNlciBjYW4gc3Bl
-Y2lmeSB0aGVtIHRocm91Z2ggdGhlc2UgcHJvcGVydGllcyBpZiB0aGV5IGFyZQ0KPj4+Pj4+PiBk
-aWZmZXJlbnQgdGhhbiB0aGUgZGVmYXVsdCBzZXR0aW5nLg0KPj4+Pj4+Pg0KPj4+Pj4+PiBTaWdu
-ZWQtb2ZmLWJ5OiBUaGluaCBOZ3V5ZW4gPHRoaW5obkBzeW5vcHN5cy5jb20+DQo+Pj4+Pj4+IC0t
-LQ0KPj4+Pj4+PiAgICAgIERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvZHdj
-My50eHQgfCA5ICsrKysrKysrKw0KPj4+Pj4+PiAgICAgIDEgZmlsZSBjaGFuZ2VkLCA5IGluc2Vy
-dGlvbnMoKykNCj4+Pj4+Pj4NCj4+Pj4+Pj4gZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vZGV2
-aWNldHJlZS9iaW5kaW5ncy91c2IvZHdjMy50eHQgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUv
-YmluZGluZ3MvdXNiL2R3YzMudHh0DQo+Pj4+Pj4+IGluZGV4IGQwM2VkZjlkMzkzNS4uNGViYTA2
-MTU1NjJmIDEwMDY0NA0KPj4+Pj4+PiAtLS0gYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmlu
-ZGluZ3MvdXNiL2R3YzMudHh0DQo+Pj4+Pj4+ICsrKyBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJl
-ZS9iaW5kaW5ncy91c2IvZHdjMy50eHQNCj4+Pj4+Pj4gQEAgLTg2LDYgKzg2LDE1IEBAIE9wdGlv
-bmFsIHByb3BlcnRpZXM6DQo+Pj4+Pj4+ICAgICAgIC0gc25wcyxxdWlyay1mcmFtZS1sZW5ndGgt
-YWRqdXN0bWVudDogVmFsdWUgZm9yIEdGTEFESl8zME1IWiBmaWVsZCBvZiBHRkxBREoNCj4+Pj4+
-Pj4gICAgICAgICByZWdpc3RlciBmb3IgcG9zdC1zaWxpY29uIGZyYW1lIGxlbmd0aCBhZGp1c3Rt
-ZW50IHdoZW4gdGhlDQo+Pj4+Pj4+ICAgICAgICAgZmxhZGpfMzBtaHpfc2RibmQgc2lnbmFsIGlz
-IGludmFsaWQgb3IgaW5jb3JyZWN0Lg0KPj4+Pj4+PiArIC0gc25wcyxudW0tbGFuZXM6IHNldCB0
-byBzcGVjaWZ5IHRoZSBudW1iZXIgb2YgbGFuZXMgdG8gdXNlLiBWYWxpZCBpbnB1dHMgYXJlDQo+
-Pj4+Pj4+ICsgICAgICAgICAgICAgICAgICAgIDEgb3IgMi4gQXBwbHkgaWYgdGhlIG1heGltdW0t
-c3BlZWQgaXMgc3VwZXItc3BlZWQtcGx1cw0KPj4+Pj4+PiArICAgICAgICAgICAgICAgICAgICBv
-bmx5LiBEZWZhdWx0IHZhbHVlIGlzIDIgZm9yIERXQ191c2IzMi4gRm9yIERXQ191c2IzMSwNCj4+
-Pj4+Pj4gKyAgICAgICAgICAgICAgICAgICAgaXQgaXMgYWx3YXlzIDEgYXQgc3VwZXItc3BlZWQt
-cGx1cy4NCj4+Pj4+Pj4gKyAtIHNucHMsbGFuZS1zcGVlZC1tYW50aXNzYS1nYnBzOiBzZXQgdG8g
-c3BlY2lmeSB0aGUgc3ltbWV0cmljIGxhbmUgc3BlZWQNCj4+Pj4+Pj4gKyAgICAgICAgICAgICAg
-ICAgICAgbWFudGlzc2EgaW4gR2Jwcy4gVmFsaWQgaW5wdXRzIGFyZSA1IG9yIDEwLiBBcHBseSBp
-Zg0KPj4+Pj4+PiArICAgICAgICAgICAgICAgICAgICB0aGUgbWF4aW11bS1zcGVlZCBpcyBzdXBl
-ci1zcGVlZC1wbHVzIG9ubHkuIERlZmF1bHQNCj4+Pj4+Pj4gKyAgICAgICAgICAgICAgICAgICAg
-dmFsdWUgaXMgMTAuIEZvciBEV0NfdXNiMzEsIGl0J3MgYWx3YXlzIDEwIGF0DQo+Pj4+Pj4+ICsg
-ICAgICAgICAgICAgICAgICAgIHN1cGVyLXNwZWVkLXBsdXMuDQo+Pj4+Pj4gVGhpcyBpcyBhbGwg
-Y29tbW9uIFVTQiB0aGluZ3MgYW5kIHNob3VsZCBiZSBjb21tb24gcHJvcGVydGllcyAod2hpY2gg
-d2UNCj4+Pj4+PiBtYXkgYWxyZWFkeSBoYXZlKS4NCj4+Pj4+IFN1cmUuIEZvciAibnVtLWxhbmVz
-IiBpcyBzaW1wbGUsIGFueSBvYmplY3Rpb24gaWYgd2UgdXNlDQo+Pj4+PiAibGFuZS1zcGVlZC1t
-YW50aXNzYS1nYnBzIj8gT3Igc2hvdWxkIHdlIGFkZCAibGFuZS1zcGVlZC1leHBvbmVudCI/DQo+
-Pj4+ICdudW0tbGFuZXMnIGlzIGdvb2QgYXMgdGhhdCdzIHdoYXQgUENJZSB1c2VzLiBEb2N1bWVu
-dCB0aGF0IHdpdGgNCj4+Pj4gJ21heGltdW0tc3BlZWQnLg0KPj4+Pg0KPj4+PiBJIHRoaW5rICdz
-dXBlci1zcGVlZC1wbHVzJyBzaG91bGQgbWVhbiBnZW4gMiAxMEcgcGVyIGxhbmUuIFRoZW4NCj4+
-Pj4gYmV0d2VlbiBudW0tbGFuZXMgYW5kIG1heGltdW0tc3BlZWQgeW91IGNhbiBkZWZpbmUgYWxs
-IDQgcG9zc2libGUNCj4+Pj4gcmF0ZXMuDQo+Pj4gVGhhdCBtYXkgY29uZnVzZSB0aGUgdXNlciBi
-ZWNhdXNlIG5vdyB3ZSdkIHVzZSAnc3VwZXItc3BlZWQtcGx1cycgdG8NCj4+PiBkZWZpbmUgdGhl
-IHNwZWVkIG9mIHRoZSBsYW5lIHJhdGhlciB0aGFuIHRoZSBkZXZpY2UgaXRzZWxmLg0KPj4+DQo+
-Pj4gQWNjb3JkaW5nIHRvIHRoZSBVU0IgMy4yIHNwZWMsIHN1cGVyLXNwZWVkLXBsdXMgY2FuIG1l
-YW4gZ2VuMngxLCBnZW4xeDIsDQo+Pj4gb3IgZ2VuMngyLg0KPj4gVGhlbiBhZGQgbmV3IHN0cmlu
-Z3MgYXMgbmVlZGVkIHRvIG1ha2UgaXQgY2xlYXI6IHN1cGVyLXNwZWVkLXBsdXMtZ2VuMXgyDQo+
-Pg0KPj4gSXQncyBvYnZpb3VzIHRoYXQgd2hhdCAnc3VwZXItc3BlZWQtcGx1cycgbWVhbnMgaXMg
-bm90IGNsZWFyIHNpbmNlDQo+PiBVU0ItSUYgZXh0ZW5kZWQgaXRzIG1lYW5pbmcuDQo+Pg0KPj4g
-Um9iDQo+IElmIHdlIGludHJvZHVjZSBhIG5ldyBlbnVtIGZvciBnZW4xeDIsIG5vdyB3ZSdkIGhh
-dmUgdG8gZ28gYmFjayBhbmQNCj4gaW5zcGVjdCBhbGwgdGhlIGNoZWNrcyBmb3IgYWxsIHRoZSBk
-cml2ZXJzIHdoZXJlIGZvciBleGFtcGxlIHNwZWVkID09DQo+IFVTQl9TUEVFRF9TVVBFUl9QTFVT
-LiBJdCBzZWVtcyB0byBiZSBtb3JlIGNsdW5reSBhbmQgbWF5IGludHJvZHVjZSBtb3JlDQo+IGJ1
-Z3MuDQo+DQoNCkluIG15IG9waW5pb24sIHRoZSBiZXR0ZXIgb3B0aW9uIHdvdWxkIGJlIHRvIGlu
-dHJvZHVjZSBhIG5ldyBwcm9wZXJ0eSANCmZvciBsYW5lIHNwZWVkIHN1Y2ggYXMgImxhbmUtc3Bl
-ZWQtbWFudGlzc2EtZ2JwcyIgYmVjYXVzZToNCg0KMSkgSXQgc3RpbGwgZm9sbG93cyB0aGUgc3Bl
-YywgZWFzaWVyIGZvciB0aGUgdXNlciB0byB1bmRlcnN0YW5kDQoyKSBXZSBvbmx5IG5lZWQgdG8g
-dXBkYXRlIHRoZSBkcml2ZXJzIHdoZXJlIHRoZSBudW1iZXIgb2YgbGFuZXMgYW5kIGxhbmUgDQpz
-cGVlZCBtYXR0ZXINCjMpIEVhc2llciBzcGVlZCBjb21wYXJpc29uIGJldHdlZW4gdXNiX2Rldmlj
-ZV9zcGVlZCBlbnVtDQo0KSBFYXNpZXIgdG8gYmFja3BvcnQgbmV3IGNvZGUgd2hlcmUgdGhlcmUn
-cyBzcGVlZCBjb21wYXJpc29uDQo1KSBFYXNpbHkgZXh0ZW5kYWJsZSB0byBuZXcvZGlmZmVyZW50
-IGxhbmUgc3BlZWRzDQoNCkJSLA0KVGhpbmgNCg==
+Hi Paul,
+
+在 2020/7/23 上午1:19, Paul Cercueil 写道:
+> Hi Zhou,
+>
+> Le mer. 22 juil. 2020 à 14:33, 周琰杰 (Zhou Yanjie) 
+> <zhouyanjie@wanyeetech.com> a écrit :
+>> Add support for probing the phy-jz4770 driver on the JZ4780 SoC,
+>> the X1000 SoC and the X1830 SoC from Ingenic.
+>>
+>> Tested-by: 周正 (Zhou Zheng) <sernia.zhou@foxmail.com>
+>> Co-developed-by: 漆鹏振 (Qi Pengzhen) <aric.pzqi@ingenic.com>
+>> Signed-off-by: 漆鹏振 (Qi Pengzhen) <aric.pzqi@ingenic.com>
+>> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+>> ---
+>>
+>> Notes:
+>>     v1->v2:
+>>     Add bindings for the JZ4780 SoC.
+>>
+>>     v2->v3:
+>>     Use "of_device_get_match_data" instead "of_match_device"
+>>     to get version information.
+>>
+>>     v3->v4:
+>>     Fix typos.
+>>
+>>  drivers/usb/phy/Kconfig      |   4 +-
+>>  drivers/usb/phy/phy-jz4770.c | 174 
+>> ++++++++++++++++++++++++++++++++-----------
+>>  2 files changed, 133 insertions(+), 45 deletions(-)
+>>
+>> diff --git a/drivers/usb/phy/Kconfig b/drivers/usb/phy/Kconfig
+>> index 4b3fa78995cf..775f0dd7b5f5 100644
+>> --- a/drivers/usb/phy/Kconfig
+>> +++ b/drivers/usb/phy/Kconfig
+>> @@ -185,11 +185,11 @@ config USB_ULPI_VIEWPORT
+>>        controllers with a viewport register (e.g. Chipidea/ARC 
+>> controllers).
+>>
+>>  config JZ4770_PHY
+>> -    tristate "Ingenic JZ4770 Transceiver Driver"
+>> +    tristate "Ingenic SoCs Transceiver Driver"
+>>      depends on MIPS || COMPILE_TEST
+>>      select USB_PHY
+>>      help
+>>        This driver provides PHY support for the USB controller found
+>> -      on the JZ4770 SoC from Ingenic.
+>> +      on the JZ4770/JZ4780/X1000/X1830 SoC from Ingenic.
+>
+> 'JZ-series / X-series SoCs' would be more future-proof :)
+>
+
+Sure.
+
+
+>>
+>>  endmenu
+>> diff --git a/drivers/usb/phy/phy-jz4770.c b/drivers/usb/phy/phy-jz4770.c
+>> index 8f62dc2a90ff..cd49b32b4c13 100644
+>> --- a/drivers/usb/phy/phy-jz4770.c
+>> +++ b/drivers/usb/phy/phy-jz4770.c
+>> @@ -1,27 +1,30 @@
+>>  // SPDX-License-Identifier: GPL-2.0
+>>  /*
+>> - * Ingenic JZ4770 USB PHY driver
+>> + * Ingenic SoCs USB PHY driver
+>>   * Copyright (c) Paul Cercueil <paul@crapouillou.net>
+>> + * Copyright (c) 漆鹏振 (Qi Pengzhen) <aric.pzqi@ingenic.com>
+>> + * Copyright (c) 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+>>   */
+>>
+>>  #include <linux/clk.h>
+>>  #include <linux/io.h>
+>>  #include <linux/module.h>
+>> +#include <linux/of_device.h>
+>>  #include <linux/platform_device.h>
+>>  #include <linux/regulator/consumer.h>
+>>  #include <linux/usb/otg.h>
+>>  #include <linux/usb/phy.h>
+>>
+>> +/* OTGPHY register offsets */
+>>  #define REG_USBPCR_OFFSET    0x00
+>>  #define REG_USBRDT_OFFSET    0x04
+>>  #define REG_USBVBFIL_OFFSET    0x08
+>>  #define REG_USBPCR1_OFFSET    0x0c
+>>
+>> -/* USBPCR */
+>> +/* bits within the USBPCR register */
+>>  #define USBPCR_USB_MODE        BIT(31)
+>>  #define USBPCR_AVLD_REG        BIT(30)
+>> -#define USBPCR_INCRM        BIT(27)
+>> -#define USBPCR_CLK12_EN        BIT(26)
+>> +#define USBPCR_INCR_MASK    BIT(27)
+>
+> Please don't rename macros, it adds a lot of noise to the patch.
+>
+
+Sure.
+
+
+>>  #define USBPCR_COMMONONN    BIT(25)
+>>  #define USBPCR_VBUSVLDEXT    BIT(24)
+>>  #define USBPCR_VBUSVLDEXTSEL    BIT(23)
+>> @@ -32,46 +35,80 @@
+>>
+>>  #define USBPCR_IDPULLUP_LSB    28
+>>  #define USBPCR_IDPULLUP_MASK    GENMASK(29, USBPCR_IDPULLUP_LSB)
+>> -#define USBPCR_IDPULLUP_ALWAYS    (3 << USBPCR_IDPULLUP_LSB)
+>> -#define USBPCR_IDPULLUP_SUSPEND    (1 << USBPCR_IDPULLUP_LSB)
+>> -#define USBPCR_IDPULLUP_OTG    (0 << USBPCR_IDPULLUP_LSB)
+>> +#define USBPCR_IDPULLUP_ALWAYS    (0x2 << USBPCR_IDPULLUP_LSB)
+>> +#define USBPCR_IDPULLUP_SUSPEND    (0x1 << USBPCR_IDPULLUP_LSB)
+>> +#define USBPCR_IDPULLUP_OTG    (0x0 << USBPCR_IDPULLUP_LSB)
+>
+> a '3' turned into a '2' here...
+>
+
+ From the information in the programming manual, it can be 3 or 2.
+
+I think using 2 with 1 and 0 below seems more in line with reading 
+habits :)
+
+
+>>
+>>  #define USBPCR_COMPDISTUNE_LSB    17
+>>  #define USBPCR_COMPDISTUNE_MASK    GENMASK(19, USBPCR_COMPDISTUNE_LSB)
+>> -#define USBPCR_COMPDISTUNE_DFT    4
+>> +#define USBPCR_COMPDISTUNE_DFT    (0x4 << USBPCR_COMPDISTUNE_LSB)
+>
+> Why? Even if you have a valid reason to do that, it does not belong in 
+> this patch.
+>
+
+USBPCR_COMPDISTUNE_DFT (and below) is using in jz4770_phy_init(), to do 
+this can simplify jz4770_phy_init(), do I need separate it as a separate 
+patch in the next version?
+
+
+>>
+>>  #define USBPCR_OTGTUNE_LSB    14
+>>  #define USBPCR_OTGTUNE_MASK    GENMASK(16, USBPCR_OTGTUNE_LSB)
+>> -#define USBPCR_OTGTUNE_DFT    4
+>> +#define USBPCR_OTGTUNE_DFT    (0x4 << USBPCR_OTGTUNE_LSB)
+>>
+>>  #define USBPCR_SQRXTUNE_LSB    11
+>>  #define USBPCR_SQRXTUNE_MASK    GENMASK(13, USBPCR_SQRXTUNE_LSB)
+>> -#define USBPCR_SQRXTUNE_DFT    3
+>> +#define USBPCR_SQRXTUNE_DCR_20PCT    (0x7 << USBPCR_SQRXTUNE_LSB)
+>> +#define USBPCR_SQRXTUNE_DFT    (0x3 << USBPCR_SQRXTUNE_LSB)
+>>
+>>  #define USBPCR_TXFSLSTUNE_LSB    7
+>>  #define USBPCR_TXFSLSTUNE_MASK    GENMASK(10, USBPCR_TXFSLSTUNE_LSB)
+>> -#define USBPCR_TXFSLSTUNE_DFT    3
+>> +#define USBPCR_TXFSLSTUNE_DCR_50PPT    (0xf << USBPCR_TXFSLSTUNE_LSB)
+>> +#define USBPCR_TXFSLSTUNE_DCR_25PPT    (0x7 << USBPCR_TXFSLSTUNE_LSB)
+>> +#define USBPCR_TXFSLSTUNE_DFT    (0x3 << USBPCR_TXFSLSTUNE_LSB)
+>> +#define USBPCR_TXFSLSTUNE_INC_25PPT    (0x1 << USBPCR_TXFSLSTUNE_LSB)
+>> +#define USBPCR_TXFSLSTUNE_INC_50PPT    (0x0 << USBPCR_TXFSLSTUNE_LSB)
+>> +
+>> +#define USBPCR_TXHSXVTUNE_LSB    4
+>> +#define USBPCR_TXHSXVTUNE_MASK    GENMASK(5, USBPCR_TXHSXVTUNE_LSB)
+>> +#define USBPCR_TXHSXVTUNE_DFT    (0x3 << USBPCR_TXHSXVTUNE_LSB)
+>> +#define USBPCR_TXHSXVTUNE_DCR_15MV    (0x1 << USBPCR_TXHSXVTUNE_LSB)
+>>
+>>  #define USBPCR_TXRISETUNE_LSB    4
+>>  #define USBPCR_TXRISETUNE_MASK    GENMASK(5, USBPCR_TXRISETUNE_LSB)
+>> -#define USBPCR_TXRISETUNE_DFT    3
+>> +#define USBPCR_TXRISETUNE_DFT    (0x3 << USBPCR_TXRISETUNE_LSB)
+>>
+>>  #define USBPCR_TXVREFTUNE_LSB    0
+>>  #define USBPCR_TXVREFTUNE_MASK    GENMASK(3, USBPCR_TXVREFTUNE_LSB)
+>> -#define USBPCR_TXVREFTUNE_DFT    5
+>> +#define USBPCR_TXVREFTUNE_INC_25PPT    (0x7 << USBPCR_TXVREFTUNE_LSB)
+>> +#define USBPCR_TXVREFTUNE_DFT    (0x5 << USBPCR_TXVREFTUNE_LSB)
+>>
+>> -/* USBRDT */
+>> +/* bits within the USBRDTR register */
+>> +#define USBRDT_UTMI_RST        BIT(27)
+>> +#define USBRDT_HB_MASK        BIT(26)
+>>  #define USBRDT_VBFIL_LD_EN    BIT(25)
+>>  #define USBRDT_IDDIG_EN        BIT(24)
+>>  #define USBRDT_IDDIG_REG    BIT(23)
+>> -
+>> -#define USBRDT_USBRDT_LSB    0
+>> -#define USBRDT_USBRDT_MASK    GENMASK(22, USBRDT_USBRDT_LSB)
+>> -
+>> -/* USBPCR1 */
+>> -#define USBPCR1_UHC_POWON    BIT(5)
+>> +#define USBRDT_VBFIL_EN        BIT(2)
+>> +
+>> +/* bits within the USBPCR1 register */
+>> +#define USBPCR1_BVLD_REG            BIT(31)
+>> +#define USBPCR1_DPPD                BIT(29)
+>> +#define USBPCR1_DMPD                BIT(28)
+>> +#define USBPCR1_USB_SEL                BIT(28)
+>> +#define USBPCR1_WORD_IF_16BIT        BIT(19)
+>> +
+>> +#define USBPCR1_REFCLKSEL_LSB        26
+>> +#define USBPCR1_REFCLKSEL_MASK        GENMASK(27, 
+>> USBPCR1_REFCLKDIV_LSB)
+>> +#define USBPCR1_REFCLKSEL_CLKCORE    (0x3 << USBPCR1_REFCLKSEL_LSB)
+>> +
+>> +#define USBPCR1_REFCLKDIV_LSB        24
+>> +#define USBPCR1_REFCLKDIV_MASK        GENMASK(25, 
+>> USBPCR1_REFCLKDIV_LSB)
+>> +#define USBPCR1_REFCLKDIV_48M        (0x2 << USBPCR1_REFCLKDIV_LSB)
+>> +#define USBPCR1_REFCLKDIV_24M        (0x1 << USBPCR1_REFCLKDIV_LSB)
+>> +#define USBPCR1_REFCLKDIV_12M        (0x0 << USBPCR1_REFCLKDIV_LSB)
+>> +
+>> +enum ingenic_usb_phy_version {
+>> +    ID_JZ4770,
+>> +    ID_JZ4780,
+>> +    ID_X1000,
+>> +    ID_X1830,
+>> +};
+>>
+>>  struct jz4770_phy {
+>> +    enum ingenic_usb_phy_version version;
+>> +
+>>      struct usb_phy phy;
+>>      struct usb_otg otg;
+>>      struct device *dev;
+>> @@ -96,6 +133,12 @@ static int jz4770_phy_set_peripheral(struct 
+>> usb_otg *otg,
+>>      struct jz4770_phy *priv = otg_to_jz4770_phy(otg);
+>>      u32 reg;
+>>
+>> +    if (priv->version >= ID_X1000) {
+>> +        reg = readl(priv->base + REG_USBPCR1_OFFSET);
+>> +        reg |= USBPCR1_BVLD_REG;
+>> +        writel(reg, priv->base + REG_USBPCR1_OFFSET);
+>> +    }
+>> +
+>>      reg = readl(priv->base + REG_USBPCR_OFFSET);
+>>      reg &= ~USBPCR_USB_MODE;
+>>      reg |= USBPCR_VBUSVLDEXT | USBPCR_VBUSVLDEXTSEL | 
+>> USBPCR_OTG_DISABLE;
+>> @@ -135,17 +178,59 @@ static int jz4770_phy_init(struct usb_phy *phy)
+>>          return err;
+>>      }
+>>
+>> -    reg = USBPCR_AVLD_REG | USBPCR_COMMONONN | USBPCR_IDPULLUP_ALWAYS |
+>> -        (USBPCR_COMPDISTUNE_DFT << USBPCR_COMPDISTUNE_LSB) |
+>> -        (USBPCR_OTGTUNE_DFT << USBPCR_OTGTUNE_LSB) |
+>> -        (USBPCR_SQRXTUNE_DFT << USBPCR_SQRXTUNE_LSB) |
+>> -        (USBPCR_TXFSLSTUNE_DFT << USBPCR_TXFSLSTUNE_LSB) |
+>> -        (USBPCR_TXRISETUNE_DFT << USBPCR_TXRISETUNE_LSB) |
+>> -        (USBPCR_TXVREFTUNE_DFT << USBPCR_TXVREFTUNE_LSB) |
+>> -        USBPCR_POR;
+>> +    if (priv->version >= ID_X1830) {
+>> +        /* rdt */
+>> +        writel(USBRDT_VBFIL_EN | USBRDT_UTMI_RST, priv->base + 
+>> REG_USBRDT_OFFSET);
+>> +
+>> +        reg = readl(priv->base + REG_USBPCR1_OFFSET) | 
+>> USBPCR1_WORD_IF_16BIT |
+>> +            USBPCR1_DMPD | USBPCR1_DPPD;
+>> +        writel(reg, priv->base + REG_USBPCR1_OFFSET);
+>> +
+>> +        reg = USBPCR_IDPULLUP_OTG | USBPCR_VBUSVLDEXT | 
+>> USBPCR_TXPREEMPHTUNE;
+>> +    } else if (priv->version >= ID_X1000) {
+>> +        reg = readl(priv->base + REG_USBPCR1_OFFSET) | 
+>> USBPCR1_WORD_IF_16BIT;
+>> +        writel(reg, priv->base + REG_USBPCR1_OFFSET);
+>> +
+>> +        reg = USBPCR_SQRXTUNE_DCR_20PCT | USBPCR_TXPREEMPHTUNE |
+>> +            USBPCR_TXHSXVTUNE_DCR_15MV | USBPCR_TXVREFTUNE_INC_25PPT;
+>> +    } else if (priv->version >= ID_JZ4780) {
+>> +        reg = readl(priv->base + REG_USBPCR1_OFFSET) | 
+>> USBPCR1_USB_SEL |
+>> +            USBPCR1_WORD_IF_16BIT;
+>> +        writel(reg, priv->base + REG_USBPCR1_OFFSET);
+>> +
+>> +        reg = USBPCR_TXPREEMPHTUNE;
+>> +    } else {
+>> +        reg = USBPCR_AVLD_REG | USBPCR_IDPULLUP_ALWAYS |
+>> +            USBPCR_COMPDISTUNE_DFT | USBPCR_OTGTUNE_DFT |
+>> +            USBPCR_SQRXTUNE_DFT | USBPCR_TXFSLSTUNE_DFT |
+>> +            USBPCR_TXRISETUNE_DFT | USBPCR_TXVREFTUNE_DFT;
+>> +    }
+>> +
+>> +    reg |= USBPCR_COMMONONN | USBPCR_POR;
+>>      writel(reg, priv->base + REG_USBPCR_OFFSET);
+>>
+>> -    /* Wait for PHY to reset */
+>> +    /*
+>> +     * Power-On Reset(POR)
+>> +     * Function:This customer-specific signal resets all test registers
+>> +     * and state machines in the USB 2.0 nanoPHY.
+>> +     * The POR signal must be asserted for a minimum of 10 μs.
+>> +     * For POR timing information:
+>> +     *
+>> +     * T0: Power-on reset (POR) is initiated. 0 (reference).
+>> +     * T1: T1 indicates when POR can be set to 1’b0. (To provide 
+>> examples,
+>> +     * values for T2 and T3 are also shown where T1 = T0 + 30 μs.);
+>> +     * In general, T1 must be ≥ T0 + 10 μs. T0 + 10 μs ≤ T1.
+>> +     * T2: T2 indicates when PHYCLOCK, CLK48MOHCI, and CLK12MOHCI are
+>> +     * available at the macro output, based on the USB 2.0 nanoPHY
+>> +     * reference clock source.
+>> +     * Crystal:
+>> +     *    • When T1 = T0 + 10 μs:
+>> +     *      T2 < T1 + 805 μs = T0 + 815 μs
+>> +     *    • When T1 = T0 + 30 μs:
+>> +     *      T2 < T1 + 805 μs = T0 + 835 μs
+>> +     * see "Reset and Power-Saving Signals" on page 60 an “Powering Up
+>> +     * and Powering Down the USB 2.0 nanoPHY” on page 73.
+>> +     */
+>
+> I don't think this comment is very interesting. The code already says 
+> that the hardware needs at least 30 µs to reset, all the low-level 
+> details are in the programming manual for those who want to learn 
+> more. Besides, since you don't actually modify the reset code, why 
+> update the comment in this patch?
+>
+
+Okay, I will drop it in the next version.
+
+
+>>      usleep_range(30, 300);
+>>      writel(reg & ~USBPCR_POR, priv->base + REG_USBPCR_OFFSET);
+>>      usleep_range(300, 1000);
+>> @@ -166,6 +251,15 @@ static void jz4770_phy_remove(void *phy)
+>>      usb_remove_phy(phy);
+>>  }
+>>
+>> +static const struct of_device_id ingenic_usb_phy_of_matches[] = {
+>> +    { .compatible = "ingenic,jz4770-phy", .data = (void *) ID_JZ4770 },
+>> +    { .compatible = "ingenic,jz4780-phy", .data = (void *) ID_JZ4780 },
+>> +    { .compatible = "ingenic,x1000-phy", .data = (void *) ID_X1000 },
+>> +    { .compatible = "ingenic,x1830-phy", .data = (void *) ID_X1830 },
+>
+> I'm not a fan of having ID_* as platform data. Create 'soc_info' 
+> structures, one per supported SoC, and pass them here. Then you can 
+> add a 'version' field of type 'enum ingenic_usb_phy_version'. And add 
+> a '.phy_init' field as a function pointer, that would be called within 
+> jz4770_phy_init(). That would make the jz4770_phy_init() function much 
+> cleaner (no if/else/else/else/...).
+
+
+Sure, I will do it in the next version.
+
+
+>
+>> +    { }
+>> +};
+>> +MODULE_DEVICE_TABLE(of, ingenic_usb_phy_of_matches);
+>> +
+>>  static int jz4770_phy_probe(struct platform_device *pdev)
+>>  {
+>>      struct device *dev = &pdev->dev;
+>> @@ -176,11 +270,13 @@ static int jz4770_phy_probe(struct 
+>> platform_device *pdev)
+>>      if (!priv)
+>>          return -ENOMEM;
+>>
+>> +    priv->version = (enum 
+>> ingenic_usb_phy_version)of_device_get_match_data(dev);
+>> +
+>>      platform_set_drvdata(pdev, priv);
+>>      priv->dev = dev;
+>>      priv->phy.dev = dev;
+>>      priv->phy.otg = &priv->otg;
+>> -    priv->phy.label = "jz4770-phy";
+>> +    priv->phy.label = "ingenic-usb-phy";
+>>      priv->phy.init = jz4770_phy_init;
+>>      priv->phy.shutdown = jz4770_phy_shutdown;
+>>
+>> @@ -221,23 +317,15 @@ static int jz4770_phy_probe(struct 
+>> platform_device *pdev)
+>>      return devm_add_action_or_reset(dev, jz4770_phy_remove, 
+>> &priv->phy);
+>>  }
+>>
+>> -#ifdef CONFIG_OF
+>> -static const struct of_device_id jz4770_phy_of_matches[] = {
+>> -    { .compatible = "ingenic,jz4770-phy" },
+>> -    { }
+>> -};
+>> -MODULE_DEVICE_TABLE(of, jz4770_phy_of_matches);
+>> -#endif
+>> -
+>> -static struct platform_driver jz4770_phy_driver = {
+>> +static struct platform_driver ingenic_usb_phy_driver = {
+>>      .probe        = jz4770_phy_probe,
+>>      .driver        = {
+>> -        .name    = "jz4770-phy",
+>> -        .of_match_table = of_match_ptr(jz4770_phy_of_matches),
+>> +        .name    = "ingenic-usb-phy",
+>> +        .of_match_table = of_match_ptr(ingenic_usb_phy_of_matches),
+>
+> It's preferred not to rename the functions unless you have a good 
+> reason, and you definitely shouldn't rename the module. It's OK to 
+> have a driver called 'jz4770-phy' even if it supports more SoCs. 
+> Renaming it breaks userspace ABI.
+
+
+Sure.
+
+
+Thanks and best regards!
+
+
+>
+> Cheers,
+> -Paul
+>
+>>      },
+>>  };
+>> -module_platform_driver(jz4770_phy_driver);
+>> +module_platform_driver(ingenic_usb_phy_driver);
+>>
+>>  MODULE_AUTHOR("Paul Cercueil <paul@crapouillou.net>");
+>> -MODULE_DESCRIPTION("Ingenic JZ4770 USB PHY driver");
+>> +MODULE_DESCRIPTION("Ingenic SoCs USB PHY driver");
+>>  MODULE_LICENSE("GPL");
+>> -- 
+>> 2.11.0
+>>
+>
