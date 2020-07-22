@@ -2,53 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0923F229359
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jul 2020 10:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3EB02293A9
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jul 2020 10:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729026AbgGVIV5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Jul 2020 04:21:57 -0400
-Received: from verein.lst.de ([213.95.11.211]:55444 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728599AbgGVIV4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 22 Jul 2020 04:21:56 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 0DB446736F; Wed, 22 Jul 2020 10:21:54 +0200 (CEST)
-Date:   Wed, 22 Jul 2020 10:21:53 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Christoph Hellwig <hch@lst.de>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: usbfs: stop using compat_alloc_user_space
-Message-ID: <20200722082153.GA27215@lst.de>
-References: <20200722073655.220011-1-hch@lst.de> <20200722080959.GA2800885@kroah.com>
+        id S1730713AbgGVIfb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jul 2020 04:35:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53288 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726157AbgGVIfb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jul 2020 04:35:31 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB75FC0619DC;
+        Wed, 22 Jul 2020 01:35:30 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id j21so846683lfe.6;
+        Wed, 22 Jul 2020 01:35:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=m0cslrJGydovPyO53eS2KxHEtjsODpHbA7i+KHpI3/c=;
+        b=pTG9y9abllHPo58k0/xNjdNHEx7rHI7AEqsyUgbVtPXFkKgHGtmgXp0ySl1i95yTYN
+         iigqbnSw6xffqB2Wlmi7GNyWIw+cyDO2X56ONNyySVRK8Ovtll2S9GqdY7DKc6oqIV20
+         9Vzbg0f7mAG0akhAWPMhzZ6nRKqKW4V8PUTyJxzembfhyowGlTIbnW5uVwcJMfQHvikE
+         8nZ4Lio0S+KvGceMc1VGmuTyJ4iu9gBfMoodZYexCkBIcO0voe5gyRuL2LW7X8Hk/F5c
+         ZhN8EUT9htA9rjHC8DhEssSk0WheiS/jZ7/ggEvvxl+8wj5ZEawYyUYDYiqhji9rPcmJ
+         CL1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=m0cslrJGydovPyO53eS2KxHEtjsODpHbA7i+KHpI3/c=;
+        b=HELquOm0sJfISDVGlJf4eKkVXLQ5+9yTmfpbpryrBxCFWGtaeqDQ96emCr/FPLA6dZ
+         pdY/kPJlw023yx8mTskcVZlbhIiG34RMVamKWUXdJapNfvpOI2UEgYNidLm3jU52bfmE
+         2ajHkwAzSGvK3x0/UfKPcRCO+O1+MTFZDyPEYwal2NMaLilRoLt41phFrj+32TEua1+r
+         q9jGDuHMzItQKgi98MDWT2oKIi4koehg01kIymJXZE/crXMkwOuI8Ha6ydHDtUj4cjrh
+         5+h4nu4AC3c9KSbqzDPstDlRHLvVCUlTJnBm7Gp9CiCkhvV7SXDVNlBhiEmBLon0XEtw
+         Wz/Q==
+X-Gm-Message-State: AOAM532kHh/BTez4pDxgKgURuJAGtQKZrV2T3aNIbN4LAYXRhNd9QgCF
+        pCpYLAUs72nt4RoYVVmxT1qP9dIExHSzmg==
+X-Google-Smtp-Source: ABdhPJy1rGcAM7U+Ak5kM+dM9X+47Bsc+6UQSgckl3Ca+9bnPT0E403R3xu/9Q7oUo3bdyjafsPdAQ==
+X-Received: by 2002:a19:5c2:: with SMTP id 185mr9627484lff.38.1595406929051;
+        Wed, 22 Jul 2020 01:35:29 -0700 (PDT)
+Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
+        by smtp.gmail.com with ESMTPSA id z12sm7586586lfh.61.2020.07.22.01.35.27
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 22 Jul 2020 01:35:28 -0700 (PDT)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Peter Chen <peter.chen@nxp.com>, mathias.nyman@intel.com,
+        gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com, pawell@cadence.com,
+        rogerq@ti.com, jun.li@nxp.com, Peter Chen <peter.chen@nxp.com>,
+        stable <stable@vger.kernel.org>
+Subject: Re: [PATCH 1/1] usb: cdns3: gadget: always zeroed TRB buffer when enable endpoint
+In-Reply-To: <20200722030619.14344-1-peter.chen@nxp.com>
+References: <20200722030619.14344-1-peter.chen@nxp.com>
+Date:   Wed, 22 Jul 2020 11:35:23 +0300
+Message-ID: <87zh7sne0k.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200722080959.GA2800885@kroah.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 22, 2020 at 10:09:59AM +0200, Greg KH wrote:
-> On Wed, Jul 22, 2020 at 09:36:55AM +0200, Christoph Hellwig wrote:
-> > Just switch the low-level routines to take kernel structures, and do the
-> > conversion from the compat to the native structure on that.
-> > 
-> > Signed-off-by: Christoph Hellwig <hch@lst.de>
-> > ---
-> >  drivers/usb/core/devio.c | 126 +++++++++++++++++++++------------------
-> >  1 file changed, 69 insertions(+), 57 deletions(-)
-> 
-> No objection to this, but why?  Are you trying to get rid of
-> compat_alloc_user_space()?
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Eventually, yes.  Al has been doing a fair amount of work on it,
-and Linus hates it with passion.
+Peter Chen <peter.chen@nxp.com> writes:
 
-> 
-> And do you want me to take this through my tree, or do you need to take
-> it through yours?
+> During the endpoint dequeue operation, it changes dequeued TRB
+> as link TRB, when the endpoint is disabled and re-reabled, the
+                                                 ^^^^^^^^^^
+                                                 re-enabled?
 
-I have no tree where this would fit in, so please take it.
+I'll fix while applying
 
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl8X+kwACgkQzL64meEa
+mQajAhAAi+vOGkzkBjwjAW875KPebN4mawejgYv+kzAghQ/ZSLXTWKZChsy5T5Vu
+jRvemvLCjLQx6pexxFjD+Xem/jsb1ze/KFi13wX5q6M+74yqPivKMOGiXaJ4qhYi
+Xoki12x52STKLd49FAKx8JK+/bEbI9r17uk/+t1ll5tASU+SNve6ZcVROAayXt3e
+6ZxiPzRcEwFIRuvqGrXaF2Mm3y3mNVR2xQFoc9QbJNtgs7b7EzXPajhXQcMSaDA0
+DdGRmKuyX7KPUo+ojMDdIfcpFOzFcMB743suDZKtqW0wBLXCUGzWEKCdGj8gxjIg
+X06DEBsXcEl5D6AKNV4ghYQ8ks+V5nE1yBmB+FuhpFnDgTv36yKfOQ6ONfR7DMcu
+AfC+Y0ZhtwXtoIOT/R81fqhkIM0juXYZJ/dUsNnl0qcFl7bHrKjW+kRM5oZnqFTX
+rMgvcOOp3TcTFcckP/2D2FfcpDc8wrkdpZ5N8+sII2N6rfUkEN0yRliaeC8QP0yc
+YT/d6hrxMPM8rH6N1xx6zW6dMo6xdVwJi2Za5SFIs5+C/rIXWSPhXywQRVZH/3In
+e8zVbQap/PGuaUvIUmnK/GwxrUlo3LDAEDfAU0uiW5KLNQW9D0yT8zyGojw/kphD
+64MzcXXsI2jkyAvnk74HLcLTXj+9ZD/DL2ZEtiezP9msM1aEzzk=
+=Y//I
+-----END PGP SIGNATURE-----
+--=-=-=--
