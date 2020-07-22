@@ -2,173 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41C0B228E81
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jul 2020 05:16:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59927228EE1
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jul 2020 06:06:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731888AbgGVDQs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 21 Jul 2020 23:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60576 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731815AbgGVDQr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 21 Jul 2020 23:16:47 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85901C0619DB
-        for <linux-usb@vger.kernel.org>; Tue, 21 Jul 2020 20:16:47 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id l63so434964pge.12
-        for <linux-usb@vger.kernel.org>; Tue, 21 Jul 2020 20:16:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pesu-pes-edu.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=73iDvHgZEqxDKHnf/uCOIPrIaeopvlWxbBWmtJPTAqY=;
-        b=dCow/A8po4LX8y5ym1eyTRdPQpuQSddIgifUo78KscgUBsEBgoD9Z6ZK5W0bwOsFy7
-         R0ppkmcieeG5mkVldNDrgzSVyINZx3PSfv3WJil21IvA+4WblxApO5zcq/jQsi0KTjvF
-         RnBctvIv6B6iECXK8c8KmTHKyM+6H2OCAaiuMxb+T1Oev5zZvGWTm9ms+tezBJz5+hJd
-         4Pya96n6/Oq4RjHq/STntxi/04/LNCyeUotdgtu6Mduaw/u4gFMM3SfPlIfc/cGgEYgv
-         YgPROtEmfxuMJsJ44vSKebVEw9O0cwzZz2nDemUPp27Y1KYOqe74V5uoonwlAGchN/Uv
-         YDGw==
+        id S1726157AbgGVEGQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jul 2020 00:06:16 -0400
+Received: from mail-io1-f71.google.com ([209.85.166.71]:50812 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725710AbgGVEGL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jul 2020 00:06:11 -0400
+Received: by mail-io1-f71.google.com with SMTP id a6so94326ioh.17
+        for <linux-usb@vger.kernel.org>; Tue, 21 Jul 2020 21:06:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=73iDvHgZEqxDKHnf/uCOIPrIaeopvlWxbBWmtJPTAqY=;
-        b=uikPmNR4nkNAnYN14vg/qDrqHNWbv6ltsy2Pn452ZVd3RN/brPulhNKojLHLCYJcIG
-         NvkFIrpKGOwsbBIwB/9ZXH/KMF02GXjjqdUqdm1Rmn8CcQCr4lQZUEJV84M1GhBY2Ex+
-         uPRUFd9mvarPPEGlVnFYDFOwOUDbRTxNwW1REozFU5NApUTc5MY2LgIdf/W6oRBHrvBZ
-         h67kfhk3ANRaYVzmbibcWGz1908rObIi9quIsyi8ns/ZZXLxePuYYhnIwa7sXGftCm0G
-         bbElPrG1Phpf245gUplb98+L63AlTqU8qr4FrfGStKwvYgATqDAJhyP8upOWyQmJlYgV
-         vZUw==
-X-Gm-Message-State: AOAM532lc6peA37/EZ+Ahli8yH47Xwk/wgA9guj8SQWuwn5P/ghXC74T
-        mu6K5q7tot34Idw0iJRmCCEyMA==
-X-Google-Smtp-Source: ABdhPJxiYyKd4Ja+8DRUmZ6C26jpNvrnFt6CdOBi26vP34+ZKUHChtrHDj7JHF2j1PyrHm0xNcZ3Kg==
-X-Received: by 2002:a63:5b05:: with SMTP id p5mr24595098pgb.143.1595387807008;
-        Tue, 21 Jul 2020 20:16:47 -0700 (PDT)
-Received: from localhost ([2406:7400:73:c50a:d055:3e56:d1e4:ce99])
-        by smtp.gmail.com with ESMTPSA id c1sm4766225pje.9.2020.07.21.20.16.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2020 20:16:45 -0700 (PDT)
-Date:   Wed, 22 Jul 2020 08:46:40 +0530
-From:   B K Karthik <bkkarthik@pesu.pes.edu>
-To:     syzbot <syzbot+e74a998ca8f1df9cc332@syzkaller.appspotmail.com>,
-        andreyknvl@google.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>, rafael@kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        Markus Elfring <Markus.Elfring@web.de>,
-        Hillf Danton <hdanton@sina.com>
-Subject: [PATCH v2] i2c: fix WARNING in pvr2_i2c_core_done
-Message-ID: <20200722031640.nobv2bfgex46sngo@pesu.pes.edu>
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=Owb9IwFQyEhlVcf9dWP5KUWd0T8KeX4hhSQrT09WLVM=;
+        b=btOtthZyLEiZU9xq70KvYa7acax75MKL5P3R4IRCagCkl4jX/TxQb1CnAc3fWdhTdv
+         4EY0w3Yd31Foj808mZBhEayVqX4rTEn2zqJ2CgrkN1GiXVX3FxoeDpvD1snmCDCqY/7o
+         Fr1afqLDFuNwFJbRBrBtrjnI79xA0Lnui0bCuLkf1dB/bgGTEpqIYq8xSYQL8T6byEIj
+         GQiUqhabVctpeOLCN9miwbYBSwf8jZPWdLhRTeu+Jp0v7S5GgcLRULY5q5zskqrIm7p+
+         R5YXilWso2Su8sTs/Tmvn9mzpcaamEnXc8eyYGQ6addKcYexrOMVmsFRi8FYsIyfiPa3
+         98xw==
+X-Gm-Message-State: AOAM532ZOI6EeUoOu77jATpAZ+et1dZ5JMRIaY1ojhAS6uE6ZxYsKOph
+        EDP+vjLx+3ElpmNq8pMy5ZYcmijM9EmS+fFXOTANfIVGbvJd
+X-Google-Smtp-Source: ABdhPJxKpX5QgCSXASidAUn4JI3ECIT+TNoa9CsBVnxXzDo3xE1LrhnckTuw5OGA3oXZjUbSGH9HOco+uX28Ij1pPBz+qD8v0bh9
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="y22zpqil25qtpkyo"
-Content-Disposition: inline
-User-Agent: NeoMutt/20180716
+X-Received: by 2002:a05:6638:1a:: with SMTP id z26mr9254802jao.15.1595390770006;
+ Tue, 21 Jul 2020 21:06:10 -0700 (PDT)
+Date:   Tue, 21 Jul 2020 21:06:10 -0700
+In-Reply-To: <20200722031640.nobv2bfgex46sngo@pesu.pes.edu>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001fd19405aaffdc0a@google.com>
+Subject: Re: WARNING in pvr2_i2c_core_done
+From:   syzbot <syzbot+e74a998ca8f1df9cc332@syzkaller.appspotmail.com>
+To:     Markus.Elfring@web.de, andreyknvl@google.com,
+        bkkarthik@pesu.pes.edu, dan.carpenter@oracle.com,
+        gregkh@linuxfoundation.org, hdanton@sina.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        rafael@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hello,
 
---y22zpqil25qtpkyo
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+general protection fault in kernfs_find_ns
 
-#syz test: https://github.com/google/kasan.git usb-fuzzer
-
-fix WARNING in pvr2_i2c_core_done by
-unregistering device in the release handler
-instead of the disconnect handler, setting the
-linked flag after adding adapter to i2c,
-and removing a call to acpi_ut_delete_generic_state()
-
-Reported-by: syzbot+e74a998ca8f1df9cc332@syzkaller.appspotmail.com
-Signed-off-by: B K Karthik <bkkarthik@pesu.pes.edu>
----
-v1 -> v2:
-	remove a call to acpi_ut_delete_generic state
-	and set linked flag after adding adapter to
-	i2c as suggested by Hillf Danton <hdanton@sina.com>
-
- drivers/acpi/acpica/utdelete.c               | 5 -----
- drivers/i2c/i2c-core-base.c                  | 2 +-
- drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c | 4 ++--
- 3 files changed, 3 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/acpi/acpica/utdelete.c b/drivers/acpi/acpica/utdelete.c
-index c365faf4e6cd..e36f51725854 100644
---- a/drivers/acpi/acpica/utdelete.c
-+++ b/drivers/acpi/acpica/utdelete.c
-@@ -648,11 +648,6 @@ acpi_ut_update_object_reference(union acpi_operand_obj=
-ect *object, u16 action)
-=20
- 	/* Free any stacked Update State objects */
-=20
--	while (state_list) {
--		state =3D acpi_ut_pop_generic_state(&state_list);
--		acpi_ut_delete_generic_state(state);
--	}
--
- 	return (status);
- }
-=20
-diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-index 26f03a14a478..2d377d2e89f1 100644
---- a/drivers/i2c/i2c-core-base.c
-+++ b/drivers/i2c/i2c-core-base.c
-@@ -462,6 +462,7 @@ static void i2c_device_shutdown(struct device *dev)
-=20
- static void i2c_client_dev_release(struct device *dev)
- {
-+	i2c_unregister_device(to_i2c_client(dev));
- 	kfree(to_i2c_client(dev));
- }
-=20
-@@ -1527,7 +1528,6 @@ void i2c_del_adapter(struct i2c_adapter *adap)
- 		dev_dbg(&adap->dev, "Removing %s at 0x%x\n", client->name,
- 			client->addr);
- 		list_del(&client->detected);
--		i2c_unregister_device(client);
- 	}
- 	mutex_unlock(&adap->userspace_clients_lock);
-=20
-diff --git a/drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c b/drivers/media/u=
-sb/pvrusb2/pvrusb2-i2c-core.c
-index 63db04fe12d3..09b2c878f459 100644
---- a/drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c
-+++ b/drivers/media/usb/pvrusb2/pvrusb2-i2c-core.c
-@@ -623,9 +623,9 @@ void pvr2_i2c_core_init(struct pvr2_hdw *hdw)
- 	hdw->i2c_adap.dev.parent =3D &hdw->usb_dev->dev;
- 	hdw->i2c_adap.algo =3D &hdw->i2c_algo;
- 	hdw->i2c_adap.algo_data =3D hdw;
--	hdw->i2c_linked =3D !0;
- 	i2c_set_adapdata(&hdw->i2c_adap, &hdw->v4l2_dev);
--	i2c_add_adapter(&hdw->i2c_adap);
-+	if (!i2c_add_adapter(&hdw->i2c_adap))
-+		hdw->i2c_linked =3D!0;
- 	if (hdw->i2c_func[0x18] =3D=3D i2c_24xxx_ir) {
- 		/* Probe for a different type of IR receiver on this
- 		   device.  This is really the only way to differentiate
---=20
-2.20.1
+pvrusb2: Invalid write control endpoint
+pvrusb2: Invalid write control endpoint
+pvrusb2: Invalid write control endpoint
+pvrusb2: Invalid write control endpoint
+general protection fault, probably for non-canonical address 0xdffffc000000000e: 0000 [#1] SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000070-0x0000000000000077]
+CPU: 0 PID: 78 Comm: pvrusb2-context Not tainted 5.7.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:kernfs_find_ns+0x31/0x370 fs/kernfs/dir.c:829
+Code: 49 89 d6 41 55 41 54 55 48 89 fd 53 48 83 ec 08 e8 f4 61 af ff 48 8d 7d 70 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 1e 03 00 00 48 8d bd 98 00 00 00 48 8b 5d 70 48
+RSP: 0018:ffff8881d419f938 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: ffffffff863789c0 RCX: ffffffff85a79ba7
+RDX: 000000000000000e RSI: ffffffff81901d1c RDI: 0000000000000070
+RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffff873ed1e7
+R10: fffffbfff0e7da3c R11: 0000000000000001 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000000000 R15: ffffffff863790e0
+FS:  0000000000000000(0000) GS:ffff8881db200000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f3a7e248000 CR3: 00000001d2224000 CR4: 00000000001406f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ kernfs_find_and_get_ns+0x2f/0x60 fs/kernfs/dir.c:906
+ kernfs_find_and_get include/linux/kernfs.h:548 [inline]
+ sysfs_unmerge_group+0x5d/0x160 fs/sysfs/group.c:366
+ dpm_sysfs_remove+0x62/0xb0 drivers/base/power/sysfs.c:790
+ device_del+0x18b/0xd20 drivers/base/core.c:2834
+ device_unregister+0x22/0xc0 drivers/base/core.c:2889
+ i2c_unregister_device include/linux/err.h:41 [inline]
+ i2c_client_dev_release+0x39/0x50 drivers/i2c/i2c-core-base.c:465
+ device_release+0x71/0x200 drivers/base/core.c:1559
+ kobject_cleanup lib/kobject.c:693 [inline]
+ kobject_release lib/kobject.c:722 [inline]
+ kref_put include/linux/kref.h:65 [inline]
+ kobject_put+0x245/0x540 lib/kobject.c:739
+ put_device drivers/base/core.c:2779 [inline]
+ device_unregister+0x34/0xc0 drivers/base/core.c:2890
+ i2c_unregister_device+0x38/0x40 include/linux/err.h:41
+ v4l2_i2c_new_subdev_board+0x159/0x2c0 drivers/media/v4l2-core/v4l2-i2c.c:114
+ v4l2_i2c_new_subdev+0xb8/0xf0 drivers/media/v4l2-core/v4l2-i2c.c:135
+ pvr2_hdw_load_subdev drivers/media/usb/pvrusb2/pvrusb2-hdw.c:2023 [inline]
+ pvr2_hdw_load_modules drivers/media/usb/pvrusb2/pvrusb2-hdw.c:2075 [inline]
+ pvr2_hdw_setup_low drivers/media/usb/pvrusb2/pvrusb2-hdw.c:2156 [inline]
+ pvr2_hdw_setup drivers/media/usb/pvrusb2/pvrusb2-hdw.c:2262 [inline]
+ pvr2_hdw_initialize+0xc8d/0x3600 drivers/media/usb/pvrusb2/pvrusb2-hdw.c:2339
+ pvr2_context_check drivers/media/usb/pvrusb2/pvrusb2-context.c:109 [inline]
+ pvr2_context_thread_func+0x250/0x850 drivers/media/usb/pvrusb2/pvrusb2-context.c:158
+ kthread+0x392/0x470 kernel/kthread.c:291
+ ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:351
+Modules linked in:
+---[ end trace a2576a16aa8e791c ]---
+RIP: 0010:kernfs_find_ns+0x31/0x370 fs/kernfs/dir.c:829
+Code: 49 89 d6 41 55 41 54 55 48 89 fd 53 48 83 ec 08 e8 f4 61 af ff 48 8d 7d 70 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 1e 03 00 00 48 8d bd 98 00 00 00 48 8b 5d 70 48
+RSP: 0018:ffff8881d419f938 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: ffffffff863789c0 RCX: ffffffff85a79ba7
+RDX: 000000000000000e RSI: ffffffff81901d1c RDI: 0000000000000070
+RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffff873ed1e7
+R10: fffffbfff0e7da3c R11: 0000000000000001 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000000000 R15: ffffffff863790e0
+FS:  0000000000000000(0000) GS:ffff8881db200000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f3a7e248000 CR3: 00000001d2224000 CR4: 00000000001406f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
 
---y22zpqil25qtpkyo
-Content-Type: application/pgp-signature; name="signature.asc"
+Tested on:
 
------BEGIN PGP SIGNATURE-----
+commit:         b791d1bd Merge tag 'locking-kcsan-2020-06-11' of git://git..
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=1208f437100000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ccf1899337a6e343
+dashboard link: https://syzkaller.appspot.com/bug?extid=e74a998ca8f1df9cc332
+compiler:       gcc (GCC) 10.1.0-syz 20200507
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=14d56430900000
 
-iQGzBAEBCgAdFiEEIF+jd5Z5uS7xKTfpQZdt+T1HgiEFAl8Xr5gACgkQQZdt+T1H
-giF1vQv+P5FnsTUChLkkI/kfULIr4EuocSn7JwwbJacBalZeiu3qmmOY0gzPjq2b
-qlJEtiuehaZIGdCB0wp/kKum0umcluCO1nWgd2tNVmOKJv++xx2l/O4Rd4SXv2TD
-r72OfvdV72XYLdsnawwDnXqi/2dgQIN4ZozpDv2PqsB9Mi/rkp+pu/i9CxrpMDpM
-HukAL9uOn8BpTdubmeU2XZc1cmJcCQzOn5+VdBM8zC3tjy8JEzoNTRlzzBqzDw0P
-xITIeW9NYXcujFJeBCr3CHKDxNsmXkCxaIxkZtBuvISMP7hggRaOADUVnKTTbj/4
-F+0VhEHxcgevJhiJBZeX2ylYSZhzitG8gHfi23ex0b8rFqccNDE7kHXP6HC2KwyZ
-DaIxZ9APw2URMjEHDVVRaH4Pwr+1y14CIV5ae1AsnRrRTGzRjm7kbAPXR8FaF+QG
-eyGHv50p/xMjR685SWIfGp4HfXub5c6ok5XZZwmsMrITt8XVtJ3k/qS0+givqsSv
-/QNBs8Ti
-=z8sj
------END PGP SIGNATURE-----
-
---y22zpqil25qtpkyo--
