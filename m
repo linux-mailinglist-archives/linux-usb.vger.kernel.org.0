@@ -2,186 +2,836 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94968229A2E
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jul 2020 16:33:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 652D1229A65
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jul 2020 16:41:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730870AbgGVOd4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Jul 2020 10:33:56 -0400
-Received: from mail-am6eur05on2052.outbound.protection.outlook.com ([40.107.22.52]:40545
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729126AbgGVOdz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 22 Jul 2020 10:33:55 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=G0uuBIy/yhbY6O6jDjD3OsboB+mLcE6JwPmqsKUa+e6lV3pCvRYYC3isuNgjVBUREJsBfSM8LdBW3Xt30ObnKNVPqjTM4iY7nBUUR2hJwz4jjsoT4r6lfyAOmPjDLZTAV21sRaWi6gkv4rI119uTxZtx10SvHvS8N31s0QxGcGa2AdikA+Aldc7cnklpYyIW/Dg4jaLaF7dV5j+x5wEtp98msO1kBQIA3ZoFjSeNdYGz5lexfa8qnSini6Z8PAo/cVbFSTJfxQBldsqwsot5H9okodIgHwcoNqtg5cguqvPWFILW6jTe8aYnK9y8VHblUvvw9zKrvN5jYQx1r973Bg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=s0Njm5pY5rHSkOTmhUJUxUPG/IHXNbNmfCV5pDIpZXE=;
- b=K98HmB2SoH4hAk98D5Fn4jMkA6M2ddI94Esy+KZLFa5Cu5s5QKc6ZJclw+Q/HwGlgpt7LUGVKzx57tJeNTLBiYqoAaMrsUpJ+fu5ChgzgBl/c9BlWjezIF6IPbB0/LlmgKZLCES5psrzrIOweWtTBuw665O/Ysh2fZ9QBYaQVmH8GhrL/WGOLQR7m+ZjFYQln4zALoFJhPC+nje5KunL3TXWRrroTQM/l7EleeKzG/QQCI19ZxTtcd3HENNJoKffflvp8N79a/s/bPN89isHh6ZwUm3+dz7KTaikD+fvHOrt/zrfLSTeXFIogRLbbV6vgdqDvQecZbm/1lLImPSCdQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=s0Njm5pY5rHSkOTmhUJUxUPG/IHXNbNmfCV5pDIpZXE=;
- b=Wyun3rmYZytFjD+X7JpkjZKpYXPhQ6+dCqwSLKNdyHha1e0YWaxWNfOEAu5Vrrc8hszQ2HarMMJXc0m+HpcfdMppIEufltcXtwN1FSE/0A05p82PXj4hMpLHaP9I/Fngs47KIlmI8KE25Z3NOHrg06RRktTFRV4kcBScoRnQ9co=
-Received: from AM6PR04MB6517.eurprd04.prod.outlook.com (2603:10a6:20b:f5::12)
- by AM6PR04MB6069.eurprd04.prod.outlook.com (2603:10a6:20b:72::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3195.17; Wed, 22 Jul
- 2020 14:33:51 +0000
-Received: from AM6PR04MB6517.eurprd04.prod.outlook.com
- ([fe80::11a9:bf16:14cb:5821]) by AM6PR04MB6517.eurprd04.prod.outlook.com
- ([fe80::11a9:bf16:14cb:5821%6]) with mapi id 15.20.3216.022; Wed, 22 Jul 2020
- 14:33:51 +0000
-From:   Jun Li <jun.li@nxp.com>
-To:     "balbi@kernel.org" <balbi@kernel.org>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Peter Chen <peter.chen@nxp.com>,
-        Anson Huang <anson.huang@nxp.com>, Peng Fan <peng.fan@nxp.com>,
-        Horia Geanta <horia.geanta@nxp.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>
-Subject: RE: [PATCH v2 1/5] usb: dwc3: add platform data to dwc3 core device
- to pass data
-Thread-Topic: [PATCH v2 1/5] usb: dwc3: add platform data to dwc3 core device
- to pass data
-Thread-Index: AQHWU3qPod3u7KLfuUW6rq9H7arWKakTwq3g
-Date:   Wed, 22 Jul 2020 14:33:50 +0000
-Message-ID: <AM6PR04MB651795D149D5D8110E51E58B89790@AM6PR04MB6517.eurprd04.prod.outlook.com>
-References: <1594028699-1055-1-git-send-email-jun.li@nxp.com>
- <1594028699-1055-2-git-send-email-jun.li@nxp.com>
-In-Reply-To: <1594028699-1055-2-git-send-email-jun.li@nxp.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.68]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 3630ad06-646b-40d6-cb87-08d82e4c40b5
-x-ms-traffictypediagnostic: AM6PR04MB6069:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM6PR04MB6069D251017335A466CED17D89790@AM6PR04MB6069.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3383;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: xD6mPZq7+Z9lCFW9GuPOdtN9eYteuXQJU1C57Zy9/uVvDwgcsUMNZ9OhuXwRUAE/Sw5Pz8AW2FGxhTh2yi00KEqVaXW94ynq4/BRXLBE85RGrceHXM1JfsoMoO2aku6SzEy7MEuPJnTC/gkB6QQhWVp8Ojgf44SkykRA+MexVahRy+ZbMY28tqdlZa7dl32KaEAxhbowEd5P5iUuarjBTp6M2ZO6GuEktRM/Gqb3WrkMfaXJW7cZWZyR91iFjQEJKO6xxRVI7mUiDk/e7ZRqDwC/g4XLcctutnVXfQN7BWJuTeCc+K/iqEpYmRv8swBpgij6X21dnC8XZYIB8RXwJw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6517.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(136003)(39860400002)(346002)(366004)(376002)(396003)(7696005)(76116006)(86362001)(186003)(316002)(66446008)(26005)(54906003)(64756008)(71200400001)(44832011)(66946007)(5660300002)(66476007)(66556008)(8676002)(9686003)(55016002)(8936002)(2906002)(52536014)(6506007)(478600001)(83380400001)(53546011)(33656002)(7416002)(6916009)(4326008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: cDn+pxTh8KBMqbEmEU8Q7thFq7r1WisQBiN9VThaFRKT6PzHr8l12EETJpGqJA01ntvXjUe7jawriKSF8Cuy1brGI+7ir70KmnJFxIxFamnB3Sg7zArX9yhlxu9V5vqIoxbKLPIErUussdbN9q0CciAWQ3MCWnbBKOAAgbnh0nE9dZTHiiFwMnxppjaWO+M+XfogKDNwh/jC+htLeZ1IasO5A09Wx5fWeKtJcA2L20aZOKAAzC4yVEt0tybJUEpRA8/38k8h4GSQFJU+7DneQyv3rEjWAXDFVQH851gE3GvA0FTPgPN8i362h2XB99dIOONPha82UO7Am1YKflhPFhe7Zrgb1tebr2ssTG8ZW8oCODHj9mYhLvWX3arv9bksLKxBamuf7yV+TtU7OmdwkXyJo5fnD9OwhkaU32k+GpCGtzkJb6LYEe224inga7j4woepe9ACjSnOZJVfaG8fZpHEQ8HP0XEw9CwPaas4t4o=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1732756AbgGVOlQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jul 2020 10:41:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53698 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728837AbgGVOlO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jul 2020 10:41:14 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893F3C0619DC
+        for <linux-usb@vger.kernel.org>; Wed, 22 Jul 2020 07:41:13 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id j18so2153690wmi.3
+        for <linux-usb@vger.kernel.org>; Wed, 22 Jul 2020 07:41:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=davidgf-net.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=XQdhVYuh0rrnARY1dz05Oj8Hrj1fYZqSJNihHLS35Jg=;
+        b=MybNHHBUl41+Znj3hOIfSlYf7HGBEBSqV5HP4RyJ+vH1cq4XRTWPmoz8bRKZUTEOSx
+         VpjCBllMpOO1uxGJUj7u0D0r5vZoMLeIyePbgB9d0gsyWWBeIgTY4IaW58NUWG8EaF7r
+         kkaxe5BheqiAnWCUBDP0pwLSPSHUtleC2r3vrXg75ZjO2TXnhR4sgh9z7hx95T9Ja98k
+         VxbNfDdcnpulgxQdADoI9KpZUaMDsyut+0+533x9uI0BaPZ1upNwPnAN0P9aHOok0dhX
+         ULJPt8a7p2tY6+6pdWVK2jTmii23H2FPlInjUfcBwhx7iI0iciTYUnBiJA9atjURiLu3
+         6zmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=XQdhVYuh0rrnARY1dz05Oj8Hrj1fYZqSJNihHLS35Jg=;
+        b=C2/xxW1TUSOZBRUa0sa/aAPoXceIJ9am8/CoPHUQt8lVw4EjZVS7oRT/zAASSrZZ3a
+         gG5GUk53y2FXfd9op+ZY5qGemQyD184VUjN0Crh8yoyRqCEqIBrk9lrpxFma6WjJgaSM
+         N2ENU+Mdto8SMxd8N6mLgNxNiyNRbOevJQzoR5ZKwv/rpCcZ2wWI7igFMbmX+FhaSyr8
+         NUh1Il58ZyojIjQbVrm+mvhFUVBCGmI7XaNAWzPh8shK3hfkV3/MGkfl+6grtHQbkbU8
+         0WFQljbn/cOWdeAF4wPrYAkS0cX/M/jNX7jKUUsrEa05geIUZk7UrL3+YOyOSYR35I83
+         5cFA==
+X-Gm-Message-State: AOAM532FtomBJYobmGZ4R//slurfmVoaqUV41lOW5mZXR7EsRGaNrcXI
+        tVkn0m0S371fxWMLdlFUXy1v
+X-Google-Smtp-Source: ABdhPJy/FP/6zmsNQzHB3WXBrG7vgmnjyfIOFWltg+2RWrDCNNE4oWtFrbgteMyw/iLpa1+Ok7eJUA==
+X-Received: by 2002:a1c:f219:: with SMTP id s25mr41452wmc.2.1595428871923;
+        Wed, 22 Jul 2020 07:41:11 -0700 (PDT)
+Received: from debian.fritz.box (85-195-242-113.fiber7.init7.net. [85.195.242.113])
+        by smtp.gmail.com with ESMTPSA id f12sm145348wrj.48.2020.07.22.07.41.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jul 2020 07:41:10 -0700 (PDT)
+Message-ID: <fbdb1c8735a6bf55851b9dc3eda18ba51600cfdf.camel@davidgf.net>
+Subject: Re: System crash/lockup after plugging CDC ACM device
+From:   David Guillen Fandos <david@davidgf.net>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Dan Williams <dcbw@redhat.com>, linux-usb@vger.kernel.org,
+        dnlplm@gmail.com
+Date:   Wed, 22 Jul 2020 16:41:10 +0200
+In-Reply-To: <20200721082642.GA1659990@kroah.com>
+References: <20200715105034.GB2880893@kroah.com>
+         <956ec3169eec6b121339ed6c1aedd0f7ca08db43.camel@davidgf.net>
+         <20200715111210.GA2892661@kroah.com>
+         <ed743fe1e0ede6d37bc4a62ba704f51c54c2f5bf.camel@davidgf.net>
+         <20200715122403.GC2937397@kroah.com>
+         <8ebe3fb975db65531e71fdf8a298e3b3f68ae3ca.camel@davidgf.net>
+         <5725602de85c43497e326ff745db01ba36caeac1.camel@davidgf.net>
+         <ae6813ea0d4144a624a7e98cbba87070d3ae6f30.camel@davidgf.net>
+         <2017952c728bd0bb5d0e0c9df266de984f293df2.camel@redhat.com>
+         <a02ae97554de9ddea29b770bda0f34eb738dda34.camel@davidgf.net>
+         <20200721082642.GA1659990@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6517.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3630ad06-646b-40d6-cb87-08d82e4c40b5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jul 2020 14:33:50.9873
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: HAhgSM8labqYm3pP4d/rsPxEzY/upamRbLGn2EeRIVpI0o2A+d5U0bo4hGuWs2Gn
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB6069
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Tue, 2020-07-21 at 10:26 +0200, Greg KH wrote:
+> On Mon, Jul 20, 2020 at 10:39:40PM +0200, David Guillen Fandos wrote:
+> > On Mon, 2020-07-20 at 11:55 -0500, Dan Williams wrote:
+> > > On Mon, 2020-07-20 at 01:36 +0200, David Guillen Fandos wrote:
+> > > > On Thu, 2020-07-16 at 16:30 +0200, David Guillen Fandos wrote:
+> > > > > On Wed, 2020-07-15 at 19:03 +0200, David Guillen Fandos
+> > > > > wrote:
+> > > > > > On Wed, 2020-07-15 at 14:24 +0200, Greg KH wrote:
+> > > > > > > On Wed, Jul 15, 2020 at 01:20:54PM +0200, David Guillen
+> > > > > > > Fandos
+> > > > > > > wrote:
+> > > > > > > > On Wed, 2020-07-15 at 13:12 +0200, Greg KH wrote:
+> > > > > > > > > On Wed, Jul 15, 2020 at 12:57:14PM +0200, David
+> > > > > > > > > Guillen
+> > > > > > > > > Fandos
+> > > > > > > > > wrote:
+> > > > > > > > > > On Wed, 2020-07-15 at 12:50 +0200, Greg KH wrote:
+> > > > > > > > > > > On Wed, Jul 15, 2020 at 12:31:42PM +0200, David
+> > > > > > > > > > > Guillen
+> > > > > > > > > > > Fandos
+> > > > > > > > > > > wrote:
+> > > > > > > > > > > > On Wed, 2020-07-15 at 11:30 +0200, Greg KH
+> > > > > > > > > > > > wrote:
+> > > > > > > > > > > > > On Wed, Jul 15, 2020 at 10:58:03AM +0200,
+> > > > > > > > > > > > > David
+> > > > > > > > > > > > > Guillen
+> > > > > > > > > > > > > Fandos
+> > > > > > > > > > > > > wrote:
+> > > > > > > > > > > > > > Hello linux-usb,
+> > > > > > > > > > > > > > 
+> > > > > > > > > > > > > > I think I might have found a kernel bug
+> > > > > > > > > > > > > > related
+> > > > > > > > > > > > > > to
+> > > > > > > > > > > > > > the
+> > > > > > > > > > > > > > USB
+> > > > > > > > > > > > > > subsystem
+> > > > > > > > > > > > > > (cdc_acm perhaps).
+> > > > > > > > > > > > > > 
+> > > > > > > > > > > > > > Context: I was playing around with a device
+> > > > > > > > > > > > > > I'm
+> > > > > > > > > > > > > > creating,
+> > > > > > > > > > > > > > essentially a
+> > > > > > > > > > > > > > USB quad modem device that exposes four
+> > > > > > > > > > > > > > modems
+> > > > > > > > > > > > > > to
+> > > > > > > > > > > > > > the
+> > > > > > > > > > > > > > host
+> > > > > > > > > > > > > > system.
+> > > > > > > > > > > > > > This
+> > > > > > > > > > > > > > device is still a prototype so there's a
+> > > > > > > > > > > > > > few
+> > > > > > > > > > > > > > bugs
+> > > > > > > > > > > > > > here
+> > > > > > > > > > > > > > and
+> > > > > > > > > > > > > > there,
+> > > > > > > > > > > > > > most
+> > > > > > > > > > > > > > likely in the USB descriptors and control
+> > > > > > > > > > > > > > requests.
+> > > > > > > > > > > > > > 
+> > > > > > > > > > > > > > What happens: After plugging the device the
+> > > > > > > > > > > > > > system
+> > > > > > > > > > > > > > starts
+> > > > > > > > > > > > > > spitting
+> > > > > > > > > > > > > > warnings and BUGs and it locks up. Most of
+> > > > > > > > > > > > > > the
+> > > > > > > > > > > > > > time
+> > > > > > > > > > > > > > some
+> > > > > > > > > > > > > > CPUs
+> > > > > > > > > > > > > > get
+> > > > > > > > > > > > > > into
+> > > > > > > > > > > > > > some spinloop and never comes back (you can
+> > > > > > > > > > > > > > see
+> > > > > > > > > > > > > > it
+> > > > > > > > > > > > > > being
+> > > > > > > > > > > > > > detected
+> > > > > > > > > > > > > > by
+> > > > > > > > > > > > > > the watchdog after a few seconds).
+> > > > > > > > > > > > > > Generally
+> > > > > > > > > > > > > > after
+> > > > > > > > > > > > > > that
+> > > > > > > > > > > > > > the
+> > > > > > > > > > > > > > USB
+> > > > > > > > > > > > > > devices
+> > > > > > > > > > > > > > stop working completely and at some point
+> > > > > > > > > > > > > > the
+> > > > > > > > > > > > > > machine
+> > > > > > > > > > > > > > freezes
+> > > > > > > > > > > > > > completely. In a couple of ocasions I
+> > > > > > > > > > > > > > managed
+> > > > > > > > > > > > > > to
+> > > > > > > > > > > > > > see
+> > > > > > > > > > > > > > a
+> > > > > > > > > > > > > > bug
+> > > > > > > > > > > > > > in
+> > > > > > > > > > > > > > dmesg
+> > > > > > > > > > > > > > saying "unable to handle page fault for
+> > > > > > > > > > > > > > address
+> > > > > > > > > > > > > > XXX"
+> > > > > > > > > > > > > > and
+> > > > > > > > > > > > > > "Supervisor
+> > > > > > > > > > > > > > read access in kernel mode" "error code
+> > > > > > > > > > > > > > (0x0000)
+> > > > > > > > > > > > > > not
+> > > > > > > > > > > > > > present
+> > > > > > > > > > > > > > page".
+> > > > > > > > > > > > > > I
+> > > > > > > > > > > > > > could not get a trace for that one since
+> > > > > > > > > > > > > > the
+> > > > > > > > > > > > > > kernel
+> > > > > > > > > > > > > > died
+> > > > > > > > > > > > > > completely
+> > > > > > > > > > > > > > and
+> > > > > > > > > > > > > > my log files were truncated/lost.
+> > > > > > > > > > > > > > 
+> > > > > > > > > > > > > > Since it is happening to my two machines
+> > > > > > > > > > > > > > (both
+> > > > > > > > > > > > > > Intel
+> > > > > > > > > > > > > > but
+> > > > > > > > > > > > > > rather
+> > > > > > > > > > > > > > different controllers, Sunrise Point-LP USB
+> > > > > > > > > > > > > > 3.0
+> > > > > > > > > > > > > > vs
+> > > > > > > > > > > > > > 8
+> > > > > > > > > > > > > > Series/C220)
+> > > > > > > > > > > > > > and
+> > > > > > > > > > > > > > with different kernel versions I suspect
+> > > > > > > > > > > > > > this
+> > > > > > > > > > > > > > might
+> > > > > > > > > > > > > > be
+> > > > > > > > > > > > > > a
+> > > > > > > > > > > > > > bug in
+> > > > > > > > > > > > > > the
+> > > > > > > > > > > > > > kernel.
+> > > > > > > > > > > > > > 
+> > > > > > > > > > > > > > I have 4 logs that I collected, they are
+> > > > > > > > > > > > > > sort
+> > > > > > > > > > > > > > of
+> > > > > > > > > > > > > > long-
+> > > > > > > > > > > > > > ish,
+> > > > > > > > > > > > > > not
+> > > > > > > > > > > > > > sure
+> > > > > > > > > > > > > > how
+> > > > > > > > > > > > > > to best send them to the list.
+> > > > > > > > > > > > > 
+> > > > > > > > > > > > > Send the crashes with the callback list, that
+> > > > > > > > > > > > > should
+> > > > > > > > > > > > > be
+> > > > > > > > > > > > > quite
+> > > > > > > > > > > > > small,
+> > > > > > > > > > > > > right?  We don't need the full log.
+> > > > > > > > > > > > > 
+> > > > > > > > > > > > > The first crash is the most important, the
+> > > > > > > > > > > > > others
+> > > > > > > > > > > > > can
+> > > > > > > > > > > > > be
+> > > > > > > > > > > > > from
+> > > > > > > > > > > > > the
+> > > > > > > > > > > > > first
+> > > > > > > > > > > > > one and are not reliable.
+> > > > > > > > > > > > > 
+> > > > > > > > > > > > > thanks,
+> > > > > > > > > > > > > 
+> > > > > > > > > > > > > greg k-h
+> > > > > > > > > > > > 
+> > > > > > > > > > > > Ok then, here comes one of the logs, I selected
+> > > > > > > > > > > > some
+> > > > > > > > > > > > bits
+> > > > > > > > > > > > only
+> > > > > > > > > > > > 
+> > > > > > > > > > > > [  147.302016] WARNING: CPU: 3 PID: 134 at
+> > > > > > > > > > > > kernel/workqueue.c:1473
+> > > > > > > > > > > > __queue_work+0x364/0x410
+> > > > > > > > > > > > [...]
+> > > > > > > > > > > > [  147.302322] Call Trace:
+> > > > > > > > > > > > [  147.302329]  <IRQ>
+> > > > > > > > > > > > [  147.302342]  queue_work_on+0x36/0x40
+> > > > > > > > > > > > [  147.302353]  __usb_hcd_giveback_urb+0x9c/0x1
+> > > > > > > > > > > > 10
+> > > > > > > > > > > > [  147.302362]  usb_giveback_urb_bh+0xa0/0xf0
+> > > > > > > > > > > > [  147.302372]  tasklet_action_common.constprop
+> > > > > > > > > > > > .0+0
+> > > > > > > > > > > > x6
+> > > > > > > > > > > > 6/
+> > > > > > > > > > > > 0x
+> > > > > > > > > > > > 10
+> > > > > > > > > > > > 0
+> > > > > > > > > > > > [  147.302382]  __do_softirq+0xe9/0x2dc
+> > > > > > > > > > > > [  147.302391]  irq_exit+0xcf/0x110
+> > > > > > > > > > > > [  147.302397]  do_IRQ+0x55/0xe0
+> > > > > > > > > > > > [  147.302408]  common_interrupt+0xf/0xf
+> > > > > > > > > > > > [  147.302413]  </IRQ>
+> > > > > > > > > > > > [...]
+> > > > > > > > > > > > [  184.771172] watchdog: BUG: soft lockup -
+> > > > > > > > > > > > CPU#3
+> > > > > > > > > > > > stuck
+> > > > > > > > > > > > for
+> > > > > > > > > > > > 23s!
+> > > > > > > > > > > > [kworker/3:2:134]
+> > > > > > > > > > > 
+> > > > > > > > > > > That was the first message?
+> > > > > > > > > > > 
+> > > > > > > > > > > Ok, we need some more logs, how about the 30
+> > > > > > > > > > > lines
+> > > > > > > > > > > right
+> > > > > > > > > > > before
+> > > > > > > > > > > the
+> > > > > > > > > > > above?
+> > > > > > > > > > > 
+> > > > > > > > > > > And what kernel version are you using?
+> > > > > > > > > > > 
+> > > > > > > > > > > thanks,
+> > > > > > > > > > > 
+> > > > > > > > > > > greg k-h
+> > > > > > > > > > 
+> > > > > > > > > > Heh I assumed you would find the 3rd stack more
+> > > > > > > > > > interesting
+> > > > > > > > > > since
+> > > > > > > > > > it
+> > > > > > > > > > involves more subsystems but anyway, here we got,
+> > > > > > > > > > the
+> > > > > > > > > > first
+> > > > > > > > > > one
+> > > > > > > > > > with
+> > > > > > > > > > more context. The trigger as you can see is me
+> > > > > > > > > > connecting
+> > > > > > > > > > the
+> > > > > > > > > > USB
+> > > > > > > > > > device:
+> > > > > > > > > > 
+> > > > > > > > > > [  141.445367] usb 1-1: new full-speed USB device
+> > > > > > > > > > number
+> > > > > > > > > > 5
+> > > > > > > > > > using
+> > > > > > > > > > xhci_hcd
+> > > > > > > > > > [  141.573592] usb 1-1: New USB device found,
+> > > > > > > > > > idVendor=0483,
+> > > > > > > > > > idProduct=5740, bcdDevice= 2.00
+> > > > > > > > > > [  141.573597] usb 1-1: New USB device strings:
+> > > > > > > > > > Mfr=1,
+> > > > > > > > > > Product=2,
+> > > > > > > > > > SerialNumber=3
+> > > > > > > > > > [  141.573601] usb 1-1: Product: Quad-UART serial
+> > > > > > > > > > USB
+> > > > > > > > > > device
+> > > > > > > > > > [  141.573603] usb 1-1: Manufacturer: davidgf.net
+> > > > > > > > > > [  141.573605] usb 1-1: SerialNumber: serialno
+> > > > > > > > > > [  142.375007] cdc_acm 1-1:1.0: ttyACM0: USB ACM
+> > > > > > > > > > device
+> > > > > > > > > > [  142.376623] cdc_acm 1-1:1.2: ttyACM1: USB ACM
+> > > > > > > > > > device
+> > > > > > > > > > [  142.378350] cdc_acm 1-1:1.4: ttyACM2: USB ACM
+> > > > > > > > > > device
+> > > > > > > > > > [  142.379637] cdc_acm 1-1:1.6: ttyACM3: USB ACM
+> > > > > > > > > > device
+> > > > > > > > > > [  142.382473] usbcore: registered new interface
+> > > > > > > > > > driver
+> > > > > > > > > > cdc_acm
+> > > > > > > > > > [  142.382476] cdc_acm: USB Abstract Control Model
+> > > > > > > > > > driver
+> > > > > > > > > > for
+> > > > > > > > > > USB
+> > > > > > > > > > modems and ISDN adapters
+> > > > > > > > > > [  147.301997] ------------[ cut here ]------------
+> > > > > > > > > > [  147.302016] WARNING: CPU: 3 PID: 134 at
+> > > > > > > > > > kernel/workqueue.c:1473
+> > > > > > > > > > __queue_work+0x364/0x410
+> > > > > > > > > > [  147.302019] Modules linked in: cdc_acm rfcomm
+> > > > > > > > > > ccm
+> > > > > > > > > > wireguard
+> > > > > > > > > > curve25519_x86_64 libchacha20poly1305 chacha_x86_64
+> > > > > > > > > > poly1305_x86_64
+> > > > > > > > > > libblake2s blake2s_x86_64 ip6_udp_tunnel udp_tunnel
+> > > > > > > > > > libcurve25519_generic libchacha libblake2s_generic
+> > > > > > > > > > nft_fib_inet
+> > > > > > > > > > nft_fib_ipv4 nft_fib_ipv6 nft_fib nft_reject_inet
+> > > > > > > > > > nf_reject_ipv4
+> > > > > > > > > > nf_reject_ipv6 nft_reject nft_ct nft_chain_nat
+> > > > > > > > > > ip6table_nat
+> > > > > > > > > > ip6table_mangle ip6table_raw ip6table_security
+> > > > > > > > > > iptable_nat
+> > > > > > > > > > nf_nat
+> > > > > > > > > > nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4
+> > > > > > > > > > libcrc32c
+> > > > > > > > > > iptable_mangle
+> > > > > > > > > > iptable_raw iptable_security ip_set nf_tables
+> > > > > > > > > > nfnetlink
+> > > > > > > > > > ip6table_filter
+> > > > > > > > > > ip6_tables iptable_filter cmac vboxnetadp(OE)
+> > > > > > > > > > vboxnetflt(OE)
+> > > > > > > > > > bnep
+> > > > > > > > > > vboxdrv(OE) sunrpc vfat fat uvcvideo
+> > > > > > > > > > videobuf2_vmalloc
+> > > > > > > > > > videobuf2_memops
+> > > > > > > > > > videobuf2_v4l2 videobuf2_common videodev btusb
+> > > > > > > > > > btrtl
+> > > > > > > > > > btbcm
+> > > > > > > > > > btintel
+> > > > > > > > > > mc
+> > > > > > > > > > bluetooth ecdh_generic ecc iTCO_wdt
+> > > > > > > > > > iTCO_vendor_support
+> > > > > > > > > > mei_hdcp
+> > > > > > > > > > intel_rapl_msr dell_laptop x86_pkg_temp_thermal
+> > > > > > > > > > intel_powerclamp
+> > > > > > > > > > coretemp kvm_intel kvm irqbypass intel_cstate
+> > > > > > > > > > intel_uncore
+> > > > > > > > > > intel_rapl_perf iwlmvm
+> > > > > > > > > > [  147.302121]  snd_hda_codec_hdmi mac80211
+> > > > > > > > > > snd_soc_skl
+> > > > > > > > > > snd_soc_sst_ipc
+> > > > > > > > > > snd_soc_sst_dsp dell_wmi snd_hda_ext_core
+> > > > > > > > > > dell_smbios
+> > > > > > > > > > snd_hda_codec_realtek dcdbas libarc4 wmi_bmof
+> > > > > > > > > > dell_wmi_descriptor
+> > > > > > > > > > snd_soc_acpi_intel_match snd_soc_acpi
+> > > > > > > > > > intel_wmi_thunderbolt
+> > > > > > > > > > snd_hda_codec_generic snd_soc_core ledtrig_audio
+> > > > > > > > > > iwlwifi
+> > > > > > > > > > pcspkr
+> > > > > > > > > > snd_compress ac97_bus snd_pcm_dmaengine
+> > > > > > > > > > snd_hda_intel
+> > > > > > > > > > snd_intel_dspcfg
+> > > > > > > > > > snd_hda_codec cfg80211 snd_hda_core snd_hwdep
+> > > > > > > > > > snd_seq
+> > > > > > > > > > snd_seq_device
+> > > > > > > > > > joydev snd_pcm rfkill snd_timer snd i2c_i801
+> > > > > > > > > > soundcore
+> > > > > > > > > > idma64
+> > > > > > > > > > int3403_thermal intel_hid int3400_thermal
+> > > > > > > > > > sparse_keymap
+> > > > > > > > > > acpi_thermal_rel mei_me intel_xhci_usb_role_switch
+> > > > > > > > > > acpi_pad
+> > > > > > > > > > roles
+> > > > > > > > > > mei
+> > > > > > > > > > intel_pch_thermal processor_thermal_device
+> > > > > > > > > > intel_rapl_common
+> > > > > > > > > > int340x_thermal_zone intel_soc_dts_iosf binfmt_misc
+> > > > > > > > > > ip_tables
+> > > > > > > > > > dm_crypt
+> > > > > > > > > > i915 rtsx_pci_sdmmc mmc_core crct10dif_pclmul
+> > > > > > > > > > crc32_pclmul
+> > > > > > > > > > i2c_algo_bit
+> > > > > > > > > > cec crc32c_intel drm_kms_helper nvme
+> > > > > > > > > > ghash_clmulni_intel
+> > > > > > > > > > drm
+> > > > > > > > > > nvme_core
+> > > > > > > > > > serio_raw rtsx_pci hid_multitouch wmi i2c_hid video
+> > > > > > > > > > pinctrl_sunrisepoint pinctrl_intel
+> > > > > > > > > > [  147.302218]  fuse
+> > > > > > > > > > [  147.302230] CPU: 3 PID: 134 Comm: kworker/3:2
+> > > > > > > > > > Tainted:
+> > > > > > > > > > G          IOE     5.7.7-200.fc32.x86_64 #1
+> > > > > > > > > > [  147.302233] Hardware name: Dell Inc. XPS 13
+> > > > > > > > > > 9350/0PWNCR,
+> > > > > > > > > > BIOS
+> > > > > > > > > > 1.12.2
+> > > > > > > > > > 12/15/2019
+> > > > > > > > > > [  147.302260] Workqueue:  0x0 (mm_percpu_wq)
+> > > > > > > > > > [  147.302275] RIP: 0010:__queue_work+0x364/0x410
+> > > > > > > > > > [  147.302282] Code: e0 f1 69 a9 00 01 1f 00 75 0f
+> > > > > > > > > > 65
+> > > > > > > > > > 48
+> > > > > > > > > > 8b
+> > > > > > > > > > 3c
+> > > > > > > > > > 25
+> > > > > > > > > > c0 8b
+> > > > > > > > > > 01 00 f6 47 24 20 75 25 0f 0b 48 83 c4 10 5b 5d 41
+> > > > > > > > > > 5c
+> > > > > > > > > > 41
+> > > > > > > > > > 5d
+> > > > > > > > > > 41
+> > > > > > > > > > 5e
+> > > > > > > > > > 41 5f
+> > > > > > > > > > c3 <0f> 0b e9 78 fe ff ff 41 83 cc 02 49 8d 57 60
+> > > > > > > > > > e9 5d
+> > > > > > > > > > fe
+> > > > > > > > > > ff
+> > > > > > > > > > ff e8
+> > > > > > > > > > 53
+> > > > > > > > > > [  147.302286] RSP: 0018:ffffbab980154e68 EFLAGS:
+> > > > > > > > > > 00010002
+> > > > > > > > > > [  147.302292] RAX: ffff8f551b333790 RBX:
+> > > > > > > > > > 0000000000000048
+> > > > > > > > > > RCX:
+> > > > > > > > > > 0000000000000000
+> > > > > > > > > > [  147.302295] RDX: ffff8f551b333798 RSI:
+> > > > > > > > > > ffff8f5575803718
+> > > > > > > > > > RDI:
+> > > > > > > > > > ffff8f5576daa840
+> > > > > > > > > > [  147.302299] RBP: ffff8f551b333790 R08:
+> > > > > > > > > > ffffffff97856cb0
+> > > > > > > > > > R09:
+> > > > > > > > > > 0000000000000000
+> > > > > > > > > > [  147.302302] R10: 0000000000000000 R11:
+> > > > > > > > > > ffffffff97856cb8
+> > > > > > > > > > R12:
+> > > > > > > > > > 0000000000000003
+> > > > > > > > > > [  147.302306] R13: 0000000000002000 R14:
+> > > > > > > > > > ffff8f5575c14e00
+> > > > > > > > > > R15:
+> > > > > > > > > > ffff8f5576db0700
+> > > > > > > > > > [  147.302311] FS:  0000000000000000(0000)
+> > > > > > > > > > GS:ffff8f5576d80000(0000)
+> > > > > > > > > > knlGS:0000000000000000
+> > > > > > > > > > [  147.302315] CS:  0010 DS: 0000 ES: 0000 CR0:
+> > > > > > > > > > 0000000080050033
+> > > > > > > > > > [  147.302319] CR2: 00000000000000b0 CR3:
+> > > > > > > > > > 0000000267774004
+> > > > > > > > > > CR4:
+> > > > > > > > > > 00000000003606e0
+> > > > > > > > > > [  147.302322] Call Trace:
+> > > > > > > > > > [  147.302329]  <IRQ>
+> > > > > > > > > > [  147.302342]  queue_work_on+0x36/0x40
+> > > > > > > > > > [  147.302353]  __usb_hcd_giveback_urb+0x9c/0x110
+> > > > > > > > > > [  147.302362]  usb_giveback_urb_bh+0xa0/0xf0
+> > > > > > > > > 
+> > > > > > > > > Are you sure your device is working properly and
+> > > > > > > > > talking
+> > > > > > > > > USB
+> > > > > > > > > correctly
+> > > > > > > > > to the host?  It looks like you are just timing out
+> > > > > > > > > for
+> > > > > > > > > some
+> > > > > > > > > reason.
+> > > > > > > > > 
+> > > > > > > > > But, that warning is showing that something is odd in
+> > > > > > > > > the
+> > > > > > > > > usb
+> > > > > > > > > workqueue,
+> > > > > > > > > which is strange.
+> > > > > > > > > 
+> > > > > > > > > What type of host controller is this talking to?  And
+> > > > > > > > > does
+> > > > > > > > > your
+> > > > > > > > > device
+> > > > > > > > > actually answer the urbs being sent to it correctly?
+> > > > > > > > > 
+> > > > > > > > > Using usbmon on this might be the best way to watch
+> > > > > > > > > the
+> > > > > > > > > USB
+> > > > > > > > > traffic,
+> > > > > > > > > if
+> > > > > > > > > you don't have a hardware protocol sniffer, which
+> > > > > > > > > could
+> > > > > > > > > provide
+> > > > > > > > > some
+> > > > > > > > > clues as to what is going wrong.
+> > > > > > > > > 
+> > > > > > > > > thanks,
+> > > > > > > > > 
+> > > > > > > > > greg k-h
+> > > > > > > > 
+> > > > > > > > As I mentioned the device is likely buggy, since I'm
+> > > > > > > > developing
+> > > > > > > > and
+> > > > > > > > debugging it.
+> > > > > > > > However my ability to debug and fix any issue is
+> > > > > > > > limited by
+> > > > > > > > the
+> > > > > > > > fact
+> > > > > > > > that the kernel decides to stop working as usual,
+> > > > > > > > making my
+> > > > > > > > USB
+> > > > > > > > keyboard and mouse useless, if not crashing later due
+> > > > > > > > to
+> > > > > > > > soft
+> > > > > > > > lockups.
+> > > > > > > > 
+> > > > > > > > Shouldn't the kernel be resilient to such devices?
+> > > > > > > 
+> > > > > > > Yes it should, we should not crash.
+> > > > > > > 
+> > > > > > > 
+> > > > > > > > I've developed quite
+> > > > > > > > a few USB devices in the past and I've never ran into
+> > > > > > > > things
+> > > > > > > > like
+> > > > > > > > this
+> > > > > > > > on Linux (Windows is another story, rather 'easy' to
+> > > > > > > > crash,
+> > > > > > > > hang
+> > > > > > > > or
+> > > > > > > > bluescreen). In any case since I do not have access to
+> > > > > > > > a
+> > > > > > > > hardware
+> > > > > > > > debugger and the machine goes bananas (preventing me
+> > > > > > > > from
+> > > > > > > > using
+> > > > > > > > Wireshark) I do not think I can further debug this
+> > > > > > > > issue. I
+> > > > > > > > could
+> > > > > > > > try
+> > > > > > > > to find a kernel version where this does not crash the
+> > > > > > > > machine
+> > > > > > > > (only
+> > > > > > > > tested 5.6.X and 5.7.X so far). Or perhaps use
+> > > > > > > > VirtualBox,
+> > > > > > > > but
+> > > > > > > > I'd
+> > > > > > > > need
+> > > > > > > > to convice the host OS to ignore the USB device and
+> > > > > > > > just
+> > > > > > > > forward
+> > > > > > > > it
+> > > > > > > > to
+> > > > > > > > the guest.
+> > > > > > > 
+> > > > > > > Trying to trace down what part of the setup is failing,
+> > > > > > > by
+> > > > > > > using
+> > > > > > > usbmon,
+> > > > > > > will be good to try to figure out what the problem is
+> > > > > > > here,
+> > > > > > > if
+> > > > > > > you
+> > > > > > > can
+> > > > > > > do that.
+> > > > > > > 
+> > > > > > > > The firmware for this device can be easily tweaked to
+> > > > > > > > expose
+> > > > > > > > an
+> > > > > > > > arbitrary number (up to 7 I think) of CDC ACM
+> > > > > > > > interfaces.
+> > > > > > > > When
+> > > > > > > > I
+> > > > > > > > use
+> > > > > > > > one or two there's no issues, three has had some issues
+> > > > > > > > (but
+> > > > > > > > did
+> > > > > > > > not
+> > > > > > > > investigate further). Going to four is what
+> > > > > > > > consistently
+> > > > > > > > triggers
+> > > > > > > > kernel issues.
+> > > > > > > 
+> > > > > > > Hm, that might be a clue, what does the output of 'lsusb
+> > > > > > > -v'
+> > > > > > > for
+> > > > > > > that
+> > > > > > > device when you have 3 and then 4 interfaces?
+> > > > > > > 
+> > > > > > > thanks,
+> > > > > > > 
+> > > > > > > greg k-h
+> > > > > > 
+> > > > > > Hello,
+> > > > > > 
+> > > > > > I will try to see how I can debug further, perhaps I can
+> > > > > > locate
+> > > > > > a
+> > > > > > machine or kernel that does not crash. Another option can
+> > > > > > be to
+> > > > > > disable
+> > > > > > the firmware down to the minimum so that it does not
+> > > > > > response
+> > > > > > to
+> > > > > > the
+> > > > > > bulk endpoints (just to the enumeration and some basic
+> > > > > > things),
+> > > > > > to
+> > > > > > rule
+> > > > > > out a bad behaviour.
+> > > > > > 
+> > > > > > The USB descriptor is what you could imagine, just
+> > > > > > replicate
+> > > > > > the
+> > > > > > two
+> > > > > > ACM interfaces (control & data) and add more endpoints.
+> > > > > > Here
+> > > > > > goes
+> > > > > > the
+> > > > > > one with three ports. Note this one seems to make the
+> > > > > > kernel
+> > > > > > crash
+> > > > > > just
+> > > > > > like the one with four. The only ones that work well are 1
+> > > > > > and
+> > > > > > 2
+> > > > > > ports.
+> > > > > > Since I'm not aware of any other commercial solutions
+> > > > > > (apart
+> > > > > > from
+> > > > > > FTDI)
+> > > > > > that use more than 2 ACM ports, could that be the issue?
+> > > > > > Meaning
+> > > > > > there's a bug somewhere and no commercial hardware that can
+> > > > > > trigger
+> > > > > > it.
+> > > > > > 
+> > > > > > For reference the diff between two and three ports (in
+> > > > > > lsusb)
+> > > > > > is
+> > > > > > that
+> > > > > > it's missing the last two interaces (with the 3 EPs
+> > > > > > described).
+> > > > > > Of
+> > > > > > course the bNumInterfaces is 4 instead of 6, and
+> > > > > > wTotalLength
+> > > > > > has
+> > > > > > a
+> > > > > > different value.
+> > > > > > 
+> > > > > > Hope this can help somehow.
+> > > > > > Thanks
+> > > > > > David
+> > > > > > 
+> > > > > > Bus 003 Device 012: ID 0483:5740 STMicroelectronics Virtual
+> > > > > > COM
+> > > > > > Port
+> > > > > 
+> > > > > Hey again,
+> > > > > 
+> > > > > I was not aware about the modems Daniele, thanks!
+> > > > > 
+> > > > > So I did some testing on my old BeagleBone black, which has a
+> > > > > very
+> > > > > old
+> > > > > kernel (3.8.13-bone47). In this device the kernel is happy
+> > > > > and I
+> > > > > was
+> > > > > able to do some testing, it seems to work well. The UARTs
+> > > > > seem to
+> > > > > work
+> > > > > well in both directions, no weird shenanigans, no error/warn
+> > > > > messages...
+> > > > > 
+> > > > > I'm a bit at loss on how I can debug this further, I will try
+> > > > > to
+> > > > > use
+> > > > > a
+> > > > > RPi with a newer kernel and see what happens. I could try to
+> > > > > boot
+> > > > > a
+> > > > > Live USB with older kernels (in my Intel machines) to try to
+> > > > > locate
+> > > > > a
+> > > > > version where it works. Since I'm no kernel expert: any way I
+> > > > > can
+> > > > > provide more info? The computer becomes unusable shortly
+> > > > > after
+> > > > > plugging
+> > > > > the device so I can't really do any meaningful stuff on it.
+> > > > > 
+> > > > > Thanks again,
+> > > > > David
+> > > > > 
+> > > > 
+> > > > Hey there again!
+> > > > 
+> > > > I managed to get a PCAP capture for this. Note that
+> > > > NetworkManager
+> > > > was
+> > > > running and actively probing the ttyACM* devices for a modem,
+> > > > hence
+> > > > why
+> > > > you can see "AT\n" commands being sent to the four devices.
+> > > 
+> > > Do you mean ModemManager? NM moved the probing to ModemManager
+> > > about
+> > > 6
+> > > or 7 years ago. In any case, ModemManager has both a "don't
+> > > probe"
+> > > list, a greylist, and build-time options to only probe things it
+> > > knows
+> > > are modems.
+> > > 
+> > > Of course the build-time policy depends on your distro; upstream
+> > > ModemManager now defaults to "strict" mode (only probe known
+> > > modems/drivers/USB IDs).
+> > > 
+> > > Dan
+> > > 
+> > > > As you can also probably see is that the device currently
+> > > > ignores
+> > > > any
+> > > > control requests (like Set Line Coding).
+> > > > 
+> > > > Hope it can help your debugging.
+> > > > 
+> > > > David
+> > > > 
+> > > > 
+> > 
+> > Yeah ModemManager. I disabled it to better debug.
+> > 
+> > So I came to the bottom of the issue (device side). This device
+> > does
+> > not support more than 3 IN and 3 OUT endpoints. Whenever you
+> > specify
+> > more they start behaving very weirdly and Linux/Wireshark shows the
+> > EPROTO errors. In almost all cases that correlates with a kernel
+> > crash.
+> 
+> Ah, that makes more sense, so the device itself is just not
+> responding
+> to USB commands properly.
+> 
+> > I've seen some EPROTO errors at the begining of a trace on working
+> > devices, I'm assuming it'd what happens during the period the
+> > device is
+> > plugged and probed and before it gets full ready (all EPs are setup
+> > and
+> > able to respond).
+> > 
+> > Now coming around the restriction I've been able to use 3 UARTs
+> > without
+> > a problem, also on another device from the same family. That
+> > explains
+> > why it did not work, does not explain why the kernel gets a CPU
+> > stuck
+> > in some busy loop/interrupt loop though.
+> 
+> I agree, it's not good that we can hang with a broken device like
+> this,
+> but if the hardware is the thing that is locking up, it might be hard
+> for us to do anything about this.  Timing out and causing errors like
+> you see might be the only thing that we can do.
+> 
+> > From my side there's not much more I can do. I could try to get
+> > this
+> > setup in a simpler device and ship it someone willing to debug it.
+> > I'm
+> > totally convinced this is a bug in the USB stack given it crashes
+> > several computers with relateively different hardware.
+> 
+> I would be interested to see what happens when you plug it into other
+> operating systems.  Do they also lock up, or can they handle devices
+> like this?
+> 
+> thanks,
+> 
+> greg k-h
+
+Hey there,
+
+So I actually tested some Live media on the same computer and it is
+interesting to see how other distros did not fail at all with the same
+kernel version as Fedora's :/ (I tested CloneZilla 5.7.0 kernel)
+
+So I dug a bit more and realized that the kernel wont go bananas if
+ModemManager is not running. I'm assuming this means the kernel only
+has issues whenever some software is poking the device (which sort of
+makes sense, but at the same time should mean that the enumeration and
+config bits are 'ok').
+
+Also running ModemManager after plugging the device results sometimes
+in different behaviour. In some occasions I didnt get it to crash (or
+at least not as reliably) but it would print:
+
+[12515.209323] xhci_hcd 0000:00:14.0: WARN Cannot submit Set TR Deq Ptr
+[12515.209324] xhci_hcd 0000:00:14.0: A Set TR Deq Ptr command is
+pending.
+
+I'm not sure whether this is helpful or not. I haven't tried Windows
+since I do not have any computer (and using VMs doesnt really seem to
+work well).
+
+Thanks!
+David
 
 
-> -----Original Message-----
-> From: Jun Li <jun.li@nxp.com>
-> Sent: Monday, July 6, 2020 5:45 PM
-> To: balbi@kernel.org; shawnguo@kernel.org; robh+dt@kernel.org
-> Cc: gregkh@linuxfoundation.org; s.hauer@pengutronix.de; kernel@pengutroni=
-x.de;
-> festevam@gmail.com; dl-linux-imx <linux-imx@nxp.com>; linux-usb@vger.kern=
-el.org;
-> linux-arm-kernel@lists.infradead.org; devicetree@vger.kernel.org; Peter C=
-hen
-> <peter.chen@nxp.com>; Anson Huang <anson.huang@nxp.com>; Peng Fan
-> <peng.fan@nxp.com>; Horia Geanta <horia.geanta@nxp.com>
-> Subject: [PATCH v2 1/5] usb: dwc3: add platform data to dwc3 core device =
-to pass
-> data
->=20
-> In case dwc3 has SoC specific customizations, dwc3 glue driver can base o=
-n compatible
-> string and pass it via platform data to dwc3 core driver; and pass xhci p=
-rivate
-> data further to xhci-plat like quirks.
->=20
-> Signed-off-by: Li Jun <jun.li@nxp.com>
-> ---
->  drivers/usb/dwc3/core.h | 5 +++++
->  drivers/usb/dwc3/host.c | 9 +++++++++
->  2 files changed, 14 insertions(+)
->=20
-> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h index
-> 0b8ea8c..3146697 100644
-> --- a/drivers/usb/dwc3/core.h
-> +++ b/drivers/usb/dwc3/core.h
-> @@ -29,6 +29,7 @@
->  #include <linux/ulpi/interface.h>
->=20
->  #include <linux/phy/phy.h>
-> +#include "../host/xhci-plat.h"
->=20
->  #define DWC3_MSG_MAX	500
->=20
-> @@ -924,6 +925,10 @@ struct dwc3_scratchpad_array {
->  	__le64	dma_adr[DWC3_MAX_HIBER_SCRATCHBUFS];
->  };
->=20
-> +struct dwc3_platform_data {
-> +	struct xhci_plat_priv *xhci_priv;
-> +};
-> +
->  /**
->   * struct dwc3 - representation of our controller
->   * @drd_work: workqueue used for role swapping diff --git a/drivers/usb/=
-dwc3/host.c
-> b/drivers/usb/dwc3/host.c index bef1c1a..4f8514a 100644
-> --- a/drivers/usb/dwc3/host.c
-> +++ b/drivers/usb/dwc3/host.c
-> @@ -46,6 +46,7 @@ int dwc3_host_init(struct dwc3 *dwc)  {
->  	struct property_entry	props[4];
->  	struct platform_device	*xhci;
-> +	struct dwc3_platform_data *dwc3_pdata;
->  	int			ret, irq;
->  	struct resource		*res;
->  	struct platform_device	*dwc3_pdev =3D to_platform_device(dwc->dev);
-> @@ -115,6 +116,14 @@ int dwc3_host_init(struct dwc3 *dwc)
->  		}
->  	}
->=20
-> +	dwc3_pdata =3D (struct dwc3_platform_data *)dev_get_platdata(dwc->dev);
-> +	if (dwc3_pdata && dwc3_pdata->xhci_priv) {
-> +		ret =3D platform_device_add_data(xhci, dwc3_pdata->xhci_priv,
-> +					       sizeof(struct xhci_plat_priv));
-> +		if (ret)
-> +			goto err;
-> +	}
-> +
->  	ret =3D platform_device_add(xhci);
->  	if (ret) {
->  		dev_err(dwc->dev, "failed to register xHCI device\n");
-> --
-> 2.7.4
-
-A gentle ping...
-
-Thanks
-Li Jun
