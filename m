@@ -2,178 +2,299 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D05102291F1
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jul 2020 09:18:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 104F622922A
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jul 2020 09:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731979AbgGVHSM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Jul 2020 03:18:12 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:41758 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1731452AbgGVHSL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jul 2020 03:18:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1595402290;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gtsyT4mz+LNAUNpKdG4kBHqIVduUS0Y9Bmc1QqpE/F8=;
-        b=TQhpq9XZns6pUWHmcC8ojfVkrjuehr4G8YJEIb27s3q3qzP3mztlgAzySqlf5o33+SKOw0
-        qSRfmOi/0m2jrE9NmeKY4ni2jLlvKU8Z1AI86Y6wwa94ILROX6iIEY0i7U3soc8npew2ED
-        cSzorXISLTeQgkWM103RWNBTNqiO0so=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-514-2mJgOecDPJSsxCg1lHnS0A-1; Wed, 22 Jul 2020 03:18:05 -0400
-X-MC-Unique: 2mJgOecDPJSsxCg1lHnS0A-1
-Received: by mail-ej1-f70.google.com with SMTP id l18so633324ejn.17
-        for <linux-usb@vger.kernel.org>; Wed, 22 Jul 2020 00:18:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=gtsyT4mz+LNAUNpKdG4kBHqIVduUS0Y9Bmc1QqpE/F8=;
-        b=KpyEPVGHJS3GXYcYdTy/17iqui/b8pxCJOeCMD1BpahocLZ16SMWwju1gbfOuyrhZv
-         Z33R7WsMsK8bmRTjB/oyulo5MwOTyfl9rwqVNAKgC1Zd+iMQDFKzPh8usV52GQvD+3S+
-         AQKQJCianVPMWng4VwzOyLXJKt19+hpz/6duZs6EFFpnle0oyOHxoPUN6X9GwKjtrdj0
-         bWKcz3vR+NO+bkmKsIeFy3YzSA7VU5Eyb4ZUZyOy40c3GTnv7fCoNjR0cQvwJ6jQ/EXb
-         vMpTj7J1o6hGjRyyPXwdREEXZiseTmog0u2WSWoUmv16ywrL6HISZQspt4AxNhz+ZSTC
-         bxtw==
-X-Gm-Message-State: AOAM531S9BrQEEVZzSl+gI6I7pE9YwN8j8H9+5IwZ0zMSOuQyDE/jnc/
-        QjlgKIrbqYoQIudz+Ulu/ZplN66h0pY7CkNNQ6IzKLWsIi0j+DkbfyHRYsojhVWOc4JPttKerSk
-        a07bZc88WN+xFIu4+ZCSB
-X-Received: by 2002:a17:906:57c5:: with SMTP id u5mr27834201ejr.311.1595402283732;
-        Wed, 22 Jul 2020 00:18:03 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyceOzzKjVYzoyGWeTz9chUJQE8t5Cdl25VlPyxcK/im99H2NYsEVDg7gPuHMxJ5fCOsgw1Og==
-X-Received: by 2002:a17:906:57c5:: with SMTP id u5mr27834183ejr.311.1595402283431;
-        Wed, 22 Jul 2020 00:18:03 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
-        by smtp.gmail.com with ESMTPSA id f17sm18076914ejr.71.2020.07.22.00.18.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jul 2020 00:18:02 -0700 (PDT)
-Subject: Re: [PATCH 1/4] dt-bindings: usb-connector: Add support for Type-C
- alternate-modes
-To:     Rob Herring <robh@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Tobias Schramm <t.schramm@manjaro.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org
-References: <20200714113617.10470-1-hdegoede@redhat.com>
- <20200714113617.10470-2-hdegoede@redhat.com> <20200721022610.GA3391383@bogus>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <f143d626-2a78-e32f-b122-7dbae1b3a50e@redhat.com>
-Date:   Wed, 22 Jul 2020 09:18:02 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S1728821AbgGVHhC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jul 2020 03:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44216 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727096AbgGVHhC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jul 2020 03:37:02 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF375C0619DC
+        for <linux-usb@vger.kernel.org>; Wed, 22 Jul 2020 00:37:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=58q5sNsknyB+c82dm74VDbMVC80lbW9qfRph2IYqF90=; b=Ce4rRSFLEkWE/qH9wZpQ7n/TwW
+        zH6LXHvahnSArg10KssSc74tzCbXPp4Exz80rds38NqYTymjp8+h3Aq680oYlFWPT2WyX6kbVuq3G
+        lU3pxNen/5KiFtju0Orn4m8RwQfLnVJCPwSXqTYrHiSEIy6iTPOEImO+yzmfIKE41yLCnxhJV5Bwq
+        XRc+oc2hdm9o54l4JoHkUR6MKb+R4Ny/M1v/cuwoQi8pmQAWUef/EaRtozIqDtLNc2q6UYGn2DdDj
+        TvbFJY+pXoIGokOxsTqrKCnPISZOoU/0MzK434SijVCqdmAUyMbV0f6wTxGy7iyq6e7ZRpGwQ7dLU
+        sUQz2Vgw==;
+Received: from [2001:4bb8:18c:2acc:e75:d48f:65ef:e944] (helo=localhost)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jy9JB-00005I-RL; Wed, 22 Jul 2020 07:36:59 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org
+Subject: [PATCH] usb: usbfs: stop using compat_alloc_user_space
+Date:   Wed, 22 Jul 2020 09:36:55 +0200
+Message-Id: <20200722073655.220011-1-hch@lst.de>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <20200721022610.GA3391383@bogus>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Just switch the low-level routines to take kernel structures, and do the
+conversion from the compat to the native structure on that.
 
-On 7/21/20 4:26 AM, Rob Herring wrote:
-> On Tue, Jul 14, 2020 at 01:36:14PM +0200, Hans de Goede wrote:
->> This commit adds the minimum bindings required to allow describing which
->> altmodes a port supports. Currently this is limited to just specifying:
->>
->> 1. The svid, which is the id of the altmode, e.g. displayport altmode has
->> a svid of 0xff01.
->>
->> 2. The vdo, a 32 bit integer, typically used as a bitmask describing the
->> capabilities of the altmode, the bits in the vdo are specified in the
->> specification of the altmode, the dt-binding simply refers to the
->> specification as that is the canonical source of the meaning of the bits.
-> 
-> What if this information should be derived from information already in
-> DT (or would be there if alt mode connections are described)?
-> 
->>
->> Later on we may want to extend the binding with extra properties specific
->> to some altmode, but for now this is sufficient to e.g. hook up
->> displayport alternate-mode.
-> 
-> I don't think this is sufficient as it doesn't describe how alternate
-> modes are connected to various components. This has been discussed some
-> here[1] with the CrOS folks. Maybe this is orthogonal, IDK, but I really
-> need something that is somewhat complete and not sprinkle a few new
-> properties at a time.
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+---
+ drivers/usb/core/devio.c | 126 +++++++++++++++++++++------------------
+ 1 file changed, 69 insertions(+), 57 deletions(-)
 
-Right, but that is an orthogonal problem, this is telling the Type-C
-controller which modes it is allowed to negotiate and which capabilties
-(altmode specific, stored in the vdo) it should advertise.
-
-I agree that if the connector is connected to a mux and how that mux is then
-connected to the SoC, or if the SoC has a multi-mode phy also needs to be
-specified in some cases. But that is mostly a separate problem.
-One thing which we will want to add to this part of the bindings when that
-other part is in place is a link to the endpoint *after* the mux, that is
-after the mode- and role-switch in Prashant's example here:
-https://lkml.org/lkml/2020/6/12/602
-
-The Type-C controller may receive out-of-band messages related to the
-altmode (through USB-PD messages) which need to be communicated to
-the endpoint, so in the case of display-port altmode, the dp0_out_ep
-from Prashant's example. Note the link/object reference I'm suggesting
-here deliberately skips the mux, since the oob messages need to be
-send through the endpoint without the mux being involved since they are
-oob after all.
-
-Specifically there is no pin on the Type-C connector for the display-port
-hotplug-detect pin, so hot(un)plug is signaled through altmode specific
-USB-PD messages.
-
-Note that this binding and the 2 patches implementing it for x86
-devices (*), are already useful / functional. The user just needs to
-manually run "xrandr" to force the video-output driver to manually
-recheck for new/changed monitors, just like an old VGA ports without
-load detection.
-
-I haven't fully figured out how to wire up the hotplug signal in the
-kernel yet, which is why the link to the DP endpoint is not yet part of
-the bindings.
-
-*) Using sw-fw-nodes to pass the info from a drivers/platform/x86/
-driver to the Type-C controller code which uses fw_nodes to get this info
-
-So since this is x86 only for now; and AFAIK you don't want to take bindings
-upstream until there is an actual DT user anyways, my main goal of including
-this was to see if we are at least on the right way with this. With x86 it
-is all in the kernel, so if the binding changes a bit we can easily adjust the
-drivers/platform/x86/ code generating the nodes at the same time as we
-update the Type-C controller code to implement the final binding. But it
-would be good to know that we are at least going in the right direction.
-
-BTW note that making the binding look like this was proposed by Heikki,
-the Type-C subsys maintainer, I ended up implementing this because Heikki
-did no have the time for it.
-
-Regards,
-
-Hans
-
-
-
-
-
-> 
->> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
->> ---
->> Note I hope I got the yaml correct, this is my first time writing a
->> dt-binding in the new yaml style. I did run:
->> make dt_binding_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/connector/usb-connector.yaml
->> and that was happy.
-> 
-> That aspect of it looks fine.
-> 
-> Rob
-> 
-> [1] https://lkml.org/lkml/2020/4/22/1819
-> 
+diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
+index 96d4507d988ac0..e96a858a12185b 100644
+--- a/drivers/usb/core/devio.c
++++ b/drivers/usb/core/devio.c
+@@ -1102,22 +1102,20 @@ static int usbdev_release(struct inode *inode, struct file *file)
+ 	return 0;
+ }
+ 
+-static int proc_control(struct usb_dev_state *ps, void __user *arg)
++static int do_proc_control(struct usb_dev_state *ps,
++		struct usbdevfs_ctrltransfer *ctrl)
+ {
+ 	struct usb_device *dev = ps->dev;
+-	struct usbdevfs_ctrltransfer ctrl;
+ 	unsigned int tmo;
+ 	unsigned char *tbuf;
+ 	unsigned wLength;
+ 	int i, pipe, ret;
+ 
+-	if (copy_from_user(&ctrl, arg, sizeof(ctrl)))
+-		return -EFAULT;
+-	ret = check_ctrlrecip(ps, ctrl.bRequestType, ctrl.bRequest,
+-			      ctrl.wIndex);
++	ret = check_ctrlrecip(ps, ctrl->bRequestType, ctrl->bRequest,
++			      ctrl->wIndex);
+ 	if (ret)
+ 		return ret;
+-	wLength = ctrl.wLength;		/* To suppress 64k PAGE_SIZE warning */
++	wLength = ctrl->wLength;	/* To suppress 64k PAGE_SIZE warning */
+ 	if (wLength > PAGE_SIZE)
+ 		return -EINVAL;
+ 	ret = usbfs_increase_memory_usage(PAGE_SIZE + sizeof(struct urb) +
+@@ -1129,52 +1127,52 @@ static int proc_control(struct usb_dev_state *ps, void __user *arg)
+ 		ret = -ENOMEM;
+ 		goto done;
+ 	}
+-	tmo = ctrl.timeout;
++	tmo = ctrl->timeout;
+ 	snoop(&dev->dev, "control urb: bRequestType=%02x "
+ 		"bRequest=%02x wValue=%04x "
+ 		"wIndex=%04x wLength=%04x\n",
+-		ctrl.bRequestType, ctrl.bRequest, ctrl.wValue,
+-		ctrl.wIndex, ctrl.wLength);
+-	if (ctrl.bRequestType & 0x80) {
++		ctrl->bRequestType, ctrl->bRequest, ctrl->wValue,
++		ctrl->wIndex, ctrl->wLength);
++	if (ctrl->bRequestType & 0x80) {
+ 		pipe = usb_rcvctrlpipe(dev, 0);
+-		snoop_urb(dev, NULL, pipe, ctrl.wLength, tmo, SUBMIT, NULL, 0);
++		snoop_urb(dev, NULL, pipe, ctrl->wLength, tmo, SUBMIT, NULL, 0);
+ 
+ 		usb_unlock_device(dev);
+-		i = usb_control_msg(dev, pipe, ctrl.bRequest,
+-				    ctrl.bRequestType, ctrl.wValue, ctrl.wIndex,
+-				    tbuf, ctrl.wLength, tmo);
++		i = usb_control_msg(dev, pipe, ctrl->bRequest,
++				    ctrl->bRequestType, ctrl->wValue, ctrl->wIndex,
++				    tbuf, ctrl->wLength, tmo);
+ 		usb_lock_device(dev);
+ 		snoop_urb(dev, NULL, pipe, max(i, 0), min(i, 0), COMPLETE,
+ 			  tbuf, max(i, 0));
+-		if ((i > 0) && ctrl.wLength) {
+-			if (copy_to_user(ctrl.data, tbuf, i)) {
++		if ((i > 0) && ctrl->wLength) {
++			if (copy_to_user(ctrl->data, tbuf, i)) {
+ 				ret = -EFAULT;
+ 				goto done;
+ 			}
+ 		}
+ 	} else {
+-		if (ctrl.wLength) {
+-			if (copy_from_user(tbuf, ctrl.data, ctrl.wLength)) {
++		if (ctrl->wLength) {
++			if (copy_from_user(tbuf, ctrl->data, ctrl->wLength)) {
+ 				ret = -EFAULT;
+ 				goto done;
+ 			}
+ 		}
+ 		pipe = usb_sndctrlpipe(dev, 0);
+-		snoop_urb(dev, NULL, pipe, ctrl.wLength, tmo, SUBMIT,
+-			tbuf, ctrl.wLength);
++		snoop_urb(dev, NULL, pipe, ctrl->wLength, tmo, SUBMIT,
++			tbuf, ctrl->wLength);
+ 
+ 		usb_unlock_device(dev);
+-		i = usb_control_msg(dev, usb_sndctrlpipe(dev, 0), ctrl.bRequest,
+-				    ctrl.bRequestType, ctrl.wValue, ctrl.wIndex,
+-				    tbuf, ctrl.wLength, tmo);
++		i = usb_control_msg(dev, usb_sndctrlpipe(dev, 0), ctrl->bRequest,
++				    ctrl->bRequestType, ctrl->wValue, ctrl->wIndex,
++				    tbuf, ctrl->wLength, tmo);
+ 		usb_lock_device(dev);
+ 		snoop_urb(dev, NULL, pipe, max(i, 0), min(i, 0), COMPLETE, NULL, 0);
+ 	}
+ 	if (i < 0 && i != -EPIPE) {
+ 		dev_printk(KERN_DEBUG, &dev->dev, "usbfs: USBDEVFS_CONTROL "
+ 			   "failed cmd %s rqt %u rq %u len %u ret %d\n",
+-			   current->comm, ctrl.bRequestType, ctrl.bRequest,
+-			   ctrl.wLength, i);
++			   current->comm, ctrl->bRequestType, ctrl->bRequest,
++			   ctrl->wLength, i);
+ 	}
+ 	ret = i;
+  done:
+@@ -1184,30 +1182,37 @@ static int proc_control(struct usb_dev_state *ps, void __user *arg)
+ 	return ret;
+ }
+ 
+-static int proc_bulk(struct usb_dev_state *ps, void __user *arg)
++static int proc_control(struct usb_dev_state *ps, void __user *arg)
++{
++	struct usbdevfs_ctrltransfer ctrl;
++
++	if (copy_from_user(&ctrl, arg, sizeof(ctrl)))
++		return -EFAULT;
++	return do_proc_control(ps, &ctrl);
++}
++
++static int do_proc_bulk(struct usb_dev_state *ps,
++		struct usbdevfs_bulktransfer *bulk)
+ {
+ 	struct usb_device *dev = ps->dev;
+-	struct usbdevfs_bulktransfer bulk;
+ 	unsigned int tmo, len1, pipe;
+ 	int len2;
+ 	unsigned char *tbuf;
+ 	int i, ret;
+ 
+-	if (copy_from_user(&bulk, arg, sizeof(bulk)))
+-		return -EFAULT;
+-	ret = findintfep(ps->dev, bulk.ep);
++	ret = findintfep(ps->dev, bulk->ep);
+ 	if (ret < 0)
+ 		return ret;
+ 	ret = checkintf(ps, ret);
+ 	if (ret)
+ 		return ret;
+-	if (bulk.ep & USB_DIR_IN)
+-		pipe = usb_rcvbulkpipe(dev, bulk.ep & 0x7f);
++	if (bulk->ep & USB_DIR_IN)
++		pipe = usb_rcvbulkpipe(dev, bulk->ep & 0x7f);
+ 	else
+-		pipe = usb_sndbulkpipe(dev, bulk.ep & 0x7f);
+-	if (!usb_maxpacket(dev, pipe, !(bulk.ep & USB_DIR_IN)))
++		pipe = usb_sndbulkpipe(dev, bulk->ep & 0x7f);
++	if (!usb_maxpacket(dev, pipe, !(bulk->ep & USB_DIR_IN)))
+ 		return -EINVAL;
+-	len1 = bulk.len;
++	len1 = bulk->len;
+ 	if (len1 >= (INT_MAX - sizeof(struct urb)))
+ 		return -EINVAL;
+ 	ret = usbfs_increase_memory_usage(len1 + sizeof(struct urb));
+@@ -1218,8 +1223,8 @@ static int proc_bulk(struct usb_dev_state *ps, void __user *arg)
+ 		ret = -ENOMEM;
+ 		goto done;
+ 	}
+-	tmo = bulk.timeout;
+-	if (bulk.ep & 0x80) {
++	tmo = bulk->timeout;
++	if (bulk->ep & 0x80) {
+ 		snoop_urb(dev, NULL, pipe, len1, tmo, SUBMIT, NULL, 0);
+ 
+ 		usb_unlock_device(dev);
+@@ -1228,14 +1233,14 @@ static int proc_bulk(struct usb_dev_state *ps, void __user *arg)
+ 		snoop_urb(dev, NULL, pipe, len2, i, COMPLETE, tbuf, len2);
+ 
+ 		if (!i && len2) {
+-			if (copy_to_user(bulk.data, tbuf, len2)) {
++			if (copy_to_user(bulk->data, tbuf, len2)) {
+ 				ret = -EFAULT;
+ 				goto done;
+ 			}
+ 		}
+ 	} else {
+ 		if (len1) {
+-			if (copy_from_user(tbuf, bulk.data, len1)) {
++			if (copy_from_user(tbuf, bulk->data, len1)) {
+ 				ret = -EFAULT;
+ 				goto done;
+ 			}
+@@ -1254,6 +1259,15 @@ static int proc_bulk(struct usb_dev_state *ps, void __user *arg)
+ 	return ret;
+ }
+ 
++static int proc_bulk(struct usb_dev_state *ps, void __user *arg)
++{
++	struct usbdevfs_bulktransfer bulk;
++
++	if (copy_from_user(&bulk, arg, sizeof(bulk)))
++		return -EFAULT;
++	return do_proc_bulk(ps, &bulk);
++}
++
+ static void check_reset_of_active_ep(struct usb_device *udev,
+ 		unsigned int epnum, char *ioctl_name)
+ {
+@@ -2013,33 +2027,31 @@ static int proc_reapurbnonblock(struct usb_dev_state *ps, void __user *arg)
+ static int proc_control_compat(struct usb_dev_state *ps,
+ 				struct usbdevfs_ctrltransfer32 __user *p32)
+ {
+-	struct usbdevfs_ctrltransfer __user *p;
+-	__u32 udata;
+-	p = compat_alloc_user_space(sizeof(*p));
+-	if (copy_in_user(p, p32, (sizeof(*p32) - sizeof(compat_caddr_t))) ||
+-	    get_user(udata, &p32->data) ||
+-	    put_user(compat_ptr(udata), &p->data))
++	struct usbdevfs_ctrltransfer ctrl;
++	u32 udata;
++
++	if (copy_from_user(&ctrl, p32, sizeof(*p32) - sizeof(compat_caddr_t)) ||
++	    get_user(udata, &p32->data))
+ 		return -EFAULT;
+-	return proc_control(ps, p);
++	ctrl.data = compat_ptr(udata);
++	return do_proc_control(ps, &ctrl);
+ }
+ 
+ static int proc_bulk_compat(struct usb_dev_state *ps,
+ 			struct usbdevfs_bulktransfer32 __user *p32)
+ {
+-	struct usbdevfs_bulktransfer __user *p;
+-	compat_uint_t n;
++	struct usbdevfs_bulktransfer bulk;
+ 	compat_caddr_t addr;
+ 
+-	p = compat_alloc_user_space(sizeof(*p));
+-
+-	if (get_user(n, &p32->ep) || put_user(n, &p->ep) ||
+-	    get_user(n, &p32->len) || put_user(n, &p->len) ||
+-	    get_user(n, &p32->timeout) || put_user(n, &p->timeout) ||
+-	    get_user(addr, &p32->data) || put_user(compat_ptr(addr), &p->data))
++	if (get_user(bulk.ep, &p32->ep) ||
++	    get_user(bulk.len, &p32->len) ||
++	    get_user(bulk.timeout, &p32->timeout) ||
++	    get_user(addr, &p32->data))
+ 		return -EFAULT;
+-
+-	return proc_bulk(ps, p);
++	bulk.data = compat_ptr(addr);
++	return do_proc_bulk(ps, &bulk);
+ }
++
+ static int proc_disconnectsignal_compat(struct usb_dev_state *ps, void __user *arg)
+ {
+ 	struct usbdevfs_disconnectsignal32 ds;
+-- 
+2.27.0
 
