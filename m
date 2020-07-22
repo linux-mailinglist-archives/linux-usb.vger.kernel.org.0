@@ -2,107 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57C6522945C
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jul 2020 11:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 328E62294B5
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jul 2020 11:20:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730713AbgGVJEF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Jul 2020 05:04:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57694 "EHLO
+        id S1728360AbgGVJS5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jul 2020 05:18:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726147AbgGVJED (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jul 2020 05:04:03 -0400
-Received: from mail-oo1-xc42.google.com (mail-oo1-xc42.google.com [IPv6:2607:f8b0:4864:20::c42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 907F8C0619DC;
-        Wed, 22 Jul 2020 02:04:03 -0700 (PDT)
-Received: by mail-oo1-xc42.google.com with SMTP id y9so270321oot.9;
-        Wed, 22 Jul 2020 02:04:03 -0700 (PDT)
+        with ESMTP id S1726153AbgGVJS5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jul 2020 05:18:57 -0400
+Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D71C0619DC;
+        Wed, 22 Jul 2020 02:18:57 -0700 (PDT)
+Received: by mail-vs1-xe43.google.com with SMTP id q15so756285vso.9;
+        Wed, 22 Jul 2020 02:18:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=zxpuzEB9KMj0t9s7OpDkA/XsxcLlP2L79Bj3H31wGQg=;
-        b=qAxVGgydjt7gac3OWXNzknnBRu/Ayp4cFle9nv2nEPqB5M5+vdb0v3MDGbQ06e+7ay
-         b0TzDGT/L02h91uiZTDfpT+t8IGImRvqqRI6REKGm2NO2yM8pg5bu2/WMEPANPwESafj
-         NsfMyrZBjDtNsro5JfsYKKqZTaqDSpaj89xS8AHgBem4i5Ui7goYOUnYHn6X9Bxglawa
-         u3sQ0Cm74g2yY2Ik9zKg5Xz5etuPnsqFdCkdhqatBU+DL04f3Ui0HP96+t4hi5KGx9PQ
-         dGUTetX4hzJgJdDQBbmcRkvGE/hY25XhaSTujaxIV3M7KqqZDEP9L7DCYm2/ihxJjhq5
-         l1cQ==
+        bh=kinsg49RAoAeoKFx4gE6QT8ur/XktSQO/apO/E1SUuk=;
+        b=MAs2/hCaFfZeqtU62i0g5NZLteR8wQMQhlEZxQ3+w4bPb6XtDyQvxMJuPeXlrIOqJR
+         vpGG7cjO36cu4B+DRoVkjsfelhrvASK9oMG9c5is99YPGVN1X3/WytqJgkg5MKJEJcmA
+         iSiDPGLk8usr2Z26x7LmW9j1i9bVijfjculv2CVUmXPnAxaoTNQDwXFg7j6PqBNIX51+
+         cJ4IVlbArWhWNCgnkNZ+xL9h5iz/eBq0sdwMruYCxGHNQs2hNGq/fFRQbD2xd14tdwXN
+         xpvWHw0eVsSuPZR4dyvSFfFmhNC+DfHV2HyWreg2tevxI/NMvwUFpduos9hw/y45c498
+         tNaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=zxpuzEB9KMj0t9s7OpDkA/XsxcLlP2L79Bj3H31wGQg=;
-        b=nqMUjMEwwG3dP4pAofXgB0PP/z1wLsoga6I9UHooDg1004GGZij/7/Ji7Q/zUE2FfC
-         VZMNEMw75F9S2q6Xcd4jvuqm7MAX4qDp9Ftq391zw54hTtv+T+pu16iy4wpY0rrU2liG
-         k3gFA6iawigs0bZweXf25eyXkSIWz1qSSACJWyMx+gwICNkXWipTDxKM/P6yEQQICLNG
-         y6lgj7Ix9hEPJlkUEHxZPtUx6e2vzqUZTqcF0xESwjLHtlYyU4ZJhG0n8VjdMOUk7J5v
-         gH7ys/56yRTL1NFG5OybAz2ixhf0a8oAjn0Hb+wDAz0Vde64V9i0HsBbP5zYdFIWDyEO
-         SHmA==
-X-Gm-Message-State: AOAM532w5mY3n9xgwia5WJ/8Kk8B+vkXCkoztY+VmKkqUEW2QxQNqX8D
-        mmOgXHIInoRWzb3/082ECAxGVhCzvjNstGQsWW4=
-X-Google-Smtp-Source: ABdhPJyvkWCP9ZAp2wHyowUwbZiqTpOrvwaJyTM71SEZs7Fadah0GjZv4QqaCe1IG4/I4xEhqsLD0r+pvHu/A3NxZFs=
-X-Received: by 2002:a4a:4cc1:: with SMTP id a184mr27367539oob.62.1595408642769;
- Wed, 22 Jul 2020 02:04:02 -0700 (PDT)
+        bh=kinsg49RAoAeoKFx4gE6QT8ur/XktSQO/apO/E1SUuk=;
+        b=LmJiuzftqakQCsUz9BoY/+cdBPM+CFPY30kDtQZ52OZX0C2GNdsWfo8TyX1gSciark
+         IIAyd+U9RVB2mfxCdAVx6ZDEcpNbJF7Nq21H3B1v4EKAXduO8RYr9d5KW5cYqRdSPoj6
+         IaEZ6c+VGIVsKKJPn/DO0CtsrqraRNVrjEXcWkvgGT//hpT/LAOfcFhTvybh+xAcFmnB
+         /ivmFHGebNBzArd3KaFctV9O1fzTY/yffC1AkzFhoQTsNnC5MPmH33tVb2b7cThpOuAQ
+         CWlOpalFVShwkg8NBhQMbLvuHnVAi3v63F5jD90sXW4Mhhe0K/A64lM7Ut2MmWtK9iey
+         o0WA==
+X-Gm-Message-State: AOAM530Fu+vVpcgYgNL62qZifEaIUFlisGfAsPAaSPgoe2WzIhiQV7R6
+        Me8voT+6m4GVf1SXdGagJM6+1LPch1aRG1PEEnA=
+X-Google-Smtp-Source: ABdhPJww+U423trzUzEsoS7wlKp+8bFRoI7RJGcypygmuZnFcx1FEDMKYSEKzljd2WthEMxN7WTvoK/RR2PBeRitGoY=
+X-Received: by 2002:a67:d086:: with SMTP id s6mr24027045vsi.130.1595409536016;
+ Wed, 22 Jul 2020 02:18:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1594919915-5225-3-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20200722085849.GF1030@ninjato> <20200722090017.GG1030@ninjato>
-In-Reply-To: <20200722090017.GG1030@ninjato>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Wed, 22 Jul 2020 10:03:36 +0100
-Message-ID: <CA+V-a8vtCBYsDE2Tw4f-FgvfuZ3RUUNwEvfrbq-sv2+4H6VxNw@mail.gmail.com>
-Subject: Re: [PATCH 02/20] arm64: dts: renesas: r8a774e1: Add PCIe device nodes
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Mark Brown <broonie@kernel.org>,
-        Niklas <niklas.soderlund@ragnatech.se>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-ide@vger.kernel.org,
-        dmaengine <dmaengine@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        alsa-devel <alsa-devel@alsa-project.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-usb@vger.kernel.org
+References: <20200722031640.nobv2bfgex46sngo@pesu.pes.edu> <0000000000001fd19405aaffdc0a@google.com>
+ <20200722091201.2076-1-hdanton@sina.com>
+In-Reply-To: <20200722091201.2076-1-hdanton@sina.com>
+From:   B K Karthik <bk.bk2000.kb@gmail.com>
+Date:   Wed, 22 Jul 2020 14:48:44 +0530
+Message-ID: <CAOEiV1ehZoknZ6b-DOjYxwH2F8UpXO3WXByuM_FcPDOy6=RSSA@mail.gmail.com>
+Subject: Re: WARNING in pvr2_i2c_core_done
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     Markus.Elfring@web.de, andreyknvl@google.com,
+        bkkarthik@pesu.pes.edu, dan.carpenter@oracle.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, rafael@kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        syzbot <syzbot+e74a998ca8f1df9cc332@syzkaller.appspotmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Wolfram,
-
-On Wed, Jul 22, 2020 at 10:00 AM Wolfram Sang <wsa@kernel.org> wrote:
+On Wed, 22 Jul 2020 at 14:42, Hillf Danton <hdanton@sina.com> wrote:
 >
-> On Wed, Jul 22, 2020 at 10:58:49AM +0200, Wolfram Sang wrote:
-> > On Thu, Jul 16, 2020 at 06:18:17PM +0100, Lad Prabhakar wrote:
-> > > Add PCIe{0,1} device nodes for R8A774E1 SoC.
-> > >
-> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
+>
+> From: syzbot <syzbot+e74a998ca8f1df9cc332@syzkaller.appspotmail.com>
+>
+> Tue, 21 Jul 2020 21:06:10 -0700
+> > Hello,
 > >
-> > Hmm, doesn't apply on top of 5.8-rc6 for me. Is there a branch to pull
-> > for easier review?
+> > syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+> > general protection fault in kernfs_find_ns
+> >
+> > pvrusb2: Invalid write control endpoint
+> > pvrusb2: Invalid write control endpoint
+> > pvrusb2: Invalid write control endpoint
+> > pvrusb2: Invalid write control endpoint
+> > general protection fault, probably for non-canonical address 0xdffffc000000000e: 0000 [#1] SMP KASAN
+> > KASAN: null-ptr-deref in range [0x0000000000000070-0x0000000000000077]
+> > CPU: 0 PID: 78 Comm: pvrusb2-context Not tainted 5.7.0-syzkaller #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> > RIP: 0010:kernfs_find_ns+0x31/0x370 fs/kernfs/dir.c:829
+> > Code: 49 89 d6 41 55 41 54 55 48 89 fd 53 48 83 ec 08 e8 f4 61 af ff 48 8d 7d 70 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 1e 03 00 00 48 8d bd 98 00 00 00 48 8b 5d 70 48
+> > RSP: 0018:ffff8881d419f938 EFLAGS: 00010202
+> > RAX: dffffc0000000000 RBX: ffffffff863789c0 RCX: ffffffff85a79ba7
+> > RDX: 000000000000000e RSI: ffffffff81901d1c RDI: 0000000000000070
+> > RBP: 0000000000000000 R08: 0000000000000000 R09: ffffffff873ed1e7
+> > R10: fffffbfff0e7da3c R11: 0000000000000001 R12: 0000000000000000
+> > R13: 0000000000000000 R14: 0000000000000000 R15: ffffffff863790e0
+> > FS:  0000000000000000(0000) GS:ffff8881db200000(0000) knlGS:0000000000000000
+> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > CR2: 00007f3a7e248000 CR3: 00000001d2224000 CR4: 00000000001406f0
+> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > Call Trace:
+> >  kernfs_find_and_get_ns+0x2f/0x60 fs/kernfs/dir.c:906
+> >  kernfs_find_and_get include/linux/kernfs.h:548 [inline]
+> >  sysfs_unmerge_group+0x5d/0x160 fs/sysfs/group.c:366
+> >  dpm_sysfs_remove+0x62/0xb0 drivers/base/power/sysfs.c:790
 >
-> My fault, I missed the first series. Please note such dependencies in
-> the cover letter.
+> [3]
 >
-I didn't mention as they were already applied to Geert's tree [1]
+> >  device_del+0x18b/0xd20 drivers/base/core.c:2834
+> >  device_unregister+0x22/0xc0 drivers/base/core.c:2889
+> >  i2c_unregister_device include/linux/err.h:41 [inline]
+>
+> [2]
+>
+> >  i2c_client_dev_release+0x39/0x50 drivers/i2c/i2c-core-base.c:465
+> >  device_release+0x71/0x200 drivers/base/core.c:1559
+>
+> [1] kobject_del() goes before the release cb in kobject_cleanup() and
+> kobj is removed from sysfs, see [3] above.
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel.git/log/?h=renesas-arm-dt-for-v5.9
+Oh, thank you for letting me know about this. Forgive me, but I did
+not understand you very clearly.
+I presume you are saying that the second call to
+i2c_unregister_device() is where the problem occurs?
 
-Cheers,
---Prabhakar
+please let me know.
+thanks,
+
+karthik
