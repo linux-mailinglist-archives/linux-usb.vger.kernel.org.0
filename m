@@ -2,38 +2,38 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CA6F22B1A7
+	by mail.lfdr.de (Postfix) with ESMTP id 98FB722B1A8
 	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 16:43:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728873AbgGWOms (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jul 2020 10:42:48 -0400
+        id S1728891AbgGWOmt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jul 2020 10:42:49 -0400
 Received: from mga02.intel.com ([134.134.136.20]:12017 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728306AbgGWOmr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 23 Jul 2020 10:42:47 -0400
-IronPort-SDR: BM0/6T6AcsAlgTdgKchu2hYgufVgg7dJQwAxS63pTu23BBJh78PV8SugJYtztOqEhU312skTkB
- RAlZHbxh1PGQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9690"; a="138607456"
+        id S1728306AbgGWOmt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 23 Jul 2020 10:42:49 -0400
+IronPort-SDR: S+4CxdFjuSnJj5JHoKn2L1PrDmVD9HYa9SvhzS52C7rocQs/08zdHyZpKakr74y2VBFH+n7lWF
+ kteZtF0ISFrg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9690"; a="138607460"
 X-IronPort-AV: E=Sophos;i="5.75,386,1589266800"; 
-   d="scan'208";a="138607456"
+   d="scan'208";a="138607460"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2020 07:42:47 -0700
-IronPort-SDR: OazlnkZCLIHRwBaa3/pddOPUZXbreAeoSAeJ+UjXJ9kH/ybcRamqImlS4hQ3lcIDWyuZaJKgLp
- 5aaJ5s9OKcbA==
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2020 07:42:49 -0700
+IronPort-SDR: o2XDy40NAeuga/Zw0rp6jsLSdCRnmagWpFGgWjRkt0Q9Gv/D+Q1aknG+cSibU/h8ofsPAjJlW2
+ dZKIHNunc7pQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,386,1589266800"; 
-   d="scan'208";a="320672447"
+   d="scan'208";a="320672454"
 Received: from mattu-haswell.fi.intel.com ([10.237.72.170])
-  by fmsmga002.fm.intel.com with ESMTP; 23 Jul 2020 07:42:45 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 23 Jul 2020 07:42:47 -0700
 From:   Mathias Nyman <mathias.nyman@linux.intel.com>
 To:     <gregkh@linuxfoundation.org>
 Cc:     <linux-usb@vger.kernel.org>,
         Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 17/27] xhci: dbc: Use dbc structure in the request completion instead of xhci_hcd
-Date:   Thu, 23 Jul 2020 17:45:20 +0300
-Message-Id: <20200723144530.9992-18-mathias.nyman@linux.intel.com>
+Subject: [PATCH 18/27] xhci: dbc: Don't use generic xhci context allocation for dbc
+Date:   Thu, 23 Jul 2020 17:45:21 +0300
+Message-Id: <20200723144530.9992-19-mathias.nyman@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200723144530.9992-1-mathias.nyman@linux.intel.com>
 References: <20200723144530.9992-1-mathias.nyman@linux.intel.com>
@@ -42,145 +42,94 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The dbc request completion callback doesn't need a xhci_hcd pointer.
-The only user of the xhci_hcd pointer in dbgtty request callback was
-the xhci_warn() function. Change it to dev_warn() instead.
+The DbC context is different from the xhci device context.
+It's a lot smaller as it only contains three 64 bytes sub-contexts;
+the info, endpoint-out, and endpoint-in contexts. In total 192 bytes.
+The context size (CSZ) field in HCCPARAMS1 xhci register does not alter
+DbC context size like it does for xhci device contexts.
 
-While changing the callback function parameter to dbc in struct
-xhci_requeset, move the struct xhci_request declaraion down a bit in the
-header file to avoid compiler warinings
+So don't use the geneic xhci context memory allocation, or the
+dma pool that is intended for xhci device contexts.
 
-No functional changes
-This change helps decoupling xhci and DbC
+In addition to saving memory this also helps decoupleing xhci and dbc code.
 
 Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 ---
- drivers/usb/host/xhci-dbgcap.c |  5 ++---
- drivers/usb/host/xhci-dbgcap.h | 34 +++++++++++++++++-----------------
- drivers/usb/host/xhci-dbgtty.c | 10 ++++------
- 3 files changed, 23 insertions(+), 26 deletions(-)
+ drivers/usb/host/xhci-dbgcap.c | 33 ++++++++++++++++++++++++++++++---
+ 1 file changed, 30 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/usb/host/xhci-dbgcap.c b/drivers/usb/host/xhci-dbgcap.c
-index 26e693dd7414..2473100b955a 100644
+index 2473100b955a..fb56198d3aff 100644
 --- a/drivers/usb/host/xhci-dbgcap.c
 +++ b/drivers/usb/host/xhci-dbgcap.c
-@@ -114,8 +114,7 @@ static void xhci_dbc_giveback(struct dbc_request *req, int status)
- {
- 	struct dbc_ep		*dep = req->dep;
- 	struct xhci_dbc		*dbc = dep->dbc;
--	struct xhci_hcd		*xhci = dbc->xhci;
--	struct device		*dev = xhci_to_hcd(dbc->xhci)->self.sysdev;
-+	struct device		*dev = dbc->dev;
+@@ -14,6 +14,14 @@
+ #include "xhci-trace.h"
+ #include "xhci-dbgcap.h"
  
- 	list_del_init(&req->list_pending);
- 	req->trb_dma = 0;
-@@ -133,7 +132,7 @@ static void xhci_dbc_giveback(struct dbc_request *req, int status)
- 
- 	/* Give back the transfer request: */
- 	spin_unlock(&dbc->lock);
--	req->complete(xhci, req);
-+	req->complete(dbc, req);
- 	spin_lock(&dbc->lock);
- }
- 
-diff --git a/drivers/usb/host/xhci-dbgcap.h b/drivers/usb/host/xhci-dbgcap.h
-index dc7d2d157e7b..9e3c5940f27b 100644
---- a/drivers/usb/host/xhci-dbgcap.h
-+++ b/drivers/usb/host/xhci-dbgcap.h
-@@ -84,23 +84,6 @@ enum dbc_state {
- 	DS_STALLED,
- };
- 
--struct dbc_request {
--	void				*buf;
--	unsigned int			length;
--	dma_addr_t			dma;
--	void				(*complete)(struct xhci_hcd *xhci,
--						    struct dbc_request *req);
--	struct list_head		list_pool;
--	int				status;
--	unsigned int			actual;
--
--	struct dbc_ep			*dep;
--	struct list_head		list_pending;
--	dma_addr_t			trb_dma;
--	union xhci_trb			*trb;
--	unsigned			direction:1;
--};
--
- struct dbc_ep {
- 	struct xhci_dbc			*dbc;
- 	struct list_head		list_pending;
-@@ -154,6 +137,23 @@ struct xhci_dbc {
- 	struct dbc_port			port;
- };
- 
-+struct dbc_request {
-+	void				*buf;
-+	unsigned int			length;
-+	dma_addr_t			dma;
-+	void				(*complete)(struct xhci_dbc *dbc,
-+						    struct dbc_request *req);
-+	struct list_head		list_pool;
-+	int				status;
-+	unsigned int			actual;
++static void dbc_free_ctx(struct device *dev, struct xhci_container_ctx *ctx)
++{
++	if (!ctx)
++		return;
++	dma_free_coherent(dev, ctx->size, ctx->bytes, ctx->dma);
++	kfree(ctx);
++}
 +
-+	struct dbc_ep			*dep;
-+	struct list_head		list_pending;
-+	dma_addr_t			trb_dma;
-+	union xhci_trb			*trb;
-+	unsigned			direction:1;
-+};
+ static u32 xhci_dbc_populate_strings(struct dbc_str_descs *strings)
+ {
+ 	struct usb_string_descriptor	*s_desc;
+@@ -364,6 +372,25 @@ static void dbc_erst_free(struct device *dev, struct xhci_erst *erst)
+ 	erst->entries = NULL;
+ }
+ 
++static struct xhci_container_ctx *
++dbc_alloc_ctx(struct device *dev, gfp_t flags)
++{
++	struct xhci_container_ctx *ctx;
 +
- #define dbc_bulkout_ctx(d)		\
- 	((struct xhci_ep_ctx *)((d)->ctx->bytes + DBC_CONTEXT_SIZE))
- #define dbc_bulkin_ctx(d)		\
-diff --git a/drivers/usb/host/xhci-dbgtty.c b/drivers/usb/host/xhci-dbgtty.c
-index 0ef48862f4a7..967f0419dad7 100644
---- a/drivers/usb/host/xhci-dbgtty.c
-+++ b/drivers/usb/host/xhci-dbgtty.c
-@@ -91,10 +91,9 @@ static void dbc_start_rx(struct dbc_port *port)
- }
- 
- static void
--dbc_read_complete(struct xhci_hcd *xhci, struct dbc_request *req)
-+dbc_read_complete(struct xhci_dbc *dbc, struct dbc_request *req)
++	ctx = kzalloc(sizeof(*ctx), flags);
++	if (!ctx)
++		return NULL;
++
++	/* xhci 7.6.9, all three contexts; info, ep-out and ep-in. Each 64 bytes*/
++	ctx->size = 3 * DBC_CONTEXT_SIZE;
++	ctx->bytes = dma_alloc_coherent(dev, ctx->size, &ctx->dma, flags);
++	if (!ctx->bytes) {
++		kfree(ctx);
++		return NULL;
++	}
++	return ctx;
++}
++
+ static int xhci_dbc_mem_init(struct xhci_hcd *xhci, gfp_t flags)
  {
- 	unsigned long		flags;
--	struct xhci_dbc		*dbc = xhci->dbc;
- 	struct dbc_port		*port = &dbc->port;
+ 	int			ret;
+@@ -391,7 +418,7 @@ static int xhci_dbc_mem_init(struct xhci_hcd *xhci, gfp_t flags)
+ 		goto erst_fail;
  
- 	spin_lock_irqsave(&port->port_lock, flags);
-@@ -103,10 +102,9 @@ dbc_read_complete(struct xhci_hcd *xhci, struct dbc_request *req)
- 	spin_unlock_irqrestore(&port->port_lock, flags);
- }
+ 	/* Allocate context data structure: */
+-	dbc->ctx = xhci_alloc_container_ctx(xhci, XHCI_CTX_TYPE_DEVICE, flags);
++	dbc->ctx = dbc_alloc_ctx(dev, flags); /* was sysdev, and is still */
+ 	if (!dbc->ctx)
+ 		goto ctx_fail;
  
--static void dbc_write_complete(struct xhci_hcd *xhci, struct dbc_request *req)
-+static void dbc_write_complete(struct xhci_dbc *dbc, struct dbc_request *req)
- {
- 	unsigned long		flags;
--	struct xhci_dbc		*dbc = xhci->dbc;
- 	struct dbc_port		*port = &dbc->port;
+@@ -420,7 +447,7 @@ static int xhci_dbc_mem_init(struct xhci_hcd *xhci, gfp_t flags)
+ 	return 0;
  
- 	spin_lock_irqsave(&port->port_lock, flags);
-@@ -118,7 +116,7 @@ static void dbc_write_complete(struct xhci_hcd *xhci, struct dbc_request *req)
- 	case -ESHUTDOWN:
- 		break;
- 	default:
--		xhci_warn(xhci, "unexpected write complete status %d\n",
-+		dev_warn(dbc->dev, "unexpected write complete status %d\n",
- 			  req->status);
- 		break;
+ string_fail:
+-	xhci_free_container_ctx(xhci, dbc->ctx);
++	dbc_free_ctx(dev, dbc->ctx);
+ 	dbc->ctx = NULL;
+ ctx_fail:
+ 	dbc_erst_free(dev, &dbc->erst);
+@@ -453,7 +480,7 @@ static void xhci_dbc_mem_cleanup(struct xhci_hcd *xhci)
+ 		dbc->string = NULL;
  	}
-@@ -133,7 +131,7 @@ static void xhci_dbc_free_req(struct dbc_ep *dep, struct dbc_request *req)
  
- static int
- xhci_dbc_alloc_requests(struct dbc_ep *dep, struct list_head *head,
--			void (*fn)(struct xhci_hcd *, struct dbc_request *))
-+			void (*fn)(struct xhci_dbc *, struct dbc_request *))
- {
- 	int			i;
- 	struct dbc_request	*req;
+-	xhci_free_container_ctx(xhci, dbc->ctx);
++	dbc_free_ctx(dbc->dev, dbc->ctx);
+ 	dbc->ctx = NULL;
+ 
+ 	dbc_erst_free(dev, &dbc->erst);
 -- 
 2.17.1
 
