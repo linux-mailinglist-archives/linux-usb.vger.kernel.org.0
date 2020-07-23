@@ -2,136 +2,174 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C98422A66C
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 06:18:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A64CF22A6DE
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 07:19:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726379AbgGWESZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jul 2020 00:18:25 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:56781 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725873AbgGWESZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jul 2020 00:18:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1595477903;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Wwl4F50oKkswHT9apgjy+aI/48kVRlBCaDpskw3i4WE=;
-        b=c2rXJXFt1vPqPPfdjuyVVJl8M7HHJYUP9HSnnO8SdZm09gdmkBUSV4uFsldZWXRMbHGZfl
-        qTsvypO3dy+hLsTKtgdc+QnNkSxPbg0zwx1P6xXyVIQVUPNuhUA7x7rtJVPDX6xsOC80iy
-        xXHllEJmAtoqVLghS1QiflnhaQRUFog=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-192-dBpKknZyOf2oV-LpXVbrVg-1; Thu, 23 Jul 2020 00:18:21 -0400
-X-MC-Unique: dBpKknZyOf2oV-LpXVbrVg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E5706106B245;
-        Thu, 23 Jul 2020 04:18:18 +0000 (UTC)
-Received: from x1.home (ovpn-112-71.phx2.redhat.com [10.3.112.71])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 918D888D41;
-        Thu, 23 Jul 2020 04:18:17 +0000 (UTC)
-Date:   Wed, 22 Jul 2020 22:18:17 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     "Weitao Wang(BJ-RD)" <WeitaoWang@zhaoxin.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        WeitaoWang-oc <WeitaoWang-oc@zhaoxin.com>,
-        "mathias.nyman@linux.intel.com" <mathias.nyman@linux.intel.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "hslester96@gmail.com" <hslester96@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Carsten_Schmid@mentor.com" <Carsten_Schmid@mentor.com>,
-        "efremov@linux.com" <efremov@linux.com>,
-        "Tony W. Wang(XA-RD)" <TonyWWang@zhaoxin.com>,
-        "Cobe Chen(BJ-RD)" <CobeChen@zhaoxin.com>,
-        "Tim Guo(BJ-RD)" <TimGuo@zhaoxin.com>,
-        "wwt8723@163.com" <wwt8723@163.com>
-Subject: Re: [PATCH] USB:Fix kernel NULL pointer when unbind UHCI form
- vfio-pci
-Message-ID: <20200722221817.542971a2@x1.home>
-In-Reply-To: <1bf449377e3448bc9c8bc7b64d7b7990@zhaoxin.com>
-References: <1595419068-4812-1-git-send-email-WeitaoWang-oc@zhaoxin.com>
-        <20200722124414.GA3153105@kroah.com>
-        <20200722145913.GB1310843@rowland.harvard.edu>
-        <1bf449377e3448bc9c8bc7b64d7b7990@zhaoxin.com>
-Organization: Red Hat
+        id S1726501AbgGWFTy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jul 2020 01:19:54 -0400
+Received: from mga18.intel.com ([134.134.136.126]:43732 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726010AbgGWFTy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 23 Jul 2020 01:19:54 -0400
+IronPort-SDR: XsvtZdMhk0VfEjgKWxRJtLLnyT5LgLhCnAerio/SOJCfeE+mj6eMonUoVac6zZoFVJw8PVKigV
+ x53Ml8X9gsIQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9690"; a="137966306"
+X-IronPort-AV: E=Sophos;i="5.75,385,1589266800"; 
+   d="scan'208";a="137966306"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2020 22:19:53 -0700
+IronPort-SDR: 6u+fbQyrlXEYuWMxbKRj7w9ipU/+K0uh3VjDyFZtqXE82Z1KDTHy91oqfh6pqnEdpkuF18Ibvj
+ /dKxjPNW9rEg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,385,1589266800"; 
+   d="scan'208";a="432618824"
+Received: from lkp-server01.sh.intel.com (HELO 7a9a14fb1d52) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 22 Jul 2020 22:19:52 -0700
+Received: from kbuild by 7a9a14fb1d52 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1jyTe3-0000Cq-Gy; Thu, 23 Jul 2020 05:19:51 +0000
+Date:   Thu, 23 Jul 2020 13:19:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ c17536d0abde2fd24afca542e3bb73b45a299633
+Message-ID: <5f191ddd.hAAX174ugpR0bXKg%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 23 Jul 2020 02:59:55 +0000
-"Weitao Wang(BJ-RD)" <WeitaoWang@zhaoxin.com> wrote:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
+branch HEAD: c17536d0abde2fd24afca542e3bb73b45a299633  usb: usbfs: stop using compat_alloc_user_space
 
-> On , Jul 22, 2020 at 02:44:14PM +0200, Alan wrote:
-> > On Wed, Jul 22, 2020 at 02:44:14PM +0200, Greg KH wrote: =20
-> > > On Wed, Jul 22, 2020 at 07:57:48PM +0800, WeitaoWangoc wrote: =20
-> > > > This bug is found in Zhaoxin platform, but it's a commom code bug.
-> > > > Fail sequence:
-> > > > step1: Unbind UHCI controller from native driver;
-> > > > step2: Bind UHCI controller to vfio-pci, which will put UHCI contro=
-ller in one =20
-> > vfio =20
-> > > >        group's device list and set UHCI's dev->driver_data to struc=
-t =20
-> > vfio-pci(for UHCI) =20
-> > >
-> > > Hah, that works?  How do you do that properly?  What code does that? =
-=20
-> >
-> > Yeah, that can't possibly work.  The USB core expects that any host
-> > controller device (or at least, any PCI host controller device) has its
-> > driver_data set to point to a struct usb_hcd.  It doesn't expect a host
-> > controller to be bound to anything other than a host controller driver.
-> >
-> > Things could easily go very wrong here.  For example, suppose at this
-> > point the ehci-hcd driver just happens to bind to the EHCI controller.
-> > When this happens, the EHCI controller hardware takes over all the USB
-> > connections that were routed to the UHCI controller.  How will vfio-pci
-> > deal with that?  Pretty ungracefully, I imagine.
+elapsed time: 1079m
 
-The issue I believe we're seeing here is not with vfio-pci trying to do
-anything with the device, the IOMMU grouping would prevent a user from
-opening any device within the group while other devices within the
-group are bound to host drivers.  So it should be fine if the EHCI
-device takes over the other ports, but it's not ok that ehci-hcd
-assumes the driver private data for any other UHCI/OHCI/EHCI device in
-the same slot is something that it's free to modify.  It really seems
-there should be some sort of companion device registration/opt-in
-rather than modifying unvalidated data.
+configs tested: 112
+configs skipped: 4
 
-> > The only way to make this work at all is to unbind both uhci-hcd and
-> > ehci-hcd first.  Then after both are finished you can safely bind
-> > vfio-pci to the EHCI controller and the UHCI controllers (in that
-> > order).
-> > =20
-> I'm agree with you, unbind both uhci-hcd and ehci-hcd first then bind to
-> vfio-pci is a more reasonable sequence. Our experiments prove that this
-> sequence is indeed good as expected.
-> However, I did not find a formal document to prescribe this order.
-> Unfortunately, some application software such as virt-manager/qemu assign
-> UHCI/EHCI to guest OS has the same bind/unbind sequence as test =E2=80=9C=
-by hand=E2=80=9D.
-> Do we need to consider compatibility with this application scenario?
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Unbinding all functions first, before binding any to vfio-pci should
-indeed work, thanks to the for_each_companion() function at least
-testing for null private data before going further.  I'd still argue
-though that these hcd drivers are overstepping their authority by
-walking the PCI bus and assuming any device in the same slot, matching
-a set of class codes, is making use of a driver with a known data
-structure that they're allowed to modify.  Even if we claim that the
-user needs to know what they're doing when they change driver binding,
-that's a pretty subtle interaction with no validation.  Thanks,
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                               allnoconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+c6x                                 defconfig
+c6x                        evmc6474_defconfig
+sh                               alldefconfig
+mips                         bigsur_defconfig
+arm                           sama5_defconfig
+arm                           omap1_defconfig
+mips                            e55_defconfig
+c6x                         dsk6455_defconfig
+m68k                         amcore_defconfig
+arm                          simpad_defconfig
+mips                   sb1250_swarm_defconfig
+arm                         shannon_defconfig
+arm                      footbridge_defconfig
+s390                             alldefconfig
+sparc64                           allnoconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                              debian-10.3
+i386                              allnoconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                              allnoconfig
+m68k                           sun3_defconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+nios2                            allyesconfig
+openrisc                            defconfig
+c6x                              allyesconfig
+c6x                               allnoconfig
+openrisc                         allyesconfig
+nds32                               defconfig
+nds32                             allnoconfig
+csky                             allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+h8300                            allmodconfig
+xtensa                              defconfig
+arc                                 defconfig
+arc                              allyesconfig
+sh                               allmodconfig
+sh                                allnoconfig
+microblaze                        allnoconfig
+mips                             allyesconfig
+mips                              allnoconfig
+mips                             allmodconfig
+parisc                            allnoconfig
+parisc                              defconfig
+parisc                           allyesconfig
+parisc                           allmodconfig
+powerpc                          allyesconfig
+powerpc                          rhel-kconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+powerpc                             defconfig
+x86_64               randconfig-a005-20200719
+x86_64               randconfig-a002-20200719
+x86_64               randconfig-a006-20200719
+x86_64               randconfig-a001-20200719
+x86_64               randconfig-a003-20200719
+x86_64               randconfig-a004-20200719
+i386                 randconfig-a001-20200719
+i386                 randconfig-a006-20200719
+i386                 randconfig-a002-20200719
+i386                 randconfig-a005-20200719
+i386                 randconfig-a003-20200719
+i386                 randconfig-a004-20200719
+i386                 randconfig-a003-20200721
+i386                 randconfig-a005-20200721
+i386                 randconfig-a004-20200721
+i386                 randconfig-a006-20200721
+i386                 randconfig-a002-20200721
+i386                 randconfig-a001-20200721
+i386                 randconfig-a015-20200719
+i386                 randconfig-a011-20200719
+i386                 randconfig-a016-20200719
+i386                 randconfig-a012-20200719
+i386                 randconfig-a013-20200719
+i386                 randconfig-a014-20200719
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+s390                             allyesconfig
+s390                              allnoconfig
+s390                             allmodconfig
+s390                                defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+sparc64                             defconfig
+sparc64                          allyesconfig
+sparc64                          allmodconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                               rhel-8.3
+x86_64                                  kexec
+x86_64                                   rhel
+x86_64                                    lkp
+x86_64                              fedora-25
 
-Alex
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
