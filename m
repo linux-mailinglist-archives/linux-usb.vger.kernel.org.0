@@ -2,179 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2F6622A530
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 04:19:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C72E422A5E6
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 05:14:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387625AbgGWCTV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Jul 2020 22:19:21 -0400
-Received: from mail-eopbgr60087.outbound.protection.outlook.com ([40.107.6.87]:43653
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2387433AbgGWCTV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 22 Jul 2020 22:19:21 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gaAUuREMQVK9CRdSRrxR78d8L/7lYIcqTgerQcApbviO+kPbGUthl5g19uIxa8aGTKk/yDiqXh7n6t/IN0zYtMxz65nD+A2i9yGwX9u0L/7Aw95kEFSBwFXm1gkmZe54BdxLu3PEXPZ6llw4Lxwb5uzD+FM8fgzp/S+SuDRklDnynls/hbgcKydkzrkEeMBXm63IF/4hkU+dn8bMbfIUPIU9rfhcus4jg0sq5mO1Iu83cxWvC+6B+GtHJNsRHkLpHXC0STcG82DejsUGY02axKI+AJ9sy4skida1Bk4CVbGvGjVGeEVkhJiTPclH6kal9CzthdN9xbso9GF/W7AEmQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nbSYGYn9kPuw2JEQMQU15e9KreQ4lyWKpfWmdOakOnM=;
- b=PkYEj3oVhX/8bO+p9FDrn6Jdnmg/eicMKCF89R062Oe26qCXXb2vcUZg/RMcS1pVvkLYEV73rnuCQFvnzpWl3Jsxiw/zneQKI3vc2JbCLRFEQeW8MLzwD01Pe+m8psG6NqUHXGLD8pfzBmXxEHw9v671geFW5tUI1XyxNq+bv0VAPrlQbXlp8R35FbsISx6IiUvEtwjJ0EkHKbIeU/SVMlq8LdOI95jOS/fZGn4e2mLUcjJl/TSmG4SaLUlUJhotbwtEm8gr9F0HouoF0PbPtIYTTnGOzDj+5FrcKNV7ISyD9XviOl6u2bCnZj8GZ1zXdtdkg8ho/4P19l8/Zqj3hw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nbSYGYn9kPuw2JEQMQU15e9KreQ4lyWKpfWmdOakOnM=;
- b=UeS3OhqZqpXs2FCJ1Ue/h9nj8E2redwp3UbECOhuQ1pBN9b+iqIPhHY6RZyT+GA7VRMVLEQfgRtBpOX6g+SNW0in/PKxxK72+qHqYeIsS6jt5AS2HBRbNDdHm98BYRPmEQjvrYUF9vvO7GsYP6Qpjse5aYqwgYOYvo+kBpQxGrU=
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
- by AM6PR04MB5736.eurprd04.prod.outlook.com (2603:10a6:20b:a8::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3216.20; Thu, 23 Jul
- 2020 02:19:17 +0000
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::539:3d00:4c6:c4a0]) by AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::539:3d00:4c6:c4a0%3]) with mapi id 15.20.3216.023; Thu, 23 Jul 2020
- 02:19:17 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Bastien Nocera <hadess@hadess.net>
-CC:     Alan Stern <stern@rowland.harvard.edu>,
+        id S2387634AbgGWDOD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jul 2020 23:14:03 -0400
+Received: from ZXSHCAS1.zhaoxin.com ([203.148.12.81]:31809 "EHLO
+        ZXSHCAS1.zhaoxin.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728902AbgGWDOC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jul 2020 23:14:02 -0400
+X-Greylist: delayed 903 seconds by postgrey-1.27 at vger.kernel.org; Wed, 22 Jul 2020 23:14:01 EDT
+Received: from zxbjmbx3.zhaoxin.com (10.29.252.165) by ZXSHCAS1.zhaoxin.com
+ (10.28.252.161) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3; Thu, 23 Jul
+ 2020 10:58:55 +0800
+Received: from zxbjmbx2.zhaoxin.com (10.29.252.164) by zxbjmbx3.zhaoxin.com
+ (10.29.252.165) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3; Thu, 23 Jul
+ 2020 10:58:55 +0800
+Received: from zxbjmbx2.zhaoxin.com ([fe80::4d77:9dba:64a8:8ec3]) by
+ zxbjmbx2.zhaoxin.com ([fe80::4d77:9dba:64a8:8ec3%4]) with mapi id
+ 15.01.1979.003; Thu, 23 Jul 2020 10:58:55 +0800
+From:   "Weitao Wang(BJ-RD)" <WeitaoWang@zhaoxin.com>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        WeitaoWang-oc <WeitaoWang-oc@zhaoxin.com>
+CC:     "mathias.nyman@linux.intel.com" <mathias.nyman@linux.intel.com>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "hslester96@gmail.com" <hslester96@gmail.com>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH 1/2] USB: Fix device driver race
-Thread-Topic: [PATCH 1/2] USB: Fix device driver race
-Thread-Index: AQHWYA0AzAqBUavxXE2biSfq3fmPF6kTuOQAgAAHeYCAAK7OAA==
-Date:   Thu, 23 Jul 2020 02:19:17 +0000
-Message-ID: <20200723021904.GA5798@b29397-desktop>
-References: <20200722094628.4236-1-hadess@hadess.net>
- <20200722152640.GC1310843@rowland.harvard.edu>
- <407a8732f7e124e623f8687729d4d4775dd8ab27.camel@hadess.net>
-In-Reply-To: <407a8732f7e124e623f8687729d4d4775dd8ab27.camel@hadess.net>
-Accept-Language: en-US
-Content-Language: en-US
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Carsten_Schmid@mentor.com" <Carsten_Schmid@mentor.com>,
+        "efremov@linux.com" <efremov@linux.com>,
+        "Tony W. Wang(XA-RD)" <TonyWWang@zhaoxin.com>,
+        "Cobe Chen(BJ-RD)" <CobeChen@zhaoxin.com>,
+        "Tim Guo(BJ-RD)" <TimGuo@zhaoxin.com>,
+        "wwt8723@163.com" <wwt8723@163.com>
+Subject: =?gb2312?B?tPC4tDogW1BBVENIXSBVU0I6Rml4IGtlcm5lbCBOVUxMIHBvaW50ZXIgd2hl?=
+ =?gb2312?Q?n_unbind_UHCI_form_vfio-pci?=
+Thread-Topic: [PATCH] USB:Fix kernel NULL pointer when unbind UHCI form
+ vfio-pci
+Thread-Index: AQHWYB9UCUIuPM0Yq0GNAP42GB7Bv6kTBUEAgAFuGyA=
+Date:   Thu, 23 Jul 2020 02:58:54 +0000
+Message-ID: <e09986ccb3de4b219d1768e24dd89aa8@zhaoxin.com>
+References: <1595419068-4812-1-git-send-email-WeitaoWang-oc@zhaoxin.com>
+ <20200722124414.GA3153105@kroah.com>
+In-Reply-To: <20200722124414.GA3153105@kroah.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-authentication-results: hadess.net; dkim=none (message not signed)
- header.d=none;hadess.net; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.67]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 5c532ee4-e315-429f-2913-08d82eaecd2a
-x-ms-traffictypediagnostic: AM6PR04MB5736:
-x-microsoft-antispam-prvs: <AM6PR04MB5736F8C67DD3A673CB8621498B760@AM6PR04MB5736.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5236;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 0Kc++GpKgskckvl6HrxmgoVBWcE7vlA8iGuRFOrTf5tbxGWaw/Cx4u1NCIGUh5fkbQwEp6GVXa9MuF8IrjQwrRsc5dP5RhbdfetCsS1jEsEJ5oDNaBoPZwRHrfT3vF0IxCUJulbdxDNYNVy+ZqQRUUGb4/YTn6bH86JO59kCfEEbwrt6XkgDXQUlAeSaTqjRpkA5+rv1ZDb+gjOHj8dIANewf4UnTDLLqK4Tfj675iMZQdcj0DPKMy5EbH4i4RjwSZ6SBDK0PjRIuR6hE8PlW24YGBLFbs4uxvDw0Ig+CMxJ+UFZAtG9OI82TqdPHuhlqEMp3N6VEP9K0w5jfgOVcQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(7916004)(39860400002)(396003)(366004)(346002)(376002)(136003)(33656002)(33716001)(54906003)(26005)(316002)(1076003)(71200400001)(8936002)(2906002)(86362001)(5660300002)(4326008)(66556008)(64756008)(6486002)(478600001)(6916009)(6512007)(8676002)(9686003)(186003)(76116006)(91956017)(66946007)(83380400001)(66476007)(44832011)(6506007)(66446008)(53546011);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: A2OQl5+qXOA5g9FiVG8UXZxcmigW3L3Fy0LQys+FKz3W9oiluOJd9rWsKxTWYFJRDWIkXllLFYjBie17fwOflMtVHMMx9F3/ClwuDVnING63/d/SgRHkKs12g6GQuv7YVZR6Tmg1QurF7p8h5++UIINHT3ZpaG0KACIyge16VGE/QWKyVu+blObYxi3/WWcP1x2oCm0RJPzaSQCKAGzWixeelT6EGvzEc1/REthLmaryHVrTBh9qiUKtCLj/LyXaXIycgcPvBh5pAImsgEUPAsr9dJQ4SbqmAmNivSLAZ6Vs43u0qlip8LAEI4pWnGVrWD7O5PdaBCd6PH6/P7jSYi31lmOIxKSzCNb+uGuSGX16YIFLSXs+Z14L8phcR6JF09/SKRPc7dVMNjuw1U2VykM9JzhoRdg0d9MH3EniK6qzzrxKeDBEUK9WD9bygJPX9wiXqcVP6e+JL/CKr8YCaa+HF9ipux+PzbqM8IoffOo=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <E68DEB9A0429C84EB5F5F0FE8B2F9096@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+x-originating-ip: [10.29.8.32]
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5c532ee4-e315-429f-2913-08d82eaecd2a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jul 2020 02:19:17.3438
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: lnkCLMOBFpHWapqwCP3w1B2p7ameieakJzbVbKpZt9IOCP+h/bGpJOJOz9Ws90YiQhEeBMD00SepwoC68br2kQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB5736
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-07-22 17:53:25, Bastien Nocera wrote:
-> On Wed, 2020-07-22 at 11:26 -0400, Alan Stern wrote:
-> > On Wed, Jul 22, 2020 at 11:46:27AM +0200, Bastien Nocera wrote:
-> > > When a new device with a specialised device driver is plugged in,
-> > > the
-> > > new driver will be modprobe()'d but the driver core will attach the
-> > > "generic" driver to the device.
-> > >=20
-> > > After that, nothing will trigger a reprobe when the modprobe()'d
-> > > device
-> > > driver has finished initialising, as the device has the "generic"
-> > > driver attached to it.
-> > >=20
-> > > Trigger a reprobe ourselves when new specialised drivers get
-> > > registered.
-> > >=20
-> > > Signed-off-by: Bastien Nocera <hadess@hadess.net>
-> > > ---
-> > >  drivers/usb/core/driver.c | 31 +++++++++++++++++++++++++++++--
-> > >  1 file changed, 29 insertions(+), 2 deletions(-)
-> > >=20
-> > > diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-> > > index f81606c6a35b..a6187dd2186c 100644
-> > > --- a/drivers/usb/core/driver.c
-> > > +++ b/drivers/usb/core/driver.c
-> > > @@ -905,6 +905,30 @@ static int usb_uevent(struct device *dev,
-> > > struct kobj_uevent_env *env)
-> > >  	return 0;
-> > >  }
-> > > =20
-> > > +static int __usb_bus_reprobe_drivers(struct device *dev, void
-> > > *data)
-> > > +{
-> > > +	struct usb_device_driver *udriver =3D to_usb_device_driver(dev-
-> > > >driver);
-> > > +	struct usb_device *udev =3D to_usb_device(dev);
-> > > +
-> > > +	if (udriver =3D=3D &usb_generic_driver &&
-> > > +	    !udev->use_generic_driver)
-> > > +		return device_reprobe(dev);
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static int __usb_device_driver_added(struct device_driver *drv,
-> > > void *data)
-> > > +{
-> > > +	struct usb_device_driver *udrv =3D to_usb_device_driver(drv);
-> > > +
-> > > +	if (udrv->match) {
-> > > +		bus_for_each_dev(&usb_bus_type, NULL, udrv,
-> > > +				 __usb_bus_reprobe_drivers);
-> >=20
-> > What does udrv get used for here?
-> >=20
-> > > +	}
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > >  /**
-> > >   * usb_register_device_driver - register a USB device (not
-> > > interface) driver
-> > >   * @new_udriver: USB operations for the device driver
-> > > @@ -934,13 +958,16 @@ int usb_register_device_driver(struct
-> > > usb_device_driver *new_udriver,
-> > > =20
-> > >  	retval =3D driver_register(&new_udriver->drvwrap.driver);
-> > > =20
-> > > -	if (!retval)
-> > > +	if (!retval) {
-> > > +		bus_for_each_drv(&usb_bus_type, NULL, NULL,
-> > > +				 __usb_device_driver_added);
-> >=20
-> > This looks funny.  You're calling both bus_for_each_drv() and=20
-> > bus_for_each_dev().  Can't you skip this iterator and just call=20
-> > bus_for_each_dev() directly?
->=20
-> You're right, looks like this could be simplified somewhat. I'm
-> building and testing a smaller patch.
->=20
-
-What do you mean "reprobe" for your device? Do you mean the mfi_fc_probe
-is not called? If it is, Would you please check why usb_device_match
-at drivers/usb/core/driver.c does not return true for your device?
-
---=20
-
-Thanks,
-Peter Chen=
+oaGhoQ0KT24gV2VkLCBKdWwgMjIsIDIwMjAgYXQgMDI6NDQ6MTRQTSArMDIwMCwgR3JlZyBLSCB3
+cm90ZToNCj4gT24gV2VkLCBKdWwgMjIsIDIwMjAgYXQgMDc6NTc6NDhQTSArMDgwMCwgV2VpdGFv
+V2FuZ29jIHdyb3RlOg0KPiA+IFRoaXMgYnVnIGlzIGZvdW5kIGluIFpoYW94aW4gcGxhdGZvcm0s
+IGJ1dCBpdCdzIGEgY29tbW9tIGNvZGUgYnVnLg0KPiA+IEZhaWwgc2VxdWVuY2U6DQo+ID4gc3Rl
+cDE6IFVuYmluZCBVSENJIGNvbnRyb2xsZXIgZnJvbSBuYXRpdmUgZHJpdmVyOw0KPiA+IHN0ZXAy
+OiBCaW5kIFVIQ0kgY29udHJvbGxlciB0byB2ZmlvLXBjaSwgd2hpY2ggd2lsbCBwdXQgVUhDSSBj
+b250cm9sbGVyIGluIG9uZQ0KPiB2ZmlvDQo+ID4gICAgICAgIGdyb3VwJ3MgZGV2aWNlIGxpc3Qg
+YW5kIHNldCBVSENJJ3MgZGV2LT5kcml2ZXJfZGF0YSB0byBzdHJ1Y3QNCj4gdmZpby1wY2koZm9y
+IFVIQ0kpDQo+DQo+IEhhaCwgdGhhdCB3b3Jrcz8gIEhvdyBkbyB5b3UgZG8gdGhhdCBwcm9wZXJs
+eT8gIFdoYXQgY29kZSBkb2VzIHRoYXQ/DQoNCkRyaXZlcnMvdmZpby92ZmlvLmMNClRoZSBmdW5j
+dGlvbiB2ZmlvX2dyb3VwX2NyZWF0ZV9kZXZpY2Ugd2lsbCBzZXQgVUhDSSBkZXYtPmRyaXZlcl9k
+YXRhDQp0byB2ZmlvLWRldmljZSBzdHJ1Y3QuDQoNCj4gPiBzdGVwMzogVW5iaW5kIEVIQ0kgY29u
+dHJvbGxlciBmcm9tIG5hdGl2ZSBkcml2ZXIsIHdpbGwgdHJ5IHRvIHRlbGwgVUhDSSBuYXRpdmUN
+Cj4gZHJpdmVyDQo+ID4gICAgICAgIHRoYXQgIkknbSByZW1vdmVkIGJ5IHNldCBjb21wYW5pb25f
+aGNkLT5zZWxmLmhzX2NvbXBhbmlvbiB0bw0KPiBOVUxMLiBIb3dldmVyLA0KPiA+ICAgICAgICBj
+b21wYW5pb25faGNkIGdldCBmcm9tIFVIQ0kncyBkZXYtPmRyaXZlcl9kYXRhIHRoYXQgaGFzIG1v
+ZGlmaWVkDQo+IGJ5IHZmaW8tcGNpDQo+ID4gICAgICAgIGFscmVhZHkuU28sIHRoZSB2ZmlvLXBj
+aSBzdHJ1Y3R1cmUgd2lsbCBiZSBkYW1hZ2VkIQ0KPg0KPiBCZWNhdXNlIHlvdSBhcmUgbWVzc2lu
+ZyBhcm91bmQgd2l0aCBiaW5kL3VuYmluZCAiYnkgaGFuZCIsIHdoaWNoIGlzDQo+IG5ldmVyIGd1
+YXJhbnRlZWQgdG8gd29yayBwcm9wZXJseS4NCj4NCj4gSXQncyBhbWF6aW5nIGFueSBvZiB0aGF0
+IHdvcmtzIGF0IGFsbC4uLg0KDQpJZiBhZGp1c3QgdGhlIHNlcXVlbmNlIG9mIFVIQ0kvRUhDSSB1
+bmJpbmQgZm9ybSBuYXRpdmUgZHJpdmVyLCB0aGF0DQpjYW4gYXZvaWQgTnVsbCBQb2ludGVyIGRl
+cmVmZXJlbmNlLiBFZy4gU3RlcDMtLT5zdGV0NC0tPnN0ZXAxLS0+c3RlcDIuDQpPdXIgZXhwZXJp
+bWVudHMgcHJvdmUgdGhhdCB0aGlzIHNlcXVlbmNlIGlzIGluZGVlZCBnb29kIGFzIGV4cGVjdGVk
+Lg0KSG93ZXZlciwgc29tZSBhcHBsaWNhdGlvbiBzb2Z0d2FyZSBzdWNoIGFzIHZpcnQtbWFuYWdl
+ci9xZW11IGFzc2lnbg0KL0VIQ0kgdG8gZ3Vlc3QgT1MgaGFzIHRoZSBzYW1lIGJpbmQvdW5iaW5k
+IHNlcXVlbmNlIGFzIHRlc3QgobBieSBoYW5kobEuDQoNCj4gNC4xOS42NS0yMDIwMDUxOTE3LXJh
+aW5vcyAjMQ0KPg0KPiA0LjE5IGlzIGEgYml0IG9sZCwgd2hhdCBhYm91dCA1Ljc/DQoNCjUuNy43
+IGhhcyB0aGUgc2FtZSBpc3N1ZS4NCg0KPiA+ICsjZGVmaW5lIFBDSV9ERVZfRFJWX0ZMQUcgICAg
+ICAgMg0KPg0KPiBXaHkgaXMgdGhlIFVTQiBjb3JlIGFsbG93ZWQgdG8gdG91Y2ggYSBwcml2YXRl
+IFBDSSBzdHJ1Y3R1cmUgZmllbGQ/DQo+DQo+IEkgZG8gbm90IHRoaW5rIHRoaXMgaXMgYWxsb3dl
+ZC4NCj4NCj4gQW5kIHdoeSBpcyB0aGlzIGEgVVNCIGhvc3QgY29udHJvbGxlci1zcGVjaWZpYyBp
+c3N1ZSwgc2hvdWxkbid0IHRoaXMNCj4gdHlwZSBvZiB0aGluZyBiZSBmaXhlZCBpbiB0aGUgUENJ
+IGNvcmU/DQoNCldoZW4gZWhjaSBoY2RfZHJpdmVyIGJpbmQgb3IgdW5iaW5kIHRvIGVoY2ksIGl0
+IHdpbGwgdG91Y2gvbW9kaWZ5IFVIQ0kgdXNiX2hjZA0KdGhhdCBnZXQgZnJvbSBVSENJJ3MgZGV2
+LT5kcml2ZXJfZGF0YS4gSG93ZXZlciwgVUhDSSBtYXliZSBiaW5kIHRvIGENCmFub3RoZXIgZHJp
+dmVyKHZmaW8tcGNpKSBhbmQgaXQncyBkcml2ZXJfZGF0YSB3aWxsIGJlIHJld3JpdHRlbi4gd2hh
+dCB3ZQ0Kc2hvdWxkIGRvIGlzIHRvIHByZXZlbnQgZWhjaV9oY2QgdG8gbW9kaWZ5IFVIQ0kncyBk
+ZXYtPmRyaXZlcl9kYXRhIHdoZW4gVUhDSQ0KaGFzIGFscmVhZHkgYm91bmQgdG8gdmZpby1wY2ku
+DQoNClRoYW5rcw0Kd2VpdGFvd2FuZw0KDQoNCg0KsaPD3Mn5w/ejug0Ksb7Tyrz+uqzT0LGjw9y7
+8teo09DQxc+io6y99rmp1ri2qMrVvP7Iy8q508Oho9HPvfu21LG+08q8/rvyxuTE2sjd1/bIzrrO
+zrS+rcrayKi1xLLp1MShosq508Ohori01sa78teqt6Khow0KQ09ORklERU5USUFMIE5PVEU6DQpU
+aGlzIGVtYWlsIGNvbnRhaW5zIGNvbmZpZGVudGlhbCBvciBsZWdhbGx5IHByaXZpbGVnZWQgaW5m
+b3JtYXRpb24gYW5kIGlzIGZvciB0aGUgc29sZSB1c2Ugb2YgaXRzIGludGVuZGVkIHJlY2lwaWVu
+dC4gQW55IHVuYXV0aG9yaXplZCByZXZpZXcsIHVzZSwgY29weWluZyBvciBmb3J3YXJkaW5nIG9m
+IHRoaXMgZW1haWwgb3IgdGhlIGNvbnRlbnQgb2YgdGhpcyBlbWFpbCBpcyBzdHJpY3RseSBwcm9o
+aWJpdGVkLg0K
