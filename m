@@ -2,30 +2,31 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F54322AAC1
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 10:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CF7322AAE6
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 10:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726177AbgGWIga (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jul 2020 04:36:30 -0400
-Received: from ZXSHCAS1.zhaoxin.com ([203.148.12.81]:9145 "EHLO
-        ZXSHCAS1.zhaoxin.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725858AbgGWIga (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jul 2020 04:36:30 -0400
-Received: from zxbjmbx3.zhaoxin.com (10.29.252.165) by ZXSHCAS1.zhaoxin.com
- (10.28.252.161) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3; Thu, 23 Jul
- 2020 16:36:26 +0800
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by zxbjmbx3.zhaoxin.com
- (10.29.252.165) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3; Thu, 23 Jul
- 2020 16:36:25 +0800
-Received: from zxbjmbx1.zhaoxin.com ([fe80::290a:f538:51e7:1416]) by
- zxbjmbx1.zhaoxin.com ([fe80::290a:f538:51e7:1416%16]) with mapi id
- 15.01.1979.003; Thu, 23 Jul 2020 16:36:25 +0800
-From:   WeitaoWang-oc <WeitaoWang-oc@zhaoxin.com>
-To:     Alex Williamson <alex.williamson@redhat.com>,
-        WeitaoWang-oc <WeitaoWang-oc@zhaoxin.com>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        id S1726330AbgGWIl1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jul 2020 04:41:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40052 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726109AbgGWIl1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 23 Jul 2020 04:41:27 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 308BD2080D;
+        Thu, 23 Jul 2020 08:41:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595493686;
+        bh=PheGDG4I+Sd5okWGMSuo1JWd9HXAe6/fNMBPEQNHz2w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iTaq7h7RwfYMBoNmsxw1lVCjbC3pvPOFNRcvog+sxixmTbZKs668cWaGmUeAwTj7t
+         7HdJG9gPG8VPyMEAxwFOw7BYL4mliAKBHHxh1ylQodA/qmVRsqfS5KcKVXcuti5z7T
+         oGu9/+ZqLoJd0r6FnOohTSmOKYzaS5uPJ6uzEHfc=
+Date:   Thu, 23 Jul 2020 10:41:31 +0200
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     WeitaoWang-oc <WeitaoWang-oc@zhaoxin.com>
+Cc:     Alex Williamson <alex.williamson@redhat.com>,
         "mathias.nyman@linux.intel.com" <mathias.nyman@linux.intel.com>,
         "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
         "vkoul@kernel.org" <vkoul@kernel.org>,
@@ -38,59 +39,65 @@ CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
         "Cobe Chen(BJ-RD)" <CobeChen@zhaoxin.com>,
         "Tim Guo(BJ-RD)" <TimGuo@zhaoxin.com>,
         "wwt8723@163.com" <wwt8723@163.com>
-Subject: =?utf-8?B?562U5aSNOiBbUEFUQ0hdIFVTQjpGaXgga2VybmVsIE5VTEwgcG9pbnRlciB3?=
- =?utf-8?Q?hen_unbind_UHCI_form_vfio-pci?=
-Thread-Topic: [PATCH] USB:Fix kernel NULL pointer when unbind UHCI form
- vfio-pci
-Thread-Index: AQHWYB9U257QN8g5QkeL/njIDTUWtqkUAziAgABPH2A=
-Date:   Thu, 23 Jul 2020 08:36:25 +0000
-Message-ID: <371b3697614e4034aed8e9f340a7dbf1@zhaoxin.com>
+Subject: Re: =?utf-8?B?562U5aSNOiBbUEFUQ0g=?= =?utf-8?Q?=5D?= USB:Fix kernel
+ NULL pointer when unbind UHCI form vfio-pci
+Message-ID: <20200723084131.GA1753458@kroah.com>
 References: <1595419068-4812-1-git-send-email-WeitaoWang-oc@zhaoxin.com>
  <20200722215313.5a842b93@x1.home>
-In-Reply-To: <20200722215313.5a842b93@x1.home>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.29.8.32]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ <371b3697614e4034aed8e9f340a7dbf1@zhaoxin.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <371b3697614e4034aed8e9f340a7dbf1@zhaoxin.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DQpPbiBUaHUsMjMgSnVseSAyMDIwIDA0OjE4OjAwICswMDAwIEFsZXggd3JvdGU6DQo+IE9uIFdl
-ZCwgMjIgSnVsIDIwMjAgMTk6NTc6NDggKzA4MDANCj4gV2VpdGFvV2FuZ29jIDxXZWl0YW9XYW5n
-LW9jQHpoYW94aW4uY29tPiB3cm90ZToNCj4gDQo+ID4gIGRyaXZlcnMvdXNiL2NvcmUvaGNkLXBj
-aS5jIHwgNSArKysrKw0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgNSBpbnNlcnRpb25zKCspDQo+ID4N
-Cj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvY29yZS9oY2QtcGNpLmMgYi9kcml2ZXJzL3Vz
-Yi9jb3JlL2hjZC1wY2kuYw0KPiA+IGluZGV4IDE1NDdhYTYuLjQ4NGYyYTAgMTAwNjQ0DQo+ID4g
-LS0tIGEvZHJpdmVycy91c2IvY29yZS9oY2QtcGNpLmMNCj4gPiArKysgYi9kcml2ZXJzL3VzYi9j
-b3JlL2hjZC1wY2kuYw0KPiA+IEBAIC0zNCw2ICszNCw3IEBAIHN0YXRpYyBERUNMQVJFX1JXU0VN
-KGNvbXBhbmlvbnNfcndzZW0pOw0KPiA+ICAjZGVmaW5lIENMX09IQ0kgICAgICAgICAgICAgICAg
-UENJX0NMQVNTX1NFUklBTF9VU0JfT0hDSQ0KPiA+ICAjZGVmaW5lIENMX0VIQ0kgICAgICAgICAg
-ICAgICAgUENJX0NMQVNTX1NFUklBTF9VU0JfRUhDSQ0KPiA+DQo+ID4gKyNkZWZpbmUgUENJX0RF
-Vl9EUlZfRkxBRyAgICAgICAyDQo+ID4gIHN0YXRpYyBpbmxpbmUgaW50IGlzX29oY2lfb3JfdWhj
-aShzdHJ1Y3QgcGNpX2RldiAqcGRldikgIHsNCj4gPiAgICAgICAgIHJldHVybiBwZGV2LT5jbGFz
-cyA9PSBDTF9PSENJIHx8IHBkZXYtPmNsYXNzID09IENMX1VIQ0k7IEBADQo+ID4gLTY4LDYgKzY5
-LDggQEAgc3RhdGljIHZvaWQgZm9yX2VhY2hfY29tcGFuaW9uKHN0cnVjdCBwY2lfZGV2ICpwZGV2
-LCBzdHJ1Y3QNCj4gdXNiX2hjZCAqaGNkLA0KPiA+ICAgICAgICAgICAgICAgICBpZiAoY29tcGFu
-aW9uLT5jbGFzcyAhPSBDTF9VSENJICYmIGNvbXBhbmlvbi0+Y2xhc3MgIT0NCj4gQ0xfT0hDSSAm
-Jg0KPiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgY29tcGFuaW9uLT5jbGFzcyAh
-PSBDTF9FSENJKQ0KPiA+ICAgICAgICAgICAgICAgICAgICAgICAgIGNvbnRpbnVlOw0KPiA+ICsg
-ICAgICAgICAgICAgICBpZiAoIShjb21wYW5pb24tPnByaXZfZmxhZ3MgJiBQQ0lfREVWX0RSVl9G
-TEFHKSkNCj4gDQo+IEJ1dCBwY2lfZGV2LnByaXZfZmxhZ3MgaXMgcHJpdmF0ZSBkYXRhIGZvciB0
-aGUgZHJpdmVyIHRoYXQgY3VycmVudGx5DQo+IG93bnMgdGhlIGRldmljZSwgd2hpY2ggY291bGQg
-YmUgdmZpby1wY2kuICBUaGlzIGlzIHJlYWxseSBubyBkaWZmZXJlbnQNCj4gdGhhbiBhc3N1bWlu
-ZyB0aGUgc3RydWN0dXJlIGF0IGRldmljZS5kcml2ZXJfZGF0YS4gIElmIHZmaW8tcGNpIHdlcmUg
-dG8NCj4gbWFrZSBsZWdpdGltYXRlIHVzZSBvZiBwY2lfZGV2LnByaXZfZmxhZ3MsIHRoaXMgY291
-bGQgc2ltcGx5IGJsb3cgdXANCj4gYWdhaW4uICBTaG91bGQgdGhlcmUgaW5zdGVhZCBiZSBzb21l
-IHNvcnQgb2YgcmVnaXN0cmF0aW9uIGludGVyZmFjZQ0KPiB3aGVyZSBoY2QgY29tcGxhaW50IGRy
-aXZlcnMgcmVnaXN0ZXIgdGhlaXIgZGV2aWNlcyBhbmQgb25seSB0aG9zZQ0KPiByZWdpc3RlcmVk
-IGRldmljZXMgY2FuIGhhdmUgdGhlaXIgZHJpdmVyIHByaXZhdGUgZGF0YSBhcmJpdHJhcmlseSBw
-b2tlZA0KPiBieSBhbm90aGVyIGRyaXZlcj8gIFRoYW5rcywNCg0KVGhhbmtzIGZvciB5b3VyIGV4
-cGxhbmF0aW9uLiBTZXQgcGNpX2Rldi5wcml2X2ZsYWdzIGlzIHJlYWxseSBub3QgYSANCnJlYXNv
-bmFibGUgYXBwcm9hY2guIEFyZSB0aGVyZSBhbnkgbW9yZSBkZXRhaWxlZCBzdWdnZXN0aW9ucyAN
-CnRvIHBhdGNoIHRoaXMgaXNzdWU/DQoNClRoYW5rcw0KV2VpdGFvd2FuZw0K
+On Thu, Jul 23, 2020 at 08:36:25AM +0000, WeitaoWang-oc wrote:
+> 
+> On Thu,23 July 2020 04:18:00 +0000 Alex wrote:
+> > On Wed, 22 Jul 2020 19:57:48 +0800
+> > WeitaoWangoc <WeitaoWang-oc@zhaoxin.com> wrote:
+> > 
+> > >  drivers/usb/core/hcd-pci.c | 5 +++++
+> > >  1 file changed, 5 insertions(+)
+> > >
+> > > diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
+> > > index 1547aa6..484f2a0 100644
+> > > --- a/drivers/usb/core/hcd-pci.c
+> > > +++ b/drivers/usb/core/hcd-pci.c
+> > > @@ -34,6 +34,7 @@ static DECLARE_RWSEM(companions_rwsem);
+> > >  #define CL_OHCI                PCI_CLASS_SERIAL_USB_OHCI
+> > >  #define CL_EHCI                PCI_CLASS_SERIAL_USB_EHCI
+> > >
+> > > +#define PCI_DEV_DRV_FLAG       2
+> > >  static inline int is_ohci_or_uhci(struct pci_dev *pdev)  {
+> > >         return pdev->class == CL_OHCI || pdev->class == CL_UHCI; @@
+> > > -68,6 +69,8 @@ static void for_each_companion(struct pci_dev *pdev, struct
+> > usb_hcd *hcd,
+> > >                 if (companion->class != CL_UHCI && companion->class !=
+> > CL_OHCI &&
+> > >                                 companion->class != CL_EHCI)
+> > >                         continue;
+> > > +               if (!(companion->priv_flags & PCI_DEV_DRV_FLAG))
+> > 
+> > But pci_dev.priv_flags is private data for the driver that currently
+> > owns the device, which could be vfio-pci.  This is really no different
+> > than assuming the structure at device.driver_data.  If vfio-pci were to
+> > make legitimate use of pci_dev.priv_flags, this could simply blow up
+> > again.  Should there instead be some sort of registration interface
+> > where hcd complaint drivers register their devices and only those
+> > registered devices can have their driver private data arbitrarily poked
+> > by another driver?  Thanks,
+> 
+> Thanks for your explanation. Set pci_dev.priv_flags is really not a 
+> reasonable approach. Are there any more detailed suggestions 
+> to patch this issue?
+
+This is not a kernel issue, it is a "do not do this in this way from
+userspace" issue :)
+
+thanks,
+
+greg k-h
