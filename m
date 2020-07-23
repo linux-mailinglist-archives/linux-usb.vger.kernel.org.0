@@ -2,131 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8671E22ABAD
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 11:22:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD4C422ABFA
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 11:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726675AbgGWJWX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jul 2020 05:22:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58088 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725984AbgGWJWX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jul 2020 05:22:23 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE96DC0619DC;
-        Thu, 23 Jul 2020 02:22:22 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id k17so2897898lfg.3;
-        Thu, 23 Jul 2020 02:22:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=XvcKynrAqO64jDpC8rXFTuj/dKk+qiTN+T9dWEvAtxc=;
-        b=S4AhXunyLyzCvttdEP0lHg79NiI8x2rN7v5vr5tZWrBNhnHq8dZqaGGts0UMrYKMZR
-         pdHmEaCvziSeqmM8ClLwcBfgaRB7ZwYo+lU/y6ShCbzUfItxrVlUAw66KmjVW4WCAgNW
-         is6DO6kAXsPA8u0GmhrWGh7KzQnkbvgGAg/MwSQXgt4Umz25XuzvlP0MCz+XSNOI88wF
-         vNT27LmNPB6occfeHKtWA6mpm/GSqhD4qb94f6m2WQ5loOzsvEXhuTVYn4EUfFtkXNtn
-         zKT3L7W6DBBvJ/rdamodnz8iN1QeywLHRnMnDWJ/xnszln22r6PkYqxcd8u3tpQ8FyBD
-         gVBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=XvcKynrAqO64jDpC8rXFTuj/dKk+qiTN+T9dWEvAtxc=;
-        b=cyoxVh1OROE+FSHzd5l28eO5pd2Cew5ryIey5Uvo3xxnufaN3zTbw8NtfozjAr4l3Z
-         zK/L4GxbQjqr1/ZebJxU5pJMGTWceD1e8mpSdpvq8XiJ0yYoZhhcIQuosU/jWTB8VdX2
-         t71vh+/HQ88rRzfQB/YZP9M2MsuEvpfrLhn+P2s5iTftLiWm6SelsKGhRYTRqSbQyd1h
-         BdeslKCBdQu/gYcyfSFHNcBXInx+zxzj2stqRsxAK5c+pyZ4qQXk/ohqexeGGs1A2Mjm
-         WfbeueNEW+v7WiiyZHicjrYlemKAnFmZQaUlp3HAsl5uFoqAbhGwJO2SgW1Nnmh5W5f+
-         RNRQ==
-X-Gm-Message-State: AOAM533V6YhlWE6cOGky2bBD2/8zheZ/lrbIiYhdS9JPlPJGrt+xokqN
-        141/RMmzmknW5lRtg+nU22c=
-X-Google-Smtp-Source: ABdhPJz/q1d2N92Gvcbi/36LZ3e25H6+JolBjAiy3RzcxRita7lk14lAd0B4uewMO9o4dqee1cz8ug==
-X-Received: by 2002:a19:654c:: with SMTP id c12mr1860082lfj.132.1595496141134;
-        Thu, 23 Jul 2020 02:22:21 -0700 (PDT)
-Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id i5sm359918lfe.5.2020.07.23.02.22.19
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 23 Jul 2020 02:22:20 -0700 (PDT)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Li Jun <jun.li@nxp.com>, shawnguo@kernel.org, robh+dt@kernel.org
-Cc:     gregkh@linuxfoundation.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, peter.chen@nxp.com,
-        Anson.Huang@nxp.com, peng.fan@nxp.com, horia.geanta@nxp.com
-Subject: Re: [PATCH v2 1/5] usb: dwc3: add platform data to dwc3 core device to pass data
-In-Reply-To: <1594028699-1055-2-git-send-email-jun.li@nxp.com>
-References: <1594028699-1055-1-git-send-email-jun.li@nxp.com> <1594028699-1055-2-git-send-email-jun.li@nxp.com>
-Date:   Thu, 23 Jul 2020 12:22:15 +0300
-Message-ID: <87r1t2oabc.fsf@kernel.org>
+        id S1727859AbgGWJ61 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jul 2020 05:58:27 -0400
+Received: from mail-eopbgr10070.outbound.protection.outlook.com ([40.107.1.70]:5438
+        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725858AbgGWJ61 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 23 Jul 2020 05:58:27 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QPrblr3ANxQVKeDknMz4Z9d7ThHHWDcUcBWyKDbMT8/M9Xw3/HLYW267XTJLJFO0ZjhL83X3p6fKRJsXA8iQLYoHzTpKMX8dKviocCefcsWsOApZu9vyIvR73tknWFs4sen14eMuNrGokqi8gP5ak1gcgRuvGk8PXIjg8FPcaDeBZyQ78T7XrO8tFMg72vLcj5onhBTd93YBK4Sa6riowybdTHCVnfD1zWf6fmx/U4h9xX8jYLXF45uDp7hAg3rL7yIxrOiECrZQtZUjrSzvGgXtQxBCfJE3BcXAiva09Cw3ac3Ukmdpmy24d2EEolFJ2m5X/pViHwSSQKDcEs02mQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JWUZP3dcO3LD8PvV6gxlaFcK9XWcKMvZNT/lxKFKATw=;
+ b=N16eZmwtOI0DPVzqkvJ0OlBlQUzshY5ygchZrcUR9zrSuOWHVbO6gyZkoFoby7j0JbPEGTgna9V/cNvGxh16Q4UHNgP1dIkFNpxoOZQDqbdDhRV/PDK4XJ8WryVQerJr3Lnr4ddLru9HTU03WyvWh2Zvf7yXWwUBAHATB8oASThDWyadcAAAzUMoUTedSaZt+SIqV15rXO2Zuup3VWRHj17VmiGQbfQQ62aZ4v7kop2VhKJ6lrLEJlp/X3ht7/sgElvHOdNxCJzJCVS1VTD/D232R9uWnSrjzTfkBltuxVvFwpAaQPjVpEpkV0xqzB8RuiXrZFmnHd8fZwNZK6ty4w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JWUZP3dcO3LD8PvV6gxlaFcK9XWcKMvZNT/lxKFKATw=;
+ b=M6YYYPlT8qfFyIKVkaxixhdBGUXzhfzJCVVSg7JLdXK9VrhQVyuNKPWxEJi8DVLQasWHaKoJmjkwRSa08Q4wpCTovH/gfpZtaz15Nbq5K3S19whZDLUnFTieRI7yiajZ0zWEuuSbZ2rNIcutOTak4Tc56SWTHa0jI0ozl0qVeXE=
+Received: from VE1PR04MB6528.eurprd04.prod.outlook.com (2603:10a6:803:127::18)
+ by VI1PR04MB4063.eurprd04.prod.outlook.com (2603:10a6:803:43::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3216.21; Thu, 23 Jul
+ 2020 09:58:22 +0000
+Received: from VE1PR04MB6528.eurprd04.prod.outlook.com
+ ([fe80::30e2:71b0:ffd3:e39e]) by VE1PR04MB6528.eurprd04.prod.outlook.com
+ ([fe80::30e2:71b0:ffd3:e39e%7]) with mapi id 15.20.3216.023; Thu, 23 Jul 2020
+ 09:58:22 +0000
+From:   Jun Li <jun.li@nxp.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Peter Chen <peter.chen@nxp.com>,
+        Anson Huang <anson.huang@nxp.com>, Peng Fan <peng.fan@nxp.com>,
+        Horia Geanta <horia.geanta@nxp.com>
+Subject: RE: [PATCH v2 1/5] usb: dwc3: add platform data to dwc3 core device
+ to pass data
+Thread-Topic: [PATCH v2 1/5] usb: dwc3: add platform data to dwc3 core device
+ to pass data
+Thread-Index: AQHWU3qPod3u7KLfuUW6rq9H7arWKakU/oyAgAAAsRA=
+Date:   Thu, 23 Jul 2020 09:58:22 +0000
+Message-ID: <VE1PR04MB6528BF081AA2B4AE64C8F00F89760@VE1PR04MB6528.eurprd04.prod.outlook.com>
+References: <1594028699-1055-1-git-send-email-jun.li@nxp.com>
+ <1594028699-1055-2-git-send-email-jun.li@nxp.com> <87r1t2oabc.fsf@kernel.org>
+In-Reply-To: <87r1t2oabc.fsf@kernel.org>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.71]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 0f89aa14-8321-4924-4db1-08d82eeeef81
+x-ms-traffictypediagnostic: VI1PR04MB4063:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR04MB406379DB53F663A142F55FA489760@VI1PR04MB4063.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ZtmvizBj068pWK+B62kLNzlrQDEML4P1C9Zx8989eV1nwTqNZS3jlFVz5TDIY5FViV9Nh92WoLRH0LRt8qhedxtM1U/pJgAba2gaNl196b1LfAdYtuX+CPkM8nIQ14tAl7ALYmR9UahSdIi37FwyFTjV3r2WOP0fLKjhoYEm3xsB40qGvVB6bzwvB95Qb9iJ06snWS3ef1FrGbjfJ9M9tQoPDN1NzNxv2gpvX1/gPcl3Tuni8PVZGw/uCw4OhGj36wv6sjLo9ynDOQnycrKoGiGJ2BdBPJ+olL4p9n13cu+nxQ4mp+eplDiP1mTN/gBSxYpOwNpRv2pDND7sBZoX7g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6528.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(346002)(376002)(366004)(136003)(39860400002)(396003)(6506007)(76116006)(64756008)(33656002)(53546011)(44832011)(55016002)(8676002)(478600001)(71200400001)(54906003)(110136005)(52536014)(66556008)(66446008)(66946007)(66476007)(7416002)(5660300002)(316002)(186003)(8936002)(2906002)(4326008)(9686003)(26005)(83380400001)(86362001)(7696005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: veJ9Da7jRQguJbsZBdvD7TvKma/HryfoK1v230MLBejSUZA514mIs5OQ86O49KVWJVolpLbJaBAwYkXqvAA00nK/qgKuc60VX+yzHD1aMq+Q5ln+QFSx3dXq5Nl1NoVXgVCYarYKR6nhs3qyIp9DJFPRtFx+b1Hvxloa5Pgp2Eb/wjgS1ZGapSqGpy+2k/q3icT7fAutXNDYH39Fkzy+O6ag+OnCdnSByGt8c6mlewnaTV8ZJWfFJ32vT1fDTfC2uyu9WaO3aGO2YuFoPLjZAE70nhJ9jFlJzK2jJbnOFuA9xuw9DffFoHX8NTn0Y+bfKDmEvQ4SHmFH7ev2ndVn76Nw3+D7uYKpEdVzyxpTHcngb18Lp319qShKejEJ3SOgImPNcGvuucC0hj/b4DALHK85bxD9BSoz5qeCkj9IBj/PcuWvObgSdyIl+GP0xWTfwWR3AZyiJPIf/IQ8VXHKvRsu6pYk8UCxEnvkGKiX4NM=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6528.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0f89aa14-8321-4924-4db1-08d82eeeef81
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jul 2020 09:58:22.7808
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: I/XA/PNeS53du11WzqXr6aFJCscPZLfAPmkV4nZlz4GY26pZxKJ19qWhRb8I6uFl
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4063
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
 
 
-Hi,
+> -----Original Message-----
+> From: Felipe Balbi <balbif@gmail.com> On Behalf Of Felipe Balbi
+> Sent: Thursday, July 23, 2020 5:22 PM
+> To: Jun Li <jun.li@nxp.com>; shawnguo@kernel.org; robh+dt@kernel.org
+> Cc: gregkh@linuxfoundation.org; s.hauer@pengutronix.de; kernel@pengutroni=
+x.de;
+> festevam@gmail.com; dl-linux-imx <linux-imx@nxp.com>; linux-usb@vger.kern=
+el.org;
+> linux-arm-kernel@lists.infradead.org; devicetree@vger.kernel.org; Peter C=
+hen
+> <peter.chen@nxp.com>; Anson Huang <anson.huang@nxp.com>; Peng Fan
+> <peng.fan@nxp.com>; Horia Geanta <horia.geanta@nxp.com>
+> Subject: Re: [PATCH v2 1/5] usb: dwc3: add platform data to dwc3 core dev=
+ice to
+> pass data
+>=20
+>=20
+> Hi,
+>=20
+> Li Jun <jun.li@nxp.com> writes:
+> > In case dwc3 has SoC specific customizations, dwc3 glue driver can
+> > base on compatible string and pass it via platform data to dwc3 core
+> > driver; and pass xhci private data further to xhci-plat like quirks.
+> >
+> > Signed-off-by: Li Jun <jun.li@nxp.com>
+> > ---
+> >  drivers/usb/dwc3/core.h | 5 +++++
+> >  drivers/usb/dwc3/host.c | 9 +++++++++
+> >  2 files changed, 14 insertions(+)
+> >
+> > diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h index
+> > 0b8ea8c..3146697 100644
+> > --- a/drivers/usb/dwc3/core.h
+> > +++ b/drivers/usb/dwc3/core.h
+> > @@ -29,6 +29,7 @@
+> >  #include <linux/ulpi/interface.h>
+> >
+> >  #include <linux/phy/phy.h>
+> > +#include "../host/xhci-plat.h"
+> >
+> >  #define DWC3_MSG_MAX	500
+> >
+> > @@ -924,6 +925,10 @@ struct dwc3_scratchpad_array {
+> >  	__le64	dma_adr[DWC3_MAX_HIBER_SCRATCHBUFS];
+> >  };
+> >
+> > +struct dwc3_platform_data {
+> > +	struct xhci_plat_priv *xhci_priv;
+> > +};
+>=20
+> why? We should rely on properties, no?
 
-Li Jun <jun.li@nxp.com> writes:
-> In case dwc3 has SoC specific customizations, dwc3 glue driver can base on
-> compatible string and pass it via platform data to dwc3 core driver; and
-> pass xhci private data further to xhci-plat like quirks.
->
-> Signed-off-by: Li Jun <jun.li@nxp.com>
-> ---
->  drivers/usb/dwc3/core.h | 5 +++++
->  drivers/usb/dwc3/host.c | 9 +++++++++
->  2 files changed, 14 insertions(+)
->
-> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> index 0b8ea8c..3146697 100644
-> --- a/drivers/usb/dwc3/core.h
-> +++ b/drivers/usb/dwc3/core.h
-> @@ -29,6 +29,7 @@
->  #include <linux/ulpi/interface.h>
->=20=20
->  #include <linux/phy/phy.h>
-> +#include "../host/xhci-plat.h"
->=20=20
->  #define DWC3_MSG_MAX	500
->=20=20
-> @@ -924,6 +925,10 @@ struct dwc3_scratchpad_array {
->  	__le64	dma_adr[DWC3_MAX_HIBER_SCRATCHBUFS];
->  };
->=20=20
-> +struct dwc3_platform_data {
-> +	struct xhci_plat_priv *xhci_priv;
-> +};
+My v1 patch was adding new property directly, considering Rob has objection
+on that way if I understand correctly, also there is suggestion on use
+compatible string to set quirks, I changed to add platform data to pass
+SoC level quirks, I think this also can be used to extend other special
+handling for glue layer driver, so should I go back to use properties?=20
+Hope an agreement can be made on adding new properties/quirks.=20
 
-why? We should rely on properties, no?
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl8ZVscACgkQzL64meEa
-mQZq4w//e21Lo4ff7jZDTYI4GNKwH8wGmrPPmEocHEMLnDb55BHDFolJp0dFTNg5
-tj06t+ukHPltpMdJB2NBhAT3hAwTFOuyl3SiTtnWkFAT5Pr/s+juL4qmOwCBrFwb
-/OSnwtgXr3b3wM88Wil8O6XqolUPe1rCWprGv+PAMnmnmFe6WALjbUoIfts/gvxY
-WPyGDnKLFyGhCt89CbAhCNpnhsqOzg4Ic1RTLMxARM5s+m8BZrfPSPS0L/5npKq3
-+SxdlQgnCnrmOZrUkVbw+w9PF1XbR2elsQOiBnSADYIx7azi6DcBtqe+ClLImb4Q
-wsfDmCrZ+yp8/BMW7MR+YvcPp8JsTH5scbv6owSu7FF9uZA9wk44kbzSL4aA0La5
-yWWmyGdkWiloxzMQCODq7sd+tizcTqZADhKylQ8YKF+7sEtDuyaNowoC6fV50Zk+
-/oTqCr6lwGkWiwE2M/FsWeXZo4+DdkXKobQx0OvyJjyqJ/26SQKyOEGoZO+xZVg/
-fDkoV/GPbgdBc89tB6HG5FiTyCXLY1oqAuNwWiZcSA03YSbBglCQGwDEh4hvGW16
-CTrT8kMATxUvTYlwMnfTwGRQwQtCp+veazjD9ZgEtfk0aB9Bwwl1qlTgok31xDI1
-uZlB9d0GbnabH8BceuyeCwgaBjFDexRPuAXVQI9TcB5ON5rZUSY=
-=yp3d
------END PGP SIGNATURE-----
---=-=-=--
+Thanks
+Li Jun
+=20
+>=20
+> --
+> balbi
