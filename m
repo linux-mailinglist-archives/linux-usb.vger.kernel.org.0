@@ -2,102 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBA6522AD42
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 13:08:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC8722ADD3
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 13:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728531AbgGWLH7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jul 2020 07:07:59 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:49370 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728515AbgGWLH6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jul 2020 07:07:58 -0400
-Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06NB7eMT021070;
-        Thu, 23 Jul 2020 13:07:40 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=STMicroelectronics;
- bh=0vmigRJKSKCaaUgNfAUdO/lMA3zem7APyAy+GcZjtNk=;
- b=OfxOU1nXwxafRPK1I1CeoWexuLiwfeVd0E6lEUHtqXjpA/WAq0IPWDNIFOKEkuMac8jm
- X3LkXRG3jY2Ic55tKOuqnQbvpMX67iF/Yi0sGkdk+X+qpkqR12tqoy5pksMn7yWQ46ph
- gwChLb/p0ogDsDZe/p4nFa8OH/YNH/aYFwWTU34D2LmbcB1bxqDku7wWHAMRFh5z5Igk
- mtP0g03VdKtQhfWd87IQ7i4gFuAcnaXYUqrU+AOQiTwTuFlDgtYEVvvIa3ONv3rnG60G
- dRJSZsRJUIksnUWqOqoCvPWaSUI9o0kK7vmYIARwbUae3F3PYQnIaobldQJB7VmEEGsf /A== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 32bsfpt7rf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Jul 2020 13:07:40 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5BCDD100038;
-        Thu, 23 Jul 2020 13:07:34 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 4D9F32AD9F6;
-        Thu, 23 Jul 2020 13:07:34 +0200 (CEST)
-Received: from localhost (10.75.127.47) by SFHDAG3NODE2.st.com (10.75.127.8)
- with Microsoft SMTP Server (TLS) id 15.0.1347.2; Thu, 23 Jul 2020 13:07:34
- +0200
-From:   Amelie Delaunay <amelie.delaunay@st.com>
-To:     Minas Harutyunyan <hminas@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>
-CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Fabrice Gasnier <fabrice.gasnier@st.com>,
-        Amelie Delaunay <amelie.delaunay@st.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH v2 3/3] usb: dwc2: don't use ID/Vbus detection if usb-role-switch on STM32MP15 SoCs
-Date:   Thu, 23 Jul 2020 13:07:17 +0200
-Message-ID: <20200723110717.18699-4-amelie.delaunay@st.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200723110717.18699-1-amelie.delaunay@st.com>
-References: <20200723110717.18699-1-amelie.delaunay@st.com>
+        id S1728040AbgGWLgv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jul 2020 07:36:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50602 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725846AbgGWLgv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jul 2020 07:36:51 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF0DC0619DC
+        for <linux-usb@vger.kernel.org>; Thu, 23 Jul 2020 04:36:50 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id q6so5960077ljp.4
+        for <linux-usb@vger.kernel.org>; Thu, 23 Jul 2020 04:36:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=65igqvPf2RECVzhmcmx44ADygdWlArWUGY40cVbFPRU=;
+        b=bEKLG+fR5AN2/vo75qSuUQHZC3uwTEw9RWJmXLbmSs3fF6vklkdeNGo7GKAPGMrzco
+         WlZ7KkYg28IcsdnlUPKDQ9oyWA9CM+V7+I80Qxc9eGDBJEfesJIOTECaOJNEAQW0ltoH
+         WK6oFkZr3fHWUof7oIkipvBjhH9kt7lUN30Zmr1S7qXznf6AI3WVX7baOIFNBYpnbkQW
+         rw4qeL0ewuUQnNCw7nuhNundntcGXxBkBY+A9cp4IC8EG58uPPMX75SaQvFxSzF8m5nV
+         Y5kX5cXLIPByiK5TvH+ituuyOQ7SpSa8iv0Q3/Sl27CXTQT7H9YVOrcwqfVCJp0ESnfL
+         BYJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=65igqvPf2RECVzhmcmx44ADygdWlArWUGY40cVbFPRU=;
+        b=IW9GLUHIy2jRRXujQsvgwQEiovpchU1I1xw1ujVx1VCGH/WcZMchE0L0y99eLWqchi
+         IhQuY3q29WOqWqSUtIDxKQH1vIKDqjGZoyntSOZIlZBCk/i+9LUTkvJFvEnDPPBCQfsC
+         3lUDriyz7nPaQ64OrbAIsFHZK953clgK7qE04uPhCzl59ozJivxykajMgNd6B8VsKV/n
+         HzAdW5vBrQqwzIy8vUBBeYUnXaUt3humqzhvQkkMlKxVv9baEYKlA9foTTbqbsc3DGhM
+         FUJPXzDmuRRTwnyrsTdkZ+yybss4ZYQG6E2soTxYC2MtcNvP3GADS0fiL9glm6Cz3dbG
+         Q+Og==
+X-Gm-Message-State: AOAM532FKgiOrCQ7QPnzWDWUbyhqqu5aguYSDhzqreJB+2jxT/sv+dCd
+        bGelItOAxXyEXOLV8B+vtKgSqh6jCV62ng==
+X-Google-Smtp-Source: ABdhPJx/RljklVNig36kpA7s5H+fQbHO1NkAa1tqTWUBwm80yXnJiJsvaCYzL5EbfjNU4JboupoIyg==
+X-Received: by 2002:a2e:8e36:: with SMTP id r22mr1836442ljk.77.1595504208893;
+        Thu, 23 Jul 2020 04:36:48 -0700 (PDT)
+Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
+        by smtp.gmail.com with ESMTPSA id p8sm2593584ljn.117.2020.07.23.04.36.47
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 23 Jul 2020 04:36:47 -0700 (PDT)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Ruslan Bilovol <ruslan.bilovol@gmail.com>
+Cc:     Linux USB <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] usb: gadget: f_uac2: fix AC Interface Header Descriptor wTotalLength
+In-Reply-To: <CAB=otbT5x5qoPedo854b0e-+Tcw1+i7UsJ6kbBBQRPrSMMtsfA@mail.gmail.com>
+References: <20200703134903.5695-1-ruslan.bilovol@gmail.com> <87r1tl6vn0.fsf@kernel.org> <CAB=otbT5x5qoPedo854b0e-+Tcw1+i7UsJ6kbBBQRPrSMMtsfA@mail.gmail.com>
+Date:   Thu, 23 Jul 2020 14:36:43 +0300
+Message-ID: <87mu3qo438.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG3NODE2.st.com
- (10.75.127.8)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-23_03:2020-07-23,2020-07-23 signatures=0
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If usb-role-switch is present in the device tree, it means that ID and Vbus
-signals are not connected to the OTG controller but to an external
-component (GPIOs, Type-C controller). In this configuration, usb role
-switch is used to force valid sessions on STM32MP15 SoCs.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Acked-by: Minas Harutyunyan <hminas@synopsys.com>
-Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
----
-No changes in v2.
----
- drivers/usb/dwc2/params.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Ruslan Bilovol <ruslan.bilovol@gmail.com> writes:
 
-diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
-index ce736d67c7c3..d6690ee7af01 100644
---- a/drivers/usb/dwc2/params.c
-+++ b/drivers/usb/dwc2/params.c
-@@ -183,9 +183,11 @@ static void dwc2_set_stm32mp15_fsotg_params(struct dwc2_hsotg *hsotg)
- static void dwc2_set_stm32mp15_hsotg_params(struct dwc2_hsotg *hsotg)
- {
- 	struct dwc2_core_params *p = &hsotg->params;
-+	struct device_node *np = hsotg->dev->of_node;
- 
- 	p->otg_cap = DWC2_CAP_PARAM_NO_HNP_SRP_CAPABLE;
--	p->activate_stm_id_vb_detection = true;
-+	p->activate_stm_id_vb_detection =
-+		!of_property_read_bool(np, "usb-role-switch");
- 	p->host_rx_fifo_size = 440;
- 	p->host_nperio_tx_fifo_size = 256;
- 	p->host_perio_tx_fifo_size = 256;
--- 
-2.17.1
+> On Thu, Jul 9, 2020 at 9:38 AM Felipe Balbi <balbi@kernel.org> wrote:
+>>
+>> Ruslan Bilovol <ruslan.bilovol@gmail.com> writes:
+>>
+>> > As per UAC2 spec (ch. 4.7.2), wTotalLength of AC Interface
+>> > Header Descriptor "includes the combined length of this
+>> > descriptor header and all Clock Source, Unit and Terminal
+>> > descriptors."
+>> >
+>> > Thus add its size to its wTotalLength.
+>> >
+>> > Also after recent changes wTotalLength is calculated
+>> > dynamically, update static definition of uac2_ac_header_descriptor
+>> > accordingly
+>> >
+>> > Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+>>
+>> Missing a Fixes tag here.
+>
+> The issue is present since this driver introduction in 2012 in the
+> commit 132fcb460839 "usb: gadget: Add Audio Class 2.0 Driver",
+> but in older version of the driver it should be fixed in the
+> uac2_ac_header_descriptor structure initialization
+>
+> Should I resend this patch or you'll add this tag to the commit message
+> by yourself:
+> Fixes: 132fcb460839 ("usb: gadget: Add Audio Class 2.0 Driver")
 
+added, thanks
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl8ZdksACgkQzL64meEa
+mQZ40g/+LVEZaPsGDsHHIbafn/ePS5CR8B9Xuk0U3hW53/7M5At34NCUzd68YmDN
+ph7PcsOQrsGk/SG2kMF9qBMNAF8WFjS9dXj5JhFIC/keWgo7Qfd9Fxgz+PPFLHDQ
+Xo/X2SbnmPMuAzQmaO+AMmLBOwogJFvhrlrQSl5vXEH0ya2R2DvZ/gwluDeua8bd
+aToLUn5yzAqALdcN9avYgmKz8cEGz12AR7G8xPX2FbuSub5dFt1josMfYAytNwXS
+8D0fNJHZ/KU1ggYvvPrPU2RQI5qT/O0ydOlSKbauFuIxDHtcHwG/JTmkyFfk/ybn
+4QupPNUTC9+xMwr8puWtFFbXI0WqXbsa+JwrrvAdQSC4bUpi7Iq1LvUoNp8TN6Lr
+SwCHyY9jKvv5zDg/iixHe78uIfT0KyVhM0exch1q2qLFaNIQ132vT1yHrB2pDb21
+hATvDRVXLde/4Uf1PBzV66IVgnsm/b7jjADzl5QjXo9OCoi6XnS6CqKFlxTnbAId
+qrviLktP1K2IvrIEmvo7hIbCQpRNhtIw2N0UZetrK6NWhhwhQhaFvcRqi3ZnpKF2
+FTu0nQmBNewnO4EqhB3IrjhklFr4rUIliTwGvSfrsMLtrHoW+lhED/oIPzmBYnjy
+WS3LB9Z/tSV0hkWlRfb6cYjEk9+C3QqXd7RMluMRtMxbNxnHSu8=
+=gXyI
+-----END PGP SIGNATURE-----
+--=-=-=--
