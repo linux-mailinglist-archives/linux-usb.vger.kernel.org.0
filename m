@@ -2,215 +2,179 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9FA522B348
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 18:17:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0B5122B37A
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 18:29:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729765AbgGWQRw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jul 2020 12:17:52 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:34422 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727052AbgGWQRt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jul 2020 12:17:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1595521067;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3ya2q/pmXB2bMNADifztEkwpspxnV8zEC+vy/TVroGU=;
-        b=fZc3NliA6a2IawfLiXBIJF852aGXZ64s/zdF2ilA8PFNieL9Na4rbh4Rc6wqlFeJJVk0ms
-        5nGjFVrf4Ywevsq1VZBGnP7UE57f4QXZRwyuckvOfvd35Ubx5u6lg3ayMD8I66VT2K2ZJb
-        NdZ+At2malg5dV/7YmbmLnd2BcF0vNA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-229-ItGpXHZ7MzKcHuwYcIw36w-1; Thu, 23 Jul 2020 12:17:42 -0400
-X-MC-Unique: ItGpXHZ7MzKcHuwYcIw36w-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DCA4C80BCB2;
-        Thu, 23 Jul 2020 16:17:37 +0000 (UTC)
-Received: from w520.home (ovpn-112-71.phx2.redhat.com [10.3.112.71])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B85511010427;
-        Thu, 23 Jul 2020 16:17:35 +0000 (UTC)
-Date:   Thu, 23 Jul 2020 10:17:35 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     "Weitao Wang\(BJ-RD\)" <WeitaoWang@zhaoxin.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        WeitaoWang-oc <WeitaoWang-oc@zhaoxin.com>,
-        "mathias.nyman@linux.intel.com" <mathias.nyman@linux.intel.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "hslester96@gmail.com" <hslester96@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Carsten_Schmid@mentor.com" <Carsten_Schmid@mentor.com>,
-        "efremov@linux.com" <efremov@linux.com>,
-        "Tony W. Wang\(XA-RD\)" <TonyWWang@zhaoxin.com>,
-        "Cobe Chen\(BJ-RD\)" <CobeChen@zhaoxin.com>,
-        "Tim Guo\(BJ-RD\)" <TimGuo@zhaoxin.com>,
-        "wwt8723@163.com" <wwt8723@163.com>
-Subject: Re: [PATCH] USB:Fix kernel NULL pointer when unbind UHCI form
- vfio-pci
-Message-ID: <20200723101735.3222c289@w520.home>
-In-Reply-To: <20200723153821.GC1352396@rowland.harvard.edu>
-References: <1595419068-4812-1-git-send-email-WeitaoWang-oc@zhaoxin.com>
-        <20200722124414.GA3153105@kroah.com>
-        <20200722145913.GB1310843@rowland.harvard.edu>
-        <1bf449377e3448bc9c8bc7b64d7b7990@zhaoxin.com>
-        <20200722221817.542971a2@x1.home>
-        <20200723153821.GC1352396@rowland.harvard.edu>
+        id S1726761AbgGWQ3A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jul 2020 12:29:00 -0400
+Received: from esa2.microchip.iphmx.com ([68.232.149.84]:50894 "EHLO
+        esa2.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726632AbgGWQ27 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jul 2020 12:28:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1595521738; x=1627057738;
+  h=from:to:subject:date:message-id:references:in-reply-to:
+   content-id:content-transfer-encoding:mime-version;
+  bh=3gMoUouwlk3fJwcByBAmiWdDWHPIZLt5eiuvmdzxTBc=;
+  b=JDKPC9jDpT2/JwfqR8vr9zNqbeWsGmNcq9leK+YCh2oX4gKml4KjELp5
+   EotMyEx8MYXiC/P8WNpJl5BdtGzreZLkN8O9EnDVbtq91koEMXGYFXfCC
+   lg8MFCaPx8IARV+8pVrju9e3RMet/ZMb8RP8/ozJ2xeRChcYY3z2RY9ST
+   nIMS9izR08EOPw3sooYa1MzgPiTvzXn/oQ7OFKd8WFJYobvS4UobNs+GQ
+   aqKjcIVBIYQUz0iTctcimwmqfWFurs9sBLN9sr4PT0awWB2qQIIS9mBbQ
+   0/wsZx5C/smcjcYl5PQ7UQ9uafdt9NcT/eeRmiFOH6guwhkdgZIvBbfCH
+   g==;
+IronPort-SDR: /G2oarO1AeG0A0QzndN1JpK5x0PGHCYv+A1fneWW0IytOXTSi3cbiDlpYpSksvzQcUxupEZQDp
+ OmTcOdgkSDXavcIQS0PUepOeOqSHRd5T+pWzSTUyxWmTLS1eTQSYOWMQVFelotTygS3e2FGJ/n
+ 9rx5Fqzq4RjyLM0hrLJK4cQ/+mdwy06qdB34gUAfqpsUJDbUaOGWpL0/WZxy9XvUl723l7dOkn
+ gyvGG5xlgie61AWw/NpStGerj06u3X4cL3ciGfAb4f7hwo3lyUxK2CAGEEAPlqLa+fc3v3fkRv
+ 7sg=
+X-IronPort-AV: E=Sophos;i="5.75,387,1589266800"; 
+   d="scan'208";a="83018926"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jul 2020 09:28:58 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Thu, 23 Jul 2020 09:28:18 -0700
+Received: from NAM02-BL2-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3 via Frontend
+ Transport; Thu, 23 Jul 2020 09:28:18 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Xq+kfKR2R2HMQZajb7t/1tSDTq2UuM/PMKe9r9l80dwsvNo3rwVD3jJh2SWb7JK9kwQfOAVhA+FxIly2DfXGEnnuHyDIFFVDY6RAqMircgPebsCrpZayeNOM7c/mSksqWqe21Fk3c4JQkHrcA2qShekENrJfAMkU0qHrLGk0bluwk+mYGQZw4Kq1BzRS/olEVgUpM8O+CWndNoOUDMuNml2zlk7jmP9LwGjjOasLUxCDOE5ckmmcXT9NGv8mnuxnEFyMVtFYGtPlxWMCLPo/to4eSL7s67YwQmatomPsQgkrnDjyt9yV2FnZAJJAUv8WQFjkjWOGoTzZQNSDhtH3EQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3gMoUouwlk3fJwcByBAmiWdDWHPIZLt5eiuvmdzxTBc=;
+ b=Z3XiIJr13ktGwu5WIPMw5b1TO9/TA8G6fJCf8dzgX77bV06DsaOQxMOgvJYy3kg8hqi5MQkSy+v4H58LEBfhMjBZ//oy8Orkn+/G0o79WGX/IEhiln+OCt1a7xz/HmRtgv4/ocYkTuLay3LuWVY1OrUGLqj70E8auFbCB68XBfwZ8K78WkvDCbyEZ+ucC2zT7Hc5D3ri172lRw+kZelYjOu7dFZP1fOMZLh1jmnIm4ZC7btkUav5XMNkUUJB4Gkf/NLkMFUkdrfu3iBSF7oMMx+S1fC7sdpdej5fA6aT1MgwC9xJOE4SU1NfrhLthdKSxmP2bTQzSvlco6HU1tfDyA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3gMoUouwlk3fJwcByBAmiWdDWHPIZLt5eiuvmdzxTBc=;
+ b=JIOJqRcwQ8489dAt8KJ1agbt7t1Z5BPe2P6+19q0rVdLQ93vTIAUfYqJn7jvD4qGjy5o670/2kWiAfcq9PqaU3mYtefmiGmfgr+r64/yZ2CIQdPrbrA/tk7bp7kyTLlYDDYsbVdzktfE31XLFa3f11CrYoATWiFYSQe/OpFAjnc=
+Received: from DM6PR11MB3420.namprd11.prod.outlook.com (2603:10b6:5:69::31) by
+ DM6PR11MB3193.namprd11.prod.outlook.com (2603:10b6:5:57::21) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3195.23; Thu, 23 Jul 2020 16:28:53 +0000
+Received: from DM6PR11MB3420.namprd11.prod.outlook.com
+ ([fe80::e8b2:1d82:49d9:f4b]) by DM6PR11MB3420.namprd11.prod.outlook.com
+ ([fe80::e8b2:1d82:49d9:f4b%6]) with mapi id 15.20.3216.024; Thu, 23 Jul 2020
+ 16:28:53 +0000
+From:   <Claudiu.Beznea@microchip.com>
+To:     <Cristian.Birsan@microchip.com>, <balbi@kernel.org>,
+        <gregkh@linuxfoundation.org>, <Nicolas.Ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <Ludovic.Desroches@microchip.com>,
+        <robh+dt@kernel.org>, <mark.rutland@arm.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 1/6] usb: gadget: udc: atmel: use
+ of_find_matching_node_and_match
+Thread-Topic: [PATCH v3 1/6] usb: gadget: udc: atmel: use
+ of_find_matching_node_and_match
+Thread-Index: AQHWYDZ7vQs+wibSwkmzkBgy4Ym1sakVXEWA
+Date:   Thu, 23 Jul 2020 16:28:53 +0000
+Message-ID: <b9c051ce-fba2-297e-e6ec-63acfcc47afc@microchip.com>
+References: <20200722134421.190741-1-cristian.birsan@microchip.com>
+ <20200722134421.190741-2-cristian.birsan@microchip.com>
+ <9cf8e546-09ce-d902-6dca-e2490fd8c4ae@microchip.com>
+In-Reply-To: <9cf8e546-09ce-d902-6dca-e2490fd8c4ae@microchip.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+authentication-results: microchip.com; dkim=none (message not signed)
+ header.d=none;microchip.com; dmarc=none action=none
+ header.from=microchip.com;
+x-originating-ip: [213.233.110.107]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 90b832b2-2bb5-43ed-3338-08d82f257d4b
+x-ms-traffictypediagnostic: DM6PR11MB3193:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DM6PR11MB3193CF28614F29BE6814808187760@DM6PR11MB3193.namprd11.prod.outlook.com>
+x-bypassexternaltag: True
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: MJXTwNxDPvrMQdaXR/OSJZpeQxsmfhMAxEKIn7tHJSpxjEZ4LFf+PbwR1IHY77ZT8nb8e5ZJHIl9mf257L95Ip/JqPSIAdegtKk1Iznt6dfmTfpB+7DxSCgzk+goZ9990T512ExGoM00w+paffJ7+myHMhnOlzw5dfK70BImEjGmAi1bzzqx7Eq/EtHUNa6VImxaGbSWEeezfo3bpMKvLtcuRmndBO7/+KriHZmGMXx2VnLScFFcLv3aq9v1/kfUisqr06b8LPWK6A2rk+k1oJ+4xPR3jM14OjsZa4pB0nqmnOntjGyr6eo459+bMiajeM62vgGwdUIHR9eIazx0eH83qFMG5icQbQzIZMqwoq7fj4w+K9WBQb629SU14HyZtzaOTR6NUSOJYflMXXhCsZZmM1RRT8aESIJY0rxqCAu4ow8MKlkcQlO5kcbxCcuHCIx4cNsLBFJi9PyZITo4V/UNK1r0Nkebtd80Kgli9qw=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3420.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(396003)(366004)(346002)(39860400002)(376002)(136003)(83380400001)(186003)(71200400001)(26005)(5660300002)(31686004)(8676002)(6486002)(66446008)(36756003)(66556008)(2616005)(966005)(31696002)(6506007)(86362001)(110136005)(66476007)(91956017)(2906002)(8936002)(53546011)(6512007)(478600001)(316002)(76116006)(64756008)(66946007)(921003)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: TtNTQ1oo8rvXhFyaDUZfe/3wreGtPOym5N+KUrh6wDJhrZfAHZ8rxCJYeFAsERNTd3BxpudxNLYAgcFGDP6oY3vLbT6TRrOKQm22LhKYFPE5eb/gCo6VtLREBKx5IdAbaA5jrjN4cc9ocxQzJNHkp6NnbdPLgIIx+2mUAWzR7E+DhI1gBgFkp36WIfI0eiLwv9/8tcdKxp/k7kk69gq4+QkaNR53zKqeDKsYT3W8WH6SdgIPUy0OYZSS5vQ3+UHOmCPfhbZLZ/EPOEidH+0WDKrWfgzXXXe0L/1AIyEFF8mVaDU0YukrShJ7FbPIAWaCp9JboRoNERSQ2K4Tkp8Ry1rb7fTNVYNIQrAmOtJdkFUc6RD3Jq08l4n8/hZhEAoumqjyxUzz5d+V6ivsJwWDRfkQUFBt59DfEE4pm8mnLzzlECIiOIHGXVhEWKvkPCxaObzk/81x5d80Qt4l5wAMJIwKoWPCAJTk7mVDh5aJSzfEM8XQRWnJ5/3vB6sOmAVL
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <47DDA43FD86B73409BAEC4EFE15D26FE@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3420.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 90b832b2-2bb5-43ed-3338-08d82f257d4b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jul 2020 16:28:53.4711
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: CHZJXIvyQK6/Yid+IK9m071+CxLn1/fpDcLiCLRgjsuAp/xeN+EUggFyHKJcx+9cIpilnxJofpOQFf7DC4kJvV2u9OZdudnZcggo2XgRf28=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB3193
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 23 Jul 2020 11:38:21 -0400
-Alan Stern <stern@rowland.harvard.edu> wrote:
-
-> On Wed, Jul 22, 2020 at 10:18:17PM -0600, Alex Williamson wrote:
-> > On Thu, 23 Jul 2020 02:59:55 +0000
-> > "Weitao Wang(BJ-RD)" <WeitaoWang@zhaoxin.com> wrote:
-> >  =20
-> > > On , Jul 22, 2020 at 02:44:14PM +0200, Alan wrote: =20
-> > > > On Wed, Jul 22, 2020 at 02:44:14PM +0200, Greg KH wrote:   =20
-> > > > > On Wed, Jul 22, 2020 at 07:57:48PM +0800, WeitaoWangoc wrote:   =
-=20
-> > > > > > This bug is found in Zhaoxin platform, but it's a commom code b=
-ug.
-> > > > > > Fail sequence:
-> > > > > > step1: Unbind UHCI controller from native driver;
-> > > > > > step2: Bind UHCI controller to vfio-pci, which will put UHCI co=
-ntroller in one   =20
-> > > > vfio   =20
-> > > > > >        group's device list and set UHCI's dev->driver_data to s=
-truct   =20
-> > > > vfio-pci(for UHCI)   =20
-> > > > >
-> > > > > Hah, that works?  How do you do that properly?  What code does th=
-at?   =20
-> > > >
-> > > > Yeah, that can't possibly work.  The USB core expects that any host
-> > > > controller device (or at least, any PCI host controller device) has=
- its
-> > > > driver_data set to point to a struct usb_hcd.  It doesn't expect a =
-host
-> > > > controller to be bound to anything other than a host controller dri=
-ver.
-> > > >
-> > > > Things could easily go very wrong here.  For example, suppose at th=
-is
-> > > > point the ehci-hcd driver just happens to bind to the EHCI controll=
-er.
-> > > > When this happens, the EHCI controller hardware takes over all the =
-USB
-> > > > connections that were routed to the UHCI controller.  How will vfio=
--pci
-> > > > deal with that?  Pretty ungracefully, I imagine. =20
-> >=20
-> > The issue I believe we're seeing here is not with vfio-pci trying to do
-> > anything with the device, the IOMMU grouping would prevent a user from
-> > opening any device within the group while other devices within the
-> > group are bound to host drivers. =20
->=20
-> You've lost me.  (A) What is IOMMU grouping?  (B) How does it prevent=20
-> users from opening devices?  (C) What do users have to do with the=20
-> problem anyway (USB host controllers and drivers have to do things on=20
-> their own even without user intervention)?
-
-The alternate driver in question here is vfio-pci, which allows IOMMU
-protected userspace driver access to a device.  A primary use case of
-vfio is to assign PCI devices to a VM, where QEMU is the userspace
-driver.  An IOMMU group is a set of one or more devices that are
-considered to be DMA isolated from other groups of devices.  DMA
-isolation includes, for instance, the potential for peer-to-peer
-between devices which cannot be managed by the IOMMU.  DMA between PCIe
-functions within a multifunction slot are generally considered to be
-non-isolated from one another unless they implement PCIe Access Control
-Services (ACS) to indicate isolation.  I've never seen a USB controller
-implement ACS, nor should they due to the interactions between
-functions, therefore all the USB functions within a slot will be
-grouped together.
-
-The vfio framework will not allow users to access groups for which some
-of the devices within the group are bound to active host drivers,
-therefore in this scenario where we have one USB function bound to a
-host driver and the other bound to vfio-pci, the user would not be able
-to access the device and the vfio-pci usage of the device is
-essentially nothing more than a stub driver until driver binding of the
-other devices within the group changes.  IOW, vfio-pci is not trying to
-make use of the device with this split binding, the report here is only
-a fault seen in the process of moving all of the functions to vfio-pci,
-which would then make the devices accessible to the user.
-
-> >  So it should be fine if the EHCI
-> > device takes over the other ports, but it's not ok that ehci-hcd
-> > assumes the driver private data for any other UHCI/OHCI/EHCI device in
-> > the same slot is something that it's free to modify.  It really seems
-> > there should be some sort of companion device registration/opt-in
-> > rather than modifying unvalidated data. =20
->=20
-> Until now that hasn't been necessary, since nobody wanted to bind a=20
-> different driver to these devices.
->=20
-> > > > The only way to make this work at all is to unbind both uhci-hcd and
-> > > > ehci-hcd first.  Then after both are finished you can safely bind
-> > > > vfio-pci to the EHCI controller and the UHCI controllers (in that
-> > > > order).
-> > > >   =20
-> > > I'm agree with you, unbind both uhci-hcd and ehci-hcd first then bind=
- to
-> > > vfio-pci is a more reasonable sequence. Our experiments prove that th=
-is
-> > > sequence is indeed good as expected.
-> > > However, I did not find a formal document to prescribe this order.
-> > > Unfortunately, some application software such as virt-manager/qemu as=
-sign
-> > > UHCI/EHCI to guest OS has the same bind/unbind sequence as test =E2=
-=80=9Cby hand=E2=80=9D.
-> > > Do we need to consider compatibility with this application scenario? =
-=20
-> >=20
-> > Unbinding all functions first, before binding any to vfio-pci should
-> > indeed work, thanks to the for_each_companion() function at least
-> > testing for null private data before going further.  I'd still argue
-> > though that these hcd drivers are overstepping their authority by
-> > walking the PCI bus and assuming any device in the same slot, matching
-> > a set of class codes, is making use of a driver with a known data
-> > structure that they're allowed to modify. =20
->=20
-> Until recently that has been a valid assumption.
->=20
-> >  Even if we claim that the
-> > user needs to know what they're doing when they change driver binding,
-> > that's a pretty subtle interaction with no validation.  Thanks, =20
->=20
-> It's worse than that.  We're not just dealing with a software=20
-> interaction issue -- the _hardware_ for these devices also interacts. =20
-> That's the real reason why the driver for the device on one slot has to=20
-> be aware of the driver for the device on a different slot.
->=20
-> Adding a mechanism for software registration or validation won't fix the=
-=20
-> hardware issues.  Relying on a protocol that requires all the devices to=
-=20
-> be unbound before any of them are bound to a new class of drivers, on=20
-> the other hand, will fix the problem.
-
-The IOMMU grouping restriction does solve the hardware issue, so long
-as one driver doesn't blindly assume the driver private data for
-another device and modify it.  I do agree that your solution would
-work, requiring all devices are unbound before any can be bound, but it
-also seems difficult to manage.  The issue is largely unique to USB
-AFAIK.  On the other hand, drivers coordinating with each other to
-register their _private_ data as share-able within a set of drivers
-seems like a much more direct and explicit interaction between the
-drivers.  Thanks,
-
-Alex
-
+DQoNCk9uIDIyLjA3LjIwMjAgMTc6NDMsIENsYXVkaXUuQmV6bmVhQG1pY3JvY2hpcC5jb20gd3Jv
+dGU6DQo+IA0KPiANCj4gT24gMjIuMDcuMjAyMCAxNjo0NCwgY3Jpc3RpYW4uYmlyc2FuQG1pY3Jv
+Y2hpcC5jb20gd3JvdGU6DQo+PiBGcm9tOiBDbGF1ZGl1IEJlem5lYSA8Y2xhdWRpdS5iZXpuZWFA
+bWljcm9jaGlwLmNvbT4NCj4+DQo+PiBJbnN0ZWFkIG9mIHRyeWluZyB0byBtYXRjaCBldmVyeSBw
+b3NzaWJsZSBjb21wYXRpYmxlIHVzZQ0KPj4gb2ZfZmluZF9tYXRjaGluZ19ub2RlX2FuZF9tYXRj
+aCgpIGFuZCBwYXNzIHRoZSBjb21wYXRpYmxlIGFycmF5Lg0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6
+IENsYXVkaXUgQmV6bmVhIDxjbGF1ZGl1LmJlem5lYUBtaWNyb2NoaXAuY29tPg0KPj4gLS0tDQo+
+PiAgZHJpdmVycy91c2IvZ2FkZ2V0L3VkYy9hdG1lbF91c2JhX3VkYy5jIHwgMjUgKysrKysrKysr
+KysrKysrKysrLS0tLS0tLQ0KPj4gIDEgZmlsZSBjaGFuZ2VkLCAxOCBpbnNlcnRpb25zKCspLCA3
+IGRlbGV0aW9ucygtKQ0KPj4NCj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9nYWRnZXQvdWRj
+L2F0bWVsX3VzYmFfdWRjLmMgYi9kcml2ZXJzL3VzYi9nYWRnZXQvdWRjL2F0bWVsX3VzYmFfdWRj
+LmMNCj4+IGluZGV4IGM1MTI4YzIyOWM1Mi4uZWUyYjU1MGFhNDAwIDEwMDY0NA0KPj4gLS0tIGEv
+ZHJpdmVycy91c2IvZ2FkZ2V0L3VkYy9hdG1lbF91c2JhX3VkYy5jDQo+PiArKysgYi9kcml2ZXJz
+L3VzYi9nYWRnZXQvdWRjL2F0bWVsX3VzYmFfdWRjLmMNCj4+IEBAIC0yMTEyLDYgKzIxMTIsMTMg
+QEAgc3RhdGljIGNvbnN0IHN0cnVjdCBvZl9kZXZpY2VfaWQgYXRtZWxfdWRjX2R0X2lkc1tdID0g
+ew0KPj4gIA0KPj4gIE1PRFVMRV9ERVZJQ0VfVEFCTEUob2YsIGF0bWVsX3VkY19kdF9pZHMpOw0K
+Pj4gIA0KPj4gK3N0YXRpYyBjb25zdCBzdHJ1Y3Qgb2ZfZGV2aWNlX2lkIGF0bWVsX3BtY19kdF9p
+ZHNbXSA9IHsNCj4+ICsJeyAuY29tcGF0aWJsZSA9ICJhdG1lbCxhdDkxc2FtOWc0NS1wbWMiIH0s
+DQo+PiArCXsgLmNvbXBhdGlibGUgPSAiYXRtZWwsYXQ5MXNhbTlybC1wbWMiIH0sDQo+PiArCXsg
+LmNvbXBhdGlibGUgPSAiYXRtZWwsYXQ5MXNhbTl4NS1wbWMiIH0sDQo+PiArCXsgLyogc2VudGlu
+ZWwgKi8gfQ0KPj4gK307DQo+PiArDQo+PiAgc3RhdGljIHN0cnVjdCB1c2JhX2VwICogYXRtZWxf
+dWRjX29mX2luaXQoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldiwNCj4+ICAJCQkJCQkgICAg
+c3RydWN0IHVzYmFfdWRjICp1ZGMpDQo+PiAgew0KPj4gQEAgLTIxMjgsMTMgKzIxMzUsMTcgQEAg
+c3RhdGljIHN0cnVjdCB1c2JhX2VwICogYXRtZWxfdWRjX29mX2luaXQoc3RydWN0IHBsYXRmb3Jt
+X2RldmljZSAqcGRldiwNCj4+ICANCj4+ICAJdWRjX2NvbmZpZyA9IG1hdGNoLT5kYXRhOw0KPj4g
+IAl1ZGMtPmVycmF0YSA9IHVkY19jb25maWctPmVycmF0YTsNCj4+IC0JdWRjLT5wbWMgPSBzeXNj
+b25fcmVnbWFwX2xvb2t1cF9ieV9jb21wYXRpYmxlKCJhdG1lbCxhdDkxc2FtOWc0NS1wbWMiKTsN
+Cj4+IC0JaWYgKElTX0VSUih1ZGMtPnBtYykpDQo+PiAtCQl1ZGMtPnBtYyA9IHN5c2Nvbl9yZWdt
+YXBfbG9va3VwX2J5X2NvbXBhdGlibGUoImF0bWVsLGF0OTFzYW05cmwtcG1jIik7DQo+PiAtCWlm
+IChJU19FUlIodWRjLT5wbWMpKQ0KPj4gLQkJdWRjLT5wbWMgPSBzeXNjb25fcmVnbWFwX2xvb2t1
+cF9ieV9jb21wYXRpYmxlKCJhdG1lbCxhdDkxc2FtOXg1LXBtYyIpOw0KPj4gLQlpZiAodWRjLT5l
+cnJhdGEgJiYgSVNfRVJSKHVkYy0+cG1jKSkNCj4+IC0JCXJldHVybiBFUlJfQ0FTVCh1ZGMtPnBt
+Yyk7DQo+PiArCWlmICh1ZGMtPmVycmF0YSkgew0KPj4gKwkJcHAgPSBvZl9maW5kX21hdGNoaW5n
+X25vZGVfYW5kX21hdGNoKE5VTEwsIGF0bWVsX3BtY19kdF9pZHMsDQo+PiArCQkJCQkJICAgICBO
+VUxMKTsNCj4+ICsJCWlmICghcHApDQo+PiArCQkJcmV0dXJuIEVSUl9QVFIoLUVOT0RFVik7DQo+
+PiArDQo+PiArCQl1ZGMtPnBtYyA9IHN5c2Nvbl9ub2RlX3RvX3JlZ21hcChwcCk7DQo+PiArCQlv
+Zl9ub2RlX3B1dChwcCk7DQo+PiArCQlpZiAoSVNfRVJSKHVkYy0+cG1jKSkNCj4+ICsJCQlyZXR1
+cm4gRVJSX0NBU1QodWRjLT5wbWMpOw0KPj4gKwl9DQo+IA0KPiBUaGlzIHNlZW1zIGEgYml0IG5v
+dCBzaW1pbGFyLiBJIG1heSBoYWQgYmVlbiB3cm9uZyBhdCB0aGUgbW9tZW50IEkgd3JvdGUNCj4g
+dGhpcyBwYXRjaC4gUHJvYmFibHkgdGhlIGJlc3Qgd291bGQgYmU6DQo+IA0KPiArCXVkYy0+cG1j
+ID0gRVJSX1BUUigtRU5PREVWKTsNCj4gKwlwcCA9IG9mX2ZpbmRfbWF0Y2hpbmdfbm9kZV9hbmRf
+bWF0Y2goTlVMTCwgYXRtZWxfcG1jX2R0X2lkcywNCj4gKwkJCQkJICAgICBOVUxMKTsNCj4gKwlp
+ZiAocHApIHsNCj4gKwkJdWRjLT5wbWMgPSBzeXNjb25fbm9kZV90b19yZWdtYXAocHApOw0KPiAr
+CQlvZl9ub2RlX3B1dChwcCk7DQo+ICsJfQ0KPiArDQo+ICsJaWYgKCghcHAgfHwgSVNfRVJSKHVk
+Yy0+cG1jKSkgJiYgdWRjLT5lcnJhdGEpDQo+ICsJCXJldHVybiBFUlJfQ0FTVCh1ZGMtPnBtYyk7
+DQoNCkFjdHVhbGx5LCB0aGUgaW5pdGlhbCBwYXRjaCBzaG91bGQgYmUgZ29vZCBhbmQgc2ltcGxl
+ciB0aGFuIHdoYXQgSSBwcm9wb3NlZA0KaW4gcHJldmlvdXMgZW1haWwuIFBsZWFzZSBpZ25vcmUg
+aXQuDQoNClNvcnJ5IGZvciB0aGUgbm9pc2UhDQoNCj4gDQo+IFRoYW5rIHlvdSwNCj4gQ2xhdWRp
+dSBCZXpuZWENCj4gDQo+PiAgDQo+PiAgCXVkYy0+bnVtX2VwID0gMDsNCj4+ICANCj4+DQo+IF9f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fDQo+IGxpbnV4LWFy
+bS1rZXJuZWwgbWFpbGluZyBsaXN0DQo+IGxpbnV4LWFybS1rZXJuZWxAbGlzdHMuaW5mcmFkZWFk
+Lm9yZw0KPiBodHRwOi8vbGlzdHMuaW5mcmFkZWFkLm9yZy9tYWlsbWFuL2xpc3RpbmZvL2xpbnV4
+LWFybS1rZXJuZWwNCj4g
