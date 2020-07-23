@@ -2,88 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4187522AD33
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 13:06:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7275922AD3D
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 13:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728282AbgGWLFj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jul 2020 07:05:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51294 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727859AbgGWLFj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 23 Jul 2020 07:05:39 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 24E75206D7;
-        Thu, 23 Jul 2020 11:05:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595502338;
-        bh=cDmd+AClrTIXXvkMIxqlnPN85VW8f4Ew+hvTI4Dl0YM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eI1p89PtcGu3MfxPsU3nMkAU3wyuB88VjWAtDh49sWjehzT6n+lmak60sBC2zxI3Q
-         AhlS/vADDJRlX3c72RLDz6kDNXRMHyNaQEc3loIaAEsbiBTCr22H7ASuR7k+K46dxR
-         zQPSN09nPBlOfNHOspFPYhRhgYL8wdKBc8JrAyYk=
-Date:   Thu, 23 Jul 2020 12:05:23 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     Mike Looijmans <mike.looijmans@topic.nl>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        balbi@kernel.org, gregkh@linuxfoundation.org, lgirdwood@gmail.com
-Subject: Re: [PATCH v3] usb: dwc3: Add support for VBUS power control
-Message-ID: <20200723110523.GA4759@sirena.org.uk>
-References: <20200619142512.19824-1-mike.looijmans@topic.nl>
- <20200723075612.tn5dbkhes2chohwh@axis.com>
+        id S1728430AbgGWLHx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jul 2020 07:07:53 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:20522 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728282AbgGWLHw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jul 2020 07:07:52 -0400
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06NAwU4c027391;
+        Thu, 23 Jul 2020 13:07:33 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=B8FNCHpPJo15iadwOE6rPE190prlO9w4wXVteCya9nk=;
+ b=zgcA6GOvFc1l5ZCgd+ZOaIrP7vM4hl4947z/fAoiy1UXl1WazB+YJ58SQUFtzoXy/x+J
+ AQ4pglkbv/Lnk2yJ7mPuxGEUMztOpfqeBcKJHznpRBukRzfocSn+MzlAdfdmHUeKHtvS
+ G3xRRYN1CQiD+GQPaQtGwFogug8dYvdWFYadAfOoEp6Ez0uNQOWCokx5aE+35VLKFp+4
+ jECBzQGEovPwANETvNSXHfTUrlatDzT4qxQ+3ecTSCkyMcvGcL5woZbyVnMHFs1eT/8V
+ VC3oA+rvKx+dkhScP1SoNREVFzMgE04bH4KpSltcRY0G8wRnJs2ZzRdqeOBJepZNi5RM ew== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 32cux0mrg2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Jul 2020 13:07:33 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 75709100034;
+        Thu, 23 Jul 2020 13:07:32 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 606EB2AD9F6;
+        Thu, 23 Jul 2020 13:07:32 +0200 (CEST)
+Received: from localhost (10.75.127.45) by SFHDAG3NODE2.st.com (10.75.127.8)
+ with Microsoft SMTP Server (TLS) id 15.0.1347.2; Thu, 23 Jul 2020 13:07:32
+ +0200
+From:   Amelie Delaunay <amelie.delaunay@st.com>
+To:     Minas Harutyunyan <hminas@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>
+CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Fabrice Gasnier <fabrice.gasnier@st.com>,
+        Amelie Delaunay <amelie.delaunay@st.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: [PATCH v2 0/3] Add USB role switch support to DWC2
+Date:   Thu, 23 Jul 2020 13:07:14 +0200
+Message-ID: <20200723110717.18699-1-amelie.delaunay@st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="AqsLC8rIMeq19msA"
-Content-Disposition: inline
-In-Reply-To: <20200723075612.tn5dbkhes2chohwh@axis.com>
-X-Cookie: Down with categorical imperative!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG1NODE1.st.com (10.75.127.1) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-23_03:2020-07-23,2020-07-23 signatures=0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+When using usb-c connector (but it can also be the case with a micro-b
+connector), iddig, avalid, bvalid, vbusvalid input signals may not be
+connected to the DWC2 OTG controller.
+DWC2 OTG controller features an overriding control of the PHY voltage valid
+and ID input signals.
+So, missing signals can be forced using usb role from usb role switch and
+this override feature.
 
---AqsLC8rIMeq19msA
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This series adds support for usb role switch to dwc2, by using overriding
+control of the PHY voltage valid and ID input signals.
 
-On Thu, Jul 23, 2020 at 09:56:14AM +0200, Vincent Whitchurch wrote:
-> On Fri, Jun 19, 2020 at 04:25:12PM +0200, Mike Looijmans wrote:
-> > +void dwc3_set_vbus(struct dwc3 *dwc, bool enable)
-> > +{
-> > +	int ret;
-> > +
-> > +	if (enable !=3D dwc->vbus_reg_enabled) {
-> > +		if (enable)
-> > +			ret =3D regulator_enable(dwc->vbus_reg);
-> > +		else
-> > +			ret =3D regulator_disable(dwc->vbus_reg);
-=20
-> dwc->vbus_reg is set to NULL when the regulator is not present.  These
-> regulator_* functions expect a non-NULL pointer so a NULL check is
-> required before calling them.
+It has been tested on stm32mp157c-dk2 [1], which has a Type-C connector
+managed by a Type-C port controller, and connected to USB OTG controller.
 
-Does the device actually support running without power so that's a thing
-that can happen?  _get_optional() should only ever be used for supplies
-that may be physically absent.
+[1] https://www.st.com/en/evaluation-tools/stm32mp157c-dk2.html
 
---AqsLC8rIMeq19msA
-Content-Type: application/pgp-signature; name="signature.asc"
+Amelie Delaunay (3):
+  usb: dwc2: override PHY input signals with usb role switch support
+  dt-bindings: usb: dwc2: add optional usb-role-switch property
+  usb: dwc2: don't use ID/Vbus detection if usb-role-switch on STM32MP15
+    SoCs
+---
+Changes in v2:
+- Previous DT patch already in stm32-next branch so removed from v2 patchset
+  "ARM: dts: stm32: enable usb-role-switch on USB OTG on stm32mp15xx-dkx"
+- DWC2 DT bindings update added
+- Build issue reported by kernel test robot fixed
+- Martin's comments taken into account
+---
+ .../devicetree/bindings/usb/dwc2.yaml         |   4 +
+ drivers/usb/dwc2/Kconfig                      |   1 +
+ drivers/usb/dwc2/Makefile                     |   2 +-
+ drivers/usb/dwc2/core.h                       |   9 +
+ drivers/usb/dwc2/drd.c                        | 183 ++++++++++++++++++
+ drivers/usb/dwc2/gadget.c                     |   2 +-
+ drivers/usb/dwc2/params.c                     |   4 +-
+ drivers/usb/dwc2/platform.c                   |  15 ++
+ 8 files changed, 217 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/usb/dwc2/drd.c
 
------BEGIN PGP SIGNATURE-----
+-- 
+2.17.1
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl8ZbusACgkQJNaLcl1U
-h9A0nwf+IJuuTu/qlJsYFuUJQPV3t/N46dHV6PYxmEqbAuqbolii0elI2nQniu4X
-nwgotmRkWYCkBZXMaO9TCifxNsrY+sL5zmuMBORCVAXnHarhx/CV6W3sEqe3+4eJ
-CUeY6BeuOONdHbgItrnqG1aJ/MzFPHajuOWQNBKrwZgXWWT9B0sVru59Kw2MFBwD
-FGfRAFMcMW890e4/H4MIzD9lIMINZkz2Dj1xDaxgmVAcpxItwbdfOLdVUiJu9QTP
-UfEEZLdJaIeB3mbgl9TDBG9RB5Q9dq/X0IcGqX2X9WP4DI+DND0TUZFz7kwwo9pC
-b9yadDCwFqRaBP2zQQadLc4c4XcEoA==
-=mOZg
------END PGP SIGNATURE-----
-
---AqsLC8rIMeq19msA--
