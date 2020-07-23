@@ -2,160 +2,173 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DB5822A962
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 09:15:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E9A222A9BC
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 09:40:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726500AbgGWHPk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jul 2020 03:15:40 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:59684 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725536AbgGWHPk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jul 2020 03:15:40 -0400
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06N7DD7m014051;
-        Thu, 23 Jul 2020 09:15:20 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=yqcfY/padsjVsHSiHABJVoYRhWwTvp1SMriQZY8ccyU=;
- b=At0Pl150HlvjCdBUER0ftWuQuekxfi0EwklT75x/bePqYqO4iWqKjxuNsDn7aFrOZpLe
- 42WJqY4eJEJYzCCfh/TdisUjXbq47ICeBRdrfFAg1n3vrswF9wFc/L6+9l7FjlYtbXQt
- ozlUIOEaCMZYqIrJm2Hkl+fcCAUERTXyqFjbBOcq/0GLgFxwvX8H7yVXfR6PxmwRFprp
- eNlqkDES+OBWBOHik1XACNAmvweFWNWXHS8ed4YVhMeDS/KSfUhK60bbf0KJWTXQs8CG
- btG6mEnaLZj84V88bkHov2UkcUEiRRfWtd1swOyWMnDoc2ka7q39STFgU6Gh1OKqTcVS 7A== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 32bsah95dp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 23 Jul 2020 09:15:20 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4B13610002A;
-        Thu, 23 Jul 2020 09:15:19 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 32E0621FEA9;
-        Thu, 23 Jul 2020 09:15:19 +0200 (CEST)
-Received: from lmecxl0995.lme.st.com (10.75.127.51) by SFHDAG3NODE2.st.com
- (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Thu, 23 Jul
- 2020 09:15:18 +0200
-Subject: Re: [PATCH 1/3] usb: dwc2: override PHY input signals with usb role
- switch support
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        id S1726500AbgGWHj6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jul 2020 03:39:58 -0400
+Received: from mail-vi1eur05on2062.outbound.protection.outlook.com ([40.107.21.62]:42177
+        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726109AbgGWHj5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 23 Jul 2020 03:39:57 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=A+OACcj6zndthDBYuK5ROIiMczNCHEZYqbze6tNisqbq5m+VgxNXamQ5UPTCUFs9W468c6b4TFls8SdZ1Y9+RBUmzzhUw8dujQdqwt74ANVNEQnJFiANWLfNrSaAb2teBketBG9h6710KhFNwYuxNcdJOjxp+wHmkRcMPTqi8Y7GwUktg5eRPZjNgzxuHDXRf7d/lh6vD2MDaei8ny1mVpaLqJdgTJdHh64dm7R/beTe3YlwhNeRtcAORGDXcycxLuJs1rlqnJ0HAAyamoT615TcaRmtpvnlbFlfuxyIwdo5OXO5DiHzmscUwcZpF6oaXj55CgoBB2L7L/UfBbeKww==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/Hdqtc/1ot7zdZ4Gt21ck3yInpnS6HTNP2nr8ldYcm0=;
+ b=R7uTcJcMWz2c92JaRKvjWdneHiDqoaxAw+5Fe3Qa0vBmGX5QAvVuyaA+S1AsE3vCmj1zLaB63VnD8gOF217tcnHCXNNAYdfdu73cTa3Wxi86tCWKTwwCtIT2sCy/hydBDMDIPEOie/8gcxXb8BKhRzDVt0YUIeO4sN/zE3onDfrLxS7tK1xrAQzFs9scy4/FoLfgfEawPiE1XdweJFVwOLBVAmBGSfFAdDBkkZI+aKOLzfQvM2qLNh/b5unxzBclj6TN7/JgS2oo7rWpYvEVFeb1Vy5+at75ufpBgJQMqOkPqOKzTdNgjOCtKSKPV5kdXWcMIQ4rJcGbN2XxhAZ+gg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/Hdqtc/1ot7zdZ4Gt21ck3yInpnS6HTNP2nr8ldYcm0=;
+ b=ROo7TLh9spbgwtc9+se6kTtHDtZAMH8kYq7GTda+QNR3anmD8hNra8tY7Csa3nV4AJBI86G+5vcZx10M9KGNSaNykEahUGzYlvhoGMJRG6492oA27z9DjpMos4cbZUKD0JWwNiTFYvy9H1tc3bzjZNNqy6cODGwWY8LHg6MBsqk=
+Received: from VE1PR04MB6528.eurprd04.prod.outlook.com (2603:10a6:803:127::18)
+ by VE1PR04MB6719.eurprd04.prod.outlook.com (2603:10a6:803:128::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3195.24; Thu, 23 Jul
+ 2020 07:39:53 +0000
+Received: from VE1PR04MB6528.eurprd04.prod.outlook.com
+ ([fe80::30e2:71b0:ffd3:e39e]) by VE1PR04MB6528.eurprd04.prod.outlook.com
+ ([fe80::30e2:71b0:ffd3:e39e%7]) with mapi id 15.20.3216.023; Thu, 23 Jul 2020
+ 07:39:53 +0000
+From:   Jun Li <jun.li@nxp.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         "balbi@kernel.org" <balbi@kernel.org>
-CC:     Alexandre TORGUE <alexandre.torgue@st.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Fabrice GASNIER <fabrice.gasnier@st.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "hminas@synopsys.com" <hminas@synopsys.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>
-References: <20200616140717.28465-2-amelie.delaunay@st.com>
- <20200704174219.612060-1-martin.blumenstingl@googlemail.com>
- <05a81997-5ddb-ea81-7a89-8078b8a2b610@st.com>
- <CAFBinCCVYJ=DuKbqhJJ8463Gs+GW0bgxyXSFiLXhUfvWV6AR0Q@mail.gmail.com>
- <ee4ee889-835e-2244-504c-2b1b605d78aa@st.com>
- <CAFBinCDUxvovAyDywz3xVcu_1v4nai+ebR2D38U2B8oBGss=yg@mail.gmail.com>
-From:   Amelie DELAUNAY <amelie.delaunay@st.com>
-Message-ID: <7497c0ed-bac6-969e-8198-c40a41e874e3@st.com>
-Date:   Thu, 23 Jul 2020 09:15:17 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <CAFBinCDUxvovAyDywz3xVcu_1v4nai+ebR2D38U2B8oBGss=yg@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH] usb: dwc3: debugfs: do not queue work if try to change
+ mode on non-drd
+Thread-Topic: [PATCH] usb: dwc3: debugfs: do not queue work if try to change
+ mode on non-drd
+Thread-Index: AQHWYAdu6x48Q9+2vUaX8tnghdnJZqkUD2gAgAByEbA=
+Date:   Thu, 23 Jul 2020 07:39:53 +0000
+Message-ID: <VE1PR04MB6528CD7C8A1BF47451EF175C89760@VE1PR04MB6528.eurprd04.prod.outlook.com>
+References: <1595408575-13150-1-git-send-email-jun.li@nxp.com>
+ <7b386b9d-4dd8-5133-5a22-89e3eb86bd6a@synopsys.com>
+In-Reply-To: <7b386b9d-4dd8-5133-5a22-89e3eb86bd6a@synopsys.com>
+Accept-Language: zh-CN, en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.75.127.51]
-X-ClientProxiedBy: SFHDAG8NODE1.st.com (10.75.127.22) To SFHDAG3NODE2.st.com
- (10.75.127.8)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-23_02:2020-07-22,2020-07-23 signatures=0
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: synopsys.com; dkim=none (message not signed)
+ header.d=none;synopsys.com; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.71]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 7aea34bb-a8a8-4ce8-f5b5-08d82edb96b6
+x-ms-traffictypediagnostic: VE1PR04MB6719:
+x-microsoft-antispam-prvs: <VE1PR04MB6719A54326AE50E364907EE689760@VE1PR04MB6719.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1265;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: fGdzvWiBbfkOB9n6+xjm8E8glQkxinrIiaLt0EWwOAsInIxVtVCFftCfNZCoA/G+xvRebZTY7TQQitjTqQMqQ6HbBTeablR9LVFQQw0/rPwTfdb2i7USLdIofjtrvoqDDXsJjpy+qVdvDwbgK6FeKy4KW0G8tT/D+nvOGOpGjebatleXxQrfNopyxZ9QSqd81KxI7RHJfkFHs9ibef0vF1q5HTGMdTyda4I3uSiH9/omtecBjvxnJ6HmwTRTxfY0alwtLPbUtZu2zeJ9Jk84unJDpHE3ds/ccD0Bq1mlz5TjdJwfBInu+18s2yrBUTfO
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6528.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(39860400002)(136003)(366004)(396003)(346002)(376002)(9686003)(4326008)(8676002)(7696005)(64756008)(478600001)(76116006)(66476007)(52536014)(55016002)(110136005)(186003)(66446008)(66556008)(71200400001)(8936002)(66946007)(53546011)(26005)(2906002)(5660300002)(316002)(86362001)(45080400002)(54906003)(6506007)(83380400001)(33656002)(44832011);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: yG0HPq9QZ+GdZ1m5zoGX70R4o7kgApbw8lMNZx2CJBFl8o61pfZ4EHiENYBmMMPEt48VBFAZz7bVvKLJRRqbxab4cZnvwCGMIT82FLATCyuP60by+pbL29fFxZmfXoOcR0b038C8KoX9FOjqsgPHXgv7cJGWiVWJEo2r5jl6Aqg/97NX5kknkOiVz7Mm1i1c6xzrIq73Bhve5+YBvN4SQMkdMWMwYhoomStGS6GYBTpZtRc5P48Vc8f7Z+Rk/rQFSnt/hvymOXNc7c4MZYRMhnqNNePAOOdzXikfb8gDlR0ePfsuCbtk069hduuM6qshKTZ39DluyAL56QSMF/l69j5+4qWWZjvfV+39EXNHVzTjjZrosvRqNEcG1Tn7+MMMxvq3IR3Z8BsBsg8kn2VR8bSH1ME2UbAyWh16YFF4++JHahs2wj7UzhNe6NKKDsGQMUR2Ktes1JLOZ1dzEzDnVDZY2/VfBB3/EdLsLhkS1I0=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6528.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7aea34bb-a8a8-4ce8-f5b5-08d82edb96b6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jul 2020 07:39:53.2774
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: RLikDRQf0pD7hz5viI6xbLG5Aek9KIAlN5iJJ+aB9/rG5EkyH7XxdaH0NZo1ENTJ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6719
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Felipe,
-Hi Martin,
-
-I saw the issue reported ([balbi-usb:testing/next 2/17] 
-drivers/usb/dwc2/drd.c:80:38: error: no member named 'test_mode' in 
-'struct dwc2_hsotg'). I prepare a V2 fixing it + adressing Martin's 
-comments.
-
-Regards,
-Amelie
-
-On 7/19/20 9:56 PM, Martin Blumenstingl wrote:
-> Hello Amelie,
-> 
-> sorry for the late reply
-> 
-> On Wed, Jul 8, 2020 at 6:00 PM Amelie DELAUNAY <amelie.delaunay@st.com> 
-> wrote:
-> [...]
->> Could you please test with:
->>
->> static int dwc2_drd_role_sw_set(struct device *dev, enum usb_role role)
->> {
->>         struct dwc2_hsotg *hsotg = dev_get_drvdata(dev);
->>         unsigned long flags;
->>         int already = 0;
->>
->>         /* Skip session not in line with dr_mode */
->>         if ((role == USB_ROLE_DEVICE && hsotg->dr_mode == USB_DR_MODE_HOST) ||
->>             (role == USB_ROLE_HOST && hsotg->dr_mode == USB_DR_MODE_PERIPHERAL))
->>                 return -EINVAL;
->>
->>         /* Skip session if core is in test mode */
->>         if (role == USB_ROLE_NONE && hsotg->test_mode) {
->>                 dev_dbg(hsotg->dev, "Core is in test mode\n");
->>                 return -EBUSY;
->>         }
->>
->>         spin_lock_irqsave(&hsotg->lock, flags);
->>
->>         if (role == USB_ROLE_HOST) {
->>                 already = dwc2_ovr_avalid(hsotg, true);
->>         } else if (role == USB_ROLE_DEVICE) {
->>                 already = dwc2_ovr_bvalid(hsotg, true);
->>                 /* This clear DCTL.SFTDISCON bit */
->>                 dwc2_hsotg_core_connect(hsotg);
->>         } else {
->>                 if (dwc2_is_device_mode(hsotg)) {
->>                     if (!dwc2_ovr_bvalid(hsotg, false))
->>                         /* This set DCTL.SFTDISCON bit */
->>                         dwc2_hsotg_core_disconnect(hsotg);
->>                 } else {
->>                         dwc2_ovr_avalid(hsotg, false);
->>                 }
->>         }
->>
->>         spin_unlock_irqrestore(&hsotg->lock, flags);
->>
->>         if (!already &&
->>             role != USB_ROLE_NONE && hsotg->dr_mode == USB_DR_MODE_OTG)
->>                 /* This will raise a Connector ID Status Change Interrupt */
->>                 dwc2_force_mode(hsotg, role == USB_ROLE_HOST);
->>
->>         dev_dbg(hsotg->dev, "%s-session valid\n",
->>                 role == USB_ROLE_NONE ? "No" :
->>                 role == USB_ROLE_HOST ? "A" : "B");
->>
->>         return 0;
->> }
->>
->>
->> dwc2_force_mode is called outside the spin_lock_irqsave so the kernel
->> should not complain. I've tested on my setup and the behavior seems the
->> same.
-> this one is looking good - the previous kernel warnings are now gone!
-> thank you very much
-> 
-> 
-> Best regards,
-> Martin
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogVGhpbmggTmd1eWVuIDxU
+aGluaC5OZ3V5ZW5Ac3lub3BzeXMuY29tPg0KPiBTZW50OiBUaHVyc2RheSwgSnVseSAyMywgMjAy
+MCA0OjM2IEFNDQo+IFRvOiBKdW4gTGkgPGp1bi5saUBueHAuY29tPjsgYmFsYmlAa2VybmVsLm9y
+Zw0KPiBDYzogZ3JlZ2toQGxpbnV4Zm91bmRhdGlvbi5vcmc7IGxpbnV4LXVzYkB2Z2VyLmtlcm5l
+bC5vcmcNCj4gU3ViamVjdDogUmU6IFtQQVRDSF0gdXNiOiBkd2MzOiBkZWJ1Z2ZzOiBkbyBub3Qg
+cXVldWUgd29yayBpZiB0cnkgdG8gY2hhbmdlIG1vZGUNCj4gb24gbm9uLWRyZA0KPiANCj4gSGks
+DQo+IA0KPiBMaSBKdW4gd3JvdGU6DQo+ID4gRG8gbm90IHRyeSB0byBxdWV1ZSBhIGRyZCB3b3Jr
+IGZvciBjaGFuZ2UgbW9kZSBpZiB0aGUgcG9ydCBpcyBub3QgYQ0KPiA+IGRyZCwgdGhpcyBpcyB0
+byBhdm9pZCBiZWxvdyBrZXJuZWwgZHVtcDoNCj4gDQo+IEFyZSB5b3UgdGFsa2luZyBhYm91dCBP
+VEcgb3IgRFJEPyBUaGlzIHBhdGNoIHNlZW1zIHRvIGJlIGZvciBPVEcuIElmIHlvdSBuZWVkIHRv
+DQo+IGRlYnVnIGFuZCBtYW51YWxseSBkbyByb2xlIHN3aXRjaCBmb3IgRFJEIGZyb20gdXNlcnNw
+YWNlLCBlbmFibGUgYW5kIHVzZSByb2xlIGNsYXNzDQo+IHN5c2ZzIGF0dHJpYnV0ZS4NCg0KVGhl
+cmUgaXMgbm8gcHJvYmxlbSBpbiBub3JtYWwgY2FzZXMsIEkgdHJpZ2dlcmVkIHRoaXMgd2Fybmlu
+Zw0Kd2hlbiB0cnkgdG8gY2hhbmdlIHRoZSByb2xlIGZvciBhIHNpbmdsZSByb2xlIHBvcnQgdmlh
+IHRoaXMgZGVidWdmcw0KZmlsZSwgSSB0aGluayBub3RoaW5nIHNob3VsZCBzdG9wIHVzZXIgdG8g
+dXNlIHRoaXMgZmlsZSBmb3IgZGVidWcNCnB1cnBvc2UuDQoNClRoZXJlIGlzIGNvbmRpdGlvbiBj
+aGVjayBvZiBVU0JfRFJfTU9ERV9PVEcgd2hlbiBpbml0IGRyZF93b3JrLCBidXQNCm5vIHRoaXMg
+Y2hlY2sgd2hlbiBxdWV1ZSB3b3JrLCBzbyBtYXliZSBhIGJldHRlciBjaGFuZ2UgaXMgdG8gbW92
+ZQ0KdGhlIGNvbmRpdGlvbiBjaGVjayBmcm9tIF9fZHdjM19zZXRfbW9kZSgpIGludG8gZHdjM19z
+ZXRfbW9kZSgpDQoNCmRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9kd2MzL2NvcmUuYyBiL2RyaXZl
+cnMvdXNiL2R3YzMvY29yZS5jDQppbmRleCA2YWRhYTdkLi4yZmE1MGVjIDEwMDY0NA0KLS0tIGEv
+ZHJpdmVycy91c2IvZHdjMy9jb3JlLmMNCisrKyBiL2RyaXZlcnMvdXNiL2R3YzMvY29yZS5jDQpA
+QCAtMTIwLDkgKzEyMCw2IEBAIHN0YXRpYyB2b2lkIF9fZHdjM19zZXRfbW9kZShzdHJ1Y3Qgd29y
+a19zdHJ1Y3QgKndvcmspDQogICAgICAgIHVuc2lnbmVkIGxvbmcgZmxhZ3M7DQogICAgICAgIGlu
+dCByZXQ7DQoNCi0gICAgICAgaWYgKGR3Yy0+ZHJfbW9kZSAhPSBVU0JfRFJfTU9ERV9PVEcpDQot
+ICAgICAgICAgICAgICAgcmV0dXJuOw0KLQ0KICAgICAgICBwbV9ydW50aW1lX2dldF9zeW5jKGR3
+Yy0+ZGV2KTsNCg0KICAgICAgICBpZiAoZHdjLT5jdXJyZW50X2RyX3JvbGUgPT0gRFdDM19HQ1RM
+X1BSVENBUF9PVEcpDQpAQCAtMjA1LDYgKzIwMiw5IEBAIHZvaWQgZHdjM19zZXRfbW9kZShzdHJ1
+Y3QgZHdjMyAqZHdjLCB1MzIgbW9kZSkNCiB7DQogICAgICAgIHVuc2lnbmVkIGxvbmcgZmxhZ3M7
+DQoNCisgICAgICAgaWYgKGR3Yy0+ZHJfbW9kZSAhPSBVU0JfRFJfTU9ERV9PVEcpDQorICAgICAg
+ICAgICAgICAgcmV0dXJuOw0KKw0KICAgICAgICBzcGluX2xvY2tfaXJxc2F2ZSgmZHdjLT5sb2Nr
+LCBmbGFncyk7DQogICAgICAgIGR3Yy0+ZGVzaXJlZF9kcl9yb2xlID0gbW9kZTsNCiAgICAgICAg
+c3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgmZHdjLT5sb2NrLCBmbGFncyk7DQoNCg0KVGhhbmtzDQpM
+aSBKdW4NCj4gDQo+IEJSLA0KPiBUaGluaA0KPiANCj4gPiBbICAgNjAuMTE1NTI5XSAtLS0tLS0t
+LS0tLS1bIGN1dCBoZXJlIF0tLS0tLS0tLS0tLS0NCj4gPiBbICAgNjAuMTIwMTY2XSBXQVJOSU5H
+OiBDUFU6IDEgUElEOiA2MjcgYXQga2VybmVsL3dvcmtxdWV1ZS5jOjE0NzMNCj4gPiBfX3F1ZXVl
+X3dvcmsrMHg0NmMvMHg1MjANCj4gPiBbICAgNjAuMTI4MjU0XSBNb2R1bGVzIGxpbmtlZCBpbjoN
+Cj4gPiBbICAgNjAuMTMxMzEzXSBDUFU6IDEgUElEOiA2MjcgQ29tbTogc2ggTm90IHRhaW50ZWQN
+Cj4gPiA1LjcuMC1yYzQtMDAwMjItZzkxNGE1ODYtZGlydHkgIzEzNQ0KPiA+IFsgICA2MC4xMzkw
+NTRdIEhhcmR3YXJlIG5hbWU6IE5YUCBpLk1YOE1RIEVWSyAoRFQpDQo+ID4gWyAgIDYwLjE0MzU4
+NV0gcHN0YXRlOiBhMDAwMDA4NSAoTnpDdiBkYUlmIC1QQU4gLVVBTykNCj4gPiBbICAgNjAuMTQ4
+Mzc2XSBwYyA6IF9fcXVldWVfd29yaysweDQ2Yy8weDUyMA0KPiA+IFsgICA2MC4xNTIzODVdIGxy
+IDogX19xdWV1ZV93b3JrKzB4MzE0LzB4NTIwDQo+ID4gWyAgIDYwLjE1NjM5M10gc3AgOiBmZmZm
+ODAwMDEyNGViYzQwDQo+ID4gWyAgIDYwLjE1OTcwNV0geDI5OiBmZmZmODAwMDEyNGViYzQwIHgy
+ODogZmZmZjgwMDAxMTgwODAxOA0KPiA+IFsgICA2MC4xNjUwMThdIHgyNzogZmZmZjgwMDAxMTgx
+OWVmOCB4MjY6IGZmZmY4MDAwMTFkMzk5ODANCj4gPiBbICAgNjAuMTcwMzMxXSB4MjU6IGZmZmY4
+MDAwMTE4MDgwMTggeDI0OiAwMDAwMDAwMDAwMDAwMTAwDQo+ID4gWyAgIDYwLjE3NTY0M10geDIz
+OiAwMDAwMDAwMDAwMDAwMDEzIHgyMjogMDAwMDAwMDAwMDAwMDAwMQ0KPiA+IFsgICA2MC4xODA5
+NTVdIHgyMTogZmZmZjAwMDBiN2MwOGUwMCB4MjA6IGZmZmYwMDAwYjZjMzEwODANCj4gPiBbICAg
+NjAuMTg2MjY3XSB4MTk6IGZmZmYwMDAwYmI5OWJjMDAgeDE4OiAwMDAwMDAwMDAwMDAwMDAwDQo+
+ID4gWyAgIDYwLjE5MTU3OV0geDE3OiAwMDAwMDAwMDAwMDAwMDAwIHgxNjogMDAwMDAwMDAwMDAw
+MDAwMA0KPiA+IFsgICA2MC4xOTY4OTFdIHgxNTogMDAwMDAwMDAwMDAwMDAwMCB4MTQ6IDAwMDAw
+MDAwMDAwMDAwMDANCj4gPiBbICAgNjAuMjAyMjAyXSB4MTM6IDAwMDAwMDAwMDAwMDAwMDAgeDEy
+OiAwMDAwMDAwMDAwMDAwMDAwDQo+ID4gWyAgIDYwLjIwNzUxNV0geDExOiAwMDAwMDAwMDAwMDAw
+MDAwIHgxMDogMDAwMDAwMDAwMDAwMDA0MA0KPiA+IFsgICA2MC4yMTI4MjddIHg5IDogZmZmZjgw
+MDAxMWQ1NTQ2MCB4OCA6IGZmZmY4MDAwMTFkNTU0NTgNCj4gPiBbICAgNjAuMjE4MTM4XSB4NyA6
+IGZmZmYwMDAwYjc4MDAwMjggeDYgOiAwMDAwMDAwMDAwMDAwMDAwDQo+ID4gWyAgIDYwLjIyMzQ1
+MF0geDUgOiBmZmZmMDAwMGI3ODAwMDAwIHg0IDogMDAwMDAwMDAwMDAwMDAwMA0KPiA+IFsgICA2
+MC4yMjg3NjJdIHgzIDogZmZmZjAwMDBiYjk5N2NjMCB4MiA6IDAwMDAwMDAwMDAwMDAwMDENCj4g
+PiBbICAgNjAuMjM0MDc0XSB4MSA6IDAwMDAwMDAwMDAwMDAwMDAgeDAgOiBmZmZmMDAwMGI2YzMx
+MDg4DQo+ID4gWyAgIDYwLjIzOTM4Nl0gQ2FsbCB0cmFjZToNCj4gPiBbICAgNjAuMjQxODM0XSAg
+X19xdWV1ZV93b3JrKzB4NDZjLzB4NTIwDQo+ID4gWyAgIDYwLjI0NTQ5Nl0gIHF1ZXVlX3dvcmtf
+b24rMHg2Yy8weDkwDQo+ID4gWyAgIDYwLjI0OTA3NV0gIGR3YzNfc2V0X21vZGUrMHg0OC8weDU4
+DQo+ID4gWyAgIDYwLjI1MjY1MV0gIGR3YzNfbW9kZV93cml0ZSsweGY4LzB4MTUwDQo+ID4gWyAg
+IDYwLjI1NjQ4OV0gIGZ1bGxfcHJveHlfd3JpdGUrMHg1Yy8weGE4DQo+ID4gWyAgIDYwLjI2MDMy
+N10gIF9fdmZzX3dyaXRlKzB4MTgvMHg0MA0KPiA+IFsgICA2MC4yNjM3MjldICB2ZnNfd3JpdGUr
+MHhkYy8weDFjOA0KPiA+IFsgICA2MC4yNjcwNDVdICBrc3lzX3dyaXRlKzB4NjgvMHhmMA0KPiA+
+IFsgICA2MC4yNzAzNjBdICBfX2FybTY0X3N5c193cml0ZSsweDE4LzB4MjANCj4gPiBbICAgNjAu
+Mjc0Mjg2XSAgZWwwX3N2Y19jb21tb24uY29uc3Rwcm9wLjArMHg2OC8weDE2MA0KPiA+IFsgICA2
+MC4yNzkwNzddICBkb19lbDBfc3ZjKzB4MjAvMHg4MA0KPiA+IFsgICA2MC4yODIzOTRdICBlbDBf
+c3luY19oYW5kbGVyKzB4MTBjLzB4MTc4DQo+ID4gWyAgIDYwLjI4NjQwM10gIGVsMF9zeW5jKzB4
+MTQwLzB4MTgwDQo+ID4gWyAgIDYwLjI4OTcxNl0gLS0tWyBlbmQgdHJhY2UgNzBiMTU1NTgyZTJi
+Nzk4OCBdLS0tDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBMaSBKdW4gPGp1bi5saUBueHAuY29t
+Pg0KPiA+IC0tLQ0KPiA+ICAgZHJpdmVycy91c2IvZHdjMy9kZWJ1Z2ZzLmMgfCAzICsrKw0KPiA+
+ICAgMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKQ0KPiA+DQo+ID4gZGlmZiAtLWdpdCBh
+L2RyaXZlcnMvdXNiL2R3YzMvZGVidWdmcy5jIGIvZHJpdmVycy91c2IvZHdjMy9kZWJ1Z2ZzLmMN
+Cj4gPiBpbmRleCA2ZDlkZTMzLi45OWU3ZjUzIDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvdXNi
+L2R3YzMvZGVidWdmcy5jDQo+ID4gKysrIGIvZHJpdmVycy91c2IvZHdjMy9kZWJ1Z2ZzLmMNCj4g
+PiBAQCAtNDI4LDYgKzQyOCw5IEBAIHN0YXRpYyBzc2l6ZV90IGR3YzNfbW9kZV93cml0ZShzdHJ1
+Y3QgZmlsZSAqZmlsZSwNCj4gPiAgIAlpZiAoY29weV9mcm9tX3VzZXIoJmJ1ZiwgdWJ1ZiwgbWlu
+X3Qoc2l6ZV90LCBzaXplb2YoYnVmKSAtIDEsIGNvdW50KSkpDQo+ID4gICAJCXJldHVybiAtRUZB
+VUxUOw0KPiA+DQo+ID4gKwlpZiAoZHdjLT5kcl9tb2RlICE9IFVTQl9EUl9NT0RFX09URykNCj4g
+PiArCQlyZXR1cm4gY291bnQ7DQo+ID4gKw0KPiA+ICAgCWlmICghc3RybmNtcChidWYsICJob3N0
+IiwgNCkpDQo+ID4gICAJCW1vZGUgPSBEV0MzX0dDVExfUFJUQ0FQX0hPU1Q7DQo+ID4NCg0K
