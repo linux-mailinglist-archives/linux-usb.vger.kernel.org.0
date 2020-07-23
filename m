@@ -2,132 +2,231 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B6D322B621
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 20:50:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D89CC22B62D
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 20:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728300AbgGWStd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jul 2020 14:49:33 -0400
-Received: from esa6.microchip.iphmx.com ([216.71.154.253]:10102 "EHLO
-        esa6.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728319AbgGWStc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jul 2020 14:49:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1595530171; x=1627066171;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=AQ4wWOdIKVge/cPSYMb3D9ty6S2PPK3wNKVv4CCqRH8=;
-  b=pN1Fdy8dANwQga2ubEy1mxICBN+vV1Mwgsb1WcGEkYxYKWUbyzRQYAV1
-   NLqjE8y5wMTXKHOduEQsPoYme+2zauXBW+W5JstweFmiyWQ8B0AxeBkAX
-   83AJ4pK3RTCCzRoR5KlZSEU1pv5LBARikzc7opur6z7Wc2VanA5ltTp/X
-   tgJTEKRnGDjO7ZtJucl6RzcX193NjZd+3C1YQW1FVFud1J1Ko5n9LssNr
-   AK2s+axoDtWw4q9kutgW+7fZmzuL5DQ2VXJNbeDOY1FmVwa4dOvNp/aOc
-   Mwqjer9W0vgH8cyC//K1zbmgLwYB25/uckSNzUA5bIDPbDaMDYVR+0cxc
-   Q==;
-IronPort-SDR: AknoA4nJgGPw2/qOV9+YdphM4AjkYFphUHb4J3gNAxDTvR9kOJtGqKbPbDe5R9/Z5F/t1xlSoM
- Ot4gecwg9aLUaTNOGYRyvKgxAcaXBb6o/zzDq8s0FNEKjADYrxZvH0rXqg/G9Y19txZSDnrfRr
- HPFhGM/oupWzH7pYUKVQKLwnArBtvF81bYJc1pEycPguJltK9lA4ksmaT7fuW+wMYJijY8oesP
- nMPMvoLoLPuoDf5JUium4AmA4LJXTWQK43t1mQsbOU1pVb8ydEruOyVlvswXcbYHAbCc9+F1Wg
- xcg=
-X-IronPort-AV: E=Sophos;i="5.75,387,1589266800"; 
-   d="scan'208";a="20343958"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jul 2020 11:49:31 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 23 Jul 2020 11:49:31 -0700
-Received: from cristi-P53.lan (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.1979.3 via Frontend
- Transport; Thu, 23 Jul 2020 11:48:48 -0700
-From:   <cristian.birsan@microchip.com>
-To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
-        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <ludovic.desroches@microchip.com>, <robh+dt@kernel.org>,
-        <mark.rutland@arm.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Cristian Birsan <cristian.birsan@microchip.com>
-Subject: [PATCH v4 6/6] ARM: dts: at91: sam9x60ek: enable usb device
-Date:   Thu, 23 Jul 2020 21:49:02 +0300
-Message-ID: <20200723184902.416705-7-cristian.birsan@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200723184902.416705-1-cristian.birsan@microchip.com>
-References: <20200723184902.416705-1-cristian.birsan@microchip.com>
+        id S1726918AbgGWSv0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jul 2020 14:51:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33504 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726617AbgGWSv0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jul 2020 14:51:26 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E088C0619E2
+        for <linux-usb@vger.kernel.org>; Thu, 23 Jul 2020 11:51:26 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id o1so2979843plk.1
+        for <linux-usb@vger.kernel.org>; Thu, 23 Jul 2020 11:51:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=L1u1/EP612atHM51MLfxnclzjBCkmv7rza24Rpog9OU=;
+        b=ImXSJ2Zx/AD2cuVUklyjgXZcToxYG0YMH42R7JppafBiBcde2wlGcA5qyps8YUchMY
+         TcIfgj1LAeYBMHSo2q/znhkEP0nhXul6Io95EwzMUUL33nNvW8Rdh16Ni/bsEk3M3I69
+         xKNyLKxVB1PlIo9EGl0u/N6l7cd4NMHstkHK0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=L1u1/EP612atHM51MLfxnclzjBCkmv7rza24Rpog9OU=;
+        b=khsWkdbTq9zP6IfGvtU0LI312v0Ps7G3lcwor/HUhx6GlNLEvnEeUyPS+ErewPTfcZ
+         klhHA9co+UuZGy9aINBFn5Qa24mQCtfXBsR1Nl6fZed/ftztjQwBmgGUHDoPdsJ6FGAq
+         qKVA8sONlCOS5hPxJE/ZoDsrdy4NyQTVXHVehei3vmBKu4GairPtkedax5n+YZIHnFS0
+         NBEX6SHbRO31YSGYpTFI/ZP4PHweo87q2lUtgA4/j5zjsDL+maKWA/pkZSaWBwF8rCIa
+         h3a/iT7gWlt7zqec6s0HTJZH/+3/AgZdqbnzSzi54T+2bmqLfPrVFtVe1nA9rVfmSlCI
+         4P7Q==
+X-Gm-Message-State: AOAM531w/UkZiuF5k76tJXTUGST+aHEhgvbFp68+ippr+QQXw6KJFc8G
+        Aq9YEH43fu2YZwU5SQhFFfNc1A==
+X-Google-Smtp-Source: ABdhPJzyj7yK2JTK1AOjG2mh6QKyzyYvBoP2CT7/5OcHK0sZ5dR0bE0p7llSMAC/hJIBfgCGbhzr4w==
+X-Received: by 2002:a17:902:9682:: with SMTP id n2mr4820147plp.11.1595530285601;
+        Thu, 23 Jul 2020 11:51:25 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:f693:9fff:fef4:e70a])
+        by smtp.gmail.com with ESMTPSA id p12sm3668537pgk.40.2020.07.23.11.51.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Jul 2020 11:51:24 -0700 (PDT)
+Date:   Thu, 23 Jul 2020 11:51:23 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Sandeep Maheswaram <sanm@codeaurora.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
+Subject: Re: [PATCH v10 1/2] usb: dwc3: qcom: Add interconnect support in
+ dwc3 driver
+Message-ID: <20200723185123.GY3191083@google.com>
+References: <1595528857-25357-1-git-send-email-sanm@codeaurora.org>
+ <1595528857-25357-2-git-send-email-sanm@codeaurora.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1595528857-25357-2-git-send-email-sanm@codeaurora.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Cristian Birsan <cristian.birsan@microchip.com>
+Hi Sandeep,
 
-Enable usb device for sam9x60ek board.
+On Thu, Jul 23, 2020 at 11:57:36PM +0530, Sandeep Maheswaram wrote:
+> Add interconnect support in dwc3-qcom driver to vote for bus
+> bandwidth.
+> 
+> This requires for two different paths - from USB to
+> DDR. The other is from APPS to USB.
+> 
+> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+> Signed-off-by: Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
+> ---
+>  drivers/usb/dwc3/dwc3-qcom.c | 127 ++++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 125 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index e1e78e9..712efb7 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -13,6 +13,7 @@
+>  #include <linux/module.h>
+>  #include <linux/kernel.h>
+>  #include <linux/extcon.h>
+> +#include <linux/interconnect.h>
+>  #include <linux/of_platform.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/phy/phy.h>
+> @@ -43,6 +44,14 @@
+>  #define SDM845_QSCRATCH_SIZE			0x400
+>  #define SDM845_DWC3_CORE_SIZE			0xcd00
+>  
+> +/* Interconnect path bandwidths in MBps */
+> +#define USB_MEMORY_AVG_HS_BW MBps_to_icc(240)
+> +#define USB_MEMORY_PEAK_HS_BW MBps_to_icc(700)
+> +#define USB_MEMORY_AVG_SS_BW  MBps_to_icc(1000)
+> +#define USB_MEMORY_PEAK_SS_BW MBps_to_icc(2500)
+> +#define APPS_USB_AVG_BW 0
+> +#define APPS_USB_PEAK_BW MBps_to_icc(40)
+> +
+>  struct dwc3_acpi_pdata {
+>  	u32			qscratch_base_offset;
+>  	u32			qscratch_base_size;
+> @@ -76,6 +85,8 @@ struct dwc3_qcom {
+>  	enum usb_dr_mode	mode;
+>  	bool			is_suspended;
+>  	bool			pm_suspended;
+> +	struct icc_path		*icc_path_ddr;
+> +	struct icc_path		*icc_path_apps;
+>  };
+>  
+>  static inline void dwc3_qcom_setbits(void __iomem *base, u32 offset, u32 val)
+> @@ -190,6 +201,103 @@ static int dwc3_qcom_register_extcon(struct dwc3_qcom *qcom)
+>  	return 0;
+>  }
+>  
+> +static int dwc3_qcom_interconnect_enable(struct dwc3_qcom *qcom)
+> +{
+> +	int ret;
+> +
+> +	ret = icc_enable(qcom->icc_path_ddr);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = icc_enable(qcom->icc_path_apps);
+> +	if (ret)
+> +		return icc_disable(qcom->icc_path_ddr);
 
-Signed-off-by: Cristian Birsan <cristian.birsan@microchip.com>
----
- arch/arm/boot/dts/at91-sam9x60ek.dts | 13 +++++++++++++
- arch/arm/boot/dts/sam9x60.dtsi       | 14 ++++++++++++++
- 2 files changed, 27 insertions(+)
+You are returning the result of icc_disable(), but it should be the
+previous error. Just do
 
-diff --git a/arch/arm/boot/dts/at91-sam9x60ek.dts b/arch/arm/boot/dts/at91-sam9x60ek.dts
-index a5f5718c711a..984cf596dfe9 100644
---- a/arch/arm/boot/dts/at91-sam9x60ek.dts
-+++ b/arch/arm/boot/dts/at91-sam9x60ek.dts
-@@ -559,6 +559,12 @@ pinctrl_key_gpio_default: pinctrl_key_gpio {
- 			atmel,pins = <AT91_PIOD 18 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
- 		};
- 	};
-+
-+	usb0 {
-+		pinctrl_usba_vbus: usba_vbus {
-+			atmel,pins = <AT91_PIOB 16 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
-+		};
-+	};
- }; /* pinctrl */
- 
- &pmc {
-@@ -657,6 +663,13 @@ timer1: timer@1 {
- 	};
- };
- 
-+&usb0 {
-+	atmel,vbus-gpio = <&pioB 16 GPIO_ACTIVE_HIGH>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_usba_vbus>;
-+	status = "okay";
-+};
-+
- &usb1 {
- 	num-ports = <3>;
- 	atmel,vbus-gpio = <0
-diff --git a/arch/arm/boot/dts/sam9x60.dtsi b/arch/arm/boot/dts/sam9x60.dtsi
-index 6763423d64b8..ef0ef8625f25 100644
---- a/arch/arm/boot/dts/sam9x60.dtsi
-+++ b/arch/arm/boot/dts/sam9x60.dtsi
-@@ -69,6 +69,20 @@ ahb {
- 		#size-cells = <1>;
- 		ranges;
- 
-+		usb0: gadget@500000 {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			compatible = "microchip,sam9x60-udc";
-+			reg = <0x00500000 0x100000
-+				0xf803c000 0x400>;
-+			interrupts = <23 IRQ_TYPE_LEVEL_HIGH 2>;
-+			clocks = <&pmc PMC_TYPE_PERIPHERAL 23>, <&pmc PMC_TYPE_CORE PMC_UTMI>;
-+			clock-names = "pclk", "hclk";
-+			assigned-clocks = <&pmc PMC_TYPE_CORE PMC_UTMI>;
-+			assigned-clock-rates = <480000000>;
-+			status = "disabled";
-+		};
-+
- 		usb1: ohci@600000 {
- 			compatible = "atmel,at91rm9200-ohci", "usb-ohci";
- 			reg = <0x00600000 0x100000>;
--- 
-2.25.1
+		icc_disable(qcom->icc_path_ddr);
 
+and use the below statement for returning (if not it should be 'return 0').
+
+> +
+> +	return ret;
+> +}
+> +
+> +static int dwc3_qcom_interconnect_disable(struct dwc3_qcom *qcom)
+> +{
+> +	int ret;
+> +
+> +	ret = icc_disable(qcom->icc_path_ddr);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = icc_disable(qcom->icc_path_apps);
+> +	if (ret)
+> +		goto err_reenable_memory_path;
+
+Please make the error handling in _enable() and _disable() symmetrical, either
+call icc_enable/disable() directly or use a goto in both functions (IMO the goto
+is not needed in this case, it makes the code more complex rather than
+simplifying it).
+
+> +
+> +	return 0;
+> +
+> +	/* Re-enable things in the event of an error */
+> +err_reenable_memory_path:
+> +	dwc3_qcom_interconnect_enable(qcom);
+
+Why this function which disables both paths and not just
+icc_enable(qcom->icc_path_ddr), analogous to dwc3_qcom_interconnect_enable()?
+
+> +
+> +	return ret;
+> +}
+> +
+> +/**
+> + * dwc3_qcom_interconnect_init() - Get interconnect path handles
+> + * and set bandwidhth.
+> + * @qcom:			Pointer to the concerned usb core.
+> + *
+> + */
+> +static int dwc3_qcom_interconnect_init(struct dwc3_qcom *qcom)
+> +{
+> +	struct device *dev = qcom->dev;
+> +	int ret;
+> +
+> +	qcom->icc_path_ddr = of_icc_get(dev, "usb-ddr");
+> +	if (IS_ERR(qcom->icc_path_ddr)) {
+> +		dev_err(dev, "failed to get usb-ddr path: %ld\n",
+> +			PTR_ERR(qcom->icc_path_ddr));
+> +		return PTR_ERR(qcom->icc_path_ddr);
+> +	}
+> +
+> +	qcom->icc_path_apps = of_icc_get(dev, "apps-usb");
+> +	if (IS_ERR(qcom->icc_path_apps)) {
+> +		dev_err(dev, "failed to get apps-usb path: %ld\n",
+> +				PTR_ERR(qcom->icc_path_apps));
+> +		return PTR_ERR(qcom->icc_path_apps);
+> +	}
+> +
+> +	if (usb_get_maximum_speed(&qcom->dwc3->dev) >= USB_SPEED_SUPER ||
+> +			usb_get_maximum_speed(&qcom->dwc3->dev) == USB_SPEED_UNKNOWN)
+> +		ret = icc_set_bw(qcom->icc_path_ddr,
+> +			USB_MEMORY_AVG_SS_BW, USB_MEMORY_PEAK_SS_BW);
+> +	else
+> +		ret = icc_set_bw(qcom->icc_path_ddr,
+> +			USB_MEMORY_AVG_HS_BW, USB_MEMORY_PEAK_HS_BW);
+> +
+> +	if (ret) {
+> +		dev_err(dev, "failed to set bandwidth for usb-ddr path: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = icc_set_bw(qcom->icc_path_apps,
+> +		APPS_USB_AVG_BW, APPS_USB_PEAK_BW);
+> +
+
+nit: remove empty line, the call and the if block belong together.
+
+> +	if (ret) {
+> +		dev_err(dev, "failed to set bandwidth for apps-usb path: %d\n", ret);
+> +		return ret;
+> +	}
