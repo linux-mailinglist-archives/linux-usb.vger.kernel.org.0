@@ -2,163 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9994D22B1B1
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 16:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2A7822B1D3
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 16:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728791AbgGWOnB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jul 2020 10:43:01 -0400
-Received: from mga02.intel.com ([134.134.136.20]:12017 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728553AbgGWOnB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 23 Jul 2020 10:43:01 -0400
-IronPort-SDR: tsSlWaITCWCgarleATW4+WypM3w+3fVcOX168lUNP7WLsxKba80InQXWc57Snwjc6bMZf0U7EF
- DRJPy+B5FVkA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9690"; a="138607504"
-X-IronPort-AV: E=Sophos;i="5.75,386,1589266800"; 
-   d="scan'208";a="138607504"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2020 07:43:00 -0700
-IronPort-SDR: ggiolBXBIjYOu9Mp9I4U9N9YKf5zYtgc149fSWRNrm9cG4eVzr+InUjol9PBYhH6tU+0H12/DQ
- +r2kPTg4goiA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,386,1589266800"; 
-   d="scan'208";a="320672529"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.170])
-  by fmsmga002.fm.intel.com with ESMTP; 23 Jul 2020 07:42:59 -0700
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-To:     <gregkh@linuxfoundation.org>
-Cc:     <linux-usb@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 27/27] xhci: dbc: remove tty specific port structure from struct xhci_dbc
-Date:   Thu, 23 Jul 2020 17:45:30 +0300
-Message-Id: <20200723144530.9992-28-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200723144530.9992-1-mathias.nyman@linux.intel.com>
-References: <20200723144530.9992-1-mathias.nyman@linux.intel.com>
+        id S1728282AbgGWOvi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jul 2020 10:51:38 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:42206 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726761AbgGWOvi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jul 2020 10:51:38 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06NEpOne183308;
+        Thu, 23 Jul 2020 14:51:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2020-01-29;
+ bh=UVrd0dvtpq4Ts0ES1WmJVk4CRHzFgNiih/Z08HeKfdc=;
+ b=Ny+VE1/0UAr8PLABJpV7zTl/cnINTVy9DOxtSXKoFowavcD47xgA2M/Z7hraFY5ujCgR
+ UZKI+TWGMBcl6eSm+cTM6EZNg+IEbaz90+tNvy8INq3TaVsUC/4bx+tVfVq0ppawe+Fz
+ 6rcojvz4Z34Tn+Au5sNnE4HdRVU5T5JF74H5y74p7n61P63ekBJ33GnHLXNbc+a6PSC/
+ h/Q+/AdBPsULRCKgH6XetWoYp04hoQTwJ3LehFl8GhRpUiETZiJc9v7RPwvxy7M3c4LB
+ D3HSrio1+XeR/HWnRFN1by39yTe+o2J82005h5IsGE2bWefgRk8eyvzoaksTl7YfwoGN 6g== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2120.oracle.com with ESMTP id 32bs1mstfx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 23 Jul 2020 14:51:31 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06NEhB3h051179;
+        Thu, 23 Jul 2020 14:51:30 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 32fb8gx3ex-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 23 Jul 2020 14:51:30 +0000
+Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 06NEpSgX017197;
+        Thu, 23 Jul 2020 14:51:29 GMT
+Received: from kadam (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 23 Jul 2020 07:51:28 -0700
+Date:   Thu, 23 Jul 2020 17:51:21 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Peilin Ye <yepeilin.cs@gmail.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        syzkaller-bugs@googlegroups.com,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [Linux-kernel-mentees] [PATCH v2] usbhid: Fix slab-out-of-bounds
+ write in hiddev_ioctl_usage()
+Message-ID: <20200723145121.GR2549@kadam>
+References: <20200718231218.170730-1-yepeilin.cs@gmail.com>
+ <20200720195209.4365-1-yepeilin.cs@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200720195209.4365-1-yepeilin.cs@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9690 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=999
+ bulkscore=0 malwarescore=0 mlxscore=0 spamscore=0 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007230110
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9691 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 bulkscore=0 adultscore=0
+ lowpriorityscore=0 mlxlogscore=999 malwarescore=0 clxscore=1015
+ spamscore=0 mlxscore=0 impostorscore=0 phishscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2007230111
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use a void pointer that any function driver can use instead.
+On Mon, Jul 20, 2020 at 03:52:09PM -0400, Peilin Ye wrote:
+> `uref->usage_index` is not always being properly checked, causing
+> hiddev_ioctl_usage() to go out of bounds under some cases. Fix it.
+> 
+> Reported-by: syzbot+34ee1b45d88571c2fa8b@syzkaller.appspotmail.com
+> Link: https://syzkaller.appspot.com/bug?id=f2aebe90b8c56806b050a20b36f51ed6acabe802
+> Signed-off-by: Peilin Ye <yepeilin.cs@gmail.com>
+> ---
+> Change in v2:
+>     - Add the same check for the `HIDIOCGUSAGE` case. (Suggested by
+>       Dan Carpenter <dan.carpenter@oracle.com>)
 
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/host/xhci-dbgcap.h |  2 +-
- drivers/usb/host/xhci-dbgtty.c | 29 +++++++++++++++++++++++------
- 2 files changed, 24 insertions(+), 7 deletions(-)
+Looks good to me.  Thanks!
 
-diff --git a/drivers/usb/host/xhci-dbgcap.h b/drivers/usb/host/xhci-dbgcap.h
-index 5018b32fc742..c70b78d504eb 100644
---- a/drivers/usb/host/xhci-dbgcap.h
-+++ b/drivers/usb/host/xhci-dbgcap.h
-@@ -137,8 +137,8 @@ struct xhci_dbc {
- 	unsigned			resume_required:1;
- 	struct dbc_ep			eps[2];
- 
--	struct dbc_port			port;
- 	const struct dbc_driver		*driver;
-+	void				*priv;
- };
- 
- struct dbc_request {
-diff --git a/drivers/usb/host/xhci-dbgtty.c b/drivers/usb/host/xhci-dbgtty.c
-index 3b306a22da47..0b942112b6f8 100644
---- a/drivers/usb/host/xhci-dbgtty.c
-+++ b/drivers/usb/host/xhci-dbgtty.c
-@@ -19,6 +19,11 @@ static void dbc_tty_exit(void);
- 
- static struct tty_driver *dbc_tty_driver;
- 
-+static inline struct dbc_port *dbc_to_port(struct xhci_dbc *dbc)
-+{
-+	return dbc->priv;
-+}
-+
- static unsigned int
- dbc_send_packet(struct dbc_port *port, char *packet, unsigned int size)
- {
-@@ -99,7 +104,7 @@ static void
- dbc_read_complete(struct xhci_dbc *dbc, struct dbc_request *req)
- {
- 	unsigned long		flags;
--	struct dbc_port		*port = &dbc->port;
-+	struct dbc_port		*port = dbc_to_port(dbc);
- 
- 	spin_lock_irqsave(&port->port_lock, flags);
- 	list_add_tail(&req->list_pool, &port->read_queue);
-@@ -110,7 +115,7 @@ dbc_read_complete(struct xhci_dbc *dbc, struct dbc_request *req)
- static void dbc_write_complete(struct xhci_dbc *dbc, struct dbc_request *req)
- {
- 	unsigned long		flags;
--	struct dbc_port		*port = &dbc->port;
-+	struct dbc_port		*port = dbc_to_port(dbc);
- 
- 	spin_lock_irqsave(&port->port_lock, flags);
- 	list_add(&req->list_pool, &port->write_pool);
-@@ -397,7 +402,7 @@ int xhci_dbc_tty_register_device(struct xhci_dbc *dbc)
- {
- 	int			ret;
- 	struct device		*tty_dev;
--	struct dbc_port		*port = &dbc->port;
-+	struct dbc_port		*port = dbc_to_port(dbc);
- 
- 	if (port->registered)
- 		return -EBUSY;
-@@ -446,7 +451,7 @@ int xhci_dbc_tty_register_device(struct xhci_dbc *dbc)
- 
- void xhci_dbc_tty_unregister_device(struct xhci_dbc *dbc)
- {
--	struct dbc_port		*port = &dbc->port;
-+	struct dbc_port		*port = dbc_to_port(dbc);
- 
- 	if (!port->registered)
- 		return;
-@@ -468,6 +473,7 @@ static const struct dbc_driver dbc_driver = {
- int xhci_dbc_tty_probe(struct xhci_hcd *xhci)
- {
- 	struct xhci_dbc		*dbc = xhci->dbc;
-+	struct dbc_port		*port;
- 	int			status;
- 
- 	/* dbc_tty_init will be called by module init() in the future */
-@@ -475,13 +481,20 @@ int xhci_dbc_tty_probe(struct xhci_hcd *xhci)
- 	if (status)
- 		return status;
- 
-+	port = kzalloc(sizeof(*port), GFP_KERNEL);
-+	if (!port) {
-+		status = -ENOMEM;
-+		goto out;
-+	}
-+
- 	dbc->driver = &dbc_driver;
-+	dbc->priv = port;
-+
- 
--	dbc_tty_driver->driver_state = &dbc->port;
-+	dbc_tty_driver->driver_state = port;
- 
- 	return 0;
- out:
--
- 	/* dbc_tty_exit will be called by module_exit() in the future */
- 	dbc_tty_exit();
- 	return status;
-@@ -493,7 +506,11 @@ int xhci_dbc_tty_probe(struct xhci_hcd *xhci)
-  */
- void xhci_dbc_tty_remove(struct xhci_dbc *dbc)
- {
-+	struct dbc_port         *port = dbc_to_port(dbc);
-+
- 	dbc->driver = NULL;
-+	dbc->priv = NULL;
-+	kfree(port);
- 
- 	/* dbc_tty_exit will be called by  module_exit() in the future */
- 	dbc_tty_exit();
--- 
-2.17.1
+Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
+
+regards,
+dan carpenter
 
