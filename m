@@ -2,103 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D300322A518
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 04:12:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D34422A519
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 04:12:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387740AbgGWCME (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Jul 2020 22:12:04 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:34878 "EHLO
+        id S2387741AbgGWCMJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jul 2020 22:12:09 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:54234 "EHLO
         smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2387467AbgGWCME (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jul 2020 22:12:04 -0400
+        by vger.kernel.org with ESMTP id S2387467AbgGWCMJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jul 2020 22:12:09 -0400
 Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id F36E0C0086;
-        Thu, 23 Jul 2020 02:12:02 +0000 (UTC)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id EB9DE4017D;
+        Thu, 23 Jul 2020 02:12:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1595470323; bh=/+ROx0/T1NSbYbubMd33Z0EHm6qA9f07CNzjW2+LDR0=;
-        h=Date:From:Subject:To:Cc:From;
-        b=d/2pJ5fZ+Kukaa5m9JGmut2+jUNcIh+KEM16M/q8R1czXj2+8JmV1u7GwPZNbTBRs
-         +uTGc0ZYty54YSWS4NSh5GXk/Bvb0b2Ya9jyA8cLeaCa/xw87lmWhLpoVWyeMA8OOz
-         8IoU66o/lleLLz1QcvTnyyRrzu+7e45HpclCygaKnb0jAdB0IT0nWjk8CvuZ+Lp0bQ
-         tFRpYK8paucQf3/HEwP9JvaAPqzRL4bbcKv8PtanXd+d62EJSZI0EgTzQBCsNhlcVO
-         2z498bFum419PR/gr9KK27fvlyBWgmTLPbZ+i/W4aOy5UwWV+nF9GHu/crOj7GnIg2
-         rt38t6sj5yGbg==
+        t=1595470329; bh=9XQ5SjIbadgCY7STByzhGubx8St7cwRl1Fv8D7kNxO8=;
+        h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
+        b=lXIlIQyAY13es9jC0fWHFbqm7cu6tXHTi+VlVL1MizsrxJllOU+HGGzSG3IEpk1LF
+         iU+fUhzOKRVamjsMcXattUA03fZkX/SlE+1xC1ks3ISxud++ejzVyR2x2fqR0O9F/q
+         waWpeke07A6jwJnOONaWycAJ/ifrbPlH7YlrhmuE1kKjNRGdDIsKI3jJljBtqW9KNU
+         y3YqIKiK5layhwZTaygyhHsDxWjTWEHV/7J5FoOj9SF22Z0Zo7q/+LRraZs3kvCNqj
+         Ya8/AzI+Uu87lK7MPqgvzRrVAC68FrCm4D/pCXU8Q4FkLebgcqrOu0VfYXOmSi9baQ
+         zIfsBnU/3K2nw==
 Received: from te-lab16 (nanobot.internal.synopsys.com [10.10.186.99])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 4D1FAA0096;
-        Thu, 23 Jul 2020 02:12:01 +0000 (UTC)
-Received: by te-lab16 (sSMTP sendmail emulation); Wed, 22 Jul 2020 19:12:01 -0700
-Date:   Wed, 22 Jul 2020 19:12:01 -0700
-Message-Id: <cover.1595468673.git.thinhn@synopsys.com>
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id D6E78A0096;
+        Thu, 23 Jul 2020 02:12:07 +0000 (UTC)
+Received: by te-lab16 (sSMTP sendmail emulation); Wed, 22 Jul 2020 19:12:07 -0700
+Date:   Wed, 22 Jul 2020 19:12:07 -0700
+Message-Id: <162ed8c99ee53a3258e434112956533d622a56e4.1595468673.git.thinhn@synopsys.com>
+In-Reply-To: <cover.1595468673.git.thinhn@synopsys.com>
+References: <cover.1595468673.git.thinhn@synopsys.com>
 X-SNPS-Relay: synopsys.com
 From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH v2 00/12] usb: Handle different sublink speeds
+Subject: [PATCH v2 01/12] usb: ch9: Add sublink speed struct
 To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Peter Chen <peter.chen@nxp.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Dejin Zheng <zhengdejin5@gmail.com>,
-        Roger Quadros <rogerq@ti.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
+        linux-usb@vger.kernel.org
 Cc:     John Youn <John.Youn@synopsys.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-A USB super-speed-plus device may operate at different sublink speed and lane
-count (e.g. gen2x2, gen1x2, or gen2x1). The usb gadget stack needs to be able
-to handle a couple things:
+USB 3.2 specification supports dual-lane for super-speed-plus. USB
+devices may operate at different sublink speeds. To avoid using magic
+numbers and capture the sublink speed better, introduce the
+usb_sublink_speed structure and various sublink speed attribute enum.
 
-1) Report the sublink speed attributes the device support
-2) Select the sublink speed attribute
+See SSP BOS descriptor in USB 3.2 specification section 9.6.2.5
 
-This series introduces sublink speed attribute structure to ch9.h to capture
-the device capability of the gadget. It also introduces a new gadget ops
-udc_set_num_lanes_and_speed to select a specific sublink speed.
-
-DWC3 needs this support for DWC_usb32 IP. Implement the new changes for DWC3.
-
+Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
+---
 Changes in v2:
- - Move usb_sublink_speed attribute struct and enum to include/linux/usb/ch9.h
- - Use "num-lanes" and "lane-speed-mantissa-gbps" as common properties instead
- - Add common functions to get num-lanes and lsm properties
- - Fix missing gen1x2 sublink speed attribute check report in dwc3
+- Move to include/linux/usb/ch9.h instead of under uapi
 
+ include/linux/usb/ch9.h | 43 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-Thinh Nguyen (12):
-  usb: ch9: Add sublink speed struct
-  usb: gadget: composite: Avoid using magic numbers
-  usb: gadget: Expose sublink speed attributes
-  usb: gadget: Set max speed for SSP devices
-  usb: composite: Properly report sublink speed
-  usb: devicetree: Introduce num-lanes and lsm
-  usb: common: Add functions to get lanes and lsm
-  usb: dwc3: Initialize lane count and sublink speed
-  usb: dwc3: gadget: Report sublink speed capability
-  usb: dwc3: gadget: Implement setting of sublink speed
-  usb: dwc3: gadget: Track connected lane and sublink speed
-  usb: dwc3: gadget: Set speed only up to the max supported
-
- Documentation/devicetree/bindings/usb/generic.txt |  11 ++
- drivers/usb/common/common.c                       |  26 ++++
- drivers/usb/dwc3/core.c                           |  62 ++++++++++
- drivers/usb/dwc3/core.h                           |  18 +++
- drivers/usb/dwc3/gadget.c                         | 143 +++++++++++++++++++++-
- drivers/usb/gadget/composite.c                    |  81 ++++++++----
- drivers/usb/gadget/udc/core.c                     |  24 +++-
- include/linux/usb/ch9.h                           |  62 ++++++++++
- include/linux/usb/gadget.h                        |  23 ++++
- 9 files changed, 414 insertions(+), 36 deletions(-)
-
-
-base-commit: 5db5ea26a2469d8899f995e82e8b718dc9e9d168
+diff --git a/include/linux/usb/ch9.h b/include/linux/usb/ch9.h
+index 58b83066bea4..f87ef9a2f859 100644
+--- a/include/linux/usb/ch9.h
++++ b/include/linux/usb/ch9.h
+@@ -36,6 +36,49 @@
+ #include <linux/device.h>
+ #include <uapi/linux/usb/ch9.h>
+ 
++/* USB 3.2 sublink speed attributes */
++
++enum usb_lane_speed_exponent {
++	USB_LSE_BPS = 0,
++	USB_LSE_KBPS = 1,
++	USB_LSE_MBPS = 2,
++	USB_LSE_GBPS = 3,
++};
++
++enum usb_sublink_type {
++	USB_ST_SYMMETRIC_RX = 0,
++	USB_ST_ASYMMETRIC_RX = 1,
++	USB_ST_SYMMETRIC_TX = 2,
++	USB_ST_ASYMMETRIC_TX = 3,
++};
++
++enum usb_link_protocol {
++	USB_LP_SS = 0,
++	USB_LP_SSP = 1,
++};
++
++/**
++ * struct usb_sublink_speed - sublink speed attribute
++ * @id: sublink speed attribute ID (SSID)
++ * @mantissa: lane speed mantissa
++ * @exponent: lane speed exponent
++ * @type: sublink type
++ * @protocol: sublink protocol
++ *
++ * Super-speed-plus supports multiple lanes. Use the sublink speed attributes to
++ * describe the sublink speed.
++ *
++ * See USB 3.2 spec section 9.6.2.6 for super-speed-plus capability for more
++ * information.
++ */
++struct usb_sublink_speed {
++	u8				id;
++	u16				mantissa;
++	enum usb_lane_speed_exponent	exponent;
++	enum usb_sublink_type		type;
++	enum usb_link_protocol		protocol;
++};
++
+ /**
+  * usb_ep_type_string() - Returns human readable-name of the endpoint type.
+  * @ep_type: The endpoint type to return human-readable name for.  If it's not
 -- 
 2.11.0
 
