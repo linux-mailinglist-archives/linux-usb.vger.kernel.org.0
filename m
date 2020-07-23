@@ -2,133 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C71CC22B909
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 23:58:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53AFF22B9DB
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 00:58:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726638AbgGWV6b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jul 2020 17:58:31 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:56693 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726390AbgGWV6a (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jul 2020 17:58:30 -0400
-Received: (qmail 1371133 invoked by uid 1000); 23 Jul 2020 17:58:30 -0400
-Date:   Thu, 23 Jul 2020 17:58:30 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Bastien Nocera <hadess@hadess.net>
-Cc:     linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v3] USB: Fix device driver race
-Message-ID: <20200723215830.GB1370343@rowland.harvard.edu>
-References: <a3cd9c51f215be37ac9bb44083ab8b3280f9359f.camel@hadess.net>
+        id S1727817AbgGWW6j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jul 2020 18:58:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43632 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726608AbgGWW6i (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jul 2020 18:58:38 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08FC9C0619D3;
+        Thu, 23 Jul 2020 15:58:38 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id g10so7407623wmc.1;
+        Thu, 23 Jul 2020 15:58:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=8qqXSwfvqheVjYXqW+atWH5qoEuJ9FdUQ20+E0c6/f8=;
+        b=lMtF2uv+uBztG8XBoS1w/RHN0Qpm1GVcEUl/qO9TEUN8NTus1jJD+FMjJnYTqrtjN8
+         e5CTFbIEhRyYUseNm3oEmPep3vA7xsMjfOGVT77wmg6wtVL06Wc2OxX3VwCPupv43nFV
+         xyXjGTOSL1MzHgeFICJoFjknOUzm2DzaAIIW7qC3a6BSQsI6GAn+cotpmYJjGa9+tFOZ
+         Jq1THhcFiboZXpZiXBOPxYrpm9Gv6QVrcEFB/v8Mmi//gnHMPwekN9qO61fi6r/OTfSA
+         01E3lYNk9F7gzykcTPKx2/JxwKLsErs/T3qtXZwepzq6WThI5xSRj2jXXpDqWf9FoY33
+         nnmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=8qqXSwfvqheVjYXqW+atWH5qoEuJ9FdUQ20+E0c6/f8=;
+        b=guA4ge3InadbqS9P/WoJm4YtAPk7U9pqojGxmEHpObDAe5hLQNblylPNKxYa0QTI1k
+         N2WvMChQqTlUucHYWYOEmGVUtN6dGzrK+QwBMl2EAkNrX9nKNsDi6QWYCJ8bJDr7anE8
+         4VqnLeBCR7hnxt5lpMg53cbGHg6hj3dOUQZg6UoHI1M1cCKUyg0gg5fFBmlQYLO2IihJ
+         uAGB7ptfQ8vZH4/hh8e4UAlH0esOtDkJCIqU9AyCCOPvDZrxFEl9A8+Ogr0Uq3HuhORN
+         tTaNb/18d+npgzwoAwkX/sVFc5Af/gHxSzGgzWWh70W7/IGjI/PROARiwFD13KmUm+5l
+         5AcQ==
+X-Gm-Message-State: AOAM530hnBvlzD9cww37LDd++/TwcFp2RZ8RgLpmVikrrAq++rW58bID
+        cPSNnJv2GXAf/D7CULkviQrE9Ew6x74=
+X-Google-Smtp-Source: ABdhPJxlaSPn6Qlr3WdBmDOLf6XsYVyz44wdckCEc7RVJjfQ1vlAxtbOcrV202cQXprXYEpGD1xWtw==
+X-Received: by 2002:a1c:2ec4:: with SMTP id u187mr5883641wmu.188.1595545116395;
+        Thu, 23 Jul 2020 15:58:36 -0700 (PDT)
+Received: from eldamar (80-218-24-251.dclient.hispeed.ch. [80.218.24.251])
+        by smtp.gmail.com with ESMTPSA id i8sm3490108wro.34.2020.07.23.15.58.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jul 2020 15:58:35 -0700 (PDT)
+Date:   Fri, 24 Jul 2020 00:58:34 +0200
+From:   Salvatore Bonaccorso <carnil@debian.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Antonio Borneo <borneo.antonio@gmail.com>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hewenliang <hewenliang4@huawei.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usbip: tools: fix build error for multiple definition
+Message-ID: <20200723225834.GA3733057@eldamar.local>
+References: <20200618000844.1048309-1-borneo.antonio@gmail.com>
+ <f914d6a1-20d6-2e00-bcf5-658848ad95a1@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a3cd9c51f215be37ac9bb44083ab8b3280f9359f.camel@hadess.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <f914d6a1-20d6-2e00-bcf5-658848ad95a1@linuxfoundation.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 23, 2020 at 11:30:39PM +0200, Bastien Nocera wrote:
-> When a new device with a specialised device driver is plugged in, the
-> new driver will be modprobe()'d but the driver core will attach the
-> "generic" driver to the device.
+Hi,
+
+On Thu, Jun 18, 2020 at 11:36:39AM -0600, Shuah Khan wrote:
+> On 6/17/20 6:08 PM, Antonio Borneo wrote:
+> > With GCC 10, building usbip triggers error for multiple definition
+> > of 'udev_context', in:
+> > - libsrc/vhci_driver.c:18 and
+> > - libsrc/usbip_host_common.c:27.
+> > 
+> > Declare as extern the definition in libsrc/usbip_host_common.c.
+> > 
+> > Signed-off-by: Antonio Borneo <borneo.antonio@gmail.com>
+> > ---
+> >   tools/usb/usbip/libsrc/usbip_host_common.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/usb/usbip/libsrc/usbip_host_common.c b/tools/usb/usbip/libsrc/usbip_host_common.c
+> > index d1d8ba2a4a40..ca78aa368476 100644
+> > --- a/tools/usb/usbip/libsrc/usbip_host_common.c
+> > +++ b/tools/usb/usbip/libsrc/usbip_host_common.c
+> > @@ -23,7 +23,7 @@
+> >   #include "list.h"
+> >   #include "sysfs_utils.h"
+> > -struct udev *udev_context;
+> > +extern struct udev *udev_context;
+> >   static int32_t read_attr_usbip_status(struct usbip_usb_device *udev)
+> >   {
+> > 
 > 
-> After that, nothing will trigger a reprobe when the modprobe()'d device
-> driver has finished initialising, as the device has the "generic"
-> driver attached to it.
+> Looks good to me.
 > 
-> Trigger a reprobe ourselves when new specialised drivers get registered.
-> 
-> Fixes: 88b7381a939d
-> Signed-off-by: Bastien Nocera <hadess@hadess.net>
+> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Better than before, but there are still some things to improve.
+As Debian (unstable) has switched to GCC 10 by default, we are biten
+by this. Patch looks good to me.
 
-> diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-> index f81606c6a35b..44531910637c 100644
-> --- a/drivers/usb/core/driver.c
-> +++ b/drivers/usb/core/driver.c
-> @@ -905,6 +905,25 @@ static int usb_uevent(struct device *dev, struct kobj_uevent_env *env)
->  	return 0;
->  }
->  
-> +static int __usb_bus_reprobe_drivers(struct device *dev, void *data)
-> +{
-> +	struct usb_device_driver *udriver = to_usb_device_driver(dev->driver);
+Tested-by: Salvatore Bonaccorso <carnil@debian.org>
 
-This variable isn't used (it gets shadowed below).
-
-> +	struct usb_device *udev = to_usb_device(dev);
-
-And this one doesn't get used unless both tests below succeed, so the 
-declaration should be moved down to the inner block.
-
-> +
-> +	if (dev->driver) {
-> +		struct usb_device_driver *udriver = to_usb_device_driver(dev->driver);
-> +
-> +		if (udriver == NULL || udriver == &usb_generic_driver) {
-
-Since dev->driver is not NULL, udriver cannot possibly be NULL.  No need 
-to test for it.
-
-> +			udev->use_generic_driver = false;
-
-Are you sure you want to do that?  If udev->use_generic_driver was set, 
-it means that a specialized driver has already been probed and failed.  
-We assume only one specialized driver will match a particular device, so 
-there's no point in reprobing -- the same driver will match and it will 
-just fail the probe again.
-
-> +			device_reprobe(dev);
-
-We shouldn't do this unless we have a good reason for believing the new 
-driver will bind to the device.  Otherwise you're messing up a perfectly 
-good existing binding for no reason.
-
-You should first test whether the device matches the new driver (pass 
-the new driver as the iterator parameter).
-
-> +		}
-> +	} else {
-> +		device_reprobe(dev);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  /**
->   * usb_register_device_driver - register a USB device (not interface) driver
->   * @new_udriver: USB operations for the device driver
-> @@ -934,13 +953,19 @@ int usb_register_device_driver(struct usb_device_driver *new_udriver,
->  
->  	retval = driver_register(&new_udriver->drvwrap.driver);
->  
-> -	if (!retval)
-> +	if (!retval) {
-> +		/* Check whether any device could be better served with
-> +		 * this new driver
-> +		 */
-> +		bus_for_each_dev(&usb_bus_type, NULL, NULL,
-> +				 __usb_bus_reprobe_drivers);
->  		pr_info("%s: registered new device driver %s\n",
->  			usbcore_name, new_udriver->name);
-
-The new iterator should be added after the pr_info(), not before, 
-because we want the new driver's registration to show up in the kernel 
-log before any notices about it being bound to devices.
-
-Alan Stern
-
-> -	else
-> +	} else {
->  		printk(KERN_ERR "%s: error %d registering device "
->  			"	driver %s\n",
->  			usbcore_name, retval, new_udriver->name);
-> +	}
->  
->  	return retval;
->  }
-> 
+Regards,
+Salvatore
