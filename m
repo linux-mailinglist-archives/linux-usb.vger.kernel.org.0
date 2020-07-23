@@ -2,136 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A51B422AA20
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 09:56:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D1622AA69
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 10:14:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727118AbgGWH41 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jul 2020 03:56:27 -0400
-Received: from smtp1.axis.com ([195.60.68.17]:10893 "EHLO smtp1.axis.com"
+        id S1726178AbgGWIN5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jul 2020 04:13:57 -0400
+Received: from smtp1.axis.com ([195.60.68.17]:31749 "EHLO smtp1.axis.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725911AbgGWH40 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 23 Jul 2020 03:56:26 -0400
+        id S1725858AbgGWIN4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 23 Jul 2020 04:13:56 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; l=2866; q=dns/txt; s=axis-central1;
-  t=1595490985; x=1627026985;
+  d=axis.com; l=1138; q=dns/txt; s=axis-central1;
+  t=1595492036; x=1627028036;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=4tk5dl/I9CocNqe8nQ3SjDglchoPKe3JhKQ0S/Rdjqs=;
-  b=a38NKQ5PfV8r6CEUY5bW7uU7YP9pxejKEBisRTgjkVK8FBnvABpWgDSi
-   vaFtOdGJAIipAfY7MwuEL70iUm2bM4q4zPfg1VpikwPP6kR+LwRBBGRCc
-   QTUIsyfdGMYRy9Loe2u0+qDhUzRxOm6tu0VESwQCqxSZ07KyjvmV9oybH
-   v/Rp5xFJktqWDfLSl1/qZvc+1qPtdobQ+6TuXMhfLK8MpkkWjLJSBrpY8
-   XPhRrenlpfLuBCl5T72ffh1aYqqf4yhDyxSUqpgxpBg+rvdMROUrXCsc/
-   P0LGJ5zA5Y9IzW3grg2MCqiq8xeyoSFQj1Jfhw1AqWkv7kwJkkAST/ym+
-   A==;
-IronPort-SDR: 2m2vDWpuYU7qwfCeogPy2Z0U7Sbt1b5hJm2caHhvITOQMZpaOLhXPbHhryhXo4UdTQvxOlAaJz
- JD3Pn5LVzbEonH7fFQP1KEluCZ4AazJjuNL6bYPv0zTcwgnG6xusIHTxQMpjYrqSIlT6sXcaCl
- SwCw0o1eRZgPkR21XCskNcO/I2vZ5srna0AVkYjhwgzMtcwftDvY78bG/aOfepPsV6deEp7pbT
- AjbGq1qX8oEOAhxmte9bkIJacfX9LM2IlZcRLSJAkbkec7z8eHlMqES2H6wr2nUmPb2FoOLk0e
- Zrk=
+  bh=50pjpICS47njee1/tY5fnV1hkALwFSNd0R5epRzTCR0=;
+  b=SDPzTQOxHV/YddBtBm6wpKdgujWIucifoDoc1PhffUc9MtBYErezabX4
+   dYyfS6U2F/9H9zl2+9dhDsfflCQ0825waGQeOFacQyuJEasv2PfcqonJ4
+   jYLxaS0uF1u/QsKYKXb9NZdMkNTOsaWdhrM8TddUCrcKFF1+ls1o8VH0z
+   kSbMp5hRCYyf7NEvknG3Yz5p0rl5tAMKt/6f+cOniMFM66pPeZelcOdCN
+   B0t0vTIgf6yKGnyogXMvYyP7EtbKAvG1NHkxVvX1WomMHWkHh0oun0+/5
+   lzDNHDJ6JrX6eTB1ARGabNSpA62eVFBNbTOtkI/4CBKiTlkLUJO1cIRju
+   w==;
+IronPort-SDR: sm/amTH7eKrS2VnpopBdgkqbHYKu9lvNtBLFc2Y83eWfxs8xxQ36GVgkWrP4gxZHUxjoYSUpf5
+ 1uyEIKzGqeX/zb0RquOlczAGI4/tSO/XWjC7PKIbsfc09dFKCWTGu2IrsuCfisqFbXN7qk3RLW
+ KhuEgvsiA4bUFPyjH9f/OfB1Q2vdqJ2ROuJ23rHNrI0gY4yzwOSez3b5uGkUc4Um+1eoZrSFwC
+ qYw7KeaI7tx00clQQ0nox6aK4nlE0vVOEpl3eBwHeX0s8xq+0/H+U8YviachNjcSVk4huaLgaX
+ ayc=
 X-IronPort-AV: E=Sophos;i="5.75,386,1589234400"; 
-   d="scan'208";a="11135062"
-Date:   Thu, 23 Jul 2020 09:56:14 +0200
+   d="scan'208";a="11135659"
+Date:   Thu, 23 Jul 2020 10:13:54 +0200
 From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     Mike Looijmans <mike.looijmans@topic.nl>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
-        <lgirdwood@gmail.com>, <broonie@kernel.org>
-Subject: Re: [PATCH v3] usb: dwc3: Add support for VBUS power control
-Message-ID: <20200723075612.tn5dbkhes2chohwh@axis.com>
-References: <20200619142512.19824-1-mike.looijmans@topic.nl>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+CC:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bjorn.andersson@linaro.org>,
+        <jackp@codeaurora.org>, <robh@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        <mike.looijmans@topic.nl>
+Subject: Re: [PATCH 6/7] usb: dwc3: Add support for a role-switch notifier
+Message-ID: <20200723081352.hrg6rdpz5zxpp2so@axis.com>
+References: <20200311191501.8165-1-bryan.odonoghue@linaro.org>
+ <20200311191501.8165-7-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20200619142512.19824-1-mike.looijmans@topic.nl>
+In-Reply-To: <20200311191501.8165-7-bryan.odonoghue@linaro.org>
 User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 19, 2020 at 04:25:12PM +0200, Mike Looijmans wrote:
-> +void dwc3_set_vbus(struct dwc3 *dwc, bool enable)
-> +{
-> +	int ret;
+On Wed, Mar 11, 2020 at 07:15:00PM +0000, Bryan O'Donoghue wrote:
+> diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+> index 2705871ec95e..789e93dd93b4 100644
+> --- a/drivers/usb/dwc3/drd.c
+> +++ b/drivers/usb/dwc3/drd.c
+> @@ -497,6 +497,8 @@ static int dwc3_usb_role_switch_set(struct usb_role_switch *sw, enum usb_role ro
+>  	}
+>  
+>  	dwc3_set_mode(dwc, mode);
+> +	raw_notifier_call_chain(&dwc->role_sw_nl, mode, NULL);
 > +
-> +	if (enable != dwc->vbus_reg_enabled) {
-> +		if (enable)
-> +			ret = regulator_enable(dwc->vbus_reg);
-> +		else
-> +			ret = regulator_disable(dwc->vbus_reg);
+>  	return 0;
+>  }
 
-dwc->vbus_reg is set to NULL when the regulator is not present.  These
-regulator_* functions expect a non-NULL pointer so a NULL check is
-required before calling them.
+dwc3_set_mode() is called from a bunch of other places too, is it
+sufficient to call the notifier only from here?  Also, dwc3_set_mode()
+performs the mode set asynchronously so the mode switch can race with
+this notifier call, is that OK?
 
-> +		if (!ret)
-> +			dwc->vbus_reg_enabled = enable;
-> +	}
-> +
-> +	if (dwc->usb2_phy)
-> +		otg_set_vbus(dwc->usb2_phy->otg, enable);
-> +}
-> +
->  static void __dwc3_set_mode(struct work_struct *work)
->  {
->  	struct dwc3 *dwc = work_to_dwc(work);
-> @@ -164,8 +182,7 @@ static void __dwc3_set_mode(struct work_struct *work)
->  		if (ret) {
->  			dev_err(dwc->dev, "failed to initialize host\n");
->  		} else {
-> -			if (dwc->usb2_phy)
-> -				otg_set_vbus(dwc->usb2_phy->otg, true);
-> +			dwc3_set_vbus(dwc, true);
->  			phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_HOST);
->  			phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_HOST);
->  		}
-> @@ -173,8 +190,7 @@ static void __dwc3_set_mode(struct work_struct *work)
->  	case DWC3_GCTL_PRTCAP_DEVICE:
->  		dwc3_event_buffers_setup(dwc);
->  
-> -		if (dwc->usb2_phy)
-> -			otg_set_vbus(dwc->usb2_phy->otg, false);
-> +		dwc3_set_vbus(dwc, false);
->  		phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_DEVICE);
->  		phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_DEVICE);
->  
-> @@ -1183,8 +1199,7 @@ static int dwc3_core_init_mode(struct dwc3 *dwc)
->  	case USB_DR_MODE_PERIPHERAL:
->  		dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_DEVICE);
->  
-> -		if (dwc->usb2_phy)
-> -			otg_set_vbus(dwc->usb2_phy->otg, false);
-> +		dwc3_set_vbus(dwc, false);
->  		phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_DEVICE);
->  		phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_DEVICE);
->  
-> @@ -1198,8 +1213,7 @@ static int dwc3_core_init_mode(struct dwc3 *dwc)
->  	case USB_DR_MODE_HOST:
->  		dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
->  
-> -		if (dwc->usb2_phy)
-> -			otg_set_vbus(dwc->usb2_phy->otg, true);
-> +		dwc3_set_vbus(dwc, true);
->  		phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_HOST);
->  		phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_HOST);
->  
-> @@ -1470,6 +1484,14 @@ static int dwc3_probe(struct platform_device *pdev)
->  
->  	dwc3_get_properties(dwc);
->  
-> +	dwc->vbus_reg = devm_regulator_get_optional(dev, "vbus");
-> +	if (IS_ERR(dwc->vbus_reg)) {
-> +		if (PTR_ERR(dwc->vbus_reg) == -EPROBE_DEFER)
-> +			return -EPROBE_DEFER;
+Mike Looijmans proposed the control of a vbus regulator from
+__dwc3_set_mode(), and that would take care of both the points above.
+Perhaps this notifier call can be moved to the same place or perhaps
+Mike's patch could even work for you?  The only problem is that your
+switching code in dwc3-qcom.c would have to be modelled as a reulator:
 
-Some drivers seem to do it this way, but I think it would be more
-correct to return all errors that aren't ENODEV, like
-drivers/gpu/drm/exynos/exynos_hdmi.c does.  That way you would allow the
-regulator to not be present, but you also wouldn't silently ignore other
-errors such as ENOMEM.
-
-> +
-> +		dwc->vbus_reg = NULL;
-> +	}
-> +
+ https://lore.kernel.org/linux-usb/20200619142512.19824-1-mike.looijmans@topic.nl/
