@@ -2,134 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4675822B5F9
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 20:44:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 008CB22B60F
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 20:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726643AbgGWSoE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jul 2020 14:44:04 -0400
-Received: from mga18.intel.com ([134.134.136.126]:56421 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726455AbgGWSoE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 23 Jul 2020 14:44:04 -0400
-IronPort-SDR: qjfBDhWQ0jLtNLP/iRIXjAnv4r4t2RrVUFIQqnN+0N/HZNwjm4xgth91hgUJWbDqwaBK1IDAdl
- ot5ntuKVWLiA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9691"; a="138098668"
+        id S1728049AbgGWStM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jul 2020 14:49:12 -0400
+Received: from esa3.microchip.iphmx.com ([68.232.153.233]:57893 "EHLO
+        esa3.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726349AbgGWStM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jul 2020 14:49:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1595530152; x=1627066152;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=rOfZiTKlOiTMXtkPiJ4sia8QYSro0nSiFyXXBuqWpiw=;
+  b=YeTlFGlK8aBPghK80iqx2SqGujBmoANPjVf1SKUbg2mxcD4upAlcyYyr
+   UdmWcmFI83ZeJCzb14vR6uLcCbuG2reit2wC8c+F7mvoTuKFsogOi17Uw
+   2lb/3vvwVZJFHNWWMZYx2GMmbzZ2xa07mzQfmWt70akg22xoURywLbZ3h
+   oDtjDp5c0Ygs1SlIoJO9bPJW4ZsoGo947kz1WPXSbEf1Y4/4JWm5lVbgH
+   2gkgr7O1l963khV75+61XNVqSISK7HNNpqzNLf9BPh23IycoIsuLwp/IX
+   SBVsewBxkGsZBY54wWmSa6uhkktMkkmmvSNv+Qg20EtG4ANa91XmNB5jM
+   A==;
+IronPort-SDR: rPmmgBacQNRffjywLrPLQpxZHMs8POFBcGKcT+um8sd8DqPF7pHK1eJa9fM98VTW4f916KGlwB
+ TudAaM+LYxgTXVOD2Mh6yr9rU3q1PTYj+hb9tMy6LsnlFua0vfG9oQMkePpAOXDfoi9MHhpIzt
+ BQ6Xr1iBjpvMiWP/RNI/ZJVHCNgxioWyCIw+6nhhtKEdTToDR/qY24OtWo5Q1OJJ26+kmsL52G
+ ++m4FfAmmHnp2qjQCnIWHX8c6WgXkKdJzxoSXYGGHH0lviDCwAA9IsUI8SKdogZslolvmQ2XNL
+ p7E=
 X-IronPort-AV: E=Sophos;i="5.75,387,1589266800"; 
-   d="scan'208";a="138098668"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2020 11:44:02 -0700
-IronPort-SDR: xBkSk1tBdbaSu+5eOZ/5y4Ovpbj4LZQra7jm8esHOGhZV8P2bk+Ia5LsgoQO7chCJalrB8gEA3
- +Q3JJI4GJnpg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,387,1589266800"; 
-   d="scan'208";a="311136474"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by fmsmga004.fm.intel.com with ESMTP; 23 Jul 2020 11:44:01 -0700
-Subject: Re: [PATCH 00/27] xhci features for usb-next
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-References: <20200723144530.9992-1-mathias.nyman@linux.intel.com>
- <20200723150411.GA2529859@kroah.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- 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 fiD/
-Message-ID: <be21534d-df11-c957-43eb-e64a05a45404@linux.intel.com>
-Date:   Thu, 23 Jul 2020 21:47:14 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+   d="scan'208";a="85153632"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jul 2020 11:49:11 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Thu, 23 Jul 2020 11:48:29 -0700
+Received: from cristi-P53.lan (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.1979.3 via Frontend
+ Transport; Thu, 23 Jul 2020 11:48:28 -0700
+From:   <cristian.birsan@microchip.com>
+To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <ludovic.desroches@microchip.com>, <robh+dt@kernel.org>,
+        <mark.rutland@arm.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Cristian Birsan <cristian.birsan@microchip.com>
+Subject: [PATCH v4 0/6] usb: gadget: udc: atmel: add usb device support for SAM9x60 SoC
+Date:   Thu, 23 Jul 2020 21:48:56 +0300
+Message-ID: <20200723184902.416705-1-cristian.birsan@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20200723150411.GA2529859@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 23.7.2020 18.04, Greg KH wrote:
-> On Thu, Jul 23, 2020 at 05:45:03PM +0300, Mathias Nyman wrote:
->> Hi Greg
->>
->> This series for usb-next is almost completely about decoupling and
->> cleaning up relations between xhci, xhci debug capability (DbC),
->> and the DbC tty support.
->>
->> Real motivation behind this is to later turn DbC into a proper device
->> allowing us to bind different drivers to it, like dbctty.
-> 
-> I don't really understand why you want to do that, but ok :)
+From: Cristian Birsan <cristian.birsan@microchip.com>
 
-Well to be fair loading different drivers for DbC isn't the only motivation.
+This patch set adds usb device support for SAM9x60 SoC.
+The DPRAM memory for the USB High Speed Device Port (UDPHS) hardware
+block was increased and the allocation method is changed. This patch
+series simplifies the endpoint allocation scheme to acomodate this SoC
+and the old ones.
 
-Just using the Linux device model solves issues we are currently seeing 
-when using DbC on systems with several xHCI controllers. The original DbC 
-implementation didn't take this into account. 
+Changes in v4:
+- rebase on top of testing/next
+- add pp variable to access pmc
 
-And as a bigger picture DbC is just one extended capability. 
-xHC controller provides a list of support extended capabilities, each one
-with an ID and often a mmio region (inside xhci mmio range).
-We don't handle these consistently in the xhci driver, for example
-the role switch capability is currently turned into a platform device
-while the DbC capability support is squashed all into the xhci driver.
+Changes in v3:
+- rebase on top of testing/next
+- depends on https://lore.kernel.org/linux-arm-kernel/cover.1594231056.git.mirq-linux@rere.qmqm.pl/
+- extend usba_udc_config structure with endpoint preallocaion flag
+- collect acked-by tags
 
-Long term idea here would be to create a extended capability bus where each
-capability is a device, (child of xhci device) and drivers for these match
-based on the capability ID.
+Changes in v2:
+- drop the patch that adds reference to pmc for sam9x60
+- use dt-bindings: usb prefix
+- enable usb device in device tree
 
-> 
-> What is that going to help with?
+Claudiu Beznea (1):
+  usb: gadget: udc: atmel: use of_find_matching_node_and_match
 
-The option to load other drivers for the DbC capability will help other
-developers to write "standard" Linux drivers that provide different interfaces
-than TTY to send data over DbC.
+Cristian Birsan (5):
+  dt-bindings: usb: atmel: Update DT bindings documentation for sam9x60
+  usb: gadget: udc: atmel: simplify endpoint allocation
+  usb: gadget: udc: atmel: use 1 bank endpoints for control transfers
+  usb: gadget: udc: atmel: update endpoint allocation for sam9x60
+  ARM: dts: at91: sam9x60ek: enable usb device
 
-I don't fully understand these TTY limitations myself, but there is a strong push
-to implement this, and the task to provide the infrastructure for this landed
-on my table.
+ .../devicetree/bindings/usb/atmel-usb.txt     |  1 +
+ arch/arm/boot/dts/at91-sam9x60ek.dts          | 13 ++++
+ arch/arm/boot/dts/sam9x60.dtsi                | 14 ++++
+ drivers/usb/gadget/udc/atmel_usba_udc.c       | 68 ++++++++++++-------
+ drivers/usb/gadget/udc/atmel_usba_udc.h       |  3 +-
+ 5 files changed, 75 insertions(+), 24 deletions(-)
 
-Thanks
--Mathias
+-- 
+2.25.1
+
