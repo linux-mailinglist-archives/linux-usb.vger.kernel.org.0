@@ -2,107 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D68822ADE8
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 13:41:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E26422AEA0
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 14:07:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728265AbgGWLlg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jul 2020 07:41:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51324 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726109AbgGWLlg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jul 2020 07:41:36 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B65FC0619DC
-        for <linux-usb@vger.kernel.org>; Thu, 23 Jul 2020 04:41:36 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id h19so5938284ljg.13
-        for <linux-usb@vger.kernel.org>; Thu, 23 Jul 2020 04:41:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=9ELG5/k0pdLiKanAroqbWo9c4Z3rdM9fYEJfpS75iwk=;
-        b=QhYprndnbPDzLzk99SK3JZ5l9oTP2cxL8zskegi2r1/rmp+RMbb6sP7eRh+0fH0bmz
-         rsWvsoifF7uqFNgMdE7oWl2VZsQuI9wdHubh+U/mWU6WsOg8QwN4K3T2btBebm1XXLQy
-         b5LFpGWflWcrDXqZbdYOxJ7WhEevQTPdam/A0b5riWeLjE9qipLgCrMgpeMpmWTbnJfe
-         vySbL6shMrnuCEsnwQoxrylaBQBhK2NTKAsZahjlvk+dkGEp6rjWsp1eDgkuQu3bisUL
-         HbdnAQLREKoZCtJ+be+bv6BpADTRLsvb7jIwzsF3D2vSoWzx5QEjcpYgsPWMDZnsON/K
-         /7pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=9ELG5/k0pdLiKanAroqbWo9c4Z3rdM9fYEJfpS75iwk=;
-        b=e8OVxjmzRLDn+XZqkUPJFMCXIvzk6I/5LV7VlPpraxRA+lbX8EpjtDk352n0eOh81m
-         kTHm0X6sSDyFiYsnXZwV2M0G/QVS26JA/xBDJ4Yt/sHxsPQcOV6E7WGnkwwpVvjoGIcR
-         NTLtkNUkPOfdPk3ojxJ1RPHqT2rgN+o+ObDXd2W3nSunnQGJ9lV+IVX1KZHGaVNwJp3S
-         FG0yA531eM54jGD81KgqNAwjBCzhIlKsNUgxTLm3YEbwzGEbpUfBUbfWqekeyszFJYYH
-         IuT0KAxdf3Qr+jpVOu6ngjqL659lONI/j83J1iwt6U9mggbjJ3ICBy0VXAdNmaey5iV5
-         9eCQ==
-X-Gm-Message-State: AOAM532bjEQUM38LxOPZGvKmoRvViJu9xEmQBpsbbXqzKiwpAJHlgVIh
-        SD1SoEPSVvRFxjF8eGCEMH4aEO4+pHqjow==
-X-Google-Smtp-Source: ABdhPJzGiahXY7jBWLOq2gMRo+DMen04p3Emqqh0+Xm4qu9Jyqz21C/wcvXYR3paiGsRXcsZ8cAydg==
-X-Received: by 2002:a2e:815a:: with SMTP id t26mr1923518ljg.182.1595504494040;
-        Thu, 23 Jul 2020 04:41:34 -0700 (PDT)
-Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id y136sm2619882lfa.79.2020.07.23.04.41.33
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 23 Jul 2020 04:41:33 -0700 (PDT)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>, qiang.zhang@windriver.com
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] usb: gadget: function: printer: Interface is disabled and returns error
-In-Reply-To: <20200701120027.GB2184169@kroah.com>
-References: <20200630054407.33165-1-qiang.zhang@windriver.com> <20200701120027.GB2184169@kroah.com>
-Date:   Thu, 23 Jul 2020 14:41:29 +0300
-Message-ID: <87h7tyo3va.fsf@kernel.org>
+        id S1728453AbgGWMGw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jul 2020 08:06:52 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:47682 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727859AbgGWMGw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jul 2020 08:06:52 -0400
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06NC3EOb006531;
+        Thu, 23 Jul 2020 14:06:36 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=zt14ziy4OTTPyQeA+zhrodnOKfhhzc5gP1zGODBiazA=;
+ b=n2464Azifba/idrPWpW2kEO0cPxxfuzIGJTx3PWtij2orrMsgaGkN69L/BvNndXW3nev
+ oqfRAj3A0bybhXhCgJ+OHNfjxHpccr7rrqYaBQj4iW309oNyXaV+Ws2dzuuImES/anbE
+ l7KsTySb+12m6/E53rSyVuWrdkzGDjyMb4j4bRXPvm+56DzgAeKzLVM2lPJpzoEnq+gt
+ QkrnDY6JsQNUZfPyxJL2AOweIRBB1RgU1pQcn+TPKb9S5fRYgs5FJRtieU27BSYvgXvv
+ Pc0J+tpnoPAV8m45hYH+Z3I0+ynfjpkDqhL/fMJwVnRdJUAVKpSveY4Dg4G50Esr/TAV QQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 32bsahakcy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 23 Jul 2020 14:06:36 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5945810002A;
+        Thu, 23 Jul 2020 14:06:35 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 358262AF314;
+        Thu, 23 Jul 2020 14:06:35 +0200 (CEST)
+Received: from localhost (10.75.127.46) by SFHDAG3NODE2.st.com (10.75.127.8)
+ with Microsoft SMTP Server (TLS) id 15.0.1347.2; Thu, 23 Jul 2020 14:06:34
+ +0200
+From:   Amelie Delaunay <amelie.delaunay@st.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Amelie Delaunay <amelie.delaunay@st.com>,
+        Fabrice Gasnier <fabrice.gasnier@st.com>
+Subject: [PATCH v2 0/6] Add STUSB160x Type-C port controller support
+Date:   Thu, 23 Jul 2020 14:06:18 +0200
+Message-ID: <20200723120624.26291-1-amelie.delaunay@st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG1NODE1.st.com (10.75.127.1) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-23_05:2020-07-23,2020-07-23 signatures=0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+This series adds support for STMicroelectronics STUSB160x Type-C port
+controllers [1].
+STUSB160x driver requires to get power operation mode via device tree,
+that's why this series also adds the optional DT property power-opmode
+for usb-c-connector to select the power operation mode capability and
+a function to convert the power operation mode string into power
+operation mode value.
+This driver has been tested on stm32mp157c-dk2 [2], which has a Type-C
+connector managed by STUSB1600, and connected to USB OTG controller. 
 
-Greg KH <gregkh@linuxfoundation.org> writes:
+[1] https://www.st.com/en/interfaces-and-transceivers/usb-type-c-and-power-delivery-controllers.html
+[2] https://www.st.com/en/evaluation-tools/stm32mp157c-dk2.html
 
-> On Tue, Jun 30, 2020 at 01:44:07PM +0800, qiang.zhang@windriver.com wrote:
->> From: Zqiang <qiang.zhang@windriver.com>
->>=20
->> After the device is disconnected from the host side, the interface of
->> the device is reset. If the userspace operates the device again,
->> an error code should be returned.
->>=20
->> Acked-by: Felipe Balbi <balbi@kernel.org>
->
-> When did Felipe ack this?  I missed that, do you have a pointer to that
-> on lore.kernel.org somewhere?
+Amelie Delaunay (6):
+  dt-bindings: connector: add power-opmode optional property to
+    usb-connector
+  usb: typec: add typec_find_pwr_opmode
+  dt-bindings: usb: Add DT bindings for STUSB160x Type-C controller
+  usb: typec: add support for STUSB160x Type-C controller family
+  ARM: dts: stm32: add STUSB1600 Type-C using I2C4 on stm32mp15xx-dkx
+  ARM: multi_v7_defconfig: enable STUSB160X Type-C port controller
+    support
+---
+Changes in v2:
+- power-opmode DT property description updated.
+---
+ .../bindings/connector/usb-connector.yaml     |  20 +
+ .../devicetree/bindings/usb/st,stusb160x.yaml |  85 ++
+ arch/arm/boot/dts/stm32mp15-pinctrl.dtsi      |   7 +
+ arch/arm/boot/dts/stm32mp15xx-dkx.dtsi        |  38 +
+ arch/arm/configs/multi_v7_defconfig           |   2 +
+ drivers/usb/typec/Kconfig                     |  12 +
+ drivers/usb/typec/Makefile                    |   1 +
+ drivers/usb/typec/class.c                     |  15 +
+ drivers/usb/typec/stusb160x.c                 | 875 ++++++++++++++++++
+ include/linux/usb/typec.h                     |   1 +
+ 10 files changed, 1056 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/st,stusb160x.yaml
+ create mode 100644 drivers/usb/typec/stusb160x.c
 
-yeah, I don't remember acking this either.
+-- 
+2.17.1
 
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl8Zd2kACgkQzL64meEa
-mQYP6w/8C//dekqQn4gmw6TFePY+xPgXyTcTQqq/wkobxAgJhKSBK0M5CJARzQxw
-mWk+fIJGPrYb5fxPABzpCJdlhzEAuWOWvxodwa4imZ/8lYIo8Lj/yt2QJum4YX1B
-6fHVBIWgSkq3NwobdlO/lBIJUGnWfiWuFA3Ub8UYG6Eb5sbi4fJuRx6TOY3L3iYR
-RxV+XBiVdf1edL73u+YSGLQyOPE0E5YsJedjR+IhuZe1BThJSPAOfBNBk8Jji+FE
-n+Ea3kJdV29BiCKMDqGzAxRyxUOY/JpMq0G0WwQ2vVE/sMqVKB8uAhe+2xdU6Qsb
-dUQbVUBrx+0uf76fMfojaIK3tawCmw4GeNMcdmJOzKLV05dmlNN8SF3izfjJGuIO
-WExpYCp1U+eY3a4TtUvEEb07uaF0WtSjPXerr4/91DuVURVOoKzS1oKP6J2g+ywa
-l9UZmSUc0RLeSdZ/VvlmtJCXKMHoV5FNiwb2biI/LODWdQFkYvixPXDJpans+vfC
-xgroro+b90M+mIwVaAjoa4/toWI6QwYvpBn4Ar81g1w3lJbKJ+2uoRlUVzPxexSM
-Dg0IYbU4jFeSZUXXy9FOWJiVQnQHtx0XQPEjXlE+3LHEtjdsm74XHeoO9Z2FiuMI
-E53Py5tJZJACnEVqOG9k6Y4qm3CBDB5msIIm6jaxgQIu3Ps0fkU=
-=bLrq
------END PGP SIGNATURE-----
---=-=-=--
