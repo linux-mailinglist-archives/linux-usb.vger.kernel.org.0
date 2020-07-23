@@ -2,60 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29A9522ADE7
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 13:40:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D68822ADE8
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 13:41:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728518AbgGWLkt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jul 2020 07:40:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51206 "EHLO
+        id S1728265AbgGWLlg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jul 2020 07:41:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726109AbgGWLks (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jul 2020 07:40:48 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0BDC0619DC;
-        Thu, 23 Jul 2020 04:40:48 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id b11so3075921lfe.10;
-        Thu, 23 Jul 2020 04:40:48 -0700 (PDT)
+        with ESMTP id S1726109AbgGWLlg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jul 2020 07:41:36 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B65FC0619DC
+        for <linux-usb@vger.kernel.org>; Thu, 23 Jul 2020 04:41:36 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id h19so5938284ljg.13
+        for <linux-usb@vger.kernel.org>; Thu, 23 Jul 2020 04:41:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=hlTSl0JbeUfivGnDno+RXh6gUR9iqd88iP7yuNeEXtk=;
-        b=TuGKc36jfu50K0bdz7oL6F7mERT2rDnIhKa6ucV04q7ayjcCZqerXE9Q3iveogjFiY
-         ElyThsbsVb8xAmYW4ffLA0ghrOymW+R4Ygw2ti/8AIT2w+H0hav5QMf/xzDP5XFjiihy
-         AsbKD7FwTDcWqKHitw25WIdcnc6JTRSx7IMLEWd0b2AYWiiINE26R6+MRu2bkFS0Eqe3
-         bt7yBBglwPPzH7FYRuCekWoxAsGXxXRRVQcnvS/lzia3U9tftZNhuTqSO5P4Rej0GPbV
-         Bq9tDmSwcCxkR41gtXY+WodZ3WyWO79KAXjX+VdWjEXs4yQ3WTz3Gk4rTnijoIPIg0AY
-         uZYA==
+        bh=9ELG5/k0pdLiKanAroqbWo9c4Z3rdM9fYEJfpS75iwk=;
+        b=QhYprndnbPDzLzk99SK3JZ5l9oTP2cxL8zskegi2r1/rmp+RMbb6sP7eRh+0fH0bmz
+         rsWvsoifF7uqFNgMdE7oWl2VZsQuI9wdHubh+U/mWU6WsOg8QwN4K3T2btBebm1XXLQy
+         b5LFpGWflWcrDXqZbdYOxJ7WhEevQTPdam/A0b5riWeLjE9qipLgCrMgpeMpmWTbnJfe
+         vySbL6shMrnuCEsnwQoxrylaBQBhK2NTKAsZahjlvk+dkGEp6rjWsp1eDgkuQu3bisUL
+         HbdnAQLREKoZCtJ+be+bv6BpADTRLsvb7jIwzsF3D2vSoWzx5QEjcpYgsPWMDZnsON/K
+         /7pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
          :date:message-id:mime-version;
-        bh=hlTSl0JbeUfivGnDno+RXh6gUR9iqd88iP7yuNeEXtk=;
-        b=sCUfzoQDoETD7CLCU5wi5q+mGt/om7fTuATDrr5P/t7CTLX2O1o6MKD3B9g/jexJo+
-         RUW2C/ueGi2GviIW7O5BIwD/k09x2UFY6V4hMAmYvNQWxYl93rusTDDhum4Fy/HVfk02
-         RI5iWjXoie1qxtbpSrMLKIPtPa4WwlGW+79+C16Hzojq5h2xPi8JXM5565UVUlZS89Nh
-         J7KCuPfyHX7fl59dTNSmdG/KTjDVf8Fl2TSN1zw0A2fbxtrZsP1aahexsfSzTALtGpUX
-         GFkYyVPe59Yao4LbKblahHV5Oc9rDxewVATyQ0jw2ZZDPkbvPmTQjlTLpiSCZiCa27oq
-         WQFA==
-X-Gm-Message-State: AOAM530DZ29kn996emkONNklgOen61edcMl1QIDTngkt0aYUV6fEDiEH
-        rly9ef5E2IRTrEx5W+6UCLn3EQwn233omw==
-X-Google-Smtp-Source: ABdhPJyPfWeLMzWCj4BnlN/bxERSNQ4adkBVinZ7gFr7obQ2QOp2F7eXKwVV0IUFjLppYwPEYVN5tQ==
-X-Received: by 2002:a05:6512:10ca:: with SMTP id k10mr2096425lfg.177.1595504446058;
-        Thu, 23 Jul 2020 04:40:46 -0700 (PDT)
+        bh=9ELG5/k0pdLiKanAroqbWo9c4Z3rdM9fYEJfpS75iwk=;
+        b=e8OVxjmzRLDn+XZqkUPJFMCXIvzk6I/5LV7VlPpraxRA+lbX8EpjtDk352n0eOh81m
+         kTHm0X6sSDyFiYsnXZwV2M0G/QVS26JA/xBDJ4Yt/sHxsPQcOV6E7WGnkwwpVvjoGIcR
+         NTLtkNUkPOfdPk3ojxJ1RPHqT2rgN+o+ObDXd2W3nSunnQGJ9lV+IVX1KZHGaVNwJp3S
+         FG0yA531eM54jGD81KgqNAwjBCzhIlKsNUgxTLm3YEbwzGEbpUfBUbfWqekeyszFJYYH
+         IuT0KAxdf3Qr+jpVOu6ngjqL659lONI/j83J1iwt6U9mggbjJ3ICBy0VXAdNmaey5iV5
+         9eCQ==
+X-Gm-Message-State: AOAM532bjEQUM38LxOPZGvKmoRvViJu9xEmQBpsbbXqzKiwpAJHlgVIh
+        SD1SoEPSVvRFxjF8eGCEMH4aEO4+pHqjow==
+X-Google-Smtp-Source: ABdhPJzGiahXY7jBWLOq2gMRo+DMen04p3Emqqh0+Xm4qu9Jyqz21C/wcvXYR3paiGsRXcsZ8cAydg==
+X-Received: by 2002:a2e:815a:: with SMTP id t26mr1923518ljg.182.1595504494040;
+        Thu, 23 Jul 2020 04:41:34 -0700 (PDT)
 Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id 202sm2619630lfg.24.2020.07.23.04.40.45
+        by smtp.gmail.com with ESMTPSA id y136sm2619882lfa.79.2020.07.23.04.41.33
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 23 Jul 2020 04:40:45 -0700 (PDT)
+        Thu, 23 Jul 2020 04:41:33 -0700 (PDT)
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH 1/2] USB: phy: fsl-usb: remove sysfs abuse
-In-Reply-To: <20200702072914.1072878-1-gregkh@linuxfoundation.org>
-References: <20200702072914.1072878-1-gregkh@linuxfoundation.org>
-Date:   Thu, 23 Jul 2020 14:40:41 +0300
-Message-ID: <87k0yuo3wm.fsf@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>, qiang.zhang@windriver.com
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2] usb: gadget: function: printer: Interface is disabled and returns error
+In-Reply-To: <20200701120027.GB2184169@kroah.com>
+References: <20200630054407.33165-1-qiang.zhang@windriver.com> <20200701120027.GB2184169@kroah.com>
+Date:   Thu, 23 Jul 2020 14:41:29 +0300
+Message-ID: <87h7tyo3va.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -68,20 +67,21 @@ X-Mailing-List: linux-usb@vger.kernel.org
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
+Greg KH <gregkh@linuxfoundation.org> writes:
 
-> This file has a HUGE debugging sysfs file that spews out a lot of
-> information all at once, which violates the one-value-per-file rule for
-> sysfs.  If this is really needed, it should go into debugfs, but given
-> the age of this driver, I strongly doubt anyone is using it anymore.
+> On Tue, Jun 30, 2020 at 01:44:07PM +0800, qiang.zhang@windriver.com wrote:
+>> From: Zqiang <qiang.zhang@windriver.com>
+>>=20
+>> After the device is disconnected from the host side, the interface of
+>> the device is reset. If the userspace operates the device again,
+>> an error code should be returned.
+>>=20
+>> Acked-by: Felipe Balbi <balbi@kernel.org>
 >
-> So just remove the file entirely, it was never documented, so obviously,
-> no one actually needed it :)
->
-> Cc: Felipe Balbi <balbi@kernel.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> When did Felipe ack this?  I missed that, do you have a pointer to that
+> on lore.kernel.org somewhere?
 
-applied both, thanks Greg.
+yeah, I don't remember acking this either.
 
 =2D-=20
 balbi
@@ -91,18 +91,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl8ZdzkACgkQzL64meEa
-mQa9TQ//eTbNo7vhL679/zs9ZIdL1jka4yapIht3nbNonwc1veaGiiZF+PQ3h0US
-+asVQSkagKmRnjnWO1/OYH59BaqXkFwgacn15+JeL3bKSWed9hNUF8HeGmsyJ3O1
-ATUkgKjkBR4jkniR3IK8XNvpMBSgBR6GRq8rTMSzvU5NuWCsCF5H+cwR1NfO41hm
-DjhclfkkjgTmPNFw5guorEBZeBkrOINyvW8FCXqE47u6D69DyK13YC5x05iZIvbe
-IVLG5CNl0lF47UkggeDJ4ALOydeM8tSerbNLC/COEhLjOIFq5/8StwpB2x2XwcVV
-oL49dFp2V1EANzFNMrJznXTqM4QL9KOEJ6Q5yvRF84F3aCjv+vKGUsoz+4cCW69b
-ccke6bSRExKBIB6Tz5l/czxEpVEkgEgJkHmsabGXG4rUe33KFnVqmU/OnO7CoISR
-TbSIz1PxcZHd4gK3P8J1XVWkMPodaMtoerKvQPO2/lWVlhx6DhY53agatMy0vO9w
-GSabS8l9xKJlvRBhz9Wx/XpEg57FCBgArPOhEgfDW/6PqamNdTIaYz8DeScopvpT
-OhGCNX5ccz47MCuzXpbhxEYAXqYRkNr3gqKRxiPUZ+7gmBb3fx2OnUDMqUT7dzVT
-iEkhHns064LZ32ZPq8rF7aFrQTvPkKbUb7VGTvimhETwGMHSzHw=
-=uDk1
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl8Zd2kACgkQzL64meEa
+mQYP6w/8C//dekqQn4gmw6TFePY+xPgXyTcTQqq/wkobxAgJhKSBK0M5CJARzQxw
+mWk+fIJGPrYb5fxPABzpCJdlhzEAuWOWvxodwa4imZ/8lYIo8Lj/yt2QJum4YX1B
+6fHVBIWgSkq3NwobdlO/lBIJUGnWfiWuFA3Ub8UYG6Eb5sbi4fJuRx6TOY3L3iYR
+RxV+XBiVdf1edL73u+YSGLQyOPE0E5YsJedjR+IhuZe1BThJSPAOfBNBk8Jji+FE
+n+Ea3kJdV29BiCKMDqGzAxRyxUOY/JpMq0G0WwQ2vVE/sMqVKB8uAhe+2xdU6Qsb
+dUQbVUBrx+0uf76fMfojaIK3tawCmw4GeNMcdmJOzKLV05dmlNN8SF3izfjJGuIO
+WExpYCp1U+eY3a4TtUvEEb07uaF0WtSjPXerr4/91DuVURVOoKzS1oKP6J2g+ywa
+l9UZmSUc0RLeSdZ/VvlmtJCXKMHoV5FNiwb2biI/LODWdQFkYvixPXDJpans+vfC
+xgroro+b90M+mIwVaAjoa4/toWI6QwYvpBn4Ar81g1w3lJbKJ+2uoRlUVzPxexSM
+Dg0IYbU4jFeSZUXXy9FOWJiVQnQHtx0XQPEjXlE+3LHEtjdsm74XHeoO9Z2FiuMI
+E53Py5tJZJACnEVqOG9k6Y4qm3CBDB5msIIm6jaxgQIu3Ps0fkU=
+=bLrq
 -----END PGP SIGNATURE-----
 --=-=-=--
