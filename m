@@ -2,100 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22F1722B7BA
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 22:29:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E92422B89B
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 23:27:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726503AbgGWU3k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jul 2020 16:29:40 -0400
-Received: from mail-il1-f193.google.com ([209.85.166.193]:42886 "EHLO
-        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725979AbgGWU3j (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jul 2020 16:29:39 -0400
-Received: by mail-il1-f193.google.com with SMTP id t27so5427243ill.9;
-        Thu, 23 Jul 2020 13:29:39 -0700 (PDT)
+        id S1726692AbgGWV1r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jul 2020 17:27:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57846 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726029AbgGWV1r (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jul 2020 17:27:47 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41046C0619D3
+        for <linux-usb@vger.kernel.org>; Thu, 23 Jul 2020 14:27:47 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id h18so3257029qvl.3
+        for <linux-usb@vger.kernel.org>; Thu, 23 Jul 2020 14:27:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=XiCjkR09sKAEMofGP9deaD2zxVAtX12ktYZe2NOY5SA=;
+        b=PE2dFBg9X8QiqJt+7BqdUVIGQYd1tPqX2idZkMu8xX1xPeEXenllCTADGA/4BmIe0E
+         j8d6pyK8iZ/NR+jHhpbv4gPKk7Gl8NDlXnjh0zkLPBorwIAzFF3+sVAR5S6oHHYAy5UR
+         39SO+mS0aJYwBlW82ZOVD88WsCJSJEj6W6Jl4tA1YkeQb9NV4k91nydo5LVyE41NDGpH
+         LoC9p1ml1xfuzosab/C0u75mPcZ6E3v9sVRSnnES27qqm8IB7289haPm0b3YsOyvs1QB
+         HxFSWfuEG/hf4E/St3djMCesdSXWaegKsaPfojMXsHu9rCIGsbyAG6mofIXuYjt3ZW1+
+         sh+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kjud4HzJiYuJbrWHJZPLLkD9nUbndPaEbp8Lk6hPciw=;
-        b=D0yQXu4P4yhZWQHAyEJqPnO6BgsAY0UgmEX/26UkR1A7qR7enEWcRFaVWNrlcvjMOs
-         XypNRJJ6eiSQtZqA0+pXqXgZ1R+PbNPhb2xW0ebdZ1bba/ABJjVHbljwsrxFJGbYuJsq
-         /ogpFDEmRca1zieuTKeYn8XeGi70e5UPEacGS1US+J8YiazqV0aDsaFczE68V1B9mxtz
-         uaIDAjyOl/N9e6TzPU5Lt0E7JBPAZxgx6Zz3Dbz77VXSVDmDixnYx3cRUaI15gPSNdYC
-         u8xFs4pC8xI5rD4JtU41kr7z7GP2Tucemd/xSQLVgJDveGEzFB6OPfFnvW/L8G/Di7S3
-         3u7g==
-X-Gm-Message-State: AOAM531ExblBZCa9HWLjSIqj/ZfMV1WuNXw6Ru5JIJnT1fTKVHsE0u59
-        gTHq2xFNlgINTBczrNoJRA==
-X-Google-Smtp-Source: ABdhPJyVRyKvIrX21z4Zl2OJ4Xp53IgxAGPYZ3HN3G0+kSgHj7Uy5uc1dGpt8JJf6bR/XReMP27Prw==
-X-Received: by 2002:a92:dc09:: with SMTP id t9mr6938082iln.226.1595536178724;
-        Thu, 23 Jul 2020 13:29:38 -0700 (PDT)
-Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id w15sm2030713ior.4.2020.07.23.13.29.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jul 2020 13:29:37 -0700 (PDT)
-Received: (nullmailer pid 808938 invoked by uid 1000);
-        Thu, 23 Jul 2020 20:29:36 -0000
-Date:   Thu, 23 Jul 2020 14:29:36 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        John Youn <John.Youn@synopsys.com>
-Subject: Re: [PATCH v2 06/12] usb: devicetree: Introduce num-lanes and lsm
-Message-ID: <20200723202936.GA801155@bogus>
-References: <cover.1595468673.git.thinhn@synopsys.com>
- <d605a437f0a4bc837a05269caaa3875c2e0b29d8.1595468673.git.thinhn@synopsys.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=XiCjkR09sKAEMofGP9deaD2zxVAtX12ktYZe2NOY5SA=;
+        b=VbfLcvK1A6ieDURKOTjbtA0qpM4tfA01jqF5JM9EZfQNunb+QOvD+66ZynutqQjcFJ
+         f37gOfIQiApptWDa9wzTqOqtzu1yeXOCy5/dSl40tlH/K9AuQhV8O9MsVwLFSqVwDtxt
+         fbQPDDpbo/1LAVfGjOPKauXfUvJwJv/z/JoaXzv+rmEhgp5j8vCq0pt7A0H3AQ5LPeT1
+         HYTMFyBtnSxnFl7DaXk81bj+2ZsH43P+rDLICCjyhW0JVQA05BfzeO+zNhL3GRXBBW69
+         z7cxHmzsArL02VF+IC5XDhKNCf/U/cPPNbaJ2Ol6Ry5YRn5jPJ57QoJVoSLus/bnCMJi
+         XMGA==
+X-Gm-Message-State: AOAM533g0+sIuSBXICPH5mH9LL2k+19tlD95kddPjw3hIxcGnQ0AjSKo
+        ygwD9om+oOrgWutgh0OmsYctj6sSxdk=
+X-Google-Smtp-Source: ABdhPJwYJ3h/bWMDOKeV+A/f2DvejuzN6PZPaD6505NZdxD5lVfoTXkOB5eufPRA/mIeR/fmt+MNVQ==
+X-Received: by 2002:ad4:4869:: with SMTP id u9mr6707342qvy.98.1595539666436;
+        Thu, 23 Jul 2020 14:27:46 -0700 (PDT)
+Received: from linux-uys3 ([206.248.190.95])
+        by smtp.gmail.com with ESMTPSA id c22sm4000386qke.2.2020.07.23.14.27.45
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 23 Jul 2020 14:27:45 -0700 (PDT)
+Date:   Thu, 23 Jul 2020 17:27:43 -0400
+From:   Trevor Woerner <twoerner@gmail.com>
+To:     alexandre.belloni@bootlin.com, jamesg@zaltys.org
+Cc:     linux-usb@vger.kernel.org
+Subject: lpc32xx and stotg04
+Message-ID: <20200723212743.GA11107@linux-uys3>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <d605a437f0a4bc837a05269caaa3875c2e0b29d8.1595468673.git.thinhn@synopsys.com>
+User-Agent: Mutt/1.6.0 (2016-04-01)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 22, 2020 at 07:12:39PM -0700, Thinh Nguyen wrote:
-> According to USB 3.2 spec, a super-speed-plus device can operate at
-> gen2x2, gen2x1, or gen1x2. Introduce "num-lanes" and
-> "lane-speed-mantissa-gbps" properties for devices operating in
-> super-speed-plus. If the USB controller device supports multiple lanes
-> at different transfer rate, the user can specify the HW capability via
-> these properties.
-> 
-> Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
-> ---
-> Changes in v2:
-> - Make "num-lanes" and "lane-speed-mantissa-gbps" common USB properties
-> 
->  Documentation/devicetree/bindings/usb/generic.txt | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/generic.txt b/Documentation/devicetree/bindings/usb/generic.txt
-> index ba472e7aefc9..a8253da684af 100644
-> --- a/Documentation/devicetree/bindings/usb/generic.txt
-> +++ b/Documentation/devicetree/bindings/usb/generic.txt
-> @@ -7,6 +7,17 @@ Optional properties:
->  			"low-speed". In case this isn't passed via DT, USB
->  			controllers should default to their maximum HW
->  			capability.
-> + - num-lanes: tells USB controllers that we want to work up to a certain number
-> +			of lanes. Valid arguments are 1 or 2. Apply if the
-> +			maximum-speed is super-speed-plus. In case this isn't
-> +			passed via DT, the USB controllers should default to
-> +			their maximum HW capability.
-> + - lane-speed-mantissa-gbps: tells USB controllers that we want the symmetric
-> +			lanes to operate up to a certain rate in Gbps. Valid
-> +			inputs are 5 or 10 (i.e. Gen 1/Gen 2 transfer rate).
-> +			Apply if the maximum-speed is super-speed-plus. In case
-> +			this isn't passed via DT, the USB controllers should
-> +			default to their maximum HW capability.
+Hi Alexandre and James,
 
-This still leaves 'maximum-speed = "super-speed-plus"' ambiguous. Fix 
-that please.
+I too am working with a board that uses the lpc32xx SoC (the lpc3240, to be
+specific) and has a stotg04 for the USB transceiver instead of the isp1301.
 
-To put it another way, we already have one way to define USB speeds. 
-Don't define a new and different way that only covers a fraction of the 
-possibilities.
+I can't get the USB to work.
 
-Rob
+My guess is that I don't have the device tree correct.
+
+I could embarrass myself by showing you what combinations I've tried but I
+thought maybe I'd ask and see if either of you could provide a DT snippet
+describing how to hook up the stotg04 to the i2cusb. Admittedly I'm quite
+fuzzy when it comes to device trees.
+
+I'm also a bit fuzzy on USB. I want to plug usb sticks into my device (which,
+by my understanding, is the opposite of OTG). So additionally I want to enable
+ohci and not usbd?
+
+In one DT incantation (the one showing the most promise so far) on startup
+'lsusb' shows two usb devices. The moment I plug a USB drive into my device I
+get:
+
+	[  433.268009] usb-ohci 31020000.ohci: controller won't resume
+	[  433.273603] usb-ohci 31020000.ohci: HC died; cleaning up
+	[  433.280566] usb 1-1: USB disconnect, device number 2
+
+And afterwards only one device is listed by 'lsusb'.
+
+Currently I'm using a 5.0 kernel and a 5.4 kernel, but I could use any kernel
+(upstream, ideally). In either case, it doesn't seem possible to deselect the
+isp1301 from the kernel config? It gets selected automatically. If I'm using
+the stotg04 instead of the isp1301, do I need a way to turn off the isp1301?
+
+Best regards,
+	Trevor
