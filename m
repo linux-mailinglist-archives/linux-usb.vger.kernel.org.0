@@ -2,301 +2,240 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5856422A5E8
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 05:15:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3063522A64A
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 05:53:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733229AbgGWDPC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 22 Jul 2020 23:15:02 -0400
-Received: from ZXSHCAS1.zhaoxin.com ([203.148.12.81]:31911 "EHLO
-        ZXSHCAS1.zhaoxin.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728902AbgGWDPC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jul 2020 23:15:02 -0400
-Received: from zxbjmbx2.zhaoxin.com (10.29.252.164) by ZXSHCAS1.zhaoxin.com
- (10.28.252.161) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3; Thu, 23 Jul
- 2020 10:59:56 +0800
-Received: from zxbjmbx2.zhaoxin.com (10.29.252.164) by zxbjmbx2.zhaoxin.com
- (10.29.252.164) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3; Thu, 23 Jul
- 2020 10:59:55 +0800
-Received: from zxbjmbx2.zhaoxin.com ([fe80::4d77:9dba:64a8:8ec3]) by
- zxbjmbx2.zhaoxin.com ([fe80::4d77:9dba:64a8:8ec3%4]) with mapi id
- 15.01.1979.003; Thu, 23 Jul 2020 10:59:55 +0800
-From:   "Weitao Wang(BJ-RD)" <WeitaoWang@zhaoxin.com>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg KH <gregkh@linuxfoundation.org>
-CC:     WeitaoWang-oc <WeitaoWang-oc@zhaoxin.com>,
-        "mathias.nyman@linux.intel.com" <mathias.nyman@linux.intel.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "hslester96@gmail.com" <hslester96@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Carsten_Schmid@mentor.com" <Carsten_Schmid@mentor.com>,
-        "efremov@linux.com" <efremov@linux.com>,
-        "Tony W. Wang(XA-RD)" <TonyWWang@zhaoxin.com>,
-        "Cobe Chen(BJ-RD)" <CobeChen@zhaoxin.com>,
-        "Tim Guo(BJ-RD)" <TimGuo@zhaoxin.com>,
-        "wwt8723@163.com" <wwt8723@163.com>
-Subject: =?gb2312?B?tPC4tDogW1BBVENIXSBVU0I6Rml4IGtlcm5lbCBOVUxMIHBvaW50ZXIgd2hl?=
- =?gb2312?Q?n_unbind_UHCI_form_vfio-pci?=
-Thread-Topic: [PATCH] USB:Fix kernel NULL pointer when unbind UHCI form
+        id S1726046AbgGWDxY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 22 Jul 2020 23:53:24 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:39935 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725857AbgGWDxX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 22 Jul 2020 23:53:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1595476401;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1Drsi8TFXb/iJQ6f6C06Boe8vaJkgAjUcN+prnBjDao=;
+        b=WTxvyskOQX2uNKJvSM8wt/q4GIjaoLG5oOypQEBIYJ6NXA7r9OAni66VIiYvxI3P7fUuW6
+        X+tYrfXu5WB17RbwFTA3pIFJ3HquGk92juZH1hCP+L2wPhX9YJ1mS4dFMB/IgXtkM0A2VD
+        bvjQDDDxPVHoe6nlTgjMpfPxphevjIU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-467-WS8aASTzNcmloPkFMS-9ag-1; Wed, 22 Jul 2020 23:53:17 -0400
+X-MC-Unique: WS8aASTzNcmloPkFMS-9ag-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 021EF100CD01;
+        Thu, 23 Jul 2020 03:53:15 +0000 (UTC)
+Received: from x1.home (ovpn-112-71.phx2.redhat.com [10.3.112.71])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C637B61100;
+        Thu, 23 Jul 2020 03:53:13 +0000 (UTC)
+Date:   Wed, 22 Jul 2020 21:53:13 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     WeitaoWangoc <WeitaoWang-oc@zhaoxin.com>
+Cc:     <gregkh@linuxfoundation.org>, <mathias.nyman@linux.intel.com>,
+        <ulf.hansson@linaro.org>, <vkoul@kernel.org>,
+        <hslester96@gmail.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <Carsten_Schmid@mentor.com>,
+        <efremov@linux.com>, <tonywwang@zhaoxin.com>,
+        <weitaowang@zhaoxin.com>, <CobeChen@zhaoxin.com>,
+        <TimGuo@zhaoxin.com>, <wwt8723@163.com>
+Subject: Re: [PATCH] USB:Fix kernel NULL pointer when unbind UHCI form
  vfio-pci
-Thread-Index: AQHWYB9UCUIuPM0Yq0GNAP42GB7Bv6kTBUEAgAAltoCAAUQSsA==
-Date:   Thu, 23 Jul 2020 02:59:55 +0000
-Message-ID: <1bf449377e3448bc9c8bc7b64d7b7990@zhaoxin.com>
+Message-ID: <20200722215313.5a842b93@x1.home>
+In-Reply-To: <1595419068-4812-1-git-send-email-WeitaoWang-oc@zhaoxin.com>
 References: <1595419068-4812-1-git-send-email-WeitaoWang-oc@zhaoxin.com>
- <20200722124414.GA3153105@kroah.com>
- <20200722145913.GB1310843@rowland.harvard.edu>
-In-Reply-To: <20200722145913.GB1310843@rowland.harvard.edu>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.29.8.32]
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+Organization: Red Hat
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DQpPbiAsIEp1bCAyMiwgMjAyMCBhdCAwMjo0NDoxNFBNICswMjAwLCBBbGFuIHdyb3RlOg0KPiBP
-biBXZWQsIEp1bCAyMiwgMjAyMCBhdCAwMjo0NDoxNFBNICswMjAwLCBHcmVnIEtIIHdyb3RlOg0K
-PiA+IE9uIFdlZCwgSnVsIDIyLCAyMDIwIGF0IDA3OjU3OjQ4UE0gKzA4MDAsIFdlaXRhb1dhbmdv
-YyB3cm90ZToNCj4gPiA+IFRoaXMgYnVnIGlzIGZvdW5kIGluIFpoYW94aW4gcGxhdGZvcm0sIGJ1
-dCBpdCdzIGEgY29tbW9tIGNvZGUgYnVnLg0KPiA+ID4gRmFpbCBzZXF1ZW5jZToNCj4gPiA+IHN0
-ZXAxOiBVbmJpbmQgVUhDSSBjb250cm9sbGVyIGZyb20gbmF0aXZlIGRyaXZlcjsNCj4gPiA+IHN0
-ZXAyOiBCaW5kIFVIQ0kgY29udHJvbGxlciB0byB2ZmlvLXBjaSwgd2hpY2ggd2lsbCBwdXQgVUhD
-SSBjb250cm9sbGVyIGluIG9uZQ0KPiB2ZmlvDQo+ID4gPiAgICAgICAgZ3JvdXAncyBkZXZpY2Ug
-bGlzdCBhbmQgc2V0IFVIQ0kncyBkZXYtPmRyaXZlcl9kYXRhIHRvIHN0cnVjdA0KPiB2ZmlvLXBj
-aShmb3IgVUhDSSkNCj4gPg0KPiA+IEhhaCwgdGhhdCB3b3Jrcz8gIEhvdyBkbyB5b3UgZG8gdGhh
-dCBwcm9wZXJseT8gIFdoYXQgY29kZSBkb2VzIHRoYXQ/DQo+DQo+IFllYWgsIHRoYXQgY2FuJ3Qg
-cG9zc2libHkgd29yay4gIFRoZSBVU0IgY29yZSBleHBlY3RzIHRoYXQgYW55IGhvc3QNCj4gY29u
-dHJvbGxlciBkZXZpY2UgKG9yIGF0IGxlYXN0LCBhbnkgUENJIGhvc3QgY29udHJvbGxlciBkZXZp
-Y2UpIGhhcyBpdHMNCj4gZHJpdmVyX2RhdGEgc2V0IHRvIHBvaW50IHRvIGEgc3RydWN0IHVzYl9o
-Y2QuICBJdCBkb2Vzbid0IGV4cGVjdCBhIGhvc3QNCj4gY29udHJvbGxlciB0byBiZSBib3VuZCB0
-byBhbnl0aGluZyBvdGhlciB0aGFuIGEgaG9zdCBjb250cm9sbGVyIGRyaXZlci4NCj4NCj4gVGhp
-bmdzIGNvdWxkIGVhc2lseSBnbyB2ZXJ5IHdyb25nIGhlcmUuICBGb3IgZXhhbXBsZSwgc3VwcG9z
-ZSBhdCB0aGlzDQo+IHBvaW50IHRoZSBlaGNpLWhjZCBkcml2ZXIganVzdCBoYXBwZW5zIHRvIGJp
-bmQgdG8gdGhlIEVIQ0kgY29udHJvbGxlci4NCj4gV2hlbiB0aGlzIGhhcHBlbnMsIHRoZSBFSENJ
-IGNvbnRyb2xsZXIgaGFyZHdhcmUgdGFrZXMgb3ZlciBhbGwgdGhlIFVTQg0KPiBjb25uZWN0aW9u
-cyB0aGF0IHdlcmUgcm91dGVkIHRvIHRoZSBVSENJIGNvbnRyb2xsZXIuICBIb3cgd2lsbCB2Zmlv
-LXBjaQ0KPiBkZWFsIHdpdGggdGhhdD8gIFByZXR0eSB1bmdyYWNlZnVsbHksIEkgaW1hZ2luZS4N
-Cj4NCj4gVGhlIG9ubHkgd2F5IHRvIG1ha2UgdGhpcyB3b3JrIGF0IGFsbCBpcyB0byB1bmJpbmQg
-Ym90aCB1aGNpLWhjZCBhbmQNCj4gZWhjaS1oY2QgZmlyc3QuICBUaGVuIGFmdGVyIGJvdGggYXJl
-IGZpbmlzaGVkIHlvdSBjYW4gc2FmZWx5IGJpbmQNCj4gdmZpby1wY2kgdG8gdGhlIEVIQ0kgY29u
-dHJvbGxlciBhbmQgdGhlIFVIQ0kgY29udHJvbGxlcnMgKGluIHRoYXQNCj4gb3JkZXIpLg0KPg0K
-SSdtIGFncmVlIHdpdGggeW91LCB1bmJpbmQgYm90aCB1aGNpLWhjZCBhbmQgZWhjaS1oY2QgZmly
-c3QgdGhlbiBiaW5kIHRvDQp2ZmlvLXBjaSBpcyBhIG1vcmUgcmVhc29uYWJsZSBzZXF1ZW5jZS4g
-T3VyIGV4cGVyaW1lbnRzIHByb3ZlIHRoYXQgdGhpcw0Kc2VxdWVuY2UgaXMgaW5kZWVkIGdvb2Qg
-YXMgZXhwZWN0ZWQuDQpIb3dldmVyLCBJIGRpZCBub3QgZmluZCBhIGZvcm1hbCBkb2N1bWVudCB0
-byBwcmVzY3JpYmUgdGhpcyBvcmRlci4NClVuZm9ydHVuYXRlbHksIHNvbWUgYXBwbGljYXRpb24g
-c29mdHdhcmUgc3VjaCBhcyB2aXJ0LW1hbmFnZXIvcWVtdSBhc3NpZ24NClVIQ0kvRUhDSSB0byBn
-dWVzdCBPUyBoYXMgdGhlIHNhbWUgYmluZC91bmJpbmQgc2VxdWVuY2UgYXMgdGVzdCChsGJ5IGhh
-bmShsS4NCkRvIHdlIG5lZWQgdG8gY29uc2lkZXIgY29tcGF0aWJpbGl0eSB3aXRoIHRoaXMgYXBw
-bGljYXRpb24gc2NlbmFyaW8/DQoNClRoZSBmb2xsb3dpbmcgbG9nIGlzIGNhcHR1cmVkIHdoZW4g
-c3RhcnRpbmcgdGhlbiBzaHV0ZG93biB0aGUNCnZpcnR1YWwgbWFjaGluZS4NCg0KLyogc3RhcnRp
-bmcgdmlydHVhbCBtYWNoaW5lKi8NClsgMjc4NS4yNTAwMDFdIGF1ZGl0OiB0eXBlPTE0MDAgYXVk
-aXQoMTU5NDM3NTgzNy4xOTE6NDgpOiBhcHBhcm1vcj0iU1RBVFVTIiBvcGVyYXRpb249InByb2Zp
-bGVfbG9hZCIgcHJvZmlsZT0idW5jb25maW5lZCIgbmFtZT0ibGlidmlydC1mYTY3NGU3My02N2Ey
-LTQ2NzItODUyNC1lNjJkZWE4YTNjNmMiIHBpZD0yMDA4IGNvbW09ImFwcGFybW9yX3BhcnNlciIN
-ClsgMjc4NS40Njc1MTBdIHVoY2lfaGNkIDAwMDA6MDA6MTAuMDogcmVtb3ZlLCBzdGF0ZSA0DQpb
-IDI3ODUuNDcyNDI2XSB1c2IgdXNiMTogVVNCIGRpc2Nvbm5lY3QsIGRldmljZSBudW1iZXIgMQ0K
-LypiaW5kIDAwMDA6MDA6MTAuMCB0byB2ZmlvLXBjaSovDQpbIDI3ODUuNDc4Nzk4XSB1aGNpX2hj
-ZCAwMDAwOjAwOjEwLjA6IFVTQiBidXMgMSBkZXJlZ2lzdGVyZWQNClsgMjc4NS41Njg3NDFdIHVo
-Y2lfaGNkIDAwMDA6MDA6MTAuMTogcmVtb3ZlLCBzdGF0ZSAxDQpbIDI3ODUuNTczNTYyXSB1c2Ig
-dXNiMjogVVNCIGRpc2Nvbm5lY3QsIGRldmljZSBudW1iZXIgMQ0KWyAyNzg1LjU3ODc5M10gdXNi
-IDItMjogVVNCIGRpc2Nvbm5lY3QsIGRldmljZSBudW1iZXIgMw0KWyAyNzg1Ljc1ODAxNl0gdWhj
-aV9oY2QgMDAwMDowMDoxMC4xOiBVU0IgYnVzIDIgZGVyZWdpc3RlcmVkDQovKmJpbmQgMDAwMDow
-MDoxMC4xIHRvIHZmaW8tcGNpKi8NClsgMjc4Ni4wMzc0NDhdIGVoY2ktcGNpIDAwMDA6MDA6MTAu
-NzogcmVtb3ZlLCBzdGF0ZSA0DQpbIDI3ODYuMDQyNDYwXSB1c2IgdXNiMzogVVNCIGRpc2Nvbm5l
-Y3QsIGRldmljZSBudW1iZXIgMQ0KWyAyNzg2LjA0ODcwMF0gZWhjaS1wY2kgMDAwMDowMDoxMC43
-OiBVU0IgYnVzIDMgZGVyZWdpc3RlcmVkDQovKmJpbmQgMDAwMDowMDoxMC43IHRvIHZmaW8tcGNp
-Ki8NClsgMjc4Ny41MTgwNDFdIGF1ZGl0OiB0eXBlPTE0MDAgYXVkaXQoMTU5NDM3NTgzOS40NTk6
-NDkpOiBhcHBhcm1vcj0iU1RBVFVTIiBvcGVyYXRpb249InByb2ZpbGVfcmVwbGFjZSIgcHJvZmls
-ZT0idW5jb25maW5lZCIgbmFtZT0ibGlidmlydC1mYTY3NGU3My02N2EyLTQ2NzItODUyNC1lNjJk
-ZWE4YTNjNmMiIHBpZD0yMDM0IGNvbW09ImFwcGFybW9yX3BhcnNlciINClsgMjc4OC4yOTA3MDZd
-IGF1ZGl0OiB0eXBlPTE0MDAgYXVkaXQoMTU5NDM3NTg0MC4yMzE6NTApOiBhcHBhcm1vcj0iU1RB
-VFVTIiBvcGVyYXRpb249InByb2ZpbGVfcmVwbGFjZSIgcHJvZmlsZT0idW5jb25maW5lZCIgbmFt
-ZT0ibGlidmlydC1mYTY3NGU3My02N2EyLTQ2NzItODUyNC1lNjJkZWE4YTNjNmMiIHBpZD0yMDM3
-IGNvbW09ImFwcGFybW9yX3BhcnNlciINClsgMjc4OC45NjAwNzBdIGF1ZGl0OiB0eXBlPTE0MDAg
-YXVkaXQoMTU5NDM3NTg0MC44OTk6NTEpOiBhcHBhcm1vcj0iU1RBVFVTIiBvcGVyYXRpb249InBy
-b2ZpbGVfcmVwbGFjZSIgaW5mbz0ic2FtZSBhcyBjdXJyZW50IHByb2ZpbGUsIHNraXBwaW5nIiBw
-cm9maWxlPSJ1bmNvbmZpbmVkIiBuYW1lPSJsaWJ2aXJ0LWZhNjc0ZTczLTY3YTItNDY3Mi04NTI0
-LWU2MmRlYThhM2M2YyIgcGlkPTIwNDAgY29tbT0iYXBwYXJtb3JfcGFyc2VyIg0KWyAyNzg4Ljk2
-ODgyMV0gdmlyYnIwOiBwb3J0IDIodm5ldDApIGVudGVyZWQgYmxvY2tpbmcgc3RhdGUNClsgMjc4
-OC45ODgxNTldIHZpcmJyMDogcG9ydCAyKHZuZXQwKSBlbnRlcmVkIGRpc2FibGVkIHN0YXRlDQpb
-IDI3ODguOTkzNzExXSBkZXZpY2Ugdm5ldDAgZW50ZXJlZCBwcm9taXNjdW91cyBtb2RlDQpbIDI3
-ODguOTk5NDUzXSB2aXJicjA6IHBvcnQgMih2bmV0MCkgZW50ZXJlZCBibG9ja2luZyBzdGF0ZQ0K
-WyAyNzg5LjAwNTA1M10gdmlyYnIwOiBwb3J0IDIodm5ldDApIGVudGVyZWQgbGlzdGVuaW5nIHN0
-YXRlDQpbIDI3ODkuMDk4NzE3XSBzeXN0ZW1kLWpvdXJuYWxkWzI4Nl06IFN1Y2Nlc3NmdWxseSBz
-ZW50IHN0cmVhbSBmaWxlIGRlc2NyaXB0b3IgdG8gc2VydmljZSBtYW5hZ2VyLg0KWyAyNzg5LjU2
-NDI0MV0gYXVkaXQ6IHR5cGU9MTQwMCBhdWRpdCgxNTk0Mzc1ODQxLjUwNzo1Mik6IGFwcGFybW9y
-PSJTVEFUVVMiIG9wZXJhdGlvbj0icHJvZmlsZV9yZXBsYWNlIiBwcm9maWxlPSJ1bmNvbmZpbmVk
-IiBuYW1lPSJsaWJ2aXJ0LWZhNjc0ZTczLTY3YTItNDY3Mi04NTI0LWU2MmRlYThhM2M2YyIgcGlk
-PTIwNjUgY29tbT0iYXBwYXJtb3JfcGFyc2VyIg0KWyAyNzkxLjAyODAyOF0gdmlyYnIwOiBwb3J0
-IDIodm5ldDApIGVudGVyZWQgbGVhcm5pbmcgc3RhdGUNClsgMjc5My4wNDc5OTldIHZpcmJyMDog
-cG9ydCAyKHZuZXQwKSBlbnRlcmVkIGZvcndhcmRpbmcgc3RhdGUNClsgMjc5My4wNTM0NDldIHZp
-cmJyMDogdG9wb2xvZ3kgY2hhbmdlIGRldGVjdGVkLCBwcm9wYWdhdGluZw0KWyAyNzkzLjQzMzYw
-NF0gdmZpb19jYXBfaW5pdDogMDAwMDowMDoxMC43IGhpZGluZyBjYXAgMHhhDQoNCi8qIHNodXRk
-b3duIHZpcnR1YWwgbWFjaGluZSovDQpbIDM4MzguNzcyMDU4XSBzeXN0ZW1kLWpvdXJuYWxkWzI4
-Nl06IFN1Y2Nlc3NmdWxseSBzZW50IHN0cmVhbSBmaWxlIGRlc2NyaXB0b3IgdG8gc2VydmljZSBt
-YW5hZ2VyLg0KWyAzODM4LjgxNTgxOV0gc3lzdGVtZC1qb3VybmFsZFsyODZdOiBTdWNjZXNzZnVs
-bHkgc2VudCBzdHJlYW0gZmlsZSBkZXNjcmlwdG9yIHRvIHNlcnZpY2UgbWFuYWdlci4NClsgMzgz
-OC44NzEwMDJdIHN5c3RlbWQtam91cm5hbGRbMjg2XTogU3VjY2Vzc2Z1bGx5IHNlbnQgc3RyZWFt
-IGZpbGUgZGVzY3JpcHRvciB0byBzZXJ2aWNlIG1hbmFnZXIuDQpbIDM4MzguODg0NjA2XSBzeXN0
-ZW1kLWpvdXJuYWxkWzI4Nl06IFN1Y2Nlc3NmdWxseSBzZW50IHN0cmVhbSBmaWxlIGRlc2NyaXB0
-b3IgdG8gc2VydmljZSBtYW5hZ2VyLg0KWyAzODM4Ljg5NDUxNF0gc3lzdGVtZC1qb3VybmFsZFsy
-ODZdOiBTdWNjZXNzZnVsbHkgc2VudCBzdHJlYW0gZmlsZSBkZXNjcmlwdG9yIHRvIHNlcnZpY2Ug
-bWFuYWdlci4NClsgMzgzOC44OTY3OTFdIHJma2lsbDogaW5wdXQgaGFuZGxlciBlbmFibGVkDQpb
-IDM4MzguOTAzODk2XSBzeXN0ZW1kLWpvdXJuYWxkWzI4Nl06IFN1Y2Nlc3NmdWxseSBzZW50IHN0
-cmVhbSBmaWxlIGRlc2NyaXB0b3IgdG8gc2VydmljZSBtYW5hZ2VyLg0KWyAzODM4LjkwNzk5OF0g
-c3lzdGVtZFsxXTogU2VudCBtZXNzYWdlIHR5cGU9c2lnbmFsIHNlbmRlcj1uL2EgZGVzdGluYXRp
-b249bi9hIHBhdGg9L29yZy9mcmVlZGVza3RvcC9zeXN0ZW1kMS91bml0L3BhY2thZ2VraXRfMmVz
-ZXJ2aWNlIGludGVyZmFjZT1vcmcuZnJlZWRlc2t0b3AuREJ1cy5Qcm9wZXJ0aWVzIG1lbWJlcj1Q
-cm9wZXJ0aWVzQ2hhbmdlZCBjb29raWU9OTUyIHJlcGx5X2Nvb2tpZT0wIHNpZ25hdHVyZT1zYXtz
-dn1hcyBlcnJvci1uYW1lPW4vYSBlcnJvci1tZXNzYWdlPW4vYQ0KWyAzODM4Ljk0OTUwMF0gc3lz
-dGVtZC1qb3VybmFsZFsyODZdOiBTdWNjZXNzZnVsbHkgc2VudCBzdHJlYW0gZmlsZSBkZXNjcmlw
-dG9yIHRvIHNlcnZpY2UgbWFuYWdlci4NClsgMzgzOS4wMDI3NTddIHN5c3RlbWQtam91cm5hbGRb
-Mjg2XTogU3VjY2Vzc2Z1bGx5IHNlbnQgc3RyZWFtIGZpbGUgZGVzY3JpcHRvciB0byBzZXJ2aWNl
-IG1hbmFnZXIuDQpbIDM4MzkuMTgyMDUzXSBzeXN0ZW1kLWpvdXJuYWxkWzI4Nl06IFN1Y2Nlc3Nm
-dWxseSBzZW50IHN0cmVhbSBmaWxlIGRlc2NyaXB0b3IgdG8gc2VydmljZSBtYW5hZ2VyLg0KWyAz
-ODM5LjE5MTMxM10gc3lzdGVtZC1qb3VybmFsZFsyODZdOiBTdWNjZXNzZnVsbHkgc2VudCBzdHJl
-YW0gZmlsZSBkZXNjcmlwdG9yIHRvIHNlcnZpY2UgbWFuYWdlci4NClsgMzgzOC4zMDI3MjVdIGxp
-YnZpcnQtZ3Vlc3RzLnNoWzIxNjFdOiBSdW5uaW5nIGd1ZXN0cyBvbiBkZWZhdWx0IFVSSTogZ2Vu
-ZXJpYw0KWyAzODM4LjMwNjc4M10gbGlidmlydC1ndWVzdHMuc2hbMjE2MV06IFNodXR0aW5nIGRv
-d24gZ3Vlc3RzIG9uIGRlZmF1bHQgVVJJLi4uDQpbIDM4MzguNDE1MTAzXSBsaWJ2aXJ0LWd1ZXN0
-cy5zaFsyMTYxXTogU3RhcnRpbmcgc2h1dGRvd24gb24gZ3Vlc3Q6IGdlbmVyaWMNCnBseW1vdXRo
-LXBvd2Vyb2ZmLnNlcnZpY2UNClsgIE9LICBdIFN0b3BwZWQgRmlybXdhcmUgdXBkYXRlIGRhZW1v
-bi4NClsgIE9LICBdIFN0b3BwZWQgU2Vzc2lvbiAxIG9mIHVzZXIgd2FuZy4NClsgIE9LICBdIFJl
-bW92ZWQgc2xpY2UgVXNlciBTbGljZSBvZiB3YW5nLg0KICAgICAgICAgU3RvcHBpbmcgUGVybWl0
-IFVzZXIgU2Vzc2lvbnMuLi4NCiAgICAgICAgIFN0b3BwaW5nIExvZ2luIFNlcnZpY2UuLi4NClsg
-IE9LICBdIFN0b3BwZWQgUGVybWl0IFVzZXIgU2Vzc2lvbnMuDQpbICBPSyAgXSBVbm1vdW50ZWQg
-TW91bnQgdW5pdCBmb3IgY29yZSwgcmV2aXNpb24gOTI4OS4NClsgIE9LICBdIFVubW91bnRlZCBN
-b3VudCB1bml0IGZvciBnbm9tZS1zeXN0ZW0tbW9uaXRvciwgcmV2aXNpb24gMTQ4Lg0KWyAgT0sg
-IF0gVW5tb3VudGVkIE1vdW50IHVuaXQgZm9yIGdub21lLTMtMzQtMTgwNCwgcmV2aXNpb24gMzMu
-DQpbICBPSyAgXSBVbm1vdW50ZWQgTW91bnQgdW5pdCBmb3IgZ25vbWUtbG9ncywgcmV2aXNpb24g
-ODEuDQpbICBPSyAgXSBVbm1vdW50ZWQgTW91bnQgdW5pdCBmb3IgY29yZTE4LCByZXZpc2lvbiAx
-NzU0Lg0KWyAgT0sgIF0gVW5tb3VudGVkIE1vdW50IHVuaXQgZm9yIGdub21lLTMtMjgtMTgwNCwg
-cmV2aXNpb24gMTE2Lg0KWyAgT0sgIF0gVW5tb3VudGVkIE1vdW50IHVuaXQgZm9yIGdub21lLWNo
-YXJhY3RlcnMsIHJldmlzaW9uIDU1MC4NClsgIE9LICBdIFVubW91bnRlZCBNb3VudCB1bml0IGZv
-ciBnbm9tZS0zLTM0LTE4MDQsIHJldmlzaW9uIDM2Lg0KWyAgT0sgIF0gVW5tb3VudGVkIE1vdW50
-IHVuaXQgZm9yIGNvcmUsIHJldmlzaW9uIDk0MzYuDQpbICBPSyAgXSBVbm1vdW50ZWQgTW91bnQg
-dW5pdCBmb3IgZ25vbWUtY2hhcmFjdGVycywgcmV2aXNpb24gNTM5Lg0KWyAgT0sgIF0gVW5tb3Vu
-dGVkIE1vdW50IHVuaXQgZm9yIGd0ay1jb21tb24tdGhlbWVzLCByZXZpc2lvbiAxNDQwLg0KWyAg
-T0sgIF0gVW5tb3VudGVkIE1vdW50IHVuaXQgZm9yIGd0ay1jb21tb24tdGhlbWVzLCByZXZpc2lv
-biAxNTA2Lg0KWyAgT0sgIF0gVW5tb3VudGVkIE1vdW50IHVuaXQgZm9yIGNvcmUxOCwgcmV2aXNp
-b24gMTY2OC4NClsgIE9LICBdIFVubW91bnRlZCBNb3VudCB1bml0IGZvciBnbm9tZS1jYWxjdWxh
-dG9yLCByZXZpc2lvbiA1NDQuDQpbICBPSyAgXSBVbm1vdW50ZWQgTW91bnQgdW5pdCBmb3IgZ25v
-bWUtY2FsY3VsYXRvciwgcmV2aXNpb24gNzQ4Lg0KWyAgT0sgIF0gVW5tb3VudGVkIE1vdW50IHVu
-aXQgZm9yIGdub21lLWxvZ3MsIHJldmlzaW9uIDEwMC4NClsgIE9LICBdIFVubW91bnRlZCBNb3Vu
-dCB1bml0IGZvciBnbm9tZS0zLTI4LTE4MDQsIHJldmlzaW9uIDEyOC4NClsgIE9LICBdIFN0b3Bw
-ZWQgTG9naW4gU2VydmljZS4NClsgIE9LICBdIFN0b3BwZWQgdGFyZ2V0IFVzZXIgYW5kIEdyb3Vw
-IE5hbWUgTG9va3Vwcy4NClsgMzgzOS40NzE2MzVdIGxpYnZpcnQtZ3Vlc3RzLnNoWzIxNjFdOiBX
-YWl0aW5nIGZvciAxIGd1ZXN0cyB0byBzaHV0IGRvd24sIDEyMCBzZWNvbmRzIGxlZnQNClsgMzg0
-MS44MjQ4NDJdIHZpcmJyMDogcG9ydCAyKHZuZXQwKSBlbnRlcmVkIGRpc2FibGVkIHN0YXRlDQpb
-IDM4NDEuODMyOTQ5XSBkZXZpY2Ugdm5ldDAgbGVmdCBwcm9taXNjdW91cyBtb2RlDQpbIDM4NDEu
-ODM3MzkzXSB2aXJicjA6IHBvcnQgMih2bmV0MCkgZW50ZXJlZCBkaXNhYmxlZCBzdGF0ZQ0KW1sg
-Mzg0My4xNjc0OTVdIGF1ZGl0OiB0eXBlPTE0MDAgYXVkaXQoMTU5NDM3Njg5NS4xMDc6NTMpOiBh
-cHBhcm1vcj0iU1RBVFVTIiBvcGVyYXRpb249InByb2ZpbGVfcmVtb3ZlIiBwcm9maWxlPSJ1bmNv
-bmZpbmVkIiBuYW1lPSJsaWJ2aXJ0LWZhNjc0ZTczLTY3YTItNDY3Mi04NTI0LWU2MmRlYThhM2M2
-YyIgcGlkPTIzMDEgY29tbT0iYXBwYXJtb3JfcGFyc2VyIg0KWyAzODQzLjI0NjM5N10gQlVHOiB1
-bmFibGUgdG8gaGFuZGxlIGtlcm5lbCBOVUxMIHBvaW50ZXIgZGVyZWZlcmVuY2UgYXQgMDAwMDAw
-MDAwMDAwMDAwMA0KWyAzODQzLjI1NDE1N10gUEdEIDAgUDREIDANClsgMzg0My4yNTY2NzFdIE9v
-cHM6IDAwMDIgWyMxXSBTTVAgTk9QVEkNClsgMzg0My4yNjAzMDFdIENQVTogMSBQSUQ6IDE4MTIg
-Q29tbTogbGlidmlydGQgTm90IHRhaW50ZWQgNC4xOS42NSAjMTANClsgMzg0My4yNjY1MTFdIEhh
-cmR3YXJlIG5hbWU6IFNoYW5naGFpIFpoYW94aW4gU2VtaWNvbmR1Y3RvciBDby4sIEx0ZC4gSFgw
-MDJFQS9IWDAwMkVBLCBCSU9TIEhYMDAyRUEwXzAzX1I0OTBfRF8yMDA3MDcgMDcvMDcvMjAyMA0K
-WyAzODQzLjI3NzgwNF0gUklQOiAwMDEwOnZmaW9fZGV2aWNlX3B1dCsweGE1LzB4MTQwIFt2Zmlv
-XQ0KWyAzODQzLjI4MzEyOV0gQ29kZTogMWMgNGUgY2UgNDggOGIgNzMgMjggNDggOGIgNTMgMjAg
-NDggYzcgYzcgNDggNTQgNjEgYzAgZTggNTEgMWMgNGUgY2UgNDggOGIgNTMgMjAgNDggOGIgNDMg
-MjggNDggYzcgYzcgODAgNTQgNjEgYzAgNDggODkgNDIgMDggPDQ4PiA4OSAxMCA0OCBiOCAwMCAw
-MSAwMCAwMCAwMCAwMCBhZCBkZSA0OCA4OSA0MyAyMCA0OCAwNSAwMCAwMSAwMA0KWyAzODQzLjMw
-MTcyNl0gUlNQOiAwMDE4OmZmZmY4ZmRlMjIxMGJjMjggRUZMQUdTOiAwMDAxMDI4Mg0KWyAzODQz
-LjMwNjkwNV0gUkFYOiAwMDAwMDAwMDAwMDAwMDAwIFJCWDogZmZmZjhmZGUxYTU5ZWQwMCBSQ1g6
-IDAwMDAwMDAwMDAwMDAwMDANClsgMzg0My4zMTM5NzVdIFJEWDogZmZmZjhmZGRlMjdkNjgyMCBS
-U0k6IGZmZmY4ZmRlMmZhOTY0MzggUkRJOiBmZmZmZmZmZmMwNjE1NDgwDQpbIDM4NDMuMzIxMTE4
-XSBSQlA6IGZmZmY4ZmRlMjIxMGJjNDggUjA4OiAwMDAwMDAwMDAwMDAwYzkwIFIwOTogM2Q3NDc4
-NjU2ZTJjMzAzZA0KWyAzODQzLjMyODE5MF0gUjEwOiBmZmZmOGZkZGUyMjg0NTIwIFIxMTogMzAz
-MjM4MzY2NDM3MzI2NSBSMTI6IGZmZmY4ZmRkZTI3ZDY4MDANClsgMzg0My4zMzUzMTRdIFIxMzog
-ZmZmZjhmZGUxYTU5ZWQyMCBSMTQ6IGZmZmY4ZmRkZTI3ZDY4MDAgUjE1OiAwMDAwMDAwMDAwMDAw
-MDAwDQpbIDM4NDMuMzQyMzkwXSBGUzogIDAwMDA3ZjkxZmUzZDY3MDAoMDAwMCkgR1M6ZmZmZjhm
-ZGUyZmE4MDAwMCgwMDAwKSBrbmxHUzowMDAwMDAwMDAwMDAwMDAwDQpbIDM4NDMuMzUwNDU3XSBD
-UzogIDAwMTAgRFM6IDAwMDAgRVM6IDAwMDAgQ1IwOiAwMDAwMDAwMDgwMDUwMDMzDQpbIDM4NDMu
-MzU2MjIxXSBDUjI6IDAwMDAwMDAwMDAwMDAwMDAgQ1IzOiAwMDAwMDAwNDI1ZmVjMDA1IENSNDog
-MDAwMDAwMDAwMDE2MGVlMA0KWyAzODQzLjM2MzMxMl0gQ2FsbCBUcmFjZToNClsgMzg0My4zNjU3
-NzhdICB2ZmlvX2RlbF9ncm91cF9kZXYrMHgxMDUvMHgyZTAgW3ZmaW9dDQpbIDM4NDMuMzcwNTM3
-XSAgPyBkb193YWl0X2ludHJfaXJxKzB4OTAvMHg5MA0KWyAzODQzLjM3NDU1MF0gID8gdnByaW50
-a19mdW5jKzB4NDcvMHhjMA0KWyAzODQzLjM3ODIwMl0gIHZmaW9fcGNpX3JlbW92ZSsweDIwLzB4
-ZTAgW3ZmaW9fcGNpXQ0KWyAzODQzLjM4MjkwMF0gIHBjaV9kZXZpY2VfcmVtb3ZlKzB4NTEvMHhk
-MA0KWyAzODQzLjM4Njc5OV0gIGRldmljZV9yZWxlYXNlX2RyaXZlcl9pbnRlcm5hbCsweDE4ZC8w
-eDI1MA0KWyAzODQzLjM5MjA0Ml0gIGRldmljZV9yZWxlYXNlX2RyaXZlcisweDEyLzB4MjANClsg
-Mzg0My4zOTYzMjRdICB1bmJpbmRfc3RvcmUrMHhiZC8weDE5MA0KWyAzODQzLjM5OTg2OV0gIGRy
-dl9hdHRyX3N0b3JlKzB4MjcvMHg0MA0KWyAzODQzLjQwMzU0MV0gIHN5c2ZzX2tmX3dyaXRlKzB4
-M2MvMHg1MA0KWyAzODQzLjQwNzI1MV0gIGtlcm5mc19mb3Bfd3JpdGUrMHgxMjUvMHgxYTANClsg
-Mzg0My40MTE0MzFdICBfX3Zmc193cml0ZSsweDNhLzB4MTkwDQpbIDM4NDMuNDE0OTAyXSAgPyBh
-cHBhcm1vcl9maWxlX3Blcm1pc3Npb24rMHgxYS8weDIwDQpbIDM4NDMuNDE5NjQ4XSAgPyBzZWN1
-cml0eV9maWxlX3Blcm1pc3Npb24rMHgzMS8weGMwDQpbIDM4NDMuNDI0NjQ4XSAgPyBfY29uZF9y
-ZXNjaGVkKzB4MTkvMHg0MA0KWyAzODQzLjQyODQwN10gIHZmc193cml0ZSsweGIxLzB4MWEwDQpb
-IDM4NDMuNDMxNjk2XSAga3N5c193cml0ZSsweDVjLzB4ZTANClsgMzg0My40MzUwNDhdICBfX3g2
-NF9zeXNfd3JpdGUrMHgxYS8weDIwDQpbIDM4NDMuNDM5MDU2XSAgZG9fc3lzY2FsbF82NCsweDVh
-LzB4MTIwDQpbIDM4NDMuNDQyNzEzXSAgZW50cnlfU1lTQ0FMTF82NF9hZnRlcl9od2ZyYW1lKzB4
-NDQvMHhhOQ0KWyAzODQzLjQ0Nzc1N10gUklQOiAwMDMzOjB4N2Y5MjRlMjkwMmI3DQpbIDM4NDMu
-NDUxMzg1XSBDb2RlOiA0NCAwMCAwMCA0MSA1NCA1NSA0OSA4OSBkNCA1MyA0OCA4OSBmNSA4OSBm
-YiA0OCA4MyBlYyAxMCBlOCA1YiBmZCBmZiBmZiA0YyA4OSBlMiA0MSA4OSBjMCA0OCA4OSBlZSA4
-OSBkZiBiOCAwMSAwMCAwMCAwMCAwZiAwNSA8NDg+IDNkIDAwIGYwIGZmIGZmIDc3IDM1IDQ0IDg5
-IGM3IDQ4IDg5IDQ0IDI0IDA4IGU4IDk0IGZkIGZmIGZmIDQ4DQpbIDM4NDMuNDcwNjk2XSBSU1A6
-IDAwMmI6MDAwMDdmOTFmZTNkNTgxMCBFRkxBR1M6IDAwMDAwMjkzIE9SSUdfUkFYOiAwMDAwMDAw
-MDAwMDAwMDAxDQpbIDM4NDMuNDc4NTA4XSBSQVg6IGZmZmZmZmZmZmZmZmZmZGEgUkJYOiAwMDAw
-MDAwMDAwMDAwMDE2IFJDWDogMDAwMDdmOTI0ZTI5MDJiNw0KWyAzODQzLjQ4NTYyN10gUkRYOiAw
-MDAwMDAwMDAwMDAwMDBjIFJTSTogMDAwMDdmOTIxMDAxYzc4NCBSREk6IDAwMDAwMDAwMDAwMDAw
-MTYNClsgMzg0My40OTMwMDFdIFJCUDogMDAwMDdmOTIxMDAxYzc4NCBSMDg6IDAwMDAwMDAwMDAw
-MDAwMDAgUjA5OiAwMDAwMDAwMDAwMDAwMDBkDQpbIDM4NDMuNTAwMTIwXSBSMTA6IDAwMDAwMDAw
-MDAwMDAwMDAgUjExOiAwMDAwMDAwMDAwMDAwMjkzIFIxMjogMDAwMDAwMDAwMDAwMDAwYw0KWyAz
-ODQzLjUwNzQxM10gUjEzOiAwMDAwMDAwMDAwMDAwMDAwIFIxNDogMDAwMDAwMDAwMDAwMDAxNiBS
-MTU6IDAwMDA3ZjkxZTgxMTJlMjANClsgMzg0My41MTQ1NDFdIE1vZHVsZXMgbGlua2VkIGluOiB2
-ZmlvX3BjaSB2ZmlvX3ZpcnFmZCB2ZmlvX2lvbW11X3R5cGUxIHZmaW8geHRfQ0hFQ0tTVU0gaXB0
-YWJsZV9tYW5nbGUgaXB0X01BU1FVRVJBREUgaXB0YWJsZV9uYXQgbmZfbmF0X2lwdjQgbmZfbmF0
-IHh0X2Nvbm50cmFjayBuZl9jb25udHJhY2sgbmZfZGVmcmFnX2lwdjYgbmZfZGVmcmFnX2lwdjQg
-bGliY3JjMzJjIGlwdF9SRUpFQ1QgbmZfcmVqZWN0X2lwdjQgeHRfdGNwdWRwIGJyaWRnZSBzdHAg
-bGxjIGVidGFibGVfZmlsdGVyIGVidGFibGVzIGlwNnRhYmxlX2ZpbHRlciBpcDZfdGFibGVzIGlw
-dGFibGVfZmlsdGVyIGJwZmlsdGVyIGFtZGdwdSBjaGFzaCBncHVfc2NoZWQgbmxzX2lzbzg4NTlf
-MSBzbmRfaGRhX2NvZGVjX2hkbWkgcmFkZW9uIHNuZF9oZGFfaW50ZWwgc25kX2hkYV9jb2RlYyBz
-bmRfaGRhX2NvcmUgc25kX2h3ZGVwIHNuZF9wY20gdmlhX2NwdXRlbXAgaHdtb25fdmlkIGt2bV9p
-bnRlbCBrdm0gc25kX3NlcV9taWRpIHR0bSBzbmRfc2VxX21pZGlfZXZlbnQgaXJxYnlwYXNzIHNu
-ZF9yYXdtaWRpIGNyY3QxMGRpZl9wY2xtdWwgY3JjMzJfcGNsbXVsIGRybV9rbXNfaGVscGVyIGdo
-YXNoX2NsbXVsbmlfaW50ZWwgc25kX3NlcSBwY2JjIGFlc25pX2ludGVsIGFlc194ODZfNjQgY3J5
-cHRvX3NpbWQgZHJtIHNuZF9zZXFfZGV2aWNlIGNyeXB0ZCBnbHVlX2hlbHBlciBqb3lkZXYgc25k
-X3RpbWVyIGlucHV0X2xlZHMgc2VyaW9fcmF3IHNuZCBpMmNfYWxnb19iaXQgZmJfc3lzX2ZvcHMg
-c3lzY29weWFyZWEgdmlkZW8gc3lzZmlsbHJlY3Qgc3lzaW1nYmx0DQpbIDM4NDMuNTg2NDYzXSAg
-c291bmRjb3JlIG1hY19oaWQgc2NoX2ZxX2NvZGVsIHBhcnBvcnRfcGMgcHBkZXYgbHAgcGFycG9y
-dCBpcF90YWJsZXMgeF90YWJsZXMgYXV0b2ZzNCBoaWRfZ2VuZXJpYyBhaGNpIHBzbW91c2Ugcjgx
-NjkgdXNiaGlkIGhpZCBsaWJhaGNpIHJlYWx0ZWsNClsgMzg0My42MDA2MzddIENSMjogMDAwMDAw
-MDAwMDAwMDAwMA0KWyAzODQzLjYwNDEwOF0gLS0tWyBlbmQgdHJhY2UgNjVkNzI2MjNiODRiZjdh
-MyBdLS0tDQpbIDM4NDMuNjA4ODM5XSBSSVA6IDAwMTA6dmZpb19kZXZpY2VfcHV0KzB4YTUvMHgx
-NDAgW3ZmaW9dDQpbIDM4NDMuNjE0MjA5XSBDb2RlOiAxYyA0ZSBjZSA0OCA4YiA3MyAyOCA0OCA4
-YiA1MyAyMCA0OCBjNyBjNyA0OCA1NCA2MSBjMCBlOCA1MSAxYyA0ZSBjZSA0OCA4YiA1MyAyMCA0
-OCA4YiA0MyAyOCA0OCBjNyBjNyA4MCA1NCA2MSBjMCA0OCA4OSA0MiAwOCA8NDg+IDg5IDEwIDQ4
-IGI4IDAwIDAxIDAwIDAwIDAwIDAwIGFkIGRlIDQ4IDg5IDQzIDIwIDQ4IDA1IDAwIDAxIDAwDQpb
-IDM4NDMuNjMzNDE5XSBSU1A6IDAwMTg6ZmZmZjhmZGUyMjEwYmMyOCBFRkxBR1M6IDAwMDEwMjgy
-DQpbIDM4NDMuNjM4ODE2XSBSQVg6IDAwMDAwMDAwMDAwMDAwMDAgUkJYOiBmZmZmOGZkZTFhNTll
-ZDAwIFJDWDogMDAwMDAwMDAwMDAwMDAwMA0KWyAzODQzLjY0NjEzM10gUkRYOiBmZmZmOGZkZGUy
-N2Q2ODIwIFJTSTogZmZmZjhmZGUyZmE5NjQzOCBSREk6IGZmZmZmZmZmYzA2MTU0ODANClsgMzg0
-My42NTM1NTFdIFJCUDogZmZmZjhmZGUyMjEwYmM0OCBSMDg6IDAwMDAwMDAwMDAwMDBjOTAgUjA5
-OiAzZDc0Nzg2NTZlMmMzMDNkDQpbIDM4NDMuNjYxMzA0XSBSMTA6IGZmZmY4ZmRkZTIyODQ1MjAg
-UjExOiAzMDMyMzgzNjY0MzczMjY1IFIxMjogZmZmZjhmZGRlMjdkNjgwMA0KWyAzODQzLjY2ODU0
-MF0gUjEzOiBmZmZmOGZkZTFhNTllZDIwIFIxNDogZmZmZjhmZGRlMjdkNjgwMCBSMTU6IDAwMDAw
-MDAwMDAwMDAwMDANClsgMzg0My42NzYwMjldIEZTOiAgMDAwMDdmOTFmZTNkNjcwMCgwMDAwKSBH
-UzpmZmZmOGZkZTJmYTgwMDAwKDAwMDApIGtubEdTOjAwMDAwMDAwMDAwMDAwMDANClsgMzg0My42
-ODQzOThdIENTOiAgMDAxMCBEUzogMDAwMCBFUzogMDAwMCBDUjA6IDAwMDAwMDAwODAwNTAwMzMN
-ClsgMzg0My42OTAyNjldIENSMjogMDAwMDAwMDAwMDAwMDAwMCBDUjM6IDAwMDAwMDA0MjVmZWMw
-MDUgQ1I0OiAwMDAwMDAwMDAwMTYwZWUwDQoNClRoYW5rcw0Kd2VpdGFvd2FuZw0KDQoNCrGjw9zJ
-+cP3o7oNCrG+08q8/rqs09Cxo8Pcu/LXqNPQ0MXPoqOsvfa5qda4tqjK1bz+yMvKudPDoaPRz737
-ttSxvtPKvP678sbkxNrI3df2yM66zs60vq3K2siotcSy6dTEoaLKudPDoaK4tNbGu/LXqreioaMN
-CkNPTkZJREVOVElBTCBOT1RFOg0KVGhpcyBlbWFpbCBjb250YWlucyBjb25maWRlbnRpYWwgb3Ig
-bGVnYWxseSBwcml2aWxlZ2VkIGluZm9ybWF0aW9uIGFuZCBpcyBmb3IgdGhlIHNvbGUgdXNlIG9m
-IGl0cyBpbnRlbmRlZCByZWNpcGllbnQuIEFueSB1bmF1dGhvcml6ZWQgcmV2aWV3LCB1c2UsIGNv
-cHlpbmcgb3IgZm9yd2FyZGluZyBvZiB0aGlzIGVtYWlsIG9yIHRoZSBjb250ZW50IG9mIHRoaXMg
-ZW1haWwgaXMgc3RyaWN0bHkgcHJvaGliaXRlZC4NCg==
+On Wed, 22 Jul 2020 19:57:48 +0800
+WeitaoWangoc <WeitaoWang-oc@zhaoxin.com> wrote:
+
+> This bug is found in Zhaoxin platform, but it's a commom code bug.
+> Fail sequence:
+> step1: Unbind UHCI controller from native driver;
+> step2: Bind UHCI controller to vfio-pci, which will put UHCI controller i=
+n one vfio
+>        group's device list and set UHCI's dev->driver_data to struct vfio=
+-pci(for UHCI)
+> step3: Unbind EHCI controller from native driver, will try to tell UHCI n=
+ative driver
+>        that "I'm removed by set companion_hcd->self.hs_companion to NULL.=
+ However,
+>        companion_hcd get from UHCI's dev->driver_data that has modified b=
+y vfio-pci
+>        already.So, the vfio-pci structure will be damaged!
+> step4: Bind EHCI controller to vfio-pci driver, which will put EHCI contr=
+oller in the
+>        same vfio group as UHCI controller;
+>      ... ...
+> step5: Unbind UHCI controller from vfio-pci, which will delete UHCI from =
+vfio group'
+>        device list that has been damaged in step 3. So,delete operation c=
+an random
+>        result into a NULL pointer dereference with the below stack dump.
+> step6: Bind UHCI controller to native driver;
+> step7: Unbind EHCI controller from vfio-pci, which will try to remove EHC=
+I controller
+>        from the vfio group;
+> step8: Bind EHCI controller to native driver;
+>=20
+> [  929.114641] uhci_hcd 0000:00:10.0: remove, state 1
+> [  929.114652] usb usb1: USB disconnect, device number 1
+> [  929.114655] usb 1-1: USB disconnect, device number 2
+> [  929.270313] usb 1-2: USB disconnect, device number 3
+> [  929.318404] uhci_hcd 0000:00:10.0: USB bus 1 deregistered
+> [  929.343029] uhci_hcd 0000:00:10.1: remove, state 4
+> [  929.343045] usb usb3: USB disconnect, device number 1
+> [  929.343685] uhci_hcd 0000:00:10.1: USB bus 3 deregistered
+> [  929.369087] ehci-pci 0000:00:10.7: remove, state 4
+> [  929.369102] usb usb4: USB disconnect, device number 1
+> [  929.370325] ehci-pci 0000:00:10.7: USB bus 4 deregistered
+> [  932.398494] BUG: unable to handle kernel NULL pointer dereference at 0=
+000000000000000
+> [  932.398496] PGD 42a67d067 P4D 42a67d067 PUD 42a65f067 PMD 0
+> [  932.398502] Oops: 0002 [#2] SMP NOPTI
+> [  932.398505] CPU: 2 PID: 7824 Comm: vfio_unbind.sh Tainted: P   D  4.19=
+.65-2020051917-rainos #1
+> [  932.398506] Hardware name: Shanghai Zhaoxin Semiconductor Co., Ltd. HX=
+002EH/HX002EH,
+>                BIOS HX002EH0_01_R480_R_200408 04/08/2020
+> [  932.398513] RIP: 0010:vfio_device_put+0x31/0xa0 [vfio]
+> [  932.398515] Code: 89 e5 41 54 53 4c 8b 67 18 48 89 fb 49 8d 74 24 30 e=
+8 e3 0e f3 de
+>                 84 c0 74 67 48 8b 53 20 48 8b 43 28 48 8b 7b 18 48 89 42 =
+08 <48> 89 10
+>                 48 b8 00 01 00 00 00 00 ad de 48 89 43 20 48 b8 00 02 00
+> [  932.398516] RSP: 0018:ffffbbfd04cffc18 EFLAGS: 00010202
+> [  932.398518] RAX: 0000000000000000 RBX: ffff92c7ea717880 RCX: 000000000=
+0000000
+> [  932.398519] RDX: ffff92c7ea713620 RSI: ffff92c7ea713630 RDI: ffff92c7e=
+a713600
+> [  932.398521] RBP: ffffbbfd04cffc28 R08: ffff92c7f02a8080 R09: ffff92c7e=
+fc03980
+> [  932.398522] R10: ffffbbfd04cff9a8 R11: 0000000000000000 R12: ffff92c7e=
+a713600
+> [  932.398523] R13: ffff92c7ed8bb0a8 R14: ffff92c7ea717880 R15: 000000000=
+0000000
+> [  932.398525] FS:  00007f3031500740(0000) GS:ffff92c7f0280000(0000) knlG=
+S:0000000000000000
+> [  932.398526] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [  932.398527] CR2: 0000000000000000 CR3: 0000000428626004 CR4: 000000000=
+0160ee0
+> [  932.398528] Call Trace:
+> [  932.398534]  vfio_del_group_dev+0xe8/0x2a0 [vfio]
+> [  932.398539]  ? __blocking_notifier_call_chain+0x52/0x60
+> [  932.398542]  ? do_wait_intr_irq+0x90/0x90
+> [  932.398546]  ? iommu_bus_notifier+0x75/0x100
+> [  932.398551]  vfio_pci_remove+0x20/0xa0 [vfio_pci]
+> [  932.398554]  pci_device_remove+0x3e/0xc0
+> [  932.398557]  device_release_driver_internal+0x17a/0x240
+> [  932.398560]  device_release_driver+0x12/0x20
+> [  932.398561]  unbind_store+0xee/0x180
+> [  932.398564]  drv_attr_store+0x27/0x40
+> [  932.398567]  sysfs_kf_write+0x3c/0x50
+> [  932.398568]  kernfs_fop_write+0x125/0x1a0
+> [  932.398572]  __vfs_write+0x3a/0x190
+> [  932.398575]  ? apparmor_file_permission+0x1a/0x20
+> [  932.398577]  ? security_file_permission+0x3b/0xc0
+> [  932.398581]  ? _cond_resched+0x1a/0x50
+> [  932.398582]  vfs_write+0xb8/0x1b0
+> [  932.398584]  ksys_write+0x5c/0xe0
+> [  932.398586]  __x64_sys_write+0x1a/0x20
+> [  932.398589]  do_syscall_64+0x5a/0x110
+> [  932.398592]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+>=20
+> Using virt-manager/qemu to boot guest os, we can see the same fail sequen=
+ce!
+>=20
+> Fix this by check for UHCI driver loaded or not before modifiy UHCI's dev=
+->driver_data,
+> which will happen in ehci native driver probe/remove.
+>=20
+> Signed-off-by: WeitaoWangoc <WeitaoWang-oc@zhaoxin.com>
+> ---
+>  drivers/usb/core/hcd-pci.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+>=20
+> diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
+> index 1547aa6..484f2a0 100644
+> --- a/drivers/usb/core/hcd-pci.c
+> +++ b/drivers/usb/core/hcd-pci.c
+> @@ -34,6 +34,7 @@ static DECLARE_RWSEM(companions_rwsem);
+>  #define CL_OHCI                PCI_CLASS_SERIAL_USB_OHCI
+>  #define CL_EHCI                PCI_CLASS_SERIAL_USB_EHCI
+>=20
+> +#define PCI_DEV_DRV_FLAG       2
+>  static inline int is_ohci_or_uhci(struct pci_dev *pdev)
+>  {
+>         return pdev->class =3D=3D CL_OHCI || pdev->class =3D=3D CL_UHCI;
+> @@ -68,6 +69,8 @@ static void for_each_companion(struct pci_dev *pdev, st=
+ruct usb_hcd *hcd,
+>                 if (companion->class !=3D CL_UHCI && companion->class !=
+=3D CL_OHCI &&
+>                                 companion->class !=3D CL_EHCI)
+>                         continue;
+> +               if (!(companion->priv_flags & PCI_DEV_DRV_FLAG))
+
+But pci_dev.priv_flags is private data for the driver that currently
+owns the device, which could be vfio-pci.  This is really no different
+than assuming the structure at device.driver_data.  If vfio-pci were to
+make legitimate use of pci_dev.priv_flags, this could simply blow up
+again.  Should there instead be some sort of registration interface
+where hcd complaint drivers register their devices and only those
+registered devices can have their driver private data arbitrarily poked
+by another driver?  Thanks,
+
+Alex
+
+> +                       continue;
+>=20
+>                 companion_hcd =3D pci_get_drvdata(companion);
+>                 if (!companion_hcd || !companion_hcd->self.root_hub)
+> @@ -254,6 +257,7 @@ int usb_hcd_pci_probe(struct pci_dev *dev, const stru=
+ct pci_device_id *id,
+>         }
+>=20
+>         pci_set_master(dev);
+> +       dev->priv_flags | =3D PCI_DEV_DRV_FLAG;
+>=20
+>         /* Note: dev_set_drvdata must be called while holding the rwsem */
+>         if (dev->class =3D=3D CL_EHCI) {
+> @@ -326,6 +330,7 @@ void usb_hcd_pci_remove(struct pci_dev *dev)
+>         local_irq_disable();
+>         usb_hcd_irq(0, hcd);
+>         local_irq_enable();
+> +       dev->priv_flags & =3D ~PCI_DEV_DRV_FLAG;
+>=20
+>         /* Note: dev_set_drvdata must be called while holding the rwsem */
+>         if (dev->class =3D=3D CL_EHCI) {
+> --
+> 2.7.4
+>=20
+>=20
+>=20
+> =E4=BF=9D=E5=AF=86=E5=A3=B0=E6=98=8E=EF=BC=9A
+> =E6=9C=AC=E9=82=AE=E4=BB=B6=E5=90=AB=E6=9C=89=E4=BF=9D=E5=AF=86=E6=88=96=
+=E4=B8=93=E6=9C=89=E4=BF=A1=E6=81=AF=EF=BC=8C=E4=BB=85=E4=BE=9B=E6=8C=87=E5=
+=AE=9A=E6=94=B6=E4=BB=B6=E4=BA=BA=E4=BD=BF=E7=94=A8=E3=80=82=E4=B8=A5=E7=A6=
+=81=E5=AF=B9=E6=9C=AC=E9=82=AE=E4=BB=B6=E6=88=96=E5=85=B6=E5=86=85=E5=AE=B9=
+=E5=81=9A=E4=BB=BB=E4=BD=95=E6=9C=AA=E7=BB=8F=E6=8E=88=E6=9D=83=E7=9A=84=E6=
+=9F=A5=E9=98=85=E3=80=81=E4=BD=BF=E7=94=A8=E3=80=81=E5=A4=8D=E5=88=B6=E6=88=
+=96=E8=BD=AC=E5=8F=91=E3=80=82
+> CONFIDENTIAL NOTE:
+> This email contains confidential or legally privileged information and is=
+ for the sole use of its intended recipient. Any unauthorized review, use, =
+copying or forwarding of this email or the content of this email is strictl=
+y prohibited.
+>=20
+
