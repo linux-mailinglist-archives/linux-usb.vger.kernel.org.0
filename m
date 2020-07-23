@@ -2,94 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8293622B12D
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 16:22:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90CE622B196
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 16:42:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728968AbgGWOWT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jul 2020 10:22:19 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:48566 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726089AbgGWOWT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jul 2020 10:22:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1595514138;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc; bh=zSZAhL25JSXHpF0bAbKJRfBjeCgJ6YYI4dxlYgSnMIw=;
-        b=Sm7Gmn9OBkhJNLgwyyBA6BPMcBawrHLy//SsDN2inGpmFdoeUy9M5uFdchje/8QiNEbzJd
-        7wWZyZvlPXS7VVTC4MWUWamQt2wsDRAcjTIehLQ2EHI6KBftxccx5OaKsM2pCU/HsJiNqt
-        u2dZFD+96HyQYHEmcXhdA48R9FHMuik=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-239-e7v3qmTINFCK6ABgH8fdbw-1; Thu, 23 Jul 2020 10:22:16 -0400
-X-MC-Unique: e7v3qmTINFCK6ABgH8fdbw-1
-Received: by mail-qk1-f198.google.com with SMTP id 3so3945852qkv.13
-        for <linux-usb@vger.kernel.org>; Thu, 23 Jul 2020 07:22:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=zSZAhL25JSXHpF0bAbKJRfBjeCgJ6YYI4dxlYgSnMIw=;
-        b=TJcjcp6bWIHekDpQ/cH0XCzTiL4/OF69u7/Gw6gLwQ8Fp09vtNktPzhZ8Eh/57U31Y
-         Cm+Hq9ltQ4Q4j6L7O3xz80VNKnbAa6wUiwXVRnD/ibbB6b6ukqp7Sil2+r0soP3jpWY1
-         bJ1lmCIU4IELm9QtwvZnIzSYLtGeLr2f/M6Yae9xmNLBD4GwCUTuXfXoGAKlWxF6uXkw
-         5QP7SPrS360fWCUmzZXi1VjLrphv3c0oPm5VRK2rV7kk1oF2tFA8L7ycMSiqFSNro1HA
-         /wzjzX1sXVIW+qApdjQjc+wjheOK7yZVoK7R4RvRTZ3x0V/eTtqZKaHP6vKJyWHXhvAS
-         jW6Q==
-X-Gm-Message-State: AOAM531Abou0o38kBZzTBKpVvPDIIjKRH3T/Yas2h8TOgh+UiF6F2HGx
-        cbf4U9Ndfqj0qI+6mudhoFWhWxrqZAOwncr21kZYveNq2IQgo0qKg9G0Bx7ikMwd2ZQx00XOBl1
-        c1uas2ADauYlC2LcbVZ7G
-X-Received: by 2002:ad4:4bb0:: with SMTP id i16mr5099824qvw.42.1595514136248;
-        Thu, 23 Jul 2020 07:22:16 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw+P4z/SKan23uckp0U4ZwHA1Evj9o8JlarlIuBAqm40uOmGWRZUthDHWilRj8lh/rxbybNZQ==
-X-Received: by 2002:ad4:4bb0:: with SMTP id i16mr5099803qvw.42.1595514136058;
-        Thu, 23 Jul 2020 07:22:16 -0700 (PDT)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id f53sm2225651qta.84.2020.07.23.07.22.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jul 2020 07:22:15 -0700 (PDT)
-From:   trix@redhat.com
-To:     davem@davemloft.net, kuba@kernel.org, masahiroy@kernel.org
-Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] net: cdc_ncm: USB_NET_CDC_NCM selects USB_NET_CDCETHER
-Date:   Thu, 23 Jul 2020 07:22:10 -0700
-Message-Id: <20200723142210.21274-1-trix@redhat.com>
-X-Mailer: git-send-email 2.18.1
+        id S1728482AbgGWOm0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jul 2020 10:42:26 -0400
+Received: from mga02.intel.com ([134.134.136.20]:12017 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728696AbgGWOmZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 23 Jul 2020 10:42:25 -0400
+IronPort-SDR: JPy0bnlAJUW/e7FheTg4zsCMrTbbyDdcryZemfh6XVYwsCYwfbId/KQ8ntOV6HedHHBW6bTza9
+ JsuPA+NVexiQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9690"; a="138607355"
+X-IronPort-AV: E=Sophos;i="5.75,386,1589266800"; 
+   d="scan'208";a="138607355"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2020 07:42:25 -0700
+IronPort-SDR: d1owht6ODW7/N+pdNAxZPEnBZ5WiCtSu6WJAiwOnx9GEUUXj+qfZn4EsK0W72eyynTvyXLRGNr
+ 3wKAwxv7pT1Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,386,1589266800"; 
+   d="scan'208";a="320672349"
+Received: from mattu-haswell.fi.intel.com ([10.237.72.170])
+  by fmsmga002.fm.intel.com with ESMTP; 23 Jul 2020 07:42:23 -0700
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+To:     <gregkh@linuxfoundation.org>
+Cc:     <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 00/27] xhci features for usb-next
+Date:   Thu, 23 Jul 2020 17:45:03 +0300
+Message-Id: <20200723144530.9992-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+Hi Greg
 
-A link error
+This series for usb-next is almost completely about decoupling and
+cleaning up relations between xhci, xhci debug capability (DbC),
+and the DbC tty support.
 
-ld: drivers/net/usb/cdc_ncm.o:
-  undefined reference to `usbnet_cdc_update_filter'
+Real motivation behind this is to later turn DbC into a proper device
+allowing us to bind different drivers to it, like dbctty.
 
-usbnet_cdc_update_filter is defined in cdc_ether.c
-Building of cdc_ether.o is controlled by USB_NET_CDCETHER
+Thanks
+-Mathias
 
-Building of cdc_ncm.o is controlled by USB_NET_CDC_NCM
+Kai-Heng Feng (1):
+  xhci: Make debug message consistent with bus and port number
 
-So add a select USB_NET_CDCETHER to USB_NET_CDC_NCM
+Mathias Nyman (26):
+  xhci: dbc: Don't use generic xhci inc_deq() function for dbc
+  xhci: Don't pass struct xhci_hcd pointer to xhci_link_seg()
+  xhci: dbc: Don't use generic xhci erst allocation and free functions
+  xhci: dbc: Remove dbc_dma_alloc_coherent() wrapper
+  xhci: dbc: Remove dbc_dma_free_coherent() wrapper
+  xhci: dbc: Add device pointer to dbc structure
+  xhci: dbc: Use dev_info() and similar instead of xhci_info()
+  xhci: dbc: Don't use xhci_write_64() as it takes xhci as a parameter
+  xhci: dbc: Don't pass the xhci pointer as a parameter to
+    xhci_dbc_init_context()
+  xhci: dbc: Get the device pointer from dbc structure in
+    dbc_ep_do_queue()
+  xhci: dbc: Pass dbc pointer to endpoint init and exit functions.
+  xhci: dbc: Change to pass dbc pointer to xhci_do_dbc_stop()
+  xhci: dbc: Pass dbc pointer to dbc_handle_xfer_event() instead of
+    xhci_hcd pointer
+  xhci: dbgtty: Pass dbc pointer when registering a dbctty device
+  xhci: dbc: Pass dbc pointer to get_in/out_ep() helper functions to get
+    endpoints
+  xhci: dbc: Use dbc structure in the request completion instead of
+    xhci_hcd
+  xhci: dbc: Don't use generic xhci context allocation for dbc
+  xhci: dbc: don't use generic xhci ring allocation functions for dbc.
+  xhci: dbc: Pass dbc pointer to dbc memory init and cleanup functions
+  xhci: dbc: Pass dbc pointer to dbc start and stop functions.
+  xhci: dbc: simplify dbc requests allocation and queueing
+  xhci: dbc: remove endpoint pointers from dbc_port structure
+  xhci: dbctty: split dbc tty driver registration and unregistration
+    functions.
+  xhci: dbc: Add a operations structure to access driver functions
+  xhci: dbgcap: remove dbc dependency on dbctty specific flag
+  xhci: dbc: remove tty specific port structure from struct xhci_dbc
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/net/usb/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/host/xhci-dbgcap.c | 391 +++++++++++++++++++++------------
+ drivers/usb/host/xhci-dbgcap.h |  69 +++---
+ drivers/usb/host/xhci-dbgtty.c | 219 +++++++++++-------
+ drivers/usb/host/xhci-hub.c    |  41 ++--
+ drivers/usb/host/xhci-mem.c    |  35 +--
+ drivers/usb/host/xhci.h        |   2 +
+ 6 files changed, 462 insertions(+), 295 deletions(-)
 
-diff --git a/drivers/net/usb/Kconfig b/drivers/net/usb/Kconfig
-index a7fbc3ccd29e..c7bcfca7d70b 100644
---- a/drivers/net/usb/Kconfig
-+++ b/drivers/net/usb/Kconfig
-@@ -252,6 +252,7 @@ config USB_NET_CDC_EEM
- config USB_NET_CDC_NCM
- 	tristate "CDC NCM support"
- 	depends on USB_USBNET
-+	select USB_NET_CDCETHER
- 	default y
- 	help
- 	  This driver provides support for CDC NCM (Network Control Model
 -- 
-2.18.1
+2.17.1
 
