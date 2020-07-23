@@ -2,66 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E668122A6E5
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 07:25:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3816222A89F
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 08:14:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726010AbgGWFZE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jul 2020 01:25:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38672 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725858AbgGWFZE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 23 Jul 2020 01:25:04 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1600B20768;
-        Thu, 23 Jul 2020 05:25:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595481903;
-        bh=po5+Z46HNZ22g6I6H/FxU75BvqaqDGGFkQvPXBB/drI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CFKiDE2WzHIUG0cgm4xcvLClcmPYg9/s5hnwPsBNEjYeILs5fDx8nSD/L6VrUdgoM
-         J+6oFaoZWEPN7sZ+F0Ha6QGwoHZAIg0ACnfvG3fgNpzaJ38aj0RFbrKEytqFkVcxPy
-         Xg77/+lo34+iv0Xe2t4RbAiAhmq8vHAw79K1oQtY=
-Date:   Thu, 23 Jul 2020 07:25:06 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Weitao Wang(BJ-RD)" <WeitaoWang@zhaoxin.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        WeitaoWang-oc <WeitaoWang-oc@zhaoxin.com>,
-        "mathias.nyman@linux.intel.com" <mathias.nyman@linux.intel.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "hslester96@gmail.com" <hslester96@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Carsten_Schmid@mentor.com" <Carsten_Schmid@mentor.com>,
-        "efremov@linux.com" <efremov@linux.com>,
-        "Tony W. Wang(XA-RD)" <TonyWWang@zhaoxin.com>,
-        "Cobe Chen(BJ-RD)" <CobeChen@zhaoxin.com>,
-        "Tim Guo(BJ-RD)" <TimGuo@zhaoxin.com>,
-        "wwt8723@163.com" <wwt8723@163.com>
-Subject: Re: =?utf-8?B?562U5aSNOiBbUEFUQ0g=?= =?utf-8?Q?=5D?= USB:Fix kernel
- NULL pointer when unbind UHCI form vfio-pci
-Message-ID: <20200723052506.GA645747@kroah.com>
-References: <1595419068-4812-1-git-send-email-WeitaoWang-oc@zhaoxin.com>
- <20200722124414.GA3153105@kroah.com>
- <20200722145913.GB1310843@rowland.harvard.edu>
- <1bf449377e3448bc9c8bc7b64d7b7990@zhaoxin.com>
+        id S1728322AbgGWGOJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jul 2020 02:14:09 -0400
+Received: from out28-75.mail.aliyun.com ([115.124.28.75]:44658 "EHLO
+        out28-75.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725846AbgGWGN5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jul 2020 02:13:57 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.2062509|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.00557333-0.00122828-0.993198;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03299;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.I6H78tB_1595484804;
+Received: from localhost.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.I6H78tB_1595484804)
+          by smtp.aliyun-inc.com(10.147.40.7);
+          Thu, 23 Jul 2020 14:13:50 +0800
+From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
+        <zhouyanjie@wanyeetech.com>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org, robh+dt@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, paul@crapouillou.net,
+        prasannatsmkumar@gmail.com, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        yanfei.li@ingenic.com, sernia.zhou@foxmail.com,
+        zhenwenjin@gmail.com
+Subject: [PATCH v5 0/4] Add USB PHY support for new Ingenic SoCs. 
+Date:   Thu, 23 Jul 2020 14:12:57 +0800
+Message-Id: <20200723061301.82583-1-zhouyanjie@wanyeetech.com>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1bf449377e3448bc9c8bc7b64d7b7990@zhaoxin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 23, 2020 at 02:59:55AM +0000, Weitao Wang(BJ-RD) wrote:
-> CONFIDENTIAL NOTE:
-> This email contains confidential or legally privileged information and is for the sole use of its intended recipient. Any unauthorized review, use, copying or forwarding of this email or the content of this email is strictly prohibited.
+1.separate the adjustments to the code style into
+  a separate patch.
+2.Modify the help message, make it more future-proof.
+3.Drop the unnecessary comment about hardware reset.
+4.Create 'soc_info' structures instead having ID_* as platform data.
 
+周琰杰 (Zhou Yanjie) (4):
+  dt-bindings: USB: Add bindings for new Ingenic SoCs.
+  USB: PHY: JZ4770: Unify code style and simplify code.
+  USB: PHY: JZ4770: Add support for new Ingenic SoCs.
+  USB: PHY: JZ4770: Reformat the code to align it.
 
-This footer is not compatible with Linux mailing lists, sorry, I am not
-allowed to respond to it.
+ .../bindings/usb/ingenic,jz4770-phy.yaml           |   6 +-
+ drivers/usb/phy/Kconfig                            |   4 +-
+ drivers/usb/phy/phy-jz4770.c                       | 284 +++++++++++++++------
+ 3 files changed, 208 insertions(+), 86 deletions(-)
 
-greg k-h
+-- 
+2.11.0
+
