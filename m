@@ -2,59 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DC8722ADD3
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 13:36:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29A9522ADE7
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 13:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728040AbgGWLgv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jul 2020 07:36:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50602 "EHLO
+        id S1728518AbgGWLkt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jul 2020 07:40:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725846AbgGWLgv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jul 2020 07:36:51 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF0DC0619DC
-        for <linux-usb@vger.kernel.org>; Thu, 23 Jul 2020 04:36:50 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id q6so5960077ljp.4
-        for <linux-usb@vger.kernel.org>; Thu, 23 Jul 2020 04:36:50 -0700 (PDT)
+        with ESMTP id S1726109AbgGWLks (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jul 2020 07:40:48 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0BDC0619DC;
+        Thu, 23 Jul 2020 04:40:48 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id b11so3075921lfe.10;
+        Thu, 23 Jul 2020 04:40:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=65igqvPf2RECVzhmcmx44ADygdWlArWUGY40cVbFPRU=;
-        b=bEKLG+fR5AN2/vo75qSuUQHZC3uwTEw9RWJmXLbmSs3fF6vklkdeNGo7GKAPGMrzco
-         WlZ7KkYg28IcsdnlUPKDQ9oyWA9CM+V7+I80Qxc9eGDBJEfesJIOTECaOJNEAQW0ltoH
-         WK6oFkZr3fHWUof7oIkipvBjhH9kt7lUN30Zmr1S7qXznf6AI3WVX7baOIFNBYpnbkQW
-         rw4qeL0ewuUQnNCw7nuhNundntcGXxBkBY+A9cp4IC8EG58uPPMX75SaQvFxSzF8m5nV
-         Y5kX5cXLIPByiK5TvH+ituuyOQ7SpSa8iv0Q3/Sl27CXTQT7H9YVOrcwqfVCJp0ESnfL
-         BYJQ==
+        bh=hlTSl0JbeUfivGnDno+RXh6gUR9iqd88iP7yuNeEXtk=;
+        b=TuGKc36jfu50K0bdz7oL6F7mERT2rDnIhKa6ucV04q7ayjcCZqerXE9Q3iveogjFiY
+         ElyThsbsVb8xAmYW4ffLA0ghrOymW+R4Ygw2ti/8AIT2w+H0hav5QMf/xzDP5XFjiihy
+         AsbKD7FwTDcWqKHitw25WIdcnc6JTRSx7IMLEWd0b2AYWiiINE26R6+MRu2bkFS0Eqe3
+         bt7yBBglwPPzH7FYRuCekWoxAsGXxXRRVQcnvS/lzia3U9tftZNhuTqSO5P4Rej0GPbV
+         Bq9tDmSwcCxkR41gtXY+WodZ3WyWO79KAXjX+VdWjEXs4yQ3WTz3Gk4rTnijoIPIg0AY
+         uZYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
          :date:message-id:mime-version;
-        bh=65igqvPf2RECVzhmcmx44ADygdWlArWUGY40cVbFPRU=;
-        b=IW9GLUHIy2jRRXujQsvgwQEiovpchU1I1xw1ujVx1VCGH/WcZMchE0L0y99eLWqchi
-         IhQuY3q29WOqWqSUtIDxKQH1vIKDqjGZoyntSOZIlZBCk/i+9LUTkvJFvEnDPPBCQfsC
-         3lUDriyz7nPaQ64OrbAIsFHZK953clgK7qE04uPhCzl59ozJivxykajMgNd6B8VsKV/n
-         HzAdW5vBrQqwzIy8vUBBeYUnXaUt3humqzhvQkkMlKxVv9baEYKlA9foTTbqbsc3DGhM
-         FUJPXzDmuRRTwnyrsTdkZ+yybss4ZYQG6E2soTxYC2MtcNvP3GADS0fiL9glm6Cz3dbG
-         Q+Og==
-X-Gm-Message-State: AOAM532FKgiOrCQ7QPnzWDWUbyhqqu5aguYSDhzqreJB+2jxT/sv+dCd
-        bGelItOAxXyEXOLV8B+vtKgSqh6jCV62ng==
-X-Google-Smtp-Source: ABdhPJx/RljklVNig36kpA7s5H+fQbHO1NkAa1tqTWUBwm80yXnJiJsvaCYzL5EbfjNU4JboupoIyg==
-X-Received: by 2002:a2e:8e36:: with SMTP id r22mr1836442ljk.77.1595504208893;
-        Thu, 23 Jul 2020 04:36:48 -0700 (PDT)
+        bh=hlTSl0JbeUfivGnDno+RXh6gUR9iqd88iP7yuNeEXtk=;
+        b=sCUfzoQDoETD7CLCU5wi5q+mGt/om7fTuATDrr5P/t7CTLX2O1o6MKD3B9g/jexJo+
+         RUW2C/ueGi2GviIW7O5BIwD/k09x2UFY6V4hMAmYvNQWxYl93rusTDDhum4Fy/HVfk02
+         RI5iWjXoie1qxtbpSrMLKIPtPa4WwlGW+79+C16Hzojq5h2xPi8JXM5565UVUlZS89Nh
+         J7KCuPfyHX7fl59dTNSmdG/KTjDVf8Fl2TSN1zw0A2fbxtrZsP1aahexsfSzTALtGpUX
+         GFkYyVPe59Yao4LbKblahHV5Oc9rDxewVATyQ0jw2ZZDPkbvPmTQjlTLpiSCZiCa27oq
+         WQFA==
+X-Gm-Message-State: AOAM530DZ29kn996emkONNklgOen61edcMl1QIDTngkt0aYUV6fEDiEH
+        rly9ef5E2IRTrEx5W+6UCLn3EQwn233omw==
+X-Google-Smtp-Source: ABdhPJyPfWeLMzWCj4BnlN/bxERSNQ4adkBVinZ7gFr7obQ2QOp2F7eXKwVV0IUFjLppYwPEYVN5tQ==
+X-Received: by 2002:a05:6512:10ca:: with SMTP id k10mr2096425lfg.177.1595504446058;
+        Thu, 23 Jul 2020 04:40:46 -0700 (PDT)
 Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id p8sm2593584ljn.117.2020.07.23.04.36.47
+        by smtp.gmail.com with ESMTPSA id 202sm2619630lfg.24.2020.07.23.04.40.45
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 23 Jul 2020 04:36:47 -0700 (PDT)
+        Thu, 23 Jul 2020 04:40:45 -0700 (PDT)
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Ruslan Bilovol <ruslan.bilovol@gmail.com>
-Cc:     Linux USB <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] usb: gadget: f_uac2: fix AC Interface Header Descriptor wTotalLength
-In-Reply-To: <CAB=otbT5x5qoPedo854b0e-+Tcw1+i7UsJ6kbBBQRPrSMMtsfA@mail.gmail.com>
-References: <20200703134903.5695-1-ruslan.bilovol@gmail.com> <87r1tl6vn0.fsf@kernel.org> <CAB=otbT5x5qoPedo854b0e-+Tcw1+i7UsJ6kbBBQRPrSMMtsfA@mail.gmail.com>
-Date:   Thu, 23 Jul 2020 14:36:43 +0300
-Message-ID: <87mu3qo438.fsf@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH 1/2] USB: phy: fsl-usb: remove sysfs abuse
+In-Reply-To: <20200702072914.1072878-1-gregkh@linuxfoundation.org>
+References: <20200702072914.1072878-1-gregkh@linuxfoundation.org>
+Date:   Thu, 23 Jul 2020 14:40:41 +0300
+Message-ID: <87k0yuo3wm.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -67,37 +68,20 @@ X-Mailing-List: linux-usb@vger.kernel.org
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
-Ruslan Bilovol <ruslan.bilovol@gmail.com> writes:
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
 
-> On Thu, Jul 9, 2020 at 9:38 AM Felipe Balbi <balbi@kernel.org> wrote:
->>
->> Ruslan Bilovol <ruslan.bilovol@gmail.com> writes:
->>
->> > As per UAC2 spec (ch. 4.7.2), wTotalLength of AC Interface
->> > Header Descriptor "includes the combined length of this
->> > descriptor header and all Clock Source, Unit and Terminal
->> > descriptors."
->> >
->> > Thus add its size to its wTotalLength.
->> >
->> > Also after recent changes wTotalLength is calculated
->> > dynamically, update static definition of uac2_ac_header_descriptor
->> > accordingly
->> >
->> > Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
->>
->> Missing a Fixes tag here.
+> This file has a HUGE debugging sysfs file that spews out a lot of
+> information all at once, which violates the one-value-per-file rule for
+> sysfs.  If this is really needed, it should go into debugfs, but given
+> the age of this driver, I strongly doubt anyone is using it anymore.
 >
-> The issue is present since this driver introduction in 2012 in the
-> commit 132fcb460839 "usb: gadget: Add Audio Class 2.0 Driver",
-> but in older version of the driver it should be fixed in the
-> uac2_ac_header_descriptor structure initialization
+> So just remove the file entirely, it was never documented, so obviously,
+> no one actually needed it :)
 >
-> Should I resend this patch or you'll add this tag to the commit message
-> by yourself:
-> Fixes: 132fcb460839 ("usb: gadget: Add Audio Class 2.0 Driver")
+> Cc: Felipe Balbi <balbi@kernel.org>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-added, thanks
+applied both, thanks Greg.
 
 =2D-=20
 balbi
@@ -107,18 +91,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl8ZdksACgkQzL64meEa
-mQZ40g/+LVEZaPsGDsHHIbafn/ePS5CR8B9Xuk0U3hW53/7M5At34NCUzd68YmDN
-ph7PcsOQrsGk/SG2kMF9qBMNAF8WFjS9dXj5JhFIC/keWgo7Qfd9Fxgz+PPFLHDQ
-Xo/X2SbnmPMuAzQmaO+AMmLBOwogJFvhrlrQSl5vXEH0ya2R2DvZ/gwluDeua8bd
-aToLUn5yzAqALdcN9avYgmKz8cEGz12AR7G8xPX2FbuSub5dFt1josMfYAytNwXS
-8D0fNJHZ/KU1ggYvvPrPU2RQI5qT/O0ydOlSKbauFuIxDHtcHwG/JTmkyFfk/ybn
-4QupPNUTC9+xMwr8puWtFFbXI0WqXbsa+JwrrvAdQSC4bUpi7Iq1LvUoNp8TN6Lr
-SwCHyY9jKvv5zDg/iixHe78uIfT0KyVhM0exch1q2qLFaNIQ132vT1yHrB2pDb21
-hATvDRVXLde/4Uf1PBzV66IVgnsm/b7jjADzl5QjXo9OCoi6XnS6CqKFlxTnbAId
-qrviLktP1K2IvrIEmvo7hIbCQpRNhtIw2N0UZetrK6NWhhwhQhaFvcRqi3ZnpKF2
-FTu0nQmBNewnO4EqhB3IrjhklFr4rUIliTwGvSfrsMLtrHoW+lhED/oIPzmBYnjy
-WS3LB9Z/tSV0hkWlRfb6cYjEk9+C3QqXd7RMluMRtMxbNxnHSu8=
-=gXyI
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl8ZdzkACgkQzL64meEa
+mQa9TQ//eTbNo7vhL679/zs9ZIdL1jka4yapIht3nbNonwc1veaGiiZF+PQ3h0US
++asVQSkagKmRnjnWO1/OYH59BaqXkFwgacn15+JeL3bKSWed9hNUF8HeGmsyJ3O1
+ATUkgKjkBR4jkniR3IK8XNvpMBSgBR6GRq8rTMSzvU5NuWCsCF5H+cwR1NfO41hm
+DjhclfkkjgTmPNFw5guorEBZeBkrOINyvW8FCXqE47u6D69DyK13YC5x05iZIvbe
+IVLG5CNl0lF47UkggeDJ4ALOydeM8tSerbNLC/COEhLjOIFq5/8StwpB2x2XwcVV
+oL49dFp2V1EANzFNMrJznXTqM4QL9KOEJ6Q5yvRF84F3aCjv+vKGUsoz+4cCW69b
+ccke6bSRExKBIB6Tz5l/czxEpVEkgEgJkHmsabGXG4rUe33KFnVqmU/OnO7CoISR
+TbSIz1PxcZHd4gK3P8J1XVWkMPodaMtoerKvQPO2/lWVlhx6DhY53agatMy0vO9w
+GSabS8l9xKJlvRBhz9Wx/XpEg57FCBgArPOhEgfDW/6PqamNdTIaYz8DeScopvpT
+OhGCNX5ccz47MCuzXpbhxEYAXqYRkNr3gqKRxiPUZ+7gmBb3fx2OnUDMqUT7dzVT
+iEkhHns064LZ32ZPq8rF7aFrQTvPkKbUb7VGTvimhETwGMHSzHw=
+=uDk1
 -----END PGP SIGNATURE-----
 --=-=-=--
