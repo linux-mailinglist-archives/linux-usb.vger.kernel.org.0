@@ -2,102 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CF7322AAE6
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 10:41:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C13822AB10
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jul 2020 10:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726330AbgGWIl1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 23 Jul 2020 04:41:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40052 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726109AbgGWIl1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 23 Jul 2020 04:41:27 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 308BD2080D;
-        Thu, 23 Jul 2020 08:41:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595493686;
-        bh=PheGDG4I+Sd5okWGMSuo1JWd9HXAe6/fNMBPEQNHz2w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iTaq7h7RwfYMBoNmsxw1lVCjbC3pvPOFNRcvog+sxixmTbZKs668cWaGmUeAwTj7t
-         7HdJG9gPG8VPyMEAxwFOw7BYL4mliAKBHHxh1ylQodA/qmVRsqfS5KcKVXcuti5z7T
-         oGu9/+ZqLoJd0r6FnOohTSmOKYzaS5uPJ6uzEHfc=
-Date:   Thu, 23 Jul 2020 10:41:31 +0200
-From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To:     WeitaoWang-oc <WeitaoWang-oc@zhaoxin.com>
-Cc:     Alex Williamson <alex.williamson@redhat.com>,
-        "mathias.nyman@linux.intel.com" <mathias.nyman@linux.intel.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "hslester96@gmail.com" <hslester96@gmail.com>,
+        id S1727948AbgGWIwB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 23 Jul 2020 04:52:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53376 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727932AbgGWIv7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 23 Jul 2020 04:51:59 -0400
+X-Greylist: delayed 60 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 23 Jul 2020 01:51:59 PDT
+Received: from forward500p.mail.yandex.net (forward500p.mail.yandex.net [IPv6:2a02:6b8:0:1472:2741:0:8b7:110])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64DE7C0619DC;
+        Thu, 23 Jul 2020 01:51:59 -0700 (PDT)
+Received: from mxback19g.mail.yandex.net (mxback19g.mail.yandex.net [IPv6:2a02:6b8:0:1472:2741:0:8b7:319])
+        by forward500p.mail.yandex.net (Yandex) with ESMTP id 4A68D94066C;
+        Thu, 23 Jul 2020 11:50:54 +0300 (MSK)
+Received: from localhost (localhost [::1])
+        by mxback19g.mail.yandex.net (mxback/Yandex) with ESMTP id IXTuY98NkU-orkGSgG9;
+        Thu, 23 Jul 2020 11:50:53 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1595494253;
+        bh=A7Ht5k3cZ3wxccJoqj/PU6v+iHZnZU4ly3x7oHqkv+M=;
+        h=Message-Id:Cc:Subject:In-Reply-To:Date:References:To:From;
+        b=NB+kAbK8jL51yG7iUfuCj2Km7Zr9+LcusXRNK1dx6omRfimbwO8NdQl1IptD3dwCC
+         HiUOnyZVRpobUx/AtjcxiI86QvD276nv8UCtjC4xgy99lLvrNjdG0f6ZUqwZippBOZ
+         3z/91RLD368Aw6Quastv1Wdkwy++U7jLCSe+sSLI=
+Authentication-Results: mxback19g.mail.yandex.net; dkim=pass header.i=@yandex.ru
+Received: by myt6-7b46a58f2373.qloud-c.yandex.net with HTTP;
+        Thu, 23 Jul 2020 11:50:52 +0300
+From:   Evgeny Novikov <novikov@ispras.ru>
+Envelope-From: eugenenovikov@yandex.ru
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Corentin Labbe <clabbe@baylibre.com>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Carsten_Schmid@mentor.com" <Carsten_Schmid@mentor.com>,
-        "efremov@linux.com" <efremov@linux.com>,
-        "Tony W. Wang(XA-RD)" <TonyWWang@zhaoxin.com>,
-        "Cobe Chen(BJ-RD)" <CobeChen@zhaoxin.com>,
-        "Tim Guo(BJ-RD)" <TimGuo@zhaoxin.com>,
-        "wwt8723@163.com" <wwt8723@163.com>
-Subject: Re: =?utf-8?B?562U5aSNOiBbUEFUQ0g=?= =?utf-8?Q?=5D?= USB:Fix kernel
- NULL pointer when unbind UHCI form vfio-pci
-Message-ID: <20200723084131.GA1753458@kroah.com>
-References: <1595419068-4812-1-git-send-email-WeitaoWang-oc@zhaoxin.com>
- <20200722215313.5a842b93@x1.home>
- <371b3697614e4034aed8e9f340a7dbf1@zhaoxin.com>
+        "ldv-project@linuxtesting.org" <ldv-project@linuxtesting.org>
+In-Reply-To: <20200723010055.GA1333715@rowland.harvard.edu>
+References: <20200721201558.20069-1-novikov@ispras.ru>
+         <20200722141741.GA1310843@rowland.harvard.edu>
+         <2097231595446720@mail.yandex.ru> <20200723010055.GA1333715@rowland.harvard.edu>
+Subject: Re: [PATCH] usb: gadget: net2280: fix memory leak on probe error handling paths
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <371b3697614e4034aed8e9f340a7dbf1@zhaoxin.com>
+X-Mailer: Yamail [ http://yandex.ru ] 5.0
+Date:   Thu, 23 Jul 2020 11:50:52 +0300
+Message-Id: <1903061595494082@mail.yandex.ru>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 23, 2020 at 08:36:25AM +0000, WeitaoWang-oc wrote:
-> 
-> On Thu,23 July 2020 04:18:00 +0000 Alex wrote:
-> > On Wed, 22 Jul 2020 19:57:48 +0800
-> > WeitaoWangoc <WeitaoWang-oc@zhaoxin.com> wrote:
-> > 
-> > >  drivers/usb/core/hcd-pci.c | 5 +++++
-> > >  1 file changed, 5 insertions(+)
-> > >
-> > > diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
-> > > index 1547aa6..484f2a0 100644
-> > > --- a/drivers/usb/core/hcd-pci.c
-> > > +++ b/drivers/usb/core/hcd-pci.c
-> > > @@ -34,6 +34,7 @@ static DECLARE_RWSEM(companions_rwsem);
-> > >  #define CL_OHCI                PCI_CLASS_SERIAL_USB_OHCI
-> > >  #define CL_EHCI                PCI_CLASS_SERIAL_USB_EHCI
-> > >
-> > > +#define PCI_DEV_DRV_FLAG       2
-> > >  static inline int is_ohci_or_uhci(struct pci_dev *pdev)  {
-> > >         return pdev->class == CL_OHCI || pdev->class == CL_UHCI; @@
-> > > -68,6 +69,8 @@ static void for_each_companion(struct pci_dev *pdev, struct
-> > usb_hcd *hcd,
-> > >                 if (companion->class != CL_UHCI && companion->class !=
-> > CL_OHCI &&
-> > >                                 companion->class != CL_EHCI)
-> > >                         continue;
-> > > +               if (!(companion->priv_flags & PCI_DEV_DRV_FLAG))
-> > 
-> > But pci_dev.priv_flags is private data for the driver that currently
-> > owns the device, which could be vfio-pci.  This is really no different
-> > than assuming the structure at device.driver_data.  If vfio-pci were to
-> > make legitimate use of pci_dev.priv_flags, this could simply blow up
-> > again.  Should there instead be some sort of registration interface
-> > where hcd complaint drivers register their devices and only those
-> > registered devices can have their driver private data arbitrarily poked
-> > by another driver?  Thanks,
-> 
-> Thanks for your explanation. Set pci_dev.priv_flags is really not a 
-> reasonable approach. Are there any more detailed suggestions 
-> to patch this issue?
+23.07.2020, 04:00, "Alan Stern" <stern@rowland.harvard.edu>:
+> On Wed, Jul 22, 2020 at 10:56:09PM +0300, Evgeny Novikov wrote:
+>>  Hi Alan,
+>>
+>>  I have neither an appropriate hardware nor an experience to deal with
+>>  issues that you mentioned. Our framework does not allow to detect them
+>>  as well at the moment. At last, it seems that rather many drivers can
+>>  suffer from these issues. So, it would be much better if somebody else
+>>  will suggest necessary fixes and test them carefully.
+>
+> Heh... Working from home, I no longer have access to the appropriate
+> hardware either. But at least I do have the necessary experience. :-)
+>
+>>  BTW, you have already discussed the race within net2280_remove() with
+>>  my colleague about 3 years ago. But you did not achieve a consensus at
+>>  that time and no fixes were made after all.
+>
+> I don't recall that. Do you have a pointer to the email thread in the
+> archives?
+https://lkml.org/lkml/2017/8/16/345 - this is the top message of that thread.
 
-This is not a kernel issue, it is a "do not do this in this way from
-userspace" issue :)
-
-thanks,
-
-greg k-h
+Evgeny
+>>  Anyway, one can consider both issues independently on the one fixed by
+>>  the patch.
+>
+> Yes. I'll write and submit a series of patches.
+>
+> Alan Stern
