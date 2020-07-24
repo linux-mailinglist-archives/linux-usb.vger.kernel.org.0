@@ -2,73 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8192422C7BB
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 16:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42C8D22C84E
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 16:45:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726643AbgGXOSY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jul 2020 10:18:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45244 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726317AbgGXOSY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jul 2020 10:18:24 -0400
-Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B082BC0619D3;
-        Fri, 24 Jul 2020 07:18:23 -0700 (PDT)
-Received: from [IPv6:2a02:2121:283:8d02:15d6:da5b:427d:49dc] ([IPv6:2a02:2121:283:8d02:15d6:da5b:427d:49dc])
-        (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 06OEIFZg003614
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 24 Jul 2020 16:18:16 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1595600297; bh=TrUfVBoeJkZ1QmlO5khT5aTGpRfHV2YfkpfBwbBHIlE=;
-        h=Date:References:Subject:To:CC:From:Message-ID:From;
-        b=S9jDUszaBm3VkJHVhbAl6i1F2/AsVuFYR6c9NRkn/IeBkaKpruw9vEb2ME+eVd2+u
-         L0FXhHIVT0JB5+c7rTbtmzdKduducZxbT+jXBCKPdD/833x9up6U6HQ20G7bC/dCwE
-         /WjAKA5JuiEI0SKNzsAt5iT7xWMUkY8+E2f6+1ec=
-Date:   Fri, 24 Jul 2020 16:18:08 +0200
-User-Agent: K-9 Mail for Android
-In-Reply-To: <1595322008.29149.5.camel@suse.de>
-References: <20200715184100.109349-1-bjorn@mork.no> <20200715184100.109349-3-bjorn@mork.no> <1595322008.29149.5.camel@suse.de>
+        id S1726717AbgGXOpr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jul 2020 10:45:47 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:42951 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726567AbgGXOpr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jul 2020 10:45:47 -0400
+Received: by mail-lf1-f68.google.com with SMTP id h8so5318149lfp.9;
+        Fri, 24 Jul 2020 07:45:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Dzkx8gigl6y/De7kKuc0wZrJ0/8/lN60gfKkzmdYUI0=;
+        b=dyhHWZM6Xgw4Ajl8H1CUqnUIkRVUc4RPb+xaHqfH5zcXUFE5RYdNu5Xw8cAoNAiTnu
+         x5LEs8VOgk6h8ksaxEnWNeO5mkrw2qT0qZu3di1scTi5m5pyQnmpfzczPlr/eoocOyPF
+         GPpoOYpPC/+Dcd+tEoZEohn4NqQyGp2afH+m1E30BNtBoXaqrK8N5fU3MggBGvsoiTX6
+         Uhu43Fe+lydXOlaLE2lTxUrCEQzSabnniV12VfSbbl/qIAODmu9qevVj9K3JPfShstgd
+         HbftaXgS2BynbbP0mSr5Lr4JcBT0awjUIaAw4ev8yXh+B11ZWoMEwVMClS9m4be9SjQW
+         AtXg==
+X-Gm-Message-State: AOAM53232PaXdJHGzBg1D6lybcSHOFg0gaReYA3Ui7c7Bv68FgkAFXPP
+        0x7B2N+z11YouhK6AD1Btfo=
+X-Google-Smtp-Source: ABdhPJxuDUKtDBKeqpYEsnpicDu6cv82dbR4O6uIC8LLHmnCf4mma1fQefnoPsAv972lWmW/J6c3kg==
+X-Received: by 2002:a19:ae0a:: with SMTP id f10mr5218572lfc.100.1595601944019;
+        Fri, 24 Jul 2020 07:45:44 -0700 (PDT)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id m5sm287761ljb.98.2020.07.24.07.45.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jul 2020 07:45:42 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1jyyx6-00031S-Np; Fri, 24 Jul 2020 16:45:37 +0200
+Date:   Fri, 24 Jul 2020 16:45:36 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
+Cc:     johan@kernel.org, gregkh@linuxfoundation.org, corbet@lwn.net,
+        linux-usb@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH for v5.9] USB: serial: Replace HTTP links with HTTPS ones
+Message-ID: <20200724144536.GP3634@localhost>
+References: <20200719161920.60087-1-grandmaster@al2klimov.de>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v5 net-next 2/5] net: cdc_ether: export usbnet_cdc_update_filter
-To:     Oliver Neukum <oneukum@suse.de>, netdev@vger.kernel.org
-CC:     linux-usb@vger.kernel.org, wxcafe@wxcafe.net,
-        =?ISO-8859-1?Q?Miguel=09Rodr=EDguez_P=E9rez?= 
-        <miguel@det.uvigo.gal>
-From:   =?ISO-8859-1?Q?Bj=F8rn_Mork?= <bjorn@mork.no>
-Message-ID: <2B227F47-F76D-45EF-85D6-8A5A85AE19A1@mork.no>
-X-Virus-Scanned: clamav-milter 0.102.2 at canardo
-X-Virus-Status: Clean
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200719161920.60087-1-grandmaster@al2klimov.de>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Sun, Jul 19, 2020 at 06:19:20PM +0200, Alexander A. Klimov wrote:
+> Rationale:
+> Reduces attack surface on kernel devs opening the links for MITM
+> as HTTPS traffic is much harder to manipulate.
+> 
+> Deterministic algorithm:
+> For each file:
+>   If not .svg:
+>     For each line:
+>       If doesn't contain `\bxmlns\b`:
+>         For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
+> 	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
+>             If both the HTTP and HTTPS versions
+>             return 200 OK and serve the same content:
+>               Replace HTTP with HTTPS.
+> 
+> Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
+> ---
+>  Continuing my work started at 93431e0607e5.
+>  See also: git log --oneline '--author=Alexander A. Klimov <grandmaster@al2klimov.de>' v5.7..master
+>  (Actually letting a shell for loop submit all this stuff for me.)
+> 
+>  If there are any URLs to be removed completely
+>  or at least not (just) HTTPSified:
+>  Just clearly say so and I'll *undo my change*.
+>  See also: https://lkml.org/lkml/2020/6/27/64
+> 
+>  If there are any valid, but yet not changed URLs:
+>  See: https://lkml.org/lkml/2020/6/26/837
+> 
+>  If you apply the patch, please let me know.
+> 
+>  Sorry again to all maintainers who complained about subject lines.
+>  Now I realized that you want an actually perfect prefixes,
+>  not just subsystem ones.
+>  I tried my best...
+>  And yes, *I could* (at least half-)automate it.
+>  Impossible is nothing! :)
+> 
+> 
+>  Documentation/usb/usb-serial.rst  |  2 +-
+>  drivers/usb/serial/cyberjack.c    |  2 +-
+>  drivers/usb/serial/ftdi_sio.h     |  4 ++--
+>  drivers/usb/serial/ftdi_sio_ids.h | 34 +++++++++++++++----------------
+>  drivers/usb/serial/kobil_sct.c    |  2 +-
+>  drivers/usb/serial/metro-usb.c    |  2 +-
+>  6 files changed, 23 insertions(+), 23 deletions(-)
+> 
+> diff --git a/Documentation/usb/usb-serial.rst b/Documentation/usb/usb-serial.rst
+> index 8fa7dbd3da9a..0a2071953691 100644
+> --- a/Documentation/usb/usb-serial.rst
+> +++ b/Documentation/usb/usb-serial.rst
+> @@ -202,7 +202,7 @@ Keyspan USA-series Serial Adapters
+>  
+>    More information is available at:
+>  
+> -        http://www.carnationsoftware.com/carnation/Keyspan.html
+> +        https://www.carnationsoftware.com/carnation/Keyspan.html
+>  
+>    For any questions or problems with this driver, please contact Hugh
+>    Blemings at hugh@misc.nu
 
+Looks like your script is buggy; there are many more URLs than this one
+is this document.
 
-On July 21, 2020 11:00:08 AM GMT+02:00, Oliver Neukum <oneukum@suse=2Ede> =
-wrote:
->Am Mittwoch, den 15=2E07=2E2020, 20:40 +0200 schrieb Bj=C3=B8rn Mork:
->>=20
->> @@ -90,6 +90,7 @@ static void usbnet_cdc_update_filter(struct usbnet
->*dev)
->>  			USB_CTRL_SET_TIMEOUT
->>  		);
->>  }
->> +EXPORT_SYMBOL_GPL(usbnet_cdc_update_filter);
->
->Hi,
->
->this function is pretty primitive=2E In fact it more or less
->is a straight take from the spec=2E Can this justify the _GPL
->version?
+> diff --git a/drivers/usb/serial/ftdi_sio_ids.h b/drivers/usb/serial/ftdi_sio_ids.h
+> index e8373528264c..a5bf2b974813 100644
+> --- a/drivers/usb/serial/ftdi_sio_ids.h
+> +++ b/drivers/usb/serial/ftdi_sio_ids.h
+> @@ -60,14 +60,14 @@
+>  /*
+>   * Texas Instruments XDS100v2 JTAG / BeagleBone A3
+>   * http://processors.wiki.ti.com/index.php/XDS100
+> - * http://beagleboard.org/bone
+> + * https://beagleboard.org/bone
+>   */
 
-Maybe not? I must admit I didn't put much thought into it=2E=20
+And here's another indication of that.
 
-I will not object to changing it=2E And you're the boss anyway :-)
-
-
-Bj=C3=B8rn 
+Johan
