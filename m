@@ -2,64 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9488822C399
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 12:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EBE122C3A9
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 12:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727811AbgGXKrj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jul 2020 06:47:39 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:17980 "EHLO
+        id S1728005AbgGXKtK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jul 2020 06:49:10 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:32328 "EHLO
         mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726593AbgGXKri (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jul 2020 06:47:38 -0400
+        by vger.kernel.org with ESMTP id S1726607AbgGXKtJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jul 2020 06:49:09 -0400
 Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06OAgavr024674;
-        Fri, 24 Jul 2020 12:47:20 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=STMicroelectronics;
- bh=1bzNsgZLWZKVjiN0fGrPqwteXNLs7cnoDEY/2HdJyoY=;
- b=KKdn0dLVI4aIyyXFDAE66pOEkOu+Hc2JItkE1EVVDMYO8Z0SCV1GEjGG+IPB8gluthOB
- YUuXtZxoKsZW3cCLxmYU2Z0GJE+CU9kwYHFHYrdTJ0UN1+FQYJ/OBtYIvffPv4+RBSON
- +TWw4bcqsmakPoCVvh8f2OzKeSDElbXV2Wf1z8LUU/StKBzWXN+YIdlx1ez2geYDZxiQ
- Od6S7VOh5RSfxRkYpY6NCFqyeZ1aus3+KejhpG/o7lAwk5PLXcKro0R1Hc0cSUqfjY9q
- dW+8HBmrwvTFx5Iz9VRwDzTtP+NvhYHgSxIKkR5/vjrGC0rNASvuuRDnEqNkmDaScg5V 2g== 
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06OAmbVi002511;
+        Fri, 24 Jul 2020 12:48:56 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : from : to : cc
+ : references : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=STMicroelectronics;
+ bh=iBJ6KkC+lhaupehlNacQ+CO4RFZx3Hx5ddo8QSwmCLM=;
+ b=lP6OiOVXBymdZQUELdBovgoGlbvQQKOZuNfT7PlSGbzF6x212er5ujQ0YwaAxzRFvgaM
+ T97elWfHHbw49BoAaMnzKz+xiOOPBt8AuTkXaA3u3BEvDgwGEbK3FqvCQHz7AeMf8C74
+ Zg12pZtzd25htF0SYP23LZJvU07p2B2/Z78mSvJ5V51MWzUlvZ8LI/DbYhd6/sXAIkT+
+ 5IFIwd6y7OBVslltyEktTZm/f8lW2uIljuyIIaO51gHPZZ4E6uOwd3HO+HgHq7Yarbm7
+ dp3WLi+FXw8I44IxRBY93t+ZHpSl92iWPmOZScKOI0MomOW9/Y1OWGQYKVnPnzD7SKn/ Fw== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 32cux0tasd-1
+        by mx07-00178001.pphosted.com with ESMTP id 32cux0tb0q-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Jul 2020 12:47:20 +0200
+        Fri, 24 Jul 2020 12:48:56 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E7A62100034;
-        Fri, 24 Jul 2020 12:47:19 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id F2F1C100034;
+        Fri, 24 Jul 2020 12:48:55 +0200 (CEST)
 Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id DA4662AE6C6;
-        Fri, 24 Jul 2020 12:47:19 +0200 (CEST)
-Received: from localhost (10.75.127.47) by SFHDAG3NODE2.st.com (10.75.127.8)
- with Microsoft SMTP Server (TLS) id 15.0.1347.2; Fri, 24 Jul 2020 12:47:19
- +0200
-From:   Amelie Delaunay <amelie.delaunay@st.com>
-To:     Minas Harutyunyan <hminas@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>
-CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Fabrice Gasnier <fabrice.gasnier@st.com>,
-        Amelie Delaunay <amelie.delaunay@st.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH v3 3/3] usb: dwc2: don't use ID/Vbus detection if usb-role-switch on STM32MP15 SoCs
-Date:   Fri, 24 Jul 2020 12:47:11 +0200
-Message-ID: <20200724104711.5474-4-amelie.delaunay@st.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200724104711.5474-1-amelie.delaunay@st.com>
-References: <20200724104711.5474-1-amelie.delaunay@st.com>
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id BD80F2AE6D7;
+        Fri, 24 Jul 2020 12:48:55 +0200 (CEST)
+Received: from lmecxl0995.lme.st.com (10.75.127.47) by SFHDAG3NODE2.st.com
+ (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Fri, 24 Jul
+ 2020 12:48:55 +0200
+Subject: Re: [balbi-usb:testing/next 1/39] drivers/usb/dwc2/drd.c:80:36:
+ error: 'struct dwc2_hsotg' has no member named 'test_mode'
+From:   Amelie DELAUNAY <amelie.delaunay@st.com>
+To:     Felipe Balbi <balbi@kernel.org>, kernel test robot <lkp@intel.com>,
+        Minas Harutyunyan <hminas@synopsys.com>
+CC:     "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>
+References: <202007241311.MMbsxewn%lkp@intel.com> <875zadnyek.fsf@kernel.org>
+ <8098bdd6-9de2-dfdf-1e50-b027296ea254@st.com>
+Message-ID: <a8176140-3c57-1d64-ba2b-a24b23bc4201@st.com>
+Date:   Fri, 24 Jul 2020 12:48:54 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <8098bdd6-9de2-dfdf-1e50-b027296ea254@st.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG8NODE2.st.com (10.75.127.23) To SFHDAG3NODE2.st.com
+X-ClientProxiedBy: SFHDAG7NODE3.st.com (10.75.127.21) To SFHDAG3NODE2.st.com
  (10.75.127.8)
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-07-24_03:2020-07-24,2020-07-24 signatures=0
@@ -68,36 +65,61 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If usb-role-switch is present in the device tree, it means that ID and Vbus
-signals are not connected to the OTG controller but to an external
-component (GPIOs, Type-C controller). In this configuration, usb role
-switch is used to force valid sessions on STM32MP15 SoCs.
+On 7/24/20 9:59 AM, Amelie DELAUNAY wrote:
+> Hi Felipe,
+> 
+> On 7/24/20 9:51 AM, Felipe Balbi wrote:
+>> kernel test robot <lkp@intel.com> writes:
+>>
+>>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git 
+>>> testing/next
+>>> head:   74dbc49b08d37ed9d4fd440d8896626733f80564
+>>> commit: bc0f0d4a5853e32ba97a0318f774570428fc5634 [1/39] usb: dwc2: 
+>>> override PHY input signals with usb role switch support
+>>> config: nios2-randconfig-r002-20200724 (attached as .config)
+>>> compiler: nios2-linux-gcc (GCC) 9.3.0
+>>> reproduce (this is a W=1 build):
+>>>          wget 
+>>> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross 
+>>> -O ~/bin/make.cross
+>>>          chmod +x ~/bin/make.cross
+>>>          git checkout bc0f0d4a5853e32ba97a0318f774570428fc5634
+>>>          # save the attached .config to linux build tree
+>>>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 
+>>> make.cross ARCH=nios2
+>>>
+>>> If you fix the issue, kindly add following tag as appropriate
+>>> Reported-by: kernel test robot <lkp@intel.com>
+>>>
+>>> All errors (new ones prefixed by >>):
+>>>
+>>>     drivers/usb/dwc2/drd.c: In function 'dwc2_drd_role_sw_set':
+>>>>> drivers/usb/dwc2/drd.c:80:36: error: 'struct dwc2_hsotg' has no 
+>>>>> member named 'test_mode'
+>>>        80 |  if (role == USB_ROLE_NONE && hsotg->test_mode) {
+>>
+>> weird, this compiled just fine here with allmodconfig on AArch64.
+>>
+>> /me goes check. Oh, I see what's happening, hsotg->test_mode is only
+>> compiled on Peripheral-only and Dual-role builds. I'm assuming this was
+>> a Host-only build. Then the problem triggers because drd.o is
+>> unconditionally added to the binary.
+>>
+>> dwc2-y                    := core.o core_intr.o platform.o drd.o
+>>
+>> Is this an old problem or was it triggered by $subject?
+>>
+> 
+> I sent a mail yesterday (https://lkml.org/lkml/2020/7/23/114) to warn 
+> about the upcoming v2.
+> 
+> This build issue is fixed in the v2 
+> (https://lore.kernel.org/patchwork/project/lkml/list/?series=454729).
+> 
 
-Acked-by: Minas Harutyunyan <hminas@synopsys.com>
-Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
----
-No changes in v3.
----
- drivers/usb/dwc2/params.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Build issue fixed in v3 instead:
+https://lore.kernel.org/patchwork/project/lkml/list/?series=454936
 
-diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
-index ce736d67c7c3..d6690ee7af01 100644
---- a/drivers/usb/dwc2/params.c
-+++ b/drivers/usb/dwc2/params.c
-@@ -183,9 +183,11 @@ static void dwc2_set_stm32mp15_fsotg_params(struct dwc2_hsotg *hsotg)
- static void dwc2_set_stm32mp15_hsotg_params(struct dwc2_hsotg *hsotg)
- {
- 	struct dwc2_core_params *p = &hsotg->params;
-+	struct device_node *np = hsotg->dev->of_node;
- 
- 	p->otg_cap = DWC2_CAP_PARAM_NO_HNP_SRP_CAPABLE;
--	p->activate_stm_id_vb_detection = true;
-+	p->activate_stm_id_vb_detection =
-+		!of_property_read_bool(np, "usb-role-switch");
- 	p->host_rx_fifo_size = 440;
- 	p->host_nperio_tx_fifo_size = 256;
- 	p->host_perio_tx_fifo_size = 256;
--- 
-2.17.1
-
+> Regards,
+> Amelie
+> 
