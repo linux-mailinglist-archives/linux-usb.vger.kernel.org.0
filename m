@@ -2,112 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA69422C057
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 09:59:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB84222C0A8
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 10:29:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726878AbgGXH7l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jul 2020 03:59:41 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:52380 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726567AbgGXH7k (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jul 2020 03:59:40 -0400
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06O7vOEV008456;
-        Fri, 24 Jul 2020 09:59:28 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=BXRpKNkSjMIUyjkajSPGDlyogS1QlT0Sg1ozOIjW8RU=;
- b=zlqhAvXl7B+L31TK5f4bEJkXUl7Cmbi6DowgVIE/NRqU1EH8TQzXeQECVb8fg6fnVrvU
- hDD6TZNp9np2HoAd8BEDDHYBOlVADiYnP99PydvLtJr74x7EkTPGwft1AIO/pj/fLaeK
- IcJxwp7bEi1nFjtQydg585QTsH/MPYHvLdNQS4m8HjLwtERNhHgl/srn/LlGogUH6rFm
- PBW4Ut8jCp+EHihzlwOq8NQZC+NtTCBHsIuSNccdv1ipY0Sd+C1yLQwXa4FROHhciDbk
- URQD9cjnzFkzxbPruY2RGQtKlgO7+XRtr9iC61XxKy+EE2MY1l5A9oXS/0LtkF/b1MCC Uw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 32bsahf2y8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Jul 2020 09:59:28 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 64B2D10002A;
-        Fri, 24 Jul 2020 09:59:27 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 4D715221504;
-        Fri, 24 Jul 2020 09:59:27 +0200 (CEST)
-Received: from lmecxl0995.lme.st.com (10.75.127.46) by SFHDAG3NODE2.st.com
- (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Fri, 24 Jul
- 2020 09:59:26 +0200
-Subject: Re: [balbi-usb:testing/next 1/39] drivers/usb/dwc2/drd.c:80:36:
- error: 'struct dwc2_hsotg' has no member named 'test_mode'
-To:     Felipe Balbi <balbi@kernel.org>, kernel test robot <lkp@intel.com>,
-        Minas Harutyunyan <hminas@synopsys.com>
-CC:     "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
+        id S1726686AbgGXI3B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jul 2020 04:29:01 -0400
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:36589 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726573AbgGXI3B (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jul 2020 04:29:01 -0400
+X-UUID: 4aeda6988bee4ac591f3373a67961c61-20200724
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=8rc7FhONmXVK/ge9nGlAXM2K6HUrmjfmOch2/2WH7Ko=;
+        b=dmdOp0kaOsFzerm6v7CamkrZdmCLcKL8X6FjsA+ryC1k0qxhUvc2shTtM8eM/8F5eK0es6appmIxaY8x8YHe5JPA2N3Ylc54LmB+JSYxJgJs7Xk8ONqfM+/QSeDVvHTURoCphxSnpSJhaHT4HfrM3MynFXFT5ZuipFhSHL1eYWE=;
+X-UUID: 4aeda6988bee4ac591f3373a67961c61-20200724
+Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 906667876; Fri, 24 Jul 2020 16:28:54 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS32N1.mediatek.inc
+ (172.27.4.71) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 24 Jul
+ 2020 16:28:51 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 24 Jul 2020 16:28:52 +0800
+Message-ID: <1595579262.23885.65.camel@mhfsdcap03>
+Subject: Re: [RFC PATCH] usb: dwc3: fix maximum_speed check for usb2.0-only
+ core
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>
-References: <202007241311.MMbsxewn%lkp@intel.com> <875zadnyek.fsf@kernel.org>
-From:   Amelie DELAUNAY <amelie.delaunay@st.com>
-Message-ID: <8098bdd6-9de2-dfdf-1e50-b027296ea254@st.com>
-Date:   Fri, 24 Jul 2020 09:59:26 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>
+Date:   Fri, 24 Jul 2020 16:27:42 +0800
+In-Reply-To: <e94e9d0c-b0d5-b2e1-e3de-0a4e85bc95b4@synopsys.com>
+References: <1594282250-25544-1-git-send-email-chunfeng.yun@mediatek.com>
+         <6dff8574-e649-7a5c-4d80-c3fe6ddd6645@synopsys.com>
+         <e94e9d0c-b0d5-b2e1-e3de-0a4e85bc95b4@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-In-Reply-To: <875zadnyek.fsf@kernel.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG5NODE1.st.com (10.75.127.13) To SFHDAG3NODE2.st.com
- (10.75.127.8)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-24_02:2020-07-24,2020-07-24 signatures=0
+X-TM-SNTS-SMTP: 2ACD6F938436F48A8374B2A2EA2AC37AF59CB494D4CCBAA901C1432351B171682000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Felipe,
-
-On 7/24/20 9:51 AM, Felipe Balbi wrote:
-> kernel test robot <lkp@intel.com> writes:
-> 
->> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git testing/next
->> head:   74dbc49b08d37ed9d4fd440d8896626733f80564
->> commit: bc0f0d4a5853e32ba97a0318f774570428fc5634 [1/39] usb: dwc2: override PHY input signals with usb role switch support
->> config: nios2-randconfig-r002-20200724 (attached as .config)
->> compiler: nios2-linux-gcc (GCC) 9.3.0
->> reproduce (this is a W=1 build):
->>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>          chmod +x ~/bin/make.cross
->>          git checkout bc0f0d4a5853e32ba97a0318f774570428fc5634
->>          # save the attached .config to linux build tree
->>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 make.cross ARCH=nios2
->>
->> If you fix the issue, kindly add following tag as appropriate
->> Reported-by: kernel test robot <lkp@intel.com>
->>
->> All errors (new ones prefixed by >>):
->>
->>     drivers/usb/dwc2/drd.c: In function 'dwc2_drd_role_sw_set':
->>>> drivers/usb/dwc2/drd.c:80:36: error: 'struct dwc2_hsotg' has no member named 'test_mode'
->>        80 |  if (role == USB_ROLE_NONE && hsotg->test_mode) {
-> 
-> weird, this compiled just fine here with allmodconfig on AArch64.
-> 
-> /me goes check. Oh, I see what's happening, hsotg->test_mode is only
-> compiled on Peripheral-only and Dual-role builds. I'm assuming this was
-> a Host-only build. Then the problem triggers because drd.o is
-> unconditionally added to the binary.
-> 
-> dwc2-y					:= core.o core_intr.o platform.o drd.o
-> 
-> Is this an old problem or was it triggered by $subject?
-> 
-
-I sent a mail yesterday (https://lkml.org/lkml/2020/7/23/114) to warn 
-about the upcoming v2.
-
-This build issue is fixed in the v2 
-(https://lore.kernel.org/patchwork/project/lkml/list/?series=454729).
-
-Regards,
-Amelie
+T24gRnJpLCAyMDIwLTA3LTI0IGF0IDAzOjMyICswMDAwLCBUaGluaCBOZ3V5ZW4gd3JvdGU6DQo+
+IEhpLA0KPiANCj4gVGhpbmggTmd1eWVuIHdyb3RlOg0KPiA+IEhpLA0KPiA+DQo+ID4gQ2h1bmZl
+bmcgWXVuIHdyb3RlOg0KPiA+PiBUaGUgbWF4aW11bV9zcGVlZCB3aWxsIGJlIFVTQl9TUEVFRF9T
+VVBFUl9QTFVTLCBidXQgdGhlDQo+ID4+IG1heGltdW1fc3BlZWQgY2hlY2sgZm9yIHVzYjIuMC1v
+bmx5IGNvcmUgZG9lc24ndCBjb25zaWRlciBpdCwNCj4gPj4gc28gZml4IGl0LCBhbmQgbW92ZSB0
+aGUgY2tlY2sgaW50byBkd2MzX2NoZWNrX3BhcmFtcygpLg0KPiA+Pg0KPiA+PiBTaWduZWQtb2Zm
+LWJ5OiBDaHVuZmVuZyBZdW4gPGNodW5mZW5nLnl1bkBtZWRpYXRlay5jb20+DQo+ID4+IC0tLQ0K
+PiA+PiBOb3RlOg0KPiA+Pg0KPiA+PiBXaGVuIEkgbG9vayBhdCB0aGUgY29kZSwgZmluZCB0aGF0
+IHRoaXMgbWF5IGJlIGEgcHJvYmxlbSwgYnV0IG5vDQo+ID4+IHBsYXRmb3JtIHRvIHRlc3QgaXQu
+DQo+ID4+IC0tLQ0KPiA+PiAgICBkcml2ZXJzL3VzYi9kd2MzL2NvcmUuYyB8IDE0ICsrKysrKyst
+LS0tLS0tDQo+ID4+ICAgIDEgZmlsZSBjaGFuZ2VkLCA3IGluc2VydGlvbnMoKyksIDcgZGVsZXRp
+b25zKC0pDQo+ID4+DQo+ID4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9kd2MzL2NvcmUuYyBi
+L2RyaXZlcnMvdXNiL2R3YzMvY29yZS5jDQo+ID4+IGluZGV4IDI1YzY4NmE3Li5mZmQ1YWIzIDEw
+MDY0NA0KPiA+PiAtLS0gYS9kcml2ZXJzL3VzYi9kd2MzL2NvcmUuYw0KPiA+PiArKysgYi9kcml2
+ZXJzL3VzYi9kd2MzL2NvcmUuYw0KPiA+PiBAQCAtOTMwLDEzICs5MzAsNiBAQCBzdGF0aWMgaW50
+IGR3YzNfY29yZV9pbml0KHN0cnVjdCBkd2MzICpkd2MpDQo+ID4+ICAgIAkgKi8NCj4gPj4gICAg
+CWR3YzNfd3JpdGVsKGR3Yy0+cmVncywgRFdDM19HVUlELCBMSU5VWF9WRVJTSU9OX0NPREUpOw0K
+PiA+PiAgICANCj4gPj4gLQkvKiBIYW5kbGUgVVNCMi4wLW9ubHkgY29yZSBjb25maWd1cmF0aW9u
+ICovDQo+ID4+IC0JaWYgKERXQzNfR0hXUEFSQU1TM19TU1BIWV9JRkMoZHdjLT5od3BhcmFtcy5o
+d3BhcmFtczMpID09DQo+ID4+IC0JCQlEV0MzX0dIV1BBUkFNUzNfU1NQSFlfSUZDX0RJUykgew0K
+PiA+PiAtCQlpZiAoZHdjLT5tYXhpbXVtX3NwZWVkID09IFVTQl9TUEVFRF9TVVBFUikNCj4gPj4g
+LQkJCWR3Yy0+bWF4aW11bV9zcGVlZCA9IFVTQl9TUEVFRF9ISUdIOw0KPiA+PiAtCX0NCj4gPj4g
+LQ0KPiA+PiAgICAJcmV0ID0gZHdjM19waHlfc2V0dXAoZHdjKTsNCj4gPj4gICAgCWlmIChyZXQp
+DQo+ID4+ICAgIAkJZ290byBlcnIwOw0KPiA+PiBAQCAtMTQyNiw2ICsxNDE5LDEzIEBAIHN0YXRp
+YyB2b2lkIGR3YzNfY2hlY2tfcGFyYW1zKHN0cnVjdCBkd2MzICpkd2MpDQo+ID4+ICAgIA0KPiA+
+PiAgICAJCWJyZWFrOw0KPiA+PiAgICAJfQ0KPiA+PiArDQo+ID4+ICsJLyogSGFuZGxlIFVTQjIu
+MC1vbmx5IGNvcmUgY29uZmlndXJhdGlvbiAqLw0KPiA+PiArCWlmIChEV0MzX0dIV1BBUkFNUzNf
+U1NQSFlfSUZDKGR3Yy0+aHdwYXJhbXMuaHdwYXJhbXMzKSA9PQ0KPiA+PiArCQkJRFdDM19HSFdQ
+QVJBTVMzX1NTUEhZX0lGQ19ESVMpIHsNCj4gPj4gKwkJaWYgKGR3Yy0+bWF4aW11bV9zcGVlZCA+
+IFVTQl9TUEVFRF9ISUdIKQ0KPiA+PiArCQkJZHdjLT5tYXhpbXVtX3NwZWVkID0gVVNCX1NQRUVE
+X0hJR0g7DQo+ID4+ICsJfQ0KPiA+PiAgICB9DQo+ID4+ICAgIA0KPiA+PiAgICBzdGF0aWMgaW50
+IGR3YzNfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikNCj4gPiBBY3R1YWxseSwg
+dGhlIGR3Yy0+bWF4aW11bV9zcGVlZCBjYXB0dXJlcyB0aGUgbWF4aW11bSBzcGVlZCBkZXZpY2UN
+Cj4gPiBwcm9wZXJ0eSB2YWx1ZS4gSXQgbWF5YmUgYmUgc2V0IGJhc2VkIG9uIHRoZSBwaHkncyBj
+YXBhYmlsaXR5IGlmIHRoZXJlJ3MNCj4gPiBubyBwcm9wZXJ0eSBzcGVjaWZ5aW5nIGl0IChpLmUu
+IG1heGltdW1fc3BlZWQgaXMgVVNCX1NQRUVEX1VOS05PV04pLg0KPiA+DQo+ID4gU28sIHRoaXMg
+Y29kZSBzaG91bGQgYmUgcmVtb3ZlZC4gVGhlIGZpeCBzaG91bGQgYmUgaW4gdGhlIGNoZWNrIG9m
+DQo+ID4gZHdjM19jaGVja19wYXJhbXMoKS4gSWYgbWF4aW11bV9zcGVlZCA9IFVTQl9TUEVFRF9V
+TktOT1dOIGFuZCB0aGUgcGh5J3MNCj4gPiBjYXBhYmlsaXR5IGlzIG9ubHkgdXAgdG8gaGlnaHNw
+ZWVkLCB0aGVuIHNldCB0aGUgbWF4aW11bV9zcGVlZCB0bw0KPiA+IGhpZ2hzcGVlZCBvbmx5Lg0K
+U29ycnkgZm9yIHRoZSBsYXRlIHJlcGx5LCBteSBvdXRsb29rIGxvc2UgeW91ciBlbWFpbC4NCj4g
+Pg0KPiANCj4gQXJlIHlvdSBnb2luZyBpbnRvIHVwZGF0ZSBhbmQgcmVzZW5kIHRoaXMgcGF0Y2g/
+DQpJIGRvbid0IGtub3cgaG93IHRvIGNoZWNrICJ0aGUgcGh5J3MgY2FwYWJpbGl0eSBpcyBvbmx5
+IHVwIHRvIGhpZ2hzcGVlZCINCg0KPiAgSWYgbm90IEkgY2FuIGNyZWF0ZSBvbmUgDQo+IGFuZCBh
+ZGQgeW91ciAiUmVwb3J0ZWQtYnkiDQpPaywgdGhhbmtzDQoNCj4gDQo+IEJSLA0KPiBUaGluaA0K
+DQo=
 
