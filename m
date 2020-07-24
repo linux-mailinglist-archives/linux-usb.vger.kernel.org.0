@@ -2,208 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BA0A22C5CD
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 15:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87A5F22C6F8
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 15:46:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726807AbgGXNKE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jul 2020 09:10:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53472 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726503AbgGXNKE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 24 Jul 2020 09:10:04 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8C7C62065F;
-        Fri, 24 Jul 2020 13:10:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595596203;
-        bh=Wx/x32FDLvLCIX8u4/VoyGIFTyiOsSSslHTt4KzamiA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MsoSlgf3Gewt21Nu6RrZO26mtmp3JGYu2lV9SCCFYHrp6CEvk0whL3QebJrDjUIF6
-         ZDmkQvLe1dwIjFjJv26KObN3hLPoNcXAkHEV18VPj3162lp6/bL+nBnzzO5AJT5Wz8
-         eJvN2T3rDi4kaqOb+uyK1YSf/nrL4ESX04dVreoA=
-Date:   Fri, 24 Jul 2020 15:10:04 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Sheng Long Wang <china_shenglong@163.com>
-Cc:     johan@kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jan.kiszka@siemens.com,
-        Wang Sheng Long <shenglong.wang.ext@siemens.com>
-Subject: Re: [PATCH] usb-serial:cp210x: add CP210x support to software flow
- control
-Message-ID: <20200724131004.GB314889@kroah.com>
-References: <20200724102946.15404-1-china_shenglong@163.com>
+        id S1727118AbgGXNqI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jul 2020 09:46:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40166 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726235AbgGXNqH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jul 2020 09:46:07 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E3CEC0619D3;
+        Fri, 24 Jul 2020 06:46:07 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id f5so10021469ljj.10;
+        Fri, 24 Jul 2020 06:46:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=vu7AEch6tVK5sMQvHGR0dpGgNZ7jy5+kRB2EBTC0xyY=;
+        b=md52HGXBAlYTKVX/vc+E2YSVjr9cCh2sxaZhVBVMKsXRzJ4CSFyeQgo+AsUD4dBhbH
+         a+BJdAwGPp0mmtKuPJL/woOC7G3k+QGxLaapfHOUSN0vYTKjBXGf/ygoJDNZPNATlrL0
+         lNBgyM5+CJa8MnczwRhZChC9rFVwHfVd6CbkuRTgZgYh7KbAgWs/wIVNNOiIvRFqg4gz
+         xRvu7Hd09vR3832fkvN3VcVhqg2p/mq5PMfAt7NeAdPXmlGPQ/PKxc4K6BJY5ohcLDUt
+         Msp6JmptEwjxnEOlrjyoWSGU7e8dftJ575WnnlCkva/edVsbnfW6GLkF0WLowrlXU+NN
+         5pJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=vu7AEch6tVK5sMQvHGR0dpGgNZ7jy5+kRB2EBTC0xyY=;
+        b=nNo5euy3vaChnnTa84b86I5+FbwnRlQRTZ3gBk+6bCYSirDOt+ssoO8Ok5ZJe0sVam
+         Zz2Mw+EnCO0YkJTOj2K70Yjox54tSJwMOR39ozHOxRlmTcqgreca1DNCs2iGhw79camE
+         q3+tZ99clo32Y50RVJUNklBFUipmyvjMMyehw7UhBEfXi5QT88aPpWaJvUbzGnT7Q2AL
+         jDbhXW4qBqyYqMZt2EZ9sLFtwrciJR/rlyDMgoll5CEVUgjEu+Wh83i0egt4tJojNGje
+         pJromSbCZGWwxMmYvGNJbCrspYFyKR+xKlkN56tq0VxM30kEVlkhXuonfswxOgoEjtJb
+         yRRQ==
+X-Gm-Message-State: AOAM533Czrfj24CdhZGyUS1HbsF0YmpKP3WPjXrWYz4G0SOQQs/hKE6h
+        iqM3pessbjvqguy3LlyGXkI=
+X-Google-Smtp-Source: ABdhPJxRLBdkoLiQ3bIn3g2yWD91G8Xg1O///R4OxhiwVBRMiIkVf0EyOqY9YyLcvXE7EpEcZxM0Cw==
+X-Received: by 2002:a2e:9ac4:: with SMTP id p4mr4663110ljj.143.1595598363953;
+        Fri, 24 Jul 2020 06:46:03 -0700 (PDT)
+Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
+        by smtp.gmail.com with ESMTPSA id i11sm289423lfl.31.2020.07.24.06.46.02
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 24 Jul 2020 06:46:03 -0700 (PDT)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Amelie DELAUNAY <amelie.delaunay@st.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc:     Minas Harutyunyan <hminas@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Fabrice Gasnier <fabrice.gasnier@st.com>
+Subject: Re: [PATCH 0/3] Add USB role switch support to DWC2
+In-Reply-To: <97cd44c1-9e19-94bc-54f8-204d79b79975@st.com>
+References: <20200616140717.28465-1-amelie.delaunay@st.com> <d8069a78-2640-d112-a2fb-d86b99a8e44f@st.com> <97cd44c1-9e19-94bc-54f8-204d79b79975@st.com>
+Date:   Fri, 24 Jul 2020 16:45:51 +0300
+Message-ID: <87blk5owkw.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200724102946.15404-1-china_shenglong@163.com>
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 24, 2020 at 06:29:46PM +0800, Sheng Long Wang wrote:
-> From: Wang Sheng Long <shenglong.wang.ext@siemens.com>
-> 
->   The cp210x driver lacks soft-flow function,so need and
->   this function.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Why is this indented?
 
-And I do not quite understand this sentance, why is this needed?
+(please, no top-posting ;-)
 
-> 
-> Signed-off-by: Wang Sheng Long <shenglong.wang.ext@siemens.com>
-> ---
->  drivers/usb/serial/cp210x.c | 110 +++++++++++++++++++++++++++++++++---
->  1 file changed, 103 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-> index e732949f65..ad5db0e2ae 100644
-> --- a/drivers/usb/serial/cp210x.c
-> +++ b/drivers/usb/serial/cp210x.c
-> @@ -380,6 +380,9 @@ static struct usb_serial_driver * const serial_drivers[] = {
->  #define CP210X_PARTNUM_CP2102N_QFN20	0x22
->  #define CP210X_PARTNUM_UNKNOWN	0xFF
->  
-> +#define CP210X_VSTART  0x11
-> +#define CP210X_VSTOP   0x13
+Hi,
 
-No tabs?
+Amelie DELAUNAY <amelie.delaunay@st.com> writes:
 
-> +
->  /* CP210X_GET_COMM_STATUS returns these 0x13 bytes */
->  struct cp210x_comm_status {
->  	__le32   ulErrors;
-> @@ -391,6 +394,15 @@ struct cp210x_comm_status {
->  	u8       bReserved;
->  } __packed;
->  
-> +struct cp210x_chars_respones{
-> +	u8       bEofchar;
-> +	u8       bErrochar;
-> +	u8       bBreakchar;
-> +	u8       bEventchar;
-> +	u8       bXonchar;
-> +	u8       bXoffchar;
+> Hi Felipe,
+>
+> I saw that you took DT patch (ARM: dts: stm32: enable usb-role-switch on=
+=20
+> USB OTG on stm32mp15xx-dkx) in your next branch. As it was already in
+> Alex' stm32-next branch, a potential merge conflict could occurred.
 
-Why the 'b' character here?
+Thanks for letting me know, I have dropped it.
 
-Is this coming from some public spec somewhere with these specific
-fields?
+=2D-=20
+balbi
 
-> +} __packed;
-> +
->  /*
->   * CP210X_PURGE - 16 bits passed in wValue of USB request.
->   * SiLabs app note AN571 gives a strange description of the 4 bits:
-> @@ -624,6 +636,43 @@ static int cp210x_read_vendor_block(struct usb_serial *serial, u8 type, u16 val,
->  	return result;
->  }
->  
-> +/*
-> + * Read and Write Characrters Respones operate
-> + * Register SET_CHARS/GET_CHATS
-> + */
-> +static int cp210x_operate_chars_block(struct usb_serial_port *port, u8 req, u8 type,
-> +		void *buf, int bufsize)
-> +{
-> +	struct usb_serial *serial = port->serial;
-> +	struct cp210x_port_private *port_priv = usb_get_serial_port_data(port);
-> +	void *dmabuf;
-> +	int result;
-> +
-> +	dmabuf = kmemdup(buf, bufsize, GFP_KERNEL);
-> +	if (!dmabuf)
-> +		return -ENOMEM;
-> +
-> +	result = usb_control_msg(serial->dev, usb_rcvctrlpipe(serial->dev, 0),
-> +			req, type, 0, port_priv->bInterfaceNumber, dmabuf, bufsize,
-> +			USB_CTRL_SET_TIMEOUT);
-> +	if (result == bufsize) {
-> +		if (type == REQTYPE_DEVICE_TO_HOST)
-> +			memcpy(buf, dmabuf, bufsize);
-> +
-> +		result = 0;
-> +	} else {
-> +		dev_err(&port->dev, "failed get req 0x%x size %d status: %d\n",
-> +				req, bufsize, result);
-> +		if (result >= 0)
-> +			result = -EIO;
-> +
-> +	}
-> +
-> +	kfree(dmabuf);
-> +
-> +	return result;
-> +}
-> +
->  /*
->   * Writes any 16-bit CP210X_ register (req) whose value is passed
->   * entirely in the wValue field of the USB request.
-> @@ -650,8 +699,8 @@ static int cp210x_write_u16_reg(struct usb_serial_port *port, u8 req, u16 val)
->   * Writes a variable-sized block of CP210X_ registers, identified by req.
->   * Data in buf must be in native USB byte order.
->   */
-> -static int cp210x_write_reg_block(struct usb_serial_port *port, u8 req,
-> -		void *buf, int bufsize)
-> +static int cp210x_write_reg_block(struct usb_serial_port *port,
-> +				u8 req, void *buf, int bufsize)
->  {
->  	struct usb_serial *serial = port->serial;
->  	struct cp210x_port_private *port_priv = usb_get_serial_port_data(port);
-> @@ -1134,11 +1183,17 @@ static void cp210x_set_termios(struct tty_struct *tty,
->  		struct usb_serial_port *port, struct ktermios *old_termios)
->  {
->  	struct device *dev = &port->dev;
-> -	unsigned int cflag, old_cflag;
-> +	struct cp210x_chars_respones CharsRes;
-> +	struct cp210x_flow_ctl flow_ctl;
-> +	unsigned int cflag, old_cflag, iflag;
->  	u16 bits;
-> +	int result;
-> +	u32 ctl_hs;
-> +	u32 flow_repl;
->  
->  	cflag = tty->termios.c_cflag;
->  	old_cflag = old_termios->c_cflag;
-> +	iflag = tty->termios.c_iflag;
->  
->  	if (tty->termios.c_ospeed != old_termios->c_ospeed)
->  		cp210x_change_speed(tty, port, old_termios);
-> @@ -1212,10 +1267,6 @@ static void cp210x_set_termios(struct tty_struct *tty,
->  	}
->  
->  	if ((cflag & CRTSCTS) != (old_cflag & CRTSCTS)) {
-> -		struct cp210x_flow_ctl flow_ctl;
-> -		u32 ctl_hs;
-> -		u32 flow_repl;
-> -
->  		cp210x_read_reg_block(port, CP210X_GET_FLOW, &flow_ctl,
->  				sizeof(flow_ctl));
->  		ctl_hs = le32_to_cpu(flow_ctl.ulControlHandshake);
-> @@ -1252,6 +1303,51 @@ static void cp210x_set_termios(struct tty_struct *tty,
->  				sizeof(flow_ctl));
->  	}
->  
-> +	/* Set Software  Flow  Control
-> +	 * Xon/Xoff code
-> +	 * Check the IXOFF/IXON status in the iflag component of the
-> +	 * termios structure.
-> +	 *
-> +	 */
-> +	if  ((iflag & IXOFF) || (iflag & IXON)) {
-> +		/*set vstart/vstop chars */
-> +		result = cp210x_operate_chars_block(port, CP210X_GET_CHARS,
-> +					  REQTYPE_DEVICE_TO_HOST, &CharsRes, sizeof(CharsRes));
-> +		dev_dbg(dev, "%s -  bXonchar=0x%x   bXoffchar=0x%x   \n",
-> +				__func__, CharsRes.bXonchar, CharsRes.bXoffchar);
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Are these dev_dbg() lines still needed now that the code is working?
+-----BEGIN PGP SIGNATURE-----
 
-And you never need a __func__ in a dev_* function, it can always display
-that automatically if you need/want it.  But here it's pointless.
-
-thanks,
-
-greg k-h
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl8a5g8ACgkQzL64meEa
+mQa6GA//dv6un4DfWkydBfBMjWWl9DuRCyLB80t59IsGJejlkudKuN4qaqQSbEI2
+DVpyiZKw/1Nt8aTpQJTJgsgf69vIzkhsxvkQ8tIrYZlXWwUoB/HKClA9R1gGR8Rq
+oI50A35v0hRHTFoE3TlOXxC+NBeGkHw+O+yCEhOFbevHJ5N9JW6s+Vkaur11mgc8
+kYIW1WYPrQ2oTAPlEgdv5HRoA2UCZX/E9poNn83gWSe8r3FL55huLPEb3Caem01y
+8LKRFgDSbvoiVrVZM+bQ7JUlu0ORvwKlTak4q4InvqE9VqAsHBstN7iNvutYwtCM
+X1RPT8npXN+mR8U+r1QZOZ549YDuVe/ToTPBoz6IaAf7H4OH2ET00nfEcEbJGWxJ
+rap1HuJDfKFJb+4B9j5lkqoaTE25JyNqk1XY3UBKtnU4tfMeJVHw8GxJIdy3xiM/
+knkPyZEk3nCRbcEoUaVhFPCvKzGweMtaer/xIw6VEM25bPZzRa2+r+2kz9k8nYnO
+WfXC2r1IS2WXJC5arwG5dStHuhngmEPzYQdvV0SPCnhMHwJO9Z5rmD3F8fRNsZMS
+e1kTs9dcurhVJz/Gm0RS/66kIJJGQT1xxf8/Z/sjln8+ShrPe1HDJlhsn3MEqP2l
+BMh1Hh8L66Sl4tNmIB8NKl0Zryn3G/gIL8w+ExILXYzPMzhRYkk=
+=6nN4
+-----END PGP SIGNATURE-----
+--=-=-=--
