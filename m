@@ -2,74 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41E5322CB18
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 18:32:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E28D22CB66
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 18:47:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726424AbgGXQcP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jul 2020 12:32:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53194 "EHLO mail.kernel.org"
+        id S1726650AbgGXQrd convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 24 Jul 2020 12:47:33 -0400
+Received: from mx2.itam.mx ([148.205.229.36]:15050 "EHLO mx2.itam.mx"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726317AbgGXQcO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 24 Jul 2020 12:32:14 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CE2A5206D8;
-        Fri, 24 Jul 2020 16:32:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595608334;
-        bh=Wu2M+P+zLSH1QV4Giv5fhpeU8je67kqtz8vmJQLi3/I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ODrtc6EcKksQ4acJLxYHw4/EQ9dbraxCzGryTdcIWOCgwDcAmn3nceXt5O80GJ0b+
-         7zs28U7fpcITpEU/1It2KuG2dilbeDPpgqHoVv7k9f+fybJoleh29uA489wpBdV/i0
-         PtMgOnF52xv31j9fRmmPlweOQdv0l1/HNu/YeCpU=
-Date:   Fri, 24 Jul 2020 18:32:15 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH 00/27] xhci features for usb-next
-Message-ID: <20200724163215.GA543850@kroah.com>
-References: <20200723144530.9992-1-mathias.nyman@linux.intel.com>
- <20200723150411.GA2529859@kroah.com>
- <be21534d-df11-c957-43eb-e64a05a45404@linux.intel.com>
- <20200724070643.GH3880088@kroah.com>
- <f8e1a53e-6095-3a7c-977e-b3a7ec7f0bca@linux.intel.com>
+        id S1726326AbgGXQrd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 24 Jul 2020 12:47:33 -0400
+Received: from cronos.itam.mx (hydrus2b.itam.mx [148.205.228.143])
+        by mx2.itam.mx  with ESMTP id 06OGiCfx015304-06OGiCg2015304
+        (version=TLSv1.0 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
+        Fri, 24 Jul 2020 11:44:12 -0500
+Received: from [10.28.175.153] (105.0.7.102) by cronos.itam.mx
+ (148.205.148.91) with Microsoft SMTP Server (TLS) id 14.3.468.0; Fri, 24 Jul
+ 2020 11:44:11 -0500
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f8e1a53e-6095-3a7c-977e-b3a7ec7f0bca@linux.intel.com>
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: =?utf-8?q?Covid_19_Wohlt=C3=A4tigkeitsfonds?=
+From:   <>
+To:     Recipients@vger.kernel.org
+Date:   Fri, 24 Jul 2020 18:43:56 +0200
+Reply-To: <mikeweirskyspende@gmail.com>
+Message-ID: <e40a78eb-0431-4b74-98e7-066079fb92b1@CRONOS.itam.mx>
+X-Originating-IP: [105.0.7.102]
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 24, 2020 at 02:11:44PM +0300, Mathias Nyman wrote:
-> > What other interface is asked for?  And yes, I would push back, what is
-> > wrong with TTY here?  It should be the most "low overhead" interface
-> > that works with common userspace tools that we have.
-> 
-> I've been asking the same questions about the TTY limitations.
-> 
-> Currently there's a driver providing a character device in development.
-> The developers are aware that they need to clarify and justify the need for a
-> new interface to get the driver upstream. My concerns and suggestions are noted.
-> 
-> As I don't understand these TTY limitations I'll have to let people publishing the
-> driver do this part. I expect that the driver will clarify things.
-> 
-> Anyway, I rather support them and work on providing the infrastructure needed 
-> to write such a driver, and give them the opportunity to implement whatever is needed.
+Lieber Freund,
 
-Don't add frameworks for no users.
+Ich bin Herr Mike Weirsky, New Jersey, Vereinigte Staaten von Amerika, der Mega-Gewinner von $ 273million In Mega Millions Jackpot, spende ich an 5 zufällige Personen, wenn Sie diese E-Mail erhalten, dann wurde Ihre E-Mail nach einem Spinball ausgewählt.Ich habe den größten Teil meines Vermögens auf eine Reihe von Wohltätigkeitsorganisationen und Organisationen verteilt.Ich habe mich freiwillig dazu entschieden, die Summe von € 2.000.000,00 an Sie als eine der ausgewählten 5 zu spenden, um meine Gewinne zu überprüfen.
+Das ist dein Spendencode: [MW530342019]
 
-Making this a char driver is not going to fly with me, I think I
-remember seeing old patches that tried to do this in the past that were
-submitted to some random Android kernel, and they just did not make any
-sense.
+www.youtube.com/watch?v=un8yRTmrYMY
 
-It is easier to hide custom ioctls (i.e. custom syscalls) in a char
-driver than it is in a tty driver, so don't fall into that trap :)
+Antworten Sie mit dem SPENDE-CODE an diese
 
-good luck!
+E-Mail:mikeweirskyspende@gmail.com
 
-greg k-h
+Ich hoffe, Sie und Ihre Familie glücklich zu machen.
+
+Grüße
+Herr Mike Weirsky
