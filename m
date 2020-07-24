@@ -2,133 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31A9122CAC8
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 18:16:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41E5322CB18
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 18:32:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726676AbgGXQQm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jul 2020 12:16:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35806 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726424AbgGXQQm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jul 2020 12:16:42 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05514C0619D3;
-        Fri, 24 Jul 2020 09:16:42 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id d17so10546673ljl.3;
-        Fri, 24 Jul 2020 09:16:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=G3jgH9IJtnDPS4GzMfQzYedGbY2dUDD4L8Drje8NRlU=;
-        b=nrUSmfpaTpszweIRHhqWJLQQZtbutSiCM3PQrV1OkVvq6RfvffjRE1yf0vpuGKHaJH
-         GwbC6/ZnQJoUwZ5oss1A3GDiGgrViVQydfS95yWJjFzW26+Z78e5ixZr2r45JXwe5Nue
-         Qx7ULKX0G91/kYXx5WyUZXGgO8tBIUuq9vEKXvR9QvQUNhJIO43nxaEUtUmvwRrYtM0b
-         zbADhSwV1bbaYEtEs5FfIHr+gnkzeYd5k9fgY5N7ob9S80HD8SQPWHgfcjukumtj+Cky
-         OSp7+V1WEu9ga05UIEVmoCY52dhnmRxE27Q2NFqvlBLz34SML1A0oXul2I0Z6X1oF3i5
-         sdrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=G3jgH9IJtnDPS4GzMfQzYedGbY2dUDD4L8Drje8NRlU=;
-        b=gpmtjPQA/UezREMhEnzIqGxv4jHWP7bsjeZShucx2AVOfpZIOuz1i5PK0ZXygAXZP5
-         FBHjYTN2CMFyNseMK1ZyilCv97uZyyEC3j2nvxXaDjNjTehTF5j3j7p+OzZKx+Wz01lv
-         wmZY5yIqU8l978UY3pwpJgXaCl2Wx7DIpGHnNXf+IQTx0uFDu/soYF89CoyeknO4fvZ8
-         2qxPU+DMhwyfZRdYJW0k9fIsAFuDjIN4rf8sYoOrE1a4VR4NKHyQqmupyeVyh7KNdWC3
-         +P1ftzZFyZkukgoyjQTQ/9CiwVDViixQ8k4+Qd9FwoqxwDv1Ult6P3W9EljAAJKVLyON
-         yGYw==
-X-Gm-Message-State: AOAM5301ahZRfu/y4Pr+wFU1wnI0epQsXxWxMWCjWK1ffrZJb6b/NtYK
-        RNVSZAXwWXhFGH/MVC6IeII=
-X-Google-Smtp-Source: ABdhPJzZZxJFgz/JhY1AQxrSNFLKjFlzqxRkySRQt6pWYKe77616ATr0A1ybIV2h7qX8Q8N/3qdvRw==
-X-Received: by 2002:a2e:960a:: with SMTP id v10mr4860375ljh.223.1595607400472;
-        Fri, 24 Jul 2020 09:16:40 -0700 (PDT)
-Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id r15sm335077ljd.130.2020.07.24.09.16.39
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 24 Jul 2020 09:16:39 -0700 (PDT)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Amelie DELAUNAY <amelie.delaunay@st.com>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre TORGUE <alexandre.torgue@st.com>
-Cc:     "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree\@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel\@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-stm32\@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Fabrice GASNIER <fabrice.gasnier@st.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: Re: [PATCH v3 0/3] Add USB role switch support to DWC2
-In-Reply-To: <fcff5f96-8383-fd84-35f1-3eb291cd65df@st.com>
-References: <20200724104711.5474-1-amelie.delaunay@st.com> <4c44f596-d2c3-6d2f-bf28-9e3964b6e6f1@st.com> <878sf9owcw.fsf@kernel.org> <fcff5f96-8383-fd84-35f1-3eb291cd65df@st.com>
-Date:   Fri, 24 Jul 2020 19:16:29 +0300
-Message-ID: <871rl0q46a.fsf@kernel.org>
+        id S1726424AbgGXQcP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jul 2020 12:32:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53194 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726317AbgGXQcO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 24 Jul 2020 12:32:14 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CE2A5206D8;
+        Fri, 24 Jul 2020 16:32:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595608334;
+        bh=Wu2M+P+zLSH1QV4Giv5fhpeU8je67kqtz8vmJQLi3/I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ODrtc6EcKksQ4acJLxYHw4/EQ9dbraxCzGryTdcIWOCgwDcAmn3nceXt5O80GJ0b+
+         7zs28U7fpcITpEU/1It2KuG2dilbeDPpgqHoVv7k9f+fybJoleh29uA489wpBdV/i0
+         PtMgOnF52xv31j9fRmmPlweOQdv0l1/HNu/YeCpU=
+Date:   Fri, 24 Jul 2020 18:32:15 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH 00/27] xhci features for usb-next
+Message-ID: <20200724163215.GA543850@kroah.com>
+References: <20200723144530.9992-1-mathias.nyman@linux.intel.com>
+ <20200723150411.GA2529859@kroah.com>
+ <be21534d-df11-c957-43eb-e64a05a45404@linux.intel.com>
+ <20200724070643.GH3880088@kroah.com>
+ <f8e1a53e-6095-3a7c-977e-b3a7ec7f0bca@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f8e1a53e-6095-3a7c-977e-b3a7ec7f0bca@linux.intel.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On Fri, Jul 24, 2020 at 02:11:44PM +0300, Mathias Nyman wrote:
+> > What other interface is asked for?  And yes, I would push back, what is
+> > wrong with TTY here?  It should be the most "low overhead" interface
+> > that works with common userspace tools that we have.
+> 
+> I've been asking the same questions about the TTY limitations.
+> 
+> Currently there's a driver providing a character device in development.
+> The developers are aware that they need to clarify and justify the need for a
+> new interface to get the driver upstream. My concerns and suggestions are noted.
+> 
+> As I don't understand these TTY limitations I'll have to let people publishing the
+> driver do this part. I expect that the driver will clarify things.
+> 
+> Anyway, I rather support them and work on providing the infrastructure needed 
+> to write such a driver, and give them the opportunity to implement whatever is needed.
 
-Amelie DELAUNAY <amelie.delaunay@st.com> writes:
+Don't add frameworks for no users.
 
-> Hi,
->
-> On 7/24/20 3:50 PM, Felipe Balbi wrote:
->>=20
->> (no top-posting, please)
->>=20
->> Hi,
->>=20
->> Amelie DELAUNAY <amelie.delaunay@st.com> writes:
->>> Series dropped.
->>=20
->> what do you mean with this? Should I drop all patches related with this =
-series?
->>=20
->
-> As v1 patches were in your next branch, I've prepared a new patchset=20
-> which contains fixes, on top of you next branch :
-> https://lore.kernel.org/patchwork/project/lkml/list/?series=3D454959
->
->
-> What do you prefer ? Drop all patches related to the v1 "Add USB role=20
-> switch support to DWC2" series and I send a v4 in replacement or keep=20
-> all patches and wait for new series review ?
+Making this a char driver is not going to fly with me, I think I
+remember seeing old patches that tried to do this in the past that were
+submitted to some random Android kernel, and they just did not make any
+sense.
 
-I've dropped those because they caused the build breakage :-) I can take
-a new series, let's take the opportunity to avoid the build regression.
+It is easier to hide custom ioctls (i.e. custom syscalls) in a char
+driver than it is in a tty driver, so don't fall into that trap :)
 
-=2D-=20
-balbi
+good luck!
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl8bCV8ACgkQzL64meEa
-mQZc7w/7BbjxTemwrP+zsnhES1GyFOmMB+RtZe3AKqd2aNcuD7rhQAPH2At/2pfK
-bVw4evguMHwzuyeHPw/3p6wy0udW/NGnxuqNR5TX+fQaydDlp4MFJj7qLK7zRpd1
-b7cYxDKXgcXpI4rMORF6w/6rOdcweTGRlTZJ+Jk8/I/cee+JB7ZmQbqwvAr2pURP
-AE6tu8v8jzcguyIm7IC0vdvTigkdQGTrNp+qmrECbf+gr5TMvvY8CYRIwmgz312O
-8Xqc2GzEm02HLK2GxZDTl31ImnXO8sRjCkkZH33BOeMka6+Jw4PqrGVj7zIGG5zG
-uxal+yZwCub2JfEPo+sVP/GbGg8iHzMeoXzBwDPHbGyvCizRqrRfUoRiSVav6Yy+
-0dtrs3vcOwnvHIo2frrxei7PMV5U/AqTNmhBik8eRr0U8aFwf2i/2IeJAZt+te0p
-z5t9wRGPop1RzMtai2jCcvxCA0e/tX8exBXB7+0UuuuPPjWBIFYSSbhqovYiyk1G
-CRbk5L4Gw4Kh8OLJzmXv+O4Awpf5PsPt8VmoWy2SVyMxwPPBiCyklwtiVYt/TpAZ
-Tsw+MnaT1USiMoluo3LLzpNLFp6p1uqgKaJGEVoLBeI5czoFP9mBdEAkUGx0Z/Zl
-HUDcXMpUkSydzN840QymcMm15u0etdm9IPdA3cwW4LZxhwEGtjk=
-=JWEE
------END PGP SIGNATURE-----
---=-=-=--
+greg k-h
