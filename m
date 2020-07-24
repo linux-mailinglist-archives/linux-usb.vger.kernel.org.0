@@ -2,112 +2,208 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 282D022C5A8
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 14:57:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BA0A22C5CD
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 15:10:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726506AbgGXM5y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jul 2020 08:57:54 -0400
-Received: from ZXSHCAS2.zhaoxin.com ([203.148.12.82]:30619 "EHLO
-        ZXSHCAS2.zhaoxin.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726235AbgGXM5y (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jul 2020 08:57:54 -0400
-Received: from zxbjmbx2.zhaoxin.com (10.29.252.164) by ZXSHCAS2.zhaoxin.com
- (10.28.252.162) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3; Fri, 24 Jul
- 2020 20:57:50 +0800
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by zxbjmbx2.zhaoxin.com
- (10.29.252.164) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3; Fri, 24 Jul
- 2020 20:57:49 +0800
-Received: from zxbjmbx1.zhaoxin.com ([fe80::290a:f538:51e7:1416]) by
- zxbjmbx1.zhaoxin.com ([fe80::290a:f538:51e7:1416%16]) with mapi id
- 15.01.1979.003; Fri, 24 Jul 2020 20:57:49 +0800
-From:   WeitaoWang-oc <WeitaoWang-oc@zhaoxin.com>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Alex Williamson <alex.williamson@redhat.com>
-CC:     Greg KH <gregkh@linuxfoundation.org>,
-        WeitaoWang-oc <WeitaoWang-oc@zhaoxin.com>,
-        "mathias.nyman@linux.intel.com" <mathias.nyman@linux.intel.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "hslester96@gmail.com" <hslester96@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Carsten_Schmid@mentor.com" <Carsten_Schmid@mentor.com>,
-        "efremov@linux.com" <efremov@linux.com>,
-        "Tony W. Wang(XA-RD)" <TonyWWang@zhaoxin.com>,
-        "Cobe Chen(BJ-RD)" <CobeChen@zhaoxin.com>,
-        "Tim Guo(BJ-RD)" <TimGuo@zhaoxin.com>,
-        "wwt8723@163.com" <wwt8723@163.com>
-Subject: =?gb2312?B?tPC4tDogW1BBVENIXSBVU0I6Rml4IGtlcm5lbCBOVUxMIHBvaW50ZXIgd2hl?=
- =?gb2312?Q?n_unbind_UHCI_form_vfio-pci?=
-Thread-Topic: [PATCH] USB:Fix kernel NULL pointer when unbind UHCI form
- vfio-pci
-Thread-Index: AQHWYB9U257QN8g5QkeL/njIDTUWtqkTBUEAgAAltoCAAMldgIAAFeWAgAC+AoCAAAr2gIAABd6AgAFUpvA=
-Date:   Fri, 24 Jul 2020 12:57:49 +0000
-Message-ID: <11a7a3e67d6c40cd9fd06cd4d6300283@zhaoxin.com>
-References: <1595419068-4812-1-git-send-email-WeitaoWang-oc@zhaoxin.com>
- <20200722124414.GA3153105@kroah.com>
- <20200722145913.GB1310843@rowland.harvard.edu>
- <1bf449377e3448bc9c8bc7b64d7b7990@zhaoxin.com>
- <20200722221817.542971a2@x1.home>
- <20200723153821.GC1352396@rowland.harvard.edu>
- <20200723101735.3222c289@w520.home>
- <20200723163835.GA1357775@rowland.harvard.edu>
-In-Reply-To: <20200723163835.GA1357775@rowland.harvard.edu>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.29.8.32]
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        id S1726807AbgGXNKE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jul 2020 09:10:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53472 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726503AbgGXNKE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 24 Jul 2020 09:10:04 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8C7C62065F;
+        Fri, 24 Jul 2020 13:10:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595596203;
+        bh=Wx/x32FDLvLCIX8u4/VoyGIFTyiOsSSslHTt4KzamiA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MsoSlgf3Gewt21Nu6RrZO26mtmp3JGYu2lV9SCCFYHrp6CEvk0whL3QebJrDjUIF6
+         ZDmkQvLe1dwIjFjJv26KObN3hLPoNcXAkHEV18VPj3162lp6/bL+nBnzzO5AJT5Wz8
+         eJvN2T3rDi4kaqOb+uyK1YSf/nrL4ESX04dVreoA=
+Date:   Fri, 24 Jul 2020 15:10:04 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Sheng Long Wang <china_shenglong@163.com>
+Cc:     johan@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jan.kiszka@siemens.com,
+        Wang Sheng Long <shenglong.wang.ext@siemens.com>
+Subject: Re: [PATCH] usb-serial:cp210x: add CP210x support to software flow
+ control
+Message-ID: <20200724131004.GB314889@kroah.com>
+References: <20200724102946.15404-1-china_shenglong@163.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200724102946.15404-1-china_shenglong@163.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DQpPbiBUaHUsIDIzIEp1bCAyMDIwIDEyOjM4OjIxIC0wNDAwLCBBbGFuIHdyb3RlOg0KPiBPbiBU
-aHUsIEp1bCAyMywgMjAyMCBhdCAxMDoxNzozNUFNIC0wNjAwLCBBbGV4IFdpbGxpYW1zb24gd3Jv
-dGU6DQo+ID4gVGhlIElPTU1VIGdyb3VwaW5nIHJlc3RyaWN0aW9uIGRvZXMgc29sdmUgdGhlIGhh
-cmR3YXJlIGlzc3VlLCBzbyBsb25nDQo+ID4gYXMgb25lIGRyaXZlciBkb2Vzbid0IGJsaW5kbHkg
-YXNzdW1lIHRoZSBkcml2ZXIgcHJpdmF0ZSBkYXRhIGZvcg0KPiA+IGFub3RoZXIgZGV2aWNlIGFu
-ZCBtb2RpZnkgaXQuDQo+IA0KPiBDb3JyZWN0aW9uOiBUaGUgSU9NTVUgZ3JvdXBpbmcgcmVzdHJp
-Y3Rpb24gc29sdmVzIHRoZSBoYXJkd2FyZSBpc3N1ZSBmb3INCj4gdmZpby1wY2kuICBJdCB3b24n
-dCBuZWNlc3NhcmlseSBoZWxwIGlmIHNvbWUgb3RoZXIgZHJpdmVyIGNvbWVzIGFsb25nDQo+IGFu
-ZCB3YW50cyB0byBiaW5kIHRvIHRoaXMgaGFyZHdhcmUuDQo+IA0KPiA+ICAgSSBkbyBhZ3JlZSB0
-aGF0IHlvdXIgc29sdXRpb24gd291bGQNCj4gPiB3b3JrLCByZXF1aXJpbmcgYWxsIGRldmljZXMg
-YXJlIHVuYm91bmQgYmVmb3JlIGFueSBjYW4gYmUgYm91bmQsIGJ1dCBpdA0KPiA+IGFsc28gc2Vl
-bXMgZGlmZmljdWx0IHRvIG1hbmFnZS4gIFRoZSBpc3N1ZSBpcyBsYXJnZWx5IHVuaXF1ZSB0byBV
-U0INCj4gPiBBRkFJSy4gIE9uIHRoZSBvdGhlciBoYW5kLCBkcml2ZXJzIGNvb3JkaW5hdGluZyB3
-aXRoIGVhY2ggb3RoZXIgdG8NCj4gPiByZWdpc3RlciB0aGVpciBfcHJpdmF0ZV8gZGF0YSBhcyBz
-aGFyZS1hYmxlIHdpdGhpbiBhIHNldCBvZiBkcml2ZXJzDQo+ID4gc2VlbXMgbGlrZSBhIG11Y2gg
-bW9yZSBkaXJlY3QgYW5kIGV4cGxpY2l0IGludGVyYWN0aW9uIGJldHdlZW4gdGhlDQo+ID4gZHJp
-dmVycy4gIFRoYW5rcywNCj4gDQo+IFllcywgdGhhdCBtYWtlcyBzZW5zZS4gIEJ1dCBpdCB3b3Vs
-ZCBoYXZlIHRvIGJlIGltcGxlbWVudGVkIGluIHRoZQ0KPiBkcml2ZXIgY29yZSwgbm90IGluIHBh
-cnRpY3VsYXIgc3Vic3lzdGVtcyBsaWtlIFVTQiBvciBQQ0kuICBBbmQgaXQgbWlnaHQNCj4gYmUg
-c2VlbiBhcyBvdmVya2lsbCwgZ2l2ZW4gdGhhdCBvbmx5IFVIQ0kvT0hDSS9FSENJIGRldmljZXMg
-cmVxdWlyZSB0aGlzDQo+IHNvcnQgb2Ygc2hhcmluZyBBRkFJSy4NCj4gDQo+IEFsc28sIHdoZW4g
-eW91IHRoaW5rIGFib3V0IGl0LCB3aGF0IGZvcm0gd291bGQgc3VjaCBjb29yZGluYXRpb24gYW1v
-bmcNCj4gZHJpdmVycyB0YWtlPyAgRnJvbSB5b3VyIGRlc2NyaXB0aW9uLCBpdCBzb3VuZHMgbGlr
-ZSB0aGUgZHJpdmVycyB3b3VsZA0KPiBhZ3JlZSB0byBhdm9pZCBhY2Nlc3NpbmcgZWFjaCBvdGhl
-cidzIHByaXZhdGUgZGF0YSBpZiB0aGUgcHJvcGVyDQo+IHJlZ2lzdHJhdGlvbiB3YXNuJ3QgaW4g
-cGxhY2UuDQo+IA0KPiBPbiB0aGUgb3RoZXIgaGFuZCwgYSBzdHJvbmdlciBhbmQgcGVyaGFwcyBt
-b3JlIHJvYnVzdCBhcHByb2FjaCB3b3VsZCBiZQ0KPiB0byBlbmZvcmNlIHRoZSBjb25kaXRpb24g
-dGhhdCBub24tY29vcGVyYXRpbmcgZHJpdmVycyBhcmUgbmV2ZXIgYm91bmQgdG8NCj4gZGV2aWNl
-cyBpbiB0aGUgc2FtZSBncm91cCBhdCB0aGUgc2FtZSB0aW1lLiAgVGhhdCdzIGJhc2ljYWxseSB3
-aGF0IEknbQ0KPiBwcm9wb3NpbmcgaGVyZSAtLSB0aGUgcXVlc3Rpb24gaXMgd2hldGhlciB0aGUg
-ZW5mb3JjZW1lbnQgc2hvdWxkIGJlDQo+IGluc3RpdHV0ZWQgaW4gdGhlIGtlcm5lbCBvciBzaG91
-bGQgbWVyZWx5IGJlIHBhcnQgb2YgYSBzdGFuZGFyZCBwcm90b2NvbA0KPiBmb2xsb3dlZCBieSB1
-c2Vyc3BhY2UgZHJpdmVycy4NCj4gDQo+IEdpdmVuIHRoYXQgaXQncyBjdXJyZW50bHkgbmVlZGVk
-IGluIG9ubHkgb25lIHBsYWNlLCBpdCBzZWVtcyByZWFzb25hYmxlDQo+IHRvIGxlYXZlIHRoaXMg
-YXMgYSAiZ2VudGxlbWVuJ3MgYWdyZWVtZW50IiBpbiB1c2Vyc3BhY2UgZm9yIHRoZSB0aW1lDQo+
-IGJlaW5nIGluc3RlYWQgb2YgYWRkaW5nIGl0IHRvIHRoZSBrZXJuZWwuDQo+IAkNCg0KUHJvdmlk
-ZWQgdGhhdCBFSENJIGFuZCBVSENJIGhvc3QgY29udHJvbGxlciBkZWNsYXJlIG5vdCBzdXBwb3J0
-IFAyUCBhbmQNCkFDUy4gU28sIHdlIGNhbiBhc3NpZ24gRUhDSSBhbmQgVUhDSSBob3N0IGNvbnRy
-b2xsZXIgdG8gZGlmZmVyZW50IElPTU1VIA0KZ3JvdXAgc2VwYXJhdGVseS4gV2UgYXNzaWduIEVI
-Q0kgaG9zdCBjb250cm9sbGVyIHRvIGhvc3QgYW5kIGFzc2lnbiBVSENJDQpob3N0IGNvbnRyb2xs
-ZXIgdG8gVk0uIFRoZW4sIGVoY2lfaGNkIGRyaXZlciBsb2FkL3VubG9hZCBvcGVyYXRpb24gaW4g
-aG9zdA0Kd2lsbCBjYXVzZSB0aGUgc2FtZSBpc3N1ZSBhcyBkaXNjdXNzZWQNCg0KVGhhbmtzDQpX
-ZWl0YW8NCg0K
+On Fri, Jul 24, 2020 at 06:29:46PM +0800, Sheng Long Wang wrote:
+> From: Wang Sheng Long <shenglong.wang.ext@siemens.com>
+> 
+>   The cp210x driver lacks soft-flow function,so need and
+>   this function.
+
+Why is this indented?
+
+And I do not quite understand this sentance, why is this needed?
+
+> 
+> Signed-off-by: Wang Sheng Long <shenglong.wang.ext@siemens.com>
+> ---
+>  drivers/usb/serial/cp210x.c | 110 +++++++++++++++++++++++++++++++++---
+>  1 file changed, 103 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
+> index e732949f65..ad5db0e2ae 100644
+> --- a/drivers/usb/serial/cp210x.c
+> +++ b/drivers/usb/serial/cp210x.c
+> @@ -380,6 +380,9 @@ static struct usb_serial_driver * const serial_drivers[] = {
+>  #define CP210X_PARTNUM_CP2102N_QFN20	0x22
+>  #define CP210X_PARTNUM_UNKNOWN	0xFF
+>  
+> +#define CP210X_VSTART  0x11
+> +#define CP210X_VSTOP   0x13
+
+No tabs?
+
+> +
+>  /* CP210X_GET_COMM_STATUS returns these 0x13 bytes */
+>  struct cp210x_comm_status {
+>  	__le32   ulErrors;
+> @@ -391,6 +394,15 @@ struct cp210x_comm_status {
+>  	u8       bReserved;
+>  } __packed;
+>  
+> +struct cp210x_chars_respones{
+> +	u8       bEofchar;
+> +	u8       bErrochar;
+> +	u8       bBreakchar;
+> +	u8       bEventchar;
+> +	u8       bXonchar;
+> +	u8       bXoffchar;
+
+Why the 'b' character here?
+
+Is this coming from some public spec somewhere with these specific
+fields?
+
+> +} __packed;
+> +
+>  /*
+>   * CP210X_PURGE - 16 bits passed in wValue of USB request.
+>   * SiLabs app note AN571 gives a strange description of the 4 bits:
+> @@ -624,6 +636,43 @@ static int cp210x_read_vendor_block(struct usb_serial *serial, u8 type, u16 val,
+>  	return result;
+>  }
+>  
+> +/*
+> + * Read and Write Characrters Respones operate
+> + * Register SET_CHARS/GET_CHATS
+> + */
+> +static int cp210x_operate_chars_block(struct usb_serial_port *port, u8 req, u8 type,
+> +		void *buf, int bufsize)
+> +{
+> +	struct usb_serial *serial = port->serial;
+> +	struct cp210x_port_private *port_priv = usb_get_serial_port_data(port);
+> +	void *dmabuf;
+> +	int result;
+> +
+> +	dmabuf = kmemdup(buf, bufsize, GFP_KERNEL);
+> +	if (!dmabuf)
+> +		return -ENOMEM;
+> +
+> +	result = usb_control_msg(serial->dev, usb_rcvctrlpipe(serial->dev, 0),
+> +			req, type, 0, port_priv->bInterfaceNumber, dmabuf, bufsize,
+> +			USB_CTRL_SET_TIMEOUT);
+> +	if (result == bufsize) {
+> +		if (type == REQTYPE_DEVICE_TO_HOST)
+> +			memcpy(buf, dmabuf, bufsize);
+> +
+> +		result = 0;
+> +	} else {
+> +		dev_err(&port->dev, "failed get req 0x%x size %d status: %d\n",
+> +				req, bufsize, result);
+> +		if (result >= 0)
+> +			result = -EIO;
+> +
+> +	}
+> +
+> +	kfree(dmabuf);
+> +
+> +	return result;
+> +}
+> +
+>  /*
+>   * Writes any 16-bit CP210X_ register (req) whose value is passed
+>   * entirely in the wValue field of the USB request.
+> @@ -650,8 +699,8 @@ static int cp210x_write_u16_reg(struct usb_serial_port *port, u8 req, u16 val)
+>   * Writes a variable-sized block of CP210X_ registers, identified by req.
+>   * Data in buf must be in native USB byte order.
+>   */
+> -static int cp210x_write_reg_block(struct usb_serial_port *port, u8 req,
+> -		void *buf, int bufsize)
+> +static int cp210x_write_reg_block(struct usb_serial_port *port,
+> +				u8 req, void *buf, int bufsize)
+>  {
+>  	struct usb_serial *serial = port->serial;
+>  	struct cp210x_port_private *port_priv = usb_get_serial_port_data(port);
+> @@ -1134,11 +1183,17 @@ static void cp210x_set_termios(struct tty_struct *tty,
+>  		struct usb_serial_port *port, struct ktermios *old_termios)
+>  {
+>  	struct device *dev = &port->dev;
+> -	unsigned int cflag, old_cflag;
+> +	struct cp210x_chars_respones CharsRes;
+> +	struct cp210x_flow_ctl flow_ctl;
+> +	unsigned int cflag, old_cflag, iflag;
+>  	u16 bits;
+> +	int result;
+> +	u32 ctl_hs;
+> +	u32 flow_repl;
+>  
+>  	cflag = tty->termios.c_cflag;
+>  	old_cflag = old_termios->c_cflag;
+> +	iflag = tty->termios.c_iflag;
+>  
+>  	if (tty->termios.c_ospeed != old_termios->c_ospeed)
+>  		cp210x_change_speed(tty, port, old_termios);
+> @@ -1212,10 +1267,6 @@ static void cp210x_set_termios(struct tty_struct *tty,
+>  	}
+>  
+>  	if ((cflag & CRTSCTS) != (old_cflag & CRTSCTS)) {
+> -		struct cp210x_flow_ctl flow_ctl;
+> -		u32 ctl_hs;
+> -		u32 flow_repl;
+> -
+>  		cp210x_read_reg_block(port, CP210X_GET_FLOW, &flow_ctl,
+>  				sizeof(flow_ctl));
+>  		ctl_hs = le32_to_cpu(flow_ctl.ulControlHandshake);
+> @@ -1252,6 +1303,51 @@ static void cp210x_set_termios(struct tty_struct *tty,
+>  				sizeof(flow_ctl));
+>  	}
+>  
+> +	/* Set Software  Flow  Control
+> +	 * Xon/Xoff code
+> +	 * Check the IXOFF/IXON status in the iflag component of the
+> +	 * termios structure.
+> +	 *
+> +	 */
+> +	if  ((iflag & IXOFF) || (iflag & IXON)) {
+> +		/*set vstart/vstop chars */
+> +		result = cp210x_operate_chars_block(port, CP210X_GET_CHARS,
+> +					  REQTYPE_DEVICE_TO_HOST, &CharsRes, sizeof(CharsRes));
+> +		dev_dbg(dev, "%s -  bXonchar=0x%x   bXoffchar=0x%x   \n",
+> +				__func__, CharsRes.bXonchar, CharsRes.bXoffchar);
+
+Are these dev_dbg() lines still needed now that the code is working?
+
+And you never need a __func__ in a dev_* function, it can always display
+that automatically if you need/want it.  But here it's pointless.
+
+thanks,
+
+greg k-h
