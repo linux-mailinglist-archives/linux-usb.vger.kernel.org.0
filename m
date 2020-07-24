@@ -2,124 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EBE122C3A9
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 12:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A2BA22C40C
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 13:08:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728005AbgGXKtK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jul 2020 06:49:10 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:32328 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726607AbgGXKtJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jul 2020 06:49:09 -0400
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06OAmbVi002511;
-        Fri, 24 Jul 2020 12:48:56 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : from : to : cc
- : references : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=iBJ6KkC+lhaupehlNacQ+CO4RFZx3Hx5ddo8QSwmCLM=;
- b=lP6OiOVXBymdZQUELdBovgoGlbvQQKOZuNfT7PlSGbzF6x212er5ujQ0YwaAxzRFvgaM
- T97elWfHHbw49BoAaMnzKz+xiOOPBt8AuTkXaA3u3BEvDgwGEbK3FqvCQHz7AeMf8C74
- Zg12pZtzd25htF0SYP23LZJvU07p2B2/Z78mSvJ5V51MWzUlvZ8LI/DbYhd6/sXAIkT+
- 5IFIwd6y7OBVslltyEktTZm/f8lW2uIljuyIIaO51gHPZZ4E6uOwd3HO+HgHq7Yarbm7
- dp3WLi+FXw8I44IxRBY93t+ZHpSl92iWPmOZScKOI0MomOW9/Y1OWGQYKVnPnzD7SKn/ Fw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 32cux0tb0q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Jul 2020 12:48:56 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id F2F1C100034;
-        Fri, 24 Jul 2020 12:48:55 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id BD80F2AE6D7;
-        Fri, 24 Jul 2020 12:48:55 +0200 (CEST)
-Received: from lmecxl0995.lme.st.com (10.75.127.47) by SFHDAG3NODE2.st.com
- (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Fri, 24 Jul
- 2020 12:48:55 +0200
-Subject: Re: [balbi-usb:testing/next 1/39] drivers/usb/dwc2/drd.c:80:36:
- error: 'struct dwc2_hsotg' has no member named 'test_mode'
-From:   Amelie DELAUNAY <amelie.delaunay@st.com>
-To:     Felipe Balbi <balbi@kernel.org>, kernel test robot <lkp@intel.com>,
-        Minas Harutyunyan <hminas@synopsys.com>
-CC:     "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>
-References: <202007241311.MMbsxewn%lkp@intel.com> <875zadnyek.fsf@kernel.org>
- <8098bdd6-9de2-dfdf-1e50-b027296ea254@st.com>
-Message-ID: <a8176140-3c57-1d64-ba2b-a24b23bc4201@st.com>
-Date:   Fri, 24 Jul 2020 12:48:54 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726969AbgGXLIe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jul 2020 07:08:34 -0400
+Received: from mga12.intel.com ([192.55.52.136]:29463 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726114AbgGXLId (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 24 Jul 2020 07:08:33 -0400
+IronPort-SDR: UhjL0cOPrqx2H7BxtleeoMxjgxSQOZ4xlEWYhfkchkWw5Azwk+jZoUvnwFi5csA4FKRP5zYuqV
+ pwg6SsdbI8NQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9691"; a="130252173"
+X-IronPort-AV: E=Sophos;i="5.75,390,1589266800"; 
+   d="scan'208";a="130252173"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2020 04:08:32 -0700
+IronPort-SDR: O/Sn6MSBhSbmI3UNtCJHEfgapdG+phMl/4bip57D+AZ0/CtLdaWYRwuhxBNPfWItJCYdzW6apk
+ pZVB3SWHamiQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,390,1589266800"; 
+   d="scan'208";a="327297226"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by FMSMGA003.fm.intel.com with ESMTP; 24 Jul 2020 04:08:31 -0700
+Subject: Re: [PATCH 00/27] xhci features for usb-next
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+References: <20200723144530.9992-1-mathias.nyman@linux.intel.com>
+ <20200723150411.GA2529859@kroah.com>
+ <be21534d-df11-c957-43eb-e64a05a45404@linux.intel.com>
+ <20200724070643.GH3880088@kroah.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
+ 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 fiD/
+Message-ID: <f8e1a53e-6095-3a7c-977e-b3a7ec7f0bca@linux.intel.com>
+Date:   Fri, 24 Jul 2020 14:11:44 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <8098bdd6-9de2-dfdf-1e50-b027296ea254@st.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+In-Reply-To: <20200724070643.GH3880088@kroah.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG7NODE3.st.com (10.75.127.21) To SFHDAG3NODE2.st.com
- (10.75.127.8)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-24_03:2020-07-24,2020-07-24 signatures=0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 7/24/20 9:59 AM, Amelie DELAUNAY wrote:
-> Hi Felipe,
-> 
-> On 7/24/20 9:51 AM, Felipe Balbi wrote:
->> kernel test robot <lkp@intel.com> writes:
->>
->>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git 
->>> testing/next
->>> head:   74dbc49b08d37ed9d4fd440d8896626733f80564
->>> commit: bc0f0d4a5853e32ba97a0318f774570428fc5634 [1/39] usb: dwc2: 
->>> override PHY input signals with usb role switch support
->>> config: nios2-randconfig-r002-20200724 (attached as .config)
->>> compiler: nios2-linux-gcc (GCC) 9.3.0
->>> reproduce (this is a W=1 build):
->>>          wget 
->>> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross 
->>> -O ~/bin/make.cross
->>>          chmod +x ~/bin/make.cross
->>>          git checkout bc0f0d4a5853e32ba97a0318f774570428fc5634
->>>          # save the attached .config to linux build tree
->>>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 
->>> make.cross ARCH=nios2
+On 24.7.2020 10.06, Greg KH wrote:
+> On Thu, Jul 23, 2020 at 09:47:14PM +0300, Mathias Nyman wrote:
+>> On 23.7.2020 18.04, Greg KH wrote:
+>>> On Thu, Jul 23, 2020 at 05:45:03PM +0300, Mathias Nyman wrote:
+>>>> Hi Greg
+>>>>
+>>>> This series for usb-next is almost completely about decoupling and
+>>>> cleaning up relations between xhci, xhci debug capability (DbC),
+>>>> and the DbC tty support.
+>>>>
+>>>> Real motivation behind this is to later turn DbC into a proper device
+>>>> allowing us to bind different drivers to it, like dbctty.
 >>>
->>> If you fix the issue, kindly add following tag as appropriate
->>> Reported-by: kernel test robot <lkp@intel.com>
->>>
->>> All errors (new ones prefixed by >>):
->>>
->>>     drivers/usb/dwc2/drd.c: In function 'dwc2_drd_role_sw_set':
->>>>> drivers/usb/dwc2/drd.c:80:36: error: 'struct dwc2_hsotg' has no 
->>>>> member named 'test_mode'
->>>        80 |  if (role == USB_ROLE_NONE && hsotg->test_mode) {
+>>> I don't really understand why you want to do that, but ok :)
 >>
->> weird, this compiled just fine here with allmodconfig on AArch64.
+>> Well to be fair loading different drivers for DbC isn't the only motivation.
 >>
->> /me goes check. Oh, I see what's happening, hsotg->test_mode is only
->> compiled on Peripheral-only and Dual-role builds. I'm assuming this was
->> a Host-only build. Then the problem triggers because drd.o is
->> unconditionally added to the binary.
->>
->> dwc2-y                    := core.o core_intr.o platform.o drd.o
->>
->> Is this an old problem or was it triggered by $subject?
->>
+>> Just using the Linux device model solves issues we are currently seeing 
+>> when using DbC on systems with several xHCI controllers. The original DbC 
+>> implementation didn't take this into account. 
 > 
-> I sent a mail yesterday (https://lkml.org/lkml/2020/7/23/114) to warn 
-> about the upcoming v2.
+> I thought when that was first merged no one cared :)
 > 
-> This build issue is fixed in the v2 
-> (https://lore.kernel.org/patchwork/project/lkml/list/?series=454729).
+> Nice to see that fixed here.
 > 
+>> And as a bigger picture DbC is just one extended capability. 
+>> xHC controller provides a list of support extended capabilities, each one
+>> with an ID and often a mmio region (inside xhci mmio range).
+>> We don't handle these consistently in the xhci driver, for example
+>> the role switch capability is currently turned into a platform device
+>> while the DbC capability support is squashed all into the xhci driver.
+>>
+>> Long term idea here would be to create a extended capability bus where each
+>> capability is a device, (child of xhci device) and drivers for these match
+>> based on the capability ID.
+> 
+> Odd, but ok.
 
-Build issue fixed in v3 instead:
-https://lore.kernel.org/patchwork/project/lkml/list/?series=454936
+Suggestions and other approaches are welcome.
 
-> Regards,
-> Amelie
 > 
+>>> What is that going to help with?
+>>
+>> The option to load other drivers for the DbC capability will help other
+>> developers to write "standard" Linux drivers that provide different interfaces
+>> than TTY to send data over DbC.
+>>
+>> I don't fully understand these TTY limitations myself, but there is a strong push
+>> to implement this, and the task to provide the infrastructure for this landed
+>> on my table.
+> 
+> What other interface is asked for?  And yes, I would push back, what is
+> wrong with TTY here?  It should be the most "low overhead" interface
+> that works with common userspace tools that we have.
+
+I've been asking the same questions about the TTY limitations.
+
+Currently there's a driver providing a character device in development.
+The developers are aware that they need to clarify and justify the need for a
+new interface to get the driver upstream. My concerns and suggestions are noted.
+
+As I don't understand these TTY limitations I'll have to let people publishing the
+driver do this part. I expect that the driver will clarify things.
+
+Anyway, I rather support them and work on providing the infrastructure needed 
+to write such a driver, and give them the opportunity to implement whatever is needed.
+
+Thanks
+Mathias
