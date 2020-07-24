@@ -2,42 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB4F22D251
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Jul 2020 01:39:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AAA922D252
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Jul 2020 01:39:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726845AbgGXXjZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jul 2020 19:39:25 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:41882 "EHLO
+        id S1726639AbgGXXjc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jul 2020 19:39:32 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:41888 "EHLO
         smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726639AbgGXXjZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jul 2020 19:39:25 -0400
-Received: from mailhost.synopsys.com (sv1-mailhost2.synopsys.com [10.205.2.132])
+        by vger.kernel.org with ESMTP id S1726592AbgGXXjb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jul 2020 19:39:31 -0400
+Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id C775DC0086;
-        Fri, 24 Jul 2020 23:39:24 +0000 (UTC)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id E387EC0086;
+        Fri, 24 Jul 2020 23:39:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1595633964; bh=9Lq2/zVc6BbTscvRNDgXwlM3fhirfm+1CB4ppedBS1I=;
+        t=1595633970; bh=rxqxrOtSEKkaYGCHbdsmdMiCN+d0UoTn0iORDokJxl4=;
         h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=jvUqYaqJUB+FErmruDG5QTnPfzOhgnIeMJSwVapPj46CUa3JQaeSIlDp0+ifRWSrG
-         1r1cDB9gBuF1RUidx4/emaqK9RNmxE/EN9gohbquDCOSfFsP8IZAupq0+pmblfq/0X
-         0bZnQdStT3YqK7SdCx6Wk78qNE2hkot9TKMnVIJ4dtbd85uzdOtZXZXVVp9sjkjF7G
-         MI4FxVVO4cxJLkLBDGBVziK8DU7LBzb4JHJOt/bLQLVm+JX1yHT5dukI43VmLqjzyi
-         kQbatpXUmfxgJT5o/6FZcZz2htrzKGegY9jUEaI7YbWjzp4JQOpZadD2zHssn3SQ/H
-         kcBldqfyuA0FA==
+        b=k6AMjesoOUQgRaIP4rDzk9NW2DsAAvmZLvOEsHPwqvQ2nA2zSNfzcJbrh3tIrbVLc
+         uVDDgJM9/J5MHIgjqBgFkdLsfQtPAiGJy8kGfVghPEuQnLgmKwDd4VcJQY8ZMavx/9
+         uL6M49FozJJpXl6HJIUxhac5WMi5EmKzz4aSv3B0T9/q7Znu1CwLmfXT62bxHLUs5Z
+         +Kx8/2MNRRzpc1t8qHwHKh1yq1gHdq3c2jMv+YJzwujvH7HLp3bSKnwdDkc8Lbn0KB
+         vckl+UASdbBw3GqSf29TjTD2NVlPiGtqJughCQD+MZNzbjs3+JGAPbXoSUad6BKMUZ
+         /R7uaX4Dbn4zw==
 Received: from te-lab16 (nanobot.internal.synopsys.com [10.10.186.99])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 98691A006F;
-        Fri, 24 Jul 2020 23:39:23 +0000 (UTC)
-Received: by te-lab16 (sSMTP sendmail emulation); Fri, 24 Jul 2020 16:39:23 -0700
-Date:   Fri, 24 Jul 2020 16:39:23 -0700
-Message-Id: <4355f743840acd523d609c1d90d3c6e49666c0e0.1595631457.git.thinhn@synopsys.com>
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id B3895A0099;
+        Fri, 24 Jul 2020 23:39:29 +0000 (UTC)
+Received: by te-lab16 (sSMTP sendmail emulation); Fri, 24 Jul 2020 16:39:29 -0700
+Date:   Fri, 24 Jul 2020 16:39:29 -0700
+Message-Id: <d69afacb57aee75c74d6983c4ee1aef423d55978.1595631457.git.thinhn@synopsys.com>
 In-Reply-To: <cover.1595631457.git.thinhn@synopsys.com>
 References: <cover.1595631457.git.thinhn@synopsys.com>
 X-SNPS-Relay: synopsys.com
 From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH v3 09/12] usb: dwc3: gadget: Report sublink speed capability
+Subject: [PATCH v3 10/12] usb: dwc3: gadget: Implement setting of sublink speed
 To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
@@ -48,104 +48,123 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Report the sublink speed attributes to the usb_gadget structure based on
-the HW capability from the device maximum_speed property.
-
-Only DWC_usb32 supports 2 sublink speeds if it can operate with 2 lanes.
-(i.e. at SSP, it can operate as gen1x2)
-
-Note: the SSID DWC3_SSP_SSID_GEN2 and DWC3_SSP_SSID_GEN1 are arbitrary.
-There's no standard according to the USB 3.2 spec as long as they are
-unique and within 0-15.
+Implement gadget ops udc_set_num_lanes_and_speed. This allows the
+gadget/core driver to select number of lanes to use and the sublink
+speed the controller supports.
 
 Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
 ---
-Changes in v3:
-- Update commit with updated field name
-- No longer use DWC3_LSM_5/10_GBPS macros
-Changes in v2:
-- Fix missing check for gen1x2 when writing to sublink speed attributes
-- Minor fix in commit message (first commit sentence ended with comma)
+ Changes in v3:
+ - None
+ Changes in v2:
+ - None
 
- drivers/usb/dwc3/core.h   |  4 ++++
- drivers/usb/dwc3/gadget.c | 49 +++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 53 insertions(+)
+ drivers/usb/dwc3/core.h   |  2 ++
+ drivers/usb/dwc3/gadget.c | 64 ++++++++++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 65 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 3bbfbeaa67d8..0ec675327014 100644
+index 0ec675327014..9466c4c36963 100644
 --- a/drivers/usb/dwc3/core.h
 +++ b/drivers/usb/dwc3/core.h
-@@ -40,6 +40,10 @@
- #define DWC3_XHCI_RESOURCES_NUM	2
- #define DWC3_ISOC_MAX_RETRIES	5
+@@ -385,6 +385,8 @@
+ #define DWC3_GUCTL2_RST_ACTBITLATER		BIT(14)
  
-+/* Sublink Speed Attribute ID */
-+#define DWC3_SSP_SSID_GEN2	2
-+#define DWC3_SSP_SSID_GEN1	1
+ /* Device Configuration Register */
++#define DWC3_DCFG_NUMLANES(n)	(((n) & 0x3) << 30) /* DWC_usb32 only */
 +
- #define DWC3_SCRATCHBUF_SIZE	4096	/* each buffer is assumed to be 4KiB */
- #define DWC3_EVENT_BUFFERS_SIZE	4096
- #define DWC3_EVENT_TYPE_MASK	0xfe
+ #define DWC3_DCFG_DEVADDR(addr)	((addr) << 3)
+ #define DWC3_DCFG_DEVADDR_MASK	DWC3_DCFG_DEVADDR(0x7f)
+ 
 diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index e44bfc3b5096..3038dae970f3 100644
+index 3038dae970f3..b7da4e1c81aa 100644
 --- a/drivers/usb/dwc3/gadget.c
 +++ b/drivers/usb/dwc3/gadget.c
-@@ -3686,6 +3686,55 @@ int dwc3_gadget_init(struct dwc3 *dwc)
- 				dwc->revision);
+@@ -2333,6 +2333,62 @@ static void dwc3_gadget_set_speed(struct usb_gadget *g,
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ }
  
- 	dwc->gadget.max_speed		= dwc->maximum_speed;
-+	dwc->gadget.max_num_lanes	= dwc->maximum_num_lanes;
++static void dwc3_gadget_set_num_lanes_and_speed(struct usb_gadget *g,
++						unsigned int num_lanes,
++						unsigned int ssid)
++{
++	struct dwc3			*dwc = gadget_to_dwc(g);
++	struct usb_sublink_speed	*ssa = NULL;
++	unsigned int			lanes;
++	unsigned long			flags;
++	u32				reg;
++	int				i;
 +
-+	if (dwc->maximum_speed == USB_SPEED_SUPER_PLUS) {
-+		struct usb_sublink_speed *ssa;
-+		int i;
++	spin_lock_irqsave(&dwc->lock, flags);
++	if (dwc->maximum_speed < USB_SPEED_SUPER_PLUS)
++		goto done;
 +
-+		/*
-+		 * Multiple sublink speeds are only available to DWC_usb32
-+		 * devices that can operate at gen2x2 max.
-+		 */
-+		if (dwc->maximum_phy_gen == USB_PHY_GEN_2 &&
-+		    dwc->maximum_num_lanes == 2) {
-+			dwc->gadget.ssac = 3;
-+			dwc->gadget.min_speed_ssid = DWC3_SSP_SSID_GEN1;
-+			dwc->gadget.max_speed_ssid = DWC3_SSP_SSID_GEN2;
-+		} else if (dwc->maximum_phy_gen == USB_PHY_GEN_1 &&
-+			   dwc->maximum_num_lanes == 2) {
-+			dwc->gadget.ssac = 1;
-+			dwc->gadget.min_speed_ssid = DWC3_SSP_SSID_GEN1;
-+			dwc->gadget.max_speed_ssid = DWC3_SSP_SSID_GEN1;
-+		} else {
-+			dwc->gadget.ssac = 1;
-+			dwc->gadget.min_speed_ssid = DWC3_SSP_SSID_GEN2;
-+			dwc->gadget.max_speed_ssid = DWC3_SSP_SSID_GEN2;
-+		}
-+
-+		for (i = 0; i < dwc->gadget.ssac + 1; i++) {
-+			ssa = &dwc->gadget.sublink_speed[i];
-+
-+			if (dwc->gadget.ssac > 1 && i > 1)
-+				ssa->id = dwc->gadget.max_speed_ssid;
-+			else
-+				ssa->id = dwc->gadget.min_speed_ssid;
-+
-+			if (ssa->id == DWC3_SSP_SSID_GEN1)
-+				ssa->mantissa = 5;
-+			else
-+				ssa->mantissa = 10;
-+
-+			/* First attribute is RX followed by TX */
-+			if (i % 2)
-+				ssa->type = USB_ST_SYMMETRIC_TX;
-+			else
-+				ssa->type = USB_ST_SYMMETRIC_RX;
-+
-+			ssa->exponent = USB_LSE_GBPS;
-+			ssa->protocol = USB_LP_SSP;
++	for (i = 0; i < g->ssac + 1; i++) {
++		if (g->sublink_speed[i].id == ssid) {
++			ssa = &g->sublink_speed[i];
++			break;
 +		}
 +	}
++
++	if (!ssa) {
++		dev_err(dwc->dev, "SSID not found (%d)\n", ssid);
++		goto done;
++	}
++
++	reg = dwc3_readl(dwc->regs, DWC3_DCFG);
++	reg &= ~DWC3_DCFG_SPEED_MASK;
++
++	switch (ssa->mantissa) {
++	case 5:
++		reg |= DWC3_DCFG_SUPERSPEED;
++		break;
++	case 10:
++		reg |= DWC3_DCFG_SUPERSPEED_PLUS;
++		break;
++	default:
++		dev_err(dwc->dev, "invalid lane speed mantissa (%d)\n",
++			ssa->mantissa);
++		goto done;
++	}
++
++	/* Lane configuration is only available to DWC_usb32 */
++	if (DWC3_IP_IS(DWC32)) {
++		lanes = clamp_t(unsigned int, num_lanes, 1,
++				dwc->maximum_num_lanes);
++		reg &= ~DWC3_DCFG_NUMLANES(~0);
++		reg |= DWC3_DCFG_NUMLANES(lanes - 1);
++	}
++
++	dwc3_writel(dwc->regs, DWC3_DCFG, reg);
++done:
++	spin_unlock_irqrestore(&dwc->lock, flags);
++}
++
+ static const struct usb_gadget_ops dwc3_gadget_ops = {
+ 	.get_frame		= dwc3_gadget_get_frame,
+ 	.wakeup			= dwc3_gadget_wakeup,
+@@ -2341,6 +2397,7 @@ static const struct usb_gadget_ops dwc3_gadget_ops = {
+ 	.udc_start		= dwc3_gadget_start,
+ 	.udc_stop		= dwc3_gadget_stop,
+ 	.udc_set_speed		= dwc3_gadget_set_speed,
++	.udc_set_num_lanes_and_speed = dwc3_gadget_set_num_lanes_and_speed,
+ 	.get_config_params	= dwc3_gadget_config_params,
+ };
  
- 	/*
- 	 * REVISIT: Here we should clear all pending IRQs to be
+@@ -3751,7 +3808,12 @@ int dwc3_gadget_init(struct dwc3 *dwc)
+ 		goto err4;
+ 	}
+ 
+-	dwc3_gadget_set_speed(&dwc->gadget, dwc->maximum_speed);
++	if (DWC3_IP_IS(DWC32) && dwc->maximum_speed == USB_SPEED_SUPER_PLUS)
++		dwc3_gadget_set_num_lanes_and_speed(&dwc->gadget,
++						    dwc->maximum_num_lanes,
++						    dwc->gadget.max_speed_ssid);
++	else
++		dwc3_gadget_set_speed(&dwc->gadget, dwc->maximum_speed);
+ 
+ 	return 0;
+ 
 -- 
 2.11.0
 
