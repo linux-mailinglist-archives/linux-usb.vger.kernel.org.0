@@ -2,99 +2,223 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1146422C2F2
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 12:18:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B5322C321
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 12:30:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726692AbgGXKSl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jul 2020 06:18:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36050 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726114AbgGXKSl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jul 2020 06:18:41 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B05C0619D3
-        for <linux-usb@vger.kernel.org>; Fri, 24 Jul 2020 03:18:41 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id s9so4918524lfs.4
-        for <linux-usb@vger.kernel.org>; Fri, 24 Jul 2020 03:18:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=7EclUz1Qqwytg+0Nno7AvnVg+82K/uYYBDoctVjZ4v8=;
-        b=lz++d/ltEHa2eeT3Y4z2sWoiku8TAJT5DzNBz/ituYaEbDpQE59vk8NBMyer29ezJU
-         ZenKKYL+Z/MpGGTL40IGOFFagZIpCG8I8dqEJgFVQsiFk/eaFDC9InP3qry+NNIXvtmC
-         iLkz1h4Xe0QN3qmw1B3eO00XP0+4y9QW2SVOuwOpf0n/0kryCGBt5T4vclWgH8vnYg99
-         Nyh1h7I6Rv8PEZui4MkX54cYUHQfFahlgrlANDl7d1YePDRI+L1FC8j9XF40AG2OaGXP
-         K26u87nzoeQU+POhrKBTLpvswyMBxl0IElLcMfa9CNLaYZRueYT1p3tAD2qwoB8wUUIF
-         SXFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=7EclUz1Qqwytg+0Nno7AvnVg+82K/uYYBDoctVjZ4v8=;
-        b=QR1TY3Ijvs+TdoDtRP9LfaRJ+nQ22+8QZTEI1dhPJ+1iyiTCIMd5ZwywXvOvQZn8TL
-         uLwSu+wTqt68ilWZ0jQr/Fz+0Mzd7OfmAxS+VCTy27bjaHwpe8xPXM+afvvqkraJX/SJ
-         3F4kWObPGiBSg6pT9CE7djn+tnR8/k8o0Yp7edSOWmQ+Q7F0xH/5ThsOJ6Skj/vTvTYc
-         UlPQo7Rc++xCzI8WCtTjIiXgoF18K0XEo8H0by+eiFKkFjsZOITUdqCeis4oOyfveo0V
-         wcfzPRlAvmgLTN0SlG0s6Jo4JV9q9yOsmi37JrB+ThcxC5o1WgK0nIeKuFaLY6iIT4zX
-         swRw==
-X-Gm-Message-State: AOAM533f88PmVwV8NBWFaqry9HXsS0CZMqjF1Qbl09yOHS3KxhcJmwNf
-        lC4WD+7/oHUScVVQS/emK07lV7jHmqg=
-X-Google-Smtp-Source: ABdhPJxKuPd0NpqiWezAkPSufYaVgbX4J+HPATkYpeAKUcbmVTc1BBUgMTYe79gvlCW8cQh0TGHjqA==
-X-Received: by 2002:a19:c752:: with SMTP id x79mr4484324lff.197.1595585919471;
-        Fri, 24 Jul 2020 03:18:39 -0700 (PDT)
-Received: from ?IPv6:2a00:1fa0:48a4:44fe:25f3:4dcc:b496:1546? ([2a00:1fa0:48a4:44fe:25f3:4dcc:b496:1546])
-        by smtp.gmail.com with ESMTPSA id 16sm141925lju.100.2020.07.24.03.18.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jul 2020 03:18:39 -0700 (PDT)
-Subject: Re: [PATCH v4] USB: Fix device driver race
-To:     Bastien Nocera <hadess@hadess.net>, linux-usb@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-References: <ee32a093d43fe6631617c203ea7c86cb700ceac5.camel@hadess.net>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Organization: Brain-dead Software
-Message-ID: <cb19dbf0-8f4f-d60c-a93f-bd3b0ae67d09@gmail.com>
-Date:   Fri, 24 Jul 2020 13:18:26 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <ee32a093d43fe6631617c203ea7c86cb700ceac5.camel@hadess.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1726754AbgGXKal (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jul 2020 06:30:41 -0400
+Received: from m12-17.163.com ([220.181.12.17]:58917 "EHLO m12-17.163.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726329AbgGXKal (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 24 Jul 2020 06:30:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id; bh=4dflDOrAqQmVXppU0j
+        BwTka3UlUGFsKY0391HvT87Vg=; b=STmmjqhUEUE4byWnDgdfvbGHe3zy23AWd0
+        M0uJTAUn7fzKZ1lR6wygFZCvOqFo7ZRjvMXH3V6VyVF0Scsf8NVrar0+opiz6C+9
+        726S7Mis+gTWY1O58lVVjUdBdLA0d7l3dYF5uACfyQi5UuSx/b8Vp4434u81WxnB
+        GI9ANeDPw=
+Received: from localhost.localdomain (unknown [118.113.11.27])
+        by smtp13 (Coremail) with SMTP id EcCowABnOLQhuBpf+hZ9AA--.62427S4;
+        Fri, 24 Jul 2020 18:29:54 +0800 (CST)
+From:   Sheng Long Wang <china_shenglong@163.com>
+To:     johan@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jan.kiszka@siemens.com,
+        Wang Sheng Long <shenglong.wang.ext@siemens.com>
+Subject: [PATCH] usb-serial:cp210x: add CP210x support to software flow control
+Date:   Fri, 24 Jul 2020 18:29:46 +0800
+Message-Id: <20200724102946.15404-1-china_shenglong@163.com>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: EcCowABnOLQhuBpf+hZ9AA--.62427S4
+X-Coremail-Antispam: 1Uf129KBjvJXoW3Jr4DtFW8JF43tr4DAF45Awb_yoW7uF48pF
+        4Utay3tFWqvr47Wa1rAF4Uu39xuan7XryIvFy3G39aya13Krn3KF18Ca4Yvr1UAa4xGry5
+        Jrs8t3yUuw4UtrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07bFnQUUUUUU=
+X-Originating-IP: [118.113.11.27]
+X-CM-SenderInfo: xfkl0tpbvkv0xjor0wi6rwjhhfrp/1tbiyQJrslQHKutUlgAAsC
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
+From: Wang Sheng Long <shenglong.wang.ext@siemens.com>
 
-On 24.07.2020 11:59, Bastien Nocera wrote:
+  The cp210x driver lacks soft-flow function,so need and
+  this function.
 
-> When a new device with a specialised device driver is plugged in, the
-> new driver will be modprobe()'d but the driver core will attach the
-> "generic" driver to the device.
-> 
-> After that, nothing will trigger a reprobe when the modprobe()'d device
-> driver has finished initialising, as the device has the "generic"
-> driver attached to it.
-> 
-> Trigger a reprobe ourselves when new specialised drivers get registered.
-> 
-> Fixes: 88b7381a939d
+Signed-off-by: Wang Sheng Long <shenglong.wang.ext@siemens.com>
+---
+ drivers/usb/serial/cp210x.c | 110 +++++++++++++++++++++++++++++++++---
+ 1 file changed, 103 insertions(+), 7 deletions(-)
 
-    It's strange that nobody has noticed... you need to cite the commit 
-summary here as well, enclosed into ("").
+diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
+index e732949f65..ad5db0e2ae 100644
+--- a/drivers/usb/serial/cp210x.c
++++ b/drivers/usb/serial/cp210x.c
+@@ -380,6 +380,9 @@ static struct usb_serial_driver * const serial_drivers[] = {
+ #define CP210X_PARTNUM_CP2102N_QFN20	0x22
+ #define CP210X_PARTNUM_UNKNOWN	0xFF
+ 
++#define CP210X_VSTART  0x11
++#define CP210X_VSTOP   0x13
++
+ /* CP210X_GET_COMM_STATUS returns these 0x13 bytes */
+ struct cp210x_comm_status {
+ 	__le32   ulErrors;
+@@ -391,6 +394,15 @@ struct cp210x_comm_status {
+ 	u8       bReserved;
+ } __packed;
+ 
++struct cp210x_chars_respones{
++	u8       bEofchar;
++	u8       bErrochar;
++	u8       bBreakchar;
++	u8       bEventchar;
++	u8       bXonchar;
++	u8       bXoffchar;
++} __packed;
++
+ /*
+  * CP210X_PURGE - 16 bits passed in wValue of USB request.
+  * SiLabs app note AN571 gives a strange description of the 4 bits:
+@@ -624,6 +636,43 @@ static int cp210x_read_vendor_block(struct usb_serial *serial, u8 type, u16 val,
+ 	return result;
+ }
+ 
++/*
++ * Read and Write Characrters Respones operate
++ * Register SET_CHARS/GET_CHATS
++ */
++static int cp210x_operate_chars_block(struct usb_serial_port *port, u8 req, u8 type,
++		void *buf, int bufsize)
++{
++	struct usb_serial *serial = port->serial;
++	struct cp210x_port_private *port_priv = usb_get_serial_port_data(port);
++	void *dmabuf;
++	int result;
++
++	dmabuf = kmemdup(buf, bufsize, GFP_KERNEL);
++	if (!dmabuf)
++		return -ENOMEM;
++
++	result = usb_control_msg(serial->dev, usb_rcvctrlpipe(serial->dev, 0),
++			req, type, 0, port_priv->bInterfaceNumber, dmabuf, bufsize,
++			USB_CTRL_SET_TIMEOUT);
++	if (result == bufsize) {
++		if (type == REQTYPE_DEVICE_TO_HOST)
++			memcpy(buf, dmabuf, bufsize);
++
++		result = 0;
++	} else {
++		dev_err(&port->dev, "failed get req 0x%x size %d status: %d\n",
++				req, bufsize, result);
++		if (result >= 0)
++			result = -EIO;
++
++	}
++
++	kfree(dmabuf);
++
++	return result;
++}
++
+ /*
+  * Writes any 16-bit CP210X_ register (req) whose value is passed
+  * entirely in the wValue field of the USB request.
+@@ -650,8 +699,8 @@ static int cp210x_write_u16_reg(struct usb_serial_port *port, u8 req, u16 val)
+  * Writes a variable-sized block of CP210X_ registers, identified by req.
+  * Data in buf must be in native USB byte order.
+  */
+-static int cp210x_write_reg_block(struct usb_serial_port *port, u8 req,
+-		void *buf, int bufsize)
++static int cp210x_write_reg_block(struct usb_serial_port *port,
++				u8 req, void *buf, int bufsize)
+ {
+ 	struct usb_serial *serial = port->serial;
+ 	struct cp210x_port_private *port_priv = usb_get_serial_port_data(port);
+@@ -1134,11 +1183,17 @@ static void cp210x_set_termios(struct tty_struct *tty,
+ 		struct usb_serial_port *port, struct ktermios *old_termios)
+ {
+ 	struct device *dev = &port->dev;
+-	unsigned int cflag, old_cflag;
++	struct cp210x_chars_respones CharsRes;
++	struct cp210x_flow_ctl flow_ctl;
++	unsigned int cflag, old_cflag, iflag;
+ 	u16 bits;
++	int result;
++	u32 ctl_hs;
++	u32 flow_repl;
+ 
+ 	cflag = tty->termios.c_cflag;
+ 	old_cflag = old_termios->c_cflag;
++	iflag = tty->termios.c_iflag;
+ 
+ 	if (tty->termios.c_ospeed != old_termios->c_ospeed)
+ 		cp210x_change_speed(tty, port, old_termios);
+@@ -1212,10 +1267,6 @@ static void cp210x_set_termios(struct tty_struct *tty,
+ 	}
+ 
+ 	if ((cflag & CRTSCTS) != (old_cflag & CRTSCTS)) {
+-		struct cp210x_flow_ctl flow_ctl;
+-		u32 ctl_hs;
+-		u32 flow_repl;
+-
+ 		cp210x_read_reg_block(port, CP210X_GET_FLOW, &flow_ctl,
+ 				sizeof(flow_ctl));
+ 		ctl_hs = le32_to_cpu(flow_ctl.ulControlHandshake);
+@@ -1252,6 +1303,51 @@ static void cp210x_set_termios(struct tty_struct *tty,
+ 				sizeof(flow_ctl));
+ 	}
+ 
++	/* Set Software  Flow  Control
++	 * Xon/Xoff code
++	 * Check the IXOFF/IXON status in the iflag component of the
++	 * termios structure.
++	 *
++	 */
++	if  ((iflag & IXOFF) || (iflag & IXON)) {
++		/*set vstart/vstop chars */
++		result = cp210x_operate_chars_block(port, CP210X_GET_CHARS,
++					  REQTYPE_DEVICE_TO_HOST, &CharsRes, sizeof(CharsRes));
++		dev_dbg(dev, "%s -  bXonchar=0x%x   bXoffchar=0x%x   \n",
++				__func__, CharsRes.bXonchar, CharsRes.bXoffchar);
++		if (result < 0) {
++			dev_err(dev, "Read Characrters Respones  failed "
++					"xon/xoff software flow control\n");
++			return;
++		}
++		CharsRes.bXonchar  = CP210X_VSTART;
++		CharsRes.bXoffchar = CP210X_VSTOP;
++		result = cp210x_operate_chars_block(port, CP210X_SET_CHARS,
++					 REQTYPE_HOST_TO_INTERFACE, &CharsRes, sizeof(CharsRes));
++		if (result < 0) {
++			memset(&CharsRes, 0, sizeof(CharsRes));
++			dev_err(dev, "Write Characrters Respones  failed"
++					"xon/xoff software flow control\n");
++			return;
++		}
++		/*Set  Rx/Tx Flow Contrl  Flag in ulFlowReplace*/
++		cp210x_read_reg_block(port, CP210X_GET_FLOW, &flow_ctl, sizeof(flow_ctl));
++		flow_repl = le32_to_cpu(flow_ctl.ulFlowReplace);
++		dev_dbg(dev, "%s - read ulControlHandshake=0x%08x, ulFlowReplace=0x%08x\n",
++				__func__, ctl_hs, flow_repl);
++		if (iflag & IXOFF)
++			flow_repl |= CP210X_SERIAL_AUTO_RECEIVE;
++		else
++			flow_repl &= ~CP210X_SERIAL_AUTO_RECEIVE;
++
++		if (iflag & IXON)
++			flow_repl |= CP210X_SERIAL_AUTO_TRANSMIT;
++		else
++			flow_repl &= ~CP210X_SERIAL_AUTO_TRANSMIT;
++
++		flow_ctl.ulFlowReplace = cpu_to_le32(flow_repl);
++		cp210x_write_reg_block(port, CP210X_SET_FLOW, &flow_ctl, sizeof(flow_ctl));
++       }
+ }
+ 
+ static int cp210x_tiocmset(struct tty_struct *tty,
+-- 
+2.17.1
 
-> Signed-off-by: Bastien Nocera <hadess@hadess.net>
-[...]
-> diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-> index f81606c6a35b..6731a8e104bc 100644
-> --- a/drivers/usb/core/driver.c
-> +++ b/drivers/usb/core/driver.c
-[...]
 
-MBR, Sergei
