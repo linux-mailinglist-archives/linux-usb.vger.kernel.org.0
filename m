@@ -2,97 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E5D022C730
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 15:59:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8192422C7BB
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 16:18:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726792AbgGXN7O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jul 2020 09:59:14 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:17018 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726658AbgGXN7O (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jul 2020 09:59:14 -0400
-Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06ODrl1D022365;
-        Fri, 24 Jul 2020 15:58:58 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=KRUo6+0et9uIWzr/7OGkArIbrkrXoASlOdUHAzwrQ+c=;
- b=o4tYZ167aIAxYvG71/FxDIp91Y1Gl3UWSaaPkCo/tPveq6Rp1PD4p6uJo7eG/TRCpSrr
- 4oz3oWk5Ge+YQ9BVEoqj+gbxiP+M25v2/4yKJk2n0vb1y52THqdiO2oX9r8Ie9RGZN1y
- w6pJ5JpPu5ini7M89305qeM9d8QaP6TLpYJdcPr8JwzJAKj491Nc+oM2J74+/cUGxhNj
- DCAaWGs3usAwNJXCW1mODvpK2DtZxKnNt8ZM2YhzF2yBbDyIQHTMcFaTdzID+A8kbUSZ
- LVz+Wm/JRsR8RD0wU/bQnzdQYlAvidy+qemtpIcFXMSSx5PQYfE17Lmk5QM6U717JD1u 4A== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 32bsfq0hx2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 24 Jul 2020 15:58:58 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3DBB110002A;
-        Fri, 24 Jul 2020 15:58:57 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2557C2B4D1F;
-        Fri, 24 Jul 2020 15:58:57 +0200 (CEST)
-Received: from lmecxl0995.lme.st.com (10.75.127.49) by SFHDAG3NODE2.st.com
- (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Fri, 24 Jul
- 2020 15:58:56 +0200
-Subject: Re: [PATCH v3 0/3] Add USB role switch support to DWC2
-To:     Felipe Balbi <balbi@kernel.org>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre TORGUE <alexandre.torgue@st.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Fabrice GASNIER <fabrice.gasnier@st.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20200724104711.5474-1-amelie.delaunay@st.com>
- <4c44f596-d2c3-6d2f-bf28-9e3964b6e6f1@st.com> <878sf9owcw.fsf@kernel.org>
-From:   Amelie DELAUNAY <amelie.delaunay@st.com>
-Message-ID: <fcff5f96-8383-fd84-35f1-3eb291cd65df@st.com>
-Date:   Fri, 24 Jul 2020 15:58:55 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726643AbgGXOSY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jul 2020 10:18:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45244 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726317AbgGXOSY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jul 2020 10:18:24 -0400
+Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B082BC0619D3;
+        Fri, 24 Jul 2020 07:18:23 -0700 (PDT)
+Received: from [IPv6:2a02:2121:283:8d02:15d6:da5b:427d:49dc] ([IPv6:2a02:2121:283:8d02:15d6:da5b:427d:49dc])
+        (authenticated bits=0)
+        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 06OEIFZg003614
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 24 Jul 2020 16:18:16 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1595600297; bh=TrUfVBoeJkZ1QmlO5khT5aTGpRfHV2YfkpfBwbBHIlE=;
+        h=Date:References:Subject:To:CC:From:Message-ID:From;
+        b=S9jDUszaBm3VkJHVhbAl6i1F2/AsVuFYR6c9NRkn/IeBkaKpruw9vEb2ME+eVd2+u
+         L0FXhHIVT0JB5+c7rTbtmzdKduducZxbT+jXBCKPdD/833x9up6U6HQ20G7bC/dCwE
+         /WjAKA5JuiEI0SKNzsAt5iT7xWMUkY8+E2f6+1ec=
+Date:   Fri, 24 Jul 2020 16:18:08 +0200
+User-Agent: K-9 Mail for Android
+In-Reply-To: <1595322008.29149.5.camel@suse.de>
+References: <20200715184100.109349-1-bjorn@mork.no> <20200715184100.109349-3-bjorn@mork.no> <1595322008.29149.5.camel@suse.de>
 MIME-Version: 1.0
-In-Reply-To: <878sf9owcw.fsf@kernel.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.49]
-X-ClientProxiedBy: SFHDAG4NODE3.st.com (10.75.127.12) To SFHDAG3NODE2.st.com
- (10.75.127.8)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-24_04:2020-07-24,2020-07-24 signatures=0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v5 net-next 2/5] net: cdc_ether: export usbnet_cdc_update_filter
+To:     Oliver Neukum <oneukum@suse.de>, netdev@vger.kernel.org
+CC:     linux-usb@vger.kernel.org, wxcafe@wxcafe.net,
+        =?ISO-8859-1?Q?Miguel=09Rodr=EDguez_P=E9rez?= 
+        <miguel@det.uvigo.gal>
+From:   =?ISO-8859-1?Q?Bj=F8rn_Mork?= <bjorn@mork.no>
+Message-ID: <2B227F47-F76D-45EF-85D6-8A5A85AE19A1@mork.no>
+X-Virus-Scanned: clamav-milter 0.102.2 at canardo
+X-Virus-Status: Clean
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On 7/24/20 3:50 PM, Felipe Balbi wrote:
-> 
-> (no top-posting, please)
-> 
-> Hi,
-> 
-> Amelie DELAUNAY <amelie.delaunay@st.com> writes:
->> Series dropped.
-> 
-> what do you mean with this? Should I drop all patches related with this series?
-> 
-
-As v1 patches were in your next branch, I've prepared a new patchset 
-which contains fixes, on top of you next branch :
-https://lore.kernel.org/patchwork/project/lkml/list/?series=454959
 
 
-What do you prefer ? Drop all patches related to the v1 "Add USB role 
-switch support to DWC2" series and I send a v4 in replacement or keep 
-all patches and wait for new series review ?
+On July 21, 2020 11:00:08 AM GMT+02:00, Oliver Neukum <oneukum@suse=2Ede> =
+wrote:
+>Am Mittwoch, den 15=2E07=2E2020, 20:40 +0200 schrieb Bj=C3=B8rn Mork:
+>>=20
+>> @@ -90,6 +90,7 @@ static void usbnet_cdc_update_filter(struct usbnet
+>*dev)
+>>  			USB_CTRL_SET_TIMEOUT
+>>  		);
+>>  }
+>> +EXPORT_SYMBOL_GPL(usbnet_cdc_update_filter);
+>
+>Hi,
+>
+>this function is pretty primitive=2E In fact it more or less
+>is a straight take from the spec=2E Can this justify the _GPL
+>version?
+
+Maybe not? I must admit I didn't put much thought into it=2E=20
+
+I will not object to changing it=2E And you're the boss anyway :-)
+
+
+Bj=C3=B8rn 
