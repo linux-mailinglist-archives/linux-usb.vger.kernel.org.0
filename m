@@ -2,45 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53CAA22CC89
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 19:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64B2122CC8A
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 19:47:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726870AbgGXRrW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jul 2020 13:47:22 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:50616 "EHLO
+        id S1726901AbgGXRrX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jul 2020 13:47:23 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:54274 "EHLO
         us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726826AbgGXRrV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jul 2020 13:47:21 -0400
+        by vger.kernel.org with ESMTP id S1726838AbgGXRrX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jul 2020 13:47:23 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1595612840;
+        s=mimecast20190719; t=1595612841;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=PNttBmtCPFbt7GIbcwI5Z9ofeeDK+5XuWVhH4KjOMlg=;
-        b=G6AjCvLQRgXizyZIfTzdlEXNpxv8wVMzeLPIM2Z+R8LAfYNOdWoPIsUNqJ2TC91oewM55f
-        i1rCH429b81FGIACNRA+4+eN2T2JkcmzqZrhauOplXJbQftH6H4BAwFu6PPLQtHZk8rQN5
-        JO+pUhvk1c/gBHFc4GDkdrxXmXN/Mcw=
+        bh=T/y68V4c4WcmgXC9p2IQHu3wJNHASeRisIJnWUDnpA0=;
+        b=A9fMxxnRDW3yCP6vyr5kQ2sd6hfmE4Gy96Ktpnw4LtPZe/aFsno4Xnu5FId8oa4JdjsNgL
+        pjOIdiagSMquSFDIN99/rECW7a7+6I1NCCLE7ZPr10w60JvFSsnJanObiDX27YgUw16qMx
+        uEVH55rJHwLWokcXI9aWxqWIgPvD468=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-409-SkBmXu7cP7Ss0FsxlC_Ldw-1; Fri, 24 Jul 2020 13:47:16 -0400
-X-MC-Unique: SkBmXu7cP7Ss0FsxlC_Ldw-1
+ us-mta-507-kpkbLZ_5MieHr6_l3eRIAw-1; Fri, 24 Jul 2020 13:47:19 -0400
+X-MC-Unique: kpkbLZ_5MieHr6_l3eRIAw-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CDE66107ACCA;
-        Fri, 24 Jul 2020 17:47:14 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CF204800483;
+        Fri, 24 Jul 2020 17:47:17 +0000 (UTC)
 Received: from x1.localdomain.com (ovpn-112-63.ams2.redhat.com [10.36.112.63])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 21AB15D9D3;
-        Fri, 24 Jul 2020 17:47:12 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 415C05D9D3;
+        Fri, 24 Jul 2020 17:47:15 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>
 Cc:     Hans de Goede <hdegoede@redhat.com>, linux-usb@vger.kernel.org
-Subject: [PATCH v2 4/6] usb: typec: tcpm: Refactor tcpm_handle_vdm_request
-Date:   Fri, 24 Jul 2020 19:47:00 +0200
-Message-Id: <20200724174702.61754-4-hdegoede@redhat.com>
+Subject: [PATCH v2 5/6] usb: typec: tcpm: Fix AB BA lock inversion between tcpm code and the alt-mode drivers
+Date:   Fri, 24 Jul 2020 19:47:01 +0200
+Message-Id: <20200724174702.61754-5-hdegoede@redhat.com>
 In-Reply-To: <20200724174702.61754-1-hdegoede@redhat.com>
 References: <20200724174702.61754-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -51,178 +51,136 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Refactor tcpm_handle_vdm_request and its tcpm_pd_svdm helper function so
-that reporting the results of the vdm to the altmode-driver is separated
-out into a clear separate step inside tcpm_handle_vdm_request, instead
-of being scattered over various places inside the tcpm_pd_svdm helper.
+When we receive a PD data packet which ends up being for the alt-mode
+driver we have the following lock order:
 
-This is a preparation patch for fixing an AB BA lock inversion between the
-tcpm code and some altmode drivers.
+1. tcpm_pd_rx_handler take the tcpm-port lock
+2. We call into the alt-mode driver which takes the alt-mode's lock
+
+And when the alt-mode driver initiates communication we have the following
+lock order:
+
+3. alt-mode driver takes the alt-mode's lock
+4. alt-mode driver calls tcpm_altmode_enter which takes the tcpm-port lock
+
+This is a classic AB BA lock inversion issue.
+
+With the refactoring of tcpm_handle_vdm_request() done before this patch,
+we don't rely on, or need to make changes to the tcpm-port data by the
+time we make call 2. from above. All data to be passed to the alt-mode
+driver sits on our stack at this point, and thus does not need locking.
+
+So after the refactoring we can simply fix this by releasing the
+tcpm-port lock before calling into the alt-mode driver.
+
+This fixes the following lockdep warning:
+
+[  191.454238] ======================================================
+[  191.454240] WARNING: possible circular locking dependency detected
+[  191.454244] 5.8.0-rc5+ #1 Not tainted
+[  191.454246] ------------------------------------------------------
+[  191.454248] kworker/u8:5/794 is trying to acquire lock:
+[  191.454251] ffff9bac8e30d4a8 (&dp->lock){+.+.}-{3:3}, at: dp_altmode_vdm+0x30/0xf0 [typec_displayport]
+[  191.454263]
+               but task is already holding lock:
+[  191.454264] ffff9bac9dc240a0 (&port->lock#2){+.+.}-{3:3}, at: tcpm_pd_rx_handler+0x43/0x12c0 [tcpm]
+[  191.454273]
+               which lock already depends on the new lock.
+
+[  191.454275]
+               the existing dependency chain (in reverse order) is:
+[  191.454277]
+               -> #1 (&port->lock#2){+.+.}-{3:3}:
+[  191.454286]        __mutex_lock+0x7b/0x820
+[  191.454290]        tcpm_altmode_enter+0x23/0x90 [tcpm]
+[  191.454293]        dp_altmode_work+0xca/0xe0 [typec_displayport]
+[  191.454299]        process_one_work+0x23f/0x570
+[  191.454302]        worker_thread+0x55/0x3c0
+[  191.454305]        kthread+0x138/0x160
+[  191.454309]        ret_from_fork+0x22/0x30
+[  191.454311]
+               -> #0 (&dp->lock){+.+.}-{3:3}:
+[  191.454317]        __lock_acquire+0x1241/0x2090
+[  191.454320]        lock_acquire+0xa4/0x3d0
+[  191.454323]        __mutex_lock+0x7b/0x820
+[  191.454326]        dp_altmode_vdm+0x30/0xf0 [typec_displayport]
+[  191.454330]        tcpm_pd_rx_handler+0x11ae/0x12c0 [tcpm]
+[  191.454333]        process_one_work+0x23f/0x570
+[  191.454336]        worker_thread+0x55/0x3c0
+[  191.454338]        kthread+0x138/0x160
+[  191.454341]        ret_from_fork+0x22/0x30
+[  191.454343]
+               other info that might help us debug this:
+
+[  191.454345]  Possible unsafe locking scenario:
+
+[  191.454347]        CPU0                    CPU1
+[  191.454348]        ----                    ----
+[  191.454350]   lock(&port->lock#2);
+[  191.454353]                                lock(&dp->lock);
+[  191.454355]                                lock(&port->lock#2);
+[  191.454357]   lock(&dp->lock);
+[  191.454360]
+                *** DEADLOCK ***
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
 Changes in v2:
-- Keep "if (adev && pdev)" checks as is instead of modifying them
+-Move the mutex_lock call to above the tcpm_queue_vdm() call, so that
+ we can use the regular tcpm_queue_vdm() instead of having to call
+ tcpm_queue_vdm_unlocked()
 ---
- drivers/usb/typec/tcpm/tcpm.c | 76 ++++++++++++++++++++++-------------
- 1 file changed, 48 insertions(+), 28 deletions(-)
+ drivers/usb/typec/tcpm/tcpm.c | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
 diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index ee239b54bcd8..03a0c083ee9a 100644
+index 03a0c083ee9a..9b26b57a0172 100644
 --- a/drivers/usb/typec/tcpm/tcpm.c
 +++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -159,6 +159,14 @@ enum pd_msg_request {
- 	PD_MSG_DATA_SOURCE_CAP,
- };
- 
-+enum adev_actions {
-+	ADEV_NONE = 0,
-+	ADEV_NOTIFY_USB_AND_QUEUE_VDM,
-+	ADEV_QUEUE_VDM,
-+	ADEV_QUEUE_VDM_SEND_EXIT_MODE_ON_FAIL,
-+	ADEV_ATTENTION,
-+};
-+
- /* Events from low level driver */
- 
- #define TCPM_CC_EVENT		BIT(0)
-@@ -1078,10 +1086,10 @@ static void tcpm_register_partner_altmodes(struct tcpm_port *port)
- 
- #define supports_modal(port)	PD_IDH_MODAL_SUPP((port)->partner_ident.id_header)
- 
--static int tcpm_pd_svdm(struct tcpm_port *port, const u32 *p, int cnt,
--			u32 *response)
-+static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
-+			const u32 *p, int cnt, u32 *response,
-+			enum adev_actions *adev_action)
- {
--	struct typec_altmode *adev;
- 	struct typec_altmode *pdev;
- 	struct pd_mode_data *modep;
- 	int rlen = 0;
-@@ -1097,9 +1105,6 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const u32 *p, int cnt,
- 
- 	modep = &port->mode_data;
- 
--	adev = typec_match_altmode(port->port_altmode, ALTMODE_DISCOVERY_MAX,
--				   PD_VDO_VID(p[0]), PD_VDO_OPOS(p[0]));
--
- 	pdev = typec_match_altmode(port->partner_altmode, ALTMODE_DISCOVERY_MAX,
- 				   PD_VDO_VID(p[0]), PD_VDO_OPOS(p[0]));
- 
-@@ -1125,8 +1130,7 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const u32 *p, int cnt,
- 			break;
- 		case CMD_ATTENTION:
- 			/* Attention command does not have response */
--			if (adev)
--				typec_altmode_attention(adev, p[1]);
-+			*adev_action = ADEV_ATTENTION;
- 			return 0;
- 		default:
- 			break;
-@@ -1180,23 +1184,15 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const u32 *p, int cnt,
- 		case CMD_ENTER_MODE:
- 			if (adev && pdev) {
- 				typec_altmode_update_active(pdev, true);
--
--				if (typec_altmode_vdm(adev, p[0], &p[1], cnt)) {
--					response[0] = VDO(adev->svid, 1,
--							  CMD_EXIT_MODE);
--					response[0] |= VDO_OPOS(adev->mode);
--					return 1;
--				}
-+				*adev_action = ADEV_QUEUE_VDM_SEND_EXIT_MODE_ON_FAIL;
- 			}
- 			return 0;
- 		case CMD_EXIT_MODE:
- 			if (adev && pdev) {
- 				typec_altmode_update_active(pdev, false);
--
- 				/* Back to USB Operation */
--				WARN_ON(typec_altmode_notify(adev,
--							     TYPEC_STATE_USB,
--							     NULL));
-+				*adev_action = ADEV_NOTIFY_USB_AND_QUEUE_VDM;
-+				return 0;
- 			}
- 			break;
- 		default:
-@@ -1207,11 +1203,8 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const u32 *p, int cnt,
- 		switch (cmd) {
- 		case CMD_ENTER_MODE:
- 			/* Back to USB Operation */
--			if (adev)
--				WARN_ON(typec_altmode_notify(adev,
--							     TYPEC_STATE_USB,
--							     NULL));
--			break;
-+			*adev_action = ADEV_NOTIFY_USB_AND_QUEUE_VDM;
-+			return 0;
- 		default:
- 			break;
- 		}
-@@ -1221,15 +1214,15 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const u32 *p, int cnt,
- 	}
- 
- 	/* Informing the alternate mode drivers about everything */
--	if (adev)
--		typec_altmode_vdm(adev, p[0], &p[1], cnt);
--
-+	*adev_action = ADEV_QUEUE_VDM;
- 	return rlen;
- }
- 
- static void tcpm_handle_vdm_request(struct tcpm_port *port,
- 				    const __le32 *payload, int cnt)
- {
-+	enum adev_actions adev_action = ADEV_NONE;
-+	struct typec_altmode *adev;
- 	u32 p[PD_MAX_PAYLOAD];
- 	u32 response[8] = { };
- 	int i, rlen = 0;
-@@ -1237,6 +1230,9 @@ static void tcpm_handle_vdm_request(struct tcpm_port *port,
- 	for (i = 0; i < cnt; i++)
- 		p[i] = le32_to_cpu(payload[i]);
- 
-+	adev = typec_match_altmode(port->port_altmode, ALTMODE_DISCOVERY_MAX,
-+				   PD_VDO_VID(p[0]), PD_VDO_OPOS(p[0]));
-+
- 	if (port->vdm_state == VDM_STATE_BUSY) {
- 		/* If UFP responded busy retry after timeout */
- 		if (PD_VDO_CMDT(p[0]) == CMDT_RSP_BUSY) {
-@@ -1251,7 +1247,31 @@ static void tcpm_handle_vdm_request(struct tcpm_port *port,
- 	}
- 
+@@ -1249,6 +1249,27 @@ static void tcpm_handle_vdm_request(struct tcpm_port *port,
  	if (PD_VDO_SVDM(p[0]))
--		rlen = tcpm_pd_svdm(port, p, cnt, response);
-+		rlen = tcpm_pd_svdm(port, adev, p, cnt, response, &adev_action);
-+
-+	if (adev) {
-+		switch (adev_action) {
-+		case ADEV_NONE:
-+			break;
-+		case ADEV_NOTIFY_USB_AND_QUEUE_VDM:
-+			WARN_ON(typec_altmode_notify(adev, TYPEC_STATE_USB, NULL));
-+			typec_altmode_vdm(adev, p[0], &p[1], cnt);
-+			break;
-+		case ADEV_QUEUE_VDM:
-+			typec_altmode_vdm(adev, p[0], &p[1], cnt);
-+			break;
-+		case ADEV_QUEUE_VDM_SEND_EXIT_MODE_ON_FAIL:
-+			if (typec_altmode_vdm(adev, p[0], &p[1], cnt)) {
-+				response[0] = VDO(adev->svid, 1, CMD_EXIT_MODE);
-+				response[0] |= VDO_OPOS(adev->mode);
-+				rlen = 1;
-+			}
-+			break;
-+		case ADEV_ATTENTION:
-+			typec_altmode_attention(adev, p[1]);
-+			break;
-+		}
-+	}
+ 		rlen = tcpm_pd_svdm(port, adev, p, cnt, response, &adev_action);
  
++	/*
++	 * We are done with any state stored in the port struct now, except
++	 * for any port struct changes done by the tcpm_queue_vdm() call
++	 * below, which is a separate operation.
++	 *
++	 * So we can safely release the lock here; and we MUST release the
++	 * lock here to avoid an AB BA lock inversion:
++	 *
++	 * If we keep the lock here then the lock ordering in this path is:
++	 * 1. tcpm_pd_rx_handler take the tcpm port lock
++	 * 2. One of the typec_altmode_* calls below takes the alt-mode's lock
++	 *
++	 * And we also have this ordering:
++	 * 1. alt-mode driver takes the alt-mode's lock
++	 * 2. alt-mode driver calls tcpm_altmode_enter which takes the
++	 *    tcpm port lock
++	 *
++	 * Dropping our lock here avoids this.
++	 */
++	mutex_unlock(&port->lock);
++
+ 	if (adev) {
+ 		switch (adev_action) {
+ 		case ADEV_NONE:
+@@ -1273,6 +1294,15 @@ static void tcpm_handle_vdm_request(struct tcpm_port *port,
+ 		}
+ 	}
+ 
++	/*
++	 * We must re-take the lock here to balance the unlock in
++	 * tcpm_pd_rx_handler, note that no changes, other then the
++	 * tcpm_queue_vdm call, are made while the lock is held again.
++	 * All that is done after the call is unwinding the call stack until
++	 * we return to tcpm_pd_rx_handler and do the unlock there.
++	 */
++	mutex_lock(&port->lock);
++
  	if (rlen > 0)
  		tcpm_queue_vdm(port, response[0], &response[1], rlen - 1);
+ }
 -- 
 2.26.2
 
