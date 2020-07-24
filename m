@@ -2,85 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B0E022CC8B
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 19:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F200822CCB1
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 19:57:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726971AbgGXRrY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jul 2020 13:47:24 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:23393 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726826AbgGXRrX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jul 2020 13:47:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1595612842;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2I112MFdsbDPPwKXfByfiQ4KTw63OFgWun/3tC0b8IQ=;
-        b=HbtigDQJT5+OMd4bDU4GCfr/W452/vyus/Jtp6lwv5yqa2XnhQAEHQng9mTNJxqY1j6qBA
-        2ERXDaOSIK3cpEapWjFvjkW+zrHi/4o2vfpANAVqYQE2R+AX9rwO4PWb2dx8RFqEjjyPo9
-        q0inLfDH+o0CXGRSI9TaS5uF+vGJPFA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-353-Qod0WCnmOv-1lH3mnLAJHw-1; Fri, 24 Jul 2020 13:47:20 -0400
-X-MC-Unique: Qod0WCnmOv-1lH3mnLAJHw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4EA76107ACCA;
-        Fri, 24 Jul 2020 17:47:19 +0000 (UTC)
-Received: from x1.localdomain.com (ovpn-112-63.ams2.redhat.com [10.36.112.63])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1FBED5D9D3;
-        Fri, 24 Jul 2020 17:47:17 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S1726381AbgGXR5U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jul 2020 13:57:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51550 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726317AbgGXR5T (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jul 2020 13:57:19 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7858C0619D3
+        for <linux-usb@vger.kernel.org>; Fri, 24 Jul 2020 10:57:18 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id s9so10812951ljm.11
+        for <linux-usb@vger.kernel.org>; Fri, 24 Jul 2020 10:57:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=IiecWBlpeMlAossAeTVkpEy+x6lMeCVx/nxrNqdqeZc=;
+        b=mHez2R2jxMcoe6mE97j/+jcOIPrrwsVSOushhmLEdoRpAbaf/RBGnViTsj5rMNCzGJ
+         Jskcv3gNCQ5mYb+OBej/959aezBi1HsDljsHxkGlIkanXX6YEGjojlIN92Cf/DQaWFXG
+         owt6Vm5lBzTtuH5iO03KRXaVq1Ufg5+JFzbtcA9AS2NBTAIEz7JM7DnOLWMboRH903JM
+         ezxR8z8B52Ld46OyVHGtGShn7XKhtiMMYG4T/MBCWaMCsNjb8IDfnToUPfa9VWahAxsw
+         DmPmAZlB1Tn9NDg7ZWMxbYiT033bI6qCG6wGN1ArwoUct6CSLPqjBaJabKnKZWm8JoUn
+         +ilw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=IiecWBlpeMlAossAeTVkpEy+x6lMeCVx/nxrNqdqeZc=;
+        b=du5LWUcne5jT42NgWyANWYbh6qIZxEK+dEQEBjIOL/HZsonUwcmlFIsNiReIvNXhPS
+         iOBN6WCtACpeHXzPLj0qMpZ4KVYMscfvUmGdya+/GbaMxOlphz5PkD+Y0N/apOZdCI6j
+         5CtUnDVFVEVHwXoXE+gVeNCKgPCeXYDAIcPX8Q7Tth9ap3I0ynwzWAOZ5KZ2DPmc7Dqn
+         zdOHfYWw8SmiL1ZAkjE/sEPm22lrNFIIJQNxmeicSQuf8KUx+ZZUDJq/jq4+31MXtQu4
+         eakaHf8sqi2elMgh4/mPJ94FOo2AmlM0xK9HCYY806qVkLLIKu/5B8liEXsJ9CLu8Rji
+         iz8w==
+X-Gm-Message-State: AOAM530dmetiFPDAD5+WeCVVSGCh4kcZ8JipXy1Bd7CG3KmEC2tLSNuh
+        cCRAuPIH4RaCO/Hp3RhDtIBoRyCPGxE=
+X-Google-Smtp-Source: ABdhPJwpSPvzYNVmLmAiBejPBMKboCvvDrV82VZ5U+LH27iD5brEkAstgh6BeFrAqn1v2xvzQLMcOQ==
+X-Received: by 2002:a2e:88d0:: with SMTP id a16mr5063651ljk.213.1595613436764;
+        Fri, 24 Jul 2020 10:57:16 -0700 (PDT)
+Received: from wasted.omprussia.ru ([2a00:1fa0:80f:eec9:9f1f:2e41:78b8:6474])
+        by smtp.gmail.com with ESMTPSA id m20sm399827lfb.72.2020.07.24.10.57.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Jul 2020 10:57:16 -0700 (PDT)
+Subject: Re: [PATCH v2 6/6] usb: typec: tcpm: Add WARN_ON ensure we are not
+ trying to send 2 VDM packets at the same time
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>, linux-usb@vger.kernel.org
-Subject: [PATCH v2 6/6] usb: typec: tcpm: Add WARN_ON ensure we are not trying to send 2 VDM packets at the same time
-Date:   Fri, 24 Jul 2020 19:47:02 +0200
-Message-Id: <20200724174702.61754-6-hdegoede@redhat.com>
-In-Reply-To: <20200724174702.61754-1-hdegoede@redhat.com>
+Cc:     linux-usb@vger.kernel.org
 References: <20200724174702.61754-1-hdegoede@redhat.com>
+ <20200724174702.61754-6-hdegoede@redhat.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <41ecf2f2-33c4-466a-ee42-37d1a3ccbb7f@gmail.com>
+Date:   Fri, 24 Jul 2020 20:57:14 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+In-Reply-To: <20200724174702.61754-6-hdegoede@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The tcpm.c code for sending VDMs assumes that there will only be one VDM
-in flight at the time. The "queue" used by tcpm_queue_vdm is only 1 entry
-deep.
+Hello.
 
-This assumes that the higher layers (tcpm state-machine and alt-mode
-drivers) ensure that queuing a new VDM before the old one has been
-completely send (or it timed out) add a WARN_ON to check for this.
+On 7/24/20 8:47 PM, Hans de Goede wrote:
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
-Changes in v2:
-- Fix typo in commit-msg subject
----
- drivers/usb/typec/tcpm/tcpm.c | 3 +++
- 1 file changed, 3 insertions(+)
+> The tcpm.c code for sending VDMs assumes that there will only be one VDM
+> in flight at the time. The "queue" used by tcpm_queue_vdm is only 1 entry
+> deep.
+> 
+> This assumes that the higher layers (tcpm state-machine and alt-mode
+> drivers) ensure that queuing a new VDM before the old one has been
+> completely send (or it timed out) add a WARN_ON to check for this.
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 9b26b57a0172..cc786d558f14 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -971,6 +971,9 @@ static void tcpm_queue_vdm(struct tcpm_port *port, const u32 header,
- {
- 	WARN_ON(!mutex_is_locked(&port->lock));
- 
-+	/* Make sure we are not still processing a previous VDM packet */
-+	WARN_ON(port->vdm_state > VDM_STATE_DONE);
-+
- 	port->vdo_count = cnt + 1;
- 	port->vdo_data[0] = header;
- 	memcpy(&port->vdo_data[1], data, sizeof(u32) * cnt);
--- 
-2.26.2
+   Sent?
 
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> ---
+> Changes in v2:
+> - Fix typo in commit-msg subject
+
+  Another typo? :-)
+
+[...]
+
+MBR, Sergei
