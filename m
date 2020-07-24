@@ -2,271 +2,536 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E13A22C943
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 17:31:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABB8522C976
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 17:51:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726424AbgGXPbP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jul 2020 11:31:15 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:20126 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726366AbgGXPbO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jul 2020 11:31:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1595604672;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eZJqqjmOuiSI1QvODewrC9T02sHT4boO6cRGPXV6P2k=;
-        b=TFXONDfFYSvPIPkzn+TKwIzxXvrvyLWL/nKNsEXAvUwD0J1rShnzsQj0q0QkRM/c+YMWbs
-        p5sCwkxvCCbqF/FcC2xXnkKmocN6luQ4Ft53Ug8I1AJZfeTl5AxQZO6/fb7bXXS92c4ZWV
-        23tX+B69tM572m6LnJdozuTwXXi5QFk=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-302-wCR9dn3FNeOc7Qb3bYcozg-1; Fri, 24 Jul 2020 11:31:10 -0400
-X-MC-Unique: wCR9dn3FNeOc7Qb3bYcozg-1
-Received: by mail-wm1-f69.google.com with SMTP id t26so3489625wmn.4
-        for <linux-usb@vger.kernel.org>; Fri, 24 Jul 2020 08:31:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+        id S1726701AbgGXPvK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jul 2020 11:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59666 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726381AbgGXPvJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jul 2020 11:51:09 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D342C0619D3;
+        Fri, 24 Jul 2020 08:51:09 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id 1so5366965pfn.9;
+        Fri, 24 Jul 2020 08:51:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=eZJqqjmOuiSI1QvODewrC9T02sHT4boO6cRGPXV6P2k=;
-        b=QGHnzxN2uVp9Fvo5DnAP1SqfYxLaKE2SL1jbJzIVsHkCQt5ecEkwMZf9c3IVTW41x8
-         rN/tPRzLiafwv1JwkeNFBMXrxrkCKbcZuqCC/qN307dkCvY7cYsX4ZYSxGX+Y+BKqhVM
-         YqN0N4Ve4RW0Y3BbZjCBr+DPq3mf9Dh0z1jyK2vII5qa9lJW3obgRwmHoOQBskuq6uTu
-         Ic3rFrhPCeEGBVw3CdPGpfcr3xVessR0FC6wPV0KVzH0ZyShLgu9mfYbUHB3Xl6Ur9DS
-         iCT6stNlDEp0hjItPBwT4bn3NJPO7AeN1wwnuKqMsVym+sl0v1ZJCaNVfubUSq0TKGJX
-         pBTA==
-X-Gm-Message-State: AOAM532kaRC6ckNWtn04rrD7sQtBhKWenwMjBRuaoZrHLOcnhJQ5jOk3
-        Zh1t72RILqq3ORO7hf/kRwtMrcT+G3zalDm/4LoQ5lC3aJ52jWZ9cnheJooAwF2Z04k0W5+5BmS
-        Hkl6IOnZ2ab/PK8WqdvX9
-X-Received: by 2002:adf:e704:: with SMTP id c4mr9884731wrm.81.1595604669241;
-        Fri, 24 Jul 2020 08:31:09 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxWpNQUgZgZNGU5OAHELleH9rA1PHk+gvh8b/8q2Olo+bVYlbrfaIJZNqnwLIMShITabfWA4w==
-X-Received: by 2002:adf:e704:: with SMTP id c4mr9884718wrm.81.1595604668951;
-        Fri, 24 Jul 2020 08:31:08 -0700 (PDT)
-Received: from x1.localdomain ([2a0e:5700:4:11:334c:7e36:8d57:40cb])
-        by smtp.gmail.com with ESMTPSA id q5sm1658282wrp.60.2020.07.24.08.31.07
+        bh=jNEo31toiJB9dfZ8OqYOee5qAU0hngLVfQj3HH0QAIA=;
+        b=oR6m7Z6ACWAu5T9SJP8AMeyyu0j7VSO3xHhbzB+mte53kzEYp5Vupri+paNIMn+h5y
+         9uaZrD/cPkgvDfwq4HTesyYg21dJ7NQQwZ17odWRSh3rz71cs9gx/tMQ6+SlVarfFBv8
+         QYoof3pQuvQRtrHhDGN8VUUQRoMbKQM2vXAk86CRi5lQRvqtNMwq0KOqr7iuG1gsiy+/
+         mUaslIt50I5UOmPT1AWvTD3NLDwHj4qUbn9JBawe9hJjcrQ2JSPgFpqV2VgGxsuOAGyE
+         90FicKH4zadRDPetCVPVNcuANlZkKsb//Ev86AwCU/Eh6XblsIOWY1W0NYfxfKyhQLvG
+         Nm4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=jNEo31toiJB9dfZ8OqYOee5qAU0hngLVfQj3HH0QAIA=;
+        b=NlbtltgsYpfkXOd3lC5B9Bk1V/sNotNt861kLMuP97uJtXmp9eolVF0E0M5yBhZilr
+         b09P/G5Y9YpDYaRx8MZHGx3ReDC5WN/5QJKbMOnV/LgebZJUX/7IxmMoAlYRIwT4xOyX
+         lmWiSn4eLwPj6QkiAmsyPLRdGsVCqKqHlzgyLlK0Rop5+R6teGyNEOljJdflFIotxFQ6
+         n8qpF6RXnB3J1Gl4O6V1AwGTJoRhaPJdKeudwlyAuKVSGMMPcyysDiBzfwPFDc9x8Mn2
+         X5xkR9EqYgTnaqbcHCiRhFwN7HaEvN5Zg/S3i8uSx3XIvtlciN+IcpGKkOR89x+eJ54p
+         S6ow==
+X-Gm-Message-State: AOAM533y5KDpc3yjLcH1ZBHplJjfRgHAISkggyOUvZSamWEdA50cQ/YJ
+        6htsXqV+eblr/G3gsZtfG6L6if/9
+X-Google-Smtp-Source: ABdhPJwX3lYXm6ndO+ushBvpE1HOaUstYlvIshu6IUkDEoajroyPj9lwQR3L+PWLlYVFJ+Lws1neHQ==
+X-Received: by 2002:a65:6448:: with SMTP id s8mr8142407pgv.405.1595605868596;
+        Fri, 24 Jul 2020 08:51:08 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g10sm6795765pfr.164.2020.07.24.08.51.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jul 2020 08:31:08 -0700 (PDT)
-Subject: Re: [PATCH 4/6] usb: typec: tcpm: Refactor tcpm_handle_vdm_request
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org
-References: <20200715132301.99816-1-hdegoede@redhat.com>
- <20200715132301.99816-5-hdegoede@redhat.com>
- <68fd64dd-0543-7a94-225d-16d21a4de149@roeck-us.net>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <0f688a25-8eef-077f-b785-e3f2ff04bee4@redhat.com>
-Date:   Fri, 24 Jul 2020 17:31:07 +0200
+        Fri, 24 Jul 2020 08:51:07 -0700 (PDT)
+Subject: Re: [PATCH v2] usb: typec: tcpm: Migrate workqueue to RT priority for
+ processing events
+To:     Badhri Jagan Sridharan <badhri@google.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200724020551.2737376-1-badhri@google.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <8ffed9f9-426c-7da2-47b7-4ca8fa8e8caf@roeck-us.net>
+Date:   Fri, 24 Jul 2020 08:51:06 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <68fd64dd-0543-7a94-225d-16d21a4de149@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20200724020551.2737376-1-badhri@google.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On 7/15/20 5:58 PM, Guenter Roeck wrote:
-> On 7/15/20 6:22 AM, Hans de Goede wrote:
->> Refactor tcpm_handle_vdm_request and its tcpm_pd_svdm helper function so
->> that reporting the results of the vdm to the altmode-driver is separated
->> out into a clear separate step inside tcpm_handle_vdm_request, instead
->> of being scattered over various places inside the tcpm_pd_svdm helper.
->>
->> This is a preparation patch for fixing an AB BA lock inversion between the
->> tcpm code and some altmode drivers.
->>
->> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
->> ---
->>   drivers/usb/typec/tcpm/tcpm.c | 80 +++++++++++++++++++++--------------
->>   1 file changed, 49 insertions(+), 31 deletions(-)
->>
->> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
->> index bf5a0322dbfe..4745b4062000 100644
->> --- a/drivers/usb/typec/tcpm/tcpm.c
->> +++ b/drivers/usb/typec/tcpm/tcpm.c
->> @@ -159,6 +159,14 @@ enum pd_msg_request {
->>   	PD_MSG_DATA_SOURCE_CAP,
->>   };
->>   
->> +enum adev_actions {
->> +	ADEV_NONE = 0,
->> +	ADEV_NOTIFY_USB_AND_QUEUE_VDM,
->> +	ADEV_QUEUE_VDM,
->> +	ADEV_QUEUE_VDM_SEND_EXIT_MODE_ON_FAIL,
->> +	ADEV_ATTENTION,
->> +};
->> +
->>   /* Events from low level driver */
->>   
->>   #define TCPM_CC_EVENT		BIT(0)
->> @@ -1079,9 +1087,8 @@ static void tcpm_register_partner_altmodes(struct tcpm_port *port)
->>   #define supports_modal(port)	PD_IDH_MODAL_SUPP((port)->partner_ident.id_header)
->>   
->>   static int tcpm_pd_svdm(struct tcpm_port *port, const u32 *p, int cnt,
->> -			u32 *response)
->> +			u32 *response, enum adev_actions *adev_action)
->>   {
->> -	struct typec_altmode *adev;
->>   	struct typec_altmode *pdev;
->>   	struct pd_mode_data *modep;
->>   	int rlen = 0;
->> @@ -1097,9 +1104,6 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const u32 *p, int cnt,
->>   
->>   	modep = &port->mode_data;
->>   
->> -	adev = typec_match_altmode(port->port_altmode, ALTMODE_DISCOVERY_MAX,
->> -				   PD_VDO_VID(p[0]), PD_VDO_OPOS(p[0]));
->> -
->>   	pdev = typec_match_altmode(port->partner_altmode, ALTMODE_DISCOVERY_MAX,
->>   				   PD_VDO_VID(p[0]), PD_VDO_OPOS(p[0]));
->>   
->> @@ -1125,8 +1129,7 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const u32 *p, int cnt,
->>   			break;
->>   		case CMD_ATTENTION:
->>   			/* Attention command does not have response */
->> -			if (adev)
->> -				typec_altmode_attention(adev, p[1]);
->> +			*adev_action = ADEV_ATTENTION;
->>   			return 0;
->>   		default:
->>   			break;
->> @@ -1178,27 +1181,18 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const u32 *p, int cnt,
->>   			}
->>   			break;
->>   		case CMD_ENTER_MODE:
->> -			if (adev && pdev) {
->> +			if (pdev)
->>   				typec_altmode_update_active(pdev, true);
->>   
+On 7/23/20 7:05 PM, Badhri Jagan Sridharan wrote:
+> "tReceiverResponse 15 ms Section 6.6.2
+> The receiver of a Message requiring a response Shall respond
+> within tReceiverResponse in order to ensure that the
+> sender’s SenderResponseTimer does not expire."
 > 
-> There is a slight semantic difference: typec_altmode_update_active() is now
-> called even if adev is NULL. Is this intentional ?
-
-Sort of, I was / am aware of this and choose to accept the small behavior change,
-since it seemed innocence and leads to some code cleanup, but thinking more about
-it the behavior change indeed seems unwanted, so I will fix this for v2 of the
-patch-set.
-
-Regards,
-
-Hans
-
-
-
+> When the cpu complex is busy running other lower priority
+> work items, TCPM's work queue sometimes does not get scheduled
+> on time to meet the above requirement from the spec.
+> Moving to kthread_work apis to run with real time priority.
+> Just lower than the default threaded irq priority,
+> MAX_USER_RT_PRIO/2 + 1. (Higher number implies lower priority).
 > 
->> -				if (typec_altmode_vdm(adev, p[0], &p[1], cnt)) {
->> -					response[0] = VDO(adev->svid, 1,
->> -							  CMD_EXIT_MODE);
->> -					response[0] |= VDO_OPOS(adev->mode);
->> -					return 1;
->> -				}
->> -			}
->> +			*adev_action = ADEV_QUEUE_VDM_SEND_EXIT_MODE_ON_FAIL;
->>   			return 0;
->>   		case CMD_EXIT_MODE:
->> -			if (adev && pdev) {
->> +			if (pdev)
->>   				typec_altmode_update_active(pdev, false);
->>   
->> -				/* Back to USB Operation */
->> -				WARN_ON(typec_altmode_notify(adev,
->> -							     TYPEC_STATE_USB,
->> -							     NULL));
->> -			}
->> -			break;
->> +			/* Back to USB Operation */
->> +			*adev_action = ADEV_NOTIFY_USB_AND_QUEUE_VDM;
->> +			return 0;
->>   		default:
->>   			break;
->>   		}
->> @@ -1207,11 +1201,8 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const u32 *p, int cnt,
->>   		switch (cmd) {
->>   		case CMD_ENTER_MODE:
->>   			/* Back to USB Operation */
->> -			if (adev)
->> -				WARN_ON(typec_altmode_notify(adev,
->> -							     TYPEC_STATE_USB,
->> -							     NULL));
->> -			break;
->> +			*adev_action = ADEV_NOTIFY_USB_AND_QUEUE_VDM;
->> +			return 0;
->>   		default:
->>   			break;
->>   		}
->> @@ -1221,15 +1212,15 @@ static int tcpm_pd_svdm(struct tcpm_port *port, const u32 *p, int cnt,
->>   	}
->>   
->>   	/* Informing the alternate mode drivers about everything */
->> -	if (adev)
->> -		typec_altmode_vdm(adev, p[0], &p[1], cnt);
->> -
->> +	*adev_action = ADEV_QUEUE_VDM;
->>   	return rlen;
->>   }
->>   
->>   static void tcpm_handle_vdm_request(struct tcpm_port *port,
->>   				    const __le32 *payload, int cnt)
->>   {
->> +	enum adev_actions adev_action = ADEV_NONE;
->> +	struct typec_altmode *adev;
->>   	u32 p[PD_MAX_PAYLOAD];
->>   	u32 response[8] = { };
->>   	int i, rlen = 0;
->> @@ -1237,6 +1228,9 @@ static void tcpm_handle_vdm_request(struct tcpm_port *port,
->>   	for (i = 0; i < cnt; i++)
->>   		p[i] = le32_to_cpu(payload[i]);
->>   
->> +	adev = typec_match_altmode(port->port_altmode, ALTMODE_DISCOVERY_MAX,
->> +				   PD_VDO_VID(p[0]), PD_VDO_OPOS(p[0]));
->> +
->>   	if (port->vdm_state == VDM_STATE_BUSY) {
->>   		/* If UFP responded busy retry after timeout */
->>   		if (PD_VDO_CMDT(p[0]) == CMDT_RSP_BUSY) {
->> @@ -1251,7 +1245,31 @@ static void tcpm_handle_vdm_request(struct tcpm_port *port,
->>   	}
->>   
->>   	if (PD_VDO_SVDM(p[0]))
->> -		rlen = tcpm_pd_svdm(port, p, cnt, response);
->> +		rlen = tcpm_pd_svdm(port, p, cnt, response, &adev_action);
->> +
->> +	if (adev) {
->> +		switch (adev_action) {
->> +		case ADEV_NONE:
->> +			break;
->> +		case ADEV_NOTIFY_USB_AND_QUEUE_VDM:
->> +			WARN_ON(typec_altmode_notify(adev, TYPEC_STATE_USB, NULL));
->> +			typec_altmode_vdm(adev, p[0], &p[1], cnt);
->> +			break;
->> +		case ADEV_QUEUE_VDM:
->> +			typec_altmode_vdm(adev, p[0], &p[1], cnt);
->> +			break;
->> +		case ADEV_QUEUE_VDM_SEND_EXIT_MODE_ON_FAIL:
->> +			if (typec_altmode_vdm(adev, p[0], &p[1], cnt)) {
->> +				response[0] = VDO(adev->svid, 1, CMD_EXIT_MODE);
->> +				response[0] |= VDO_OPOS(adev->mode);
->> +				rlen = 1;
->> +			}
->> +			break;
->> +		case ADEV_ATTENTION:
->> +			typec_altmode_attention(adev, p[1]);
->> +			break;
->> +		}
->> +	}
->>   
->>   	if (rlen > 0)
->>   		tcpm_queue_vdm_unlocked(port, response[0], &response[1], rlen - 1);
->>
+> Further, as observed in 1ff688209e2e, moving to hrtimers to
+> overcome scheduling latency while scheduling the delayed work.
+> 
+> TCPM has three work streams:
+> 1. tcpm_state_machine
+> 2. vdm_state_machine
+> 3. event_work
+> 
+> tcpm_state_machine and vdm_state_machine both schedule work in
+> future i.e. delayed. Hence each of them have a corresponding
+> hrtimer, tcpm_state_machine_timer & vdm_state_machine_timer.
+> 
+> When work is queued right away kthread_queue_work is used.
+> Else, the relevant timer is programmed and made to queue
+> the kthread_work upon timer expiry.
+> 
+> kthread_create_worker only creates one kthread worker thread,
+> hence single threadedness of workqueue is retained.
+> 
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+Thanks,
+Guenter
+
+> ---
+> 
+> Changes since v1:(Guenter's suggestions)
+> - Remove redundant call to hrtimer_cancel while calling
+>   hrtimer_start.
+> 
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 140 ++++++++++++++++++++++------------
+>  1 file changed, 92 insertions(+), 48 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index ff1cbd2147ca8a..fa9002944dc766 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -8,8 +8,10 @@
+>  #include <linux/completion.h>
+>  #include <linux/debugfs.h>
+>  #include <linux/device.h>
+> +#include <linux/hrtimer.h>
+>  #include <linux/jiffies.h>
+>  #include <linux/kernel.h>
+> +#include <linux/kthread.h>
+>  #include <linux/module.h>
+>  #include <linux/mutex.h>
+>  #include <linux/power_supply.h>
+> @@ -28,7 +30,8 @@
+>  #include <linux/usb/role.h>
+>  #include <linux/usb/tcpm.h>
+>  #include <linux/usb/typec_altmode.h>
+> -#include <linux/workqueue.h>
+> +
+> +#include <uapi/linux/sched/types.h>
+>  
+>  #define FOREACH_STATE(S)			\
+>  	S(INVALID_STATE),			\
+> @@ -195,7 +198,7 @@ struct tcpm_port {
+>  	struct device *dev;
+>  
+>  	struct mutex lock;		/* tcpm state machine lock */
+> -	struct workqueue_struct *wq;
+> +	struct kthread_worker *wq;
+>  
+>  	struct typec_capability typec_caps;
+>  	struct typec_port *typec_port;
+> @@ -239,15 +242,17 @@ struct tcpm_port {
+>  	enum tcpm_state prev_state;
+>  	enum tcpm_state state;
+>  	enum tcpm_state delayed_state;
+> -	unsigned long delayed_runtime;
+> +	ktime_t delayed_runtime;
+>  	unsigned long delay_ms;
+>  
+>  	spinlock_t pd_event_lock;
+>  	u32 pd_events;
+>  
+> -	struct work_struct event_work;
+> -	struct delayed_work state_machine;
+> -	struct delayed_work vdm_state_machine;
+> +	struct kthread_work event_work;
+> +	struct hrtimer state_machine_timer;
+> +	struct kthread_work state_machine;
+> +	struct hrtimer vdm_state_machine_timer;
+> +	struct kthread_work vdm_state_machine;
+>  	bool state_machine_running;
+>  
+>  	struct completion tx_complete;
+> @@ -332,7 +337,7 @@ struct tcpm_port {
+>  };
+>  
+>  struct pd_rx_event {
+> -	struct work_struct work;
+> +	struct kthread_work work;
+>  	struct tcpm_port *port;
+>  	struct pd_message msg;
+>  };
+> @@ -906,6 +911,27 @@ static int tcpm_pd_send_sink_caps(struct tcpm_port *port)
+>  	return tcpm_pd_transmit(port, TCPC_TX_SOP, &msg);
+>  }
+>  
+> +static void mod_tcpm_delayed_work(struct tcpm_port *port, unsigned int delay_ms)
+> +{
+> +	if (delay_ms) {
+> +		hrtimer_start(&port->state_machine_timer, ms_to_ktime(delay_ms), HRTIMER_MODE_REL);
+> +	} else {
+> +		hrtimer_cancel(&port->state_machine_timer);
+> +		kthread_queue_work(port->wq, &port->state_machine);
+> +	}
+> +}
+> +
+> +static void mod_vdm_delayed_work(struct tcpm_port *port, unsigned int delay_ms)
+> +{
+> +	if (delay_ms) {
+> +		hrtimer_start(&port->vdm_state_machine_timer, ms_to_ktime(delay_ms),
+> +			      HRTIMER_MODE_REL);
+> +	} else {
+> +		hrtimer_cancel(&port->vdm_state_machine_timer);
+> +		kthread_queue_work(port->wq, &port->vdm_state_machine);
+> +	}
+> +}
+> +
+>  static void tcpm_set_state(struct tcpm_port *port, enum tcpm_state state,
+>  			   unsigned int delay_ms)
+>  {
+> @@ -914,9 +940,8 @@ static void tcpm_set_state(struct tcpm_port *port, enum tcpm_state state,
+>  			 tcpm_states[port->state], tcpm_states[state],
+>  			 delay_ms);
+>  		port->delayed_state = state;
+> -		mod_delayed_work(port->wq, &port->state_machine,
+> -				 msecs_to_jiffies(delay_ms));
+> -		port->delayed_runtime = jiffies + msecs_to_jiffies(delay_ms);
+> +		mod_tcpm_delayed_work(port, delay_ms);
+> +		port->delayed_runtime = ktime_add(ktime_get(), ms_to_ktime(delay_ms));
+>  		port->delay_ms = delay_ms;
+>  	} else {
+>  		tcpm_log(port, "state change %s -> %s",
+> @@ -931,7 +956,7 @@ static void tcpm_set_state(struct tcpm_port *port, enum tcpm_state state,
+>  		 * machine.
+>  		 */
+>  		if (!port->state_machine_running)
+> -			mod_delayed_work(port->wq, &port->state_machine, 0);
+> +			mod_tcpm_delayed_work(port, 0);
+>  	}
+>  }
+>  
+> @@ -952,7 +977,7 @@ static void tcpm_queue_message(struct tcpm_port *port,
+>  			       enum pd_msg_request message)
+>  {
+>  	port->queued_message = message;
+> -	mod_delayed_work(port->wq, &port->state_machine, 0);
+> +	mod_tcpm_delayed_work(port, 0);
+>  }
+>  
+>  /*
+> @@ -1238,8 +1263,7 @@ static void tcpm_handle_vdm_request(struct tcpm_port *port,
+>  			port->vdm_state = VDM_STATE_WAIT_RSP_BUSY;
+>  			port->vdo_retry = (p0 & ~VDO_CMDT_MASK) |
+>  				CMDT_INIT;
+> -			mod_delayed_work(port->wq, &port->vdm_state_machine,
+> -					 msecs_to_jiffies(PD_T_VDM_BUSY));
+> +			mod_vdm_delayed_work(port, PD_T_VDM_BUSY);
+>  			return;
+>  		}
+>  		port->vdm_state = VDM_STATE_DONE;
+> @@ -1250,7 +1274,7 @@ static void tcpm_handle_vdm_request(struct tcpm_port *port,
+>  
+>  	if (rlen > 0) {
+>  		tcpm_queue_vdm(port, response[0], &response[1], rlen - 1);
+> -		mod_delayed_work(port->wq, &port->vdm_state_machine, 0);
+> +		mod_vdm_delayed_work(port, 0);
+>  	}
+>  }
+>  
+> @@ -1267,7 +1291,7 @@ static void tcpm_send_vdm(struct tcpm_port *port, u32 vid, int cmd,
+>  			1 : (PD_VDO_CMD(cmd) <= CMD_ATTENTION), cmd);
+>  	tcpm_queue_vdm(port, header, data, count);
+>  
+> -	mod_delayed_work(port->wq, &port->vdm_state_machine, 0);
+> +	mod_vdm_delayed_work(port, 0);
+>  }
+>  
+>  static unsigned int vdm_ready_timeout(u32 vdm_hdr)
+> @@ -1334,8 +1358,7 @@ static void vdm_run_state_machine(struct tcpm_port *port)
+>  			port->vdm_retries = 0;
+>  			port->vdm_state = VDM_STATE_BUSY;
+>  			timeout = vdm_ready_timeout(port->vdo_data[0]);
+> -			mod_delayed_work(port->wq, &port->vdm_state_machine,
+> -					 timeout);
+> +			mod_vdm_delayed_work(port, timeout);
+>  		}
+>  		break;
+>  	case VDM_STATE_WAIT_RSP_BUSY:
+> @@ -1364,10 +1387,9 @@ static void vdm_run_state_machine(struct tcpm_port *port)
+>  	}
+>  }
+>  
+> -static void vdm_state_machine_work(struct work_struct *work)
+> +static void vdm_state_machine_work(struct kthread_work *work)
+>  {
+> -	struct tcpm_port *port = container_of(work, struct tcpm_port,
+> -					      vdm_state_machine.work);
+> +	struct tcpm_port *port = container_of(work, struct tcpm_port, vdm_state_machine);
+>  	enum vdm_states prev_state;
+>  
+>  	mutex_lock(&port->lock);
+> @@ -1515,7 +1537,7 @@ static int tcpm_altmode_enter(struct typec_altmode *altmode, u32 *vdo)
+>  	header |= VDO_OPOS(altmode->mode);
+>  
+>  	tcpm_queue_vdm(port, header, vdo, vdo ? 1 : 0);
+> -	mod_delayed_work(port->wq, &port->vdm_state_machine, 0);
+> +	mod_vdm_delayed_work(port, 0);
+>  	mutex_unlock(&port->lock);
+>  
+>  	return 0;
+> @@ -1531,7 +1553,7 @@ static int tcpm_altmode_exit(struct typec_altmode *altmode)
+>  	header |= VDO_OPOS(altmode->mode);
+>  
+>  	tcpm_queue_vdm(port, header, NULL, 0);
+> -	mod_delayed_work(port->wq, &port->vdm_state_machine, 0);
+> +	mod_vdm_delayed_work(port, 0);
+>  	mutex_unlock(&port->lock);
+>  
+>  	return 0;
+> @@ -1544,7 +1566,7 @@ static int tcpm_altmode_vdm(struct typec_altmode *altmode,
+>  
+>  	mutex_lock(&port->lock);
+>  	tcpm_queue_vdm(port, header, data, count - 1);
+> -	mod_delayed_work(port->wq, &port->vdm_state_machine, 0);
+> +	mod_vdm_delayed_work(port, 0);
+>  	mutex_unlock(&port->lock);
+>  
+>  	return 0;
+> @@ -1961,7 +1983,7 @@ static void tcpm_pd_ext_msg_request(struct tcpm_port *port,
+>  	}
+>  }
+>  
+> -static void tcpm_pd_rx_handler(struct work_struct *work)
+> +static void tcpm_pd_rx_handler(struct kthread_work *work)
+>  {
+>  	struct pd_rx_event *event = container_of(work,
+>  						 struct pd_rx_event, work);
+> @@ -2023,10 +2045,10 @@ void tcpm_pd_receive(struct tcpm_port *port, const struct pd_message *msg)
+>  	if (!event)
+>  		return;
+>  
+> -	INIT_WORK(&event->work, tcpm_pd_rx_handler);
+> +	kthread_init_work(&event->work, tcpm_pd_rx_handler);
+>  	event->port = port;
+>  	memcpy(&event->msg, msg, sizeof(*msg));
+> -	queue_work(port->wq, &event->work);
+> +	kthread_queue_work(port->wq, &event->work);
+>  }
+>  EXPORT_SYMBOL_GPL(tcpm_pd_receive);
+>  
+> @@ -2079,9 +2101,9 @@ static bool tcpm_send_queued_message(struct tcpm_port *port)
+>  	} while (port->queued_message != PD_MSG_NONE);
+>  
+>  	if (port->delayed_state != INVALID_STATE) {
+> -		if (time_is_after_jiffies(port->delayed_runtime)) {
+> -			mod_delayed_work(port->wq, &port->state_machine,
+> -					 port->delayed_runtime - jiffies);
+> +		if (ktime_after(port->delayed_runtime, ktime_get())) {
+> +			mod_tcpm_delayed_work(port, ktime_to_ms(ktime_sub(port->delayed_runtime,
+> +									  ktime_get())));
+>  			return true;
+>  		}
+>  		port->delayed_state = INVALID_STATE;
+> @@ -3214,10 +3236,9 @@ static void run_state_machine(struct tcpm_port *port)
+>  	case SNK_DISCOVERY_DEBOUNCE_DONE:
+>  		if (!tcpm_port_is_disconnected(port) &&
+>  		    tcpm_port_is_sink(port) &&
+> -		    time_is_after_jiffies(port->delayed_runtime)) {
+> +		    ktime_after(port->delayed_runtime, ktime_get())) {
+>  			tcpm_set_state(port, SNK_DISCOVERY,
+> -				       jiffies_to_msecs(port->delayed_runtime -
+> -							jiffies));
+> +				       ktime_to_ms(ktime_sub(port->delayed_runtime, ktime_get())));
+>  			break;
+>  		}
+>  		tcpm_set_state(port, unattached_state(port), 0);
+> @@ -3612,10 +3633,9 @@ static void run_state_machine(struct tcpm_port *port)
+>  	}
+>  }
+>  
+> -static void tcpm_state_machine_work(struct work_struct *work)
+> +static void tcpm_state_machine_work(struct kthread_work *work)
+>  {
+> -	struct tcpm_port *port = container_of(work, struct tcpm_port,
+> -					      state_machine.work);
+> +	struct tcpm_port *port = container_of(work, struct tcpm_port, state_machine);
+>  	enum tcpm_state prev_state;
+>  
+>  	mutex_lock(&port->lock);
+> @@ -3975,7 +3995,7 @@ static void _tcpm_pd_hard_reset(struct tcpm_port *port)
+>  		       0);
+>  }
+>  
+> -static void tcpm_pd_event_handler(struct work_struct *work)
+> +static void tcpm_pd_event_handler(struct kthread_work *work)
+>  {
+>  	struct tcpm_port *port = container_of(work, struct tcpm_port,
+>  					      event_work);
+> @@ -4016,7 +4036,7 @@ void tcpm_cc_change(struct tcpm_port *port)
+>  	spin_lock(&port->pd_event_lock);
+>  	port->pd_events |= TCPM_CC_EVENT;
+>  	spin_unlock(&port->pd_event_lock);
+> -	queue_work(port->wq, &port->event_work);
+> +	kthread_queue_work(port->wq, &port->event_work);
+>  }
+>  EXPORT_SYMBOL_GPL(tcpm_cc_change);
+>  
+> @@ -4025,7 +4045,7 @@ void tcpm_vbus_change(struct tcpm_port *port)
+>  	spin_lock(&port->pd_event_lock);
+>  	port->pd_events |= TCPM_VBUS_EVENT;
+>  	spin_unlock(&port->pd_event_lock);
+> -	queue_work(port->wq, &port->event_work);
+> +	kthread_queue_work(port->wq, &port->event_work);
+>  }
+>  EXPORT_SYMBOL_GPL(tcpm_vbus_change);
+>  
+> @@ -4034,7 +4054,7 @@ void tcpm_pd_hard_reset(struct tcpm_port *port)
+>  	spin_lock(&port->pd_event_lock);
+>  	port->pd_events = TCPM_RESET_EVENT;
+>  	spin_unlock(&port->pd_event_lock);
+> -	queue_work(port->wq, &port->event_work);
+> +	kthread_queue_work(port->wq, &port->event_work);
+>  }
+>  EXPORT_SYMBOL_GPL(tcpm_pd_hard_reset);
+>  
+> @@ -4742,10 +4762,28 @@ static int devm_tcpm_psy_register(struct tcpm_port *port)
+>  	return PTR_ERR_OR_ZERO(port->psy);
+>  }
+>  
+> +static enum hrtimer_restart state_machine_timer_handler(struct hrtimer *timer)
+> +{
+> +	struct tcpm_port *port = container_of(timer, struct tcpm_port, state_machine_timer);
+> +
+> +	kthread_queue_work(port->wq, &port->state_machine);
+> +	return HRTIMER_NORESTART;
+> +}
+> +
+> +static enum hrtimer_restart vdm_state_machine_timer_handler(struct hrtimer *timer)
+> +{
+> +	struct tcpm_port *port = container_of(timer, struct tcpm_port, vdm_state_machine_timer);
+> +
+> +	kthread_queue_work(port->wq, &port->vdm_state_machine);
+> +	return HRTIMER_NORESTART;
+> +}
+> +
+>  struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
+>  {
+>  	struct tcpm_port *port;
+>  	int err;
+> +	/* Priority just lower than default irq thread priority */
+> +	struct sched_param param = {.sched_priority = (MAX_USER_RT_PRIO / 2) + 1,};
+>  
+>  	if (!dev || !tcpc ||
+>  	    !tcpc->get_vbus || !tcpc->set_cc || !tcpc->get_cc ||
+> @@ -4763,12 +4801,18 @@ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
+>  	mutex_init(&port->lock);
+>  	mutex_init(&port->swap_lock);
+>  
+> -	port->wq = create_singlethread_workqueue(dev_name(dev));
+> -	if (!port->wq)
+> -		return ERR_PTR(-ENOMEM);
+> -	INIT_DELAYED_WORK(&port->state_machine, tcpm_state_machine_work);
+> -	INIT_DELAYED_WORK(&port->vdm_state_machine, vdm_state_machine_work);
+> -	INIT_WORK(&port->event_work, tcpm_pd_event_handler);
+> +	port->wq = kthread_create_worker(0, dev_name(dev));
+> +	if (IS_ERR(port->wq))
+> +		return (struct tcpm_port *)port->wq;
+> +	sched_setscheduler(port->wq->task, SCHED_FIFO, &param);
+> +
+> +	kthread_init_work(&port->state_machine, tcpm_state_machine_work);
+> +	kthread_init_work(&port->vdm_state_machine, vdm_state_machine_work);
+> +	kthread_init_work(&port->event_work, tcpm_pd_event_handler);
+> +	hrtimer_init(&port->state_machine_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+> +	port->state_machine_timer.function = state_machine_timer_handler;
+> +	hrtimer_init(&port->vdm_state_machine_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+> +	port->vdm_state_machine_timer.function = vdm_state_machine_timer_handler;
+>  
+>  	spin_lock_init(&port->pd_event_lock);
+>  
+> @@ -4820,7 +4864,7 @@ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
+>  	usb_role_switch_put(port->role_sw);
+>  out_destroy_wq:
+>  	tcpm_debugfs_exit(port);
+> -	destroy_workqueue(port->wq);
+> +	kthread_destroy_worker(port->wq);
+>  	return ERR_PTR(err);
+>  }
+>  EXPORT_SYMBOL_GPL(tcpm_register_port);
+> @@ -4835,7 +4879,7 @@ void tcpm_unregister_port(struct tcpm_port *port)
+>  	typec_unregister_port(port->typec_port);
+>  	usb_role_switch_put(port->role_sw);
+>  	tcpm_debugfs_exit(port);
+> -	destroy_workqueue(port->wq);
+> +	kthread_destroy_worker(port->wq);
+>  }
+>  EXPORT_SYMBOL_GPL(tcpm_unregister_port);
+>  
 > 
 
