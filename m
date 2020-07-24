@@ -2,129 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 298C722CE91
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 21:17:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4676222CF08
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 22:06:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726689AbgGXTRT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jul 2020 15:17:19 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:34901 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726381AbgGXTRT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jul 2020 15:17:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1595618237;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AJj/7mTJTokfFN7V2SBXvCQ6TJ6IN4DPcE0cHn1s29c=;
-        b=CxBmKivfJaKx+RiMkJeQYD4/c0/Kg5lTuE8xgboLRdk/szxaVv18+89/XeExAxK9IrqkPH
-        QEJ209rK67mlSVtF77pL7G1Iq5kumsSJtVWV9+RQNav/cqyoQtu6/rsPjeizcjAdcaEBHo
-        TIZbpgJtV41dlD5klgY8xVC7wW3Uukk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-270-6BoaiVaGM7ebz50loHlDeQ-1; Fri, 24 Jul 2020 15:17:13 -0400
-X-MC-Unique: 6BoaiVaGM7ebz50loHlDeQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D39CF800464;
-        Fri, 24 Jul 2020 19:17:10 +0000 (UTC)
-Received: from x1.home (ovpn-112-71.phx2.redhat.com [10.3.112.71])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 80C546FEFE;
-        Fri, 24 Jul 2020 19:17:09 +0000 (UTC)
-Date:   Fri, 24 Jul 2020 13:17:08 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     WeitaoWang-oc <WeitaoWang-oc@zhaoxin.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "mathias.nyman@linux.intel.com" <mathias.nyman@linux.intel.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "hslester96@gmail.com" <hslester96@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Carsten_Schmid@mentor.com" <Carsten_Schmid@mentor.com>,
-        "efremov@linux.com" <efremov@linux.com>,
-        "Tony W. Wang(XA-RD)" <TonyWWang@zhaoxin.com>,
-        "Cobe Chen(BJ-RD)" <CobeChen@zhaoxin.com>,
-        "Tim Guo(BJ-RD)" <TimGuo@zhaoxin.com>,
-        "wwt8723@163.com" <wwt8723@163.com>
-Subject: Re: [PATCH] USB:Fix kernel NULL pointer when unbind UHCI form
- vfio-pci
-Message-ID: <20200724131708.0a0f3358@x1.home>
-In-Reply-To: <11a7a3e67d6c40cd9fd06cd4d6300283@zhaoxin.com>
-References: <1595419068-4812-1-git-send-email-WeitaoWang-oc@zhaoxin.com>
-        <20200722124414.GA3153105@kroah.com>
-        <20200722145913.GB1310843@rowland.harvard.edu>
-        <1bf449377e3448bc9c8bc7b64d7b7990@zhaoxin.com>
-        <20200722221817.542971a2@x1.home>
-        <20200723153821.GC1352396@rowland.harvard.edu>
-        <20200723101735.3222c289@w520.home>
-        <20200723163835.GA1357775@rowland.harvard.edu>
-        <11a7a3e67d6c40cd9fd06cd4d6300283@zhaoxin.com>
-Organization: Red Hat
+        id S1726573AbgGXUGH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jul 2020 16:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43608 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726381AbgGXUGH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jul 2020 16:06:07 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC40C0619D3
+        for <linux-usb@vger.kernel.org>; Fri, 24 Jul 2020 13:06:07 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id m16so5139161pls.5
+        for <linux-usb@vger.kernel.org>; Fri, 24 Jul 2020 13:06:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Mock4yITmusHCt/J+nz7q/uJJ5ezoPfjtI2UT2SuLXA=;
+        b=iGdYuHzf3rp6kf1S5htt2sDxOZyrH8HX3ZNn+aW6ZhZpCrrl+qsBoXYzdJzHMPONAx
+         ssBni3hhvPCJXIZ5byUcmgdVqC4JrP+K7HqypTjGOJiSCAC393mWyIjJRgc4Iyc1XaWC
+         +Kz0z4sBNwiax+QwzGONM8wFicCZbG6TOACRDHpOLDovXniS3wTqcuvrudKc5HiL9nPf
+         g5xJzdzF+3XcMS9/St1zg1AT6CV0HDEgPLPFkB6OqLCYKwC+dakbQo0f/aBUQvpuonxb
+         ZNBNpQLK5RfIr/Q6KwIi7ugskTuydQehAl2pQTGi3lOYXoaIGqDBnisKBj5aZ9MOpr98
+         jmHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Mock4yITmusHCt/J+nz7q/uJJ5ezoPfjtI2UT2SuLXA=;
+        b=KOPVot37KshQOIKlVeTE1wl/3+N9ZN6i4kbyNCVA5BKjXjxJcmbiI8UdBaXj11DM45
+         wNqLOFwIxFiojqNyyAOKn2DjAqS3qQcBtYu36wdXfxu9xdeIZgF/G2o5GO7Si3iJy3ux
+         DHoRRFj8Nm+1x+6FsTTera+JLJQ3g3vQp3m04yIWepi3H0WLySKXVV+qWnUPlkkLRm6w
+         kN24nbX42IUagIqEnlA30MYJS5h7Y8KdJR+FdDVcMJtzTvJJGcPvaGlLwKizb2qANNlz
+         fAOBJ2u1CUFN8LeN1lpRgeYsaiIxBdeGL/AjOmlKurVBsbHIoloug1+s1qVd46HqJB2o
+         /evg==
+X-Gm-Message-State: AOAM532DQjIAzsj0e0OR2f/nhHInbx83E8DQhRL8J+CmucTurirbDhPC
+        gDZhuCSLl/IyLJ2nrC5gVuqNIHV/NRQKUmXMaDY=
+X-Google-Smtp-Source: ABdhPJzNRzCBg4az0hf7733SxLskNepRrUl1cIVqOQrY7tnK+NfX44H67+x8XnFEAHdtvOUI6d1PM88NLBeb9vqBC5o=
+X-Received: by 2002:a17:90a:498b:: with SMTP id d11mr7365797pjh.129.1595621166679;
+ Fri, 24 Jul 2020 13:06:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+References: <ee32a093d43fe6631617c203ea7c86cb700ceac5.camel@hadess.net>
+ <CAHp75VeKY0FSdfza0E9Fz8=2dCyPXwPZYE0kjywiRQAsvmbiow@mail.gmail.com> <20200724152707.GB1388675@rowland.harvard.edu>
+In-Reply-To: <20200724152707.GB1388675@rowland.harvard.edu>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 24 Jul 2020 23:05:50 +0300
+Message-ID: <CAHp75VcPOQnOfiG5RyuwjjyUkyEz+u9RbwqNHBmG3tT2g3XJLg@mail.gmail.com>
+Subject: Re: [PATCH v4] USB: Fix device driver race
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Bastien Nocera <hadess@hadess.net>,
+        USB <linux-usb@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 24 Jul 2020 12:57:49 +0000
-WeitaoWang-oc <WeitaoWang-oc@zhaoxin.com> wrote:
+On Fri, Jul 24, 2020 at 6:27 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> On Fri, Jul 24, 2020 at 01:32:40PM +0300, Andy Shevchenko wrote:
+> > On Fri, Jul 24, 2020 at 12:03 PM Bastien Nocera <hadess@hadess.net> wrote:
 
-> On Thu, 23 Jul 2020 12:38:21 -0400, Alan wrote:
-> > On Thu, Jul 23, 2020 at 10:17:35AM -0600, Alex Williamson wrote:  
-> > > The IOMMU grouping restriction does solve the hardware issue, so long
-> > > as one driver doesn't blindly assume the driver private data for
-> > > another device and modify it.  
-> > 
-> > Correction: The IOMMU grouping restriction solves the hardware issue for
-> > vfio-pci.  It won't necessarily help if some other driver comes along
-> > and wants to bind to this hardware.
-> >   
-> > >   I do agree that your solution would
-> > > work, requiring all devices are unbound before any can be bound, but it
-> > > also seems difficult to manage.  The issue is largely unique to USB
-> > > AFAIK.  On the other hand, drivers coordinating with each other to
-> > > register their _private_ data as share-able within a set of drivers
-> > > seems like a much more direct and explicit interaction between the
-> > > drivers.  Thanks,  
-> > 
-> > Yes, that makes sense.  But it would have to be implemented in the
-> > driver core, not in particular subsystems like USB or PCI.  And it might
-> > be seen as overkill, given that only UHCI/OHCI/EHCI devices require this
-> > sort of sharing AFAIK.
-> > 
-> > Also, when you think about it, what form would such coordination among
-> > drivers take?  From your description, it sounds like the drivers would
-> > agree to avoid accessing each other's private data if the proper
-> > registration wasn't in place.
-> > 
-> > On the other hand, a stronger and perhaps more robust approach would be
-> > to enforce the condition that non-cooperating drivers are never bound to
-> > devices in the same group at the same time.  That's basically what I'm
-> > proposing here -- the question is whether the enforcement should be
-> > instituted in the kernel or should merely be part of a standard protocol
-> > followed by userspace drivers.
-> > 
-> > Given that it's currently needed in only one place, it seems reasonable
-> > to leave this as a "gentlemen's agreement" in userspace for the time
-> > being instead of adding it to the kernel.
-> > 	  
-> 
-> Provided that EHCI and UHCI host controller declare not support P2P and
-> ACS. So, we can assign EHCI and UHCI host controller to different IOMMU 
-> group separately. We assign EHCI host controller to host and assign UHCI
-> host controller to VM. Then, ehci_hcd driver load/unload operation in host
-> will cause the same issue as discussed
+...
 
-And you have an example of such a device?  I expect these do not exist,
-nor should they.  It seems like it would be an improper use of ACS.
-Thanks,
+> > What about
+> >
+> > static bool is_dev_usb_generic_driver(dev)
+> > {
+> >       struct usb_device_driver *udd = dev->driver ?
+> > to_usb_device_driver(dev->driver) : NULL;
+> >
+> >       return udd == &usb_generic_driver;
+> > }
+> >
+> >   if (!is_dev_usb_generic_driver)
+> >     return 0;
+> >
+> > ?
+>
+> Why would you want to add more lines of code to do the same thing?
+> Abstraction is fine up to point, but excessive abstraction only makes
+> things more difficult.
 
-Alex
+At least to put into ternary will actually reduce LOCs in the original
+code (if we drop helper).
 
+The idea of a helper comes to mind that somebody else might reuse
+(__check_usb_generic()?).
+
+...
+
+> The logic is wrong.  If usb_device_match_id() returns NULL then we want
+> to go ahead with the second test, not give up right away.  But this
+> could be written as:
+
+Yes, sorry I didn't think well here.
+
+>
+>         if (usb_device_match_id(udev, new_udriver->id_table) == NULL &&
+>                         (!new_udriver->match || new_udriver->match(udev) != 0))
+>                 return 0;
+>
+>         device_reprobe(dev);
+>
+> This would make the overall flow of the routine more uniform.
+
+Yes, my intention was to make all error cases go first.
+
+-- 
+With Best Regards,
+Andy Shevchenko
