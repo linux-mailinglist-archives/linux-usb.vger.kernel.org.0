@@ -2,40 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0678922D021
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 23:01:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ABD722D022
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 23:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726801AbgGXVA7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jul 2020 17:00:59 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:48676 "EHLO
+        id S1726811AbgGXVBG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jul 2020 17:01:06 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:37410 "EHLO
         smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726527AbgGXVA6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jul 2020 17:00:58 -0400
-Received: from mailhost.synopsys.com (sv1-mailhost2.synopsys.com [10.205.2.132])
+        by vger.kernel.org with ESMTP id S1726527AbgGXVBF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jul 2020 17:01:05 -0400
+Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 7F43F4011D;
-        Fri, 24 Jul 2020 21:00:57 +0000 (UTC)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 94C08C0086;
+        Fri, 24 Jul 2020 21:01:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1595624457; bh=xrc4YTkepANgLvICJ2M6oa7lsvKpskD/Wmmccdw+HEU=;
-        h=Date:From:Subject:To:Cc:From;
-        b=XgL//uVWB9EXrreHCN94lMWLa/ylV3jCaFlTizT65bIQNKPJ5flWy2b5e7ruEHTTY
-         ikr8+gpavatiWErzUhjK+KByw4+YBjWtzgi+EkF4YucR/1ufV/Ugs1zlzNIICS623j
-         hF5EIwduxFt6JRwFxkxUzkL2nrjIEo4IJAfialI2njH8ssmVv7yN84dRD2WOemSpqj
-         1hXCTaht2U83z6jqCQacQqd7ADL8b/6Mne50FwaWc5hrA3d90QeYYCbZkUhV183DGQ
-         mPsoL3B6cZZSulK3AeZ7ZMzkfW/pCkq3ey6pLcLMN4GUTPT0ZKxf77AGkn1K4RXiHc
-         DuYqOSNXT5Fug==
+        t=1595624465; bh=4BW8ac6SGWc7gaUSIr74ZhLGz1XbiBafNo79vA2LqL8=;
+        h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
+        b=ecdAW3jzSaeJRV5GIoTAAUtsDBTqw1aHn433A84Pz3vqtyu7F54T6xjI8p5kRvLws
+         3E1J2M1zmuQUG1SRieRQ/73S8cu6vCq0yRrpYQCjxJ7qhvMcpdHi4RYQKjXwUvfqk2
+         Pw6Ckan8Fzh/AvQ3a+BciG774JK3taU2PoS5+NiIrABPklLETw7INK6Ax4PvuCs1oY
+         bVASxEgaYeJmG2ALoUvDD1173PT6iELSUFwAnFdJQevM6fB1bpmiNN+G00zer+6SbE
+         B8vB3z0sUHMN7OpbmxFE5xQJmdp3xc1hEcDDoxOjJAFTtKnneHF12p/k64HXpSU6zi
+         7hPNlgGR9OIzQ==
 Received: from te-lab16 (nanobot.internal.synopsys.com [10.10.186.99])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 146BAA006F;
-        Fri, 24 Jul 2020 21:00:55 +0000 (UTC)
-Received: by te-lab16 (sSMTP sendmail emulation); Fri, 24 Jul 2020 14:00:55 -0700
-Date:   Fri, 24 Jul 2020 14:00:55 -0700
-Message-Id: <cover.1595624103.git.thinhn@synopsys.com>
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id AFDE4A0096;
+        Fri, 24 Jul 2020 21:01:02 +0000 (UTC)
+Received: by te-lab16 (sSMTP sendmail emulation); Fri, 24 Jul 2020 14:01:02 -0700
+Date:   Fri, 24 Jul 2020 14:01:02 -0700
+Message-Id: <4aa1f6dd1d4d895fcf3d987323c1e37672a71680.1595624103.git.thinhn@synopsys.com>
+In-Reply-To: <cover.1595624103.git.thinhn@synopsys.com>
+References: <cover.1595624103.git.thinhn@synopsys.com>
 X-SNPS-Relay: synopsys.com
 From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH 0/2] usb: dwc3: Valid HW capability
+Subject: [PATCH 1/2] usb: dwc3: core: Properly default unspecified speed
 To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
@@ -46,23 +48,79 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The field dwc->maximum_speed captures the device "maximum-speed" property. If
-the property is not set, then default the field to the maximum speed the HW
-supports.
+If the maximum_speed is not specified, default the device speed base on
+its HW capability. Don't prematurely check HW capability before
+validating the maximum_speed device property. The device property takes
+precedence in dwc->maximum_speed.
 
-This series makes sure that the user input takes precedence and only prints
-warning if the user specifies a maximum-speed higher than what the HW shows.
+Fixes: 0e1e5c47f7a9 ("usb: dwc3: add support for USB 2.0-only core configuration")
+Reported-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
+---
+ drivers/usb/dwc3/core.c | 35 ++++++++++++++++++-----------------
+ 1 file changed, 18 insertions(+), 17 deletions(-)
 
-
-Thinh Nguyen (2):
-  usb: dwc3: core: Properly default unspecified speed
-  usb: dwc3: core: Print warning on unsupported speed
-
- drivers/usb/dwc3/core.c | 44 +++++++++++++++++++++++++++-----------------
- 1 file changed, 27 insertions(+), 17 deletions(-)
-
-
-base-commit: a95fcda246dc3e9f5d00222c9a8f0a76aa0bb950
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 422aea24afcd..7f6f5567b118 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -930,13 +930,6 @@ static int dwc3_core_init(struct dwc3 *dwc)
+ 	 */
+ 	dwc3_writel(dwc->regs, DWC3_GUID, LINUX_VERSION_CODE);
+ 
+-	/* Handle USB2.0-only core configuration */
+-	if (DWC3_GHWPARAMS3_SSPHY_IFC(dwc->hwparams.hwparams3) ==
+-			DWC3_GHWPARAMS3_SSPHY_IFC_DIS) {
+-		if (dwc->maximum_speed == USB_SPEED_SUPER)
+-			dwc->maximum_speed = USB_SPEED_HIGH;
+-	}
+-
+ 	ret = dwc3_phy_setup(dwc);
+ 	if (ret)
+ 		goto err0;
+@@ -1382,6 +1375,8 @@ bool dwc3_has_imod(struct dwc3 *dwc)
+ static void dwc3_check_params(struct dwc3 *dwc)
+ {
+ 	struct device *dev = dwc->dev;
++	unsigned int hwparam_gen =
++		DWC3_GHWPARAMS3_SSPHY_IFC(dwc->hwparams.hwparams3);
+ 
+ 	/* Check for proper value of imod_interval */
+ 	if (dwc->imod_interval && !dwc3_has_imod(dwc)) {
+@@ -1413,17 +1408,23 @@ static void dwc3_check_params(struct dwc3 *dwc)
+ 			dwc->maximum_speed);
+ 		/* fall through */
+ 	case USB_SPEED_UNKNOWN:
+-		/* default to superspeed */
+-		dwc->maximum_speed = USB_SPEED_SUPER;
+-
+-		/*
+-		 * default to superspeed plus if we are capable.
+-		 */
+-		if ((DWC3_IP_IS(DWC31) || DWC3_IP_IS(DWC32)) &&
+-		    (DWC3_GHWPARAMS3_SSPHY_IFC(dwc->hwparams.hwparams3) ==
+-		     DWC3_GHWPARAMS3_SSPHY_IFC_GEN2))
++		switch (hwparam_gen) {
++		case DWC3_GHWPARAMS3_SSPHY_IFC_GEN2:
+ 			dwc->maximum_speed = USB_SPEED_SUPER_PLUS;
+-
++			break;
++		case DWC3_GHWPARAMS3_SSPHY_IFC_GEN1:
++			if (DWC3_IP_IS(DWC32))
++				dwc->maximum_speed = USB_SPEED_SUPER_PLUS;
++			else
++				dwc->maximum_speed = USB_SPEED_SUPER;
++			break;
++		case DWC3_GHWPARAMS3_SSPHY_IFC_DIS:
++			dwc->maximum_speed = USB_SPEED_HIGH;
++			break;
++		default:
++			dwc->maximum_speed = USB_SPEED_SUPER;
++			break;
++		}
+ 		break;
+ 	}
+ }
 -- 
 2.11.0
 
