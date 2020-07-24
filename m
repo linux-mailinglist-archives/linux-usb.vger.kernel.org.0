@@ -2,135 +2,278 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42C8D22C84E
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 16:45:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56E9322C863
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jul 2020 16:50:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726717AbgGXOpr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jul 2020 10:45:47 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:42951 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726567AbgGXOpr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jul 2020 10:45:47 -0400
-Received: by mail-lf1-f68.google.com with SMTP id h8so5318149lfp.9;
-        Fri, 24 Jul 2020 07:45:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Dzkx8gigl6y/De7kKuc0wZrJ0/8/lN60gfKkzmdYUI0=;
-        b=dyhHWZM6Xgw4Ajl8H1CUqnUIkRVUc4RPb+xaHqfH5zcXUFE5RYdNu5Xw8cAoNAiTnu
-         x5LEs8VOgk6h8ksaxEnWNeO5mkrw2qT0qZu3di1scTi5m5pyQnmpfzczPlr/eoocOyPF
-         GPpoOYpPC/+Dcd+tEoZEohn4NqQyGp2afH+m1E30BNtBoXaqrK8N5fU3MggBGvsoiTX6
-         Uhu43Fe+lydXOlaLE2lTxUrCEQzSabnniV12VfSbbl/qIAODmu9qevVj9K3JPfShstgd
-         HbftaXgS2BynbbP0mSr5Lr4JcBT0awjUIaAw4ev8yXh+B11ZWoMEwVMClS9m4be9SjQW
-         AtXg==
-X-Gm-Message-State: AOAM53232PaXdJHGzBg1D6lybcSHOFg0gaReYA3Ui7c7Bv68FgkAFXPP
-        0x7B2N+z11YouhK6AD1Btfo=
-X-Google-Smtp-Source: ABdhPJxuDUKtDBKeqpYEsnpicDu6cv82dbR4O6uIC8LLHmnCf4mma1fQefnoPsAv972lWmW/J6c3kg==
-X-Received: by 2002:a19:ae0a:: with SMTP id f10mr5218572lfc.100.1595601944019;
-        Fri, 24 Jul 2020 07:45:44 -0700 (PDT)
-Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id m5sm287761ljb.98.2020.07.24.07.45.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jul 2020 07:45:42 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1jyyx6-00031S-Np; Fri, 24 Jul 2020 16:45:37 +0200
-Date:   Fri, 24 Jul 2020 16:45:36 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
-Cc:     johan@kernel.org, gregkh@linuxfoundation.org, corbet@lwn.net,
-        linux-usb@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH for v5.9] USB: serial: Replace HTTP links with HTTPS ones
-Message-ID: <20200724144536.GP3634@localhost>
-References: <20200719161920.60087-1-grandmaster@al2klimov.de>
+        id S1726567AbgGXOuh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jul 2020 10:50:37 -0400
+Received: from mga01.intel.com ([192.55.52.88]:19147 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726326AbgGXOuh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 24 Jul 2020 10:50:37 -0400
+IronPort-SDR: kmnaRh5TeXyZ81dhjpDgFBfkBYng0H8FDu/Z5y5o83+KOjBngJWr1aS31xE8LzKXnLeI2yW+qG
+ mrEwxKVnxBkQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9691"; a="168848689"
+X-IronPort-AV: E=Sophos;i="5.75,391,1589266800"; 
+   d="scan'208";a="168848689"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2020 07:48:34 -0700
+IronPort-SDR: 3qD4emY11BiWaNoUivO5G1BW9Xa9UgRlf69O+VHzyVw2hyetEVfv7cusd2zTcjKJGQVztfKHlx
+ x4QswLk2YokQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,391,1589266800"; 
+   d="scan'208";a="321039315"
+Received: from lkp-server01.sh.intel.com (HELO df0563f96c37) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 24 Jul 2020 07:48:33 -0700
+Received: from kbuild by df0563f96c37 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1jyyzw-0000Nw-Vt; Fri, 24 Jul 2020 14:48:32 +0000
+Date:   Fri, 24 Jul 2020 22:48:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS WITH WARNING
+ 9a360a7cae11461ccd933a9ea366b0dcb3afadb0
+Message-ID: <5f1af4be.tlUI8XPIq7ZTTGEd%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200719161920.60087-1-grandmaster@al2klimov.de>
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jul 19, 2020 at 06:19:20PM +0200, Alexander A. Klimov wrote:
-> Rationale:
-> Reduces attack surface on kernel devs opening the links for MITM
-> as HTTPS traffic is much harder to manipulate.
-> 
-> Deterministic algorithm:
-> For each file:
->   If not .svg:
->     For each line:
->       If doesn't contain `\bxmlns\b`:
->         For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
-> 	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
->             If both the HTTP and HTTPS versions
->             return 200 OK and serve the same content:
->               Replace HTTP with HTTPS.
-> 
-> Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
-> ---
->  Continuing my work started at 93431e0607e5.
->  See also: git log --oneline '--author=Alexander A. Klimov <grandmaster@al2klimov.de>' v5.7..master
->  (Actually letting a shell for loop submit all this stuff for me.)
-> 
->  If there are any URLs to be removed completely
->  or at least not (just) HTTPSified:
->  Just clearly say so and I'll *undo my change*.
->  See also: https://lkml.org/lkml/2020/6/27/64
-> 
->  If there are any valid, but yet not changed URLs:
->  See: https://lkml.org/lkml/2020/6/26/837
-> 
->  If you apply the patch, please let me know.
-> 
->  Sorry again to all maintainers who complained about subject lines.
->  Now I realized that you want an actually perfect prefixes,
->  not just subsystem ones.
->  I tried my best...
->  And yes, *I could* (at least half-)automate it.
->  Impossible is nothing! :)
-> 
-> 
->  Documentation/usb/usb-serial.rst  |  2 +-
->  drivers/usb/serial/cyberjack.c    |  2 +-
->  drivers/usb/serial/ftdi_sio.h     |  4 ++--
->  drivers/usb/serial/ftdi_sio_ids.h | 34 +++++++++++++++----------------
->  drivers/usb/serial/kobil_sct.c    |  2 +-
->  drivers/usb/serial/metro-usb.c    |  2 +-
->  6 files changed, 23 insertions(+), 23 deletions(-)
-> 
-> diff --git a/Documentation/usb/usb-serial.rst b/Documentation/usb/usb-serial.rst
-> index 8fa7dbd3da9a..0a2071953691 100644
-> --- a/Documentation/usb/usb-serial.rst
-> +++ b/Documentation/usb/usb-serial.rst
-> @@ -202,7 +202,7 @@ Keyspan USA-series Serial Adapters
->  
->    More information is available at:
->  
-> -        http://www.carnationsoftware.com/carnation/Keyspan.html
-> +        https://www.carnationsoftware.com/carnation/Keyspan.html
->  
->    For any questions or problems with this driver, please contact Hugh
->    Blemings at hugh@misc.nu
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git  usb-testing
+branch HEAD: 9a360a7cae11461ccd933a9ea366b0dcb3afadb0  xhci: dbc: remove tty specific port structure from struct xhci_dbc
 
-Looks like your script is buggy; there are many more URLs than this one
-is this document.
+Warning in current branch:
 
-> diff --git a/drivers/usb/serial/ftdi_sio_ids.h b/drivers/usb/serial/ftdi_sio_ids.h
-> index e8373528264c..a5bf2b974813 100644
-> --- a/drivers/usb/serial/ftdi_sio_ids.h
-> +++ b/drivers/usb/serial/ftdi_sio_ids.h
-> @@ -60,14 +60,14 @@
->  /*
->   * Texas Instruments XDS100v2 JTAG / BeagleBone A3
->   * http://processors.wiki.ti.com/index.php/XDS100
-> - * http://beagleboard.org/bone
-> + * https://beagleboard.org/bone
->   */
+drivers/usb/host/xhci-dbgcap.c:410:1: warning: no previous prototype for 'xhci_dbc_ring_alloc' [-Wmissing-prototypes]
+drivers/usb/host/xhci-dbgcap.c:423:1: warning: no previous prototype for 'xhci_dbc_ring_alloc' [-Wmissing-prototypes]
+drivers/usb/host/xhci-dbgtty.c:396:5: warning: no previous prototype for 'xhci_dbc_tty_register_device' [-Wmissing-prototypes]
+drivers/usb/host/xhci-dbgtty.c:401:5: warning: no previous prototype for 'xhci_dbc_tty_register_device' [-Wmissing-prototypes]
+drivers/usb/host/xhci-dbgtty.c:444:6: warning: no previous prototype for 'xhci_dbc_tty_unregister_device' [-Wmissing-prototypes]
+drivers/usb/host/xhci-dbgtty.c:452:6: warning: no previous prototype for 'xhci_dbc_tty_unregister_device' [-Wmissing-prototypes]
 
-And here's another indication of that.
+Warning ids grouped by kconfigs:
 
-Johan
+recent_errors
+|-- alpha-allmodconfig
+|   |-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|   |-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_register_device
+|   `-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_unregister_device
+|-- alpha-allyesconfig
+|   `-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|-- arc-allyesconfig
+|   |-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|   |-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_register_device
+|   `-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_unregister_device
+|-- arm-allmodconfig
+|   |-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|   |-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_register_device
+|   `-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_unregister_device
+|-- arm-allyesconfig
+|   |-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|   |-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_register_device
+|   `-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_unregister_device
+|-- arm64-allmodconfig
+|   |-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|   |-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_register_device
+|   `-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_unregister_device
+|-- arm64-allyesconfig
+|   |-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|   |-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_register_device
+|   `-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_unregister_device
+|-- c6x-allyesconfig
+|   |-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|   |-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_register_device
+|   `-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_unregister_device
+|-- h8300-allmodconfig
+|   |-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|   |-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_register_device
+|   `-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_unregister_device
+|-- h8300-allyesconfig
+|   |-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|   |-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_register_device
+|   `-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_unregister_device
+|-- i386-allyesconfig
+|   |-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|   |-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_register_device
+|   `-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_unregister_device
+|-- ia64-allmodconfig
+|   |-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|   |-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_register_device
+|   `-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_unregister_device
+|-- ia64-allyesconfig
+|   |-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|   |-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_register_device
+|   `-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_unregister_device
+|-- m68k-allmodconfig
+|   |-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|   |-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_register_device
+|   `-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_unregister_device
+|-- m68k-allyesconfig
+|   |-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|   |-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_register_device
+|   `-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_unregister_device
+|-- mips-allmodconfig
+|   |-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|   |-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_register_device
+|   `-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_unregister_device
+|-- mips-allyesconfig
+|   |-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|   |-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_register_device
+|   `-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_unregister_device
+|-- mips-randconfig-c021-20200724
+|   |-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|   |-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_register_device
+|   `-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_unregister_device
+|-- nds32-allyesconfig
+|   `-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|-- nios2-allyesconfig
+|   |-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|   |-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_register_device
+|   `-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_unregister_device
+|-- openrisc-allyesconfig
+|   |-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|   |-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_register_device
+|   `-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_unregister_device
+|-- parisc-allmodconfig
+|   `-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|-- parisc-allyesconfig
+|   `-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|-- powerpc-allmodconfig
+|   |-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|   |-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_register_device
+|   `-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_unregister_device
+|-- powerpc-allyesconfig
+|   |-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|   |-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_register_device
+|   `-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_unregister_device
+|-- riscv-allmodconfig
+|   |-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|   |-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_register_device
+|   `-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_unregister_device
+|-- riscv-allyesconfig
+|   |-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|   |-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_register_device
+|   `-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_unregister_device
+|-- s390-allmodconfig
+|   |-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|   |-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_register_device
+|   `-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_unregister_device
+|-- s390-allyesconfig
+|   |-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|   |-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_register_device
+|   `-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_unregister_device
+|-- sh-allmodconfig
+|   |-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|   |-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_register_device
+|   `-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_unregister_device
+|-- sparc-allyesconfig
+|   |-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|   |-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_register_device
+|   `-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_unregister_device
+|-- sparc64-allmodconfig
+|   |-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|   |-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_register_device
+|   `-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_unregister_device
+|-- sparc64-allyesconfig
+|   |-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|   |-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_register_device
+|   `-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_unregister_device
+|-- x86_64-randconfig-c002-20200724
+|   |-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+|   |-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_register_device
+|   `-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_unregister_device
+`-- xtensa-allyesconfig
+    |-- drivers-usb-host-xhci-dbgcap.c:warning:no-previous-prototype-for-xhci_dbc_ring_alloc
+    |-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_register_device
+    `-- drivers-usb-host-xhci-dbgtty.c:warning:no-previous-prototype-for-xhci_dbc_tty_unregister_device
+
+elapsed time: 1337m
+
+configs tested: 74
+configs skipped: 1
+
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                               allnoconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                              debian-10.3
+i386                              allnoconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                              allnoconfig
+m68k                           sun3_defconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nds32                               defconfig
+nds32                             allnoconfig
+csky                             allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+h8300                            allmodconfig
+xtensa                              defconfig
+arc                                 defconfig
+arc                              allyesconfig
+sh                               allmodconfig
+sh                                allnoconfig
+microblaze                        allnoconfig
+nios2                               defconfig
+nios2                            allyesconfig
+c6x                              allyesconfig
+c6x                               allnoconfig
+openrisc                            defconfig
+openrisc                         allyesconfig
+mips                             allyesconfig
+mips                              allnoconfig
+mips                             allmodconfig
+parisc                            allnoconfig
+parisc                              defconfig
+parisc                           allyesconfig
+parisc                           allmodconfig
+powerpc                             defconfig
+powerpc                          allyesconfig
+powerpc                          rhel-kconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+s390                             allyesconfig
+s390                              allnoconfig
+s390                             allmodconfig
+s390                                defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+sparc64                             defconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                          allmodconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                               rhel-8.3
+x86_64                                  kexec
+x86_64                                   rhel
+x86_64                                    lkp
+x86_64                              fedora-25
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
