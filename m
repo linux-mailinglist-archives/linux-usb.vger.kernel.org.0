@@ -2,555 +2,210 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36E2722D79C
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Jul 2020 14:59:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ECE822D82C
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Jul 2020 16:37:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727023AbgGYM7F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 25 Jul 2020 08:59:05 -0400
-Received: from crapouillou.net ([89.234.176.41]:57722 "EHLO crapouillou.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726618AbgGYM7F (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 25 Jul 2020 08:59:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1595681941; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yNUyJeyP16I90PYzVoeeQozAUAYH6uxu6YR45xwBtBY=;
-        b=w8eIqQco6w0RfvECfW5efN5bP2SnV1DgxvcQIw4FopW5G5rv3EAqKvkMVl45kHSREnslQ/
-        q2ld2jtaBq4w3nmPXCAK5m6VwCxGuvCp/TZ3jGQgZ76h9e9vguGJ4DOfWPWsqu9sddlfle
-        7w9UxjSCCJwr4Bd3zZzcZ3NL/wh1MpE=
-Date:   Sat, 25 Jul 2020 14:58:50 +0200
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH RESEND v6 5/5] USB: PHY: JZ4770: Use the generic PHY
- framework.
-To:     =?UTF-8?b?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, prasannatsmkumar@gmail.com,
-        kishon@ti.com, vkoul@kernel.org, gor@linux.ibm.com,
-        hca@linux.ibm.com, christophe.jaillet@wanadoo.fr,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, yanfei.li@ingenic.com,
-        sernia.zhou@foxmail.com, zhenwenjin@gmail.com
-Message-Id: <2201EQ.3JVH7TJO4AV3@crapouillou.net>
-In-Reply-To: <20200725073327.64216-1-zhouyanjie@wanyeetech.com>
-References: <20200725073327.64216-1-zhouyanjie@wanyeetech.com>
+        id S1727036AbgGYOh4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 25 Jul 2020 10:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45856 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726944AbgGYOhz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Jul 2020 10:37:55 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9853C08C5C0
+        for <linux-usb@vger.kernel.org>; Sat, 25 Jul 2020 07:37:53 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id l6so5989823plt.7
+        for <linux-usb@vger.kernel.org>; Sat, 25 Jul 2020 07:37:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=KTRErV5RqdYNqfF0IK8gkfKX4UmiqHblsetSQIxgRqM=;
+        b=TEJEVkZWB1ITqWtYLYNezovnOP8K5Tg1+nc9aCOPlzAAzhOFJ/Pmck0ikrC2RDTHdF
+         Pbli+NvyU4zExnx8xC2dtTYTjoSMJovVhawgonke7VYmx2QhjuXcBAhM+1rI04zU3Chc
+         iSOKJ8aM8Q2X8auGJ7yd8ljeb7kvnE5HrJV3sZGu1msw6KGX6AotlEYzqd5+eGXs472d
+         pZ+itm4nJ4sODLY4xl7wB6W+M3dUrck62FbPiPdlEmnZNxbWhlnvxz8/p90Zi+DFI6FD
+         28W0avVdRjV9vtmWMO0+XYYlC6AkMSTyxNuwj/UULHz4HMd7VJaMHJNmuPPIOlf5RkxC
+         BiMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=KTRErV5RqdYNqfF0IK8gkfKX4UmiqHblsetSQIxgRqM=;
+        b=i0OfppZVNK/N5lyQzEmQd4R6OvS6F+IwhqpKkdTVP4VDBpCLhY3RCvKWzEfj6EvOgG
+         TpGDX8axqCgfMjo6D1gf3+JrQgHw8uBVsY3M+Vk+myLVkVoF3XdEXNtCkiPJ0mTIlzo2
+         TySJT8+wWGlqLFEwBqxN5K+Z04L5bWQfPCUGh6xuVOgoLvGDv+dVLJb0I0ne73ZLaRRF
+         dW6ams4ZzjBKWUWv6XIYYhsZYjMZb8LmHjXR/5yzG2gG0VjxKZvYfEEwvXuMMgh6mT/Q
+         XR3Exu2u0tJg/OLxFDYTtajipCWA3VEO/2mT2muHQ5+iSifHhrgRpySVKS0zhrpaR0Nh
+         E3YQ==
+X-Gm-Message-State: AOAM530TXKa86TxJwzZ7HqHgnz9brsE97YtxqoEk0AzngF5F5V5FpEiH
+        JNxG1dr1C15sdqJ+rIwYliRBy76c
+X-Google-Smtp-Source: ABdhPJziDq7Kh1dDy5s5PW17hfe+T14I75omOkKH1zsAOGKUhrF3L7DQ3UwSdQ6gqZWPtygH4mEnvg==
+X-Received: by 2002:a17:90a:ce96:: with SMTP id g22mr10418362pju.9.1595687873052;
+        Sat, 25 Jul 2020 07:37:53 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r185sm9075424pfr.8.2020.07.25.07.37.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 25 Jul 2020 07:37:52 -0700 (PDT)
+Subject: Re: [PATCH v2 2/6] usb: typec: tcpm: Add tcpm_queue_vdm_unlocked()
+ helper
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org
+References: <20200724174702.61754-1-hdegoede@redhat.com>
+ <20200724174702.61754-2-hdegoede@redhat.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <1e91918e-accc-532a-d44a-681a9374f92b@roeck-us.net>
+Date:   Sat, 25 Jul 2020 07:37:50 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200724174702.61754-2-hdegoede@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Zhou,
+On 7/24/20 10:46 AM, Hans de Goede wrote:
+> Various callers (all the typec_altmode_ops) take the port-lock just for
+> the tcpm_queue_vdm() call.
+> 
+> Add a new tcpm_queue_vdm_unlocked() helper which takes the lock, so that
+> its callers don't have to do this themselves.
+> 
+> This is a preparation patch for fixing an AB BA lock inversion between
+> the tcpm code and some altmode drivers.
+> 
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 
-I'm a bit lost in all these JZ4770 PHY patchsets...
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Anyway, the move from drivers/usb/phy to drivers/phy should be done=20
-before adding anything else to the driver, so right after the=20
-devicetree change. Here, your patch modifies things that were just=20
-introduced in the previous patches; that adds a lot of noise for=20
-nothing and is harder to review.
-
-If you really want to rename the function names and comments from=20
-jz4770_phy* to ingenic_usb_phy*, you can do it afterwards, within your=20
-current "unify code style" patch. Then add the patch to reformat the=20
-macros, and then finally finish the patchset by adding support for the=20
-new SoCs, because right now the macros introduced in the "add SoCs"=20
-patch are modified in the "reformat macros" patch.
-
-So I think you got the content right, just some reordering to do.
-
-
-Le sam. 25 juil. 2020 =C3=A0 15:33, =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanji=
-e)=20
-<zhouyanjie@wanyeetech.com> a =C3=A9crit :
-> Used the generic PHY framework API to create the PHY,
-> and move the driver to driver/phy/ingenic.
->=20
-> Tested-by: =E5=91=A8=E6=AD=A3 (Zhou Zheng) <sernia.zhou@foxmail.com>
-> Suggested-by: Felipe Balbi <balbi@kernel.org>
-> Co-developed-by: =E6=BC=86=E9=B9=8F=E6=8C=AF (Qi Pengzhen) <aric.pzqi@ing=
-enic.com>
-> Signed-off-by: =E6=BC=86=E9=B9=8F=E6=8C=AF (Qi Pengzhen) <aric.pzqi@ingen=
-ic.com>
-> Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) <zhouyanjie@wany=
-eetech.com>
 > ---
->=20
-> Notes:
->     v6:
->     New patch.
->=20
->  drivers/phy/Kconfig                                |   1 +
->  drivers/phy/Makefile                               |   1 +
->  drivers/phy/ingenic/Kconfig                        |  12 ++
->  drivers/phy/ingenic/Makefile                       |   2 +
->  .../phy-jz4770.c =3D> phy/ingenic/phy-ingenic-usb.c} | 208=20
-> ++++++++++++---------
->  drivers/usb/phy/Kconfig                            |   8 -
->  drivers/usb/phy/Makefile                           |   1 -
->  7 files changed, 134 insertions(+), 99 deletions(-)
->  create mode 100644 drivers/phy/ingenic/Kconfig
->  create mode 100644 drivers/phy/ingenic/Makefile
->  rename drivers/{usb/phy/phy-jz4770.c =3D>=20
-> phy/ingenic/phy-ingenic-usb.c} (67%)
->=20
-> diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
-> index b3ed94b98d9b..96d7bb85f595 100644
-> --- a/drivers/phy/Kconfig
-> +++ b/drivers/phy/Kconfig
-> @@ -55,6 +55,7 @@ source "drivers/phy/broadcom/Kconfig"
->  source "drivers/phy/cadence/Kconfig"
->  source "drivers/phy/freescale/Kconfig"
->  source "drivers/phy/hisilicon/Kconfig"
-> +source "drivers/phy/ingenic/Kconfig"
->  source "drivers/phy/lantiq/Kconfig"
->  source "drivers/phy/marvell/Kconfig"
->  source "drivers/phy/mediatek/Kconfig"
-> diff --git a/drivers/phy/Makefile b/drivers/phy/Makefile
-> index 310c149a9df5..0f88724b4387 100644
-> --- a/drivers/phy/Makefile
-> +++ b/drivers/phy/Makefile
-> @@ -18,6 +18,7 @@ obj-y					+=3D broadcom/	\
->  					   cadence/	\
->  					   freescale/	\
->  					   hisilicon/	\
-> +					   ingenic/	\
->  					   intel/	\
->  					   lantiq/	\
->  					   marvell/	\
-> diff --git a/drivers/phy/ingenic/Kconfig b/drivers/phy/ingenic/Kconfig
-> new file mode 100644
-> index 000000000000..b9581eae89dd
-> --- /dev/null
-> +++ b/drivers/phy/ingenic/Kconfig
-> @@ -0,0 +1,12 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +#
-> +# Phy drivers for Ingenic platforms
-> +#
-> +config PHY_INGENIC_USB
-> +	tristate "Ingenic SoCs USB PHY Driver"
-> +	depends on (MACH_INGENIC && MIPS) || COMPILE_TEST
-> +	depends on USB_SUPPORT
-> +	select GENERIC_PHY
-> +	help
-> +	  This driver provides USB PHY support for the USB controller found
-> +	  on the JZ-series and X-series SoCs from Ingenic.
-> diff --git a/drivers/phy/ingenic/Makefile=20
-> b/drivers/phy/ingenic/Makefile
-> new file mode 100644
-> index 000000000000..65d5ea00fc9d
-> --- /dev/null
-> +++ b/drivers/phy/ingenic/Makefile
-> @@ -0,0 +1,2 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +obj-y		+=3D phy-ingenic-usb.o
-> diff --git a/drivers/usb/phy/phy-jz4770.c=20
-> b/drivers/phy/ingenic/phy-ingenic-usb.c
-> similarity index 67%
-> rename from drivers/usb/phy/phy-jz4770.c
-> rename to drivers/phy/ingenic/phy-ingenic-usb.c
-> index 23d38cbc150e..c43d53b235d3 100644
-> --- a/drivers/usb/phy/phy-jz4770.c
-> +++ b/drivers/phy/ingenic/phy-ingenic-usb.c
-> @@ -7,12 +7,12 @@
->   */
->=20
->  #include <linux/clk.h>
-> +#include <linux/delay.h>
->  #include <linux/io.h>
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
->  #include <linux/regulator/consumer.h>
-> -#include <linux/usb/otg.h>
-> -#include <linux/usb/phy.h>
-> +#include <linux/phy/phy.h>
->=20
->  /* OTGPHY register offsets */
->  #define REG_USBPCR_OFFSET			0x00
-> @@ -97,66 +97,48 @@ enum ingenic_usb_phy_version {
->  struct ingenic_soc_info {
->  	enum ingenic_usb_phy_version version;
->=20
-> -	void (*usb_phy_init)(struct usb_phy *phy);
-> +	void (*usb_phy_init)(struct phy *phy);
->  };
->=20
-> -struct jz4770_phy {
-> +struct ingenic_usb_phy {
->  	const struct ingenic_soc_info *soc_info;
->=20
-> -	struct usb_phy phy;
-> -	struct usb_otg otg;
-> +	struct phy *phy;
->  	struct device *dev;
->  	void __iomem *base;
->  	struct clk *clk;
->  	struct regulator *vcc_supply;
->  };
->=20
-> -static inline struct jz4770_phy *otg_to_jz4770_phy(struct usb_otg=20
-> *otg)
-> +static int ingenic_usb_phy_init(struct phy *phy)
+> Changes in v2:
+> - Name the new helper tcpm_queue_vdm_unlocked() instead of renaming the
+>   original function to this
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 25 +++++++++++++------------
+>  1 file changed, 13 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index fc6455a29c74..862c474b3ebd 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -961,6 +961,8 @@ static void tcpm_queue_message(struct tcpm_port *port,
+>  static void tcpm_queue_vdm(struct tcpm_port *port, const u32 header,
+>  			   const u32 *data, int cnt)
 >  {
-> -	return container_of(otg, struct jz4770_phy, otg);
-> -}
-> -
-> -static inline struct jz4770_phy *phy_to_jz4770_phy(struct usb_phy=20
-> *phy)
-> -{
-> -	return container_of(phy, struct jz4770_phy, phy);
-> -}
-> -
-> -static int ingenic_usb_phy_set_peripheral(struct usb_otg *otg,
-> -				     struct usb_gadget *gadget)
-> -{
-> -	struct jz4770_phy *priv =3D otg_to_jz4770_phy(otg);
-> -	u32 reg;
-> +	struct ingenic_usb_phy *priv =3D phy_get_drvdata(phy);
-> +	int err;
->=20
-> -	if (priv->soc_info->version >=3D ID_X1000) {
-> -		reg =3D readl(priv->base + REG_USBPCR1_OFFSET);
-> -		reg |=3D USBPCR1_BVLD_REG;
-> -		writel(reg, priv->base + REG_USBPCR1_OFFSET);
-> +	err =3D clk_prepare_enable(priv->clk);
-> +	if (err) {
-> +		dev_err(priv->dev, "Unable to start clock: %d\n", err);
-> +		return err;
->  	}
->=20
-> -	reg =3D readl(priv->base + REG_USBPCR_OFFSET);
-> -	reg &=3D ~USBPCR_USB_MODE;
-> -	reg |=3D USBPCR_VBUSVLDEXT | USBPCR_VBUSVLDEXTSEL |=20
-> USBPCR_OTG_DISABLE;
-> -	writel(reg, priv->base + REG_USBPCR_OFFSET);
-> +	priv->soc_info->usb_phy_init(phy);
->=20
->  	return 0;
+> +	WARN_ON(!mutex_is_locked(&port->lock));
+> +
+>  	port->vdo_count = cnt + 1;
+>  	port->vdo_data[0] = header;
+>  	memcpy(&port->vdo_data[1], data, sizeof(u32) * cnt);
+> @@ -971,6 +973,14 @@ static void tcpm_queue_vdm(struct tcpm_port *port, const u32 header,
+>  	mod_delayed_work(port->wq, &port->vdm_state_machine, 0);
 >  }
->=20
-> -static int ingenic_usb_phy_set_host(struct usb_otg *otg, struct=20
-> usb_bus *host)
-> +static int ingenic_usb_phy_exit(struct phy *phy)
->  {
-> -	struct jz4770_phy *priv =3D otg_to_jz4770_phy(otg);
-> -	u32 reg;
-> +	struct ingenic_usb_phy *priv =3D phy_get_drvdata(phy);
->=20
-> -	reg =3D readl(priv->base + REG_USBPCR_OFFSET);
-> -	reg &=3D ~(USBPCR_VBUSVLDEXT | USBPCR_VBUSVLDEXTSEL |=20
-> USBPCR_OTG_DISABLE);
-> -	reg |=3D USBPCR_USB_MODE;
-> -	writel(reg, priv->base + REG_USBPCR_OFFSET);
-> +	clk_disable_unprepare(priv->clk);
-> +	regulator_disable(priv->vcc_supply);
->=20
->  	return 0;
->  }
->=20
-> -static int ingenic_usb_phy_init(struct usb_phy *phy)
-> +static int ingenic_usb_phy_power_on(struct phy *phy)
->  {
-> -	struct jz4770_phy *priv =3D phy_to_jz4770_phy(phy);
-> +	struct ingenic_usb_phy *priv =3D phy_get_drvdata(phy);
->  	int err;
->=20
->  	err =3D regulator_enable(priv->vcc_supply);
-> @@ -165,33 +147,71 @@ static int ingenic_usb_phy_init(struct usb_phy=20
-> *phy)
->  		return err;
->  	}
->=20
-> -	err =3D clk_prepare_enable(priv->clk);
-> -	if (err) {
-> -		dev_err(priv->dev, "Unable to start clock: %d\n", err);
-> -		return err;
-> -	}
-> -
-> -	priv->soc_info->usb_phy_init(phy);
-> -
->  	return 0;
->  }
->=20
-> -static void ingenic_usb_phy_shutdown(struct usb_phy *phy)
-> +static int ingenic_usb_phy_power_off(struct phy *phy)
->  {
-> -	struct jz4770_phy *priv =3D phy_to_jz4770_phy(phy);
-> +	struct ingenic_usb_phy *priv =3D phy_get_drvdata(phy);
->=20
-> -	clk_disable_unprepare(priv->clk);
->  	regulator_disable(priv->vcc_supply);
-> +
-> +	return 0;
->  }
->=20
-> -static void ingenic_usb_phy_remove(void *phy)
-> +static int ingenic_usb_phy_set_mode(struct phy *phy,
-> +				  enum phy_mode mode, int submode)
->  {
-> -	usb_remove_phy(phy);
-> +	struct ingenic_usb_phy *priv =3D phy_get_drvdata(phy);
-> +	u32 reg;
-> +
-> +	switch (mode) {
-> +	case PHY_MODE_USB_HOST:
-> +		reg =3D readl(priv->base + REG_USBPCR_OFFSET);
-> +		reg &=3D ~(USBPCR_VBUSVLDEXT | USBPCR_VBUSVLDEXTSEL |=20
-> USBPCR_OTG_DISABLE);
-> +		reg |=3D USBPCR_USB_MODE;
-> +		writel(reg, priv->base + REG_USBPCR_OFFSET);
-> +
-> +		break;
-> +	case PHY_MODE_USB_DEVICE:
-> +		if (priv->soc_info->version >=3D ID_X1000) {
-> +			reg =3D readl(priv->base + REG_USBPCR1_OFFSET);
-> +			reg |=3D USBPCR1_BVLD_REG;
-> +			writel(reg, priv->base + REG_USBPCR1_OFFSET);
-> +		}
-> +
-> +		reg =3D readl(priv->base + REG_USBPCR_OFFSET);
-> +		reg &=3D ~USBPCR_USB_MODE;
-> +		reg |=3D USBPCR_VBUSVLDEXT | USBPCR_VBUSVLDEXTSEL |=20
-> USBPCR_OTG_DISABLE;
-> +		writel(reg, priv->base + REG_USBPCR_OFFSET);
-> +
-> +		break;
-> +	case PHY_MODE_USB_OTG:
-> +		reg =3D readl(priv->base + REG_USBPCR_OFFSET);
-> +		reg &=3D ~USBPCR_OTG_DISABLE;
-> +		reg |=3D USBPCR_VBUSVLDEXT | USBPCR_VBUSVLDEXTSEL | USBPCR_USB_MODE;
-> +		writel(reg, priv->base + REG_USBPCR_OFFSET);
-> +
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
->  }
->=20
-> -static void jz4770_usb_phy_init(struct usb_phy *phy)
-> +static const struct phy_ops ingenic_usb_phy_ops =3D {
-> +	.init		=3D ingenic_usb_phy_init,
-> +	.exit		=3D ingenic_usb_phy_exit,
-> +	.power_on	=3D ingenic_usb_phy_power_on,
-> +	.power_off	=3D ingenic_usb_phy_power_off,
-> +	.set_mode	=3D ingenic_usb_phy_set_mode,
-> +	.owner		=3D THIS_MODULE,
-> +};
-> +
-> +static void jz4770_usb_phy_init(struct phy *phy)
->  {
-> -	struct jz4770_phy *priv =3D phy_to_jz4770_phy(phy);
-> +	struct ingenic_usb_phy *priv =3D phy_get_drvdata(phy);
->  	u32 reg;
->=20
->  	reg =3D USBPCR_AVLD_REG | USBPCR_COMMONONN | USBPCR_IDPULLUP_ALWAYS |
-> @@ -206,9 +226,9 @@ static void jz4770_usb_phy_init(struct usb_phy=20
-> *phy)
->  	usleep_range(300, 1000);
->  }
->=20
-> -static void jz4780_usb_phy_init(struct usb_phy *phy)
-> +static void jz4780_usb_phy_init(struct phy *phy)
->  {
-> -	struct jz4770_phy *priv =3D phy_to_jz4770_phy(phy);
-> +	struct ingenic_usb_phy *priv =3D phy_get_drvdata(phy);
->  	u32 reg;
->=20
->  	reg =3D readl(priv->base + REG_USBPCR1_OFFSET) | USBPCR1_USB_SEL |
-> @@ -224,9 +244,9 @@ static void jz4780_usb_phy_init(struct usb_phy=20
-> *phy)
->  	usleep_range(300, 1000);
->  }
->=20
-> -static void x1000_usb_phy_init(struct usb_phy *phy)
-> +static void x1000_usb_phy_init(struct phy *phy)
->  {
-> -	struct jz4770_phy *priv =3D phy_to_jz4770_phy(phy);
-> +	struct ingenic_usb_phy *priv =3D phy_get_drvdata(phy);
->  	u32 reg;
->=20
->  	reg =3D readl(priv->base + REG_USBPCR1_OFFSET) |=20
-> USBPCR1_WORD_IF_16BIT;
-> @@ -243,9 +263,9 @@ static void x1000_usb_phy_init(struct usb_phy=20
-> *phy)
->  	usleep_range(300, 1000);
->  }
->=20
-> -static void x1830_usb_phy_init(struct usb_phy *phy)
-> +static void x1830_usb_phy_init(struct phy *phy)
->  {
-> -	struct jz4770_phy *priv =3D phy_to_jz4770_phy(phy);
-> +	struct ingenic_usb_phy *priv =3D phy_get_drvdata(phy);
->  	u32 reg;
->=20
->  	/* rdt */
-> @@ -298,75 +318,83 @@ static const struct of_device_id=20
-> ingenic_usb_phy_of_matches[] =3D {
->  };
->  MODULE_DEVICE_TABLE(of, ingenic_usb_phy_of_matches);
->=20
-> -static int jz4770_phy_probe(struct platform_device *pdev)
-> +static int ingenic_usb_phy_probe(struct platform_device *pdev)
->  {
-> -	struct device *dev =3D &pdev->dev;
-> -	struct jz4770_phy *priv;
-> +	struct ingenic_usb_phy *priv;
-> +	struct phy_provider *provider;
->  	int err;
->=20
-> -	priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> +	priv =3D devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
->  	if (!priv)
->  		return -ENOMEM;
->=20
-> +	priv->dev =3D &pdev->dev;
-> +
->  	priv->soc_info =3D device_get_match_data(&pdev->dev);
->  	if (!priv->soc_info) {
->  		dev_err(&pdev->dev, "Error: No device match found\n");
->  		return -ENODEV;
->  	}
->=20
-> -	platform_set_drvdata(pdev, priv);
-> -	priv->dev =3D dev;
-> -	priv->phy.dev =3D dev;
-> -	priv->phy.otg =3D &priv->otg;
-> -	priv->phy.label =3D "ingenic-usb-phy";
-> -	priv->phy.init =3D ingenic_usb_phy_init;
-> -	priv->phy.shutdown =3D ingenic_usb_phy_shutdown;
-> -
-> -	priv->otg.state =3D OTG_STATE_UNDEFINED;
-> -	priv->otg.usb_phy =3D &priv->phy;
-> -	priv->otg.set_host =3D ingenic_usb_phy_set_host;
-> -	priv->otg.set_peripheral =3D ingenic_usb_phy_set_peripheral;
-> -
->  	priv->base =3D devm_platform_ioremap_resource(pdev, 0);
->  	if (IS_ERR(priv->base)) {
-> -		dev_err(dev, "Failed to map registers\n");
-> +		dev_err(priv->dev, "Failed to map registers\n");
->  		return PTR_ERR(priv->base);
->  	}
->=20
-> -	priv->clk =3D devm_clk_get(dev, NULL);
-> +	priv->clk =3D devm_clk_get(priv->dev, NULL);
->  	if (IS_ERR(priv->clk)) {
->  		err =3D PTR_ERR(priv->clk);
->  		if (err !=3D -EPROBE_DEFER)
-> -			dev_err(dev, "Failed to get clock\n");
-> +			dev_err(priv->dev, "Failed to get clock\n");
->  		return err;
->  	}
->=20
-> -	priv->vcc_supply =3D devm_regulator_get(dev, "vcc");
-> +	priv->vcc_supply =3D devm_regulator_get(priv->dev, "vcc");
->  	if (IS_ERR(priv->vcc_supply)) {
->  		err =3D PTR_ERR(priv->vcc_supply);
->  		if (err !=3D -EPROBE_DEFER)
-> -			dev_err(dev, "Failed to get regulator\n");
-> +			dev_err(priv->dev, "Failed to get regulator\n");
->  		return err;
->  	}
->=20
-> -	err =3D usb_add_phy(&priv->phy, USB_PHY_TYPE_USB2);
-> -	if (err) {
-> -		if (err !=3D -EPROBE_DEFER)
-> -			dev_err(dev, "Unable to register PHY\n");
-> -		return err;
-> +	priv->phy =3D devm_phy_create(priv->dev, NULL, &ingenic_usb_phy_ops);
-> +	if (IS_ERR(priv)) {
-> +		dev_err(priv->dev, "Failed to create PHY: %ld\n",	PTR_ERR(priv));
-> +		return PTR_ERR(priv);
->  	}
->=20
-> -	return devm_add_action_or_reset(dev, ingenic_usb_phy_remove,=20
-> &priv->phy);
-> +	provider =3D devm_of_phy_provider_register(priv->dev,=20
-> of_phy_simple_xlate);
-> +	if (IS_ERR(provider)) {
-> +		dev_err(priv->dev, "Failed to register PHY provider: %ld\n",=20
-> PTR_ERR(provider));
-> +		return PTR_ERR(provider);
-> +	}
-> +
-> +	platform_set_drvdata(pdev, priv);
-> +	phy_set_drvdata(priv->phy, priv);
-> +
-> +	return 0;
+>  
+> +static void tcpm_queue_vdm_unlocked(struct tcpm_port *port, const u32 header,
+> +				    const u32 *data, int cnt)
+> +{
+> +	mutex_lock(&port->lock);
+> +	tcpm_queue_vdm(port, header, data, cnt);
+> +	mutex_unlock(&port->lock);
 > +}
 > +
-> +static int ingenic_usb_phy_remove(struct platform_device *pdev)
-> +{
-> +	struct ingenic_usb_phy *priv =3D platform_get_drvdata(pdev);
-> +
-> +	clk_disable_unprepare(priv->clk);
-> +	regulator_disable(priv->vcc_supply);
-> +
-> +	return 0;
->  }
->=20
-> -static struct platform_driver ingenic_phy_driver =3D {
-> -	.probe		=3D jz4770_phy_probe,
-> +static struct platform_driver ingenic_usb_phy_driver =3D {
-> +	.probe		=3D ingenic_usb_phy_probe,
-> +	.remove		=3D ingenic_usb_phy_remove,
->  	.driver		=3D {
-> -		.name	=3D "jz4770-phy",
-> +		.name	=3D "ingenic-usb-phy",
->  		.of_match_table =3D of_match_ptr(ingenic_usb_phy_of_matches),
->  	},
->  };
-> -module_platform_driver(ingenic_phy_driver);
-> +module_platform_driver(ingenic_usb_phy_driver);
->=20
->  MODULE_AUTHOR("=E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) <zhouyanjie@wan=
-yeetech.com>");
->  MODULE_AUTHOR("=E6=BC=86=E9=B9=8F=E6=8C=AF (Qi Pengzhen) <aric.pzqi@inge=
-nic.com>");
-
-Finally, because of the renaming, the module name changed. To keep=20
-compatibility with userspace, I think you need to add a=20
-MODULE_ALIAS(jz4770_phy) here (but I'm not sure and maybe someone else=20
-should confirm that).
-
-Cheers,
--Paul
-
-> diff --git a/drivers/usb/phy/Kconfig b/drivers/usb/phy/Kconfig
-> index ef4787cd3d37..ff24fca0a2d9 100644
-> --- a/drivers/usb/phy/Kconfig
-> +++ b/drivers/usb/phy/Kconfig
-> @@ -184,12 +184,4 @@ config USB_ULPI_VIEWPORT
->  	  Provides read/write operations to the ULPI phy register set for
->  	  controllers with a viewport register (e.g. Chipidea/ARC=20
-> controllers).
->=20
-> -config JZ4770_PHY
-> -	tristate "Ingenic SoCs Transceiver Driver"
-> -	depends on MIPS || COMPILE_TEST
-> -	select USB_PHY
-> -	help
-> -	  This driver provides PHY support for the USB controller found
-> -	  on the JZ-series and X-series SoCs from Ingenic.
+>  static void svdm_consume_identity(struct tcpm_port *port, const __le32 *payload,
+>  				  int cnt)
+>  {
+> @@ -1506,13 +1516,10 @@ static int tcpm_altmode_enter(struct typec_altmode *altmode, u32 *vdo)
+>  	struct tcpm_port *port = typec_altmode_get_drvdata(altmode);
+>  	u32 header;
+>  
+> -	mutex_lock(&port->lock);
+>  	header = VDO(altmode->svid, vdo ? 2 : 1, CMD_ENTER_MODE);
+>  	header |= VDO_OPOS(altmode->mode);
+>  
+> -	tcpm_queue_vdm(port, header, vdo, vdo ? 1 : 0);
+> -	mutex_unlock(&port->lock);
 > -
->  endmenu
-> diff --git a/drivers/usb/phy/Makefile b/drivers/usb/phy/Makefile
-> index b352bdbe8712..df1d99010079 100644
-> --- a/drivers/usb/phy/Makefile
-> +++ b/drivers/usb/phy/Makefile
-> @@ -24,4 +24,3 @@ obj-$(CONFIG_USB_MXS_PHY)		+=3D phy-mxs-usb.o
->  obj-$(CONFIG_USB_ULPI)			+=3D phy-ulpi.o
->  obj-$(CONFIG_USB_ULPI_VIEWPORT)		+=3D phy-ulpi-viewport.o
->  obj-$(CONFIG_KEYSTONE_USB_PHY)		+=3D phy-keystone.o
-> -obj-$(CONFIG_JZ4770_PHY)		+=3D phy-jz4770.o
-> --
-> 2.11.0
-
+> +	tcpm_queue_vdm_unlocked(port, header, vdo, vdo ? 1 : 0);
+>  	return 0;
+>  }
+>  
+> @@ -1521,13 +1528,10 @@ static int tcpm_altmode_exit(struct typec_altmode *altmode)
+>  	struct tcpm_port *port = typec_altmode_get_drvdata(altmode);
+>  	u32 header;
+>  
+> -	mutex_lock(&port->lock);
+>  	header = VDO(altmode->svid, 1, CMD_EXIT_MODE);
+>  	header |= VDO_OPOS(altmode->mode);
+>  
+> -	tcpm_queue_vdm(port, header, NULL, 0);
+> -	mutex_unlock(&port->lock);
+> -
+> +	tcpm_queue_vdm_unlocked(port, header, NULL, 0);
+>  	return 0;
+>  }
+>  
+> @@ -1536,10 +1540,7 @@ static int tcpm_altmode_vdm(struct typec_altmode *altmode,
+>  {
+>  	struct tcpm_port *port = typec_altmode_get_drvdata(altmode);
+>  
+> -	mutex_lock(&port->lock);
+> -	tcpm_queue_vdm(port, header, data, count - 1);
+> -	mutex_unlock(&port->lock);
+> -
+> +	tcpm_queue_vdm_unlocked(port, header, data, count - 1);
+>  	return 0;
+>  }
+>  
+> 
 
