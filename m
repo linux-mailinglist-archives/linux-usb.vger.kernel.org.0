@@ -2,142 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D11B22D848
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Jul 2020 16:59:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4523622D866
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Jul 2020 17:14:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727019AbgGYO7Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 25 Jul 2020 10:59:24 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:55559 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726904AbgGYO7X (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Jul 2020 10:59:23 -0400
-Received: (qmail 1421498 invoked by uid 1000); 25 Jul 2020 10:59:22 -0400
-Date:   Sat, 25 Jul 2020 10:59:22 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Bastien Nocera <hadess@hadess.net>
+        id S1727019AbgGYPON (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 25 Jul 2020 11:14:13 -0400
+Received: from relay6-d.mail.gandi.net ([217.70.183.198]:35579 "EHLO
+        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726567AbgGYPOM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Jul 2020 11:14:12 -0400
+X-Originating-IP: 82.255.60.242
+Received: from classic (lns-bzn-39-82-255-60-242.adsl.proxad.net [82.255.60.242])
+        (Authenticated sender: hadess@hadess.net)
+        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id F0B55C0004;
+        Sat, 25 Jul 2020 15:14:10 +0000 (UTC)
+Message-ID: <5d20f8fa370f3c86dc6cfe73c066bfd7434997d4.camel@hadess.net>
+Subject: Re: [PATCH 2/3] USB: Also check for ->match
+From:   Bastien Nocera <hadess@hadess.net>
+To:     Alan Stern <stern@rowland.harvard.edu>
 Cc:     linux-usb@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH 3/3 v5] USB: Fix device driver race
-Message-ID: <20200725145922.GC1421097@rowland.harvard.edu>
-References: <ab1fcd9c7e8f4aecd1f709a74a763bcc239fe6c4.camel@hadess.net>
+Date:   Sat, 25 Jul 2020 17:14:10 +0200
+In-Reply-To: <20200725145143.GB1421097@rowland.harvard.edu>
+References: <25f9d978b791d25583b18f4b5d0a929e031fec1f.camel@hadess.net>
+         <20200725145143.GB1421097@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.3 (3.36.3-1.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ab1fcd9c7e8f4aecd1f709a74a763bcc239fe6c4.camel@hadess.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Jul 25, 2020 at 11:16:47AM +0200, Bastien Nocera wrote:
-> When a new device with a specialised device driver is plugged in, the
-> new driver will be modprobe()'d but the driver core will attach the
-> "generic" driver to the device.
+On Sat, 2020-07-25 at 10:51 -0400, Alan Stern wrote:
+> On Sat, Jul 25, 2020 at 11:14:07AM +0200, Bastien Nocera wrote:
+> > We only ever used a the ID table matching before, but we should
+> > probably
+> > also support an open-coded match function.
+> > 
+> > Fixes: 88b7381a939de ("USB: Select better matching USB drivers when
+> > available")
+> > Signed-off-by: Bastien Nocera <hadess@hadess.net>
+> > ---
+> >  drivers/usb/core/generic.c | 5 +++--
+> >  1 file changed, 3 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/usb/core/generic.c
+> > b/drivers/usb/core/generic.c
+> > index b6f2d4b44754..2b2f1ab6e36a 100644
+> > --- a/drivers/usb/core/generic.c
+> > +++ b/drivers/usb/core/generic.c
+> > @@ -205,8 +205,9 @@ static int __check_usb_generic(struct
+> > device_driver *drv, void *data)
+> >  	udrv = to_usb_device_driver(drv);
+> >  	if (udrv == &usb_generic_driver)
+> >  		return 0;
+> > -
+> > -	return usb_device_match_id(udev, udrv->id_table) != NULL;
+> > +	if (usb_device_match_id(udev, udrv->id_table) != NULL)
+> > +		return 1;
+> > +	return (udrv->match && udrv->match(udev));
+> >  }
+> >  
+> >  static bool usb_generic_driver_match(struct usb_device *udev)
 > 
-> After that, nothing will trigger a reprobe when the modprobe()'d device
-> driver has finished initialising, as the device has the "generic"
-> driver attached to it.
+> Acked-by: Alan Stern <stern@rowland.harvard.edu>
 > 
-> Trigger a reprobe ourselves when new specialised drivers get registered.
-> 
-> Fixes: 88b7381a939d ("USB: Select better matching USB drivers when available")
-> Signed-off-by: Bastien Nocera <hadess@hadess.net>
-> ---
-> Changes since v4:
-> - Add commit subject to "fixes" section
-> - Clarify conditional that checks for generic driver
-> - Remove check duplicated inside the loop
-> 
-> Changes since v3:
-> - Only reprobe devices that could use the new driver
-> - Many code fixes
-> 
-> Changes since v2:
-> - Fix formatting
-> 
-> Changes since v1:
-> - Simplified after Alan Stern's comments and some clarifications from
-> Benjamin Tissoires.
-> 
-> 
->  drivers/usb/core/driver.c | 37 +++++++++++++++++++++++++++++++++++--
->  1 file changed, 35 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-> index f81606c6a35b..7d3878aa8090 100644
-> --- a/drivers/usb/core/driver.c
-> +++ b/drivers/usb/core/driver.c
-> @@ -905,6 +905,32 @@ static int usb_uevent(struct device *dev, struct kobj_uevent_env *env)
->  	return 0;
->  }
->  
-> +static bool is_dev_usb_generic_driver(struct device *dev)
-> +{
-> +	struct usb_device_driver *udd = dev->driver ?
-> +		to_usb_device_driver(dev->driver) : NULL;
-> +
-> +	return udd == &usb_generic_driver;
-> +}
+> You know, at some point it would be nice to change the name of this 
+> function.  __check_usb_generic doesn't explain very well what the 
+> function actually does: It checks to see whether the driver is 
+> non-generic and matches the device.  Something like 
+> check_for_non_generic_match would be a lot better.
 
-Heh...  I don't recommend this optimization because it's a little 
-unclear, but the function can be shortened to:
+Sure. I'll do a follow-up patch unless there's something requiring a
+respin.
 
-	return dev->driver == &usb_generic_driver.drvwrap.driver;
+Greg, there's just the typo in this commit message, all the rest was
+ack'ed. Did you want to take care of that typo, or do you want me to
+respin?
 
-> +
-> +static int __usb_bus_reprobe_drivers(struct device *dev, void *data)
-> +{
-> +	struct usb_device_driver *new_udriver = data;
-> +	struct usb_device *udev;
-> +
-> +	if (!is_dev_usb_generic_driver(dev))
-> +		return 0;
-> +
-> +	udev = to_usb_device(dev);
-> +	if (usb_device_match_id(udev, new_udriver->id_table) == NULL &&
-> +	    (!new_udriver->match || new_udriver->match(udev) != 0))
-> +		return 0;
-> +
-> +	(void)!device_reprobe(dev);
+Cheers
 
-What's that '!' doing hiding in there?  It doesn't affect the final 
-outcome, but it sure looks weird -- if people notice it at all.
-
-Aside from that,
-
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-
-Alan Stern
-
-> +
-> +	return 0;
-> +}
-> +
->  /**
->   * usb_register_device_driver - register a USB device (not interface) driver
->   * @new_udriver: USB operations for the device driver
-> @@ -934,13 +960,20 @@ int usb_register_device_driver(struct usb_device_driver *new_udriver,
->  
->  	retval = driver_register(&new_udriver->drvwrap.driver);
->  
-> -	if (!retval)
-> +	if (!retval) {
->  		pr_info("%s: registered new device driver %s\n",
->  			usbcore_name, new_udriver->name);
-> -	else
-> +		/*
-> +		 * Check whether any device could be better served with
-> +		 * this new driver
-> +		 */
-> +		bus_for_each_dev(&usb_bus_type, NULL, new_udriver,
-> +				 __usb_bus_reprobe_drivers);
-> +	} else {
->  		printk(KERN_ERR "%s: error %d registering device "
->  			"	driver %s\n",
->  			usbcore_name, retval, new_udriver->name);
-> +	}
->  
->  	return retval;
->  }
-> 
