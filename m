@@ -2,65 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8640A22D3F4
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Jul 2020 04:54:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B11E622D42A
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Jul 2020 05:12:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726764AbgGYCyn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 24 Jul 2020 22:54:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50392 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726592AbgGYCyn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jul 2020 22:54:43 -0400
-Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B512C0619D3;
-        Fri, 24 Jul 2020 19:54:43 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 79A8F1277A0AA;
-        Fri, 24 Jul 2020 19:37:57 -0700 (PDT)
-Date:   Fri, 24 Jul 2020 19:54:41 -0700 (PDT)
-Message-Id: <20200724.195441.1368606642401001205.davem@davemloft.net>
-To:     trix@redhat.com
-Cc:     kuba@kernel.org, masahiroy@kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: cdc_ncm: USB_NET_CDC_NCM selects USB_NET_CDCETHER
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20200723142210.21274-1-trix@redhat.com>
-References: <20200723142210.21274-1-trix@redhat.com>
-X-Mailer: Mew version 6.8 on Emacs 26.3
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Fri, 24 Jul 2020 19:37:57 -0700 (PDT)
+        id S1726821AbgGYDMz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 24 Jul 2020 23:12:55 -0400
+Received: from out28-2.mail.aliyun.com ([115.124.28.2]:52190 "EHLO
+        out28-2.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726572AbgGYDMy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 24 Jul 2020 23:12:54 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1455954|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_news_journal|0.00769507-0.00104563-0.991259;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03275;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.I7EUJe-_1595646770;
+Received: from 192.168.10.205(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.I7EUJe-_1595646770)
+          by smtp.aliyun-inc.com(10.147.44.129);
+          Sat, 25 Jul 2020 11:12:51 +0800
+Subject: Re: [PATCH v5 0/4] Add USB PHY support for new Ingenic SoCs.
+To:     Felipe Balbi <balbi@kernel.org>, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, paul@crapouillou.net,
+        prasannatsmkumar@gmail.com, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        yanfei.li@ingenic.com, sernia.zhou@foxmail.com,
+        zhenwenjin@gmail.com
+References: <20200723061301.82583-1-zhouyanjie@wanyeetech.com>
+ <87tuxyoafs.fsf@kernel.org>
+From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Message-ID: <49a76da8-5a42-5bfe-84f4-18b763ea9aa7@wanyeetech.com>
+Date:   Sat, 25 Jul 2020 11:12:34 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.3.0
+MIME-Version: 1.0
+In-Reply-To: <87tuxyoafs.fsf@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: trix@redhat.com
-Date: Thu, 23 Jul 2020 07:22:10 -0700
+Hello Felipe,
 
-> From: Tom Rix <trix@redhat.com>
-> 
-> A link error
-> 
-> ld: drivers/net/usb/cdc_ncm.o:
->   undefined reference to `usbnet_cdc_update_filter'
-> 
-> usbnet_cdc_update_filter is defined in cdc_ether.c
-> Building of cdc_ether.o is controlled by USB_NET_CDCETHER
-> 
-> Building of cdc_ncm.o is controlled by USB_NET_CDC_NCM
-> 
-> So add a select USB_NET_CDCETHER to USB_NET_CDC_NCM
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
+在 2020/7/23 下午5:19, Felipe Balbi 写道:
+> 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com> writes:
+>
+>> 1.separate the adjustments to the code style into
+>>    a separate patch.
+>> 2.Modify the help message, make it more future-proof.
+>> 3.Drop the unnecessary comment about hardware reset.
+>> 4.Create 'soc_info' structures instead having ID_* as platform data.
+> For v5.10, make sure to move your phy driver to drivers/phy.
+>
+Sure, I will move it to drivers/phy in next version.
 
-Please indicate the appropriate target tree ('net' or 'net-next') in
-your Subject line f.e. "[PATCH net-next] ..."
+Thanks and best regards!
 
-Please provide an appropriate and properly formatted Fixes: tag.
-
-Thank you.
