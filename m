@@ -2,67 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A99322D634
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Jul 2020 10:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B00B422D658
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Jul 2020 11:13:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726701AbgGYIwb convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Sat, 25 Jul 2020 04:52:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41090 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726613AbgGYIwa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 25 Jul 2020 04:52:30 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+        id S1726845AbgGYJNP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 25 Jul 2020 05:13:15 -0400
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:40477 "EHLO
+        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725944AbgGYJNP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Jul 2020 05:13:15 -0400
+X-Originating-IP: 82.255.60.242
+Received: from classic (lns-bzn-39-82-255-60-242.adsl.proxad.net [82.255.60.242])
+        (Authenticated sender: hadess@hadess.net)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id B6AC040007;
+        Sat, 25 Jul 2020 09:13:12 +0000 (UTC)
+Message-ID: <616e0a918957ce9936478574a4856df742c20ad7.camel@hadess.net>
+Subject: [PATCH 1/3] USB: Simplify USB ID table match
+From:   Bastien Nocera <hadess@hadess.net>
 To:     linux-usb@vger.kernel.org
-Subject: [Bug 208257] Kingston USB flash drive repeatedly disconnected after
- "Set SEL for device-initiated U2 failed."
-Date:   Sat, 25 Jul 2020 08:52:30 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: julroy67@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-208257-208809-vKoHGMUk13@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-208257-208809@https.bugzilla.kernel.org/>
-References: <bug-208257-208809@https.bugzilla.kernel.org/>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Date:   Sat, 25 Jul 2020 11:13:12 +0200
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+User-Agent: Evolution 3.36.3 (3.36.3-1.fc32) 
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=208257
+usb_device_match_id() supports being passed NULL tables, so no need to
+check for it.
 
---- Comment #5 from Julien Humbert (julroy67@gmail.com) ---
-Created attachment 290557
-  --> https://bugzilla.kernel.org/attachment.cgi?id=290557&action=edit
-Sony Vaio kernel 5.7.10 dmesg log
+Signed-off-by: Bastien Nocera <hadess@hadess.net>
+---
+ drivers/usb/core/generic.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-Sorry for the delay.
+diff --git a/drivers/usb/core/generic.c b/drivers/usb/core/generic.c
+index 4626227a6dd2..b6f2d4b44754 100644
+--- a/drivers/usb/core/generic.c
++++ b/drivers/usb/core/generic.c
+@@ -205,8 +205,6 @@ static int __check_usb_generic(struct device_driver *drv, void *data)
+ 	udrv = to_usb_device_driver(drv);
+ 	if (udrv == &usb_generic_driver)
+ 		return 0;
+-	if (!udrv->id_table)
+-		return 0;
+ 
+ 	return usb_device_match_id(udev, udrv->id_table) != NULL;
+ }
 
-The exact same thing happens on my Sony Vaio SVP132A1CM (dmesg logs attached).
-Disabling Link Power Management before plugging in the flash drive with "sudo
-echo 0951:1666:k >/sys/module/usbcore/parameters/quirks" fixes the issue.
-
-I have no other laptop at hand to test, but I hope you can get the informations
-needed to fix it.
-
-Thank you!
-
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
