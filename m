@@ -2,182 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C9FC22D697
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Jul 2020 12:12:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CF0C22D69A
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Jul 2020 12:13:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726593AbgGYKMh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 25 Jul 2020 06:12:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49734 "EHLO mail.kernel.org"
+        id S1726636AbgGYKN1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 25 Jul 2020 06:13:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50134 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726572AbgGYKMh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 25 Jul 2020 06:12:37 -0400
+        id S1726572AbgGYKN1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 25 Jul 2020 06:13:27 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7FD78206D7;
-        Sat, 25 Jul 2020 10:12:34 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F068A206D7;
+        Sat, 25 Jul 2020 10:13:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595671955;
-        bh=zV9TTaB7RVFcpd6P8B0dWyD9xT4cj7S77iuef3Vqzyw=;
+        s=default; t=1595672006;
+        bh=r8T2iq4wIaySUfq55B2rwgUFuxRnooCUrwPMe+L+YQk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TIUmk2KDTbc5E80Sm8E57stlG3k3OYM+Zfz3n2tXHhJy/+JzHwZ8SYFUcVAx6kR/+
-         M9I9Q0VxAaYr87H0gg2QpWnST8nkFho/eb5wfONeU+oOSFOa0MTqugc5biKkjXUJ6H
-         ycdx+XuP2tH22iNAMIdEeNOZCQpz1dwEqQwwAISg=
-Date:   Sat, 25 Jul 2020 12:12:35 +0200
+        b=M4aKV134GpdZXGxYOnW2XydKx1TnFrP4z9Ms2JiRx9hCigi52/TULfxoAHNBMhdd8
+         rwVHQQA6r4OeleSkNxw1NNsvDs0DSN3WInmG5jcL+6kFvc7l3u0OXrDPWVJxru0VME
+         P2QgeCNyW2Gt/uV2ogpqzuT6mEhCy5m/Jdi2uoV4=
+Date:   Sat, 25 Jul 2020 12:13:26 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         John Youn <John.Youn@synopsys.com>
-Subject: Re: [PATCH v3 07/12] usb: common: Add function to get num_lanes and
- transfer rate
-Message-ID: <20200725101235.GA1093846@kroah.com>
+Subject: Re: [PATCH v3 03/12] usb: gadget: Expose sublink speed attributes
+Message-ID: <20200725101326.GB1093846@kroah.com>
 References: <cover.1595631457.git.thinhn@synopsys.com>
- <d86ccd4f97469cfe67cbce549b37d4df7cd8cb27.1595631457.git.thinhn@synopsys.com>
+ <500284ccf0353ee17a6bee8fa55011f801e17630.1595631457.git.thinhn@synopsys.com>
+ <1595646889.23885.68.camel@mhfsdcap03>
+ <d8539fd9-ffa6-824f-0347-71c73315d8a5@synopsys.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d86ccd4f97469cfe67cbce549b37d4df7cd8cb27.1595631457.git.thinhn@synopsys.com>
+In-Reply-To: <d8539fd9-ffa6-824f-0347-71c73315d8a5@synopsys.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 24, 2020 at 04:39:11PM -0700, Thinh Nguyen wrote:
-> Add a new common function to parse maximum_speed property string for
-> the specified number of lanes and transfer rate.
+On Sat, Jul 25, 2020 at 03:33:39AM +0000, Thinh Nguyen wrote:
+> Chunfeng Yun wrote:
+> > On Fri, 2020-07-24 at 16:38 -0700, Thinh Nguyen wrote:
+> >> The USB 3.2 specification supports dual-lane and different transfer
+> >> rates for super-speed-plus. Devices operating in super-speed-plus can
+> >> be gen2x1, gen1x2, or gen2x2.
+> >>
+> >> A gadget driver may need to know the gadget's sublink speeds to properly
+> >> setup its transfer requests and describe its capability in its
+> >> descriptors. To describe the transfer rate in super-speed-plus fully,
+> >> let's expose the lane count and sublink speed attributes when operating
+> >> in super-speed-plus.
+> >>
+> >> Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
+> >> ---
+> >>   Changes in v3:
+> >>   - None
+> >>   Changes in v2:
+> >>   - None
+> >>
+> >>   include/linux/usb/gadget.h | 20 ++++++++++++++++++++
+> >>   1 file changed, 20 insertions(+)
+> >>
+> >> diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
+> >> index 52ce1f6b8f83..bd982669609c 100644
+> >> --- a/include/linux/usb/gadget.h
+> >> +++ b/include/linux/usb/gadget.h
+> >> @@ -339,6 +339,15 @@ struct usb_gadget_ops {
+> >>    * @speed: Speed of current connection to USB host.
+> >>    * @max_speed: Maximal speed the UDC can handle.  UDC must support this
+> >>    *      and all slower speeds.
+> >> + * @num_lanes: Number of lanes in use.
+> >> + * @max_num_lanes: Maximum number of lanes the UDC supports.
+> >> + * @ssac: Sublink speed attribute count. The number of sublink speed
+> >> + *	attributes is ssac + 1.
+> >> + * @sublink_speed: Array of sublink speed attributes the UDC supports. Sublink
+> >> + *	speed attributes are paired, and an RX followed by a TX attribute.
+> >> + * @speed_ssid: Current sublink speed attribute ID in use.
+> >> + * @min_speed_ssid: Sublink speed attribute ID with the minimum speed.
+> >> + * @max_speed_ssid: Sublink speed attribute ID with the maximum speed.
+> >>    * @state: the state we are now (attached, suspended, configured, etc)
+> >>    * @name: Identifies the controller hardware type.  Used in diagnostics
+> >>    *	and sometimes configuration.
+> >> @@ -406,6 +415,17 @@ struct usb_gadget {
+> >>   	struct list_head		ep_list;	/* of usb_ep */
+> >>   	enum usb_device_speed		speed;
+> >>   	enum usb_device_speed		max_speed;
+> >> +
+> >> +	/* SSP only */
+> >> +	unsigned			num_lanes;
+> >> +	unsigned			max_num_lanes;
+> >> +	unsigned			ssac;
+> >> +#define USB_GADGET_MAX_SSAC 3
+> >> +	struct usb_sublink_speed	sublink_speed[USB_GADGET_MAX_SSAC + 1];
+> >> +	unsigned			speed_ssid;
+> >> +	unsigned			min_speed_ssid;
+> >> +	unsigned			max_speed_ssid;
+> > checkpatch warning:
+> >
+> > WARNING:UNSPECIFIED_INT: Prefer 'unsigned int' to bare use of 'unsigned'
 > 
-> Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
-> ---
-> Changes in v3:
-> - Add new function to parse "maximum-speed" for lanes and transfer rate
-> - Remove separate functions getting num_lanes and transfer rate properties
+> Yes, but I'd like to keep them consistent with the rest of the fields in 
+> this structure.
 
-No, why have you split this into a single function that for some reason
-"can not fail"?
-
-> Changes in v2:
-> - New commit
-> 
->  drivers/usb/common/common.c | 47 ++++++++++++++++++++++++++++++++++++++++++---
->  include/linux/usb/ch9.h     | 25 ++++++++++++++++++++++++
->  2 files changed, 69 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/common/common.c b/drivers/usb/common/common.c
-> index 1433260d99b4..53b4950c49e4 100644
-> --- a/drivers/usb/common/common.c
-> +++ b/drivers/usb/common/common.c
-> @@ -77,18 +77,59 @@ const char *usb_speed_string(enum usb_device_speed speed)
->  }
->  EXPORT_SYMBOL_GPL(usb_speed_string);
->  
-> -enum usb_device_speed usb_get_maximum_speed(struct device *dev)
-> +void usb_get_maximum_speed_and_num_lanes(struct device *dev,
-> +					 enum usb_device_speed *speed,
-> +					 enum usb_phy_gen *gen,
-> +					 u8 *num_lanes)
-
-What is wrong with just having multiple different functions instead?
-
->  {
->  	const char *maximum_speed;
-> +	enum usb_device_speed matched_speed = USB_SPEED_UNKNOWN;
-> +	enum usb_phy_gen matched_gen = USB_PHY_GEN_UNKNOWN;
-> +	u8 matched_num_lanes = 0;
->  	int ret;
->  
->  	ret = device_property_read_string(dev, "maximum-speed", &maximum_speed);
->  	if (ret < 0)
-> -		return USB_SPEED_UNKNOWN;
-> +		goto done;
->  
->  	ret = match_string(speed_names, ARRAY_SIZE(speed_names), maximum_speed);
-> +	if (ret >= 0) {
-> +		matched_speed = ret;
-> +		goto done;
-> +	}
-> +
-> +	if (strncmp("super-speed-plus-gen2x2", maximum_speed, 23) == 0) {
-> +		matched_speed = USB_SPEED_SUPER_PLUS;
-> +		matched_gen = USB_PHY_GEN_2;
-> +		matched_num_lanes = 2;
-> +	} else if (strncmp("super-speed-plus-gen2x1", maximum_speed, 23) == 0) {
-> +		matched_speed = USB_SPEED_SUPER_PLUS;
-> +		matched_gen = USB_PHY_GEN_2;
-> +		matched_num_lanes = 1;
-> +	} else if (strncmp("super-speed-plus-gen1x2", maximum_speed, 23) == 0) {
-
-Where are all of these device properties documented?
-
-
-
-> +		matched_speed = USB_SPEED_SUPER_PLUS;
-> +		matched_gen = USB_PHY_GEN_1;
-> +		matched_num_lanes = 2;
-> +	}
-> +
-> +done:
-> +	if (speed)
-> +		*speed = matched_speed;
-> +
-> +	if (num_lanes)
-> +		*num_lanes = matched_num_lanes;
-> +
-> +	if (gen)
-> +		*gen = matched_gen;
-
-
-
-> +}
-> +EXPORT_SYMBOL_GPL(usb_get_maximum_speed_and_num_lanes);
-> +
-> +enum usb_device_speed usb_get_maximum_speed(struct device *dev)
-> +{
-> +	enum usb_device_speed speed;
->  
-> -	return (ret < 0) ? USB_SPEED_UNKNOWN : ret;
-> +	usb_get_maximum_speed_and_num_lanes(dev, &speed, NULL, NULL);
-
-Here's an example of why this isn't a good function.
-
-It isn't self-describing.  Why do you pass in 3 pointers yet the name
-only contains 2 things?
-
-usb_get_maximum_speed_and_num_lanes_and_generation() shows that this is
-not a good thing, right?
-
-Again, 3 different functions please.
-
-> +	return speed;
->  }
->  EXPORT_SYMBOL_GPL(usb_get_maximum_speed);
->  
-> diff --git a/include/linux/usb/ch9.h b/include/linux/usb/ch9.h
-> index 01191649a0ad..46cfd72e7082 100644
-> --- a/include/linux/usb/ch9.h
-> +++ b/include/linux/usb/ch9.h
-> @@ -57,6 +57,13 @@ enum usb_link_protocol {
->  	USB_LP_SSP = 1,
->  };
->  
-> +/* USB phy signaling rate gen */
-> +enum usb_phy_gen {
-> +	USB_PHY_GEN_UNKNOWN,
-> +	USB_PHY_GEN_1,
-> +	USB_PHY_GEN_2,
-> +};
-> +
->  /**
->   * struct usb_sublink_speed - sublink speed attribute
->   * @id: sublink speed attribute ID (SSID)
-> @@ -95,6 +102,24 @@ extern const char *usb_ep_type_string(int ep_type);
->   */
->  extern const char *usb_speed_string(enum usb_device_speed speed);
->  
-> +/**
-> + * usb_get_maximum_speed_and_num_lanes - Get maximum requested speed and number
-> + * of lanes for a given USB controller.
-
-You forgot that it also determines the "gen".
+No, do not do things that you know are wrong and will have to be cleaned
+up in the future.  Unless you are trying to increase your patch count
+for some reason, this is not ok.
 
 thanks,
 
