@@ -2,30 +2,29 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4523622D866
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Jul 2020 17:14:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCD3E22D86D
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Jul 2020 17:24:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727019AbgGYPON (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 25 Jul 2020 11:14:13 -0400
-Received: from relay6-d.mail.gandi.net ([217.70.183.198]:35579 "EHLO
-        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726567AbgGYPOM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Jul 2020 11:14:12 -0400
-X-Originating-IP: 82.255.60.242
+        id S1726904AbgGYPYX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 25 Jul 2020 11:24:23 -0400
+Received: from relay10.mail.gandi.net ([217.70.178.230]:53741 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726567AbgGYPYX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Jul 2020 11:24:23 -0400
 Received: from classic (lns-bzn-39-82-255-60-242.adsl.proxad.net [82.255.60.242])
         (Authenticated sender: hadess@hadess.net)
-        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id F0B55C0004;
-        Sat, 25 Jul 2020 15:14:10 +0000 (UTC)
-Message-ID: <5d20f8fa370f3c86dc6cfe73c066bfd7434997d4.camel@hadess.net>
-Subject: Re: [PATCH 2/3] USB: Also check for ->match
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 70EA6240004;
+        Sat, 25 Jul 2020 15:24:21 +0000 (UTC)
+Message-ID: <fa8f94ff5d62b42569b559a10638f952b2037145.camel@hadess.net>
+Subject: Re: [PATCH 3/3 v5] USB: Fix device driver race
 From:   Bastien Nocera <hadess@hadess.net>
 To:     Alan Stern <stern@rowland.harvard.edu>
 Cc:     linux-usb@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Date:   Sat, 25 Jul 2020 17:14:10 +0200
-In-Reply-To: <20200725145143.GB1421097@rowland.harvard.edu>
-References: <25f9d978b791d25583b18f4b5d0a929e031fec1f.camel@hadess.net>
-         <20200725145143.GB1421097@rowland.harvard.edu>
+Date:   Sat, 25 Jul 2020 17:24:20 +0200
+In-Reply-To: <20200725145922.GC1421097@rowland.harvard.edu>
+References: <ab1fcd9c7e8f4aecd1f709a74a763bcc239fe6c4.camel@hadess.net>
+         <20200725145922.GC1421097@rowland.harvard.edu>
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.36.3 (3.36.3-1.fc32) 
 MIME-Version: 1.0
@@ -35,52 +34,26 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, 2020-07-25 at 10:51 -0400, Alan Stern wrote:
-> On Sat, Jul 25, 2020 at 11:14:07AM +0200, Bastien Nocera wrote:
-> > We only ever used a the ID table matching before, but we should
-> > probably
-> > also support an open-coded match function.
-> > 
-> > Fixes: 88b7381a939de ("USB: Select better matching USB drivers when
-> > available")
-> > Signed-off-by: Bastien Nocera <hadess@hadess.net>
-> > ---
-> >  drivers/usb/core/generic.c | 5 +++--
-> >  1 file changed, 3 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/usb/core/generic.c
-> > b/drivers/usb/core/generic.c
-> > index b6f2d4b44754..2b2f1ab6e36a 100644
-> > --- a/drivers/usb/core/generic.c
-> > +++ b/drivers/usb/core/generic.c
-> > @@ -205,8 +205,9 @@ static int __check_usb_generic(struct
-> > device_driver *drv, void *data)
-> >  	udrv = to_usb_device_driver(drv);
-> >  	if (udrv == &usb_generic_driver)
-> >  		return 0;
-> > -
-> > -	return usb_device_match_id(udev, udrv->id_table) != NULL;
-> > +	if (usb_device_match_id(udev, udrv->id_table) != NULL)
-> > +		return 1;
-> > +	return (udrv->match && udrv->match(udev));
-> >  }
-> >  
-> >  static bool usb_generic_driver_match(struct usb_device *udev)
+On Sat, 2020-07-25 at 10:59 -0400, Alan Stern wrote:
+<snip>
+> > +	udev = to_usb_device(dev);
+> > +	if (usb_device_match_id(udev, new_udriver->id_table) == NULL &&
+> > +	    (!new_udriver->match || new_udriver->match(udev) != 0))
+> > +		return 0;
+> > +
+> > +	(void)!device_reprobe(dev);
+> 
+> What's that '!' doing hiding in there?  It doesn't affect the final 
+> outcome, but it sure looks weird -- if people notice it at all.
+
+It's how we stop gcc from complaining about the warn_unused_result
+attribute on device_reprobe()... (void) is enough with clang, but not
+with gcc.
+
+> Aside from that,
 > 
 > Acked-by: Alan Stern <stern@rowland.harvard.edu>
-> 
-> You know, at some point it would be nice to change the name of this 
-> function.  __check_usb_generic doesn't explain very well what the 
-> function actually does: It checks to see whether the driver is 
-> non-generic and matches the device.  Something like 
-> check_for_non_generic_match would be a lot better.
 
-Sure. I'll do a follow-up patch unless there's something requiring a
-respin.
+Thanks!
 
-Greg, there's just the typo in this commit message, all the rest was
-ack'ed. Did you want to take care of that typo, or do you want me to
-respin?
-
-Cheers
 
