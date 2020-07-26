@@ -2,75 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7760122DD51
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Jul 2020 10:37:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 546E822DD52
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Jul 2020 10:37:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725972AbgGZIhO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 26 Jul 2020 04:37:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50764 "EHLO mail.kernel.org"
+        id S1725972AbgGZIh6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 26 Jul 2020 04:37:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51070 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725848AbgGZIhO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 26 Jul 2020 04:37:14 -0400
+        id S1725810AbgGZIh6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 26 Jul 2020 04:37:58 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 23517206E3;
-        Sun, 26 Jul 2020 08:37:12 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 544E520714;
+        Sun, 26 Jul 2020 08:37:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595752633;
-        bh=YVrX0fjLkypC7ddVmCMuGRAIn/E2H8OAJJh5MC2i+/o=;
+        s=default; t=1595752677;
+        bh=ML/f9CAI2HOK9mlkt9dYYLGQRHoLaEEjAuYSeB7bmlk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RpZTvuJ9vDpimJwNIFkPwxDqB/lpWQPl15BUldDkFf/WXOv0rVxlHwRsVp8bt+UDx
-         67pAqEzLwVyCCLufDWqRKZK5k/GrI2p1HoLIDvISkezGsmBv/yxpSfXFyQU2VBGO4m
-         ra7qtm+kb9fYdvDks8fDzBvVU5y7EhFr0FAoPcw0=
-Date:   Sun, 26 Jul 2020 10:36:55 +0200
+        b=mlEdWwWOU/S0KshwF0yPRXNlL/nUGMtTU3lSJ17Qg2nG4Hkfq0bNkllLffdYaHc9v
+         fxeRu7+cj5xSOzYk/2gbxfB4GubjaeipEXL8F8oRzUEAl9pdbU8yTVNndJ3E6oK/Ti
+         L+u7AQGaU8sWlG2ebGWJQNTeUQuSgf8zZXdj/lHA=
+Date:   Sun, 26 Jul 2020 10:37:55 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Bastien Nocera <hadess@hadess.net>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 3/3 v5] USB: Fix device driver race
-Message-ID: <20200726083655.GA448215@kroah.com>
-References: <ab1fcd9c7e8f4aecd1f709a74a763bcc239fe6c4.camel@hadess.net>
- <20200725145922.GC1421097@rowland.harvard.edu>
- <fa8f94ff5d62b42569b559a10638f952b2037145.camel@hadess.net>
- <20200725195707.GB1426415@rowland.harvard.edu>
+To:     Bastien Nocera <hadess@hadess.net>
+Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 2/3] USB: Also check for ->match
+Message-ID: <20200726083755.GB448215@kroah.com>
+References: <25f9d978b791d25583b18f4b5d0a929e031fec1f.camel@hadess.net>
+ <20200725145143.GB1421097@rowland.harvard.edu>
+ <5d20f8fa370f3c86dc6cfe73c066bfd7434997d4.camel@hadess.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200725195707.GB1426415@rowland.harvard.edu>
+In-Reply-To: <5d20f8fa370f3c86dc6cfe73c066bfd7434997d4.camel@hadess.net>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Jul 25, 2020 at 03:57:07PM -0400, Alan Stern wrote:
-> On Sat, Jul 25, 2020 at 05:24:20PM +0200, Bastien Nocera wrote:
-> > On Sat, 2020-07-25 at 10:59 -0400, Alan Stern wrote:
-> > <snip>
-> > > > +	udev = to_usb_device(dev);
-> > > > +	if (usb_device_match_id(udev, new_udriver->id_table) == NULL &&
-> > > > +	    (!new_udriver->match || new_udriver->match(udev) != 0))
-> > > > +		return 0;
-> > > > +
-> > > > +	(void)!device_reprobe(dev);
+On Sat, Jul 25, 2020 at 05:14:10PM +0200, Bastien Nocera wrote:
+> On Sat, 2020-07-25 at 10:51 -0400, Alan Stern wrote:
+> > On Sat, Jul 25, 2020 at 11:14:07AM +0200, Bastien Nocera wrote:
+> > > We only ever used a the ID table matching before, but we should
+> > > probably
+> > > also support an open-coded match function.
 > > > 
-> > > What's that '!' doing hiding in there?  It doesn't affect the final 
-> > > outcome, but it sure looks weird -- if people notice it at all.
+> > > Fixes: 88b7381a939de ("USB: Select better matching USB drivers when
+> > > available")
+> > > Signed-off-by: Bastien Nocera <hadess@hadess.net>
+> > > ---
+> > >  drivers/usb/core/generic.c | 5 +++--
+> > >  1 file changed, 3 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/usb/core/generic.c
+> > > b/drivers/usb/core/generic.c
+> > > index b6f2d4b44754..2b2f1ab6e36a 100644
+> > > --- a/drivers/usb/core/generic.c
+> > > +++ b/drivers/usb/core/generic.c
+> > > @@ -205,8 +205,9 @@ static int __check_usb_generic(struct
+> > > device_driver *drv, void *data)
+> > >  	udrv = to_usb_device_driver(drv);
+> > >  	if (udrv == &usb_generic_driver)
+> > >  		return 0;
+> > > -
+> > > -	return usb_device_match_id(udev, udrv->id_table) != NULL;
+> > > +	if (usb_device_match_id(udev, udrv->id_table) != NULL)
+> > > +		return 1;
+> > > +	return (udrv->match && udrv->match(udev));
+> > >  }
+> > >  
+> > >  static bool usb_generic_driver_match(struct usb_device *udev)
 > > 
-> > It's how we stop gcc from complaining about the warn_unused_result
-> > attribute on device_reprobe()... (void) is enough with clang, but not
-> > with gcc.
+> > Acked-by: Alan Stern <stern@rowland.harvard.edu>
+> > 
+> > You know, at some point it would be nice to change the name of this 
+> > function.  __check_usb_generic doesn't explain very well what the 
+> > function actually does: It checks to see whether the driver is 
+> > non-generic and matches the device.  Something like 
+> > check_for_non_generic_match would be a lot better.
 > 
-> Hmmm.  Maybe this is an indication that device_reprobe() doesn't really 
-> need to be __must_check.
+> Sure. I'll do a follow-up patch unless there's something requiring a
+> respin.
 > 
-> Greg, do you know why it's annotated this way?
+> Greg, there's just the typo in this commit message, all the rest was
+> ack'ed. Did you want to take care of that typo, or do you want me to
+> respin?
 
-Because you really should pass up the return value if an error happens
-here.  Why do we think it is safe to ignore?
+Never make me hand-edit a patch, that ensures it will go to the end of
+the line :(
 
-And that "(void)!" is not ok, if the annotation is safe to ignore, then
-we need to remove the annotation, don't work around stuff like this
-without at the very least, a comment saying why it is ok.
+ALso, your patches are not showing up as linked to each other, so they
+are all over the place in my mailbox.  Please use something like git
+send-email or other tools that will properly link them to ensure I can
+see them correctly.
 
 thanks,
 
