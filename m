@@ -2,127 +2,169 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 260C122DB31
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Jul 2020 03:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31A4222DB32
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Jul 2020 03:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727867AbgGZBgW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 25 Jul 2020 21:36:22 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:44738 "EHLO
+        id S1727886AbgGZBg1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 25 Jul 2020 21:36:27 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:50678 "EHLO
         smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726870AbgGZBgV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Jul 2020 21:36:21 -0400
+        by vger.kernel.org with ESMTP id S1726870AbgGZBg1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 25 Jul 2020 21:36:27 -0400
 Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 244FBC00A4;
-        Sun, 26 Jul 2020 01:36:21 +0000 (UTC)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 1E82940141;
+        Sun, 26 Jul 2020 01:36:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1595727381; bh=IoIpYWUbBgyDgfAVz1ui3L1DGhQB8+u/80SeUDRgvZE=;
+        t=1595727387; bh=87ml2iWRy7mIiJrILI7/dFvJupvPzhVXyAkHikvVucc=;
         h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=k48CT+LqSudhiOAAh7n5jEsJwVPOWkGqazLFew7cET273UPsahLma3/M+opAkTCtq
-         Hm4alGCo+RAayErfLXVpq1w6GGn3hLG56EcrvsqB7BDGzAHuXUL/bcQbZfcUAmQ/UT
-         WEJUvVJwdTSfw/dHyaejwxdG9Bh5hj9lDVtrEtRN5MlLNVwAHRMQ3WdlzSImQkKOdm
-         barY+s43VyGfgB+YE95C1pCAGmC74+UBRzr/6pWjNwOhQypWbLfqYM6ZW5H64DY6Mu
-         m1107D5CvVt8DpKMc2VHgla3nOt8G0bxc/lbVazuH/q4Dwm3LnNj8l4Mh3PXrTYf3C
-         vTOiMOmvPRquA==
+        b=ZpL2RS7ceWohWYfJVf2KV/uzC8RvomU3/roVK4gBLwOTGRS9GaTtAu2SsHThWE/yH
+         OO/TsTov0QC0XYR78YyBhXOpyDXPyFCWSW3WlmSofrHhjlBP+XWp+NC5AR1AuY5b3c
+         KX1Wne97BPQ5o0/OzQOBD/CZTvAIjJy/c2HVvHgNE4/O+7vhQE6ecICeL57GfkMeX3
+         6h++sqs6BUZWNztNs7U6ljKfBcCPkn3s+H/s5jAcoSncYmCeFwzhFJEloR9M2b8t6x
+         pTSAqYi4UEuVj40FvLAWoJXR02eSpD+fWz2Crd95sRAS3vvvKmFHXqgiNKkEB3abqX
+         Vt1akyLIitGWg==
 Received: from te-lab16 (nanobot.internal.synopsys.com [10.10.186.99])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 67A19A0099;
-        Sun, 26 Jul 2020 01:36:18 +0000 (UTC)
-Received: by te-lab16 (sSMTP sendmail emulation); Sat, 25 Jul 2020 18:36:18 -0700
-Date:   Sat, 25 Jul 2020 18:36:18 -0700
-Message-Id: <ca08434f44e6649aa3e3fe93e3aa7f3488cd0fb3.1595727196.git.thinhn@synopsys.com>
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 071F0A0096;
+        Sun, 26 Jul 2020 01:36:26 +0000 (UTC)
+Received: by te-lab16 (sSMTP sendmail emulation); Sat, 25 Jul 2020 18:36:25 -0700
+Date:   Sat, 25 Jul 2020 18:36:25 -0700
+Message-Id: <3a0c19f74becaf011b184aeab966d2125f80f2d9.1595727196.git.thinhn@synopsys.com>
 In-Reply-To: <cover.1595727196.git.thinhn@synopsys.com>
 References: <cover.1595727196.git.thinhn@synopsys.com>
 X-SNPS-Relay: synopsys.com
 From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH v4 04/12] usb: gadget: Set max speed for SSP devices
+Subject: [PATCH v4 05/12] usb: composite: Properly report sublink speed
 To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-usb@vger.kernel.org, Peter Chen <peter.chen@nxp.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Dejin Zheng <zhengdejin5@gmail.com>,
-        Roger Quadros <rogerq@ti.com>
+        linux-usb@vger.kernel.org
 Cc:     John Youn <John.Youn@synopsys.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-A super-speed-plus device may operate at different sublink speeds (e.g.
-gen2x2, gen1x2, or gen2x1). If the USB device supports different sublink
-speeds at super-speed-plus, set the device to operate at the maximum
-number of lanes and sublink speed possible. Introduce gadget ops
-udc_set_num_lanes_and_speed to set the lane count and sublink speed for
-super-speed-plus capable devices.
+Use the max sublink speed attributes reported in the gadget structure
+to write to the super-speed-plus BOS descriptor if available.
 
 Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
 ---
-Changes in v4:
-- Add identifier name for usb_gadget in gadget ops
-  (*udc_set_num_lanes_and_speed) to avoid checkpatch warning
-Changes in v3:
-- None
-Changes in v2:
-- None
+ Changes in v4:
+ - None
+ Changes in v3:
+ - None
+ Changes in v2:
+ - None
 
- drivers/usb/gadget/udc/core.c | 24 +++++++++++++++++++-----
- include/linux/usb/gadget.h    |  3 +++
- 2 files changed, 22 insertions(+), 5 deletions(-)
+ drivers/usb/gadget/composite.c | 76 +++++++++++++++++++++++++++++-------------
+ 1 file changed, 52 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-index 4f82bcd31fd3..e5f569dc9ee0 100644
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -1114,12 +1114,26 @@ static inline void usb_gadget_udc_stop(struct usb_udc *udc)
- static inline void usb_gadget_udc_set_speed(struct usb_udc *udc,
- 					    enum usb_device_speed speed)
- {
--	if (udc->gadget->ops->udc_set_speed) {
--		enum usb_device_speed s;
-+	struct usb_gadget *gadget = udc->gadget;
-+	enum usb_device_speed s;
- 
--		s = min(speed, udc->gadget->max_speed);
--		udc->gadget->ops->udc_set_speed(udc->gadget, s);
--	}
-+	if (speed == USB_SPEED_UNKNOWN)
-+		s = gadget->max_speed;
-+	else
-+		s = min(speed, gadget->max_speed);
+diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+index 0aa4cb49aa53..2d0b7af4b08f 100644
+--- a/drivers/usb/gadget/composite.c
++++ b/drivers/usb/gadget/composite.c
+@@ -729,45 +729,73 @@ static int bos_desc(struct usb_composite_dev *cdev)
+ 	/* The SuperSpeedPlus USB Device Capability descriptor */
+ 	if (gadget_is_superspeed_plus(cdev->gadget)) {
+ 		struct usb_ssp_cap_descriptor *ssp_cap;
++		unsigned int ssac = 1;
++		unsigned int ssic = 0;
++		unsigned int min_ssid = 0;
++		int i;
 +
-+	/*
-+	 * If the UDC supports super-speed-plus and different sublink speeds,
-+	 * then set the gadget to the max possible sublink speed for
-+	 * super-speed-plus symmetric lanes.
-+	 */
-+	if (s == USB_SPEED_SUPER_PLUS &&
-+	    gadget->ops->udc_set_num_lanes_and_speed)
-+		gadget->ops->udc_set_num_lanes_and_speed(gadget,
-+							 gadget->max_num_lanes,
-+							 gadget->max_speed_ssid);
-+	else if (gadget->ops->udc_set_speed)
-+		gadget->ops->udc_set_speed(gadget, s);
- }
++		if (cdev->gadget->ssac) {
++			ssac = cdev->gadget->ssac;
++
++			/*
++			 * Paired RX and TX sublink speed attributes share
++			 * the same SSID.
++			 */
++			ssic = (ssac + 1) / 2 - 1;
++			min_ssid = cdev->gadget->min_speed_ssid;
++		}
  
- /**
-diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
-index d25aefaacba0..3bbd8d7a80ad 100644
---- a/include/linux/usb/gadget.h
-+++ b/include/linux/usb/gadget.h
-@@ -323,6 +323,9 @@ struct usb_gadget_ops {
- 			struct usb_gadget_driver *);
- 	int	(*udc_stop)(struct usb_gadget *);
- 	void	(*udc_set_speed)(struct usb_gadget *, enum usb_device_speed);
-+	void	(*udc_set_num_lanes_and_speed)(struct usb_gadget *gadget,
-+					       unsigned int num_lanes,
-+					       unsigned int ssid);
- 	struct usb_ep *(*match_ep)(struct usb_gadget *,
- 			struct usb_endpoint_descriptor *,
- 			struct usb_ss_ep_comp_descriptor *);
+ 		ssp_cap = cdev->req->buf + le16_to_cpu(bos->wTotalLength);
+ 		bos->bNumDeviceCaps++;
+ 
+-		/*
+-		 * Report typical values.
+-		 */
+-
+-		le16_add_cpu(&bos->wTotalLength, USB_DT_USB_SSP_CAP_SIZE(1));
+-		ssp_cap->bLength = USB_DT_USB_SSP_CAP_SIZE(1);
++		le16_add_cpu(&bos->wTotalLength, USB_DT_USB_SSP_CAP_SIZE(ssac));
++		ssp_cap->bLength = USB_DT_USB_SSP_CAP_SIZE(ssac);
+ 		ssp_cap->bDescriptorType = USB_DT_DEVICE_CAPABILITY;
+ 		ssp_cap->bDevCapabilityType = USB_SSP_CAP_TYPE;
+ 		ssp_cap->bReserved = 0;
+ 		ssp_cap->wReserved = 0;
+ 
+ 		ssp_cap->bmAttributes =
+-			cpu_to_le32(FIELD_PREP(USB_SSP_SUBLINK_SPEED_ATTRIBS, 1) |
+-				    FIELD_PREP(USB_SSP_SUBLINK_SPEED_IDS, 0));
++			cpu_to_le32(FIELD_PREP(USB_SSP_SUBLINK_SPEED_ATTRIBS, ssac) |
++				    FIELD_PREP(USB_SSP_SUBLINK_SPEED_IDS, ssic));
+ 
+ 		ssp_cap->wFunctionalitySupport =
+-			cpu_to_le16(FIELD_PREP(USB_SSP_MIN_SUBLINK_SPEED_ATTRIBUTE_ID, 0) |
++			cpu_to_le16(FIELD_PREP(USB_SSP_MIN_SUBLINK_SPEED_ATTRIBUTE_ID, min_ssid) |
+ 				    FIELD_PREP(USB_SSP_MIN_RX_LANE_COUNT, 1) |
+ 				    FIELD_PREP(USB_SSP_MIN_TX_LANE_COUNT, 1));
+ 
+-		ssp_cap->bmSublinkSpeedAttr[0] =
+-			cpu_to_le32(FIELD_PREP(USB_SSP_SUBLINK_SPEED_SSID, 0) |
+-				    FIELD_PREP(USB_SSP_SUBLINK_SPEED_LSE, USB_LSE_GBPS) |
+-				    FIELD_PREP(USB_SSP_SUBLINK_SPEED_ST,
+-					       USB_ST_SYMMETRIC_RX) |
+-				    FIELD_PREP(USB_SSP_SUBLINK_SPEED_LP, USB_LP_SSP) |
+-				    FIELD_PREP(USB_SSP_SUBLINK_SPEED_LSM, 10));
+-
+-		ssp_cap->bmSublinkSpeedAttr[1] =
+-			cpu_to_le32(FIELD_PREP(USB_SSP_SUBLINK_SPEED_SSID, 0) |
+-				    FIELD_PREP(USB_SSP_SUBLINK_SPEED_LSE, USB_LSE_GBPS) |
+-				    FIELD_PREP(USB_SSP_SUBLINK_SPEED_ST,
+-					       USB_ST_SYMMETRIC_TX) |
+-				    FIELD_PREP(USB_SSP_SUBLINK_SPEED_LP, USB_LP_SSP) |
+-				    FIELD_PREP(USB_SSP_SUBLINK_SPEED_LSM, 10));
++		/*
++		 * If the sublink speed attributes are not specified, then the
++		 * default will be a pair symmetric RX/TX sublink speed
++		 * attributes of 10 Gbps.
++		 */
++		for (i = 0; i < ssac + 1; i++) {
++			struct usb_sublink_speed default_ssa;
++			struct usb_sublink_speed *ptr;
++
++			if (cdev->gadget->ssac) {
++				ptr = &cdev->gadget->sublink_speed[i];
++			} else {
++				default_ssa.id = i / 2;
++				default_ssa.protocol = USB_LP_SSP;
++				default_ssa.exponent = USB_LSE_GBPS;
++				default_ssa.mantissa = 10;
++
++				if (i % 2)
++					default_ssa.type = USB_ST_SYMMETRIC_TX;
++				else
++					default_ssa.type = USB_ST_SYMMETRIC_RX;
++
++				ptr = &default_ssa;
++			}
++
++			ssp_cap->bmSublinkSpeedAttr[i] =
++				cpu_to_le32(FIELD_PREP(USB_SSP_SUBLINK_SPEED_SSID, ptr->id) |
++					    FIELD_PREP(USB_SSP_SUBLINK_SPEED_LSE, ptr->exponent) |
++					    FIELD_PREP(USB_SSP_SUBLINK_SPEED_ST, ptr->type) |
++					    FIELD_PREP(USB_SSP_SUBLINK_SPEED_LP, ptr->protocol) |
++					    FIELD_PREP(USB_SSP_SUBLINK_SPEED_LSM, ptr->mantissa));
++		}
+ 	}
+ 
+ 	return le16_to_cpu(bos->wTotalLength);
 -- 
 2.11.0
 
