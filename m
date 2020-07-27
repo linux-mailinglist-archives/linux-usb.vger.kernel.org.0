@@ -2,172 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DFB722ECD3
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 15:06:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FC1222EE1E
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 15:58:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728542AbgG0NGi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jul 2020 09:06:38 -0400
-Received: from mga02.intel.com ([134.134.136.20]:59418 "EHLO mga02.intel.com"
+        id S1728135AbgG0N6P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jul 2020 09:58:15 -0400
+Received: from mx2.suse.de ([195.135.220.15]:39616 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728393AbgG0NGh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 27 Jul 2020 09:06:37 -0400
-IronPort-SDR: 2v0DxkGq+SM2aWK39bJXdQ6yAPqQh4b7pUQLm0w8fFGi1F47bYVl6gZTj58Vt3/EiWFAaNOFms
- qgYhgSp1xNEA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9694"; a="139038469"
-X-IronPort-AV: E=Sophos;i="5.75,402,1589266800"; 
-   d="scan'208";a="139038469"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2020 06:05:32 -0700
-IronPort-SDR: dm4Ln0TlqLC73NTofpZWW3ntYmjGkEGiQhlTD4Sfp5KSWJPzN0DxI79e2OcLzxsM1OrPykZol/
- A2mpmgx/NTcw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,402,1589266800"; 
-   d="scan'208";a="393977754"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 27 Jul 2020 06:05:29 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 27 Jul 2020 16:05:28 +0300
-Date:   Mon, 27 Jul 2020 16:05:28 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tobias Schramm <t.schramm@manjaro.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 2/4] usb: typec: Add
- typec_port_register_altmodes_from_fwnode()
-Message-ID: <20200727130528.GB883641@kuha.fi.intel.com>
-References: <20200714113617.10470-1-hdegoede@redhat.com>
- <20200714113617.10470-3-hdegoede@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200714113617.10470-3-hdegoede@redhat.com>
+        id S1726298AbgG0N6P (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 27 Jul 2020 09:58:15 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 613D2AF57;
+        Mon, 27 Jul 2020 13:58:24 +0000 (UTC)
+Message-ID: <1595858285.13408.36.camel@suse.de>
+Subject: Re: [PATCH] usb: core: Solve race condition in
+ usb_kill_anchored_urbs
+From:   Oliver Neukum <oneukum@suse.de>
+To:     Eli Billauer <eli.billauer@gmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        hdegoede@redhat.com, stern@rowland.harvard.edu
+Date:   Mon, 27 Jul 2020 15:58:05 +0200
+In-Reply-To: <5F1EBA04.5050109@gmail.com>
+References: <20200727072225.25195-1-eli.billauer@gmail.com>
+         <1595844840.13408.17.camel@suse.de> <5F1EBA04.5050109@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Hans,
-
-On Tue, Jul 14, 2020 at 01:36:15PM +0200, Hans de Goede wrote:
-> This can be used by Type-C controller drivers which use a standard
-> usb-connector fwnode, with altmodes sub-node, to describe the available
-> altmodes.
+Am Montag, den 27.07.2020, 14:27 +0300 schrieb Eli Billauer:
+> Hello, Oliver.
 > 
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-> ---
->  drivers/usb/typec/class.c | 56 +++++++++++++++++++++++++++++++++++++++
->  include/linux/usb/typec.h |  7 +++++
->  2 files changed, 63 insertions(+)
+> On 27/07/20 13:14, Oliver Neukum wrote:
+> > That however is really a kludge we cannot have in usbcore.
+> > I am afraid as is the patch should_not_  be applied.
+> >    
 > 
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index c9234748537a..47de2b2e3d54 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -1607,6 +1607,62 @@ typec_port_register_altmode(struct typec_port *port,
->  }
->  EXPORT_SYMBOL_GPL(typec_port_register_altmode);
->  
-> +void typec_port_register_altmodes_from_fwnode(struct typec_port *port,
-> +	const struct typec_altmode_ops *ops, void *drvdata,
-> +	struct typec_altmode **altmodes, size_t n,
-> +	struct fwnode_handle *fwnode)
-> +{
-> +	struct fwnode_handle *altmodes_node, *child;
-> +	struct typec_altmode_desc desc;
-> +	struct typec_altmode *alt;
-> +	size_t index = 0;
-> +	u32 svid, vdo;
-> +	int ret;
-> +
-> +	altmodes_node = fwnode_get_named_child_node(fwnode, "altmodes");
-> +	if (!altmodes_node)
-> +		return;
+> Could you please explain further why the suggested patch is unsuitable?
 
-Do we need that? Why not just make the sub-nodes describing the
-alternate modes direct children of the connector node instead of
-grouping them under a special sub-node?
+Hi,
 
-If the child node of the connector has device properties "svid" and
-"vdo" then it is an alt mode that the connector supports, and it can't
-be anything else, no?
+certainly.
 
+1. timeouts are generally a bad idea, especially if the timeout does
+not come out of a spec.
 
-> +	child = NULL;
-> +	while ((child = fwnode_get_next_child_node(altmodes_node, child))) {
-> +		ret = fwnode_property_read_u32(child, "svid", &svid);
-> +		if (ret) {
-> +			dev_err(&port->dev, "Error reading svid for altmode %s\n",
-> +				fwnode_get_name(child));
-> +			continue;
-> +		}
-> +
-> +		ret = fwnode_property_read_u32(child, "vdo", &vdo);
-> +		if (ret) {
-> +			dev_err(&port->dev, "Error reading vdo for altmode %s\n",
-> +				fwnode_get_name(child));
-> +			continue;
-> +		}
-> +
-> +		if (index >= n) {
-> +			dev_err(&port->dev, "Error not enough space for altmode %s\n",
-> +				fwnode_get_name(child));
-> +			continue;
-> +		}
-> +
-> +		desc.svid = svid;
-> +		desc.vdo = vdo;
-> +		desc.mode = index + 1;
-> +		alt = typec_port_register_altmode(port, &desc);
-> +		if (IS_ERR(alt)) {
-> +			dev_err(&port->dev, "Error registering altmode %s\n",
-> +				fwnode_get_name(child));
-> +			continue;
-> +		}
-> +
-> +		alt->ops = ops;
-> +		typec_altmode_set_drvdata(alt, drvdata);
-> +		altmodes[index] = alt;
-> +		index++;
-> +	}
-> +}
-> +EXPORT_SYMBOL_GPL(typec_port_register_altmodes_from_fwnode);
-> +
->  /**
->   * typec_register_port - Register a USB Type-C Port
->   * @parent: Parent device
-> diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
-> index 5daa1c49761c..fbe4bccb3a98 100644
-> --- a/include/linux/usb/typec.h
-> +++ b/include/linux/usb/typec.h
-> @@ -17,6 +17,7 @@ struct typec_partner;
->  struct typec_cable;
->  struct typec_plug;
->  struct typec_port;
-> +struct typec_altmode_ops;
->  
->  struct fwnode_handle;
->  struct device;
-> @@ -121,6 +122,12 @@ struct typec_altmode
->  struct typec_altmode
->  *typec_port_register_altmode(struct typec_port *port,
->  			     const struct typec_altmode_desc *desc);
-> +
-> +void typec_port_register_altmodes_from_fwnode(struct typec_port *port,
-> +	const struct typec_altmode_ops *ops, void *drvdata,
-> +	struct typec_altmode **altmodes, size_t n,
-> +	struct fwnode_handle *fwnode);
-> +
->  void typec_unregister_altmode(struct typec_altmode *altmode);
->  
->  struct typec_port *typec_altmode2port(struct typec_altmode *alt);
-> -- 
-> 2.26.2
+2. That involves quoting you:
 
-thanks,
+Alternatively, if the driver submits URBs to the same anchor while 
+usb_kill_anchored_urbs() is called, this timeout might be reached. This 
+could happen, for example, if the completer function that ran in the 
+racy situation resubmits the URB. If that situation isn't cleared within 
+1000ms, it means that there's a URB in the system that the driver isn't 
+aware of. Maybe that situation is worth more than a WARN.
 
--- 
-heikki
+That is an entirely valid use case. And a bulk URB may take a potentially
+unbounded time to complete.
+
+My failure in this case is simply overengineering.
+If this line:
+
+        usb_unanchor_urb(urb);
+
+In __usb_hcd_giveback_urb(struct urb *urb) weren't there, the issue
+would not exist. I misdesigned the API in automatically unanchoring
+a completing URB.
+Simply removing it now is no longer possible, so we need to come up with
+a more complex solution.
+
+	Regards
+		Oliver
+
