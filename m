@@ -2,117 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1332C22F71D
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 19:56:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C999D22F754
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 20:08:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729001AbgG0Rz5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jul 2020 13:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42410 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728496AbgG0Rz5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jul 2020 13:55:57 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9B3C061794;
-        Mon, 27 Jul 2020 10:55:56 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id v22so2024531edy.0;
-        Mon, 27 Jul 2020 10:55:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BfQsl2VkPzgMjJHaARqwNqUbw1qIxknvRprBs1qxAqw=;
-        b=rvIHSw7X95GJr0+XCFfmmero5cD0/utExmJuKYz5Qs91sBvJXMlcCDzKQXK2BYAF0q
-         AOyqJaZngQWr9wfISZQjGxz7+meMd/1D7iHIkUQofP/eBvXJf6CUZyBQGBZBgRfC6trk
-         i9V1whbAYAhLMZ1Ng8LBUYQyNA/ltTX7xk7PRr1gOsJQE7fPjvrOOFpVSMbkdKEEGlPd
-         xIdBRhbyQRReLzRwZ9apKo1+tqI81oY9UNdZe2783fIH1PaB3ImM/EoqUJ9I2Gjtb1DL
-         aZ7sqkAYV32yhov8ktBIyeVgaGarSpP8xTcJTPyK+iDceCdsXg9JT/G41ThxH4puV+mT
-         9jUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BfQsl2VkPzgMjJHaARqwNqUbw1qIxknvRprBs1qxAqw=;
-        b=qUAcUwjRsMi+656tO/+nwplMOtyceqfV0O4dcswWJo/RYyNH7Z+7JAdIGy3YxGYKfe
-         rlg0YKaGrcOcgANRA8eGvcHdBwgTlzz+Gk8MBNzdoR+fRhhgVD1KJGoISktgoncRH7+J
-         uAeVzotOlod9rF8ZbA0P9dXFIWv239YZGud9a03SN2HAlIppUiZ3eqw0vQsaGyxfx91p
-         0GpYeu1jOv3Oixm/OdsK2R8mmpvkcX2uBlVqTk9q9p45a7Dh113/1TAI1SzJLnxvzu2o
-         rMy3bsW1NevIJYhoGDrzXwXc31SFwNbdG2qExZ/0Kww9kszF1t7aP2TU4ty2v/kxdG9Z
-         YA5Q==
-X-Gm-Message-State: AOAM533jdzm8dIztfRpxT9Eul51/wcIINY0qxRSgXZUzGhQV/94d6l2E
-        LREdDs1dqGwpq/BjpIHXoSdPZmSZCYh70qU4Qh8=
-X-Google-Smtp-Source: ABdhPJwOE9lGhBvTtOQCpdnEA2roxCZkipXvXyeHn714NvtvMLoTIv9wK2fKfq+w2poL81YL7Lc+OfvmhPCaxPbx1SQ=
-X-Received: by 2002:aa7:c788:: with SMTP id n8mr2559169eds.146.1595872555514;
- Mon, 27 Jul 2020 10:55:55 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200727092346.19780-1-amelie.delaunay@st.com> <20200727092346.19780-3-amelie.delaunay@st.com>
-In-Reply-To: <20200727092346.19780-3-amelie.delaunay@st.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Mon, 27 Jul 2020 19:55:44 +0200
-Message-ID: <CAFBinCBDtuJ19_WZe1H+_BJTJAi=jENyczybPhC1AGYwedNHcQ@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] usb: dwc2: override PHY input signals with usb
- role switch support
-To:     Amelie Delaunay <amelie.delaunay@st.com>
-Cc:     Minas Harutyunyan <hminas@synopsys.com>,
+        id S1730206AbgG0SIL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jul 2020 14:08:11 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:50321 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729618AbgG0SIL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jul 2020 14:08:11 -0400
+Received: from 1.general.cking.uk.vpn ([10.172.193.212])
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <colin.king@canonical.com>)
+        id 1k07Xk-0004j4-0s; Mon, 27 Jul 2020 18:08:08 +0000
+To:     Zhou Yanjie <zhouyanjie@wanyeetech.com>,
         Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Fabrice Gasnier <fabrice.gasnier@st.com>
-Content-Type: text/plain; charset="UTF-8"
+        linux-usb@vger.kernel.org
+From:   Colin Ian King <colin.king@canonical.com>
+Autocrypt: addr=colin.king@canonical.com; prefer-encrypt=mutual; keydata=
+ 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
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: USB: PHY: JZ4770: Add support for new Ingenic SoCs - bug report
+Message-ID: <661defa2-ac55-c4bc-7ac1-41657a4552bd@canonical.com>
+Date:   Mon, 27 Jul 2020 19:08:07 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Amelie,
+Hi,
 
-On Mon, Jul 27, 2020 at 11:23 AM Amelie Delaunay <amelie.delaunay@st.com> wrote:
->
-> This patch adds support for usb role switch to dwc2, by using overriding
-> control of the PHY voltage valid and ID input signals.
->
-> iddig signal (ID) can be overridden:
-> - when setting GUSBCFG_FORCEHOSTMODE, iddig input pin is overridden with 1;
-> - when setting GUSBCFG_FORCEDEVMODE, iddig input pin is overridden with 0.
->
-> avalid/bvalid/vbusvalid signals can be overridden respectively with:
-> - GOTGCTL_AVALOEN + GOTGCTL_AVALOVAL
-> - GOTGCTL_BVALOEN + GOTGCTL_BVALOVAL
-> - GOTGCTL_VBVALEN + GOTGCTL_VBVALOVAL
->
-> It is possible to determine valid sessions thanks to usb role switch:
-> - if USB_ROLE_NONE then !avalid && !bvalid && !vbusvalid
-> - if USB_ROLE_DEVICE then !avalid && bvalid && vbusvalid
-> - if USB_ROLE_HOST then avalid && !bvalid && vbusvalid
->
-> Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
-please add my:
-Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Static analysis with Coverity has detected an issue with the following
+commit:
 
-The usb_role_switch part looks correct to me
-I don't understand the details of the dwc2 hardware well enough to say
-if the rest of this patch is fine or not (which is why I'm giving my
-Acked-by instead of Reviewed-by).
+commit 2a6c0b82e65128c73b5102e00e031c5e58bb3504
+Author: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+Date:   Thu Jul 23 14:13:00 2020 +0800
 
-Unfortunately I'm still fighting with the Amlogic bits (or my
-board...) to make this work on my boards.
-That why I can't give my Tested-by yet
-At the same time I'm confident that the problem lies within the
-Amlogic OTG detection/GPIOs so I don't see a reason to hold your patch
-up due to this
+    USB: PHY: JZ4770: Add support for new Ingenic SoCs.
 
-Finally, please note that there may be a small conflict due to one
-bugfix I sent: [0]
-I think it will be trivial to solve (since we're both adding a new error label)
+The analysis from Coverity is as follows:
+
+157 static int ingenic_usb_phy_init(struct usb_phy *phy)
+158 {
+159        struct jz4770_phy *priv = phy_to_jz4770_phy(phy);
+160        int err;
+
+1. var_decl: Declaring variable reg without initializer.
+
+161        u32 reg;
+162
+163        err = regulator_enable(priv->vcc_supply);
+
+2. Condition err, taking false branch.
+
+164        if (err) {
+165                dev_err(priv->dev, "Unable to enable VCC: %d\n", err);
+166                return err;
+167        }
+168
+169        err = clk_prepare_enable(priv->clk);
+
+3. Condition err, taking false branch.
+
+170        if (err) {
+171                dev_err(priv->dev, "Unable to start clock: %d\n", err);
+172                return err;
+173        }
+174
+175        priv->soc_info->usb_phy_init(phy);
+176
+177        /* Wait for PHY to reset */
+178        usleep_range(30, 300);
+
+Uninitialized scalar variable (UNINIT)
+4. uninit_use: Using uninitialized value reg.
+
+179        writel(reg & ~USBPCR_POR, priv->base + REG_USBPCR_OFFSET);
+180        usleep_range(300, 1000);
+181
+182        return 0;
+183 }
 
 
-Thank you for your good work again!
-Best regards,
-Martin
+The commit removed the setting of reg in the change:
 
+-       reg = USBPCR_AVLD_REG | USBPCR_COMMONONN | USBPCR_IDPULLUP_ALWAYS |
+-               USBPCR_COMPDISTUNE_DFT | USBPCR_OTGTUNE_DFT |
+USBPCR_SQRXTUNE_DFT |
+-               USBPCR_TXFSLSTUNE_DFT | USBPCR_TXRISETUNE_DFT |
+USBPCR_TXVREFTUNE_DFT |
+-               USBPCR_POR;
+-       writel(reg, priv->base + REG_USBPCR_OFFSET);
 
-[0] https://patchwork.kernel.org/patch/11687357/
+Colin
