@@ -2,106 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4924122EB7E
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 13:53:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9D2222EBF7
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 14:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728109AbgG0Lxk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jul 2020 07:53:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54318 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726873AbgG0Lxj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 27 Jul 2020 07:53:39 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A227E206E7;
-        Mon, 27 Jul 2020 11:53:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595850819;
-        bh=pmx7r4So4ltU9GFLtyowT8sGCWQ3CPndiOgHKn5MH2Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G1ACx5gLsKOlLnHUq7TxrmlaoSuUj35QO83mZgX22J+x2NolUsEZLVhjOUT0Duu2X
-         UBU8N1plsG6Qtp1WieL6u0koBH+1NAhNq5ckcoQiUhlW12aQ+nQzPDHVpbAGDiZ+1d
-         LpaP1h91USoBeicfxQp8fugF1xEmm13NGV/cXHe4=
-Date:   Mon, 27 Jul 2020 12:53:21 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Mike Looijmans <mike.looijmans@topic.nl>
-Cc:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        balbi@kernel.org, gregkh@linuxfoundation.org, lgirdwood@gmail.com
-Subject: Re: [PATCH v3] usb: dwc3: Add support for VBUS power control
-Message-ID: <20200727115321.GC6275@sirena.org.uk>
-References: <20200619142512.19824-1-mike.looijmans@topic.nl>
- <20200723075612.tn5dbkhes2chohwh@axis.com>
- <20200723110523.GA4759@sirena.org.uk>
- <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.2698920d-90ba-4c46-abda-83e18e2093c8@emailsignatures365.codetwo.com>
- <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.0d2bd5fa-15cc-4b27-b94e-83614f9e5b38.ac9c2a67-d7df-4f70-81b3-db983bbfb4db@emailsignatures365.codetwo.com>
- <e63ee918-c9e3-a8ee-e7c5-577b5a3e09be@topic.nl>
- <20200727102317.GA6275@sirena.org.uk>
- <be4013b6-01c6-7f67-35ad-5c398b85c066@topic.nl>
+        id S1728294AbgG0MV2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jul 2020 08:21:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46180 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728124AbgG0MV1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jul 2020 08:21:27 -0400
+Received: from mail-oo1-xc41.google.com (mail-oo1-xc41.google.com [IPv6:2607:f8b0:4864:20::c41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6170C061794
+        for <linux-usb@vger.kernel.org>; Mon, 27 Jul 2020 05:21:27 -0700 (PDT)
+Received: by mail-oo1-xc41.google.com with SMTP id z10so230110ooi.10
+        for <linux-usb@vger.kernel.org>; Mon, 27 Jul 2020 05:21:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cKl9wH3ozqqpJTIt/IjccYMf+/q0iSRZmm3fxklxSkc=;
+        b=tx7NILK7yxaiSxHHiMoZxv3+qZNy3D2bZudvsh5Oftl/WXVc4nquDGydzcKPxm1GGr
+         iKhryB0u248LgvHZXC4IuO00mNv+WLbrCbDzoYRKcPV7KMzh4/Q352/bifixZHAv0s76
+         LQAWM5+EhxeUfElmQNUC5VMMr3lOC0hBZFoCYDP9hsyWpevOo6ckBlZDe3FYptSyJm85
+         v/oVWqD6tiQNqxUWaFVL2RqqerFPM2av21pOT/XiO/b9t4ix54jkqSrLF+HbbfLT/Eog
+         YgxWGlS9GqyfpyMqJ6wjDI2MTHjfu4FB0bOXpsmEZWK78DM0UWcutAWpZOuoDe0KIWJb
+         hLzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cKl9wH3ozqqpJTIt/IjccYMf+/q0iSRZmm3fxklxSkc=;
+        b=pyb/Bg4mMK+TkoAi4PFaPofEhF5k/YN2M3V4HRvypj60CZg5Wybne03BxsZrlaF5RM
+         FkzmPzWhXbm4zyJU+M8/Lomtl1cimTjg0+CoX/tobKEeSM/rwglUSgSyLyR78q3OX8Hb
+         9WgXQm4AUgmoMfo+rtBb3uV31xLV/uo09zB+s8FFJUe2bbCpCEFKSSJY4MaKjJaPLJAK
+         rjTYlgT+MbvNlk8qWycPMOMWswwBTNEU8OyvU/cS4nRn8QMN1WVD79Am31r6GmucsLba
+         zY6S7pGLMEQ566vYhY118tzKMzfuv+YOm9aq0MY+ZsOGCquKRWoOY1J09nPcOqRukT9P
+         i6jg==
+X-Gm-Message-State: AOAM532mH1yApjyApbfZnb3yJkTuFogZB/tAsQlrVILizBtn+vKNjix2
+        3li+/N7xLm0R9YBiQe5stOwLrNasOE97CCImePHXvZX/drU=
+X-Google-Smtp-Source: ABdhPJw8GqRnQKT3pvzFWoc/sPGSC/01YVHyawr2eXcQR6jMH7X4lGoVNWCmmebfC0W64NWHjZVVOXFIjHJiudMUrd8=
+X-Received: by 2002:a4a:d62c:: with SMTP id n12mr12236306oon.38.1595852487099;
+ Mon, 27 Jul 2020 05:21:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vOmOzSkFvhd7u8Ms"
-Content-Disposition: inline
-In-Reply-To: <be4013b6-01c6-7f67-35ad-5c398b85c066@topic.nl>
-X-Cookie: Doing gets it done.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <79D67DF9-2A12-40DE-AFF7-4FF68193AD1C@me.com> <6194f859-aa61-90fa-043e-1df02b01bacb@ivitera.com>
+In-Reply-To: <6194f859-aa61-90fa-043e-1df02b01bacb@ivitera.com>
+From:   Ruslan Bilovol <ruslan.bilovol@gmail.com>
+Date:   Mon, 27 Jul 2020 15:21:04 +0300
+Message-ID: <CAB=otbTrnYfFOhF8ZNzbOwb1_ky3v2j7iBzDEguV=8O9XFRGUQ@mail.gmail.com>
+Subject: Re: usb:gadget:f_uac2: EP OUT is adaptive instead of async
+To:     Pavel Hofman <pavel.hofman@ivitera.com>
+Cc:     harrison conroy <harrisonconroy@me.com>,
+        Linux USB <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Sat, Jul 25, 2020 at 1:24 PM Pavel Hofman <pavel.hofman@ivitera.com> wrote:
+>
+>
+> Dne 22. 07. 20 v 17:25 harrison conroy napsal(a):
+> > Hi Ruslan,
+> >
+> > I am working on a project that involves using an RPi 4 as a USB Gadget
+> > and we have run into the feedback endpoint issue causing Windows 10 to
+> > not recognize it as a USB audio device. Do you have any updates on this
+> > patch for the community? Any help would be greatly appreciated.
+>
+> As a temporary workaround you can change the EP OUT type from
+> USB_ENDPOINT_SYNC_ASYNC to USB_ENDPOINT_SYNC_ADAPTIVE.
+>
+> Or you can add implicit feedback flag to the EP IN. Win10 should handle
+> implicit feedback OK, unlike Win7. Unfortunately linux still requires an
+> explicit quirk for the implicit feedback
+> https://www.spinics.net/lists/alsa-devel/msg111824.html . Yet it is
+> still a workaround because IMO the existing EP IN is in fact not async
+> but adaptive, clocked by the USB frames.
+>
 
---vOmOzSkFvhd7u8Ms
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+There is a commit which I've sent earlier this month which is a part
+of Win10 enumeration solution:
+https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git/commit/?h=next&id=a9cf8715180b18c62addbfe6f6267b8101903119
 
-On Mon, Jul 27, 2020 at 01:50:26PM +0200, Mike Looijmans wrote:
->=20
-> Met vriendelijke groet / kind regards,
->=20
-> Mike Looijmans
-> System Expert
+For the rest of the solution (feedback endpoint implementation) I'm
+refreshing patches on top of this, and expect to submit them very soon
 
-You probably want to remove your signature when replying to the list...
-
-> On 27-07-2020 12:23, Mark Brown wrote:
-> > On Sun, Jul 26, 2020 at 09:10:39AM +0200, Mike Looijmans wrote:
-
-> > > It's the 5V VBUS power for the USB "plug" that's being controlled her=
-e. It
-> > > must turned on when the controller is in "host" mode. Some boards arr=
-ange
-> > > this in hardware through the PHY, and some just don't have any contro=
-l at
-> > > all and have it permanently on or off. On a board where the 5V is con=
-trolled
-> > > using a GPIO line or an I2C chip, this patch is required to make it w=
-ork.
-
-> > That sounds like the driver should not be using _get_optional() then.
-
-> Making it mandatory would break most (read: all except Topic's) existing
-> boards as they won't have it in their devicetree. I'm perfectly okay with
-> that, but others might disagree.
-
-No, it wouldn't break them at all - they'd get a dummy regulator
-provided.
-
---vOmOzSkFvhd7u8Ms
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl8ewDEACgkQJNaLcl1U
-h9AOeAf/Q3uCuO9POLkFE4AFLM60fwOW/cXI1NJMegOuZ91RhQk4TF2WaZlMWHIf
-b8SYB4gvI151gQYg2UPgf52UpWEbVUZN6GoM/wyk1dOAm6ulrMx248Upv3gQkpHi
-RBRynDGfnTgOdn6GPde9XO24zF9zCpL6HyN1AHbp9y9zuC3nVg23Pi+Usyw3MyiG
-RWRyQ3lKAqssLAh+6CYQQBVQ2mEp6ubHxH9UuGoKYfgDDqo7gff1b4Ibfkv9QT3G
-wjVCthn7ZcgpKyFalB1cZ6MJcsnvEvtWcdz/lMAYT6YXpha0UvuVs5xj0LFYw6pc
-u9fo8pNhRClmGM+PizicmWsAcQ6aBg==
-=yKtV
------END PGP SIGNATURE-----
-
---vOmOzSkFvhd7u8Ms--
+Thanks,
+Ruslan
