@@ -2,141 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E0CB22E66E
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 09:23:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2290022E6EE
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 09:51:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726183AbgG0HXI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jul 2020 03:23:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56458 "EHLO
+        id S1727067AbgG0Hu5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jul 2020 03:50:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726116AbgG0HXH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jul 2020 03:23:07 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3B3C0619D2
-        for <linux-usb@vger.kernel.org>; Mon, 27 Jul 2020 00:23:06 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id a1so11313021edt.10
-        for <linux-usb@vger.kernel.org>; Mon, 27 Jul 2020 00:23:06 -0700 (PDT)
+        with ESMTP id S1726116AbgG0Hu5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jul 2020 03:50:57 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 421DEC0619D2;
+        Mon, 27 Jul 2020 00:50:57 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id z5so8985473pgb.6;
+        Mon, 27 Jul 2020 00:50:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=Q7vEuh+TCFRtmIhZa9bVqmvhpFWEmKru9M7JItowJEI=;
-        b=CjbHGDKGTNs/YhppnfpDb7I89Azs+0QMF/+RGqDpTlwELGMsZc7ZSNivaXqw1GlMQX
-         j2/sMcKC9HU30DDdIrCxV/S1j9albImS+ZZtSWOtG+XhFPbjEZjfYCwGBE2wBtn6i2B9
-         0e3soOGkoOv4uk2bC0F9NQjbajud0GKCgHE28YGxjzaHyzoSgmLenx61dbj06PScxMFM
-         83QnOvtZ/2BXV7GHb5Xy5Roc62LJeQhvIDHriTIZI/+WBp4d9VsNEMpCzgA6YRqPOiYy
-         dnYd5uHn5qdXjggysrw5ySuK5JWdJfDeu0p6aWazZR3EOLNzur82MJt7KUTaBNTeRSp9
-         8jiQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HvRchyhkxeOLvzDuOrbaCYZ/zyb156MiLRE1ABCH84I=;
+        b=KHuKlq97lOmpgvmfdymhvpN8uf/hANCv3kkGu6QGEqkIdNfGIKZoOZhPHipHkLubxz
+         POPDaIvlCDmqdt9EHt7kMEd2b/8zf6vzgQHOUoqBub+XyOdPIzUhYy/M7DPe1oBeuxHm
+         VT6qGOMZw880nUoP71XlImKhZHXsHRa6k7ISxETfFyQWt4qsYJEqtGdsxmMoiFbRPzW7
+         xIdi8aQIpCR4QQU98/NyNdI8wHvkq5pL1AZmHs3ozQH0nJRU8LdmLjMxR2dn+3BAkL+w
+         wVzyC0kgNbBOgIa6RjciRV692+rSYDnkvWWtH0diAUZ0nlE8RHT718PeeBTdn4lFfUpR
+         IFaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=Q7vEuh+TCFRtmIhZa9bVqmvhpFWEmKru9M7JItowJEI=;
-        b=esUriqPE2u+Am6ndewToM4/yZoEGATOHH05MnhdUlt+3MZQq77/Bm2MRLDthLLQN+9
-         5jMVkKgq08Jz+ditPdT0id3+O8v3OD/5G+MoKc1aqq62d/nCJKclbOuF9SkN47nAHWfE
-         maZeNS8l1cEGnKhujgALgA+oepIjwN6tK9wwBhVPYZzZ4773c7mRUC5qF/mGKTjbJsVI
-         s25W0rhl5bVFwX/PzLHCMhpaaeQqP6Q6i3jMBAgS8pb9zcCnZ5JEZqgPrHcZ9Fli5XN3
-         kM0tzLdqtprnvnEbUnqC/gogTyg2/gG03vgDjtpySPw6dhcmRYr0fPulIJi27PEi29qw
-         2SpA==
-X-Gm-Message-State: AOAM533jYPtndhfa7Aqln0UWf8ZcKHEbNTklGOPFa1P/FyULaILHd30y
-        h1qCzgSb3BZ0Jl72q60coeA=
-X-Google-Smtp-Source: ABdhPJxQeoyqVzox3EvXE0KA1JWY3vfw5C/nVCedYYu4GAnRsJ3Jb41ARe+wRRXZBefCbBiaK9ahGA==
-X-Received: by 2002:a05:6402:1c0f:: with SMTP id ck15mr19316587edb.155.1595834584827;
-        Mon, 27 Jul 2020 00:23:04 -0700 (PDT)
-Received: from ruhe.localdomain (109-186-98-97.bb.netvision.net.il. [109.186.98.97])
-        by smtp.gmail.com with ESMTPSA id m6sm6370728ejq.85.2020.07.27.00.23.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jul 2020 00:23:04 -0700 (PDT)
-From:   eli.billauer@gmail.com
-To:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-Cc:     hdegoede@redhat.com, stern@rowland.harvard.edu,
-        Eli Billauer <eli.billauer@gmail.com>
-Subject: [PATCH] usb: core: Solve race condition in usb_kill_anchored_urbs
-Date:   Mon, 27 Jul 2020 10:22:25 +0300
-Message-Id: <20200727072225.25195-1-eli.billauer@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HvRchyhkxeOLvzDuOrbaCYZ/zyb156MiLRE1ABCH84I=;
+        b=HCleAqbcx+s9vj2bLP8jhzp+X46HhVkMUSek6zuN0/EeGaMN3feNdEn8sTvi5WeJ83
+         NA/Zi3197LovCvVwoOx5N3vkj9Aov1IwjFrp4O2HiSemiDfjtvWfApcebwmhQ1T4ySLa
+         gvdKLs1PvMraT6+8nklmPH1wWk5ncLBFbNtoGhE2KDBYdz+0YlAcCqYBx3bQaUz3Qh8+
+         imghdUJ79CZ6rehvlgTAB6QReeH+oRwKeHjHXSWlWWnO3H85GwgWjUM9KxWvgcvROHRL
+         GrWmNusLa7MMPWAH1B9Uts9rlZOKCMa/YAHbaYqdUB0y9rzu9r4Z5vA9dN5KDAs7dqE+
+         sQYQ==
+X-Gm-Message-State: AOAM530tDAsn5x94XOZAUcFIHHriepA3vTfPXMMyJ6aBgOQIAubxDwrl
+        gryum4sAjdSdAl4F+UdiO5alzG64fcGlvdcuoP4=
+X-Google-Smtp-Source: ABdhPJwZN36/0+bYxDq0YBCSQHuH6bnFz+l4e8yWNnes2mWDmufxX0YDvCAitBi7fUC2Q0zTyPsuywd9QxQfHrNA5eQ=
+X-Received: by 2002:a63:924b:: with SMTP id s11mr18169222pgn.74.1595836256878;
+ Mon, 27 Jul 2020 00:50:56 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200607162350.21297-1-mani@kernel.org> <20200607162350.21297-3-mani@kernel.org>
+ <20200701130206.GD3334@localhost> <20200726155223.GB12036@Mani-XPS-13-9360>
+ <CAHp75VeP8CMZ-T2Kk24NzOPiWHM62GErxCDUgBbYzNotwiFHhw@mail.gmail.com> <20200727044610.GC12036@Mani-XPS-13-9360>
+In-Reply-To: <20200727044610.GC12036@Mani-XPS-13-9360>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 27 Jul 2020 10:50:39 +0300
+Message-ID: <CAHp75Vddgt=dDxjtd9A7HejVYk+_GMVgvUM3dfzH5giCwhbaKA@mail.gmail.com>
+Subject: Re: [RESEND PATCH v4 2/3] usb: serial: xr_serial: Add gpiochip support
+To:     Manivannan Sadhasivam <mani@kernel.org>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        patong.mxl@gmail.com, Linus Walleij <linus.walleij@linaro.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Eli Billauer <eli.billauer@gmail.com>
+On Mon, Jul 27, 2020 at 7:46 AM Manivannan Sadhasivam <mani@kernel.org> wrote:
+> On Sun, Jul 26, 2020 at 07:34:54PM +0300, Andy Shevchenko wrote:
+> > On Sun, Jul 26, 2020 at 6:53 PM Manivannan Sadhasivam <mani@kernel.org> wrote:
 
-usb_kill_anchored_urbs() is commonly used to cancel all URBs on an
-anchor just before releasing resources which the URBs rely on. By doing
-so, users of this function rely on that no completer callbacks will take
-place from any URB on the anchor after it returns.
+...
 
-However if this function is called in parallel with __usb_hcd_giveback_urb
-processing a URB on the anchor, the latter may call the completer
-callback after usb_kill_anchored_urbs() returns. This can lead to a
-kernel panic due to use after release of memory in interrupt context.
+> > I'm wondering if you may use mctrl_gpio_*() API instead.
+>
+> How? mctrl_gpio APIs are a wrapper for accessing modem control gpio pins but
+> here we are not accessing the pins but rather exposing the pins as a gpiochip.
 
-The race condition is that __usb_hcd_giveback_urb() first unanchors the URB
-and then makes the completer callback. Such URB is hence invisible to
-usb_kill_anchored_urbs(), allowing it to return before the completer has
-been called, since the anchor's urb_list is empty.
+I see. Thanks for the explanation.
 
-This patch adds a call to usb_wait_anchor_empty_timeout() prior to
-returning. This function waits until urb_list is empty (it should
-already be), but more importantly, until @suspend_wakeups is zero.
+> Am I missing something?
 
-The latter condition resolves the race condition, since @suspend_wakeups
-is incremented by __usb_hcd_giveback_urb() before unanchoring a URB and
-decremented after completing it. @suspend_wakeups is hence an upper limit
-of the number of unanchored but uncompleted URBs. By waiting for it to be
-zero, the race condition is eliminated, in the same way that another
-problem was solved for the same race condition in commit 6ec4147e7bdb
-("usb-anchor: Delay usb_wait_anchor_empty_timeout wake up till completion
-is done").
-
-An arbitrary timeout of 1000 ms should cover any sane completer
-callback. The wait condition may also fail if the anchor is populated
-while usb_kill_anchored_urbs() is called. Both timeout scenarios are
-alarmingly weird, hence a WARN() is issued.
-
-Signed-off-by: Eli Billauer <eli.billauer@gmail.com>
----
- drivers/usb/core/urb.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
-index da923ec17612..7fa23615199f 100644
---- a/drivers/usb/core/urb.c
-+++ b/drivers/usb/core/urb.c
-@@ -772,11 +772,12 @@ void usb_block_urb(struct urb *urb)
- EXPORT_SYMBOL_GPL(usb_block_urb);
- 
- /**
-- * usb_kill_anchored_urbs - cancel transfer requests en masse
-+ * usb_kill_anchored_urbs -  kill all URBs associated with an anchor
-  * @anchor: anchor the requests are bound to
-  *
-- * this allows all outstanding URBs to be killed starting
-- * from the back of the queue
-+ * This kills all outstanding URBs starting from the back of the queue,
-+ * with guarantee that no completer callbacks will take place from the
-+ * anchor after this function returns.
-  *
-  * This routine should not be called by a driver after its disconnect
-  * method has returned.
-@@ -784,6 +785,7 @@ EXPORT_SYMBOL_GPL(usb_block_urb);
- void usb_kill_anchored_urbs(struct usb_anchor *anchor)
- {
- 	struct urb *victim;
-+	int ret;
- 
- 	spin_lock_irq(&anchor->lock);
- 	while (!list_empty(&anchor->urb_list)) {
-@@ -798,6 +800,10 @@ void usb_kill_anchored_urbs(struct usb_anchor *anchor)
- 		spin_lock_irq(&anchor->lock);
- 	}
- 	spin_unlock_irq(&anchor->lock);
-+
-+	ret = usb_wait_anchor_empty_timeout(anchor, 1000);
-+
-+	WARN(!ret, "Returning with non-empty anchor due to timeout");
- }
- EXPORT_SYMBOL_GPL(usb_kill_anchored_urbs);
- 
 -- 
-2.17.1
-
+With Best Regards,
+Andy Shevchenko
