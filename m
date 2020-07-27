@@ -2,49 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BF5622E8F2
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 11:27:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2620522E923
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 11:37:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727784AbgG0J07 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jul 2020 05:26:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54600 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726320AbgG0J07 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 27 Jul 2020 05:26:59 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9F5492065C;
-        Mon, 27 Jul 2020 09:26:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595842019;
-        bh=ItUlf5qVHL1sqAOZEj3EJzoG8funbru622hJqMHUqtU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YUvN1RdDiPCnKjgYeMF1pXfDv1dEeZsKTf4qrPHN5p0YlQgN4TtJiLjWulQOXNIpR
-         HQ4Rqlvvjqsqt9ILzFh8TAal7F74yd7uAR2UkA3dzgSR8nUFuVnifFU+ti314JjJZ4
-         85eQf9Qz3RVYQUWUuD/1TrnH/9RmDFU3y9W5OzII=
-Date:   Mon, 27 Jul 2020 11:26:54 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Forest Crossman <cyrozap@gmail.com>
-Cc:     linux-usb@vger.kernel.org, mathias.nyman@intel.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] usb: xhci: define IDs for various ASMedia host
- controllers
-Message-ID: <20200727092654.GD1764157@kroah.com>
-References: <20200727090629.169701-1-cyrozap@gmail.com>
- <20200727090629.169701-2-cyrozap@gmail.com>
+        id S1728193AbgG0Jhl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jul 2020 05:37:41 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:41492 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727016AbgG0Jhi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jul 2020 05:37:38 -0400
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06R9Vv0S028187;
+        Mon, 27 Jul 2020 11:37:26 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=STMicroelectronics;
+ bh=y6Q3xzmtzgK/GB+c33+XKmkK12IGii6dx3KQjUYpn1I=;
+ b=gqQ4IG3KwKmqVB4G4SP7n92qV1QJ62/Z9QSHCmtwfW+GnN5jyEkeUp21uyVhn2CUPfOI
+ PRcyC0x/uvw0i3JduFz8jHqkTBy46/732LDz2BvD2vi3G5L457JuQ7+fH4MAhovhZOHk
+ P7nZpXWHfKlk3fUFB2N7xMUFgve0XQJUFDOuXtbvOXY7/vajgBd64Oez6RtySTV3hEGo
+ N87wkYcblGQIPurwAZxgn5VEcvMaLxYjxnpag/Ipye7PwLtSxtONM/8yQC6ZGBDLj63F
+ +1Gtr1de2XmWFw5ZQU8skzPUSkraSuqvUFGM35hnxVLQszbKDi5+bHrsm8ZYptQtevpI Gw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 32gbmg08wy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 27 Jul 2020 11:37:26 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4234510002A;
+        Mon, 27 Jul 2020 11:37:25 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2E53B2AE6D4;
+        Mon, 27 Jul 2020 11:37:25 +0200 (CEST)
+Received: from lmecxl0995.lme.st.com (10.75.127.48) by SFHDAG3NODE2.st.com
+ (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Mon, 27 Jul
+ 2020 11:37:23 +0200
+Subject: Re: [PATCH v3 0/3] Add USB role switch support to DWC2
+To:     Felipe Balbi <balbi@kernel.org>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre TORGUE <alexandre.torgue@st.com>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Fabrice GASNIER <fabrice.gasnier@st.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+References: <20200724104711.5474-1-amelie.delaunay@st.com>
+ <4c44f596-d2c3-6d2f-bf28-9e3964b6e6f1@st.com> <878sf9owcw.fsf@kernel.org>
+ <fcff5f96-8383-fd84-35f1-3eb291cd65df@st.com> <871rl0q46a.fsf@kernel.org>
+From:   Amelie DELAUNAY <amelie.delaunay@st.com>
+Message-ID: <94748764-43b2-f11e-fd12-20ef3970c09a@st.com>
+Date:   Mon, 27 Jul 2020 11:37:22 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200727090629.169701-2-cyrozap@gmail.com>
+In-Reply-To: <871rl0q46a.fsf@kernel.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.48]
+X-ClientProxiedBy: SFHDAG8NODE1.st.com (10.75.127.22) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-27_06:2020-07-27,2020-07-27 signatures=0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 27, 2020 at 04:06:28AM -0500, Forest Crossman wrote:
-> Signed-off-by: Forest Crossman <cyrozap@gmail.com>
+Hi,
 
-I can not take patches without any changelog text, sorry.
+On 7/24/20 6:16 PM, Felipe Balbi wrote:
+> Amelie DELAUNAY <amelie.delaunay@st.com> writes:
+> 
+>> Hi,
+>>
+>> On 7/24/20 3:50 PM, Felipe Balbi wrote:
+>>>
+>>> (no top-posting, please)
+>>>
+>>> Hi,
+>>>
+>>> Amelie DELAUNAY <amelie.delaunay@st.com> writes:
+>>>> Series dropped.
+>>>
+>>> what do you mean with this? Should I drop all patches related with this series?
+>>>
+>>
+>> As v1 patches were in your next branch, I've prepared a new patchset
+>> which contains fixes, on top of you next branch :
+>> https://lore.kernel.org/patchwork/project/lkml/list/?series=454959
+>>
+>>
+>> What do you prefer ? Drop all patches related to the v1 "Add USB role
+>> switch support to DWC2" series and I send a v4 in replacement or keep
+>> all patches and wait for new series review ?
+> 
+> I've dropped those because they caused the build breakage :-) I can take
+> a new series, let's take the opportunity to avoid the build regression.
+> 
 
-greg k-h
+Sure! I've sent the v4, rebased on your testing/next because your next 
+still contains the v1 patches, with the fix for build issue, and 
+adressing Martin's comments. I drop the fixes series.
+
+Regards,
+Amelie
