@@ -2,121 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D31D22F8E6
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 21:20:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 164EF22F8E9
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 21:21:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728840AbgG0TUS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jul 2020 15:20:18 -0400
-Received: from mga09.intel.com ([134.134.136.24]:41916 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728313AbgG0TUS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 27 Jul 2020 15:20:18 -0400
-IronPort-SDR: xykozmDOAZLzcoAw4aS5aeaTpETcvNpN/seMAY5OVpJVvOyHq2egJJo9Om0sd2ergXVUqTCPxU
- c0cwud802jYQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9695"; a="152355812"
-X-IronPort-AV: E=Sophos;i="5.75,403,1589266800"; 
-   d="scan'208";a="152355812"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2020 12:20:17 -0700
-IronPort-SDR: syBvibh0/4Utybu/qmZ2/voWyFWxm4j7xCs6+5Erv3WwPQZTU021fApR/SNgZHtqG9wyuJOSri
- 2l/jddvSWBSA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,403,1589266800"; 
-   d="scan'208";a="273344016"
-Received: from lkp-server01.sh.intel.com (HELO df0563f96c37) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 27 Jul 2020 12:20:15 -0700
-Received: from kbuild by df0563f96c37 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1k08fW-00021U-O9; Mon, 27 Jul 2020 19:20:14 +0000
-Date:   Tue, 28 Jul 2020 03:19:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     linux-omap@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [balbi-usb:testing/next] BUILD SUCCESS WITH WARNING
- a1ff2f6769e39055e973b068070aeea0b3bcd90f
-Message-ID: <5f1f28d5.uXJE2ec25rGvBP7L%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1728772AbgG0TUw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jul 2020 15:20:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55692 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727880AbgG0TUw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jul 2020 15:20:52 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261DAC0619D2
+        for <linux-usb@vger.kernel.org>; Mon, 27 Jul 2020 12:20:52 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id p3so10435473pgh.3
+        for <linux-usb@vger.kernel.org>; Mon, 27 Jul 2020 12:20:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=t8hLkFIbtpdEX3UBYFfNbS3mhtXXCA/FYFZZm/zp7IQ=;
+        b=AaPrVOqNWMgqMpxH88BEQJnuih5t7lG8Pv8holLzmGEU4PKPfhWaJFBe3+epjBa5TG
+         Keaw7CEihV8ZtlT6zoxgh/RsdsdBJpqs4TK1Q0FOtw+Q+IDZMp3VNvwboWf9iZB/5Gh/
+         RmXdaa/Uox3jj+vCZXTE35yj488G1nA9Bf82c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=t8hLkFIbtpdEX3UBYFfNbS3mhtXXCA/FYFZZm/zp7IQ=;
+        b=WmyCmZvZn2aALw/K59CrhHy9xEz4R/lLr3renxzbowyXPPq9HJTnMqd8P66BhZBA2F
+         4FhmampIdBq55aHTOcy06ZVVI64eRnUWvO2kfb5ZM8e36TfRyaYMp78cehru700ERWLW
+         3k4J7CvShNYYe4Lx0w9+BbbyY9QfRaMi8j4iULk/JC2nrrzOqVK87jGSnl2jBztDjYXp
+         Dtz6PFvKHU5x4HJRE4+EuTROES9yNS9n17vtWtTo5f8SouEjrC21I/UQaZTI5fQ9UUVU
+         Ao/xKUV+Wa38l6IETty/Qw7ZJ/bqoF1bkRGIkGNwTDyRrttAfBd8N4e+AvNsydv8tAgJ
+         b5yQ==
+X-Gm-Message-State: AOAM531HFDvbTbWxGzwSCqgJb0fQMkSukFmYuSYg9RKBx10VwkdsFnxw
+        yjtA/6fE7oB/v5mNos0P3lRF2Q==
+X-Google-Smtp-Source: ABdhPJx0j3o/dfARdxLCxZFu0QCg2nY4pjGflu6c0tuLw5tUQhIucFl39ZjiLASPZto5FWJNbE3ECA==
+X-Received: by 2002:a63:6c0a:: with SMTP id h10mr21194250pgc.11.1595877651605;
+        Mon, 27 Jul 2020 12:20:51 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:f693:9fff:fef4:e70a])
+        by smtp.gmail.com with ESMTPSA id u24sm15605054pfm.211.2020.07.27.12.20.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jul 2020 12:20:51 -0700 (PDT)
+Date:   Mon, 27 Jul 2020 12:20:50 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Sandeep Maheswaram <sanm@codeaurora.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
+Subject: Re: [PATCH v11 1/2] usb: dwc3: qcom: Add interconnect support in
+ dwc3 driver
+Message-ID: <20200727192050.GD3191083@google.com>
+References: <1595869597-26049-1-git-send-email-sanm@codeaurora.org>
+ <1595869597-26049-2-git-send-email-sanm@codeaurora.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1595869597-26049-2-git-send-email-sanm@codeaurora.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git  testing/next
-branch HEAD: a1ff2f6769e39055e973b068070aeea0b3bcd90f  usb: gadget: udc: Drop surplus include
+On Mon, Jul 27, 2020 at 10:36:36PM +0530, Sandeep Maheswaram wrote:
+> Add interconnect support in dwc3-qcom driver to vote for bus
+> bandwidth.
+> 
+> This requires for two different paths - from USB to
+> DDR. The other is from APPS to USB.
+> 
+> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+> Signed-off-by: Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
 
-Warning in current branch:
-
-drivers/usb/dwc2/platform.c:593:1: sparse: sparse: unused label 'error_debugfs'
-
-Warning ids grouped by kconfigs:
-
-recent_errors
-`-- h8300-randconfig-s031-20200726
-    `-- drivers-usb-dwc2-platform.c:sparse:sparse:unused-label-error_debugfs
-
-elapsed time: 3516m
-
-configs tested: 52
-configs skipped: 1
-
-arm64                            allyesconfig
-arm64                               defconfig
-arm                                 defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                             allyesconfig
-i386                                defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                           sun3_defconfig
-m68k                                defconfig
-m68k                             allyesconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-nios2                            allyesconfig
-nios2                               defconfig
-openrisc                            defconfig
-c6x                              allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-xtensa                              defconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-sparc                            allyesconfig
-sparc                               defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                             defconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-sparc64                             defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                               rhel-8.3
-x86_64                                  kexec
-x86_64                                   rhel
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
