@@ -2,85 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 164EF22F8E9
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 21:21:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77C7C22F955
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 21:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728772AbgG0TUw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jul 2020 15:20:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55692 "EHLO
+        id S1728810AbgG0Toh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jul 2020 15:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727880AbgG0TUw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jul 2020 15:20:52 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261DAC0619D2
-        for <linux-usb@vger.kernel.org>; Mon, 27 Jul 2020 12:20:52 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id p3so10435473pgh.3
-        for <linux-usb@vger.kernel.org>; Mon, 27 Jul 2020 12:20:52 -0700 (PDT)
+        with ESMTP id S1726196AbgG0Tog (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jul 2020 15:44:36 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D54C061794;
+        Mon, 27 Jul 2020 12:44:36 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id m8so2800927pfh.3;
+        Mon, 27 Jul 2020 12:44:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=t8hLkFIbtpdEX3UBYFfNbS3mhtXXCA/FYFZZm/zp7IQ=;
-        b=AaPrVOqNWMgqMpxH88BEQJnuih5t7lG8Pv8holLzmGEU4PKPfhWaJFBe3+epjBa5TG
-         Keaw7CEihV8ZtlT6zoxgh/RsdsdBJpqs4TK1Q0FOtw+Q+IDZMp3VNvwboWf9iZB/5Gh/
-         RmXdaa/Uox3jj+vCZXTE35yj488G1nA9Bf82c=
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qzzZKFqE1nfVRb0bTdQAza1honJ2T0+1vW2BFXwTzqA=;
+        b=HLOh+BHLV83GvCy5qUxFSaZI0+nJP44EMKDBWsLY8Ovleoz0qJzz9U/WHyEcv8UmBR
+         K6dzaNevQflsp7u1+vL5BpA3XgDFl66RzHvFTsbEJAoMUxj8tAYHWQ5e2pNuo8db9gJe
+         PJegFSJz/dE71vnOhQ4JE8F7CAkptW/6IiGqB18TtsZS+FvQ+fpDtHyKSpGeyycOmDGk
+         +61FWMMRgSO3dsJRPTJYfH7iezRNM7LIchSAZBCfb8kF4+kXRublXv+myOcu6UNAEBgi
+         rLsNTbH1/YK8y3dO6mBN28vzkIqqhsJwgLugHq2jPJAK7F4CjOjeLidnlm6kM8JEwKL4
+         gi1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=t8hLkFIbtpdEX3UBYFfNbS3mhtXXCA/FYFZZm/zp7IQ=;
-        b=WmyCmZvZn2aALw/K59CrhHy9xEz4R/lLr3renxzbowyXPPq9HJTnMqd8P66BhZBA2F
-         4FhmampIdBq55aHTOcy06ZVVI64eRnUWvO2kfb5ZM8e36TfRyaYMp78cehru700ERWLW
-         3k4J7CvShNYYe4Lx0w9+BbbyY9QfRaMi8j4iULk/JC2nrrzOqVK87jGSnl2jBztDjYXp
-         Dtz6PFvKHU5x4HJRE4+EuTROES9yNS9n17vtWtTo5f8SouEjrC21I/UQaZTI5fQ9UUVU
-         Ao/xKUV+Wa38l6IETty/Qw7ZJ/bqoF1bkRGIkGNwTDyRrttAfBd8N4e+AvNsydv8tAgJ
-         b5yQ==
-X-Gm-Message-State: AOAM531HFDvbTbWxGzwSCqgJb0fQMkSukFmYuSYg9RKBx10VwkdsFnxw
-        yjtA/6fE7oB/v5mNos0P3lRF2Q==
-X-Google-Smtp-Source: ABdhPJx0j3o/dfARdxLCxZFu0QCg2nY4pjGflu6c0tuLw5tUQhIucFl39ZjiLASPZto5FWJNbE3ECA==
-X-Received: by 2002:a63:6c0a:: with SMTP id h10mr21194250pgc.11.1595877651605;
-        Mon, 27 Jul 2020 12:20:51 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:f693:9fff:fef4:e70a])
-        by smtp.gmail.com with ESMTPSA id u24sm15605054pfm.211.2020.07.27.12.20.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jul 2020 12:20:51 -0700 (PDT)
-Date:   Mon, 27 Jul 2020 12:20:50 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Sandeep Maheswaram <sanm@codeaurora.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qzzZKFqE1nfVRb0bTdQAza1honJ2T0+1vW2BFXwTzqA=;
+        b=PyK+AxFqwavXoNnGZH2qOAPdlhoHmp60s5BR2CP+a/jJl/tNxTcXwnwplDAaM7nS6t
+         w9fZU1WMECHpmbd3ANQPVuY6wb01YNDPPufTiPV06dZJNZMOwWaXc+OY0ZvJQOKArfCp
+         exGVr3BdG2/HAauiWMydt3Gc6xKXy9tj6+M3eH/kW7zSEa+OayoesKkT5fnjxOKCOXD6
+         fREiuCyjEBr8QSCr6RkvB4aDtKsS4Gh82ZfIUJIWIaNtjy2uMAesscs6KocB7k05VbKy
+         DgGXMgKcQDB+LM1f1Ng8+6GVFkzEN9JFGkcleSEnhIs51BQbcocEzR7ZWq/9ffMltvtF
+         gYJA==
+X-Gm-Message-State: AOAM530mzj6zkTZJ8MZIo+e9eT/gFSkgTAVCA1+TYmqP192/S3esU6VD
+        cCpH4sWV7HpZ2j2TGP054GJJ6u9Xl+ZFZGgqFigzjVwPTQ0=
+X-Google-Smtp-Source: ABdhPJzEd9N2EW8275FRzfeT1fNAW9ksND1FAyY1KyG0A8DkhI41cM9sG0GJE6Li/KdL/CE30l9gi3zTMIRToWH2OsA=
+X-Received: by 2002:a62:758f:: with SMTP id q137mr3064389pfc.170.1595879075906;
+ Mon, 27 Jul 2020 12:44:35 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200727092346.19780-1-amelie.delaunay@st.com>
+ <20200727092346.19780-4-amelie.delaunay@st.com> <CAFBinCCXuUC4PHgrobYjj=yjA3Tz73Wwx0KWz+B6PfCw_OSi_w@mail.gmail.com>
+In-Reply-To: <CAFBinCCXuUC4PHgrobYjj=yjA3Tz73Wwx0KWz+B6PfCw_OSi_w@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 27 Jul 2020 22:44:19 +0300
+Message-ID: <CAHp75Ve75d+K87cokb4YYgim_wU0gTidGuiPs3BmohRKfTh5gA@mail.gmail.com>
+Subject: Re: [PATCH v4 3/3] usb: dwc2: don't use ID/Vbus detection if
+ usb-role-switch on STM32MP15 SoCs
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     Amelie Delaunay <amelie.delaunay@st.com>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
-Subject: Re: [PATCH v11 1/2] usb: dwc3: qcom: Add interconnect support in
- dwc3 driver
-Message-ID: <20200727192050.GD3191083@google.com>
-References: <1595869597-26049-1-git-send-email-sanm@codeaurora.org>
- <1595869597-26049-2-git-send-email-sanm@codeaurora.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1595869597-26049-2-git-send-email-sanm@codeaurora.org>
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        USB <linux-usb@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Fabrice Gasnier <fabrice.gasnier@st.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 27, 2020 at 10:36:36PM +0530, Sandeep Maheswaram wrote:
-> Add interconnect support in dwc3-qcom driver to vote for bus
-> bandwidth.
-> 
-> This requires for two different paths - from USB to
-> DDR. The other is from APPS to USB.
-> 
-> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
-> Signed-off-by: Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
+On Mon, Jul 27, 2020 at 10:04 PM Martin Blumenstingl
+<martin.blumenstingl@googlemail.com> wrote:
+> On Mon, Jul 27, 2020 at 11:23 AM Amelie Delaunay <amelie.delaunay@st.com> wrote:
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+> > -       p->activate_stm_id_vb_detection = true;
+> > +       p->activate_stm_id_vb_detection =
+> > +               !of_property_read_bool(np, "usb-role-switch");
+> the rest of params.c uses device_property_read_* instead of of_read_property_*
+> I thought I'd mention it so you can decide yourself whether this is
+> fine or needs to be changed
+
+Better to change and leave all on one line.
+
+-- 
+With Best Regards,
+Andy Shevchenko
