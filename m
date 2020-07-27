@@ -2,91 +2,247 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E7A22F333
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 16:59:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B672922F348
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 17:03:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729392AbgG0O7O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jul 2020 10:59:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43094 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728852AbgG0O7N (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jul 2020 10:59:13 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B68C061794
-        for <linux-usb@vger.kernel.org>; Mon, 27 Jul 2020 07:59:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=42wu5vJ4HqsdpVpb8ocOuHtna+9P01FRJGqSJgZWXYs=; b=WQmQbm0LY9WgoL2I3BEUv2P/Sv
-        t43p8gRRN7MUL0esOlDRKvQKGzrf6ExDTSwmYT7ikmwhIhxquFmd998tjWi/wJ+qgkYxr1L1oUltj
-        Xl7sFwRERwYsFMKS1VgbQuE9VGcAXUMuXxYIp6UUlH6Fz2HbK+r1tF1Fy+iVb86K91itggYekb3mG
-        Rf2seDNSlmbd7l64p8BXGySn+P8KNZAL3UMRgbrNPy9bOQ0zXd9q2WESAAvCKiyvaMgZ/Qd8dpVcX
-        esN1HNrjvwmBIOf7L4TqGsehx+RdkLCBIV/JMDQCLuWUibb93GjxZQsrEY6BZxaNK5/RUHqYHXaWu
-        3sMmGPfg==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1k04as-0007go-Rf; Mon, 27 Jul 2020 14:59:11 +0000
-Subject: Re: [RESEND PATCH v5] drivers: most: add USB adapter driver
-To:     Christian Gromm <christian.gromm@microchip.com>,
-        gregkh@linuxfoundation.org
-Cc:     driverdev-devel@linuxdriverproject.org, linux-usb@vger.kernel.org
-References: <1595838646-12674-1-git-send-email-christian.gromm@microchip.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <616b53fb-3d51-2728-6bf1-a5d5dd0c5b4d@infradead.org>
-Date:   Mon, 27 Jul 2020 07:59:07 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1729978AbgG0PDO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jul 2020 11:03:14 -0400
+Received: from crapouillou.net ([89.234.176.41]:42346 "EHLO crapouillou.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728933AbgG0PDN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 27 Jul 2020 11:03:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1595862189; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=c2+KBusTYw4XXP6S5EXIOXQHYMpCEGdEMNRzuD1vNCo=;
+        b=VzBQm+/NpES995TN1e5nncacB0wbVwpubqKxwkqYJu6gNxtybmi3p1cw//Dq18rcHZcRmj
+        oxHyNnruVq2kOyqsSjut6H9uTe8EjegtRosiiKs+yTR9/sCO7/i/Kt5X22DEBIYcVHsnqy
+        wCYgHjqMKG49UGZS0ZF1y7t3sZzBCVE=
+Date:   Mon, 27 Jul 2020 17:02:59 +0200
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [RESEND PATCH] usb: common: usb-conn-gpio: Register optional
+ charger
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>, od@zcrc.me,
+        USB <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Message-Id: <Z4V4EQ.I8UQ5TF3SBJ61@crapouillou.net>
+In-Reply-To: <1595828558.23885.90.camel@mhfsdcap03>
+References: <20200621224807.882184-1-paul@crapouillou.net>
+        <CAHp75VcfhDncqP_hSVvRNc_vY0fOYaoxm-tiCm2G92Xrisb9hA@mail.gmail.com>
+        <FPN2EQ.RC89XKRQDKRN3@crapouillou.net>
+        <1595828558.23885.90.camel@mhfsdcap03>
 MIME-Version: 1.0
-In-Reply-To: <1595838646-12674-1-git-send-email-christian.gromm@microchip.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi--
 
-On 7/27/20 1:30 AM, Christian Gromm wrote:
-> This patch adds the usb driver source file most_usb.c and
-> modifies the Makefile and Kconfig accordingly.
-> 
-> Signed-off-by: Christian Gromm <christian.gromm@microchip.com>
-> ---
-> 
->  drivers/most/Kconfig    |   12 +
->  drivers/most/Makefile   |    2 +
->  drivers/most/most_usb.c | 1170 +++++++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 1184 insertions(+)
->  create mode 100644 drivers/most/most_usb.c
-> 
-> diff --git a/drivers/most/Kconfig b/drivers/most/Kconfig
-> index 58d7999..7b65320 100644
-> --- a/drivers/most/Kconfig
-> +++ b/drivers/most/Kconfig
-> @@ -13,3 +13,15 @@ menuconfig MOST
->  	  module will be called most_core.
->  
->  	  If in doubt, say N here.
-> +
-> +if MOST
-> +config MOST_USB_HDM
-> +	tristate "USB"
-> +	depends on USB && NET
-> +	help
-> +	  Say Y here if you want to connect via USB to network transceiver.
-> +	  This device driver depends on the networking AIM.
 
-What does that last sentence above mean?
+Le lun. 27 juil. 2020 =E0 13:42, Chunfeng Yun=20
+<chunfeng.yun@mediatek.com> a =E9crit :
+> On Sun, 2020-07-26 at 12:27 +0200, Paul Cercueil wrote:
+>>=20
+>>  Le dim. 26 juil. 2020 =E0 13:14, Andy Shevchenko
+>>  <andy.shevchenko@gmail.com> a =E9crit :
+>>  > On Mon, Jun 22, 2020 at 1:51 AM Paul Cercueil=20
+>> <paul@crapouillou.net>
+>>  > wrote:
+>>  >>
+>>  >>  Register a power supply charger, if the Kconfig option
+>>  >>  USB_CONN_GPIO_CHARGER is set, whose online state depends on=20
+>> whether
+>>  >>  the USB role is set to device or not.
+>>  >>
+>>  >>  This is useful when the USB role is the only way to know if the
+>>  >> device
+>>  >>  is charging from USB. The API is the standard power supply=20
+>> charger
+>>  >> API,
+>>  >>  you get a /sys/class/power_supply/xxx/online node which tells=20
+>> you
+>>  >> the
+>>  >>  state of the charger.
+>>  >>
+>>  >>  The sole purpose of this is to give userspace applications a=20
+>> way to
+>>  >>  know whether or not the charger is plugged.
+>>  >
+>>  > I'm not sure I understand the purpose of this (third?) way to=20
+>> detect
+>>  > USB charger and notify user space about.
+>>  > Why is extcon not good enough?
+>>=20
+>>  We can't have extcon and USB role detection at the same time.
+>>=20
+>>  -Paul
+>>=20
+>>  >>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+>>  >>  ---
+>>  >>   drivers/usb/common/Kconfig         | 11 +++++++
+>>  >>   drivers/usb/common/usb-conn-gpio.c | 47
+>>  >> ++++++++++++++++++++++++++++++
+>>  >>   2 files changed, 58 insertions(+)
+>>  >>
+>>  >>  diff --git a/drivers/usb/common/Kconfig=20
+>> b/drivers/usb/common/Kconfig
+>>  >>  index d611477aae41..5405ae96c68f 100644
+>>  >>  --- a/drivers/usb/common/Kconfig
+>>  >>  +++ b/drivers/usb/common/Kconfig
+>>  >>  @@ -49,3 +49,14 @@ config USB_CONN_GPIO
+>>  >>
+>>  >>            To compile the driver as a module, choose M here: the
+>>  >> module will
+>>  >>            be called usb-conn-gpio.ko
+>>  >>  +
+>>  >>  +if USB_CONN_GPIO
+>>  >>  +
+>>  >>  +config USB_CONN_GPIO_CHARGER
+>>  >>  +       bool "USB charger support"
+>>  >>  +       select POWER_SUPPLY
+>>  >>  +       help
+>>  >>  +         Register a charger with the power supply subsystem.=20
+>> This
+>>  >> will allow
+>>  >>  +         userspace to know whether or not the device is=20
+>> charging
+>>  >> from USB.
+>>  >>  +
+>>  >>  +endif
+>>  >>  diff --git a/drivers/usb/common/usb-conn-gpio.c
+>>  >> b/drivers/usb/common/usb-conn-gpio.c
+>>  >>  index ed204cbb63ea..129d48db280b 100644
+>>  >>  --- a/drivers/usb/common/usb-conn-gpio.c
+>>  >>  +++ b/drivers/usb/common/usb-conn-gpio.c
+>>  >>  @@ -17,6 +17,7 @@
+>>  >>   #include <linux/of.h>
+>>  >>   #include <linux/pinctrl/consumer.h>
+>>  >>   #include <linux/platform_device.h>
+>>  >>  +#include <linux/power_supply.h>
+>>  >>   #include <linux/regulator/consumer.h>
+>>  >>   #include <linux/usb/role.h>
+>>  >>
+>>  >>  @@ -38,6 +39,9 @@ struct usb_conn_info {
+>>  >>          struct gpio_desc *vbus_gpiod;
+>>  >>          int id_irq;
+>>  >>          int vbus_irq;
+>>  >>  +
+>>  >>  +       struct power_supply_desc desc;
+>>  >>  +       struct power_supply *charger;
+>>  >>   };
+>>  >>
+>>  >>   /**
+>>  >>  @@ -98,6 +102,8 @@ static void usb_conn_detect_cable(struct
+>>  >> work_struct *work)
+>>  >>                  ret =3D regulator_enable(info->vbus);
+>>  >>                  if (ret)
+>>  >>                          dev_err(info->dev, "enable vbus=20
+>> regulator
+>>  >> failed\n");
+>>  >>  +       } else if (IS_ENABLED(CONFIG_USB_CONN_GPIO_CHARGER)) {
+>>  >>  +               power_supply_changed(info->charger);
+>>  >>          }
+>>  >>
+>>  >>          info->last_role =3D role;
+>>  >>  @@ -121,10 +127,35 @@ static irqreturn_t usb_conn_isr(int irq,=20
+>> void
+>>  >> *dev_id)
+>>  >>          return IRQ_HANDLED;
+>>  >>   }
+>>  >>
+>>  >>  +static enum power_supply_property usb_charger_properties[] =3D {
+>>  >>  +       POWER_SUPPLY_PROP_ONLINE,
+>>  >>  +};
+>>  >>  +
+>>  >>  +static int usb_charger_get_property(struct power_supply *psy,
+>>  >>  +                                   enum power_supply_property=20
+>> psp,
+>>  >>  +                                   union power_supply_propval=20
+>> *val)
+>>  >>  +{
+>>  >>  +       struct usb_conn_info *info =3D=20
+>> power_supply_get_drvdata(psy);
+>>  >>  +
+>>  >>  +       switch (psp) {
+>>  >>  +       case POWER_SUPPLY_PROP_ONLINE:
+>>  >>  +               val->intval =3D info->last_role =3D=3D=20
+>> USB_ROLE_DEVICE;
+> What will happen if you not change info->last_role here?
+> I prefer it's only changed by usb_conn_isr(), if it's changed by other
+> drivers, for example, through power_supply_get_property(), may skip=20
+> role
+> switch.
 
-> +
-> +	  To compile this driver as a module, choose M here: the
-> +	  module will be called most_usb.
-> +endif
+If you read carefully, info->last_role is not modified here :)
 
-thanks.
--- 
-~Randy
+-Paul
+
+>=20
+>>  >>  +               break;
+>>  >>  +       default:
+>>  >>  +               return -EINVAL;
+>>  >>  +       }
+>>  >>  +
+>>  >>  +       return 0;
+>>  >>  +}
+>>  >>  +
+>>  >>   static int usb_conn_probe(struct platform_device *pdev)
+>>  >>   {
+>>  >>          struct device *dev =3D &pdev->dev;
+>>  >>  +       struct power_supply_desc *desc;
+>>  >>          struct usb_conn_info *info;
+>>  >>  +       struct power_supply_config cfg =3D {
+>>  >>  +               .of_node =3D dev->of_node,
+>>  >>  +       };
+>>  >>          int ret =3D 0;
+>>  >>
+>>  >>          info =3D devm_kzalloc(dev, sizeof(*info), GFP_KERNEL);
+>>  >>  @@ -203,6 +234,22 @@ static int usb_conn_probe(struct
+>>  >> platform_device *pdev)
+>>  >>                  }
+>>  >>          }
+>>  >>
+>>  >>  +       if (IS_ENABLED(CONFIG_USB_CONN_GPIO_CHARGER)) {
+>>  >>  +               desc =3D &info->desc;
+>>  >>  +               desc->name =3D "usb-charger";
+>>  >>  +               desc->properties =3D usb_charger_properties;
+>>  >>  +               desc->num_properties =3D
+>>  >> ARRAY_SIZE(usb_charger_properties);
+>>  >>  +               desc->get_property =3D usb_charger_get_property;
+>>  >>  +               desc->type =3D POWER_SUPPLY_TYPE_USB;
+>>  >>  +               cfg.drv_data =3D info;
+>>  >>  +
+>>  >>  +               info->charger =3D devm_power_supply_register(dev,
+>>  >> desc, &cfg);
+>>  >>  +               if (IS_ERR(info->charger)) {
+>>  >>  +                       dev_err(dev, "Unable to register
+>>  >> charger\n");
+>>  >>  +                       return PTR_ERR(info->charger);
+>>  >>  +               }
+>>  >>  +       }
+>>  >>  +
+>>  >>          platform_set_drvdata(pdev, info);
+>>  >>
+>>  >>          /* Perform initial detection */
+>>  >>  --
+>>  >>  2.27.0
+>>  >>
+>>  >
+>>  >
+>>  > --
+>>  > With Best Regards,
+>>  > Andy Shevchenko
+>>=20
+>>=20
+>=20
+
 
