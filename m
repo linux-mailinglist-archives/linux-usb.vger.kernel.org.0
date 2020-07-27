@@ -2,91 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D2222EBF7
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 14:21:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44D9922EC4A
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 14:37:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728294AbgG0MV2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jul 2020 08:21:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46180 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728124AbgG0MV1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jul 2020 08:21:27 -0400
-Received: from mail-oo1-xc41.google.com (mail-oo1-xc41.google.com [IPv6:2607:f8b0:4864:20::c41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6170C061794
-        for <linux-usb@vger.kernel.org>; Mon, 27 Jul 2020 05:21:27 -0700 (PDT)
-Received: by mail-oo1-xc41.google.com with SMTP id z10so230110ooi.10
-        for <linux-usb@vger.kernel.org>; Mon, 27 Jul 2020 05:21:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cKl9wH3ozqqpJTIt/IjccYMf+/q0iSRZmm3fxklxSkc=;
-        b=tx7NILK7yxaiSxHHiMoZxv3+qZNy3D2bZudvsh5Oftl/WXVc4nquDGydzcKPxm1GGr
-         iKhryB0u248LgvHZXC4IuO00mNv+WLbrCbDzoYRKcPV7KMzh4/Q352/bifixZHAv0s76
-         LQAWM5+EhxeUfElmQNUC5VMMr3lOC0hBZFoCYDP9hsyWpevOo6ckBlZDe3FYptSyJm85
-         v/oVWqD6tiQNqxUWaFVL2RqqerFPM2av21pOT/XiO/b9t4ix54jkqSrLF+HbbfLT/Eog
-         YgxWGlS9GqyfpyMqJ6wjDI2MTHjfu4FB0bOXpsmEZWK78DM0UWcutAWpZOuoDe0KIWJb
-         hLzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cKl9wH3ozqqpJTIt/IjccYMf+/q0iSRZmm3fxklxSkc=;
-        b=pyb/Bg4mMK+TkoAi4PFaPofEhF5k/YN2M3V4HRvypj60CZg5Wybne03BxsZrlaF5RM
-         FkzmPzWhXbm4zyJU+M8/Lomtl1cimTjg0+CoX/tobKEeSM/rwglUSgSyLyR78q3OX8Hb
-         9WgXQm4AUgmoMfo+rtBb3uV31xLV/uo09zB+s8FFJUe2bbCpCEFKSSJY4MaKjJaPLJAK
-         rjTYlgT+MbvNlk8qWycPMOMWswwBTNEU8OyvU/cS4nRn8QMN1WVD79Am31r6GmucsLba
-         zY6S7pGLMEQ566vYhY118tzKMzfuv+YOm9aq0MY+ZsOGCquKRWoOY1J09nPcOqRukT9P
-         i6jg==
-X-Gm-Message-State: AOAM532mH1yApjyApbfZnb3yJkTuFogZB/tAsQlrVILizBtn+vKNjix2
-        3li+/N7xLm0R9YBiQe5stOwLrNasOE97CCImePHXvZX/drU=
-X-Google-Smtp-Source: ABdhPJw8GqRnQKT3pvzFWoc/sPGSC/01YVHyawr2eXcQR6jMH7X4lGoVNWCmmebfC0W64NWHjZVVOXFIjHJiudMUrd8=
-X-Received: by 2002:a4a:d62c:: with SMTP id n12mr12236306oon.38.1595852487099;
- Mon, 27 Jul 2020 05:21:27 -0700 (PDT)
+        id S1728294AbgG0Mhj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jul 2020 08:37:39 -0400
+Received: from mga03.intel.com ([134.134.136.65]:2550 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728173AbgG0Mhi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 27 Jul 2020 08:37:38 -0400
+IronPort-SDR: m4RrRPyPLTGUD2Q5DtmDF7FuOm+uKKNmX7O2bgXWNT6m0jrJssdEzINiSDFoEYCrVcSvL5R04h
+ f7Ka3PIntpnQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9694"; a="150983675"
+X-IronPort-AV: E=Sophos;i="5.75,402,1589266800"; 
+   d="scan'208";a="150983675"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2020 05:37:38 -0700
+IronPort-SDR: A0Vpd6PDP0n2Uw82EWNTfJI7KKJ0bT/TH/rTfyo3m8JvWh2FSh8568HkNNz6mCtdALK2FgtO3W
+ QUIUDy/jrLtw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,402,1589266800"; 
+   d="scan'208";a="393970505"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 27 Jul 2020 05:37:36 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 27 Jul 2020 15:37:35 +0300
+Date:   Mon, 27 Jul 2020 15:37:35 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     linux-usb <linux-usb@vger.kernel.org>
+Subject: Re: AB BA lock inversion in ucsi driver caused by "usb: typec: ucsi:
+ displayport: Fix a potential race during registration"
+Message-ID: <20200727123735.GA883641@kuha.fi.intel.com>
+References: <734333be-aa48-d2fc-0463-6334115e3c12@redhat.com>
 MIME-Version: 1.0
-References: <79D67DF9-2A12-40DE-AFF7-4FF68193AD1C@me.com> <6194f859-aa61-90fa-043e-1df02b01bacb@ivitera.com>
-In-Reply-To: <6194f859-aa61-90fa-043e-1df02b01bacb@ivitera.com>
-From:   Ruslan Bilovol <ruslan.bilovol@gmail.com>
-Date:   Mon, 27 Jul 2020 15:21:04 +0300
-Message-ID: <CAB=otbTrnYfFOhF8ZNzbOwb1_ky3v2j7iBzDEguV=8O9XFRGUQ@mail.gmail.com>
-Subject: Re: usb:gadget:f_uac2: EP OUT is adaptive instead of async
-To:     Pavel Hofman <pavel.hofman@ivitera.com>
-Cc:     harrison conroy <harrisonconroy@me.com>,
-        Linux USB <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <734333be-aa48-d2fc-0463-6334115e3c12@redhat.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Jul 25, 2020 at 1:24 PM Pavel Hofman <pavel.hofman@ivitera.com> wrote:
->
->
-> Dne 22. 07. 20 v 17:25 harrison conroy napsal(a):
-> > Hi Ruslan,
-> >
-> > I am working on a project that involves using an RPi 4 as a USB Gadget
-> > and we have run into the feedback endpoint issue causing Windows 10 to
-> > not recognize it as a USB audio device. Do you have any updates on this
-> > patch for the community? Any help would be greatly appreciated.
->
-> As a temporary workaround you can change the EP OUT type from
-> USB_ENDPOINT_SYNC_ASYNC to USB_ENDPOINT_SYNC_ADAPTIVE.
->
-> Or you can add implicit feedback flag to the EP IN. Win10 should handle
-> implicit feedback OK, unlike Win7. Unfortunately linux still requires an
-> explicit quirk for the implicit feedback
-> https://www.spinics.net/lists/alsa-devel/msg111824.html . Yet it is
-> still a workaround because IMO the existing EP IN is in fact not async
-> but adaptive, clocked by the USB frames.
->
+Hi Hans,
 
-There is a commit which I've sent earlier this month which is a part
-of Win10 enumeration solution:
-https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git/commit/?h=next&id=a9cf8715180b18c62addbfe6f6267b8101903119
+Sorry about the late reply. I just returned from vacation.
 
-For the rest of the solution (feedback endpoint implementation) I'm
-refreshing patches on top of this, and expect to submit them very soon
+On Fri, Jul 17, 2020 at 12:04:58PM +0200, Hans de Goede wrote:
+> Hi Heikki,
+> 
+> I've been running my personal kernel builds with lockdep enabled
+> (more people should do that) and it found an AB BA lock inversion in the
+> ucsi driver. This has been introduced by commit 081da1325d35 ("usb: typec:
+> ucsi: displayport: Fix a potential race during registration").
+> 
+> The problem is as follows:
+> 
+> AB order:
+> 
+> 1. ucsi_init takes ucsi->ppm_lock (it runs with that locked for the duration of the function)
+> 2. usci_init eventually end up calling ucsi_register_displayport, which takes
+>    ucsi_connector->lock
+> 
+> BA order:
+> 
+> 1. ucsi_handle_connector_change work is started, takes ucsi_connector->lock
+> 2. ucsi_handle_connector_change calls ucsi_send_command which takes ucsi->ppm_lock
+> 
+> I think this can be fixed by doing the following:
+> 
+> a. Make ucsi_init drop the ucsi->ppm_lock before it starts registering ports; and
+>    replacing any ucsi_run_command calls after this point with ucsi_send_command
+>    (which is a wrapper around run_command taking the lock while handling the command)
+> 
+> b. Move the taking of the ucsi_connector->lock from ucsi_register_displayport into
+>    ucsi_register_port() to make sure that nothing can touch the connector/port until
+>    ucsi_register_port() has completed.
+> 
+> 
+> b. is not stricly necessary but it brings the locking during init more inline
+> with locking done during runtime so this seems like a good idea.
 
-Thanks,
-Ruslan
+Makes sense. So b. it is. Can you prepare the patch for that?
+
+thanks,
+
+-- 
+heikki
