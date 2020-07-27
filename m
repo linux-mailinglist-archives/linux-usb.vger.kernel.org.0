@@ -2,102 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F047622E937
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 11:39:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA31422E979
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 11:51:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728043AbgG0Jjm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jul 2020 05:39:42 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:22254 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727847AbgG0Jjm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jul 2020 05:39:42 -0400
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06R9bZt4028611;
-        Mon, 27 Jul 2020 11:39:25 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=KNpb5IhGAR9mrGu7U7F+4OMqL2SAQVWh1aDlJk1R/ks=;
- b=XCS39xlpu3dw83UhAQbLqmErci+xzOc3Jf2CMDSwhCvF0qDPr7yzkzoli7SWvLl6RkUL
- 6M3autdinKYz7fiizzoQnahnSz44iRuNojqosCxsEo00Q4p1Bj2pH3Mw4C0OsJps4WKH
- cRIvJlgSUJineksA1rYGiPhUeW8SXqhaD2morP0s6tIjhWD7qhInTADRk8W2W4Bc3d38
- QNWiOOP9RN/0KsBNIsU7Q/I97+XkNPYhQ2hLXL0E+ZlZag8d90DoWANZMhLv/pqXUyaP
- UeAahUJ7K3AnocJL6kQLGJOkibFmerv7huBMDLB7jbBas4sekBvppHvwklRZjmURsl0z GQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 32gagv0gbg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Jul 2020 11:39:25 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id ACEF110002A;
-        Mon, 27 Jul 2020 11:39:24 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9A5E22AE6DA;
-        Mon, 27 Jul 2020 11:39:24 +0200 (CEST)
-Received: from lmecxl0995.lme.st.com (10.75.127.50) by SFHDAG3NODE2.st.com
- (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Mon, 27 Jul
- 2020 11:39:24 +0200
-Subject: Re: [PATCH 0/4] Fix DWC2 USB role switch support
-To:     Minas Harutyunyan <hminas@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre TORGUE <alexandre.torgue@st.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Fabrice GASNIER <fabrice.gasnier@st.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20200724123748.25369-1-amelie.delaunay@st.com>
-From:   Amelie DELAUNAY <amelie.delaunay@st.com>
-Message-ID: <8d59dcfa-dbb6-de26-9154-fc2bd349075f@st.com>
-Date:   Mon, 27 Jul 2020 11:39:23 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1727121AbgG0JvU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jul 2020 05:51:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36204 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726196AbgG0JvU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 27 Jul 2020 05:51:20 -0400
+Received: from localhost (unknown [122.171.202.192])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 28CD820759;
+        Mon, 27 Jul 2020 09:51:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595843480;
+        bh=/Nkd3YBv64YbNEYFecnspgikZgRL+85WrksxxlVoT0I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VGVwa5C3r0p7g3xdE0OicJ5ZPXih40I1dEWTzt7TI0B1iKKgIJgAp8uLai4TrXCbn
+         1vz3BtkhI3uniG7qPbvD9VEdq91WHgb1YAHhlgAYxS8sF0+2oJSe6NWBNr10+yIZe0
+         Awo16hVElKS/ty7yqR7WrqJnTmtSSQfpuEKHoRBs=
+Date:   Mon, 27 Jul 2020 15:21:15 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
+        <zhouyanjie@wanyeetech.com>, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        paul@crapouillou.net, prasannatsmkumar@gmail.com, kishon@ti.com,
+        gor@linux.ibm.com, hca@linux.ibm.com,
+        christophe.jaillet@wanadoo.fr, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        yanfei.li@ingenic.com, sernia.zhou@foxmail.com,
+        zhenwenjin@gmail.com
+Subject: Re: [PATCH v6 3/5] USB: PHY: JZ4770: Add support for new Ingenic
+ SoCs.
+Message-ID: <20200727095115.GV12965@vkoul-mobl>
+References: <20200725035159.31231-1-zhouyanjie@wanyeetech.com>
+ <20200725035159.31231-4-zhouyanjie@wanyeetech.com>
+ <87r1t0nmpr.fsf@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20200724123748.25369-1-amelie.delaunay@st.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.75.127.50]
-X-ClientProxiedBy: SFHDAG4NODE1.st.com (10.75.127.10) To SFHDAG3NODE2.st.com
- (10.75.127.8)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-27_06:2020-07-27,2020-07-27 signatures=0
+In-Reply-To: <87r1t0nmpr.fsf@kernel.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 25-07-20, 09:16, Felipe Balbi wrote:
+> 
+> Hi,
+> 
+> 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com> writes:
+> > Add support for probing the phy-jz4770 driver on the JZ4780 SoC,
+> > the X1000 SoC and the X1830 SoC from Ingenic.
+> >
+> > Tested-by: 周正 (Zhou Zheng) <sernia.zhou@foxmail.com>
+> > Co-developed-by: 漆鹏振 (Qi Pengzhen) <aric.pzqi@ingenic.com>
+> > Signed-off-by: 漆鹏振 (Qi Pengzhen) <aric.pzqi@ingenic.com>
+> > Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+> 
+> It would be better to move this driver to drivers/phy before adding
+> support for new SoCs. We want to remove drivers/usb/phy/ in the near
+> future, any help is welcome.
 
-On 7/24/20 2:37 PM, Amelie DELAUNAY wrote:
-> This patchset adds missing documentation for usb-role-switch support in DWC2
-> bindings. It also fixes build issue when config is DWC2_HOST only,
-> sleeping while atomic issue and missing usb-role-switch unregistration 
-> in probe
-> error path.
-> 
-> Amelie Delaunay (4):
->    dt-bindings: usb: dwc2: add optional usb-role-switch property
->    usb: dwc2: fix build issue when config is USB_DWC2_HOST only
->    usb: dwc2: drd: fix sleeping while spinlock atomic context
->    usb: dwc2: fix error path with missing dwc2_drd_exit
-> 
->   .../devicetree/bindings/usb/dwc2.yaml         |  4 +++
->   drivers/usb/dwc2/core.h                       |  1 +
->   drivers/usb/dwc2/drd.c                        | 30 +++++++------------
->   drivers/usb/dwc2/platform.c                   |  2 ++
->   4 files changed, 17 insertions(+), 20 deletions(-)
-> 
-> -- 
-> 2.17.1
-> 
+Yeah I was about to ask why should this patch up drivers/usb/phy/ rather
+than move to drivers/phy, thanks for confirming that :)
 
-Patchset dropped.
+Looking forward to move
 
-Regards,
-Amelie
+-- 
+~Vinod
