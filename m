@@ -2,70 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CC4D22F625
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 19:07:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE69622F5EB
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 19:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730047AbgG0RHN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jul 2020 13:07:13 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:27531 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730002AbgG0RHM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jul 2020 13:07:12 -0400
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 27 Jul 2020 10:07:12 -0700
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 27 Jul 2020 10:07:10 -0700
-Received: from c-sanm-linux.qualcomm.com ([10.206.25.31])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 27 Jul 2020 22:36:44 +0530
-Received: by c-sanm-linux.qualcomm.com (Postfix, from userid 2343233)
-        id 83E2B2C93; Mon, 27 Jul 2020 22:36:43 +0530 (IST)
-From:   Sandeep Maheswaram <sanm@codeaurora.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Sandeep Maheswaram <sanm@codeaurora.org>
-Subject: [PATCH v11 2/2] arm64: dts: qcom: sc7180: Add maximum speed property for DWC3 USB node
-Date:   Mon, 27 Jul 2020 22:36:37 +0530
-Message-Id: <1595869597-26049-3-git-send-email-sanm@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1595869597-26049-1-git-send-email-sanm@codeaurora.org>
-References: <1595869597-26049-1-git-send-email-sanm@codeaurora.org>
+        id S1728641AbgG0RCI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jul 2020 13:02:08 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:8831 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726979AbgG0RCI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 27 Jul 2020 13:02:08 -0400
+Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 496559162BB968D62170;
+        Tue, 28 Jul 2020 01:02:05 +0800 (CST)
+Received: from kernelci-master.huawei.com (10.175.101.6) by
+ DGGEMS401-HUB.china.huawei.com (10.3.19.201) with Microsoft SMTP Server id
+ 14.3.487.0; Tue, 28 Jul 2020 01:01:58 +0800
+From:   Wei Yongjun <weiyongjun1@huawei.com>
+To:     Hulk Robot <hulkci@huawei.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Wei Yongjun <weiyongjun1@huawei.com>, <linux-usb@vger.kernel.org>
+Subject: [PATCH -next] xhci: dbgtty: Make some functions static
+Date:   Tue, 28 Jul 2020 01:11:49 +0800
+Message-ID: <20200727171149.3011-1-weiyongjun1@huawei.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.175.101.6]
+X-CFilter-Loop: Reflected
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Adding maximum speed property for DWC3 USB node which can be used
-for setting interconnect bandwidth.
+The sparse tool complains as follows:
 
-Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+drivers/usb/host/xhci-dbgtty.c:401:5: warning:
+ symbol 'xhci_dbc_tty_register_device' was not declared. Should it be static?
+drivers/usb/host/xhci-dbgtty.c:452:6: warning:
+ symbol 'xhci_dbc_tty_unregister_device' was not declared. Should it be static?
+
+After commit 6ae6470bfa33 ("xhci: dbc: Add a operations structure
+to access driver functions"), those functions are not used outside
+of xhci-dbgtty.c, so this commit marks them static.
+
+Fixes: 6ae6470bfa33 ("xhci: dbc: Add a operations structure to access driver functions")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
 ---
- arch/arm64/boot/dts/qcom/sc7180.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/host/xhci-dbgtty.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-index 16df08d..3fe759b6 100644
---- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-@@ -2656,6 +2656,7 @@
- 				snps,dis_enblslpm_quirk;
- 				phys = <&usb_1_hsphy>, <&usb_1_ssphy>;
- 				phy-names = "usb2-phy", "usb3-phy";
-+				maximum-speed = "super-speed";
- 			};
- 		};
+diff --git a/drivers/usb/host/xhci-dbgtty.c b/drivers/usb/host/xhci-dbgtty.c
+index 0b942112b6f8..b8918f73a432 100644
+--- a/drivers/usb/host/xhci-dbgtty.c
++++ b/drivers/usb/host/xhci-dbgtty.c
+@@ -398,7 +398,7 @@ xhci_dbc_tty_exit_port(struct dbc_port *port)
+ 	tty_port_destroy(&port->port);
+ }
  
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-of Code Aurora Forum, hosted by The Linux Foundation
+-int xhci_dbc_tty_register_device(struct xhci_dbc *dbc)
++static int xhci_dbc_tty_register_device(struct xhci_dbc *dbc)
+ {
+ 	int			ret;
+ 	struct device		*tty_dev;
+@@ -449,7 +449,7 @@ int xhci_dbc_tty_register_device(struct xhci_dbc *dbc)
+ 	return ret;
+ }
+ 
+-void xhci_dbc_tty_unregister_device(struct xhci_dbc *dbc)
++static void xhci_dbc_tty_unregister_device(struct xhci_dbc *dbc)
+ {
+ 	struct dbc_port		*port = dbc_to_port(dbc);
+ 
 
