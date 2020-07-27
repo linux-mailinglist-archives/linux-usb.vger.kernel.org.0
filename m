@@ -2,159 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D49A722F609
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 19:04:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44DE522F616
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 19:06:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729796AbgG0REV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jul 2020 13:04:21 -0400
-Received: from crapouillou.net ([89.234.176.41]:50942 "EHLO crapouillou.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728945AbgG0REV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 27 Jul 2020 13:04:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1595869459; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:references; bh=eT2jj7Ti6DrN9oXU7iVezLcMMoelbwTnKJJCcgsMRyA=;
-        b=r37eGibOeuqtd+N5v/w3TcFBPfpIyU0J3ooSjYyHjhFZ55FavejAJqKmnq0Cmx7YZ+rwVh
-        FaLPjh8DRrjApyks/NvKEjs5LvCKuQDTagG9JGsWkr/2iRXVdEy6yi5ohY/hvdrPGe5Oau
-        0MT+YP7TZJ9mIDzxmKarnioOc4VmyRU=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     od@zcrc.me, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v2] usb: common: usb-conn-gpio: Register charger
-Date:   Mon, 27 Jul 2020 19:04:13 +0200
-Message-Id: <20200727170413.23131-1-paul@crapouillou.net>
+        id S1729309AbgG0RGR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jul 2020 13:06:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34710 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728626AbgG0RGR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jul 2020 13:06:17 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4956CC061794;
+        Mon, 27 Jul 2020 10:06:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=H2hMVO0DvvdnV/52WjxaCmZ/2+HoWo9ccpnlHRms9Sg=; b=DKFG2qDXCWMD3wvB7voq22f0v0
+        I48AwoyLIo7PrzicNlGbBLQafgHUgzuT4XcUPZP2HxPCgA1p4O1LwMDudYI7BaTtgl9jYMAXVqZ+m
+        0yT5/qPrQmXYEeITjlzVBKHG7f5rLDeUC/zEp8Lbxv5OBIQ6Iy/XqZIyyp80Y8auFfuIIZmZKiAW6
+        7XKydT4mJooQ+XJ5PtQYcHnafNjy8p0YaKcvwcVj6GdPe1oaJukFPhvXKgjyvtsb+gJLLAFFIXG7R
+        OtVyf3fTOJgPLbumotigYC4qu33TQnZ1ZcWH8feO1nqaHi0eqoTdHOftOP+CRUEl9siKqmucJCpXm
+        DpqbTm4w==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1k06Zq-00060Q-AI; Mon, 27 Jul 2020 17:06:14 +0000
+Subject: Re: linux-next: Tree for Jul 27 (drivers/usb/dwc2/drd.c)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        USB list <linux-usb@vger.kernel.org>
+References: <20200727232346.0106c375@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <62a2eb1d-ccf0-f35d-e679-4aab2667c9d8@infradead.org>
+Date:   Mon, 27 Jul 2020 10:06:11 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <20200727232346.0106c375@canb.auug.org.au>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Register a power supply charger, whose online state depends on whether
-the USB role is set to device or not.
+On 7/27/20 6:23 AM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Changes since 20200724:
+> 
 
-This is useful when the USB role is the only way to know if the device
-is charging from USB. The API is the standard power supply charger API,
-you get a /sys/class/power_supply/xxx/online node which tells you the
-state of the charger.
+on i386:
 
-The sole purpose of this is to give userspace applications a way to
-know whether or not the charger is plugged.
+CONFIG_USB_DWC2=y
+CONFIG_USB_DWC2_HOST=y
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
+#
+# Gadget/Dual-role mode requires USB Gadget support to be enabled
+#
+# CONFIG_USB_DWC2_PERIPHERAL is not set
+# CONFIG_USB_DWC2_DUAL_ROLE is not set
+# CONFIG_USB_DWC2_PCI is not set
+CONFIG_USB_DWC2_DEBUG=y
+# CONFIG_USB_DWC2_VERBOSE is not set
+# CONFIG_USB_DWC2_TRACK_MISSED_SOFS is not set
+CONFIG_USB_DWC2_DEBUG_PERIODIC=y
 
-Notes:
-    v2: Don't make charger registration optional
 
- drivers/usb/common/Kconfig         |  1 +
- drivers/usb/common/usb-conn-gpio.c | 45 ++++++++++++++++++++++++++++++
- 2 files changed, 46 insertions(+)
+../drivers/usb/dwc2/drd.c: In function ‘dwc2_drd_role_sw_set’:
+../drivers/usb/dwc2/drd.c:80:38: error: ‘struct dwc2_hsotg’ has no member named ‘test_mode’; did you mean ‘dr_mode’?
+  if (role == USB_ROLE_NONE && hsotg->test_mode) {
+                                      ^~~~~~~~~
+                                      dr_mode
 
-diff --git a/drivers/usb/common/Kconfig b/drivers/usb/common/Kconfig
-index d611477aae41..5e8a04e3dd3c 100644
---- a/drivers/usb/common/Kconfig
-+++ b/drivers/usb/common/Kconfig
-@@ -40,6 +40,7 @@ config USB_CONN_GPIO
- 	tristate "USB GPIO Based Connection Detection Driver"
- 	depends on GPIOLIB
- 	select USB_ROLE_SWITCH
-+	select POWER_SUPPLY
- 	help
- 	  The driver supports USB role switch between host and device via GPIO
- 	  based USB cable detection, used typically if an input GPIO is used
-diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common/usb-conn-gpio.c
-index ed204cbb63ea..fb7d35b040b7 100644
---- a/drivers/usb/common/usb-conn-gpio.c
-+++ b/drivers/usb/common/usb-conn-gpio.c
-@@ -17,6 +17,7 @@
- #include <linux/of.h>
- #include <linux/pinctrl/consumer.h>
- #include <linux/platform_device.h>
-+#include <linux/power_supply.h>
- #include <linux/regulator/consumer.h>
- #include <linux/usb/role.h>
- 
-@@ -38,6 +39,9 @@ struct usb_conn_info {
- 	struct gpio_desc *vbus_gpiod;
- 	int id_irq;
- 	int vbus_irq;
-+
-+	struct power_supply_desc desc;
-+	struct power_supply *charger;
- };
- 
- /**
-@@ -104,6 +108,8 @@ static void usb_conn_detect_cable(struct work_struct *work)
- 
- 	dev_dbg(info->dev, "vbus regulator is %s\n",
- 		regulator_is_enabled(info->vbus) ? "enabled" : "disabled");
-+
-+	power_supply_changed(info->charger);
- }
- 
- static void usb_conn_queue_dwork(struct usb_conn_info *info,
-@@ -121,10 +127,35 @@ static irqreturn_t usb_conn_isr(int irq, void *dev_id)
- 	return IRQ_HANDLED;
- }
- 
-+static enum power_supply_property usb_charger_properties[] = {
-+	POWER_SUPPLY_PROP_ONLINE,
-+};
-+
-+static int usb_charger_get_property(struct power_supply *psy,
-+				    enum power_supply_property psp,
-+				    union power_supply_propval *val)
-+{
-+	struct usb_conn_info *info = power_supply_get_drvdata(psy);
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_ONLINE:
-+		val->intval = info->last_role == USB_ROLE_DEVICE;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
- static int usb_conn_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-+	struct power_supply_desc *desc;
- 	struct usb_conn_info *info;
-+	struct power_supply_config cfg = {
-+		.of_node = dev->of_node,
-+	};
- 	int ret = 0;
- 
- 	info = devm_kzalloc(dev, sizeof(*info), GFP_KERNEL);
-@@ -203,6 +234,20 @@ static int usb_conn_probe(struct platform_device *pdev)
- 		}
- 	}
- 
-+	desc = &info->desc;
-+	desc->name = "usb-charger";
-+	desc->properties = usb_charger_properties;
-+	desc->num_properties = ARRAY_SIZE(usb_charger_properties);
-+	desc->get_property = usb_charger_get_property;
-+	desc->type = POWER_SUPPLY_TYPE_USB;
-+	cfg.drv_data = info;
-+
-+	info->charger = devm_power_supply_register(dev, desc, &cfg);
-+	if (IS_ERR(info->charger)) {
-+		dev_err(dev, "Unable to register charger\n");
-+		return PTR_ERR(info->charger);
-+	}
-+
- 	platform_set_drvdata(pdev, info);
- 
- 	/* Perform initial detection */
+../drivers/usb/dwc2/drd.c:114:5: error: implicit declaration of function ‘dwc2_hsotg_core_disconnect’; did you mean ‘dwc2_hsotg_core_connect’? [-Werror=implicit-function-declaration]
+     dwc2_hsotg_core_disconnect(hsotg);
+     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+     dwc2_hsotg_core_connect
+
+
+
 -- 
-2.27.0
-
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
