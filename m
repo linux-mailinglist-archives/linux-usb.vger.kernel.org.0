@@ -2,81 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B1AF22E652
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 09:17:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E0CB22E66E
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 09:23:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727111AbgG0HQt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jul 2020 03:16:49 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:35255 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727091AbgG0HQt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jul 2020 03:16:49 -0400
-X-UUID: a4fb24737e4a43cd875755d57ae76d1a-20200727
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=kMaydL2v9BshbyUReMb3wcjNfslH3HmUZia9G0XRnJc=;
-        b=f8QOemF0Ybi/R3Y2gLV5RrHQgGd+/QS0DvA6FC9LbwHengawHYgF+FJWwfSogANP+W+OqSti5+7s1a33onQGtna3AAXxOFSlbAVpbudpfpxOSTqgEBQm1DNSW0SmDrRm32K7zgh6/Btvths5HYA6bSJBIQPp4iCdJTmGtT7yw/U=;
-X-UUID: a4fb24737e4a43cd875755d57ae76d1a-20200727
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 32602630; Mon, 27 Jul 2020 15:16:46 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs08n2.mediatek.inc (172.21.101.56) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 27 Jul 2020 15:16:43 +0800
-Received: from localhost.localdomain (10.17.3.153) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 27 Jul 2020 15:16:43 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Eddie Hung <eddie.hung@mediatek.com>
-Subject: [PATCH 11/11] usb: mtu3: simplify mtu3_req_complete()
-Date:   Mon, 27 Jul 2020 15:15:00 +0800
-Message-ID: <1595834101-13094-11-git-send-email-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 1.8.1.1.dirty
-In-Reply-To: <1595834101-13094-1-git-send-email-chunfeng.yun@mediatek.com>
-References: <1595834101-13094-1-git-send-email-chunfeng.yun@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: B2FBB65A761F5069A6267965A8BC72CF8580797430EE14138B9473B4676492382000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+        id S1726183AbgG0HXI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jul 2020 03:23:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56458 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726116AbgG0HXH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jul 2020 03:23:07 -0400
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3B3C0619D2
+        for <linux-usb@vger.kernel.org>; Mon, 27 Jul 2020 00:23:06 -0700 (PDT)
+Received: by mail-ed1-x542.google.com with SMTP id a1so11313021edt.10
+        for <linux-usb@vger.kernel.org>; Mon, 27 Jul 2020 00:23:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=Q7vEuh+TCFRtmIhZa9bVqmvhpFWEmKru9M7JItowJEI=;
+        b=CjbHGDKGTNs/YhppnfpDb7I89Azs+0QMF/+RGqDpTlwELGMsZc7ZSNivaXqw1GlMQX
+         j2/sMcKC9HU30DDdIrCxV/S1j9albImS+ZZtSWOtG+XhFPbjEZjfYCwGBE2wBtn6i2B9
+         0e3soOGkoOv4uk2bC0F9NQjbajud0GKCgHE28YGxjzaHyzoSgmLenx61dbj06PScxMFM
+         83QnOvtZ/2BXV7GHb5Xy5Roc62LJeQhvIDHriTIZI/+WBp4d9VsNEMpCzgA6YRqPOiYy
+         dnYd5uHn5qdXjggysrw5ySuK5JWdJfDeu0p6aWazZR3EOLNzur82MJt7KUTaBNTeRSp9
+         8jiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Q7vEuh+TCFRtmIhZa9bVqmvhpFWEmKru9M7JItowJEI=;
+        b=esUriqPE2u+Am6ndewToM4/yZoEGATOHH05MnhdUlt+3MZQq77/Bm2MRLDthLLQN+9
+         5jMVkKgq08Jz+ditPdT0id3+O8v3OD/5G+MoKc1aqq62d/nCJKclbOuF9SkN47nAHWfE
+         maZeNS8l1cEGnKhujgALgA+oepIjwN6tK9wwBhVPYZzZ4773c7mRUC5qF/mGKTjbJsVI
+         s25W0rhl5bVFwX/PzLHCMhpaaeQqP6Q6i3jMBAgS8pb9zcCnZ5JEZqgPrHcZ9Fli5XN3
+         kM0tzLdqtprnvnEbUnqC/gogTyg2/gG03vgDjtpySPw6dhcmRYr0fPulIJi27PEi29qw
+         2SpA==
+X-Gm-Message-State: AOAM533jYPtndhfa7Aqln0UWf8ZcKHEbNTklGOPFa1P/FyULaILHd30y
+        h1qCzgSb3BZ0Jl72q60coeA=
+X-Google-Smtp-Source: ABdhPJxQeoyqVzox3EvXE0KA1JWY3vfw5C/nVCedYYu4GAnRsJ3Jb41ARe+wRRXZBefCbBiaK9ahGA==
+X-Received: by 2002:a05:6402:1c0f:: with SMTP id ck15mr19316587edb.155.1595834584827;
+        Mon, 27 Jul 2020 00:23:04 -0700 (PDT)
+Received: from ruhe.localdomain (109-186-98-97.bb.netvision.net.il. [109.186.98.97])
+        by smtp.gmail.com with ESMTPSA id m6sm6370728ejq.85.2020.07.27.00.23.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jul 2020 00:23:04 -0700 (PDT)
+From:   eli.billauer@gmail.com
+To:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Cc:     hdegoede@redhat.com, stern@rowland.harvard.edu,
+        Eli Billauer <eli.billauer@gmail.com>
+Subject: [PATCH] usb: core: Solve race condition in usb_kill_anchored_urbs
+Date:   Mon, 27 Jul 2020 10:22:25 +0300
+Message-Id: <20200727072225.25195-1-eli.billauer@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-VXNlIGFyZ3VtZW50IHJlcSBkaXJlY3RseSBpbnN0ZWFkIG9mIG1yZXEtPnJlcXVlc3QsIHRoZXkN
-CmFyZSB0aGUgc2FtZSB1c2IgcmVxdWVzdC4NCg0KU2lnbmVkLW9mZi1ieTogQ2h1bmZlbmcgWXVu
-IDxjaHVuZmVuZy55dW5AbWVkaWF0ZWsuY29tPg0KLS0tDQogZHJpdmVycy91c2IvbXR1My9tdHUz
-X2dhZGdldC5jIHwgMTcgKysrKysrKy0tLS0tLS0tLS0NCiAxIGZpbGUgY2hhbmdlZCwgNyBpbnNl
-cnRpb25zKCspLCAxMCBkZWxldGlvbnMoLSkNCg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL210
-dTMvbXR1M19nYWRnZXQuYyBiL2RyaXZlcnMvdXNiL210dTMvbXR1M19nYWRnZXQuYw0KaW5kZXgg
-NzNhODUzNi4uMWRlNWM5YSAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvdXNiL210dTMvbXR1M19nYWRn
-ZXQuYw0KKysrIGIvZHJpdmVycy91c2IvbXR1My9tdHUzX2dhZGdldC5jDQpAQCAtMTUsMTUgKzE1
-LDEzIEBAIHZvaWQgbXR1M19yZXFfY29tcGxldGUoc3RydWN0IG10dTNfZXAgKm1lcCwNCiBfX3Jl
-bGVhc2VzKG1lcC0+bXR1LT5sb2NrKQ0KIF9fYWNxdWlyZXMobWVwLT5tdHUtPmxvY2spDQogew0K
-LQlzdHJ1Y3QgbXR1M19yZXF1ZXN0ICptcmVxOw0KLQlzdHJ1Y3QgbXR1MyAqbXR1Ow0KKwlzdHJ1
-Y3QgbXR1M19yZXF1ZXN0ICptcmVxID0gdG9fbXR1M19yZXF1ZXN0KHJlcSk7DQorCXN0cnVjdCBt
-dHUzICptdHUgPSBtcmVxLT5tdHU7DQogDQotCW1yZXEgPSB0b19tdHUzX3JlcXVlc3QocmVxKTsN
-CiAJbGlzdF9kZWwoJm1yZXEtPmxpc3QpOw0KLQlpZiAobXJlcS0+cmVxdWVzdC5zdGF0dXMgPT0g
-LUVJTlBST0dSRVNTKQ0KLQkJbXJlcS0+cmVxdWVzdC5zdGF0dXMgPSBzdGF0dXM7DQorCWlmIChy
-ZXEtPnN0YXR1cyA9PSAtRUlOUFJPR1JFU1MpDQorCQlyZXEtPnN0YXR1cyA9IHN0YXR1czsNCiAN
-Ci0JbXR1ID0gbXJlcS0+bXR1Ow0KIAl0cmFjZV9tdHUzX3JlcV9jb21wbGV0ZShtcmVxKTsNCiAJ
-c3Bpbl91bmxvY2soJm10dS0+bG9jayk7DQogDQpAQCAtMzEsMTEgKzI5LDEwIEBAIHZvaWQgbXR1
-M19yZXFfY29tcGxldGUoc3RydWN0IG10dTNfZXAgKm1lcCwNCiAJaWYgKG1lcC0+ZXBudW0pDQog
-CQl1c2JfZ2FkZ2V0X3VubWFwX3JlcXVlc3QoJm10dS0+ZywgcmVxLCBtZXAtPmlzX2luKTsNCiAN
-Ci0JZGV2X2RiZyhtdHUtPmRldiwgIiVzIGNvbXBsZXRlIHJlcTogJXAsIHN0cyAlZCwgJWQvJWRc
-biIsIG1lcC0+bmFtZSwNCi0JCXJlcSwgcmVxLT5zdGF0dXMsIG1yZXEtPnJlcXVlc3QuYWN0dWFs
-LCBtcmVxLT5yZXF1ZXN0Lmxlbmd0aCk7DQotDQotCXVzYl9nYWRnZXRfZ2l2ZWJhY2tfcmVxdWVz
-dCgmbWVwLT5lcCwgJm1yZXEtPnJlcXVlc3QpOw0KKwlkZXZfZGJnKG10dS0+ZGV2LCAiJXMgY29t
-cGxldGUgcmVxOiAlcCwgc3RzICVkLCAlZC8lZFxuIiwNCisJCW1lcC0+bmFtZSwgcmVxLCByZXEt
-PnN0YXR1cywgcmVxLT5hY3R1YWwsIHJlcS0+bGVuZ3RoKTsNCiANCisJdXNiX2dhZGdldF9naXZl
-YmFja19yZXF1ZXN0KCZtZXAtPmVwLCByZXEpOw0KIAlzcGluX2xvY2soJm10dS0+bG9jayk7DQog
-fQ0KIA0KLS0gDQoxLjkuMQ0K
+From: Eli Billauer <eli.billauer@gmail.com>
+
+usb_kill_anchored_urbs() is commonly used to cancel all URBs on an
+anchor just before releasing resources which the URBs rely on. By doing
+so, users of this function rely on that no completer callbacks will take
+place from any URB on the anchor after it returns.
+
+However if this function is called in parallel with __usb_hcd_giveback_urb
+processing a URB on the anchor, the latter may call the completer
+callback after usb_kill_anchored_urbs() returns. This can lead to a
+kernel panic due to use after release of memory in interrupt context.
+
+The race condition is that __usb_hcd_giveback_urb() first unanchors the URB
+and then makes the completer callback. Such URB is hence invisible to
+usb_kill_anchored_urbs(), allowing it to return before the completer has
+been called, since the anchor's urb_list is empty.
+
+This patch adds a call to usb_wait_anchor_empty_timeout() prior to
+returning. This function waits until urb_list is empty (it should
+already be), but more importantly, until @suspend_wakeups is zero.
+
+The latter condition resolves the race condition, since @suspend_wakeups
+is incremented by __usb_hcd_giveback_urb() before unanchoring a URB and
+decremented after completing it. @suspend_wakeups is hence an upper limit
+of the number of unanchored but uncompleted URBs. By waiting for it to be
+zero, the race condition is eliminated, in the same way that another
+problem was solved for the same race condition in commit 6ec4147e7bdb
+("usb-anchor: Delay usb_wait_anchor_empty_timeout wake up till completion
+is done").
+
+An arbitrary timeout of 1000 ms should cover any sane completer
+callback. The wait condition may also fail if the anchor is populated
+while usb_kill_anchored_urbs() is called. Both timeout scenarios are
+alarmingly weird, hence a WARN() is issued.
+
+Signed-off-by: Eli Billauer <eli.billauer@gmail.com>
+---
+ drivers/usb/core/urb.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
+index da923ec17612..7fa23615199f 100644
+--- a/drivers/usb/core/urb.c
++++ b/drivers/usb/core/urb.c
+@@ -772,11 +772,12 @@ void usb_block_urb(struct urb *urb)
+ EXPORT_SYMBOL_GPL(usb_block_urb);
+ 
+ /**
+- * usb_kill_anchored_urbs - cancel transfer requests en masse
++ * usb_kill_anchored_urbs -  kill all URBs associated with an anchor
+  * @anchor: anchor the requests are bound to
+  *
+- * this allows all outstanding URBs to be killed starting
+- * from the back of the queue
++ * This kills all outstanding URBs starting from the back of the queue,
++ * with guarantee that no completer callbacks will take place from the
++ * anchor after this function returns.
+  *
+  * This routine should not be called by a driver after its disconnect
+  * method has returned.
+@@ -784,6 +785,7 @@ EXPORT_SYMBOL_GPL(usb_block_urb);
+ void usb_kill_anchored_urbs(struct usb_anchor *anchor)
+ {
+ 	struct urb *victim;
++	int ret;
+ 
+ 	spin_lock_irq(&anchor->lock);
+ 	while (!list_empty(&anchor->urb_list)) {
+@@ -798,6 +800,10 @@ void usb_kill_anchored_urbs(struct usb_anchor *anchor)
+ 		spin_lock_irq(&anchor->lock);
+ 	}
+ 	spin_unlock_irq(&anchor->lock);
++
++	ret = usb_wait_anchor_empty_timeout(anchor, 1000);
++
++	WARN(!ret, "Returning with non-empty anchor due to timeout");
+ }
+ EXPORT_SYMBOL_GPL(usb_kill_anchored_urbs);
+ 
+-- 
+2.17.1
 
