@@ -2,101 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A13022E888
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 11:07:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ED3E22E8BC
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 11:21:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728053AbgG0JH0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jul 2020 05:07:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44482 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728022AbgG0JHY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jul 2020 05:07:24 -0400
-Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D9DC061794;
-        Mon, 27 Jul 2020 02:07:24 -0700 (PDT)
-Received: by mail-oi1-x242.google.com with SMTP id k22so13763102oib.0;
-        Mon, 27 Jul 2020 02:07:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=/acPY9VLlTRiHv9DA9lq/Q62CiWAa35NOoQ1vhCiUdY=;
-        b=HOSDwWY6psSHAf/sxyIYNVWjM3iNUdh85IqFhWbqX5Ao9PyrG1IRT1ul6oaBSGiUos
-         evcBLqvHIjxyc55ARGzkF4GwZXjwYkgN3viW9kDZb4UCUy3maE0cib9Imm6d6s/TXUTZ
-         hYb6deEToFfEHwTBsAPZWdH6cce9w+pFImzoqSTMKpDHnovgRXeI1NSA1bV8AoobxR62
-         sBNDCponYBD1D4FNHxk6g0wViEm1IlB4uMWutVJ3YVVRhAipWj49RAofWAeT/2zLMk7w
-         2hLvY0kH+PfrCV9eVEp+pvhv8ayiZLKwPvfEBUYkQmfa8s2KcPlCVxY2JyD6i1Z10h6o
-         0d5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/acPY9VLlTRiHv9DA9lq/Q62CiWAa35NOoQ1vhCiUdY=;
-        b=e34jOrPlNOcIiQL+fhff707QBSK7668Ga2pOusTFNaJwd86Jtq6z2ytSALM6YVQObR
-         3kLpX8SHDVRKhHhRgmXAGRKI5SVvqB1bkYb2OGI7dmcfZogk4Lev0Cj3YCnTjpmazIu9
-         SHWUYQF6b/nULQZSdzJHlU0BibTbYTr65XRYZs1Pl3o7FsRZbdeJocQ21eD3CwHI4/vg
-         x7G8w3It3JmrZPsy7lNXWeVVPx+6Kb7A2Z7rvFzJbfNdKyAARQzGB3nuYagOa/ccUVKN
-         RRuDML21zpnGKDrYK8WQpKxMgrBLBJwh3WKnsNMZ98FW3HIuLXRAQ4M11qY7lGw0DvCF
-         wYOw==
-X-Gm-Message-State: AOAM533tarvK56k1FM/A3bd4MBX4tg6qCNklD8rq8DqE0hCGYrCTdRDu
-        O9er+2SM1rS59jgpAvXELT02pyBGhBk=
-X-Google-Smtp-Source: ABdhPJzOIsNkWrL5WqLHCj62fTSUlSegmCNnGQFl/mJG2tooJTSgdFQDYY0OYQXZ8+zYuXtKxWqgYA==
-X-Received: by 2002:aca:3102:: with SMTP id x2mr6431919oix.57.1595840843892;
-        Mon, 27 Jul 2020 02:07:23 -0700 (PDT)
-Received: from localhost.localdomain ([170.130.31.90])
-        by smtp.gmail.com with ESMTPSA id q189sm1471297oic.15.2020.07.27.02.07.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jul 2020 02:07:23 -0700 (PDT)
-From:   Forest Crossman <cyrozap@gmail.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Forest Crossman <cyrozap@gmail.com>, mathias.nyman@intel.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] usb: xhci: Fix ASMedia ASM1142 DMA addressing
-Date:   Mon, 27 Jul 2020 04:06:29 -0500
-Message-Id: <20200727090629.169701-3-cyrozap@gmail.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200727090629.169701-1-cyrozap@gmail.com>
-References: <20200727090629.169701-1-cyrozap@gmail.com>
+        id S1726676AbgG0JVr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jul 2020 05:21:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52106 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726263AbgG0JVr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 27 Jul 2020 05:21:47 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 37E6320658;
+        Mon, 27 Jul 2020 09:21:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595841706;
+        bh=YsXrXhSPR5O9LZbhFI9u3/annkNek25UBN0Et/rEjLU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MWRifUwSo5JqIuT20XUmMsNJGpvhIKS9ZUEfm5HJRnq6htfQy/fKD0ORQ3fz3YGXB
+         W/4XvE/YxUXl8lmntFlHUjIQ25BKQkXVTOx72y3O9y2HxhkDZypHEfQEd8HuYJnMuL
+         FHYRCkCSTJvslKugkG/rB0ZrjYmRO8vj8PUWCgzY=
+Date:   Mon, 27 Jul 2020 11:21:41 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     eli.billauer@gmail.com
+Cc:     linux-usb@vger.kernel.org, hdegoede@redhat.com,
+        stern@rowland.harvard.edu
+Subject: Re: [PATCH] usb: core: Solve race condition in usb_kill_anchored_urbs
+Message-ID: <20200727092141.GA1764157@kroah.com>
+References: <20200727072225.25195-1-eli.billauer@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200727072225.25195-1-eli.billauer@gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I've confirmed that the ASMedia ASM1142 has the same problem as the
-ASM2142/ASM3142, in that it too reports that it supports 64-bit DMA
-addresses when in fact it does not. As with the ASM2142/ASM3142, this
-can cause problems on systems where the upper bits matter, and adding
-the XHCI_NO_64BIT_SUPPORT quirk completely fixes the issue.
+On Mon, Jul 27, 2020 at 10:22:25AM +0300, eli.billauer@gmail.com wrote:
+> From: Eli Billauer <eli.billauer@gmail.com>
+> 
+> usb_kill_anchored_urbs() is commonly used to cancel all URBs on an
+> anchor just before releasing resources which the URBs rely on. By doing
+> so, users of this function rely on that no completer callbacks will take
+> place from any URB on the anchor after it returns.
+> 
+> However if this function is called in parallel with __usb_hcd_giveback_urb
+> processing a URB on the anchor, the latter may call the completer
+> callback after usb_kill_anchored_urbs() returns. This can lead to a
+> kernel panic due to use after release of memory in interrupt context.
+> 
+> The race condition is that __usb_hcd_giveback_urb() first unanchors the URB
+> and then makes the completer callback. Such URB is hence invisible to
+> usb_kill_anchored_urbs(), allowing it to return before the completer has
+> been called, since the anchor's urb_list is empty.
+> 
+> This patch adds a call to usb_wait_anchor_empty_timeout() prior to
+> returning. This function waits until urb_list is empty (it should
+> already be), but more importantly, until @suspend_wakeups is zero.
+> 
+> The latter condition resolves the race condition, since @suspend_wakeups
+> is incremented by __usb_hcd_giveback_urb() before unanchoring a URB and
+> decremented after completing it. @suspend_wakeups is hence an upper limit
+> of the number of unanchored but uncompleted URBs. By waiting for it to be
+> zero, the race condition is eliminated, in the same way that another
+> problem was solved for the same race condition in commit 6ec4147e7bdb
+> ("usb-anchor: Delay usb_wait_anchor_empty_timeout wake up till completion
+> is done").
+> 
+> An arbitrary timeout of 1000 ms should cover any sane completer
+> callback. The wait condition may also fail if the anchor is populated
+> while usb_kill_anchored_urbs() is called. Both timeout scenarios are
+> alarmingly weird, hence a WARN() is issued.
+> 
+> Signed-off-by: Eli Billauer <eli.billauer@gmail.com>
+> ---
+>  drivers/usb/core/urb.c | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
+> index da923ec17612..7fa23615199f 100644
+> --- a/drivers/usb/core/urb.c
+> +++ b/drivers/usb/core/urb.c
+> @@ -772,11 +772,12 @@ void usb_block_urb(struct urb *urb)
+>  EXPORT_SYMBOL_GPL(usb_block_urb);
+>  
+>  /**
+> - * usb_kill_anchored_urbs - cancel transfer requests en masse
+> + * usb_kill_anchored_urbs -  kill all URBs associated with an anchor
+>   * @anchor: anchor the requests are bound to
+>   *
+> - * this allows all outstanding URBs to be killed starting
+> - * from the back of the queue
+> + * This kills all outstanding URBs starting from the back of the queue,
+> + * with guarantee that no completer callbacks will take place from the
+> + * anchor after this function returns.
+>   *
+>   * This routine should not be called by a driver after its disconnect
+>   * method has returned.
+> @@ -784,6 +785,7 @@ EXPORT_SYMBOL_GPL(usb_block_urb);
+>  void usb_kill_anchored_urbs(struct usb_anchor *anchor)
+>  {
+>  	struct urb *victim;
+> +	int ret;
+>  
+>  	spin_lock_irq(&anchor->lock);
+>  	while (!list_empty(&anchor->urb_list)) {
+> @@ -798,6 +800,10 @@ void usb_kill_anchored_urbs(struct usb_anchor *anchor)
+>  		spin_lock_irq(&anchor->lock);
+>  	}
+>  	spin_unlock_irq(&anchor->lock);
+> +
+> +	ret = usb_wait_anchor_empty_timeout(anchor, 1000);
+> +
+> +	WARN(!ret, "Returning with non-empty anchor due to timeout");
 
-Signed-off-by: Forest Crossman <cyrozap@gmail.com>
----
- drivers/usb/host/xhci-pci.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Don't do a warn-on for things that can be triggered by userspace (i.e.
+"bad USB device), as that can cause systems to reboot, and will get
+caught by the syzbot testing tool.
 
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index baa5af88ca67..3feaafebfe58 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -59,6 +59,7 @@
- #define PCI_DEVICE_ID_AMD_PROMONTORYA_1			0x43bc
- #define PCI_DEVICE_ID_ASMEDIA_1042_XHCI			0x1042
- #define PCI_DEVICE_ID_ASMEDIA_1042A_XHCI		0x1142
-+#define PCI_DEVICE_ID_ASMEDIA_1142_XHCI			0x1242
- #define PCI_DEVICE_ID_ASMEDIA_2142_XHCI			0x2142
- 
- static const char hcd_name[] = "xhci_hcd";
-@@ -268,7 +269,8 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042A_XHCI)
- 		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
- 	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
--		pdev->device == PCI_DEVICE_ID_ASMEDIA_2142_XHCI)
-+	    (pdev->device == PCI_DEVICE_ID_ASMEDIA_1142_XHCI ||
-+	     pdev->device == PCI_DEVICE_ID_ASMEDIA_2142_XHCI))
- 		xhci->quirks |= XHCI_NO_64BIT_SUPPORT;
- 
- 	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
--- 
-2.20.1
+Also, will this cause things to take longer than they used to?  What
+race conditions is this going to cause?  :)
 
+thanks,
+
+greg k-h
