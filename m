@@ -2,53 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61C6422E1DC
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Jul 2020 20:05:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DBD122E503
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 06:46:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727801AbgGZSFZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 26 Jul 2020 14:05:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50054 "EHLO mail.kernel.org"
+        id S1726116AbgG0Eq2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jul 2020 00:46:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46244 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726760AbgGZSFF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 26 Jul 2020 14:05:05 -0400
-Subject: Re: [GIT PULL] USB driver fixes for 5.8-rc7
+        id S1725775AbgG0Eq2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 27 Jul 2020 00:46:28 -0400
+Received: from Mani-XPS-13-9360 (unknown [157.46.48.117])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 957FB2073E;
+        Mon, 27 Jul 2020 04:46:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595786705;
-        bh=Y265sKMgoJxMfgoTE1x6RYCX18wyvYp9+QGQu5ljVjE=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=qFSq8t7yktd+YHMXVioglLN5K8lsqENUMfVHlxVzk8adTN5hCpP/wiG8HOkD9uwBW
-         9RU0iaCeU/pCucDMipcuHoXt2pa/aC4NKK0DApmHusjPP1fM9cDM7eF6soza0lFjOW
-         0OLhJYk9aMlmC+23MlISvKpF1qoXtcGZSiioFlo8=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20200726111143.GA1283454@kroah.com>
-References: <20200726111143.GA1283454@kroah.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20200726111143.GA1283454@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.8-rc7
-X-PR-Tracked-Commit-Id: 0b987032f8b58ef51cc8a042f46cc0cf1f277172
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 17f50e28a858e4bab808733339995133390aae54
-Message-Id: <159578670510.6689.6960568851748598718.pr-tracker-bot@kernel.org>
-Date:   Sun, 26 Jul 2020 18:05:05 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+        s=default; t=1595825187;
+        bh=FaoNP8k6aSLsx7TpTwjKJPpQYLPjHTrsR+RxlYSUviU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DxKMTyFAiQtwVJ8+TAzrsFrS/urT4BTzQAYkttN0vO2lb6v9eml9DXxa+OimH6s4P
+         ZrQmPSpmfk5J+mmY+BuhCpQSKoJ7Ponb9EW7asDNx4P3w5Q8K2LnLQjP7pk1qDF5s6
+         6YSFkrGND2zQeHtOwkqIU6ZB7lPxzIM0qddlynjM=
+Date:   Mon, 27 Jul 2020 10:16:10 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        patong.mxl@gmail.com, Linus Walleij <linus.walleij@linaro.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
+Subject: Re: [RESEND PATCH v4 2/3] usb: serial: xr_serial: Add gpiochip
+ support
+Message-ID: <20200727044610.GC12036@Mani-XPS-13-9360>
+References: <20200607162350.21297-1-mani@kernel.org>
+ <20200607162350.21297-3-mani@kernel.org>
+ <20200701130206.GD3334@localhost>
+ <20200726155223.GB12036@Mani-XPS-13-9360>
+ <CAHp75VeP8CMZ-T2Kk24NzOPiWHM62GErxCDUgBbYzNotwiFHhw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHp75VeP8CMZ-T2Kk24NzOPiWHM62GErxCDUgBbYzNotwiFHhw@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The pull request you sent on Sun, 26 Jul 2020 13:11:43 +0200:
+On Sun, Jul 26, 2020 at 07:34:54PM +0300, Andy Shevchenko wrote:
+> On Sun, Jul 26, 2020 at 6:53 PM Manivannan Sadhasivam <mani@kernel.org> wrote:
+> > On Wed, Jul 01, 2020 at 03:02:06PM +0200, Johan Hovold wrote:
+> > > On Sun, Jun 07, 2020 at 09:53:49PM +0530, Manivannan Sadhasivam wrote:
+> 
+> ...
+> 
+> > > Same here. And perhaps just ignoring the pins managed by gpiolib is
+> > > better (cf. gpiolib and pinctrl being orthogonal).
+> >
+> > You mean, we can just make TX,RX,CTS,RTS pins controlled only by the serial
+> > driver and the rest only by gpiolib?
+> 
+> I'm wondering if you may use mctrl_gpio_*() API instead.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.8-rc7
+How? mctrl_gpio APIs are a wrapper for accessing modem control gpio pins but
+here we are not accessing the pins but rather exposing the pins as a gpiochip.
+Am I missing something?
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/17f50e28a858e4bab808733339995133390aae54
+Thanks,
+Mani
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
