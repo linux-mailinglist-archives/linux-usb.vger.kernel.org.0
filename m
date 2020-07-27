@@ -2,55 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91C2F22F707
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 19:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1332C22F71D
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 19:56:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730699AbgG0RuC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jul 2020 13:50:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41494 "EHLO
+        id S1729001AbgG0Rz5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jul 2020 13:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726846AbgG0RuC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jul 2020 13:50:02 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 425DEC061794;
-        Mon, 27 Jul 2020 10:50:02 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id kq25so5002746ejb.3;
-        Mon, 27 Jul 2020 10:50:02 -0700 (PDT)
+        with ESMTP id S1728496AbgG0Rz5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jul 2020 13:55:57 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9B3C061794;
+        Mon, 27 Jul 2020 10:55:56 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id v22so2024531edy.0;
+        Mon, 27 Jul 2020 10:55:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=E3P4kvBv8Rleuknjs/EKTdnAw0nGwmEOuGwij7lqxeU=;
-        b=jLtvF/aQ5RtTONzbSrQDOZ1CQZgDhxf9HDJmnPZud7lgph0ilkpZaU78GtBhDuvd/2
-         XmfXbx35DAI4/SglbNcNHF7h7zU7e4p0cA0f0vciUXtNUk85F31iGXiz12kBr4+fWgRD
-         hb+sgtPHobb0bF263fhJxgjNXPA4nZiC0u01RdMJ7iuCtNx9s8Wrvl2lOVSatGcBy6Y7
-         SWxtFNAI6SpEcTTrI96iv1FIfoF6atpJdLZ4tM/SjnLDB5flQ6szb6JfblsDE3BNMXVY
-         wbvsp0o3+hXk3D4C2T0BZgwg2apRKpQYk/XrcaLxEAIr98Y9MMoaRATEJKcwDv8Sgoh8
-         61aA==
+        bh=BfQsl2VkPzgMjJHaARqwNqUbw1qIxknvRprBs1qxAqw=;
+        b=rvIHSw7X95GJr0+XCFfmmero5cD0/utExmJuKYz5Qs91sBvJXMlcCDzKQXK2BYAF0q
+         AOyqJaZngQWr9wfISZQjGxz7+meMd/1D7iHIkUQofP/eBvXJf6CUZyBQGBZBgRfC6trk
+         i9V1whbAYAhLMZ1Ng8LBUYQyNA/ltTX7xk7PRr1gOsJQE7fPjvrOOFpVSMbkdKEEGlPd
+         xIdBRhbyQRReLzRwZ9apKo1+tqI81oY9UNdZe2783fIH1PaB3ImM/EoqUJ9I2Gjtb1DL
+         aZ7sqkAYV32yhov8ktBIyeVgaGarSpP8xTcJTPyK+iDceCdsXg9JT/G41ThxH4puV+mT
+         9jUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=E3P4kvBv8Rleuknjs/EKTdnAw0nGwmEOuGwij7lqxeU=;
-        b=scPW5OJ+TZB6P9OGsHPw9eOKm/5HGVx1OkeXDIMEhmHLzFqxa6y43eMdC0M667F7QA
-         pgPafJ2aQaO1U4aaTSl1idTP/wWm3MzAHO+BCKuJXXP5GwS1Bhh/UDiSik7//zgwBttx
-         scam5ZEIwdkcQvsGk9BN4Vch2lT7t6UzK0jxanLEKa8yLT93GRVMA3mZwojLcyWz/GxG
-         0jPDEFRkoVeTmxopeBpM7WApNMnaeAfNKp1ARMIOLgIkU0pMT5jnZkkU/L9nY5IS7KvO
-         BwVbHxK3E7MP+X95dqiDSZCK2momCMk3y4xDvh4+vnLus6Ruu011gxRZGeQPs/UqoR4R
-         yQ1w==
-X-Gm-Message-State: AOAM531vIlPzU+ntyTBtN/hJcAmlw9nTbFQFf6g1zH7Ztv9CR6soszwm
-        q7qrC5oKiGTuvzDp9lqef9lVhv95TMs8gbUiI24=
-X-Google-Smtp-Source: ABdhPJx00cueCvmkr54gaDTC1tq+EK0jdh4p/C2xAIh4A01uMkWJLB4IiShofhBWPvcEAq/5YL+6MG9izDKcQfaj+q4=
-X-Received: by 2002:a17:906:aad2:: with SMTP id kt18mr4042699ejb.537.1595872200937;
- Mon, 27 Jul 2020 10:50:00 -0700 (PDT)
+        bh=BfQsl2VkPzgMjJHaARqwNqUbw1qIxknvRprBs1qxAqw=;
+        b=qUAcUwjRsMi+656tO/+nwplMOtyceqfV0O4dcswWJo/RYyNH7Z+7JAdIGy3YxGYKfe
+         rlg0YKaGrcOcgANRA8eGvcHdBwgTlzz+Gk8MBNzdoR+fRhhgVD1KJGoISktgoncRH7+J
+         uAeVzotOlod9rF8ZbA0P9dXFIWv239YZGud9a03SN2HAlIppUiZ3eqw0vQsaGyxfx91p
+         0GpYeu1jOv3Oixm/OdsK2R8mmpvkcX2uBlVqTk9q9p45a7Dh113/1TAI1SzJLnxvzu2o
+         rMy3bsW1NevIJYhoGDrzXwXc31SFwNbdG2qExZ/0Kww9kszF1t7aP2TU4ty2v/kxdG9Z
+         YA5Q==
+X-Gm-Message-State: AOAM533jdzm8dIztfRpxT9Eul51/wcIINY0qxRSgXZUzGhQV/94d6l2E
+        LREdDs1dqGwpq/BjpIHXoSdPZmSZCYh70qU4Qh8=
+X-Google-Smtp-Source: ABdhPJwOE9lGhBvTtOQCpdnEA2roxCZkipXvXyeHn714NvtvMLoTIv9wK2fKfq+w2poL81YL7Lc+OfvmhPCaxPbx1SQ=
+X-Received: by 2002:aa7:c788:: with SMTP id n8mr2559169eds.146.1595872555514;
+ Mon, 27 Jul 2020 10:55:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200727092346.19780-1-amelie.delaunay@st.com> <20200727092346.19780-4-amelie.delaunay@st.com>
-In-Reply-To: <20200727092346.19780-4-amelie.delaunay@st.com>
+References: <20200727092346.19780-1-amelie.delaunay@st.com> <20200727092346.19780-3-amelie.delaunay@st.com>
+In-Reply-To: <20200727092346.19780-3-amelie.delaunay@st.com>
 From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Mon, 27 Jul 2020 19:49:50 +0200
-Message-ID: <CAFBinCCXuUC4PHgrobYjj=yjA3Tz73Wwx0KWz+B6PfCw_OSi_w@mail.gmail.com>
-Subject: Re: [PATCH v4 3/3] usb: dwc2: don't use ID/Vbus detection if
- usb-role-switch on STM32MP15 SoCs
+Date:   Mon, 27 Jul 2020 19:55:44 +0200
+Message-ID: <CAFBinCBDtuJ19_WZe1H+_BJTJAi=jENyczybPhC1AGYwedNHcQ@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] usb: dwc2: override PHY input signals with usb
+ role switch support
 To:     Amelie Delaunay <amelie.delaunay@st.com>
 Cc:     Minas Harutyunyan <hminas@synopsys.com>,
         Felipe Balbi <balbi@kernel.org>,
@@ -71,24 +71,48 @@ X-Mailing-List: linux-usb@vger.kernel.org
 Hi Amelie,
 
 On Mon, Jul 27, 2020 at 11:23 AM Amelie Delaunay <amelie.delaunay@st.com> wrote:
-[...]
-> diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
-> index a3611cdd1dea..65f8596f6795 100644
-> --- a/drivers/usb/dwc2/params.c
-> +++ b/drivers/usb/dwc2/params.c
-> @@ -183,9 +183,11 @@ static void dwc2_set_stm32mp15_fsotg_params(struct dwc2_hsotg *hsotg)
->  static void dwc2_set_stm32mp15_hsotg_params(struct dwc2_hsotg *hsotg)
->  {
->         struct dwc2_core_params *p = &hsotg->params;
-> +       struct device_node *np = hsotg->dev->of_node;
 >
->         p->otg_cap = DWC2_CAP_PARAM_NO_HNP_SRP_CAPABLE;
-> -       p->activate_stm_id_vb_detection = true;
-> +       p->activate_stm_id_vb_detection =
-> +               !of_property_read_bool(np, "usb-role-switch");
-the rest of params.c uses device_property_read_* instead of of_read_property_*
-I thought I'd mention it so you can decide yourself whether this is
-fine or needs to be changed
+> This patch adds support for usb role switch to dwc2, by using overriding
+> control of the PHY voltage valid and ID input signals.
+>
+> iddig signal (ID) can be overridden:
+> - when setting GUSBCFG_FORCEHOSTMODE, iddig input pin is overridden with 1;
+> - when setting GUSBCFG_FORCEDEVMODE, iddig input pin is overridden with 0.
+>
+> avalid/bvalid/vbusvalid signals can be overridden respectively with:
+> - GOTGCTL_AVALOEN + GOTGCTL_AVALOVAL
+> - GOTGCTL_BVALOEN + GOTGCTL_BVALOVAL
+> - GOTGCTL_VBVALEN + GOTGCTL_VBVALOVAL
+>
+> It is possible to determine valid sessions thanks to usb role switch:
+> - if USB_ROLE_NONE then !avalid && !bvalid && !vbusvalid
+> - if USB_ROLE_DEVICE then !avalid && bvalid && vbusvalid
+> - if USB_ROLE_HOST then avalid && !bvalid && vbusvalid
+>
+> Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
+please add my:
+Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+
+The usb_role_switch part looks correct to me
+I don't understand the details of the dwc2 hardware well enough to say
+if the rest of this patch is fine or not (which is why I'm giving my
+Acked-by instead of Reviewed-by).
+
+Unfortunately I'm still fighting with the Amlogic bits (or my
+board...) to make this work on my boards.
+That why I can't give my Tested-by yet
+At the same time I'm confident that the problem lies within the
+Amlogic OTG detection/GPIOs so I don't see a reason to hold your patch
+up due to this
+
+Finally, please note that there may be a small conflict due to one
+bugfix I sent: [0]
+I think it will be trivial to solve (since we're both adding a new error label)
 
 
+Thank you for your good work again!
+Best regards,
 Martin
+
+
+[0] https://patchwork.kernel.org/patch/11687357/
