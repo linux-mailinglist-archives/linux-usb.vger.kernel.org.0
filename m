@@ -2,36 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E758422FD99
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jul 2020 01:28:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 348DF22FD74
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jul 2020 01:27:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728193AbgG0XYZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jul 2020 19:24:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35332 "EHLO mail.kernel.org"
+        id S1726711AbgG0X1s (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jul 2020 19:27:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35982 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728178AbgG0XYX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 27 Jul 2020 19:24:23 -0400
+        id S1728369AbgG0XYq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 27 Jul 2020 19:24:46 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C2CB020FC3;
-        Mon, 27 Jul 2020 23:24:21 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 026F621D95;
+        Mon, 27 Jul 2020 23:24:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595892262;
-        bh=S6znPVZ89jcmyvwj57Su9erZ8HNhREGGkPYBHmEPk6I=;
+        s=default; t=1595892285;
+        bh=24/kZlRm8jazrDcIiMOpg+gWnDJLT6ZaiVEEri8sSQo=;
         h=From:To:Cc:Subject:Date:From;
-        b=z0tg7w7tbn6ZDdnvaexGKXyH5e98tDyJJFPJPRJ1U+jtzSReStIbgcMl2mqjbqVJI
-         BoLaIEghaIydf/U0DWhU6gxhXxwxahNesEjXhLhneC0YDsPjna/1GRm1tQD000WyjY
-         049sl8PiE6hYoDmbS+qwi7a2LET+Wf/5+Blbu2rE=
+        b=cx+xuIVDgzChKFRiE7ZZ+uYvYn4E4gJ696F+4oGpNdgHTudv946c+7KdxFmHmq4Hh
+         rb7mid3txCKrH4dYr2b32XuEjZdlSB33RBvvUTeDoAF43EnuT79SLCmzk6uKEY/efY
+         KhdnrpsTKWH8bH73SZKltNbFL1YMy9JKp+KhLsDI=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
         "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 01/17] usb: hso: Fix debug compile warning on sparc32
-Date:   Mon, 27 Jul 2020 19:24:04 -0400
-Message-Id: <20200727232420.717684-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 01/10] usb: hso: Fix debug compile warning on sparc32
+Date:   Mon, 27 Jul 2020 19:24:34 -0400
+Message-Id: <20200727232443.718000-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -72,10 +72,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/net/usb/hso.c b/drivers/net/usb/hso.c
-index 74849da031fab..66a8b835aa94c 100644
+index 5251c5f6f96ed..61b9d33681484 100644
 --- a/drivers/net/usb/hso.c
 +++ b/drivers/net/usb/hso.c
-@@ -1389,8 +1389,9 @@ static void hso_serial_set_termios(struct tty_struct *tty, struct ktermios *old)
+@@ -1403,8 +1403,9 @@ static void hso_serial_set_termios(struct tty_struct *tty, struct ktermios *old)
  	unsigned long flags;
  
  	if (old)
