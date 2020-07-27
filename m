@@ -2,62 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE17622E882
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 11:07:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E679022E87C
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 11:07:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728019AbgG0JHP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jul 2020 05:07:15 -0400
-Received: from mailout02.rmx.de ([62.245.148.41]:50044 "EHLO mailout02.rmx.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726227AbgG0JHO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 27 Jul 2020 05:07:14 -0400
-X-Greylist: delayed 1975 seconds by postgrey-1.27 at vger.kernel.org; Mon, 27 Jul 2020 05:07:13 EDT
-Received: from kdin01.retarus.com (kdin01.dmz1.retloc [172.19.17.48])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mailout02.rmx.de (Postfix) with ESMTPS id 4BFY4k3XJ8zNmS0;
-        Mon, 27 Jul 2020 10:34:14 +0200 (CEST)
-Received: from mta.arri.de (unknown [217.111.95.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by kdin01.retarus.com (Postfix) with ESMTPS id 4BFY4P5jZxz2xDy;
-        Mon, 27 Jul 2020 10:33:57 +0200 (CEST)
-Received: from N95HX1G2.wgnetz.xx (192.168.54.102) by mta.arri.de
- (192.168.100.104) with Microsoft SMTP Server (TLS) id 14.3.408.0; Mon, 27 Jul
- 2020 10:33:44 +0200
-From:   Christian Eggers <ceggers@arri.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Rob Hering <robh@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        "Richard Leitner" <richard.leitner@skidata.com>,
-        <devicetree@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <ceggers@arri.de>
-Subject: [PATCH v3] Add two new configuration drivers for Microchip USB hubs
-Date:   Mon, 27 Jul 2020 10:33:29 +0200
-Message-ID: <20200727083333.19623-1-ceggers@arri.de>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200726084116.GD448215@kroah.com>
-References: <20200726084116.GD448215@kroah.com>
+        id S1727997AbgG0JHC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jul 2020 05:07:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44418 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727850AbgG0JHB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jul 2020 05:07:01 -0400
+Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F418C061794;
+        Mon, 27 Jul 2020 02:07:01 -0700 (PDT)
+Received: by mail-ot1-x342.google.com with SMTP id h13so11821401otr.0;
+        Mon, 27 Jul 2020 02:07:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Cnnk+R6s02N/1ZtsK3L3h80BkK4YyB9AiPTtAGsZx7Q=;
+        b=ek7ZqXpnRZsKYEckxz8ADcWr6162gmxv+Wfg/VPifAgvMFGtdVjReQiHzHPLwdLcOq
+         icV8Si8AMi9ik/+QgKU0oh6BDXJVHcsx2ht1PgdjsLN4v6mLEzEc6JGXfubohK4LYTKK
+         DuVhqkMDbxMmNgG1M4lCCZPyS+3RR1S0CjwQgC6gkvoXsGwe5FfzEyXdhz+8YReNNPKU
+         kCpxAG9Hz8eFnjsAgoImjblNx4TAjoLj2ld8OvfJa3MyY47+40tDRg2DFOZJy3SMq1+z
+         HIKGGVFARyDN+Siq6aneD82dF6fbTuwzE7AS9jq49wp0WBcgHu4VaesqiZFOp5Ij1Sng
+         0qvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Cnnk+R6s02N/1ZtsK3L3h80BkK4YyB9AiPTtAGsZx7Q=;
+        b=Ilt1IXaC4S5n0qOYzfTjmRo9wcxbw08v3V7rrruMMAS/5A+mGHIB/r066Jo6+k+5GX
+         /UR3ymLXCJqipSIUf9cgYnfxuBYBii5Yvz2r6GoNTjqnqUYj+tg5UesRbOfGfwYyKsH1
+         bU2wOcNUCKdUUDh2iCw+A6CBevQwmrk9MEDSxapFI8mlG43o0x15K6fvwg/Xz95MPuB+
+         ALr1SsTW0+bY5s2KmXJ5+MD3OyV/yP+6QG8OMTPqbdLxbYh0GCGHIR/LEjRUTu57681C
+         V4hwWrEeKAPL7TdceA/G2n0UKub60WzYfkwgbGylJMH28NML1pFRxVcZ3ByaW6CcSEwP
+         Vv3g==
+X-Gm-Message-State: AOAM533XS4+f8JuRf/FZAln3GXL2NV2pvz19aB+Kkn0sgKhTO/a/t+xh
+        NE5NxiA7ATR6Sn7g2i5KupmMyeNP
+X-Google-Smtp-Source: ABdhPJyGgv3a23b5lsT5QrMXtNqJyXacnhWEZoQLb96Xh14GfhLOO6vVPujqIpXAmOR27rJ9QKngEQ==
+X-Received: by 2002:a9d:63cd:: with SMTP id e13mr20224848otl.170.1595840820489;
+        Mon, 27 Jul 2020 02:07:00 -0700 (PDT)
+Received: from localhost.localdomain ([170.130.31.90])
+        by smtp.gmail.com with ESMTPSA id q189sm1471297oic.15.2020.07.27.02.06.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jul 2020 02:06:59 -0700 (PDT)
+From:   Forest Crossman <cyrozap@gmail.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Forest Crossman <cyrozap@gmail.com>, mathias.nyman@intel.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] Small fixes for ASMedia host controllers
+Date:   Mon, 27 Jul 2020 04:06:27 -0500
+Message-Id: <20200727090629.169701-1-cyrozap@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.54.102]
-X-RMX-ID: 20200727-103403-4BFY4P5jZxz2xDy-0@kdin01
-X-RMX-SOURCE: 217.111.95.66
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sonday, greg k-h wrote:
-> Please resend the whole series, not just a single patch, as it makes it
-> very difficult to pick the "correct" patches to be applied...
+The first patch just defines some host controller device IDs to make the
+code a bit easier to read (since the controller part number is not
+always the same as the DID) and to prepare for the next patch.
 
-Changes in v3:
- - none (only resend the whole series)
-
-Changes in v2:
- - added property description for ocs-min-width-ms
- - fixed property description for oc-delay-ns
+The second patch defines a new device ID for the ASM1142 and enables the
+XHCI_NO_64BIT_SUPPORT quirk for that device, since it has the same
+problem with truncating the higher bits as the ASM2142/ASM3142.
 
 
+Forest Crossman (2):
+  usb: xhci: define IDs for various ASMedia host controllers
+  usb: xhci: Fix ASMedia ASM1142 DMA addressing
+
+ drivers/usb/host/xhci-pci.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+-- 
+2.20.1
 
