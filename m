@@ -2,145 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C999D22F754
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 20:08:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E7CE22F771
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jul 2020 20:13:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730206AbgG0SIL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jul 2020 14:08:11 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:50321 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729618AbgG0SIL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jul 2020 14:08:11 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212])
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1k07Xk-0004j4-0s; Mon, 27 Jul 2020 18:08:08 +0000
-To:     Zhou Yanjie <zhouyanjie@wanyeetech.com>,
-        Felipe Balbi <balbi@kernel.org>,
+        id S1730353AbgG0SNw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 27 Jul 2020 14:13:52 -0400
+Received: from mail-il1-f194.google.com ([209.85.166.194]:36087 "EHLO
+        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728312AbgG0SNw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jul 2020 14:13:52 -0400
+Received: by mail-il1-f194.google.com with SMTP id z3so3673526ilh.3;
+        Mon, 27 Jul 2020 11:13:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FezFginUTy2nglTrBQrbccgUu3m/rgDlVyShBQFXbuM=;
+        b=HfzXlKqcU5oWxENTYnB2cM0h/mDjkeheLT5qiOyyLv0UV5kzbx2wyw/Q/0Pi8tb9BH
+         kjtl+RIFEHVJ6J473PunNXxQuk5hJvoijHnyXsYcTiRhr9W69qb+pN0WevFXd1PJuq6V
+         0KDZ8FLpiogNRXDNAY8AYntD3xi9hrIRsMWYLAyKWoatfteE3Yk1br9Q3FzyOu1o5fJV
+         66bQRlQHriOvMkFigq+rRZCP3neNgaPK1GVBrmRF4/z+B3WQiuZoJn+w9QgPysMCeyv4
+         FwyQrf3FI4zEo16Lrif2i3rq99zOnvMBm0XNIODx6qaq8Owb6fP/Ea8GRgbboBTq1KLd
+         ZBRw==
+X-Gm-Message-State: AOAM530IK2lFEHVwffUu3GpyutQswwfdKRFlE05ez9GIWqkoBPpNScL1
+        zpWkQOxWx2W6JPrpYWHDtQ==
+X-Google-Smtp-Source: ABdhPJxcTZ1wWiZQBj6GSHPIlQHm9ClLpwRYBVSWGAnLwaItX6R/lSkREMbAFXVOnxUjPhxCOFMv7g==
+X-Received: by 2002:a05:6e02:8e4:: with SMTP id n4mr16683067ilt.96.1595873631429;
+        Mon, 27 Jul 2020 11:13:51 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id c67sm9202464iof.16.2020.07.27.11.13.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jul 2020 11:13:50 -0700 (PDT)
+Received: (nullmailer pid 638435 invoked by uid 1000);
+        Mon, 27 Jul 2020 18:13:46 -0000
+Date:   Mon, 27 Jul 2020 12:13:46 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Konrad Dybcio <konradybcio@gmail.com>
+Cc:     martin.botka1@gmail.com, Rob Clark <robdclark@gmail.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-From:   Colin Ian King <colin.king@canonical.com>
-Autocrypt: addr=colin.king@canonical.com; prefer-encrypt=mutual; keydata=
- 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
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: USB: PHY: JZ4770: Add support for new Ingenic SoCs - bug report
-Message-ID: <661defa2-ac55-c4bc-7ac1-41657a4552bd@canonical.com>
-Date:   Mon, 27 Jul 2020 19:08:07 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Jordan Crouse <jcrouse@codeaurora.org>,
+        zhengbin <zhengbin13@huawei.com>,
+        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>,
+        AngeloGioacchino Del Regno <kholk11@gmail.com>,
+        Ben Dooks <ben.dooks@codethink.co.uk>,
+        Krzysztof Wilczynski <kw@linux.com>,
+        Harigovindan P <harigovi@codeaurora.org>,
+        Brian Masney <masneyb@onstation.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Xiaozhe Shi <xiaozhes@codeaurora.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: Re: [PATCH 9/9] soc/qcom: Add REVID driver
+Message-ID: <20200727181346.GA634850@bogus>
+References: <20200726111215.22361-1-konradybcio@gmail.com>
+ <20200726111215.22361-10-konradybcio@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200726111215.22361-10-konradybcio@gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Sun, Jul 26, 2020 at 01:12:06PM +0200, Konrad Dybcio wrote:
+> From: Xiaozhe Shi <xiaozhes@codeaurora.org>
+> 
+> Add the REVID device driver. The REVID driver will print out the PMIC
+> revision at probe time.
+> 
+> Signed-off-by: Xiaozhe Shi <xiaozhes@codeaurora.org>
+> [konradybcio@gmail.com: Fast-forward the driver from kernel 4.14 to 5.8,
+> convert binding to yaml]
+> Signed-off-by: Konrad Dybcio <konradybcio@gmail.com>
+> ---
+>  .../bindings/soc/qcom/qcom,qpnp-revid.yaml    |  38 ++
 
-Static analysis with Coverity has detected an issue with the following
-commit:
+Bindings should be a separate patch. checkpatch.pl will tell you this.
 
-commit 2a6c0b82e65128c73b5102e00e031c5e58bb3504
-Author: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-Date:   Thu Jul 23 14:13:00 2020 +0800
-
-    USB: PHY: JZ4770: Add support for new Ingenic SoCs.
-
-The analysis from Coverity is as follows:
-
-157 static int ingenic_usb_phy_init(struct usb_phy *phy)
-158 {
-159        struct jz4770_phy *priv = phy_to_jz4770_phy(phy);
-160        int err;
-
-1. var_decl: Declaring variable reg without initializer.
-
-161        u32 reg;
-162
-163        err = regulator_enable(priv->vcc_supply);
-
-2. Condition err, taking false branch.
-
-164        if (err) {
-165                dev_err(priv->dev, "Unable to enable VCC: %d\n", err);
-166                return err;
-167        }
-168
-169        err = clk_prepare_enable(priv->clk);
-
-3. Condition err, taking false branch.
-
-170        if (err) {
-171                dev_err(priv->dev, "Unable to start clock: %d\n", err);
-172                return err;
-173        }
-174
-175        priv->soc_info->usb_phy_init(phy);
-176
-177        /* Wait for PHY to reset */
-178        usleep_range(30, 300);
-
-Uninitialized scalar variable (UNINIT)
-4. uninit_use: Using uninitialized value reg.
-
-179        writel(reg & ~USBPCR_POR, priv->base + REG_USBPCR_OFFSET);
-180        usleep_range(300, 1000);
-181
-182        return 0;
-183 }
-
-
-The commit removed the setting of reg in the change:
-
--       reg = USBPCR_AVLD_REG | USBPCR_COMMONONN | USBPCR_IDPULLUP_ALWAYS |
--               USBPCR_COMPDISTUNE_DFT | USBPCR_OTGTUNE_DFT |
-USBPCR_SQRXTUNE_DFT |
--               USBPCR_TXFSLSTUNE_DFT | USBPCR_TXRISETUNE_DFT |
-USBPCR_TXVREFTUNE_DFT |
--               USBPCR_POR;
--       writel(reg, priv->base + REG_USBPCR_OFFSET);
-
-Colin
+>  drivers/soc/qcom/Kconfig                      |   9 +
+>  drivers/soc/qcom/Makefile                     |   1 +
+>  drivers/soc/qcom/qpnp-revid.c                 | 288 ++++++++++++++
+>  include/linux/qpnp/qpnp-revid.h               | 369 ++++++++++++++++++
+>  5 files changed, 705 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,qpnp-revid.yaml
+>  create mode 100644 drivers/soc/qcom/qpnp-revid.c
+>  create mode 100644 include/linux/qpnp/qpnp-revid.h
