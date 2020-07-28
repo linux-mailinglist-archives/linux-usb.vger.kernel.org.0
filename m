@@ -2,117 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E16A2310D1
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jul 2020 19:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C80302310E6
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jul 2020 19:29:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731942AbgG1R00 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Jul 2020 13:26:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34912 "EHLO
+        id S1732029AbgG1R3W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Jul 2020 13:29:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731684AbgG1R00 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Jul 2020 13:26:26 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B332C061794;
-        Tue, 28 Jul 2020 10:26:26 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id u10so739089plr.7;
-        Tue, 28 Jul 2020 10:26:26 -0700 (PDT)
+        with ESMTP id S1731779AbgG1R3V (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Jul 2020 13:29:21 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5340EC061794;
+        Tue, 28 Jul 2020 10:29:21 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id k4so10229088pld.12;
+        Tue, 28 Jul 2020 10:29:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=s8CxIPWlau8UfBUUf1Zit/bYMskp+FR/Gd+ldXuH8Yg=;
-        b=S4wzOSxXwDfGFg2NCSMoo/K0LdSBMO0r4Evck5FCh2ufocaD+t+u1uag149ihpgNNm
-         wI7JAaNIpItm81KSwCxVThGounvWOCAWy1X5HMtDpRuWX9qMFbjYLYvER/frsHix/vSF
-         /Jifal9mnrB2XcWnE1K2A9dQEXyiiQ3lmHpHeGUqHBUapyAalbreS0GuGPqtBvh5QZjX
-         9grcWfEcA9cufRH5GvIU4pdIRfI4PeE0wZprpNarBHVh3ZW7HBY6a7adB9aUdyUfu68R
-         w2QpxR4STpLO4dQP2pH5fohY0+GRCGQmBOz2BL32Il7NzMCf2S0QsUedCPec+ZtPKN9t
-         GdRQ==
+         :cc;
+        bh=DvC33c6lX0M+cpFedrNCLZ1U+Zo7I7ibJkFG+4mqa48=;
+        b=SyxYachVFhddv9xgQSCtTM81YnnLRQvfAdfCIXYBJGywlbTOAe56WaqrxZkelpcZIT
+         aNeRE6VXBeiAy5H78OHAkA7DnlhlX+t7hT21JkI323wKse2v24CpNdfbMabKqMQe2YO6
+         oM68s0417RsaCNEoYuZWj7/pHwFh8Db0UmapN9NGhzshWV7AlQiMeZZfAlBgD932u81/
+         wS7yRsYxLcYm95RzQZCavC3QsXMWUeshoGCdpnDY1a18OkaX7v2PYlK8QoXrH9pb3HqH
+         llvex8HxTkmdy00dKr5uJpUZ8/Vnck432yidHnv7ckh+aYCixUkwarEkmeAdaFEN7KBi
+         DGAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=s8CxIPWlau8UfBUUf1Zit/bYMskp+FR/Gd+ldXuH8Yg=;
-        b=F5VGuK9kP6FydXBNOOYnvl0J89df6aa7xSfETcUPUs4iIU7EB599BO3dTvPC2gvSGo
-         ahOPGxdxVSDQuAG5GaauInrmun6ZcCgGJLVP4hi2YF1z+x3fhJy7jShIqOlQqiEW0iCS
-         AMemHk6Vpgq834I7jatPQV5WJTIaHXQcnc1fgG5NsGepIuRjISl2fB7fPVBPKTK1USuE
-         eTigG5ZgJKBCfHTQOMKolUrjd3OWf66zmVkcT2G/fRH8f4fDLaGpYu1BFsA8mW4+Ciwz
-         HUK/mVH60tHuUvWDt0RH86BKqpkFFsqDKA5VtgWsw7aGdPMkdXawazsLrTrp6K2NIVrU
-         KdIQ==
-X-Gm-Message-State: AOAM531ztbNe5H2JaMyKCIlVyfbE/u6MbQT1Xue3crVix4cbtTU6UGqw
-        RppCohUgULI8/UeIAUWr+e2mtzXTooS2gNDT9Zg=
-X-Google-Smtp-Source: ABdhPJzdfHhS6L4t1jcHgJuUpezx+u/rVpyefG5mBGWG6CWr23hRVPrasPCQ6/5Sxh5clMW6uBMr/Db7MpAi4+2gkUg=
-X-Received: by 2002:a17:90a:a393:: with SMTP id x19mr5705366pjp.228.1595957185750;
- Tue, 28 Jul 2020 10:26:25 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=DvC33c6lX0M+cpFedrNCLZ1U+Zo7I7ibJkFG+4mqa48=;
+        b=lBAucCNCrpqdBYwqGfrSZwOgMxXCHbGs6U17frRdS49aA4foRxhn6me0df56QSj/Ze
+         ZcoZetnyr8cjyhGaajTyPQfmoD3sNlwfWPz0q8HFVZc4t6KX0EwOgM9CUu6wLtxq/k36
+         TxS0aB32/wgmtBKNwmv0gHAGM9udh+NKMNp6PbB9ailSw/GrJ4F8Lf0CkktEjiGCGk9q
+         v2bLVMlvYnmI8+0zgtKsawRwjUK2p9QK5dagUNumypUAFazncK6e/abD/2AYR6poFRKe
+         38bWQAs1d/fJR3T4v1Exb6wlc9mRqpPx4KWiQ6Wn7KAQf5vfR2KJIqejSPz+JzEDY8Rv
+         l+Cw==
+X-Gm-Message-State: AOAM5327vqbLtFUsEgQtTJv/F/0vYv3QTyZc4ucoCE4rcwA6l/pwIh/a
+        UR4Nk4gUqdxtlmbZn0J/h7PZkCOQOldPehfdNWc=
+X-Google-Smtp-Source: ABdhPJyo6Up0HxgUu0YXezBBId8olJiV2HxsKPkSX/2vuB9eJTZdnOqNu8a+sLck2iCAvE4kWHW/kPzUymSyxIghXfM=
+X-Received: by 2002:a17:90a:a393:: with SMTP id x19mr5714267pjp.228.1595957360726;
+ Tue, 28 Jul 2020 10:29:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200728170251.112484-1-zhouyanjie@wanyeetech.com> <20200728170251.112484-2-zhouyanjie@wanyeetech.com>
-In-Reply-To: <20200728170251.112484-2-zhouyanjie@wanyeetech.com>
+References: <MN2PR18MB2637D7C742BC235FE38367F0A09C0@MN2PR18MB2637.namprd18.prod.outlook.com>
+ <1595900652-3842-1-git-send-email-penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <1595900652-3842-1-git-send-email-penguin-kernel@I-love.SAKURA.ne.jp>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 28 Jul 2020 20:26:10 +0300
-Message-ID: <CAHp75VevCu2Diojjam1q76nSdOOsfB_3kXCYFLPMfwad8kHv+A@mail.gmail.com>
-Subject: Re: [PATCH 1/1] USB: PHY: JZ4770: Fix static checker warning.
-To:     =?UTF-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB <linux-usb@vger.kernel.org>,
+Date:   Tue, 28 Jul 2020 20:29:05 +0300
+Message-ID: <CAHp75Vdta2xGDH=0CwRf8yK30JQimSGj70-pXz7QUFSgjxoatQ@mail.gmail.com>
+Subject: Re: [PATCH] mwifiex: don't call del_timer_sync() on uninitialized timer
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     gbhat@marvell.com, amitkarwar@gmail.com, andreyknvl@google.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Vyukov <dvyukov@google.com>, huxinming820@gmail.com,
+        Kalle Valo <kvalo@codeaurora.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Colin King <colin.king@canonical.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        prasannatsmkumar@gmail.com, dongsheng.qiu@ingenic.com,
-        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
-        yanfei.li@ingenic.com, sernia.zhou@foxmail.com,
-        zhenwenjin@gmail.com
+        USB <linux-usb@vger.kernel.org>,
+        "open list:TI WILINK WIRELES..." <linux-wireless@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Nishant Sarmukadam <nishants@marvell.com>,
+        syzbot+dc4127f950da51639216@syzkaller.appspotmail.com,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        syzbot <syzbot+373e6719b49912399d21@syzkaller.appspotmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 28, 2020 at 8:09 PM =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie)
-<zhouyanjie@wanyeetech.com> wrote:
+On Tue, Jul 28, 2020 at 4:46 AM Tetsuo Handa
+<penguin-kernel@i-love.sakura.ne.jp> wrote:
 >
-> The commit 2a6c0b82e651 ("USB: PHY: JZ4770: Add support for new
-> Ingenic SoCs.") introduced the initialization function for different
-> chips, but left the relevant code involved in the resetting process
-> in the original function, resulting in uninitialized variable calls.
-> This problem can be solved by putting this part of the code into the
-> initialization function for each chip. Although the four processors
-> currently supported have the same reset code, let us can solve this
-
-'can' -> ''
-
-> problem by adding the initialization of the reg variable to the
-> original function, but when other processors with different reset
-> methods (such as X2000) are introduced in the future, it will cause
-> inevitable condition judgments to complicate the function, which
-> violates the original intention of introducing initialization
-> functions for each processor.
+> syzbot is reporting that del_timer_sync() is called from
+> mwifiex_usb_cleanup_tx_aggr() from mwifiex_unregister_dev() without
+> checking timer_setup() from mwifiex_usb_tx_init() was called [1].
+> Since mwifiex_usb_prepare_tx_aggr_skb() is calling del_timer() if
+> is_hold_timer_set == true, use the same condition for del_timer_sync().
 >
-> Fixes: 2a6c0b82e651 ("USB: PHY: JZ4770: Add support for new
-> Ingenic SoCs.").
-
-No period at the end
-
+> [1] https://syzkaller.appspot.com/bug?id=fdeef9cf7348be8b8ab5b847f2ed993aba8ea7b6
 >
 
-No blank line in the tag block.
+Can you use BugLink: tag for above?
 
-> Reported-by: Colin Ian King <colin.king@canonical.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) <zhouyanjie@wany=
-eetech.com>
+> Reported-by: syzbot <syzbot+373e6719b49912399d21@syzkaller.appspotmail.com>
+> Cc: Ganapathi Bhat <gbhat@marvell.com>
+> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> ---
+> A patch from Ganapathi Bhat ( https://patchwork.kernel.org/patch/10990275/ ) is stalling
+> at https://lore.kernel.org/linux-usb/MN2PR18MB2637D7C742BC235FE38367F0A09C0@MN2PR18MB2637.namprd18.prod.outlook.com/ .
+> syzbot by now got this report for 10000 times. Do we want to go with this simple patch?
+>
+>  drivers/net/wireless/marvell/mwifiex/usb.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/wireless/marvell/mwifiex/usb.c b/drivers/net/wireless/marvell/mwifiex/usb.c
+> index 6f3cfde..04a1461 100644
+> --- a/drivers/net/wireless/marvell/mwifiex/usb.c
+> +++ b/drivers/net/wireless/marvell/mwifiex/usb.c
+> @@ -1353,7 +1353,8 @@ static void mwifiex_usb_cleanup_tx_aggr(struct mwifiex_adapter *adapter)
+>                                 skb_dequeue(&port->tx_aggr.aggr_list)))
+>                                 mwifiex_write_data_complete(adapter, skb_tmp,
+>                                                             0, -1);
+> -               del_timer_sync(&port->tx_aggr.timer_cnxt.hold_timer);
+> +               if (port->tx_aggr.timer_cnxt.is_hold_timer_set)
+> +                       del_timer_sync(&port->tx_aggr.timer_cnxt.hold_timer);
+>                 port->tx_aggr.timer_cnxt.is_hold_timer_set = false;
+>                 port->tx_aggr.timer_cnxt.hold_tmo_msecs = 0;
+>         }
+> --
+> 1.8.3.1
+>
 
-...
 
-> +       /* Wait for PHY to reset */
-> +       usleep_range(30, 300);
-> +       writel(reg & ~USBPCR_POR, priv->base + REG_USBPCR_OFFSET);
-> +       usleep_range(300, 1000);
-
-Instead of copy'n'paste 4 times, you may provide a helper function.
-
---=20
+-- 
 With Best Regards,
 Andy Shevchenko
