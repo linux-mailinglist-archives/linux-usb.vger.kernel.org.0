@@ -2,84 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 075CB22FF08
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jul 2020 03:45:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5ACB23008B
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jul 2020 06:24:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726753AbgG1BpA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 27 Jul 2020 21:45:00 -0400
-Received: from www262.sakura.ne.jp ([202.181.97.72]:52595 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726575AbgG1BpA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 27 Jul 2020 21:45:00 -0400
-Received: from fsav303.sakura.ne.jp (fsav303.sakura.ne.jp [153.120.85.134])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 06S1iJxD088794;
-        Tue, 28 Jul 2020 10:44:19 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav303.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav303.sakura.ne.jp);
- Tue, 28 Jul 2020 10:44:19 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav303.sakura.ne.jp)
-Received: from localhost.localdomain (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 06S1iFhm088645
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 28 Jul 2020 10:44:19 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-To:     gbhat@marvell.com
-Cc:     amitkarwar@gmail.com, andreyknvl@google.com, davem@davemloft.net,
-        dvyukov@google.com, huxinming820@gmail.com, kvalo@codeaurora.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        nishants@marvell.com,
-        syzbot+dc4127f950da51639216@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        syzbot <syzbot+373e6719b49912399d21@syzkaller.appspotmail.com>
-Subject: [PATCH] mwifiex: don't call del_timer_sync() on uninitialized timer
-Date:   Tue, 28 Jul 2020 10:44:12 +0900
-Message-Id: <1595900652-3842-1-git-send-email-penguin-kernel@I-love.SAKURA.ne.jp>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <MN2PR18MB2637D7C742BC235FE38367F0A09C0@MN2PR18MB2637.namprd18.prod.outlook.com>
-References: <MN2PR18MB2637D7C742BC235FE38367F0A09C0@MN2PR18MB2637.namprd18.prod.outlook.com>
+        id S1726245AbgG1EYe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Jul 2020 00:24:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54980 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725851AbgG1EYe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Jul 2020 00:24:34 -0400
+Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1AFC061794;
+        Mon, 27 Jul 2020 21:24:34 -0700 (PDT)
+Received: by mail-oi1-x242.google.com with SMTP id s144so6402086oie.3;
+        Mon, 27 Jul 2020 21:24:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=lw8BChbOt+3cCy8fjAi9TdK1jevRdCglCZh6ivvQ72M=;
+        b=MH+logvcbnUxbInUxm2hCr72Kb94JCc1KO/eAd5bqlZeb/E1P66eAqFa8SQwF03vnF
+         WdWWTd/ijhP6EghdCKI4+c/ks8DWewsXLF7C7NTN4jh7yEVdf75KhZz3eTYj/W5mouik
+         pm8XA6M+x+RzLNfs899HLuhuiuP805qLtSM5GR4neoUjsnyv6Qm8T76jXFvl1hOt09eY
+         cUuhBYhRYpNcd6HnC4VH4sCpViYdwJRxtz5EY7A2xluVnGMDJqHpdo8Ck1frMdgsdDH3
+         u3IVNB7bxj+3ZIRY/8rIaHBwbYrHYNAGgXS46f/XyRu2SBvIqsBX2LXQh7GZmTqq9xUX
+         dhoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=lw8BChbOt+3cCy8fjAi9TdK1jevRdCglCZh6ivvQ72M=;
+        b=rdakembw9bcMeDpBJMu50AkWelfWBUv3tYna7FCCa4TgHGP96TIhS79mc6u2VAjsvN
+         M0OYqp+znhKu1oaau3yq2COlCtlQS/LeRh751uG4VEaFysiuR96stYU5KpVQauZgGYwi
+         5kqtVVK8GeQVwFORGdSI9WckWgQsXWAyOPZE7mb6/hCct0lUPjTDU98AmIzAWYGjiHok
+         g8oSkkLYY10bQES5rw6IkW/4aUnFIS/Iqs2+Of6r7O1WyQ8GwhVl3dy1o/WdmIyA3gSA
+         5d606aLt5XHW+Y0hkng43x1Pma9gPXtzobNT9bHAujzN/s6/uo5zbgNvcTqTcVcM3tQ4
+         nZBA==
+X-Gm-Message-State: AOAM533mpB+xKzoXTyinG/c3JYo7aXlvDB9xNBUN02G/BwG2E7mHf/6R
+        2VuZM/01rgRl3PJl7vU+fxOW6xSJsIE=
+X-Google-Smtp-Source: ABdhPJxxmSPcnvbuf5zau6AmKRtUr2TWD8mhzcnltgIcV9JwRo+hu2H2eVHsVX6nHyw2rRGZ/s242w==
+X-Received: by 2002:aca:b2d5:: with SMTP id b204mr1970129oif.44.1595910273270;
+        Mon, 27 Jul 2020 21:24:33 -0700 (PDT)
+Received: from localhost.localdomain ([170.130.31.90])
+        by smtp.gmail.com with ESMTPSA id v3sm765198oiv.45.2020.07.27.21.24.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jul 2020 21:24:32 -0700 (PDT)
+From:   Forest Crossman <cyrozap@gmail.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Forest Crossman <cyrozap@gmail.com>, mathias.nyman@intel.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] Small fixes for ASMedia host controllers
+Date:   Mon, 27 Jul 2020 23:24:06 -0500
+Message-Id: <20200728042408.180529-1-cyrozap@gmail.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200727090629.169701-1-cyrozap@gmail.com>
+References: <20200727090629.169701-1-cyrozap@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-syzbot is reporting that del_timer_sync() is called from
-mwifiex_usb_cleanup_tx_aggr() from mwifiex_unregister_dev() without
-checking timer_setup() from mwifiex_usb_tx_init() was called [1].
-Since mwifiex_usb_prepare_tx_aggr_skb() is calling del_timer() if
-is_hold_timer_set == true, use the same condition for del_timer_sync().
+The first patch just defines some host controller device IDs to make the
+code a bit easier to read (since the controller part number is not
+always the same as the DID) and to prepare for the next patch.
 
-[1] https://syzkaller.appspot.com/bug?id=fdeef9cf7348be8b8ab5b847f2ed993aba8ea7b6
+The second patch defines a new device ID for the ASM1142 and enables the
+XHCI_NO_64BIT_SUPPORT quirk for that device, since it has the same
+problem with truncating the higher bits as the ASM2142/ASM3142.
 
-Reported-by: syzbot <syzbot+373e6719b49912399d21@syzkaller.appspotmail.com>
-Cc: Ganapathi Bhat <gbhat@marvell.com>
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
----
-A patch from Ganapathi Bhat ( https://patchwork.kernel.org/patch/10990275/ ) is stalling
-at https://lore.kernel.org/linux-usb/MN2PR18MB2637D7C742BC235FE38367F0A09C0@MN2PR18MB2637.namprd18.prod.outlook.com/ .
-syzbot by now got this report for 10000 times. Do we want to go with this simple patch?
 
- drivers/net/wireless/marvell/mwifiex/usb.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Changes since v1:
+ - Added changelog text to the first patch.
 
-diff --git a/drivers/net/wireless/marvell/mwifiex/usb.c b/drivers/net/wireless/marvell/mwifiex/usb.c
-index 6f3cfde..04a1461 100644
---- a/drivers/net/wireless/marvell/mwifiex/usb.c
-+++ b/drivers/net/wireless/marvell/mwifiex/usb.c
-@@ -1353,7 +1353,8 @@ static void mwifiex_usb_cleanup_tx_aggr(struct mwifiex_adapter *adapter)
- 				skb_dequeue(&port->tx_aggr.aggr_list)))
- 				mwifiex_write_data_complete(adapter, skb_tmp,
- 							    0, -1);
--		del_timer_sync(&port->tx_aggr.timer_cnxt.hold_timer);
-+		if (port->tx_aggr.timer_cnxt.is_hold_timer_set)
-+			del_timer_sync(&port->tx_aggr.timer_cnxt.hold_timer);
- 		port->tx_aggr.timer_cnxt.is_hold_timer_set = false;
- 		port->tx_aggr.timer_cnxt.hold_tmo_msecs = 0;
- 	}
+
+Forest Crossman (2):
+  usb: xhci: define IDs for various ASMedia host controllers
+  usb: xhci: Fix ASMedia ASM1142 DMA addressing
+
+ drivers/usb/host/xhci-pci.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
 -- 
-1.8.3.1
+2.20.1
 
