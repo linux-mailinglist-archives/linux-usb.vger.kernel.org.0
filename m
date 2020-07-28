@@ -2,84 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9108623093B
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jul 2020 13:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30ACB2309A7
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jul 2020 14:12:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729245AbgG1L4v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Jul 2020 07:56:51 -0400
-Received: from mga09.intel.com ([134.134.136.24]:4606 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728268AbgG1L4u (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 28 Jul 2020 07:56:50 -0400
-IronPort-SDR: McS2wKE0XI3MB/Q3ZRFvefwgw9WUtPEYe9XON+y6C7US38VzFW8hf1wW9CicZMkqkQScbOSlGP
- zxAbM1Sen9rA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9695"; a="152445565"
-X-IronPort-AV: E=Sophos;i="5.75,406,1589266800"; 
-   d="scan'208";a="152445565"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2020 04:56:49 -0700
-IronPort-SDR: S2/dcYrIit3AWvum25eTbvPfg1pyeTNBZm4i1SqjNH/oUjcIdlDrGIHuycF+4og8shtMN/Htrh
- UDUc4MtqgIhg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,406,1589266800"; 
-   d="scan'208";a="394310584"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 28 Jul 2020 04:56:47 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 28 Jul 2020 14:56:46 +0300
-Date:   Tue, 28 Jul 2020 14:56:46 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Kyle Tso <kyletso@google.com>
-Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org, badhri@google.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] usb: typec: tcpm: Error handling for
- tcpm_register_partner_altmodes
-Message-ID: <20200728115646.GE883641@kuha.fi.intel.com>
-References: <20200714033453.4044482-1-kyletso@google.com>
- <20200714033453.4044482-3-kyletso@google.com>
+        id S1729127AbgG1MLf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Jul 2020 08:11:35 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:44842 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728793AbgG1MLe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Jul 2020 08:11:34 -0400
+Received: by mail-lf1-f68.google.com with SMTP id y18so10849679lfh.11;
+        Tue, 28 Jul 2020 05:11:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YbhY91q5+cbKaui6Xn8c9WzRHG7wbBm55onNv1D4kWQ=;
+        b=RjOGwZQwVsrvThiWuwwScSH4Or5XbbNws9bC8n5EMADORVtlqXyJelBwl0UdXKTCYK
+         j1CLwVGIFn5kJM9VoE7Cui46rx6z7YNAunWkEz9NmNSyPV2tZalddT+/ibjF1AUPorFd
+         75EP6kOc2Ehskw9gz3uLTDsXOhkysFLdt32Kk/cVmBTykM1uG6HdqD6gLgJTy4DkD01f
+         pO60NAgsAnq1/4ppA2YcrCVGgjwyP+7AvohOarZOUi1j5DYhE9VJJ+mNlM6y7eRpZnf6
+         XKi79hPbS4K3jw+Rlj+oPaSTskpLj0p3Vnvr6G8vVXz3pmTdD4IK7oXhqkWI7rf1hYmi
+         ewrw==
+X-Gm-Message-State: AOAM532a2nXz9FtHqzGX4H9apNWgfAIjSIslpZiinER95FnSSRcBmCsA
+        2KkIvHwnoiLzzpTs2zBX1cc=
+X-Google-Smtp-Source: ABdhPJx7cyVpzBP2fpc28JYPbYEZEM83QMxPnmgF4I1a1Ztd2Im61fsqnfcZpSBSEv9aJhby0Mqr8g==
+X-Received: by 2002:a19:7d04:: with SMTP id y4mr14552159lfc.51.1595938291522;
+        Tue, 28 Jul 2020 05:11:31 -0700 (PDT)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id j2sm1751468ljb.98.2020.07.28.05.11.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jul 2020 05:11:30 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@xi.terra>)
+        id 1k0OS5-0003Dj-HL; Tue, 28 Jul 2020 14:11:26 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Woojung Huh <woojung.huh@microchip.com>
+Cc:     Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH net 0/3] net: lan78xx: fix NULL deref and memory leak
+Date:   Tue, 28 Jul 2020 14:10:28 +0200
+Message-Id: <20200728121031.12323-1-johan@kernel.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200714033453.4044482-3-kyletso@google.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 14, 2020 at 11:34:53AM +0800, Kyle Tso wrote:
-> typec_partner_register_altmode returns ERR_PTR. Reset the pointer
-> altmode to NULL on failure.
-> 
-> Signed-off-by: Kyle Tso <kyletso@google.com>
+The first two patches fix a NULL-pointer dereference at probe that can
+be triggered by a malicious device and a small transfer-buffer memory
+leak, respectively.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+For another subsystem I would have marked them:
 
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 82b19ebd7838..a6d4b03ec250 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -1061,9 +1061,11 @@ static void tcpm_register_partner_altmodes(struct tcpm_port *port)
->  	for (i = 0; i < modep->altmodes; i++) {
->  		altmode = typec_partner_register_altmode(port->partner,
->  						&modep->altmode_desc[i]);
-> -		if (!altmode)
-> +		if (IS_ERR(altmode)) {
->  			tcpm_log(port, "Failed to register partner SVID 0x%04x",
->  				 modep->altmode_desc[i].svid);
-> +			altmode = NULL;
-> +		}
->  		port->partner_altmode[i] = altmode;
->  	}
->  }
-> -- 
-> 2.27.0.389.gc38d7665816-goog
+	Cc: stable@vger.kernel.org	# 4.3
 
-thanks,
+The third one replaces the driver's current broken endpoint lookup
+helper, which could end up accepting incomplete interfaces and whose
+results weren't even useeren
+Johan
+
+
+Johan Hovold (3):
+  net: lan78xx: add missing endpoint sanity check
+  net: lan78xx: fix transfer-buffer memory leak
+  net: lan78xx: replace bogus endpoint lookup
+
+ drivers/net/usb/lan78xx.c | 113 +++++++++++---------------------------
+ 1 file changed, 31 insertions(+), 82 deletions(-)
 
 -- 
-heikki
+2.26.2
+
