@@ -2,97 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06E0C230BAF
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jul 2020 15:42:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4511230CB0
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jul 2020 16:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730231AbgG1Nmt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Jul 2020 09:42:49 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:55051 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1730208AbgG1Nmt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Jul 2020 09:42:49 -0400
-Received: (qmail 1499376 invoked by uid 1000); 28 Jul 2020 09:42:48 -0400
-Date:   Tue, 28 Jul 2020 09:42:48 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Eli Billauer <eli.billauer@gmail.com>
-Cc:     Oliver Neukum <oneukum@suse.de>, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, hdegoede@redhat.com
-Subject: Re: [PATCH] usb: core: Solve race condition in usb_kill_anchored_urbs
-Message-ID: <20200728134248.GB1498392@rowland.harvard.edu>
-References: <20200727072225.25195-1-eli.billauer@gmail.com>
- <1595844840.13408.17.camel@suse.de>
- <5F1EBA04.5050109@gmail.com>
- <1595858285.13408.36.camel@suse.de>
- <20200727144357.GB1468275@rowland.harvard.edu>
- <1595885364.13408.44.camel@suse.de>
- <5F1FF432.9060509@gmail.com>
+        id S1730505AbgG1OuQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Jul 2020 10:50:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38796 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730335AbgG1OuQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Jul 2020 10:50:16 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C2ABC061794;
+        Tue, 28 Jul 2020 07:50:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=QTqHP6bK9W4RFpKAMBcspR5sA1/+rrn6GZmLT6RFR2o=; b=jF9O5dfqNDC0lWxB7y/eY27PpJ
+        XVJ1Zl6Xh6YxEBwVfJ7AV+OcbuFxqaCPr1o1Ko/I/V8dZfo49zDUPE42Y2plHlxH+MNcoXw+b6trg
+        i03meS7XFWkTrrM2aFbUwNpXUvOWqlIhhrTGN8E5HhfkjKAFYqqmvl/q909D5aPWbgfwoYHog+Sd2
+        q3BlVtdubcUIopYG8CURT7UrAcyiiJITcbWxjyvRpvB/UnvQcJWunC3Fvqx7/a6HmokqaY6/2jeIw
+        VA3uFOYJs0zt9FTLtonZzQK+nCaKyk/DbimLBV/hyzuHT9MR/e4aV72HJunpTlDDbwWzCZxyMJYF9
+        +LNnf8Sw==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1k0Qvk-0001Bt-Rh; Tue, 28 Jul 2020 14:50:13 +0000
+Subject: Re: linux-next: Tree for Jul 28 (drivers/net/usb/)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Oliver Neukum <oliver@neukum.org>
+References: <20200728215731.00cb56d3@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <d8e712fa-65c8-f616-3411-a41b88950eba@infradead.org>
+Date:   Tue, 28 Jul 2020 07:50:09 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5F1FF432.9060509@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200728215731.00cb56d3@canb.auug.org.au>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 28, 2020 at 12:47:30PM +0300, Eli Billauer wrote:
-> Oliver, Alan,
+On 7/28/20 4:57 AM, Stephen Rothwell wrote:
+> Hi all,
 > 
-> I understand that there's a disagreement in what is allowed or not with the
-> anchor API. Effectively that means that I have to assume that driver
-> programmers will go either way. I have to admit that my view was that a
-> driver must proactively make sure it doesn't submit further URBs to an
-> anchor as long as usb_kill_anchored_urbs() runs, through completers or
-> otherwise. I formed the current patch accordingly.
+> Changes since 20200727:
 > 
-> To make things trickier, a driver might rely (correctly or not) on that
-> usb_kill_urb() makes sure that resubmission of a URB by the completer, while
-> usb_kill_urb() is killing it, will fail. Or at least so says the description
-> of this function.
-> 
-> And once again, the resubmitted URB will remain untouched if the said race
-> condition occurs. So a driver's programmer, who relied on usb_kill_urb() to
-> prevent the resubmission, might get the impression that he did correctly
-> when testing the driver, but then the kernel panic will happen rarely and
-> far from the eye.
-> 
-> Writing an additional API without this problem is beyond the scope of this
-> discussion. I'm focused on resolving the problem of the current one. The
-> existing API must be safe to use, even if it's planned to phase out.
-> 
-> Given the discussion so far, I realized that the resubmission by completer
-> case must be handled properly as well. So I suggest modifying the patch to
-> something like
-> 
-> do {
->     spin_lock_irq(&anchor->lock);
->     while (!list_empty(&anchor->urb_list)) {
->         /* URB kill loop */
->     }
->     spin_unlock_irq(&anchor->lock);
-> } while (unlikely(!usb_anchor_check_wakeup(anchor)));
-> 
-> The do-while loop will almost never make any difference. But it will loop
-> like a waiting spinlock in the rare event of the said race condition, while
-> the completer callback executes.
-> 
-> And if the completer submitted a URB, it will be removed as well this way.
-> Recall that this loops only in the event of a race condition, so it will NOT
-> play cat-and-mouse with the completer callback, but rather finish this up
-> rather quickly.
-> 
-> And I've dropped the WARN(): If some people consider resubmission of a URB
-> to be OK, even while usb_kill_anchored_urbs() is called, no noise should be
-> made if that causes a rare but tricky situation.
-> 
-> And since I'm at it, I'll make the same change to
-> usb_poison_anchored_urbs(), which suffers from exactly the same problem.
-> 
-> What do you think?
 
-This seems like a good way to fix up the existing API, until drivers can 
-be converted over to Oliver's "mooring" scheme.  Of course, Oliver might 
-not agree...
+on i386:
 
-Alan Stern
+CONFIG_USB_USBNET=y
+# CONFIG_USB_NET_AX8817X is not set
+CONFIG_USB_NET_AX88179_178A=y
+CONFIG_USB_NET_CDCETHER=m
+CONFIG_USB_NET_CDC_EEM=m
+CONFIG_USB_NET_CDC_NCM=y
+CONFIG_USB_NET_HUAWEI_CDC_NCM=m
+CONFIG_USB_NET_CDC_MBIM=m
+
+ld: drivers/net/usb/cdc_ncm.o:(.rodata+0x27c): undefined reference to `usbnet_cdc_update_filter'
+ld: drivers/net/usb/cdc_ncm.o:(.rodata+0x2dc): undefined reference to `usbnet_cdc_update_filter'
+ld: drivers/net/usb/cdc_ncm.o:(.rodata+0x33c): undefined reference to `usbnet_cdc_update_filter'
+
+because 'usbnet_cdc_update_filter' lives in cdc_ether.c, which is being built
+as a loadable module while cdc_ncm.o is builtin.
+
+
+-- 
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
