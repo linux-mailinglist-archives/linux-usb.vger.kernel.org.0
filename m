@@ -2,206 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ACDE231070
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jul 2020 19:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E16A2310D1
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jul 2020 19:26:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731803AbgG1RGW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Jul 2020 13:06:22 -0400
-Received: from mail-il1-f200.google.com ([209.85.166.200]:38464 "EHLO
-        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731551AbgG1RGW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Jul 2020 13:06:22 -0400
-Received: by mail-il1-f200.google.com with SMTP id t79so11982823ild.5
-        for <linux-usb@vger.kernel.org>; Tue, 28 Jul 2020 10:06:21 -0700 (PDT)
+        id S1731942AbgG1R00 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Jul 2020 13:26:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34912 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731684AbgG1R00 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Jul 2020 13:26:26 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B332C061794;
+        Tue, 28 Jul 2020 10:26:26 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id u10so739089plr.7;
+        Tue, 28 Jul 2020 10:26:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=s8CxIPWlau8UfBUUf1Zit/bYMskp+FR/Gd+ldXuH8Yg=;
+        b=S4wzOSxXwDfGFg2NCSMoo/K0LdSBMO0r4Evck5FCh2ufocaD+t+u1uag149ihpgNNm
+         wI7JAaNIpItm81KSwCxVThGounvWOCAWy1X5HMtDpRuWX9qMFbjYLYvER/frsHix/vSF
+         /Jifal9mnrB2XcWnE1K2A9dQEXyiiQ3lmHpHeGUqHBUapyAalbreS0GuGPqtBvh5QZjX
+         9grcWfEcA9cufRH5GvIU4pdIRfI4PeE0wZprpNarBHVh3ZW7HBY6a7adB9aUdyUfu68R
+         w2QpxR4STpLO4dQP2pH5fohY0+GRCGQmBOz2BL32Il7NzMCf2S0QsUedCPec+ZtPKN9t
+         GdRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=gxgsVNgMju6EFb0WmfcBE/0w/FhLwyo5HMozMxfMsks=;
-        b=H0j6UX7Q6kCDmpQprGXiUluljPogkVuH4abIlEUYv+Ejb2sLChBg0WoVChcofNG0jf
-         Ys535LWRhvkKtarapQkOZM8H1zn9HzGghzkP1NcdTNjJ7ToktT1VWoT6mXJza92UCifl
-         BHz3hAxoBwUSQTuETQDi3pPM4Pj97L/E8jTj73coeXfxQsX0Z5bRHmU5FkXVwGgHhCqh
-         LY7vw7dedMJBBBwKH1xdyZ4dlwYXYn4NvleH4hoeQXzFenQRPnzBOHvpgn0KdWTjrJw3
-         c1HsAqNOYgJSA1IzzFA1dBBNQHdRWwbx9Jy/mqyiqQdkNufzwZndBCwBoQCsBiO2MLR1
-         BE4A==
-X-Gm-Message-State: AOAM5336+KXCCjevJSWihw/P4HiEEb1TwWOhcDktLYWqpl8SP5R6aPz7
-        wVlOGvmP4rtYKgS0vPNjQBL8bRNRG9TOOd2ij1LWCiLVcehd
-X-Google-Smtp-Source: ABdhPJyfumVwNMg7hYM9ynDDWhAUQv9Rn2C++jZ2YLGJwgOP1QWYGXa0QiStQHC+tN2CwyutCSwzfYReVkvtKMHU1aC5pKRzPKQY
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=s8CxIPWlau8UfBUUf1Zit/bYMskp+FR/Gd+ldXuH8Yg=;
+        b=F5VGuK9kP6FydXBNOOYnvl0J89df6aa7xSfETcUPUs4iIU7EB599BO3dTvPC2gvSGo
+         ahOPGxdxVSDQuAG5GaauInrmun6ZcCgGJLVP4hi2YF1z+x3fhJy7jShIqOlQqiEW0iCS
+         AMemHk6Vpgq834I7jatPQV5WJTIaHXQcnc1fgG5NsGepIuRjISl2fB7fPVBPKTK1USuE
+         eTigG5ZgJKBCfHTQOMKolUrjd3OWf66zmVkcT2G/fRH8f4fDLaGpYu1BFsA8mW4+Ciwz
+         HUK/mVH60tHuUvWDt0RH86BKqpkFFsqDKA5VtgWsw7aGdPMkdXawazsLrTrp6K2NIVrU
+         KdIQ==
+X-Gm-Message-State: AOAM531ztbNe5H2JaMyKCIlVyfbE/u6MbQT1Xue3crVix4cbtTU6UGqw
+        RppCohUgULI8/UeIAUWr+e2mtzXTooS2gNDT9Zg=
+X-Google-Smtp-Source: ABdhPJzdfHhS6L4t1jcHgJuUpezx+u/rVpyefG5mBGWG6CWr23hRVPrasPCQ6/5Sxh5clMW6uBMr/Db7MpAi4+2gkUg=
+X-Received: by 2002:a17:90a:a393:: with SMTP id x19mr5705366pjp.228.1595957185750;
+ Tue, 28 Jul 2020 10:26:25 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a92:194d:: with SMTP id e13mr19463433ilm.125.1595955981022;
- Tue, 28 Jul 2020 10:06:21 -0700 (PDT)
-Date:   Tue, 28 Jul 2020 10:06:21 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000537dfd05ab837526@google.com>
-Subject: KASAN: out-of-bounds Read in ath9k_hif_usb_rx_cb (2)
-From:   syzbot <syzbot+dbcf296f0cfda711b5c4@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, ath9k-devel@qca.qualcomm.com,
-        davem@davemloft.net, kuba@kernel.org, kvalo@codeaurora.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+References: <20200728170251.112484-1-zhouyanjie@wanyeetech.com> <20200728170251.112484-2-zhouyanjie@wanyeetech.com>
+In-Reply-To: <20200728170251.112484-2-zhouyanjie@wanyeetech.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 28 Jul 2020 20:26:10 +0300
+Message-ID: <CAHp75VevCu2Diojjam1q76nSdOOsfB_3kXCYFLPMfwad8kHv+A@mail.gmail.com>
+Subject: Re: [PATCH 1/1] USB: PHY: JZ4770: Fix static checker warning.
+To:     =?UTF-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
+        <zhouyanjie@wanyeetech.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Colin King <colin.king@canonical.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        prasannatsmkumar@gmail.com, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        yanfei.li@ingenic.com, sernia.zhou@foxmail.com,
+        zhenwenjin@gmail.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Tue, Jul 28, 2020 at 8:09 PM =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie)
+<zhouyanjie@wanyeetech.com> wrote:
+>
+> The commit 2a6c0b82e651 ("USB: PHY: JZ4770: Add support for new
+> Ingenic SoCs.") introduced the initialization function for different
+> chips, but left the relevant code involved in the resetting process
+> in the original function, resulting in uninitialized variable calls.
+> This problem can be solved by putting this part of the code into the
+> initialization function for each chip. Although the four processors
+> currently supported have the same reset code, let us can solve this
 
-syzbot found the following issue on:
+'can' -> ''
 
-HEAD commit:    25252919 xhci: dbgtty: Make some functions static
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=164adf28900000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=fb6677a3d4f11788
-dashboard link: https://syzkaller.appspot.com/bug?extid=dbcf296f0cfda711b5c4
-compiler:       gcc (GCC) 10.1.0-syz 20200507
+> problem by adding the initialization of the reg variable to the
+> original function, but when other processors with different reset
+> methods (such as X2000) are introduced in the future, it will cause
+> inevitable condition judgments to complicate the function, which
+> violates the original intention of introducing initialization
+> functions for each processor.
+>
+> Fixes: 2a6c0b82e651 ("USB: PHY: JZ4770: Add support for new
+> Ingenic SoCs.").
 
-Unfortunately, I don't have any reproducer for this issue yet.
+No period at the end
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+dbcf296f0cfda711b5c4@syzkaller.appspotmail.com
+>
 
-==================================================================
-BUG: KASAN: out-of-bounds in ath9k_hif_usb_rx_stream drivers/net/wireless/ath/ath9k/hif_usb.c:637 [inline]
-BUG: KASAN: out-of-bounds in ath9k_hif_usb_rx_cb+0xe82/0xf80 drivers/net/wireless/ath/ath9k/hif_usb.c:671
-Read of size 4 at addr ffff8881a248c098 by task kworker/0:5/3249
+No blank line in the tag block.
 
-CPU: 0 PID: 3249 Comm: kworker/0:5 Not tainted 5.8.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: events request_firmware_work_func
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0xf6/0x16e lib/dump_stack.c:118
- print_address_description.constprop.0+0x1a/0x210 mm/kasan/report.c:383
- __kasan_report mm/kasan/report.c:513 [inline]
- kasan_report.cold+0x37/0x7c mm/kasan/report.c:530
- ath9k_hif_usb_rx_stream drivers/net/wireless/ath/ath9k/hif_usb.c:637 [inline]
- ath9k_hif_usb_rx_cb+0xe82/0xf80 drivers/net/wireless/ath/ath9k/hif_usb.c:671
- __usb_hcd_giveback_urb+0x32d/0x560 drivers/usb/core/hcd.c:1650
- usb_hcd_giveback_urb+0x367/0x410 drivers/usb/core/hcd.c:1716
- dummy_timer+0x11f2/0x3240 drivers/usb/gadget/udc/dummy_hcd.c:1967
- call_timer_fn+0x1ac/0x6e0 kernel/time/timer.c:1415
- expire_timers kernel/time/timer.c:1460 [inline]
- __run_timers.part.0+0x54c/0x9e0 kernel/time/timer.c:1784
- __run_timers kernel/time/timer.c:1756 [inline]
- run_timer_softirq+0x80/0x120 kernel/time/timer.c:1797
- __do_softirq+0x222/0x95b kernel/softirq.c:292
- asm_call_on_stack+0xf/0x20 arch/x86/entry/entry_64.S:711
- </IRQ>
- __run_on_irqstack arch/x86/include/asm/irq_stack.h:22 [inline]
- run_on_irqstack_cond arch/x86/include/asm/irq_stack.h:48 [inline]
- do_softirq_own_stack+0xed/0x140 arch/x86/kernel/irq_64.c:77
- invoke_softirq kernel/softirq.c:387 [inline]
- __irq_exit_rcu kernel/softirq.c:417 [inline]
- irq_exit_rcu+0x150/0x1f0 kernel/softirq.c:429
- sysvec_apic_timer_interrupt+0x49/0xc0 arch/x86/kernel/apic/apic.c:1091
- asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:585
-RIP: 0010:arch_local_irq_restore arch/x86/include/asm/irqflags.h:85 [inline]
-RIP: 0010:console_unlock+0xbe2/0xcd0 kernel/printk/printk.c:2497
-Code: fc ff ff e8 10 31 16 00 0f 0b e9 b1 fd ff ff e8 04 31 16 00 0f 0b e9 04 fe ff ff e8 f8 30 16 00 e8 43 bc 1b 00 ff 74 24 30 9d <e9> 6b fc ff ff e8 04 e0 3f 00 e9 65 f6 ff ff e8 0a e0 3f 00 e9 1f
-RSP: 0018:ffff8881c8a3fa18 EFLAGS: 00000293
-RAX: 0000000000465681 RBX: 0000000000000200 RCX: 0000000000000006
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffffff8129790d
-RBP: 0000000000000001 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000000 R12: ffffffff82b05a80
-R13: ffffffff876f53b0 R14: 0000000000000042 R15: dffffc0000000000
- vprintk_emit+0x1b2/0x460 kernel/printk/printk.c:2021
- vprintk_func+0x8b/0x133 kernel/printk/printk_safe.c:393
- printk+0xba/0xed kernel/printk/printk.c:2070
- ath9k_htc_hw_init.cold+0x17/0x2a drivers/net/wireless/ath/ath9k/htc_hst.c:502
- ath9k_hif_usb_firmware_cb+0x274/0x530 drivers/net/wireless/ath/ath9k/hif_usb.c:1220
- request_firmware_work_func+0x126/0x250 drivers/base/firmware_loader/main.c:1001
- process_one_work+0x94c/0x15f0 kernel/workqueue.c:2269
- worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
- kthread+0x392/0x470 kernel/kthread.c:291
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:293
+> Reported-by: Colin Ian King <colin.king@canonical.com>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) <zhouyanjie@wany=
+eetech.com>
 
-general protection fault, probably for non-canonical address 0xdead000000000400: 0000 [#1] SMP KASAN
-CPU: 0 PID: 3249 Comm: kworker/0:5 Not tainted 5.8.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: events request_firmware_work_func
-RIP: 0010:nearest_obj include/linux/slub_def.h:176 [inline]
-RIP: 0010:print_address_description.constprop.0+0x18e/0x210 mm/kasan/report.c:388
-Code: c4 60 5b 5d 41 5c 41 5d c3 4c 89 e6 48 2b 35 41 e2 a3 05 48 89 e8 49 8b 5c 24 18 48 c1 fe 06 48 c1 e6 0c 48 03 35 3a e2 a3 05 <8b> 4b 18 48 29 f0 48 99 48 89 cf 48 f7 f9 41 0f b7 44 24 2a 48 89
-RSP: 0018:ffff8881db209838 EFLAGS: 00010086
-RAX: ffff8881a248c098 RBX: dead000000000400 RCX: 0000000000000000
-RDX: 0000000000000001 RSI: ffff8881a248c000 RDI: ffffed103b6412f9
-RBP: ffff8881a248c098 R08: 0000000000000000 R09: ffff8881db21fe8b
-R10: 0000000000000000 R11: 0000000000000004 R12: ffffea0006892300
-R13: ffffffff82e223f2 R14: ffffffff82e223f2 R15: ffffed103a67ee10
-FS:  0000000000000000(0000) GS:ffff8881db200000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fda4b7b9000 CR3: 00000001d1c45000 CR4: 00000000001406f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <IRQ>
- __kasan_report mm/kasan/report.c:513 [inline]
- kasan_report.cold+0x37/0x7c mm/kasan/report.c:530
- ath9k_hif_usb_rx_stream drivers/net/wireless/ath/ath9k/hif_usb.c:637 [inline]
- ath9k_hif_usb_rx_cb+0xe82/0xf80 drivers/net/wireless/ath/ath9k/hif_usb.c:671
- __usb_hcd_giveback_urb+0x32d/0x560 drivers/usb/core/hcd.c:1650
- usb_hcd_giveback_urb+0x367/0x410 drivers/usb/core/hcd.c:1716
- dummy_timer+0x11f2/0x3240 drivers/usb/gadget/udc/dummy_hcd.c:1967
- call_timer_fn+0x1ac/0x6e0 kernel/time/timer.c:1415
- expire_timers kernel/time/timer.c:1460 [inline]
- __run_timers.part.0+0x54c/0x9e0 kernel/time/timer.c:1784
- __run_timers kernel/time/timer.c:1756 [inline]
- run_timer_softirq+0x80/0x120 kernel/time/timer.c:1797
- __do_softirq+0x222/0x95b kernel/softirq.c:292
- asm_call_on_stack+0xf/0x20 arch/x86/entry/entry_64.S:711
- </IRQ>
- __run_on_irqstack arch/x86/include/asm/irq_stack.h:22 [inline]
- run_on_irqstack_cond arch/x86/include/asm/irq_stack.h:48 [inline]
- do_softirq_own_stack+0xed/0x140 arch/x86/kernel/irq_64.c:77
- invoke_softirq kernel/softirq.c:387 [inline]
- __irq_exit_rcu kernel/softirq.c:417 [inline]
- irq_exit_rcu+0x150/0x1f0 kernel/softirq.c:429
- sysvec_apic_timer_interrupt+0x49/0xc0 arch/x86/kernel/apic/apic.c:1091
- asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:585
-RIP: 0010:arch_local_irq_restore arch/x86/include/asm/irqflags.h:85 [inline]
-RIP: 0010:console_unlock+0xbe2/0xcd0 kernel/printk/printk.c:2497
-Code: fc ff ff e8 10 31 16 00 0f 0b e9 b1 fd ff ff e8 04 31 16 00 0f 0b e9 04 fe ff ff e8 f8 30 16 00 e8 43 bc 1b 00 ff 74 24 30 9d <e9> 6b fc ff ff e8 04 e0 3f 00 e9 65 f6 ff ff e8 0a e0 3f 00 e9 1f
-RSP: 0018:ffff8881c8a3fa18 EFLAGS: 00000293
-RAX: 0000000000465681 RBX: 0000000000000200 RCX: 0000000000000006
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffffff8129790d
-RBP: 0000000000000001 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000000 R12: ffffffff82b05a80
-R13: ffffffff876f53b0 R14: 0000000000000042 R15: dffffc0000000000
- vprintk_emit+0x1b2/0x460 kernel/printk/printk.c:2021
- vprintk_func+0x8b/0x133 kernel/printk/printk_safe.c:393
- printk+0xba/0xed kernel/printk/printk.c:2070
- ath9k_htc_hw_init.cold+0x17/0x2a drivers/net/wireless/ath/ath9k/htc_hst.c:502
- ath9k_hif_usb_firmware_cb+0x274/0x530 drivers/net/wireless/ath/ath9k/hif_usb.c:1220
- request_firmware_work_func+0x126/0x250 drivers/base/firmware_loader/main.c:1001
- process_one_work+0x94c/0x15f0 kernel/workqueue.c:2269
- worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
- kthread+0x392/0x470 kernel/kthread.c:291
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:293
-Modules linked in:
----[ end trace 6f3e98b95d1a4467 ]---
-RIP: 0010:nearest_obj include/linux/slub_def.h:176 [inline]
-RIP: 0010:print_address_description.constprop.0+0x18e/0x210 mm/kasan/report.c:388
-Code: c4 60 5b 5d 41 5c 41 5d c3 4c 89 e6 48 2b 35 41 e2 a3 05 48 89 e8 49 8b 5c 24 18 48 c1 fe 06 48 c1 e6 0c 48 03 35 3a e2 a3 05 <8b> 4b 18 48 29 f0 48 99 48 89 cf 48 f7 f9 41 0f b7 44 24 2a 48 89
-RSP: 0018:ffff8881db209838 EFLAGS: 00010086
-RAX: ffff8881a248c098 RBX: dead000000000400 RCX: 0000000000000000
-RDX: 0000000000000001 RSI: ffff8881a248c000 RDI: ffffed103b6412f9
-RBP: ffff8881a248c098 R08: 0000000000000000 R09: ffff8881db21fe8b
-R10: 0000000000000000 R11: 0000000000000004 R12: ffffea0006892300
-R13: ffffffff82e223f2 R14: ffffffff82e223f2 R15: ffffed103a67ee10
-FS:  0000000000000000(0000) GS:ffff8881db200000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fda4b7b9000 CR3: 00000001d1c45000 CR4: 00000000001406f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+...
 
+> +       /* Wait for PHY to reset */
+> +       usleep_range(30, 300);
+> +       writel(reg & ~USBPCR_POR, priv->base + REG_USBPCR_OFFSET);
+> +       usleep_range(300, 1000);
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Instead of copy'n'paste 4 times, you may provide a helper function.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+--=20
+With Best Regards,
+Andy Shevchenko
