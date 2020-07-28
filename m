@@ -2,168 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65AB52311EB
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jul 2020 20:46:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF80D23125A
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jul 2020 21:19:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732483AbgG1SqF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Jul 2020 14:46:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47218 "EHLO
+        id S1732708AbgG1TSh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Jul 2020 15:18:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729006AbgG1SqE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Jul 2020 14:46:04 -0400
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65688C0619D2
-        for <linux-usb@vger.kernel.org>; Tue, 28 Jul 2020 11:46:04 -0700 (PDT)
-Received: by mail-qk1-x744.google.com with SMTP id d14so19665965qke.13
-        for <linux-usb@vger.kernel.org>; Tue, 28 Jul 2020 11:46:04 -0700 (PDT)
+        with ESMTP id S1728751AbgG1TSg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Jul 2020 15:18:36 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A93C061794;
+        Tue, 28 Jul 2020 12:18:36 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id v22so4858250edy.0;
+        Tue, 28 Jul 2020 12:18:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=googlemail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Jdr1gVzgoBXFB+stTUTeunVZqOgXPnJz20tH+qp5ajw=;
-        b=MFQCx1GKMluY3hy4StyDLrDfypn97t7pcQAX7c+HYjOGfDl+4jEVlsEYXmiSHawzIs
-         oGreHihOlGfmzPgjNROKXyn6AqvmH9IqmQd1i5eUcJkgf9cLfNfYlkoRJdjApwVVAsUQ
-         +xhDoQ1ZDgve6j6NeqYTU0c0r/b3dOWzvrhJo=
+        bh=oa15p4iXa6GJWXcRKbHat247Q7cvm1xa0u7tYmwOk/s=;
+        b=blU+NE79hmQP+AWK2v6QHIjREnaP4/YLScYIEh3rWReHYQ1hpM4CB6natewhEcZJg3
+         At/DtAoJ9fBGj4g3ZnXIMFH10prYf+AFTHKPO+8fGRN1w55P9BQqv5CG5MoRsyeuOUGy
+         POKNlHiYWWDnRAmGiURfH6NrFotdNYkduTjxfX1eU8AGv+UrcTi8XLXCxBpX95UH/nrL
+         VkdM0HjfPkXJVbmw5xo9QFfmCuDC7uGtgEvhLlgy6LaFCwHAms40eJR1/qxhoNZR63Us
+         RkobSo+XmF/XkyPrpesTskiyKBR75/rYao7GhgZ+zXjoQJs1dT76PdO1tV+cozSe21+o
+         52EQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Jdr1gVzgoBXFB+stTUTeunVZqOgXPnJz20tH+qp5ajw=;
-        b=McowyMIZ72OJ2mzGY4DF02BpyTf4fIH6nnvu6h4aGwo7OhPJGCOTLcJQ372MRnVbG4
-         oGRRIrsJYCVZhjIaP75JSzHJkOEApwFPf961HqaDW5JPWdtVswpcTFiBqdJecstvso/g
-         vWUmOKUIyEqyCW9JxUujaY7iebEXx2yzKW3kQp98pl59x9nv5DNq8JHQB2Gs4cclPohs
-         M+C2JlOrrvKIGk/8nY/82VXCLtx8FRRKR68kcawgkfJH0XzKIfd84MtZcOvpeul843jB
-         xjzL5B8gEFyDdc//cYJQh6nCD26aQPz0H09l7U3KPBveVkUvMSkPaI/agIFHZJgZOL4B
-         ZQkg==
-X-Gm-Message-State: AOAM5309Bc8MLR1t3NGwTMz0kVlCybf8iTIqSCMQGnvaPUjorI9AVpxx
-        7xliVY7tYgQHqm9pWd5yWE2AAubZpEY=
-X-Google-Smtp-Source: ABdhPJxskyXEpUBXxuH6Bw+/+ugc+19HgUtQQ81HZZa+S5YGU2KLvVVP3pcyIFPJRJia5flU6SFuaw==
-X-Received: by 2002:a37:686:: with SMTP id 128mr26116074qkg.427.1595961962883;
-        Tue, 28 Jul 2020 11:46:02 -0700 (PDT)
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com. [209.85.160.182])
-        by smtp.gmail.com with ESMTPSA id b20sm20605253qta.51.2020.07.28.11.45.57
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jul 2020 11:45:58 -0700 (PDT)
-Received: by mail-qt1-f182.google.com with SMTP id c12so6638059qtn.9
-        for <linux-usb@vger.kernel.org>; Tue, 28 Jul 2020 11:45:57 -0700 (PDT)
-X-Received: by 2002:ac8:6758:: with SMTP id n24mr27337056qtp.124.1595961956507;
- Tue, 28 Jul 2020 11:45:56 -0700 (PDT)
+        bh=oa15p4iXa6GJWXcRKbHat247Q7cvm1xa0u7tYmwOk/s=;
+        b=Uy4PPF4woKMyS4JMu3Q8HWUxMMcMppymWPzWFO6BqnxBP+0fmOjBK6P7V1tSYLiaSJ
+         FSMI7a1eWs4SHcT78TgnltknunaOvUZHJKLWLsb3N/ZNYecj9pq/3+Y6YZc8Xm5ipCtX
+         TkuOU7c5ZwCnkFlajsyRqrIvG7ty6ZQwP3ilZaKMxH+zyw2kfIfnqgucNbU85FP4ZdSX
+         /IMvp3OrwQylnw3FoD3IZer9TR0MIbtrR7YiuwHx1sytaGFVPxwqRx0Lhqmt+TK947BI
+         9hqI8YTgkYn+EwXc29Wx4X77wNJeGhC9hFwm9f1N7j7F1jIwNsirRv7YlDg3sb5qsCgf
+         GsYQ==
+X-Gm-Message-State: AOAM5317sbn/o/tDDTFAyNXOBIcr5GsnBpRQP394iRbL/Fxv1fVIAGR3
+        WsG0EwYB2GkZtLxd8doVuAFQ32wrNjvL85Kq5lA=
+X-Google-Smtp-Source: ABdhPJy5S7ubQoYm3tHb4jW0VlpjbyrDB7KIdVKen1wY3pcq2mMJd8xXnF7ClZtX7lLSpJPEPi2etzzsUrRn6G+1/8E=
+X-Received: by 2002:a05:6402:1d0a:: with SMTP id dg10mr26396667edb.110.1595963915038;
+ Tue, 28 Jul 2020 12:18:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <MN2PR18MB2637D7C742BC235FE38367F0A09C0@MN2PR18MB2637.namprd18.prod.outlook.com>
- <1595900652-3842-1-git-send-email-penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <1595900652-3842-1-git-send-email-penguin-kernel@I-love.SAKURA.ne.jp>
-From:   Brian Norris <briannorris@chromium.org>
-Date:   Tue, 28 Jul 2020 11:45:45 -0700
-X-Gmail-Original-Message-ID: <CA+ASDXMHt2gq9Hy+iP_BYkWXsSreWdp3_bAfMkNcuqJ3K+-jbQ@mail.gmail.com>
-Message-ID: <CA+ASDXMHt2gq9Hy+iP_BYkWXsSreWdp3_bAfMkNcuqJ3K+-jbQ@mail.gmail.com>
-Subject: Re: [PATCH] mwifiex: don't call del_timer_sync() on uninitialized timer
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     Ganapathi Bhat <gbhat@marvell.com>,
-        amit karwar <amitkarwar@gmail.com>, andreyknvl@google.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Xinming Hu <huxinming820@gmail.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        "<netdev@vger.kernel.org>" <netdev@vger.kernel.org>,
-        Nishant Sarmukadam <nishants@marvell.com>,
-        syzbot+dc4127f950da51639216@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com,
-        syzbot <syzbot+373e6719b49912399d21@syzkaller.appspotmail.com>
+References: <20200728074602.14218-1-amelie.delaunay@st.com> <20200728074602.14218-4-amelie.delaunay@st.com>
+In-Reply-To: <20200728074602.14218-4-amelie.delaunay@st.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Tue, 28 Jul 2020 21:18:24 +0200
+Message-ID: <CAFBinCDd_9HJA4TT2mS007xFyO4jovt+Xrpejppzzq2Ty-JDmg@mail.gmail.com>
+Subject: Re: [PATCH v5 3/3] usb: dwc2: don't use ID/Vbus detection if
+ usb-role-switch on STM32MP15 SoCs
+To:     Amelie Delaunay <amelie.delaunay@st.com>
+Cc:     Minas Harutyunyan <hminas@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Fabrice Gasnier <fabrice.gasnier@st.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Hi Amelie,
 
-On Mon, Jul 27, 2020 at 6:45 PM Tetsuo Handa
-<penguin-kernel@i-love.sakura.ne.jp> wrote:
+On Tue, Jul 28, 2020 at 9:46 AM Amelie Delaunay <amelie.delaunay@st.com> wrote:
 >
-> syzbot is reporting that del_timer_sync() is called from
-> mwifiex_usb_cleanup_tx_aggr() from mwifiex_unregister_dev() without
-> checking timer_setup() from mwifiex_usb_tx_init() was called [1].
-> Since mwifiex_usb_prepare_tx_aggr_skb() is calling del_timer() if
-> is_hold_timer_set == true, use the same condition for del_timer_sync().
+> If usb-role-switch is present in the device tree, it means that ID and Vbus
+> signals are not connected to the OTG controller but to an external
+> component (GPIOs, Type-C controller). In this configuration, usb role
+> switch is used to force valid sessions on STM32MP15 SoCs.
 >
-> [1] https://syzkaller.appspot.com/bug?id=fdeef9cf7348be8b8ab5b847f2ed993aba8ea7b6
->
-> Reported-by: syzbot <syzbot+373e6719b49912399d21@syzkaller.appspotmail.com>
-> Cc: Ganapathi Bhat <gbhat@marvell.com>
-> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-> ---
-> A patch from Ganapathi Bhat ( https://patchwork.kernel.org/patch/10990275/ ) is stalling
-> at https://lore.kernel.org/linux-usb/MN2PR18MB2637D7C742BC235FE38367F0A09C0@MN2PR18MB2637.namprd18.prod.outlook.com/ .
-> syzbot by now got this report for 10000 times. Do we want to go with this simple patch?
-
-Sorry, that stall is partly my fault, and partly Ganapathi's. It
-doesn't help that it took him 4 months to reply to my questions, so I
-completely lost even the tiny bit of context I had managed to build up
-in my head at initial review time... and so it's still buried in the
-dark corners of my inbox. (I think I'll go archive that now, because
-it really deserves a better sell than it had initially, if Ganapathi
-really wants to land it.)
-
->  drivers/net/wireless/marvell/mwifiex/usb.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/net/wireless/marvell/mwifiex/usb.c b/drivers/net/wireless/marvell/mwifiex/usb.c
-> index 6f3cfde..04a1461 100644
-> --- a/drivers/net/wireless/marvell/mwifiex/usb.c
-> +++ b/drivers/net/wireless/marvell/mwifiex/usb.c
-> @@ -1353,7 +1353,8 @@ static void mwifiex_usb_cleanup_tx_aggr(struct mwifiex_adapter *adapter)
->                                 skb_dequeue(&port->tx_aggr.aggr_list)))
->                                 mwifiex_write_data_complete(adapter, skb_tmp,
->                                                             0, -1);
-> -               del_timer_sync(&port->tx_aggr.timer_cnxt.hold_timer);
-> +               if (port->tx_aggr.timer_cnxt.is_hold_timer_set)
-
-I believe if we ever actually started aggregation, then the timer can
-be active at this point, and thus, the access to 'is_hold_timer_set'
-is racy.
-
-This *probably* deserves a better refactor, but in absence of that
-(and a better explanation than Ganapathi gave), I think you at least
-need to hold port->tx_aggr_lock. So perhaps (totally untested):
-
-  spin_lock_bh(&port->tx_aggr_lock);
-  if (port->tx_aggr.timer_cnxt.is_hold_timer_set) {
-    port->tx_aggr.timer_cnxt.is_hold_timer_set = false;
-    spin_unlock_bh(&port->tx_aggr_lock);
-    /* Timer could still be running, but it can't be restarted at this
-point, so this is safe. */
-    del_timer_sync(&port->tx_aggr.timer_cnxt.hold_timer);
-  } else {
-    spin_unlock_bh(&port->tx_aggr_lock);
-  }
-
-Otherwise, I think this is fine:
-
-Reviewed-by: Brian Norris <briannorris@chromium.org>
-
-I also believe mwifiex_usb_prepare_tx_aggr_skb() needs to stop using
-del_timer() (without the _sync()), because otherwise we might have
-deactivated the timer already but not ensured that it has completely
-finished executing on other CPUs. But that is probably orthogonal to
-the current patch. (Again, so much in this driver needs refactoring.)
-
-Side note: this entire TX aggregation feature for USB has been hidden
-behind the mwifiex.aggr_ctrl module param since its introduction,
-which has always been disabled by default. I wonder whether anybody is
-*really* testing it, or whether it's 100% broken, as with many things
-in this driver...
+> Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
+thank you for updating this patch - please add my:
+Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
 
-Brian
-
-> +                       del_timer_sync(&port->tx_aggr.timer_cnxt.hold_timer);
->                 port->tx_aggr.timer_cnxt.is_hold_timer_set = false;
->                 port->tx_aggr.timer_cnxt.hold_tmo_msecs = 0;
->         }
-> --
-> 1.8.3.1
->
+Martin
