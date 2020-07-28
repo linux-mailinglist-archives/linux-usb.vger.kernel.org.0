@@ -2,88 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0635D231030
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jul 2020 18:56:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0828231066
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jul 2020 19:05:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731663AbgG1Q4u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 28 Jul 2020 12:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58506 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731579AbgG1Q4p (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Jul 2020 12:56:45 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D08C0619DA
-        for <linux-usb@vger.kernel.org>; Tue, 28 Jul 2020 09:56:45 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id w9so21331953ejc.8
-        for <linux-usb@vger.kernel.org>; Tue, 28 Jul 2020 09:56:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=YqljJR74+Mn7SppABFl/S/+hKBpdw+21MScTQOdBTOE=;
-        b=lV7+TqzjxoGceDfe6LGN3Ae63gOeC2fiafu3RVtn3n9OvQujyBC7h6Pa35EQrNjIM9
-         SBq6F0KiK0gfUyUMZIg7nzFQt2d3/xeo1cnOYTFRA/yIf+f1wOb5mQfu2fWla2Ova2vv
-         gDVbejsy/SvwzA0CLIMSxnOklpzBvt23FHYAyD0QZxOA/GY/dNh5UbrcP2A5lVqeWNbR
-         /tz9Qziq88HE5hKswpRvbS31xfwMCXRsYIpUODRBB0QPfx0weACZiuLaqlOwQ8ypCeH8
-         PDOuuMCRKyO9CM/FXwoebiuaDH607zJLR7nGSGaWiAQSCp+NGk41FRpGq8sVZ8iLTxlA
-         FAjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=YqljJR74+Mn7SppABFl/S/+hKBpdw+21MScTQOdBTOE=;
-        b=n0SvIfM1ayv7MbB3LD2IDQv84XbZ1nxngohwB+SnV2GVWHJxP4K1rBlcP5U/vCFVen
-         y14wpPPTO+LRhzgeCkrFfP/EEXqTsWnT55/gHhgx7ZsjFDo8cLvfd82+AJTogX5WPpvy
-         ryp7JScDE5VY75mC+4I4bhkJw6+BXE3ByyRD+wggJRQwFsn692/N+zhFJ2RU5IPsPTHu
-         oxOkCA258Ur/A0MRnXFMXFCBjVqnAgCt1Uh878ifpH8QKhOmMnaqRDVx754FGB0K/mk0
-         FgGzsjk9/WTbIerjFxwE9VXtxFXaFkH1ISldwFdgPyEQpujbIlO047/NGsI1aflnwxhQ
-         hSNg==
-X-Gm-Message-State: AOAM53094EeN59XxdrG+DxfwdNmf9ADllv4ONnKFehCuiIezxrkHikS2
-        g6UW5j0CmuwQ4k0INQB8/XjiKR3dm47d9wMkFBw=
-X-Google-Smtp-Source: ABdhPJyD+qobOKVu+X8+1AME7mvZ7Tyyj3L9BOKohhAIRnTEH/cKzWAhjm8THBy3gXtB9glcDk36e2LkhcaTqCtKyq4=
-X-Received: by 2002:a17:906:ca4d:: with SMTP id jx13mr18490835ejb.548.1595955403537;
- Tue, 28 Jul 2020 09:56:43 -0700 (PDT)
+        id S1731648AbgG1RFe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 28 Jul 2020 13:05:34 -0400
+Received: from out28-147.mail.aliyun.com ([115.124.28.147]:38300 "EHLO
+        out28-147.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731070AbgG1RFe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 28 Jul 2020 13:05:34 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.250105|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_news_journal|0.077471-0.000474437-0.922055;FP=0|0|0|0|0|-1|-1|-1;HT=e01l10434;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.I8uonft_1595955914;
+Received: from localhost.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.I8uonft_1595955914)
+          by smtp.aliyun-inc.com(10.147.44.145);
+          Wed, 29 Jul 2020 01:05:28 +0800
+From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
+        <zhouyanjie@wanyeetech.com>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        colin.king@canonical.com, dan.carpenter@oracle.com,
+        paul@crapouillou.net, prasannatsmkumar@gmail.com,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, yanfei.li@ingenic.com,
+        sernia.zhou@foxmail.com, zhenwenjin@gmail.com
+Subject: [PATCH 0/1] Fix static checker warning.
+Date:   Wed, 29 Jul 2020 01:02:50 +0800
+Message-Id: <20200728170251.112484-1-zhouyanjie@wanyeetech.com>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-Received: by 2002:a50:8a99:0:0:0:0:0 with HTTP; Tue, 28 Jul 2020 09:56:43
- -0700 (PDT)
-Reply-To: mrsnicole.france1958@outlook.com
-From:   Mrs Nicole Marois Benoite <mrsnicolefrance1958@gmail.com>
-Date:   Tue, 28 Jul 2020 09:56:43 -0700
-Message-ID: <CAJKBOPmG1o==twVStViQzZEmz2Lyb3D3MsODbQT1nFq_vz0HSg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dear Beloved
+Fix the warning that appears during Static analysis.
 
-I am Mrs Nicole Benoite Marois and i have been suffering from ovarian
-cancer disease and the doctor says that i have just few days to leave.
-I am from (Paris) France but based in Africa Burkina Faso since eight
-years ago as a business woman dealing with gold exportation.
+周琰杰 (Zhou Yanjie) (1):
+  USB: PHY: JZ4770: Fix static checker warning.
 
-Now that i am about to end the race like this, without any family
-members and no child. I have $3 Million US DOLLARS in Africa
-Development Bank (ADB) Burkina Faso which i instructed the bank to remit and
-give to Orphanage & Teaching Volunteer Work in Burkina Faso.But my
-mind is not at
-rest because i am writing this letter now through the help of my
-computer beside my sick bed.
+ drivers/usb/phy/phy-jz4770.c | 26 ++++++++++++++++++++------
+ 1 file changed, 20 insertions(+), 6 deletions(-)
 
-I also have $4.5 Million US Dollars at Eco-Bank here in Burkina Faso
-and i instructed the bank to transfer the fund to you as foreigner
-that will apply to the bank after i have gone, that they should
-release the fund to him/her,but you will assure me that you will take
-50% of the fund and give 50% to the orphanages home in your country
-for my heart to rest.
+-- 
+2.11.0
 
-Respond to me immediately via my private email address
-(mrsnicole.france1958@outlook.com) for further details since I have just
-few days to end my life due to the ovarian cancer disease, hoping you
-will understand my point
-
-Yours fairly friend,
-
-Mrs Nicole Benoite Marois.
