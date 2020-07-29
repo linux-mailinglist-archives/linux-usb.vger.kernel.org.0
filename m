@@ -2,141 +2,175 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31428231F28
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jul 2020 15:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 624EF231F6C
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jul 2020 15:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726476AbgG2NWN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Jul 2020 09:22:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49256 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726353AbgG2NWN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jul 2020 09:22:13 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217BEC061794
-        for <linux-usb@vger.kernel.org>; Wed, 29 Jul 2020 06:22:13 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id z3so9125870ilh.3
-        for <linux-usb@vger.kernel.org>; Wed, 29 Jul 2020 06:22:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UCWyTb1UTyujoVaF6C3YpPKXd4JjrUv7/CB4E1zkf9w=;
-        b=hKZrJADiVsm/IX/0/KeAKFW2lQUV7eHmkEUjKrW/O+KZ7kcJaEMn7TLakTNMIysjpx
-         yNfxAf/UojmnXDuwarQCxQ5RmAbX5RLbF8TqjM8qw3AR1qygkhNH/kEg9/PfEktbRMWh
-         nXjgl1BDNfkOSGvVBiI9SAlyaggS1CTf9XvKAt0Vvp2FIcIbmv03XHwN5fPEP428S4MS
-         anTuaJmTPrsQz5h5hdPubCT4gCK1wP9wfeHVLR2Ox8/lJvy6qOSLJl4bh7YI3b5T/rM5
-         j0t0GGLTEKOkksIU1vxNX3R6/Ut1Bqp8Av8HAZy4KP4+hsD+QU3ReKc+33q5C58NeotD
-         0m0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UCWyTb1UTyujoVaF6C3YpPKXd4JjrUv7/CB4E1zkf9w=;
-        b=A70MV6MNYnKs+3qDStyd1w8TLn5KCI/R3OUiwy0+Oj+729be7pBQVqeok4VF07gbKU
-         zz5jFXg57qUd1jqy9imiX6l/YU1Hqsza9CihfnV7O7NJZflpuce0viJ5z6v0rmSfH3+R
-         Xa1fLlMUdZSgujP3YoesHK7K0GIdU0auxfI5+yTm9l3RxeM2b8CpqsE7jMuRtNFoxz/o
-         hnuGtkh6bYsS4PBDsteEhMPPMvuh31vaMM4aSjpacU+n2zIqiQC73mm/BPqGcHrX+f0S
-         HyxNPQ80fpAiSdRe/WAwfzk/YwJUQSNiHSBpb5L9KztJM9OnUhJLok3w2cz4dn2D8exW
-         WN5Q==
-X-Gm-Message-State: AOAM5304LXdCztUTEFQPcKJJlT0Bcjz9qEzveI8T3jL96cu9BI9Y5kml
-        vMgfCiC/g6yuv6pxuoQCEINve7aD+njv6WzM2FY=
-X-Google-Smtp-Source: ABdhPJwz7AwbZaKcZG+071c5rlaimIUQzDi2+r2Ez7FbdmfHJm8QOAG5+VtfNRLP9LQef44ZP+WkP1quHRkUEA8ghk0=
-X-Received: by 2002:a92:d607:: with SMTP id w7mr3268612ilm.149.1596028932333;
- Wed, 29 Jul 2020 06:22:12 -0700 (PDT)
+        id S1726496AbgG2Nis (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Jul 2020 09:38:48 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:44679 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726336AbgG2Nir (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jul 2020 09:38:47 -0400
+Received: (qmail 1531564 invoked by uid 1000); 29 Jul 2020 09:38:46 -0400
+Date:   Wed, 29 Jul 2020 09:38:46 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     eli.billauer@gmail.com
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        hdegoede@redhat.com, oneukum@suse.de
+Subject: Re: [PATCH v2] usb: core: Solve race condition in anchor cleanup
+ functions
+Message-ID: <20200729133846.GA1530967@rowland.harvard.edu>
+References: <20200729103139.49229-1-eli.billauer@gmail.com>
 MIME-Version: 1.0
-References: <CAO3ALPyB1JDvvC27JGgAoTuHh0w+897tPhmTKX9PQWBFCrrnbQ@mail.gmail.com>
-In-Reply-To: <CAO3ALPyB1JDvvC27JGgAoTuHh0w+897tPhmTKX9PQWBFCrrnbQ@mail.gmail.com>
-From:   "Oliver O'Halloran" <oohall@gmail.com>
-Date:   Wed, 29 Jul 2020 23:22:01 +1000
-Message-ID: <CAOSf1CEkHLamLXK3HOAZ+w0K=2hTOjn=x5KpDdmRZ4BXVy+P2A@mail.gmail.com>
-Subject: Re: ASMedia ASM2142 USB host controller tries to DMA to address zero
- when doing bulk reads from multiple devices
-To:     Forest Crossman <cyrozap@gmail.com>
-Cc:     linux-usb@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Alexey Kardashevskiy <aik@ozlabs.ru>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200729103139.49229-1-eli.billauer@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 21, 2020 at 3:51 PM Forest Crossman <cyrozap@gmail.com> wrote:
->
-> Hello, again!
->
-> After fixing the issue in my previous thread using this patch[1], I
-> decided to do some stress-testing of the controller to make sure it
-> could handle my intended workloads and that there were no further DMA
-> address issues that would need to be fixed. Unfortunately, it looks
-> like there's still more work to be done: when I try to do long bulk
-> reads from multiple devices simultaneously, eventually the host
-> controller sends a DMA write to address zero, which then triggers EEH
-> in my POWER9 system, causing the controller card to get hotplug-reset,
-> which of course kills the disk-reading processes. For more details on
-> the EEH errors, you can see my kernel's EEH message log[2].
+On Wed, Jul 29, 2020 at 01:31:39PM +0300, eli.billauer@gmail.com wrote:
+> From: Eli Billauer <eli.billauer@gmail.com>
+> 
+> usb_kill_anchored_urbs() is commonly used to cancel all URBs on an
+> anchor just before releasing resources which the URBs rely on. By doing
+> so, users of this function rely on that no completer callbacks will take
+> place from any URB on the anchor after it returns.
+> 
+> However if this function is called in parallel with __usb_hcd_giveback_urb
+> processing a URB on the anchor, the latter may call the completer
+> callback after usb_kill_anchored_urbs() returns. This can lead to a
+> kernel panic due to use after release of memory in interrupt context.
+> 
+> The race condition is that __usb_hcd_giveback_urb() first unanchors the URB
+> and then makes the completer callback. Such URB is hence invisible to
+> usb_kill_anchored_urbs(), allowing it to return before the completer has
+> been called, since the anchor's urb_list is empty.
+> 
+> Even worse, if the racing completer callback resubmits the URB, it may
+> remain in the system long after usb_kill_anchored_urbs() returns.
+> 
+> Hence list_empty(&anchor->urb_list), which is used in the existing
+> while-loop, doesn't reliably ensure that all URBs of the anchor are gone.
+> 
+> A similar problem exists with usb_poison_anchored_urbs() and
+> usb_scuttle_anchored_urbs().
+> 
+> This patch adds an external do-while loop, which ensures that all URBs
+> are indeed handled before these three functions return. This change has
+> no effect at all unless the race condition occurs, in which case the
+> loop will busy-wait until the racing completer callback has finished.
+> This is a rare condition, so the CPU waste of this spinning is
+> negligible.
+> 
+> The additional do-while loop relies on the new usb_anchor_safe_empty()
+> function, which is like usb_anchor_check_wakeup(), only the former takes
+> the anchor's lock before checking. Both functions return true iff the
+> anchor list is empty, and there is no __usb_hcd_giveback_urb() in the
+> system that is in the middle of the unanchor-before-complete phase.
+> The @suspend_wakeups member of struct usb_anchor is used for this purpose,
+> which was introduced to solve another problem which the same race
+> condition causes, in commit 6ec4147e7bdb ("usb-anchor: Delay
+> usb_wait_anchor_empty_timeout wake up till completion is done").
+> 
+> To summarize, using usb_anchor_safe_empty() means that the patched
+> functions can return only when the anchor's list is empty, and there is
+> no invisible URB being processed. Since the inner while loop finishes on
+> the empty list condition, the new do-while loop will terminate as well,
+> except for when the said race condition occurs.
+> 
+> Signed-off-by: Eli Billauer <eli.billauer@gmail.com>
+> ---
+>  drivers/usb/core/urb.c | 90 ++++++++++++++++++++++++++----------------
+>  1 file changed, 55 insertions(+), 35 deletions(-)
 
-Take the logged address with a grain of salt. If an error occurs while
-translating the DMA address the PHB logs all zeros as the "DMA
-Address" because it only keeps around the bits that it needs to fetch
-the next level of the TCE table. The EEH dump says the error is due to
-a TCE permission mis-match so odds the ASmedia controller is writing
-to an address that's already been DMA unmapped, hence the logged
-address being zeros.
+With a small amount of restructuring you can eliminate three unlock-lock 
+pairs and avoid the need for usb_anchor_safe_empty():
 
-Sorry, I probably should have mentioned that quirk in the last mail.
+> diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
+> index da923ec17612..44db8b8fabc9 100644
+> --- a/drivers/usb/core/urb.c
+> +++ b/drivers/usb/core/urb.c
+> @@ -145,6 +145,19 @@ static int usb_anchor_check_wakeup(struct usb_anchor *anchor)
+>  		list_empty(&anchor->urb_list);
+>  }
+>  
+> +static int usb_anchor_safe_empty(struct usb_anchor *anchor)
+> +{
+> +	unsigned long flags;
+> +	int ret;
+> +
+> +	spin_lock_irqsave(&anchor->lock, flags);
+> +	ret = atomic_read(&anchor->suspend_wakeups) == 0 &&
+> +		list_empty(&anchor->urb_list);
+> +	spin_unlock_irqrestore(&anchor->lock, flags);
+> +
+> +	return ret;
+> +}
+> +
+>  /* Callers must hold anchor->lock */
+>  static void __usb_unanchor_urb(struct urb *urb, struct usb_anchor *anchor)
+>  {
+> @@ -772,11 +785,12 @@ void usb_block_urb(struct urb *urb)
+>  EXPORT_SYMBOL_GPL(usb_block_urb);
+>  
+>  /**
+> - * usb_kill_anchored_urbs - cancel transfer requests en masse
+> + * usb_kill_anchored_urbs - kill all URBs associated with an anchor
+>   * @anchor: anchor the requests are bound to
+>   *
+> - * this allows all outstanding URBs to be killed starting
+> - * from the back of the queue
+> + * This kills all outstanding URBs starting from the back of the queue,
+> + * with guarantee that no completer callbacks will take place from the
+> + * anchor after this function returns.
+>   *
+>   * This routine should not be called by a driver after its disconnect
+>   * method has returned.
+> @@ -785,19 +799,21 @@ void usb_kill_anchored_urbs(struct usb_anchor *anchor)
+>  {
+>  	struct urb *victim;
+>  
+> -	spin_lock_irq(&anchor->lock);
+> -	while (!list_empty(&anchor->urb_list)) {
+> -		victim = list_entry(anchor->urb_list.prev, struct urb,
+> -				    anchor_list);
+> -		/* we must make sure the URB isn't freed before we kill it*/
+> -		usb_get_urb(victim);
+> -		spin_unlock_irq(&anchor->lock);
+> -		/* this will unanchor the URB */
+> -		usb_kill_urb(victim);
+> -		usb_put_urb(victim);
+> +	do {
+>  		spin_lock_irq(&anchor->lock);
 
-> The results of the various tests I performed are listed below.
->
-> Test results (all failures are due to DMA writes to address zero, all
-> hubs are USB 3.0/3.1 Gen1 only, and all disks are accessed via the
-> usb-storage driver):
-> - Reading simultaneously from two or more disks behind a hub connected
-> to one port on the host controller:
->   - FAIL after 20-50 GB of data transferred for each device.
-> - Reading simultaneously from two disks, each connected directly to
-> one port on the host controller:
->   - FAIL after about 800 GB of data transferred for each device.
-> - Reading from one disk behind a hub connected to one port on the host
-> controller:
->   - OK for at least 2.7 TB of data transferred (I didn't test the
-> whole 8 TB disk).
-> - Writing simultaneously to two FL2000 dongles (using osmo-fl2k's
-> "fl2k_test"), each connected directly to one port on the host
-> controller:
->   - OK, was able to write several dozen terabytes to each device over
-> the course of a little over 21 hours.
->
-> Seeing how simultaneous writes to multiple devices and reads from
-> single devices both seem to work fine, I assume that means this is
-> being caused by some race condition in the host controller firmware
-> when it responds to multiple read requests.
+All you have to do is move this spin_lock_irq() above the start of the 
+outer loop...
 
-Most likely. It's possible it's a platform specific race with DMA
-map/unmap too, but I think we would be seeing similar issues with
-other devices if it was.
+> -	}
+> -	spin_unlock_irq(&anchor->lock);
+> +		while (!list_empty(&anchor->urb_list)) {
+> +			victim = list_entry(anchor->urb_list.prev,
+> +					    struct urb, anchor_list);
+> +			/* make sure the URB isn't freed before we kill it */
+> +			usb_get_urb(victim);
+> +			spin_unlock_irq(&anchor->lock);
+> +			/* this will unanchor the URB */
+> +			usb_kill_urb(victim);
+> +			usb_put_urb(victim);
+> +			spin_lock_irq(&anchor->lock);
+> +		}
+> +		spin_unlock_irq(&anchor->lock);
 
-> I also assume we're not
-> going to be able to convince ASMedia to both fix the bug in their
-> firmware and release the details on how to flash it from Linux, so I
-> guess we'll just have to figure out how to make the driver talk to the
-> controller in a way that avoids triggering the bad DMA write. As
-> before, I decided to try a little kernel hacking of my own before
-> sending this email, and tried separately enabling the
-> XHCI_BROKEN_STREAMS and XHCI_ASMEDIA_MODIFY_FLOWCONTROL quirks in an
-> attempt to fix this. As you might expect since you're reading this
-> message, neither of those quirks fixed the issue, nor did they even
-> make the transfers last any longer before failing.
->
-> So now I've reached the limits of my understanding, and I need some
-> help devising a fix. If anyone has any comments to that effect, or any
-> questions about my hardware configuration, testing methodology, etc.,
-> please don't hesitate to air them. Also, if anyone needs me to perform
-> additional tests, or collect more log information, I'd be happy to do
-> that as well.
+... and move this spin_unlock_irq() below the end of the outer loop.
+Likewise for the two other routines.
 
-I started writing a tool a while ago to use the internal trace bus to
-log incoming TLPs. Something like that might allow you to get a better
-idea what the faulting access pattern is, but you would still need to
-find a way to mitigate the issue. I'm not all that familiar with USB3
-so I'm not much help on that front.
+> +	} while (unlikely(!usb_anchor_safe_empty(anchor)));
+
+likely() and unlikely() are frowned upon unless you can provide actual 
+measurements showing that they make a significant difference.  In this 
+case they don't matter, since the bottleneck is the usb_kill_urb() call.
+
+Alan Stern
