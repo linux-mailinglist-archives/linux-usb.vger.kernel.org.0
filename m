@@ -2,65 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBEDB23242C
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jul 2020 20:00:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E75823245B
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jul 2020 20:08:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727850AbgG2SAI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Jul 2020 14:00:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35892 "EHLO
+        id S1727085AbgG2SID (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Jul 2020 14:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728102AbgG2SAH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jul 2020 14:00:07 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B63C061794
-        for <linux-usb@vger.kernel.org>; Wed, 29 Jul 2020 11:00:07 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id t6so13095504ljk.9
-        for <linux-usb@vger.kernel.org>; Wed, 29 Jul 2020 11:00:07 -0700 (PDT)
+        with ESMTP id S1726533AbgG2SID (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jul 2020 14:08:03 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08912C061794;
+        Wed, 29 Jul 2020 11:08:03 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id t23so2534824ljc.3;
+        Wed, 29 Jul 2020 11:08:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=iMUjt1EbRHtnKcY3nbQgc+zcV96eLfRF8PiQIrzK55c=;
-        b=Wi+q2t/anPOIDdVj0oYKM1C8KfZ3uh4jlKhII1zTCixBhgRyvBUWhHamthiAkL6vzL
-         f6fobesV+6xZ0kR4g0fqeUVHXqP1f4FAhHkmV7qUMbQhne9YUXLs34zfWZbdyTt64Exg
-         v0Zb73XoVD/IrsT/0YTPpeaTJ/CrtGcZFNaOaVQGUXAGP9Y5AaVUsE1gMkjD9WvGjvH7
-         fD4m8gP7KKl4Fd5FCtpiA7q+m4PerFmgDcEocOJiCuHvL4aJVxQhZqnFKAV2PiMngUQi
-         SMsDXQAjXEPVlHMSKeU7gQHa3on6KRkoybSrsg1142KsWrEUZYwyx2MTynl9xT0EzdjX
-         6z0A==
+        bh=rP5EEJynL4vgrWif7lHCElf13y97LueeJ9XmjRFRzS0=;
+        b=EHIjsZuIB3TgAX8r22RZWI/8jR1FJnzWSlLGYPXpB+kD8YvVZV8aze0sZ/Mi0CfV/U
+         UAbiD9oRa9su9lvZI+vgs9vtebyHkewkpGA9V6w6V0viYqr8TkoPVw91aIqccFNNNsvq
+         eReEsCq6wV4/eNP0zks13qdCs0azKEuKAQL3kluP8SaJwaxjuz8XrheyxQnAbrbmBjGF
+         oq9mWeTJCWu8Z+0LhNmSfeXFD2E8sN+vChyvX6TQKQO9X3/PO9sFIojBK9yRpkWEqL4b
+         buQrjMJySHkHtstvBgAmwD8vjShSs03rdauPB0TXzTWCUnrwSLqgDzrsfDlXuvs9bnyU
+         9m6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=iMUjt1EbRHtnKcY3nbQgc+zcV96eLfRF8PiQIrzK55c=;
-        b=mbSafQ+ZrKJGlNCW5mfmV9aHwEXM8kFIkYt5bz1AhOZhok+ze42XO3A5Jc/OcQgiCv
-         RLcv7urJ5ikASRXSt5IYx5TBnHTdtCEXY5u5uCOOR+ecNZv5ezZH2CQ6MEdcnf2R/7Nw
-         fFyAJ7nMWsFhqPXSNbol1WlpZ+vnKwKToILDDDy8frIeYpphSvR4X3Rmi25Dh53c6yUU
-         FXpXN6MAzcs8cRnOvVO94JiMFoag7D18OEZvehe3+oxmCLi258mKGtM6cOoQVSADp8Qj
-         w4HJvmgU/4hANCNzLf20pyl8ttze1an7ceEZPibvGp9wlAesjaNeyrIScbyafTZ4qYTj
-         /Guw==
-X-Gm-Message-State: AOAM533gGiJXzorF/R6v0zsW1xmMuMhxBV9lYaHDor6IiLU7iDr/ySi+
-        tlrMzZuAe2H956nwgKDh2vCoRItM
-X-Google-Smtp-Source: ABdhPJyg0P88AsH/7rPcZcc1klrLotlGPgVj8l+SqdTLeQfVyFQ5sQZVy7KCxYHsBdMbUqV1fdbtLQ==
-X-Received: by 2002:a2e:8ed2:: with SMTP id e18mr2688862ljl.366.1596045605664;
-        Wed, 29 Jul 2020 11:00:05 -0700 (PDT)
+        bh=rP5EEJynL4vgrWif7lHCElf13y97LueeJ9XmjRFRzS0=;
+        b=ptNfz55lVYC4Eak+ksR7iyxC0mV4IZMmFxGqyHUFPD62eJ/UG8LQmqlJZ1YUCUUIFe
+         yEsFNPNfCXohr1wUH9l9roHB+6jq7xBmrDZJi0kLqLSuO8Yx/1I0sUby3ZHwG5ICWKeb
+         WeIId+8BZcco8feIydUkLgRveWtV2/MXmgq0K/+A7SggBpJVZuh4vz6z8QOMK6P1iqrq
+         vZ6jfXV1Wt9mT8qC0ZvPhmn7MgxuxYs6/Dty76c9MFujFDpWadm+4t/tzlUL4lubHOx6
+         ubddUIOltazWd1+sq1SopR9Oq7aONpTM46E0Ujn1hy778JaIrZYafR4k6ARRahD0iyl6
+         xcDQ==
+X-Gm-Message-State: AOAM533ZrRebqSrN3Xh4+bMuGEDNpxDyFBzUOyjFnPjFgid48Ns8/Acy
+        36sXFYmXD7s0YxoB6FnT5nvCINLEdd8=
+X-Google-Smtp-Source: ABdhPJxcfwFKEXxoYle9H02FAwEpkRJE3h4+zoXeAqWpIEyYOxLKpX2yOdVWUTis4U5IW3fPT30rgQ==
+X-Received: by 2002:a2e:9cc2:: with SMTP id g2mr13926210ljj.442.1596046081288;
+        Wed, 29 Jul 2020 11:08:01 -0700 (PDT)
 Received: from wasted.omprussia.ru ([2a00:1fa0:609:47e:1634:9053:a274:2373])
-        by smtp.gmail.com with ESMTPSA id x6sm604593lff.64.2020.07.29.11.00.04
+        by smtp.gmail.com with ESMTPSA id e14sm520837ljj.120.2020.07.29.11.08.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jul 2020 11:00:05 -0700 (PDT)
-Subject: Re: [PATCH] usb: ohci-nxp: add support for stotg04 phy
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Trevor Woerner <twoerner@gmail.com>
-Cc:     jamesg@zaltys.org, linux-usb@vger.kernel.org
-References: <20200729172829.GA3679@piout.net>
- <20200729174918.321615-1-alexandre.belloni@bootlin.com>
+        Wed, 29 Jul 2020 11:08:00 -0700 (PDT)
+Subject: Re: [PATCH v2 1/2] usb: xhci: define IDs for various ASMedia host
+ controllers
+To:     Forest Crossman <cyrozap@gmail.com>, linux-usb@vger.kernel.org
+Cc:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org
+References: <20200727090629.169701-1-cyrozap@gmail.com>
+ <20200728042408.180529-1-cyrozap@gmail.com>
+ <20200728042408.180529-2-cyrozap@gmail.com>
 From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <b5389371-3d47-f046-4d34-3d329276cb35@gmail.com>
-Date:   Wed, 29 Jul 2020 21:00:04 +0300
+Message-ID: <3dbfff9a-e64e-e11f-c032-2bbbb7359c97@gmail.com>
+Date:   Wed, 29 Jul 2020 21:08:00 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200729174918.321615-1-alexandre.belloni@bootlin.com>
+In-Reply-To: <20200728042408.180529-2-cyrozap@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -71,43 +73,42 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 Hello!
 
-On 7/29/20 8:49 PM, Alexandre Belloni wrote:
+On 7/28/20 7:24 AM, Forest Crossman wrote:
 
-> The STOTG04 phy is used as a drop-in replacement of the ISP1301 but some
-> bits doesn't have exactly the same meaning and this can lead to issues.
-> Detect the phy dynamically and avoid writing to reserved bits.
+> Not all ASMedia host controllers have a device ID that matches its part
+> number. #define some of these IDs to make it clearer at a glance which
+> chips require what quirks.
 > 
-> Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Signed-off-by: Forest Crossman <cyrozap@gmail.com>
 > ---
+>  drivers/usb/host/xhci-pci.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
 > 
-> Hi Trevor, this is totally untested but at least it builds ;)
-> 
->  drivers/usb/host/ohci-nxp.c | 21 +++++++++++++++------
->  1 file changed, 15 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/host/ohci-nxp.c b/drivers/usb/host/ohci-nxp.c
-> index 85878e8ad331..36ab1501c28f 100644
-> --- a/drivers/usb/host/ohci-nxp.c
-> +++ b/drivers/usb/host/ohci-nxp.c
-> @@ -55,6 +55,15 @@ static struct clk *usb_host_clk;
->  
->  static void isp1301_configure_lpc32xx(void)
->  {
-> +	u8 value, atx_is_stotg = 0;
-
-   Why the flag is not *bool*?
-
-> +	s32 vendor, product;
-> +
-> +	vendor = i2c_smbus_read_word_data(isp1301_i2c_client, 0x00);
-> +	product = i2c_smbus_read_word_data(isp1301_i2c_client, 0x02);
-> +
-> +	if (vendor == 0x0483 && product == 0xa0c4)
-> +		atx_is_stotg = 1;
-> +
->  	/* LPC32XX only supports DAT_SE0 USB mode */
->  	/* This sequence is important */
->  
+> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+> index 9234c82e70e4..baa5af88ca67 100644
+> --- a/drivers/usb/host/xhci-pci.c
+> +++ b/drivers/usb/host/xhci-pci.c
 [...]
+> @@ -260,13 +262,13 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+>  		xhci->quirks |= XHCI_LPM_SUPPORT;
+>  
+>  	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
+> -			pdev->device == 0x1042)
+> +		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042_XHCI)
+
+   You shouldn't have un-indented it, blends with the branch below.
+   The 80-column line length limit is history now. :-)
+
+>  		xhci->quirks |= XHCI_BROKEN_STREAMS;
+>  	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
+> -			pdev->device == 0x1142)
+> +		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042A_XHCI)
+>  		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
+>  	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
+> -			pdev->device == 0x2142)
+> +		pdev->device == PCI_DEVICE_ID_ASMEDIA_2142_XHCI)
+>  		xhci->quirks |= XHCI_NO_64BIT_SUPPORT;
+>  
+>  	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
 
 MBR, Sergei
