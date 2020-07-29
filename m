@@ -2,76 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AE1523211B
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jul 2020 16:57:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DABB2232139
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jul 2020 17:09:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726891AbgG2O5v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Jul 2020 10:57:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36802 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726353AbgG2O5v (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 29 Jul 2020 10:57:51 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C6FEA20829;
-        Wed, 29 Jul 2020 14:57:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596034671;
-        bh=PetF+YxL9uyJxluGUGwLtyh7dr4mJSsSpbz6SvwkKtY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=t4pcc1G8ggkv5bkZYS2j0kZxY4h9eKsaxlx8wSdyt8hQSx6FxQYNIykr4lrC0/vkE
-         axbLful3b+kMIl7XHK5y512+mTydNyfoQh0ULYlCQxUhM35lGC85f0Xp78xNGagU03
-         hbHLFzGeMZcI0nBfQE/3XIGEbYs2WnN67uCRlXOI=
-Date:   Wed, 29 Jul 2020 16:57:41 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Christian.Gromm@microchip.com
-Cc:     driverdev-devel@linuxdriverproject.org, linux-usb@vger.kernel.org
-Subject: Re: [RESEND PATCH v5] drivers: most: add USB adapter driver
-Message-ID: <20200729145741.GA3501473@kroah.com>
-References: <1595838646-12674-1-git-send-email-christian.gromm@microchip.com>
- <20200729142715.GA3343116@kroah.com>
- <799deccc9cd874a2f36bbe93f9b880eea018197f.camel@microchip.com>
+        id S1726509AbgG2PJN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Jul 2020 11:09:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37830 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726385AbgG2PJN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jul 2020 11:09:13 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12224C061794
+        for <linux-usb@vger.kernel.org>; Wed, 29 Jul 2020 08:09:13 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id i26so14351336edv.4
+        for <linux-usb@vger.kernel.org>; Wed, 29 Jul 2020 08:09:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:date:from:user-agent:mime-version:to:cc:subject
+         :references:in-reply-to:content-transfer-encoding;
+        bh=gj6I2p18tYY70gbDHNsHUMANZp75I7KTs3mlTZiws9g=;
+        b=bX9TSGefdNAEqiXcACdt8NEdF3m4ytA171KCCIYgr2Mumgljm7QRX8cVN59kPooP/3
+         6YTa/sdZWXvlfawtKijZgUrSnRMReFtIvxv90EpcafHULCFEjfIOA6Es0U14GbdM8mIK
+         dMy6LtR00ULCDOqHz5zqGG+jYuoU6JUZ989sH6xSdgo14Fno14P615i3Njikid4fVsWw
+         WabGQSRgVRfAc8WvFVb6Z93YeSm4WR9FWlxM3xl5qPLE/OxZ4s1L+PM9SOmJuzSmgcqt
+         53pDkEdwR4/2H8itSzR/I0NIhxLpru1STtLb91cdNgiXJyBDbm/uDuQLX9W13PJKossH
+         s1XA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:from:user-agent:mime-version:to
+         :cc:subject:references:in-reply-to:content-transfer-encoding;
+        bh=gj6I2p18tYY70gbDHNsHUMANZp75I7KTs3mlTZiws9g=;
+        b=eUOBfJDjtwptepLdGP4rbbNclCVxcUHbwJWuUtFw4LnlrQOVV65hT9FWuxlbED4Oms
+         WXZq9V2vg2BXr0dtp8NU/1GCxD+RIHNM+GBVd/oKeA+sFLrbctSvtI9t62wl22RhFwhX
+         VdLZxR48NXnIMhNEOz5TVP6bPnd5qZmnl1pHVAkwTLnqPbdVNokDUBPqDQ+af3lXzQhQ
+         uVGSQCwC/q+J7PujZNecrG3x7eh8+zJvp9Q/Zjy8puLRGCr9s0uymXGPqWIs+repGyyo
+         VKVKsqViabVMn2nAM6069LxaOIZ9XoZwHM4bVw6aoXLP9w3RKHwfMAoriAhziGgHWmaF
+         Jy5g==
+X-Gm-Message-State: AOAM533P2Udh9dRqhcB3dHF0HGTndqSc9bYs0Z3TIx7ttpsPkdm53gTa
+        sTF8DtIZ7oVjlKFl0KgBAeY=
+X-Google-Smtp-Source: ABdhPJwXMT4/SDMJsvBf5AvnJmyX/kyhNUAoFjBPL2cqKVYmSUesXLtfowCNu5UE0AH/skuv+kyJAg==
+X-Received: by 2002:aa7:ca05:: with SMTP id y5mr32082639eds.204.1596035351766;
+        Wed, 29 Jul 2020 08:09:11 -0700 (PDT)
+Received: from [109.186.98.97] (109-186-98-97.bb.netvision.net.il. [109.186.98.97])
+        by smtp.gmail.com with ESMTPSA id s4sm1815287ejx.94.2020.07.29.08.09.10
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Wed, 29 Jul 2020 08:09:11 -0700 (PDT)
+Message-ID: <5F2190F6.5020901@gmail.com>
+Date:   Wed, 29 Jul 2020 18:08:38 +0300
+From:   Eli Billauer <eli.billauer@gmail.com>
+User-Agent: Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.12) Gecko/20100907 Fedora/3.0.7-1.fc12 Thunderbird/3.0.7
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <799deccc9cd874a2f36bbe93f9b880eea018197f.camel@microchip.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        hdegoede@redhat.com, oneukum@suse.de
+Subject: Re: [PATCH v2] usb: core: Solve race condition in anchor cleanup
+ functions
+References: <20200729103139.49229-1-eli.billauer@gmail.com> <20200729133846.GA1530967@rowland.harvard.edu>
+In-Reply-To: <20200729133846.GA1530967@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 29, 2020 at 02:53:29PM +0000, Christian.Gromm@microchip.com wrote:
-> On Wed, 2020-07-29 at 16:27 +0200, Greg KH wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you
-> > know the content is safe
-> > 
-> > On Mon, Jul 27, 2020 at 10:30:46AM +0200, Christian Gromm wrote:
-> > > This patch adds the usb driver source file most_usb.c and
-> > > modifies the Makefile and Kconfig accordingly.
-> > > 
-> > > Signed-off-by: Christian Gromm <christian.gromm@microchip.com>
-> > 
-> > Sorry for the long delay in getting to this.
-> > 
-> > This looks good to me, but I tried to apply it to my usb tree, and of
-> > course I get the following build error:
-> >         error: the following would cause module name conflict:
-> >           drivers/staging/most/usb/most_usb.ko
-> >           drivers/most/most_usb.ko
-> > 
-> > So, can you just send a "rename the file" patch that I can apply
-> > against
-> > my staging-next branch and I will take it through there so that there
-> > are no conflicts like this?
-> 
-> Are you talking about (1) a patch that just renames the most_usb.ko
-> file located at drivers/staging/most/usb/ or (2) a patch for the
-> Makefile in the staging tree, so the Kbuild system creates a new
-> kernel object in this branch with a different name?
+On 29/07/20 16:38, Alan Stern wrote:
+> With a small amount of restructuring you can eliminate three unlock-lock
+> pairs and avoid the need for usb_anchor_safe_empty():
+> [ ... ]
+> All you have to do is move this spin_lock_irq() above the start of the
+> outer loop...
+> [ ... ]
+> .. and move this spin_unlock_irq() below the end of the outer loop.
+> Likewise for the two other routines.
+>
+>    
+I'm afraid that might not work. The whole purpose of the outer loop is 
+to kick in when urb_list is empty, but there's this unanchor-completer 
+race going on. So the inner loop will be skipped, because 
+list_empty(&anchor->urb_list) will evaluate true. As a result, the 
+spinlock will be held as the loop spins, until the completer has finished.
 
-(1) is easiest, do it all at once :)
+But if the completer tries to take the same lock, we're deadlocked. For 
+example, if it resubmits the URB, which is pretty much the point of this 
+extra while loop.
 
-thanks,
+This is also the reason why I didn't just modify the original 
+while-loop's condition, so it would go on spinning as long the race 
+condition is in effect. It mustn't spin with the lock held.
+>> >  +	} while (unlikely(!usb_anchor_safe_empty(anchor)));
+>>      
+> likely() and unlikely() are frowned upon unless you can provide actual
+> measurements showing that they make a significant difference.  In this
+> case they don't matter, since the bottleneck is the usb_kill_urb() call.
+>    
+The irony is that I added this "unlikely" for the human reader, and not 
+for the compiler: I wanted to communicate that the outer loop is 
+unlikely to kick in. I'll keep that in mind for v3 of this patch.
 
-greg k-h
+Thanks,
+    Eli
+
