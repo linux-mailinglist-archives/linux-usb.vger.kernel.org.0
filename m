@@ -2,104 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DABB2232139
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jul 2020 17:09:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A80232356
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jul 2020 19:28:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726509AbgG2PJN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Jul 2020 11:09:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37830 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726385AbgG2PJN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jul 2020 11:09:13 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12224C061794
-        for <linux-usb@vger.kernel.org>; Wed, 29 Jul 2020 08:09:13 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id i26so14351336edv.4
-        for <linux-usb@vger.kernel.org>; Wed, 29 Jul 2020 08:09:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:date:from:user-agent:mime-version:to:cc:subject
-         :references:in-reply-to:content-transfer-encoding;
-        bh=gj6I2p18tYY70gbDHNsHUMANZp75I7KTs3mlTZiws9g=;
-        b=bX9TSGefdNAEqiXcACdt8NEdF3m4ytA171KCCIYgr2Mumgljm7QRX8cVN59kPooP/3
-         6YTa/sdZWXvlfawtKijZgUrSnRMReFtIvxv90EpcafHULCFEjfIOA6Es0U14GbdM8mIK
-         dMy6LtR00ULCDOqHz5zqGG+jYuoU6JUZ989sH6xSdgo14Fno14P615i3Njikid4fVsWw
-         WabGQSRgVRfAc8WvFVb6Z93YeSm4WR9FWlxM3xl5qPLE/OxZ4s1L+PM9SOmJuzSmgcqt
-         53pDkEdwR4/2H8itSzR/I0NIhxLpru1STtLb91cdNgiXJyBDbm/uDuQLX9W13PJKossH
-         s1XA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:from:user-agent:mime-version:to
-         :cc:subject:references:in-reply-to:content-transfer-encoding;
-        bh=gj6I2p18tYY70gbDHNsHUMANZp75I7KTs3mlTZiws9g=;
-        b=eUOBfJDjtwptepLdGP4rbbNclCVxcUHbwJWuUtFw4LnlrQOVV65hT9FWuxlbED4Oms
-         WXZq9V2vg2BXr0dtp8NU/1GCxD+RIHNM+GBVd/oKeA+sFLrbctSvtI9t62wl22RhFwhX
-         VdLZxR48NXnIMhNEOz5TVP6bPnd5qZmnl1pHVAkwTLnqPbdVNokDUBPqDQ+af3lXzQhQ
-         uVGSQCwC/q+J7PujZNecrG3x7eh8+zJvp9Q/Zjy8puLRGCr9s0uymXGPqWIs+repGyyo
-         VKVKsqViabVMn2nAM6069LxaOIZ9XoZwHM4bVw6aoXLP9w3RKHwfMAoriAhziGgHWmaF
-         Jy5g==
-X-Gm-Message-State: AOAM533P2Udh9dRqhcB3dHF0HGTndqSc9bYs0Z3TIx7ttpsPkdm53gTa
-        sTF8DtIZ7oVjlKFl0KgBAeY=
-X-Google-Smtp-Source: ABdhPJwXMT4/SDMJsvBf5AvnJmyX/kyhNUAoFjBPL2cqKVYmSUesXLtfowCNu5UE0AH/skuv+kyJAg==
-X-Received: by 2002:aa7:ca05:: with SMTP id y5mr32082639eds.204.1596035351766;
-        Wed, 29 Jul 2020 08:09:11 -0700 (PDT)
-Received: from [109.186.98.97] (109-186-98-97.bb.netvision.net.il. [109.186.98.97])
-        by smtp.gmail.com with ESMTPSA id s4sm1815287ejx.94.2020.07.29.08.09.10
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Wed, 29 Jul 2020 08:09:11 -0700 (PDT)
-Message-ID: <5F2190F6.5020901@gmail.com>
-Date:   Wed, 29 Jul 2020 18:08:38 +0300
-From:   Eli Billauer <eli.billauer@gmail.com>
-User-Agent: Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.12) Gecko/20100907 Fedora/3.0.7-1.fc12 Thunderbird/3.0.7
+        id S1726476AbgG2R2b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Jul 2020 13:28:31 -0400
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:51575 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726449AbgG2R2b (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jul 2020 13:28:31 -0400
+X-Originating-IP: 90.66.108.79
+Received: from localhost (lfbn-lyo-1-1932-79.w90-66.abo.wanadoo.fr [90.66.108.79])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 4A5CC1BF20A;
+        Wed, 29 Jul 2020 17:28:29 +0000 (UTC)
+Date:   Wed, 29 Jul 2020 19:28:29 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Trevor Woerner <twoerner@gmail.com>
+Cc:     jamesg@zaltys.org, linux-usb@vger.kernel.org
+Subject: Re: lpc32xx and stotg04
+Message-ID: <20200729172829.GA3679@piout.net>
+References: <20200723212743.GA11107@linux-uys3>
 MIME-Version: 1.0
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        hdegoede@redhat.com, oneukum@suse.de
-Subject: Re: [PATCH v2] usb: core: Solve race condition in anchor cleanup
- functions
-References: <20200729103139.49229-1-eli.billauer@gmail.com> <20200729133846.GA1530967@rowland.harvard.edu>
-In-Reply-To: <20200729133846.GA1530967@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200723212743.GA11107@linux-uys3>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 29/07/20 16:38, Alan Stern wrote:
-> With a small amount of restructuring you can eliminate three unlock-lock
-> pairs and avoid the need for usb_anchor_safe_empty():
-> [ ... ]
-> All you have to do is move this spin_lock_irq() above the start of the
-> outer loop...
-> [ ... ]
-> .. and move this spin_unlock_irq() below the end of the outer loop.
-> Likewise for the two other routines.
->
->    
-I'm afraid that might not work. The whole purpose of the outer loop is 
-to kick in when urb_list is empty, but there's this unanchor-completer 
-race going on. So the inner loop will be skipped, because 
-list_empty(&anchor->urb_list) will evaluate true. As a result, the 
-spinlock will be held as the loop spins, until the completer has finished.
+Hi,
 
-But if the completer tries to take the same lock, we're deadlocked. For 
-example, if it resubmits the URB, which is pretty much the point of this 
-extra while loop.
+On 23/07/2020 17:27:43-0400, Trevor Woerner wrote:
+> I too am working with a board that uses the lpc32xx SoC (the lpc3240, to be
+> specific) and has a stotg04 for the USB transceiver instead of the isp1301.
+> 
+> I can't get the USB to work.
+> 
+> My guess is that I don't have the device tree correct.
+> 
+> I could embarrass myself by showing you what combinations I've tried but I
+> thought maybe I'd ask and see if either of you could provide a DT snippet
+> describing how to hook up the stotg04 to the i2cusb. Admittedly I'm quite
+> fuzzy when it comes to device trees.
+> 
 
-This is also the reason why I didn't just modify the original 
-while-loop's condition, so it would go on spinning as long the race 
-condition is in effect. It mustn't spin with the lock held.
->> >  +	} while (unlikely(!usb_anchor_safe_empty(anchor)));
->>      
-> likely() and unlikely() are frowned upon unless you can provide actual
-> measurements showing that they make a significant difference.  In this
-> case they don't matter, since the bottleneck is the usb_kill_urb() call.
->    
-The irony is that I added this "unlikely" for the human reader, and not 
-for the compiler: I wanted to communicate that the outer loop is 
-unlikely to kick in. I'll keep that in mind for v3 of this patch.
+This is what I had that is relevant:
 
-Thanks,
-    Eli
+&i2cusb {
+	clock-frequency = <100000>;
 
+	isp1301: usb-transceiver@2d {
+		compatible = "nxp,isp1301";
+		reg = <0x2d>;
+	};
+};
+
+/* Here, choose exactly one from: ohci, usbd */
+&usbd {
+// &ohci {
+	transceiver = <&isp1301>;
+	status = "okay";
+};
+
+> I'm also a bit fuzzy on USB. I want to plug usb sticks into my device (which,
+> by my understanding, is the opposite of OTG). So additionally I want to enable
+> ohci and not usbd?
+> 
+
+Indeed, you want ohci (as you can see this is commented out in my device
+tree)
+
+> In one DT incantation (the one showing the most promise so far) on startup
+> 'lsusb' shows two usb devices. The moment I plug a USB drive into my device I
+> get:
+> 
+> 	[  433.268009] usb-ohci 31020000.ohci: controller won't resume
+> 	[  433.273603] usb-ohci 31020000.ohci: HC died; cleaning up
+> 	[  433.280566] usb 1-1: USB disconnect, device number 2
+> 
+> And afterwards only one device is listed by 'lsusb'.
+> 
+> Currently I'm using a 5.0 kernel and a 5.4 kernel, but I could use any kernel
+> (upstream, ideally). In either case, it doesn't seem possible to deselect the
+> isp1301 from the kernel config? It gets selected automatically. If I'm using
+> the stotg04 instead of the isp1301, do I need a way to turn off the isp1301?
+> 
+
+The platform I was working on is on v5.1 and has an stotg04. Honnestly,
+the whole thing is a mess and you have to use the isp1301 driver. Then
+the difference between isp1301 and stotg04 is handled in lpc32xx_udc.c.
+
+So I would say you are missing something similar to what I did in
+2a60f5eafa74 ("usb: gadget: udc: lpc32xx: add support for stotg04 phy")
+but in drivers/usb/host/ohci-nxp.c:isp1301_configure_lpc32xx()
+
+I guess your issue is MC2_SPD_SUSP_CTRL line 75 ;) You can try to
+remove it.
+
+Regards,
+
+-- 
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
