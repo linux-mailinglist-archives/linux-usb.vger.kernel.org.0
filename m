@@ -2,113 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E75823245B
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jul 2020 20:08:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B3BB232615
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jul 2020 22:22:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727085AbgG2SID (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Jul 2020 14:08:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37110 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726533AbgG2SID (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jul 2020 14:08:03 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08912C061794;
-        Wed, 29 Jul 2020 11:08:03 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id t23so2534824ljc.3;
-        Wed, 29 Jul 2020 11:08:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=rP5EEJynL4vgrWif7lHCElf13y97LueeJ9XmjRFRzS0=;
-        b=EHIjsZuIB3TgAX8r22RZWI/8jR1FJnzWSlLGYPXpB+kD8YvVZV8aze0sZ/Mi0CfV/U
-         UAbiD9oRa9su9lvZI+vgs9vtebyHkewkpGA9V6w6V0viYqr8TkoPVw91aIqccFNNNsvq
-         eReEsCq6wV4/eNP0zks13qdCs0azKEuKAQL3kluP8SaJwaxjuz8XrheyxQnAbrbmBjGF
-         oq9mWeTJCWu8Z+0LhNmSfeXFD2E8sN+vChyvX6TQKQO9X3/PO9sFIojBK9yRpkWEqL4b
-         buQrjMJySHkHtstvBgAmwD8vjShSs03rdauPB0TXzTWCUnrwSLqgDzrsfDlXuvs9bnyU
-         9m6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=rP5EEJynL4vgrWif7lHCElf13y97LueeJ9XmjRFRzS0=;
-        b=ptNfz55lVYC4Eak+ksR7iyxC0mV4IZMmFxGqyHUFPD62eJ/UG8LQmqlJZ1YUCUUIFe
-         yEsFNPNfCXohr1wUH9l9roHB+6jq7xBmrDZJi0kLqLSuO8Yx/1I0sUby3ZHwG5ICWKeb
-         WeIId+8BZcco8feIydUkLgRveWtV2/MXmgq0K/+A7SggBpJVZuh4vz6z8QOMK6P1iqrq
-         vZ6jfXV1Wt9mT8qC0ZvPhmn7MgxuxYs6/Dty76c9MFujFDpWadm+4t/tzlUL4lubHOx6
-         ubddUIOltazWd1+sq1SopR9Oq7aONpTM46E0Ujn1hy778JaIrZYafR4k6ARRahD0iyl6
-         xcDQ==
-X-Gm-Message-State: AOAM533ZrRebqSrN3Xh4+bMuGEDNpxDyFBzUOyjFnPjFgid48Ns8/Acy
-        36sXFYmXD7s0YxoB6FnT5nvCINLEdd8=
-X-Google-Smtp-Source: ABdhPJxcfwFKEXxoYle9H02FAwEpkRJE3h4+zoXeAqWpIEyYOxLKpX2yOdVWUTis4U5IW3fPT30rgQ==
-X-Received: by 2002:a2e:9cc2:: with SMTP id g2mr13926210ljj.442.1596046081288;
-        Wed, 29 Jul 2020 11:08:01 -0700 (PDT)
-Received: from wasted.omprussia.ru ([2a00:1fa0:609:47e:1634:9053:a274:2373])
-        by smtp.gmail.com with ESMTPSA id e14sm520837ljj.120.2020.07.29.11.08.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jul 2020 11:08:00 -0700 (PDT)
-Subject: Re: [PATCH v2 1/2] usb: xhci: define IDs for various ASMedia host
- controllers
-To:     Forest Crossman <cyrozap@gmail.com>, linux-usb@vger.kernel.org
-Cc:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org
-References: <20200727090629.169701-1-cyrozap@gmail.com>
- <20200728042408.180529-1-cyrozap@gmail.com>
- <20200728042408.180529-2-cyrozap@gmail.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <3dbfff9a-e64e-e11f-c032-2bbbb7359c97@gmail.com>
-Date:   Wed, 29 Jul 2020 21:08:00 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726496AbgG2UWE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Jul 2020 16:22:04 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:40379 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726365AbgG2UWD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jul 2020 16:22:03 -0400
+Received: (qmail 1584985 invoked by uid 1000); 29 Jul 2020 16:22:02 -0400
+Date:   Wed, 29 Jul 2020 16:22:02 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Felipe Balbi <felipe.balbi@linux.intel.com>
+Cc:     Roger Quadros <rogerq@ti.com>, Peter Chen <peter.chen@nxp.com>,
+        Anton Vasilyev <vasilyev@ispras.ru>,
+        Evgeny Novikov <novikov@ispras.ru>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        USB mailing list <linux-usb@vger.kernel.org>
+Subject: [PATCH RFC 0/4] USB: UDC: Fix memory leaks by expanding the API
+Message-ID: <20200729202202.GA1584059@rowland.harvard.edu>
 MIME-Version: 1.0
-In-Reply-To: <20200728042408.180529-2-cyrozap@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
+This series fixes some long-standing memory leaks in the net2280 and 
+net2272 drivers.  Along the way it expands the UDC/gadget API and 
+addresses a stale pointer issue.
 
-On 7/28/20 7:24 AM, Forest Crossman wrote:
+The real problem in net2280 and net2272 is that they need to do a bunch 
+of cleanup operations using their private data structure after the 
+gadget has been unregistered but before it is deallocated.  The current 
+API does not offer any way to do this, nor any way to perform setup 
+operations after the gadget is initialized but before it is registered.
 
-> Not all ASMedia host controllers have a device ID that matches its part
-> number. #define some of these IDs to make it clearer at a glance which
-> chips require what quirks.
-> 
-> Signed-off-by: Forest Crossman <cyrozap@gmail.com>
-> ---
->  drivers/usb/host/xhci-pci.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> index 9234c82e70e4..baa5af88ca67 100644
-> --- a/drivers/usb/host/xhci-pci.c
-> +++ b/drivers/usb/host/xhci-pci.c
-[...]
-> @@ -260,13 +262,13 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
->  		xhci->quirks |= XHCI_LPM_SUPPORT;
->  
->  	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
-> -			pdev->device == 0x1042)
-> +		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042_XHCI)
+Patch 2/4 fixes this by enlarging the API.  Using this new 
+functionality, fixing the issues in the two UDC drivers is easy.
 
-   You shouldn't have un-indented it, blends with the branch below.
-   The 80-column line length limit is history now. :-)
+The stale pointer issue (patch 1/4) is related to the matter of 
+re-registering a gadget multiple times, which is the subject of a 
+separate email thread.
 
->  		xhci->quirks |= XHCI_BROKEN_STREAMS;
->  	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
-> -			pdev->device == 0x1142)
-> +		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042A_XHCI)
->  		xhci->quirks |= XHCI_TRUST_TX_LENGTH;
->  	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
-> -			pdev->device == 0x2142)
-> +		pdev->device == PCI_DEVICE_ID_ASMEDIA_2142_XHCI)
->  		xhci->quirks |= XHCI_NO_64BIT_SUPPORT;
->  
->  	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
-
-MBR, Sergei
+Alan Stern
