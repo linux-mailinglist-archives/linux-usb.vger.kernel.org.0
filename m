@@ -2,90 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3794F232C01
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Jul 2020 08:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1D68232C04
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Jul 2020 08:44:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728791AbgG3GnO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Jul 2020 02:43:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40780 "EHLO mail.kernel.org"
+        id S1726820AbgG3GoH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Jul 2020 02:44:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40942 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725892AbgG3GnO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 30 Jul 2020 02:43:14 -0400
+        id S1725892AbgG3GoH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 30 Jul 2020 02:44:07 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B0269206D7;
-        Thu, 30 Jul 2020 06:43:13 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E3918206D7;
+        Thu, 30 Jul 2020 06:44:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596091394;
-        bh=fx5s0QFgHVKC4dKTHjz74JWUCKz1djkpMY/M/ccaWUY=;
+        s=default; t=1596091446;
+        bh=MVEIO7FfojzQztFXL9hSu5cyY0RA3fORSt6UPu4rm/E=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WFiUGCqR2ZrpLErcJ/wu/Trf0zP+S+Eja0b2b3QjiOkKAFmGi8Zv+e/jBzaM4Mq9D
-         BcV9oAAy629jZ1o+dJoE9hboOYWNDdhcolpRZcsTJtnkDF6n0duM3q2LBgupmB3M5Q
-         nj2ZAX4TvXn7QkP/F9OtK65iSgnGB+mLKi/aMJf8=
-Date:   Thu, 30 Jul 2020 08:43:03 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Trevor Woerner <twoerner@gmail.com>, jamesg@zaltys.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: ohci-nxp: add support for stotg04 phy
-Message-ID: <20200730064303.GA3909742@kroah.com>
-References: <20200729172829.GA3679@piout.net>
- <20200729174918.321615-1-alexandre.belloni@bootlin.com>
- <b5389371-3d47-f046-4d34-3d329276cb35@gmail.com>
+        b=A1FiKYPaH2+h9zer3nVVTKIHkZyRLDJ55pAj6CjKudvNPdyLel5Bga4zkaFViIkaD
+         tYYTFcNOoljvUQlJxHVm1X0htfpq+0F2sYd4y2wQuzzEZ7NmX78+j0PY7thuwNc5Yv
+         LLSCs2cm9lxqKt0VhIjQzYkCNLfqLoKhgpZuVuXE=
+Date:   Thu, 30 Jul 2020 08:43:56 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] usb: typec: tcpm: Migrate workqueue to RT priority
+ for processing events
+Message-ID: <20200730064356.GA3910237@kroah.com>
+References: <20200730022457.3021112-1-badhri@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <b5389371-3d47-f046-4d34-3d329276cb35@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200730022457.3021112-1-badhri@google.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 29, 2020 at 09:00:04PM +0300, Sergei Shtylyov wrote:
-> Hello!
+On Wed, Jul 29, 2020 at 07:24:57PM -0700, Badhri Jagan Sridharan wrote:
+> "tReceiverResponse 15 ms Section 6.6.2
+> The receiver of a Message requiring a response Shall respond
+> within tReceiverResponse in order to ensure that the
+> sender’s SenderResponseTimer does not expire."
 > 
-> On 7/29/20 8:49 PM, Alexandre Belloni wrote:
+> When the cpu complex is busy running other lower priority
+> work items, TCPM's work queue sometimes does not get scheduled
+> on time to meet the above requirement from the spec.
+> Moving to kthread_work apis to run with real time priority.
+> Just lower than the default threaded irq priority,
+> MAX_USER_RT_PRIO/2 + 1. (Higher number implies lower priority).
 > 
-> > The STOTG04 phy is used as a drop-in replacement of the ISP1301 but some
-> > bits doesn't have exactly the same meaning and this can lead to issues.
-> > Detect the phy dynamically and avoid writing to reserved bits.
-> > 
-> > Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> > ---
-> > 
-> > Hi Trevor, this is totally untested but at least it builds ;)
-> > 
-> >  drivers/usb/host/ohci-nxp.c | 21 +++++++++++++++------
-> >  1 file changed, 15 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/drivers/usb/host/ohci-nxp.c b/drivers/usb/host/ohci-nxp.c
-> > index 85878e8ad331..36ab1501c28f 100644
-> > --- a/drivers/usb/host/ohci-nxp.c
-> > +++ b/drivers/usb/host/ohci-nxp.c
-> > @@ -55,6 +55,15 @@ static struct clk *usb_host_clk;
-> >  
-> >  static void isp1301_configure_lpc32xx(void)
-> >  {
-> > +	u8 value, atx_is_stotg = 0;
+> Further, as observed in 1ff688209e2e, moving to hrtimers to
+> overcome scheduling latency while scheduling the delayed work.
 > 
->    Why the flag is not *bool*?
-
-That's not an issue so much as:
-
+> TCPM has three work streams:
+> 1. tcpm_state_machine
+> 2. vdm_state_machine
+> 3. event_work
 > 
-> > +	s32 vendor, product;
-> > +
-> > +	vendor = i2c_smbus_read_word_data(isp1301_i2c_client, 0x00);
-> > +	product = i2c_smbus_read_word_data(isp1301_i2c_client, 0x02);
+> tcpm_state_machine and vdm_state_machine both schedule work in
+> future i.e. delayed. Hence each of them have a corresponding
+> hrtimer, tcpm_state_machine_timer & vdm_state_machine_timer.
+> 
+> When work is queued right away kthread_queue_work is used.
+> Else, the relevant timer is programmed and made to queue
+> the kthread_work upon timer expiry.
+> 
+> kthread_create_worker only creates one kthread worker thread,
+> hence single threadedness of workqueue is retained.
+> 
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> ---
+> Changes since v1:(Guenter's suggestions)
+> - Remove redundant call to hrtimer_cancel while calling
+>   hrtimer_start.
+> 
+> Changes since v2:(Greg KH's suggestions)
+> - Rebase usb-next TOT.
+>   633198cd2945b7 (HEAD -> usb-next-1) usb: typec: tcpm: Migrate workqueue to RT priority for processing events
+>   fa56dd9152ef95 (origin/usb-next) Merge tag 'usb-serial-5.9-rc1' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-next
+>   25252919a1050e xhci: dbgtty: Make some functions static
+>   b0e02550346e67 xhci: dbc: Make function xhci_dbc_ring_alloc() static
+>   ca6377900974c3 Revert "usb: dwc2: override PHY input signals with usb role switch support"
+>   09df709cb5aeb2 Revert "usb: dwc2: don't use ID/Vbus detection if usb-role-switch on STM32MP15 SoCs"
+>   17a82716587e9d USB: iowarrior: fix up report size handling for some devices
+>   e98ba8cc3f8a89 Merge tag 'usb-for-v5.9' of git://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb into usb-next
+>   c97793089b11f7 Merge 5.8-rc7 into usb-next
+>   92ed301919932f (tag: v5.8-rc7, origin/usb-linus, origin/main) Linux 5.8-rc7
+> 
 
-Why are these signed 32bit numbers?  Shouldn't they be unsigned?
-
-> > +
-> > +	if (vendor == 0x0483 && product == 0xa0c4)
-
-No endian flips anywhere?
+Hm, still does not apply.  I think it has something to do with other
+patches that landed before yours, can you rebase again?
 
 thanks,
 
