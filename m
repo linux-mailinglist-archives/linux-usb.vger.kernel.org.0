@@ -2,142 +2,239 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 348FE232C9F
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Jul 2020 09:32:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61667232DEC
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Jul 2020 10:16:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728697AbgG3HcD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Jul 2020 03:32:03 -0400
-Received: from mail-am6eur05on2085.outbound.protection.outlook.com ([40.107.22.85]:49696
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725892AbgG3HcC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 30 Jul 2020 03:32:02 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dqVCJpPzngLEBdY4olMzf5WiDNTct9aYMYXYgQKBA4CJS9glLTmINxtISl+loq0oq0XV7ghtGCmObFKhLO6weAPzyMqF+5Vj81y6Dp8Sg5FgPnJGRMuLbrHJ6E7KOuVxXjih46Eyg0wQihXjbXGam8iMzGXEgvFaISKBTWis7mQOtrPyXOc6dZR8h6j5nViwhw11mHXK3uKyqGkcoAc4837P13uVZoVUM1li7wxcmKfogOAA1DtjtixtNpA29wh0BpQzEEPeGOYAnSblojWDWt9BQOJdktIE4+4ms1PzKzxlFWBLKqPDjFsmO5MIvfAhNTm6nnmOAxR+95kB0DJPNg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pVHz3jQTF2JzNNPxf01jAN6qKWxCk6vbzFCyXNodKQ4=;
- b=P5RWv04h0VAXkLgiG66m1c+epYFjf/XisVflSdLeBhSDUdUWm6808fMRYHPw3zapVS8GkJQVoOTLWWnD6sYh9gaHYtzqVgeUnod2OJpSijz+KoblcaWKR0UdCddTSozlARetWrEd5PWFD7PdPbpbIqHQrpvYyvp2wyxpWGYWqpyOs6SZ21AlWVRsQ+QUv3scZkmoSa6C/p8MH0x8MmJaeNjOmBb/yrYmBF36/V6u3kuX2H0a1/8qzfmoqCyd8/MLBj1I96MCbsT6XJ1RwCeSo0eK9ZgrRzBHYZUq318gN26jg123kAIqmr1FPHsx/f8+Z1Tw9oHzF2wx5LIyeKNZNA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pVHz3jQTF2JzNNPxf01jAN6qKWxCk6vbzFCyXNodKQ4=;
- b=Vt4P8i0rrfkWBEj/j/oZFrVLbXDT5LiFTVLy1Kja0cRekIjDkBhIzsEpcIM3dfR/BwKUk4GdwKioCPcx/2OMEvAQexKbCuP7JFep1NuDWFJzdcQI76HcdT7CarSDfs81liTOXjNTHGPRqY6pYhwLzP/5BCxKpZVvPONIrHfdV1M=
-Received: from DB8PR04MB7162.eurprd04.prod.outlook.com (2603:10a6:10:12c::13)
- by DB6PR04MB2999.eurprd04.prod.outlook.com (2603:10a6:6:5::20) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3216.27; Thu, 30 Jul 2020 07:31:59 +0000
-Received: from DB8PR04MB7162.eurprd04.prod.outlook.com
- ([fe80::8a7:786f:91a3:1e1f]) by DB8PR04MB7162.eurprd04.prod.outlook.com
- ([fe80::8a7:786f:91a3:1e1f%7]) with mapi id 15.20.3239.017; Thu, 30 Jul 2020
- 07:31:58 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Greg KH <greg@kroah.com>
-CC:     Alan Stern <stern@rowland.harvard.edu>,
-        Roger Quadros <rogerq@ti.com>,
-        Anton Vasilyev <vasilyev@ispras.ru>,
-        Evgeny Novikov <novikov@ispras.ru>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        USB mailing list <linux-usb@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>
-Subject: RE: [PATCH RFC 1/4] USB: UDC: Don't wipe deallocated memory
-Thread-Topic: [PATCH RFC 1/4] USB: UDC: Don't wipe deallocated memory
-Thread-Index: AQHWZeX+sOparEfj/0SX/jVZ2loWAKkfdvoAgAAfGwCAABM4AA==
-Date:   Thu, 30 Jul 2020 07:31:58 +0000
-Message-ID: <DB8PR04MB7162D3E8F721DCCA942EB2158B710@DB8PR04MB7162.eurprd04.prod.outlook.com>
-References: <20200729202231.GB1584059@rowland.harvard.edu>
- <20200730032744.GC26224@b29397-desktop> <20200730051904.GA3859261@kroah.com>
-In-Reply-To: <20200730051904.GA3859261@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: kroah.com; dkim=none (message not signed)
- header.d=none;kroah.com; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.67]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: e11b9a0d-ad95-491a-babe-08d8345aa4cd
-x-ms-traffictypediagnostic: DB6PR04MB2999:
-x-microsoft-antispam-prvs: <DB6PR04MB29991744D56BB715157863088B710@DB6PR04MB2999.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: /O2TSG38yaXpXfhPNWUutEc3KV0xSAUWHPfPXJYIEV2mMWeSCo+f52GJ58/F2YkxLET3SEmhcH4mbybokgTy3tQ/wBb2ErkDDU7ezg4zajpKeMoIBfWOjHiruhuhn9Ee/UrmWSVVNvs5p8knOzNxgDumPJUzbU2VNZWiRS5JoXAzPFnefy6PqUSlWU7JqnqZJLIQs6xck/S7jVgI2+THR5i1G/tuUrsaGoaJDHxN6oRthXRvkvqJmcvPl0hTS6NtGNyn+kdLZtVCz/xGei2WMu1pjtdR3s7uz5zCFTREcoIfBRY5kgQygXs33b1oQS4iIQJdPLTSxMaFRc7CYgzuXw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB7162.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(396003)(376002)(136003)(346002)(39860400002)(366004)(4326008)(86362001)(2906002)(478600001)(316002)(33656002)(6506007)(54906003)(5660300002)(7696005)(6916009)(53546011)(44832011)(71200400001)(9686003)(186003)(64756008)(26005)(8936002)(66476007)(76116006)(8676002)(52536014)(66446008)(55016002)(66946007)(66556008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: 9RE4KW/Nk9eOWXC8AVqR/9geHqDJtYvAWzFdg3suxPO4j+WFCpbAqK/2XfYscVjtSRLR1pST8C0j0In2oz9/iXTE6Sbi5LNbUdsUDQ4vJ3YqC6UKEMHgA8IrLrcE5Abn6iA9Z0kZt2gPAnBscgrvVqOkXDcgytna6G099fez4OA2dtVLoOEhes9MGZD0bv4hePzHsArEds0f1X8o43qElihnBWo+YOjaMCm4/xxlY3ocp3sv66L13hTQnqf09/NzrN02w5g0eFHVIYg8fIsYEi3sirIE7wEoaV5thd2fZ/e+FAWMmpmiS4v6llgrMCT9Vw920Wm1nbi+SOW6G4xNGzf1xbrHnjWPWUI33QpHQMTPNfiT3LqZV3vIzNbAozSRQd+fdxiD/m+Pd8kDUruOyOrVSmJcMTcIxlbdm4Q31LFPDUsMBHO+XLcjF8p369eaVVv0PEih+rUSS/DV7ObWX3KmaOX9C/2lYeWJUwJ6cZ8=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB7162.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e11b9a0d-ad95-491a-babe-08d8345aa4cd
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jul 2020 07:31:58.8526
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ipQY5hzYfHJboCIubir/W/bKnLSf/raJmh9bgE1tGh4tNOhFE5eKGRbq9XWpEJbCKk+zZd81EiFdVop8n9rNCg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR04MB2999
+        id S1729811AbgG3IPy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Jul 2020 04:15:54 -0400
+Received: from m12-15.163.com ([220.181.12.15]:49057 "EHLO m12-15.163.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730060AbgG3IPq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 30 Jul 2020 04:15:46 -0400
+X-Greylist: delayed 917 seconds by postgrey-1.27 at vger.kernel.org; Thu, 30 Jul 2020 04:15:40 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id; bh=sq3ZqP/9IOq2CA8bWa
+        Y6LQE3pVu1n99et9lY6X29D4I=; b=SQG6T3XyX+5I9LUV3lHzxvaE4QVV8chN0G
+        HREo6hyD1WZquO+kHd9URIopeJ6D9XKR3D8HCHKs7RM5bfbc6LhXk0FFvElOJtJK
+        5qcawa5uwbCLFPq4Xe/ZDsL/9xy5lRnZogCSRG6peo5sURuwd+9cB4f07Q7ze0ev
+        oETQhlNTg=
+Received: from localhost.localdomain (unknown [182.149.199.78])
+        by smtp11 (Coremail) with SMTP id D8CowACnQ83jfSJfAnTdDQ--.38317S4;
+        Thu, 30 Jul 2020 15:59:31 +0800 (CST)
+From:   Sheng Long Wang <china_shenglong@163.com>
+To:     johan@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jan.kiszka@siemens.com,
+        Wang Sheng Long <shenglong.wang.ext@siemens.com>
+Subject: [PATCH] usb-serial:cp210x: add support to software flow control
+Date:   Thu, 30 Jul 2020 15:59:22 +0800
+Message-Id: <20200730075922.28041-1-china_shenglong@163.com>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: D8CowACnQ83jfSJfAnTdDQ--.38317S4
+X-Coremail-Antispam: 1Uf129KBjvJXoW3JF45Jw18Jr45GFWftFyrZwb_yoW7Cw1DpF
+        W8trWfKF4DZF43Wa1rAF4Uu3sxuanaqry2yFW3G39Ik3W3Jr1fKF1Ika4Yvr1UArW7J345
+        Jrs8tayDur47trJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07bYpBfUUUUU=
+X-Originating-IP: [182.149.199.78]
+X-CM-SenderInfo: xfkl0tpbvkv0xjor0wi6rwjhhfrp/1tbiyQRxslQHKy9QnwAAsW
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-=20
-> On Thu, Jul 30, 2020 at 03:28:09AM +0000, Peter Chen wrote:
-> > On 20-07-29 16:22:31, Alan Stern wrote:
-> > > Abusing the kernel's device model, some UDC drivers (including
-> > > dwc3 and cdns3) register and unregister their gadget structures
-> > > multiple times.  This is strictly forbidden; device structures may
-> > > not be reused.
-> >
-> > Register and unregister gadget structures multiple times should be
-> > allowed if we pass a clean (zeroed) gadget device structure. I checked
-> > the cdns3 code (cdns3_gadget_start), it always zeroed struct
-> > usb_gadget before calling usb_add_gadget_udc when start device mode.
->=20
-> How do you "know" that the structure really was properly freed/released b=
-y the
-> driver core at that point in time?
->=20
-> That's the issue, even if you do unregister it, the driver core, or any o=
-ther part of
-> the kernel, can hold on to the memory for an unbounded amount of time, du=
-e to the
-> fact that this is a reference counted pointer.
->=20
+From: Wang Sheng Long <shenglong.wang.ext@siemens.com>
 
-Yes, I find many UDC drivers have issues for that. The UDC driver's .remove=
- has
-no sync with device reference counter for gadget device, they free device p=
-rivate
-structure which contains gadget device unconditional without considering de=
-vice
-reference counter for gadget device.
+When data is transmitted between two serial ports,
+the phenomenon of data loss often occurs. The two kinds
+of flow control commonly used in serial communication
+are hardware flow control and software flow control.
 
-The UDC driver may need to call get_device/put_device for &gadget->dev to s=
-ync
-with device core, and at gadget->dev .release callback, free the whole devi=
-ce's
-private structure. So,  a common .release (usb_udc_nop_release) callback at=
-=20
-core.c may not suitable for most of UDC driver.
+In serial communication, If you only use RX/TX/GND Pins, you
+can't do hardware flow. So we often used software flow control
+and prevent data loss. The user sets the software flow control
+through the application program, and the application program
+sets the software flow control mode for the serial port
+chip through the driver.
 
-> So please, never "recycle" memory structures like this.  The documentatio=
-n for the
-> kernel explicitly says "do not do this!"
-=20
-Yes, "recycle" memory structures have issue, but at cdns3 driver(cdns3/gadg=
-et.c), it does not
-use the same memory, it always allocates a NEW memory region for device str=
-ucture before adding
-to device core.
+For the cp210 serial port chip, its driver lacks the
+software flow control setting code, so the user cannot set
+the software flow control function through the application
+program. This adds the missing software flow control.
 
-Peter
+Signed-off-by: Wang Sheng Long <shenglong.wang.ext@siemens.com>
+---
+ drivers/usb/serial/cp210x.c | 118 ++++++++++++++++++++++++++++++++++--
+ 1 file changed, 113 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
+index e732949f65..c66a0e0fb9 100644
+--- a/drivers/usb/serial/cp210x.c
++++ b/drivers/usb/serial/cp210x.c
+@@ -380,6 +380,9 @@ static struct usb_serial_driver * const serial_drivers[] = {
+ #define CP210X_PARTNUM_CP2102N_QFN20	0x22
+ #define CP210X_PARTNUM_UNKNOWN	0xFF
+ 
++#define CP210X_VSTART	0x11
++#define CP210X_VSTOP	0x13
++
+ /* CP210X_GET_COMM_STATUS returns these 0x13 bytes */
+ struct cp210x_comm_status {
+ 	__le32   ulErrors;
+@@ -391,6 +394,15 @@ struct cp210x_comm_status {
+ 	u8       bReserved;
+ } __packed;
+ 
++struct cp210x_chars_response {
++	u8	eofchar;
++	u8	errochar;
++	u8	breakchar;
++	u8	eventchar;
++	u8	xonchar;
++	u8	xoffchar;
++} __packed;
++
+ /*
+  * CP210X_PURGE - 16 bits passed in wValue of USB request.
+  * SiLabs app note AN571 gives a strange description of the 4 bits:
+@@ -624,6 +636,45 @@ static int cp210x_read_vendor_block(struct usb_serial *serial, u8 type, u16 val,
+ 	return result;
+ }
+ 
++/*
++ * Read and Write Character Responses operate
++ * Register SET_CHARS/GET_CHATS
++ */
++static int cp210x_operate_chars_block(struct usb_serial_port *port,
++				u8 req, u8 type, void *buf, int bufsize)
++{
++	struct usb_serial *serial = port->serial;
++	struct cp210x_port_private *port_priv = usb_get_serial_port_data(port);
++	void *dmabuf;
++	int result;
++
++	dmabuf = kmemdup(buf, bufsize, GFP_KERNEL);
++	if (!dmabuf)
++		return -ENOMEM;
++
++	result = usb_control_msg(serial->dev,
++				usb_rcvctrlpipe(serial->dev, 0),
++				req, type, 0, port_priv->bInterfaceNumber,
++				dmabuf, bufsize, USB_CTRL_SET_TIMEOUT);
++
++	if (result == bufsize) {
++		if (type == REQTYPE_DEVICE_TO_HOST)
++			memcpy(buf, dmabuf, bufsize);
++
++		result = 0;
++	} else {
++		dev_err(&port->dev, "failed get req 0x%x size %d status: %d\n",
++			req, bufsize, result);
++		if (result >= 0)
++			result = -EIO;
++
++	}
++
++	kfree(dmabuf);
++
++	return result;
++}
++
+ /*
+  * Writes any 16-bit CP210X_ register (req) whose value is passed
+  * entirely in the wValue field of the USB request.
+@@ -1134,11 +1185,17 @@ static void cp210x_set_termios(struct tty_struct *tty,
+ 		struct usb_serial_port *port, struct ktermios *old_termios)
+ {
+ 	struct device *dev = &port->dev;
+-	unsigned int cflag, old_cflag;
++	struct cp210x_chars_response charsres;
++	struct cp210x_flow_ctl flow_ctl;
++	unsigned int cflag, old_cflag, iflag;
+ 	u16 bits;
++	int result;
++	u32 ctl_hs;
++	u32 flow_repl;
+ 
+ 	cflag = tty->termios.c_cflag;
+ 	old_cflag = old_termios->c_cflag;
++	iflag = tty->termios.c_iflag;
+ 
+ 	if (tty->termios.c_ospeed != old_termios->c_ospeed)
+ 		cp210x_change_speed(tty, port, old_termios);
+@@ -1212,10 +1269,6 @@ static void cp210x_set_termios(struct tty_struct *tty,
+ 	}
+ 
+ 	if ((cflag & CRTSCTS) != (old_cflag & CRTSCTS)) {
+-		struct cp210x_flow_ctl flow_ctl;
+-		u32 ctl_hs;
+-		u32 flow_repl;
+-
+ 		cp210x_read_reg_block(port, CP210X_GET_FLOW, &flow_ctl,
+ 				sizeof(flow_ctl));
+ 		ctl_hs = le32_to_cpu(flow_ctl.ulControlHandshake);
+@@ -1252,6 +1305,61 @@ static void cp210x_set_termios(struct tty_struct *tty,
+ 				sizeof(flow_ctl));
+ 	}
+ 
++	/*
++	 * Set Software  Flow  Control
++	 * Check the IXOFF/IXON status in the iflag component of the
++	 * termios structure.
++	 *
++	 */
++	if ((iflag & IXOFF) || (iflag & IXON)) {
++
++		result = cp210x_operate_chars_block(port,
++						CP210X_GET_CHARS,
++						REQTYPE_DEVICE_TO_HOST,
++						&charsres,
++						sizeof(charsres));
++
++		if (result < 0) {
++			dev_err(dev, "Read Characrter Responses failed\n");
++			return;
++		}
++		charsres.xonchar  = CP210X_VSTART;
++		charsres.xoffchar = CP210X_VSTOP;
++		result = cp210x_operate_chars_block(port,
++						CP210X_SET_CHARS,
++						REQTYPE_HOST_TO_INTERFACE,
++						&charsres,
++						sizeof(charsres));
++		if (result < 0) {
++			memset(&charsres, 0, sizeof(charsres));
++			dev_err(dev, "Write Characrter Responses failed\n");
++			return;
++		}
++
++		/* Set  Rx/Tx Flow Control Flag in ulFlowReplace */
++		cp210x_read_reg_block(port,
++					CP210X_GET_FLOW,
++					&flow_ctl,
++					sizeof(flow_ctl));
++
++		flow_repl = le32_to_cpu(flow_ctl.ulFlowReplace);
++
++		if (iflag & IXOFF)
++			flow_repl |= CP210X_SERIAL_AUTO_RECEIVE;
++		else
++			flow_repl &= ~CP210X_SERIAL_AUTO_RECEIVE;
++
++		if (iflag & IXON)
++			flow_repl |= CP210X_SERIAL_AUTO_TRANSMIT;
++		else
++			flow_repl &= ~CP210X_SERIAL_AUTO_TRANSMIT;
++
++		flow_ctl.ulFlowReplace = cpu_to_le32(flow_repl);
++		cp210x_write_reg_block(port,
++					CP210X_SET_FLOW,
++					&flow_ctl,
++					sizeof(flow_ctl));
++	}
+ }
+ 
+ static int cp210x_tiocmset(struct tty_struct *tty,
+-- 
+2.17.1
+
 
