@@ -2,65 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 071A723310A
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Jul 2020 13:35:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47327233128
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Jul 2020 13:46:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727845AbgG3Lf0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 30 Jul 2020 07:35:26 -0400
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:17143 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726631AbgG3Lf0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 30 Jul 2020 07:35:26 -0400
-X-Originating-IP: 90.66.108.79
-Received: from localhost (lfbn-lyo-1-1932-79.w90-66.abo.wanadoo.fr [90.66.108.79])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 1F8EA240002;
-        Thu, 30 Jul 2020 11:35:21 +0000 (UTC)
-Date:   Thu, 30 Jul 2020 13:35:21 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        Trevor Woerner <twoerner@gmail.com>, jamesg@zaltys.org,
+        id S1727844AbgG3Lqq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 30 Jul 2020 07:46:46 -0400
+Received: from mx2.suse.de ([195.135.220.15]:55700 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727781AbgG3Lqp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 30 Jul 2020 07:46:45 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 89419AC37;
+        Thu, 30 Jul 2020 11:46:56 +0000 (UTC)
+Message-ID: <1596109601.2508.4.camel@suse.de>
+Subject: Re: [PATCH v3] usb: core: Solve race condition in anchor cleanup
+ functions
+From:   Oliver Neukum <oneukum@suse.de>
+To:     eli.billauer@gmail.com, gregkh@linuxfoundation.org,
         linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: ohci-nxp: add support for stotg04 phy
-Message-ID: <20200730113521.GC3679@piout.net>
-References: <20200729172829.GA3679@piout.net>
- <20200729174918.321615-1-alexandre.belloni@bootlin.com>
- <b5389371-3d47-f046-4d34-3d329276cb35@gmail.com>
- <20200730064303.GA3909742@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200730064303.GA3909742@kroah.com>
+Cc:     hdegoede@redhat.com, stern@rowland.harvard.edu
+Date:   Thu, 30 Jul 2020 13:46:41 +0200
+In-Reply-To: <20200730082338.23709-1-eli.billauer@gmail.com>
+References: <20200730082338.23709-1-eli.billauer@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 30/07/2020 08:43:03+0200, Greg KH wrote:
-> > 
-> > > +	s32 vendor, product;
-> > > +
-> > > +	vendor = i2c_smbus_read_word_data(isp1301_i2c_client, 0x00);
-> > > +	product = i2c_smbus_read_word_data(isp1301_i2c_client, 0x02);
-> 
-> Why are these signed 32bit numbers?  Shouldn't they be unsigned?
-
-Because i2c_smbus_read_word_data returns an s32 and should be checked
-for errors but because the whole driver is never checking, I'll leave
-that as an exercise for outreachy interns.
-
-> > > +
-> > > +	if (vendor == 0x0483 && product == 0xa0c4)
-> 
-> No endian flips anywhere?
+Am Donnerstag, den 30.07.2020, 11:23 +0300 schrieb
+eli.billauer@gmail.com:
+> From: Eli Billauer <eli.billauer@gmail.com>
 > 
 
-The whole driver makes the assumption that it will only run on lpc32xx
-with an isp1301. I don't believe we will ever see an other platform
-using it.
+Hi,
 
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> The additional do-while loop relies on the new usb_anchor_safe_empty()
+> function, which is like usb_anchor_check_wakeup(), only the former takes
+> the anchor's lock before checking. Both functions return true iff the
+> anchor list is empty, and there is no __usb_hcd_giveback_urb() in the
+> system that is in the middle of the unanchor-before-complete phase.
+> The @suspend_wakeups member of struct usb_anchor is used for this purpose,
+> which was introduced to solve another problem which the same race
+> condition causes, in commit 6ec4147e7bdb ("usb-anchor: Delay
+> usb_wait_anchor_empty_timeout wake up till completion is done").
+> 
+
+I think you can partially heed Alan's suggestion. The test takes
+a lock you have just dropped. You need to drop it before you
+call usb_kill_urb(), but the drop before the test is redundant.
+
+	Regards
+		Oliver
+
