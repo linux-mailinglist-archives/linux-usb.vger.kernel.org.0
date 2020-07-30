@@ -2,196 +2,198 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E205232A3E
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Jul 2020 05:03:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33AD5232A60
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Jul 2020 05:28:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728466AbgG3DDl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 29 Jul 2020 23:03:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34596 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726341AbgG3DDk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 29 Jul 2020 23:03:40 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81650C061794;
-        Wed, 29 Jul 2020 20:03:40 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id w17so12994708ply.11;
-        Wed, 29 Jul 2020 20:03:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=qGNXUjyUFh9KJsiYCnnMQ1hXSgL+E3MLC3x5GIlw/Hk=;
-        b=S0NakWCTWzAgeJfVgqFMQ4MtsWMGYo/e/GKGywyTBCLgSXu4VZE1inBRtAiXRoHEc0
-         7rt1VXkdFOyloI6zoidvpyhYKoMW+fpCXQzUt64BCKIJDPC7OaZlyzOSI8wVYmeph4Y4
-         7NzC4hQXkiWkkk7NO3YeVGgS3si4kCkwOZ3byHrHS9dpcgtbLpQaGidStTJI5H+Cd5e2
-         m3NvigI0sKvzykS8/rEn0nzEU5qlEbV7SIyFWWTS0fWUiT8qNuTDI0X8PS9keCrAYi5d
-         wkW0PCZqEzaGyXpmhQRFzNr1OlEiy8I14/uFkm7tkl7+qIgGyK5kZPrtspeEmFsUq1nL
-         ezFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=qGNXUjyUFh9KJsiYCnnMQ1hXSgL+E3MLC3x5GIlw/Hk=;
-        b=QwdnNZkL0UgUtLBqObtMfy++f4C0Z0QNpeJ4WDZMZYSU+Wi6BcNTUr2/q2Oe78XNYJ
-         gl6LWpTxusJ68iPM1ho5ZQOIkf8bq7j6SSalYp86o+Jbx1FFUzfi29pqKuQCXJXoqFsy
-         m+VABfJynzBsDg1r2HwQFosRmr26R69eKsebjU7MRLZ/uPasoWEpHtpmgdO0SeUwD75S
-         vwzndNXQcBHMNyotPso8BfGsuAO8Bv2eI6KLLbzvJvsNHWPMROBivIVZ6EC69YfiJJCA
-         UVfznkK5/ndo9tXSp0jtmd5Ar7A6QiWXYk5xRLORZ1sJVHnP7rmwAt7F464P0SR90dvT
-         PXDg==
-X-Gm-Message-State: AOAM532WQbiWMgMNEvPGc4GahPiW93x9Jf/kZf7/n9od0Aelx+LVrGjh
-        JN1IQgfR4qMMhhBfKx1yFAYzVfTH
-X-Google-Smtp-Source: ABdhPJxxJNQqBLrU+fQQRtcfYfL1RdgjWQEKnToq3hMaN90gEuEqI8w0HqsWH4sTFyRSdVWpKH4IdA==
-X-Received: by 2002:a17:90b:355:: with SMTP id fh21mr967338pjb.46.1596078219739;
-        Wed, 29 Jul 2020 20:03:39 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f6sm3918692pje.16.2020.07.29.20.03.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jul 2020 20:03:38 -0700 (PDT)
-Subject: Re: [PATCH v2] usb: typec: tcpm: Migrate workqueue to RT priority for
- processing events
-To:     Badhri Jagan Sridharan <badhri@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        USB <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20200724020551.2737376-1-badhri@google.com>
- <20200729145309.GA3490882@kroah.com>
- <CAPTae5+JbpzC7qzznXFqLPL-KrPzHLaHsJXj29Bx-jW1zEPEAQ@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <f7fe51da-5dd7-5065-b5c7-426bf8e07c29@roeck-us.net>
-Date:   Wed, 29 Jul 2020 20:03:37 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <CAPTae5+JbpzC7qzznXFqLPL-KrPzHLaHsJXj29Bx-jW1zEPEAQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
+        id S1728453AbgG3D2P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 29 Jul 2020 23:28:15 -0400
+Received: from mail-eopbgr70080.outbound.protection.outlook.com ([40.107.7.80]:61351
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726367AbgG3D2O (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 29 Jul 2020 23:28:14 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nowftIxuq6ZsBfGO/oNjvwa9pjD8U0hjNIdAU1TFwHhX0Iy3ghmnpQbr+y+Wdmy77VbwtxLUNiHscudos0ZYDIDsG+eShR/1OWkdNqOC5/mY5NUTmyJDrYEZiS3lJNTOPYVzeHMq0urCnJJlLK14K9zlxG2hWTubP6DZhWIy36EAcHD7Zh7DJpqt6wAIeb8IhdKdvc0C+E+FFT9Wn6lTrWh8TD7rT+SbTlzyyrIVTd9wga/EmTP/blBZDowzssnmwOPRdVbqZEDScm9W1/hfGXl7JP9VZnq9ct4Cl1HGg8rBc5idgG99R0ClNm+ieYWWHB0zdnP6Dmu3OM6R7R14kg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7xDLhdP9MCdSR+AHolp6h7syLYV36IYfRSyYEKnO1TA=;
+ b=f6l5IW2wUJwZQSnHyDlJ4wUrx5toVbY2fUhvtVpyMgit06dPOru7dwCotZgtcDyaWLTxjKKrejOHJnYmkAOEygZ7h0tZNQOhPZ9koAKi+SNLqaMSb+nvr3BDUNBacNdcGCyZITpH3Hh+VDkCcGTG+rk+rO+BAJ/CifbMnZyj+5SjouLxLK+0PvUH1QNEZ7DBSx2hHpXwqZtldQhKYcAFQail3m5Y3VtzBdX83EnqiQcNK9d9/di0DGZEfrtpuEmSpR59t+g3eZvIjJW/ss6L3Kt9BP4wblonugIlGU4O3ZRbH+G262nrq546UjZdZTudkbSbsNWS1smSOD2qyf4MtA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7xDLhdP9MCdSR+AHolp6h7syLYV36IYfRSyYEKnO1TA=;
+ b=VfcZQNpEkcYqVi6pmlNPTSHRjflrbCqYNIvPMdcWR4MIMFzZ31Acc7fTqSDqNh3Y1BZtmeZ46I437DBYBE1upNvGgd06Bkcb10OkJBek4O92ToP3fr08739ym35to9VPpzyHO1Q+4Ik/anucAZxWNwo2fLHCKCjXIHARr7fzojw=
+Received: from DB8PR04MB7162.eurprd04.prod.outlook.com (2603:10a6:10:12c::13)
+ by DB7PR04MB4474.eurprd04.prod.outlook.com (2603:10a6:5:3c::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3216.27; Thu, 30 Jul
+ 2020 03:28:09 +0000
+Received: from DB8PR04MB7162.eurprd04.prod.outlook.com
+ ([fe80::8a7:786f:91a3:1e1f]) by DB8PR04MB7162.eurprd04.prod.outlook.com
+ ([fe80::8a7:786f:91a3:1e1f%7]) with mapi id 15.20.3239.017; Thu, 30 Jul 2020
+ 03:28:09 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Roger Quadros <rogerq@ti.com>,
+        Anton Vasilyev <vasilyev@ispras.ru>,
+        Evgeny Novikov <novikov@ispras.ru>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        USB mailing list <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH RFC 1/4] USB: UDC: Don't wipe deallocated memory
+Thread-Topic: [PATCH RFC 1/4] USB: UDC: Don't wipe deallocated memory
+Thread-Index: AQHWZeX+sOparEfj/0SX/jVZ2loWAKkfdvoA
+Date:   Thu, 30 Jul 2020 03:28:09 +0000
+Message-ID: <20200730032744.GC26224@b29397-desktop>
+References: <20200729202231.GB1584059@rowland.harvard.edu>
+In-Reply-To: <20200729202231.GB1584059@rowland.harvard.edu>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: rowland.harvard.edu; dkim=none (message not signed)
+ header.d=none;rowland.harvard.edu; dmarc=none action=none
+ header.from=nxp.com;
+x-originating-ip: [119.31.174.67]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: b980abf5-1ee9-4020-6bae-08d8343894f9
+x-ms-traffictypediagnostic: DB7PR04MB4474:
+x-microsoft-antispam-prvs: <DB7PR04MB44743D5B4B1C5E94110A779C8B710@DB7PR04MB4474.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: WF3f6ABPEuGtnYu0OQLzRigHytcz/RrVrknyCNlAR27P8UZNGEhVZFScK37btxgpxeRrCi7CAMseCYxdBDUMC1VrufyL/fNkUf3sk6kFQKOqePGNOUGISBHBmYzFAqviN/917j1CBkfQ6TjB577KXtQJu7GtHmSjJBngYKijHsiTmNLcd2Ng3+RKi1PXxVGe7X7ln5Xp29fBys/lDUmN0IgTvFR1ZioWbUj6cktL7ZZxMwanABqpkbbPBcsesuO8aLFvozSxvz7Ry32ku+6swVyq6Ogm8Sl/nyPEwVNLQdCfndQsxDH8JndvBdidKMZpAJoWhJKwCjctaxMP+KKGdA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB7162.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(7916004)(4636009)(376002)(366004)(39860400002)(346002)(136003)(396003)(8676002)(66946007)(4326008)(316002)(2906002)(76116006)(64756008)(66556008)(66446008)(71200400001)(83380400001)(8936002)(1076003)(9686003)(54906003)(66476007)(91956017)(6512007)(33716001)(6916009)(44832011)(478600001)(86362001)(5660300002)(6506007)(53546011)(33656002)(6486002)(26005)(186003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: bd1Gtoq0bELbaz3wg3TPrFYufERvRibuCgtwqpQCLaDu77Na+SdrsjoE0WBmJkxQoTX2nZ8Ec5z+fpeNvl8aA9cNbPC54hSIxsNtSdcIONuvgNnJC7a+g1DQeitB3flN3+RPECpdnkLr9G3kaOQOFFKdgPTlZ+GZPGxNAs1HThkN7MQE7eXthDr/4ePeNTcTiKbLbARwVdiP5L3OCEVj+2NEzkBdJ+001fCC61U0BrXuuGm00atlDGfRNST9kuEYQSvY1mbD695TCswD1jvpVh7LdHi5LjXunwagHhSsqmbA1Qp9yHw5IQVn/sH3bsqbwCkvxP3UKa4Xgazyv6DXeCO5zcdkGC/oPV+tsWUWP/VuI4FCfEpLRaOWMqevx93u7EiPhrkFc0v+y0E/IjNbiCOZD8qGUyds25FOdybxjbRHn8+wvWbRtXhSAnciJHorJNJeYi84ZO2I/LbZ2l7LuWtnd+mAqGzmD1cjPjTl7CE=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <6F0D66D73D58F54F873B4E57BA0852A4@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB7162.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b980abf5-1ee9-4020-6bae-08d8343894f9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jul 2020 03:28:09.3628
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: v8phaXcecgVa/kKcGk8FZFNLDm8CsUn0X1KgALpcr8bLhi2vczpS61ybnscLdmygc2i32IRnpQDLJwcEnV2lMw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB4474
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 7/29/20 7:28 PM, Badhri Jagan Sridharan wrote:
-> Hi Greg,
-> 
-> Sure just sent the new patch v3.
-> 
-> Patch applies cleanly on my end. So wondering what I am missing.
+On 20-07-29 16:22:31, Alan Stern wrote:
+> Abusing the kernel's device model, some UDC drivers (including
+> dwc3 and cdns3) register and unregister their gadget structures
+> multiple times.  This is strictly forbidden; device structures may not
+> be reused.
 
-I expected your patch to conflict with Hans' patch series.
-Maybe those are in a different tree/branch ?
+Register and unregister gadget structures multiple times should be
+allowed if we pass a clean (zeroed) gadget device structure. I checked
+the cdns3 code (cdns3_gadget_start), it always zeroed struct usb_gadget
+before calling usb_add_gadget_udc when start device mode.
 
-Guenter
+>=20
+> Commit fac323471df6 ("usb: udc: allow adding and removing the same
+> gadget device") attempted to work around this restriction by zeroing
+> out the memory occupied by a gadget's embedded struct device when the
+> gadget is unregistered.  However, it does so at the wrong time,
+> immediately following the call to device_unregister().  At that point
+> there may still be outstanding references to the device, and
+> overwriting its memory is likely to cause trouble.  Even worse, if
+> there are no outstanding references then the gadget's memory may have
+> been deallocated, and so gadget must be considered to be a stale
+> pointer when it is passed to memset().
+>=20
+> This patch fixes the problem by moving the offending memset to the
+> device's release routine, which gets called only when all references
+> have been dropped.  (Actually the call gets moved to the default
+> release routine, renamed from "usb_udc_nop_release" to
+> "usb_udc_zero_release" to indicate that it now zeroes out the memory.
+> This routine is the one used by dwc3 and cdns3; other drivers may not
+> use it.)
 
-> Just in case if you are still noticing merge conflicts.
-> 
-> Here is the git log of my local tree:
-> 633198cd2945b7 (HEAD -> usb-next-1) usb: typec: tcpm: Migrate workqueue to RT priority for processing events
-> fa56dd9152ef95 (origin/usb-next) Merge tag 'usb-serial-5.9-rc1' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-next
-> 25252919a1050e xhci: dbgtty: Make some functions static
-> b0e02550346e67 xhci: dbc: Make function xhci_dbc_ring_alloc() static
-> ca6377900974c3 Revert "usb: dwc2: override PHY input signals with usb role switch support"
-> 09df709cb5aeb2 Revert "usb: dwc2: don't use ID/Vbus detection if usb-role-switch on STM32MP15 SoCs"
-> 17a82716587e9d USB: iowarrior: fix up report size handling for some devices
-> e98ba8cc3f8a89 Merge tag 'usb-for-v5.9' of git://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb <http://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb> into usb-next
-> c97793089b11f7 Merge 5.8-rc7 into usb-next
-> 92ed301919932f (tag: v5.8-rc7, origin/usb-linus, origin/main) Linux 5.8-rc7
-> 
-> Was comparing against https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/log/?h=usb-next
-> 
-> Thanks,
-> Badhri
-> 
-> On Wed, Jul 29, 2020 at 7:53 AM Greg Kroah-Hartman <gregkh@linuxfoundation.org <mailto:gregkh@linuxfoundation.org>> wrote:
-> 
->     On Thu, Jul 23, 2020 at 07:05:51PM -0700, Badhri Jagan Sridharan wrote:
->     > "tReceiverResponse 15 ms Section 6.6.2
->     > The receiver of a Message requiring a response Shall respond
->     > within tReceiverResponse in order to ensure that the
->     > sender’s SenderResponseTimer does not expire."
->     >
->     > When the cpu complex is busy running other lower priority
->     > work items, TCPM's work queue sometimes does not get scheduled
->     > on time to meet the above requirement from the spec.
->     > Moving to kthread_work apis to run with real time priority.
->     > Just lower than the default threaded irq priority,
->     > MAX_USER_RT_PRIO/2 + 1. (Higher number implies lower priority).
->     >
->     > Further, as observed in 1ff688209e2e, moving to hrtimers to
->     > overcome scheduling latency while scheduling the delayed work.
->     >
->     > TCPM has three work streams:
->     > 1. tcpm_state_machine
->     > 2. vdm_state_machine
->     > 3. event_work
->     >
->     > tcpm_state_machine and vdm_state_machine both schedule work in
->     > future i.e. delayed. Hence each of them have a corresponding
->     > hrtimer, tcpm_state_machine_timer & vdm_state_machine_timer.
->     >
->     > When work is queued right away kthread_queue_work is used.
->     > Else, the relevant timer is programmed and made to queue
->     > the kthread_work upon timer expiry.
->     >
->     > kthread_create_worker only creates one kthread worker thread,
->     > hence single threadedness of workqueue is retained.
->     >
->     > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com <mailto:badhri@google.com>>
-> 
->     This doesn't apply against my usb-next branch at all.
-> 
->     Can you rebase and resend?
-> 
->     Remember to collect the reviewed-by tags as well when you do so.
-> 
->     thanks,
-> 
->     greg k-h
-> 
+In fact, many new written UDC drivers uses usb_add_gadget_udc directly
+which uses default .release function defined at core.c.
 
+>=20
+> This doesn't fix the underlying problem.  UDC drivers that register
+> their gadgets multiple times should be rewritten to allocate their
+> gadget structures dynamically, using a new one each time.  Until that
+> is done, this will at least remove one potential source of errors.
+>=20
+> On the other hand, the patch may create new errors if the release
+> routine doesn't get called until after the gadget has been
+> re-registered.
+>=20
+> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+> CC: Roger Quadros <rogerq@ti.com>
+> CC: Peter Chen <peter.chen@nxp.com>
+> CC: Anton Vasilyev <vasilyev@ispras.ru>
+> CC: Evgeny Novikov <novikov@ispras.ru>
+> CC: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+>=20
+> ---
+>=20
+>  drivers/usb/gadget/udc/core.c |    6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>=20
+> Index: usb-devel/drivers/usb/gadget/udc/core.c
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> --- usb-devel.orig/drivers/usb/gadget/udc/core.c
+> +++ usb-devel/drivers/usb/gadget/udc/core.c
+> @@ -1138,9 +1138,10 @@ static void usb_udc_release(struct devic
+> =20
+>  static const struct attribute_group *usb_udc_attr_groups[];
+> =20
+> -static void usb_udc_nop_release(struct device *dev)
+> +static void usb_udc_zero_release(struct device *dev)
+>  {
+>  	dev_vdbg(dev, "%s\n", __func__);
+> +	memset(dev, 0, sizeof(*dev));
+>  }
+> =20
+>  /* should be called with udc_lock held */
+> @@ -1184,7 +1185,7 @@ int usb_add_gadget_udc_release(struct de
+>  	if (release)
+>  		gadget->dev.release =3D release;
+>  	else
+> -		gadget->dev.release =3D usb_udc_nop_release;
+> +		gadget->dev.release =3D usb_udc_zero_release;
+> =20
+>  	device_initialize(&gadget->dev);
+
+According to kernel-doc for device_initialize
+
+ * All fields in @dev must be initialized by the caller to 0, except
+ * for those explicitly set to some other value.  The simplest
+ * approach is to use kzalloc() to allocate the structure containing
+ * @dev.
+ *
+
+Is it better to zeroed gadget->dev before calling device_initialize?
+
+> =20
+> @@ -1338,7 +1339,6 @@ void usb_del_gadget_udc(struct usb_gadge
+>  	flush_work(&gadget->work);
+>  	device_unregister(&udc->dev);
+>  	device_unregister(&gadget->dev);
+> -	memset(&gadget->dev, 0x00, sizeof(gadget->dev));
+>  }
+>  EXPORT_SYMBOL_GPL(usb_del_gadget_udc);
+> =20
+
+--=20
+
+Thanks,
+Peter Chen=
