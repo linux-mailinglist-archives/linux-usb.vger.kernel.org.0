@@ -2,112 +2,180 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 343FB2341B0
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Jul 2020 10:58:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D4462343DA
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Jul 2020 12:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731808AbgGaI6P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 Jul 2020 04:58:15 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:11742 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728437AbgGaI6O (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Jul 2020 04:58:14 -0400
-X-UUID: 82b739de27a3420592e9259af2d0299e-20200731
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=NjNs/L/PQBspTHCRKxQtG3j74BSnJbhVaOVg+dzczjA=;
-        b=uMdRaMlke+fLMUQG2Wr6NqndkWOmlv4NqnzDlpudBAr9LW6gXf/TPIBoytXigENMfaiPgQcdpRKs9C9SCIVXtSwTkbJHVGlXzzTpy3gSsZsPwfz6PzCp26WECpmDQEnABpDZnoYTzAhW7bd8jvM4nWKhGqClsBpG7nfecmB/47w=;
-X-UUID: 82b739de27a3420592e9259af2d0299e-20200731
-Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw01.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1549384507; Fri, 31 Jul 2020 16:58:07 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs08n1.mediatek.inc (172.21.101.55) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 31 Jul 2020 16:58:03 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 31 Jul 2020 16:58:04 +0800
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Eddie Hung <eddie.hung@mediatek.com>,
+        id S1732280AbgGaKAU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 Jul 2020 06:00:20 -0400
+Received: from mail-eopbgr00062.outbound.protection.outlook.com ([40.107.0.62]:52802
+        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1732240AbgGaKAT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 31 Jul 2020 06:00:19 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=U++iFgUzoAJXj6tB9C0uOirDkWV4UGGVRZOohMcXf/rOTKlcVcjQQ9Htu6ZNFo9qUKAqsENAZU8H4ZVZ+1yqSGLtguQJTffC9IYL7l94tA+JTpINQShMLa9lFF+xdp8odYLuEUva5Rmiea+hLRJp3Jx6gKLAIMmFwzi0V2QW1+hGQ3UA8hwA8zgsMHqRTS4AD0jPfcrsnlJNzyqUDFj7p44DCASKEF3K84UhKdJ/xIJRRBA4j1L+nyLatwfJ6cmsE5KdESJ7lbpE+OlwJJVvJsLeWJrcqYG4TE5aIsFRr53+H8xkHexFEzLX661/mBrLkSnu4T3pFejDDe7T9EvLJA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mYGNlS/NQjqqJy1DyJC2odyIB4bO3u+vmvk1NKq/mHg=;
+ b=itJQSiWtWzuF+ludV9+cZKQeIWlZbVjK0xYmIvXyhS8hPHr794Vma/51EErvvFwhcwsPETYB2MZQHGKp4hWZXjyr/F3kE0WncVxvN3ZkTj10sXV/XvFuKMVgwS7ytsbuaQCYHaD12QRJaOefrqxnmgNfSdDIxzLqpkYy5DmXq4OoqKW+NMDH/4/BpTUr+XmUquLcr4zBiLiCf597xV0KiK2H94gPLQAdRvHgdSBDC+BqNkDB/zexlMdPgxGi9UbvuwXmpC6ffFJD9OBwGqOrSakeGIQNkybBLdpvCWbm0s3T7qFU0/aw2UO6BtLABfx08/JLIdJI2wA/bYHOayTFVw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mYGNlS/NQjqqJy1DyJC2odyIB4bO3u+vmvk1NKq/mHg=;
+ b=WmIY6Nu2xLDOG/KbBWrdmwPWe0ieaPQ1g94SQQ/2HxqJj5QVO4viW9czqSFMeip7z0wtPz9c1GohCRhiqlHp5XJd7bGX1WtK0KYpM9doqH4MUG5FKegt598I4jYAApi3hHWbcWf4Erm29qUGtum/MoCa4UdABVRigVVE/LWS/Po=
+Authentication-Results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
+Received: from DB8PR04MB7162.eurprd04.prod.outlook.com (2603:10a6:10:12c::13)
+ by DB6PR0401MB2517.eurprd04.prod.outlook.com (2603:10a6:4:34::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3239.20; Fri, 31 Jul
+ 2020 10:00:15 +0000
+Received: from DB8PR04MB7162.eurprd04.prod.outlook.com
+ ([fe80::8a7:786f:91a3:1e1f]) by DB8PR04MB7162.eurprd04.prod.outlook.com
+ ([fe80::8a7:786f:91a3:1e1f%7]) with mapi id 15.20.3239.017; Fri, 31 Jul 2020
+ 10:00:15 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     balbi@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com,
+        Peter Chen <peter.chen@nxp.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>,
-        Macpaul Lin <macpaul.lin@gmail.com>, <stable@vger.kernel.org>
-Subject: [PATCH v2] usb: mtu3: fix panic in mtu3_gadget_disconnect()
-Date:   Fri, 31 Jul 2020 16:57:58 +0800
-Message-ID: <1596185878-24360-1-git-send-email-macpaul.lin@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <1596177366-12029-1-git-send-email-macpaul.lin@mediatek.com>
-References: <1596177366-12029-1-git-send-email-macpaul.lin@mediatek.com>
-MIME-Version: 1.0
+        Alan Stern <stern@rowland.harvard.edu>
+Subject: [PATCH 1/1] usb: gadget: core: wait gadget device .release finishing at usb_del_gadget_udc
+Date:   Fri, 31 Jul 2020 17:59:35 +0800
+Message-Id: <20200731095935.23034-1-peter.chen@nxp.com>
+X-Mailer: git-send-email 2.17.1
 Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+X-ClientProxiedBy: SG2PR06CA0116.apcprd06.prod.outlook.com
+ (2603:1096:1:1d::18) To DB8PR04MB7162.eurprd04.prod.outlook.com
+ (2603:10a6:10:12c::13)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from b29397-desktop.ap.freescale.net (119.31.174.67) by SG2PR06CA0116.apcprd06.prod.outlook.com (2603:1096:1:1d::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3239.16 via Frontend Transport; Fri, 31 Jul 2020 10:00:13 +0000
+X-Mailer: git-send-email 2.17.1
+X-Originating-IP: [119.31.174.67]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: d9cab533-cfac-4fe8-f439-08d8353885e5
+X-MS-TrafficTypeDiagnostic: DB6PR0401MB2517:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <DB6PR0401MB25176E326F79DF50FD16310B8B4E0@DB6PR0401MB2517.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: soVT9j4QiFD8gmLg9F7Vnrob5tLQP8O906EvkwFd+Bz+kalPkCTCe8+F7WMsrLxYQj+zL/S9iJt2m6X1cCBKgzeI6/98tDs67IhYFuRgDlsMsiGfl13BxZbINSx6ZLmvj0+DCgLrwVwNo1vZA+Zd9I/k2UIm0DzrkiCV8o/T5i8X6n/hHI5XharSrvKdcgR5wCcURkrmZtZ7zBQCf6YJqWW4gASjarZ85jv7d8TfK7xN3f6pwQZS6vtAsQwAyUhc5kvyy+FUbpMkILln+NXGYkGRyPwy5Pq1m5PUULeNPpgMSiUTJg32gRUewDFuStJqrMfxZ4lbbUE6zpzuV4wOhzBkrcAqo4UhdW3H8sxf3RaARLLrlSwekn+cGG3ASuZqHcFK/sXJBVq+h5/k5dFUbszS9gD8b4CXVBc1z+l9XC4IFkq828Rh6UrXMSLNdogMOCKMOjCB2/Muii/i3XzUdA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB7162.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(39860400002)(376002)(136003)(366004)(346002)(396003)(66946007)(66556008)(66476007)(186003)(86362001)(26005)(5660300002)(44832011)(1076003)(956004)(6486002)(2616005)(16526019)(6666004)(316002)(966005)(54906003)(478600001)(2906002)(6512007)(36756003)(52116002)(6916009)(6506007)(8936002)(8676002)(4326008)(83380400001)(142923001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: F2o0vqtlHpwm/F6ra3XNKX3HjZwuz8LL47Tm60RQY/hlN8o1aMOkgTCmYXv7/X5as454vDA3u5GiLHs96TwC6a029F9pdvRDBmCyEgtxGYsL6LfVXIqogR/4BqUd8VPjNI7B2STVcVmVHJuch8o+Tjf2/hXqyXLdSy0BPxQmmmfTCRotXwRfzx6P8y382FCwoXfSQacM/XCx6VVXMCrHugIc7D5JcLCzTPlIahYsgh0f1Bi1BVnOl+QeRgZdIdPRgJUKhF9I6GicNFthjdvHsNKD8iQsSbUL9MD3vjq+GOgigUc0VgpYYWVZqX1kz7qbjAegBqBqs6y7ugtR/HbuWdCdgcZlAQgKsNMBML9j+X0HBNg3ZbrbPLdhoWxBftrpUJN2YO0Sgx3iLaKT5fTH7Cw6Wc8wGiMmuZ+YWeMPIIFeXniLVHLYJqq4+gFWSg1yEfQM9dWIr2j5V8Mgw4Pxpas8shNcQgvgq2/wBwrDzWNOC/AWQ1JhCnxmd3uOH9/99jWLMdWA+gtwdv/UScRaVmpp5TPHLpOciT33utgXiV5ApM/UmT01LajT1nWXxT8z9R9puYTNzEkWHPqYpurqcfeupR4xDJfN3ywDT3nAt7FFfyEjM/sSP6fO+9GkZgJO34r9Z8LuniJOYrXeWLD1nA==
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d9cab533-cfac-4fe8-f439-08d8353885e5
+X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB7162.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jul 2020 10:00:15.7270
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: d3NRXm+x/wQMvfJ8Ng3lCcjNkCq3B8P+v2vXOX3ALEwq0XETXSP1z2oLQUPZQ4pfkWOq9l/OfCFn39e34TDQJg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR0401MB2517
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-VGhpcyBwYXRjaCBmaXhlcyBhIHBvc3NpYmxlIGlzc3VlIHdoZW4gbXR1M19nYWRnZXRfc3RvcCgp
-DQphbHJlYWR5IGFzc2lnbmVkIE5VTEwgdG8gbXR1LT5nYWRnZXRfZHJpdmVyIGR1cmluZyBtdHVf
-Z2FkZ2V0X2Rpc2Nvbm5lY3QoKS4NCg0KWzxmZmZmZmY5MDA4MTYxOTc0Pl0gbm90aWZpZXJfY2Fs
-bF9jaGFpbisweGE0LzB4MTI4DQpbPGZmZmZmZjkwMDgxNjFmZDQ+XSBfX2F0b21pY19ub3RpZmll
-cl9jYWxsX2NoYWluKzB4ODQvMHgxMzgNCls8ZmZmZmZmOTAwODE2MmVjMD5dIG5vdGlmeV9kaWUr
-MHhiMC8weDEyMA0KWzxmZmZmZmY5MDA4MDllMzQwPl0gZGllKzB4MWY4LzB4NWQwDQpbPGZmZmZm
-ZjkwMDgwZDAzYjQ+XSBfX2RvX2tlcm5lbF9mYXVsdCsweDE5Yy8weDI4MA0KWzxmZmZmZmY5MDA4
-MGQwNGRjPl0gZG9fYmFkX2FyZWErMHg0NC8weDE0MA0KWzxmZmZmZmY5MDA4MGQwZjljPl0gZG9f
-dHJhbnNsYXRpb25fZmF1bHQrMHg0Yy8weDkwDQpbPGZmZmZmZjkwMDgwODBhNzg+XSBkb19tZW1f
-YWJvcnQrMHhiOC8weDI1OA0KWzxmZmZmZmY5MDA4MDg0OWQwPl0gZWwxX2RhKzB4MjQvMHgzYw0K
-WzxmZmZmZmY5MDA5YmRlMDFjPl0gbXR1M19nYWRnZXRfZGlzY29ubmVjdCsweGFjLzB4MTI4DQpb
-PGZmZmZmZjkwMDliZDU3NmM+XSBtdHUzX2lycSsweDM0Yy8weGMxOA0KWzxmZmZmZmY5MDA4MmFj
-MDNjPl0gX19oYW5kbGVfaXJxX2V2ZW50X3BlcmNwdSsweDJhYy8weGNkMA0KWzxmZmZmZmY5MDA4
-MmFjYWUwPl0gaGFuZGxlX2lycV9ldmVudF9wZXJjcHUrMHg4MC8weDEzOA0KWzxmZmZmZmY5MDA4
-MmFjYzQ0Pl0gaGFuZGxlX2lycV9ldmVudCsweGFjLzB4MTQ4DQpbPGZmZmZmZjkwMDgyYjcxY2M+
-XSBoYW5kbGVfZmFzdGVvaV9pcnErMHgyMzQvMHg1NjgNCls8ZmZmZmZmOTAwODJhODcwOD5dIGdl
-bmVyaWNfaGFuZGxlX2lycSsweDQ4LzB4NjgNCls8ZmZmZmZmOTAwODJhOTZhYz5dIF9faGFuZGxl
-X2RvbWFpbl9pcnErMHgyNjQvMHgxNzQwDQpbPGZmZmZmZjkwMDgwODE5ZjQ+XSBnaWNfaGFuZGxl
-X2lycSsweDE0Yy8weDI1MA0KWzxmZmZmZmY5MDA4MDg0Y2VjPl0gZWwxX2lycSsweGVjLzB4MTk0
-DQpbPGZmZmZmZjkwMDg1Yjk4NWM+XSBkbWFfcG9vbF9hbGxvYysweDZlNC8weGFlMA0KWzxmZmZm
-ZmY5MDA4ZDdmODkwPl0gY21kcV9tYm94X3Bvb2xfYWxsb2NfaW1wbCsweGIwLzB4MjM4DQpbPGZm
-ZmZmZjkwMDhkODA5MDQ+XSBjbWRxX3BrdF9hbGxvY19idWYrMHgyZGMvMHg3YzANCls8ZmZmZmZm
-OTAwOGQ4MGY2MD5dIGNtZHFfcGt0X2FkZF9jbWRfYnVmZmVyKzB4MTc4LzB4MjcwDQpbPGZmZmZm
-ZjkwMDhkODIzMjA+XSBjbWRxX3BrdF9wZXJmX2JlZ2luKzB4MTA4LzB4MTQ4DQpbPGZmZmZmZjkw
-MDhkODI0ZDg+XSBjbWRxX3BrdF9jcmVhdGUrMHgxNzgvMHgxZjANCls8ZmZmZmZmOTAwOGY5NjIz
-MD5dIG10a19jcnRjX2NvbmZpZ19kZWZhdWx0X3BhdGgrMHgzMjgvMHg3YTANCls8ZmZmZmZmOTAw
-OTAyNDZjYz5dIG10a19kcm1faWRsZW1ncl9raWNrKzB4YTZjLzB4MTQ2MA0KWzxmZmZmZmY5MDA4
-ZjliYmI0Pl0gbXRrX2RybV9jcnRjX2F0b21pY19iZWdpbisweDFhNC8weDFhNjgNCls8ZmZmZmZm
-OTAwOGU4ZGY5Yz5dIGRybV9hdG9taWNfaGVscGVyX2NvbW1pdF9wbGFuZXMrMHgxNTQvMHg4NzgN
-Cls8ZmZmZmZmOTAwOGYyZmI3MD5dIG10a19hdG9taWNfY29tcGxldGUuaXNyYS4xNisweGU4MC8w
-eDE5YzgNCls8ZmZmZmZmOTAwOGYzMDkxMD5dIG10a19hdG9taWNfY29tbWl0KzB4MjU4LzB4ODk4
-DQpbPGZmZmZmZjkwMDhlZjE0MmM+XSBkcm1fYXRvbWljX2NvbW1pdCsweGNjLzB4MTA4DQpbPGZm
-ZmZmZjkwMDhlZjdjZjA+XSBkcm1fbW9kZV9hdG9taWNfaW9jdGwrMHgxYzIwLzB4MjU4MA0KWzxm
-ZmZmZmY5MDA4ZWJjNzY4Pl0gZHJtX2lvY3RsX2tlcm5lbCsweDExOC8weDFiMA0KWzxmZmZmZmY5
-MDA4ZWJjZGU4Pl0gZHJtX2lvY3RsKzB4NWMwLzB4OTIwDQpbPGZmZmZmZjkwMDg2M2IwMzA+XSBk
-b192ZnNfaW9jdGwrMHgxODgvMHgxODIwDQpbPGZmZmZmZjkwMDg2M2M3NTQ+XSBTeVNfaW9jdGwr
-MHg4Yy8weGEwDQoNClNpZ25lZC1vZmYtYnk6IE1hY3BhdWwgTGluIDxtYWNwYXVsLmxpbkBtZWRp
-YXRlay5jb20+DQpDYzogc3RhYmxlQHZnZXIua2VybmVsLm9yZw0KLS0tDQpDaGFuZ2VzIGZvciB2
-MjoNCiAgLSBDaGVjayBtdHVfZ2FkZ2V0X2RyaXZlciBvdXQgb2Ygc3Bpbl9sb2NrIG1pZ2h0IHN0
-aWxsIG5vdCB3b3JrLg0KICAgIFdlIHVzZSBhIHRlbXBvcmFyeSBwb2ludGVyIHRvIGtlZXAgdGhl
-IGNhbGxiYWNrIGZ1bmN0aW9uLg0KDQogZHJpdmVycy91c2IvbXR1My9tdHUzX2dhZGdldC5jIHwg
-OSArKysrKysrKy0NCiAxIGZpbGUgY2hhbmdlZCwgOCBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9u
-KC0pDQoNCmRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9tdHUzL210dTNfZ2FkZ2V0LmMgYi9kcml2
-ZXJzL3VzYi9tdHUzL210dTNfZ2FkZ2V0LmMNCmluZGV4IDY4ZWE0Mzk1Zjg3MS4uNDBjYjY2MjZm
-NDk2IDEwMDY0NA0KLS0tIGEvZHJpdmVycy91c2IvbXR1My9tdHUzX2dhZGdldC5jDQorKysgYi9k
-cml2ZXJzL3VzYi9tdHUzL210dTNfZ2FkZ2V0LmMNCkBAIC04NDAsMTAgKzg0MCwxNyBAQCB2b2lk
-IG10dTNfZ2FkZ2V0X3N1c3BlbmQoc3RydWN0IG10dTMgKm10dSkNCiAvKiBjYWxsZWQgd2hlbiBW
-QlVTIGRyb3BzIGJlbG93IHNlc3Npb24gdGhyZXNob2xkLCBhbmQgaW4gb3RoZXIgY2FzZXMgKi8N
-CiB2b2lkIG10dTNfZ2FkZ2V0X2Rpc2Nvbm5lY3Qoc3RydWN0IG10dTMgKm10dSkNCiB7DQorCXN0
-cnVjdCB1c2JfZ2FkZ2V0X2RyaXZlciAqZHJpdmVyOw0KKw0KIAlkZXZfZGJnKG10dS0+ZGV2LCAi
-Z2FkZ2V0IERJU0NPTk5FQ1RcbiIpOw0KIAlpZiAobXR1LT5nYWRnZXRfZHJpdmVyICYmIG10dS0+
-Z2FkZ2V0X2RyaXZlci0+ZGlzY29ubmVjdCkgew0KKwkJZHJpdmVyID0gbXR1LT5nYWRnZXRfZHJp
-dmVyOw0KIAkJc3Bpbl91bmxvY2soJm10dS0+bG9jayk7DQotCQltdHUtPmdhZGdldF9kcml2ZXIt
-PmRpc2Nvbm5lY3QoJm10dS0+Zyk7DQorCQkvKg0KKwkJICogYXZvaWQga2VybmVsIHBhbmljIGJl
-Y2F1c2UgbXR1M19nYWRnZXRfc3RvcCgpIGFzc2lnbmVkIE5VTEwNCisJCSAqIHRvIG10dS0+Z2Fk
-Z2V0X2RyaXZlci4NCisJCSAqLw0KKwkJZHJpdmVyLT5kaXNjb25uZWN0KCZtdHUtPmcpOw0KIAkJ
-c3Bpbl9sb2NrKCZtdHUtPmxvY2spOw0KIAl9DQogDQotLSANCjIuMTguMA0K
+Per discussion[1], to avoid UDC driver possible freeing gadget device
+memory before device core finishes using it, we add wait-complete
+mechanism at usb_del_gadget_udc and gadget device .release callback.
+After that, usb_del_gadget_udc will not return back until device
+core finishes using gadget device.
+
+For UDC drivers who have own .release callback, it needs to call
+complete(&gadget->done) by themselves, if not, the UDC core will
+handle it by default .release callback usb_gadget_release.
+
+[1] https://www.spinics.net/lists/linux-usb/msg198790.html
+
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Peter Chen <peter.chen@nxp.com>
+---
+If this RFC patch is ok, I will create the formal patches which will change
+UDC drivers who have their own .release function.
+
+ drivers/usb/gadget/udc/core.c | 14 +++++++++++---
+ include/linux/usb/gadget.h    |  2 ++
+ 2 files changed, 13 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+index ee226ad802a4..ed141e1a0dcf 100644
+--- a/drivers/usb/gadget/udc/core.c
++++ b/drivers/usb/gadget/udc/core.c
+@@ -1138,9 +1138,15 @@ static void usb_udc_release(struct device *dev)
+ 
+ static const struct attribute_group *usb_udc_attr_groups[];
+ 
+-static void usb_udc_nop_release(struct device *dev)
++static void usb_gadget_release(struct device *dev)
+ {
++	struct usb_gadget *gadget;
++
+ 	dev_vdbg(dev, "%s\n", __func__);
++
++	gadget = container_of(dev, struct usb_gadget, dev);
++	complete(&gadget->done);
++	memset(dev, 0x0, sizeof(*dev));
+ }
+ 
+ /* should be called with udc_lock held */
+@@ -1184,7 +1190,7 @@ int usb_add_gadget_udc_release(struct device *parent, struct usb_gadget *gadget,
+ 	if (release)
+ 		gadget->dev.release = release;
+ 	else
+-		gadget->dev.release = usb_udc_nop_release;
++		gadget->dev.release = usb_gadget_release;
+ 
+ 	device_initialize(&gadget->dev);
+ 
+@@ -1324,6 +1330,7 @@ void usb_del_gadget_udc(struct usb_gadget *gadget)
+ 	dev_vdbg(gadget->dev.parent, "unregistering gadget\n");
+ 
+ 	mutex_lock(&udc_lock);
++	init_completion(&gadget->done);
+ 	list_del(&udc->list);
+ 
+ 	if (udc->driver) {
+@@ -1338,7 +1345,8 @@ void usb_del_gadget_udc(struct usb_gadget *gadget)
+ 	flush_work(&gadget->work);
+ 	device_unregister(&udc->dev);
+ 	device_unregister(&gadget->dev);
+-	memset(&gadget->dev, 0x00, sizeof(gadget->dev));
++	/* Wait gadget release() is done */
++	wait_for_completion(&gadget->done);
+ }
+ EXPORT_SYMBOL_GPL(usb_del_gadget_udc);
+ 
+diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
+index 298b334e2951..ae346b524591 100644
+--- a/include/linux/usb/gadget.h
++++ b/include/linux/usb/gadget.h
+@@ -378,6 +378,7 @@ struct usb_gadget_ops {
+  * @lpm_capable: If the gadget max_speed is FULL or HIGH, this flag
+  *	indicates that it supports LPM as per the LPM ECN & errata.
+  * @irq: the interrupt number for device controller.
++ * @done: gadget device's release() is done
+  *
+  * Gadgets have a mostly-portable "gadget driver" implementing device
+  * functions, handling all usb configurations and interfaces.  Gadget
+@@ -433,6 +434,7 @@ struct usb_gadget {
+ 	unsigned			connected:1;
+ 	unsigned			lpm_capable:1;
+ 	int				irq;
++	struct completion		done;
+ };
+ #define work_to_gadget(w)	(container_of((w), struct usb_gadget, work))
+ 
+-- 
+2.17.1
 
