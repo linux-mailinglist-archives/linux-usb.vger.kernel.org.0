@@ -2,107 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2E4E2345F4
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Jul 2020 14:40:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F632234740
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Jul 2020 15:58:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733218AbgGaMkv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 Jul 2020 08:40:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53726 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733216AbgGaMkv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 31 Jul 2020 08:40:51 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3420621744;
-        Fri, 31 Jul 2020 12:40:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596199250;
-        bh=Pt1S98f0GzIE3AAoj+4sq2CBEAjfR0SVaxb/dca5dmc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xUV6h0YtM1KiAG4GBOeaFkD4UyQQkUDaU4z6OfG0q003a/iyU/xaYkXx7pBXpxljS
-         cZDNilfa82croF8TomtZSU63xNIlNxIzcoHNPHvBzUaUHOO0OoxLEL7zJGN7Wv78mi
-         m7hr7smE8oUTadvR0ClNkIlK+LwhTHijHY39uYos=
-Date:   Fri, 31 Jul 2020 14:40:37 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Christian Gromm <christian.gromm@microchip.com>
-Cc:     driverdev-devel@linuxdriverproject.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v7] drivers: most: add USB adapter driver
-Message-ID: <20200731124037.GA1689939@kroah.com>
-References: <1596198058-26541-1-git-send-email-christian.gromm@microchip.com>
+        id S1730903AbgGaN5R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 Jul 2020 09:57:17 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:42209 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1730733AbgGaN5R (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Jul 2020 09:57:17 -0400
+Received: (qmail 36867 invoked by uid 1000); 31 Jul 2020 09:57:15 -0400
+Date:   Fri, 31 Jul 2020 09:57:15 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     eli.billauer@gmail.com
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        hdegoede@redhat.com, oneukum@suse.de
+Subject: Re: [PATCH v5] usb: core: Solve race condition in anchor cleanup
+ functions
+Message-ID: <20200731135715.GA36650@rowland.harvard.edu>
+References: <20200731054650.30644-1-eli.billauer@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1596198058-26541-1-git-send-email-christian.gromm@microchip.com>
+In-Reply-To: <20200731054650.30644-1-eli.billauer@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 31, 2020 at 02:20:58PM +0200, Christian Gromm wrote:
-> This patch adds the USB driver source file most_usb.c and
-> modifies the Makefile and Kconfig accordingly.
+On Fri, Jul 31, 2020 at 08:46:50AM +0300, eli.billauer@gmail.com wrote:
+> From: Eli Billauer <eli.billauer@gmail.com>
 > 
-> Signed-off-by: Christian Gromm <christian.gromm@microchip.com>
+> usb_kill_anchored_urbs() is commonly used to cancel all URBs on an
+> anchor just before releasing resources which the URBs rely on. By doing
+> so, users of this function rely on that no completer callbacks will take
+> place from any URB on the anchor after it returns.
+> 
+> However if this function is called in parallel with __usb_hcd_giveback_urb
+> processing a URB on the anchor, the latter may call the completer
+> callback after usb_kill_anchored_urbs() returns. This can lead to a
+> kernel panic due to use after release of memory in interrupt context.
+> 
+> The race condition is that __usb_hcd_giveback_urb() first unanchors the URB
+> and then makes the completer callback. Such URB is hence invisible to
+> usb_kill_anchored_urbs(), allowing it to return before the completer has
+> been called, since the anchor's urb_list is empty.
+> 
+> Even worse, if the racing completer callback resubmits the URB, it may
+> remain in the system long after usb_kill_anchored_urbs() returns.
+> 
+> Hence list_empty(&anchor->urb_list), which is used in the existing
+> while-loop, doesn't reliably ensure that all URBs of the anchor are gone.
+> 
+> A similar problem exists with usb_poison_anchored_urbs() and
+> usb_scuttle_anchored_urbs().
+> 
+> This patch adds an external do-while loop, which ensures that all URBs
+> are indeed handled before these three functions return. This change has
+> no effect at all unless the race condition occurs, in which case the
+> loop will busy-wait until the racing completer callback has finished.
+> This is a rare condition, so the CPU waste of this spinning is
+> negligible.
+> 
+> The additional do-while loop relies on usb_anchor_check_wakeup(), which
+> returns true iff the anchor list is empty, and there is no
+> __usb_hcd_giveback_urb() in the system that is in the middle of the
+> unanchor-before-complete phase. The @suspend_wakeups member of
+> struct usb_anchor is used for this purpose, which was introduced to solve
+> another problem which the same race condition causes, in commit
+> 6ec4147e7bdb ("usb-anchor: Delay usb_wait_anchor_empty_timeout wake up
+> till completion is done").
+> 
+> The surely_empty variable is necessary, because usb_anchor_check_wakeup()
+> must be called with the lock held to prevent races. However the spinlock
+> must be released and reacquired if the outer loop spins with an empty
+> URB list while waiting for the unanchor-before-complete passage to finish:
+> The completer callback may very well attempt to take the very same lock.
+> 
+> To summarize, using usb_anchor_check_wakeup() means that the patched
+> functions can return only when the anchor's list is empty, and there is
+> no invisible URB being processed. Since the inner while loop finishes on
+> the empty list condition, the new do-while loop will terminate as well,
+> except for when the said race condition occurs.
+> 
+> Signed-off-by: Eli Billauer <eli.billauer@gmail.com>
 > ---
-> v2:
-> Reported-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->         - don't remove usb driver from staging area
->         - don't touch staging/most/Kconfig
->         - remove subdirectory for USB driver and put source file into
->           drivers/most
-> v3:
->         - submitted fixes found during code audit to staging version
->           first to be able to resend single patch that adds the driver
-> v4:
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> 
->         submitted patch set that fixes issues found during code audit
->         to staging version first to be able to resend single patch that
->         adds the driver. The patch series included:
-> 
->         - use function sysfs_streq
->         - add missing put_device calls
->         - use correct error codes
->         - replace code to calculate array index
->         - don't use error path to exit function on success
->         - move allocation of URB out of critical section
->         - return 0 instead of variable
->         - change return value of function drci_rd_reg
->         - don't use expressions that might fail in a declaration
->         - change order of function parameters
-> 
-> v5:
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> 
->         submitted patch set that fixes issues found during code audit
->         to staging version first to be able to resend single patch that
->         adds the driver. The patch series included:
-> 
->         - init return value in default path of switch/case expression
-> 
-> v6:
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> 
-> 	remove dependency to NET in Kconfig file
-> 
-> v7:
-> Reported-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> 
-> 	created patch with 'git format-patch -M' to show that this is
-> 	a move only.
->  
->  drivers/most/Kconfig                                | 11 +++++++++++
->  drivers/most/Makefile                               |  2 ++
->  drivers/{staging/most/usb/usb.c => most/most_usb.c} |  0
->  drivers/staging/most/Kconfig                        |  2 --
->  drivers/staging/most/usb/Kconfig                    | 13 -------------
->  drivers/staging/most/usb/Makefile                   |  4 ----
->  6 files changed, 13 insertions(+), 19 deletions(-)
->  rename drivers/{staging/most/usb/usb.c => most/most_usb.c} (100%)
->  delete mode 100644 drivers/staging/most/usb/Kconfig
->  delete mode 100644 drivers/staging/most/usb/Makefile
+> Difference from patch v4: Added cpu_relax() calls per Alan's advice.
+>  drivers/usb/core/urb.c | 89 +++++++++++++++++++++++++-----------------
+>  1 file changed, 54 insertions(+), 35 deletions(-)
 
-Thanks, this worked, now queued up!
-
-greg k-h
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
