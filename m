@@ -2,86 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99CFB2347AA
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Jul 2020 16:22:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62E07234B41
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Jul 2020 20:39:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729184AbgGaOWN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 Jul 2020 10:22:13 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:56885 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1729172AbgGaOWN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Jul 2020 10:22:13 -0400
-Received: (qmail 37750 invoked by uid 1000); 31 Jul 2020 10:22:12 -0400
-Date:   Fri, 31 Jul 2020 10:22:12 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Macpaul Lin <macpaul.lin@mediatek.com>
-Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Eddie Hung <eddie.hung@mediatek.com>,
+        id S2387907AbgGaSi6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 Jul 2020 14:38:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60828 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387676AbgGaSi6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Jul 2020 14:38:58 -0400
+Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C59C061574;
+        Fri, 31 Jul 2020 11:38:57 -0700 (PDT)
+Received: by mail-qt1-x844.google.com with SMTP id 6so23726776qtt.0;
+        Fri, 31 Jul 2020 11:38:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hmlynqxkKJT+AklZpDdQn6RJdhmkaFRFUyQ1+UUwwKU=;
+        b=KvmAMOvF4+8tqzp2+qH7sQBYhUmlWMMHQYRQEAyX3ufuczq/2ENbC41E24FHBlYMOQ
+         QRx1CQ7hH2UgONKJE+0vjN4gt7zUPCgaAGdpgINwANeZhNLhBqwJTj2KtiiSSCa/n7E2
+         kibXk4mLLih6bIxNNRuzVqE2Y9ttW7RGnMSUjYYgMt27H6Q7g4YI2lKDaifOSoSFC3z+
+         pbtu/kbAIyS3q0LQgCnWY3+CqLOuAqqzvXZfdVQjwm9UePpzq8ipLBUvKbuVyEKyBGBP
+         cLi5Hf9J9QrJq0mq2XzaMGmiwq9ryko8PRbHfPVS1dKmronXw12z88vP6y8oqDFQS9Cj
+         lh2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hmlynqxkKJT+AklZpDdQn6RJdhmkaFRFUyQ1+UUwwKU=;
+        b=ir8wsYNSgmkZMMbXj/AOAsZ5eytMXTKHbotIZ0SVG+AaWqqIfVa39BucL/rF/nNUQT
+         KdSsSw9+Fj6Uj0tR7VsVunUgM2uBJQ+2bhMJXgxmsZ2qK7LY135FQf58qjxVNpfGtk2P
+         LkU8fv6l6wwJOsCa2Jc9FAba0F2oZh2F8e8rFKwudhFPNhgMP3OwapdEwZ8tCaywMX8i
+         jBkb1oOOCxjNyqCtySmw/W4J23RUa4AOXEejivhNW1iebpBkajFqmLBCM0doMpGTgKXk
+         mX2Rs6q4XK46lQtSKO/o9uSEhgfEh151zvuCgyQ6OyJLPjK75lV6taavdGejCVlWOvdz
+         hn4w==
+X-Gm-Message-State: AOAM530l2b17E6weygqAJs7WwX3Kiq7GL7wAd30G1MtfBKNGajWddeYI
+        C6uAhznVu6PJDjxnehdHKmk=
+X-Google-Smtp-Source: ABdhPJy4SC1/P8V4XXUJOKNekIdadtMw2vA2d1nIgiOXTL1o9u+42phUs021Nj3hsi3+kyOjtGWBLA==
+X-Received: by 2002:ac8:5416:: with SMTP id b22mr5004515qtq.45.1596220737104;
+        Fri, 31 Jul 2020 11:38:57 -0700 (PDT)
+Received: from ubuntu-n2-xlarge-x86 ([2604:1380:45d1:2600::1])
+        by smtp.gmail.com with ESMTPSA id l1sm9492144qtp.96.2020.07.31.11.38.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Jul 2020 11:38:56 -0700 (PDT)
+Date:   Fri, 31 Jul 2020 11:38:54 -0700
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        Macpaul Lin <macpaul.lin@gmail.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v2] usb: mtu3: fix panic in mtu3_gadget_disconnect()
-Message-ID: <20200731142212.GE36650@rowland.harvard.edu>
-References: <1596177366-12029-1-git-send-email-macpaul.lin@mediatek.com>
- <1596185878-24360-1-git-send-email-macpaul.lin@mediatek.com>
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: s3c: Remove unused 'udc' variable
+Message-ID: <20200731183854.GA2279514@ubuntu-n2-xlarge-x86>
+References: <20200731074122.6484-1-krzk@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1596185878-24360-1-git-send-email-macpaul.lin@mediatek.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200731074122.6484-1-krzk@kernel.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 31, 2020 at 04:57:58PM +0800, Macpaul Lin wrote:
-> This patch fixes a possible issue when mtu3_gadget_stop()
-> already assigned NULL to mtu->gadget_driver during mtu_gadget_disconnect().
-
+On Fri, Jul 31, 2020 at 09:41:22AM +0200, Krzysztof Kozlowski wrote:
+> Remove unused 'udc' variable to fix compile warnings:
 > 
-> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
-> Cc: stable@vger.kernel.org
+>     drivers/usb/gadget/udc/s3c2410_udc.c: In function 's3c2410_udc_dequeue':
+>     drivers/usb/gadget/udc/s3c2410_udc.c:1268:22: warning: variable 'udc' set but not used [-Wunused-but-set-variable]
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+
+Weird, looks like it has been unused since the introduction of the
+driver.
+
+Reviewed-by: Nathan Chancellor <natechancellor@gmail.com>
+
 > ---
-> Changes for v2:
->   - Check mtu_gadget_driver out of spin_lock might still not work.
->     We use a temporary pointer to keep the callback function.
+>  drivers/usb/gadget/udc/s3c2410_udc.c | 3 ---
+>  1 file changed, 3 deletions(-)
 > 
->  drivers/usb/mtu3/mtu3_gadget.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/mtu3/mtu3_gadget.c b/drivers/usb/mtu3/mtu3_gadget.c
-> index 68ea4395f871..40cb6626f496 100644
-> --- a/drivers/usb/mtu3/mtu3_gadget.c
-> +++ b/drivers/usb/mtu3/mtu3_gadget.c
-> @@ -840,10 +840,17 @@ void mtu3_gadget_suspend(struct mtu3 *mtu)
->  /* called when VBUS drops below session threshold, and in other cases */
->  void mtu3_gadget_disconnect(struct mtu3 *mtu)
+> diff --git a/drivers/usb/gadget/udc/s3c2410_udc.c b/drivers/usb/gadget/udc/s3c2410_udc.c
+> index bc2e8eb737c3..e875a0b967c0 100644
+> --- a/drivers/usb/gadget/udc/s3c2410_udc.c
+> +++ b/drivers/usb/gadget/udc/s3c2410_udc.c
+> @@ -1270,7 +1270,6 @@ static int s3c2410_udc_queue(struct usb_ep *_ep, struct usb_request *_req,
+>  static int s3c2410_udc_dequeue(struct usb_ep *_ep, struct usb_request *_req)
 >  {
-> +	struct usb_gadget_driver *driver;
-> +
->  	dev_dbg(mtu->dev, "gadget DISCONNECT\n");
->  	if (mtu->gadget_driver && mtu->gadget_driver->disconnect) {
-> +		driver = mtu->gadget_driver;
->  		spin_unlock(&mtu->lock);
-> -		mtu->gadget_driver->disconnect(&mtu->g);
-> +		/*
-> +		 * avoid kernel panic because mtu3_gadget_stop() assigned NULL
-> +		 * to mtu->gadget_driver.
-> +		 */
-> +		driver->disconnect(&mtu->g);
->  		spin_lock(&mtu->lock);
->  	}
-
-This is not the right approach; it might race with the gadget driver 
-unregistering itself.
-
-Instead, mtu3_gadget_stop() should call synchronize_irq() after 
-releasing the IRQ line.  When synchronize_irq() returns, you'll know any 
-IRQ handlers have finished running, so you won't receive any more 
-disconnect notifications.  Then it will be safe to acquire the spinlock 
-and set mtu->gadget_driver to NULL.
-
-Alan Stern
+>  	struct s3c2410_ep	*ep = to_s3c2410_ep(_ep);
+> -	struct s3c2410_udc	*udc;
+>  	int			retval = -EINVAL;
+>  	unsigned long		flags;
+>  	struct s3c2410_request	*req = NULL;
+> @@ -1283,8 +1282,6 @@ static int s3c2410_udc_dequeue(struct usb_ep *_ep, struct usb_request *_req)
+>  	if (!_ep || !_req)
+>  		return retval;
+>  
+> -	udc = to_s3c2410_udc(ep->gadget);
+> -
+>  	local_irq_save(flags);
+>  
+>  	list_for_each_entry(req, &ep->queue, queue) {
+> -- 
+> 2.17.1
+> 
