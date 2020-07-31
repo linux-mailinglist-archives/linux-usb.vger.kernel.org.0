@@ -2,230 +2,525 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1372C233F4B
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Jul 2020 08:44:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0418233F83
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Jul 2020 08:58:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731436AbgGaGo0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 Jul 2020 02:44:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55202 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731224AbgGaGoY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 31 Jul 2020 02:44:24 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7CF28207F5;
-        Fri, 31 Jul 2020 06:44:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596177862;
-        bh=VoWIbr12cLn+M9EERi4T3nwBVg+le+rIf7e1szxEnuQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UIghgX6ldHsdkjM4+0Y+iFxmju9nu1xZpNnzRp/wa7sOwcK2vfqTWdwL9A2W0k7Ze
-         9DJIeLPBSGYnM621Wke2JrMS2cz+xjUYBc+IESklckyiCRFzEqTHjChPBAHoh6Ez1m
-         htT5U9RnWMlyZNtzmylrFTifbly3ECZEhiBx4IPY=
-Date:   Fri, 31 Jul 2020 08:44:10 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Yasushi Asano <yazzep@gmail.com>
-Cc:     stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
-        erosca@de.adit-jv.com, andrew_gabbasov@mentor.com,
-        jim_baxter@mentor.com, wnatsume@jp.adit-jv.com,
-        nnishiguchi@jp.adit-jv.com, yasano@jp.adit-jv.com
-Subject: Re: [PATCH] [RFC] USB: hub.c: Add the retry count module parameter
- for usbcore
-Message-ID: <20200731064410.GG1508201@kroah.com>
-References: <20200730104226.3537-1-yazzep@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200730104226.3537-1-yazzep@gmail.com>
+        id S1731478AbgGaG6g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 Jul 2020 02:58:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37742 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731456AbgGaG6f (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Jul 2020 02:58:35 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D36C061574
+        for <linux-usb@vger.kernel.org>; Thu, 30 Jul 2020 23:58:35 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id k11so9449786ybp.1
+        for <linux-usb@vger.kernel.org>; Thu, 30 Jul 2020 23:58:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=/0Q6XFNNX59gIOGxvSdDXEc54czs1Xha4qqlJtedwg0=;
+        b=skAPgd7Ks9cQrItck70x1Mh3jZKSED1uzmOoOCMV950oVeqv65KHEP1nBrhICyhbUQ
+         AJrWFq40yvGgl9Fn3roDlHCHgNu5DMawKJ8t464S581okN1Hh/JuXrV0FHTrdIqWK2s5
+         6xVzPSI/eMbS1e9Pz5ENsd3l2tQJ7+yrBWEOCAq4XIEjj/6rIp2VSr1eMJOw0Wuq7jF2
+         z5/gQh6d0UuVPg7wZcaL8+Vv5ts646yytGB2I2nLn8sxgkpbwMY0PuASBYyBoQW5EeQj
+         WxgchSEhN52B/TFoPM8HcTS2WYxWMZ26lmQbHXtKpMqJSPA7lciGrdfn+8SxBkHidBWL
+         5G4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=/0Q6XFNNX59gIOGxvSdDXEc54czs1Xha4qqlJtedwg0=;
+        b=ucWREgvRGs9zHw3Ij+PoZO0pta7jfGA9bLNudDSVpf6ct/40Ssfas90nShn7XuYdt0
+         jXihDZbh07BMULOOq2d9zhRK/9gGcdBsiGfHD8f8UvNv4vnfwG2o1qTrZxWGiYEsmwjl
+         iaRpRhN6FzuqAR6N/a01cy2eQF7NfxYJtRxJWlIujsO+RdldMdA8c3kSVw91vTmHZYrm
+         9uFbhLCKZAC44sE0DjmmNqjk+Vnu76T9OhHG6pcYvMdSCvfvSyV5fL4drzHIbxnCFsUb
+         k2g+8ZgMzMPnEQOy5igQGh1Phedg74fjDlGMX5r98oBEOA7/+zzgdUEZ4Nj1MiUAZqBf
+         w98A==
+X-Gm-Message-State: AOAM5310042BPufdGeT6iFXo+lx+GIamK4ZNeTvTAb8L+iO1+FgI0r+n
+        epZJgchQzJTEyyZ4uZfZcRjTPnbs+W4=
+X-Google-Smtp-Source: ABdhPJzr5EeyJsHwPuwByshyxF1qIj2q9ZVndbihsZ5jBZZLv+YiVg5ok784Bdt2SCpJYtLz9p4XaXxZDtc=
+X-Received: by 2002:a25:d946:: with SMTP id q67mr3676470ybg.517.1596178714762;
+ Thu, 30 Jul 2020 23:58:34 -0700 (PDT)
+Date:   Thu, 30 Jul 2020 23:58:30 -0700
+Message-Id: <20200731065830.3744049-1-badhri@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.28.0.163.g6104cc2f0b6-goog
+Subject: [PATCH v5] usb: typec: tcpm: Migrate workqueue to RT priority for
+ processing events
+From:   Badhri Jagan Sridharan <badhri@google.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Badhri Jagan Sridharan <badhri@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 30, 2020 at 07:42:26PM +0900, Yasushi Asano wrote:
-> From: Yasushi Asano <yasano@jp.adit-jv.com>
-> 
-> Dear Alan
-> Dear Greg
-> 
-> I would like to have a consultation with you. The customer's product
-> board needs to get a USB certification and compliance, but it can not
-> pass the test using the current USB hub driver. According to the USB
-> compliance plan[1], the“6.7.22 Device No Response” test requires the
-> detection of device enumeration failure within 30 seconds. The
-> kernel(USB hub driver) must notify userspace of the enumeration failure
-> within 30 seconds.
+"tReceiverResponse 15 ms Section 6.6.2
+The receiver of a Message requiring a response Shall respond
+within tReceiverResponse in order to ensure that the
+sender=E2=80=99s SenderResponseTimer does not expire."
 
-Odd, we have passed the USB certification tests in the past, what
-changed recently to cause this?
+When the cpu complex is busy running other lower priority
+work items, TCPM's work queue sometimes does not get scheduled
+on time to meet the above requirement from the spec.
+Moving to kthread_work apis to run with real time priority.
+Just lower than the default threaded irq priority,
+MAX_USER_RT_PRIO/2 + 1. (Higher number implies lower priority).
 
-> In the current hub driver, the place to detect device enumeration
-> failure is [2]. I have modified the hub driver to issue a uevent here,
-> but the procedure of device enumeration (new_scheme+old_scheme) takes
-> too long to execute, it couldn't reach [2] within 30 seconds after
-> starting the test.  According to the result of PETtool [3], the state of
-> "Device No response" is that usb_control_msg(USB_REQ_GET_DESCRIPTOR) [4]
-> in hub_port_initn times out. That means r == -ETIMEDOUT.  because of the
-> default setting of initial_descriptor_timeout is 5000 msec[5],
-> usb_control_msg() took 5000msec until -ETIMEDOUT.
-> 
-> I will try to describe the flow of device enumeration processing
-> below[6].  If my understanding is correct, the enumeration failure [2]
-> will be reached after performing all the loops of [7][8][9]+[7][10].  In
-> the new scheme, 12 times check will be performed ([7]/2*[8]*[9] => 2*2*3
-> => 12).  In the old scheme , 4 times check will be performed ([7]/2*[10]
-> => 2*2 => 4).  In total, it checks 16 times, and it took 5000msec to
-> ETIMEDOUT every time. Therefore, It takes about 80 seconds(16*5000msec)
-> to reach [2]. This does not pass the "Device No response" test.
-> 
-> If I set the module parameter old_schene_first=Y and use_both_schemes=N,
-> it can be reached [2] within 30 seconds. However, the new_scheme will no
-> longer be performed. I think we can't choose this, as
-> previously-detected devices may become undetectable.  new_scheme is
-> taking too long and I think 12 times checks are redundant. So, I
-> confirmed the USB specification.
-> 
-> This is the only description of the read of the device descriptor[12].
-> I couldn't find the description related retry count or timing here and
-> anywhere in this specification.  And I couldn't find the description
-> related timing in the “No silent failures" requirements in other
-> documents[13] also.
-> 
-> Because I'm not sure where this number of loop count is decided, I'm not
-> sure how should it be modified the driver to pass the USB compliance
-> test. Is it possible for me to receive a proposal for a solution?  As my
-> thought, the number of loops may be redundant, so I think if the user
-> can change it arbitrarily, the problem will be solved. Currently, the
-> timeout value can be adjusted with a module parameter, but the loop
-> count cannot. Is there any problem if it is changed like this patch?
-> The original handling of the driver is unchanged by this modification. I
-> think the user will be able to adjust the time to enumeration failure
-> freely. Is this patch acceptable? I would appreciate it much if I could
-> receive the feedback from you.
-> 
-> ----------------------------------------------------------------------------------------------------------------------------------------
-> [1] https://www.usb.org/sites/default/files/otgeh_compliance_plan_1_2.pdf
-> 6.7.22 A-UUT “Device No Response” for connection timeout
-> 6.7.22.2 Test Procedure for A-UUT which does not support sessions
->    - 5. If operator clicks OK before 30s elapses since VBUS went on, then UUT passes test.
->    - 6. If 30s elapses first, then UUT fails test.
-> ----------------------------------------------------------------------------------------------------------------------------------------
-> [2] hub_port_connect()
-> 
->         if (hub->hdev->parent ||
->                         !hcd->driver->port_handed_over ||
->                         !(hcd->driver->port_handed_over)(hcd, port1)) {
->                 if (status != -ENOTCONN && status != -ENODEV)
->                         dev_err(&port_dev->dev,
->                                         "unable to enumerate USB device\n");
->         }
-> ----------------------------------------------------------------------------------------------------------------------------------------
-> [3] http://www.mqp.com/usbcomp.htm
-> ----------------------------------------------------------------------------------------------------------------------------------------
-> [4] hub_port_init()
-> 
->   r = usb_control_msg(udev, usb_rcvaddr0pipe(),
->           USB_REQ_GET_DESCRIPTOR, USB_DIR_IN,
->           USB_DT_DEVICE << 8, 0,
->           buf, GET_DESCRIPTOR_BUFSIZE,
->           initial_descriptor_timeout);
-> ----------------------------------------------------------------------------------------------------------------------------------------
-> [5]
-> static int initial_descriptor_timeout = USB_CTRL_GET_TIMEOUT;
-> include/linux/usb.h:#define USB_CTRL_GET_TIMEOUT        5000
-> ----------------------------------------------------------------------------------------------------------------------------------------
-> [6] The flow of device enumeration processing
-> drivers/usb/core/hub.c
-> 
-> hub_port_connect(){
->        for (x = 0; x < SET_CONFIG_TRIES; x++) {                  ...[7] SET_CONFIG_TRIES is 4 as default setting
->                hub_port_init(){
->                        if( x < 2 ) {
->                              ------ new scheme ------
->                              for ( y= 0; y < 2; ++y ) {          ...[8] 2==GET_DESCRIPTOR_TRIES
->                                     for ( z = 0; z < 3; ++z ) {  ...[9]
->                                            usb_control_msg()     ...[3] ETIMEDOUT(-110) is detected. Timieout value=5000msec.
->                                     }
->                              }
->                        }
->                        else {
->                              ------ old scheme ------
->                              for ( y= 0; y < 2; ++y ) {          ...[10] 2==SET_ADDRESS_TRIES
->                                     hub_set_address()            ...[11] ETIMEDOUT(-110) is detected. Timieout value=5000msec.
->                              }
->                        }
->                }
->        }
->        unable to enumerate USB device.                           ...[2]
-> }
-> ----------------------------------------------------------------------------------------------------------------------------------------
-> [12] https://www.usb.org/document-library/usb-20-specification
-> Universal Serial Bus Specification (usb_20.pdf)
-> 9.1.2 Bus Enumeration
-> 6. Before the USB device receives a unique address, its Default Control Pipe is still accessible via the default address.
->    The host reads the device descriptor to determine what actual maximum data payload size this USB device's default pipe can use.
-> ----------------------------------------------------------------------------------------------------------------------------------------
-> [13] https://www.usb.org/document-library/usb-20-specification
-> On-The-Go and Embedded Host Supplement to the USB Revision 2.0 Specification (USB_OTG_and_EH_2-0-version 1_1a.pdf)
-> 3.5 No Silent Failures
-> ----------------------------------------------------------------------------------------------------------------------------------------
-> 
-> Signed-off-by: Yasushi Asano <yasano@jp.adit-jv.com>
-> ---
->  drivers/usb/core/hub.c | 17 +++++++++++++++--
->  1 file changed, 15 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index 052d5ac..01c2b2d 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -99,6 +99,18 @@ MODULE_PARM_DESC(use_both_schemes,
->  		"try the other device initialization scheme if the "
->  		"first one fails");
->  
-> +static int get_descriptor_tries = 2;
-> +module_param(get_descriptor_tries, int, S_IRUGO | S_IWUSR);
-> +MODULE_PARM_DESC(get_descriptor_tries,
-> +		"The number of a 64-byte GET_DESCRIPTOR request tries "
-> +		"(default 2)");
-> +
-> +static int get_descriptor_operations = 3;
-> +module_param(get_descriptor_operations, int, S_IRUGO | S_IWUSR);
-> +MODULE_PARM_DESC(get_descriptor_operations,
-> +		"The number of a 64-byte GET_DESCRIPTOR operation "
-> +		"(default 3)");
-> +
->  /* Mutual exclusion for EHCI CF initialization.  This interferes with
->   * port reset on some companion controllers.
->   */
-> @@ -2707,7 +2719,8 @@ static unsigned hub_is_wusb(struct usb_hub *hub)
->  
->  #define PORT_RESET_TRIES	5
->  #define SET_ADDRESS_TRIES	2
-> -#define GET_DESCRIPTOR_TRIES	2
-> +#define GET_DESCRIPTOR_TRIES	get_descriptor_tries
-> +#define GET_DESCRIPTOR_OPERATIONS	get_descriptor_operations
+Further, as observed in 1ff688209e2e, moving to hrtimers to
+overcome scheduling latency while scheduling the delayed work.
 
-No need for these defines now that you have a variable being used,
-right?
+TCPM has three work streams:
+1. tcpm_state_machine
+2. vdm_state_machine
+3. event_work
 
->  #define SET_CONFIG_TRIES	(2 * (use_both_schemes + 1))
->  #define USE_NEW_SCHEME(i, scheme)	((i) / 2 == (int)(scheme))
->  
-> @@ -4684,7 +4697,7 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
->  			 * 255 is for WUSB devices, we actually need to use
->  			 * 512 (WUSB1.0[4.8.1]).
->  			 */
-> -			for (operations = 0; operations < 3; ++operations) {
-> +			for (operations = 0; operations < GET_DESCRIPTOR_OPERATIONS; ++operations) {
+tcpm_state_machine and vdm_state_machine both schedule work in
+future i.e. delayed. Hence each of them have a corresponding
+hrtimer, tcpm_state_machine_timer & vdm_state_machine_timer.
 
-module parameters are not ok, they work for all devices/hubs in the
-system, and no one knows how to change them or not.
+When work is queued right away kthread_queue_work is used.
+Else, the relevant timer is programmed and made to queue
+the kthread_work upon timer expiry.
 
-Any other way we can "just always do it correctly" here?
+kthread_create_worker only creates one kthread worker thread,
+hence single threadedness of workqueue is retained.
 
-thanks,
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+---
+Changes since v1:(Guenter's suggestions)
+- Remove redundant call to hrtimer_cancel while calling
+  hrtimer_start.
 
-greg k-h
+Changes since v2:(Greg KH's suggestions)
+- Rebase usb-next TOT.
+  633198cd2945b7 (HEAD -> usb-next-1) usb: typec: tcpm: Migrate workqueue t=
+o RT priority for processing events
+  fa56dd9152ef95 (origin/usb-next) Merge tag 'usb-serial-5.9-rc1' of https:=
+//git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-next
+  25252919a1050e xhci: dbgtty: Make some functions static
+  b0e02550346e67 xhci: dbc: Make function xhci_dbc_ring_alloc() static
+  ca6377900974c3 Revert "usb: dwc2: override PHY input signals with usb rol=
+e switch support"
+  09df709cb5aeb2 Revert "usb: dwc2: don't use ID/Vbus detection if usb-role=
+-switch on STM32MP15 SoCs"
+  17a82716587e9d USB: iowarrior: fix up report size handling for some devic=
+es
+  e98ba8cc3f8a89 Merge tag 'usb-for-v5.9' of git://git.kernel.org/pub/scm/l=
+inux/kernel/git/balbi/usb into usb-next
+  c97793089b11f7 Merge 5.8-rc7 into usb-next
+  92ed301919932f (tag: v5.8-rc7, origin/usb-linus, origin/main) Linux 5.8-r=
+c7
+
+- Added reviewed-by tags.
+
+Changes since v3:(Greg KH's suggestions)
+- Rebase usb-next TOT
+  Resolve merge conflict with "usb: typec: tcpm: Move mod_delayed_work(&por=
+t->vdm_state_machine) call into tcpm_queue_vdm()"
+
+  b8f151122648b0 (HEAD -> usb-next-1) usb: typec: tcpm: Migrate workqueue t=
+o RT priority for processing events
+  ab4dc051d7b39c (origin/usb-testing, origin/usb-next) usb: mtu3: simplify =
+mtu3_req_complete()
+  f1e51e99ed498d usb: mtu3: clear dual mode of u3port when disable device
+  54402373c45e44 usb: mtu3: use MTU3_EP_WEDGE flag
+  bf77804b1cbdeb usb: mtu3: remove useless member @busy in mtu3_ep struct
+  ba428976a8827f usb: mtu3: remove repeated error log
+  dc4c1aa7eae99d usb: mtu3: add ->udc_set_speed()
+  1258450ef38af7 usb: mtu3: introduce a funtion to check maximum speed
+
+Changes since v4:
+ - Constantify and fix sched_param (Heikki & Guenter suggestion)
+ - Change applied so added Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+ - Move to ERR_CAST when wq fails to setup
+---
+
+drivers/usb/typec/tcpm/tcpm.c | 136 +++++++++++++++++++++++-----------
+ 1 file changed, 92 insertions(+), 44 deletions(-)
+
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 3ef37202ee3757..d1fc8abaedbc7e 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -8,8 +8,10 @@
+ #include <linux/completion.h>
+ #include <linux/debugfs.h>
+ #include <linux/device.h>
++#include <linux/hrtimer.h>
+ #include <linux/jiffies.h>
+ #include <linux/kernel.h>
++#include <linux/kthread.h>
+ #include <linux/module.h>
+ #include <linux/mutex.h>
+ #include <linux/power_supply.h>
+@@ -28,7 +30,8 @@
+ #include <linux/usb/role.h>
+ #include <linux/usb/tcpm.h>
+ #include <linux/usb/typec_altmode.h>
+-#include <linux/workqueue.h>
++
++#include <uapi/linux/sched/types.h>
+=20
+ #define FOREACH_STATE(S)			\
+ 	S(INVALID_STATE),			\
+@@ -203,7 +206,7 @@ struct tcpm_port {
+ 	struct device *dev;
+=20
+ 	struct mutex lock;		/* tcpm state machine lock */
+-	struct workqueue_struct *wq;
++	struct kthread_worker *wq;
+=20
+ 	struct typec_capability typec_caps;
+ 	struct typec_port *typec_port;
+@@ -247,15 +250,17 @@ struct tcpm_port {
+ 	enum tcpm_state prev_state;
+ 	enum tcpm_state state;
+ 	enum tcpm_state delayed_state;
+-	unsigned long delayed_runtime;
++	ktime_t delayed_runtime;
+ 	unsigned long delay_ms;
+=20
+ 	spinlock_t pd_event_lock;
+ 	u32 pd_events;
+=20
+-	struct work_struct event_work;
+-	struct delayed_work state_machine;
+-	struct delayed_work vdm_state_machine;
++	struct kthread_work event_work;
++	struct hrtimer state_machine_timer;
++	struct kthread_work state_machine;
++	struct hrtimer vdm_state_machine_timer;
++	struct kthread_work vdm_state_machine;
+ 	bool state_machine_running;
+=20
+ 	struct completion tx_complete;
+@@ -340,7 +345,7 @@ struct tcpm_port {
+ };
+=20
+ struct pd_rx_event {
+-	struct work_struct work;
++	struct kthread_work work;
+ 	struct tcpm_port *port;
+ 	struct pd_message msg;
+ };
+@@ -914,6 +919,27 @@ static int tcpm_pd_send_sink_caps(struct tcpm_port *po=
+rt)
+ 	return tcpm_pd_transmit(port, TCPC_TX_SOP, &msg);
+ }
+=20
++static void mod_tcpm_delayed_work(struct tcpm_port *port, unsigned int del=
+ay_ms)
++{
++	if (delay_ms) {
++		hrtimer_start(&port->state_machine_timer, ms_to_ktime(delay_ms), HRTIMER=
+_MODE_REL);
++	} else {
++		hrtimer_cancel(&port->state_machine_timer);
++		kthread_queue_work(port->wq, &port->state_machine);
++	}
++}
++
++static void mod_vdm_delayed_work(struct tcpm_port *port, unsigned int dela=
+y_ms)
++{
++	if (delay_ms) {
++		hrtimer_start(&port->vdm_state_machine_timer, ms_to_ktime(delay_ms),
++			      HRTIMER_MODE_REL);
++	} else {
++		hrtimer_cancel(&port->vdm_state_machine_timer);
++		kthread_queue_work(port->wq, &port->vdm_state_machine);
++	}
++}
++
+ static void tcpm_set_state(struct tcpm_port *port, enum tcpm_state state,
+ 			   unsigned int delay_ms)
+ {
+@@ -922,9 +948,8 @@ static void tcpm_set_state(struct tcpm_port *port, enum=
+ tcpm_state state,
+ 			 tcpm_states[port->state], tcpm_states[state],
+ 			 delay_ms);
+ 		port->delayed_state =3D state;
+-		mod_delayed_work(port->wq, &port->state_machine,
+-				 msecs_to_jiffies(delay_ms));
+-		port->delayed_runtime =3D jiffies + msecs_to_jiffies(delay_ms);
++		mod_tcpm_delayed_work(port, delay_ms);
++		port->delayed_runtime =3D ktime_add(ktime_get(), ms_to_ktime(delay_ms));
+ 		port->delay_ms =3D delay_ms;
+ 	} else {
+ 		tcpm_log(port, "state change %s -> %s",
+@@ -939,7 +964,7 @@ static void tcpm_set_state(struct tcpm_port *port, enum=
+ tcpm_state state,
+ 		 * machine.
+ 		 */
+ 		if (!port->state_machine_running)
+-			mod_delayed_work(port->wq, &port->state_machine, 0);
++			mod_tcpm_delayed_work(port, 0);
+ 	}
+ }
+=20
+@@ -960,7 +985,7 @@ static void tcpm_queue_message(struct tcpm_port *port,
+ 			       enum pd_msg_request message)
+ {
+ 	port->queued_message =3D message;
+-	mod_delayed_work(port->wq, &port->state_machine, 0);
++	mod_tcpm_delayed_work(port, 0);
+ }
+=20
+ /*
+@@ -981,7 +1006,7 @@ static void tcpm_queue_vdm(struct tcpm_port *port, con=
+st u32 header,
+ 	port->vdm_retries =3D 0;
+ 	port->vdm_state =3D VDM_STATE_READY;
+=20
+-	mod_delayed_work(port->wq, &port->vdm_state_machine, 0);
++	mod_vdm_delayed_work(port, 0);
+ }
+=20
+ static void tcpm_queue_vdm_unlocked(struct tcpm_port *port, const u32 head=
+er,
+@@ -1244,8 +1269,7 @@ static void tcpm_handle_vdm_request(struct tcpm_port =
+*port,
+ 			port->vdm_state =3D VDM_STATE_WAIT_RSP_BUSY;
+ 			port->vdo_retry =3D (p[0] & ~VDO_CMDT_MASK) |
+ 				CMDT_INIT;
+-			mod_delayed_work(port->wq, &port->vdm_state_machine,
+-					 msecs_to_jiffies(PD_T_VDM_BUSY));
++			mod_vdm_delayed_work(port, PD_T_VDM_BUSY);
+ 			return;
+ 		}
+ 		port->vdm_state =3D VDM_STATE_DONE;
+@@ -1390,8 +1414,7 @@ static void vdm_run_state_machine(struct tcpm_port *p=
+ort)
+ 			port->vdm_retries =3D 0;
+ 			port->vdm_state =3D VDM_STATE_BUSY;
+ 			timeout =3D vdm_ready_timeout(port->vdo_data[0]);
+-			mod_delayed_work(port->wq, &port->vdm_state_machine,
+-					 timeout);
++			mod_vdm_delayed_work(port, timeout);
+ 		}
+ 		break;
+ 	case VDM_STATE_WAIT_RSP_BUSY:
+@@ -1420,10 +1443,9 @@ static void vdm_run_state_machine(struct tcpm_port *=
+port)
+ 	}
+ }
+=20
+-static void vdm_state_machine_work(struct work_struct *work)
++static void vdm_state_machine_work(struct kthread_work *work)
+ {
+-	struct tcpm_port *port =3D container_of(work, struct tcpm_port,
+-					      vdm_state_machine.work);
++	struct tcpm_port *port =3D container_of(work, struct tcpm_port, vdm_state=
+_machine);
+ 	enum vdm_states prev_state;
+=20
+ 	mutex_lock(&port->lock);
+@@ -1591,6 +1613,7 @@ static int tcpm_altmode_vdm(struct typec_altmode *alt=
+mode,
+ 	struct tcpm_port *port =3D typec_altmode_get_drvdata(altmode);
+=20
+ 	tcpm_queue_vdm_unlocked(port, header, data, count - 1);
++
+ 	return 0;
+ }
+=20
+@@ -2005,7 +2028,7 @@ static void tcpm_pd_ext_msg_request(struct tcpm_port =
+*port,
+ 	}
+ }
+=20
+-static void tcpm_pd_rx_handler(struct work_struct *work)
++static void tcpm_pd_rx_handler(struct kthread_work *work)
+ {
+ 	struct pd_rx_event *event =3D container_of(work,
+ 						 struct pd_rx_event, work);
+@@ -2067,10 +2090,10 @@ void tcpm_pd_receive(struct tcpm_port *port, const =
+struct pd_message *msg)
+ 	if (!event)
+ 		return;
+=20
+-	INIT_WORK(&event->work, tcpm_pd_rx_handler);
++	kthread_init_work(&event->work, tcpm_pd_rx_handler);
+ 	event->port =3D port;
+ 	memcpy(&event->msg, msg, sizeof(*msg));
+-	queue_work(port->wq, &event->work);
++	kthread_queue_work(port->wq, &event->work);
+ }
+ EXPORT_SYMBOL_GPL(tcpm_pd_receive);
+=20
+@@ -2123,9 +2146,9 @@ static bool tcpm_send_queued_message(struct tcpm_port=
+ *port)
+ 	} while (port->queued_message !=3D PD_MSG_NONE);
+=20
+ 	if (port->delayed_state !=3D INVALID_STATE) {
+-		if (time_is_after_jiffies(port->delayed_runtime)) {
+-			mod_delayed_work(port->wq, &port->state_machine,
+-					 port->delayed_runtime - jiffies);
++		if (ktime_after(port->delayed_runtime, ktime_get())) {
++			mod_tcpm_delayed_work(port, ktime_to_ms(ktime_sub(port->delayed_runtime=
+,
++									  ktime_get())));
+ 			return true;
+ 		}
+ 		port->delayed_state =3D INVALID_STATE;
+@@ -3258,10 +3281,9 @@ static void run_state_machine(struct tcpm_port *port=
+)
+ 	case SNK_DISCOVERY_DEBOUNCE_DONE:
+ 		if (!tcpm_port_is_disconnected(port) &&
+ 		    tcpm_port_is_sink(port) &&
+-		    time_is_after_jiffies(port->delayed_runtime)) {
++		    ktime_after(port->delayed_runtime, ktime_get())) {
+ 			tcpm_set_state(port, SNK_DISCOVERY,
+-				       jiffies_to_msecs(port->delayed_runtime -
+-							jiffies));
++				       ktime_to_ms(ktime_sub(port->delayed_runtime, ktime_get())));
+ 			break;
+ 		}
+ 		tcpm_set_state(port, unattached_state(port), 0);
+@@ -3656,10 +3678,9 @@ static void run_state_machine(struct tcpm_port *port=
+)
+ 	}
+ }
+=20
+-static void tcpm_state_machine_work(struct work_struct *work)
++static void tcpm_state_machine_work(struct kthread_work *work)
+ {
+-	struct tcpm_port *port =3D container_of(work, struct tcpm_port,
+-					      state_machine.work);
++	struct tcpm_port *port =3D container_of(work, struct tcpm_port, state_mac=
+hine);
+ 	enum tcpm_state prev_state;
+=20
+ 	mutex_lock(&port->lock);
+@@ -4019,7 +4040,7 @@ static void _tcpm_pd_hard_reset(struct tcpm_port *por=
+t)
+ 		       0);
+ }
+=20
+-static void tcpm_pd_event_handler(struct work_struct *work)
++static void tcpm_pd_event_handler(struct kthread_work *work)
+ {
+ 	struct tcpm_port *port =3D container_of(work, struct tcpm_port,
+ 					      event_work);
+@@ -4060,7 +4081,7 @@ void tcpm_cc_change(struct tcpm_port *port)
+ 	spin_lock(&port->pd_event_lock);
+ 	port->pd_events |=3D TCPM_CC_EVENT;
+ 	spin_unlock(&port->pd_event_lock);
+-	queue_work(port->wq, &port->event_work);
++	kthread_queue_work(port->wq, &port->event_work);
+ }
+ EXPORT_SYMBOL_GPL(tcpm_cc_change);
+=20
+@@ -4069,7 +4090,7 @@ void tcpm_vbus_change(struct tcpm_port *port)
+ 	spin_lock(&port->pd_event_lock);
+ 	port->pd_events |=3D TCPM_VBUS_EVENT;
+ 	spin_unlock(&port->pd_event_lock);
+-	queue_work(port->wq, &port->event_work);
++	kthread_queue_work(port->wq, &port->event_work);
+ }
+ EXPORT_SYMBOL_GPL(tcpm_vbus_change);
+=20
+@@ -4078,7 +4099,7 @@ void tcpm_pd_hard_reset(struct tcpm_port *port)
+ 	spin_lock(&port->pd_event_lock);
+ 	port->pd_events =3D TCPM_RESET_EVENT;
+ 	spin_unlock(&port->pd_event_lock);
+-	queue_work(port->wq, &port->event_work);
++	kthread_queue_work(port->wq, &port->event_work);
+ }
+ EXPORT_SYMBOL_GPL(tcpm_pd_hard_reset);
+=20
+@@ -4786,6 +4807,27 @@ static int devm_tcpm_psy_register(struct tcpm_port *=
+port)
+ 	return PTR_ERR_OR_ZERO(port->psy);
+ }
+=20
++static enum hrtimer_restart state_machine_timer_handler(struct hrtimer *ti=
+mer)
++{
++	struct tcpm_port *port =3D container_of(timer, struct tcpm_port, state_ma=
+chine_timer);
++
++	kthread_queue_work(port->wq, &port->state_machine);
++	return HRTIMER_NORESTART;
++}
++
++static enum hrtimer_restart vdm_state_machine_timer_handler(struct hrtimer=
+ *timer)
++{
++	struct tcpm_port *port =3D container_of(timer, struct tcpm_port, vdm_stat=
+e_machine_timer);
++
++	kthread_queue_work(port->wq, &port->vdm_state_machine);
++	return HRTIMER_NORESTART;
++}
++
++/* Priority just lower than default irq thread priority */
++static const struct sched_param param =3D {
++	.sched_priority =3D (MAX_USER_RT_PRIO / 2) + 1,
++};
++
+ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *=
+tcpc)
+ {
+ 	struct tcpm_port *port;
+@@ -4807,12 +4849,18 @@ struct tcpm_port *tcpm_register_port(struct device =
+*dev, struct tcpc_dev *tcpc)
+ 	mutex_init(&port->lock);
+ 	mutex_init(&port->swap_lock);
+=20
+-	port->wq =3D create_singlethread_workqueue(dev_name(dev));
+-	if (!port->wq)
+-		return ERR_PTR(-ENOMEM);
+-	INIT_DELAYED_WORK(&port->state_machine, tcpm_state_machine_work);
+-	INIT_DELAYED_WORK(&port->vdm_state_machine, vdm_state_machine_work);
+-	INIT_WORK(&port->event_work, tcpm_pd_event_handler);
++	port->wq =3D kthread_create_worker(0, dev_name(dev));
++	if (IS_ERR(port->wq))
++		return ERR_CAST(port->wq);
++	sched_setscheduler(port->wq->task, SCHED_FIFO, &param);
++
++	kthread_init_work(&port->state_machine, tcpm_state_machine_work);
++	kthread_init_work(&port->vdm_state_machine, vdm_state_machine_work);
++	kthread_init_work(&port->event_work, tcpm_pd_event_handler);
++	hrtimer_init(&port->state_machine_timer, CLOCK_MONOTONIC, HRTIMER_MODE_RE=
+L);
++	port->state_machine_timer.function =3D state_machine_timer_handler;
++	hrtimer_init(&port->vdm_state_machine_timer, CLOCK_MONOTONIC, HRTIMER_MOD=
+E_REL);
++	port->vdm_state_machine_timer.function =3D vdm_state_machine_timer_handle=
+r;
+=20
+ 	spin_lock_init(&port->pd_event_lock);
+=20
+@@ -4864,7 +4912,7 @@ struct tcpm_port *tcpm_register_port(struct device *d=
+ev, struct tcpc_dev *tcpc)
+ 	usb_role_switch_put(port->role_sw);
+ out_destroy_wq:
+ 	tcpm_debugfs_exit(port);
+-	destroy_workqueue(port->wq);
++	kthread_destroy_worker(port->wq);
+ 	return ERR_PTR(err);
+ }
+ EXPORT_SYMBOL_GPL(tcpm_register_port);
+@@ -4879,7 +4927,7 @@ void tcpm_unregister_port(struct tcpm_port *port)
+ 	typec_unregister_port(port->typec_port);
+ 	usb_role_switch_put(port->role_sw);
+ 	tcpm_debugfs_exit(port);
+-	destroy_workqueue(port->wq);
++	kthread_destroy_worker(port->wq);
+ }
+ EXPORT_SYMBOL_GPL(tcpm_unregister_port);
+=20
+--=20
+2.28.0.163.g6104cc2f0b6-goog
+
