@@ -2,173 +2,158 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30398234E96
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Aug 2020 01:33:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09974234EAD
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Aug 2020 01:42:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726846AbgGaXdC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 Jul 2020 19:33:02 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:45127 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726807AbgGaXdC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 31 Jul 2020 19:33:02 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1596238381; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=vF/ZfSy0GW8C+ioPXlIi2t6ZaQN9VfKaJ+Oof9fc1KQ=; b=gxJt+QyQOiRhu6kH7zhD4zJeaKGI/FKGo2zpOqzEWAraxw4x4vrQ1JT0awnXkUn7rl1/BhNv
- oaBE5vzYCKe7J6w/ia5jEPqlhJTttt1gU30W/TjBJ1nmyj9xEGVbs8aetgyHRXEqK1Ehq11/
- 3OK8xjdEYeUfwW8zT9hDP6raTeI=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n15.prod.us-east-1.postgun.com with SMTP id
- 5f24a9d990893260dd39d2f1 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 31 Jul 2020 23:31:37
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 7DBDAC43395; Fri, 31 Jul 2020 23:31:36 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.7 required=2.0 tests=ALL_TRUSTED,NICE_REPLY_A,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [10.110.121.73] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id C569EC433C9;
-        Fri, 31 Jul 2020 23:31:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org C569EC433C9
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [PATCH v6 1/4] usb: typec: Add QCOM PMIC typec detection driver
-To:     Stephen Boyd <sboyd@kernel.org>, agross@kernel.org,
-        bjorn.andersson@linaro.org, gregkh@linuxfoundation.org,
-        heikki.krogerus@linux.intel.com, robh+dt@kernel.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        jackp@codeaurora.org
-References: <20200729071340.7673-1-wcheng@codeaurora.org>
- <20200729071340.7673-2-wcheng@codeaurora.org>
- <159601160976.1360974.10172804658083744292@swboyd.mtv.corp.google.com>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <e11fc325-7f82-b13f-3e8a-f444ddc50257@codeaurora.org>
-Date:   Fri, 31 Jul 2020 16:31:33 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <159601160976.1360974.10172804658083744292@swboyd.mtv.corp.google.com>
-Content-Type: text/plain; charset=utf-8
+        id S1727873AbgGaXm6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 Jul 2020 19:42:58 -0400
+Received: from mail-eopbgr80081.outbound.protection.outlook.com ([40.107.8.81]:51771
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726347AbgGaXm5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 31 Jul 2020 19:42:57 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QagNAvCSveKy8TFRMmkKytnOlvsQpyztPiLw35F2Wt9hC6kZdlDBH2swoRyfWNUfBWyXLwqEll4c63O0d2Bp7tdkk1/cgj0vi/vM2SC7VZZUKclpn8ae08M2o3bLBq1oidVT3ZXD2sYAbBfYfii4apgLrVtoe5Fbu1W1DU2LjT/+WXZA3nZEzC16epPgA+zqGhlOBLvfFfGFJPyS8WvQimqsSJJWPWiuQm3IMNYzoHvM2a87HAQCy3dK1gfSN9mM6teds54qg8PbFQJWOS6OpNsfa+nOdk4Yi7dGppmgv8K5wvZP7NbBxprm+RX0Mo88adJTRUdJ1tys69KZ4a7jew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RLrwY+sskOPDBdSZVyZM/JcQkXxvrpR574KWvORfqP8=;
+ b=TPXGIgFJamCv4iAbkrQ1N3RfRFQ6ZHyL4JcmaVTmjHlDeXmHNW/dzCf3+hNOVV+4NK38SeX63NlhPVuB0LEGox6RyxUNa1ZRSNq+MVYrJYHMj3sABSOeQRsNukvKdNalW6i7Y7ux398l/MAFz7EatV1w/cE/Ps6LMMDHepAPtx7bklVAwWdmbQ+0OBRtGw+Sxv7a/PkNsMn6ydlaIwLAa82z/dceacEiEsHODZNCmoW27Zdjxmm6GKP92TomihSvwFKTjNdffjkpGSK/1gh/ayJ+ZWHkRmOkbK8BemcuhU4zXFNNbAFc0gVyjVgTYOoTuEIOSl6GsbYFzyYJC8HHoQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RLrwY+sskOPDBdSZVyZM/JcQkXxvrpR574KWvORfqP8=;
+ b=ghnU0cgU7MhTz3JRFiYn34rBLgraqlv4f0N8kKml4UoZ3A1Fo4A/WIpgpml9aDm7yGMVNkKQ7ZJHP4aMAADy0T+reuQr/XyouI7vYnLWDCTiglcO9qC81OYdZeb4x9x9k74kRf1AHomkqBmt8R6vsWcIZEBrnSG8K7wB6mYg9XA=
+Received: from DB8PR04MB7162.eurprd04.prod.outlook.com (2603:10a6:10:12c::13)
+ by DB3PR0402MB3642.eurprd04.prod.outlook.com (2603:10a6:8:2::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3216.28; Fri, 31 Jul
+ 2020 23:42:52 +0000
+Received: from DB8PR04MB7162.eurprd04.prod.outlook.com
+ ([fe80::8a7:786f:91a3:1e1f]) by DB8PR04MB7162.eurprd04.prod.outlook.com
+ ([fe80::8a7:786f:91a3:1e1f%7]) with mapi id 15.20.3239.017; Fri, 31 Jul 2020
+ 23:42:52 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [PATCH 1/1] usb: gadget: core: wait gadget device .release
+ finishing at usb_del_gadget_udc
+Thread-Topic: [PATCH 1/1] usb: gadget: core: wait gadget device .release
+ finishing at usb_del_gadget_udc
+Thread-Index: AQHWZyFjrjQabElMSUmE/uyQe+yec6khlL4AgAAB30CAAAZvAIAAHBiAgAAB7wCAAJ8lAA==
+Date:   Fri, 31 Jul 2020 23:42:52 +0000
+Message-ID: <20200731234224.GA13414@b29397-desktop>
+References: <20200731095935.23034-1-peter.chen@nxp.com>
+ <20200731115536.GB1648202@kroah.com>
+ <DB8PR04MB7162B2FAC7FACD0A11F6D8218B4E0@DB8PR04MB7162.eurprd04.prod.outlook.com>
+ <20200731122520.GB1655976@kroah.com> <20200731140553.GA8013@b29397-desktop>
+ <20200731141248.GC36650@rowland.harvard.edu>
+In-Reply-To: <20200731141248.GC36650@rowland.harvard.edu>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: rowland.harvard.edu; dkim=none (message not signed)
+ header.d=none;rowland.harvard.edu; dmarc=none action=none
+ header.from=nxp.com;
+x-originating-ip: [119.31.174.67]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 3f298d5e-8413-4356-0485-08d835ab7138
+x-ms-traffictypediagnostic: DB3PR0402MB3642:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DB3PR0402MB36423957EE647085D68D34068B4E0@DB3PR0402MB3642.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Sn0s8Q+bt584yn6o1Ls6uV5olxgd4LNrVmz68lvMrTlRohHOguwaou8QPSSFZRZGQn/k3/0DX56YlJYGuKafF14BmCzYQCsdiZtHmmZg+H7zZF2FmL0ZI6j/R4b8c000TGIc5ySsu+MkH8935b1uim1CbA6snRRv7+NT57sOB+swqyU5owG9VS35tHfpzc7DP27rATyP9NEoIIp3pvC5eAQNfZYdDIdP5U5a4Oag7QLHng6UYWsGstS7XQhIpgTY/M78TaPwBXKObccC68H3JvLkOHVJaqJofuizw6JBiuNNBCffXDyiomXFCJfPmOudsZGSIGknVOunpWrdhYZlp0gphPFTc61y7mi8ooaATf8mUrIoEqxEGlAV1ZkyXPHE8wvPktd76Y5G04iQKMmj2Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB7162.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(7916004)(366004)(346002)(376002)(136003)(396003)(39860400002)(6916009)(66946007)(76116006)(8936002)(2906002)(5660300002)(91956017)(316002)(54906003)(8676002)(478600001)(186003)(66476007)(44832011)(53546011)(6506007)(4326008)(1076003)(86362001)(33656002)(6486002)(33716001)(66446008)(64756008)(6512007)(71200400001)(9686003)(66556008)(26005)(142923001)(21314003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: +x9++HBKRdGATRD1QUCUMtpExYyRjP9Bal1Dn+tNoaKR9apyWXfB9fzsouihba4WQ2lM3ckrKtPZSUL1R4wj9LbmWxrLSeLwhuBN8IscGq7PejOrKdlAVZ0VwbajKqYPWpgB1bSofYvqwC05AZaMyw0US9B1GIbBENsnMq5fsnoklYFYpNzaOZHjYiCtSVVUDsmWnCN5nXG11/+NEK6Vpra99jfKFwNFdnX1pDLGOuSxy0k+SwxZFV34gapLy9FsWllYAn8u8KT4NM8BLB4KLkUWSYdMwvWSIvyCNdZjX3PtBK6tOCO7cH/GVSBFmjRuS35N19O/02ZKolw24G6hvZ2eY9xPywsN2PSu/izUgkWsBEesJjT/DNAaEjZr1DehZZel8K5i+A+zj4M3GzRk/jN8CPLrFlimbXEHprvZnir1nzHVVUsyPtBmxEcVZeCOvOdOAmSvKy8noBE0G2r4ONK/peye2yaWKFRQsYq7hwg=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <50651B4E29338D40B6F1BE0BCDB48145@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB7162.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3f298d5e-8413-4356-0485-08d835ab7138
+X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Jul 2020 23:42:52.7056
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: CWh4BCflgy+mBqfYCYrbCDpDx6gku6XriJAiwudrBjiUv/hV8cx0HuuK/RaHHRr42evrlmDDy+OiDq9QEu5xRw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3642
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 20-07-31 10:12:48, Alan Stern wrote:
+> On Fri, Jul 31, 2020 at 02:06:20PM +0000, Peter Chen wrote:
+> > On 20-07-31 14:25:20, Greg Kroah-Hartman wrote:
+> > > On Fri, Jul 31, 2020 at 12:11:32PM +0000, Peter Chen wrote:
+> > >=20
+> > > Grab a reference from somewhere else and do not give it up for a long
+> > > time.
+> > >=20
+> >=20
+> > So wait_for_completion_timeout is suitable? The similar use case is whe=
+n
+> > we open the file at the USB Drive at Windows, and we click "Eject", it
+> > will say "The device is currently in use", and refuse our "Eject"
+> > operation.
+> >=20
+> > When we try to remove the gadget, if the gadget is in use, we could
+> > refuse the remove operation, reasonable?
+>=20
+> No, the real solution is to fix the UDC drivers.  They need to allocate=20
+> the gadget structure dynamically instead of reusing it.  And they should=
+=20
+> have a real release routine that deallocates the gadget structure.
+>=20
+> Alan Stern
+
+So, the basic routine should like below. I thought the usb_gadget should
+be deallocated before the UDC driver remove itself (UDC device
+is the parent of usb_gadget device), I may not need to wrong about it,
+it is just a memory region, it could release later.
+
+xxx_udc_release(struct device *gadget_dev)
+{
+	struct usb_gadget *gadget =3D container_of(gadget_dev, struct
+			usb_gadget, dev);
+	kfree(gadget);
+}
 
 
-On 7/29/2020 1:33 AM, Stephen Boyd wrote:
-> Quoting Wesley Cheng (2020-07-29 00:13:37)
->> diff --git a/drivers/usb/typec/Kconfig b/drivers/usb/typec/Kconfig
->> index 559dd06117e7..3e375f82849d 100644
->> --- a/drivers/usb/typec/Kconfig
->> +++ b/drivers/usb/typec/Kconfig
->> @@ -73,6 +73,18 @@ config TYPEC_TPS6598X
->>           If you choose to build this driver as a dynamically linked module, the
->>           module will be called tps6598x.ko.
->>  
->> +config TYPEC_QCOM_PMIC
->> +       tristate "Qualcomm PMIC USB Type-C driver"
->> +       depends on ARCH_QCOM
-> 
-> Can you add || COMPILE_TEST here?
-> 
+xxx_udc_probe(pdev)
+{
+	udc_priv_data =3D kzalloc(sizeof(*udc_priv_data), GFP_KERNEL);
+	gadget =3D kzalloc(sizeof(struct usb_gadget), GFP_KERNEL);
+	udc_priv_data->gadget =3D gadget;
+	...
+	usb_add_gadget_udc_release(&pdev->dev, gadget, xxx_udc_release);
 
-Sure, will do.
+}
 
->> +#include <linux/err.h>
->> +#include <linux/regmap.h>
->> +#include <linux/kernel.h>
->> +#include <linux/module.h>
->> +#include <linux/slab.h>
->> +#include <linux/interrupt.h>
->> +#include <linux/of_irq.h>
-> 
-> Is this include used?
-> 
->> +#include <linux/platform_device.h>
->> +#include <linux/of_device.h>
-> 
-> Is this include used?
-> 
+At xxx_udc_remove(pdev)
+{
+	usb_del_gadget_udc(udc_priv_data->gadget);
+	/* need to never reference udc_priv_data->gadget any more */
+	udc_priv_data other deinit;
+	kfree(udc_priv_data);
+}
 
-Reviewed which includes I used, and removed the ones that were not needed.
+Since all structures xxx_udc_release uses are common one, it could
+replace usb_udc_nop_release at udc/core.c.
 
->> +static void qcom_pmic_typec_enable_vbus_regulator(struct qcom_pmic_typec
->> +                                                       *qcom_usb, bool enable)
->> +{
->> +       int ret = 0;
-> 
-> Please don't assign and then reassign before testing this variable.
-> 
+--=20
 
-I will just remove the assignment here.
-
->> +       if (stat & CC_ATTACHED) {
->> +               orientation = ((stat & CC_ORIENTATION) >> 1) ?
-> 
-> Do we really need to shift >> by 1? Seems useless for a test.
-> 
-
-Agreed, we can remove the shift.
-
->> +       ret = of_property_read_u32(dev->of_node, "reg", &reg);
->> +       if (ret < 0) {
->> +               dev_err(dev, "missing base address");
-> 
-> Please add newlines at the end of printk messages.
-> 
-
-Done.
-
->> +       irq = platform_get_irq(pdev, 0);
->> +       if (irq < 0) {
->> +               dev_err(dev, "Failed to get CC irq\n");
-> 
-> platform_get_irq() already prints an error message. Please remove this.
-> 
-
-Got it.
-
->> +static const struct of_device_id qcom_pmic_typec_table[] = {
->> +       { .compatible = "qcom,pm8150b-usb-typec" },
->> +       { },
-> 
-> Nitpick: Drop the comma here so nothing can come after without causing a
-> compile error.
-> 
-
-Sure.
-
->> +static struct platform_driver qcom_pmic_typec = {
->> +       .driver = {
->> +               .name = "qcom,pmic-typec",
->> +               .of_match_table = qcom_pmic_typec_table,
->> +       },
->> +       .probe = qcom_pmic_typec_probe,
->> +       .remove = qcom_pmic_typec_remove,
->> +};
->> +
-> 
-> Another nitpick: Drop the newline and make module_platform_driver()
-> follow directly after the driver.
-> 
-
-Ok, will do.
-
-Thanks for the review/feedback, Stephen.
-
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Thanks,
+Peter Chen=
