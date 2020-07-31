@@ -2,76 +2,173 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2423C234C97
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Jul 2020 23:01:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30398234E96
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Aug 2020 01:33:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728862AbgGaVBE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 31 Jul 2020 17:01:04 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:35304 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727969AbgGaVBD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 31 Jul 2020 17:01:03 -0400
-Received: by mail-io1-f68.google.com with SMTP id s189so25750032iod.2;
-        Fri, 31 Jul 2020 14:01:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=he4Igwk/67gpHkuDjdC4uwLoo0dcwQMpUF2WbhaQetQ=;
-        b=TPPUsU2bArpDDTJMl8LDgoUYfrBzU5WoI77zUm9Mtd9a81EK89jYVRd7asKJuOMMbT
-         y9b4iC+EQnytXItLQwp8e8ZakbazdCUcEZZdLZOZGfqEkOzQ3s1yL44oshjmNIy/uQHn
-         TTOKspRWGYlD6xA8akyc+qjTwpczVrMqxO/xpokhKcIC3umxNGc6Cyn7v2WTl4R3QP+O
-         /65XvJgky0Eqcod41W5YKuiyaMVPi9aEWB2Hb8uvbyfskihxfsrZM0mTzBgOmuNwHz+U
-         IbH65yBi9fF01ET4n1CBlrJ8M/wwrrFKS5H39HQAKQmhJP2VF1Q0taLQKiD/6AFdJkWS
-         Y3Hw==
-X-Gm-Message-State: AOAM533zizFdhbLBxQWj5+3mw53peVrDJonjg1SOaiklruzSyKmWa4oP
-        hDkHaXe29wLiCKWbYardkw==
-X-Google-Smtp-Source: ABdhPJz5zr86vUbd/1/OTctwlFOTcHcbn6YLc+aqmoYZ/vLEcG0zrUaemo2J6QRDaidL9t05GtmCPA==
-X-Received: by 2002:a6b:fe0f:: with SMTP id x15mr5445855ioh.173.1596229262610;
-        Fri, 31 Jul 2020 14:01:02 -0700 (PDT)
-Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id q14sm4883075ioi.48.2020.07.31.14.01.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Jul 2020 14:01:01 -0700 (PDT)
-Received: (nullmailer pid 778932 invoked by uid 1000);
-        Fri, 31 Jul 2020 21:00:59 -0000
-Date:   Fri, 31 Jul 2020 15:00:59 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Amelie Delaunay <amelie.delaunay@st.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Fabrice Gasnier <fabrice.gasnier@st.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/3] dt-bindings: usb: dwc2: add optional
- usb-role-switch property
-Message-ID: <20200731210059.GA778876@bogus>
-References: <20200728074602.14218-1-amelie.delaunay@st.com>
- <20200728074602.14218-2-amelie.delaunay@st.com>
+        id S1726846AbgGaXdC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 31 Jul 2020 19:33:02 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:45127 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726807AbgGaXdC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 31 Jul 2020 19:33:02 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1596238381; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=vF/ZfSy0GW8C+ioPXlIi2t6ZaQN9VfKaJ+Oof9fc1KQ=; b=gxJt+QyQOiRhu6kH7zhD4zJeaKGI/FKGo2zpOqzEWAraxw4x4vrQ1JT0awnXkUn7rl1/BhNv
+ oaBE5vzYCKe7J6w/ia5jEPqlhJTttt1gU30W/TjBJ1nmyj9xEGVbs8aetgyHRXEqK1Ehq11/
+ 3OK8xjdEYeUfwW8zT9hDP6raTeI=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n15.prod.us-east-1.postgun.com with SMTP id
+ 5f24a9d990893260dd39d2f1 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 31 Jul 2020 23:31:37
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 7DBDAC43395; Fri, 31 Jul 2020 23:31:36 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.7 required=2.0 tests=ALL_TRUSTED,NICE_REPLY_A,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.110.121.73] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id C569EC433C9;
+        Fri, 31 Jul 2020 23:31:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org C569EC433C9
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=wcheng@codeaurora.org
+Subject: Re: [PATCH v6 1/4] usb: typec: Add QCOM PMIC typec detection driver
+To:     Stephen Boyd <sboyd@kernel.org>, agross@kernel.org,
+        bjorn.andersson@linaro.org, gregkh@linuxfoundation.org,
+        heikki.krogerus@linux.intel.com, robh+dt@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        jackp@codeaurora.org
+References: <20200729071340.7673-1-wcheng@codeaurora.org>
+ <20200729071340.7673-2-wcheng@codeaurora.org>
+ <159601160976.1360974.10172804658083744292@swboyd.mtv.corp.google.com>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <e11fc325-7f82-b13f-3e8a-f444ddc50257@codeaurora.org>
+Date:   Fri, 31 Jul 2020 16:31:33 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200728074602.14218-2-amelie.delaunay@st.com>
+In-Reply-To: <159601160976.1360974.10172804658083744292@swboyd.mtv.corp.google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 28 Jul 2020 09:46:00 +0200, Amelie Delaunay wrote:
-> This patch documents the usb-role-switch property in dwc2 bindings, now
-> that usb-role-switch support is available in dwc2 driver.
+
+
+On 7/29/2020 1:33 AM, Stephen Boyd wrote:
+> Quoting Wesley Cheng (2020-07-29 00:13:37)
+>> diff --git a/drivers/usb/typec/Kconfig b/drivers/usb/typec/Kconfig
+>> index 559dd06117e7..3e375f82849d 100644
+>> --- a/drivers/usb/typec/Kconfig
+>> +++ b/drivers/usb/typec/Kconfig
+>> @@ -73,6 +73,18 @@ config TYPEC_TPS6598X
+>>           If you choose to build this driver as a dynamically linked module, the
+>>           module will be called tps6598x.ko.
+>>  
+>> +config TYPEC_QCOM_PMIC
+>> +       tristate "Qualcomm PMIC USB Type-C driver"
+>> +       depends on ARCH_QCOM
 > 
-> Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Signed-off-by: Amelie Delaunay <amelie.delaunay@st.com>
-> ---
->  Documentation/devicetree/bindings/usb/dwc2.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
+> Can you add || COMPILE_TEST here?
 > 
 
-Acked-by: Rob Herring <robh@kernel.org>
+Sure, will do.
+
+>> +#include <linux/err.h>
+>> +#include <linux/regmap.h>
+>> +#include <linux/kernel.h>
+>> +#include <linux/module.h>
+>> +#include <linux/slab.h>
+>> +#include <linux/interrupt.h>
+>> +#include <linux/of_irq.h>
+> 
+> Is this include used?
+> 
+>> +#include <linux/platform_device.h>
+>> +#include <linux/of_device.h>
+> 
+> Is this include used?
+> 
+
+Reviewed which includes I used, and removed the ones that were not needed.
+
+>> +static void qcom_pmic_typec_enable_vbus_regulator(struct qcom_pmic_typec
+>> +                                                       *qcom_usb, bool enable)
+>> +{
+>> +       int ret = 0;
+> 
+> Please don't assign and then reassign before testing this variable.
+> 
+
+I will just remove the assignment here.
+
+>> +       if (stat & CC_ATTACHED) {
+>> +               orientation = ((stat & CC_ORIENTATION) >> 1) ?
+> 
+> Do we really need to shift >> by 1? Seems useless for a test.
+> 
+
+Agreed, we can remove the shift.
+
+>> +       ret = of_property_read_u32(dev->of_node, "reg", &reg);
+>> +       if (ret < 0) {
+>> +               dev_err(dev, "missing base address");
+> 
+> Please add newlines at the end of printk messages.
+> 
+
+Done.
+
+>> +       irq = platform_get_irq(pdev, 0);
+>> +       if (irq < 0) {
+>> +               dev_err(dev, "Failed to get CC irq\n");
+> 
+> platform_get_irq() already prints an error message. Please remove this.
+> 
+
+Got it.
+
+>> +static const struct of_device_id qcom_pmic_typec_table[] = {
+>> +       { .compatible = "qcom,pm8150b-usb-typec" },
+>> +       { },
+> 
+> Nitpick: Drop the comma here so nothing can come after without causing a
+> compile error.
+> 
+
+Sure.
+
+>> +static struct platform_driver qcom_pmic_typec = {
+>> +       .driver = {
+>> +               .name = "qcom,pmic-typec",
+>> +               .of_match_table = qcom_pmic_typec_table,
+>> +       },
+>> +       .probe = qcom_pmic_typec_probe,
+>> +       .remove = qcom_pmic_typec_remove,
+>> +};
+>> +
+> 
+> Another nitpick: Drop the newline and make module_platform_driver()
+> follow directly after the driver.
+> 
+
+Ok, will do.
+
+Thanks for the review/feedback, Stephen.
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
