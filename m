@@ -2,33 +2,23 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD4723A988
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Aug 2020 17:39:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24C9D23AA13
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Aug 2020 18:03:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726989AbgHCPiX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 Aug 2020 11:38:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37042 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726979AbgHCPiX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 3 Aug 2020 11:38:23 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2A9F6207DF;
-        Mon,  3 Aug 2020 15:38:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596469101;
-        bh=HtYKrPcq1FzrlgUja3FCokgf75ZLa/9pzn4kxo3iJPA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d3MSg1lyyccHLI28XCF285P5RcuBXswV3OxKdssp0I9MjPnoLGfb/bl6WpdekeePS
-         vERY5CKmPHu3FCwoSNGRIiN9vPjdCatF+EVCo1O1sfuCfsZEUscCIAeR5mGgEvyU4y
-         7j14TMFURJrqzKec6StCjYAlFTFSDN2cbleORlEg=
-Date:   Mon, 3 Aug 2020 17:38:04 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        id S1728172AbgHCQCX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 Aug 2020 12:02:23 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:53915 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726457AbgHCQCW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Aug 2020 12:02:22 -0400
+Received: (qmail 110633 invoked by uid 1000); 3 Aug 2020 12:02:21 -0400
+Date:   Mon, 3 Aug 2020 12:02:21 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
 To:     Bastien Nocera <hadess@hadess.net>
-Cc:     linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Subject: Re: [PATCH v6 3/3] USB: Fix device driver race
-Message-ID: <20200803153804.GA1172014@kroah.com>
+Message-ID: <20200803160221.GA108905@rowland.harvard.edu>
 References: <20200727104644.149873-1-hadess@hadess.net>
  <20200727104644.149873-3-hadess@hadess.net>
  <64c8caa8ee054ed9106683f15238b2be74f77aa2.camel@hadess.net>
@@ -36,6 +26,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <64c8caa8ee054ed9106683f15238b2be74f77aa2.camel@hadess.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
@@ -64,11 +55,11 @@ On Mon, Aug 03, 2020 at 05:04:46PM +0200, Bastien Nocera wrote:
 > If so, I can send it again with Alan's acks, along with a fix for the
 > function name Alan mentioned. I see that the first patch in the list
 > landed in usb-next already.
-> 
 
-Yes, please resend the remaining patches.  I don't recall seeing Alan's
-ack on it.
+This is almost the same as v5, which I already Acked.  The only 
+difference is the error logging when the reprobe fails, and that looks 
+fine.  So...
 
-thanks,
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-greg k-h
+Alan Stern
