@@ -2,175 +2,203 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1804623547A
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Aug 2020 23:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79C01239E50
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Aug 2020 06:27:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726978AbgHAV6L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 1 Aug 2020 17:58:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56810 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726477AbgHAV6K (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 Aug 2020 17:58:10 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D0DEC06174A
-        for <linux-usb@vger.kernel.org>; Sat,  1 Aug 2020 14:58:10 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id q7so35926773ljm.1
-        for <linux-usb@vger.kernel.org>; Sat, 01 Aug 2020 14:58:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IqZxQaiay3zz4XT/GEF4YNkpUfdLIPuG9OhUVrjgqN8=;
-        b=Ds6ik7S56VtYmYcA7pY8lhD/r9kz/5BLU7jkiRYBpvIfM0szTzvaUBd83+KU/76mbM
-         ClpjswbzEq8LOkB6nxvXU2n9GhKnW/2zyJLXv7hTiaBqU9fkNj+m93ZOKvZVb1n+wXWt
-         iX9KJkOFaaB2umLkJ8Kv2zYmBJn4ZMrADre/u2JWTguoRr7rcUf9mAeSE+X48G8RQCT0
-         Q0XHHfXCaxnUGj5kxBxJeKLR9QHrr/eBYkdOOc5wlILYif2kzGa43yVRtqstOYgZ5HfF
-         /ys5K+DCKutfDUdrsoXjfv6ES0tmcBQu3CNEhPitnp+Fz9YoqohekR/ChNviJdxA4vgM
-         ouyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IqZxQaiay3zz4XT/GEF4YNkpUfdLIPuG9OhUVrjgqN8=;
-        b=rH1zy+xIUjGki64SMOUftH17RZZGQQSVw6rPas3KjOJWmJswgFq8K6vUqMgLKlpxDM
-         vx7rUhGf+u9U31iDN9/LO5tmkgQDGJEVSN7GOUVyrcy4Oh93yJW1R0eySQWt+No8jdrG
-         iEn3E28c6PWqwG+8Mpr/eZgRaCQNsLP2+/UKfmWSoPDdI+AWS7RAl9h521UiOSuT5hPv
-         DfPia04jH3Q/cjigXqNjr7kJ3X4r/dQ7qIu9EyrzzaZzgvS+oTx/BxIOLj6zD07R0VsL
-         iZEmvE3VSnIijWG4OtLrGeHRvEYIkeMv7j0XEqb6Z7F2lZIjE52ZjBluCT2cceI3wVeD
-         mF8Q==
-X-Gm-Message-State: AOAM532azZNWlMJPaOcvIuYhQjdT7ksN70yovSLO7ZypJi7q9CKHPklS
-        4pESsivoRX+2lT93Jhjf7eXE8UbJtIDjHw5r09h9b3jL
-X-Google-Smtp-Source: ABdhPJzfcl+DUjqxMWgh3+xjnjOMhuEFHMZP2fG+eoQhwALnf3jC6YPLLabO4O1DueauXzfpxYi4Ayii7LQNL6rIyu4=
-X-Received: by 2002:a2e:999a:: with SMTP id w26mr4797896lji.242.1596319088452;
- Sat, 01 Aug 2020 14:58:08 -0700 (PDT)
+        id S1726537AbgHCE1q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 Aug 2020 00:27:46 -0400
+Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:51134 "EHLO
+        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725908AbgHCE1p (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Aug 2020 00:27:45 -0400
+Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
+        by mx0b-0014ca01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0734Outp010543;
+        Sun, 2 Aug 2020 21:27:19 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=proofpoint;
+ bh=8f8HKQ3lkaLpS8NPhK8wiKbn3kUBkIzujT5yJncN7LU=;
+ b=Uir3iOPbBGJ+qy/NLOJjclPY38E7mjVUgY8HhBinkW3iL1HrF9dp+PTIlJnBBvReFmrt
+ ANlr6WVwBaT7JBGJ6zKrvtRYIkIpAGqhZ3ZwT+tuZllSfRyrBGl8grQMiFFYpJS7cftQ
+ anma+y9Ee0dUhLMVnjjpJCDANxmlS5E6zmQ7sZ8HBVu3QKbZp+xyog1rgrMCrEyiRX+g
+ zSTRtoQY3gLhlBW6wNJVw9diRnEUh1Dv5nzMldjPTutzoVDg0rgzrgRZRtj4HtS7S8Cr
+ 3qCP1/mvTTWrJwu8BkfW3yumHwrXIXFhncOlsfBYan/vFSNTmy1fUMSEvxjeDABpHU52 Bw== 
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2177.outbound.protection.outlook.com [104.47.58.177])
+        by mx0b-0014ca01.pphosted.com with ESMTP id 32n8gxm691-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 02 Aug 2020 21:27:19 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PHo4wwjMPA80hQL5lkFFunLL/b6Bjtc96gXCgHliFiJsseZ6s6f/CVNwvZLgC7+Najod50gjhMtJc4l7jJNN+CvynTBz1htMKq7ZLvxvmB5Do0cYd9+XLSLCnRlOWDvQR7E/o+eV/wGlXR0ZHWVYOnyJaykDXQFlQUCJw9pluurWlYUFob6ogd61FjwH6KGIMMi3H6lTGKh2eqqEMjEHUy5tWDXKPsONw2lkEgznbaZTXNMusz/8zvVwX+FY0J0bAT0hbrYivkcNxjouQApAWQXq/d0okDEROSSbFWezye/8w7719rFQ8yvRWNIdggBo4X3EMS0zXwvmhC97Dq/aEQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8f8HKQ3lkaLpS8NPhK8wiKbn3kUBkIzujT5yJncN7LU=;
+ b=V+hVM16J9amynhW5ryo9DrU4WAU7Ys5yVnV6nUAwRuNHUvay2VWB5CG+7en4cVpqOZnchW4iTs4L9xUdx1R2LW7xBrodhgtHjYsZtHDLw0ccoZgYqlx4WPb5jCcjgexUsU+G8crjmk0EzXe9s+axj0Nb71QWmBRi+8/fxrE2PEwgHpmPFXFGBhhTk77MqesmDIsm0Nf+VgybE/gc7udf3zVaxD/Ii1YuvrfLH8oZY4+onHGBAvQMqwXsG+I6bUcXNPZDN24RYKv5xaSXTNyv6ISSHrreBoeUyH5pzUGr+CAVi8+MTXTApC/c5q9y6ThLx6DJwSbrU/AieBveVhN6+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
+ dkim=pass header.d=cadence.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8f8HKQ3lkaLpS8NPhK8wiKbn3kUBkIzujT5yJncN7LU=;
+ b=H2iULZ759Afzus/SMTxRaikHIvz4/1HFxfFhlRxs008KZyFlUn8TjIcAzCL8kVL7oxeuZC6FuNW8rvptPLE3x/97SGBV0Z4leaKd+HwyFqh/9sfYmdo0XtM1wJAxgJ8HWE4mGcpt1gzbxF3Eg7rr0CNgP8IX7+X2ORjk+2GW9EY=
+Received: from DM6PR07MB5529.namprd07.prod.outlook.com (2603:10b6:5:7a::30) by
+ DM6PR07MB4460.namprd07.prod.outlook.com (2603:10b6:5:c6::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3239.19; Mon, 3 Aug 2020 04:27:17 +0000
+Received: from DM6PR07MB5529.namprd07.prod.outlook.com
+ ([fe80::35cf:ffb3:3776:8362]) by DM6PR07MB5529.namprd07.prod.outlook.com
+ ([fe80::35cf:ffb3:3776:8362%4]) with mapi id 15.20.3239.021; Mon, 3 Aug 2020
+ 04:27:17 +0000
+From:   Pawel Laszczak <pawell@cadence.com>
+To:     Peter Chen <peter.chen@nxp.com>
+CC:     "balbi@kernel.org" <balbi@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rogerq@ti.com" <rogerq@ti.com>,
+        "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>,
+        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
+        "colin.king@canonical.com" <colin.king@canonical.com>,
+        Jayshri Dajiram Pawar <jpawar@cadence.com>,
+        "ben.dooks@codethink.co.uk" <ben.dooks@codethink.co.uk>,
+        Rahul Kumar <kurahul@cadence.com>,
+        Sanket Parmar <sparmar@cadence.com>
+Subject: RE: [PATCH v2 7/9] usb: cdns3: core: removed 'goto not_otg'
+Thread-Topic: [PATCH v2 7/9] usb: cdns3: core: removed 'goto not_otg'
+Thread-Index: AQHWWP1JVS+n3WQDxkyDvzwFhNzdrqkS8ReAgBL3eFA=
+Date:   Mon, 3 Aug 2020 04:27:17 +0000
+Message-ID: <DM6PR07MB55299BC37F8BD76E2551759BDD4D0@DM6PR07MB5529.namprd07.prod.outlook.com>
+References: <20200713100554.28530-1-pawell@cadence.com>
+ <20200713100554.28530-8-pawell@cadence.com>
+ <20200722024051.GF5807@b29397-desktop>
+In-Reply-To: <20200722024051.GF5807@b29397-desktop>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccGF3ZWxsXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctOWFkMDA1NjItZDU0MS0xMWVhLTg3NjctMWM0ZDcwMWRmYmE0XGFtZS10ZXN0XDlhZDAwNTYzLWQ1NDEtMTFlYS04NzY3LTFjNGQ3MDFkZmJhNGJvZHkudHh0IiBzej0iMjE1NiIgdD0iMTMyNDA5MDI0MzQ1Njg5MTkyIiBoPSJmS0dxdENFOVlpcXZNQVBLemJTdm5KNnMrRGc9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
+x-dg-rorf: true
+authentication-results: nxp.com; dkim=none (message not signed)
+ header.d=none;nxp.com; dmarc=none action=none header.from=cadence.com;
+x-originating-ip: [185.217.253.59]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 6add4d17-399a-4d47-cb0e-08d837658163
+x-ms-traffictypediagnostic: DM6PR07MB4460:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DM6PR07MB44602E993FA9768366B906E5DD4D0@DM6PR07MB4460.namprd07.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: DEel84c/DjIbhM+bHAmO/BkuI44oqHmtaG6z090Yr14BrpnHZkKWI2ubKnZqA7XX8RDGqmIZG5OZBbg1O43232SyYuFpuaRLYcMXzCLVKXR1gsgyNsSKyQFmx6ttXHSWbZiU+xG27cLNuowRH/pzlU4W2ZOaK3JyCB7WO62i6DnTmIwybXxea8PJMK/r+Ah8WktYiwCFkSEMaBtr6mr6sfLrawHQR9ILy0TvhhYX2SLQ8/nhzzsr/nFvwi+27YtLnVcXk09LLi5KVx6tMNTgDivVusOc77s3BvOYYmiWihPCOfRu4u3z6dz7qmfTqsGcuqb9sSRI7o9jaaNyhzZvsdj7zoKtQoYf/0KzaGRNoTh7JB4Xa0dYY2rUiAaAkuHH
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR07MB5529.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(396003)(376002)(136003)(346002)(366004)(39860400002)(36092001)(76116006)(66556008)(66946007)(66446008)(107886003)(66476007)(64756008)(6916009)(83380400001)(9686003)(4326008)(71200400001)(8676002)(186003)(7416002)(478600001)(5660300002)(7696005)(52536014)(316002)(54906003)(2906002)(86362001)(55016002)(8936002)(26005)(33656002)(6506007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: 8gWf9xQqytr/9gqWSQw4Btc2dvfdLlsrX7iUkMJoiMlSEIRZJPJTYW/6JaiEc7sjrvolPA7oAJhOHSfYNwhIkOsf2zfmptQhctA/vWldwEuUeECuiFjefluMX6tT22DUWKOV+QOyT/KY1zbhmIQxYZCLRlpLUjlLAgXiSCngnV3ysST+rrnZUpc0pXcKwKr8hnH+u2vhAGNhZ94pdXW8NF7VrVe8kaFVX5h1psVPu7Pf1ZmlipcdmXs5DpdkgJoJbebt3cyOWuB/Iwhfev9nyySGGLn6GkOlijdCyyXjEVZicWuRJWmmpzMLygvnIICzCwIl5yxqV7OXSVu8QCwgKnjZ5bX8wWC+oS0bK/0ykcfSsIFSrt2YJ94mjwNBukDXVzNswZNEP4wGWR3Ck7YYgpwvbvjK1JlstA0UG+IVd3tV73zfwkHdo/D0VHawlkX+338/2R/sOA4Cf4Kz/yDVSPXyx8YTpxgASM7P5xYljNMGyvRAwenMnexfB+zJagbZtFey5/cqoRtuTOy/g4GcIyrMO+zkQK6BAj2cxT/Qon2rKZdB/J4OoB2CiAltmTdO6J2D4RNvRcNGVxhIte+bPoaX4Y3hubZrnCY95MXwFXiLi6U0Oy/lyyCndJzVfx3IhaNG6pSvf7ZF6mw0nDSk7Q==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <CAO3ALPyB1JDvvC27JGgAoTuHh0w+897tPhmTKX9PQWBFCrrnbQ@mail.gmail.com>
- <CAOSf1CEkHLamLXK3HOAZ+w0K=2hTOjn=x5KpDdmRZ4BXVy+P2A@mail.gmail.com>
-In-Reply-To: <CAOSf1CEkHLamLXK3HOAZ+w0K=2hTOjn=x5KpDdmRZ4BXVy+P2A@mail.gmail.com>
-From:   Forest Crossman <cyrozap@gmail.com>
-Date:   Sat, 1 Aug 2020 16:57:56 -0500
-Message-ID: <CAO3ALPxou56Y8cvBzC9qOAkBLkTAxodan1PhQ1WSBgWubamJGQ@mail.gmail.com>
-Subject: Re: ASMedia ASM2142 USB host controller tries to DMA to address zero
- when doing bulk reads from multiple devices
-To:     "Oliver O'Halloran" <oohall@gmail.com>
-Cc:     linux-usb@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Alexey Kardashevskiy <aik@ozlabs.ru>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR07MB5529.namprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6add4d17-399a-4d47-cb0e-08d837658163
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Aug 2020 04:27:17.3471
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: OCyPcnfMOEjeiZspwTBF6IE20utXzl0QpBuk7xcw/v/J2lTUQ4dhPMdogrAdnrDeRVI6ySxAShaBAHadA1b/PnzmfNxN3tHnlbmBPmsKfQk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR07MB4460
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-08-03_01:2020-07-31,2020-08-03 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 malwarescore=0
+ phishscore=0 mlxlogscore=943 impostorscore=0 priorityscore=1501
+ bulkscore=0 suspectscore=0 spamscore=0 mlxscore=0 clxscore=1011
+ adultscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2006250000 definitions=main-2008030031
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 29, 2020 at 8:22 AM Oliver O'Halloran <oohall@gmail.com> wrote:
 >
-> On Tue, Jul 21, 2020 at 3:51 PM Forest Crossman <cyrozap@gmail.com> wrote:
-> >
-> > Hello, again!
-> >
-> > After fixing the issue in my previous thread using this patch[1], I
-> > decided to do some stress-testing of the controller to make sure it
-> > could handle my intended workloads and that there were no further DMA
-> > address issues that would need to be fixed. Unfortunately, it looks
-> > like there's still more work to be done: when I try to do long bulk
-> > reads from multiple devices simultaneously, eventually the host
-> > controller sends a DMA write to address zero, which then triggers EEH
-> > in my POWER9 system, causing the controller card to get hotplug-reset,
-> > which of course kills the disk-reading processes. For more details on
-> > the EEH errors, you can see my kernel's EEH message log[2].
+>On 20-07-13 12:05:52, Pawel Laszczak wrote:
+>> Patch removes 'goto not_otg' instruction from
+>> cdns3_hw_role_state_machine function.
+>>
+>> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+>> ---
+>>  drivers/usb/cdns3/core.c | 20 +++++++++-----------
+>>  1 file changed, 9 insertions(+), 11 deletions(-)
+>>
+>> diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
+>> index c498b585eb13..8e3996f211a8 100644
+>> --- a/drivers/usb/cdns3/core.c
+>> +++ b/drivers/usb/cdns3/core.c
+>> @@ -191,11 +191,17 @@ static int cdns3_core_init_role(struct cdns3 *cdns=
+)
+>>   */
+>>  static enum usb_role cdns3_hw_role_state_machine(struct cdns3 *cdns)
+>>  {
+>> -	enum usb_role role;
+>> +	enum usb_role role =3D USB_ROLE_NONE;
+>>  	int id, vbus;
+>>
+>> -	if (cdns->dr_mode !=3D USB_DR_MODE_OTG)
+>> -		goto not_otg;
+>> +	if (cdns->dr_mode !=3D USB_DR_MODE_OTG) {
+>> +		if (cdns3_is_host(cdns))
+>> +			role =3D USB_ROLE_HOST;
+>> +		if (cdns3_is_device(cdns))
+>> +			role =3D USB_ROLE_DEVICE;
+>> +
+>> +		return role;
+>> +	}
 >
-> Take the logged address with a grain of salt. If an error occurs while
-> translating the DMA address the PHB logs all zeros as the "DMA
-> Address" because it only keeps around the bits that it needs to fetch
-> the next level of the TCE table. The EEH dump says the error is due to
-> a TCE permission mis-match so odds the ASmedia controller is writing
-> to an address that's already been DMA unmapped, hence the logged
-> address being zeros.
-
-Interesting, that's good to know. I saw that the RXE_TCE_FESR had the
-"TCE Response Page Access Error" bit set, and had originally assumed
-that just meant the DMA to address zero was triggering that error
-since it wasn't in a mapped page, but after reading that bit's
-description again I think I understand it now.
-
-> Sorry, I probably should have mentioned that quirk in the last mail.
+>Would you please improve it a bit like below:
 >
-> > The results of the various tests I performed are listed below.
-> >
-> > Test results (all failures are due to DMA writes to address zero, all
-> > hubs are USB 3.0/3.1 Gen1 only, and all disks are accessed via the
-> > usb-storage driver):
-> > - Reading simultaneously from two or more disks behind a hub connected
-> > to one port on the host controller:
-> >   - FAIL after 20-50 GB of data transferred for each device.
-> > - Reading simultaneously from two disks, each connected directly to
-> > one port on the host controller:
-> >   - FAIL after about 800 GB of data transferred for each device.
-> > - Reading from one disk behind a hub connected to one port on the host
-> > controller:
-> >   - OK for at least 2.7 TB of data transferred (I didn't test the
-> > whole 8 TB disk).
-> > - Writing simultaneously to two FL2000 dongles (using osmo-fl2k's
-> > "fl2k_test"), each connected directly to one port on the host
-> > controller:
-> >   - OK, was able to write several dozen terabytes to each device over
-> > the course of a little over 21 hours.
-> >
-> > Seeing how simultaneous writes to multiple devices and reads from
-> > single devices both seem to work fine, I assume that means this is
-> > being caused by some race condition in the host controller firmware
-> > when it responds to multiple read requests.
+>	if (cdns->dr_mode !=3D USB_DR_MODE_OTG) {
+>		if (cdns3_is_host(cdns))
+>			role =3D USB_ROLE_HOST;
+>		else if (cdns3_is_device(cdns))
+>			role =3D USB_ROLE_DEVICE;
+>		else
+>			role =3D USB_ROLE_NONE;
 >
-> Most likely. It's possible it's a platform specific race with DMA
-> map/unmap too, but I think we would be seeing similar issues with
-> other devices if it was.
-
-Yeah, I have several other xHCI controllers connected to this system,
-and I've never experienced this issue with any of them. If the problem
-was a POWER-specific DMA map/unmap race I would expect to be having
-problems with those controllers as well.
-
-> > I also assume we're not
-> > going to be able to convince ASMedia to both fix the bug in their
-> > firmware and release the details on how to flash it from Linux, so I
-> > guess we'll just have to figure out how to make the driver talk to the
-> > controller in a way that avoids triggering the bad DMA write. As
-> > before, I decided to try a little kernel hacking of my own before
-> > sending this email, and tried separately enabling the
-> > XHCI_BROKEN_STREAMS and XHCI_ASMEDIA_MODIFY_FLOWCONTROL quirks in an
-> > attempt to fix this. As you might expect since you're reading this
-> > message, neither of those quirks fixed the issue, nor did they even
-> > make the transfers last any longer before failing.
-> >
-> > So now I've reached the limits of my understanding, and I need some
-> > help devising a fix. If anyone has any comments to that effect, or any
-> > questions about my hardware configuration, testing methodology, etc.,
-> > please don't hesitate to air them. Also, if anyone needs me to perform
-> > additional tests, or collect more log information, I'd be happy to do
-> > that as well.
+>		return role;
+>	}
 >
-> I started writing a tool a while ago to use the internal trace bus to
-> log incoming TLPs. Something like that might allow you to get a better
-> idea what the faulting access pattern is, but you would still need to
-> find a way to mitigate the issue. I'm not all that familiar with USB3
-> so I'm not much help on that front.
 
-Oh, interesting, I remember seeing the trace registers in the PHB4
-spec, but I wasn't sure how to access them without writing a kernel
-driver. I'd love to be able to log and dissect TLPs in Wireshark the
-same way I do for USB packets, since it makes reverse engineering
-protocols and debugging drivers so much easier. This would also be
-especially helpful because I haven't yet figured out how to get Qemu
-to intercept certain types of PCIe accesses (I forget if it was DMA or
-PIO or something, it was a quite while ago), and PCIe protocol
-analyzer hardware is prohibitively expensive (when it's even available
-for purchase). So if you've uploaded your code anywhere, I'd be really
-interested in seeing it, even if it's incomplete, since even with
-incomplete code I could use that as a reference for a Wireshark plugin
-or something. But if it's not online or if you'd prefer not to share
-it in its current state, I'll understand.
+Sorry for delay, I had holiday.=20
+Currently this patch was added by Greg to his usb-next branch, so=20
+I don't want to change anything.  Next time I will add such changes.=20
 
+>Peter
+>>
+>>  	id =3D cdns3_get_id(cdns);
+>>  	vbus =3D cdns3_get_vbus(cdns);
+>> @@ -232,14 +238,6 @@ static enum usb_role cdns3_hw_role_state_machine(st=
+ruct cdns3 *cdns)
+>>  	dev_dbg(cdns->dev, "role %d -> %d\n", cdns->role, role);
+>>
+>>  	return role;
+>> -
+>> -not_otg:
+>> -	if (cdns3_is_host(cdns))
+>> -		role =3D USB_ROLE_HOST;
+>> -	if (cdns3_is_device(cdns))
+>> -		role =3D USB_ROLE_DEVICE;
+>> -
+>> -	return role;
+>>  }
+>>
+>>  static int cdns3_idle_role_start(struct cdns3 *cdns)
+>> --
+>> 2.17.1
+>>
+>
+>--
+>
+>Thanks,
+>Peter Chen
 
-Thanks again for your help,
-
-Forest
+Thanks,
+Pawel
