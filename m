@@ -2,168 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DFE923A8BA
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Aug 2020 16:44:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0679D23A915
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Aug 2020 17:05:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727877AbgHCOlX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 Aug 2020 10:41:23 -0400
-Received: from mail-il1-f199.google.com ([209.85.166.199]:56168 "EHLO
-        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726358AbgHCOlX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Aug 2020 10:41:23 -0400
-Received: by mail-il1-f199.google.com with SMTP id i78so22566065ill.22
-        for <linux-usb@vger.kernel.org>; Mon, 03 Aug 2020 07:41:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=b+AIlwHdWKaVk2//u11VgGwlGAYtZ+URjN4AzvlvYdE=;
-        b=eXNLfhTx2YDho+a0TP5f9Iq6M09c9JpSDeVDdtWyVGQ+WWvaz6X6kRc7BtFll4hzfD
-         yx1WXIccPuQe+qbY6TSYCNrGMTFL+f8TU+iXlADHIYlErqiBMFrqjR1q8hKrraiwiAWw
-         1PTDybZiJhNqTIx9DbOeKllhXrrOKuV+aCar+Hn14Z8XNLlFRji7QHVTKctAj4dFsJwX
-         +Dia9fu2Rp33ncZ12bdb6LAKlRhHWC90a9OJcLIjPjLFBe1YOyXW4qyYsRyroYdWpGAy
-         DMJB/APbmuCyrGjQHPIMQdtUwY7lg93+xWF7znAn67lVNIQkVyRxwg2J46PWh2VVlaXX
-         vyaw==
-X-Gm-Message-State: AOAM530DBMZv7PUAdkq334czs38b+AbmuWYuWWFKf6ai49heH+bsG+71
-        AWXnikIoI+4hUj1uLC/Z6RO+K32G8wZVleYCcakbtLh38ny2
-X-Google-Smtp-Source: ABdhPJyF4eLpGymvlaM3gOSL3NphfFxMkX89wASbDpgyVENK7/7rZt2utmM2bXQcdX0KB/wY5roLduSCeJHl8DyJDc7fHFQO49/0
-MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2549:: with SMTP id j9mr151937ioe.89.1596465681724;
- Mon, 03 Aug 2020 07:41:21 -0700 (PDT)
-Date:   Mon, 03 Aug 2020 07:41:21 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000dafa8405abfa211a@google.com>
-Subject: KASAN: slab-out-of-bounds Read in usb_destroy_configuration
-From:   syzbot <syzbot+aafdc32825a345214a76@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        johan@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
+        id S1726816AbgHCPEt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 Aug 2020 11:04:49 -0400
+Received: from relay7-d.mail.gandi.net ([217.70.183.200]:38853 "EHLO
+        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726276AbgHCPEt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Aug 2020 11:04:49 -0400
+X-Originating-IP: 82.255.60.242
+Received: from classic (lns-bzn-39-82-255-60-242.adsl.proxad.net [82.255.60.242])
+        (Authenticated sender: hadess@hadess.net)
+        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 27EE120012;
+        Mon,  3 Aug 2020 15:04:46 +0000 (UTC)
+Message-ID: <64c8caa8ee054ed9106683f15238b2be74f77aa2.camel@hadess.net>
+Subject: Re: [PATCH v6 3/3] USB: Fix device driver race
+From:   Bastien Nocera <hadess@hadess.net>
+To:     linux-usb@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Date:   Mon, 03 Aug 2020 17:04:46 +0200
+In-Reply-To: <20200727104644.149873-3-hadess@hadess.net>
+References: <20200727104644.149873-1-hadess@hadess.net>
+         <20200727104644.149873-3-hadess@hadess.net>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.3 (3.36.3-1.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Mon, 2020-07-27 at 12:46 +0200, Bastien Nocera wrote:
+> When a new device with a specialised device driver is plugged in, the
+> new driver will be modprobe()'d but the driver core will attach the
+> "generic" driver to the device.
+> 
+> After that, nothing will trigger a reprobe when the modprobe()'d
+> device
+> driver has finished initialising, as the device has the "generic"
+> driver attached to it.
+> 
+> Trigger a reprobe ourselves when new specialised drivers get
+> registered.
+> 
+> Fixes: 88b7381a939d ("USB: Select better matching USB drivers when
+> available")
+> Signed-off-by: Bastien Nocera <hadess@hadess.net>
 
-syzbot found the following issue on:
+Greg, Alan, are you happy with this iteration?
 
-HEAD commit:    e3ee0e74 usb: common: usb-conn-gpio: Register charger
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=175a3e0c900000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=fb6677a3d4f11788
-dashboard link: https://syzkaller.appspot.com/bug?extid=aafdc32825a345214a76
-compiler:       gcc (GCC) 10.1.0-syz 20200507
+If so, I can send it again with Alan's acks, along with a fix for the
+function name Alan mentioned. I see that the first patch in the list
+landed in usb-next already.
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+aafdc32825a345214a76@syzkaller.appspotmail.com
-
-usb 1-1: USB disconnect, device number 72
-==================================================================
-BUG: KASAN: slab-out-of-bounds in usb_destroy_configuration+0x636/0x6d0 drivers/usb/core/config.c:834
-Read of size 8 at addr ffff8881c7e3c758 by task kworker/1:7/3434
-
-CPU: 1 PID: 3434 Comm: kworker/1:7 Not tainted 5.8.0-rc7-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0xf6/0x16e lib/dump_stack.c:118
- print_address_description.constprop.0+0x1a/0x210 mm/kasan/report.c:383
- __kasan_report mm/kasan/report.c:513 [inline]
- kasan_report.cold+0x37/0x7c mm/kasan/report.c:530
- usb_destroy_configuration+0x636/0x6d0 drivers/usb/core/config.c:834
- usb_release_dev+0x3e/0x100 drivers/usb/core/usb.c:417
- device_release+0x71/0x200 drivers/base/core.c:1579
- kobject_cleanup lib/kobject.c:693 [inline]
- kobject_release lib/kobject.c:722 [inline]
- kref_put include/linux/kref.h:65 [inline]
- kobject_put+0x245/0x540 lib/kobject.c:739
- put_device+0x1b/0x30 drivers/base/core.c:2799
- hub_port_connect drivers/usb/core/hub.c:5059 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
- port_event drivers/usb/core/hub.c:5494 [inline]
- hub_event+0x1c93/0x4390 drivers/usb/core/hub.c:5576
- process_one_work+0x94c/0x15f0 kernel/workqueue.c:2269
- worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
- kthread+0x392/0x470 kernel/kthread.c:291
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:293
-
-Allocated by task 13775:
- save_stack+0x1b/0x40 mm/kasan/common.c:48
- set_track mm/kasan/common.c:56 [inline]
- __kasan_kmalloc.constprop.0+0xc2/0xd0 mm/kasan/common.c:494
- kmalloc include/linux/slab.h:560 [inline]
- kzalloc include/linux/slab.h:669 [inline]
- usb_get_configuration+0x186/0x3a50 drivers/usb/core/config.c:887
- usb_enumerate_device drivers/usb/core/hub.c:2387 [inline]
- usb_new_device+0x42c/0x7a0 drivers/usb/core/hub.c:2523
- hub_port_connect drivers/usb/core/hub.c:5208 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
- port_event drivers/usb/core/hub.c:5494 [inline]
- hub_event+0x2361/0x4390 drivers/usb/core/hub.c:5576
- process_one_work+0x94c/0x15f0 kernel/workqueue.c:2269
- worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
- kthread+0x392/0x470 kernel/kthread.c:291
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:293
-
-Freed by task 3070:
- save_stack+0x1b/0x40 mm/kasan/common.c:48
- set_track mm/kasan/common.c:56 [inline]
- kasan_set_free_info mm/kasan/common.c:316 [inline]
- __kasan_slab_free+0x116/0x160 mm/kasan/common.c:455
- slab_free_hook mm/slub.c:1474 [inline]
- slab_free_freelist_hook+0x53/0x140 mm/slub.c:1507
- slab_free mm/slub.c:3072 [inline]
- kfree+0xbc/0x2c0 mm/slub.c:4052
- kfree_const+0x51/0x60 mm/util.c:40
- kobject_cleanup lib/kobject.c:699 [inline]
- kobject_release lib/kobject.c:722 [inline]
- kref_put include/linux/kref.h:65 [inline]
- kobject_put+0x26f/0x540 lib/kobject.c:739
- put_device drivers/base/core.c:2799 [inline]
- device_unregister+0x34/0xc0 drivers/base/core.c:2910
- usb_remove_ep_devs+0x3e/0x80 drivers/usb/core/endpoint.c:215
- remove_intf_ep_devs drivers/usb/core/message.c:1120 [inline]
- usb_disable_device+0x335/0x930 drivers/usb/core/message.c:1244
- usb_disconnect.cold+0x27d/0x780 drivers/usb/core/hub.c:2217
- hub_port_connect drivers/usb/core/hub.c:5059 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
- port_event drivers/usb/core/hub.c:5494 [inline]
- hub_event+0x1c93/0x4390 drivers/usb/core/hub.c:5576
- process_one_work+0x94c/0x15f0 kernel/workqueue.c:2269
- worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
- kthread+0x392/0x470 kernel/kthread.c:291
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:293
-
-The buggy address belongs to the object at ffff8881c7e3c750
- which belongs to the cache kmalloc-8 of size 8
-The buggy address is located 0 bytes to the right of
- 8-byte region [ffff8881c7e3c750, ffff8881c7e3c758)
-The buggy address belongs to the page:
-page:ffffea00071f8f00 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff8881c7e3c7b0
-flags: 0x200000000000200(slab)
-raw: 0200000000000200 ffffea00071ffac0 0000000b0000000b ffff8881da003900
-raw: ffff8881c7e3c7b0 0000000080aa00a8 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
- ffff8881c7e3c600: 00 fc fc 00 fc fc fb fc fc fb fc fc 00 fc fc fb
- ffff8881c7e3c680: fc fc fb fc fc fb fc fc fb fc fc fb fc fc fb fc
->ffff8881c7e3c700: fc fb fc fc 00 fc fc fb fc fc 00 fc fc fb fc fc
-                                                    ^
- ffff8881c7e3c780: 00 fc fc fb fc fc fb fc fc 00 fc fc fb fc fc 00
- ffff8881c7e3c800: fc fc 00 fc fc fb fc fc fb fc fc 00 fc fc 00 fc
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
