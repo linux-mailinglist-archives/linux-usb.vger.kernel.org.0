@@ -2,92 +2,183 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBA2D23A11F
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Aug 2020 10:38:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55A4F23A123
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Aug 2020 10:38:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725861AbgHCIia (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 Aug 2020 04:38:30 -0400
-Received: from mx2.suse.de ([195.135.220.15]:52582 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725806AbgHCIi3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 3 Aug 2020 04:38:29 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 55FCBAFC0;
-        Mon,  3 Aug 2020 08:38:43 +0000 (UTC)
-Message-ID: <1596443906.19923.2.camel@suse.com>
-Subject: Re: [PATCH v5] usb: core: Solve race condition in anchor cleanup
- functions
-From:   Oliver Neukum <oneukum@suse.com>
-To:     eli.billauer@gmail.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org
-Cc:     hdegoede@redhat.com, stern@rowland.harvard.edu
-Date:   Mon, 03 Aug 2020 10:38:26 +0200
-In-Reply-To: <20200731054650.30644-1-eli.billauer@gmail.com>
-References: <20200731054650.30644-1-eli.billauer@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
+        id S1725980AbgHCIiy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 Aug 2020 04:38:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35362 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725806AbgHCIix (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Aug 2020 04:38:53 -0400
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90843C06174A;
+        Mon,  3 Aug 2020 01:38:53 -0700 (PDT)
+Received: by mail-lf1-x141.google.com with SMTP id x24so2713198lfe.11;
+        Mon, 03 Aug 2020 01:38:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=npiAot/ESE5mhly/NaC6fJlIGXLDCeDJyZ85G/ASWIU=;
+        b=tmBmBbr7oGARNTJ1j3DW1ktq5cxSaT5AUui4HZEQw22InmC7w3mRMgM3YZI0sxxYIq
+         3HPRbpfrMzib43mP50XuHVYLCuyRPU8S+W5uRdrgFlMTo99Vqwf1r5COYtXrNKhoHLtZ
+         YMdCFj5wM9XOghbfngD1hOofNl3MvVW2fcj+FwoE9HjWys4uFviJ0bV9Oefcb1D+r0rV
+         bQoAHgXasLhEr+5UhNx66i9BnuomgXjvIahd5Tbj/IBX0e4sQ0f2Y05UXzd5/prr7PMF
+         OinXfHE20O+xI/dzThW1Ytim99j1eL7v6z1kaiWlluqEKCNlz98Z7NvDJAu1RkvF99uf
+         Ai9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=npiAot/ESE5mhly/NaC6fJlIGXLDCeDJyZ85G/ASWIU=;
+        b=HlYGOfZhWsBX5FdTJP5z+Z4wjJM4IzHx8mT1QlJ/74xiDOT1oo48CsLNGzC4uxTsZt
+         CB91IhVvFlSlqA64Jt0zcFnkb22FJLKA50hgKYh2mBQvKCP/lD0pSTWISImDVfzuWZIg
+         +cfysciInpfsnmvFjsWAtNBSqAateJfBXl3+OZdDDSMKydonKzRu2frgrYn9vrwSQPU4
+         UDESmKT9r+eJe3OR5LwqAQjEm2rcn1Siu9B3bDxs4RYntz+PsYrUUD2/bf43LXkmv1Pp
+         yD8EwAlzlbskjPBKKLYkYHRpQvr0x257+hLYgUCxkG1bSJoWnc7G2gsXTBHOE9mq7hIo
+         sU8w==
+X-Gm-Message-State: AOAM533CneLNmFXb0ZIYV+hU94x1p/XWUp3hbtvSjMCLw0PCB8susQQM
+        m/uBHHl3/BvrzZcIfUTbGuQ=
+X-Google-Smtp-Source: ABdhPJy+zto/pN/N51x74qxXDYQPUzbXI44kmi8sTGPRL+P65odKDO3+CPgYLAFpPpixQMB/sV7WcA==
+X-Received: by 2002:a19:c806:: with SMTP id y6mr1590436lff.156.1596443930855;
+        Mon, 03 Aug 2020 01:38:50 -0700 (PDT)
+Received: from ?IPv6:2a00:1fa0:25e:e39f:415e:ce79:1f52:c7? ([2a00:1fa0:25e:e39f:415e:ce79:1f52:c7])
+        by smtp.gmail.com with ESMTPSA id s9sm3958409ljh.46.2020.08.03.01.38.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Aug 2020 01:38:50 -0700 (PDT)
+Subject: Re: [PATCH] qmi_wwan: support modify usbnet's rx_urb_size
+To:     yzc666@netease.com, bjorn@mork.no
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, carl <carl.yin@quectel.com>
+References: <20200803065105.8997-1-yzc666@netease.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Organization: Brain-dead Software
+Message-ID: <5a3c7567-da1a-7676-2516-de7681652643@gmail.com>
+Date:   Mon, 3 Aug 2020 11:38:47 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
+MIME-Version: 1.0
+In-Reply-To: <20200803065105.8997-1-yzc666@netease.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Freitag, den 31.07.2020, 08:46 +0300 schrieb eli.billauer@gmail.com:
-> From: Eli Billauer <eli.billauer@gmail.com>
+On 03.08.2020 9:51, yzc666@netease.com wrote:
+> From: carl <carl.yin@quectel.com>
+
+    Prefrrably a full name, matching that one in the signoff tag.
+
 > 
-> usb_kill_anchored_urbs() is commonly used to cancel all URBs on an
-> anchor just before releasing resources which the URBs rely on. By doing
-> so, users of this function rely on that no completer callbacks will take
-> place from any URB on the anchor after it returns.
+>      When QMUX enabled, the 'dl-datagram-max-size' can be 4KB/16KB/31KB depend on QUALCOMM's chipsets.
+
+    No indentation here please, start at column 1 and respect the length limit 
+of 75 columns as script/checkpatch.pl says...
+
+>      User can set 'dl-datagram-max-size' by 'QMI_WDA_SET_DATA_FORMAT'.
+>      The usbnet's rx_urb_size must lager than or equal to the 'dl-datagram-max-size'.
+>      This patch allow user to modify usbnet's rx_urb_size by next command.
 > 
-> However if this function is called in parallel with __usb_hcd_giveback_urb
-> processing a URB on the anchor, the latter may call the completer
-> callback after usb_kill_anchored_urbs() returns. This can lead to a
-> kernel panic due to use after release of memory in interrupt context.
+> 		echo 4096 > /sys/class/net/wwan0/qmi/rx_urb_size
 > 
-> The race condition is that __usb_hcd_giveback_urb() first unanchors the URB
-> and then makes the completer callback. Such URB is hence invisible to
-> usb_kill_anchored_urbs(), allowing it to return before the completer has
-> been called, since the anchor's urb_list is empty.
+> 		Next commnds show how to set and query 'dl-datagram-max-size' by qmicli
+> 		# qmicli -d /dev/cdc-wdm1 --wda-set-data-format="link-layer-protocol=raw-ip, ul-protocol=qmap,
+> 				dl-protocol=qmap, dl-max-datagrams=32, dl-datagram-max-size=31744, ep-type=hsusb, ep-iface-number=4"
+> 		[/dev/cdc-wdm1] Successfully set data format
+> 		                        QoS flow header: no
+> 		                    Link layer protocol: 'raw-ip'
+> 		       Uplink data aggregation protocol: 'qmap'
+> 		     Downlink data aggregation protocol: 'qmap'
+> 		                          NDP signature: '0'
+> 		Downlink data aggregation max datagrams: '10'
+> 		     Downlink data aggregation max size: '4096'
 > 
-> Even worse, if the racing completer callback resubmits the URB, it may
-> remain in the system long after usb_kill_anchored_urbs() returns.
+> 	    # qmicli -d /dev/cdc-wdm1 --wda-get-data-format
+> 		[/dev/cdc-wdm1] Successfully got data format
+> 		                   QoS flow header: no
+> 		               Link layer protocol: 'raw-ip'
+> 		  Uplink data aggregation protocol: 'qmap'
+> 		Downlink data aggregation protocol: 'qmap'
+> 		                     NDP signature: '0'
+> 		Downlink data aggregation max datagrams: '10'
+> 		Downlink data aggregation max size: '4096'
 > 
-> Hence list_empty(&anchor->urb_list), which is used in the existing
-> while-loop, doesn't reliably ensure that all URBs of the anchor are gone.
+> Signed-off-by: carl <carl.yin@quectel.com>
+
+    Need your full name.
+
+> ---
+>   drivers/net/usb/qmi_wwan.c | 39 ++++++++++++++++++++++++++++++++++++++
+>   1 file changed, 39 insertions(+)
 > 
-> A similar problem exists with usb_poison_anchored_urbs() and
-> usb_scuttle_anchored_urbs().
+> diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+> index 07c42c0719f5b..8ea57fd99ae43 100644
+> --- a/drivers/net/usb/qmi_wwan.c
+> +++ b/drivers/net/usb/qmi_wwan.c
+> @@ -400,6 +400,44 @@ static ssize_t raw_ip_store(struct device *d,  struct device_attribute *attr, co
+>   	return ret;
+>   }
+>   
+> +static ssize_t rx_urb_size_show(struct device *d, struct device_attribute *attr, char *buf)
+> +{
+> +	struct usbnet *dev = netdev_priv(to_net_dev(d));
+> +
+> +	return sprintf(buf, "%zd\n", dev->rx_urb_size);
+
+   Is dev->rx_urb_size really declared as size_t?
+
+> +}
+> +
+> +static ssize_t rx_urb_size_store(struct device *d,  struct device_attribute *attr,
+> +				 const char *buf, size_t len)
+> +{
+> +	struct usbnet *dev = netdev_priv(to_net_dev(d));
+> +	u32 rx_urb_size;
+
+    ... in this case, sholdn't this variable be also declared as size_t?
+
+> +	int ret;
+> +
+> +	if (kstrtou32(buf, 0, &rx_urb_size))
+> +		return -EINVAL;
+> +
+> +	/* no change? */
+> +	if (rx_urb_size == dev->rx_urb_size)
+> +		return len;
+> +
+> +	if (!rtnl_trylock())
+> +		return restart_syscall();
+> +
+> +	/* we don't want to modify a running netdev */
+> +	if (netif_running(dev->net)) {
+> +		netdev_err(dev->net, "Cannot change a running device\n");
+> +		ret = -EBUSY;
+> +		goto err;
+> +	}
+> +
+> +	dev->rx_urb_size = rx_urb_size;
+> +	ret = len;
+> +err:
+> +	rtnl_unlock();
+> +	return ret;
+> +}
+> +
+>   static ssize_t add_mux_show(struct device *d, struct device_attribute *attr, char *buf)
+>   {
+>   	struct net_device *dev = to_net_dev(d);
+> @@ -505,6 +543,7 @@ static DEVICE_ATTR_RW(add_mux);
+>   static DEVICE_ATTR_RW(del_mux);
+>   
+>   static struct attribute *qmi_wwan_sysfs_attrs[] = {
+> +	&dev_attr_rx_urb_size.attr,
+>   	&dev_attr_raw_ip.attr,
+>   	&dev_attr_add_mux.attr,
+>   	&dev_attr_del_mux.attr,
 > 
-> This patch adds an external do-while loop, which ensures that all URBs
-> are indeed handled before these three functions return. This change has
-> no effect at all unless the race condition occurs, in which case the
-> loop will busy-wait until the racing completer callback has finished.
-> This is a rare condition, so the CPU waste of this spinning is
-> negligible.
-> 
-> The additional do-while loop relies on usb_anchor_check_wakeup(), which
-> returns true iff the anchor list is empty, and there is no
-> __usb_hcd_giveback_urb() in the system that is in the middle of the
-> unanchor-before-complete phase. The @suspend_wakeups member of
-> struct usb_anchor is used for this purpose, which was introduced to solve
-> another problem which the same race condition causes, in commit
-> 6ec4147e7bdb ("usb-anchor: Delay usb_wait_anchor_empty_timeout wake up
-> till completion is done").
-> 
-> The surely_empty variable is necessary, because usb_anchor_check_wakeup()
-> must be called with the lock held to prevent races. However the spinlock
-> must be released and reacquired if the outer loop spins with an empty
-> URB list while waiting for the unanchor-before-complete passage to finish:
-> The completer callback may very well attempt to take the very same lock.
-> 
-> To summarize, using usb_anchor_check_wakeup() means that the patched
-> functions can return only when the anchor's list is empty, and there is
-> no invisible URB being processed. Since the inner while loop finishes on
-> the empty list condition, the new do-while loop will terminate as well,
-> except for when the said race condition occurs.
-> 
-> Signed-off-by: Eli Billauer <eli.billauer@gmail.com>
-Acked-by: Oliver Neukum <oneukum@suse.com>
+
