@@ -2,151 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3723423A304
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Aug 2020 13:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEA3023A3D8
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Aug 2020 14:08:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726296AbgHCLAX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 Aug 2020 07:00:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48884 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725945AbgHCLAV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 3 Aug 2020 07:00:21 -0400
-Received: from localhost (unknown [122.171.202.192])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 55DB520578;
-        Mon,  3 Aug 2020 11:00:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596452419;
-        bh=LYS0GWdRpiOi06IUzhl5C/4AAkTdXCxhTjn+IAoTmwI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aknNQkg/fkfqlAJkanuP86F0U0ybdq+0nVqKK3c/cmMK5Mb6txJZRRA1KeHacl4Ag
-         dK3x2SQOz0k+OrDtiLPy69xBdcaBIjnIudeR7vBhfUGph9ozVgDa17Ee5EG9vZ/U25
-         yJmSjh9Iz+yOg9ZX2laUFq6EgqSS3LUUiCNeGX3U=
-Date:   Mon, 3 Aug 2020 16:30:16 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Konrad Dybcio <konradybcio@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Clark <robdclark@gmail.com>
-Cc:     martin.botka1@gmail.com, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Jordan Crouse <jcrouse@codeaurora.org>,
-        zhengbin <zhengbin13@huawei.com>,
-        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>,
-        AngeloGioacchino Del Regno <kholk11@gmail.com>,
-        Ben Dooks <ben.dooks@codethink.co.uk>,
-        Krzysztof Wilczynski <kw@linux.com>,
-        Harigovindan P <harigovi@codeaurora.org>,
-        Brian Masney <masneyb@onstation.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Xiaozhe Shi <xiaozhes@codeaurora.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCH 4/9] drm/msm/dsi: Add phy configuration for SDM630/636/660
-Message-ID: <20200803110016.GL12965@vkoul-mobl>
-References: <20200726111215.22361-1-konradybcio@gmail.com>
- <20200726111215.22361-5-konradybcio@gmail.com>
+        id S1726800AbgHCMIa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 Aug 2020 08:08:30 -0400
+Received: from mail-eopbgr1300071.outbound.protection.outlook.com ([40.107.130.71]:58621
+        "EHLO APC01-HK2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726394AbgHCMI3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 3 Aug 2020 08:08:29 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=I7YMo+MNxhMoTnGnHpZK6+xWmCtsTbvEiiAEsXQJIXIEHEqzEjuoIEe3Pc9IMjgdhHi0K7w+okmPjPyJnucYWPo1ABMuuLlUgMaPm/V1WOu7yXklCBhGCHZ+Gwx7wM9ahm1owMi1Omrt7+l6HgKmFy8FK0OcjL5fSHMXLiKHG39LzXxZzLRQ/4yYep9uJ0z1ldXQkubSeMFtK+XGiFDsr8aTi2TipRz1DmRR8jjugUKVsR3B1MX8WhKMYBWoVBv/Rge7a3iiDSJ7js6RVmoSf7JH0zinSPOSfFJOuAccB6Ed8Ysern15NbTpncTyd09Di/KgBx2Vp6e7NR2TcyVyvw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nBKjMMFoDYcaDh7IJhACMLh0mKnzfj7+BrO/NMKGarY=;
+ b=bOAHnwz3hd3UMDKZWTpw3B4UY0tvBDgf00BLEN6wY8yzzzZ4iQJ86gEGl1WAwGkdAptK3BOKy0BdhU3E2iYfP+2VeIOwQbqRNqdz4x5IAwMUKNKsVUkToahYln39DgsqN2HugjFPRN6oi3OyN0GGvOidIO5DdC0pDdKpr0WY5QEd+1atyU41Hm13Pr+gvy4rePnxDvisrOJtIiUttzhvQbHzFag4PcTMMOhG6+1dpngvKfMGD18/InBlV3xvxytV3lY5AG2UZ51sVmSe8dv0g+wYkBPZwWLuL/lYATidwSBaH4CZrVmzE6V+ubrWeRyormfaG2qejG27FG9OoCWUnw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=quectel.com; dmarc=pass action=none header.from=quectel.com;
+ dkim=pass header.d=quectel.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quectel.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nBKjMMFoDYcaDh7IJhACMLh0mKnzfj7+BrO/NMKGarY=;
+ b=aAwZkqMv1ZuciveeRfMAIG6fIt3AnhI3dqDAfg3eMD19XoitXNT/vbrTX327AwxFmxwYobRNLAcPgKwtZ3W2oFv3ZdoR5XQ73wV6rAOe6nFjBIJ3XELE0BdCJF27Kd3+wQfnQpI65TVmpcuMtQatTFjLahvYWnTcaoScJrLhTMc=
+Received: from HK2PR06MB3507.apcprd06.prod.outlook.com (2603:1096:202:3e::14)
+ by HK2PR06MB3300.apcprd06.prod.outlook.com (2603:1096:202:34::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3239.20; Mon, 3 Aug
+ 2020 12:08:24 +0000
+Received: from HK2PR06MB3507.apcprd06.prod.outlook.com
+ ([fe80::4ff:f478:119f:2b80]) by HK2PR06MB3507.apcprd06.prod.outlook.com
+ ([fe80::4ff:f478:119f:2b80%4]) with mapi id 15.20.3239.021; Mon, 3 Aug 2020
+ 12:08:24 +0000
+From:   =?utf-8?B?Q2FybCBZaW4o5q635byg5oiQKQ==?= <carl.yin@quectel.com>
+To:     =?utf-8?B?QmrDuHJuIE1vcms=?= <bjorn@mork.no>,
+        Daniele Palmas <dnlplm@gmail.com>
+CC:     Greg KH <gregkh@linuxfoundation.org>,
+        "yzc666@netease.com" <yzc666@netease.com>,
+        David Miller <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        linux-usb <linux-usb@vger.kernel.org>
+Subject: =?utf-8?B?562U5aSNOiBbUEFUQ0hdIHFtaV93d2FuOiBzdXBwb3J0IG1vZGlmeSB1c2Ju?=
+ =?utf-8?B?ZXQncyByeF91cmJfc2l6ZQ==?=
+Thread-Topic: [PATCH] qmi_wwan: support modify usbnet's rx_urb_size
+Thread-Index: AQHWaYGZA5jXQ0Vbi0OPJRG5PwjhvakmQTNA
+Date:   Mon, 3 Aug 2020 12:08:24 +0000
+Message-ID: <HK2PR06MB3507C4CD349BBD29C68F3FCE864D0@HK2PR06MB3507.apcprd06.prod.outlook.com>
+References: <2a2ddc57522e8fb2512e02feacbc2886@sslemail.net>
+ <87r1so9fzl.fsf@miraculix.mork.no>
+In-Reply-To: <87r1so9fzl.fsf@miraculix.mork.no>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: mork.no; dkim=none (message not signed)
+ header.d=none;mork.no; dmarc=none action=none header.from=quectel.com;
+x-originating-ip: [210.73.58.133]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 9599a7b9-130a-4216-bdd9-08d837a5ec20
+x-ms-traffictypediagnostic: HK2PR06MB3300:
+x-microsoft-antispam-prvs: <HK2PR06MB3300FD50CE3653EBB791A426864D0@HK2PR06MB3300.apcprd06.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: +qio3Oj1MUG2PF43LwkIJzz2nTdteT/Z6JHdyvx9NR4Ajptr/lzLZoUSVaECVw9HzO+XX3HIXKLY6V5gtZrIHXwT2QTLf9LBc52hTtOwJ0XioFlmU7bMNH0pYzYUdsei2+++zx+op+SxsGYpJZye4WQQuBH9Kbu2C2vCuXsOZxjYZ5Wcl2746rkoZJDt4YsnNmNR60gUpQ6V/Ia1Be6OlmcDbXxoAVBAITOitfwRI5lvHH+QVfsS4umdKEMy4FzZd5WMCyB1GG2m8lJT82LGPHWtoXlG5gB997oEn8CVYob4+9EnS0zUzBN8c1+peeWStAJrwybTQdSO0rhD9a6QYQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK2PR06MB3507.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(376002)(136003)(346002)(39860400002)(396003)(366004)(66946007)(7696005)(33656002)(66476007)(66556008)(6506007)(86362001)(8936002)(83380400001)(85182001)(66574015)(64756008)(66446008)(110136005)(54906003)(5660300002)(4326008)(55016002)(9686003)(224303003)(52536014)(316002)(186003)(2906002)(71200400001)(26005)(76116006)(478600001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: 665k6CFwWKAk8MoUPD/OqEJUdT1o+ZnWrYkjT4wSAi70Tl32+GKM6s2UuTponkVArwQOX+6Z8tzQ0OGFXweNDXFQNBkp+Gp95O06+YttW3I1JBxPos+dkXulxNlvRidrHLrckwCoYKVeIFYu2RKVrQHXxkHHXThwgt1huo6CVre4KSCKBYnn8b67OOuikNGuVLajUcgXZ3PbTm80+OAEoSAkpVVrvDExbqSoXvVuv36cxIoywWeZo07IZ/tzLsymDVrr8hHR1IIr3/zmwn/bRSEgjtfxuvXWfDvgN/RRF3RHgQaYb6VyHXKPnra5S1uZsONjRoCqCp/lrgM4nZeQnrLi7HFVpTyySgMOHhf2FkW+rOpWQQqs+gub2DLRSAwFike6m137H9MzccdWfud8FmzkXkcVenNN6pmMP/5t1DEWyz761K/5ICLL2qHFduWP1gcIlNV0d8gOG2AO81wK2sCLDqts5wl7PGr+djkWIoxZI43V9EaSgWxpZOEz74aLirV7lASQd6X+/g4rrbUKC5Dn9qayCmadBoLih7y5jLblsyyUjP2xF79MHBGcLORKODMLvGnVZrkEmoh8TBxIiQZQ6rNOViFGs4VDSWXpUY3ImKzUW0Tv5d+KYHjbPIxc1SgOrXyxo8Qnmn74b6nXng==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200726111215.22361-5-konradybcio@gmail.com>
+X-OriginatorOrg: quectel.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HK2PR06MB3507.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9599a7b9-130a-4216-bdd9-08d837a5ec20
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Aug 2020 12:08:24.3055
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 7730d043-e129-480c-b1ba-e5b6a9f476aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6xM4LkFgziPlYSb8PGq0ih0gPzic78ARrFpOlkrQQm8ejJct2P1lye2Xc2lseiCQRu13yXYhPsrMxKgwhoHztw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK2PR06MB3300
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 26-07-20, 13:12, Konrad Dybcio wrote:
-> These SoCs make use of the 14nm phy, but at different
-> addresses than other 14nm units.
-> 
-> Signed-off-by: Konrad Dybcio <konradybcio@gmail.com>
-> ---
->  .../devicetree/bindings/display/msm/dsi.txt    |  1 +
->  drivers/gpu/drm/msm/dsi/phy/dsi_phy.c          |  2 ++
->  drivers/gpu/drm/msm/dsi/phy/dsi_phy.h          |  1 +
->  drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c     | 18 ++++++++++++++++++
-
-Is there a reason why dsi phy needs to be here and not in phy subsystem
-drivers/phy/ ?
-
->  4 files changed, 22 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/display/msm/dsi.txt b/Documentation/devicetree/bindings/display/msm/dsi.txt
-> index af95586c898f..7884fd7a85c1 100644
-> --- a/Documentation/devicetree/bindings/display/msm/dsi.txt
-> +++ b/Documentation/devicetree/bindings/display/msm/dsi.txt
-> @@ -87,6 +87,7 @@ Required properties:
->    * "qcom,dsi-phy-20nm"
->    * "qcom,dsi-phy-28nm-8960"
->    * "qcom,dsi-phy-14nm"
-> +  * "qcom,dsi-phy-14nm-660"
->    * "qcom,dsi-phy-10nm"
->    * "qcom,dsi-phy-10nm-8998"
->  - reg: Physical base address and length of the registers of PLL, PHY. Some
-> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
-> index f509ebd77500..009f5b843dd1 100644
-> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
-> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
-> @@ -499,6 +499,8 @@ static const struct of_device_id dsi_phy_dt_match[] = {
->  #ifdef CONFIG_DRM_MSM_DSI_14NM_PHY
->  	{ .compatible = "qcom,dsi-phy-14nm",
->  	  .data = &dsi_phy_14nm_cfgs },
-> +	{ .compatible = "qcom,dsi-phy-14nm-660",
-> +	  .data = &dsi_phy_14nm_660_cfgs },
->  #endif
->  #ifdef CONFIG_DRM_MSM_DSI_10NM_PHY
->  	{ .compatible = "qcom,dsi-phy-10nm",
-> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h
-> index 24b294ed3059..ef8672d7b123 100644
-> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h
-> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h
-> @@ -45,6 +45,7 @@ extern const struct msm_dsi_phy_cfg dsi_phy_28nm_lp_cfgs;
->  extern const struct msm_dsi_phy_cfg dsi_phy_20nm_cfgs;
->  extern const struct msm_dsi_phy_cfg dsi_phy_28nm_8960_cfgs;
->  extern const struct msm_dsi_phy_cfg dsi_phy_14nm_cfgs;
-> +extern const struct msm_dsi_phy_cfg dsi_phy_14nm_660_cfgs;
->  extern const struct msm_dsi_phy_cfg dsi_phy_10nm_cfgs;
->  extern const struct msm_dsi_phy_cfg dsi_phy_10nm_8998_cfgs;
->  
-> diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c
-> index 1594f1422372..519400501bcd 100644
-> --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c
-> +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_14nm.c
-> @@ -161,3 +161,21 @@ const struct msm_dsi_phy_cfg dsi_phy_14nm_cfgs = {
->  	.io_start = { 0x994400, 0x996400 },
->  	.num_dsi_phy = 2,
->  };
-> +
-> +const struct msm_dsi_phy_cfg dsi_phy_14nm_660_cfgs = {
-> +	.type = MSM_DSI_PHY_14NM,
-> +	.src_pll_truthtable = { {false, false}, {true, false} },
-> +	.reg_cfg = {
-> +		.num = 1,
-> +		.regs = {
-> +			{"vcca", 17000, 32},
-> +		},
-> +	},
-> +	.ops = {
-> +		.enable = dsi_14nm_phy_enable,
-> +		.disable = dsi_14nm_phy_disable,
-> +		.init = dsi_14nm_phy_init,
-> +	},
-> +	.io_start = { 0xc994400, 0xc996000 },
-> +	.num_dsi_phy = 2,
-> +};
-> -- 
-> 2.27.0
-
--- 
-~Vinod
+Ympvcm5AbW9yay5ubyB3cml0ZXM6DQo+IERhbmllbGUgUGFsbWFzIDxkbmxwbG1AZ21haWwuY29t
+PiB3cml0ZXM6DQo+ID4gSWwgZ2lvcm5vIGx1biAzIGFnbyAyMDIwIGFsbGUgb3JlIDEwOjE4IEdy
+ZWcgS0gNCj4gPiA8Z3JlZ2toQGxpbnV4Zm91bmRhdGlvbi5vcmc+IGhhIHNjcml0dG86DQo+ID4N
+Cj4gPj4gQWN0dWFsbHksIG5vLCB0aGlzIGFsbCBzaG91bGQgYmUgZG9uZSAiYXV0b21hdGljYWxs
+eSIsIGRvIG5vdCBjaGFuZ2UNCj4gPj4gdGhlIHVyYiBzaXplIG9uIHRoZSBmbHkuICBDaGFuZ2Ug
+aXQgYXQgcHJvYmUgdGltZSBiYXNlZCBvbiB0aGUgZGV2aWNlDQo+ID4+IHlvdSBhcmUgdXNpbmcs
+IGRvIG5vdCBmb3JjZSB1c2Vyc3BhY2UgdG8gImtub3ciIHdoYXQgdG8gZG8gaGVyZSwgYXMNCj4g
+Pj4gaXQgd2lsbCBub3Qga25vdyB0aGF0IGF0IGFsbC4NCj4gPj4NCj4gPg0KPiA+IHRoZSBwcm9i
+bGVtIHdpdGggZG9pbmcgYXQgcHJvYmUgdGltZSBpcyB0aGF0IHJ4X3VyYl9zaXplIGlzIG5vdCBm
+aXhlZCwNCj4gPiBidXQgZGVwZW5kcyBvbiB0aGUgY29uZmlndXJhdGlvbiBkb25lIGF0IHRoZSB1
+c2Vyc3BhY2UgbGV2ZWwgd2l0aA0KPiA+IFFNSV9XREFfU0VUX0RBVEFfRk9STUFULCBzbyB0aGUg
+dXNlcnNwYWNlIGtub3dzIHRoYXQuDQo+IA0KPiBZZXMsIGJ1dCB0aGUgZHJpdmVyICJ3aWxsIGtu
+b3ciIChvciAibWF5IGFzc3VtZSIpIHRoaXMgYmFzZWQgb24gdGhlDQo+IFFNSV9XV0FOX0ZMQUdf
+TVVYIGZsYWcsIGFzIGxvbmcgYXMgd2UgYXJlIHVzaW5nIHRoZSBkcml2ZXIgaW50ZXJuYWwNCj4g
+KGRlKW11eGluZy4gIFdlIHNob3VsZCBiZSBhYmxlIHRvIGF1dG9tYXRpY2FsbHkgc2V0IGEgc2Fu
+ZSByeF91cmJfc2l6ZSB2YWx1ZQ0KPiBiYXNlZCBvbiB0aGlzPw0KPiANCj4gTm90IHN1cmUgaWYg
+dGhlIHJtbmV0IGRyaXZlciBjdXJyZW50bHkgY2FuIGJlIHVzZWQgb24gdG9wIG9mIHFtaV93d2Fu
+Pw0KPiBUaGF0IHdpbGwgb2J2aW91c2x5IG5lZWQgc29tZSBvdGhlciB3b3JrYXJvdW5kLg0KPiAN
+Cj4gPiBDdXJyZW50bHkgdGhlcmUncyBhIHdvcmthcm91bmQgZm9yIHNldHRpbmcgcnhfdXJiX3Np
+emUgaS5lLiBjaGFuZ2luZw0KPiA+IHRoZSBuZXR3b3JrIGludGVyZmFjZSBNVFU6IHRoaXMgaXMg
+ZmluZSBmb3IgbW9zdCB1c2VzIHdpdGggcW1hcCwgYnV0DQo+ID4gdGhlcmUncyB0aGUgbGltaXRh
+dGlvbiB0aGF0IGNlcnRhaW4gdmFsdWVzIChtdWx0aXBsZSBvZiB0aGUgZW5kcG9pbnQNCj4gPiBz
+aXplKSBhcmUgbm90IGFsbG93ZWQuDQo+IA0KPiBBbmQgdGhpcyBhbHNvIHJlcXVpcmVzIGFuIGFk
+ZGl0aW9uYWwgc2V0dXAgc3RlcCBmb3IgdXNlci91c2Vyc3BhY2UsIHdoaWNoIHdlDQo+IHNob3Vs
+ZCB0cnkgdG8gYXZvaWQgaWYgcG9zc2libGUuDQo+IA0KPiBJJ20gYWxsIGZvciBhIGZ1bGx5IGF1
+dG9tYXRpYyBzb2x1dGlvbi4gIEkgZG9uJ3QgdGhpbmsgcnhfdXJiX3NpemUgc2hvdWxkIGJlIGRp
+cmVjdGx5DQo+IGNvbmZpZ3VyYWJsZS4gQW5kIGl0IGl0IHdlcmUsIHRoZW4gaXQgc2hvdWxkIGJl
+IGltcGxlbWVudGVkIGluIHRoZSB1c2JuZXQNCj4gZnJhbWV3b3JrLiBJdCBpcyBub3QgYSBxbWlf
+d3dhbiBzcGVjaWZpYyBhdHRyaWJ1dGUuDQoNCkhpIEJqw7hybiwgDQoJWW91IGNhbiBjaGVjayBj
+ZGNfbmNtLmMuDQoJY2RjIG5jbSBkcml2ZXIgc2V0ICdyeF91cmJfc2l6ZScgb24gZHJpdmVyIHBy
+b2JlIHRpbWUsIGFuZCB0aGUgdmFsdWUgcmVhZCBmcm9tJyBjZGNfbmNtX2JpbmRfY29tbW9uKCkg
+J3MgVVNCX0NEQ19HRVRfTlRCX0ZPUk1BVCAnLg0KCWFuZCBhbHNvIGFsbG93IHRoZSB1c2Vyc3Bh
+Y2UgdG8gbW9kaWZ5ICdyeF91cmJfc2l6ZScgYnkgJyAvc3lzL2NsYXNzL25ldC93d2FuMC9jZGNf
+bmNtL3J4X21heCcuDQoNCj4gDQo+IA0KPiBCasO4cm4NCg==
