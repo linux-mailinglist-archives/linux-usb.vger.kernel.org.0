@@ -2,183 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55A4F23A123
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Aug 2020 10:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E37C23A13D
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Aug 2020 10:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725980AbgHCIiy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 Aug 2020 04:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35362 "EHLO
+        id S1726482AbgHCIqb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 Aug 2020 04:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725806AbgHCIix (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Aug 2020 04:38:53 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90843C06174A;
-        Mon,  3 Aug 2020 01:38:53 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id x24so2713198lfe.11;
-        Mon, 03 Aug 2020 01:38:53 -0700 (PDT)
+        with ESMTP id S1725806AbgHCIqa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Aug 2020 04:46:30 -0400
+Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC555C06174A;
+        Mon,  3 Aug 2020 01:46:30 -0700 (PDT)
+Received: by mail-ot1-x344.google.com with SMTP id r21so16816173ota.10;
+        Mon, 03 Aug 2020 01:46:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=npiAot/ESE5mhly/NaC6fJlIGXLDCeDJyZ85G/ASWIU=;
-        b=tmBmBbr7oGARNTJ1j3DW1ktq5cxSaT5AUui4HZEQw22InmC7w3mRMgM3YZI0sxxYIq
-         3HPRbpfrMzib43mP50XuHVYLCuyRPU8S+W5uRdrgFlMTo99Vqwf1r5COYtXrNKhoHLtZ
-         YMdCFj5wM9XOghbfngD1hOofNl3MvVW2fcj+FwoE9HjWys4uFviJ0bV9Oefcb1D+r0rV
-         bQoAHgXasLhEr+5UhNx66i9BnuomgXjvIahd5Tbj/IBX0e4sQ0f2Y05UXzd5/prr7PMF
-         OinXfHE20O+xI/dzThW1Ytim99j1eL7v6z1kaiWlluqEKCNlz98Z7NvDJAu1RkvF99uf
-         Ai9Q==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ldpq9lUOsWhKwe/FZyOZtBINOPkrHNfkHnfcPwlRPCU=;
+        b=WpMWmZ08n26KnNJ8Kee1MYAG1Jm/zPcTsurcm70Oz6QCv5oFfJJeXvq3VcoC9Bqmp3
+         ZwUe+YLsT+FIs/9kGKQtxteKlRXHSSQ+XStDVRPK0FJ9rDWqULujkoduvfNvMAyy0GOg
+         NoXxh8OaGSL/tRiXvcDRUH0pjdIKGIrcWXdgMqadI1W4uKjz2xIadtm/umq1TPcJ2dwv
+         x921GXZ22H8R3fB7B0gACzntSyHHPZ4Uep08cGKEx1pE00WBaNIlW5skBV0VR9xSPFsw
+         +/MQUrW8/mEWr+pwjxhIKc3bVJJhFwBIXZ+8+jfHudxJdG2f4k8YUNGYS662utnJkUBW
+         AW1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=npiAot/ESE5mhly/NaC6fJlIGXLDCeDJyZ85G/ASWIU=;
-        b=HlYGOfZhWsBX5FdTJP5z+Z4wjJM4IzHx8mT1QlJ/74xiDOT1oo48CsLNGzC4uxTsZt
-         CB91IhVvFlSlqA64Jt0zcFnkb22FJLKA50hgKYh2mBQvKCP/lD0pSTWISImDVfzuWZIg
-         +cfysciInpfsnmvFjsWAtNBSqAateJfBXl3+OZdDDSMKydonKzRu2frgrYn9vrwSQPU4
-         UDESmKT9r+eJe3OR5LwqAQjEm2rcn1Siu9B3bDxs4RYntz+PsYrUUD2/bf43LXkmv1Pp
-         yD8EwAlzlbskjPBKKLYkYHRpQvr0x257+hLYgUCxkG1bSJoWnc7G2gsXTBHOE9mq7hIo
-         sU8w==
-X-Gm-Message-State: AOAM533CneLNmFXb0ZIYV+hU94x1p/XWUp3hbtvSjMCLw0PCB8susQQM
-        m/uBHHl3/BvrzZcIfUTbGuQ=
-X-Google-Smtp-Source: ABdhPJy+zto/pN/N51x74qxXDYQPUzbXI44kmi8sTGPRL+P65odKDO3+CPgYLAFpPpixQMB/sV7WcA==
-X-Received: by 2002:a19:c806:: with SMTP id y6mr1590436lff.156.1596443930855;
-        Mon, 03 Aug 2020 01:38:50 -0700 (PDT)
-Received: from ?IPv6:2a00:1fa0:25e:e39f:415e:ce79:1f52:c7? ([2a00:1fa0:25e:e39f:415e:ce79:1f52:c7])
-        by smtp.gmail.com with ESMTPSA id s9sm3958409ljh.46.2020.08.03.01.38.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Aug 2020 01:38:50 -0700 (PDT)
-Subject: Re: [PATCH] qmi_wwan: support modify usbnet's rx_urb_size
-To:     yzc666@netease.com, bjorn@mork.no
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, carl <carl.yin@quectel.com>
-References: <20200803065105.8997-1-yzc666@netease.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Organization: Brain-dead Software
-Message-ID: <5a3c7567-da1a-7676-2516-de7681652643@gmail.com>
-Date:   Mon, 3 Aug 2020 11:38:47 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ldpq9lUOsWhKwe/FZyOZtBINOPkrHNfkHnfcPwlRPCU=;
+        b=S2i4w17TkTjow/DAUUwUt4cLc0WVNL7DWcViXbTgk/rSb1TPPaqZMWb7GQhnyX/Rvc
+         w6YtVicIwgXzpsOGro85vUhiGOcW6kcrr8IQ2o8JMpj8+2zzGjnYtVby1Bwq7OY4Etjw
+         Qxz9Efp1zP4sU3G2sR/n0mGpiUplXkc9VmqOkb84Htje6dEgzLx+O1auCVIgZaA2YMxe
+         LHPkiQzg6cBO9mWOEQSmo5SJK1VBx43iWtJ7OOwjkUonc/lFa+kEZD+7PDwuEC619K5v
+         lm+twLIweE0UMxn9uhrGX2v+atdECWUQ7HMyoGsuk4G/iomj8mgum+X5xRnpi5Z+oWcN
+         u/ng==
+X-Gm-Message-State: AOAM533mbgZKP9u3qlrG77656FGd2AxYLyIEBX809A1GJteplh9KTB4u
+        q5oaQzRXBTfzRJkdD3sQHb5Yb8HNREpFZ3ae6Io=
+X-Google-Smtp-Source: ABdhPJywEIvpuyitAoDTtD0/wC6yQxi+TGZF6FmBDXPPZy9GwNZrNEeGyjiIoXvh3WcLO7UKIwA2uajhqG5WgWac/6c=
+X-Received: by 2002:a05:6830:1c65:: with SMTP id s5mr12486238otg.264.1596444390081;
+ Mon, 03 Aug 2020 01:46:30 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200803065105.8997-1-yzc666@netease.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200716030847.1564131-1-keescook@chromium.org>
+ <87h7tpa3hg.fsf@nanos.tec.linutronix.de> <202007301113.45D24C9D@keescook>
+In-Reply-To: <202007301113.45D24C9D@keescook>
+From:   Allen <allen.lkml@gmail.com>
+Date:   Mon, 3 Aug 2020 14:16:15 +0530
+Message-ID: <CAOMdWSJQKHAWY1P297b9koOLd8sVtezEYEyWGtymN1YeY27M6A@mail.gmail.com>
+Subject: Re: [PATCH 0/3] Modernize tasklet callback API
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Oscar Carter <oscar.carter@gmx.com>,
+        Romain Perier <romain.perier@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-s390@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-usb@vger.kernel.org, kgdb-bugreport@lists.sourceforge.net,
+        alsa-devel@alsa-project.org,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 03.08.2020 9:51, yzc666@netease.com wrote:
-> From: carl <carl.yin@quectel.com>
+Kees,
 
-    Prefrrably a full name, matching that one in the signoff tag.
+>
+> [heavily trimmed CC list because I think lkml is ignoring this
+> thread...]
+>
+> On Thu, Jul 30, 2020 at 09:03:55AM +0200, Thomas Gleixner wrote:
+> > Kees,
+> >
+> > Kees Cook <keescook@chromium.org> writes:
+> > > This is the infrastructure changes to prepare the tasklet API for
+> > > conversion to passing the tasklet struct as the callback argument instead
+> > > of an arbitrary unsigned long. The first patch details why this is useful
+> > > (it's the same rationale as the timer_struct changes from a bit ago:
+> > > less abuse during memory corruption attacks, more in line with existing
+> > > ways of doing things in the kernel, save a little space in struct,
+> > > etc). Notably, the existing tasklet API use is much less messy, so there
+> > > is less to clean up.
+> > >
+> > > It's not clear to me which tree this should go through... Greg since it
+> > > starts with a USB clean-up, -tip for timer or interrupt, or if I should
+> > > just carry it. I'm open to suggestions, but if I don't hear otherwise,
+> > > I'll just carry it.
+> > >
+> > > My goal is to have this merged for v5.9-rc1 so that during the v5.10
+> > > development cycle the new API will be available. The entire tree of
+> > > changes is here[1] currently, but to split it up by maintainer the
+> > > infrastructure changes need to be landed first.
+> > >
+> > > Review and Acks appreciated! :)
+> >
+> > I'd rather see tasklets vanish from the planet completely, but that's
+> > going to be a daring feat. So, grudgingly:
+>
+> Understood! I will update the comments near the tasklet API.
+>
+> > Acked-by: Thomas Gleixner <tglx@linutronix.de>
+>
 
-> 
->      When QMUX enabled, the 'dl-datagram-max-size' can be 4KB/16KB/31KB depend on QUALCOMM's chipsets.
+Here's the series re-based on top of 5.8
+https://github.com/allenpais/tasklets/tree/V3
 
-    No indentation here please, start at column 1 and respect the length limit 
-of 75 columns as script/checkpatch.pl says...
+Let me know how you would want these to be reviewed.
 
->      User can set 'dl-datagram-max-size' by 'QMI_WDA_SET_DATA_FORMAT'.
->      The usbnet's rx_urb_size must lager than or equal to the 'dl-datagram-max-size'.
->      This patch allow user to modify usbnet's rx_urb_size by next command.
-> 
-> 		echo 4096 > /sys/class/net/wwan0/qmi/rx_urb_size
-> 
-> 		Next commnds show how to set and query 'dl-datagram-max-size' by qmicli
-> 		# qmicli -d /dev/cdc-wdm1 --wda-set-data-format="link-layer-protocol=raw-ip, ul-protocol=qmap,
-> 				dl-protocol=qmap, dl-max-datagrams=32, dl-datagram-max-size=31744, ep-type=hsusb, ep-iface-number=4"
-> 		[/dev/cdc-wdm1] Successfully set data format
-> 		                        QoS flow header: no
-> 		                    Link layer protocol: 'raw-ip'
-> 		       Uplink data aggregation protocol: 'qmap'
-> 		     Downlink data aggregation protocol: 'qmap'
-> 		                          NDP signature: '0'
-> 		Downlink data aggregation max datagrams: '10'
-> 		     Downlink data aggregation max size: '4096'
-> 
-> 	    # qmicli -d /dev/cdc-wdm1 --wda-get-data-format
-> 		[/dev/cdc-wdm1] Successfully got data format
-> 		                   QoS flow header: no
-> 		               Link layer protocol: 'raw-ip'
-> 		  Uplink data aggregation protocol: 'qmap'
-> 		Downlink data aggregation protocol: 'qmap'
-> 		                     NDP signature: '0'
-> 		Downlink data aggregation max datagrams: '10'
-> 		Downlink data aggregation max size: '4096'
-> 
-> Signed-off-by: carl <carl.yin@quectel.com>
+Also, I was thinking if removing tasklets completely could be a task
+on KSPP wiki. If yes, I did like to take ownership of that task. I have a
+couple of ideas in mind, which could be discussed in a separate email.
 
-    Need your full name.
+Thanks.
 
-> ---
->   drivers/net/usb/qmi_wwan.c | 39 ++++++++++++++++++++++++++++++++++++++
->   1 file changed, 39 insertions(+)
-> 
-> diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-> index 07c42c0719f5b..8ea57fd99ae43 100644
-> --- a/drivers/net/usb/qmi_wwan.c
-> +++ b/drivers/net/usb/qmi_wwan.c
-> @@ -400,6 +400,44 @@ static ssize_t raw_ip_store(struct device *d,  struct device_attribute *attr, co
->   	return ret;
->   }
->   
-> +static ssize_t rx_urb_size_show(struct device *d, struct device_attribute *attr, char *buf)
-> +{
-> +	struct usbnet *dev = netdev_priv(to_net_dev(d));
-> +
-> +	return sprintf(buf, "%zd\n", dev->rx_urb_size);
-
-   Is dev->rx_urb_size really declared as size_t?
-
-> +}
-> +
-> +static ssize_t rx_urb_size_store(struct device *d,  struct device_attribute *attr,
-> +				 const char *buf, size_t len)
-> +{
-> +	struct usbnet *dev = netdev_priv(to_net_dev(d));
-> +	u32 rx_urb_size;
-
-    ... in this case, sholdn't this variable be also declared as size_t?
-
-> +	int ret;
-> +
-> +	if (kstrtou32(buf, 0, &rx_urb_size))
-> +		return -EINVAL;
-> +
-> +	/* no change? */
-> +	if (rx_urb_size == dev->rx_urb_size)
-> +		return len;
-> +
-> +	if (!rtnl_trylock())
-> +		return restart_syscall();
-> +
-> +	/* we don't want to modify a running netdev */
-> +	if (netif_running(dev->net)) {
-> +		netdev_err(dev->net, "Cannot change a running device\n");
-> +		ret = -EBUSY;
-> +		goto err;
-> +	}
-> +
-> +	dev->rx_urb_size = rx_urb_size;
-> +	ret = len;
-> +err:
-> +	rtnl_unlock();
-> +	return ret;
-> +}
-> +
->   static ssize_t add_mux_show(struct device *d, struct device_attribute *attr, char *buf)
->   {
->   	struct net_device *dev = to_net_dev(d);
-> @@ -505,6 +543,7 @@ static DEVICE_ATTR_RW(add_mux);
->   static DEVICE_ATTR_RW(del_mux);
->   
->   static struct attribute *qmi_wwan_sysfs_attrs[] = {
-> +	&dev_attr_rx_urb_size.attr,
->   	&dev_attr_raw_ip.attr,
->   	&dev_attr_add_mux.attr,
->   	&dev_attr_del_mux.attr,
-> 
-
+-- 
+       - Allen
