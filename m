@@ -2,203 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C01239E50
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Aug 2020 06:27:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C18D623A037
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Aug 2020 09:23:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726537AbgHCE1q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 Aug 2020 00:27:46 -0400
-Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:51134 "EHLO
-        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725908AbgHCE1p (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Aug 2020 00:27:45 -0400
-Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
-        by mx0b-0014ca01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0734Outp010543;
-        Sun, 2 Aug 2020 21:27:19 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=proofpoint;
- bh=8f8HKQ3lkaLpS8NPhK8wiKbn3kUBkIzujT5yJncN7LU=;
- b=Uir3iOPbBGJ+qy/NLOJjclPY38E7mjVUgY8HhBinkW3iL1HrF9dp+PTIlJnBBvReFmrt
- ANlr6WVwBaT7JBGJ6zKrvtRYIkIpAGqhZ3ZwT+tuZllSfRyrBGl8grQMiFFYpJS7cftQ
- anma+y9Ee0dUhLMVnjjpJCDANxmlS5E6zmQ7sZ8HBVu3QKbZp+xyog1rgrMCrEyiRX+g
- zSTRtoQY3gLhlBW6wNJVw9diRnEUh1Dv5nzMldjPTutzoVDg0rgzrgRZRtj4HtS7S8Cr
- 3qCP1/mvTTWrJwu8BkfW3yumHwrXIXFhncOlsfBYan/vFSNTmy1fUMSEvxjeDABpHU52 Bw== 
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2177.outbound.protection.outlook.com [104.47.58.177])
-        by mx0b-0014ca01.pphosted.com with ESMTP id 32n8gxm691-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 02 Aug 2020 21:27:19 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PHo4wwjMPA80hQL5lkFFunLL/b6Bjtc96gXCgHliFiJsseZ6s6f/CVNwvZLgC7+Najod50gjhMtJc4l7jJNN+CvynTBz1htMKq7ZLvxvmB5Do0cYd9+XLSLCnRlOWDvQR7E/o+eV/wGlXR0ZHWVYOnyJaykDXQFlQUCJw9pluurWlYUFob6ogd61FjwH6KGIMMi3H6lTGKh2eqqEMjEHUy5tWDXKPsONw2lkEgznbaZTXNMusz/8zvVwX+FY0J0bAT0hbrYivkcNxjouQApAWQXq/d0okDEROSSbFWezye/8w7719rFQ8yvRWNIdggBo4X3EMS0zXwvmhC97Dq/aEQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8f8HKQ3lkaLpS8NPhK8wiKbn3kUBkIzujT5yJncN7LU=;
- b=V+hVM16J9amynhW5ryo9DrU4WAU7Ys5yVnV6nUAwRuNHUvay2VWB5CG+7en4cVpqOZnchW4iTs4L9xUdx1R2LW7xBrodhgtHjYsZtHDLw0ccoZgYqlx4WPb5jCcjgexUsU+G8crjmk0EzXe9s+axj0Nb71QWmBRi+8/fxrE2PEwgHpmPFXFGBhhTk77MqesmDIsm0Nf+VgybE/gc7udf3zVaxD/Ii1YuvrfLH8oZY4+onHGBAvQMqwXsG+I6bUcXNPZDN24RYKv5xaSXTNyv6ISSHrreBoeUyH5pzUGr+CAVi8+MTXTApC/c5q9y6ThLx6DJwSbrU/AieBveVhN6+w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
- dkim=pass header.d=cadence.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8f8HKQ3lkaLpS8NPhK8wiKbn3kUBkIzujT5yJncN7LU=;
- b=H2iULZ759Afzus/SMTxRaikHIvz4/1HFxfFhlRxs008KZyFlUn8TjIcAzCL8kVL7oxeuZC6FuNW8rvptPLE3x/97SGBV0Z4leaKd+HwyFqh/9sfYmdo0XtM1wJAxgJ8HWE4mGcpt1gzbxF3Eg7rr0CNgP8IX7+X2ORjk+2GW9EY=
-Received: from DM6PR07MB5529.namprd07.prod.outlook.com (2603:10b6:5:7a::30) by
- DM6PR07MB4460.namprd07.prod.outlook.com (2603:10b6:5:c6::16) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3239.19; Mon, 3 Aug 2020 04:27:17 +0000
-Received: from DM6PR07MB5529.namprd07.prod.outlook.com
- ([fe80::35cf:ffb3:3776:8362]) by DM6PR07MB5529.namprd07.prod.outlook.com
- ([fe80::35cf:ffb3:3776:8362%4]) with mapi id 15.20.3239.021; Mon, 3 Aug 2020
- 04:27:17 +0000
-From:   Pawel Laszczak <pawell@cadence.com>
-To:     Peter Chen <peter.chen@nxp.com>
-CC:     "balbi@kernel.org" <balbi@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rogerq@ti.com" <rogerq@ti.com>,
-        "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>,
-        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-        "colin.king@canonical.com" <colin.king@canonical.com>,
-        Jayshri Dajiram Pawar <jpawar@cadence.com>,
-        "ben.dooks@codethink.co.uk" <ben.dooks@codethink.co.uk>,
-        Rahul Kumar <kurahul@cadence.com>,
-        Sanket Parmar <sparmar@cadence.com>
-Subject: RE: [PATCH v2 7/9] usb: cdns3: core: removed 'goto not_otg'
-Thread-Topic: [PATCH v2 7/9] usb: cdns3: core: removed 'goto not_otg'
-Thread-Index: AQHWWP1JVS+n3WQDxkyDvzwFhNzdrqkS8ReAgBL3eFA=
-Date:   Mon, 3 Aug 2020 04:27:17 +0000
-Message-ID: <DM6PR07MB55299BC37F8BD76E2551759BDD4D0@DM6PR07MB5529.namprd07.prod.outlook.com>
-References: <20200713100554.28530-1-pawell@cadence.com>
- <20200713100554.28530-8-pawell@cadence.com>
- <20200722024051.GF5807@b29397-desktop>
-In-Reply-To: <20200722024051.GF5807@b29397-desktop>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccGF3ZWxsXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctOWFkMDA1NjItZDU0MS0xMWVhLTg3NjctMWM0ZDcwMWRmYmE0XGFtZS10ZXN0XDlhZDAwNTYzLWQ1NDEtMTFlYS04NzY3LTFjNGQ3MDFkZmJhNGJvZHkudHh0IiBzej0iMjE1NiIgdD0iMTMyNDA5MDI0MzQ1Njg5MTkyIiBoPSJmS0dxdENFOVlpcXZNQVBLemJTdm5KNnMrRGc9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
-x-dg-rorf: true
-authentication-results: nxp.com; dkim=none (message not signed)
- header.d=none;nxp.com; dmarc=none action=none header.from=cadence.com;
-x-originating-ip: [185.217.253.59]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 6add4d17-399a-4d47-cb0e-08d837658163
-x-ms-traffictypediagnostic: DM6PR07MB4460:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DM6PR07MB44602E993FA9768366B906E5DD4D0@DM6PR07MB4460.namprd07.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: DEel84c/DjIbhM+bHAmO/BkuI44oqHmtaG6z090Yr14BrpnHZkKWI2ubKnZqA7XX8RDGqmIZG5OZBbg1O43232SyYuFpuaRLYcMXzCLVKXR1gsgyNsSKyQFmx6ttXHSWbZiU+xG27cLNuowRH/pzlU4W2ZOaK3JyCB7WO62i6DnTmIwybXxea8PJMK/r+Ah8WktYiwCFkSEMaBtr6mr6sfLrawHQR9ILy0TvhhYX2SLQ8/nhzzsr/nFvwi+27YtLnVcXk09LLi5KVx6tMNTgDivVusOc77s3BvOYYmiWihPCOfRu4u3z6dz7qmfTqsGcuqb9sSRI7o9jaaNyhzZvsdj7zoKtQoYf/0KzaGRNoTh7JB4Xa0dYY2rUiAaAkuHH
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR07MB5529.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(396003)(376002)(136003)(346002)(366004)(39860400002)(36092001)(76116006)(66556008)(66946007)(66446008)(107886003)(66476007)(64756008)(6916009)(83380400001)(9686003)(4326008)(71200400001)(8676002)(186003)(7416002)(478600001)(5660300002)(7696005)(52536014)(316002)(54906003)(2906002)(86362001)(55016002)(8936002)(26005)(33656002)(6506007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: 8gWf9xQqytr/9gqWSQw4Btc2dvfdLlsrX7iUkMJoiMlSEIRZJPJTYW/6JaiEc7sjrvolPA7oAJhOHSfYNwhIkOsf2zfmptQhctA/vWldwEuUeECuiFjefluMX6tT22DUWKOV+QOyT/KY1zbhmIQxYZCLRlpLUjlLAgXiSCngnV3ysST+rrnZUpc0pXcKwKr8hnH+u2vhAGNhZ94pdXW8NF7VrVe8kaFVX5h1psVPu7Pf1ZmlipcdmXs5DpdkgJoJbebt3cyOWuB/Iwhfev9nyySGGLn6GkOlijdCyyXjEVZicWuRJWmmpzMLygvnIICzCwIl5yxqV7OXSVu8QCwgKnjZ5bX8wWC+oS0bK/0ykcfSsIFSrt2YJ94mjwNBukDXVzNswZNEP4wGWR3Ck7YYgpwvbvjK1JlstA0UG+IVd3tV73zfwkHdo/D0VHawlkX+338/2R/sOA4Cf4Kz/yDVSPXyx8YTpxgASM7P5xYljNMGyvRAwenMnexfB+zJagbZtFey5/cqoRtuTOy/g4GcIyrMO+zkQK6BAj2cxT/Qon2rKZdB/J4OoB2CiAltmTdO6J2D4RNvRcNGVxhIte+bPoaX4Y3hubZrnCY95MXwFXiLi6U0Oy/lyyCndJzVfx3IhaNG6pSvf7ZF6mw0nDSk7Q==
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR07MB5529.namprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6add4d17-399a-4d47-cb0e-08d837658163
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Aug 2020 04:27:17.3471
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: OCyPcnfMOEjeiZspwTBF6IE20utXzl0QpBuk7xcw/v/J2lTUQ4dhPMdogrAdnrDeRVI6ySxAShaBAHadA1b/PnzmfNxN3tHnlbmBPmsKfQk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR07MB4460
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-08-03_01:2020-07-31,2020-08-03 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 malwarescore=0
- phishscore=0 mlxlogscore=943 impostorscore=0 priorityscore=1501
- bulkscore=0 suspectscore=0 spamscore=0 mlxscore=0 clxscore=1011
- adultscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2006250000 definitions=main-2008030031
+        id S1725928AbgHCHXR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 Aug 2020 03:23:17 -0400
+Received: from mail-177132.yeah.net ([123.58.177.132]:32952 "EHLO
+        mail-177132.yeah.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725270AbgHCHXR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 Aug 2020 03:23:17 -0400
+X-Greylist: delayed 1881 seconds by postgrey-1.27 at vger.kernel.org; Mon, 03 Aug 2020 03:23:15 EDT
+Received: from localhost.localdomain (unknown [220.180.239.201])
+        by smtp2 (Coremail) with SMTP id C1UQrABnb3vesydfvXCkGA--.40163S2;
+        Mon, 03 Aug 2020 14:51:11 +0800 (CST)
+From:   yzc666@netease.com
+To:     bjorn@mork.no
+Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, carl <carl.yin@quectel.com>
+Subject: [PATCH]     qmi_wwan: support modify usbnet's rx_urb_size
+Date:   Mon,  3 Aug 2020 14:51:05 +0800
+Message-Id: <20200803065105.8997-1-yzc666@netease.com>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: C1UQrABnb3vesydfvXCkGA--.40163S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxJF1xWw1xury5uFWDZry7Jrb_yoW5Zr1xpF
+        W3XayrWrWUJrZrWrsxJF4DW3W3Wr1ru34fG3y2gwnYkrnrXwnrta4UJFyYyrZ3KF98CrWY
+        qr4Dta1UGrs8XFJanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jFUDJUUUUU=
+X-Originating-IP: [220.180.239.201]
+X-CM-SenderInfo: h12fllmw6qv3phdvvhhfrp/1tbiDR91HFszSoasMQAAsC
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
->
->On 20-07-13 12:05:52, Pawel Laszczak wrote:
->> Patch removes 'goto not_otg' instruction from
->> cdns3_hw_role_state_machine function.
->>
->> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
->> ---
->>  drivers/usb/cdns3/core.c | 20 +++++++++-----------
->>  1 file changed, 9 insertions(+), 11 deletions(-)
->>
->> diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
->> index c498b585eb13..8e3996f211a8 100644
->> --- a/drivers/usb/cdns3/core.c
->> +++ b/drivers/usb/cdns3/core.c
->> @@ -191,11 +191,17 @@ static int cdns3_core_init_role(struct cdns3 *cdns=
-)
->>   */
->>  static enum usb_role cdns3_hw_role_state_machine(struct cdns3 *cdns)
->>  {
->> -	enum usb_role role;
->> +	enum usb_role role =3D USB_ROLE_NONE;
->>  	int id, vbus;
->>
->> -	if (cdns->dr_mode !=3D USB_DR_MODE_OTG)
->> -		goto not_otg;
->> +	if (cdns->dr_mode !=3D USB_DR_MODE_OTG) {
->> +		if (cdns3_is_host(cdns))
->> +			role =3D USB_ROLE_HOST;
->> +		if (cdns3_is_device(cdns))
->> +			role =3D USB_ROLE_DEVICE;
->> +
->> +		return role;
->> +	}
->
->Would you please improve it a bit like below:
->
->	if (cdns->dr_mode !=3D USB_DR_MODE_OTG) {
->		if (cdns3_is_host(cdns))
->			role =3D USB_ROLE_HOST;
->		else if (cdns3_is_device(cdns))
->			role =3D USB_ROLE_DEVICE;
->		else
->			role =3D USB_ROLE_NONE;
->
->		return role;
->	}
->
+From: carl <carl.yin@quectel.com>
 
-Sorry for delay, I had holiday.=20
-Currently this patch was added by Greg to his usb-next branch, so=20
-I don't want to change anything.  Next time I will add such changes.=20
+    When QMUX enabled, the 'dl-datagram-max-size' can be 4KB/16KB/31KB depend on QUALCOMM's chipsets.
+    User can set 'dl-datagram-max-size' by 'QMI_WDA_SET_DATA_FORMAT'.
+    The usbnet's rx_urb_size must lager than or equal to the 'dl-datagram-max-size'.
+    This patch allow user to modify usbnet's rx_urb_size by next command.
 
->Peter
->>
->>  	id =3D cdns3_get_id(cdns);
->>  	vbus =3D cdns3_get_vbus(cdns);
->> @@ -232,14 +238,6 @@ static enum usb_role cdns3_hw_role_state_machine(st=
-ruct cdns3 *cdns)
->>  	dev_dbg(cdns->dev, "role %d -> %d\n", cdns->role, role);
->>
->>  	return role;
->> -
->> -not_otg:
->> -	if (cdns3_is_host(cdns))
->> -		role =3D USB_ROLE_HOST;
->> -	if (cdns3_is_device(cdns))
->> -		role =3D USB_ROLE_DEVICE;
->> -
->> -	return role;
->>  }
->>
->>  static int cdns3_idle_role_start(struct cdns3 *cdns)
->> --
->> 2.17.1
->>
->
->--
->
->Thanks,
->Peter Chen
+		echo 4096 > /sys/class/net/wwan0/qmi/rx_urb_size
 
-Thanks,
-Pawel
+		Next commnds show how to set and query 'dl-datagram-max-size' by qmicli
+		# qmicli -d /dev/cdc-wdm1 --wda-set-data-format="link-layer-protocol=raw-ip, ul-protocol=qmap,
+				dl-protocol=qmap, dl-max-datagrams=32, dl-datagram-max-size=31744, ep-type=hsusb, ep-iface-number=4"
+		[/dev/cdc-wdm1] Successfully set data format
+		                        QoS flow header: no
+		                    Link layer protocol: 'raw-ip'
+		       Uplink data aggregation protocol: 'qmap'
+		     Downlink data aggregation protocol: 'qmap'
+		                          NDP signature: '0'
+		Downlink data aggregation max datagrams: '10'
+		     Downlink data aggregation max size: '4096'
+
+	    # qmicli -d /dev/cdc-wdm1 --wda-get-data-format
+		[/dev/cdc-wdm1] Successfully got data format
+		                   QoS flow header: no
+		               Link layer protocol: 'raw-ip'
+		  Uplink data aggregation protocol: 'qmap'
+		Downlink data aggregation protocol: 'qmap'
+		                     NDP signature: '0'
+		Downlink data aggregation max datagrams: '10'
+		Downlink data aggregation max size: '4096'
+
+Signed-off-by: carl <carl.yin@quectel.com>
+---
+ drivers/net/usb/qmi_wwan.c | 39 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 07c42c0719f5b..8ea57fd99ae43 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -400,6 +400,44 @@ static ssize_t raw_ip_store(struct device *d,  struct device_attribute *attr, co
+ 	return ret;
+ }
+ 
++static ssize_t rx_urb_size_show(struct device *d, struct device_attribute *attr, char *buf)
++{
++	struct usbnet *dev = netdev_priv(to_net_dev(d));
++
++	return sprintf(buf, "%zd\n", dev->rx_urb_size);
++}
++
++static ssize_t rx_urb_size_store(struct device *d,  struct device_attribute *attr,
++				 const char *buf, size_t len)
++{
++	struct usbnet *dev = netdev_priv(to_net_dev(d));
++	u32 rx_urb_size;
++	int ret;
++
++	if (kstrtou32(buf, 0, &rx_urb_size))
++		return -EINVAL;
++
++	/* no change? */
++	if (rx_urb_size == dev->rx_urb_size)
++		return len;
++
++	if (!rtnl_trylock())
++		return restart_syscall();
++
++	/* we don't want to modify a running netdev */
++	if (netif_running(dev->net)) {
++		netdev_err(dev->net, "Cannot change a running device\n");
++		ret = -EBUSY;
++		goto err;
++	}
++
++	dev->rx_urb_size = rx_urb_size;
++	ret = len;
++err:
++	rtnl_unlock();
++	return ret;
++}
++
+ static ssize_t add_mux_show(struct device *d, struct device_attribute *attr, char *buf)
+ {
+ 	struct net_device *dev = to_net_dev(d);
+@@ -505,6 +543,7 @@ static DEVICE_ATTR_RW(add_mux);
+ static DEVICE_ATTR_RW(del_mux);
+ 
+ static struct attribute *qmi_wwan_sysfs_attrs[] = {
++	&dev_attr_rx_urb_size.attr,
+ 	&dev_attr_raw_ip.attr,
+ 	&dev_attr_add_mux.attr,
+ 	&dev_attr_del_mux.attr,
+-- 
+2.17.1
+
