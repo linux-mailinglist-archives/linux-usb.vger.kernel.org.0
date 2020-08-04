@@ -2,87 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45D0023BA0E
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Aug 2020 13:59:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C82CC23BA40
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Aug 2020 14:23:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730391AbgHDL6A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Aug 2020 07:58:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39268 "EHLO mail.kernel.org"
+        id S1726820AbgHDMXz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Aug 2020 08:23:55 -0400
+Received: from mga02.intel.com ([134.134.136.20]:7366 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730377AbgHDL5s (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 4 Aug 2020 07:57:48 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 58EC42086A;
-        Tue,  4 Aug 2020 11:56:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596542212;
-        bh=Spm5JSI+Bd0FBYtapWeQzYxYTOs4IxRXrw2IzJwxVJc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wyXPZZgFa5+HqVS3IVQz234H2sAk3JsRK2KlnBXBc6r/krMILu7wfABGRh2UACID4
-         mxWkHj5hiyM3wVf38rRwaE/2qwoenaBU/l42TJleXewd59ENcSyQ3DmfmrrdAznryS
-         Wu7DXeMNrc0OPPmMKdcdcOlxcxpgqDfFoyncc6JI=
-Date:   Tue, 4 Aug 2020 13:56:33 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Bastien Nocera <hadess@hadess.net>
-Cc:     linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: [PATCH v6 3/3] USB: Fix device driver race
-Message-ID: <20200804115633.GA203147@kroah.com>
-References: <20200727104644.149873-1-hadess@hadess.net>
- <20200727104644.149873-3-hadess@hadess.net>
- <64c8caa8ee054ed9106683f15238b2be74f77aa2.camel@hadess.net>
- <20200803153804.GA1172014@kroah.com>
- <8f1de4cc2813f0a8721a2f76421956056c0c6278.camel@hadess.net>
+        id S1730120AbgHDLrW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 4 Aug 2020 07:47:22 -0400
+IronPort-SDR: f7soVae0dUonlP3OeFsGfxcBbCVVibF14bT4sWUYIdT+MwfnkvTpuyIhN2ubx9YQqOhdnIQZeR
+ v6DY1eERqi6A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9702"; a="140210829"
+X-IronPort-AV: E=Sophos;i="5.75,433,1589266800"; 
+   d="scan'208";a="140210829"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2020 04:47:20 -0700
+IronPort-SDR: 4x+OmTL0vxeYDr8xwZ/uODc8EFXTsEz33UgReiJz43H8ipHQctuDY6A+XLqEZK1gHZjuuy6p+h
+ QWqH/sliOsnQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,433,1589266800"; 
+   d="scan'208";a="396549693"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga001.fm.intel.com with SMTP; 04 Aug 2020 04:47:17 -0700
+Received: by lahna (sSMTP sendmail emulation); Tue, 04 Aug 2020 14:47:17 +0300
+Date:   Tue, 4 Aug 2020 14:47:17 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Matt Turner <mattst88@gmail.com>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        linux-usb@vger.kernel.org
+Subject: Re: Thunderbolt hotplug fails on HP x360 13t-aw000/86FA with HP
+ Thunderbolt 3 Dock
+Message-ID: <20200804114717.GN1375436@lahna.fi.intel.com>
+References: <20200731033620.GA4428@hp-x360.mattst88.com>
+ <20200803105404.GQ1375436@lahna.fi.intel.com>
+ <CAEdQ38FRBg_ptDWVr7yRwC4GCd5DxWkBzH+HyTJXL56v2cL4+Q@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8f1de4cc2813f0a8721a2f76421956056c0c6278.camel@hadess.net>
+In-Reply-To: <CAEdQ38FRBg_ptDWVr7yRwC4GCd5DxWkBzH+HyTJXL56v2cL4+Q@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 04, 2020 at 01:41:25PM +0200, Bastien Nocera wrote:
-> On Mon, 2020-08-03 at 17:38 +0200, Greg Kroah-Hartman wrote:
-> > On Mon, Aug 03, 2020 at 05:04:46PM +0200, Bastien Nocera wrote:
-> > > On Mon, 2020-07-27 at 12:46 +0200, Bastien Nocera wrote:
-> > > > When a new device with a specialised device driver is plugged in,
-> > > > the
-> > > > new driver will be modprobe()'d but the driver core will attach
-> > > > the
-> > > > "generic" driver to the device.
-> > > > 
-> > > > After that, nothing will trigger a reprobe when the modprobe()'d
-> > > > device
-> > > > driver has finished initialising, as the device has the "generic"
-> > > > driver attached to it.
-> > > > 
-> > > > Trigger a reprobe ourselves when new specialised drivers get
-> > > > registered.
-> > > > 
-> > > > Fixes: 88b7381a939d ("USB: Select better matching USB drivers
-> > > > when
-> > > > available")
-> > > > Signed-off-by: Bastien Nocera <hadess@hadess.net>
-> > > 
-> > > Greg, Alan, are you happy with this iteration?
-> > > 
-> > > If so, I can send it again with Alan's acks, along with a fix for
-> > > the
-> > > function name Alan mentioned. I see that the first patch in the
-> > > list
-> > > landed in usb-next already.
-> > > 
-> > 
-> > Yes, please resend the remaining patches.  I don't recall seeing
-> > Alan's
-> > ack on it.
+On Mon, Aug 03, 2020 at 09:52:26AM -0700, Matt Turner wrote:
+> On Mon, Aug 3, 2020 at 3:54 AM Mika Westerberg
+> <mika.westerberg@linux.intel.com> wrote:
+> > Can you try the patch here?
+> >
+> >   https://lore.kernel.org/patchwork/patch/1257708/
 > 
-> Resent as v7. There's a new patch in the lot, based on a comment by
-> Alan in this thread which I thought appropriate to include.
+> Thanks.
+> 
+> It looks like that doesn't fix the problem. I hotplugged the dock
+> about 25 times this morning and it was only successful once, very
+> early in the testing. I didn't think it was going to be that rare, so
+> I didn't capture the log and now I can't reproduce it :(
+> 
+> Any other ideas or patches I should try?
 
-Thanks, will look at them once 5.9-rc1 is out as I can't do anything
-with my tree until then.
+Can you try so that you boot without device connected. Then plug in the
+dock, and wait a bit for it to enumerate (you can check thunderbolt
+related messages in dmesg).
 
-greg k-h
+Then send me full dmesg and output of command 'sudo lspci -vv'.
+
+I also sugged to file a bug in kernel bugzilla
+(https://bugzilla.kernel.org/) and add these logs there as well.
