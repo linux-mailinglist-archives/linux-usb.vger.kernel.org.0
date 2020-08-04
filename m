@@ -2,141 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D12823B9AD
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Aug 2020 13:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA53F23B9C4
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Aug 2020 13:41:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730192AbgHDLik (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Aug 2020 07:38:40 -0400
-Received: from relay7-d.mail.gandi.net ([217.70.183.200]:54119 "EHLO
-        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730120AbgHDLij (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Aug 2020 07:38:39 -0400
+        id S1728902AbgHDLl2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 Aug 2020 07:41:28 -0400
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:52083 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728675AbgHDLl2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Aug 2020 07:41:28 -0400
 X-Originating-IP: 82.255.60.242
-Received: from localhost.localdomain (lns-bzn-39-82-255-60-242.adsl.proxad.net [82.255.60.242])
+Received: from classic (lns-bzn-39-82-255-60-242.adsl.proxad.net [82.255.60.242])
         (Authenticated sender: hadess@hadess.net)
-        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id 33A322000C;
-        Tue,  4 Aug 2020 11:38:37 +0000 (UTC)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 5ADE41C000B;
+        Tue,  4 Aug 2020 11:41:26 +0000 (UTC)
+Message-ID: <8f1de4cc2813f0a8721a2f76421956056c0c6278.camel@hadess.net>
+Subject: Re: [PATCH v6 3/3] USB: Fix device driver race
 From:   Bastien Nocera <hadess@hadess.net>
-To:     linux-usb@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Bastien Nocera <hadess@hadess.net>
-Subject: [PATCH v7 3/3] USB: Fix device driver race
-Date:   Tue,  4 Aug 2020 13:38:34 +0200
-Message-Id: <20200804113834.6409-3-hadess@hadess.net>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200804113834.6409-1-hadess@hadess.net>
-References: <20200804113834.6409-1-hadess@hadess.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>
+Date:   Tue, 04 Aug 2020 13:41:25 +0200
+In-Reply-To: <20200803153804.GA1172014@kroah.com>
+References: <20200727104644.149873-1-hadess@hadess.net>
+         <20200727104644.149873-3-hadess@hadess.net>
+         <64c8caa8ee054ed9106683f15238b2be74f77aa2.camel@hadess.net>
+         <20200803153804.GA1172014@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.3 (3.36.3-1.fc32) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When a new device with a specialised device driver is plugged in, the
-new driver will be modprobe()'d but the driver core will attach the
-"generic" driver to the device.
+On Mon, 2020-08-03 at 17:38 +0200, Greg Kroah-Hartman wrote:
+> On Mon, Aug 03, 2020 at 05:04:46PM +0200, Bastien Nocera wrote:
+> > On Mon, 2020-07-27 at 12:46 +0200, Bastien Nocera wrote:
+> > > When a new device with a specialised device driver is plugged in,
+> > > the
+> > > new driver will be modprobe()'d but the driver core will attach
+> > > the
+> > > "generic" driver to the device.
+> > > 
+> > > After that, nothing will trigger a reprobe when the modprobe()'d
+> > > device
+> > > driver has finished initialising, as the device has the "generic"
+> > > driver attached to it.
+> > > 
+> > > Trigger a reprobe ourselves when new specialised drivers get
+> > > registered.
+> > > 
+> > > Fixes: 88b7381a939d ("USB: Select better matching USB drivers
+> > > when
+> > > available")
+> > > Signed-off-by: Bastien Nocera <hadess@hadess.net>
+> > 
+> > Greg, Alan, are you happy with this iteration?
+> > 
+> > If so, I can send it again with Alan's acks, along with a fix for
+> > the
+> > function name Alan mentioned. I see that the first patch in the
+> > list
+> > landed in usb-next already.
+> > 
+> 
+> Yes, please resend the remaining patches.  I don't recall seeing
+> Alan's
+> ack on it.
 
-After that, nothing will trigger a reprobe when the modprobe()'d device
-driver has finished initialising, as the device has the "generic"
-driver attached to it.
+Resent as v7. There's a new patch in the lot, based on a comment by
+Alan in this thread which I thought appropriate to include.
 
-Trigger a reprobe ourselves when new specialised drivers get registered.
-
-Fixes: 88b7381a939d ("USB: Select better matching USB drivers when available")
-Signed-off-by: Bastien Nocera <hadess@hadess.net>
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
----
-Changes since v6:
-- Added Alan's ack
-
-Changes since v5:
-- Throw error when device_reprobe() fails
-
-Changes since v4:
-- Add commit subject to "fixes" section
-- Clarify conditional that checks for generic driver
-- Remove check duplicated inside the loop
-
-Changes since v3:
-- Only reprobe devices that could use the new driver
-- Many code fixes
-
-Changes since v2:
-- Fix formatting
-
-Changes since v1:
-- Simplified after Alan Stern's comments and some clarifications from
-Benjamin Tissoires.
-
-
- drivers/usb/core/driver.c | 40 +++++++++++++++++++++++++++++++++++++--
- 1 file changed, 38 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-index f81606c6a35b..7e73e989645b 100644
---- a/drivers/usb/core/driver.c
-+++ b/drivers/usb/core/driver.c
-@@ -905,6 +905,35 @@ static int usb_uevent(struct device *dev, struct kobj_uevent_env *env)
- 	return 0;
- }
- 
-+static bool is_dev_usb_generic_driver(struct device *dev)
-+{
-+	struct usb_device_driver *udd = dev->driver ?
-+		to_usb_device_driver(dev->driver) : NULL;
-+
-+	return udd == &usb_generic_driver;
-+}
-+
-+static int __usb_bus_reprobe_drivers(struct device *dev, void *data)
-+{
-+	struct usb_device_driver *new_udriver = data;
-+	struct usb_device *udev;
-+	int ret;
-+
-+	if (!is_dev_usb_generic_driver(dev))
-+		return 0;
-+
-+	udev = to_usb_device(dev);
-+	if (usb_device_match_id(udev, new_udriver->id_table) == NULL &&
-+	    (!new_udriver->match || new_udriver->match(udev) != 0))
-+		return 0;
-+
-+	ret = device_reprobe(dev);
-+	if (ret && ret != -EPROBE_DEFER)
-+		dev_err(dev, "Failed to reprobe device (error %d)\n", ret);
-+
-+	return 0;
-+}
-+
- /**
-  * usb_register_device_driver - register a USB device (not interface) driver
-  * @new_udriver: USB operations for the device driver
-@@ -934,13 +963,20 @@ int usb_register_device_driver(struct usb_device_driver *new_udriver,
- 
- 	retval = driver_register(&new_udriver->drvwrap.driver);
- 
--	if (!retval)
-+	if (!retval) {
- 		pr_info("%s: registered new device driver %s\n",
- 			usbcore_name, new_udriver->name);
--	else
-+		/*
-+		 * Check whether any device could be better served with
-+		 * this new driver
-+		 */
-+		bus_for_each_dev(&usb_bus_type, NULL, new_udriver,
-+				 __usb_bus_reprobe_drivers);
-+	} else {
- 		printk(KERN_ERR "%s: error %d registering device "
- 			"	driver %s\n",
- 			usbcore_name, retval, new_udriver->name);
-+	}
- 
- 	return retval;
- }
--- 
-2.26.2
+Cheers
 
