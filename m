@@ -2,91 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6006423D209
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Aug 2020 22:08:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CFAC23D2C0
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Aug 2020 22:16:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728895AbgHEUIZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Aug 2020 16:08:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43802 "EHLO
+        id S1726380AbgHEUP6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Aug 2020 16:15:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727064AbgHEQce (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Aug 2020 12:32:34 -0400
-Received: from mail-oo1-xc42.google.com (mail-oo1-xc42.google.com [IPv6:2607:f8b0:4864:20::c42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC18C008691;
-        Wed,  5 Aug 2020 07:33:09 -0700 (PDT)
-Received: by mail-oo1-xc42.google.com with SMTP id x1so6635989oox.6;
-        Wed, 05 Aug 2020 07:33:09 -0700 (PDT)
+        with ESMTP id S1726448AbgHEQUG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Aug 2020 12:20:06 -0400
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BE5C001FCB
+        for <linux-usb@vger.kernel.org>; Wed,  5 Aug 2020 08:49:37 -0700 (PDT)
+Received: by mail-il1-x141.google.com with SMTP id j9so34367159ilc.11
+        for <linux-usb@vger.kernel.org>; Wed, 05 Aug 2020 08:49:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RAePZiXm6lZPAjA6iTXawTSBS+sAH5U4gKjxjlBvI0Y=;
+        b=cEZUlFvDLAnpENC/yKTWFB1oZSsWgaFcdEK3kO1XWKEBFLTEOIndPMsfpvJYNJvNeG
+         lkm9ZjcuKgHISltwWrUminf2SdoZ1/nOSTuA9nUedqthXNBZKufJsuDrBMnRCtRZSbdu
+         hZYXu71PtTywu/2KeBDpycp66T60q8ILHjAUifO1oTfaR5hT8Cyt5pDQIN+fK+v98b62
+         Ol3Byx7byyjTBH9DfQXEazKsO/teovdrl40E9QN2E0VTe9K2X/UF0C4JshZ9cBBKihLl
+         pLEUYCQ3v//7ryr1n/B9eCCcIhq9EN3yea/bWA5hY0ngP0dPFdaLsonPcKf3euYDH7gp
+         d1qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=tpO2xc5Co4QKfwe/fUkQqUFFAe1WeeGtz1oyCqUMySo=;
-        b=LhYz9i6I5AM4ZFtxHd+I9u1ASrO4rAxTxI/t4siugm6WhxTGylbyg693lSH2SkAJZg
-         IIGDv8cuq2Atkg6a/memP/3ZxkHNwXGhTlhzGgql3a+l8cb4BSqpY41/FoS2Dey738US
-         HNY7oS82tp4qxK0zU5KSG+5wR25XkLh17nddtBS+6isamMTdOSpgHAG7z+Dv3ZLvYKSj
-         WGny2c2fiRFPZvJ/1bYdsySXuQgp4q5b00waN4/XfIO6UGXfbhT3GB3aIdI6DdpTqwQf
-         PttRBBuebLldZ7pofLVcvbU+u/4I905HPTm1+H9J+KjyGphDBVlO8Qd1DI2oAJ/StVAp
-         dTsA==
-X-Gm-Message-State: AOAM533LjPC09EQ93J7+rqUEO7o2QGimyEUznlys74pspdXXuJB5yAAR
-        UXzpdrWWpUaJ+hWv1tXbOuarwbxyZUyw1hXSS06MMhU6
-X-Google-Smtp-Source: ABdhPJxign8Uk2fIcUs7RpIodong0uS1bWU72pwITdrYewzbK7L9StNz09TcvScLc02ZC/yaUnpVr8Fq/+75ppivh0g=
-X-Received: by 2002:a4a:9d19:: with SMTP id w25mr2320144ooj.11.1596626166283;
- Wed, 05 Aug 2020 04:16:06 -0700 (PDT)
+        bh=RAePZiXm6lZPAjA6iTXawTSBS+sAH5U4gKjxjlBvI0Y=;
+        b=i9n+QLJloO63IiWWuXZs9ZFI/8JR1btoy1ycHrSNAA5EGBxkwCM2mUTX/EwhrQf6Hg
+         5vAUHAAm/bTeTeamNtkKvpvYGmo26pbJGA0r+MNn737iE4pJPGQ3w3F/Do+TntTswwmW
+         wGjwXnKDuOb5wGSqDnzbuEJsb+IopvB2/GNybSmYIS7oCncwx8lPCD8myCnquuGXelpc
+         POPz143RqMV90VPiUn1iJ1y7J217KUokOKmL2G1FUZUsktyJRTLA/+nxdwvbFEDKRkNT
+         ss9bLVjHjeSd+mmm0CN41HAin44rZxgO+wqOoHplD8FDLtooxt0Cgc4olONFrHL1gP7C
+         NCxg==
+X-Gm-Message-State: AOAM5338y9+fHRyeNqB3FiHX8HpSE1Ko1i+peTIta9FaXNxKLNxkPh00
+        ex4zvkE1qBXnTNm4vU9zuwS6VE3IGoca7LJuyvy7uw==
+X-Google-Smtp-Source: ABdhPJw4+QNSbWVVgzqtpHXqkxWJ0R16Kf4NhYIRqnjztUp9gdjrTBTVrV7+NngM10Ct80llKGRZbRgfa4AOC5nKypI=
+X-Received: by 2002:a92:d8cf:: with SMTP id l15mr4977954ilo.0.1596642575465;
+ Wed, 05 Aug 2020 08:49:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1594919915-5225-16-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <1594919915-5225-16-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 5 Aug 2020 13:15:54 +0200
-Message-ID: <CAMuHMdWzwQpjhOeVDkj1b1L7mJuxnLpVMO-3WMMLF3oJMzgAmg@mail.gmail.com>
-Subject: Re: [PATCH 15/20] arm64: dts: renesas: r8a774e1: Add audio support
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Mark Brown <broonie@kernel.org>,
-        Niklas <niklas.soderlund@ragnatech.se>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-ide@vger.kernel.org,
-        dmaengine <dmaengine@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>
+References: <20200805075810.604063-1-lorenzo@google.com> <87mu39tmu6.fsf@kernel.org>
+In-Reply-To: <87mu39tmu6.fsf@kernel.org>
+From:   Lorenzo Colitti <lorenzo@google.com>
+Date:   Thu, 6 Aug 2020 00:49:23 +0900
+Message-ID: <CAKD1Yr17hFju=xvDHWWcLjwj=nuSBBVJn9xQ5ocHHXQm6PAw_A@mail.gmail.com>
+Subject: Re: [PATCH] usb: gadget: f_ncm: allow using NCM in SuperSpeed Plus gadgets.
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     linux-usb@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <zenczykowski@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 16, 2020 at 7:20 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Add sound support for the RZ/G2H SoC (a.k.a. R8A774E1).
+On Wed, Aug 5, 2020 at 7:21 PM Felipe Balbi <balbi@kernel.org> wrote:
+> But anyway, if we change 13 to 16, then we 1Gbps. How did you get
+> 1.7Gbps? I think we should really update ncm_bitrate() to contain the
+> correct equations for bitrate on different speeds.
+
+I got 1.7 Gbps because that's what I measured in iperf. :-)
+
+But actually after reading the spec I think that for SuperSpeed and
+above that calculation is meaningless, because bulk transfers are no
+longer limited by a set number of packets per microframe. The USB 3.2
+spec has mostly replaced the words "microframe" with "bus interval",
+but I don't see any place in the spec that says the number of packets
+per bus interval is limited. Section 8.12.1.2 (Bulk IN Transactions)
+just says that "when the host is ready to receive bulk data, it sends
+an ACK TP" saying how many packets it's willing to accept, where the
+maximum is the burst size supported by the endpoint. After that, the
+host has to respond with an ACK to every data packet received, and
+every ACK specifies the number of data packets it expects from then
+on.
+
+It seems more correct that for SS and above the driver should simply
+just report the link speed minus theoretical bus overhead? Section
+4.4.11 suggests that's about 10%, so it would announce 4.5 Gbps.
+
+> > +static struct usb_ss_ep_comp_descriptor ssp_ncm_bulk_comp_desc = {
+> > +     .bLength =              sizeof(ssp_ncm_bulk_comp_desc),
+> > +     .bDescriptorType =      USB_DT_SS_ENDPOINT_COMP,
+> > +
+> > +     /* the following 2 values can be tweaked if necessary */
+> > +     /* .bMaxBurst =         0, */
 >
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
+> should you add bMaxBurst = 15 here?
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v5.10.
+I'm not sure. On my setup, it provides a fair performance boost (goes
+from ~1.7Gbps to ~2.3Gbps in, and ~620Mbps to ~720Mbps out). But I
+don't know whether there might be any compatibility constraints or
+hardware dependencies. I do see that the f_mass_storage driver sets it
+to 15:
 
-Gr{oetje,eeting}s,
+         /* Calculate bMaxBurst, we know packet size is 1024 */
+        max_burst = min_t(unsigned, FSG_BUFLEN / 1024, 15);
 
-                        Geert
+so perhaps this is fine to do in NCM too? If we want to set bMaxBurst
+to 15, should that be in this patch, or in a separate patch?
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Cheers,
+Lorenzo
