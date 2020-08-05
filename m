@@ -2,94 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4AC123C2A0
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Aug 2020 02:35:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD03F23C524
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Aug 2020 07:33:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726101AbgHEAfm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 Aug 2020 20:35:42 -0400
-Received: from sonic308-19.consmr.mail.ir2.yahoo.com ([77.238.178.147]:42098
-        "EHLO sonic308-19.consmr.mail.ir2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725950AbgHEAfm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 Aug 2020 20:35:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1596587740; bh=+NKq2YP/4c3bLm2HmGhxa/KCZOXr0NIUKHs/ECuC0yk=; h=Date:From:Reply-To:Subject:References:From:Subject; b=ltwSKq8oDViD0acvNF8NZgcxPUh0DQyfwqRqZwHlTCH8Qk3iPI4CYr14mivS9WhA8T7q8iAni4rwv3W+ZidLH8oTm0xwkDBCXVebh0bjt07tHf0sJQEjAp9+FKdmo3h7mMzp1B/u/eOUg4iGMHNg/1VwhuywzKPGyryNcxUWexrh/ndH0N+S7+oCqv3FPLLzIGia+Nt9uX6xhTPUvRsQGIAfVg4M+AD6uIxeHsCp4OLSL2m5tAU9ZaaDhuDyOhAyROnQ5KtAnRH0NmGYZr18XpX+xS4K0IaxUKq5PUT/c1y9PWikv6sDrxyG0hdGAnAIayd3Ok4s9exUtqctgP2JEg==
-X-YMail-OSG: jzEbQ_4VM1nXjBmiW26r9K5hP5ZjnxUJgEQnEpICdfX0WNXlD4S5_IDo1TaNFYy
- xMrBNd_xlBzwwTrydnrErhbZYXpfVqBYCqZZLsCteGGuqvutMh99Is2LEbtL2GknzBMJgl7iwVth
- atZ8lO8WSZTy_lsfeAnggizm4xQ.Kic1I3._pNlyLpwbqmpDG1RwTQAn70oV4XDgm7amcjCIaOPt
- goREm3hF.V.VaPiLau_3Wrj.VTR4KrxN1QFD4PBHihA3Ri2QH12gIucKmqS4t9_DF.L2XcZd6maU
- cBOJ5P3J_UebXJ1ZKmbz9Bm1FOP94MoYnVZ0AQnp2dKBWikwkG1cqYAKYo__2MlDpu2U70rvlTqU
- IZNocOOw1EyaBcb.7pIIzXwoIv5.cxoqOy.3G2czJd.WddbeXea.9D.MF.9Wjalk1nrRHctfB8za
- gNO1vz1BnaBL6fDUvpwr._8eb3NukMAdgRVt_d5EX95awoJEPl9TYJHel0E5WU6e0y7JkmCd3s6v
- xRX9O64h0VUxdj9vg3wdOgC7r70KcVNbHI9XlOKFibj1APjDSx6OBoxMxoSnYl9b7zNLOg5A0Izo
- yDBn8e2T_zCOTdOmn06aN3M9F1L7XpiAUpNLanuchlW8uoq5VGA4pOq.TLiYElEZBXzDmP3yHBfh
- W1Fih92vy9uCQoEXEgdhviJ91Tt.CW8gQPkrXMJWMPJhA8O2Vkr2W.ylBa5H0wsDKxD1Fco.6vvG
- Jv0.Rn6OR8SJNzDhTp8s1N7T4abmscWrK0wLK6A7y3FdTdpO4kI1i_U.plNHNVllVIx00z2WIhHK
- tS4..fMkdpbi2tnFGUjW84VTCS6DeCny16QzwT2tgigjLcH1mWNb8mbR4P304gr6fEDB050.V3Y4
- NrnUrmXddemaCoPYdeB9ERFDwECEH5nl0PSevg63ZUvs.sRZ.yEe6OzSYo2CGwjENsYs6n8gEXqY
- MTwzzC3OKXt8galAzRVzdU0a_YUdRMeWYaSX39OUopkSxBgLygoR234zBSR0Jd92gTCZ2.Cu51Dr
- hl7kFim7O6gFvad.D0NC356KZjmg50S3HymUefsE7_HAQn9FZUeCjAzi0pqnJhvTQCCcryElH4AS
- bJWfWELIR8iYF88ekit4WeE_ZkNSjaLO2HMsJM_BLTZ.zNFNVTdCtwQRPMupvAZq0gTgywwm3zow
- s2d2YUq2D9XvMncmQKaOJGOh.TY5Z2nPFPsw3mpCclcejTrLl2cewMQt4Trpw8HKDrYI.HqEmwqa
- VzxcXnWIebixRHCP3y0i_Ynkx.3zFEY9xWCe9Bcs-
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.ir2.yahoo.com with HTTP; Wed, 5 Aug 2020 00:35:40 +0000
-Date:   Wed, 5 Aug 2020 00:35:35 +0000 (UTC)
-From:   "Mrs. Mina A. Brunel" <mrs.minaabrunel209@gmail.com>
-Reply-To: mrsminaaaliyahbrunel1@gmail.com
-Message-ID: <954743634.30352.1596587735110@mail.yahoo.com>
-Subject: My Dear in the lord
+        id S1726684AbgHEFdJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Aug 2020 01:33:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54974 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725372AbgHEFdJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Aug 2020 01:33:09 -0400
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87210C06174A
+        for <linux-usb@vger.kernel.org>; Tue,  4 Aug 2020 22:33:08 -0700 (PDT)
+Received: by mail-oi1-x241.google.com with SMTP id j7so22171977oij.9
+        for <linux-usb@vger.kernel.org>; Tue, 04 Aug 2020 22:33:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PJh9idvhnYQu6+tHMsdjbpUMLjsbhkJrYBowuz2U7ew=;
+        b=VTNnHYzjcWpfKHEC0qnERLwRNAb3exZOQtSkHkZLl5RsU5L+uIu8VWcqKV/tvuqqgd
+         hGsrCUgVZKq1d1UxhA4jHeHNi8MP9aFSxKnTA3zTeAdfqvj3XcthlXllZAvq3VqbyW8/
+         gMcChaCbrTDFighbVIYvSPcEK42uS2/kn8cnRiWRek9GKsMxJzU9tbwI7vgtbOWm0Jxu
+         JwWaas5dhgiSQyljhb99Zr+MTVGJhcmsltG0u3KEOmS9znYrFU8vSBITlv0xUu1tFwkf
+         D+H65ZEehba4ur8v9Ghce3aLuHL8xQlJ7rIA3oDhiDBK0upZ3B6BQr+48qED9nhbsMF6
+         wGLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PJh9idvhnYQu6+tHMsdjbpUMLjsbhkJrYBowuz2U7ew=;
+        b=VsJO5qnmZIqAATLX/XooK8Bykw8HMNcPGU1kSTCIR9EOsLoCDV2ckvXKTujJE+mNxW
+         mnNVVjxm7KJymA9xSVReFw98zVCWblY8JFobieTi2ZlhD7iKOtmva+VH4s/hDpwZp0fb
+         kHKvpzAC+IlNdu53IDhbPwBmS7opJTCbdhnuH8xYsBl2ADqIaEWFJcuqm1MP/XiATViH
+         6iV+D+B+zolSStQOPWEZh3vS0xp5Z3qJR2LwZvPSlJMouID9ltO4DiqbFG/jBd/ZIHgO
+         nrT9fHV6W/NIY3cWJmo2KjeUL2w3wy45GD8oxvVxOPwopNBjzPyCmV1L3cllD4c2qSaw
+         imEQ==
+X-Gm-Message-State: AOAM530m1jAf9U0ZvBtw8i9HaBArHzVFpgni9KPfpCLg3dXG7Gymm49V
+        JM6eJiLscDlO7GR0pqi1pGTzDClB+eXmw/6VrHCKTQ==
+X-Google-Smtp-Source: ABdhPJwwDq+gQJc4l2FSWDtEGHBjXEMEtV032PLCkcrbKSG+f9HrltjfmQ8CiEel6sFRDWO6vHlyR6f20PdhhPsu8wY=
+X-Received: by 2002:aca:1117:: with SMTP id 23mr1468870oir.97.1596605587860;
+ Tue, 04 Aug 2020 22:33:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-References: <954743634.30352.1596587735110.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.16436 YMailNodin Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0
-To:     unlisted-recipients:; (no To-header on input)
+References: <CALAqxLWAvvHGo1RYef1fJ_k65WqHAPCDhLfehO6_j_f8E2jB7Q@mail.gmail.com>
+ <CALAqxLXjByaYaNweqGiSyArJ=1J-D7bSm+sndCtH_wf7h2avTA@mail.gmail.com> <BYAPR02MB4933A269D7CFAF7AC540CCC7A76A0@BYAPR02MB4933.namprd02.prod.outlook.com>
+In-Reply-To: <BYAPR02MB4933A269D7CFAF7AC540CCC7A76A0@BYAPR02MB4933.namprd02.prod.outlook.com>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Tue, 4 Aug 2020 22:32:56 -0700
+Message-ID: <CALAqxLWHgmJjoqxMqcs9Veco8Cf_cZZH0EG9DyLnLpyEyu77Lg@mail.gmail.com>
+Subject: Re: dwc3 inconsistent gadget connection state?
+To:     Anurag Kumar Vulisha <anuragku@xilinx.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Tejas Joglekar <tejas.joglekar@synopsys.com>,
+        Yang Fei <fei.yang@intel.com>,
+        YongQin Liu <yongqin.liu@linaro.org>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Thinh Nguyen <thinhn@synopsys.com>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        Jun Li <lijun.kernel@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Fri, Jul 3, 2020 at 12:57 AM Anurag Kumar Vulisha
+<anuragku@xilinx.com> wrote:
+> >On Thu, Jul 2, 2020 at 2:44 PM John Stultz <john.stultz@linaro.org> wrote:
+> >The one consistent difference between the working and not working case I
+> >saw was the DWC3_DSTS_COREIDLE bit in the DWC3_DSTS register.
+> >
+> >It seems when we get to gadget_start()/pullup() if the DSTS_COREIDLE bit
+> >isn't on we won't get the reset irq.
+> >
+> >I added a simple timeout loop to pullup() similar to the DSTS_DEVCTRLHLT
+> >loop, but in the failure mode it always times out with COREIDLE not being set.
+> >
+> >Searching around hasn't provided any info on what COREIDLE actually means,
+> >so I'm a bit in the dark.  Any clues?
+> >
+> DSTS.CoreIdle bit indicates that the core processed all the RXFIFO data, updated the
+> Descriptors and is in idle state.
+> From your previous mail I understood that the USB-C connection is configured for
+> USB 2.0 only. Since you are facing issue with reset, can u please try setting the
+> USB2PHYCFG. XCVRDLY bit. Enabling this bit adds an extra 2.5us delay after the
+> controller sending command to configure the ULPI transceiver to HS mode and
+> controller driving TxValid to 0,  for sending a HS chirp signal. Please check if this
+> workaround works for you.
 
+Hey Anurag!
+  Sorry for the slow response! I finally took a bit more time to chase
+this issue today, and tried your suggestion above. Unfortunately
+adding the XCVRDLY bit to the USB2PHYCFG register doesn't seem to
+help. I see the same behavior either way. Thanks for the suggestion
+though!
 
-My Dear in the lord
+I can consistently detect the problem when the COREIDLE bit isn't set
+after the dwc3_ep0_out_start() call in __dwc3_gadget_start():
+  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/dwc3/gadget.c?h=v5.8#n2130
 
+When it gets stuck off, the COREIDLE bit doesn't seem to ever come
+back while the cable is plugged in.
+Since unplugging and replugging the cable does seem to unstick this,
+and since I can consistently detect when the problem has occured, I
+tweaked the code so we would return a error (and that error would be
+handled in the calling dwc3_gadget_start() code.  However, the device
+then tries to initialize over and over, but the COREIDLE is still
+stuck off. So I tried a few times to see if I could reset via
+dwc3_reset_gadget(), but that doesn't seem to actually do anything
+that unsticks the core. Then I tried to mimic something similar to the
+softreset code but that just ends up getting the code stuck elsewhere
+(i see hard hangs and rcu warnings, but not sure where it goes awry).
+So not much luck...
 
-My name is Mrs. Mina A. Brunel I am a Norway Citizen who is living in Burki=
-na Faso, I am married to Mr. Brunel Patrice, a politician who owns a small =
-gold company in Burkina Faso; He died of Leprosy and Radesyge, in the year =
-February 2010, During his lifetime he deposited the sum of =E2=82=AC 8.5 Mi=
-llion Euro) Eight million, Five hundred thousand Euros in a bank in Ouagado=
-ugou the capital city of Burkina Faso in West Africa. The money was from th=
-e sale of his company and death benefits payment and entitlements of my dec=
-eased husband by his company.
+Is there some recommendation for how to best reset the hardware from
+the gadget.c code? Or is there a better place to try to detect this
+COREIDLE stuck-off state and do something about it?
 
-I am sending you this message with heavy tears in my eyes and great sorrow =
-in my heart, and also praying that it will reach you in good health because=
- I am not in good health, I sleep every night without knowing if I may be a=
-live to see the next day. I am suffering from long time cancer and presentl=
-y I am partially suffering from Leprosy, which has become difficult for me =
-to move around. I was married to my late husband for more than 6 years with=
-out having a child and my doctor confided that I have less chance to live, =
-having to know when the cup of death will come, I decided to contact you to=
- claim the fund since I don't have any relation I grew up from an orphanage=
- home.
-
-I have decided to donate this money for the support of helping Motherless b=
-abies/Less privileged/Widows and churches also to build the house of God be=
-cause I am dying and diagnosed with cancer for about 3 years ago. I have de=
-cided to donate from what I have inherited from my late husband to you for =
-the good work of Almighty God; I will be going in for an operation surgery =
-soon.
-
-Now I want you to stand as my next of kin to claim the funds for charity pu=
-rposes. Because of this money remains unclaimed after my death, the bank ex=
-ecutives or the government will take the money as unclaimed fund and maybe =
-use it for selfishness and worthless ventures, I need a very honest person =
-who can claim this money and use it for Charity works, for orphanages, wido=
-ws and also build schools and churches for less privilege that will be name=
-d after my late husband and my name.
-
-I need your urgent answer to know if you will be able to execute this proje=
-ct, and I will give you more information on how the fund will be transferre=
-d to your bank account or online banking.
-
-Thanks
-Mrs. Mina A. Brunel
+thanks
+-john
