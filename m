@@ -2,151 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 346B423DC47
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Aug 2020 18:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 480C723DC50
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Aug 2020 18:49:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729502AbgHFQsI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Aug 2020 12:48:08 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:43481 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729009AbgHFQmt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Aug 2020 12:42:49 -0400
-Received: by mail-ed1-f66.google.com with SMTP id b18so4487958edv.10;
-        Thu, 06 Aug 2020 09:42:07 -0700 (PDT)
+        id S1729106AbgHFQtO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Aug 2020 12:49:14 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:39862 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729104AbgHFQsx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Aug 2020 12:48:53 -0400
+Received: by mail-lj1-f193.google.com with SMTP id v9so18064113ljk.6;
+        Thu, 06 Aug 2020 09:48:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=O7b6zzBbEswhT1r045fM/qsaYWnifcvdI3BJNWUghN0=;
-        b=dPs2Jf9mdsFOSfeP4RUxvVmNpO9ZC6St6BomLKCPcZiRclaDf7jZybK2NP+tjv8TdX
-         0xDi5O+UJIIk7CMl4g4WzT+b9BJli7e37ijstJo/E1GDs+xtMvbjJAZvHJ9UFiITNOZS
-         5zHqT+Vny61OrrUX24RQPyUJ0qVEY5nbMrfkkcn+RRRUExRev+B+Xqe+MPfoyOF7+xxC
-         cWiGIrpUs2peC+OieaEUQR9KbzyWN6TQB0FtVQXxcCB5LSOrCds4B+1k/DOmEYHdI/z+
-         Xfa2+7KD9OlT1Jpb/QTX4T/RJHnjisgB4rv9BmZIp69dNwxEOURZEWGCuJqwLWzy5z70
-         ymow==
-X-Gm-Message-State: AOAM530G/8vm2/bR+rIiC+oVpApKlXg9ut+u7HeZ0UxxQbr0GxBulMmj
-        UKCY0/OZopQB11o5Kr/JXIIIRs0vPUY=
-X-Google-Smtp-Source: ABdhPJyHniBgsghgZjB//lGvj5nz1YqjaBKR9ZEZZ2nKGP7t+QwlCAdzva9yQdEXnpi9Gds5MbvK5g==
-X-Received: by 2002:ac2:4d4f:: with SMTP id 15mr3791625lfp.163.1596717213497;
-        Thu, 06 Aug 2020 05:33:33 -0700 (PDT)
+        bh=2CFr1WO/oeNCTJdjwIX/TiCWFfnGU5V/MdaXXMTg4nw=;
+        b=o2eaXiemnyv7kEoOxaj3PhunceF4k4Z5gP6KuR88evRcrlcJ//Fu3GjVJNVnqI5/EJ
+         o6e0AbJ073jvh4mgMPAHtaeN0xqCrnC9rWc7iTXEOG0ZoyOQdtS7RTZexPDisn+hS8yJ
+         iCKgntdqy57zhihUX3JH8BjeB461v45ZkVZs80w4mmyjXVehg6/6XR59bCmi7+L90Rqi
+         mPjYp1khXm1SzwOu8nFxNQGBFLzm4yDtX39jKkTHWeMxwjQSjSNOc52lawalfQZN5Qb3
+         1WPLFYVxr9OI9nvFTl8j/3INopkqzq5pYc6rEaqQ2H8/1HuEU4I9pfWsFG7Ic6Fqwm4J
+         XnVQ==
+X-Gm-Message-State: AOAM530n8Jv1UjRK2u5g22DFkMwiV55iV7QkJ6W9g8/uy5wknhqE3DmE
+        bpAuIestmCmzsah04tJ1obGg+WIL+r0=
+X-Google-Smtp-Source: ABdhPJzBoIhDGLnB9sT9oB5TM5Ps4uAmCPKjH7JBZrcf1F76+eu7r7+YJBa7FmB1d0p5KoyIofGB8g==
+X-Received: by 2002:a2e:5c5:: with SMTP id 188mr3701045ljf.466.1596721995016;
+        Thu, 06 Aug 2020 06:53:15 -0700 (PDT)
 Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
-        by smtp.gmail.com with ESMTPSA id o23sm2658274lfr.67.2020.08.06.05.33.32
+        by smtp.gmail.com with ESMTPSA id p11sm2670295lfo.71.2020.08.06.06.53.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Aug 2020 05:33:32 -0700 (PDT)
+        Thu, 06 Aug 2020 06:53:13 -0700 (PDT)
 Received: from johan by xi.terra with local (Exim 4.93.0.4)
         (envelope-from <johan@kernel.org>)
-        id 1k3f5T-0003Cq-KO; Thu, 06 Aug 2020 14:33:36 +0200
-Date:   Thu, 6 Aug 2020 14:33:35 +0200
+        id 1k3gKa-0003Vy-Vg; Thu, 06 Aug 2020 15:53:17 +0200
+Date:   Thu, 6 Aug 2020 15:53:16 +0200
 From:   Johan Hovold <johan@kernel.org>
 To:     Manivannan Sadhasivam <mani@kernel.org>
 Cc:     Johan Hovold <johan@kernel.org>, gregkh@linuxfoundation.org,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         patong.mxl@gmail.com, linus.walleij@linaro.org,
-        mchehab+huawei@kernel.org
-Subject: Re: [RESEND PATCH v4 1/3] usb: serial: Add MaxLinear/Exar USB to
- Serial driver
-Message-ID: <20200806123335.GS3634@localhost>
+        mchehab+huawei@kernel.org, linux-gpio@vger.kernel.org
+Subject: Re: [RESEND PATCH v4 2/3] usb: serial: xr_serial: Add gpiochip
+ support
+Message-ID: <20200806135316.GT3634@localhost>
 References: <20200607162350.21297-1-mani@kernel.org>
- <20200607162350.21297-2-mani@kernel.org>
- <20200701103433.GC3334@localhost>
- <20200726154928.GA12036@Mani-XPS-13-9360>
+ <20200607162350.21297-3-mani@kernel.org>
+ <20200701130206.GD3334@localhost>
+ <20200726155223.GB12036@Mani-XPS-13-9360>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200726154928.GA12036@Mani-XPS-13-9360>
+In-Reply-To: <20200726155223.GB12036@Mani-XPS-13-9360>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jul 26, 2020 at 09:19:28PM +0530, Manivannan Sadhasivam wrote:
-> Hi,
-> 
-> Sorry for the late reply!
-
-No worries at all.
-
-> On Wed, Jul 01, 2020 at 12:34:33PM +0200, Johan Hovold wrote:
-> > On Sun, Jun 07, 2020 at 09:53:48PM +0530, Manivannan Sadhasivam wrote:
-> > > Add support for MaxLinear/Exar USB to Serial converters. This driver
-> > > only supports XR21V141X series but it can be extended to other series
-> > > from Exar as well in future.
+On Sun, Jul 26, 2020 at 09:22:23PM +0530, Manivannan Sadhasivam wrote:
+> On Wed, Jul 01, 2020 at 03:02:06PM +0200, Johan Hovold wrote:
+> > On Sun, Jun 07, 2020 at 09:53:49PM +0530, Manivannan Sadhasivam wrote:
+> > > Add gpiochip support for Maxlinear/Exar USB to serial converter
+> > > for controlling the available gpios.
 > > > 
-> > > This driver is inspired from the initial one submitted by Patong Yang:
+> > > Inspired from cp210x usb to serial converter driver.
 > > > 
-> > > https://patchwork.kernel.org/patch/10543261/
-> > 
-> > You've also copied code from that driver so you need to maintain its
-> > copyright as well.
-> > 
-> > Probably better you link to lore than patchwork. Do that in the file
-> > header as well.
-> > 
-> > > While the initial driver was a custom tty USB driver exposing whole
-> > > new serial interface ttyXRUSBn, this version is completely based on USB
-> > > serial core thus exposing the interfaces as ttyUSBn. This will avoid
-> > > the overhead of exposing a new USB serial interface which the userspace
-> > > tools are unaware of.
-> > > 
-> > > Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > Tested-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> > > Cc: Linus Walleij <linus.walleij@linaro.org>
+> > > Cc: linux-gpio@vger.kernel.org
+> > > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 > > > Signed-off-by: Manivannan Sadhasivam <mani@kernel.org>
 > > > ---
-> > >  drivers/usb/serial/Kconfig     |   9 +
-> > >  drivers/usb/serial/Makefile    |   1 +
-> > >  drivers/usb/serial/xr_serial.c | 650 +++++++++++++++++++++++++++++++++
-> > >  3 files changed, 660 insertions(+)
-> > >  create mode 100644 drivers/usb/serial/xr_serial.c
+> > >  drivers/usb/serial/xr_serial.c | 209 ++++++++++++++++++++++++++++++++-
+> > >  1 file changed, 208 insertions(+), 1 deletion(-)
 
-> > > +#define XR21V141X_CLOCK_DIVISOR_0	0x4
-> > > +#define XR21V141X_CLOCK_DIVISOR_1	0x5
-> > > +#define XR21V141X_CLOCK_DIVISOR_2	0x6
-> > > +#define XR21V141X_TX_CLOCK_MASK_0	0x7
-> > > +#define XR21V141X_TX_CLOCK_MASK_1	0x8
-> > > +#define XR21V141X_RX_CLOCK_MASK_0	0x9
-> > > +#define XR21V141X_RX_CLOCK_MASK_1	0xa
+> > > @@ -390,6 +408,13 @@ static void xr_set_flow_mode(struct tty_struct *tty,
+> > >  	 */
+> > >  	gpio_mode &= ~UART_MODE_GPIO_MASK;
+> > >  	if (cflag & CRTSCTS) {
+> > > +#ifdef CONFIG_GPIOLIB
+> > > +		/* Check if the CTS/RTS pins are occupied */
+> > > +		if (port_priv->pin_status[GPIO_RTS] ||
+> > > +		    port_priv->pin_status[GPIO_CTS])
+> > > +			return;
+> > > +#endif
 > > 
-> > Please 0-pad these are they are registers.
-> 
-> You mean adding 0 after 0x?
-
-Yes, exactly.
-
-> > > +static int xr_attach(struct usb_serial *serial)
-> > > +{
-> > > +	/* Do not register tty device for the control interface */
-> > > +	if (serial->interface->cur_altsetting->desc.bInterfaceNumber == 0)
-> > > +		return 1;
+> > You cannot just bail out as this could leave software flow enabled etc.
 > > 
-> > Ok, so you went for my first suggestion here instead of explicitly
-> > claiming the sibling interface.
+> > You also need to claim these pins once at open or leave them be. We
+> > don't want CRTSCTS to suddenly start toggling because a pin is released
+> > by gpiolib.
 > > 
-> > I still think you should bind to the data interface and then explicitly
-> > claim the control interface instead, since that better reflects that
-> > these interfaces are used together (and allows for unbinding through
-> > sysfs etc).
+> > That is, determine who owns each pin at open() and keep it that way till
+> > close() (by setting some flags at open).
+> > 
+> > > +
+> > >  		dev_dbg(&port->dev, "Enabling hardware flow ctrl\n");
+> > >  		flow = UART_FLOW_MODE_HW;
+> > >  		gpio_mode |= UART_MODE_RTS_CTS;
+> > > @@ -497,6 +522,17 @@ static int xr_tiocmset_port(struct usb_serial_port *port,
+> > >  	u8 gpio_set = 0;
+> > >  	u8 gpio_clr = 0;
+> > >  
+> > > +#ifdef CONFIG_GPIOLIB
+> > > +	/* Check if the RTS/DTR pins are occupied */
+> > > +	if (set & TIOCM_RTS || clear & TIOCM_RTS)
+> > > +		if (port_priv->pin_status[GPIO_RTS])
+> > > +			return -EBUSY;
+> > > +
+> > > +	if (set & TIOCM_DTR || clear & TIOCM_DTR)
+> > > +		if (port_priv->pin_status[GPIO_DTR])
+> > > +			return -EBUSY;
+> > > +#endif
+> > 
+> > Same here. And perhaps just ignoring the pins managed by gpiolib is
+> > better (cf. gpiolib and pinctrl being orthogonal).
 > 
-> How about something like below?
-> 
-> static int xr_probe(struct usb_serial *serial, const struct usb_device_id *id)
-> {
->         struct usb_device *usb_dev = interface_to_usbdev(serial->interface);
->         struct usb_driver *driver = serial->type->usb_driver;
->         struct usb_interface *control_interface;
-> 
->         /* Don't bind to control interface */
->         if (serial->interface->cur_altsetting->desc.bInterfaceNumber == 0)
->                 return -ENODEV;
-> 
->         /* But claim the control interface during data interface probe */
->         control_interface = usb_ifnum_to_if(usb_dev, 0);
->         if (usb_driver_claim_interface(driver, control_interface, NULL) != 0)
->                 dev_err(serial->interface->dev, "Can't claim control interface");
-> 
->         return 0;
-> }
+> You mean, we can just make TX,RX,CTS,RTS pins controlled only by the serial
+> driver and the rest only by gpiolib?
 
-Yes, something like that, but with error handling and a '\n' added to
-the error message. ;)
+No, I think I just meant that you shouldn't return an error here for
+signals whose pins happen to be muxed for a different function (gpio).
 
 Johan
