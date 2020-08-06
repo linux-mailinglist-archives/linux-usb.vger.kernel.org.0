@@ -2,227 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 620BF23DF81
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Aug 2020 19:48:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 481AC23DF83
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Aug 2020 19:48:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730536AbgHFRsg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        id S1730530AbgHFRsg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
         Thu, 6 Aug 2020 13:48:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40830 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728851AbgHFQfR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Aug 2020 12:35:17 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F89CC002162;
-        Thu,  6 Aug 2020 09:04:22 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id b18so4400185edv.10;
-        Thu, 06 Aug 2020 09:04:22 -0700 (PDT)
+        with ESMTP id S1728064AbgHFQfY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Aug 2020 12:35:24 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1813C002170
+        for <linux-usb@vger.kernel.org>; Thu,  6 Aug 2020 09:12:13 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id bo3so28296906ejb.11
+        for <linux-usb@vger.kernel.org>; Thu, 06 Aug 2020 09:12:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kZTh0PB6PtKkLmDSXAVhkUVZ2z542iKjjb2bge0x2uk=;
-        b=pg3dkv4MzAI4Vu5ecucgFGw78gwbzmI6iFNufzUy2Y9bX4U+MpEOvwWztz/Kr7NOpu
-         xtpjEUtJroaxQvp3Wyi5+D8C4VEfvJb0UTXMBshW76X9ox4sp+KuoPobM/0tJMW+COjX
-         2cJ1jHU9SESSA77GtlVxxauA1toSZHcaEfJ6sf77ihymwZ5ecD+W6fsyN3RmpnIG8J0l
-         Fxyy7FGyHYIgGv8YnfUIjgUOln56C/xs9Laon1VIVux7pkSZn8LFx/IjZH6HYhnPdxNA
-         973wA7+KuPyRFjtGEzITS2phpbPrIme1DqwooH+sCogjL/f5fPbY3voQvcDopdAYr425
-         +QcQ==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=7oz9fgT32RcT+dyLlchS0zeaHghAL2BpVPc+IG++fVc=;
+        b=IzKmra3Q6aXMzumlH3aqGvkOqG9bxKVBCaGTjtVzcsbez2e5Ewpjfs3afFIRrciZzq
+         iSNqfvNT0N9U9qLaJ9PzJdGTSU+HknuotWOLt9xtTehdfNgtqDzAObLXWbccOsmevlsJ
+         633251l9UkQ7ooIakF8igonYdF7FoLlrovhYHD1yVqGJoYbQyedZLmp4nz+uWFabSYfV
+         vA/tpZHaI1yiHEhIxAQqZCqJNzaP041mh0Hp9FsOEhAjCmRjNpykaG3RXk8I+4zXiyiG
+         i/up5VzkC/oYTon4yrtPkJdbB+y8TnQESOtIku9SRRH/wB5vPQXL/Pi5ztVyJ8xzh44A
+         mbEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kZTh0PB6PtKkLmDSXAVhkUVZ2z542iKjjb2bge0x2uk=;
-        b=o90kZ3ov1bFQzhUM8ur2e35doBjJ/W4u88XjzteS1r2H2BqR/QYV7+5j20w9ik5rzs
-         NkReO0Pr8dyUs4BBqw3tQ0PjjwmwDxcXczsPHd+AmzxBq1Xgw0ScU/4BCm3xz6NQVEda
-         VAJPwYXKYaTwpR/k6/MGjX/Tbw0+hmmGvhWStSihUqoLWNAuaudx4tHe8wywTTLgnnBa
-         FKuEtr4lN6gmrN0D4kwu3Ki6rkyEvz2THivVAV5rs0CEL0YUu/fCm/nGm2ilXJbJW7+i
-         DJI0OWWNLd98/iEEdS/aAURI4NmUMmqg/60vAkFcVosQWTwumMgtN3q8YF/Gr3sbhdZK
-         5LeA==
-X-Gm-Message-State: AOAM532wfsx2CTsAI11VqPWreCVCXaCHJLmJEdUGUIKeNn9qIYfAd5b3
-        TQ8OZvrsmU4PPx4eIrhLBKA=
-X-Google-Smtp-Source: ABdhPJzSfarPrINxyfBxN7O8FB+1XmqNpoBkjHDOIgn+Hcw4GEthMJtAUMIwNZblwph/Ue9nS5ik0g==
-X-Received: by 2002:a50:ba84:: with SMTP id x4mr4954155ede.282.1596729860361;
-        Thu, 06 Aug 2020 09:04:20 -0700 (PDT)
-Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id bx22sm4051834ejc.18.2020.08.06.09.04.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Aug 2020 09:04:18 -0700 (PDT)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH 1/3] usb: gadget: tegra-xudc: Use consistent spelling and formatting
-Date:   Thu,  6 Aug 2020 18:04:15 +0200
-Message-Id: <20200806160417.3937056-1-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.27.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=7oz9fgT32RcT+dyLlchS0zeaHghAL2BpVPc+IG++fVc=;
+        b=ZiSNxHHUU6JEecw37X7YASa5a7ZHD202HLgfic3OQmp9Mhz1hJ75fNuujWGg6CgDwG
+         neDmeZzHKm8blQLMs5UCQGtoHUzYBLacX0dOmSJoE/24KEShliaU4MFBKxds0y14vnPm
+         KZBeHYA0NAlOeVcGWQBV31izux/1dArZskalEQzgHJx+w0PdsBGeq5F/cEAynXgVfCGX
+         oRXesq4qjS6n+1bA3oKVKyAeA4DXDVPhJVatmY/5WXF50hXAqUE6FDXNSWJNOUcljtYW
+         yqN8urL+KL6iFM24inG/I9xmy7aenWX1Z37tAZneumh2BrZqhMqgdnRZhhL//UTAx3+/
+         GVdw==
+X-Gm-Message-State: AOAM531eZsIgr554FQnYA+vRrLWxxRqwRSM8DWh1RLZkL2V3A4+3kZOo
+        pO3WZf7lZbabaCVVLsoDy85+KtuZSurEPVfO+1o=
+X-Google-Smtp-Source: ABdhPJw/9qTm6cuPmP6U8Vqp/16eZPKt/kEztrjGxh2CN1gEkm9KkLmabxzTdyghzw+33tqiG32RUX8oXY6vPRTQwss=
+X-Received: by 2002:a17:906:6a5b:: with SMTP id n27mr4884405ejs.221.1596730332638;
+ Thu, 06 Aug 2020 09:12:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a17:906:af52:0:0:0:0 with HTTP; Thu, 6 Aug 2020 09:12:11
+ -0700 (PDT)
+Reply-To: aapoissa7@gmail.com
+From:   Aapo Issa <info99749@gmail.com>
+Date:   Thu, 6 Aug 2020 16:12:11 +0000
+Message-ID: <CABMUSZZZaydqWARaZ9uCn=-gghQFq2SLssHk-Ja3npHuM-Yu_A@mail.gmail.com>
+Subject: re.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Thierry Reding <treding@nvidia.com>
+How things generally? Hope this message meet you well, Please do not
+Ignore this message unlike before, because your Inheritance Fund of
+(US$5,340,000.00) is now Unveil waiting for your immediate positive.
 
-Make sure to use consistent spelling and formatting in error messages.
-
-Signed-off-by: Thierry Reding <treding@nvidia.com>
----
- drivers/usb/gadget/udc/tegra-xudc.c | 36 ++++++++++++++---------------
- 1 file changed, 18 insertions(+), 18 deletions(-)
-
-diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/udc/tegra-xudc.c
-index d6ff68c06911..ec43081f15bd 100644
---- a/drivers/usb/gadget/udc/tegra-xudc.c
-+++ b/drivers/usb/gadget/udc/tegra-xudc.c
-@@ -705,11 +705,11 @@ static void tegra_xudc_device_mode_on(struct tegra_xudc *xudc)
- 
- 	err = phy_power_on(xudc->curr_utmi_phy);
- 	if (err < 0)
--		dev_err(xudc->dev, "utmi power on failed %d\n", err);
-+		dev_err(xudc->dev, "UTMI power on failed: %d\n", err);
- 
- 	err = phy_power_on(xudc->curr_usb3_phy);
- 	if (err < 0)
--		dev_err(xudc->dev, "usb3 phy power on failed %d\n", err);
-+		dev_err(xudc->dev, "USB3 PHY power on failed: %d\n", err);
- 
- 	dev_dbg(xudc->dev, "device mode on\n");
- 
-@@ -759,11 +759,11 @@ static void tegra_xudc_device_mode_off(struct tegra_xudc *xudc)
- 
- 	err = phy_power_off(xudc->curr_utmi_phy);
- 	if (err < 0)
--		dev_err(xudc->dev, "utmi_phy power off failed %d\n", err);
-+		dev_err(xudc->dev, "UTMI PHY power off failed: %d\n", err);
- 
- 	err = phy_power_off(xudc->curr_usb3_phy);
- 	if (err < 0)
--		dev_err(xudc->dev, "usb3_phy power off failed %d\n", err);
-+		dev_err(xudc->dev, "USB3 PHY power off failed: %d\n", err);
- 
- 	pm_runtime_put(xudc->dev);
- }
-@@ -1539,7 +1539,7 @@ static int __tegra_xudc_ep_set_halt(struct tegra_xudc_ep *ep, bool halt)
- 		return -EINVAL;
- 
- 	if (usb_endpoint_xfer_isoc(ep->desc)) {
--		dev_err(xudc->dev, "can't halt isoc EP\n");
-+		dev_err(xudc->dev, "can't halt isochronous EP\n");
- 		return -ENOTSUPP;
- 	}
- 
-@@ -1788,7 +1788,7 @@ static int __tegra_xudc_ep_enable(struct tegra_xudc_ep *ep,
- 
- 	if (usb_endpoint_xfer_isoc(desc)) {
- 		if (xudc->nr_isoch_eps > XUDC_MAX_ISOCH_EPS) {
--			dev_err(xudc->dev, "too many isoch endpoints\n");
-+			dev_err(xudc->dev, "too many isochronous endpoints\n");
- 			return -EBUSY;
- 		}
- 		xudc->nr_isoch_eps++;
-@@ -3509,7 +3509,7 @@ static int tegra_xudc_phy_get(struct tegra_xudc *xudc)
- 		if (IS_ERR(xudc->utmi_phy[i])) {
- 			err = PTR_ERR(xudc->utmi_phy[i]);
- 			if (err != -EPROBE_DEFER)
--				dev_err(xudc->dev, "failed to get usb2-%d phy: %d\n",
-+				dev_err(xudc->dev, "failed to get usb2-%d PHY: %d\n",
- 					i, err);
- 
- 			goto clean_up;
-@@ -3539,12 +3539,12 @@ static int tegra_xudc_phy_get(struct tegra_xudc *xudc)
- 		if (IS_ERR(xudc->usb3_phy[i])) {
- 			err = PTR_ERR(xudc->usb3_phy[i]);
- 			if (err != -EPROBE_DEFER)
--				dev_err(xudc->dev, "failed to get usb3-%d phy: %d\n",
-+				dev_err(xudc->dev, "failed to get usb3-%d PHY: %d\n",
- 					usb3, err);
- 
- 			goto clean_up;
- 		} else if (xudc->usb3_phy[i])
--			dev_dbg(xudc->dev, "usb3_phy-%d registered", usb3);
-+			dev_dbg(xudc->dev, "usb3-%d PHY registered", usb3);
- 	}
- 
- 	return err;
-@@ -3577,13 +3577,13 @@ static int tegra_xudc_phy_init(struct tegra_xudc *xudc)
- 	for (i = 0; i < xudc->soc->num_phys; i++) {
- 		err = phy_init(xudc->utmi_phy[i]);
- 		if (err < 0) {
--			dev_err(xudc->dev, "utmi phy init failed: %d\n", err);
-+			dev_err(xudc->dev, "UTMI PHY #%u initialization failed: %d\n", i, err);
- 			goto exit_phy;
- 		}
- 
- 		err = phy_init(xudc->usb3_phy[i]);
- 		if (err < 0) {
--			dev_err(xudc->dev, "usb3 phy init failed: %d\n", err);
-+			dev_err(xudc->dev, "USB3 PHY #%u initialization failed: %d\n", i, err);
- 			goto exit_phy;
- 		}
- 	}
-@@ -3696,14 +3696,14 @@ static int tegra_xudc_powerdomain_init(struct tegra_xudc *xudc)
- 								"dev");
- 	if (IS_ERR(xudc->genpd_dev_device)) {
- 		err = PTR_ERR(xudc->genpd_dev_device);
--		dev_err(dev, "failed to get dev pm-domain: %d\n", err);
-+		dev_err(dev, "failed to get device power domain: %d\n", err);
- 		return err;
- 	}
- 
- 	xudc->genpd_dev_ss = dev_pm_domain_attach_by_name(dev, "ss");
- 	if (IS_ERR(xudc->genpd_dev_ss)) {
- 		err = PTR_ERR(xudc->genpd_dev_ss);
--		dev_err(dev, "failed to get superspeed pm-domain: %d\n", err);
-+		dev_err(dev, "failed to get SuperSpeed power domain: %d\n", err);
- 		return err;
- 	}
- 
-@@ -3711,7 +3711,7 @@ static int tegra_xudc_powerdomain_init(struct tegra_xudc *xudc)
- 					       DL_FLAG_PM_RUNTIME |
- 					       DL_FLAG_STATELESS);
- 	if (!xudc->genpd_dl_device) {
--		dev_err(dev, "adding usb device device link failed!\n");
-+		dev_err(dev, "failed to add USB device link\n");
- 		return -ENODEV;
- 	}
- 
-@@ -3719,7 +3719,7 @@ static int tegra_xudc_powerdomain_init(struct tegra_xudc *xudc)
- 					     DL_FLAG_PM_RUNTIME |
- 					     DL_FLAG_STATELESS);
- 	if (!xudc->genpd_dl_ss) {
--		dev_err(dev, "adding superspeed device link failed!\n");
-+		dev_err(dev, "failed to add SuperSpeed device link\n");
- 		return -ENODEV;
- 	}
- 
-@@ -3783,7 +3783,7 @@ static int tegra_xudc_probe(struct platform_device *pdev)
- 	err = devm_clk_bulk_get(&pdev->dev, xudc->soc->num_clks,
- 				      xudc->clks);
- 	if (err) {
--		dev_err(xudc->dev, "failed to request clks %d\n", err);
-+		dev_err(xudc->dev, "failed to request clocks: %d\n", err);
- 		return err;
- 	}
- 
-@@ -3798,7 +3798,7 @@ static int tegra_xudc_probe(struct platform_device *pdev)
- 	err = devm_regulator_bulk_get(&pdev->dev, xudc->soc->num_supplies,
- 				      xudc->supplies);
- 	if (err) {
--		dev_err(xudc->dev, "failed to request regulators %d\n", err);
-+		dev_err(xudc->dev, "failed to request regulators: %d\n", err);
- 		return err;
- 	}
- 
-@@ -3808,7 +3808,7 @@ static int tegra_xudc_probe(struct platform_device *pdev)
- 
- 	err = regulator_bulk_enable(xudc->soc->num_supplies, xudc->supplies);
- 	if (err) {
--		dev_err(xudc->dev, "failed to enable regulators %d\n", err);
-+		dev_err(xudc->dev, "failed to enable regulators: %d\n", err);
- 		goto put_padctl;
- 	}
- 
--- 
-2.27.0
-
+Bar. Aapo Issa
