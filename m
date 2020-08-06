@@ -2,107 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CFAC23D2C0
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Aug 2020 22:16:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59F6623D4CD
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Aug 2020 02:44:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726380AbgHEUP6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 Aug 2020 16:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42184 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726448AbgHEQUG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Aug 2020 12:20:06 -0400
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BE5C001FCB
-        for <linux-usb@vger.kernel.org>; Wed,  5 Aug 2020 08:49:37 -0700 (PDT)
-Received: by mail-il1-x141.google.com with SMTP id j9so34367159ilc.11
-        for <linux-usb@vger.kernel.org>; Wed, 05 Aug 2020 08:49:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RAePZiXm6lZPAjA6iTXawTSBS+sAH5U4gKjxjlBvI0Y=;
-        b=cEZUlFvDLAnpENC/yKTWFB1oZSsWgaFcdEK3kO1XWKEBFLTEOIndPMsfpvJYNJvNeG
-         lkm9ZjcuKgHISltwWrUminf2SdoZ1/nOSTuA9nUedqthXNBZKufJsuDrBMnRCtRZSbdu
-         hZYXu71PtTywu/2KeBDpycp66T60q8ILHjAUifO1oTfaR5hT8Cyt5pDQIN+fK+v98b62
-         Ol3Byx7byyjTBH9DfQXEazKsO/teovdrl40E9QN2E0VTe9K2X/UF0C4JshZ9cBBKihLl
-         pLEUYCQ3v//7ryr1n/B9eCCcIhq9EN3yea/bWA5hY0ngP0dPFdaLsonPcKf3euYDH7gp
-         d1qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RAePZiXm6lZPAjA6iTXawTSBS+sAH5U4gKjxjlBvI0Y=;
-        b=i9n+QLJloO63IiWWuXZs9ZFI/8JR1btoy1ycHrSNAA5EGBxkwCM2mUTX/EwhrQf6Hg
-         5vAUHAAm/bTeTeamNtkKvpvYGmo26pbJGA0r+MNn737iE4pJPGQ3w3F/Do+TntTswwmW
-         wGjwXnKDuOb5wGSqDnzbuEJsb+IopvB2/GNybSmYIS7oCncwx8lPCD8myCnquuGXelpc
-         POPz143RqMV90VPiUn1iJ1y7J217KUokOKmL2G1FUZUsktyJRTLA/+nxdwvbFEDKRkNT
-         ss9bLVjHjeSd+mmm0CN41HAin44rZxgO+wqOoHplD8FDLtooxt0Cgc4olONFrHL1gP7C
-         NCxg==
-X-Gm-Message-State: AOAM5338y9+fHRyeNqB3FiHX8HpSE1Ko1i+peTIta9FaXNxKLNxkPh00
-        ex4zvkE1qBXnTNm4vU9zuwS6VE3IGoca7LJuyvy7uw==
-X-Google-Smtp-Source: ABdhPJw4+QNSbWVVgzqtpHXqkxWJ0R16Kf4NhYIRqnjztUp9gdjrTBTVrV7+NngM10Ct80llKGRZbRgfa4AOC5nKypI=
-X-Received: by 2002:a92:d8cf:: with SMTP id l15mr4977954ilo.0.1596642575465;
- Wed, 05 Aug 2020 08:49:35 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200805075810.604063-1-lorenzo@google.com> <87mu39tmu6.fsf@kernel.org>
-In-Reply-To: <87mu39tmu6.fsf@kernel.org>
-From:   Lorenzo Colitti <lorenzo@google.com>
-Date:   Thu, 6 Aug 2020 00:49:23 +0900
-Message-ID: <CAKD1Yr17hFju=xvDHWWcLjwj=nuSBBVJn9xQ5ocHHXQm6PAw_A@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: f_ncm: allow using NCM in SuperSpeed Plus gadgets.
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     linux-usb@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <zenczykowski@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726087AbgHFAos (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 Aug 2020 20:44:48 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:59024 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725779AbgHFAor (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 Aug 2020 20:44:47 -0400
+Received: from mailhost.synopsys.com (sv1-mailhost2.synopsys.com [10.205.2.132])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id E42F5C0BBD;
+        Thu,  6 Aug 2020 00:44:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1596674686; bh=1c/MFJts3h/Olny4+yRENzVMH46l/md2vN+CQJYSKqU=;
+        h=Date:From:Subject:To:Cc:From;
+        b=F004Co/jP8u71YCwchAeP7FYSuDbcGCezXA8kFkI6MLfp3no6uStDYrBgPo8ONy1q
+         PpA9cErETFlza6mIbL8NCY5cKKuAss8KFidU4itIoWCYqSSYqlk5Iu9MSnYylv9EzQ
+         cDDb/jeAJWWu/HH9eIljFCeZv7GHN3hvvYKexjLUzDVO+SBdR6iyuziRBi/hRiJtKn
+         KueKATq806/w7hsZSKfw1ykRhWQUoc+qQde1wa1RGOJwKUS4sbYFr4Kff1rjtcYGG0
+         i8q93gP71QgolcGfSmOoNA2yer/GjHJmMxCaiD+PpPsE1vFzvMGNKjGHiCmUWfrvRu
+         oQoqlN+XCwLcQ==
+Received: from te-lab16 (nanobot.internal.synopsys.com [10.10.186.99])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 44550A006F;
+        Thu,  6 Aug 2020 00:44:44 +0000 (UTC)
+Received: by te-lab16 (sSMTP sendmail emulation); Wed, 05 Aug 2020 17:44:43 -0700
+Date:   Wed, 05 Aug 2020 17:44:43 -0700
+Message-Id: <cover.1596674377.git.thinhn@synopsys.com>
+X-SNPS-Relay: synopsys.com
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: [PATCH 0/7] usb: dwc3: gadget: Fix TRB preparation
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        linux-usb@vger.kernel.org
+Cc:     John Youn <John.Youn@synopsys.com>, stable@vger.kernel.org
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 5, 2020 at 7:21 PM Felipe Balbi <balbi@kernel.org> wrote:
-> But anyway, if we change 13 to 16, then we 1Gbps. How did you get
-> 1.7Gbps? I think we should really update ncm_bitrate() to contain the
-> correct equations for bitrate on different speeds.
+There are a few issues in DWC3 driver when preparing for TRB.
+The driver needs to account the following:
 
-I got 1.7 Gbps because that's what I measured in iperf. :-)
+* MPS alignment for ZLP OUT direction
+* Extra TRBs when checking for available TRBs
+* SG entries size > request length
 
-But actually after reading the spec I think that for SuperSpeed and
-above that calculation is meaningless, because bulk transfers are no
-longer limited by a set number of packets per microframe. The USB 3.2
-spec has mostly replaced the words "microframe" with "bus interval",
-but I don't see any place in the spec that says the number of packets
-per bus interval is limited. Section 8.12.1.2 (Bulk IN Transactions)
-just says that "when the host is ready to receive bulk data, it sends
-an ACK TP" saying how many packets it's willing to accept, where the
-maximum is the burst size supported by the endpoint. After that, the
-host has to respond with an ACK to every data packet received, and
-every ACK specifies the number of data packets it expects from then
-on.
+Along with these fixes, there are some cleanup/refactoring patches in this
+series .
 
-It seems more correct that for SS and above the driver should simply
-just report the link speed minus theoretical bus overhead? Section
-4.4.11 suggests that's about 10%, so it would announce 4.5 Gbps.
 
-> > +static struct usb_ss_ep_comp_descriptor ssp_ncm_bulk_comp_desc = {
-> > +     .bLength =              sizeof(ssp_ncm_bulk_comp_desc),
-> > +     .bDescriptorType =      USB_DT_SS_ENDPOINT_COMP,
-> > +
-> > +     /* the following 2 values can be tweaked if necessary */
-> > +     /* .bMaxBurst =         0, */
->
-> should you add bMaxBurst = 15 here?
+Thinh Nguyen (7):
+  usb: dwc3: gadget: Don't setup more than requested
+  usb: dwc3: gadget: Fix handling ZLP
+  usb: dwc3: gadget: Handle ZLP for sg requests
+  usb: dwc3: gadget: Refactor preparing TRBs
+  usb: dwc3: gadget: Account for extra TRB
+  usb: dwc3: gadget: Rename misleading function names
+  usb: dwc3: ep0: Skip ZLP setup for OUT
 
-I'm not sure. On my setup, it provides a fair performance boost (goes
-from ~1.7Gbps to ~2.3Gbps in, and ~620Mbps to ~720Mbps out). But I
-don't know whether there might be any compatibility constraints or
-hardware dependencies. I do see that the f_mass_storage driver sets it
-to 15:
+ drivers/usb/dwc3/ep0.c    |   2 +-
+ drivers/usb/dwc3/gadget.c | 232 ++++++++++++++++++++++----------------
+ 2 files changed, 137 insertions(+), 97 deletions(-)
 
-         /* Calculate bMaxBurst, we know packet size is 1024 */
-        max_burst = min_t(unsigned, FSG_BUFLEN / 1024, 15);
 
-so perhaps this is fine to do in NCM too? If we want to set bMaxBurst
-to 15, should that be in this patch, or in a separate patch?
+base-commit: e3ee0e740c3887d2293e8d54a8707218d70d86ca
+-- 
+2.28.0
 
-Cheers,
-Lorenzo
