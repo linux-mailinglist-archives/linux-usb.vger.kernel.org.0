@@ -2,96 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 041CD23DB88
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Aug 2020 18:14:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6876523DBA2
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Aug 2020 18:27:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727809AbgHFQON (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Aug 2020 12:14:13 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:58867 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728648AbgHFQOG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Aug 2020 12:14:06 -0400
-Received: (qmail 199991 invoked by uid 1000); 6 Aug 2020 11:10:16 -0400
-Date:   Thu, 6 Aug 2020 11:10:16 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     "Asano, Yasushi \(ADITJ/SWG\)" <yasano@jp.adit-jv.com>
-Cc:     Yasushi Asano <yazzep@gmail.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "Rosca, Eugeniu \(ADITG/ESM1\)" <erosca@de.adit-jv.com>,
-        "andrew_gabbasov@mentor.com" <andrew_gabbasov@mentor.com>,
-        "jim_baxter@mentor.com" <jim_baxter@mentor.com>,
-        "Natsume, Wataru \(ADITJ/SWG\)" <wnatsume@jp.adit-jv.com>,
-        "Nishiguchi, Naohiro \(ADITJ/SWG\)" <nnishiguchi@jp.adit-jv.com>
-Subject: Re: [PATCH] [RFC] USB: hub.c: Add the retry count module parameter
- for usbcore
-Message-ID: <20200806151016.GB197575@rowland.harvard.edu>
-References: <20200730104226.3537-1-yazzep@gmail.com>
- <20200803183732.GA112453@rowland.harvard.edu>
- <589E8CD8BC4E4743ADCA659B6BADC9710BD43DB7@ky0exch01.adit-jv.com>
+        id S1727864AbgHFQ1j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Aug 2020 12:27:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37762 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727081AbgHFQSr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Aug 2020 12:18:47 -0400
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283EBC00215F;
+        Thu,  6 Aug 2020 09:02:55 -0700 (PDT)
+Received: by mail-ed1-x543.google.com with SMTP id v22so24751828edy.0;
+        Thu, 06 Aug 2020 09:02:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=CECQrTdPbGjVPX2RCRIk8am23VvwhZ+qTSo0hSxBl3o=;
+        b=Z1PLwnz5/fx/Z6dzRP3Qg8AStjfCJB6bxY4Q5BbC/Wgxs6E3gpE97VG8FbsJpxuY2M
+         zVCfl8kTqJRQXVsI3XcAbbohpxUXhB2pQ7arkm8ajmV6xCaMGQ7S+gD+MhJ034iLfQf9
+         MqVmtVLiytju3ZSHmh5wEFSn7QcM67A+xj5w+xe0sZe42IwZZjUIy0jto/NFTWpOQJZn
+         ndREU01ar4OvfUT0osHmTkDB3zXoCxiNdboAkApDBwcsJbBBjCYTjIPm0oFlIsJZiPYz
+         kz6HqUpuaFjwe/lhWxNOpTSoOyhVVNjQ3Jx0FU8vg/cVAzvmJUj8jEXNpYz68nzZhXQQ
+         qOBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=CECQrTdPbGjVPX2RCRIk8am23VvwhZ+qTSo0hSxBl3o=;
+        b=HBCbEhqRFfnYDLTioCYQ/yRIbj/fME6zlxKeKBuxxIkh8anpNciiNIUNdvrp9rr6T9
+         +BMWLsp6864ET5jKZAmk4bcMxG+tgUiAd2bIXNe9NyZjMcs/6MsjkYgSgW0gzoYLdlk7
+         yUaGsCLENbLPa9QZE9IFqS57A98gmERqwNNXnqdb1w414KKDerUfVwgo1fnVp8TZblnt
+         4cizhUHKTv0HbxLQxqyhYr099WyCtl8sS+f+UUJvsnkhWZekybGApVvkZxPvENxJtKSw
+         80tIq6z5r6Bb9CJE9qBb2du5HJGx9dfwmzDr2QE7c5PP5fRcU/kBIJaEJh2FGPX0FVvi
+         SIYA==
+X-Gm-Message-State: AOAM531pZA0ujs3RHll8khEMbBl8UgCx77ASJ7IaHlk+hJyaCDt2Z2FU
+        PtDE0GMa/0161y8KNKiPUOA=
+X-Google-Smtp-Source: ABdhPJyjP6Tg6vGResi/PT4q25in8ESFmnFaAbhMRGP9vNUEC8yre8RyUHGTeEb31y1gXCLySX9zDQ==
+X-Received: by 2002:a50:d908:: with SMTP id t8mr4558574edj.373.1596729773914;
+        Thu, 06 Aug 2020 09:02:53 -0700 (PDT)
+Received: from localhost ([62.96.65.119])
+        by smtp.gmail.com with ESMTPSA id a16sm4011063ejy.78.2020.08.06.09.02.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Aug 2020 09:02:52 -0700 (PDT)
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: [PATCH 2/2] usb: common: usb-conn-gpio: Print error on failure to get VBUS
+Date:   Thu,  6 Aug 2020 18:02:48 +0200
+Message-Id: <20200806160248.3936771-2-thierry.reding@gmail.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200806160248.3936771-1-thierry.reding@gmail.com>
+References: <20200806160248.3936771-1-thierry.reding@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <589E8CD8BC4E4743ADCA659B6BADC9710BD43DB7@ky0exch01.adit-jv.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 06, 2020 at 05:43:54AM +0000, Asano, Yasushi (ADITJ/SWG) wrote:
-> Dear Alan
-> Dear Greg
-> 
-> Thank you for your feedback.
-> I really appreciate your concrete proposal.
-> 
-> > So let's change the code to do 3 tries with each scheme.
-> I understood. I will try to modify it so that the number of 
-> attempts will decrease. It is 6 attempts in total both old and 
-> new schemes, but msleep is executed at various places in 
-> hub_port_connect and hub_port_init. apart from a timeout.
->  
-> For example, msleep(100) is executed every time in the loop of 
-> GET_DESCRIPTOR_TRIES[8] of new scheme. and In the old scheme, 
-> msleep(200) is executed in the loop of SET_ADDRESS_TRIES[10].
-> From my measurement, it does not subside within 30 seconds, 
-> but it is around 32 seconds.
-> 
-> From these things, I would like you to reconsider the number of attempts. 
-> Is it OK to set the new scheme to 3 times and the old scheme to 
-> 2 times(no change as it is)? In other words 
-> 
-> [plan 1]
-> 3 * new scheme, then 2 * old scheme, or else
-> 2 * old scheme, then 3 * new_scheme,
-> depending on the old_scheme_first parameter.
+From: Thierry Reding <treding@nvidia.com>
 
-Yes, that's all right.  Although you might want to make the second case 
-be: 3 * old scheme, then 2 * new scheme.
+The exact error that happened trying to get the VBUS supply can be
+useful to troubleshoot what's going on.
 
-> Also, although it is a "better plan", the original processing is in the following.
-> 
-> 6 * new scheme, then 6 * new scheme, 
-> then 2 * old scheme, then 2 * old scheme
-> 
-> if it will be modified from above to below, It seems that the structure 
-> of the loop has to be greatly revised. I think.
-> 
-> 2 * new scheme, then 2 * old scheme, 
-> then 1 * new scheme, then 1 * old scheme
+Signed-off-by: Thierry Reding <treding@nvidia.com>
+---
+ drivers/usb/common/usb-conn-gpio.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-If you want to use only five attempts, you'll have to get rid of the 
-last one.
+diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common/usb-conn-gpio.c
+index c5b516d327c7..6c4e3a19f42c 100644
+--- a/drivers/usb/common/usb-conn-gpio.c
++++ b/drivers/usb/common/usb-conn-gpio.c
+@@ -206,7 +206,7 @@ static int usb_conn_probe(struct platform_device *pdev)
+ 
+ 	if (IS_ERR(info->vbus)) {
+ 		if (PTR_ERR(info->vbus) != -EPROBE_DEFER)
+-			dev_err(dev, "failed to get vbus\n");
++			dev_err(dev, "failed to get vbus: %ld\n", PTR_ERR(info->vbus));
+ 		return PTR_ERR(info->vbus);
+ 	}
+ 
+-- 
+2.27.0
 
-> The fix is likely to be large, so Can I proceed with a patch in plan 1?
-
-Okay.
-
-Alan Stern
-
-> I will post the patch after confirming the behavior of the patch with 
-> the customer board with the PET tool. please give me a little time.
-> 
-> Best Regards
-> Yasushi Asano
