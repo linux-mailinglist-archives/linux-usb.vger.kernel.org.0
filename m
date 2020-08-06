@@ -2,260 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE4B623E0F5
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Aug 2020 20:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4570E23E217
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Aug 2020 21:25:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726799AbgHFS2f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Aug 2020 14:28:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51160 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728343AbgHFSXc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 6 Aug 2020 14:23:32 -0400
-Received: from localhost.localdomain (unknown [194.230.155.117])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F303122D06;
-        Thu,  6 Aug 2020 18:22:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596738136;
-        bh=41DB04g7bnvHlbjYbY4BAew/yHdDAUU2eHUM/YHd6eI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SsUMJwrOd4mJyKpNs/CIMXd3noEkrz6TxA8z2JExxEjdCSb3IJJHPuk97wtbWPoNL
-         32tVAIKOcDTCI80KbmrW63jnaPqRJp0bKqJ+sE67JAp/icDA8uMjs47IXI8dmZquco
-         2hUCicQHgZrDi4A0MumUHAwH2dDYkERdiTunAEqM=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org
-Subject: [PATCH v2 09/41] usb: gadget: s3c-hsudc: remove platform header dependency
-Date:   Thu,  6 Aug 2020 20:20:26 +0200
-Message-Id: <20200806182059.2431-9-krzk@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200806181932.2253-1-krzk@kernel.org>
-References: <20200806181932.2253-1-krzk@kernel.org>
+        id S1726234AbgHFTZS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 Aug 2020 15:25:18 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:46699 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1725272AbgHFTZS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 Aug 2020 15:25:18 -0400
+Received: (qmail 207466 invoked by uid 1000); 6 Aug 2020 15:18:36 -0400
+Date:   Thu, 6 Aug 2020 15:18:36 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     balbi@kernel.org, linux-usb@vger.kernel.org, linux-imx@nxp.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH 1/2] usb: dwc3: allocate gadget structure dynamically
+Message-ID: <20200806191836.GA207178@rowland.harvard.edu>
+References: <20200806090717.18657-1-peter.chen@nxp.com>
+ <20200806145414.GA197575@rowland.harvard.edu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200806145414.GA197575@rowland.harvard.edu>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Thu, Aug 06, 2020 at 10:54:14AM -0400, Alan Stern wrote:
+> On Thu, Aug 06, 2020 at 05:07:16PM +0800, Peter Chen wrote:
+> > The current code uses commit fac323471df6 ("usb: udc: allow adding
+> > and removing the same gadget device") as the workaround to let
+> > the gadget device is re-used, but it is not allowed from driver
+> > core point. In this commit, we allocate gadget structure dynamically,
+> > and free it at its release function. Since the gadget device's
+> > driver_data has already occupied by usb_composite_dev structure, we have
+> > to use gadget device's platform data to store dwc3 structure.
+> > 
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Cc: Alan Stern <stern@rowland.harvard.edu>
+> > Signed-off-by: Peter Chen <peter.chen@nxp.com>
+> 
+> There's one problem with this patch...
+> 
+> > @@ -3670,21 +3685,22 @@ int dwc3_gadget_init(struct dwc3 *dwc)
+> >  
+> >  	ret = dwc3_gadget_init_endpoints(dwc, dwc->num_eps);
+> >  	if (ret)
+> > -		goto err3;
+> > +		goto err4;
+> >  
+> > -	ret = usb_add_gadget_udc(dwc->dev, &dwc->gadget);
+> > +	ret = usb_add_gadget_udc_release(dwc->dev, dwc->gadget, dwc_gadget_release);
+> >  	if (ret) {
+> >  		dev_err(dwc->dev, "failed to register udc\n");
+> > -		goto err4;
+> > +		goto err5;
+> >  	}
+> >  
+> > -	dwc3_gadget_set_speed(&dwc->gadget, dwc->maximum_speed);
+> > +	dwc3_gadget_set_speed(dwc->gadget, dwc->maximum_speed);
+> >  
+> >  	return 0;
+> >  
+> > -err4:
+> > +err5:
+> >  	dwc3_gadget_free_endpoints(dwc);
+> > -
+> > +err4:
+> > +	kfree(dwc->gadget);
+> 
+> Once you call usb_add_gadget_udc_release() -- even if the call fails --
+> you must not call kfree() directly.  Instead you have to do
+> put_device(&dwc->gadget.dev).  That's a little awkward given the code
+> arrangement here.
 
-There is no real phy driver, so s3c-hsudc just pokes the registers
-itself. Improve this a little by making it a platform data callback
-like we do for gpios.
+Sorry, I got that wrong.  If usb_add_gadget_udc_release() succeeds then 
+you must call put_device() in order to destroy the gadget.  But if it 
+fails then it calls put_device() for you, so that dwc->gadget is a stale 
+pointer.  In this case you must not call either kfree() or put_device().
 
-There is only one board using this driver, and it's unlikely
-that another would be added, so this is a minimal workaround.
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-[krzk: Include regs-s3c2443-clock.h in ifdef to fixup build on s3c6400]
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-
----
-
-Changes since v1:
-1. Include regs-s3c2443-clock.h in ifdef to fixup build on s3c640
----
- .../include/mach/regs-s3c2443-clock.h         | 49 +++++++++++++++++
- arch/arm/plat-samsung/devs.c                  |  6 ++
- drivers/usb/gadget/udc/s3c-hsudc.c            | 55 ++-----------------
- include/linux/platform_data/s3c-hsudc.h       |  2 +
- 4 files changed, 61 insertions(+), 51 deletions(-)
-
-diff --git a/arch/arm/mach-s3c24xx/include/mach/regs-s3c2443-clock.h b/arch/arm/mach-s3c24xx/include/mach/regs-s3c2443-clock.h
-index 6bf924612b06..682759549e63 100644
---- a/arch/arm/mach-s3c24xx/include/mach/regs-s3c2443-clock.h
-+++ b/arch/arm/mach-s3c24xx/include/mach/regs-s3c2443-clock.h
-@@ -10,6 +10,8 @@
- #ifndef __ASM_ARM_REGS_S3C2443_CLOCK
- #define __ASM_ARM_REGS_S3C2443_CLOCK
- 
-+#include <linux/delay.h>
-+
- #define S3C2443_CLKREG(x)		((x) + S3C24XX_VA_CLKPWR)
- 
- #define S3C2443_PLLCON_MDIVSHIFT	16
-@@ -184,5 +186,52 @@ s3c2443_get_epll(unsigned int pllval, unsigned int baseclk)
- 	return (unsigned int)fvco;
- }
- 
-+static inline void s3c_hsudc_init_phy(void)
-+{
-+	u32 cfg;
-+
-+	cfg = readl(S3C2443_PWRCFG) | S3C2443_PWRCFG_USBPHY;
-+	writel(cfg, S3C2443_PWRCFG);
-+
-+	cfg = readl(S3C2443_URSTCON);
-+	cfg |= (S3C2443_URSTCON_FUNCRST | S3C2443_URSTCON_PHYRST);
-+	writel(cfg, S3C2443_URSTCON);
-+	mdelay(1);
-+
-+	cfg = readl(S3C2443_URSTCON);
-+	cfg &= ~(S3C2443_URSTCON_FUNCRST | S3C2443_URSTCON_PHYRST);
-+	writel(cfg, S3C2443_URSTCON);
-+
-+	cfg = readl(S3C2443_PHYCTRL);
-+	cfg &= ~(S3C2443_PHYCTRL_CLKSEL | S3C2443_PHYCTRL_DSPORT);
-+	cfg |= (S3C2443_PHYCTRL_EXTCLK | S3C2443_PHYCTRL_PLLSEL);
-+	writel(cfg, S3C2443_PHYCTRL);
-+
-+	cfg = readl(S3C2443_PHYPWR);
-+	cfg &= ~(S3C2443_PHYPWR_FSUSPEND | S3C2443_PHYPWR_PLL_PWRDN |
-+		S3C2443_PHYPWR_XO_ON | S3C2443_PHYPWR_PLL_REFCLK |
-+		S3C2443_PHYPWR_ANALOG_PD);
-+	cfg |= S3C2443_PHYPWR_COMMON_ON;
-+	writel(cfg, S3C2443_PHYPWR);
-+
-+	cfg = readl(S3C2443_UCLKCON);
-+	cfg |= (S3C2443_UCLKCON_DETECT_VBUS | S3C2443_UCLKCON_FUNC_CLKEN |
-+		S3C2443_UCLKCON_TCLKEN);
-+	writel(cfg, S3C2443_UCLKCON);
-+}
-+
-+static inline void s3c_hsudc_uninit_phy(void)
-+{
-+	u32 cfg;
-+
-+	cfg = readl(S3C2443_PWRCFG) & ~S3C2443_PWRCFG_USBPHY;
-+	writel(cfg, S3C2443_PWRCFG);
-+
-+	writel(S3C2443_PHYPWR_FSUSPEND, S3C2443_PHYPWR);
-+
-+	cfg = readl(S3C2443_UCLKCON) & ~S3C2443_UCLKCON_FUNC_CLKEN;
-+	writel(cfg, S3C2443_UCLKCON);
-+}
-+
- #endif /*  __ASM_ARM_REGS_S3C2443_CLOCK */
- 
-diff --git a/arch/arm/plat-samsung/devs.c b/arch/arm/plat-samsung/devs.c
-index 2ed3ef604a25..0607d2984841 100644
---- a/arch/arm/plat-samsung/devs.c
-+++ b/arch/arm/plat-samsung/devs.c
-@@ -40,6 +40,10 @@
- #include <mach/irqs.h>
- #include <mach/map.h>
- 
-+#ifdef CONFIG_PLAT_S3C24XX
-+#include <mach/regs-s3c2443-clock.h>
-+#endif /* CONFIG_PLAT_S3C24XX */
-+
- #include <plat/cpu.h>
- #include <plat/devs.h>
- #include <plat/adc.h>
-@@ -1037,6 +1041,8 @@ struct platform_device s3c_device_usb_hsudc = {
- void __init s3c24xx_hsudc_set_platdata(struct s3c24xx_hsudc_platdata *pd)
- {
- 	s3c_set_platdata(pd, sizeof(*pd), &s3c_device_usb_hsudc);
-+	pd->phy_init = s3c_hsudc_init_phy;
-+	pd->phy_uninit = s3c_hsudc_uninit_phy;
- }
- #endif /* CONFIG_PLAT_S3C24XX */
- 
-diff --git a/drivers/usb/gadget/udc/s3c-hsudc.c b/drivers/usb/gadget/udc/s3c-hsudc.c
-index aaca1b0a2f59..7bd5182ce3ef 100644
---- a/drivers/usb/gadget/udc/s3c-hsudc.c
-+++ b/drivers/usb/gadget/udc/s3c-hsudc.c
-@@ -30,8 +30,6 @@
- #include <linux/regulator/consumer.h>
- #include <linux/pm_runtime.h>
- 
--#include <mach/regs-s3c2443-clock.h>
--
- #define S3C_HSUDC_REG(x)	(x)
- 
- /* Non-Indexed Registers */
-@@ -186,53 +184,6 @@ static inline void __orr32(void __iomem *ptr, u32 val)
- 	writel(readl(ptr) | val, ptr);
- }
- 
--static void s3c_hsudc_init_phy(void)
--{
--	u32 cfg;
--
--	cfg = readl(S3C2443_PWRCFG) | S3C2443_PWRCFG_USBPHY;
--	writel(cfg, S3C2443_PWRCFG);
--
--	cfg = readl(S3C2443_URSTCON);
--	cfg |= (S3C2443_URSTCON_FUNCRST | S3C2443_URSTCON_PHYRST);
--	writel(cfg, S3C2443_URSTCON);
--	mdelay(1);
--
--	cfg = readl(S3C2443_URSTCON);
--	cfg &= ~(S3C2443_URSTCON_FUNCRST | S3C2443_URSTCON_PHYRST);
--	writel(cfg, S3C2443_URSTCON);
--
--	cfg = readl(S3C2443_PHYCTRL);
--	cfg &= ~(S3C2443_PHYCTRL_CLKSEL | S3C2443_PHYCTRL_DSPORT);
--	cfg |= (S3C2443_PHYCTRL_EXTCLK | S3C2443_PHYCTRL_PLLSEL);
--	writel(cfg, S3C2443_PHYCTRL);
--
--	cfg = readl(S3C2443_PHYPWR);
--	cfg &= ~(S3C2443_PHYPWR_FSUSPEND | S3C2443_PHYPWR_PLL_PWRDN |
--		S3C2443_PHYPWR_XO_ON | S3C2443_PHYPWR_PLL_REFCLK |
--		S3C2443_PHYPWR_ANALOG_PD);
--	cfg |= S3C2443_PHYPWR_COMMON_ON;
--	writel(cfg, S3C2443_PHYPWR);
--
--	cfg = readl(S3C2443_UCLKCON);
--	cfg |= (S3C2443_UCLKCON_DETECT_VBUS | S3C2443_UCLKCON_FUNC_CLKEN |
--		S3C2443_UCLKCON_TCLKEN);
--	writel(cfg, S3C2443_UCLKCON);
--}
--
--static void s3c_hsudc_uninit_phy(void)
--{
--	u32 cfg;
--
--	cfg = readl(S3C2443_PWRCFG) & ~S3C2443_PWRCFG_USBPHY;
--	writel(cfg, S3C2443_PWRCFG);
--
--	writel(S3C2443_PHYPWR_FSUSPEND, S3C2443_PHYPWR);
--
--	cfg = readl(S3C2443_UCLKCON) & ~S3C2443_UCLKCON_FUNC_CLKEN;
--	writel(cfg, S3C2443_UCLKCON);
--}
--
- /**
-  * s3c_hsudc_complete_request - Complete a transfer request.
-  * @hsep: Endpoint to which the request belongs.
-@@ -1188,7 +1139,8 @@ static int s3c_hsudc_start(struct usb_gadget *gadget,
- 
- 	pm_runtime_get_sync(hsudc->dev);
- 
--	s3c_hsudc_init_phy();
-+	if (hsudc->pd->phy_init)
-+		hsudc->pd->phy_init();
- 	if (hsudc->pd->gpio_init)
- 		hsudc->pd->gpio_init();
- 
-@@ -1210,7 +1162,8 @@ static int s3c_hsudc_stop(struct usb_gadget *gadget)
- 
- 	spin_lock_irqsave(&hsudc->lock, flags);
- 	hsudc->gadget.speed = USB_SPEED_UNKNOWN;
--	s3c_hsudc_uninit_phy();
-+	if (hsudc->pd->phy_uninit)
-+		hsudc->pd->phy_uninit();
- 
- 	pm_runtime_put(hsudc->dev);
- 
-diff --git a/include/linux/platform_data/s3c-hsudc.h b/include/linux/platform_data/s3c-hsudc.h
-index 4dc9b8760166..a170939832d5 100644
---- a/include/linux/platform_data/s3c-hsudc.h
-+++ b/include/linux/platform_data/s3c-hsudc.h
-@@ -26,6 +26,8 @@ struct s3c24xx_hsudc_platdata {
- 	unsigned int	epnum;
- 	void		(*gpio_init)(void);
- 	void		(*gpio_uninit)(void);
-+	void		(*phy_init)(void);
-+	void		(*phy_uninit)(void);
- };
- 
- #endif	/* __LINUX_USB_S3C_HSUDC_H */
--- 
-2.17.1
-
+Alan Stern
