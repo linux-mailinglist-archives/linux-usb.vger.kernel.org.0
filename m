@@ -2,97 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FEF823EEB8
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Aug 2020 16:09:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2306023EEF7
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Aug 2020 16:22:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726769AbgHGOIt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Aug 2020 10:08:49 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:52589 "HELO
+        id S1726210AbgHGOWF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Aug 2020 10:22:05 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:55969 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726238AbgHGN7e (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Aug 2020 09:59:34 -0400
-Received: (qmail 227415 invoked by uid 1000); 7 Aug 2020 09:59:13 -0400
-Date:   Fri, 7 Aug 2020 09:59:13 -0400
+        with SMTP id S1726150AbgHGOWF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Aug 2020 10:22:05 -0400
+Received: (qmail 228067 invoked by uid 1000); 7 Aug 2020 10:22:03 -0400
+Date:   Fri, 7 Aug 2020 10:22:03 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     balbi@kernel.org, linux-usb@vger.kernel.org, linux-imx@nxp.com,
-        gregkh@linuxfoundation.org,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Subject: Re: [PATCH 2/6] USB: UDC: net2280: Fix memory leaks
-Message-ID: <20200807135913.GA226516@rowland.harvard.edu>
-References: <20200807094151.13526-1-peter.chen@nxp.com>
- <20200807094151.13526-3-peter.chen@nxp.com>
+To:     syzbot <syzbot+bb9cb5f2cd814f87212a@syzkaller.appspotmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, m.szyprowski@samsung.com,
+        noring@nocrew.org, syzkaller-bugs@googlegroups.com,
+        tweek@google.com
+Subject: Re: KASAN: use-after-free Read in __usb_hcd_giveback_urb
+Message-ID: <20200807142203.GD226516@rowland.harvard.edu>
+References: <0000000000004a381905ac444162@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200807094151.13526-3-peter.chen@nxp.com>
+In-Reply-To: <0000000000004a381905ac444162@google.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 07, 2020 at 05:41:47PM +0800, Peter Chen wrote:
-> From: Alan Stern <stern@rowland.harvard.edu>
+On Fri, Aug 07, 2020 at 12:07:16AM -0700, syzbot wrote:
+> Hello,
 > 
-> As Anton and Evgeny have noted, the net2280 UDC driver has a problem
-> with leaking memory along some of its failure pathways.  It also has
-> another problem, not previously noted, in that some of the failure
-> pathways will call usb_del_gadget_udc() without first calling
-> usb_add_gadget_udc_release().  And it leaks memory by calling kfree()
-> when it should call put_device().
+> syzbot found the following issue on:
 > 
-> Previous attempts to fix the problems have failed because of lack of
-> support in the UDC core for separately initializing and adding
-> gadgets, or for separately deleting and freeing gadgets.  The previous
-> patch in this series adds the necessary support, making it possible to
-> fix the outstanding problems properly.
+> HEAD commit:    fffe3ae0 Merge tag 'for-linus-hmm' of git://git.kernel.org..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=12b22fda900000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=226c7a97d80bec54
+> dashboard link: https://syzkaller.appspot.com/bug?extid=bb9cb5f2cd814f87212a
+> compiler:       clang version 10.0.0 (https://github.com/llvm/llvm-project/ c2443155a0fb245c8f17f2c1c72b6ea391e86e81)
 > 
-> This patch adds an "added" flag to the net2280 structure to indicate
-> whether or not the gadget has been registered (and thus whether or not
-> to call usb_del_gadget()), and it fixes the deallocation issues by
-> calling usb_put_gadget() at the appropriate point.
+> Unfortunately, I don't have any reproducer for this issue yet.
 > 
-> A similar memory leak issue, apparently never before recognized, stems
-> from the fact that the driver never initializes the drvdata field in
-> the gadget's embedded struct device!  Evidently this wasn't noticed
-> because the pointer is only ever used as an argument to kfree(), which
-> doesn't mind getting called with a NULL pointer. In fact, the drvdata
-> for gadget device will be written by usb_composite_dev structure if
-> any gadget class is loaded, so it needs to use usb_gadget structure
-> to get net2280 private data.
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+bb9cb5f2cd814f87212a@syzkaller.appspotmail.com
 > 
-> CC: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-> Reported-by: Anton Vasilyev <vasilyev@ispras.ru>
-> Reported-by: Evgeny Novikov <novikov@ispras.ru>
-> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-> ---
-> Changes from RFC:
-> - Using usb_gadget structure to get net2280 private data, and
-> update commit log accoringly.
+> xpad 3-1:0.65: xpad_irq_in - usb_submit_urb failed with result -19
+> xpad 3-1:0.65: xpad_irq_out - usb_submit_urb failed with result -19
+> ==================================================================
+> BUG: KASAN: use-after-free in register_lock_class+0x12a8/0x1520 kernel/locking/lockdep.c:1250
+> Read of size 2 at addr ffff8880a1f5c092 by task systemd-udevd/1571
 > 
->  drivers/usb/gadget/udc/net2280.c | 13 +++++++++----
->  drivers/usb/gadget/udc/net2280.h |  1 +
->  2 files changed, 10 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/udc/net2280.c b/drivers/usb/gadget/udc/net2280.c
-> index 5eff85eeaa5a..0b449f4c2da0 100644
-> --- a/drivers/usb/gadget/udc/net2280.c
-> +++ b/drivers/usb/gadget/udc/net2280.c
-> @@ -3561,7 +3561,9 @@ static irqreturn_t net2280_irq(int irq, void *_dev)
->  
->  static void gadget_release(struct device *_dev)
->  {
-> -	struct net2280	*dev = dev_get_drvdata(_dev);
-> +	struct usb_gadget	*gadget = container_of(_dev,
-> +					struct usb_gadget, dev);
-> +	struct net2280	*dev = container_of(gadget, struct net2280, gadget);
+> CPU: 0 PID: 1571 Comm: systemd-udevd Not tainted 5.8.0-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> Call Trace:
+>  <IRQ>
+>  __dump_stack lib/dump_stack.c:77 [inline]
+>  dump_stack+0x1f0/0x31e lib/dump_stack.c:118
+>  print_address_description+0x66/0x5a0 mm/kasan/report.c:383
+>  __kasan_report mm/kasan/report.c:513 [inline]
+>  kasan_report+0x132/0x1d0 mm/kasan/report.c:530
+>  register_lock_class+0x12a8/0x1520 kernel/locking/lockdep.c:1250
+>  __lock_acquire+0xfa/0x2ab0 kernel/locking/lockdep.c:4305
+>  lock_acquire+0x160/0x730 kernel/locking/lockdep.c:5005
+>  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+>  _raw_spin_lock_irqsave+0x9e/0xc0 kernel/locking/spinlock.c:159
+>  __wake_up_common_lock kernel/sched/wait.c:122 [inline]
+>  __wake_up+0xb8/0x150 kernel/sched/wait.c:142
+>  __usb_hcd_giveback_urb+0x340/0x4b0 drivers/usb/core/hcd.c:1653
 
-In fact, this can be done in one step:
-
-	struct net2280	*dev = container_of(_dev, struct net2280, gadget.dev);
-
-The same is true for the net2272 patch and your cdns3 patch, if you want 
-to change it.
+It looks like xpad_disconnect() fails to call xpad_stop_input() if the 
+hardware isn't an Xbox 360W.
 
 Alan Stern
