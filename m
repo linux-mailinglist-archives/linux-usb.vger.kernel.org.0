@@ -2,210 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B79C23E9E4
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Aug 2020 11:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAED523EA9E
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Aug 2020 11:42:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726998AbgHGJPL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Aug 2020 05:15:11 -0400
-Received: from gofer.mess.org ([88.97.38.141]:51277 "EHLO gofer.mess.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726619AbgHGJPK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 7 Aug 2020 05:15:10 -0400
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 66697C688B; Fri,  7 Aug 2020 10:15:04 +0100 (BST)
-Date:   Fri, 7 Aug 2020 10:15:04 +0100
-From:   Sean Young <sean@mess.org>
-To:     syzbot <syzbot+ceef16277388d6f24898@syzkaller.appspotmail.com>
-Cc:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: KASAN: use-after-free Read in rc_dev_uevent
-Message-ID: <20200807091504.GA7397@gofer.mess.org>
-References: <00000000000003dcbd05ac44862c@google.com>
+        id S1726809AbgHGJms (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Aug 2020 05:42:48 -0400
+Received: from mail-eopbgr50089.outbound.protection.outlook.com ([40.107.5.89]:59671
+        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726382AbgHGJmr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 7 Aug 2020 05:42:47 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=T/uc/aV3C3mzjZ/f8spQVcwCyhwBbV2AyLJX+GJLhVVGBqZoZBdAKzZZ/AmAMYbkh6CjXt3sB+gk/m2QIN0AN05eaXXoG02PxHM6ap8Gsj7bsW3gLd/jSkXtzDZpeIUqYpLmO2ByoLKa82Hvurw5PUkvfTqSN9wNdi3+KqwEklOQ9eb4eUH5+0RXiqOtYp8aT/AVXK7PwKjRJvvbMpfPWtMVfu7nQg+m61wbiw793oq5X2rS8QN+q/KYZQcJIBOgSf/MCwln8bhVFSmoUBrxxfFHR18ziNftns7BG9mzm5NTfkEghy18206BJMXM1unweuysN8SvJEBFQsK2VZV1cg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aNF3dnhmmis1otN/Ac219ig4nBKU443aQZAj8jme3d4=;
+ b=KM62hy3uB6xuPg10gUpD1OynQESnw2Y25o3+Zk5l7ivYOa9TB3zBrVBk35lDZ9Tw62kT+/Gm0A37E2u2NOWnz263HteoPITwuT9NxFE5nh0kX0W8hf53qqhJwz0KUFIDW/5+usrx0S8ZqI+h9d/pqcf2S+UN0rhDvfJX69toQXMSF/t7UNZFDxpqK00b0kTuCyrJOaNybWcoh+5Sj4fALrp3FslexT8L/n+Mg+BZ06fI48hwndvZWXD0mfV0i108pS2FhmY+WQvBJ6KDDubk/7RnQZKWs/kVZfuqNMfMsotIzKd4zLQykargIOQgZkdV9OlXoZMY7u+4LR16QiZIrA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aNF3dnhmmis1otN/Ac219ig4nBKU443aQZAj8jme3d4=;
+ b=XzCJXmGvpa0UUpN96ubnDFgyQwVuXVX4jWIF8n+adILRAZZPSd1V3iYApqUd8iOCh+P8ULD1TjErR1HKE78BCsMgUeiAdCmtKixReaY4LAnz5idRAkYy6mrMJdsvhsx1RQ8HA79uZobvFp/pZUlFzc92Sbi3jLpY8tQ4o9fFGoE=
+Authentication-Results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
+ by AM7PR04MB7077.eurprd04.prod.outlook.com (2603:10a6:20b:11c::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3261.19; Fri, 7 Aug
+ 2020 09:42:43 +0000
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::ed7f:8755:5994:7fcf]) by AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::ed7f:8755:5994:7fcf%5]) with mapi id 15.20.3261.020; Fri, 7 Aug 2020
+ 09:42:43 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     balbi@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com,
+        stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
+        Peter Chen <peter.chen@nxp.com>
+Subject: [PATCH 0/6] USB: UDC: Fix memory leaks by expanding the API
+Date:   Fri,  7 Aug 2020 17:41:45 +0800
+Message-Id: <20200807094151.13526-1-peter.chen@nxp.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR03CA0113.apcprd03.prod.outlook.com
+ (2603:1096:4:91::17) To AM7PR04MB7157.eurprd04.prod.outlook.com
+ (2603:10a6:20b:118::20)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00000000000003dcbd05ac44862c@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from b29397-desktop.ap.freescale.net (119.31.174.67) by SG2PR03CA0113.apcprd03.prod.outlook.com (2603:1096:4:91::17) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3283.5 via Frontend Transport; Fri, 7 Aug 2020 09:42:41 +0000
+X-Mailer: git-send-email 2.17.1
+X-Originating-IP: [119.31.174.67]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: ff95bd9a-c13b-421b-2d6e-08d83ab63bbd
+X-MS-TrafficTypeDiagnostic: AM7PR04MB7077:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <AM7PR04MB7077B8AD8FE2CE78F1CB02018B490@AM7PR04MB7077.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: irKRP4VVhTUvn9gbUQgZNZYvzblTj1GeZ8kzMn0xk2o6LPVq0k3Wve/xwFPe6qPw38CyHwYlpNMiWwDUCZvD4+r3pU9w52j+soSZR5iqvyHTeZWawRymul+XxZ1/i7l/RawoSh5udReVC3PEe88nmsKbnDtwBAQCh13S3f4x370Jw69qhmWhcbW71H6FLma9RCQjS7rFpo8WnxSlZZ2MTgytHeUthY4gL03f2F1AaNbFM+uwCPKoankQQHGiC+4OuNPcKxXkvgPLcyctRO+0kTTRgh9Og4+Nkf0vze85Vkn64ubaNScK9FOyLM0qLp6lMi77L5kA7llkzjWxfrOLyw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(366004)(346002)(136003)(39860400002)(376002)(396003)(956004)(2616005)(5660300002)(86362001)(16526019)(44832011)(6486002)(186003)(66556008)(66946007)(4326008)(6512007)(26005)(52116002)(8676002)(83380400001)(1076003)(66476007)(36756003)(8936002)(478600001)(6916009)(316002)(6506007)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: HWQBZWZczOhJWZgMnObymStgqBUngvDIwe56kKlCQr6RJP2OtsEm2zLsZdOH24mwDQ+gmH3f8T2eFX2rH8r41msmdzhs0u5U7rR+xTAG9KF+RTMnMFYmDZrKo0u/ZnULuUuFifo3x0cAN27F2vEZIs2kqFMLmP0fe9tzkhgTnQl7xshV+1JyblX8xuqeqjSeoBeUjZg3bIIMbw8R8sNQQNMzfFuZ4TjhbC/Bo8givsl267D3L2e5WsJW982DW/fqe+XdlL3npL0p0LbqVFhu+eH/g/BVSX7ra+R1tUm5hMsLbC0HvN7lYekqdRbhbXNnQErr9Ev+Fbjiyd5ysT1FiMg1M+ZWDCbngWtABqjaq4dETFFhXnr0RDYPOwZApd/xXBp1cQ6pIG82/N4Y/wlpY4gutcFZ/M6bXu0xt3m7W9Th016lIWhI6MDBRO9J2N3+243f2ge+vHS32TdQ96DdOhBEqka4sdvMfZb2O05xlkwIjO6jIsh0b/+zrzY8XNpQaut4rQoGwKfzVwOdXlyjulVLWQoouAMEW/K5L3pI9g5eoHu7tUud0NkM2E496Ad1aBib3znf6l6Ng07af/UNvKaLTgaRss12h4bWvzWHxx5GMg2zpYbGp6Zn6GwJF5jHC55OzarsloWd/Vbnv+YmhQ==
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ff95bd9a-c13b-421b-2d6e-08d83ab63bbd
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Aug 2020 09:42:43.6863
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: eDMuAQMUDPAs92eL5H1dSKizmxbHh+behn5TXMOhC7DTx1YBfwONwHJdubQL41HJL5NPlCxIdJr4JgvJ8F3vyQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB7077
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 07, 2020 at 12:26:29AM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    7b4ea945 Revert "x86/mm/64: Do not sync vmalloc/ioremap ma..
-> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> console output: https://syzkaller.appspot.com/x/log.txt?x=11a7813a900000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=72a84c46d0c668c
-> dashboard link: https://syzkaller.appspot.com/bug?extid=ceef16277388d6f24898
-> compiler:       gcc (GCC) 10.1.0-syz 20200507
-> 
-> Unfortunately, I don't have any reproducer for this issue yet.
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+ceef16277388d6f24898@syzkaller.appspotmail.com
-> 
-> ==================================================================
-> BUG: KASAN: use-after-free in string_nocheck lib/vsprintf.c:611 [inline]
-> BUG: KASAN: use-after-free in string+0x39c/0x3d0 lib/vsprintf.c:693
-> Read of size 1 at addr ffff8881ca21cd20 by task systemd-udevd/5147
-> 
-> CPU: 1 PID: 5147 Comm: systemd-udevd Not tainted 5.8.0-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> Call Trace:
->  __dump_stack lib/dump_stack.c:77 [inline]
->  dump_stack+0xf6/0x16e lib/dump_stack.c:118
->  print_address_description.constprop.0+0x1a/0x210 mm/kasan/report.c:383
->  __kasan_report mm/kasan/report.c:513 [inline]
->  kasan_report.cold+0x37/0x7c mm/kasan/report.c:530
->  string_nocheck lib/vsprintf.c:611 [inline]
->  string+0x39c/0x3d0 lib/vsprintf.c:693
->  vsnprintf+0x71b/0x14f0 lib/vsprintf.c:2617
->  add_uevent_var+0x14d/0x310 lib/kobject_uevent.c:664
->  rc_dev_uevent+0x54/0x140 drivers/media/rc/rc-main.c:1616
->  dev_uevent+0x30e/0x780 drivers/base/core.c:1916
->  uevent_show+0x1bb/0x360 drivers/base/core.c:1963
->  dev_attr_show+0x4b/0x90 drivers/base/core.c:1667
->  sysfs_kf_seq_show+0x1f8/0x400 fs/sysfs/file.c:60
->  seq_read+0x432/0x1070 fs/seq_file.c:208
->  kernfs_fop_read+0xe9/0x590 fs/kernfs/file.c:251
->  vfs_read+0x1df/0x520 fs/read_write.c:479
->  ksys_read+0x12d/0x250 fs/read_write.c:607
->  do_syscall_64+0x2d/0x40 arch/x86/entry/common.c:46
->  entry_SYSCALL_64_after_hwframe+0x44/0xa9
-> RIP: 0033:0x7f6e6c02f910
-> Code: b6 fe ff ff 48 8d 3d 0f be 08 00 48 83 ec 08 e8 06 db 01 00 66 0f 1f 44 00 00 83 3d f9 2d 2c 00 00 75 10 b8 00 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 31 c3 48 83 ec 08 e8 de 9b 01 00 48 89 04 24
-> RSP: 002b:00007fff3cddeae8 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
-> RAX: ffffffffffffffda RBX: 0000558492caaae0 RCX: 00007f6e6c02f910
-> RDX: 0000000000001000 RSI: 0000558492cc7530 RDI: 0000000000000007
-> RBP: 00007f6e6c2ea440 R08: 00007f6e6c2ee298 R09: 0000000000001010
-> R10: 0000558492caaae0 R11: 0000000000000246 R12: 0000000000001000
-> R13: 0000000000000d68 R14: 0000558492cc7530 R15: 00007f6e6c2e9900
+This series expands the UDC API to fix some long-standing memory leaks
+in the net2280 and net2272 drivers. And with expanding APIs, it could
+manage cdns3 and dwc3 gadget device memory better without the hacks
+at UDC core.
 
-This thread is reading the uevent sysfs file, which reads
-rc_dev->map.name, and also rc_dev->device_name, but that is not causing
-problems is this case.
+Alan Stern (3):
+  USB: UDC: Expand device model API interface
+  USB: UDC: net2280: Fix memory leaks
+  USB: UDC: net2272: Fix memory leaks
 
-> 
-> Allocated by task 5:
->  save_stack+0x1b/0x40 mm/kasan/common.c:48
->  set_track mm/kasan/common.c:56 [inline]
->  __kasan_kmalloc.constprop.0+0xc2/0xd0 mm/kasan/common.c:494
->  slab_post_alloc_hook mm/slab.h:586 [inline]
->  slab_alloc_node mm/slub.c:2824 [inline]
->  slab_alloc mm/slub.c:2832 [inline]
->  __kmalloc_track_caller+0xec/0x280 mm/slub.c:4430
->  kstrdup+0x36/0x70 mm/util.c:60
->  ir_create_table drivers/media/rc/rc-main.c:217 [inline]
->  ir_setkeytable drivers/media/rc/rc-main.c:477 [inline]
->  rc_prepare_rx_device drivers/media/rc/rc-main.c:1786 [inline]
->  rc_register_device+0x464/0x1600 drivers/media/rc/rc-main.c:1914
->  igorplugusb_probe+0x7e6/0xc98 drivers/media/rc/igorplugusb.c:209
->  usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:374
->  really_probe+0x291/0xde0 drivers/base/dd.c:553
->  driver_probe_device+0x26b/0x3d0 drivers/base/dd.c:738
->  __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:844
->  bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:431
->  __device_attach+0x228/0x4a0 drivers/base/dd.c:912
->  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
->  device_add+0xb51/0x1c70 drivers/base/core.c:2930
->  usb_set_configuration+0xf05/0x18a0 drivers/usb/core/message.c:2032
->  usb_generic_driver_probe+0xba/0xf2 drivers/usb/core/generic.c:239
->  usb_probe_device+0xd9/0x250 drivers/usb/core/driver.c:272
->  really_probe+0x291/0xde0 drivers/base/dd.c:553
->  driver_probe_device+0x26b/0x3d0 drivers/base/dd.c:738
->  __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:844
->  bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:431
->  __device_attach+0x228/0x4a0 drivers/base/dd.c:912
->  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
->  device_add+0xb51/0x1c70 drivers/base/core.c:2930
->  usb_new_device.cold+0x71d/0xfd4 drivers/usb/core/hub.c:2554
->  hub_port_connect drivers/usb/core/hub.c:5208 [inline]
->  hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
->  port_event drivers/usb/core/hub.c:5494 [inline]
->  hub_event+0x2361/0x4390 drivers/usb/core/hub.c:5576
->  process_one_work+0x94c/0x15f0 kernel/workqueue.c:2269
->  worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
->  kthread+0x392/0x470 kernel/kthread.c:292
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+Peter Chen (3):
+  usb: cdns3: gadget: fix possible memory leak
+  usb: dwc3: allocate gadget structure dynamically
+  Revert "usb: udc: allow adding and removing the same gadget device"
 
-.. this probed the device ..
+ drivers/usb/cdns3/gadget.c       |  21 ++++--
+ drivers/usb/dwc3/core.h          |   2 +-
+ drivers/usb/dwc3/ep0.c           |  26 ++++----
+ drivers/usb/dwc3/gadget.c        | 106 ++++++++++++++++++-------------
+ drivers/usb/dwc3/gadget.h        |   2 +-
+ drivers/usb/gadget/udc/core.c    |  79 ++++++++++++++++++-----
+ drivers/usb/gadget/udc/net2272.c |  25 +++++---
+ drivers/usb/gadget/udc/net2272.h |   1 +
+ drivers/usb/gadget/udc/net2280.c |  13 ++--
+ drivers/usb/gadget/udc/net2280.h |   1 +
+ include/linux/usb/gadget.h       |  27 ++++++--
+ 11 files changed, 203 insertions(+), 100 deletions(-)
 
-> Freed by task 5:
->  save_stack+0x1b/0x40 mm/kasan/common.c:48
->  set_track mm/kasan/common.c:56 [inline]
->  kasan_set_free_info mm/kasan/common.c:316 [inline]
->  __kasan_slab_free+0x116/0x160 mm/kasan/common.c:455
->  slab_free_hook mm/slub.c:1474 [inline]
->  slab_free_freelist_hook+0x53/0x140 mm/slub.c:1507
->  slab_free mm/slub.c:3072 [inline]
->  kfree+0xbc/0x2c0 mm/slub.c:4052
->  ir_free_table drivers/media/rc/rc-main.c:245 [inline]
->  rc_free_rx_device drivers/media/rc/rc-main.c:1875 [inline]
->  rc_unregister_device+0x142/0x410 drivers/media/rc/rc-main.c:2014
->  igorplugusb_disconnect+0x58/0x110 drivers/media/rc/igorplugusb.c:232
->  usb_unbind_interface+0x1d8/0x8d0 drivers/usb/core/driver.c:436
->  __device_release_driver+0x3c6/0x6f0 drivers/base/dd.c:1153
->  device_release_driver_internal drivers/base/dd.c:1184 [inline]
->  device_release_driver+0x26/0x40 drivers/base/dd.c:1207
->  bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
->  device_del+0x481/0xd90 drivers/base/core.c:3107
->  usb_disable_device+0x387/0x930 drivers/usb/core/message.c:1245
->  usb_disconnect.cold+0x27d/0x780 drivers/usb/core/hub.c:2217
->  hub_port_connect drivers/usb/core/hub.c:5059 [inline]
->  hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
->  port_event drivers/usb/core/hub.c:5494 [inline]
->  hub_event+0x1c93/0x4390 drivers/usb/core/hub.c:5576
->  process_one_work+0x94c/0x15f0 kernel/workqueue.c:2269
->  process_scheduled_works kernel/workqueue.c:2331 [inline]
->  worker_thread+0x82b/0x1120 kernel/workqueue.c:2417
->  kthread+0x392/0x470 kernel/kthread.c:292
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+-- 
+2.17.1
 
-This unplugged the device, and freed rc_dev->map->name and sets
-it to NULL. There is no locking between the two threads so this is
-a race condition.
-
-I think there are worse, related problems here. For example, iguanair
-driver allocates rc_dev->device_name and frees it in its usb disconnect
-handler. This field is also read by uevent, and not set to null by
-the disconnect handler.
-
-Not sure what the best solution is yet.
-
-Thanks
-
-Sean
-
-> The buggy address belongs to the object at ffff8881ca21cd20
->  which belongs to the cache kmalloc-16 of size 16
-> The buggy address is located 0 bytes inside of
->  16-byte region [ffff8881ca21cd20, ffff8881ca21cd30)
-> The buggy address belongs to the page:
-> page:ffffea0007288700 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0
-> flags: 0x200000000000200(slab)
-> raw: 0200000000000200 0000000000000000 0000000100000001 ffff8881da003680
-> raw: 0000000000000000 0000000080800080 00000001ffffffff 0000000000000000
-> page dumped because: kasan: bad access detected
-> 
-> Memory state around the buggy address:
->  ffff8881ca21cc00: fb fb fc fc fb fb fc fc fb fb fc fc 00 00 fc fc
->  ffff8881ca21cc80: fb fb fc fc 00 00 fc fc 00 00 fc fc 00 00 fc fc
-> >ffff8881ca21cd00: fb fb fc fc fb fb fc fc fb fb fc fc 00 00 fc fc
->                                ^
->  ffff8881ca21cd80: 00 00 fc fc fb fb fc fc fb fb fc fc fb fb fc fc
->  ffff8881ca21ce00: 00 00 fc fc fb fb fc fc 00 00 fc fc 00 00 fc fc
-> ==================================================================
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
