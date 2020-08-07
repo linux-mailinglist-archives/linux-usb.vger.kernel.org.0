@@ -2,159 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D1E423ED39
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Aug 2020 14:19:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DE6923EE7F
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Aug 2020 15:58:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728381AbgHGMTT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Aug 2020 08:19:19 -0400
-Received: from mail-il1-f200.google.com ([209.85.166.200]:42982 "EHLO
-        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727783AbgHGMTR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Aug 2020 08:19:17 -0400
-Received: by mail-il1-f200.google.com with SMTP id a17so1373830ilk.9
-        for <linux-usb@vger.kernel.org>; Fri, 07 Aug 2020 05:19:16 -0700 (PDT)
+        id S1726073AbgHGN5q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Aug 2020 09:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40548 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725815AbgHGN5o (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Aug 2020 09:57:44 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3191C061574;
+        Fri,  7 Aug 2020 06:57:43 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id t23so2321061ljc.3;
+        Fri, 07 Aug 2020 06:57:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=GsMsINOwUrYodbh+1gZjJuGWX0FnIRjRsLe5PftqS9Y=;
+        b=LAYdrLE18Y6Z9pFhpwKemwVYQtGrkZEn0bB8iNXLvmV+hH9X9A7iaNQsCwiFsyEj4b
+         /X2+gh5lt+QllIUYPYH9+NKRfzeGpGvIy9saZ+BIZAmP645aVjdX8iRSffHcW2zUcx7C
+         N+dlC2BpARVeztxtDswhlCh8EdXsG+MKVoMMxlOxUbPGlJRGB/urPCdETpWj6zNwTGqN
+         gEAxE8ASN9Spn9Eb0CYrlNcRoBVUhlLXmvStr2gn3w5671jnt19OiLTuPZUg+7fEFEMi
+         O18wySiFr0ZN2Qu0BxI72uA51LI1yzGLv7SldZ+ZuiOz4Mhi8Vt4B/LGc6BZ4Vx++O1H
+         VKEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=lTtdC+vCkszF8sYUSIwFc5FRid7eCFAUZQejKiH4rZ4=;
-        b=ZQw8s/AyJwkGvk0nygN2AdcNVotU1V8wZ0vATpLNZfW8yMfeGzPXHghTjimEhcDtsY
-         JL5TFHmNsGuBBKX6gWMcoXaJ4oxJMdJySO91g3I/1ZQDWa/NMgtWeFhW3myS1X7gu8Rr
-         nA5AeBjkGdo0baJnO4uCrY3HMAczVQvTZVQCNUUtdGzM6GC0jQmnZ4UJeQoUVPPbxiSg
-         +sz8dxvK5g8WHOz+anEM46HaEoZDxAnFsnSRcGOi7asDLLtdDEJsqS55zMPUA5BXKlG9
-         5dn5392Z3q0Z9fuZzCcn6ekoXwyGhFRznOFFzlQg5zts7Q399AWGY9z7wNJy9or9ycql
-         xc0A==
-X-Gm-Message-State: AOAM530BgVDDn9HEEb7mr2S/su019YLIz3HleiwWuwIv3no/p/U1T6Eb
-        qHAGgqw8iIEqrBkGVFR2e5Hd+nOaUQMpQVZ9yjsj+D2RYF69
-X-Google-Smtp-Source: ABdhPJzi0MVNUkZtYsJ4KYJoCAoCWdPB8jH+AwlKoJIupbnYoEVZqJInqSVTShxc4KiyI5iqyUfm9JEEpOaFkFEv3AnE2MiCj5kH
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=GsMsINOwUrYodbh+1gZjJuGWX0FnIRjRsLe5PftqS9Y=;
+        b=nrSfLBwpjWVDECYiweD89S1OQKsv6r7UpVg09L8If7edeERxJCqFCrgMc+5aQlIbQ1
+         MTdQPrOwJcpGJUp0pJWANiqWb2y76smW5MblS4wkverEToLxws82CTzyrrgcTQ5uWp7v
+         hPsDfhISTU8c5+LAydKFxKEABwF4D+YshxVzwZYj/JanvxxQAXwHUwzC6lz8mKHyJaUz
+         bGk+qprHdzzyPJfbO5JUZBo4I7fe3iP/GAPcNCiSTYMJEFJlbMpsLhLGEKs6BdkuWZ0B
+         uGO4pciTCE+WMzs3xhhWZYxjuJlx4Rp7vQGET3GEBc/PMR8Ycc3SZXnyTsgG4U+cFY0f
+         34qw==
+X-Gm-Message-State: AOAM531DyWDCTBIvsbasQF4L59nwOulz97E15aAIFR7+5TkbqDGjBwYm
+        IS1+gJj91S82ESrR4Mb7tSZe+jn6lTo=
+X-Google-Smtp-Source: ABdhPJydZP9rgsASTJaEa+1o/kNJx+qckxY75jtJmI9lKpoCrqxNzNUZzRaJM/QkfNuX/rWV9czOIA==
+X-Received: by 2002:a05:651c:88:: with SMTP id 8mr6678123ljq.277.1596808657281;
+        Fri, 07 Aug 2020 06:57:37 -0700 (PDT)
+Received: from saruman ([165.231.178.18])
+        by smtp.gmail.com with ESMTPSA id v9sm4173599lja.81.2020.08.07.06.57.35
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 07 Aug 2020 06:57:36 -0700 (PDT)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Krzysztof Kozlowski <krzk@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kukjin Kim <kgene@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH v2 08/41] usb: gadget: s3c: use platform resources
+In-Reply-To: <20200806182059.2431-8-krzk@kernel.org>
+References: <20200806181932.2253-1-krzk@kernel.org> <20200806182059.2431-8-krzk@kernel.org>
+Date:   Fri, 07 Aug 2020 16:57:31 +0300
+Message-ID: <87y2mqpnhw.fsf@kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:bc2:: with SMTP id g2mr4666407jad.21.1596802756269;
- Fri, 07 Aug 2020 05:19:16 -0700 (PDT)
-Date:   Fri, 07 Aug 2020 05:19:16 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000105ec205ac489d59@google.com>
-Subject: KASAN: use-after-free Read in service_outstanding_interrupt
-From:   syzbot <syzbot+9e04e2df4a32fb661daf@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        gustavoars@kernel.org, ingrassia@epigenesys.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-syzbot found the following issue on:
+Krzysztof Kozlowski <krzk@kernel.org> writes:
 
-HEAD commit:    7b4ea945 Revert "x86/mm/64: Do not sync vmalloc/ioremap ma..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=108adf32900000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=72a84c46d0c668c
-dashboard link: https://syzkaller.appspot.com/bug?extid=9e04e2df4a32fb661daf
-compiler:       gcc (GCC) 10.1.0-syz 20200507
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The resources are correctly initialized, so just use them
+> instead of relying on hardcoded data from platform headers.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-Unfortunately, I don't have any reproducer for this issue yet.
+If you want me to carry this and the following patch through my tree,
+let me know. Otherwise:
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9e04e2df4a32fb661daf@syzkaller.appspotmail.com
+Acked-by: Felipe Balbi <balbi@kernel.org>
 
-==================================================================
-BUG: KASAN: use-after-free in usb_submit_urb+0x10c4/0x13e0 drivers/usb/core/urb.c:368
-Read of size 4 at addr ffff8881caa52018 by task syz-executor.3/13922
+=2D-=20
+balbi
 
-CPU: 1 PID: 13922 Comm: syz-executor.3 Not tainted 5.8.0-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0xf6/0x16e lib/dump_stack.c:118
- print_address_description.constprop.0+0x1a/0x210 mm/kasan/report.c:383
- __kasan_report mm/kasan/report.c:513 [inline]
- kasan_report.cold+0x37/0x7c mm/kasan/report.c:530
- usb_submit_urb+0x10c4/0x13e0 drivers/usb/core/urb.c:368
- service_outstanding_interrupt.part.0+0x5f/0xa0 drivers/usb/class/cdc-wdm.c:463
- service_outstanding_interrupt drivers/usb/class/cdc-wdm.c:458 [inline]
- wdm_read+0x9a0/0xbd0 drivers/usb/class/cdc-wdm.c:576
- vfs_read+0x1df/0x520 fs/read_write.c:479
- ksys_read+0x12d/0x250 fs/read_write.c:607
- do_syscall_64+0x2d/0x40 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x45ce79
-Code: 2d b6 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 fb b5 fb ff c3 66 2e 0f 1f 84 00 00 00 00
-RSP: 002b:00007f8d2099fc78 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
-RAX: ffffffffffffffda RBX: 00000000000252c0 RCX: 000000000045ce79
-RDX: 00000000000000f2 RSI: 0000000020000100 RDI: 0000000000000003
-RBP: 000000000118bf60 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 000000000118bf2c
-R13: 00007ffd66f595ff R14: 00007f8d209a09c0 R15: 000000000118bf2c
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Allocated by task 4524:
- save_stack+0x1b/0x40 mm/kasan/common.c:48
- set_track mm/kasan/common.c:56 [inline]
- __kasan_kmalloc.constprop.0+0xc2/0xd0 mm/kasan/common.c:494
- kmalloc include/linux/slab.h:555 [inline]
- kzalloc include/linux/slab.h:669 [inline]
- usb_alloc_dev+0x51/0xf67 drivers/usb/core/usb.c:582
- hub_port_connect drivers/usb/core/hub.c:5114 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
- port_event drivers/usb/core/hub.c:5494 [inline]
- hub_event+0x1dff/0x4390 drivers/usb/core/hub.c:5576
- process_one_work+0x94c/0x15f0 kernel/workqueue.c:2269
- worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
- kthread+0x392/0x470 kernel/kthread.c:292
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+-----BEGIN PGP SIGNATURE-----
 
-Freed by task 5477:
- save_stack+0x1b/0x40 mm/kasan/common.c:48
- set_track mm/kasan/common.c:56 [inline]
- kasan_set_free_info mm/kasan/common.c:316 [inline]
- __kasan_slab_free+0x116/0x160 mm/kasan/common.c:455
- slab_free_hook mm/slub.c:1474 [inline]
- slab_free_freelist_hook+0x53/0x140 mm/slub.c:1507
- slab_free mm/slub.c:3072 [inline]
- kfree+0xbc/0x2c0 mm/slub.c:4052
- device_release+0x71/0x200 drivers/base/core.c:1800
- kobject_cleanup lib/kobject.c:704 [inline]
- kobject_release lib/kobject.c:735 [inline]
- kref_put include/linux/kref.h:65 [inline]
- kobject_put+0x1c8/0x540 lib/kobject.c:752
- put_device+0x1b/0x30 drivers/base/core.c:3029
- hub_port_connect drivers/usb/core/hub.c:5059 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
- port_event drivers/usb/core/hub.c:5494 [inline]
- hub_event+0x1c93/0x4390 drivers/usb/core/hub.c:5576
- process_one_work+0x94c/0x15f0 kernel/workqueue.c:2269
- worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
- kthread+0x392/0x470 kernel/kthread.c:292
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
-
-The buggy address belongs to the object at ffff8881caa52000
- which belongs to the cache kmalloc-2k of size 2048
-The buggy address is located 24 bytes inside of
- 2048-byte region [ffff8881caa52000, ffff8881caa52800)
-The buggy address belongs to the page:
-page:ffffea00072a9400 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 head:ffffea00072a9400 order:3 compound_mapcount:0 compound_pincount:0
-flags: 0x200000000010200(slab|head)
-raw: 0200000000010200 0000000000000000 0000000100000001 ffff8881da00c000
-raw: 0000000000000000 0000000000080008 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
- ffff8881caa51f00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff8881caa51f80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->ffff8881caa52000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                            ^
- ffff8881caa52080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff8881caa52100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl8tXcsACgkQzL64meEa
+mQZA4w/8CJ54XLKdECc57KFHhY6lVIHanhEvJbHXAxas90EQiV8BrcUe+5jiL026
+iz2wcFq9GYRTRVcR2drgUG0fVSuqYbPbETlwAWy8fyDRKfs+LfDlvH0iz3eo7P2h
+Lr3OBDYEymbErFov8w1cOWNIDuRjol8ed7FWnLQfvXNd9NKXaCq9JvCBkjcBfKGT
+EcB4+ZUGtY6IQ1iDVrB0tpC6Br7HiuZoVocSuN+3LQSCae/QoYD57fqujyH5ywHk
+QB7XSnp9yKk1vI20X/U5J/5DbM6k3DE73A24cpf+TFKDabQcdRUiSRJm1evl12nE
+hOz0cBxflsL9BUtpOpvGKYDz6GjR/KXnkKw/I9q3npkNd1ybWAIKaELoQkE/Jtni
+AjaR1uzMb0X7IPDaJu7dYFYSujWjFK/WrJZxJc9O7lCrugN5aAC9nt87s56wptZq
+TCfN/ot2OOtemOc2BcrwDItdiPTbdOHxkrVu886cIYbxhHDyB0+Tk18Qa9paffUC
+TS3Ebq6mPDuksavbGn9aum6xz5vJiw7rwz9laTw4pTdoGvphedZAOhWQiisZaBvk
+zefXWKxWnu9KWOZiLemLpmm1Ml5sohd13hmwSDt8CUiuw8+3ipooiN87wPlnXCbG
+397W2xRTWYXkS0teICSXeuEMdXky1HZ8R/PD7bA6ApGmgNV60k8=
+=pdwI
+-----END PGP SIGNATURE-----
+--=-=-=--
