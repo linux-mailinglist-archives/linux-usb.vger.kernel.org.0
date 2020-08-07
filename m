@@ -2,176 +2,210 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82CA523E88E
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Aug 2020 10:07:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B79C23E9E4
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Aug 2020 11:15:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726980AbgHGIG5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Aug 2020 04:06:57 -0400
-Received: from nat-hk.nvidia.com ([203.18.50.4]:40694 "EHLO nat-hk.nvidia.com"
+        id S1726998AbgHGJPL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Aug 2020 05:15:11 -0400
+Received: from gofer.mess.org ([88.97.38.141]:51277 "EHLO gofer.mess.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725805AbgHGIG5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 7 Aug 2020 04:06:57 -0400
-Received: from hkpgpgate102.nvidia.com (Not Verified[10.18.92.77]) by nat-hk.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5f2d0b9d0000>; Fri, 07 Aug 2020 16:06:53 +0800
-Received: from HKMAIL104.nvidia.com ([10.18.16.13])
-  by hkpgpgate102.nvidia.com (PGP Universal service);
-  Fri, 07 Aug 2020 01:06:53 -0700
-X-PGP-Universal: processed;
-        by hkpgpgate102.nvidia.com on Fri, 07 Aug 2020 01:06:53 -0700
-Received: from HKMAIL103.nvidia.com (10.18.16.12) by HKMAIL104.nvidia.com
- (10.18.16.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 7 Aug
- 2020 08:06:50 +0000
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.36.53) by
- HKMAIL103.nvidia.com (10.18.16.12) with Microsoft SMTP Server (TLS) id
- 15.0.1473.3 via Frontend Transport; Fri, 7 Aug 2020 08:06:49 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=I4Eh7RrxddgLodAuvB//cOYB4+e6YSn2M5iAOrLsrivpfc+yHX/bDqjpqXaoA65GLD4/3ycA1c6OfA6nv+ru2MaQ3COTtsduH/MDpB06pYCNLYDYXBThug9yHltm1ui5mmd4+3fWjVJLmbq+XgiBqrBDUVzFLF30uha1+IlL2qRuDt3+vPK3eg+7sOKCqFi3RxP3sdDc73GU/vZwmPSzYqRVBLv5NKhvUNRxedzRYJYu2g5/t6Xn8YnCwDN46weFqVfNf6dHz9qEvt6wzkz/pUudBTGtpknUFirIvmzKbukDnFO0lEJwQvb3jSvwyM4IzJjptMjR7ggmb7NOZOsgUQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=69Pgf2YAcEJwv8mzzuliq/NXwSm52cCm33prjL8rtww=;
- b=BJgJOwjVPsYIn9uCWcgthuvCCt2pYKZmr/DtfK0myRFSFZBVfFsJPCV3DO51OxFCOCbE75neU6t9wMZaBrdrM4Ru6h66jGBsS+aYuYhtjtGkOVV9MJvOpEvKlWhwYujFOhuyBjYQbG+p05DLD9xbu/v/rNzy1Y2KLfd7bAJYhCWv53Xjd2/31WDtX6rYgcy2G0jk5hIv9+oSVgcm+QAztJYiNisNkKdKjUyGScMum1U6sQIXRnk+8/46moAXE7SRkY3TiUuaWmJkWAQPooQBlI09cjMM48eCepXlhJTkoDJg9w19GE8ypXamyTDhp81DhX94vJlG4UimhPgDOq0Zrw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-Received: from CY4PR12MB1845.namprd12.prod.outlook.com (2603:10b6:903:126::12)
- by CY4PR12MB1174.namprd12.prod.outlook.com (2603:10b6:903:36::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3261.19; Fri, 7 Aug
- 2020 08:06:47 +0000
-Received: from CY4PR12MB1845.namprd12.prod.outlook.com
- ([fe80::19e0:4303:2714:aedc]) by CY4PR12MB1845.namprd12.prod.outlook.com
- ([fe80::19e0:4303:2714:aedc%3]) with mapi id 15.20.3239.024; Fri, 7 Aug 2020
- 08:06:47 +0000
-From:   EJ Hsu <ejh@nvidia.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Subject: RE: [PATCH net] r8152: Use MAC address from correct device tree node
-Thread-Topic: [PATCH net] r8152: Use MAC address from correct device tree node
-Thread-Index: AQHWbI2ZJMaQdnx8B0Wis8EPhOxCUKksSTgg
-Date:   Fri, 7 Aug 2020 08:06:47 +0000
-Message-ID: <CY4PR12MB184516578554206588482E2ECF490@CY4PR12MB1845.namprd12.prod.outlook.com>
-References: <20200807073632.63057-1-thierry.reding@gmail.com>
-In-Reply-To: <20200807073632.63057-1-thierry.reding@gmail.com>
-Accept-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Enabled=True;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SiteId=43083d15-7273-40c1-b7db-39efd9ccc17a;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Owner=ejh@nvidia.com;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SetDate=2020-08-07T08:06:45.0776304Z;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Name=Unrestricted;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Application=Microsoft Azure
- Information Protection;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_ActionId=a59ed5e1-b69a-4895-8b29-b01408fc699b;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Extended_MSFT_Method=Automatic
-authentication-results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=nvidia.com;
-x-originating-ip: [59.124.78.18]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 06beff04-62e8-4d4e-fc51-08d83aa8d50e
-x-ms-traffictypediagnostic: CY4PR12MB1174:
-x-microsoft-antispam-prvs: <CY4PR12MB1174FF338DA55CA05DB05464CF490@CY4PR12MB1174.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: P4yN272zNmjkGEfGDzp+pv41Mn9mo9zo45KegHjKl+yJT5AIH8NhDtrG7vllIcmqwR2TJ/MVZRyqjPZlvt0/EoauKtb89qsmvr1Z4Tfvr89UfgSFyrSvE93k7NmcamJqw9dIEElsz2cNrFeMVD8aswTO9svBmmBxmLnTL/YXIiRBqKRLPwLYLV9M5lQswG65yilAZ2+gkn8HlLXKwUN19GH3LuXT0qSjZDZbMs6wQb6SC4F0qvaK4TkPAABxWYI9cf6m4xo7n0OQY/4C88DfJMaBjVqDtAg9eykbT1/8tcc1ybtw35hwjqEtaVSPAn6EYCnfdqoHgLW/apA4VMjs/g==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR12MB1845.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(396003)(366004)(376002)(136003)(346002)(39860400002)(9686003)(5660300002)(33656002)(54906003)(4326008)(26005)(66446008)(76116006)(66946007)(83380400001)(71200400001)(8676002)(66556008)(64756008)(6506007)(55016002)(186003)(8936002)(7696005)(478600001)(316002)(2906002)(66476007)(86362001)(110136005)(52536014);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: AYzPLSTysME8emFmK0HO9gmBoujNVTnjIIsjTB8e7l5BxZecIWPZxWrI+k2FnxUTqqEQmmk+tBQLiIP8WLaxImYw4O/N8l+H4YZi93vrhk7DgtDhyzEobOUaGeREfLH6ly3awTqBZy8JvN3VCY7MQuZa+XUgHUFc4+j8k+vUhOnl3+wf+V1RS4/Bn71cWXqekApcVLYPHOIKYJ96QMMDQSEPigadNIrbM2hV14tqNV3eFvtb27win9w1a7PVhcTMKULQMfGw2IICnYDyuJteFU9s5gfEt3OkeKv7NjMIWLpQKTj+Je1z9YX9o7YFcLzNya7txTPEVkmGKzpsgWi5Q98mk3PGUT0ewuUMf50acnVVUsvrdau64jHK1Z7Jo+KjmysxsW3oSV8D+3bMkqWQVO49sgJzMCg57Cy7cw9xWEdtVH2+StjnxOE8EqbsymUmfZpZ3OkA2csHvbz+PG2ZtordpjBAE0f+Ovr9X2i838B0HUD9ku66Rcg0UYqu3tcQmNzftolzLJiujJ0Lt0jTL0wwqtRjkMQ+W/JiVJuJeOPrN/i2esPCWSURTiCfCb+Hy9/8sGYCRkK+UNfq0BIw3lnTTk4UVvdNVjsw+TFSY/xPCrtZmeDJ2pyPMWAxBMU5xJFmwPpmrhsomzy6reg2dQ==
-x-ms-exchange-transport-forked: True
+        id S1726619AbgHGJPK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 7 Aug 2020 05:15:10 -0400
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 66697C688B; Fri,  7 Aug 2020 10:15:04 +0100 (BST)
+Date:   Fri, 7 Aug 2020 10:15:04 +0100
+From:   Sean Young <sean@mess.org>
+To:     syzbot <syzbot+ceef16277388d6f24898@syzkaller.appspotmail.com>
+Cc:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: KASAN: use-after-free Read in rc_dev_uevent
+Message-ID: <20200807091504.GA7397@gofer.mess.org>
+References: <00000000000003dcbd05ac44862c@google.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR12MB1845.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 06beff04-62e8-4d4e-fc51-08d83aa8d50e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Aug 2020 08:06:47.5121
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: MBUGKHZOeEfn2hv6x7+xuk5J4II4RkK6Tl3x9dTN8AkA36Eh/t5li3cuy8GlwjBB
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1174
-X-OriginatorOrg: Nvidia.com
-Content-Language: en-US
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1596787613; bh=69Pgf2YAcEJwv8mzzuliq/NXwSm52cCm33prjL8rtww=;
-        h=X-PGP-Universal:ARC-Seal:ARC-Message-Signature:
-         ARC-Authentication-Results:From:To:CC:Subject:Thread-Topic:
-         Thread-Index:Date:Message-ID:References:In-Reply-To:
-         Accept-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:msip_labels:
-         authentication-results:x-originating-ip:x-ms-publictraffictype:
-         x-ms-office365-filtering-correlation-id:x-ms-traffictypediagnostic:
-         x-microsoft-antispam-prvs:x-ms-oob-tlc-oobclassifiers:
-         x-ms-exchange-senderadcheck:x-microsoft-antispam:
-         x-microsoft-antispam-message-info:x-forefront-antispam-report:
-         x-ms-exchange-antispam-messagedata:x-ms-exchange-transport-forked:
-         MIME-Version:X-MS-Exchange-CrossTenant-AuthAs:
-         X-MS-Exchange-CrossTenant-AuthSource:
-         X-MS-Exchange-CrossTenant-Network-Message-Id:
-         X-MS-Exchange-CrossTenant-originalarrivaltime:
-         X-MS-Exchange-CrossTenant-fromentityheader:
-         X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
-         X-MS-Exchange-CrossTenant-userprincipalname:
-         X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg:
-         Content-Language:Content-Type:Content-Transfer-Encoding;
-        b=QUA/5q/6TtgSlIGG7F7iKMnoNwhK24176FUdvNbdipaAZ05OGJGzkLmmuyW/vl2C4
-         o1erQkTpxlaDrGnsnL7saRjuR9YTJ3tMv9EBQbg5opTWacelMutKUC3t5AOFfzKHEo
-         c+ShT90y0jdtlYg+ZWbot+QHy93ly8X4oJrF0VC9PkvBwqeCHVWGmjb6M5N1JqCg6z
-         1RaHRUDSx9+OgyKtUixnYXnPpxpw3Rrj+q7kscSY7XMOCxAVZXoWc3cM7OJoxXzCKh
-         kiVqlKfzwhyKWfe8GQVYTzezwgQw0+z7YPLOJIEVBaN6SMVDdlPJ6NKG4ECAUdGloX
-         4gfYN4Mg8unkw==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00000000000003dcbd05ac44862c@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-EJ Hsu wrote:
+On Fri, Aug 07, 2020 at 12:26:29AM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    7b4ea945 Revert "x86/mm/64: Do not sync vmalloc/ioremap ma..
+> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+> console output: https://syzkaller.appspot.com/x/log.txt?x=11a7813a900000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=72a84c46d0c668c
+> dashboard link: https://syzkaller.appspot.com/bug?extid=ceef16277388d6f24898
+> compiler:       gcc (GCC) 10.1.0-syz 20200507
+> 
+> Unfortunately, I don't have any reproducer for this issue yet.
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+ceef16277388d6f24898@syzkaller.appspotmail.com
+> 
+> ==================================================================
+> BUG: KASAN: use-after-free in string_nocheck lib/vsprintf.c:611 [inline]
+> BUG: KASAN: use-after-free in string+0x39c/0x3d0 lib/vsprintf.c:693
+> Read of size 1 at addr ffff8881ca21cd20 by task systemd-udevd/5147
+> 
+> CPU: 1 PID: 5147 Comm: systemd-udevd Not tainted 5.8.0-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> Call Trace:
+>  __dump_stack lib/dump_stack.c:77 [inline]
+>  dump_stack+0xf6/0x16e lib/dump_stack.c:118
+>  print_address_description.constprop.0+0x1a/0x210 mm/kasan/report.c:383
+>  __kasan_report mm/kasan/report.c:513 [inline]
+>  kasan_report.cold+0x37/0x7c mm/kasan/report.c:530
+>  string_nocheck lib/vsprintf.c:611 [inline]
+>  string+0x39c/0x3d0 lib/vsprintf.c:693
+>  vsnprintf+0x71b/0x14f0 lib/vsprintf.c:2617
+>  add_uevent_var+0x14d/0x310 lib/kobject_uevent.c:664
+>  rc_dev_uevent+0x54/0x140 drivers/media/rc/rc-main.c:1616
+>  dev_uevent+0x30e/0x780 drivers/base/core.c:1916
+>  uevent_show+0x1bb/0x360 drivers/base/core.c:1963
+>  dev_attr_show+0x4b/0x90 drivers/base/core.c:1667
+>  sysfs_kf_seq_show+0x1f8/0x400 fs/sysfs/file.c:60
+>  seq_read+0x432/0x1070 fs/seq_file.c:208
+>  kernfs_fop_read+0xe9/0x590 fs/kernfs/file.c:251
+>  vfs_read+0x1df/0x520 fs/read_write.c:479
+>  ksys_read+0x12d/0x250 fs/read_write.c:607
+>  do_syscall_64+0x2d/0x40 arch/x86/entry/common.c:46
+>  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> RIP: 0033:0x7f6e6c02f910
+> Code: b6 fe ff ff 48 8d 3d 0f be 08 00 48 83 ec 08 e8 06 db 01 00 66 0f 1f 44 00 00 83 3d f9 2d 2c 00 00 75 10 b8 00 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 31 c3 48 83 ec 08 e8 de 9b 01 00 48 89 04 24
+> RSP: 002b:00007fff3cddeae8 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+> RAX: ffffffffffffffda RBX: 0000558492caaae0 RCX: 00007f6e6c02f910
+> RDX: 0000000000001000 RSI: 0000558492cc7530 RDI: 0000000000000007
+> RBP: 00007f6e6c2ea440 R08: 00007f6e6c2ee298 R09: 0000000000001010
+> R10: 0000558492caaae0 R11: 0000000000000246 R12: 0000000000001000
+> R13: 0000000000000d68 R14: 0000558492cc7530 R15: 00007f6e6c2e9900
 
-> From: Thierry Reding <treding@nvidia.com>
->=20
-> Query the USB device's device tree node when looking for a MAC address.
-> The struct device embedded into the struct net_device does not have a dev=
-ice
-> tree node attached at all.
->=20
-> The reason why this went unnoticed is because the system where this was
-> tested was one of the few development units that had its OTP programmed,
-> as opposed to production systems where the MAC address is stored in a
-> separate EEPROM and is passed via device tree by the firmware.
->=20
-> Reported-by: EJ Hsu <ejh@nvidia.com>
-> Fixes: acb6d3771a03 ("r8152: Use MAC address from device tree if availabl=
-e")
-> Signed-off-by: Thierry Reding <treding@nvidia.com>
+This thread is reading the uevent sysfs file, which reads
+rc_dev->map.name, and also rc_dev->device_name, but that is not causing
+problems is this case.
+
+> 
+> Allocated by task 5:
+>  save_stack+0x1b/0x40 mm/kasan/common.c:48
+>  set_track mm/kasan/common.c:56 [inline]
+>  __kasan_kmalloc.constprop.0+0xc2/0xd0 mm/kasan/common.c:494
+>  slab_post_alloc_hook mm/slab.h:586 [inline]
+>  slab_alloc_node mm/slub.c:2824 [inline]
+>  slab_alloc mm/slub.c:2832 [inline]
+>  __kmalloc_track_caller+0xec/0x280 mm/slub.c:4430
+>  kstrdup+0x36/0x70 mm/util.c:60
+>  ir_create_table drivers/media/rc/rc-main.c:217 [inline]
+>  ir_setkeytable drivers/media/rc/rc-main.c:477 [inline]
+>  rc_prepare_rx_device drivers/media/rc/rc-main.c:1786 [inline]
+>  rc_register_device+0x464/0x1600 drivers/media/rc/rc-main.c:1914
+>  igorplugusb_probe+0x7e6/0xc98 drivers/media/rc/igorplugusb.c:209
+>  usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:374
+>  really_probe+0x291/0xde0 drivers/base/dd.c:553
+>  driver_probe_device+0x26b/0x3d0 drivers/base/dd.c:738
+>  __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:844
+>  bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:431
+>  __device_attach+0x228/0x4a0 drivers/base/dd.c:912
+>  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
+>  device_add+0xb51/0x1c70 drivers/base/core.c:2930
+>  usb_set_configuration+0xf05/0x18a0 drivers/usb/core/message.c:2032
+>  usb_generic_driver_probe+0xba/0xf2 drivers/usb/core/generic.c:239
+>  usb_probe_device+0xd9/0x250 drivers/usb/core/driver.c:272
+>  really_probe+0x291/0xde0 drivers/base/dd.c:553
+>  driver_probe_device+0x26b/0x3d0 drivers/base/dd.c:738
+>  __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:844
+>  bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:431
+>  __device_attach+0x228/0x4a0 drivers/base/dd.c:912
+>  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
+>  device_add+0xb51/0x1c70 drivers/base/core.c:2930
+>  usb_new_device.cold+0x71d/0xfd4 drivers/usb/core/hub.c:2554
+>  hub_port_connect drivers/usb/core/hub.c:5208 [inline]
+>  hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
+>  port_event drivers/usb/core/hub.c:5494 [inline]
+>  hub_event+0x2361/0x4390 drivers/usb/core/hub.c:5576
+>  process_one_work+0x94c/0x15f0 kernel/workqueue.c:2269
+>  worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
+>  kthread+0x392/0x470 kernel/kthread.c:292
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+
+.. this probed the device ..
+
+> Freed by task 5:
+>  save_stack+0x1b/0x40 mm/kasan/common.c:48
+>  set_track mm/kasan/common.c:56 [inline]
+>  kasan_set_free_info mm/kasan/common.c:316 [inline]
+>  __kasan_slab_free+0x116/0x160 mm/kasan/common.c:455
+>  slab_free_hook mm/slub.c:1474 [inline]
+>  slab_free_freelist_hook+0x53/0x140 mm/slub.c:1507
+>  slab_free mm/slub.c:3072 [inline]
+>  kfree+0xbc/0x2c0 mm/slub.c:4052
+>  ir_free_table drivers/media/rc/rc-main.c:245 [inline]
+>  rc_free_rx_device drivers/media/rc/rc-main.c:1875 [inline]
+>  rc_unregister_device+0x142/0x410 drivers/media/rc/rc-main.c:2014
+>  igorplugusb_disconnect+0x58/0x110 drivers/media/rc/igorplugusb.c:232
+>  usb_unbind_interface+0x1d8/0x8d0 drivers/usb/core/driver.c:436
+>  __device_release_driver+0x3c6/0x6f0 drivers/base/dd.c:1153
+>  device_release_driver_internal drivers/base/dd.c:1184 [inline]
+>  device_release_driver+0x26/0x40 drivers/base/dd.c:1207
+>  bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
+>  device_del+0x481/0xd90 drivers/base/core.c:3107
+>  usb_disable_device+0x387/0x930 drivers/usb/core/message.c:1245
+>  usb_disconnect.cold+0x27d/0x780 drivers/usb/core/hub.c:2217
+>  hub_port_connect drivers/usb/core/hub.c:5059 [inline]
+>  hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
+>  port_event drivers/usb/core/hub.c:5494 [inline]
+>  hub_event+0x1c93/0x4390 drivers/usb/core/hub.c:5576
+>  process_one_work+0x94c/0x15f0 kernel/workqueue.c:2269
+>  process_scheduled_works kernel/workqueue.c:2331 [inline]
+>  worker_thread+0x82b/0x1120 kernel/workqueue.c:2417
+>  kthread+0x392/0x470 kernel/kthread.c:292
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+
+This unplugged the device, and freed rc_dev->map->name and sets
+it to NULL. There is no locking between the two threads so this is
+a race condition.
+
+I think there are worse, related problems here. For example, iguanair
+driver allocates rc_dev->device_name and frees it in its usb disconnect
+handler. This field is also read by uevent, and not set to null by
+the disconnect handler.
+
+Not sure what the best solution is yet.
+
+Thanks
+
+Sean
+
+> The buggy address belongs to the object at ffff8881ca21cd20
+>  which belongs to the cache kmalloc-16 of size 16
+> The buggy address is located 0 bytes inside of
+>  16-byte region [ffff8881ca21cd20, ffff8881ca21cd30)
+> The buggy address belongs to the page:
+> page:ffffea0007288700 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0
+> flags: 0x200000000000200(slab)
+> raw: 0200000000000200 0000000000000000 0000000100000001 ffff8881da003680
+> raw: 0000000000000000 0000000080800080 00000001ffffffff 0000000000000000
+> page dumped because: kasan: bad access detected
+> 
+> Memory state around the buggy address:
+>  ffff8881ca21cc00: fb fb fc fc fb fb fc fc fb fb fc fc 00 00 fc fc
+>  ffff8881ca21cc80: fb fb fc fc 00 00 fc fc 00 00 fc fc 00 00 fc fc
+> >ffff8881ca21cd00: fb fb fc fc fb fb fc fc fb fb fc fc 00 00 fc fc
+>                                ^
+>  ffff8881ca21cd80: 00 00 fc fc fb fb fc fc fb fb fc fc fb fb fc fc
+>  ffff8881ca21ce00: 00 00 fc fc fb fb fc fc 00 00 fc fc 00 00 fc fc
+> ==================================================================
+> 
+> 
 > ---
->  drivers/net/usb/r8152.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c index
-> 7d39f998535d..2b02fefd094d 100644
-> --- a/drivers/net/usb/r8152.c
-> +++ b/drivers/net/usb/r8152.c
-> @@ -1504,7 +1504,7 @@ static int determine_ethernet_addr(struct r8152
-> *tp, struct sockaddr *sa)
->=20
->         sa->sa_family =3D dev->type;
->=20
-> -       ret =3D eth_platform_get_mac_address(&dev->dev, sa->sa_data);
-> +       ret =3D eth_platform_get_mac_address(&tp->udev->dev, sa->sa_data)=
-;
->         if (ret < 0) {
->                 if (tp->version =3D=3D RTL_VER_01) {
->                         ret =3D pla_ocp_read(tp, PLA_IDR, 8, sa->sa_data)=
-;
-> --
-> 2.27.0
-
-
-Reviewed-by: EJ Hsu <ejh@nvidia.com>
-
---nvpublic
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
