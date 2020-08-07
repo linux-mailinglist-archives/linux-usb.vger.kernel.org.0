@@ -2,180 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB45E23ECA6
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Aug 2020 13:37:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D1E423ED39
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Aug 2020 14:19:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728363AbgHGLhA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Fri, 7 Aug 2020 07:37:00 -0400
-Received: from mail-oo1-f65.google.com ([209.85.161.65]:43049 "EHLO
-        mail-oo1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726293AbgHGLg7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Aug 2020 07:36:59 -0400
-Received: by mail-oo1-f65.google.com with SMTP id z10so353625ooi.10;
-        Fri, 07 Aug 2020 04:36:57 -0700 (PDT)
+        id S1728381AbgHGMTT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Aug 2020 08:19:19 -0400
+Received: from mail-il1-f200.google.com ([209.85.166.200]:42982 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727783AbgHGMTR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Aug 2020 08:19:17 -0400
+Received: by mail-il1-f200.google.com with SMTP id a17so1373830ilk.9
+        for <linux-usb@vger.kernel.org>; Fri, 07 Aug 2020 05:19:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=XXMM2VmPbdzScEgaWzC2c7QfQOtrLAuTY8gvz9Vc4VA=;
-        b=i2+bmzm6DH1N21mIeZptUZA7++/9Dot11W8Go1vfnZmv6NLxFyMUQ3NYRJuC/9zZy6
-         JX/bJkajC04xQ0mBs4txh8Yn7UV9MSBsecOVOhqPddopu6nuxkL6IbMmaXS/xAMW5Mvd
-         nv3umyDWILaKzFR7VW4BYeeOlryd9pgvlQ4pUTT9vXozKkZfSdocnpmAfzdm0Y0pWMOv
-         F5tLDf8S9Bh/f0zH0WTKncPNiKabeEPgjnv0/Wen5JEKC7M+AKARxSd/pGnNoYX0BaLm
-         sXcGmj0gCJQeZz+Z/yXvZrzWEKU6vP40BbDzJy5zcH3lwP7CZr0PjAWEfKMX45B+tbll
-         8TSw==
-X-Gm-Message-State: AOAM5321t5vfKYT5soHllJlIECFhExrcIHDvk9hNqFzsqTFdqXVR4wMV
-        ZLSjKRnGrwCzbJxf3irZSYkIYbyhRdwti3Lbm18=
-X-Google-Smtp-Source: ABdhPJzvkXusENrHFbx7Z4UeU5tcAYrWmu2wMgV9PP1LU7MWabSySITzZd9SeQneUYYb9H/JEkRsCIws54cijEZ+u5w=
-X-Received: by 2002:a4a:4201:: with SMTP id h1mr12077660ooj.1.1596800217309;
- Fri, 07 Aug 2020 04:36:57 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=lTtdC+vCkszF8sYUSIwFc5FRid7eCFAUZQejKiH4rZ4=;
+        b=ZQw8s/AyJwkGvk0nygN2AdcNVotU1V8wZ0vATpLNZfW8yMfeGzPXHghTjimEhcDtsY
+         JL5TFHmNsGuBBKX6gWMcoXaJ4oxJMdJySO91g3I/1ZQDWa/NMgtWeFhW3myS1X7gu8Rr
+         nA5AeBjkGdo0baJnO4uCrY3HMAczVQvTZVQCNUUtdGzM6GC0jQmnZ4UJeQoUVPPbxiSg
+         +sz8dxvK5g8WHOz+anEM46HaEoZDxAnFsnSRcGOi7asDLLtdDEJsqS55zMPUA5BXKlG9
+         5dn5392Z3q0Z9fuZzCcn6ekoXwyGhFRznOFFzlQg5zts7Q399AWGY9z7wNJy9or9ycql
+         xc0A==
+X-Gm-Message-State: AOAM530BgVDDn9HEEb7mr2S/su019YLIz3HleiwWuwIv3no/p/U1T6Eb
+        qHAGgqw8iIEqrBkGVFR2e5Hd+nOaUQMpQVZ9yjsj+D2RYF69
+X-Google-Smtp-Source: ABdhPJzi0MVNUkZtYsJ4KYJoCAoCWdPB8jH+AwlKoJIupbnYoEVZqJInqSVTShxc4KiyI5iqyUfm9JEEpOaFkFEv3AnE2MiCj5kH
 MIME-Version: 1.0
-References: <1594919915-5225-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1594919915-5225-21-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMuHMdVriWnPK8-=w=0mq8yj9+1jbsg9yH8aV=ygyHsQ0f-CQQ@mail.gmail.com>
- <CA+V-a8vXjhV-EeQb=bBhoRmuVA=0GSuFiV33N9nkhi39VNN6oA@mail.gmail.com>
- <CAMuHMdXie+GfKBO22mFrn4oG_y7YUxU9ekQdWnp1hn-6z2mLuQ@mail.gmail.com> <20200807112754.GC3387836@oden.dyn.berto.se>
-In-Reply-To: <20200807112754.GC3387836@oden.dyn.berto.se>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 7 Aug 2020 13:36:46 +0200
-Message-ID: <CAMuHMdW1Ofjouj4P+bdg2VWmYohD73=si8R6ivZ4QiZps6=HAQ@mail.gmail.com>
-Subject: Re: [PATCH 20/20] arm64: dts: renesas: r8a774e1: Add VIN and CSI-2 nodes
-To:     =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
-Cc:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Jens Axboe <axboe@kernel.dk>, Rob Herring <robh+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Mark Brown <broonie@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-ide@vger.kernel.org,
-        dmaengine <dmaengine@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
+X-Received: by 2002:a05:6638:bc2:: with SMTP id g2mr4666407jad.21.1596802756269;
+ Fri, 07 Aug 2020 05:19:16 -0700 (PDT)
+Date:   Fri, 07 Aug 2020 05:19:16 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000105ec205ac489d59@google.com>
+Subject: KASAN: use-after-free Read in service_outstanding_interrupt
+From:   syzbot <syzbot+9e04e2df4a32fb661daf@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        gustavoars@kernel.org, ingrassia@epigenesys.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Niklas,
+Hello,
 
-On Fri, Aug 7, 2020 at 1:27 PM Niklas Söderlund
-<niklas.soderlund@ragnatech.se> wrote:
-> On 2020-08-06 13:47:58 +0200, Geert Uytterhoeven wrote:
-> > On Thu, Aug 6, 2020 at 1:17 PM Lad, Prabhakar
-> > <prabhakar.csengg@gmail.com> wrote:
-> > > On Wed, Aug 5, 2020 at 12:19 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > > On Thu, Jul 16, 2020 at 7:20 PM Lad Prabhakar
-> > > > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> > > > > Add VIN and CSI-2 nodes to RZ/G2H (R8A774E1) SoC dtsi.
-> > > > >
-> > > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > > > Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
-> > > >
-> > > > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > > >
-> > > > However, before I queue this in renesas-devel for v5.10, I'd like to
-> > > > have some clarification about the issue below.
-> > > >
-> > > > > --- a/arch/arm64/boot/dts/renesas/r8a774e1.dtsi
-> > > > > +++ b/arch/arm64/boot/dts/renesas/r8a774e1.dtsi
-> > > >
-> > > > > +               vin4: video@e6ef4000 {
-> > > > > +                       compatible = "renesas,vin-r8a774e1";
-> > > > > +                       reg = <0 0xe6ef4000 0 0x1000>;
-> > > > > +                       interrupts = <GIC_SPI 174 IRQ_TYPE_LEVEL_HIGH>;
-> > > > > +                       clocks = <&cpg CPG_MOD 807>;
-> > > > > +                       power-domains = <&sysc R8A774E1_PD_ALWAYS_ON>;
-> > > > > +                       resets = <&cpg 807>;
-> > > > > +                       renesas,id = <4>;
-> > > > > +                       status = "disabled";
-> > > > > +
-> > > > > +                       ports {
-> > > > > +                               #address-cells = <1>;
-> > > > > +                               #size-cells = <0>;
-> > > > > +
-> > > > > +                               port@1 {
-> > > > > +                                       #address-cells = <1>;
-> > > > > +                                       #size-cells = <0>;
-> > > >
-> > > > "make dtbs W=1" says:
-> > > >
-> > > >     arch/arm64/boot/dts/renesas/r8a774e1.dtsi:1562.12-1572.7: Warning
-> > > > (graph_child_address): /soc/video@e6ef4000/ports/port@1: graph node
-> > > > has single child node 'endpoint@0', #address-cells/#size-cells are not
-> > > > necessary
-> > > >
-> > > > (same for vin5-7 below)
-> > > >
-> > > Referring to commit 5e53dbf4edb4d ("arm64: dts: renesas: r8a77990: Fix
-> > > VIN endpoint numbering") we definitely need endpoint numbering.
-> > > Probably the driver needs to be fixed to handle such cases.
-> >
-> > > > > +
-> > > > > +                                       reg = <1>;
-> > > > > +
-> > > > > +                                       vin4csi20: endpoint@0 {
-> > > > > +                                               reg = <0>;
-> > > > > +                                               remote-endpoint = <&csi20vin4>;
-> >
-> > On R-Car E3, the single endpoint is at address 2, so "make dtbs W=1"doesn't
-> > complain. Here it is at address 0.
-> >
-> > Niklas?
->
-> First the R-Car VIN driver makes decisions based on which endpoint is
-> described, each endpoint 0-3 represents a different CSI-2 block on the
-> other end (0: CSI20, 1: CSI21, 2: CSI40 and 3: CSI41).
+syzbot found the following issue on:
 
-That's my understanding, too.
+HEAD commit:    7b4ea945 Revert "x86/mm/64: Do not sync vmalloc/ioremap ma..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=108adf32900000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=72a84c46d0c668c
+dashboard link: https://syzkaller.appspot.com/bug?extid=9e04e2df4a32fb661daf
+compiler:       gcc (GCC) 10.1.0-syz 20200507
 
-> Then how to handle the warning I'm not sure. I can only really see 2
-> options.
->
-> 1. Ignore the warning.
-> 2. Remove #address-cells, #size-cells and reg properties from port@ if
->    the only endpoint described is endpoint@0.
->
-> I would prefers option 2. that is what we do in other cases (for example
-> on Gen2 boards that only have a single parallel sensor in some early DTS
-> files we don't have the ports node and just describe a single port with
-> the same reasoning.
->
-> We are not at risk at someone describing a second CSI-2 bock as an
-> overlay so I see no real harm in option 2.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Yeah, no overlay possible for on-SoC wiring ;-)
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+9e04e2df4a32fb661daf@syzkaller.appspotmail.com
 
-> What are your thoughts Geert?
-> You know more about DT then me.
+==================================================================
+BUG: KASAN: use-after-free in usb_submit_urb+0x10c4/0x13e0 drivers/usb/core/urb.c:368
+Read of size 4 at addr ffff8881caa52018 by task syz-executor.3/13922
 
-You have too much faith in me ;-)
+CPU: 1 PID: 13922 Comm: syz-executor.3 Not tainted 5.8.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xf6/0x16e lib/dump_stack.c:118
+ print_address_description.constprop.0+0x1a/0x210 mm/kasan/report.c:383
+ __kasan_report mm/kasan/report.c:513 [inline]
+ kasan_report.cold+0x37/0x7c mm/kasan/report.c:530
+ usb_submit_urb+0x10c4/0x13e0 drivers/usb/core/urb.c:368
+ service_outstanding_interrupt.part.0+0x5f/0xa0 drivers/usb/class/cdc-wdm.c:463
+ service_outstanding_interrupt drivers/usb/class/cdc-wdm.c:458 [inline]
+ wdm_read+0x9a0/0xbd0 drivers/usb/class/cdc-wdm.c:576
+ vfs_read+0x1df/0x520 fs/read_write.c:479
+ ksys_read+0x12d/0x250 fs/read_write.c:607
+ do_syscall_64+0x2d/0x40 arch/x86/entry/common.c:46
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x45ce79
+Code: 2d b6 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 fb b5 fb ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007f8d2099fc78 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+RAX: ffffffffffffffda RBX: 00000000000252c0 RCX: 000000000045ce79
+RDX: 00000000000000f2 RSI: 0000000020000100 RDI: 0000000000000003
+RBP: 000000000118bf60 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 000000000118bf2c
+R13: 00007ffd66f595ff R14: 00007f8d209a09c0 R15: 000000000118bf2c
 
-AFAIK we don't get this warning for e.g. SPI buses, which can have a
-single device at address 0, and #{address,size}-cells is mandatory
-there. So endpoints (or SPI?) are treated special?
+Allocated by task 4524:
+ save_stack+0x1b/0x40 mm/kasan/common.c:48
+ set_track mm/kasan/common.c:56 [inline]
+ __kasan_kmalloc.constprop.0+0xc2/0xd0 mm/kasan/common.c:494
+ kmalloc include/linux/slab.h:555 [inline]
+ kzalloc include/linux/slab.h:669 [inline]
+ usb_alloc_dev+0x51/0xf67 drivers/usb/core/usb.c:582
+ hub_port_connect drivers/usb/core/hub.c:5114 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
+ port_event drivers/usb/core/hub.c:5494 [inline]
+ hub_event+0x1dff/0x4390 drivers/usb/core/hub.c:5576
+ process_one_work+0x94c/0x15f0 kernel/workqueue.c:2269
+ worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
+ kthread+0x392/0x470 kernel/kthread.c:292
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
 
-Gr{oetje,eeting}s,
+Freed by task 5477:
+ save_stack+0x1b/0x40 mm/kasan/common.c:48
+ set_track mm/kasan/common.c:56 [inline]
+ kasan_set_free_info mm/kasan/common.c:316 [inline]
+ __kasan_slab_free+0x116/0x160 mm/kasan/common.c:455
+ slab_free_hook mm/slub.c:1474 [inline]
+ slab_free_freelist_hook+0x53/0x140 mm/slub.c:1507
+ slab_free mm/slub.c:3072 [inline]
+ kfree+0xbc/0x2c0 mm/slub.c:4052
+ device_release+0x71/0x200 drivers/base/core.c:1800
+ kobject_cleanup lib/kobject.c:704 [inline]
+ kobject_release lib/kobject.c:735 [inline]
+ kref_put include/linux/kref.h:65 [inline]
+ kobject_put+0x1c8/0x540 lib/kobject.c:752
+ put_device+0x1b/0x30 drivers/base/core.c:3029
+ hub_port_connect drivers/usb/core/hub.c:5059 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
+ port_event drivers/usb/core/hub.c:5494 [inline]
+ hub_event+0x1c93/0x4390 drivers/usb/core/hub.c:5576
+ process_one_work+0x94c/0x15f0 kernel/workqueue.c:2269
+ worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
+ kthread+0x392/0x470 kernel/kthread.c:292
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
 
-                        Geert
+The buggy address belongs to the object at ffff8881caa52000
+ which belongs to the cache kmalloc-2k of size 2048
+The buggy address is located 24 bytes inside of
+ 2048-byte region [ffff8881caa52000, ffff8881caa52800)
+The buggy address belongs to the page:
+page:ffffea00072a9400 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 head:ffffea00072a9400 order:3 compound_mapcount:0 compound_pincount:0
+flags: 0x200000000010200(slab|head)
+raw: 0200000000010200 0000000000000000 0000000100000001 ffff8881da00c000
+raw: 0000000000000000 0000000000080008 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Memory state around the buggy address:
+ ffff8881caa51f00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff8881caa51f80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>ffff8881caa52000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                            ^
+ ffff8881caa52080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff8881caa52100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
