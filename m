@@ -2,79 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2306023EEF7
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Aug 2020 16:22:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 689B323EF43
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Aug 2020 16:49:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726210AbgHGOWF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Aug 2020 10:22:05 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:55969 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726150AbgHGOWF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Aug 2020 10:22:05 -0400
-Received: (qmail 228067 invoked by uid 1000); 7 Aug 2020 10:22:03 -0400
-Date:   Fri, 7 Aug 2020 10:22:03 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+bb9cb5f2cd814f87212a@syzkaller.appspotmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, m.szyprowski@samsung.com,
-        noring@nocrew.org, syzkaller-bugs@googlegroups.com,
-        tweek@google.com
-Subject: Re: KASAN: use-after-free Read in __usb_hcd_giveback_urb
-Message-ID: <20200807142203.GD226516@rowland.harvard.edu>
-References: <0000000000004a381905ac444162@google.com>
+        id S1726600AbgHGOtv convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 7 Aug 2020 10:49:51 -0400
+Received: from mail.furshetcrimea.ru ([193.27.243.220]:51882 "EHLO
+        furshetcrimea.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726523AbgHGOtt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Aug 2020 10:49:49 -0400
+X-Greylist: delayed 4975 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 Aug 2020 10:49:48 EDT
+Received: from [154.118.61.214] (account info@furshetcrimea.ru HELO [192.168.8.100])
+  by furshetcrimea.ru (CommuniGate Pro SMTP 6.1.10)
+  with ESMTPA id 11097405; Fri, 07 Aug 2020 16:34:35 +0300
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000004a381905ac444162@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Bei Interesse antworten.
+To:     Recipients <info@furshetcrimea.ru>
+From:   info@furshetcrimea.ru
+Date:   Fri, 07 Aug 2020 14:21:58 +0100
+Reply-To: mattiassjoborg751@gmail.com
+X-Antivirus: Avast (VPS 200807-0, 08/07/2020), Outbound message
+X-Antivirus-Status: Clean
+Message-ID: <auto-000011097405@furshetcrimea.ru>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 07, 2020 at 12:07:16AM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    fffe3ae0 Merge tag 'for-linus-hmm' of git://git.kernel.org..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=12b22fda900000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=226c7a97d80bec54
-> dashboard link: https://syzkaller.appspot.com/bug?extid=bb9cb5f2cd814f87212a
-> compiler:       clang version 10.0.0 (https://github.com/llvm/llvm-project/ c2443155a0fb245c8f17f2c1c72b6ea391e86e81)
-> 
-> Unfortunately, I don't have any reproducer for this issue yet.
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+bb9cb5f2cd814f87212a@syzkaller.appspotmail.com
-> 
-> xpad 3-1:0.65: xpad_irq_in - usb_submit_urb failed with result -19
-> xpad 3-1:0.65: xpad_irq_out - usb_submit_urb failed with result -19
-> ==================================================================
-> BUG: KASAN: use-after-free in register_lock_class+0x12a8/0x1520 kernel/locking/lockdep.c:1250
-> Read of size 2 at addr ffff8880a1f5c092 by task systemd-udevd/1571
-> 
-> CPU: 0 PID: 1571 Comm: systemd-udevd Not tainted 5.8.0-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> Call Trace:
->  <IRQ>
->  __dump_stack lib/dump_stack.c:77 [inline]
->  dump_stack+0x1f0/0x31e lib/dump_stack.c:118
->  print_address_description+0x66/0x5a0 mm/kasan/report.c:383
->  __kasan_report mm/kasan/report.c:513 [inline]
->  kasan_report+0x132/0x1d0 mm/kasan/report.c:530
->  register_lock_class+0x12a8/0x1520 kernel/locking/lockdep.c:1250
->  __lock_acquire+0xfa/0x2ab0 kernel/locking/lockdep.c:4305
->  lock_acquire+0x160/0x730 kernel/locking/lockdep.c:5005
->  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
->  _raw_spin_lock_irqsave+0x9e/0xc0 kernel/locking/spinlock.c:159
->  __wake_up_common_lock kernel/sched/wait.c:122 [inline]
->  __wake_up+0xb8/0x150 kernel/sched/wait.c:142
->  __usb_hcd_giveback_urb+0x340/0x4b0 drivers/usb/core/hcd.c:1653
+Schöne Grüße,
 
-It looks like xpad_disconnect() fails to call xpad_stop_input() if the 
-hardware isn't an Xbox 360W.
+Mein Name ist MATTIAS SJOBORG, ich bin Schweizer Staatsbürger und (Vorsitzender des Vergütungs- und Nominierungsausschusses) von Tethys Petroleum, einem multinationalen Ölkonzern mit Sitz in London-England, Großbritannien. Ich bitte Sie um Ihre Hilfe, um die Summe von vierzig Millionen Dollar abzurufen, die aus zwei Sendungsboxen besteht.
 
-Alan Stern
+Dieses Geld wurde von der Firma erworben und von einem Diplomaten begleitet und korrekt in einer Sicherheitsfirma in Amerika hinterlegt. Mein Grund dafür ist, dass ich von der Firma zu lange um meine Ansprüche betrogen wurde, nur weil ich kein bin Britisch. Die Kontaktdaten des Diplomaten erhalten Sie, wenn Sie Ihr Interesse bekunden, mir zu helfen.
+
+Jede der Schachteln enthält 20 Mio. USD. Für Ihre Hilfe bin ich bereit, 40% an Sie freizugeben. Aus Sicherheitsgründen wurde die Sendung als VERTRAULICHE DIPLOMATISCHE DOKUMENTE registriert, und ich kann erklären, warum dies so erklärt wurde. Denken Sie daran, dass der Diplomat den Inhalt der Sendung nicht kennt. Er ist seit einem Monat dort, während ich nach einem zuverlässigen Partner suchen möchte. Ich werde das Land verlassen, sobald die Sendung für Sie an Sie geliefert wird Private Investitionen und ich haben geschworen, niemals nach London zurückzukehren. Bitte, ich brauche Ihre dringende Antwort, bevor meine Pläne, das Unternehmen zu verlassen, entdeckt werden.
+
+www.tethyspetroleum.com/tethys/static/EN_US/au_seniormanagement.html
+
+Im Moment ist die sicherste Form der Korrespondenz meine eigene E-Mail-Adresse. Bitte antworten Sie im Interesse der Vertraulichkeit nur über meine direkte E-Mail-Adresse. Antworten Sie zusammen mit Ihrer direkten Telefon- und Faxnummer, unter der ich Sie alternativ erreichen kann.
+
+Bitte, wenn Sie nicht bereit und interessiert sind, mir zu helfen, löschen Sie bitte diese E-Mail aus Ihrer E-Mail und tun Sie so, als hätten Sie sie nie erhalten.
+
+Freundliche Grüße,
+Mr.Mattias Sjoborg
+(Vorsitzender des Vergütungs- und Nominierungsausschusses)
+Tethys Petroleum.
+London, England
+
+-- 
+This email has been checked for viruses by Avast antivirus software.
+https://www.avast.com/antivirus
+
