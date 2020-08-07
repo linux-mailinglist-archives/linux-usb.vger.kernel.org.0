@@ -2,97 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 403C823F213
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Aug 2020 19:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D456C23F3AC
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Aug 2020 22:20:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726545AbgHGRmu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 Aug 2020 13:42:50 -0400
-Received: from mout.kundenserver.de ([212.227.17.13]:55037 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726015AbgHGRmt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Aug 2020 13:42:49 -0400
-Received: from mail-qv1-f53.google.com ([209.85.219.53]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1MkYoK-1kReqP3jfa-00m3Ei; Fri, 07 Aug 2020 19:42:48 +0200
-Received: by mail-qv1-f53.google.com with SMTP id w2so1108850qvh.12;
-        Fri, 07 Aug 2020 10:42:47 -0700 (PDT)
-X-Gm-Message-State: AOAM532+7psWA3XSEzzzlRrYm69eacuclV6Rxrpwixdruc3bF/469+3k
-        yJWT/aRpSFQBxy040BkHuzXP69d2ie00vtHgmD4=
-X-Google-Smtp-Source: ABdhPJyv7rCGmFeLP7RqhcY13WRRiZFuulb0+11PGjaOlihhytyNU3OWx3CTv4fKmN0hSDmFQyGgcqMPDDRluUfvdeM=
-X-Received: by 2002:a0c:e604:: with SMTP id z4mr16028335qvm.222.1596822166562;
- Fri, 07 Aug 2020 10:42:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200806181932.2253-1-krzk@kernel.org> <20200806182059.2431-9-krzk@kernel.org>
- <87v9hupnf7.fsf@kernel.org>
-In-Reply-To: <87v9hupnf7.fsf@kernel.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 7 Aug 2020 19:42:30 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2UH2NELh8ifZj0s+Xv1vqURjwJWU5Qb2FQiOq7c=dcBg@mail.gmail.com>
-Message-ID: <CAK8P3a2UH2NELh8ifZj0s+Xv1vqURjwJWU5Qb2FQiOq7c=dcBg@mail.gmail.com>
-Subject: Re: [PATCH v2 09/41] usb: gadget: s3c-hsudc: remove platform header dependency
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        USB list <linux-usb@vger.kernel.org>
+        id S1726058AbgHGUUa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 7 Aug 2020 16:20:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54540 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725893AbgHGUUa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 7 Aug 2020 16:20:30 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 208843] New: System freeze and hard reset when attempting to
+ flash Sparkfun Red-V
+Date:   Fri, 07 Aug 2020 20:20:29 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: michael@michaelkloos.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression
+Message-ID: <bug-208843-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:xqCGEHVPGcWB0jFSoTTeIJSqhIg7jVYYMR5j6NlvNl3TbaQ0WLr
- +8ETHw69y0eV6btEKppBnfNKYARUJNbYhrpZnQwY9UGItBJQluG410enW81PrSEYRlN7ms2
- kURabCHww+WltJqBkc7pNCxWIMnLDtgiCmYh6qKwaibwz/eSyN3hQ3ZCkRBXJwXHE01Vs7l
- V15y1LQw3+u5kuB4BvPIA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:xuYE522+8qo=:D7pjgWSOHM6maavPIzu8JH
- NBk2XWP6xcFRkDFEhGxHX3a2T5KwIxJCfJyEv8pFvtRgDn0vIhVvWAPP9os1bqnQTa921d4OF
- yCGIBZqV1RO6VV6Q1XpZagM0SKuWIpFMos0cPcEu5m+1tl/Guwl2vF/u4xZexUogeu43ecNrD
- IInm9OsPg7cOZs6sRKFbAMjwOddT35RVEfRgSyuUSrx5KtR78v8RXJ5IzePLxW5DYE9GZl+X8
- UB+7sH0smUk/hGwU2eMDCiccm6F/IPEg48Tjhb/gLXgowHl9usaxeooIgdYl2nLT48Vbgiinm
- sr2gZnyfHXPeJewzZIuzonleNax5qbNrKsKE7MyQe86uMHC/az49oUEL8lZJes8PpBOX+tfkM
- XkskfDEYHaG2W1AQT8McFJXPRutuOyuocFpWPQOgzGvz8F+lxBTNS7Z5R4XKeKTKnWBwEZDly
- KSg1vJVeV0LMrwiiwV1PGDrpIcPhuCTi8Y8v+J2XUV/IMLqYPDOjQfwppGhzM+0DfnIn1nBaS
- ARWxg3aCHRK3fOkBqNP45ltMpPadrz1etsoqtnbEYzsQUoR+Ty/ndQxWyg/kXEf3M6ezhTaji
- qUolMcHjczxWcbcdXPUPGHHy0ULjT9dapcTZOK9TnslzgS586fS65QbN2zPMzGVV5pwhYphKd
- TkfrbBjLwPDNrS7eUKgkRUy/cJ+wudbNPdsrfiG9gStI7WJRz2Ug77g3GOwbtcGkrZEVsPNTB
- f95ilNP2PF5WtzzHcl0OAZJtms6Ng4Y452LFQcbshk4wvr+jaSzp/xHectlBYIykpVsiZEwjA
- fhftQAHnzHjrO8gCy6NOqjJMvNNDGC9MpUWGPFreAWBAzDXdnm5EmewvuoShojJZSVBT2qdrP
- E+7GDwxkb6G1Cl4I8keYYiEr/S2Ghe/pdJLTmj8cJjwdIwSxODpRCaXGgQzN/2OivB+4ll5uq
- xuM2gH8h3/lWbpibBi4P2zVLj7XrgxDmSTgWl3w8ynu0WWThfDne0
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 7, 2020 at 3:59 PM Felipe Balbi <balbi@kernel.org> wrote:
-> Krzysztof Kozlowski <krzk@kernel.org> writes:
+https://bugzilla.kernel.org/show_bug.cgi?id=208843
 
-> > +#include <linux/delay.h>
-> > +
-> >  #define S3C2443_CLKREG(x)            ((x) + S3C24XX_VA_CLKPWR)
-> >
-> >  #define S3C2443_PLLCON_MDIVSHIFT     16
-> > @@ -184,5 +186,52 @@ s3c2443_get_epll(unsigned int pllval, unsigned int baseclk)
-> >       return (unsigned int)fvco;
-> >  }
-> >
-> > +static inline void s3c_hsudc_init_phy(void)
->
-> This should, really, be a PHY driver under drivers/phy, since the goal
-> is to make this platform-independent, might as well take the opportunity
-> to introduce a proper driver, no?
+            Bug ID: 208843
+           Summary: System freeze and hard reset when attempting to flash
+                    Sparkfun Red-V
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: 5.4.48-gentoo
+          Hardware: x86-64
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: normal
+          Priority: P1
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: michael@michaelkloos.com
+        Regression: No
 
-In theory, this is absolutely correct. I fear it will be hard to find anyone
-to make a larger scale cleanup of the file however. As my old changelog
-text says, there is only one board (smdk2416) in the kernel that registers
-the device. My change was the minimum to keep it working during the
-move to a multiplatform configuration, but if there is someone who has
-the hardware and volunteers to make a proper phy driver, that would also
-work.
+The Sparkfun Red-V appears as a flash drive and 2 ACM modems (UARTs).  When an
+ihex file is copied to the "flash drive", the Red-V resets as it uses that file
+to reflash it's SPI flash.  Every 4-5 times I attempt this procedure, the
+sudden disconnection of the device causes my host system to freeze for a second
+or 2 and then hard-reset.  I wish I could give more technical info, but I'm not
+a kernel dev.  If you need more info, let me know and I'll try to get it for
+you.
 
-As the board only exists as a reference for other boards, but none of those
-made it into the kernel, we could alternatively just decide to drop the
-driver. There is also a .dts file for the board, which is lacking a device node
-for the udc (and the driver lacks DT support), so that board file could also
-be dropped then, leaving only the DT version as a reference for the SoC.
-
-       Arnd
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
