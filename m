@@ -2,201 +2,213 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE11A23E657
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Aug 2020 05:35:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB18123E78B
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Aug 2020 09:07:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726071AbgHGDfW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 Aug 2020 23:35:22 -0400
-Received: from mail-eopbgr10084.outbound.protection.outlook.com ([40.107.1.84]:21313
-        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726038AbgHGDfV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 6 Aug 2020 23:35:21 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aAPS9O5wDKyxWw+lxgeddf9nZ7nzKXtyPyC/2p2nJFi20dT/PGUT909MYhTUZ6RbjKSbrGWd9A5gbmgwdPlWFsCdq1gO2wZlui0XTIO4SakgZgL29S9JgL5OfYOknPQrfNP2JANp31KPT1ICujKi5yWWZflkaRmvmK2VAO8L1RzWYi9k0ZJzwBkv2lq6NnQp8n9z07aO1fIcH19dMcizOqGELDDmFELFz7xQU50YGK9XaSUfaBm+mkJ9KWn9bT6DXQjVMvH4MPQ+Fm57onjWF4BSrpY8ug3y6KHccWOefqrHJZXIO/55sUKTICCj4es8J2HtVO4kzsBsaDhwxoaQxw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tyHs5PEXe+gWBojmdCrQWCnOKYRLSCrVoTc7pnVJXDE=;
- b=OGTHbklO8JKPVpi9kFHq9jMjbil6DzJ34xNRJ1I0N4qKk9xOZfiFHONSj/2hrzzdhku6J37TWWcDT6IBhFqnQ28lRAwpofcOTTa3eZnIkeIxdtCZ06tUGJgRwK8IRahCh/fLgjM44IEpVy3L+HULIiVRJ2wnajtvYbSiAkCi67g8GUhdH/hnSEovA6hs85c4VtD1FuVdRLhhrQCLSOXtUDJE7OkT3A/AUODcQRETjuZgyjfpPf8EllTuGuO67u5PNdDaEbCYiucmomLrr52esPThMM2TAYfHknQKNcjBrBix+iD4orAyUDEmbgjXufb5zmLrnRB0QzY2LDFXdVXzvw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tyHs5PEXe+gWBojmdCrQWCnOKYRLSCrVoTc7pnVJXDE=;
- b=MKWjmIIYMNyiRkZeo4lFBclTfWMZ56hj41QqaiWeVm/5KDF3jK210k6DJHwv6Ra6bFHOrrHwiZ7dYpHYBn3RRAtFHZWjpZDQ10RtZ8mKAc5VWpmnXeVTpVy1BQtbVgaVCkUTac+uEdibTOHb+v0GxEhMJAD8k/xyBhxEmyTuuxk=
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
- by AM5PR04MB3137.eurprd04.prod.outlook.com (2603:10a6:206:c::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3261.20; Fri, 7 Aug
- 2020 03:35:18 +0000
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::ed7f:8755:5994:7fcf]) by AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::ed7f:8755:5994:7fcf%5]) with mapi id 15.20.3261.019; Fri, 7 Aug 2020
- 03:35:18 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Anton Vasilyev <vasilyev@ispras.ru>,
-        Evgeny Novikov <novikov@ispras.ru>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        USB mailing list <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH RFC 3/4] USB: UDC: net2280: Fix memory leaks
-Thread-Topic: [PATCH RFC 3/4] USB: UDC: net2280: Fix memory leaks
-Thread-Index: AQHWZeYhmVwzqjjWmkOV7PIsBZoLa6ksC3yA
-Date:   Fri, 7 Aug 2020 03:35:17 +0000
-Message-ID: <20200807033423.GA17207@b29397-desktop>
-References: <20200729202328.GD1584059@rowland.harvard.edu>
-In-Reply-To: <20200729202328.GD1584059@rowland.harvard.edu>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: rowland.harvard.edu; dkim=none (message not signed)
- header.d=none;rowland.harvard.edu; dmarc=none action=none
- header.from=nxp.com;
-x-originating-ip: [119.31.174.67]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 646b01fa-918b-4416-5aa8-08d83a82e7b6
-x-ms-traffictypediagnostic: AM5PR04MB3137:
-x-microsoft-antispam-prvs: <AM5PR04MB3137F4E10F5137136B7CD8068B490@AM5PR04MB3137.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: d5Y4/xHhfRQIpl2nXjDzV9B0wmNFlQwCMs+cpJA8CymGgedQ2YBN6afOEwzc8wBb3/8gUUHQ6sAPvMfhloQv1O42+WQcDERKFOp7UjDnSnV6syrYsXfTc2nSdYYgH/DKI4uCbf4zJbMvYn+A9OTWfBnZcnx8n6kzDwwO6AVO4OAsOmnuZkuON/G+uBBjyGAh7oQVoSLdx5rM1KPIPjQxOG6pSCSvaEAkZlq9dctmL7KS59H9i0LiM/byZjYTCkzOVs/J5zLM49HS6AWEfovcscgnDyJKF0cLINAdLsCDzcTeNAYl0k+8ubnGL/5tb9KskBh88k/lhRKpk0BqqAUbdw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(7916004)(4636009)(396003)(366004)(39860400002)(136003)(376002)(346002)(83380400001)(71200400001)(86362001)(6916009)(44832011)(33716001)(2906002)(54906003)(8676002)(91956017)(76116006)(26005)(66946007)(4326008)(66556008)(64756008)(66446008)(1076003)(66476007)(186003)(8936002)(478600001)(6512007)(6506007)(53546011)(9686003)(6486002)(5660300002)(33656002)(316002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: MUaJUowV4MsSPQYUjYdcK1GkOQdRV9ez4P5dcL9eI+FLkO0H5iyffMhNdrY0XBT4UbXo0MjQ/l3BdNO5Ymi0hCvx9aETK4EhwPmp6GToIZYFphklpSQe99FD9qur/ly7MOyvOW3vP3jWnbhXj47JrM18QWf/RcVFl4wwhXsAnerVjtgJXl/YKuG8yL972JcVQXeUBUSMKVXrasyMfwkRE5OHIZGmWxfWzG9NwzhLIzip0JJhCVMzyQo/D8TPC5tZREM4g+Q9Yt8JtsvdcZJu189nKmliCBZGETfsjzs0Qy/tLMyMHz71r8z5HOlYWk1US95pLuE7T9HKR4gK4v9vbNMY+0xWyPpMa4gl3ohlGbH4gmYNj4PUSseJjSSdodPz3+9UvCHLKylO8D0bOqbEw6DrmVFn0BJLTOpbH1FnzZWT1xkpezCBsGyRN7ir/mMfP+7tR5Y6pNM+fQvEoq7o0Yj/lj6HlvYwIhNHNM715Rzd5jG3lcFPfph3yPig3j/NFNHWwYjCYxrFTGXkKYk9dYBAnm4eq5k4rWBe2S6q8j3Iie/dIso2lWPdEGnxOc80dIefEMfZtg8xCm12VNP3LjzSjroBSS2F1ftoYYlYsRfL0mts9Xys3ouiFTOSavv0/YRnwAwaWigrF8k5NAEX2A==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <7639AACA3FA2CF4FB3F1DF941FB4EC1C@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1726566AbgHGHHT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 Aug 2020 03:07:19 -0400
+Received: from mail-il1-f200.google.com ([209.85.166.200]:53904 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726377AbgHGHHS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 Aug 2020 03:07:18 -0400
+Received: by mail-il1-f200.google.com with SMTP id v13so791893ila.20
+        for <linux-usb@vger.kernel.org>; Fri, 07 Aug 2020 00:07:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=29COMVJJ9zWLyYRwO7E5QPM3HQ4152TI677F1dd/mMI=;
+        b=pR5hwBqLO56Gg4nv4mKvNslUej8+TPuiE2OoMRKZwVaXsgFDoRGP+MEwFv6QRINIP/
+         ArtMYqg2CHgTKX3kQaMyx9vj6B3GotlMnY80SlrAXtM+McLQSh8z5hbRKby0rkJj2J3d
+         ovmymMPaFUooqtr3/ZxBIGkLKdNRjDlT0CNO5pjucp0yNDD51jjwHlOGnx8hWu3xibM4
+         qJiog/VD/V/hiDpDLZLZVjwc+cha1qYdHmssjRypPEqGMH8kr013+hm/n0oQeSvPwh3A
+         99OvugZq8vH1aLtp9HpucY/r6qc3UuLLjGkS1mWo5E6TZ0Bw9yXwqrYgbAb2L7A79J1Z
+         IxDw==
+X-Gm-Message-State: AOAM5332dfldrY1ax+THvVGVzYAmIGWMJxHN0d8yI+HhHqTx2nYAc6dz
+        bbSdBnJ3B5lwwFv0/+nTylw9XtS6M1HD3anyafukJtho+94K
+X-Google-Smtp-Source: ABdhPJxWSjDRQG78oxLIu4fKqxSaOKRwTDfdxu60Q5pR6Wa2B0z8ipLGZEskB8Jeaz88bOqT4/LwZQjZeuF0LrJcMA9PPBajFcLk
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 646b01fa-918b-4416-5aa8-08d83a82e7b6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Aug 2020 03:35:17.9925
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: I0b6sCseGxoeELOS2aWyWQp8MTaED93tn6AN5FJtuRZr6D2yBG4xFpeagfduIyV3b4rX7Ri3mz1I8uzsXBAqSg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR04MB3137
+X-Received: by 2002:a05:6602:58:: with SMTP id z24mr3208509ioz.76.1596784036687;
+ Fri, 07 Aug 2020 00:07:16 -0700 (PDT)
+Date:   Fri, 07 Aug 2020 00:07:16 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004a381905ac444162@google.com>
+Subject: KASAN: use-after-free Read in __usb_hcd_giveback_urb
+From:   syzbot <syzbot+bb9cb5f2cd814f87212a@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, m.szyprowski@samsung.com,
+        noring@nocrew.org, syzkaller-bugs@googlegroups.com,
+        tweek@google.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-07-29 16:23:28, Alan Stern wrote:
-> As Anton and Evgeny have noted, the net2280 UDC driver has a problem
-> with leaking memory along some of its failure pathways.  It also has
-> another problem, not previously noted, in that some of the failure
-> pathways will call usb_del_gadget_udc() without first calling
-> usb_add_gadget_udc_release().  And it leaks memory by calling kfree()
-> when it should call put_device().
->=20
-> Previous attempts to fix the problems have failed because of lack of
-> support in the UDC core for separately initializing and adding
-> gadgets, or for separately deleting and freeing gadgets.  The previous
-> patch in this series adds the necessary support, making it possible to
-> fix the outstanding problems properly.
->=20
-> This patch adds an "added" flag to the net2280 structure to indicate
-> whether or not the gadget has been registered (and thus whether or not
-> to call usb_del_gadget()), and it fixes the deallocation issues by
-> calling usb_put_gadget() at the appropriate point.
->=20
-> A similar memory leak issue, apparently never before recognized, stems
-> from the fact that the driver never initializes the drvdata field in
-> the gadget's embedded struct device!  Evidently this wasn't noticed
-> because the pointer is only ever used as an argument to kfree(), which
-> doesn't mind getting called with a NULL pointer.
->=20
-> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-> Reported-By: Anton Vasilyev <vasilyev@ispras.ru>
-> Reported-By: Evgeny Novikov <novikov@ispras.ru>
-> CC: Benjamin Herrenschmidt <benh@kernel.crashing.org>
->=20
-> ---
->=20
->  drivers/usb/gadget/udc/net2280.c |   10 +++++++---
->  drivers/usb/gadget/udc/net2280.h |    1 +
->  2 files changed, 8 insertions(+), 3 deletions(-)
->=20
-> Index: usb-devel/drivers/usb/gadget/udc/net2280.c
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> --- usb-devel.orig/drivers/usb/gadget/udc/net2280.c
-> +++ usb-devel/drivers/usb/gadget/udc/net2280.c
-> @@ -3572,7 +3572,8 @@ static void net2280_remove(struct pci_de
->  {
->  	struct net2280		*dev =3D pci_get_drvdata(pdev);
-> =20
-> -	usb_del_gadget_udc(&dev->gadget);
-> +	if (dev->added)
-> +		usb_del_gadget(&dev->gadget);
-> =20
->  	BUG_ON(dev->driver);
-> =20
-> @@ -3603,6 +3604,7 @@ static void net2280_remove(struct pci_de
->  	device_remove_file(&pdev->dev, &dev_attr_registers);
-> =20
->  	ep_info(dev, "unbind\n");
-> +	usb_put_gadget(&dev->gadget);
->  }
-> =20
->  /* wrap this driver around the specified device, but
-> @@ -3624,6 +3626,8 @@ static int net2280_probe(struct pci_dev
->  	}
-> =20
->  	pci_set_drvdata(pdev, dev);
-> +	dev_set_drvdata(&dev->gadget.dev, dev);
+Hello,
 
-The gadget device's drvdata will be written by usb_composite_dev
-structure pointer at composite_bind, composite_bind is called after
-loading any gadget class drivers, so you can't depend on it at
-gadget_release.
+syzbot found the following issue on:
 
-Peter
+HEAD commit:    fffe3ae0 Merge tag 'for-linus-hmm' of git://git.kernel.org..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=12b22fda900000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=226c7a97d80bec54
+dashboard link: https://syzkaller.appspot.com/bug?extid=bb9cb5f2cd814f87212a
+compiler:       clang version 10.0.0 (https://github.com/llvm/llvm-project/ c2443155a0fb245c8f17f2c1c72b6ea391e86e81)
 
-> +	usb_initialize_gadget(&pdev->dev, &dev->gadget, gadget_release);
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+bb9cb5f2cd814f87212a@syzkaller.appspotmail.com
+
+xpad 3-1:0.65: xpad_irq_in - usb_submit_urb failed with result -19
+xpad 3-1:0.65: xpad_irq_out - usb_submit_urb failed with result -19
+==================================================================
+BUG: KASAN: use-after-free in register_lock_class+0x12a8/0x1520 kernel/locking/lockdep.c:1250
+Read of size 2 at addr ffff8880a1f5c092 by task systemd-udevd/1571
+
+CPU: 0 PID: 1571 Comm: systemd-udevd Not tainted 5.8.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <IRQ>
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x1f0/0x31e lib/dump_stack.c:118
+ print_address_description+0x66/0x5a0 mm/kasan/report.c:383
+ __kasan_report mm/kasan/report.c:513 [inline]
+ kasan_report+0x132/0x1d0 mm/kasan/report.c:530
+ register_lock_class+0x12a8/0x1520 kernel/locking/lockdep.c:1250
+ __lock_acquire+0xfa/0x2ab0 kernel/locking/lockdep.c:4305
+ lock_acquire+0x160/0x730 kernel/locking/lockdep.c:5005
+ __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+ _raw_spin_lock_irqsave+0x9e/0xc0 kernel/locking/spinlock.c:159
+ __wake_up_common_lock kernel/sched/wait.c:122 [inline]
+ __wake_up+0xb8/0x150 kernel/sched/wait.c:142
+ __usb_hcd_giveback_urb+0x340/0x4b0 drivers/usb/core/hcd.c:1653
+ dummy_timer+0x71b/0x3e10 drivers/usb/gadget/udc/dummy_hcd.c:1967
+ call_timer_fn+0x91/0x160 kernel/time/timer.c:1413
+ expire_timers kernel/time/timer.c:1458 [inline]
+ __run_timers+0x65e/0x830 kernel/time/timer.c:1755
+ run_timer_softirq+0x46/0x80 kernel/time/timer.c:1768
+ __do_softirq+0x236/0x66c kernel/softirq.c:298
+ asm_call_on_stack+0xf/0x20 arch/x86/entry/entry_64.S:706
+ </IRQ>
+ __run_on_irqstack arch/x86/include/asm/irq_stack.h:22 [inline]
+ run_on_irqstack_cond arch/x86/include/asm/irq_stack.h:48 [inline]
+ do_softirq_own_stack+0x91/0xe0 arch/x86/kernel/irq_64.c:77
+ invoke_softirq kernel/softirq.c:393 [inline]
+ __irq_exit_rcu+0x1e1/0x1f0 kernel/softirq.c:423
+ irq_exit_rcu+0x5/0x10 kernel/softirq.c:435
+ sysvec_apic_timer_interrupt+0xd5/0xf0 arch/x86/kernel/apic/apic.c:1091
+ asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:581
+RIP: 0010:do_inode_permission fs/namei.c:396 [inline]
+RIP: 0010:inode_permission+0x53/0x4a0 fs/namei.c:463
+Code: 00 00 00 00 fc ff df 83 e3 02 48 89 1c 24 0f 85 b4 00 00 00 e8 7e 87 b4 ff 4d 8d 7e 02 4c 89 fb 48 c1 eb 03 49 89 ed 8a 04 2b <84> c0 0f 85 23 03 00 00 41 0f b7 2f 83 e5 01 31 ff 89 ee e8 c5 8a
+RSP: 0018:ffffc90017927c20 EFLAGS: 00000a06
+RAX: ffffffff81c05000 RBX: 1ffff110145e86b8 RCX: ffff88801bc50380
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: dffffc0000000000 R08: ffffffff81c05013 R09: fffff52002f24fb6
+R10: fffff52002f24fb6 R11: 0000000000000000 R12: 0000000000000001
+R13: dffffc0000000000 R14: ffff8880a2f435c0 R15: ffff8880a2f435c2
+ may_lookup fs/namei.c:1575 [inline]
+ link_path_walk+0x20e/0xba0 fs/namei.c:2125
+ path_lookupat+0xab/0x960 fs/namei.c:2332
+ filename_lookup+0x1ab/0x5d0 fs/namei.c:2366
+ user_path_at include/linux/namei.h:59 [inline]
+ do_faccessat+0x3a0/0x870 fs/open.c:423
+ do_syscall_64+0x31/0x70 arch/x86/entry/common.c:46
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x7f25ea32d9c7
+Code: 83 c4 08 48 3d 01 f0 ff ff 73 01 c3 48 8b 0d c8 d4 2b 00 f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 b8 15 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d a1 d4 2b 00 f7 d8 64 89 01 48
+RSP: 002b:00007ffc5e5cb2f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000015
+RAX: ffffffffffffffda RBX: 0000558966534980 RCX: 00007f25ea32d9c7
+RDX: 00746e657665752f RSI: 0000000000000000 RDI: 00007ffc5e5cb300
+RBP: 00007ffc5e5cb370 R08: 0000000000000122 R09: 0000000000001010
+R10: 00007f25ea5ebb58 R11: 0000000000000246 R12: 0000558965bff856
+R13: 000055896653ac10 R14: 00007ffc5e5cb300 R15: 000055896653a268
+
+Allocated by task 472:
+ save_stack mm/kasan/common.c:48 [inline]
+ set_track mm/kasan/common.c:56 [inline]
+ __kasan_kmalloc+0x103/0x140 mm/kasan/common.c:494
+ kmem_cache_alloc_trace+0x234/0x300 mm/slab.c:3551
+ kmalloc include/linux/slab.h:555 [inline]
+ kzalloc include/linux/slab.h:669 [inline]
+ xpad_probe+0x389/0x1a10 drivers/input/joystick/xpad.c:1729
+ usb_probe_interface+0x614/0xac0 drivers/usb/core/driver.c:374
+ really_probe+0x753/0x1110 drivers/base/dd.c:557
+ driver_probe_device+0x106/0x1a0 drivers/base/dd.c:738
+ bus_for_each_drv+0x108/0x170 drivers/base/bus.c:431
+ __device_attach+0x262/0x3f0 drivers/base/dd.c:912
+ bus_probe_device+0xb8/0x1f0 drivers/base/bus.c:491
+ device_add+0x1630/0x19b0 drivers/base/core.c:2930
+ usb_set_configuration+0x19d2/0x1f20 drivers/usb/core/message.c:2032
+ usb_generic_driver_probe+0x82/0x140 drivers/usb/core/generic.c:239
+ usb_probe_device+0x12d/0x1d0 drivers/usb/core/driver.c:272
+ really_probe+0x753/0x1110 drivers/base/dd.c:557
+ driver_probe_device+0x106/0x1a0 drivers/base/dd.c:738
+ bus_for_each_drv+0x108/0x170 drivers/base/bus.c:431
+ __device_attach+0x262/0x3f0 drivers/base/dd.c:912
+ bus_probe_device+0xb8/0x1f0 drivers/base/bus.c:491
+ device_add+0x1630/0x19b0 drivers/base/core.c:2930
+ usb_new_device+0xcc3/0x1650 drivers/usb/core/hub.c:2554
+ hub_port_connect drivers/usb/core/hub.c:5208 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
+ port_event drivers/usb/core/hub.c:5494 [inline]
+ hub_event+0x2823/0x4cb0 drivers/usb/core/hub.c:5576
+ process_one_work+0x789/0xfc0 kernel/workqueue.c:2269
+ worker_thread+0xaa4/0x1460 kernel/workqueue.c:2415
+ kthread+0x37e/0x3a0 drivers/block/aoe/aoecmd.c:1234
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+
+Freed by task 22084:
+ save_stack mm/kasan/common.c:48 [inline]
+ set_track mm/kasan/common.c:56 [inline]
+ kasan_set_free_info mm/kasan/common.c:316 [inline]
+ __kasan_slab_free+0x114/0x170 mm/kasan/common.c:455
+ __cache_free mm/slab.c:3426 [inline]
+ kfree+0x10a/0x220 mm/slab.c:3757
+ xpad_disconnect+0x2ec/0x3f0 drivers/input/joystick/xpad.c:1877
+ usb_unbind_interface+0x1d2/0x840 drivers/usb/core/driver.c:436
+ __device_release_driver drivers/base/dd.c:1153 [inline]
+ device_release_driver_internal+0x516/0x7b0 drivers/base/dd.c:1184
+ bus_remove_device+0x2eb/0x360 drivers/base/bus.c:533
+ device_del+0x7b9/0x1280 drivers/base/core.c:3107
+ usb_disable_device+0x3ee/0xc80 drivers/usb/core/message.c:1245
+ usb_disconnect+0x346/0x880 drivers/usb/core/hub.c:2217
+ hub_port_connect drivers/usb/core/hub.c:5059 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
+ port_event drivers/usb/core/hub.c:5494 [inline]
+ hub_event+0x1c18/0x4cb0 drivers/usb/core/hub.c:5576
+ process_one_work+0x789/0xfc0 kernel/workqueue.c:2269
+ worker_thread+0xaa4/0x1460 kernel/workqueue.c:2415
+ kthread+0x37e/0x3a0 drivers/block/aoe/aoecmd.c:1234
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+
+The buggy address belongs to the object at ffff8880a1f5c000
+ which belongs to the cache kmalloc-1k of size 1024
+The buggy address is located 146 bytes inside of
+ 1024-byte region [ffff8880a1f5c000, ffff8880a1f5c400)
+The buggy address belongs to the page:
+page:ffffea000287d700 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0
+flags: 0xfffe0000000200(slab)
+raw: 00fffe0000000200 ffffea0002448208 ffffea000260c7c8 ffff8880aa400c40
+raw: 0000000000000000 ffff8880a1f5c000 0000000100000002 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+ ffff8880a1f5bf80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff8880a1f5c000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff8880a1f5c080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                         ^
+ ffff8880a1f5c100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff8880a1f5c180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
 
 
->  	spin_lock_init(&dev->lock);
->  	dev->quirks =3D id->driver_data;
->  	dev->pdev =3D pdev;
-> @@ -3774,10 +3778,10 @@ static int net2280_probe(struct pci_dev
->  	if (retval)
->  		goto done;
-> =20
-> -	retval =3D usb_add_gadget_udc_release(&pdev->dev, &dev->gadget,
-> -			gadget_release);
-> +	retval =3D usb_add_gadget(&dev->gadget);
->  	if (retval)
->  		goto done;
-> +	dev->added =3D 1;
->  	return 0;
-> =20
->  done:
-> Index: usb-devel/drivers/usb/gadget/udc/net2280.h
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> --- usb-devel.orig/drivers/usb/gadget/udc/net2280.h
-> +++ usb-devel/drivers/usb/gadget/udc/net2280.h
-> @@ -156,6 +156,7 @@ struct net2280 {
->  					softconnect : 1,
->  					got_irq : 1,
->  					region:1,
-> +					added:1,
->  					u1_enable:1,
->  					u2_enable:1,
->  					ltm_enable:1,
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
---=20
-
-Thanks,
-Peter Chen=
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
