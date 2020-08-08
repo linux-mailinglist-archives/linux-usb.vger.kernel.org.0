@@ -2,97 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C8F423F7B1
-	for <lists+linux-usb@lfdr.de>; Sat,  8 Aug 2020 15:00:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B135A23F807
+	for <lists+linux-usb@lfdr.de>; Sat,  8 Aug 2020 17:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726266AbgHHNAT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 8 Aug 2020 09:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54770 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726125AbgHHNAT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 8 Aug 2020 09:00:19 -0400
-X-Greylist: delayed 589 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 08 Aug 2020 06:00:18 PDT
-Received: from mxwww.masterlogin.de (mxwww.masterlogin.de [IPv6:2a03:2900:1:1::b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAEFCC061756
-        for <linux-usb@vger.kernel.org>; Sat,  8 Aug 2020 06:00:18 -0700 (PDT)
-Received: from mxout1.routing.net (unknown [192.168.10.81])
-        by forward.mxwww.masterlogin.de (Postfix) with ESMTPS id A7D9596281;
-        Sat,  8 Aug 2020 12:50:19 +0000 (UTC)
-Received: from mxbox4.masterlogin.de (unknown [192.168.10.79])
-        by mxout1.routing.net (Postfix) with ESMTP id 725683FEAF;
-        Sat,  8 Aug 2020 12:50:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=20200217; t=1596891019;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Wj2UayRDflcnw5kUmZA37cOx3/QYiW/w9iZEs90Vdzw=;
-        b=PE0cKnHyhUjOHIKjyvMjunDc16plM449cKob0oqnP5TFPVjNbqPmHxAN3F+kLXiGV8uZnf
-        W0I5cMu7yoZkdufBKMuprfRu+s89EWgUenGcDqVljGo5+oPZqFrEm5w8MK/LP9dvZRk44S
-        RoLgsP5qDSGitsksqA0Nl9vipEs29/M=
-Received: from localhost.localdomain (fttx-pool-217.61.152.39.bambit.de [217.61.152.39])
-        by mxbox4.masterlogin.de (Postfix) with ESMTPSA id D25358018E;
-        Sat,  8 Aug 2020 12:50:18 +0000 (UTC)
-From:   Frank Wunderlich <linux@fw-web.de>
-To:     linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: xhci-mtk: Fix typo
-Date:   Sat,  8 Aug 2020 14:49:06 +0200
-Message-Id: <20200808124906.89976-1-linux@fw-web.de>
-X-Mailer: git-send-email 2.25.1
+        id S1726377AbgHHPRb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 8 Aug 2020 11:17:31 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:51651 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726233AbgHHPQt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 8 Aug 2020 11:16:49 -0400
+Received: (qmail 257323 invoked by uid 1000); 8 Aug 2020 11:16:48 -0400
+Date:   Sat, 8 Aug 2020 11:16:48 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Yasushi Asano <yazzep@gmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        erosca@de.adit-jv.com, andrew_gabbasov@mentor.com,
+        jim_baxter@mentor.com, wnatsume@jp.adit-jv.com,
+        nnishiguchi@jp.adit-jv.com, yasano@jp.adit-jv.com
+Subject: Re: [PATCH] [RFC] USB: hub.c: decrease the number of attempts of
+ enumeration scheme
+Message-ID: <20200808151648.GC256751@rowland.harvard.edu>
+References: <CAEt1RjrQsb6=reKUKV9uJTG4JoJXErhJFj=2TdVx=N1_Ad1GVg@mail.gmail.com>
+ <20200808064014.3199-1-yazzep@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200808064014.3199-1-yazzep@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Frank Wunderlich <frank-w@public-files.de>
+On Sat, Aug 08, 2020 at 03:40:14PM +0900, Yasushi Asano wrote:
+> From: Yasushi Asano <yasano@jp.adit-jv.com>
+> 
+> According to 6.7.22 A-UUT “Device No Response” for connection timeout
+> of USB OTG and EH automated compliance plan v1.2, the enumeration
+> failure has to be detected within 30 seconds. However, the old and new
+> enumeration schemes made a total of 16 attempts, and each attempt can
+> take 5 seconds to timeout, so it failed with PET test. Modify it to
+> reduce the number of attempts to 5 and pass PET test.
 
-fix this small typo u3_ports_disabed => u3_ports_disabled
+This description should explain that there will be 3 attempts using the 
+new scheme and 2 attempts using the old scheme (is that right?), at 
+most.
 
-Fixes: 55ba6e9e25a6 (usb: xhci-mtk: support option to disable usb3 ports)
-Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
----
- drivers/usb/host/xhci-mtk.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> Signed-off-by: Yasushi Asano <yasano@jp.adit-jv.com>
+> ---
+>  drivers/usb/core/hub.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index 052d5ac..ebf6931 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -2707,9 +2707,9 @@ static unsigned hub_is_wusb(struct usb_hub *hub)
+>  
+>  #define PORT_RESET_TRIES	5
+>  #define SET_ADDRESS_TRIES	2
+> -#define GET_DESCRIPTOR_TRIES	2
+> -#define SET_CONFIG_TRIES	(2 * (use_both_schemes + 1))
+> -#define USE_NEW_SCHEME(i, scheme)	((i) / 2 == (int)(scheme))
+> +#define GET_DESCRIPTOR_TRIES	1
 
-diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
-index 4311d4c9b68d..8f321f39ab96 100644
---- a/drivers/usb/host/xhci-mtk.c
-+++ b/drivers/usb/host/xhci-mtk.c
-@@ -77,7 +77,7 @@ static int xhci_mtk_host_enable(struct xhci_hcd_mtk *mtk)
- {
- 	struct mu3c_ippc_regs __iomem *ippc = mtk->ippc_regs;
- 	u32 value, check_val;
--	int u3_ports_disabed = 0;
-+	int u3_ports_disabled = 0;
- 	int ret;
- 	int i;
- 
-@@ -92,7 +92,7 @@ static int xhci_mtk_host_enable(struct xhci_hcd_mtk *mtk)
- 	/* power on and enable u3 ports except skipped ones */
- 	for (i = 0; i < mtk->num_u3_ports; i++) {
- 		if ((0x1 << i) & mtk->u3p_dis_msk) {
--			u3_ports_disabed++;
-+			u3_ports_disabled++;
- 			continue;
- 		}
- 
-@@ -117,7 +117,7 @@ static int xhci_mtk_host_enable(struct xhci_hcd_mtk *mtk)
- 	check_val = STS1_SYSPLL_STABLE | STS1_REF_RST |
- 			STS1_SYS125_RST | STS1_XHCI_RST;
- 
--	if (mtk->num_u3_ports > u3_ports_disabed)
-+	if (mtk->num_u3_ports > u3_ports_disabled)
- 		check_val |= STS1_U3_MAC_RST;
- 
- 	ret = readl_poll_timeout(&ippc->ip_pw_sts1, value,
--- 
-2.25.1
+Instead of changing the number of loop iterations to 1, you should get 
+rid of the loop entirely.
 
+> +#define SET_CONFIG_TRIES	(use_both_schemes + 1)
+> +#define USE_NEW_SCHEME(i, scheme)	((i) == (int)(scheme))
+>  
+>  #define HUB_ROOT_RESET_TIME	60	/* times are in msec */
+>  #define HUB_SHORT_RESET_TIME	10
+> -- 
+> 2.7.4
+
+Alan Stern
