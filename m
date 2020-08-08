@@ -2,81 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B135A23F807
-	for <lists+linux-usb@lfdr.de>; Sat,  8 Aug 2020 17:17:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3803A23F921
+	for <lists+linux-usb@lfdr.de>; Sat,  8 Aug 2020 23:27:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726377AbgHHPRb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 8 Aug 2020 11:17:31 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:51651 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726233AbgHHPQt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 8 Aug 2020 11:16:49 -0400
-Received: (qmail 257323 invoked by uid 1000); 8 Aug 2020 11:16:48 -0400
-Date:   Sat, 8 Aug 2020 11:16:48 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Yasushi Asano <yazzep@gmail.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        erosca@de.adit-jv.com, andrew_gabbasov@mentor.com,
-        jim_baxter@mentor.com, wnatsume@jp.adit-jv.com,
-        nnishiguchi@jp.adit-jv.com, yasano@jp.adit-jv.com
-Subject: Re: [PATCH] [RFC] USB: hub.c: decrease the number of attempts of
- enumeration scheme
-Message-ID: <20200808151648.GC256751@rowland.harvard.edu>
-References: <CAEt1RjrQsb6=reKUKV9uJTG4JoJXErhJFj=2TdVx=N1_Ad1GVg@mail.gmail.com>
- <20200808064014.3199-1-yazzep@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200808064014.3199-1-yazzep@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1726442AbgHHV1l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 8 Aug 2020 17:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47292 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726200AbgHHV1k (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 8 Aug 2020 17:27:40 -0400
+Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA32FC061756;
+        Sat,  8 Aug 2020 14:27:40 -0700 (PDT)
+Received: from localhost (50-47-102-2.evrt.wa.frontiernet.net [50.47.102.2])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id D5E51127359E8;
+        Sat,  8 Aug 2020 14:10:53 -0700 (PDT)
+Date:   Sat, 08 Aug 2020 14:27:38 -0700 (PDT)
+Message-Id: <20200808.142738.431277384120054736.davem@davemloft.net>
+To:     thierry.reding@gmail.com
+Cc:     kuba@kernel.org, linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-tegra@vger.kernel.org, ejh@nvidia.com
+Subject: Re: [PATCH net] r8152: Use MAC address from correct device tree
+ node
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20200807073632.63057-1-thierry.reding@gmail.com>
+References: <20200807073632.63057-1-thierry.reding@gmail.com>
+X-Mailer: Mew version 6.8 on Emacs 26.3
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Sat, 08 Aug 2020 14:10:54 -0700 (PDT)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Aug 08, 2020 at 03:40:14PM +0900, Yasushi Asano wrote:
-> From: Yasushi Asano <yasano@jp.adit-jv.com>
+From: Thierry Reding <thierry.reding@gmail.com>
+Date: Fri,  7 Aug 2020 09:36:32 +0200
+
+> From: Thierry Reding <treding@nvidia.com>
 > 
-> According to 6.7.22 A-UUT “Device No Response” for connection timeout
-> of USB OTG and EH automated compliance plan v1.2, the enumeration
-> failure has to be detected within 30 seconds. However, the old and new
-> enumeration schemes made a total of 16 attempts, and each attempt can
-> take 5 seconds to timeout, so it failed with PET test. Modify it to
-> reduce the number of attempts to 5 and pass PET test.
-
-This description should explain that there will be 3 attempts using the 
-new scheme and 2 attempts using the old scheme (is that right?), at 
-most.
-
+> Query the USB device's device tree node when looking for a MAC address.
+> The struct device embedded into the struct net_device does not have a
+> device tree node attached at all.
 > 
-> Signed-off-by: Yasushi Asano <yasano@jp.adit-jv.com>
-> ---
->  drivers/usb/core/hub.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+> The reason why this went unnoticed is because the system where this was
+> tested was one of the few development units that had its OTP programmed,
+> as opposed to production systems where the MAC address is stored in a
+> separate EEPROM and is passed via device tree by the firmware.
 > 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index 052d5ac..ebf6931 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -2707,9 +2707,9 @@ static unsigned hub_is_wusb(struct usb_hub *hub)
->  
->  #define PORT_RESET_TRIES	5
->  #define SET_ADDRESS_TRIES	2
-> -#define GET_DESCRIPTOR_TRIES	2
-> -#define SET_CONFIG_TRIES	(2 * (use_both_schemes + 1))
-> -#define USE_NEW_SCHEME(i, scheme)	((i) / 2 == (int)(scheme))
-> +#define GET_DESCRIPTOR_TRIES	1
+> Reported-by: EJ Hsu <ejh@nvidia.com>
+> Fixes: acb6d3771a03 ("r8152: Use MAC address from device tree if available")
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
 
-Instead of changing the number of loop iterations to 1, you should get 
-rid of the loop entirely.
+Applied, thank you.
 
-> +#define SET_CONFIG_TRIES	(use_both_schemes + 1)
-> +#define USE_NEW_SCHEME(i, scheme)	((i) == (int)(scheme))
->  
->  #define HUB_ROOT_RESET_TIME	60	/* times are in msec */
->  #define HUB_SHORT_RESET_TIME	10
-> -- 
-> 2.7.4
-
-Alan Stern
