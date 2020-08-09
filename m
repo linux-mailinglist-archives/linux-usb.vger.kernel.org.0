@@ -2,44 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63E6923FEB9
-	for <lists+linux-usb@lfdr.de>; Sun,  9 Aug 2020 16:19:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 701D123FEBD
+	for <lists+linux-usb@lfdr.de>; Sun,  9 Aug 2020 16:19:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726242AbgHIOTN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 9 Aug 2020 10:19:13 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:23351 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726070AbgHIOTM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 9 Aug 2020 10:19:12 -0400
+        id S1726370AbgHIOTT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 9 Aug 2020 10:19:19 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:25610 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726293AbgHIOTR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 9 Aug 2020 10:19:17 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1596982750;
+        s=mimecast20190719; t=1596982753;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=KJfDvNtR06xu5KpjicQMLrqqiKfJr4YyEx0w8epCDm0=;
-        b=G9mnyjxhpWCrHhVhwzrTGfDLh8N9q43+cZgkBTJGzn4XhKoJb5MnkiuGuJBllxM4rA155g
-        HRhN3DnnnctWAHtm5bg2bPEr3cBDRsZIpsjvz2Ez1JYsDWEoffNOQttbJPzc9lLXWmOacd
-        L/rMnCfmwUPgtsbvJIpCJhT+t3w9TW8=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3SxBwwd/jGFDYXHUnTvTxkgkCOmK+BmPZI0Qya15sKI=;
+        b=JNEgyU1w0to7yBXD2OXCrG1vUnlaaDlT5zKjPKdJwtX+jQSQhuhOBNZn3fE3nj40HcNFx7
+        W5XKmRV26kpSYoO0B/2YfIsdxUeKZ04k5aCZ9nS4MSnWidKqr1nQKJGRGdwGRLz9gRxqUG
+        77wH7qmoehaCAfwckD29D5xP3gl4KSs=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-340-HOO6AugkOkWKRujTnEqQew-1; Sun, 09 Aug 2020 10:19:08 -0400
-X-MC-Unique: HOO6AugkOkWKRujTnEqQew-1
+ us-mta-232-rbjyxjQ3NQi0B5g-dDpI3g-1; Sun, 09 Aug 2020 10:19:09 -0400
+X-MC-Unique: rbjyxjQ3NQi0B5g-dDpI3g-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 17DFF19200C0;
-        Sun,  9 Aug 2020 14:19:07 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9EBB457;
+        Sun,  9 Aug 2020 14:19:08 +0000 (UTC)
 Received: from x1.localdomain.com (ovpn-112-24.ams2.redhat.com [10.36.112.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BDD2A8953D;
-        Sun,  9 Aug 2020 14:19:05 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 67A8989528;
+        Sun,  9 Aug 2020 14:19:07 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Guenter Roeck <linux@roeck-us.net>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>, linux-usb@vger.kernel.org
-Subject: [PATCH 0/4] usb: typec: ucsi: Fix various locking issues
-Date:   Sun,  9 Aug 2020 16:19:00 +0200
-Message-Id: <20200809141904.4317-1-hdegoede@redhat.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-usb@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: [PATCH 1/4] usb: typec: ucsi: Fix AB BA lock inversion
+Date:   Sun,  9 Aug 2020 16:19:01 +0200
+Message-Id: <20200809141904.4317-2-hdegoede@redhat.com>
+In-Reply-To: <20200809141904.4317-1-hdegoede@redhat.com>
+References: <20200809141904.4317-1-hdegoede@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
@@ -48,33 +52,126 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Heikki, et al.,
+Lockdep reports an AB BA lock inversion between ucsi_init() and
+ucsi_handle_connector_change():
 
-As discussed before here is my fix for the AB BA lock inversion issue
-which lockdep found in the ucsi code.
+AB order:
 
-While working on the AB BA fix I added a
-WARN_ON(!mutex_is_locked(&ucsi->ppm_lock)) to ucsi_run_command() and
-that found me some more unrelated issues of ucsi_run_command() getting
-called without the ppm_lock held. This is fixed in the second patch.
-This made me realize that the ppm_lock handling should probably just
-be pushed down to inside ucsi_run_command() instead of letting the
-callers worry about this.
+1. ucsi_init takes ucsi->ppm_lock (it runs with that locked for the
+   duration of the function)
+2. usci_init eventually end up calling ucsi_register_displayport,
+   which takes ucsi_connector->lock
 
-In essence the first 3 patches are all related and all boil down to
-push the ppm_lock handling down into ucsi_run_command(), removing the
-difference between ucsi_run_command() and ucsi_send_command(). I have
-been thinking that we may want to just squash these 3 together. I've
-left them as separate patches now as thet document how I go to the
-end result after the 3th patch and having them separate might be
-easier for reviewing purposes. Let me know if you want a v2 of this
-patchset with them squashed into a single "usb: typec: ucsi: Rework
-ppm_lock handling" commit (with the commit messages merged).
+BA order:
 
-The 4th patch makes the also already discussed change of holding
-con->lock for the entire duration of ucsi_register_port().
+1. ucsi_handle_connector_change work is started, takes ucsi_connector->lock
+2. ucsi_handle_connector_change calls ucsi_send_command which takes
+   ucsi->ppm_lock
 
-Regards,
+The ppm_lock really only needs to be hold during 2 functions:
+ucsi_reset_ppm() and ucsi_run_command().
 
-Hans
+This commit fixes the AB BA lock inversion by making ucsi_init drop the
+ucsi->ppm_lock before it starts registering ports; and replacing any
+ucsi_run_command() calls after this point with ucsi_send_command()
+(which is a wrapper around run_command taking the lock while handling
+the command).
+
+Some of the replacing of ucsi_run_command with ucsi_send_command
+in the helpers used during port registration also fixes a number of
+code paths after registration which call ucsi_run_command() without
+holding the ppm_lock:
+1. ucsi_altmode_update_active() call in ucsi/displayport.c
+2. ucsi_register_altmodes() call from ucsi_handle_connector_change()
+   (through ucsi_partner_change())
+
+Cc: stable@vger.kernel.org
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ drivers/usb/typec/ucsi/ucsi.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index d0c63afaf345..d9d93f83b2a6 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -205,7 +205,7 @@ void ucsi_altmode_update_active(struct ucsi_connector *con)
+ 	int i;
+ 
+ 	command = UCSI_GET_CURRENT_CAM | UCSI_CONNECTOR_NUMBER(con->num);
+-	ret = ucsi_run_command(con->ucsi, command, &cur, sizeof(cur));
++	ret = ucsi_send_command(con->ucsi, command, &cur, sizeof(cur));
+ 	if (ret < 0) {
+ 		if (con->ucsi->version > 0x0100) {
+ 			dev_err(con->ucsi->dev,
+@@ -354,7 +354,7 @@ ucsi_register_altmodes_nvidia(struct ucsi_connector *con, u8 recipient)
+ 		command |= UCSI_GET_ALTMODE_RECIPIENT(recipient);
+ 		command |= UCSI_GET_ALTMODE_CONNECTOR_NUMBER(con->num);
+ 		command |= UCSI_GET_ALTMODE_OFFSET(i);
+-		len = ucsi_run_command(con->ucsi, command, &alt, sizeof(alt));
++		len = ucsi_send_command(con->ucsi, command, &alt, sizeof(alt));
+ 		/*
+ 		 * We are collecting all altmodes first and then registering.
+ 		 * Some type-C device will return zero length data beyond last
+@@ -431,7 +431,7 @@ static int ucsi_register_altmodes(struct ucsi_connector *con, u8 recipient)
+ 		command |= UCSI_GET_ALTMODE_RECIPIENT(recipient);
+ 		command |= UCSI_GET_ALTMODE_CONNECTOR_NUMBER(con->num);
+ 		command |= UCSI_GET_ALTMODE_OFFSET(i);
+-		len = ucsi_run_command(con->ucsi, command, alt, sizeof(alt));
++		len = ucsi_send_command(con->ucsi, command, alt, sizeof(alt));
+ 		if (len <= 0)
+ 			return len;
+ 
+@@ -904,7 +904,7 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+ 	/* Get connector capability */
+ 	command = UCSI_GET_CONNECTOR_CAPABILITY;
+ 	command |= UCSI_CONNECTOR_NUMBER(con->num);
+-	ret = ucsi_run_command(ucsi, command, &con->cap, sizeof(con->cap));
++	ret = ucsi_send_command(ucsi, command, &con->cap, sizeof(con->cap));
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -953,8 +953,7 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+ 
+ 	/* Get the status */
+ 	command = UCSI_GET_CONNECTOR_STATUS | UCSI_CONNECTOR_NUMBER(con->num);
+-	ret = ucsi_run_command(ucsi, command, &con->status,
+-			       sizeof(con->status));
++	ret = ucsi_send_command(ucsi, command, &con->status, sizeof(con->status));
+ 	if (ret < 0) {
+ 		dev_err(ucsi->dev, "con%d: failed to get status\n", con->num);
+ 		return 0;
+@@ -1044,6 +1043,8 @@ int ucsi_init(struct ucsi *ucsi)
+ 		goto err_reset;
+ 	}
+ 
++	mutex_unlock(&ucsi->ppm_lock);
++
+ 	/* Register all connectors */
+ 	for (i = 0; i < ucsi->cap.num_connectors; i++) {
+ 		ret = ucsi_register_port(ucsi, i);
+@@ -1054,12 +1055,10 @@ int ucsi_init(struct ucsi *ucsi)
+ 	/* Enable all notifications */
+ 	ucsi->ntfy = UCSI_ENABLE_NTFY_ALL;
+ 	command = UCSI_SET_NOTIFICATION_ENABLE | ucsi->ntfy;
+-	ret = ucsi_run_command(ucsi, command, NULL, 0);
++	ret = ucsi_send_command(ucsi, command, NULL, 0);
+ 	if (ret < 0)
+ 		goto err_unregister;
+ 
+-	mutex_unlock(&ucsi->ppm_lock);
+-
+ 	return 0;
+ 
+ err_unregister:
+@@ -1071,6 +1070,7 @@ int ucsi_init(struct ucsi *ucsi)
+ 		con->port = NULL;
+ 	}
+ 
++	mutex_lock(&ucsi->ppm_lock);
+ err_reset:
+ 	ucsi_reset_ppm(ucsi);
+ err:
+-- 
+2.26.2
 
