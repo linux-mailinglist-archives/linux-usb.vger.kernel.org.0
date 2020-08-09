@@ -2,117 +2,235 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B84E23FE55
-	for <lists+linux-usb@lfdr.de>; Sun,  9 Aug 2020 14:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3400E23FEA7
+	for <lists+linux-usb@lfdr.de>; Sun,  9 Aug 2020 16:04:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726229AbgHIMyL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 9 Aug 2020 08:54:11 -0400
-Received: from crapouillou.net ([89.234.176.41]:33422 "EHLO crapouillou.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726009AbgHIMyJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 9 Aug 2020 08:54:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1596977646; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:references; bh=cnkmqD3TG3gz8m5XcYrWDZ+GrLOHBws185ObzDx76W4=;
-        b=koKnTka2TQh1Pi5bezaIUxvSZNqIOH73m0JLB50SXT/kS7HRy7RE3eYCxF0kylxdMBaKtz
-        r9SBDWb9XR5VPe1KBCjk0EHZ5Hw2sMjWvsHqhuynBpq810w3G5kunugipyx8SQ0lKVHCmG
-        tn2xrwbelnBWR2TEEIiThPD3FT4ktgo=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Bin Liu <b-liu@ti.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Johan Hovold <johan@kernel.org>, od@zcrc.me,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paul Cercueil <paul@crapouillou.net>, stable@vger.kernel.org
-Subject: [PATCH] usb: musb: Fix runtime PM race in musb_queue_resume_work
-Date:   Sun,  9 Aug 2020 14:53:59 +0200
-Message-Id: <20200809125359.31025-1-paul@crapouillou.net>
+        id S1726299AbgHIODt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 9 Aug 2020 10:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57822 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726207AbgHIODo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 9 Aug 2020 10:03:44 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CBEC061787
+        for <linux-usb@vger.kernel.org>; Sun,  9 Aug 2020 07:03:42 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id di22so4546556edb.12
+        for <linux-usb@vger.kernel.org>; Sun, 09 Aug 2020 07:03:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vanguardiasur-com-ar.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KLZEVLP20PgmfVdEJqcQ68Pgn+2fkvIP5+vKsHo8nuo=;
+        b=1Wf2eqKYeDEvfeEJ4g1YLY6V6+zJFPFqQK9lPAztUsfWPIGGSeo6Pk/UUM0qm4UUfw
+         qoLIMbhuo6e516UTEO6AokZ/UZivmAoan0TyuepA+6LAUiz1jOuTo7uxtUfbWBzwdp+x
+         4tuPcdEwtes9N+8mgqDLEWDzxu8S0DvrAvzr233VLym0BLi0fclx34+duxpoVgbMrHC6
+         K1fXkq3nc4fSYI3HxRejqA1H/iliVbdyDQfj72F5noTHe2c00rs72yQefrThhOQVaYDb
+         34CxAndp3VuzR22Wmb1MT+8BdtnzBPuoB3vYzJFw4YxJAzujL19yafj7SzLT1bB7yc2v
+         gfnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KLZEVLP20PgmfVdEJqcQ68Pgn+2fkvIP5+vKsHo8nuo=;
+        b=mDBP7TvvmG5zeCi7fa/EieCgEkkwe8AoJHFJqPJp15CBB2Y2aW28hiJtkwvljtRBpt
+         I2lfziUfQQcztZIBZEzixiBm5m5B2sfzUkiIl8DRJ5iwmHmSkziVGBWaSQvP3NIMgLbD
+         39P8vHr8GwV4u82wVIg+J8QeDbNwgLW8mKWkO0Nq/05Gn+yiT9VVzuNm4ckN/70kziqN
+         1IDPVqSYQmSQPqJrPqaAvYDsc6FVdAxC2frgNLck24n2JgEV2cHEo3xYAQZRkDTV1jnA
+         EU/gtL0V187lYFVYJiMiAyqseKMhuOWQmorKOIiT0FJJD5Oulz+2OKEMVjviI29ujvWt
+         /Mnw==
+X-Gm-Message-State: AOAM531pmp6ReTsUdb8Sgtt0iCxI5ABecXugy2AfXSbE001xBbzVQiIV
+        dj8HM9nVbGLtvEEdK6ulP+m4MpV/+S3UNyApp8OaXQ==
+X-Google-Smtp-Source: ABdhPJw7T/ETZp88a+Gd8iKRT0NBaqKz/GU1e9SiKOpPtrYewpEnmIzMfi0Y0lIAi3n83GSsEkkaVTQDuklrsy6RG1Q=
+X-Received: by 2002:aa7:de13:: with SMTP id h19mr16648239edv.322.1596981820142;
+ Sun, 09 Aug 2020 07:03:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <00000000000003dcbd05ac44862c@google.com> <20200807091504.GA7397@gofer.mess.org>
+ <CAAEAJfDfc_vw15g_5OEG4uX+ynZpZH3M_P16DNFjstwsUnZtCw@mail.gmail.com> <20200808092526.GA31150@gofer.mess.org>
+In-Reply-To: <20200808092526.GA31150@gofer.mess.org>
+From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Date:   Sun, 9 Aug 2020 11:03:28 -0300
+Message-ID: <CAAEAJfDbvX6erE76GpNn-1QP025RWUoW-MARbn1KekPiUbchag@mail.gmail.com>
+Subject: Re: KASAN: use-after-free Read in rc_dev_uevent
+To:     Sean Young <sean@mess.org>
+Cc:     syzbot <syzbot+ceef16277388d6f24898@syzkaller.appspotmail.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-musb_queue_resume_work() would call the provided callback if the runtime
-PM status was 'active'. Otherwise, it would enqueue the request if the
-hardware was still suspended (musb->is_runtime_suspended is true).
+On Sat, 8 Aug 2020 at 06:25, Sean Young <sean@mess.org> wrote:
+>
+> Hi Eze,
+>
+> On Fri, Aug 07, 2020 at 08:45:12PM -0300, Ezequiel Garcia wrote:
+> > On Fri, 7 Aug 2020 at 06:15, Sean Young <sean@mess.org> wrote:
+> > >
+> > > On Fri, Aug 07, 2020 at 12:26:29AM -0700, syzbot wrote:
+> > > > Hello,
+> > > >
+> > > > syzbot found the following issue on:
+> > > >
+> > > > HEAD commit:    7b4ea945 Revert "x86/mm/64: Do not sync vmalloc/ioremap ma..
+> > > > git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+> > > > console output: https://syzkaller.appspot.com/x/log.txt?x=11a7813a900000
+> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=72a84c46d0c668c
+> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=ceef16277388d6f24898
+> > > > compiler:       gcc (GCC) 10.1.0-syz 20200507
+> > > >
+> > > > Unfortunately, I don't have any reproducer for this issue yet.
+> > > >
+> > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > > > Reported-by: syzbot+ceef16277388d6f24898@syzkaller.appspotmail.com
+> > > >
+> > > > ==================================================================
+> > > > BUG: KASAN: use-after-free in string_nocheck lib/vsprintf.c:611 [inline]
+> > > > BUG: KASAN: use-after-free in string+0x39c/0x3d0 lib/vsprintf.c:693
+> > > > Read of size 1 at addr ffff8881ca21cd20 by task systemd-udevd/5147
+> > > >
+> > > > CPU: 1 PID: 5147 Comm: systemd-udevd Not tainted 5.8.0-syzkaller #0
+> > > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> > > > Call Trace:
+> > > >  __dump_stack lib/dump_stack.c:77 [inline]
+> > > >  dump_stack+0xf6/0x16e lib/dump_stack.c:118
+> > > >  print_address_description.constprop.0+0x1a/0x210 mm/kasan/report.c:383
+> > > >  __kasan_report mm/kasan/report.c:513 [inline]
+> > > >  kasan_report.cold+0x37/0x7c mm/kasan/report.c:530
+> > > >  string_nocheck lib/vsprintf.c:611 [inline]
+> > > >  string+0x39c/0x3d0 lib/vsprintf.c:693
+> > > >  vsnprintf+0x71b/0x14f0 lib/vsprintf.c:2617
+> > > >  add_uevent_var+0x14d/0x310 lib/kobject_uevent.c:664
+> > > >  rc_dev_uevent+0x54/0x140 drivers/media/rc/rc-main.c:1616
+> > > >  dev_uevent+0x30e/0x780 drivers/base/core.c:1916
+> > > >  uevent_show+0x1bb/0x360 drivers/base/core.c:1963
+> > > >  dev_attr_show+0x4b/0x90 drivers/base/core.c:1667
+> > > >  sysfs_kf_seq_show+0x1f8/0x400 fs/sysfs/file.c:60
+> > > >  seq_read+0x432/0x1070 fs/seq_file.c:208
+> > > >  kernfs_fop_read+0xe9/0x590 fs/kernfs/file.c:251
+> > > >  vfs_read+0x1df/0x520 fs/read_write.c:479
+> > > >  ksys_read+0x12d/0x250 fs/read_write.c:607
+> > > >  do_syscall_64+0x2d/0x40 arch/x86/entry/common.c:46
+> > > >  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> > > > RIP: 0033:0x7f6e6c02f910
+> > > > Code: b6 fe ff ff 48 8d 3d 0f be 08 00 48 83 ec 08 e8 06 db 01 00 66 0f 1f 44 00 00 83 3d f9 2d 2c 00 00 75 10 b8 00 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 31 c3 48 83 ec 08 e8 de 9b 01 00 48 89 04 24
+> > > > RSP: 002b:00007fff3cddeae8 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+> > > > RAX: ffffffffffffffda RBX: 0000558492caaae0 RCX: 00007f6e6c02f910
+> > > > RDX: 0000000000001000 RSI: 0000558492cc7530 RDI: 0000000000000007
+> > > > RBP: 00007f6e6c2ea440 R08: 00007f6e6c2ee298 R09: 0000000000001010
+> > > > R10: 0000558492caaae0 R11: 0000000000000246 R12: 0000000000001000
+> > > > R13: 0000000000000d68 R14: 0000558492cc7530 R15: 00007f6e6c2e9900
+> > >
+> > > This thread is reading the uevent sysfs file, which reads
+> > > rc_dev->map.name, and also rc_dev->device_name, but that is not causing
+> > > problems is this case.
+> > >
+> > > >
+> > > > Allocated by task 5:
+> > > >  save_stack+0x1b/0x40 mm/kasan/common.c:48
+> > > >  set_track mm/kasan/common.c:56 [inline]
+> > > >  __kasan_kmalloc.constprop.0+0xc2/0xd0 mm/kasan/common.c:494
+> > > >  slab_post_alloc_hook mm/slab.h:586 [inline]
+> > > >  slab_alloc_node mm/slub.c:2824 [inline]
+> > > >  slab_alloc mm/slub.c:2832 [inline]
+> > > >  __kmalloc_track_caller+0xec/0x280 mm/slub.c:4430
+> > > >  kstrdup+0x36/0x70 mm/util.c:60
+> > > >  ir_create_table drivers/media/rc/rc-main.c:217 [inline]
+> > > >  ir_setkeytable drivers/media/rc/rc-main.c:477 [inline]
+> > > >  rc_prepare_rx_device drivers/media/rc/rc-main.c:1786 [inline]
+> > > >  rc_register_device+0x464/0x1600 drivers/media/rc/rc-main.c:1914
+> > > >  igorplugusb_probe+0x7e6/0xc98 drivers/media/rc/igorplugusb.c:209
+> > > >  usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:374
+> > > >  really_probe+0x291/0xde0 drivers/base/dd.c:553
+> > > >  driver_probe_device+0x26b/0x3d0 drivers/base/dd.c:738
+> > > >  __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:844
+> > > >  bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:431
+> > > >  __device_attach+0x228/0x4a0 drivers/base/dd.c:912
+> > > >  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
+> > > >  device_add+0xb51/0x1c70 drivers/base/core.c:2930
+> > > >  usb_set_configuration+0xf05/0x18a0 drivers/usb/core/message.c:2032
+> > > >  usb_generic_driver_probe+0xba/0xf2 drivers/usb/core/generic.c:239
+> > > >  usb_probe_device+0xd9/0x250 drivers/usb/core/driver.c:272
+> > > >  really_probe+0x291/0xde0 drivers/base/dd.c:553
+> > > >  driver_probe_device+0x26b/0x3d0 drivers/base/dd.c:738
+> > > >  __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:844
+> > > >  bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:431
+> > > >  __device_attach+0x228/0x4a0 drivers/base/dd.c:912
+> > > >  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
+> > > >  device_add+0xb51/0x1c70 drivers/base/core.c:2930
+> > > >  usb_new_device.cold+0x71d/0xfd4 drivers/usb/core/hub.c:2554
+> > > >  hub_port_connect drivers/usb/core/hub.c:5208 [inline]
+> > > >  hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
+> > > >  port_event drivers/usb/core/hub.c:5494 [inline]
+> > > >  hub_event+0x2361/0x4390 drivers/usb/core/hub.c:5576
+> > > >  process_one_work+0x94c/0x15f0 kernel/workqueue.c:2269
+> > > >  worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
+> > > >  kthread+0x392/0x470 kernel/kthread.c:292
+> > > >  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+> > >
+> > > .. this probed the device ..
+> > >
+> > > > Freed by task 5:
+> > > >  save_stack+0x1b/0x40 mm/kasan/common.c:48
+> > > >  set_track mm/kasan/common.c:56 [inline]
+> > > >  kasan_set_free_info mm/kasan/common.c:316 [inline]
+> > > >  __kasan_slab_free+0x116/0x160 mm/kasan/common.c:455
+> > > >  slab_free_hook mm/slub.c:1474 [inline]
+> > > >  slab_free_freelist_hook+0x53/0x140 mm/slub.c:1507
+> > > >  slab_free mm/slub.c:3072 [inline]
+> > > >  kfree+0xbc/0x2c0 mm/slub.c:4052
+> > > >  ir_free_table drivers/media/rc/rc-main.c:245 [inline]
+> > > >  rc_free_rx_device drivers/media/rc/rc-main.c:1875 [inline]
+> > > >  rc_unregister_device+0x142/0x410 drivers/media/rc/rc-main.c:2014
+> > > >  igorplugusb_disconnect+0x58/0x110 drivers/media/rc/igorplugusb.c:232
+> > > >  usb_unbind_interface+0x1d8/0x8d0 drivers/usb/core/driver.c:436
+> > > >  __device_release_driver+0x3c6/0x6f0 drivers/base/dd.c:1153
+> > > >  device_release_driver_internal drivers/base/dd.c:1184 [inline]
+> > > >  device_release_driver+0x26/0x40 drivers/base/dd.c:1207
+> > > >  bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
+> > > >  device_del+0x481/0xd90 drivers/base/core.c:3107
+> > > >  usb_disable_device+0x387/0x930 drivers/usb/core/message.c:1245
+> > > >  usb_disconnect.cold+0x27d/0x780 drivers/usb/core/hub.c:2217
+> > > >  hub_port_connect drivers/usb/core/hub.c:5059 [inline]
+> > > >  hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
+> > > >  port_event drivers/usb/core/hub.c:5494 [inline]
+> > > >  hub_event+0x1c93/0x4390 drivers/usb/core/hub.c:5576
+> > > >  process_one_work+0x94c/0x15f0 kernel/workqueue.c:2269
+> > > >  process_scheduled_works kernel/workqueue.c:2331 [inline]
+> > > >  worker_thread+0x82b/0x1120 kernel/workqueue.c:2417
+> > > >  kthread+0x392/0x470 kernel/kthread.c:292
+> > > >  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+> > >
+> > > This unplugged the device, and freed rc_dev->map->name and sets
+> > > it to NULL. There is no locking between the two threads so this is
+> > > a race condition.
+> > >
+> > > I think there are worse, related problems here. For example, iguanair
+> > > driver allocates rc_dev->device_name and frees it in its usb disconnect
+> > > handler. This field is also read by uevent, and not set to null by
+> > > the disconnect handler.
+> > >
+> > > Not sure what the best solution is yet.
+> > >
+> >
+> > All USB drivers (and also any kind of driver that can be hotplugged)
+> > should implement some sort of refcounting, to avoid this kind of
+> > use-after-free issue.
+> >
+> > Drivers can't free memory that may be associated with an open
+> > handle, until you remove the device node.
+>
+> Thank you for trying to be helpful, but I do know all these things; I
 
-This causes a race with the runtime PM handlers, as it is possible to be
-in the case where the runtime PM status is not yet 'active', but the
-hardware has been awaken (PM resume function has been called).
+I hope you didn't read my reply as condescending. I was just being
+a bit naive: after seeing your latest patches using the registered boolean
+for sysfs paths I realized that I got confused by seeing rc_unregister_device,
+and not seeing the refcounted rc_dev_release.
 
-When hitting the race, the resume work was not enqueued, which probably
-triggered other bugs further down the stack. For instance, a telnet
-connection on Ingenic SoCs would result in a 50/50 chance of a
-segmentation fault somewhere in the musb code.
-
-Rework the code so that either we call the callback directly if
-(musb->is_runtime_suspended == 0), or enqueue the query otherwise.
-
-Fixes: ea2f35c01d5e ("usb: musb: Fix sleeping function called from invalid context for hdrc glue")
-Cc: stable@vger.kernel.org # v4.9
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- drivers/usb/musb/musb_core.c | 31 +++++++++++++++++--------------
- 1 file changed, 17 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/usb/musb/musb_core.c b/drivers/usb/musb/musb_core.c
-index 384a8039a7fd..462c10d7455a 100644
---- a/drivers/usb/musb/musb_core.c
-+++ b/drivers/usb/musb/musb_core.c
-@@ -2241,32 +2241,35 @@ int musb_queue_resume_work(struct musb *musb,
- {
- 	struct musb_pending_work *w;
- 	unsigned long flags;
-+	bool is_suspended;
- 	int error;
- 
- 	if (WARN_ON(!callback))
- 		return -EINVAL;
- 
--	if (pm_runtime_active(musb->controller))
--		return callback(musb, data);
-+	spin_lock_irqsave(&musb->list_lock, flags);
-+	is_suspended = musb->is_runtime_suspended;
-+
-+	if (is_suspended) {
-+		w = devm_kzalloc(musb->controller, sizeof(*w), GFP_ATOMIC);
-+		if (!w) {
-+			error = -ENOMEM;
-+			goto out_unlock;
-+		}
- 
--	w = devm_kzalloc(musb->controller, sizeof(*w), GFP_ATOMIC);
--	if (!w)
--		return -ENOMEM;
-+		w->callback = callback;
-+		w->data = data;
- 
--	w->callback = callback;
--	w->data = data;
--	spin_lock_irqsave(&musb->list_lock, flags);
--	if (musb->is_runtime_suspended) {
- 		list_add_tail(&w->node, &musb->pending_list);
- 		error = 0;
--	} else {
--		dev_err(musb->controller, "could not add resume work %p\n",
--			callback);
--		devm_kfree(musb->controller, w);
--		error = -EINPROGRESS;
- 	}
-+
-+out_unlock:
- 	spin_unlock_irqrestore(&musb->list_lock, flags);
- 
-+	if (!is_suspended)
-+		error = callback(musb, data);
-+
- 	return error;
- }
- EXPORT_SYMBOL_GPL(musb_queue_resume_work);
--- 
-2.28.0
-
+Sorry for the noise!
+Ezequiel
