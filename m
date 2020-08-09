@@ -2,103 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AB0123FD6C
-	for <lists+linux-usb@lfdr.de>; Sun,  9 Aug 2020 10:44:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B84E23FE55
+	for <lists+linux-usb@lfdr.de>; Sun,  9 Aug 2020 14:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726299AbgHIIoN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 9 Aug 2020 04:44:13 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:42461 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725710AbgHIIoM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 9 Aug 2020 04:44:12 -0400
-Received: by mail-wr1-f65.google.com with SMTP id r4so5391930wrx.9;
-        Sun, 09 Aug 2020 01:44:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=XTNoyFeYnEOkAJbw8iUBzSkCy3+i9xEDKg6ExpJpe58=;
-        b=f1eVZXIFneTFqsfir7kKbKuuseMC/ZEIx+TXLkGnxI54px6nHzE/2TlYR1HNsf1N+z
-         EleIf8mg0GCOs8PXpO7J7eoNF3BXAiBRNsWz4LukKM81oDnOmRE0Q9T5tleoTvG3+GaT
-         qcALOhoATJ3sBhFOGZCiimhJ4LLkPJKjT9LrZd8In6lN/oqcWxfT/nHk+78SVdCMLpjW
-         yMceQNb01guWHpJjcnFg68Nmk3T83wEo9NdtOmbvbVIhoEM9CKShF8Ls1LTOvv2aJ3Fs
-         XSE9B9PrSx/4xob/iIVDqq3TVdP9VOcrCk0EKDxZbG55k2CVVeWLGWap+wNqe4qOE1/V
-         r6ug==
-X-Gm-Message-State: AOAM532nVZaCgklty5vJx+RMWvjPS2KQGoIWvgJTU4jZQ6+wTwWQnSpD
-        ja8/7yKd11xXdhZTpUkC+eM=
-X-Google-Smtp-Source: ABdhPJzR24fsvQn+bWapiKi1vT1VGMsKWHkAfPzOI1FgKJZqRX84iY++vZGIbOeWRK5zx5K/fvoPtQ==
-X-Received: by 2002:adf:fac8:: with SMTP id a8mr19817671wrs.368.1596962650201;
-        Sun, 09 Aug 2020 01:44:10 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.117])
-        by smtp.googlemail.com with ESMTPSA id d23sm16745787wmd.27.2020.08.09.01.44.08
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 09 Aug 2020 01:44:09 -0700 (PDT)
-Date:   Sun, 9 Aug 2020 10:44:07 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        USB list <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH v2 09/41] usb: gadget: s3c-hsudc: remove platform header
- dependency
-Message-ID: <20200809084407.GA7722@kozik-lap>
-References: <20200806181932.2253-1-krzk@kernel.org>
- <20200806182059.2431-9-krzk@kernel.org>
- <87v9hupnf7.fsf@kernel.org>
- <CAK8P3a2UH2NELh8ifZj0s+Xv1vqURjwJWU5Qb2FQiOq7c=dcBg@mail.gmail.com>
+        id S1726229AbgHIMyL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 9 Aug 2020 08:54:11 -0400
+Received: from crapouillou.net ([89.234.176.41]:33422 "EHLO crapouillou.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726009AbgHIMyJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 9 Aug 2020 08:54:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1596977646; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:references; bh=cnkmqD3TG3gz8m5XcYrWDZ+GrLOHBws185ObzDx76W4=;
+        b=koKnTka2TQh1Pi5bezaIUxvSZNqIOH73m0JLB50SXT/kS7HRy7RE3eYCxF0kylxdMBaKtz
+        r9SBDWb9XR5VPe1KBCjk0EHZ5Hw2sMjWvsHqhuynBpq810w3G5kunugipyx8SQ0lKVHCmG
+        tn2xrwbelnBWR2TEEIiThPD3FT4ktgo=
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Bin Liu <b-liu@ti.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Johan Hovold <johan@kernel.org>, od@zcrc.me,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paul Cercueil <paul@crapouillou.net>, stable@vger.kernel.org
+Subject: [PATCH] usb: musb: Fix runtime PM race in musb_queue_resume_work
+Date:   Sun,  9 Aug 2020 14:53:59 +0200
+Message-Id: <20200809125359.31025-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a2UH2NELh8ifZj0s+Xv1vqURjwJWU5Qb2FQiOq7c=dcBg@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 07, 2020 at 07:42:30PM +0200, Arnd Bergmann wrote:
-> On Fri, Aug 7, 2020 at 3:59 PM Felipe Balbi <balbi@kernel.org> wrote:
-> > Krzysztof Kozlowski <krzk@kernel.org> writes:
-> 
-> > > +#include <linux/delay.h>
-> > > +
-> > >  #define S3C2443_CLKREG(x)            ((x) + S3C24XX_VA_CLKPWR)
-> > >
-> > >  #define S3C2443_PLLCON_MDIVSHIFT     16
-> > > @@ -184,5 +186,52 @@ s3c2443_get_epll(unsigned int pllval, unsigned int baseclk)
-> > >       return (unsigned int)fvco;
-> > >  }
-> > >
-> > > +static inline void s3c_hsudc_init_phy(void)
-> >
-> > This should, really, be a PHY driver under drivers/phy, since the goal
-> > is to make this platform-independent, might as well take the opportunity
-> > to introduce a proper driver, no?
-> 
-> In theory, this is absolutely correct. I fear it will be hard to find anyone
-> to make a larger scale cleanup of the file however. As my old changelog
-> text says, there is only one board (smdk2416) in the kernel that registers
-> the device. My change was the minimum to keep it working during the
-> move to a multiplatform configuration, but if there is someone who has
-> the hardware and volunteers to make a proper phy driver, that would also
-> work.
-> 
-> As the board only exists as a reference for other boards, but none of those
-> made it into the kernel, we could alternatively just decide to drop the
-> driver. There is also a .dts file for the board, which is lacking a device node
-> for the udc (and the driver lacks DT support), so that board file could also
-> be dropped then, leaving only the DT version as a reference for the SoC.
+musb_queue_resume_work() would call the provided callback if the runtime
+PM status was 'active'. Otherwise, it would enqueue the request if the
+hardware was still suspended (musb->is_runtime_suspended is true).
 
-All this is a work on a very old SoC with an unknown number of
-current/real users. I don't have the hardware to test so I would prefer
-to skip any big changes. As Arnd suggests, we could just drop this one
-board and the driver... or if it does not harm/bother to much we could
-keep it as is, just without platform header dependency. Someone still
-might be using it.
+This causes a race with the runtime PM handlers, as it is possible to be
+in the case where the runtime PM status is not yet 'active', but the
+hardware has been awaken (PM resume function has been called).
 
-Best regards,
-Krzysztof
+When hitting the race, the resume work was not enqueued, which probably
+triggered other bugs further down the stack. For instance, a telnet
+connection on Ingenic SoCs would result in a 50/50 chance of a
+segmentation fault somewhere in the musb code.
+
+Rework the code so that either we call the callback directly if
+(musb->is_runtime_suspended == 0), or enqueue the query otherwise.
+
+Fixes: ea2f35c01d5e ("usb: musb: Fix sleeping function called from invalid context for hdrc glue")
+Cc: stable@vger.kernel.org # v4.9
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+ drivers/usb/musb/musb_core.c | 31 +++++++++++++++++--------------
+ 1 file changed, 17 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/usb/musb/musb_core.c b/drivers/usb/musb/musb_core.c
+index 384a8039a7fd..462c10d7455a 100644
+--- a/drivers/usb/musb/musb_core.c
++++ b/drivers/usb/musb/musb_core.c
+@@ -2241,32 +2241,35 @@ int musb_queue_resume_work(struct musb *musb,
+ {
+ 	struct musb_pending_work *w;
+ 	unsigned long flags;
++	bool is_suspended;
+ 	int error;
+ 
+ 	if (WARN_ON(!callback))
+ 		return -EINVAL;
+ 
+-	if (pm_runtime_active(musb->controller))
+-		return callback(musb, data);
++	spin_lock_irqsave(&musb->list_lock, flags);
++	is_suspended = musb->is_runtime_suspended;
++
++	if (is_suspended) {
++		w = devm_kzalloc(musb->controller, sizeof(*w), GFP_ATOMIC);
++		if (!w) {
++			error = -ENOMEM;
++			goto out_unlock;
++		}
+ 
+-	w = devm_kzalloc(musb->controller, sizeof(*w), GFP_ATOMIC);
+-	if (!w)
+-		return -ENOMEM;
++		w->callback = callback;
++		w->data = data;
+ 
+-	w->callback = callback;
+-	w->data = data;
+-	spin_lock_irqsave(&musb->list_lock, flags);
+-	if (musb->is_runtime_suspended) {
+ 		list_add_tail(&w->node, &musb->pending_list);
+ 		error = 0;
+-	} else {
+-		dev_err(musb->controller, "could not add resume work %p\n",
+-			callback);
+-		devm_kfree(musb->controller, w);
+-		error = -EINPROGRESS;
+ 	}
++
++out_unlock:
+ 	spin_unlock_irqrestore(&musb->list_lock, flags);
+ 
++	if (!is_suspended)
++		error = callback(musb, data);
++
+ 	return error;
+ }
+ EXPORT_SYMBOL_GPL(musb_queue_resume_work);
+-- 
+2.28.0
 
