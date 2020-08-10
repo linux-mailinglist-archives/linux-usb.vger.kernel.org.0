@@ -2,115 +2,315 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB73B2400CB
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Aug 2020 04:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CD5C2400CC
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Aug 2020 04:26:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726382AbgHJC0O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 9 Aug 2020 22:26:14 -0400
-Received: from mail-eopbgr70077.outbound.protection.outlook.com ([40.107.7.77]:52739
+        id S1726426AbgHJC0U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 9 Aug 2020 22:26:20 -0400
+Received: from mail-eopbgr70080.outbound.protection.outlook.com ([40.107.7.80]:49993
         "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726219AbgHJC0O (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 9 Aug 2020 22:26:14 -0400
+        id S1726219AbgHJC0U (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 9 Aug 2020 22:26:20 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m8SAk8Bqfe+ovNZdHMulMvBjJxwRXwCHHb8JHR6t1A0kgSFc7JgLG1l1UsBpVppU/NYuhTIS9mfU/PjNDDm2nDSgKqB003ITEhtAlDvaxGeQ1iCz7Xu2vEKSICnUCTnenEXzyoYdtatVe6en9poRkgRe8ia2eskcNueITMQGukRTLoS3y333Cv/RtfWW5O9HdkLz0dc+3rBnBpV7YSSCcDltTHbCbqa4Xz15qhkoQszGKy47cJHpjcYfFolZb5wQuzmegoft7/I/jYXaVuWibyoBSzwL3NQowhJ70IB/+Ht9EcFvQVtrvQRis2QVdZwgwAAzDW4uup0j6FDMWVWIgg==
+ b=F0gYxt50NF92tdfYO8COgnKv+q01OwEL2bCLUKUM65LtkpcFuRfBlJRrqkbIcO0qN6j9hjeX5CU2hdsjA6tyFFtWQx3jOsAeVw2wu7Dl/RMTevD/VDDjhaove8DyFHK/gWjLzwb+YwAVKTQTUTX+yfad5S65inkuToV7nu+V9W9yJZtSNRUOxdgoFocKoS7b/MNuXOiswEhR1hnwTJ4UtqCagQGBdV0AzJ9ZqEO4qMC0lU3QK2Sg8LSf7dnSJYl9Bs1WQHiKD1iscqmZPsX8holRUWOyILt4nX/HWpyv28Km5b7LHHrDZu0zOp97zJHkaI7vucRthXKDWXT3b2Qb0A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1M97GwHBpurzIe2w7m+ML10ARVZh+QMHst/clPZ5wNY=;
- b=crSgS0cJC9b9J+SSRJ46YKZFJOUMNyMdfMeKf+HGHCFqyQzbZyvXyIIa9KZ98Zx9qUuVKEkSGTmnUTOU7E8/zSBn5+dUcQeVJhM7QVouYfuNQmvY4skwjfwwdthzlOtPegPt9npaxVmmhqr+BX+vIMOVufvMcU5sUkU/rzdA3MfMpI13Yo7S4IReP6WXTn1ZFBUPK2TyKzTw2FjaVbBI+yByxuwuoJpteCOKKdVSmAeuUVENdOQXjssVTBgI9tm6Ae1kEr+nOogV9WSbwkcnp0pMQxBIKwrbmh5U8zgTE8aZ98oxtOGNRpJzJSfG7B+UYeR0qScbyoZGnKL/FgJCdg==
+ bh=ZbyXripJCHFzmjrlked+NH8AMepnnYixIufdUp/SSts=;
+ b=IOxIp4cgp0meVUwXnrUyAL3OYMOY1yxNJVK/xrz6hRbfFjwcckMLMXjEGe2k0z5ODvHwqJjXScILSfCakwJh3bfbfpaaa9UeJ2p9qelhPm7sevjSerj/cR0PundMHgccvoQTphBPfPrTlCOkcFLjbdNu6KjbpjMTgq4CYezypBrCN/fxsb5qAE32UWBN8Ba2BfmECf0Y5Xo0bEOF7iotbXsU9x1VbzcjL2ie9vC7chN3bBndcijMCfoax/oeKz+hvrAZB0Y10tDCA6mVsW7P+3Ovco9TP4PRsYDyEYN/iVR0aQkueIjoqzo9bR3JO72WVjW933mSrouMgeGCd+WVHg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1M97GwHBpurzIe2w7m+ML10ARVZh+QMHst/clPZ5wNY=;
- b=brdIqkRre7CA59l1/V3xqUHb6d6njIz5m9OJMmbDp90w6UcQMFIlEgVlrQF3V68K/3t+lQFAFtBkGJ3YP3Fya4n8YxtRzu52ToaFRNK0FlpQjufChSdvUOacWTsAVhnFIgL11TBHxL9M9e3OzIdg51ckw+iqpspAnwioE03Gilw=
+ bh=ZbyXripJCHFzmjrlked+NH8AMepnnYixIufdUp/SSts=;
+ b=pkvwRMoZ/7txZCakjYHeNNpJ9NbMomCPdo+l39uiVCFF/CAWodOTZmuGOtqGjuCcrqiDr4M3rc0D246lc0S8NzTy74AXY1/IG3ORbG6F4gpum+cMiJM2KUKuU1+wWtIjwPPzWymMFhQxDVcZOU4gMgh/5w8em91hjovGZOPRabg=
 Authentication-Results: kernel.org; dkim=none (message not signed)
  header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
 Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
  by AM7PR04MB7160.eurprd04.prod.outlook.com (2603:10a6:20b:119::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3261.19; Mon, 10 Aug
- 2020 02:26:09 +0000
+ 2020 02:26:14 +0000
 Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
  ([fe80::ed7f:8755:5994:7fcf]) by AM7PR04MB7157.eurprd04.prod.outlook.com
  ([fe80::ed7f:8755:5994:7fcf%5]) with mapi id 15.20.3261.023; Mon, 10 Aug 2020
- 02:26:09 +0000
+ 02:26:14 +0000
 From:   Peter Chen <peter.chen@nxp.com>
 To:     balbi@kernel.org
 Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com,
         gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+        Anton Vasilyev <vasilyev@ispras.ru>,
+        Evgeny Novikov <novikov@ispras.ru>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Peter Chen <peter.chen@nxp.com>
-Subject: [PATCH v2 0/6] USB: UDC: Fix memory leaks by expanding the API
-Date:   Mon, 10 Aug 2020 10:25:04 +0800
-Message-Id: <20200810022510.6516-1-peter.chen@nxp.com>
+Subject: [PATCH v2 1/6] USB: UDC: Expand device model API interface
+Date:   Mon, 10 Aug 2020 10:25:05 +0800
+Message-Id: <20200810022510.6516-2-peter.chen@nxp.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200810022510.6516-1-peter.chen@nxp.com>
+References: <20200810022510.6516-1-peter.chen@nxp.com>
 Content-Type: text/plain
 X-ClientProxiedBy: SG2PR03CA0120.apcprd03.prod.outlook.com
  (2603:1096:4:91::24) To AM7PR04MB7157.eurprd04.prod.outlook.com
  (2603:10a6:20b:118::20)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from b29397-desktop.ap.freescale.net (119.31.174.67) by SG2PR03CA0120.apcprd03.prod.outlook.com (2603:1096:4:91::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3283.5 via Frontend Transport; Mon, 10 Aug 2020 02:26:07 +0000
+Received: from b29397-desktop.ap.freescale.net (119.31.174.67) by SG2PR03CA0120.apcprd03.prod.outlook.com (2603:1096:4:91::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3283.5 via Frontend Transport; Mon, 10 Aug 2020 02:26:10 +0000
 X-Mailer: git-send-email 2.17.1
 X-Originating-IP: [119.31.174.67]
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: f930e870-b22a-4766-8159-08d83cd4be4b
+X-MS-Office365-Filtering-Correlation-Id: 4d5cfd54-b2fc-4eb3-e844-08d83cd4c116
 X-MS-TrafficTypeDiagnostic: AM7PR04MB7160:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM7PR04MB7160C67B9494ADB4DBFD26038B440@AM7PR04MB7160.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-Microsoft-Antispam-PRVS: <AM7PR04MB716065170F588139D0CF3BBC8B440@AM7PR04MB7160.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:392;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: I4n6a9hto9ko87TFNKsOTZ1wGVNjgw+2dkAwntFiPt6lCqB7i/lZlkQK6diu9+hOJwkZTXuDrDH9h4ZFwyuhTeG5jpRiONMh55w9vX6rmsCtD2QkUlQ5FU7WlvDEPVa9ACxfiLxWstLVgdR97u+FRphiVvfnyPkijCth/0FhZgPq2rPOYSODJd+xKwvvTQHeDqHu27rZBwa9uKEvG27ZLX3a/HlPkXNa6J/ZTMEozF7yf5OjF+ou8pAvhalnf3seAGmPvfj62Y/oI4tQPgXqScw2S7JiCsRoAmbO6CN1nNxiR/5S9YRnoGNwnCZMbF4UeAyho4bSM8taxtg7uUt4Xg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(366004)(346002)(376002)(136003)(39860400002)(396003)(36756003)(2906002)(86362001)(83380400001)(1076003)(5660300002)(6916009)(6666004)(6506007)(6512007)(44832011)(2616005)(956004)(8676002)(66476007)(8936002)(66946007)(66556008)(478600001)(16526019)(26005)(52116002)(316002)(186003)(6486002)(4326008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: 3Vme1TVj1boDyplw1kZ35qhazzYholMP6x31oxjITJGdRUUtju/I0VgAWTdubEmWSxO818ra3eU0US2/vL6kz2A+f0vyu3sYa85rKgcKRPs+clmTJPf8sgzzjtVPPWQ81CTZA8BmzCnSlBHndMMG2dQ8AbfKcqmHrahg6ai0hNh6WSnnA/9ZtPLdOmrA8hP9U59MlX8ixlnKJ7snzEw1A7PfVZjyoFT1IyRSxRYcjIOn7VnOn7G2Wr9zpdAjUvIjFooSpN4mcHbWr5b78iMy6xBPZWNojgAR5t+pR4ambMClZnGmkTa3xbeyIa5l/dMxNVOmgauZBjb9EQu9uEfLcyU5uXAKUHQInr5pa3Pz5vFApW80IT+ixNXjMI/uykRAUIY649rC4eK0x4AOp7k6wbesb22Iy2zTIkgsJn4ZXLH+ZO3QlC9ur/OQeBNxWPMDTcZyWVK2gqJ2r0CiNatC201mXGkmFFWKlwDxjEXzng1d/fHR0ufeX5ysmlNRUJPuYwy3sffovALqYggcr8Ih7sGRHzQ7prc/UkktYu739LyHm63YW+B0EdtNSxPK4et+8x9TvK8Jb+4N1iIhk/JTf4SolMWwBRXqBJEXKrsMsEr/7lCTYagjKy3XYCO/BuNEJ9leiDc05My9zFstb2qSAQ==
+X-Microsoft-Antispam-Message-Info: JUQJI5ZW3Osq3pmX8lWcweyEUcZJTCvlKIFFnfi4AqPQ6TQeW7pqER/yNzC50eJamPzpm2LAVp6vVjTNmK1pLuAkh1Vg2qT8+6iex3w3o4eX6BfMlXDtZfq+PB3ID7FWnvZIXYRSupydjQE9rKY9VzXGsFhDgztMnzPIfB3RxlFZzT0lHCotValxB3cHgiQA6c0ezt3tTcUyoudjKBSydG5wgd0YxfmAZ7aEonI+COs+zGsc3t6YBgc73Q5olEIyh+bZ/ydE0hzL22MjHgLQq2bGPtRNLAkpBNIgFcbW8OD/xrLZpzXEJ5ZBWOwOjlQNixMWRKuhSzuaTsukYKYCyA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(366004)(346002)(376002)(136003)(39860400002)(396003)(36756003)(2906002)(86362001)(83380400001)(1076003)(5660300002)(6916009)(6666004)(6506007)(6512007)(44832011)(2616005)(956004)(8676002)(66476007)(8936002)(66946007)(66556008)(478600001)(16526019)(26005)(52116002)(316002)(186003)(54906003)(6486002)(4326008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: O6S12XEhwxa4nIB+y35J6XIMz9owYc6b6dNb0jkJPntKugHX+JBLfC4XdyDKd6HQZeYG7qL/8A/JvulHqKXgAqPH4fmzUGlaF73NXIKowvfxjZ9TF7YfJwCsscrPlF3aLc8mE4Cxt9E1fUScVjHzyc82V3ZjyzpOuE8D6fgLBbygYiGa9bttJOKJNL2z0P+wpACB2cUOUdxd2FRUWJo2Y6mOh0Op6xTLHd1Z8PtW4r68HD6Q1axVPJIDBNZbWq0ELlVPUHZw60RRTYIp8LUHYRUeAJoxA8LfjV2Dp9JUP/W40LNoKfMtvHrjMbsZKw9SWQ9mq6tmCFnHTAPH4J0NAG1XVw1RhYfdX+cOd5HY2+8Xeysm2YfCny8eFcGNP9Vk9NXhohxHYMbvtr3StnaAtI262v9gpwUe8kJepaYQTIVbvJvZoHN7REQ2hdCZqEhy6laKDioWe46es9lxnEpbHu6jA2fESb91xbRbYngCKjP4GeGq2YkVFGsng3smd6D3iswimCKyzasej2knXco9C4HOZHl6IX6ikZ974ELBlXNDMRL8f7h+C1N7YHRiZGy+p3sUmvyf4AM0LBm0qiPuCvRCmnSjoRAV3f/XdOO9ycYKpd92t70R0w85bCL3zpu4KIOPmC/3gMtTVqLzVzb17w==
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f930e870-b22a-4766-8159-08d83cd4be4b
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4d5cfd54-b2fc-4eb3-e844-08d83cd4c116
 X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Aug 2020 02:26:09.9105
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Aug 2020 02:26:14.6657
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: arr29tfCRR9LXViC1HTqZY8XOJk1nmgKJaIRLjG47jgb0wXcS98e9royejhl/etgfwoxVrL3b+asiQjMLn3gtg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: eLuUQSKakCQk2CUVNzDUYixtHEA2wPkIPc6hmNmOsYqmmGBGRzxh9JQXEHHu44NztYMMm8sUorxOajpuuu4mIw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB7160
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This series expands the UDC API to fix some long-standing memory leaks
-in the net2280 and net2272 drivers. And with expanding APIs, it could
-manage cdns3 and dwc3 gadget device memory better without the hacks
-at UDC core.
+From: Alan Stern <stern@rowland.harvard.edu>
 
-Alan Stern (3):
-  USB: UDC: Expand device model API interface
-  USB: UDC: net2280: Fix memory leaks
-  USB: UDC: net2272: Fix memory leaks
+The routines used by the UDC core to interface with the kernel's
+device model, namely usb_add_gadget_udc(),
+usb_add_gadget_udc_release(), and usb_del_gadget_udc(), provide access
+to only a subset of the device model's full API.  They include
+functionality equivalent to device_register() and device_unregister()
+for gadgets, but they omit device_initialize(), device_add(),
+device_del(), get_device(), and put_device().
 
-Peter Chen (3):
-  usb: cdns3: gadget: fix possible memory leak
-  usb: dwc3: allocate gadget structure dynamically
-  Revert "usb: udc: allow adding and removing the same gadget device"
+This patch expands the UDC API by adding usb_initialize_gadget(),
+usb_add_gadget(), usb_del_gadget(), usb_get_gadget(), and
+usb_put_gadget() to fill in the gap.  It rewrites the existing
+routines to call the new ones.
 
- drivers/usb/cdns3/gadget.c       |  20 ++++--
- drivers/usb/dwc3/core.h          |   2 +-
- drivers/usb/dwc3/ep0.c           |  26 ++++----
- drivers/usb/dwc3/gadget.c        | 106 ++++++++++++++++++-------------
- drivers/usb/dwc3/gadget.h        |   2 +-
- drivers/usb/gadget/udc/core.c    |  79 ++++++++++++++++++-----
- drivers/usb/gadget/udc/net2272.c |  23 ++++---
- drivers/usb/gadget/udc/net2272.h |   1 +
- drivers/usb/gadget/udc/net2280.c |  11 ++--
- drivers/usb/gadget/udc/net2280.h |   1 +
- include/linux/usb/gadget.h       |  27 ++++++--
- 11 files changed, 198 insertions(+), 100 deletions(-)
+CC: Anton Vasilyev <vasilyev@ispras.ru>
+CC: Evgeny Novikov <novikov@ispras.ru>
+CC: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Peter Chen <peter.chen@nxp.com>
+---
+Changes for v1
+- Add my Sob
 
+Changes for RFC
+- %s/intialize/initialize
+- Delete the net2272 and 2280 description at commit log
+
+
+ drivers/usb/gadget/udc/core.c | 78 ++++++++++++++++++++++++++++-------
+ include/linux/usb/gadget.h    | 27 +++++++++---
+ 2 files changed, 84 insertions(+), 21 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+index ee226ad802a4..473e74088b1f 100644
+--- a/drivers/usb/gadget/udc/core.c
++++ b/drivers/usb/gadget/udc/core.c
+@@ -1162,21 +1162,18 @@ static int check_pending_gadget_drivers(struct usb_udc *udc)
+ }
+ 
+ /**
+- * usb_add_gadget_udc_release - adds a new gadget to the udc class driver list
++ * usb_initialize_gadget - initialize a gadget and its embedded struct device
+  * @parent: the parent device to this udc. Usually the controller driver's
+  * device.
+- * @gadget: the gadget to be added to the list.
++ * @gadget: the gadget to be initialized.
+  * @release: a gadget release function.
+  *
+  * Returns zero on success, negative errno otherwise.
+  * Calls the gadget release function in the latter case.
+  */
+-int usb_add_gadget_udc_release(struct device *parent, struct usb_gadget *gadget,
++void usb_initialize_gadget(struct device *parent, struct usb_gadget *gadget,
+ 		void (*release)(struct device *dev))
+ {
+-	struct usb_udc		*udc;
+-	int			ret = -ENOMEM;
+-
+ 	dev_set_name(&gadget->dev, "gadget");
+ 	INIT_WORK(&gadget->work, usb_gadget_state_work);
+ 	gadget->dev.parent = parent;
+@@ -1187,17 +1184,32 @@ int usb_add_gadget_udc_release(struct device *parent, struct usb_gadget *gadget,
+ 		gadget->dev.release = usb_udc_nop_release;
+ 
+ 	device_initialize(&gadget->dev);
++}
++EXPORT_SYMBOL_GPL(usb_initialize_gadget);
++
++/**
++ * usb_add_gadget - adds a new gadget to the udc class driver list
++ * @gadget: the gadget to be added to the list.
++ *
++ * Returns zero on success, negative errno otherwise.
++ * Does not do a final usb_put_gadget() if an error occurs.
++ */
++int usb_add_gadget(struct usb_gadget *gadget)
++{
++	struct usb_udc		*udc;
++	int			ret = -ENOMEM;
+ 
+ 	udc = kzalloc(sizeof(*udc), GFP_KERNEL);
+ 	if (!udc)
+-		goto err_put_gadget;
++		goto error;
+ 
+ 	device_initialize(&udc->dev);
+ 	udc->dev.release = usb_udc_release;
+ 	udc->dev.class = udc_class;
+ 	udc->dev.groups = usb_udc_attr_groups;
+-	udc->dev.parent = parent;
+-	ret = dev_set_name(&udc->dev, "%s", kobject_name(&parent->kobj));
++	udc->dev.parent = gadget->dev.parent;
++	ret = dev_set_name(&udc->dev, "%s",
++			kobject_name(&gadget->dev.parent->kobj));
+ 	if (ret)
+ 		goto err_put_udc;
+ 
+@@ -1239,8 +1251,30 @@ int usb_add_gadget_udc_release(struct device *parent, struct usb_gadget *gadget,
+  err_put_udc:
+ 	put_device(&udc->dev);
+ 
+- err_put_gadget:
+-	put_device(&gadget->dev);
++ error:
++	return ret;
++}
++EXPORT_SYMBOL_GPL(usb_add_gadget);
++
++/**
++ * usb_add_gadget_udc_release - adds a new gadget to the udc class driver list
++ * @parent: the parent device to this udc. Usually the controller driver's
++ * device.
++ * @gadget: the gadget to be added to the list.
++ * @release: a gadget release function.
++ *
++ * Returns zero on success, negative errno otherwise.
++ * Calls the gadget release function in the latter case.
++ */
++int usb_add_gadget_udc_release(struct device *parent, struct usb_gadget *gadget,
++		void (*release)(struct device *dev))
++{
++	int	ret;
++
++	usb_initialize_gadget(parent, gadget, release);
++	ret = usb_add_gadget(gadget);
++	if (ret)
++		usb_put_gadget(gadget);
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(usb_add_gadget_udc_release);
+@@ -1308,13 +1342,14 @@ static void usb_gadget_remove_driver(struct usb_udc *udc)
+ }
+ 
+ /**
+- * usb_del_gadget_udc - deletes @udc from udc_list
++ * usb_del_gadget - deletes @udc from udc_list
+  * @gadget: the gadget to be removed.
+  *
+- * This, will call usb_gadget_unregister_driver() if
++ * This will call usb_gadget_unregister_driver() if
+  * the @udc is still busy.
++ * It will not do a final usb_put_gadget().
+  */
+-void usb_del_gadget_udc(struct usb_gadget *gadget)
++void usb_del_gadget(struct usb_gadget *gadget)
+ {
+ 	struct usb_udc *udc = gadget->udc;
+ 
+@@ -1337,7 +1372,20 @@ void usb_del_gadget_udc(struct usb_gadget *gadget)
+ 	kobject_uevent(&udc->dev.kobj, KOBJ_REMOVE);
+ 	flush_work(&gadget->work);
+ 	device_unregister(&udc->dev);
+-	device_unregister(&gadget->dev);
++	device_del(&gadget->dev);
++}
++EXPORT_SYMBOL_GPL(usb_del_gadget);
++
++/**
++ * usb_del_gadget_udc - deletes @udc from udc_list
++ * @gadget: the gadget to be removed.
++ *
++ * Calls usb_del_gadget() and does a final usb_put_gadget().
++ */
++void usb_del_gadget_udc(struct usb_gadget *gadget)
++{
++	usb_del_gadget(gadget);
++	usb_put_gadget(gadget);
+ 	memset(&gadget->dev, 0x00, sizeof(gadget->dev));
+ }
+ EXPORT_SYMBOL_GPL(usb_del_gadget_udc);
+diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
+index 298b334e2951..791571f5191e 100644
+--- a/include/linux/usb/gadget.h
++++ b/include/linux/usb/gadget.h
+@@ -436,6 +436,7 @@ struct usb_gadget {
+ };
+ #define work_to_gadget(w)	(container_of((w), struct usb_gadget, work))
+ 
++/* Interface to the device model */
+ static inline void set_gadget_data(struct usb_gadget *gadget, void *data)
+ 	{ dev_set_drvdata(&gadget->dev, data); }
+ static inline void *get_gadget_data(struct usb_gadget *gadget)
+@@ -444,6 +445,26 @@ static inline struct usb_gadget *dev_to_usb_gadget(struct device *dev)
+ {
+ 	return container_of(dev, struct usb_gadget, dev);
+ }
++static inline struct usb_gadget *usb_get_gadget(struct usb_gadget *gadget)
++{
++	get_device(&gadget->dev);
++	return gadget;
++}
++static inline void usb_put_gadget(struct usb_gadget *gadget)
++{
++	put_device(&gadget->dev);
++}
++extern void usb_initialize_gadget(struct device *parent,
++		struct usb_gadget *gadget, void (*release)(struct device *dev));
++extern int usb_add_gadget(struct usb_gadget *gadget);
++extern void usb_del_gadget(struct usb_gadget *gadget);
++
++/* Legacy device-model interface */
++extern int usb_add_gadget_udc_release(struct device *parent,
++		struct usb_gadget *gadget, void (*release)(struct device *dev));
++extern int usb_add_gadget_udc(struct device *parent, struct usb_gadget *gadget);
++extern void usb_del_gadget_udc(struct usb_gadget *gadget);
++extern char *usb_get_gadget_udc_name(void);
+ 
+ /* iterates the non-control endpoints; 'tmp' is a struct usb_ep pointer */
+ #define gadget_for_each_ep(tmp, gadget) \
+@@ -735,12 +756,6 @@ int usb_gadget_probe_driver(struct usb_gadget_driver *driver);
+  */
+ int usb_gadget_unregister_driver(struct usb_gadget_driver *driver);
+ 
+-extern int usb_add_gadget_udc_release(struct device *parent,
+-		struct usb_gadget *gadget, void (*release)(struct device *dev));
+-extern int usb_add_gadget_udc(struct device *parent, struct usb_gadget *gadget);
+-extern void usb_del_gadget_udc(struct usb_gadget *gadget);
+-extern char *usb_get_gadget_udc_name(void);
+-
+ /*-------------------------------------------------------------------------*/
+ 
+ /* utility to simplify dealing with string descriptors */
 -- 
 2.17.1
 
