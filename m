@@ -2,64 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1BA2407BF
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Aug 2020 16:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A19E7240841
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Aug 2020 17:17:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727069AbgHJOmN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Aug 2020 10:42:13 -0400
-Received: from mail-il1-f198.google.com ([209.85.166.198]:45427 "EHLO
-        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726111AbgHJOmL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Aug 2020 10:42:11 -0400
-Received: by mail-il1-f198.google.com with SMTP id 65so7917247ilb.12
-        for <linux-usb@vger.kernel.org>; Mon, 10 Aug 2020 07:42:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=OzRqCxKFuIBYd6uAIlx4xZOrodkSUu/+cChTzUG+OTk=;
-        b=Jo+zoNRRyc6yQJ67c8MNXTvjR31zUwCoDXR1OTFQHtejsO+rZ/PjnM/lIfdOlXCLtq
-         Nv63+lh5NE08gHe239bSPkRuR/KlCGl1/PRauihxXzliMuUibxSPphpb51RfGYOE9kZc
-         KfNnJ311BD7yVx1XojbT5i/CpjYOg7DZl2UeS3YoNY7sTszEjyEv8NkwuG+XkVDg7idt
-         MTb2vCyQHvKAAZM34JHgyRgF7Qow3UNeq2os1ndgFJvtP85mW0QkTpF3ys0+kx8fUo5T
-         /JHOdBJXTTZvPLOcivKYaI/rEnV1kRftWVzI5igWfnQn4nJYCVtFB7AL/IMluVoIK/rS
-         VTzg==
-X-Gm-Message-State: AOAM533pgUDQJ5++HU/YmYk0aYpWxZ/pNdOg4JinlpM5+wriGPgWbQzu
-        cPxHHIyp705VbiscY5DHReCA+FBw5fIS3UCYsbEWkdc/l5c7
-X-Google-Smtp-Source: ABdhPJxXFLShve5fwsxHgj+zHfvKDZxlj0s2XHM3ReDwNCMkS1tJ8mZ5yZkigLmULrkVBmjKY8LGwZ7Q9j1yKl+G27H/VtFlxZ3A
+        id S1726489AbgHJPR0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Aug 2020 11:17:26 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:46727 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726284AbgHJPRZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Aug 2020 11:17:25 -0400
+Received: (qmail 302545 invoked by uid 1000); 10 Aug 2020 11:17:23 -0400
+Date:   Mon, 10 Aug 2020 11:17:23 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Eli Billauer <eli.billauer@gmail.com>, linux-usb@vger.kernel.org
+Subject: Re: [RFC]mooring API
+Message-ID: <20200810151723.GE299045@rowland.harvard.edu>
+References: <1596722827.2488.8.camel@suse.com>
+ <20200806152039.GC197575@rowland.harvard.edu>
+ <1597070118.2515.3.camel@suse.com>
 MIME-Version: 1.0
-X-Received: by 2002:a5e:a607:: with SMTP id q7mr17629684ioi.16.1597070529854;
- Mon, 10 Aug 2020 07:42:09 -0700 (PDT)
-Date:   Mon, 10 Aug 2020 07:42:09 -0700
-In-Reply-To: <20200810142441.GB299045@rowland.harvard.edu>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009d004605ac86f57b@google.com>
-Subject: Re: WARNING in slab_pre_alloc_hook
-From:   syzbot <syzbot+c2c3302f9c601a4b1be2@syzkaller.appspotmail.com>
-To:     andreyknvl@gmail.com, andreyknvl@google.com, balbi@kernel.org,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1597070118.2515.3.camel@suse.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Mon, Aug 10, 2020 at 04:35:18PM +0200, Oliver Neukum wrote:
+> Am Donnerstag, den 06.08.2020, 11:20 -0400 schrieb Alan Stern:
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+> > > --- a/drivers/usb/core/hcd.c
+> > > +++ b/drivers/usb/core/hcd.c
+> > > @@ -1640,7 +1640,9 @@ static void __usb_hcd_giveback_urb(struct urb *urb)
+> > >  	unmap_urb_for_dma(hcd, urb);
+> > >  	usbmon_urb_complete(&hcd->self, urb, status);
+> > >  	usb_anchor_suspend_wakeups(anchor);
+> > > -	usb_unanchor_urb(urb);
+> > > +	smp_rmb(); /* against usb_(un)moor_urb() */
+> > 
+> > What is the race you want to protect against?
+> 
+> It looks to me like I need to be sure that the URB could have
+> been moored on another CPU.
 
-Reported-and-tested-by: syzbot+c2c3302f9c601a4b1be2@syzkaller.appspotmail.com
+You mean, the URB could have been anchored already, but another CPU 
+could moor it just as this CPU is unachoring it?
 
-Tested on:
+For one thing, I doubt that a single smp_rmb() will provide any real 
+protection.  For another, it would be best to just avoid races in the 
+first place.  Can you think of any use case where it makes sense to moor 
+an URB just as it is completing (or indeed at any time while it is 
+active)?
 
-commit:         449dc8c9 Merge tag 'for-v5.9' of git://git.kernel.org/pub/..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6ef84fa8ee48e528
-dashboard link: https://syzkaller.appspot.com/bug?extid=c2c3302f9c601a4b1be2
-compiler:       gcc (GCC) 10.1.0-syz 20200507
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=14ef8e52900000
+> > Wouldn't it be better to require drivers that want to moor an URB to do 
+> > so before submitting it?  And to unmoor an URB only in the completion 
+> > handler?  Then there wouldn't be any race.
+> 
+> I am afraid we cannot do that, as it must be possible to unmoor an
+> URb that needs to be unmoored before it is submitted, even on
+> another CPU.
 
-Note: testing is done by a robot and is best-effort only.
+I should have said: require drivers that want to unmoor an URB to do so 
+either before it is submitted or in (or after) the completion handler.  
+In other words, don't moor or unmoor an URB while it is active.  How 
+about that?
+
+> What do you think of the API itself?
+
+It looks fine as far as I can tell.  But I haven't worked on any drivers 
+that use anchors.
+
+Alan Stern
