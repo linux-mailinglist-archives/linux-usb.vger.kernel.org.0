@@ -2,73 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FCCB2402F3
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Aug 2020 09:45:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7569A2402F5
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Aug 2020 09:47:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726515AbgHJHpu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Aug 2020 03:45:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51890 "EHLO mail.kernel.org"
+        id S1726479AbgHJHq4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Aug 2020 03:46:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52736 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725894AbgHJHpt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 10 Aug 2020 03:45:49 -0400
+        id S1725894AbgHJHqz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 10 Aug 2020 03:46:55 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D2A542065C;
-        Mon, 10 Aug 2020 07:45:48 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BF34D2065C;
+        Mon, 10 Aug 2020 07:46:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597045549;
-        bh=dq4Zy/CeFmHQYVTM5GklBdsD9JSUlFhjHQ64cOaA+hU=;
+        s=default; t=1597045615;
+        bh=d7yZTMaajyYYDp1xUH/+msJ7BOrEiV5LPH4/r1jiZps=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AFCSKimFu1k6eQglbr6/Ex3KsUJijB2jonlNiH1h55Iud2nlwMCTljtu1yv0FYTAq
-         /xH7/UAX5E/q2i3q8CoZY5GL5+z5Cg/VJrrnrroUtODzqrPH0GvOIfdlrubXTM6L38
-         iaFpb38hSmIwqOBAuPSMN8Uni9j60Y1uFATuTdqg=
-Date:   Mon, 10 Aug 2020 09:46:01 +0200
+        b=xUMoQJ0Rj1qEx67OX2Ceqywy2Yyj+2T8X3o+e9FmDy8FR2gT+SJGFsA/UQvR136dN
+         CXt3WUVGCc0S2UXFpVGgzG9+umduUDstNjQc4eBhgYIN6uAYIMVf+Jd+R/xGfiV9Y4
+         JmfripfRyZPVjP09oPKx/jtALkGprinOP82Pn2Bs=
+Date:   Mon, 10 Aug 2020 09:47:06 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Yasushi Asano <yazzep@gmail.com>
-Cc:     stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
-        erosca@de.adit-jv.com, andrew_gabbasov@mentor.com,
-        jim_baxter@mentor.com, wnatsume@jp.adit-jv.com,
-        nnishiguchi@jp.adit-jv.com, yasano@jp.adit-jv.com
-Subject: Re: [PATCH v2] [RFC] USB: hub.c: decrease the number of attempts of
- enumeration scheme
-Message-ID: <20200810074601.GC1529187@kroah.com>
-References: <20200808151648.GC256751@rowland.harvard.edu>
- <20200810001935.4489-1-yazzep@gmail.com>
- <20200810001935.4489-2-yazzep@gmail.com>
+To:     syzbot <syzbot+a7e220df5a81d1ab400e@syzkaller.appspotmail.com>
+Cc:     andreyknvl@google.com, balbi@kernel.org, dan.carpenter@oracle.com,
+        glider@google.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: KMSAN: kernel-infoleak in raw_ioctl
+Message-ID: <20200810074706.GD1529187@kroah.com>
+References: <000000000000ce85c405ac744ff6@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200810001935.4489-2-yazzep@gmail.com>
+In-Reply-To: <000000000000ce85c405ac744ff6@google.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 10, 2020 at 09:19:35AM +0900, Yasushi Asano wrote:
-> From: Yasushi Asano <yasano@jp.adit-jv.com>
+On Sun, Aug 09, 2020 at 09:27:18AM -0700, syzbot wrote:
+> Hello,
 > 
-> According to 6.7.22 A-UUT “Device No Response” for connection timeout
-> of USB OTG and EH automated compliance plan v1.2, the enumeration
-> failure has to be detected within 30 seconds. However, the old and new
-> enumeration schemes made a total of 16 attempts, and each attempt can
-> take 5 seconds to timeout, so it failed with PET test. Modify it to
-> reduce the number of attempts to 5 and pass PET test.
+> syzbot found the following issue on:
 > 
-> in case of old_schene_first=N and use_both_schemes=Y
-> attempt 3 * new scheme, then 2 * old scheme
-> in case of old_schene_first=Y and use_both_schemes=Y
-> attempt 2 * old scheme, then 3 * new scheme
+> HEAD commit:    ce8056d1 wip: changed copy_from_user where instrumented
+> git tree:       https://github.com/google/kmsan.git master
+> console output: https://syzkaller.appspot.com/x/log.txt?x=141eb8b2900000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3afe005fb99591f
+> dashboard link: https://syzkaller.appspot.com/bug?extid=a7e220df5a81d1ab400e
+> compiler:       clang version 10.0.0 (https://github.com/llvm/llvm-project/ c2443155a0fb245c8f17f2c1c72b6ea391e86e81)
+> userspace arch: i386
 > 
-> Signed-off-by: Yasushi Asano <yasano@jp.adit-jv.com>
-> ---
->  drivers/usb/core/hub.c | 16 +++++++---------
->  1 file changed, 7 insertions(+), 9 deletions(-)
+> Unfortunately, I don't have any reproducer for this issue yet.
 
-Why is there a "[RFC]" on the subject line, do you not think this works
-properly?  Does it work for your devices and solve the problem for you?
+The irony of a kernel module written for syzbot testing, causing syzbot
+reports....
 
-thanks,
-
-greg k-h
