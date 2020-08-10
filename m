@@ -2,111 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2693240BFD
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Aug 2020 19:31:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24820240CFC
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Aug 2020 20:30:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727941AbgHJRbe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Aug 2020 13:31:34 -0400
-Received: from relay10.mail.gandi.net ([217.70.178.230]:42753 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726820AbgHJRbe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Aug 2020 13:31:34 -0400
-Received: from classic (lns-bzn-39-82-255-60-242.adsl.proxad.net [82.255.60.242])
-        (Authenticated sender: hadess@hadess.net)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 1F489240008;
-        Mon, 10 Aug 2020 17:31:29 +0000 (UTC)
-Message-ID: <6e450e16117afb9e1dd1e4270ef5c2e0d5885348.camel@hadess.net>
-Subject: Re: [PATCH] usbip: Implement a match function to fix usbip
-From:   Bastien Nocera <hadess@hadess.net>
-To:     "M. Vefa Bicakci" <m.v.b@runbox.com>, linux-usb@vger.kernel.org
-Cc:     stable@vger.kernel.org,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Date:   Mon, 10 Aug 2020 19:31:29 +0200
-In-Reply-To: <20200810160017.46002-1-m.v.b@runbox.com>
-References: <20200810160017.46002-1-m.v.b@runbox.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.3 (3.36.3-1.fc32) 
+        id S1728095AbgHJS34 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Aug 2020 14:29:56 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:44271 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1727982AbgHJS34 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Aug 2020 14:29:56 -0400
+Received: (qmail 309517 invoked by uid 1000); 10 Aug 2020 14:29:54 -0400
+Date:   Mon, 10 Aug 2020 14:29:54 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Greg KH <greg@kroah.com>
+Cc:     andreyknvl@gmail.com, andreyknvl@google.com, balbi@kernel.org,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: [PATCH] USB: yurex: Fix bad gfp argument
+Message-ID: <20200810182954.GB307778@rowland.harvard.edu>
+References: <20200810142441.GB299045@rowland.harvard.edu>
+ <0000000000009d004605ac86f57b@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0000000000009d004605ac86f57b@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 2020-08-10 at 19:00 +0300, M. Vefa Bicakci wrote:
-> Commit 88b7381a939d ("USB: Select better matching USB drivers when
-> available") introduced the use of a "match" function to select a
-> non-generic/better driver for a particular USB device. This
-> unfortunately breaks the operation of usbip in general, as reported
-> in
-> the kernel bugzilla with bug 208267 (linked below).
-> 
-> Upon inspecting the aforementioned commit, one can observe that the
-> original code in the usb_device_match function used to return 1
-> unconditionally, but the aforementioned commit makes the
-> usb_device_match
-> function use identifier tables and "match" virtual functions, if
-> either of
-> them are available.
-> 
-> Hence, this commit implements a match function for usbip that
-> unconditionally returns true to ensure that usbip is functional
-> again.
-> 
-> This change has been verified to restore usbip functionality, with a
-> v5.7.y kernel on an up-to-date version of Qubes OS 4.0, which uses
-> usbip to redirect USB devices between VMs.
-> 
-> Thanks to Jonathan Dieter for the effort in bisecting this issue down
-> to the aforementioned commit.
+The syzbot fuzzer identified a bug in the yurex driver: It passes
+GFP_KERNEL as a memory-allocation flag to usb_submit_urb() at a time
+when its state is TASK_INTERRUPTIBLE, not TASK_RUNNING:
 
-Looks correct. Thanks for root causing the problem.
+do not call blocking ops when !TASK_RUNNING; state=1 set at [<00000000370c7c68>] prepare_to_wait+0xb1/0x2a0 kernel/sched/wait.c:247
+WARNING: CPU: 1 PID: 340 at kernel/sched/core.c:7253 __might_sleep+0x135/0x190
+kernel/sched/core.c:7253
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 1 PID: 340 Comm: syz-executor677 Not tainted 5.8.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google
+01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xf6/0x16e lib/dump_stack.c:118
+ panic+0x2aa/0x6e1 kernel/panic.c:231
+ __warn.cold+0x20/0x50 kernel/panic.c:600
+ report_bug+0x1bd/0x210 lib/bug.c:198
+ handle_bug+0x41/0x80 arch/x86/kernel/traps.c:234
+ exc_invalid_op+0x14/0x40 arch/x86/kernel/traps.c:254
+ asm_exc_invalid_op+0x12/0x20 arch/x86/include/asm/idtentry.h:536
+RIP: 0010:__might_sleep+0x135/0x190 kernel/sched/core.c:7253
+Code: 65 48 8b 1c 25 40 ef 01 00 48 8d 7b 10 48 89 fe 48 c1 ee 03 80 3c 06 00 75
+2b 48 8b 73 10 48 c7 c7 e0 9e 06 86 e8 ed 12 f6 ff <0f> 0b e9 46 ff ff ff e8 1f
+b2 4b 00 e9 29 ff ff ff e8 15 b2 4b 00
+RSP: 0018:ffff8881cdb77a28 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: ffff8881c6458000 RCX: 0000000000000000
+RDX: ffff8881c6458000 RSI: ffffffff8129ec93 RDI: ffffed1039b6ef37
+RBP: ffffffff86fdade2 R08: 0000000000000001 R09: ffff8881db32f54f
+R10: 0000000000000000 R11: 0000000030343354 R12: 00000000000001f2
+R13: 0000000000000000 R14: 0000000000000068 R15: ffffffff83c1b1aa
+ slab_pre_alloc_hook.constprop.0+0xea/0x200 mm/slab.h:498
+ slab_alloc_node mm/slub.c:2816 [inline]
+ slab_alloc mm/slub.c:2900 [inline]
+ kmem_cache_alloc_trace+0x46/0x220 mm/slub.c:2917
+ kmalloc include/linux/slab.h:554 [inline]
+ dummy_urb_enqueue+0x7a/0x880 drivers/usb/gadget/udc/dummy_hcd.c:1251
+ usb_hcd_submit_urb+0x2b2/0x22d0 drivers/usb/core/hcd.c:1547
+ usb_submit_urb+0xb4e/0x13e0 drivers/usb/core/urb.c:570
+ yurex_write+0x3ea/0x820 drivers/usb/misc/yurex.c:495
 
-Reviewed-by: Bastien Nocera <hadess@hadess.net>
+This patch changes the call to use GFP_ATOMIC instead of GFP_KERNEL.
 
-> Fixes: 88b7381a939d ("USB: Select better matching USB drivers when
-> available")
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=208267
-> Link: https://bugzilla.redhat.com/show_bug.cgi?id=1856443
-> Link: https://github.com/QubesOS/qubes-issues/issues/5905
-> Signed-off-by: M. Vefa Bicakci <m.v.b@runbox.com>
-> Cc: <stable@vger.kernel.org> # 5.7
-> Cc: Valentina Manea <valentina.manea.m@gmail.com>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Bastien Nocera <hadess@hadess.net>
-> Cc: Alan Stern <stern@rowland.harvard.edu>
-> ---
->  drivers/usb/usbip/stub_dev.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/usb/usbip/stub_dev.c
-> b/drivers/usb/usbip/stub_dev.c
-> index 2305d425e6c9..9d7d642022d1 100644
-> --- a/drivers/usb/usbip/stub_dev.c
-> +++ b/drivers/usb/usbip/stub_dev.c
-> @@ -461,6 +461,11 @@ static void stub_disconnect(struct usb_device
-> *udev)
->  	return;
->  }
->  
-> +static bool usbip_match(struct usb_device *udev)
-> +{
-> +	return true;
-> +}
-> +
->  #ifdef CONFIG_PM
->  
->  /* These functions need usb_port_suspend and usb_port_resume,
-> @@ -486,6 +491,7 @@ struct usb_device_driver stub_driver = {
->  	.name		= "usbip-host",
->  	.probe		= stub_probe,
->  	.disconnect	= stub_disconnect,
-> +	.match		= usbip_match,
->  #ifdef CONFIG_PM
->  	.suspend	= stub_suspend,
->  	.resume		= stub_resume,
+Reported-and-tested-by: syzbot+c2c3302f9c601a4b1be2@syzkaller.appspotmail.com
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+CC: <stable@vger.kernel.org>
 
+---
+
+
+[as1940]
+
+
+ drivers/usb/misc/yurex.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+Index: usb-devel/drivers/usb/misc/yurex.c
+===================================================================
+--- usb-devel.orig/drivers/usb/misc/yurex.c
++++ usb-devel/drivers/usb/misc/yurex.c
+@@ -492,7 +492,7 @@ static ssize_t yurex_write(struct file *
+ 	prepare_to_wait(&dev->waitq, &wait, TASK_INTERRUPTIBLE);
+ 	dev_dbg(&dev->interface->dev, "%s - submit %c\n", __func__,
+ 		dev->cntl_buffer[0]);
+-	retval = usb_submit_urb(dev->cntl_urb, GFP_KERNEL);
++	retval = usb_submit_urb(dev->cntl_urb, GFP_ATOMIC);
+ 	if (retval >= 0)
+ 		timeout = schedule_timeout(YUREX_WRITE_TIMEOUT);
+ 	finish_wait(&dev->waitq, &wait);
