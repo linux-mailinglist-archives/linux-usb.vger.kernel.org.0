@@ -2,40 +2,40 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2E7E240EAE
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Aug 2020 21:15:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 335712410CB
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Aug 2020 21:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729246AbgHJTPE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Aug 2020 15:15:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47830 "EHLO mail.kernel.org"
+        id S1729284AbgHJTco (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Aug 2020 15:32:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35948 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729005AbgHJTPD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 10 Aug 2020 15:15:03 -0400
+        id S1728574AbgHJTJf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 10 Aug 2020 15:09:35 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4FA6222B49;
-        Mon, 10 Aug 2020 19:15:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3803320885;
+        Mon, 10 Aug 2020 19:09:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597086902;
-        bh=dFDUeVvVdY8Fs9I9C6hZNkObUoIHi4TQ5HEz4oU+ZtI=;
+        s=default; t=1597086575;
+        bh=x9GG5gygsBiraECBSOqumUJcpCscr6B3l3sBiltVbKI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1UPjAqscrKwh2pGgBImSwrnCYG9rtMuEmJ4RD4SfB8Iv+vr6/0VPYcte0rAYc8t6l
-         psdHMYsO6CLRNKrUc1HO13cC+swEdBaAG5N7vJ9EN7/nuH2rOm3/XD2Tka9fmIwjhW
-         1J1G68aKWhz1GyZBZaWrmVGs6mTp6QwWdTlVbr0g=
+        b=xBDHpePKQL5pMA+GoiBseKk0AOvwfKnhO2/n1ne3M8EiQaLZTjBmGFwA2bej1gxpb
+         N8mdSuXadpCytpY3O+/XI/QPyUwmy08PB88bAQD+HZ7/3V19zm7yrXeMVIH6zUlJ1B
+         FdZLT1KaS2h+cG0GZZwThoklynFZ8oWivxDeOodg=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sasi Kumar <sasi.kumar@broadcom.com>,
-        Al Cooper <alcooperx@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 12/16] bdc: Fix bug causing crash after multiple disconnects
-Date:   Mon, 10 Aug 2020 15:14:39 -0400
-Message-Id: <20200810191443.3795581-12-sashal@kernel.org>
+Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.8 26/64] usb: mtu3: clear dual mode of u3port when disable device
+Date:   Mon, 10 Aug 2020 15:08:21 -0400
+Message-Id: <20200810190859.3793319-26-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200810191443.3795581-1-sashal@kernel.org>
-References: <20200810191443.3795581-1-sashal@kernel.org>
+In-Reply-To: <20200810190859.3793319-1-sashal@kernel.org>
+References: <20200810190859.3793319-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -45,90 +45,39 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Sasi Kumar <sasi.kumar@broadcom.com>
+From: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-[ Upstream commit a95bdfd22076497288868c028619bc5995f5cc7f ]
+[ Upstream commit f1e51e99ed498d4aa9ae5df28e43d558ea627781 ]
 
-Multiple connects/disconnects can cause a crash on the second
-disconnect. The driver had a problem where it would try to send
-endpoint commands after it was disconnected which is not allowed
-by the hardware. The fix is to only allow the endpoint commands
-when the endpoint is connected. This will also fix issues that
-showed up when using configfs to create gadgets.
+If not clear u3port's dual mode when disable device, the IP
+will fail to enter sleep mode when suspend.
 
-Signed-off-by: Sasi Kumar <sasi.kumar@broadcom.com>
-Signed-off-by: Al Cooper <alcooperx@gmail.com>
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Felipe Balbi <balbi@kernel.org>
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Link: https://lore.kernel.org/r/1595834101-13094-10-git-send-email-chunfeng.yun@mediatek.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/udc/bdc/bdc_core.c |  4 ++++
- drivers/usb/gadget/udc/bdc/bdc_ep.c   | 16 ++++++++++------
- 2 files changed, 14 insertions(+), 6 deletions(-)
+ drivers/usb/mtu3/mtu3_core.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/gadget/udc/bdc/bdc_core.c b/drivers/usb/gadget/udc/bdc/bdc_core.c
-index e9bd8d4abca00..f09a74d79c9eb 100644
---- a/drivers/usb/gadget/udc/bdc/bdc_core.c
-+++ b/drivers/usb/gadget/udc/bdc/bdc_core.c
-@@ -286,6 +286,7 @@ static void bdc_mem_init(struct bdc *bdc, bool reinit)
- 	 * in that case reinit is passed as 1
- 	 */
- 	if (reinit) {
-+		int i;
- 		/* Enable interrupts */
- 		temp = bdc_readl(bdc->regs, BDC_BDCSC);
- 		temp |= BDC_GIE;
-@@ -295,6 +296,9 @@ static void bdc_mem_init(struct bdc *bdc, bool reinit)
- 		/* Initialize SRR to 0 */
- 		memset(bdc->srr.sr_bds, 0,
- 					NUM_SR_ENTRIES * sizeof(struct bdc_bd));
-+		/* clear ep flags to avoid post disconnect stops/deconfigs */
-+		for (i = 1; i < bdc->num_eps; ++i)
-+			bdc->bdc_ep_array[i]->flags = 0;
- 	} else {
- 		/* One time initiaization only */
- 		/* Enable status report function pointers */
-diff --git a/drivers/usb/gadget/udc/bdc/bdc_ep.c b/drivers/usb/gadget/udc/bdc/bdc_ep.c
-index 3a65272fbed86..9f5f18891ba85 100644
---- a/drivers/usb/gadget/udc/bdc/bdc_ep.c
-+++ b/drivers/usb/gadget/udc/bdc/bdc_ep.c
-@@ -621,7 +621,6 @@ int bdc_ep_enable(struct bdc_ep *ep)
- 	}
- 	bdc_dbg_bd_list(bdc, ep);
- 	/* only for ep0: config ep is called for ep0 from connect event */
--	ep->flags |= BDC_EP_ENABLED;
- 	if (ep->ep_num == 1)
- 		return ret;
+diff --git a/drivers/usb/mtu3/mtu3_core.c b/drivers/usb/mtu3/mtu3_core.c
+index 9dd02160cca97..e3780d4d65149 100644
+--- a/drivers/usb/mtu3/mtu3_core.c
++++ b/drivers/usb/mtu3/mtu3_core.c
+@@ -131,8 +131,12 @@ static void mtu3_device_disable(struct mtu3 *mtu)
+ 	mtu3_setbits(ibase, SSUSB_U2_CTRL(0),
+ 		SSUSB_U2_PORT_DIS | SSUSB_U2_PORT_PDN);
  
-@@ -767,10 +766,13 @@ static int ep_dequeue(struct bdc_ep *ep, struct bdc_req *req)
- 					__func__, ep->name, start_bdi, end_bdi);
- 	dev_dbg(bdc->dev, "ep_dequeue ep=%p ep->desc=%p\n",
- 						ep, (void *)ep->usb_ep.desc);
--	/* Stop the ep to see where the HW is ? */
--	ret = bdc_stop_ep(bdc, ep->ep_num);
--	/* if there is an issue with stopping ep, then no need to go further */
--	if (ret)
-+	/* if still connected, stop the ep to see where the HW is ? */
-+	if (!(bdc_readl(bdc->regs, BDC_USPC) & BDC_PST_MASK)) {
-+		ret = bdc_stop_ep(bdc, ep->ep_num);
-+		/* if there is an issue, then no need to go further */
-+		if (ret)
-+			return 0;
-+	} else
- 		return 0;
+-	if (mtu->ssusb->dr_mode == USB_DR_MODE_OTG)
++	if (mtu->ssusb->dr_mode == USB_DR_MODE_OTG) {
+ 		mtu3_clrbits(ibase, SSUSB_U2_CTRL(0), SSUSB_U2_PORT_OTG_SEL);
++		if (mtu->is_u3_ip)
++			mtu3_clrbits(ibase, SSUSB_U3_CTRL(0),
++				     SSUSB_U3_PORT_DUAL_MODE);
++	}
  
- 	/*
-@@ -1921,7 +1923,9 @@ static int bdc_gadget_ep_disable(struct usb_ep *_ep)
- 		__func__, ep->name, ep->flags);
- 
- 	if (!(ep->flags & BDC_EP_ENABLED)) {
--		dev_warn(bdc->dev, "%s is already disabled\n", ep->name);
-+		if (bdc->gadget.speed != USB_SPEED_UNKNOWN)
-+			dev_warn(bdc->dev, "%s is already disabled\n",
-+				 ep->name);
- 		return 0;
- 	}
- 	spin_lock_irqsave(&bdc->lock, flags);
+ 	mtu3_setbits(ibase, U3D_SSUSB_IP_PW_CTRL2, SSUSB_IP_DEV_PDN);
+ }
 -- 
 2.25.1
 
