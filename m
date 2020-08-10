@@ -2,101 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24820240CFC
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Aug 2020 20:30:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 019B3240DF6
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Aug 2020 21:12:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728095AbgHJS34 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Aug 2020 14:29:56 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:44271 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727982AbgHJS34 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Aug 2020 14:29:56 -0400
-Received: (qmail 309517 invoked by uid 1000); 10 Aug 2020 14:29:54 -0400
-Date:   Mon, 10 Aug 2020 14:29:54 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg KH <greg@kroah.com>
-Cc:     andreyknvl@gmail.com, andreyknvl@google.com, balbi@kernel.org,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: [PATCH] USB: yurex: Fix bad gfp argument
-Message-ID: <20200810182954.GB307778@rowland.harvard.edu>
-References: <20200810142441.GB299045@rowland.harvard.edu>
- <0000000000009d004605ac86f57b@google.com>
+        id S1728864AbgHJTKM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Aug 2020 15:10:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37288 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728852AbgHJTKL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 10 Aug 2020 15:10:11 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3D0A721775;
+        Mon, 10 Aug 2020 19:10:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1597086610;
+        bh=SNx4u4/k2IbtAP3EPJ8PZIqvxZtBKRyULR07bQ8PFZ0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=EDVUjsLFkcxemq7d/gouWC7rlLfG2xI5cYzHF6PB0B2RUzrT9/kHt164Ikq00XLZG
+         scahxhU7XFo61GJN15n8szyxxBw7YwolQl5k36UlFrw9jLtOm9XqMO6jBinVKyPHOY
+         V3B/NvGPVxAhqpN5hvwHE8pQBt9rMRrPqx9UqLU0=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Evgeny Novikov <novikov@ispras.ru>,
+        Felipe Balbi <balbi@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.8 52/64] usb: gadget: net2280: fix memory leak on probe error handling paths
+Date:   Mon, 10 Aug 2020 15:08:47 -0400
+Message-Id: <20200810190859.3793319-52-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200810190859.3793319-1-sashal@kernel.org>
+References: <20200810190859.3793319-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000009d004605ac86f57b@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The syzbot fuzzer identified a bug in the yurex driver: It passes
-GFP_KERNEL as a memory-allocation flag to usb_submit_urb() at a time
-when its state is TASK_INTERRUPTIBLE, not TASK_RUNNING:
+From: Evgeny Novikov <novikov@ispras.ru>
 
-do not call blocking ops when !TASK_RUNNING; state=1 set at [<00000000370c7c68>] prepare_to_wait+0xb1/0x2a0 kernel/sched/wait.c:247
-WARNING: CPU: 1 PID: 340 at kernel/sched/core.c:7253 __might_sleep+0x135/0x190
-kernel/sched/core.c:7253
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 1 PID: 340 Comm: syz-executor677 Not tainted 5.8.0-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google
-01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0xf6/0x16e lib/dump_stack.c:118
- panic+0x2aa/0x6e1 kernel/panic.c:231
- __warn.cold+0x20/0x50 kernel/panic.c:600
- report_bug+0x1bd/0x210 lib/bug.c:198
- handle_bug+0x41/0x80 arch/x86/kernel/traps.c:234
- exc_invalid_op+0x14/0x40 arch/x86/kernel/traps.c:254
- asm_exc_invalid_op+0x12/0x20 arch/x86/include/asm/idtentry.h:536
-RIP: 0010:__might_sleep+0x135/0x190 kernel/sched/core.c:7253
-Code: 65 48 8b 1c 25 40 ef 01 00 48 8d 7b 10 48 89 fe 48 c1 ee 03 80 3c 06 00 75
-2b 48 8b 73 10 48 c7 c7 e0 9e 06 86 e8 ed 12 f6 ff <0f> 0b e9 46 ff ff ff e8 1f
-b2 4b 00 e9 29 ff ff ff e8 15 b2 4b 00
-RSP: 0018:ffff8881cdb77a28 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: ffff8881c6458000 RCX: 0000000000000000
-RDX: ffff8881c6458000 RSI: ffffffff8129ec93 RDI: ffffed1039b6ef37
-RBP: ffffffff86fdade2 R08: 0000000000000001 R09: ffff8881db32f54f
-R10: 0000000000000000 R11: 0000000030343354 R12: 00000000000001f2
-R13: 0000000000000000 R14: 0000000000000068 R15: ffffffff83c1b1aa
- slab_pre_alloc_hook.constprop.0+0xea/0x200 mm/slab.h:498
- slab_alloc_node mm/slub.c:2816 [inline]
- slab_alloc mm/slub.c:2900 [inline]
- kmem_cache_alloc_trace+0x46/0x220 mm/slub.c:2917
- kmalloc include/linux/slab.h:554 [inline]
- dummy_urb_enqueue+0x7a/0x880 drivers/usb/gadget/udc/dummy_hcd.c:1251
- usb_hcd_submit_urb+0x2b2/0x22d0 drivers/usb/core/hcd.c:1547
- usb_submit_urb+0xb4e/0x13e0 drivers/usb/core/urb.c:570
- yurex_write+0x3ea/0x820 drivers/usb/misc/yurex.c:495
+[ Upstream commit 2468c877da428ebfd701142c4cdfefcfb7d4c00e ]
 
-This patch changes the call to use GFP_ATOMIC instead of GFP_KERNEL.
+Driver does not release memory for device on error handling paths in
+net2280_probe() when gadget_release() is not registered yet.
 
-Reported-and-tested-by: syzbot+c2c3302f9c601a4b1be2@syzkaller.appspotmail.com
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-CC: <stable@vger.kernel.org>
+The patch fixes the bug like in other similar drivers.
 
+Found by Linux Driver Verification project (linuxtesting.org).
+
+Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
+Signed-off-by: Felipe Balbi <balbi@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
+ drivers/usb/gadget/udc/net2280.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/usb/gadget/udc/net2280.c b/drivers/usb/gadget/udc/net2280.c
+index 5eff85eeaa5a0..7530bd9a08c43 100644
+--- a/drivers/usb/gadget/udc/net2280.c
++++ b/drivers/usb/gadget/udc/net2280.c
+@@ -3781,8 +3781,10 @@ static int net2280_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	return 0;
+ 
+ done:
+-	if (dev)
++	if (dev) {
+ 		net2280_remove(pdev);
++		kfree(dev);
++	}
+ 	return retval;
+ }
+ 
+-- 
+2.25.1
 
-[as1940]
-
-
- drivers/usb/misc/yurex.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-Index: usb-devel/drivers/usb/misc/yurex.c
-===================================================================
---- usb-devel.orig/drivers/usb/misc/yurex.c
-+++ usb-devel/drivers/usb/misc/yurex.c
-@@ -492,7 +492,7 @@ static ssize_t yurex_write(struct file *
- 	prepare_to_wait(&dev->waitq, &wait, TASK_INTERRUPTIBLE);
- 	dev_dbg(&dev->interface->dev, "%s - submit %c\n", __func__,
- 		dev->cntl_buffer[0]);
--	retval = usb_submit_urb(dev->cntl_urb, GFP_KERNEL);
-+	retval = usb_submit_urb(dev->cntl_urb, GFP_ATOMIC);
- 	if (retval >= 0)
- 		timeout = schedule_timeout(YUREX_WRITE_TIMEOUT);
- 	finish_wait(&dev->waitq, &wait);
