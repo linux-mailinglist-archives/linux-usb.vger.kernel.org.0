@@ -2,91 +2,298 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51F74240AEB
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Aug 2020 18:01:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D88D0240B35
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Aug 2020 18:35:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727896AbgHJQBm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Aug 2020 12:01:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41380 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726720AbgHJQBm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Aug 2020 12:01:42 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AF83C061756
-        for <linux-usb@vger.kernel.org>; Mon, 10 Aug 2020 09:01:42 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id a15so8661684wrh.10
-        for <linux-usb@vger.kernel.org>; Mon, 10 Aug 2020 09:01:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:date:from:user-agent:mime-version:to:cc:subject
-         :references:in-reply-to:content-transfer-encoding;
-        bh=TDpOMHly03XIpe97gA3VRcmOBP2T7XSh9D1jyRNFDlw=;
-        b=aoqLuUZhRksq6iCvJoQHd+nj0xxwDXJ8Uk/04EYOgvdrl2PgUhv59pyyXXC/Ex1V/c
-         CzQbtFb0EsevI0HJirIr7S6iiBkPjJchRFaCNAzevjuy7AvtCA+hFZ2HrSjdA1fpS+Sc
-         QuG3UVEDONDINltutduqDlOWd73T9+hNnAELfYWttsWAAhnoJ5GA2hmNqIOui2MqNBV8
-         VyEASmuV9wI54d1m9ZkFdM2rzzRvLLzONJIlzbo1WzgvNm945UOa39yGpGCITVu3G0NG
-         Pzk1HmcWkL4x4WmBWLPwAAPBK4Wj+5/zdEwI1uvnBG4Odylptcr5oUKv1DSvi8EWMH6V
-         zhpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:from:user-agent:mime-version:to
-         :cc:subject:references:in-reply-to:content-transfer-encoding;
-        bh=TDpOMHly03XIpe97gA3VRcmOBP2T7XSh9D1jyRNFDlw=;
-        b=gzRVKbK5dQ5QNG2Pro6F5NN2hPCET6wa9h6gHXQnwwo88MaXYvdqAnv4v1GUFVQ4tx
-         LSJ8/wNZRB1Bs3VIfDfz8vWrn39fIi4aWBomUgAOKG+xpeZ9//MrXGijUMD8ph1bj5B5
-         rbvg2XKzRaWGgLr0awjDGzClrMH+rP9bjlFbv1AZjSzfbUsM014cZ8zyRk9E3YZuCV3R
-         Jm3Low1G7xw84Zs1xPA9qp23cqglzF0/MlRU5lL8GKD9V0jKGodbyB9I/jRtLHkEGiI4
-         g3v0MjBeFy6yoHxdQP8FBHozJDtr0YjBJufnaBVoEfK5u2x/4UNirivuHpdYlxtX7tld
-         ORKw==
-X-Gm-Message-State: AOAM533rjFLx8wVOVFLg8+5BWCKQX8+wWF6r3pIfyw/l57kRHqP3ZmzX
-        vIgmD1E1+dfIMk0GYqSDt3T3UjMJ
-X-Google-Smtp-Source: ABdhPJx3C412XbUbN+e0mZQudWiQ+YH1fnSuoGkRH4IuBfsqw6b++2CpU6A9tZdVddqNZzkudvEhPA==
-X-Received: by 2002:adf:a106:: with SMTP id o6mr25370613wro.1.1597075299596;
-        Mon, 10 Aug 2020 09:01:39 -0700 (PDT)
-Received: from [46.117.37.149] (46-117-37-149.bb.netvision.net.il. [46.117.37.149])
-        by smtp.gmail.com with ESMTPSA id 128sm22130690wmz.43.2020.08.10.09.01.38
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Mon, 10 Aug 2020 09:01:38 -0700 (PDT)
-Message-ID: <5F316F60.5090506@gmail.com>
-Date:   Mon, 10 Aug 2020 19:01:36 +0300
-From:   Eli Billauer <eli.billauer@gmail.com>
-User-Agent: Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.12) Gecko/20100907 Fedora/3.0.7-1.fc12 Thunderbird/3.0.7
+        id S1726927AbgHJQfL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Aug 2020 12:35:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33438 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725873AbgHJQfL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 10 Aug 2020 12:35:11 -0400
+Received: from coco.lan (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BAAF52076B;
+        Mon, 10 Aug 2020 16:35:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1597077310;
+        bh=6XZCNzTvPDPpAJipzV4KMM4oXZn8UErU3tUeLjJnPCk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=zpYCuMyjNm7ScaxBAs25N/CLxoq1R0aZYc8lhma9LfjkEOo9r1Gyzj5PvFJTv8lPm
+         q1z+PvbVM5lydCLNJrwkyolBlLqz183vQ6vTcg9sgBJ/UoISGsXAQNwXgemNBVSjTq
+         BNpBRXVMrWpcxsk8oVaVLFw8Nq22ya/EA1Ubr5Vc=
+Date:   Mon, 10 Aug 2020 18:35:03 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     lkml <linux-kernel@vger.kernel.org>, Yu Chen <chenyu56@huawei.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        ShuFan Lee <shufan_lee@richtek.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jun Li <lijun.kernel@gmail.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Jack Pham <jackp@codeaurora.org>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [RFC][PATCH v3 11/11] misc: hisi_hikey_usb: Driver to support
+ usb functionality of Hikey960
+Message-ID: <20200810183503.3e8bae80@coco.lan>
+In-Reply-To: <20191016033340.1288-12-john.stultz@linaro.org>
+References: <20191016033340.1288-1-john.stultz@linaro.org>
+        <20191016033340.1288-12-john.stultz@linaro.org>
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-To:     Oliver Neukum <oneukum@suse.com>
-CC:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org
-Subject: Re: [RFC]mooring API
-References: <1596722827.2488.8.camel@suse.com> <5F2C2C74.8000104@gmail.com> <1597070349.2515.6.camel@suse.com>
-In-Reply-To: <1597070349.2515.6.camel@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/08/20 17:39, Oliver Neukum wrote:
->> To me the anchor API is great. If there is unclearances about its API, I
->> >  suppose docs would help. The fact that the URB is unanchored prior to
->> >  calling the completer is intuitive, so there's a clear benefit in that.
->>      
-> But is it necessary? DO you ever move URBs between anchors?
->    
-I don't think it's relevant what I would or wouldn't do. The question is 
-if someone out there would do that. Without any guidelines saying it's 
-explicitly disallowed, some will do it. Actually, even if there are such 
-guidelines.
->    
->> >  This requires some ungraceful code where almost nobody's looking, but if
->> >  that makes the common programmer's life easier, I think it's a good deal.
->>      
-> It would be, if the deal is necessary. In hindsight it still looks
-> to me like completion should unanchor an URB.
->    
-Once again, I'm not sure that matters so much anymore. The anchor API 
-has been around for a while, and there are drivers using it. Adding 
-another API will undoubtedly create some confusion. That's why I think 
-that the question should be what is functionally flawed with the current 
-API, and if that can be fixed.
+Hi John,
 
-Regards,
-    Eli
+Em Wed, 16 Oct 2019 03:33:40 +0000
+John Stultz <john.stultz@linaro.org> escreveu:
+
+> From: Yu Chen <chenyu56@huawei.com>
+> 
+> The HiKey960 has a fairly complex USB configuration due to it
+> needing to support a USB-C port for host/device mode and multiple
+> USB-A ports in host mode using a single USB controller.
+> 
+> See schematics here:
+>   https://github.com/96boards/documentation/raw/master/consumer/hikey/hikey960/hardware-docs/HiKey960_Schematics.pdf
+> 
+> This driver acts as a usb-role-switch intermediary, intercepting
+> the role switch notifications from the tcpm code, and passing
+> them on to the dwc3 core.
+> 
+> In doing so, it also controls the onboard hub and power gpios in
+> order to properly route the data lines between the USB-C port
+> and the onboard hub to the USB-A ports.
+> 
+> NOTE: It was noted that controlling the TYPEC_VBUS_POWER_OFF and
+> TYPEC_VBUS_POWER_ON values here is not reccomended. I'm looking
+> for a way to remove that bit from the logic here, but wanted to
+> still get feedback on this approach.
+
+Let me somewhat hijack this thread. I'm trying to add support here
+for the Hikey 970 driver. Maybe you might help me finding the remaing
+issues over there ;-)
+
+The Hikey 970 has lots of things in common with Hikey 960, but
+the USB hub uses a somewhat different approach (based on what I
+saw at the Linaro's 4.9 official Hikey kernel tree).
+
+Basically, with the enclosed patch applied, the USB hub needs these
+at the DT file:
+
+		hikey_usbhub: hikey_usbhub {
+			compatible = "hisilicon,kirin970_hikey_usbhub";
+
+			typec-vbus-gpios = <&gpio26 1 0>;
+			otg-switch-gpios = <&gpio4 2 0>;
+			hub_reset_en_gpio = <&gpio0 3 0>;
+			hub-vdd-supply = <&ldo17>;
+			usb-role-switch;
+...
+		}
+
+E.g. when compared with Hikey 960, the USB hub:
+
+- Hikey 970 uses a regulator instead of GPIO for powering on;
+- Hikey 970 has a reset pin controlled via GPIO.
+
+It should be simple to add support for it, as done by the
+enclosed patch. With this, the phy driver for Hikey 970 and a new
+small driver to properly set clocks and reset lines at dwg3[1],
+I can now see the hub on my Hikey970:
+
+	$ lsusb
+	Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+	Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+
+Still, I'm missing something to make it work, as, besides the hub,
+right now, it doesn't detect the keyboard/mouse, which are
+attached at the USB hub.
+
+Do you have any ideas?
+
+-
+
+[1] Right now, this is needed:
+	https://github.com/96boards-hikey/linux/blob/hikey970-v4.9/drivers/usb/dwc3/dwc3-hisi.c
+
+    Placing dwc3 directly under soc at DT causes some weird NMI, with
+    either produce an OOPS or hangs the machine at boot time.
+
+Thanks,
+Mauro
+
+[PATCH] misc: hisi_hikey_usb: add support for Hikey 970
+
+The HiKey 970 board uses a voltage regulator and GPIO reset pin.
+
+Add support for them.
+
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+
+diff --git a/drivers/misc/hisi_hikey_usb.c b/drivers/misc/hisi_hikey_usb.c
+index 3a98a890757c..76eb38fc6169 100644
+--- a/drivers/misc/hisi_hikey_usb.c
++++ b/drivers/misc/hisi_hikey_usb.c
+@@ -14,8 +14,10 @@
+ #include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+ #include <linux/notifier.h>
++#include <linux/of_gpio.h>
+ #include <linux/platform_device.h>
+ #include <linux/property.h>
++#include <linux/regulator/consumer.h>
+ #include <linux/slab.h>
+ #include <linux/usb/role.h>
+ 
+@@ -46,18 +48,27 @@ struct hisi_hikey_usb {
+ 
+ static void hub_power_ctrl(struct hisi_hikey_usb *hisi_hikey_usb, int value)
+ {
++	if (!hisi_hikey_usb->hub_vbus)
++		return;
++
+ 	gpiod_set_value_cansleep(hisi_hikey_usb->hub_vbus, value);
+ }
+ 
+ static void usb_switch_ctrl(struct hisi_hikey_usb *hisi_hikey_usb,
+ 			    int switch_to)
+ {
++	if (!hisi_hikey_usb->otg_switch)
++		return;
++
+ 	gpiod_set_value_cansleep(hisi_hikey_usb->otg_switch, switch_to);
+ }
+ 
+ static void usb_typec_power_ctrl(struct hisi_hikey_usb *hisi_hikey_usb,
+ 				 int value)
+ {
++	if (!hisi_hikey_usb->typec_vbus)
++		return;
++
+ 	gpiod_set_value_cansleep(hisi_hikey_usb->typec_vbus, value);
+ }
+ 
+@@ -117,31 +128,89 @@ static int hub_usb_role_switch_set(struct usb_role_switch *sw, enum usb_role rol
+ 	return 0;
+ }
+ 
++static int hisi_hikey_usb_parse_kirin970(struct platform_device *pdev)
++{
++	struct regulator *regulator;
++	int hub_reset_en_gpio;
++	int ret;
++
++	regulator = devm_regulator_get_optional(&pdev->dev, "hub-vdd");
++	if (IS_ERR(regulator)) {
++		if (PTR_ERR(regulator) == -EPROBE_DEFER) {
++			dev_info(&pdev->dev,
++				"waiting for hub-vdd-supply to be probed\n");
++			return PTR_ERR(regulator);
++		} else {
++			/* let it fall back to regulator dummy */
++			regulator = devm_regulator_get(&pdev->dev, "hub-vdd");
++			if (IS_ERR(regulator)) {
++				dev_err(&pdev->dev,
++					"get hub-vdd-supply failed with error %ld\n",
++					PTR_ERR(regulator));
++				return PTR_ERR(regulator);
++			}
++		}
++	}
++
++	ret = regulator_set_voltage(regulator, 3300000, 3300000);
++	if (ret)
++		dev_err(&pdev->dev, "set hub-vdd-supply voltage failed\n");
++
++	hub_reset_en_gpio = of_get_named_gpio(pdev->dev.of_node,
++					      "hub_reset_en_gpio", 0);
++	if (!gpio_is_valid(hub_reset_en_gpio)) {
++		dev_err(&pdev->dev, "Failed to get a valid reset gpio\n");
++		return -ENODEV;
++	}
++
++	ret = devm_gpio_request(&pdev->dev, hub_reset_en_gpio,
++				"hub_reset_en_gpio");
++	if (ret) {
++		dev_err(&pdev->dev, "Failed to request the reset gpio\n");
++		return ret;
++	}
++	ret = gpio_direction_output(hub_reset_en_gpio, 1);
++	if (ret)
++		dev_err(&pdev->dev,
++			"Failed to set the direction of the reset gpio\n");
++
++	return ret;
++}
++
+ static int hisi_hikey_usb_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	struct hisi_hikey_usb *hisi_hikey_usb;
+ 	struct usb_role_switch_desc hub_role_switch = {NULL};
++	int ret;
+ 
+ 	hisi_hikey_usb = devm_kzalloc(dev, sizeof(*hisi_hikey_usb), GFP_KERNEL);
+ 	if (!hisi_hikey_usb)
+ 		return -ENOMEM;
+ 
+-	hisi_hikey_usb->typec_vbus = devm_gpiod_get(dev, "typec-vbus",
+-						    GPIOD_OUT_LOW);
+-	if (IS_ERR(hisi_hikey_usb->typec_vbus))
+-		return PTR_ERR(hisi_hikey_usb->typec_vbus);
+-
+ 	hisi_hikey_usb->otg_switch = devm_gpiod_get(dev, "otg-switch",
+ 						    GPIOD_OUT_HIGH);
+ 	if (IS_ERR(hisi_hikey_usb->otg_switch))
+ 		return PTR_ERR(hisi_hikey_usb->otg_switch);
+ 
+-	/* hub-vdd33-en is optional */
+-	hisi_hikey_usb->hub_vbus = devm_gpiod_get_optional(dev, "hub-vdd33-en",
+-							   GPIOD_OUT_HIGH);
+-	if (IS_ERR(hisi_hikey_usb->hub_vbus))
+-		return PTR_ERR(hisi_hikey_usb->hub_vbus);
++	/* Parse Kirin 970-specific OF data */
++	if (of_device_is_compatible(pdev->dev.of_node,
++				    "hisilicon,kirin970_hikey_usbhub")) {
++		ret = hisi_hikey_usb_parse_kirin970(pdev);
++		if (ret)
++			return ret;
++	} else {
++		hisi_hikey_usb->typec_vbus = devm_gpiod_get(dev, "typec-vbus",
++							    GPIOD_OUT_LOW);
++		if (IS_ERR(hisi_hikey_usb->typec_vbus))
++			return PTR_ERR(hisi_hikey_usb->typec_vbus);
++
++		/* hub-vdd33-en is optional */
++		hisi_hikey_usb->hub_vbus = devm_gpiod_get_optional(dev, "hub-vdd33-en",
++								GPIOD_OUT_HIGH);
++		if (IS_ERR(hisi_hikey_usb->hub_vbus))
++			return PTR_ERR(hisi_hikey_usb->hub_vbus);
++	}
+ 
+ 	hisi_hikey_usb->dev_role_sw = usb_role_switch_get(dev);
+ 	if (!hisi_hikey_usb->dev_role_sw)
+@@ -185,6 +254,7 @@ static int  hisi_hikey_usb_remove(struct platform_device *pdev)
+ 
+ static const struct of_device_id id_table_hisi_hikey_usb[] = {
+ 	{.compatible = "hisilicon,gpio_hubv1"},
++	{.compatible = "hisilicon,kirin970_hikey_usbhub"},
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(of, id_table_hisi_hikey_usb);
+
+
