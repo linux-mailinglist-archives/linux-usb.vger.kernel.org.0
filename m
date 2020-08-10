@@ -2,113 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68CDF240717
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Aug 2020 16:00:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E01324073A
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Aug 2020 16:07:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726922AbgHJOAk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Aug 2020 10:00:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50992 "EHLO
+        id S1726915AbgHJOHw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Aug 2020 10:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726787AbgHJOAj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Aug 2020 10:00:39 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515D6C061756;
-        Mon, 10 Aug 2020 07:00:39 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id g19so9454824ejc.9;
-        Mon, 10 Aug 2020 07:00:39 -0700 (PDT)
+        with ESMTP id S1726787AbgHJOHv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Aug 2020 10:07:51 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D626C061756
+        for <linux-usb@vger.kernel.org>; Mon, 10 Aug 2020 07:07:51 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id r11so5386070pfl.11
+        for <linux-usb@vger.kernel.org>; Mon, 10 Aug 2020 07:07:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=2Jkjqxej/y2JcP9NMnzzVbe7sdXk6we2prVXda1ylkY=;
-        b=rWkTFvqs7MCFdNX1Ov/4AEueG11h0PTT10mj/x4xXRHoyKmLX+Go+qCwa78mdtZ92S
-         21L3Ybw7avC7xwPTkA+vjM5wEwn+ZelYcHlo9OOlD8KGQIwsMltiV7ggg6OItQ2bNg1T
-         BOpW2dZWJ4C3FTbBov32q2R1UNCpLNNwVr+9w+l1QsY2BeNVKPdQxSUWUqVo+xDDt7N1
-         rvGAuuDGT0RfNzJ6SJU74z/TUAWKH6i1vvRmptsd0ihWZ1OUfODewhXkxME7/rk1eXg/
-         KjWh3seamRaAO6iFVxBCLrT96EoI5RPdbwqXxbWk6TfjkDWxE8RlUwZchj7m+D4gmHvP
-         PIBQ==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OLUN7yzaJjWoVmWHoIQUorknRQRx0+Y1VLFiuVxKXZE=;
+        b=Dpho1qU1RLdNfqLhCLelmgInMzDJHQBp0jLpVj5SckMaZQyrKgl+jmndVd0rZbhwLY
+         h/FuIr1dSHqOgfFng4dubYhhakXkFBf8jJ1eBTA4RE43Q3JEXTr7quDhKbLxfdf3ZDUf
+         nhdaDHNcADUXGW1JtmRTJlt4izjMKmb4/yHpiUw3ByRYZ5HTDtaX/xFiPkGYJpefPsdy
+         yt2sWcg9XXgY/XD1ykXA+1Pl0tF4Cr/Gu0CAcDTxrm0xFJ9Wpo1YbTAdtlDig4RbWxzq
+         /vb0XVYvRSBZyKzccjNjyAK3c/HELNdT2LoteL8eVL2VyZk6PWT6RV6C+kBYDW68D3zO
+         n8Dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=2Jkjqxej/y2JcP9NMnzzVbe7sdXk6we2prVXda1ylkY=;
-        b=WDXZNIas7V27bR+uU+uKlL/ps7fDVfZStoD2fmGzOpWkbMIsJ/MQn1T583powditZP
-         GLXWANaUkeLq8fiCXxeyRAgPBotnigF7q5uknctNrd4u7bWQgJf7EecxMBwXYb7E62Y/
-         xQjazrAmtb8z4E/MPQP74KslOa9a7RsmlZDfWb7uUMttXrfxVaD/5W0kP+dTDCkzkwjc
-         q/mG0KO8LMuctO0FppRyRhkDB8wi62HN0FCTAd8ZCD+m7nKuczpywMfl3P/JPn3ENV2I
-         05KmwPGvwKGm55EDapjVShW6nv92uvhFBiGAbXwZZsuC6qyvLB5qctcIz7tw/a2Jy0qd
-         nAIQ==
-X-Gm-Message-State: AOAM530ylyG4U2gsp3ZMd1qy2OvfTA2u8mscnSNjAVpGbpFd/JmbZ399
-        b0ZCrK7+nWUBBSx3M08VbOk5n/ks
-X-Google-Smtp-Source: ABdhPJw6aU2rEDCyVIk4J/4v8Rf4ZwH02pdOOxfJipNx6W6tt0vEHyAVO/i7TIF/ZHhqOLcgPYwsAw==
-X-Received: by 2002:a17:906:d187:: with SMTP id c7mr22271872ejz.196.1597068037973;
-        Mon, 10 Aug 2020 07:00:37 -0700 (PDT)
-Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id dr21sm8762514ejc.112.2020.08.10.07.00.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Aug 2020 07:00:36 -0700 (PDT)
-Date:   Mon, 10 Aug 2020 16:00:35 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Nagarjuna Kristam <nkristam@nvidia.com>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, jonathanh@nvidia.com,
-        yuehaibing@huawei.com, heikki.krogerus@linux.intel.com,
-        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: tegra-xudc: Avoid GFP_ATOMIC where it is
- not needed
-Message-ID: <20200810140035.GA808811@ulmo>
-References: <20200809072948.743269-1-christophe.jaillet@wanadoo.fr>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OLUN7yzaJjWoVmWHoIQUorknRQRx0+Y1VLFiuVxKXZE=;
+        b=VI510MOk5tcSvBTf3SybqrAL/IAyr9X9978XI5cUEw5nQA6rzdNcJ77+LQiwWdwWcM
+         7M9hgKVo/QJuoXzxN1hXMtUZczJoQICG6a0+5hZooVWZsdbajpA4yX2rjlfT12uugQo6
+         4hibkj8EehqJ2l4whrdhDGxl97g26PBwhXoF+P7viM/qCudOaWdhecftBInRNs+bqYlN
+         6YvgfmP8EoyMiG461sA//+3IsQ1NOIEQThEc20icsJ7q9suVksLQklcTuc8+mO8tTdXH
+         9fT1FGyUXpsdct4dniP2bc+Axk32ZbWQoMKRKZtOwN3HI3rohPqnnrm6kLS3A5RF6Shp
+         AMSg==
+X-Gm-Message-State: AOAM532NCOVh+8QqvW46X/AIKDnYQ1O6dh9UUvVZkoio3D8H9W9qipZc
+        sMpqwkR7lIibOxKS5TkDXe1/FKYqZr29No1yBl0lBQ==
+X-Google-Smtp-Source: ABdhPJwa8ANYWls5D1ZzUqXv+dm6c9jFr+cX/1Wf9Qz2AgHllUAJnGydKsSmlskVi+7e9tHG6bISyosgU3GWhWtHhVM=
+X-Received: by 2002:a65:4bc7:: with SMTP id p7mr21992591pgr.440.1597068470553;
+ Mon, 10 Aug 2020 07:07:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Qxx1br4bt0+wmkIi"
-Content-Disposition: inline
-In-Reply-To: <20200809072948.743269-1-christophe.jaillet@wanadoo.fr>
-User-Agent: Mutt/1.14.4 (2020-06-18)
+References: <000000000000ce85c405ac744ff6@google.com> <20200810074706.GD1529187@kroah.com>
+ <CACT4Y+aS6oangE4BzhCfx3gs9guAW=zQpwN1LP+yB3kza68xFw@mail.gmail.com>
+ <20200810090833.GA2271719@kroah.com> <20200810091538.GA2273701@kroah.com>
+ <20200810095754.GA2404978@kroah.com> <CACT4Y+badWwK8L3HjYrv2nu-W+WnUfj5Pi2JsLTUMU3o2tJL9g@mail.gmail.com>
+In-Reply-To: <CACT4Y+badWwK8L3HjYrv2nu-W+WnUfj5Pi2JsLTUMU3o2tJL9g@mail.gmail.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Mon, 10 Aug 2020 16:07:39 +0200
+Message-ID: <CAAeHK+wjkbuGenK+wwMPvU=jJ7JRQ14HsQhU3sWrsUQ2QK6RYQ@mail.gmail.com>
+Subject: Re: KMSAN: kernel-infoleak in raw_ioctl
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        syzbot <syzbot+a7e220df5a81d1ab400e@syzkaller.appspotmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Alexander Potapenko <glider@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Mon, Aug 10, 2020 at 12:22 PM Dmitry Vyukov <dvyukov@google.com> wrote:
+>
+> On Mon, Aug 10, 2020 at 11:57 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Mon, Aug 10, 2020 at 11:15:38AM +0200, Greg KH wrote:
+> > > On Mon, Aug 10, 2020 at 11:08:33AM +0200, Greg KH wrote:
+> > > > On Mon, Aug 10, 2020 at 11:00:07AM +0200, Dmitry Vyukov wrote:
+> > > > > On Mon, Aug 10, 2020 at 9:46 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > > > > >
+> > > > > > On Sun, Aug 09, 2020 at 09:27:18AM -0700, syzbot wrote:
+> > > > > > > Hello,
+> > > > > > >
+> > > > > > > syzbot found the following issue on:
+> > > > > > >
+> > > > > > > HEAD commit:    ce8056d1 wip: changed copy_from_user where instrumented
+> > > > > > > git tree:       https://github.com/google/kmsan.git master
+> > > > > > > console output: https://syzkaller.appspot.com/x/log.txt?x=141eb8b2900000
+> > > > > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=3afe005fb99591f
+> > > > > > > dashboard link: https://syzkaller.appspot.com/bug?extid=a7e220df5a81d1ab400e
+> > > > > > > compiler:       clang version 10.0.0 (https://github.com/llvm/llvm-project/ c2443155a0fb245c8f17f2c1c72b6ea391e86e81)
+> > > > > > > userspace arch: i386
+> > > > > > >
+> > > > > > > Unfortunately, I don't have any reproducer for this issue yet.
+> > > > > >
+> > > > > > The irony of a kernel module written for syzbot testing, causing syzbot
+> > > > > > reports....
+> > > > >
+> > > > > The raw gadget and KCOV are also kernel code and subject to all the
+> > > > > same rules as any other kernel code from syzkaller point of view.
+> > > > >
+> > > > > But I think the root cause of this bug is the origin of the uninitialized-ness:
+> > > > >
+> > > > > Local variable ----buf.i@asix_get_phy_addr created at:
+> > > > >  asix_read_cmd drivers/net/usb/asix_common.c:312 [inline]
+> > > > >  asix_read_phy_addr drivers/net/usb/asix_common.c:295 [inline]
+> > > > >  asix_get_phy_addr+0x4d/0x290 drivers/net/usb/asix_common.c:314
+> > > > >  asix_read_cmd drivers/net/usb/asix_common.c:312 [inline]
+> > > > >  asix_read_phy_addr drivers/net/usb/asix_common.c:295 [inline]
+> > > > >  asix_get_phy_addr+0x4d/0x290 drivers/net/usb/asix_common.c:314
+> > > >
+> > > > read buffers sent to USB hardware are ment to be filled in by the
+> > > > hardware with the data received from it, we do not zero-out those
+> > > > buffers before passing the pointer there.
+> > > >
+> > > > Perhaps with testing frameworks like the raw usb controller, that might
+> > > > cause a number of false-positives to happen?
+> > >
+> > > Ah, wait, that buffer is coming from the stack, which isn't allowed in
+> > > the first place :(
+> > >
+> > > So that should be changed anyway to a dynamic allocation, I'll go write
+> > > up a patch...
+> >
+> > Nope, my fault, the data is not coming from the stack, so all is good.
+>
+> My reading of the code is that asix_read_cmd returns the number of
+> bytes actually read, which may be less than requested.
+> This happens in __usbnet_read_cmd:
+> https://elixir.bootlin.com/linux/latest/source/drivers/net/usb/usbnet.c#L2002
+> So this code in asix_read_phy_addr will need produce an uninit value
+> for result if <2 bytes read:
+>
+>     u8 buf[2];
+>     int ret = asix_read_cmd(dev, AX_CMD_READ_PHY_ID, 0, 0, 2, buf, 0);
+>     if (ret < 0)
+>         netdev_err(dev->net, "Error reading PHYID register: %02x\n", ret);
+>     ret = buf[offset];
+>     return ret;
+>
+> And it looks like all of 13 uses of asix_read_cmd in
+> drivers/net/usb/asix_common.c are subject to this bug as well.
 
---Qxx1br4bt0+wmkIi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Sun, Aug 09, 2020 at 09:29:48AM +0200, Christophe JAILLET wrote:
-> There is no need to use GFP_ATOMIC here. It is a probe function, no
-> spinlock is taken.
->=20
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->  drivers/usb/gadget/udc/tegra-xudc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-
-Looks good to me. I can't think of any reason why this would have to be
-an atomic allocation. Nagarjuna, please shout if this is really needed,
-otherwise:
-
-Acked-by: Thierry Reding <treding@nvidia.com>
-
---Qxx1br4bt0+wmkIi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl8xUvcACgkQ3SOs138+
-s6F9rw/+PeuqljJiA32vQ8TM7tR5BDd66QmCNhEsxxi8d8jhOXoun3IBvCmN4640
-xy5z+K7q4m36vAZ62TpE7PGzuIRdYINZfPFryH1746ZJ5oIBYPvVIgnB9PL1Zxrb
-SPAmxYAWic9t9zxgRUKYyX2vA2MZ6usvF1VoQ5/3QrJDU9EWBAT3QLCOQG4xkHaJ
-66pkAKvNU807JFHz6DnFwJJO+OO3kqcmiZkvrrblDARIf4FiMXo+V1rn4TSBf+aj
-vGI6H2FwBx7ye/sTKUutk0UayG3yyh12tZ51rPibwOPzmU/nfQPVD2Pg66Og5H5A
-9UpScutoVDK4mEzriaZIVhY6qIfwuiYB0EQlVF3wQJaOC5tihmt+BJiLj5C568oR
-HS8Qtq3i0IDf8jao36zTItstFn94UdgkmSI/Tib9XasfQqdw1oUo1huOCC2734bj
-osFeqlVWoqOz9fL7T26owy29Rqe/X/4aMkch/8ngs7bqWC/+yU/GsXCo6pjw/byz
-PH9BipZhJAKfpkdPTstA9Ghmt96eWIG7BkKuGj1bvP+xk57DD8JhATVURKr9QnJV
-VUVI5sAnX3YLmwZ2EQoZ8K9hoDg6yuxkzVsXfMy5Pf2Z5mU9EbTOVEm1d5Atq68v
-JKX6VIpWehZ9PK73SDRAP175Ll77CAu4y7NTNrcloNbpJq65OyY=
-=6BAu
------END PGP SIGNATURE-----
-
---Qxx1br4bt0+wmkIi--
+Yeah, such issues are unfortunately currently getting attributed to
+raw-gadget. I wonder if we can improve crash parsing code to cover
+this kind of cases... We would need to skip the first few
+raw-gadget/USB-related stack traces, and only take one of the "Uninit
+was stored to memory at" ones.
