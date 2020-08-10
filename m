@@ -2,152 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 101AF240759
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Aug 2020 16:17:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B895924076C
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Aug 2020 16:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727035AbgHJORk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Aug 2020 10:17:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53594 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726967AbgHJORi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Aug 2020 10:17:38 -0400
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B7EC061756
-        for <linux-usb@vger.kernel.org>; Mon, 10 Aug 2020 07:17:37 -0700 (PDT)
-Received: by mail-qk1-x741.google.com with SMTP id 77so8439900qkm.5
-        for <linux-usb@vger.kernel.org>; Mon, 10 Aug 2020 07:17:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3++VDW9CFsksX2oCeztAkvfCJ7YATTDDH7DuF4MGyJQ=;
-        b=dyNuaTscRCp4wBDLNz/Mruv3dtofts4bEpGRvKV/jCZAth4Mn+VC+W0vExNqTGHauZ
-         leuHcVV5/cr6M/I2m20xTj0YCTcJWfIynjisVlsvzqC54Ejb1BX2cJXHMedQLDN433Q6
-         W97KA5oqVwqNOSuPpf/z8QnHfGl8Tfk6RE/2CygSL8mdwguPwAhP5zpkFDghhEFxwdFT
-         zNZoAZEaBFFKY0XzMZw+gU1v4yj76ammX6Pcy0Ny1iFvpCoCwlxoD7IEiwojPcWmf/fK
-         xNpVUeNPKdzBgK2StUbyyjxRJ6QuQf0hYRK27QzcXx2kPCnZiw4JCRYsdbgN3KoQhw4t
-         SbWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3++VDW9CFsksX2oCeztAkvfCJ7YATTDDH7DuF4MGyJQ=;
-        b=sh7AMbyr337hRtVIQBimaEIrfEGrrVdIKZ9ZITkRUC5VBuo2/iXbrwJi+GAYn2d1Yl
-         maaZ3zYzM64j3qIWAqUXAnGu6wmsVNgx079ptNhF78xGNVb2dFq4mhWV7E3ZEeR8MiOu
-         SZgODozCzxARCFbUqSWDZ/9KlMo/uEfIfk19VutZCu0u0FHuB8d+l7htDvvX7EyUR8Js
-         73vqq2qHS5R6ZQpzx8bC7xxwyZyzqQxQzlQMsWNVtGRaFjOpKgaA1ZFrLUnriOP3dFz4
-         xbQyoeZuQE4mmEUtKknUut18HbpPaShyKlv12sDGMEQDIJrZoOpaGO/rmNeAqZcG/Gj9
-         T+ng==
-X-Gm-Message-State: AOAM531/rmcJ/fPDB9o/2dw7Tif494go4p2UdCyvKqg8w0274Eh7q1Jd
-        VJvG6NxMHE24S3NMlQ1j2mfxRD0chknpC+aPK+DOOg==
-X-Google-Smtp-Source: ABdhPJwOKbKK4/6wWw9jmPphWe7MUwI0KxmaNez7jEYi0uqr60dqPnsdZuy3ryr3K7PsV3eX+GTBj3b8Sken+dBZOcg=
-X-Received: by 2002:a05:620a:21d2:: with SMTP id h18mr23412240qka.407.1597069055159;
- Mon, 10 Aug 2020 07:17:35 -0700 (PDT)
+        id S1726521AbgHJOYn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Aug 2020 10:24:43 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:59887 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1725979AbgHJOYm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Aug 2020 10:24:42 -0400
+Received: (qmail 300635 invoked by uid 1000); 10 Aug 2020 10:24:41 -0400
+Date:   Mon, 10 Aug 2020 10:24:41 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     syzbot <syzbot+c2c3302f9c601a4b1be2@syzkaller.appspotmail.com>
+Cc:     andreyknvl@gmail.com, andreyknvl@google.com, balbi@kernel.org,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: WARNING in slab_pre_alloc_hook
+Message-ID: <20200810142441.GB299045@rowland.harvard.edu>
+References: <000000000000589ccd05ac845d6e@google.com>
 MIME-Version: 1.0
-References: <000000000000ce85c405ac744ff6@google.com> <20200810074706.GD1529187@kroah.com>
- <CACT4Y+aS6oangE4BzhCfx3gs9guAW=zQpwN1LP+yB3kza68xFw@mail.gmail.com>
- <20200810090833.GA2271719@kroah.com> <20200810091538.GA2273701@kroah.com>
- <20200810095754.GA2404978@kroah.com> <CACT4Y+badWwK8L3HjYrv2nu-W+WnUfj5Pi2JsLTUMU3o2tJL9g@mail.gmail.com>
- <CAAeHK+wjkbuGenK+wwMPvU=jJ7JRQ14HsQhU3sWrsUQ2QK6RYQ@mail.gmail.com>
-In-Reply-To: <CAAeHK+wjkbuGenK+wwMPvU=jJ7JRQ14HsQhU3sWrsUQ2QK6RYQ@mail.gmail.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Mon, 10 Aug 2020 16:17:21 +0200
-Message-ID: <CACT4Y+b5QZJ1yTzh9nFYRsqMa_SxD0sbteu_L+KRL8oV8CMPvQ@mail.gmail.com>
-Subject: Re: KMSAN: kernel-infoleak in raw_ioctl
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        syzbot <syzbot+a7e220df5a81d1ab400e@syzkaller.appspotmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Alexander Potapenko <glider@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000589ccd05ac845d6e@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 10, 2020 at 4:07 PM 'Andrey Konovalov' via syzkaller-bugs
-<syzkaller-bugs@googlegroups.com> wrote:
-> > > On Mon, Aug 10, 2020 at 11:15:38AM +0200, Greg KH wrote:
-> > > > On Mon, Aug 10, 2020 at 11:08:33AM +0200, Greg KH wrote:
-> > > > > On Mon, Aug 10, 2020 at 11:00:07AM +0200, Dmitry Vyukov wrote:
-> > > > > > On Mon, Aug 10, 2020 at 9:46 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > > > > > >
-> > > > > > > On Sun, Aug 09, 2020 at 09:27:18AM -0700, syzbot wrote:
-> > > > > > > > Hello,
-> > > > > > > >
-> > > > > > > > syzbot found the following issue on:
-> > > > > > > >
-> > > > > > > > HEAD commit:    ce8056d1 wip: changed copy_from_user where instrumented
-> > > > > > > > git tree:       https://github.com/google/kmsan.git master
-> > > > > > > > console output: https://syzkaller.appspot.com/x/log.txt?x=141eb8b2900000
-> > > > > > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=3afe005fb99591f
-> > > > > > > > dashboard link: https://syzkaller.appspot.com/bug?extid=a7e220df5a81d1ab400e
-> > > > > > > > compiler:       clang version 10.0.0 (https://github.com/llvm/llvm-project/ c2443155a0fb245c8f17f2c1c72b6ea391e86e81)
-> > > > > > > > userspace arch: i386
-> > > > > > > >
-> > > > > > > > Unfortunately, I don't have any reproducer for this issue yet.
-> > > > > > >
-> > > > > > > The irony of a kernel module written for syzbot testing, causing syzbot
-> > > > > > > reports....
-> > > > > >
-> > > > > > The raw gadget and KCOV are also kernel code and subject to all the
-> > > > > > same rules as any other kernel code from syzkaller point of view.
-> > > > > >
-> > > > > > But I think the root cause of this bug is the origin of the uninitialized-ness:
-> > > > > >
-> > > > > > Local variable ----buf.i@asix_get_phy_addr created at:
-> > > > > >  asix_read_cmd drivers/net/usb/asix_common.c:312 [inline]
-> > > > > >  asix_read_phy_addr drivers/net/usb/asix_common.c:295 [inline]
-> > > > > >  asix_get_phy_addr+0x4d/0x290 drivers/net/usb/asix_common.c:314
-> > > > > >  asix_read_cmd drivers/net/usb/asix_common.c:312 [inline]
-> > > > > >  asix_read_phy_addr drivers/net/usb/asix_common.c:295 [inline]
-> > > > > >  asix_get_phy_addr+0x4d/0x290 drivers/net/usb/asix_common.c:314
-> > > > >
-> > > > > read buffers sent to USB hardware are ment to be filled in by the
-> > > > > hardware with the data received from it, we do not zero-out those
-> > > > > buffers before passing the pointer there.
-> > > > >
-> > > > > Perhaps with testing frameworks like the raw usb controller, that might
-> > > > > cause a number of false-positives to happen?
-> > > >
-> > > > Ah, wait, that buffer is coming from the stack, which isn't allowed in
-> > > > the first place :(
-> > > >
-> > > > So that should be changed anyway to a dynamic allocation, I'll go write
-> > > > up a patch...
-> > >
-> > > Nope, my fault, the data is not coming from the stack, so all is good.
-> >
-> > My reading of the code is that asix_read_cmd returns the number of
-> > bytes actually read, which may be less than requested.
-> > This happens in __usbnet_read_cmd:
-> > https://elixir.bootlin.com/linux/latest/source/drivers/net/usb/usbnet.c#L2002
-> > So this code in asix_read_phy_addr will need produce an uninit value
-> > for result if <2 bytes read:
-> >
-> >     u8 buf[2];
-> >     int ret = asix_read_cmd(dev, AX_CMD_READ_PHY_ID, 0, 0, 2, buf, 0);
-> >     if (ret < 0)
-> >         netdev_err(dev->net, "Error reading PHYID register: %02x\n", ret);
-> >     ret = buf[offset];
-> >     return ret;
-> >
-> > And it looks like all of 13 uses of asix_read_cmd in
-> > drivers/net/usb/asix_common.c are subject to this bug as well.
->
-> Yeah, such issues are unfortunately currently getting attributed to
-> raw-gadget. I wonder if we can improve crash parsing code to cover
-> this kind of cases... We would need to skip the first few
-> raw-gadget/USB-related stack traces, and only take one of the "Uninit
-> was stored to memory at" ones.
+On Mon, Aug 10, 2020 at 04:36:25AM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    449dc8c9 Merge tag 'for-v5.9' of git://git.kernel.org/pub/..
+> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+> console output: https://syzkaller.appspot.com/x/log.txt?x=16581652900000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=6ef84fa8ee48e528
+> dashboard link: https://syzkaller.appspot.com/bug?extid=c2c3302f9c601a4b1be2
+> compiler:       gcc (GCC) 10.1.0-syz 20200507
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16e8de34900000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1244eb62900000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+c2c3302f9c601a4b1be2@syzkaller.appspotmail.com
+> 
+> ------------[ cut here ]------------
+> do not call blocking ops when !TASK_RUNNING; state=1 set at [<00000000370c7c68>] prepare_to_wait+0xb1/0x2a0 kernel/sched/wait.c:247
+> WARNING: CPU: 1 PID: 340 at kernel/sched/core.c:7253 __might_sleep+0x135/0x190 kernel/sched/core.c:7253
+> Kernel panic - not syncing: panic_on_warn set ...
+> CPU: 1 PID: 340 Comm: syz-executor677 Not tainted 5.8.0-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> Call Trace:
+>  __dump_stack lib/dump_stack.c:77 [inline]
+>  dump_stack+0xf6/0x16e lib/dump_stack.c:118
+>  panic+0x2aa/0x6e1 kernel/panic.c:231
+>  __warn.cold+0x20/0x50 kernel/panic.c:600
+>  report_bug+0x1bd/0x210 lib/bug.c:198
+>  handle_bug+0x41/0x80 arch/x86/kernel/traps.c:234
+>  exc_invalid_op+0x14/0x40 arch/x86/kernel/traps.c:254
+>  asm_exc_invalid_op+0x12/0x20 arch/x86/include/asm/idtentry.h:536
+> RIP: 0010:__might_sleep+0x135/0x190 kernel/sched/core.c:7253
+> Code: 65 48 8b 1c 25 40 ef 01 00 48 8d 7b 10 48 89 fe 48 c1 ee 03 80 3c 06 00 75 2b 48 8b 73 10 48 c7 c7 e0 9e 06 86 e8 ed 12 f6 ff <0f> 0b e9 46 ff ff ff e8 1f b2 4b 00 e9 29 ff ff ff e8 15 b2 4b 00
+> RSP: 0018:ffff8881cdb77a28 EFLAGS: 00010282
+> RAX: 0000000000000000 RBX: ffff8881c6458000 RCX: 0000000000000000
+> RDX: ffff8881c6458000 RSI: ffffffff8129ec93 RDI: ffffed1039b6ef37
+> RBP: ffffffff86fdade2 R08: 0000000000000001 R09: ffff8881db32f54f
+> R10: 0000000000000000 R11: 0000000030343354 R12: 00000000000001f2
+> R13: 0000000000000000 R14: 0000000000000068 R15: ffffffff83c1b1aa
+>  slab_pre_alloc_hook.constprop.0+0xea/0x200 mm/slab.h:498
+>  slab_alloc_node mm/slub.c:2816 [inline]
+>  slab_alloc mm/slub.c:2900 [inline]
+>  kmem_cache_alloc_trace+0x46/0x220 mm/slub.c:2917
+>  kmalloc include/linux/slab.h:554 [inline]
+>  dummy_urb_enqueue+0x7a/0x880 drivers/usb/gadget/udc/dummy_hcd.c:1251
+>  usb_hcd_submit_urb+0x2b2/0x22d0 drivers/usb/core/hcd.c:1547
+>  usb_submit_urb+0xb4e/0x13e0 drivers/usb/core/urb.c:570
+>  yurex_write+0x3ea/0x820 drivers/usb/misc/yurex.c:495
 
-Looking at some other reports in the past I considered if we should
-attribute uninit's to the _origin_ stack rather than all places the
-origin may end up being used. But I don't have quantitative data on if
-it will improve quality overall or not. There are definitely cases
-where it will be wrong as well -- in particular allocation of skb's in
-sendmsg.
+The yurex driver shouldn't use GFP_KERNEL in a context where the current 
+state isn't TASK_RUNNING.
+
+Alan Stern
+
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git 449dc8c9
+
+Index: usb-devel/drivers/usb/misc/yurex.c
+===================================================================
+--- usb-devel.orig/drivers/usb/misc/yurex.c
++++ usb-devel/drivers/usb/misc/yurex.c
+@@ -492,7 +492,7 @@ static ssize_t yurex_write(struct file *
+ 	prepare_to_wait(&dev->waitq, &wait, TASK_INTERRUPTIBLE);
+ 	dev_dbg(&dev->interface->dev, "%s - submit %c\n", __func__,
+ 		dev->cntl_buffer[0]);
+-	retval = usb_submit_urb(dev->cntl_urb, GFP_KERNEL);
++	retval = usb_submit_urb(dev->cntl_urb, GFP_ATOMIC);
+ 	if (retval >= 0)
+ 		timeout = schedule_timeout(YUREX_WRITE_TIMEOUT);
+ 	finish_wait(&dev->waitq, &wait);
