@@ -2,130 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACD5824050A
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Aug 2020 13:06:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD577240566
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Aug 2020 13:36:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726596AbgHJLGQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Aug 2020 07:06:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43198 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726368AbgHJLGM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 10 Aug 2020 07:06:12 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2C15220729;
-        Mon, 10 Aug 2020 11:06:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597057565;
-        bh=iCudXyjdYzGdwBeDT9k0njKXIiJW45q0BJa7WH0s4Dc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z6eT13jgvH1KgFLo4PP1uO1yglBPMk1iFWkVhMmoCHpwDj4kJa4iMoRswlSbq2sWc
-         w1/S1CEcrlWQeDm71kCfbONmR0+vnJRdeekSbtJuk3aVYyX2PMBiLI6WDLVt36BaqQ
-         GKyQkCR0P03BgDtUGLKl+Qr1ish6QyANqXtgnqac=
-Date:   Mon, 10 Aug 2020 13:06:16 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     syzbot <syzbot+a7e220df5a81d1ab400e@syzkaller.appspotmail.com>,
-        Andrey Konovalov <andreyknvl@google.com>, balbi@kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Alexander Potapenko <glider@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Subject: Re: KMSAN: kernel-infoleak in raw_ioctl
-Message-ID: <20200810110616.GA2415197@kroah.com>
-References: <000000000000ce85c405ac744ff6@google.com>
- <20200810074706.GD1529187@kroah.com>
- <CACT4Y+aS6oangE4BzhCfx3gs9guAW=zQpwN1LP+yB3kza68xFw@mail.gmail.com>
- <20200810090833.GA2271719@kroah.com>
- <20200810091538.GA2273701@kroah.com>
- <20200810095754.GA2404978@kroah.com>
- <CACT4Y+badWwK8L3HjYrv2nu-W+WnUfj5Pi2JsLTUMU3o2tJL9g@mail.gmail.com>
+        id S1726415AbgHJLg1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Aug 2020 07:36:27 -0400
+Received: from mail-il1-f197.google.com ([209.85.166.197]:43837 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726330AbgHJLg0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Aug 2020 07:36:26 -0400
+Received: by mail-il1-f197.google.com with SMTP id 2so7540659ill.10
+        for <linux-usb@vger.kernel.org>; Mon, 10 Aug 2020 04:36:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=TIxOf1Tf6BsOdnD/hs/2ERCEHWfwJ12vftxSvMX9nNo=;
+        b=hSawG9Po1/QtS/ZeS5hHMwOhaU4ZvUikTlX14uKDIg3e4H+xcHpFLca/JfgY9Px3Ma
+         TuOWm2MOp1Utr68yL1pD9ajZIx9pPd51CKYQK3+FgSyTaUr2fZ6J0yRrC2Q2QnVECxDu
+         k7lhOwQThIySJ/PY/rLwHWV413JKH/mRNk1s9pY5Yk/LQD/uy/GwTjYdnUnZTfE/oPEl
+         gp0hSp2VnVX1GjKoZHFQNBtFrL1JbyqbiBiVjVHfuBTHs4KyANPeJsq2533IUONlSK5X
+         gtCjiqHXbosLmpsQZLRY6jX8EMNs0ZUz6NGD85FaSl8f3+h34rxWv9cRfMYGyw/ZSWca
+         eulA==
+X-Gm-Message-State: AOAM531A6lfFuVG/shlJzpeCwogcb/VAWd8ycVyWobWIGhoMr2jfFV16
+        e7N+4LXBeorbPU9ng26CL9qv9I9WZDPyqzcR9eEuX04k2qHx
+X-Google-Smtp-Source: ABdhPJzKsuv+jSFxCNAg+dPQCFRhFehVFF1ufCqQZ5+mFzkf/2ms76No9uqdMJ54t7ZFfpR2SuIbcL6Su5JC+mISTp49KobtgLw8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACT4Y+badWwK8L3HjYrv2nu-W+WnUfj5Pi2JsLTUMU3o2tJL9g@mail.gmail.com>
+X-Received: by 2002:a92:98c8:: with SMTP id a69mr2396270ill.0.1597059385300;
+ Mon, 10 Aug 2020 04:36:25 -0700 (PDT)
+Date:   Mon, 10 Aug 2020 04:36:25 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000589ccd05ac845d6e@google.com>
+Subject: WARNING in slab_pre_alloc_hook
+From:   syzbot <syzbot+c2c3302f9c601a4b1be2@syzkaller.appspotmail.com>
+To:     andreyknvl@gmail.com, andreyknvl@google.com, balbi@kernel.org,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 10, 2020 at 12:21:49PM +0200, Dmitry Vyukov wrote:
-> On Mon, Aug 10, 2020 at 11:57 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Mon, Aug 10, 2020 at 11:15:38AM +0200, Greg KH wrote:
-> > > On Mon, Aug 10, 2020 at 11:08:33AM +0200, Greg KH wrote:
-> > > > On Mon, Aug 10, 2020 at 11:00:07AM +0200, Dmitry Vyukov wrote:
-> > > > > On Mon, Aug 10, 2020 at 9:46 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > > > > >
-> > > > > > On Sun, Aug 09, 2020 at 09:27:18AM -0700, syzbot wrote:
-> > > > > > > Hello,
-> > > > > > >
-> > > > > > > syzbot found the following issue on:
-> > > > > > >
-> > > > > > > HEAD commit:    ce8056d1 wip: changed copy_from_user where instrumented
-> > > > > > > git tree:       https://github.com/google/kmsan.git master
-> > > > > > > console output: https://syzkaller.appspot.com/x/log.txt?x=141eb8b2900000
-> > > > > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=3afe005fb99591f
-> > > > > > > dashboard link: https://syzkaller.appspot.com/bug?extid=a7e220df5a81d1ab400e
-> > > > > > > compiler:       clang version 10.0.0 (https://github.com/llvm/llvm-project/ c2443155a0fb245c8f17f2c1c72b6ea391e86e81)
-> > > > > > > userspace arch: i386
-> > > > > > >
-> > > > > > > Unfortunately, I don't have any reproducer for this issue yet.
-> > > > > >
-> > > > > > The irony of a kernel module written for syzbot testing, causing syzbot
-> > > > > > reports....
-> > > > >
-> > > > > The raw gadget and KCOV are also kernel code and subject to all the
-> > > > > same rules as any other kernel code from syzkaller point of view.
-> > > > >
-> > > > > But I think the root cause of this bug is the origin of the uninitialized-ness:
-> > > > >
-> > > > > Local variable ----buf.i@asix_get_phy_addr created at:
-> > > > >  asix_read_cmd drivers/net/usb/asix_common.c:312 [inline]
-> > > > >  asix_read_phy_addr drivers/net/usb/asix_common.c:295 [inline]
-> > > > >  asix_get_phy_addr+0x4d/0x290 drivers/net/usb/asix_common.c:314
-> > > > >  asix_read_cmd drivers/net/usb/asix_common.c:312 [inline]
-> > > > >  asix_read_phy_addr drivers/net/usb/asix_common.c:295 [inline]
-> > > > >  asix_get_phy_addr+0x4d/0x290 drivers/net/usb/asix_common.c:314
-> > > >
-> > > > read buffers sent to USB hardware are ment to be filled in by the
-> > > > hardware with the data received from it, we do not zero-out those
-> > > > buffers before passing the pointer there.
-> > > >
-> > > > Perhaps with testing frameworks like the raw usb controller, that might
-> > > > cause a number of false-positives to happen?
-> > >
-> > > Ah, wait, that buffer is coming from the stack, which isn't allowed in
-> > > the first place :(
-> > >
-> > > So that should be changed anyway to a dynamic allocation, I'll go write
-> > > up a patch...
-> >
-> > Nope, my fault, the data is not coming from the stack, so all is good.
-> 
-> My reading of the code is that asix_read_cmd returns the number of
-> bytes actually read, which may be less than requested.
-> This happens in __usbnet_read_cmd:
-> https://elixir.bootlin.com/linux/latest/source/drivers/net/usb/usbnet.c#L2002
-> So this code in asix_read_phy_addr will need produce an uninit value
-> for result if <2 bytes read:
-> 
->     u8 buf[2];
->     int ret = asix_read_cmd(dev, AX_CMD_READ_PHY_ID, 0, 0, 2, buf, 0);
->     if (ret < 0)
->         netdev_err(dev->net, "Error reading PHYID register: %02x\n", ret);
->     ret = buf[offset];
->     return ret;
-> 
-> And it looks like all of 13 uses of asix_read_cmd in
-> drivers/net/usb/asix_common.c are subject to this bug as well.
+Hello,
 
-Ah, yeah, and no one checks error values either, there's even a TODO
-statement in the driver about that :(
+syzbot found the following issue on:
 
-Good catch, I'll point some interns at this and see if they can fix it
-up, thanks!
+HEAD commit:    449dc8c9 Merge tag 'for-v5.9' of git://git.kernel.org/pub/..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=16581652900000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6ef84fa8ee48e528
+dashboard link: https://syzkaller.appspot.com/bug?extid=c2c3302f9c601a4b1be2
+compiler:       gcc (GCC) 10.1.0-syz 20200507
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16e8de34900000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1244eb62900000
 
-greg k-h
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+c2c3302f9c601a4b1be2@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+do not call blocking ops when !TASK_RUNNING; state=1 set at [<00000000370c7c68>] prepare_to_wait+0xb1/0x2a0 kernel/sched/wait.c:247
+WARNING: CPU: 1 PID: 340 at kernel/sched/core.c:7253 __might_sleep+0x135/0x190 kernel/sched/core.c:7253
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 1 PID: 340 Comm: syz-executor677 Not tainted 5.8.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xf6/0x16e lib/dump_stack.c:118
+ panic+0x2aa/0x6e1 kernel/panic.c:231
+ __warn.cold+0x20/0x50 kernel/panic.c:600
+ report_bug+0x1bd/0x210 lib/bug.c:198
+ handle_bug+0x41/0x80 arch/x86/kernel/traps.c:234
+ exc_invalid_op+0x14/0x40 arch/x86/kernel/traps.c:254
+ asm_exc_invalid_op+0x12/0x20 arch/x86/include/asm/idtentry.h:536
+RIP: 0010:__might_sleep+0x135/0x190 kernel/sched/core.c:7253
+Code: 65 48 8b 1c 25 40 ef 01 00 48 8d 7b 10 48 89 fe 48 c1 ee 03 80 3c 06 00 75 2b 48 8b 73 10 48 c7 c7 e0 9e 06 86 e8 ed 12 f6 ff <0f> 0b e9 46 ff ff ff e8 1f b2 4b 00 e9 29 ff ff ff e8 15 b2 4b 00
+RSP: 0018:ffff8881cdb77a28 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: ffff8881c6458000 RCX: 0000000000000000
+RDX: ffff8881c6458000 RSI: ffffffff8129ec93 RDI: ffffed1039b6ef37
+RBP: ffffffff86fdade2 R08: 0000000000000001 R09: ffff8881db32f54f
+R10: 0000000000000000 R11: 0000000030343354 R12: 00000000000001f2
+R13: 0000000000000000 R14: 0000000000000068 R15: ffffffff83c1b1aa
+ slab_pre_alloc_hook.constprop.0+0xea/0x200 mm/slab.h:498
+ slab_alloc_node mm/slub.c:2816 [inline]
+ slab_alloc mm/slub.c:2900 [inline]
+ kmem_cache_alloc_trace+0x46/0x220 mm/slub.c:2917
+ kmalloc include/linux/slab.h:554 [inline]
+ dummy_urb_enqueue+0x7a/0x880 drivers/usb/gadget/udc/dummy_hcd.c:1251
+ usb_hcd_submit_urb+0x2b2/0x22d0 drivers/usb/core/hcd.c:1547
+ usb_submit_urb+0xb4e/0x13e0 drivers/usb/core/urb.c:570
+ yurex_write+0x3ea/0x820 drivers/usb/misc/yurex.c:495
+ vfs_write+0x2b0/0x730 fs/read_write.c:576
+ ksys_write+0x12d/0x250 fs/read_write.c:631
+ do_syscall_64+0x2d/0x40 arch/x86/entry/common.c:46
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x444809
+Code: e8 bc af 02 00 48 83 c4 18 c3 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 9b d7 fb ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007ffc4c2b1358 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 00000000004002e0 RCX: 0000000000444809
+RDX: 00000000000000cb RSI: 0000000020000300 RDI: 0000000000000004
+RBP: 00000000006cf018 R08: 000000000000000f R09: 00000000004002e0
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000402430
+R13: 00000000004024c0 R14: 0000000000000000 R15: 0000000000000000
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
