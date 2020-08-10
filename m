@@ -2,77 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A19E7240841
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Aug 2020 17:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BF61240B2B
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Aug 2020 18:29:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726489AbgHJPR0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Aug 2020 11:17:26 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:46727 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726284AbgHJPRZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Aug 2020 11:17:25 -0400
-Received: (qmail 302545 invoked by uid 1000); 10 Aug 2020 11:17:23 -0400
-Date:   Mon, 10 Aug 2020 11:17:23 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Eli Billauer <eli.billauer@gmail.com>, linux-usb@vger.kernel.org
-Subject: Re: [RFC]mooring API
-Message-ID: <20200810151723.GE299045@rowland.harvard.edu>
-References: <1596722827.2488.8.camel@suse.com>
- <20200806152039.GC197575@rowland.harvard.edu>
- <1597070118.2515.3.camel@suse.com>
+        id S1727032AbgHJQ27 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Aug 2020 12:28:59 -0400
+Received: from aibo.runbox.com ([91.220.196.211]:58910 "EHLO aibo.runbox.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726115AbgHJQ26 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 10 Aug 2020 12:28:58 -0400
+X-Greylist: delayed 1691 seconds by postgrey-1.27 at vger.kernel.org; Mon, 10 Aug 2020 12:28:57 EDT
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
+         s=selector2; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:
+        Subject:Cc:To:From; bh=bo1G8C5GYYhENQGfKCwbxKc3IBx2vVMOyqyqCffyR9w=; b=Z/2Ie+
+        ur4KKxiw5e6nNnVi6b7ACMAp6nMwNQC7F6N+qfzcL/TmXz8gxbeC/wzuwW6JkIa4Nada+dIAgLymK
+        wePJmkqhpSafnkZVSkgLT+ma+b9p8EYKwi99fT85BEov2SZ6Xg4OLLqGPPPKLshKL5+UStonQv7hC
+        yQDzMZpqa9qsNwdvA+F/GQIVttTSKl1SvJ+PWE8vS01xLP+GV2lwwI6wvTLos7rmnqQ5pyQoh3wrm
+        ebdA+NvkuFDRhVcOcoFmQC/0CSJzO1Z6LIK+DPQRPrPeQYmVDnhCd2O5ZQUxZBQc22Yg5bDIBcvf1
+        360uJA3dL3ykA3nJvEct8Da3Z8TQ==;
+Received: from [10.9.9.74] (helo=submission03.runbox)
+        by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+        (envelope-from <m.v.b@runbox.com>)
+        id 1k5AE8-0001mT-EV; Mon, 10 Aug 2020 18:00:44 +0200
+Received: by submission03.runbox with esmtpsa  [Authenticated alias (536975)]  (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.90_1)
+        id 1k5ADq-0001c7-OM; Mon, 10 Aug 2020 18:00:26 +0200
+From:   "M. Vefa Bicakci" <m.v.b@runbox.com>
+To:     linux-usb@vger.kernel.org
+Cc:     "M. Vefa Bicakci" <m.v.b@runbox.com>, stable@vger.kernel.org,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        Alan Stern <stern@rowland.harvard.edu>
+Subject: [PATCH] usbip: Implement a match function to fix usbip
+Date:   Mon, 10 Aug 2020 19:00:17 +0300
+Message-Id: <20200810160017.46002-1-m.v.b@runbox.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1597070118.2515.3.camel@suse.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 10, 2020 at 04:35:18PM +0200, Oliver Neukum wrote:
-> Am Donnerstag, den 06.08.2020, 11:20 -0400 schrieb Alan Stern:
+Commit 88b7381a939d ("USB: Select better matching USB drivers when
+available") introduced the use of a "match" function to select a
+non-generic/better driver for a particular USB device. This
+unfortunately breaks the operation of usbip in general, as reported in
+the kernel bugzilla with bug 208267 (linked below).
 
-> > > --- a/drivers/usb/core/hcd.c
-> > > +++ b/drivers/usb/core/hcd.c
-> > > @@ -1640,7 +1640,9 @@ static void __usb_hcd_giveback_urb(struct urb *urb)
-> > >  	unmap_urb_for_dma(hcd, urb);
-> > >  	usbmon_urb_complete(&hcd->self, urb, status);
-> > >  	usb_anchor_suspend_wakeups(anchor);
-> > > -	usb_unanchor_urb(urb);
-> > > +	smp_rmb(); /* against usb_(un)moor_urb() */
-> > 
-> > What is the race you want to protect against?
-> 
-> It looks to me like I need to be sure that the URB could have
-> been moored on another CPU.
+Upon inspecting the aforementioned commit, one can observe that the
+original code in the usb_device_match function used to return 1
+unconditionally, but the aforementioned commit makes the usb_device_match
+function use identifier tables and "match" virtual functions, if either of
+them are available.
 
-You mean, the URB could have been anchored already, but another CPU 
-could moor it just as this CPU is unachoring it?
+Hence, this commit implements a match function for usbip that
+unconditionally returns true to ensure that usbip is functional again.
 
-For one thing, I doubt that a single smp_rmb() will provide any real 
-protection.  For another, it would be best to just avoid races in the 
-first place.  Can you think of any use case where it makes sense to moor 
-an URB just as it is completing (or indeed at any time while it is 
-active)?
+This change has been verified to restore usbip functionality, with a
+v5.7.y kernel on an up-to-date version of Qubes OS 4.0, which uses
+usbip to redirect USB devices between VMs.
 
-> > Wouldn't it be better to require drivers that want to moor an URB to do 
-> > so before submitting it?  And to unmoor an URB only in the completion 
-> > handler?  Then there wouldn't be any race.
-> 
-> I am afraid we cannot do that, as it must be possible to unmoor an
-> URb that needs to be unmoored before it is submitted, even on
-> another CPU.
+Thanks to Jonathan Dieter for the effort in bisecting this issue down
+to the aforementioned commit.
 
-I should have said: require drivers that want to unmoor an URB to do so 
-either before it is submitted or in (or after) the completion handler.  
-In other words, don't moor or unmoor an URB while it is active.  How 
-about that?
+Fixes: 88b7381a939d ("USB: Select better matching USB drivers when available")
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=208267
+Link: https://bugzilla.redhat.com/show_bug.cgi?id=1856443
+Link: https://github.com/QubesOS/qubes-issues/issues/5905
+Signed-off-by: M. Vefa Bicakci <m.v.b@runbox.com>
+Cc: <stable@vger.kernel.org> # 5.7
+Cc: Valentina Manea <valentina.manea.m@gmail.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Bastien Nocera <hadess@hadess.net>
+Cc: Alan Stern <stern@rowland.harvard.edu>
+---
+ drivers/usb/usbip/stub_dev.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-> What do you think of the API itself?
+diff --git a/drivers/usb/usbip/stub_dev.c b/drivers/usb/usbip/stub_dev.c
+index 2305d425e6c9..9d7d642022d1 100644
+--- a/drivers/usb/usbip/stub_dev.c
++++ b/drivers/usb/usbip/stub_dev.c
+@@ -461,6 +461,11 @@ static void stub_disconnect(struct usb_device *udev)
+ 	return;
+ }
+ 
++static bool usbip_match(struct usb_device *udev)
++{
++	return true;
++}
++
+ #ifdef CONFIG_PM
+ 
+ /* These functions need usb_port_suspend and usb_port_resume,
+@@ -486,6 +491,7 @@ struct usb_device_driver stub_driver = {
+ 	.name		= "usbip-host",
+ 	.probe		= stub_probe,
+ 	.disconnect	= stub_disconnect,
++	.match		= usbip_match,
+ #ifdef CONFIG_PM
+ 	.suspend	= stub_suspend,
+ 	.resume		= stub_resume,
+-- 
+2.26.2
 
-It looks fine as far as I can tell.  But I haven't worked on any drivers 
-that use anchors.
-
-Alan Stern
