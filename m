@@ -2,63 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B22C82405DC
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Aug 2020 14:27:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35970240635
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Aug 2020 14:52:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726632AbgHJM1q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Aug 2020 08:27:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36680 "EHLO
+        id S1726685AbgHJMwG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Aug 2020 08:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726141AbgHJM1p (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Aug 2020 08:27:45 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53AC3C061756;
-        Mon, 10 Aug 2020 05:27:44 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id 140so4589160lfi.5;
-        Mon, 10 Aug 2020 05:27:44 -0700 (PDT)
+        with ESMTP id S1726465AbgHJMv7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Aug 2020 08:51:59 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9851C061756;
+        Mon, 10 Aug 2020 05:51:58 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id h19so9389881ljg.13;
+        Mon, 10 Aug 2020 05:51:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=Gxqygr0JZ/pB21ogFMQ/Jn+CE1eOCdPD88TlAVeBA8g=;
-        b=mkJ33crWA60Y8MJIimiOaO4PhYCWU94raJzsF9BzC60Bpjkyfry70QHLhLjMd3SeCP
-         3THdvUmaSP0kTnjVygFREal8NtzMgYT+EIxbR1wZsdyh5Fvekj0H19UPQwfuvqBvJ0Fv
-         1BMDfJTDa0N5nsqUH7lpNgtYs3CmuB0k9sMhV9jTJxWBwwXKh9KCyWAZLlVMpOGMLIBW
-         C1+rxMVbvLEfO7DNVDiHPRx8LIr638ZaNCd57X6DQ6otNWSJzuvad+cPRzBxU4KPIlpb
-         yuZIPoKsoe7wOyFj2IggeAR4jL2aNU0q4FFRj87PO0khoB2wSQFXTHQ/VQoXhpaWCEav
-         sc3g==
+        bh=GvWA+cHcTusPc74H1ig/BeGEZu0OoSLz8DXc1wSfXHY=;
+        b=f/IUyKHBm8Vv1crRgafPxQxKJwAKNHp7asa01zBYOW3yFNi2bCvl7H+Lj5/pEOp1Pc
+         Sb+Cc6wU8PRSlBrnpcr2jQ3XrV4zzD0dk6hsceuGadY/6achgV0j0ZwFUZ14zNMV0/RX
+         ZhMHY+83ujPYUj+j1czDiXvV8YkjNR+lp/fRd5PxmYnzFF+FuWUiOmLX8bS34vUatXmh
+         cldC1N5yR6LP0BqjY9OEXLMt3KPi0/V1L3035AW8Te12ppL0PTA3JYGpqM5GP4h2dz5r
+         5s/0AlsJSwt09kYZofyz0lYanwofNBUmx68gfnmIafnv9A/ttRhE7uOesWK6cRVruoT7
+         A05A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
          :date:message-id:mime-version;
-        bh=Gxqygr0JZ/pB21ogFMQ/Jn+CE1eOCdPD88TlAVeBA8g=;
-        b=KtF5JLsKdkTFfQfRvjdrq8nP6P+2NuZ9De8LwrnoZ7fbQ2na/CvZ9v0JxwNXrFobHo
-         GVAwmL0SREAw4dFfu7bO7HORu+g8rxE8LB3SG61Sjtg9MNIyaGi0s1r5piPgcLSkIV25
-         r/+iSERGpRGsV5JRYzaZNIYwt+Eo+2RmA2qxSRC0IrZ2RCJHZMTUiUsuDKfjHw6+R5gt
-         koPmz3Gzxk/MLz1i/bJ5KYE2CLCb2ebge9Y2jrd4KWzJYwej8E9La7e7FDJ5oPgNvrzy
-         vPQsEnxonESmpfjPZ4mOpiJSO/wNzfrGHfGe0Ja5C2cPcZ9tLqSoLM1pi75jihtPcotm
-         A0pw==
-X-Gm-Message-State: AOAM5316gbuJT96rdcAuYYaiPbWzBY4VZ7jvAhJKC+EMBojkihvb0vc8
-        Hkjti5T6Z0EIYeYEEamgM3k=
-X-Google-Smtp-Source: ABdhPJye8OXBbZke33jmjvnrB1xZJoivWVybUtpqzg+N9E+LBX1YutHbvTzyyC33FvKlxmsVUMFcVg==
-X-Received: by 2002:a05:6512:281:: with SMTP id j1mr395105lfp.214.1597062462554;
-        Mon, 10 Aug 2020 05:27:42 -0700 (PDT)
+        bh=GvWA+cHcTusPc74H1ig/BeGEZu0OoSLz8DXc1wSfXHY=;
+        b=D4gIANRQlhAPnUlDRlcyU7vdon/Bl1wQW1dh2E1z1k3n0Q7K6DieTNFwwy3PF9yIjD
+         gNHP/NL8xyQdrSX2V3YUXhdrdUxYuVemo4qPYxdwMZkeuWzv7y8jqx4AyFzBFTRqnYQ1
+         d+mtLPKigmR+eqJXd5X1B9hJdtgl1696ooBJY0MQP9pwIW+iRVrbiDk1yemp3+5jeKIY
+         1UjiZep1Sl5tciuZ5C3K3ApKkvozUyZGOd9S/0umfHlpb40m99DE31VQ1n3XIf3mhDoe
+         t/h+k28hP5PWFbOCxN6WGpbP5rHWs1E9WDcBbHEymiC644AnAdIwEBoaj+/uj8pt1aNG
+         Y7jg==
+X-Gm-Message-State: AOAM530BNBrjCxN9bxne8Jgknc95NY8nTQ52grB+X8UUKXrWbcysDLp0
+        c7Qav+GM6mG51F6QhF8VNVt2yUClK2Y=
+X-Google-Smtp-Source: ABdhPJwFXbAjLj8UYUeq2//BnaEY3ybYVGLtp0rzkIBXkXH9x1z7wc3VCUCwOrimSp5BNS/sd8cDYw==
+X-Received: by 2002:a2e:b88c:: with SMTP id r12mr452781ljp.373.1597063916939;
+        Mon, 10 Aug 2020 05:51:56 -0700 (PDT)
 Received: from saruman ([194.34.132.58])
-        by smtp.gmail.com with ESMTPSA id m27sm10724584lfq.19.2020.08.10.05.27.41
+        by smtp.gmail.com with ESMTPSA id 12sm9210870ljv.49.2020.08.10.05.51.55
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 10 Aug 2020 05:27:41 -0700 (PDT)
+        Mon, 10 Aug 2020 05:51:56 -0700 (PDT)
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Wesley Cheng <wcheng@codeaurora.org>, agross@kernel.org,
-        bjorn.andersson@linaro.org, gregkh@linuxfoundation.org,
-        robh+dt@kernel.org
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        jackp@codeaurora.org, Wesley Cheng <wcheng@codeaurora.org>
-Subject: Re: [RFC v4 1/3] usb: dwc3: Resize TX FIFOs to meet EP bursting requirements
-In-Reply-To: <20200624022848.7765-2-wcheng@codeaurora.org>
-References: <20200624022848.7765-1-wcheng@codeaurora.org> <20200624022848.7765-2-wcheng@codeaurora.org>
-Date:   Mon, 10 Aug 2020 15:27:37 +0300
-Message-ID: <87d03yptxi.fsf@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        USB list <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v2 09/41] usb: gadget: s3c-hsudc: remove platform header dependency
+In-Reply-To: <CAK8P3a2UH2NELh8ifZj0s+Xv1vqURjwJWU5Qb2FQiOq7c=dcBg@mail.gmail.com>
+References: <20200806181932.2253-1-krzk@kernel.org> <20200806182059.2431-9-krzk@kernel.org> <87v9hupnf7.fsf@kernel.org> <CAK8P3a2UH2NELh8ifZj0s+Xv1vqURjwJWU5Qb2FQiOq7c=dcBg@mail.gmail.com>
+Date:   Mon, 10 Aug 2020 15:51:51 +0300
+Message-ID: <87a6z2pst4.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -71,246 +72,133 @@ X-Mailing-List: linux-usb@vger.kernel.org
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
-Wesley Cheng <wcheng@codeaurora.org> writes:
+Arnd Bergmann <arnd@arndb.de> writes:
 
-Hi,
+> On Fri, Aug 7, 2020 at 3:59 PM Felipe Balbi <balbi@kernel.org> wrote:
+>> Krzysztof Kozlowski <krzk@kernel.org> writes:
+>
+>> > +#include <linux/delay.h>
+>> > +
+>> >  #define S3C2443_CLKREG(x)            ((x) + S3C24XX_VA_CLKPWR)
+>> >
+>> >  #define S3C2443_PLLCON_MDIVSHIFT     16
+>> > @@ -184,5 +186,52 @@ s3c2443_get_epll(unsigned int pllval, unsigned in=
+t baseclk)
+>> >       return (unsigned int)fvco;
+>> >  }
+>> >
+>> > +static inline void s3c_hsudc_init_phy(void)
+>>
+>> This should, really, be a PHY driver under drivers/phy, since the goal
+>> is to make this platform-independent, might as well take the opportunity
+>> to introduce a proper driver, no?
+>
+> In theory, this is absolutely correct. I fear it will be hard to find any=
+one
+> to make a larger scale cleanup of the file however. As my old changelog
+> text says, there is only one board (smdk2416) in the kernel that registers
+> the device. My change was the minimum to keep it working during the
+> move to a multiplatform configuration, but if there is someone who has
+> the hardware and volunteers to make a proper phy driver, that would also
+> work.
+>
+> As the board only exists as a reference for other boards, but none of tho=
+se
+> made it into the kernel, we could alternatively just decide to drop the
+> driver. There is also a .dts file for the board, which is lacking a devic=
+e node
+> for the udc (and the driver lacks DT support), so that board file could a=
+lso
+> be dropped then, leaving only the DT version as a reference for the SoC.
 
-> Some devices have USB compositions which may require multiple endpoints
-> that support EP bursting.  HW defined TX FIFO sizes may not always be
-> sufficient for these compositions.  By utilizing flexible TX FIFO
-> allocation, this allows for endpoints to request the required FIFO depth =
-to
-> achieve higher bandwidth.  With some higher bMaxBurst configurations, usi=
-ng
-> a larger TX FIFO size results in better TX throughput.
+I don't mind deleting the entire thing if nobody is using it. The entire
+history of the driver consists of only 65 commits and if you look at the
+actual commits, there has been no real maintenance work on it for a long
+time, most commits are regular janitorial work and updates due to
+framework changes:
 
-how much better? What's the impact? Got some real numbers of this
-running with upstream kernel? I guess mass storage gadget is the
-simplest one to test.
+6e1591947304 udc: s3c-hsudc: Silence warning about supplies during deferred=
+ probe
+237b668c1c5d usb: gadget: s3c-hsudc: use devm_platform_ioremap_resource() t=
+o simplify code
+b33f37064b74 usb: Remove dev_err() usage after platform_get_irq()
+229e3682393c USB: gadget: udc: Remove redundant license text
+5fd54ace4721 USB: add SPDX identifiers to all remaining files in drivers/us=
+b/
+977ac789507a usb: gadget: udc: constify usb_ep_ops structures
+ca0709946023 usb: gadget: s3c-hsudc: remove redundant condition
+bc1b9f300ae0 usb: gadget: s3c-hsudc: add ep capabilities support
+22835b807e7c usb: gadget: remove unnecessary 'driver' argument
+6ce372fed2cb usb: gadget: udc: s3c-hsudc: remove bind/unbind messages
+82891b959cbb usb: gadget: udc: s3c-hsudc: do not rely on 'driver' argument
+3dc3b4e15e09 usb: gadget: s3c-hsudc: delete unnecessary 'out of memory' mes=
+sages
+6d3f5f2d895b usb: gadget: udc: drop owner assignment from platform_drivers
+304f7e5e1d08 usb: gadget: Refactor request completion
+90fccb529d24 usb: gadget: Gadget directory cleanup - group UDC drivers
+236064c25358 usb: gadget: s3c-hsudc: remove unused label
+e117e742d310 usb: gadget: add "maxpacket_limit" field to struct usb_ep
+e01ee9f509a9 usb: gadget: use dev_get_platdata()
+38678f25689c usb: gadget: s3c-hsudc: delete outdated comment
+492a39022ad5 usb: gadget: s3c-hsudc: don't touch gadget.dev.driver
+4c422049bd0f usb: gadget: s3c-hsudc: remove unnecessary initializations
+7bce401cc6db usb: gadget: drop now unnecessary flag
+40ed30cff595 usb: gadget: s3c-hsudc: let udc-core manage gadget->dev
+eeef45876631 (tag: gadget-for-v3.9) usb: gadget: constify all struct usb_ga=
+dget_ops
+148e11349b0c usb: Convert to devm_ioremap_resource()
+32b8666589d5 usb: gadget: remove u32 castings of address passed to readl()
+924d2532ab18 usb: gadget: s3c-hsudc: Use devm_regulator_bulk_get
+41ac7b3ab7fe usb: remove use of __devinit
+dc2cdcaf4caa usb: gadget: s3c-hsudc: Replace 0 with NULL for pointers
+affaab4c58d8 usb: gadget: s3c-hsudc: Add missing braces around sizeof
+78f0c53ef856 usb: gadget: s3c-hsudc: Use devm_* functions
+ded017ee6c7b usb: phy: fix return value check of usb_get_phy
+662dca54ca67 usb: otg: support for multiple transceivers by a single contro=
+ller
+721002ec1dd5 usb: otg: utils: rename function name in OTG utils
+109f0f718375 usb: gadget: s3c-hsudc.c: Remove unneeded condition
+955846a60a9d usb: gadget: Update s3c-hsudc to use usb_endpoint_descriptor i=
+nside the struct usb_ep
+6e13c6505cdf (tag: xceiv-for-v3.4) usb: otg: Convert all users to pass stru=
+ct usb_otg for OTG functions
+b96d3b08365f usb: Convert all users to new usb_phy
+f9c56cdd3905 usb: gadget: Clear usb_endpoint_descriptor inside the struct u=
+sb_ep on disable
+8675381109b0 usb: otg: Rename otg_transceiver to usb_phy
+294f78ec493e usb: s3c-hsudc: add basic runtime_pm calls
+2d4172c93874 usb: s3c-hsudc: Use helper functions instead of generic contai=
+ner_of
+922be95a3f26 usb: gadget: s3c-hsudc: remove the_controller global
+dee19be7d8ed usb: gadget: s3c-hsudc: use release_mem_region instead of rele=
+ase_resource
+bab7d037c84f usb: gadget: s3c-hsudc: Add regulator handling
+d93e2600d80f usb: gadget: s3c-hsudc: use udc_start and udc_stop functions
+103495aaf0e7 usb: gadget: s3c-hsudc: move device registration to probe
+e9bcb9e5feb0 usb: gadget: s3c-hsudc: add missing otg_put_transceiver in pro=
+be
+a1977562718f usb: gadget: s3c-hsudc: add __devinit to probe function
+715a3e41e78a usb: gadget: s3c-hsudc: move platform_data struct to global he=
+ader
+7177aed44f51 usb: gadget: rename usb_gadget_driver::speed to max_speed
+d327ab5b6d66 usb: gadget: replace usb_gadget::is_dualspeed with max_speed
+bfe0658b402d usb: udc: Fix gadget driver's speed check in various UDC drive=
+rs
+cc27c96c2bee usb: convert drivers/usb/* to use module_platform_driver()
+fba9e546eac9 s3c-hsudc: implement vbus_draw hook
+29cc88979a88 USB: use usb_endpoint_maxp() instead of le16_to_cpu()
+938fbe54f33e s3c-hsudc: Add basic otg transceiver handling
+da4fc14c9955 s3c-hsudc: Fix possible nullpointer dereference during probe
+86081d7be34e usb: gadget: add platform module alias where it is missing
+0f91349b89f3 usb: gadget: convert all users to the new udc infrastructure
+6bc129532176 usb/s3c-hsudc: fix error path
+b38b03b363a5 usb: gadget: include <linux/prefetch.h> to fix compiling error
+d6167660b284 USB: s3c-hsudc: fix checkpatch error and warning
+004c127ef071 USB: s3c-hsudc: use IS_ERR() instead of NULL check
+a9df304cf78d USB: Gadget: Add Samsung S3C24XX USB High-Speed controller dri=
+ver
 
-> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
-> index 6dee4dabc0a4..76db9b530861 100644
-> --- a/drivers/usb/dwc3/ep0.c
-> +++ b/drivers/usb/dwc3/ep0.c
-> @@ -601,8 +601,9 @@ static int dwc3_ep0_set_config(struct dwc3 *dwc, stru=
-ct usb_ctrlrequest *ctrl)
->  {
->  	enum usb_device_state state =3D dwc->gadget.state;
->  	u32 cfg;
-> -	int ret;
-> +	int ret, num, size;
-
-no, no. Please one declaration per line.
-
->  	u32 reg;
-> +	struct dwc3_ep *dep;
-
-Keep reverse xmas tree order.
-
-> @@ -611,6 +612,40 @@ static int dwc3_ep0_set_config(struct dwc3 *dwc, str=
-uct usb_ctrlrequest *ctrl)
->  		return -EINVAL;
->=20=20
->  	case USB_STATE_ADDRESS:
-> +		/*
-> +		 * If tx-fifo-resize flag is not set for the controller, then
-> +		 * do not clear existing allocated TXFIFO since we do not
-> +		 * allocate it again in dwc3_gadget_resize_tx_fifos
-> +		 */
-> +		if (dwc->needs_fifo_resize) {
-> +			/* Read ep0IN related TXFIFO size */
-> +			dep =3D dwc->eps[1];
-> +			size =3D dwc3_readl(dwc->regs, DWC3_GTXFIFOSIZ(0));
-> +			if (dwc3_is_usb31(dwc))
-> +				dep->fifo_depth =3D DWC31_GTXFIFOSIZ_TXFDEP(size);
-> +			else
-> +				dep->fifo_depth =3D DWC3_GTXFIFOSIZ_TXFDEP(size);
-> +
-> +			dwc->last_fifo_depth =3D dep->fifo_depth;
-> +			/* Clear existing TXFIFO for all IN eps except ep0 */
-> +			for (num =3D 3; num < min_t(int, dwc->num_eps,
-> +				DWC3_ENDPOINTS_NUM); num +=3D 2) {
-> +				dep =3D dwc->eps[num];
-> +				/* Don't change TXFRAMNUM on usb31 version */
-> +				size =3D dwc3_is_usb31(dwc) ?
-> +					dwc3_readl(dwc->regs,
-> +						   DWC3_GTXFIFOSIZ(num >> 1)) &
-> +						   DWC31_GTXFIFOSIZ_TXFRAMNUM :
-> +						   0;
-> +
-> +				dwc3_writel(dwc->regs,
-> +					    DWC3_GTXFIFOSIZ(num >> 1),
-> +					    size);
-> +				dep->fifo_depth =3D 0;
-> +			}
-> +			dwc->num_ep_resized =3D 0;
-
-care to move this into a helper that you call unconditionally and the
-helper returns early is !needs_fifo_resize?
-
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 00746c2848c0..777badf3e85d 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -540,6 +540,117 @@ static int dwc3_gadget_start_config(struct dwc3_ep =
-*dep)
->  	return 0;
->  }
->=20=20
-> +/*
-> + * dwc3_gadget_resize_tx_fifos - reallocate fifo spaces for current use-=
-case
-> + * @dwc: pointer to our context structure
-> + *
-> + * This function will a best effort FIFO allocation in order
-> + * to improve FIFO usage and throughput, while still allowing
-> + * us to enable as many endpoints as possible.
-> + *
-> + * Keep in mind that this operation will be highly dependent
-> + * on the configured size for RAM1 - which contains TxFifo -,
-> + * the amount of endpoints enabled on coreConsultant tool, and
-> + * the width of the Master Bus.
-> + *
-> + * In general, FIFO depths are represented with the following equation:
-> + *
-> + * fifo_size =3D mult * ((max_packet + mdwidth)/mdwidth + 1) + 1
-> + *
-> + * Conversions can be done to the equation to derive the number of packe=
-ts that
-> + * will fit to a particular FIFO size value.
-> + */
-> +static int dwc3_gadget_resize_tx_fifos(struct dwc3_ep *dep)
-> +{
-> +	struct dwc3 *dwc =3D dep->dwc;
-> +	int ram1_depth, mdwidth, fifo_0_start, tmp, num_in_ep;
-> +	int min_depth, remaining, fifo_size, mult =3D 1, fifo, max_packet =3D 1=
-024;
-
-one declaration per line, also make sure you order it in reverse xmas
-tree order.
-
-> +	if (!dwc->needs_fifo_resize)
-> +		return 0;
-> +
-> +	/* resize IN endpoints except ep0 */
-> +	if (!usb_endpoint_dir_in(dep->endpoint.desc) || dep->number <=3D 1)
-> +		return 0;
-> +
-> +	/* Don't resize already resized IN endpoint */
-> +	if (dep->fifo_depth)
-
-using fifo_depth as a flag seems flakey to me. What happens when someone
-in the future changes the behavior below and this doesn't apply anymore?
-
-Also, why is this procedure called more than once for the same endpoint?
-Does that really happen?
-
-> +		return 0;
-> +
-> +	ram1_depth =3D DWC3_RAM1_DEPTH(dwc->hwparams.hwparams7);
-> +	mdwidth =3D DWC3_MDWIDTH(dwc->hwparams.hwparams0);
-> +	/* MDWIDTH is represented in bits, we need it in bytes */
-> +	mdwidth >>=3D 3;
-> +
-> +	if (((dep->endpoint.maxburst > 1) &&
-> +			usb_endpoint_xfer_bulk(dep->endpoint.desc))
-> +			|| usb_endpoint_xfer_isoc(dep->endpoint.desc))
-> +		mult =3D 3;
-> +
-> +	if ((dep->endpoint.maxburst > 6) &&
-> +			usb_endpoint_xfer_bulk(dep->endpoint.desc)
-> +			&& dwc3_is_usb31(dwc))
-> +		mult =3D 6;
-> +
-> +	/* FIFO size for a single buffer */
-> +	fifo =3D (max_packet + mdwidth)/mdwidth;
-
-add spaces around integer division operator
-
-> +	fifo++;
-> +
-> +	/* Calculate the number of remaining EPs w/o any FIFO */
-> +	num_in_ep =3D dwc->num_eps/2;
-> +	num_in_ep -=3D dwc->num_ep_resized;
-> +	/* Ignore EP0 IN */
-> +	num_in_ep--;
-> +
-> +	/* Reserve at least one FIFO for the number of IN EPs */
-> +	min_depth =3D num_in_ep * (fifo+1);
-> +	remaining =3D ram1_depth - min_depth - dwc->last_fifo_depth;
-> +
-> +	/* We've already reserved 1 FIFO per EP, so check what we can fit in
-
-comment style is wrong
-
-> +	 * addition to it.  If there is not enough remaining space, allocate
-> +	 * all the remaining space to the EP.
-> +	 */
-> +	fifo_size =3D (mult-1) * fifo;
-
-spaces around subtraction
-
-> +	if (remaining < fifo_size) {
-> +		if (remaining > 0)
-> +			fifo_size =3D remaining;
-> +		else
-> +			fifo_size =3D 0;
-> +	}
-> +
-> +	fifo_size +=3D fifo;
-> +	fifo_size++;
-
-why the increment?
-
-> +	dep->fifo_depth =3D fifo_size;
-> +
-> +	/* Check if TXFIFOs start at non-zero addr */
-> +	tmp =3D dwc3_readl(dwc->regs, DWC3_GTXFIFOSIZ(0));
-> +	fifo_0_start =3D DWC3_GTXFIFOSIZ_TXFSTADDR(tmp);
-> +
-> +	fifo_size |=3D (fifo_0_start + (dwc->last_fifo_depth << 16));
-> +	if (dwc3_is_usb31(dwc))
-> +		dwc->last_fifo_depth +=3D DWC31_GTXFIFOSIZ_TXFDEP(fifo_size);
-> +	else
-> +		dwc->last_fifo_depth +=3D DWC3_GTXFIFOSIZ_TXFDEP(fifo_size);
-> +
-> +	/* Check fifo size allocation doesn't exceed available RAM size. */
-> +	if (dwc->last_fifo_depth >=3D ram1_depth) {
-> +		dev_err(dwc->dev, "Fifosize(%d) > RAM size(%d) %s depth:%d\n",
-> +				(dwc->last_fifo_depth * mdwidth), ram1_depth,
-> +				dep->endpoint.name, fifo_size);
-> +		if (dwc3_is_usb31(dwc))
-> +			fifo_size =3D DWC31_GTXFIFOSIZ_TXFDEP(fifo_size);
-> +		else
-> +			fifo_size =3D DWC3_GTXFIFOSIZ_TXFDEP(fifo_size);
-> +		dwc->last_fifo_depth -=3D fifo_size;
-> +		dep->fifo_depth =3D 0;
-> +		return -ENOMEM;
-> +	}
-> +
-> +	dwc3_writel(dwc->regs, DWC3_GTXFIFOSIZ(dep->number >> 1), fifo_size);
-> +	dwc->num_ep_resized++;
-
-add a blank line here
-
-> +	return 0;
-> +}
-> +
->  static int dwc3_gadget_set_ep_config(struct dwc3_ep *dep, unsigned int a=
-ction)
->  {
->  	const struct usb_ss_ep_comp_descriptor *comp_desc;
-> @@ -620,6 +731,10 @@ static int __dwc3_gadget_ep_enable(struct dwc3_ep *d=
-ep, unsigned int action)
->  	int			ret;
->=20=20
->  	if (!(dep->flags & DWC3_EP_ENABLED)) {
-> +		ret =3D dwc3_gadget_resize_tx_fifos(dep);
-> +		if (ret)
-> +			return ret;
-
-doesn't it look odd that you're resizing every fifo every time a new
-endpoint is enabled? Is there a better way to achieve this?
+If there are no objections, I'm okay deleting the driver.
 
 =2D-=20
 balbi
@@ -320,18 +208,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl8xPTkACgkQzL64meEa
-mQYA3hAAj6/Qx+aAx2Uq9+UlhgzciFWWJ8T4LQPB7Oesbsntb/01VaQpbzUePFQq
-aL8folVLgoutxP5+AoVLIzLIhrINtoF+PPneVIbDt2LI0QwI5m2DLRqf+5c5tP7T
-sdBf34KlxM0ABBijW5S/p2Xh6yKm4mjlkzin1hpyIkN9BM3O+zXroHuBloTXjZwb
-LVxysSEijB7FwKZEDJHEmqbDJgx/81B/DYUgrkA7gFNl89zNcICEMElbP9s9aHzh
-xDj/7kJWW7J6TiXGZvGV2s/Z/E9/p6LmIRNRNJ2A/v7Qf561EJmTuLYhuKlXO4LY
-VVXiV3JwzG3z7swiylnGO0bB7OR1cQ/sTQdrJiTmQZZh5Xa1X/tbG5gQYrD6Rfbb
-f6HrCbQqobWMJClWGWCXNDkqwjxiHK8OgXdyagh9dtWQ+MGFqo3cmiEd7cnTDjFZ
-/kDotfcN+35CjF2sg8p7030ILhdT3V8Zq/IjzkGi7urhFUeq44Sg4J4JaQ699wp6
-xTRnNo+LLVVhcl+XSl4O/QeXVeiDBQSxk3CA+5Ed9pemJIPNQQM6yiU6/2GgxQuM
-nLctww2h/2LudeA2dYksAF0Frn4Ud3OOldk1y2ClJdO99wHIuLwtfYvEf9ZFYWBx
-VM7w+Jy5ABdctH430DnOFnbXxLykhUPtWcoDU2bZilM9n/d9VVc=
-=JObr
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl8xQucACgkQzL64meEa
+mQaidhAAoUNz9ltGIIdWbogdhbcTeY1faFBBnzQ7GvTWW18xSMD2+DfqptDwACc6
+W2og6/Q8mdfLFvN29S3TcxzCp6ZclWrHsX55SHyJeUYVwyS6aAvlMmUPmy9WJZco
+57sNMY4CjJ/BK+ZIvvWt8kyJE3ckpsweyhkSx8Z77PJOW1RIYC1GtgYepsvC+e6I
+DsxSVTxmg/gfxRxObCK0F0DOX/gSGKMImPGoGRM3IYLLF8hPJGQGZ+1SSv2tKb8n
+XZpGIKb/9mNylmAQu2hmNOQfaYZBFvZJHvt+bz+aWpkLB7unVYrLVGY5tfPFGvyC
+wqROr3PiIUqCVrf46suH1Xm1ajN9FjXAJFn1EzScxZxge9CtWW9RIcxdq32dyyMG
+Thkk3Xle4h6ELR4bOPSqONJFwIOGr8lMyQVFE2nwlm3MbErFv3S3szxNNQ4qqwWh
+jqPS4Rdjz23Df6iUIy1EAfDU5bEx9YpUL/63BT+JAz0YvOowfR/wnWSVIoZAdN70
+YhI8Zxe7UAUZeBuRi1uEAA7BgQB7zKpeY7QCBqHQfQaujXrNy0CLrWH22/tK+yej
+pGR2ta4FZg0bwrUbZPIPuzRxjHXceh+QKCqMgrW8son53WZn9cKgZT4cLM3vsz8p
+GHYPyKe6e3EK2Ll0diPPQybnACDB1135xVUOfEeLK/j076uQfjU=
+=RjT4
 -----END PGP SIGNATURE-----
 --=-=-=--
