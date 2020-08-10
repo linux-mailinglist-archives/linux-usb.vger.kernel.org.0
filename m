@@ -2,115 +2,219 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81C2E2400D1
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Aug 2020 04:26:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A355C240257
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Aug 2020 09:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726458AbgHJC0l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 9 Aug 2020 22:26:41 -0400
-Received: from mail-eopbgr70080.outbound.protection.outlook.com ([40.107.7.80]:49993
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726453AbgHJC0k (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 9 Aug 2020 22:26:40 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QnxGnccsAPsTJzpN9a9InvJZxX9yaxIynJj0h8QeZvSmr5Lr3wYNFFlfqZDRn9rvulBASHgqcT7emJRZGmcR+xgchvYRt9lyhb4UsvPZRRqEtFmvv5jbW+5/d1mOjEX2iAuT4igxnQ1sTz4GYXlETTCDjbBX86oTueh614rsjvKt+a/0nqdJ6r8ETPmNmbKHnEWK/Omb093JP7jysZAx2bUL0zHh2MQd95yB6WFJEcDWXvlV8YXXlonzqUQ+bi3gKgo97d5RPSh4LXFQXp9NCbw635Udr5RyH1f5gLmQysZoLpRU0tbG2jzRiNvy9+W6A69vUHqU5pZiE9eoh9Jqkg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9N4goH2jfQlG7Pb2yFXL49bnwKPGjHiD7ykFgsukWxo=;
- b=lRgOA0b5NjUXSfOl3OFf7kj14HHvYxgHTSp3eRKH10EMNGwPOiu0O+rp8g3UGeTCeMAhcnMhozH35dJnYt93Y7h+bs9t18GXlvCcXBS/l9SHU9Be8TMM6eTvOZG/qKKtuDoB7zesHfYHggQqTrhyHxfXCsXsrpDjWwlyX+D9O7tiFECQEXsZfw5W8AynkCgGgl2COWXZwAy4Nw8elXzwg1Qg+Nkty+OwgNF7GzqPvL1dKC84foUTHefv7g9pJhOyci/iJsBUKersrJDZN85XeX0CpvT1R1Gi4K7gha5HxWQwSkT3+jtPcy4qjKp8sQvxAz/HhxUfLlCwa0/Jlkf57A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9N4goH2jfQlG7Pb2yFXL49bnwKPGjHiD7ykFgsukWxo=;
- b=h1n1BbWLo8nTHBkDw1buJYeojhLddGayFvQOlw7Zst+amBFDvvqHDjlR3iZZWN0ucnIAH6cX19RcxfZUGFZvqOQpDyxMIgYWgub+MW8pJ52d6JwLUxOV4MuEiBpc7I6SQt0XPdfOgEDH4hetKMVOUzn4r51bgULfpAdbFb+1v38=
-Authentication-Results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
- by AM7PR04MB7160.eurprd04.prod.outlook.com (2603:10a6:20b:119::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3261.19; Mon, 10 Aug
- 2020 02:26:31 +0000
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::ed7f:8755:5994:7fcf]) by AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::ed7f:8755:5994:7fcf%5]) with mapi id 15.20.3261.023; Mon, 10 Aug 2020
- 02:26:30 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     balbi@kernel.org
-Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com,
-        gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        Peter Chen <peter.chen@nxp.com>
-Subject: [PATCH v2 6/6] Revert "usb: udc: allow adding and removing the same gadget device"
-Date:   Mon, 10 Aug 2020 10:25:10 +0800
-Message-Id: <20200810022510.6516-7-peter.chen@nxp.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200810022510.6516-1-peter.chen@nxp.com>
-References: <20200810022510.6516-1-peter.chen@nxp.com>
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR03CA0120.apcprd03.prod.outlook.com
- (2603:1096:4:91::24) To AM7PR04MB7157.eurprd04.prod.outlook.com
- (2603:10a6:20b:118::20)
+        id S1726450AbgHJHTi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Aug 2020 03:19:38 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:45599 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726472AbgHJHTg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Aug 2020 03:19:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1597043973;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IdPp+ky3+l0vsDUx1MEmcIdtmS3DI4hGyGGscVhnCXA=;
+        b=jTIoUOZhFYL1H3a3rPj7qYH42WuoQ8kdoMyb1n9T/rGAg06J0Sei5k2RwXdu6dIOJ+gylP
+        HxTI5KIu8J6SESQWigva3vh7eliVWbxrqKSL5+MIBtgN25jUpwKv7VXRU7/fK9rCYWjhOp
+        pA4vk6M+nMJ3AfloqCM/h74SAQRx1oI=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-181-qlHvDVmFOgiIIhlAEHFzOg-1; Mon, 10 Aug 2020 03:19:31 -0400
+X-MC-Unique: qlHvDVmFOgiIIhlAEHFzOg-1
+Received: by mail-ej1-f69.google.com with SMTP id l7so3496671ejr.7
+        for <linux-usb@vger.kernel.org>; Mon, 10 Aug 2020 00:19:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=IdPp+ky3+l0vsDUx1MEmcIdtmS3DI4hGyGGscVhnCXA=;
+        b=dTRxrq1gIHZHlU5CxGGc+JqayOvUxdMU4DFzfzd1AVyj8B9VVRY2WzCAPo7U3vbzMs
+         iedsMBKoGOkPxe2m3fTwdUcKBoYu+0GC2NDfbO152eigDIHK4WiZul2aVcHu0D1FOZyE
+         x6yvFnU2LSe6R+bP4n3WNl0/DGTUFOccJNvwioMsIY+DFser1160LJvRlxBfApbqZW8M
+         9xiYe4D+ra+8ZHWfmb781iZFw/yxxZR9SCwlIQAoh8FxdhweLXXvFCn2TV6LsK3y4lwi
+         iYQ0JEkPxQ4zy0QJEU8umL2Qq8EnxYshYiA0ECWhOhQDn+XDQIAPQFmp5K0Lg1AfOHut
+         EHrQ==
+X-Gm-Message-State: AOAM5301M8oF/kJBb+F22SXulmRrQ3Gya1L8/fhuEWZnYL+nx0DmpDfR
+        M+7TR9y5Bc29KrQhjoEgj78bj8i+sKa8b4oqZxggkCeZdYUsQ/k72sHYAJaNqaAQFaWtDM+GvCJ
+        3lKsZKYkKoQoqUnigpW0p
+X-Received: by 2002:a17:906:198e:: with SMTP id g14mr20008151ejd.266.1597043969715;
+        Mon, 10 Aug 2020 00:19:29 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyLKBIb+PD1XhZu/ndFYc7QoSd0w8khDmgEo6fDLbZ20zyRucoNKIZnBD3zTeN8gtsxsMiimA==
+X-Received: by 2002:a17:906:198e:: with SMTP id g14mr20008139ejd.266.1597043969449;
+        Mon, 10 Aug 2020 00:19:29 -0700 (PDT)
+Received: from x1.localdomain ([78.108.130.193])
+        by smtp.gmail.com with ESMTPSA id sd8sm12500696ejb.58.2020.08.10.00.19.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Aug 2020 00:19:28 -0700 (PDT)
+Subject: Re: [PATCH 2/4] usb: typec: Add
+ typec_port_register_altmodes_from_fwnode()
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tobias Schramm <t.schramm@manjaro.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org
+References: <20200714113617.10470-1-hdegoede@redhat.com>
+ <20200714113617.10470-3-hdegoede@redhat.com>
+ <20200727130528.GB883641@kuha.fi.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <469f369a-73f4-c348-b9ee-1662956f45be@redhat.com>
+Date:   Mon, 10 Aug 2020 09:19:27 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from b29397-desktop.ap.freescale.net (119.31.174.67) by SG2PR03CA0120.apcprd03.prod.outlook.com (2603:1096:4:91::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3283.5 via Frontend Transport; Mon, 10 Aug 2020 02:26:28 +0000
-X-Mailer: git-send-email 2.17.1
-X-Originating-IP: [119.31.174.67]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: d895f6e4-b7c5-48d3-5b19-08d83cd4cacc
-X-MS-TrafficTypeDiagnostic: AM7PR04MB7160:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM7PR04MB71601F11CE8F8DB654593BA48B440@AM7PR04MB7160.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:222;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EaoiK6rFp06b+QV4EkoBYW+0yVCcj3PhJDRSN3LG0okcOuzIh/MYHzJotDxnl48yyX0IdTf2rRS9HgI7931ttjPptHKBVb7FM0W1e9kumUnXfMoT2uHl2kXZf+4ZlO5BdoGkrmcVQnx/4qG8e9Va/qDzOiuZo+2w1da0Tov2crfv8hEP0IOFXKULm/s3xgTBLyJ+V0PVtb0FGw37l9mQhU/LuGkayHz8BpYq5ZwBcVUF370pSFUZ6sb7IWzfy58tl1uN6ihXgMvbBE8dp13hxfNFJ6O7yI+Jrq5SvU5yDr3LDvw5XYhoivItfM3Fg9VAVCfoK+46yX/nEJxV/3SBFw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(366004)(346002)(376002)(136003)(39860400002)(396003)(36756003)(2906002)(86362001)(83380400001)(1076003)(5660300002)(6916009)(4744005)(6666004)(6506007)(6512007)(44832011)(2616005)(956004)(8676002)(66476007)(8936002)(66946007)(66556008)(478600001)(16526019)(26005)(52116002)(316002)(186003)(6486002)(4326008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: OtSnSOSKU62To+cO0d3zjGf3tPNoMGZ5gSH2QACfUFnu47XXgqSWTcJr/ajfyqBL1dQbndnLRhIqhcU0GH+cget8wDiftPjX1C/oHcaW4uMfoK0cH1zAHwKdG6tQbyiB8sH+Q7DKnbIEWqKGMOzp5yLCe+TOPF/9B+48Dt6bVCIHGMobcZOZYkv7xSEkFKpQtmeUWmxGTo4P5gcsdwteyI0RF3/3J3PHC0VmXZsY8cVtW01vtPzarO5Hx6jQZ1J6UEUlLndBH1bEW8zNE6IL1I3aUaNEKmPu2dPwWGCTJQBgMtsQPhNcP8sgbfdh8hZKrsa7BVr/Rx1K1goSjTyIQSzwKLXDMNY7cwNlz6tvfAHf9ckj3rBqPKYfG/Jqj6PnUhx9QR7fyRZSOo4aC6s0ksg7aTgfcvCgARRKhyqKq1ig2sBqDERIBcLOyJpiB+z6hQ1Iq9ammr3NgEMAxttvBGzR14OTSCbNxe0V3cOCjSEVBqWSLRN+kafHCk2pp3/xzH4lAwm5bDtkptu/1nlWyJiBI2++A/GQQVOEiPb1zEkPvLnVe0f8ShqR4ssGRkJ0xcNwcAPIotJcYSoiaMVmrWkwDWaWwn9B3jNNWSVJiGoou8ykCt1fjRv4/ShGlgs1RSuJvbbdEqPqdJr9d0BFCg==
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d895f6e4-b7c5-48d3-5b19-08d83cd4cacc
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Aug 2020 02:26:30.8866
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SjK9p1tRX819T04HKy41zteLX1eIGybVRzn0BOkYPB3g7zwQaksfTLXAlFZdlBp+xvgWMkMEWyraNyrTAPvs6Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB7160
+In-Reply-To: <20200727130528.GB883641@kuha.fi.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-We have already allocated gadget structure dynamically at UDC (dwc3)
-driver, so commit fac323471df6 ("usb: udc: allow adding and removing
-the same gadget device")could be reverted.
+Hi,
 
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Peter Chen <peter.chen@nxp.com>
----
-Changes from v1:
-- No changes.
+On 7/27/20 3:05 PM, Heikki Krogerus wrote:
+> Hi Hans,
+> 
+> On Tue, Jul 14, 2020 at 01:36:15PM +0200, Hans de Goede wrote:
+>> This can be used by Type-C controller drivers which use a standard
+>> usb-connector fwnode, with altmodes sub-node, to describe the available
+>> altmodes.
+>>
+>> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+>> ---
+>>   drivers/usb/typec/class.c | 56 +++++++++++++++++++++++++++++++++++++++
+>>   include/linux/usb/typec.h |  7 +++++
+>>   2 files changed, 63 insertions(+)
+>>
+>> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+>> index c9234748537a..47de2b2e3d54 100644
+>> --- a/drivers/usb/typec/class.c
+>> +++ b/drivers/usb/typec/class.c
+>> @@ -1607,6 +1607,62 @@ typec_port_register_altmode(struct typec_port *port,
+>>   }
+>>   EXPORT_SYMBOL_GPL(typec_port_register_altmode);
+>>   
+>> +void typec_port_register_altmodes_from_fwnode(struct typec_port *port,
+>> +	const struct typec_altmode_ops *ops, void *drvdata,
+>> +	struct typec_altmode **altmodes, size_t n,
+>> +	struct fwnode_handle *fwnode)
+>> +{
+>> +	struct fwnode_handle *altmodes_node, *child;
+>> +	struct typec_altmode_desc desc;
+>> +	struct typec_altmode *alt;
+>> +	size_t index = 0;
+>> +	u32 svid, vdo;
+>> +	int ret;
+>> +
+>> +	altmodes_node = fwnode_get_named_child_node(fwnode, "altmodes");
+>> +	if (!altmodes_node)
+>> +		return;
+> 
+> Do we need that? Why not just make the sub-nodes describing the
+> alternate modes direct children of the connector node instead of
+> grouping them under a special sub-node?
 
- drivers/usb/gadget/udc/core.c | 1 -
- 1 file changed, 1 deletion(-)
+If you envision how this will look in e.g. DTS sources then I think
+you will see that this grouping keeps the DTS source code more
+readable. Grouping things together like this is somewhat normal in
+devicetree files. E.g. PMIC's or other regulator providers typical
+have a "regulators" node grouping all their regulators; and also the OF
+graph bindings which are used in the USB-connector node start with a
+"ports" parent / grouping node.
 
-diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-index 473e74088b1f..43351b0af569 100644
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -1386,7 +1386,6 @@ void usb_del_gadget_udc(struct usb_gadget *gadget)
- {
- 	usb_del_gadget(gadget);
- 	usb_put_gadget(gadget);
--	memset(&gadget->dev, 0x00, sizeof(gadget->dev));
- }
- EXPORT_SYMBOL_GPL(usb_del_gadget_udc);
- 
--- 
-2.17.1
+> If the child node of the connector has device properties "svid" and
+> "vdo" then it is an alt mode that the connector supports, and it can't
+> be anything else, no?
+
+If you want to get rid of the altmodes parent/grouping node, then the
+usual way to do this would be to add a compatible string to the nodes,
+rather then check for the existence of some properties.
+
+Regards,
+
+Hans
+
+
+> 
+> 
+>> +	child = NULL;
+>> +	while ((child = fwnode_get_next_child_node(altmodes_node, child))) {
+>> +		ret = fwnode_property_read_u32(child, "svid", &svid);
+>> +		if (ret) {
+>> +			dev_err(&port->dev, "Error reading svid for altmode %s\n",
+>> +				fwnode_get_name(child));
+>> +			continue;
+>> +		}
+>> +
+>> +		ret = fwnode_property_read_u32(child, "vdo", &vdo);
+>> +		if (ret) {
+>> +			dev_err(&port->dev, "Error reading vdo for altmode %s\n",
+>> +				fwnode_get_name(child));
+>> +			continue;
+>> +		}
+>> +
+>> +		if (index >= n) {
+>> +			dev_err(&port->dev, "Error not enough space for altmode %s\n",
+>> +				fwnode_get_name(child));
+>> +			continue;
+>> +		}
+>> +
+>> +		desc.svid = svid;
+>> +		desc.vdo = vdo;
+>> +		desc.mode = index + 1;
+>> +		alt = typec_port_register_altmode(port, &desc);
+>> +		if (IS_ERR(alt)) {
+>> +			dev_err(&port->dev, "Error registering altmode %s\n",
+>> +				fwnode_get_name(child));
+>> +			continue;
+>> +		}
+>> +
+>> +		alt->ops = ops;
+>> +		typec_altmode_set_drvdata(alt, drvdata);
+>> +		altmodes[index] = alt;
+>> +		index++;
+>> +	}
+>> +}
+>> +EXPORT_SYMBOL_GPL(typec_port_register_altmodes_from_fwnode);
+>> +
+>>   /**
+>>    * typec_register_port - Register a USB Type-C Port
+>>    * @parent: Parent device
+>> diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
+>> index 5daa1c49761c..fbe4bccb3a98 100644
+>> --- a/include/linux/usb/typec.h
+>> +++ b/include/linux/usb/typec.h
+>> @@ -17,6 +17,7 @@ struct typec_partner;
+>>   struct typec_cable;
+>>   struct typec_plug;
+>>   struct typec_port;
+>> +struct typec_altmode_ops;
+>>   
+>>   struct fwnode_handle;
+>>   struct device;
+>> @@ -121,6 +122,12 @@ struct typec_altmode
+>>   struct typec_altmode
+>>   *typec_port_register_altmode(struct typec_port *port,
+>>   			     const struct typec_altmode_desc *desc);
+>> +
+>> +void typec_port_register_altmodes_from_fwnode(struct typec_port *port,
+>> +	const struct typec_altmode_ops *ops, void *drvdata,
+>> +	struct typec_altmode **altmodes, size_t n,
+>> +	struct fwnode_handle *fwnode);
+>> +
+>>   void typec_unregister_altmode(struct typec_altmode *altmode);
+>>   
+>>   struct typec_port *typec_altmode2port(struct typec_altmode *alt);
+>> -- 
+>> 2.26.2
+> 
+> thanks,
+> 
 
