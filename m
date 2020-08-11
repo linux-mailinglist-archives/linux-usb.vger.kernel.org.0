@@ -2,123 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6769E241EE9
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Aug 2020 19:07:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C49F4241F0E
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Aug 2020 19:19:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729260AbgHKRGl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Aug 2020 13:06:41 -0400
-Received: from mail-il1-f199.google.com ([209.85.166.199]:46135 "EHLO
-        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729184AbgHKRGT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Aug 2020 13:06:19 -0400
-Received: by mail-il1-f199.google.com with SMTP id q19so4214119ilt.13
-        for <linux-usb@vger.kernel.org>; Tue, 11 Aug 2020 10:06:18 -0700 (PDT)
+        id S1729184AbgHKRTF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Aug 2020 13:19:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48744 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729116AbgHKRTE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Aug 2020 13:19:04 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6464BC06174A
+        for <linux-usb@vger.kernel.org>; Tue, 11 Aug 2020 10:19:04 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id g6so14357161ljn.11
+        for <linux-usb@vger.kernel.org>; Tue, 11 Aug 2020 10:19:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:subject:message-id:date:user-agent:mime-version
+         :content-transfer-encoding:content-language;
+        bh=VgfZ0yf0u6CPD7GngLkF0ERtij6py9wcrO05kR7rTbQ=;
+        b=alUp2lexe58zyCe7TMSrKVOWmMFeWK/Ybe7kkzT1Gpga6lkvp4rJZpmMAWntfeA2L7
+         LR7sH33M4t6WWtt8Ehdjpqj3fvsp969gIWiBnxPkWl00lyiAD+Yw+2x3mQ2YuaiZZ+7d
+         OIsdnD745u2oraD5D/ylSt3UwjItOAh1RCmVWWTCsefc2kehvPMXZQGOxeE1X1OtbHme
+         wMZpnmF9Ae/sgA2iwxV2x9xyJBj75S6CGay3BQCv4gT2uR2iGy2OZOjdHfJItG19YEdx
+         H9TfR0SOoW1bZZxC5Ww9jiR0Yla+3feperxslmTdCf4S3y42a9KYDsUQ2dW4fwNVRwJO
+         4Pgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=RxnDrZAgrm5qTZ0RPNFz6huceHpzuDNxWd8B/TcZ13s=;
-        b=X1aLzjRpGXCj7SDEh5TIvu9o5G/tzb+0LCmwIhxeW9no8I2wMWXZCSAyT17xGUQytv
-         VpYOIeuZl2wXZ4U1LGhifKCixk0ea8dJ44PcoZn8Nc7mEJfFC0XUSXwTr+ooTAl56WoU
-         jqR09kBiHO3+otj3XnZsnYuyyqwTmkoamEY6z4L8tDRQMVgYb+UWciWlDSxhR4OWWfcE
-         u+p6WKYHFNacyB9Fmr220DAAX5CPJvTcZn8F6p14nzdNlSbzG4DXQUyKP7jaDB6DMIFg
-         qZQdyY34bDZpZ6u0N3tVElLgSBO3zyo/LySU5B0eMNVjjUrfhKkABerM3EaAm3t5UA0m
-         mLAg==
-X-Gm-Message-State: AOAM531WpbLYqmPmf6VdviJCBM92ajDDACF0FyMrL6Vhd8yTLQaR5fVf
-        pF/woOaRmENS7L10KM1y2lTYR7F8PvrMWh1jB+TgSR4XNNyM
-X-Google-Smtp-Source: ABdhPJyVzuOJqFeDPOWCQIBGIxE4BphWmAyddfJ97xQeXPlpEfycHfskkE1R39zcSbsSr1S84/rXvf2wvQ705g2Cbs483WLzwZiC
+        h=x-gm-message-state:from:to:subject:message-id:date:user-agent
+         :mime-version:content-transfer-encoding:content-language;
+        bh=VgfZ0yf0u6CPD7GngLkF0ERtij6py9wcrO05kR7rTbQ=;
+        b=NJqw902MJ7X9+fWClKjVaFU5PKXX9wcevptcxwEFTBG5wg6OLAK6to6ihZKz0RDpUR
+         bpBmADOCtldUTaBmmcYHUxGyjHSu8DXeBYu4fzbWIf667sOvTrNNdaulSsNoQFiQXucI
+         iTxt0dBm5wWpjhraf+lgZaxMndc3zBvio12BmoQ8OLwjCKZq+FsIPx08rPjTKXy3Z3PF
+         wdfSPFLmROFtKRsHwPqIuF6jYavjnbC7pEYdfiyfV6pf1noKBltZZ1FqS8g0ySWOW56m
+         Mlm30OslDALcmZWFIJLIeQOqucQzzRCKE2VI2ceIeZd6A60Vpn0QMszUeWGBS0QqV8lK
+         uHXg==
+X-Gm-Message-State: AOAM532ETQiGonGmL+AD3j3fmQn0MdavYVfmOXa7vnaETYmlp3ZNqn36
+        tvdtcAMhjs9GxWIIb1X3fE4=
+X-Google-Smtp-Source: ABdhPJwlLDywVrOB3Vqt2dOQFhVqc2nayXUPNuTvi3jVy5ByQDi4rGz43A5o/0r2NAJrO8KpHQuZpA==
+X-Received: by 2002:a2e:8145:: with SMTP id t5mr3345940ljg.398.1597166342415;
+        Tue, 11 Aug 2020 10:19:02 -0700 (PDT)
+Received: from [10.10.0.8] ([185.213.154.162])
+        by smtp.googlemail.com with ESMTPSA id j17sm11788593lfr.32.2020.08.11.10.19.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Aug 2020 10:19:01 -0700 (PDT)
+From:   Patrik Nilsson <nipatriknilsson@gmail.com>
+To:     linux-usb@vger.kernel.org
+Subject: high speed data to usb disk makes the kernel think that is has been
+ unmounted
+Message-ID: <a161e45d-6ce8-2077-c513-380b67c4dfd8@gmail.com>
+Date:   Tue, 11 Aug 2020 19:19:00 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-Received: by 2002:a92:cb12:: with SMTP id s18mr7589772ilo.13.1597165578180;
- Tue, 11 Aug 2020 10:06:18 -0700 (PDT)
-Date:   Tue, 11 Aug 2020 10:06:18 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ef601705ac9d161b@google.com>
-Subject: KMSAN: kernel-usb-infoleak in hif_usb_send
-From:   syzbot <syzbot+f83a1df1ed4f67e8d8ad@syzkaller.appspotmail.com>
-To:     glider@google.com, gregkh@linuxfoundation.org,
-        ingrassia@epigenesys.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Hi!
 
-syzbot found the following issue on:
+I have an issue with a usb to sata adapter when much high speed data is 
+sent. If I erase my 4Tb SSD disk connected to the usb to sata interface 
+with a "slower" /dev/urandom it works, but if I exchanges this to 
+/dev/zero the disk is after a while disconnected.
 
-HEAD commit:    ce8056d1 wip: changed copy_from_user where instrumented
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=124d453c900000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3afe005fb99591f
-dashboard link: https://syzkaller.appspot.com/bug?extid=f83a1df1ed4f67e8d8ad
-compiler:       clang version 10.0.0 (https://github.com/llvm/llvm-project/ c2443155a0fb245c8f17f2c1c72b6ea391e86e81)
-userspace arch: i386
+For logs from udev and more debug attempts see: 
+https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1886172
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Description:
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f83a1df1ed4f67e8d8ad@syzkaller.appspotmail.com
+When the speed of data with a usb disk device is too high, the probes 
+that check if the disk still exists is missed. This makes the disk to be 
+unmounted and is remounted with an other drive letter (/dev/sdX). If 
+this disk is the root ("/"), the computer hangs.
 
-usb 4-1: ath9k_htc: Transferred FW: ath9k_htc/htc_9271-1.4.0.fw, size: 51008
-=====================================================
-BUG: KMSAN: kernel-usb-infoleak in kmsan_handle_urb+0x28/0x40 mm/kmsan/kmsan_hooks.c:307
-CPU: 1 PID: 13012 Comm: kworker/1:6 Not tainted 5.8.0-rc5-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: events request_firmware_work_func
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x21c/0x280 lib/dump_stack.c:118
- kmsan_report+0xf7/0x1e0 mm/kmsan/kmsan_report.c:121
- kmsan_internal_check_memory+0x238/0x3d0 mm/kmsan/kmsan.c:423
- kmsan_handle_urb+0x28/0x40 mm/kmsan/kmsan_hooks.c:307
- usb_submit_urb+0x861/0x2470 drivers/usb/core/urb.c:406
- hif_usb_send_regout drivers/net/wireless/ath/ath9k/hif_usb.c:127 [inline]
- hif_usb_send+0x633/0x1790 drivers/net/wireless/ath/ath9k/hif_usb.c:470
- htc_issue_send drivers/net/wireless/ath/ath9k/htc_hst.c:34 [inline]
- htc_connect_service+0x14b4/0x19f0 drivers/net/wireless/ath/ath9k/htc_hst.c:275
- ath9k_wmi_connect+0x178/0x2c0 drivers/net/wireless/ath/ath9k/wmi.c:268
- ath9k_init_htc_services+0xf3/0x11f0 drivers/net/wireless/ath/ath9k/htc_drv_init.c:146
- ath9k_htc_probe_device+0x4dc/0x3ed0 drivers/net/wireless/ath/ath9k/htc_drv_init.c:962
- ath9k_htc_hw_init+0xdf/0x190 drivers/net/wireless/ath/ath9k/htc_hst.c:501
- ath9k_hif_usb_firmware_cb+0x42e/0xab0 drivers/net/wireless/ath/ath9k/hif_usb.c:1218
- request_firmware_work_func+0x1aa/0x2d0 drivers/base/firmware_loader/main.c:1001
- process_one_work+0x1688/0x2140 kernel/workqueue.c:2269
- worker_thread+0x10bc/0x2730 kernel/workqueue.c:2415
- kthread+0x551/0x590 kernel/kthread.c:292
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:293
+A usb SSD-disk (4 TB) connected to a USB port reproduce this bug easily. 
+This has never happened with a mechanical USB-drive.
 
-Uninit was created at:
- kmsan_save_stack_with_flags mm/kmsan/kmsan.c:144 [inline]
- kmsan_internal_poison_shadow+0x66/0xd0 mm/kmsan/kmsan.c:127
- kmsan_slab_alloc+0x8a/0xe0 mm/kmsan/kmsan_hooks.c:80
- slab_alloc_node mm/slub.c:2839 [inline]
- __kmalloc_node_track_caller+0xeab/0x12e0 mm/slub.c:4478
- __kmalloc_reserve net/core/skbuff.c:142 [inline]
- __alloc_skb+0x35f/0xb30 net/core/skbuff.c:210
- alloc_skb include/linux/skbuff.h:1083 [inline]
- htc_connect_service+0x1057/0x19f0 drivers/net/wireless/ath/ath9k/htc_hst.c:258
- ath9k_wmi_connect+0x178/0x2c0 drivers/net/wireless/ath/ath9k/wmi.c:268
- ath9k_init_htc_services+0xf3/0x11f0 drivers/net/wireless/ath/ath9k/htc_drv_init.c:146
- ath9k_htc_probe_device+0x4dc/0x3ed0 drivers/net/wireless/ath/ath9k/htc_drv_init.c:962
- ath9k_htc_hw_init+0xdf/0x190 drivers/net/wireless/ath/ath9k/htc_hst.c:501
- ath9k_hif_usb_firmware_cb+0x42e/0xab0 drivers/net/wireless/ath/ath9k/hif_usb.c:1218
- request_firmware_work_func+0x1aa/0x2d0 drivers/base/firmware_loader/main.c:1001
- process_one_work+0x1688/0x2140 kernel/workqueue.c:2269
- worker_thread+0x10bc/0x2730 kernel/workqueue.c:2415
- kthread+0x551/0x590 kernel/kthread.c:292
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:293
+Symptoms and how to reproduce:
 
-Bytes 4-7 of 18 are uninitialized
-Memory access of size 18 starts at ffff8881d24f1000
-=====================================================
+1) (Disk mounted as root) Computer hangs. Only way to get started again 
+is a hard reset.
 
+2) (Erasing disk, not mounted as root) If you erase a disk with dd ("dd 
+if=/dev/zero of=/dev/sdX"), the disk disappears from the mounted list 
+and reappears as an other drive letter. In my case the data is 
+redirected to /dev/null and the fans speed up. The apparent data 
+transfer speed is also increased. Usually this happens after about 45 to 
+60 minutes.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+3) Fill RAM with programs and make sure the swap to this disk is used.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Bug found in:
+
+$ uname -a
+Linux pb-189b1884 5.4.0-40-generic #44-Ubuntu SMP Tue Jun 23 00:01:04 
+UTC 2020 x86_64 x86_64 x86_64 GNU/Linux
+
+$ cat /proc/version_signature
+Ubuntu 5.4.0-40.44-generic 5.4.44
+
+Hardware:
+
+Tested with slower and faster computers. Tested directly connected to a 
+computer and via a hub. They all reproduce this bug.
+
+Workaround:
+
+None found.
+
+Best regards,
+Patrik
