@@ -2,101 +2,180 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83D5A2417E4
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Aug 2020 10:02:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90CC3241888
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Aug 2020 10:51:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728322AbgHKICo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Aug 2020 04:02:44 -0400
-Received: from relmlor1.renesas.com ([210.160.252.171]:51706 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728134AbgHKICn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Aug 2020 04:02:43 -0400
-X-IronPort-AV: E=Sophos;i="5.75,460,1589209200"; 
-   d="scan'208";a="54355772"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 11 Aug 2020 17:02:43 +0900
-Received: from localhost.localdomain (unknown [172.29.52.148])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 736074007529;
-        Tue, 11 Aug 2020 17:02:40 +0900 (JST)
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        id S1728402AbgHKIvT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Aug 2020 04:51:19 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:43181 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728346AbgHKIvS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 11 Aug 2020 04:51:18 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1597135877; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=7WwnnDLcpDYR0mzRDFxxHd6DBQPVie18LRrLzCaS3S4=; b=DK3XNnjceqLItRAB/N2p+op4lzPc4nkaNpNhLfFPZIVkgOtwzZS/YotTTEJhA3vAWz06oJCb
+ 8z5yAvs9rK1++tQvqwOwPAe7VLwoVIqq8y9WdwlbWQLsSZwx9fFM3o5rZyO8yshicl/Bb2BR
+ TL4otMxAIP3fKz/rkJ3ir0yLewo=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n12.prod.us-east-1.postgun.com with SMTP id
+ 5f325bf82b87d66049f524f8 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 11 Aug 2020 08:51:04
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 125CAC433A1; Tue, 11 Aug 2020 08:51:04 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,NICE_REPLY_A,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.131.194.49] (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: mgautam)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 22AE7C433C9;
+        Tue, 11 Aug 2020 08:50:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 22AE7C433C9
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=mgautam@codeaurora.org
+Subject: Re: [PATCH 2/2] usb: dwc3: Host wake up support from system suspend
+To:     Sandeep Maheswaram <sanm@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-usb@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v2 3/5] usb: typec: hd3ss3220: Use OF graph API to get the connector fwnode
-Date:   Tue, 11 Aug 2020 09:02:25 +0100
-Message-Id: <20200811080227.3170-4-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200811080227.3170-1-biju.das.jz@bp.renesas.com>
-References: <20200811080227.3170-1-biju.das.jz@bp.renesas.com>
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Michael Turquette <mturquette@baylibre.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, Taniya Das <tdas@codeaurora.org>
+References: <1591885683-29514-1-git-send-email-sanm@codeaurora.org>
+ <1591885683-29514-3-git-send-email-sanm@codeaurora.org>
+From:   Manu Gautam <mgautam@codeaurora.org>
+Message-ID: <7e2e94c8-e06b-1ecc-4304-008fcce1fe30@codeaurora.org>
+Date:   Tue, 11 Aug 2020 14:20:55 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <1591885683-29514-3-git-send-email-sanm@codeaurora.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Some platforms have only super speed data bus connected to this device
-and high speed data bus directly connected to the SoC. In such platforms
-modelling connector as a child of this device is making it non compliant
-with usb connector bindings. By modelling connector node as standalone
-device node along with this device and the SoC data bus will make it
-compliant with usb connector bindings.
-Update the driver to handle this model by using OF graph API to get the
-connector fwnode and usb role switch class API to get role switch handle.
+Hi,
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
-v1->v2: Fixed the commit message (https://patchwork.kernel.org/patch/11700777/)
-Ref:https://patchwork.kernel.org/patch/11669423/
----
- drivers/usb/typec/hd3ss3220.c | 18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+On 6/11/2020 7:58 PM, Sandeep Maheswaram wrote:
+> Avoiding phy powerdown in host mode so that it can be wake up by devices.
+> Set usb controller wakeup capable when wakeup capable devices are
+> connected to the host.
+>
+> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+> ---
+>  drivers/usb/dwc3/core.c      | 47 ++++++++++++++++++++++++++-----
+>  drivers/usb/dwc3/core.h      |  1 +
+>  drivers/usb/dwc3/dwc3-qcom.c | 66 +++++++++++++++++++++++++++++++++-----------
+>  3 files changed, 91 insertions(+), 23 deletions(-)
+>
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index 25c686a7..8370350 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -31,15 +31,19 @@
+>  #include <linux/usb/gadget.h>
+>  #include <linux/usb/of.h>
+>  #include <linux/usb/otg.h>
+> +#include <linux/usb/hcd.h>
+>  
+>  #include "core.h"
+>  #include "gadget.h"
+>  #include "io.h"
+>  
+>  #include "debug.h"
+> +#include "../host/xhci.h"
+>  
+>  #define DWC3_DEFAULT_AUTOSUSPEND_DELAY	5000 /* ms */
+>  
+> +bool need_phy_for_wakeup;
+> +
+>  /**
+>   * dwc3_get_dr_mode - Validates and sets dr_mode
+>   * @dwc: pointer to our context structure
+> @@ -1627,10 +1631,36 @@ static int dwc3_core_init_for_resume(struct dwc3 *dwc)
+>  	return ret;
+>  }
+>  
+> +static void dwc3_set_phy_speed_flags(struct dwc3 *dwc)
+> +{
+> +
+> +	int i, num_ports;
+> +	u32 reg;
+> +	struct usb_hcd	*hcd = platform_get_drvdata(dwc->xhci);
 
-diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.c
-index 323dfa8160ab..f633ec15b1a1 100644
---- a/drivers/usb/typec/hd3ss3220.c
-+++ b/drivers/usb/typec/hd3ss3220.c
-@@ -155,7 +155,7 @@ static int hd3ss3220_probe(struct i2c_client *client,
- {
- 	struct typec_capability typec_cap = { };
- 	struct hd3ss3220 *hd3ss3220;
--	struct fwnode_handle *connector;
-+	struct fwnode_handle *connector, *ep;
- 	int ret;
- 	unsigned int data;
- 
-@@ -173,11 +173,21 @@ static int hd3ss3220_probe(struct i2c_client *client,
- 
- 	hd3ss3220_set_source_pref(hd3ss3220,
- 				  HD3SS3220_REG_GEN_CTRL_SRC_PREF_DRP_DEFAULT);
-+	/* For backward compatibility check the connector child node first */
- 	connector = device_get_named_child_node(hd3ss3220->dev, "connector");
--	if (!connector)
--		return -ENODEV;
-+	if (connector) {
-+		hd3ss3220->role_sw = fwnode_usb_role_switch_get(connector);
-+	} else {
-+		ep = fwnode_graph_get_next_endpoint(dev_fwnode(hd3ss3220->dev), NULL);
-+		if (!ep)
-+			return -ENODEV;
-+		connector = fwnode_graph_get_remote_port_parent(ep);
-+		fwnode_handle_put(ep);
-+		if (!connector)
-+			return -ENODEV;
-+		hd3ss3220->role_sw = usb_role_switch_get(hd3ss3220->dev);
-+	}
- 
--	hd3ss3220->role_sw = fwnode_usb_role_switch_get(connector);
- 	if (IS_ERR(hd3ss3220->role_sw)) {
- 		ret = PTR_ERR(hd3ss3220->role_sw);
- 		goto err_put_fwnode;
+dwc->xhci could be NULL for DR_MODE = PERIPHERAL.
+
+
+> +	struct xhci_hcd	*xhci_hcd = hcd_to_xhci(hcd);
+> +
+> +	dwc->hs_phy_flags &= ~(PHY_MODE_USB_HOST_HS | PHY_MODE_USB_HOST_LS);
+> +
+> +	reg = readl(&xhci_hcd->cap_regs->hcs_params1);
+> +
+> +	num_ports = HCS_MAX_PORTS(reg);
+> +	for (i = 0; i < num_ports; i++) {
+> +		reg = readl(&xhci_hcd->op_regs->port_status_base + i*0x10);
+> +		if (reg & PORT_PE) {
+> +			if (DEV_HIGHSPEED(reg) || DEV_FULLSPEED(reg))
+> +				dwc->hs_phy_flags |= PHY_MODE_USB_HOST_HS;
+> +			else if (DEV_LOWSPEED(reg))
+> +				dwc->hs_phy_flags |= PHY_MODE_USB_HOST_LS;
+> +		}
+> +	}
+> +	phy_set_mode(dwc->usb2_generic_phy, dwc->hs_phy_flags);
+
+
+Can we move this logic to xhci driver instead?
+
+> +}
+> +
+..
+> @@ -240,6 +267,11 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom)
+>  {
+>  	u32 val;
+>  	int i;
+> +	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
+> +	struct usb_hcd  *hcd = platform_get_drvdata(dwc->xhci);
+
+dwc->xhci could be NULL
+
+
+> +
+> +	if (usb_wakeup_enabled_descendants(hcd->self.root_hub))
+> +		device_init_wakeup(qcom->dev, 1);
+>  
+>  	if (qcom->is_suspended)
+>  		return 0;
+> @@ -262,6 +294,8 @@ static int dwc3_qcom_resume(struct dwc3_qcom *qcom)
+>  	int ret;
+>  	int i;
+>  
+> +	device_init_wakeup(qcom->dev, 0);
+> +
+>  	if (!qcom->is_suspended)
+>  		return 0;
+>  
+
 -- 
-2.17.1
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
