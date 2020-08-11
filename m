@@ -2,126 +2,185 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70DCE241F3A
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Aug 2020 19:29:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ACAE241F5B
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Aug 2020 19:39:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729324AbgHKR3m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Aug 2020 13:29:42 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:48795 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729258AbgHKR3g (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Aug 2020 13:29:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1597166974;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/kCCiP1A994GEPhfTMliHq1uK+Sv/vNDYIXMua8VMzw=;
-        b=IqDuLgB6JJNeR0UFLOWa+giGAEu2+7S1ZRnVivBFGZEbewfUjRrQAnRG12cJjwF7TFt6Eu
-        wHQ1do3sBMR1J6aD/tuz9H6GlecmHeebI2mFspeJrPQpmssjLMiK/UgxIhjcFQ6HgUVLaz
-        bsatkcLL428CRS2XQa0/Q/SBxS92AGQ=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-449-2nyRLVfBMhGmF44vPv2c0Q-1; Tue, 11 Aug 2020 13:29:32 -0400
-X-MC-Unique: 2nyRLVfBMhGmF44vPv2c0Q-1
-Received: by mail-qt1-f200.google.com with SMTP id w15so10302425qtv.11
-        for <linux-usb@vger.kernel.org>; Tue, 11 Aug 2020 10:29:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=/kCCiP1A994GEPhfTMliHq1uK+Sv/vNDYIXMua8VMzw=;
-        b=iTUiZhkrHZwk0jL5wKJ9ya9yFt69o9Yh1B5BTmI0JIEX8D67AS0wrvsQZmslSOdR0i
-         C8uVgsHXUx1uFIZc/db/qTEOwsBmL1UIX/Ll77gXD960zQQmw5LGm7HKtPvq9A/56dVP
-         CtyRp5Mg19omgh2IANm1vRvxFYYo2BpkYJGPOVUUyI8h+CkuymOS+COQBYMrGusy0vTZ
-         tUlJrK9aIFgVmvnRNyztOdQu3w89R5s5SkLHqxE26isa2Wax81ksX7EqKgRNddb9L4yH
-         gVMk2PwQFbmG8qtxKMhq0Czs/6xM8ACI09+Rfvyi4rLO6qEVzH1aaV1mxvwf3Q0vurJQ
-         RBBA==
-X-Gm-Message-State: AOAM530iYlpFREG5K+dy2iBN/9tGNWhWZVNRYQ9xpkEEq7UQpr9PoVw9
-        uP7vOlthRK0jHrbe2aatShISvRoWXn4wQnQm8wXPKjAmb+e4RZpMgvWcwo2XkG1xtaRZhnjgoYe
-        ARKtcJgUEJvDR5U5/Wijt
-X-Received: by 2002:ac8:6e87:: with SMTP id c7mr2347335qtv.62.1597166971940;
-        Tue, 11 Aug 2020 10:29:31 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyL8bEYELl1qXi1MXs8Z4bGDTdMzjg5IXgTDDjBowuqwx+PFGWiyKTQTphCbSqHo0N18EI7IQ==
-X-Received: by 2002:ac8:6e87:: with SMTP id c7mr2347311qtv.62.1597166971642;
-        Tue, 11 Aug 2020 10:29:31 -0700 (PDT)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id g55sm20376876qta.94.2020.08.11.10.29.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Aug 2020 10:29:31 -0700 (PDT)
-Subject: Re: [PATCH] USB: realtek_cr: fix return check for dma functions
+        id S1729079AbgHKRjP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Aug 2020 13:39:15 -0400
+Received: from mx2.suse.de ([195.135.220.15]:42014 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728862AbgHKRjO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 11 Aug 2020 13:39:14 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 861EDB6B4;
+        Tue, 11 Aug 2020 17:39:34 +0000 (UTC)
+Message-ID: <1597167552.28022.4.camel@suse.com>
+Subject: Re: [RFC]mooring API
+From:   Oliver Neukum <oneukum@suse.com>
 To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     gregkh@linuxfoundation.org, acozzette@cs.hmc.edu,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        linux-kernel@vger.kernel.org
-References: <20200811151505.12222-1-trix@redhat.com>
- <20200811160348.GD335280@rowland.harvard.edu>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <1f7d5a64-f264-4fed-bf90-b64e2693652d@redhat.com>
-Date:   Tue, 11 Aug 2020 10:29:29 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
-MIME-Version: 1.0
-In-Reply-To: <20200811160348.GD335280@rowland.harvard.edu>
-Content-Type: text/plain; charset=utf-8
+Cc:     Eli Billauer <eli.billauer@gmail.com>, linux-usb@vger.kernel.org
+Date:   Tue, 11 Aug 2020 19:39:12 +0200
+In-Reply-To: <20200810151723.GE299045@rowland.harvard.edu>
+References: <1596722827.2488.8.camel@suse.com>
+         <20200806152039.GC197575@rowland.harvard.edu>
+         <1597070118.2515.3.camel@suse.com>
+         <20200810151723.GE299045@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Am Montag, den 10.08.2020, 11:17 -0400 schrieb Alan Stern:
+> On Mon, Aug 10, 2020 at 04:35:18PM +0200, Oliver Neukum wrote:
 
-On 8/11/20 9:03 AM, Alan Stern wrote:
-> On Tue, Aug 11, 2020 at 08:15:05AM -0700, trix@redhat.com wrote:
->> From: Tom Rix <trix@redhat.com>
->>
->> clang static analysis reports this representative problem
->>
->> realtek_cr.c:639:3: warning: The left expression of the compound
->>   assignment is an uninitialized value. The computed value will
->>   also be garbage
->>     SET_BIT(value, 2);
->>     ^~~~~~~~~~~~~~~~~
->>
->> value is set by a successful call to rts51x_read_mem()
->>
->> 	retval = rts51x_read_mem(us, 0xFE77, &value, 1);
->> 	if (retval < 0)
->> 		return -EIO;
->>
->> A successful call to rts51x_read_mem returns 0, failure can
->> return positive and negative values.  This check is wrong
->> for a number of functions.  Fix the retval check.
->>
->> Fixes: 065e60964e29 ("ums_realtek: do not use stack memory for DMA")
->> Signed-off-by: Tom Rix <trix@redhat.com>
->> ---
->>  drivers/usb/storage/realtek_cr.c | 36 ++++++++++++++++----------------
->>  1 file changed, 18 insertions(+), 18 deletions(-)
->>
->> diff --git a/drivers/usb/storage/realtek_cr.c b/drivers/usb/storage/realtek_cr.c
->> index 3789698d9d3c..b983753e2368 100644
->> --- a/drivers/usb/storage/realtek_cr.c
->> +++ b/drivers/usb/storage/realtek_cr.c
->> @@ -481,16 +481,16 @@ static int enable_oscillator(struct us_data *us)
->>  	u8 value;
->>  
->>  	retval = rts51x_read_mem(us, 0xFE77, &value, 1);
->> -	if (retval < 0)
->> +	if (retval != STATUS_SUCCESS)
->>  		return -EIO;
-> Instead of changing all these call sites, wouldn't it be a lot easier 
-> just to change rts51x_read_mem() to make it always return a negative 
-> value (such as -EIO) when there's an error?
->
-> Alan Stern
+> 
+> You mean, the URB could have been anchored already, but another CPU 
+> could moor it just as this CPU is unachoring it?
 
-I thought about that but there was already existing (retval != STATUS_SUCCESS) checks for these calls.
+I was worrying about accidental unanchoring of a moored URB, actually.
 
-Tom
+> For one thing, I doubt that a single smp_rmb() will provide any real 
+> protection.  For another, it would be best to just avoid races in the 
+> first place.  Can you think of any use case where it makes sense to moor 
+> an URB just as it is completing (or indeed at any time while it is 
+> active)?
 
->
+No, I am removing it.
+
+
+> I should have said: require drivers that want to unmoor an URB to do so 
+> either before it is submitted or in (or after) the completion handler.  
+> In other words, don't moor or unmoor an URB while it is active.  How 
+> about that?
+
+Entirely reasonable.
+
+> > What do you think of the API itself?
+> 
+> It looks fine as far as I can tell.  But I haven't worked on any drivers 
+> that use anchors.
+
+Writing decent documentation for that is actually hard. Any sugestions?
+
+	Regards
+		Oliver
+
+From 3caa2aa250808a86529302c6553dfcce93bf2927 Mon Sep 17 00:00:00 2001
+From: Oliver Neukum <oneukum@suse.com>
+Date: Tue, 28 Jul 2020 11:38:23 +0200
+Subject: [PATCH] USB: add mooring API
+
+This is a simplified and thereby better version of the anchor API.
+Anchors have the problem that they unanchor an URB upon giveback,
+which creates a window during which an URB is unanchored but not
+yet returned, leading to operations on anchors not having the
+semantics many driver errornously assume them to have.
+The new API keeps an URB on an anchor until it is explicitly
+unmoored.
+
+Signed-off-by: Oliver Neukum <oneukum@suse.de>
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/usb/core/hcd.c |  3 ++-
+ drivers/usb/core/urb.c | 27 ++++++++++++++++++++++++++-
+ include/linux/usb.h    |  3 +++
+ 3 files changed, 31 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+index a33b849e8beb..5cebbc2b3600 100644
+--- a/drivers/usb/core/hcd.c
++++ b/drivers/usb/core/hcd.c
+@@ -1640,7 +1640,8 @@ static void __usb_hcd_giveback_urb(struct urb *urb)
+ 	unmap_urb_for_dma(hcd, urb);
+ 	usbmon_urb_complete(&hcd->self, urb, status);
+ 	usb_anchor_suspend_wakeups(anchor);
+-	usb_unanchor_urb(urb);
++	if (!urb->moored)
++		usb_unanchor_urb(urb);
+ 	if (likely(status == 0))
+ 		usb_led_activity(USB_LED_EVENT_HOST);
+ 
+diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
+index 7bc23469f4e4..ee3c6c7c2630 100644
+--- a/drivers/usb/core/urb.c
++++ b/drivers/usb/core/urb.c
+@@ -123,7 +123,7 @@ EXPORT_SYMBOL_GPL(usb_get_urb);
+  * This can be called to have access to URBs which are to be executed
+  * without bothering to track them
+  */
+-void usb_anchor_urb(struct urb *urb, struct usb_anchor *anchor)
++static void __usb_anchor_urb(struct urb *urb, struct usb_anchor *anchor)
+ {
+ 	unsigned long flags;
+ 
+@@ -137,8 +137,20 @@ void usb_anchor_urb(struct urb *urb, struct usb_anchor *anchor)
+ 
+ 	spin_unlock_irqrestore(&anchor->lock, flags);
+ }
++
++void usb_anchor_urb(struct urb *urb, struct usb_anchor *anchor)
++{
++	__usb_anchor_urb(urb, anchor);
++}
+ EXPORT_SYMBOL_GPL(usb_anchor_urb);
+ 
++void usb_moor_urb(struct urb *urb, struct usb_anchor *anchor)
++{
++	urb->moored = true;
++	__usb_anchor_urb(urb, anchor);
++}
++EXPORT_SYMBOL_GPL(usb_moor_urb);
++
+ static int usb_anchor_check_wakeup(struct usb_anchor *anchor)
+ {
+ 	return atomic_read(&anchor->suspend_wakeups) == 0 &&
+@@ -185,6 +197,19 @@ void usb_unanchor_urb(struct urb *urb)
+ }
+ EXPORT_SYMBOL_GPL(usb_unanchor_urb);
+ 
++void usb_unmoor_urb(struct urb *urb)
++{
++	struct usb_anchor *anchor;
++
++	urb->moored = false;
++	anchor = urb->anchor;
++	if (!anchor)
++		return;
++
++	__usb_unanchor_urb(urb, anchor);
++}
++EXPORT_SYMBOL_GPL(usb_unmoor_urb);
++
+ /*-------------------------------------------------------------------*/
+ 
+ static const int pipetypes[4] = {
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index 20c555db4621..b9e1464a2552 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -1565,6 +1565,7 @@ struct urb {
+ 	void *hcpriv;			/* private data for host controller */
+ 	atomic_t use_count;		/* concurrent submissions counter */
+ 	atomic_t reject;		/* submissions will fail */
++	bool moored;			/* the URB is moored not anchored */
+ 
+ 	/* public: documented fields in the urb that can be used by drivers */
+ 	struct list_head urb_list;	/* list head for use by the urb's
+@@ -1732,6 +1733,8 @@ extern void usb_anchor_suspend_wakeups(struct usb_anchor *anchor);
+ extern void usb_anchor_resume_wakeups(struct usb_anchor *anchor);
+ extern void usb_anchor_urb(struct urb *urb, struct usb_anchor *anchor);
+ extern void usb_unanchor_urb(struct urb *urb);
++extern void usb_moor_urb(struct urb *urb, struct usb_anchor *anchor);
++extern void usb_unmoor_urb(struct urb *urb);
+ extern int usb_wait_anchor_empty_timeout(struct usb_anchor *anchor,
+ 					 unsigned int timeout);
+ extern struct urb *usb_get_from_anchor(struct usb_anchor *anchor);
+-- 
+2.16.4
+
 
