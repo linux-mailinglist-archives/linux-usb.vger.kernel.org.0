@@ -2,105 +2,233 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D81B5241C8C
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Aug 2020 16:38:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CE54241D01
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Aug 2020 17:15:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728830AbgHKOii (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Aug 2020 10:38:38 -0400
-Received: from mga03.intel.com ([134.134.136.65]:63132 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728783AbgHKOih (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 11 Aug 2020 10:38:37 -0400
-IronPort-SDR: eEfmuh2tYJIs8xG5mENvLyAFw9wP23wcuDvc42JEFxnpDHdiDiQL69dVZZ+UpMJOs64Af1DQNf
- e2l6wT8/Ligw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9710"; a="153716507"
-X-IronPort-AV: E=Sophos;i="5.76,461,1592895600"; 
-   d="scan'208";a="153716507"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2020 07:38:36 -0700
-IronPort-SDR: Nx76xLg49REiDVzBeRo2QG4Jq1uLrDICOx6ARs93zhCQ9zngHeUpOitdEG8lGLwyKkq99SUwc5
- o12gO+xe7jCw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,461,1592895600"; 
-   d="scan'208";a="398544463"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 11 Aug 2020 07:38:33 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 11 Aug 2020 17:38:33 +0300
-Date:   Tue, 11 Aug 2020 17:38:33 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tobias Schramm <t.schramm@manjaro.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 2/4] usb: typec: Add
- typec_port_register_altmodes_from_fwnode()
-Message-ID: <20200811143833.GC627773@kuha.fi.intel.com>
-References: <20200714113617.10470-1-hdegoede@redhat.com>
- <20200714113617.10470-3-hdegoede@redhat.com>
- <20200727130528.GB883641@kuha.fi.intel.com>
- <469f369a-73f4-c348-b9ee-1662956f45be@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <469f369a-73f4-c348-b9ee-1662956f45be@redhat.com>
+        id S1728844AbgHKPPQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Aug 2020 11:15:16 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:26402 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728721AbgHKPPP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Aug 2020 11:15:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1597158913;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=3esd2ry+DBaV82mVE8iUIQ1zvcp2TStZOt6XF639RHg=;
+        b=M8nSRFu26nPZbliv3K73wfvZqdHqIjab4GFWv8QZLozIKuUys9V44McBRiAbhzqPCZNzgt
+        aAPqs9nYcVTzBrfkeyZMg5q+NZdUoG4CNS2jEZAf6OGd45oeEMzPihOs1wW9DasycV4yT2
+        JZw3Xhh+o673SD4l9aIJNRmWZzEsxLQ=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-198-k2YUwox8M6-tUX8-xp1XzQ-1; Tue, 11 Aug 2020 11:15:12 -0400
+X-MC-Unique: k2YUwox8M6-tUX8-xp1XzQ-1
+Received: by mail-qt1-f200.google.com with SMTP id m13so9998862qth.16
+        for <linux-usb@vger.kernel.org>; Tue, 11 Aug 2020 08:15:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=3esd2ry+DBaV82mVE8iUIQ1zvcp2TStZOt6XF639RHg=;
+        b=AndeSaLgATKeE++c8T5JwbAJuXNnBiUU0fwdyLGQxSc0ExtiJ/73WJ/86gMADeqTJt
+         /JetBsikAD2L+0d0Z8M0oIDlf9732iRKIGD3yMVFpNtnENnoTC15Wjd4nVH6DpUBDmS7
+         LYsJ4FJ7MHbxkLcRWowItMlqncX1xrlg2dDrN4rkvZZ3UiNNpwBUVsUVzuwNIQaTbFVk
+         +sGUsgX5ar8c20b+KVj2OmuBp6Gi8JW4WYG021hPR+FErpUvf2lsAPmaRrPw1omLe4zW
+         ckmENkd+0iYVMyClYQhM0WDvzqtm4npu0ncFt6pu1wegEvbm+hBp7mOaYNbew5LFXEj2
+         d0zg==
+X-Gm-Message-State: AOAM530Yt67r7M8OT1WcHQwnDNDyuhLM7q31aBOlZaMjQ6/Sr53WWSyL
+        n13ykfUaYFgGjW7lonPeSO7UG3zjIGKqPRx9vNlMA6bCFbSdWC/s9qTUpAZ4zWZV3WddXMk13JN
+        H6NrHp42UDBnzaWA5wLGV
+X-Received: by 2002:a0c:9b85:: with SMTP id o5mr1806902qve.11.1597158911544;
+        Tue, 11 Aug 2020 08:15:11 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwGcJOYBsolI3rpKndVyNpm8v41rYZuU02gZc73pUkYiYEtHjtRWWW9Z1ky0FlZWFTQeDRHsg==
+X-Received: by 2002:a0c:9b85:: with SMTP id o5mr1806860qve.11.1597158911195;
+        Tue, 11 Aug 2020 08:15:11 -0700 (PDT)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id 8sm16358892qkh.77.2020.08.11.08.15.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Aug 2020 08:15:10 -0700 (PDT)
+From:   trix@redhat.com
+To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
+        acozzette@cs.hmc.edu
+Cc:     linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] USB: realtek_cr: fix return check for dma functions
+Date:   Tue, 11 Aug 2020 08:15:05 -0700
+Message-Id: <20200811151505.12222-1-trix@redhat.com>
+X-Mailer: git-send-email 2.18.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+From: Tom Rix <trix@redhat.com>
 
-> > > +void typec_port_register_altmodes_from_fwnode(struct typec_port *port,
-> > > +	const struct typec_altmode_ops *ops, void *drvdata,
-> > > +	struct typec_altmode **altmodes, size_t n,
-> > > +	struct fwnode_handle *fwnode)
-> > > +{
-> > > +	struct fwnode_handle *altmodes_node, *child;
-> > > +	struct typec_altmode_desc desc;
-> > > +	struct typec_altmode *alt;
-> > > +	size_t index = 0;
-> > > +	u32 svid, vdo;
-> > > +	int ret;
-> > > +
-> > > +	altmodes_node = fwnode_get_named_child_node(fwnode, "altmodes");
-> > > +	if (!altmodes_node)
-> > > +		return;
-> > 
-> > Do we need that? Why not just make the sub-nodes describing the
-> > alternate modes direct children of the connector node instead of
-> > grouping them under a special sub-node?
-> 
-> If you envision how this will look in e.g. DTS sources then I think
-> you will see that this grouping keeps the DTS source code more
-> readable. Grouping things together like this is somewhat normal in
-> devicetree files. E.g. PMIC's or other regulator providers typical
-> have a "regulators" node grouping all their regulators; and also the OF
-> graph bindings which are used in the USB-connector node start with a
-> "ports" parent / grouping node.
-> 
-> > If the child node of the connector has device properties "svid" and
-> > "vdo" then it is an alt mode that the connector supports, and it can't
-> > be anything else, no?
-> 
-> If you want to get rid of the altmodes parent/grouping node, then the
-> usual way to do this would be to add a compatible string to the nodes,
-> rather then check for the existence of some properties.
+clang static analysis reports this representative problem
 
-I'm looking at this from ACPI PoW. We do not have compatible string in
-ACPI (and in case you are wondering, the _HID PRP0001 is not a
-reliable solution for that).
+realtek_cr.c:639:3: warning: The left expression of the compound
+  assignment is an uninitialized value. The computed value will
+  also be garbage
+    SET_BIT(value, 2);
+    ^~~~~~~~~~~~~~~~~
 
-If you wish to group the altmodes under a subnode, then that's fine, but
-the "altmodes" node will need to be optional, just like the "ports"
-OF-graph node is optional. So we need to be able to support systems
-where the alternate mode subnodes are directly under the connector as
-well.
+value is set by a successful call to rts51x_read_mem()
 
-thanks,
+	retval = rts51x_read_mem(us, 0xFE77, &value, 1);
+	if (retval < 0)
+		return -EIO;
 
+A successful call to rts51x_read_mem returns 0, failure can
+return positive and negative values.  This check is wrong
+for a number of functions.  Fix the retval check.
+
+Fixes: 065e60964e29 ("ums_realtek: do not use stack memory for DMA")
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/usb/storage/realtek_cr.c | 36 ++++++++++++++++----------------
+ 1 file changed, 18 insertions(+), 18 deletions(-)
+
+diff --git a/drivers/usb/storage/realtek_cr.c b/drivers/usb/storage/realtek_cr.c
+index 3789698d9d3c..b983753e2368 100644
+--- a/drivers/usb/storage/realtek_cr.c
++++ b/drivers/usb/storage/realtek_cr.c
+@@ -481,16 +481,16 @@ static int enable_oscillator(struct us_data *us)
+ 	u8 value;
+ 
+ 	retval = rts51x_read_mem(us, 0xFE77, &value, 1);
+-	if (retval < 0)
++	if (retval != STATUS_SUCCESS)
+ 		return -EIO;
+ 
+ 	value |= 0x04;
+ 	retval = rts51x_write_mem(us, 0xFE77, &value, 1);
+-	if (retval < 0)
++	if (retval != STATUS_SUCCESS)
+ 		return -EIO;
+ 
+ 	retval = rts51x_read_mem(us, 0xFE77, &value, 1);
+-	if (retval < 0)
++	if (retval != STATUS_SUCCESS)
+ 		return -EIO;
+ 
+ 	if (!(value & 0x04))
+@@ -533,7 +533,7 @@ static int do_config_autodelink(struct us_data *us, int enable, int force)
+ 	u8 value;
+ 
+ 	retval = rts51x_read_mem(us, 0xFE47, &value, 1);
+-	if (retval < 0)
++	if (retval != STATUS_SUCCESS)
+ 		return -EIO;
+ 
+ 	if (enable) {
+@@ -549,7 +549,7 @@ static int do_config_autodelink(struct us_data *us, int enable, int force)
+ 
+ 	/* retval = rts51x_write_mem(us, 0xFE47, &value, 1); */
+ 	retval = __do_config_autodelink(us, &value, 1);
+-	if (retval < 0)
++	if (retval != STATUS_SUCCESS)
+ 		return -EIO;
+ 
+ 	return 0;
+@@ -565,7 +565,7 @@ static int config_autodelink_after_power_on(struct us_data *us)
+ 		return 0;
+ 
+ 	retval = rts51x_read_mem(us, 0xFE47, &value, 1);
+-	if (retval < 0)
++	if (retval != STATUS_SUCCESS)
+ 		return -EIO;
+ 
+ 	if (auto_delink_en) {
+@@ -580,7 +580,7 @@ static int config_autodelink_after_power_on(struct us_data *us)
+ 
+ 		/* retval = rts51x_write_mem(us, 0xFE47, &value, 1); */
+ 		retval = __do_config_autodelink(us, &value, 1);
+-		if (retval < 0)
++		if (retval != STATUS_SUCCESS)
+ 			return -EIO;
+ 
+ 		retval = enable_oscillator(us);
+@@ -602,18 +602,18 @@ static int config_autodelink_after_power_on(struct us_data *us)
+ 
+ 		/* retval = rts51x_write_mem(us, 0xFE47, &value, 1); */
+ 		retval = __do_config_autodelink(us, &value, 1);
+-		if (retval < 0)
++		if (retval != STATUS_SUCCESS)
+ 			return -EIO;
+ 
+ 		if (CHECK_ID(chip, 0x0159, 0x5888)) {
+ 			value = 0xFF;
+ 			retval = rts51x_write_mem(us, 0xFE79, &value, 1);
+-			if (retval < 0)
++			if (retval != STATUS_SUCCESS)
+ 				return -EIO;
+ 
+ 			value = 0x01;
+ 			retval = rts51x_write_mem(us, 0x48, &value, 1);
+-			if (retval < 0)
++			if (retval != STATUS_SUCCESS)
+ 				return -EIO;
+ 		}
+ 	}
+@@ -633,37 +633,37 @@ static int config_autodelink_before_power_down(struct us_data *us)
+ 
+ 	if (auto_delink_en) {
+ 		retval = rts51x_read_mem(us, 0xFE77, &value, 1);
+-		if (retval < 0)
++		if (retval != STATUS_SUCCESS)
+ 			return -EIO;
+ 
+ 		SET_BIT(value, 2);
+ 		retval = rts51x_write_mem(us, 0xFE77, &value, 1);
+-		if (retval < 0)
++		if (retval != STATUS_SUCCESS)
+ 			return -EIO;
+ 
+ 		if (CHECK_ID(chip, 0x0159, 0x5888)) {
+ 			value = 0x01;
+ 			retval = rts51x_write_mem(us, 0x48, &value, 1);
+-			if (retval < 0)
++			if (retval != STATUS_SUCCESS)
+ 				return -EIO;
+ 		}
+ 
+ 		retval = rts51x_read_mem(us, 0xFE47, &value, 1);
+-		if (retval < 0)
++		if (retval != STATUS_SUCCESS)
+ 			return -EIO;
+ 
+ 		SET_BIT(value, 0);
+ 		if (CHECK_ID(chip, 0x0138, 0x3882))
+ 			SET_BIT(value, 2);
+ 		retval = rts51x_write_mem(us, 0xFE77, &value, 1);
+-		if (retval < 0)
++		if (retval != STATUS_SUCCESS)
+ 			return -EIO;
+ 	} else {
+ 		if (CHECK_ID(chip, 0x0159, 0x5889) ||
+ 		    CHECK_ID(chip, 0x0138, 0x3880) ||
+ 		    CHECK_ID(chip, 0x0138, 0x3882)) {
+ 			retval = rts51x_read_mem(us, 0xFE47, &value, 1);
+-			if (retval < 0)
++			if (retval != STATUS_SUCCESS)
+ 				return -EIO;
+ 
+ 			if (CHECK_ID(chip, 0x0159, 0x5889) ||
+@@ -677,14 +677,14 @@ static int config_autodelink_before_power_down(struct us_data *us)
+ 
+ 			/* retval = rts51x_write_mem(us, 0xFE47, &value, 1); */
+ 			retval = __do_config_autodelink(us, &value, 1);
+-			if (retval < 0)
++			if (retval != STATUS_SUCCESS)
+ 				return -EIO;
+ 		}
+ 
+ 		if (CHECK_ID(chip, 0x0159, 0x5888)) {
+ 			value = 0x01;
+ 			retval = rts51x_write_mem(us, 0x48, &value, 1);
+-			if (retval < 0)
++			if (retval != STATUS_SUCCESS)
+ 				return -EIO;
+ 		}
+ 	}
 -- 
-heikki
+2.18.1
+
