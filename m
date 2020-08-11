@@ -2,117 +2,219 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DAFC241878
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Aug 2020 10:49:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D70132418BA
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Aug 2020 11:12:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728383AbgHKItX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Aug 2020 04:49:23 -0400
-Received: from mga06.intel.com ([134.134.136.31]:5597 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728301AbgHKItX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 11 Aug 2020 04:49:23 -0400
-IronPort-SDR: oBEgQenW7Xvw3xd945JvGpy2rB84uc15GwYzjNopmZJ/MOycshNV7nGXrzIngvVfLC3sYqQwZP
- XN5T4LuYC8sw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9709"; a="215210977"
-X-IronPort-AV: E=Sophos;i="5.75,460,1589266800"; 
-   d="scan'208";a="215210977"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2020 01:49:21 -0700
-IronPort-SDR: IjDMjOjtMt5NrsPQQQhQG5ppu9k/6vRzxFy9SnlCF1inWJL2ZuVvgbjwN5CxLjn+lOhn+EJU4K
- 9qcllnVS6xCQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,460,1589266800"; 
-   d="scan'208";a="276244986"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by fmsmga007.fm.intel.com with ESMTP; 11 Aug 2020 01:49:20 -0700
-Subject: Re: [PATCH] xhci: Do warm-reset when both CAS and XDEV_RESUME are set
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        mathias.nyman@intel.com
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20200810140753.6639-1-kai.heng.feng@canonical.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- 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 fiD/
-Message-ID: <171f8ce9-2fdf-9b8b-9dfe-2b24e5a4b1a1@linux.intel.com>
-Date:   Tue, 11 Aug 2020 11:52:39 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1728405AbgHKJMb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Aug 2020 05:12:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58552 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728355AbgHKJMa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Aug 2020 05:12:30 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD18C06174A;
+        Tue, 11 Aug 2020 02:12:28 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id g6so12652738ljn.11;
+        Tue, 11 Aug 2020 02:12:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=Eqc+3NbaxwoojpJ4wCmnVzMHGK5tFF910hokAKhwEAQ=;
+        b=QGaJh62swSOyNJSej4GYVVg1+IdjpM91enN86WzVB5D+VT3gJ4F2gVyA67n+QbKlwi
+         vOTvwRtaSkKpVxiRAM6wu07GI0JFfpOm8/6lScOdsMeg9mVzJW0sJjUcEG8LePKK5UzG
+         vOmRdtSMMmGeXonsMVc+4kuQntv6eIFkgFRChGKD0yE7iLNJhb781Qegs1T/6rjUmYSY
+         yHHMHg6aSyFt7wH61PFJNXIJLwCtHc/CnVtcnIvwMNol9qgLVN0L4hoiwDdWAnXfpp6d
+         7C3oBFWGT6N6Sq5YOV1MyyY5dEVm//TnIWGtn5HxSJ2+FFCMhhYhgY3tXa85AwwGEY5K
+         kO1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=Eqc+3NbaxwoojpJ4wCmnVzMHGK5tFF910hokAKhwEAQ=;
+        b=BUGSmkK2CbeLYf1+o60B+F3yS99E892Zdt71hMaH1zwRrYjTs6hq8zJJMzCcEDpsU+
+         J1TkAGtLqa74N+ExkqpGGABUj9r4oPHWQrrwRjUWEmEFLvOs2UxM8P9Rv2LdK/W67Dbl
+         gNokHJcd3AD42Dt+LiV29LDDt+PHHinmMQxrU4Tcrn4DXGpzZ6G6x5pZOGx0itHpTAT/
+         v5Z2JByJA2y06GuKZPt6DtzeKMwZ65YcBVzEJK3KUbFZbTRZP8hA3YczwXLgMGWXytcy
+         mP/EoHQnlGz5gslXISTCao3tICIXshl3/3m4kijnop4pZsSTv1y5TFEDgjIVwLCoCjGe
+         9qvg==
+X-Gm-Message-State: AOAM533fHwVsdqVrVtchwmqorfIKe8D7ybF1KYB94Bk4Fnal+yUx/Nem
+        Ko6n2nn4mSxSSp/ilAObqFA=
+X-Google-Smtp-Source: ABdhPJyywIbiOv+zXy+wOQ3SXRh/6kavcG9IMhbtAn8xZQHQnrTcXEUm0BS+Ph7ZWqu7cv6m9U017Q==
+X-Received: by 2002:a2e:3c10:: with SMTP id j16mr2740226lja.324.1597137147094;
+        Tue, 11 Aug 2020 02:12:27 -0700 (PDT)
+Received: from saruman ([194.34.132.58])
+        by smtp.gmail.com with ESMTPSA id d20sm11416961lfn.85.2020.08.11.02.12.24
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 11 Aug 2020 02:12:26 -0700 (PDT)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Sandeep Maheswaram <sanm@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Michael Turquette <mturquette@baylibre.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manu Gautam <mgautam@codeaurora.org>,
+        linux-clk@vger.kernel.org, Taniya Das <tdas@codeaurora.org>,
+        Sandeep Maheswaram <sanm@codeaurora.org>
+Subject: Re: [PATCH 2/2] usb: dwc3: Host wake up support from system suspend
+In-Reply-To: <1591885683-29514-3-git-send-email-sanm@codeaurora.org>
+References: <1591885683-29514-1-git-send-email-sanm@codeaurora.org> <1591885683-29514-3-git-send-email-sanm@codeaurora.org>
+Date:   Tue, 11 Aug 2020 12:12:20 +0300
+Message-ID: <874kp9pmvf.fsf@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20200810140753.6639-1-kai.heng.feng@canonical.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10.8.2020 17.07, Kai-Heng Feng wrote:
-> Sometimes re-plugging a USB device during system sleep renders the device
-> useless:
-> [  173.418345] xhci_hcd 0000:00:14.0: Get port status 2-4 read: 0x14203e2, return 0x10262
-> ...
-> [  176.496485] usb 2-4: Waited 2000ms for CONNECT
-> [  176.496781] usb usb2-port4: status 0000.0262 after resume, -19
-> [  176.497103] usb 2-4: can't resume, status -19
-> [  176.497438] usb usb2-port4: logical disconnect
-> 
-> Because PLS equals to XDEV_RESUME, xHCI driver reports U3 to usbcore,
-> despite of CAS bit is flagged.
-> 
-> So proritize CAS over XDEV_RESUME to let usbcore handle warm-reset for
-> the port.
-> 
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+
+Sandeep Maheswaram <sanm@codeaurora.org> writes:
+
+> Avoiding phy powerdown in host mode so that it can be wake up by devices.
+> Set usb controller wakeup capable when wakeup capable devices are
+> connected to the host.
+>
+> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
 > ---
+>  drivers/usb/dwc3/core.c      | 47 ++++++++++++++++++++++++++-----
+>  drivers/usb/dwc3/core.h      |  1 +
+>  drivers/usb/dwc3/dwc3-qcom.c | 66 +++++++++++++++++++++++++++++++++-----=
+------
+>  3 files changed, 91 insertions(+), 23 deletions(-)
+>
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index 25c686a7..8370350 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -31,15 +31,19 @@
+>  #include <linux/usb/gadget.h>
+>  #include <linux/usb/of.h>
+>  #include <linux/usb/otg.h>
+> +#include <linux/usb/hcd.h>
+>=20=20
+>  #include "core.h"
+>  #include "gadget.h"
+>  #include "io.h"
+>=20=20
+>  #include "debug.h"
+> +#include "../host/xhci.h"
 
-Thanks, nice catch.
-Adding to queue
+nope
 
--Mathias
+>  #define DWC3_DEFAULT_AUTOSUSPEND_DELAY	5000 /* ms */
+>=20=20
+> +bool need_phy_for_wakeup;
 
+nope
+
+> +
+>  /**
+>   * dwc3_get_dr_mode - Validates and sets dr_mode
+>   * @dwc: pointer to our context structure
+> @@ -1627,10 +1631,36 @@ static int dwc3_core_init_for_resume(struct dwc3 =
+*dwc)
+>  	return ret;
+>  }
+>=20=20
+> +static void dwc3_set_phy_speed_flags(struct dwc3 *dwc)
+> +{
+> +
+> +	int i, num_ports;
+> +	u32 reg;
+> +	struct usb_hcd	*hcd =3D platform_get_drvdata(dwc->xhci);
+> +	struct xhci_hcd	*xhci_hcd =3D hcd_to_xhci(hcd);
+> +
+> +	dwc->hs_phy_flags &=3D ~(PHY_MODE_USB_HOST_HS | PHY_MODE_USB_HOST_LS);
+> +
+> +	reg =3D readl(&xhci_hcd->cap_regs->hcs_params1);
+> +
+> +	num_ports =3D HCS_MAX_PORTS(reg);
+> +	for (i =3D 0; i < num_ports; i++) {
+> +		reg =3D readl(&xhci_hcd->op_regs->port_status_base + i*0x10);
+> +		if (reg & PORT_PE) {
+> +			if (DEV_HIGHSPEED(reg) || DEV_FULLSPEED(reg))
+> +				dwc->hs_phy_flags |=3D PHY_MODE_USB_HOST_HS;
+> +			else if (DEV_LOWSPEED(reg))
+> +				dwc->hs_phy_flags |=3D PHY_MODE_USB_HOST_LS;
+> +		}
+> +	}
+> +	phy_set_mode(dwc->usb2_generic_phy, dwc->hs_phy_flags);
+
+XHCI already supports PHY framework, no?
+
+>  static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+>  {
+>  	unsigned long	flags;
+>  	u32 reg;
+> +	struct usb_hcd  *hcd =3D platform_get_drvdata(dwc->xhci);
+>=20=20
+>  	switch (dwc->current_dr_role) {
+>  	case DWC3_GCTL_PRTCAP_DEVICE:
+> @@ -1643,9 +1673,10 @@ static int dwc3_suspend_common(struct dwc3 *dwc, p=
+m_message_t msg)
+>  		dwc3_core_exit(dwc);
+>  		break;
+>  	case DWC3_GCTL_PRTCAP_HOST:
+> +		dwc3_set_phy_speed_flags(dwc);
+>  		if (!PMSG_IS_AUTO(msg)) {
+> -			dwc3_core_exit(dwc);
+> -			break;
+> +			if (usb_wakeup_enabled_descendants(hcd->self.root_hub))
+> +				need_phy_for_wakeup =3D true;
+
+should be done in xhci-plat
+
+> @@ -1705,11 +1736,13 @@ static int dwc3_resume_common(struct dwc3 *dwc, p=
+m_message_t msg)
+>  		break;
+>  	case DWC3_GCTL_PRTCAP_HOST:
+>  		if (!PMSG_IS_AUTO(msg)) {
+> -			ret =3D dwc3_core_init_for_resume(dwc);
+> -			if (ret)
+> -				return ret;
+> -			dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
+> -			break;
+> +			if (!need_phy_for_wakeup) {
+> +				ret =3D dwc3_core_init_for_resume(dwc);
+> +				if (ret)
+> +					return ret;
+> +				dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
+> +				break;
+
+why?
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl8yYPQACgkQzL64meEa
+mQYzpQ//RlvBlJqDn5YjtLQDgcPnIwSd+Toup6FmId0ZU9y6UA08aKYTxxtjupUq
+kx4XvOOrPY0xggUoWDd1od1LIXfwbRci1os+5J4yEyKT9tANjTZucJZLaYH7j5ki
+mCB1Pf8g5LJ1ol5j/fh7UElA+CJ6ZYFXj3Mky9Knd5T++ve02jLzAhqga1cz3fiL
+NHXkCPt2MqILB8H7NYE8Pytp9DHTElr//+lrVBSkxyqTT8buM/pZ2kfo04nJvO6+
+v2yiq6Edksa+Ky8H5NxOM/Up5Y/anuh6AqLiwvirWl1Ugf1gBV3LxCPunezeIg2I
+hXGJ2xnGX+pJkcFhFT5mac6gQVd2qxPOtaQLWRbuswewykyOhtp7e6yOqma5SjuZ
+7VnYVLZ8By/oRH4/dBAtRSrJyagY2+RWOJFOzF3G6zgx0PrDITwWn9qaYzD5f3FD
+Iy1Ybz1U1O8a+TcB9R7DhfSTLTmWswHT8xniuaqdqXOuJKiTwjBZuBkt9WIzvBAS
+Gnnd2jYpu0DMvS037Wv3mnAcps78rPuG7YeepUEzs3irck0HNvI+DajEh/TVzRpe
+NmzFnb9SsfkoLc+cnFvU/GAW4mlyadxZrqydDVI4zawmqxF+eNqxgP6r21waq8Nq
+KchxxSssP4X7sECoErPZRI6O5zPLk1VaXHg7IyjBvCILWcEskLE=
+=3o7M
+-----END PGP SIGNATURE-----
+--=-=-=--
