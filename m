@@ -2,114 +2,189 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1B8B2414C1
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Aug 2020 04:01:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99D9E2415C3
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Aug 2020 06:37:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728133AbgHKCBb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Aug 2020 22:01:31 -0400
-Received: from mail-am6eur05on2066.outbound.protection.outlook.com ([40.107.22.66]:26904
-        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728088AbgHKCBb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 10 Aug 2020 22:01:31 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AbGV6XA2osAVFaqnx8ONM73ovZMgaxWmjeRrbShmQflLwf5ofrFfprdolo7qXqNn7aCoxuXVZCo7xZMahroocIqL+5L3yvHWSTv+/3mvA6dsRZaugEzDRw88P02CM2VVP71e/gaqYEGr+5TGnkHI87Nf2Q4awStlfvNJEdS9tZwyc+zgvtWSGGT3JbVBdQLEVTas9LFJuBh+bBO/0opT+CyhI8VDsX//+0v4ACEgSkIIw4ZayxawsapXPibWGJ7dI0LuMUr2h/YLE+UrBa8v4WSIFM3OwsKBntUfw6uHBH5AFf4hXuXlPvVTWYxIJ29klxUV4uZJGrgIoXXbNkC0Fg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XsnodHHjfNPBRIU+BlBdiRA8p8D15qBZiO22hZpu6WM=;
- b=TZsg45K96eJQCsfK2BLQBI3Euo0abhey5WL3JZF69xdBYZ8J2FI5IRSJ3pttGBH9PKdD4TXqHdciLPNhwqYQgpdBCoRJwnPP/mbE55/FdX91TYthu7PYeYoCkBqjuAf55HObsA9eEbwTk3buPI6uqEG1Kix3xsBKJJTQuG47zofP1361dmSDxHP89jM1KTyZZu/hIJWZE0i/mbU0tf2EAz0NBpAwCdST/VHSMVE3q8WBAfp8B6WiD6HNB8vbiF3uMXsAunkV3meaR9GUQgylFJFx/YyUanFGy9QUNPIHMtsxMemm2z2jtheo33i6reN08BzfAqVCDjtgoR2NHS1fBA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XsnodHHjfNPBRIU+BlBdiRA8p8D15qBZiO22hZpu6WM=;
- b=lA7CHuY8NdKc1Qa6h5qxzK/aCZhkpoLmkthjOlmpK0GeoGHl/LBI042aY2JdhSYVQbMCdP0sNu8l8sdvkC0viN52P4zXe7L/XvteVacR6yP3fc656QB6keyWaPpaSYs07gqI1CeABGqsq+ll/laQSwJvdvOhyUvRCvBn4KbOcPY=
-Authentication-Results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
- by AM6PR04MB5494.eurprd04.prod.outlook.com (2603:10a6:20b:9f::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3261.16; Tue, 11 Aug
- 2020 02:01:28 +0000
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::ed7f:8755:5994:7fcf]) by AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::ed7f:8755:5994:7fcf%5]) with mapi id 15.20.3261.025; Tue, 11 Aug 2020
- 02:01:28 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     balbi@kernel.org
-Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com, jun.li@nxp.com,
-        Peter Chen <peter.chen@nxp.com>
-Subject: [PATCH 2/2] usb: gadget: core: do not try to disconnect gadget if it is not connected
-Date:   Tue, 11 Aug 2020 10:00:26 +0800
-Message-Id: <20200811020026.25157-2-peter.chen@nxp.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200811020026.25157-1-peter.chen@nxp.com>
-References: <20200811020026.25157-1-peter.chen@nxp.com>
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR01CA0123.apcprd01.prod.exchangelabs.com
- (2603:1096:4:40::27) To AM7PR04MB7157.eurprd04.prod.outlook.com
- (2603:10a6:20b:118::20)
+        id S1726182AbgHKEhM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Aug 2020 00:37:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44278 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725901AbgHKEhL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Aug 2020 00:37:11 -0400
+Received: from mail-oo1-xc41.google.com (mail-oo1-xc41.google.com [IPv6:2607:f8b0:4864:20::c41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B59C061787
+        for <linux-usb@vger.kernel.org>; Mon, 10 Aug 2020 21:37:10 -0700 (PDT)
+Received: by mail-oo1-xc41.google.com with SMTP id a6so2353532oog.9
+        for <linux-usb@vger.kernel.org>; Mon, 10 Aug 2020 21:37:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FPdGPls7XKnK6l88IhsscH6AnhZFYq5rNB+PX3ZFR10=;
+        b=dxM1z0BXDg7afqYJjQfxO/1MwrEEycqlmIvtkr78rcvSx5zSGDmtjx7RfUB4iahSRI
+         hpJKOS62qM66XQvcpwByUcZSxLv8dBj+QgnI/79a5Sj43X1OVTComqFOq7lW9XFjv7dX
+         z3jNtbfL9Fkxt+yFpAwfBGvVB3vhYuMJ/Fuw3m68et3TztY/RQywPJ2asv1CvjSmyTXM
+         WOt0NigS+vakIelTY8UMnqpIQauXZuxERuajNmRqxYkHmfs09Ng0ahY2RATff7JM4zcn
+         ZEFCgYr6mM0EXIlvIc1HlGE4ArISfjFlS82KJeyBXg31Ek4qQ23YHYU00h8EToKdqATd
+         NzQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FPdGPls7XKnK6l88IhsscH6AnhZFYq5rNB+PX3ZFR10=;
+        b=ZFRg1x2T7kEKto2oKDOqk66q1XrqVOp/xezj7CW2dK7CtVBGIk0OX7r4rMPFkHXjY1
+         HIm+OeZTFrCK4xoAlW0s+KnrpBX/XHlDawg0+l68dmCTVNJxZunCuwXVCAaj6wtbKUv3
+         RJJFKx9OiLixfx4j35vRf2mQc2M9g5tZ2KpbT7BEr6MXZaRRA4Vkrs8YrsjrWq+/SU7b
+         WQD1m9aV4EJnNoWxtdMtFl++19x1lUT/IA7/bGk72/iI2WOxd6cO3qVbWP1Y7KH8AaOS
+         TBBV1pUx4y6JdPfyNHJdkbjYbb0m+UP8Rk2hTCctQ51dhc4zWk0HvAaIXoH86FcCaHS0
+         APsg==
+X-Gm-Message-State: AOAM530XS1SfxN9VGPe2UZZA3W7EJaLWzsLORooUA2HPKKCsQEYTeJEP
+        one/hyfyxmP8DPaTm5+xKG3PbiAXTfrOoj+R2CVjQQ==
+X-Google-Smtp-Source: ABdhPJxM9JRpnyVw1z5GDRbBjP7hicHOZu1FavU7lQF0kZi/nJnX2jui7VosuKd0dv38Z0cz/XRvr2yosDYuIzuEHCw=
+X-Received: by 2002:a4a:a648:: with SMTP id j8mr3662355oom.36.1597120629344;
+ Mon, 10 Aug 2020 21:37:09 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from b29397-desktop.ap.freescale.net (119.31.174.67) by SG2PR01CA0123.apcprd01.prod.exchangelabs.com (2603:1096:4:40::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3261.19 via Frontend Transport; Tue, 11 Aug 2020 02:01:25 +0000
-X-Mailer: git-send-email 2.17.1
-X-Originating-IP: [119.31.174.67]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: f3de6864-3052-4383-fecb-08d83d9a7560
-X-MS-TrafficTypeDiagnostic: AM6PR04MB5494:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM6PR04MB5494EECAA34E486A72155D208B450@AM6PR04MB5494.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SwBlK3vAMCB9IInABuqK7ms4vD9eZidQroO+gDS77MJsu91SwSnbuBuXYETx3qGiTC7vobzXh1O2raFbn6SK7Diu0lv6C9jdULquIIG3mjZPrHQOexhARN2QNICUgT8onGfcKasgTPLKPaK1VDkkMOL3huzfieSbhkQ5U+88/HQo1h9fdt62hXHiulGCxGmP1YG/0aLvPM1dPvlqjXpHEvvQ2uddju1MAslP/i7aldXD88gCKsBKrzX1QLZgt4lg9IIclmoRXOmTkazyo5AXCu33FMXUrvCMYARcxbD3afYSC9q7k/InMXTgJp5iWZ3H+AGk5kFNC1gf6d98yB9fQA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(396003)(39860400002)(366004)(376002)(346002)(136003)(6512007)(86362001)(6506007)(26005)(52116002)(16526019)(6486002)(83380400001)(6916009)(8676002)(2906002)(36756003)(8936002)(316002)(66556008)(44832011)(478600001)(186003)(5660300002)(66946007)(2616005)(956004)(1076003)(4326008)(4744005)(66476007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: vL24hecTA32GTk8aOOIJPTBAtNoVDJUXpPHqjvNBY+O9vwMiMQgimTieAnH/q3qaBvILtB0mQXBpBWRFy4EQNc0UAiNqAw1/WqI9TDBRM7zBB5isJMdYJi65prrxCOqAvZbozJ0BXIzfK/6bTXIoXegMDKrXAUs6L/wvYY9ZBVztcA/F6Z+szmRMaG3OkSQ0d1DM1V1nx4NZwzGfwILMoL/+8a0CXfFDd9yVM6cgM4lYtxoKNLv1MrkkNUX+WQxlzxbxH8lNgHL1A8d27EGbTLBzuzwBKSqsIByTj8nlpMgnqaBg/k3+KLqYTnJN988lxo2xCd+pY8vZ41Kuq+Yndhv50YxFmv3XA4d6JW1ih65UMasm5qK48pYZBv8hebyFSnLimyfbu7IcJNhCrZVCa6YYw/HpsliCsDDh7yvWKL+db3PZZS/qxfmSd3EuxSkzxpHmv+pdqv7i9GhRDnHpXhjnkJpZ/Jw8gIuqKv4LxUmfFjJn9bvRvDRLSi+wC1II/Um+cC1eU89wXU6Xdb5Y0/BB1awR4gQseHZAPX/8nLlwcNBpO6ujdT9Bm6dw+XmlQ0nbJ9HqYi4hfCwGYvDjsoIV1geh+i9JPhtA8hrjHfhGkemf5stCXA+GaAo5OzcDJcBkUQduKPQU471/SQAP4g==
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f3de6864-3052-4383-fecb-08d83d9a7560
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Aug 2020 02:01:27.9391
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CqQwlQEpc0K2n7ne5go+NY+XEpFTuQpWqi01XrWqzNQcDl10TlxQ83zUfEGuV5MfH1LtZ3a3uRR0+LfEpmVC3Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB5494
+References: <20191016033340.1288-1-john.stultz@linaro.org> <20191016033340.1288-12-john.stultz@linaro.org>
+ <20200810183503.3e8bae80@coco.lan>
+In-Reply-To: <20200810183503.3e8bae80@coco.lan>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Mon, 10 Aug 2020 21:36:58 -0700
+Message-ID: <CALAqxLUu76m=Q_tDht4DmtgXYmL7Ma1zVJZzvhcsHn2hMAgpLA@mail.gmail.com>
+Subject: Re: [RFC][PATCH v3 11/11] misc: hisi_hikey_usb: Driver to support usb
+ functionality of Hikey960
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     lkml <linux-kernel@vger.kernel.org>, Yu Chen <chenyu56@huawei.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        ShuFan Lee <shufan_lee@richtek.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jun Li <lijun.kernel@gmail.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Current UDC core connects gadget during the loading gadget flow
-(udc_bind_to_driver->usb_udc_connect_control), but for
-platforms which do not connect gadget if the VBUS is not there,
-they call usb_gadget_disconnect, but the gadget is not connected
-at this time, notify disconnecton for the gadget driver is meaningless
-at this situation.
+On Mon, Aug 10, 2020 at 9:35 AM Mauro Carvalho Chehab
+<mchehab+huawei@kernel.org> wrote:
+> Em Wed, 16 Oct 2019 03:33:40 +0000
+> John Stultz <john.stultz@linaro.org> escreveu:
+>
+> > From: Yu Chen <chenyu56@huawei.com>
+> >
+> > The HiKey960 has a fairly complex USB configuration due to it
+> > needing to support a USB-C port for host/device mode and multiple
+> > USB-A ports in host mode using a single USB controller.
+> >
+> > See schematics here:
+> >   https://github.com/96boards/documentation/raw/master/consumer/hikey/hikey960/hardware-docs/HiKey960_Schematics.pdf
+> >
+> > This driver acts as a usb-role-switch intermediary, intercepting
+> > the role switch notifications from the tcpm code, and passing
+> > them on to the dwc3 core.
+> >
+> > In doing so, it also controls the onboard hub and power gpios in
+> > order to properly route the data lines between the USB-C port
+> > and the onboard hub to the USB-A ports.
+> >
+> > NOTE: It was noted that controlling the TYPEC_VBUS_POWER_OFF and
+> > TYPEC_VBUS_POWER_ON values here is not reccomended. I'm looking
+> > for a way to remove that bit from the logic here, but wanted to
+> > still get feedback on this approach.
+>
+> Let me somewhat hijack this thread. I'm trying to add support here
+> for the Hikey 970 driver. Maybe you might help me finding the remaing
+> issues over there ;-)
 
-Signed-off-by: Peter Chen <peter.chen@nxp.com>
----
- drivers/usb/gadget/udc/core.c | 3 +++
- 1 file changed, 3 insertions(+)
+So.. just as a heads up, this is a fairly old version of this patch. I
+have the current version here:
+  https://git.linaro.org/people/john.stultz/android-dev.git/commit/?h=dev/hikey960-mainline-WIP&id=1155346a06472177b8a7e7918de052549916f06f
 
-diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-index 0df73ac28c93..466cb76ca0ac 100644
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -714,6 +714,9 @@ int usb_gadget_disconnect(struct usb_gadget *gadget)
- 		goto out;
- 	}
- 
-+	if (!gadget->connected)
-+		goto out;
-+
- 	if (gadget->deactivated) {
- 		/*
- 		 * If gadget is deactivated we only save new state.
--- 
-2.17.1
+So you may want to rework ontop of that.
 
+That said, the last time I submitted the hub/mux driver, Rob pushed
+back suggesting that the vbus, switch and hub power should probably be
+DT describable:
+  https://lore.kernel.org/lkml/20191218163738.GA12358@bogus/
+
+I'm at the point where I probably don't have additional cycles to
+spend to rework all the supporting drivers to support such a DT
+binding, so I'm not very optimistic this patch will go upstream (its
+much easier to float the current hub/mux driver).  So you may want to
+focus on Rob's feedback there rather than any of my feedback here. :)
+
+
+> The Hikey 970 has lots of things in common with Hikey 960, but
+> the USB hub uses a somewhat different approach (based on what I
+> saw at the Linaro's 4.9 official Hikey kernel tree).
+>
+> Basically, with the enclosed patch applied, the USB hub needs these
+> at the DT file:
+>
+>                 hikey_usbhub: hikey_usbhub {
+>                         compatible = "hisilicon,kirin970_hikey_usbhub";
+>
+>                         typec-vbus-gpios = <&gpio26 1 0>;
+>                         otg-switch-gpios = <&gpio4 2 0>;
+>                         hub_reset_en_gpio = <&gpio0 3 0>;
+>                         hub-vdd-supply = <&ldo17>;
+>                         usb-role-switch;
+> ...
+>                 }
+>
+> E.g. when compared with Hikey 960, the USB hub:
+>
+> - Hikey 970 uses a regulator instead of GPIO for powering on;
+
+So, it might not be too hard to rework the hikey960 hub power gpio to
+a gpio-regulator binding, and then both platforms can use the same
+code?
+
+> - Hikey 970 has a reset pin controlled via GPIO.
+
+You might be able to put this reset pin under the dwc3 resets?
+
+
+> It should be simple to add support for it, as done by the
+> enclosed patch. With this, the phy driver for Hikey 970 and a new
+> small driver to properly set clocks and reset lines at dwg3[1],
+> I can now see the hub on my Hikey970:
+>
+>         $ lsusb
+>         Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+>         Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+>
+> Still, I'm missing something to make it work, as, besides the hub,
+> right now, it doesn't detect the keyboard/mouse, which are
+> attached at the USB hub.
+>
+> Do you have any ideas?
+
+Not sure about the hub keyboard mouse issue. I worry that may be an
+issue with the hub power not being on?
+Make sure the mux driver is in the expected state when you boot up and
+switch modes.
+
+> [1] Right now, this is needed:
+>         https://github.com/96boards-hikey/linux/blob/hikey970-v4.9/drivers/usb/dwc3/dwc3-hisi.c
+>
+>     Placing dwc3 directly under soc at DT causes some weird NMI, with
+>     either produce an OOPS or hangs the machine at boot time.
+
+I suspect you can drop the dwc3-hisi glue code once you move the clks
+and resets to the dwc3 node directly, as we did for hikey960.
+  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/hisilicon/hi3660.dtsi?id=4bcf69e57063c9b1b15df1a293c969e80a1c97e6#n1169
+
+thanks
+-john
