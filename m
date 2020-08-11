@@ -2,107 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79454241D11
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Aug 2020 17:20:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C5A3241DC1
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Aug 2020 18:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728873AbgHKPUu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Aug 2020 11:20:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58738 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728783AbgHKPUs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Aug 2020 11:20:48 -0400
-Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46588C06174A
-        for <linux-usb@vger.kernel.org>; Tue, 11 Aug 2020 08:20:48 -0700 (PDT)
-Received: by mail-io1-xd44.google.com with SMTP id g19so13013846ioh.8
-        for <linux-usb@vger.kernel.org>; Tue, 11 Aug 2020 08:20:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=JdtWbzHFFrLnpkKaDlOJhr39J5tFuU8QjZMTXQuWoo8=;
-        b=BfHE8btZCBDPiBM7YzjdiJrccijcEPBhWxnZesu+gZ5XqmpeuKxv0CL0qbH4xfAdy6
-         8qQDx9f/OjiKfObPI9LXjBqdWz2ondQNG7rr+4/F7qw7uRGepUtWoFTreF7AMH7VEb5G
-         IgL7Yyv/3zc/yUUoXsx4y5Ab5lqmbvraJseT/b4DYuufjFdb2h4j8QoiEaE+qwFDeS+1
-         Aw1cgc5ybQPN1xhJkXlXNhyG5CGtp4sp74u9G1JJb7Au176f8bxJN73HbUknxI+hxKGr
-         JYiqT3On3Fu0yjXYNLxWN3bXboBJij9xKBNNHl7vWUatDQrg+ESCD6qWwT1NI2xiaQE5
-         eahg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=JdtWbzHFFrLnpkKaDlOJhr39J5tFuU8QjZMTXQuWoo8=;
-        b=HseFOcvSwhJ+hAE/iB8mY3/gZMTKo1LGH2t1y7OMAAmOB8aW0H1CfLiV8xrSBo3z3K
-         bYm0GDc4lwcqCaCxm8ZMqlRpiXCK9hFOf6h7SqYxQjHAI7iwBgrvHv9WGVYl4jMxQ614
-         RfuxfDWBBLjDwtQNYddHPep+ZoSc00Nvq+LHm/zgzkr29nP2A+FrpoLYcZfY8smnBOfB
-         DCgluztIn36hyrs4HYqKqnE0it+6owj5SNrSSK1Eebye71sK0BHIm/hcVY1Q2p4TcvDk
-         mvX1ZxjnUvT9ZDkUJP3+uXHtBR80Nnq012l5YbV3JZ8wQigk5He4yUlnpZGSkzSLJROo
-         MwVw==
-X-Gm-Message-State: AOAM530l40qkk1jjXm/BNAiroVPQjowCjHT95uOFCOdyFGVyjsnzlXgM
-        fyC4GOoAlQ9mqe3SZNrSbLVolFbeJuHHfR1PvMM=
-X-Google-Smtp-Source: ABdhPJyiMNzaTsJmazkxT6Yj64wcxf7YdXSXZdrwkuv3JU44uj/DySXYigZTS0RdlrWiS1joP2kCbSF/9mZhFqJSBLw=
-X-Received: by 2002:a6b:b4d1:: with SMTP id d200mr23327865iof.70.1597159247684;
- Tue, 11 Aug 2020 08:20:47 -0700 (PDT)
+        id S1728947AbgHKQDt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Aug 2020 12:03:49 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:46909 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1728869AbgHKQDt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Aug 2020 12:03:49 -0400
+Received: (qmail 337967 invoked by uid 1000); 11 Aug 2020 12:03:48 -0400
+Date:   Tue, 11 Aug 2020 12:03:48 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     trix@redhat.com
+Cc:     gregkh@linuxfoundation.org, acozzette@cs.hmc.edu,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: realtek_cr: fix return check for dma functions
+Message-ID: <20200811160348.GD335280@rowland.harvard.edu>
+References: <20200811151505.12222-1-trix@redhat.com>
 MIME-Version: 1.0
-References: <20200808151648.GC256751@rowland.harvard.edu> <20200810001935.4489-1-yazzep@gmail.com>
- <20200810001935.4489-2-yazzep@gmail.com> <20200810074601.GC1529187@kroah.com>
-In-Reply-To: <20200810074601.GC1529187@kroah.com>
-From:   yasushi asano <yazzep@gmail.com>
-Date:   Wed, 12 Aug 2020 00:20:31 +0900
-Message-ID: <CAEt1Rjq+Fz85KU-aKO+boNE5yL7GiwdopmRd3-FxEL+mzEui-g@mail.gmail.com>
-Subject: Re: [PATCH v2] [RFC] USB: hub.c: decrease the number of attempts of
- enumeration scheme
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
-        "Rosca, Eugeniu (ADITG/ESM1)" <erosca@de.adit-jv.com>,
-        andrew_gabbasov@mentor.com, Baxter Jim <jim_baxter@mentor.com>,
-        "Natsume, Wataru (ADITJ/SWG)" <wnatsume@jp.adit-jv.com>,
-        "Nishiguchi, Naohiro (ADITJ/SWG)" <nnishiguchi@jp.adit-jv.com>,
-        =?UTF-8?B?5rWF6YeO5oGt5Y+y?= <yasano@jp.adit-jv.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200811151505.12222-1-trix@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Greg, I'm sorry for the inconvenience. I was not sure how to use
-[RFC] well. If the patch works well, we already don't need to add RFC
-in the subject line? This patch works fine on my target.  If it is not
-needed [PFC] ,I will send the patch again without RFC in the patch
-title and subject line in email later.
+On Tue, Aug 11, 2020 at 08:15:05AM -0700, trix@redhat.com wrote:
+> From: Tom Rix <trix@redhat.com>
+> 
+> clang static analysis reports this representative problem
+> 
+> realtek_cr.c:639:3: warning: The left expression of the compound
+>   assignment is an uninitialized value. The computed value will
+>   also be garbage
+>     SET_BIT(value, 2);
+>     ^~~~~~~~~~~~~~~~~
+> 
+> value is set by a successful call to rts51x_read_mem()
+> 
+> 	retval = rts51x_read_mem(us, 0xFE77, &value, 1);
+> 	if (retval < 0)
+> 		return -EIO;
+> 
+> A successful call to rts51x_read_mem returns 0, failure can
+> return positive and negative values.  This check is wrong
+> for a number of functions.  Fix the retval check.
+> 
+> Fixes: 065e60964e29 ("ums_realtek: do not use stack memory for DMA")
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  drivers/usb/storage/realtek_cr.c | 36 ++++++++++++++++----------------
+>  1 file changed, 18 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/usb/storage/realtek_cr.c b/drivers/usb/storage/realtek_cr.c
+> index 3789698d9d3c..b983753e2368 100644
+> --- a/drivers/usb/storage/realtek_cr.c
+> +++ b/drivers/usb/storage/realtek_cr.c
+> @@ -481,16 +481,16 @@ static int enable_oscillator(struct us_data *us)
+>  	u8 value;
+>  
+>  	retval = rts51x_read_mem(us, 0xFE77, &value, 1);
+> -	if (retval < 0)
+> +	if (retval != STATUS_SUCCESS)
+>  		return -EIO;
 
-Best regards
-Yasushi Asano
+Instead of changing all these call sites, wouldn't it be a lot easier 
+just to change rts51x_read_mem() to make it always return a negative 
+value (such as -EIO) when there's an error?
 
-
-2020=E5=B9=B48=E6=9C=8810=E6=97=A5(=E6=9C=88) 16:45 Greg KH <gregkh@linuxfo=
-undation.org>:
->
-> On Mon, Aug 10, 2020 at 09:19:35AM +0900, Yasushi Asano wrote:
-> > From: Yasushi Asano <yasano@jp.adit-jv.com>
-> >
-> > According to 6.7.22 A-UUT =E2=80=9CDevice No Response=E2=80=9D for conn=
-ection timeout
-> > of USB OTG and EH automated compliance plan v1.2, the enumeration
-> > failure has to be detected within 30 seconds. However, the old and new
-> > enumeration schemes made a total of 16 attempts, and each attempt can
-> > take 5 seconds to timeout, so it failed with PET test. Modify it to
-> > reduce the number of attempts to 5 and pass PET test.
-> >
-> > in case of old_schene_first=3DN and use_both_schemes=3DY
-> > attempt 3 * new scheme, then 2 * old scheme
-> > in case of old_schene_first=3DY and use_both_schemes=3DY
-> > attempt 2 * old scheme, then 3 * new scheme
-> >
-> > Signed-off-by: Yasushi Asano <yasano@jp.adit-jv.com>
-> > ---
-> >  drivers/usb/core/hub.c | 16 +++++++---------
-> >  1 file changed, 7 insertions(+), 9 deletions(-)
->
-> Why is there a "[RFC]" on the subject line, do you not think this works
-> properly?  Does it work for your devices and solve the problem for you?
->
-> thanks,
->
-> greg k-h
+Alan Stern
