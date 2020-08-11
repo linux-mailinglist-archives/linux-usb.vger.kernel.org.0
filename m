@@ -2,181 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C707D2414AC
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Aug 2020 03:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B0EF2414C0
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Aug 2020 04:01:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728167AbgHKBvO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 Aug 2020 21:51:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47128 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728046AbgHKBvN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 Aug 2020 21:51:13 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CADAAC06174A;
-        Mon, 10 Aug 2020 18:51:13 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id m71so6351614pfd.1;
-        Mon, 10 Aug 2020 18:51:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=cQifSZOziOnvUK04OfVsd2hJ+niYunqai4Bzh6MMUq4=;
-        b=GpMKX9QsiJdKjPn5Jj//JsC4RG82dGOsZkU3qkonR198ZambfctqGxjsjdodfw/kQO
-         pLAAfP7eLrnhcD4SxAj/z9wbio5EjQzjWODNhFd/wMi05guYpCytbPAgboVRm7g1ohrp
-         VbnN+QiotDhkWqseLUA4G7I6pEvt3xKgpA7WIrNNqINoYX+8WFB6kasctuEa22zgrKmX
-         tCEUcsHIaRoOq/W4Ex5mMsxmRB+OTYSCPrV4nyrGRMWN62wvYdNon2a5VfykeliVt7Pc
-         P+0r5CsSMMwCywWgvUDXXKaxPWSqk/E3U/E5TxCJvaEkhrriy85o2h7X1gbKDf0GXA+U
-         2zWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=cQifSZOziOnvUK04OfVsd2hJ+niYunqai4Bzh6MMUq4=;
-        b=XfdwdQqE4gaKRWz/9TUCmdL9OgX7QyRPyVME4NNi9MgJuBoTrNUKIA2jso9Y2Qba6U
-         7N4c2qOZk8iX/mJwTPoXRiH1z0bkXwCLvS1SlfpQ5rGsetMxPPyeh+jeT5mlPiySuEhv
-         qNOyFNMF/qYKKFRCh/drcEcEImCmu/jrBzakgvzdwb13G7F19g7SeCABAgo9x+zlbF1M
-         SWyOZtqXXH1aTAVkfcau7yx8hSAchjQKE3/17gQ6cDh0OwzSyn32lHLJgF1liJny2WBZ
-         82z907aczpqqn8Wyi8i0cZHyFY+pX9r4C4ecSRSjLTiX90pnMs1q8Va1q9TN254KnIXx
-         qSEQ==
-X-Gm-Message-State: AOAM532QfsJ/5VJO+w7Ajepbr13CT9K7pkj1l2EjhQg04cbRDUHcwtlF
-        NCmoEbTAuWiqPlGgQ4IiLc9Z4K9Y
-X-Google-Smtp-Source: ABdhPJwELZF1ZtMSd2g60KqHk+2RwVtTNs6cV6S7HprEoy+m7mfhHsbA9UezTeH4N32ExqDY4g80cA==
-X-Received: by 2002:aa7:8743:: with SMTP id g3mr3830918pfo.76.1597110673022;
-        Mon, 10 Aug 2020 18:51:13 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id h1sm24700567pfr.39.2020.08.10.18.51.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Aug 2020 18:51:12 -0700 (PDT)
-Subject: Re: [PATCH v1] usb: typec: tcpm: Fix TDA 2.2.1.1 and TDA 2.2.1.2
- failures
-To:     Badhri Jagan Sridharan <badhri@google.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200811011126.130297-1-badhri@google.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-Message-ID: <ef32ea96-16c8-772b-2c80-8df43ee8f668@roeck-us.net>
-Date:   Mon, 10 Aug 2020 18:51:10 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1728122AbgHKCB3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 Aug 2020 22:01:29 -0400
+Received: from mail-am6eur05on2066.outbound.protection.outlook.com ([40.107.22.66]:26904
+        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728080AbgHKCB3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 10 Aug 2020 22:01:29 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VzStihqdbnXstvjinjLc5gPXerJu5PQfJ/V/kcWBGjHGW06pnoW8rWEJcbh76QB9Nu4GjvsayFRRD7dJLZZrcXkRjsMJlfJ5lo2fp6z9qZEaelWg6SAHncMt7JpQ2dX7jPqVnWHRGBn90T371HgKaOTFGKbS04QRM+vxPPVoR/F0G5kKBrXFWWV2172x9CuiSxP2h31lIvEKl0YHecUCVOZ/UOUc1S4bC7XDj7gglUF4EfBRWSyp4iuSUurd3pJ8+L+1zuERO4E+3nzjjiwkJK2kA/MXadaLfITSeMT4SIh1y6eblrkpLdbh1L9bwYYAIeXjyZfAN+pQvzzziRY7dw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HdZ6mBswAKaryU1bIl9VczT07vTRpeQZSvib0zVDiR4=;
+ b=XMFwmXEQGJmGBsB/91UdL4RgcvYH/78Us2ghgUyJ/1bJk39LCXRR2EU9yEz/ELFFLzVTIOexQrfYsVuDI9mpc7kk+tpPssEKzosqWCXDabB7KTtAxxr50q7UKqX1CUMvnKycjnYSe8eCM+bNb5BPW5OtU2j9L1Zg4HbdjtiVBA1vuM/zZqv8jfE2J9hkDZ4aQAO+IjrCy3eOXgVNvyCJ6RGinDtZZzZ5ElyATaQzjhr+ODECUTJ/iRYo9rZV+KT+ODkRqp+UlRyuweqDfY/dV1GPMjOQMMXsyI2NK43j38TcyVAKb/QGS/MGvulsJVuJvGAmCnLu0n92wIq2i5Bn4w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HdZ6mBswAKaryU1bIl9VczT07vTRpeQZSvib0zVDiR4=;
+ b=YQy13Ob18gkj7Fo/xZoQ9kzXWOP2WwE4otCWJCtYK8Zv1LUs7bC8pjxTiBAVCbPqp/P3zbrHJZ6FmDWvcdIYK6Y9totKjTWb8SAh/y7qAqTYBQvqUeO05e/Ct4eCR6oA0gVgPDZbMoe/FowysSniD4ANcMR1s2jYKyCpkQkkncQ=
+Authentication-Results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
+ by AM6PR04MB5494.eurprd04.prod.outlook.com (2603:10a6:20b:9f::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3261.16; Tue, 11 Aug
+ 2020 02:01:25 +0000
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::ed7f:8755:5994:7fcf]) by AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::ed7f:8755:5994:7fcf%5]) with mapi id 15.20.3261.025; Tue, 11 Aug 2020
+ 02:01:25 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     balbi@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com, jun.li@nxp.com,
+        Peter Chen <peter.chen@nxp.com>
+Subject: [PATCH 1/2] usb: gadget: core: change the comment for usb_gadget_connect
+Date:   Tue, 11 Aug 2020 10:00:25 +0800
+Message-Id: <20200811020026.25157-1-peter.chen@nxp.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR01CA0123.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:40::27) To AM7PR04MB7157.eurprd04.prod.outlook.com
+ (2603:10a6:20b:118::20)
 MIME-Version: 1.0
-In-Reply-To: <20200811011126.130297-1-badhri@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from b29397-desktop.ap.freescale.net (119.31.174.67) by SG2PR01CA0123.apcprd01.prod.exchangelabs.com (2603:1096:4:40::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3261.19 via Frontend Transport; Tue, 11 Aug 2020 02:01:23 +0000
+X-Mailer: git-send-email 2.17.1
+X-Originating-IP: [119.31.174.67]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 4c3edfa7-8433-4479-6086-08d83d9a73fb
+X-MS-TrafficTypeDiagnostic: AM6PR04MB5494:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <AM6PR04MB5494BED5C68BCD6FF52058AA8B450@AM6PR04MB5494.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: TsPl2h3PkE6iJDm2DMBmv0DceKtYRJiv1bQZnADcGdkvaiouj5JkVACVdCUJpRlxvvXSO7FaBc6bXFPYjTHj1BgH9S2VEbYHR4M4Suj359pAT+q0dykuAeUN9aWkGApGhpBj3Ew91L1FDYUj3gLXsPM7wpyDulJ+Dh2UtXly/yF5Jsnr5LCX/Vp4+ZUCISQSbpPD7bOIARQz2l8fou4ZfgEMXL8Pas4+6MVdQGS7RP9eOljXwMdSHcaA5hHdjJxCbeYSFFdtZ2dyvAjepjZ9RUDUXVR89t1AVu3Wrp5b7FHGLFZ7H4ZT1azGMgIp4X178NeYdcxEqo8q4jl/KbhjuQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(396003)(39860400002)(366004)(376002)(346002)(136003)(6512007)(86362001)(6506007)(26005)(52116002)(16526019)(6486002)(83380400001)(6916009)(8676002)(2906002)(36756003)(8936002)(316002)(66556008)(44832011)(478600001)(186003)(5660300002)(66946007)(2616005)(956004)(1076003)(4326008)(66476007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: 7y7Hx+o8QVfrcHiOn10yhb3Ulp40LwV1aSLPE8ZFzex+icEriRhUZGINbjG/K5GMxitodEKhgULaIfg0HNbYsOhx73rrdFgDqLFlWHPvIO9r+WFXspKN5aRV/Yk7TqHjE2220weQ8CcKvdzg//FCnGqRsCXrQgUccmfqjZtteKF9BP59nWaclGwqG04rJRgScF7faf62EzqLcDl9QOlP/GLFCI2U808dGbKozASbCmmyvCA18IHXylMBpA7Ea+0cU4q/nJoqY5eSH2EknY/L0WhwBQ8u1UYHmYfD1fpfaW26BZeEodwqDQ0Bet1DbI5Kbr2ZnPBs3OYb9LTsiCD91IhL36z61/755r3+HlTOGrNtb1spWGfg7aSr5yG/P03fK2CJXwhUBZDf4oqufKBtCkyozx7dnGhhFh0sddejmQmtKV0dXCTt7px3D6zV+kR/aaNB1li9TkhE4WqugsVc8h2TqurgSfAPqhnGf5e/3++lnk/hei1gcyiLAu8U/TBgMZvopK7nbn0qGolyKC2bmFSrC5oCxbSCkVUAAYvKbGUnmzyuwsYUYCm+ejERGfHEKIPZgmw38LrFj2k0uGgICEwIcYdIp5UszFTNPIpfa/Tksaw3JD5KMZ0W2PgC2UahLdj2YYQf2L9AvaTvp/L01A==
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4c3edfa7-8433-4479-6086-08d83d9a73fb
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Aug 2020 02:01:25.5128
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: htfUQRUNo7L8/fmBoImkiUgHNMIfb+eYwfOJeX3LdIAUn9fRZkoKe898qai4HAga78LPHs6GXoas6shheCwxyQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB5494
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 8/10/20 6:11 PM, Badhri Jagan Sridharan wrote:
->>From the spec:
-> "7.1.5 Response to Hard Resets
-> Hard Reset Signaling indicates a communication failure has occurred and
-> the Source Shall stop driving VCONN, Shall remove Rp from the VCONN pin
-> and Shall drive VBUS to vSafe0V as shown in Figure 7-9. The USB connection
-> May reset during a Hard Reset since the VBUS voltage will be less than
-> vSafe5V for an extended period of time. After establishing the vSafe0V
-> voltage condition on VBUS, the Source Shall wait tSrcRecover before
-> re-applying VCONN and restoring VBUS to vSafe5V. A Source Shall conform
-> to the VCONN timing as specified in [USB Type-C 1.3]."
-> 
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 16 +++++++++++++---
->  1 file changed, 13 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 3ef37202ee37..e41c4e5d3c71 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -3372,13 +3372,19 @@ static void run_state_machine(struct tcpm_port *port)
->  			tcpm_set_state(port, SNK_HARD_RESET_SINK_OFF, 0);
->  		break;
->  	case SRC_HARD_RESET_VBUS_OFF:
-> -		tcpm_set_vconn(port, true);
-> +		/*
-> +		 * 7.1.5 Response to Hard Resets
-> +		 * Hard Reset Signaling indicates a communication failure has occurred and the
-> +		 * Source Shall stop driving VCONN, Shall remove Rp from the VCONN pin and Shall
-> +		 * drive VBUS to vSafe0V as shown in Figure 7-9.
-> +		 */
-> +		tcpm_set_vconn(port, false);
->  		tcpm_set_vbus(port, false);
->  		tcpm_set_roles(port, port->self_powered, TYPEC_SOURCE,
->  			       tcpm_data_role_for_source(port));
-> -		tcpm_set_state(port, SRC_HARD_RESET_VBUS_ON, PD_T_SRC_RECOVER);
+The pullup does not need to be enabled at below situations:
+- For platforms which the hardware pullup starts after setting
+register even they do not see the VBUS. If the pullup is always
+enabled for these platforms, it will consume more power and
+break the USB IF compliance tests [1].
+- For platforms which need to do BC 1.2 charger detection after
+seeing the VBUS. Pullup D+ will break the charger detection
+flow.
+- For platforms which the system suspend is allowed when the
+connection with host is there but the bus is not at suspend.
+For these platforms, it is better to disable pullup when
+entering the system suspend otherwise the host may confuse
+the device behavior after controller is in low power mode.
+Disable pullup is considered as a disconnection event from
+host side.
 
-I am a bit concerned about this. If I understand correctly, it means that
-we won't turn VBUS back on unless a SRC_HARD_RESET_VBUS_OFF PD event is received.
-Is that correct ? What happens if that event is never received ?
+[1] USB-IF Full and Low Speed Compliance Test Procedure
+F Back-voltage Testing
+Section 7.2.1 of the USB specification requires that no device
+shall supply (source) current on VBUS at its upstream facing
+port at any time. From VBUS on its upstream facing port,
+a device may only draw (sink) current. They may not provide power
+to the pull-up resistor on D+/D- unless VBUS is present (see
+Section 7.1.5).
 
-Thanks,
-Guenter
+Signed-off-by: Peter Chen <peter.chen@nxp.com>
+---
+ drivers/usb/gadget/udc/core.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
->  		break;
->  	case SRC_HARD_RESET_VBUS_ON:
-> +		tcpm_set_vconn(port, true);
->  		tcpm_set_vbus(port, true);
->  		port->tcpc->set_pd_rx(port->tcpc, true);
->  		tcpm_set_attached_state(port, true);
-> @@ -3944,7 +3950,11 @@ static void _tcpm_pd_vbus_off(struct tcpm_port *port)
->  		tcpm_set_state(port, SNK_HARD_RESET_WAIT_VBUS, 0);
->  		break;
->  	case SRC_HARD_RESET_VBUS_OFF:
-> -		tcpm_set_state(port, SRC_HARD_RESET_VBUS_ON, 0);
-> +		/*
-> +		 * After establishing the vSafe0V voltage condition on VBUS, the Source Shall wait
-> +		 * tSrcRecover before re-applying VCONN and restoring VBUS to vSafe5V.
-> +		 */
-> +		tcpm_set_state(port, SRC_HARD_RESET_VBUS_ON, PD_T_SRC_RECOVER);
->  		break;
->  	case HARD_RESET_SEND:
->  		break;
-> 
+diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+index 43351b0af569..0df73ac28c93 100644
+--- a/drivers/usb/gadget/udc/core.c
++++ b/drivers/usb/gadget/udc/core.c
+@@ -659,8 +659,7 @@ EXPORT_SYMBOL_GPL(usb_gadget_vbus_disconnect);
+  *
+  * Enables the D+ (or potentially D-) pullup.  The host will start
+  * enumerating this gadget when the pullup is active and a VBUS session
+- * is active (the link is powered).  This pullup is always enabled unless
+- * usb_gadget_disconnect() has been used to disable it.
++ * is active (the link is powered).
+  *
+  * Returns zero on success, else negative errno.
+  */
+-- 
+2.17.1
 
