@@ -2,109 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42DB42421BF
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Aug 2020 23:14:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38914242202
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Aug 2020 23:33:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726479AbgHKVOP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Aug 2020 17:14:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56804 "EHLO
+        id S1726505AbgHKVdR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Aug 2020 17:33:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725987AbgHKVOO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Aug 2020 17:14:14 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A55C1C06174A
-        for <linux-usb@vger.kernel.org>; Tue, 11 Aug 2020 14:14:13 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id h19so15101825ljg.13
-        for <linux-usb@vger.kernel.org>; Tue, 11 Aug 2020 14:14:13 -0700 (PDT)
+        with ESMTP id S1726164AbgHKVdQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Aug 2020 17:33:16 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E148DC06174A
+        for <linux-usb@vger.kernel.org>; Tue, 11 Aug 2020 14:33:15 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id 2so80553pjx.5
+        for <linux-usb@vger.kernel.org>; Tue, 11 Aug 2020 14:33:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=wXHhCL/Jq5S+dl4cIE+xDbFsMy78sqh/mLA767qJV0A=;
-        b=Dc4ZanxbY1dI/ypn9xgkpMgrpM2psJoB4E4w2tpk47WIUjwhgTLlcO9L4zJIzTU3rE
-         C0AHx5L7G+Yr53YZdRFHuRwIU+sKCE+OqpICudPW3Jwakkwb1TbqUMAwsIbkaGiOTUP8
-         tIM8CdfJLt0ucCLc0Tf/wdiCbudTZFXiLpjEEBdGsbZ+qM8MA1+IwARUFkMkQl8wv8rM
-         KETeqty80R2HC3sx+MT0tNFYXxqv8hOQev+GRMyZ99i9UlZtXRwK8x27d48uiTOJ+JIS
-         yiuDo3GPSvVzgo3wvGyIdk0KfbtUD5Hivgjpfbjj5J4ovgyxbyLvxC0QtCmELAuVFn/v
-         nW/Q==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1XmU1UxtFoX+JxWRWBVQUmWx0SHpCQU0BLn06Acf+NU=;
+        b=nO3gYAQ3UHUw7olEjw932d3zFLqOCCUdnacl9cVKrUgmFx2PGjAFNp8CQwEB7V4Hmy
+         FGOy733ZHh3A1xH6oKC3op8DvO/HEaTRYWhxchiQa9h8rnO5vamgJzN81P21hsQ5n8I3
+         t7TvIriH92cU2JNs0mnOTN8SDZ89gDDMfKKUs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=wXHhCL/Jq5S+dl4cIE+xDbFsMy78sqh/mLA767qJV0A=;
-        b=rh8twyAPUS5Z/kQ98PL/oztawD4aQfBDcNGTSWRNPQBlEfCUa0MzXdXk+vollvN94d
-         RKdr2nZVvhTSU+S1YwQe78q3pTP++EqHqVKmV1SHcSMU2tThf+7+h8Sgjh31EbOCUEYn
-         +I6anEadTdTIhST/R/8iRlROYT2G0PMkii45mG4j4nIm6+ERfnSOiygL+BAMrCC/4Mcn
-         xBHB8M+j0Q1Pao1VpZr8tgC4pjadrulp+LYD0jluOfxxzGMg7P4yCPMy64pifLBpe1xd
-         oBEEACRdK1s6w5OwXZpVg6ntQTLPrGrKR1CDcZr52LojgsPbdSX4NZgr3vHxhjfMu+Wq
-         djww==
-X-Gm-Message-State: AOAM531HnSZPJCYuNDt2lrpRxk4GNXytPW/saU9d6JyZzTyVAu8/84O5
-        g/lBHi+vMNAjesUEGm63NzE=
-X-Google-Smtp-Source: ABdhPJzRjsongTG+JYR2doA6GNxyEU2qWlx3I2GSC3z2Knzmqn+jf40J/uRt6IsJX/pfNqUREMTq6g==
-X-Received: by 2002:a2e:9f4e:: with SMTP id v14mr4078738ljk.72.1597180452170;
-        Tue, 11 Aug 2020 14:14:12 -0700 (PDT)
-Received: from [10.10.0.8] ([185.213.154.162])
-        by smtp.googlemail.com with ESMTPSA id o24sm191426ljg.69.2020.08.11.14.14.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Aug 2020 14:14:11 -0700 (PDT)
-Subject: Re: high speed data to usb disk makes the kernel think that is has
- been unmounted
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
-References: <a161e45d-6ce8-2077-c513-380b67c4dfd8@gmail.com>
- <20200811175655.GB828356@kroah.com>
- <47a5804c-835a-f1a2-abce-50b3531f2556@gmail.com>
- <20200811193150.GA344152@rowland.harvard.edu>
-From:   Patrik Nilsson <nipatriknilsson@gmail.com>
-Message-ID: <ef2937d6-f8a8-fbc6-decd-eeb4af94e863@gmail.com>
-Date:   Tue, 11 Aug 2020 23:14:09 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1XmU1UxtFoX+JxWRWBVQUmWx0SHpCQU0BLn06Acf+NU=;
+        b=VLWjvIbuFYjRCR3NNVL+9s/WaRPhKeEIXo8DJuIewadShLIonCGszTua/gFTroLK01
+         eV+MygdgdZI9oPDgjFnAHshfebpf+Mf/0bpgOuTbK3WtpTvqgMel6hXQXwjlN2KSC1O0
+         fO26bGdHPG8EAnrxFuMcmGmKVBYCifVYRgQ2qFKzLVaNzYVbXvSBWbmSudljHclnpCBQ
+         HBcTbDMjcD0VRsaMbxk0kU29GhCtVkdlOATLvowL2GZ6099GP2G1LQrt5ZCiYCLINtf1
+         G8NWSCxptL4OnZi38q7RIEC0UlYjw3bfVK0eWavHOdJXlQMg7bDvYPOSzdQfeXHybdTq
+         pFgQ==
+X-Gm-Message-State: AOAM530D/pbyqsvNiamZZRQ5nrGCcDoeV4VMakpP1UcJ+2FJhVRkbAna
+        VZGXSnYhuYEQvy94iH9nHm5acA==
+X-Google-Smtp-Source: ABdhPJzVUgwczR2LI6waXoChEBBAZmQiyV+rznpXD/j383hrrCcUrIvWs+lVRQIEgQVz81ia6sNYwg==
+X-Received: by 2002:a17:90a:ccd:: with SMTP id 13mr2785480pjt.123.1597181595355;
+        Tue, 11 Aug 2020 14:33:15 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id k12sm3694242pjp.38.2020.08.11.14.33.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Aug 2020 14:33:14 -0700 (PDT)
+Date:   Tue, 11 Aug 2020 14:33:13 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Allen <allen.lkml@gmail.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Oscar Carter <oscar.carter@gmx.com>,
+        Romain Perier <romain.perier@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-s390@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-usb@vger.kernel.org, kgdb-bugreport@lists.sourceforge.net,
+        alsa-devel@alsa-project.org,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>
+Subject: Re: [PATCH 0/3] Modernize tasklet callback API
+Message-ID: <202008111427.D00FCCF@keescook>
+References: <20200716030847.1564131-1-keescook@chromium.org>
+ <87h7tpa3hg.fsf@nanos.tec.linutronix.de>
+ <202007301113.45D24C9D@keescook>
+ <CAOMdWSJQKHAWY1P297b9koOLd8sVtezEYEyWGtymN1YeY27M6A@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200811193150.GA344152@rowland.harvard.edu>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOMdWSJQKHAWY1P297b9koOLd8sVtezEYEyWGtymN1YeY27M6A@mail.gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Mon, Aug 03, 2020 at 02:16:15PM +0530, Allen wrote:
+> Here's the series re-based on top of 5.8
+> https://github.com/allenpais/tasklets/tree/V3
 
-On 11/08/2020 21:31, Alan Stern wrote:
-> On Tue, Aug 11, 2020 at 08:34:53PM +0200, Patrik Nilsson wrote:
->> Hi Greg,
->>> Can you provide kernel logs?  Odds are the disk disconnects itself as it
->>> takes too much power or something.
->> udev-kernel logs can be found:
->> https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1886172
-> The bug report doesn't seem to contain any dmesg kernel logs showing
-> what happens when the problem occurs.
-I'm compiling the latest kernel to supply the kernel logs when done 
-testing. It takes a while.
->
-> Also, the bug report indicates that you started to do a bisection
-> looking for the kernel version where the problem first appears, but
-> there's no mention of the final result.
+Great!
 
-There were no result. For an unknown reason I haven't the bug behavior 
-in the 4.15 series of the kernel (Ubuntu Mate Bionic), but when I tried 
-later I had. Maybe it was when I ran Ubuntu Mate Focal with 4.15 series 
-of kernel that triggered the bug.
+> Let me know how you would want these to be reviewed.
 
-It was a failed attempt to iterate to the kernel version that worked.
+Was a Coccinelle script used for any of these conversions? I wonder if
+it'd be easier to do a single treewide patch for the more mechanical
+changes.
 
-It is the same hardware.
+And, actually, I still think the "prepare" patches should just be
+collapsed into the actual "covert" patches -- there are only a few.
 
-> The bug report also indicates that one of your tests involves copying
-> /dev/zero to a mounted disk device!  That is highly likely to crash the
-> kernel regardless of what the hardware does.  What happens if you
-> unmount the disk before running the test?
-The ssd disk contains no partition data. It is not mounted.
-> Alan Stern
-Patrik
+After those, yeah, I think getting these sent to their respective
+maintainers is the next step.
+
+> Also, I was thinking if removing tasklets completely could be a task
+> on KSPP wiki. If yes, I did like to take ownership of that task. I have a
+> couple of ideas in mind, which could be discussed in a separate email.
+
+Sure! I will add it to the tracker. Here's for the refactoring:
+https://github.com/KSPP/linux/issues/30
+
+and here's for the removal:
+https://github.com/KSPP/linux/issues/94
+
+if you can added details/examples of how they should be removed, that'd
+help other folks too, if they wanted to jump in. :)
+
+-Kees
 
 -- 
-PGP-key fingerprint: 1B30 7F61 AF9E 538A FCD6  2BE7 CED7 B0E4 3BF9 8D6C
-
+Kees Cook
