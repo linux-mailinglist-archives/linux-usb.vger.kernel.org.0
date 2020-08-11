@@ -2,369 +2,250 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39ACC2415E9
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Aug 2020 07:11:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4D7D2416FA
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Aug 2020 09:12:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727779AbgHKFKx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Aug 2020 01:10:53 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:37421 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726680AbgHKFKx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 11 Aug 2020 01:10:53 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1597122651; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=fNTNLk+YcU+2RefkRwGbM5Ie2n6ZAQJJrXgsBdwG+QA=; b=maI1jdIw33ai4aDosAs2xEY9bElgRcfU5qyyFLrAjDtlfsYLrE6ijUKb8uzFaxI0RCFE/kti
- bLNjYRQf4IblEzLiR66X+/cbnTg1sIROY1kNk0lkNWwzgfgqizYQDnFcorLoaNFqls6ddHDU
- FbzZHCnrkpo29OZwpwaoE2WzBgw=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
- 5f32285bcbcd42bdeec913c9 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 11 Aug 2020 05:10:51
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 37DFFC433CB; Tue, 11 Aug 2020 05:10:50 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,NICE_REPLY_A,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [10.110.5.78] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id EDC73C433C6;
-        Tue, 11 Aug 2020 05:10:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org EDC73C433C6
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [RFC v4 1/3] usb: dwc3: Resize TX FIFOs to meet EP bursting
- requirements
-To:     Felipe Balbi <balbi@kernel.org>, agross@kernel.org,
+        id S1728295AbgHKHMv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Aug 2020 03:12:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40136 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726421AbgHKHMt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Aug 2020 03:12:49 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37288C06174A;
+        Tue, 11 Aug 2020 00:12:49 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id h19so12326109ljg.13;
+        Tue, 11 Aug 2020 00:12:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=7bmfSdcP8nAJ6eufJvnZyOOA5fmvgr+qxvCK6Eif1M8=;
+        b=dp0taWtrZcdTBfRahr1KwjxanpDhAeW+LmzOYnbXNKFYs2UmRBHHKNsI3+zsCh72k+
+         3PA75AfLdqW0ypTG+MckbCre9zWTtCc20U5kpS8H7QtjuGk4mdniioosZle2Bs8fS2hi
+         c8ahMXv28FmeGZYOFYWkLfH28IEVn+st2cKfRLdHkMxG3MA6iKfUlCvlIeBGEPmUWhCv
+         /yf1MYQRJUuesyS4IyQTYftirdQfremLX8InLveWiiMuX6DCha0XIoewAVMkuqXzmhgQ
+         h2QQz5Z5s9OC020DL3xn4rMqY0CedZ3RZ1Z33b5TmBDYYyn0i2b0Bfq7N3QHaregiUdU
+         rBdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=7bmfSdcP8nAJ6eufJvnZyOOA5fmvgr+qxvCK6Eif1M8=;
+        b=X6jjrju8WO5gf+J8slSL4EbFIPpkWvxXpB9/5wixMMR6C7Wbq8zfgYK+9fVlesfGhK
+         M3Ai1cyJk/HhaHP+2dX/PXr+YQasz+6ebuy7pPZ3KlwVY5OdR8/AZttHEmfjYNAundgO
+         vFUiGqp4ckg9iUoF0biuLid+clYee9sMRGwITTsxWlt6PDy1ke213Qg3zdXjtbrXIqI8
+         eNpeiamRe8iDwiT8OuLnyIZJlrbHcgdf/sSpSS+zkQXIH1/Rxczbq33x1OMznlPKEY9G
+         VXLVIiWrwVJ0QRJaEIEpp9rMlzXPatHLhm1I6tO9pd05I2O6ldCJmPqNvqEGexpJpb1V
+         l0NA==
+X-Gm-Message-State: AOAM531dU+I1Zg6DaBVJ2HKvTcM8uomdt8mJ5K6Mr5wVAhRzvETPnUdt
+        2oVrGkkqkzV1L11sMgMv65JgTCSuaNE=
+X-Google-Smtp-Source: ABdhPJxRuWMchbZpnBgVASzaeeTvW03Mo41per/jH9BlTQnm/4RZmD3Ce0Kf6Te/n5xLF+SccGNSCQ==
+X-Received: by 2002:a2e:6808:: with SMTP id c8mr2580495lja.13.1597129967438;
+        Tue, 11 Aug 2020 00:12:47 -0700 (PDT)
+Received: from saruman ([194.34.132.58])
+        by smtp.gmail.com with ESMTPSA id s1sm11520605lfi.76.2020.08.11.00.12.45
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 11 Aug 2020 00:12:46 -0700 (PDT)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Wesley Cheng <wcheng@codeaurora.org>, agross@kernel.org,
         bjorn.andersson@linaro.org, gregkh@linuxfoundation.org,
         robh+dt@kernel.org
 Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
         jackp@codeaurora.org
-References: <20200624022848.7765-1-wcheng@codeaurora.org>
- <20200624022848.7765-2-wcheng@codeaurora.org> <87d03yptxi.fsf@kernel.org>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <b0c8a95b-45e3-0d79-2a7c-14c8936dd551@codeaurora.org>
-Date:   Mon, 10 Aug 2020 22:10:47 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+Subject: Re: [RFC v4 1/3] usb: dwc3: Resize TX FIFOs to meet EP bursting requirements
+In-Reply-To: <b0c8a95b-45e3-0d79-2a7c-14c8936dd551@codeaurora.org>
+References: <20200624022848.7765-1-wcheng@codeaurora.org> <20200624022848.7765-2-wcheng@codeaurora.org> <87d03yptxi.fsf@kernel.org> <b0c8a95b-45e3-0d79-2a7c-14c8936dd551@codeaurora.org>
+Date:   Tue, 11 Aug 2020 10:12:41 +0300
+Message-ID: <877du5pseu.fsf@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <87d03yptxi.fsf@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
 
-On 8/10/2020 5:27 AM, Felipe Balbi wrote:
-> Wesley Cheng <wcheng@codeaurora.org> writes:
-> 
-> Hi,
-> 
->> Some devices have USB compositions which may require multiple endpoints
->> that support EP bursting.  HW defined TX FIFO sizes may not always be
->> sufficient for these compositions.  By utilizing flexible TX FIFO
->> allocation, this allows for endpoints to request the required FIFO depth to
->> achieve higher bandwidth.  With some higher bMaxBurst configurations, using
->> a larger TX FIFO size results in better TX throughput.
-> 
-> how much better? What's the impact? Got some real numbers of this
-> running with upstream kernel? I guess mass storage gadget is the
-> simplest one to test.
-> 
-Hi Felipe,
+Hi,
 
-Thanks for the input.
+Wesley Cheng <wcheng@codeaurora.org> writes:
+> On 8/10/2020 5:27 AM, Felipe Balbi wrote:
+>> Wesley Cheng <wcheng@codeaurora.org> writes:
+>>=20
+>> Hi,
+>>=20
+>>> Some devices have USB compositions which may require multiple endpoints
+>>> that support EP bursting.  HW defined TX FIFO sizes may not always be
+>>> sufficient for these compositions.  By utilizing flexible TX FIFO
+>>> allocation, this allows for endpoints to request the required FIFO dept=
+h to
+>>> achieve higher bandwidth.  With some higher bMaxBurst configurations, u=
+sing
+>>> a larger TX FIFO size results in better TX throughput.
+>>=20
+>> how much better? What's the impact? Got some real numbers of this
+>> running with upstream kernel? I guess mass storage gadget is the
+>> simplest one to test.
+>>=20
+> Hi Felipe,
+>
+> Thanks for the input.
+>
+> Sorry for not including the numbers in the patch itself, but I did
+> mention the set of mass storage tests I ran w/ the upstream kernel on
+> SM8150 in the cover letter.  Let me just share that here:
+>
+> Test Parameters:
+>  - Platform: Qualcomm SM8150
+>  - bMaxBurst =3D 6
+>  - USB req size =3D 256kB
+>  - Num of USB reqs =3D 16
+>  - USB Speed =3D Super-Speed
+>  - Function Driver: Mass Storage (w/ ramdisk)
+>  - Test Application: CrystalDiskMark
+>
+> Results:
+>
+> TXFIFO Depth =3D 3 max packets
+>
+> Test Case | Data Size | AVG tput (in MB/s)
+> -------------------------------------------
+> Sequential|1 GB x     |
+> Read      |9 loops    | 193.60
+> 	  |           | 195.86
+>           |           | 184.77
+>           |           | 193.60
+> -------------------------------------------
+>
+> TXFIFO Depth =3D 6 max packets
+>
+> Test Case | Data Size | AVG tput (in MB/s)
+> -------------------------------------------
+> Sequential|1 GB x     |
+> Read      |9 loops    | 287.35
+> 	  |           | 304.94
+>           |           | 289.64
+>           |           | 293.61
+> -------------------------------------------
 
-Sorry for not including the numbers in the patch itself, but I did
-mention the set of mass storage tests I ran w/ the upstream kernel on
-SM8150 in the cover letter.  Let me just share that here:
+awesome, thanks a lot for this :-) It's a considerable increase in your
+setup. My only fear here is that we may end up creating a situation
+where we can't allocate enough FIFO for all endpoints. This is, of
+course, a consequence of the fact that we enable one endpoint at a
+time.
 
-Test Parameters:
- - Platform: Qualcomm SM8150
- - bMaxBurst = 6
- - USB req size = 256kB
- - Num of USB reqs = 16
- - USB Speed = Super-Speed
- - Function Driver: Mass Storage (w/ ramdisk)
- - Test Application: CrystalDiskMark
+Perhaps we could envision a way where function driver requests endpoints
+in bulk, i.e. combines all endpoint requirements into a single method
+call for gadget framework and, consequently, for UDC.
 
-Results:
+>>> +	if (!dwc->needs_fifo_resize)
+>>> +		return 0;
+>>> +
+>>> +	/* resize IN endpoints except ep0 */
+>>> +	if (!usb_endpoint_dir_in(dep->endpoint.desc) || dep->number <=3D 1)
+>>> +		return 0;
+>>> +
+>>> +	/* Don't resize already resized IN endpoint */
+>>> +	if (dep->fifo_depth)
+>>=20
+>> using fifo_depth as a flag seems flakey to me. What happens when someone
+>> in the future changes the behavior below and this doesn't apply anymore?
+>>=20
+>> Also, why is this procedure called more than once for the same endpoint?
+>> Does that really happen?
+>>=20
+> I guess it can be considered a bug elsewhere (ie usb gadget or function
+> driver) if this happens twice.  Plus, if we decide to keep this in the
+> dwc3 enable endpoint path, the DWC3_EP_ENABLED flag will ensure it's
+> called only once as well.  Its probably overkill to check fifo_depth here.
 
-TXFIFO Depth = 3 max packets
+We could add a dev_WARN_ONCE() just to catch any possible bugs elsewhere.
 
-Test Case | Data Size | AVG tput (in MB/s)
--------------------------------------------
-Sequential|1 GB x     |
-Read      |9 loops    | 193.60
-	  |           | 195.86
-          |           | 184.77
-          |           | 193.60
--------------------------------------------
+>>> +	if (remaining < fifo_size) {
+>>> +		if (remaining > 0)
+>>> +			fifo_size =3D remaining;
+>>> +		else
+>>> +			fifo_size =3D 0;
+>>> +	}
+>>> +
+>>> +	fifo_size +=3D fifo;
+>>> +	fifo_size++;
+>>=20
+>> why the increment?
+>>=20
+> This is to account for the last +1 in the equation from the DWC3 databook:
+> fifo_size =3D mult * ((max_packet + mdwidth)/mdwidth + 1) + 1 <- this one
 
-TXFIFO Depth = 6 max packets
+great, could you add this detail as a comment so it doesn't look as
+cryptic? :-)
 
-Test Case | Data Size | AVG tput (in MB/s)
--------------------------------------------
-Sequential|1 GB x     |
-Read      |9 loops    | 287.35
-	  |           | 304.94
-          |           | 289.64
-          |           | 293.61
--------------------------------------------
+>>> +	return 0;
+>>> +}
+>>> +
+>>>  static int dwc3_gadget_set_ep_config(struct dwc3_ep *dep, unsigned int=
+ action)
+>>>  {
+>>>  	const struct usb_ss_ep_comp_descriptor *comp_desc;
+>>> @@ -620,6 +731,10 @@ static int __dwc3_gadget_ep_enable(struct dwc3_ep =
+*dep, unsigned int action)
+>>>  	int			ret;
+>>>=20=20
+>>>  	if (!(dep->flags & DWC3_EP_ENABLED)) {
+>>> +		ret =3D dwc3_gadget_resize_tx_fifos(dep);
+>>> +		if (ret)
+>>> +			return ret;
+>>=20
+>> doesn't it look odd that you're resizing every fifo every time a new
+>> endpoint is enabled? Is there a better way to achieve this?
+>>=20
+> We're only resizing a single fifo per call, and clearing the previous
+> fifo configuration upon receiving the set address.  In the past, I know
+> the change was to resize all fifos after receiving the set configuration
+> packet.  With that approach, I believe we saw issues with some function
+> drivers that immediately queued a USB request during their set_alt()
+> routine, followed by the dwc3 ep0 driver calling the TX fifo resize
+> API.(as the tx fifo resize was executed after we delegated the set
+> config packet to the USB composite)
 
->> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
->> index 6dee4dabc0a4..76db9b530861 100644
->> --- a/drivers/usb/dwc3/ep0.c
->> +++ b/drivers/usb/dwc3/ep0.c
->> @@ -601,8 +601,9 @@ static int dwc3_ep0_set_config(struct dwc3 *dwc, struct usb_ctrlrequest *ctrl)
->>  {
->>  	enum usb_device_state state = dwc->gadget.state;
->>  	u32 cfg;
->> -	int ret;
->> +	int ret, num, size;
-> 
-> no, no. Please one declaration per line.
-> 
-Got it.
->>  	u32 reg;
->> +	struct dwc3_ep *dep;
-> 
-> Keep reverse xmas tree order.
-> 
-Understood.
->> @@ -611,6 +612,40 @@ static int dwc3_ep0_set_config(struct dwc3 *dwc, struct usb_ctrlrequest *ctrl)
->>  		return -EINVAL;
->>  
->>  	case USB_STATE_ADDRESS:
->> +		/*
->> +		 * If tx-fifo-resize flag is not set for the controller, then
->> +		 * do not clear existing allocated TXFIFO since we do not
->> +		 * allocate it again in dwc3_gadget_resize_tx_fifos
->> +		 */
->> +		if (dwc->needs_fifo_resize) {
->> +			/* Read ep0IN related TXFIFO size */
->> +			dep = dwc->eps[1];
->> +			size = dwc3_readl(dwc->regs, DWC3_GTXFIFOSIZ(0));
->> +			if (dwc3_is_usb31(dwc))
->> +				dep->fifo_depth = DWC31_GTXFIFOSIZ_TXFDEP(size);
->> +			else
->> +				dep->fifo_depth = DWC3_GTXFIFOSIZ_TXFDEP(size);
->> +
->> +			dwc->last_fifo_depth = dep->fifo_depth;
->> +			/* Clear existing TXFIFO for all IN eps except ep0 */
->> +			for (num = 3; num < min_t(int, dwc->num_eps,
->> +				DWC3_ENDPOINTS_NUM); num += 2) {
->> +				dep = dwc->eps[num];
->> +				/* Don't change TXFRAMNUM on usb31 version */
->> +				size = dwc3_is_usb31(dwc) ?
->> +					dwc3_readl(dwc->regs,
->> +						   DWC3_GTXFIFOSIZ(num >> 1)) &
->> +						   DWC31_GTXFIFOSIZ_TXFRAMNUM :
->> +						   0;
->> +
->> +				dwc3_writel(dwc->regs,
->> +					    DWC3_GTXFIFOSIZ(num >> 1),
->> +					    size);
->> +				dep->fifo_depth = 0;
->> +			}
->> +			dwc->num_ep_resized = 0;
-> 
-> care to move this into a helper that you call unconditionally and the
-> helper returns early is !needs_fifo_resize?
-> 
-Sure, I'll include that in the next revision.
->> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->> index 00746c2848c0..777badf3e85d 100644
->> --- a/drivers/usb/dwc3/gadget.c
->> +++ b/drivers/usb/dwc3/gadget.c
->> @@ -540,6 +540,117 @@ static int dwc3_gadget_start_config(struct dwc3_ep *dep)
->>  	return 0;
->>  }
->>  
->> +/*
->> + * dwc3_gadget_resize_tx_fifos - reallocate fifo spaces for current use-case
->> + * @dwc: pointer to our context structure
->> + *
->> + * This function will a best effort FIFO allocation in order
->> + * to improve FIFO usage and throughput, while still allowing
->> + * us to enable as many endpoints as possible.
->> + *
->> + * Keep in mind that this operation will be highly dependent
->> + * on the configured size for RAM1 - which contains TxFifo -,
->> + * the amount of endpoints enabled on coreConsultant tool, and
->> + * the width of the Master Bus.
->> + *
->> + * In general, FIFO depths are represented with the following equation:
->> + *
->> + * fifo_size = mult * ((max_packet + mdwidth)/mdwidth + 1) + 1
->> + *
->> + * Conversions can be done to the equation to derive the number of packets that
->> + * will fit to a particular FIFO size value.
->> + */
->> +static int dwc3_gadget_resize_tx_fifos(struct dwc3_ep *dep)
->> +{
->> +	struct dwc3 *dwc = dep->dwc;
->> +	int ram1_depth, mdwidth, fifo_0_start, tmp, num_in_ep;
->> +	int min_depth, remaining, fifo_size, mult = 1, fifo, max_packet = 1024;
-> 
-> one declaration per line, also make sure you order it in reverse xmas
-> tree order.
-> 
-Will make sure to fix this in further declarations.
->> +	if (!dwc->needs_fifo_resize)
->> +		return 0;
->> +
->> +	/* resize IN endpoints except ep0 */
->> +	if (!usb_endpoint_dir_in(dep->endpoint.desc) || dep->number <= 1)
->> +		return 0;
->> +
->> +	/* Don't resize already resized IN endpoint */
->> +	if (dep->fifo_depth)
-> 
-> using fifo_depth as a flag seems flakey to me. What happens when someone
-> in the future changes the behavior below and this doesn't apply anymore?
-> 
-> Also, why is this procedure called more than once for the same endpoint?
-> Does that really happen?
-> 
-I guess it can be considered a bug elsewhere (ie usb gadget or function
-driver) if this happens twice.  Plus, if we decide to keep this in the
-dwc3 enable endpoint path, the DWC3_EP_ENABLED flag will ensure it's
-called only once as well.  Its probably overkill to check fifo_depth here.
->> +		return 0;
->> +
->> +	ram1_depth = DWC3_RAM1_DEPTH(dwc->hwparams.hwparams7);
->> +	mdwidth = DWC3_MDWIDTH(dwc->hwparams.hwparams0);
->> +	/* MDWIDTH is represented in bits, we need it in bytes */
->> +	mdwidth >>= 3;
->> +
->> +	if (((dep->endpoint.maxburst > 1) &&
->> +			usb_endpoint_xfer_bulk(dep->endpoint.desc))
->> +			|| usb_endpoint_xfer_isoc(dep->endpoint.desc))
->> +		mult = 3;
->> +
->> +	if ((dep->endpoint.maxburst > 6) &&
->> +			usb_endpoint_xfer_bulk(dep->endpoint.desc)
->> +			&& dwc3_is_usb31(dwc))
->> +		mult = 6;
->> +
->> +	/* FIFO size for a single buffer */
->> +	fifo = (max_packet + mdwidth)/mdwidth;
-> 
-> add spaces around integer division operator
-> 
->> +	fifo++;
->> +
->> +	/* Calculate the number of remaining EPs w/o any FIFO */
->> +	num_in_ep = dwc->num_eps/2;
->> +	num_in_ep -= dwc->num_ep_resized;
->> +	/* Ignore EP0 IN */
->> +	num_in_ep--;
->> +
->> +	/* Reserve at least one FIFO for the number of IN EPs */
->> +	min_depth = num_in_ep * (fifo+1);
->> +	remaining = ram1_depth - min_depth - dwc->last_fifo_depth;
->> +
->> +	/* We've already reserved 1 FIFO per EP, so check what we can fit in
-> 
-> comment style is wrong
-> 
->> +	 * addition to it.  If there is not enough remaining space, allocate
->> +	 * all the remaining space to the EP.
->> +	 */
->> +	fifo_size = (mult-1) * fifo;
-> 
-> spaces around subtraction
-> 
-Will fix the formatting comments above.
->> +	if (remaining < fifo_size) {
->> +		if (remaining > 0)
->> +			fifo_size = remaining;
->> +		else
->> +			fifo_size = 0;
->> +	}
->> +
->> +	fifo_size += fifo;
->> +	fifo_size++;
-> 
-> why the increment?
-> 
-This is to account for the last +1 in the equation from the DWC3 databook:
-fifo_size = mult * ((max_packet + mdwidth)/mdwidth + 1) + 1 <- this one
+I don't remember seeing such an issue. Allocating FIFOs after we know
+the entire requirements would avoid another possible situation, that of
+dwc3 exausting FIFO space before it knows there are more enpdoints to
+enable.
 
->> +	dep->fifo_depth = fifo_size;
->> +
->> +	/* Check if TXFIFOs start at non-zero addr */
->> +	tmp = dwc3_readl(dwc->regs, DWC3_GTXFIFOSIZ(0));
->> +	fifo_0_start = DWC3_GTXFIFOSIZ_TXFSTADDR(tmp);
->> +
->> +	fifo_size |= (fifo_0_start + (dwc->last_fifo_depth << 16));
->> +	if (dwc3_is_usb31(dwc))
->> +		dwc->last_fifo_depth += DWC31_GTXFIFOSIZ_TXFDEP(fifo_size);
->> +	else
->> +		dwc->last_fifo_depth += DWC3_GTXFIFOSIZ_TXFDEP(fifo_size);
->> +
->> +	/* Check fifo size allocation doesn't exceed available RAM size. */
->> +	if (dwc->last_fifo_depth >= ram1_depth) {
->> +		dev_err(dwc->dev, "Fifosize(%d) > RAM size(%d) %s depth:%d\n",
->> +				(dwc->last_fifo_depth * mdwidth), ram1_depth,
->> +				dep->endpoint.name, fifo_size);
->> +		if (dwc3_is_usb31(dwc))
->> +			fifo_size = DWC31_GTXFIFOSIZ_TXFDEP(fifo_size);
->> +		else
->> +			fifo_size = DWC3_GTXFIFOSIZ_TXFDEP(fifo_size);
->> +		dwc->last_fifo_depth -= fifo_size;
->> +		dep->fifo_depth = 0;
->> +		return -ENOMEM;
->> +	}
->> +
->> +	dwc3_writel(dwc->regs, DWC3_GTXFIFOSIZ(dep->number >> 1), fifo_size);
->> +	dwc->num_ep_resized++;
-> 
-> add a blank line here
-> 
->> +	return 0;
->> +}
->> +
->>  static int dwc3_gadget_set_ep_config(struct dwc3_ep *dep, unsigned int action)
->>  {
->>  	const struct usb_ss_ep_comp_descriptor *comp_desc;
->> @@ -620,6 +731,10 @@ static int __dwc3_gadget_ep_enable(struct dwc3_ep *dep, unsigned int action)
->>  	int			ret;
->>  
->>  	if (!(dep->flags & DWC3_EP_ENABLED)) {
->> +		ret = dwc3_gadget_resize_tx_fifos(dep);
->> +		if (ret)
->> +			return ret;
-> 
-> doesn't it look odd that you're resizing every fifo every time a new
-> endpoint is enabled? Is there a better way to achieve this?
-> 
-We're only resizing a single fifo per call, and clearing the previous
-fifo configuration upon receiving the set address.  In the past, I know
-the change was to resize all fifos after receiving the set configuration
-packet.  With that approach, I believe we saw issues with some function
-drivers that immediately queued a USB request during their set_alt()
-routine, followed by the dwc3 ep0 driver calling the TX fifo resize
-API.(as the tx fifo resize was executed after we delegated the set
-config packet to the USB composite)
+One possibility around this was suggested above, something along the
+lines of:
 
-Thanks
-Wesley
+	usb_gadget_ep_enable_bulk(struct usb_gadget *, struct
+		usb_ep_alloc_desc *alloc_desc)
 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+(please think of better names, I'm hopeless haha)
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl8yROkACgkQzL64meEa
+mQYsgw//VrujRt4ABbuiEhJpUVG0Uu0meU5L8aQMg+eTI3U55m2TViV+G+sIs1+T
+JjE8Ly1rGqaBL+M3uf38+XNqaHL63J25udIgKeycTb3hOurfQMbqIXUBmVmaMe7l
+XGIu4oGw7K4iH0VyqTomvfnWidVRgJMYygv6OFMiSkgGugWW2A4wJ5Wum/+8VweB
+YpNSOXC7rp12Ws/cL3+760sJPEqS1FrND33MEilIVJh2nWUk8UEalBo16+OCcf7Y
+IzWP+ek6355TiKbCvTCE9OMhg1AySEF3nzXrne1LJkZGBYJrUZ0dQh7h6mmdPZIy
+jRwspFEu0eNHDdpuKdCuMurVNc6rJR9RXFsCQJSUFXDig8KJOMlRVO5GlsmHhfjt
+VEdHhej0ZZDxL+M49Af9OBV6VXE0KrUE2FU7j/wotYV+A+7pn+5M1/aMaBFy62OA
+96EjNiPBGf9O/6fvhCt3zFp+d+g2el0A7Jbha9N8W+aHQM8YOiQ9pW+ulqQh2du5
+SoiTtmIzg0DBDlS6Kei4w04e/keD+vn09ALLsbaKE1E3swDq5t8ZKlek2GErugNO
+LegzKyzJe9f5mop1EE0L/1xVzGI1bhcYeDHfPJt3LlWess2XxVZ5+ysGklD4Fs0u
+bBLlQ3EvO7vyzN/GntKDZjyr/DuHqEQ+MCp4YbkolTu2HYhqxb4=
+=vvEl
+-----END PGP SIGNATURE-----
+--=-=-=--
