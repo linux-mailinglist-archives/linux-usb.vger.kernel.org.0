@@ -2,61 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C49F4241F0E
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Aug 2020 19:19:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70DCE241F3A
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Aug 2020 19:29:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729184AbgHKRTF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Aug 2020 13:19:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48744 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729116AbgHKRTE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Aug 2020 13:19:04 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6464BC06174A
-        for <linux-usb@vger.kernel.org>; Tue, 11 Aug 2020 10:19:04 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id g6so14357161ljn.11
-        for <linux-usb@vger.kernel.org>; Tue, 11 Aug 2020 10:19:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:subject:message-id:date:user-agent:mime-version
-         :content-transfer-encoding:content-language;
-        bh=VgfZ0yf0u6CPD7GngLkF0ERtij6py9wcrO05kR7rTbQ=;
-        b=alUp2lexe58zyCe7TMSrKVOWmMFeWK/Ybe7kkzT1Gpga6lkvp4rJZpmMAWntfeA2L7
-         LR7sH33M4t6WWtt8Ehdjpqj3fvsp969gIWiBnxPkWl00lyiAD+Yw+2x3mQ2YuaiZZ+7d
-         OIsdnD745u2oraD5D/ylSt3UwjItOAh1RCmVWWTCsefc2kehvPMXZQGOxeE1X1OtbHme
-         wMZpnmF9Ae/sgA2iwxV2x9xyJBj75S6CGay3BQCv4gT2uR2iGy2OZOjdHfJItG19YEdx
-         H9TfR0SOoW1bZZxC5Ww9jiR0Yla+3feperxslmTdCf4S3y42a9KYDsUQ2dW4fwNVRwJO
-         4Pgg==
+        id S1729324AbgHKR3m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Aug 2020 13:29:42 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:48795 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729258AbgHKR3g (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Aug 2020 13:29:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1597166974;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/kCCiP1A994GEPhfTMliHq1uK+Sv/vNDYIXMua8VMzw=;
+        b=IqDuLgB6JJNeR0UFLOWa+giGAEu2+7S1ZRnVivBFGZEbewfUjRrQAnRG12cJjwF7TFt6Eu
+        wHQ1do3sBMR1J6aD/tuz9H6GlecmHeebI2mFspeJrPQpmssjLMiK/UgxIhjcFQ6HgUVLaz
+        bsatkcLL428CRS2XQa0/Q/SBxS92AGQ=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-449-2nyRLVfBMhGmF44vPv2c0Q-1; Tue, 11 Aug 2020 13:29:32 -0400
+X-MC-Unique: 2nyRLVfBMhGmF44vPv2c0Q-1
+Received: by mail-qt1-f200.google.com with SMTP id w15so10302425qtv.11
+        for <linux-usb@vger.kernel.org>; Tue, 11 Aug 2020 10:29:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:message-id:date:user-agent
-         :mime-version:content-transfer-encoding:content-language;
-        bh=VgfZ0yf0u6CPD7GngLkF0ERtij6py9wcrO05kR7rTbQ=;
-        b=NJqw902MJ7X9+fWClKjVaFU5PKXX9wcevptcxwEFTBG5wg6OLAK6to6ihZKz0RDpUR
-         bpBmADOCtldUTaBmmcYHUxGyjHSu8DXeBYu4fzbWIf667sOvTrNNdaulSsNoQFiQXucI
-         iTxt0dBm5wWpjhraf+lgZaxMndc3zBvio12BmoQ8OLwjCKZq+FsIPx08rPjTKXy3Z3PF
-         wdfSPFLmROFtKRsHwPqIuF6jYavjnbC7pEYdfiyfV6pf1noKBltZZ1FqS8g0ySWOW56m
-         Mlm30OslDALcmZWFIJLIeQOqucQzzRCKE2VI2ceIeZd6A60Vpn0QMszUeWGBS0QqV8lK
-         uHXg==
-X-Gm-Message-State: AOAM532ETQiGonGmL+AD3j3fmQn0MdavYVfmOXa7vnaETYmlp3ZNqn36
-        tvdtcAMhjs9GxWIIb1X3fE4=
-X-Google-Smtp-Source: ABdhPJwlLDywVrOB3Vqt2dOQFhVqc2nayXUPNuTvi3jVy5ByQDi4rGz43A5o/0r2NAJrO8KpHQuZpA==
-X-Received: by 2002:a2e:8145:: with SMTP id t5mr3345940ljg.398.1597166342415;
-        Tue, 11 Aug 2020 10:19:02 -0700 (PDT)
-Received: from [10.10.0.8] ([185.213.154.162])
-        by smtp.googlemail.com with ESMTPSA id j17sm11788593lfr.32.2020.08.11.10.19.00
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=/kCCiP1A994GEPhfTMliHq1uK+Sv/vNDYIXMua8VMzw=;
+        b=iTUiZhkrHZwk0jL5wKJ9ya9yFt69o9Yh1B5BTmI0JIEX8D67AS0wrvsQZmslSOdR0i
+         C8uVgsHXUx1uFIZc/db/qTEOwsBmL1UIX/Ll77gXD960zQQmw5LGm7HKtPvq9A/56dVP
+         CtyRp5Mg19omgh2IANm1vRvxFYYo2BpkYJGPOVUUyI8h+CkuymOS+COQBYMrGusy0vTZ
+         tUlJrK9aIFgVmvnRNyztOdQu3w89R5s5SkLHqxE26isa2Wax81ksX7EqKgRNddb9L4yH
+         gVMk2PwQFbmG8qtxKMhq0Czs/6xM8ACI09+Rfvyi4rLO6qEVzH1aaV1mxvwf3Q0vurJQ
+         RBBA==
+X-Gm-Message-State: AOAM530iYlpFREG5K+dy2iBN/9tGNWhWZVNRYQ9xpkEEq7UQpr9PoVw9
+        uP7vOlthRK0jHrbe2aatShISvRoWXn4wQnQm8wXPKjAmb+e4RZpMgvWcwo2XkG1xtaRZhnjgoYe
+        ARKtcJgUEJvDR5U5/Wijt
+X-Received: by 2002:ac8:6e87:: with SMTP id c7mr2347335qtv.62.1597166971940;
+        Tue, 11 Aug 2020 10:29:31 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyL8bEYELl1qXi1MXs8Z4bGDTdMzjg5IXgTDDjBowuqwx+PFGWiyKTQTphCbSqHo0N18EI7IQ==
+X-Received: by 2002:ac8:6e87:: with SMTP id c7mr2347311qtv.62.1597166971642;
+        Tue, 11 Aug 2020 10:29:31 -0700 (PDT)
+Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
+        by smtp.gmail.com with ESMTPSA id g55sm20376876qta.94.2020.08.11.10.29.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Aug 2020 10:19:01 -0700 (PDT)
-From:   Patrik Nilsson <nipatriknilsson@gmail.com>
-To:     linux-usb@vger.kernel.org
-Subject: high speed data to usb disk makes the kernel think that is has been
- unmounted
-Message-ID: <a161e45d-6ce8-2077-c513-380b67c4dfd8@gmail.com>
-Date:   Tue, 11 Aug 2020 19:19:00 +0200
+        Tue, 11 Aug 2020 10:29:31 -0700 (PDT)
+Subject: Re: [PATCH] USB: realtek_cr: fix return check for dma functions
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     gregkh@linuxfoundation.org, acozzette@cs.hmc.edu,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        linux-kernel@vger.kernel.org
+References: <20200811151505.12222-1-trix@redhat.com>
+ <20200811160348.GD335280@rowland.harvard.edu>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <1f7d5a64-f264-4fed-bf90-b64e2693652d@redhat.com>
+Date:   Tue, 11 Aug 2020 10:29:29 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20200811160348.GD335280@rowland.harvard.edu>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
@@ -64,57 +73,55 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi!
 
-I have an issue with a usb to sata adapter when much high speed data is 
-sent. If I erase my 4Tb SSD disk connected to the usb to sata interface 
-with a "slower" /dev/urandom it works, but if I exchanges this to 
-/dev/zero the disk is after a while disconnected.
+On 8/11/20 9:03 AM, Alan Stern wrote:
+> On Tue, Aug 11, 2020 at 08:15:05AM -0700, trix@redhat.com wrote:
+>> From: Tom Rix <trix@redhat.com>
+>>
+>> clang static analysis reports this representative problem
+>>
+>> realtek_cr.c:639:3: warning: The left expression of the compound
+>>   assignment is an uninitialized value. The computed value will
+>>   also be garbage
+>>     SET_BIT(value, 2);
+>>     ^~~~~~~~~~~~~~~~~
+>>
+>> value is set by a successful call to rts51x_read_mem()
+>>
+>> 	retval = rts51x_read_mem(us, 0xFE77, &value, 1);
+>> 	if (retval < 0)
+>> 		return -EIO;
+>>
+>> A successful call to rts51x_read_mem returns 0, failure can
+>> return positive and negative values.  This check is wrong
+>> for a number of functions.  Fix the retval check.
+>>
+>> Fixes: 065e60964e29 ("ums_realtek: do not use stack memory for DMA")
+>> Signed-off-by: Tom Rix <trix@redhat.com>
+>> ---
+>>  drivers/usb/storage/realtek_cr.c | 36 ++++++++++++++++----------------
+>>  1 file changed, 18 insertions(+), 18 deletions(-)
+>>
+>> diff --git a/drivers/usb/storage/realtek_cr.c b/drivers/usb/storage/realtek_cr.c
+>> index 3789698d9d3c..b983753e2368 100644
+>> --- a/drivers/usb/storage/realtek_cr.c
+>> +++ b/drivers/usb/storage/realtek_cr.c
+>> @@ -481,16 +481,16 @@ static int enable_oscillator(struct us_data *us)
+>>  	u8 value;
+>>  
+>>  	retval = rts51x_read_mem(us, 0xFE77, &value, 1);
+>> -	if (retval < 0)
+>> +	if (retval != STATUS_SUCCESS)
+>>  		return -EIO;
+> Instead of changing all these call sites, wouldn't it be a lot easier 
+> just to change rts51x_read_mem() to make it always return a negative 
+> value (such as -EIO) when there's an error?
+>
+> Alan Stern
 
-For logs from udev and more debug attempts see: 
-https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1886172
+I thought about that but there was already existing (retval != STATUS_SUCCESS) checks for these calls.
 
-Description:
+Tom
 
-When the speed of data with a usb disk device is too high, the probes 
-that check if the disk still exists is missed. This makes the disk to be 
-unmounted and is remounted with an other drive letter (/dev/sdX). If 
-this disk is the root ("/"), the computer hangs.
+>
 
-A usb SSD-disk (4 TB) connected to a USB port reproduce this bug easily. 
-This has never happened with a mechanical USB-drive.
-
-Symptoms and how to reproduce:
-
-1) (Disk mounted as root) Computer hangs. Only way to get started again 
-is a hard reset.
-
-2) (Erasing disk, not mounted as root) If you erase a disk with dd ("dd 
-if=/dev/zero of=/dev/sdX"), the disk disappears from the mounted list 
-and reappears as an other drive letter. In my case the data is 
-redirected to /dev/null and the fans speed up. The apparent data 
-transfer speed is also increased. Usually this happens after about 45 to 
-60 minutes.
-
-3) Fill RAM with programs and make sure the swap to this disk is used.
-
-Bug found in:
-
-$ uname -a
-Linux pb-189b1884 5.4.0-40-generic #44-Ubuntu SMP Tue Jun 23 00:01:04 
-UTC 2020 x86_64 x86_64 x86_64 GNU/Linux
-
-$ cat /proc/version_signature
-Ubuntu 5.4.0-40.44-generic 5.4.44
-
-Hardware:
-
-Tested with slower and faster computers. Tested directly connected to a 
-computer and via a hub. They all reproduce this bug.
-
-Workaround:
-
-None found.
-
-Best regards,
-Patrik
