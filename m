@@ -2,80 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 692BB2418F8
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Aug 2020 11:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E12241AD8
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Aug 2020 14:17:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728454AbgHKJfs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Aug 2020 05:35:48 -0400
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:9505 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728422AbgHKJfr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Aug 2020 05:35:47 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5f3266650004>; Tue, 11 Aug 2020 02:35:33 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Tue, 11 Aug 2020 02:35:47 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Tue, 11 Aug 2020 02:35:47 -0700
-Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 11 Aug
- 2020 09:35:46 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Tue, 11 Aug 2020 09:35:46 +0000
-Received: from jckuo-lt.nvidia.com (Not Verified[10.19.100.79]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5f3266700002>; Tue, 11 Aug 2020 02:35:46 -0700
-From:   JC Kuo <jckuo@nvidia.com>
-To:     <mathias.nyman@linux.intel.com>, <gregkh@linuxfoundation.org>,
-        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>
-CC:     <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <nkristam@nvidia.com>, JC Kuo <jckuo@nvidia.com>
-Subject: [PATCH] usb: host: xhci-tegra: remove a duplicated entry
-Date:   Tue, 11 Aug 2020 17:35:31 +0800
-Message-ID: <20200811093531.720503-1-jckuo@nvidia.com>
-X-Mailer: git-send-email 2.25.1
+        id S1728651AbgHKMRC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Aug 2020 08:17:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58564 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728556AbgHKMQm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Aug 2020 08:16:42 -0400
+Received: from mail-oo1-xc43.google.com (mail-oo1-xc43.google.com [IPv6:2607:f8b0:4864:20::c43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F7EC06174A;
+        Tue, 11 Aug 2020 05:16:41 -0700 (PDT)
+Received: by mail-oo1-xc43.google.com with SMTP id y30so2579022ooj.3;
+        Tue, 11 Aug 2020 05:16:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BfaOWSVdZQ07T1WYL8SAoDKGztX/6CbsXqzUzK0St8s=;
+        b=SUZSVEhCg6bsE5g5AFV3Nu7ILrIBK14FCJeQTRW4bRuMioqVg6Xp+cvlp3Yg1AIoqp
+         +KJKITEVIQCC1qHMKKl6em+lfdg+/slX9FriU4yJcV/PdONBjp+w5Vg7c5lA5H/B30xo
+         kbK88mNEzpr+gxCHW2krRACRsrCFrXErLis+oz+OGxiTog21ZC3h/ORMHGljsYc9qYWV
+         ZeSRskj+HxmoIBBv6sNByjudCtnXj72+c/p3RBZs0DnyCBEZoD1zrdj3FaN1e60XJNeh
+         zDBtXC4LSVsOIfENZwvo9yqNGeotY1MPPOUoEKYypDhOkuCUPSA4AiGeNj248+s7ZXKA
+         jOMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BfaOWSVdZQ07T1WYL8SAoDKGztX/6CbsXqzUzK0St8s=;
+        b=dehgjnTXRiHNOkGlKjcTrGnd1GhBC0cslb6IMQqDgBQHpcX53uvuOqLGIbMv5B6odm
+         0isrv9qbXuDuRI8ZNgL55slnmpgjnHDUvOvrLTEdBQvHK84dAcLc2uyN0GqXEIZbYElR
+         iVyPe5Eh9a3IXX+II7b+vyBFCPHSJS6jTSfhm8ZrLRcOfI+7N4eUBqHl+l7iEY1l0VHE
+         /EzUBD1SO3SwJ8+oRxshr0emmx//cKsGRFaljsbSXOIiaOPEOapzqJ0lwWqR/xd/r+yU
+         8Wh4PKgstJZWYdK/RT7/HMR8RWzPd63v8c8cx9nFFBY8Mr/uNsrCa6PAj2OqhYxBlwaa
+         9F2g==
+X-Gm-Message-State: AOAM5321oNah6qdtpwjFo0Bkdy+lwc74yeF3o/LcS2BZjmVsdPM28NMI
+        Pu4eIYcW91tjxbj0mD8HpTfGSY9YPQ3GL/Bna9E=
+X-Google-Smtp-Source: ABdhPJzSaTIBww3RVWzclOnCFAapTOONrFiRaRjDySuKQvXkeW9wMlyEhPPRLW4/2hyPS3tLM0iChxXJ4fWU8jt/XPY=
+X-Received: by 2002:a4a:2c83:: with SMTP id o125mr823335ooo.84.1597148201081;
+ Tue, 11 Aug 2020 05:16:41 -0700 (PDT)
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1597138533; bh=I3xFnRdOqr7BOTNMc72IoEmLCcGBonmAQfRk4MXXurc=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         MIME-Version:X-NVConfidentiality:Content-Transfer-Encoding:
-         Content-Type;
-        b=qyqoETaf9EbYVH4WcEm1JzLEYcBTRTDs2IeTnrYQWL4EJVeRFqZHxFBxMDQqVGjDH
-         xjUpXvas+2jRRebxJKHNbPPIInJGNhlQRpPo9UeS6qsquO2T8hgZIr/5QjH7f0XNNc
-         pW2nYItssqRGfmrdo2P558NIAo3TtFoQA4ugriLgSutL/GFfnp8YGFJ7lNlxjhbS7J
-         mQG3/TjZgOatUIhtL5aivRCTwH8hXVDWrUNpYsl7zsFhmiqYAmUvpI7UHfVWvnxuDH
-         B5BW4Zc0puqwT+YRq6kNmmA69EBwPuffbeFhjRe9a4DfCqRVktw2/rLxdQeXJDT+wX
-         o5oeLJYwp2kcQ==
+References: <20200716030847.1564131-1-keescook@chromium.org>
+ <87h7tpa3hg.fsf@nanos.tec.linutronix.de> <202007301113.45D24C9D@keescook> <CAOMdWSJQKHAWY1P297b9koOLd8sVtezEYEyWGtymN1YeY27M6A@mail.gmail.com>
+In-Reply-To: <CAOMdWSJQKHAWY1P297b9koOLd8sVtezEYEyWGtymN1YeY27M6A@mail.gmail.com>
+From:   Allen <allen.lkml@gmail.com>
+Date:   Tue, 11 Aug 2020 17:46:29 +0530
+Message-ID: <CAOMdWSLef4Vy=k-Kfp8RJ++=SsMwCQTU4+hEueK_APDGvJ-PaA@mail.gmail.com>
+Subject: Re: [PATCH 0/3] Modernize tasklet callback API
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Oscar Carter <oscar.carter@gmx.com>,
+        Romain Perier <romain.perier@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-s390@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-usb@vger.kernel.org, kgdb-bugreport@lists.sourceforge.net,
+        alsa-devel@alsa-project.org,
+        Kernel Hardening <kernel-hardening@lists.openwall.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Remove a duplicated register "IPFS_XUSB_HOST_MSI_BAR_SZ_0" from
-tegra124_xusb_context_ipfs[] array.
+Kees,
 
-Signed-off-by: JC Kuo <jckuo@nvidia.com>
----
- drivers/usb/host/xhci-tegra.c | 1 -
- 1 file changed, 1 deletion(-)
+> >
+>
+> Here's the series re-based on top of 5.8
+> https://github.com/allenpais/tasklets/tree/V3
+>
+> Let me know how you would want these to be reviewed.
+>
 
-diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
-index 014d79334f50..0672edcba8f1 100644
---- a/drivers/usb/host/xhci-tegra.c
-+++ b/drivers/usb/host/xhci-tegra.c
-@@ -1863,7 +1863,6 @@ static const struct tegra_xusb_phy_type tegra124_phy_=
-types[] =3D {
- };
-=20
- static const unsigned int tegra124_xusb_context_ipfs[] =3D {
--	IPFS_XUSB_HOST_MSI_BAR_SZ_0,
- 	IPFS_XUSB_HOST_MSI_BAR_SZ_0,
- 	IPFS_XUSB_HOST_MSI_AXI_BAR_ST_0,
- 	IPFS_XUSB_HOST_MSI_FPCI_BAR_ST_0,
---=20
-2.25.1
+  I see the first set of infrastructure patches for tasklets have
+landed in Linus's tree. Good time to send out the ~200 patches?
 
+- Allen
