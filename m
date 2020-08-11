@@ -2,76 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C5A3241DC1
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Aug 2020 18:03:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFA9C241ED2
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Aug 2020 19:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728947AbgHKQDt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Aug 2020 12:03:49 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:46909 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728869AbgHKQDt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Aug 2020 12:03:49 -0400
-Received: (qmail 337967 invoked by uid 1000); 11 Aug 2020 12:03:48 -0400
-Date:   Tue, 11 Aug 2020 12:03:48 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     trix@redhat.com
-Cc:     gregkh@linuxfoundation.org, acozzette@cs.hmc.edu,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: realtek_cr: fix return check for dma functions
-Message-ID: <20200811160348.GD335280@rowland.harvard.edu>
-References: <20200811151505.12222-1-trix@redhat.com>
+        id S1729360AbgHKRA7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Aug 2020 13:00:59 -0400
+Received: from mail-io1-f69.google.com ([209.85.166.69]:34010 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728906AbgHKRAV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Aug 2020 13:00:21 -0400
+Received: by mail-io1-f69.google.com with SMTP id 127so10255299iou.1
+        for <linux-usb@vger.kernel.org>; Tue, 11 Aug 2020 10:00:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=gZgyni2GVSRYbWS9PH5RPXXStatdShT/Am/nC/on1wU=;
+        b=TKFL6XIOZGN40bSmQkV91WmPxsOqNyXJWB+DVTkNGsTKuw2CwrOmfpG0McDcGTOgab
+         HrwYcE2v7HX+zAjS/HJ+zwZr1ljxEO6wdxfmv4ahNKHqKWH93XkbSNoukv2VIWBpmIBe
+         mTmLv/tDXuDfvm9WwH1yv0y70Q1+obsI0uIxBEoKwH32G8PurLbMobYPm37/lEddn5YV
+         2UaVWgv3S6iHLscdWZKWmqhpPLfjHsacCGYC42WRHANiKOjAv1JN3Q4EZaRjmq68R2LT
+         2G1Z8uU0WJCLk7uVgYloj+kLBYhXvZlYIsI+oSu3GbtaD+oZikz3TcZu0Oqk/vdBBO5S
+         fVbA==
+X-Gm-Message-State: AOAM531mzIJOkGXLBn6D0GTIxm4nyZoHXHuNKiuBu2cj1MPrXZwECgAo
+        FaE19WIMQ/nZGEQbouYvHKKtzngP93KIS4S3DXFCH+JlA/7F
+X-Google-Smtp-Source: ABdhPJz1pliI1BOrZ+96rn0J2xfn79n1/E/FbQN1k0QqkVWljk/RNp2RC/UXhxEQMv88+KUaR4gwTJbwP2L0lzTvVuGkxRM+DF3w
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200811151505.12222-1-trix@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Received: by 2002:a05:6602:2f88:: with SMTP id u8mr23823093iow.210.1597165219516;
+ Tue, 11 Aug 2020 10:00:19 -0700 (PDT)
+Date:   Tue, 11 Aug 2020 10:00:19 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008e983905ac9d0182@google.com>
+Subject: KASAN: use-after-free Read in rtl_fw_do_work
+From:   syzbot <syzbot+ff4b26b0bfbff2dc7960@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, davem@davemloft.net, kuba@kernel.org,
+        kvalo@codeaurora.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, pkshih@realtek.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 11, 2020 at 08:15:05AM -0700, trix@redhat.com wrote:
-> From: Tom Rix <trix@redhat.com>
-> 
-> clang static analysis reports this representative problem
-> 
-> realtek_cr.c:639:3: warning: The left expression of the compound
->   assignment is an uninitialized value. The computed value will
->   also be garbage
->     SET_BIT(value, 2);
->     ^~~~~~~~~~~~~~~~~
-> 
-> value is set by a successful call to rts51x_read_mem()
-> 
-> 	retval = rts51x_read_mem(us, 0xFE77, &value, 1);
-> 	if (retval < 0)
-> 		return -EIO;
-> 
-> A successful call to rts51x_read_mem returns 0, failure can
-> return positive and negative values.  This check is wrong
-> for a number of functions.  Fix the retval check.
-> 
-> Fixes: 065e60964e29 ("ums_realtek: do not use stack memory for DMA")
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/usb/storage/realtek_cr.c | 36 ++++++++++++++++----------------
->  1 file changed, 18 insertions(+), 18 deletions(-)
-> 
-> diff --git a/drivers/usb/storage/realtek_cr.c b/drivers/usb/storage/realtek_cr.c
-> index 3789698d9d3c..b983753e2368 100644
-> --- a/drivers/usb/storage/realtek_cr.c
-> +++ b/drivers/usb/storage/realtek_cr.c
-> @@ -481,16 +481,16 @@ static int enable_oscillator(struct us_data *us)
->  	u8 value;
->  
->  	retval = rts51x_read_mem(us, 0xFE77, &value, 1);
-> -	if (retval < 0)
-> +	if (retval != STATUS_SUCCESS)
->  		return -EIO;
+Hello,
 
-Instead of changing all these call sites, wouldn't it be a lot easier 
-just to change rts51x_read_mem() to make it always return a negative 
-value (such as -EIO) when there's an error?
+syzbot found the following issue on:
 
-Alan Stern
+HEAD commit:    449dc8c9 Merge tag 'for-v5.9' of git://git.kernel.org/pub/..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=16cd1a26900000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6ef84fa8ee48e528
+dashboard link: https://syzkaller.appspot.com/bug?extid=ff4b26b0bfbff2dc7960
+compiler:       gcc (GCC) 10.1.0-syz 20200507
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ff4b26b0bfbff2dc7960@syzkaller.appspotmail.com
+
+usb 5-1: Direct firmware load for rtlwifi/rtl8192cufw.bin failed with error -2
+==================================================================
+BUG: KASAN: use-after-free in rtl_fw_do_work+0x407/0x430 drivers/net/wireless/realtek/rtlwifi/core.c:87
+Read of size 8 at addr ffff8881cd72ff38 by task kworker/1:5/3068
+
+CPU: 1 PID: 3068 Comm: kworker/1:5 Not tainted 5.8.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events request_firmware_work_func
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xf6/0x16e lib/dump_stack.c:118
+ print_address_description.constprop.0+0x1c/0x210 mm/kasan/report.c:383
+ __kasan_report mm/kasan/report.c:513 [inline]
+ kasan_report.cold+0x37/0x7c mm/kasan/report.c:530
+ rtl_fw_do_work+0x407/0x430 drivers/net/wireless/realtek/rtlwifi/core.c:87
+ request_firmware_work_func+0x126/0x250 drivers/base/firmware_loader/main.c:1001
+ process_one_work+0x94c/0x15f0 kernel/workqueue.c:2269
+ worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
+ kthread+0x392/0x470 kernel/kthread.c:292
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+
+The buggy address belongs to the page:
+page:000000004712885d refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1cd72f
+flags: 0x200000000000000()
+raw: 0200000000000000 0000000000000000 ffffea000735cbc8 0000000000000000
+raw: 0000000000000000 0000000000000000 00000000ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+ ffff8881cd72fe00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff8881cd72fe80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>ffff8881cd72ff00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+                                        ^
+ ffff8881cd72ff80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff8881cd730000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
