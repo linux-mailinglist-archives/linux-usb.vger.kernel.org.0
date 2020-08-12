@@ -2,86 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8224824280D
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Aug 2020 12:09:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA8FD24286E
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Aug 2020 12:56:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727066AbgHLKJ0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Aug 2020 06:09:26 -0400
-Received: from www262.sakura.ne.jp ([202.181.97.72]:58793 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727032AbgHLKJ0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Aug 2020 06:09:26 -0400
-Received: from fsav106.sakura.ne.jp (fsav106.sakura.ne.jp [27.133.134.233])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 07CA9OdC032456;
-        Wed, 12 Aug 2020 19:09:24 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav106.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav106.sakura.ne.jp);
- Wed, 12 Aug 2020 19:09:24 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav106.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 07CA9Od3032446
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO);
-        Wed, 12 Aug 2020 19:09:24 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Subject: Re: [PATCH] USB: cdc-wdm: Remove unsafe wdm_flush().
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Colin Ian King <colin.king@canonical.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-usb@vger.kernel.org,
-        syzbot <syzbot+854768b99f19e89d7f81@syzkaller.appspotmail.com>
-References: <1597188375-4787-1-git-send-email-penguin-kernel@I-love.SAKURA.ne.jp>
- <1597219371.28022.6.camel@suse.com>
-From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Message-ID: <9a57e64d-4f83-9df8-dcfb-f907d5983935@i-love.sakura.ne.jp>
-Date:   Wed, 12 Aug 2020 19:09:21 +0900
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S1727884AbgHLK4A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Aug 2020 06:56:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41842 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727095AbgHLKzq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Aug 2020 06:55:46 -0400
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FE76C06121D
+        for <linux-usb@vger.kernel.org>; Wed, 12 Aug 2020 03:54:24 -0700 (PDT)
+Received: by mail-yb1-xb43.google.com with SMTP id s195so1116364ybc.8
+        for <linux-usb@vger.kernel.org>; Wed, 12 Aug 2020 03:54:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=h1Wep4bWm4c6UJ7FpYIC1ACXuPoB2ZCMfU6PJTjxU/k=;
+        b=eHtAeuj7bl+NqyA/LfsHaO+6oyAIxBkO+xaPddsTkjseO3G/4FMwJLJZ3d+diuxq/O
+         YffChG6lM/ut84kiK2GdqizvnXUTzqNXiKNeOCFMCHYmku2UrRGBn1y3T1OsOwMYOEKv
+         LBmDv2mjmGXbF3KwlPMtLwFc3xM6G+0bvX65YPeFgFlF5FcqfYFe6/ujnqj6ZwqtqzRx
+         CRsXYh37MAdT1niXt9HvyCtXxvFJMDNle0UTFpVQ2TzE6EUtu97WN+v6jDd+jOD/fhNs
+         NHhfILPNMrGbOKQ0K/3+sSXJpmcDIWxt9q3WVW0iG0t9vhqzhK4edfeGY8dzuTRSQOKD
+         0iWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=h1Wep4bWm4c6UJ7FpYIC1ACXuPoB2ZCMfU6PJTjxU/k=;
+        b=SmjS59+togeuZ2Mrz7I2nZ/6/wN6WgTOQUX0GAd6c+XidqioPqYPFNFzFtDTk0mCcF
+         4CudNM3Uy1EC/ZkHNciB/hez/RBo4X5AVxusMTgSE7mQQ/OsIGI8vlmNkM29z2dt21iV
+         LJlWw6eXF+5m1Lz07LBHU3tf3Lag4Dk+xboTj1HzjAzXhHIFmt5n5HDf5MIXHNe0IZXZ
+         G5u7oqB1RpkUqGJIwIfLGdFcz0UidH6CzFZ3fuNEPtHEZd4tsFqXmZ6aYW70P1Az8tq1
+         mMATS12ExNcDgKqNsqHmDgi824dpkG51mTcp+9dFnsh/pRIxpHbYs7FJcAq50f83jJdH
+         m/5Q==
+X-Gm-Message-State: AOAM532nF5VT/W9Zfu5s7JPLIY3NjFL75ynzn/fetd/6ukQIaDwaD3iS
+        2MQ70lTtNXsiDqP/E2HrLsQvnia/RfJahxPGql4=
+X-Google-Smtp-Source: ABdhPJxlNC8oUTUc5nL8/QI7Vh+VC7WTqcpf0G2Ip8kZv1WBdyY0VUrpvwJDuXU1Jl7EvF/Yh6KiQFr+AHCrWs7YdRU=
+X-Received: by 2002:a25:234a:: with SMTP id j71mr54485670ybj.504.1597229657758;
+ Wed, 12 Aug 2020 03:54:17 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1597219371.28022.6.camel@suse.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a05:7000:229b:0:0:0:0 with HTTP; Wed, 12 Aug 2020 03:54:17
+ -0700 (PDT)
+Reply-To: alexanadi0005@gmail.com
+From:   Alex Anadi <diplomatagency2011@gmail.com>
+Date:   Wed, 12 Aug 2020 11:54:17 +0100
+Message-ID: <CAG2PG9VSNH2ukcO6fsJhaDp9DqTRw4ujLo-DJjtej2T=gVdW3A@mail.gmail.com>
+Subject: Re:
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2020/08/12 17:02, Oliver Neukum wrote:
-> Am Mittwoch, den 12.08.2020, 08:26 +0900 schrieb Tetsuo Handa:
->> syzbot is reporting hung task at wdm_flush() [1], for there is a circular
->> dependency that wdm_flush() from flip_close() for /dev/cdc-wdm0 forever
->> waits for /dev/raw-gadget to be closed while close() for /dev/raw-gadget
->> cannot be called unless close() for /dev/cdc-wdm0 completes.
->>
->> It turned out that wdm_flush() is broken in multiple aspects.
-> 
-> Sorry,
-> 
-> this seems to be a miscommunication. I was under the impression that
-> you were testing patches. I will push them upstream. You
-> cannot just remove flush() without impairing error handling.
+Attention: Sir/Madam,
 
-Then, will you check
+Compliments of the season.
 
-  https://lore.kernel.org/linux-usb/254939d4-f3a1-8c7e-94e5-9862c02774fa@i-love.sakura.ne.jp/
+I am Mr Alex Anadi a senior staff of Computer Telex Dept of central
+bank of Nigeria.
 
-and
+I decided to contact you because of the prevailing security report
+reaching my office and the intense nature of polity in Nigeria.
 
-  https://lore.kernel.org/linux-usb/c85331fc-874c-6e46-a77f-0ef1dc075308@i-love.sakura.ne.jp/
+This is to inform you about the recent plan of federal government of
+Nigeria to send your fund to you via diplomatic immunity CASH DELIVERY
+SYSTEM valued at $10.6 Million United states dollars only, contact me
+for further details.
 
-before pushing upstream?
-
-> 
-> 	Regards
-> 		Oliver
-> 
-> 
-> Nacked-by: Oliver Neukum <oneukum@suse.com>
-> 
-
+Regards,
+Mr Alex Anadi.
