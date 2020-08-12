@@ -2,108 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA3162425F7
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Aug 2020 09:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5EA242686
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Aug 2020 10:02:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726946AbgHLHUH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Aug 2020 03:20:07 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:50468 "EHLO m43-7.mailgun.net"
+        id S1726680AbgHLIC5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Aug 2020 04:02:57 -0400
+Received: from mx2.suse.de ([195.135.220.15]:34134 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726897AbgHLHT5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 12 Aug 2020 03:19:57 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1597216797; h=Content-Transfer-Encoding: MIME-Version:
- References: In-Reply-To: Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=OLPKTdSqqloYxw93IHUq14f5yJAcWoSaKHnlKyo6IBE=; b=YhcnryVP3NElyKfH7dFjRTprJlnMgxlDWomKBdTnVT3McWbZK97sYbOIObEIVZavJe7LBOSM
- YZaJHfKzzLW0FHPUVJCS7dyRXjlFjWfF5mquDmRdfXoWYfuCp/8882RCeZw6Nm/Oajg53uom
- kFY2QesjCnpZe7lcG/VITjCvnO4=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
- 5f33981c4c787f237b5a48e7 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 12 Aug 2020 07:19:56
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 97B00C43395; Wed, 12 Aug 2020 07:19:56 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 95146C433C9;
-        Wed, 12 Aug 2020 07:19:55 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 95146C433C9
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=wcheng@codeaurora.org
-From:   Wesley Cheng <wcheng@codeaurora.org>
-To:     sboyd@kernel.org, heikki.krogerus@linux.intel.com,
-        agross@kernel.org, robh+dt@kernel.org, gregkh@linuxfoundation.org,
-        bjorn.andersson@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Wesley Cheng <wcheng@codeaurora.org>
-Subject: [PATCH v8 4/4] arm64: boot: dts: qcom: pm8150b: Add DTS node for PMIC VBUS booster
-Date:   Wed, 12 Aug 2020 00:19:25 -0700
-Message-Id: <20200812071925.315-5-wcheng@codeaurora.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200812071925.315-1-wcheng@codeaurora.org>
-References: <20200812071925.315-1-wcheng@codeaurora.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1726479AbgHLIC5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 12 Aug 2020 04:02:57 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 2EF0BAEA8;
+        Wed, 12 Aug 2020 08:03:17 +0000 (UTC)
+Message-ID: <1597219371.28022.6.camel@suse.com>
+Subject: Re: [PATCH] USB: cdc-wdm: Remove unsafe wdm_flush().
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Andrey Konovalov <andreyknvl@google.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Colin Ian King <colin.king@canonical.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-usb@vger.kernel.org,
+        syzbot <syzbot+854768b99f19e89d7f81@syzkaller.appspotmail.com>
+Date:   Wed, 12 Aug 2020 10:02:51 +0200
+In-Reply-To: <1597188375-4787-1-git-send-email-penguin-kernel@I-love.SAKURA.ne.jp>
+References: <1597188375-4787-1-git-send-email-penguin-kernel@I-love.SAKURA.ne.jp>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add the required DTS node for the USB VBUS output regulator, which is
-available on PM8150B.  This will provide the VBUS source to connected
-peripherals.
+Am Mittwoch, den 12.08.2020, 08:26 +0900 schrieb Tetsuo Handa:
+> syzbot is reporting hung task at wdm_flush() [1], for there is a circular
+> dependency that wdm_flush() from flip_close() for /dev/cdc-wdm0 forever
+> waits for /dev/raw-gadget to be closed while close() for /dev/raw-gadget
+> cannot be called unless close() for /dev/cdc-wdm0 completes.
+> 
+> It turned out that wdm_flush() is broken in multiple aspects.
 
-Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
----
- arch/arm64/boot/dts/qcom/pm8150b.dtsi   | 6 ++++++
- arch/arm64/boot/dts/qcom/sm8150-mtp.dts | 4 ++++
- 2 files changed, 10 insertions(+)
+Sorry,
 
-diff --git a/arch/arm64/boot/dts/qcom/pm8150b.dtsi b/arch/arm64/boot/dts/qcom/pm8150b.dtsi
-index 053c659734a7..9e560c1ca30d 100644
---- a/arch/arm64/boot/dts/qcom/pm8150b.dtsi
-+++ b/arch/arm64/boot/dts/qcom/pm8150b.dtsi
-@@ -53,6 +53,12 @@ power-on@800 {
- 			status = "disabled";
- 		};
- 
-+		pm8150b_vbus: dcdc@1100 {
-+			compatible = "qcom,pm8150b-vbus-reg";
-+			status = "disabled";
-+			reg = <0x1100>;
-+		};
-+
- 		pm8150b_typec: typec@1500 {
- 			compatible = "qcom,pm8150b-usb-typec";
- 			status = "disabled";
-diff --git a/arch/arm64/boot/dts/qcom/sm8150-mtp.dts b/arch/arm64/boot/dts/qcom/sm8150-mtp.dts
-index 6c6325c3af59..ba3b5b802954 100644
---- a/arch/arm64/boot/dts/qcom/sm8150-mtp.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8150-mtp.dts
-@@ -409,6 +409,10 @@ &ufs_mem_phy {
- 	vdda-pll-max-microamp = <19000>;
- };
- 
-+&pm8150b_vbus {
-+	status = "okay";
-+};
-+
- &usb_1_hsphy {
- 	status = "okay";
- 	vdda-pll-supply = <&vdd_usb_hs_core>;
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+this seems to be a miscommunication. I was under the impression that
+you were testing patches. I will push them upstream. You
+cannot just remove flush() without impairing error handling.
 
+	Regards
+		Oliver
+
+
+Nacked-by: Oliver Neukum <oneukum@suse.com>
