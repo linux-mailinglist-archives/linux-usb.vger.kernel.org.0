@@ -2,137 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A710B242425
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Aug 2020 04:51:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA3B124250E
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Aug 2020 07:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726420AbgHLCvb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Aug 2020 22:51:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52288 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726255AbgHLCva (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Aug 2020 22:51:30 -0400
-Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52751C06174A
-        for <linux-usb@vger.kernel.org>; Tue, 11 Aug 2020 19:51:30 -0700 (PDT)
-Received: by mail-qv1-xf49.google.com with SMTP id l10so476560qvw.22
-        for <linux-usb@vger.kernel.org>; Tue, 11 Aug 2020 19:51:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=HImBaAs0uc45OqtAJgZ8+ISMmBV9I7FItZjw+fSeCgo=;
-        b=G1n4xgpC9EfQKBRZfi0+3DN1iWPjo1Zuv1zvNLudk+pDViLirw7hQVaoPSBG8DtB5I
-         /kQWvXh6cGlZKQhD5KWxYFDplwN6NL8cDg1N09lOF/Olp3RKpDtoavBzaZTebtTMpUtt
-         pGYktLk6zgyL1yQ7T87fxpBXhJgblRg0VJBjqaNz8eYROIT/g1p2w5r4EX7XA786aO+e
-         +xEmBJEbyAe9kNrMo2MR6GEgajcLd9uPtRdpPurqTLGADOIn730CV4nKRm+b0WlMrvuQ
-         6WMVwBJ6f0T0DF76kR1rD1jIQ2d3YYD5DXRFeFgSW/J1VNbefwLikirKoBISYMijLOSp
-         jbsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=HImBaAs0uc45OqtAJgZ8+ISMmBV9I7FItZjw+fSeCgo=;
-        b=J6T3meTt2gh/91VjvVykMYzYPPdMjUSH2ig6ObHysLMqd1ZPVsSvxmSWNvX1nnQ+mE
-         clrSUORMkkVOS7SSkbJZXulZIPrjY5714SfiMhlIyKb+WdTHRoDEbEnDZumR4ckaz9ox
-         GIZq5+YiaBpbhJLhggmYMNLrYxmIpyrITZ3PMpPvwxPW1QyRM++BpdSXRqU4gEMTtjt7
-         SrOXTyq5tixWB/fL+3F6nWvzidshBDfYQCfy8w/UENGWUilmXKEinFsC5+rxTU7JoczL
-         a+HtB3+ollWTawDVRhusGO4vV1rCJwVJbgqFj1iCl1kN+JOf3t6ZYgz59m3oBpRL0rK1
-         HwGg==
-X-Gm-Message-State: AOAM533RfYNZKGInqRWPCjEzXRLpJGCtmwsvTNKyADadDDyf9PTEkSI2
-        9dIt/56XPJu0Noeb3HV/YD0zJug4Y7s=
-X-Google-Smtp-Source: ABdhPJyBpLfxQ5F41wghm9T9k6xYgeHM8BywD2CKeOutLUjVlWTuCK/1lKNzDVZMon06LiXqaR43N6vVWQo=
-X-Received: by 2002:a05:6214:3e8:: with SMTP id cf8mr4577952qvb.74.1597200689437;
- Tue, 11 Aug 2020 19:51:29 -0700 (PDT)
-Date:   Tue, 11 Aug 2020 19:51:26 -0700
-Message-Id: <20200812025126.574519-1-badhri@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.28.0.236.gb10cc79966-goog
-Subject: [PATCH v3] usb: typec: tcpm: Fix TDA 2.2.1.1 and TDA 2.2.1.2 failures
-From:   Badhri Jagan Sridharan <badhri@google.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Badhri Jagan Sridharan <badhri@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726507AbgHLFrt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Aug 2020 01:47:49 -0400
+Received: from aibo.runbox.com ([91.220.196.211]:49772 "EHLO aibo.runbox.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726430AbgHLFrt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 12 Aug 2020 01:47:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
+         s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        MIME-Version:Date:Message-ID:References:Cc:To:Subject:From;
+        bh=wsrb6xDEoSQ6++8Jvlsfl6n6XGZ9DYMcpQfBMRBqS5U=; b=aRY7hqTA5IMUYvBJSCRlJnZzgL
+        rGGaRgO+qQncaBMDAKGW9YUnr+cSvbFUdKSqk9ZLGPslurQtM+GQ4XBXlghFE3WZW/1rq0dxGamjw
+        rvekx2te5RlPMj7EzGezxlrC3EHfAwG5BOW+eD39y0SFaBsITbBWLuJY/5INbyINvw24i66LjK4UT
+        PKbQrYtlrY9Xqi22bVedAFlHQne7Tz2bI+hL4iDemSiVmg3rSzUkjD/ZmVq44vup2RrQcxkQrkeyj
+        jt/zLiWNCidFK0HlPLLhko+oHRqDaazaTWlP6LROjcXSFT94BDhsBNPZkJ3PI4opjgQD1yZRY/zwv
+        47Z9xiJQ==;
+Received: from [10.9.9.72] (helo=submission01.runbox)
+        by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+        (envelope-from <m.v.b@runbox.com>)
+        id 1k5jbp-0002ip-UJ; Wed, 12 Aug 2020 07:47:34 +0200
+Received: by submission01.runbox with esmtpsa  [Authenticated alias (536975)]  (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.90_1)
+        id 1k5jbg-00073V-9F; Wed, 12 Aug 2020 07:47:24 +0200
+From:   "M. Vefa Bicakci" <m.v.b@runbox.com>
+Subject: Re: [PATCH] usbip: Implement a match function to fix usbip
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Bastien Nocera <hadess@hadess.net>, linux-usb@vger.kernel.org
+Cc:     stable@vger.kernel.org,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Shuah Khan <shuah@kernel.org>
+References: <20200810160017.46002-1-m.v.b@runbox.com>
+ <6e450e16117afb9e1dd1e4270ef5c2e0d5885348.camel@hadess.net>
+ <a7351706-9933-a3e1-4e7d-b7ab6f289938@linuxfoundation.org>
+Message-ID: <99330f61-ed16-7e27-6852-d3486f331ef5@runbox.com>
+Date:   Wed, 12 Aug 2020 08:47:20 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.1.1
+MIME-Version: 1.0
+In-Reply-To: <a7351706-9933-a3e1-4e7d-b7ab6f289938@linuxfoundation.org>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From the spec:
-"7.1.5 Response to Hard Resets
-Hard Reset Signaling indicates a communication failure has occurred and
-the Source Shall stop driving VCONN, Shall remove Rp from the VCONN pin
-and Shall drive VBUS to vSafe0V as shown in Figure 7-9. The USB connection
-May reset during a Hard Reset since the VBUS voltage will be less than
-vSafe5V for an extended period of time. After establishing the vSafe0V
-voltage condition on VBUS, the Source Shall wait tSrcRecover before
-re-applying VCONN and restoring VBUS to vSafe5V. A Source Shall conform
-to the VCONN timing as specified in [USB Type-C 1.3]."
+On 10/08/2020 22.09, Shuah Khan wrote:
+> On 8/10/20 11:31 AM, Bastien Nocera wrote:
+>> On Mon, 2020-08-10 at 19:00 +0300, M. Vefa Bicakci wrote:
+>>> Commit 88b7381a939d ("USB: Select better matching USB drivers when
+>>> available") introduced the use of a "match" function to select a
+>>> non-generic/better driver for a particular USB device. This
+>>> unfortunately breaks the operation of usbip in general, as reported
+>>> in
+>>> the kernel bugzilla with bug 208267 (linked below).
+>>>
+>>> Upon inspecting the aforementioned commit, one can observe that the
+>>> original code in the usb_device_match function used to return 1
+>>> unconditionally, but the aforementioned commit makes the
+>>> usb_device_match
+>>> function use identifier tables and "match" virtual functions, if
+>>> either of
+>>> them are available.
+>>>
+>>> Hence, this commit implements a match function for usbip that
+>>> unconditionally returns true to ensure that usbip is functional
+>>> again.
+>>>
+>>> This change has been verified to restore usbip functionality, with a
+>>> v5.7.y kernel on an up-to-date version of Qubes OS 4.0, which uses
+>>> usbip to redirect USB devices between VMs.
+>>>
+>>> Thanks to Jonathan Dieter for the effort in bisecting this issue down
+>>> to the aforementioned commit.
+>>
+>> Looks correct. Thanks for root causing the problem.
+>>
+>> Reviewed-by: Bastien Nocera <hadess@hadess.net>
+>>
+> 
+> Thank you for finding and fixing the problem.
+> 
+> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
----
-Changes since V1 (Guenter's suggestion):
-- Bound SRC_HARD_RESET_VBUS_ON to accommodate tcpc drivers which doesn't
-  update the vbus status.
+Hello Shuah and Bastien,
 
-Changes since V2:
-- Reviewed-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/usb/typec/tcpm/tcpm.c | 28 +++++++++++++++++++++++++---
- 1 file changed, 25 insertions(+), 3 deletions(-)
+Thank you for reviewing the patch!
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 3ef37202ee37..a48e3f90d196 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -3372,13 +3372,31 @@ static void run_state_machine(struct tcpm_port *port)
- 			tcpm_set_state(port, SNK_HARD_RESET_SINK_OFF, 0);
- 		break;
- 	case SRC_HARD_RESET_VBUS_OFF:
--		tcpm_set_vconn(port, true);
-+		/*
-+		 * 7.1.5 Response to Hard Resets
-+		 * Hard Reset Signaling indicates a communication failure has occurred and the
-+		 * Source Shall stop driving VCONN, Shall remove Rp from the VCONN pin and Shall
-+		 * drive VBUS to vSafe0V as shown in Figure 7-9.
-+		 */
-+		tcpm_set_vconn(port, false);
- 		tcpm_set_vbus(port, false);
- 		tcpm_set_roles(port, port->self_powered, TYPEC_SOURCE,
- 			       tcpm_data_role_for_source(port));
--		tcpm_set_state(port, SRC_HARD_RESET_VBUS_ON, PD_T_SRC_RECOVER);
-+		/*
-+		 * If tcpc fails to notify vbus off, TCPM will wait for PD_T_SAFE_0V +
-+		 * PD_T_SRC_RECOVER before turning vbus back on.
-+		 * From Table 7-12 Sequence Description for a Source Initiated Hard Reset:
-+		 * 4. Policy Engine waits tPSHardReset after sending Hard Reset Signaling and then
-+		 * tells the Device Policy Manager to instruct the power supply to perform a
-+		 * Hard Reset. The transition to vSafe0V Shall occur within tSafe0V (t2).
-+		 * 5. After tSrcRecover the Source applies power to VBUS in an attempt to
-+		 * re-establish communication with the Sink and resume USB Default Operation.
-+		 * The transition to vSafe5V Shall occur within tSrcTurnOn(t4).
-+		 */
-+		tcpm_set_state(port, SRC_HARD_RESET_VBUS_ON, PD_T_SAFE_0V + PD_T_SRC_RECOVER);
- 		break;
- 	case SRC_HARD_RESET_VBUS_ON:
-+		tcpm_set_vconn(port, true);
- 		tcpm_set_vbus(port, true);
- 		port->tcpc->set_pd_rx(port->tcpc, true);
- 		tcpm_set_attached_state(port, true);
-@@ -3944,7 +3962,11 @@ static void _tcpm_pd_vbus_off(struct tcpm_port *port)
- 		tcpm_set_state(port, SNK_HARD_RESET_WAIT_VBUS, 0);
- 		break;
- 	case SRC_HARD_RESET_VBUS_OFF:
--		tcpm_set_state(port, SRC_HARD_RESET_VBUS_ON, 0);
-+		/*
-+		 * After establishing the vSafe0V voltage condition on VBUS, the Source Shall wait
-+		 * tSrcRecover before re-applying VCONN and restoring VBUS to vSafe5V.
-+		 */
-+		tcpm_set_state(port, SRC_HARD_RESET_VBUS_ON, PD_T_SRC_RECOVER);
- 		break;
- 	case HARD_RESET_SEND:
- 		break;
--- 
-2.28.0.236.gb10cc79966-goog
+Just to confirm, should I re-publish this patch after having added your
+Reviewed-by tags to the commit message? My current understanding is that
+a re-spin of a patch is only necessary when changes are requested during
+the code review. The development process documentation in the kernel
+repository does not mention this aspect, but I might have missed it during
+my quick search.
 
+Thanks again,
+
+Vefa
