@@ -2,71 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2873E242F0C
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Aug 2020 21:17:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58AC5242FFA
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Aug 2020 22:20:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726640AbgHLTRn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Aug 2020 15:17:43 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:39117 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726512AbgHLTRm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Aug 2020 15:17:42 -0400
-Received: by mail-io1-f67.google.com with SMTP id z6so4236773iow.6;
-        Wed, 12 Aug 2020 12:17:42 -0700 (PDT)
+        id S1726557AbgHLUUp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Aug 2020 16:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44080 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726030AbgHLUUo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Aug 2020 16:20:44 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB229C061383;
+        Wed, 12 Aug 2020 13:20:44 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id r4so1614999pls.2;
+        Wed, 12 Aug 2020 13:20:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=IeO2QX7jX5HpTExQro6Oxo9pVZ7dXOVfRlcfZocSNUA=;
+        b=uuGt8bIYTXENPkcGTC/MKsQN6zvk0hjl3gOq4bm9hxP6xc1EFnrxPmD4rltKQYT6QP
+         5HHSlX2LxDGP3P/bZoglmL0XCsWyLhmJx2UF2H/GqSEBiPMtWU3blCLJ/VAQKr4GntWe
+         ykSznhrG9+l4AEz7abkEAhPDPt1Hk3Kydsb05hQKCmr866aLNYMbvSkw6Umt+ycXEi5W
+         zVVuYx3YKDeHtdQaT+JVP2dJpsZxuTeWnNxxNjjdnCvE4vGveI2uy8p2KnW+xUwfW0PR
+         sPH30ZlMow4L9IV0XGv3sJ9nD5Kfs9kmeVgz1toBr7KnfXMVplzZOSI+L+QMDXd1avWI
+         42mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vr7JJj3Y9GiAlYzvS0+5aTL0iogN2guoGVxaz2usNJw=;
-        b=IDWFXRWPEdxdvvLiERhBXnfHf3giY6BH6XBIR2L6MDTFCgz2Yl3Fb+te+B5pqvevyn
-         2gDx9m6ZxpX+KNU+RZ9qBhNJtxqCDWdYHYyC0c1gJroTatvp7dHzDzDtoVl66HiMoLYy
-         pXV2rHpY3r63dWZfJqD877k/bfccjVprMGIxuOi+N5DKVWWgHXxg1JgvWojReaK/prLZ
-         AUjtBplc1BRN1qSuDgChLoXD/MDN3J02s/UY1xugS+TklrKouZPk7TUcnxnKY0jjhCYy
-         F7sl7gz0sqRwYQNK6VdD23MnGWpKCEVJEIOxlnwPMjJepIGXYh35S6oIOCCB81lkWfkK
-         BMxw==
-X-Gm-Message-State: AOAM532Ubj7ruE+YkO/QKe2+4ki7noroVVyGxR7aut46JiHN34XNH1ZA
-        K1jP/4YgAA9gbcpYMpdGBg==
-X-Google-Smtp-Source: ABdhPJxKxxPnwqRVYO+YsLSkOXYLymeOGqqn5pXYeKm702C03Xpk9n/t2XJ36W4WDKO1aokbNYZANA==
-X-Received: by 2002:a02:bb82:: with SMTP id g2mr1048806jan.54.1597259862191;
-        Wed, 12 Aug 2020 12:17:42 -0700 (PDT)
-Received: from xps15 ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id z9sm1462109ilm.78.2020.08.12.12.17.40
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=IeO2QX7jX5HpTExQro6Oxo9pVZ7dXOVfRlcfZocSNUA=;
+        b=FapEnFDD7kWEFO8IKEPNx7Nw1meN+LswJkai/lS2TLxsNaIstKGKqzCte2VVISpyek
+         JOcn9jaT9hSgQ0YkgTLxD5w77bfonIyyk2ZfnLbhT1hGU7/4o7E5yjJcqlmCH/iAyFwQ
+         XwPRMjxH2dAW+cTVp/9gKqlaeyTLb7drjvuqCYDFjk/tBik175fbz8ZNzydxWLGEuB0P
+         A0CUQV/ikRDms4xvnDwGXUTTzjW6xOBTCz1FY3EErlg5JcBTypGMnWKBc2mbaLQUqXDF
+         sJvy79Df5055TCpRoxf9OUCKmyelL12oSWAvexSDKUqWenH7aQfqtiCflXfMb+aPHFqt
+         +TKA==
+X-Gm-Message-State: AOAM532R/qtiAb7f2trSKD6QuEJ3hlol1RWiqotm+42pb3FH4McTZ0BB
+        Y3m2pg7HkJn3ygTpmtTGUpy4nSql
+X-Google-Smtp-Source: ABdhPJxwtx6DE4giBh/lTEgKbmIrZMP/Ul3scI0f2XYaq7kX2E6u67YaYVesBjVrYva0qVCwaujJ5A==
+X-Received: by 2002:a17:902:8e89:: with SMTP id bg9mr1025458plb.126.1597263644151;
+        Wed, 12 Aug 2020 13:20:44 -0700 (PDT)
+Received: from stbsrv-and-01.and.broadcom.net ([192.19.231.250])
+        by smtp.gmail.com with ESMTPSA id 75sm3292999pfx.187.2020.08.12.13.20.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Aug 2020 12:17:41 -0700 (PDT)
-Received: (nullmailer pid 2552036 invoked by uid 1000);
-        Wed, 12 Aug 2020 19:17:40 -0000
-Date:   Wed, 12 Aug 2020 13:17:40 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-imx@nxp.com,
-        kernel@pengutronix.de, linux-usb@vger.kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org, shawnguo@kernel.org
-Subject: Re: [PATCH v3 1/4] doc: dt-binding: ci-hdrc-usb2: add property for
- samsung picophy
-Message-ID: <20200812191740.GA2551988@bogus>
-References: <20200724060532.3878-1-peter.chen@nxp.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200724060532.3878-1-peter.chen@nxp.com>
+        Wed, 12 Aug 2020 13:20:43 -0700 (PDT)
+From:   Al Cooper <alcooperx@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Al Cooper <alcooperx@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>
+Subject: [PATCH 0/3] usb: Add driver for USB signal re-mapper
+Date:   Wed, 12 Aug 2020 16:20:15 -0400
+Message-Id: <20200812202018.49046-1-alcooperx@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 24 Jul 2020 14:05:29 +0800, Peter Chen wrote:
-> Add two parameters which are used to tune USB signal for samsung picophy,
-> which is used at imx7d, imx8mm, and imx8mn.
-> 
-> Reviewed-by: Jun Li <jun.li@nxp.com>
-> Signed-off-by: Peter Chen <peter.chen@nxp.com>
-> ---
-> Changes for v3:
-> - Changing propery name to indicate it is a samsung phy
-> - Add property range and default value.
-> 
->  Documentation/devicetree/bindings/usb/ci-hdrc-usb2.txt | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
+The Broadcom 7211 has new functionality that allows some USB low
+speed side band signals, that go from the XHCI host controller to
+pins on the chip, to be remapped to use any GPIO pin instead of the
+limited set selectable by hardware. This can be done without changing
+the standard driver for the host controller. There is currently
+support for three USB signals, PWRON, VBUS_PRESENT and PWRFLT. This
+driver will allow the remapping of any of these three signals based
+on settings in the Device Tree node for the driver. The driver was
+written so that it could handle additional signals added in the
+future by just adding the correct properties to the DT node.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Al Cooper (3):
+  dt-bindings: Add support for Broadcom USB pin map driver
+  usb: Add driver to allow any GPIO to be used for 7211 USB signals
+  usb: Add Kconfig and Makefile changes to build brcmstb-usb-pinmap
+
+ .../bindings/usb/brcm,usb-pinmap.yaml         |  63 ++++
+ MAINTAINERS                                   |   8 +
+ drivers/usb/host/Kconfig                      |   4 +
+ drivers/usb/host/Makefile                     |   1 +
+ drivers/usb/host/brcmstb-usb-pinmap.c         | 348 ++++++++++++++++++
+ 5 files changed, 424 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/brcm,usb-pinmap.yaml
+ create mode 100644 drivers/usb/host/brcmstb-usb-pinmap.c
+
+-- 
+2.17.1
+
