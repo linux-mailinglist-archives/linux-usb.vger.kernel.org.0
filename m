@@ -2,58 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08594242413
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Aug 2020 04:29:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A710B242425
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Aug 2020 04:51:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726526AbgHLC3r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Aug 2020 22:29:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48922 "EHLO
+        id S1726420AbgHLCvb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Aug 2020 22:51:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726173AbgHLC3q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Aug 2020 22:29:46 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F977C06174A
-        for <linux-usb@vger.kernel.org>; Tue, 11 Aug 2020 19:29:46 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id x184so1196694ybx.10
-        for <linux-usb@vger.kernel.org>; Tue, 11 Aug 2020 19:29:46 -0700 (PDT)
+        with ESMTP id S1726255AbgHLCva (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Aug 2020 22:51:30 -0400
+Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52751C06174A
+        for <linux-usb@vger.kernel.org>; Tue, 11 Aug 2020 19:51:30 -0700 (PDT)
+Received: by mail-qv1-xf49.google.com with SMTP id l10so476560qvw.22
+        for <linux-usb@vger.kernel.org>; Tue, 11 Aug 2020 19:51:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=+n1LUw8DJLUyTXbv9Oe2r81KbedmVRu6OMKCTfy3ZiQ=;
-        b=gF+6KkYSkPuCLW86O6juaBcdj4+WaTmJrk88Z0Ll9t0HKXakRLGtL2e+dhoGTjOnOR
-         kaUAbdEXQaR5k+Qbya8c5FHurzzHJN1LAkLzVFEolC2/dwXBzRVWyqiVLvuba/NVbUZJ
-         noY+rFhLK1Q9kfzlB8PDzkFSYMgTRB1JfbleLBaqnviMYn7MWW4CG7/xL6hjbElKNo14
-         gmJSvbOGWteTH8BIykzQFgef/ngKDt0Sg56ylSppx36Hki0V1gGdEPBJDrlV4lT7tq+k
-         uPsTKxJCjdk7QRkcXjgoMHmkaC7JaEpnFmoFuVb6hkzmNgrJwpdw3YQtKmaNsIywOXMQ
-         VHPg==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=HImBaAs0uc45OqtAJgZ8+ISMmBV9I7FItZjw+fSeCgo=;
+        b=G1n4xgpC9EfQKBRZfi0+3DN1iWPjo1Zuv1zvNLudk+pDViLirw7hQVaoPSBG8DtB5I
+         /kQWvXh6cGlZKQhD5KWxYFDplwN6NL8cDg1N09lOF/Olp3RKpDtoavBzaZTebtTMpUtt
+         pGYktLk6zgyL1yQ7T87fxpBXhJgblRg0VJBjqaNz8eYROIT/g1p2w5r4EX7XA786aO+e
+         +xEmBJEbyAe9kNrMo2MR6GEgajcLd9uPtRdpPurqTLGADOIn730CV4nKRm+b0WlMrvuQ
+         6WMVwBJ6f0T0DF76kR1rD1jIQ2d3YYD5DXRFeFgSW/J1VNbefwLikirKoBISYMijLOSp
+         jbsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=+n1LUw8DJLUyTXbv9Oe2r81KbedmVRu6OMKCTfy3ZiQ=;
-        b=Z5jPZqZBfz0J4fmE34yx8pHSUaAcpB7+xTuvPgwTgNtDWk6e2spFDTLFBRyy6ylMqY
-         H9lRDiQV0PKdNskZCk6mRWEfHC5of17aHLeHwh3g3rQZphe9rytzHNwYxt6zmwY4w2oD
-         c+T039aPZPh5hNFVp3jklNRNrabC6KzPBDcRLM0J8XY2qXybJqiFeZZe+J3fl5YdEX8H
-         2RK/6wjQaqVb7YZJ56cQdnEwfPjRT4FFd0hPlZeZKu20nroOoLZW3DemQms5TUfe7bzL
-         7A8jfpxj/TBQON/YFAONol+cE8j36TYjUf4jfjZO8w6GtfIl0UztCuhLsmE2mepaCtzC
-         bDHQ==
-X-Gm-Message-State: AOAM531CTAm9iCUWcNKhY3QnOuVDV+0ad//LHAYt15hHdXu2yDAWf+cI
-        mNmj5wYf0yo8G1g4jPZzp8b3NX2foMw=
-X-Google-Smtp-Source: ABdhPJy4Ky3Al50cuQO6kqOXG7d2vNlasxYBXERWMS28MgJ0beqiTabAX+wsLbbYFzmtVPKC3nhGlkrYfuA=
-X-Received: by 2002:a25:f30c:: with SMTP id c12mr55236202ybs.471.1597199385901;
- Tue, 11 Aug 2020 19:29:45 -0700 (PDT)
-Date:   Tue, 11 Aug 2020 19:29:34 -0700
-In-Reply-To: <20200812022934.568134-1-badhri@google.com>
-Message-Id: <20200812022934.568134-2-badhri@google.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=HImBaAs0uc45OqtAJgZ8+ISMmBV9I7FItZjw+fSeCgo=;
+        b=J6T3meTt2gh/91VjvVykMYzYPPdMjUSH2ig6ObHysLMqd1ZPVsSvxmSWNvX1nnQ+mE
+         clrSUORMkkVOS7SSkbJZXulZIPrjY5714SfiMhlIyKb+WdTHRoDEbEnDZumR4ckaz9ox
+         GIZq5+YiaBpbhJLhggmYMNLrYxmIpyrITZ3PMpPvwxPW1QyRM++BpdSXRqU4gEMTtjt7
+         SrOXTyq5tixWB/fL+3F6nWvzidshBDfYQCfy8w/UENGWUilmXKEinFsC5+rxTU7JoczL
+         a+HtB3+ollWTawDVRhusGO4vV1rCJwVJbgqFj1iCl1kN+JOf3t6ZYgz59m3oBpRL0rK1
+         HwGg==
+X-Gm-Message-State: AOAM533RfYNZKGInqRWPCjEzXRLpJGCtmwsvTNKyADadDDyf9PTEkSI2
+        9dIt/56XPJu0Noeb3HV/YD0zJug4Y7s=
+X-Google-Smtp-Source: ABdhPJyBpLfxQ5F41wghm9T9k6xYgeHM8BywD2CKeOutLUjVlWTuCK/1lKNzDVZMon06LiXqaR43N6vVWQo=
+X-Received: by 2002:a05:6214:3e8:: with SMTP id cf8mr4577952qvb.74.1597200689437;
+ Tue, 11 Aug 2020 19:51:29 -0700 (PDT)
+Date:   Tue, 11 Aug 2020 19:51:26 -0700
+Message-Id: <20200812025126.574519-1-badhri@google.com>
 Mime-Version: 1.0
-References: <20200812022934.568134-1-badhri@google.com>
 X-Mailer: git-send-email 2.28.0.236.gb10cc79966-goog
-Subject: [PATCH 2/2 v3] usb: typec: pd: Fix formatting in pd.h header
+Subject: [PATCH v3] usb: typec: tcpm: Fix TDA 2.2.1.1 and TDA 2.2.1.2 failures
 From:   Badhri Jagan Sridharan <badhri@google.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         Badhri Jagan Sridharan <badhri@google.com>
 Content-Type: text/plain; charset="UTF-8"
@@ -62,40 +58,81 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Replacing spaces with tabs for PD_T_* constants.
+From the spec:
+"7.1.5 Response to Hard Resets
+Hard Reset Signaling indicates a communication failure has occurred and
+the Source Shall stop driving VCONN, Shall remove Rp from the VCONN pin
+and Shall drive VBUS to vSafe0V as shown in Figure 7-9. The USB connection
+May reset during a Hard Reset since the VBUS voltage will be less than
+vSafe5V for an extended period of time. After establishing the vSafe0V
+voltage condition on VBUS, the Source Shall wait tSrcRecover before
+re-applying VCONN and restoring VBUS to vSafe5V. A Source Shall conform
+to the VCONN timing as specified in [USB Type-C 1.3]."
 
 Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 ---
-Change history:
-First version. Keeping the version number same as the parent.
+Changes since V1 (Guenter's suggestion):
+- Bound SRC_HARD_RESET_VBUS_ON to accommodate tcpc drivers which doesn't
+  update the vbus status.
 
+Changes since V2:
+- Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 ---
- include/linux/usb/pd.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/usb/typec/tcpm/tcpm.c | 28 +++++++++++++++++++++++++---
+ 1 file changed, 25 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/usb/pd.h b/include/linux/usb/pd.h
-index 1df895e4680b..f842e4589bd2 100644
---- a/include/linux/usb/pd.h
-+++ b/include/linux/usb/pd.h
-@@ -471,9 +471,10 @@ static inline unsigned int rdo_max_power(u32 rdo)
- #define PD_T_VCONN_SOURCE_ON	100
- #define PD_T_SINK_REQUEST	100	/* 100 ms minimum */
- #define PD_T_ERROR_RECOVERY	100	/* minimum 25 is insufficient */
--#define PD_T_SRCSWAPSTDBY      625     /* Maximum of 650ms */
--#define PD_T_NEWSRC            250     /* Maximum of 275ms */
-+#define PD_T_SRCSWAPSTDBY	625	/* Maximum of 650ms */
-+#define PD_T_NEWSRC		250	/* Maximum of 275ms */
- #define PD_T_SWAP_SRC_START	20	/* Minimum of 20ms */
-+#define PD_T_BIST_CONT_MODE	50	/* 30 - 60 ms */
- 
- #define PD_T_DRP_TRY		100	/* 75 - 150 ms */
- #define PD_T_DRP_TRYWAIT	600	/* 400 - 800 ms */
-@@ -484,5 +485,4 @@ static inline unsigned int rdo_max_power(u32 rdo)
- #define PD_N_CAPS_COUNT		(PD_T_NO_RESPONSE / PD_T_SEND_SOURCE_CAP)
- #define PD_N_HARD_RESET_COUNT	2
- 
--#define PD_T_BIST_CONT_MODE	50 /* 30 - 60 ms */
- #endif /* __LINUX_USB_PD_H */
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 3ef37202ee37..a48e3f90d196 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -3372,13 +3372,31 @@ static void run_state_machine(struct tcpm_port *port)
+ 			tcpm_set_state(port, SNK_HARD_RESET_SINK_OFF, 0);
+ 		break;
+ 	case SRC_HARD_RESET_VBUS_OFF:
+-		tcpm_set_vconn(port, true);
++		/*
++		 * 7.1.5 Response to Hard Resets
++		 * Hard Reset Signaling indicates a communication failure has occurred and the
++		 * Source Shall stop driving VCONN, Shall remove Rp from the VCONN pin and Shall
++		 * drive VBUS to vSafe0V as shown in Figure 7-9.
++		 */
++		tcpm_set_vconn(port, false);
+ 		tcpm_set_vbus(port, false);
+ 		tcpm_set_roles(port, port->self_powered, TYPEC_SOURCE,
+ 			       tcpm_data_role_for_source(port));
+-		tcpm_set_state(port, SRC_HARD_RESET_VBUS_ON, PD_T_SRC_RECOVER);
++		/*
++		 * If tcpc fails to notify vbus off, TCPM will wait for PD_T_SAFE_0V +
++		 * PD_T_SRC_RECOVER before turning vbus back on.
++		 * From Table 7-12 Sequence Description for a Source Initiated Hard Reset:
++		 * 4. Policy Engine waits tPSHardReset after sending Hard Reset Signaling and then
++		 * tells the Device Policy Manager to instruct the power supply to perform a
++		 * Hard Reset. The transition to vSafe0V Shall occur within tSafe0V (t2).
++		 * 5. After tSrcRecover the Source applies power to VBUS in an attempt to
++		 * re-establish communication with the Sink and resume USB Default Operation.
++		 * The transition to vSafe5V Shall occur within tSrcTurnOn(t4).
++		 */
++		tcpm_set_state(port, SRC_HARD_RESET_VBUS_ON, PD_T_SAFE_0V + PD_T_SRC_RECOVER);
+ 		break;
+ 	case SRC_HARD_RESET_VBUS_ON:
++		tcpm_set_vconn(port, true);
+ 		tcpm_set_vbus(port, true);
+ 		port->tcpc->set_pd_rx(port->tcpc, true);
+ 		tcpm_set_attached_state(port, true);
+@@ -3944,7 +3962,11 @@ static void _tcpm_pd_vbus_off(struct tcpm_port *port)
+ 		tcpm_set_state(port, SNK_HARD_RESET_WAIT_VBUS, 0);
+ 		break;
+ 	case SRC_HARD_RESET_VBUS_OFF:
+-		tcpm_set_state(port, SRC_HARD_RESET_VBUS_ON, 0);
++		/*
++		 * After establishing the vSafe0V voltage condition on VBUS, the Source Shall wait
++		 * tSrcRecover before re-applying VCONN and restoring VBUS to vSafe5V.
++		 */
++		tcpm_set_state(port, SRC_HARD_RESET_VBUS_ON, PD_T_SRC_RECOVER);
+ 		break;
+ 	case HARD_RESET_SEND:
+ 		break;
 -- 
 2.28.0.236.gb10cc79966-goog
 
