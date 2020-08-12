@@ -2,104 +2,166 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F79C242959
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Aug 2020 14:32:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C24A62429BC
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Aug 2020 14:50:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727959AbgHLMcJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Aug 2020 08:32:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56574 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726846AbgHLMcJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Aug 2020 08:32:09 -0400
-Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18BF6C06174A;
-        Wed, 12 Aug 2020 05:32:09 -0700 (PDT)
-Received: by mail-oi1-x242.google.com with SMTP id l204so1651127oib.3;
-        Wed, 12 Aug 2020 05:32:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rVoACvL3vbhn7Hy+rg7NvJC/rRz4OGAEG/IOuYVfJLk=;
-        b=YkqGfxOvN96eGolDSvt0iCWOvbZZeKLlCAGi8BAH/XmoiSQNEa5synSoNNTH3X5sLJ
-         J0XSC09qP/ds7a/R4Q0SSHomSPcp0o15AVV2+lMvLnTd0vBV6RrhGJjKX/x/0SkqiKwV
-         0A06fOqNelj9etWPOTYb+YgdV2enu7Fu10STP5iSBmXYnoCAcjjN9WoirJjjmeTuYc3n
-         nbzkPOmaEZpF2jhtGMP8FxV8952FOiOMh2n1AUuK375GNKqppbaAbdxZ1DWWt48ETdQL
-         u7QVCoEWkBLGQ3/N4TpSYorKV9FXu36SK0GdrESPraE01ZXd8Fjq2XFQXHvDOrZrjyq5
-         8LeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rVoACvL3vbhn7Hy+rg7NvJC/rRz4OGAEG/IOuYVfJLk=;
-        b=r/p3muA5t+/bqbt39pc1i2xMmpB+2ZkGjm6DzvOlcULL6KPh71FB78Twv/A3aEvKle
-         hL4Nok67+mMGFIHa11ltVOJTQOTla3agqr4J9x5RVRJfTQb/YKQukP1fzJvsFEfu+en1
-         60o6jLStDdbPAID/QP77KBRsqNkh8l3ZBzrfKDWkwI43SQOtywolwSHFuc5rNgKKIX0e
-         T5T0/IJuT8MVZo/s98wWkwLBTBn8soCkLvsvQF/Y3IX3Pa/sU0u8LCp7b2ZbLKCOFJ8L
-         AKqUfAHQAYRSuE9ySCEMxHA6Wlvf8B31m8rOEFIWbmIxcM6jFvVXBts17XRSvdSBl3ZR
-         u1bw==
-X-Gm-Message-State: AOAM533xH2bhmtYBpb8l5r3722b0g1SrE+UjyWwY4TSAN4gCBK4yPIxs
-        nuQUN98cak95E2ZNNjctFf1pd545WjuAVCGO5Aw=
-X-Google-Smtp-Source: ABdhPJypHP+8lAnojHqsj+HMjv2Kx5qQD1vR1U48FukFJAYIMQIqPx17kRoJyhSS4FcPT0MB5slRlnJYgqYSUKBAAmw=
-X-Received: by 2002:a05:6808:4c5:: with SMTP id a5mr7370620oie.175.1597235526662;
- Wed, 12 Aug 2020 05:32:06 -0700 (PDT)
+        id S1728002AbgHLMuB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Aug 2020 08:50:01 -0400
+Received: from mga01.intel.com ([192.55.52.88]:57955 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727817AbgHLMuA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 12 Aug 2020 08:50:00 -0400
+IronPort-SDR: F7Tu8HzgYkcAnAe1UfHmyX/HLrHwK++DIAZGlL1ANdIeEh8XWgLEyeT9gXP6NXzgRjOnZ3IuQU
+ CWtj4GJTyljw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9710"; a="171987071"
+X-IronPort-AV: E=Sophos;i="5.76,304,1592895600"; 
+   d="scan'208";a="171987071"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2020 05:49:59 -0700
+IronPort-SDR: NSPy78gSBXDDNkFrYpL64aVOWVgXqj2+RxWSASPm6eLfKgZ0F1p9iI5yvAYCDqXflgUNQiaUYv
+ fA5N5lFTUs3A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,304,1592895600"; 
+   d="scan'208";a="398825863"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 12 Aug 2020 05:49:56 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 12 Aug 2020 15:49:55 +0300
+Date:   Wed, 12 Aug 2020 15:49:55 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tobias Schramm <t.schramm@manjaro.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/4] usb: typec: Add
+ typec_port_register_altmodes_from_fwnode()
+Message-ID: <20200812124955.GB1169992@kuha.fi.intel.com>
+References: <20200714113617.10470-1-hdegoede@redhat.com>
+ <20200714113617.10470-3-hdegoede@redhat.com>
+ <20200727130528.GB883641@kuha.fi.intel.com>
+ <469f369a-73f4-c348-b9ee-1662956f45be@redhat.com>
+ <20200811143833.GC627773@kuha.fi.intel.com>
+ <6c223f20-cf63-392e-f694-869cb231c46d@redhat.com>
 MIME-Version: 1.0
-References: <20200716030847.1564131-1-keescook@chromium.org>
- <87h7tpa3hg.fsf@nanos.tec.linutronix.de> <202007301113.45D24C9D@keescook>
- <CAOMdWSJQKHAWY1P297b9koOLd8sVtezEYEyWGtymN1YeY27M6A@mail.gmail.com> <202008111427.D00FCCF@keescook>
-In-Reply-To: <202008111427.D00FCCF@keescook>
-From:   Allen <allen.lkml@gmail.com>
-Date:   Wed, 12 Aug 2020 18:01:55 +0530
-Message-ID: <CAOMdWS+nJr+g1c0Kb99Z=HwQjHtH_-NCC9hW-o6xFs4huGKsqQ@mail.gmail.com>
-Subject: Re: [PATCH 0/3] Modernize tasklet callback API
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Oscar Carter <oscar.carter@gmx.com>,
-        Romain Perier <romain.perier@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-s390@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-usb@vger.kernel.org, kgdb-bugreport@lists.sourceforge.net,
-        alsa-devel@alsa-project.org,
-        Kernel Hardening <kernel-hardening@lists.openwall.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6c223f20-cf63-392e-f694-869cb231c46d@redhat.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Kees,
+On Wed, Aug 12, 2020 at 10:36:32AM +0200, Hans de Goede wrote:
+> Hi,
+> 
+> On 8/11/20 4:38 PM, Heikki Krogerus wrote:
+> > Hi,
+> > 
+> > > > > +void typec_port_register_altmodes_from_fwnode(struct typec_port *port,
+> > > > > +	const struct typec_altmode_ops *ops, void *drvdata,
+> > > > > +	struct typec_altmode **altmodes, size_t n,
+> > > > > +	struct fwnode_handle *fwnode)
+> > > > > +{
+> > > > > +	struct fwnode_handle *altmodes_node, *child;
+> > > > > +	struct typec_altmode_desc desc;
+> > > > > +	struct typec_altmode *alt;
+> > > > > +	size_t index = 0;
+> > > > > +	u32 svid, vdo;
+> > > > > +	int ret;
+> > > > > +
+> > > > > +	altmodes_node = fwnode_get_named_child_node(fwnode, "altmodes");
+> > > > > +	if (!altmodes_node)
+> > > > > +		return;
+> > > > 
+> > > > Do we need that? Why not just make the sub-nodes describing the
+> > > > alternate modes direct children of the connector node instead of
+> > > > grouping them under a special sub-node?
+> > > 
+> > > If you envision how this will look in e.g. DTS sources then I think
+> > > you will see that this grouping keeps the DTS source code more
+> > > readable. Grouping things together like this is somewhat normal in
+> > > devicetree files. E.g. PMIC's or other regulator providers typical
+> > > have a "regulators" node grouping all their regulators; and also the OF
+> > > graph bindings which are used in the USB-connector node start with a
+> > > "ports" parent / grouping node.
+> > > 
+> > > > If the child node of the connector has device properties "svid" and
+> > > > "vdo" then it is an alt mode that the connector supports, and it can't
+> > > > be anything else, no?
+> > > 
+> > > If you want to get rid of the altmodes parent/grouping node, then the
+> > > usual way to do this would be to add a compatible string to the nodes,
+> > > rather then check for the existence of some properties.
+> > 
+> > I'm looking at this from ACPI PoW. We do not have compatible string in
+> > ACPI (and in case you are wondering, the _HID PRP0001 is not a
+> > reliable solution for that).
+> 
+> Note my main use-case for this is the ACPI case too, remember the
+> infamous drivers/platform/x86/intel_cht_int33fe_typec.c that is my
+> main consumer for this patch. Although there the info is lacking in ACPI
+> so I need to inject it with c-code.
+> 
+> > If you wish to group the altmodes under a subnode, then that's fine, but
+> > the "altmodes" node will need to be optional, just like the "ports"
+> > OF-graph node is optional. So we need to be able to support systems
+> > where the alternate mode subnodes are directly under the connector as
+> > well.
+> 
+> So for the ports case, AFAIK not having a ports subnode to group them
+> is only used in the case there are no other type of subnodes.
+> 
+> With the existing usb-connector devicetree-bindings we will have both
+> ports subnodes and altmode subnodes. The usb-connector devicetree-bindings
+> already specify that the port subnodes *must* be grouped together under
+> a single ports subnode (for usb-connector nodes).
+> 
+> So it seems logical and much cleaner to me to also group the altmodes
+> together under an altmodes subnode. This also solves the problem of
+> having to due heuristics to tell different kinds of subnodes apart.
+> 
+> Question: why do you write: "we need to be able to support systems
+> where the alternate mode subnodes are directly under the connector as
+> well" are there already systems out there (or on their way) which
+> contain ACPI table which contain a fwnode adhering to the usb-connector
+> bindings + having subnodes which set a svid + vdo ?
 
-> Was a Coccinelle script used for any of these conversions? I wonder if
-> it'd be easier to do a single treewide patch for the more mechanical
-> changes.
+There are indeed platforms on their way, but I'll see if I can still
+influence what goes into the ACPI tables of those platforms.
 
-No, I should have written one. Will do it.
+> Because unless such systems already exist I don't see why we need to
+> be able to support them ?  New systems can use whatever scheme we
+> can come-up with and unless existing systems already have what we
+> need, except for the altmodes grouping node, then we will need some
+> translating code which generates the expected swnodes anyways and
+> then the translator can easily inject the grouping node.
+> 
+> So I do not see why we would " need to be able to support systems
+> where the alternate mode subnodes are directly under the connector as
+> well" ?
+> 
+> If you insist I can make the altmodes node optional and simply
+> skip any child nodes which do not have both a svid and a vdo
+> property, but having the subnode (and then logging an error on
+> missing svid or vdo props) seems cleaner to me.
 
-> And, actually, I still think the "prepare" patches should just be
-> collapsed into the actual "covert" patches -- there are only a few.
+I'm trying to get the way the USB Type-C connectors are described
+in ACPI (including the alternate modes) documented somewhere. I think
+I already mentioned that to you already. There is now a discussion
+with our Windows folks how to move forward with that. In any case,
+additional nodes like that "altmodes" node are really problematic in
+Windows because of way they handle the nodes, and to be honest, I
+don't see any way I could convince those guys to accept it.
 
-Okay. It's been done and pushed to:
-https://github.com/allenpais/tasklets/tree/V4
+But all that is really not your problem. I have now a feeling that the
+way we will end up describing the alternate modes in ACPI will not be
+compatible with DT :-(. So I guess we can just go ahead with this, and
+then add support for ACPI later?
 
-> After those, yeah, I think getting these sent to their respective
-> maintainers is the next step.
+thanks,
 
- Please look at the above branch, if it looks fine, let me know
-if I can add your ACK on the patches.
->
-> Sure! I will add it to the tracker. Here's for the refactoring:
-> https://github.com/KSPP/linux/issues/30
->
-> and here's for the removal:
-> https://github.com/KSPP/linux/issues/94
->
-> if you can added details/examples of how they should be removed, that'd
-> help other folks too, if they wanted to jump in. :)
-
-Sure, Thank you.
-
-- Allen
+-- 
+heikki
