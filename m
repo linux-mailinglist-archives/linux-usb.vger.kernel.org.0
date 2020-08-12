@@ -2,21 +2,21 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 840022430B9
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Aug 2020 00:18:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 069C32430BA
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Aug 2020 00:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726547AbgHLWSA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 12 Aug 2020 18:18:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59132 "EHLO mail.kernel.org"
+        id S1726554AbgHLWSY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 12 Aug 2020 18:18:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59474 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726508AbgHLWSA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 12 Aug 2020 18:18:00 -0400
+        id S1726508AbgHLWSY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 12 Aug 2020 18:18:24 -0400
 From:   bugzilla-daemon@bugzilla.kernel.org
 Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
 To:     linux-usb@vger.kernel.org
 Subject: [Bug 208891] Thunderbolt hotplug fails on HP x360 13t-aw000/86FA
  with HP Thunderbolt 3 Dock
-Date:   Wed, 12 Aug 2020 22:18:00 +0000
+Date:   Wed, 12 Aug 2020 22:18:23 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -32,7 +32,7 @@ X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-208891-208809-LAUjyQVwNz@https.bugzilla.kernel.org/>
+Message-ID: <bug-208891-208809-2fSDJyHu2A@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-208891-208809@https.bugzilla.kernel.org/>
 References: <bug-208891-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -47,10 +47,10 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=208891
 
---- Comment #1 from Matt Turner (mattst88@gmail.com) ---
-Created attachment 290845
-  --> https://bugzilla.kernel.org/attachment.cgi?id=290845&action=edit
-coldplugged-lspci
+--- Comment #2 from Matt Turner (mattst88@gmail.com) ---
+Created attachment 290847
+  --> https://bugzilla.kernel.org/attachment.cgi?id=290847&action=edit
+unplugged-lspci
 
 -- 
 You are receiving this mail because:
