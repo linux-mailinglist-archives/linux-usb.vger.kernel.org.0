@@ -2,82 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B65D2423AF
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Aug 2020 03:28:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E3782423D0
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Aug 2020 03:39:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726329AbgHLB2i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Aug 2020 21:28:38 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:1655 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726143AbgHLB2h (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Aug 2020 21:28:37 -0400
-X-UUID: 33676643d9964419b8fabf34a501bbcb-20200812
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=PSmyy6RB68QIlyE2RdAZ/dLjGNAiqe5NS8RADOChyZA=;
-        b=fNwu8mbEg/qvYXZ5W4yLrDB3JRk9UrylJwK4a2Ndk1tRRyy9vc1TilzsGdfOo/yEDL+Mw/FcfViBbsvb5syxTUFTlvhrujiZ98cZDHXUFFpG0uv+b8vxp3kDp/oUrnAaxl/VzCqrO1Znws+4rLUtIpOuuC7gixIbH633iqgRVnU=;
-X-UUID: 33676643d9964419b8fabf34a501bbcb-20200812
-Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 1445121796; Wed, 12 Aug 2020 09:28:26 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS32DR.mediatek.inc
- (172.27.6.104) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 12 Aug
- 2020 09:28:19 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 12 Aug 2020 09:28:14 +0800
-Message-ID: <1597195610.21478.10.camel@mhfsdcap03>
-Subject: Re: [PATCH] usb: xhci-mtk: Fix typo
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Frank Wunderlich <linux@fw-web.de>
-CC:     <linux-mediatek@lists.infradead.org>,
-        Frank Wunderlich <frank-w@public-files.de>,
+        id S1726430AbgHLBjg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Aug 2020 21:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41206 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726235AbgHLBjg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Aug 2020 21:39:36 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109F9C06174A;
+        Tue, 11 Aug 2020 18:39:36 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id 2so324426pjx.5;
+        Tue, 11 Aug 2020 18:39:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=wCpdTikHMIG2mAVozwmNq1fm15f/reL2wBsMHhYOQZU=;
+        b=U1VXgH0JX+yv1psGzF00P0ZVpsrOWI/xdLQmBLgIOONDaWc/2w+Iz03tIskxdK2j8J
+         i/X1AX6j65BfMSCwtuQYgdvuXdSVS+OS4YYaOxDJPp6w7pOJFE743yLW3FfoO0OXcDm8
+         N6aW6tXrKN0qXHxicIJlJ3Z0eysT73bFcgOyeC5p2GmJSnuQtcabOly10PV1fDviX0Sx
+         tFFmTuOdAeiuSBFrDM98MOfVgfG1VikrdiEIuMg6WhOi/pgZHxnbdvw88fh5zSDRTZy2
+         tmAeZouX8fkpKKh0cLVrh5rnEpeeNb+8XDti2t9LnoZVP2x34B9/rSvL0OBzDnkBrdQ4
+         ZdaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=wCpdTikHMIG2mAVozwmNq1fm15f/reL2wBsMHhYOQZU=;
+        b=d8TyGHg6bBB5ssX42S6CFwzVc6mYmXwL9XNADJ+hChuoGghvB5Fwy1adXP44XP7MqS
+         kl+u39BkOJrBjckziP4GnPK7Bm8Dbn5kVPKzFt0WcYfGSh1tp/EbYspjZY0jveFYsnWm
+         IO8Qg+6jOP6BM9L0A3lCYoEizfetKvD3zT4IrgnFMEEmq1bUSL26DW00PbR1F6iWp3d4
+         KBDP6ND1bAaGu02TlvNyeXofi5KdfmTIkN1oRCwg3NH2WYUXfpRl970mwfBwn8Bzo7yn
+         Kft96jCBxU/dqborcb8INsOkKdznJ523GRnIjqR7LFA3HSzDrnOjCbqZEvbjuZVuPHjt
+         JFAQ==
+X-Gm-Message-State: AOAM530BNA4VnnEKi0CxPbqI3lOipCGpWw1trX5xeXyGnbeUtgQLNPh1
+        CC7roXfQ8bGM4NPsX9nWYtuZ8j27
+X-Google-Smtp-Source: ABdhPJzoQJB/t3CyAadNMD1+hsJVysMqhthSzsaOKvLFW4ZTa4tYdfpvx3xqTayHR9ohuRjnE6om0g==
+X-Received: by 2002:a17:902:9a01:: with SMTP id v1mr3192398plp.15.1597196375454;
+        Tue, 11 Aug 2020 18:39:35 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j13sm342226pfa.149.2020.08.11.18.39.34
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 11 Aug 2020 18:39:34 -0700 (PDT)
+Date:   Tue, 11 Aug 2020 18:39:33 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Date:   Wed, 12 Aug 2020 09:26:50 +0800
-In-Reply-To: <20200808124906.89976-1-linux@fw-web.de>
-References: <20200808124906.89976-1-linux@fw-web.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: typec: tcpm: Fix TDA 2.2.1.1 and TDA 2.2.1.2
+ failures
+Message-ID: <20200812013933.GA116439@roeck-us.net>
+References: <20200811200228.433264-1-badhri@google.com>
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 0D2B0029EF119CD7EB5464ABFEF244164C84DA1B3C0330CEACF56DF3E90248D72000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200811200228.433264-1-badhri@google.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gU2F0LCAyMDIwLTA4LTA4IGF0IDE0OjQ5ICswMjAwLCBGcmFuayBXdW5kZXJsaWNoIHdyb3Rl
-Og0KPiBGcm9tOiBGcmFuayBXdW5kZXJsaWNoIDxmcmFuay13QHB1YmxpYy1maWxlcy5kZT4NCj4g
-DQo+IGZpeCB0aGlzIHNtYWxsIHR5cG8gdTNfcG9ydHNfZGlzYWJlZCA9PiB1M19wb3J0c19kaXNh
-YmxlZA0KPiANCj4gRml4ZXM6IDU1YmE2ZTllMjVhNiAodXNiOiB4aGNpLW10azogc3VwcG9ydCBv
-cHRpb24gdG8gZGlzYWJsZSB1c2IzIHBvcnRzKQ0KPiBTaWduZWQtb2ZmLWJ5OiBGcmFuayBXdW5k
-ZXJsaWNoIDxmcmFuay13QHB1YmxpYy1maWxlcy5kZT4NCj4gLS0tDQo+ICBkcml2ZXJzL3VzYi9o
-b3N0L3hoY2ktbXRrLmMgfCA2ICsrKy0tLQ0KPiAgMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9u
-cygrKSwgMyBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9ob3N0
-L3hoY2ktbXRrLmMgYi9kcml2ZXJzL3VzYi9ob3N0L3hoY2ktbXRrLmMNCj4gaW5kZXggNDMxMWQ0
-YzliNjhkLi44ZjMyMWYzOWFiOTYgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvdXNiL2hvc3QveGhj
-aS1tdGsuYw0KPiArKysgYi9kcml2ZXJzL3VzYi9ob3N0L3hoY2ktbXRrLmMNCj4gQEAgLTc3LDcg
-Kzc3LDcgQEAgc3RhdGljIGludCB4aGNpX210a19ob3N0X2VuYWJsZShzdHJ1Y3QgeGhjaV9oY2Rf
-bXRrICptdGspDQo+ICB7DQo+ICAJc3RydWN0IG11M2NfaXBwY19yZWdzIF9faW9tZW0gKmlwcGMg
-PSBtdGstPmlwcGNfcmVnczsNCj4gIAl1MzIgdmFsdWUsIGNoZWNrX3ZhbDsNCj4gLQlpbnQgdTNf
-cG9ydHNfZGlzYWJlZCA9IDA7DQo+ICsJaW50IHUzX3BvcnRzX2Rpc2FibGVkID0gMDsNCj4gIAlp
-bnQgcmV0Ow0KPiAgCWludCBpOw0KPiAgDQo+IEBAIC05Miw3ICs5Miw3IEBAIHN0YXRpYyBpbnQg
-eGhjaV9tdGtfaG9zdF9lbmFibGUoc3RydWN0IHhoY2lfaGNkX210ayAqbXRrKQ0KPiAgCS8qIHBv
-d2VyIG9uIGFuZCBlbmFibGUgdTMgcG9ydHMgZXhjZXB0IHNraXBwZWQgb25lcyAqLw0KPiAgCWZv
-ciAoaSA9IDA7IGkgPCBtdGstPm51bV91M19wb3J0czsgaSsrKSB7DQo+ICAJCWlmICgoMHgxIDw8
-IGkpICYgbXRrLT51M3BfZGlzX21zaykgew0KPiAtCQkJdTNfcG9ydHNfZGlzYWJlZCsrOw0KPiAr
-CQkJdTNfcG9ydHNfZGlzYWJsZWQrKzsNCj4gIAkJCWNvbnRpbnVlOw0KPiAgCQl9DQo+ICANCj4g
-QEAgLTExNyw3ICsxMTcsNyBAQCBzdGF0aWMgaW50IHhoY2lfbXRrX2hvc3RfZW5hYmxlKHN0cnVj
-dCB4aGNpX2hjZF9tdGsgKm10aykNCj4gIAljaGVja192YWwgPSBTVFMxX1NZU1BMTF9TVEFCTEUg
-fCBTVFMxX1JFRl9SU1QgfA0KPiAgCQkJU1RTMV9TWVMxMjVfUlNUIHwgU1RTMV9YSENJX1JTVDsN
-Cj4gIA0KPiAtCWlmIChtdGstPm51bV91M19wb3J0cyA+IHUzX3BvcnRzX2Rpc2FiZWQpDQo+ICsJ
-aWYgKG10ay0+bnVtX3UzX3BvcnRzID4gdTNfcG9ydHNfZGlzYWJsZWQpDQo+ICAJCWNoZWNrX3Zh
-bCB8PSBTVFMxX1UzX01BQ19SU1Q7DQo+ICANCj4gIAlyZXQgPSByZWFkbF9wb2xsX3RpbWVvdXQo
-JmlwcGMtPmlwX3B3X3N0czEsIHZhbHVlLA0KDQpSZXZpZXdlZC1ieTogQ2h1bmZlbmcgWXVuIDxj
-aHVuZmVuZy55dW5AbWVkaWF0ZWsuY29tPg0KDQpUaGFua3MNCg0KDQo=
+On Tue, Aug 11, 2020 at 01:02:28PM -0700, Badhri Jagan Sridharan wrote:
+> From the spec:
+> "7.1.5 Response to Hard Resets
+> Hard Reset Signaling indicates a communication failure has occurred and
+> the Source Shall stop driving VCONN, Shall remove Rp from the VCONN pin
+> and Shall drive VBUS to vSafe0V as shown in Figure 7-9. The USB connection
+> May reset during a Hard Reset since the VBUS voltage will be less than
+> vSafe5V for an extended period of time. After establishing the vSafe0V
+> voltage condition on VBUS, the Source Shall wait tSrcRecover before
+> re-applying VCONN and restoring VBUS to vSafe5V. A Source Shall conform
+> to the VCONN timing as specified in [USB Type-C 1.3]."
+> 
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+Guenter
+
+> ---
+> Changes since V1 (Guenter's suggestion):
+> - Bound SRC_HARD_RESET_VBUS_ON to accommodate tcpc drivers which doesn't
+>   update the vbus status.
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 28 +++++++++++++++++++++++++---
+>  1 file changed, 25 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 3ef37202ee37..a48e3f90d196 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -3372,13 +3372,31 @@ static void run_state_machine(struct tcpm_port *port)
+>  			tcpm_set_state(port, SNK_HARD_RESET_SINK_OFF, 0);
+>  		break;
+>  	case SRC_HARD_RESET_VBUS_OFF:
+> -		tcpm_set_vconn(port, true);
+> +		/*
+> +		 * 7.1.5 Response to Hard Resets
+> +		 * Hard Reset Signaling indicates a communication failure has occurred and the
+> +		 * Source Shall stop driving VCONN, Shall remove Rp from the VCONN pin and Shall
+> +		 * drive VBUS to vSafe0V as shown in Figure 7-9.
+> +		 */
+> +		tcpm_set_vconn(port, false);
+>  		tcpm_set_vbus(port, false);
+>  		tcpm_set_roles(port, port->self_powered, TYPEC_SOURCE,
+>  			       tcpm_data_role_for_source(port));
+> -		tcpm_set_state(port, SRC_HARD_RESET_VBUS_ON, PD_T_SRC_RECOVER);
+> +		/*
+> +		 * If tcpc fails to notify vbus off, TCPM will wait for PD_T_SAFE_0V +
+> +		 * PD_T_SRC_RECOVER before turning vbus back on.
+> +		 * From Table 7-12 Sequence Description for a Source Initiated Hard Reset:
+> +		 * 4. Policy Engine waits tPSHardReset after sending Hard Reset Signaling and then
+> +		 * tells the Device Policy Manager to instruct the power supply to perform a
+> +		 * Hard Reset. The transition to vSafe0V Shall occur within tSafe0V (t2).
+> +		 * 5. After tSrcRecover the Source applies power to VBUS in an attempt to
+> +		 * re-establish communication with the Sink and resume USB Default Operation.
+> +		 * The transition to vSafe5V Shall occur within tSrcTurnOn(t4).
+> +		 */
+> +		tcpm_set_state(port, SRC_HARD_RESET_VBUS_ON, PD_T_SAFE_0V + PD_T_SRC_RECOVER);
+>  		break;
+>  	case SRC_HARD_RESET_VBUS_ON:
+> +		tcpm_set_vconn(port, true);
+>  		tcpm_set_vbus(port, true);
+>  		port->tcpc->set_pd_rx(port->tcpc, true);
+>  		tcpm_set_attached_state(port, true);
+> @@ -3944,7 +3962,11 @@ static void _tcpm_pd_vbus_off(struct tcpm_port *port)
+>  		tcpm_set_state(port, SNK_HARD_RESET_WAIT_VBUS, 0);
+>  		break;
+>  	case SRC_HARD_RESET_VBUS_OFF:
+> -		tcpm_set_state(port, SRC_HARD_RESET_VBUS_ON, 0);
+> +		/*
+> +		 * After establishing the vSafe0V voltage condition on VBUS, the Source Shall wait
+> +		 * tSrcRecover before re-applying VCONN and restoring VBUS to vSafe5V.
+> +		 */
+> +		tcpm_set_state(port, SRC_HARD_RESET_VBUS_ON, PD_T_SRC_RECOVER);
+>  		break;
+>  	case HARD_RESET_SEND:
+>  		break;
