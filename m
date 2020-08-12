@@ -2,230 +2,350 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76AB32423F0
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Aug 2020 04:04:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B3D9242406
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Aug 2020 04:22:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726483AbgHLCER (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 Aug 2020 22:04:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44998 "EHLO
+        id S1726428AbgHLCW3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 Aug 2020 22:22:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726143AbgHLCEQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Aug 2020 22:04:16 -0400
-Received: from mail-ua1-x941.google.com (mail-ua1-x941.google.com [IPv6:2607:f8b0:4864:20::941])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3388CC06174A
-        for <linux-usb@vger.kernel.org>; Tue, 11 Aug 2020 19:04:16 -0700 (PDT)
-Received: by mail-ua1-x941.google.com with SMTP id g11so178535ual.2
-        for <linux-usb@vger.kernel.org>; Tue, 11 Aug 2020 19:04:16 -0700 (PDT)
+        with ESMTP id S1726173AbgHLCW2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 Aug 2020 22:22:28 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E818C06174A;
+        Tue, 11 Aug 2020 19:22:28 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id g6so486188ljn.11;
+        Tue, 11 Aug 2020 19:22:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=n4534WVfwtYILd0kDXgE1s8p0HFb/iqe5lFVW/x7HYk=;
-        b=IKf1A7uH52OPGehWEpED5AkCkL4zOEG3tTiTlxNacw9w3OstUOrxwpJfPyCWahbDST
-         R0KqBAQOh8IrJ7chFno4IlJMA1MIABC88eQpuVPVejbMwNHgYaj9ox4jmOgYmiV6asdc
-         sQyzLeDLT2O31ISy2GzWBXc7slzBExHqsFcygckPTIBs27T5KIwObJGooIpIIAUP0cG1
-         FipE1ngHE5JtewIk1xpVkdxewJSbn9XBlTCvitAyfxryt78rWAvBA5Ndpj9yX1KGGrnS
-         jaBgH9Xf9xE9x+rWFi+s27lB/sEHTJkwV7nK96lPah9vEJ3z/Z3vLo2iV045Yv+LnzkB
-         DhTg==
+        bh=Z/e0pOtFdHj174q/0e3ZuFusjMXBEvLuHWOiwJUcqag=;
+        b=HthDeMH8RKFpoZxRW1lCINtZq/UMQN2pqoJOs9NPlXzmgEo+6F41VMa8XTK7ai2nn+
+         rrSYvJLCAOdrY9iTRzYfiCfI5a33DOFeTXsCvppdtcl1+bRlvfhyo7Z1CmuJW8yvVA/o
+         B0OyCYbbD/X5mXcDaGIiHfZTf8kw39czwMhxwli+a+laCmbZboHkskH0H5elV7L3XsYv
+         fbH96jF6YFygUBkhAfUysrSBV0xiLuTO2h/nCvSnwpCCbOMcNNiPbGK47rYRywxeQdyE
+         g+oidsGklmAjO0r2HMKwED00LoPTdhyE6/ue15inbfYpXjzigIcZYDkWIpetnNtyOVki
+         RgRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=n4534WVfwtYILd0kDXgE1s8p0HFb/iqe5lFVW/x7HYk=;
-        b=jbWKfKM/hL0iciX9SVFzGI7ZP8hmw4v9QVwjGkGZcu7m9ghQfMP6MaXdwiwHK4DdSA
-         w/2UlFX162cT7v3gt58sH4iJ1BFIze79zdec2FMrdrXKtWbZ7d/xbxuOFq6bd+yFolvM
-         V9OgZensTqskVefIi2U94HKmsJBGl66lFB67i7EWH7dysoQZ8NJgKvXVsSMDZchCNP3P
-         dh/QutgRkxi8y5HluIwguxVlwUYO+L/MR8spOA/F+j9jYLQMGpi0IRapVNGJgLlgT0bR
-         TEERdXLSb3XYl9x8pHPVKAFxHzUhF8Xsy//XFxGUBw636fPut12KsopiB+Xw42a1dOeV
-         kWAg==
-X-Gm-Message-State: AOAM532RQANuVWdg9+UGU33xWZWHb8JPUZSJJO69W9rmqqPCYMEDL4lH
-        q80qDOQLO7pg2KxW2kIPABdC1GYS+t4IqYC8xyjhBw==
-X-Google-Smtp-Source: ABdhPJygaxrt9U+3sxyR7iT3p2Mr6w7ztTvhYFjhPLuKGfb2idPZEzqtJFj/PJR35v4KmdvTS4SiDg06KwwwiBF53HA=
-X-Received: by 2002:ab0:69d6:: with SMTP id u22mr25938205uaq.65.1597197853120;
- Tue, 11 Aug 2020 19:04:13 -0700 (PDT)
+        bh=Z/e0pOtFdHj174q/0e3ZuFusjMXBEvLuHWOiwJUcqag=;
+        b=cwUwtXst4+gxO+Lznp4zpJ3kiZf+/pVa93Nk6fXx6NuaCyStQGf/ODQvfJRdTiCdjA
+         HgapSfBJqqlO0ntUXkxRZQ5U2a8WAOsdArhqa9373lgBj3RsIl+XaoqPBEE9d2RoIqWv
+         m251hpp2NpbzZX7TzciAsRLLZAyTFxDwBZFogbWEJkwxGVr1H7Bx7mgLuRz0hkjkF6Rf
+         RyOSKscRgox8LcujUs/khseWf+e/hoRdVY+VzQu9EjFXZb8up+/Xa5szbA4enRGC0et0
+         6u0e92aLabcRhKG1u7xZDupsiISxhNqYv+49AgEy4OnQDvkNEacwgkD2aM5wjKunFs2g
+         +AaQ==
+X-Gm-Message-State: AOAM532c07sv7bUzf+8Hev1tADKpijTAxIkBl8QN4AoAlAi1eSvwKzrU
+        U3ohvcWybVYjA9ENh5D+K2oe6JCryOY1ojvIizy0k/T1TabEMQ==
+X-Google-Smtp-Source: ABdhPJzl3jNhuD5EmOAmK4WMWsW6xQpy5lPBYv0/o9ZVAfwjheq+1/Uc8OHGuLpNPcFJsVLBp0BDjTDipB6dxSoXfe4=
+X-Received: by 2002:a2e:9c86:: with SMTP id x6mr4165220lji.346.1597198946676;
+ Tue, 11 Aug 2020 19:22:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200811011126.130297-1-badhri@google.com> <ef32ea96-16c8-772b-2c80-8df43ee8f668@roeck-us.net>
- <CAPTae5Lhty3rJymi-4gANjUoz79_LujdjddS9oT=vpOxTSecdQ@mail.gmail.com>
- <20200811184507.GB86545@roeck-us.net> <CAPTae5KFxTS+QPnN1Qt_miOFdVYuyuDD2m=jH_Fo87F_C4tTBw@mail.gmail.com>
- <8a2e77f4-1470-ebf0-402c-df90ab6332bb@roeck-us.net> <CAPTae5J9qfJzkqykYJyM=FNHb2qdW6CJ2sNJmXCe9hbfE+o0Kw@mail.gmail.com>
- <ccfa822c-bbd7-7894-8d33-b8d25814b042@roeck-us.net> <CAPTae5LBW=4bYkP2kaRTmdd0EcVxHD8PNVxpX7S6D4GCmVS4bg@mail.gmail.com>
- <5461f039-ca37-daaa-78c1-d6fc69d17004@roeck-us.net>
-In-Reply-To: <5461f039-ca37-daaa-78c1-d6fc69d17004@roeck-us.net>
-From:   Badhri Jagan Sridharan <badhri@google.com>
-Date:   Tue, 11 Aug 2020 19:03:36 -0700
-Message-ID: <CAPTae5JVzQqVhHK+eNx=mR1TG4PB9zZgDUdp+DAxquFWDTEcDA@mail.gmail.com>
-Subject: Re: [PATCH v1] usb: typec: tcpm: Fix TDA 2.2.1.1 and TDA 2.2.1.2 failures
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+References: <20200624022848.7765-1-wcheng@codeaurora.org> <20200624022848.7765-2-wcheng@codeaurora.org>
+In-Reply-To: <20200624022848.7765-2-wcheng@codeaurora.org>
+From:   Peter Chen <hzpeterchen@gmail.com>
+Date:   Wed, 12 Aug 2020 10:22:15 +0800
+Message-ID: <CAL411-qvuCTib1VBV9uRwL-rEHkefFLm1x-WLLP4kYzcNtQd_g@mail.gmail.com>
+Subject: Re: [RFC v4 1/3] usb: dwc3: Resize TX FIFOs to meet EP bursting requirements
+To:     Wesley Cheng <wcheng@codeaurora.org>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, balbi@kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+        robh+dt@kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        USB list <linux-usb@vger.kernel.org>, jackp@codeaurora.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 11, 2020 at 6:44 PM Guenter Roeck <linux@roeck-us.net> wrote:
+On Wed, Jun 24, 2020 at 10:31 AM Wesley Cheng <wcheng@codeaurora.org> wrote:
 >
-> On 8/11/20 6:08 PM, Badhri Jagan Sridharan wrote:
-> > Yes I did ! https://lkml.org/lkml/2020/8/11/788 !
-> >
-> > For me gmail is grouping V1 and V2 patches in the same thread so
-> > thought you saw the v2 patch :P
-> >
+> Some devices have USB compositions which may require multiple endpoints
+> that support EP bursting.  HW defined TX FIFO sizes may not always be
+> sufficient for these compositions.  By utilizing flexible TX FIFO
+> allocation, this allows for endpoints to request the required FIFO depth to
+> achieve higher bandwidth.  With some higher bMaxBurst configurations, using
+> a larger TX FIFO size results in better TX throughput.
 >
-> You copied me on v1, but not on v2. I am not on any of the mailing lists
-> you sent v2 to, so I did not see it.
+> Ensure that one TX FIFO is reserved for every IN endpoint.  This allows for
+> the FIFO logic to prevent running out of FIFO space.
 >
-> Guenter
 
-My bad ! Apologies Guenter ! Screwed up while performing the git
-send-email command.
-Will make sure that I double check next time.
+You may do this for only allocated endpoints, but you need override
+default .match_ep
+API. See cdns3/gadget.c and cdns3/ep0.c as an example.
 
-Thanks,
-Badhri
+Peter
 
+> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+> ---
+>  drivers/usb/dwc3/core.c   |   2 +
+>  drivers/usb/dwc3/core.h   |   8 +++
+>  drivers/usb/dwc3/ep0.c    |  37 +++++++++++-
+>  drivers/usb/dwc3/gadget.c | 115 ++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 161 insertions(+), 1 deletion(-)
 >
-> > Thanks,
-> > Badhri
-> >
-> > On Tue, Aug 11, 2020 at 5:36 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> >>
-> >> On 8/11/20 4:21 PM, Badhri Jagan Sridharan wrote:
-> >>> Thanks Guenter ! However I don't see a reviewed-by tag :)
-> >>>
-> >>
-> >> Confused. Did you send a v2 with the changes we discussed ?
-> >> I didn't see that.
-> >>
-> >> Thanks,
-> >> Guenter
-> >>
-> >>> On Tue, Aug 11, 2020 at 1:18 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> >>>>
-> >>>> On 8/11/20 12:39 PM, Badhri Jagan Sridharan wrote:
-> >>>>> On Tue, Aug 11, 2020 at 11:45 AM Guenter Roeck <linux@roeck-us.net> wrote:
-> >>>>>>
-> >>>>>> On Tue, Aug 11, 2020 at 11:24:07AM -0700, Badhri Jagan Sridharan wrote:
-> >>>>>>> On Mon, Aug 10, 2020 at 6:51 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> >>>>>>>>
-> >>>>>>>> On 8/10/20 6:11 PM, Badhri Jagan Sridharan wrote:
-> >>>>>>>>> >From the spec:
-> >>>>>>>>> "7.1.5 Response to Hard Resets
-> >>>>>>>>> Hard Reset Signaling indicates a communication failure has occurred and
-> >>>>>>>>> the Source Shall stop driving VCONN, Shall remove Rp from the VCONN pin
-> >>>>>>>>> and Shall drive VBUS to vSafe0V as shown in Figure 7-9. The USB connection
-> >>>>>>>>> May reset during a Hard Reset since the VBUS voltage will be less than
-> >>>>>>>>> vSafe5V for an extended period of time. After establishing the vSafe0V
-> >>>>>>>>> voltage condition on VBUS, the Source Shall wait tSrcRecover before
-> >>>>>>>>> re-applying VCONN and restoring VBUS to vSafe5V. A Source Shall conform
-> >>>>>>>>> to the VCONN timing as specified in [USB Type-C 1.3]."
-> >>>>>>>>>
-> >>>>>>>>> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> >>>>>>>>> ---
-> >>>>>>>>>  drivers/usb/typec/tcpm/tcpm.c | 16 +++++++++++++---
-> >>>>>>>>>  1 file changed, 13 insertions(+), 3 deletions(-)
-> >>>>>>>>>
-> >>>>>>>>> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> >>>>>>>>> index 3ef37202ee37..e41c4e5d3c71 100644
-> >>>>>>>>> --- a/drivers/usb/typec/tcpm/tcpm.c
-> >>>>>>>>> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> >>>>>>>>> @@ -3372,13 +3372,19 @@ static void run_state_machine(struct tcpm_port *port)
-> >>>>>>>>>                       tcpm_set_state(port, SNK_HARD_RESET_SINK_OFF, 0);
-> >>>>>>>>>               break;
-> >>>>>>>>>       case SRC_HARD_RESET_VBUS_OFF:
-> >>>>>>>>> -             tcpm_set_vconn(port, true);
-> >>>>>>>>> +             /*
-> >>>>>>>>> +              * 7.1.5 Response to Hard Resets
-> >>>>>>>>> +              * Hard Reset Signaling indicates a communication failure has occurred and the
-> >>>>>>>>> +              * Source Shall stop driving VCONN, Shall remove Rp from the VCONN pin and Shall
-> >>>>>>>>> +              * drive VBUS to vSafe0V as shown in Figure 7-9.
-> >>>>>>>>> +              */
-> >>>>>>>>> +             tcpm_set_vconn(port, false);
-> >>>>>>>>>               tcpm_set_vbus(port, false);
-> >>>>>>>>>               tcpm_set_roles(port, port->self_powered, TYPEC_SOURCE,
-> >>>>>>>>>                              tcpm_data_role_for_source(port));
-> >>>>>>>>> -             tcpm_set_state(port, SRC_HARD_RESET_VBUS_ON, PD_T_SRC_RECOVER);
-> >>>>>>>>
-> >>>>>>>> I am a bit concerned about this. If I understand correctly, it means that
-> >>>>>>>> we won't turn VBUS back on unless a SRC_HARD_RESET_VBUS_OFF PD event is received.
-> >>>>>>>> Is that correct ? What happens if that event is never received ?
-> >>>>>>>>
-> >>>>>>>> Thanks,
-> >>>>>>>> Guenter
-> >>>>>>>
-> >>>>>>> The term PD event is a little ambiguous to me. Trying to summarize the workflow.
-> >>>>>>> Lower level tcpc driver would have to call tcpm_vbus_change which
-> >>>>>>> would in-turn trigger TCPM_VBUS_EVENT
-> >>>>>>> and queries port->tcpc->get_vbus to get the vbus status. It is not
-> >>>>>>> really a PD protocol driven event hence the
-> >>>>>>> confusion.
-> >>>>>>>
-> >>>>>>> "What happens if that event is never received ?"
-> >>>>>>> Yeah TCPM would be in SRC_HARD_RESET_VBUS_OFF till the tcpc calls the
-> >>>>>>> tcpm_vbus_change.
-> >>>>>>> Do you suspect that existing tcpc would not have the capability to
-> >>>>>>> monitor vbus status while sourcing and call tcpm_vbus_change?
-> >>>>>>>
-> >>>>>> That, or the driver might be buggy, or the hardware does't signal a status
-> >>>>>> update, or the update gets lost. I think we should have some backup,
-> >>>>>> to trigger if the event is not received in a reasonable amout of time.
-> >>>>>> I don't know if the specification has some kind of maximum limit. If
-> >>>>>> not, we should still have something
-> >>>>>>
-> >>>>>> Thanks,
-> >>>>>> Guenter
-> >>>>>
-> >>>>> Got it ! The specification actually has a bound for vbus off.
-> >>>>> tSafe0V  - Time to reach vSafe0V max - 650ms. (PD_T_SAFE_0V).
-> >>>>> So I will bound it to that.
-> >>>>>
-> >>>>
-> >>>> Excellent. Thanks a lot for looking into this!
-> >>>>
-> >>>> Guenter
-> >>>>
-> >>>>> >From Table 7-12 Sequence Description for a Source Initiated Hard Reset:
-> >>>>> 4.Policy Engine waits tPSHardReset after sending Hard Reset Signaling
-> >>>>> and then tells the Device Policy Manager to instruct the power supply
-> >>>>> to perform a Hard Reset. The transition to vSafe0V Shall occur within
-> >>>>> tSafe0V (t2).
-> >>>>> 5 After tSrcRecover the Source applies power to VBUS in an attempt to
-> >>>>> re-establish communication with the Sink and resume USB Default
-> >>>>> Operation. The transition to vSafe5V Shall occur within tSrcTurnOn
-> >>>>> (t4).
-> >>>>>
-> >>>>> Thanks,
-> >>>>> Badhri
-> >>>>>
-> >>>>>>
-> >>>>>>> Thanks,
-> >>>>>>> Badhri
-> >>>>>>>
-> >>>>>>>
-> >>>>>>>>>               break;
-> >>>>>>>>>       case SRC_HARD_RESET_VBUS_ON:
-> >>>>>>>>> +             tcpm_set_vconn(port, true);
-> >>>>>>>>>               tcpm_set_vbus(port, true);
-> >>>>>>>>>               port->tcpc->set_pd_rx(port->tcpc, true);
-> >>>>>>>>>               tcpm_set_attached_state(port, true);
-> >>>>>>>>> @@ -3944,7 +3950,11 @@ static void _tcpm_pd_vbus_off(struct tcpm_port *port)
-> >>>>>>>>>               tcpm_set_state(port, SNK_HARD_RESET_WAIT_VBUS, 0);
-> >>>>>>>>>               break;
-> >>>>>>>>>       case SRC_HARD_RESET_VBUS_OFF:
-> >>>>>>>>> -             tcpm_set_state(port, SRC_HARD_RESET_VBUS_ON, 0);
-> >>>>>>>>> +             /*
-> >>>>>>>>> +              * After establishing the vSafe0V voltage condition on VBUS, the Source Shall wait
-> >>>>>>>>> +              * tSrcRecover before re-applying VCONN and restoring VBUS to vSafe5V.
-> >>>>>>>>> +              */
-> >>>>>>>>> +             tcpm_set_state(port, SRC_HARD_RESET_VBUS_ON, PD_T_SRC_RECOVER);
-> >>>>>>>>>               break;
-> >>>>>>>>>       case HARD_RESET_SEND:
-> >>>>>>>>>               break;
-> >>>>>>>>>
-> >>>>>>>>
-> >>>>
-> >>
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index edc17155cb2b..cca555493929 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -1304,6 +1304,8 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+>                                 &tx_thr_num_pkt_prd);
+>         device_property_read_u8(dev, "snps,tx-max-burst-prd",
+>                                 &tx_max_burst_prd);
+> +       dwc->needs_fifo_resize = device_property_read_bool(dev,
+> +                               "tx-fifo-resize");
+>
+>         dwc->disable_scramble_quirk = device_property_read_bool(dev,
+>                                 "snps,disable_scramble_quirk");
+> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> index 4c171a8e215f..ce0bf288b6ac 100644
+> --- a/drivers/usb/dwc3/core.h
+> +++ b/drivers/usb/dwc3/core.h
+> @@ -675,6 +675,7 @@ struct dwc3_event_buffer {
+>   *             isochronous START TRANSFER command failure workaround
+>   * @start_cmd_status: the status of testing START TRANSFER command with
+>   *             combo_num = 'b00
+> + * @fifo_depth: allocated TXFIFO depth
+>   */
+>  struct dwc3_ep {
+>         struct usb_ep           endpoint;
+> @@ -727,6 +728,7 @@ struct dwc3_ep {
+>         /* For isochronous START TRANSFER workaround only */
+>         u8                      combo_num;
+>         int                     start_cmd_status;
+> +       int                     fifo_depth;
+>  };
+>
+>  enum dwc3_phy {
+> @@ -1004,6 +1006,7 @@ struct dwc3_scratchpad_array {
+>   *     1       - utmi_l1_suspend_n
+>   * @is_fpga: true when we are using the FPGA board
+>   * @pending_events: true when we have pending IRQs to be handled
+> + * @needs_fifo_resize: not all users might want fifo resizing, flag it
+>   * @pullups_connected: true when Run/Stop bit is set
+>   * @setup_packet_pending: true when there's a Setup Packet in FIFO. Workaround
+>   * @three_stage_setup: set if we perform a three phase setup
+> @@ -1044,6 +1047,8 @@ struct dwc3_scratchpad_array {
+>   * @dis_metastability_quirk: set to disable metastability quirk.
+>   * @imod_interval: set the interrupt moderation interval in 250ns
+>   *                 increments or 0 to disable.
+> + * @last_fifo_depth: total TXFIFO depth of all enabled USB IN/INT endpoints
+> + * @num_ep_resized: the number of TX FIFOs that have already been resized
+>   */
+>  struct dwc3 {
+>         struct work_struct      drd_work;
+> @@ -1204,6 +1209,7 @@ struct dwc3 {
+>         unsigned                is_utmi_l1_suspend:1;
+>         unsigned                is_fpga:1;
+>         unsigned                pending_events:1;
+> +       unsigned                needs_fifo_resize:1;
+>         unsigned                pullups_connected:1;
+>         unsigned                setup_packet_pending:1;
+>         unsigned                three_stage_setup:1;
+> @@ -1236,6 +1242,8 @@ struct dwc3 {
+>         unsigned                dis_metastability_quirk:1;
+>
+>         u16                     imod_interval;
+> +       int                     last_fifo_depth;
+> +       int                     num_ep_resized;
+>  };
+>
+>  #define INCRX_BURST_MODE 0
+> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
+> index 6dee4dabc0a4..76db9b530861 100644
+> --- a/drivers/usb/dwc3/ep0.c
+> +++ b/drivers/usb/dwc3/ep0.c
+> @@ -601,8 +601,9 @@ static int dwc3_ep0_set_config(struct dwc3 *dwc, struct usb_ctrlrequest *ctrl)
+>  {
+>         enum usb_device_state state = dwc->gadget.state;
+>         u32 cfg;
+> -       int ret;
+> +       int ret, num, size;
+>         u32 reg;
+> +       struct dwc3_ep *dep;
+>
+>         cfg = le16_to_cpu(ctrl->wValue);
+>
+> @@ -611,6 +612,40 @@ static int dwc3_ep0_set_config(struct dwc3 *dwc, struct usb_ctrlrequest *ctrl)
+>                 return -EINVAL;
+>
+>         case USB_STATE_ADDRESS:
+> +               /*
+> +                * If tx-fifo-resize flag is not set for the controller, then
+> +                * do not clear existing allocated TXFIFO since we do not
+> +                * allocate it again in dwc3_gadget_resize_tx_fifos
+> +                */
+> +               if (dwc->needs_fifo_resize) {
+> +                       /* Read ep0IN related TXFIFO size */
+> +                       dep = dwc->eps[1];
+> +                       size = dwc3_readl(dwc->regs, DWC3_GTXFIFOSIZ(0));
+> +                       if (dwc3_is_usb31(dwc))
+> +                               dep->fifo_depth = DWC31_GTXFIFOSIZ_TXFDEP(size);
+> +                       else
+> +                               dep->fifo_depth = DWC3_GTXFIFOSIZ_TXFDEP(size);
+> +
+> +                       dwc->last_fifo_depth = dep->fifo_depth;
+> +                       /* Clear existing TXFIFO for all IN eps except ep0 */
+> +                       for (num = 3; num < min_t(int, dwc->num_eps,
+> +                               DWC3_ENDPOINTS_NUM); num += 2) {
+> +                               dep = dwc->eps[num];
+> +                               /* Don't change TXFRAMNUM on usb31 version */
+> +                               size = dwc3_is_usb31(dwc) ?
+> +                                       dwc3_readl(dwc->regs,
+> +                                                  DWC3_GTXFIFOSIZ(num >> 1)) &
+> +                                                  DWC31_GTXFIFOSIZ_TXFRAMNUM :
+> +                                                  0;
+> +
+> +                               dwc3_writel(dwc->regs,
+> +                                           DWC3_GTXFIFOSIZ(num >> 1),
+> +                                           size);
+> +                               dep->fifo_depth = 0;
+> +                       }
+> +                       dwc->num_ep_resized = 0;
+> +               }
+> +
+>                 ret = dwc3_ep0_delegate_req(dwc, ctrl);
+>                 /* if the cfg matches and the cfg is non zero */
+>                 if (cfg && (!ret || (ret == USB_GADGET_DELAYED_STATUS))) {
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index 00746c2848c0..777badf3e85d 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -540,6 +540,117 @@ static int dwc3_gadget_start_config(struct dwc3_ep *dep)
+>         return 0;
+>  }
+>
+> +/*
+> + * dwc3_gadget_resize_tx_fifos - reallocate fifo spaces for current use-case
+> + * @dwc: pointer to our context structure
+> + *
+> + * This function will a best effort FIFO allocation in order
+> + * to improve FIFO usage and throughput, while still allowing
+> + * us to enable as many endpoints as possible.
+> + *
+> + * Keep in mind that this operation will be highly dependent
+> + * on the configured size for RAM1 - which contains TxFifo -,
+> + * the amount of endpoints enabled on coreConsultant tool, and
+> + * the width of the Master Bus.
+> + *
+> + * In general, FIFO depths are represented with the following equation:
+> + *
+> + * fifo_size = mult * ((max_packet + mdwidth)/mdwidth + 1) + 1
+> + *
+> + * Conversions can be done to the equation to derive the number of packets that
+> + * will fit to a particular FIFO size value.
+> + */
+> +static int dwc3_gadget_resize_tx_fifos(struct dwc3_ep *dep)
+> +{
+> +       struct dwc3 *dwc = dep->dwc;
+> +       int ram1_depth, mdwidth, fifo_0_start, tmp, num_in_ep;
+> +       int min_depth, remaining, fifo_size, mult = 1, fifo, max_packet = 1024;
+> +
+> +       if (!dwc->needs_fifo_resize)
+> +               return 0;
+> +
+> +       /* resize IN endpoints except ep0 */
+> +       if (!usb_endpoint_dir_in(dep->endpoint.desc) || dep->number <= 1)
+> +               return 0;
+> +
+> +       /* Don't resize already resized IN endpoint */
+> +       if (dep->fifo_depth)
+> +               return 0;
+> +
+> +       ram1_depth = DWC3_RAM1_DEPTH(dwc->hwparams.hwparams7);
+> +       mdwidth = DWC3_MDWIDTH(dwc->hwparams.hwparams0);
+> +       /* MDWIDTH is represented in bits, we need it in bytes */
+> +       mdwidth >>= 3;
+> +
+> +       if (((dep->endpoint.maxburst > 1) &&
+> +                       usb_endpoint_xfer_bulk(dep->endpoint.desc))
+> +                       || usb_endpoint_xfer_isoc(dep->endpoint.desc))
+> +               mult = 3;
+> +
+> +       if ((dep->endpoint.maxburst > 6) &&
+> +                       usb_endpoint_xfer_bulk(dep->endpoint.desc)
+> +                       && dwc3_is_usb31(dwc))
+> +               mult = 6;
+> +
+> +       /* FIFO size for a single buffer */
+> +       fifo = (max_packet + mdwidth)/mdwidth;
+> +       fifo++;
+> +
+> +       /* Calculate the number of remaining EPs w/o any FIFO */
+> +       num_in_ep = dwc->num_eps/2;
+> +       num_in_ep -= dwc->num_ep_resized;
+> +       /* Ignore EP0 IN */
+> +       num_in_ep--;
+> +
+> +       /* Reserve at least one FIFO for the number of IN EPs */
+> +       min_depth = num_in_ep * (fifo+1);
+> +       remaining = ram1_depth - min_depth - dwc->last_fifo_depth;
+> +
+> +       /* We've already reserved 1 FIFO per EP, so check what we can fit in
+> +        * addition to it.  If there is not enough remaining space, allocate
+> +        * all the remaining space to the EP.
+> +        */
+> +       fifo_size = (mult-1) * fifo;
+> +       if (remaining < fifo_size) {
+> +               if (remaining > 0)
+> +                       fifo_size = remaining;
+> +               else
+> +                       fifo_size = 0;
+> +       }
+> +
+> +       fifo_size += fifo;
+> +       fifo_size++;
+> +       dep->fifo_depth = fifo_size;
+> +
+> +       /* Check if TXFIFOs start at non-zero addr */
+> +       tmp = dwc3_readl(dwc->regs, DWC3_GTXFIFOSIZ(0));
+> +       fifo_0_start = DWC3_GTXFIFOSIZ_TXFSTADDR(tmp);
+> +
+> +       fifo_size |= (fifo_0_start + (dwc->last_fifo_depth << 16));
+> +       if (dwc3_is_usb31(dwc))
+> +               dwc->last_fifo_depth += DWC31_GTXFIFOSIZ_TXFDEP(fifo_size);
+> +       else
+> +               dwc->last_fifo_depth += DWC3_GTXFIFOSIZ_TXFDEP(fifo_size);
+> +
+> +       /* Check fifo size allocation doesn't exceed available RAM size. */
+> +       if (dwc->last_fifo_depth >= ram1_depth) {
+> +               dev_err(dwc->dev, "Fifosize(%d) > RAM size(%d) %s depth:%d\n",
+> +                               (dwc->last_fifo_depth * mdwidth), ram1_depth,
+> +                               dep->endpoint.name, fifo_size);
+> +               if (dwc3_is_usb31(dwc))
+> +                       fifo_size = DWC31_GTXFIFOSIZ_TXFDEP(fifo_size);
+> +               else
+> +                       fifo_size = DWC3_GTXFIFOSIZ_TXFDEP(fifo_size);
+> +               dwc->last_fifo_depth -= fifo_size;
+> +               dep->fifo_depth = 0;
+> +               return -ENOMEM;
+> +       }
+> +
+> +       dwc3_writel(dwc->regs, DWC3_GTXFIFOSIZ(dep->number >> 1), fifo_size);
+> +       dwc->num_ep_resized++;
+> +       return 0;
+> +}
+> +
+>  static int dwc3_gadget_set_ep_config(struct dwc3_ep *dep, unsigned int action)
+>  {
+>         const struct usb_ss_ep_comp_descriptor *comp_desc;
+> @@ -620,6 +731,10 @@ static int __dwc3_gadget_ep_enable(struct dwc3_ep *dep, unsigned int action)
+>         int                     ret;
+>
+>         if (!(dep->flags & DWC3_EP_ENABLED)) {
+> +               ret = dwc3_gadget_resize_tx_fifos(dep);
+> +               if (ret)
+> +                       return ret;
+> +
+>                 ret = dwc3_gadget_start_config(dep);
+>                 if (ret)
+>                         return ret;
+> --
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
 >
