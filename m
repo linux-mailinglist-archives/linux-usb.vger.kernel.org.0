@@ -2,72 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 594F82427AB
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Aug 2020 11:34:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8224824280D
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Aug 2020 12:09:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727850AbgHLJed (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Aug 2020 05:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57634 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726629AbgHLJec (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Aug 2020 05:34:32 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E55AC06174A;
-        Wed, 12 Aug 2020 02:34:32 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id h19so1438421ljg.13;
-        Wed, 12 Aug 2020 02:34:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=a17geVUtG3V76Xw8G0K0I/am9ItmXpyn0kGJcOXpFak=;
-        b=eHrJ5R9GwjUo0d3w+oNXRPavVKC4tJ3u1O5YUUa/6VXXzbVIiPXUW74Blzx6aTZd38
-         OWf09pmSzTpsrAnRghC4mw9CWZr5RyuTWaZmxSR1AGvtci+C5Sj576ASbQyKMbXU+6gt
-         zRdBEt2CEubaIIazCt589T1crpqbRYIQ7f5ZtwIEZecYFzSM189yZsdotPvYIPEC1h01
-         +a6F0ceWeww/Aw8IDjbGT6PxbHHpfWfxlcSVmKhFpZwMyDOif6Z9OzoV/9KobPWqpTn7
-         Kr5H1L0HGSM8HTQSjo9OX6HyCHCo1DX6YaniLlEiCArKcFEevHCX5bl6NWM9aO7SuzlH
-         eWIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=a17geVUtG3V76Xw8G0K0I/am9ItmXpyn0kGJcOXpFak=;
-        b=FfDIlJnODW7pptGgd8BxJpMSWx11VLd2aGuArFzscWSezugfyC+hpxbdvmhzv9FNiy
-         MK2w7wbvaGZMh/EtLSXmpxnMfCBVBEPssM+gs5tNRofqFpBDfR2ifulTZT4/Okqm6kOG
-         v0hRvlBWjFBCrJubKcuCOl41qdCAO6+Eysot2+ZoG0XatwngIuHU7gOtDWI8VDoEiMk8
-         p4k7IorOQBqOAMNaqHTsP9woKslNAvlAstW0WEx4vYZoecZMG1+dpACQXXiZbio5Fl2H
-         MMNd9GzroheRXq5eMlvn0z8nxO3QNdZXu9XiDgzQ6ifsagBqALiuk+nTyte1azslUa41
-         9rKw==
-X-Gm-Message-State: AOAM531RU9SXQRoqimsd4aUu66bbzV6N974n2ZOk8qgYDMAdmbHNtdxt
-        YHR8oMbuGRiBLvBKA6eL5ZILzOeuoC8=
-X-Google-Smtp-Source: ABdhPJzqhrrBwT6zYABIIIlNnOzfUWCC2VTJfAIDcF2OecjRVfaONWeC34KrvzBhF/Up9tjnbR2tIw==
-X-Received: by 2002:a2e:96c3:: with SMTP id d3mr5069508ljj.270.1597224870461;
-        Wed, 12 Aug 2020 02:34:30 -0700 (PDT)
-Received: from ?IPv6:2a00:1fa0:41b:98d0:14d2:8cca:fcf5:be6? ([2a00:1fa0:41b:98d0:14d2:8cca:fcf5:be6])
-        by smtp.gmail.com with ESMTPSA id x17sm329782ljm.0.2020.08.12.02.34.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Aug 2020 02:34:28 -0700 (PDT)
-Subject: Re: [PATCH v8 4/4] arm64: boot: dts: qcom: pm8150b: Add DTS node for
- PMIC VBUS booster
-To:     Wesley Cheng <wcheng@codeaurora.org>, sboyd@kernel.org,
-        heikki.krogerus@linux.intel.com, agross@kernel.org,
-        robh+dt@kernel.org, gregkh@linuxfoundation.org,
-        bjorn.andersson@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20200812071925.315-1-wcheng@codeaurora.org>
- <20200812071925.315-5-wcheng@codeaurora.org>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Organization: Brain-dead Software
-Message-ID: <1ed0a34c-6219-fe3d-7d9c-13a74ce2d4d0@gmail.com>
-Date:   Wed, 12 Aug 2020 12:34:20 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
+        id S1727066AbgHLKJ0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Aug 2020 06:09:26 -0400
+Received: from www262.sakura.ne.jp ([202.181.97.72]:58793 "EHLO
+        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727032AbgHLKJ0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Aug 2020 06:09:26 -0400
+Received: from fsav106.sakura.ne.jp (fsav106.sakura.ne.jp [27.133.134.233])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 07CA9OdC032456;
+        Wed, 12 Aug 2020 19:09:24 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav106.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav106.sakura.ne.jp);
+ Wed, 12 Aug 2020 19:09:24 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav106.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 07CA9Od3032446
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO);
+        Wed, 12 Aug 2020 19:09:24 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Subject: Re: [PATCH] USB: cdc-wdm: Remove unsafe wdm_flush().
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Colin Ian King <colin.king@canonical.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-usb@vger.kernel.org,
+        syzbot <syzbot+854768b99f19e89d7f81@syzkaller.appspotmail.com>
+References: <1597188375-4787-1-git-send-email-penguin-kernel@I-love.SAKURA.ne.jp>
+ <1597219371.28022.6.camel@suse.com>
+From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Message-ID: <9a57e64d-4f83-9df8-dcfb-f907d5983935@i-love.sakura.ne.jp>
+Date:   Wed, 12 Aug 2020 19:09:21 +0900
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:68.0) Gecko/20100101
  Thunderbird/68.11.0
 MIME-Version: 1.0
-In-Reply-To: <20200812071925.315-5-wcheng@codeaurora.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <1597219371.28022.6.camel@suse.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
@@ -75,41 +52,36 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello!
-
-On 12.08.2020 10:19, Wesley Cheng wrote:
-
-> Add the required DTS node for the USB VBUS output regulator, which is
-> available on PM8150B.  This will provide the VBUS source to connected
-> peripherals.
+On 2020/08/12 17:02, Oliver Neukum wrote:
+> Am Mittwoch, den 12.08.2020, 08:26 +0900 schrieb Tetsuo Handa:
+>> syzbot is reporting hung task at wdm_flush() [1], for there is a circular
+>> dependency that wdm_flush() from flip_close() for /dev/cdc-wdm0 forever
+>> waits for /dev/raw-gadget to be closed while close() for /dev/raw-gadget
+>> cannot be called unless close() for /dev/cdc-wdm0 completes.
+>>
+>> It turned out that wdm_flush() is broken in multiple aspects.
 > 
-> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
-> ---
->   arch/arm64/boot/dts/qcom/pm8150b.dtsi   | 6 ++++++
->   arch/arm64/boot/dts/qcom/sm8150-mtp.dts | 4 ++++
->   2 files changed, 10 insertions(+)
+> Sorry,
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/pm8150b.dtsi b/arch/arm64/boot/dts/qcom/pm8150b.dtsi
-> index 053c659734a7..9e560c1ca30d 100644
-> --- a/arch/arm64/boot/dts/qcom/pm8150b.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/pm8150b.dtsi
-> @@ -53,6 +53,12 @@ power-on@800 {
->   			status = "disabled";
->   		};
->   
-> +		pm8150b_vbus: dcdc@1100 {
+> this seems to be a miscommunication. I was under the impression that
+> you were testing patches. I will push them upstream. You
+> cannot just remove flush() without impairing error handling.
 
-    s/dcdc/regulator/? What is "dcdc", anyway?
-    The device nodes must have the generic names, according to the DT spec.
+Then, will you check
 
-> +			compatible = "qcom,pm8150b-vbus-reg";
-> +			status = "disabled";
-> +			reg = <0x1100>;
-> +		};
-> +
->   		pm8150b_typec: typec@1500 {
->   			compatible = "qcom,pm8150b-usb-typec";
->   			status = "disabled";
-[...]
+  https://lore.kernel.org/linux-usb/254939d4-f3a1-8c7e-94e5-9862c02774fa@i-love.sakura.ne.jp/
 
-MBR, Sergei
+and
+
+  https://lore.kernel.org/linux-usb/c85331fc-874c-6e46-a77f-0ef1dc075308@i-love.sakura.ne.jp/
+
+before pushing upstream?
+
+> 
+> 	Regards
+> 		Oliver
+> 
+> 
+> Nacked-by: Oliver Neukum <oneukum@suse.com>
+> 
+
