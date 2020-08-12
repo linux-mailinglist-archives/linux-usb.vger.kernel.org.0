@@ -2,21 +2,21 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E4042430D5
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Aug 2020 00:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 103F52430D6
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Aug 2020 00:34:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726531AbgHLWeF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 12 Aug 2020 18:34:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48676 "EHLO mail.kernel.org"
+        id S1726564AbgHLWe0 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 12 Aug 2020 18:34:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49410 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726508AbgHLWeF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 12 Aug 2020 18:34:05 -0400
+        id S1726508AbgHLWeZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 12 Aug 2020 18:34:25 -0400
 From:   bugzilla-daemon@bugzilla.kernel.org
 Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
 To:     linux-usb@vger.kernel.org
 Subject: [Bug 208891] Thunderbolt hotplug fails on HP x360 13t-aw000/86FA
  with HP Thunderbolt 3 Dock
-Date:   Wed, 12 Aug 2020 22:34:04 +0000
+Date:   Wed, 12 Aug 2020 22:34:24 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -32,7 +32,7 @@ X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-208891-208809-ygpftrkmHz@https.bugzilla.kernel.org/>
+Message-ID: <bug-208891-208809-VjGILpYQB8@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-208891-208809@https.bugzilla.kernel.org/>
 References: <bug-208891-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -47,10 +47,10 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=208891
 
---- Comment #10 from Matt Turner (mattst88@gmail.com) ---
-Created attachment 290863
-  --> https://bugzilla.kernel.org/attachment.cgi?id=290863&action=edit
-hotplugged-not-previously-attached-dmesg
+--- Comment #11 from Matt Turner (mattst88@gmail.com) ---
+Created attachment 290865
+  --> https://bugzilla.kernel.org/attachment.cgi?id=290865&action=edit
+hotplugged-not-previously-attached-lspci
 
 -- 
 You are receiving this mail because:
