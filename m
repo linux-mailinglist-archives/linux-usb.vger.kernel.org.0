@@ -2,190 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC6D243CC5
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Aug 2020 17:49:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB37C243D33
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Aug 2020 18:25:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726606AbgHMPto (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Aug 2020 11:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54810 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726253AbgHMPtn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Aug 2020 11:49:43 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B29C061385
-        for <linux-usb@vger.kernel.org>; Thu, 13 Aug 2020 08:49:42 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id f9so2937489pju.4
-        for <linux-usb@vger.kernel.org>; Thu, 13 Aug 2020 08:49:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=QisyeHY3ZHMM3TerX6llGGeWvEX6TJlY7NstZgbx+iA=;
-        b=LKuthNgyTESR2Nb5oycvHkDmSlKMH02vcClqoGbLB+Q3J0FfgdtV/KW/wYLum4WUiZ
-         OfVxpFSYY5d8YHZ3+iqoHu/a+DIQeHox5ug7EO6gbNtt/HujRCr9O0uZruzuirhrVqMC
-         7tXN7EGsBqpcLjldCm3M1WB/akMnXU8vn394U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QisyeHY3ZHMM3TerX6llGGeWvEX6TJlY7NstZgbx+iA=;
-        b=GPKYcqBqP4VAYpVqJ9ekkATQdyqpbkwG1oQWFeXDg9eFIJz2NH3eqrZrYc7HHeMQEF
-         hMyExtLzaYlX0kVHXYvkjbjiT6+RMklFB0zT80hRejBYm0Iso4b7L4jgSh2JzZ99hLtk
-         KxAwOswNqUZ5rQ9784u2X259BDEAbo4xs5H5KAs1jUJkY5aBmUn3nu5LnIc8qJkHpvuR
-         Qnp5yr1cUJ486TxJDP0px+RJ6ybBpqjjOWf7JaDmwpNGgzA4RDVtsMY8ZYeuFpE/aFBT
-         GFZ7BJShlInp3ocVc/Gnp2oPPgVHkLVqcKzm3gmVn8DXD9dzOczxu62a5V8S7JhOe2Wk
-         HDQg==
-X-Gm-Message-State: AOAM532jcdlEO+98mS8aSTghycNKmM1KZDp+UKY02aNmD5a9FSqV/ALp
-        92nfAQjN7ZwEQLqByW4NgR2JhA==
-X-Google-Smtp-Source: ABdhPJz1M1P1S51YzM2m55MEu1bwSyYnt8Ac/RYg3NEhBAQvrxXf7zaV/15+/gOI8U5pzir/Bpl51Q==
-X-Received: by 2002:a17:90a:6d96:: with SMTP id a22mr5449139pjk.165.1597333782100;
-        Thu, 13 Aug 2020 08:49:42 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:f693:9fff:fef4:e70a])
-        by smtp.gmail.com with ESMTPSA id b185sm6329480pfg.71.2020.08.13.08.49.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Aug 2020 08:49:40 -0700 (PDT)
-Date:   Thu, 13 Aug 2020 08:49:39 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Sandeep Maheswaram <sanm@codeaurora.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <mgautam@codeaurora.org>
-Subject: Re: [PATCH v2 1/3] usb: dwc3: core: Host wake up support from system
- suspend
-Message-ID: <20200813154939.GB2995789@google.com>
-References: <1594235417-23066-1-git-send-email-sanm@codeaurora.org>
- <1594235417-23066-2-git-send-email-sanm@codeaurora.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1594235417-23066-2-git-send-email-sanm@codeaurora.org>
+        id S1726384AbgHMQZj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Aug 2020 12:25:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57854 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726131AbgHMQZi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 13 Aug 2020 12:25:38 -0400
+Received: from localhost (unknown [70.37.104.77])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0244D20658;
+        Thu, 13 Aug 2020 16:25:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1597335937;
+        bh=mq48PNtnQj5rHRfgjFX+CHdC2rpatgZUfykW8WLTs/s=;
+        h=Date:From:To:To:To:Cc:Cc:Cc:Subject:In-Reply-To:References:From;
+        b=V01muYME+tXkmaCcUMYc+kY9vcYwcqYqeNIn1i8qjqY+Y36qcgd+Z/B3cwYZZsNm7
+         jj23FtMoXXY45beQyKDVLz5nuV0lRK2ABxq+Wg7UZi8/zYsjVhQxBl8Q8Sv9z41ojk
+         x/WLPyevBCYTQi7Y/FfQRYM2zr4Upo1XgMgCVUQs=
+Date:   Thu, 13 Aug 2020 16:25:36 +0000
+From:   Sasha Levin <sashal@kernel.org>
+To:     Sasha Levin <sashal@kernel.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-usb@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Subject: Re: [PATCH 2/4] usb: typec: ucsi: Fix 2 unlocked ucsi_run_command calls
+In-Reply-To: <20200809141904.4317-3-hdegoede@redhat.com>
+References: <20200809141904.4317-3-hdegoede@redhat.com>
+Message-Id: <20200813162537.0244D20658@mail.kernel.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 09, 2020 at 12:40:15AM +0530, Sandeep Maheswaram wrote:
-> Avoiding phy powerdown in host mode so that it can be wake up by devices.
-> Added need_phy_for_wakeup flag to distinugush resume path and hs_phy_flags
-> to check connection status and set phy mode and  configure interrupts.
-> 
-> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
-> ---
->  drivers/usb/dwc3/core.c | 47 ++++++++++++++++++++++++++++++++++++++++-------
->  drivers/usb/dwc3/core.h |  2 ++
->  2 files changed, 42 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 25c686a7..eb7c225 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -31,12 +31,14 @@
->  #include <linux/usb/gadget.h>
->  #include <linux/usb/of.h>
->  #include <linux/usb/otg.h>
-> +#include <linux/usb/hcd.h>
->  
->  #include "core.h"
->  #include "gadget.h"
->  #include "io.h"
->  
->  #include "debug.h"
-> +#include "../host/xhci.h"
->  
->  #define DWC3_DEFAULT_AUTOSUSPEND_DELAY	5000 /* ms */
->  
-> @@ -1627,10 +1629,36 @@ static int dwc3_core_init_for_resume(struct dwc3 *dwc)
->  	return ret;
->  }
->  
-> +static void dwc3_set_phy_speed_flags(struct dwc3 *dwc)
-> +{
-> +
-> +	int i, num_ports;
-> +	u32 reg;
-> +	struct usb_hcd	*hcd = platform_get_drvdata(dwc->xhci);
-> +	struct xhci_hcd	*xhci_hcd = hcd_to_xhci(hcd);
-> +
-> +	dwc->hs_phy_flags &= ~(PHY_MODE_USB_HOST_HS | PHY_MODE_USB_HOST_LS);
-> +
-> +	reg = readl(&xhci_hcd->cap_regs->hcs_params1);
-> +
-> +	num_ports = HCS_MAX_PORTS(reg);
-> +	for (i = 0; i < num_ports; i++) {
-> +		reg = readl(&xhci_hcd->op_regs->port_status_base + i * 0x04);
-> +		if (reg & PORT_PE) {
-> +			if (DEV_HIGHSPEED(reg) || DEV_FULLSPEED(reg))
-> +				dwc->hs_phy_flags |= PHY_MODE_USB_HOST_HS;
-> +			else if (DEV_LOWSPEED(reg))
-> +				dwc->hs_phy_flags |= PHY_MODE_USB_HOST_LS;
-> +		}
-> +	}
-> +	phy_set_mode(dwc->usb2_generic_phy, dwc->hs_phy_flags);
-> +}
-> +
->  static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->  {
->  	unsigned long	flags;
->  	u32 reg;
-> +	struct usb_hcd  *hcd = platform_get_drvdata(dwc->xhci);
->  
->  	switch (dwc->current_dr_role) {
->  	case DWC3_GCTL_PRTCAP_DEVICE:
-> @@ -1643,9 +1671,12 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->  		dwc3_core_exit(dwc);
->  		break;
->  	case DWC3_GCTL_PRTCAP_HOST:
-> +		dwc3_set_phy_speed_flags(dwc);
->  		if (!PMSG_IS_AUTO(msg)) {
-> -			dwc3_core_exit(dwc);
-> -			break;
-> +			if (usb_wakeup_enabled_descendants(hcd->self.root_hub))
-> +				dwc->need_phy_for_wakeup = true;
-> +			else
-> +				dwc->need_phy_for_wakeup = false;
->  		}
->  
->  		/* Let controller to suspend HSPHY before PHY driver suspends */
-> @@ -1705,11 +1736,13 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
->  		break;
->  	case DWC3_GCTL_PRTCAP_HOST:
->  		if (!PMSG_IS_AUTO(msg)) {
-> -			ret = dwc3_core_init_for_resume(dwc);
-> -			if (ret)
-> -				return ret;
-> -			dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
-> -			break;
-> +			if (!dwc->need_phy_for_wakeup) {
-> +				ret = dwc3_core_init_for_resume(dwc);
-> +				if (ret)
-> +					return ret;
-> +				dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
-> +				break;
-> +			}
->  		}
->  		/* Restore GUSB2PHYCFG bits that were modified in suspend */
->  		reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
-> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> index 013f42a..5367d510e 100644
-> --- a/drivers/usb/dwc3/core.h
-> +++ b/drivers/usb/dwc3/core.h
-> @@ -1094,6 +1094,8 @@ struct dwc3 {
->  	struct phy		*usb3_generic_phy;
->  
->  	bool			phys_ready;
-> +	bool                    need_phy_for_wakeup;
-> +	unsigned int            hs_phy_flags;
->  
->  	struct ulpi		*ulpi;
->  	bool			ulpi_ready;
+Hi
 
-Should this include a check for the 'wakeup-source' DT attribute as in
-xhci-mtk.c, to make wakeup support optional?
+[This is an automated email]
+
+This commit has been processed because it contains a -stable tag.
+The stable tag indicates that it's relevant for the following trees: all
+
+The bot has tested the following trees: v5.8, v5.7.14, v5.4.57, v4.19.138, v4.14.193, v4.9.232, v4.4.232.
+
+v5.8: Build OK!
+v5.7.14: Failed to apply! Possible dependencies:
+    4dbc6a4ef06d ("usb: typec: ucsi: save power data objects in PD mode")
+
+v5.4.57: Failed to apply! Possible dependencies:
+    2ede55468ca8 ("usb: typec: ucsi: Remove the old API")
+    3cf657f07918 ("usb: typec: ucsi: Remove all bit-fields")
+    470ce43a1a81 ("usb: typec: ucsi: Remove struct ucsi_control")
+    4dbc6a4ef06d ("usb: typec: ucsi: save power data objects in PD mode")
+    6df475f804e6 ("usb: typec: ucsi: Start using struct typec_operations")
+    bdc62f2bae8f ("usb: typec: ucsi: Simplified registration and I/O API")
+
+v4.19.138: Failed to apply! Possible dependencies:
+    247c554a14aa ("usb: typec: ucsi: add support for Cypress CCGx")
+    2ede55468ca8 ("usb: typec: ucsi: Remove the old API")
+    470ce43a1a81 ("usb: typec: ucsi: Remove struct ucsi_control")
+    5c9ae5a87573 ("usb: typec: ucsi: ccg: add firmware flashing support")
+    5d438e200215 ("usb: typec: ucsi: ccg: add get_fw_info function")
+    6df475f804e6 ("usb: typec: ucsi: Start using struct typec_operations")
+    81534d5fa973 ("usb: typec: ucsi: Remove debug.h file")
+    a94ecde41f7e ("usb: typec: ucsi: ccg: enable runtime pm support")
+    ad74b8649bea ("usb: typec: ucsi: Preliminary support for alternate modes")
+    af8622f6a585 ("usb: typec: ucsi: Support for DisplayPort alt mode")
+    bdc62f2bae8f ("usb: typec: ucsi: Simplified registration and I/O API")
+    f2372b87c386 ("usb: typec: ucsi: displayport: Fix for the mode entering routine")
+
+v4.14.193: Failed to apply! Possible dependencies:
+    0a4c005bd171 ("usb: typec: driver for TI TPS6598x USB Power Delivery controllers")
+    247c554a14aa ("usb: typec: ucsi: add support for Cypress CCGx")
+    2ede55468ca8 ("usb: typec: ucsi: Remove the old API")
+    3c4fb9f16921 ("usb: typec: wcove: start using tcpm for USB PD support")
+    44262fad12a7 ("staging: typec: tcpm: Drop commented out code")
+    4b4e02c83167 ("typec: tcpm: Move out of staging")
+    70cd90be3300 ("staging: typec: pd: Document struct pd_message")
+    76f0c53d08b9 ("usb: typec: fusb302: Move out of staging")
+    81534d5fa973 ("usb: typec: ucsi: Remove debug.h file")
+    956c36c297a2 ("USB: typec: add SPDX identifiers to some files")
+    98076fa64a05 ("staging: typec: tcpm: Document data structures")
+    ad74b8649bea ("usb: typec: ucsi: Preliminary support for alternate modes")
+    af8622f6a585 ("usb: typec: ucsi: Support for DisplayPort alt mode")
+    cf6e06cddf29 ("usb: typec: Start using ERR_PTR")
+
+v4.9.232: Failed to apply! Possible dependencies:
+    0c744ea4f77d ("Linux 4.10-rc2")
+    2bd6bf03f4c1 ("Linux 4.14-rc1")
+    2ea659a9ef48 ("Linux 4.12-rc1")
+    2ede55468ca8 ("usb: typec: ucsi: Remove the old API")
+    49def1853334 ("Linux 4.10-rc4")
+    566cf877a1fc ("Linux 4.10-rc6")
+    5771a8c08880 ("Linux v4.13-rc1")
+    7089db84e356 ("Linux 4.10-rc8")
+    7a308bb3016f ("Linux 4.10-rc5")
+    7ce7d89f4883 ("Linux 4.10-rc1")
+    a121103c9228 ("Linux 4.10-rc3")
+    af8622f6a585 ("usb: typec: ucsi: Support for DisplayPort alt mode")
+    b24413180f56 ("License cleanup: add SPDX GPL-2.0 license identifier to files with no license")
+    c1ae3cfa0e89 ("Linux 4.11-rc1")
+    c470abd4fde4 ("Linux 4.10")
+    d5adbfcd5f7b ("Linux 4.10-rc7")
+
+v4.4.232: Failed to apply! Possible dependencies:
+    1001354ca341 ("Linux 4.9-rc1")
+    18558cae0272 ("Linux 4.5-rc4")
+    1a695a905c18 ("Linux 4.7-rc1")
+    29b4817d4018 ("Linux 4.8-rc1")
+    2bd6bf03f4c1 ("Linux 4.14-rc1")
+    2dcd0af568b0 ("Linux 4.6")
+    2ea659a9ef48 ("Linux 4.12-rc1")
+    2ede55468ca8 ("usb: typec: ucsi: Remove the old API")
+    36f90b0a2ddd ("Linux 4.5-rc2")
+    388f7b1d6e8c ("Linux 4.5-rc3")
+    5771a8c08880 ("Linux v4.13-rc1")
+    7ce7d89f4883 ("Linux 4.10-rc1")
+    81f70ba233d5 ("Linux 4.5-rc5")
+    92e963f50fc7 ("Linux 4.5-rc1")
+    af8622f6a585 ("usb: typec: ucsi: Support for DisplayPort alt mode")
+    b24413180f56 ("License cleanup: add SPDX GPL-2.0 license identifier to files with no license")
+    b562e44f507e ("Linux 4.5")
+    c1ae3cfa0e89 ("Linux 4.11-rc1")
+    f55532a0c0b8 ("Linux 4.6-rc1")
+    f6cede5b49e8 ("Linux 4.5-rc7")
+    fc77dbd34c5c ("Linux 4.5-rc6")
+
+
+NOTE: The patch will not be queued to stable trees until it is upstream.
+
+How should we proceed with this patch?
+
+-- 
+Thanks
+Sasha
