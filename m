@@ -2,127 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B60524382B
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Aug 2020 12:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 553FB24388C
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Aug 2020 12:31:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726427AbgHMKBT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Aug 2020 06:01:19 -0400
-Received: from mx2.suse.de ([195.135.220.15]:52128 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726167AbgHMKBT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 13 Aug 2020 06:01:19 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id F3CB4ACF3;
-        Thu, 13 Aug 2020 10:01:39 +0000 (UTC)
-Message-ID: <a6aecb7a4d270cb23430d25850c85a332555af55.camel@suse.de>
-Subject: Re: [PATCH v5 0/9] Raspberry Pi 4 USB firmware initialization rework
-From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
-To:     f.fainelli@gmail.com, gregkh@linuxfoundation.org, robh@kernel.org,
-        wahrenst@gmx.net, p.zabel@pengutronix.de, andy.shevchenko@gmail.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com, tim.gover@raspberrypi.org,
-        linux-pci@vger.kernel.org, helgaas@kernel.org,
-        mathias.nyman@linux.intel.com, lorenzo.pieralisi@arm.com
-Date:   Thu, 13 Aug 2020 12:01:14 +0200
-In-Reply-To: <20200629161845.6021-1-nsaenzjulienne@suse.de>
-References: <20200629161845.6021-1-nsaenzjulienne@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.3-0ubuntu1 
+        id S1726593AbgHMKbh convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 13 Aug 2020 06:31:37 -0400
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:35289 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726048AbgHMKbf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Aug 2020 06:31:35 -0400
+Received: from [37.161.87.136] (port=46755 helo=[192.168.42.162])
+        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1k6AW9-000FlW-5k; Thu, 13 Aug 2020 12:31:29 +0200
+Subject: Re: [PATCH] dt-bindings: Whitespace clean-ups in schema files
+To:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <20200812203618.2656699-1-robh@kernel.org>
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Message-ID: <d5808e9c-07fe-1c28-b9a6-a16abe9df458@lucaceresoli.net>
+Date:   Thu, 13 Aug 2020 12:31:28 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20200812203618.2656699-1-robh@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8BIT
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi everyone.
+Hi Rob,
 
-On Mon, 2020-06-29 at 18:18 +0200, Nicolas Saenz Julienne wrote:
-> On the Raspberry Pi 4, after a PCI reset, VL805's firmware may either be
-> loaded directly from an EEPROM or, if not present, by the SoC's
-> co-processor, VideoCore. This series reworks how we handle this.
+On 12/08/20 22:36, Rob Herring wrote:
+> Clean-up incorrect indentation, extra spaces, long lines, and missing
+> EOF newline in schema files. Most of the clean-ups are for list
+> indentation which should always be 2 spaces more than the preceding
+> keyword.
 > 
-> The previous solution makes use of PCI quirks and exporting platform
-> specific functions. Albeit functional it feels pretty shoehorned. This
-> proposes an alternative way of handling the triggering of the xHCI chip
-> initialization trough means of a reset controller.
-> 
-> The benefits are pretty evident: less platform churn in core xHCI code,
-> and no explicit device dependency management in pcie-brcmstb.
-> 
-> Note that patch #1 depends on another series[1], that was just applied
-> into the clk maintainer's tree.
-> 
-> The series is based on v5.8-rc3
-> 
-> v3: https://www.spinics.net/lists/arm-kernel/msg813612.html
-> v2: https://lkml.org/lkml/2020/6/9/875
-> v1: https://lore.kernel.org/linux-usb/20200608192701.18355-1-nsaenzjulienne@suse.de/T/#t
-> 
-> [1] https://lore.kernel.org/linux-clk/159304773261.62212.983376627029743900@swboyd.mtv.corp.google.com/T/#t
-> 
-> ---
+> Found with yamllint (which I plan to integrate into the checks).
 
-We were waiting on a dependency to be merged upstream to get this. They are now
-in, so could we move things forward?
+[...]
 
-I can take the device tree patches, I guess philipp can take the reset
-controller code. But I'm not so sure who should be taking the PCI/USB
-counterparts.
+> diff --git a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
+> index 3d4e1685cc55..28c6461b9a9a 100644
+> --- a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
+> +++ b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
+> @@ -95,10 +95,10 @@ allOf:
+>        # Devices without builtin crystal
+>        properties:
+>          clock-names:
+> -            minItems: 1
+> -            maxItems: 2
+> -            items:
+> -              enum: [ xin, clkin ]
+> +          minItems: 1
+> +          maxItems: 2
+> +          items:
+> +            enum: [ xin, clkin ]
+>          clocks:
+>            minItems: 1
+>            maxItems: 2
 
-Regards,
-Nicolas
+Thanks for noticing, LGTM.
 
+[...]
+
+> diff --git a/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml b/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
+> index d7dac16a3960..36dc7b56a453 100644
+> --- a/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
+> +++ b/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
+> @@ -33,8 +33,8 @@ properties:
+>      $ref: /schemas/types.yaml#/definitions/uint32
+>  
+>    touchscreen-min-pressure:
+> -    description: minimum pressure on the touchscreen to be achieved in order for the
+> -                 touchscreen driver to report a touch event.
+> +    description: minimum pressure on the touchscreen to be achieved in order
+> +      for the touchscreen driver to report a touch event.
+
+Out of personal taste, I find the original layout more pleasant and
+readable. This third option is also good, especially for long descriptions:
+
+  description:
+    minimum pressure on the touchscreen to be achieved in order for the
+    touchscreen driver to report a touch event.
+
+At first glance yamllint seems to support exactly these two by default:
+
+> With indentation: {spaces: 4, check-multi-line-strings: true}
 > 
-> Changes since v4:
->  - Adress Andy's comments
+> the following code snippet would PASS:
 > 
-> Changes since v3:
->  - Rework dt patch to include root bridge as a separate node
->  - Update xhci-pci patch now that the xhci dev has a dt node (it was
->    getting it in the past from its bus)
+> Blaise Pascal:
+>     Je vous écris une longue lettre parce que
+>     je n'ai pas le temps d'en écrire une courte.
 > 
-> Changes since v2:
->  - Add reset to resume routine in xhci-pci
->  - Correct of refcount in pci-quirks
->  - Correct typos
->  - Use include file to define firmware reset IDs
+> the following code snippet would PASS:
 > 
-> Changes since v1:
->  - Rework reset controller so it's less USB centric
->  - Use correct reset controller API in xhci-pci
->  - Correct typos
+> Blaise Pascal: Je vous écris une longue lettre parce que
+>                je n'ai pas le temps d'en écrire une courte.
 > 
-> Nicolas Saenz Julienne (9):
->   dt-bindings: reset: Add a binding for the RPi Firmware reset
->     controller
->   reset: Add Raspberry Pi 4 firmware reset controller
->   ARM: dts: bcm2711: Add firmware usb reset node
->   ARM: dts: bcm2711: Add reset controller to xHCI node
->   usb: xhci-pci: Add support for reset controllers
->   Revert "USB: pci-quirks: Add Raspberry Pi 4 quirk"
->   usb: host: pci-quirks: Bypass xHCI quirks for Raspberry Pi 4
->   Revert "firmware: raspberrypi: Introduce vl805 init routine"
->   Revert "PCI: brcmstb: Wait for Raspberry Pi's firmware when present"
+> the following code snippet would FAIL:
 > 
->  .../arm/bcm/raspberrypi,bcm2835-firmware.yaml |  21 +++
->  arch/arm/boot/dts/bcm2711-rpi-4-b.dts         |  22 ++++
->  drivers/firmware/Kconfig                      |   3 +-
->  drivers/firmware/raspberrypi.c                |  61 ---------
->  drivers/pci/controller/pcie-brcmstb.c         |  17 ---
->  drivers/reset/Kconfig                         |  11 ++
->  drivers/reset/Makefile                        |   1 +
->  drivers/reset/reset-raspberrypi.c             | 122 ++++++++++++++++++
->  drivers/usb/host/pci-quirks.c                 |  22 ++--
->  drivers/usb/host/xhci-pci.c                   |  10 ++
->  drivers/usb/host/xhci.h                       |   2 +
->  .../reset/raspberrypi,firmware-reset.h        |  13 ++
->  include/soc/bcm2835/raspberrypi-firmware.h    |   7 -
->  13 files changed, 215 insertions(+), 97 deletions(-)
->  create mode 100644 drivers/reset/reset-raspberrypi.c
->  create mode 100644 include/dt-bindings/reset/raspberrypi,firmware-reset.h
+> Blaise Pascal: Je vous écris une longue lettre parce que
+>   je n'ai pas le temps d'en écrire une courte.
 > 
+(https://yamllint.readthedocs.io/en/stable/rules.html#module-yamllint.rules.indentation)
+
+
+-- 
+Luca
 
