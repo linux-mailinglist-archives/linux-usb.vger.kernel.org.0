@@ -2,125 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA81E2432E5
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Aug 2020 05:39:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E8392433A7
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Aug 2020 07:41:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726609AbgHMDjC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Aug 2020 23:39:02 -0400
-Received: from mail-vi1eur05on2040.outbound.protection.outlook.com ([40.107.21.40]:46849
-        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726621AbgHMDjB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 12 Aug 2020 23:39:01 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nMpvvAk77Ee0fyp53VqphuuzMTvnB/eFOJCeDkIBfeyfKNfv5G6UMKJZTXhip3QD+AmMvNkzFQaglQYfSxYLQVCfuJ6CuGDPBdn0Qt/AofvAPx5kYpSuUJFiv6d/7dj5Z5sYrknvmlrSamdZygg0cMAFUzkkxUPAqXlstoKMIGpMMfdRHvwVdPYqCCT+wxMV5bQn27Fc0wSynHkZt2ooNvzfeBwqiz6ilgIK0XkRu57J0E32UyEJ3Guv2g/pQSqxh7T1tpRTQCJXfGfEyDG+8QOxfhQ9LhllRjAn7D7pACznkAOwZnn1TegEKR9B+QJHjxFLGY/AR8fpi+acAjknsQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GiygfphVRc6jCRLTweWBo0aa43+acXpEU7O3O1eRSHM=;
- b=d3ywwgD/z0qjD+lIMUWFfR7HhYhI2gM1TNQhyZ2QdXiHp/u0gV6HqfM/MN6TZAhvpf2p5p9Y3Z9gQTwzYRpo9kI5b7+L3m56+kULe5UEXj9IxA/7mH1zfaAEsqFGLBTCUvwp/0CRlBzVzUI6nsUhDINV+ENQBpuYFEEE2kmxO3Ug/Q1HrFMjdj04gm5LCn3jddjCDf/2gSe5o0gI+rabHNGJanPE4U4LYwxsraukQ8V74QvcMc6Tb395ZTkb8uizWWXbG8ruKdZXJTmN1sYS2ABbpDvAAnaOG7WNczwRo8268j//LgM7ZK42tOWo3ZR/iYQ2G5n9S/lmU/Q7GrXNdw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GiygfphVRc6jCRLTweWBo0aa43+acXpEU7O3O1eRSHM=;
- b=mMh4Fjkx0EA+8irnRHDX/vwbHwJuWqC7g7FOOcdr23d6xfOLDCfrxMqOeLtRdSDE7j/4XhQwX57spGuomoYgx0OXUbLtGJUR6Yq36qIMzUuo6uyaC2IFZxkEbfTCaSd7aT0PN/BREMfUkplL8myGKspSB524Olb2Z9pQV9GiJlA=
-Authentication-Results: intel.com; dkim=none (message not signed)
- header.d=none;intel.com; dmarc=none action=none header.from=nxp.com;
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
- by AM6PR0402MB3654.eurprd04.prod.outlook.com (2603:10a6:209:21::30) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3283.16; Thu, 13 Aug
- 2020 03:38:58 +0000
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::ed7f:8755:5994:7fcf]) by AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::ed7f:8755:5994:7fcf%5]) with mapi id 15.20.3261.025; Thu, 13 Aug 2020
- 03:38:58 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     mathias.nyman@intel.com
-Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
-        linux-imx@nxp.com, Peter Chen <peter.chen@nxp.com>
-Subject: [RESEND PATCH 7/7] usb: host: xhci: avoid calling contineous two times for xhci_suspend
-Date:   Thu, 13 Aug 2020 11:37:41 +0800
-Message-Id: <20200813033741.13982-8-peter.chen@nxp.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200813033741.13982-1-peter.chen@nxp.com>
-References: <20200813033741.13982-1-peter.chen@nxp.com>
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR01CA0142.apcprd01.prod.exchangelabs.com
- (2603:1096:4:8f::22) To AM7PR04MB7157.eurprd04.prod.outlook.com
- (2603:10a6:20b:118::20)
+        id S1726043AbgHMFkz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Aug 2020 01:40:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35124 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725949AbgHMFkz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 13 Aug 2020 01:40:55 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5BF7D20639;
+        Thu, 13 Aug 2020 05:40:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1597297254;
+        bh=bQZJ0csaHLc3qhSl2N9bDL/Th0k3IbfW8GP+TvkeLZE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hUSp26TN0+hTBL4DvZdAHU5esUKHk4ITr7+3w3yRFw9xYlGbHsd+ezWa3042ogmUv
+         ZYIAkMK4F967W2t2M767YWQRhS3m4Ot4F0KywCwBiv8X2T0D8QDEmKtpmDGfN6EOPm
+         eC1+4cDs9k6dH4LbxS5aLOZhLhLFU9a2V2ozcX8E=
+Date:   Thu, 13 Aug 2020 07:40:52 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Al Cooper <alcooperx@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Al Cooper <al.cooper@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH 3/3] usb: Add Kconfig and Makefile changes to build
+ brcmstb-usb-pinmap
+Message-ID: <20200813054052.GB1353152@kroah.com>
+References: <20200812202018.49046-1-alcooperx@gmail.com>
+ <20200812202018.49046-4-alcooperx@gmail.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from b29397-desktop.ap.freescale.net (119.31.174.67) by SG2PR01CA0142.apcprd01.prod.exchangelabs.com (2603:1096:4:8f::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3283.15 via Frontend Transport; Thu, 13 Aug 2020 03:38:56 +0000
-X-Mailer: git-send-email 2.17.1
-X-Originating-IP: [119.31.174.67]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: f48e7fca-af9e-4392-3ffb-08d83f3a6937
-X-MS-TrafficTypeDiagnostic: AM6PR0402MB3654:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM6PR0402MB3654DE86517C3BFF3DAFE65A8B430@AM6PR0402MB3654.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(396003)(376002)(136003)(346002)(39860400002)(6506007)(478600001)(316002)(26005)(6666004)(36756003)(6486002)(86362001)(186003)(6512007)(2906002)(66946007)(6916009)(66476007)(66556008)(4326008)(5660300002)(956004)(2616005)(16526019)(8936002)(8676002)(52116002)(1076003)(44832011)(83380400001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f48e7fca-af9e-4392-3ffb-08d83f3a6937
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Aug 2020 03:38:58.0439
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zO5K6KG03RQLvtGRN+cf34ljFBCyjld5K7ZQdz8rMej7t1duIbcQW4Uzh7uAPGAGxhvl8+ydZS4n41FIgDzCWw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR0402MB3654
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200812202018.49046-4-alcooperx@gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If the xhci-plat.c is the platform driver, after the runtime pm is
-enabled, the xhci_suspend is called if nothing is connected on
-the port. When the system goes to suspend, it will call xhci_suspend again
-if USB wakeup is enabled.
+On Wed, Aug 12, 2020 at 04:20:18PM -0400, Al Cooper wrote:
+> From: Al Cooper <al.cooper@broadcom.com>
+> 
+> Add Kconfig and Makefile changes to build brcmstb-usb-pinmap and
+> update MAINTAINERS for the new driver.
 
-Since the runtime suspend wakeup setting is not always the same with
-system suspend wakeup setting, eg, at runtime suspend, we always need
-wakeup if the controller is in low power mode; but at suspend system,
-we may not need wakeup. So, we move the judgement after changing
-wakeup setting.
+This can be part of the previous patch, or at least the Kconfig and
+Makefile changes should be there so that we build the code when we add
+it.
 
-Reviewed-by: Jun Li <jun.li@nxp.com>
-Signed-off-by: Peter Chen <peter.chen@nxp.com>
----
- drivers/usb/host/xhci.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+> refs #SWLINUX-5537
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 3c41b14ecce7..cde71f3b9767 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -982,12 +982,15 @@ int xhci_suspend(struct xhci_hcd *xhci, bool do_wakeup)
- 			xhci->shared_hcd->state != HC_STATE_SUSPENDED)
- 		return -EINVAL;
- 
--	xhci_dbc_suspend(xhci);
--
- 	/* Clear root port wake on bits if wakeup not allowed. */
- 	if (!do_wakeup)
- 		xhci_disable_port_wake_on_bits(xhci);
- 
-+	if (!HCD_HW_ACCESSIBLE(hcd))
-+		return 0;
-+
-+	xhci_dbc_suspend(xhci);
-+
- 	/* Don't poll the roothubs on bus suspend. */
- 	xhci_dbg(xhci, "%s: stopping port polling.\n", __func__);
- 	clear_bit(HCD_FLAG_POLL_RH, &hcd->flags);
--- 
-2.17.1
+What is this?
 
+> 
+> Signed-off-by: Al Cooper <al.cooper@broadcom.com>
+> ---
+>  MAINTAINERS               | 8 ++++++++
+>  drivers/usb/host/Kconfig  | 4 ++++
+>  drivers/usb/host/Makefile | 1 +
+>  3 files changed, 13 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index f0569cf304ca..3a44ac61899b 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -3527,6 +3527,14 @@ S:	Maintained
+>  F:	Documentation/devicetree/bindings/usb/brcm,bcm7445-ehci.yaml
+>  F:	drivers/usb/host/ehci-brcm.*
+>  
+> +BROADCOM BRCMSTB USB PIN MAP DRIVER
+> +M:	Al Cooper <alcooperx@gmail.com>
+> +L:	linux-usb@vger.kernel.org
+> +L:	bcm-kernel-feedback-list@broadcom.com
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/usb/brcm,usb-pinmap.yaml
+> +F:	drivers/usb/host/brcmstb-usb-pinmap.c
+> +
+>  BROADCOM BRCMSTB USB2 and USB3 PHY DRIVER
+>  M:	Al Cooper <alcooperx@gmail.com>
+>  L:	linux-kernel@vger.kernel.org
+> diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
+> index 1cb3004ea7b2..9c285053bb0c 100644
+> --- a/drivers/usb/host/Kconfig
+> +++ b/drivers/usb/host/Kconfig
+> @@ -109,12 +109,16 @@ endif # USB_XHCI_HCD
+>  config USB_EHCI_BRCMSTB
+>         tristate
+>  
+> +config BRCM_USB_PINMAP
+> +       tristate
+> +
+>  config USB_BRCMSTB
+>  	tristate "Broadcom STB USB support"
+>  	depends on (ARCH_BRCMSTB && PHY_BRCM_USB) || COMPILE_TEST
+>  	select USB_OHCI_HCD_PLATFORM if USB_OHCI_HCD
+>  	select USB_EHCI_BRCMSTB if USB_EHCI_HCD
+>  	select USB_XHCI_PLATFORM if USB_XHCI_HCD
+> +	select BRCM_USB_PINMAP
+>  	help
+>  	  Enables support for XHCI, EHCI and OHCI host controllers
+>  	  found in Broadcom STB SoC's.
+> diff --git a/drivers/usb/host/Makefile b/drivers/usb/host/Makefile
+> index bc731332fed9..0e63ef94790d 100644
+> --- a/drivers/usb/host/Makefile
+> +++ b/drivers/usb/host/Makefile
+> @@ -90,3 +90,4 @@ obj-$(CONFIG_USB_HCD_BCMA)	+= bcma-hcd.o
+>  obj-$(CONFIG_USB_HCD_SSB)	+= ssb-hcd.o
+>  obj-$(CONFIG_USB_FOTG210_HCD)	+= fotg210-hcd.o
+>  obj-$(CONFIG_USB_MAX3421_HCD)	+= max3421-hcd.o
+> +obj-$(CONFIG_BRCM_USB_PINMAP)	+= brcmstb-usb-pinmap.o
+
+Shouldn't this driver be in usb/misc/ with other drivers like this?  Why
+host?
+
+Wait, why is this a separate driver at all?  Why not just build it into
+the USB_BRCMSTB driver?
+
+thanks,
+
+greg k-h
