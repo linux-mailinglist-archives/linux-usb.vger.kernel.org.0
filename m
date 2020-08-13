@@ -2,138 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 553FB24388C
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Aug 2020 12:31:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AC7624391A
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Aug 2020 13:07:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726593AbgHMKbh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 13 Aug 2020 06:31:37 -0400
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:35289 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726048AbgHMKbf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Aug 2020 06:31:35 -0400
-Received: from [37.161.87.136] (port=46755 helo=[192.168.42.162])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1k6AW9-000FlW-5k; Thu, 13 Aug 2020 12:31:29 +0200
-Subject: Re: [PATCH] dt-bindings: Whitespace clean-ups in schema files
-To:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-media@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <20200812203618.2656699-1-robh@kernel.org>
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-Message-ID: <d5808e9c-07fe-1c28-b9a6-a16abe9df458@lucaceresoli.net>
-Date:   Thu, 13 Aug 2020 12:31:28 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726102AbgHMLHR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Aug 2020 07:07:17 -0400
+Received: from mga12.intel.com ([192.55.52.136]:24483 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726072AbgHMLHR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 13 Aug 2020 07:07:17 -0400
+IronPort-SDR: 1xLKQQTaxtmZUmoAxx1Ou67n0GUlqNvq7VymcjanyGI5Ozy/MhnPzNmEjanBUhoBglgrmoR7z8
+ b4KBgLOYbuaw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9711"; a="133724978"
+X-IronPort-AV: E=Sophos;i="5.76,308,1592895600"; 
+   d="scan'208";a="133724978"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2020 04:07:16 -0700
+IronPort-SDR: SWkeHnbggdoodf/8JYKjl6AXO2vWwIKJxK+m0ksEI3sVo+VKoKMvI/zc8/X4DcluBulseAx/Yr
+ Y7EafThxH8tA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,308,1592895600"; 
+   d="scan'208";a="399132726"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 13 Aug 2020 04:07:14 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 13 Aug 2020 14:07:13 +0300
+Date:   Thu, 13 Aug 2020 14:07:13 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 0/4] usb: typec: ucsi: Fix various locking issues
+Message-ID: <20200813110713.GG1169992@kuha.fi.intel.com>
+References: <20200809141904.4317-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20200812203618.2656699-1-robh@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8BIT
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200809141904.4317-1-hdegoede@redhat.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Rob,
-
-On 12/08/20 22:36, Rob Herring wrote:
-> Clean-up incorrect indentation, extra spaces, long lines, and missing
-> EOF newline in schema files. Most of the clean-ups are for list
-> indentation which should always be 2 spaces more than the preceding
-> keyword.
+On Sun, Aug 09, 2020 at 04:19:00PM +0200, Hans de Goede wrote:
+> Hi Heikki, et al.,
 > 
-> Found with yamllint (which I plan to integrate into the checks).
-
-[...]
-
-> diff --git a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
-> index 3d4e1685cc55..28c6461b9a9a 100644
-> --- a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
-> +++ b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
-> @@ -95,10 +95,10 @@ allOf:
->        # Devices without builtin crystal
->        properties:
->          clock-names:
-> -            minItems: 1
-> -            maxItems: 2
-> -            items:
-> -              enum: [ xin, clkin ]
-> +          minItems: 1
-> +          maxItems: 2
-> +          items:
-> +            enum: [ xin, clkin ]
->          clocks:
->            minItems: 1
->            maxItems: 2
-
-Thanks for noticing, LGTM.
-
-[...]
-
-> diff --git a/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml b/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
-> index d7dac16a3960..36dc7b56a453 100644
-> --- a/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
-> +++ b/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
-> @@ -33,8 +33,8 @@ properties:
->      $ref: /schemas/types.yaml#/definitions/uint32
->  
->    touchscreen-min-pressure:
-> -    description: minimum pressure on the touchscreen to be achieved in order for the
-> -                 touchscreen driver to report a touch event.
-> +    description: minimum pressure on the touchscreen to be achieved in order
-> +      for the touchscreen driver to report a touch event.
-
-Out of personal taste, I find the original layout more pleasant and
-readable. This third option is also good, especially for long descriptions:
-
-  description:
-    minimum pressure on the touchscreen to be achieved in order for the
-    touchscreen driver to report a touch event.
-
-At first glance yamllint seems to support exactly these two by default:
-
-> With indentation: {spaces: 4, check-multi-line-strings: true}
+> As discussed before here is my fix for the AB BA lock inversion issue
+> which lockdep found in the ucsi code.
 > 
-> the following code snippet would PASS:
+> While working on the AB BA fix I added a
+> WARN_ON(!mutex_is_locked(&ucsi->ppm_lock)) to ucsi_run_command() and
+> that found me some more unrelated issues of ucsi_run_command() getting
+> called without the ppm_lock held. This is fixed in the second patch.
+> This made me realize that the ppm_lock handling should probably just
+> be pushed down to inside ucsi_run_command() instead of letting the
+> callers worry about this.
 > 
-> Blaise Pascal:
->     Je vous écris une longue lettre parce que
->     je n'ai pas le temps d'en écrire une courte.
+> In essence the first 3 patches are all related and all boil down to
+> push the ppm_lock handling down into ucsi_run_command(), removing the
+> difference between ucsi_run_command() and ucsi_send_command(). I have
+> been thinking that we may want to just squash these 3 together. I've
+> left them as separate patches now as thet document how I go to the
+> end result after the 3th patch and having them separate might be
+> easier for reviewing purposes. Let me know if you want a v2 of this
+> patchset with them squashed into a single "usb: typec: ucsi: Rework
+> ppm_lock handling" commit (with the commit messages merged).
 > 
-> the following code snippet would PASS:
-> 
-> Blaise Pascal: Je vous écris une longue lettre parce que
->                je n'ai pas le temps d'en écrire une courte.
-> 
-> the following code snippet would FAIL:
-> 
-> Blaise Pascal: Je vous écris une longue lettre parce que
->   je n'ai pas le temps d'en écrire une courte.
-> 
-(https://yamllint.readthedocs.io/en/stable/rules.html#module-yamllint.rules.indentation)
+> The 4th patch makes the also already discussed change of holding
+> con->lock for the entire duration of ucsi_register_port().
+
+I'm fine with having them in separate pathes like that. This all looks
+good to me. Thanks for fixing this. For the whole series:
+
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 
 -- 
-Luca
-
+heikki
