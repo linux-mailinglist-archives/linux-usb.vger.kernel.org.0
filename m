@@ -2,189 +2,206 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAE26243405
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Aug 2020 08:25:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ABBB24347E
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Aug 2020 09:12:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726467AbgHMGZx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Aug 2020 02:25:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38210 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726419AbgHMGZw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 13 Aug 2020 02:25:52 -0400
-Received: from saruman.elisa-laajakaista.fi (unknown [194.34.132.57])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D73492078D;
-        Thu, 13 Aug 2020 06:25:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597299951;
-        bh=XqBNb/nUTdIvLeD6DiA78f2UoG4UXyYLikbj5H38YGg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JMcbXcUwuBdjcEaRLTGeM4QE18uT59O32g1jaPO96VK5rTRIsucAXPhMFkZASbGC4
-         EoZW7TkcLysA1nODFyMaQdnmYy2hpaDvXk5ZH4LU6+EYuDpNHpP5qp8HZHyDCsurp/
-         EPpPvsmO5zX6OId2+5ItAsBBv772wx09fI5Y+P4M=
-From:   balbi@kernel.org
-To:     Linux USB <linux-usb@vger.kernel.org>
-Cc:     Felipe Balbi <balbi@kernel.org>
-Subject: [PATCH 11/11] dwc3: debugfs: fix checkpatch warnings
-Date:   Thu, 13 Aug 2020 09:25:32 +0300
-Message-Id: <20200813062532.829720-11-balbi@kernel.org>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200813062532.829720-1-balbi@kernel.org>
-References: <20200813062532.829720-1-balbi@kernel.org>
+        id S1726605AbgHMHMD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Aug 2020 03:12:03 -0400
+Received: from mx0a-0014ca01.pphosted.com ([208.84.65.235]:41382 "EHLO
+        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726144AbgHMHMC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Aug 2020 03:12:02 -0400
+Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
+        by mx0a-0014ca01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07D78QlD004458;
+        Thu, 13 Aug 2020 00:11:45 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=proofpoint;
+ bh=NLKHHLtcHycL7y0952artV7D3TdCAL8qifpbwRHEavQ=;
+ b=iCnfxsF2Zr/SM3IMT51eio5/sL2AzVdTTdBfnvNZjoly3zbUbYl5Qk+NtN9PARs5GIj1
+ VLwQVyZgwc/WR50+NM8549Z6Zll2Z47bmmU22C4lUJVNf6vkjw/y0k0vDs5RUX7UwRvd
+ Y4QCB0w3JvOgSmUY5yITwjYYjp3WvhgyAwMAeugihjVbjQ4yAxeXLHOjxii8CyBjORkQ
+ BoVo1eCWjXh5gRfCoI6YVr2HVURL65dEthnKVHWvvxobR1UQSKGx5okiYHRpJbxMeWzw
+ 0fODZUUIWAcfyPf96I/tFsC2SD7X6KDga5OJ7SAPsbTV8J7DR9okn4Qbimev3fM18+nC 6g== 
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2170.outbound.protection.outlook.com [104.47.59.170])
+        by mx0a-0014ca01.pphosted.com with ESMTP id 32srkw8dty-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 13 Aug 2020 00:11:43 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Cmg5AZEGlxa4nncbLfCK3Z9/2v4vCKNDJJbLpAYszlgjHdTyUi1HyDeEj6mVfdhgM3CpLrJ79CYsOuIMeqAV3YDgKdktZSDkkvCIe4DAMFjb2vbtOgFlrx0i2epUqgbFRUTc6ja2lcKpb1GjIEA1CJiEkVKMewg1fZytB//ak1rg2Nj6ORHQXKiWYNT6e/UrMwAc5vPJiOajKVOjSvXg55RLpPYmHxBw1G9jfSfXBJjNJMaGKWzzVXzcLM/r6jkTh4qAFRaia7c+RrqgiS7igGUiboTIFLclU/oF+WJD56tkap7fISeZVRh5K9TcOQanA992Bf4NCo7f4KBklrfHwA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NLKHHLtcHycL7y0952artV7D3TdCAL8qifpbwRHEavQ=;
+ b=R1K4bHZVyGXd1fYX+8crnZm39ld7mJlo7+kQQ3qF63kovTtTbAdMNHTxaJlQqy4ldb8/zYwjUaGPtE96nTa14rnRcTx+0PDFVuP1s7/Kiv91grKpBrdISydPkKXo527zihKnNd43HQMbYbYqUU9DRrKqSkrqTxAxSkKgCgUOl2Ze513Nf/dRqVxVZYyObjyWayH1lYFuS2G8HGzHDMTw6+1qSCq5KOSQySWNd5lgJFVCT/ialoyViO8CzgbmB6Z/W96ayH6OyJMs2AlPISojDOnObpatgNwsqRJP5cu1aKs7avxKFe0QOuMo/lSPjYa2HV3+1FkMKiy9KX6XidmZug==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 158.140.1.147) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=cadence.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=cadence.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NLKHHLtcHycL7y0952artV7D3TdCAL8qifpbwRHEavQ=;
+ b=riCPLfxNIa1q7zeRctruCdGyNsAGDtwv0uAPTSOXt2RAwa3JDuAL0Abex4YqprlZlvSnFrEFiSavAV6z6ivwILD3sOn3vgX0XlfH3hVotd0p8gNxomRiU2Fw/zbmsZUd4ueC9EYkgzicVjCjNV90LZDl9Z7koJXj3/jOHorhnJM=
+Received: from MWHPR20CA0031.namprd20.prod.outlook.com (2603:10b6:300:ed::17)
+ by BYAPR07MB6151.namprd07.prod.outlook.com (2603:10b6:a03:11f::29) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3261.19; Thu, 13 Aug
+ 2020 07:11:41 +0000
+Received: from MW2NAM12FT040.eop-nam12.prod.protection.outlook.com
+ (2603:10b6:300:ed:cafe::c3) by MWHPR20CA0031.outlook.office365.com
+ (2603:10b6:300:ed::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3283.15 via Frontend
+ Transport; Thu, 13 Aug 2020 07:11:41 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 158.140.1.147)
+ smtp.mailfrom=cadence.com; vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=pass action=none
+ header.from=cadence.com;
+Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
+ 158.140.1.147 as permitted sender) receiver=protection.outlook.com;
+ client-ip=158.140.1.147; helo=sjmaillnx1.cadence.com;
+Received: from sjmaillnx1.cadence.com (158.140.1.147) by
+ MW2NAM12FT040.mail.protection.outlook.com (10.13.180.228) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3283.11 via Frontend Transport; Thu, 13 Aug 2020 07:11:40 +0000
+Received: from maileu3.global.cadence.com (maileu3.cadence.com [10.160.88.99])
+        by sjmaillnx1.cadence.com (8.14.4/8.14.4) with ESMTP id 07D7Bam1031745
+        (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=OK);
+        Thu, 13 Aug 2020 00:11:38 -0700
+X-CrossPremisesHeadersFilteredBySendConnector: maileu3.global.cadence.com
+Received: from maileu3.global.cadence.com (10.160.88.99) by
+ maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1367.3; Thu, 13 Aug 2020 09:11:36 +0200
+Received: from vleu-orange.cadence.com (10.160.88.83) by
+ maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1367.3 via Frontend Transport; Thu, 13 Aug 2020 09:11:36 +0200
+Received: from vleu-orange.cadence.com (localhost.localdomain [127.0.0.1])
+        by vleu-orange.cadence.com (8.14.4/8.14.4) with ESMTP id 07D7Bamb025936;
+        Thu, 13 Aug 2020 09:11:36 +0200
+Received: (from pawell@localhost)
+        by vleu-orange.cadence.com (8.14.4/8.14.4/Submit) id 07D7BZBO025935;
+        Thu, 13 Aug 2020 09:11:35 +0200
+From:   Pawel Laszczak <pawell@cadence.com>
+To:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <balbi@kernel.org>
+CC:     <rogerq@ti.com>, <peter.chen@nxp.com>, <weiyongjun1@huawei.com>,
+        <jpawar@cadence.com>, <kurahul@cadence.com>, <sparmar@cadence.com>,
+        Pawel Laszczak <pawell@cadence.com>
+Subject: [PATCH] usb: cdns3: Removes duplicated call to the cdns3_exit_roles function
+Date:   Thu, 13 Aug 2020 09:10:54 +0200
+Message-ID: <20200813071054.25837-1-pawell@cadence.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-OrganizationHeadersPreserved: maileu3.global.cadence.com
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9e55b736-bbfd-4724-15e9-08d83f582069
+X-MS-TrafficTypeDiagnostic: BYAPR07MB6151:
+X-Microsoft-Antispam-PRVS: <BYAPR07MB6151E7FAE955D6DC997D552DDD430@BYAPR07MB6151.namprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:619;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: JcUMacY/833DyKywzwMjEAz6BnyTpfVroPr5bEvrPSBnnrRO2eO/WQBOScHs0sIVza5lYa7bcMz6RwXfuyFpQMfcNTJDIYyH0kDlxpJerRHYDy2RbKuVxE+mcVkprBcwaoogFXjh0O3Z5/Jb2EqxstXmiT+XCiPJss8ajfc3a2lsFgLFtOacqgMlbELADnxdy3phEKbTZ5T9i+cvYT9hzN0EbcoOlQYmmT7TcdvdWL9m8AC8Njj7LPa+gBlX8BxKTYXfFjZYBSgdgFX2jCLH2wZvurLG36W6NzpwlASojEoej4FDp5Yf6fg6+qJrsBEdKmPtRIjPOKZCtJXWwqIvn6b7ndtc54WNB1D/+1WyrHz5o0Hn76rGeZJY5xeOcXHH9HCrpoB4wl6Fq9aEKTgxdrSzTC3xVSbdMUOaHAFDJgI=
+X-Forefront-Antispam-Report: CIP:158.140.1.147;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:sjmaillnx1.cadence.com;PTR:unknown.Cadence.COM;CAT:NONE;SFTY:;SFS:(4636009)(396003)(346002)(376002)(136003)(39860400002)(36092001)(46966005)(86362001)(70586007)(8936002)(336012)(107886003)(83380400001)(36756003)(82310400002)(70206006)(2616005)(426003)(1076003)(26005)(186003)(6666004)(2906002)(316002)(47076004)(7636003)(36906005)(356005)(82740400003)(4326008)(8676002)(110136005)(5660300002)(42186006)(478600001)(54906003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Aug 2020 07:11:40.5715
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9e55b736-bbfd-4724-15e9-08d83f582069
+X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[158.140.1.147];Helo=[sjmaillnx1.cadence.com]
+X-MS-Exchange-CrossTenant-AuthSource: MW2NAM12FT040.eop-nam12.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR07MB6151
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-08-13_04:2020-08-13,2020-08-13 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 mlxlogscore=706
+ impostorscore=0 mlxscore=0 spamscore=0 clxscore=1015 priorityscore=1501
+ malwarescore=0 lowpriorityscore=0 adultscore=0 suspectscore=0 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2008130054
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Felipe Balbi <balbi@kernel.org>
+To avoid double calling of function cdns3_exit_roles when initialization
+failed patch removes invoking this function from cdns3_core_init_role.
+This function is invoked again from cdns3_probe when
+cdns3_core_init_role returns error code.
 
-no functional changes
-
-Signed-off-by: Felipe Balbi <balbi@kernel.org>
+Signed-off-by: Pawel Laszczak <pawell@cadence.com>
 ---
- drivers/usb/dwc3/debugfs.c | 56 ++++++++++++++++++--------------------
- 1 file changed, 26 insertions(+), 30 deletions(-)
+ drivers/usb/cdns3/core.c | 20 ++++++++------------
+ 1 file changed, 8 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/usb/dwc3/debugfs.c b/drivers/usb/dwc3/debugfs.c
-index 2c7b6dd79cdf..608639a0dea7 100644
---- a/drivers/usb/dwc3/debugfs.c
-+++ b/drivers/usb/dwc3/debugfs.c
-@@ -397,13 +397,13 @@ static int dwc3_mode_show(struct seq_file *s, void *unused)
+diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
+index 5c1586ec7824..c22c7224642a 100644
+--- a/drivers/usb/cdns3/core.c
++++ b/drivers/usb/cdns3/core.c
+@@ -132,7 +132,7 @@ static int cdns3_core_init_role(struct cdns3 *cdns)
+ 		if (ret) {
+ 			dev_err(dev, "Host initialization failed with %d\n",
+ 				ret);
+-			goto err;
++			return ret;
+ 		}
+ 	}
  
- 	switch (DWC3_GCTL_PRTCAP(reg)) {
- 	case DWC3_GCTL_PRTCAP_HOST:
--		seq_printf(s, "host\n");
-+		seq_puts(s, "host\n");
+@@ -141,7 +141,7 @@ static int cdns3_core_init_role(struct cdns3 *cdns)
+ 		if (ret) {
+ 			dev_err(dev, "Device initialization failed with %d\n",
+ 				ret);
+-			goto err;
++			return ret;
+ 		}
+ 	}
+ 
+@@ -149,38 +149,34 @@ static int cdns3_core_init_role(struct cdns3 *cdns)
+ 
+ 	ret = cdns3_drd_update_mode(cdns);
+ 	if (ret)
+-		goto err;
++		return ret;
+ 
+ 	/* Initialize idle role to start with */
+ 	ret = cdns3_role_start(cdns, USB_ROLE_NONE);
+ 	if (ret)
+-		goto err;
++		return ret;
+ 
+ 	switch (cdns->dr_mode) {
+ 	case USB_DR_MODE_OTG:
+ 		ret = cdns3_hw_role_switch(cdns);
+ 		if (ret)
+-			goto err;
++			return ret;
  		break;
- 	case DWC3_GCTL_PRTCAP_DEVICE:
--		seq_printf(s, "device\n");
-+		seq_puts(s, "device\n");
+ 	case USB_DR_MODE_PERIPHERAL:
+ 		ret = cdns3_role_start(cdns, USB_ROLE_DEVICE);
+ 		if (ret)
+-			goto err;
++			return ret;
  		break;
- 	case DWC3_GCTL_PRTCAP_OTG:
--		seq_printf(s, "otg\n");
-+		seq_puts(s, "otg\n");
+ 	case USB_DR_MODE_HOST:
+ 		ret = cdns3_role_start(cdns, USB_ROLE_HOST);
+ 		if (ret)
+-			goto err;
++			return ret;
  		break;
  	default:
- 		seq_printf(s, "UNKNOWN %08x\n", DWC3_GCTL_PRTCAP(reg));
-@@ -464,22 +464,22 @@ static int dwc3_testmode_show(struct seq_file *s, void *unused)
- 
- 	switch (reg) {
- 	case 0:
--		seq_printf(s, "no test\n");
-+		seq_puts(s, "no test\n");
- 		break;
- 	case USB_TEST_J:
--		seq_printf(s, "test_j\n");
-+		seq_puts(s, "test_j\n");
- 		break;
- 	case USB_TEST_K:
--		seq_printf(s, "test_k\n");
-+		seq_puts(s, "test_k\n");
- 		break;
- 	case USB_TEST_SE0_NAK:
--		seq_printf(s, "test_se0_nak\n");
-+		seq_puts(s, "test_se0_nak\n");
- 		break;
- 	case USB_TEST_PACKET:
--		seq_printf(s, "test_packet\n");
-+		seq_puts(s, "test_packet\n");
- 		break;
- 	case USB_TEST_FORCE_ENABLE:
--		seq_printf(s, "test_force_enable\n");
-+		seq_puts(s, "test_force_enable\n");
- 		break;
- 	default:
- 		seq_printf(s, "UNKNOWN %d\n", reg);
-@@ -760,27 +760,26 @@ static int dwc3_transfer_type_show(struct seq_file *s, void *unused)
- 	unsigned long		flags;
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
--	if (!(dep->flags & DWC3_EP_ENABLED) ||
--			!dep->endpoint.desc) {
--		seq_printf(s, "--\n");
-+	if (!(dep->flags & DWC3_EP_ENABLED) || !dep->endpoint.desc) {
-+		seq_puts(s, "--\n");
- 		goto out;
+-		ret = -EINVAL;
+-		goto err;
++		return -EINVAL;
  	}
  
- 	switch (usb_endpoint_type(dep->endpoint.desc)) {
- 	case USB_ENDPOINT_XFER_CONTROL:
--		seq_printf(s, "control\n");
-+		seq_puts(s, "control\n");
- 		break;
- 	case USB_ENDPOINT_XFER_ISOC:
--		seq_printf(s, "isochronous\n");
-+		seq_puts(s, "isochronous\n");
- 		break;
- 	case USB_ENDPOINT_XFER_BULK:
--		seq_printf(s, "bulk\n");
-+		seq_puts(s, "bulk\n");
- 		break;
- 	case USB_ENDPOINT_XFER_INT:
--		seq_printf(s, "interrupt\n");
-+		seq_puts(s, "interrupt\n");
- 		break;
- 	default:
--		seq_printf(s, "--\n");
-+		seq_puts(s, "--\n");
- 	}
- 
- out:
-@@ -798,11 +797,11 @@ static int dwc3_trb_ring_show(struct seq_file *s, void *unused)
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 	if (dep->number <= 1) {
--		seq_printf(s, "--\n");
-+		seq_puts(s, "--\n");
- 		goto out;
- 	}
- 
--	seq_printf(s, "buffer_addr,size,type,ioc,isp_imi,csp,chn,lst,hwo\n");
-+	seq_puts(s, "buffer_addr,size,type,ioc,isp_imi,csp,chn,lst,hwo\n");
- 
- 	for (i = 0; i < DWC3_TRB_NUM; i++) {
- 		struct dwc3_trb *trb = &dep->trb_pool[i];
-@@ -884,7 +883,7 @@ static void dwc3_debugfs_create_endpoint_files(struct dwc3_ep *dep,
- 		const struct file_operations *fops = dwc3_ep_file_map[i].fops;
- 		const char *name = dwc3_ep_file_map[i].name;
- 
--		debugfs_create_file(name, S_IRUGO, parent, dep, fops);
-+		debugfs_create_file(name, 0444, parent, dep, fops);
- 	}
+ 	return 0;
+-err:
+-	cdns3_exit_roles(cdns);
+-	return ret;
  }
  
-@@ -929,21 +928,18 @@ void dwc3_debugfs_init(struct dwc3 *dwc)
- 	root = debugfs_create_dir(dev_name(dwc->dev), usb_debug_root);
- 	dwc->root = root;
- 
--	debugfs_create_regset32("regdump", S_IRUGO, root, dwc->regset);
-+	debugfs_create_regset32("regdump", 0444, root, dwc->regset);
-+	debugfs_create_file("lsp_dump", 0644, root, dwc, &dwc3_lsp_fops);
- 
--	debugfs_create_file("lsp_dump", S_IRUGO | S_IWUSR, root, dwc,
--			    &dwc3_lsp_fops);
--
--	if (IS_ENABLED(CONFIG_USB_DWC3_DUAL_ROLE)) {
--		debugfs_create_file("mode", S_IRUGO | S_IWUSR, root, dwc,
-+	if (IS_ENABLED(CONFIG_USB_DWC3_DUAL_ROLE))
-+		debugfs_create_file("mode", 0644, root, dwc,
- 				    &dwc3_mode_fops);
--	}
- 
- 	if (IS_ENABLED(CONFIG_USB_DWC3_DUAL_ROLE) ||
- 			IS_ENABLED(CONFIG_USB_DWC3_GADGET)) {
--		debugfs_create_file("testmode", S_IRUGO | S_IWUSR, root, dwc,
--				    &dwc3_testmode_fops);
--		debugfs_create_file("link_state", S_IRUGO | S_IWUSR, root, dwc,
-+		debugfs_create_file("testmode", 0644, root, dwc,
-+				&dwc3_testmode_fops);
-+		debugfs_create_file("link_state", 0644, root, dwc,
- 				    &dwc3_link_state_fops);
- 		dwc3_debugfs_create_endpoint_dirs(dwc, root);
- 	}
+ /**
 -- 
-2.28.0
+2.17.1
 
