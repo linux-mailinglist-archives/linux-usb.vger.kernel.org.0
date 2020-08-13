@@ -2,112 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43E16243564
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Aug 2020 09:51:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D14382435BE
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Aug 2020 10:08:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726816AbgHMHvK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Aug 2020 03:51:10 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:38760 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726106AbgHMHvJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Aug 2020 03:51:09 -0400
-Received: by mail-ot1-f65.google.com with SMTP id q9so4110499oth.5;
-        Thu, 13 Aug 2020 00:51:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=eU62SrftExeZEPFtSlHLsBRzbUkLx1KNOgZc6VKFeBQ=;
-        b=RKVY0mqqakUrEXk4TORV8A5/ZSMY0dexhKfXyaOKBp8tYT6+lN9tMY1gCu59dMSnI/
-         6Av5sXCLtCtfska6KBUfoUvPLN8QSlHGcwX+BKv8ZNWhNtirhMGElzBnWp56J7vtBCeA
-         RTsTm+tpM0JqO6hs1Zx9oL0KiDPnHu2wr8nXIFBaGz9jqMUEyZCYMyj21d8ckpZmX8IH
-         sIyh51oPoVvqSR3qDoGMDZJhbXuz4s9KHdaT9j4oPeIaqxws0OL9u53GcL8uZhE7hrov
-         ikjJM0LMxR/OG4BC9tZAySXGXWwQpPbcG9j3oyJJCCrBhecUJhWEIB5ZPymwSBlP+imO
-         EXuw==
-X-Gm-Message-State: AOAM531KpbVTNZA6DQGhlLakjE36ZGk11NQSWXrXhgb2m/BrbDAUDZAN
-        GTNNlK5/qceLxjH+paJhJQLuqYhFPre+GsLWPoc=
-X-Google-Smtp-Source: ABdhPJzAAKS8g3t/W5mSJd2Vboc2FEvoNvVXoru7u4kNP7jabPCwVCki2JjTk/fEfMzVv8QAFC24k07bLAU2LYhSK+k=
-X-Received: by 2002:a05:6830:1b79:: with SMTP id d25mr2990956ote.107.1597305067462;
- Thu, 13 Aug 2020 00:51:07 -0700 (PDT)
+        id S1726419AbgHMIIZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Aug 2020 04:08:25 -0400
+Received: from mga11.intel.com ([192.55.52.93]:31081 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726048AbgHMIIZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 13 Aug 2020 04:08:25 -0400
+IronPort-SDR: 2UEceZJ7BT5XbioCmkxS/dXjKJTofHUFRQ5uaLFbFaKDiNJBHLk+f5l+fD7AN1MCupLYpmMjz4
+ ZHmHQI3mn7dQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9711"; a="151825505"
+X-IronPort-AV: E=Sophos;i="5.76,307,1592895600"; 
+   d="scan'208";a="151825505"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2020 01:08:24 -0700
+IronPort-SDR: 4LEJ3i2StXviShvyGgDfxT5+5ADtHCl7puZLj8WUzJyASpiwl9PoJcUGjt+Lx9GTEUAgYx2+uy
+ HdZLe5cNIvsg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,307,1592895600"; 
+   d="scan'208";a="399094202"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 13 Aug 2020 01:08:22 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 13 Aug 2020 11:08:21 +0300
+Date:   Thu, 13 Aug 2020 11:08:21 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] usb: typec: tcpm: Fix TDA 2.2.1.1 and TDA 2.2.1.2
+ failures
+Message-ID: <20200813080821.GD1169992@kuha.fi.intel.com>
+References: <20200812025126.574519-1-badhri@google.com>
 MIME-Version: 1.0
-References: <20200812203618.2656699-1-robh@kernel.org>
-In-Reply-To: <20200812203618.2656699-1-robh@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 13 Aug 2020 09:50:55 +0200
-Message-ID: <CAMuHMdVXvSRF-G_TYu4P+Bqa2FZJWsUCyzqFur3Rb-tBExfbsw@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Whitespace clean-ups in schema files
-To:     Rob Herring <robh@kernel.org>
-Cc:     "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-hwmon@vger.kernel.org,
-        linux-rtc@vger.kernel.org,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-iio@vger.kernel.org,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
-        <linux-remoteproc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        linux-input@vger.kernel.org, linux-clk <linux-clk@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200812025126.574519-1-badhri@google.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Rob,
+Hi,
 
-On Wed, Aug 12, 2020 at 10:36 PM Rob Herring <robh@kernel.org> wrote:
-> Clean-up incorrect indentation, extra spaces, long lines, and missing
-> EOF newline in schema files. Most of the clean-ups are for list
-> indentation which should always be 2 spaces more than the preceding
-> keyword.
->
-> Found with yamllint (which I plan to integrate into the checks).
+On Tue, Aug 11, 2020 at 07:51:26PM -0700, Badhri Jagan Sridharan wrote:
+> >From the spec:
+> "7.1.5 Response to Hard Resets
+> Hard Reset Signaling indicates a communication failure has occurred and
+> the Source Shall stop driving VCONN, Shall remove Rp from the VCONN pin
+> and Shall drive VBUS to vSafe0V as shown in Figure 7-9. The USB connection
+> May reset during a Hard Reset since the VBUS voltage will be less than
+> vSafe5V for an extended period of time. After establishing the vSafe0V
+> voltage condition on VBUS, the Source Shall wait tSrcRecover before
+> re-applying VCONN and restoring VBUS to vSafe5V. A Source Shall conform
+> to the VCONN timing as specified in [USB Type-C 1.3]."
 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+I really think you need to explain the patch at least a little.
+Consider people who don't understand that much about USB PD. Open it
+up somehow instead of just quoting the spec.
 
-Thanks for your patch!
+Can you please start by explaining what exactly is TDA 2.2.1.1 and TDA
+2.2.1.2. Perhaps you could also consider a better subject line for
+this?
 
-> --- a/Documentation/devicetree/bindings/clock/renesas,cpg-clocks.yaml
-> +++ b/Documentation/devicetree/bindings/clock/renesas,cpg-clocks.yaml
-> @@ -24,9 +24,9 @@ properties:
->        - const: renesas,r8a7778-cpg-clocks # R-Car M1
->        - const: renesas,r8a7779-cpg-clocks # R-Car H1
->        - items:
-> -        - enum:
-> -            - renesas,r7s72100-cpg-clocks # RZ/A1H
-> -        - const: renesas,rz-cpg-clocks    # RZ/A1
-> +          - enum:
-> +              - renesas,r7s72100-cpg-clocks # RZ/A1H
-> +          - const: renesas,rz-cpg-clocks    # RZ/A1
-
-This change breaks alignment of the comments at the end of each line.
-
->        - const: renesas,sh73a0-cpg-clocks  # SH-Mobile AG5
-
-(I only checked the files I care about)
-
-If you don't update commit  e0fe7fc6f2ca0781 ("dt-bindings: Whitespace
-clean-ups in schema files"), I can send a patch after v5.9-rc1.
-
-Gr{oetje,eeting}s,
-
-                        Geert
+thanks,
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+heikki
