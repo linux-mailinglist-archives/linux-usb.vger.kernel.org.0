@@ -2,33 +2,33 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D674243401
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Aug 2020 08:25:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D01243402
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Aug 2020 08:25:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726244AbgHMGZt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Aug 2020 02:25:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38114 "EHLO mail.kernel.org"
+        id S1726249AbgHMGZu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Aug 2020 02:25:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38146 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726174AbgHMGZr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 13 Aug 2020 02:25:47 -0400
+        id S1726167AbgHMGZs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 13 Aug 2020 02:25:48 -0400
 Received: from saruman.elisa-laajakaista.fi (unknown [194.34.132.57])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 17B6620716;
-        Thu, 13 Aug 2020 06:25:45 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 474B62078D;
+        Thu, 13 Aug 2020 06:25:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597299946;
-        bh=Xfu4dFBmXNFvSByz5OjqWRdtRbMq7N32vvQ7SmTVS8A=;
+        s=default; t=1597299948;
+        bh=3l06lVbHyKOg+g6w8AjVaqYHrYNKKb/MzVL/EIbgA7w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ptqGwN9mweFa9Cz4lfN1LY+t9YEtsRT3Jo60A/q+P9zZlLcJrMK7qEyDwqEts7+O7
-         kEitCVdFaujuhqbERQGex4D2lwkIqPhWer2T5gQ2iHyCk95eqGB2J6p3js98UYH4/g
-         RrgNgLux3gjl7knIQUmPyO23coRiyAQ/btC8mNrI=
+        b=InyJYVatEhZ2kY9mY8h+SyJcd6od85JJxzWYeqVHhrJC/qlA8G8IUzk3KFweUCHgg
+         cSOvd73WZrKgh2DFnGvrHOlNSXDwK7C2gfCWTiUTvSp1/CuXgW/fQ4sLcuF5wzn+nQ
+         Dg5VcgXbLlrTT1ykNE1OB5UKkPkatXQLAoRayrng=
 From:   balbi@kernel.org
 To:     Linux USB <linux-usb@vger.kernel.org>
 Cc:     Felipe Balbi <balbi@kernel.org>
-Subject: [PATCH 07/11] dwc3: core: fix checkpatch warnings
-Date:   Thu, 13 Aug 2020 09:25:28 +0300
-Message-Id: <20200813062532.829720-7-balbi@kernel.org>
+Subject: [PATCH 08/11] dwc3: gadget: fix checkpatch warnings
+Date:   Thu, 13 Aug 2020 09:25:29 +0300
+Message-Id: <20200813062532.829720-8-balbi@kernel.org>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200813062532.829720-1-balbi@kernel.org>
 References: <20200813062532.829720-1-balbi@kernel.org>
@@ -45,111 +45,106 @@ no functional changes
 
 Signed-off-by: Felipe Balbi <balbi@kernel.org>
 ---
- drivers/usb/dwc3/core.h | 37 +++++++++++++++++++------------------
- 1 file changed, 19 insertions(+), 18 deletions(-)
+ drivers/usb/dwc3/gadget.c | 32 +++++++++++++++++---------------
+ 1 file changed, 17 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 2f04b3e42bf1..ce457950606e 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -634,7 +634,7 @@ struct dwc3_trb;
- struct dwc3_event_buffer {
- 	void			*buf;
- 	void			*cache;
--	unsigned		length;
-+	unsigned int		length;
- 	unsigned int		lpos;
- 	unsigned int		count;
- 	unsigned int		flags;
-@@ -694,7 +694,7 @@ struct dwc3_ep {
- 	struct dwc3		*dwc;
- 
- 	u32			saved_state;
--	unsigned		flags;
-+	unsigned int		flags;
- #define DWC3_EP_ENABLED		BIT(0)
- #define DWC3_EP_STALL		BIT(1)
- #define DWC3_EP_WEDGE		BIT(2)
-@@ -893,9 +893,9 @@ struct dwc3_request {
- 	struct scatterlist	*sg;
- 	struct scatterlist	*start_sg;
- 
--	unsigned		num_pending_sgs;
-+	unsigned int		num_pending_sgs;
- 	unsigned int		num_queued_sgs;
--	unsigned		remaining;
-+	unsigned int		remaining;
- 
- 	unsigned int		status;
- #define DWC3_REQUEST_STATUS_QUEUED	0
-@@ -908,11 +908,11 @@ struct dwc3_request {
- 	struct dwc3_trb		*trb;
- 	dma_addr_t		trb_dma;
- 
--	unsigned		num_trbs;
-+	unsigned int		num_trbs;
- 
--	unsigned		needs_extra_trb:1;
--	unsigned		direction:1;
--	unsigned		mapped:1;
-+	unsigned int		needs_extra_trb:1;
-+	unsigned int		direction:1;
-+	unsigned int		mapped:1;
- };
- 
- /*
-@@ -1010,8 +1010,8 @@ struct dwc3_scratchpad_array {
-  * @has_lpm_erratum: true when core was configured with LPM Erratum. Note that
-  *			there's now way for software to detect this in runtime.
-  * @is_utmi_l1_suspend: the core asserts output signal
-- * 	0	- utmi_sleep_n
-- * 	1	- utmi_l1_suspend_n
-+ *	0	- utmi_sleep_n
-+ *	1	- utmi_l1_suspend_n
-  * @is_fpga: true when we are using the FPGA board
-  * @pending_events: true when we have pending IRQs to be handled
-  * @pullups_connected: true when Run/Stop bit is set
-@@ -1047,13 +1047,13 @@ struct dwc3_scratchpad_array {
-  *			instances in park mode.
-  * @tx_de_emphasis_quirk: set if we enable Tx de-emphasis quirk
-  * @tx_de_emphasis: Tx de-emphasis value
-- * 	0	- -6dB de-emphasis
-- * 	1	- -3.5dB de-emphasis
-- * 	2	- No de-emphasis
-- * 	3	- Reserved
-+ *	0	- -6dB de-emphasis
-+ *	1	- -3.5dB de-emphasis
-+ *	2	- No de-emphasis
-+ *	3	- Reserved
-  * @dis_metastability_quirk: set to disable metastability quirk.
-  * @imod_interval: set the interrupt moderation interval in 250ns
-- *                 increments or 0 to disable.
-+ *			increments or 0 to disable.
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index e44bfc3b5096..6b9f891b7e40 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -227,7 +227,8 @@ void dwc3_gadget_giveback(struct dwc3_ep *dep, struct dwc3_request *req,
+  * Caller should take care of locking. Issue @cmd with a given @param to @dwc
+  * and wait for its completion.
   */
- struct dwc3 {
- 	struct work_struct	drd_work;
-@@ -1456,9 +1456,10 @@ void dwc3_gadget_exit(struct dwc3 *dwc);
- int dwc3_gadget_set_test_mode(struct dwc3 *dwc, int mode);
- int dwc3_gadget_get_link_state(struct dwc3 *dwc);
- int dwc3_gadget_set_link_state(struct dwc3 *dwc, enum dwc3_link_state state);
+-int dwc3_send_gadget_generic_command(struct dwc3 *dwc, unsigned cmd, u32 param)
++int dwc3_send_gadget_generic_command(struct dwc3 *dwc, unsigned int cmd,
++		u32 param)
+ {
+ 	u32		timeout = 500;
+ 	int		status = 0;
+@@ -268,7 +269,7 @@ static int __dwc3_gadget_wakeup(struct dwc3 *dwc);
+  * Caller should handle locking. This function will issue @cmd with given
+  * @params to @dep and wait for its completion.
+  */
 -int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep, unsigned cmd,
 +int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep, unsigned int cmd,
- 		struct dwc3_gadget_ep_cmd_params *params);
--int dwc3_send_gadget_generic_command(struct dwc3 *dwc, unsigned cmd, u32 param);
-+int dwc3_send_gadget_generic_command(struct dwc3 *dwc, unsigned int cmd,
-+		u32 param);
- #else
- static inline int dwc3_gadget_init(struct dwc3 *dwc)
- { return 0; }
-@@ -1472,7 +1473,7 @@ static inline int dwc3_gadget_set_link_state(struct dwc3 *dwc,
- 		enum dwc3_link_state state)
- { return 0; }
- 
--static inline int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep, unsigned cmd,
-+static inline int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep, unsigned int cmd,
  		struct dwc3_gadget_ep_cmd_params *params)
- { return 0; }
- static inline int dwc3_send_gadget_generic_command(struct dwc3 *dwc,
+ {
+ 	const struct usb_endpoint_descriptor *desc = dep->endpoint.desc;
+@@ -564,6 +565,7 @@ static int dwc3_gadget_set_ep_config(struct dwc3_ep *dep, unsigned int action)
+ 	/* Burst size is only needed in SuperSpeed mode */
+ 	if (dwc->gadget.speed >= USB_SPEED_SUPER) {
+ 		u32 burst = dep->endpoint.maxburst;
++
+ 		params.param0 |= DWC3_DEPCFG_BURST_SIZE(burst - 1);
+ 	}
+ 
+@@ -942,9 +944,10 @@ static u32 dwc3_calc_trbs_left(struct dwc3_ep *dep)
+ }
+ 
+ static void __dwc3_prepare_one_trb(struct dwc3_ep *dep, struct dwc3_trb *trb,
+-		dma_addr_t dma, unsigned length, unsigned chain, unsigned node,
+-		unsigned stream_id, unsigned short_not_ok,
+-		unsigned no_interrupt, unsigned is_last)
++		dma_addr_t dma, unsigned int length, unsigned int chain,
++		unsigned int node, unsigned int stream_id,
++		unsigned int short_not_ok, unsigned int no_interrupt,
++		unsigned int is_last)
+ {
+ 	struct dwc3		*dwc = dep->dwc;
+ 	struct usb_gadget	*gadget = &dwc->gadget;
+@@ -1058,15 +1061,15 @@ static void __dwc3_prepare_one_trb(struct dwc3_ep *dep, struct dwc3_trb *trb,
+  * @node: only for isochronous endpoints. First TRB needs different type.
+  */
+ static void dwc3_prepare_one_trb(struct dwc3_ep *dep,
+-		struct dwc3_request *req, unsigned chain, unsigned node)
++		struct dwc3_request *req, unsigned int chain, unsigned int node)
+ {
+ 	struct dwc3_trb		*trb;
++	unsigned int		stream_id = req->request.stream_id;
++	unsigned int		short_not_ok = req->request.short_not_ok;
++	unsigned int		no_interrupt = req->request.no_interrupt;
++	unsigned int		is_last = req->request.is_last;
+ 	unsigned int		length;
+ 	dma_addr_t		dma;
+-	unsigned		stream_id = req->request.stream_id;
+-	unsigned		short_not_ok = req->request.short_not_ok;
+-	unsigned		no_interrupt = req->request.no_interrupt;
+-	unsigned		is_last = req->request.is_last;
+ 
+ 	if (req->request.num_sgs > 0) {
+ 		length = sg_dma_len(req->start_sg);
+@@ -1104,7 +1107,7 @@ static void dwc3_prepare_one_trb_sg(struct dwc3_ep *dep,
+ 		unsigned int length = req->request.length;
+ 		unsigned int maxp = usb_endpoint_maxp(dep->endpoint.desc);
+ 		unsigned int rem = length % maxp;
+-		unsigned chain = true;
++		unsigned int chain = true;
+ 
+ 		/*
+ 		 * IOMMU driver is coalescing the list of sgs which shares a
+@@ -1586,9 +1589,8 @@ static int __dwc3_gadget_ep_queue(struct dwc3_ep *dep, struct dwc3_request *req)
+ 			return 0;
+ 
+ 		if ((dep->flags & DWC3_EP_PENDING_REQUEST)) {
+-			if (!(dep->flags & DWC3_EP_TRANSFER_STARTED)) {
++			if (!(dep->flags & DWC3_EP_TRANSFER_STARTED))
+ 				return __dwc3_gadget_start_isoc(dep);
+-			}
+ 		}
+ 	}
+ 
+@@ -1726,8 +1728,8 @@ int __dwc3_gadget_ep_set_halt(struct dwc3_ep *dep, int value, int protocol)
+ 	if (value) {
+ 		struct dwc3_trb *trb;
+ 
+-		unsigned transfer_in_flight;
+-		unsigned started;
++		unsigned int transfer_in_flight;
++		unsigned int started;
+ 
+ 		if (dep->number > 1)
+ 			trb = dwc3_ep_prev_trb(dep, dep->trb_enqueue);
 -- 
 2.28.0
 
