@@ -2,227 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E50024448D
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Aug 2020 07:29:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC29B244497
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Aug 2020 07:36:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726340AbgHNF3k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Aug 2020 01:29:40 -0400
-Received: from mail-eopbgr70059.outbound.protection.outlook.com ([40.107.7.59]:27701
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726091AbgHNF3k (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 14 Aug 2020 01:29:40 -0400
+        id S1726139AbgHNFg7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Aug 2020 01:36:59 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:46614 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726064AbgHNFg6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Aug 2020 01:36:58 -0400
+Received: from mailhost.synopsys.com (us03-mailhost1.synopsys.com [10.4.17.17])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 5EB12408E1;
+        Fri, 14 Aug 2020 05:36:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1597383418; bh=qMIJ4YBh3xjeJjOx4M9hXf9N1/tckwdAQpCWvbXdPck=;
+        h=From:To:Subject:Date:References:In-Reply-To:From;
+        b=Gig163GD0nApyxX0McwGbgYhFJ8aMIN3StabB0z8BMIPZFcJn+peptn4LdylO68JI
+         r4c/87nZSwtEgCt9oryOJhNKr/hz0CEaqxa4QDw42hGUuLrUZ6Q3jqSrGiXbG4P9sp
+         xEJjch66bvfegFFG6TKV3AdrbvwRCaD+heP0XgYUf9bUxYsw0hEU+LlgVS0c6fQEMN
+         IjTKCfQMN7DnMM47MCMStbGEO42+T/MIz7bOaltxmrfWDy0Wt1hoKdI56T6RoaoSip
+         pQUqF2KuvDj0UMxFz5/UGjrt35nKKGyuCrIq6PamTV1acsc3kpkPiYg5pD/SKkxpKQ
+         D//YH8XinAUgw==
+Received: from o365relay-in.synopsys.com (sv2-o365relay3.synopsys.com [10.202.1.139])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPS id 23C9DA005A;
+        Fri, 14 Aug 2020 05:36:57 +0000 (UTC)
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2047.outbound.protection.outlook.com [104.47.66.47])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "mail.protection.outlook.com", Issuer "GlobalSign Organization Validation CA - SHA256 - G3" (verified OK))
+        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 790284013B;
+        Fri, 14 Aug 2020 05:36:57 +0000 (UTC)
+Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=thinhn@synopsys.com
+Authentication-Results: o365relay-in.synopsys.com;
+        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="j/AluJNi";
+        dkim-atps=neutral
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m9assuwj5a6VEuGK9OlCDTI++7STgxf4IUouv+AkXTUazFw7PpDZoy3HesqLCpBi/bjg/3WL30o8ajdHI/2P3IOeLuXhMugdkkwgmeeQDJrVqxIX0/4EAp9cxgHpXRSc/OwY+mdmds0+ItSL70qiqd9FM59262tYTtvwS9YhoB3srSM3OPAjcRmDV5MiuybvmVKa4Rkb5oNmGPzRhb3NOSzgzM8GNOa5NV1QCIFH2MGgKA8axVoCEuEoGYvZdGMvo0cNmhO75kRpqB++N9yI1gEJVVJcnBgPV2qKBrvj6i12R9gMddQewzQSWYNf3wKtCPr4Ok1cv42++qdCeakRZw==
+ b=hfz4ETlMGn70M43Z1zKOLraB5aZHthNQOwCKuPjAlJ/pweu3p3JLKAI7iTcoW7njAK7UI+Msy8/IIUfiaZ7V1OVGgN47ywy2vs2EWP9OvUpHegi5POz8J2je2cw/7RC4nAc17Z9XfnagG5Agaorb224MzCQwaxPHVVv3cSxOymeRnU29e4ur6EoXuwnsl0rnRyiDhaPa7uYRN+fqvHUt2RIi1VV+6OnEO5ysmKhdEJ+DC9oqfYQbyiQna6txCYuWfxEUEJXBSDfvm0vwEMsIzNk6GYIlSfFEDTCBG6xjCuejhOogjkk2+SR2CBco+q3fjFJ2djSSjJ2CNEAprSykoQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=N4o+MZO1Q1eHiyPV1PZV7y+iiUZ+76V9NwQbCfEZG1o=;
- b=EdgT394Bb3G4eGLk5TAM4spkiq66bX37aC3tNm5jAXJ/3x+t09cdBLctwswfQ+P7LPyT8TJAEB1v8GK5OZ1xpTuWn+zKD98gj73yHhLFoWExPkN5nQqNUiV8OCKZG164Ap3NHrMJKPzl7sGi2i7bSOv7wx656DFQr9BtL9CbqBCjncgXt+4QaBT2WIXlyh18y3SaXakhoPr7cl1NuU/nBPsnRH8AE8cKfTWCDe8M2IBM/5pSfsXxqi77Y9OYvyEvvw1oQa9VVtqbgJjLSQUKWfzDr6FWQ3AEhg/l3ahWJ+SzxL6NXbC7o3Maj57+6K0VBwP7v6kvrGU+Asffo00rww==
+ bh=qMIJ4YBh3xjeJjOx4M9hXf9N1/tckwdAQpCWvbXdPck=;
+ b=Qy3pCzcgcJODb9cYxpSlz6aiU8ysVpLzmhOdVbM4++Ax8wk/Kni4N2U4DUOhGXNrZAjlWcH9+KDNvM05QVFWD0q3w7sIJSZ4BjcSipjj2HFkfM/AcUzdQ7UxpqEJSJ70gBnoB2VhdmeNAb3y7nmB7/YzHqsxN/7fj44qS8UdnvLPKI7QB1O1GtrGAWDi8gHyFD9N6uajsdZrgxbJp6KaSIZQKyxm7WJwHGK+T7BlmAfbnrYzaI0Wv/rF9iERJmDljjCfRQI8H2FMLfGpNrXXShIkDUEZTKonU9YXYuZbVN+PbikPWE48VKKyBSeb5xGvRU6RLSASXPC7cPUjJKIk7Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=N4o+MZO1Q1eHiyPV1PZV7y+iiUZ+76V9NwQbCfEZG1o=;
- b=Ljh1FIA160fW56x/wqHxDh3o00n5S1vkjBboBns8fnYOVnfJNIZKFWRb95sr6kjzVbAFVIYD/rtSGsu+fDI/zp20ZPkDY2NrTA+FE7o9keG3xKDw13qRSxZdR+ZoVSpOANzxEh4YkyadXQgWIFE2k5KD0KwkPD1aHzaxjN8qB60=
-Received: from DB8PR04MB7162.eurprd04.prod.outlook.com (2603:10a6:10:12c::13)
- by DB3PR0402MB3641.eurprd04.prod.outlook.com (2603:10a6:8:b::12) with
+ bh=qMIJ4YBh3xjeJjOx4M9hXf9N1/tckwdAQpCWvbXdPck=;
+ b=j/AluJNilOHt2Fx9aeRdC/o4KR1mvfZPWhJjb5W/DZfYyBi+cc/gKyEoEKSdg1AP11KZ6BxJtmB4AcV5aHefmnS1hnCFRiwR355dWnhFoO4NQZkQfXcNz+y/VxnkacrUO/vLls9gPh62l8A3Tg6ifzxVegdjFlRn8XRbCsETnd8=
+Received: from BYAPR12MB2917.namprd12.prod.outlook.com (2603:10b6:a03:130::14)
+ by BY5PR12MB3889.namprd12.prod.outlook.com (2603:10b6:a03:1ad::30) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3283.16; Fri, 14 Aug
- 2020 05:29:32 +0000
-Received: from DB8PR04MB7162.eurprd04.prod.outlook.com
- ([fe80::acee:9763:7898:84a2]) by DB8PR04MB7162.eurprd04.prod.outlook.com
- ([fe80::acee:9763:7898:84a2%9]) with mapi id 15.20.3261.025; Fri, 14 Aug 2020
- 05:29:32 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Pawel Laszczak <pawell@cadence.com>
-CC:     "balbi@kernel.org" <balbi@kernel.org>,
-        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "rogerq@ti.com" <rogerq@ti.com>, Jun Li <jun.li@nxp.com>
-Subject: Re: [PATCH v5 1/9] usb: cdns3: introduce set_phy_power_on{off} APIs
-Thread-Topic: [PATCH v5 1/9] usb: cdns3: introduce set_phy_power_on{off} APIs
-Thread-Index: AQHWVDMv69m1Bo7FyU6Dwmwi2hXQ5Kk2LOwAgAEiNgA=
-Date:   Fri, 14 Aug 2020 05:29:32 +0000
-Message-ID: <20200814052840.GB22554@b29397-desktop>
-References: <20200707074941.28078-1-peter.chen@nxp.com>
- <20200707074941.28078-2-peter.chen@nxp.com>
- <DM6PR07MB55298C1258149664502DCDCFDD430@DM6PR07MB5529.namprd07.prod.outlook.com>
-In-Reply-To: <DM6PR07MB55298C1258149664502DCDCFDD430@DM6PR07MB5529.namprd07.prod.outlook.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3261.22; Fri, 14 Aug
+ 2020 05:36:56 +0000
+Received: from BYAPR12MB2917.namprd12.prod.outlook.com
+ ([fe80::c98f:a13f:fd88:c209]) by BYAPR12MB2917.namprd12.prod.outlook.com
+ ([fe80::c98f:a13f:fd88:c209%7]) with mapi id 15.20.3283.020; Fri, 14 Aug 2020
+ 05:36:56 +0000
+X-SNPS-Relay: synopsys.com
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Linux USB <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH 11/11] dwc3: debugfs: fix checkpatch warnings
+Thread-Topic: [PATCH 11/11] dwc3: debugfs: fix checkpatch warnings
+Thread-Index: AQHWcTqb7ekmZwlpLkKb02kc+QyDBqk2aXWAgACnMgCAAAa6gA==
+Date:   Fri, 14 Aug 2020 05:36:56 +0000
+Message-ID: <609defe5-e658-5d93-18af-9613de32f497@synopsys.com>
+References: <20200813062532.829720-1-balbi@kernel.org>
+ <20200813062532.829720-11-balbi@kernel.org>
+ <0f678c7a-f2e1-a8cc-2f7f-75bc92513cc7@synopsys.com>
+ <87pn7tolnx.fsf@kernel.org>
+In-Reply-To: <87pn7tolnx.fsf@kernel.org>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-authentication-results: cadence.com; dkim=none (message not signed)
- header.d=none;cadence.com; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.67]
+user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=synopsys.com;
+x-originating-ip: [149.117.7.22]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 20bd0dee-3869-44f7-be55-08d840130639
-x-ms-traffictypediagnostic: DB3PR0402MB3641:
+x-ms-office365-filtering-correlation-id: 44ad0753-30fd-4b76-4340-08d840140ed7
+x-ms-traffictypediagnostic: BY5PR12MB3889:
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB3PR0402MB3641C1927A43FF920CE593338B400@DB3PR0402MB3641.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5797;
+x-microsoft-antispam-prvs: <BY5PR12MB388909670FF56C2CB6A1FB4CAA400@BY5PR12MB3889.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:962;
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: qXMC6+SNAJKJIrgeNbmLHuFb7g65pvLGzVMruL3BY4nRY5prlU7BJt3TRTUHdIQJra1rOLSPMRqyELhtWrzptiTAG7VACODRa+JBJEsrB7p1PfQSnymXKUlnSlKrvdsPp2f2f1rm2l/VecpW1zTFgJ88Nh09N5PXtU4IK9YvHFMzBHvNXd8Jk2dkFQT6nM7cZ/IgLRIjrZskZ7Qg5wuURpy9mbVQ4tG4Gx1YkAiHL7cs0Wgxr4jjacf9L1ai9mmET8+s4D3ptujXBfIIMFD4sMqJyGNB2fQ5/YZ8udL+mGPHOd4CFYnif/yAmh3s1oz0xZQToXR8m03tVOGmu87K+A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB7162.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(7916004)(366004)(396003)(136003)(39860400002)(376002)(346002)(186003)(66446008)(64756008)(33716001)(66476007)(44832011)(83380400001)(76116006)(66946007)(5660300002)(478600001)(26005)(1076003)(66556008)(91956017)(71200400001)(6916009)(33656002)(8936002)(6486002)(53546011)(6506007)(86362001)(54906003)(6512007)(9686003)(8676002)(316002)(4326008)(2906002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: l+v8pC106ptUTh2rZIM9XY39G/yp4UQ2doqvqPyEK6Gpa3J166V10C0RXmB1KkPdVnk0VW1IaCUL9rhhFaE1VP4nBOh9p4v5y9VegbhOh1ddf4SoytW6ie4DGeW5cSV5qxsRRXzEOOx3GYQUGeV9N8ar+WFA9nKyapuslranroQipu7DveJ2W6PXaeteERJmiSSyyoc4eA71wXc8BxYLb4qrqag2hjWenTdzyt9VvIGrjA89T3AZZjdyAi3eqmxMkUBBxasmUEZmwkkpi6euo0YTfymsR9ZeANuegoplAs5MIXrQ7Mb25ByU5veXqUdYCWvBdbTDreqmQc96u1ghT/N46Oni65JxcyPfaZ683LZEQ47bHKb9H/FR3GkU78qnv2hhdKpnK26ouUspGkoMVgZgAN5Lbqb/eIf1QfS1BiF9KUrGjmEwd2+36En38CLI2J7u8bBAjufZ1JlD6G8hdRdGPRZFWHgv726vjwyww3ChVE0jJFlnQtcMi6meBzIHkmAnvLx2It9a9HcDufIPwzHjDei8ueqJb4VRJnLbQkWXljuYPrfPIXFenhQvRZ+viPCEoCIA3k+LtpkGi8KtVxfiD9vhnI/WyznGxafzTfbp2n0kTCoJe78XuxzMeXJQrIZ8lJqJjspHjzxDtFMLiQ==
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <D261420CAEC3B047AE092A9CAA2CCAAB@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+x-microsoft-antispam-message-info: gsGBn7X29YGmEcUTbHNj0UPhXUTciTrNmMu+7XtPUERjuiH4vAlxv6Ycdge8QCEqyP+Z4q/jZbp5exOKE3qQK6MCgPSgld1bOOHp3B9X4i+/NZDNymkBDgEUvr/1eg4kiZyel3ZfmmykWobu7tG/Ii5uTnHb5ubcjKTdjvGLsrV9QyvBk+zB80lehOdTFeIItUa1cPXwEivBb4T1tJOxW9UT6bUm1WYDKV064d7JvUmok5tFIGaKiR4G4/c6xRY9+LWpF4aieVoMNV28YezCwC6uo0+5vWMQD+1JbmrNJYeYX5+cRR9JGMSQ1cJ+Rt3UPmVXO2WfDbHr/F4yfMrXvmu8xO0CyLbr0l6OYTB90QL6RXqCjSZwi8IZhlPbscJRaKUNqNubMwEvUQMLPJYScBo1f3a5PblreSzPPee3ThZDfhoSWM0Qp+JFhfin+ENtgRnkD3tjuitqoBeloK0CVA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB2917.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(39860400002)(396003)(136003)(366004)(376002)(346002)(966005)(31686004)(478600001)(26005)(71200400001)(186003)(316002)(110136005)(31696002)(36756003)(86362001)(6486002)(2906002)(6506007)(64756008)(66556008)(6512007)(8676002)(5660300002)(2616005)(76116006)(66946007)(83380400001)(66446008)(66476007)(8936002)(43740500002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: ZcdrANR12btCZHt+2dWS//v+cbVheoxgtEWaPUqNoBzlcx/WgeEV8Fsymi96A8cKQ/qeS8+sIKsBFiqWgBjNzGZ8drpXQ0pqSNRE4lHhPdO5ApJ03AwMwOQRoS86CGnqOwH/Tp4y/724yAQsJHcBBPr7DOyECdvJxtbACeaK3FMEuabpfsmg21hGx6DdgGVDbLp8gTvUsTGgMv687T6VaJ91T32qG1RT7BuXvuYe39nn7MQqiIByVyMQV0nC68nB2BVL1X1OkYo/OP7qSwKZcmm0g100Zu1TyMKclAKo0MJjflVbxtRaUQYlWKhor6JUFguIk0vG8tyRG5Khpbyfc9oZ9OUrQBEct7l6tDNkkte3AvdhUVTaPij5hy1kQ+xzsRFq2ODyfCZIDyekfu5++LYAxNO7m3wR30ZyJrwk2LLH2LxWPqnUEhqJfjYdFPz4/3wcvWTmCG7Hf1LEfUrRdjZL3/Wd5bqV+VIGfcXd8BYeFiFAwPA21FGOglNEqeOgu9cvAfsJmVjPz7HfbbXfEZHbr0rqM717qnEh0+LzBOlHUOK0UtVTBWn2ohUqiu7QPcYxsNoycOuMrdC4xEoxOhdCdvhwL3i7EEhX+B/Li7RWQJUbU+iHYrc/yxzuMhIa6xCdVUvPCTttVvEz1XY1hw==
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <00600B8FC486F04CA24D073FA9B4A939@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
+X-OriginatorOrg: synopsys.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB7162.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 20bd0dee-3869-44f7-be55-08d840130639
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Aug 2020 05:29:32.4385
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB2917.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 44ad0753-30fd-4b76-4340-08d840140ed7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Aug 2020 05:36:56.4227
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: hmqI6tx816hNSmxaR/snpbQOUe59kt6/MIC+LNpXU3YWxXw0ZQ+IgBj60FssNEMRHF+Lh6S2rO1euG15EqVVsg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3641
+X-MS-Exchange-CrossTenant-userprincipalname: RxgGR4K8oNeoHXIBz5BTVPJLuQe+bBYZJY2dr+zK10FJlca4ZEfxgKYTVioJ96fJg602yymz5zJSLyqi4PEYVg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB3889
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-08-13 12:09:58, Pawel Laszczak wrote:
->=20
-> >
-> >Since we have both USB2 and USB3 PHYs for cdns3 controller, it is
-> >better we have unity APIs to handle both USB2 and USB3's power, it
-> >could simplify code for error handling and further power management
-> >implementation.
-> >
-> >Reviewed-by: Jun Li <jun.li@nxp.com>
-> >Signed-off-by: Peter Chen <peter.chen@nxp.com>
-> >---
-> > drivers/usb/cdns3/core.c | 43 ++++++++++++++++++++++++++--------------
-> > 1 file changed, 28 insertions(+), 15 deletions(-)
-> >
-> >diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
-> >index 19bbb5b7e6b6..8818935d157b 100644
-> >--- a/drivers/usb/cdns3/core.c
-> >+++ b/drivers/usb/cdns3/core.c
-> >@@ -384,6 +384,27 @@ static int cdns3_role_set(struct usb_role_switch *s=
-w, enum usb_role role)
-> > 	return ret;
-> > }
-> >
-> >+static int set_phy_power_on(struct cdns3 *cdns)
-> >+{
-> >+	int ret;
-> >+
-> >+	ret =3D phy_power_on(cdns->usb2_phy);
-> >+	if (ret)
-> >+		return ret;
-> >+
-> >+	ret =3D phy_power_on(cdns->usb3_phy);
-> >+	if (ret)
-> >+		phy_power_off(cdns->usb2_phy);
-> >+
-> >+	return ret;
-> >+}
-> >+
-> >+static void set_phy_power_off(struct cdns3 *cdns)
-> >+{
-> >+	phy_power_off(cdns->usb3_phy);
-> >+	phy_power_off(cdns->usb2_phy);
-> >+}
-> >+
-> > /**
-> >  * cdns3_probe - probe for cdns3 core device
-> >  * @pdev: Pointer to cdns3 core platform device
-> >@@ -477,14 +498,10 @@ static int cdns3_probe(struct platform_device *pde=
-v)
-> > 	if (ret)
-> > 		goto err1;
-> >
-> >-	ret =3D phy_power_on(cdns->usb2_phy);
-> >+	ret =3D set_phy_power_on(cdns);
-> > 	if (ret)
-> > 		goto err2;
-> >
-> >-	ret =3D phy_power_on(cdns->usb3_phy);
-> >-	if (ret)
-> >-		goto err3;
-> >-
-> > 	sw_desc.set =3D cdns3_role_set;
-> > 	sw_desc.get =3D cdns3_role_get;
-> > 	sw_desc.allow_userspace_control =3D true;
-> >@@ -496,16 +513,16 @@ static int cdns3_probe(struct platform_device *pde=
-v)
-> > 	if (IS_ERR(cdns->role_sw)) {
-> > 		ret =3D PTR_ERR(cdns->role_sw);
-> > 		dev_warn(dev, "Unable to register Role Switch\n");
-> >-		goto err4;
-> >+		goto err3;
-> > 	}
-> >
-> > 	ret =3D cdns3_drd_init(cdns);
-> > 	if (ret)
-> >-		goto err5;
-> >+		goto err4;
-> >
-> > 	ret =3D cdns3_core_init_role(cdns);
-> > 	if (ret)
-> >-		goto err5;
-> >+		goto err4;
-> >
-> > 	device_set_wakeup_capable(dev, true);
-> > 	pm_runtime_set_active(dev);
-> >@@ -522,14 +539,11 @@ static int cdns3_probe(struct platform_device *pde=
-v)
-> > 	dev_dbg(dev, "Cadence USB3 core: probe succeed\n");
-> >
-> > 	return 0;
-> >-err5:
-> >+err4:
-> > 	cdns3_drd_exit(cdns);
-> > 	usb_role_switch_unregister(cdns->role_sw);
-> >-err4:
-> >-	phy_power_off(cdns->usb3_phy);
-> >-
-> > err3:
-> >-	phy_power_off(cdns->usb2_phy);
-> >+	set_phy_power_off(cdns);
-> > err2:
-> > 	phy_exit(cdns->usb3_phy);
-> > err1:
->=20
-> Dan Carpenter suggested me to use more meaningful labels instead err1 .. =
-err5.
-
-Yes, it is reasonable, we could follow this rule when design the new
-function.
-
-Peter
-> =20
-> Reviewed-by: Pawel Laszczak<pawell@cadence.com>
->=20
-> Pawel
->=20
-> >@@ -553,8 +567,7 @@ static int cdns3_remove(struct platform_device *pdev=
-)
-> > 	pm_runtime_put_noidle(&pdev->dev);
-> > 	cdns3_exit_roles(cdns);
-> > 	usb_role_switch_unregister(cdns->role_sw);
-> >-	phy_power_off(cdns->usb2_phy);
-> >-	phy_power_off(cdns->usb3_phy);
-> >+	set_phy_power_off(cdns);
-> > 	phy_exit(cdns->usb2_phy);
-> > 	phy_exit(cdns->usb3_phy);
-> > 	return 0;
-> >--
-> >2.17.1
->=20
-
---=20
-
-Thanks,
-Peter Chen=
+RmVsaXBlIEJhbGJpIHdyb3RlOg0KPiBUaGluaCBOZ3V5ZW4gPFRoaW5oLk5ndXllbkBzeW5vcHN5
+cy5jb20+IHdyaXRlczoNCj4NCj4+IEhpIEZlbGlwZSwNCj4+DQo+PiBiYWxiaUBrZXJuZWwub3Jn
+IHdyb3RlOg0KPj4+IEZyb206IEZlbGlwZSBCYWxiaSA8YmFsYmlAa2VybmVsLm9yZz4NCj4+Pg0K
+Pj4+IG5vIGZ1bmN0aW9uYWwgY2hhbmdlcw0KPj4+DQo+Pj4gU2lnbmVkLW9mZi1ieTogRmVsaXBl
+IEJhbGJpIDxiYWxiaUBrZXJuZWwub3JnPg0KPj4+IC0tLQ0KPj4+ICBkcml2ZXJzL3VzYi9kd2Mz
+L2RlYnVnZnMuYyB8IDU2ICsrKysrKysrKysrKysrKysrKy0tLS0tLS0tLS0tLS0tLS0tLS0tDQo+
+Pj4gIDEgZmlsZSBjaGFuZ2VkLCAyNiBpbnNlcnRpb25zKCspLCAzMCBkZWxldGlvbnMoLSkNCj4+
+Pg0KPj4gVGhlc2UgY2hlY2twYXRjaCBmaXhlcyB3aWxsIGNyZWF0ZSBtYW55IGNvbmZsaWN0cyB0
+byB0aGUgcGF0Y2hlcyBJDQo+PiBzdWJtaXR0ZWQuDQo+Pg0KPj4gRGlkIHlvdSBnZXQgYSBjaGFu
+Y2UgdG8gdGFrZSBhIGxvb2sgYXQgdGhlbSB5ZXQgYmVmb3JlIEkgcmV2aXNlIHRoZW0gdG8NCj4+
+IGJlIGFibGUgdG8gcmViYXNlIG9uIHlvdXIgdGVzdGluZy9uZXh0IGJyYW5jaD8NCj4gV2hpY2gg
+cGF0Y2hlcyBzcGVjaWZpY2FsbHkgZG8geW91IGhhdmUgaW4gbWluZD8gSSBjYW4gcmViYXNlIG15
+IHBhdGNoZXMNCj4gb24gdG9wIG9mIHlvdXJzLCBzaG91bGRuJ3QgYmUgYSBiaWcgaXNzdWUuDQo+
+DQoNCklmIHBvc3NpYmxlLCBjYW4geW91IHJlYmFzZSBvbiB0b3Agb2YgdGhlc2UgMiBzZXJpZXMg
+b2YgZml4ZXM6DQoNClNlcmllcyAxOiBbUEFUQ0ggdjIgMC83XSB1c2I6IGR3YzM6IGdhZGdldDog
+Rml4IFRSQiBwcmVwYXJhdGlvbg0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGludXgtdXNiL2Nv
+dmVyLjE1OTY3Njc5OTEuZ2l0LnRoaW5obkBzeW5vcHN5cy5jb20vVC8jdA0KDQpTZXJpZXMgMjog
+W1BBVENIIDAvM10gdXNiOiBkd2MzOiBnYWRnZXQ6IEZpeCBoYWx0L2NsZWFyX3N0YWxsIGhhbmRs
+aW5nDQpodHRwczovL2xvcmUua2VybmVsLm9yZy9saW51eC11c2IvY292ZXIuMTU5Njc2Nzk5MS5n
+aXQudGhpbmhuQHN5bm9wc3lzLmNvbS9ULyN0DQoNCklmIHRoZXkgbG9vayBvayB0byB5b3UsIHlv
+dSBjYW4gcmViYXNlIG9uIHRvcCBvZiB0aGVtLiBUaGF0J2QgaGVscCBtZSBhDQpidW5jaC4NCg0K
+SSdsbCBsZXQgdGhlIHNlcmllcyB1cGRhdGluZyBVU0IgMy4yIHNvYWsgZm9yIGEgbGl0dGxlIGxv
+bmdlciB0byBmb3IgYW55DQpjb21tZW50LiBJIGNhbiByZWJhc2UgYW5kIHJlc2VuZCB0aGF0IHNl
+cmllcyBsYXRlci4NCg0KVGhhbmtzIQ0KVGhpbmgNCg0KDQo=
