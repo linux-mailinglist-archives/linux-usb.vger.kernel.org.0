@@ -2,160 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 151F92443F3
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Aug 2020 05:45:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A660244472
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Aug 2020 07:13:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726578AbgHNDpA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Aug 2020 23:45:00 -0400
-Received: from mail-vi1eur05on2055.outbound.protection.outlook.com ([40.107.21.55]:56352
-        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726568AbgHNDpA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 13 Aug 2020 23:45:00 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mMKeHd1PfoLrNhDlNHGgAxaqbFBWMDt4FXLsABYYZJNZXfENF5FEl26Olw2lEzbQL309J1j4XqZ5sITlL/6PxU80r/lWmhT6g4vRdAxYv40qcAvaQYA16GnKLB19lA48wG2xz4utwa5SM+r+6PcpwkDIR7o1yOvRoEePWNA+eW3PKD9GQtGtfcyvq2wlSyiV/SCN6aPHNR+fnlFc76wsycwWogChGtbvvhiUyovw5o+1EEK7yUhEI24YaADNKQnRNGFx2w/dipjMYTdT0r8PQc9EiaqQXmZcT9grmr/8wi+RiWHyqZ3xJ9FqVVclFaIC3Hl6F5Vl7HlmyQ1lZ894RQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jewGzhcfd5FJwcLYwnlrf3JeHsIBvZIQN9Man9pq16I=;
- b=SC40m6zVFPf9T068d2mhavfnXoClp1pUuUS9gJWL4YpHJ8mpqKmnUb3JDw3A1Xl+iwasWaJMLG6HnCHQM2vus8sd7F8wvaIvuNdxChvjCNGe+8UQ1Oaf7cYPpBsfuWMywgs7X80GWqb82zlvZLyf+4Dh+pYpBj0s6T32i/YNd0qlddnjeHdTp7GYleWkTYZmmYUCn2ixd3NizdKRF3hf6MilAxIAttCwAaJbs2R9fJbdIhbvJoJfZXybAGKQKN16hToQWtlMb02MfHjguzz/snhsvmaCBwMciLgCuBiAwZRTLreZP5aW+WinjORsF6KUtcsq/OqVVOU0gJC5Ne4+9g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jewGzhcfd5FJwcLYwnlrf3JeHsIBvZIQN9Man9pq16I=;
- b=XZRD+E7KSHffiJ/2inD3L3AGpZhPu1NWlKchcHhpUH3J/bq2W25WAv6VzzhRmd1prEi2EkIHm4fln914lsLNO6zMULML1fVL4O9C7ZxLfaZmDzjZhE7fmE98bJCzo7kVcPfZwio+jig9lYqBf7LL0MUw8ZRQkOMkLiOCmkRJeto=
-Received: from DB8PR04MB7162.eurprd04.prod.outlook.com (2603:10a6:10:12c::13)
- by DB8PR04MB6476.eurprd04.prod.outlook.com (2603:10a6:10:104::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3283.16; Fri, 14 Aug
- 2020 03:44:54 +0000
-Received: from DB8PR04MB7162.eurprd04.prod.outlook.com
- ([fe80::acee:9763:7898:84a2]) by DB8PR04MB7162.eurprd04.prod.outlook.com
- ([fe80::acee:9763:7898:84a2%9]) with mapi id 15.20.3261.025; Fri, 14 Aug 2020
- 03:44:53 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     "balbi@kernel.org" <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Subject: Re: [PATCH v3 2/6] USB: UDC: net2280: Fix memory leaks
-Thread-Topic: [PATCH v3 2/6] USB: UDC: net2280: Fix memory leaks
-Thread-Index: AQHWcSDEAWff1H7y/kOv9wi6Xhzy8ak2EQiAgADnAAA=
-Date:   Fri, 14 Aug 2020 03:44:53 +0000
-Message-ID: <20200814034400.GA22554@b29397-desktop>
-References: <20200813031953.13676-1-peter.chen@nxp.com>
- <20200813031953.13676-3-peter.chen@nxp.com>
- <20200813135713.GA405784@rowland.harvard.edu>
-In-Reply-To: <20200813135713.GA405784@rowland.harvard.edu>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: rowland.harvard.edu; dkim=none (message not signed)
- header.d=none;rowland.harvard.edu; dmarc=none action=none
- header.from=nxp.com;
-x-originating-ip: [119.31.174.67]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 93c61440-1d23-407e-4fe2-08d840046787
-x-ms-traffictypediagnostic: DB8PR04MB6476:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB8PR04MB6476578C9E62DFF4A59DF2AD8B400@DB8PR04MB6476.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: CLEH7r9P9/PAWzHOytMBT36xahjElff95RrrIfhUTE97Y85aaPmVUuxMNNuUnMjgq1SKRl7ZV+aW8O2DmN8OKDEv+9FYbJ2TgEPPy34bSinBrrK38JcWAZUfm/eIXGck5xUt/Eprdw9nYyHZ8TBra33//+t//7mNwZSykoaj5FbXrJwQxGZ4YFBLnkk8nBVa1u3bOioNjYlq0q5ppZ1Y32YWDzKI+UEEa5jKo74W2zpIcG/sm/H22MYU3OT57aruMbLFY8STyms52Rmns/v74DjBrOjbbnsllN/PGqZ7R1DsImWsEqxb2wswpE9V0Cew4WFORLSZsUkCPFNT/fxpQg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB7162.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(7916004)(346002)(376002)(136003)(39860400002)(396003)(366004)(4326008)(53546011)(6512007)(66446008)(6486002)(8676002)(86362001)(5660300002)(26005)(71200400001)(44832011)(9686003)(64756008)(66556008)(66476007)(91956017)(66946007)(76116006)(6506007)(54906003)(1076003)(8936002)(33716001)(186003)(33656002)(2906002)(478600001)(83380400001)(316002)(6916009);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: W4ajmEvMqnqq683rsbo9GX7MYTBDJW0qU3QhaeROAz4aW7HKE33+Kq/BnByOjG6mNFs4LsWuFhawu3bKT6B6A8fjiy/U58Z4NouSO0qN8YkfDD9iGq02TaPdgxyDffpVG7p0U+/1amLAx7Q+dG0Woh0jywHB2sf05o79WqB0GnFUej763l0O2QO1CjOlRxME094ozUx+jIOVGwglSCkHGDu3tGMoJBy7CJYU8ry+caTdUBHnnl5pZbntLTorAWqHGOR05JZ+hFMpGGzCLlIjSoAvrk78XqCbhInWEGXCmgGAi48pXy25xLKgutt12qeOk/uNhP75cm6KIo42RHMi/Tmj9fI7B4MZNPoaC4sjxF4UBDvEVD6Y8ETrO3CEYCqUSpG4ZAZ4PM3i+xyrpk+pzS9jj/I1Ca1dDgmLfFhwRzslcj+OAX0U4V1hVqP7Y3/FN4BuQgM0a3h8vURJEM/qAZFk7dMxRPi0tjGOiDktbzS4YxLC/jo26G7LScxZRGYBlwhTV//6k+MbFAgF1AjUTkLzUblhrd/t99QGh5bw6Z4o5sQ/LtbSD0asg9ixBNfa0kM5eJtfSD6ZMVXgbfDEM9Xu2qyHp33qZyh3Tu+An+hNxCQufsUHBr3Nb0JY9U1xWVbjBBjmj67GU4fAweU9tg==
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <55285EF9EF6BC74A97ACC955C73129A6@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1726124AbgHNFNF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Aug 2020 01:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37004 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726006AbgHNFNF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Aug 2020 01:13:05 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA0EC061757
+        for <linux-usb@vger.kernel.org>; Thu, 13 Aug 2020 22:13:05 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id f26so8616621ljc.8
+        for <linux-usb@vger.kernel.org>; Thu, 13 Aug 2020 22:13:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=gzWdN7cyXENnAZZTpDeoARpqpHyMxh8WhXL19wqKyQE=;
+        b=dHHdZEeH785hRcE+UnQmgHWhJRGBEvP1vRxl4rosw0u5j945ctlYEYggF1qlRvrmd2
+         rWtfdExtullbAL520UnsP2qpcle5qao9Rbpr4rR1jPfKU2sDRbKu9nRl6ri9t1P1ao9c
+         Llr/7i5r+FCTw1VJzTsk9JpxMQUVIEzuhmSk7/KVN6PcyvorXJSONDpPx527N/PmD9jP
+         YnFzJdcRypBUir4Z75qkn7NJeiMr6s3r2IuHPVHB5k3Za3dUDB8pu4BCF74RSPFB8XVl
+         HFewVPHHbvOYVX5mXHM60o3s0ZbO0Arg+KER0g8Y1M2BKdtXGtac+DSbhdE5fP3PQAzy
+         YgTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=gzWdN7cyXENnAZZTpDeoARpqpHyMxh8WhXL19wqKyQE=;
+        b=r+Q/QYrrFH8rMMZacdDkpOmjdUqlwyLoppxAh7ys3DKt97uC3G7avYI4Dvh6GHYXA+
+         C+Mydwti2jTKhRMc35A3GliPXFFW/LRE7dAaT+WDk4ecrbLJwOy8q35ISOFxzAiQg3dC
+         7GCcSqs6fsSUdllqKoWkrfzq/Q0BeavD+hoFmsVirHgeQhakrMMsQBiNY6B4AAk/Logl
+         BMLdUMIlqtFnBLLJ0F90p3DvucXg+yTjz2M+C8reDkUCLWQqwneu+g1OiyO405QiEkCG
+         IQempdDK2w0KvZfNdNgU2z8prBAu+M7jukbZStEUbucrnkZCk3oZcnWQcYGw3nNfp4dx
+         LGcw==
+X-Gm-Message-State: AOAM530m2A+HuhBrSeX3JzdMMq8sKQKEbA+CxUHQXAickLUDG3U4EVgN
+        86a9WXykchiFJa4XaqKPgMo8itY1
+X-Google-Smtp-Source: ABdhPJy57RSx1UJXhM2ril6jPxVFjksjUswsWXM8ETMMbqrdHbtBogJLlW0hMzIPbOHHbCTmxbOUkw==
+X-Received: by 2002:a2e:a54f:: with SMTP id e15mr464536ljn.115.1597381983250;
+        Thu, 13 Aug 2020 22:13:03 -0700 (PDT)
+Received: from saruman ([194.34.132.58])
+        by smtp.gmail.com with ESMTPSA id t20sm1525827ljd.12.2020.08.13.22.13.02
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 13 Aug 2020 22:13:02 -0700 (PDT)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Linux USB <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH 11/11] dwc3: debugfs: fix checkpatch warnings
+In-Reply-To: <0f678c7a-f2e1-a8cc-2f7f-75bc92513cc7@synopsys.com>
+References: <20200813062532.829720-1-balbi@kernel.org> <20200813062532.829720-11-balbi@kernel.org> <0f678c7a-f2e1-a8cc-2f7f-75bc92513cc7@synopsys.com>
+Date:   Fri, 14 Aug 2020 08:12:50 +0300
+Message-ID: <87pn7tolnx.fsf@kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB7162.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 93c61440-1d23-407e-4fe2-08d840046787
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Aug 2020 03:44:53.3106
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Y8JXBFtw8H0LcvT1tMsxo1el7qnPAwxkrXCZ/LtaDuv1XfwKEaj8I6BdwnRiD+yzr7sFqKP8xY6R7JEPPjKH5g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB6476
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-08-13 09:57:13, Alan Stern wrote:
-> On Thu, Aug 13, 2020 at 11:19:49AM +0800, Peter Chen wrote:
-> > From: Alan Stern <stern@rowland.harvard.edu>
-> >=20
-> > As Anton and Evgeny have noted, the net2280 UDC driver has a problem
-> > with leaking memory along some of its failure pathways.  It also has
-> > another problem, not previously noted, in that some of the failure
-> > pathways will call usb_del_gadget_udc() without first calling
-> > usb_add_gadget_udc_release().  And it leaks memory by calling kfree()
-> > when it should call put_device().
-> >=20
-> > Previous attempts to fix the problems have failed because of lack of
-> > support in the UDC core for separately initializing and adding
-> > gadgets, or for separately deleting and freeing gadgets.  The previous
-> > patch in this series adds the necessary support, making it possible to
-> > fix the outstanding problems properly.
-> >=20
-> > This patch adds an "added" flag to the net2280 structure to indicate
-> > whether or not the gadget has been registered (and thus whether or not
-> > to call usb_del_gadget()), and it fixes the deallocation issues by
-> > calling usb_put_gadget() at the appropriate point.
-> >=20
-> > A similar memory leak issue, apparently never before recognized, stems
-> > from the fact that the driver never initializes the drvdata field in
-> > the gadget's embedded struct device!  Evidently this wasn't noticed
-> > because the pointer is only ever used as an argument to kfree(), which
-> > doesn't mind getting called with a NULL pointer. In fact, the drvdata
-> > for gadget device will be written by usb_composite_dev structure if
-> > any gadget class is loaded, so it needs to use usb_gadget structure
-> > to get net2280 private data.
-> >=20
-> > CC: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-> > Reported-by: Anton Vasilyev <vasilyev@ispras.ru>
-> > Reported-by: Evgeny Novikov <novikov@ispras.ru>
-> > Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-> > ---
-> >  drivers/usb/gadget/udc/net2280.c | 13 +++++++++----
-> >  drivers/usb/gadget/udc/net2280.h |  1 +
-> >  2 files changed, 10 insertions(+), 4 deletions(-)
-> >=20
-> > diff --git a/drivers/usb/gadget/udc/net2280.c b/drivers/usb/gadget/udc/=
-net2280.c
-> > index 7530bd9a08c4..31e49cc34316 100644
-> > --- a/drivers/usb/gadget/udc/net2280.c
-> > +++ b/drivers/usb/gadget/udc/net2280.c
-> > @@ -3561,7 +3561,9 @@ static irqreturn_t net2280_irq(int irq, void *_de=
-v)
-> > =20
-> >  static void gadget_release(struct device *_dev)
-> >  {
-> > -	struct net2280	*dev =3D dev_get_drvdata(_dev);
-> > +	struct usb_gadget	*gadget =3D container_of(_dev,
-> > +					struct usb_gadget, dev);
-> > +	struct net2280	*dev =3D container_of(gadget, struct net2280, gadget);
->=20
-> Please change this to
->=20
-> 	struct net2280	*dev =3D container_of(_dev, struct net2280, gadget,dev);
->=20
-> And do the same for the net2272 patch.
->=20
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Sorry, my oops. Please skip this patch set.
+Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
 
---=20
+> Hi Felipe,
+>
+> balbi@kernel.org wrote:
+>> From: Felipe Balbi <balbi@kernel.org>
+>>
+>> no functional changes
+>>
+>> Signed-off-by: Felipe Balbi <balbi@kernel.org>
+>> ---
+>>  drivers/usb/dwc3/debugfs.c | 56 ++++++++++++++++++--------------------
+>>  1 file changed, 26 insertions(+), 30 deletions(-)
+>>
+>
+> These checkpatch fixes will create many conflicts to the patches I
+> submitted.
+>
+> Did you get a chance to take a look at them yet before I revise them to
+> be able to rebase on your testing/next branch?
 
-Thanks,
-Peter Chen=
+Which patches specifically do you have in mind? I can rebase my patches
+on top of yours, shouldn't be a big issue.
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl82HVQACgkQzL64meEa
+mQa6Vw/8CCBlE7dICqxUnrFkx/GT3ZqPmodioLghnJcgTy8RbVY1vECwHlHkn9nE
+/EOCh7q9x9BdJf4cAA9vJYA26TbWYt5G5D+5+0pRlq2EiLDfMpsfw3OArfE91U0E
+GNB68Ke6R+MgS0B2q3nteb15ZNcJ+1SoRWRNEchW2qUH5GR7suwGII7KgwzOnQHQ
+IqClqQnEEU7q/MmQ5uZ6DJPjKCoailOKTh4vkytbH9HpsdgrUItm1BnKXze7wU8v
+HvmBx85k+dCgeZuTFLN29GVm7ro5iYf+LcvyP9xen0Isg6bYaXJbqfMK7V0DGmML
+OEpKSxoOh+awhyJ8cttwmegw320eesSHy1SUzd47VBZyeHQ7VC0iASW3YpKX7Sxb
+jEsZI6jghu7yNrKUSgI+6wKVL4iE+hyc+NnuwWwBHgee5Y9hpIbBpic084vSKiDu
+JXxw/csugHllxIMEiNoQZdtPIsP6tqQxXV99eIK7pCtFwE/gBQYUMrNM4MAA4x2j
+12bioE7sU8E3Dqdd3L+xB+7OFGnxjGNIDaskZBKwp2m0PoIMaDunV+2JFvm9Hq7s
+lUDuZ/4xct5hYroRTbxNmP47KRozQK7gM6xGGl/gwPqy2lqa0Hf3SupyeOmZ+EFb
+Jbk+p5rYuIJRY+kIgv1py4DCC4Lti4xDthRrYCvHVi8meiUBLng=
+=YfYA
+-----END PGP SIGNATURE-----
+--=-=-=--
