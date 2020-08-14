@@ -2,59 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E51D2449FB
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Aug 2020 14:51:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CD40244B01
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Aug 2020 15:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728050AbgHNMvS convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Fri, 14 Aug 2020 08:51:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54888 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726313AbgHNMvS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 14 Aug 2020 08:51:18 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 208891] Thunderbolt hotplug fails on HP x360 13t-aw000/86FA
- with HP Thunderbolt 3 Dock
-Date:   Fri, 14 Aug 2020 12:51:17 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mika.westerberg@linux.intel.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-208891-208809-tCvrsejFOY@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-208891-208809@https.bugzilla.kernel.org/>
-References: <bug-208891-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1728314AbgHNN6j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Aug 2020 09:58:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32942 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728219AbgHNN63 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Aug 2020 09:58:29 -0400
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5225EC061347
+        for <linux-usb@vger.kernel.org>; Fri, 14 Aug 2020 06:58:27 -0700 (PDT)
+Received: by mail-yb1-xb43.google.com with SMTP id x10so5209587ybj.13
+        for <linux-usb@vger.kernel.org>; Fri, 14 Aug 2020 06:58:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=ADSxHTiClFeEpnekIgxMm+4vNveMDrQOPCHPEgxRQmY=;
+        b=OuCR0lVGqzd5H5FQmJLbFMNQ+eyV0gzEwr4HY3cd3GF6Lnsu1xJVt3zglMz7Jw3m6g
+         6tlQS1f9t9BYgSgXfDaRlV7w8WD3il1PEMBvmswjf0OZgEHzc1jHtX67zkOtBSyBoxLc
+         xSp/eQJ4+Ex7HAoy43U5Nx1I2rFcFsarYX4GCS2LVaBXZjUMWYC5HD7BH4nlOsnKw5vX
+         zu9ygJ4Ak8kbLaUIR+Wg4wOkXpQbQFuB6AS3nSIngBGrfhH2iurIYvgHPK9vFRdVn4tn
+         No2wYXX7H+1SF39WsLEjuvUdeAfdZx1+eqojEu1sK7RLckN57Cb59z1zh3/DfitQjmxg
+         khiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=ADSxHTiClFeEpnekIgxMm+4vNveMDrQOPCHPEgxRQmY=;
+        b=aMJ+aLntNk111Je+SZQM2Nlnu/yZRnrOE4wBwgRx0lxuaOaz+1alwXz3ZTuL9X897g
+         O5C53J2Tq7Cx1WlePiLrYx7/UCsc1clP3qDiOyOArCRkiT85sngvdMp8330tnA4+RwGQ
+         qDzQx2eTts+2jktFeEUDUslO+4i1Q951ouOaOiJRXL6uSIVQprlC+CKprGU9KlX2p6fe
+         ShbY7d2kd+2l/ucgp0jSEyQdn0qwUloyH8pVrcTj3hsKPlShvG3xKhoenP7PTqcIDQag
+         9XCwypfAujyZMlnPP4zSYyB8tNbyYxVSxdZwBDy0zWPZ/ApyICwOuOh5UZnWAlU2A/XA
+         2C+A==
+X-Gm-Message-State: AOAM530Z1PpWmxX63DljLX059dQrqO/u42nM8SJs4btn6uOk56R9/jK5
+        MU/mGUdcnA0eLcWAt7fLEKVRfZufwfZ9700UagY=
+X-Google-Smtp-Source: ABdhPJxSW2CH4l3gAV3UQbiDhKcbIln2aHe6a5DgwtK9XXMnm22hlYpRVpHOZ1RfSDgnZMpqgrmaN7TH4tMfw5Vx2lE=
+X-Received: by 2002:a25:7c01:: with SMTP id x1mr782217ybc.357.1597413505967;
+ Fri, 14 Aug 2020 06:58:25 -0700 (PDT)
 MIME-Version: 1.0
+Received: by 2002:a25:ce42:0:0:0:0:0 with HTTP; Fri, 14 Aug 2020 06:58:25
+ -0700 (PDT)
+Reply-To: alexanadi111@gmail.com
+From:   Alex Anadi <debtpaymentsettlementcenter201@gmail.com>
+Date:   Fri, 14 Aug 2020 14:58:25 +0100
+Message-ID: <CANm_i2ZZaffMNzbC+-T=vYbsmQZ-2aL-nGfz+G8fS=qjR86-6w@mail.gmail.com>
+Subject: OK.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=208891
+Dear Sir/Madam,
 
---- Comment #21 from Mika Westerberg (mika.westerberg@linux.intel.com) ---
-Thanks for the logs. For some reason the two downstream PCIe ports (2d:00.0 and
-2d:01.0) that lead to the xHCI and the NIC get their bridge windows reset to 0
-and this prevents drivers from accessing their MMIO registers. I also see that
-you are not running the mainline kernel so can you take v5.8 vanilla kernel and
-try that and add "pcie_port_pm=off" to the kernel command line to disable
-runtime PM of those ports.
+I want to know if you authorized Ms Diane Webb to put claims for your
+funds valued at $10.6M
 
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+Regards,
+Alex Anadi.
