@@ -2,115 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A660244472
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Aug 2020 07:13:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76A3D244475
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Aug 2020 07:14:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726124AbgHNFNF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Aug 2020 01:13:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37004 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726006AbgHNFNF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Aug 2020 01:13:05 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA0EC061757
-        for <linux-usb@vger.kernel.org>; Thu, 13 Aug 2020 22:13:05 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id f26so8616621ljc.8
-        for <linux-usb@vger.kernel.org>; Thu, 13 Aug 2020 22:13:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=gzWdN7cyXENnAZZTpDeoARpqpHyMxh8WhXL19wqKyQE=;
-        b=dHHdZEeH785hRcE+UnQmgHWhJRGBEvP1vRxl4rosw0u5j945ctlYEYggF1qlRvrmd2
-         rWtfdExtullbAL520UnsP2qpcle5qao9Rbpr4rR1jPfKU2sDRbKu9nRl6ri9t1P1ao9c
-         Llr/7i5r+FCTw1VJzTsk9JpxMQUVIEzuhmSk7/KVN6PcyvorXJSONDpPx527N/PmD9jP
-         YnFzJdcRypBUir4Z75qkn7NJeiMr6s3r2IuHPVHB5k3Za3dUDB8pu4BCF74RSPFB8XVl
-         HFewVPHHbvOYVX5mXHM60o3s0ZbO0Arg+KER0g8Y1M2BKdtXGtac+DSbhdE5fP3PQAzy
-         YgTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=gzWdN7cyXENnAZZTpDeoARpqpHyMxh8WhXL19wqKyQE=;
-        b=r+Q/QYrrFH8rMMZacdDkpOmjdUqlwyLoppxAh7ys3DKt97uC3G7avYI4Dvh6GHYXA+
-         C+Mydwti2jTKhRMc35A3GliPXFFW/LRE7dAaT+WDk4ecrbLJwOy8q35ISOFxzAiQg3dC
-         7GCcSqs6fsSUdllqKoWkrfzq/Q0BeavD+hoFmsVirHgeQhakrMMsQBiNY6B4AAk/Logl
-         BMLdUMIlqtFnBLLJ0F90p3DvucXg+yTjz2M+C8reDkUCLWQqwneu+g1OiyO405QiEkCG
-         IQempdDK2w0KvZfNdNgU2z8prBAu+M7jukbZStEUbucrnkZCk3oZcnWQcYGw3nNfp4dx
-         LGcw==
-X-Gm-Message-State: AOAM530m2A+HuhBrSeX3JzdMMq8sKQKEbA+CxUHQXAickLUDG3U4EVgN
-        86a9WXykchiFJa4XaqKPgMo8itY1
-X-Google-Smtp-Source: ABdhPJy57RSx1UJXhM2ril6jPxVFjksjUswsWXM8ETMMbqrdHbtBogJLlW0hMzIPbOHHbCTmxbOUkw==
-X-Received: by 2002:a2e:a54f:: with SMTP id e15mr464536ljn.115.1597381983250;
-        Thu, 13 Aug 2020 22:13:03 -0700 (PDT)
-Received: from saruman ([194.34.132.58])
-        by smtp.gmail.com with ESMTPSA id t20sm1525827ljd.12.2020.08.13.22.13.02
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 13 Aug 2020 22:13:02 -0700 (PDT)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Linux USB <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH 11/11] dwc3: debugfs: fix checkpatch warnings
-In-Reply-To: <0f678c7a-f2e1-a8cc-2f7f-75bc92513cc7@synopsys.com>
-References: <20200813062532.829720-1-balbi@kernel.org> <20200813062532.829720-11-balbi@kernel.org> <0f678c7a-f2e1-a8cc-2f7f-75bc92513cc7@synopsys.com>
-Date:   Fri, 14 Aug 2020 08:12:50 +0300
-Message-ID: <87pn7tolnx.fsf@kernel.org>
+        id S1726213AbgHNFN6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Aug 2020 01:13:58 -0400
+Received: from smtp12.smtpout.orange.fr ([80.12.242.134]:60245 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726124AbgHNFN6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Aug 2020 01:13:58 -0400
+Received: from localhost.localdomain ([93.23.15.18])
+        by mwinf5d35 with ME
+        id FHDt230050PNgoV03HDuGY; Fri, 14 Aug 2020 07:13:56 +0200
+X-ME-Helo: localhost.localdomain
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Fri, 14 Aug 2020 07:13:56 +0200
+X-ME-IP: 93.23.15.18
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] xhci: Do not use GFP_KERNEL in (potentially) atomic context
+Date:   Fri, 14 Aug 2020 07:13:48 +0200
+Message-Id: <20200814051348.763199-1-christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+'xhci_urb_enqueue()' is passed a 'mem_flags' argument, because "URBs may be
+submitted in interrupt context" (see comment related to 'usb_submit_urb()'
+in 'drivers/usb/core/urb.c')
 
-Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
+So this flag should be used in all the calling chain.
+Up to now, 'xhci_check_maxpacket()' which is only called from
+'xhci_urb_enqueue()', uses GFP_KERNEL.
 
-> Hi Felipe,
->
-> balbi@kernel.org wrote:
->> From: Felipe Balbi <balbi@kernel.org>
->>
->> no functional changes
->>
->> Signed-off-by: Felipe Balbi <balbi@kernel.org>
->> ---
->>  drivers/usb/dwc3/debugfs.c | 56 ++++++++++++++++++--------------------
->>  1 file changed, 26 insertions(+), 30 deletions(-)
->>
->
-> These checkpatch fixes will create many conflicts to the patches I
-> submitted.
->
-> Did you get a chance to take a look at them yet before I revise them to
-> be able to rebase on your testing/next branch?
+Be safe and pass the mem_flags to this function as well.
 
-Which patches specifically do you have in mind? I can rebase my patches
-on top of yours, shouldn't be a big issue.
+Fixes: ddba5cd0aeff ("xhci: Use command structures when queuing commands on the command ring")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+I'm not 100% sure of the Fixes tag. The commit is the only that introduced
+this GFP_KERNEL, but I've not checked what was the behavior before that.
 
-=2D-=20
-balbi
+If the patch is correct, I guess that a cc stable should be welcome.
+---
+ drivers/usb/host/xhci.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 3c41b14ecce7..b536f18e4cfd 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -1382,7 +1382,7 @@ static int xhci_configure_endpoint(struct xhci_hcd *xhci,
+  * we need to issue an evaluate context command and wait on it.
+  */
+ static int xhci_check_maxpacket(struct xhci_hcd *xhci, unsigned int slot_id,
+-		unsigned int ep_index, struct urb *urb)
++		unsigned int ep_index, struct urb *urb, gfp_t mem_flags)
+ {
+ 	struct xhci_container_ctx *out_ctx;
+ 	struct xhci_input_control_ctx *ctrl_ctx;
+@@ -1413,7 +1413,7 @@ static int xhci_check_maxpacket(struct xhci_hcd *xhci, unsigned int slot_id,
+ 		 * changes max packet sizes.
+ 		 */
+ 
+-		command = xhci_alloc_command(xhci, true, GFP_KERNEL);
++		command = xhci_alloc_command(xhci, true, mem_flags);
+ 		if (!command)
+ 			return -ENOMEM;
+ 
+@@ -1509,7 +1509,7 @@ static int xhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
+ 		 */
+ 		if (urb->dev->speed == USB_SPEED_FULL) {
+ 			ret = xhci_check_maxpacket(xhci, slot_id,
+-					ep_index, urb);
++					ep_index, urb, mem_flags);
+ 			if (ret < 0) {
+ 				xhci_urb_free_priv(urb_priv);
+ 				urb->hcpriv = NULL;
+-- 
+2.25.1
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl82HVQACgkQzL64meEa
-mQa6Vw/8CCBlE7dICqxUnrFkx/GT3ZqPmodioLghnJcgTy8RbVY1vECwHlHkn9nE
-/EOCh7q9x9BdJf4cAA9vJYA26TbWYt5G5D+5+0pRlq2EiLDfMpsfw3OArfE91U0E
-GNB68Ke6R+MgS0B2q3nteb15ZNcJ+1SoRWRNEchW2qUH5GR7suwGII7KgwzOnQHQ
-IqClqQnEEU7q/MmQ5uZ6DJPjKCoailOKTh4vkytbH9HpsdgrUItm1BnKXze7wU8v
-HvmBx85k+dCgeZuTFLN29GVm7ro5iYf+LcvyP9xen0Isg6bYaXJbqfMK7V0DGmML
-OEpKSxoOh+awhyJ8cttwmegw320eesSHy1SUzd47VBZyeHQ7VC0iASW3YpKX7Sxb
-jEsZI6jghu7yNrKUSgI+6wKVL4iE+hyc+NnuwWwBHgee5Y9hpIbBpic084vSKiDu
-JXxw/csugHllxIMEiNoQZdtPIsP6tqQxXV99eIK7pCtFwE/gBQYUMrNM4MAA4x2j
-12bioE7sU8E3Dqdd3L+xB+7OFGnxjGNIDaskZBKwp2m0PoIMaDunV+2JFvm9Hq7s
-lUDuZ/4xct5hYroRTbxNmP47KRozQK7gM6xGGl/gwPqy2lqa0Hf3SupyeOmZ+EFb
-Jbk+p5rYuIJRY+kIgv1py4DCC4Lti4xDthRrYCvHVi8meiUBLng=
-=YfYA
------END PGP SIGNATURE-----
---=-=-=--
