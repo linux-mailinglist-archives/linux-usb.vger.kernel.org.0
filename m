@@ -2,156 +2,629 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDA392454FE
-	for <lists+linux-usb@lfdr.de>; Sun, 16 Aug 2020 02:06:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAA362454FB
+	for <lists+linux-usb@lfdr.de>; Sun, 16 Aug 2020 02:01:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726652AbgHPAGM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 15 Aug 2020 20:06:12 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:57929 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1725927AbgHPAGL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 15 Aug 2020 20:06:11 -0400
-Received: (qmail 52733 invoked by uid 1000); 14 Aug 2020 22:19:29 -0400
-Date:   Fri, 14 Aug 2020 22:19:29 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Cyril Roelandt <tipecaml@gmail.com>
-Cc:     USB list <linux-usb@vger.kernel.org>, sellis@redhat.com,
-        pachoramos@gmail.com, labbott@fedoraproject.org,
-        gregkh@linuxfoundation.org, javhera@gmx.com, brice.goglin@gmail.com
-Subject: Re: [BUG] Regression in Linux 5.4.17 for JMicron JMS566 enclosure
-Message-ID: <20200815021929.GC52242@rowland.harvard.edu>
-References: <20200417220957.GA4707@Susan>
- <Pine.LNX.4.44L0.2004191144550.4266-100000@netrider.rowland.org>
- <20200421030137.GA2492@Susan>
- <20200815001829.GA2786@Susan>
+        id S1726429AbgHPAB2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 15 Aug 2020 20:01:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37918 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725966AbgHPAB1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 15 Aug 2020 20:01:27 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F481C061786;
+        Sat, 15 Aug 2020 17:01:27 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id kr4so6023279pjb.2;
+        Sat, 15 Aug 2020 17:01:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:autocrypt:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=1g3oensl/bRAchzBqZesu45uMev3BVjyPYbpqq5ZTYw=;
+        b=YhQoQkjrhc4CoUh9sASFDCH0SMnhl7ngh7zBs7klpt8VO2cs4Me+6fG1qx2thMkoh3
+         hY7KfTDSTKsfzE4ynOj9QFv11SvkOsmDhPZ23vGLVxuZpYU1aNO+I+6+wdEMVlU9xVXJ
+         /K3BHd5I9Qs9KR1xpzCSd5iC6hlP2QddLTlEoe2QQBFaMcT+RG8/GFTbod0WLsFPhkut
+         y74lOQZ1dWs2dOx4+r3yJI/0BYHp5yXYVt1BmaN9Asizb6ny4GWnybxzerp+wgTPaiyH
+         g7Aqf9ewvJT+gjloF1eJRTA4RUrPTAnupmc+3NXDj/8paaj2ntOjjn86N2d0QOg4P9nG
+         ZfSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=1g3oensl/bRAchzBqZesu45uMev3BVjyPYbpqq5ZTYw=;
+        b=AQk7bvvv0aDQgeTxloEO657wBF6GRdZ1w/t4DoHkLpCBqSRD7BecaUxuptIqZJJ4BT
+         AWVtWgt7nNFVZ944UIF62jThLYva9gI8eGo14xBzSGAn8w38kVJcjyhiGaWZrEK3SG78
+         leb1UPhglEufs/FI52ven5IK5z8LR+1gDJobfxGsgad3IhY+20wxWR5L74tF9I58SnCB
+         Qha5Vus6k0ybSatxBA8gLK6GCqVgERzZccTIGBa/UrToDzC/mwBcAUFg/Ueu/ks90F5n
+         VmwPn5KjM8KwQPngU/M9u6kjzac82oEX69xfbs6UGbJXFZMvDeFjAcNfZuSoYpB8KwgV
+         fQqA==
+X-Gm-Message-State: AOAM532OkXM+ep5Nfs1EzPToO5Is4avnai2zJR0XynJ+0xyTXBtITVAV
+        tWV4MH+tj9RCRqMPDA+6DV0US0wZZ0Y=
+X-Google-Smtp-Source: ABdhPJwcOAiD2ZgSBwZ4khkwD9ryCFX4hF9DtA9TE0908GBlymopsknjXZYmiIM1v3GFBJUoUfG8mQ==
+X-Received: by 2002:a17:902:8a85:: with SMTP id p5mr6689380plo.193.1597536086014;
+        Sat, 15 Aug 2020 17:01:26 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t25sm13063178pfe.51.2020.08.15.17.01.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 15 Aug 2020 17:01:25 -0700 (PDT)
+Subject: Re: [PATCH V4] hwmon: add fan/pwm driver for corsair h100i platinum
+To:     =?UTF-8?Q?Barnab=c3=a1s_P=c5=91cze?= <pobrn@protonmail.com>,
+        jaap aarts <jaap.aarts1@gmail.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+References: <20200815211617.86565-1-jaap.aarts1@gmail.com>
+ <2uSV3Shd92hhPyvj_GgPWEXYDX0o7GczgyAP4ue9S7xTHvwhqa9-4bcdMf3XNKCZ5jkq_KN7xqDRXT_X39VTcqxdvrE5x2Dft1hqNBjhXk4=@protonmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
+ RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
+ nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
+ 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
+ gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
+ IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
+ kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
+ VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
+ jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
+ BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
+ ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
+ CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAlVcphcFCRmg06EACgkQyx8mb86fmYFg0RAA
+ nzXJzuPkLJaOmSIzPAqqnutACchT/meCOgMEpS5oLf6xn5ySZkl23OxuhpMZTVX+49c9pvBx
+ hpvl5bCWFu5qC1jC2eWRYU+aZZE4sxMaAGeWenQJsiG9lP8wkfCJP3ockNu0ZXXAXwIbY1O1
+ c+l11zQkZw89zNgWgKobKzrDMBFOYtAh0pAInZ9TSn7oA4Ctejouo5wUugmk8MrDtUVXmEA9
+ 7f9fgKYSwl/H7dfKKsS1bDOpyJlqhEAH94BHJdK/b1tzwJCFAXFhMlmlbYEk8kWjcxQgDWMu
+ GAthQzSuAyhqyZwFcOlMCNbAcTSQawSo3B9yM9mHJne5RrAbVz4TWLnEaX8gA5xK3uCNCeyI
+ sqYuzA4OzcMwnnTASvzsGZoYHTFP3DQwf2nzxD6yBGCfwNGIYfS0i8YN8XcBgEcDFMWpOQhT
+ Pu3HeztMnF3HXrc0t7e5rDW9zCh3k2PA6D2NV4fews9KDFhLlTfCVzf0PS1dRVVWM+4jVl6l
+ HRIAgWp+2/f8dx5vPc4Ycp4IsZN0l1h9uT7qm1KTwz+sSl1zOqKD/BpfGNZfLRRxrXthvvY8
+ BltcuZ4+PGFTcRkMytUbMDFMF9Cjd2W9dXD35PEtvj8wnEyzIos8bbgtLrGTv/SYhmPpahJA
+ l8hPhYvmAvpOmusUUyB30StsHIU2LLccUPPOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
+ 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
+ pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
+ J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
+ pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
+ 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
+ ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
+ I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
+ nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
+ HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
+ JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAlVcpi8FCRmg08MACgkQyx8mb86fmYHNRQ/+
+ J0OZsBYP4leJvQF8lx9zif+v4ZY/6C9tTcUv/KNAE5leyrD4IKbnV4PnbrVhjq861it/zRQW
+ cFpWQszZyWRwNPWUUz7ejmm9lAwPbr8xWT4qMSA43VKQ7ZCeTQJ4TC8kjqtcbw41SjkjrcTG
+ wF52zFO4bOWyovVAPncvV9eGA/vtnd3xEZXQiSt91kBSqK28yjxAqK/c3G6i7IX2rg6pzgqh
+ hiH3/1qM2M/LSuqAv0Rwrt/k+pZXE+B4Ud42hwmMr0TfhNxG+X7YKvjKC+SjPjqp0CaztQ0H
+ nsDLSLElVROxCd9m8CAUuHplgmR3seYCOrT4jriMFBtKNPtj2EE4DNV4s7k0Zy+6iRQ8G8ng
+ QjsSqYJx8iAR8JRB7Gm2rQOMv8lSRdjva++GT0VLXtHULdlzg8VjDnFZ3lfz5PWEOeIMk7Rj
+ trjv82EZtrhLuLjHRCaG50OOm0hwPSk1J64R8O3HjSLdertmw7eyAYOo4RuWJguYMg5DRnBk
+ WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
+ HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+Message-ID: <99ee823b-b1fa-74a0-e377-31dc97e4d985@roeck-us.net>
+Date:   Sat, 15 Aug 2020 17:01:23 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200815001829.GA2786@Susan>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <2uSV3Shd92hhPyvj_GgPWEXYDX0o7GczgyAP4ue9S7xTHvwhqa9-4bcdMf3XNKCZ5jkq_KN7xqDRXT_X39VTcqxdvrE5x2Dft1hqNBjhXk4=@protonmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Aug 15, 2020 at 02:18:29AM +0200, Cyril Roelandt wrote:
+On 8/15/20 3:54 PM, Barnabás Pőcze wrote:
 > Hello,
 > 
-> On 2020-04-21 05:01, Cyril Roelandt wrote:
-> > On 2020-04-19 12:03, Alan Stern wrote:
-> > > [...]
-> > > 
-> > > Below is a patch which will tell the kernel that the JMS566's FUA 
-> > > support is broken.  Let me know whether it fixes the problem.
-> > > 
-> > 
-> > I applied your patch on top of v5.4 and was able to use the enclosure.
-> 
-> Well, I guess I made a mistake. I tried your patch on top of v5.4
-> instead of v5.4.17, which means I tried your fix for a usb-storage issue
-> on a version of the kernel that still allowed my enclosure to use UAS.
-> Oops.
-> 
-> Brice Goglin (CCed) and I can witness the same issue on recent kernels:
-> 
-> $ uname -a
-> Linux Susan 5.7.0-2-amd64 #1 SMP Debian 5.7.10-1 (2020-07-26) x86_64 GNU/Linux
-> 
-> Once I plug the USB drive:
-> 
-> # dmesg -T
-> [Fri Aug 14 21:20:20 2020] usb 4-2: new SuperSpeed Gen 1 USB device number 2 using xhci_hcd
-> [Fri Aug 14 21:20:20 2020] usb 4-2: New USB device found, idVendor=357d, idProduct=7788, bcdDevice= 1.14
-> [Fri Aug 14 21:20:20 2020] usb 4-2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-> [Fri Aug 14 21:20:20 2020] usb 4-2: Product: USB to ATA/ATAPI Bridge
-> [Fri Aug 14 21:20:20 2020] usb 4-2: Manufacturer: JMicron
-> [Fri Aug 14 21:20:20 2020] usb 4-2: SerialNumber: 74D7851513309E5
-> [Fri Aug 14 21:20:20 2020] usbcore: registered new interface driver usb-storage
-> [Fri Aug 14 21:20:20 2020] usb 4-2: UAS is blacklisted for this device, using usb-storage instead
-> [Fri Aug 14 21:20:20 2020] usbcore: registered new interface driver uas
-> #
-> 
-> "fdisk -l" does not show the drive. No new partitions are listed in
-> /dev/sd*. 
-> 
-> Here is the usbmon trace for the faulty enclosure (idVendor=357d,
-> idProduct=7788, bcdDevice=1.14):
+> there are a couple things that I did not notice in v3, or were introduced in
+> this version of the patch.
 > 
 > 
-> ffff8f0014b340c0 3930083831 S Ci:4:001:0 s a3 00 0000 0001 0004 4 <
-> ffff8f0014b340c0 3930083883 C Ci:4:001:0 0 4 = a0020000
-> ffff8f0014b340c0 3930083897 S Ci:4:001:0 s a3 00 0000 0002 0004 4 <
-> ffff8f0014b340c0 3930083909 C Ci:4:001:0 0 4 = 03020100
-> ffff8f0014b340c0 3930083918 S Co:4:001:0 s 23 01 0010 0002 0000 0
-> ffff8f0014b340c0 3930083930 C Co:4:001:0 0 0
-> ffff8f0014b340c0 3930083940 S Ci:4:001:0 s a3 00 0000 0003 0004 4 <
-> ffff8f0014b340c0 3930083951 C Ci:4:001:0 0 4 = a0020000
-> ffff8f0014b340c0 3930083959 S Ci:4:001:0 s a3 00 0000 0004 0004 4 <
-> ffff8f0014b340c0 3930083969 C Ci:4:001:0 0 4 = a0020000
-> ffff8f00151b3d80 3930190644 S Ii:4:001:1 -115:2048 4 <
-> ffff8f0014b340c0 3930190706 S Ci:4:001:0 s a3 00 0000 0002 0004 4 <
-> ffff8f0014b340c0 3930190741 C Ci:4:001:0 0 4 = 03020000
-> ffff8f0014b340c0 3930190891 S Ci:4:001:0 s a3 00 0000 0002 0004 4 <
-> ffff8f0014b340c0 3930190923 C Ci:4:001:0 0 4 = 03020000
-> ffff8f0014b340c0 3930190938 S Co:4:001:0 s 23 03 0004 0002 0000 0
-> ffff8f0014b340c0 3930190992 C Co:4:001:0 0 0
-> ffff8f0014b340c0 3930258677 S Ci:4:001:0 s a3 00 0000 0002 0004 4 <
-> ffff8f0014b340c0 3930258716 C Ci:4:001:0 0 4 = 03021000
-> ffff8f0014b340c0 3930258729 S Co:4:001:0 s 23 01 0014 0002 0000 0
-> ffff8f0014b340c0 3930258741 C Co:4:001:0 0 0
-> ffff8f0014b340c0 3930258748 S Co:4:001:0 s 23 01 001d 0002 0000 0
-> ffff8f0014b340c0 3930258758 C Co:4:001:0 0 0
-> ffff8f0014b340c0 3930258765 S Co:4:001:0 s 23 01 0019 0002 0000 0
-> ffff8f0014b340c0 3930258775 C Co:4:001:0 0 0
-> ffff8f0014b340c0 3930258785 S Co:4:001:0 s 23 01 0010 0002 0000 0
-> ffff8f0014b340c0 3930258795 C Co:4:001:0 0 0
-> ffff8f0014b340c0 3930258805 S Ci:4:001:0 s a3 00 0000 0002 0004 4 <
-> ffff8f0014b340c0 3930258816 C Ci:4:001:0 0 4 = 03020000
-> ffff8f0014b340c0 3930338684 S Ci:4:003:0 s 80 06 0100 0000 0008 8 <
-> ffff8f0014b340c0 3930338776 C Ci:4:003:0 0 8 = 12010003 00000009
-> ffff8f0014b340c0 3930338799 S Co:4:003:0 s 00 31 0028 0000 0000 0
-> ffff8f0014b340c0 3930338842 C Co:4:003:0 0 0
-> ffff8f0014b340c0 3930338856 S Ci:4:003:0 s 80 06 0100 0000 0012 18 <
-> ffff8f0014b340c0 3930338934 C Ci:4:003:0 0 18 = 12010003 00000009 7d358877 14010102 0301
-> ffff8f0014b340c0 3930338957 S Ci:4:003:0 s 80 06 0f00 0000 0005 5 <
-> ffff8f0014b340c0 3930339013 C Ci:4:003:0 0 5 = 050f1600 02
-> ffff8f0014b340c0 3930339033 S Ci:4:003:0 s 80 06 0f00 0000 0016 22 <
-> ffff8f0014b340c0 3930339110 C Ci:4:003:0 0 22 = 050f1600 02071002 02000000 0a100300 0e00010a 2000
-> ffff8f0014b340c0 3930339139 S Ci:4:003:0 s 80 06 0200 0000 0009 9 <
-> ffff8f0014b340c0 3930339226 C Ci:4:003:0 0 9 = 09027900 010104c0 01
-> ffff8f0014b340c0 3930339243 S Ci:4:003:0 s 80 06 0200 0000 0079 121 <
-> ffff8f0014b340c0 3930339406 C Ci:4:003:0 0 121 = 09027900 010104c0 01090400 00020806 50060705 81020004 0006300f 00000007
-> ffff8f0014b34600 3930339428 S Ci:4:003:0 s 80 06 0300 0000 00ff 255 <
-> ffff8f0014b34600 3930339508 C Ci:4:003:0 0 4 = 04030904
-> ffff8f0014b34600 3930339519 S Ci:4:003:0 s 80 06 0302 0409 00ff 255 <
-> ffff8f0014b34600 3930339655 C Ci:4:003:0 0 48 = 30035500 53004200 20007400 6f002000 41005400 41002f00 41005400 41005000
-> ffff8f0014b34600 3930339669 S Ci:4:003:0 s 80 06 0301 0409 00ff 255 <
-> ffff8f0014b34600 3930339764 C Ci:4:003:0 0 16 = 10034a00 4d006900 63007200 6f006e00
-> ffff8f0014b34600 3930339777 S Ci:4:003:0 s 80 06 0303 0409 00ff 255 <
-> ffff8f0014b34600 3930339873 C Ci:4:003:0 0 32 = 20033700 34004400 37003800 35003100 35003100 33003300 30003900 45003500
-> ffff8f0014b34600 3930341327 S Co:4:003:0 s 00 09 0001 0000 0000 0
-> ffff8f0014b34600 3930341379 C Co:4:003:0 0 0
-> ffff8f0014b34600 3930341397 S Ci:4:003:0 s 80 06 0304 0409 00ff 255 <
-> ffff8f0014b34600 3930341500 C Ci:4:003:0 0 34 = 22035500 53004200 20004d00 61007300 73002000 53007400 6f007200 61006700
-> ffff8f0014b34600 3930341512 S Co:4:003:0 s 00 30 0000 0000 0006 6 = 0a0a0002 0002
-> ffff8f0014b34600 3930341554 C Co:4:003:0 0 6 >
-> ffff8f0014b34600 3930341597 S Co:4:001:0 s 23 03 0017 3202 0000 0
-> ffff8f0014b34600 3930341615 C Co:4:001:0 0 0
-> ffff8f0014b34600 3930341624 S Co:4:003:0 s 00 03 0030 0000 0000 0
-> ffff8f0014b34600 3930341657 C Co:4:003:0 0 0
-> ffff8f0014b34600 3930341665 S Co:4:003:0 s 00 30 0000 0000 0006 6 = 0a0a0002 0002
-> ffff8f0014b34600 3930341708 C Co:4:003:0 0 6 >
-> ffff8f0014b34600 3930341750 S Co:4:001:0 s 23 03 0018 2802 0000 0
-> ffff8f0014b34600 3930341762 C Co:4:001:0 0 0
-> ffff8f0014b34600 3930341769 S Co:4:003:0 s 00 03 0031 0000 0000 0
-> ffff8f0014b34600 3930341803 C Co:4:003:0 0 0
-> ffff8f0014b34600 3930341851 S Ci:4:003:0 s 80 06 0306 0409 00ff 255 <
-> ffff8f0014b34600 3930341965 C Ci:4:003:0 0 48 = 30034d00 53004300 20004200 75006c00 6b002d00 4f006e00 6c007900 20005400
+>> [...]
+>> +
+>> +#define max_fan_count 2
+>> +#define max_pwm_channel_count max_fan_count
+>> +
+> 
+> I think these should be all-caps as per
+> https://www.kernel.org/doc/html/latest/process/coding-style.html#macros-enums-and-rtl
+> 
+> 
+>> [...]
+>> +
+>> +#define default_curve quiet_curve
+>> +
+> 
+> I am inclined to say that this should be all-caps as well.
+> 
+> 
+>> [...]
+>> +static int transfer_usb(struct hydro_i_pro_device *hdev,
+>> +			unsigned char *send_buf, unsigned char *recv_buf,
+>> +			int send_len, int recv_len)
+>> +{
+>> +	int retval;
+>> +	int wrote;
+>> +	int sndpipe = usb_sndbulkpipe(hdev->udev, hdev->bulk_out_endpointAddr);
+>> +	int rcvpipe = usb_rcvbulkpipe(hdev->udev, hdev->bulk_in_endpointAddr);
+>> +
+>> +	retval = usb_bulk_msg(hdev->udev, sndpipe, send_buf, send_len, &wrote,
+>> +			      BULK_TIMEOUT);
+>> +	if (retval)
+>> +		return retval;
+>> +
+>> +	retval = usb_bulk_msg(hdev->udev, rcvpipe, recv_buf, recv_len, &wrote,
+>> +			      BULK_TIMEOUT);
+>> +	if (retval)
+>> +		return retval;
+>> +	return 0;
+> 
+> The preceding 5 lines could be simplified to the following:
+> 
+> return usb_bulk_msg(hdev->udev, rcvpipe, recv_buf, recv_len, &wrote,
+> 		    BULK_TIMEOUT);
+> 
+> And if you don't use 'wrote', you can simply pass 'NULL' as the 5th argument of
+> usb_bulk_msg(). Although you should either check the value or set 'recv_buf' to
+> all zeroes in the calling function to avoid the possibility of a failed transaction
+> being recognized as successful.
+> 
+> 
+>> +}
+>> +
+>> +static int set_fan_pwm_curve(struct hydro_i_pro_device *hdev,
+>> +			     struct hwmon_fan_data *fan_data,
+>> +			     struct curve_point point[7])
+>> +{
+>> +	int retval;
+>> +	unsigned char *send_buf = hdev->bulk_out_buffer;
+>> +	unsigned char *recv_buf = hdev->bulk_in_buffer;
+>> +
+>> +	memcpy(fan_data->curve, point, sizeof(struct curve_point) * 7);
+>> +
+> 
+> Personally, I'd use 'sizeof(fan_data->curve)' here. And consider making that
+> seven a named constant.
+> 
+> Beware that even though the size is there in 'struct curve_point point[7]',
+> you can still pass arrays that are smaller than that. Consider using
+> 'struct curve_point point[static 7]'.
+> 
+> 
+>> +	send_buf[0] = PWM_FAN_CURVE_CMD;
+>> +	send_buf[1] = fan_data->fan_channel;
+>> +	send_buf[2] = point[0].temp;
+>> +	send_buf[3] = point[1].temp;
+>> +	send_buf[4] = point[2].temp;
+>> +	send_buf[5] = point[3].temp;
+>> +	send_buf[6] = point[4].temp;
+>> +	send_buf[7] = point[5].temp;
+>> +	send_buf[8] = point[6].temp;
+>> +	send_buf[9] = point[0].pwm;
+>> +	send_buf[10] = point[1].pwm;
+>> +	send_buf[11] = point[2].pwm;
+>> +	send_buf[12] = point[3].pwm;
+>> +	send_buf[13] = point[4].pwm;
+>> +	send_buf[14] = point[5].pwm;
+>> +	send_buf[15] = point[6].pwm;
+>> +
+>> +	retval = transfer_usb(hdev, send_buf, recv_buf, 16, 4);
+>> +	if (retval)
+>> +		return retval;
+>> +
+>> +	if (!check_succes(send_buf[0], recv_buf)) {
+>> +		dev_warn(
+>> +			&hdev->udev->dev,
+>> +			"failed setting fan pwm/temp curve for %s on channel %d %d,%d,%d\n",
+>> +			hdev->config->name, recv_buf[3], recv_buf[0],
+>> +			recv_buf[1], recv_buf[2]);
+>> +		return -EINVAL;
+>> +	}
+>> +	return 0;
+>> +}
+>> +
+>> [...]
+>> +
+>> +static int set_fan_target_pwm(struct hydro_i_pro_device *hdev,
+>> +			      struct hwmon_fan_data *fan_data, u8 val)
+>> +{
+>> +	int retval;
+>> +	unsigned char *send_buf = hdev->bulk_out_buffer;
+>> +	unsigned char *recv_buf = hdev->bulk_in_buffer;
+>> +
+>> +	fan_data->fan_target = 0;
+>> +	fan_data->fan_pwm_target = val;
+>> +
+>> +	send_buf[0] = PWM_FAN_TARGET_CMD;
+>> +	send_buf[1] = fan_data->fan_channel;
+>> +	send_buf[3] = fan_data->fan_pwm_target;
+>> +
+>> +	retval = transfer_usb(hdev, send_buf, recv_buf, 4, 6);
+>> +	if (retval)
+>> +		return retval;
+>> +
+>> +	if (!check_succes(send_buf[0], recv_buf)) {
+> 
+> Any reason why you don't check recv_buf[3] as in get_fan_current_rpm()?
+> (same applies to set_fan_pwm_curve() and set_fan_target_rpm())
+> 
+> 
+>> +		dev_warn(
+>> +			&hdev->udev->dev,
+>> +			"failed setting fan pwm for %s on channel %d %d,%d,%d\n",
+>> +			hdev->config->name, recv_buf[3], recv_buf[0],
+>> +			recv_buf[1], recv_buf[2]);
+>> +		return -EINVAL;
+>> +	}
+>> +	return 0;
+>> +}
+>> +
+>> [...]
+>> +
+>> +static int hwmon_write(struct device *dev, enum hwmon_sensor_types type,
+>> +		       u32 attr, int channel, long val)
+>> +{
+>> +	struct hwmon_data *data = dev_get_drvdata(dev);
+>> +	struct hydro_i_pro_device *hdev = data->hdev;
+>> +	struct hwmon_fan_data *fan_data;
+>> +	int retval = 0;
+>> +
+>> +	switch (type) {
+>> +	case hwmon_fan:
+>> +		switch (attr) {
+>> +		case hwmon_fan_target:
+>> +			fan_data = data->channel_data[channel];
+>> +			if (fan_data->mode != 1)
+>> +				return -EINVAL;
+>> +
+>> +			if (val < (2 ^ 16) - 2)
+> 
+> Did you intend to write 2 to the power of 16? Because 2^16 is not that.
+> 2 to the power 16 may be written as '(1 << 16)' or 'BIT(16)'
+> (you may need to include linux/bits.h for the latter)
+> 
+> But something like this is my suggestion:
+> 
+> if (val < 0 || 0xFFFF < val)
+> 	return -EINVAL;
+> 
 
-Is that really where the trace stops?  This is before any of the 
-mass-storage features on the device have been used.
+I would suggest to use clamp_val; we don't expect users to know device
+specific limits. Also, FTR, I won't accept any Yoda programming.
 
-Can you get a similar usbmon trace for the same device under a kernel 
-where it works okay?
+Guenter
 
-Alan Stern
+> Though, I suspect the fans won't go up to 60000 RPM or so.
+> 
+> 
+>> +				return -EINVAL;
+>> +
+>> +			retval = acquire_lock(hdev);
+>> +			if (retval)
+>> +				goto exit;
+>> +
+>> +			retval = set_fan_target_rpm(hdev, fan_data, val);
+>> +			if (retval)
+>> +				goto cleanup;
+>> +
+>> +			break;
+>> +		default:
+>> +			return -EINVAL;
+>> +		}
+>> +		break;
+>> +	case hwmon_pwm:
+>> +		switch (attr) {
+>> +		case hwmon_pwm_input:
+>> +			fan_data = data->channel_data[channel];
+>> +			if (fan_data->mode != 1)
+>> +				return -EINVAL;
+>> +
+>> +			if (val < (2 ^ 8) - 2)
+> 
+> Same here, 2^8 != 2 to the power of 8.
+> 
+> I suggest you simply do something like the following:
+> 
+> if (val < 0 || 0xFF < val)
+> 	return -EINVAL;
+> 
+> 
+>> +				return -EINVAL;
+>> +
+>> +			retval = acquire_lock(hdev);
+>> +			if (retval)
+>> +				goto exit;
+>> +
+>> +			retval = set_fan_target_pwm(hdev, fan_data, val);
+>> +			if (retval)
+>> +				goto cleanup;
+>> +
+>> +			break;
+>> +		case hwmon_pwm_enable:
+>> +			fan_data = data->channel_data[channel];
+>> +
+>> +			switch (val) {
+>> +			case 0:
+>> +				retval = acquire_lock(hdev);
+>> +				if (retval)
+>> +					goto exit;
+>> +
+>> +				retval = set_fan_pwm_curve(hdev, fan_data,
+>> +							   default_curve);
+>> +				if (retval)
+>> +					goto cleanup;
+>> +				fan_data->mode = 0;
+>> +				break;
+>> +			case 1:
+>> +				retval = acquire_lock(hdev);
+>> +				if (retval)
+>> +					goto exit;
+>> +
+>> +				if (fan_data->fan_target != 0) {
+>> +					retval = set_fan_target_rpm(
+>> +						hdev, fan_data,
+>> +						fan_data->fan_target);
+>> +					if (retval)
+>> +						goto cleanup;
+>> +				} else if (fan_data->fan_pwm_target != 0) {
+>> +					retval = set_fan_target_pwm(
+>> +						hdev, fan_data,
+>> +						fan_data->fan_pwm_target);
+>> +					if (retval)
+>> +						goto cleanup;
+>> +				}
+>> +				fan_data->mode = 1;
+>> +				break;
+>> +			case 2:
+>> +				retval = acquire_lock(hdev);
+>> +				if (retval)
+>> +					goto exit;
+>> +
+>> +				retval = set_fan_pwm_curve(hdev, fan_data,
+>> +							   default_curve);
+>> +				if (retval)
+>> +					goto cleanup;
+>> +				fan_data->mode = 2;
+>> +				break;
+> 
+> If I see it correctly, case 0 and case 2 are the basically the same, no?
+> If so, then you could merge them.
+> 
+> 
+>> +			default:
+>> +				return -EINVAL;
+>> +			}
+>> +			break;
+>> +		default:
+>> +			return -EINVAL;
+>> +		}
+>> +		break;
+>> +	default:
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +cleanup:
+>> +	mutex_unlock(&hdev->io_mutex);
+>> +	usb_autopm_put_interface(hdev->interface);
+>> +exit:
+>> +	return retval;
+>> +}
+>> +
+>> +static int hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+>> +		      u32 attr, int channel, long *val)
+>> +{
+>> +	struct hwmon_data *data = dev_get_drvdata(dev);
+>> +	struct hydro_i_pro_device *hdev = data->hdev;
+>> +	struct hwmon_fan_data *fan_data;
+>> +	int retval = 0;
+>> +
+>> +	switch (type) {
+>> +	case hwmon_fan:
+>> +		switch (attr) {
+>> +		case hwmon_fan_input:
+>> +			fan_data = data->channel_data[channel];
+>> +
+>> +			retval = acquire_lock(hdev);
+>> +			if (retval)
+>> +				goto exit;
+>> +
+>> +			retval = get_fan_current_rpm(hdev, fan_data, val);
+>> +			if (retval)
+>> +				goto cleanup;
+>> +
+>> +			goto cleanup;
+> 
+> The preceding 3 lines can be replaced by a single 'break' given that the
+> 'goto exit' is replaced by a 'break' after the 'switch (attr)'
+> 
+> 
+>> +		case hwmon_fan_target:
+>> +			fan_data = data->channel_data[channel];
+>> +			if (fan_data->mode != 1) {
+>> +				*val = 0;
+>> +				goto exit;
+>> +			}
+>> +			*val = fan_data->fan_target;
+>> +			goto exit;
+>> +		case hwmon_fan_min:
+>> +			*val = 200;
+>> +			goto exit;
+>> +
+>> +		default:
+>> +			return -EINVAL;
+>> +		}
+>> +		goto exit;
+>> +
+> 
+> I don't see why this goto is needed here. It has no effect on the control flow.
+> 
+> 
+>> +	case hwmon_pwm:
+>> +		switch (attr) {
+>> +		case hwmon_pwm_enable:
+>> +			fan_data = data->channel_data[channel];
+>> +			*val = fan_data->mode;
+>> +			goto exit;
+>> +		default:
+>> +			return -EINVAL;
+>> +		}
+>> +		goto exit;
+>> +
+>> +	default:
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +cleanup:
+>> +	mutex_unlock(&hdev->io_mutex);
+>> +	usb_autopm_put_interface(hdev->interface);
+>> +exit:
+>> +	return retval;
+>> +}
+>> +
+>> +static const struct hwmon_ops i_pro_ops = {
+>> +	.is_visible = hwmon_is_visible,
+>> +	.read = hwmon_read,
+>> +	.write = hwmon_write,
+>> +};
+>> +
+>> +static void hwmon_init(struct hydro_i_pro_device *hdev)
+>> +{
+>> +	u8 fan_id;
+>> +	struct device *hwmon_dev;
+>> +	struct hwmon_fan_data *fan;
+>> +	struct hwmon_data *data = devm_kzalloc(
+>> +		&hdev->udev->dev, sizeof(struct hwmon_data), GFP_KERNEL);
+>> +	struct hwmon_chip_info *hwmon_info = devm_kzalloc(
+>> +		&hdev->udev->dev, sizeof(struct hwmon_chip_info), GFP_KERNEL);
+>> +
+>> +	/* You did something bad!! Either adjust  max_fan_count or the fancount for the config!*/
+>> +	WARN_ON(hdev->config->fancount >= max_pwm_channel_count);
+> 
+> If this warning is triggered, then that leads to the overflow of 'data->channel_data' later on.
+> 
+> 
+>> +	data->channel_count = hdev->config->fancount;
+>> +
+>> +	/* For each fan create a data channel a fan config entry and a pwm config entry */
+>> +	for (fan_id = 0; fan_id < data->channel_count; fan_id++) {
+>> +		fan = devm_kzalloc(&hdev->udev->dev,
+>> +				   sizeof(struct hwmon_fan_data), GFP_KERNEL);
+>> +		fan->fan_channel = fan_id;
+>> +		fan->mode = 0;
+>> +		data->channel_data[fan_id] = fan;
+>> +	}
+>> +
+>> +	hwmon_info->ops = &i_pro_ops;
+>> +	hwmon_info->info = hdev->config->hwmon_info;
+>> +
+>> +	data->hdev = hdev;
+>> +	hwmon_dev = devm_hwmon_device_register_with_info(
+>> +		&hdev->udev->dev, hdev->config->name, data, hwmon_info, NULL);
+>> +	dev_info(&hdev->udev->dev, "setup hwmon for %s\n", hdev->config->name);
+>> +}
+>> +
+> 
+> There is absolutely no error checking in hwmon_init().
+> 
+> 
+>> +const int USB_VENDOR_ID_CORSAIR = 0x1b1c;
+>> +const int USB_PRODUCT_ID_H100I_PRO = 0x0c15;
+> 
+> I think these should be either - preferably - #define's or 'static' at least.
+> 
+> 
+>> +/*
+>> + * Devices that work with this driver.
+>> + * More devices should work, however none have been tested.
+>> + */
+>> +static const struct usb_device_id astk_table[] = {
+>> +	{ USB_DEVICE(USB_VENDOR_ID_CORSAIR, USB_PRODUCT_ID_H100I_PRO),
+>> +	  .driver_info = (kernel_ulong_t)&config_table[0] },
+>> +	{},
+>> +};
+>> +
+>> +MODULE_DEVICE_TABLE(usb, astk_table);
+>> +
+>> +static int init_device(struct usb_device *udev)
+>> +{
+>> +	int retval;
+>> +
+>> +	/*
+>> +	 * This is needed because when running windows in a vm with proprietary driver
+>> +	 * and you switch to this driver, the device will not respond unless you run this.
+>> +	 */
+>> +	retval = usb_control_msg(udev, usb_sndctrlpipe(udev, 0), 0x00, 0x40,
+>> +				 0xffff, 0x0000, 0, 0, 0);
+>> +	/*this always returns error*/
+>> +	if (retval)
+>> +		;
+> 
+> Shouldn't you check if it's the "good" kind of error?
+> 
+> 
+>> +
+>> +	retval = usb_control_msg(udev, usb_sndctrlpipe(udev, 0), 0x02, 0x40,
+>> +				 0x0002, 0x0000, 0, 0, 0);
+>> +	return retval;
+>> +}
+>> +
+>> +static int deinit_device(struct usb_device *udev)
+>> +{
+>> +	return usb_control_msg(udev, usb_sndctrlpipe(udev, 0), 0x02, 0x40,
+>> +			       0x0004, 0x0000, 0, 0, 0);
+>> +}
+>> +
+>> +static void astk_delete(struct hydro_i_pro_device *hdev)
+>> +{
+>> +	usb_put_intf(hdev->interface);
+>> +	usb_put_dev(hdev->udev);
+>> +	kfree(hdev->bulk_in_buffer);
+>> +	kfree(hdev->bulk_out_buffer);
+>> +	kfree(hdev);
+>> +}
+>> +
+> 
+> I think you should call mutex_destroy() in astk_delete().
+> 
+> 
+>> +static int astk_probe(struct usb_interface *interface,
+>> +		      const struct usb_device_id *id)
+>> +{
+>> +	struct hydro_i_pro_device *hdev =
+>> +		kzalloc(sizeof(struct hydro_i_pro_device), GFP_KERNEL);
+> 
+> I think this should be modifed to use 'sizeof(*ptr)' as per
+> https://www.kernel.org/doc/html/latest/process/coding-style.html#allocating-memory
+> (and everything else that uses the same pattern)
+> 
+> 
+> 
+>> [...]
+>> +	retval = init_device(hdev->udev);
+>> +	if (retval) {
+>> +		dev_err(&interface->dev, "failed initialising %s\n",
+>> +			hdev->config->name);
+> 
+> If you print the error code, that helps immensely with troubleshooting.
+> 
+> 
+>> +		kfree(hdev);
+>> +		goto exit;
+>> +	}
+>> +
+>> +	hwmon_init(hdev);
+>> +
+>> +	usb_set_intfdata(interface, hdev);
+>> +	mutex_init(&hdev->io_mutex);
+>> +exit:
+>> +	return retval;
+>> +}
+>> +
+>> [...]
+> 
+> 
+> Barnabás Pőcze
+> 
+
