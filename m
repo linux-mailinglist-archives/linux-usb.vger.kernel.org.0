@@ -2,132 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5445524593A
-	for <lists+linux-usb@lfdr.de>; Sun, 16 Aug 2020 21:11:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C16924593F
+	for <lists+linux-usb@lfdr.de>; Sun, 16 Aug 2020 21:23:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727973AbgHPTLb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 16 Aug 2020 15:11:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43748 "EHLO
+        id S1729117AbgHPTXn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 16 Aug 2020 15:23:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726699AbgHPTLb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 16 Aug 2020 15:11:31 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014FCC061786;
-        Sun, 16 Aug 2020 12:11:31 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id y2so6118607ljc.1;
-        Sun, 16 Aug 2020 12:11:30 -0700 (PDT)
+        with ESMTP id S1725873AbgHPTXl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 16 Aug 2020 15:23:41 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9181AC061786;
+        Sun, 16 Aug 2020 12:23:40 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id t15so10597542edq.13;
+        Sun, 16 Aug 2020 12:23:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=9xELaxhSwN3Qs3FBQinUtIi3lBYmbmXSxPDV/snQ3xc=;
-        b=m+N/eDa2PDSMrVjR/fs0xkmaNky8bVyKFQBNfLEKt5jZhX+C6S6liAbuNC/V6sBbvY
-         dluoLpbvZtT2Rn841Jd7rv5xoGPB4nU1d8XiHNU4uo+xpi8IlIDqS5IICWGbku3T9eA8
-         c0cAuGiG2YdHUwMOPu1Dl8gKG4OtCpBIM7mZQr3COLKEob6bum0EvmF4eh266y+6qlZy
-         IEu4VU0ISylvmxyHJxBkTxekj1r8VZLYDPP8nQ6g9B4CkGf8RW9PbDAHRu3/ENRXvhBL
-         SpzGA6a4Si8XS4Wg6fitSoef9V1O5Aqc4tOAgj5viHGvNvohBsnEsqqjUTx8uppEjbKf
-         0/wg==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=OI2ilMyT/T1bEBIiLjqqyPUgBfPn1XCfDm/gphRm5kg=;
+        b=Wy7jjy9Gv9ZxM3v3dIC72o7hwek0w6VthWQA6+9Rhgr0UP6FbU6fRqt+unlz20F1Nl
+         ntLm4n3zhGJiyeQUS3OwrfN1eE5QJc/oJibwlek9/ZJrbfCv3rS7C1TyWoAC68wixtV+
+         2mO+VM2PXpe6Kx/PTnqvaw+Pi88NIAaopHQyUJQddN7fpxtPJyRUdOewpr1I8CTJXMX9
+         2Uj4Y3RpPkGK9QLSSTdWxSEGxqeW1Q95YbYYb1grTJG5NHI2253mPW5qIt+8jCrb+20V
+         vVp+/XNv+AfhZYgzTP+7yu2X6476i5Fj1qbCdA+FtmONj2OllsNzBIyaW9fzeSuQdt7I
+         lVHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=9xELaxhSwN3Qs3FBQinUtIi3lBYmbmXSxPDV/snQ3xc=;
-        b=Qb/jJlZf/aOeY4kRZGkm2lbdqpXQz6NorJ8+1fgyy4Yd5LtANlpNLHcna/cyNVbipL
-         ld2CG4WU3yLcRvyQQymkcArBwUootXcrjf0ABVGrkSGnsvSS96zlN0g7ytpLpr/pv0Mz
-         NPpKPWNqJmr8ixIsv9ftdW97nd9Mb6dKYyfepHb91UlFmWOh1mTl0ZypTcr90u4jn15o
-         /u8egKYieEWIsj4RzMbAYYYmu56D3p/CDVWhhjaJs4nAP++4angd6LMPPiUvUny5xYHE
-         X8pwCskTGmO4wNTlUKjq+PKGvtw8BiHMrB88068NXMjyQbq4cSsPh6t04ZU4P+VknvUx
-         xBFQ==
-X-Gm-Message-State: AOAM530LRNdRXiCMzNaoRfpYo8V6ruZ/wMxN/a+jOR7ILIcgV0gzRWrZ
-        Q20NLeDFoC6WkXPs2TiYcWfr/fFLUqrqzuu9IjQ=
-X-Google-Smtp-Source: ABdhPJxV8RZbeirR0TTSzwYmpWXw3SR34u9HgX4QKlWEd7KI6IVUpdYb9m0sadllfRbebyavxM+XOOsJtNIEou3HoWA=
-X-Received: by 2002:a2e:3817:: with SMTP id f23mr5437690lja.118.1597605087936;
- Sun, 16 Aug 2020 12:11:27 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=OI2ilMyT/T1bEBIiLjqqyPUgBfPn1XCfDm/gphRm5kg=;
+        b=pDu/jf5+Scd6//TuLq8QgC5v6qhjz0NwNEnvLPfp3A7Nijl8G0/yVXZIAr4jS1on2G
+         V2eRnmyGMp6f70XoBc8klv17WKivLpHesTAk+ixD9FyIp7pi2HTiWhoDaMSFnnjUE2uZ
+         RC6yWNd1kZ2rUoAKddqKQYxRrft2yESfbKKjhnIXrfpxdNHgp+3hBKCmh4kxkfUZWD3W
+         CD1aVnq+8uaHl1KS2JJ/jvgd572zspfIaAv/spCGbf653ZNt2M++JbS3TorR+62VGVgx
+         7K2Wj02kT8zs4O6B4ZtIu13/+UIfki+mt+TEzDgBwFvUIUEJmhwIfe755Nj7sdwvPKrZ
+         Ze7A==
+X-Gm-Message-State: AOAM531iUV/ZmQrdQRZp+n4JRHV/uEqn4NH1tWvghPZhbWtJ942dSQiS
+        HD8u20o+NEC8lSH+bmNfx7g=
+X-Google-Smtp-Source: ABdhPJxKWoES0hitdZBraV7D3zk3EQ6vqSWM5VgAcaUp0prurr7PKW8o5uA2fGbnR0sfGdHRProVYw==
+X-Received: by 2002:a05:6402:7d5:: with SMTP id u21mr12493663edy.341.1597605819001;
+        Sun, 16 Aug 2020 12:23:39 -0700 (PDT)
+Received: from [192.168.2.1] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id dr21sm13649255ejc.112.2020.08.16.12.23.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Aug 2020 12:23:38 -0700 (PDT)
+Subject: Re: [PATCH 1/3] usb: dwc3: of-simple: Add compatible for rk3328
+To:     Cameron Nemo <cnemo@tutanota.com>,
+        Devicetree <devicetree@vger.kernel.org>,
+        Linux Arm Kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Rockchip <linux-rockchip@lists.infradead.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     robh+dt@kernel.org, Heiko <heiko@sntech.de>, balbi@kernel.org,
+        gregkh@linuxfoundation.org
+References: <MEsGWB_--3-2@tutanota.com>
+From:   Johan Jonker <jbx6244@gmail.com>
+Message-ID: <4482f04a-d75d-6ede-acae-eb3fc7364130@gmail.com>
+Date:   Sun, 16 Aug 2020 21:23:36 +0200
+User-Agent: Mozilla/5.0 (X11; Linux i686; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-References: <20200816164616.417500-1-jaap.aarts1@gmail.com> <odhPvTQHPORgr-0oIThKQfchHX1_snHADl8aZCGSc771d492UJqUwFJEuC3PkRwlwQmxXU-OZJfvsvbvBFANCk_JO2yAfcXI82q3FyxwtF8=@protonmail.com>
-In-Reply-To: <odhPvTQHPORgr-0oIThKQfchHX1_snHADl8aZCGSc771d492UJqUwFJEuC3PkRwlwQmxXU-OZJfvsvbvBFANCk_JO2yAfcXI82q3FyxwtF8=@protonmail.com>
-From:   jaap aarts <jaap.aarts1@gmail.com>
-Date:   Sun, 16 Aug 2020 21:11:16 +0200
-Message-ID: <CACtzdJ2kbmKL6vhoF85vociG6TeJ1ZiuDEHAHmRJ0bJA_zSWDA@mail.gmail.com>
-Subject: Re: [PATCH V6] hwmon: add fan/pwm driver for corsair h100i platinum
-To:     =?UTF-8?B?QmFybmFiw6FzIFDFkWN6ZQ==?= <pobrn@protonmail.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <MEsGWB_--3-2@tutanota.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, 16 Aug 2020 at 20:17, Barnab=C3=A1s P=C5=91cze <pobrn@protonmail.co=
-m> wrote:
-> [...]
-> > +     retval =3D hwmon_init(hdev);
-> > +     if (retval) {
-> > +             dev_err(&interface->dev, "failed initialising hwmon %s:%d=
-\n",
-> > +                     hdev->config->name, retval);
-> > +             kfree(hdev);
-> > +             kfree(hdev->bulk_in_buffer);
-> > +             kfree(hdev->bulk_out_buffer);
->
-> I hope what I said wasn't confusing, but - like you said - if you use
-> devm_* you don't need to explicitly free it. Furthermore, you access a po=
-inter
-> that has already been freed here.
+Hi Cameron,
 
-well since I didn't put the device it wouldn't have been freed. This
-in itself was a
-mistake of course since I got the device I should put it as well.
+Use plain text mode for patches.
 
-> devm_k.alloc() and devm_kfree() OR k.alloc() and kfree(), do not mix the =
-two.
-> In case of failure I think it makes sense to free the resources either wa=
-y, but
-> it is not strictly necessary since devm resources will be freed when the =
-device
-> is gone.
+Before you introduce a new compatible string, your patch serie must
+change the documents first in version 2.
+See:
 
-I couldn't find any clear documentation on this, but since .disconnect
-doesn't get
-called if probe fails I can just restructure the code so I can call
-astk_delete on
-errors. This makes everything much cleaner and nicer.
-> > +             goto exit;
-> > +     }
-> > +
-> > +     usb_set_intfdata(interface, hdev);
-> > +     mutex_init(&hdev->io_mutex);
-> > +exit:
-> > +     return retval;
-> > +}
-> > [...]
->
->
-> Please think more about memory management and how it should work in this =
-module.
-> Only manage devm resources between "getting" and "putting" the device.
-> Don't do it after "putting" or before "getting" the device.
-> And please compile and test your code (among other things) before submitt=
-ing as per
-> https://www.kernel.org/doc/html/latest/hwmon/submitting-patches.html
+dwc3.txt
+rockchip,dwc3.txt
 
-Thanks for the link to the page, I did compile and test the code
-before submitting, but I
-must have ctrl-z ed or something for it not to compile. I always make
-sure everything
-works before submitting (at least setting mode, rpm, pwm and reading rpm).
+(TODO but not now) Both documents are in need for a conversion to yaml.
 
-After looking at the link a bit, I will try and write documentation
-tomorrow, and see
-how the MAINTAINERS file is structured to add myself.
-After that I will post another version, if there is anything else let
-me know so I can
-incorporate it in the patch.
+Also sort nodes without reg alphabetically in rk3328-rock64.dts.
 
-Kind Regards,
+&u2phy {}
+&uart2 {}
+&usb20_otg {}
+&usbdrd3 {}
+&usbdrd_dwc3 {}
+&usb_host0_ehci {}
+&usb_host0_ohci {}
 
-Jaap Aarts
+On 8/16/20 7:16 PM, Cameron Nemo wrote:
+> Add a compatible to be hooked into by the Rockchip rk3328 device tree.
+> 
+> The rk3399 compatible cannot be reused because the rk3328 SoCs may
+> require a specialized driver in the future, and old device trees must
+> remain commpatible with newer kernels.
+> 
+> Signed-off-by: Cameron Nemo <cnemo@tutanota.com>
+> ---
+> drivers/usb/dwc3/dwc3-of-simple.c | 4 +++-
+> 1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-of-simple.c b/drivers/usb/dwc3/dwc3-of-simple.c
+> index 7df115012935..54f38e434028 100644
+> --- a/drivers/usb/dwc3/dwc3-of-simple.c
+> +++ b/drivers/usb/dwc3/dwc3-of-simple.c
+> @@ -49,7 +49,8 @@ static int dwc3_of_simple_probe(struct platform_device *pdev)
+> * Some controllers need to toggle the usb3-otg reset before trying to
+> * initialize the PHY, otherwise the PHY times out.
+> */
+> -	if (of_device_is_compatible(np, "rockchip,rk3399-dwc3"))
+
+> +	if (of_device_is_compatible(np, "rockchip,rk3399-dwc3") ||
+> +	    of_device_is_compatible(np, "rockchip,rk3328-dwc3"))
+
+sort alphabetically.
+
+> simple->need_reset = true;
+> 
+> simple->resets = of_reset_control_array_get(np, false, true,
+> @@ -171,6 +172,7 @@ static const struct dev_pm_ops dwc3_of_simple_dev_pm_ops = {
+> };
+> 
+> static const struct of_device_id of_dwc3_simple_match[] = {
+> +	{ .compatible = "rockchip,rk3328-dwc3" },
+> { .compatible = "rockchip,rk3399-dwc3" },
+> { .compatible = "xlnx,zynqmp-dwc3" },
+> { .compatible = "cavium,octeon-7130-usb-uctl" },
+> --
+> 2.28.0
+> 
+> 
+> 
+
