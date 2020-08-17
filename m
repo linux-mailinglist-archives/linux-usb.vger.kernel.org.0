@@ -2,39 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61FF9246788
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Aug 2020 15:42:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BC4D2467B3
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Aug 2020 15:49:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728786AbgHQNm2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Aug 2020 09:42:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42938 "EHLO mail.kernel.org"
+        id S1728698AbgHQNto (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Aug 2020 09:49:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53292 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728778AbgHQNmZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 17 Aug 2020 09:42:25 -0400
+        id S1727953AbgHQNtm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 17 Aug 2020 09:49:42 -0400
 Received: from saruman (unknown [194.34.132.59])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AD8CC20786;
-        Mon, 17 Aug 2020 13:42:23 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 383D72065C;
+        Mon, 17 Aug 2020 13:49:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597671745;
-        bh=JyxU5w0+jdQZ9gcCrDN6RzF8LRBFi5n4EoRES8+MYaw=;
+        s=default; t=1597672181;
+        bh=neILveBskNIGri0vUIbvh+uU43bAIKbA+3Ui69RMDEs=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=rKf7xAIGIEO07qprlLKVUC10KtLVWpnLhyo8G/4vA19Xra/ENqTlfPZN3t9469C7m
-         KiKzbwfAWwCfQAVVwy7e6BMDSGZx647suFJ+JDDDvUCR9wGANH/lH46li7tSnl62N9
-         xAgiIaFKFA6hLXDe7iqiwbPdERGdM5fJdBC/jvbg=
+        b=B2dQcjMvHdPr+yGQWxV5pReE59glr540FiC9zAx/WQDn0xn+sIBKD+xL2t18N9sM4
+         SAWDG5mRanAZS3YXc1SbcOWFN+I++rs+P2t0AF94BeFQC9kUnY534zUyGQ1LVc4sEc
+         Ew7LVl8v3JitXfdLzjWSBWhzkaD1SkxqAUpbWWOg=
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+To:     rentao.bupt@gmail.com,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-usb@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>
-Subject: Re: [PATCH v2 4/7] usb: dwc3: gadget: Refactor preparing TRBs
-In-Reply-To: <6f67c1a81052389225a95fbccec93b0af0151cf1.1596767991.git.thinhn@synopsys.com>
-References: <cover.1596767991.git.thinhn@synopsys.com>
- <6f67c1a81052389225a95fbccec93b0af0151cf1.1596767991.git.thinhn@synopsys.com>
-Date:   Mon, 17 Aug 2020 16:42:17 +0300
-Message-ID: <878sedz8w6.fsf@kernel.org>
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Stephen Boyd <swboyd@chromium.org>, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, taoren@fb.com
+Cc:     Tao Ren <rentao.bupt@gmail.com>
+Subject: Re: [PATCH] usb: gadget: aspeed: fixup vhub port irq handling
+In-Reply-To: <20200528011154.30355-1-rentao.bupt@gmail.com>
+References: <20200528011154.30355-1-rentao.bupt@gmail.com>
+Date:   Mon, 17 Aug 2020 16:49:32 +0300
+Message-ID: <875z9hz8k3.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -50,17 +55,43 @@ Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
-> There are a lot of common codes for preparing SG and linear TRBs. Let's
-> refactor them for easier read. No functional change here.
+rentao.bupt@gmail.com writes:
+> From: Tao Ren <rentao.bupt@gmail.com>
 >
-> Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
+> This is a follow-on patch for commit a23be4ed8f48 ("usb: gadget: aspeed:
+> improve vhub port irq handling"): for_each_set_bit() is replaced with
+> simple for() loop because for() loop runs faster on ASPEED BMC.
+>
+> Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
+> ---
+>  drivers/usb/gadget/udc/aspeed-vhub/core.c | 10 +++-------
+>  drivers/usb/gadget/udc/aspeed-vhub/vhub.h |  3 +++
+>  2 files changed, 6 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/usb/gadget/udc/aspeed-vhub/core.c b/drivers/usb/gadg=
+et/udc/aspeed-vhub/core.c
+> index cdf96911e4b1..be7bb64e3594 100644
+> --- a/drivers/usb/gadget/udc/aspeed-vhub/core.c
+> +++ b/drivers/usb/gadget/udc/aspeed-vhub/core.c
+> @@ -135,13 +135,9 @@ static irqreturn_t ast_vhub_irq(int irq, void *data)
+>=20=20
+>  	/* Handle device interrupts */
+>  	if (istat & vhub->port_irq_mask) {
+> -		unsigned long bitmap =3D istat;
+> -		int offset =3D VHUB_IRQ_DEV1_BIT;
+> -		int size =3D VHUB_IRQ_DEV1_BIT + vhub->max_ports;
+> -
+> -		for_each_set_bit_from(offset, &bitmap, size) {
+> -			i =3D offset - VHUB_IRQ_DEV1_BIT;
+> -			ast_vhub_dev_irq(&vhub->ports[i].dev);
+> +		for (i =3D 0; i < vhub->max_ports; i++) {
+> +			if (istat & VHUB_DEV_IRQ(i))
+> +				ast_vhub_dev_irq(&vhub->ports[i].dev);
 
-patches 1-3 will be merged for the -rc cycle. Because following patches
-depend on this, I have to delay the others for v5.10 merge
-window. Unless you want to rebase to make this the final patch in the
-series and make sure all fixes come before any refactoring on code
-clean-ups.
+how have you measured your statement above? for_each_set_bit() does
+exactly what you did. Unless your architecture has an instruction which
+helps finds the next set bit (like cls on ARM), which, then, makes it
+much faster.
 
 =2D-=20
 balbi
@@ -70,19 +101,19 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl86iToRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQZ7BxAAxaT37b2ykdHXWwJOCgfDHULz/UMl1q/a
-yuEaKj7OO99UojneagsmLh1SftZo8+OhJ9nJK1PiWVWIeEsBtwop8kYuCTK1bac+
-rV8IBH71sCKhXKxHuYK93tA6Wj/6xmKB0H5G1akHXDm7kLXNQH8CUg8Wpr5mlxHz
-kZ5YTMK+HfTXnKxipfhmshGf24cmsnW52T4xxbshFwggApgQjXQ+kBlD1bexYnFd
-5M6d00QsJEkNMiyS8QHyWBECeMmlRXSQ7ruV5bwW7QBVuvkxxVqEEJ+02jAWhx9/
-055l6hrGEBqhuNL+FhvExLnN9jq5po/vMhBymv/+fFSh4OHI/XPVHWg3HSSJ1LRX
-Pt3Sy2hCv8UyBN6n7QRJrlWIiJBD9y84xW7eF8oFYHPvo3wO7Ccvw7BzD1TNaBR9
-MdFkjm7s+obWKJ9NLjBopLvpdan43WKAxOo6hOWD87+GgynIp62E+2DGulvx5ors
-OhxlJk7EDbIZjMdrZyNyxlL3DFrUdfPd+lgz/LyLsAHmHPB29lSdFEAccQZNfXXs
-7qm5NVF7x26b8yPmoYts/YzalSYrLsVH1FdD7LZEwBW6fn13gguwfIF3J5wWNfIO
-A5A2nnLc25sNYOGP/pThP7vqvSFvDqcoTWl5k9ey3XX7iubEgCkYHVHA+oY5qqTi
-YmmyxwFw4Is=
-=LpXS
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl86iuwRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQZuXg//doj2VlNrrpXSD2a83iUegA+NRRRKef1U
+PRfUUrIK4igGr/FiQAhE9Mlilxj/sZTLcQ6qe1EhIY+f5JhyfucZ5Te4WhNFaxtZ
+UJp24ndXVc0q8NTmSkre+c6GLX/lD4NFlfgMSsdqpvAlYJirzL4GY63EWA9W8I3k
+cO4Igdvi8ZskhUgX2QBCM4kDxMk+WxV6PrD8L4EykHmXTzFqVJxKM30BO7U0Gdd4
+bmImEVCqzUDSivYKC7xwDWnT0HAXjbm38tcb4hq40pePVtDNEGFiNd3NUo953SvP
+065liQg/4ats64P21c+PN0qXFovkWoSTJBa1yzcqfWF+Yi8fKI5UVNp49W0CJZ2m
+lEKNc/H4+qzEysoXCgWCCznDg4RCxE0f4Y5OsNxkf63QvVEAaFRePgNZ6txble7v
+dJueHYNiEfsgCe2QUCxl4f805gq2+iIMKGnWvEdwcdlpUCmop+CBXouD9MuMt+hB
+OLDU6hSo/REsEHKVsooiICwfUOuD0xrqiqObcLKwSd0krXnDRkkYjYm4FvN4u43y
+y+sTwkU5jswAvcBCHDgayGgm37U0QsDLpZW5voCirwaPqdC+09yVQ18/lx4cA+Lq
+Y2WHyvRRssi5U8G3YHQUoLVJ7umEx5o6k13rBQNBnueyfEsVM3G8V74j+uuYLGzO
+BbmxKI2a0bY=
+=TM9v
 -----END PGP SIGNATURE-----
 --=-=-=--
