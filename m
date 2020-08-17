@@ -2,41 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A3DA246D0A
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Aug 2020 18:43:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B9BD246D16
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Aug 2020 18:44:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388944AbgHQQmr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Aug 2020 12:42:47 -0400
-Received: from mga09.intel.com ([134.134.136.24]:9525 "EHLO mga09.intel.com"
+        id S1731322AbgHQQoj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Aug 2020 12:44:39 -0400
+Received: from mga14.intel.com ([192.55.52.115]:44950 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388937AbgHQQm3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 17 Aug 2020 12:42:29 -0400
-IronPort-SDR: j7Sp7ru6XaRTS3SHXP/km35zpSPWNbkEupbgGqGkKiMbc60J5yCbdkjzurdAIs0MqRhKyCN7Y/
- ntLP3WqDUdHQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9716"; a="155837525"
+        id S2388936AbgHQQma (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 17 Aug 2020 12:42:30 -0400
+IronPort-SDR: x/v86nx6bXvNrSaNnzesarUHZSpbXgAian8P0GJvYIU5z4+8nBCXrfg/Bw0HlbSlNsPXa12vnf
+ 20o058aKx/rQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9716"; a="154003095"
 X-IronPort-AV: E=Sophos;i="5.76,324,1592895600"; 
-   d="scan'208";a="155837525"
+   d="scan'208";a="154003095"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2020 09:42:28 -0700
-IronPort-SDR: kKKGbtTwSThDHZkle78TF2C95umm+bcqUyNd28E5DIAx8JjBn+qio48WAqpIn0QR1/GkDk0L3H
- LvpGqjFUge1w==
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2020 09:42:28 -0700
+IronPort-SDR: JYZ9rQ8B6AgSTm1MCFYzMWwMCt5A73L5B/TLwoqdTaYAHtfwNEJ2S8TaK8OpyksG0MUhJf1XrY
+ BShn7/dwuabQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.76,324,1592895600"; 
-   d="scan'208";a="310149226"
+   d="scan'208";a="336329428"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 17 Aug 2020 09:42:27 -0700
+  by orsmga007.jf.intel.com with ESMTP; 17 Aug 2020 09:42:27 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id A669116D; Mon, 17 Aug 2020 19:42:26 +0300 (EEST)
+        id B10FF11E; Mon, 17 Aug 2020 19:42:26 +0300 (EEST)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/3] usb: early: xhci-dbc: use readl_poll_timeout() to simplify code
-Date:   Mon, 17 Aug 2020 19:42:24 +0300
-Message-Id: <20200817164226.49119-1-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 2/3] usb: early: xhci-dbc: Move cpu_to_le16_array() to core
+Date:   Mon, 17 Aug 2020 19:42:25 +0300
+Message-Id: <20200817164226.49119-2-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200817164226.49119-1-andriy.shevchenko@linux.intel.com>
+References: <20200817164226.49119-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
@@ -44,136 +46,98 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use readl_poll_timeout() to poll the status of the registers.
+It's used in USB but it might be useful for other drivers as well.
+While at it, introduce a counterpart helper, i.e. le16_to_cpu_array().
+
+Make them available through byteorder/generic.h.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/usb/early/xhci-dbc.c | 56 +++++++++++++++++-------------------
- 1 file changed, 27 insertions(+), 29 deletions(-)
+ drivers/usb/early/xhci-dbc.c      | 15 ++++-----------
+ include/linux/byteorder/generic.h | 16 ++++++++++++++++
+ 2 files changed, 20 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/usb/early/xhci-dbc.c b/drivers/usb/early/xhci-dbc.c
-index c0507767a8e3..77c2e8301971 100644
+index 77c2e8301971..c5761ea9394d 100644
 --- a/drivers/usb/early/xhci-dbc.c
 +++ b/drivers/usb/early/xhci-dbc.c
-@@ -14,6 +14,7 @@
+@@ -9,6 +9,7 @@
+ 
+ #define pr_fmt(fmt)	KBUILD_MODNAME ":%s: " fmt, __func__
+ 
++#include <linux/byteorder/generic.h>
+ #include <linux/console.h>
+ #include <linux/pci_regs.h>
  #include <linux/pci_ids.h>
- #include <linux/memblock.h>
- #include <linux/io.h>
-+#include <linux/iopoll.h>
- #include <asm/pci-direct.h>
- #include <asm/fixmap.h>
- #include <linux/bcd.h>
-@@ -131,38 +132,23 @@ static u32 __init xdbc_find_dbgp(int xdbc_num, u32 *b, u32 *d, u32 *f)
- 	return -1;
+@@ -200,14 +201,6 @@ static void xdbc_reset_ring(struct xdbc_ring *ring)
+ 	}
  }
  
--static int handshake(void __iomem *ptr, u32 mask, u32 done, int wait, int delay)
+-static inline void xdbc_put_utf16(u16 *s, const char *c, size_t size)
 -{
--	u32 result;
+-	int i;
 -
--	do {
--		result = readl(ptr);
--		result &= mask;
--		if (result == done)
--			return 0;
--		udelay(delay);
--		wait -= delay;
--	} while (wait > 0);
--
--	return -ETIMEDOUT;
+-	for (i = 0; i < size; i++)
+-		s[i] = cpu_to_le16(c[i]);
 -}
 -
- static void __init xdbc_bios_handoff(void)
+ static void xdbc_mem_init(void)
  {
- 	int offset, timeout;
- 	u32 val;
+ 	struct xdbc_ep_context *ep_in, *ep_out;
+@@ -263,7 +256,7 @@ static void xdbc_mem_init(void)
+ 	s_desc->bLength		= (strlen(XDBC_STRING_SERIAL) + 1) * 2;
+ 	s_desc->bDescriptorType	= USB_DT_STRING;
  
- 	offset = xhci_find_next_ext_cap(xdbc.xhci_base, 0, XHCI_EXT_CAPS_LEGACY);
--	val = readl(xdbc.xhci_base + offset);
+-	xdbc_put_utf16(s_desc->wData, XDBC_STRING_SERIAL, strlen(XDBC_STRING_SERIAL));
++	cpu_to_le16_array(s_desc->wData, XDBC_STRING_SERIAL, strlen(XDBC_STRING_SERIAL));
+ 	string_length = s_desc->bLength;
+ 	string_length <<= 8;
  
--	if (val & XHCI_HC_BIOS_OWNED) {
-+	val = readl(xdbc.xhci_base + offset);
-+	if (val & XHCI_HC_BIOS_OWNED)
- 		writel(val | XHCI_HC_OS_OWNED, xdbc.xhci_base + offset);
--		timeout = handshake(xdbc.xhci_base + offset, XHCI_HC_BIOS_OWNED, 0, 5000, 10);
+@@ -272,7 +265,7 @@ static void xdbc_mem_init(void)
+ 	s_desc->bLength		= (strlen(XDBC_STRING_PRODUCT) + 1) * 2;
+ 	s_desc->bDescriptorType	= USB_DT_STRING;
  
--		if (timeout) {
--			pr_notice("failed to hand over xHCI control from BIOS\n");
--			writel(val & ~XHCI_HC_BIOS_OWNED, xdbc.xhci_base + offset);
--		}
-+	timeout = readl_poll_timeout_atomic(xdbc.xhci_base + offset, val,
-+					    !(val & XHCI_HC_BIOS_OWNED),
-+					    10, 5000);
-+	if (timeout) {
-+		pr_notice("failed to hand over xHCI control from BIOS\n");
-+		writel(val & ~XHCI_HC_BIOS_OWNED, xdbc.xhci_base + offset);
- 	}
+-	xdbc_put_utf16(s_desc->wData, XDBC_STRING_PRODUCT, strlen(XDBC_STRING_PRODUCT));
++	cpu_to_le16_array(s_desc->wData, XDBC_STRING_PRODUCT, strlen(XDBC_STRING_PRODUCT));
+ 	string_length += s_desc->bLength;
+ 	string_length <<= 8;
  
- 	/* Disable BIOS SMIs and clear all SMI events: */
-@@ -421,7 +407,9 @@ static int xdbc_start(void)
+@@ -281,7 +274,7 @@ static void xdbc_mem_init(void)
+ 	s_desc->bLength		= (strlen(XDBC_STRING_MANUFACTURER) + 1) * 2;
+ 	s_desc->bDescriptorType	= USB_DT_STRING;
  
- 	ctrl = readl(&xdbc.xdbc_reg->control);
- 	writel(ctrl | CTRL_DBC_ENABLE | CTRL_PORT_ENABLE, &xdbc.xdbc_reg->control);
--	ret = handshake(&xdbc.xdbc_reg->control, CTRL_DBC_ENABLE, CTRL_DBC_ENABLE, 100000, 100);
-+	ret = readl_poll_timeout_atomic(&xdbc.xdbc_reg->control, ctrl,
-+					(ctrl & CTRL_DBC_ENABLE) == CTRL_DBC_ENABLE,
-+					100, 100000);
- 	if (ret) {
- 		xdbc_trace("failed to initialize hardware\n");
- 		return ret;
-@@ -432,14 +420,18 @@ static int xdbc_start(void)
- 		xdbc_reset_debug_port();
+-	xdbc_put_utf16(s_desc->wData, XDBC_STRING_MANUFACTURER, strlen(XDBC_STRING_MANUFACTURER));
++	cpu_to_le16_array(s_desc->wData, XDBC_STRING_MANUFACTURER, strlen(XDBC_STRING_MANUFACTURER));
+ 	string_length += s_desc->bLength;
+ 	string_length <<= 8;
  
- 	/* Wait for port connection: */
--	ret = handshake(&xdbc.xdbc_reg->portsc, PORTSC_CONN_STATUS, PORTSC_CONN_STATUS, 5000000, 100);
-+	ret = readl_poll_timeout_atomic(&xdbc.xdbc_reg->portsc, status,
-+					(status & PORTSC_CONN_STATUS) == PORTSC_CONN_STATUS,
-+					100, 5000000);
- 	if (ret) {
- 		xdbc_trace("waiting for connection timed out\n");
- 		return ret;
- 	}
+diff --git a/include/linux/byteorder/generic.h b/include/linux/byteorder/generic.h
+index 4b13e0a3e15b..24904ad79df0 100644
+--- a/include/linux/byteorder/generic.h
++++ b/include/linux/byteorder/generic.h
+@@ -156,6 +156,22 @@ static inline void le64_add_cpu(__le64 *var, u64 val)
+ 	*var = cpu_to_le64(le64_to_cpu(*var) + val);
+ }
  
- 	/* Wait for debug device to be configured: */
--	ret = handshake(&xdbc.xdbc_reg->control, CTRL_DBC_RUN, CTRL_DBC_RUN, 5000000, 100);
-+	ret = readl_poll_timeout_atomic(&xdbc.xdbc_reg->control, status,
-+					(status & CTRL_DBC_RUN) == CTRL_DBC_RUN,
-+					100, 5000000);
- 	if (ret) {
- 		xdbc_trace("waiting for device configuration timed out\n");
- 		return ret;
-@@ -523,11 +515,14 @@ static int xdbc_bulk_transfer(void *data, int size, bool read)
- 
- static int xdbc_handle_external_reset(void)
++static inline void cpu_to_le16_array(__le16 *dst, const u16 *src, size_t len)
++{
++	int i;
++
++	for (i = 0; i < len; i++)
++		dst[i] = cpu_to_le16(src[i]);
++}
++
++static inline void le16_to_cpu_array(u16 *dst, const __le16 *src, size_t len)
++{
++	int i;
++
++	for (i = 0; i < len; i++)
++		dst[i] = le16_to_cpu(src[i]);
++}
++
+ /* XXX: this stuff can be optimized */
+ static inline void le32_to_cpu_array(u32 *buf, unsigned int words)
  {
--	int ret = 0;
-+	u32 result;
-+	int ret;
- 
- 	xdbc.flags = 0;
- 	writel(0, &xdbc.xdbc_reg->control);
--	ret = handshake(&xdbc.xdbc_reg->control, CTRL_DBC_ENABLE, 0, 100000, 10);
-+	ret = readl_poll_timeout_atomic(&xdbc.xdbc_reg->control, result,
-+					!(result & CTRL_DBC_ENABLE),
-+					10, 100000);
- 	if (ret)
- 		goto reset_out;
- 
-@@ -552,10 +547,13 @@ static int xdbc_handle_external_reset(void)
- 
- static int __init xdbc_early_setup(void)
- {
-+	u32 result;
- 	int ret;
- 
- 	writel(0, &xdbc.xdbc_reg->control);
--	ret = handshake(&xdbc.xdbc_reg->control, CTRL_DBC_ENABLE, 0, 100000, 100);
-+	ret = readl_poll_timeout_atomic(&xdbc.xdbc_reg->control, result,
-+					!(result & CTRL_DBC_ENABLE),
-+					100, 100000);
- 	if (ret)
- 		return ret;
- 
 -- 
 2.28.0
 
