@@ -2,243 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 767A9246586
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Aug 2020 13:32:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E4DE24658E
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Aug 2020 13:35:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728527AbgHQLc1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Aug 2020 07:32:27 -0400
-Received: from mail-io1-f71.google.com ([209.85.166.71]:37755 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728580AbgHQLcR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Aug 2020 07:32:17 -0400
-Received: by mail-io1-f71.google.com with SMTP id f6so9674494ioa.4
-        for <linux-usb@vger.kernel.org>; Mon, 17 Aug 2020 04:32:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=ZakdSAPE5T4FwrgSAUta2TlD1gJfj04Y9UqSeil88K0=;
-        b=AOlBwOPOIhpKeUClX8AnfmWnOVUhixVCX3jI8Jh3pVbUminP7H+Xle6+CwcdYNclz/
-         acfgw1sqmLS+0IJsXkmwSJBek2j5xiu+iIjro1WK70DMU2sK1dwskvhVQWYtoe+v/RHN
-         0kj2Y2+asGZGcdChMbyJfWE1xiuzkFmzL26WyQZwy6bsFSQp9nV7o+/qMEsCRIStb2fy
-         49ybPdWIRS7lP9rGKfh6QZx9OMtbcaN5r9pEpYmFOdNVhptmhYqrnrgQhvVxetf+rgZs
-         Qq4nHgG4Nd/Mx4tQEGqmGTgSD/rIOU9VHQ5+JcYH1EtYnwm1QXBlrunJHrhTZoi+86x7
-         CyyQ==
-X-Gm-Message-State: AOAM531wZiBkAGBykDPlHxDHmCqdTl4KN3HSgnSp59tRLOk7LfABpK3P
-        f1/8jgqHc6yWYAep8Qvh47iMGJIaRWEakRCtBk4jwp3GktfY
-X-Google-Smtp-Source: ABdhPJyagLnu2Z/o5/G5cfTd61mC2KgjV/smFi2kUR9c+aWb9hQv8ITsgGeV9cq1e30llEuIzNaH2cKJrRhR61KqjhJx0rCSd+vo
+        id S1726371AbgHQLfQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Aug 2020 07:35:16 -0400
+Received: from mga18.intel.com ([134.134.136.126]:18301 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726286AbgHQLfM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 17 Aug 2020 07:35:12 -0400
+IronPort-SDR: NVN8dMwr9usodMEYOVKOUB5XKqsSFeMe1z5+wsl1lQOphe6DzgsM2G0rGUKyUPS217IT65aLM3
+ zU4MFl/S3D6g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9715"; a="142309387"
+X-IronPort-AV: E=Sophos;i="5.76,322,1592895600"; 
+   d="scan'208";a="142309387"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2020 04:35:11 -0700
+IronPort-SDR: BCldVN+sRnh4lPc4AXWJM4xPFbUdaNgAkla/d9FVVHb+5m7poCDP/g19ZBOiTGmd32UuuizOEy
+ o9HimdsTivQA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,322,1592895600"; 
+   d="scan'208";a="326383266"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga008.jf.intel.com with ESMTP; 17 Aug 2020 04:35:10 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andy.shevchenko@gmail.com>)
+        id 1k7dPx-009IrN-B4; Mon, 17 Aug 2020 14:35:09 +0300
+Date:   Mon, 17 Aug 2020 14:35:09 +0300
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     John Garry <john.garry@huawei.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [Report]: BUG: KASAN: use-after-free in usb_hcd_pci_remove
+Message-ID: <20200817113509.GJ1891694@smile.fi.intel.com>
+References: <b5f23591-50c1-f01e-31a0-879eeec3ab3f@huawei.com>
+ <20200813182811.GA4035999@kroah.com>
+ <00274550-e14c-79a8-7c6e-aa58ada74fd4@huawei.com>
+ <30a8c4ca-64c2-863b-cfcd-0970599c0ba3@huawei.com>
+ <20200814180720.GE1891694@smile.fi.intel.com>
+ <20200814195119.GA45072@rowland.harvard.edu>
+ <CAHp75VdMXd3LWLM5ooBsWGZnSXnJBW3R5gH9Cpux0EHmcxjTvQ@mail.gmail.com>
+ <20200815015000.GA52242@rowland.harvard.edu>
+ <CAHp75VdCCe=sKuas+sdu__qYVSEO4pKqZ8RGq_Jxaoh91HXZ+g@mail.gmail.com>
+ <20200816160550.GB86937@rowland.harvard.edu>
 MIME-Version: 1.0
-X-Received: by 2002:a5d:9d11:: with SMTP id j17mr12293387ioj.140.1597663935346;
- Mon, 17 Aug 2020 04:32:15 -0700 (PDT)
-Date:   Mon, 17 Aug 2020 04:32:15 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005642a205ad111fc3@google.com>
-Subject: KASAN: invalid-free in klist_children_put
-From:   syzbot <syzbot+d448b63291df9f64b6bc@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        rafael@kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200816160550.GB86937@rowland.harvard.edu>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Sun, Aug 16, 2020 at 12:05:50PM -0400, Alan Stern wrote:
+> On Sun, Aug 16, 2020 at 11:33:14AM +0300, Andy Shevchenko wrote:
+> > On Sat, Aug 15, 2020 at 4:50 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > > On Sat, Aug 15, 2020 at 12:55:57AM +0300, Andy Shevchenko wrote:
 
-syzbot found the following issue on:
+...
 
-HEAD commit:    9123e3a7 Linux 5.9-rc1
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=106d03f6900000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ccafc70ac3d5f49c
-dashboard link: https://syzkaller.appspot.com/bug?extid=d448b63291df9f64b6bc
-compiler:       gcc (GCC) 10.1.0-syz 20200507
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10915731900000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=151a6f6e900000
+> > > Sure, the difference in ordering was pretty obvious.  What is not
+> > > obvious is why this should cause a problem.
+> > 
+> > It may be not causing any problem right now, but with all these small
+> > steps we may come to the case like DWC3 removal mess.
+> > 
+> > > Do you think that the host controller driver is going to try to use the
+> > > IRQ vector somewhere between the pci_free_irq_vectors call and the
+> > > usb_put_hcd call?  If that's not going to happen then I don't see what
+> > > difference the order of the two calls makes.
+> > 
+> > I think that this is a bit incorrect to rely on side-effects to ruin
+> > the clear understanding of what ordering is going on. If you insist,
+> > you can take John's solution, but I won't give a tag on such.
+> > 
+> > Also take into consideration the possible copy'n'paste of this example
+> > to other drivers. I have seen a lot of bad examples were
+> > copied'n'pasted all over the kernel during my reviews. I don't want to
+> > give another one.
+> > 
+> > So, the review process, in my opinion, should be slightly broader that
+> > we usually understand it, i.e. take into account:
+> > - *run-time* bisectability
+> > - possible copy'n'paste of the code excerpts
+> 
+> I see.  So you use "correct" in the broader sense of "good form" as well 
+> as strict correctness.  (It was confusing because I wouldn't conflate 
+> those two different concepts.)
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+d448b63291df9f64b6bc@syzkaller.appspotmail.com
+Thank you for clarification, I'm not native speaker and this is a good learn
+to me. I will try to use better wording in the future.
 
-usb 1-1: New USB device found, idVendor=093a, idProduct=8001, bcdDevice= 0.00
-usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-usb 1-1: config 0 descriptor??
-usb 1-1: USB disconnect, device number 2
-==================================================================
-BUG: KASAN: double-free or invalid-free in slab_free mm/slub.c:3142 [inline]
-BUG: KASAN: double-free or invalid-free in kfree+0xbe/0x470 mm/slub.c:4123
+> Okay, now your reply makes sense.
 
-CPU: 1 PID: 21 Comm: kworker/1:1 Not tainted 5.9.0-rc1-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0xf6/0x16e lib/dump_stack.c:118
- print_address_description.constprop.0+0x1c/0x210 mm/kasan/report.c:383
- kasan_report_invalid_free+0x51/0x80 mm/kasan/report.c:477
- __kasan_slab_free+0x122/0x130 mm/kasan/common.c:401
- slab_free_hook mm/slub.c:1548 [inline]
- slab_free_freelist_hook+0x53/0x140 mm/slub.c:1581
- slab_free mm/slub.c:3142 [inline]
- kfree+0xbe/0x470 mm/slub.c:4123
- platform_device_release+0x64/0xf0 drivers/base/platform.c:426
- device_release+0x71/0x200 drivers/base/core.c:1800
- kobject_cleanup lib/kobject.c:704 [inline]
- kobject_release lib/kobject.c:735 [inline]
- kref_put include/linux/kref.h:65 [inline]
- kobject_put+0x1c8/0x540 lib/kobject.c:752
- put_device drivers/base/core.c:3029 [inline]
- klist_children_put+0x41/0x50 drivers/base/core.c:2382
- klist_prev+0x2a2/0x510 lib/klist.c:362
- prev_device drivers/base/core.c:3146 [inline]
- device_for_each_child_reverse+0xc0/0x180 drivers/base/core.c:3268
- mfd_remove_devices+0x75/0xa0 drivers/mfd/mfd-core.c:391
- sensor_hub_remove+0x1d6/0x270 drivers/hid/hid-sensor-hub.c:744
- hid_device_remove+0xed/0x240 drivers/hid/hid-core.c:2296
- __device_release_driver+0x3c6/0x6f0 drivers/base/dd.c:1153
- device_release_driver_internal drivers/base/dd.c:1184 [inline]
- device_release_driver+0x26/0x40 drivers/base/dd.c:1207
- bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
- device_del+0x481/0xd90 drivers/base/core.c:3107
- hid_remove_device drivers/hid/hid-core.c:2467 [inline]
- hid_destroy_device+0xe1/0x150 drivers/hid/hid-core.c:2486
- usbhid_disconnect+0x9f/0xe0 drivers/hid/usbhid/hid-core.c:1439
- usb_unbind_interface+0x1d8/0x8d0 drivers/usb/core/driver.c:436
- __device_release_driver+0x3c6/0x6f0 drivers/base/dd.c:1153
- device_release_driver_internal drivers/base/dd.c:1184 [inline]
- device_release_driver+0x26/0x40 drivers/base/dd.c:1207
- bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
- device_del+0x481/0xd90 drivers/base/core.c:3107
- usb_disable_device+0x387/0x930 drivers/usb/core/message.c:1245
- usb_disconnect.cold+0x27d/0x780 drivers/usb/core/hub.c:2217
- hub_port_connect drivers/usb/core/hub.c:5059 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
- port_event drivers/usb/core/hub.c:5494 [inline]
- hub_event+0x1c93/0x4390 drivers/usb/core/hub.c:5576
- process_one_work+0x94c/0x15f0 kernel/workqueue.c:2269
- worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
- kthread+0x392/0x470 kernel/kthread.c:292
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+Thanks!
 
-Allocated by task 21:
- kasan_save_stack+0x1b/0x40 mm/kasan/common.c:48
- kasan_set_track mm/kasan/common.c:56 [inline]
- __kasan_kmalloc.constprop.0+0xc2/0xd0 mm/kasan/common.c:461
- slab_post_alloc_hook mm/slab.h:518 [inline]
- slab_alloc_node mm/slub.c:2892 [inline]
- slab_alloc mm/slub.c:2900 [inline]
- __kmalloc_track_caller+0xf6/0x270 mm/slub.c:4463
- kmemdup+0x23/0x50 mm/util.c:127
- kmemdup include/linux/string.h:479 [inline]
- mfd_add_device+0x112/0x1190 drivers/mfd/mfd-core.c:191
- mfd_add_devices+0xdb/0x170 drivers/mfd/mfd-core.c:339
- mfd_add_hotplug_devices include/linux/mfd/core.h:152 [inline]
- sensor_hub_probe+0xa93/0xdc0 drivers/hid/hid-sensor-hub.c:713
- hid_device_probe+0x2bd/0x3f0 drivers/hid/hid-core.c:2263
- really_probe+0x291/0xde0 drivers/base/dd.c:553
- driver_probe_device+0x26b/0x3d0 drivers/base/dd.c:738
- __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:844
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:431
- __device_attach+0x228/0x4a0 drivers/base/dd.c:912
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
- device_add+0xb51/0x1c70 drivers/base/core.c:2930
- hid_add_device+0x344/0x9b0 drivers/hid/hid-core.c:2419
- usbhid_probe+0xaae/0xfc0 drivers/hid/usbhid/hid-core.c:1412
- usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:374
- really_probe+0x291/0xde0 drivers/base/dd.c:553
- driver_probe_device+0x26b/0x3d0 drivers/base/dd.c:738
- __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:844
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:431
- __device_attach+0x228/0x4a0 drivers/base/dd.c:912
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
- device_add+0xb51/0x1c70 drivers/base/core.c:2930
- usb_set_configuration+0xf05/0x18a0 drivers/usb/core/message.c:2032
- usb_generic_driver_probe+0xba/0xf2 drivers/usb/core/generic.c:239
- usb_probe_device+0xd9/0x250 drivers/usb/core/driver.c:272
- really_probe+0x291/0xde0 drivers/base/dd.c:553
- driver_probe_device+0x26b/0x3d0 drivers/base/dd.c:738
- __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:844
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:431
- __device_attach+0x228/0x4a0 drivers/base/dd.c:912
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
- device_add+0xb51/0x1c70 drivers/base/core.c:2930
- usb_new_device.cold+0x71d/0xfd4 drivers/usb/core/hub.c:2554
- hub_port_connect drivers/usb/core/hub.c:5208 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
- port_event drivers/usb/core/hub.c:5494 [inline]
- hub_event+0x2361/0x4390 drivers/usb/core/hub.c:5576
- process_one_work+0x94c/0x15f0 kernel/workqueue.c:2269
- worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
- kthread+0x392/0x470 kernel/kthread.c:292
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
-
-Freed by task 21:
- kasan_save_stack+0x1b/0x40 mm/kasan/common.c:48
- kasan_set_track+0x1c/0x30 mm/kasan/common.c:56
- kasan_set_free_info+0x1b/0x30 mm/kasan/generic.c:355
- __kasan_slab_free+0xf3/0x130 mm/kasan/common.c:422
- slab_free_hook mm/slub.c:1548 [inline]
- slab_free_freelist_hook+0x53/0x140 mm/slub.c:1581
- slab_free mm/slub.c:3142 [inline]
- kfree+0xbe/0x470 mm/slub.c:4123
- mfd_remove_devices_fn drivers/mfd/mfd-core.c:373 [inline]
- mfd_remove_devices_fn+0xf9/0x140 drivers/mfd/mfd-core.c:355
- device_for_each_child_reverse+0x110/0x180 drivers/base/core.c:3269
- mfd_remove_devices+0x75/0xa0 drivers/mfd/mfd-core.c:391
- sensor_hub_remove+0x1d6/0x270 drivers/hid/hid-sensor-hub.c:744
- hid_device_remove+0xed/0x240 drivers/hid/hid-core.c:2296
- __device_release_driver+0x3c6/0x6f0 drivers/base/dd.c:1153
- device_release_driver_internal drivers/base/dd.c:1184 [inline]
- device_release_driver+0x26/0x40 drivers/base/dd.c:1207
- bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
- device_del+0x481/0xd90 drivers/base/core.c:3107
- hid_remove_device drivers/hid/hid-core.c:2467 [inline]
- hid_destroy_device+0xe1/0x150 drivers/hid/hid-core.c:2486
- usbhid_disconnect+0x9f/0xe0 drivers/hid/usbhid/hid-core.c:1439
- usb_unbind_interface+0x1d8/0x8d0 drivers/usb/core/driver.c:436
- __device_release_driver+0x3c6/0x6f0 drivers/base/dd.c:1153
- device_release_driver_internal drivers/base/dd.c:1184 [inline]
- device_release_driver+0x26/0x40 drivers/base/dd.c:1207
- bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
- device_del+0x481/0xd90 drivers/base/core.c:3107
- usb_disable_device+0x387/0x930 drivers/usb/core/message.c:1245
- usb_disconnect.cold+0x27d/0x780 drivers/usb/core/hub.c:2217
- hub_port_connect drivers/usb/core/hub.c:5059 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
- port_event drivers/usb/core/hub.c:5494 [inline]
- hub_event+0x1c93/0x4390 drivers/usb/core/hub.c:5576
- process_one_work+0x94c/0x15f0 kernel/workqueue.c:2269
- worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
- kthread+0x392/0x470 kernel/kthread.c:292
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
-
-The buggy address belongs to the object at ffff8881d519fc00
- which belongs to the cache kmalloc-192 of size 192
-The buggy address is located 0 bytes inside of
- 192-byte region [ffff8881d519fc00, ffff8881d519fcc0)
-The buggy address belongs to the page:
-page:000000000c30de42 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1d519f
-flags: 0x200000000000200(slab)
-raw: 0200000000000200 ffffea00074f1880 0000000700000007 ffff8881da041500
-raw: 0000000000000000 0000000080100010 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
- ffff8881d519fb00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff8881d519fb80: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
->ffff8881d519fc00: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                   ^
- ffff8881d519fc80: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
- ffff8881d519fd00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
