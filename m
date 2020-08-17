@@ -2,99 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94EFE245ECF
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Aug 2020 10:07:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21EF52460CB
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Aug 2020 10:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726196AbgHQIH1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Aug 2020 04:07:27 -0400
-Received: from mga17.intel.com ([192.55.52.151]:4979 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725765AbgHQIH0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 17 Aug 2020 04:07:26 -0400
-IronPort-SDR: g8VbzN/3k8gkn+U8de9XFeyrvQNgA8AYHCnjm5HExa4oqR7uiqdEpF/kqsGz+UEDOCbZY/Sxm4
- PtbFqJCAbOqg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9715"; a="134714646"
-X-IronPort-AV: E=Sophos;i="5.76,322,1592895600"; 
-   d="scan'208";a="134714646"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2020 01:07:26 -0700
-IronPort-SDR: UprZgQpDHZHN14fzFVEaiHymPDrfMsQnr0c7TfR/wV0ycE/rljC7OUHhOmc9FZ24iLIM0W/Jtw
- fNMHYcNHnY+Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,322,1592895600"; 
-   d="scan'208";a="400121917"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 17 Aug 2020 01:07:23 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 17 Aug 2020 11:07:23 +0300
-Date:   Mon, 17 Aug 2020 11:07:23 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        USB <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2 v3] tcpm: During PR_SWAP, source caps should be sent
- only after tSwapSourceStart
-Message-ID: <20200817080723.GB1448906@kuha.fi.intel.com>
-References: <20200812022934.568134-1-badhri@google.com>
- <20200813082507.GE1169992@kuha.fi.intel.com>
- <CAPTae5KUdTN5fVn45xFwhWS5Gy_xFJ91gAObb7qMk2KA+n72yQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPTae5KUdTN5fVn45xFwhWS5Gy_xFJ91gAObb7qMk2KA+n72yQ@mail.gmail.com>
+        id S1726897AbgHQIq2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Aug 2020 04:46:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55952 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726089AbgHQIq1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Aug 2020 04:46:27 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F95FC061388;
+        Mon, 17 Aug 2020 01:46:27 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id f193so7881426pfa.12;
+        Mon, 17 Aug 2020 01:46:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=nb32zZpaq5DzYInbkLOMoGw5CQr0RQ3ACjmDsPtmqPo=;
+        b=kWD2M2eRZOtNKawmTSq/yR75QnpAQBoo9exQE9wtVhu6SSt87u6RRdzQxwglUNqioj
+         7WYux5yzIUJyhFvD5OINhiFFLd724EmEC2YNnx3Sc1cXlrKxDnGgcqdD3VVVRUylIwnt
+         kAYLhayOSk7rO5Q7p6gypk/paOlMsKMGySrpR/sn4q1aJktG20z5+Ls0eohB5473ifSz
+         zckKko/KXt0ABJ/jjHnrHAUN09HaXj5S2kjk5L+SJtUtbLn1dmS3L74fombWkdECCLPn
+         pfG9VHUyUc+prdm2/eGq1xnFUuOsUkmHaauTfzqVYno9/OC85K1M0Sujq7sBg2MTtrHz
+         fMGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=nb32zZpaq5DzYInbkLOMoGw5CQr0RQ3ACjmDsPtmqPo=;
+        b=YEopDIBQZ5qG0LfAZ3s4UOLDOUAWr9yPGREmUsvxzXpFuDZfO4kTL7/xMQZ+CbTvA7
+         8VQq9Lk2duGpiii5+N+hy+ynKn987BvGn7kmXJb6UMqq8Es388Ub/u8wJBtOoCfimXU3
+         mE1Our9DF0U5ruzyuUjOnKCccUW5qPj5r+z5/dQGnI76uNilIMyb3MNux6+QdTBom9Fp
+         G8O4Mn/tJ6YCN06ar/gWWXbVIy93OV7Wat49Lq6Sct+x57KR+fbn3ZcTBaff7F+1tI3u
+         mihn/8CTvQnJ+e6VPoxs49bj189xH6bT0tlWf7I9hPsf6/ABbtenRw9/9Sox01ML7Lyw
+         sK4w==
+X-Gm-Message-State: AOAM533jzq4tY5iX3kirqnfnl50e3rrbdzuYkY69Y7j4wPfAiar7I4W5
+        YHUByL2UFCxP4Rc0jqL3+h0=
+X-Google-Smtp-Source: ABdhPJyypHx7MJA5JHgOzBfYE6gKoueYyuVnnKWVkRcqK6wFFKpCEGwC321zfv2ZqVmfnfvsZtfVag==
+X-Received: by 2002:a63:b21a:: with SMTP id x26mr2662719pge.424.1597653986591;
+        Mon, 17 Aug 2020 01:46:26 -0700 (PDT)
+Received: from localhost.localdomain ([49.207.202.98])
+        by smtp.gmail.com with ESMTPSA id ml18sm16418443pjb.43.2020.08.17.01.46.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Aug 2020 01:46:25 -0700 (PDT)
+From:   Allen Pais <allen.cryptic@gmail.com>
+To:     m.grzeschik@pengutronix.de, davem@davemloft.net, paulus@samba.org,
+        oliver@neukum.org, woojung.huh@microchip.com, petkan@nucleusys.com
+Cc:     keescook@chromium.org, netdev@vger.kernel.org,
+        linux-ppp@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, Allen Pais <allen.lkml@gmail.com>
+Subject: [PATCH 0/8] drivers: net: convert tasklets to use new tasklet_setup()
+Date:   Mon, 17 Aug 2020 14:16:02 +0530
+Message-Id: <20200817084614.24263-1-allen.cryptic@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 13, 2020 at 12:40:04PM -0700, Badhri Jagan Sridharan wrote:
-> Hi Heikki,
-> 
-> Sure. Same as the other patch I will try to address your question here
-> and will update the commit description once you are satisfied with the
-> description.
-> 
-> Subject:
-> During PR_SWAP, source caps should be sent only after tSwapSourceStart
-> 
-> Commit description:
-> The patch addresses the compliance test failures while running
-> TD.PD.CP.E3, TD.PD.CP.E4, TD.PD.CP.E5 of the "Deterministic PD
-> Compliance MOI" test plan published in https://www.usb.org/usbc.
-> For a product to be Type-C compliant, it's expected that these tests
-> are run on usb.org certified Type-C compliance tester as mentioned in
-> https://www.usb.org/usbc.
-> 
-> The purpose of the tests TD.PD.CP.E3, TD.PD.CP.E4, TD.PD.CP.E5 is to
-> verify the PR_SWAP response of the device. While doing so, the test
-> asserts that Source Capabilities message is NOT received from the test
-> device within tSwapSourceStart min (20 ms) from the time the last bit
-> of GoodCRC corresponding to the RS_RDY message sent by the UUT was
-> sent. If it does then the test fails.
-> 
-> This is in line with the requirements from the USB Power Delivery
-> Specification Revision 3.0, Version 1.2:
-> "6.6.8.1 SwapSourceStartTimer
-> The SwapSourceStartTimer Shall be used by the new Source, after a
-> Power Role Swap or Fast Role Swap, to ensure that it does not send
-> Source_Capabilities Message before the new Sink is ready to receive
-> the
-> Source_Capabilities Message. The new Source Shall Not send the
-> Source_Capabilities Message earlier than tSwapSourceStart after the
-> last bit of the EOP of GoodCRC Message sent in response to the PS_RDY
-> Message sent by the new Source indicating that its power supply is
-> ready."
-> 
-> The patch makes sure that TCPM does not send the Source_Capabilities
-> Message within tSwapSourceStart(20ms) by transitioning into
-> SRC_STARTUP only after  tSwapSourceStart(20ms).
+From: Allen Pais <allen.lkml@gmail.com>
 
-That looks good to me. Thanks.
+Commit 12cc923f1ccc ("tasklet: Introduce new initialization API")'
+introduced a new tasklet initialization API. This series converts 
+all the net/* drivers to use the new tasklet_setup() API
 
-Br,
+Allen Pais (8):
+  net: dccp: convert tasklets to use new tasklet_setup() API
+  net: ipv4: convert tasklets to use new tasklet_setup() API
+  net: mac80211: convert tasklets to use new tasklet_setup() API
+  net: mac802154: convert tasklets to use new tasklet_setup() API
+  net: rds: convert tasklets to use new tasklet_setup() API
+  net: sched: convert tasklets to use new tasklet_setup() API
+  net: smc: convert tasklets to use new tasklet_setup() API
+  net: xfrm: convert tasklets to use new tasklet_setup() API
+
+ net/dccp/timer.c           | 10 +++++-----
+ net/ipv4/tcp_output.c      |  8 +++-----
+ net/mac80211/ieee80211_i.h |  4 ++--
+ net/mac80211/main.c        | 14 +++++---------
+ net/mac80211/tx.c          |  5 +++--
+ net/mac80211/util.c        |  5 +++--
+ net/mac802154/main.c       |  8 +++-----
+ net/rds/ib_cm.c            | 14 ++++++--------
+ net/sched/sch_atm.c        |  9 +++++----
+ net/smc/smc_cdc.c          |  6 +++---
+ net/smc/smc_wr.c           | 14 ++++++--------
+ net/xfrm/xfrm_input.c      |  7 +++----
+ 12 files changed, 47 insertions(+), 57 deletions(-)
 
 -- 
-heikki
+2.17.1
+
