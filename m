@@ -2,127 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE58C2463AF
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Aug 2020 11:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D77362463D8
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Aug 2020 11:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726837AbgHQJqo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Aug 2020 05:46:44 -0400
-Received: from mail-db8eur05on2086.outbound.protection.outlook.com ([40.107.20.86]:12129
-        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726324AbgHQJqm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 17 Aug 2020 05:46:42 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nwPcD3ceeygnjgqj+6agk0u9VGwGhZd6tCpOB+hwxV2s7ZVlGT6GbjxSG5L2sfp/1Dyeuv9L3LM/wyGzfiG6tYY2hJjQ1CGpv0nRMGNI/NCNigV8D9iZDMyeVNYp8UAb2vRzckHJSlBmkJWsL5XNB9hA+MU1Dahr+RFm3z+fOiq18bKjvuKgd11sKj8VvddbTD6m202p/5QB77TBKwms894QTMC6l0s0TwkS44lRmNcxWd672YniDTqDREmgTuDn7LgB1M+a3C3hIrwOkhJX6F8dlE1O22QVFbTNmn1uJ1jizPrtAelZ1Bip/H8PjwhXxoDm3V2BK9+6Tc4nKXYgCg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GiygfphVRc6jCRLTweWBo0aa43+acXpEU7O3O1eRSHM=;
- b=EwB0us+Z8uRu7Gcc5O3cSg+XlqoHpxCS/9MbibIhHXqj8DTfw3bl87/E2gO378fnAU09oXT60L8ZmCXv0P1+PVbucFWPFdrUBUxijRTF4P0HKNJbMhIsJrLxivNkFTZWoPqxPfAvIsLTGcVBG4+Lj/bmPCzoMubDqGaWj+FIms4ov5VexMXs4IvaFDjk164OgsFwpXIqUVidTeMU3y0VpIDYbptSUTkWf/L8Zcu2KiJzjZx1iqKTaPkHNXPkn+OO8SQZoE9j4hAw0pi5gh6mfAvsQfkr9xTXy2nuaPT7OS/MNPVyah89ybbWGVJwMXeRYdxOlIG+FkGf5XcF2gSOTw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GiygfphVRc6jCRLTweWBo0aa43+acXpEU7O3O1eRSHM=;
- b=WyRM16rIJAmnlURi77JJgTGSmz3VFCEgjQ4FyETG1rUb92mql+a1flBfTcsrJnFlRvoa3e+kWgmoqCEvL+FtZQ7zUdVPd5kBeu+OkURaVBHY4EylOi9YAjnlpUXOwovnNmxSFiyM6GlcbEnsHZFB/G+Rp1hPasx26Y+PKFPCNMo=
-Authentication-Results: intel.com; dkim=none (message not signed)
- header.d=none;intel.com; dmarc=none action=none header.from=nxp.com;
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
- by AM5PR0402MB2740.eurprd04.prod.outlook.com (2603:10a6:203:9a::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3283.15; Mon, 17 Aug
- 2020 09:46:06 +0000
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1023:be8d:40c:efe1]) by AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1023:be8d:40c:efe1%3]) with mapi id 15.20.3283.028; Mon, 17 Aug 2020
- 09:46:06 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     mathias.nyman@intel.com
-Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
-        linux-imx@nxp.com, Peter Chen <peter.chen@nxp.com>
-Subject: [PATCH v2 7/7] usb: host: xhci: avoid calling contineous two times for xhci_suspend
-Date:   Mon, 17 Aug 2020 17:44:40 +0800
-Message-Id: <20200817094440.23202-8-peter.chen@nxp.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200817094440.23202-1-peter.chen@nxp.com>
-References: <20200817094440.23202-1-peter.chen@nxp.com>
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR02CA0094.apcprd02.prod.outlook.com
- (2603:1096:4:90::34) To AM7PR04MB7157.eurprd04.prod.outlook.com
- (2603:10a6:20b:118::20)
+        id S1726973AbgHQJzr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Aug 2020 05:55:47 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:43306 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726385AbgHQJzq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Aug 2020 05:55:46 -0400
+Received: by mail-lj1-f195.google.com with SMTP id v12so16758544ljc.10;
+        Mon, 17 Aug 2020 02:55:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=4nEjwbn3JPPjnvjnDGJFs8xT2ZWqJn/zT9YAgEPeUdk=;
+        b=D2FszZtqGbi9EHUF5WKi5yu17qQwKpl2t+F7h87P9O8j+TUNc7aAg3xfAq4eTKNbRR
+         Ikwz4xgaXYjlRJGvif3zPY6HRKUYMiTubWcZ+hm6fTFVrJ4HKR0jWFAwoIfyPa0+0LLE
+         WcDzoNzlnYzpWpwwR4HR0knC/Xcjgh+nM4C4Oh8XUuWYy8skcPsjjMGVyZfkmg+L9XJk
+         jP4lYCTV53qm/lVgtYgVr14ACiG8/xegYIkSVJiosy7a5f/A4VOloTRpfXUwXJbokQ0B
+         icaF6/6r4bE+DvOvTEJcD1N+P6p2Nc7iUqrzTbEEhT3f8mqZd7EymYe3f1AB3cGSdS0p
+         LFcA==
+X-Gm-Message-State: AOAM530BsHkDDoTmql1iGiPkVf9Qx1YAiqyX1CD4C+NyXOZMwWHbKAt2
+        hckn2DYJ54amUTMA8UdkmNA=
+X-Google-Smtp-Source: ABdhPJzuju/OypiGpEJSlFr7KcuLb4mAH49KUa6Y1vdxeC1rNvCO0+BsGDT7bkv8ZXaS8LfJuDiNog==
+X-Received: by 2002:a2e:91d2:: with SMTP id u18mr7274231ljg.436.1597658143751;
+        Mon, 17 Aug 2020 02:55:43 -0700 (PDT)
+Received: from xi.terra (c-beaee455.07-184-6d6c6d4.bbcust.telenor.se. [85.228.174.190])
+        by smtp.gmail.com with ESMTPSA id 185sm4913882ljf.82.2020.08.17.02.55.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Aug 2020 02:55:42 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1k7brh-00010R-67; Mon, 17 Aug 2020 11:55:41 +0200
+Date:   Mon, 17 Aug 2020 11:55:41 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     =?utf-8?B?UGjDuiBMxrB1?= An <luuanphu@gmail.com>
+Cc:     Johan Hovold <johan@kernel.org>, Phu Luu <Phu.Luu@silabs.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Brant Merryman <Brant.Merryman@silabs.com>,
+        Richard Hendricks <Richard.Hendricks@silabs.com>,
+        "hungnd3@fsoft.com.vn" <hungnd3@fsoft.com.vn>
+Subject: Re: [PATCH v3 2/2] USB: serial: cp210x: Proper RTS control when
+ buffers fill
+Message-ID: <20200817095541.GA3383@localhost>
+References: <ECCF8E73-91F3-4080-BE17-1714BC8818FB@silabs.com>
+ <20200626074206.GP3334@localhost>
+ <20200706101834.GI3453@localhost>
+ <CAP847ynZDozdA0kDEo6Zjuk0LOeaiTyW_fnU89hnFUD8ntL8uw@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from b29397-desktop.ap.freescale.net (119.31.174.67) by SG2PR02CA0094.apcprd02.prod.outlook.com (2603:1096:4:90::34) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3283.16 via Frontend Transport; Mon, 17 Aug 2020 09:46:04 +0000
-X-Mailer: git-send-email 2.17.1
-X-Originating-IP: [119.31.174.67]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: b9b8690a-291f-4e98-003d-08d842925cf7
-X-MS-TrafficTypeDiagnostic: AM5PR0402MB2740:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <AM5PR0402MB27404D683E7F964A5608EA2C8B5F0@AM5PR0402MB2740.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uzzAl9iN/2pTTjtfSVIzHDOqC0MAUGZJOPKI1MLRlY2seFaG+o2N5Ops4Fysi6aJw9Ynbtg0kTAWt9uzQyuAUT7Qvq+x11g0rLbBt/becxfgBkWfdi7WIHMQuSUXiZC5a3Lc9plgzfXLOV8bjlmVQwz+hDPsRuJ3tp6Q9xIPz6UqHt+Zi8G2Txt6oY0zmccl7sj7nI7wWuUDkG8KPqAQ1YmcwWbJvIEn0dfkmtR3UMD2W7UFL4gwdev6MGauNCmhCJ20on828m2bJPupWl4y6ohf0yxvDobrw9DYFNiSr58fJIj+ejv3vFaGjJFC/CR3
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(136003)(346002)(376002)(366004)(396003)(5660300002)(66476007)(4326008)(36756003)(2906002)(8936002)(6486002)(66556008)(44832011)(83380400001)(6512007)(6916009)(66946007)(8676002)(316002)(6666004)(16526019)(186003)(26005)(52116002)(86362001)(2616005)(478600001)(1076003)(956004)(6506007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: /f2R6D0i0x5cVwd5dTDvzVmPK9bCot2urKki3P1eNyCvedcsZhgwhXv+j/Z5d8j7E98AivYxFkpm9/qwn1m1riXGpTnZNM2k1vqLS0woGSHTRZxctVQA2pRzkeqXVVNP10XsXKw1XgvH7UerQZAIuK21ne0rHDlZAEzcVpBuUtYRd8elfLiND/k15qjSaXKDcHm8dqVSHAWsvbU5t0iHjvWKFTQ+c9USXkvG3oS/qQgbP1UAEYz1fCXxhXhsGIjNJqGBZ8GS+JviVL5Xczubip1cu1G0PMIMONojBz0SbTICoEFEPs7bCOUt8RswI7aIYZiFs5D3Is3E5/bhuRtf9CZXjR0ntIX0Lg7Wqy59B7j+r7vKSuRxgPEDQHvEXxAoyNdXLYIciI4MJaQ1fXZUHbeQO252L8iJjntScsCqdubo2rOW4EMGT5DIx5PUygwHXxPolE4F62rCtFDstzXhvpi/J/fqJlZTiBnDpJFboxvE3HTyOEtgKBpnjGqByjueDTDdQGzaCH5k07fbasBFzGxdPwI3ZhkNVa/mRbFWh9OELlpOcSuu2Xsg+aQzMstUnnnNcXTPlA44t2G64mk+HvFhv3BSqr61WJkyEU/H43/IwuDnflbO/GoNdM2Z6C2SMLzzshjEPajEvVvmora4nw==
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b9b8690a-291f-4e98-003d-08d842925cf7
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Aug 2020 09:46:06.7564
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: m0Ts9ycZ43VZ47MVUjoVxjicgH9FvgsxRqISlXPMhQZr7iydAUmTm30A0PLkIicAwmWIJUzoADY+RAw0wp3Slw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR0402MB2740
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAP847ynZDozdA0kDEo6Zjuk0LOeaiTyW_fnU89hnFUD8ntL8uw@mail.gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If the xhci-plat.c is the platform driver, after the runtime pm is
-enabled, the xhci_suspend is called if nothing is connected on
-the port. When the system goes to suspend, it will call xhci_suspend again
-if USB wakeup is enabled.
+On Mon, Aug 17, 2020 at 09:24:05AM +0700, Phú Lưu An wrote:
+> Hi Johan,
+> 
+> My customer asked me when this patch is applied to the community. So, could
+> you please tell me when it appears in a various distributions?
 
-Since the runtime suspend wakeup setting is not always the same with
-system suspend wakeup setting, eg, at runtime suspend, we always need
-wakeup if the controller is in low power mode; but at suspend system,
-we may not need wakeup. So, we move the judgement after changing
-wakeup setting.
+You'll have to ask the distributions about that.
 
-Reviewed-by: Jun Li <jun.li@nxp.com>
-Signed-off-by: Peter Chen <peter.chen@nxp.com>
----
- drivers/usb/host/xhci.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+The patch in question is in Linus's tree since about two weeks and
+should be picked up and backported to the stable trees soon:
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 3c41b14ecce7..cde71f3b9767 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -982,12 +982,15 @@ int xhci_suspend(struct xhci_hcd *xhci, bool do_wakeup)
- 			xhci->shared_hcd->state != HC_STATE_SUSPENDED)
- 		return -EINVAL;
- 
--	xhci_dbc_suspend(xhci);
--
- 	/* Clear root port wake on bits if wakeup not allowed. */
- 	if (!do_wakeup)
- 		xhci_disable_port_wake_on_bits(xhci);
- 
-+	if (!HCD_HW_ACCESSIBLE(hcd))
-+		return 0;
-+
-+	xhci_dbc_suspend(xhci);
-+
- 	/* Don't poll the roothubs on bus suspend. */
- 	xhci_dbg(xhci, "%s: stopping port polling.\n", __func__);
- 	clear_bit(HCD_FLAG_POLL_RH, &hcd->flags);
--- 
-2.17.1
+	c7614ff9b73a ("USB: serial: cp210x: re-enable auto-RTS on open")
 
+Johan
