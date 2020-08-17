@@ -2,156 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84F412464EE
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Aug 2020 12:56:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3266A246504
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Aug 2020 13:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726480AbgHQK4P convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 17 Aug 2020 06:56:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38882 "EHLO mail.kernel.org"
+        id S1728349AbgHQK7X (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Aug 2020 06:59:23 -0400
+Received: from muru.com ([72.249.23.125]:40508 "EHLO muru.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728095AbgHQKzY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 17 Aug 2020 06:55:24 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 208911] Renesas USB controller - FW has invalid version :8224
-Date:   Mon, 17 Aug 2020 10:55:23 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: code-kernel@bnavigator.de
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-208911-208809-4IA1U2QTvA@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-208911-208809@https.bugzilla.kernel.org/>
-References: <bug-208911-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1728301AbgHQK7A (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 17 Aug 2020 06:59:00 -0400
+Received: from atomide.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 26A7980A3;
+        Mon, 17 Aug 2020 10:58:58 +0000 (UTC)
+Date:   Mon, 17 Aug 2020 13:59:26 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>, od@zcrc.me,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] usb: musb: Fix runtime PM race in musb_queue_resume_work
+Message-ID: <20200817105926.GF2994@atomide.com>
+References: <20200809125359.31025-1-paul@crapouillou.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200809125359.31025-1-paul@crapouillou.net>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=208911
+* Paul Cercueil <paul@crapouillou.net> [200809 12:54]:
+> musb_queue_resume_work() would call the provided callback if the runtime
+> PM status was 'active'. Otherwise, it would enqueue the request if the
+> hardware was still suspended (musb->is_runtime_suspended is true).
+> 
+> This causes a race with the runtime PM handlers, as it is possible to be
+> in the case where the runtime PM status is not yet 'active', but the
+> hardware has been awaken (PM resume function has been called).
+> 
+> When hitting the race, the resume work was not enqueued, which probably
+> triggered other bugs further down the stack. For instance, a telnet
+> connection on Ingenic SoCs would result in a 50/50 chance of a
+> segmentation fault somewhere in the musb code.
+> 
+> Rework the code so that either we call the callback directly if
+> (musb->is_runtime_suspended == 0), or enqueue the query otherwise.
 
-Ben Greiner (code-kernel@bnavigator.de) changed:
+Yes we should use is_runtime_suspended, thanks for fixing it.
+Things still work for me so:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |code-kernel@bnavigator.de
-
---- Comment #8 from Ben Greiner (code-kernel@bnavigator.de) ---
-I get the same error with :8215. Is this related?
-
-Kernel version: 5.8.1-arch1-1
-
-
-system journal (happens before cryptsetup):
-
-    Aug 17 12:31:33 archlinux kernel: xhci_hcd 0000:03:00.0: FW has invalid
-version :8215
-    Aug 17 12:31:33 archlinux kernel: xhci_hcd 0000:03:00.0: Direct firmware
-load for renesas_usb_fw.mem failed with error -2
-    Aug 17 12:31:33 archlinux kernel: xhci_hcd 0000:03:00.0: request_firmware
-failed: -2
-    Aug 17 12:31:33 archlinux kernel: xhci_hcd: probe of 0000:03:00.0 failed
-with error -2
-
-The USB3 controller is on the mainboard of a Samsung Series 9 Ultrabook
-NP900X4D
-
-    # lspci -vv -s 03:0.0
-    03:00.0 USB controller: Renesas Technology Corp. uPD720202 USB 3.0 Host
-Controller (rev 02) (prog-if 30 [XHCI])
-        Subsystem: Samsung Electronics Co Ltd Device c0cd
-        Control: I/O- Mem+ BusMaster- SpecCycle- MemWINV- VGASnoop- ParErr-
-Stepping- SERR- FastB2B- DisINTx-
-        Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort-
-<MAbort- >SERR- <PERR- INTx-
-        Interrupt: pin A routed to IRQ 16
-        Region 0: Memory at f0500000 (64-bit, non-prefetchable) [size=8K]
-        Capabilities: [50] Power Management version 3
-            Flags: PMEClk- DSI- D1- D2- AuxCurrent=375mA
-PME(D0+,D1-,D2-,D3hot+,D3cold+)
-            Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
-        Capabilities: [70] MSI: Enable- Count=1/8 Maskable- 64bit+
-            Address: 0000000000000000  Data: 0000
-        Capabilities: [90] MSI-X: Enable- Count=8 Masked-
-            Vector table: BAR=0 offset=00001000
-            PBA: BAR=0 offset=00001080
-        Capabilities: [a0] Express (v2) Endpoint, MSI 00
-            DevCap:     MaxPayload 128 bytes, PhantFunc 0, Latency L0s
-unlimited, L1 unlimited
-                ExtTag- AttnBtn- AttnInd- PwrInd- RBE+ FLReset- SlotPowerLimit
-0.000W
-            DevCtl:     CorrErr- NonFatalErr- FatalErr- UnsupReq-
-                RlxdOrd+ ExtTag- PhantFunc- AuxPwr- NoSnoop+
-                MaxPayload 128 bytes, MaxReadReq 512 bytes
-            DevSta:     CorrErr- NonFatalErr- FatalErr- UnsupReq- AuxPwr+
-TransPend-
-            LnkCap:     Port #0, Speed 5GT/s, Width x1, ASPM L0s L1, Exit
-Latency L0s <4us, L1 unlimited
-                ClockPM+ Surprise- LLActRep- BwNot- ASPMOptComp-
-            LnkCtl:     ASPM L1 Enabled; RCB 64 bytes, Disabled- CommClk+
-                ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
-            LnkSta:     Speed 5GT/s (ok), Width x1 (ok)
-                TrErr- Train- SlotClk+ DLActive- BWMgmt- ABWMgmt-
-            DevCap2: Completion Timeout: Not Supported, TimeoutDis+ NROPrPrP-
-LTR+
-                10BitTagComp- 10BitTagReq- OBFF Not Supported, ExtFmt-
-EETLPPrefix-
-                EmergencyPowerReduction Not Supported,
-EmergencyPowerReductionInit-
-                FRS- TPHComp- ExtTPHComp-
-                AtomicOpsCap: 32bit- 64bit- 128bitCAS-
-            DevCtl2: Completion Timeout: 50us to 50ms, TimeoutDis- LTR- OBFF
-Disabled,
-                AtomicOpsCtl: ReqEn-
-            LnkCtl2: Target Link Speed: 5GT/s, EnterCompliance- SpeedDis-
-                Transmit Margin: Normal Operating Range,
-EnterModifiedCompliance- ComplianceSOS-
-                Compliance De-emphasis: -6dB
-            LnkSta2: Current De-emphasis Level: -6dB, EqualizationComplete-
-EqualizationPhase1-
-                EqualizationPhase2- EqualizationPhase3-
-LinkEqualizationRequest-
-                Retimer- 2Retimers- CrosslinkRes: unsupported
-        Capabilities: [100 v1] Advanced Error Reporting
-            UESta:      DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt-
-RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
-            UEMsk:      DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt-
-RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
-            UESvrt:     DLP+ SDES+ TLP- FCP+ CmpltTO- CmpltAbrt- UnxCmplt-
-RxOF+ MalfTLP+ ECRC- UnsupReq- ACSViol-
-            CESta:      RxErr- BadTLP- BadDLLP- Rollover- Timeout-
-AdvNonFatalErr-
-            CEMsk:      RxErr- BadTLP- BadDLLP- Rollover- Timeout-
-AdvNonFatalErr+
-            AERCap:     First Error Pointer: 00, ECRCGenCap- ECRCGenEn-
-ECRCChkCap- ECRCChkEn-
-                MultHdrRecCap- MultHdrRecEn- TLPPfxPres- HdrLogCap-
-            HeaderLog: 00000000 00000000 00000000 00000000
-        Capabilities: [150 v1] Latency Tolerance Reporting
-            Max snoop latency: 0ns
-            Max no snoop latency: 0ns
-        Kernel modules: xhci_pci
-
-
-
-I am currently booting into LTS kernel as workaround.
-
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+Reviewed-by: Tony Lindgren <tony@atomide.com>
+Tested-by: Tony Lindgren <tony@atomide.com>
