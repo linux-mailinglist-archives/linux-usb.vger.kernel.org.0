@@ -2,118 +2,178 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BC4D2467B3
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Aug 2020 15:49:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A3DA246D0A
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Aug 2020 18:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728698AbgHQNto (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Aug 2020 09:49:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53292 "EHLO mail.kernel.org"
+        id S2388944AbgHQQmr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Aug 2020 12:42:47 -0400
+Received: from mga09.intel.com ([134.134.136.24]:9525 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727953AbgHQNtm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 17 Aug 2020 09:49:42 -0400
-Received: from saruman (unknown [194.34.132.59])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 383D72065C;
-        Mon, 17 Aug 2020 13:49:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597672181;
-        bh=neILveBskNIGri0vUIbvh+uU43bAIKbA+3Ui69RMDEs=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=B2dQcjMvHdPr+yGQWxV5pReE59glr540FiC9zAx/WQDn0xn+sIBKD+xL2t18N9sM4
-         SAWDG5mRanAZS3YXc1SbcOWFN+I++rs+P2t0AF94BeFQC9kUnY534zUyGQ1LVc4sEc
-         Ew7LVl8v3JitXfdLzjWSBWhzkaD1SkxqAUpbWWOg=
-From:   Felipe Balbi <balbi@kernel.org>
-To:     rentao.bupt@gmail.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Stephen Boyd <swboyd@chromium.org>, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        openbmc@lists.ozlabs.org, taoren@fb.com
-Cc:     Tao Ren <rentao.bupt@gmail.com>
-Subject: Re: [PATCH] usb: gadget: aspeed: fixup vhub port irq handling
-In-Reply-To: <20200528011154.30355-1-rentao.bupt@gmail.com>
-References: <20200528011154.30355-1-rentao.bupt@gmail.com>
-Date:   Mon, 17 Aug 2020 16:49:32 +0300
-Message-ID: <875z9hz8k3.fsf@kernel.org>
+        id S2388937AbgHQQm3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 17 Aug 2020 12:42:29 -0400
+IronPort-SDR: j7Sp7ru6XaRTS3SHXP/km35zpSPWNbkEupbgGqGkKiMbc60J5yCbdkjzurdAIs0MqRhKyCN7Y/
+ ntLP3WqDUdHQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9716"; a="155837525"
+X-IronPort-AV: E=Sophos;i="5.76,324,1592895600"; 
+   d="scan'208";a="155837525"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2020 09:42:28 -0700
+IronPort-SDR: kKKGbtTwSThDHZkle78TF2C95umm+bcqUyNd28E5DIAx8JjBn+qio48WAqpIn0QR1/GkDk0L3H
+ LvpGqjFUge1w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,324,1592895600"; 
+   d="scan'208";a="310149226"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 17 Aug 2020 09:42:27 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id A669116D; Mon, 17 Aug 2020 19:42:26 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/3] usb: early: xhci-dbc: use readl_poll_timeout() to simplify code
+Date:   Mon, 17 Aug 2020 19:42:24 +0300
+Message-Id: <20200817164226.49119-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+Use readl_poll_timeout() to poll the status of the registers.
 
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/usb/early/xhci-dbc.c | 56 +++++++++++++++++-------------------
+ 1 file changed, 27 insertions(+), 29 deletions(-)
 
-Hi,
+diff --git a/drivers/usb/early/xhci-dbc.c b/drivers/usb/early/xhci-dbc.c
+index c0507767a8e3..77c2e8301971 100644
+--- a/drivers/usb/early/xhci-dbc.c
++++ b/drivers/usb/early/xhci-dbc.c
+@@ -14,6 +14,7 @@
+ #include <linux/pci_ids.h>
+ #include <linux/memblock.h>
+ #include <linux/io.h>
++#include <linux/iopoll.h>
+ #include <asm/pci-direct.h>
+ #include <asm/fixmap.h>
+ #include <linux/bcd.h>
+@@ -131,38 +132,23 @@ static u32 __init xdbc_find_dbgp(int xdbc_num, u32 *b, u32 *d, u32 *f)
+ 	return -1;
+ }
+ 
+-static int handshake(void __iomem *ptr, u32 mask, u32 done, int wait, int delay)
+-{
+-	u32 result;
+-
+-	do {
+-		result = readl(ptr);
+-		result &= mask;
+-		if (result == done)
+-			return 0;
+-		udelay(delay);
+-		wait -= delay;
+-	} while (wait > 0);
+-
+-	return -ETIMEDOUT;
+-}
+-
+ static void __init xdbc_bios_handoff(void)
+ {
+ 	int offset, timeout;
+ 	u32 val;
+ 
+ 	offset = xhci_find_next_ext_cap(xdbc.xhci_base, 0, XHCI_EXT_CAPS_LEGACY);
+-	val = readl(xdbc.xhci_base + offset);
+ 
+-	if (val & XHCI_HC_BIOS_OWNED) {
++	val = readl(xdbc.xhci_base + offset);
++	if (val & XHCI_HC_BIOS_OWNED)
+ 		writel(val | XHCI_HC_OS_OWNED, xdbc.xhci_base + offset);
+-		timeout = handshake(xdbc.xhci_base + offset, XHCI_HC_BIOS_OWNED, 0, 5000, 10);
+ 
+-		if (timeout) {
+-			pr_notice("failed to hand over xHCI control from BIOS\n");
+-			writel(val & ~XHCI_HC_BIOS_OWNED, xdbc.xhci_base + offset);
+-		}
++	timeout = readl_poll_timeout_atomic(xdbc.xhci_base + offset, val,
++					    !(val & XHCI_HC_BIOS_OWNED),
++					    10, 5000);
++	if (timeout) {
++		pr_notice("failed to hand over xHCI control from BIOS\n");
++		writel(val & ~XHCI_HC_BIOS_OWNED, xdbc.xhci_base + offset);
+ 	}
+ 
+ 	/* Disable BIOS SMIs and clear all SMI events: */
+@@ -421,7 +407,9 @@ static int xdbc_start(void)
+ 
+ 	ctrl = readl(&xdbc.xdbc_reg->control);
+ 	writel(ctrl | CTRL_DBC_ENABLE | CTRL_PORT_ENABLE, &xdbc.xdbc_reg->control);
+-	ret = handshake(&xdbc.xdbc_reg->control, CTRL_DBC_ENABLE, CTRL_DBC_ENABLE, 100000, 100);
++	ret = readl_poll_timeout_atomic(&xdbc.xdbc_reg->control, ctrl,
++					(ctrl & CTRL_DBC_ENABLE) == CTRL_DBC_ENABLE,
++					100, 100000);
+ 	if (ret) {
+ 		xdbc_trace("failed to initialize hardware\n");
+ 		return ret;
+@@ -432,14 +420,18 @@ static int xdbc_start(void)
+ 		xdbc_reset_debug_port();
+ 
+ 	/* Wait for port connection: */
+-	ret = handshake(&xdbc.xdbc_reg->portsc, PORTSC_CONN_STATUS, PORTSC_CONN_STATUS, 5000000, 100);
++	ret = readl_poll_timeout_atomic(&xdbc.xdbc_reg->portsc, status,
++					(status & PORTSC_CONN_STATUS) == PORTSC_CONN_STATUS,
++					100, 5000000);
+ 	if (ret) {
+ 		xdbc_trace("waiting for connection timed out\n");
+ 		return ret;
+ 	}
+ 
+ 	/* Wait for debug device to be configured: */
+-	ret = handshake(&xdbc.xdbc_reg->control, CTRL_DBC_RUN, CTRL_DBC_RUN, 5000000, 100);
++	ret = readl_poll_timeout_atomic(&xdbc.xdbc_reg->control, status,
++					(status & CTRL_DBC_RUN) == CTRL_DBC_RUN,
++					100, 5000000);
+ 	if (ret) {
+ 		xdbc_trace("waiting for device configuration timed out\n");
+ 		return ret;
+@@ -523,11 +515,14 @@ static int xdbc_bulk_transfer(void *data, int size, bool read)
+ 
+ static int xdbc_handle_external_reset(void)
+ {
+-	int ret = 0;
++	u32 result;
++	int ret;
+ 
+ 	xdbc.flags = 0;
+ 	writel(0, &xdbc.xdbc_reg->control);
+-	ret = handshake(&xdbc.xdbc_reg->control, CTRL_DBC_ENABLE, 0, 100000, 10);
++	ret = readl_poll_timeout_atomic(&xdbc.xdbc_reg->control, result,
++					!(result & CTRL_DBC_ENABLE),
++					10, 100000);
+ 	if (ret)
+ 		goto reset_out;
+ 
+@@ -552,10 +547,13 @@ static int xdbc_handle_external_reset(void)
+ 
+ static int __init xdbc_early_setup(void)
+ {
++	u32 result;
+ 	int ret;
+ 
+ 	writel(0, &xdbc.xdbc_reg->control);
+-	ret = handshake(&xdbc.xdbc_reg->control, CTRL_DBC_ENABLE, 0, 100000, 100);
++	ret = readl_poll_timeout_atomic(&xdbc.xdbc_reg->control, result,
++					!(result & CTRL_DBC_ENABLE),
++					100, 100000);
+ 	if (ret)
+ 		return ret;
+ 
+-- 
+2.28.0
 
-rentao.bupt@gmail.com writes:
-> From: Tao Ren <rentao.bupt@gmail.com>
->
-> This is a follow-on patch for commit a23be4ed8f48 ("usb: gadget: aspeed:
-> improve vhub port irq handling"): for_each_set_bit() is replaced with
-> simple for() loop because for() loop runs faster on ASPEED BMC.
->
-> Signed-off-by: Tao Ren <rentao.bupt@gmail.com>
-> ---
->  drivers/usb/gadget/udc/aspeed-vhub/core.c | 10 +++-------
->  drivers/usb/gadget/udc/aspeed-vhub/vhub.h |  3 +++
->  2 files changed, 6 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/usb/gadget/udc/aspeed-vhub/core.c b/drivers/usb/gadg=
-et/udc/aspeed-vhub/core.c
-> index cdf96911e4b1..be7bb64e3594 100644
-> --- a/drivers/usb/gadget/udc/aspeed-vhub/core.c
-> +++ b/drivers/usb/gadget/udc/aspeed-vhub/core.c
-> @@ -135,13 +135,9 @@ static irqreturn_t ast_vhub_irq(int irq, void *data)
->=20=20
->  	/* Handle device interrupts */
->  	if (istat & vhub->port_irq_mask) {
-> -		unsigned long bitmap =3D istat;
-> -		int offset =3D VHUB_IRQ_DEV1_BIT;
-> -		int size =3D VHUB_IRQ_DEV1_BIT + vhub->max_ports;
-> -
-> -		for_each_set_bit_from(offset, &bitmap, size) {
-> -			i =3D offset - VHUB_IRQ_DEV1_BIT;
-> -			ast_vhub_dev_irq(&vhub->ports[i].dev);
-> +		for (i =3D 0; i < vhub->max_ports; i++) {
-> +			if (istat & VHUB_DEV_IRQ(i))
-> +				ast_vhub_dev_irq(&vhub->ports[i].dev);
-
-how have you measured your statement above? for_each_set_bit() does
-exactly what you did. Unless your architecture has an instruction which
-helps finds the next set bit (like cls on ARM), which, then, makes it
-much faster.
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl86iuwRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQZuXg//doj2VlNrrpXSD2a83iUegA+NRRRKef1U
-PRfUUrIK4igGr/FiQAhE9Mlilxj/sZTLcQ6qe1EhIY+f5JhyfucZ5Te4WhNFaxtZ
-UJp24ndXVc0q8NTmSkre+c6GLX/lD4NFlfgMSsdqpvAlYJirzL4GY63EWA9W8I3k
-cO4Igdvi8ZskhUgX2QBCM4kDxMk+WxV6PrD8L4EykHmXTzFqVJxKM30BO7U0Gdd4
-bmImEVCqzUDSivYKC7xwDWnT0HAXjbm38tcb4hq40pePVtDNEGFiNd3NUo953SvP
-065liQg/4ats64P21c+PN0qXFovkWoSTJBa1yzcqfWF+Yi8fKI5UVNp49W0CJZ2m
-lEKNc/H4+qzEysoXCgWCCznDg4RCxE0f4Y5OsNxkf63QvVEAaFRePgNZ6txble7v
-dJueHYNiEfsgCe2QUCxl4f805gq2+iIMKGnWvEdwcdlpUCmop+CBXouD9MuMt+hB
-OLDU6hSo/REsEHKVsooiICwfUOuD0xrqiqObcLKwSd0krXnDRkkYjYm4FvN4u43y
-y+sTwkU5jswAvcBCHDgayGgm37U0QsDLpZW5voCirwaPqdC+09yVQ18/lx4cA+Lq
-Y2WHyvRRssi5U8G3YHQUoLVJ7umEx5o6k13rBQNBnueyfEsVM3G8V74j+uuYLGzO
-BbmxKI2a0bY=
-=TM9v
------END PGP SIGNATURE-----
---=-=-=--
