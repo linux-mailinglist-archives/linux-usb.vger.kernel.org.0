@@ -2,262 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97F7A245A20
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Aug 2020 01:52:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 162E3245BA4
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Aug 2020 06:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726408AbgHPXwQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 16 Aug 2020 19:52:16 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:36888 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726254AbgHPXwP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 16 Aug 2020 19:52:15 -0400
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4F1FBF9;
-        Mon, 17 Aug 2020 01:52:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1597621931;
-        bh=Z3mw0uAASzL5EGhPOBrTIfXXzzbCeFOHtL4uBOxrFuY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nKFU21KmQ1hy2pehY93/EXLQKB2N2/hfdKVAJJjjYCTBFkgIbScwNzSHfS0SZPMGI
-         SDSEr9XzdAdI54MhOfw3g7Oqqptn3fQIqdFQNRSbtWAYfDwWYVOhcUVGzb93URA704
-         HZJZgOT4BLK911PwIGe6yR9dNBbHldIyY6po9D+E=
-Date:   Mon, 17 Aug 2020 02:51:55 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-usb <linux-usb@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-media@vger.kernel.org, linux-uvc-devel@lists.sourceforge.net,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@iki.fi>
-Subject: Re: Protecting uvcvideo againt USB device disconnect [Was: Re:
- Protecting usb_set_interface() against device removal]
-Message-ID: <20200816235155.GA7729@pendragon.ideasonboard.com>
-References: <b0a7247c-bed3-934b-2c73-7f4b0adb5e75@roeck-us.net>
- <20200815020739.GB52242@rowland.harvard.edu>
- <20200816003315.GA13826@roeck-us.net>
- <20200816121816.GC32174@pendragon.ideasonboard.com>
- <9bb20ed7-b156-f6c2-4d25-6acac1a0021b@roeck-us.net>
+        id S1726114AbgHQEho (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Aug 2020 00:37:44 -0400
+Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:30620 "EHLO
+        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725983AbgHQEhi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Aug 2020 00:37:38 -0400
+Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
+        by mx0b-0014ca01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07H4Yh1m001316;
+        Sun, 16 Aug 2020 21:37:28 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=proofpoint;
+ bh=QZUf2HTthGW92k1RdidoA2ppTCFX4o44p8+NhZ9zRvk=;
+ b=MOuJHts1IwGe3Yc60XJvPBLun1U4YOmIK5UW7z8JCwsoo16ae4WBbTWbDtu7/EWo0diW
+ qpP6DrEBi3LR9H4I5MAMxWt13t/C8yeohbyaBoNX03I/pG9E10IzzoyjqGfIke/CKKNx
+ DJmrn02G4mKs1Iye+pQdUNDd7YhaKS99nuwBmwo94cQexP+53O3GIYRjL2Ji9Rktkbce
+ Y9hfCaZwHePNuF/2049Wy31J5Y0QiOqFdAm5fWMejxTJ/+DNz2MJg9RBJ4q+/3Zwit0+
+ BL7AaXjpFWnzgdju2ZKjQFtr9T+ibnkUDb4FLO/1tu1gl8eW0BsoFAMGqp4RtaSTvvkn Jg== 
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2107.outbound.protection.outlook.com [104.47.55.107])
+        by mx0b-0014ca01.pphosted.com with ESMTP id 32xba0d0gf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 16 Aug 2020 21:37:28 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Xa1b1kMgPlcedjodXe1sVvjVzZrfGO3scIL+yzw9w9fEpXa/QLMuQDz+KatAcStEwXHx/XgEikAeuIAH1H245YLnQqCPM2OVGRVyujMVg+AaPygCOefBL/p2nNapv7Jis+d8QMrgfI/CyD+ylMTTNp3GGqExMAHma8ID5Yd0/m5DJgt0X0dX5R4jGm4sLCcSaGQcAi3ejmo/JEiht2r/20+TPmGrnOT6/ODzyt4rY17wisKPp9y4/02eQRKVV8IzQYKuunIFFwueAckMrkF8gcyWhi03GJqUVduJmnIWjHphENfmu/iDBqeSYRAEHm8MSbfSEy5pdQa1dI23eQIq5w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QZUf2HTthGW92k1RdidoA2ppTCFX4o44p8+NhZ9zRvk=;
+ b=Cbbj78IXIDsMaXyipeASxC2zbW0oTlZaUbZSOxRxfuqCwrToPL3I+8Gq4CK/q8ujEhoDJll59Cl0Tpsj2ZfQo9LSevrc303P1htBcV+hWFWtNHnQGEgLuMR2SDXFBwr9uqPqftmocqfpBYEST95eRi3Ikz+SjuwSRJeK+Y/0l6A8/w73N9aHAXE19yUrGcqlUXVbsSqeEgayo10vC9T3F0fIIrFatNrQEN7cfd/8XBDl4vxcEfXorPODDfOcIxFIynIZL+Q/JFkXTViDqAeiV/W66mH/VcF6Po8zWPXf5G1OjXXXCrzeCf03EU2FpEd9eMEvF5e3ePYE9jr8e2J19g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
+ dkim=pass header.d=cadence.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QZUf2HTthGW92k1RdidoA2ppTCFX4o44p8+NhZ9zRvk=;
+ b=t2yJOTZxZ56k5aqI9FdNXD24iQv+gVHGNp6XO4gC7XzF68fedqBBQd7JvxlcPZkcRNuQUPslUiOrXy2RFRCMHfQFMtk+AIuFCVg+JxcbVXUvW5npuSddn6pK2TdXd2/LPgYz1xj75y0pTjsiEpbh3g9+28LEUxjFWsmx7oxXXoY=
+Received: from DM6PR07MB5529.namprd07.prod.outlook.com (2603:10b6:5:7a::30) by
+ DM6PR07MB7098.namprd07.prod.outlook.com (2603:10b6:5:158::31) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3283.18; Mon, 17 Aug 2020 04:37:24 +0000
+Received: from DM6PR07MB5529.namprd07.prod.outlook.com
+ ([fe80::35cf:ffb3:3776:8362]) by DM6PR07MB5529.namprd07.prod.outlook.com
+ ([fe80::35cf:ffb3:3776:8362%4]) with mapi id 15.20.3283.028; Mon, 17 Aug 2020
+ 04:37:23 +0000
+From:   Pawel Laszczak <pawell@cadence.com>
+To:     Peter Chen <peter.chen@nxp.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-imx@nxp.com" <linux-imx@nxp.com>,
+        "rogerq@ti.com" <rogerq@ti.com>, "jun.li@nxp.com" <jun.li@nxp.com>
+Subject: RE: [PATCH v5 9/9] usb: cdns3: host: add xhci_plat_priv quirk
+ XHCI_SKIP_PHY_INIT
+Thread-Topic: [PATCH v5 9/9] usb: cdns3: host: add xhci_plat_priv quirk
+ XHCI_SKIP_PHY_INIT
+Thread-Index: AQHWVDNCW3WjLSrXz0WTEcln9/QW86k79vyA
+Date:   Mon, 17 Aug 2020 04:37:23 +0000
+Message-ID: <DM6PR07MB552946569333D23154D25E57DD5F0@DM6PR07MB5529.namprd07.prod.outlook.com>
+References: <20200707074941.28078-1-peter.chen@nxp.com>
+ <20200707074941.28078-10-peter.chen@nxp.com>
+In-Reply-To: <20200707074941.28078-10-peter.chen@nxp.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccGF3ZWxsXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctNTUwNTE3MzgtZTA0My0xMWVhLTg3NjgtMWM0ZDcwMWRmYmE0XGFtZS10ZXN0XDU1MDUxNzNhLWUwNDMtMTFlYS04NzY4LTFjNGQ3MDFkZmJhNGJvZHkudHh0IiBzej0iODI0IiB0PSIxMzI0MjExMjYzOTIyMDkzNzAiIGg9InN0bXh3M3YzYThsaHpyeFJPNU5sZFowaXhpMD0iIGlkPSIiIGJsPSIwIiBibz0iMSIvPjwvbWV0YT4=
+x-dg-rorf: true
+authentication-results: nxp.com; dkim=none (message not signed)
+ header.d=none;nxp.com; dmarc=none action=none header.from=cadence.com;
+x-originating-ip: [185.217.253.59]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 7aab09a8-749f-4d28-8354-08d842673c9c
+x-ms-traffictypediagnostic: DM6PR07MB7098:
+x-microsoft-antispam-prvs: <DM6PR07MB70984978F27D1DFAB1F5A147DD5F0@DM6PR07MB7098.namprd07.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:989;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: MEBY4Ht68kcJhM+WIu42bJSBMjsxSxBB5uYogQs52zv4wuUYZtFs7dpL/nE5ATCCBhC29My+fx9stpNQdYkKq+wlIizPgewvyHth8kHCEJaVjZAKZLwv4QJ6/Mw1SMmWEq87vruFzPVfKHzjIS8jY8TE1+mfZC3q6EzSfWhBavnQHgMB+7zgKJ6Tl83eRhiCZGIyicJ1HeRxIopx3coMtikY7sJyiDIqpbbjucPtfqvgUlcE5nlyApBJUkJUzVy/2dpBKpJkRWh2S6m70Ep+WSXzgfGdaMW/291gUMRMW4Sqr/CShcmBPyOBwjSK9vCUz/ypFsC90vxglDR7ramEiIe230+YyWof1mq+yg7Xjeuq2LO0lEGyYIJxbCGNgc/R
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR07MB5529.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(39860400002)(396003)(376002)(346002)(366004)(36092001)(4744005)(52536014)(5660300002)(110136005)(316002)(8676002)(54906003)(66446008)(55016002)(66946007)(76116006)(66476007)(66556008)(64756008)(71200400001)(33656002)(83380400001)(86362001)(2906002)(9686003)(4326008)(26005)(6506007)(478600001)(7696005)(8936002)(186003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: MeVdOZzS2EaU+5eynnoJsFT83Gz8TX4brn4hXqel+H6WXUqfKkh3tQzmn9nLHuYWp9yAo/k4l0WBqydIVUi/P8y3Uqkuv9JM7VBZg3Z1IlxbsVpfHBbovUc/X6bgCQtsKYtMsTGjodCQ6OyL+7OP+YvrH07k4C+HhsHZNwTbl8Y9j6K4H2t35RZD2Xk7hbRDCCIEwpKPRNvg3ocqzHNCfU7ynEEzD7UR8uktW/4O9peTIIHrZ98z5j8btM8FdR2+zsy04t9X4860TPMtYqMOyraSYrfchuURsZkRPdVbTRFdE1E6gLXq/4no/oBJo2L19POdxbYh3S7ahmp/jBmhHoZH3Um2iiRXFO0LjijFVSXnfqjFmS/j1c0tdmWeSQ89bTZCGlA7RByaTsM7MC9S/dXWT1152+/rqJX5rUefMLsBy1fHN/mXHjR4Tv0/kueXPEom3c6Qg1eVlcFykQfovkpyKyy5BEst9komGcXk/Zbr4GjkkL1aEAXbh7Yvn++lnPN95wR/nlSs2f6i/vMPMfjQqFXDNwIyUJkuKeury94OcQTrjVHvKGWdc6BNLrVF5UtqgiMfRBFPCzwyG5KcBxPwY20zFmEPuby6U6c7GPqbIv0y/hcPnSixJzXwZ2iSid5KWjxlXFRkUkNYXwwM6A==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <9bb20ed7-b156-f6c2-4d25-6acac1a0021b@roeck-us.net>
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR07MB5529.namprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7aab09a8-749f-4d28-8354-08d842673c9c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Aug 2020 04:37:23.7370
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 0VacDk8X9VvsO1vgoWYekv77SxR8EyPiHiu1c6jIk+4JMLjMtB0+BuC+IJPam5awyLdsiH9O0u/PzVFkYs9f7ksPW9R2bNndQD0mT+JPzqw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR07MB7098
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-08-17_01:2020-08-14,2020-08-17 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 bulkscore=0
+ mlxlogscore=999 suspectscore=0 lowpriorityscore=0 priorityscore=1501
+ impostorscore=0 malwarescore=0 clxscore=1015 adultscore=0 mlxscore=0
+ spamscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2008170036
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Guenter,
-
-On Sun, Aug 16, 2020 at 08:54:18AM -0700, Guenter Roeck wrote:
-> On 8/16/20 5:18 AM, Laurent Pinchart wrote:
-> > Hi Guenter,
-> > 
-> > CC'ing Hans Verkuil and Sakari Ailus for the discussion about handling
-> > file operations and disconnect in V4L2.
-> > 
-> > On Sat, Aug 15, 2020 at 05:33:15PM -0700, Guenter Roeck wrote:
-> >> + linux-uvc-devel@lists.sourceforge.net
-> >> + linux-media@vger.kernel.org
-> >> + laurent.pinchart@ideasonboard.com
-> >>
-> >> and changed subject
-> >>
-> >> On Fri, Aug 14, 2020 at 10:07:39PM -0400, Alan Stern wrote:
-> >>> On Fri, Aug 14, 2020 at 04:07:03PM -0700, Guenter Roeck wrote:
-> >>>> Hi all,
-> >>>>
-> >>>> over time, there have been a number of reports of crashes in usb_ifnum_to_if(),
-> >>>> called from usb_hcd_alloc_bandwidth, which is in turn called from usb_set_interface().
-> >>>> Examples are [1] [2] [3]. A typical backtrace is:
-> >>>>
-> >>>> <3>[ 3489.445468] intel_sst_acpi 808622A8:00: sst: Busy wait failed, cant send this msg
-> >>>> <6>[ 3490.507273] usb 1-4: USB disconnect, device number 3
-> >>>> <1>[ 3490.516670] BUG: unable to handle kernel NULL pointer dereference at 0000000000000000
-> >>>> <6>[ 3490.516680] PGD 0 P4D 0
-> >>>> <4>[ 3490.516687] Oops: 0000 [#1] PREEMPT SMP PTI
-> >>>> <4>[ 3490.516693] CPU: 0 PID: 5633 Comm: V4L2CaptureThre Not tainted 4.19.113-08536-g5d29ca36db06 #1
-> >>>> <4>[ 3490.516696] Hardware name: GOOGLE Edgar, BIOS Google_Edgar.7287.167.156 03/25/2019
-> >>>> <4>[ 3490.516706] RIP: 0010:usb_ifnum_to_if+0x29/0x40
-> >>>> <4>[ 3490.516710] Code: ee 0f 1f 44 00 00 55 48 89 e5 48 8b 8f f8 03 00 00 48 85 c9 74 27 44 0f b6 41 04 4d 85 c0 74 1d 31 ff 48 8b 84 f9 98 00 00 00 <48> 8b 10 0f b6 52 02 39 f2 74 0a 48 ff c7 4c 39 c7 72 e5 31 c0 5d
-> >>>> <4>[ 3490.516714] RSP: 0018:ffffa46f42a47a80 EFLAGS: 00010246
-> >>>> <4>[ 3490.516718] RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffff904a396c9000
-> >>>> <4>[ 3490.516721] RDX: ffff904a39641320 RSI: 0000000000000001 RDI: 0000000000000000
-> >>>> <4>[ 3490.516724] RBP: ffffa46f42a47a80 R08: 0000000000000002 R09: 0000000000000000
-> >>>> <4>[ 3490.516727] R10: 0000000000009975 R11: 0000000000000009 R12: 0000000000000000
-> >>>> <4>[ 3490.516731] R13: ffff904a396b3800 R14: ffff904a39e88000 R15: 0000000000000000
-> >>>> <4>[ 3490.516735] FS: 00007f396448e700(0000) GS:ffff904a3ba00000(0000) knlGS:0000000000000000
-> >>>> <4>[ 3490.516738] CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> >>>> <4>[ 3490.516742] CR2: 0000000000000000 CR3: 000000016cb46000 CR4: 00000000001006f0
-> >>>> <4>[ 3490.516745] Call Trace:
-> >>>> <4>[ 3490.516756] usb_hcd_alloc_bandwidth+0x1ee/0x30f
-> >>>> <4>[ 3490.516762] usb_set_interface+0x1a3/0x2b7
-> >>>> <4>[ 3490.516773] uvc_video_start_transfer+0x29b/0x4b8 [uvcvideo]
-> >>>> <4>[ 3490.516781] uvc_video_start_streaming+0x91/0xdd [uvcvideo]
-> >>>> <4>[ 3490.516787] uvc_start_streaming+0x28/0x5d [uvcvideo]
-> >>>> <4>[ 3490.516795] vb2_start_streaming+0x61/0x143 [videobuf2_common]
-> >>>> <4>[ 3490.516801] vb2_core_streamon+0xf7/0x10f [videobuf2_common]
-> >>>> <4>[ 3490.516807] uvc_queue_streamon+0x2e/0x41 [uvcvideo]
-> >>>> <4>[ 3490.516814] uvc_ioctl_streamon+0x42/0x5c [uvcvideo]
-> >>>> <4>[ 3490.516820] __video_do_ioctl+0x33d/0x42a
-> >>>> <4>[ 3490.516826] video_usercopy+0x34e/0x5ff
-> >>>> <4>[ 3490.516831] ? video_ioctl2+0x16/0x16
-> >>>> <4>[ 3490.516837] v4l2_ioctl+0x46/0x53
-> >>>> <4>[ 3490.516843] do_vfs_ioctl+0x50a/0x76f
-> >>>> <4>[ 3490.516848] ksys_ioctl+0x58/0x83
-> >>>> <4>[ 3490.516853] __x64_sys_ioctl+0x1a/0x1e
-> >>>> <4>[ 3490.516858] do_syscall_64+0x54/0xde
-> >>>>
-> >>>> I have been able to reproduce the problem on a Chromebook by strategically placing
-> >>>> msleep() calls into usb_set_interface() and usb_disable_device(). Ultimately, the
-> >>>> problem boils down to lack of protection against device removal in usb_set_interface()
-> >>>> [and/or possibly other callers of usb_ifnum_to_if()].
-> >>>>
-> >>>> Sequence of events is roughly as follows:
-> >>>>
-> >>>> - usb_set_interface() is called and proceeds to some point, possibly to
-> >>>>   mutex_lock(hcd->bandwidth_mutex);
-> >>>> - Device removal event is detected, and usb_disable_device() is called
-> >>>
-> >>> At this point all interface drivers get unbound (their disconnect 
-> >>> routines are called).
-> >>>
-> >>>> - usb_disable_device() starts removing actconfig data. It has removed
-> >>>>   and cleared dev->actconfig->interface[i], but not dev->actconfig
-> >>>> - usb_set_interface() calls usb_hcd_alloc_bandwidth(), which calls
-> >>>>   usb_ifnum_to_if()
-> >>>> - In usb_ifnum_to_if(), dev->actconfig is not NULL, but
-> >>>>   dev->actconfig->interface[i] is NULL
-> >>>> - crash
-> >>>>
-> >>>> Question is what we can do about this. Checking if dev->state != USB_STATE_NOTATTACHED
-> >>>> in usb_ifnum_to_if() might be a possible approach, but strictly speaking it would
-> >>>> still be racy since there is still no lock against device removal. I have not tried
-> >>>> calling usb_lock_device() in usb_set_interface() - would that possibly be an option ?
-> >>>
-> >>> As far as I know, protecting against these races is the responsibility 
-> >>> of the USB interface drivers.  They must make sure that their disconnect 
-> >>> routines block until all outstanding calls to usb_set_interface return 
-> >>> (in fact, until all outstanding device accesses have finished).
-> >>>
-> >>> For instance, in the log extract you showed, it's obvious that the 
-> >>> uvc_start_streaming routine was running after the disconnect routine had 
-> >>> returned, which looks like a bug in itself: Once the disconnect routine 
-> >>> returns, the driver is not supposed to try to access the device at all 
-> >>> because some other driver may now be bound to it.
-> >>>
-> >>> We can't just call usb_lock_device from within usb_set_interface, 
-> >>> because usb_set_interface is often called with that lock already held.
-> >>>
-> >> I had a closer look into the uvcvideo driver and compared it to other usb
-> >> drivers, including drivers in drivers/media/usb/ which connect to the video
-> >> subsystem.
-> >>
-> >> The usbvideo driver lacks protection against calls to uvc_disconnect() while
-> > 
-> > Are you confusing usbvideo and uvcvideo ? Both exist, and uvcvideo would
-> > have been called usbvideo if the former hadn't already been in use.
-> 
-> Yes, sorry :-(. I am not sure how s/uvc/usb/ happened.
-
-No worries.
-
-> >> calls into file operations are ongoing. This is pretty widespread, and not
-> >> even limited to file operations (for example, there is a worker which is only
-> >> canceled in uvc_delete, not in ucv_disconnect). The existing protection only
-> >> ensures that no file operations are started after the call to ucv_disconnect,
-> >> but that is insufficient.
-> >>
-> >> Other drivers do have that protection and make sure that no usb operations
-> >> can happen after the disconnect call.
-> >>
-> >> The only remedy I can see is to rework the usbvideo driver and add the
-> >> necessary protections. At first glance, it looks like this may be a
-> >> substantial amount of work. I'd sign up for that, but before I start,
-> >> I would like to get input from the usbvideo community. Is such an effort
-> >> already going on ? If yes, how can I help ? If not, is the problem
-> >> understood and accepted ? Are there any ideas on how to solve it ?
-> > 
-> > This is something that has been discussed before, and needs to be solved
-> > in the V4L2 framework itself, not in individual drivers. Not only would
-> > this avoid rolling out the same code manually everywhere (in different
-> > incorrect ways, as races are difficult to solve and implementations are
-> > more often wrong than right), but it will also avoid similar issues for
-> > non-USB devices.
 >
-> You mean code that ensures that no user-space v4l2 operation is in progress
-> after video_device_unregister / v4l2_device_unregister return ? I agree,
-> that would simplify the necessary changes on the uvc side.
-
-I was thinking about adding a new function to be called from the
-disconnect handler to implement the wait on end of userspace access, but
-video_device_unregister() seems an even better idea.
-v4l2_device_unregister() is probably not very useful as v4l2_device
-isn't exposed to userspace, only video_device is (and v4l2_subdev and
-media_device, but that's a different story, although probably still an
-issue for the latter in the UVC driver).
-
-We also have a v4l2_device_disconnect() function which is supposed to
-handle hot-pluggable device disconnection, but it's fairly useless (I'd
-even say harmful as it gives the illusion that hotplugging is correctly
-handled, while in reality the media subsystem is plagged by hot-unplug
-issues :-S).
-
-> I actually came from the other side - I assumed that there is a reason
-> that is not already the case, and that the problem therefore has to be
-> resolved on the driver side.
-> 
-> So I guess the next question is: Is this already being addressed on the
-> v4l2 side ?
-
-I'm not aware of anyone working on this.
-
-> > It shouldn't take more than two flags (to track user-space operations in
-> > progress and disconnection), a spinlock and a wait queue entry. I'm not
-> > sure if someone has already given it a try, and don't recall why this
-> > hasn't been done yet, as it should be fairly straightforward.
-> > 
-> > On the UVC side, the work queue probably has to be flushed in
-> > uvc_disconnect(). I'd keep the destroy call in uvc_delete() though.
-> > Please make sure to look for potential race conditions between the URB
-> > completion handler and the .disconnect() handler (they shouldn't be any,
-> > but I haven't checked lately myself).
+>cdns3 manages PHY by own DRD driver, so skip the management by
+>HCD core.
 >
-> My current solution for this problem is to call uvc_ctrl_cleanup_device()
-> from uvc_disconnect(), after uvc_unregister_video().
+>Signed-off-by: Peter Chen <peter.chen@nxp.com>
+>---
+> drivers/usb/cdns3/host.c | 1 +
+> 1 file changed, 1 insertion(+)
+>
+>diff --git a/drivers/usb/cdns3/host.c b/drivers/usb/cdns3/host.c
+>index 030d6421abd3..1dfbe23fa089 100644
+>--- a/drivers/usb/cdns3/host.c
+>+++ b/drivers/usb/cdns3/host.c
+>@@ -24,6 +24,7 @@
+> #define LPM_2_STB_SWITCH_EN	(1 << 25)
+>
 
-I'd rather avoid that, as the cleanup functions in the UVC driver are
-generally meant to free memory when the last user disappears. While no
-new userspace operation will be started after disconnection once the
-above fix will be in place, there's one operation we can't avoid: the
-file release. This will access some of the memory allocated by the
-driver, and while the current implementation probably doesn't access in
-.release() any memory freed by uvc_ctrl_cleanup_device(), I think it's a
-good practice to only shut down the userspace API in .disconnect(), and
-free memory when the last reference is released.
+Please use BIT(25)=20
 
-> An alternative might
-> be to add a uvc_ctrl_stop_device() function which would just cancel the
-> worker.
+Reviewed-by: Pawel Laszczak <pawell@cadence.com>
 
-I think that would be best. Should stream->async_wq (in uvc_video.c) be
-similarly flushed ? The driver does so in stream->async_wq(), called
-from uvc_video_stop_transfer(), itself called from
-uvc_video_stop_streaming() (among other places, that are either error
-paths or system suspend handling). The call stack goes to
-uvc_stop_streaming(), and, through the videobuf2 helpers, to
-vb2_queue_release() called by uvc_queue_release() itself called by
-uvc_v4l2_release() (in the non-disconnect case,
-uvc_video_stop_streaming() will be called through videobuf2 by
-uvc_queue_streamoff(), in response to a VIDIOC_STREAMOFF ioctl). We thus
-flush the workqueue too late, and also access the device in
-uvc_video_stop_streaming() long after .disconnect() returns.
+Regards
+Pawel
 
-I think uvc_video_stop_streaming() could be called in uvc_disconnect()
-after uvc_unregister_video().
+> static const struct xhci_plat_priv xhci_plat_cdns3_xhci =3D {
+>+	.quirks =3D XHCI_SKIP_PHY_INIT,
+> 	.suspend_quirk =3D xhci_cdns3_suspend_quirk,
+> };
+>
 
--- 
-Regards,
+>--
+>2.17.1
 
-Laurent Pinchart
