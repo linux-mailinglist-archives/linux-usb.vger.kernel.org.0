@@ -2,82 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FA92245EAF
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Aug 2020 10:01:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94EFE245ECF
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Aug 2020 10:07:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726707AbgHQIBp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Aug 2020 04:01:45 -0400
-Received: from mail2.skidata.com ([91.230.2.91]:20910 "EHLO mail2.skidata.com"
+        id S1726196AbgHQIH1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Aug 2020 04:07:27 -0400
+Received: from mga17.intel.com ([192.55.52.151]:4979 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726089AbgHQIBn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 17 Aug 2020 04:01:43 -0400
-X-Greylist: delayed 429 seconds by postgrey-1.27 at vger.kernel.org; Mon, 17 Aug 2020 04:01:42 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=skidata.com; i=@skidata.com; q=dns/txt; s=selector1;
-  t=1597651302; x=1629187302;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4ofZrqwAJsIrM6P1Vwx0HSmOUvg40eLwTglG9qnXtQI=;
-  b=YPna2yU3tqDJlPYDgFaDitGcq2Vat/kKxTBzSpTgl//2pnGdHzVOq1Ic
-   JBNQYwxwRjQKzR+T3aIwIvTmDws8s6MRG1qNBbdXkJZ1AQ950T99WE0r1
-   lBK5emT8R1dMEed52VE3YeKpioWp6/ZnuzIysnRuGPmftJ86CPSVrsKuI
-   59H8jU/+1WpwtSont0b8dA2RPsnU/AQl0J7TR5JDIkv7ShasxKok13LZj
-   tiLEy8C0CxzwvGmbVQlsFu0bB+LqXx4gfKakywwL4fV0AoVljts0jjcGh
-   nRdKpb6yMN63TG54pVCEcY0wNYwI6Jsw8lgp1wlgKKSIp65iai3o49Vm+
-   Q==;
-IronPort-SDR: E6jKT3W4gGuPCqcb4dACYlUcJdMvMQ6vN3AbLOWDsFITViC1ocTwq1NFR8yGc6UYCithd/ds9s
- LPsfgBt9exsxIDt7Cyls6tvynZTqeupkZtIlqWC4Dj3vUtFmkq5ntcwsd7c0PGxzzJ4nfm0V8B
- RjUVFTXtvCyL5tAsN4ROaAJ0yohsvLVjerg1Vlr8I4Y63JzHavc/QzETBWPP406Je0v+nZiGr2
- zpp3CSi1EhzAgl6Kt38qpvIN7JsLTIy6kvy4BaIA+KHSXcnt1KuyRdMnsAN01TCTx0J/zeS+JY
- ybk=
-X-IronPort-AV: E=Sophos;i="5.76,322,1592863200"; 
-   d="scan'208";a="2642593"
-Date:   Mon, 17 Aug 2020 09:54:26 +0200
-From:   Richard Leitner <richard.leitner@skidata.com>
-To:     Christian Eggers <ceggers@arri.de>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Hering <robh@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3] Add two new configuration drivers for Microchip USB
- hubs
-Message-ID: <20200817075426.GA560469@pcleri>
-References: <20200726084116.GD448215@kroah.com>
- <20200727083333.19623-1-ceggers@arri.de>
+        id S1725765AbgHQIH0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 17 Aug 2020 04:07:26 -0400
+IronPort-SDR: g8VbzN/3k8gkn+U8de9XFeyrvQNgA8AYHCnjm5HExa4oqR7uiqdEpF/kqsGz+UEDOCbZY/Sxm4
+ PtbFqJCAbOqg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9715"; a="134714646"
+X-IronPort-AV: E=Sophos;i="5.76,322,1592895600"; 
+   d="scan'208";a="134714646"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2020 01:07:26 -0700
+IronPort-SDR: UprZgQpDHZHN14fzFVEaiHymPDrfMsQnr0c7TfR/wV0ycE/rljC7OUHhOmc9FZ24iLIM0W/Jtw
+ fNMHYcNHnY+Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,322,1592895600"; 
+   d="scan'208";a="400121917"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 17 Aug 2020 01:07:23 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 17 Aug 2020 11:07:23 +0300
+Date:   Mon, 17 Aug 2020 11:07:23 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        USB <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2 v3] tcpm: During PR_SWAP, source caps should be sent
+ only after tSwapSourceStart
+Message-ID: <20200817080723.GB1448906@kuha.fi.intel.com>
+References: <20200812022934.568134-1-badhri@google.com>
+ <20200813082507.GE1169992@kuha.fi.intel.com>
+ <CAPTae5KUdTN5fVn45xFwhWS5Gy_xFJ91gAObb7qMk2KA+n72yQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200727083333.19623-1-ceggers@arri.de>
-X-Originating-IP: [192.168.111.252]
-X-ClientProxiedBy: sdex6srv.skidata.net (192.168.111.84) To
- sdex5srv.skidata.net (192.168.111.83)
+In-Reply-To: <CAPTae5KUdTN5fVn45xFwhWS5Gy_xFJ91gAObb7qMk2KA+n72yQ@mail.gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 27, 2020 at 10:33:29AM +0200, Christian Eggers wrote:
-> On Sonday, greg k-h wrote:
-> > Please resend the whole series, not just a single patch, as it makes it
-> > very difficult to pick the "correct" patches to be applied...
-
-Hi Christian,
-sorry for the late reply. My MUA somehow didn't show me that series
-earlier...
-
-I haven't looked into the patches in detail, but at a first glance it
-looks like a lot copy-n-paste.
-Have you thought about merging the (after your series) 3 hub drivers
-into one? Something like a "microchip i2c usb hub driver"?
-Would that be feasible for your point of view?
-
-regards;rl
-
+On Thu, Aug 13, 2020 at 12:40:04PM -0700, Badhri Jagan Sridharan wrote:
+> Hi Heikki,
 > 
-> Changes in v3:
->  - none (only resend the whole series)
+> Sure. Same as the other patch I will try to address your question here
+> and will update the commit description once you are satisfied with the
+> description.
 > 
-> Changes in v2:
->  - added property description for ocs-min-width-ms
->  - fixed property description for oc-delay-ns
+> Subject:
+> During PR_SWAP, source caps should be sent only after tSwapSourceStart
 > 
+> Commit description:
+> The patch addresses the compliance test failures while running
+> TD.PD.CP.E3, TD.PD.CP.E4, TD.PD.CP.E5 of the "Deterministic PD
+> Compliance MOI" test plan published in https://www.usb.org/usbc.
+> For a product to be Type-C compliant, it's expected that these tests
+> are run on usb.org certified Type-C compliance tester as mentioned in
+> https://www.usb.org/usbc.
+> 
+> The purpose of the tests TD.PD.CP.E3, TD.PD.CP.E4, TD.PD.CP.E5 is to
+> verify the PR_SWAP response of the device. While doing so, the test
+> asserts that Source Capabilities message is NOT received from the test
+> device within tSwapSourceStart min (20 ms) from the time the last bit
+> of GoodCRC corresponding to the RS_RDY message sent by the UUT was
+> sent. If it does then the test fails.
+> 
+> This is in line with the requirements from the USB Power Delivery
+> Specification Revision 3.0, Version 1.2:
+> "6.6.8.1 SwapSourceStartTimer
+> The SwapSourceStartTimer Shall be used by the new Source, after a
+> Power Role Swap or Fast Role Swap, to ensure that it does not send
+> Source_Capabilities Message before the new Sink is ready to receive
+> the
+> Source_Capabilities Message. The new Source Shall Not send the
+> Source_Capabilities Message earlier than tSwapSourceStart after the
+> last bit of the EOP of GoodCRC Message sent in response to the PS_RDY
+> Message sent by the new Source indicating that its power supply is
+> ready."
+> 
+> The patch makes sure that TCPM does not send the Source_Capabilities
+> Message within tSwapSourceStart(20ms) by transitioning into
+> SRC_STARTUP only after  tSwapSourceStart(20ms).
+
+That looks good to me. Thanks.
+
+Br,
+
+-- 
+heikki
