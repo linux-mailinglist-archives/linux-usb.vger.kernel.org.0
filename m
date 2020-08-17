@@ -2,301 +2,243 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D222424650A
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Aug 2020 13:01:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 767A9246586
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Aug 2020 13:32:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728444AbgHQLBe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Aug 2020 07:01:34 -0400
-Received: from lb3-smtp-cloud9.xs4all.net ([194.109.24.30]:36063 "EHLO
-        lb3-smtp-cloud9.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728360AbgHQLA4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Aug 2020 07:00:56 -0400
-Received: from cust-b5b5937f ([IPv6:fc0c:c16d:66b8:757f:c639:739b:9d66:799d])
-        by smtp-cloud9.xs4all.net with ESMTPA
-        id 7csjkLqShuuXO7cskkWecL; Mon, 17 Aug 2020 13:00:51 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s1;
-        t=1597662051; bh=Mibg5xG/rF25AfwA47LloiEbI/feWVJWsmrf4fSRYV8=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=MTaSCII+xidRlPlI9QnU0w8vHAbQ/Rddx4jxpx0coSB3sgCiwhr/zA8OI7MbMDdsu
-         nLRqpFZAj511/To8z5F0r9048ClKdjupz788ALX0IJnEc71h/Iu0ROhqhOSJu+NO7J
-         vuRJj7hXcwWUeuJAh50yNJ/pPY20lforAliYXtST0Hs7WIddNsYjZFe0BfoTwNtRxg
-         yUvRlW2JYha0rPeFzWMVdpAUUzlmnb0IrhHfi90pi9Dl3XkiFf6ar2/n6bBswx7Ycx
-         zf7jMMb8+vbe0RcIJfu++NsDU1Q6p1SZq71ApJGCkctLQNET+tawVznrb3J+g1SjSt
-         bqPTVAdCpi0UA==
-Subject: Re: Protecting uvcvideo againt USB device disconnect [Was: Re:
- Protecting usb_set_interface() against device removal]
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-usb <linux-usb@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-media@vger.kernel.org, linux-uvc-devel@lists.sourceforge.net,
-        Sakari Ailus <sakari.ailus@iki.fi>
-References: <b0a7247c-bed3-934b-2c73-7f4b0adb5e75@roeck-us.net>
- <20200815020739.GB52242@rowland.harvard.edu>
- <20200816003315.GA13826@roeck-us.net>
- <20200816121816.GC32174@pendragon.ideasonboard.com>
- <9bb20ed7-b156-f6c2-4d25-6acac1a0021b@roeck-us.net>
- <20200816235155.GA7729@pendragon.ideasonboard.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Message-ID: <0684b71c-8ac5-8962-cbd5-c0bcaa8b6881@xs4all.nl>
-Date:   Mon, 17 Aug 2020 13:00:49 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1728527AbgHQLc1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Aug 2020 07:32:27 -0400
+Received: from mail-io1-f71.google.com ([209.85.166.71]:37755 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728580AbgHQLcR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Aug 2020 07:32:17 -0400
+Received: by mail-io1-f71.google.com with SMTP id f6so9674494ioa.4
+        for <linux-usb@vger.kernel.org>; Mon, 17 Aug 2020 04:32:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=ZakdSAPE5T4FwrgSAUta2TlD1gJfj04Y9UqSeil88K0=;
+        b=AOlBwOPOIhpKeUClX8AnfmWnOVUhixVCX3jI8Jh3pVbUminP7H+Xle6+CwcdYNclz/
+         acfgw1sqmLS+0IJsXkmwSJBek2j5xiu+iIjro1WK70DMU2sK1dwskvhVQWYtoe+v/RHN
+         0kj2Y2+asGZGcdChMbyJfWE1xiuzkFmzL26WyQZwy6bsFSQp9nV7o+/qMEsCRIStb2fy
+         49ybPdWIRS7lP9rGKfh6QZx9OMtbcaN5r9pEpYmFOdNVhptmhYqrnrgQhvVxetf+rgZs
+         Qq4nHgG4Nd/Mx4tQEGqmGTgSD/rIOU9VHQ5+JcYH1EtYnwm1QXBlrunJHrhTZoi+86x7
+         CyyQ==
+X-Gm-Message-State: AOAM531wZiBkAGBykDPlHxDHmCqdTl4KN3HSgnSp59tRLOk7LfABpK3P
+        f1/8jgqHc6yWYAep8Qvh47iMGJIaRWEakRCtBk4jwp3GktfY
+X-Google-Smtp-Source: ABdhPJyagLnu2Z/o5/G5cfTd61mC2KgjV/smFi2kUR9c+aWb9hQv8ITsgGeV9cq1e30llEuIzNaH2cKJrRhR61KqjhJx0rCSd+vo
 MIME-Version: 1.0
-In-Reply-To: <20200816235155.GA7729@pendragon.ideasonboard.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfHV2em9r2nGK8bzto+XbjkmifxsispDVk3IjlpJFoNHdOkom7XO6TwBv4Csgg7KhRk9lmcp6Mz3m2ev3B1Z02Q8PJozXd30MPVM76Fbjdusav7QGY/uc
- 3aV+jLs8JkOoLITX9Z8MRe8DdgJpQ04fx4oUUjfEbnkHwWuA1ssvRctAv/UgwMfzJo5eX3l37xRHWOga87ZSjS/lOkNTjMFS1LyRyPuLqyIguZFLMRvPF+/2
- 2nOtUeewooDstSdXX3uOXumevXEqMhEqpxPf7Qsb/tBJnD+d00o8jtBPxLuQXYwOR4FB0MedctfNz3kpcSREGPZ50u2O/b3OIgg4hkC4H1jkyi+XU474nyqa
- KPvoZYrXwf0jWfGYuNLc8bXe0sngVMvbtTZGOJ85yAA+IGmTgY4t9ywb3EYHIStc+hK9aVZlojpd6sRG3QJ0cpJBOZBv70BjFazt0nOI1qI4t45E9I5Yki/D
- XaCE16BUfV6Yag7qkOhIOlXYdA0M59/smuAyf9W6X4gvbUeHeFhAwh0Tp4R1ZSlPnxbMYdeKRySahsytrh5tu4J1+HgiKPoTQYPSBZDsWfCFmScWR+n+TWNK
- j/zCzRfPaYLvA91HNwvb3Mir
+X-Received: by 2002:a5d:9d11:: with SMTP id j17mr12293387ioj.140.1597663935346;
+ Mon, 17 Aug 2020 04:32:15 -0700 (PDT)
+Date:   Mon, 17 Aug 2020 04:32:15 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005642a205ad111fc3@google.com>
+Subject: KASAN: invalid-free in klist_children_put
+From:   syzbot <syzbot+d448b63291df9f64b6bc@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        rafael@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 17/08/2020 01:51, Laurent Pinchart wrote:
-> Hi Guenter,
-> 
-> On Sun, Aug 16, 2020 at 08:54:18AM -0700, Guenter Roeck wrote:
->> On 8/16/20 5:18 AM, Laurent Pinchart wrote:
->>> Hi Guenter,
->>>
->>> CC'ing Hans Verkuil and Sakari Ailus for the discussion about handling
->>> file operations and disconnect in V4L2.
->>>
->>> On Sat, Aug 15, 2020 at 05:33:15PM -0700, Guenter Roeck wrote:
->>>> + linux-uvc-devel@lists.sourceforge.net
->>>> + linux-media@vger.kernel.org
->>>> + laurent.pinchart@ideasonboard.com
->>>>
->>>> and changed subject
->>>>
->>>> On Fri, Aug 14, 2020 at 10:07:39PM -0400, Alan Stern wrote:
->>>>> On Fri, Aug 14, 2020 at 04:07:03PM -0700, Guenter Roeck wrote:
->>>>>> Hi all,
->>>>>>
->>>>>> over time, there have been a number of reports of crashes in usb_ifnum_to_if(),
->>>>>> called from usb_hcd_alloc_bandwidth, which is in turn called from usb_set_interface().
->>>>>> Examples are [1] [2] [3]. A typical backtrace is:
->>>>>>
->>>>>> <3>[ 3489.445468] intel_sst_acpi 808622A8:00: sst: Busy wait failed, cant send this msg
->>>>>> <6>[ 3490.507273] usb 1-4: USB disconnect, device number 3
->>>>>> <1>[ 3490.516670] BUG: unable to handle kernel NULL pointer dereference at 0000000000000000
->>>>>> <6>[ 3490.516680] PGD 0 P4D 0
->>>>>> <4>[ 3490.516687] Oops: 0000 [#1] PREEMPT SMP PTI
->>>>>> <4>[ 3490.516693] CPU: 0 PID: 5633 Comm: V4L2CaptureThre Not tainted 4.19.113-08536-g5d29ca36db06 #1
->>>>>> <4>[ 3490.516696] Hardware name: GOOGLE Edgar, BIOS Google_Edgar.7287.167.156 03/25/2019
->>>>>> <4>[ 3490.516706] RIP: 0010:usb_ifnum_to_if+0x29/0x40
->>>>>> <4>[ 3490.516710] Code: ee 0f 1f 44 00 00 55 48 89 e5 48 8b 8f f8 03 00 00 48 85 c9 74 27 44 0f b6 41 04 4d 85 c0 74 1d 31 ff 48 8b 84 f9 98 00 00 00 <48> 8b 10 0f b6 52 02 39 f2 74 0a 48 ff c7 4c 39 c7 72 e5 31 c0 5d
->>>>>> <4>[ 3490.516714] RSP: 0018:ffffa46f42a47a80 EFLAGS: 00010246
->>>>>> <4>[ 3490.516718] RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffff904a396c9000
->>>>>> <4>[ 3490.516721] RDX: ffff904a39641320 RSI: 0000000000000001 RDI: 0000000000000000
->>>>>> <4>[ 3490.516724] RBP: ffffa46f42a47a80 R08: 0000000000000002 R09: 0000000000000000
->>>>>> <4>[ 3490.516727] R10: 0000000000009975 R11: 0000000000000009 R12: 0000000000000000
->>>>>> <4>[ 3490.516731] R13: ffff904a396b3800 R14: ffff904a39e88000 R15: 0000000000000000
->>>>>> <4>[ 3490.516735] FS: 00007f396448e700(0000) GS:ffff904a3ba00000(0000) knlGS:0000000000000000
->>>>>> <4>[ 3490.516738] CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>>>>> <4>[ 3490.516742] CR2: 0000000000000000 CR3: 000000016cb46000 CR4: 00000000001006f0
->>>>>> <4>[ 3490.516745] Call Trace:
->>>>>> <4>[ 3490.516756] usb_hcd_alloc_bandwidth+0x1ee/0x30f
->>>>>> <4>[ 3490.516762] usb_set_interface+0x1a3/0x2b7
->>>>>> <4>[ 3490.516773] uvc_video_start_transfer+0x29b/0x4b8 [uvcvideo]
->>>>>> <4>[ 3490.516781] uvc_video_start_streaming+0x91/0xdd [uvcvideo]
->>>>>> <4>[ 3490.516787] uvc_start_streaming+0x28/0x5d [uvcvideo]
->>>>>> <4>[ 3490.516795] vb2_start_streaming+0x61/0x143 [videobuf2_common]
->>>>>> <4>[ 3490.516801] vb2_core_streamon+0xf7/0x10f [videobuf2_common]
->>>>>> <4>[ 3490.516807] uvc_queue_streamon+0x2e/0x41 [uvcvideo]
->>>>>> <4>[ 3490.516814] uvc_ioctl_streamon+0x42/0x5c [uvcvideo]
->>>>>> <4>[ 3490.516820] __video_do_ioctl+0x33d/0x42a
->>>>>> <4>[ 3490.516826] video_usercopy+0x34e/0x5ff
->>>>>> <4>[ 3490.516831] ? video_ioctl2+0x16/0x16
->>>>>> <4>[ 3490.516837] v4l2_ioctl+0x46/0x53
->>>>>> <4>[ 3490.516843] do_vfs_ioctl+0x50a/0x76f
->>>>>> <4>[ 3490.516848] ksys_ioctl+0x58/0x83
->>>>>> <4>[ 3490.516853] __x64_sys_ioctl+0x1a/0x1e
->>>>>> <4>[ 3490.516858] do_syscall_64+0x54/0xde
->>>>>>
->>>>>> I have been able to reproduce the problem on a Chromebook by strategically placing
->>>>>> msleep() calls into usb_set_interface() and usb_disable_device(). Ultimately, the
->>>>>> problem boils down to lack of protection against device removal in usb_set_interface()
->>>>>> [and/or possibly other callers of usb_ifnum_to_if()].
->>>>>>
->>>>>> Sequence of events is roughly as follows:
->>>>>>
->>>>>> - usb_set_interface() is called and proceeds to some point, possibly to
->>>>>>   mutex_lock(hcd->bandwidth_mutex);
->>>>>> - Device removal event is detected, and usb_disable_device() is called
->>>>>
->>>>> At this point all interface drivers get unbound (their disconnect 
->>>>> routines are called).
->>>>>
->>>>>> - usb_disable_device() starts removing actconfig data. It has removed
->>>>>>   and cleared dev->actconfig->interface[i], but not dev->actconfig
->>>>>> - usb_set_interface() calls usb_hcd_alloc_bandwidth(), which calls
->>>>>>   usb_ifnum_to_if()
->>>>>> - In usb_ifnum_to_if(), dev->actconfig is not NULL, but
->>>>>>   dev->actconfig->interface[i] is NULL
->>>>>> - crash
->>>>>>
->>>>>> Question is what we can do about this. Checking if dev->state != USB_STATE_NOTATTACHED
->>>>>> in usb_ifnum_to_if() might be a possible approach, but strictly speaking it would
->>>>>> still be racy since there is still no lock against device removal. I have not tried
->>>>>> calling usb_lock_device() in usb_set_interface() - would that possibly be an option ?
->>>>>
->>>>> As far as I know, protecting against these races is the responsibility 
->>>>> of the USB interface drivers.  They must make sure that their disconnect 
->>>>> routines block until all outstanding calls to usb_set_interface return 
->>>>> (in fact, until all outstanding device accesses have finished).
->>>>>
->>>>> For instance, in the log extract you showed, it's obvious that the 
->>>>> uvc_start_streaming routine was running after the disconnect routine had 
->>>>> returned, which looks like a bug in itself: Once the disconnect routine 
->>>>> returns, the driver is not supposed to try to access the device at all 
->>>>> because some other driver may now be bound to it.
->>>>>
->>>>> We can't just call usb_lock_device from within usb_set_interface, 
->>>>> because usb_set_interface is often called with that lock already held.
->>>>>
->>>> I had a closer look into the uvcvideo driver and compared it to other usb
->>>> drivers, including drivers in drivers/media/usb/ which connect to the video
->>>> subsystem.
->>>>
->>>> The usbvideo driver lacks protection against calls to uvc_disconnect() while
->>>
->>> Are you confusing usbvideo and uvcvideo ? Both exist, and uvcvideo would
->>> have been called usbvideo if the former hadn't already been in use.
->>
->> Yes, sorry :-(. I am not sure how s/uvc/usb/ happened.
-> 
-> No worries.
-> 
->>>> calls into file operations are ongoing. This is pretty widespread, and not
->>>> even limited to file operations (for example, there is a worker which is only
->>>> canceled in uvc_delete, not in ucv_disconnect). The existing protection only
->>>> ensures that no file operations are started after the call to ucv_disconnect,
->>>> but that is insufficient.
->>>>
->>>> Other drivers do have that protection and make sure that no usb operations
->>>> can happen after the disconnect call.
->>>>
->>>> The only remedy I can see is to rework the usbvideo driver and add the
->>>> necessary protections. At first glance, it looks like this may be a
->>>> substantial amount of work. I'd sign up for that, but before I start,
->>>> I would like to get input from the usbvideo community. Is such an effort
->>>> already going on ? If yes, how can I help ? If not, is the problem
->>>> understood and accepted ? Are there any ideas on how to solve it ?
->>>
->>> This is something that has been discussed before, and needs to be solved
->>> in the V4L2 framework itself, not in individual drivers. Not only would
->>> this avoid rolling out the same code manually everywhere (in different
->>> incorrect ways, as races are difficult to solve and implementations are
->>> more often wrong than right), but it will also avoid similar issues for
->>> non-USB devices.
->>
->> You mean code that ensures that no user-space v4l2 operation is in progress
->> after video_device_unregister / v4l2_device_unregister return ? I agree,
->> that would simplify the necessary changes on the uvc side.
-> 
-> I was thinking about adding a new function to be called from the
-> disconnect handler to implement the wait on end of userspace access, but
-> video_device_unregister() seems an even better idea.
-> v4l2_device_unregister() is probably not very useful as v4l2_device
-> isn't exposed to userspace, only video_device is (and v4l2_subdev and
-> media_device, but that's a different story, although probably still an
-> issue for the latter in the UVC driver).
+Hello,
 
-Actually, all that is needed is to take the ioctl serialization lock in the disconnect
-function.
+syzbot found the following issue on:
 
-See last paragraph in 1.4.1 here:
+HEAD commit:    9123e3a7 Linux 5.9-rc1
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=106d03f6900000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ccafc70ac3d5f49c
+dashboard link: https://syzkaller.appspot.com/bug?extid=d448b63291df9f64b6bc
+compiler:       gcc (GCC) 10.1.0-syz 20200507
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10915731900000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=151a6f6e900000
 
-https://hverkuil.home.xs4all.nl/spec/driver-api/v4l2-dev.html
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d448b63291df9f64b6bc@syzkaller.appspotmail.com
 
-Since uvc uses its own lock, you need to take that one.
+usb 1-1: New USB device found, idVendor=093a, idProduct=8001, bcdDevice= 0.00
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+usb 1-1: USB disconnect, device number 2
+==================================================================
+BUG: KASAN: double-free or invalid-free in slab_free mm/slub.c:3142 [inline]
+BUG: KASAN: double-free or invalid-free in kfree+0xbe/0x470 mm/slub.c:4123
 
-> 
-> We also have a v4l2_device_disconnect() function which is supposed to
-> handle hot-pluggable device disconnection, but it's fairly useless (I'd
-> even say harmful as it gives the illusion that hotplugging is correctly
-> handled, while in reality the media subsystem is plagged by hot-unplug
-> issues :-S).
+CPU: 1 PID: 21 Comm: kworker/1:1 Not tainted 5.9.0-rc1-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xf6/0x16e lib/dump_stack.c:118
+ print_address_description.constprop.0+0x1c/0x210 mm/kasan/report.c:383
+ kasan_report_invalid_free+0x51/0x80 mm/kasan/report.c:477
+ __kasan_slab_free+0x122/0x130 mm/kasan/common.c:401
+ slab_free_hook mm/slub.c:1548 [inline]
+ slab_free_freelist_hook+0x53/0x140 mm/slub.c:1581
+ slab_free mm/slub.c:3142 [inline]
+ kfree+0xbe/0x470 mm/slub.c:4123
+ platform_device_release+0x64/0xf0 drivers/base/platform.c:426
+ device_release+0x71/0x200 drivers/base/core.c:1800
+ kobject_cleanup lib/kobject.c:704 [inline]
+ kobject_release lib/kobject.c:735 [inline]
+ kref_put include/linux/kref.h:65 [inline]
+ kobject_put+0x1c8/0x540 lib/kobject.c:752
+ put_device drivers/base/core.c:3029 [inline]
+ klist_children_put+0x41/0x50 drivers/base/core.c:2382
+ klist_prev+0x2a2/0x510 lib/klist.c:362
+ prev_device drivers/base/core.c:3146 [inline]
+ device_for_each_child_reverse+0xc0/0x180 drivers/base/core.c:3268
+ mfd_remove_devices+0x75/0xa0 drivers/mfd/mfd-core.c:391
+ sensor_hub_remove+0x1d6/0x270 drivers/hid/hid-sensor-hub.c:744
+ hid_device_remove+0xed/0x240 drivers/hid/hid-core.c:2296
+ __device_release_driver+0x3c6/0x6f0 drivers/base/dd.c:1153
+ device_release_driver_internal drivers/base/dd.c:1184 [inline]
+ device_release_driver+0x26/0x40 drivers/base/dd.c:1207
+ bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
+ device_del+0x481/0xd90 drivers/base/core.c:3107
+ hid_remove_device drivers/hid/hid-core.c:2467 [inline]
+ hid_destroy_device+0xe1/0x150 drivers/hid/hid-core.c:2486
+ usbhid_disconnect+0x9f/0xe0 drivers/hid/usbhid/hid-core.c:1439
+ usb_unbind_interface+0x1d8/0x8d0 drivers/usb/core/driver.c:436
+ __device_release_driver+0x3c6/0x6f0 drivers/base/dd.c:1153
+ device_release_driver_internal drivers/base/dd.c:1184 [inline]
+ device_release_driver+0x26/0x40 drivers/base/dd.c:1207
+ bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
+ device_del+0x481/0xd90 drivers/base/core.c:3107
+ usb_disable_device+0x387/0x930 drivers/usb/core/message.c:1245
+ usb_disconnect.cold+0x27d/0x780 drivers/usb/core/hub.c:2217
+ hub_port_connect drivers/usb/core/hub.c:5059 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
+ port_event drivers/usb/core/hub.c:5494 [inline]
+ hub_event+0x1c93/0x4390 drivers/usb/core/hub.c:5576
+ process_one_work+0x94c/0x15f0 kernel/workqueue.c:2269
+ worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
+ kthread+0x392/0x470 kernel/kthread.c:292
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
 
-The v4l2_device_disconnect() is there to remove a v4l2_dev reference to
-the device that is about to be removed when the disconnect() exists.
-Otherwise v4l2_dev->dev would point to a missing device.
+Allocated by task 21:
+ kasan_save_stack+0x1b/0x40 mm/kasan/common.c:48
+ kasan_set_track mm/kasan/common.c:56 [inline]
+ __kasan_kmalloc.constprop.0+0xc2/0xd0 mm/kasan/common.c:461
+ slab_post_alloc_hook mm/slab.h:518 [inline]
+ slab_alloc_node mm/slub.c:2892 [inline]
+ slab_alloc mm/slub.c:2900 [inline]
+ __kmalloc_track_caller+0xf6/0x270 mm/slub.c:4463
+ kmemdup+0x23/0x50 mm/util.c:127
+ kmemdup include/linux/string.h:479 [inline]
+ mfd_add_device+0x112/0x1190 drivers/mfd/mfd-core.c:191
+ mfd_add_devices+0xdb/0x170 drivers/mfd/mfd-core.c:339
+ mfd_add_hotplug_devices include/linux/mfd/core.h:152 [inline]
+ sensor_hub_probe+0xa93/0xdc0 drivers/hid/hid-sensor-hub.c:713
+ hid_device_probe+0x2bd/0x3f0 drivers/hid/hid-core.c:2263
+ really_probe+0x291/0xde0 drivers/base/dd.c:553
+ driver_probe_device+0x26b/0x3d0 drivers/base/dd.c:738
+ __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:844
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:431
+ __device_attach+0x228/0x4a0 drivers/base/dd.c:912
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
+ device_add+0xb51/0x1c70 drivers/base/core.c:2930
+ hid_add_device+0x344/0x9b0 drivers/hid/hid-core.c:2419
+ usbhid_probe+0xaae/0xfc0 drivers/hid/usbhid/hid-core.c:1412
+ usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:374
+ really_probe+0x291/0xde0 drivers/base/dd.c:553
+ driver_probe_device+0x26b/0x3d0 drivers/base/dd.c:738
+ __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:844
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:431
+ __device_attach+0x228/0x4a0 drivers/base/dd.c:912
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
+ device_add+0xb51/0x1c70 drivers/base/core.c:2930
+ usb_set_configuration+0xf05/0x18a0 drivers/usb/core/message.c:2032
+ usb_generic_driver_probe+0xba/0xf2 drivers/usb/core/generic.c:239
+ usb_probe_device+0xd9/0x250 drivers/usb/core/driver.c:272
+ really_probe+0x291/0xde0 drivers/base/dd.c:553
+ driver_probe_device+0x26b/0x3d0 drivers/base/dd.c:738
+ __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:844
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:431
+ __device_attach+0x228/0x4a0 drivers/base/dd.c:912
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
+ device_add+0xb51/0x1c70 drivers/base/core.c:2930
+ usb_new_device.cold+0x71d/0xfd4 drivers/usb/core/hub.c:2554
+ hub_port_connect drivers/usb/core/hub.c:5208 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
+ port_event drivers/usb/core/hub.c:5494 [inline]
+ hub_event+0x2361/0x4390 drivers/usb/core/hub.c:5576
+ process_one_work+0x94c/0x15f0 kernel/workqueue.c:2269
+ worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
+ kthread+0x392/0x470 kernel/kthread.c:292
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
 
-However, I wonder if it is still needed: commit 236c5441d703 from 2011 added
-code to take a reference to v4l2_dev->dev in v4l2_device_register(). This
-should prevent the device from disappearing until v4l2_device_unregister() is
-called. I suspect that v4l2_device_disconnect() can be removed completely, and
-instead v4l2_device_unregister() just calls put_device(v4l2_dev->dev).
+Freed by task 21:
+ kasan_save_stack+0x1b/0x40 mm/kasan/common.c:48
+ kasan_set_track+0x1c/0x30 mm/kasan/common.c:56
+ kasan_set_free_info+0x1b/0x30 mm/kasan/generic.c:355
+ __kasan_slab_free+0xf3/0x130 mm/kasan/common.c:422
+ slab_free_hook mm/slub.c:1548 [inline]
+ slab_free_freelist_hook+0x53/0x140 mm/slub.c:1581
+ slab_free mm/slub.c:3142 [inline]
+ kfree+0xbe/0x470 mm/slub.c:4123
+ mfd_remove_devices_fn drivers/mfd/mfd-core.c:373 [inline]
+ mfd_remove_devices_fn+0xf9/0x140 drivers/mfd/mfd-core.c:355
+ device_for_each_child_reverse+0x110/0x180 drivers/base/core.c:3269
+ mfd_remove_devices+0x75/0xa0 drivers/mfd/mfd-core.c:391
+ sensor_hub_remove+0x1d6/0x270 drivers/hid/hid-sensor-hub.c:744
+ hid_device_remove+0xed/0x240 drivers/hid/hid-core.c:2296
+ __device_release_driver+0x3c6/0x6f0 drivers/base/dd.c:1153
+ device_release_driver_internal drivers/base/dd.c:1184 [inline]
+ device_release_driver+0x26/0x40 drivers/base/dd.c:1207
+ bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
+ device_del+0x481/0xd90 drivers/base/core.c:3107
+ hid_remove_device drivers/hid/hid-core.c:2467 [inline]
+ hid_destroy_device+0xe1/0x150 drivers/hid/hid-core.c:2486
+ usbhid_disconnect+0x9f/0xe0 drivers/hid/usbhid/hid-core.c:1439
+ usb_unbind_interface+0x1d8/0x8d0 drivers/usb/core/driver.c:436
+ __device_release_driver+0x3c6/0x6f0 drivers/base/dd.c:1153
+ device_release_driver_internal drivers/base/dd.c:1184 [inline]
+ device_release_driver+0x26/0x40 drivers/base/dd.c:1207
+ bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
+ device_del+0x481/0xd90 drivers/base/core.c:3107
+ usb_disable_device+0x387/0x930 drivers/usb/core/message.c:1245
+ usb_disconnect.cold+0x27d/0x780 drivers/usb/core/hub.c:2217
+ hub_port_connect drivers/usb/core/hub.c:5059 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
+ port_event drivers/usb/core/hub.c:5494 [inline]
+ hub_event+0x1c93/0x4390 drivers/usb/core/hub.c:5576
+ process_one_work+0x94c/0x15f0 kernel/workqueue.c:2269
+ worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
+ kthread+0x392/0x470 kernel/kthread.c:292
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
 
-I don't like v4l2_device_disconnect() either, so if this works, then that would
-be a nice simplification.
+The buggy address belongs to the object at ffff8881d519fc00
+ which belongs to the cache kmalloc-192 of size 192
+The buggy address is located 0 bytes inside of
+ 192-byte region [ffff8881d519fc00, ffff8881d519fcc0)
+The buggy address belongs to the page:
+page:000000000c30de42 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1d519f
+flags: 0x200000000000200(slab)
+raw: 0200000000000200 ffffea00074f1880 0000000700000007 ffff8881da041500
+raw: 0000000000000000 0000000080100010 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
 
-Regards,
+Memory state around the buggy address:
+ ffff8881d519fb00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff8881d519fb80: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
+>ffff8881d519fc00: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                   ^
+ ffff8881d519fc80: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
+ ffff8881d519fd00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
 
-	Hans
 
-> 
->> I actually came from the other side - I assumed that there is a reason
->> that is not already the case, and that the problem therefore has to be
->> resolved on the driver side.
->>
->> So I guess the next question is: Is this already being addressed on the
->> v4l2 side ?
-> 
-> I'm not aware of anyone working on this.
-> 
->>> It shouldn't take more than two flags (to track user-space operations in
->>> progress and disconnection), a spinlock and a wait queue entry. I'm not
->>> sure if someone has already given it a try, and don't recall why this
->>> hasn't been done yet, as it should be fairly straightforward.
->>>
->>> On the UVC side, the work queue probably has to be flushed in
->>> uvc_disconnect(). I'd keep the destroy call in uvc_delete() though.
->>> Please make sure to look for potential race conditions between the URB
->>> completion handler and the .disconnect() handler (they shouldn't be any,
->>> but I haven't checked lately myself).
->>
->> My current solution for this problem is to call uvc_ctrl_cleanup_device()
->> from uvc_disconnect(), after uvc_unregister_video().
-> 
-> I'd rather avoid that, as the cleanup functions in the UVC driver are
-> generally meant to free memory when the last user disappears. While no
-> new userspace operation will be started after disconnection once the
-> above fix will be in place, there's one operation we can't avoid: the
-> file release. This will access some of the memory allocated by the
-> driver, and while the current implementation probably doesn't access in
-> .release() any memory freed by uvc_ctrl_cleanup_device(), I think it's a
-> good practice to only shut down the userspace API in .disconnect(), and
-> free memory when the last reference is released.
-> 
->> An alternative might
->> be to add a uvc_ctrl_stop_device() function which would just cancel the
->> worker.
-> 
-> I think that would be best. Should stream->async_wq (in uvc_video.c) be
-> similarly flushed ? The driver does so in stream->async_wq(), called
-> from uvc_video_stop_transfer(), itself called from
-> uvc_video_stop_streaming() (among other places, that are either error
-> paths or system suspend handling). The call stack goes to
-> uvc_stop_streaming(), and, through the videobuf2 helpers, to
-> vb2_queue_release() called by uvc_queue_release() itself called by
-> uvc_v4l2_release() (in the non-disconnect case,
-> uvc_video_stop_streaming() will be called through videobuf2 by
-> uvc_queue_streamoff(), in response to a VIDIOC_STREAMOFF ioctl). We thus
-> flush the workqueue too late, and also access the device in
-> uvc_video_stop_streaming() long after .disconnect() returns.
-> 
-> I think uvc_video_stop_streaming() could be called in uvc_disconnect()
-> after uvc_unregister_video().
-> 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
