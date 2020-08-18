@@ -2,51 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A241248C3C
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Aug 2020 18:59:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC5F3248C3E
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Aug 2020 18:59:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728475AbgHRQ7V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Aug 2020 12:59:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47348 "EHLO
+        id S1728630AbgHRQ7Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Aug 2020 12:59:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728622AbgHRQ7E (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Aug 2020 12:59:04 -0400
+        with ESMTP id S1728619AbgHRQ7I (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Aug 2020 12:59:08 -0400
 Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB77C061389
-        for <linux-usb@vger.kernel.org>; Tue, 18 Aug 2020 09:59:00 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id e196so22797839ybh.6
-        for <linux-usb@vger.kernel.org>; Tue, 18 Aug 2020 09:59:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD7FC061343
+        for <linux-usb@vger.kernel.org>; Tue, 18 Aug 2020 09:59:08 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id g127so22753680ybf.11
+        for <linux-usb@vger.kernel.org>; Tue, 18 Aug 2020 09:59:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=o9JIR5P3YJ8yGWm9bzlQRfs81LouvpWibUbieKx2QVI=;
-        b=erPbZV0GF/QmzAGkM2ZLKrh5OqgkEH9MKapp+ZOn0UurUQueV4xibTy9lqklSs2SqG
-         L4Hb/6e0hAxKCYhDT4IyjvXGtQdI1RpK9GSzSAoBV7yCC5GsJFYHBfO++TOed8V0/jd0
-         jW9MnKhEdRQ2ue4Qy/edAo7ttGw4boC8dUKZXXQqv0CWdZ4rV+uweEAQMSpv52JXN4UX
-         fhp/dkLnhgskJr2wLN6eZifKTrFkrl9DYqFBn/qdqoIh2/pZOOQm7ewha2EpTaI9xxvd
-         yJlwgYbNik+t+8UDxaO/veRQ6qXb5dre1CWy3LSK/b6rKigz6fnCtA25qP9meqtWqpFm
-         CCpA==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=4TNVRkUNpf58TBKmVZYhNfFRkuTY8ErhDLTbq/+6hn0=;
+        b=HcYnvq2GokDgKc0+3PZZ5eU9OA01Q4KV/8pd5sIq76IGFHPn66c2TdAA9JDUBTLbMV
+         SPHNusvk82GSewYMFfTWW6L75oBGi31v9e5lAoZk2JuYMpS/xwfu2MS+X6xeXpDarzPc
+         48m3yG4Pou73rAD0uXGCY8jjTNDmXnJDCpUNtEAopHRT3fJx2Z2RMOabAab8OKqs8E6W
+         fq/GntjrhV7vAfoY2egy+Z9jnUr3b1wPRVCkOAjJ4GKLyIuLs9S2X9kJ76hdxt1ZiYSG
+         fuamdFcewmS2sPRPq2oC87GhNRuhd48CqnGdZmsY+4jFmjJE/RkbYYwF/Pl6grmnbCo6
+         +DrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=o9JIR5P3YJ8yGWm9bzlQRfs81LouvpWibUbieKx2QVI=;
-        b=NalQqg2WCidd8CxmbkRum4Iqx56HsmK5s80mTF+AnnsxL5+9xaZ6WHeRCwwSR3VenJ
-         KQE1DgoI7B8Y+s5mnpI0kPdzvsJGgKi1Ey0UVc1bcKzD9xyC8T5CEE+OAtS2SUZqgc8h
-         WpYGTpEXvIV6eJB8bJMCASXo5cnqlVZ7G3inPmPotwGNRO8uzjf7uLAKUnnNWw0r4yu9
-         jdgjC0mlD37/dzP/O9Sd6hbNI8ufXr6DLWF1cKvaYPlTTbrWvGJ0+BBMw+T/E7C8C5uy
-         PqDoaaFMCdy9y058opYyzevpxvTpDutOZQcIiFmt5MKJ4ba1zghoVB1o5IwRBF56LQ2M
-         dXYA==
-X-Gm-Message-State: AOAM533NwHfnZTj7qbzbJnOESQ64ABfxpdlJWL+83xxfSEp58X/37EiZ
-        q766CggNppMWcauYTT5kQHuzI1e8Z+U647I4lDbVMkRwGpF75BaK7amtt+m1lBoLgtOXwrJUoTM
-        3H/7ixjnwZhwyXYzWtgzFT9qGE8sxc6toL35USRkajde5+Y2eNfO0ACexeidnXau2oOin
-X-Google-Smtp-Source: ABdhPJyfitNCesM5cOHJkJpKWrV6GNClGCzG9qsfZ1py5ry9HqzrpEZw+xNGOwERl1NSKRRGq38TK1+AmXlU
-X-Received: by 2002:a25:5755:: with SMTP id l82mr30677619ybb.175.1597769939743;
- Tue, 18 Aug 2020 09:58:59 -0700 (PDT)
-Date:   Wed, 19 Aug 2020 01:58:46 +0900
-Message-Id: <20200818165848.4117493-1-lorenzo@google.com>
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=4TNVRkUNpf58TBKmVZYhNfFRkuTY8ErhDLTbq/+6hn0=;
+        b=LxPh+h27Kbu5UuHX3S3vcS3dsDYSAAsUQz3fQITCqiBoaop/qL7N53wgNqR7jDlb/U
+         zJX33GdAvew9iLIq5b7+zKgO5tMdbR4zBZUtTjxNBLxvITJ9P15xgRG21anlG6XUd/z8
+         vmxec7lW3J6t3mrVFn6414hRWiGfU7voWmUNPiuWDv6ulJdzUZUuhSsPxCC0bIqT/FBA
+         KeapLKwUxQvEOZ0BVdHSytlSLqpgzaEUBU6Huqh3dsw0sgzm9R56JPQsNJmbg/70/iJj
+         WDbQs6Y849huJp4G8Yk7M82pEhDFMENKpMIlX/OE6uqk9dyvVgY/fD3nf70jtVSyQkWE
+         2Q1Q==
+X-Gm-Message-State: AOAM531xCezECG2mVsUmOiFRDwtXxOJb2HUIkzg/Jffx9jiBfs0EVaJT
+        /jQU0BDYbzt5JJc+nNk4v5yJBJWmMHIaZ525WGeqW0RCXz2xc9Vj16ZIqU5YedygDE28oRwWUMp
+        ZS9sKTZuElMArZcJbHaco5LUWrHG8ORf7vzgq5P0g4mZ2CvqAwZtrRNeoDXx+82l3j90v
+X-Google-Smtp-Source: ABdhPJydyJZlrJJ3njpf3gLvZql1zqcFyw0O968Ki/+fTJZdIZpBvwOtkYuDXnztzckwpivUVcDhDjf0ywNs
+X-Received: by 2002:a25:870a:: with SMTP id a10mr29775609ybl.257.1597769947110;
+ Tue, 18 Aug 2020 09:59:07 -0700 (PDT)
+Date:   Wed, 19 Aug 2020 01:58:47 +0900
+In-Reply-To: <20200818165848.4117493-1-lorenzo@google.com>
+Message-Id: <20200818165848.4117493-2-lorenzo@google.com>
 Mime-Version: 1.0
+References: <20200818165848.4117493-1-lorenzo@google.com>
 X-Mailer: git-send-email 2.28.0.220.ged08abb693-goog
-Subject: [PATCH v2 1/3] usb: gadget: f_ncm: fix ncm_bitrate for SuperSpeed and above.
+Subject: [PATCH v2 2/3] usb: gadget: f_ncm: set SuperSpeed bulk descriptor
+ bMaxBurst to 15
 From:   Lorenzo Colitti <lorenzo@google.com>
 To:     linux-usb@vger.kernel.org
 Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
@@ -57,47 +62,38 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Currently, SuperSpeed NCM gadgets report a speed of 851 Mbps
-in USB_CDC_NOTIFY_SPEED_CHANGE. But the calculation appears to
-assume 16 packets per microframe, and USB 3 and above no longer
-use microframes.
+This improves performance on fast connections. When directly
+connecting to a Linux laptop running 5.6, single-stream iperf3
+goes from ~1.7Gbps to ~2.3Gbps out, and from ~620Mbps to ~720Mbps
+in.
 
-Maximum speed is actually much higher. On a direct connection,
-theoretical throughput is about 3.86 Gbps for gen1x1 and
-9.35 Gbps for gen2x1, and I have seen gadget->host speeds
->2 Gbps for gen1x1 and >4 Gbps for gen2x1.
-
-Unfortunately the ConnectionSpeedChange defined in the CDC spec
-only uses 32-bit values, so we can't report accurate numbers for
-10Gbps and above. So always report a speed of 4 Gbps, which is
-close enough to the technical maximum of a 5 Gbps link.
-
-This results in:
-
-[96033.958723] cdc_ncm 8-2:1.0 enx4643f5db6f40: renamed from usb0
-[96033.997136] cdc_ncm 8-2:1.0 enx4643f5db6f40: 4000 mbit/s downlink 4000 mbit/s uplink
-
-Fixes: 1650113888fe ("usb: gadget: f_ncm: add SuperSpeed descriptors for CDC NCM")
 Signed-off-by: Lorenzo Colitti <lorenzo@google.com>
 ---
  drivers/usb/gadget/function/f_ncm.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/function/f_ncm.c
-index 1d900081b1..0c073df225 100644
+index 0c073df225..57ccf30c6c 100644
 --- a/drivers/usb/gadget/function/f_ncm.c
 +++ b/drivers/usb/gadget/function/f_ncm.c
-@@ -85,8 +85,8 @@ static inline struct f_ncm *func_to_ncm(struct usb_function *f)
- /* peak (theoretical) bulk transfer rate in bits-per-second */
- static inline unsigned ncm_bitrate(struct usb_gadget *g)
- {
--	if (gadget_is_superspeed(g) && g->speed == USB_SPEED_SUPER)
--		return 13 * 1024 * 8 * 1000 * 8;
-+	if (gadget_is_superspeed(g) && g->speed >= USB_SPEED_SUPER)
-+		return 4000000000;
- 	else if (gadget_is_dualspeed(g) && g->speed == USB_SPEED_HIGH)
- 		return 13 * 512 * 8 * 1000 * 8;
- 	else
+@@ -348,7 +348,7 @@ static struct usb_ss_ep_comp_descriptor ss_ncm_notify_comp_desc = {
+ 	.bDescriptorType =	USB_DT_SS_ENDPOINT_COMP,
+ 
+ 	/* the following 3 values can be tweaked if necessary */
+-	/* .bMaxBurst =		0, */
++	.bMaxBurst =		15,
+ 	/* .bmAttributes =	0, */
+ 	.wBytesPerInterval =	cpu_to_le16(NCM_STATUS_BYTECOUNT),
+ };
+@@ -376,7 +376,7 @@ static struct usb_ss_ep_comp_descriptor ss_ncm_bulk_comp_desc = {
+ 	.bDescriptorType =	USB_DT_SS_ENDPOINT_COMP,
+ 
+ 	/* the following 2 values can be tweaked if necessary */
+-	/* .bMaxBurst =		0, */
++	.bMaxBurst =		15,
+ 	/* .bmAttributes =	0, */
+ };
+ 
 -- 
 2.28.0.220.ged08abb693-goog
 
