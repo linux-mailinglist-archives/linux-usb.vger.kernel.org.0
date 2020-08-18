@@ -2,79 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D0424825E
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Aug 2020 11:58:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81A6124826D
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Aug 2020 12:00:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726424AbgHRJ6F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Aug 2020 05:58:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51640 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726145AbgHRJ6F (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 18 Aug 2020 05:58:05 -0400
-Received: from localhost (unknown [122.171.38.130])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F044F206DA;
-        Tue, 18 Aug 2020 09:58:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597744684;
-        bh=liPekAEqEhXna7fi9pE3+yVKQDVG7V0t3PgzODIgVeU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SLZNg6fiT5Z5kpBuFHuWZrQKECS9wMB5O+KtuBKDjJVCB9o/zAa0Z7baeJ6YW7q8I
-         zdXgYh6R2QGn9v/0nryXo69hNM+A/BpUqCcw7myjmWUtZ6sPJLPJy7az0vzVg57ol6
-         VVmzAvsHqGoKbrYsSFcqcVIRKbjYbUeWfl0YJiiI=
-Date:   Tue, 18 Aug 2020 15:28:00 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
+        id S1726482AbgHRKAW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Aug 2020 06:00:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37294 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726145AbgHRKAU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Aug 2020 06:00:20 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8502C061389;
+        Tue, 18 Aug 2020 03:00:19 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id 74so9700573pfx.13;
+        Tue, 18 Aug 2020 03:00:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=OOenSclepS0MABruprKXkVZk2CmkqltRlMtrV3FqKk0=;
+        b=c3C8yFsQurPTAqZp5ro2DQU9RyvdO3D6JEMGO6BND1O8fmHvaNLwU0BXpPovPyleiI
+         +vXOUOIV5DPz3DG4vLwFMIsz6T+xgq2IwLiRgPhPy4d8v9wY4s62RXr9TvMn8LmGjuTS
+         f+SrIXoOW/F3EGG9vAeSK0TtVfVl2PQJIy/QrFu2HVHmqlOjlGQJXUOskcapulDRaI5O
+         a6gAL2n/0Avbc9kKN1Zn/lYdzgZufygWn6HNwT4RXxKrxX39/OepzkCw8LKuyhlTdtGm
+         XHC5by/+f1aRJKJaqbbQrRwpDZi5tLFx1hcZsiLUBqiS3xHFUykRSDW0dj7Axmyx3f+k
+         JXOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OOenSclepS0MABruprKXkVZk2CmkqltRlMtrV3FqKk0=;
+        b=Kif4EUl0NjIj9coTGg6YFiGMuFXAp3jmp8fkgaWVYcXBMz4D75wgaq2XV7MOEOFSi7
+         4Lbly1msef+9u7fm00xxYe174PTQsCB7tNAX+S+0q3ITIE4pmJygDmB9Nme41mB3/o6p
+         +2YHjOR4Hbl1hf3BjQX5aRpjsh70BWtSERv1lxmpxuOuB66LHosbs46zIvEpkNWO2PjY
+         grzFQfolA8nk+PyShi0f4js3Ttw7rzSTUWQv4eyrXVYvi1Eyrg28jqMO2m/4XbSIHp8K
+         3VoOfJZ0iSTW7Ax2FeeN45kIkOqszWrHmWXWKSNOOrWWG7KNEoiq9Xvwrd6l9aesQYZe
+         15gg==
+X-Gm-Message-State: AOAM533A/B1B/5w6KOrDb5FWwH3LhkiZg7FGzv72P1xNzuQ52uiPKCrW
+        kCtiEwWKea/DyfvG/MdADw==
+X-Google-Smtp-Source: ABdhPJw8bM1oYpBq691mtUzOLfn8tTF4UwM50ybp3c0lFYLllJw5jJLjkMd01hKUBOnsJZw5Rm1Xig==
+X-Received: by 2002:a62:1ad0:: with SMTP id a199mr15047482pfa.56.1597744818002;
+        Tue, 18 Aug 2020 03:00:18 -0700 (PDT)
+Received: from PWN ([221.124.243.27])
+        by smtp.gmail.com with ESMTPSA id j5sm24157839pfg.80.2020.08.18.03.00.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Aug 2020 03:00:17 -0700 (PDT)
+Date:   Tue, 18 Aug 2020 06:00:08 -0400
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+To:     Jiri Kosina <jikos@kernel.org>
+Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        syzkaller-bugs@googlegroups.com,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] usb: renesas-xhci: remove version check
-Message-ID: <20200818095800.GZ2639@vkoul-mobl>
-References: <20200818071739.789720-1-vkoul@kernel.org>
- <20200818073108.GE9254@kroah.com>
- <20200818083919.GY2639@vkoul-mobl>
- <20200818084605.GA27455@kroah.com>
+Subject: Re: [Linux-kernel-mentees] [PATCH v2 RESEND] usbhid: Fix
+ slab-out-of-bounds write in hiddev_ioctl_usage()
+Message-ID: <20200818100008.GA2135@PWN>
+References: <20200718231218.170730-1-yepeilin.cs@gmail.com>
+ <20200729113712.8097-1-yepeilin.cs@gmail.com>
+ <nycvar.YFH.7.76.2008171221290.27422@cbobk.fhfr.pm>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200818084605.GA27455@kroah.com>
+In-Reply-To: <nycvar.YFH.7.76.2008171221290.27422@cbobk.fhfr.pm>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 18-08-20, 10:46, Greg Kroah-Hartman wrote:
-> On Tue, Aug 18, 2020 at 02:09:19PM +0530, Vinod Koul wrote:
-> > On 18-08-20, 09:31, Greg Kroah-Hartman wrote:
-> > > On Tue, Aug 18, 2020 at 12:47:39PM +0530, Vinod Koul wrote:
-> > > > Some devices in wild are reporting bunch of firmware versions, so remove
-> > > > the check for versions in driver
-> > > > 
-> > > > Reported by: Anastasios Vacharakis <vacharakis@gmail.com>
-> > > > Reported by: Glen Journeay <journeay@gmail.com>
-> > > > Fixes: 2478be82de44 ("usb: renesas-xhci: Add ROM loader for uPD720201")
-> > > > Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=208911
-> > > > Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> > > > ---
-> > > > Changes in v3:
-> > > >  - drop additional firmware versions and remove the check
-> > > > 
-> > > > Greg, this fixes regression for folks with preprogrammed controllers
-> > > > please mark as stable material
-> > > 
-> > > You could have done so by putting "Cc: stable..." in the s-o-b of the
-> > > kernel, why force me to do that by hand?
-> > 
-> > Oops, wasnt sure of your preference. Btw am sure you would have scripted
-> > it :-)
-> > 
-> > Would you like me to send an update with stable tagged or this is fine
-> > for now?
+On Mon, Aug 17, 2020 at 12:21:41PM +0200, Jiri Kosina wrote:
+> On Wed, 29 Jul 2020, Peilin Ye wrote:
 > 
-> I can do it now, but in the future please be nice to maintainers, we are
-> overworked as you well know :)
+> > `uref->usage_index` is not always being properly checked, causing
+> > hiddev_ioctl_usage() to go out of bounds under some cases. Fix it.
+> > 
+> > Reported-by: syzbot+34ee1b45d88571c2fa8b@syzkaller.appspotmail.com
+> > Link: https://syzkaller.appspot.com/bug?id=f2aebe90b8c56806b050a20b36f51ed6acabe802
+> > Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
+> > Signed-off-by: Peilin Ye <yepeilin.cs@gmail.com>
+> > ---
+> > Change in v2:
+> >     - Add the same check for the `HIDIOCGUSAGE` case. (Suggested by
+> >       Dan Carpenter <dan.carpenter@oracle.com>)
+> 
+> Applied, thanks.
 
-Thanks.
+Thank you for reviewing the patch!
 
--- 
-~Vinod
+Peilin Ye
