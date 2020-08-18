@@ -2,64 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28DF2248227
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Aug 2020 11:46:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1258D248238
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Aug 2020 11:50:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726570AbgHRJqr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Aug 2020 05:46:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35204 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726273AbgHRJqo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Aug 2020 05:46:44 -0400
-Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A5AC061342
-        for <linux-usb@vger.kernel.org>; Tue, 18 Aug 2020 02:46:35 -0700 (PDT)
-Received: by mail-oi1-x241.google.com with SMTP id z22so17429216oid.1
-        for <linux-usb@vger.kernel.org>; Tue, 18 Aug 2020 02:46:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=xNDgY8BgpnLjx0SebOYwAR+PZBvf4oK3xAAWm2FgwCE=;
-        b=Dck37ScITZKf9EvOpcn+mdP+fgg7+zd9agFz2J+CHTmmMyxxYjNe4wENNyHFwC7fWS
-         dWRdsVjo2x5SnbGIYoGoYTAtvGuvb8iqvXCzNVc84OvYjXI1G1+ZLPhP5IyiR2ebjE4B
-         6bu953jVJ4G/eb9MPGON9j+hB1rc/8nWN4te7DDVwqt8/+KcjFPP9JQBtU3v6EkBUDuD
-         olCYRR9cEkaWItWh0fEdMItrnzFwQt2xszZqG6bLcUdOw2/Msfyhcj8YQiYyuED6z29q
-         r2yHBZ+hXJw0pESOXD83Hbmeqz5eYe4mZZAYsWSxevZaavj/DEM3AQZ9418/TYUoeiK9
-         am4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=xNDgY8BgpnLjx0SebOYwAR+PZBvf4oK3xAAWm2FgwCE=;
-        b=WXoq3cDRv2AXeMz0309foCvIpCkmny3Si/viK3hyvWUyqebLv8o6KyHllqS+uv2PNf
-         4I69MzpOzKHE+UEor0ZFPf0Pruvi8sdAHeQvbuwvhFANtUql8vXNLBs88V67epwzH+lr
-         ZqYFZo/RKIrYC7yb4Pci0WIns4veLs8bXsocify7R+HJdCBOe6Tq1FZVc2K8g/Nk2kaf
-         W5wUuW/hjoen2l8X+ogaNakNean/KV399i3G9EKOduZZNnQecaRE06muI52tuLvGhQCd
-         RaEPHEJ7qwJeqwRfX12Mvyi0bZh8wEJ1OSVFBWfYWeHZFCNQiAkxeyfssWOX1Y8m+9Co
-         uBmA==
-X-Gm-Message-State: AOAM533lxBeWe3UZrZvjVv5FL7jyZ7H4LLNf4Bqud8eT2jzOwhgo6j80
-        Q3n3f5+qpIjildv0zgaPl/bQ1VwwodCBg/RgNIyw9SHYvlo=
-X-Google-Smtp-Source: ABdhPJwkq1YB455sN0M4MF4NMrZTENaDkhjMqatERUJAno3/SGJuIgaWo/GCubUhOFTrcf9sd6va2SmzUwIJZmYNOQE=
-X-Received: by 2002:aca:1a14:: with SMTP id a20mr11602075oia.167.1597743994606;
- Tue, 18 Aug 2020 02:46:34 -0700 (PDT)
+        id S1726635AbgHRJui (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Aug 2020 05:50:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46368 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726628AbgHRJui (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 18 Aug 2020 05:50:38 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B07D7206B5;
+        Tue, 18 Aug 2020 09:50:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1597744238;
+        bh=qz+/Do4gQWYqGfpTGMzMSVoBUMTZmSklNt39J0l+r/g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=zKCc6k9HzYw6jZmJXKQkmkSTQxLEjDt3Yd1jy5CyBCWNmFAGxzPFSBdudjlFJ1oGj
+         E5xxe39VzvJ5Us83h55lGDmnMtSmIyVc5iKwFF8b4PgGaukSIN2qwOfODXxe0mM11G
+         ULF5ZbBHJpePSpLpyEQ5OAzggTrDu71m1UxSuVzM=
+Date:   Tue, 18 Aug 2020 11:51:01 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Bastien Nocera <hadess@hadess.net>
+Cc:     linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>
+Subject: Re: [PATCH v7 1/3] USB: Also check for ->match
+Message-ID: <20200818095101.GB56916@kroah.com>
+References: <20200804113834.6409-1-hadess@hadess.net>
+ <20200818090037.GC28036@kroah.com>
+ <bd8e57a4c96df5c18a3019b9c20da45458db1ed4.camel@hadess.net>
 MIME-Version: 1.0
-Received: by 2002:ac9:1181:0:0:0:0:0 with HTTP; Tue, 18 Aug 2020 02:46:34
- -0700 (PDT)
-From:   "Laura J. Richardson" <jaster189@gmail.com>
-Date:   Tue, 18 Aug 2020 09:46:34 +0000
-X-Google-Sender-Auth: vJZxRy3bQfU3y6JrIdYyM8JE_hU
-Message-ID: <CAPn97Q=uu_d7LTLY988E9S1FUQnAk3KTQcp=CN7dH4yy62xmLQ@mail.gmail.com>
-Subject: Hi
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bd8e57a4c96df5c18a3019b9c20da45458db1ed4.camel@hadess.net>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi dear friend,
+On Tue, Aug 18, 2020 at 11:42:23AM +0200, Bastien Nocera wrote:
+> On Tue, 2020-08-18 at 11:00 +0200, Greg Kroah-Hartman wrote:
+> > On Tue, Aug 04, 2020 at 01:38:32PM +0200, Bastien Nocera wrote:
+> > > We only ever used the ID table matching before, but we should
+> > > probably
+> > > also support an open-coded match function.
+> > > 
+> > > Fixes: 88b7381a939de ("USB: Select better matching USB drivers when
+> > > available")
+> > > Signed-off-by: Bastien Nocera <hadess@hadess.net>
+> > > Acked-by: Alan Stern <stern@rowland.harvard.edu>
+> > 
+> > The subject line does not make sense, what is "also"?  Who is doing
+> > this?
+> > 
+> > Coming back to this after a week I have no idea what is going on, so
+> > that's a sign that it needs to be reworded :(
+> 
+> It's actually been 2 weeks. Were there any other changes you wanted
+> made in this patchset, or is that going to be it?
 
-I'm Laura J. Richardson from the United States. Please, I would wish
-to have a communication with you. I will be waiting for your response.
-
-Laura.
+I think that's it.
