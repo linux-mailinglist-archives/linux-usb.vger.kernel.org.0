@@ -2,63 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3EB6247F87
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Aug 2020 09:30:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08973248042
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Aug 2020 10:14:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726605AbgHRHap (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Aug 2020 03:30:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57652 "EHLO mail.kernel.org"
+        id S1726420AbgHRIOX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Aug 2020 04:14:23 -0400
+Received: from mga14.intel.com ([192.55.52.115]:59087 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726043AbgHRHao (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 18 Aug 2020 03:30:44 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F0D8A206B5;
-        Tue, 18 Aug 2020 07:30:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597735844;
-        bh=Zii/iidjf7sBtv2hMWeEW5aoRhsRt7licNkclEoHalQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=upwVUrQlyfYcs8wgdKov1dmuqlL2PsTH6A8esdjI78GAemOn894tzbyi6+zcc6lax
-         k3AXikO5RYWKF/I0fOMO70UsEPQgeZSs9iWusEpjhJ4jsem5pl2z5/4MoRjEYIFNc8
-         /3VUkRIafk7PqopN5DucRjegZXbWhCzb9nrxraE8=
-Date:   Tue, 18 Aug 2020 09:31:08 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] usb: renesas-xhci: remove version check
-Message-ID: <20200818073108.GE9254@kroah.com>
-References: <20200818071739.789720-1-vkoul@kernel.org>
+        id S1726341AbgHRIOW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 18 Aug 2020 04:14:22 -0400
+IronPort-SDR: mlhFGgaimL4et991zF/PUKJ1LScGQvLLNRDlTQ1jl3R8EoDSgOBkg7IQGwN4Jv1hj+zohUnUJC
+ ettv9G+ZDTiA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9716"; a="154119614"
+X-IronPort-AV: E=Sophos;i="5.76,326,1592895600"; 
+   d="scan'208";a="154119614"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2020 01:14:22 -0700
+IronPort-SDR: 3zx13NX+RxrHvv2xsNOgNRvvtQCHUr6tx0EonPtsYGNH1A/tj+zTOLNro2iU4+C+gQPlVamDnl
+ 3YeGWDozdcWw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,326,1592895600"; 
+   d="scan'208";a="326661678"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by orsmga008.jf.intel.com with ESMTP; 18 Aug 2020 01:14:18 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1k7wYS-009bKE-F2; Tue, 18 Aug 2020 11:01:12 +0300
+Date:   Tue, 18 Aug 2020 11:01:12 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
+Cc:     Anton Sviridenko <anton@corp.bluecherry.net>,
+        Andrey Utkin <andrey.utkin@corp.bluecherry.net>,
+        Ismael Luceno <ismael@iodev.co.uk>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jussi Kivilinna <jussi.kivilinna@iki.fi>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        Sylwia Wnuczko <sylwia.wnuczko@intel.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>
+Subject: Re: [PATCH v2 1/8] byteorder: Introduce cpu_to_le16_array() and
+ le16_to_cpu_array()
+Message-ID: <20200818080112.GZ1891694@smile.fi.intel.com>
+References: <20200817184659.58419-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200818071739.789720-1-vkoul@kernel.org>
+In-Reply-To: <20200817184659.58419-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 18, 2020 at 12:47:39PM +0530, Vinod Koul wrote:
-> Some devices in wild are reporting bunch of firmware versions, so remove
-> the check for versions in driver
-> 
-> Reported by: Anastasios Vacharakis <vacharakis@gmail.com>
-> Reported by: Glen Journeay <journeay@gmail.com>
-> Fixes: 2478be82de44 ("usb: renesas-xhci: Add ROM loader for uPD720201")
-> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=208911
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> ---
-> Changes in v3:
->  - drop additional firmware versions and remove the check
-> 
-> Greg, this fixes regression for folks with preprogrammed controllers
-> please mark as stable material
+On Mon, Aug 17, 2020 at 09:46:52PM +0300, Andy Shevchenko wrote:
+> Introduce cpu_to_le16_array() and le16_to_cpu_array() for existing and
+> future users.
 
-You could have done so by putting "Cc: stable..." in the s-o-b of the
-kernel, why force me to do that by hand?
+It appears that the series needs more work. Please, discard this and at some
+point I'll send v3.
 
-thanks,
+-- 
+With Best Regards,
+Andy Shevchenko
 
-greg k-h
+
