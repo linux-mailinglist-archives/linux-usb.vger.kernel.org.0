@@ -2,66 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2908224881A
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Aug 2020 16:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7225B248827
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Aug 2020 16:48:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726880AbgHROq5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Aug 2020 10:46:57 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:36107 "HELO
+        id S1727114AbgHROsU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Aug 2020 10:48:20 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:59147 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726698AbgHROq4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Aug 2020 10:46:56 -0400
-Received: (qmail 146088 invoked by uid 1000); 18 Aug 2020 10:46:55 -0400
-Date:   Tue, 18 Aug 2020 10:46:55 -0400
-From:   "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: Re: [PATCH v2 6/6] Revert "usb: udc: allow adding and removing the
- same gadget device"
-Message-ID: <20200818144655.GA144306@rowland.harvard.edu>
-References: <20200810022510.6516-1-peter.chen@nxp.com>
- <20200810022510.6516-7-peter.chen@nxp.com>
- <20200818093305.GA34785@kroah.com>
- <AM7PR04MB7157182367D7EEE2BDAD53318B5C0@AM7PR04MB7157.eurprd04.prod.outlook.com>
+        with SMTP id S1727005AbgHROsT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Aug 2020 10:48:19 -0400
+Received: (qmail 146374 invoked by uid 1000); 18 Aug 2020 10:48:18 -0400
+Date:   Tue, 18 Aug 2020 10:48:18 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Jim Baxter <jim_baxter@mentor.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-usb@vger.kernel.org,
+        "Resch Carsten \(CM/ESO6\)" <Carsten.Resch@de.bosch.com>,
+        "Rosca, Eugeniu \(ADITG/ESB\)" <erosca@de.adit-jv.com>
+Subject: Re: PROBLEM: Long Workqueue delays.
+Message-ID: <20200818144818.GB144306@rowland.harvard.edu>
+References: <71aafe68-7fe0-6b77-ea8e-83edd3f16c8d@mentor.com>
+ <20200817115744.GA3985908@kroah.com>
+ <57a7841d-86e3-b6df-1488-a252a68a9ee0@mentor.com>
+ <20200817184753.GA120209@rowland.harvard.edu>
+ <1838f2c3-7915-9e5b-3112-6b082b945410@mentor.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <AM7PR04MB7157182367D7EEE2BDAD53318B5C0@AM7PR04MB7157.eurprd04.prod.outlook.com>
+In-Reply-To: <1838f2c3-7915-9e5b-3112-6b082b945410@mentor.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 18, 2020 at 10:05:51AM +0000, Peter Chen wrote:
->  
-> > >
-> > > diff --git a/drivers/usb/gadget/udc/core.c
-> > > b/drivers/usb/gadget/udc/core.c index 473e74088b1f..43351b0af569
-> > > 100644
-> > > --- a/drivers/usb/gadget/udc/core.c
-> > > +++ b/drivers/usb/gadget/udc/core.c
-> > > @@ -1386,7 +1386,6 @@ void usb_del_gadget_udc(struct usb_gadget
-> > > *gadget)  {
-> > >  	usb_del_gadget(gadget);
-> > >  	usb_put_gadget(gadget);
-> > > -	memset(&gadget->dev, 0x00, sizeof(gadget->dev));
+On Tue, Aug 18, 2020 at 11:54:51AM +0100, Jim Baxter wrote:
+> On 17/08/2020 19:47, Alan Stern wrote:
 > > 
-> > Shouldn't you do this patch earlier in the series, as the
-> > usb_put_gadget() call could have freed the memory that is being cleared here?
+> > Unplugging a R/W USB drive without unmounting it first is a great way to 
+> > corrupt the data.
+> > 
+> Thank you, post development we will only mount the USB stick as R/O.
+> 
+> >> Using perf Iidentified the hub_events workqueue was spending a lot of time in
+> >> invalidate_partition(), I have included a cut down the captured data from perf in
+> >> [2] which shows the additional functions where the kworker spends most of its time.
+> > 
+> > invalidate_partition() is part of the block layer, not part of USB.  It 
+> > gets called whenever a drive is removed from the system, no matter what 
+> > type of drive it is.  You should ask the people involved in that 
+> > subsystem why it takes so long.
 > > 
 > 
-> If I did it earlier, it would cause dwc3 break if people do 'git bisect', dwc3 issue is
-> fixed at patch 5.
+> I included the linux-mm list but missed the filesystem, I will ask the question
+> to the linux-fsdevel too.
 
-If you use the patch I posted earlier:
-
-	https://marc.info/?l=linux-usb&m=159605415210351&w=2
-
-instead of this one then dwc3 would continue to work correctly during 
-the intermediate stages of the series.
+What about linux-block?  The block layer is different from the 
+memory-management (mm) layer.
 
 Alan Stern
