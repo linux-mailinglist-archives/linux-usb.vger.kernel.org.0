@@ -2,249 +2,1063 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C36BF247C04
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Aug 2020 03:54:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71EB3247D37
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Aug 2020 06:13:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726382AbgHRByy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Aug 2020 21:54:54 -0400
-Received: from mail-eopbgr70085.outbound.protection.outlook.com ([40.107.7.85]:59524
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726357AbgHRByw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 17 Aug 2020 21:54:52 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=c8HJ4mNt7nzfcScJbc1bCbNXiAMpgaNp1I+ZX2CQDOpT54DZ2K5lpaC7uMJ3RfKb1JEsRkJIiEnYZVRBrjuOCABmJ9ikx48d37u6e6JF0KfW6SJo8jHqFFPab8Ec35Rb1/cydqlGSsjdPFTkzihbg7aLPwnEUSZSRxJFc9DUNs+PBCOTXOTx6lAq6HFf7EEIbKqak8kJ9UrO53LdO4rilMkIkHfEPJq4jMFAXc7qp9h7FRzVh+5K+VG5gjIzzs5CQ97zPYJ9bVOrC2hRrKbyFnr8+vzqM8nr0XwMvG4AFZjRVROkCKrxlqwwm04b1eBQBS+Z6FrCYFTYz6Mn3a99Lg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VVblp/1h7QMRzRBwSKUKfvh8gq/n2ynd3p7j41B8TUk=;
- b=HE3LR21smqXrFIAYaixMPTYS0nRbZIc5TedLOPpvoifkjeQpBw/ONkbshdMAhCx8te59Cj/Tt8NhcqVq0scWJ07XAEQ5+ApvxtnEWMrN0+CL4LFMmMR8pbZUfg7avnzfbcBnoGQjNkoCeWnTfKLG0VQjT2oHnpohpuqgz2WOVMJPeakcU+bKfpkdD2mg4Aj5tJt7iFxKAWkOGg0LjVdrY1ULd1IsrPpWRNv1Th+hBxAECW0IpdiVLcFnFcGfptJhL0bfMatOFsARS7rMtff5QPnGha8lm6gzrO+yCPufCjkY7MTTvUoOD+4B6/z1l/EAy84+EByUp4YR1WhclwC70Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VVblp/1h7QMRzRBwSKUKfvh8gq/n2ynd3p7j41B8TUk=;
- b=qlCgESHu8RyWHJPbbMnQnZQeeKYInaW9JlDEU0HW7oUibe7A8uKg1mknmkHZi8mQfSBdq6NSKdE/Nz41YARXMB5/7EjUZB+dpSYdhEplHMbw7DjZeFjnk/JKJCToXBOmvRuKxtSsuBDrU8K8PdG4svCaHQqTWlgWyaABpCHKmBg=
-Received: from VE1PR04MB6528.eurprd04.prod.outlook.com (2603:10a6:803:127::18)
- by VI1PR04MB6911.eurprd04.prod.outlook.com (2603:10a6:803:12e::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3283.20; Tue, 18 Aug
- 2020 01:54:45 +0000
-Received: from VE1PR04MB6528.eurprd04.prod.outlook.com
- ([fe80::acd3:d354:3f34:3af7]) by VE1PR04MB6528.eurprd04.prod.outlook.com
- ([fe80::acd3:d354:3f34:3af7%4]) with mapi id 15.20.3283.028; Tue, 18 Aug 2020
- 01:54:45 +0000
-From:   Jun Li <jun.li@nxp.com>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        "mathias.nyman@intel.com" <mathias.nyman@intel.com>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: [PATCH v2] usb: xhci: add debugfs support for ep with stream
-Thread-Topic: [PATCH v2] usb: xhci: add debugfs support for ep with stream
-Thread-Index: AQHWW240LsQE47DpHka0ISI6aMQrkKk1+RLggAZonYCAAOs9cA==
-Date:   Tue, 18 Aug 2020 01:54:45 +0000
-Message-ID: <VE1PR04MB65289D522279DD1267A1FFF5895C0@VE1PR04MB6528.eurprd04.prod.outlook.com>
-References: <1594901321-6992-1-git-send-email-jun.li@nxp.com>
- <DB8PR04MB6523AC8B5B7C1DEDA1254F0A89430@DB8PR04MB6523.eurprd04.prod.outlook.com>
- <c6c4f598-ff8a-8b51-d87c-c5d20f4421a4@linux.intel.com>
-In-Reply-To: <c6c4f598-ff8a-8b51-d87c-c5d20f4421a4@linux.intel.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: linux.intel.com; dkim=none (message not signed)
- header.d=none;linux.intel.com; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.71]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 7cd63853-b384-48b8-bd6c-08d84319ae6f
-x-ms-traffictypediagnostic: VI1PR04MB6911:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR04MB6911BA3DB73F76802C461010895C0@VI1PR04MB6911.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1443;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 4D5evaSHNBIVFd4IzaoNr2K0MSfzk7rIH6PUtmR4FJa/HEAqITboMOd8YPMcEEJMv9PxFLfloX54+HvKW6pICqYbslZLG50g/t65odvNCIEL8tcC9eZBBAXHkRsPULfJ10K1G0ARPMsX3j+sx92kef9k2UGweAdDZ4QYzQ8Thbwu0d9niQ7zyQnredJ8ONdz7XysOZncM1fucUMpH8mnS6sRCDB6uzflg1mAls4UyFJKNFiBE9Y4BS7tX0EdyyohWWGOiWD7U+AFiPDKBlDZ7Uh09z395PpPE0LV/hTee0XNNJs9TUz8CL7KBk7QXAFOElajlxl816uxjYVIIcj+6w==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6528.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(39860400002)(136003)(366004)(346002)(376002)(2906002)(7696005)(110136005)(44832011)(478600001)(4326008)(54906003)(33656002)(83380400001)(6506007)(76116006)(8936002)(26005)(53546011)(52536014)(5660300002)(66476007)(66556008)(66446008)(64756008)(55016002)(186003)(86362001)(9686003)(8676002)(66946007)(316002)(71200400001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: waZgp8JmmiPW4XyVY/j19V5MSdAC36u2D8Ub9xC7/s7tN+YgDxugLyEFatpHz15UDsHBWOZ3yikFZ/i5lAdOzrFopjQs//eclom+rwtMu1ulkC2ZPzH+9OIPiLB2OEYtyHKlC5pfGUfM49a/darTQKTCG4qyPHFZHDBxPJmdZgO8IAQD9hWFoTUEY+lXCbh4pV1vpLIZV+VGln5TG2dWYvmZ+oSzT834uCokFFP6s135QQb1paPoqoeECvUYT3Uyd6Ia+iuuD5RvCgSVGByyA8jh56vkHc3if9n4JuCgc+GLeGpNljLVeCyXRQxogIiFXs08vmgxpOyaUKq0wVPoKqxjjVB7i0SDPzwXDIkTTH7llQVtCuLA2AYxHHOyo1tKI6gS7R9DILhtQh7aLafwuKgq9cnt2F1l6crKacUPw1vcaUcZaQRpGPzqwWPa65bkXtxWssQZo9xur6WYbT3DIKv+DQAH0BiUdH7oYiz3bFDdTPPTuF2TO4c/RYK+aOxs+a0zvPDgxDOIlpWaOD7PhBnTfxZfi1LaOxA8A7e/0E9IgvPw95zTy9RXRUxwA0LnFP/o+KgiyGVjV7Ho0SPV/HcVeXfkzZBntcRJW8laPlOTDj/+eya0a6wOnkdfBDmoZBJaFMo1Hvlo8OjUIFKifA==
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1726403AbgHRENg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Aug 2020 00:13:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39486 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725800AbgHRENd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Aug 2020 00:13:33 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 138F9C061389
+        for <linux-usb@vger.kernel.org>; Mon, 17 Aug 2020 21:13:33 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 3so15664340wmi.1
+        for <linux-usb@vger.kernel.org>; Mon, 17 Aug 2020 21:13:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=fE6vmAvgfBdO1+dZOa5eYOH9EQCF3VQpBQdsWHIdd/0=;
+        b=f8A8ERTFxGSmKg+/9mp9xjTs4yxOPDwk2u9HaGKfv3ZfPn8ICDKBB487adNz3G57o3
+         khoqPlXAVQv9oodCFypT16eK6MiYz9BhbVMp/0VpX3c+zsll2kjGi09SUf7nRRD+F6Va
+         WwgJLBMyFNAHBw44nrV4R9geEacwo9bw2SMsE64oEEnlg98DE7yPh6rmuWO0enRuZZBF
+         ZkAhp76o/Xo4xLq5lOFNPmQkPUB9iJlgeyG0OC3PeDJcM6O4FihvAg91k8l0ssfVPZHe
+         5ClrI98xKdkr9DblBxAr0kAH6alPL+NkOwvkrqEZQ2LalI523uE1EBuuN53tbZeH7FSY
+         0/Gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fE6vmAvgfBdO1+dZOa5eYOH9EQCF3VQpBQdsWHIdd/0=;
+        b=qkiE9WOklhbNINs7nT1MISq7XL7IfMiYgJVSFj5njup0qMJpllmX8zQDdAzhBj6+2C
+         APu7F6Lgjxs+aZhMQj0X4ZW45OZ0eqYujdImm0wBXhSQXM2Fwpeco+5kmFo/psIbl8Io
+         B+lAOq7RAz2d1+i8zme3o/cR5eR/WEqAaArc/kIMa1HEOmw7E8keTwRhC+HhtFnv5PPr
+         WostvTujAlBVToKRff0uuBGCyF9eSwG/1FPP0cpYhlTETRu12RTU3pdrCyRW+qDTp1qa
+         Xm9/PYpvS5Y9g36AqjOkGxyGQTy71V1zxIhpWNZPiyrKVe2QATdPYZK6txL0sHo46Vui
+         F1lg==
+X-Gm-Message-State: AOAM531PNLKVuw32cDqqquy3+v3+lSx7ps+isl7QzeBqcrHOnDkbm89u
+        agY+C+4odyq6FWtQfbKo6v0=
+X-Google-Smtp-Source: ABdhPJxUwxINo4eLanOK09KybdsOXQspfdljbkihYAYqkBwbVkEXBIVroFmHSZlroK/Z5Mf+NN43aw==
+X-Received: by 2002:a1c:750f:: with SMTP id o15mr18194059wmc.182.1597724007340;
+        Mon, 17 Aug 2020 21:13:27 -0700 (PDT)
+Received: from Susan (91-164-97-136.subs.proxad.net. [91.164.97.136])
+        by smtp.gmail.com with ESMTPSA id r21sm33824991wrc.2.2020.08.17.21.13.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Aug 2020 21:13:26 -0700 (PDT)
+Date:   Tue, 18 Aug 2020 06:13:24 +0200
+From:   Cyril Roelandt <tipecaml@gmail.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     USB list <linux-usb@vger.kernel.org>, sellis@redhat.com,
+        pachoramos@gmail.com, labbott@fedoraproject.org,
+        gregkh@linuxfoundation.org, javhera@gmx.com, brice.goglin@gmail.com
+Subject: Re: [BUG] Regression in Linux 5.4.17 for JMicron JMS566 enclosure
+Message-ID: <20200818041324.GA3173@Susan>
+References: <20200417220957.GA4707@Susan>
+ <Pine.LNX.4.44L0.2004191144550.4266-100000@netrider.rowland.org>
+ <20200421030137.GA2492@Susan>
+ <20200815001829.GA2786@Susan>
+ <20200815021929.GC52242@rowland.harvard.edu>
+ <20200815232357.GB2786@Susan>
+ <20200816162642.GC86937@rowland.harvard.edu>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6528.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7cd63853-b384-48b8-bd6c-08d84319ae6f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Aug 2020 01:54:45.1647
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: SWoGUjaznWy3kV2wxf4XT0+ljgWlfPO5CFH93+AsicnemCQUIx7yJMhPkkJUnDpt
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6911
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200816162642.GC86937@rowland.harvard.edu>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogTWF0aGlhcyBOeW1hbiA8
-bWF0aGlhcy5ueW1hbkBsaW51eC5pbnRlbC5jb20+DQo+IFNlbnQ6IE1vbmRheSwgQXVndXN0IDE3
-LCAyMDIwIDc6NDggUE0NCj4gVG86IEp1biBMaSA8anVuLmxpQG54cC5jb20+OyBtYXRoaWFzLm55
-bWFuQGludGVsLmNvbQ0KPiBDYzogZ3JlZ2toQGxpbnV4Zm91bmRhdGlvbi5vcmc7IGxpbnV4LXVz
-YkB2Z2VyLmtlcm5lbC5vcmc7IGRsLWxpbnV4LWlteA0KPiA8bGludXgtaW14QG54cC5jb20+DQo+
-IFN1YmplY3Q6IFJlOiBbUEFUQ0ggdjJdIHVzYjogeGhjaTogYWRkIGRlYnVnZnMgc3VwcG9ydCBm
-b3IgZXAgd2l0aCBzdHJlYW0NCj4gDQo+IE9uIDEzLjguMjAyMCAxMi41NywgSnVuIExpIHdyb3Rl
-Og0KPiA+IEhpDQo+ID4NCj4gPj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gPj4gRnJv
-bTogSnVuIExpIDxqdW4ubGlAbnhwLmNvbT4NCj4gPj4gU2VudDogVGh1cnNkYXksIEp1bHkgMTYs
-IDIwMjAgODo0MCBQTQ0KPiA+PiBUbzogbWF0aGlhcy5ueW1hbkBpbnRlbC5jb20NCj4gPj4gQ2M6
-IGdyZWdraEBsaW51eGZvdW5kYXRpb24ub3JnOyBsaW51eC11c2JAdmdlci5rZXJuZWwub3JnOw0K
-PiA+PiBkbC1saW51eC1pbXggPGxpbnV4LWlteEBueHAuY29tPg0KPiA+PiBTdWJqZWN0OiBbUEFU
-Q0ggdjJdIHVzYjogeGhjaTogYWRkIGRlYnVnZnMgc3VwcG9ydCBmb3IgZXAgd2l0aCBzdHJlYW0N
-Cj4gPj4NCj4gPj4gVG8gc2hvdyB0aGUgdHJiIHJpbmcgb2Ygc3RyZWFtcywgdXNlIHRoZSBleHNp
-dGluZyByaW5nIGZpbGVzIG9mIGJ1bGsNCj4gPj4gZXAgdG8gc2hvdyB0cmIgcmluZyBvZiBvbmUg
-c3BlY2lmaWMgc3RyZWFtIElELCB3aGljaCBzdHJlYW0gSUQncyB0cmINCj4gPj4gcmluZyB3aWxs
-IGJlIHNob3duLCBpcyBjb250cm9sbGVkIGJ5IGEgbmV3IGRlYnVnZnMgZmlsZSBzdHJlYW1faWQs
-DQo+ID4+IHRoaXMgaXMgdG8gYXZvaWQgdG8gY3JlYXRlIGEgbGFyZ2UgbnVtYmVyIG9mIGRpciBm
-b3IgZXZlcnkgYWxsb2NhdGUNCj4gPj4gc3RyZWFtIElEcywgYW5vdGhlciBkZWJ1Z2ZzIGZpbGUg
-c3RyZWFtX2NvbnRleHRfYXJyYXkgaXMgY3JlYXRlZCB0byBzaG93IGFsbA0KPiB0aGUgYWxsb2Nh
-dGVkIHN0cmVhbSBjb250ZXh0IGFycmF5IGVudHJpZXMuDQo+ID4+DQo+ID4+IFNpZ25lZC1vZmYt
-Ynk6IExpIEp1biA8anVuLmxpQG54cC5jb20+DQo+ID4+IC0tLQ0KPiA+PiBjaGFuYWdlcyBmb3Ig
-djI6DQo+ID4+IC0gIERyb3Agc3RyZWFtIGZpbGVzIHJlbW92ZSwgdGhlIHN0cmVhbSBmaWxlcyB3
-aWxsIGJlIHJlbW92ZWQNCj4gPj4gICAgd2l0aCBlcCBkaXIgcmVtb3ZhbCwga2VlcCB0aGUgZXAg
-YnV0IG9ubHkgcmVtb3ZlIHN0cmVhbXMNCj4gPj4gICAgYWN0dWFsbHkgZG9lcyBub3QgbWFrZSBz
-ZW5zZSBpbiBjdXJyZW50IGNvZGUuDQo+ID4+IC0gIFVzZSB0aGUgbmV3X3JpbmcgZm9yIHNob3df
-cmluZyBwb2ludGVyIGZvciBub24temVybyBlcC4NCj4gPj4NCj4gPj4gIGRyaXZlcnMvdXNiL2hv
-c3QveGhjaS1kZWJ1Z2ZzLmMgfCAxMTINCj4gPj4gKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKysrLQ0KPiA+PiAgZHJpdmVycy91c2IvaG9zdC94aGNpLWRlYnVnZnMuaCB8ICAx
-MCArKysrDQo+ID4+ICBkcml2ZXJzL3VzYi9ob3N0L3hoY2kuYyAgICAgICAgIHwgICAxICsNCj4g
-Pj4gIDMgZmlsZXMgY2hhbmdlZCwgMTIyIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkNCj4g
-Pj4NCj4gPj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1kZWJ1Z2ZzLmMNCj4g
-Pj4gYi9kcml2ZXJzL3VzYi9ob3N0L3hoY2ktZGVidWdmcy5jIGluZGV4IDY1ZDhkZTQuLjcwODU4
-NWMgMTAwNjQ0DQo+ID4+IC0tLSBhL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1kZWJ1Z2ZzLmMNCj4g
-Pj4gKysrIGIvZHJpdmVycy91c2IvaG9zdC94aGNpLWRlYnVnZnMuYw0KPiA+PiBAQCAtNDUwLDkg
-KzQ1MCwxNCBAQCB2b2lkIHhoY2lfZGVidWdmc19jcmVhdGVfZW5kcG9pbnQoc3RydWN0IHhoY2lf
-aGNkICp4aGNpLA0KPiA+PiAgCWlmICghZXByaXYpDQo+ID4+ICAJCXJldHVybjsNCj4gPj4NCj4g
-Pj4gKwlpZiAoZGV2LT5lcHNbZXBfaW5kZXhdLnJpbmcpDQo+ID4+ICsJCWVwcml2LT5zaG93X3Jp
-bmcgPSBkZXYtPmVwc1tlcF9pbmRleF0ucmluZzsNCj4gPj4gKwllbHNlDQo+ID4+ICsJCWVwcml2
-LT5zaG93X3JpbmcgPSBkZXYtPmVwc1tlcF9pbmRleF0ubmV3X3Jpbmc7DQo+ID4+ICsNCj4gPj4g
-IAlzbnByaW50ZihlcHJpdi0+bmFtZSwgc2l6ZW9mKGVwcml2LT5uYW1lKSwgImVwJTAyZCIsIGVw
-X2luZGV4KTsNCj4gPj4gIAllcHJpdi0+cm9vdCA9IHhoY2lfZGVidWdmc19jcmVhdGVfcmluZ19k
-aXIoeGhjaSwNCj4gPj4gLQkJCQkJCSAgICZkZXYtPmVwc1tlcF9pbmRleF0ucmluZywNCj4gPj4g
-KwkJCQkJCSAgICZlcHJpdi0+c2hvd19yaW5nLA0KPiA+PiAgCQkJCQkJICAgZXByaXYtPm5hbWUs
-DQo+ID4+ICAJCQkJCQkgICBzcHJpdi0+cm9vdCk7DQo+ID4+ICAJc3ByaXYtPmVwc1tlcF9pbmRl
-eF0gPSBlcHJpdjsNCj4gPj4gQEAgLTQ3NCw2ICs0NzksMTExIEBAIHZvaWQgeGhjaV9kZWJ1Z2Zz
-X3JlbW92ZV9lbmRwb2ludChzdHJ1Y3QgeGhjaV9oY2QgKnhoY2ksDQo+ID4+ICAJa2ZyZWUoZXBy
-aXYpOw0KPiA+PiAgfQ0KPiA+Pg0KPiA+PiArc3RhdGljIGludCB4aGNpX3N0cmVhbV9pZF9zaG93
-KHN0cnVjdCBzZXFfZmlsZSAqcywgdm9pZCAqdW51c2VkKSB7DQo+ID4+ICsJc3RydWN0IHhoY2lf
-ZXBfcHJpdgkqZXByaXYgPSBzLT5wcml2YXRlOw0KPiA+PiArDQo+ID4+ICsJaWYgKCFlcHJpdi0+
-c3RyZWFtX2luZm8pDQo+ID4+ICsJCXJldHVybiAtRVBFUk07DQo+ID4+ICsNCj4gPj4gKwlzZXFf
-cHJpbnRmKHMsICJTdXBwb3J0ZWQgc3RyZWFtIElEcyBhcmUgMSB+ICVkLCB0cmIgcmluZyB0byBi
-ZQ0KPiA+PiArc2hvd24gaXMgZm9yDQo+ID4+IHN0cmVhbSBpZCAlZFxuIiwNCj4gDQo+IE1pbm9y
-IGNoYW5nZSwgYnV0IG1heWJlIHNvbWV0aGluZyBzaG9ydGVyIGxpa2U6DQo+ICJTaG93IHN0cmVh
-bSBJRCAlZCB0cmIgcmluZywgc3VwcG9ydGVkIFsxIC0gJWRdDQoNCkxvb2tzIGJldHRlciwgdGhh
-bmtzLg0KDQo+IA0KPiA+PiArCQkgICBlcHJpdi0+c3RyZWFtX2luZm8tPm51bV9zdHJlYW1zIC0g
-MSwgZXByaXYtPnN0cmVhbV9pZCk7DQo+ID4+ICsNCj4gPj4gKwlyZXR1cm4gMDsNCj4gPj4gK30N
-Cj4gPj4gKw0KPiA+PiArc3RhdGljIGludCB4aGNpX3N0cmVhbV9pZF9vcGVuKHN0cnVjdCBpbm9k
-ZSAqaW5vZGUsIHN0cnVjdCBmaWxlDQo+ID4+ICsqZmlsZSkgew0KPiA+PiArCXJldHVybiBzaW5n
-bGVfb3BlbihmaWxlLCB4aGNpX3N0cmVhbV9pZF9zaG93LCBpbm9kZS0+aV9wcml2YXRlKTsgfQ0K
-PiA+PiArDQo+ID4+ICtzdGF0aWMgc3NpemVfdCB4aGNpX3N0cmVhbV9pZF93cml0ZShzdHJ1Y3Qg
-ZmlsZSAqZmlsZSwgIGNvbnN0IGNoYXIgX191c2VyDQo+ICp1YnVmLA0KPiA+PiArCQkJICAgICAg
-IHNpemVfdCBjb3VudCwgbG9mZl90ICpwcG9zKSB7DQo+ID4+ICsJc3RydWN0IHNlcV9maWxlICAg
-ICAgICAgKnMgPSBmaWxlLT5wcml2YXRlX2RhdGE7DQo+ID4+ICsJc3RydWN0IHhoY2lfZXBfcHJp
-dgkqZXByaXYgPSBzLT5wcml2YXRlOw0KPiA+PiArCWludAkJCXJldDsNCj4gPj4gKwl1MTYJCQlz
-dHJlYW1faWQ7IC8qIE1heFBTdHJlYW1zICsgMSA8PSAxNiAqLw0KPiA+PiArDQo+ID4+ICsJaWYg
-KCFlcHJpdi0+c3RyZWFtX2luZm8pDQo+ID4+ICsJCXJldHVybiAtRVBFUk07DQo+ID4+ICsNCj4g
-Pj4gKwkvKiBEZWNpbWFsIG51bWJlciAqLw0KPiA+PiArCXJldCA9IGtzdHJ0b3UxNl9mcm9tX3Vz
-ZXIodWJ1ZiwgY291bnQsIDEwLCAmc3RyZWFtX2lkKTsNCj4gPj4gKwlpZiAocmV0KQ0KPiA+PiAr
-CQlyZXR1cm4gcmV0Ow0KPiA+PiArDQo+ID4+ICsJaWYgKHN0cmVhbV9pZCA9PSAwIHx8IHN0cmVh
-bV9pZCA+PSBlcHJpdi0+c3RyZWFtX2luZm8tPm51bV9zdHJlYW1zKQ0KPiA+PiArCQlyZXR1cm4g
-LUVJTlZBTDsNCj4gPj4gKw0KPiA+PiArCWVwcml2LT5zdHJlYW1faWQgPSBzdHJlYW1faWQ7DQo+
-ID4+ICsJZXByaXYtPnNob3dfcmluZyA9IGVwcml2LT5zdHJlYW1faW5mby0+c3RyZWFtX3Jpbmdz
-W3N0cmVhbV9pZF07DQo+ID4+ICsNCj4gPj4gKwlyZXR1cm4gY291bnQ7DQo+ID4+ICt9DQo+ID4+
-ICsNCj4gPj4gK3N0YXRpYyBjb25zdCBzdHJ1Y3QgZmlsZV9vcGVyYXRpb25zIHN0cmVhbV9pZF9m
-b3BzID0gew0KPiA+PiArCS5vcGVuCQkJPSB4aGNpX3N0cmVhbV9pZF9vcGVuLA0KPiA+PiArCS53
-cml0ZSAgICAgICAgICAgICAgICAgID0geGhjaV9zdHJlYW1faWRfd3JpdGUsDQo+ID4+ICsJLnJl
-YWQJCQk9IHNlcV9yZWFkLA0KPiA+PiArCS5sbHNlZWsJCQk9IHNlcV9sc2VlaywNCj4gPj4gKwku
-cmVsZWFzZQkJPSBzaW5nbGVfcmVsZWFzZSwNCj4gPj4gK307DQo+ID4+ICsNCj4gPj4gK3N0YXRp
-YyBpbnQgeGhjaV9zdHJlYW1fY29udGV4dF9hcnJheV9zaG93KHN0cnVjdCBzZXFfZmlsZSAqcywg
-dm9pZA0KPiA+PiArKnVudXNlZCkgew0KPiA+PiArCXN0cnVjdCB4aGNpX2VwX3ByaXYJKmVwcml2
-ID0gcy0+cHJpdmF0ZTsNCj4gPj4gKwlzdHJ1Y3QgeGhjaV9zdHJlYW1fY3R4CSpzdHJlYW1fY3R4
-Ow0KPiA+PiArCWRtYV9hZGRyX3QJCWRtYTsNCj4gPj4gKwlpbnQJCQlpZDsNCj4gPj4gKw0KPiA+
-PiArCWlmICghZXByaXYtPnN0cmVhbV9pbmZvKQ0KPiA+PiArCQlyZXR1cm4gLUVQRVJNOw0KPiA+
-PiArDQo+ID4+ICsJc2VxX3ByaW50ZihzLCAiQWxsb2NhdGVkICVkIHN0cmVhbXMgYW5kICVkIHN0
-cmVhbSBjb250ZXh0IGFycmF5IGVudHJpZXNcbiIsDQo+ID4+ICsJCQllcHJpdi0+c3RyZWFtX2lu
-Zm8tPm51bV9zdHJlYW1zLA0KPiA+PiArCQkJZXByaXYtPnN0cmVhbV9pbmZvLT5udW1fc3RyZWFt
-X2N0eHMpOw0KPiA+PiArDQo+ID4+ICsJZm9yIChpZCA9IDA7IGlkIDwgZXByaXYtPnN0cmVhbV9p
-bmZvLT5udW1fc3RyZWFtX2N0eHM7IGlkKyspIHsNCj4gPj4gKwkJc3RyZWFtX2N0eCA9IGVwcml2
-LT5zdHJlYW1faW5mby0+c3RyZWFtX2N0eF9hcnJheSArIGlkOw0KPiA+PiArCQlkbWEgPSBlcHJp
-di0+c3RyZWFtX2luZm8tPmN0eF9hcnJheV9kbWEgKyBpZCAqIDE2Ow0KPiA+PiArCQlpZiAoaWQg
-PCBlcHJpdi0+c3RyZWFtX2luZm8tPm51bV9zdHJlYW1zKQ0KPiA+PiArCQkJc2VxX3ByaW50Zihz
-LCAiJXBhZCBzdHJlYW0gaWQgJWQgZGVxICUwMTZsbHhcbiIsICZkbWEsDQo+ID4+ICsJCQkJICAg
-aWQsIGxlNjRfdG9fY3B1KHN0cmVhbV9jdHgtPnN0cmVhbV9yaW5nKSk7DQo+ID4+ICsJCWVsc2UN
-Cj4gPj4gKwkJCXNlcV9wcmludGYocywgIiVwYWQgc3RyZWFtIGNvbnRleHQgZW50cnkgbm90IHVz
-ZWQgZGVxICUwMTZsbHhcbiIsDQo+ID4+ICsJCQkJICAgJmRtYSwgbGU2NF90b19jcHUoc3RyZWFt
-X2N0eC0+c3RyZWFtX3JpbmcpKTsNCj4gPj4gKwl9DQo+ID4+ICsNCj4gPj4gKwlyZXR1cm4gMDsN
-Cj4gPj4gK30NCj4gPj4gK0RFRklORV9TSE9XX0FUVFJJQlVURSh4aGNpX3N0cmVhbV9jb250ZXh0
-X2FycmF5KTsNCj4gPj4gKw0KPiA+PiArdm9pZCB4aGNpX2RlYnVnZnNfY3JlYXRlX3N0cmVhbV9m
-aWxlcyhzdHJ1Y3QgeGhjaV9oY2QgKnhoY2ksDQo+ID4+ICsJCQkJICAgICAgc3RydWN0IHhoY2lf
-dmlydF9kZXZpY2UgKmRldiwNCj4gPj4gKwkJCQkgICAgICBpbnQgZXBfaW5kZXgpDQo+ID4+ICt7
-DQo+ID4+ICsJc3RydWN0IHhoY2lfc2xvdF9wcml2CSpzcHJpdiA9IGRldi0+ZGVidWdmc19wcml2
-YXRlOw0KPiA+PiArCXN0cnVjdCB4aGNpX2VwX3ByaXYJKmVwcml2Ow0KPiA+PiArDQo+ID4+ICsJ
-aWYgKCFzcHJpdiB8fCAhc3ByaXYtPmVwc1tlcF9pbmRleF0gfHwNCj4gPj4gKwkgICAgIWRldi0+
-ZXBzW2VwX2luZGV4XS5zdHJlYW1faW5mbykNCj4gPj4gKwkJcmV0dXJuOw0KPiA+PiArDQo+ID4+
-ICsJZXByaXYgPSBzcHJpdi0+ZXBzW2VwX2luZGV4XTsNCj4gPj4gKwllcHJpdi0+c3RyZWFtX2lu
-Zm8gPSBkZXYtPmVwc1tlcF9pbmRleF0uc3RyZWFtX2luZm87DQo+ID4+ICsNCj4gPj4gKwkvKiBT
-aG93IHRyYiByaW5nIG9mIHN0cmVhbSBJRCAxIGJ5IGRlZmF1bHQgKi8NCj4gPj4gKwllcHJpdi0+
-c3RyZWFtX2lkID0gMTsNCj4gPj4gKwllcHJpdi0+c2hvd19yaW5nID0gZXByaXYtPnN0cmVhbV9p
-bmZvLT5zdHJlYW1fcmluZ3NbMV07DQo+ID4+ICsJZGVidWdmc19jcmVhdGVfZmlsZSgic3RyZWFt
-X2lkIiwgMDY0NCwNCj4gPj4gKwkJCSAgICBlcHJpdi0+cm9vdCwgZXByaXYsDQo+ID4+ICsJCQkg
-ICAgJnN0cmVhbV9pZF9mb3BzKTsNCj4gPj4gKwlkZWJ1Z2ZzX2NyZWF0ZV9maWxlKCJzdHJlYW1f
-Y29udGV4dF9hcnJheSIsIDA0NDQsDQo+ID4+ICsJCQkgICAgZXByaXYtPnJvb3QsIGVwcml2LA0K
-PiA+PiArCQkJICAgICZ4aGNpX3N0cmVhbV9jb250ZXh0X2FycmF5X2ZvcHMpOyB9DQo+ID4+ICsN
-Cj4gPj4gIHZvaWQgeGhjaV9kZWJ1Z2ZzX2NyZWF0ZV9zbG90KHN0cnVjdCB4aGNpX2hjZCAqeGhj
-aSwgaW50IHNsb3RfaWQpICB7DQo+ID4+ICAJc3RydWN0IHhoY2lfc2xvdF9wcml2CSpwcml2Ow0K
-PiA+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvaG9zdC94aGNpLWRlYnVnZnMuaA0KPiA+PiBi
-L2RyaXZlcnMvdXNiL2hvc3QveGhjaS1kZWJ1Z2ZzLmggaW5kZXggZjdhNGUyNC4uZjMzNDhkYSAx
-MDA2NDQNCj4gPj4gLS0tIGEvZHJpdmVycy91c2IvaG9zdC94aGNpLWRlYnVnZnMuaA0KPiA+PiAr
-KysgYi9kcml2ZXJzL3VzYi9ob3N0L3hoY2ktZGVidWdmcy5oDQo+ID4+IEBAIC05MSw2ICs5MSw5
-IEBAIHN0cnVjdCB4aGNpX2ZpbGVfbWFwIHsgIHN0cnVjdCB4aGNpX2VwX3ByaXYgew0KPiA+PiAg
-CWNoYXIJCQluYW1lW0RFQlVHRlNfTkFNRUxFTl07DQo+ID4+ICAJc3RydWN0IGRlbnRyeQkJKnJv
-b3Q7DQo+ID4+ICsJc3RydWN0IHhoY2lfc3RyZWFtX2luZm8gKnN0cmVhbV9pbmZvOw0KPiA+PiAr
-CXN0cnVjdCB4aGNpX3JpbmcJKnNob3dfcmluZzsNCj4gPj4gKwl1bnNpZ25lZCBpbnQJCXN0cmVh
-bV9pZDsNCj4gPj4gIH07DQo+ID4+DQo+ID4+ICBzdHJ1Y3QgeGhjaV9zbG90X3ByaXYgew0KPiA+
-PiBAQCAtMTEzLDYgKzExNiw5IEBAIHZvaWQgeGhjaV9kZWJ1Z2ZzX2NyZWF0ZV9lbmRwb2ludChz
-dHJ1Y3QgeGhjaV9oY2QNCj4gPj4gKnhoY2ksICB2b2lkIHhoY2lfZGVidWdmc19yZW1vdmVfZW5k
-cG9pbnQoc3RydWN0IHhoY2lfaGNkICp4aGNpLA0KPiA+PiAgCQkJCSAgc3RydWN0IHhoY2lfdmly
-dF9kZXZpY2UgKnZpcnRfZGV2LA0KPiA+PiAgCQkJCSAgaW50IGVwX2luZGV4KTsNCj4gPj4gK3Zv
-aWQgeGhjaV9kZWJ1Z2ZzX2NyZWF0ZV9zdHJlYW1fZmlsZXMoc3RydWN0IHhoY2lfaGNkICp4aGNp
-LA0KPiA+PiArCQkJCSAgICAgIHN0cnVjdCB4aGNpX3ZpcnRfZGV2aWNlICp2aXJ0X2RldiwNCj4g
-Pj4gKwkJCQkgICAgICBpbnQgZXBfaW5kZXgpOw0KPiA+PiAgI2Vsc2UNCj4gPj4gIHN0YXRpYyBp
-bmxpbmUgdm9pZCB4aGNpX2RlYnVnZnNfaW5pdChzdHJ1Y3QgeGhjaV9oY2QgKnhoY2kpIHsgfQ0K
-PiA+PiBzdGF0aWMgaW5saW5lIHZvaWQgeGhjaV9kZWJ1Z2ZzX2V4aXQoc3RydWN0IHhoY2lfaGNk
-ICp4aGNpKSB7IH0gQEANCj4gPj4gLTEyOCw2ICsxMzQsMTAgQEAgc3RhdGljIGlubGluZSB2b2lk
-ICB4aGNpX2RlYnVnZnNfcmVtb3ZlX2VuZHBvaW50KHN0cnVjdA0KPiB4aGNpX2hjZCAqeGhjaSwN
-Cj4gPj4gIAkJCSAgICAgc3RydWN0IHhoY2lfdmlydF9kZXZpY2UgKnZpcnRfZGV2LA0KPiA+PiAg
-CQkJICAgICBpbnQgZXBfaW5kZXgpIHsgfQ0KPiA+PiArc3RhdGljIGlubGluZSB2b2lkDQo+ID4+
-ICt4aGNpX2RlYnVnZnNfY3JlYXRlX3N0cmVhbV9maWxlcyhzdHJ1Y3QgeGhjaV9oY2QgKnhoY2ks
-DQo+ID4+ICsJCQkJIHN0cnVjdCB4aGNpX3ZpcnRfZGV2aWNlICp2aXJ0X2RldiwNCj4gPj4gKwkJ
-CQkgaW50IGVwX2luZGV4KSB7IH0NCj4gPj4gICNlbmRpZiAvKiBDT05GSUdfREVCVUdfRlMgKi8N
-Cj4gPj4NCj4gPj4gICNlbmRpZiAvKiBfX0xJTlVYX1hIQ0lfREVCVUdGU19IICovDQo+ID4+IGRp
-ZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9ob3N0L3hoY2kuYyBiL2RyaXZlcnMvdXNiL2hvc3QveGhj
-aS5jIGluZGV4DQo+ID4+IGJlZTVkZWMuLjJkNjU4NGMgMTAwNjQ0DQo+ID4+IC0tLSBhL2RyaXZl
-cnMvdXNiL2hvc3QveGhjaS5jDQo+ID4+ICsrKyBiL2RyaXZlcnMvdXNiL2hvc3QveGhjaS5jDQo+
-ID4+IEBAIC0zNTI5LDYgKzM1MjksNyBAQCBzdGF0aWMgaW50IHhoY2lfYWxsb2Nfc3RyZWFtcyhz
-dHJ1Y3QgdXNiX2hjZA0KPiA+PiAqaGNkLCBzdHJ1Y3QgdXNiX2RldmljZSAqdWRldiwNCj4gPj4g
-IAkJeGhjaV9kYmcoeGhjaSwgIlNsb3QgJXUgZXAgY3R4ICV1IG5vdyBoYXMgc3RyZWFtcy5cbiIs
-DQo+ID4+ICAJCQkgdWRldi0+c2xvdF9pZCwgZXBfaW5kZXgpOw0KPiA+PiAgCQl2ZGV2LT5lcHNb
-ZXBfaW5kZXhdLmVwX3N0YXRlIHw9IEVQX0hBU19TVFJFQU1TOw0KPiA+PiArCQl4aGNpX2RlYnVn
-ZnNfY3JlYXRlX3N0cmVhbV9maWxlcyh4aGNpLCB2ZGV2LCBlcF9pbmRleCk7DQo+ID4+ICAJfQ0K
-PiA+PiAgCXhoY2lfZnJlZV9jb21tYW5kKHhoY2ksIGNvbmZpZ19jbWQpOw0KPiA+PiAgCXNwaW5f
-dW5sb2NrX2lycXJlc3RvcmUoJnhoY2ktPmxvY2ssIGZsYWdzKTsNCj4gPj4gLS0NCj4gPj4gMi43
-LjQNCj4gPg0KPiA+IEEgZ2VudGxlIHBpbmcuLi4NCj4gDQo+IExvb2tzIGdvb2QgdG8gbWUsIElm
-IHlvdSBhcHByb3ZlIEknbGwgbWFrZSB0aGUgYWJvdmUgY2hhbmdlLg0KDQpBYm92ZSBjaGFuZ2Ug
-aXMgZmluZSBmb3IgbWUuDQoNCj4gSXQgd2lsbCB0YWtlIHNvbWUgdGltZSB0byBhY3R1YWxseSB0
-ZXN0IGl0LCBJIGhhdmVuJ3QgZ290IGEgVUFTIG9yIG90aGVyIHN0cmVhbQ0KPiBzdXBwb3J0aW5n
-IHVzYiBkZXZpY2UgaW4gbXkgY3VycmVudCBsb2NhdGlvbi4NCj4gDQo+IEFkZGluZyB0byBxdWV1
-ZSB0byBnZXQgc29tZSBhdXRvbWF0ZWQgdGVzdGluZyBkb25lIG9uIGl0Lg0KDQpUaGFua3MNCkxp
-IEp1bg0KPiANCj4gLU1hdGhpYXMNCj4gDQo+IA0KDQo=
+Hello,
+
+On 2020-08-16 12:26, Alan Stern wrote:
+> 
+> If I understand correctly, you have said that 5.4 with the patch
+> applied and using usb-storage makes more progress than 5.7 with the
+> patch applied and using usb-storage.  Is that right?
+
+So, here is a summary of the issue:
+
+1) The enclosure worked fine using UAS
+2) Commit bc3bdb12bbb34 disabled UAS for this enclosure, forcing it to
+use usb-storage. This prevented me from mounting the partitions (mount
+would fail with "can't read superblock on /dev/sdb1")
+3) I thought commit 94f9c8c3c404e fixed the issue described in 2), but
+it doesn't (I failed to test the patch properly). Now I cannot even see
+my partitions. It does seem like usb-storage does not run at all, as you
+pointed out.
+
+I never got this enclosure working with usb-storage.
+
+I am inlining dmesg logs (with dynamic debug enabled) and usbmon traces
+for two different kernels: 5.7.15 (the partitions cannot be seen), and
+5.7.15 with 94f9c8c3c404e reverted (the partitions can be seen, but
+cannot be mounted).
+
+
+* Kernel 5.7.15:
+
+# dmesg -T
+[Tue Aug 18 05:14:19 2020] usb 2-2: new SuperSpeed Gen 1 USB device number 3 using xhci_hcd
+[Tue Aug 18 05:14:19 2020] usb 2-2: New USB device found, idVendor=357d, idProduct=7788, bcdDevice= 1.14
+[Tue Aug 18 05:14:19 2020] usb 2-2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[Tue Aug 18 05:14:19 2020] usb 2-2: Product: USB to ATA/ATAPI Bridge
+[Tue Aug 18 05:14:19 2020] usb 2-2: Manufacturer: JMicron
+[Tue Aug 18 05:14:19 2020] usb 2-2: SerialNumber: 74D7851513309E5
+[Tue Aug 18 05:14:19 2020] usb 2-2: UAS is blacklisted for this device, using usb-storage instead
+
+ffff9b37ca316840 1226538360 S Ci:2:001:0 s a3 00 0000 0001 0004 4 <
+ffff9b37ca316840 1226538410 C Ci:2:001:0 0 4 = a0020000
+ffff9b37ca316840 1226538427 S Ci:2:001:0 s a3 00 0000 0002 0004 4 <
+ffff9b37ca316840 1226538440 C Ci:2:001:0 0 4 = 03020100
+ffff9b37ca316840 1226538451 S Co:2:001:0 s 23 01 0010 0002 0000 0
+ffff9b37ca316840 1226538466 C Co:2:001:0 0 0
+ffff9b37ca316840 1226538475 S Ci:2:001:0 s a3 00 0000 0003 0004 4 <
+ffff9b37ca316840 1226538486 C Ci:2:001:0 0 4 = a0020000
+ffff9b37ca316840 1226538496 S Ci:2:001:0 s a3 00 0000 0004 0004 4 <
+ffff9b37ca316840 1226538506 C Ci:2:001:0 0 4 = a0020000
+ffff9b37cac03cc0 1226643646 S Ii:2:001:1 -115:2048 4 <
+ffff9b37ca316840 1226643692 S Ci:2:001:0 s a3 00 0000 0002 0004 4 <
+ffff9b37ca316840 1226643723 C Ci:2:001:0 0 4 = 03020000
+ffff9b37ca316840 1226643875 S Ci:2:001:0 s a3 00 0000 0002 0004 4 <
+ffff9b37ca316840 1226643899 C Ci:2:001:0 0 4 = 03020000
+ffff9b37ca316840 1226643911 S Co:2:001:0 s 23 03 0004 0002 0000 0
+ffff9b37ca316840 1226643926 C Co:2:001:0 0 0
+ffff9b37ca316840 1226711653 S Ci:2:001:0 s a3 00 0000 0002 0004 4 <
+ffff9b37ca316840 1226711691 C Ci:2:001:0 0 4 = 03021000
+ffff9b37ca316840 1226711707 S Co:2:001:0 s 23 01 0014 0002 0000 0
+ffff9b37ca316840 1226711723 C Co:2:001:0 0 0
+ffff9b37ca316840 1226711732 S Co:2:001:0 s 23 01 001d 0002 0000 0
+ffff9b37ca316840 1226711745 C Co:2:001:0 0 0
+ffff9b37ca316840 1226711753 S Co:2:001:0 s 23 01 0019 0002 0000 0
+ffff9b37ca316840 1226711766 C Co:2:001:0 0 0
+ffff9b37ca316840 1226711776 S Co:2:001:0 s 23 01 0010 0002 0000 0
+ffff9b37ca316840 1226711788 C Co:2:001:0 0 0
+ffff9b37ca316840 1226711802 S Ci:2:001:0 s a3 00 0000 0002 0004 4 <
+ffff9b37ca316840 1226711813 C Ci:2:001:0 0 4 = 03020000
+ffff9b37ca316840 1226791659 S Ci:2:003:0 s 80 06 0100 0000 0008 8 <
+ffff9b37ca316840 1226791753 C Ci:2:003:0 0 8 = 12010003 00000009
+ffff9b37ca316840 1226791776 S Co:2:003:0 s 00 31 0028 0000 0000 0
+ffff9b37ca316840 1226791824 C Co:2:003:0 0 0
+ffff9b37ca316840 1226791844 S Ci:2:003:0 s 80 06 0100 0000 0012 18 <
+ffff9b37ca316840 1226791912 C Ci:2:003:0 0 18 = 12010003 00000009 7d358877 14010102 0301
+ffff9b37ca316840 1226791939 S Ci:2:003:0 s 80 06 0f00 0000 0005 5 <
+ffff9b37ca316840 1226791996 C Ci:2:003:0 0 5 = 050f1600 02
+ffff9b37ca316840 1226792020 S Ci:2:003:0 s 80 06 0f00 0000 0016 22 <
+ffff9b37ca316840 1226792091 C Ci:2:003:0 0 22 = 050f1600 02071002 02000000 0a100300 0e00010a 2000
+ffff9b37ca316840 1226792123 S Ci:2:003:0 s 80 06 0200 0000 0009 9 <
+ffff9b37ca316840 1226792209 C Ci:2:003:0 0 9 = 09027900 010104c0 01
+ffff9b37ca316840 1226792232 S Ci:2:003:0 s 80 06 0200 0000 0079 121 <
+ffff9b37ca316840 1226792396 C Ci:2:003:0 0 121 = 09027900 010104c0 01090400 00020806 50060705 81020004 0006300f 00000007
+ffff9b37ca316cc0 1226792421 S Ci:2:003:0 s 80 06 0300 0000 00ff 255 <
+ffff9b37ca316cc0 1226792502 C Ci:2:003:0 0 4 = 04030904
+ffff9b37ca316cc0 1226792515 S Ci:2:003:0 s 80 06 0302 0409 00ff 255 <
+ffff9b37ca316cc0 1226792651 C Ci:2:003:0 0 48 = 30035500 53004200 20007400 6f002000 41005400 41002f00 41005400 41005000
+ffff9b37ca316cc0 1226792664 S Ci:2:003:0 s 80 06 0301 0409 00ff 255 <
+ffff9b37ca316cc0 1226792757 C Ci:2:003:0 0 16 = 10034a00 4d006900 63007200 6f006e00
+ffff9b37ca316cc0 1226792770 S Ci:2:003:0 s 80 06 0303 0409 00ff 255 <
+ffff9b37ca316cc0 1226792867 C Ci:2:003:0 0 32 = 20033700 34004400 37003800 35003100 35003100 33003300 30003900 45003500
+ffff9b37ca316cc0 1226794387 S Co:2:003:0 s 00 09 0001 0000 0000 0
+ffff9b37ca316cc0 1226794446 C Co:2:003:0 0 0
+ffff9b37ca316cc0 1226794458 S Ci:2:003:0 s 80 06 0304 0409 00ff 255 <
+ffff9b37ca316cc0 1226794564 C Ci:2:003:0 0 34 = 22035500 53004200 20004d00 61007300 73002000 53007400 6f007200 61006700
+ffff9b37ca316cc0 1226794580 S Co:2:003:0 s 00 30 0000 0000 0006 6 = 0a0a0002 0002
+ffff9b37ca316cc0 1226794624 C Co:2:003:0 0 6 >
+ffff9b37ca316cc0 1226794670 S Co:2:001:0 s 23 03 0017 3202 0000 0
+ffff9b37ca316cc0 1226794694 C Co:2:001:0 0 0
+ffff9b37ca316cc0 1226794702 S Co:2:003:0 s 00 03 0030 0000 0000 0
+ffff9b37ca316cc0 1226794737 C Co:2:003:0 0 0
+ffff9b37ca316cc0 1226794748 S Co:2:003:0 s 00 30 0000 0000 0006 6 = 0a0a0002 0002
+ffff9b37ca316cc0 1226794791 C Co:2:003:0 0 6 >
+ffff9b37ca316cc0 1226794836 S Co:2:001:0 s 23 03 0018 2802 0000 0
+ffff9b37ca316cc0 1226794854 C Co:2:001:0 0 0
+ffff9b37ca316cc0 1226794861 S Co:2:003:0 s 00 03 0031 0000 0000 0
+ffff9b37ca316cc0 1226794897 C Co:2:003:0 0 0
+ffff9b37ca316cc0 1226794959 S Ci:2:003:0 s 80 06 0306 0409 00ff 255 <
+ffff9b37ca316cc0 1226795077 C Ci:2:003:0 0 48 = 30034d00 53004300 20004200 75006c00 6b002d00 4f006e00 6c007900 20005400
+
+
+* Kernel 5.7.15 with 94f9c8c3c404e reverted:
+
+# dmesg -T
+[Tue Aug 18 04:26:34 2020] usb 4-2: new SuperSpeed Gen 1 USB device number 4 using xhci_hcd
+[Tue Aug 18 04:26:34 2020] usb 4-2: New USB device found, idVendor=357d, idProduct=7788, bcdDevice= 1.14
+[Tue Aug 18 04:26:34 2020] usb 4-2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[Tue Aug 18 04:26:34 2020] usb 4-2: Product: USB to ATA/ATAPI Bridge
+[Tue Aug 18 04:26:34 2020] usb 4-2: Manufacturer: JMicron
+[Tue Aug 18 04:26:34 2020] usb 4-2: SerialNumber: 74D7851513309E5
+[Tue Aug 18 04:26:34 2020] usb 4-2: UAS is blacklisted for this device, using usb-storage instead
+[Tue Aug 18 04:26:34 2020] usb-storage 4-2:1.0: USB Mass Storage device detected
+[Tue Aug 18 04:26:34 2020] usb-storage 4-2:1.0: Quirks match for vid 357d pid 7788: 4800000
+[Tue Aug 18 04:26:34 2020] scsi host6: usb-storage 4-2:1.0
+[Tue Aug 18 04:26:34 2020] usb-storage 4-2:1.0: waiting for device to settle before scanning
+[Tue Aug 18 04:26:35 2020] usb-storage 4-2:1.0: starting scan
+[Tue Aug 18 04:26:35 2020] usb-storage 4-2:1.0: scan complete
+[Tue Aug 18 04:26:35 2020] scsi 6:0:0:0: Direct-Access     WDC WD10 JPVT-00A1YT0     0114 PQ: 0 ANSI: 6
+[Tue Aug 18 04:26:35 2020] sd 6:0:0:0: Attached scsi generic sg1 type 0
+[Tue Aug 18 04:26:35 2020] sd 6:0:0:0: [sdb] Spinning up disk...
+[Tue Aug 18 04:26:36 2020] ..ready
+[Tue Aug 18 04:26:37 2020] sd 6:0:0:0: [sdb] 1953525168 512-byte logical blocks: (1.00 TB/932 GiB)
+[Tue Aug 18 04:26:37 2020] sd 6:0:0:0: [sdb] Write Protect is off
+[Tue Aug 18 04:26:37 2020] sd 6:0:0:0: [sdb] Mode Sense: 47 00 10 08
+[Tue Aug 18 04:26:37 2020] sd 6:0:0:0: [sdb] Write cache: enabled, read cache: enabled, supports DPO and FUA
+[Tue Aug 18 04:26:37 2020]  sdb: sdb1
+[Tue Aug 18 04:26:37 2020] sd 6:0:0:0: [sdb] Attached SCSI disk
+
+
+ffff88970bdba900 1703880524 S Ci:4:001:0 s a3 00 0000 0001 0004 4 <
+ffff88970bdba900 1703880569 C Ci:4:001:0 0 4 = a0020000
+ffff88970bdba900 1703880582 S Ci:4:001:0 s a3 00 0000 0002 0004 4 <
+ffff88970bdba900 1703880592 C Ci:4:001:0 0 4 = 03020100
+ffff88970bdba900 1703880599 S Co:4:001:0 s 23 01 0010 0002 0000 0
+ffff88970bdba900 1703880609 C Co:4:001:0 0 0
+ffff88970bdba900 1703880615 S Ci:4:001:0 s a3 00 0000 0003 0004 4 <
+ffff88970bdba900 1703880623 C Ci:4:001:0 0 4 = a0020000
+ffff88970bdba900 1703880628 S Ci:4:001:0 s a3 00 0000 0004 0004 4 <
+ffff88970bdba900 1703880637 C Ci:4:001:0 0 4 = a0020000
+ffff889607ecc0c0 1703987257 S Ii:4:001:1 -115:2048 4 <
+ffff88970bdba900 1703987320 S Ci:4:001:0 s a3 00 0000 0002 0004 4 <
+ffff88970bdba900 1703987356 C Ci:4:001:0 0 4 = 03020000
+ffff88970bdba900 1703987472 S Ci:4:001:0 s a3 00 0000 0002 0004 4 <
+ffff88970bdba900 1703987491 C Ci:4:001:0 0 4 = 03020000
+ffff88970bdba900 1703987499 S Co:4:001:0 s 23 03 0004 0002 0000 0
+ffff88970bdba900 1703987508 C Co:4:001:0 0 0
+ffff88970bdba900 1704055243 S Ci:4:001:0 s a3 00 0000 0002 0004 4 <
+ffff88970bdba900 1704055277 C Ci:4:001:0 0 4 = 03021000
+ffff88970bdba900 1704055290 S Co:4:001:0 s 23 01 0014 0002 0000 0
+ffff88970bdba900 1704055301 C Co:4:001:0 0 0
+ffff88970bdba900 1704055307 S Co:4:001:0 s 23 01 001d 0002 0000 0
+ffff88970bdba900 1704055316 C Co:4:001:0 0 0
+ffff88970bdba900 1704055323 S Co:4:001:0 s 23 01 0019 0002 0000 0
+ffff88970bdba900 1704055331 C Co:4:001:0 0 0
+ffff88970bdba900 1704055336 S Co:4:001:0 s 23 01 0010 0002 0000 0
+ffff88970bdba900 1704055345 C Co:4:001:0 0 0
+ffff88970bdba900 1704055352 S Ci:4:001:0 s a3 00 0000 0002 0004 4 <
+ffff88970bdba900 1704055359 C Ci:4:001:0 0 4 = 03020000
+ffff88970bdba900 1704135260 S Ci:4:003:0 s 80 06 0100 0000 0008 8 <
+ffff88970bdba900 1704135372 C Ci:4:003:0 0 8 = 12010003 00000009
+ffff88970bdba900 1704135402 S Co:4:003:0 s 00 31 0028 0000 0000 0
+ffff88970bdba900 1704135468 C Co:4:003:0 0 0
+ffff88970bdba900 1704135488 S Ci:4:003:0 s 80 06 0100 0000 0012 18 <
+ffff88970bdba900 1704135598 C Ci:4:003:0 0 18 = 12010003 00000009 7d358877 14010102 0301
+ffff88970bdba900 1704135632 S Ci:4:003:0 s 80 06 0f00 0000 0005 5 <
+ffff88970bdba900 1704135722 C Ci:4:003:0 0 5 = 050f1600 02
+ffff88970bdba900 1704135757 S Ci:4:003:0 s 80 06 0f00 0000 0016 22 <
+ffff88970bdba900 1704135852 C Ci:4:003:0 0 22 = 050f1600 02071002 02000000 0a100300 0e00010a 2000
+ffff88970bdba900 1704135892 S Ci:4:003:0 s 80 06 0200 0000 0009 9 <
+ffff88970bdba900 1704136007 C Ci:4:003:0 0 9 = 09027900 010104c0 01
+ffff88970bdba900 1704136039 S Ci:4:003:0 s 80 06 0200 0000 0079 121 <
+ffff88970bdba900 1704136205 C Ci:4:003:0 0 121 = 09027900 010104c0 01090400 00020806 50060705 81020004 0006300f 00000007
+ffff88970bdbaa80 1704136229 S Ci:4:003:0 s 80 06 0300 0000 00ff 255 <
+ffff88970bdbaa80 1704136309 C Ci:4:003:0 0 4 = 04030904
+ffff88970bdbaa80 1704136324 S Ci:4:003:0 s 80 06 0302 0409 00ff 255 <
+ffff88970bdbaa80 1704136458 C Ci:4:003:0 0 48 = 30035500 53004200 20007400 6f002000 41005400 41002f00 41005400 41005000
+ffff88970bdbaa80 1704136466 S Ci:4:003:0 s 80 06 0301 0409 00ff 255 <
+ffff88970bdbaa80 1704136557 C Ci:4:003:0 0 16 = 10034a00 4d006900 63007200 6f006e00
+ffff88970bdbaa80 1704136564 S Ci:4:003:0 s 80 06 0303 0409 00ff 255 <
+ffff88970bdbaa80 1704136659 C Ci:4:003:0 0 32 = 20033700 34004400 37003800 35003100 35003100 33003300 30003900 45003500
+ffff88970bdbaa80 1704138686 S Co:4:003:0 s 00 09 0001 0000 0000 0
+ffff88970bdbaa80 1704138744 C Co:4:003:0 0 0
+ffff88970bdbaa80 1704138756 S Ci:4:003:0 s 80 06 0304 0409 00ff 255 <
+ffff88970bdbaa80 1704138861 C Ci:4:003:0 0 34 = 22035500 53004200 20004d00 61007300 73002000 53007400 6f007200 61006700
+ffff88970bdbaa80 1704138875 S Co:4:003:0 s 00 30 0000 0000 0006 6 = 0a0a0002 0002
+ffff88970bdbaa80 1704138919 C Co:4:003:0 0 6 >
+ffff88970bdbaa80 1704138962 S Co:4:001:0 s 23 03 0017 3202 0000 0
+ffff88970bdbaa80 1704138980 C Co:4:001:0 0 0
+ffff88970bdbaa80 1704138988 S Co:4:003:0 s 00 03 0030 0000 0000 0
+ffff88970bdbaa80 1704139022 C Co:4:003:0 0 0
+ffff88970bdbaa80 1704139031 S Co:4:003:0 s 00 30 0000 0000 0006 6 = 0a0a0002 0002
+ffff88970bdbaa80 1704139074 C Co:4:003:0 0 6 >
+ffff88970bdbaa80 1704139116 S Co:4:001:0 s 23 03 0018 2802 0000 0
+ffff88970bdbaa80 1704139131 C Co:4:001:0 0 0
+ffff88970bdbaa80 1704139138 S Co:4:003:0 s 00 03 0031 0000 0000 0
+ffff88970bdbaa80 1704139197 C Co:4:003:0 0 0
+ffff88970bdbaa80 1704139280 S Ci:4:003:0 s 80 06 0306 0409 00ff 255 <
+ffff88970bdbaa80 1704139414 C Ci:4:003:0 0 48 = 30034d00 53004300 20004200 75006c00 6b002d00 4f006e00 6c007900 20005400
+ffff88970bdbacc0 1705167257 S Ci:4:003:0 s a1 fe 0000 0000 0001 1 <
+ffff88970bdbacc0 1705167342 C Ci:4:003:0 0 1 = 00
+ffff88970bdbacc0 1705167577 S Bo:4:003:2 -115 31 = 55534243 01000000 24000000 80000612 00000024 00000000 00000000 000000
+ffff88970bdbacc0 1705167662 C Bo:4:003:2 0 31 >
+ffff889709e30e40 1705167695 S Bi:4:003:1 -115 36 <
+ffff889709e30e40 1705167757 C Bi:4:003:1 0 36 = 00000612 5b000000 57444320 57443130 4a505654 2d303041 31595430 20202020
+ffff88970bdbacc0 1705167815 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1705167870 C Bi:4:003:1 0 13 = 55534253 01000000 00000000 00
+ffff88970bdbacc0 1705168578 S Bo:4:003:2 -115 31 = 55534243 02000000 00000000 00000600 00000000 00000000 00000000 000000
+ffff88970bdbacc0 1705168626 C Bo:4:003:2 0 31 >
+ffff88970bdbacc0 1705168634 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1705168654 C Bi:4:003:1 0 13 = 55534253 02000000 00000000 01
+ffff88970bdbacc0 1705168664 S Bo:4:003:2 -115 31 = 55534243 03000000 60000000 80000603 00000060 00000000 00000000 000000
+ffff88970bdbacc0 1705168694 C Bo:4:003:2 0 31 >
+ffff88970bdba000 1705168704 S Bi:4:003:1 -115 96 <
+ffff88970bdba000 1705168736 C Bi:4:003:1 -121 18 = 70000200 0000000a 00000000 04010000 0000
+ffff88970bdbacc0 1705168744 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1705168788 C Bi:4:003:1 -32 0
+ffff88970bdbacc0 1705168799 S Co:4:003:0 s 02 01 0000 0081 0000 0
+ffff88970bdbacc0 1705168840 C Co:4:003:0 0 0
+ffff88970bdbacc0 1705168852 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1705168878 C Bi:4:003:1 0 13 = 55534253 03000000 4e000000 00
+ffff88970bdbacc0 1705168935 S Bo:4:003:2 -115 31 = 55534243 04000000 00000000 00000600 00000000 00000000 00000000 000000
+ffff88970bdbacc0 1705168969 C Bo:4:003:2 0 31 >
+ffff88970bdbacc0 1705168980 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1705169006 C Bi:4:003:1 0 13 = 55534253 04000000 00000000 01
+ffff88970bdbacc0 1705169014 S Bo:4:003:2 -115 31 = 55534243 05000000 60000000 80000603 00000060 00000000 00000000 000000
+ffff88970bdbacc0 1705169047 C Bo:4:003:2 0 31 >
+ffff88970bdba000 1705169056 S Bi:4:003:1 -115 96 <
+ffff88970bdba000 1705169087 C Bi:4:003:1 -121 18 = 70000200 0000000a 00000000 04010000 0000
+ffff88970bdbacc0 1705169097 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1705169131 C Bi:4:003:1 -32 0
+ffff88970bdbacc0 1705169140 S Co:4:003:0 s 02 01 0000 0081 0000 0
+ffff88970bdbacc0 1705169207 C Co:4:003:0 0 0
+ffff88970bdbacc0 1705169217 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1705169246 C Bi:4:003:1 0 13 = 55534253 05000000 4e000000 00
+ffff88970bdbacc0 1705169284 S Bo:4:003:2 -115 31 = 55534243 06000000 00000000 00000600 00000000 00000000 00000000 000000
+ffff88970bdbacc0 1705169305 C Bo:4:003:2 0 31 >
+ffff88970bdbacc0 1705169313 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1705169345 C Bi:4:003:1 0 13 = 55534253 06000000 00000000 01
+ffff88970bdbacc0 1705169357 S Bo:4:003:2 -115 31 = 55534243 07000000 60000000 80000603 00000060 00000000 00000000 000000
+ffff88970bdbacc0 1705169384 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1705169394 S Bi:4:003:1 -115 96 <
+ffff88968561ea80 1705169424 C Bi:4:003:1 -121 18 = 70000200 0000000a 00000000 04010000 0000
+ffff88970bdbacc0 1705169436 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1705169475 C Bi:4:003:1 -32 0
+ffff88970bdbacc0 1705169487 S Co:4:003:0 s 02 01 0000 0081 0000 0
+ffff88970bdbacc0 1705169545 C Co:4:003:0 0 0
+ffff88970bdbacc0 1705169557 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1705169584 C Bi:4:003:1 0 13 = 55534253 07000000 4e000000 00
+ffff88970bdbacc0 1705169647 S Bo:4:003:2 -115 31 = 55534243 08000000 00000000 0000061b 01000001 00000000 00000000 000000
+ffff88970bdbacc0 1705169670 C Bo:4:003:2 0 31 >
+ffff88970bdbacc0 1705169679 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1705169709 C Bi:4:003:1 0 13 = 55534253 08000000 00000000 01
+ffff88970bdbacc0 1705169719 S Bo:4:003:2 -115 31 = 55534243 09000000 60000000 80000603 00000060 00000000 00000000 000000
+ffff88970bdbacc0 1705169748 C Bo:4:003:2 0 31 >
+ffff889709e30e40 1705169757 S Bi:4:003:1 -115 96 <
+ffff889709e30e40 1705169789 C Bi:4:003:1 -121 18 = 70000200 0000000a 00000000 04000000 0000
+ffff88970bdbacc0 1705169802 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1705169834 C Bi:4:003:1 -32 0
+ffff88970bdbacc0 1705169845 S Co:4:003:0 s 02 01 0000 0081 0000 0
+ffff88970bdbacc0 1705169909 C Co:4:003:0 0 0
+ffff88970bdbacc0 1705169922 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1705169949 C Bi:4:003:1 0 13 = 55534253 09000000 4e000000 00
+ffff88970bdbacc0 1706191287 S Bo:4:003:2 -115 31 = 55534243 0a000000 00000000 00000600 00000000 00000000 00000000 000000
+ffff88970bdbacc0 1706191372 C Bo:4:003:2 0 31 >
+ffff88970bdbacc0 1706191397 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1706191450 C Bi:4:003:1 0 13 = 55534253 0a000000 00000000 01
+ffff88970bdbacc0 1706191478 S Bo:4:003:2 -115 31 = 55534243 0b000000 60000000 80000603 00000060 00000000 00000000 000000
+ffff88970bdbacc0 1706191515 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1706191548 S Bi:4:003:1 -115 96 <
+ffff88968561ea80 1706191605 C Bi:4:003:1 -121 18 = 70000200 0000000a 00000000 04010000 0000
+ffff88970bdbacc0 1706191626 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1706191687 C Bi:4:003:1 -32 0
+ffff88970bdbacc0 1706191702 S Co:4:003:0 s 02 01 0000 0081 0000 0
+ffff88970bdbacc0 1706191756 C Co:4:003:0 0 0
+ffff88970bdbacc0 1706191777 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1706191796 C Bi:4:003:1 0 13 = 55534253 0b000000 4e000000 00
+ffff88970bdbacc0 1706191855 S Bo:4:003:2 -115 31 = 55534243 0c000000 00000000 00000600 00000000 00000000 00000000 000000
+ffff88970bdbacc0 1706191880 C Bo:4:003:2 0 31 >
+ffff88970bdbacc0 1706191887 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1706191918 C Bi:4:003:1 0 13 = 55534253 0c000000 00000000 01
+ffff88970bdbacc0 1706191927 S Bo:4:003:2 -115 31 = 55534243 0d000000 60000000 80000603 00000060 00000000 00000000 000000
+ffff88970bdbacc0 1706191958 C Bo:4:003:2 0 31 >
+ffff88969539c480 1706191966 S Bi:4:003:1 -115 96 <
+ffff88969539c480 1706191998 C Bi:4:003:1 -121 18 = 70000200 0000000a 00000000 04010000 0000
+ffff88970bdbacc0 1706192009 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1706192042 C Bi:4:003:1 -32 0
+ffff88970bdbacc0 1706192051 S Co:4:003:0 s 02 01 0000 0081 0000 0
+ffff88970bdbacc0 1706192118 C Co:4:003:0 0 0
+ffff88970bdbacc0 1706192127 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1706192158 C Bi:4:003:1 0 13 = 55534253 0d000000 4e000000 00
+ffff88970bdbacc0 1706192203 S Bo:4:003:2 -115 31 = 55534243 0e000000 00000000 00000600 00000000 00000000 00000000 000000
+ffff88970bdbacc0 1706192221 C Bo:4:003:2 0 31 >
+ffff88970bdbacc0 1706192227 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1706192260 C Bi:4:003:1 0 13 = 55534253 0e000000 00000000 01
+ffff88970bdbacc0 1706192268 S Bo:4:003:2 -115 31 = 55534243 0f000000 60000000 80000603 00000060 00000000 00000000 000000
+ffff88970bdbacc0 1706192300 C Bo:4:003:2 0 31 >
+ffff88969539c480 1706192313 S Bi:4:003:1 -115 96 <
+ffff88969539c480 1706192340 C Bi:4:003:1 -121 18 = 70000200 0000000a 00000000 04010000 0000
+ffff88970bdbacc0 1706192349 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1706192383 C Bi:4:003:1 -32 0
+ffff88970bdbacc0 1706192391 S Co:4:003:0 s 02 01 0000 0081 0000 0
+ffff88970bdbacc0 1706192460 C Co:4:003:0 0 0
+ffff88970bdbacc0 1706192470 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1706192500 C Bi:4:003:1 0 13 = 55534253 0f000000 4e000000 00
+ffff88970bdbacc0 1707215328 S Bo:4:003:2 -115 31 = 55534243 10000000 00000000 00000600 00000000 00000000 00000000 000000
+ffff88970bdbacc0 1707215386 C Bo:4:003:2 0 31 >
+ffff88970bdbacc0 1707215409 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707215433 C Bi:4:003:1 0 13 = 55534253 10000000 00000000 00
+ffff88970bdbacc0 1707215528 S Bo:4:003:2 -115 31 = 55534243 11000000 08000000 80000a25 00000000 00000000 00000000 000000
+ffff88970bdbacc0 1707215552 C Bo:4:003:2 0 31 >
+ffff889709e30cc0 1707215571 S Bi:4:003:1 -115 8 <
+ffff889709e30cc0 1707215595 C Bi:4:003:1 0 8 = 74706daf 00000200
+ffff88970bdbacc0 1707215611 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707215634 C Bi:4:003:1 0 13 = 55534253 11000000 00000000 00
+ffff88970bdbacc0 1707215736 S Bo:4:003:2 -115 31 = 55534243 12000000 c0000000 8000061a 003f00c0 00000000 00000000 000000
+ffff88970bdbacc0 1707215767 C Bo:4:003:2 0 31 >
+ffff889709e30cc0 1707215783 S Bi:4:003:1 -115 192 <
+ffff889709e30cc0 1707215832 C Bi:4:003:1 -121 72 = 47001008 74706db0 00000200 88121400 ffff0000 ffffffff 00ff0000 00000000
+ffff88970bdbacc0 1707215848 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707215880 C Bi:4:003:1 -32 0
+ffff88970bdbacc0 1707215894 S Co:4:003:0 s 02 01 0000 0081 0000 0
+ffff88970bdbacc0 1707215951 C Co:4:003:0 0 0
+ffff88970bdbacc0 1707215966 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707215991 C Bi:4:003:1 0 13 = 55534253 12000000 78000000 00
+ffff88970bdbacc0 1707216069 S Bo:4:003:2 -115 31 = 55534243 13000000 c0000000 8000061a 003f00c0 00000000 00000000 000000
+ffff88970bdbacc0 1707216099 C Bo:4:003:2 0 31 >
+ffff889709e30cc0 1707216114 S Bi:4:003:1 -115 192 <
+ffff889709e30cc0 1707216166 C Bi:4:003:1 -121 72 = 47001008 74706db0 00000200 88121400 ffff0000 ffffffff 00ff0000 00000000
+ffff88970bdbacc0 1707216181 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707216211 C Bi:4:003:1 -32 0
+ffff88970bdbacc0 1707216222 S Co:4:003:0 s 02 01 0000 0081 0000 0
+ffff88970bdbacc0 1707216281 C Co:4:003:0 0 0
+ffff88970bdbacc0 1707216293 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707216321 C Bi:4:003:1 0 13 = 55534253 13000000 78000000 00
+ffff88970bdbacc0 1707231644 S Bo:4:003:2 -115 31 = 55534243 14000000 00000000 00000600 00000000 00000000 00000000 000000
+ffff88970bdbacc0 1707231710 C Bo:4:003:2 0 31 >
+ffff88970bdbacc0 1707231733 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707231755 C Bi:4:003:1 0 13 = 55534253 14000000 00000000 00
+ffff88970bdbacc0 1707231871 S Bo:4:003:2 -115 31 = 55534243 15000000 08000000 80000a25 00000000 00000000 00000000 000000
+ffff88970bdbacc0 1707231896 C Bo:4:003:2 0 31 >
+ffff889709e30cc0 1707231918 S Bi:4:003:1 -115 8 <
+ffff889709e30cc0 1707231941 C Bi:4:003:1 0 8 = 74706daf 00000200
+ffff88970bdbacc0 1707231960 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707231980 C Bi:4:003:1 0 13 = 55534253 15000000 00000000 00
+ffff88970bdbacc0 1707232067 S Bo:4:003:2 -115 31 = 55534243 16000000 c0000000 8000061a 003f00c0 00000000 00000000 000000
+ffff88970bdbacc0 1707232093 C Bo:4:003:2 0 31 >
+ffff889709e30cc0 1707232107 S Bi:4:003:1 -115 192 <
+ffff889709e30cc0 1707232156 C Bi:4:003:1 -121 72 = 47001008 74706db0 00000200 88121400 ffff0000 ffffffff 00ff0000 00000000
+ffff88970bdbacc0 1707232168 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707232202 C Bi:4:003:1 -32 0
+ffff88970bdbacc0 1707232211 S Co:4:003:0 s 02 01 0000 0081 0000 0
+ffff88970bdbacc0 1707232283 C Co:4:003:0 0 0
+ffff88970bdbacc0 1707232297 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707232316 C Bi:4:003:1 0 13 = 55534253 16000000 78000000 00
+ffff88970bdbacc0 1707233290 S Bo:4:003:2 -115 31 = 55534243 17000000 c0000000 8000061a 003f00c0 00000000 00000000 000000
+ffff88970bdbacc0 1707233318 C Bo:4:003:2 0 31 >
+ffff889709e30cc0 1707233338 S Bi:4:003:1 -115 192 <
+ffff889709e30cc0 1707233384 C Bi:4:003:1 -121 72 = 47001008 74706db0 00000200 88121400 ffff0000 ffffffff 00ff0000 00000000
+ffff88970bdbacc0 1707233400 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707233429 C Bi:4:003:1 -32 0
+ffff88970bdbacc0 1707233436 S Co:4:003:0 s 02 01 0000 0081 0000 0
+ffff88970bdbacc0 1707233504 C Co:4:003:0 0 0
+ffff88970bdbacc0 1707233521 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707233544 C Bi:4:003:1 0 13 = 55534253 17000000 78000000 00
+ffff88970bdbacc0 1707233665 S Bo:4:003:2 -115 31 = 55534243 18000000 00100000 80000a28 00000000 00000008 00000000 000000
+ffff88970bdbacc0 1707233711 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707233725 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707289028 C Bi:4:003:1 0 4096 = fab80010 8ed0bc00 b0b80000 8ed88ec0 fbbe007c bf0006b9 0002f3a4 ea210600
+ffff88970bdbacc0 1707289104 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707289136 C Bi:4:003:1 0 13 = 55534253 18000000 00000000 00
+ffff88970bdbacc0 1707290116 S Bo:4:003:2 -115 31 = 55534243 19000000 00000000 00000600 00000000 00000000 00000000 000000
+ffff88970bdbacc0 1707290186 C Bo:4:003:2 0 31 >
+ffff88970bdbacc0 1707290213 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707290239 C Bi:4:003:1 0 13 = 55534253 19000000 00000000 00
+ffff88970bdbacc0 1707290389 S Bo:4:003:2 -115 31 = 55534243 1a000000 08000000 80000a25 00000000 00000000 00000000 000000
+ffff88970bdbacc0 1707290434 C Bo:4:003:2 0 31 >
+ffff88969539cf00 1707290454 S Bi:4:003:1 -115 8 <
+ffff88969539cf00 1707290482 C Bi:4:003:1 0 8 = 74706daf 00000200
+ffff88970bdbacc0 1707290503 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707290528 C Bi:4:003:1 0 13 = 55534253 1a000000 00000000 00
+ffff88970bdbacc0 1707290650 S Bo:4:003:2 -115 31 = 55534243 1b000000 c0000000 8000061a 003f00c0 00000000 00000000 000000
+ffff88970bdbacc0 1707290686 C Bo:4:003:2 0 31 >
+ffff889709e30cc0 1707290701 S Bi:4:003:1 -115 192 <
+ffff889709e30cc0 1707290751 C Bi:4:003:1 -121 72 = 47001008 74706db0 00000200 88121400 ffff0000 ffffffff 00ff0000 00000000
+ffff88970bdbacc0 1707290779 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707290800 C Bi:4:003:1 -32 0
+ffff88970bdbacc0 1707290809 S Co:4:003:0 s 02 01 0000 0081 0000 0
+ffff88970bdbacc0 1707290873 C Co:4:003:0 0 0
+ffff88970bdbacc0 1707290885 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707290913 C Bi:4:003:1 0 13 = 55534253 1b000000 78000000 00
+ffff88970bdbacc0 1707290969 S Bo:4:003:2 -115 31 = 55534243 1c000000 c0000000 8000061a 003f00c0 00000000 00000000 000000
+ffff88970bdbacc0 1707290985 C Bo:4:003:2 0 31 >
+ffff889709e30cc0 1707290994 S Bi:4:003:1 -115 192 <
+ffff889709e30cc0 1707291053 C Bi:4:003:1 -121 72 = 47001008 74706db0 00000200 88121400 ffff0000 ffffffff 00ff0000 00000000
+ffff88970bdbacc0 1707291063 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707291096 C Bi:4:003:1 -32 0
+ffff88970bdbacc0 1707291105 S Co:4:003:0 s 02 01 0000 0081 0000 0
+ffff88970bdbacc0 1707291190 C Co:4:003:0 0 0
+ffff88970bdbacc0 1707291221 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707291239 C Bi:4:003:1 0 13 = 55534253 1c000000 78000000 00
+ffff88970bdbacc0 1707296168 S Bo:4:003:2 -115 31 = 55534243 1d000000 24000000 80000612 00000024 00000000 00000000 000000
+ffff88970bdbacc0 1707296212 C Bo:4:003:2 0 31 >
+ffff88969539cf00 1707296226 S Bi:4:003:1 -115 36 <
+ffff88969539cf00 1707296311 C Bi:4:003:1 0 36 = 00000612 5b000000 57444320 57443130 4a505654 2d303041 31595430 20202020
+ffff88970bdbacc0 1707296337 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707296356 C Bi:4:003:1 0 13 = 55534253 1d000000 00000000 00
+ffff88970bdbacc0 1707296439 S Bo:4:003:2 -115 31 = 55534243 1e000000 00020000 80000ca1 082e0001 00000000 ec000000 000000
+ffff88970bdbacc0 1707296460 C Bo:4:003:2 0 31 >
+ffff88969539cf00 1707296475 S Bi:4:003:1 -115 512 <
+ffff88969539cf00 1707297611 C Bi:4:003:1 0 512 = 7a42ff3f 37c81000 00000000 3f000000 00000000 20202020 57202d44 58573155
+ffff88970bdbacc0 1707297630 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707297663 C Bi:4:003:1 0 13 = 55534253 1e000000 00000000 00
+ffff88970bdbacc0 1707298802 S Bo:4:003:2 -115 31 = 55534243 1f000000 00100000 80000a28 0074706d 00000008 00000000 000000
+ffff88970bdbacc0 1707298822 C Bo:4:003:2 0 31 >
+ffff88969539c300 1707298828 S Bi:4:003:1 -115 4096 <
+ffff88969539c300 1707331510 C Bi:4:003:1 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707331554 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707331580 C Bi:4:003:1 0 13 = 55534253 1f000000 00000000 00
+ffff88970bdbacc0 1707331731 S Bo:4:003:2 -115 31 = 55534243 20000000 00100000 80000a28 0074706d a0000008 00000000 000000
+ffff88970bdbacc0 1707331766 C Bo:4:003:2 0 31 >
+ffff88969539c300 1707331781 S Bi:4:003:1 -115 4096 <
+ffff88969539c300 1707332790 C Bi:4:003:1 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707332825 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707332847 C Bi:4:003:1 0 13 = 55534253 20000000 00000000 00
+ffff88970bdbacc0 1707332996 S Bo:4:003:2 -115 31 = 55534243 21000000 00100000 80000a28 00000000 00000008 00000000 000000
+ffff88970bdbacc0 1707333025 C Bo:4:003:2 0 31 >
+ffff88969539c300 1707333036 S Bi:4:003:1 -115 4096 <
+ffff88969539c300 1707333108 C Bi:4:003:1 0 4096 = fab80010 8ed0bc00 b0b80000 8ed88ec0 fbbe007c bf0006b9 0002f3a4 ea210600
+ffff88970bdbacc0 1707333115 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707333148 C Bi:4:003:1 0 13 = 55534253 21000000 00000000 00
+ffff88970bdbacc0 1707333228 S Bo:4:003:2 -115 31 = 55534243 22000000 00100000 80000a28 00000000 08000008 00000000 000000
+ffff88970bdbacc0 1707333254 C Bo:4:003:2 0 31 >
+ffff88969539c300 1707333263 S Bi:4:003:1 -115 4096 <
+ffff88969539c300 1707333337 C Bi:4:003:1 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707333348 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707333377 C Bi:4:003:1 0 13 = 55534253 22000000 00000000 00
+ffff88970bdbacc0 1707333433 S Bo:4:003:2 -115 31 = 55534243 23000000 00020000 80000a28 0074706d a8000001 00000000 000000
+ffff88970bdbacc0 1707333449 C Bo:4:003:2 0 31 >
+ffff88969539c300 1707333461 S Bi:4:003:1 -115 512 <
+ffff88969539c300 1707333509 C Bi:4:003:1 0 512 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707333516 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707333549 C Bi:4:003:1 0 13 = 55534253 23000000 00000000 00
+ffff88970bdbacc0 1707333590 S Bo:4:003:2 -115 31 = 55534243 24000000 00020000 80000a28 0074706d a9000001 00000000 000000
+ffff88970bdbacc0 1707333606 C Bo:4:003:2 0 31 >
+ffff889709e30cc0 1707333620 S Bi:4:003:1 -115 512 <
+ffff889709e30cc0 1707333667 C Bi:4:003:1 0 512 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707333705 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707333718 C Bi:4:003:1 0 13 = 55534253 24000000 00000000 00
+ffff88970bdbacc0 1707333766 S Bo:4:003:2 -115 31 = 55534243 25000000 00020000 80000a28 0074706d aa000001 00000000 000000
+ffff88970bdbacc0 1707333777 C Bo:4:003:2 0 31 >
+ffff889709e30cc0 1707333786 S Bi:4:003:1 -115 512 <
+ffff889709e30cc0 1707333843 C Bi:4:003:1 0 512 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707333877 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707333890 C Bi:4:003:1 0 13 = 55534253 25000000 00000000 00
+ffff88970bdbacc0 1707333934 S Bo:4:003:2 -115 31 = 55534243 26000000 00020000 80000a28 0074706d ab000001 00000000 000000
+ffff88970bdbacc0 1707333945 C Bo:4:003:2 0 31 >
+ffff889709e30cc0 1707333954 S Bi:4:003:1 -115 512 <
+ffff889709e30cc0 1707334006 C Bi:4:003:1 0 512 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707334045 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707334059 C Bi:4:003:1 0 13 = 55534253 26000000 00000000 00
+ffff88970bdbacc0 1707334101 S Bo:4:003:2 -115 31 = 55534243 27000000 00020000 80000a28 0074706d ac000001 00000000 000000
+ffff88970bdbacc0 1707334112 C Bo:4:003:2 0 31 >
+ffff88969539c300 1707334117 S Bi:4:003:1 -115 512 <
+ffff88969539c300 1707334178 C Bi:4:003:1 0 512 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707334184 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707334218 C Bi:4:003:1 0 13 = 55534253 27000000 00000000 00
+ffff88970bdbacc0 1707334240 S Bo:4:003:2 -115 31 = 55534243 28000000 00020000 80000a28 0074706d ad000001 00000000 000000
+ffff88970bdbacc0 1707334259 C Bo:4:003:2 0 31 >
+ffff889709e30cc0 1707334267 S Bi:4:003:1 -115 512 <
+ffff889709e30cc0 1707334321 C Bi:4:003:1 0 512 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707334330 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707334361 C Bi:4:003:1 0 13 = 55534253 28000000 00000000 00
+ffff88970bdbacc0 1707334390 S Bo:4:003:2 -115 31 = 55534243 29000000 00020000 80000a28 0074706d ae000001 00000000 000000
+ffff88970bdbacc0 1707334404 C Bo:4:003:2 0 31 >
+ffff88970bdba480 1707334408 S Bi:4:003:1 -115 512 <
+ffff88970bdba480 1707334469 C Bi:4:003:1 0 512 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707334474 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707334508 C Bi:4:003:1 0 13 = 55534253 29000000 00000000 00
+ffff88970bdbacc0 1707334529 S Bo:4:003:2 -115 31 = 55534243 2a000000 00020000 80000a28 0074706d af000001 00000000 000000
+ffff88970bdbacc0 1707334549 C Bo:4:003:2 0 31 >
+ffff88970bdba480 1707334554 S Bi:4:003:1 -115 512 <
+ffff88970bdba480 1707334601 C Bi:4:003:1 0 512 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707334606 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707334641 C Bi:4:003:1 0 13 = 55534253 2a000000 00000000 00
+ffff88970bdbacc0 1707334682 S Bo:4:003:2 -115 31 = 55534243 2b000000 00100000 80000a28 0074706c a8000008 00000000 000000
+ffff88970bdbacc0 1707334699 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707334705 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707341751 C Bi:4:003:1 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707341810 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707341831 C Bi:4:003:1 0 13 = 55534253 2b000000 00000000 00
+ffff88970bdbacc0 1707341950 S Bo:4:003:2 -115 31 = 55534243 2c000000 00100000 80000a28 0074706d 70000008 00000000 000000
+ffff88970bdbacc0 1707341994 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707342036 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707342063 C Bi:4:003:1 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707342090 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707342110 C Bi:4:003:1 0 13 = 55534253 2c000000 00000000 00
+ffff88970bdbacc0 1707342207 S Bo:4:003:2 -115 31 = 55534243 2d000000 00100000 80000a28 0074706c b0000008 00000000 000000
+ffff88970bdbacc0 1707342223 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707342229 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707342371 C Bi:4:003:1 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707342394 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707342406 C Bi:4:003:1 0 13 = 55534253 2d000000 00000000 00
+ffff88970bdbacc0 1707342494 S Bo:4:003:2 -115 31 = 55534243 2e000000 00100000 80000a28 0074706c 20000008 00000000 000000
+ffff88970bdbacc0 1707342509 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707342514 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707342616 C Bi:4:003:1 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707342630 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707342641 C Bi:4:003:1 0 13 = 55534253 2e000000 00000000 00
+ffff88970bdbacc0 1707342716 S Bo:4:003:2 -115 31 = 55534243 2f000000 00100000 80000a28 0074706b 60000008 00000000 000000
+ffff88970bdbacc0 1707342730 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707342736 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707350217 C Bi:4:003:1 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707350276 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707350298 C Bi:4:003:1 0 13 = 55534253 2f000000 00000000 00
+ffff88970bdbacc0 1707350471 S Bo:4:003:2 -115 31 = 55534243 30000000 00100000 80000a28 0074706b 08000008 00000000 000000
+ffff88970bdbacc0 1707350520 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707350532 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707359339 C Bi:4:003:1 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707359397 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707359416 C Bi:4:003:1 0 13 = 55534253 30000000 00000000 00
+ffff88970bdbacc0 1707359580 S Bo:4:003:2 -115 31 = 55534243 31000000 00100000 80000a28 0074706a d0000008 00000000 000000
+ffff88970bdbacc0 1707359630 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707359675 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707359702 C Bi:4:003:1 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707359741 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707359766 C Bi:4:003:1 0 13 = 55534253 31000000 00000000 00
+ffff88970bdbacc0 1707359854 S Bo:4:003:2 -115 31 = 55534243 32000000 00100000 80000a28 0074706a 20000008 00000000 000000
+ffff88970bdbacc0 1707359874 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707359881 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707368482 C Bi:4:003:1 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707368498 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707368511 C Bi:4:003:1 0 13 = 55534253 32000000 00000000 00
+ffff88970bdbacc0 1707368635 S Bo:4:003:2 -115 31 = 55534243 33000000 00100000 80000a28 00747069 e0000008 00000000 000000
+ffff88970bdbacc0 1707368680 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707368696 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707368846 C Bi:4:003:1 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707368893 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707368922 C Bi:4:003:1 0 13 = 55534253 33000000 00000000 00
+ffff88970bdbacc0 1707369046 S Bo:4:003:2 -115 31 = 55534243 34000000 00100000 80000a28 00747069 d0000008 00000000 000000
+ffff88970bdbacc0 1707369094 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707369139 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707369168 C Bi:4:003:1 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707369177 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707369204 C Bi:4:003:1 0 13 = 55534253 34000000 00000000 00
+ffff88970bdbacc0 1707369288 S Bo:4:003:2 -115 31 = 55534243 35000000 00100000 80000a28 00747069 f8000008 00000000 000000
+ffff88970bdbacc0 1707369310 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707369317 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707369388 C Bi:4:003:1 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707369397 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707369428 C Bi:4:003:1 0 13 = 55534253 35000000 00000000 00
+ffff88970bdbacc0 1707369484 S Bo:4:003:2 -115 31 = 55534243 36000000 00100000 80000a28 00747061 a0000008 00000000 000000
+ffff88970bdbacc0 1707369500 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707369509 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707371586 C Bi:4:003:1 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707371596 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707371624 C Bi:4:003:1 0 13 = 55534253 36000000 00000000 00
+ffff88970bdbacc0 1707371739 S Bo:4:003:2 -115 31 = 55534243 37000000 00100000 80000a28 00000000 20000008 00000000 000000
+ffff88970bdbacc0 1707371758 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707371774 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707371896 C Bi:4:003:1 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707371943 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707371961 C Bi:4:003:1 0 13 = 55534253 37000000 00000000 00
+ffff88970bdbacc0 1707372085 S Bo:4:003:2 -115 31 = 55534243 38000000 00100000 80000a28 00000000 40000008 00000000 000000
+ffff88970bdbacc0 1707372115 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707372140 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707372210 C Bi:4:003:1 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707372235 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707372248 C Bi:4:003:1 0 13 = 55534253 38000000 00000000 00
+ffff88970bdbacc0 1707372316 S Bo:4:003:2 -115 31 = 55534243 39000000 00100000 80000a28 00000000 80000008 00000000 000000
+ffff88970bdbacc0 1707372337 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707372344 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707372459 C Bi:4:003:1 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707372473 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707372488 C Bi:4:003:1 0 13 = 55534253 39000000 00000000 00
+ffff88970bdbacc0 1707372572 S Bo:4:003:2 -115 31 = 55534243 3a000000 00100000 80000a28 00000001 00000008 00000000 000000
+ffff88970bdbacc0 1707372592 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707372600 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707372715 C Bi:4:003:1 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707372729 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707372744 C Bi:4:003:1 0 13 = 55534253 3a000000 00000000 00
+ffff88970bdbacc0 1707372826 S Bo:4:003:2 -115 31 = 55534243 3b000000 00100000 80000a28 00000002 00000008 00000000 000000
+ffff88970bdbacc0 1707372846 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707372854 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707372938 C Bi:4:003:1 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707372947 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707372977 C Bi:4:003:1 0 13 = 55534253 3b000000 00000000 00
+ffff88970bdbacc0 1707373035 S Bo:4:003:2 -115 31 = 55534243 3c000000 00100000 80000a28 00000004 00000008 00000000 000000
+ffff88970bdbacc0 1707373052 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707373058 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707373143 C Bi:4:003:1 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707373151 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707373184 C Bi:4:003:1 0 13 = 55534253 3c000000 00000000 00
+ffff88970bdbacc0 1707373243 S Bo:4:003:2 -115 31 = 55534243 3d000000 00100000 80000a28 00000008 00000008 00000000 000000
+ffff88970bdbacc0 1707373259 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707373266 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707373354 C Bi:4:003:1 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707373361 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707373395 C Bi:4:003:1 0 13 = 55534253 3d000000 00000000 00
+ffff88970bdbacc0 1707373447 S Bo:4:003:2 -115 31 = 55534243 3e000000 00100000 80000a28 00000010 00000008 00000000 000000
+ffff88970bdbacc0 1707373462 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707373469 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707405945 C Bi:4:003:1 0 4096 = 00810000 00810100 00810200 00810300 00810400 00810c00 00810d00 00811800
+ffff88970bdbacc0 1707406017 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707406042 C Bi:4:003:1 0 13 = 55534253 3e000000 00000000 00
+ffff88970bdbacc0 1707406279 S Bo:4:003:2 -115 31 = 55534243 3f000000 00100000 80000a28 00000020 00000008 00000000 000000
+ffff88970bdbacc0 1707406335 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707406394 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707412076 C Bi:4:003:1 0 4096 = 00830000 00830100 00830200 00830300 00830400 00830c00 00830d00 00831800
+ffff88970bdbacc0 1707412146 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707412171 C Bi:4:003:1 0 13 = 55534253 3f000000 00000000 00
+ffff88970bdbacc0 1707412453 S Bo:4:003:2 -115 31 = 55534243 40000000 00100000 80000a28 00000000 18000008 00000000 000000
+ffff88970bdbacc0 1707412510 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707412569 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707412603 C Bi:4:003:1 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707412650 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707412671 C Bi:4:003:1 0 13 = 55534253 40000000 00000000 00
+ffff88970bdbacc0 1707412866 S Bo:4:003:2 -115 31 = 55534243 41000000 00100000 80000a28 00000000 38000008 00000000 000000
+ffff88970bdbacc0 1707412922 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707412972 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707413004 C Bi:4:003:1 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707413015 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707413038 C Bi:4:003:1 0 13 = 55534253 41000000 00000000 00
+ffff88970bdbacc0 1707413153 S Bo:4:003:2 -115 31 = 55534243 42000000 00100000 80000a28 00000000 78000008 00000000 000000
+ffff88970bdbacc0 1707413175 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707413183 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707413410 C Bi:4:003:1 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707413425 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707413440 C Bi:4:003:1 0 13 = 55534253 42000000 00000000 00
+ffff88970bdbacc0 1707413577 S Bo:4:003:2 -115 31 = 55534243 43000000 00100000 80000a28 00000000 10000008 00000000 000000
+ffff88970bdbacc0 1707413598 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707413606 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707413722 C Bi:4:003:1 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707413736 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707413749 C Bi:4:003:1 0 13 = 55534253 43000000 00000000 00
+ffff88970bdbacc0 1707413818 S Bo:4:003:2 -115 31 = 55534243 44000000 00200000 80000a28 00000000 28000010 00000000 000000
+ffff88970bdbacc0 1707413835 C Bo:4:003:2 0 31 >
+ffff889709e30cc0 1707413851 S Bi:4:003:1 -115 8192 <
+ffff889709e30cc0 1707413969 C Bi:4:003:1 0 8192 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707414022 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707414039 C Bi:4:003:1 0 13 = 55534253 44000000 00000000 00
+ffff88970bdbacc0 1707414111 S Bo:4:003:2 -115 31 = 55534243 45000000 00600000 80000a28 00000000 48000030 00000000 000000
+ffff88970bdbacc0 1707414132 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707414155 S Bi:4:003:1 -115 24576 <
+ffff88968561ea80 1707414293 C Bi:4:003:1 0 24576 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707414335 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707414357 C Bi:4:003:1 0 13 = 55534253 45000000 00000000 00
+ffff88970bdbacc0 1707414410 S Bo:4:003:2 -115 31 = 55534243 46000000 00f00000 80000a28 00000000 88000078 00000000 000000
+ffff88970bdbacc0 1707414429 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707414448 S Bi:4:003:1 -115 61440 <
+ffff88968561ea80 1707414719 C Bi:4:003:1 0 61440 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707414761 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707414784 C Bi:4:003:1 0 13 = 55534253 46000000 00000000 00
+ffff88970bdbacc0 1707414851 S Bo:4:003:2 -115 31 = 55534243 47000000 00f00100 80000a28 00000001 080000f8 00000000 000000
+ffff88970bdbacc0 1707414872 C Bo:4:003:2 0 31 >
+ffff889709e30cc0 1707414881 S Bi:4:003:1 -115 126976 <
+ffff889709e30cc0 1707415397 C Bi:4:003:1 0 126976 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707415441 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707415465 C Bi:4:003:1 0 13 = 55534253 47000000 00000000 00
+ffff88970bdbacc0 1707415818 S Bo:4:003:2 -115 31 = 55534243 48000000 00f00300 80000a28 00000002 080001f8 00000000 000000
+ffff88970bdbacc0 1707415838 C Bo:4:003:2 0 31 >
+ffff889709e30cc0 1707415859 S Bi:4:003:1 -115 258048 <
+ffff889709e30cc0 1707416816 C Bi:4:003:1 0 258048 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707416842 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707416860 C Bi:4:003:1 0 13 = 55534253 48000000 00000000 00
+ffff88970bdbacc0 1707417268 S Bo:4:003:2 -115 31 = 55534243 49000000 00a00300 80000a28 00747068 000001d0 00000000 000000
+ffff88970bdbacc0 1707417288 C Bo:4:003:2 0 31 >
+ffff889709e30cc0 1707417310 S Bi:4:003:1 -115 237568 <
+ffff889709e30cc0 1707445316 C Bi:4:003:1 0 237568 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707445387 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707445412 C Bi:4:003:1 0 13 = 55534253 49000000 00000000 00
+ffff88970bdbacc0 1707445538 S Bo:4:003:2 -115 31 = 55534243 4a000000 00100000 80000a28 00747069 d8000008 00000000 000000
+ffff88970bdbacc0 1707445587 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707445645 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707445682 C Bi:4:003:1 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707445737 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707445765 C Bi:4:003:1 0 13 = 55534253 4a000000 00000000 00
+ffff88970bdbacc0 1707445887 S Bo:4:003:2 -115 31 = 55534243 4b000000 00200000 80000a28 00747069 e8000010 00000000 000000
+ffff88970bdbacc0 1707445943 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707445968 S Bi:4:003:1 -115 8192 <
+ffff88968561ea80 1707446039 C Bi:4:003:1 0 8192 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707446088 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707446114 C Bi:4:003:1 0 13 = 55534253 4b000000 00000000 00
+ffff88970bdbacc0 1707446408 S Bo:4:003:2 -115 31 = 55534243 4c000000 00400000 80000a28 0074706a 00000020 00000000 000000
+ffff88970bdbacc0 1707446452 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707446470 S Bi:4:003:1 -115 16384 <
+ffff88968561ea80 1707446572 C Bi:4:003:1 0 16384 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707446586 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707446602 C Bi:4:003:1 0 13 = 55534253 4c000000 00000000 00
+ffff88970bdbacc0 1707446665 S Bo:4:003:2 -115 31 = 55534243 4d000000 00500100 80000a28 0074706a 280000a8 00000000 000000
+ffff88970bdbacc0 1707446681 C Bo:4:003:2 0 31 >
+ffff889709e30cc0 1707446693 S Bi:4:003:1 -115 86016 <
+ffff889709e30cc0 1707447168 C Bi:4:003:1 0 86016 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707447201 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707447217 C Bi:4:003:1 0 13 = 55534253 4d000000 00000000 00
+ffff88970bdbacc0 1707447283 S Bo:4:003:2 -115 31 = 55534243 4e000000 00600000 80000a28 0074706a d8000030 00000000 000000
+ffff88970bdbacc0 1707447299 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707447322 S Bi:4:003:1 -115 24576 <
+ffff88968561ea80 1707447469 C Bi:4:003:1 0 24576 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707447515 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707447548 C Bi:4:003:1 0 13 = 55534253 4e000000 00000000 00
+ffff88970bdbacc0 1707447645 S Bo:4:003:2 -115 31 = 55534243 4f000000 00a00000 80000a28 0074706b 10000050 00000000 000000
+ffff88970bdbacc0 1707447675 C Bo:4:003:2 0 31 >
+ffff889709e30cc0 1707447688 S Bi:4:003:1 -115 40960 <
+ffff889709e30cc0 1707447885 C Bi:4:003:1 0 40960 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707447928 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707447952 C Bi:4:003:1 0 13 = 55534253 4f000000 00000000 00
+ffff88970bdbacc0 1707448012 S Bo:4:003:2 -115 31 = 55534243 50000000 00300100 80000a28 0074706b 68000098 00000000 000000
+ffff88970bdbacc0 1707448038 C Bo:4:003:2 0 31 >
+ffff88970bdba480 1707448048 S Bi:4:003:1 -115 77824 <
+ffff88970bdba480 1707448943 C Bi:4:003:1 0 77824 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707448952 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707448984 C Bi:4:003:1 0 13 = 55534253 50000000 00000000 00
+ffff88970bdbacc0 1707468556 S Bo:4:003:2 -115 31 = 55534243 51000000 00100000 80000a28 00747067 80000008 00000000 000000
+ffff88970bdbacc0 1707468580 C Bo:4:003:2 0 31 >
+ffff88970bdba480 1707468585 S Bi:4:003:1 -115 4096 <
+ffff88970bdba480 1707473774 C Bi:4:003:1 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707473819 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707473842 C Bi:4:003:1 0 13 = 55534253 51000000 00000000 00
+ffff88970bdbacc0 1707473983 S Bo:4:003:2 -115 31 = 55534243 52000000 00100000 80000a28 00747067 f0000008 00000000 000000
+ffff88970bdbacc0 1707474007 C Bo:4:003:2 0 31 >
+ffff88970bdba480 1707474014 S Bi:4:003:1 -115 4096 <
+ffff88970bdba480 1707474588 C Bi:4:003:1 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707474603 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707474635 C Bi:4:003:1 0 13 = 55534253 52000000 00000000 00
+ffff88970bdbacc0 1707474719 S Bo:4:003:2 -115 31 = 55534243 53000000 00100000 80000a28 00000008 00000008 00000000 000000
+ffff88970bdbacc0 1707474739 C Bo:4:003:2 0 31 >
+ffff88970bdba480 1707474744 S Bi:4:003:1 -115 4096 <
+ffff88970bdba480 1707474837 C Bi:4:003:1 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707474846 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707474883 C Bi:4:003:1 0 13 = 55534253 53000000 00000000 00
+ffff88970bdbacc0 1707474936 S Bo:4:003:2 -115 31 = 55534243 54000000 00100000 80000a28 00000008 08000008 00000000 000000
+ffff88970bdbacc0 1707474948 C Bo:4:003:2 0 31 >
+ffff88970bdba480 1707474951 S Bi:4:003:1 -115 4096 <
+ffff88970bdba480 1707475039 C Bi:4:003:1 0 4096 = 01040000 11040000 21040000 dc5bf51f 02000400 00000000 00000000 f21f59e1
+ffff88970bdbacc0 1707475043 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707475079 C Bi:4:003:1 0 13 = 55534253 54000000 00000000 00
+ffff88970bdbacc0 1707475110 S Bo:4:003:2 -115 31 = 55534243 55000000 00100000 80000a28 00747067 f8000008 00000000 000000
+ffff88970bdbacc0 1707475131 C Bo:4:003:2 0 31 >
+ffff88970bdba480 1707475134 S Bi:4:003:1 -115 4096 <
+ffff88970bdba480 1707475213 C Bi:4:003:1 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707475218 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707475249 C Bi:4:003:1 0 13 = 55534253 55000000 00000000 00
+ffff88970bdbacc0 1707475289 S Bo:4:003:2 -115 31 = 55534243 56000000 00100000 80000a28 00747066 f8000008 00000000 000000
+ffff88970bdbacc0 1707475310 C Bo:4:003:2 0 31 >
+ffff88970bdba480 1707475313 S Bi:4:003:1 -115 4096 <
+ffff88970bdba480 1707475389 C Bi:4:003:1 0 4096 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707475393 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707475429 C Bi:4:003:1 0 13 = 55534253 56000000 00000000 00
+ffff88970bdbacc0 1707475500 S Bo:4:003:2 -115 31 = 55534243 57000000 00100000 80000a28 00000008 20000008 00000000 000000
+ffff88970bdbacc0 1707475513 C Bo:4:003:2 0 31 >
+ffff88970bdba480 1707475516 S Bi:4:003:1 -115 4096 <
+ffff88970bdba480 1707475604 C Bi:4:003:1 0 4096 = 0000c000 1000c000 2000c000 e05f0020 00000500 00000000 00000000 00203226
+ffff88970bdbacc0 1707475608 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707475644 C Bi:4:003:1 0 13 = 55534253 57000000 00000000 00
+ffff88970bdbacc0 1707475672 S Bo:4:003:2 -115 31 = 55534243 58000000 00100000 80000a28 00000008 40000008 00000000 000000
+ffff88970bdbacc0 1707475694 C Bo:4:003:2 0 31 >
+ffff88970bdba480 1707475706 S Bi:4:003:1 -115 4096 <
+ffff88970bdba480 1707475768 C Bi:4:003:1 0 4096 = 0000c001 1000c001 2000c001 e05f0020 00000500 00000000 00000000 0020e504
+ffff88970bdbacc0 1707475772 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707475808 C Bi:4:003:1 0 13 = 55534253 58000000 00000000 00
+ffff88970bdbacc0 1707475847 S Bo:4:003:2 -115 31 = 55534243 59000000 00100000 80000a28 00000008 80000008 00000000 000000
+ffff88970bdbacc0 1707475868 C Bo:4:003:2 0 31 >
+ffff88970bdba480 1707475882 S Bi:4:003:1 -115 4096 <
+ffff88970bdba480 1707475950 C Bi:4:003:1 0 4096 = 0000c003 1000c003 2000c003 6e02e11a 13010400 00000000 00000000 80069740
+ffff88970bdbacc0 1707475954 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707475990 C Bi:4:003:1 0 13 = 55534253 59000000 00000000 00
+ffff88970bdbacc0 1707476017 S Bo:4:003:2 -115 31 = 55534243 5a000000 00100000 80000a28 00000009 00000008 00000000 000000
+ffff88970bdbacc0 1707476040 C Bo:4:003:2 0 31 >
+ffff88970bdba480 1707476052 S Bi:4:003:1 -115 4096 <
+ffff88970bdba480 1707476119 C Bi:4:003:1 0 4096 = 0000c007 1000c007 2000c007 b85a7e08 1a050400 00000000 00000000 7e08d5d4
+ffff88970bdbacc0 1707476124 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707476159 C Bi:4:003:1 0 13 = 55534253 5a000000 00000000 00
+ffff88970bdbacc0 1707476187 S Bo:4:003:2 -115 31 = 55534243 5b000000 00100000 80000a28 0000000a 00000008 00000000 000000
+ffff88970bdbacc0 1707476200 C Bo:4:003:2 0 31 >
+ffff88970bdba480 1707476213 S Bi:4:003:1 -115 4096 <
+ffff88970bdba480 1707476285 C Bi:4:003:1 0 4096 = 40800000 40800100 40800200 40800300 40800400 40800c00 40800d00 40801800
+ffff88970bdbacc0 1707476289 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707476325 C Bi:4:003:1 0 13 = 55534253 5b000000 00000000 00
+ffff88970bdbacc0 1707476352 S Bo:4:003:2 -115 31 = 55534243 5c000000 00100000 80000a28 0000000c 00000008 00000000 000000
+ffff88970bdbacc0 1707476375 C Bo:4:003:2 0 31 >
+ffff88970bdba480 1707476387 S Bi:4:003:1 -115 4096 <
+ffff88970bdba480 1707501529 C Bi:4:003:1 0 4096 = 80800000 80800100 80800200 80800300 80800400 80800c00 80800d00 80801800
+ffff88970bdbacc0 1707501552 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707501568 C Bi:4:003:1 0 13 = 55534253 5c000000 00000000 00
+ffff88970bdbacc0 1707501750 S Bo:4:003:2 -115 31 = 55534243 5d000000 00100000 80000a28 00000010 00000008 00000000 000000
+ffff88970bdbacc0 1707501790 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707501829 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707501914 C Bi:4:003:1 0 4096 = 00810000 00810100 00810200 00810300 00810400 00810c00 00810d00 00811800
+ffff88970bdbacc0 1707501954 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707501997 C Bi:4:003:1 0 13 = 55534253 5d000000 00000000 00
+ffff88970bdbacc0 1707502137 S Bo:4:003:2 -115 31 = 55534243 5e000000 00100000 80000a28 00000018 00000008 00000000 000000
+ffff88970bdbacc0 1707502179 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707502187 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707503623 C Bi:4:003:1 0 4096 = 00820000 00820100 00820200 00820300 00820400 00820c00 00820d00 00821800
+ffff88970bdbacc0 1707503644 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707503657 C Bi:4:003:1 0 13 = 55534253 5e000000 00000000 00
+ffff88970bdbacc0 1707503746 S Bo:4:003:2 -115 31 = 55534243 5f000000 00100000 80000a28 00000028 00000008 00000000 000000
+ffff88970bdbacc0 1707503768 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707503776 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707509921 C Bi:4:003:1 0 4096 = 00840000 00840100 00840200 00840300 00840400 00840c00 00840d00 00841800
+ffff88970bdbacc0 1707509985 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707510016 C Bi:4:003:1 0 13 = 55534253 5f000000 00000000 00
+ffff88970bdbacc0 1707510245 S Bo:4:003:2 -115 31 = 55534243 60000000 00100000 80000a28 00000008 18000008 00000000 000000
+ffff88970bdbacc0 1707510300 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707510352 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707510392 C Bi:4:003:1 0 4096 = 00008000 10008000 20008000 125f0020 00000500 00000000 00000000 002015f5
+ffff88970bdbacc0 1707510444 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707510502 C Bi:4:003:1 0 13 = 55534253 60000000 00000000 00
+ffff88970bdbacc0 1707510672 S Bo:4:003:2 -115 31 = 55534243 61000000 00100000 80000a28 00000008 38000008 00000000 000000
+ffff88970bdbacc0 1707510703 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707510724 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707510795 C Bi:4:003:1 0 4096 = 00008001 10008001 20008001 e05f0020 00000500 00000000 00000000 0020505c
+ffff88970bdbacc0 1707510810 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707510832 C Bi:4:003:1 0 13 = 55534253 61000000 00000000 00
+ffff88970bdbacc0 1707510977 S Bo:4:003:2 -115 31 = 55534243 62000000 00100000 80000a28 00000008 78000008 00000000 000000
+ffff88970bdbacc0 1707511000 C Bo:4:003:2 0 31 >
+ffff88969539c300 1707511020 S Bi:4:003:1 -115 4096 <
+ffff88969539c300 1707511095 C Bi:4:003:1 0 4096 = 00008003 10008003 20008003 93346015 d7010400 00000000 00000000 56120075
+ffff88970bdbacc0 1707511114 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707511132 C Bi:4:003:1 0 13 = 55534253 62000000 00000000 00
+ffff88970bdbacc0 1707511323 S Bo:4:003:2 -115 31 = 55534243 63000000 00100000 80000a28 00000008 10000008 00000000 000000
+ffff88970bdbacc0 1707511350 C Bo:4:003:2 0 31 >
+ffff88969539c300 1707511370 S Bi:4:003:1 -115 4096 <
+ffff88969539c300 1707511443 C Bi:4:003:1 0 4096 = 00004000 10004000 20004000 77540020 00000500 00000000 00000000 0020b3fd
+ffff88970bdbacc0 1707511455 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707511480 C Bi:4:003:1 0 13 = 55534253 63000000 00000000 00
+ffff88970bdbacc0 1707511540 S Bo:4:003:2 -115 31 = 55534243 64000000 00200000 80000a28 00000008 28000010 00000000 000000
+ffff88970bdbacc0 1707511557 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707511564 S Bi:4:003:1 -115 8192 <
+ffff88968561ea80 1707511663 C Bi:4:003:1 0 8192 = 00000001 10000001 20000001 e05f0020 00000500 00000000 00000000 00203aed
+ffff88970bdbacc0 1707511683 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707511701 C Bi:4:003:1 0 13 = 55534253 64000000 00000000 00
+ffff88970bdbacc0 1707511763 S Bo:4:003:2 -115 31 = 55534243 65000000 00600000 80000a28 00000008 48000030 00000000 000000
+ffff88970bdbacc0 1707511779 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707511787 S Bi:4:003:1 -115 24576 <
+ffff88968561ea80 1707511941 C Bi:4:003:1 0 24576 = 00000002 10000002 20000002 ee570020 00000500 00000000 00000000 0020a6a3
+ffff88970bdbacc0 1707511980 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707512012 C Bi:4:003:1 0 13 = 55534253 65000000 00000000 00
+ffff88970bdbacc0 1707512076 S Bo:4:003:2 -115 31 = 55534243 66000000 00f00000 80000a28 00000008 88000078 00000000 000000
+ffff88970bdbacc0 1707512094 C Bo:4:003:2 0 31 >
+ffff88969539c300 1707512101 S Bi:4:003:1 -115 61440 <
+ffff88969539c300 1707512390 C Bi:4:003:1 0 61440 = 00000004 10000004 20000004 5701681d 31000400 00000000 00000000 681d8f78
+ffff88970bdbacc0 1707512409 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707512427 C Bi:4:003:1 0 13 = 55534253 66000000 00000000 00
+ffff88970bdbacc0 1707512479 S Bo:4:003:2 -115 31 = 55534243 67000000 00f00100 80000a28 00000009 080000f8 00000000 000000
+ffff88970bdbacc0 1707512506 C Bo:4:003:2 0 31 >
+ffff88970bdba480 1707512510 S Bi:4:003:1 -115 126976 <
+ffff88970bdba480 1707513044 C Bi:4:003:1 0 126976 = 00000008 10000008 20000008 7059fc06 1a050400 00000000 00000000 0f061178
+ffff88970bdbacc0 1707513065 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707513080 C Bi:4:003:1 0 13 = 55534253 67000000 00000000 00
+ffff88970bdbacc0 1707513468 S Bo:4:003:2 -115 31 = 55534243 68000000 00f00300 80000a28 0000000a 080001f8 00000000 000000
+ffff88970bdbacc0 1707513495 C Bo:4:003:2 0 31 >
+ffff88970bdba480 1707513502 S Bi:4:003:1 -115 258048 <
+ffff88970bdba480 1707523614 C Bi:4:003:1 0 258048 = 41800000 41800100 41800200 41800300 41800400 41800c00 41800d00 41801800
+ffff88970bdbacc0 1707523660 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707523686 C Bi:4:003:1 0 13 = 55534253 68000000 00000000 00
+ffff88970bdbacc0 1707524304 S Bo:4:003:2 -115 31 = 55534243 69000000 00000400 80000a28 00747064 00000200 00000000 000000
+ffff88970bdbacc0 1707524349 C Bo:4:003:2 0 31 >
+ffff88970bdba480 1707524362 S Bi:4:003:1 -115 262144 <
+ffff88970bdba480 1707559118 C Bi:4:003:1 0 262144 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707559167 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707559228 C Bi:4:003:1 0 13 = 55534253 69000000 00000000 00
+ffff88970bdbacc0 1707559918 S Bo:4:003:2 -115 31 = 55534243 6a000000 00f00100 80000a28 00747066 000000f8 00000000 000000
+ffff88970bdbacc0 1707559969 C Bo:4:003:2 0 31 >
+ffff88970bdba480 1707559984 S Bi:4:003:1 -115 126976 <
+ffff88970bdba480 1707562191 C Bi:4:003:1 0 126976 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707562238 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707562263 C Bi:4:003:1 0 13 = 55534253 6a000000 00000000 00
+ffff88970bdbacc0 1707562377 S Bo:4:003:2 -115 31 = 55534243 6b000000 00000100 80000a28 00747067 00000080 00000000 000000
+ffff88970bdbacc0 1707562416 C Bo:4:003:2 0 31 >
+ffff88969539c300 1707562453 S Bi:4:003:1 -115 65536 <
+ffff88969539c300 1707562737 C Bi:4:003:1 0 65536 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707562779 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707562807 C Bi:4:003:1 0 13 = 55534253 6b000000 00000000 00
+ffff88970bdbacc0 1707562925 S Bo:4:003:2 -115 31 = 55534243 6c000000 00d00000 80000a28 00747067 88000068 00000000 000000
+ffff88970bdbacc0 1707562965 C Bo:4:003:2 0 31 >
+ffff88970bdba480 1707562978 S Bi:4:003:1 -115 53248 <
+ffff88970bdba480 1707563228 C Bi:4:003:1 0 53248 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707563264 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707563297 C Bi:4:003:1 0 13 = 55534253 6c000000 00000000 00
+ffff88970bdbacc0 1707563912 S Bo:4:003:2 -115 31 = 55534243 6d000000 00100000 80000a28 00000000 00000008 00000000 000000
+ffff88970bdbacc0 1707563956 C Bo:4:003:2 0 31 >
+ffff88969539c300 1707563971 S Bi:4:003:1 -115 4096 <
+ffff88969539c300 1707564066 C Bi:4:003:1 0 4096 = fab80010 8ed0bc00 b0b80000 8ed88ec0 fbbe007c bf0006b9 0002f3a4 ea210600
+ffff88970bdbacc0 1707564092 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707564113 C Bi:4:003:1 0 13 = 55534253 6d000000 00000000 00
+ffff88970bdbacc0 1707572782 S Bo:4:003:2 -115 31 = 55534243 6e000000 00000000 00000a35 00000000 00000000 00000000 000000
+ffff88970bdbacc0 1707572809 C Bo:4:003:2 0 31 >
+ffff88970bdbacc0 1707572819 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707573001 C Bi:4:003:1 0 13 = 55534253 6e000000 00000000 00
+ffff88970bdbacc0 1707573085 S Bo:4:003:2 -115 31 = 55534243 6f000000 00400000 80000a28 00000008 00000020 00000000 000000
+ffff88970bdbacc0 1707573099 C Bo:4:003:2 0 31 >
+ffff88970bdba480 1707573105 S Bi:4:003:1 -115 16384 <
+ffff88970bdba480 1707573231 C Bi:4:003:1 0 16384 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707573238 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707573270 C Bi:4:003:1 0 13 = 55534253 6f000000 00000000 00
+ffff88970bdbacc0 1707573347 S Bo:4:003:2 -115 31 = 55534243 70000000 00800000 80000a28 00000008 20000040 00000000 000000
+ffff88970bdbacc0 1707573363 C Bo:4:003:2 0 31 >
+ffff88970bdba480 1707573376 S Bi:4:003:1 -115 32768 <
+ffff88970bdba480 1707573549 C Bi:4:003:1 0 32768 = 0000c000 1000c000 2000c000 e05f0020 00000500 00000000 00000000 00203226
+ffff88970bdbacc0 1707573556 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707573588 C Bi:4:003:1 0 13 = 55534253 70000000 00000000 00
+ffff88970bdbacc0 1707573620 S Bo:4:003:2 -115 31 = 55534243 71000000 00000100 80000a28 00000008 60000080 00000000 000000
+ffff88970bdbacc0 1707573634 C Bo:4:003:2 0 31 >
+ffff88970bdba480 1707573645 S Bi:4:003:1 -115 65536 <
+ffff88970bdba480 1707573936 C Bi:4:003:1 0 65536 = 0000c002 1000c002 2000c002 1658040e 3f040400 00000000 00000000 030e1da3
+ffff88970bdbacc0 1707573943 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707573975 C Bi:4:003:1 0 13 = 55534253 71000000 00000000 00
+ffff88970bdbacc0 1707574005 S Bo:4:003:2 -115 31 = 55534243 72000000 00000200 80000a28 00000008 e0000100 00000000 000000
+ffff88970bdbacc0 1707574018 C Bo:4:003:2 0 31 >
+ffff88970bdba840 1707574024 S Bi:4:003:1 -115 131072 <
+ffff88970bdba840 1707574553 C Bi:4:003:1 0 131072 = 0000c006 1000c006 2000c006 995a5404 64040400 00000000 00000000 00009723
+ffff88970bdbacc0 1707574559 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707574590 C Bi:4:003:1 0 13 = 55534253 72000000 00000000 00
+ffff88970bdbacc0 1707574618 S Bo:4:003:2 -115 31 = 55534243 73000000 00000200 80000a28 00000009 e0000100 00000000 000000
+ffff88970bdbacc0 1707574634 C Bo:4:003:2 0 31 >
+ffff88970bdba840 1707574639 S Bi:4:003:1 -115 131072 <
+ffff88970bdba840 1707575432 C Bi:4:003:1 0 131072 = 3c800000 3c800100 3c800200 3c800300 3c800400 3c800c00 3c800d00 3c801800
+ffff88970bdbacc0 1707575442 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707575456 C Bi:4:003:1 0 13 = 55534253 73000000 00000000 00
+ffff88970bdbacc0 1707575481 S Bo:4:003:2 -115 31 = 55534243 74000000 00100000 80000a28 00000029 08000008 00000000 000000
+ffff88970bdbacc0 1707575495 C Bo:4:003:2 0 31 >
+ffff88970bdba840 1707575498 S Bi:4:003:1 -115 4096 <
+ffff88970bdba840 1707575603 C Bi:4:003:1 0 4096 = 00000000 00000000 77488252 77488252 77488252 00000000 00000000 00000000
+ffff88970bdbacc0 1707575613 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707575627 C Bi:4:003:1 0 13 = 55534253 74000000 00000000 00
+ffff88970bdbacc0 1707575679 S Bo:4:003:2 -115 31 = 55534243 75000000 00100000 80000a28 003a0408 00000008 00000000 000000
+ffff88970bdbacc0 1707575692 C Bo:4:003:2 0 31 >
+ffff88970bdba840 1707575695 S Bi:4:003:1 -115 4096 <
+ffff88970bdba840 1707595156 C Bi:4:003:1 0 4096 = c03b3998 00000004 00000000 00001000 00008000 00000001 0000d612 00000000
+ffff88970bdbacc0 1707595166 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707595180 C Bi:4:003:1 0 13 = 55534253 75000000 00000000 00
+ffff88970bdbacc0 1707598456 S Bo:4:003:2 -115 31 = 55534243 76000000 00000000 00000a35 00000000 00000000 00000000 000000
+ffff88970bdbacc0 1707598488 C Bo:4:003:2 0 31 >
+ffff88970bdbacc0 1707598491 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707607534 C Bi:4:003:1 0 13 = 55534253 76000000 00000000 00
+ffff88970bdbacc0 1707607602 S Bo:4:003:2 -115 31 = 55534243 77000000 00400000 80000a28 00000008 00000020 00000000 000000
+ffff88970bdbacc0 1707607618 C Bo:4:003:2 0 31 >
+ffff88970bdba840 1707607621 S Bi:4:003:1 -115 16384 <
+ffff88970bdba840 1707607781 C Bi:4:003:1 0 16384 = 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ffff88970bdbacc0 1707607789 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707607802 C Bi:4:003:1 0 13 = 55534253 77000000 00000000 00
+ffff88970bdbacc0 1707607861 S Bo:4:003:2 -115 31 = 55534243 78000000 00800000 80000a28 00000008 20000040 00000000 000000
+ffff88970bdbacc0 1707607875 C Bo:4:003:2 0 31 >
+ffff88970bdba840 1707607881 S Bi:4:003:1 -115 32768 <
+ffff88970bdba840 1707608093 C Bi:4:003:1 0 32768 = 0000c000 1000c000 2000c000 e05f0020 00000500 00000000 00000000 00203226
+ffff88970bdbacc0 1707608101 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707608114 C Bi:4:003:1 0 13 = 55534253 78000000 00000000 00
+ffff88970bdbacc0 1707608145 S Bo:4:003:2 -115 31 = 55534243 79000000 00000100 80000a28 00000008 60000080 00000000 000000
+ffff88970bdbacc0 1707608160 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707608165 S Bi:4:003:1 -115 65536 <
+ffff88968561ea80 1707608465 C Bi:4:003:1 0 65536 = 0000c002 1000c002 2000c002 1658040e 3f040400 00000000 00000000 030e1da3
+ffff88970bdbacc0 1707608470 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707608517 C Bi:4:003:1 0 13 = 55534253 79000000 00000000 00
+ffff88970bdbacc0 1707608548 S Bo:4:003:2 -115 31 = 55534243 7a000000 00000200 80000a28 00000008 e0000100 00000000 000000
+ffff88970bdbacc0 1707608561 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707608565 S Bi:4:003:1 -115 131072 <
+ffff88968561ea80 1707609089 C Bi:4:003:1 0 131072 = 0000c006 1000c006 2000c006 995a5404 64040400 00000000 00000000 00009723
+ffff88970bdbacc0 1707609094 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707609140 C Bi:4:003:1 0 13 = 55534253 7a000000 00000000 00
+ffff88970bdbacc0 1707609163 S Bo:4:003:2 -115 31 = 55534243 7b000000 00000200 80000a28 00000009 e0000100 00000000 000000
+ffff88970bdbacc0 1707609173 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707609177 S Bi:4:003:1 -115 131072 <
+ffff88968561ea80 1707610429 C Bi:4:003:1 0 131072 = 3c800000 3c800100 3c800200 3c800300 3c800400 3c800c00 3c800d00 3c801800
+ffff88970bdbacc0 1707610434 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707610467 C Bi:4:003:1 0 13 = 55534253 7b000000 00000000 00
+ffff88970bdbacc0 1707610484 S Bo:4:003:2 -115 31 = 55534243 7c000000 00100000 80000a28 00000029 08000008 00000000 000000
+ffff88970bdbacc0 1707610507 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707610511 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707610586 C Bi:4:003:1 0 4096 = 00000000 00000000 77488252 77488252 77488252 00000000 00000000 00000000
+ffff88970bdbacc0 1707610590 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707610626 C Bi:4:003:1 0 13 = 55534253 7c000000 00000000 00
+ffff88970bdbacc0 1707610661 S Bo:4:003:2 -115 31 = 55534243 7d000000 00100000 80000a28 003a0408 00000008 00000000 000000
+ffff88970bdbacc0 1707610672 C Bo:4:003:2 0 31 >
+ffff88968561ea80 1707610675 S Bi:4:003:1 -115 4096 <
+ffff88968561ea80 1707610760 C Bi:4:003:1 0 4096 = c03b3998 00000004 00000000 00001000 00008000 00000001 0000d612 00000000
+ffff88970bdbacc0 1707610764 S Bi:4:003:1 -115 13 <
+ffff88970bdbacc0 1707610800 C Bi:4:003:1 0 13 = 55534253 7d000000 00000000 00
+
+
+
+Regards,
+Cyril
