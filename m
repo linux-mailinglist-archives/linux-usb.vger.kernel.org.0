@@ -2,93 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81A6124826D
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Aug 2020 12:00:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D088248289
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Aug 2020 12:05:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726482AbgHRKAW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Aug 2020 06:00:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37294 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726145AbgHRKAU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Aug 2020 06:00:20 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8502C061389;
-        Tue, 18 Aug 2020 03:00:19 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id 74so9700573pfx.13;
-        Tue, 18 Aug 2020 03:00:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=OOenSclepS0MABruprKXkVZk2CmkqltRlMtrV3FqKk0=;
-        b=c3C8yFsQurPTAqZp5ro2DQU9RyvdO3D6JEMGO6BND1O8fmHvaNLwU0BXpPovPyleiI
-         +vXOUOIV5DPz3DG4vLwFMIsz6T+xgq2IwLiRgPhPy4d8v9wY4s62RXr9TvMn8LmGjuTS
-         f+SrIXoOW/F3EGG9vAeSK0TtVfVl2PQJIy/QrFu2HVHmqlOjlGQJXUOskcapulDRaI5O
-         a6gAL2n/0Avbc9kKN1Zn/lYdzgZufygWn6HNwT4RXxKrxX39/OepzkCw8LKuyhlTdtGm
-         XHC5by/+f1aRJKJaqbbQrRwpDZi5tLFx1hcZsiLUBqiS3xHFUykRSDW0dj7Axmyx3f+k
-         JXOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=OOenSclepS0MABruprKXkVZk2CmkqltRlMtrV3FqKk0=;
-        b=Kif4EUl0NjIj9coTGg6YFiGMuFXAp3jmp8fkgaWVYcXBMz4D75wgaq2XV7MOEOFSi7
-         4Lbly1msef+9u7fm00xxYe174PTQsCB7tNAX+S+0q3ITIE4pmJygDmB9Nme41mB3/o6p
-         +2YHjOR4Hbl1hf3BjQX5aRpjsh70BWtSERv1lxmpxuOuB66LHosbs46zIvEpkNWO2PjY
-         grzFQfolA8nk+PyShi0f4js3Ttw7rzSTUWQv4eyrXVYvi1Eyrg28jqMO2m/4XbSIHp8K
-         3VoOfJZ0iSTW7Ax2FeeN45kIkOqszWrHmWXWKSNOOrWWG7KNEoiq9Xvwrd6l9aesQYZe
-         15gg==
-X-Gm-Message-State: AOAM533A/B1B/5w6KOrDb5FWwH3LhkiZg7FGzv72P1xNzuQ52uiPKCrW
-        kCtiEwWKea/DyfvG/MdADw==
-X-Google-Smtp-Source: ABdhPJw8bM1oYpBq691mtUzOLfn8tTF4UwM50ybp3c0lFYLllJw5jJLjkMd01hKUBOnsJZw5Rm1Xig==
-X-Received: by 2002:a62:1ad0:: with SMTP id a199mr15047482pfa.56.1597744818002;
-        Tue, 18 Aug 2020 03:00:18 -0700 (PDT)
-Received: from PWN ([221.124.243.27])
-        by smtp.gmail.com with ESMTPSA id j5sm24157839pfg.80.2020.08.18.03.00.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Aug 2020 03:00:17 -0700 (PDT)
-Date:   Tue, 18 Aug 2020 06:00:08 -0400
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Jiri Kosina <jikos@kernel.org>
-Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        syzkaller-bugs@googlegroups.com,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [Linux-kernel-mentees] [PATCH v2 RESEND] usbhid: Fix
- slab-out-of-bounds write in hiddev_ioctl_usage()
-Message-ID: <20200818100008.GA2135@PWN>
-References: <20200718231218.170730-1-yepeilin.cs@gmail.com>
- <20200729113712.8097-1-yepeilin.cs@gmail.com>
- <nycvar.YFH.7.76.2008171221290.27422@cbobk.fhfr.pm>
+        id S1726366AbgHRKF4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Aug 2020 06:05:56 -0400
+Received: from mail-eopbgr50077.outbound.protection.outlook.com ([40.107.5.77]:16417
+        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726043AbgHRKFz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 18 Aug 2020 06:05:55 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iQBBMAxSoZTF7y35doZNcNeUHrQ0E462CeS4RRpaxsN2u1xJ27F/uZhdCK5uvP2IRA01DKhy+d73IfNJSC96K6kY7BO73PE4I0BQfN4Y+bGQhnMfQTgPvo/je7zXf6mbOFihKtKXajzoIlfTtvViN02PJED2CYxcyC0cQcy0Jsw2ijkfpegiHqAbEJcUWGfismxyAh2iHSzqa/kTQjQCrSOlC+lSKvalMxiYAoUEh7haSmn6CkhuQpMJBsQ4Nmje8hdJUJ6LUMaz4uJP+s5vjLLyHdzn8McqjXROov5/7W+ayDm0Svgfs2//QB0u77dN8Vg/Ue89zDwSlwYf8+tzEg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FXxWDy2s9rnZqTivYlVWbphROn9SNoeTjZp26k8lTRo=;
+ b=aL28J+Nh8fz3TzQNc9k4bjQcPMgDo5vHzx1w/RT/4ZgBgr7pal9tvCe8WwB+vBhja/SECz3Zf967YXdRjdSzy70uP2MPmXla29pMHVhswfEAyRvO1DLp8I2TJsV2USBBA3qryAJ5e6wk75qnbT+mJ43ATeqxvUKFVLEZidG6M8QLBCMq0IMPCcvtSDUPSV5iPq4DzuiNLwQn1rH51pyh2o9N8ufNNTNCl4A5hotZtekgSv05VHFvyAbjFrPuL97SzP8tKwQUiT3q1Y3n4FIeoa6QioZfwLt0+Zpc7M+GbvSju9ZzmB65Pq8S0En4IG7EsJW0NB7Aw59fpIA2mFSvQQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FXxWDy2s9rnZqTivYlVWbphROn9SNoeTjZp26k8lTRo=;
+ b=syY6rB4bCC/xTrJ79bcS9H8ytQQk/Ofej6JsFaMREUocD9BPRI6FRKJzULlIHIUUuEzEPpDLkcVv+5SzPSMhQcyJswugGDm2yNWjTRPMft+0AaA5+OlYGveHxZGdMBXl6hA+/AZJh49eXMWOedy3/MA5nZZt6DjSdGdACd/feXI=
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
+ by AM6PR0402MB3429.eurprd04.prod.outlook.com (2603:10a6:209:6::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3283.20; Tue, 18 Aug
+ 2020 10:05:51 +0000
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1023:be8d:40c:efe1]) by AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1023:be8d:40c:efe1%3]) with mapi id 15.20.3283.028; Tue, 18 Aug 2020
+ 10:05:51 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     "balbi@kernel.org" <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>
+Subject: RE: [PATCH v2 6/6] Revert "usb: udc: allow adding and removing the
+ same gadget device"
+Thread-Topic: [PATCH v2 6/6] Revert "usb: udc: allow adding and removing the
+ same gadget device"
+Thread-Index: AQHWbr2o/fJ02AbWoEyqinkW1JML5ak9p6qAgAAIBWA=
+Date:   Tue, 18 Aug 2020 10:05:51 +0000
+Message-ID: <AM7PR04MB7157182367D7EEE2BDAD53318B5C0@AM7PR04MB7157.eurprd04.prod.outlook.com>
+References: <20200810022510.6516-1-peter.chen@nxp.com>
+ <20200810022510.6516-7-peter.chen@nxp.com> <20200818093305.GA34785@kroah.com>
+In-Reply-To: <20200818093305.GA34785@kroah.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: linuxfoundation.org; dkim=none (message not signed)
+ header.d=none;linuxfoundation.org; dmarc=none action=none
+ header.from=nxp.com;
+x-originating-ip: [218.82.62.103]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 8eddb782-5538-442c-8514-08d8435e49c8
+x-ms-traffictypediagnostic: AM6PR0402MB3429:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM6PR0402MB34296F12720F14C6973D61BB8B5C0@AM6PR0402MB3429.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6430;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: kpzhakZ7dPJNBHoYJQw7RRcqmOw1ocCCR6fG4Hav7bvSapTuJ5GdLb6IWMX3gexUl7MQ37K0AxTlpavuYzcqRxeJxOO/4PFNdjuufLHO8BK7NEfNuZgRYyJw4dCZhAyCVIecx37i8z8w6FFm6G88YuhX39oeAGKtrFKpqKeNdE4qYu6miXZgb5pxbx/o904Fgbhog8TnpHu0vgrbDLVPw8fOyuzVD3pmP/CQzUoZ5hvUnM3JhqTsDH1k6hAK5sTHr0tD7qIJr2gqkFL5hW9CqxdbocyVEcDCQObJkvmQanMhCK7tBmm1/3xr39s7JXe3
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(39860400002)(346002)(366004)(376002)(136003)(55016002)(71200400001)(4326008)(54906003)(6916009)(478600001)(66946007)(8936002)(8676002)(9686003)(5660300002)(316002)(66556008)(7696005)(66476007)(66446008)(86362001)(64756008)(33656002)(4744005)(44832011)(186003)(6506007)(76116006)(52536014)(26005)(2906002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: rGqYq7hsB/U+cQJ/8XDeD05dc2+9HbbdJuxGI9SbtEkXKVoIk87UvW3ZNC0KLd9+IhZ87jT2TG10LeIreyzfqdJq1RNg/qcgaJD4cYUE74FsnbB4TW0Lu77uQ6COIZtWN6KvIQXHmlXNRwUj6ggM0L8tJ3twM2+8KRiEASp7P+kiYTGERZ8NRpqJUm2IzVH9r3Mq2uLWR9tU/LKqZFQubEOywF49yucVHjIXJZ2md+DiE/T0rZxREN2AommPJ+wCoSzYfyZsUc1DuKWG0Khq4wVMLjIk6RRwHa7RORV+69WUoVe2c/XqZ9NLG92XLlaAITsQhnkI5AKqKNshmlwYtNckY+IxsQvKBqPV+Ca88A0H6DB/DqqoAOzYaErqWJMU/nNPwmTZ53jcINgIQrK+Fw2LgysG0TFEERyf7FoAGOFxY9sE2a1J4Ac0SjFMH6TFCwkZUpfj53eMx33Zprn/Ahh/X6GIbjdSA4IehuN4UZISQtHTQ6DE2Dhc9Kh+EsnFnEUVcXGAThd7l8jp3hUoXwxn0o1l1IUig5xopPzkXWiB90byvXuToS4m7zR0Yv+YPDyOtM0qroBH5yj2BoBbG4LNFyud/JOpwQYU3tjxbtKyboi/V6m5cMWWfGHorP7HsgkrnCFN87NHArcU4cZVTQ==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <nycvar.YFH.7.76.2008171221290.27422@cbobk.fhfr.pm>
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8eddb782-5538-442c-8514-08d8435e49c8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Aug 2020 10:05:51.6361
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: sX6yf4pCefFHDvybOq2r/jDe6uNqoF77tW1weZtxCFVm2LExmwG3rsx1DXTDtxXtYjR/p03oEG3WjIkWB5CrFA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR0402MB3429
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 17, 2020 at 12:21:41PM +0200, Jiri Kosina wrote:
-> On Wed, 29 Jul 2020, Peilin Ye wrote:
-> 
-> > `uref->usage_index` is not always being properly checked, causing
-> > hiddev_ioctl_usage() to go out of bounds under some cases. Fix it.
-> > 
-> > Reported-by: syzbot+34ee1b45d88571c2fa8b@syzkaller.appspotmail.com
-> > Link: https://syzkaller.appspot.com/bug?id=f2aebe90b8c56806b050a20b36f51ed6acabe802
-> > Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
-> > Signed-off-by: Peilin Ye <yepeilin.cs@gmail.com>
-> > ---
-> > Change in v2:
-> >     - Add the same check for the `HIDIOCGUSAGE` case. (Suggested by
-> >       Dan Carpenter <dan.carpenter@oracle.com>)
-> 
-> Applied, thanks.
+=20
+> >
+> > diff --git a/drivers/usb/gadget/udc/core.c
+> > b/drivers/usb/gadget/udc/core.c index 473e74088b1f..43351b0af569
+> > 100644
+> > --- a/drivers/usb/gadget/udc/core.c
+> > +++ b/drivers/usb/gadget/udc/core.c
+> > @@ -1386,7 +1386,6 @@ void usb_del_gadget_udc(struct usb_gadget
+> > *gadget)  {
+> >  	usb_del_gadget(gadget);
+> >  	usb_put_gadget(gadget);
+> > -	memset(&gadget->dev, 0x00, sizeof(gadget->dev));
+>=20
+> Shouldn't you do this patch earlier in the series, as the
+> usb_put_gadget() call could have freed the memory that is being cleared h=
+ere?
+>=20
 
-Thank you for reviewing the patch!
+If I did it earlier, it would cause dwc3 break if people do 'git bisect', d=
+wc3 issue is
+fixed at patch 5.
 
-Peilin Ye
+Peter
+
+> Otherwise, this series looks good, thanks for doing it.
+>=20
+> greg k-h
