@@ -2,82 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54A69248B90
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Aug 2020 18:27:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A241248C3C
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Aug 2020 18:59:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726918AbgHRQ1J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Aug 2020 12:27:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42288 "EHLO
+        id S1728475AbgHRQ7V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Aug 2020 12:59:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726676AbgHRQ0o (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Aug 2020 12:26:44 -0400
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A35EC061342
-        for <linux-usb@vger.kernel.org>; Tue, 18 Aug 2020 09:26:44 -0700 (PDT)
-Received: by mail-io1-xd43.google.com with SMTP id t15so21843309iob.3
-        for <linux-usb@vger.kernel.org>; Tue, 18 Aug 2020 09:26:44 -0700 (PDT)
+        with ESMTP id S1728622AbgHRQ7E (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Aug 2020 12:59:04 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB77C061389
+        for <linux-usb@vger.kernel.org>; Tue, 18 Aug 2020 09:59:00 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id e196so22797839ybh.6
+        for <linux-usb@vger.kernel.org>; Tue, 18 Aug 2020 09:59:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=o/YfmjeNFqhb5pexfCcE7Z8ungwl2bHyC5O/sNv2uS4=;
-        b=ENux4DIr1qVhk9LgoudnoBlQ6qxqA9L4ARkSCq1xG6RCL9VLbg713HoknsZlmgIgLd
-         +voFevbm4tc5K7OC7Du/6uJDNsnAITliqECuykT248YcOz2baBNc/m8y0f8dREyFHx2Z
-         mg4dDVatPi2KIhmz//XJDVl2G4kSO32yh4Jaxbfzn9WxzaJhNV6zhDr4taSbitVdFuqx
-         4SyVM65lSFJ6sG1oUAIJv6p2mmN0lsn8A6N/C1SFYv+f6nxiwoIilv00rLcGmihjtnLD
-         2E06FKj/5D6di7h8EYq32DDTKa6X8EfBmVemhbWkzHu93LzrTt4KbkBrnMp6mfwTIQNI
-         Wr2w==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=o9JIR5P3YJ8yGWm9bzlQRfs81LouvpWibUbieKx2QVI=;
+        b=erPbZV0GF/QmzAGkM2ZLKrh5OqgkEH9MKapp+ZOn0UurUQueV4xibTy9lqklSs2SqG
+         L4Hb/6e0hAxKCYhDT4IyjvXGtQdI1RpK9GSzSAoBV7yCC5GsJFYHBfO++TOed8V0/jd0
+         jW9MnKhEdRQ2ue4Qy/edAo7ttGw4boC8dUKZXXQqv0CWdZ4rV+uweEAQMSpv52JXN4UX
+         fhp/dkLnhgskJr2wLN6eZifKTrFkrl9DYqFBn/qdqoIh2/pZOOQm7ewha2EpTaI9xxvd
+         yJlwgYbNik+t+8UDxaO/veRQ6qXb5dre1CWy3LSK/b6rKigz6fnCtA25qP9meqtWqpFm
+         CCpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=o/YfmjeNFqhb5pexfCcE7Z8ungwl2bHyC5O/sNv2uS4=;
-        b=E8UXb8eHPblaqZODsHktpeXrPMv+LQ/RniaA8uUn6SpEvXAsHiFU++Lek6dtWwXnZZ
-         TBtbOhfeqa2D1jRpyxstlwETZwdbxb+Gtks/Demwm8H2g5NeyMGWItg0seRQP5hzRr5o
-         4N5ztfisAtUTGcdNIwhCJncF2ScnNNz9hir5vb20LUmSJjVvKa8Eh4C4Pv+r/x7CNhUN
-         2YQk3ETMITwE80Ju2n/phe8PypQwrw+/Kia9GwYX83DvaVYK9Lw+GfFuHh8i+I/06/WU
-         BZZcjGi1RttgP3OlXJ8n7KO4V4tZI5qPYMbbZSbxgLAZr8NOat7P3d8g3xRVK4ZFgDqW
-         2LPA==
-X-Gm-Message-State: AOAM530MSgM4aBToqJDexJujiaylmTlUVZqmtOAikWmfpUUrDshw+zEi
-        m97jGmNUgoc1bt2pPZZxHhNs6pi4CiQqIlvAiA01Ig==
-X-Google-Smtp-Source: ABdhPJyjMRp1+G3XgKHNtowgofhG5dKyMZibePCrzqviOcqezdE8vORnHuFn5Kwfi9QaEmUtlIYfeGezZfAbf1Zze3I=
-X-Received: by 2002:a5d:80cb:: with SMTP id h11mr16696469ior.189.1597768003729;
- Tue, 18 Aug 2020 09:26:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200806161643.1694266-1-lorenzo@google.com> <CAHo-Ooxh7OWkkGP58YPE-0aeQ5wn6juGb0rfgMmuHC53quJaZA@mail.gmail.com>
- <CAHo-Oow8sZ8QaX3HNuFoJFmF01XximkOwbmxn6iWQF+a9vPkXw@mail.gmail.com>
-In-Reply-To: <CAHo-Oow8sZ8QaX3HNuFoJFmF01XximkOwbmxn6iWQF+a9vPkXw@mail.gmail.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=o9JIR5P3YJ8yGWm9bzlQRfs81LouvpWibUbieKx2QVI=;
+        b=NalQqg2WCidd8CxmbkRum4Iqx56HsmK5s80mTF+AnnsxL5+9xaZ6WHeRCwwSR3VenJ
+         KQE1DgoI7B8Y+s5mnpI0kPdzvsJGgKi1Ey0UVc1bcKzD9xyC8T5CEE+OAtS2SUZqgc8h
+         WpYGTpEXvIV6eJB8bJMCASXo5cnqlVZ7G3inPmPotwGNRO8uzjf7uLAKUnnNWw0r4yu9
+         jdgjC0mlD37/dzP/O9Sd6hbNI8ufXr6DLWF1cKvaYPlTTbrWvGJ0+BBMw+T/E7C8C5uy
+         PqDoaaFMCdy9y058opYyzevpxvTpDutOZQcIiFmt5MKJ4ba1zghoVB1o5IwRBF56LQ2M
+         dXYA==
+X-Gm-Message-State: AOAM533NwHfnZTj7qbzbJnOESQ64ABfxpdlJWL+83xxfSEp58X/37EiZ
+        q766CggNppMWcauYTT5kQHuzI1e8Z+U647I4lDbVMkRwGpF75BaK7amtt+m1lBoLgtOXwrJUoTM
+        3H/7ixjnwZhwyXYzWtgzFT9qGE8sxc6toL35USRkajde5+Y2eNfO0ACexeidnXau2oOin
+X-Google-Smtp-Source: ABdhPJyfitNCesM5cOHJkJpKWrV6GNClGCzG9qsfZ1py5ry9HqzrpEZw+xNGOwERl1NSKRRGq38TK1+AmXlU
+X-Received: by 2002:a25:5755:: with SMTP id l82mr30677619ybb.175.1597769939743;
+ Tue, 18 Aug 2020 09:58:59 -0700 (PDT)
+Date:   Wed, 19 Aug 2020 01:58:46 +0900
+Message-Id: <20200818165848.4117493-1-lorenzo@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.28.0.220.ged08abb693-goog
+Subject: [PATCH v2 1/3] usb: gadget: f_ncm: fix ncm_bitrate for SuperSpeed and above.
 From:   Lorenzo Colitti <lorenzo@google.com>
-Date:   Wed, 19 Aug 2020 01:26:32 +0900
-Message-ID: <CAKD1Yr05HwJa3PXj8kjMUa_6t4yjcfYNeqgkFsczWVmRPybdjg@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: u_ether: enable qmult on SuperSpeed Plus as well
-To:     =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <zenczykowski@gmail.com>
-Cc:     linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>
+To:     linux-usb@vger.kernel.org
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        zenczykowski@gmail.com, Lorenzo Colitti <lorenzo@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 7, 2020 at 2:41 AM Maciej =C5=BBenczykowski
-<zenczykowski@gmail.com> wrote:
-> btw. it looks like irq throttling in the same file:
->
-> @@ -598,9 +599,10 @@ static netdev_tx_t eth_start_xmit(struct sk_buff *sk=
-b,
-> -       /* throttle highspeed IRQ rate back slightly */
-> +       /* throttle high/super speed IRQ rate back slightly */
->         if (gadget_is_dualspeed(dev->gadget))
-> -               req->no_interrupt =3D (dev->gadget->speed =3D=3D USB_SPEE=
-D_HIGH)
-> +               req->no_interrupt =3D (dev->gadget->speed =3D=3D USB_SPEE=
-D_HIGH ||
-> +                                    dev->gadget->speed =3D=3D USB_SPEED_=
-SUPER)
->
-> should also be fixed to be >=3D SUPER and not =3D=3D.
+Currently, SuperSpeed NCM gadgets report a speed of 851 Mbps
+in USB_CDC_NOTIFY_SPEED_CHANGE. But the calculation appears to
+assume 16 packets per microframe, and USB 3 and above no longer
+use microframes.
 
-That code was removed by fd9afd3cbe40 ("usb: gadget: u_ether: remove
-interrupt throttling").
+Maximum speed is actually much higher. On a direct connection,
+theoretical throughput is about 3.86 Gbps for gen1x1 and
+9.35 Gbps for gen2x1, and I have seen gadget->host speeds
+>2 Gbps for gen1x1 and >4 Gbps for gen2x1.
+
+Unfortunately the ConnectionSpeedChange defined in the CDC spec
+only uses 32-bit values, so we can't report accurate numbers for
+10Gbps and above. So always report a speed of 4 Gbps, which is
+close enough to the technical maximum of a 5 Gbps link.
+
+This results in:
+
+[96033.958723] cdc_ncm 8-2:1.0 enx4643f5db6f40: renamed from usb0
+[96033.997136] cdc_ncm 8-2:1.0 enx4643f5db6f40: 4000 mbit/s downlink 4000 mbit/s uplink
+
+Fixes: 1650113888fe ("usb: gadget: f_ncm: add SuperSpeed descriptors for CDC NCM")
+Signed-off-by: Lorenzo Colitti <lorenzo@google.com>
+---
+ drivers/usb/gadget/function/f_ncm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/function/f_ncm.c
+index 1d900081b1..0c073df225 100644
+--- a/drivers/usb/gadget/function/f_ncm.c
++++ b/drivers/usb/gadget/function/f_ncm.c
+@@ -85,8 +85,8 @@ static inline struct f_ncm *func_to_ncm(struct usb_function *f)
+ /* peak (theoretical) bulk transfer rate in bits-per-second */
+ static inline unsigned ncm_bitrate(struct usb_gadget *g)
+ {
+-	if (gadget_is_superspeed(g) && g->speed == USB_SPEED_SUPER)
+-		return 13 * 1024 * 8 * 1000 * 8;
++	if (gadget_is_superspeed(g) && g->speed >= USB_SPEED_SUPER)
++		return 4000000000;
+ 	else if (gadget_is_dualspeed(g) && g->speed == USB_SPEED_HIGH)
+ 		return 13 * 512 * 8 * 1000 * 8;
+ 	else
+-- 
+2.28.0.220.ged08abb693-goog
+
