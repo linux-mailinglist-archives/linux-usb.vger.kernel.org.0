@@ -2,113 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C95924828D
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Aug 2020 12:07:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EB82248363
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Aug 2020 12:55:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726391AbgHRKHh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Aug 2020 06:07:37 -0400
-Received: from mail-db8eur05on2044.outbound.protection.outlook.com ([40.107.20.44]:44704
-        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726043AbgHRKHg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 18 Aug 2020 06:07:36 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N94FYzT4tUYquECEqZ1VBQ6KfQJoFzFhqyihjLhmcJyFdzCrMT+aBWN9Q4lSvUdG7E51IIu5hE16srJUZQYNjQfQTZwmokRdK0wbcw5kz8h1hobyJ84CUoVYialNXoP08Nd81ZoPLCTn183IXFXVuUpK9dWd49c8LEGka1oevsxDTBOKjNRfqL1q+azUZutK7/3B1vkSS0fPWRctRuQrwsr1p2CnY2nfYaKUfpzXfLzP1CZfqK+psK5eBP13wIudGDXU7NpkuKwcDJeBBsE+R5VhPosRSEy54kSJ63mZ6H2cBAMPnPY9bpbyXY26saX28vPfhtzcCH7a5HUzAJV7lg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uVy+QdknpGjtbqLhPlnVH63NJwUaKLmrY7o0WnRdk2s=;
- b=CnDRuu5omWlpYGgewqZfKbLtN98e3PJBqi/9aJwo8We0sGB4uBHAp1tE3XlCc6p/aycGmsMhpmNn4bV18ewMIq//uHB/rnKRRVSB9LOBfvrvJnRgLJTklN6dplRMbsnkot9eMf856QpdzoF5HIZv2JUtrJPuytARg2Cg8LT3kGsmgFaHBdO7faSVe3GTbBJrIZPNG2DWbMZQOI5xCuhfayOxszZr7Wm5qx9aZQOHhGyuutnLJOnThMneHn61Twpf1+pXASlkadQo+WU9f3K8VHCQ8tFA3PjkofO49W0uErgDHfefhtp4kEXataH5ks74JrhZakGljldVW40Ln9cNMg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uVy+QdknpGjtbqLhPlnVH63NJwUaKLmrY7o0WnRdk2s=;
- b=aYZ5adsAS3qqE0ZPiTerEudomYORk9r48SLSJCn3aWTSPaPdWbQ2u6TYKVMKAQnD0rrmY4hPHfxTsa3XmXCkxxn5pkhlXTsBnsbgEIorXL9FZbw99tEqRDBdMY+7JQmEZ8WVW6Nkq2cFl+w06gvjgb2/QXT3V6aNzwd7uRqvO+k=
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
- by AM6PR04MB4534.eurprd04.prod.outlook.com (2603:10a6:20b:24::28) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3283.20; Tue, 18 Aug
- 2020 10:07:33 +0000
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1023:be8d:40c:efe1]) by AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1023:be8d:40c:efe1%3]) with mapi id 15.20.3283.028; Tue, 18 Aug 2020
- 10:07:33 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "balbi@kernel.org" <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>
-Subject: RE: [PATCH v2 0/6] USB: UDC: Fix memory leaks by expanding the API
-Thread-Topic: [PATCH v2 0/6] USB: UDC: Fix memory leaks by expanding the API
-Thread-Index: AQHWbr2bA/9hRw8p2kOY3rr3tzW5a6k9p76AgAAJMYA=
-Date:   Tue, 18 Aug 2020 10:07:33 +0000
-Message-ID: <AM7PR04MB71574E3EEA0AEBE5348BEEA58B5C0@AM7PR04MB7157.eurprd04.prod.outlook.com>
-References: <20200810022510.6516-1-peter.chen@nxp.com>
- <20200818093321.GB34785@kroah.com>
-In-Reply-To: <20200818093321.GB34785@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: linuxfoundation.org; dkim=none (message not signed)
- header.d=none;linuxfoundation.org; dmarc=none action=none
- header.from=nxp.com;
-x-originating-ip: [218.82.62.103]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 9a69c126-42ef-4934-62cd-08d8435e8676
-x-ms-traffictypediagnostic: AM6PR04MB4534:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM6PR04MB45349F587B762231E3BE46D88B5C0@AM6PR04MB4534.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5236;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: +kj7vV1Yy4o/1gw6O47ihqWgMJCkoQg7ffcSJ9Xwk/sHAKKucKX0b2Jp3Hb89NOePWHrpTs3lHnGK+1UPZyBT4xr2aqSuNgvKEZcAE2/MswTJ62HoQk5VhA5RyhjMY5TG1KL5PlOv3XPJURiE6bUrIiZec2pYRPYIX7NlplbBDsxIB6zMI4uoqWGYYcs68m64aGRhdBDRVyULmLuTWBQ+EiV3OEh0xnRe1GkAZNUCAKznOAKyVLlAMclwjQOch0yv6I8AMyWiyVEkzE0819GsS36m3wbq++CvELk8Q7Cl+LujN7ygAeNaiJPtc1NnRdnECQwaO4pmmPqPh0nr6qeLMk8s9iSNJzZ96Oq06k7xZFIXfzeyPa2UB0BVmhzO+GjirsXhTdlF2tWKDd2kkg3Pg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(396003)(376002)(39860400002)(366004)(136003)(4744005)(6506007)(186003)(9686003)(2906002)(7696005)(55016002)(6916009)(33656002)(52536014)(8676002)(478600001)(966005)(316002)(26005)(66556008)(66446008)(66476007)(44832011)(64756008)(8936002)(71200400001)(66946007)(4326008)(86362001)(76116006)(5660300002)(54906003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: st8YDQ/Yki6JZRa688Vm/Tv1NY0SswAdWGiuoIhRaSyKn9PMeMUmDRpki2Z0SHJDRYYsmUP9nWFRZLKplVh4wCbJOlqoju6Xzh/So9t+aCidUYuWBVpe5isL7cNpcfmEIUrfiSQsdDQJo6wniEKA2hI8YKiVXHT76ip48hBHd70JcIxPhC+0gxv1BuiW7xAH6Ovwx/PVPCxdGdW+M2KVbR/GA+tfk+QAsmSEnuS0DkDGivYClHSuMgXoxWQ0jv+/UXtoraeyPUXNPHvIGBk4g4nOqtzS1uQTuzLNYLQoW11ulGZtorLZooEgHbVLQsLUXOs/69X/RKFYCXkLE3DIL0sJGqGC+6EoJSx339y82dwTMihLRFtQ7OAn7BavrxsnCuXbSWs32s+22r0/cVwb3e4nRkwDtkcdSnSEDX3cEvyxNVwtylZCVUWeQYQdrGsPoLsD8ENg6+43J+qgljuI3wmjtWwpJWIx3zWVuo2BYwGoVr1m2nLCagvxiBOwa9/klCR2Flhk8dVEqyKTA4Fj2gvP5PHrKO3byL2+zHJ9SwXGBLoiyDg9Kd7GB/tzSUEs/ZrXTbC3AfrSsi2+CgVAzxlSgn/t4KHKQw3ktEl139xVXEmFXGstT2JPVZN80Nq78NAJpIT850sVxm4z4JDTCg==
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1726709AbgHRKzB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Aug 2020 06:55:01 -0400
+Received: from esa2.mentor.iphmx.com ([68.232.141.98]:2028 "EHLO
+        esa2.mentor.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726633AbgHRKy7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Aug 2020 06:54:59 -0400
+IronPort-SDR: WlyE8QrVPyGOa90CAF0uAqRrsVrjRuh/1EAcRrGW3vpckos3KO6sDmrVqJkLHxay90J6KFYv0k
+ fNmMFDqBc7+L+DWEvWC78a1ubUp+kol8mlpoe1KdK7LYC4cjcOQPadzBBOJdCle8zagNSvSMqP
+ cjP0/ARzBZpfGqCqFewwDgRjiPx1kOpWt6lh8Y/v/84RlBTRlXbcFAMEFc7LGGWarnrU4wGXNu
+ c+9Xwcz4TJY8Ijenaq3aT4EEwi18+gfZTjCp2U9FV/JDo4Krvqx6yTuFwoZPMEVj2UPWGHvEXp
+ YY8=
+X-IronPort-AV: E=Sophos;i="5.76,327,1592899200"; 
+   d="scan'208";a="52035206"
+Received: from orw-gwy-02-in.mentorg.com ([192.94.38.167])
+  by esa2.mentor.iphmx.com with ESMTP; 18 Aug 2020 02:54:57 -0800
+IronPort-SDR: l6vG8IyywSfuGOUGMYKwnlSW55Izkbe8QU9xRXxWDhtrwhYh+vp6bo/gtoZ0S8YTOkXPPlESvD
+ H1tLMeBNgHyyYbGTX+XKVXC3yZ68tUeDl1Pj2cOd5Ps4KDfU/38v01HbPF8nLzROeZihWyeLHG
+ ocNLR8tw9hxU/QUduVhqaTXdyeBBBHFWNXqfCSpdllgjfmdo7fLpplJITtWrhOhsP04j2ImFt3
+ 4V/Hy+5RVt0IBikNv/FAqwBBDNRTt13njv62t6SjMPYEfvELZfr5ZEPFGNPYFhqWwDku0rpYSg
+ XEc=
+From:   Jim Baxter <jim_baxter@mentor.com>
+Subject: Re: PROBLEM: Long Workqueue delays.
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     Greg KH <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <linux-usb@vger.kernel.org>,
+        "Resch Carsten (CM/ESO6)" <Carsten.Resch@de.bosch.com>,
+        "Rosca, Eugeniu (ADITG/ESB)" <erosca@de.adit-jv.com>
+References: <71aafe68-7fe0-6b77-ea8e-83edd3f16c8d@mentor.com>
+ <20200817115744.GA3985908@kroah.com>
+ <57a7841d-86e3-b6df-1488-a252a68a9ee0@mentor.com>
+ <20200817184753.GA120209@rowland.harvard.edu>
+Message-ID: <1838f2c3-7915-9e5b-3112-6b082b945410@mentor.com>
+Date:   Tue, 18 Aug 2020 11:54:51 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9a69c126-42ef-4934-62cd-08d8435e8676
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Aug 2020 10:07:33.3901
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: XHMaI41LN26EmpOjaRQn9EGw7o2HuErAffstruAQPebOD9Et0hDKeOQTkOx92rJgzNCe93JtWzmcBck5a7RiBw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB4534
+In-Reply-To: <20200817184753.GA120209@rowland.harvard.edu>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [137.202.0.90]
+X-ClientProxiedBy: SVR-IES-MBX-08.mgc.mentorg.com (139.181.222.8) To
+ SVR-IES-MBX-03.mgc.mentorg.com (139.181.222.3)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-=20
-> On Mon, Aug 10, 2020 at 10:25:04AM +0800, Peter Chen wrote:
-> > This series expands the UDC API to fix some long-standing memory leaks
-> > in the net2280 and net2272 drivers. And with expanding APIs, it could
-> > manage cdns3 and dwc3 gadget device memory better without the hacks at
-> > UDC core.
-> >
-> > Alan Stern (3):
-> >   USB: UDC: Expand device model API interface
-> >   USB: UDC: net2280: Fix memory leaks
-> >   USB: UDC: net2272: Fix memory leaks
-> >
-> > Peter Chen (3):
-> >   usb: cdns3: gadget: fix possible memory leak
-> >   usb: dwc3: allocate gadget structure dynamically
-> >   Revert "usb: udc: allow adding and removing the same gadget device"
-> >
->=20
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+On 17/08/2020 19:47, Alan Stern wrote:
+> 
+> Unplugging a R/W USB drive without unmounting it first is a great way to 
+> corrupt the data.
+> 
+Thank you, post development we will only mount the USB stick as R/O.
 
-Thanks, Greg. The latest revision is at:
-https://www.spinics.net/lists/linux-usb/msg199291.html
+>> Using perf Iidentified the hub_events workqueue was spending a lot of time in
+>> invalidate_partition(), I have included a cut down the captured data from perf in
+>> [2] which shows the additional functions where the kworker spends most of its time.
+> 
+> invalidate_partition() is part of the block layer, not part of USB.  It 
+> gets called whenever a drive is removed from the system, no matter what 
+> type of drive it is.  You should ask the people involved in that 
+> subsystem why it takes so long.
+> 
 
-Peter
+I included the linux-mm list but missed the filesystem, I will ask the question
+to the linux-fsdevel too.
+
+>> I realise that not unmounting the USB stick is not ideal, though I wonder what 
+>> additional work is done when unplugging the USB stick compared to unmounting it.
+> 
+> Unmounting a drive flushes all the dirty buffers from memory back to the 
+> drive.  Obviously that can't be done if the drive is unplugged first.
+> 
+> As far as the USB subsystem is concerned, exactly the same amount of 
+> work is done during disconnect regardless of whether or not the drive is 
+> mounted.  (In fact, the USB subsystem doesn't even know whether a drive 
+> is mounted; that concept is part of the block and filesystem layers.)
+>>> I guess it may be waiting for a time-out during the operation without the unmount.
+> 
+> That seems very unlikely.  When a USB device gets unplugged the system 
+> realizes it.  Any I/O meant for that device is immediately cancelled; 
+> there are no timeouts.
+> 
+> (Okay, not strictly true; there is a fraction-of-a-second timeout during 
+> which the system waits to see whether the disconnect was permanent or 
+> just a temporary glitch.  But you're talking about 6-second long 
+> delays.)
+> 
+
+Thank you, no I don't expect that to cause the issue and it is very likely the delay
+is in another subsystem.
+
+Regards,
+Jim Baxter
+
+
+> Alan Stern
+> 
