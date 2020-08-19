@@ -2,81 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 575942492E3
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Aug 2020 04:27:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12ED4249311
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Aug 2020 04:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726923AbgHSC1w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Aug 2020 22:27:52 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:56132 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726372AbgHSC1v (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Aug 2020 22:27:51 -0400
-Received: from mailhost.synopsys.com (sv1-mailhost2.synopsys.com [10.205.2.132])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 0A7CC401AA;
-        Wed, 19 Aug 2020 02:27:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1597804070; bh=QZEExHTjul/kr+pWOJMKovdVXYqInJHMRRAuQIgoA1I=;
-        h=Date:From:Subject:To:Cc:From;
-        b=cW5l80mWndzzq6Uvrir+3jOpyIy27aKZmH54xbB8WX7UtW0j3jjxG0vhm7MsH40QJ
-         8/TapbOK0P4izjaUiwtAi8KthPZOdU8hITi4WGikoJBpwavdDqXCgqdIpbx3HM6GKh
-         BofWB0BJz7YIOK45nEpkn7sXke88n354yY6OaZq4uGbLSholN5mIhAW/AC3cQzpjHI
-         hAlGejQ0TqLWgIUXSH5Xo6WZoE7f3BGLYiir26NziQXhC8gKhrA+3jz4wcMFLkaxQT
-         88GyFv3qnkzQx5iYtfnR4M0zMXD1+okP7EaiJ0x6lMDRXoRvBx1tNddv1B+hJZ0M6V
-         bFCI3KSDWXe/Q==
-Received: from te-lab16 (nanobot.internal.synopsys.com [10.10.186.99])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id A9D26A006B;
-        Wed, 19 Aug 2020 02:27:47 +0000 (UTC)
-Received: by te-lab16 (sSMTP sendmail emulation); Tue, 18 Aug 2020 19:27:47 -0700
-Date:   Tue, 18 Aug 2020 19:27:47 -0700
-Message-Id: <2b0585228b003eedcc82db84697b31477df152e0.1597803605.git.thinhn@synopsys.com>
-X-SNPS-Relay: synopsys.com
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH] usb: uas: Add quirk for PNY Pro Elite
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        usb-storage@lists.one-eyed-alien.net
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>, stable@vger.kernel.org
+        id S1726888AbgHSCws convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 18 Aug 2020 22:52:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46816 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726632AbgHSCwr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 18 Aug 2020 22:52:47 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 208959] New: USB-serial (mct_u232): bit7=1 when tty is set to
+ cs7?
+Date:   Wed, 19 Aug 2020 02:52:47 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: low
+X-Bugzilla-Who: mslade@epic-code.com.au
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression
+Message-ID: <bug-208959-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-PNY Pro Elite USB 3.1 Gen 2 device (SSD) doesn't respond to ATA_12
-pass-through command (i.e. it just hangs). If it doesn't support this
-command, it should respond properly to the host. Let's just add a quirk
-to be able to move forward with other operations.
+https://bugzilla.kernel.org/show_bug.cgi?id=208959
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
----
- drivers/usb/storage/unusual_uas.h | 7 +++++++
- 1 file changed, 7 insertions(+)
+            Bug ID: 208959
+           Summary: USB-serial (mct_u232): bit7=1 when tty is set to cs7?
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: 5.7.0
+          Hardware: All
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: low
+          Priority: P1
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: mslade@epic-code.com.au
+        Regression: No
 
-diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
-index 162b09d69f62..971f8a4354c8 100644
---- a/drivers/usb/storage/unusual_uas.h
-+++ b/drivers/usb/storage/unusual_uas.h
-@@ -80,6 +80,13 @@ UNUSUAL_DEV(0x152d, 0x0578, 0x0000, 0x9999,
- 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
- 		US_FL_BROKEN_FUA),
- 
-+/* Reported-by: Thinh Nguyen <thinhn@synopsys.com> */
-+UNUSUAL_DEV(0x154b, 0xf00d, 0x0000, 0x9999,
-+		"PNY",
-+		"Pro Elite SSD",
-+		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-+		US_FL_NO_ATA_1X),
-+
- /* Reported-by: Hans de Goede <hdegoede@redhat.com> */
- UNUSUAL_DEV(0x2109, 0x0711, 0x0000, 0x9999,
- 		"VIA",
+I'm not 100% certain this is a bug, please let me know if this is expected
+behavior.
 
-base-commit: d5643d2249b279077427b2c2b2ffae9b70c95b0b
+I have hooked an old serial mouse up to a USB serial device, USB ID 0711:0230
+(part of an circa 2000 Targus port replicator)
+
+when I configure it with the appropriate 1200 baud and 7 bit char width, the
+bytes that come through /dev/ttyUSB0 all have bit7 set to 1.
+
+This behavior is in contrast to an old serial port on a box running a 2.4.19
+kernel.
+
+Is there a standard for the value that non-data bits should be set to?
+
 -- 
-2.28.0
-
+You are receiving this mail because:
+You are watching the assignee of the bug.
