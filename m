@@ -2,239 +2,210 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E2D924A25C
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Aug 2020 17:03:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72CB024A5CD
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Aug 2020 20:17:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726929AbgHSPDk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Aug 2020 11:03:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55732 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726854AbgHSPDg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Aug 2020 11:03:36 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAEB5C061757
-        for <linux-usb@vger.kernel.org>; Wed, 19 Aug 2020 08:03:35 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id d190so2401239wmd.4
-        for <linux-usb@vger.kernel.org>; Wed, 19 Aug 2020 08:03:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=references:user-agent:from:to:cc:subject:in-reply-to:date
-         :message-id:mime-version;
-        bh=eu4v7h7KMBfOvFVp/MrsRWeah+PO2aIM6NFVUEyYhkE=;
-        b=c9LdyZq4Qxd2LaobNpvW5gJk+D4RiNfx+DKY63RNIIdWvfaKV4e3xZAsJrKvPzdWHS
-         +36QvaDKLZBBa8MlKOYCgSNdB56Fxm5yLHAhFDtajpuCHgXiNGh/AtOa5lEY2uu9FI/J
-         TRbPklyA04wS+0eE+bxWqGTOydDIVxCZ5g9BUKREMoslQYwUKn0R71HZXc4VO+OvP39O
-         Kk3rgQaR0hAP0e+9jT69jhvkjzNMUw/BuaA9W6y2MG6KW/uukFjpjiLlTREbAhSf4F2I
-         VjS7/28FAjMF4k7FmM2yRoGG8YJd2XWPqtsucLV5oV/jjyH7jEaG6drqZTHeysIhFmo4
-         3Sdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject
-         :in-reply-to:date:message-id:mime-version;
-        bh=eu4v7h7KMBfOvFVp/MrsRWeah+PO2aIM6NFVUEyYhkE=;
-        b=HWCRJ9yEaul91EUAuuckNbjNY/kOkXbl9KZW9zVgSslj8u1+Q408zbQcgyppAfP9xh
-         /mLRoRV/srTkEWJkKnHlQPpkKJlYORm4iPXMGhZLvPmk5gX5nyOPBNvPUj7FPsed/O7J
-         epVDMcRCZ9hWTFoP8FbJyloFZ9rB9QbMGUFxTnUo0olZxWCyw97F6JBb9QqSz8IlOiWx
-         JooK4l911IolMfMgWcl9qNRpAR026qMf08kudFnOri0vyJbxZlNbOcPLuEKBaluBqhQ3
-         o+DeYIpsBiB+Kl98XaKWFPYaQGgoVm3eLJhO08Llv3Y9L0CbP3in+CzwN8c3EsRm6Dw8
-         6A3g==
-X-Gm-Message-State: AOAM530/d7dpvrXCxR6ZhaAFG/FJ3k8PR/gZqxGt9G/z+99rBnntLPT+
-        1pEL+0uA/3QeC4nv1uEiVhKr1Q==
-X-Google-Smtp-Source: ABdhPJwDTbg93K1fdXxlEGzb/pYz/Mc9T5E6t719CnJRZRuY06stun/UbbDlmYSAm5talGq2zuADug==
-X-Received: by 2002:a7b:c38a:: with SMTP id s10mr5629808wmj.13.1597849414286;
-        Wed, 19 Aug 2020 08:03:34 -0700 (PDT)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id p3sm5719559wma.44.2020.08.19.08.03.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Aug 2020 08:03:33 -0700 (PDT)
-References: <20200713160522.19345-1-dan@dlrobertson.com> <20200713160522.19345-2-dan@dlrobertson.com>
-User-agent: mu4e 1.3.3; emacs 26.3
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Dan Robertson <dan@dlrobertson.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, aouledameur@baylibre.com
-Subject: Re: [PATCH 1/1] usb: dwc3: meson-g12a: fix shared reset control use
-In-reply-to: <20200713160522.19345-2-dan@dlrobertson.com>
-Date:   Wed, 19 Aug 2020 17:03:32 +0200
-Message-ID: <1jy2maekzf.fsf@starbuckisacylon.baylibre.com>
+        id S1726766AbgHSSR6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Aug 2020 14:17:58 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:37867 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726435AbgHSSR5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 19 Aug 2020 14:17:57 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1597861075; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=+yY6ARtxEi7zwXwHoX/pmkrR5nxBNg14YNXmTQgs4QI=; b=ESx0GVWH+ir7yavALvuQ08xaJIJfcw4aSPsrgwvGE5DlPMsVwjYPYNT6xbLuzQxyFg6XVkwO
+ 97wiI2KUiHqzs1zCWQRnE72LuwSXyPBbIdEGUXLLIJScYIoG9I/r9a62l5XIANlSlaKcxcvB
+ I9BohegB3CBEt7jkUF9m+ZF0cJo=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-west-2.postgun.com with SMTP id
+ 5f3d6cc1673250c006118323 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 19 Aug 2020 18:17:37
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 2355DC433CB; Wed, 19 Aug 2020 18:17:37 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.4 required=2.0 tests=ALL_TRUSTED,NICE_REPLY_A,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.0
+Received: from [10.110.104.6] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 51B0DC433C6;
+        Wed, 19 Aug 2020 18:17:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 51B0DC433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=wcheng@codeaurora.org
+Subject: Re: [PATCH] usb: dwc3: Stop active transfers before halting the
+ controller
+To:     Felipe Balbi <balbi@kernel.org>, gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        jackp@codeaurora.org
+References: <20200819051739.22123-1-wcheng@codeaurora.org>
+ <87zh6qyihk.fsf@kernel.org>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <3b87cc4c-f45c-b168-a7e3-9e60101e526e@codeaurora.org>
+Date:   Wed, 19 Aug 2020 11:17:35 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <87zh6qyihk.fsf@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
-On Mon 13 Jul 2020 at 18:05, Dan Robertson <dan@dlrobertson.com> wrote:
 
-> The reset is a shared reset line, but reset_control_reset is still used
-> and reset_control_deassert is not guaranteed to have been called before
-> the first reset_control_assert call. When suspending the following
-> warning may be seen:
+On 8/19/2020 4:37 AM, Felipe Balbi wrote:
+> 
+> Hi,
+> 
+> Wesley Cheng <wcheng@codeaurora.org> writes:
+>> In the DWC3 databook, for a device initiated disconnect, the driver is
+>> required to send dependxfer commands for any pending transfers.
+>> In addition, before the controller can move to the halted state, the SW
+>> needs to acknowledge any pending events.  If the controller is not halted
+>> properly, there is a chance the controller will continue accessing stale or
+>> freed TRBs and buffers.
+>>
+>> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+>>
+>> ---
+>> Verified fix by adding a check for ETIMEDOUT during the run stop call.
+>> Shell script writing to the configfs UDC file to trigger disconnect and
+>> connect.  Batch script to have PC execute data transfers over adb (ie adb
+>> push)  After a few iterations, we'd run into a scenario where the
+>> controller wasn't halted.  With the following change, no failed halts after
+>> many iterations.
+>> ---
+>>  drivers/usb/dwc3/ep0.c    |  2 +-
+>>  drivers/usb/dwc3/gadget.c | 59 +++++++++++++++++++++++++++++++++++++--
+>>  2 files changed, 57 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
+>> index 59f2e8c31bd1..456aa87e8778 100644
+>> --- a/drivers/usb/dwc3/ep0.c
+>> +++ b/drivers/usb/dwc3/ep0.c
+>> @@ -197,7 +197,7 @@ int dwc3_gadget_ep0_queue(struct usb_ep *ep, struct usb_request *request,
+>>  	int				ret;
+>>  
+>>  	spin_lock_irqsave(&dwc->lock, flags);
+>> -	if (!dep->endpoint.desc) {
+>> +	if (!dep->endpoint.desc || !dwc->pullups_connected) {
+> 
+> these two should be the same. If pullups are not connected, there's no
+> way we can have an endpoint descriptor. Did you find a race condition here?
+> 
 
-And now the same type of warning maybe seen on boot. This is
-happening for me on the libretech-cc (s905x - gxl).
+Hi Felipe,
 
-[    1.863469] ------------[ cut here ]------------
-[    1.867914] WARNING: CPU: 1 PID: 16 at drivers/reset/core.c:309 reset_control_reset+0x130/0x150
-[    1.876525] Modules linked in:
-[    1.879548] CPU: 1 PID: 16 Comm: kworker/1:0 Not tainted 5.9.0-rc1-00167-ga2e4e3a34775 #64
-[    1.887737] Hardware name: Libre Computer AML-S905X-CC V2 (DT)
-[    1.893525] Workqueue: events deferred_probe_work_func
-[    1.898607] pstate: 80000005 (Nzcv daif -PAN -UAO BTYPE=--)
-[    1.904126] pc : reset_control_reset+0x130/0x150
-[    1.908700] lr : phy_meson_gxl_usb2_init+0x24/0x70
-[    1.913439] sp : ffff8000123ebad0
-[    1.916717] x29: ffff8000123ebad0 x28: 0000000000000000 
-[    1.921978] x27: ffff00007c4b1ac8 x26: ffff00007c4b1ab0 
-[    1.927239] x25: ffff00007fc149b0 x24: ffff00007c4b1ab0 
-[    1.932500] x23: ffff00007cd03800 x22: ffff800011fb9000 
-[    1.937761] x21: ffff00007c60db08 x20: ffff00007c468a80 
-[    1.943023] x19: ffff00007c466b00 x18: ffffffffffffffff 
-[    1.948284] x17: 0000000000000000 x16: 000000000000000e 
-[    1.953545] x15: ffff800011fb9948 x14: ffffffffffffffff 
-[    1.958806] x13: ffffffff00000000 x12: ffffffffffffffff 
-[    1.964068] x11: 0000000000000020 x10: 7f7f7f7f7f7f7f7f 
-[    1.969329] x9 : 78676f2c32617274 x8 : 0000000000000000 
-[    1.974590] x7 : ffffffffffffffff x6 : 0000000000000000 
-[    1.979851] x5 : 0000000000000000 x4 : 0000000000000000 
-[    1.985112] x3 : 0000000000000000 x2 : ffff8000107aa370 
-[    1.990374] x1 : 0000000000000001 x0 : 0000000000000001 
-[    1.995636] Call trace:
-[    1.998054]  reset_control_reset+0x130/0x150
-[    2.002279]  phy_meson_gxl_usb2_init+0x24/0x70
-[    2.006677]  phy_init+0x78/0xd0
-[    2.009784]  dwc3_meson_g12a_probe+0x2c8/0x560
-[    2.014182]  platform_drv_probe+0x58/0xa8
-[    2.018149]  really_probe+0x114/0x3d8
-[    2.021770]  driver_probe_device+0x5c/0xb8
-[    2.025824]  __device_attach_driver+0x98/0xb8
-[    2.030138]  bus_for_each_drv+0x74/0xd8
-[    2.033933]  __device_attach+0xec/0x148
-[    2.037726]  device_initial_probe+0x24/0x30
-[    2.041868]  bus_probe_device+0x9c/0xa8
-[    2.045663]  deferred_probe_work_func+0x7c/0xb8
-[    2.050150]  process_one_work+0x1f0/0x4b0
-[    2.054115]  worker_thread+0x210/0x480
-[    2.057824]  kthread+0x158/0x160
-[    2.061017]  ret_from_fork+0x10/0x18
-[    2.064550] ---[ end trace 94d737efe593c6f6 ]---
-[    2.069158] phy phy-d0078000.phy.0: phy init failed --> -22
-[    2.074858] dwc3-meson-g12a: probe of d0078080.usb failed with error -22
+At least for EP0, I don't see us clearing the EP0 desc after we set it
+during dwc3_gadget_init_endpoint().  In the dwc3_gadget_ep_disable() we
+only clear the desc for non control EPs:
 
-This breaks USB on this device. reverting the change brings it back.
+static int __dwc3_gadget_ep_disable(struct dwc3_ep *dep)
+{
+...
+	/* Clear out the ep descriptors for non-ep0 */
+	if (dep->number > 1) {
+		dep->endpoint.comp_desc = NULL;
+		dep->endpoint.desc = NULL;
+	}
 
-Looking at the reset framework code, I don't think drivers sharing the
-same reset line should mix using reset_control_reset() VS
-reset_control_assert()/reset_control_deassert()
+Is the desc for ep0 handled elsewhere? (checked ep0.c as well, but
+couldn't find any references there)
 
->
-> WARNING: CPU: 1 PID: 5530 at drivers/reset/core.c:355 reset_control_assert+0x184/0x19c
-> Hardware name: Hardkernel ODROID-N2 (DT)
-> [..]
-> pc : reset_control_assert+0x184/0x19c
-> lr : dwc3_meson_g12a_suspend+0x68/0x7c
-> [..]
-> Call trace:
->  reset_control_assert+0x184/0x19c
->  dwc3_meson_g12a_suspend+0x68/0x7c
->  platform_pm_suspend+0x28/0x54
->  __device_suspend+0x590/0xabc
->  dpm_suspend+0x104/0x404
->  dpm_suspend_start+0x84/0x1bc
->  suspend_devices_and_enter+0xc4/0x4fc
->  pm_suspend+0x198/0x2d4
->
-> Fixes: 6d9fa35a347a87 ("usb: dwc3: meson-g12a: get the reset as shared")
-> Signed-off-by: Dan Robertson <dan@dlrobertson.com>
-> ---
->  drivers/usb/dwc3/dwc3-meson-g12a.c | 15 +++++++++------
->  1 file changed, 9 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/usb/dwc3/dwc3-meson-g12a.c b/drivers/usb/dwc3/dwc3-meson-g12a.c
-> index 1f7f4d88ed9d..88b75b5a039c 100644
-> --- a/drivers/usb/dwc3/dwc3-meson-g12a.c
-> +++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
-> @@ -737,13 +737,13 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
->  		goto err_disable_clks;
->  	}
->  
-> -	ret = reset_control_reset(priv->reset);
-> +	ret = reset_control_deassert(priv->reset);
+>> @@ -1926,6 +1926,24 @@ static int dwc3_gadget_set_selfpowered(struct usb_gadget *g,
+>>  	return 0;
+>>  }
+>>  
+>> +static void dwc3_stop_active_transfers(struct dwc3 *dwc)
+>> +{
+>> +	u32 epnum;
+>> +
+>> +	for (epnum = 2; epnum < DWC3_ENDPOINTS_NUM; epnum++) {
+>> +		struct dwc3_ep *dep;
+>> +
+>> +		dep = dwc->eps[epnum];
+>> +		if (!dep)
+>> +			continue;
+>> +
+>> +		if (!(dep->flags & DWC3_EP_ENABLED))
+>> +			continue;
+>> +
+>> +		dwc3_remove_requests(dwc, dep);
+>> +	}
+>> +}
+>> +
+>>  static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on, int suspend)
+>>  {
+>>  	u32			reg;
+>> @@ -1950,16 +1968,37 @@ static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on, int suspend)
+>>  
+>>  		dwc->pullups_connected = true;
+>>  	} else {
+>> +		dwc->pullups_connected = false;
+>> +
+>> +		__dwc3_gadget_ep_disable(dwc->eps[0]);
+>> +		__dwc3_gadget_ep_disable(dwc->eps[1]);
+>> +
+>> +		/*
+>> +		 * The databook explicitly mentions for a device-initiated
+>> +		 * disconnect sequence, the SW needs to ensure that it ends any
+>> +		 * active transfers.
+>> +		 */
+>> +		dwc3_stop_active_transfers(dwc);
+> 
+> IIRC, gadget driver is required to dequeue transfers before
+> disconnecting. My memory is a bit fuzzy in that area, but anyway, how
+> did you trigger this problem?
+> 
 
-The change introduced here is significant. If the reset is not initially
-asserted, it never will be before the life of the device.
+I had a script that just did the following to trigger the soft disconnect:
+echo "" > /sys/kernel/config/usb_gadget/g1/UDC
+sleep 4
+echo "a600000.dwc3" > /sys/kernel/config/usb_gadget/g1/UDC
 
-This means that Linux will have to deal which whatever state is left by the
-bootloader. This looks sketchy ...
+Then on the PC, I just had a batch file executing adb push (of a large
+file), in order to create the situation where there was a device
+initiated disconnect while an active transfer was occurring.  After
+maybe after 4-5 iterations, I saw that the controller halt failed.
 
-I think the safer way solve the problem here would be to keep using
-reset_control_reset() and introduce a new API in the reset
-framework to decrement the reset line "triggered_count"
-(reset_control_clear() ??)
+[   87.364252] dwc3_gadget_run_stop run stop = 0
+[   87.374168] ffs_epfile_io_complete: eshutdown
+[   87.376162] __dwc3_gadget_ep_queue
+[   87.386160] ffs_epfile_io_complete: eshutdown
 
-That way, if all device using the reset line go to suspend, the line will
-be "reset-able" again by the first device coming out of suspend ?
+I added some prints to hopefully show that while we are disabling the
+controller, the gadget/function driver is still active.  The eshutdown
+prints happen due to the dwc3_stop_active_transfers() call, which means
+there are still some pending/active reqs.
 
-Philip, would you be ok with such new API ?
+Thanks
+Wesley
 
-In the meantime, I think this change should be reverted. A warning on
-suspend seems less critical than a regression breaking USB completly.
+>> @@ -1994,9 +2033,15 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+>>  		}
+>>  	}
+>>  
+>> +	/*
+>> +	 * Synchronize and disable any further event handling while controller
+>> +	 * is being enabled/disabled.
+>> +	 */
+>> +	disable_irq(dwc->irq_gadget);
+> 
+> looks like a call to synchronize_irq() would be enough here.
+> 
 
->  	if (ret)
-> -		goto err_disable_clks;
-> +		goto err_assert_reset;
->  
->  	ret = dwc3_meson_g12a_get_phys(priv);
->  	if (ret)
-> -		goto err_disable_clks;
-> +		goto err_assert_reset;
->  
->  	ret = priv->drvdata->setup_regmaps(priv, base);
->  	if (ret)
-> @@ -752,7 +752,7 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
->  	if (priv->vbus) {
->  		ret = regulator_enable(priv->vbus);
->  		if (ret)
-> -			goto err_disable_clks;
-> +			goto err_assert_reset;
->  	}
->  
->  	/* Get dr_mode */
-> @@ -765,13 +765,13 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
->  
->  	ret = priv->drvdata->usb_init(priv);
->  	if (ret)
-> -		goto err_disable_clks;
-> +		goto err_assert_reset;
->  
->  	/* Init PHYs */
->  	for (i = 0 ; i < PHY_COUNT ; ++i) {
->  		ret = phy_init(priv->phys[i]);
->  		if (ret)
-> -			goto err_disable_clks;
-> +			goto err_assert_reset;
->  	}
->  
->  	/* Set PHY Power */
-> @@ -809,6 +809,9 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
->  	for (i = 0 ; i < PHY_COUNT ; ++i)
->  		phy_exit(priv->phys[i]);
->  
-> +err_assert_reset:
-> +	reset_control_assert(priv->reset);
-> +
->  err_disable_clks:
->  	clk_bulk_disable_unprepare(priv->drvdata->num_clks,
->  				   priv->drvdata->clks);
->
->
-> _______________________________________________
-> linux-amlogic mailing list
-> linux-amlogic@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-amlogic
-
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
