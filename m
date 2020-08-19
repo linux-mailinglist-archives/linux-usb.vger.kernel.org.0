@@ -2,172 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 022A0249BF3
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Aug 2020 13:37:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49FDD249C97
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Aug 2020 13:52:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728104AbgHSLh1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Aug 2020 07:37:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39266 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727079AbgHSLhV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 19 Aug 2020 07:37:21 -0400
-Received: from saruman (unknown [85.206.163.145])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 099822078D;
-        Wed, 19 Aug 2020 11:37:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597837040;
-        bh=bz2q61a1QGUygLHfRAwZFSBYQUXwYUk++yBB0zbgQLk=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=j6jNm51KfUTfd25ShvpMsalmrdyJvXseNjg+4OQSTU1HCB1j0z8zKgkS0YXK7BbVF
-         BGms/qZGpMmpo4mBzcsbsG39iNOxcs1hVLURR0pSboFyev/me/1bdEdLddBwgUv+2w
-         EXEsEbdGDIP/RkFH8m9YPdh1IAXgaguHNYXmbNcg=
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Wesley Cheng <wcheng@codeaurora.org>, gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        jackp@codeaurora.org, Wesley Cheng <wcheng@codeaurora.org>
-Subject: Re: [PATCH] usb: dwc3: Stop active transfers before halting the
- controller
-In-Reply-To: <20200819051739.22123-1-wcheng@codeaurora.org>
-References: <20200819051739.22123-1-wcheng@codeaurora.org>
-Date:   Wed, 19 Aug 2020 14:37:11 +0300
-Message-ID: <87zh6qyihk.fsf@kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+        id S1728241AbgHSLwH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Aug 2020 07:52:07 -0400
+Received: from lucky1.263xmail.com ([211.157.147.134]:45724 "EHLO
+        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728183AbgHSLvQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Aug 2020 07:51:16 -0400
+Received: from localhost (unknown [192.168.167.16])
+        by lucky1.263xmail.com (Postfix) with ESMTP id 0C580C0EE6;
+        Wed, 19 Aug 2020 19:51:05 +0800 (CST)
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-ADDR-CHECKED4: 1
+X-ANTISPAM-LEVEL: 2
+X-ABS-CHECKED: 0
+Received: from localhost.localdomain (250.19.126.124.broad.bjtelecom.net [124.126.19.250])
+        by smtp.263.net (postfix) whith ESMTP id P25957T140259910207232S1597837866680276_;
+        Wed, 19 Aug 2020 19:51:06 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <7df13add65a42e5e027ee7f126acc4a5>
+X-RL-SENDER: penghao@uniontech.com
+X-SENDER: penghao@uniontech.com
+X-LOGIN-NAME: penghao@uniontech.com
+X-FST-TO: jikos@kernel.org
+X-SENDER-IP: 124.126.19.250
+X-ATTACHMENT-NUM: 0
+X-DNS-TYPE: 5
+X-System-Flag: 0
+From:   penghao <penghao@uniontech.com>
+To:     jikos@kernel.org, benjamin.tissoires@redhat.com
+Cc:     linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, penghao@uniontech.com
+Subject: [PATCH] USB HID: Add disabled wakeup from s3 by touchpad on byd zhaoxin notebook
+Date:   Wed, 19 Aug 2020 19:51:01 +0800
+Message-Id: <20200819115101.22532-1-penghao@uniontech.com>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+BYD Notebook built-in touch pad, USB interface,so disabled,the touch pad
+device idVendor 0x0c45 idProduct 0x7056
+
+Signed-off-by: penghao <penghao@uniontech.com>
+---
+ drivers/hid/usbhid/hid-core.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
+index 492dd641a25d..630a3cad211f 100644
+--- a/drivers/hid/usbhid/hid-core.c
++++ b/drivers/hid/usbhid/hid-core.c
+@@ -1193,7 +1193,13 @@ static int usbhid_start(struct hid_device *hid)
+ 			interface->desc.bInterfaceProtocol ==
+ 				USB_INTERFACE_PROTOCOL_KEYBOARD) {
+ 		usbhid_set_leds(hid);
+-		device_set_wakeup_enable(&dev->dev, 1);
++		/*
++		 * USB HID: Add disabled touchpad wakeup on byd zhaoxin notebook
++		 */
++		if ((hid->vendor == 0x0c45) && (hid->product == 0x7056))
++			device_set_wakeup_enable(&dev->dev, 0);
++		else
++			device_set_wakeup_enable(&dev->dev, 1);
+ 	}
+ 
+ 	mutex_unlock(&usbhid->mutex);
+-- 
+2.11.0
 
 
-Hi,
 
-Wesley Cheng <wcheng@codeaurora.org> writes:
-> In the DWC3 databook, for a device initiated disconnect, the driver is
-> required to send dependxfer commands for any pending transfers.
-> In addition, before the controller can move to the halted state, the SW
-> needs to acknowledge any pending events.  If the controller is not halted
-> properly, there is a chance the controller will continue accessing stale =
-or
-> freed TRBs and buffers.
->
-> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
->
-> ---
-> Verified fix by adding a check for ETIMEDOUT during the run stop call.
-> Shell script writing to the configfs UDC file to trigger disconnect and
-> connect.  Batch script to have PC execute data transfers over adb (ie adb
-> push)  After a few iterations, we'd run into a scenario where the
-> controller wasn't halted.  With the following change, no failed halts aft=
-er
-> many iterations.
-> ---
->  drivers/usb/dwc3/ep0.c    |  2 +-
->  drivers/usb/dwc3/gadget.c | 59 +++++++++++++++++++++++++++++++++++++--
->  2 files changed, 57 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
-> index 59f2e8c31bd1..456aa87e8778 100644
-> --- a/drivers/usb/dwc3/ep0.c
-> +++ b/drivers/usb/dwc3/ep0.c
-> @@ -197,7 +197,7 @@ int dwc3_gadget_ep0_queue(struct usb_ep *ep, struct u=
-sb_request *request,
->  	int				ret;
->=20=20
->  	spin_lock_irqsave(&dwc->lock, flags);
-> -	if (!dep->endpoint.desc) {
-> +	if (!dep->endpoint.desc || !dwc->pullups_connected) {
-
-these two should be the same. If pullups are not connected, there's no
-way we can have an endpoint descriptor. Did you find a race condition here?
-
-> @@ -1926,6 +1926,24 @@ static int dwc3_gadget_set_selfpowered(struct usb_=
-gadget *g,
->  	return 0;
->  }
->=20=20
-> +static void dwc3_stop_active_transfers(struct dwc3 *dwc)
-> +{
-> +	u32 epnum;
-> +
-> +	for (epnum =3D 2; epnum < DWC3_ENDPOINTS_NUM; epnum++) {
-> +		struct dwc3_ep *dep;
-> +
-> +		dep =3D dwc->eps[epnum];
-> +		if (!dep)
-> +			continue;
-> +
-> +		if (!(dep->flags & DWC3_EP_ENABLED))
-> +			continue;
-> +
-> +		dwc3_remove_requests(dwc, dep);
-> +	}
-> +}
-> +
->  static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on, int suspend)
->  {
->  	u32			reg;
-> @@ -1950,16 +1968,37 @@ static int dwc3_gadget_run_stop(struct dwc3 *dwc,=
- int is_on, int suspend)
->=20=20
->  		dwc->pullups_connected =3D true;
->  	} else {
-> +		dwc->pullups_connected =3D false;
-> +
-> +		__dwc3_gadget_ep_disable(dwc->eps[0]);
-> +		__dwc3_gadget_ep_disable(dwc->eps[1]);
-> +
-> +		/*
-> +		 * The databook explicitly mentions for a device-initiated
-> +		 * disconnect sequence, the SW needs to ensure that it ends any
-> +		 * active transfers.
-> +		 */
-> +		dwc3_stop_active_transfers(dwc);
-
-IIRC, gadget driver is required to dequeue transfers before
-disconnecting. My memory is a bit fuzzy in that area, but anyway, how
-did you trigger this problem?
-
-> @@ -1994,9 +2033,15 @@ static int dwc3_gadget_pullup(struct usb_gadget *g=
-, int is_on)
->  		}
->  	}
->=20=20
-> +	/*
-> +	 * Synchronize and disable any further event handling while controller
-> +	 * is being enabled/disabled.
-> +	 */
-> +	disable_irq(dwc->irq_gadget);
-
-looks like a call to synchronize_irq() would be enough here.
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl89DucRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQbK0g/+PGZ3r/FwZvIA5KkkqUjbQpd2wXWBXLrz
-Vv0ZPdNu/VsVIulBDYtGYghXEaGkvstsCDwvmO0WPk2jZgxQ8qdhsS34m5G+G/AT
-QmCtVKaKi5voX5u66cOf4NmiRph5In5R42gybkgFVzMmgje4YlcQS3c6cMe3Yzdl
-z9wQX36dvZ/4gA2BmYNIACp/fmFACICG4H3N5VRCETDo1Ok/JfBHEKtlJTFIIw5Z
-BpAoKlloPKN8O7Ge7bcrr3MFECohJguw2J6q59hCEJthMLJu5Ru1himq19whGdbn
-ii6hLwWvLW4/hxpw1MHNNWobpDFl37B/dcfUgSh0doHsN/DbDvT28fl9cJb7/DZV
-VrX8eFdbZ0bsruTmdHKT/R+lWB5r9icAf0dO3v9m0O/LYKcRAT0k3E3fnOvnuxWG
-Qtgdh8DOJm0swhgThNsCTX2Q2ikHLV21ts6tdz6h2WJCLSLkUGku07MMP33mHz2S
-PvUF/gFJjxB7UwAPKrUAVWyp/8pB+tY3CpxYwXJsDVTzfMlzzI1eztbKLR8uyY0e
-HoG+J+LAcfecBZu6jLmFWtVwkQEG5AoOxhFmzW6Nfeo9hkr0UxuIxbvDK+jvHo35
-dQMzd3hq4414CEtzjle5ySYwDE6IkufT6DGn9fyOmGpkKbgK/13lbwA1u0LOUuEJ
-xz36oc6xhZ4=
-=qJ1X
------END PGP SIGNATURE-----
---=-=-=--
