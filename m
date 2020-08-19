@@ -2,33 +2,33 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57229249D12
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Aug 2020 14:00:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4B14249D11
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Aug 2020 14:00:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728150AbgHSMAI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Aug 2020 08:00:08 -0400
-Received: from mga11.intel.com ([192.55.52.93]:23197 "EHLO mga11.intel.com"
+        id S1728368AbgHSL7f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Aug 2020 07:59:35 -0400
+Received: from mga05.intel.com ([192.55.52.43]:49550 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728453AbgHSL7R (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        id S1728409AbgHSL7R (ORCPT <rfc822;linux-usb@vger.kernel.org>);
         Wed, 19 Aug 2020 07:59:17 -0400
-IronPort-SDR: jkgx8MdRyBTdVo8Y2ycmSS9Y4UbPJ34a1ao272IYd1BELj3dJStEv+h8sDpYd62VbK5L0BTqQe
- LkEU9aRZ785w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9717"; a="152708174"
+IronPort-SDR: Xm7ZGRSNj94zajWBfKi4BIzHJdynwp7wB/+rlRNW5GwM8Da2AACoGquuDQ+HPbOHpizpKc8weX
+ /hICI7GRNa/g==
+X-IronPort-AV: E=McAfee;i="6000,8403,9717"; a="239922667"
 X-IronPort-AV: E=Sophos;i="5.76,331,1592895600"; 
-   d="scan'208";a="152708174"
+   d="scan'208";a="239922667"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2020 04:59:14 -0700
-IronPort-SDR: Nttxb4+YcF2yr3xWeLrmOtQkjZYMskIXL2yWeXYUHPXmATj3QmhtGB82UaaTpBcau3TsW3Cn1a
- z8kRFV3xNz4Q==
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2020 04:59:14 -0700
+IronPort-SDR: +wZIaCmcceJ/nNxrZd5PHt1REUyEaecsb4eqtyJOril7LjqKk9j8IdkSWu9cJeQ7hMHKIFHDh0
+ TAOVRmQggITw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.76,331,1592895600"; 
-   d="scan'208";a="400804657"
+   d="scan'208";a="329310755"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 19 Aug 2020 04:59:11 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 19 Aug 2020 04:59:11 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 960A43DF; Wed, 19 Aug 2020 14:59:06 +0300 (EEST)
+        id A1A3E463; Wed, 19 Aug 2020 14:59:06 +0300 (EEST)
 From:   Mika Westerberg <mika.westerberg@linux.intel.com>
 To:     linux-usb@vger.kernel.org
 Cc:     Michael Jamet <michael.jamet@intel.com>,
@@ -43,9 +43,9 @@ Cc:     Michael Jamet <michael.jamet@intel.com>,
         Len Brown <lenb@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: [PATCH 07/19] thunderbolt: Send reset only to first generation routers
-Date:   Wed, 19 Aug 2020 14:58:53 +0300
-Message-Id: <20200819115905.59834-8-mika.westerberg@linux.intel.com>
+Subject: [PATCH 08/19] thunderbolt: Tear down DP tunnels when suspending
+Date:   Wed, 19 Aug 2020 14:58:54 +0300
+Message-Id: <20200819115905.59834-9-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200819115905.59834-1-mika.westerberg@linux.intel.com>
 References: <20200819115905.59834-1-mika.westerberg@linux.intel.com>
@@ -56,81 +56,59 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-First generation routers may need the reset command upon resume but it
-is not supported by newer generations.
+DP tunnels do not need the same kind of treatment as others because they
+are created based on hot-plug events on DP adapter ports, and the
+display stack does not need the tunnels to be enabled when resuming from
+suspend. Also Tiger Lake Thunderbolt controller sends unplug event on D3
+exit so this avoids that as well.
 
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/thunderbolt/switch.c | 21 +++++++++++----------
- drivers/thunderbolt/tb.c     |  2 +-
- drivers/thunderbolt/tb.h     |  2 +-
- 3 files changed, 13 insertions(+), 12 deletions(-)
+ drivers/thunderbolt/tb.c | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-index 72756c8ceead..fb30ea1dfc31 100644
---- a/drivers/thunderbolt/switch.c
-+++ b/drivers/thunderbolt/switch.c
-@@ -1234,23 +1234,24 @@ static void tb_dump_switch(const struct tb *tb, const struct tb_switch *sw)
- 
- /**
-  * reset_switch() - reconfigure route, enable and send TB_CFG_PKG_RESET
-+ * @sw: Switch to reset
-  *
-  * Return: Returns 0 on success or an error code on failure.
-  */
--int tb_switch_reset(struct tb *tb, u64 route)
-+int tb_switch_reset(struct tb_switch *sw)
- {
- 	struct tb_cfg_result res;
--	struct tb_regs_switch_header header = {
--		header.route_hi = route >> 32,
--		header.route_lo = route,
--		header.enabled = true,
--	};
--	tb_dbg(tb, "resetting switch at %llx\n", route);
--	res.err = tb_cfg_write(tb->ctl, ((u32 *) &header) + 2, route,
--			0, 2, 2, 2);
-+
-+	if (sw->generation > 1)
-+		return 0;
-+
-+	tb_sw_dbg(sw, "resetting switch\n");
-+
-+	res.err = tb_sw_write(sw, ((u32 *) &sw->config) + 2,
-+			      TB_CFG_SWITCH, 2, 2);
- 	if (res.err)
- 		return res.err;
--	res = tb_cfg_reset(tb->ctl, route, TB_CFG_DEFAULT_TIMEOUT);
-+	res = tb_cfg_reset(sw->tb->ctl, tb_route(sw), TB_CFG_DEFAULT_TIMEOUT);
- 	if (res.err > 0)
- 		return -EIO;
- 	return res.err;
 diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-index 98f268a818a0..a6da2d0567ae 100644
+index a6da2d0567ae..c35d5fec48f4 100644
 --- a/drivers/thunderbolt/tb.c
 +++ b/drivers/thunderbolt/tb.c
-@@ -1258,7 +1258,7 @@ static int tb_resume_noirq(struct tb *tb)
- 	tb_dbg(tb, "resuming...\n");
+@@ -910,6 +910,29 @@ static void tb_dp_resource_available(struct tb *tb, struct tb_port *port)
+ 	tb_tunnel_dp(tb);
+ }
  
- 	/* remove any pci devices the firmware might have setup */
--	tb_switch_reset(tb, 0);
-+	tb_switch_reset(tb->root_switch);
++static void tb_disconnect_and_release_dp(struct tb *tb)
++{
++	struct tb_cm *tcm = tb_priv(tb);
++	struct tb_tunnel *tunnel, *n;
++
++	/*
++	 * Tear down all DP tunnels and release their resources. They
++	 * will be re-established after resume based on plug events.
++	 */
++	list_for_each_entry_safe_reverse(tunnel, n, &tcm->tunnel_list, list) {
++		if (tb_tunnel_is_dp(tunnel))
++			tb_deactivate_and_free_tunnel(tunnel);
++	}
++
++	while (!list_empty(&tcm->dp_resources)) {
++		struct tb_port *port;
++
++		port = list_first_entry(&tcm->dp_resources,
++					struct tb_port, list);
++		list_del_init(&port->list);
++	}
++}
++
+ static int tb_tunnel_pci(struct tb *tb, struct tb_switch *sw)
+ {
+ 	struct tb_port *up, *down, *port;
+@@ -1226,6 +1249,7 @@ static int tb_suspend_noirq(struct tb *tb)
+ 	struct tb_cm *tcm = tb_priv(tb);
  
- 	tb_switch_resume(tb->root_switch);
- 	tb_free_invalid_tunnels(tb);
-diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-index df08f6d7aaa0..69e78bbed53a 100644
---- a/drivers/thunderbolt/tb.h
-+++ b/drivers/thunderbolt/tb.h
-@@ -634,7 +634,7 @@ int tb_switch_add(struct tb_switch *sw);
- void tb_switch_remove(struct tb_switch *sw);
- void tb_switch_suspend(struct tb_switch *sw);
- int tb_switch_resume(struct tb_switch *sw);
--int tb_switch_reset(struct tb *tb, u64 route);
-+int tb_switch_reset(struct tb_switch *sw);
- void tb_sw_set_unplugged(struct tb_switch *sw);
- struct tb_port *tb_switch_find_port(struct tb_switch *sw,
- 				    enum tb_port_type type);
+ 	tb_dbg(tb, "suspending...\n");
++	tb_disconnect_and_release_dp(tb);
+ 	tb_switch_suspend(tb->root_switch);
+ 	tcm->hotplug_active = false; /* signal tb_handle_hotplug to quit */
+ 	tb_dbg(tb, "suspend finished\n");
 -- 
 2.28.0
 
