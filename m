@@ -2,33 +2,33 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 439A9249D38
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Aug 2020 14:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2795C249D29
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Aug 2020 14:02:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728352AbgHSMCo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Aug 2020 08:02:44 -0400
-Received: from mga05.intel.com ([192.55.52.43]:49568 "EHLO mga05.intel.com"
+        id S1728498AbgHSL7a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Aug 2020 07:59:30 -0400
+Received: from mga12.intel.com ([192.55.52.136]:34066 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728493AbgHSL7W (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 19 Aug 2020 07:59:22 -0400
-IronPort-SDR: SPbFxX9AevWWWeTISxfFlxTReWpzO40IHQhbJIzQDDi+NW2/TUqtCo8O5dnh+aUeB8Dvsai+HL
- WXH4p3UPoBVA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9717"; a="239922672"
+        id S1728260AbgHSL7R (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 19 Aug 2020 07:59:17 -0400
+IronPort-SDR: nPUFkw7LkQSai0008UOMKf/u0xR75ptVtUYjmqHIy31wwoGQVpKMPxzr7DtYzPdGyACHJTX+70
+ tpLdGOQ/3Emg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9717"; a="134610557"
 X-IronPort-AV: E=Sophos;i="5.76,331,1592895600"; 
-   d="scan'208";a="239922672"
+   d="scan'208";a="134610557"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2020 04:59:14 -0700
-IronPort-SDR: knPXZSxeBqB46vVg835SwDONqzistVX9LP+zgOjtUm6K3bTUQD/cl/vtWwJ2EiM92V8d9ELxy/
- czDMRiZ6stcA==
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2020 04:59:16 -0700
+IronPort-SDR: 88rLKxKPvltUAIjZMepMWjQj1Zn9zhGaGdv708Itao6hFHG5ypSgQ+dBruBfeHbg/7YAdrafFR
+ jLY4mFyCizbw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.76,331,1592895600"; 
-   d="scan'208";a="329310762"
+   d="scan'208";a="472211902"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 19 Aug 2020 04:59:11 -0700
+  by orsmga005.jf.intel.com with ESMTP; 19 Aug 2020 04:59:11 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id B38634B3; Wed, 19 Aug 2020 14:59:06 +0300 (EEST)
+        id BC68951B; Wed, 19 Aug 2020 14:59:06 +0300 (EEST)
 From:   Mika Westerberg <mika.westerberg@linux.intel.com>
 To:     linux-usb@vger.kernel.org
 Cc:     Michael Jamet <michael.jamet@intel.com>,
@@ -43,9 +43,9 @@ Cc:     Michael Jamet <michael.jamet@intel.com>,
         Len Brown <lenb@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: [PATCH 10/19] thunderbolt: Do not change default USB4 router notification timeout
-Date:   Wed, 19 Aug 2020 14:58:56 +0300
-Message-Id: <20200819115905.59834-11-mika.westerberg@linux.intel.com>
+Subject: [PATCH 11/19] thunderbolt: Configure link after lane bonding is enabled
+Date:   Wed, 19 Aug 2020 14:58:57 +0300
+Message-Id: <20200819115905.59834-12-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200819115905.59834-1-mika.westerberg@linux.intel.com>
 References: <20200819115905.59834-1-mika.westerberg@linux.intel.com>
@@ -56,44 +56,206 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Some early stage USB4 devices do not like that any of the enumerating
-router config space fields (ROUTER_CS_1 - ROUTER_CS_4) are written after
-the initial enumeration for example when entering sleep states. The
-default timeout by the USB4 spec is 10 ms which should be fine for the
-driver to handle.
-
-For this reason do not change the notification timeout from the default
-10 ms for USB4 routers.
+During testing it was noticed that the link is not properly restored
+after the domain exits sleep if the link configured bits are set before
+lane bonding is enabled. The USB4 spec does not say in which order these
+need to be set but setting link configured afterwards makes the link
+restoration work so we do that instead.
 
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/thunderbolt/switch.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ drivers/thunderbolt/lc.c     |  6 ----
+ drivers/thunderbolt/switch.c | 55 +++++++++++++++++++++++++++---------
+ drivers/thunderbolt/tb.c     |  5 ++++
+ drivers/thunderbolt/tb.h     |  2 ++
+ drivers/thunderbolt/usb4.c   |  6 ----
+ 5 files changed, 49 insertions(+), 25 deletions(-)
 
-diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-index de186d6ed166..e1ba8215144b 100644
---- a/drivers/thunderbolt/switch.c
-+++ b/drivers/thunderbolt/switch.c
-@@ -1269,7 +1269,7 @@ static int tb_plug_events_active(struct tb_switch *sw, bool active)
- 	u32 data;
- 	int res;
+diff --git a/drivers/thunderbolt/lc.c b/drivers/thunderbolt/lc.c
+index 19be627d090f..b2f62ba0421d 100644
+--- a/drivers/thunderbolt/lc.c
++++ b/drivers/thunderbolt/lc.c
+@@ -94,9 +94,6 @@ int tb_lc_configure_link(struct tb_switch *sw)
+ 	struct tb_port *up, *down;
+ 	int ret;
  
--	if (tb_switch_is_icm(sw))
-+	if (tb_switch_is_icm(sw) || tb_switch_is_usb4(sw))
- 		return 0;
- 
- 	sw->config.plug_events_delay = 0xff;
-@@ -1277,10 +1277,6 @@ static int tb_plug_events_active(struct tb_switch *sw, bool active)
- 	if (res)
- 		return res;
- 
--	/* Plug events are always enabled in USB4 */
--	if (tb_switch_is_usb4(sw))
+-	if (!tb_route(sw) || tb_switch_is_icm(sw))
 -		return 0;
 -
- 	res = tb_sw_read(sw, &data, TB_CFG_SWITCH, sw->cap_plug_events + 1, 1);
- 	if (res)
- 		return res;
+ 	up = tb_upstream_port(sw);
+ 	down = tb_port_at(tb_route(sw), tb_to_switch(sw->dev.parent));
+ 
+@@ -124,9 +121,6 @@ void tb_lc_unconfigure_link(struct tb_switch *sw)
+ {
+ 	struct tb_port *up, *down;
+ 
+-	if (sw->is_unplugged || !tb_route(sw) || tb_switch_is_icm(sw))
+-		return;
+-
+ 	up = tb_upstream_port(sw);
+ 	down = tb_port_at(tb_route(sw), tb_to_switch(sw->dev.parent));
+ 
+diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+index e1ba8215144b..ecc47ea81bb6 100644
+--- a/drivers/thunderbolt/switch.c
++++ b/drivers/thunderbolt/switch.c
+@@ -2012,10 +2012,6 @@ int tb_switch_configure(struct tb_switch *sw)
+ 			return ret;
+ 
+ 		ret = usb4_switch_setup(sw);
+-		if (ret)
+-			return ret;
+-
+-		ret = usb4_switch_configure_link(sw);
+ 	} else {
+ 		if (sw->config.vendor_id != PCI_VENDOR_ID_INTEL)
+ 			tb_sw_warn(sw, "unknown switch vendor id %#x\n",
+@@ -2029,10 +2025,6 @@ int tb_switch_configure(struct tb_switch *sw)
+ 		/* Enumerate the switch */
+ 		ret = tb_sw_write(sw, (u32 *)&sw->config + 1, TB_CFG_SWITCH,
+ 				  ROUTER_CS_1, 3);
+-		if (ret)
+-			return ret;
+-
+-		ret = tb_lc_configure_link(sw);
+ 	}
+ 	if (ret)
+ 		return ret;
+@@ -2315,6 +2307,48 @@ void tb_switch_lane_bonding_disable(struct tb_switch *sw)
+ 	tb_sw_dbg(sw, "lane bonding disabled\n");
+ }
+ 
++/**
++ * tb_switch_configure_link() - Set link configured
++ * @sw: Switch whose link is configured
++ *
++ * Sets the link upstream from @sw configured (from both ends) so that
++ * it will not be disconnected when the domain exits sleep. Can be
++ * called for any switch.
++ *
++ * It is recommended that this is called after lane bonding is enabled.
++ *
++ * Returns %0 on success and negative errno in case of error.
++ */
++int tb_switch_configure_link(struct tb_switch *sw)
++{
++	if (!tb_route(sw) || tb_switch_is_icm(sw))
++		return 0;
++
++	if (tb_switch_is_usb4(sw))
++		return usb4_switch_configure_link(sw);
++	return tb_lc_configure_link(sw);
++}
++
++/**
++ * tb_switch_unconfigure_link() - Unconfigure link
++ * @sw: Switch whose link is unconfigured
++ *
++ * Sets the link unconfigured so the @sw will be disconnected if the
++ * domain exists sleep.
++ */
++void tb_switch_unconfigure_link(struct tb_switch *sw)
++{
++	if (sw->is_unplugged)
++		return;
++	if (!tb_route(sw) || tb_switch_is_icm(sw))
++		return;
++
++	if (tb_switch_is_usb4(sw))
++		usb4_switch_unconfigure_link(sw);
++	else
++		tb_lc_unconfigure_link(sw);
++}
++
+ /**
+  * tb_switch_add() - Add a switch to the domain
+  * @sw: Switch to add
+@@ -2449,11 +2483,6 @@ void tb_switch_remove(struct tb_switch *sw)
+ 	if (!sw->is_unplugged)
+ 		tb_plug_events_active(sw, false);
+ 
+-	if (tb_switch_is_usb4(sw))
+-		usb4_switch_unconfigure_link(sw);
+-	else
+-		tb_lc_unconfigure_link(sw);
+-
+ 	tb_switch_nvm_remove(sw);
+ 
+ 	if (tb_route(sw))
+diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+index c35d5fec48f4..54a4daf0b1b4 100644
+--- a/drivers/thunderbolt/tb.c
++++ b/drivers/thunderbolt/tb.c
+@@ -593,6 +593,8 @@ static void tb_scan_port(struct tb_port *port)
+ 
+ 	/* Enable lane bonding if supported */
+ 	tb_switch_lane_bonding_enable(sw);
++	/* Set the link configured */
++	tb_switch_configure_link(sw);
+ 
+ 	if (tb_enable_tmu(sw))
+ 		tb_sw_warn(sw, "failed to enable TMU\n");
+@@ -681,6 +683,7 @@ static void tb_free_unplugged_children(struct tb_switch *sw)
+ 		if (port->remote->sw->is_unplugged) {
+ 			tb_retimer_remove_all(port);
+ 			tb_remove_dp_resources(port->remote->sw);
++			tb_switch_unconfigure_link(port->remote->sw);
+ 			tb_switch_lane_bonding_disable(port->remote->sw);
+ 			tb_switch_remove(port->remote->sw);
+ 			port->remote = NULL;
+@@ -1076,6 +1079,7 @@ static void tb_handle_hotplug(struct work_struct *work)
+ 			tb_free_invalid_tunnels(tb);
+ 			tb_remove_dp_resources(port->remote->sw);
+ 			tb_switch_tmu_disable(port->remote->sw);
++			tb_switch_unconfigure_link(port->remote->sw);
+ 			tb_switch_lane_bonding_disable(port->remote->sw);
+ 			tb_switch_remove(port->remote->sw);
+ 			port->remote = NULL;
+@@ -1269,6 +1273,7 @@ static void tb_restore_children(struct tb_switch *sw)
+ 			continue;
+ 
+ 		tb_switch_lane_bonding_enable(port->remote->sw);
++		tb_switch_configure_link(port->remote->sw);
+ 
+ 		tb_restore_children(port->remote->sw);
+ 	}
+diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+index 69e78bbed53a..dcdc886412f5 100644
+--- a/drivers/thunderbolt/tb.h
++++ b/drivers/thunderbolt/tb.h
+@@ -767,6 +767,8 @@ static inline bool tb_switch_is_icm(const struct tb_switch *sw)
+ 
+ int tb_switch_lane_bonding_enable(struct tb_switch *sw);
+ void tb_switch_lane_bonding_disable(struct tb_switch *sw);
++int tb_switch_configure_link(struct tb_switch *sw);
++void tb_switch_unconfigure_link(struct tb_switch *sw);
+ 
+ bool tb_switch_query_dp_resource(struct tb_switch *sw, struct tb_port *in);
+ int tb_switch_alloc_dp_resource(struct tb_switch *sw, struct tb_port *in);
+diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
+index 2b8355e6b65f..dd601a6db23c 100644
+--- a/drivers/thunderbolt/usb4.c
++++ b/drivers/thunderbolt/usb4.c
+@@ -368,9 +368,6 @@ int usb4_switch_configure_link(struct tb_switch *sw)
+ {
+ 	struct tb_port *up;
+ 
+-	if (!tb_route(sw))
+-		return 0;
+-
+ 	up = tb_upstream_port(sw);
+ 	return usb4_set_port_configured(up, true);
+ }
+@@ -385,9 +382,6 @@ void usb4_switch_unconfigure_link(struct tb_switch *sw)
+ {
+ 	struct tb_port *up;
+ 
+-	if (sw->is_unplugged || !tb_route(sw))
+-		return;
+-
+ 	up = tb_upstream_port(sw);
+ 	usb4_set_port_configured(up, false);
+ }
 -- 
 2.28.0
 
