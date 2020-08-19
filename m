@@ -2,78 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49FDD249C97
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Aug 2020 13:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17092249CCB
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Aug 2020 13:55:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728241AbgHSLwH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Aug 2020 07:52:07 -0400
-Received: from lucky1.263xmail.com ([211.157.147.134]:45724 "EHLO
-        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728183AbgHSLvQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Aug 2020 07:51:16 -0400
-Received: from localhost (unknown [192.168.167.16])
-        by lucky1.263xmail.com (Postfix) with ESMTP id 0C580C0EE6;
-        Wed, 19 Aug 2020 19:51:05 +0800 (CST)
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-ADDR-CHECKED4: 1
-X-ANTISPAM-LEVEL: 2
-X-ABS-CHECKED: 0
-Received: from localhost.localdomain (250.19.126.124.broad.bjtelecom.net [124.126.19.250])
-        by smtp.263.net (postfix) whith ESMTP id P25957T140259910207232S1597837866680276_;
-        Wed, 19 Aug 2020 19:51:06 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <7df13add65a42e5e027ee7f126acc4a5>
-X-RL-SENDER: penghao@uniontech.com
-X-SENDER: penghao@uniontech.com
-X-LOGIN-NAME: penghao@uniontech.com
-X-FST-TO: jikos@kernel.org
-X-SENDER-IP: 124.126.19.250
-X-ATTACHMENT-NUM: 0
-X-DNS-TYPE: 5
-X-System-Flag: 0
-From:   penghao <penghao@uniontech.com>
-To:     jikos@kernel.org, benjamin.tissoires@redhat.com
-Cc:     linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, penghao@uniontech.com
-Subject: [PATCH] USB HID: Add disabled wakeup from s3 by touchpad on byd zhaoxin notebook
-Date:   Wed, 19 Aug 2020 19:51:01 +0800
-Message-Id: <20200819115101.22532-1-penghao@uniontech.com>
-X-Mailer: git-send-email 2.11.0
+        id S1728127AbgHSLzl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Aug 2020 07:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54460 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728160AbgHSLzG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Aug 2020 07:55:06 -0400
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B8B1C061757
+        for <linux-usb@vger.kernel.org>; Wed, 19 Aug 2020 04:54:56 -0700 (PDT)
+Received: by mail-ed1-x542.google.com with SMTP id ba10so17851189edb.3
+        for <linux-usb@vger.kernel.org>; Wed, 19 Aug 2020 04:54:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=H6fg9iS25jVW9vT2Atd1JR+Ra5fbPrScKI70vf5hPbo=;
+        b=K5CAZrUgQKuvEnVvJQprLOkW1RHxRIYHJNhWlND/M7zfUnLzHM994Wk61kv+fdxlqO
+         bbngZT1sPJYxp/kQMe33SjaH7bzQs5QrWnxovTttDWsm1r6ogz+IXNV0G8hWBT8xwCb0
+         Uf6MhLxqoZ0DI5BC3pp1vG6AC0pa2sYrNfx3MmORWQdcjN/IAjZ44zjoc0mKbHrJg/sa
+         hf6VEjPiX9a89yBJ5m4txit7VKidF70tsd/4xd39JwpemLBL5VkpR9DDeVXWUZ2hXaoB
+         Qmmw08kOYEQ5Rji7u9/tGUgzFyOBSB13chPb4xmVhDDh5CQ2srTsLswHEmRRsqH26lKH
+         0NTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=H6fg9iS25jVW9vT2Atd1JR+Ra5fbPrScKI70vf5hPbo=;
+        b=KygNZlugYd5KVnqAI443eDw6CPROB1OR5J23G/nug8kYlVE6tMzHT0YH6iL4tY6wvN
+         SOfWZXXWeuUC2NYTDune7UzqE5PyXZ/XumCVMjc4N1wBvQcbYqQUqbzP1bdvYwl7P5U1
+         mYnxdHpoZTlsqpVgzjOl4IwerS+A+A5PtHHOIzha/jBBrQWL8gdTD8J/ZME6usaxs3DL
+         oYUhSslBg1EUMzOqpsDDZ8tb9fRqFU5pWShI7OcarD7agL8lDZQXmSakeRzDepGBUcE6
+         cme/gQY9NozkkSFdz5vfFmBVmJ1xBf+Zk+kwcy7Ls1letPZZUDlP4JuS39S99kIdc99f
+         fx0w==
+X-Gm-Message-State: AOAM530GDlpSt6MhcTjdWCPJA5it7eBQGHmGIh2GmXEbIMUENe2iUD8l
+        UwjNm+FuJIUZ0ch1vuMUupt6+RCx0cTEjMs4rl8=
+X-Google-Smtp-Source: ABdhPJzy9+IV1m3Vsfp24g3dvVT0J8nLsiKfEj6aq99BDMOCy+suf6OeXBibUkDM/TC+ONl+OIx2/SVTy0RrPilt9O8=
+X-Received: by 2002:a05:6402:847:: with SMTP id b7mr25205766edz.39.1597838095220;
+ Wed, 19 Aug 2020 04:54:55 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200819112716.59074-1-mika.westerberg@linux.intel.com>
+In-Reply-To: <20200819112716.59074-1-mika.westerberg@linux.intel.com>
+From:   Yehezkel Bernat <yehezkelshb@gmail.com>
+Date:   Wed, 19 Aug 2020 14:54:39 +0300
+Message-ID: <CA+CmpXs+WHj_PS51s=nOAJp9pvn6atDhVi0FtNasHfqqJ9MhXw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] thunderbolt: Disable ports that are not implemented
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org, Michael Jamet <michael.jamet@intel.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        "Nikunj A . Dadhania" <nikunj.dadhania@linux.intel.com>,
+        Srikanth Nandamuri <srikanth.nandamuri@intel.com>,
+        Lukas Wunner <lukas@wunner.de>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-BYD Notebook built-in touch pad, USB interface,so disabled,the touch pad
-device idVendor 0x0c45 idProduct 0x7056
+> - * @disabled: Disabled by eeprom
+> + * @disabled: Disabled by eeprom or enabled, but not implemented
 
-Signed-off-by: penghao <penghao@uniontech.com>
----
- drivers/hid/usbhid/hid-core.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
-index 492dd641a25d..630a3cad211f 100644
---- a/drivers/hid/usbhid/hid-core.c
-+++ b/drivers/hid/usbhid/hid-core.c
-@@ -1193,7 +1193,13 @@ static int usbhid_start(struct hid_device *hid)
- 			interface->desc.bInterfaceProtocol ==
- 				USB_INTERFACE_PROTOCOL_KEYBOARD) {
- 		usbhid_set_leds(hid);
--		device_set_wakeup_enable(&dev->dev, 1);
-+		/*
-+		 * USB HID: Add disabled touchpad wakeup on byd zhaoxin notebook
-+		 */
-+		if ((hid->vendor == 0x0c45) && (hid->product == 0x7056))
-+			device_set_wakeup_enable(&dev->dev, 0);
-+		else
-+			device_set_wakeup_enable(&dev->dev, 1);
- 	}
- 
- 	mutex_unlock(&usbhid->mutex);
--- 
-2.11.0
-
-
-
+I'm not a native speaker, so I'm not sure about it, but maybe the comma here is
+superfluous and just confuses the reader. To me it looks like it means
+"(disabled
+|| enabled) && !implemented" instead of "disabled || (enabled && !implemented)".
+Any opinion?
