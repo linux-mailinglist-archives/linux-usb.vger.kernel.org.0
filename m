@@ -2,101 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF1EB24A68C
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Aug 2020 21:07:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0000824A694
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Aug 2020 21:11:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726861AbgHSTHr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Aug 2020 15:07:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37066 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726820AbgHSTHp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Aug 2020 15:07:45 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B32C061757
-        for <linux-usb@vger.kernel.org>; Wed, 19 Aug 2020 12:07:45 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id o18so27583389eje.7
-        for <linux-usb@vger.kernel.org>; Wed, 19 Aug 2020 12:07:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=kBCjwt0/XhlY3JnKJsd+i1VFlwEYv8w9YXDHJU4epO8=;
-        b=VAHPykFrTWgH9UBfve4745FZLnFuD8LT8bSoUnvwgWl2b2IZ7qWUfiMwnC++noyFIz
-         NwZ6OdF5EDYB+OxAIPdLTiEzpFhPG46F8Adr2gGTgvp/LAvOGm5EcmAVdg4cibUPASBe
-         f73pR/Zy226Ln/s5EeVRRh1HBPpwV9gYgRxsjhDPCJi5EWCYQLCSGJbw4Avguh+Kfw2s
-         llSQMKHSVd13ZV30fYO5udOw02GXdgHIv3wSSNs5SpcGRCqYAOhs4ANA78Tj4+Qh//OV
-         MDyyhMe00uSEBr6ytIEyg1WHzFlt1MS0iXR46Bats3Kjg2OOd+qjGFv1kcP33lKH/PZy
-         cNrg==
+        id S1726578AbgHSTLg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Aug 2020 15:11:36 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:40060 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725997AbgHSTLe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Aug 2020 15:11:34 -0400
+Received: by mail-ed1-f67.google.com with SMTP id a14so19026162edx.7;
+        Wed, 19 Aug 2020 12:11:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=kBCjwt0/XhlY3JnKJsd+i1VFlwEYv8w9YXDHJU4epO8=;
-        b=RsaLCFo6PrcrzCzcigEmpTNQe/GWVwFxTXHO/GwKJLiSOV5+4Qn1LO8awMsDlCzt7b
-         RiVUvhESpsHBRLYOtRqYPyEI+pUXAEB4RQKRD6+QaFTGo3jSV5CqCQsNfZCgTBHC4Cp8
-         kMn6QUFFlRLEBHpjhSErpB+9eHyHC3X1adKMLVDz1gOjfW5N8E/PEx6oYOXcqGlghhPF
-         18YWOyVTe+bns9jXg/JuJYveURQBpwqFdOWcYvMz+3QBfkPvrU2WLDITIES6EYg1MI1k
-         X+GKnFmvxeF96McgfE7cTTJlh5JeVC7QGk4X1cR8SG1/xO/NELCNGQ3FXILv9C9rZoHZ
-         GTXQ==
-X-Gm-Message-State: AOAM533iTXI5DvadWwiUMad+PY554ZXleoIBNktnloomUJ0AdQqKYeB8
-        rmasP+Ze+rXOm26yw/wdvvO1v3U78dvzBsAbSL8=
-X-Google-Smtp-Source: ABdhPJzYyUe3JqJcbOggVCwZdqWQDLqYeia1JH0bWhfTYxxfRFD+VtZRF7/a109vFSJGQcuaKxpH6VB2hmibjh5S3t8=
-X-Received: by 2002:a17:906:5f84:: with SMTP id a4mr5707060eju.345.1597864063743;
- Wed, 19 Aug 2020 12:07:43 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=/p+rpWf5THdb/F5fw2hvL+B8c1zMsLILKJouEIRFrTw=;
+        b=YgwulQeGfQia2HUKXylcBXMWorYQOC/LMO50ufG4slxFATTdzV4CbQY9DUE+OsE1w/
+         9HSxgE6VZ5eNA/P02fm5k8ZXVhvRVJQ9Yr1xkMkI/lE3EzWO0LzN/XMg65dALXllcd1U
+         H78YirVhKPEL9gEJKteEFNxwJ1C62ZJVXS65xj+2iUxWyobwotDLSWWK6HSh5ch/BdqF
+         byzfdDSyYA+qe1J85kDxytcXUXaHnkNGAxcG6cnR3SJXy5p9bJFqh3qFK1Ds6fpNpqGw
+         5nvtP7kQyQlCN4irhYaQpwRVYpieZdnV5nIL1/h51aw7umBtpjcrmoLMFn6vk00EYvUx
+         SWDw==
+X-Gm-Message-State: AOAM532iyVzvTD2qXSx0lgQa9Vey1soDhYMgVXVS4to+R8h0IEpUxPkd
+        +gj3apxkAxg5G8O0aDN/3bdxJLnmWe9vQw==
+X-Google-Smtp-Source: ABdhPJz05KL81rpEg12X6qhvazsMeQzWg96ReAGVByn1S7IXawceJiUgrzgEkuoZOH6yQXGcFsLy7w==
+X-Received: by 2002:a05:6402:1591:: with SMTP id c17mr25661925edv.111.1597864292944;
+        Wed, 19 Aug 2020 12:11:32 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.216])
+        by smtp.googlemail.com with ESMTPSA id y25sm19290320ejq.36.2020.08.19.12.11.31
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 19 Aug 2020 12:11:32 -0700 (PDT)
+Date:   Wed, 19 Aug 2020 21:11:30 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: s3c: Remove unused 'udc' variable
+Message-ID: <20200819191130.GA5213@kozik-lap>
+References: <20200731074122.6484-1-krzk@kernel.org>
 MIME-Version: 1.0
-References: <20200818165848.4117493-1-lorenzo@google.com> <CAHo-Oox6qcD-+FoB0d+s45e1i4q_zw07a1NZGYNrah=goT1nQA@mail.gmail.com>
- <CAKD1Yr1daQPFvZ5abGk4pgA779FsM-L+eRg_yjxgDcOL5N1QZw@mail.gmail.com>
-In-Reply-To: <CAKD1Yr1daQPFvZ5abGk4pgA779FsM-L+eRg_yjxgDcOL5N1QZw@mail.gmail.com>
-From:   =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <zenczykowski@gmail.com>
-Date:   Wed, 19 Aug 2020 12:07:32 -0700
-Message-ID: <CAHo-OowrfkTjdudmN02G5TbZQCBYUCPZVwtHB+48FK_FVj=yAQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] usb: gadget: f_ncm: fix ncm_bitrate for SuperSpeed
- and above.
-To:     Lorenzo Colitti <lorenzo@google.com>
-Cc:     linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200731074122.6484-1-krzk@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 19, 2020 at 6:56 AM Lorenzo Colitti <lorenzo@google.com> wrote:
->
-> On Wed, Aug 19, 2020 at 6:39 AM Maciej =C5=BBenczykowski
-> <zenczykowski@gmail.com> wrote:
-> > > -       if (gadget_is_superspeed(g) && g->speed =3D=3D USB_SPEED_SUPE=
-R)
-> > > -               return 13 * 1024 * 8 * 1000 * 8;
-> > > +       if (gadget_is_superspeed(g) && g->speed >=3D USB_SPEED_SUPER)
-> > > +               return 4000000000;
->
-> Will respin to change this to 4000000000U to address the warning
-> reported by the kernel test robot.
->
-> > Do you know what this actually affects besides the display?
-> > My cursory investigation shows it gets printed to kernel log and sent
-> > over some sort of ncm notification to the other side...
->
-> Yes, it's sent in the ConnectionSpeedChange notifications which are
-> intended to inform the host about how fast the link is. For a direct
-> connection over a USB cable this does not make much sense, but for,
-> say, a Gigabit Ethernet dongle that uses NCM, you'd probably want to
-> inform the host of whether the connection is 10, 100, or 1000M. This
-> is not what the code does now, obviously.
->
-> > Is it better to underestimate or overestimate?
-> > (ie. would it be better to report 3.5 gbps for super and max out at
-> > 4.2 gbps for super plus instead?)
->
-> I don't think it matters much. I'm happy to put 3860000000 for
-> SuperSpeed and 4200000000 for SuperSpeed Plus, or whatever else we
-> think makes sense. The speed is theoretical anyway. I suppose
-> reporting different speeds might be useful to debug whether the
-> connection is using 5G or >=3D 10G.
->
-> Felipe, any opinions?
+On Fri, Jul 31, 2020 at 09:41:22AM +0200, Krzysztof Kozlowski wrote:
+> Remove unused 'udc' variable to fix compile warnings:
+> 
+>     drivers/usb/gadget/udc/s3c2410_udc.c: In function 's3c2410_udc_dequeue':
+>     drivers/usb/gadget/udc/s3c2410_udc.c:1268:22: warning: variable 'udc' set but not used [-Wunused-but-set-variable]
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> ---
+>  drivers/usb/gadget/udc/s3c2410_udc.c | 3 ---
 
-Oh reporting diff speeds to make it more obvious what happened and
-whether SS+ is in use... that does seem like a win.
+Applied along with other mach-s3c (and related usb) cleanups to
+samsung-soc.
+
+Best regards,
+Krzysztof
+
