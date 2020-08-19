@@ -2,74 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58A14249D77
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Aug 2020 14:09:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63E55249D84
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Aug 2020 14:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728137AbgHSMJj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Aug 2020 08:09:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46818 "EHLO mail.kernel.org"
+        id S1728249AbgHSMJv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Aug 2020 08:09:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47662 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728200AbgHSMIe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 19 Aug 2020 08:08:34 -0400
+        id S1728207AbgHSMJu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 19 Aug 2020 08:09:50 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C9E36205CB;
-        Wed, 19 Aug 2020 12:08:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0CA20205CB;
+        Wed, 19 Aug 2020 12:09:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597838914;
-        bh=ds1bI2FNOetemI0iGOxjd//vmJ7FuX5vgPU2SVW5nOQ=;
+        s=default; t=1597838989;
+        bh=t/TZTN6magjI4csa/4SY5nxjnkjswmAQ6VB4tPt4FX8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p/C6dXOhGr5YrrBD8slToXpFiWvIHbiPDOvXWigza0lxxRXRnLPlwHZI9paHkeb1N
-         M4gl2HAbv84kIqey4gd+t1DIqIUOzNWzBwTs+HjZfQOz2ZzOHlBj8j0wQzyRs7DuNg
-         Werlhf12WnCxzoLwZubGDmLmSuSP0vTLPYlyy/EY=
-Date:   Wed, 19 Aug 2020 14:08:56 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     penghao <penghao@uniontech.com>
-Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com,
-        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB HID: Add disabled wakeup from s3 by touchpad on byd
- zhaoxin notebook
-Message-ID: <20200819120856.GA931936@kroah.com>
-References: <20200819115101.22532-1-penghao@uniontech.com>
+        b=vqWtTt6vHSS/+3hTZAFadZmyiLa0rrD/sO4Fp8oyRcW5/dWtC5UYsdEV2/imqVtPS
+         SvBzPwkpNeHS1U9DviqGFxnoF19GJcHHrVBx5F0P2UFoVapEWzWGjPKm8Q21yeffG5
+         T6WMG5BKSFcmk376CIuHJiI1RCWCRWJ9Ig69Js20=
+Date:   Wed, 19 Aug 2020 14:10:11 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [GIT PULL] USB: fixes for v5.9-rc2
+Message-ID: <20200819121011.GB931936@kroah.com>
+References: <87wo1uyhdm.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200819115101.22532-1-penghao@uniontech.com>
+In-Reply-To: <87wo1uyhdm.fsf@kernel.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 19, 2020 at 07:51:01PM +0800, penghao wrote:
-> BYD Notebook built-in touch pad, USB interface,so disabled,the touch pad
-> device idVendor 0x0c45 idProduct 0x7056
+On Wed, Aug 19, 2020 at 03:01:09PM +0300, Felipe Balbi wrote:
 > 
-> Signed-off-by: penghao <penghao@uniontech.com>
-> ---
->  drivers/hid/usbhid/hid-core.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
+> Hi Greg,
 > 
-> diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
-> index 492dd641a25d..630a3cad211f 100644
-> --- a/drivers/hid/usbhid/hid-core.c
-> +++ b/drivers/hid/usbhid/hid-core.c
-> @@ -1193,7 +1193,13 @@ static int usbhid_start(struct hid_device *hid)
->  			interface->desc.bInterfaceProtocol ==
->  				USB_INTERFACE_PROTOCOL_KEYBOARD) {
->  		usbhid_set_leds(hid);
-> -		device_set_wakeup_enable(&dev->dev, 1);
-> +		/*
-> +		 * USB HID: Add disabled touchpad wakeup on byd zhaoxin notebook
-> +		 */
-> +		if ((hid->vendor == 0x0c45) && (hid->product == 0x7056))
-> +			device_set_wakeup_enable(&dev->dev, 0);
-> +		else
-> +			device_set_wakeup_enable(&dev->dev, 1);
+> Here's my first pull request for the current -rc cycle. It contains only
+> 4 commits. Hopefully this means the USB gadget framework is almost ready
+> ;-)
 
-Shouldn't this be a quirk somewhere instead of this core check?
+Hah!
 
-thanks,
+> Let me know if you want anything to be changed
+> 
+> cheers
+> 
+> The following changes since commit 9123e3a74ec7b934a4a099e98af6a61c2f80bbf5:
+> 
+>   Linux 5.9-rc1 (2020-08-16 13:04:57 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git tags/fixes-for-v5.9-rc2
+
+now pulled and pushed out, thanks.
 
 greg k-h
