@@ -2,90 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19394249BB9
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Aug 2020 13:27:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE4EE249BBC
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Aug 2020 13:28:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728056AbgHSL13 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Aug 2020 07:27:29 -0400
-Received: from mga06.intel.com ([134.134.136.31]:63288 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727116AbgHSL1V (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 19 Aug 2020 07:27:21 -0400
-IronPort-SDR: vCsKWuPvDT7zYG4WsnbLCBHdiAzkGU9/paYxs7zudVzCchF2XGRAgj+YjQe94RVpO9bc8p9rHF
- V0YoIacUEmpQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9717"; a="216612662"
-X-IronPort-AV: E=Sophos;i="5.76,331,1592895600"; 
-   d="scan'208";a="216612662"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2020 04:27:20 -0700
-IronPort-SDR: uyxpC3TYfO1rGHJQqNXNOkfwQxVPBiXdoTMWebCucXgZbpfAT3IYcra/QIhfvrTT81ZO4wAarO
- /rp63RHHgyAg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,331,1592895600"; 
-   d="scan'208";a="497204521"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga006.fm.intel.com with ESMTP; 19 Aug 2020 04:27:17 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id CE706B8; Wed, 19 Aug 2020 14:27:16 +0300 (EEST)
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Nikunj A . Dadhania" <nikunj.dadhania@linux.intel.com>,
-        Srikanth Nandamuri <srikanth.nandamuri@intel.com>,
-        Lukas Wunner <lukas@wunner.de>
-Subject: [PATCH 2/2] thunderbolt: Use maximum USB3 link rate when reclaiming if link is not up
-Date:   Wed, 19 Aug 2020 14:27:16 +0300
-Message-Id: <20200819112716.59074-2-mika.westerberg@linux.intel.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200819112716.59074-1-mika.westerberg@linux.intel.com>
-References: <20200819112716.59074-1-mika.westerberg@linux.intel.com>
+        id S1728103AbgHSL2V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Aug 2020 07:28:21 -0400
+Received: from mail-io1-f69.google.com ([209.85.166.69]:44410 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727926AbgHSL2Q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Aug 2020 07:28:16 -0400
+Received: by mail-io1-f69.google.com with SMTP id m12so13991314iov.11
+        for <linux-usb@vger.kernel.org>; Wed, 19 Aug 2020 04:28:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=fZ+jHgbDVnTePiqQLf+qDPU79cvKlvXb87FOaXtnhP4=;
+        b=Ucn0r8bgW0dQ1GVYIiokTleJa7bNteTv+lHVx6URmc/9HDevkMPj50b89Ssu845A11
+         0KFduGUtiTA/9Lk16Qa8FraDsQEsK9tuum/L2Jc/claE3WmKZVNzCsDm5aAgvKXriEG9
+         XQfwLBQCpXWZHOF/Wk9Xf6CBnIrc9+6NWHnzwskDmjVvGL6M59B+6w+ycS+tAOrpa2cu
+         KYRDxHpF3FE+TGYhwVlHasXWi7YhVvKyXhbDobqio14neYoxDSpVKqCfVs/irs1bOZUY
+         aOQFwOAEjqRGctdP1KNA/Eqv1WqyFM+/WtSwRQw9D8YoGeQdeCm+/+uZI4j9IM836YdG
+         YtKg==
+X-Gm-Message-State: AOAM532XLop8pV4oLqeiK9jqDZXPmDifMhbY0//44zmzSEr3su3vB3NZ
+        vl5K4bbZxOb1o3O26/Om4UnA4OBub/OVblP7ajSAjhMvCTOJ
+X-Google-Smtp-Source: ABdhPJyYxCaTjoXI5lwBslHbXVUaP0mdunUILc4ZtNELRPRKvkHL8k2pW1d50vmUXXUCxuPOh/VozsgqiR+8Aerk512vkbZi4J8M
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a92:d7cd:: with SMTP id g13mr9475062ilq.51.1597836495670;
+ Wed, 19 Aug 2020 04:28:15 -0700 (PDT)
+Date:   Wed, 19 Aug 2020 04:28:15 -0700
+In-Reply-To: <0000000000008e983905ac9d0182@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000bbd1ff05ad394c92@google.com>
+Subject: Re: KASAN: use-after-free Read in rtl_fw_do_work
+From:   syzbot <syzbot+ff4b26b0bfbff2dc7960@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, davem@davemloft.net, kuba@kernel.org,
+        kvalo@codeaurora.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, pkshih@realtek.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If the USB3 link is not up the actual link rate is 0 so when reclaiming
-bandwidth we should look at maximum supported link rate instead.
+syzbot has found a reproducer for the following issue on:
 
-Cc: stable@vger.kernel.org
-Fixes: 0bd680cd900c ("thunderbolt: Add USB3 bandwidth management")
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
----
- drivers/thunderbolt/tunnel.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+HEAD commit:    28157b8c USB: Better name for __check_usb_generic()
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=1064697a900000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ccafc70ac3d5f49c
+dashboard link: https://syzkaller.appspot.com/bug?extid=ff4b26b0bfbff2dc7960
+compiler:       gcc (GCC) 10.1.0-syz 20200507
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10f0a00e900000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=162bc289900000
 
-diff --git a/drivers/thunderbolt/tunnel.c b/drivers/thunderbolt/tunnel.c
-index 2aae2c76d880..d50e5b93632a 100644
---- a/drivers/thunderbolt/tunnel.c
-+++ b/drivers/thunderbolt/tunnel.c
-@@ -951,10 +951,18 @@ static void tb_usb3_reclaim_available_bandwidth(struct tb_tunnel *tunnel,
- 	int ret, max_rate, allocate_up, allocate_down;
- 
- 	ret = usb4_usb3_port_actual_link_rate(tunnel->src_port);
--	if (ret <= 0) {
--		tb_tunnel_warn(tunnel, "tunnel is not up\n");
-+	if (ret < 0) {
-+		tb_tunnel_warn(tunnel, "failed to read actual link rate\n");
- 		return;
-+	} else if (!ret) {
-+		/* Use maximum link rate if the link valid is not set */
-+		ret = usb4_usb3_port_max_link_rate(tunnel->src_port);
-+		if (ret < 0) {
-+			tb_tunnel_warn(tunnel, "failed to read maximum link rate\n");
-+			return;
-+		}
- 	}
-+
- 	/*
- 	 * 90% of the max rate can be allocated for isochronous
- 	 * transfers.
--- 
-2.28.0
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ff4b26b0bfbff2dc7960@syzkaller.appspotmail.com
+
+usb 6-1: Direct firmware load for rtlwifi/rtl8192cufw_TMSC.bin failed with error -2
+usb 6-1: Direct firmware load for rtlwifi/rtl8192cufw.bin failed with error -2
+==================================================================
+BUG: KASAN: use-after-free in rtl_fw_do_work+0x407/0x430 drivers/net/wireless/realtek/rtlwifi/core.c:87
+Read of size 8 at addr ffff8881ca9aff38 by task kworker/0:1/328
+
+CPU: 0 PID: 328 Comm: kworker/0:1 Not tainted 5.9.0-rc1-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: events request_firmware_work_func
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0xf6/0x16e lib/dump_stack.c:118
+ print_address_description.constprop.0+0x1c/0x210 mm/kasan/report.c:383
+ __kasan_report mm/kasan/report.c:513 [inline]
+ kasan_report.cold+0x37/0x7c mm/kasan/report.c:530
+ rtl_fw_do_work+0x407/0x430 drivers/net/wireless/realtek/rtlwifi/core.c:87
+ request_firmware_work_func+0x126/0x250 drivers/base/firmware_loader/main.c:1001
+ process_one_work+0x94c/0x15f0 kernel/workqueue.c:2269
+ worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
+ kthread+0x392/0x470 kernel/kthread.c:292
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+
+The buggy address belongs to the page:
+page:00000000fcdef481 refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1ca9af
+flags: 0x200000000000000()
+raw: 0200000000000000 0000000000000000 ffffea00072a6bc8 0000000000000000
+raw: 0000000000000000 0000000000000000 00000000ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+ ffff8881ca9afe00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff8881ca9afe80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>ffff8881ca9aff00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+                                        ^
+ ffff8881ca9aff80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff8881ca9b0000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+==================================================================
 
