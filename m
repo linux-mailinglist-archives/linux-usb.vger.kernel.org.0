@@ -2,64 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CBA22494B1
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Aug 2020 07:54:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D5F249503
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Aug 2020 08:33:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726435AbgHSFyl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Aug 2020 01:54:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34940 "EHLO mail.kernel.org"
+        id S1726697AbgHSGdJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Aug 2020 02:33:09 -0400
+Received: from mga11.intel.com ([192.55.52.93]:54924 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725997AbgHSFyl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 19 Aug 2020 01:54:41 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5922D20772;
-        Wed, 19 Aug 2020 05:54:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597816480;
-        bh=u1pQ/vhujwi7PrpNVhL2hvhkSG1EjCkasQq0Cr89ZSI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IlZgRlBZy9qn8Svn9SKKIIwa8W7XtO6ZqQlu6UBqT+UpneuEHI5SGpAf8t9TIJdDE
-         QeNgNH2PHPR7gBhWceO7Cgj7f+hws62EdjUkxwkL+/vcQJY4pu1k21/fBiqfaWkfTQ
-         oz0+KFO+zxd+khx9qyRl8AwFaKCHmf+OT80b37/Q=
-Date:   Wed, 19 Aug 2020 07:55:03 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Bastien Nocera <hadess@hadess.net>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v8 3/3] USB: Fix device driver race
-Message-ID: <20200819055503.GC853200@kroah.com>
-References: <20200818110445.509668-1-hadess@hadess.net>
- <20200818110445.509668-3-hadess@hadess.net>
- <fdfc0146-5b7f-1805-3c35-68c662b2651d@gmail.com>
- <20200818172901.GA152667@rowland.harvard.edu>
- <a4e87e78-7ce4-efaa-55a7-7fe7c33094c5@gmail.com>
+        id S1726685AbgHSGdI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 19 Aug 2020 02:33:08 -0400
+IronPort-SDR: VR+3QcAulfk/HIxfCiq8T2S1bybY+5vQK8lxbQRkQNUGpEV2tQfeUNAqVZZRweEBOv/QS7Of1T
+ 5LPkzzBzO9zQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9717"; a="152675316"
+X-IronPort-AV: E=Sophos;i="5.76,330,1592895600"; 
+   d="scan'208";a="152675316"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2020 23:30:57 -0700
+IronPort-SDR: yWGynPXoF/ygcZzdiuq4SnHzVEviyzMnEv8e3E0nomUDhYzbJYzVNCN8LMryjRcCns9bAmMmcb
+ nwLn6d8Wq2LQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,330,1592895600"; 
+   d="scan'208";a="400730444"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 18 Aug 2020 23:30:54 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 19 Aug 2020 09:30:54 +0300
+Date:   Wed, 19 Aug 2020 09:30:54 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2 v4] tcpm: During PR_SWAP, source caps should be sent
+ only after tSwapSourceStart
+Message-ID: <20200819063054.GA2772165@kuha.fi.intel.com>
+References: <20200817183828.1895015-1-badhri@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a4e87e78-7ce4-efaa-55a7-7fe7c33094c5@gmail.com>
+In-Reply-To: <20200817183828.1895015-1-badhri@google.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 18, 2020 at 11:49:43PM +0300, Sergei Shtylyov wrote:
-> On 8/18/20 8:29 PM, Alan Stern wrote:
+On Mon, Aug 17, 2020 at 11:38:27AM -0700, Badhri Jagan Sridharan wrote:
+> The patch addresses the compliance test failures while running
+> TD.PD.CP.E3, TD.PD.CP.E4, TD.PD.CP.E5 of the "Deterministic PD
+> Compliance MOI" test plan published in https://www.usb.org/usbc.
+> For a product to be Type-C compliant, it's expected that these tests
+> are run on usb.org certified Type-C compliance tester as mentioned in
+> https://www.usb.org/usbc.
 > 
-> >>> +	} else {
-> >>>  		printk(KERN_ERR "%s: error %d registering device "
-> >>>  			"	driver %s\n",
-> >>
-> >>    Unrelated but... hm, this string literal seems weird. GregKH, would it be OK if we fix it?
-> >>
-> >>>  			usbcore_name, retval, new_udriver->name);
-> > 
-> > Indeed, an extra tab character snuck in there by mistake.  It has been 
-> > present ever since 2006, when the routine was originally added by commit 
-> > 8bb54ab573ec ("usbcore: add usb_device_driver definition").
+> The purpose of the tests TD.PD.CP.E3, TD.PD.CP.E4, TD.PD.CP.E5 is to
+> verify the PR_SWAP response of the device. While doing so, the test
+> asserts that Source Capabilities message is NOT received from the test
+> device within tSwapSourceStart min (20 ms) from the time the last bit
+> of GoodCRC corresponding to the RS_RDY message sent by the UUT was
+> sent. If it does then the test fails.
 > 
->    And meanwhile it got copied to another function, usb_register_driver().
-> I guess it's OK to fix both w/one patch?
+> This is in line with the requirements from the USB Power Delivery
+> Specification Revision 3.0, Version 1.2:
+> "6.6.8.1 SwapSourceStartTimer
+> The SwapSourceStartTimer Shall be used by the new Source, after a
+> Power Role Swap or Fast Role Swap, to ensure that it does not send
+> Source_Capabilities Message before the new Sink is ready to receive
+> the
+> Source_Capabilities Message. The new Source Shall Not send the
+> Source_Capabilities Message earlier than tSwapSourceStart after the
+> last bit of the EOP of GoodCRC Message sent in response to the PS_RDY
+> Message sent by the new Source indicating that its power supply is
+> ready."
+> 
+> The patch makes sure that TCPM does not send the Source_Capabilities
+> Message within tSwapSourceStart(20ms) by transitioning into
+> SRC_STARTUP only after  tSwapSourceStart(20ms).
+> 
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Yes.
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> ---
+> Changes since V1:
+> - Comment on the permissible values of tSwapSourceStart
+> 
+> Changes since V2:
+> - Fixing alignment issue pointed out by Guenter.
+> - Added Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> 
+> Changes since V3:
+> - Updated commit description and made it elaborate to address Heikki's
+>   suggestion.
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 2 +-
+>  include/linux/usb/pd.h        | 1 +
+>  2 files changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 3ef37202ee37..d38347bd3335 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -3555,7 +3555,7 @@ static void run_state_machine(struct tcpm_port *port)
+>  		 */
+>  		tcpm_set_pwr_role(port, TYPEC_SOURCE);
+>  		tcpm_pd_send_control(port, PD_CTRL_PS_RDY);
+> -		tcpm_set_state(port, SRC_STARTUP, 0);
+> +		tcpm_set_state(port, SRC_STARTUP, PD_T_SWAP_SRC_START);
+>  		break;
+>  
+>  	case VCONN_SWAP_ACCEPT:
+> diff --git a/include/linux/usb/pd.h b/include/linux/usb/pd.h
+> index b6c233e79bd4..1df895e4680b 100644
+> --- a/include/linux/usb/pd.h
+> +++ b/include/linux/usb/pd.h
+> @@ -473,6 +473,7 @@ static inline unsigned int rdo_max_power(u32 rdo)
+>  #define PD_T_ERROR_RECOVERY	100	/* minimum 25 is insufficient */
+>  #define PD_T_SRCSWAPSTDBY      625     /* Maximum of 650ms */
+>  #define PD_T_NEWSRC            250     /* Maximum of 275ms */
+> +#define PD_T_SWAP_SRC_START	20	/* Minimum of 20ms */
+>  
+>  #define PD_T_DRP_TRY		100	/* 75 - 150 ms */
+>  #define PD_T_DRP_TRYWAIT	600	/* 400 - 800 ms */
+
+thanks,
+
+-- 
+heikki
