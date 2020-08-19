@@ -2,174 +2,172 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 94DF0249BED
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Aug 2020 13:36:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 022A0249BF3
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Aug 2020 13:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727995AbgHSLgT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Aug 2020 07:36:19 -0400
-Received: from mail-io1-f71.google.com ([209.85.166.71]:45778 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727814AbgHSLgQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Aug 2020 07:36:16 -0400
-Received: by mail-io1-f71.google.com with SMTP id q5so13936364ion.12
-        for <linux-usb@vger.kernel.org>; Wed, 19 Aug 2020 04:36:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=6Izm6KZJGkoT4ry2D4FMOXAmvEF08wicPMAS6AKBkCQ=;
-        b=oEcpUAnJL7LviKkYX4JhoGwC/Nk5dLoc0F1lNdXsetNp5Sx7LQu5CnQ2p99JZRB/u7
-         GJMHtdNEUc0ZV5zmZitrVXJ4KAdTiudOi5JTGu/Sg+uRMFke+PB+DbX0Gew2l3OOXEuv
-         rIpdAnqF3cbfwwkYTdwOVXfTsm7jC6PH6YV7Ko0f8Lwwo0qAbQaSQJVONhIeNDAZxKPF
-         ywByn9mMyc/dIsAQHjExse0dBAkPCEmaITE0oW9z22qP9oK3TTO2C6D5+QxzUrANQacm
-         oocczftDjEE7fo/U/PMHgPqD+8nsEA3yC+EEC0l1+Ydlu8q3VoPMGwb4oMHgX2a/OEkt
-         jUaQ==
-X-Gm-Message-State: AOAM532kB08PbAcBQ2S6uYz0mhOgs+5/75zv2qtJoZdxPqxXgJNLE/bC
-        uKHaPkhAQOGQ7wsi74la4e1Bxpc184PSA1bYlIy1B90HgWfD
-X-Google-Smtp-Source: ABdhPJyjk22LAvM0RK3pKXgF1KEeAJU6yYWQZUwekpox3+ieHfoCpkOr1HpO57I819EkY8XvvSXM7bi3zVEuYquMvQ5FSqDm6YDg
+        id S1728104AbgHSLh1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Aug 2020 07:37:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39266 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727079AbgHSLhV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 19 Aug 2020 07:37:21 -0400
+Received: from saruman (unknown [85.206.163.145])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 099822078D;
+        Wed, 19 Aug 2020 11:37:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1597837040;
+        bh=bz2q61a1QGUygLHfRAwZFSBYQUXwYUk++yBB0zbgQLk=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=j6jNm51KfUTfd25ShvpMsalmrdyJvXseNjg+4OQSTU1HCB1j0z8zKgkS0YXK7BbVF
+         BGms/qZGpMmpo4mBzcsbsG39iNOxcs1hVLURR0pSboFyev/me/1bdEdLddBwgUv+2w
+         EXEsEbdGDIP/RkFH8m9YPdh1IAXgaguHNYXmbNcg=
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Wesley Cheng <wcheng@codeaurora.org>, gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        jackp@codeaurora.org, Wesley Cheng <wcheng@codeaurora.org>
+Subject: Re: [PATCH] usb: dwc3: Stop active transfers before halting the
+ controller
+In-Reply-To: <20200819051739.22123-1-wcheng@codeaurora.org>
+References: <20200819051739.22123-1-wcheng@codeaurora.org>
+Date:   Wed, 19 Aug 2020 14:37:11 +0300
+Message-ID: <87zh6qyihk.fsf@kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a02:852c:: with SMTP id g41mr23876031jai.58.1597836975423;
- Wed, 19 Aug 2020 04:36:15 -0700 (PDT)
-Date:   Wed, 19 Aug 2020 04:36:15 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000544b0205ad3969d7@google.com>
-Subject: KASAN: slab-out-of-bounds Read in mxl5007t_attach
-From:   syzbot <syzbot+59c4a4184685764d112a@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        mchehab@kernel.org, mkrufky@linuxtv.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    28157b8c USB: Better name for __check_usb_generic()
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=13a6a929900000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ccafc70ac3d5f49c
-dashboard link: https://syzkaller.appspot.com/bug?extid=59c4a4184685764d112a
-compiler:       gcc (GCC) 10.1.0-syz 20200507
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+59c4a4184685764d112a@syzkaller.appspotmail.com
-
-au0828: recv_control_msg() Failed receiving control message, error -71.
-au8522_writereg: writereg error (reg == 0x106, val == 0x0001, ret == -5)
-==================================================================
-BUG: KASAN: slab-out-of-bounds in i2c_adapter_id include/linux/i2c.h:902 [inline]
-BUG: KASAN: slab-out-of-bounds in mxl5007t_attach+0x2b6/0x2e0 drivers/media/tuners/mxl5007t.c:853
-Read of size 4 at addr ffff8881d01247c8 by task kworker/0:3/136
-
-CPU: 0 PID: 136 Comm: kworker/0:3 Not tainted 5.9.0-rc1-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0xf6/0x16e lib/dump_stack.c:118
- print_address_description.constprop.0+0x1c/0x210 mm/kasan/report.c:383
- __kasan_report mm/kasan/report.c:513 [inline]
- kasan_report.cold+0x37/0x7c mm/kasan/report.c:530
- i2c_adapter_id include/linux/i2c.h:902 [inline]
- mxl5007t_attach+0x2b6/0x2e0 drivers/media/tuners/mxl5007t.c:853
- au0828_dvb_register+0x451/0x1360 drivers/media/usb/au0828/au0828-dvb.c:597
- au0828_usb_probe+0x56f/0x5d5 drivers/media/usb/au0828/au0828-core.c:738
- usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:374
- really_probe+0x291/0xde0 drivers/base/dd.c:553
- driver_probe_device+0x26b/0x3d0 drivers/base/dd.c:738
- __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:844
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:431
- __device_attach+0x228/0x4a0 drivers/base/dd.c:912
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
- device_add+0xb51/0x1c70 drivers/base/core.c:2930
- usb_set_configuration+0xf05/0x18a0 drivers/usb/core/message.c:2032
- usb_generic_driver_probe+0xba/0xf2 drivers/usb/core/generic.c:239
- usb_probe_device+0xd9/0x250 drivers/usb/core/driver.c:272
- really_probe+0x291/0xde0 drivers/base/dd.c:553
- driver_probe_device+0x26b/0x3d0 drivers/base/dd.c:738
- __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:844
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:431
- __device_attach+0x228/0x4a0 drivers/base/dd.c:912
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
- device_add+0xb51/0x1c70 drivers/base/core.c:2930
- usb_new_device.cold+0x71d/0xfd4 drivers/usb/core/hub.c:2554
- hub_port_connect drivers/usb/core/hub.c:5208 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
- port_event drivers/usb/core/hub.c:5494 [inline]
- hub_event+0x2361/0x4390 drivers/usb/core/hub.c:5576
- process_one_work+0x94c/0x15f0 kernel/workqueue.c:2269
- worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
- kthread+0x392/0x470 kernel/kthread.c:292
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
-
-Allocated by task 25209:
- kasan_save_stack+0x1b/0x40 mm/kasan/common.c:48
- kasan_set_track mm/kasan/common.c:56 [inline]
- __kasan_kmalloc.constprop.0+0xc2/0xd0 mm/kasan/common.c:461
- kmalloc include/linux/slab.h:554 [inline]
- kzalloc include/linux/slab.h:666 [inline]
- ep_alloc.constprop.0+0xff/0x370 fs/eventpoll.c:1016
- do_epoll_create+0x97/0x1c0 fs/eventpoll.c:2064
- __do_sys_epoll_create1 fs/eventpoll.c:2095 [inline]
- __se_sys_epoll_create1 fs/eventpoll.c:2093 [inline]
- __x64_sys_epoll_create1+0x2d/0x40 fs/eventpoll.c:2093
- do_syscall_64+0x2d/0x40 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-
-Freed by task 25209:
- kasan_save_stack+0x1b/0x40 mm/kasan/common.c:48
- kasan_set_track+0x1c/0x30 mm/kasan/common.c:56
- kasan_set_free_info+0x1b/0x30 mm/kasan/generic.c:355
- __kasan_slab_free+0xf3/0x130 mm/kasan/common.c:422
- slab_free_hook mm/slub.c:1548 [inline]
- slab_free_freelist_hook+0x53/0x140 mm/slub.c:1581
- slab_free mm/slub.c:3142 [inline]
- kfree+0xbe/0x470 mm/slub.c:4123
- ep_eventpoll_release+0x41/0x60 fs/eventpoll.c:864
- __fput+0x282/0x920 fs/file_table.c:281
- task_work_run+0xdd/0x1a0 kernel/task_work.c:141
- exit_task_work include/linux/task_work.h:25 [inline]
- do_exit+0xbaf/0x2890 kernel/exit.c:806
- do_group_exit+0x125/0x310 kernel/exit.c:903
- __do_sys_exit_group kernel/exit.c:914 [inline]
- __se_sys_exit_group kernel/exit.c:912 [inline]
- __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:912
- do_syscall_64+0x2d/0x40 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-
-The buggy address belongs to the object at ffff8881d0124400
- which belongs to the cache kmalloc-512 of size 512
-The buggy address is located 456 bytes to the right of
- 512-byte region [ffff8881d0124400, ffff8881d0124600)
-The buggy address belongs to the page:
-page:00000000182cf651 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff8881d0124000 pfn:0x1d0124
-head:00000000182cf651 order:2 compound_mapcount:0 compound_pincount:0
-flags: 0x200000000010200(slab|head)
-raw: 0200000000010200 ffffea0007296508 ffffea00074f9908 ffff8881da041280
-raw: ffff8881d0124000 000000000010000d 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
- ffff8881d0124680: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff8881d0124700: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->ffff8881d0124780: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-                                              ^
- ffff8881d0124800: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff8881d0124880: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Hi,
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Wesley Cheng <wcheng@codeaurora.org> writes:
+> In the DWC3 databook, for a device initiated disconnect, the driver is
+> required to send dependxfer commands for any pending transfers.
+> In addition, before the controller can move to the halted state, the SW
+> needs to acknowledge any pending events.  If the controller is not halted
+> properly, there is a chance the controller will continue accessing stale =
+or
+> freed TRBs and buffers.
+>
+> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+>
+> ---
+> Verified fix by adding a check for ETIMEDOUT during the run stop call.
+> Shell script writing to the configfs UDC file to trigger disconnect and
+> connect.  Batch script to have PC execute data transfers over adb (ie adb
+> push)  After a few iterations, we'd run into a scenario where the
+> controller wasn't halted.  With the following change, no failed halts aft=
+er
+> many iterations.
+> ---
+>  drivers/usb/dwc3/ep0.c    |  2 +-
+>  drivers/usb/dwc3/gadget.c | 59 +++++++++++++++++++++++++++++++++++++--
+>  2 files changed, 57 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
+> index 59f2e8c31bd1..456aa87e8778 100644
+> --- a/drivers/usb/dwc3/ep0.c
+> +++ b/drivers/usb/dwc3/ep0.c
+> @@ -197,7 +197,7 @@ int dwc3_gadget_ep0_queue(struct usb_ep *ep, struct u=
+sb_request *request,
+>  	int				ret;
+>=20=20
+>  	spin_lock_irqsave(&dwc->lock, flags);
+> -	if (!dep->endpoint.desc) {
+> +	if (!dep->endpoint.desc || !dwc->pullups_connected) {
+
+these two should be the same. If pullups are not connected, there's no
+way we can have an endpoint descriptor. Did you find a race condition here?
+
+> @@ -1926,6 +1926,24 @@ static int dwc3_gadget_set_selfpowered(struct usb_=
+gadget *g,
+>  	return 0;
+>  }
+>=20=20
+> +static void dwc3_stop_active_transfers(struct dwc3 *dwc)
+> +{
+> +	u32 epnum;
+> +
+> +	for (epnum =3D 2; epnum < DWC3_ENDPOINTS_NUM; epnum++) {
+> +		struct dwc3_ep *dep;
+> +
+> +		dep =3D dwc->eps[epnum];
+> +		if (!dep)
+> +			continue;
+> +
+> +		if (!(dep->flags & DWC3_EP_ENABLED))
+> +			continue;
+> +
+> +		dwc3_remove_requests(dwc, dep);
+> +	}
+> +}
+> +
+>  static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on, int suspend)
+>  {
+>  	u32			reg;
+> @@ -1950,16 +1968,37 @@ static int dwc3_gadget_run_stop(struct dwc3 *dwc,=
+ int is_on, int suspend)
+>=20=20
+>  		dwc->pullups_connected =3D true;
+>  	} else {
+> +		dwc->pullups_connected =3D false;
+> +
+> +		__dwc3_gadget_ep_disable(dwc->eps[0]);
+> +		__dwc3_gadget_ep_disable(dwc->eps[1]);
+> +
+> +		/*
+> +		 * The databook explicitly mentions for a device-initiated
+> +		 * disconnect sequence, the SW needs to ensure that it ends any
+> +		 * active transfers.
+> +		 */
+> +		dwc3_stop_active_transfers(dwc);
+
+IIRC, gadget driver is required to dequeue transfers before
+disconnecting. My memory is a bit fuzzy in that area, but anyway, how
+did you trigger this problem?
+
+> @@ -1994,9 +2033,15 @@ static int dwc3_gadget_pullup(struct usb_gadget *g=
+, int is_on)
+>  		}
+>  	}
+>=20=20
+> +	/*
+> +	 * Synchronize and disable any further event handling while controller
+> +	 * is being enabled/disabled.
+> +	 */
+> +	disable_irq(dwc->irq_gadget);
+
+looks like a call to synchronize_irq() would be enough here.
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAl89DucRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQbK0g/+PGZ3r/FwZvIA5KkkqUjbQpd2wXWBXLrz
+Vv0ZPdNu/VsVIulBDYtGYghXEaGkvstsCDwvmO0WPk2jZgxQ8qdhsS34m5G+G/AT
+QmCtVKaKi5voX5u66cOf4NmiRph5In5R42gybkgFVzMmgje4YlcQS3c6cMe3Yzdl
+z9wQX36dvZ/4gA2BmYNIACp/fmFACICG4H3N5VRCETDo1Ok/JfBHEKtlJTFIIw5Z
+BpAoKlloPKN8O7Ge7bcrr3MFECohJguw2J6q59hCEJthMLJu5Ru1himq19whGdbn
+ii6hLwWvLW4/hxpw1MHNNWobpDFl37B/dcfUgSh0doHsN/DbDvT28fl9cJb7/DZV
+VrX8eFdbZ0bsruTmdHKT/R+lWB5r9icAf0dO3v9m0O/LYKcRAT0k3E3fnOvnuxWG
+Qtgdh8DOJm0swhgThNsCTX2Q2ikHLV21ts6tdz6h2WJCLSLkUGku07MMP33mHz2S
+PvUF/gFJjxB7UwAPKrUAVWyp/8pB+tY3CpxYwXJsDVTzfMlzzI1eztbKLR8uyY0e
+HoG+J+LAcfecBZu6jLmFWtVwkQEG5AoOxhFmzW6Nfeo9hkr0UxuIxbvDK+jvHo35
+dQMzd3hq4414CEtzjle5ySYwDE6IkufT6DGn9fyOmGpkKbgK/13lbwA1u0LOUuEJ
+xz36oc6xhZ4=
+=qJ1X
+-----END PGP SIGNATURE-----
+--=-=-=--
