@@ -2,95 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67F5624A20B
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Aug 2020 16:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18C1924A24D
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Aug 2020 17:00:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728437AbgHSOwh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Aug 2020 10:52:37 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:33153 "HELO
+        id S1728610AbgHSPAI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Aug 2020 11:00:08 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:42481 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728093AbgHSOwh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Aug 2020 10:52:37 -0400
-Received: (qmail 183014 invoked by uid 1000); 19 Aug 2020 10:52:36 -0400
-Date:   Wed, 19 Aug 2020 10:52:36 -0400
-From:   "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: Re: [PATCH v2 6/6] Revert "usb: udc: allow adding and removing the
- same gadget device"
-Message-ID: <20200819145236.GA181847@rowland.harvard.edu>
-References: <20200810022510.6516-1-peter.chen@nxp.com>
- <20200810022510.6516-7-peter.chen@nxp.com>
- <20200818093305.GA34785@kroah.com>
- <AM7PR04MB7157182367D7EEE2BDAD53318B5C0@AM7PR04MB7157.eurprd04.prod.outlook.com>
- <20200818144655.GA144306@rowland.harvard.edu>
- <20200819013014.GA16614@b29397-desktop>
+        with SMTP id S1727087AbgHSO77 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Aug 2020 10:59:59 -0400
+Received: (qmail 183296 invoked by uid 1000); 19 Aug 2020 10:59:57 -0400
+Date:   Wed, 19 Aug 2020 10:59:57 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Lee Jones <lee.jones@linaro.org>
+Subject: Re: [PATCH 10/10] usb: udc: net2280: convert to
+ readl_poll_timeout_atomic()
+Message-ID: <20200819145957.GA183103@rowland.harvard.edu>
+References: <1597840865-26631-1-git-send-email-chunfeng.yun@mediatek.com>
+ <1597840865-26631-10-git-send-email-chunfeng.yun@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200819013014.GA16614@b29397-desktop>
+In-Reply-To: <1597840865-26631-10-git-send-email-chunfeng.yun@mediatek.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 19, 2020 at 01:31:14AM +0000, Peter Chen wrote:
-> On 20-08-18 10:46:55, stern@rowland.harvard.edu wrote:
-> > On Tue, Aug 18, 2020 at 10:05:51AM +0000, Peter Chen wrote:
-> > >  
-> > > > >
-> > > > > diff --git a/drivers/usb/gadget/udc/core.c
-> > > > > b/drivers/usb/gadget/udc/core.c index 473e74088b1f..43351b0af569
-> > > > > 100644
-> > > > > --- a/drivers/usb/gadget/udc/core.c
-> > > > > +++ b/drivers/usb/gadget/udc/core.c
-> > > > > @@ -1386,7 +1386,6 @@ void usb_del_gadget_udc(struct usb_gadget
-> > > > > *gadget)  {
-> > > > >  	usb_del_gadget(gadget);
-> > > > >  	usb_put_gadget(gadget);
-> > > > > -	memset(&gadget->dev, 0x00, sizeof(gadget->dev));
-> > > > 
-> > > > Shouldn't you do this patch earlier in the series, as the
-> > > > usb_put_gadget() call could have freed the memory that is being cleared here?
-> > > > 
-> > > 
-> > > If I did it earlier, it would cause dwc3 break if people do 'git bisect', dwc3 issue is
-> > > fixed at patch 5.
-> > 
-> > If you use the patch I posted earlier:
-> > 
-> > 	https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fmarc.info%2F%3Fl%3Dlinux-usb%26m%3D159605415210351%26w%3D2&amp;data=02%7C01%7Cpeter.chen%40nxp.com%7C84c12532be684ba94c1708d843858e86%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C637333588196922016&amp;sdata=gOe5kecj38gR9qIbkfjVkNO%2FICp0bHis30Yi2tomrc8%3D&amp;reserved=0
-> > 
-> > instead of this one then dwc3 would continue to work correctly during 
-> > the intermediate stages of the series.
-> > 
+On Wed, Aug 19, 2020 at 08:41:05PM +0800, Chunfeng Yun wrote:
+> Use readl_poll_timeout_atomic() to simplify code
 > 
-> But at last, we don't want below at .release function
+> Cc: Alan Stern <stern@rowland.harvard.edu>
+> Cc: Felipe Balbi <balbi@kernel.org>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+>  drivers/usb/gadget/udc/net2280.c | 21 ++++++++++-----------
+>  1 file changed, 10 insertions(+), 11 deletions(-)
 > 
-> 	memset(dev, 0, sizeof(*dev));
-> 
-> It still needs another patch to delete it after dwc3 changes,
-> and it changes .release function name to usb_udc_zero_release,
-> this change may also not be needed.
-> 
-> Or I only do move memory clear operation at the first patch, and
-> delete it at the last patch, it could let the reader not see
-> the memory clear operation at the usb_del_gadget during the patch
-> series.
+> diff --git a/drivers/usb/gadget/udc/net2280.c b/drivers/usb/gadget/udc/net2280.c
+> index 7530bd9..f1a21f4 100644
+> --- a/drivers/usb/gadget/udc/net2280.c
+> +++ b/drivers/usb/gadget/udc/net2280.c
+> @@ -52,6 +52,7 @@
+>  #include <linux/usb/gadget.h>
+>  #include <linux/prefetch.h>
+>  #include <linux/io.h>
+> +#include <linux/iopoll.h>
+>  
+>  #include <asm/byteorder.h>
+>  #include <asm/irq.h>
+> @@ -360,18 +361,16 @@ static inline void enable_pciirqenb(struct net2280_ep *ep)
+>  static int handshake(u32 __iomem *ptr, u32 mask, u32 done, int usec)
+>  {
+>  	u32	result;
+> +	int	ret;
+>  
+> -	do {
+> -		result = readl(ptr);
+> -		if (result == ~(u32)0)		/* "device unplugged" */
+> -			return -ENODEV;
+> -		result &= mask;
+> -		if (result == done)
+> -			return 0;
+> -		udelay(1);
+> -		usec--;
+> -	} while (usec > 0);
+> -	return -ETIMEDOUT;
+> +	ret = readl_poll_timeout_atomic(ptr, result,
+> +					((result & mask) == done ||
+> +					 result == U32_MAX),
+> +					1, usec);
+> +	if (result == U32_MAX)		/* device unplugged */
+> +		return -ENODEV;
+> +
+> +	return ret;
+>  }
+>  
+>  static const struct usb_ep_ops net2280_ep_ops;
+> -- 
 
-One way or another, the existing code is wrong.  I guess the best we can 
-do for now is to let it remain wrong during the patch series, rather 
-than changing it to be wrong in a different way.
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-To put it another way, we already run the risk of clearing memory that 
-has been freed.  The series does not make that risk any worse, and it 
-eventually fixes the problem.
-
-This means your patch should remain in its position at the end of the 
-series.
+However, I noticed that the kerneldoc for readl_poll_timeout_atomic() is 
+out of date.  Can you fix it up?
 
 Alan Stern
