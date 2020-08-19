@@ -2,45 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE4EE249BBC
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Aug 2020 13:28:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94DF0249BED
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Aug 2020 13:36:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728103AbgHSL2V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Aug 2020 07:28:21 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:44410 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727926AbgHSL2Q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Aug 2020 07:28:16 -0400
-Received: by mail-io1-f69.google.com with SMTP id m12so13991314iov.11
-        for <linux-usb@vger.kernel.org>; Wed, 19 Aug 2020 04:28:16 -0700 (PDT)
+        id S1727995AbgHSLgT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Aug 2020 07:36:19 -0400
+Received: from mail-io1-f71.google.com ([209.85.166.71]:45778 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727814AbgHSLgQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Aug 2020 07:36:16 -0400
+Received: by mail-io1-f71.google.com with SMTP id q5so13936364ion.12
+        for <linux-usb@vger.kernel.org>; Wed, 19 Aug 2020 04:36:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=fZ+jHgbDVnTePiqQLf+qDPU79cvKlvXb87FOaXtnhP4=;
-        b=Ucn0r8bgW0dQ1GVYIiokTleJa7bNteTv+lHVx6URmc/9HDevkMPj50b89Ssu845A11
-         0KFduGUtiTA/9Lk16Qa8FraDsQEsK9tuum/L2Jc/claE3WmKZVNzCsDm5aAgvKXriEG9
-         XQfwLBQCpXWZHOF/Wk9Xf6CBnIrc9+6NWHnzwskDmjVvGL6M59B+6w+ycS+tAOrpa2cu
-         KYRDxHpF3FE+TGYhwVlHasXWi7YhVvKyXhbDobqio14neYoxDSpVKqCfVs/irs1bOZUY
-         aOQFwOAEjqRGctdP1KNA/Eqv1WqyFM+/WtSwRQw9D8YoGeQdeCm+/+uZI4j9IM836YdG
-         YtKg==
-X-Gm-Message-State: AOAM532XLop8pV4oLqeiK9jqDZXPmDifMhbY0//44zmzSEr3su3vB3NZ
-        vl5K4bbZxOb1o3O26/Om4UnA4OBub/OVblP7ajSAjhMvCTOJ
-X-Google-Smtp-Source: ABdhPJyYxCaTjoXI5lwBslHbXVUaP0mdunUILc4ZtNELRPRKvkHL8k2pW1d50vmUXXUCxuPOh/VozsgqiR+8Aerk512vkbZi4J8M
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=6Izm6KZJGkoT4ry2D4FMOXAmvEF08wicPMAS6AKBkCQ=;
+        b=oEcpUAnJL7LviKkYX4JhoGwC/Nk5dLoc0F1lNdXsetNp5Sx7LQu5CnQ2p99JZRB/u7
+         GJMHtdNEUc0ZV5zmZitrVXJ4KAdTiudOi5JTGu/Sg+uRMFke+PB+DbX0Gew2l3OOXEuv
+         rIpdAnqF3cbfwwkYTdwOVXfTsm7jC6PH6YV7Ko0f8Lwwo0qAbQaSQJVONhIeNDAZxKPF
+         ywByn9mMyc/dIsAQHjExse0dBAkPCEmaITE0oW9z22qP9oK3TTO2C6D5+QxzUrANQacm
+         oocczftDjEE7fo/U/PMHgPqD+8nsEA3yC+EEC0l1+Ydlu8q3VoPMGwb4oMHgX2a/OEkt
+         jUaQ==
+X-Gm-Message-State: AOAM532kB08PbAcBQ2S6uYz0mhOgs+5/75zv2qtJoZdxPqxXgJNLE/bC
+        uKHaPkhAQOGQ7wsi74la4e1Bxpc184PSA1bYlIy1B90HgWfD
+X-Google-Smtp-Source: ABdhPJyjk22LAvM0RK3pKXgF1KEeAJU6yYWQZUwekpox3+ieHfoCpkOr1HpO57I819EkY8XvvSXM7bi3zVEuYquMvQ5FSqDm6YDg
 MIME-Version: 1.0
-X-Received: by 2002:a92:d7cd:: with SMTP id g13mr9475062ilq.51.1597836495670;
- Wed, 19 Aug 2020 04:28:15 -0700 (PDT)
-Date:   Wed, 19 Aug 2020 04:28:15 -0700
-In-Reply-To: <0000000000008e983905ac9d0182@google.com>
+X-Received: by 2002:a02:852c:: with SMTP id g41mr23876031jai.58.1597836975423;
+ Wed, 19 Aug 2020 04:36:15 -0700 (PDT)
+Date:   Wed, 19 Aug 2020 04:36:15 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000bbd1ff05ad394c92@google.com>
-Subject: Re: KASAN: use-after-free Read in rtl_fw_do_work
-From:   syzbot <syzbot+ff4b26b0bfbff2dc7960@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, davem@davemloft.net, kuba@kernel.org,
-        kvalo@codeaurora.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, pkshih@realtek.com,
+Message-ID: <000000000000544b0205ad3969d7@google.com>
+Subject: KASAN: slab-out-of-bounds Read in mxl5007t_attach
+From:   syzbot <syzbot+59c4a4184685764d112a@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        mchehab@kernel.org, mkrufky@linuxtv.org,
         syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
@@ -48,55 +45,131 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Hello,
+
+syzbot found the following issue on:
 
 HEAD commit:    28157b8c USB: Better name for __check_usb_generic()
 git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=1064697a900000
+console output: https://syzkaller.appspot.com/x/log.txt?x=13a6a929900000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=ccafc70ac3d5f49c
-dashboard link: https://syzkaller.appspot.com/bug?extid=ff4b26b0bfbff2dc7960
+dashboard link: https://syzkaller.appspot.com/bug?extid=59c4a4184685764d112a
 compiler:       gcc (GCC) 10.1.0-syz 20200507
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10f0a00e900000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=162bc289900000
+
+Unfortunately, I don't have any reproducer for this issue yet.
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ff4b26b0bfbff2dc7960@syzkaller.appspotmail.com
+Reported-by: syzbot+59c4a4184685764d112a@syzkaller.appspotmail.com
 
-usb 6-1: Direct firmware load for rtlwifi/rtl8192cufw_TMSC.bin failed with error -2
-usb 6-1: Direct firmware load for rtlwifi/rtl8192cufw.bin failed with error -2
+au0828: recv_control_msg() Failed receiving control message, error -71.
+au8522_writereg: writereg error (reg == 0x106, val == 0x0001, ret == -5)
 ==================================================================
-BUG: KASAN: use-after-free in rtl_fw_do_work+0x407/0x430 drivers/net/wireless/realtek/rtlwifi/core.c:87
-Read of size 8 at addr ffff8881ca9aff38 by task kworker/0:1/328
+BUG: KASAN: slab-out-of-bounds in i2c_adapter_id include/linux/i2c.h:902 [inline]
+BUG: KASAN: slab-out-of-bounds in mxl5007t_attach+0x2b6/0x2e0 drivers/media/tuners/mxl5007t.c:853
+Read of size 4 at addr ffff8881d01247c8 by task kworker/0:3/136
 
-CPU: 0 PID: 328 Comm: kworker/0:1 Not tainted 5.9.0-rc1-syzkaller #0
+CPU: 0 PID: 136 Comm: kworker/0:3 Not tainted 5.9.0-rc1-syzkaller #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: events request_firmware_work_func
+Workqueue: usb_hub_wq hub_event
 Call Trace:
  __dump_stack lib/dump_stack.c:77 [inline]
  dump_stack+0xf6/0x16e lib/dump_stack.c:118
  print_address_description.constprop.0+0x1c/0x210 mm/kasan/report.c:383
  __kasan_report mm/kasan/report.c:513 [inline]
  kasan_report.cold+0x37/0x7c mm/kasan/report.c:530
- rtl_fw_do_work+0x407/0x430 drivers/net/wireless/realtek/rtlwifi/core.c:87
- request_firmware_work_func+0x126/0x250 drivers/base/firmware_loader/main.c:1001
+ i2c_adapter_id include/linux/i2c.h:902 [inline]
+ mxl5007t_attach+0x2b6/0x2e0 drivers/media/tuners/mxl5007t.c:853
+ au0828_dvb_register+0x451/0x1360 drivers/media/usb/au0828/au0828-dvb.c:597
+ au0828_usb_probe+0x56f/0x5d5 drivers/media/usb/au0828/au0828-core.c:738
+ usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:374
+ really_probe+0x291/0xde0 drivers/base/dd.c:553
+ driver_probe_device+0x26b/0x3d0 drivers/base/dd.c:738
+ __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:844
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:431
+ __device_attach+0x228/0x4a0 drivers/base/dd.c:912
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
+ device_add+0xb51/0x1c70 drivers/base/core.c:2930
+ usb_set_configuration+0xf05/0x18a0 drivers/usb/core/message.c:2032
+ usb_generic_driver_probe+0xba/0xf2 drivers/usb/core/generic.c:239
+ usb_probe_device+0xd9/0x250 drivers/usb/core/driver.c:272
+ really_probe+0x291/0xde0 drivers/base/dd.c:553
+ driver_probe_device+0x26b/0x3d0 drivers/base/dd.c:738
+ __device_attach_driver+0x1d1/0x290 drivers/base/dd.c:844
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:431
+ __device_attach+0x228/0x4a0 drivers/base/dd.c:912
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
+ device_add+0xb51/0x1c70 drivers/base/core.c:2930
+ usb_new_device.cold+0x71d/0xfd4 drivers/usb/core/hub.c:2554
+ hub_port_connect drivers/usb/core/hub.c:5208 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
+ port_event drivers/usb/core/hub.c:5494 [inline]
+ hub_event+0x2361/0x4390 drivers/usb/core/hub.c:5576
  process_one_work+0x94c/0x15f0 kernel/workqueue.c:2269
  worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
  kthread+0x392/0x470 kernel/kthread.c:292
  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
 
+Allocated by task 25209:
+ kasan_save_stack+0x1b/0x40 mm/kasan/common.c:48
+ kasan_set_track mm/kasan/common.c:56 [inline]
+ __kasan_kmalloc.constprop.0+0xc2/0xd0 mm/kasan/common.c:461
+ kmalloc include/linux/slab.h:554 [inline]
+ kzalloc include/linux/slab.h:666 [inline]
+ ep_alloc.constprop.0+0xff/0x370 fs/eventpoll.c:1016
+ do_epoll_create+0x97/0x1c0 fs/eventpoll.c:2064
+ __do_sys_epoll_create1 fs/eventpoll.c:2095 [inline]
+ __se_sys_epoll_create1 fs/eventpoll.c:2093 [inline]
+ __x64_sys_epoll_create1+0x2d/0x40 fs/eventpoll.c:2093
+ do_syscall_64+0x2d/0x40 arch/x86/entry/common.c:46
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+
+Freed by task 25209:
+ kasan_save_stack+0x1b/0x40 mm/kasan/common.c:48
+ kasan_set_track+0x1c/0x30 mm/kasan/common.c:56
+ kasan_set_free_info+0x1b/0x30 mm/kasan/generic.c:355
+ __kasan_slab_free+0xf3/0x130 mm/kasan/common.c:422
+ slab_free_hook mm/slub.c:1548 [inline]
+ slab_free_freelist_hook+0x53/0x140 mm/slub.c:1581
+ slab_free mm/slub.c:3142 [inline]
+ kfree+0xbe/0x470 mm/slub.c:4123
+ ep_eventpoll_release+0x41/0x60 fs/eventpoll.c:864
+ __fput+0x282/0x920 fs/file_table.c:281
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:141
+ exit_task_work include/linux/task_work.h:25 [inline]
+ do_exit+0xbaf/0x2890 kernel/exit.c:806
+ do_group_exit+0x125/0x310 kernel/exit.c:903
+ __do_sys_exit_group kernel/exit.c:914 [inline]
+ __se_sys_exit_group kernel/exit.c:912 [inline]
+ __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:912
+ do_syscall_64+0x2d/0x40 arch/x86/entry/common.c:46
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+
+The buggy address belongs to the object at ffff8881d0124400
+ which belongs to the cache kmalloc-512 of size 512
+The buggy address is located 456 bytes to the right of
+ 512-byte region [ffff8881d0124400, ffff8881d0124600)
 The buggy address belongs to the page:
-page:00000000fcdef481 refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1ca9af
-flags: 0x200000000000000()
-raw: 0200000000000000 0000000000000000 ffffea00072a6bc8 0000000000000000
-raw: 0000000000000000 0000000000000000 00000000ffffffff 0000000000000000
+page:00000000182cf651 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff8881d0124000 pfn:0x1d0124
+head:00000000182cf651 order:2 compound_mapcount:0 compound_pincount:0
+flags: 0x200000000010200(slab|head)
+raw: 0200000000010200 ffffea0007296508 ffffea00074f9908 ffff8881da041280
+raw: ffff8881d0124000 000000000010000d 00000001ffffffff 0000000000000000
 page dumped because: kasan: bad access detected
 
 Memory state around the buggy address:
- ffff8881ca9afe00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff8881ca9afe80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
->ffff8881ca9aff00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-                                        ^
- ffff8881ca9aff80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff8881ca9b0000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff8881d0124680: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff8881d0124700: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>ffff8881d0124780: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+                                              ^
+ ffff8881d0124800: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff8881d0124880: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
 ==================================================================
 
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
