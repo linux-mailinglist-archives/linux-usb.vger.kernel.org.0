@@ -2,56 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB2524A037
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Aug 2020 15:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2893C24A0C3
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Aug 2020 15:56:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727827AbgHSNjk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Aug 2020 09:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42526 "EHLO
+        id S1728120AbgHSN4k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Aug 2020 09:56:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726560AbgHSNji (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Aug 2020 09:39:38 -0400
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF491C061757
-        for <linux-usb@vger.kernel.org>; Wed, 19 Aug 2020 06:39:36 -0700 (PDT)
-Received: by mail-il1-x141.google.com with SMTP id k4so20648474ilr.12
-        for <linux-usb@vger.kernel.org>; Wed, 19 Aug 2020 06:39:36 -0700 (PDT)
+        with ESMTP id S1727018AbgHSN4j (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Aug 2020 09:56:39 -0400
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D27B3C061757
+        for <linux-usb@vger.kernel.org>; Wed, 19 Aug 2020 06:56:38 -0700 (PDT)
+Received: by mail-io1-xd41.google.com with SMTP id u126so24669914iod.12
+        for <linux-usb@vger.kernel.org>; Wed, 19 Aug 2020 06:56:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=K750lhVhvQCGJRLgK465vJm+czXmMzEaBcFDRWtgZug=;
-        b=wBx0Dj8TY552WXXZXrlqOXix2xITA1QGNg6/X4+/dIYZQrzFzweSGq8AZr+8ksLI4D
-         b6Z1metQv84csOAztrgWKkDr2FHgLV3ijWbdJchoQ6aNahDapEyaOJPQyxiziCxBQQ6Q
-         aDwaEJwIHs7pG9omj5QDAyXsCugtn6YI3zqWzqnlu82C5H1xthsP2Yi4yXFx+DMM5agB
-         6+loghg4qEoEjLn/HfgE1HLaKPhUhXYlzQ4H2T8XdTLeUsly/xdrkPE4b6g3jL8LO4uk
-         +OYz60OTloDSivBnT2+UwE3yzQKbWLmABvfVin7rdN/Qe21BpUlD4w4eUi9DT2qPZMGj
-         aIBw==
+        bh=ROiGQT5nf5EsheymP3lPAfkef8I86vBclbumuFqKS3E=;
+        b=e9OnNiuvLq03OKxxnuRUPrL8+abr9edkGuoScvGrvrkvgGLJPFew/f6cSQrtUYQSC6
+         i19d7QOAyVuvlIRtktMIcVEaaobUWnbZgizeOSXl5L3Neh8Pvd+3Kz5gA6lDjxANGn5t
+         qJScxmrbcmUU1X+8BkGO3N4eH1yqNtiEAIMlMTwckVpoh6s1QLKNdaND0EKWtMfBmCMi
+         ZFkk4bU+neBaXVHQ09LmNUTSxHGmmsrVMw2l24GsNJxj0no7sYlioTG0C/dW4P06eoF9
+         NcvpJ8fyQUjVjOUjCTHRpp1Xaoa76X9WHskPRGefxRenW1mv14xjIoxLmNXB+s9PVWpe
+         R1LQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=K750lhVhvQCGJRLgK465vJm+czXmMzEaBcFDRWtgZug=;
-        b=NYrTrXNbZEId5NZ4pzWCE2J2bGzkoPkzUAomuWfXseZLxqm4vvjXHoMFozNJCcxT6k
-         gv+dEl8k/5MmWplfulVXLcJQfNA4Pc4Dev53QlSDE+JFRAfcejd69zHCERQOLAGLj4PN
-         OP1YNgObIzJFaryiHlMpVxu+uXFNGd+eVYr0pDndF2+4T2BCoqW43a9bRCLj5siBdk5z
-         PFfe+1AmUXdWiSCsDyTJAUJWfxjS0N0uZpC4vVz0Fk5q7FiART2IssMHfRtd2ld/0aiZ
-         4qAKghBlL/QioA9DIy2O/hMQqjELxnPAqSYJ155mF8IeoPSJyfKiNxy7TEr742GuzkMY
-         bx1g==
-X-Gm-Message-State: AOAM5327uwCFjKarQO7LJCfswgEli+8lmher+mKcYmTeHYIJ7oDXznLO
-        5W68hV7dOxmSPdz/M3V06hhyVu1pYYY/b8j6PrifLg==
-X-Google-Smtp-Source: ABdhPJwS5BIyuWHOygJr8vGXgRiILhx6HW5gQgbZrzcX1uNX+XxZNH+pAR2e9Eh1aEyzVkxTX1LbqnRHerheERLYdpk=
-X-Received: by 2002:a92:98c8:: with SMTP id a69mr23477634ill.0.1597844375862;
- Wed, 19 Aug 2020 06:39:35 -0700 (PDT)
+        bh=ROiGQT5nf5EsheymP3lPAfkef8I86vBclbumuFqKS3E=;
+        b=is7p4Z5v5lzz1oy7JlWvD1YPuE0kr+/66KAwWw92t6GoX2evspyTe4FFXERlTN8bBe
+         AOkLc8QG6B0bzn8BG5taoHzJurXqFS5oqoo8/USo/1dLMWikkjkhnxcmlsM5aAX6baUG
+         5IoW7xGuAIj52ile7byVqIoyKw+1Yb9wy0lI57AZbOJ3tzX6npVATodjS/GQ0V737yK8
+         lw2sWDIXyuiI84uKkMP27ezcDVwYKgYxtaoFeWjVnk7k6qH9r3FU7PU1LsnPzjbWLmeo
+         MH7I0eGpoUYT26fPYF/hbICp6HGSc3uVTbrnfI0hr8OOvzm0NE41Ho/qwyHfnKqMBNdk
+         RYUA==
+X-Gm-Message-State: AOAM531gIhP2WOjgUIVvWWoO8kEwjbEDM8nYBUxhFsZkGXVkwdkYaKHu
+        Y7mTmpc+kTs6cgJF00ZIBbyGC903ja5p4RMRv1NHGw==
+X-Google-Smtp-Source: ABdhPJyAC76YAvuOVxGmoaFCtV9OxcNm31g2zy2oAy7NEd8EX/EWif8X1I6T28gzo7U3Lo1TMUqhhN/fL+9g7OPZfXk=
+X-Received: by 2002:a5e:9601:: with SMTP id a1mr21080386ioq.179.1597845397641;
+ Wed, 19 Aug 2020 06:56:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200818165848.4117493-1-lorenzo@google.com> <20200818165848.4117493-3-lorenzo@google.com>
- <CAHo-Oozepnrdw1ng1XvFURYZPc9L7FkmiMDJMsZ76PEyuDt8jw@mail.gmail.com>
-In-Reply-To: <CAHo-Oozepnrdw1ng1XvFURYZPc9L7FkmiMDJMsZ76PEyuDt8jw@mail.gmail.com>
+References: <20200818165848.4117493-1-lorenzo@google.com> <CAHo-Oox6qcD-+FoB0d+s45e1i4q_zw07a1NZGYNrah=goT1nQA@mail.gmail.com>
+In-Reply-To: <CAHo-Oox6qcD-+FoB0d+s45e1i4q_zw07a1NZGYNrah=goT1nQA@mail.gmail.com>
 From:   Lorenzo Colitti <lorenzo@google.com>
-Date:   Wed, 19 Aug 2020 22:39:24 +0900
-Message-ID: <CAKD1Yr0bMB-4vJAHdtu5CQ6GH5UVf0zg=axc_XXN1MYVQnxqHg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] usb: gadget: f_ncm: allow using NCM in SuperSpeed
- Plus gadgets.
+Date:   Wed, 19 Aug 2020 22:56:24 +0900
+Message-ID: <CAKD1Yr1daQPFvZ5abGk4pgA779FsM-L+eRg_yjxgDcOL5N1QZw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] usb: gadget: f_ncm: fix ncm_bitrate for SuperSpeed
+ and above.
 To:     =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <zenczykowski@gmail.com>
 Cc:     linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
         Greg KH <gregkh@linuxfoundation.org>
@@ -62,131 +61,35 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 19, 2020 at 7:40 AM Maciej =C5=BBenczykowski
+On Wed, Aug 19, 2020 at 6:39 AM Maciej =C5=BBenczykowski
 <zenczykowski@gmail.com> wrote:
-> All the dongles I've looked at seem to place MaxBurst just after MaxPacke=
-tSize,
-> and not in a separate descriptor (and don't place burst on the
-> status/config channel).
+> > -       if (gadget_is_superspeed(g) && g->speed =3D=3D USB_SPEED_SUPER)
+> > -               return 13 * 1024 * 8 * 1000 * 8;
+> > +       if (gadget_is_superspeed(g) && g->speed >=3D USB_SPEED_SUPER)
+> > +               return 4000000000;
 
-You're right, that looks wrong. In my patches, the companion
-descriptor sets max burst of 15 on ss_ncm_notify_comp_desc (and
-ss_ncm_notify_comp_desc), which is an interrupt IN endpoint with a max
-packet size of 16. This probably doesn't make sense, and in any case
-is prohibited by the spec:
+Will respin to change this to 4000000000U to address the warning
+reported by the kernel test robot.
 
-=3D=3D=3D=3D=3D=3D
-The only allowable maximum data payload size for interrupt endpoints
-is 1024 bytes for interrupt endpoints that support a burst size
-greater than one and can be any size from 1 to 1024 for an interrupt
-endpoint with a burst size equal to one. The maximum allowable burst
-size for interrupt endpoints is three.
-=3D=3D=3D=3D=3D=3D
+> Do you know what this actually affects besides the display?
+> My cursory investigation shows it gets printed to kernel log and sent
+> over some sort of ncm notification to the other side...
 
-Will respin this series to leave ss_ncm_notify_comp_desc and
-ssp_ncm_notify_comp_desc at a burst of 0.
+Yes, it's sent in the ConnectionSpeedChange notifications which are
+intended to inform the host about how fast the link is. For a direct
+connection over a USB cable this does not make much sense, but for,
+say, a Gigabit Ethernet dongle that uses NCM, you'd probably want to
+inform the host of whether the connection is 10, 100, or 1000M. This
+is not what the code does now, obviously.
 
-> What does "lsusb -d ... -v" show from the host side?
+> Is it better to underestimate or overestimate?
+> (ie. would it be better to report 3.5 gbps for super and max out at
+> 4.2 gbps for super plus instead?)
 
-Output when on a 10 Gbps link:
+I don't think it matters much. I'm happy to put 3860000000 for
+SuperSpeed and 4200000000 for SuperSpeed Plus, or whatever else we
+think makes sense. The speed is theoretical anyway. I suppose
+reporting different speeds might be useful to debug whether the
+connection is using 5G or >=3D 10G.
 
-    Interface Association:
-      bLength                 8
-      bDescriptorType        11
-      bFirstInterface         0
-      bInterfaceCount         2
-      bFunctionClass          2 Communications
-      bFunctionSubClass      13
-      bFunctionProtocol       0
-      iFunction               7 CDC NCM
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           1
-      bInterfaceClass         2 Communications
-      bInterfaceSubClass     13
-      bInterfaceProtocol      0
-      iInterface              4 CDC Network Control Model (NCM)
-      CDC Header:
-        bcdCDC               1.10
-      CDC Union:
-        bMasterInterface        0
-        bSlaveInterface         1
-      CDC Ethernet:
-        iMacAddress                      5 fab33fdead72
-        bmEthernetStatistics    0x00000000
-        wMaxSegmentSize               1514
-        wNumberMCFilters            0x0000
-        bNumberPowerFilters              0
-      CDC NCM:
-        bcdNcmVersion        1.00
-        bmNetworkCapabilities 0x11
-          crc mode
-          packet filter
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x82  EP 2 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0010  1x 16 bytes
-        bInterval               9
-        bMaxBurst              15
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-This looks wrong, see above.
-
-
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        1
-      bAlternateSetting       0
-      bNumEndpoints           0
-      bInterfaceClass        10 CDC Data
-      bInterfaceSubClass      0
-      bInterfaceProtocol      1
-      iInterface              6 CDC Network Data
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        1
-      bAlternateSetting       1
-      bNumEndpoints           2
-      bInterfaceClass        10 CDC Data
-      bInterfaceSubClass      0
-      bInterfaceProtocol      1
-      iInterface              6 CDC Network Data
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x81  EP 1 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0400  1x 1024 bytes
-        bInterval               0
-        bMaxBurst              15
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-This looks correct (max burst of 15 on the bulk in endpoint).
-
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x01  EP 1 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0400  1x 1024 bytes
-        bInterval               0
-        bMaxBurst              15
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-This looks correct (max burst of 15 on the bulk out endpoint).
+Felipe, any opinions?
