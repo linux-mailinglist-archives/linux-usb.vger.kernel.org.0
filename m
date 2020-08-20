@@ -2,195 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1094D24B098
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Aug 2020 09:56:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DB9724B1AC
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Aug 2020 11:06:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726772AbgHTH4F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Aug 2020 03:56:05 -0400
-Received: from mga11.intel.com ([192.55.52.93]:9761 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726664AbgHTH4E (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 20 Aug 2020 03:56:04 -0400
-IronPort-SDR: Ti1O6pi2xnKisCXPah8H09oH2IWiPRS57N6TS9XoCLZ7FRBMg1P/QFUQBIbCkxqHCojik+oREU
- 0GTg2K4qIFxQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9718"; a="152855754"
-X-IronPort-AV: E=Sophos;i="5.76,332,1592895600"; 
-   d="scan'208";a="152855754"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2020 00:56:00 -0700
-IronPort-SDR: rtLfZBVICcfOQn4f0tiGnT12EeQCPphOc48MVm+Z+hFBaoJJtAQAYyvU5CxqOu2o98oSGUdVxA
- s65Go2woLUVA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,332,1592895600"; 
-   d="scan'208";a="401072922"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 20 Aug 2020 00:55:58 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 20 Aug 2020 10:55:57 +0300
-Date:   Thu, 20 Aug 2020 10:55:57 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] usb: typec: tcpm: Fix Fix source hard reset response
- for TDA 2.3.1.1 and TDA 2.3.1.2 failures
-Message-ID: <20200820075557.GD3055713@kuha.fi.intel.com>
-References: <20200817184601.1899929-1-badhri@google.com>
+        id S1726731AbgHTJGi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Aug 2020 05:06:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53242 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725866AbgHTJGg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Aug 2020 05:06:36 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F53C061757;
+        Thu, 20 Aug 2020 02:06:35 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id v15so546933lfg.6;
+        Thu, 20 Aug 2020 02:06:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ZB4PCuqp8Bl2dkJy5Fm6Sj2/MRT/e7zYVg69/U7Iw3A=;
+        b=jRSU7EbPYuaZa+y1ww5c1uQFbyH05AS+4/y9F7u0zfd9hNB2tnzBPNp8je59myQNMQ
+         jHPH6tBd1Wwn7BdCa00KVXc60BSdX0Ndq10P7ka8NPFWg1ZJ3LsSZv0w8HBp6uQ3NiAh
+         dj5XA0KHwLfCp0cjSlMmH6bx+JfVFMeQqSseCHBBmtyfNIM9YIojgpQJL8XUFhtSBjsW
+         EUKBfwxwlk5cLYa8WcK31DAuysfcZ2hLaBPSEULzoNNVE+3ShAUapOTgWe+4CkfB57ZP
+         mL01BWILpPiVjIBecOCA99KxCmG02TPxV3cr0jcgUSZ2kUozu8reoSXmgLtmVOjnXzBX
+         ScIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=ZB4PCuqp8Bl2dkJy5Fm6Sj2/MRT/e7zYVg69/U7Iw3A=;
+        b=Lsh2CwfShDBkNd0QHhxQpJ5PFwQ1O8F9BGOG7/khoezcFf5LJAMoZGtHtZ+OGM4S1t
+         W0/XsySxQa++blbuW0C9ETdM8ZGWeMkPl38hwiELgHemG4gCp9ih2UGuzNe/GujRc+FC
+         54yc/StFO5BdUEj0vM0vKtS4C/Pg/3Gk28AvEaCqo98kxuQmVHyUJkd27LPGY6zFkm7t
+         njkNlXJVXwKYs4NuSCpDj1AnYMCIuS0R51n+YLWEkE/Qh4YFMYuYsS2EpGf36FnRaT5Q
+         6eca+EpWPxIo1Wz2rxy7H44u1N+LWAtrsRqZKkahr2MAkeNdt4uxFPLnMqXWJ4fL12lV
+         JS8w==
+X-Gm-Message-State: AOAM530BxC/WcGbim/ATHLCysKAIaCi3aeOFZKnI9gM7PGg/7HvA9a6O
+        Iv8QqWBaYwqN/6Vs1jhuHPI/GMgpAa/Iwgub
+X-Google-Smtp-Source: ABdhPJx586OB1ZFNi8bmTijB1iKrXx0pOQq+0PCvDWVugFZLEr8cnAEYNYIu9kBNKKo6DTiGbe/wQw==
+X-Received: by 2002:a05:6512:3185:: with SMTP id i5mr1144189lfe.205.1597914394167;
+        Thu, 20 Aug 2020 02:06:34 -0700 (PDT)
+Received: from ?IPv6:2a00:1fa0:42ab:a165:4cb2:5f04:a1e8:63b? ([2a00:1fa0:42ab:a165:4cb2:5f04:a1e8:63b])
+        by smtp.gmail.com with ESMTPSA id j2sm322988ljb.98.2020.08.20.02.06.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Aug 2020 02:06:33 -0700 (PDT)
+Subject: Re: [PATCH v8 4/4] arm64: boot: dts: qcom: pm8150b: Add DTS node for
+ PMIC VBUS booster
+To:     Wesley Cheng <wcheng@codeaurora.org>, sboyd@kernel.org,
+        heikki.krogerus@linux.intel.com, agross@kernel.org,
+        robh+dt@kernel.org, gregkh@linuxfoundation.org,
+        bjorn.andersson@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20200812071925.315-1-wcheng@codeaurora.org>
+ <20200812071925.315-5-wcheng@codeaurora.org>
+ <1ed0a34c-6219-fe3d-7d9c-13a74ce2d4d0@gmail.com>
+ <02111c69-73fd-5e8c-5594-27393865d458@codeaurora.org>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Organization: Brain-dead Software
+Message-ID: <eaf4618c-54da-c522-52c6-1edec7744872@gmail.com>
+Date:   Thu, 20 Aug 2020 12:06:23 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200817184601.1899929-1-badhri@google.com>
+In-Reply-To: <02111c69-73fd-5e8c-5594-27393865d458@codeaurora.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 17, 2020 at 11:46:01AM -0700, Badhri Jagan Sridharan wrote:
-> The patch addresses the compliance test failures while running  TDA
-> 2.3.1.1 and  TDA 2.3.1.2 of the "PD Communications Engine USB PD
-> Compliance MOI" test plan published in https://www.usb.org/usbc.
-> For a product to be Type-C compliant, it's expected that these tests
-> are run on usb.org certified Type-C compliance tester as mentioned in
-> https://www.usb.org/usbc.
-> 
-> While the purpose of TDA 2.3.1.1 and  TDA 2.3.1.2 is to verify that
-> the static and dynamic electrical capabilities of a Source meet the
-> requirements for each PDO offered,  while doing so, the tests also
-> monitor that the timing of the VBUS waveform versus the messages meets
-> the requirements for Hard Reset defined in PROT-PROC-HR-TSTR as
-> mentioned in step 11 of TDA.2.3.1.1 and step 15 of TDA.2.3.1.2.
-> 
-> TDB.2.2.13.1: PROT-PROC-HR-TSTR Procedure and Checks for Tester
-> Originated Hard Reset
-> Purpose: To perform the appropriate protocol checks relating to any
-> circumstance in which the Hard Reset signal is sent by the Tester.
-> 
-> UUT is behaving as source:
-> The Tester sends a Hard Reset signal.
-> 1. Check VBUS stays within present valid voltage range for
-> tPSHardReset min (25ms) after last bit of Hard Reset signal.
-> [PROT_PROC_HR_TSTR_1]
-> 2. Check that VBUS starts to fall below present valid voltage range by
-> tPSHardReset max (35ms). [PROT_PROC_HR_TSTR_2]
-> 3. Check that VBUS reaches vSafe0V within tSafe0v max (650 ms).
-> [PROT_PROC_HR_TSTR_3]
-> 4. Check that VBUS starts rising to vSafe5V after a delay of
-> tSrcRecover (0.66s - 1s) from reaching vSafe0V. [PROT_PROC_HR_TSTR_4]
-> 5. Check that VBUS reaches vSafe5V within tSrcTurnOn max (275ms) of
-> rising above vSafe0v max (0.8V). [PROT_PROC_HR_TSTR_5] Power Delivery
-> Compliance Plan 139 6. Check that Source Capabilities are finished
-> sending within tFirstSourceCap max (250ms) of VBUS reaching vSafe5v
-> min. [PROT_PROC_HR_TSTR_6].
-> 
-> This is in line with 7.1.5 Response to Hard Resets of the USB Power
-> Delivery Specification Revision 3.0, Version 1.2,
-> "Hard Reset Signaling indicates a communication failure has occurred
-> and the Source Shall stop driving VCONN, Shall remove Rp from the
-> VCONN pin and Shall drive VBUS to vSafe0V as shown in Figure 7-9. The
-> USB connection May reset during a Hard Reset since the VBUS voltage
-> will be less than vSafe5V for an extended period of time. After
-> establishing the vSafe0V voltage condition on VBUS, the Source Shall
-> wait tSrcRecover before re-applying VCONN and restoring VBUS to
-> vSafe5V. A Source Shall conform to the VCONN timing as specified in
-> [USB Type-C 1.3]."
-> 
-> With the above guidelines from the spec in mind, TCPM does not turn
-> off VCONN while entering SRC_HARD_RESET_VBUS_OFF. The patch makes TCPM
-> turn off VCONN while entering SRC_HARD_RESET_VBUS_OFF and turn it back
-> on while entering SRC_HARD_RESET_VBUS_ON along with vbus instead of
-> having VCONN on through hardreset.
-> 
-> Also, the spec clearly states that "After establishing the vSafe0V
-> voltage condition on VBUS",  the Source Shall wait tSrcRecover before
-> re-applying VCONN and restoring VBUS to vSafe5V.
-> TCPM does not conform to this requirement. If the TCPC driver calls
-> tcpm_vbus_change with vbus off signal, TCPM right away enters
-> SRC_HARD_RESET_VBUS_ON without waiting for tSrcRecover.
-> For TCPC's which are buggy/does not call tcpm_vbus_change, TCPM
-> assumes that the vsafe0v is instantaneous as TCPM only waits
-> tSrcRecover instead of waiting for tSafe0v + tSrcRecover.
-> This patch also fixes this behavior by making sure that TCPM waits for
-> tSrcRecover before transitioning into SRC_HARD_RESET_VBUS_ON when
-> tcpm_vbus_change is called by TCPC.
-> When TCPC does not call tcpm_vbus_change, TCPM assumes the worst case
-> i.e.  tSafe0v + tSrcRecover before transitioning into
-> SRC_HARD_RESET_VBUS_ON.
-> 
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+On 20.08.2020 10:47, Wesley Cheng wrote:
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+[...]
+>>> Add the required DTS node for the USB VBUS output regulator, which is
+>>> available on PM8150B.  This will provide the VBUS source to connected
+>>> peripherals.
+>>>
+>>> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+>>> ---
+>>>    arch/arm64/boot/dts/qcom/pm8150b.dtsi   | 6 ++++++
+>>>    arch/arm64/boot/dts/qcom/sm8150-mtp.dts | 4 ++++
+>>>    2 files changed, 10 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/pm8150b.dtsi
+>>> b/arch/arm64/boot/dts/qcom/pm8150b.dtsi
+>>> index 053c659734a7..9e560c1ca30d 100644
+>>> --- a/arch/arm64/boot/dts/qcom/pm8150b.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/pm8150b.dtsi
+>>> @@ -53,6 +53,12 @@ power-on@800 {
+>>>                status = "disabled";
+>>>            };
+>>>    +        pm8150b_vbus: dcdc@1100 {
+>>
+>>     s/dcdc/regulator/? What is "dcdc", anyway?
+>>     The device nodes must have the generic names, according to the DT spec.
+>>
+> 
+> Hi Sergei,
+> 
+> Thanks for the comment!
 
-> ---
-> Changes since V1 (Guenter's suggestion):
-> - Bound SRC_HARD_RESET_VBUS_ON to accommodate tcpc drivers which doesn't
->   update the vbus status.
-> 
-> Changes since V2:
-> - Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> 
-> Changes since V3:
-> - Fixed compliance test numbers and updated commit description and made
->   in more elaborate to address Heikki's suggestion.
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 28 +++++++++++++++++++++++++---
->  1 file changed, 25 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 3ef37202ee37..a48e3f90d196 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -3372,13 +3372,31 @@ static void run_state_machine(struct tcpm_port *port)
->  			tcpm_set_state(port, SNK_HARD_RESET_SINK_OFF, 0);
->  		break;
->  	case SRC_HARD_RESET_VBUS_OFF:
-> -		tcpm_set_vconn(port, true);
-> +		/*
-> +		 * 7.1.5 Response to Hard Resets
-> +		 * Hard Reset Signaling indicates a communication failure has occurred and the
-> +		 * Source Shall stop driving VCONN, Shall remove Rp from the VCONN pin and Shall
-> +		 * drive VBUS to vSafe0V as shown in Figure 7-9.
-> +		 */
-> +		tcpm_set_vconn(port, false);
->  		tcpm_set_vbus(port, false);
->  		tcpm_set_roles(port, port->self_powered, TYPEC_SOURCE,
->  			       tcpm_data_role_for_source(port));
-> -		tcpm_set_state(port, SRC_HARD_RESET_VBUS_ON, PD_T_SRC_RECOVER);
-> +		/*
-> +		 * If tcpc fails to notify vbus off, TCPM will wait for PD_T_SAFE_0V +
-> +		 * PD_T_SRC_RECOVER before turning vbus back on.
-> +		 * From Table 7-12 Sequence Description for a Source Initiated Hard Reset:
-> +		 * 4. Policy Engine waits tPSHardReset after sending Hard Reset Signaling and then
-> +		 * tells the Device Policy Manager to instruct the power supply to perform a
-> +		 * Hard Reset. The transition to vSafe0V Shall occur within tSafe0V (t2).
-> +		 * 5. After tSrcRecover the Source applies power to VBUS in an attempt to
-> +		 * re-establish communication with the Sink and resume USB Default Operation.
-> +		 * The transition to vSafe5V Shall occur within tSrcTurnOn(t4).
-> +		 */
-> +		tcpm_set_state(port, SRC_HARD_RESET_VBUS_ON, PD_T_SAFE_0V + PD_T_SRC_RECOVER);
->  		break;
->  	case SRC_HARD_RESET_VBUS_ON:
-> +		tcpm_set_vconn(port, true);
->  		tcpm_set_vbus(port, true);
->  		port->tcpc->set_pd_rx(port->tcpc, true);
->  		tcpm_set_attached_state(port, true);
-> @@ -3944,7 +3962,11 @@ static void _tcpm_pd_vbus_off(struct tcpm_port *port)
->  		tcpm_set_state(port, SNK_HARD_RESET_WAIT_VBUS, 0);
->  		break;
->  	case SRC_HARD_RESET_VBUS_OFF:
-> -		tcpm_set_state(port, SRC_HARD_RESET_VBUS_ON, 0);
-> +		/*
-> +		 * After establishing the vSafe0V voltage condition on VBUS, the Source Shall wait
-> +		 * tSrcRecover before re-applying VCONN and restoring VBUS to vSafe5V.
-> +		 */
-> +		tcpm_set_state(port, SRC_HARD_RESET_VBUS_ON, PD_T_SRC_RECOVER);
->  		break;
->  	case HARD_RESET_SEND:
->  		break;
-> -- 
-> 2.28.0.236.gb10cc79966-goog
+     You're welcome.
 
--- 
-heikki
+> DCDC is the label that we use for the DC to DC converter block, since
+> the VBUS booster will output 5V to the connected devices.  Would it make
+> more sense to have "dc-dc?"
+
+    Better use s/th like "regulator-dcdc". As I said, the names should be 
+generic, reflecting the device class.
+
+> Thanks
+> Wesley
+> 
+>>> +            compatible = "qcom,pm8150b-vbus-reg";
+>>> +            status = "disabled";
+>>> +            reg = <0x1100>;
+>>> +        };
+>>> +
+>>>            pm8150b_typec: typec@1500 {
+>>>                compatible = "qcom,pm8150b-usb-typec";
+>>>                status = "disabled";
+>> [...]
+
+MBR, Sergei
