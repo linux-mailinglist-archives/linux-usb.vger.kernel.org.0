@@ -2,173 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5EA424AD64
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Aug 2020 05:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FE6724AE94
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Aug 2020 07:47:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726823AbgHTDkL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Aug 2020 23:40:11 -0400
-Received: from mail-eopbgr80042.outbound.protection.outlook.com ([40.107.8.42]:12165
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726698AbgHTDkL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 19 Aug 2020 23:40:11 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SGOGOmxxZJMUi6P9/ThlRUOxYPIAAbpcs1Ovz1Is7jGADUuzpwX0mJMIIoKk4IWz1uGb1GdWNpSZuFHD8rsj8w8tyesUuzqkxT6mFroHHVGM/EikCwrnOtged+7xnoZGLlvclspg3CfFQUJrrbNM0Ql6dLTDtAMrgcNyU7jkq6aEBMsn6VFDTuBMNhXftwkb3GqQWYHqvqimJXXscPiL8tE5ZvKvnDqn6l/Lf8fYv3lpblblNxlVg5Ei6trgLYrLmDBKsvwmLmrrNvW8bULDBtNNKWlAC2nrmxPpOlwm1TAqBIL6UQypPSZc7Q2WFCzlYb2r5ibzwwNc1yAi85x/Tg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=G0VEOiV+3xD/YApBwkb+7h4/XebERIVij1GpYIf9vgQ=;
- b=nFmzFQ7uCKDGjRfQ6HnFlde07id3kChjWuyPSIkX2rEeFM95n3YQS1EYtNY1v16QnajdNK9DB2FHk0Gbl4leCEn7ap5yjEqPglf6JFj9pBM7AaYa9Rn2sRy9RvSwQ5tAWRkLaPsnvIGihN01vHspu/znoRvLJyincyvIMEIDoSLHEl1qIXfMVsQ4x8/BfAxXjm1KBBfVlIr9yUY9SshaMDIaDYQfJRUIN7S8Qfv+Jt/bV2lSI5YtKfEOS8y/CvNGFhoemxImwAJVrpWuGtZUPkB6Ilj/znbyGzZdriluD8HioJBgR3FwCjb20GFdRYXvWLGN/5ij8H8qfWIXbrin8Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=G0VEOiV+3xD/YApBwkb+7h4/XebERIVij1GpYIf9vgQ=;
- b=lUT+gxqzih2poADgzipweYOrIV32whyizSiTzgNATL1gql1VzzmCbiH4nRBDbdOvFvEs8Lv7gGemVzt2hgl7ffTDydjj6/V2PkaStDV4K/uEHEHn6fYP0/LpN5bnIAQP4EEMPKJWOXi3OovvlM/89SwZF9K18gjX5iBAK0M4bP4=
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
- by AM6PR04MB4758.eurprd04.prod.outlook.com (2603:10a6:20b:f::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3283.20; Thu, 20 Aug
- 2020 03:40:06 +0000
-Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1023:be8d:40c:efe1]) by AM7PR04MB7157.eurprd04.prod.outlook.com
- ([fe80::1023:be8d:40c:efe1%3]) with mapi id 15.20.3283.028; Thu, 20 Aug 2020
- 03:40:06 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>
-CC:     Greg KH <gregkh@linuxfoundation.org>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: Re: [PATCH v2 6/6] Revert "usb: udc: allow adding and removing the
- same gadget device"
-Thread-Topic: [PATCH v2 6/6] Revert "usb: udc: allow adding and removing the
- same gadget device"
-Thread-Index: AQHWbr2o/fJ02AbWoEyqinkW1JML5ak9p6qAgAAIBWCAAE+qgIAAs74AgADgLgCAANYlgA==
-Date:   Thu, 20 Aug 2020 03:40:06 +0000
-Message-ID: <20200820033903.GA24349@b29397-desktop>
-References: <20200810022510.6516-1-peter.chen@nxp.com>
- <20200810022510.6516-7-peter.chen@nxp.com> <20200818093305.GA34785@kroah.com>
- <AM7PR04MB7157182367D7EEE2BDAD53318B5C0@AM7PR04MB7157.eurprd04.prod.outlook.com>
- <20200818144655.GA144306@rowland.harvard.edu>
- <20200819013014.GA16614@b29397-desktop>
- <20200819145236.GA181847@rowland.harvard.edu>
-In-Reply-To: <20200819145236.GA181847@rowland.harvard.edu>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: rowland.harvard.edu; dkim=none (message not signed)
- header.d=none;rowland.harvard.edu; dmarc=none action=none
- header.from=nxp.com;
-x-originating-ip: [119.31.174.67]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: d7788f53-a138-4dd6-86aa-08d844babb10
-x-ms-traffictypediagnostic: AM6PR04MB4758:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM6PR04MB47588A306A2E192BCA9847DC8B5A0@AM6PR04MB4758.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: MclG3/datIr2MFeIL/BnR4ZvJxGeZp+331TnyQ3vNsmMVXtYZ9tfFJYhqmPbzx/qHa4lm7m++hd4OPBeLcAir/EGq8teDsU8AjbJQ11RjSfxdDI2q8SM1V8BAC6cTX9HcviCOfCuiqXjHK9YESRdvulNP+K8rN9A7phvk2+b0k1AMhMYQkXJ8AxPwgcUYZKhD/Q5OAupdBgny3P+ostrWqYT5iFDiCCGlkG4UmRLWHv/b9pu7cfULrFnWmRLxoUh/s3UG8gAM3C3HC3erNO9kNFB3IknyfmrvzremGd4/bZ3umIHTFg0htNdNdkPGYO8sdoisEIJy8i3McClNmLXIWuJiJ2sk5zw3FvSQyK7k/Y7hWiP87Z8yi7UwGAS1fgtS9xMxVX36ZOXpwkhN99O9A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(7916004)(39860400002)(366004)(136003)(396003)(376002)(346002)(86362001)(6916009)(8676002)(478600001)(1076003)(64756008)(8936002)(44832011)(76116006)(71200400001)(4326008)(45080400002)(966005)(33656002)(66946007)(83380400001)(91956017)(5660300002)(66476007)(66446008)(66556008)(2906002)(33716001)(26005)(316002)(6506007)(53546011)(186003)(6512007)(54906003)(9686003)(6486002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: sFB9hpaLueyiLVRNiXxqWFjfDZQ/BTCfs/XBwc2IYSpB9t+ZaLKuHqdhxeODpyB6eYvTSqxomTV+IX84k0ruBtDMkfGcLghhUQD+0al5UrZ35RZV25hXa3i3ojuKDa+IKBsvvvYABPDDvUZiP1QDeDZyZsv1FNPWL08va14pVX5PYDtanj5z86jeLZAUL44itgXmULrHoQqlRzuS4nyPCiynONaB5U2wDmZoiS1ELB+9qWADOOIwcKs5tHEhFEXFWvU94cavP2jQYXIAakdeMtl4r8AeA/lXsZMZEaNc19mBNND2cHpLac95S1k0n7hv6aPG/tmFmhs6fQt1uX7IFrtrkrhTr1l75nYTTePRDaE1K6be1I2n4e+Qmb2ip5BiMAPUnbZcBaqUo9IZwSAkXcjbc5q2cQSD3OU8LYw2ZhDfxJyGr1upU0CJ74qGAkAMpz4vXLXeyl/kCJAI50aBROriEpKy2n5t4IOzn/EFzWCwlGoFdrKug0ywBb6J9Z7uWsUEu3FICkoWuTYs/VbXsxdfqi95NN0fFqxf7VeUtsm/doxeYpBPMUVrXzX0QbcqxZVjdoBLoNaQYg+GrMf4ROukAqAhejW3rid0mzHaR13qe+hShrlfJuPu3IfFTaqxLGbTabMwUgGrqpk76LMvbw==
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <67AB65846C59F34980D57B96AD0E83C6@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1725820AbgHTFrV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Aug 2020 01:47:21 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:30621 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725768AbgHTFrV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Aug 2020 01:47:21 -0400
+X-UUID: cc999b98498d42cdb13ac7af8900fc75-20200820
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=8MLwD3gkfbEFQ+qj1XGRZ5pG2UR6AqYlaUwnbuLOed8=;
+        b=rguRe/s8BkMBvXJQheCoid/PGEZvd0xgYlZ6QdV4WBXImRL+f5qLzfvDUsbIJdnWKusBKLUhkl5qLXlk1QuJ5FYKGvf4vrKjKmA/C/iC+6j6cqBO7ZqmHws/m7hlHpUcZF2r6a+z405mlooi50SfFNQivdM/fJ5J7tk6TlKVAIY=;
+X-UUID: cc999b98498d42cdb13ac7af8900fc75-20200820
+Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 1405888067; Thu, 20 Aug 2020 13:47:10 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ MTKMBS31N2.mediatek.inc (172.27.4.87) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 20 Aug 2020 13:47:08 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 20 Aug 2020 13:47:07 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Felipe Balbi <balbi@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH v2 01/11] usb: early: convert to readl_poll_timeout_atomic()
+Date:   Thu, 20 Aug 2020 13:45:39 +0800
+Message-ID: <1597902349-8998-1-git-send-email-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 1.8.1.1.dirty
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d7788f53-a138-4dd6-86aa-08d844babb10
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Aug 2020 03:40:06.4599
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: +73RCBHVi3o2VKoZu4HQmnHJY4MALGMod/8GC2ZvXzdEoozSqWm7wE/wBXjGjeHp6Ixpc7GI1cTvwyHjw0NYbg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB4758
+Content-Type: text/plain
+X-TM-SNTS-SMTP: 969B85A066FD04249CC8CF2E942C15D3031504E50D3B0C4302B76F80AD73868D2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20-08-19 10:52:36, stern@rowland.harvard.edu wrote:
-> On Wed, Aug 19, 2020 at 01:31:14AM +0000, Peter Chen wrote:
-> > On 20-08-18 10:46:55, stern@rowland.harvard.edu wrote:
-> > > On Tue, Aug 18, 2020 at 10:05:51AM +0000, Peter Chen wrote:
-> > > > =20
-> > > > > >
-> > > > > > diff --git a/drivers/usb/gadget/udc/core.c
-> > > > > > b/drivers/usb/gadget/udc/core.c index 473e74088b1f..43351b0af56=
-9
-> > > > > > 100644
-> > > > > > --- a/drivers/usb/gadget/udc/core.c
-> > > > > > +++ b/drivers/usb/gadget/udc/core.c
-> > > > > > @@ -1386,7 +1386,6 @@ void usb_del_gadget_udc(struct usb_gadget
-> > > > > > *gadget)  {
-> > > > > >  	usb_del_gadget(gadget);
-> > > > > >  	usb_put_gadget(gadget);
-> > > > > > -	memset(&gadget->dev, 0x00, sizeof(gadget->dev));
-> > > > >=20
-> > > > > Shouldn't you do this patch earlier in the series, as the
-> > > > > usb_put_gadget() call could have freed the memory that is being c=
-leared here?
-> > > > >=20
-> > > >=20
-> > > > If I did it earlier, it would cause dwc3 break if people do 'git bi=
-sect', dwc3 issue is
-> > > > fixed at patch 5.
-> > >=20
-> > > If you use the patch I posted earlier:
-> > >=20
-> > > 	https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2F=
-marc.info%2F%3Fl%3Dlinux-usb%26m%3D159605415210351%26w%3D2&amp;data=3D02%7C=
-01%7Cpeter.chen%40nxp.com%7Cac0a92404ea34c230dd208d8444f83d3%7C686ea1d3bc2b=
-4c6fa92cd99c5c301635%7C0%7C0%7C637334455595715503&amp;sdata=3DwhweZozRiWD%2=
-B4iRFz7zvEahWAqQYkQQ8tHlRSiU%2Fj7I%3D&amp;reserved=3D0
-> > >=20
-> > > instead of this one then dwc3 would continue to work correctly during=
-=20
-> > > the intermediate stages of the series.
-> > >=20
-> >=20
-> > But at last, we don't want below at .release function
-> >=20
-> > 	memset(dev, 0, sizeof(*dev));
-> >=20
-> > It still needs another patch to delete it after dwc3 changes,
-> > and it changes .release function name to usb_udc_zero_release,
-> > this change may also not be needed.
-> >=20
-> > Or I only do move memory clear operation at the first patch, and
-> > delete it at the last patch, it could let the reader not see
-> > the memory clear operation at the usb_del_gadget during the patch
-> > series.
->=20
-> One way or another, the existing code is wrong.  I guess the best we can=
-=20
-> do for now is to let it remain wrong during the patch series, rather=20
-> than changing it to be wrong in a different way.
->=20
-> To put it another way, we already run the risk of clearing memory that=20
-> has been freed.  The series does not make that risk any worse, and it=20
-> eventually fixes the problem.
->=20
-> This means your patch should remain in its position at the end of the=20
-> series.
->=20
+VXNlIHJlYWRsX3BvbGxfdGltZW91dF9hdG9taWMoKSB0byBzaW1wbGlmeSBjb2RlDQoNCkNjOiBM
+dSBCYW9sdSA8YmFvbHUubHVAbGludXguaW50ZWwuY29tPg0KQ2M6IE1hdGhpYXMgTnltYW4gPG1h
+dGhpYXMubnltYW5AbGludXguaW50ZWwuY29tPg0KU2lnbmVkLW9mZi1ieTogQ2h1bmZlbmcgWXVu
+IDxjaHVuZmVuZy55dW5AbWVkaWF0ZWsuY29tPg0KLS0tDQp2Mjogbm8gY2hhbmdlcw0KLS0tDQog
+ZHJpdmVycy91c2IvZWFybHkveGhjaS1kYmMuYyB8IDE0ICsrKystLS0tLS0tLS0tDQogMSBmaWxl
+IGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgMTAgZGVsZXRpb25zKC0pDQoNCmRpZmYgLS1naXQg
+YS9kcml2ZXJzL3VzYi9lYXJseS94aGNpLWRiYy5jIGIvZHJpdmVycy91c2IvZWFybHkveGhjaS1k
+YmMuYw0KaW5kZXggYzA1MDc3Ni4uYmU0ZWNiYSAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvdXNiL2Vh
+cmx5L3hoY2ktZGJjLmMNCisrKyBiL2RyaXZlcnMvdXNiL2Vhcmx5L3hoY2ktZGJjLmMNCkBAIC0x
+NCw2ICsxNCw3IEBADQogI2luY2x1ZGUgPGxpbnV4L3BjaV9pZHMuaD4NCiAjaW5jbHVkZSA8bGlu
+dXgvbWVtYmxvY2suaD4NCiAjaW5jbHVkZSA8bGludXgvaW8uaD4NCisjaW5jbHVkZSA8bGludXgv
+aW9wb2xsLmg+DQogI2luY2x1ZGUgPGFzbS9wY2ktZGlyZWN0Lmg+DQogI2luY2x1ZGUgPGFzbS9m
+aXhtYXAuaD4NCiAjaW5jbHVkZSA8bGludXgvYmNkLmg+DQpAQCAtMTM1LDE2ICsxMzYsOSBAQCBz
+dGF0aWMgaW50IGhhbmRzaGFrZSh2b2lkIF9faW9tZW0gKnB0ciwgdTMyIG1hc2ssIHUzMiBkb25l
+LCBpbnQgd2FpdCwgaW50IGRlbGF5KQ0KIHsNCiAJdTMyIHJlc3VsdDsNCiANCi0JZG8gew0KLQkJ
+cmVzdWx0ID0gcmVhZGwocHRyKTsNCi0JCXJlc3VsdCAmPSBtYXNrOw0KLQkJaWYgKHJlc3VsdCA9
+PSBkb25lKQ0KLQkJCXJldHVybiAwOw0KLQkJdWRlbGF5KGRlbGF5KTsNCi0JCXdhaXQgLT0gZGVs
+YXk7DQotCX0gd2hpbGUgKHdhaXQgPiAwKTsNCi0NCi0JcmV0dXJuIC1FVElNRURPVVQ7DQorCXJl
+dHVybiByZWFkbF9wb2xsX3RpbWVvdXRfYXRvbWljKHB0ciwgcmVzdWx0LA0KKwkJCQkJICgocmVz
+dWx0ICYgbWFzaykgPT0gZG9uZSksDQorCQkJCQkgZGVsYXksIHdhaXQpOw0KIH0NCiANCiBzdGF0
+aWMgdm9pZCBfX2luaXQgeGRiY19iaW9zX2hhbmRvZmYodm9pZCkNCi0tIA0KMS45LjENCg==
 
-Thank.
-
-If you think my sequence during the patch series is OK, would you
-please add your reviewed-by below?
-
-https://www.spinics.net/lists/linux-usb/msg199291.html
-
---=20
-
-Thanks,
-Peter Chen=
