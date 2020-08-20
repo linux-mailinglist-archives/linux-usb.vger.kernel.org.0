@@ -2,72 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DCA924BA2A
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Aug 2020 14:03:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 817CC24BB80
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Aug 2020 14:30:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730082AbgHTMBp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Aug 2020 08:01:45 -0400
-Received: from mga11.intel.com ([192.55.52.93]:32669 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729911AbgHTMB3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 20 Aug 2020 08:01:29 -0400
-IronPort-SDR: DDSfPRtp6nP4ltP959ZqcFmFhk+rLxygT0GSZcXEiDJBFD56AV7VEjLO0otWdFvQOSOL+uBZIg
- yA8slY+91+kw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9718"; a="152880514"
-X-IronPort-AV: E=Sophos;i="5.76,332,1592895600"; 
-   d="scan'208";a="152880514"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2020 05:01:23 -0700
-IronPort-SDR: Ue0xaKDoSd8ZLMmMu695W+q2OqVQsTJq8YeMCTs/Mog7syPnFnopoErbKfZAfsFA2zRX4V2qIK
- LobHFZt/SBLA==
-X-IronPort-AV: E=Sophos;i="5.76,332,1592895600"; 
-   d="scan'208";a="472628791"
-Received: from ndadhani-mobl.gar.corp.intel.com (HELO [10.213.64.199]) ([10.213.64.199])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2020 05:01:12 -0700
-Subject: Re: [PATCH 1/2] thunderbolt: Disable ports that are not implemented
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <yehezkelshb@gmail.com>
-Cc:     linux-usb@vger.kernel.org, Michael Jamet <michael.jamet@intel.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Srikanth Nandamuri <srikanth.nandamuri@intel.com>,
-        Lukas Wunner <lukas@wunner.de>
-References: <20200819112716.59074-1-mika.westerberg@linux.intel.com>
- <CA+CmpXs+WHj_PS51s=nOAJp9pvn6atDhVi0FtNasHfqqJ9MhXw@mail.gmail.com>
- <20200819124512.GJ1375436@lahna.fi.intel.com>
-From:   "Nikunj A. Dadhania" <nikunj.dadhania@linux.intel.com>
-Message-ID: <5227d92b-069d-7026-9136-5036cfbe3fee@linux.intel.com>
-Date:   Thu, 20 Aug 2020 17:31:08 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S1730003AbgHTMaB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Aug 2020 08:30:01 -0400
+Received: from cmccmta2.chinamobile.com ([221.176.66.80]:12054 "EHLO
+        cmccmta2.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729006AbgHTM36 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Aug 2020 08:29:58 -0400
+X-Greylist: delayed 559 seconds by postgrey-1.27 at vger.kernel.org; Thu, 20 Aug 2020 08:29:56 EDT
+Received: from spf.mail.chinamobile.com (unknown[172.16.121.13]) by rmmx-syy-dmz-app08-12008 (RichMail) with SMTP id 2ee85f3e6a814ba-e3f62; Thu, 20 Aug 2020 20:20:18 +0800 (CST)
+X-RM-TRANSID: 2ee85f3e6a814ba-e3f62
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG: 00000000
+Received: from localhost.localdomain (unknown[223.112.105.130])
+        by rmsmtp-syy-appsvr07-12007 (RichMail) with SMTP id 2ee75f3e6a7f13e-2fed8;
+        Thu, 20 Aug 2020 20:20:17 +0800 (CST)
+X-RM-TRANSID: 2ee75f3e6a7f13e-2fed8
+From:   Tang Bin <tangbin@cmss.chinamobile.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tang Bin <tangbin@cmss.chinamobile.com>,
+        Zhang Shengju <zhangshengju@cmss.chinamobile.com>
+Subject: [PATCH] usb: hcd: fix the error check
+Date:   Thu, 20 Aug 2020 20:20:38 +0800
+Message-Id: <20200820122038.18704-1-tangbin@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.20.1.windows.1
 MIME-Version: 1.0
-In-Reply-To: <20200819124512.GJ1375436@lahna.fi.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 8/19/2020 6:15 PM, Mika Westerberg wrote:
-> On Wed, Aug 19, 2020 at 02:54:39PM +0300, Yehezkel Bernat wrote:
->>> - * @disabled: Disabled by eeprom
->>> + * @disabled: Disabled by eeprom or enabled, but not implemented
->>
->> I'm not a native speaker, so I'm not sure about it, but maybe the comma here is
->> superfluous and just confuses the reader. To me it looks like it means
->> "(disabled
->> || enabled) && !implemented" instead of "disabled || (enabled && !implemented)". >> Any opinion?
-> 
-> For me (also non-native speaker) I don't see a difference but sure I can
-> remove it :)
-> 
+In the function usb_add_hcd(), usb_phy_roothub_alloc()
+can return NULL in some cases, so IS_ERR() doesn't meet
+the requirements. Thus fix it.
+Signed-off-by: Zhang Shengju <zhangshengju@cmss.chinamobile.com>
+Signed-off-by: Tang Bin <tangbin@cmss.chinamobile.com>
+---
+ drivers/usb/core/hcd.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-I meant the second - "disabled || (enabled && !implemented)"
-(also non-native speaker). If the comma confuses the reader please 
-remove it.
+diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+index aa45840d8..b73a92ee1 100644
+--- a/drivers/usb/core/hcd.c
++++ b/drivers/usb/core/hcd.c
+@@ -2633,8 +2633,9 @@ int usb_add_hcd(struct usb_hcd *hcd,
+ 
+ 	if (!hcd->skip_phy_initialization && usb_hcd_is_primary_hcd(hcd)) {
+ 		hcd->phy_roothub = usb_phy_roothub_alloc(hcd->self.sysdev);
+-		if (IS_ERR(hcd->phy_roothub))
+-			return PTR_ERR(hcd->phy_roothub);
++		if (IS_ERR_OR_NULL(hcd->phy_roothub))
++			return hcd->phy_roothub ?
++					PTR_ERR(hcd->phy_roothub) : -ENODEV;
+ 
+ 		retval = usb_phy_roothub_init(hcd->phy_roothub);
+ 		if (retval)
+-- 
+2.20.1.windows.1
 
-Regards
-Nikunj
+
+
