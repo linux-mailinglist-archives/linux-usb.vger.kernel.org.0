@@ -2,132 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DB9724B1AC
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Aug 2020 11:06:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4635324B752
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Aug 2020 12:51:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726731AbgHTJGi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Aug 2020 05:06:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53242 "EHLO
+        id S1731296AbgHTKvK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Aug 2020 06:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725866AbgHTJGg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Aug 2020 05:06:36 -0400
+        with ESMTP id S1730228AbgHTKOo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Aug 2020 06:14:44 -0400
 Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F53C061757;
-        Thu, 20 Aug 2020 02:06:35 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id v15so546933lfg.6;
-        Thu, 20 Aug 2020 02:06:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7572BC061757;
+        Thu, 20 Aug 2020 03:14:44 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id c8so638773lfh.9;
+        Thu, 20 Aug 2020 03:14:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:organization:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=ZB4PCuqp8Bl2dkJy5Fm6Sj2/MRT/e7zYVg69/U7Iw3A=;
-        b=jRSU7EbPYuaZa+y1ww5c1uQFbyH05AS+4/y9F7u0zfd9hNB2tnzBPNp8je59myQNMQ
-         jHPH6tBd1Wwn7BdCa00KVXc60BSdX0Ndq10P7ka8NPFWg1ZJ3LsSZv0w8HBp6uQ3NiAh
-         dj5XA0KHwLfCp0cjSlMmH6bx+JfVFMeQqSseCHBBmtyfNIM9YIojgpQJL8XUFhtSBjsW
-         EUKBfwxwlk5cLYa8WcK31DAuysfcZ2hLaBPSEULzoNNVE+3ShAUapOTgWe+4CkfB57ZP
-         mL01BWILpPiVjIBecOCA99KxCmG02TPxV3cr0jcgUSZ2kUozu8reoSXmgLtmVOjnXzBX
-         ScIQ==
+        bh=vIqpTmovFa8dVc4Ln43GhodOHY6DYWmxTNMxOIaUSmk=;
+        b=mQKGf1p7s26/YEZUJCDJw1Tu7tKxQjJkJbGshc8hEqWQ0aPATF1nLsD1c05MqNppYj
+         F7jcqy60M6TktK4f2Wp3LLFT1sdbnUNe/NNDlql4uUI1NzKxREGwwFn14IbP8avMucma
+         r9jei4zpVrMjL61VyCyH6hwunwyHB68u3Ls8drUYwxNlUC1ZYwt0nNupTO+1jIVjCjVe
+         BD9MynVK7jENWyxu3sjHrYYu1efw/Zbd4cm+0zg7DEX2+v4oU33KwNy5HSJcfoWUuTsw
+         wp5JP6ddhwrgggtUAiArIdP2nV6uH9hU/1rYqQh881fcMBGyenh6aClx2abnWiMyMlR6
+         LVMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:organization
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=ZB4PCuqp8Bl2dkJy5Fm6Sj2/MRT/e7zYVg69/U7Iw3A=;
-        b=Lsh2CwfShDBkNd0QHhxQpJ5PFwQ1O8F9BGOG7/khoezcFf5LJAMoZGtHtZ+OGM4S1t
-         W0/XsySxQa++blbuW0C9ETdM8ZGWeMkPl38hwiELgHemG4gCp9ih2UGuzNe/GujRc+FC
-         54yc/StFO5BdUEj0vM0vKtS4C/Pg/3Gk28AvEaCqo98kxuQmVHyUJkd27LPGY6zFkm7t
-         njkNlXJVXwKYs4NuSCpDj1AnYMCIuS0R51n+YLWEkE/Qh4YFMYuYsS2EpGf36FnRaT5Q
-         6eca+EpWPxIo1Wz2rxy7H44u1N+LWAtrsRqZKkahr2MAkeNdt4uxFPLnMqXWJ4fL12lV
-         JS8w==
-X-Gm-Message-State: AOAM530BxC/WcGbim/ATHLCysKAIaCi3aeOFZKnI9gM7PGg/7HvA9a6O
-        Iv8QqWBaYwqN/6Vs1jhuHPI/GMgpAa/Iwgub
-X-Google-Smtp-Source: ABdhPJx586OB1ZFNi8bmTijB1iKrXx0pOQq+0PCvDWVugFZLEr8cnAEYNYIu9kBNKKo6DTiGbe/wQw==
-X-Received: by 2002:a05:6512:3185:: with SMTP id i5mr1144189lfe.205.1597914394167;
-        Thu, 20 Aug 2020 02:06:34 -0700 (PDT)
+        bh=vIqpTmovFa8dVc4Ln43GhodOHY6DYWmxTNMxOIaUSmk=;
+        b=MTv5nZiKouMVjE74zMUuUt6SYrm0fVUzDL7LpM27k1jRbRgmyDrKyGDe78eddRC0FB
+         oJ7mVztlF6UvVuH8BVWv1T2Wk8dJhc8YCeDQpIMenq1/T3vL/TBZxAt4etHiNJxb23zI
+         wzUaOBNRxpVzcBa8MxKEKjLwH3axF1nZc2ToXrFLpMn+dUWoXd0jI7fWg8E1WVuHlp5k
+         p1pWetVb9mjnpzbdub2Bazds8AYAxsA7ZnJXGCwP+jYyClU32LGMMf59sV31iePF0cum
+         XwVchtXVG+kEEG7TdaAwKRuYpzmeWa+UlodXAZY/UGQXydZ94S72UbIp8ztTSp4R7sVh
+         I8RA==
+X-Gm-Message-State: AOAM531yKnyWO/VY44HgOC3mdViwwHPq2cbReq4TgVvhda1/u38+6xkt
+        8/1/0pa1pEsr2/FMsGJR2OE=
+X-Google-Smtp-Source: ABdhPJwkqxUCR2HlVxBFdk4S2ON7cs2z7amFEy/eH3RHaxNifp9RAtkK3fIzcr28JtSp2B8dyQlCSw==
+X-Received: by 2002:a19:c894:: with SMTP id y142mr1226308lff.74.1597918482964;
+        Thu, 20 Aug 2020 03:14:42 -0700 (PDT)
 Received: from ?IPv6:2a00:1fa0:42ab:a165:4cb2:5f04:a1e8:63b? ([2a00:1fa0:42ab:a165:4cb2:5f04:a1e8:63b])
-        by smtp.gmail.com with ESMTPSA id j2sm322988ljb.98.2020.08.20.02.06.32
+        by smtp.gmail.com with ESMTPSA id a12sm400511lfi.83.2020.08.20.03.14.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Aug 2020 02:06:33 -0700 (PDT)
-Subject: Re: [PATCH v8 4/4] arm64: boot: dts: qcom: pm8150b: Add DTS node for
- PMIC VBUS booster
-To:     Wesley Cheng <wcheng@codeaurora.org>, sboyd@kernel.org,
-        heikki.krogerus@linux.intel.com, agross@kernel.org,
-        robh+dt@kernel.org, gregkh@linuxfoundation.org,
-        bjorn.andersson@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20200812071925.315-1-wcheng@codeaurora.org>
- <20200812071925.315-5-wcheng@codeaurora.org>
- <1ed0a34c-6219-fe3d-7d9c-13a74ce2d4d0@gmail.com>
- <02111c69-73fd-5e8c-5594-27393865d458@codeaurora.org>
+        Thu, 20 Aug 2020 03:14:42 -0700 (PDT)
+Subject: Re: [PATCH v2 11/11] iopoll: update kerneldoc of
+ read_poll_timeout_atomic()
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Lee Jones <lee.jones@linaro.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+References: <1597902349-8998-1-git-send-email-chunfeng.yun@mediatek.com>
+ <1597902349-8998-11-git-send-email-chunfeng.yun@mediatek.com>
 From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
 Organization: Brain-dead Software
-Message-ID: <eaf4618c-54da-c522-52c6-1edec7744872@gmail.com>
-Date:   Thu, 20 Aug 2020 12:06:23 +0300
+Message-ID: <49de5eaf-9870-522c-b1f2-037ecb122237@gmail.com>
+Date:   Thu, 20 Aug 2020 13:14:32 +0300
 User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.11.0
 MIME-Version: 1.0
-In-Reply-To: <02111c69-73fd-5e8c-5594-27393865d458@codeaurora.org>
+In-Reply-To: <1597902349-8998-11-git-send-email-chunfeng.yun@mediatek.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20.08.2020 10:47, Wesley Cheng wrote:
+Hello!
 
+On 20.08.2020 8:45, Chunfeng Yun wrote:
+
+> Arguments description of read_poll_timeout_atomic() if out of date,
+
+    s/if/is/?
+
+> update it.
+> 
+> Cc: Alan Stern <stern@rowland.harvard.edu>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 [...]
->>> Add the required DTS node for the USB VBUS output regulator, which is
->>> available on PM8150B.  This will provide the VBUS source to connected
->>> peripherals.
->>>
->>> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
->>> ---
->>>    arch/arm64/boot/dts/qcom/pm8150b.dtsi   | 6 ++++++
->>>    arch/arm64/boot/dts/qcom/sm8150-mtp.dts | 4 ++++
->>>    2 files changed, 10 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/pm8150b.dtsi
->>> b/arch/arm64/boot/dts/qcom/pm8150b.dtsi
->>> index 053c659734a7..9e560c1ca30d 100644
->>> --- a/arch/arm64/boot/dts/qcom/pm8150b.dtsi
->>> +++ b/arch/arm64/boot/dts/qcom/pm8150b.dtsi
->>> @@ -53,6 +53,12 @@ power-on@800 {
->>>                status = "disabled";
->>>            };
->>>    +        pm8150b_vbus: dcdc@1100 {
->>
->>     s/dcdc/regulator/? What is "dcdc", anyway?
->>     The device nodes must have the generic names, according to the DT spec.
->>
-> 
-> Hi Sergei,
-> 
-> Thanks for the comment!
-
-     You're welcome.
-
-> DCDC is the label that we use for the DC to DC converter block, since
-> the VBUS booster will output 5V to the connected devices.  Would it make
-> more sense to have "dc-dc?"
-
-    Better use s/th like "regulator-dcdc". As I said, the names should be 
-generic, reflecting the device class.
-
-> Thanks
-> Wesley
-> 
->>> +            compatible = "qcom,pm8150b-vbus-reg";
->>> +            status = "disabled";
->>> +            reg = <0x1100>;
->>> +        };
->>> +
->>>            pm8150b_typec: typec@1500 {
->>>                compatible = "qcom,pm8150b-usb-typec";
->>>                status = "disabled";
->> [...]
 
 MBR, Sergei
