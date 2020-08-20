@@ -2,74 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D14DD24B905
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Aug 2020 13:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5177C24B8E3
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Aug 2020 13:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730011AbgHTLeW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Aug 2020 07:34:22 -0400
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:28876 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1730644AbgHTLcv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Aug 2020 07:32:51 -0400
-X-UUID: 4b3863a1b24a441f852a3a7e30223cf4-20200820
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=njMU5VLie19Pssvi8+YgppuDMCXfmQYubWzISF4gV9Y=;
-        b=JHB29HqJeuONQDk4mRL0MZeIudsGcDE6G6+Kbw/6yfT96wsm4leIUu5X9bUK6el/6BSRlu/dV6fCcjxLIcnCK0uYWRiiWBFmYw/ee4lX+sHGwUGWDf9jQhBgPzrmQVoxRKhKCTU/JEW7RYJCvU+NOoWqv9xKLEKiUJxxQengucM=;
-X-UUID: 4b3863a1b24a441f852a3a7e30223cf4-20200820
-Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 1629179673; Thu, 20 Aug 2020 19:32:35 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- MTKMBS31N2.mediatek.inc (172.27.4.87) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 20 Aug 2020 19:32:35 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 20 Aug 2020 19:32:32 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Al Cooper <alcooperx@gmail.com>,
-        Sasi Kumar <sasi.kumar@broadcom.com>,
-        Peter Chen <peter.chen@nxp.com>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [PATCH v2 11/11] usb: gadget: bdc: fix checkpatch.pl repeated word warning
-Date:   Thu, 20 Aug 2020 19:30:46 +0800
-Message-ID: <1597923046-12535-11-git-send-email-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 1.8.1.1.dirty
-In-Reply-To: <1597923046-12535-1-git-send-email-chunfeng.yun@mediatek.com>
-References: <1597923046-12535-1-git-send-email-chunfeng.yun@mediatek.com>
+        id S1730202AbgHTLbn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Aug 2020 07:31:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47462 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730399AbgHTLb0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Aug 2020 07:31:26 -0400
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D929DC061385
+        for <linux-usb@vger.kernel.org>; Thu, 20 Aug 2020 04:31:25 -0700 (PDT)
+Received: by mail-io1-xd44.google.com with SMTP id t15so1811797iob.3
+        for <linux-usb@vger.kernel.org>; Thu, 20 Aug 2020 04:31:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=mcq4G1cXloe1roY5GO+CaIx/IokYeb5wbbsJjkCv7gY=;
+        b=iHIgSc2M/x3ZS8tDZ8+FKJvYQ+CVM8W7Gu+0pJSj+qxjUaF1DakcdzDI/6Ig6rCmWk
+         1m0YlEnqgq9GdvII1BS0VHscU0cXsjpxB7NLBKFVKateM1A9936JE/KUASisxaNUhbTG
+         0r/JGb7tN8oBUeIbrWecFuiIltag/d1DEdMQoOCo0yQAcNVqJhMJd/vFHAx6dJdcfanl
+         1lmhxfBFPb1ujLZTbRjeDICywtMA7FQQxzxyry1sg3Ywhd1ieGzLEpulgk46ztcQFc9f
+         PsCZRjIp4kNLKgmlsu6PKKLb2XUBW9tOhRz3DiUrsmfxz67V6ms4lmKiwotNEDUzQNok
+         CeCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=mcq4G1cXloe1roY5GO+CaIx/IokYeb5wbbsJjkCv7gY=;
+        b=XOmt2b7po038K/AmSTT3AT1OTTe6mLy5Uax7kbyO5yY0FqwQSQsoy4byanaWehmafX
+         lG1vd9b3EZVwgh6JH16QcmMoiY4GTZBcD1I3NZDZcTvR3G0/IKLuXMTCUFZR6GiGxxsy
+         xnKp9Ctaba8xJVnUPt8FGYo3uEoFRZRpQeaVZpR2e9/BKjtDuyssOePKXNxkmGYfMaj+
+         W3O5/nSxxPQwlD40rbAnnEWN+1bfMNi8xY89keks5NaMfQiiDYNo/MMc+CKEvVO9aKfR
+         gvDU76VQryJW5TOLJkflwjrGG+V0+QIGuKafcB8klfnHKZdnN1xG7wMMassRViXIEBGb
+         qBnQ==
+X-Gm-Message-State: AOAM530GwGPojGwPPz3DlUuogIN8gAvqdj6dsD+/n3Z1bbiCe9l14hDQ
+        XBcxvKZGd7J3TK7fZyhixx7ZVFv4cV+frzqVZwI=
+X-Google-Smtp-Source: ABdhPJz3WlPChpa1VWho+9x4GMcwqzrEO2lfHwxGA1TEAu/L+s/TUA5tEKRlxKUMlfLa98+6Xl3A1OGR+ngOQDLQ6/4=
+X-Received: by 2002:a6b:5c17:: with SMTP id z23mr2210097ioh.67.1597923084196;
+ Thu, 20 Aug 2020 04:31:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: B3585BA57539BB1FE94948FEBFECC89BEB16E80F879A3BED4E0C2E2CE777E7A62000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Received: by 2002:a92:b702:0:0:0:0:0 with HTTP; Thu, 20 Aug 2020 04:31:23
+ -0700 (PDT)
+Reply-To: mrs.miraclewilliams0@gmail.com
+From:   "Mrs.Miracle Williams" <chidionuoha44@gmail.com>
+Date:   Thu, 20 Aug 2020 11:31:23 +0000
+Message-ID: <CAHEVrzVRq6WqXMW_Hvu_etdUTehBENp7TJVWsEUmqar26P0P+Q@mail.gmail.com>
+Subject: Dearest in the Lord,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Zml4IHRoZSB3YXJuaW5nOg0KV0FSTklORzpSRVBFQVRFRF9XT1JEOiBQb3NzaWJsZSByZXBlYXRl
-ZCB3b3JkOiAnYW5kJw0KDQpDYzogRmxvcmlhbiBGYWluZWxsaSA8Zi5mYWluZWxsaUBnbWFpbC5j
-b20+DQpTaWduZWQtb2ZmLWJ5OiBDaHVuZmVuZyBZdW4gPGNodW5mZW5nLnl1bkBtZWRpYXRlay5j
-b20+DQotLS0NCnYyOiBuZXcgcGF0Y2gNCi0tLQ0KIGRyaXZlcnMvdXNiL2dhZGdldC91ZGMvYmRj
-L2JkY19lcC5jIHwgMiArLQ0KIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxl
-dGlvbigtKQ0KDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvZ2FkZ2V0L3VkYy9iZGMvYmRjX2Vw
-LmMgYi9kcml2ZXJzL3VzYi9nYWRnZXQvdWRjL2JkYy9iZGNfZXAuYw0KaW5kZXggZDIyN2QyNi4u
-OGUyZjIwYiAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvdXNiL2dhZGdldC91ZGMvYmRjL2JkY19lcC5j
-DQorKysgYi9kcml2ZXJzL3VzYi9nYWRnZXQvdWRjL2JkYy9iZGNfZXAuYw0KQEAgLTE0MDUsNyAr
-MTQwNSw3IEBAIHN0YXRpYyBpbnQgZXAwX3NldF9zZWwoc3RydWN0IGJkYyAqYmRjLA0KIH0NCiAN
-CiAvKg0KLSAqIFF1ZXVlIGEgMCBieXRlIGJkIG9ubHkgaWYgd0xlbmd0aCBpcyBtb3JlIHRoYW4g
-dGhlIGxlbmd0aCBhbmQgYW5kIGxlbmd0aCBpcw0KKyAqIFF1ZXVlIGEgMCBieXRlIGJkIG9ubHkg
-aWYgd0xlbmd0aCBpcyBtb3JlIHRoYW4gdGhlIGxlbmd0aCBhbmQgbGVuZ3RoIGlzDQogICogYSBt
-dWx0aXBsZSBvZiBNYXhQYWNrZXQgdGhlbiBxdWV1ZSAwIGJ5dGUgQkQNCiAgKi8NCiBzdGF0aWMg
-aW50IGVwMF9xdWV1ZV96bHAoc3RydWN0IGJkYyAqYmRjKQ0KLS0gDQoxLjkuMQ0K
+Dearest in the Lord,
 
+I am Mrs. Miracle Williams, a widow suffering from long time illness
+Cancer). I am married to Mr. John Williams who died in a motor
+accident. We were married for Eighteen years without a child.
+
+Since his death I decided not to remarry or get a child outside my
+matrimonial home. When my late husband was alive he deposited the sum
+of US$ 3. 500.000.00 (Three Million Five Hundred thousand Dollars) in
+a Bank, presently, this money is still in bank.
+
+My late husband instructed that this fund should be use for charity
+purpose such as to build schools, orphanage homes, hospitals, etc.
+
+Recently, my Doctor told me that I would not last for the next three
+months due to cancer problem. Having known my condition, I want a
+honest and God fearing person or an organization that will use this
+fund for charity works.
+
+I took this decision because I don't have any child that will inherit
+this money and I want God to be merciful to me and accept my soul,
+With God all things are possible.
+
+Please if you would be able to use this fund for God's work kindly
+reply me. As soon as I receive your reply I shall give you the contact
+of the Bank, I will also send application letter to the bank that will
+prove you the present beneficiary of this fund.
+
+Please assure me that you will act accordingly as I Stated here in and
+please always be prayerful all through your life.
+
+I hope to receive your reply.
+
+Remain blessed in the Lord.
+
+Thanks,
+Mrs. Miracle Williams.
