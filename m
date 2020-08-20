@@ -2,243 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2572824BAB3
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Aug 2020 14:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DCA924BA2A
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Aug 2020 14:03:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730309AbgHTMQQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Aug 2020 08:16:16 -0400
-Received: from m12-13.163.com ([220.181.12.13]:55685 "EHLO m12-13.163.com"
+        id S1730082AbgHTMBp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Aug 2020 08:01:45 -0400
+Received: from mga11.intel.com ([192.55.52.93]:32669 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730254AbgHTJ5G (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 20 Aug 2020 05:57:06 -0400
-X-Greylist: delayed 6414 seconds by postgrey-1.27 at vger.kernel.org; Thu, 20 Aug 2020 05:57:01 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id; bh=zh3BcAV+VPoSPllH0M
-        6u5wgwqBFhydicUtJNSNo6k0A=; b=dQ0Su/Id+ScorRnxqvOUNDmqEcCmvclewL
-        /iANzNAWCQ4TAWd6xynRfdGX5z6ffkRKPNed4JwHYD5TbbN5PtvGhLdfgakMQjO3
-        sRofhHp2Lga/xBF1aPLeGgq3JX/gYoqtP2RW96il4tUPqGuciX4+KgwsdQNoUW5x
-        ZvdRCwJ6g=
-Received: from localhost.localdomain (unknown [182.149.198.204])
-        by smtp9 (Coremail) with SMTP id DcCowAA3sygTLD5fhvmqCQ--.55333S4;
-        Thu, 20 Aug 2020 15:53:56 +0800 (CST)
-From:   Sheng Long Wang <china_shenglong@163.com>
-To:     johan@kernel.org, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jan.kiszka@siemens.com,
-        Wang Sheng Long <shenglong.wang.ext@siemens.com>
-Subject: [PATCH v3] usb-serial:cp210x: add support to software flow control
-Date:   Thu, 20 Aug 2020 15:52:40 +0800
-Message-Id: <20200820075240.13321-1-china_shenglong@163.com>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: DcCowAA3sygTLD5fhvmqCQ--.55333S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW3JF45Jw18Jr45GFWftFyrZwb_yoW7ZFW7pF
-        W8trWfKF4DZF4fWa1rAF4Uu3sxuanaqry2yFy3G39I9a13Jr1fKF1Ika4Yvr1UArW7G345
-        Jrs8tayDur4qyrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07bY6pPUUUUU=
-X-Originating-IP: [182.149.198.204]
-X-CM-SenderInfo: xfkl0tpbvkv0xjor0wi6rwjhhfrp/1tbiNA+GslaD5MEDugABsH
+        id S1729911AbgHTMB3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 20 Aug 2020 08:01:29 -0400
+IronPort-SDR: DDSfPRtp6nP4ltP959ZqcFmFhk+rLxygT0GSZcXEiDJBFD56AV7VEjLO0otWdFvQOSOL+uBZIg
+ yA8slY+91+kw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9718"; a="152880514"
+X-IronPort-AV: E=Sophos;i="5.76,332,1592895600"; 
+   d="scan'208";a="152880514"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2020 05:01:23 -0700
+IronPort-SDR: Ue0xaKDoSd8ZLMmMu695W+q2OqVQsTJq8YeMCTs/Mog7syPnFnopoErbKfZAfsFA2zRX4V2qIK
+ LobHFZt/SBLA==
+X-IronPort-AV: E=Sophos;i="5.76,332,1592895600"; 
+   d="scan'208";a="472628791"
+Received: from ndadhani-mobl.gar.corp.intel.com (HELO [10.213.64.199]) ([10.213.64.199])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2020 05:01:12 -0700
+Subject: Re: [PATCH 1/2] thunderbolt: Disable ports that are not implemented
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <yehezkelshb@gmail.com>
+Cc:     linux-usb@vger.kernel.org, Michael Jamet <michael.jamet@intel.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Srikanth Nandamuri <srikanth.nandamuri@intel.com>,
+        Lukas Wunner <lukas@wunner.de>
+References: <20200819112716.59074-1-mika.westerberg@linux.intel.com>
+ <CA+CmpXs+WHj_PS51s=nOAJp9pvn6atDhVi0FtNasHfqqJ9MhXw@mail.gmail.com>
+ <20200819124512.GJ1375436@lahna.fi.intel.com>
+From:   "Nikunj A. Dadhania" <nikunj.dadhania@linux.intel.com>
+Message-ID: <5227d92b-069d-7026-9136-5036cfbe3fee@linux.intel.com>
+Date:   Thu, 20 Aug 2020 17:31:08 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
+MIME-Version: 1.0
+In-Reply-To: <20200819124512.GJ1375436@lahna.fi.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Wang Sheng Long <shenglong.wang.ext@siemens.com>
+On 8/19/2020 6:15 PM, Mika Westerberg wrote:
+> On Wed, Aug 19, 2020 at 02:54:39PM +0300, Yehezkel Bernat wrote:
+>>> - * @disabled: Disabled by eeprom
+>>> + * @disabled: Disabled by eeprom or enabled, but not implemented
+>>
+>> I'm not a native speaker, so I'm not sure about it, but maybe the comma here is
+>> superfluous and just confuses the reader. To me it looks like it means
+>> "(disabled
+>> || enabled) && !implemented" instead of "disabled || (enabled && !implemented)". >> Any opinion?
+> 
+> For me (also non-native speaker) I don't see a difference but sure I can
+> remove it :)
+> 
 
-When data is transmitted between two serial ports,
-the phenomenon of data loss often occurs. The two kinds
-of flow control commonly used in serial communication
-are hardware flow control and software flow control.
+I meant the second - "disabled || (enabled && !implemented)"
+(also non-native speaker). If the comma confuses the reader please 
+remove it.
 
-In serial communication, If you only use RX/TX/GND Pins, you
-can't do hardware flow. So we often used software flow control
-and prevent data loss. The user sets the software flow control
-through the application program, and the application program
-sets the software flow control mode for the serial port
-chip through the driver.
-
-For the cp210 serial port chip, its driver lacks the
-software flow control setting code, so the user cannot set
-the software flow control function through the application
-program. This adds the missing software flow control.
-
-Signed-off-by: Wang Sheng Long <shenglong.wang.ext@siemens.com>
-
-Changes in v3:
--fixed code style, It mainly adjusts the code style acccording
- to kernel specification.
----
- drivers/usb/serial/cp210x.c | 118 ++++++++++++++++++++++++++++++++++--
- 1 file changed, 113 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-index e732949f65..c66a0e0fb9 100644
---- a/drivers/usb/serial/cp210x.c
-+++ b/drivers/usb/serial/cp210x.c
-@@ -380,6 +380,9 @@ static struct usb_serial_driver * const serial_drivers[] = {
- #define CP210X_PARTNUM_CP2102N_QFN20	0x22
- #define CP210X_PARTNUM_UNKNOWN	0xFF
- 
-+#define CP210X_VSTART	0x11
-+#define CP210X_VSTOP	0x13
-+
- /* CP210X_GET_COMM_STATUS returns these 0x13 bytes */
- struct cp210x_comm_status {
- 	__le32   ulErrors;
-@@ -391,6 +394,15 @@ struct cp210x_comm_status {
- 	u8       bReserved;
- } __packed;
- 
-+struct cp210x_chars_response {
-+	u8	eofchar;
-+	u8	errochar;
-+	u8	breakchar;
-+	u8	eventchar;
-+	u8	xonchar;
-+	u8	xoffchar;
-+} __packed;
-+
- /*
-  * CP210X_PURGE - 16 bits passed in wValue of USB request.
-  * SiLabs app note AN571 gives a strange description of the 4 bits:
-@@ -624,6 +636,45 @@ static int cp210x_read_vendor_block(struct usb_serial *serial, u8 type, u16 val,
- 	return result;
- }
- 
-+/*
-+ * Read and Write Character Responses operate
-+ * Register SET_CHARS/GET_CHATS
-+ */
-+static int cp210x_operate_chars_block(struct usb_serial_port *port,
-+				u8 req, u8 type, void *buf, int bufsize)
-+{
-+	struct usb_serial *serial = port->serial;
-+	struct cp210x_port_private *port_priv = usb_get_serial_port_data(port);
-+	void *dmabuf;
-+	int result;
-+
-+	dmabuf = kmemdup(buf, bufsize, GFP_KERNEL);
-+	if (!dmabuf)
-+		return -ENOMEM;
-+
-+	result = usb_control_msg(serial->dev,
-+				usb_rcvctrlpipe(serial->dev, 0),
-+				req, type, 0, port_priv->bInterfaceNumber,
-+				dmabuf, bufsize, USB_CTRL_SET_TIMEOUT);
-+
-+	if (result == bufsize) {
-+		if (type == REQTYPE_DEVICE_TO_HOST)
-+			memcpy(buf, dmabuf, bufsize);
-+
-+		result = 0;
-+	} else {
-+		dev_err(&port->dev, "failed get req 0x%x size %d status: %d\n",
-+			req, bufsize, result);
-+		if (result >= 0)
-+			result = -EIO;
-+
-+	}
-+
-+	kfree(dmabuf);
-+
-+	return result;
-+}
-+
- /*
-  * Writes any 16-bit CP210X_ register (req) whose value is passed
-  * entirely in the wValue field of the USB request.
-@@ -1134,11 +1185,17 @@ static void cp210x_set_termios(struct tty_struct *tty,
- 		struct usb_serial_port *port, struct ktermios *old_termios)
- {
- 	struct device *dev = &port->dev;
--	unsigned int cflag, old_cflag;
-+	struct cp210x_chars_response charsres;
-+	struct cp210x_flow_ctl flow_ctl;
-+	unsigned int cflag, old_cflag, iflag;
- 	u16 bits;
-+	int result;
-+	u32 ctl_hs;
-+	u32 flow_repl;
- 
- 	cflag = tty->termios.c_cflag;
- 	old_cflag = old_termios->c_cflag;
-+	iflag = tty->termios.c_iflag;
- 
- 	if (tty->termios.c_ospeed != old_termios->c_ospeed)
- 		cp210x_change_speed(tty, port, old_termios);
-@@ -1212,10 +1269,6 @@ static void cp210x_set_termios(struct tty_struct *tty,
- 	}
- 
- 	if ((cflag & CRTSCTS) != (old_cflag & CRTSCTS)) {
--		struct cp210x_flow_ctl flow_ctl;
--		u32 ctl_hs;
--		u32 flow_repl;
--
- 		cp210x_read_reg_block(port, CP210X_GET_FLOW, &flow_ctl,
- 				sizeof(flow_ctl));
- 		ctl_hs = le32_to_cpu(flow_ctl.ulControlHandshake);
-@@ -1252,6 +1305,61 @@ static void cp210x_set_termios(struct tty_struct *tty,
- 				sizeof(flow_ctl));
- 	}
- 
-+	/*
-+	 * Set Software  Flow  Control
-+	 * Check the IXOFF/IXON status in the iflag component of the
-+	 * termios structure.
-+	 *
-+	 */
-+	if ((iflag & IXOFF) || (iflag & IXON)) {
-+
-+		result = cp210x_operate_chars_block(port,
-+						CP210X_GET_CHARS,
-+						REQTYPE_DEVICE_TO_HOST,
-+						&charsres,
-+						sizeof(charsres));
-+
-+		if (result < 0) {
-+			dev_err(dev, "Read Characrter Responses failed\n");
-+			return;
-+		}
-+		charsres.xonchar  = CP210X_VSTART;
-+		charsres.xoffchar = CP210X_VSTOP;
-+		result = cp210x_operate_chars_block(port,
-+						CP210X_SET_CHARS,
-+						REQTYPE_HOST_TO_INTERFACE,
-+						&charsres,
-+						sizeof(charsres));
-+		if (result < 0) {
-+			memset(&charsres, 0, sizeof(charsres));
-+			dev_err(dev, "Write Characrter Responses failed\n");
-+			return;
-+		}
-+
-+		/*Set  Rx/Tx Flow Contrl  Flag in ulFlowReplace*/
-+		cp210x_read_reg_block(port,
-+					CP210X_GET_FLOW,
-+					&flow_ctl,
-+					sizeof(flow_ctl));
-+
-+		flow_repl = le32_to_cpu(flow_ctl.ulFlowReplace);
-+
-+		if (iflag & IXOFF)
-+			flow_repl |= CP210X_SERIAL_AUTO_RECEIVE;
-+		else
-+			flow_repl &= ~CP210X_SERIAL_AUTO_RECEIVE;
-+
-+		if (iflag & IXON)
-+			flow_repl |= CP210X_SERIAL_AUTO_TRANSMIT;
-+		else
-+			flow_repl &= ~CP210X_SERIAL_AUTO_TRANSMIT;
-+
-+		flow_ctl.ulFlowReplace = cpu_to_le32(flow_repl);
-+		cp210x_write_reg_block(port,
-+					CP210X_SET_FLOW,
-+					&flow_ctl,
-+					sizeof(flow_ctl));
-+	}
- }
- 
- static int cp210x_tiocmset(struct tty_struct *tty,
--- 
-2.17.1
-
-
+Regards
+Nikunj
