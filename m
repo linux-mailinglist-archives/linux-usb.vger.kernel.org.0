@@ -2,65 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C745624ACA6
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Aug 2020 03:31:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E83224ACC8
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Aug 2020 03:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726786AbgHTBbZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Aug 2020 21:31:25 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:53015 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726362AbgHTBbY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Aug 2020 21:31:24 -0400
-Received: (qmail 202460 invoked by uid 1000); 19 Aug 2020 21:31:22 -0400
-Date:   Wed, 19 Aug 2020 21:31:22 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-media@vger.kernel.org, linux-uvc-devel@lists.sourceforge.net,
-        Sakari Ailus <sakari.ailus@iki.fi>
-Subject: Re: Protecting uvcvideo againt USB device disconnect [Was: Re:
- Protecting usb_set_interface() against device removal]
-Message-ID: <20200820013122.GA202178@rowland.harvard.edu>
-References: <b0a7247c-bed3-934b-2c73-7f4b0adb5e75@roeck-us.net>
- <20200815020739.GB52242@rowland.harvard.edu>
- <20200816003315.GA13826@roeck-us.net>
- <20200816121816.GC32174@pendragon.ideasonboard.com>
- <9bb20ed7-b156-f6c2-4d25-6acac1a0021b@roeck-us.net>
- <20200816235155.GA7729@pendragon.ideasonboard.com>
- <0684b71c-8ac5-8962-cbd5-c0bcaa8b6881@xs4all.nl>
- <20200819013002.GL2360@pendragon.ideasonboard.com>
- <20200819230851.GA222844@roeck-us.net>
+        id S1726603AbgHTB6V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Aug 2020 21:58:21 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:62776 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726362AbgHTB6V (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Aug 2020 21:58:21 -0400
+X-UUID: 458344327af840cf9009a36fee9ac9c5-20200820
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=EFWywN6zeLfx3mYDlfu+y15rEMdXgmrxserMhZ887hk=;
+        b=J1IlM1Yh+IHRVrTZB10AbJJjGKJIysMwZxenNX8Ft9rLwFeBaUaZpAmzSONDJdkWSaIEyuXNZrptSzF00gOsovKM15ESR3J7/GOay1iESu2CnkD99HcLAahG3JqX0QJF6e0qy2hezG2roBv4hil5Of18//EPupwNMU9T1Xqd/v8=;
+X-UUID: 458344327af840cf9009a36fee9ac9c5-20200820
+Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 481422092; Thu, 20 Aug 2020 09:58:15 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS33DR.mediatek.inc
+ (172.27.6.106) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 20 Aug
+ 2020 09:58:14 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 20 Aug 2020 09:58:10 +0800
+Message-ID: <1597888623.23067.19.camel@mhfsdcap03>
+Subject: Re: [PATCH 10/10] usb: udc: net2280: convert to
+ readl_poll_timeout_atomic()
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Lee Jones <lee.jones@linaro.org>
+Date:   Thu, 20 Aug 2020 09:57:03 +0800
+In-Reply-To: <20200819145957.GA183103@rowland.harvard.edu>
+References: <1597840865-26631-1-git-send-email-chunfeng.yun@mediatek.com>
+         <1597840865-26631-10-git-send-email-chunfeng.yun@mediatek.com>
+         <20200819145957.GA183103@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200819230851.GA222844@roeck-us.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-TM-SNTS-SMTP: 22D2EDA70C9DE4A57BACB86CCD4B9AF55312C82D351F55D5F12277413D9518212000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 19, 2020 at 04:08:51PM -0700, Guenter Roeck wrote:
+T24gV2VkLCAyMDIwLTA4LTE5IGF0IDEwOjU5IC0wNDAwLCBBbGFuIFN0ZXJuIHdyb3RlOg0KPiBP
+biBXZWQsIEF1ZyAxOSwgMjAyMCBhdCAwODo0MTowNVBNICswODAwLCBDaHVuZmVuZyBZdW4gd3Jv
+dGU6DQo+ID4gVXNlIHJlYWRsX3BvbGxfdGltZW91dF9hdG9taWMoKSB0byBzaW1wbGlmeSBjb2Rl
+DQo+ID4gDQo+ID4gQ2M6IEFsYW4gU3Rlcm4gPHN0ZXJuQHJvd2xhbmQuaGFydmFyZC5lZHU+DQo+
+ID4gQ2M6IEZlbGlwZSBCYWxiaSA8YmFsYmlAa2VybmVsLm9yZz4NCj4gPiBTaWduZWQtb2ZmLWJ5
+OiBDaHVuZmVuZyBZdW4gPGNodW5mZW5nLnl1bkBtZWRpYXRlay5jb20+DQo+ID4gLS0tDQo+ID4g
+IGRyaXZlcnMvdXNiL2dhZGdldC91ZGMvbmV0MjI4MC5jIHwgMjEgKysrKysrKysrKy0tLS0tLS0t
+LS0tDQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCAxMCBpbnNlcnRpb25zKCspLCAxMSBkZWxldGlvbnMo
+LSkNCj4gPiANCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvZ2FkZ2V0L3VkYy9uZXQyMjgw
+LmMgYi9kcml2ZXJzL3VzYi9nYWRnZXQvdWRjL25ldDIyODAuYw0KPiA+IGluZGV4IDc1MzBiZDku
+LmYxYTIxZjQgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy91c2IvZ2FkZ2V0L3VkYy9uZXQyMjgw
+LmMNCj4gPiArKysgYi9kcml2ZXJzL3VzYi9nYWRnZXQvdWRjL25ldDIyODAuYw0KPiA+IEBAIC01
+Miw2ICs1Miw3IEBADQo+ID4gICNpbmNsdWRlIDxsaW51eC91c2IvZ2FkZ2V0Lmg+DQo+ID4gICNp
+bmNsdWRlIDxsaW51eC9wcmVmZXRjaC5oPg0KPiA+ICAjaW5jbHVkZSA8bGludXgvaW8uaD4NCj4g
+PiArI2luY2x1ZGUgPGxpbnV4L2lvcG9sbC5oPg0KPiA+ICANCj4gPiAgI2luY2x1ZGUgPGFzbS9i
+eXRlb3JkZXIuaD4NCj4gPiAgI2luY2x1ZGUgPGFzbS9pcnEuaD4NCj4gPiBAQCAtMzYwLDE4ICsz
+NjEsMTYgQEAgc3RhdGljIGlubGluZSB2b2lkIGVuYWJsZV9wY2lpcnFlbmIoc3RydWN0IG5ldDIy
+ODBfZXAgKmVwKQ0KPiA+ICBzdGF0aWMgaW50IGhhbmRzaGFrZSh1MzIgX19pb21lbSAqcHRyLCB1
+MzIgbWFzaywgdTMyIGRvbmUsIGludCB1c2VjKQ0KPiA+ICB7DQo+ID4gIAl1MzIJcmVzdWx0Ow0K
+PiA+ICsJaW50CXJldDsNCj4gPiAgDQo+ID4gLQlkbyB7DQo+ID4gLQkJcmVzdWx0ID0gcmVhZGwo
+cHRyKTsNCj4gPiAtCQlpZiAocmVzdWx0ID09IH4odTMyKTApCQkvKiAiZGV2aWNlIHVucGx1Z2dl
+ZCIgKi8NCj4gPiAtCQkJcmV0dXJuIC1FTk9ERVY7DQo+ID4gLQkJcmVzdWx0ICY9IG1hc2s7DQo+
+ID4gLQkJaWYgKHJlc3VsdCA9PSBkb25lKQ0KPiA+IC0JCQlyZXR1cm4gMDsNCj4gPiAtCQl1ZGVs
+YXkoMSk7DQo+ID4gLQkJdXNlYy0tOw0KPiA+IC0JfSB3aGlsZSAodXNlYyA+IDApOw0KPiA+IC0J
+cmV0dXJuIC1FVElNRURPVVQ7DQo+ID4gKwlyZXQgPSByZWFkbF9wb2xsX3RpbWVvdXRfYXRvbWlj
+KHB0ciwgcmVzdWx0LA0KPiA+ICsJCQkJCSgocmVzdWx0ICYgbWFzaykgPT0gZG9uZSB8fA0KPiA+
+ICsJCQkJCSByZXN1bHQgPT0gVTMyX01BWCksDQo+ID4gKwkJCQkJMSwgdXNlYyk7DQo+ID4gKwlp
+ZiAocmVzdWx0ID09IFUzMl9NQVgpCQkvKiBkZXZpY2UgdW5wbHVnZ2VkICovDQo+ID4gKwkJcmV0
+dXJuIC1FTk9ERVY7DQo+ID4gKw0KPiA+ICsJcmV0dXJuIHJldDsNCj4gPiAgfQ0KPiA+ICANCj4g
+PiAgc3RhdGljIGNvbnN0IHN0cnVjdCB1c2JfZXBfb3BzIG5ldDIyODBfZXBfb3BzOw0KPiA+IC0t
+IA0KPiANCj4gQWNrZWQtYnk6IEFsYW4gU3Rlcm4gPHN0ZXJuQHJvd2xhbmQuaGFydmFyZC5lZHU+
+DQo+IA0KPiBIb3dldmVyLCBJIG5vdGljZWQgdGhhdCB0aGUga2VybmVsZG9jIGZvciByZWFkbF9w
+b2xsX3RpbWVvdXRfYXRvbWljKCkgaXMgDQo+IG91dCBvZiBkYXRlLiAgQ2FuIHlvdSBmaXggaXQg
+dXA/DQpPaywgd2lsbCBkbyBpdCwgdGhhbmtzDQoNCj4gDQo+IEFsYW4gU3Rlcm4NCg0K
 
-> usb_set_interface() should not be called anymore after uvc_disconnect(),
-> or at east I think so (is that documented anywhere ?).
-
-It may be documented somewhere, but basically it goes without saying.  
-
-A main feature of the device model design is that drivers get bound to 
-devices by having their probe routine called, and they get unbound by 
-having their disconnect routine called.  It should go without saying 
-that once a driver is unbound from a device, it must not communicate 
-with that device any more.
-
-It might be nice if this requirement could be enforced (say in the USB 
-core), but doing so is impractical.  It would require every I/O request 
-to include some sort of cookie proving that the caller is authorized to 
-make the request.  That's not how the kernel works; it trusts drivers 
-to generally do the right thing without constant checking.
-
-Alan Stern
