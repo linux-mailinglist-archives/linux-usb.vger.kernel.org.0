@@ -2,49 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF07A24CB11
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Aug 2020 04:57:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ED6924CB12
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Aug 2020 04:57:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727064AbgHUC52 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Aug 2020 22:57:28 -0400
+        id S1727068AbgHUC5c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Aug 2020 22:57:32 -0400
 Received: from mail-eopbgr50073.outbound.protection.outlook.com ([40.107.5.73]:27655
         "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725852AbgHUC51 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 20 Aug 2020 22:57:27 -0400
+        id S1726840AbgHUC5a (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 20 Aug 2020 22:57:30 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=C/SypZR//bkp+bHlYBtjrLpoJmFQkKsj8tUB2DyKYIFqUS3f53bfEjwkeNERb7IZyTefsZjMSOgA7f3u4ACnW7SXa2XMajxsYMIpf+1km0xdmHg7Yg/zbSfVAgYfwUG8pkWSezArLTV35m91Ak7J3kJ1tbYgX6X81vg6FnFU3fcFmcgA9ZLM6TUdU39omu/0ZUzKzpYTSkXNtHh6z+BBp1h6Ylk9xtH3UvkLbVFuOi93cYb55Wqc8ld+nynmmWnqYyRL26w7xlo+4vgNJDVCoxdx7FdTzHTODeY6pZ4fCsF4AMeJXJM7tBQXJ+nkyO0qsKT1dxVacfTxnUZcZzblkQ==
+ b=YV3FfV1yfXyy2ZIFopnGYJ/CS3vkih5JaT3G5+eU6yLhD7j5nsppBTAl1F7PLkgrYiapprXHXr4aFPr2yLuZA9xE2f5r36mdF/fH4kvIJnGNd3kkIS0EeyZEx5x4KocICETZ3HNwlnZ2ystxsRG1V0AEjhTT015oBhzwPQv3rYAu1ddnGPzAwz1np2R/DN5b2Z7sJH1m2px1YfRmN7eve1Z9kG/QrhkDvM9qj0/P5vp70oW0aEIqZDZaER5u+JoSrDeOdcoKJUoF1NJIAXYv4wx3+vtd+dxSLfnVoSfg5XM1V+JKjH81Bmn8LvEGfNIyUmjdyBg997x6SixCAsXR1w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=m1W3WCbN8OC3F7KdKMlG7SPTkA/1CC+6n6vCaMelW7k=;
- b=B6akdni5a+2N6ndtiwoN8B2EZpaM30I+y3j3blFeiLGOAVPGVwft6/hfAREW1IlRKh2ebs1AILfGK+9DVU1mQQwQqNzVHYxL5DmTc9WBsE6JaGzPbMeJqn9YW1yIdFqi8k9cVIZu5V/YXuR9RSVQc1dIGSUBWgxfknZHAsMo1XzoQncLvWqq64H4xvJtJ9efG32JCukHh5V3FZ+HAc2Gr03lEsMQQ6j/4agq/YnjEta5HeaW4IlyqWduUtIZE71OccVyb85PQSz0kps2eQTRoTITH8QObEDV06TRDmWQIGRCgkl4OHKR+J0UCZQ4Jz7datDPkSMcgTFsTsC4+x8nfw==
+ bh=smp2OXtAij6UGWdQwcFsorYzHWkVWgbxvqKvc8me1Ck=;
+ b=kxddbY3Gz6m4ZKv26vKEg8K8nyvSxwPmJ3gDRiPLiRZFNWj3wiP1IsjbeUmOipiqzY0uGPCGDF0iPeNk2UTKdODnqv/1QNZb2e60iaWVtQoYpnGriDf1zLBjvKzuZ8IrFcP4P6uzU7JhCUzdmgYQYTztFRnTxnsvX1jj8A2pzjQuilXxtfltS8hfCqeCflcttESGqN5rdkjwCH7YOkEGTi3OqRgZbCaKFyoovNQ64XoQUj4b9ckh3OLy0JeLGbcFC24x8ecUvCTIjeVl2G+N2ryW7Njx+50PPjCYy42TUfRgG/fjq5gqCCm7xxBqdmtNgy0b6O30CctVHzlPlxpvdA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=m1W3WCbN8OC3F7KdKMlG7SPTkA/1CC+6n6vCaMelW7k=;
- b=TGAPCn2WH0S+giZVU9q3biVVfxlBrhwjfa7U89vtHV01ga4quyYCPhz6qW7ea73C5v3i/JDjWh25kDXOReYWFqYFhCeu3NnRxe5s7PsDrA9nHQtK9/H8pv1uIhJ+Q94b5jnqqyh+1wms8L2hZfD8kQPps6pfAwAR+puNTaMmwIU=
+ bh=smp2OXtAij6UGWdQwcFsorYzHWkVWgbxvqKvc8me1Ck=;
+ b=HPxSc6geQ9doq+QIoriwbT9FU6cdD9B6Vj2EItB7LcgVkAWgvIR3gtNjjejzoUXMAP7mBb3kdmPfTppTa7kiSEtXRAf19c2RxcYl+7rQVY9xcZk/RjXltjlCMc3DTKslmXh/M5fXy1eMhqdmZpehjpXHKlaW/k5qL+VN4Pa9PyE=
 Authentication-Results: kernel.org; dkim=none (message not signed)
  header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
 Received: from DB8PR04MB7162.eurprd04.prod.outlook.com (2603:10a6:10:12c::13)
  by DB7PR04MB5577.eurprd04.prod.outlook.com (2603:10a6:10:8a::30) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3305.26; Fri, 21 Aug
- 2020 02:57:20 +0000
+ 2020 02:57:22 +0000
 Received: from DB8PR04MB7162.eurprd04.prod.outlook.com
  ([fe80::acee:9763:7898:84a2]) by DB8PR04MB7162.eurprd04.prod.outlook.com
  ([fe80::acee:9763:7898:84a2%9]) with mapi id 15.20.3283.027; Fri, 21 Aug 2020
- 02:57:20 +0000
+ 02:57:22 +0000
 From:   Peter Chen <peter.chen@nxp.com>
 To:     balbi@kernel.org
 Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com,
         gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
         Peter Chen <peter.chen@nxp.com>
-Subject: [PATCH v4 4/6] usb: cdns3: gadget: fix possible memory leak
-Date:   Fri, 21 Aug 2020 10:55:47 +0800
-Message-Id: <20200821025549.4591-5-peter.chen@nxp.com>
+Subject: [PATCH v4 5/6] usb: dwc3: allocate gadget structure dynamically
+Date:   Fri, 21 Aug 2020 10:55:48 +0800
+Message-Id: <20200821025549.4591-6-peter.chen@nxp.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200821025549.4591-1-peter.chen@nxp.com>
 References: <20200821025549.4591-1-peter.chen@nxp.com>
@@ -54,119 +54,510 @@ X-ClientProxiedBy: SG2PR01CA0132.apcprd01.prod.exchangelabs.com
  (2603:10a6:10:12c::13)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from b29397-desktop.ap.freescale.net (119.31.174.67) by SG2PR01CA0132.apcprd01.prod.exchangelabs.com (2603:1096:4:40::36) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3305.24 via Frontend Transport; Fri, 21 Aug 2020 02:57:18 +0000
+Received: from b29397-desktop.ap.freescale.net (119.31.174.67) by SG2PR01CA0132.apcprd01.prod.exchangelabs.com (2603:1096:4:40::36) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3305.24 via Frontend Transport; Fri, 21 Aug 2020 02:57:20 +0000
 X-Mailer: git-send-email 2.17.1
 X-Originating-IP: [119.31.174.67]
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 893f73c3-e1bc-4365-1ed8-08d8457deb9e
+X-MS-Office365-Filtering-Correlation-Id: 89188372-8851-4445-3661-08d8457ded0f
 X-MS-TrafficTypeDiagnostic: DB7PR04MB5577:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <DB7PR04MB55775A9B96C142DBF554BDCC8B5B0@DB7PR04MB5577.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-Microsoft-Antispam-PRVS: <DB7PR04MB55771DB90C5EBB32F3CA6C598B5B0@DB7PR04MB5577.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:352;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: S0+OSk/k+/tw7SfU4q49OzdGlrxMI0FbO9Q0l3eSbLA5FoFTQvF+lQAUJMtXyr+85829ValTqpdWrT1kj2+j2yUqQwyr7w+Lea5QfbpOcISBvI6IUFUQSOff71S2qe1ol9u2p/npagt0Ln/GpbQfMTu5ErXDRLge+fE+L4wPlV8BftpCkKY40ZaGp46nmNPWepWcoyP5WhSZrYXf4qC6n81OH+aPCq6tAmyjqFka9DZSoiJPZMjVeNMNYM/Izj9gUe2ZH9K5W08MRKwSiqyMlltGPHPC36nvTNOfAjqQdcSishIevSHszfqs1iG5oqJK
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB7162.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(376002)(136003)(366004)(346002)(39860400002)(52116002)(66946007)(2906002)(8676002)(6486002)(4326008)(6506007)(478600001)(316002)(6666004)(44832011)(36756003)(956004)(26005)(66476007)(66556008)(2616005)(8936002)(1076003)(6512007)(5660300002)(6916009)(186003)(83380400001)(86362001)(16526019);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: 3vjcwPuJroD6TXCd4qDiY6lPEiYndoIM+EiMVq4IO5KXJGVF5qTfEsxpcL/SYJSxbkbzFaQSih8oQKIE8ilP1vwPLTXy4MbujJb6fVsfUTCFuiSZ0nsQfLF3EnsJznqobFC408KlvQ6wqpFpVTi6YHmWXYOQ6sK5ty90RmG31hnjzPOmadNXtCUtJntKR6LNUlYEIm/Vtig8EtQEZ2X4K+t+dasPhj7f9vAA0Kyh/+IFeSjlBRiP8Sp9vos8DKLwdBVNRFBWXmSJ3OrIOvoCBlDahwC4c+olyT9Bi3rbf4Ttj/JHe2iW+Bv33iLqRKLyNP5G9+M22gJ5ZnEV2eTVZ4QIdvjld8TxeoZlxS0yanFb/ihMCJ2rt38ciupNHGWNWx/20o9jbSuhv2jxeda05E/cI5poJW7pN31Z8jGkc+MU17Gy2ewe5SSstBIwUGKYacfbS9COqsfCnjDJ2Q6Nvq4gk8toS2te6yAaGkky3TliNgp4Pu4BuFBE6xb8Frk6iE4ZwtiJ9ijHFKQiOxBVsJkUKG86BE/SlkAb+Mmeql6IeAS+Wwb0VMCMQ13JLaokv+nOv5txO7aoNotyTQ+MlP6p2t+eNyDqE0ZYSHZTtrh22VCeH6oiauKpYmAXIOOr1WEqCvOJyiAGxXxzI1BLMw==
+X-Microsoft-Antispam-Message-Info: wdeAPDJ+IvPf7ir/A0HNpKqxLf95fxtlS4sSYC3nScKFKuI6qlB38Cjf6A5LYtAn3RqF1Lx2aFnKkQNRK0noIz0zJOQIgxm4wJfinI1ZsJk5pzDw9zZpGxQcAL2yYrTvJIQAfj4mKLROVR4FUP4M01MTruohJTyPgeXi2/eqTzugLRDSxxiiUo4Q6triwToCG318WGHMyNN8C06hDL/HdVGB72yVMXFxh6j0p3S2opSmhnyfcIqav7GI9byyChQ9fP1PMQ2rAUaS5UVMWvuRT+ErflhLklT8D8CwKNQtN8G5m7YpGW1ASJjdg4bargU1JXMrFG3Qel6awzihcgQ38A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB7162.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(376002)(136003)(366004)(346002)(39860400002)(30864003)(52116002)(66946007)(2906002)(8676002)(6486002)(4326008)(6506007)(478600001)(316002)(6666004)(19627235002)(44832011)(36756003)(956004)(26005)(66476007)(66556008)(2616005)(8936002)(1076003)(6512007)(5660300002)(6916009)(186003)(83380400001)(86362001)(16526019);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: jRf6ofP/z5lpxmrjek0Am0u0wgZ1xQQ4f5WX/7owZQgQfv73JKoBaEEGXfW6Adoz4w6lxTngyjmV3qzEjbZrEcdzo8TfSndCccF8THl6KE7rAjvrRdzN4gG7CpUx/spgn9qklITf//CsaNyHcbAl36PfRXIQUGX007ZrHkWN7vF5PU3uCBGC5ccZodLuxOEgDIKm77Fb8Ptiv+dAhv4f70oiJ3zhiviZSSSEicUtiC7FBgqM6Dj+6YVo4ar9A5ET91CvgdS7RB2Vnb0cdhxy4e9/m55Qkh01KpaFu9sKAF5nX9mR5X/zBu08G01rm61ra/D1ze08CZMvU6qDjQuEdLXVwFli936OUnB5uY2DQkU1+tfErbVOEO20qyZiVmrXH0VKvO5BpZBfToLmshEeR2DFUotzsceJn9v1eA1EgxD7rPqmwOh7OuOTAu9c3knexzreSyD/8JoRRULcRYZpE3h6JNeic7qxXB3b57956RySU4/vOQgMOCLQ8ADwTeHP77SoSk3KHuwYwQLZhwPyTLS8DrAh8u4FFYZUaA5n+7JxaW7c2V7/9LrCaaZQ3U64jBHivdk0xPqFK6yM1KoJIBbojQNZLS2XOD6KhjsxdPc3Z9l+S6zaGmyWCicKe/V6e4phFl7pGNr997UwanV32w==
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 893f73c3-e1bc-4365-1ed8-08d8457deb9e
+X-MS-Exchange-CrossTenant-Network-Message-Id: 89188372-8851-4445-3661-08d8457ded0f
 X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB7162.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Aug 2020 02:57:20.0999
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Aug 2020 02:57:22.6940
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zMPxGDTFsr3dh2H1BcGo7brngOj9PRDrxpYKv3bxPE6ZQ2KZBeWnlKTEu9mavTr9STp9+lFp9iNp9s5w+C4fuw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: EQw1dIbf996nr9Qwe1oHgY02jwykbMRkt2RN0z4ZyELLlLM+vTtD+g1hdMBIUPDh5JtTNcdhP63sGeLnWX8Oqg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB5577
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If cdns3_gadget_start is failed, it never frees cdns3_device structure.
-Meanwhile, there is no release function for gadget device, it causes
-there is no sync with driver core.
+The current code uses commit fac323471df6 ("usb: udc: allow adding
+and removing the same gadget device") as the workaround to let
+the gadget device is re-used, but it is not allowed from driver
+core point. In this commit, we allocate gadget structure dynamically,
+and free it at its release function. Since the gadget device's
+driver_data has already occupied by usb_composite_dev structure, we have
+to use gadget device's platform data to store dwc3 structure.
 
-To fix this, we add release function for gadget device, and free
-cdns3_device structure at there. Meanwhile, With the new UDC core
-APIs, we could work with driver core better to handle memory leak
-issue.
-
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Alan Stern <stern@rowland.harvard.edu>
 Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Peter Chen <peter.chen@nxp.com>
 ---
- drivers/usb/cdns3/gadget.c | 20 +++++++++++++++-----
- 1 file changed, 15 insertions(+), 5 deletions(-)
+ drivers/usb/dwc3/core.h   |   2 +-
+ drivers/usb/dwc3/ep0.c    |  26 ++++-----
+ drivers/usb/dwc3/gadget.c | 108 ++++++++++++++++++++++----------------
+ drivers/usb/dwc3/gadget.h |   2 +-
+ 4 files changed, 78 insertions(+), 60 deletions(-)
 
-diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
-index 8bbb38cd560b..721e7914d91c 100644
---- a/drivers/usb/cdns3/gadget.c
-+++ b/drivers/usb/cdns3/gadget.c
-@@ -2988,6 +2988,14 @@ static int cdns3_init_eps(struct cdns3_device *priv_dev)
- 	return -ENOMEM;
- }
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index 2f04b3e42bf1..219446bebeb6 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -1079,7 +1079,7 @@ struct dwc3 {
+ 	struct dwc3_event_buffer *ev_buf;
+ 	struct dwc3_ep		*eps[DWC3_ENDPOINTS_NUM];
  
-+static void cdns3_gadget_release(struct device *dev)
-+{
-+	struct cdns3_device *priv_dev = container_of(dev,
-+			struct cdns3_device, gadget.dev);
-+
-+	kfree(priv_dev);
-+}
-+
- void cdns3_gadget_exit(struct cdns3 *cdns)
+-	struct usb_gadget	gadget;
++	struct usb_gadget	*gadget;
+ 	struct usb_gadget_driver *gadget_driver;
+ 
+ 	struct clk_bulk_data	*clks;
+diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
+index 59f2e8c31bd1..9367ba960e01 100644
+--- a/drivers/usb/dwc3/ep0.c
++++ b/drivers/usb/dwc3/ep0.c
+@@ -131,7 +131,7 @@ static int __dwc3_gadget_ep0_queue(struct dwc3_ep *dep,
+ 
+ 		direction = !dwc->ep0_expect_in;
+ 		dwc->delayed_status = false;
+-		usb_gadget_set_state(&dwc->gadget, USB_STATE_CONFIGURED);
++		usb_gadget_set_state(dwc->gadget, USB_STATE_CONFIGURED);
+ 
+ 		if (dwc->ep0state == EP0_STATUS_PHASE)
+ 			__dwc3_ep0_do_control_status(dwc, dwc->eps[direction]);
+@@ -325,7 +325,7 @@ static int dwc3_ep0_handle_status(struct dwc3 *dwc,
+ 		/*
+ 		 * LTM will be set once we know how to set this in HW.
+ 		 */
+-		usb_status |= dwc->gadget.is_selfpowered;
++		usb_status |= dwc->gadget->is_selfpowered;
+ 
+ 		if ((dwc->speed == DWC3_DSTS_SUPERSPEED) ||
+ 		    (dwc->speed == DWC3_DSTS_SUPERSPEED_PLUS)) {
+@@ -450,7 +450,7 @@ static int dwc3_ep0_handle_device(struct dwc3 *dwc,
+ 
+ 	wValue = le16_to_cpu(ctrl->wValue);
+ 	wIndex = le16_to_cpu(ctrl->wIndex);
+-	state = dwc->gadget.state;
++	state = dwc->gadget->state;
+ 
+ 	switch (wValue) {
+ 	case USB_DEVICE_REMOTE_WAKEUP:
+@@ -559,7 +559,7 @@ static int dwc3_ep0_handle_feature(struct dwc3 *dwc,
+ 
+ static int dwc3_ep0_set_address(struct dwc3 *dwc, struct usb_ctrlrequest *ctrl)
  {
- 	struct cdns3_device *priv_dev;
-@@ -2999,7 +3007,7 @@ void cdns3_gadget_exit(struct cdns3 *cdns)
- 	pm_runtime_mark_last_busy(cdns->dev);
- 	pm_runtime_put_autosuspend(cdns->dev);
+-	enum usb_device_state state = dwc->gadget.state;
++	enum usb_device_state state = dwc->gadget->state;
+ 	u32 addr;
+ 	u32 reg;
  
--	usb_del_gadget_udc(&priv_dev->gadget);
-+	usb_del_gadget(&priv_dev->gadget);
+@@ -580,9 +580,9 @@ static int dwc3_ep0_set_address(struct dwc3 *dwc, struct usb_ctrlrequest *ctrl)
+ 	dwc3_writel(dwc->regs, DWC3_DCFG, reg);
  
- 	cdns3_free_all_eps(priv_dev);
+ 	if (addr)
+-		usb_gadget_set_state(&dwc->gadget, USB_STATE_ADDRESS);
++		usb_gadget_set_state(dwc->gadget, USB_STATE_ADDRESS);
+ 	else
+-		usb_gadget_set_state(&dwc->gadget, USB_STATE_DEFAULT);
++		usb_gadget_set_state(dwc->gadget, USB_STATE_DEFAULT);
  
-@@ -3019,7 +3027,7 @@ void cdns3_gadget_exit(struct cdns3 *cdns)
- 			  priv_dev->setup_dma);
- 
- 	kfree(priv_dev->zlp_buf);
--	kfree(priv_dev);
-+	usb_put_gadget(&priv_dev->gadget);
- 	cdns->gadget_dev = NULL;
- 	cdns3_drd_gadget_off(cdns);
+ 	return 0;
  }
-@@ -3034,6 +3042,8 @@ static int cdns3_gadget_start(struct cdns3 *cdns)
- 	if (!priv_dev)
- 		return -ENOMEM;
+@@ -592,14 +592,14 @@ static int dwc3_ep0_delegate_req(struct dwc3 *dwc, struct usb_ctrlrequest *ctrl)
+ 	int ret;
  
-+	usb_initialize_gadget(cdns->dev, &priv_dev->gadget,
-+			cdns3_gadget_release);
- 	cdns->gadget_dev = priv_dev;
- 	priv_dev->sysdev = cdns->dev;
- 	priv_dev->dev = cdns->dev;
-@@ -3121,10 +3131,9 @@ static int cdns3_gadget_start(struct cdns3 *cdns)
- 	}
- 
- 	/* add USB gadget device */
--	ret = usb_add_gadget_udc(priv_dev->dev, &priv_dev->gadget);
-+	ret = usb_add_gadget(&priv_dev->gadget);
- 	if (ret < 0) {
--		dev_err(priv_dev->dev,
--			"Failed to register USB device controller\n");
-+		dev_err(priv_dev->dev, "Failed to add gadget\n");
- 		goto err4;
- 	}
- 
-@@ -3137,6 +3146,7 @@ static int cdns3_gadget_start(struct cdns3 *cdns)
- err2:
- 	cdns3_free_all_eps(priv_dev);
- err1:
-+	usb_put_gadget(&priv_dev->gadget);
- 	cdns->gadget_dev = NULL;
+ 	spin_unlock(&dwc->lock);
+-	ret = dwc->gadget_driver->setup(&dwc->gadget, ctrl);
++	ret = dwc->gadget_driver->setup(dwc->gadget, ctrl);
+ 	spin_lock(&dwc->lock);
  	return ret;
  }
+ 
+ static int dwc3_ep0_set_config(struct dwc3 *dwc, struct usb_ctrlrequest *ctrl)
+ {
+-	enum usb_device_state state = dwc->gadget.state;
++	enum usb_device_state state = dwc->gadget->state;
+ 	u32 cfg;
+ 	int ret;
+ 	u32 reg;
+@@ -622,7 +622,7 @@ static int dwc3_ep0_set_config(struct dwc3 *dwc, struct usb_ctrlrequest *ctrl)
+ 			 * to change the state on the next usb_ep_queue()
+ 			 */
+ 			if (ret == 0)
+-				usb_gadget_set_state(&dwc->gadget,
++				usb_gadget_set_state(dwc->gadget,
+ 						USB_STATE_CONFIGURED);
+ 
+ 			/*
+@@ -641,7 +641,7 @@ static int dwc3_ep0_set_config(struct dwc3 *dwc, struct usb_ctrlrequest *ctrl)
+ 	case USB_STATE_CONFIGURED:
+ 		ret = dwc3_ep0_delegate_req(dwc, ctrl);
+ 		if (!cfg && !ret)
+-			usb_gadget_set_state(&dwc->gadget,
++			usb_gadget_set_state(dwc->gadget,
+ 					USB_STATE_ADDRESS);
+ 		break;
+ 	default:
+@@ -697,7 +697,7 @@ static void dwc3_ep0_set_sel_cmpl(struct usb_ep *ep, struct usb_request *req)
+ static int dwc3_ep0_set_sel(struct dwc3 *dwc, struct usb_ctrlrequest *ctrl)
+ {
+ 	struct dwc3_ep	*dep;
+-	enum usb_device_state state = dwc->gadget.state;
++	enum usb_device_state state = dwc->gadget->state;
+ 	u16		wLength;
+ 
+ 	if (state == USB_STATE_DEFAULT)
+@@ -741,7 +741,7 @@ static int dwc3_ep0_set_isoch_delay(struct dwc3 *dwc, struct usb_ctrlrequest *ct
+ 	if (wIndex || wLength)
+ 		return -EINVAL;
+ 
+-	dwc->gadget.isoch_delay = wValue;
++	dwc->gadget->isoch_delay = wValue;
+ 
+ 	return 0;
+ }
+@@ -1102,7 +1102,7 @@ static void dwc3_ep0_xfernotready(struct dwc3 *dwc,
+ 			 */
+ 			if (!list_empty(&dep->pending_list)) {
+ 				dwc->delayed_status = false;
+-				usb_gadget_set_state(&dwc->gadget,
++				usb_gadget_set_state(dwc->gadget,
+ 						     USB_STATE_CONFIGURED);
+ 				dwc3_ep0_do_control_status(dwc, event);
+ 			}
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index e44bfc3b5096..adc8e22e30a2 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -290,7 +290,7 @@ int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep, unsigned cmd,
+ 	 *
+ 	 * DWC_usb3 3.30a and DWC_usb31 1.90a programming guide section 3.2.2
+ 	 */
+-	if (dwc->gadget.speed <= USB_SPEED_HIGH) {
++	if (dwc->gadget->speed <= USB_SPEED_HIGH) {
+ 		reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
+ 		if (unlikely(reg & DWC3_GUSB2PHYCFG_SUSPHY)) {
+ 			saved_config |= DWC3_GUSB2PHYCFG_SUSPHY;
+@@ -422,7 +422,7 @@ static int dwc3_send_clear_stall_ep_cmd(struct dwc3_ep *dep)
+ 	 */
+ 	if (dep->direction &&
+ 	    !DWC3_VER_IS_PRIOR(DWC3, 260A) &&
+-	    (dwc->gadget.speed >= USB_SPEED_SUPER))
++	    (dwc->gadget->speed >= USB_SPEED_SUPER))
+ 		cmd |= DWC3_DEPCMD_CLEARPENDIN;
+ 
+ 	memset(&params, 0, sizeof(params));
+@@ -562,7 +562,7 @@ static int dwc3_gadget_set_ep_config(struct dwc3_ep *dep, unsigned int action)
+ 		| DWC3_DEPCFG_MAX_PACKET_SIZE(usb_endpoint_maxp(desc));
+ 
+ 	/* Burst size is only needed in SuperSpeed mode */
+-	if (dwc->gadget.speed >= USB_SPEED_SUPER) {
++	if (dwc->gadget->speed >= USB_SPEED_SUPER) {
+ 		u32 burst = dep->endpoint.maxburst;
+ 		params.param0 |= DWC3_DEPCFG_BURST_SIZE(burst - 1);
+ 	}
+@@ -947,7 +947,7 @@ static void __dwc3_prepare_one_trb(struct dwc3_ep *dep, struct dwc3_trb *trb,
+ 		unsigned no_interrupt, unsigned is_last)
+ {
+ 	struct dwc3		*dwc = dep->dwc;
+-	struct usb_gadget	*gadget = &dwc->gadget;
++	struct usb_gadget	*gadget = dwc->gadget;
+ 	enum usb_device_speed	speed = gadget->speed;
+ 
+ 	trb->size = DWC3_TRB_SIZE_LENGTH(length);
+@@ -1477,12 +1477,12 @@ static int __dwc3_gadget_start_isoc(struct dwc3_ep *dep)
+ 	if (!dwc->dis_start_transfer_quirk &&
+ 	    (DWC3_VER_IS_PRIOR(DWC31, 170A) ||
+ 	     DWC3_VER_TYPE_IS_WITHIN(DWC31, 170A, EA01, EA06))) {
+-		if (dwc->gadget.speed <= USB_SPEED_HIGH && dep->direction)
++		if (dwc->gadget->speed <= USB_SPEED_HIGH && dep->direction)
+ 			return dwc3_gadget_start_isoc_quirk(dep);
+ 	}
+ 
+ 	if (desc->bInterval <= 14 &&
+-	    dwc->gadget.speed >= USB_SPEED_HIGH) {
++	    dwc->gadget->speed >= USB_SPEED_HIGH) {
+ 		u32 frame = __dwc3_gadget_get_frame(dwc);
+ 		bool rollover = frame <
+ 				(dep->frame_number & DWC3_FRNUMBER_MASK);
+@@ -2182,7 +2182,7 @@ static int dwc3_gadget_start(struct usb_gadget *g,
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 	if (dwc->gadget_driver) {
+ 		dev_err(dwc->dev, "%s is already bound to %s\n",
+-				dwc->gadget.name,
++				dwc->gadget->name,
+ 				dwc->gadget_driver->driver.name);
+ 		ret = -EBUSY;
+ 		goto err1;
+@@ -2354,7 +2354,7 @@ static int dwc3_gadget_init_control_endpoint(struct dwc3_ep *dep)
+ 	dep->endpoint.maxburst = 1;
+ 	dep->endpoint.ops = &dwc3_gadget_ep0_ops;
+ 	if (!dep->direction)
+-		dwc->gadget.ep0 = &dep->endpoint;
++		dwc->gadget->ep0 = &dep->endpoint;
+ 
+ 	dep->endpoint.caps.type_control = true;
+ 
+@@ -2400,7 +2400,7 @@ static int dwc3_gadget_init_in_endpoint(struct dwc3_ep *dep)
+ 	dep->endpoint.max_streams = 15;
+ 	dep->endpoint.ops = &dwc3_gadget_ep_ops;
+ 	list_add_tail(&dep->endpoint.ep_list,
+-			&dwc->gadget.ep_list);
++			&dwc->gadget->ep_list);
+ 	dep->endpoint.caps.type_iso = true;
+ 	dep->endpoint.caps.type_bulk = true;
+ 	dep->endpoint.caps.type_int = true;
+@@ -2449,7 +2449,7 @@ static int dwc3_gadget_init_out_endpoint(struct dwc3_ep *dep)
+ 	dep->endpoint.max_streams = 15;
+ 	dep->endpoint.ops = &dwc3_gadget_ep_ops;
+ 	list_add_tail(&dep->endpoint.ep_list,
+-			&dwc->gadget.ep_list);
++			&dwc->gadget->ep_list);
+ 	dep->endpoint.caps.type_iso = true;
+ 	dep->endpoint.caps.type_bulk = true;
+ 	dep->endpoint.caps.type_int = true;
+@@ -2510,7 +2510,7 @@ static int dwc3_gadget_init_endpoints(struct dwc3 *dwc, u8 total)
+ {
+ 	u8				epnum;
+ 
+-	INIT_LIST_HEAD(&dwc->gadget.ep_list);
++	INIT_LIST_HEAD(&dwc->gadget->ep_list);
+ 
+ 	for (epnum = 0; epnum < total; epnum++) {
+ 		int			ret;
+@@ -2948,7 +2948,7 @@ static void dwc3_disconnect_gadget(struct dwc3 *dwc)
+ {
+ 	if (dwc->gadget_driver && dwc->gadget_driver->disconnect) {
+ 		spin_unlock(&dwc->lock);
+-		dwc->gadget_driver->disconnect(&dwc->gadget);
++		dwc->gadget_driver->disconnect(dwc->gadget);
+ 		spin_lock(&dwc->lock);
+ 	}
+ }
+@@ -2957,7 +2957,7 @@ static void dwc3_suspend_gadget(struct dwc3 *dwc)
+ {
+ 	if (dwc->gadget_driver && dwc->gadget_driver->suspend) {
+ 		spin_unlock(&dwc->lock);
+-		dwc->gadget_driver->suspend(&dwc->gadget);
++		dwc->gadget_driver->suspend(dwc->gadget);
+ 		spin_lock(&dwc->lock);
+ 	}
+ }
+@@ -2966,7 +2966,7 @@ static void dwc3_resume_gadget(struct dwc3 *dwc)
+ {
+ 	if (dwc->gadget_driver && dwc->gadget_driver->resume) {
+ 		spin_unlock(&dwc->lock);
+-		dwc->gadget_driver->resume(&dwc->gadget);
++		dwc->gadget_driver->resume(dwc->gadget);
+ 		spin_lock(&dwc->lock);
+ 	}
+ }
+@@ -2976,9 +2976,9 @@ static void dwc3_reset_gadget(struct dwc3 *dwc)
+ 	if (!dwc->gadget_driver)
+ 		return;
+ 
+-	if (dwc->gadget.speed != USB_SPEED_UNKNOWN) {
++	if (dwc->gadget->speed != USB_SPEED_UNKNOWN) {
+ 		spin_unlock(&dwc->lock);
+-		usb_gadget_udc_reset(&dwc->gadget, dwc->gadget_driver);
++		usb_gadget_udc_reset(dwc->gadget, dwc->gadget_driver);
+ 		spin_lock(&dwc->lock);
+ 	}
+ }
+@@ -3079,9 +3079,9 @@ static void dwc3_gadget_disconnect_interrupt(struct dwc3 *dwc)
+ 
+ 	dwc3_disconnect_gadget(dwc);
+ 
+-	dwc->gadget.speed = USB_SPEED_UNKNOWN;
++	dwc->gadget->speed = USB_SPEED_UNKNOWN;
+ 	dwc->setup_packet_pending = false;
+-	usb_gadget_set_state(&dwc->gadget, USB_STATE_NOTATTACHED);
++	usb_gadget_set_state(dwc->gadget, USB_STATE_NOTATTACHED);
+ 
+ 	dwc->connected = false;
+ }
+@@ -3160,8 +3160,8 @@ static void dwc3_gadget_conndone_interrupt(struct dwc3 *dwc)
+ 	switch (speed) {
+ 	case DWC3_DSTS_SUPERSPEED_PLUS:
+ 		dwc3_gadget_ep0_desc.wMaxPacketSize = cpu_to_le16(512);
+-		dwc->gadget.ep0->maxpacket = 512;
+-		dwc->gadget.speed = USB_SPEED_SUPER_PLUS;
++		dwc->gadget->ep0->maxpacket = 512;
++		dwc->gadget->speed = USB_SPEED_SUPER_PLUS;
+ 		break;
+ 	case DWC3_DSTS_SUPERSPEED:
+ 		/*
+@@ -3181,27 +3181,27 @@ static void dwc3_gadget_conndone_interrupt(struct dwc3 *dwc)
+ 			dwc3_gadget_reset_interrupt(dwc);
+ 
+ 		dwc3_gadget_ep0_desc.wMaxPacketSize = cpu_to_le16(512);
+-		dwc->gadget.ep0->maxpacket = 512;
+-		dwc->gadget.speed = USB_SPEED_SUPER;
++		dwc->gadget->ep0->maxpacket = 512;
++		dwc->gadget->speed = USB_SPEED_SUPER;
+ 		break;
+ 	case DWC3_DSTS_HIGHSPEED:
+ 		dwc3_gadget_ep0_desc.wMaxPacketSize = cpu_to_le16(64);
+-		dwc->gadget.ep0->maxpacket = 64;
+-		dwc->gadget.speed = USB_SPEED_HIGH;
++		dwc->gadget->ep0->maxpacket = 64;
++		dwc->gadget->speed = USB_SPEED_HIGH;
+ 		break;
+ 	case DWC3_DSTS_FULLSPEED:
+ 		dwc3_gadget_ep0_desc.wMaxPacketSize = cpu_to_le16(64);
+-		dwc->gadget.ep0->maxpacket = 64;
+-		dwc->gadget.speed = USB_SPEED_FULL;
++		dwc->gadget->ep0->maxpacket = 64;
++		dwc->gadget->speed = USB_SPEED_FULL;
+ 		break;
+ 	case DWC3_DSTS_LOWSPEED:
+ 		dwc3_gadget_ep0_desc.wMaxPacketSize = cpu_to_le16(8);
+-		dwc->gadget.ep0->maxpacket = 8;
+-		dwc->gadget.speed = USB_SPEED_LOW;
++		dwc->gadget->ep0->maxpacket = 8;
++		dwc->gadget->speed = USB_SPEED_LOW;
+ 		break;
+ 	}
+ 
+-	dwc->eps[1]->endpoint.maxpacket = dwc->gadget.ep0->maxpacket;
++	dwc->eps[1]->endpoint.maxpacket = dwc->gadget->ep0->maxpacket;
+ 
+ 	/* Enable USB2 LPM Capability */
+ 
+@@ -3269,7 +3269,7 @@ static void dwc3_gadget_wakeup_interrupt(struct dwc3 *dwc)
+ 
+ 	if (dwc->gadget_driver && dwc->gadget_driver->resume) {
+ 		spin_unlock(&dwc->lock);
+-		dwc->gadget_driver->resume(&dwc->gadget);
++		dwc->gadget_driver->resume(dwc->gadget);
+ 		spin_lock(&dwc->lock);
+ 	}
+ }
+@@ -3440,7 +3440,7 @@ static void dwc3_gadget_interrupt(struct dwc3 *dwc,
+ 			 * Ignore suspend event until the gadget enters into
+ 			 * USB_STATE_CONFIGURED state.
+ 			 */
+-			if (dwc->gadget.state >= USB_STATE_CONFIGURED)
++			if (dwc->gadget->state >= USB_STATE_CONFIGURED)
+ 				dwc3_gadget_suspend_interrupt(dwc,
+ 						event->event_info);
+ 		}
+@@ -3615,6 +3615,13 @@ static int dwc3_gadget_get_irq(struct dwc3 *dwc)
+ 	return irq;
+ }
+ 
++static void dwc_gadget_release(struct device *dev)
++{
++	struct usb_gadget *gadget = container_of(dev, struct usb_gadget, dev);
++
++	kfree(gadget);
++}
++
+ /**
+  * dwc3_gadget_init - initializes gadget related registers
+  * @dwc: pointer to our controller context structure
+@@ -3625,6 +3632,7 @@ int dwc3_gadget_init(struct dwc3 *dwc)
+ {
+ 	int ret;
+ 	int irq;
++	struct device *dev;
+ 
+ 	irq = dwc3_gadget_get_irq(dwc);
+ 	if (irq < 0) {
+@@ -3657,12 +3665,21 @@ int dwc3_gadget_init(struct dwc3 *dwc)
+ 	}
+ 
+ 	init_completion(&dwc->ep0_in_setup);
++	dwc->gadget = kzalloc(sizeof(struct usb_gadget), GFP_KERNEL);
++	if (!dwc->gadget) {
++		ret = -ENOMEM;
++		goto err3;
++	}
+ 
+-	dwc->gadget.ops			= &dwc3_gadget_ops;
+-	dwc->gadget.speed		= USB_SPEED_UNKNOWN;
+-	dwc->gadget.sg_supported	= true;
+-	dwc->gadget.name		= "dwc3-gadget";
+-	dwc->gadget.lpm_capable		= true;
++
++	usb_initialize_gadget(dwc->dev, dwc->gadget, dwc_gadget_release);
++	dev				= &dwc->gadget->dev;
++	dev->platform_data		= dwc;
++	dwc->gadget->ops		= &dwc3_gadget_ops;
++	dwc->gadget->speed		= USB_SPEED_UNKNOWN;
++	dwc->gadget->sg_supported	= true;
++	dwc->gadget->name		= "dwc3-gadget";
++	dwc->gadget->lpm_capable	= true;
+ 
+ 	/*
+ 	 * FIXME We might be setting max_speed to <SUPER, however versions
+@@ -3685,7 +3702,7 @@ int dwc3_gadget_init(struct dwc3 *dwc)
+ 		dev_info(dwc->dev, "changing max_speed on rev %08x\n",
+ 				dwc->revision);
+ 
+-	dwc->gadget.max_speed		= dwc->maximum_speed;
++	dwc->gadget->max_speed		= dwc->maximum_speed;
+ 
+ 	/*
+ 	 * REVISIT: Here we should clear all pending IRQs to be
+@@ -3694,21 +3711,22 @@ int dwc3_gadget_init(struct dwc3 *dwc)
+ 
+ 	ret = dwc3_gadget_init_endpoints(dwc, dwc->num_eps);
+ 	if (ret)
+-		goto err3;
++		goto err4;
+ 
+-	ret = usb_add_gadget_udc(dwc->dev, &dwc->gadget);
++	ret = usb_add_gadget(dwc->gadget);
+ 	if (ret) {
+-		dev_err(dwc->dev, "failed to register udc\n");
+-		goto err4;
++		dev_err(dwc->dev, "failed to add gadget\n");
++		goto err5;
+ 	}
+ 
+-	dwc3_gadget_set_speed(&dwc->gadget, dwc->maximum_speed);
++	dwc3_gadget_set_speed(dwc->gadget, dwc->maximum_speed);
+ 
+ 	return 0;
+ 
+-err4:
++err5:
+ 	dwc3_gadget_free_endpoints(dwc);
+-
++err4:
++	usb_put_gadget(dwc->gadget);
+ err3:
+ 	dma_free_coherent(dwc->sysdev, DWC3_BOUNCE_SIZE, dwc->bounce,
+ 			dwc->bounce_addr);
+@@ -3728,7 +3746,7 @@ int dwc3_gadget_init(struct dwc3 *dwc)
+ 
+ void dwc3_gadget_exit(struct dwc3 *dwc)
+ {
+-	usb_del_gadget_udc(&dwc->gadget);
++	usb_del_gadget_udc(dwc->gadget);
+ 	dwc3_gadget_free_endpoints(dwc);
+ 	dma_free_coherent(dwc->sysdev, DWC3_BOUNCE_SIZE, dwc->bounce,
+ 			  dwc->bounce_addr);
+diff --git a/drivers/usb/dwc3/gadget.h b/drivers/usb/dwc3/gadget.h
+index bd85eb7fa9ef..6beb9263c2fb 100644
+--- a/drivers/usb/dwc3/gadget.h
++++ b/drivers/usb/dwc3/gadget.h
+@@ -17,7 +17,7 @@
+ 
+ struct dwc3;
+ #define to_dwc3_ep(ep)		(container_of(ep, struct dwc3_ep, endpoint))
+-#define gadget_to_dwc(g)	(container_of(g, struct dwc3, gadget))
++#define gadget_to_dwc(g)	(dev_get_platdata(&g->dev))
+ 
+ /* DEPCFG parameter 1 */
+ #define DWC3_DEPCFG_INT_NUM(n)		(((n) & 0x1f) << 0)
 -- 
 2.17.1
 
