@@ -2,62 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6213C24DC67
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Aug 2020 19:01:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AE9924E2F6
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Aug 2020 00:05:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728388AbgHURBg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Aug 2020 13:01:36 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:59589 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728712AbgHURBQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Aug 2020 13:01:16 -0400
-Received: (qmail 260200 invoked by uid 1000); 21 Aug 2020 13:01:06 -0400
-Date:   Fri, 21 Aug 2020 13:01:06 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Martin Thierer <mthierer@gmail.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: Data toggles not reset on "set configuration" for ports handled
- by "xhci_hcd" driver
-Message-ID: <20200821170106.GB256196@rowland.harvard.edu>
-References: <CAL3BvCzb6dGZOm6jy2PddSfioM7hThMEBm+aQ_gmMAWAXFYOuQ@mail.gmail.com>
- <20200821160321.GA256196@rowland.harvard.edu>
- <CAL3BvCyz3W+aRu0e=RE3teaMMh6KDYxu8NbFicY07Xt-=f9Whg@mail.gmail.com>
+        id S1726893AbgHUWFT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 21 Aug 2020 18:05:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39046 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726641AbgHUWFS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 21 Aug 2020 18:05:18 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 208911] Renesas USB controller - FW has invalid version :8224
+Date:   Fri, 21 Aug 2020 22:05:17 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: neoweb@hackspherelabs.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-208911-208809-tkPIkbJCDS@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-208911-208809@https.bugzilla.kernel.org/>
+References: <bug-208911-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL3BvCyz3W+aRu0e=RE3teaMMh6KDYxu8NbFicY07Xt-=f9Whg@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 21, 2020 at 06:34:55PM +0200, Martin Thierer wrote:
-> I read the usb 2.0 specs and generally came to the same conclusion,
-> except I wasn't 100% sure because 9.1.1.5 talks about "configuring" in
-> the context of bringing a device into the "configured" state, which
-> one could argue isn't really the case if a "set configuration" message
-> is sent to a device that is already configured with the exact same
-> configuration.
+https://bugzilla.kernel.org/show_bug.cgi?id=208911
 
-Nonsense.  The text explicitly says "configuration involves correctly 
-processing a SetConfiguration() request with a non-zero configuration 
-value."  There's no requirement about what state the device was in 
-previously.
+neoweb@hackspherelabs.com changed:
 
-> > Together these should explain the correct behavior.
-> 
-> I'm not sure I understand what you're implying here. That the kernel's
-> behaviour is correct or not?
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |neoweb@hackspherelabs.com
 
-That the EHCI behavior is correct and the xHCI behavior is wrong.
+--- Comment #14 from neoweb@hackspherelabs.com ---
+Hello,
 
->  (You're explicitly citing the usb *2.0*
-> specs, but that should also apply to a usb 2 device plugged into an
-> usb 3 port, right?)
+I am not trying to waste anyone's time here.  This is what I had:
 
-Yes; the USB 3 spec says that the behavior of USB-2 devices should be 
-governed by the USB-2 spec, even when they are plugged into a hub or 
-controller.
+[    1.578294] xhci_hcd 0000:0a:00.0: FW has invalid version :8215
+[    1.578331] xhci_hcd 0000:0a:00.0: Direct firmware load for
+renesas_usb_fw.mem failed with error -2
+[    1.578334] xhci_hcd 0000:0a:00.0: request_firmware failed: -2
+[    1.578339] xhci_hcd: probe of 0000:0a:00.0 failed with error -2
 
-Alan Stern
+I can find a ton of detail about this, I never knew that cards like this needed
+firmware to be loaded on every boot.  I know FreeBSD will load firmware into
+LSI Raid cards IIRC.  So it looks like from the comment of the final patch: 
+"Test if ROM is present and loaded, if so we can skip everything" that my card
+is going to use the firmware that is in the EEPROM.
+
+I never knew you could load firmware into a USB 3.0 card like this.  It looks
+like someone has even created a userspace util + SystemD setup for this:  
+
+*https://mjott.de/blog/881-renesas-usb-3-0-controllers-vs-linux/
+*https://github.com/markusj/upd72020x-load
+*https://lore.kernel.org/patchwork/patch/686290/
+
+So to get to my point.  I have noticed I have some issues sometimes with my
+Renesas USB card manufactured by StarTech.  Just standard USB stuff, and issues
+with pluggable USB 3.0 hubs...sometimes I have to reboot to get everything
+working again, or reset the hub.
+
+Am I doing myself a disservice not upgrading the firmware on it using the
+Windows utils from Startech...or should I systemd with the github stuff above,
+and upgrade the firmware every boot?
+
+I don't know much about this stuff, but should linux always push a new firmware
+to the card like CPU microcode, or FreeBSD.
+
+Like I said, sorry if this is a waste of time or I am posting in the wrong
+place, but it would be doing linux a disservice if all the Windows drivers
+pushed newer better firmware to these devices, and worked better, because
+firmware loading was just skipped.
+
+Anyone have any idea?
+
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
