@@ -2,274 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEC1424C61D
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Aug 2020 21:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9793724C999
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Aug 2020 03:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728003AbgHTTFI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Aug 2020 15:05:08 -0400
-Received: from sender4-op-o17.zoho.com ([136.143.188.17]:17784 "EHLO
-        sender4-op-o17.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727833AbgHTTFH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Aug 2020 15:05:07 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1597950288; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=nVYoRHTP5nihvDHd9H33RYFU/a3bcpIrCByItMnzjIsmCDL1WsGTynuy3+zJmo5T/LXRbQCRybTfss+saEzpMz3TVvVIti4mkaZ25Md597zZC3OPtXgvTz1pOFSoNYHosWcOiFc8X9t4bBWrcgoRMeUUWnP060BHD6c6pTD8GTE=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1597950288; h=Content-Type:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=2wY6PlH5/NsVxj4VbcKZj0ucBST8105Nldk4fm+SueU=; 
-        b=i3y37MKTud9bq15sZzglwvDkJi3k8VrYj+PlnzDvZXB95PBKhhgdziOBgJSLumuRVVmSC/O4jG4dRi3yUlGyow4zWsAW+vYw+vZIJjMOGwtzWw+8TV4wyRUJ0+P3pSju4qWQQpMvNEZNY5bxJ9CEUyiKswUbgLnFVrJYI1+Nzfc=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        spf=pass  smtp.mailfrom=dan@dlrobertson.com;
-        dmarc=pass header.from=<dan@dlrobertson.com> header.from=<dan@dlrobertson.com>
-Received: from nessie (pool-108-28-30-30.washdc.fios.verizon.net [108.28.30.30]) by mx.zohomail.com
-        with SMTPS id 159795028151961.6841726816898; Thu, 20 Aug 2020 12:04:41 -0700 (PDT)
-Date:   Thu, 20 Aug 2020 18:44:37 +0000
-From:   Dan Robertson <dan@dlrobertson.com>
-To:     Jerome Brunet <jbrunet@baylibre.com>
-Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-amlogic@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, aouledameur@baylibre.com
-Subject: Re: [PATCH 1/1] usb: dwc3: meson-g12a: fix shared reset control use
-Message-ID: <20200820184437.GA4528@nessie>
-References: <20200713160522.19345-1-dan@dlrobertson.com>
- <20200713160522.19345-2-dan@dlrobertson.com>
- <1jy2maekzf.fsf@starbuckisacylon.baylibre.com>
+        id S1726948AbgHUBjx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Aug 2020 21:39:53 -0400
+Received: from mail-am6eur05on2062.outbound.protection.outlook.com ([40.107.22.62]:44672
+        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726819AbgHUBjs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 20 Aug 2020 21:39:48 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UCrg/RBoBu+fr7ETMOLkJcDRag8BXsiYEcIxIBog7JZEjAzaElqrPGiVjw6owu70yqEHDWbM+jvyXK/CF4QEBaoPkZ2Nigq0LW9tr/p2WG5tk8TI+Qc1/A9tega0rZclU+//ndjF9HBjSwmB98+29NrpoGzlrbDZski6bkM8gMC+3PWTiMmHFPWvA3ykFYCUfTNCKmGuPCpOhRNpGcvCT4J/Fs2lRhn2ZTkal1siSdyOHnq8l/FIOC/EEE6QbID0+Z90OXjT4JIwt1V3q5hVkeFQ/E/6MA1uzReDLOdlHvtvrTvUDtp5p9aW2qH87ByvoSa8zdTLglQ8pQigP315NA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2E26P83qh6qUHmDG++MBPWcTeXfxsHO9ucmb063ch6I=;
+ b=kCzzoQzLrlqHSXYr//q2JDVcBvkzzvcftXvmwcErI2gYXVpR3HKHaJN6evr5zZCING1MgBbZhijgrr1eBJcNLY9KPme7Bqbu6iEm6BH4+8/4eOTwjSqyOT8qUUS3vLj+t1gawRJS65KrPGCyGZMWrAB9nFnrb+Njs+aFMfUgwq1cw2UpC1MVZaPI2XLz1v7bylBgpYO38/JUGzaaOaKD0qDn198u2hBwyNd4QV11UiBh9vwCpwB75AHUbq2GXZjC/mSpLHLTpoNSIRIbHDoJCp5JvwhC1fFi55qN2wH98X7rZZvuKhE92to7eit7Oxx059y96aDSAYnqsvepRHHBSw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2E26P83qh6qUHmDG++MBPWcTeXfxsHO9ucmb063ch6I=;
+ b=P3IYe87qOlx+gsfZttnqsbJ8QliWEmALTb8OAQlvvDNICuG43UphQ+yjYpcbGUu4JDnG/SO4+MXyW8IxxqAqtlE/9qht562lN2F3uIPJA8A8N2o3SHLi3XQW3N/bisXptAfWEDUeqnDBZs4tQCKBw6IdkOYFQgRA6KcdBF8mL1o=
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com (2603:10a6:20b:118::20)
+ by AM6PR04MB4856.eurprd04.prod.outlook.com (2603:10a6:20b:b::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3305.25; Fri, 21 Aug
+ 2020 01:39:44 +0000
+Received: from AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1023:be8d:40c:efe1]) by AM7PR04MB7157.eurprd04.prod.outlook.com
+ ([fe80::1023:be8d:40c:efe1%3]) with mapi id 15.20.3283.028; Fri, 21 Aug 2020
+ 01:39:44 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+CC:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v3 3/4] arm64: dts: imx8mm-evk: add two parameters for
+ samsung picophy tuning
+Thread-Topic: [PATCH v3 3/4] arm64: dts: imx8mm-evk: add two parameters for
+ samsung picophy tuning
+Thread-Index: AQHWYYCFfcI/EL75wkqE5gg4u6HvralB9JWA
+Date:   Fri, 21 Aug 2020 01:39:44 +0000
+Message-ID: <20200821013839.GA24960@b29397-desktop>
+References: <20200724060532.3878-1-peter.chen@nxp.com>
+ <20200724060532.3878-3-peter.chen@nxp.com>
+In-Reply-To: <20200724060532.3878-3-peter.chen@nxp.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.67]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 7a18fd7c-86c7-41cd-c43c-08d8457314b2
+x-ms-traffictypediagnostic: AM6PR04MB4856:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM6PR04MB48563F778474358ABB14B99F8B5B0@AM6PR04MB4856.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: EAkR3N4dGvJd19kf+QkkJLaN/Kgmf9/rPXeHWXi3PA+4NzQl6X0xdFT2mw5EO5fDJiHX99CZma033GXdo/pCFgCibkTtoDyh/13xaXfhFAG2CFqfmkqPgP6Lhg85E2VFEssX781H+UojXF7A+mL6DqtSu3rG4UPorkMbZirdzIy+tMir7hREuu9OkEc/LXuvg8xg4mIRoj2WFhKVuMcTp5Z3qGuc9qz00B5KVKZbgJ9pW1ePtiPiFZXeihiZaOx3UoRdjEsvI6yIHk1jTJHnde41MDmRGhjEG73qeu32STI4oI1syDpObBEctg79229WffqqEEE+fj3qNxD9Zw+rQhb0MZTeyxByvD1r4DgMlTgqy+HwpwquYVa3t8CzNVqW
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7157.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(4636009)(39860400002)(376002)(346002)(396003)(366004)(136003)(71200400001)(64756008)(66556008)(66446008)(66946007)(66476007)(53546011)(8676002)(478600001)(4326008)(91956017)(6486002)(76116006)(8936002)(33716001)(9686003)(33656002)(6512007)(6506007)(86362001)(1076003)(44832011)(316002)(26005)(4744005)(110136005)(2906002)(54906003)(186003)(5660300002)(32563001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: cPMUF5UBsdLbPNe5g1zvVhMSq+2tlcD9mY+do06GZ9G8eybqWoBUA+mEYMAWOdEVksPkYrw9rffHDjAKHU07q9a8RI5Y+KOyTpZbQMif9Gq5uQkFEkKGRSx6gGxw3jPVWjNVcV69jC5H/y0R5OhBL6Lz44NcDL5NQZvxYSlc4akkRGp0GMXwkR+nAJ8M4YYPA6/i5OQedSuUtaDuf+oqM5k7C0xYR8Ji2yIVS3OI78pTus9PWt3a52MLQfciIIYohNqpwfF082DZ+/hV4z43yoBkp222BqM4ubrKZ7Osj2IZFH/QYakzsQkgVrumDlTXsZCy4TXUSYfgO+JJz90X3MM18H8yglST31mx9o+J2zPnaaLbUyjukRPfJ1U5Xug6fp0F2UQxLp6DmGMe5IPbRpFXtrT6XrQnEqBZomr7V3i3+5wpenKwmRbRsY3uc+c5pkBycOOEqcnnDjz9au5D08ulqieTePARzp0grF6MpQjNtrAXbHm+kD92eajVXp/CMAJTa+jq+Pk4yrJnps1RKfgRtLZ1mi16lBhi3/INZfsLQN/LVvhjgTtBWf/U8lqwp7RepgkXYZ58J1lI2kffUd/O9Uu4DIe4TfiLQ49n0m50f0YVpV9Fbo6b7Epd7cJzYWKN7E+apfcAFG4fg58HUg==
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <C7FAC2D6C90BAE468A8E5158C48F9009@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="EeQfGwPcQSOJBaQU"
-Content-Disposition: inline
-In-Reply-To: <1jy2maekzf.fsf@starbuckisacylon.baylibre.com>
-X-Zoho-Virus-Status: 1
-X-ZohoMailClient: External
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7157.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7a18fd7c-86c7-41cd-c43c-08d8457314b2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Aug 2020 01:39:44.2655
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: jITiqyNNN3Jz7EmhtRRNDC/ptoCcCHPbxZiV3ap1GYk0ruPbdcFKhbpizCdGPnp7ZtZTZ4QuMpemRQ5JU2lyow==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB4856
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 20-07-24 14:05:31, Peter Chen wrote:
+> With these two parameters tuning, it can pass USB eye diagram at evk boar=
+d.
+>=20
+> Reviewed-by: Jun Li <jun.li@nxp.com>
+> Signed-off-by: Peter Chen <peter.chen@nxp.com>
+> ---
+> Changes for v3:
+> - Using the new property name
+> Changes for v2
+> - Address Shawn's comment to change subject.
+>=20
+>  arch/arm64/boot/dts/freescale/imx8mm-evk.dts | 2 ++
+>  1 file changed, 2 insertions(+)
+>=20
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dts b/arch/arm64/bo=
+ot/dts/freescale/imx8mm-evk.dts
+> index 0f1d7f8aeac4..7c652b898114 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
+> +++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
+> @@ -324,6 +324,8 @@
+>  	srp-disable;
+>  	adp-disable;
+>  	usb-role-switch;
+> +	samsung,picophy-pre-emp-curr-control =3D <3>;
+> +	samsung,picophy-dc-vol-level-adjust =3D <7>;
+>  	status =3D "okay";
+> =20
+>  	port {
+> --=20
 
---EeQfGwPcQSOJBaQU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Shawn,
 
-On Wed, Aug 19, 2020 at 05:03:32PM +0200, Jerome Brunet wrote:
->=20
-> On Mon 13 Jul 2020 at 18:05, Dan Robertson <dan@dlrobertson.com> wrote:
->=20
-> > The reset is a shared reset line, but reset_control_reset is still used
-> > and reset_control_deassert is not guaranteed to have been called before
-> > the first reset_control_assert call. When suspending the following
-> > warning may be seen:
->=20
-> And now the same type of warning maybe seen on boot. This is
-> happening for me on the libretech-cc (s905x - gxl).
->=20
-> [    1.863469] ------------[ cut here ]------------
-> [    1.867914] WARNING: CPU: 1 PID: 16 at drivers/reset/core.c:309 reset_=
-control_reset+0x130/0x150
-> [    1.876525] Modules linked in:
-> [    1.879548] CPU: 1 PID: 16 Comm: kworker/1:0 Not tainted 5.9.0-rc1-001=
-67-ga2e4e3a34775 #64
-> [    1.887737] Hardware name: Libre Computer AML-S905X-CC V2 (DT)
-> [    1.893525] Workqueue: events deferred_probe_work_func
-> [    1.898607] pstate: 80000005 (Nzcv daif -PAN -UAO BTYPE=3D--)
-> [    1.904126] pc : reset_control_reset+0x130/0x150
-> [    1.908700] lr : phy_meson_gxl_usb2_init+0x24/0x70
-> [    1.913439] sp : ffff8000123ebad0
-> [    1.916717] x29: ffff8000123ebad0 x28: 0000000000000000=20
-> [    1.921978] x27: ffff00007c4b1ac8 x26: ffff00007c4b1ab0=20
-> [    1.927239] x25: ffff00007fc149b0 x24: ffff00007c4b1ab0=20
-> [    1.932500] x23: ffff00007cd03800 x22: ffff800011fb9000=20
-> [    1.937761] x21: ffff00007c60db08 x20: ffff00007c468a80=20
-> [    1.943023] x19: ffff00007c466b00 x18: ffffffffffffffff=20
-> [    1.948284] x17: 0000000000000000 x16: 000000000000000e=20
-> [    1.953545] x15: ffff800011fb9948 x14: ffffffffffffffff=20
-> [    1.958806] x13: ffffffff00000000 x12: ffffffffffffffff=20
-> [    1.964068] x11: 0000000000000020 x10: 7f7f7f7f7f7f7f7f=20
-> [    1.969329] x9 : 78676f2c32617274 x8 : 0000000000000000=20
-> [    1.974590] x7 : ffffffffffffffff x6 : 0000000000000000=20
-> [    1.979851] x5 : 0000000000000000 x4 : 0000000000000000=20
-> [    1.985112] x3 : 0000000000000000 x2 : ffff8000107aa370=20
-> [    1.990374] x1 : 0000000000000001 x0 : 0000000000000001=20
-> [    1.995636] Call trace:
-> [    1.998054]  reset_control_reset+0x130/0x150
-> [    2.002279]  phy_meson_gxl_usb2_init+0x24/0x70
-> [    2.006677]  phy_init+0x78/0xd0
-> [    2.009784]  dwc3_meson_g12a_probe+0x2c8/0x560
-> [    2.014182]  platform_drv_probe+0x58/0xa8
-> [    2.018149]  really_probe+0x114/0x3d8
-> [    2.021770]  driver_probe_device+0x5c/0xb8
-> [    2.025824]  __device_attach_driver+0x98/0xb8
-> [    2.030138]  bus_for_each_drv+0x74/0xd8
-> [    2.033933]  __device_attach+0xec/0x148
-> [    2.037726]  device_initial_probe+0x24/0x30
-> [    2.041868]  bus_probe_device+0x9c/0xa8
-> [    2.045663]  deferred_probe_work_func+0x7c/0xb8
-> [    2.050150]  process_one_work+0x1f0/0x4b0
-> [    2.054115]  worker_thread+0x210/0x480
-> [    2.057824]  kthread+0x158/0x160
-> [    2.061017]  ret_from_fork+0x10/0x18
-> [    2.064550] ---[ end trace 94d737efe593c6f6 ]---
-> [    2.069158] phy phy-d0078000.phy.0: phy init failed --> -22
-> [    2.074858] dwc3-meson-g12a: probe of d0078080.usb failed with error -=
-22
->=20
-> This breaks USB on this device. reverting the change brings it back.
->=20
-> Looking at the reset framework code, I don't think drivers sharing the
-> same reset line should mix using reset_control_reset() VS
-> reset_control_assert()/reset_control_deassert()
->=20
+Rob has already acked the binding-doc changes, would you please queue
+these two dts changes?
 
-Thanks for finding this. I was only able to test on the Odroid N2
+--=20
 
-> >
-> > WARNING: CPU: 1 PID: 5530 at drivers/reset/core.c:355 reset_control_ass=
-ert+0x184/0x19c
-> > Hardware name: Hardkernel ODROID-N2 (DT)
-> > [..]
-> > pc : reset_control_assert+0x184/0x19c
-> > lr : dwc3_meson_g12a_suspend+0x68/0x7c
-> > [..]
-> > Call trace:
-> >  reset_control_assert+0x184/0x19c
-> >  dwc3_meson_g12a_suspend+0x68/0x7c
-> >  platform_pm_suspend+0x28/0x54
-> >  __device_suspend+0x590/0xabc
-> >  dpm_suspend+0x104/0x404
-> >  dpm_suspend_start+0x84/0x1bc
-> >  suspend_devices_and_enter+0xc4/0x4fc
-> >  pm_suspend+0x198/0x2d4
-> >
-> > Fixes: 6d9fa35a347a87 ("usb: dwc3: meson-g12a: get the reset as shared")
-> > Signed-off-by: Dan Robertson <dan@dlrobertson.com>
-> > ---
-> >  drivers/usb/dwc3/dwc3-meson-g12a.c | 15 +++++++++------
-> >  1 file changed, 9 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/usb/dwc3/dwc3-meson-g12a.c b/drivers/usb/dwc3/dwc3=
--meson-g12a.c
-> > index 1f7f4d88ed9d..88b75b5a039c 100644
-> > --- a/drivers/usb/dwc3/dwc3-meson-g12a.c
-> > +++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
-> > @@ -737,13 +737,13 @@ static int dwc3_meson_g12a_probe(struct platform_=
-device *pdev)
-> >  		goto err_disable_clks;
-> >  	}
-> > =20
-> > -	ret =3D reset_control_reset(priv->reset);
-> > +	ret =3D reset_control_deassert(priv->reset);
->=20
-> The change introduced here is significant. If the reset is not initially
-> asserted, it never will be before the life of the device.
->=20
-> This means that Linux will have to deal which whatever state is left by t=
-he
-> bootloader. This looks sketchy ...
->=20
-> I think the safer way solve the problem here would be to keep using
-> reset_control_reset() and introduce a new API in the reset
-> framework to decrement the reset line "triggered_count"
-> (reset_control_clear() ??)
-
-I have very limited experience with reset controls, but phy_meson_gxl_usb2_=
-init
-calls reset_control_reset on a shared reset line, which should not be done
-according to the reset control docs. Would removing the use of reset_contro=
-l_reset,
-or using reset_control_(de)assert in phy_meson_gxl_usb2_init also resolve t=
-he
-issue?
-
-> That way, if all device using the reset line go to suspend, the line will
-> be "reset-able" again by the first device coming out of suspend ?
->=20
-> Philip, would you be ok with such new API ?
->=20
-> In the meantime, I think this change should be reverted. A warning on
-> suspend seems less critical than a regression breaking USB completly.
-
-The reset_control_(de)assert() calls could also be removed from the
-suspend/resume calls for now.
-
-> >  	if (ret)
-> > -		goto err_disable_clks;
-> > +		goto err_assert_reset;
-> > =20
-> >  	ret =3D dwc3_meson_g12a_get_phys(priv);
-> >  	if (ret)
-> > -		goto err_disable_clks;
-> > +		goto err_assert_reset;
-> > =20
-> >  	ret =3D priv->drvdata->setup_regmaps(priv, base);
-> >  	if (ret)
-> > @@ -752,7 +752,7 @@ static int dwc3_meson_g12a_probe(struct platform_de=
-vice *pdev)
-> >  	if (priv->vbus) {
-> >  		ret =3D regulator_enable(priv->vbus);
-> >  		if (ret)
-> > -			goto err_disable_clks;
-> > +			goto err_assert_reset;
-> >  	}
-> > =20
-> >  	/* Get dr_mode */
-> > @@ -765,13 +765,13 @@ static int dwc3_meson_g12a_probe(struct platform_=
-device *pdev)
-> > =20
-> >  	ret =3D priv->drvdata->usb_init(priv);
-> >  	if (ret)
-> > -		goto err_disable_clks;
-> > +		goto err_assert_reset;
-> > =20
-> >  	/* Init PHYs */
-> >  	for (i =3D 0 ; i < PHY_COUNT ; ++i) {
-> >  		ret =3D phy_init(priv->phys[i]);
-> >  		if (ret)
-> > -			goto err_disable_clks;
-> > +			goto err_assert_reset;
-> >  	}
-> > =20
-> >  	/* Set PHY Power */
-> > @@ -809,6 +809,9 @@ static int dwc3_meson_g12a_probe(struct platform_de=
-vice *pdev)
-> >  	for (i =3D 0 ; i < PHY_COUNT ; ++i)
-> >  		phy_exit(priv->phys[i]);
-> > =20
-> > +err_assert_reset:
-> > +	reset_control_assert(priv->reset);
-> > +
-> >  err_disable_clks:
-> >  	clk_bulk_disable_unprepare(priv->drvdata->num_clks,
-> >  				   priv->drvdata->clks);
-> >
-> >
-> > _______________________________________________
-> > linux-amlogic mailing list
-> > linux-amlogic@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-amlogic
->=20
-
---EeQfGwPcQSOJBaQU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEF5dO2RaKc5C+SCJ9RcSmUsR+QqUFAl8+xJMACgkQRcSmUsR+
-QqV/iQ/+MjU7tkSy/m/QlIsfgh/+YpRS+n/prRA3hWbdBnnkpw9DN8DEU6lrrDam
-2QQsGX0jmvHy6tq5SZ/n8mIlTN2MnCZ/nN3khZwsx+DSAPhjQV7G9yi+k0LZ1/aX
-QeqmWdm62VG+PpIzR/MvfxvPNRW0pfZLg+qSCjlMtTsFCgaZcHZqBgBV4HcQzh2q
-/JMedaSwyGaPBmbrU4wO6esF5E2/yWNx6s/eY8yss7xSDEsEdpJKBBpvfCk6zRff
-rrboqfyoTVoY5EqehDLVIw8+53XDcYLcHiOfG4jVp4hFKGufL0g8mGjhUN+0HUJn
-ZVf1QzSV+cJ9GnSwCjP2svgyO690YerOptXbGDiSecE/Iw9yEyY+7S10AnGNp9r0
-JWadcfp8WNsEAgh/NDW5ka7r84G1FE25fjSZLi177qGJOHiIFBCcrWJ99Tde7awG
-plpTCg7UbxrsDknv/5m48MyeKgRhC6DJT/6njWBXwqakDPxYKFyTUEERY8Uj4N2J
-/nYVe9QHEsFeI+IcfQwITGgO4yhl0hs0raP9F4rl3dR4g9oDksYxP8VcmWUku63I
-SuOXGafvGLIyflBvfH+CvB/NYhoQ9xpO4grsqwvUD7GtzsRmZHdfzmmdezTGK7u+
-XvxLztDwqpHqOvnNtqD0qxec8kWoWvHKagr4nILGDJiW4Ih4AUc=
-=LF+n
------END PGP SIGNATURE-----
-
---EeQfGwPcQSOJBaQU--
+Thanks,
+Peter Chen=
