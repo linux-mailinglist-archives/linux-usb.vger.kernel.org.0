@@ -2,63 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F4E224D0F3
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Aug 2020 10:56:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67A2424D12D
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Aug 2020 11:12:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728228AbgHUI4g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Aug 2020 04:56:36 -0400
-Received: from relmlor2.renesas.com ([210.160.252.172]:58277 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726062AbgHUI4e (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Aug 2020 04:56:34 -0400
-X-IronPort-AV: E=Sophos;i="5.76,335,1592838000"; 
-   d="scan'208";a="54949013"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 21 Aug 2020 17:56:33 +0900
-Received: from localhost.localdomain (unknown [10.166.252.89])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 32FE44221738;
-        Fri, 21 Aug 2020 17:56:33 +0900 (JST)
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     balbi@kernel.org
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: [PATCH] usb: gadget: u_serial: clear suspended flag when discnnecting
-Date:   Fri, 21 Aug 2020 17:56:19 +0900
-Message-Id: <1598000179-28417-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-X-Mailer: git-send-email 2.7.4
+        id S1726062AbgHUJMe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Aug 2020 05:12:34 -0400
+Received: from mga01.intel.com ([192.55.52.88]:60819 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725965AbgHUJMe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 21 Aug 2020 05:12:34 -0400
+IronPort-SDR: NqLCZpxL3AOlZuVv0eeZK1r3GuZVFu9NYYVaHuQOJiKeBHTNcGwtskM9EcG6XRpI4Ya/VfcVts
+ udRLU0Fp4PgQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9719"; a="173544063"
+X-IronPort-AV: E=Sophos;i="5.76,335,1592895600"; 
+   d="scan'208";a="173544063"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2020 02:12:33 -0700
+IronPort-SDR: Hb7YfONC9SPMqBpibasRJqKhqmxp6ydNOXiayqCCO2FbsBgbUKptaDVPW+5dvmU0cJ5Jzma8ZA
+ DMxkjCtmr/rA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,335,1592895600"; 
+   d="scan'208";a="321194810"
+Received: from mattu-haswell.fi.intel.com ([10.237.72.170])
+  by fmsmga004.fm.intel.com with ESMTP; 21 Aug 2020 02:12:33 -0700
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+To:     <gregkh@linuxfoundation.org>
+Cc:     <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 0/3] xhci fixes for usb-linus
+Date:   Fri, 21 Aug 2020 12:15:46 +0300
+Message-Id: <20200821091549.20556-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The commit aba3a8d01d62 ("usb: gadget: u_serial: add suspend resume
-callbacks") set/cleared the suspended flag in USB bus suspend/resume
-only. But, when a USB cable is disconnected in the suspend, since some
-controllers will not detect USB bus resume, the suspended flag is not
-cleared. After that, user cannot send any data. To fix the issue,
-clears the suspended flag in the gserial_disconnect().
+Hi Greg
 
-Fixes: aba3a8d01d62 ("usb: gadget: u_serial: add suspend resume callbacks")
-Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Tested-by: Linh Phung <linh.phung.jy@renesas.com>
-Tested-by: Tam Nguyen <tam.nguyen.xa@renesas.com>
----
- drivers/usb/gadget/function/u_serial.c | 1 +
- 1 file changed, 1 insertion(+)
+A few xhci fixes for usb-linus.
+This series makes sure we don't ignore devices attached during suspend that
+are stuck in a resume "cold attach status" state, and makes sure xhci driver
+doesn't prevent queuing urbs to a endpoint only because driver previously
+refused to manually clear the data toggle of a non-empty endpoint.
 
-diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
-index 127ecc2..2caccbb 100644
---- a/drivers/usb/gadget/function/u_serial.c
-+++ b/drivers/usb/gadget/function/u_serial.c
-@@ -1391,6 +1391,7 @@ void gserial_disconnect(struct gserial *gser)
- 		if (port->port.tty)
- 			tty_hangup(port->port.tty);
- 	}
-+	port->suspended = false;
- 	spin_unlock_irqrestore(&port->port_lock, flags);
- 
- 	/* disable endpoints, aborting down any active I/O */
+-Mathias
+
+Ding Hui (1):
+  xhci: Always restore EP_SOFT_CLEAR_TOGGLE even if ep reset failed
+
+Kai-Heng Feng (1):
+  xhci: Do warm-reset when both CAS and XDEV_RESUME are set
+
+Li Jun (1):
+  usb: host: xhci: fix ep context print mismatch in debugfs
+
+ drivers/usb/host/xhci-debugfs.c |  8 ++++----
+ drivers/usb/host/xhci-hub.c     | 19 ++++++++++---------
+ drivers/usb/host/xhci.c         |  3 ++-
+ 3 files changed, 16 insertions(+), 14 deletions(-)
+
 -- 
-2.7.4
+2.17.1
 
