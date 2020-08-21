@@ -2,78 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7806324D5DB
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Aug 2020 15:11:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DF5824D952
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Aug 2020 18:03:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728698AbgHUNLG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Aug 2020 09:11:06 -0400
-Received: from mga06.intel.com ([134.134.136.31]:10174 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728695AbgHUNLF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 21 Aug 2020 09:11:05 -0400
-IronPort-SDR: U+YrHDpjup7NxW0jLkl1Penkc7RL/jGnA8aPOnWIMMUr0t+jG0FuYA/uQ9MRt8oi8KffhTDI2h
- 78ARsDijIuFA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9719"; a="217066237"
-X-IronPort-AV: E=Sophos;i="5.76,335,1592895600"; 
-   d="scan'208";a="217066237"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2020 06:11:04 -0700
-IronPort-SDR: 8U91G06QaJ0NAgrU8ctscmNGvUGByjpjYjMxjMWbHvV9sF7E8Q+cKsMtSBP/hXbOwP6qbzaSXV
- yMdHGdLw5ObA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,335,1592895600"; 
-   d="scan'208";a="401466638"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 21 Aug 2020 06:11:03 -0700
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     linux-usb@vger.kernel.org, Raymond Tan <raymond.tan@intel.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] usb: dwc3: pci: Allow Elkhart Lake to utilize DSM method for PM functionality
-Date:   Fri, 21 Aug 2020 16:11:01 +0300
-Message-Id: <20200821131101.81915-1-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.28.0
+        id S1726903AbgHUQDa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Aug 2020 12:03:30 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:37141 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726858AbgHUQD1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Aug 2020 12:03:27 -0400
+Received: (qmail 257463 invoked by uid 1000); 21 Aug 2020 12:03:21 -0400
+Date:   Fri, 21 Aug 2020 12:03:21 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Martin Thierer <mthierer@gmail.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: Data toggles not reset on "set configuration" for ports handled
+ by "xhci_hcd" driver
+Message-ID: <20200821160321.GA256196@rowland.harvard.edu>
+References: <CAL3BvCzb6dGZOm6jy2PddSfioM7hThMEBm+aQ_gmMAWAXFYOuQ@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAL3BvCzb6dGZOm6jy2PddSfioM7hThMEBm+aQ_gmMAWAXFYOuQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Raymond Tan <raymond.tan@intel.com>
+On Fri, Aug 21, 2020 at 02:30:12PM +0200, Martin Thierer wrote:
+> I'm debugging a problem with the "xum1541" usb adapter (used to
+> interface with legacy cbm floppy drives), which doesn't work correctly
+> when plugged into some usb ports but works fine in others.
+> 
+> The symptom of failure is that the host command only works the first
+> time after the device has been plugged in.
+> 
+> This is what I found so far:
+> 
+> The device mostly uses bulk transfers for communication. After every
+> start, the host program issues a "set configuration" command (even
+> though the device only has a single configuration). On receiving the
+> "set configuration" message, the firmware of the xum1541 device does
+> an endpoint reset including a reset of the data toggles.
+> 
+> The problem is, that my host computer only seems to reset its data
+> toggles when the device is plugged into a usb port that as per syslog
+> uses the "ehci-pci" driver, while it does not in ports using the
+> "xhci_hcd" driver.
+> 
+> That's why the data toggles get out of sync when the device is plugged
+> into a port handled by the "xhci_hcd" driver and therefore stops
+> working.
+> 
+> For now I try to work around this issue by avoiding the "set
+> configuration" call altogether, but I'm still curious what the correct
+> behaviour is.
+> 
+> The notion of a "set configuration" call that doesn't really change
+> the configuration triggering a "lightweight reset" seems to be common,
+> but I'm not sure if there's consensus what the reset should include.
+> 
+> So I'm not sure which behaviour (to reset the data toggles or not) is
+> correct, but I think at least the linux kernel should behave
+> consistently regardless of the usb driver / port used?
 
-Similar to some other IA platforms, Elkhart Lake too depends on the
-PMU register write to request transition of Dx power state.
+The USB 2.0 specification says (section 8.5.2):
 
-Thus, we add the PCI_DEVICE_ID_INTEL_EHLLP to the list of devices that
-shall execute the ACPI _DSM method during D0/D3 sequence.
+	A bulk endpoint’s toggle sequence is initialized to DATA0 when 
+	the endpoint experiences any configuration event (configuration 
+	events are explained in Sections 9.1.1.5 and 9.4.5).
 
-[heikki.krogerus@linux.intel.com: included Fixes tag]
+Section 9.1.1.5 says:
 
-Fixes: dbb0569de852 ("usb: dwc3: pci: Add Support for Intel Elkhart Lake Devices")
-Cc: stable@vger.kernel.org
-Signed-off-by: Raymond Tan <raymond.tan@intel.com>
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
- drivers/usb/dwc3/dwc3-pci.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+	Before a USB device’s function may be used, the device must be 
+	configured. From the device’s perspective, configuration 
+	involves correctly processing a SetConfiguration() request with 
+	a non-zero configuration value. Configuring a device or changing 
+	an alternate setting causes all of the status and configuration 
+	values associated with endpoints in the affected interfaces to 
+	be set to their default values. This includes setting the data 
+	toggle of any endpoint using data toggles to the value DATA0.
 
-diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
-index f5a61f57c74f0..242b6210380a4 100644
---- a/drivers/usb/dwc3/dwc3-pci.c
-+++ b/drivers/usb/dwc3/dwc3-pci.c
-@@ -147,7 +147,8 @@ static int dwc3_pci_quirks(struct dwc3_pci *dwc)
- 
- 	if (pdev->vendor == PCI_VENDOR_ID_INTEL) {
- 		if (pdev->device == PCI_DEVICE_ID_INTEL_BXT ||
--				pdev->device == PCI_DEVICE_ID_INTEL_BXT_M) {
-+		    pdev->device == PCI_DEVICE_ID_INTEL_BXT_M ||
-+		    pdev->device == PCI_DEVICE_ID_INTEL_EHLLP) {
- 			guid_parse(PCI_INTEL_BXT_DSM_GUID, &dwc->guid);
- 			dwc->has_dsm_for_pm = true;
- 		}
--- 
-2.28.0
+Together these should explain the correct behavior.
 
+> Is resetting the data toggles even handled by the driver (or by the
+> hardware)?
+
+The driver.
+
+Alan Stern
