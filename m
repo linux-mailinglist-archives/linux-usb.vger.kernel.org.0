@@ -2,79 +2,208 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49F5824E63D
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Aug 2020 10:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42CA224E6CA
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Aug 2020 11:56:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727120AbgHVIJ3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 22 Aug 2020 04:09:29 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:36496 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727008AbgHVIJ1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Aug 2020 04:09:27 -0400
-X-UUID: 97798217ae4b435ab16de9eda914188a-20200822
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=1f1GqktsmoCBBHY58Mnms9zF6E9zoWUyHkZ1qxBjj5A=;
-        b=bTS+Qnr4b3tPMI41AdLVavYNePWv0WlNLuMWx31i5DZtW3XiQ9GPonkNfsG/s95mgvtnjGaP8lJc4OGI0amImT/WmbAQRilppyQRtpeJVHKdETZUMr4ETxqCUyjNrULgfsCYmk+SKnLA6Ek/r/1mVys5cpcqVK3+sh+H3ZO/PV0=;
-X-UUID: 97798217ae4b435ab16de9eda914188a-20200822
-Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 78470259; Sat, 22 Aug 2020 16:09:19 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- MTKMBS31DR.mediatek.inc (172.27.6.102) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Sat, 22 Aug 2020 16:09:19 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sat, 22 Aug 2020 16:09:17 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Felipe Balbi <balbi@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
+        id S1725973AbgHVJ4f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 22 Aug 2020 05:56:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54946 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725864AbgHVJ4e (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Aug 2020 05:56:34 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB60C061573
+        for <linux-usb@vger.kernel.org>; Sat, 22 Aug 2020 02:56:34 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id 17so2286884pfw.9
+        for <linux-usb@vger.kernel.org>; Sat, 22 Aug 2020 02:56:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=l7aXGPl3X/xYs2Q5GHfUvsQEQDqjScmIL2WkfrO0/J8=;
+        b=W8f//rSHBcdDDAsG8jkW4n1pEPAn1sCr5nT9WKxAhYBi0vghHRt9UfcuHgFpsACI5U
+         C+z3wyhYGlhD9oeb4NKk28esSNgGE1m8J27cZUHtOD3HjttEpDu2TeIDuaAkeGDJOIXe
+         miAifO1v8Sg8eQJdQKLA6W26EUxo1pVleApV0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=l7aXGPl3X/xYs2Q5GHfUvsQEQDqjScmIL2WkfrO0/J8=;
+        b=P68D8XDsT5X5RJCVVoHRhWJkUvFalbzCUmXiHpAFoySQRshRsJvf4zm8TeBO5Qj8Ku
+         mc9Khng+pQDF9JAb1VBVsgJS0C6Q1yLYSzy01GJZOEeSUN1lZVTvZvhgonG/uPeuURrM
+         EW4ZTeiF+AeMWYnEIj9gugWN4IFuQAU6SkFOajAU/2nKXbgb20h1DdS2ogWdt7YtUyQd
+         2AdAqrDKxUxJc4sY4enzVjjh+OHkXgzWU4urfUYt0XEOEtZ3heJqFVRdY1PTgQPPIzPy
+         HTwH1Ra20aNRk6AwuuOQ5yxcQ5v7iCfXt7j7edPd4+eUNxYodCEN0nY3CejKoPk7XHOx
+         wRzg==
+X-Gm-Message-State: AOAM532wO+wUiHStFN8g45BFyr17dNDqRGYI6VSNdDxczb3FJPQQcvNy
+        9rcgM5I8NIXZ5fmfPdA4T+sIrw==
+X-Google-Smtp-Source: ABdhPJypEzdvrBsNRY5wsHrDoJm1bHtjRZ4Qj+zqHGfH90ZVYoUQxjdEVGi8eLw5I6wC8PvJhUxBGA==
+X-Received: by 2002:aa7:8a08:: with SMTP id m8mr5770969pfa.135.1598090193532;
+        Sat, 22 Aug 2020 02:56:33 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:a28c:fdff:fef0:49dd])
+        by smtp.gmail.com with ESMTPSA id e23sm4240486pgb.79.2020.08.22.02.56.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 22 Aug 2020 02:56:32 -0700 (PDT)
+Date:   Sat, 22 Aug 2020 02:56:31 -0700
+From:   Prashant Malani <pmalani@chromium.org>
+To:     Rajmohan Mani <rajmohan.mani@intel.com>
+Cc:     Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Lee Jones <lee.jones@linaro.org>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: [PATCH v3 11/11] iopoll: update kerneldoc of read_poll_timeout_atomic()
-Date:   Sat, 22 Aug 2020 16:05:53 +0800
-Message-ID: <1598083553-31896-11-git-send-email-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 1.8.1.1.dirty
-In-Reply-To: <1598083553-31896-1-git-send-email-chunfeng.yun@mediatek.com>
-References: <1598083553-31896-1-git-send-email-chunfeng.yun@mediatek.com>
+        Ayman Bagabas <ayman.bagabas@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Jithu Joseph <jithu.joseph@intel.com>,
+        =?utf-8?B?Qmxhxb4=?= Hrastnik <blaz@mxxn.io>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, bleung@chromium.org
+Subject: Re: [PATCH v2 1/3] platform/x86: Add Intel Input Output Manager
+ (IOM) driver
+Message-ID: <20200822095631.GB2553024@google.com>
+References: <20200822040508.23510-1-rajmohan.mani@intel.com>
+ <20200822040508.23510-2-rajmohan.mani@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: 08DE332221603EEB4127FB0BA2C940C91FF642440EAC2E2737773133EF96AEEA2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200822040508.23510-2-rajmohan.mani@intel.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-QXJndW1lbnRzIGRlc2NyaXB0aW9uIG9mIHJlYWRfcG9sbF90aW1lb3V0X2F0b21pYygpIGlzIG91
-dCBvZiBkYXRlLA0KdXBkYXRlIGl0Lg0KDQpDYzogQWxhbiBTdGVybiA8c3Rlcm5Acm93bGFuZC5o
-YXJ2YXJkLmVkdT4NClNpZ25lZC1vZmYtYnk6IENodW5mZW5nIFl1biA8Y2h1bmZlbmcueXVuQG1l
-ZGlhdGVrLmNvbT4NCi0tLQ0KdjM6IGZpeCB0eXBvIGluIGNvbW1pdCBtZXNzYWdlIHN1Z2dlc3Rl
-ZCBieSBTZXJnZWkNCg0KdjI6IG5ldyBwYXRjaCwgc3VnZ2VzdGVkIGJ5IEFsYW4NCi0tLQ0KIGlu
-Y2x1ZGUvbGludXgvaW9wb2xsLmggfCA0ICsrLS0NCiAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRp
-b25zKCspLCAyIGRlbGV0aW9ucygtKQ0KDQpkaWZmIC0tZ2l0IGEvaW5jbHVkZS9saW51eC9pb3Bv
-bGwuaCBiL2luY2x1ZGUvbGludXgvaW9wb2xsLmgNCmluZGV4IGJjODlhYzYuLjJjODg2MGUgMTAw
-NjQ0DQotLS0gYS9pbmNsdWRlL2xpbnV4L2lvcG9sbC5oDQorKysgYi9pbmNsdWRlL2xpbnV4L2lv
-cG9sbC5oDQpAQCAtNjAsOCArNjAsNyBAQA0KIC8qKg0KICAqIHJlYWRfcG9sbF90aW1lb3V0X2F0
-b21pYyAtIFBlcmlvZGljYWxseSBwb2xsIGFuIGFkZHJlc3MgdW50aWwgYSBjb25kaXRpb24gaXMN
-CiAgKiAJCQkJbWV0IG9yIGEgdGltZW91dCBvY2N1cnMNCi0gKiBAb3A6IGFjY2Vzc29yIGZ1bmN0
-aW9uICh0YWtlcyBAYWRkciBhcyBpdHMgb25seSBhcmd1bWVudCkNCi0gKiBAYWRkcjogQWRkcmVz
-cyB0byBwb2xsDQorICogQG9wOiBhY2Nlc3NvciBmdW5jdGlvbiAodGFrZXMgQGFyZ3MgYXMgaXRz
-IGFyZ3VtZW50cykNCiAgKiBAdmFsOiBWYXJpYWJsZSB0byByZWFkIHRoZSB2YWx1ZSBpbnRvDQog
-ICogQGNvbmQ6IEJyZWFrIGNvbmRpdGlvbiAodXN1YWxseSBpbnZvbHZpbmcgQHZhbCkNCiAgKiBA
-ZGVsYXlfdXM6IFRpbWUgdG8gdWRlbGF5IGJldHdlZW4gcmVhZHMgaW4gdXMgKDAgdGlnaHQtbG9v
-cHMpLiAgU2hvdWxkDQpAQCAtNjksNiArNjgsNyBAQA0KICAqICAgICAgICAgICAgRG9jdW1lbnRh
-dGlvbi90aW1lcnMvdGltZXJzLWhvd3RvLnJzdCkuDQogICogQHRpbWVvdXRfdXM6IFRpbWVvdXQg
-aW4gdXMsIDAgbWVhbnMgbmV2ZXIgdGltZW91dA0KICAqIEBkZWxheV9iZWZvcmVfcmVhZDogaWYg
-aXQgaXMgdHJ1ZSwgZGVsYXkgQGRlbGF5X3VzIGJlZm9yZSByZWFkLg0KKyAqIEBhcmdzOiBhcmd1
-bWVudHMgZm9yIEBvcCBwb2xsDQogICoNCiAgKiBSZXR1cm5zIDAgb24gc3VjY2VzcyBhbmQgLUVU
-SU1FRE9VVCB1cG9uIGEgdGltZW91dC4gSW4gZWl0aGVyDQogICogY2FzZSwgdGhlIGxhc3QgcmVh
-ZCB2YWx1ZSBhdCBAYXJncyBpcyBzdG9yZWQgaW4gQHZhbC4NCi0tIA0KMS45LjENCg==
+Hi Rajmohan,
+
+On Fri, Aug 21, 2020 at 09:05:06PM -0700, Rajmohan Mani wrote:
+> Input Output Manager (IOM) is part of the Tiger Lake SoC that
+> configures the Type-C Sub System (TCSS). IOM is a micro controller
+> that handles Type-C topology, configuration and PM functions of
+> various Type-C devices connected on the platform.
+> 
+> This driver helps read relevant information such as Type-C port
+> status (whether a device is connected to a Type-C port or not) and
+> the activity type on the Type-C ports (such as USB, Display Port,
+> Thunderbolt), for consumption by other drivers.
+> 
+> Currently intel_iom_port_status() API is exported by this driver,
+> that has information about the Type-C port status and port activity
+> type.
+> 
+> Signed-off-by: Rajmohan Mani <rajmohan.mani@intel.com>
+> ---
+
+Perhaps include a version log of changes since v1?
+> diff --git a/drivers/platform/x86/intel_iom.c b/drivers/platform/x86/intel_iom.c
+> new file mode 100644
+> index 000000000000..cda7716410c6
+> --- /dev/null
+> +++ b/drivers/platform/x86/intel_iom.c
+> +int intel_iom_port_status(u8 port, u32 *status)
+> +{
+> +	void __iomem *reg;
+> +
+> +	if (!iom || !iom->dev || !iom->regbar)
+
+Do we need to check for !iom->dev and !iom->regbar? Is there a valid
+situation where iom != NULL but iom->dev and/or iom->regbar == NULL?
+Sounds like it shouldn't, but I may be missing something.
+
+> +		return -ENODEV;
+> +
+> +	if (!status || (port > IOM_MAX_PORTS - 1))
+
+I think parentheses around "port > IOM_MAX_PORT - 1" aren't required.
+> +		return -EINVAL;
+> +
+> +	reg = iom->regbar + IOM_PORT_STATUS_OFFSET + IOM_REG_LEN * port;
+> +
+> +	*status = ioread32(reg);
+
+Perhaps just inline reg within the parentheses?
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(intel_iom_port_status);
+> +
+> +static int intel_iom_probe(struct platform_device *pdev)
+> +{
+> +	void __iomem *addr;
+> +
+> +	/* only one IOM device is supported */
+
+Minor nit: s/only/Only
+> +	if (iom)
+> +		return -EBUSY;
+> +
+> +	iom = devm_kzalloc(&pdev->dev, sizeof(*iom), GFP_KERNEL);
+> +	if (!iom)
+> +		return -ENOMEM;
+> +
+> +	addr = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(addr))
+> +		return PTR_ERR(addr);
+> +
+> +	iom->regbar = addr;
+> +	iom->dev = &pdev->dev;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct acpi_device_id intel_iom_acpi_ids[] = {
+> +	{ "INTC1072" },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(acpi, intel_iom_acpi_ids);
+> +
+> +static struct platform_driver intel_iom_driver = {
+> +	.probe = intel_iom_probe,
+
+nit: I generally see ".probe" listed below ".driver".
+> +	.driver = {
+> +		.name = "intel_iom",
+> +		.acpi_match_table = intel_iom_acpi_ids,
+> +	},
+> +};
+> +
+> +module_platform_driver_probe(intel_iom_driver, intel_iom_probe);
+> +
+> +MODULE_AUTHOR("Rajmohan Mani <rajmohan.mani@intel.com>");
+> +MODULE_DESCRIPTION("Intel IOM driver");
+> +MODULE_LICENSE("GPL v2");
+> diff --git a/include/linux/platform_data/x86/intel_iom.h b/include/linux/platform_data/x86/intel_iom.h
+> new file mode 100644
+> index 000000000000..e4c9a305e7a9
+> --- /dev/null
+> +++ b/include/linux/platform_data/x86/intel_iom.h
+> @@ -0,0 +1,49 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +
+> +#ifndef _PLATFORM_DATA_X86_INTEL_IOM_H_
+> +#define _PLATFORM_DATA_X86_INTEL_IOM_H_
+> +
+> +
+> +#define IOM_MAX_PORTS					4
+> +/* Register length in bytes */
+> +#define IOM_REG_LEN					4
+
+Do these two #define's need to be in the header, instead of directly in
+intel_iom.c ?
+
+> +
+> +#ifdef CONFIG_ACPI
+> +
+> +int intel_iom_port_status(u8 port, u32 *status);
+> +
+> +#else
+> +
+> +int intel_iom_port_status(struct intel_iom *iom, u8 port, u32 *status)
+
+Should the function signature be the same as the #ifdef case?
+
+Best regards,
+
+-Prashant
 
