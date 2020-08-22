@@ -2,120 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D9D024E7CA
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Aug 2020 16:15:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B56C024E92E
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Aug 2020 20:02:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728067AbgHVOPg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 22 Aug 2020 10:15:36 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:60149 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728019AbgHVOPf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Aug 2020 10:15:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1598105733;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JV/kqhMMNVm2hgOeYtw9b34lpsa9RQ6l73NIRdxZMHk=;
-        b=dDaz0+rE+Non0xBWJVEyWj2g61t2aohqzr1kNaRPENdAnTnUcPD+GRqRueEnFM5SpXUkam
-        CFxoE+xFvWGYUJFW8xfYKVyVfgeiOUBnRvifg3EB5QqvbooKGJGTFzZMiALyzcVryIAaEj
-        nqMdXOx9cm9vmnA1qLoNgKhY+z2MeBE=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-50-iFXoun0RNrG14WbStPSZDg-1; Sat, 22 Aug 2020 10:15:31 -0400
-X-MC-Unique: iFXoun0RNrG14WbStPSZDg-1
-Received: by mail-ed1-f72.google.com with SMTP id g20so1684558edj.15
-        for <linux-usb@vger.kernel.org>; Sat, 22 Aug 2020 07:15:31 -0700 (PDT)
+        id S1728211AbgHVSCg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 22 Aug 2020 14:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45276 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727899AbgHVSCf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Aug 2020 14:02:35 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2588EC061573
+        for <linux-usb@vger.kernel.org>; Sat, 22 Aug 2020 11:02:35 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id m34so2524478pgl.11
+        for <linux-usb@vger.kernel.org>; Sat, 22 Aug 2020 11:02:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=Z1rjGHQ7FHp41iM5QVhuNm4VchpoAYic+PxeEOffWjs=;
+        b=CwpPubFfom872QZ32UBsHj2mR0UOe+5olOHPZzdKvOfUIVSyi/oS9TfeYHzQVc4F31
+         rlbSOERoNSDzkpWYdnQ5oJNa32z3+tT2LeTuVmd2yNB5CAroffMZOLgaDebZZupILhFU
+         A2Ij3o5lUKlOxBtY1WAXkdO0UVkJB3S50HEASW/ccrIjnIAG+dt+zLxCp2FW8+cuLwYH
+         8UcNUkkmuZj4VE7rRwqcF23p5ed5q9eUhvn8tVGFqXm9zFvOHDOlP6z02mPrJMpgdw9F
+         FwZFI3JJ/7QEU64/ChfdiYls+yPdz+3pJZJQGQfoa4qUlVGmqcsytlgbu9RpR17pTDJm
+         q+gA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=JV/kqhMMNVm2hgOeYtw9b34lpsa9RQ6l73NIRdxZMHk=;
-        b=cLmOj9igf9KCk4Ngw9ARH5mWWjfFaHDNYkf9DRNx6SJIg/hrYBVUvijXJ6U2569hhW
-         L6QE4zASbg+opnKJrOwTqO04+FtiaJBij1qjqUX5jwq+fP+Rx3v+i01piGOCUt5Qk36Z
-         PBuZjLmOo7UPOUYwHzEWOrVkr+INaYYk1Uy1teVbJq54OqRDpT+oY8o0Nt/7Xvgn9PXn
-         ajbWHiX2lKWPbDRNgwabTia2clh7tPmdSpRb6A7FC0XfdMJXVPezZdUzuvKxTafHLTkX
-         u7YTzwF3lhDvZwJQvhCBx6R07nDXvN0N+YpjzSJgDxhJ6FTXdRpq32w/J7ECi7chfjKY
-         IGqg==
-X-Gm-Message-State: AOAM5332EnUn3o+sxd09T8dEwe0DQWaWZbIjE38dqy3hw503sJYQfmkR
-        QDGrI43XpzX/gZSiSowkJj5QGqgwWUA/LbXj1VRln6uDZF1EFwuuF8//i4KBqOgRx71gXW2ck39
-        kxG4/zkphQZZEpkhlzd6i
-X-Received: by 2002:aa7:ca44:: with SMTP id j4mr450927edt.222.1598105727275;
-        Sat, 22 Aug 2020 07:15:27 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwy6FUBOovEB6JgNBdRn/icmteGQLQvsCKyhx9maPg5hX8hsOVYy8L4FaocVbaAtY29UA6BUQ==
-X-Received: by 2002:aa7:ca44:: with SMTP id j4mr450916edt.222.1598105727092;
-        Sat, 22 Aug 2020 07:15:27 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
-        by smtp.gmail.com with ESMTPSA id a11sm3312202ejt.107.2020.08.22.07.15.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Aug 2020 07:15:26 -0700 (PDT)
-Subject: Re: [PATCH] usb: uas: Add quirk for PNY Pro Elite
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        usb-storage@lists.one-eyed-alien.net
-Cc:     stable@vger.kernel.org, Oliver Neukum <oneukum@suse.com>
-References: <2b0585228b003eedcc82db84697b31477df152e0.1597803605.git.thinhn@synopsys.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <4a8bdf55-2111-af21-4b44-ed718d965ebc@redhat.com>
-Date:   Sat, 22 Aug 2020 16:15:25 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=Z1rjGHQ7FHp41iM5QVhuNm4VchpoAYic+PxeEOffWjs=;
+        b=mUxc+P5STCMdIW5U3ZAhFycJLNMbpVfBXVj1rDAMJcfE1Ti/V40sqeKdc/ZIuEuXLA
+         gXLvC7Ur67J7UTfGQlKXJEc4DAwhdFz7rPi2FPQYwvG86CvdjCWbd92rb75lw9PLNUed
+         5E/5cMIBZskb2KC5VP49DoV6h2o4aY5WUHIExT40G4L9t5HANV5q4gyPDRjGeTOZYreb
+         K4k3IVO/gtWnYEnKaWYE5MKUp16dTAIA1RtDXdle8/TIrdzswS9NV9UqbZLCa/yqM6eH
+         XNZHsGBJsOT1mH1aQf5lH/CEJoxXvGdmM8yCzIVf7Hkmt3rkPmCAGL7JE751PsY3XXi/
+         WJfA==
+X-Gm-Message-State: AOAM532sxNlSBp4VZGtiZXSZEbbEKcGJyO3a3ZqOGaa1w9NzAHrTnKPw
+        7mFWMp/3Ev5TxdaM0NjrJH57/JIpLEvj3x0RaBglaUamxS00Rw==
+X-Google-Smtp-Source: ABdhPJxU3EvJi1KCg+aM6zPY+SksPA6oSQgQAYGlqftdzuBLuzSjqMgrgAhqxhFievtzOTYgG8Tn5EnOJpbpVPaDg3k=
+X-Received: by 2002:a05:6a00:2247:: with SMTP id i7mr6901058pfu.217.1598119354321;
+ Sat, 22 Aug 2020 11:02:34 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <2b0585228b003eedcc82db84697b31477df152e0.1597803605.git.thinhn@synopsys.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+From:   yunhua li <yunhual@gmail.com>
+Date:   Sat, 22 Aug 2020 11:02:16 -0700
+Message-ID: <CAMqbrUhE-D3QoeUkr=FnTks_a+KRxLpScghMefEZp9GHD55E_Q@mail.gmail.com>
+Subject: XCHI bulk transaction latency, data lost, NAK stats
+To:     linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Hello all
+For USB Bulk transaction,
+1. If there are NAK, and retransmit happens on a physical layer, does
+XHCI provide any statistical counter, e.g. how many retries for that
+URB, how can I get those counters or enable it for that TRB?
+2. If Data is lost, XHCI have to resend URB request?  how long it will
+take before it resend URB request?  Is that a configurable timeout on
+XHCI spec?
 
-On 8/19/20 4:27 AM, Thinh Nguyen wrote:
-> PNY Pro Elite USB 3.1 Gen 2 device (SSD) doesn't respond to ATA_12
-> pass-through command (i.e. it just hangs). If it doesn't support this
-> command, it should respond properly to the host. Let's just add a quirk
-> to be able to move forward with other operations.
-> 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
+The following are some  background of my question.
+I have a XHCI USB Host controller, there are 4 ports. I only connect
+one port to a USB 3.0 camera.  and running program keep reading data
+from device, guvcview -d /dev/video0,
+the camera keeps sending 30 frames/second, normal within each frame,
+XHCI driver sends URB request -> Device response URB, response time is
+about 10 ~ 200ms.
+Some times, the response time takes 20 000 ~ 200 000 ms, as a result,
+the image gets corrupted.
+From the USB device(Camera) firmware debugging tool, I can see that
+the Device actually did submit DMA in time, when this big latency
+happens firmware will complain, DMA buffer overflow.
+looks software works correctly on both sides.
+I'm trying to understand why the latency is not consistent?
 
-Patch looks good to me:
+3. I have 4 USB ports on the XHCI host controller, but only 1 device
+connects,  does other 3 empty port take any USB bandwidth?  is there
+anything related to bandwidth allocation I should look at it?
+4. anything related PCIe I should look at? I enabled PCIe error
+reporting, No error found?
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Thanks.
 
-Regards,
-
-Hans
-
-
-> ---
->   drivers/usb/storage/unusual_uas.h | 7 +++++++
->   1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
-> index 162b09d69f62..971f8a4354c8 100644
-> --- a/drivers/usb/storage/unusual_uas.h
-> +++ b/drivers/usb/storage/unusual_uas.h
-> @@ -80,6 +80,13 @@ UNUSUAL_DEV(0x152d, 0x0578, 0x0000, 0x9999,
->   		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
->   		US_FL_BROKEN_FUA),
->   
-> +/* Reported-by: Thinh Nguyen <thinhn@synopsys.com> */
-> +UNUSUAL_DEV(0x154b, 0xf00d, 0x0000, 0x9999,
-> +		"PNY",
-> +		"Pro Elite SSD",
-> +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-> +		US_FL_NO_ATA_1X),
-> +
->   /* Reported-by: Hans de Goede <hdegoede@redhat.com> */
->   UNUSUAL_DEV(0x2109, 0x0711, 0x0000, 0x9999,
->   		"VIA",
-> 
-> base-commit: d5643d2249b279077427b2c2b2ffae9b70c95b0b
-> 
-
+Regards
+Yunhua
