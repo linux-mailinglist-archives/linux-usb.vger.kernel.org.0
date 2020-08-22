@@ -2,214 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 774EA24E57E
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Aug 2020 06:42:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2340524E654
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Aug 2020 10:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726885AbgHVEmQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 22 Aug 2020 00:42:16 -0400
-Received: from mga11.intel.com ([192.55.52.93]:62114 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725840AbgHVEmK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 22 Aug 2020 00:42:10 -0400
-IronPort-SDR: fVSt6qW7t56PouEtv0eYWPHnAIHkYgoi42c4uz+g8J4wtYOC1Y2/BRIGDC+IvUTPTk+aFVuajK
- 0vJg05kgX3Qg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9720"; a="153275287"
-X-IronPort-AV: E=Sophos;i="5.76,339,1592895600"; 
-   d="scan'208";a="153275287"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2020 21:42:01 -0700
-IronPort-SDR: griWtDcJu82w9E+SGCJUbsLhzP1NJ6oVRQ6OMPvx3UflMk7vkzDwFSCtrgD8EdkjVUk+48o7Qq
- b0xXQG4a6W9w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,339,1592895600"; 
-   d="scan'208";a="327943130"
-Received: from glacier.sc.intel.com ([10.3.62.63])
-  by orsmga008.jf.intel.com with ESMTP; 21 Aug 2020 21:42:01 -0700
-From:   Rajmohan Mani <rajmohan.mani@intel.com>
-To:     Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        id S1726556AbgHVIJT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 22 Aug 2020 04:09:19 -0400
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:56568 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725877AbgHVIJT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Aug 2020 04:09:19 -0400
+X-UUID: ed0cf974d34d4e93b42088219df8827d-20200822
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=n+pceR4RMgmAMEAt4bZLKvLzwP+bC0iCUPc31NQ9+9s=;
+        b=S/2maIyluc5PF34fxaYVNsAJU4CK0sKgXLva0awErLbQQ1xkEU3eHDD+OfddueX9+0bjdErx3vZGt5sBrlKqyEmVQwZV5XMj/72BxrKL6jI4UxVUFe+Blz+L21RY4rMKWLifWb1VUcfq2j4iK45LHY+Xyr3BmoPIiGT7LYlvNys=;
+X-UUID: ed0cf974d34d4e93b42088219df8827d-20200822
+Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 1461500314; Sat, 22 Aug 2020 16:09:09 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ MTKMBS31N2.mediatek.inc (172.27.4.87) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Sat, 22 Aug 2020 16:09:08 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 22 Aug 2020 16:09:05 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Felipe Balbi <balbi@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
         Lee Jones <lee.jones@linaro.org>,
-        Ayman Bagabas <ayman.bagabas@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Jithu Joseph <jithu.joseph@intel.com>,
-        =?UTF-8?q?Bla=C5=BE=20Hrastnik?= <blaz@mxxn.io>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     pmalani@chromium.org, bleung@chromium.org,
-        Rajmohan Mani <rajmohan.mani@intel.com>
-Subject: [PATCH v2 3/3] usb: typec: intel_pmc_mux: Support for device role (UFP)
-Date:   Fri, 21 Aug 2020 21:05:08 -0700
-Message-Id: <20200822040508.23510-4-rajmohan.mani@intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200822040508.23510-1-rajmohan.mani@intel.com>
-References: <20200822040508.23510-1-rajmohan.mani@intel.com>
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH v3 01/11] usb: early: convert to readl_poll_timeout_atomic()
+Date:   Sat, 22 Aug 2020 16:05:43 +0800
+Message-ID: <1598083553-31896-1-git-send-email-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 1.8.1.1.dirty
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TM-SNTS-SMTP: 710DD285F53E49DF8C43FE47D5677618B03991FFAEE3B920486DC39D6992D9992000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
-This adds support for device data role, and data role
-swapping. The driver no longer relies on the cached role, as
-it may not be valid (for example after bootup). Instead, the
-role is always checked by readding the port status from IOM.
-
-Note. After this, the orientation is always only cached, so
-the driver does not support scenario where the role is set
-before orientation. It means the typec drivers must always
-set the orientation first before role.
-
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Rajmohan Mani <rajmohan.mani@intel.com>
----
- drivers/usb/typec/mux/intel_pmc_mux.c | 67 ++++++++++++++-------------
- 1 file changed, 34 insertions(+), 33 deletions(-)
-
-diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
-index c758d6113c41..d4ee7132227b 100644
---- a/drivers/usb/typec/mux/intel_pmc_mux.c
-+++ b/drivers/usb/typec/mux/intel_pmc_mux.c
-@@ -191,9 +191,6 @@ pmc_usb_mux_dp(struct pmc_usb_port *port, struct typec_mux_state *state)
- 		return pmc_usb_mux_dp_hpd(port, state->data);
- 	}
- 
--	if (data->status & DP_STATUS_IRQ_HPD)
--		return pmc_usb_mux_dp_hpd(port, state->data);
--
- 	req.usage = PMC_USB_ALT_MODE;
- 	req.usage |= port->usb3_port << PMC_USB_MSG_USB3_PORT_SHIFT;
- 	req.mode_type = PMC_USB_MODE_TYPE_DP << PMC_USB_MODE_TYPE_SHIFT;
-@@ -312,39 +309,52 @@ static int pmc_usb_mux_safe_state(struct pmc_usb_port *port)
- 	return pmc_usb_command(port, &msg, sizeof(msg));
- }
- 
--static int pmc_usb_connect(struct pmc_usb_port *port)
-+static int pmc_usb_disconnect(struct pmc_usb_port *port)
- {
-+	struct typec_displayport_data data = { };
- 	u8 msg[2];
- 
--	if (port->iom_status & IOM_PORT_STATUS_CONNECTED)
-+	if (!(port->iom_status & IOM_PORT_STATUS_CONNECTED))
- 		return 0;
- 
--	msg[0] = PMC_USB_CONNECT;
-+	/* Clear DisplayPort HPD if it's still asserted. */
-+	if (IOM_PORT_HPD_ASSERTED(port->iom_status))
-+		pmc_usb_mux_dp_hpd(port, &data);
-+
-+	msg[0] = PMC_USB_DISCONNECT;
- 	msg[0] |= port->usb3_port << PMC_USB_MSG_USB3_PORT_SHIFT;
- 
- 	msg[1] = port->usb2_port << PMC_USB_MSG_USB2_PORT_SHIFT;
--	msg[1] |= hsl_orientation(port) << PMC_USB_MSG_ORI_HSL_SHIFT;
--	msg[1] |= sbu_orientation(port) << PMC_USB_MSG_ORI_AUX_SHIFT;
- 
- 	return pmc_usb_command(port, msg, sizeof(msg));
- }
- 
--static int pmc_usb_disconnect(struct pmc_usb_port *port)
-+static int pmc_usb_connect(struct pmc_usb_port *port, enum usb_role role)
- {
--	struct typec_displayport_data data = { };
-+	u8 ufp = role == USB_ROLE_DEVICE ? 1 : 0;
- 	u8 msg[2];
-+	int ret;
- 
--	if (!(port->iom_status & IOM_PORT_STATUS_CONNECTED))
--		return 0;
-+	if (port->orientation == TYPEC_ORIENTATION_NONE)
-+		return -EINVAL;
- 
--	/* Clear DisplayPort HPD if it's still asserted. */
--	if (IOM_PORT_HPD_ASSERTED(port->iom_status))
--		pmc_usb_mux_dp_hpd(port, &data);
-+	if (port->iom_status & IOM_PORT_STATUS_CONNECTED) {
-+		if (port->role == role || port->role == USB_ROLE_NONE)
-+			return 0;
- 
--	msg[0] = PMC_USB_DISCONNECT;
-+		/* Role swap */
-+		ret = pmc_usb_disconnect(port);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	msg[0] = PMC_USB_CONNECT;
- 	msg[0] |= port->usb3_port << PMC_USB_MSG_USB3_PORT_SHIFT;
- 
- 	msg[1] = port->usb2_port << PMC_USB_MSG_USB2_PORT_SHIFT;
-+	msg[1] |= ufp << PMC_USB_MSG_UFP_SHIFT;
-+	msg[1] |= hsl_orientation(port) << PMC_USB_MSG_ORI_HSL_SHIFT;
-+	msg[1] |= sbu_orientation(port) << PMC_USB_MSG_ORI_AUX_SHIFT;
- 
- 	return pmc_usb_command(port, msg, sizeof(msg));
- }
-@@ -365,7 +375,7 @@ pmc_usb_mux_set(struct typec_mux *mux, struct typec_mux_state *state)
- 	if (state->mode == TYPEC_STATE_SAFE)
- 		return pmc_usb_mux_safe_state(port);
- 	if (state->mode == TYPEC_STATE_USB)
--		return pmc_usb_connect(port);
-+		return pmc_usb_connect(port, port->role);
- 
- 	if (state->alt) {
- 		switch (state->alt->svid) {
-@@ -380,7 +390,7 @@ pmc_usb_mux_set(struct typec_mux *mux, struct typec_mux_state *state)
- 			/* REVISIT: Try with usb3_port set to 0? */
- 			break;
- 		case TYPEC_MODE_USB3:
--			return pmc_usb_connect(port);
-+			return pmc_usb_connect(port, port->role);
- 		case TYPEC_MODE_USB4:
- 			return pmc_usb_mux_usb4(port, state);
- 		}
-@@ -401,13 +411,6 @@ static int pmc_usb_set_orientation(struct typec_switch *sw,
- 
- 	port->orientation = orientation;
- 
--	if (port->role) {
--		if (orientation == TYPEC_ORIENTATION_NONE)
--			return pmc_usb_disconnect(port);
--		else
--			return pmc_usb_connect(port);
--	}
--
- 	return 0;
- }
- 
-@@ -420,16 +423,14 @@ static int pmc_usb_set_role(struct usb_role_switch *sw, enum usb_role role)
- 	if (ret)
- 		return ret;
- 
--	port->role = role;
-+	if (role == USB_ROLE_NONE)
-+		ret = pmc_usb_disconnect(port);
-+	else
-+		ret = pmc_usb_connect(port, role);
- 
--	if (port->orientation) {
--		if (role == USB_ROLE_NONE)
--			return pmc_usb_disconnect(port);
--		else
--			return pmc_usb_connect(port);
--	}
-+	port->role = role;
- 
--	return 0;
-+	return ret;
- }
- 
- static int pmc_usb_register_port(struct pmc_usb *pmc, int index,
--- 
-2.20.1
+VXNlIHJlYWRsX3BvbGxfdGltZW91dF9hdG9taWMoKSB0byBzaW1wbGlmeSBjb2RlDQoNCkNjOiBM
+dSBCYW9sdSA8YmFvbHUubHVAbGludXguaW50ZWwuY29tPg0KQ2M6IE1hdGhpYXMgTnltYW4gPG1h
+dGhpYXMubnltYW5AbGludXguaW50ZWwuY29tPg0KU2lnbmVkLW9mZi1ieTogQ2h1bmZlbmcgWXVu
+IDxjaHVuZmVuZy55dW5AbWVkaWF0ZWsuY29tPg0KLS0tDQp2Mn52Mzogbm8gY2hhbmdlcw0KLS0t
+DQogZHJpdmVycy91c2IvZWFybHkveGhjaS1kYmMuYyB8IDE0ICsrKystLS0tLS0tLS0tDQogMSBm
+aWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgMTAgZGVsZXRpb25zKC0pDQoNCmRpZmYgLS1n
+aXQgYS9kcml2ZXJzL3VzYi9lYXJseS94aGNpLWRiYy5jIGIvZHJpdmVycy91c2IvZWFybHkveGhj
+aS1kYmMuYw0KaW5kZXggYzA1MDc3Ni4uYmU0ZWNiYSAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvdXNi
+L2Vhcmx5L3hoY2ktZGJjLmMNCisrKyBiL2RyaXZlcnMvdXNiL2Vhcmx5L3hoY2ktZGJjLmMNCkBA
+IC0xNCw2ICsxNCw3IEBADQogI2luY2x1ZGUgPGxpbnV4L3BjaV9pZHMuaD4NCiAjaW5jbHVkZSA8
+bGludXgvbWVtYmxvY2suaD4NCiAjaW5jbHVkZSA8bGludXgvaW8uaD4NCisjaW5jbHVkZSA8bGlu
+dXgvaW9wb2xsLmg+DQogI2luY2x1ZGUgPGFzbS9wY2ktZGlyZWN0Lmg+DQogI2luY2x1ZGUgPGFz
+bS9maXhtYXAuaD4NCiAjaW5jbHVkZSA8bGludXgvYmNkLmg+DQpAQCAtMTM1LDE2ICsxMzYsOSBA
+QCBzdGF0aWMgaW50IGhhbmRzaGFrZSh2b2lkIF9faW9tZW0gKnB0ciwgdTMyIG1hc2ssIHUzMiBk
+b25lLCBpbnQgd2FpdCwgaW50IGRlbGF5KQ0KIHsNCiAJdTMyIHJlc3VsdDsNCiANCi0JZG8gew0K
+LQkJcmVzdWx0ID0gcmVhZGwocHRyKTsNCi0JCXJlc3VsdCAmPSBtYXNrOw0KLQkJaWYgKHJlc3Vs
+dCA9PSBkb25lKQ0KLQkJCXJldHVybiAwOw0KLQkJdWRlbGF5KGRlbGF5KTsNCi0JCXdhaXQgLT0g
+ZGVsYXk7DQotCX0gd2hpbGUgKHdhaXQgPiAwKTsNCi0NCi0JcmV0dXJuIC1FVElNRURPVVQ7DQor
+CXJldHVybiByZWFkbF9wb2xsX3RpbWVvdXRfYXRvbWljKHB0ciwgcmVzdWx0LA0KKwkJCQkJICgo
+cmVzdWx0ICYgbWFzaykgPT0gZG9uZSksDQorCQkJCQkgZGVsYXksIHdhaXQpOw0KIH0NCiANCiBz
+dGF0aWMgdm9pZCBfX2luaXQgeGRiY19iaW9zX2hhbmRvZmYodm9pZCkNCi0tIA0KMS45LjENCg==
 
