@@ -2,96 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E4C724E409
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Aug 2020 01:58:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E868A24E4E8
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Aug 2020 05:32:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726746AbgHUX6e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Aug 2020 19:58:34 -0400
-Received: from mail-m17613.qiye.163.com ([59.111.176.13]:36191 "EHLO
-        mail-m17613.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726688AbgHUX6d (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Aug 2020 19:58:33 -0400
-Received: from 2CD-RMPB.local (unknown [113.89.247.200])
-        by mail-m17613.qiye.163.com (Hmail) with ESMTPA id 1A4884816D2;
-        Sat, 22 Aug 2020 07:58:30 +0800 (CST)
-Subject: Re: [PATCH] xhci: Always restore EP_SOFT_CLEAR_TOGGLE even if ep
- reset failed
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20200821070652.27782-1-dinghui@sangfor.com.cn>
- <20200821073147.GA1681156@kroah.com>
- <c6275105-a204-fe23-2dae-2bfa6c06a839@linux.intel.com>
-From:   Ding Hui <dinghui@sangfor.com.cn>
-Message-ID: <576e0013-a11e-4ffb-3964-cc9aba204245@sangfor.com.cn>
-Date:   Sat, 22 Aug 2020 07:58:29 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:78.0)
- Gecko/20100101 Thunderbird/78.1.1
+        id S1727069AbgHVDcB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Aug 2020 23:32:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35600 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726387AbgHVDcA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 21 Aug 2020 23:32:00 -0400
+Received: from dragon (unknown [80.251.214.228])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 17BB2214F1;
+        Sat, 22 Aug 2020 03:31:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598067120;
+        bh=UAUhlnAYZxih4M0/rTtvsAwTQ69ckCB2XzCicXjAGUc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qjJCE23M5WK2DnpulXekbIUWKwA/7WPyuukb3m3cDwUAJciTXl2pc2jfpGYFJklk9
+         QvPfrcUw6ifj05wWUu58hO/NWJXt5QYu+1mFV7pU91v1Sp+Pa82nTfO/nROSAAV7/o
+         N8RtGhg2vH+BEmA1UyUeUi03LXAnJ99ep9VFRPjY=
+Date:   Sat, 22 Aug 2020 11:31:48 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v3 3/4] arm64: dts: imx8mm-evk: add two parameters for
+ samsung picophy tuning
+Message-ID: <20200822033144.GB27575@dragon>
+References: <20200724060532.3878-1-peter.chen@nxp.com>
+ <20200724060532.3878-3-peter.chen@nxp.com>
+ <20200821013839.GA24960@b29397-desktop>
 MIME-Version: 1.0
-In-Reply-To: <c6275105-a204-fe23-2dae-2bfa6c06a839@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgYFAkeWUFZS1VLWVdZKFlBSE83V1ktWUFJV1kPCR
-        oVCBIfWUFZS0IfQk0fTk8dT0waVkpOQkNLTk9ISktJQklVEwETFhoSFyQUDg9ZV1kWGg8SFR0UWU
-        FZT0tIVUpKS0hKQ1VKS0tZBg++
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Nz46TAw6GD8uPDIJT00SEQky
-        PzNPCg9VSlVKTkJDS05PSEpLTUxDVTMWGhIXVR8SFRwTDhI7CBoVHB0UCVUYFBZVGBVFWVdZEgtZ
-        QVlKSkhVQ0JVSU9MVUlLS1lXWQgBWUFJQkxCNwY+
-X-HM-Tid: 0a741375a16393bakuws1a4884816d2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200821013839.GA24960@b29397-desktop>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2020/8/21 4:44 下午, Mathias Nyman wrote:
-> On 21.8.2020 10.31, Greg KH wrote:
->> On Fri, Aug 21, 2020 at 03:06:52PM +0800, Ding Hui wrote:
->>> Some devices driver call libusb_clear_halt when target ep queue
->>> is not empty. (eg. spice client connected to qemu for usb redir)
->>>
->>> Before commit f5249461b504 ("xhci: Clear the host side toggle
->>> manually when endpoint is soft reset"), that works well.
->>> But now, we got the error log:
->>>
->>>      EP not empty, refuse reset
->>>
->>> xhch_endpoint_reset failed and left ep_state's EP_SOFT_CLEAR_TOGGLE
->>> bit is still on
->>>
->>> So all the subsequent urb sumbit to the ep will fail with the
->>> warn log:
->>>
->>>      Can't enqueue URB while manually clearing toggle
->>>
->>> We need restore ep_state EP_SOFT_CLEAR_TOGGLE bit after
->>> xhci_endpoint_reset, even if it is failed.
->>>
->>> Signed-off-by: Ding Hui <dinghui@sangfor.com.cn>
+On Fri, Aug 21, 2020 at 01:39:44AM +0000, Peter Chen wrote:
+> On 20-07-24 14:05:31, Peter Chen wrote:
+> > With these two parameters tuning, it can pass USB eye diagram at evk board.
+> > 
+> > Reviewed-by: Jun Li <jun.li@nxp.com>
+> > Signed-off-by: Peter Chen <peter.chen@nxp.com>
+> > ---
+> > Changes for v3:
+> > - Using the new property name
+> > Changes for v2
+> > - Address Shawn's comment to change subject.
+> > 
+> >  arch/arm64/boot/dts/freescale/imx8mm-evk.dts | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/arch/arm64/boot/dts/freescale/imx8mm-evk.dts b/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
+> > index 0f1d7f8aeac4..7c652b898114 100644
+> > --- a/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
+> > +++ b/arch/arm64/boot/dts/freescale/imx8mm-evk.dts
+> > @@ -324,6 +324,8 @@
+> >  	srp-disable;
+> >  	adp-disable;
+> >  	usb-role-switch;
+> > +	samsung,picophy-pre-emp-curr-control = <3>;
+> > +	samsung,picophy-dc-vol-level-adjust = <7>;
+> >  	status = "okay";
+> >  
+> >  	port {
+> > -- 
 > 
-> Thanks, nice catch.
+> Hi Shawn,
 > 
->>> ---
->>>   drivers/usb/host/xhci.c | 3 ++-
->>>   1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> Shouldn't this have a Fixes: tag on it and be backported to the affected
->> stable trees?
+> Rob has already acked the binding-doc changes, would you please queue
+> these two dts changes?
 
-Sorry for missing the tags, this is my first kernel patch :-)
-
-> 
-> It should, but I like this patch and want it in, so I'll add the tags this time.
-
-Thanks for correcting my commit msg
-
-> 
-> Thanks
-> -Mathias
-> 
-
-
--- 
-Thanks,
--dinghui
+Applied patch #3 and #4, thanks.
