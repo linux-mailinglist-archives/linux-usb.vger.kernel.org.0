@@ -2,94 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A03724F002
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Aug 2020 00:02:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD9D624F007
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Aug 2020 00:08:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727017AbgHWWBN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 23 Aug 2020 18:01:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49454 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726744AbgHWWAl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Aug 2020 18:00:41 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452DDC061573;
-        Sun, 23 Aug 2020 15:00:41 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id v4so7491618ljd.0;
-        Sun, 23 Aug 2020 15:00:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=JPZuS7I229v2rKOhfu7+ce1NyRVmKq/AHQWhLmKujP4=;
-        b=cTg+E2ydKwcInMKpR3G8waBqOeQXI6b1Yvvta+Aff/dHc+qAKsIsTPfqYLMlS+DLBg
-         GNdqdoI/vH4LiNMLjydYF7KzB/wXahqqqgvQEWf9JoKfak3xmNVrhw19wAc2Uuq3A+RX
-         aHpcavoIsaplGXjKD6f+V02r7I77Q7rE9o4XKPTFEPi8VTw8ONh3c6r+jJ5vC2YIM630
-         woojk/MX4HurR2SV3ob99fpskXGJ0s4Mdb6QJntTl71cvVc4VYjEJbfWFBvn100uGCJA
-         Sx+/822CRvMQQ+dHNC5fnc2BzzmnBTnPZIgrcNniiuvLtE1h9McsCzN6/+lpZD9sdTtr
-         U7Fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=JPZuS7I229v2rKOhfu7+ce1NyRVmKq/AHQWhLmKujP4=;
-        b=d0sjdbFHdQHwSbllG5gM406uByqoO4BF4Koez7tQRE3Zm0fQrSAeV2dyzoBfd9bpDV
-         JbXye5s6FJ7VnCoPV9W6qNFJeEn2b4UK+LITkw6TIT17P27wwpjsY3WI/5yj/lHorQrT
-         ZuuA/5N/0dYaEYpf18R6Wf8xd85psRTpSy8UHqPyhL1POEHvuZ/ZdPPJeqomG/jOSp9H
-         9LJRcdG/ikQO55iAcv+GgeVV4XONZ+KFyWFY0MBJU9lu/Lpw4h1pLyKnLZG+Cb7T8x8H
-         OQPTVaJIHwk04FInV6SBtAES4qzhUphSHejh/1dwScSk+8219qfvYEuTLvF6xEPO9UDW
-         RzOA==
-X-Gm-Message-State: AOAM532UoGotd+t7+JszYETT9U+qie9amQrWqUby6mhKrPK16yD9Skxh
-        DFQs7C7N1zTE+SJgQg/nZ10=
-X-Google-Smtp-Source: ABdhPJzW+lVIxAbZZMzVpx99MwYlCHKd16McQ4UG52nPDjpInTQMoO8aRibYEin4DYIWm20b6dWQFQ==
-X-Received: by 2002:a2e:87cd:: with SMTP id v13mr1406397ljj.180.1598220039776;
-        Sun, 23 Aug 2020 15:00:39 -0700 (PDT)
-Received: from localhost.localdomain (h-82-196-111-59.NA.cust.bahnhof.se. [82.196.111.59])
-        by smtp.gmail.com with ESMTPSA id g11sm1825097lfc.46.2020.08.23.15.00.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Aug 2020 15:00:39 -0700 (PDT)
-From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
-To:     Kishon Vijay Abraham I <kishon@ti.com>,
+        id S1726239AbgHWWHs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 23 Aug 2020 18:07:48 -0400
+Received: from smtprelay0150.hostedemail.com ([216.40.44.150]:58002 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725992AbgHWWHs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Aug 2020 18:07:48 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay04.hostedemail.com (Postfix) with ESMTP id 256A0180A7FF5;
+        Sun, 23 Aug 2020 22:07:47 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:973:982:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2393:2559:2562:2828:3138:3139:3140:3141:3142:3352:3622:3865:3866:3867:3868:3870:3871:3872:4321:5007:6742:7974:10004:10400:10848:11026:11232:11658:11914:12043:12296:12297:12438:12555:12740:12760:12895:13069:13138:13231:13311:13357:13439:14096:14097:14659:14721:21080:21627:21796:30036:30054:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
+X-HE-Tag: straw46_5206e912704e
+X-Filterd-Recvd-Size: 2585
+Received: from XPS-9350 (unknown [172.58.43.36])
+        (Authenticated sender: joe@perches.com)
+        by omf11.hostedemail.com (Postfix) with ESMTPA;
+        Sun, 23 Aug 2020 22:07:42 +0000 (UTC)
+Message-ID: <a6763ea3eba3cbcf27ffd4584d4daf9cc1759d35.camel@perches.com>
+Subject: Re: [PATCH 0/8] drivers: phy: Constify static phy_ops structs
+From:   Joe Perches <joe@perches.com>
+To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
         Vinod Koul <vkoul@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+Cc:     linux-kernel@vger.kernel.org, Peter Chen <peter.chen@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
         Yu Chen <chenyu56@huawei.com>,
         Binghui Wang <wangbinghui@hisilicon.com>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH 3/8] phy: hisilicon; Constify hi3660_phy_ops
-Date:   Mon, 24 Aug 2020 00:00:20 +0200
-Message-Id: <20200823220025.17588-4-rikard.falkeborn@gmail.com>
-X-Mailer: git-send-email 2.28.0
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Seungwon Jeon <essuuj@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Date:   Sun, 23 Aug 2020 15:07:39 -0700
 In-Reply-To: <20200823220025.17588-1-rikard.falkeborn@gmail.com>
 References: <20200823220025.17588-1-rikard.falkeborn@gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.36.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The only usage is to pass its address to devm_phy_create() which takes a
-const pointer. Make it const to allow the compiler to put it in
-read-only memory.
+On Mon, 2020-08-24 at 00:00 +0200, Rikard Falkeborn wrote:
+> This series constifies all static phy_ops structs in drivers/phy.
+> Typically the only usage is to pass the address of it to devm_phy_create()
+> which takes a const pointer. The lone exception is in
+> drivers/phy/qualcomm/phy-qcom-ipq4019-usb.c where the address of the
+> structs is assigned to the data-field in of_device_id, which is a const
+> void pointer.
+> 
+> Making the structs const allows the compiler to put them in read-only
+> memory.
+> 
+> The patches are all independent of each other, and have been
+> compile-tested only.
 
-Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+Perhaps add phy_ops to scripts/const_structs.checkpatch too
 ---
- drivers/phy/hisilicon/phy-hi3660-usb3.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ scripts/const_structs.checkpatch | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/phy/hisilicon/phy-hi3660-usb3.c b/drivers/phy/hisilicon/phy-hi3660-usb3.c
-index cc0af2c044d0..84adce9b4277 100644
---- a/drivers/phy/hisilicon/phy-hi3660-usb3.c
-+++ b/drivers/phy/hisilicon/phy-hi3660-usb3.c
-@@ -161,7 +161,7 @@ static int hi3660_phy_exit(struct phy *phy)
- 	return ret;
- }
- 
--static struct phy_ops hi3660_phy_ops = {
-+static const struct phy_ops hi3660_phy_ops = {
- 	.init		= hi3660_phy_init,
- 	.exit		= hi3660_phy_exit,
- 	.owner		= THIS_MODULE,
--- 
-2.28.0
+diff --git a/scripts/const_structs.checkpatch b/scripts/const_structs.checkpatch
+index e9df9cc28a85..cd45cb3c2b04 100644
+--- a/scripts/const_structs.checkpatch
++++ b/scripts/const_structs.checkpatch
+@@ -39,6 +39,7 @@ nlmsvc_binding
+ nvkm_device_chip
+ of_device_id
+ pci_raw_ops
++phy_ops
+ pipe_buf_operations
+ platform_hibernation_ops
+ platform_suspend_ops
+
 
