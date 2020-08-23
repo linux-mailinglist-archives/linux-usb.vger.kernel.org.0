@@ -2,69 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A68EB24EDDC
-	for <lists+linux-usb@lfdr.de>; Sun, 23 Aug 2020 17:12:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4407B24EEF5
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Aug 2020 19:19:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727890AbgHWPMf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 23 Aug 2020 11:12:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36034 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726818AbgHWPMc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 23 Aug 2020 11:12:32 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5C2A02067C;
-        Sun, 23 Aug 2020 15:12:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598195551;
-        bh=FGoaCSIX4ECmGEmLd7xZKV4f1E5QyxkP1d/xsP/BO4o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=omjzM7yvmI4MH3adpW0r5YOaQcSlwjqHqXypFT2fUjyBYvNfr+kbhDapxDV2hr9gX
-         oTt3fs827o+xXASeuBzHMdVi/iG1fzkBS8ar6JRAM2dV2wKR41C6tyWBTulwiQDoGP
-         1YKeeEWVsjt7Gr6br+PEx1HDkWGe0NYX2QhuG7BE=
-Date:   Sun, 23 Aug 2020 17:12:51 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org, Ding Hui <dinghui@sangfor.com.cn>,
-        stable <stable@vger.kernel.org>
-Subject: Re: [PATCH 3/3] xhci: Always restore EP_SOFT_CLEAR_TOGGLE even if ep
- reset failed
-Message-ID: <20200823151251.GA2914810@kroah.com>
-References: <20200821091549.20556-1-mathias.nyman@linux.intel.com>
- <20200821091549.20556-4-mathias.nyman@linux.intel.com>
+        id S1726057AbgHWRTW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 23 Aug 2020 13:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34498 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725887AbgHWRTU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Aug 2020 13:19:20 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB210C061573
+        for <linux-usb@vger.kernel.org>; Sun, 23 Aug 2020 10:19:19 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id q93so2363291pjq.0
+        for <linux-usb@vger.kernel.org>; Sun, 23 Aug 2020 10:19:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jtx84NHnOo1lt1iC9Reos0iIfV8G9wjY+VqA8Hm1o9s=;
+        b=VIgvqxmdXQu0VUPw1uBT17ZshQuBMO6dj71nbntBuQx8rEGu9CaZ/cl8DkNiOgFG2C
+         JesNV04CJQy4DgKbc0fA4Uvau+f3tbPNWM/gdmJphYRBxFuuIUgTJblttN2RgLSd4UUu
+         IQDjYSmHAYHn/hsa03ifP5HL+M3mZ3byxDjnxLDhlb/uiFeH4ZwWk6OGLON9bIQxwNDr
+         uDaTS2FvgDGR+fvm9r/Vb1d68G6mI3JZvleRei5J8FG/Hiua8z4AOOYCiacGj9XqkpEH
+         5v608ktui87SQ2ktP2D9XTBS6y3kS06uqlA1RL9+zPBQuRj4QzA2C7y6da0eu36YVLuW
+         8v0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jtx84NHnOo1lt1iC9Reos0iIfV8G9wjY+VqA8Hm1o9s=;
+        b=s31wWMUAsysrPi8IBkfaocPAEmoqHBP72Um4y0fxR0+1F2MUHescH+v4lZsda7s5GT
+         Nx1FY1HRuWnKci9kJr6fYJbNV+Zfuf0eelEZ4oUBvcBam8jZGsPyQbvW0XFqCu4RHMD5
+         OGq3zpbavk/VlskdSLyl5qFNrNLx7zxYQEszo5DeV4o0OHwdFihKaFl68NONzkV+gEwe
+         bvAhjfFzR9/McO7UjzkP+05OKBd1cQEo5gH6qN25HMV2+l1GOUTCOOZGrZU/3tldpEZ8
+         sH+9z8wo3FiNykhtWPbl9F7jRIgrzeovuGkjP4tVOi6g5S2MaCJZ9OMCK95QJzcKOdA+
+         umiA==
+X-Gm-Message-State: AOAM5338KXq1JFg8xyX/JUrgDxG9E1K1BqHFoOS+8kGXyZxczHfD0PUF
+        trsVzAiStRMX2UEG6rfvzwvALouAKZnEye8fmEXwEXc5bDg=
+X-Google-Smtp-Source: ABdhPJySEZl3PemTzmmghTt+H5k96bDZ+zvQOCRH8rG1vj8Xz/V5gfhUBuAUDHxaCKKZwBGs00zTJP8VqUKgTVkN484=
+X-Received: by 2002:a17:902:e78d:: with SMTP id cp13mr1349072plb.105.1598203159248;
+ Sun, 23 Aug 2020 10:19:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200821091549.20556-4-mathias.nyman@linux.intel.com>
+References: <CAMqbrUhE-D3QoeUkr=FnTks_a+KRxLpScghMefEZp9GHD55E_Q@mail.gmail.com>
+ <20200822200107.GA288350@rowland.harvard.edu> <CAMqbrUiRfk7uy+oPwwsvjL+CZNGEFGonGRx5LMGyQ7UTwrPA8A@mail.gmail.com>
+ <20200822204107.GC288350@rowland.harvard.edu> <CAMqbrUhtoZxg--Gp0un=sKYBWfmtmNMYR+8rvyRHxdKsjWY73w@mail.gmail.com>
+ <20200823004316.GA292576@rowland.harvard.edu>
+In-Reply-To: <20200823004316.GA292576@rowland.harvard.edu>
+From:   yunhua li <yunhual@gmail.com>
+Date:   Sun, 23 Aug 2020 10:19:01 -0700
+Message-ID: <CAMqbrUiRir-JU2WWk=dbH9u_Qgd6NVtXCr8e80Bk+bx=YFXmcw@mail.gmail.com>
+Subject: Re: XCHI bulk transaction latency, data lost, NAK stats
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 21, 2020 at 12:15:49PM +0300, Mathias Nyman wrote:
-> From: Ding Hui <dinghui@sangfor.com.cn>
-> 
-> Some device drivers call libusb_clear_halt when target ep queue
-> is not empty. (eg. spice client connected to qemu for usb redir)
-> 
-> Before commit f5249461b504 ("xhci: Clear the host side toggle
-> manually when endpoint is soft reset"), that works well.
-> But now, we got the error log:
-> 
->     EP not empty, refuse reset
-> 
-> xhci_endpoint_reset failed and left ep_state's EP_SOFT_CLEAR_TOGGLE
-> bit still set
-> 
-> So all the subsequent urb sumbits to the ep will fail with the
-> warn log:
-> 
->     Can't enqueue URB while manually clearing toggle
-> 
-> We need to clear ep_state EP_SOFT_CLEAR_TOGGLE bit after
-> xhci_endpoint_reset, even if it failed.
-> 
-> Fixes: f5249461b504 ("xhci: Clear the host side toggle manually when endpoint is soft reset"
+Thanks, I'll check it out.
 
-Nit, you forgot the trailing ')' here...
+On Sat, Aug 22, 2020 at 5:43 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Sat, Aug 22, 2020 at 02:03:02PM -0700, yunhua li wrote:
+> > Thanks, Alan, your answers are really helpful.
+> > one more question:
+> > > It depends on what other devices are attached to the USB bus.  They may
+> > > or may not require some reserved bandwidth.
+> > Is there any tool/method I can dump reserved or allocated bandwidth
+> > info of each  USB device?
+>
+> You can run "lsusb -v" and you can examine the contents of
+> /sys/kernel/debug/usb/devices.  There's more information available
+> under /sys/kernel/debug/usb/xhci/* but I don't know what the format is
+> or if it includes bandwidth reservations.
+>
+> Alan Stern
