@@ -2,67 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 731A424EB1D
-	for <lists+linux-usb@lfdr.de>; Sun, 23 Aug 2020 06:12:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A89AD24EC27
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Aug 2020 10:21:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725648AbgHWEL0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 23 Aug 2020 00:11:26 -0400
-Received: from out2-smtp.messagingengine.com ([66.111.4.26]:45053 "EHLO
-        out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725139AbgHWELZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Aug 2020 00:11:25 -0400
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id B00E25C0095
-        for <linux-usb@vger.kernel.org>; Sun, 23 Aug 2020 00:11:24 -0400 (EDT)
-Received: from imap21 ([10.202.2.71])
-  by compute7.internal (MEProxy); Sun, 23 Aug 2020 00:11:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aeam.us; h=
-        mime-version:message-id:date:from:to:subject:content-type; s=
-        fm2; bh=m9/vrGOPw7tTTCM+jL3PsYwJJsUOKobeftSnwR8NScA=; b=icrsqTAL
-        Nlg356AuSqp51m6unJgOjWMubZErHlYunLsVoY/y5J6KvhsmtJ1lx2FHUQCPxJaf
-        tmoaK45WR617D4A690VEraNkVLaKn8vq70zuHXQfwVL0Djj5i2SHijWuDRoVwPkp
-        cA0pDfPGWbsqs0GYgF+sSkMloCmZxHrgUKeO4xp2I4W8G21N8AyPakGVM3wVIgfp
-        jIvuft7qgUFcPb2p5BU0892nICHA1PFiwspWqUJ+pMbAkLNj+Yc0gZz4Cnkx0JmK
-        DWdpPsBtK3V6Tne3YRQbEWW1EUnkXeG53vlHxivLxqs1GWsbWyLhzG69l8AXqAVE
-        LRpnbknFWwZvRA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=content-type:date:from:message-id
-        :mime-version:subject:to:x-me-proxy:x-me-proxy:x-me-sender
-        :x-me-sender:x-sasl-enc; s=fm3; bh=m9/vrGOPw7tTTCM+jL3PsYwJJsUOK
-        obeftSnwR8NScA=; b=pmzB/3zJ97or+4TE0pt9MeEEXvkhF+nGZtUedWRJSy6xG
-        4IbxiG6D4/hsBriV/518OrJNCYGiLf7pBUoMidcquulzfUkFPSFfxxd3uTWPGtyP
-        INCkSJJfdCEt049q//Oqk+PU5Vack/fPHssumispwRVQPGbqlolj5RqTpvg1doas
-        3JB9d4bQuuX1U+l2++cIuDMkMn1SVJG1sjkt/jlyoOu5PS/VXRH7mhUtvQV01T5J
-        +U8hTRcoCg2dzArFQ3OMYZOlODcq4k5wweaoX44R/bmz0gm0syrNpkfuMD3Edz6D
-        ICPE4wAYIkvaRw+EQybPUs4ZqUd7dfF2fgogO4LjA==
-X-ME-Sender: <xms:bOxBX8JE8OeK0echw8xU5mwKwiAEdd38yoLmylclfh8xDmq7yyJNDA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedrudduhedgkedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefofgggkfffhffvufgtsehttdertd
-    erreejnecuhfhrohhmpedfufhiugcuufhprhihfdcuoehsihgusegrvggrmhdruhhsqeen
-    ucggtffrrghtthgvrhhnpeekudeuueegudffjeejjeeiheellefhffejgefgvedvieevge
-    fhjeehheeiiedtgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhl
-    fhhrohhmpehsihgusegrvggrmhdruhhs
-X-ME-Proxy: <xmx:bOxBX8Ku4YXExZiau2QHbYdU4lhsQ3Rqf1jOZU_U3ivZwfX5E2cCVQ>
-    <xmx:bOxBX8sMUhLA5ja2j-KvRSngWhKsudtMSYxywi0WLooY22lvYttd-Q>
-    <xmx:bOxBX5ZAdZ6EAI4jjbbaUT9yxnn9g2vzY_zPBFEHShkKyF7IRqBW5g>
-    <xmx:bOxBX7qeted7Vhkx-r0dN-BVCdee1OZC5oiJ932HvqmuJ2QvHpLrnw>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 0161666006F; Sun, 23 Aug 2020 00:11:20 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.3.0-214-g5a29d88-fm-20200818.002-g5a29d882
-Mime-Version: 1.0
-Message-Id: <508e531e-076d-4b02-8aac-783842346bc2@www.fastmail.com>
-Date:   Sat, 22 Aug 2020 23:11:03 -0500
-From:   "Sid Spry" <sid@aeam.us>
-To:     linux-usb@vger.kernel.org
-Subject: =?UTF-8?Q?mkdir_acm.${name}_in_configfs_always_fails_with_"Device_or_res?=
- =?UTF-8?Q?ource_busy"?=
-Content-Type: text/plain
+        id S1726365AbgHWIVY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 23 Aug 2020 04:21:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36544 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726075AbgHWIVW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Aug 2020 04:21:22 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11815C061573;
+        Sun, 23 Aug 2020 01:21:22 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id k13so2763939plk.13;
+        Sun, 23 Aug 2020 01:21:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=HorE3eSfXz4Gki6guH9XnAbsktXH9J/H5OfUk+fj9ww=;
+        b=D9m4vGhhadKVAw7CoQBmjIajZLQNNltNmMM6DDOZqZzdNZoB0yI7WVyi0OXKbppRBo
+         2U6LWFugxmTinh1FdA5xCI9UPTEb9d5izBpr47nrZeXk5PgTPWzD7GVYmrsS4okAgG4d
+         /dGRUHaoNgNWVzGj0k+3JwnRb+sMi9+b78mT5Rh9y9GVFmnunZAOv928a2ikFBa88CF9
+         QlxypZvyFajyAPumyDoidP5LkXzxA7T4cLZYDxKZAaIvvfqypORK8sQyKokiJl9OjmAK
+         M677vY1Y6yT/u5grPENUNzXZzL3/Chz0JtqmqZT0FnemSOrSxRGGdqWar6C1MKnybOul
+         cR2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=HorE3eSfXz4Gki6guH9XnAbsktXH9J/H5OfUk+fj9ww=;
+        b=ZQ+8omlOopra+WHH99c1tnrdR1/l0REq6Cb4j1De16v0vaTmatLMnjC3l0nLXRhYpT
+         o7/LPGhpcSqUszuYuheZ/TDiY+r9fki3vU4QL5NOeTSDmgRBOCs3RKeDgu070FAtEpPs
+         fjf1B4TCmK66qyZZF+80Tz7iTlhAZhT+hQWhwpVH1h5Dng7y8f/TMTE86I575q/8KSLs
+         /sjGCDjNq0Aqs+CtOwrU+pbTfH1GzPYFRz/0rGKEo98kYa9ny8pq/8z2++K0LYf/ZVVH
+         DLy5Vk/dB5xiM+AEyixtg8QkvC4wWJtdziQeF2PyFngOnDAwNmYWb/0O75A+Fpf0Fpuu
+         8KVQ==
+X-Gm-Message-State: AOAM5323Sasrog3SG1e95lRMSegTP7SLgnJ2C6/u5TWQK2R+3jz3OLkO
+        /jUGXjrpM7kW2TklNqkCFZQ=
+X-Google-Smtp-Source: ABdhPJxLf+kXTEY8tY4f4/a5bUzfIcFh3YpQnFiHe2KQmR1ZuODc+Zff+j2Fm43ZKu7SfHriVcLBSw==
+X-Received: by 2002:a17:90a:a791:: with SMTP id f17mr412787pjq.136.1598170881504;
+        Sun, 23 Aug 2020 01:21:21 -0700 (PDT)
+Received: from localhost.localdomain ([157.32.237.182])
+        by smtp.gmail.com with ESMTPSA id q17sm7416783pfh.32.2020.08.23.01.21.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Aug 2020 01:21:20 -0700 (PDT)
+From:   Himadri Pandya <himadrispandya@gmail.com>
+To:     davem@davemloft.net, kuba@kernel.org
+Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        Himadri Pandya <himadrispandya@gmail.com>
+Subject: [PATCH] net: usb: Fix uninit-was-stored issue in asix_read_cmd()
+Date:   Sun, 23 Aug 2020 13:50:42 +0530
+Message-Id: <20200823082042.20816-1-himadrispandya@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-See title. I'm getting this even when using shell commands, so I don't think it is my program.
-Creating anything else, like ncm.usb0, will work.
+Initialize the buffer before passing it to usb_read_cmd() function(s) to
+fix the uninit-was-stored issue in asix_read_cmd().
+
+Fixes: KMSAN: kernel-infoleak in raw_ioctl
+Reported by: syzbot+a7e220df5a81d1ab400e@syzkaller.appspotmail.com
+
+Signed-off-by: Himadri Pandya <himadrispandya@gmail.com>
+---
+ drivers/net/usb/asix_common.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
+index e39f41efda3e..a67ea1971b78 100644
+--- a/drivers/net/usb/asix_common.c
++++ b/drivers/net/usb/asix_common.c
+@@ -17,6 +17,8 @@ int asix_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+ 
+ 	BUG_ON(!dev);
+ 
++	memset(data, 0, size);
++
+ 	if (!in_pm)
+ 		fn = usbnet_read_cmd;
+ 	else
+-- 
+2.17.1
+
